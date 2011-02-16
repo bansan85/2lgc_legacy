@@ -1,5 +1,33 @@
 Programmation
-Pour les nombres flottants, il faut utiliser double. Entre autre parce que cxsparse utilise des types double.
+Pour les nombres flottants, il faut utiliser double. Entre autre parce que cxsparse utilise des types double et principalement car la précision est plus importante.
+
+Règles de rédaction de l'arborescence ci-dessous :
+	- la description d'éléments de type dossier doit commencer par : dossier contenant
+La source possède l'arborescence suivante :
+
+	- AUTHORS : contient la liste des auteurs du projet.
+	- ChangeLog : Le ChangeLog
+	- clean_config : supprimer tous les fichiers créés par les autotools et les différents make
+	- _configure : configure tous les fichiers, lance les autotools, le ./configure et le make
+	- COPYING : la licence
+	- diff-configure.scan.patch : les modifications à apporter au configure.scan après le lancement de la commande autoscan. Met à jours également le numéro de version
+	- doc : dossier contenant de la documentation diverse
+	- files : dossier contenant les fichiers de configuration du programme développé
+	- INSTALL : liste des instructions pour compiler et installer l'application
+	- Makefile.am : pour autotools
+	- NEWS : les news
+	- po : dossier contenant les fichiers de traduction. Bien que cela semble superflu pour l'instant car l'application est rédigé en français, il est nécessaire de maintenir le fichier fr.po.
+		- La procédure de mise à jour des traductions et de création de nouvelles est rédigée dans le fichier INSTALL contenu dans la racine du projet
+	- README : readme
+	- src : dossier contenant les sources du programme
+		- calc : dossier contenant les programmes de calculs
+		- gui : dossier contenant les programmes gérant l'interface graphique et appelant les programmes de calculs
+		- lib : dossier contenant les librairies de calcul (une librairies par norme !!).
+			- sample : dossier pouvant servir de base viège pour créer une nouvelle norme
+				Un compromis, à la discrétion des développeurs, doit être trouvé entre un fichier regroupant toutes les formules et un fichier par formule.
+			
+
+
 
 
 

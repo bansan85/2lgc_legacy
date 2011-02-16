@@ -1,12 +1,45 @@
-Pour compiler l'application, il suffit de lancer les commandes suivantes :
+Si vous êtes sous Windows, la compilation nécessite de créer un environnement très proche de Linux. Une application est faite pour ça : Cygwin.
+Allez sur le site de cygwin http://cygwin.com/install.html et télécharger le fichier "setup.exe".
+
+Durant le processus d'installation :
+	- Choose a download Source : Install from Internet
+	- Dossier d'installation : choisissez un emplacement ne contenant pas d'espace ni de caractère "spéciaux" (avec accent)
+	- Choose a Download Site : choississez un site internet proche de chez vous. Pour la france, l'extension doit être en .fr, avec une préférence pour le protocole ftp.
+	- Select Packages : Les paquets nécessaires à un environnement de base sont sélectionés par défaut.
+	- Paquets supplémentaires nécessaires : gdb, automake1.11, patchutils, gettext-devel, libtool, make, gcc4.5
+
+
+
+
+
+
+
+Pour compiler et installer l'application, il suffit de lancer les commandes suivantes :
 ./_configure
 sudo make install
 
 Le script clean_config permet de supprimer tous les fichiers temporaires créés par les différents programmes de configuration et de compilation
 
-2 scripts existent dans le dossier po.
-./update : permet de mettre à jour tous les fichiers .po si le fichier généré par ./_configure contient de nouvelles traductions à faire
-msginit -l fr -o fr.po -i `find . -name "*.pot"` : permet d'ajouter une langue (dans le cas ici, le français). L'abbréviation est compatible avec /usr/share/locale
+si le programme ne permet pas une compilation sans erreur par un 
+./_configure
+1) vérifier le message d'erreur, il s'agit peut-être d'une application dont dépend le logiciel qui est non installée
+2) A défaut, il faut déposer un rapport de bogue afin d'expliquer la raison de cet échec.
 
-iour réaliser le diff entre deux versions, il faut utiliser la commande :
+
+
+
+
+un script est présent dans le dossier po.
+./update : permet de mettre à jour tous les fichiers .po si le fichier généré par ./_configure contient de nouvelles traductions à faire
+
+La commande suivante permet de créer un nouveau fichier de traduction dans une langue.
+msginit -l fr -o fr.po -i `find . -name "*.pot"` : permet d'ajouter une langue (dans le cas ici, le français). L'abbréviation est compatible avec /usr/share/locale
+NOTA : avant de lancer msginit, il est nécessaire de compiler l'application avec _configure
+
+
+
+
+
+
+pour réaliser le diff entre deux versions, il faut utiliser la commande :
 patch -pu -N -r eurocode-0.0.0.0 eurocode-0.0.0.1 > eurocode-0.0.0.0-0.0.0.1.patch

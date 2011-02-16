@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2011-02-08 19:14+0100\n"
+"POT-Creation-Date: 2011-02-13 14:34+0100\n"
 "PO-Revision-Date: 2011-02-08 18:36+0100\n"
 "Last-Translator:  <devel@2lgc.org>\n"
 "Language-Team: French\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: src/gui/main.c:32
+#: src/gui/codegui/main.c:32
 #, fuzzy, c-format
 msgid "Hello\n"
 msgstr "Bonjour, monde!\n"
