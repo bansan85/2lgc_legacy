@@ -1,22 +1,37 @@
+echo '-- clean_config --'
 ./clean_config
 
+echo '-- autoscan --'
 autoscan
 
+echo '-- patch < diff-configure.scan.patch --'
 patch < diff-configure.scan.patch
+echo '-- mv configure.scan configure.ac --'
 mv configure.scan configure.ac
 
+echo '-- gettextize -c -f --no-changelog --'
 gettextize -c -f --no-changelog
+echo '-- mv po/Makevars.template po/Makevars --'
 mv po/Makevars.template po/Makevars
+echo '-- rm -f po/POTFILES.in --'
 rm -f po/POTFILES.in
+echo '-- find . -name "*.c" > po/POTFILES.in --'
 find . -name "*.c" > po/POTFILES.in
 
+echo '-- autoheader --'
 autoheader
+echo '-- aclocal --'
 aclocal
+echo '-- libtoolize --'
 libtoolize
+echo '-- automake --add-missing --copy --'
 automake --add-missing --copy
+echo '-- autoconf --'
 autoconf
 
-./configure --prefix=/usr --build=x86_64-pc-linux-gnu --host=x86_64-pc-linux-gnu --mandir=/usr/share/man --infodir=/usr/share/info --datadir=/usr/share --sysconfdir=/etc --localstatedir=/var/lib --libdir=/usr/lib64
+echo '-- ./configure --'
+./configure
 
-make
+echo '-- make -j3 --'
+make -j3
 
