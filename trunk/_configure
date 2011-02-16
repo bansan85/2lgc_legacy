@@ -1,0 +1,22 @@
+./clean_config
+
+autoscan
+
+patch < diff-configure.scan.patch
+mv configure.scan configure.ac
+
+gettextize -c -f --no-changelog
+mv po/Makevars.template po/Makevars
+rm -f po/POTFILES.in
+find . -name "*.c" > po/POTFILES.in
+
+autoheader
+aclocal
+libtoolize
+automake --add-missing --copy
+autoconf
+
+./configure --prefix=/usr --build=x86_64-pc-linux-gnu --host=x86_64-pc-linux-gnu --mandir=/usr/share/man --infodir=/usr/share/info --datadir=/usr/share --sysconfdir=/etc --localstatedir=/var/lib --libdir=/usr/lib64
+
+make
+

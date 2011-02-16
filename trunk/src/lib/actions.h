@@ -16,20 +16,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "config.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <libintl.h>
-#include <locale.h>
+typedef struct __charge {
+	char			*nom;
+	char			*description;
+	double			valeur_caracteristique;
+	double			valeur_combinaison; 		// valeur_caracteristique * psi0
+	double			valeur_frequente;		// valeur_caracteristique * psi1
+	double			valeur_quasi_permanente;	// valeur_caracteristique * psi2
+} charge;
 
 
-int main(void)
-{
-	printf("%s\n", PACKAGE);
-	setlocale( LC_ALL, "" );
-	bindtextdomain(PACKAGE, LOCALEDIR);
-	textdomain(PACKAGE);
-	printf(gettext("Hello\n"));
-	return 0;
-}
+typedef struct __action {
+	char			*nom;
+	char			*description;
+	int			nature;				// permanente, variable, accidentelle
+	int			categorie;			// permanente : poids propre, précontrainte, eau. variable : neige, exploitation, ...
+	charge*			*charges;
+	struct __action		*suivant;
+} action;
 
