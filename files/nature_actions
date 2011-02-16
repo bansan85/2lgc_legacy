@@ -1,0 +1,25 @@
+EU	Ad	accidentelle
+EU	AEd	sismique
+EU	Gk	permanente
+FR	Fw	-1.00	-1.00	-1.00	eau souterraine
+EU	Pp	1.00	1.00	1.00	poids propre
+EU	P	précontrainte
+EU	Pr	1.00	1.00	1.00	précontrainte
+EU	Qk	variable
+EU	A	0.70	0.50	0.30	catégorie A : habitation
+EU	B	0.70	0.50	0.30	catégorie B : bureaux
+EU	C	0.70	0.70	0.60	catégorie C : lieux de réunion
+EU	D	0.70	0.70	0.60	catégorie D : commerces
+EU	E	1.00	0.90	0.80	catégorie E : stockage
+EU	F	0.70	0.70	0.60	catégorie F : zone de trafic (véhicule <= 30 kN)
+EU	G	0.70	0.50	0.30	catégorie G : zone de trafic (30 kN < véhicule <= 160 kN)
+EU	H	0.00	0.00	0.00	catégorie H : toitures inacessibles
+FR	I	-0.70	-0.50	-0.30	catégorie I : toitures accessibles
+FR	J	1.00	0.90	0.50	catégorie J : hélicoptère sur toiture
+FR	K	0.70	0.50	0.30	catégorie K : hélicoptère sur toiture (autres charges)
+EU	Sn1	0.70	0.50	0.20	neige : Finlande, Islande, Norvège, Suède
+EU	Sn2	0.70	0.50	0.20	neige : Autres états membres CEN, altitude > 1000 m
+EU	Sn3	0.50	0.20	0.00	neige : Autres états membres CEN, altitude <= 1000 m
+FR	Sn4	0.70	0.50	0.20	neige : Saint-Pierre-et-Miquelon
+EU	T	0.60	0.50	0.0	température
+EU	W	0.60	0.20	0.0	vent

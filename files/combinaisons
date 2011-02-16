@@ -1,0 +1,15 @@
+EU	ELU_EQU	sum %g~G,j~ G~k,j~ plus sum %g~P~ P plus %g~Q,1~ Q~k,1~ plus sum %g~Q,i~ %y~0,i~ Q~k,i~
+EU	ELU_STR1	sum %g~G,j~ G~k,j~ plus sum %g~P~ P plus sum %g~Q,i~ %y~0,i~ Q~k,i~
+EU	ELU_STR2	sum %x~j~ %g~G,j~ G~k,j~ plus sum %g~P~ P plus %g~Q,1~ Q~k,1~ plus sum %g~Q,i~ %y~0,i~ Q~k,i~
+EU	ELU_GEO1	sum %g~G,j~ G~k,j~ plus sum %g~P~ P plus sum %g~Q,i~ %y~0,i~ Q~k,i~
+EU	ELU_GEO2	sum %x~j~ %g~G,j~ G~k,j~ plus sum %g~P~ P plus %g~Q,1~ Q~k,1~ plus sum %g~Q,i~ %y~0,i~ Q~k,i~
+FR	ELU_STR1	sum %g~G,j~ G~k,j~ plus sum %g~P~ P plus %g~Q,1~ Q~k,1~ plus sum %g~Q,i~ %y~0,i~ Q~k,i~
+FR	ELU_STR2	XXXX
+FR	ELU_GEO1	sum %g~G,j~ G~k,j~ plus sum %g~P~ P plus %g~Q,1~ Q~k,1~ plus sum %g~Q,i~ %y~0,i~ Q~k,i~
+FR	ELU_GEO2	XXXX
+EU	ELU_ACCI	sum G~k,j~ plus sum P plus sum A~d~ plus %y~1,1~ Q~k,1~ plus sum %y~2,i~ Q~k,i~
+EU	ELU_SISMIQUE	sum G~k,j~ plus sum P plus sum A~Ed~ plus sum %y~2,i~ Q~k,i~
+EU	ELS_CARACT	sum G~k,j~ plus sum P plus Q~k,1~ plus sum %y~0,i~ Q~k,i~
+EU	ELS_FREQ	sum G~k,j~ plus sum P plus %y~1,1~ Q~k,1~ plus sum %y~2,i~ Q~k,i~
+EU	ELS_QUASI_PERM	sum G~k,j~ plus sum P plus sum %y~2,i~ Q~k,i~
+

@@ -1,4 +1,5 @@
-rm -Rf aclocal.m4 autom4te.cache autoscan-?.??.log config* depcomp install-sh ltmain.sh Makefile Makefile.in missing stamp-h1 m4 libtool src/gui/codegui
+rm -Rf install-sh ltmain.sh config.status config.h config.h.in config.log configure configure.ac depcomp config.status Makefile Makefile.in config.guess config.sub missing stamp-h1 libtool autom4te.cache autoscan-?.??.log config.h config.guess config.h.in config.log config.status config.sub aclocal.m4 config.rpath m4 ABOUT-NLS
+rm -Rf po/boldquot.sed po/en@boldquot.header po/en@quot.header po/insert-header.sin po/Makefile.in.in po/Makevars po/POTFILES po/POTFILES.in po/quot.sed po/remove-potcdate.sed po/remove-potcdate.sin po/Rules-quot po/stamp-po
 find . -name "Makefile" -exec rm {} \;
 find . -name "Makefile.in" -exec rm {} \;
 find . -name ".deps" -exec rm -Rf {} \;
@@ -6,3 +7,7 @@ find . -name ".libs" -exec rm -Rf {} \;
 find . -name "*.o" -exec rm {} \;
 find . -name "*.lo" -exec rm {} \;
 find . -name "*.la" -exec rm {} \;
+find . -name "*.mo" -exec rm {} \;
+find po -name "*.pot" -exec rm {} \;
+find po -name "*.gmo" -exec rm {} \;
+find . -name "*~" -exec rm {} \;

@@ -1,4 +1,9 @@
 ACLOCAL_AMFLAGS = -I m4
 
+SUBDIRS = 	po \
+		src \
+		files
 
-SUBDIRS=src
+applicationdir = $(datadir)/2lgc/code
+
+EXTRA_DIST = config.rpath  config.rpath  config.rpath  config.rpath  config.rpath  config.rpath  config.rpath  config.rpath

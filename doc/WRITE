@@ -1,0 +1,72 @@
+Programmation
+Pour les nombres flottants, il faut utiliser double. Entre autre parce que cxsparse utilise des types double.
+
+
+
+
+
+Interface graphique :
+paramètre pour définir une action :
+	- nature (permanente, précontrainte, exploitation, accidentelle, sismique)
+	- catégorie
+	- action structurelle ou géotechnique ?
+	- variable dominante ou d'accompagnement ?
+	- stocker les valeurs : %y~0~, %y~1~, %y~2~
+	- coefficient de sécurité sur les actions : %g~F~
+	- coefficient majorateur dynamique : %j
+	- Pourcentage d'écart possible de la valeur caractéristique (sup et inf).
+	- Charge disponible à l'ELU et/ou ELS et/ou ELA
+
+
+
+
+
+
+Description des fichiers de configuration (dossier files)
+
+Dans tous les fichiers, chaque ligne doit commencer par 
+	- EU si l'élément a été pris dans la norme européenne
+	- FR si l'élément a été pris dans l'annexe nationale française
+Ensuite une tabulation est insérée et enfin les données peuvent apparaître.
+Si une valeur de l'annexe nationale entre en contradiction avec la norme européenne, la valeur nationale doit porter le même nom que la valeur européenne.
+Pour des exemples concrêts, lire le contenu des fichiers fournis avec le logiciel est la solution la plus simple.
+
+
+Fichier "actions_defaut" : ce fichier contient les chargements par défaut en fonction de la catégorie de l'élément
+
+
+
+Fichier "combinaisons" : ce fichier contient les différentes combinaisons d'actions
+nom de la combinaison puis tabulation puis la combinaison.
+Dans le cas où une annexe nationale invalide une combinaison, cette dernière devra être définie par le nom de la combinaison européenne puis tabulation puis XXXX (4 fois X)
+le fichier combinaison contient tous les exemples nécessaires pour effectuer toutes les autres combinaisons possible.
+les "symboles" reconnus par le programme sont :
+	- %g~G,j~ : toutes les actions permanentes
+	- %g~P~ : toutes les actions de précontrainte
+	- %g~Q,1~ : l'action variable dominante
+	- %g~Q,i~ : toutes les actions variables d'accompagnement
+	- %x~j~ : coefficient de réduction des actions permanentes défaborables
+	- %y~0,i~ : coefficient %y~0~ pour les actions variables d'accompagnement
+	- %y~1,1~ : coefficient %y~1~ pour l'action variable dominante
+	- %y~2,i~ : coefficient %y~2~ pour les actions variables d'accompagnement
+	- A~Ed~ : action sismique
+	- A~d~ : action accidentelle
+	- G~k,j~ : action permanente
+	- P : action de précontrainte
+	- Q~k,1~ : action variable dominante
+	- Q~k,i~ : action variable d'accompagnement
+
+
+Fichier "duree" : ce fichier contient la durée indicative d'utilisation de projet
+Catégorie de durée puis tabulation puis durée en année puis tabulation puis description de la catégorie
+La norme européenne indiquant un intervalle de temps, la plus grande durée a été indiquée.
+
+
+Fichier "nature_actions" : ce fichier contient la nature, la catégorie des actions prises en compte dans les normes Eurocodes.
+Premier élément (la nature de l'action) : l'abbréviation puis tabulation puis description de l'action (permanente, exploitation, accidentelle). La ligne "nature de l'action" est reconnue par le fait que la ligne ne possède pas les 3 chiffres (%y)
+L'abbréviation doit être la même avec le fichier combinaison (moins les ~ et ce qui se trouve après la première virgule). Par exemple : G~k,j~ doit être retranscript : Gk
+Deuxième élément (la catégorie de l'action) : la catégorie puis tabulation puis ps0 puis tabulation puis ps1 puis tabulation puis ps2 puis tabulation puis description de la catégorie de l'action.
+NOTA : une valeur négative indique que si l'utilisateur DOIT définir les valeurs de psx (par exemple pour les eaux souterraines). La valeur absolue définie étant la valeur par défaut.
+Les nombres doivent être avec deux décimales. Le séparateur de décimale est de point (.)
+
+

@@ -1,0 +1,1 @@
+find . -name "*.po" -exec msgmerge -s -U {} `find . -name "*.pot"` \;

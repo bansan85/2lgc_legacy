@@ -1,23 +1,12 @@
-Pour compiler l'application, il suffit d'appliquer les commandes ci-dessous :
-autoscan
-patch < diff-configure.scan.patch
-mv configure.scan configure.ac
-autoheader
-aclocal
-libtoolize
-automake --add-missing --copy
-autoconf
-./configure --prefix=/usr --build=x86_64-pc-linux-gnu --host=x86_64-pc-linux-gnu --mandir=/usr/share/man --infodir=/usr/share/info --datadir=/usr/share --sysconfdir=/etc --localstatedir=/var/lib --libdir=/usr/lib64
-
-
-
-
-Le fichier diff-configure.scan.patch permet de modifier le fichier configure.scan :
-Remplace AC_INIT par AC_INIT(2lgc_code, 0.0.0.0, legarrec.vincent@gmail.com, 2lgc_code, http://2lgc.com)
-Ajoute AM_INIT_AUTOMAKE après AC_INIT
-Ajoute AC_CONFIG_MACRO_DIR([m4]) après AM_CONFIG_HEADER
-Ajoute AC_PROG_LIBTOOL après AC_PROG_CC
-
-
+Pour compiler l'application, il suffit de lancer les commandes suivantes :
+./_configure
+sudo make install
 
 Le script clean_config permet de supprimer tous les fichiers temporaires créés par les différents programmes de configuration et de compilation
+
+2 scripts existent dans le dossier po.
+./update : permet de mettre à jour tous les fichiers .po si le fichier généré par ./_configure contient de nouvelles traductions à faire
+msginit -l fr -o fr.po -i `find . -name "*.pot"` : permet d'ajouter une langue (dans le cas ici, le français). L'abbréviation est compatible avec /usr/share/locale
+
+iour réaliser le diff entre deux versions, il faut utiliser la commande :
+patch -pu -N -r eurocode-0.0.0.0 eurocode-0.0.0.1 > eurocode-0.0.0.0-0.0.0.1.patch
