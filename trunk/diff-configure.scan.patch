@@ -1,0 +1,32 @@
+*** configure.scan.old	2011-01-09 16:14:44.547999999 +0100
+--- configure.scan	2011-01-09 16:15:20.195999999 +0100
+***************
+*** 2,13 ****
+  # Process this file with autoconf to produce a configure script.
+  
+  AC_PREREQ([2.68])
+! AC_INIT([FULL-PACKAGE-NAME], [VERSION], [BUG-REPORT-ADDRESS])
+  AC_CONFIG_SRCDIR([src/gui/main.c])
+  AC_CONFIG_HEADERS([config.h])
+  
+  # Checks for programs.
+  AC_PROG_CC
+  
+  # Checks for libraries.
+  
+--- 2,16 ----
+  # Process this file with autoconf to produce a configure script.
+  
+  AC_PREREQ([2.68])
+! AC_INIT(2lgc_code, 0.0.0.0, legarrec.vincent@gmail.com, 2lgc_code, http://2lgc.com)
+! AM_INIT_AUTOMAKE
+  AC_CONFIG_SRCDIR([src/gui/main.c])
+  AC_CONFIG_HEADERS([config.h])
++ AC_CONFIG_MACRO_DIR([m4])
+  
+  # Checks for programs.
+  AC_PROG_CC
++ AC_PROG_LIBTOOL
+  
+  # Checks for libraries.
+  

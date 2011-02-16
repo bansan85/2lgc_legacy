@@ -1,0 +1,8 @@
+rm -Rf aclocal.m4 autom4te.cache autoscan-?.??.log config* depcomp install-sh ltmain.sh Makefile Makefile.in missing stamp-h1 m4 libtool src/gui/codegui
+find . -name "Makefile" -exec rm {} \;
+find . -name "Makefile.in" -exec rm {} \;
+find . -name ".deps" -exec rm -Rf {} \;
+find . -name ".libs" -exec rm -Rf {} \;
+find . -name "*.o" -exec rm {} \;
+find . -name "*.lo" -exec rm {} \;
+find . -name "*.la" -exec rm {} \;
