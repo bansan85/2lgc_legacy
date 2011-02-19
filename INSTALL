@@ -15,8 +15,25 @@ Durant le processus d'installation :
 
 
 Pour compiler et installer l'application, il suffit de lancer les commandes suivantes :
-./_configure
-sudo make install
+./clean_config
+
+autoscan
+patch < diff-configure.scan.patch
+mv configure.scan configure.ac
+
+gettextize -c -f --no-changelog
+mv po/Makevars.template po/Makevars
+rm -f po/POTFILES.in
+find . -name "*.c" > po/POTFILES.in
+
+autoheader
+aclocal
+libtoolize
+automake --add-missing --copy
+autoconf
+./configure
+make -j3
+
 
 Le script clean_config permet de supprimer tous les fichiers temporaires créés par les différents programmes de configuration et de compilation
 
