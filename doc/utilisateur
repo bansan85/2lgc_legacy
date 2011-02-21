@@ -1,0 +1,5 @@
+Paramètre de codegui :
+Utilisation : codegui [OPTION]... [FILE]...
+Options:
+	-h, --help : affiche le présent menu
+	-w, --warranty : affiche les limites de garantie du logiciel

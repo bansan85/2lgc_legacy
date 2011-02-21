@@ -1,7 +1,8 @@
 DEFAULT_INCLUDES	=	-I../../..
 
 bin_PROGRAMS=codegui
-codegui_SOURCES=main.c
+codegui_SOURCES =	main.c \
+			cmd_text.c
 
 # codegui_LDADD = ../../..b/libhello.la
 

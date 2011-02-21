@@ -22,6 +22,9 @@ patch < diff-configure.scan.patch
 mv configure.scan configure.ac
 
 gettextize -c -f --no-changelog
+cd po
+patch < ../diff-po-Makevars.template.patch
+cd ..
 mv po/Makevars.template po/Makevars
 rm -f po/POTFILES.in
 find . -name "*.c" > po/POTFILES.in
@@ -46,13 +49,10 @@ si le programme ne permet pas une compilation sans erreur par un
 
 
 
-un script est présent dans le dossier po.
-./update : permet de mettre à jour tous les fichiers .po si le fichier généré par ./_configure contient de nouvelles traductions à faire
-
 La commande suivante permet de créer un nouveau fichier de traduction dans une langue.
 msginit -l fr -o fr.po -i `find . -name "*.pot"` : permet d'ajouter une langue (dans le cas ici, le français). L'abbréviation est compatible avec /usr/share/locale
 NOTA : avant de lancer msginit, il est nécessaire de compiler l'application avec _configure
-
+Il n'est pas utile de lancer la commande pour mettre à jour le fichier contenant les traductions. Le Makefile le fait automatiquement.
 
 
 

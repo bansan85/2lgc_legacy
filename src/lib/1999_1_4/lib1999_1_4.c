@@ -1,8 +1,8 @@
 /*
  * 2lgc_code : calcul de résistance des matériaux selon les normes Eurocodes
- * Copyright (C) 2011  VLG
+ * Copyright (C) 2011
  *
- * This program is free software: you can redistribute it a../../.. modify
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
@@ -13,6 +13,6 @@
  * GNU General Public License for more details.
  * 
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <htt../../..ww.gnu.org/licenses/>.
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
