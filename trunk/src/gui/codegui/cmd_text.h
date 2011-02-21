@@ -16,16 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "config.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <libintl.h>
-#include <locale.h>
+// Affiche les limites de garantie du logiciel
+void show_warranty();
 
-
-int main(void)
-{
-	printf("treztretrez\n");
-	return EXIT_SUCCESS;;
-}
-
+// Affiche l'aide
+void show_help();

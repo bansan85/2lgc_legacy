@@ -8,7 +8,6 @@ La source possède l'arborescence suivante :
 	- AUTHORS : contient la liste des auteurs du projet.
 	- ChangeLog : Le ChangeLog
 	- clean_config : supprimer tous les fichiers créés par les autotools et les différents make
-	- _configure : configure tous les fichiers, lance les autotools, le ./configure et le make
 	- COPYING : la licence
 	- diff-configure.scan.patch : les modifications à apporter au configure.scan après le lancement de la commande autoscan. Met à jours également le numéro de version
 	- doc : dossier contenant de la documentation diverse
