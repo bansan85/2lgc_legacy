@@ -1,4 +1,5 @@
-DEFAULT_INCLUDES	=	-I../..
+DEFAULT_INCLUDES	=	-I../.. \
+				-I../lib/1990
 
 TESTS = 1990__1
 
@@ -6,7 +7,7 @@ TESTS = 1990__1
 
 EXTRA_PROGRAMS = 1990__1
 
-# codegui_LDADD = ../../..b/libhello.la
+1990__1_LDADD = ../lib/1990/lib1990.la
 
 datadir		=       @datadir@
 localedir       =       $(datadir)/locale

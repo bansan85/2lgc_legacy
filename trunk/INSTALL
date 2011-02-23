@@ -28,6 +28,7 @@ cd ..
 mv po/Makevars.template po/Makevars
 rm -f po/POTFILES.in
 find . -name "*.c" > po/POTFILES.in
+find . -name "*.h" >> po/POTFILES.in
 
 autoheader
 aclocal
@@ -36,6 +37,7 @@ automake --add-missing --copy
 autoconf
 ./configure
 make -j3
+make check -j3
 
 
 Le script clean_config permet de supprimer tous les fichiers temporaires créés par les différents programmes de configuration et de compilation

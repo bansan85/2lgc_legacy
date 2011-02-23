@@ -1,8 +1,9 @@
-DEFAULT_INCLUDES	=	-I../../..
+DEFAULT_INCLUDES	=	-I../../.. \
+				-I../../cmd/common
 
 bin_PROGRAMS=codegui
 codegui_SOURCES =	main.c \
-			cmd_text.c
+			../../cmd/common/cmd_text.c
 
 # codegui_LDADD = ../../..b/libhello.la
 
