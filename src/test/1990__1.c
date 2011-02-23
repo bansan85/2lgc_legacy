@@ -22,10 +22,53 @@
 #include <libintl.h>
 #include <locale.h>
 
+#include "1990_duree.h"
 
 int main(void)
 {
-	printf("treztretrez\n");
+	
+	setlocale( LC_ALL, "" );
+	bindtextdomain(PACKAGE, LOCALEDIR);
+	textdomain(PACKAGE);
+	
+	if (duree_projet_eu(-150) != -1)
+		return -1;
+	if (duree_projet_eu(0) != -1)
+		return -1;
+	if (duree_projet_eu(1) != 10)
+		return -1;
+	if (duree_projet_eu(2) != 25)
+		return -1;
+	if (duree_projet_eu(3) != 30)
+		return -1;
+	if (duree_projet_eu(4) != 50)
+		return -1;
+	if (duree_projet_eu(5) != 100)
+		return -1;
+	if (duree_projet_eu(6) != -1)
+		return -1;
+	if (duree_projet_eu(15690) != -1)
+		return -1;
+	
+	if (duree_projet_fr(-150) != -1)
+		return -1;
+	if (duree_projet_fr(0) != -1)
+		return -1;
+	if (duree_projet_fr(1) != 10)
+		return -1;
+	if (duree_projet_fr(2) != 25)
+		return -1;
+	if (duree_projet_fr(3) != 25)
+		return -1;
+	if (duree_projet_fr(4) != 50)
+		return -1;
+	if (duree_projet_fr(5) != 100)
+		return -1;
+	if (duree_projet_fr(6) != -1)
+		return -1;
+	if (duree_projet_fr(15690) != -1)
+		return -1;
+
 	return EXIT_SUCCESS;;
 }
 
