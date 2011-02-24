@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2011-02-23 01:42+0100\n"
+"POT-Creation-Date: 2011-02-23 19:01+0100\n"
 "PO-Revision-Date: 2011-02-08 18:36+0100\n"
 "Last-Translator:  <devel@2lgc.org>\n"
 "Language-Team: French\n"
@@ -223,11 +223,11 @@ msgstr "\t-h, --help : affiche le présent menu\n"
 msgid "\t-w, --warranty : affiche les limites de garantie du logiciel\n"
 msgstr "\t-w, --warranty : affiche les limites de garantie du logiciel\n"
 
-#: src/lib/1990/1990_duree.c:117
+#: src/lib/1990/1990_duree.c:117 src/lib/1990/1990_duree.c:155
 msgid "Structures provisoires"
 msgstr "Structures provisoires"
 
-#: src/lib/1990/1990_duree.c:122
+#: src/lib/1990/1990_duree.c:122 src/lib/1990/1990_duree.c:160
 msgid ""
 "Éléments structuraux remplaçables, par exemple poutres de roulement, "
 "appareils d'appui"
@@ -235,16 +235,88 @@ msgstr ""
 "Éléments structuraux remplaçables, par exemple poutres de roulement, "
 "appareils d'appui"
 
-#: src/lib/1990/1990_duree.c:127
+#: src/lib/1990/1990_duree.c:127 src/lib/1990/1990_duree.c:165
 msgid "Structures agricoles et similaires"
 msgstr "Structures agricoles et similaires"
 
-#: src/lib/1990/1990_duree.c:132
+#: src/lib/1990/1990_duree.c:132 src/lib/1990/1990_duree.c:170
 msgid "Structures de bâtiments et autres structures courantes"
 msgstr "Structures de bâtiments et autres structures courantes"
 
-#: src/lib/1990/1990_duree.c:137
+#: src/lib/1990/1990_duree.c:137 src/lib/1990/1990_duree.c:175
 msgid ""
 "Structures monumentales de bâtiments, pont et autres ouvrages de génie civil"
 msgstr ""
 "Structures monumentales de bâtiments, pont et autres ouvrages de génie civil"
+
+#: src/lib/1990/1990_coef_psi.c:138 src/lib/1990/1990_coef_psi.c:156
+msgid "Catégorie A : habitation, zones résidentielles"
+msgstr "Catégorie A : habitation, zones résidentielles"
+
+#: src/lib/1990/1990_coef_psi.c:139 src/lib/1990/1990_coef_psi.c:157
+msgid "Catégorie B : bureaux"
+msgstr "Catégorie B : bureaux"
+
+#: src/lib/1990/1990_coef_psi.c:140 src/lib/1990/1990_coef_psi.c:158
+msgid "Catégorie C : lieux de réunion"
+msgstr "Catégorie C : lieux de réunion"
+
+#: src/lib/1990/1990_coef_psi.c:141 src/lib/1990/1990_coef_psi.c:159
+msgid "Catégorie D : commerces"
+msgstr "Catégorie D : commerces"
+
+#: src/lib/1990/1990_coef_psi.c:142 src/lib/1990/1990_coef_psi.c:160
+msgid "Catégorie E : stockage"
+msgstr "Catégorie E : stockage"
+
+#: src/lib/1990/1990_coef_psi.c:143 src/lib/1990/1990_coef_psi.c:161
+msgid "Catégorie F : zone de trafic, véhicules de poids inférieur à 30 kN"
+msgstr "Catégorie F : zone de trafic, véhicules de poids inférieur à 30 kN"
+
+#: src/lib/1990/1990_coef_psi.c:144 src/lib/1990/1990_coef_psi.c:162
+msgid "Catégorie G : zone de trafic, véhicules de poids entre 30 kN et 160 kN"
+msgstr "Catégorie G : zone de trafic, véhicules de poids entre 30 kN et 160 kN"
+
+#: src/lib/1990/1990_coef_psi.c:145 src/lib/1990/1990_coef_psi.c:163
+msgid "Catégorie H : toits"
+msgstr "Catégorie H : toits"
+
+#: src/lib/1990/1990_coef_psi.c:164
+msgid "Catégorie I  : toitures accessibles avec locaux des catégories A à D"
+msgstr "Catégorie I  : toitures accessibles avec locaux des catégories A à D"
+
+#: src/lib/1990/1990_coef_psi.c:165
+msgid "Catégorie K : Hélicoptère sur la toiture"
+msgstr "Catégorie K : Hélicoptère sur la toiture"
+
+#: src/lib/1990/1990_coef_psi.c:166
+msgid ""
+"Catégorie K : Hélicoptère sur la toiture, autres charges (fret, personnel, "
+"accessoires ou équipements divers)"
+msgstr ""
+"Catégorie K : Hélicoptère sur la toiture, autres charges (fret, personnel, "
+"accessoires ou équipements divers)"
+
+#: src/lib/1990/1990_coef_psi.c:250 src/lib/1990/1990_coef_psi.c:262
+msgid "Finlande, Islande, Norvège, Suède"
+msgstr "Finlande, Islande, Norvège, Suède"
+
+#: src/lib/1990/1990_coef_psi.c:251 src/lib/1990/1990_coef_psi.c:263
+msgid "Autres états membres CEN, altitude > 1000 m"
+msgstr "Autres états membres CEN, altitude > 1000 m"
+
+#: src/lib/1990/1990_coef_psi.c:252 src/lib/1990/1990_coef_psi.c:264
+msgid "Autres états membres CEN, altitude <= 1000 m"
+msgstr "Autres états membres CEN, altitude <= 1000 m"
+
+#: src/lib/1990/1990_coef_psi.c:265
+msgid "Saint-Pierre-et-Miquelon"
+msgstr "Saint-Pierre-et-Miquelon"
+
+#: src/lib/1990/1990_coef_psi.c:333 src/lib/1990/1990_coef_psi.c:343
+msgid "Charges dues au vent sur les bâtiments"
+msgstr "Charges dues au vent sur les bâtiments"
+
+#: src/lib/1990/1990_coef_psi.c:411 src/lib/1990/1990_coef_psi.c:422
+msgid "Température (hors incendie) dans les bâtiments"
+msgstr "Température (hors incendie) dans les bâtiments"

@@ -16,18 +16,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// duree_projet_eu : renvoie la durée (en année) indicative de la norme européenne
+// _1990_duree_projet_eu : renvoie la durée (en année) indicative de la norme européenne
 // Dans le cas où la durée indiquée par la norme européenne est un
 // intervalle d'année, la durée la plus importante est renvoyée.
 // Si la valeur de type ne correspond pas à une catégorie, la fonction renvoie -1.
 // type : categorie de durée d'utilisation de projet
-int duree_projet_eu(int type);
+int _1990_duree_projet_eu(int type);
 // duree_projet_eu : renvoie la durée (en année) indicative de la norme française
-int duree_projet_fr(int type);
+int _1990_duree_projet_fr(int type);
 
-// duree_projet_txt_eu : renvoie la description des catérogies des durées indicative de la norme européenne
+// _1990_duree_projet_txt_eu : renvoie la description des catérogies des durées indicative de la norme européenne
 // Renvoie NULL si la catégorie n'existe pas
 // type : catégorie de durée d'utilisation de projet
-char* duree_projet_txt_eu(int type);
-// duree_projet_txt_fr : renvoie la description des catérogies des durées indicative de la norme française
-char* duree_projet_txt_fr(int type);
+char* _1990_duree_projet_txt_eu(int type);
+// _1990_duree_projet_txt_fr : renvoie la description des catérogies des durées indicative de la norme française
+char* _1990_duree_projet_txt_fr(int type);

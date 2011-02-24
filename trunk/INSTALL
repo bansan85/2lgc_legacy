@@ -35,15 +35,12 @@ aclocal
 libtoolize
 automake --add-missing --copy
 autoconf
-./configure
-make -j3
-make check -j3
+./configure && make -j3 && make check -j3
 
 
 Le script clean_config permet de supprimer tous les fichiers temporaires créés par les différents programmes de configuration et de compilation
 
 si le programme ne permet pas une compilation sans erreur par un 
-./_configure
 1) vérifier le message d'erreur, il s'agit peut-être d'une application dont dépend le logiciel qui est non installée
 2) A défaut, il faut déposer un rapport de bogue afin d'expliquer la raison de cet échec.
 
