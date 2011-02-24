@@ -20,12 +20,12 @@
 #include <libintl.h>
 #include <locale.h>
 
-// duree_projet_eu : renvoie la durée (en année) indicative de la norme européenne
+// _1990_duree_projet_eu : renvoie la durée (en année) indicative de la norme européenne
 // Dans le cas où la durée indiquée par la norme européenne est un
 // intervalle d'année, la durée la plus importante est renvoyée.
 // Si la valeur de type ne correspond pas à une catégorie, la fonction renvoie -1.
 // type : categorie de durée d'utilisation de projet
-int duree_projet_eu(int type)
+int _1990_duree_projet_eu(int type)
 {
 	switch (type)
 	{
@@ -62,12 +62,12 @@ int duree_projet_eu(int type)
 	}
 }
 
-// duree_projet_fr : renvoie la durée (en année) indicative de la norme française
+// _1990_duree_projet_fr : renvoie la durée (en année) indicative de la norme française
 // Dans le cas où la durée indiquée par la norme européenne est un
 // intervalle d'année, la durée la plus importante est renvoyée.
 // Si la valeur de type ne correspond pas à une catégorie, la fonction renvoie -1.
 // type : categorie de durée d'utilisation de projet
-int duree_projet_fr(int type)
+int _1990_duree_projet_fr(int type)
 {
 	switch (type)
 	{
@@ -105,10 +105,10 @@ int duree_projet_fr(int type)
 }
 
 
-// duree_projet_txt_eu : renvoie la description des catérogies des durées indicative de la norme européenne
+// _1990_duree_projet_txt_eu : renvoie la description des catérogies des durées indicative de la norme européenne
 // Renvoie NULL si la catégorie n'existe pas
 // type : catégorie de durée d'utilisation de projet
-char* duree_projet_txt_eu(int type)
+char* _1990_duree_projet_txt_eu(int type)
 {
 	switch(type)
 	{
@@ -145,8 +145,40 @@ char* duree_projet_txt_eu(int type)
 	}
 }
 
-// duree_projet_txt_fr : renvoie la description des catérogies des durées indicative de la norme française
-char* duree_projet_txt_fr(int type)
+// _1990_duree_projet_txt_fr : renvoie la description des catérogies des durées indicative de la norme française
+char* _1990_duree_projet_txt_fr(int type)
 {
-	return duree_projet_txt_eu(type);
+	switch(type)
+	{
+		case 1 :
+		{
+			return gettext("Structures provisoires");
+			break;
+		}
+		case 2 :
+		{
+			return gettext("Éléments structuraux remplaçables, par exemple poutres de roulement, appareils d'appui");
+			break;
+		}
+		case 3 :
+		{
+			return gettext("Structures agricoles et similaires");
+			break;
+		}
+		case 4 :
+		{
+			return gettext("Structures de bâtiments et autres structures courantes");
+			break;
+		}
+		case 5 :
+		{
+			return gettext("Structures monumentales de bâtiments, pont et autres ouvrages de génie civil");
+			break;
+		}
+		default :
+		{
+			return NULL;
+			break;
+		}
+	}
 }
