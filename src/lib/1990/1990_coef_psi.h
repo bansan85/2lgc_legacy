@@ -20,87 +20,11 @@
 // pour les bâtiment et les charges d'exploitation
 // Si la valeur de type ne correspond pas à une catégorie, la fonction renvoie -1.
 // type : categorie de durée d'utilisation de projet
-double _1990_coef_psi0_bat_exp_eu(int type);
-double _1990_coef_psi1_bat_exp_eu(int type);
-double _1990_coef_psi2_bat_exp_eu(int type);
+double _1990_coef_psi0_bat_eu(int type);
+double _1990_coef_psi1_bat_eu(int type);
+double _1990_coef_psi2_bat_eu(int type);
 // _1990_coef_psi0_bat_exp_fr : renvoie le coefficient psi0 indiquée de la norme française
 // pour les bâtiment et les charges d'exploitation
-double _1990_coef_psi0_bat_exp_fr(int type);
-double _1990_coef_psi1_bat_exp_fr(int type);
-double _1990_coef_psi2_bat_exp_fr(int type);
-
-// _1990_coef_psi0_bat_exp_txt_eu : renvoie le descriptif de la catégorie du coefficient psi0
-// indiquée de la norme européenne pour les bâtiment et les charges d'exploitation
-// Si la valeur de type ne correspond pas à une catégorie, la fonction renvoie NULL.
-// type : categorie de durée d'utilisation de projet
-char* _1990_coef_psi_bat_exp_txt_eu(int type);
-// _1990_coef_psi0_bat_exp_txt_eu : renvoie le descriptif de la catégorie du coefficient psi0
-// indiquée de la norme française pour les bâtiment et les charges d'exploitation
-char* _1990_coef_psi_bat_exp_txt_fr(int type);
-
-// _1990_coef_psi0_bat_neige_eu : renvoie le coefficient psi0 indiquée de la norme européenne
-// pour les bâtiment et les charges de neige
-// Si la valeur de type ne correspond pas à une catégorie, la fonction renvoie -1.
-// type : categorie de durée d'utilisation de projet
-double _1990_coef_psi0_bat_neige_eu(int type);
-double _1990_coef_psi1_bat_neige_eu(int type);
-double _1990_coef_psi2_bat_neige_eu(int type);
-// _1990_coef_psi0_bat_exp_fr : renvoie le coefficient psi0 indiquée de la norme française
-// pour les bâtiment et les charges de neige
-double _1990_coef_psi0_bat_neige_fr(int type);
-double _1990_coef_psi1_bat_neige_fr(int type);
-double _1990_coef_psi2_bat_neige_fr(int type);
-
-// _1990_coef_psi0_bat_neige_txt_eu : renvoie le descriptif de la catégorie du coefficient psi0
-// indiquée de la norme européenne pour les bâtiment et les charges de neige
-// Si la valeur de type ne correspond pas à une catégorie, la fonction renvoie NULL.
-// type : categorie de durée d'utilisation de projet
-char* _1990_coef_psi_bat_neige_txt_eu(int type);
-// _1990_coef_psi0_bat_neige_txt_eu : renvoie le descriptif de la catégorie du coefficient psi0
-// indiquée de la norme française pour les bâtiment et les charges de neige
-char* _1990_coef_psi_bat_neige_txt_fr(int type);
-
-// _1990_coef_psi0_bat_vent_eu : renvoie le coefficient psi0 indiquée de la norme européenne
-// pour les bâtiment et les charges de vent
-// Si la valeur de type ne correspond pas à une catégorie, la fonction renvoie -1.
-// type : categorie de durée d'utilisation de projet
-double _1990_coef_psi0_bat_vent_eu(int type);
-double _1990_coef_psi1_bat_vent_eu(int type);
-double _1990_coef_psi2_bat_vent_eu(int type);
-// _1990_coef_psi0_bat_vent_fr : renvoie le coefficient psi0 indiquée de la norme française
-// pour les bâtiment et les charges de vent
-double _1990_coef_psi0_bat_vent_fr(int type);
-double _1990_coef_psi1_bat_vent_fr(int type);
-double _1990_coef_psi2_bat_vent_fr(int type);
-
-// _1990_coef_psi0_bat_vent_txt_eu : renvoie le descriptif de la catégorie du coefficient psi0
-// indiquée de la norme européenne pour les bâtiment et les charges de vent
-// Si la valeur de type ne correspond pas à une catégorie, la fonction renvoie NULL.
-// type : categorie de durée d'utilisation de projet
-char* _1990_coef_psi_bat_vent_txt_eu(int type);
-// _1990_coef_psi0_bat_vent_txt_eu : renvoie le descriptif de la catégorie du coefficient psi0
-// indiquée de la norme française pour les bâtiment et les charges de vent
-char* _1990_coef_psi_bat_vent_txt_fr(int type);
-
-// _1990_coef_psi0_bat_temp_eu : renvoie le coefficient psi0 indiquée de la norme européenne
-// pour les bâtiment et les charges de température
-// Si la valeur de type ne correspond pas à une catégorie, la fonction renvoie -1.
-// type : categorie de durée d'utilisation de projet
-double _1990_coef_psi0_bat_temp_eu(int type);
-double _1990_coef_psi1_bat_temp_eu(int type);
-double _1990_coef_psi2_bat_temp_eu(int type);
-// _1990_coef_psi0_bat_temp_fr : renvoie le coefficient psi0 indiquée de la norme française
-// pour les bâtiment et les charges de température
-double _1990_coef_psi0_bat_temp_fr(int type);
-double _1990_coef_psi1_bat_temp_fr(int type);
-double _1990_coef_psi2_bat_temp_fr(int type);
-
-// _1990_coef_psi0_bat_temp_txt_eu : renvoie le descriptif de la catégorie du coefficient psi0
-// indiquée de la norme européenne pour les bâtiment et les charges de température
-// Si la valeur de type ne correspond pas à une catégorie, la fonction renvoie NULL.
-// type : categorie de durée d'utilisation de projet
-char* _1990_coef_psi_bat_temp_txt_eu(int type);
-// _1990_coef_psi0_bat_temp_txt_eu : renvoie le descriptif de la catégorie du coefficient psi0
-// indiquée de la norme française pour les bâtiment et les charges de température
-char* _1990_coef_psi_bat_temp_txt_fr(int type);
-
+double _1990_coef_psi0_bat_fr(int type);
+double _1990_coef_psi1_bat_fr(int type);
+double _1990_coef_psi2_bat_fr(int type);

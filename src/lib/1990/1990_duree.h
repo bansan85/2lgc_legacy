@@ -28,6 +28,6 @@ int _1990_duree_projet_fr(int type);
 // _1990_duree_projet_txt_eu : renvoie la description des catérogies des durées indicative de la norme européenne
 // Renvoie NULL si la catégorie n'existe pas
 // type : catégorie de durée d'utilisation de projet
-char* _1990_duree_projet_txt_eu(int type);
+char *_1990_duree_projet_txt_eu(int type);
 // _1990_duree_projet_txt_fr : renvoie la description des catérogies des durées indicative de la norme française
-char* _1990_duree_projet_txt_fr(int type);
+char *_1990_duree_projet_txt_fr(int type);
