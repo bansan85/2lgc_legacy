@@ -1,10 +1,13 @@
 Programmation
 Pour les nombres flottants, il faut utiliser double. Entre autre parce que cxsparse utilise des types double et principalement car la précision est plus importante.
 
+
+
+
 Règles de rédaction de l'arborescence ci-dessous :
 	- la description d'éléments de type dossier doit commencer par : dossier contenant
-La source possède l'arborescence suivante :
 
+La source possède l'arborescence suivante :
 	- AUTHORS : contient la liste des auteurs du projet.
 	- ChangeLog : Le ChangeLog
 	- clean_config : supprimer tous les fichiers créés par les autotools et les différents make
@@ -25,6 +28,19 @@ La source possède l'arborescence suivante :
 			- sample : dossier pouvant servir de base viège pour créer une nouvelle norme
 				Un compromis, à la discrétion des développeurs, doit être trouvé entre un fichier regroupant toutes les formules et un fichier par formule.
 			
+
+
+
+Si make check échoue, la ligne où le programme plante peut être obtenu par gdb.
+Par exemple, pour le programme test : src/test/1990__1 il y a deux possibilités :
+	- Soit le fichier est un exécutable et alors un simple "gdb src/test/1990__1" "run" "bt full" détecte l'emplacement exact du problème
+	- Soit le fichier est un script shell, il faut alors lancer src/test/.libs/1990__1. Il sera alors indiqué qu'il manque une librairie.
+		Pour chaque librairie manquante, il faudra compléter la variable shell : export LD_LIBRARY_PATH=src/lib/1990/.libs/
+		Ensuite, "gdb src/test/.libs/1990__1" "run" "bt full" détecte l'emplacement exact du problème
+
+
+
+
 
 
 

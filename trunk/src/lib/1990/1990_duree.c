@@ -29,36 +29,12 @@ int _1990_duree_projet_eu(int type)
 {
 	switch (type)
 	{
-		case 1 :
-		{
-			return 10;
-			break;
-		}
-		case 2 :
-		{
-			return 25;
-			break;
-		}
-		case 3 :
-		{
-			return 30;
-			break;
-		}
-		case 4 :
-		{
-			return 50;
-			break;
-		}
-		case 5 :
-		{
-			return 100;
-			break;
-		}
-		default :
-		{
-			return -1;
-			break;
-		}
+		case 1 : { return 10; break; }
+		case 2 : { return 25; break; }
+		case 3 : { return 30; break; }
+		case 4 : { return 50; break; }
+		case 5 : { return 100; break; }
+		default : { return -1; break; }
 	}
 }
 
@@ -71,36 +47,12 @@ int _1990_duree_projet_fr(int type)
 {
 	switch (type)
 	{
-		case 1 :
-		{
-			return 10;
-			break;
-		}
-		case 2 :
-		{
-			return 25;
-			break;
-		}
-		case 3 :
-		{
-			return 25;
-			break;
-		}
-		case 4 :
-		{
-			return 50;
-			break;
-		}
-		case 5 :
-		{
-			return 100;
-			break;
-		}
-		default :
-		{
-			return -1;
-			break;
-		}
+		case 1 : { return 10; break; }
+		case 2 : { return 25; break; }
+		case 3 : { return 25; break; }
+		case 4 : { return 50; break; }
+		case 5 : { return 100; break; }
+		default : { return -1; break; }
 	}
 }
 
@@ -108,77 +60,29 @@ int _1990_duree_projet_fr(int type)
 // _1990_duree_projet_txt_eu : renvoie la description des catérogies des durées indicative de la norme européenne
 // Renvoie NULL si la catégorie n'existe pas
 // type : catégorie de durée d'utilisation de projet
-char* _1990_duree_projet_txt_eu(int type)
+char *_1990_duree_projet_txt_eu(int type)
 {
 	switch(type)
 	{
-		case 1 :
-		{
-			return gettext("Structures provisoires");
-			break;
-		}
-		case 2 :
-		{
-			return gettext("Éléments structuraux remplaçables, par exemple poutres de roulement, appareils d'appui");
-			break;
-		}
-		case 3 :
-		{
-			return gettext("Structures agricoles et similaires");
-			break;
-		}
-		case 4 :
-		{
-			return gettext("Structures de bâtiments et autres structures courantes");
-			break;
-		}
-		case 5 :
-		{
-			return gettext("Structures monumentales de bâtiments, pont et autres ouvrages de génie civil");
-			break;
-		}
-		default :
-		{
-			return NULL;
-			break;
-		}
+		case 1 : { return gettext("Structures provisoires"); break; }
+		case 2 : { return gettext("Éléments structuraux remplaçables, par exemple poutres de roulement, appareils d'appui"); break; }
+		case 3 : { return gettext("Structures agricoles et similaires"); break; }
+		case 4 : { return gettext("Structures de bâtiments et autres structures courantes"); break; }
+		case 5 : { return gettext("Structures monumentales de bâtiments, pont et autres ouvrages de génie civil"); break; }
+		default : { return NULL; break; }
 	}
 }
 
 // _1990_duree_projet_txt_fr : renvoie la description des catérogies des durées indicative de la norme française
-char* _1990_duree_projet_txt_fr(int type)
+char *_1990_duree_projet_txt_fr(int type)
 {
 	switch(type)
 	{
-		case 1 :
-		{
-			return gettext("Structures provisoires");
-			break;
-		}
-		case 2 :
-		{
-			return gettext("Éléments structuraux remplaçables, par exemple poutres de roulement, appareils d'appui");
-			break;
-		}
-		case 3 :
-		{
-			return gettext("Structures agricoles et similaires");
-			break;
-		}
-		case 4 :
-		{
-			return gettext("Structures de bâtiments et autres structures courantes");
-			break;
-		}
-		case 5 :
-		{
-			return gettext("Structures monumentales de bâtiments, pont et autres ouvrages de génie civil");
-			break;
-		}
-		default :
-		{
-			return NULL;
-			break;
-		}
+		case 1 : { return gettext("Structures provisoires"); break; }
+		case 2 : { return gettext("Éléments structuraux remplaçables, par exemple poutres de roulement, appareils d'appui"); break; }
+		case 3 : { return gettext("Structures agricoles et similaires"); break; }
+		case 4 : { return gettext("Structures de bâtiments et autres structures courantes"); break; }
+		case 5 : { return gettext("Structures monumentales de bâtiments, pont et autres ouvrages de génie civil"); break; }
+		default : { return NULL; break; }
 	}
 }
