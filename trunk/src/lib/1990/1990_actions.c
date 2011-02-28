@@ -20,6 +20,9 @@
 #include <libintl.h>
 #include <locale.h>
 
+#include "1990_actions.h"
+#include "projet.h"
+
 // _1990_duree_projet_txt_eu : renvoie la description des catérogies des durées indicative de la norme européenne
 // Renvoie NULL si la catégorie n'existe pas
 // type : catégorie de durée d'utilisation de projet
@@ -43,6 +46,7 @@ char *_1990_action_categorie_bat_txt_eu(int type)
 		case 14 : { return gettext("Vent"); break; }
 		case 15 : { return gettext("Température (hors incendie)"); break; }
 		case 16 : { return gettext("Accidentelle"); break; }
+		case 17 : { return gettext("Sismique"); break; }
 		default : { return NULL; break; }
 	}
 }
@@ -74,7 +78,18 @@ char *_1990_action_categorie_bat_txt_fr(int type)
 		case 18 : { return gettext("Vent"); break; }
 		case 19 : { return gettext("Température (hors incendie)"); break; }
 		case 20 : { return gettext("Accidentelle"); break; }
-		case 21 : { return gettext("Eaux souterraines"); break; }
+		case 21 : { return gettext("Sismique"); break; }
+		case 22 : { return gettext("Eaux souterraines"); break; }
+		default : { return NULL; break; }
+	}
+}
+
+char *_1990_action_categorie_bat_txt(int type, int pays)
+{
+	switch (pays)
+	{
+		case 0 : { return _1990_action_categorie_bat_txt_eu(type); break; }
+		case 1 : { return _1990_action_categorie_bat_txt_fr(type); break; }
 		default : { return NULL; break; }
 	}
 }
@@ -96,6 +111,8 @@ int _1990_action_type_combinaison_bat_eu(int categorie)
 		return 3;
 	else if (categorie == 16)
 		return 4;
+	else if (categorie == 17)
+		return 5;
 	else
 		return -1;
 }
@@ -119,6 +136,59 @@ int _1990_action_type_combinaison_bat_fr(int categorie)
 		return 4;
 	else if (categorie == 21)
 		return 5;
+	else if (categorie == 22)
+		return 6;
 	else
 		return -1;
+}
+
+int _1990_action_type_combinaison_bat(int categorie, int pays)
+{
+	switch (pays)
+	{
+		case 0 : { return _1990_action_type_combinaison_bat_eu(categorie); break; }
+		case 1 : { return _1990_action_type_combinaison_bat_fr(categorie); break; }
+		default : { return -1; break; }
+	}
+}
+
+// _1990_action_init : Initialise la liste des actions
+int _1990_action_init(Projet *projet)
+{
+	projet->actions = list_init();
+	if (projet->actions == NULL)
+		return -2;
+	else
+		return 0;
+}
+
+// _1990_action_nouveau_init : ajouter une nouvelle action à la liste des actions
+// Renvoie -1 si le pays ou la catégorie n'est pas bon
+// Renvoie -2 si l'insertion a échoué
+// Renvoie 0 si tout va bien
+int _1990_action_ajout(Projet *projet, int categorie)
+{
+	Action *action_dernier, action_nouveau;
+
+	if (_1990_action_type_combinaison_bat(categorie, projet->pays) == -1)
+		return -1;
+	list_mvrear(projet->actions);
+	action_dernier = (Action *)list_mvrear(projet->actions);
+	action_nouveau.nom = NULL;
+	action_nouveau.description = NULL;
+	action_nouveau.categorie = categorie;
+	if (action_dernier == NULL)
+		action_nouveau.categorie = 1;
+	else
+		action_nouveau.categorie = action_dernier->numero+1;
+	if (list_insert_after(projet->actions, &(action_nouveau), sizeof(action_nouveau)) == NULL)
+		return -2;
+	
+	return 0;
+}
+
+void _1990_action_free(Projet *projet)
+{
+	list_free(projet->actions, LIST_DEALLOC);
+	projet->actions = NULL;
 }

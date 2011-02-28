@@ -35,8 +35,8 @@ aclocal
 libtoolize
 automake --add-missing --copy
 autoconf
-./configure && make -j3 && make check -j3
-
+CFLAGS="-march=nocona -O0 -g3 -ggdb3 -pipe -ftracer -fsched2-use-traces -Wl,--as-needed -Wl,-O0 -fno-inline -Wall -Wextra -Werror -Wfatal-errors -pg -fprofile-arcs -ftest-coverage" ./configure && make -j3 && make check -j3
+NOTA IMPORTANT : -pg -fprofile-arcs -ftest-coverage sont des options de deboguage qui ne doivent pas être mises pour une utilisation courante.
 
 Le script clean_config permet de supprimer tous les fichiers temporaires créés par les différents programmes de configuration et de compilation
 

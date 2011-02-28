@@ -16,41 +16,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "config.h"
-#include "cmd_text.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <libintl.h>
-#include <locale.h>
-#include <string.h>
+#ifndef __PROJET_H
+#define __PROJET_H
 
+#include "list.h"
 
-int main(int argc, char *argv[])
+typedef struct __Projet
 {
-	setlocale( LC_ALL, "" );
-	bindtextdomain(PACKAGE, LOCALEDIR);
-	textdomain(PACKAGE);
-	
-	switch (argc)
-	{
-		case 2:
-		{
-			if ((strcmp(argv[1], "-w") == 0) || (strcmp(argv[1], "--warranty") == 0))
-			{
-				show_warranty();
-			}
-			else if ((strcmp(argv[1], "-h") == 0) || (strcmp(argv[1], "--help") == 0))
-			{
-				show_help();
-			}
-			break;
-		}
-		default:
-		{
-			break;
-		}
-	}
+	LIST			*actions;
+	LIST			*groupes;
+	int			pays;		// 0 : norme européenne
+						// 1 : norme française
+} Projet;
 
-	return 0;
-}
+Projet *projet_init();
+int projet_free(Projet *projet);
 
+#endif

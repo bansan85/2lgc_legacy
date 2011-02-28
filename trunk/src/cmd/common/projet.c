@@ -16,41 +16,33 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "config.h"
-#include "cmd_text.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <libintl.h>
 #include <locale.h>
-#include <string.h>
 
+#include "projet.h"
 
-int main(int argc, char *argv[])
+Projet *projet_init()
 {
-	setlocale( LC_ALL, "" );
-	bindtextdomain(PACKAGE, LOCALEDIR);
-	textdomain(PACKAGE);
-	
-	switch (argc)
-	{
-		case 2:
-		{
-			if ((strcmp(argv[1], "-w") == 0) || (strcmp(argv[1], "--warranty") == 0))
-			{
-				show_warranty();
-			}
-			else if ((strcmp(argv[1], "-h") == 0) || (strcmp(argv[1], "--help") == 0))
-			{
-				show_help();
-			}
-			break;
-		}
-		default:
-		{
-			break;
-		}
-	}
-
-	return 0;
+	Projet *projet;
+	projet = (Projet*)malloc(sizeof(Projet));
+	if (projet == NULL)
+		return NULL;
+	projet->actions = NULL;
+	projet->groupes = NULL;
+	projet->pays = 0;
+	return projet;
 }
 
+int projet_free(Projet *projet)
+{
+	if (projet->actions != NULL)
+		_1990_action_free(projet);
+	if (projet->groupes != NULL)
+	{
+		list_free(projet->groupes, LIST_DEALLOC);
+		projet->groupes = NULL;
+	}
+	return 0;
+}

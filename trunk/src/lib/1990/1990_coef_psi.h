@@ -28,3 +28,7 @@ double _1990_coef_psi2_bat_eu(int type);
 double _1990_coef_psi0_bat_fr(int type);
 double _1990_coef_psi1_bat_fr(int type);
 double _1990_coef_psi2_bat_fr(int type);
+
+double _1990_coef_psi0_bat(int type, int pays);
+double _1990_coef_psi1_bat(int type, int pays);
+double _1990_coef_psi2_bat(int type, int pays);
