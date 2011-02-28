@@ -16,23 +16,34 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-typedef struct __charge {
+#include <list.h>
+
+#include "projet.h"
+
+typedef struct __Charge
+{
 	char			*nom;
 	char			*description;
 	double			valeur_caracteristique;
 	double			valeur_combinaison;		// valeur_caracteristique * psi0
 	double			valeur_frequente;		// valeur_caracteristique * psi1
 	double			valeur_quasi_permanente;	// valeur_caracteristique * psi2
-} charge;
+} Charge;
 
-
-typedef struct __action {
+typedef struct __Action
+{
 	char			*nom;
 	char			*description;
-	int			categorie;			// Les catégories sont défnies dans les fonctions _1990_action_categorie
-	charge*			*charges;
-	struct __action		*suivant;
-} action;
+	int			numero;
+	int			categorie;			// Les catégories sont définies dans les fonctions _1990_action_categorie
+	LIST			*charges;
+} Action;
+
+typedef struct __Groupe
+{
+	char			*nom;
+
+} Groupe;
 
 // _1990_action_categorie_bat_txt_eu : renvoie la description des catérogies des actions des bâtiments selon la norme européenne
 // Renvoie NULL si la catégorie n'existe pas
@@ -40,6 +51,7 @@ typedef struct __action {
 char *_1990_action_categorie_bat_txt_eu(int type);
 // _1990_action_categorie_bat_txt_fr : renvoie la description des catérogies des actions des bâtimentsselon la norme française
 char *_1990_action_categorie_bat_txt_fr(int type);
+char *_1990_action_categorie_bat_txt(int type, int pays);
 
 // _1990_action_type_combinaison_bat_eu : renvoie le type d'une action pour les combinaisons d'action des bâtiments selon la norme européenne
 // Renvoie	: -1 si la catégorie n'existe pas
@@ -57,5 +69,9 @@ int _1990_action_type_combinaison_bat_fr(int categorie);
 //		: 3 si action variable
 //		: 4 si accidentelle
 //		: 5 si eaux souterraines
+int _1990_action_type_combinaison_bat(int categorie, int pays);
 
-
+// _1990_action_groupes 
+int _1990_action_init(Projet *projet);
+int _1990_action_ajout(Projet *projet, int categorie);
+void _1990_action_free(Projet *projet);

@@ -6,11 +6,12 @@ TESTS = 1990__1
 
 1990__1_SOURCES =	1990__1.c \
 			../cmd/common/cmd_text.c \
-			../cmd/common/erreurs.c
+			../cmd/common/erreurs.c \
+			../cmd/common/projet.c
 
 EXTRA_PROGRAMS = 1990__1
 
-1990__1_LDADD = ../lib/1990/lib1990.la
+1990__1_LDADD =	../lib/1990/lib1990.la -llist
 
 datadir		=       @datadir@
 localedir       =       $(datadir)/locale

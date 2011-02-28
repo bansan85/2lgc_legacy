@@ -44,6 +44,7 @@ double _1990_coef_psi0_bat_eu(int type)
 		case 14 : { return 0.6; break; }
 		case 15 : { return 0.6; break; }
 		case 16 : { return -1.; break; }
+		case 17 : { return -1.; break; }
 		default : { return -1.; break; }
 	}
 }
@@ -67,6 +68,7 @@ double _1990_coef_psi1_bat_eu(int type)
 		case 14 : { return 0.2; break; }
 		case 15 : { return 0.5; break; }
 		case 16 : { return -1.; break; }
+		case 17 : { return -1.; break; }
 		default : { return -1.; break; }
 	}
 }
@@ -90,6 +92,7 @@ double _1990_coef_psi2_bat_eu(int type)
 		case 14 : { return 0.0; break; }
 		case 15 : { return 0.0; break; }
 		case 16 : { return -1.; break; }
+		case 17 : { return -1.; break; }
 		default : { return -1.; break; }
 	}
 }
@@ -121,6 +124,7 @@ double _1990_coef_psi0_bat_fr(int type)
 		case 19 : { return 0.6; break; }
 		case 20 : { return -1.; break; }
 		case 21 : { return -1.; break; }
+		case 22 : { return -1.; break; }
 		default : { return -1.; break; }
 	}
 }
@@ -149,6 +153,7 @@ double _1990_coef_psi1_bat_fr(int type)
 		case 19 : { return 0.5; break; }
 		case 20 : { return -1.; break; }
 		case 21 : { return -1.; break; }
+		case 22 : { return -1.; break; }
 		default : { return -1.; break; }
 	}
 }
@@ -177,6 +182,37 @@ double _1990_coef_psi2_bat_fr(int type)
 		case 19 : { return 0.0; break; }
 		case 20 : { return -1.; break; }
 		case 21 : { return -1.; break; }
+		case 22 : { return -1.; break; }
+		default : { return -1.; break; }
+	}
+}
+
+double _1990_coef_psi0_bat(int type, int pays)
+{
+	switch (pays)
+	{
+		case 0 : { return _1990_coef_psi0_bat_eu(type); break; }
+		case 1 : { return _1990_coef_psi0_bat_fr(type); break; }
+		default : { return -1.; break; }
+	}
+}
+
+double _1990_coef_psi1_bat(int type, int pays)
+{
+	switch (pays)
+	{
+		case 0 : { return _1990_coef_psi1_bat_eu(type); break; }
+		case 1 : { return _1990_coef_psi1_bat_fr(type); break; }
+		default : { return -1.; break; }
+	}
+}
+
+double _1990_coef_psi2_bat(int type, int pays)
+{
+	switch (pays)
+	{
+		case 0 : { return _1990_coef_psi2_bat_eu(type); break; }
+		case 1 : { return _1990_coef_psi2_bat_fr(type); break; }
 		default : { return -1.; break; }
 	}
 }

@@ -12,4 +12,8 @@ find . -name "*.mo" -exec rm {} \;
 find po -name "*.pot" -exec rm {} \;
 find po -name "*.gmo" -exec rm {} \;
 find . -name "*~" -exec rm {} \;
+find . -name "*.gcov" -exec rm {} \;
+find . -name "*.gcda" -exec rm {} \;
+find . -name "gmon.out" -exec rm {} \;
+find . -name "*.gcno" -exec rm {} \;
 find src/test -type f -perm /111 -exec rm {} \;

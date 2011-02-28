@@ -1,6 +1,16 @@
 Programmation
 Pour les nombres flottants, il faut utiliser double. Entre autre parce que cxsparse utilise des types double et principalement car la précision est plus importante.
 
+tous les defines doivent être en majuscule :
+#define BUG free((int*)1)
+
+Toutes les noms de définitions de structure doivent avoir la première lettre en majuscule. Le nom des propriétés est en minuscule
+typedef struct __Projet
+{
+	Actions		actions
+} Projet;
+
+
 
 
 

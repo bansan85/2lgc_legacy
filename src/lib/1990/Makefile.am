@@ -1,6 +1,9 @@
-DEFAULT_INCLUDES	=	-I../../..
+DEFAULT_INCLUDES	=	-I../../.. \
+				-I../../cmd/common
 
 lib_LTLIBRARIES = lib1990.la
+
+lib1990_la_LIBADD = -llist
 
 lib1990_la_SOURCES =	1990_duree.c \
 			1990_coef_psi.c \
