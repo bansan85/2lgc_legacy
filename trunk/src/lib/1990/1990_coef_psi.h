@@ -16,6 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef __1990_COEF_PSI_H
+#define __1990_COEF_PSI_H
+
 // _1990_coef_psi0_bat_exp_eu : renvoie le coefficient psi0 indiquée de la norme européenne
 // pour les bâtiment et les charges d'exploitation
 // Si la valeur de type ne correspond pas à une catégorie, la fonction renvoie -1.
@@ -32,3 +35,5 @@ double _1990_coef_psi2_bat_fr(int type);
 double _1990_coef_psi0_bat(int type, int pays);
 double _1990_coef_psi1_bat(int type, int pays);
 double _1990_coef_psi2_bat(int type, int pays);
+
+#endif

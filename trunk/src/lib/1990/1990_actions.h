@@ -16,6 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef __1990_ACTIONS_H
+#define __1990_ACTIONS_H
+
 #include <list.h>
 
 #include "projet.h"
@@ -38,12 +41,6 @@ typedef struct __Action
 	int			categorie;			// Les catégories sont définies dans les fonctions _1990_action_categorie
 	LIST			*charges;
 } Action;
-
-typedef struct __Groupe
-{
-	char			*nom;
-
-} Groupe;
 
 // _1990_action_categorie_bat_txt_eu : renvoie la description des catérogies des actions des bâtiments selon la norme européenne
 // Renvoie NULL si la catégorie n'existe pas
@@ -74,4 +71,8 @@ int _1990_action_type_combinaison_bat(int categorie, int pays);
 // _1990_action_groupes 
 int _1990_action_init(Projet *projet);
 int _1990_action_ajout(Projet *projet, int categorie);
+int _1990_action_cherche(void *input, void *curr);
+void _1990_action_affiche_tout(Projet *projet);
 void _1990_action_free(Projet *projet);
+
+#endif
