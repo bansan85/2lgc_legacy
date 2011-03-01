@@ -16,6 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef __1990_DUREE_H
+#define __1990_DUREE_H
+
 // _1990_duree_projet_eu : renvoie la durée (en année) indicative de la norme européenne
 // Dans le cas où la durée indiquée par la norme européenne est un
 // intervalle d'année, la durée la plus importante est renvoyée.
@@ -31,3 +34,5 @@ int _1990_duree_projet_fr(int type);
 char *_1990_duree_projet_txt_eu(int type);
 // _1990_duree_projet_txt_fr : renvoie la description des catérogies des durées indicative de la norme française
 char *_1990_duree_projet_txt_fr(int type);
+
+#endif

@@ -19,6 +19,8 @@
 #include "config.h"
 #include <libintl.h>
 #include <locale.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 #include "1990_actions.h"
 #include "projet.h"
@@ -157,7 +159,7 @@ int _1990_action_init(Projet *projet)
 {
 	projet->actions = list_init();
 	if (projet->actions == NULL)
-		return -2;
+		return -1;
 	else
 		return 0;
 }
@@ -173,22 +175,58 @@ int _1990_action_ajout(Projet *projet, int categorie)
 	if (_1990_action_type_combinaison_bat(categorie, projet->pays) == -1)
 		return -1;
 	list_mvrear(projet->actions);
-	action_dernier = (Action *)list_mvrear(projet->actions);
+	action_dernier = (Action *)list_rear(projet->actions);
 	action_nouveau.nom = NULL;
 	action_nouveau.description = NULL;
 	action_nouveau.categorie = categorie;
 	if (action_dernier == NULL)
-		action_nouveau.categorie = 1;
+		action_nouveau.numero = 1;
 	else
-		action_nouveau.categorie = action_dernier->numero+1;
+		action_nouveau.numero = action_dernier->numero+1;
+	
 	if (list_insert_after(projet->actions, &(action_nouveau), sizeof(action_nouveau)) == NULL)
 		return -2;
 	
 	return 0;
 }
 
+int _1990_action_cherche(void *input, void *curr)
+{
+	Action *action = (Action*)curr;
+	int *numero = (int *)input;
+	if (action->numero == (*numero))
+		return FALSE;
+	else
+		return TRUE;
+}
+
+int _1990_action_affiche(__attribute__((unused)) void *input, void *curr)
+{
+	Action *action = (Action*)curr;
+	printf("%s %s %d %d\n", action->nom, action->description, action->numero, action->categorie);
+	return TRUE;
+}
+
+void _1990_action_affiche_tout(Projet *projet)
+{
+	list_traverse(projet->actions, (void *)NULL, _1990_action_affiche, 0);
+	return;
+}
+
+void _1990_action_free_free(void *data)
+{
+	Action *action = (Action*)data;
+	if (action->nom != NULL)
+		free(action->nom);
+	if (action->description != NULL)
+		free(action->description);
+	free(action);
+	return;
+}
+
 void _1990_action_free(Projet *projet)
 {
-	list_free(projet->actions, LIST_DEALLOC);
+	list_free(projet->actions, &(_1990_action_free_free));
 	projet->actions = NULL;
+	return;
 }

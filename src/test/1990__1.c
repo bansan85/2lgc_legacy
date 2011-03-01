@@ -27,6 +27,7 @@
 #include "1990_duree.h"
 #include "1990_coef_psi.h"
 #include "1990_actions.h"
+#include "1990_groupes.h"
 #include "maths.h"
 #include "erreurs.h"
 #include "projet.h"
@@ -79,16 +80,6 @@ int main(void)
 	if (_1990_action_type_combinaison_bat_fr(22) != 6) BUG;
 	if (_1990_action_type_combinaison_bat_fr(23) != -1) BUG;
 	if (_1990_action_type_combinaison_bat_fr(15690) != -1) BUG;
-	
-	projet = projet_init();
-	if (projet == NULL) BUG;
-	if (_1990_action_init(projet) != 0) BUG;
-	if (_1990_action_ajout(projet, 0) != -1) BUG;
-	if (_1990_action_ajout(projet, 150) != -1) BUG;
-	if (_1990_action_ajout(projet, 3) != 0) BUG;
-	if (_1990_action_ajout(projet, 2) != 0) BUG;
-	if (_1990_action_ajout(projet, 5) != 0) BUG;
-	_1990_action_free(projet);
 	
 	// Test 1990_coef_psi.c
 	
@@ -282,12 +273,27 @@ int main(void)
 	projet = projet_init();
 	projet->pays = 1;
 	if (projet == NULL) BUG;
-	if (_1990_action_init(projet) == -1) BUG;
-	if (_1990_action_ajout(projet, 1) == -1) BUG;
-	if (_1990_action_ajout(projet, 2) == -1) BUG;
-	if (_1990_action_ajout(projet, 3) == -1) BUG;
-	if (_1990_action_ajout(projet, 20) == -1) BUG;
-	if (_1990_action_ajout(projet, 21) == -1) BUG;
+	if (_1990_action_init(projet) != 0) BUG;
+	if (_1990_action_ajout(projet, 1) != 0) BUG;
+	if (_1990_action_ajout(projet, 2) != 0) BUG;
+	if (_1990_action_ajout(projet, 3) != 0) BUG;
+	if (_1990_action_ajout(projet, 20) != 0) BUG;
+	if (_1990_action_ajout(projet, 21) != 0) BUG;
+	_1990_action_affiche_tout(projet);
+	if (_1990_groupe_etage_init(projet) != 0) BUG;
+	if (_1990_groupe_etage_ajout(projet, 1) != 0) BUG;
+	if (_1990_groupe_etage_ajout(projet, 2) != 0) BUG;
+	if (_1990_groupe_ajout(projet, 1, 1, GROUPE_COMBINAISON_OR) != 0) BUG;
+	if (_1990_groupe_ajout(projet, 1, 2, GROUPE_COMBINAISON_XOR) != 0) BUG;
+	if (_1990_groupe_ajout(projet, 2, 1, GROUPE_COMBINAISON_AND) != 0) BUG;
+	if (_1990_groupe_ajout_element(projet, 1, 1, 1) != 0) BUG;
+	if (_1990_groupe_ajout_element(projet, 1, 1, 2) != 0) BUG;
+	if (_1990_groupe_ajout_element(projet, 1, 1, 3) != 0) BUG;
+	if (_1990_groupe_ajout_element(projet, 1, 2, 4) != 0) BUG;
+	if (_1990_groupe_ajout_element(projet, 1, 2, 5) != 0) BUG;
+	if (_1990_groupe_ajout_element(projet, 2, 1, 1) != 0) BUG;
+	if (_1990_groupe_ajout_element(projet, 2, 1, 2) == 0) BUG;
+	_1990_groupe_affiche_tout(projet);
 	projet_free(projet);
 	
 	return EXIT_SUCCESS;

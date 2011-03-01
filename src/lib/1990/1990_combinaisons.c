@@ -16,33 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <stdio.h>
-#include <stdlib.h>
+#include "config.h"
 #include <libintl.h>
 #include <locale.h>
+#include <stdlib.h>
+#include <stdio.h>
 
-#include "projet.h"
 #include "1990_actions.h"
+#include "projet.h"
 #include "1990_groupes.h"
 
-Projet *projet_init()
-{
-	Projet *projet;
-	projet = (Projet*)malloc(sizeof(Projet));
-	if (projet == NULL)
-		return NULL;
-	projet->actions = NULL;
-	projet->groupes = NULL;
-	projet->pays = 0;
-	return projet;
-}
-
-int projet_free(Projet *projet)
-{
-	if (projet->actions != NULL)
-		_1990_action_free(projet);
-	if (projet->groupes != NULL)
-		_1990_groupe_free(projet);
-	free(projet);
-	return 0;
-}
