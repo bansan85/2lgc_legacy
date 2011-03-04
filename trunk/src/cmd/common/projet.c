@@ -22,17 +22,36 @@
 #include <locale.h>
 
 #include "projet.h"
+#include "erreurs.h"
 #include "1990_actions.h"
 #include "1990_groupes.h"
+#include "1990_combinaisons.h"
 
 Projet *projet_init()
 {
 	Projet *projet;
 	projet = (Projet*)malloc(sizeof(Projet));
 	if (projet == NULL)
-		return NULL;
-	projet->actions = NULL;
-	projet->groupes = NULL;
+		BUG(NULL);
+	if (_1990_action_init(projet) != 0)
+	{
+		free(projet);
+		BUG(NULL);
+	}
+	if (_1990_groupe_etage_init(projet) != 0)
+	{
+		_1990_action_free(projet);
+		free(projet);
+		BUG(NULL);
+	}
+	if (_1990_combinaisons_init(projet) != 0)
+	{
+		_1990_groupe_free(projet);
+		_1990_action_free(projet);
+		free(projet);
+		BUG(NULL);
+	}
+	
 	projet->pays = 0;
 	return projet;
 }

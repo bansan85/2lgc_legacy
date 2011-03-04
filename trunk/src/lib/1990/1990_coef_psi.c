@@ -19,6 +19,7 @@
 #include "config.h"
 #include <libintl.h>
 #include <locale.h>
+#include "erreurs.h"
 
 // _1990_coef_psi0_bat_eu : renvoie le coefficient psi0 indiquée de la norme européenne
 // pour les bâtiment et les charges d'exploitation
@@ -28,72 +29,72 @@ double _1990_coef_psi0_bat_eu(int type)
 {
 	switch (type)
 	{
+		case 0 : { return -1.; break; }
 		case 1 : { return -1.; break; }
-		case 2 : { return -1.; break; }
+		case 2 : { return 0.7; break; }
 		case 3 : { return 0.7; break; }
 		case 4 : { return 0.7; break; }
 		case 5 : { return 0.7; break; }
-		case 6 : { return 0.7; break; }
-		case 7 : { return 1.0; break; }
+		case 6 : { return 1.0; break; }
+		case 7 : { return 0.7; break; }
 		case 8 : { return 0.7; break; }
-		case 9 : { return 0.7; break; }
-		case 10 : { return 0.0; break; }
+		case 9 : { return 0.0; break; }
+		case 10 : { return 0.7; break; }
 		case 11 : { return 0.7; break; }
-		case 12 : { return 0.7; break; }
-		case 13 : { return 0.5; break; }
+		case 12 : { return 0.5; break; }
+		case 13 : { return 0.6; break; }
 		case 14 : { return 0.6; break; }
-		case 15 : { return 0.6; break; }
+		case 15 : { return -1.; break; }
 		case 16 : { return -1.; break; }
-		case 17 : { return -1.; break; }
-		default : { return -1.; break; }
+		default : { BUG(-1.); break; }
 	}
 }
 double _1990_coef_psi1_bat_eu(int type)
 {
 	switch (type)
 	{
+		case 0 : { return -1.; break; }
 		case 1 : { return -1.; break; }
-		case 2 : { return -1.; break; }
+		case 2 : { return 0.5; break; }
 		case 3 : { return 0.5; break; }
-		case 4 : { return 0.5; break; }
+		case 4 : { return 0.7; break; }
 		case 5 : { return 0.7; break; }
-		case 6 : { return 0.7; break; }
-		case 7 : { return 0.9; break; }
-		case 8 : { return 0.7; break; }
-		case 9 : { return 0.5; break; }
-		case 10 : { return 0.0; break; }
+		case 6 : { return 0.9; break; }
+		case 7 : { return 0.7; break; }
+		case 8 : { return 0.5; break; }
+		case 9 : { return 0.0; break; }
+		case 10 : { return 0.5; break; }
 		case 11 : { return 0.5; break; }
-		case 12 : { return 0.5; break; }
+		case 12 : { return 0.2; break; }
 		case 13 : { return 0.2; break; }
-		case 14 : { return 0.2; break; }
-		case 15 : { return 0.5; break; }
+		case 14 : { return 0.5; break; }
+		case 15 : { return -1.; break; }
 		case 16 : { return -1.; break; }
-		case 17 : { return -1.; break; }
-		default : { return -1.; break; }
+		default : { BUG(-1.); break; }
 	}
 }
 double _1990_coef_psi2_bat_eu(int type)
 {
 	switch (type)
 	{
+		case 0 : { return -1.; break; }
 		case 1 : { return -1.; break; }
-		case 2 : { return -1.; break; }
+		case 2 : { return 0.3; break; }
 		case 3 : { return 0.3; break; }
-		case 4 : { return 0.3; break; }
+		case 4 : { return 0.6; break; }
 		case 5 : { return 0.6; break; }
-		case 6 : { return 0.6; break; }
-		case 7 : { return 0.8; break; }
-		case 8 : { return 0.6; break; }
-		case 9 : { return 0.3; break; }
-		case 10 : { return 0.0; break; }
+		case 6 : { return 0.8; break; }
+		case 7 : { return 0.6; break; }
+		case 8 : { return 0.3; break; }
+		case 9 : { return 0.0; break; }
+		case 10 : { return 0.2; break; }
 		case 11 : { return 0.2; break; }
-		case 12 : { return 0.2; break; }
+		case 12 : { return 0.0; break; }
 		case 13 : { return 0.0; break; }
 		case 14 : { return 0.0; break; }
-		case 15 : { return 0.0; break; }
+		case 15 : { return -1.; break; }
 		case 16 : { return -1.; break; }
-		case 17 : { return -1.; break; }
-		default : { return -1.; break; }
+		default : { BUG(-1.); break; }
 	}
 }
 
@@ -103,87 +104,87 @@ double _1990_coef_psi0_bat_fr(int type)
 {
 	switch (type)
 	{
+		case 0 : { return -1.; break; }
 		case 1 : { return -1.; break; }
-		case 2 : { return -1.; break; }
+		case 2 : { return 0.7; break; }
 		case 3 : { return 0.7; break; }
 		case 4 : { return 0.7; break; }
 		case 5 : { return 0.7; break; }
-		case 6 : { return 0.7; break; }
-		case 7 : { return 1.0; break; }
+		case 6 : { return 1.0; break; }
+		case 7 : { return 0.7; break; }
 		case 8 : { return 0.7; break; }
-		case 9 : { return 0.7; break; }
-		case 10 : { return 0.0; break; }
+		case 9 : { return 0.0; break; }
+		case 10 : { return 0.7; break; }
 		case 11 : { return 0.7; break; }
-		case 12 : { return 0.7; break; }
-		case 13 : { return 1.0; break; }
+		case 12 : { return 1.0; break; }
+		case 13 : { return 0.7; break; }
 		case 14 : { return 0.7; break; }
 		case 15 : { return 0.7; break; }
-		case 16 : { return 0.7; break; }
-		case 17 : { return 0.5; break; }
+		case 16 : { return 0.5; break; }
+		case 17 : { return 0.6; break; }
 		case 18 : { return 0.6; break; }
-		case 19 : { return 0.6; break; }
+		case 19 : { return -1.; break; }
 		case 20 : { return -1.; break; }
 		case 21 : { return -1.; break; }
-		case 22 : { return -1.; break; }
-		default : { return -1.; break; }
+		default : { BUG(-1.); break; }
 	}
 }
 double _1990_coef_psi1_bat_fr(int type)
 {
 	switch (type)
 	{
+		case 0 : { return -1.; break; }
 		case 1 : { return -1.; break; }
-		case 2 : { return -1.; break; }
+		case 2 : { return 0.5; break; }
 		case 3 : { return 0.5; break; }
-		case 4 : { return 0.5; break; }
+		case 4 : { return 0.7; break; }
 		case 5 : { return 0.7; break; }
-		case 6 : { return 0.7; break; }
-		case 7 : { return 0.9; break; }
-		case 8 : { return 0.7; break; }
-		case 9 : { return 0.5; break; }
-		case 10 : { return 0.0; break; }
-		case 11 : { return 0.5; break; }
-		case 12 : { return 0.7; break; }
-		case 13 : { return 0.9; break; }
+		case 6 : { return 0.9; break; }
+		case 7 : { return 0.7; break; }
+		case 8 : { return 0.5; break; }
+		case 9 : { return 0.0; break; }
+		case 10 : { return 0.5; break; }
+		case 11 : { return 0.7; break; }
+		case 12 : { return 0.9; break; }
+		case 13 : { return 0.5; break; }
 		case 14 : { return 0.5; break; }
 		case 15 : { return 0.5; break; }
-		case 16 : { return 0.5; break; }
+		case 16 : { return 0.2; break; }
 		case 17 : { return 0.2; break; }
-		case 18 : { return 0.2; break; }
-		case 19 : { return 0.5; break; }
+		case 18 : { return 0.5; break; }
+		case 19 : { return -1.; break; }
 		case 20 : { return -1.; break; }
 		case 21 : { return -1.; break; }
-		case 22 : { return -1.; break; }
-		default : { return -1.; break; }
+		default : { BUG(-1.); break; }
 	}
 }
 double _1990_coef_psi2_bat_fr(int type)
 {
 	switch (type)
 	{
+		case 0 : { return -1.; break; }
 		case 1 : { return -1.; break; }
-		case 2 : { return -1.; break; }
+		case 2 : { return 0.3; break; }
 		case 3 : { return 0.3; break; }
-		case 4 : { return 0.3; break; }
+		case 4 : { return 0.6; break; }
 		case 5 : { return 0.6; break; }
-		case 6 : { return 0.6; break; }
-		case 7 : { return 0.8; break; }
-		case 8 : { return 0.6; break; }
-		case 9 : { return 0.3; break; }
-		case 10 : { return 0.0; break; }
-		case 11 : { return 0.3; break; }
-		case 12 : { return 0.6; break; }
-		case 13 : { return 0.5; break; }
-		case 14 : { return 0.3; break; }
+		case 6 : { return 0.8; break; }
+		case 7 : { return 0.6; break; }
+		case 8 : { return 0.3; break; }
+		case 9 : { return 0.0; break; }
+		case 10 : { return 0.3; break; }
+		case 11 : { return 0.6; break; }
+		case 12 : { return 0.5; break; }
+		case 13 : { return 0.3; break; }
+		case 14 : { return 0.2; break; }
 		case 15 : { return 0.2; break; }
-		case 16 : { return 0.2; break; }
+		case 16 : { return 0.0; break; }
 		case 17 : { return 0.0; break; }
 		case 18 : { return 0.0; break; }
-		case 19 : { return 0.0; break; }
+		case 19 : { return -1.; break; }
 		case 20 : { return -1.; break; }
 		case 21 : { return -1.; break; }
-		case 22 : { return -1.; break; }
-		default : { return -1.; break; }
+		default : { BUG(-1.); break; }
 	}
 }
 
@@ -193,7 +194,7 @@ double _1990_coef_psi0_bat(int type, int pays)
 	{
 		case 0 : { return _1990_coef_psi0_bat_eu(type); break; }
 		case 1 : { return _1990_coef_psi0_bat_fr(type); break; }
-		default : { return -1.; break; }
+		default : { BUG(-1.); break; }
 	}
 }
 
@@ -203,7 +204,7 @@ double _1990_coef_psi1_bat(int type, int pays)
 	{
 		case 0 : { return _1990_coef_psi1_bat_eu(type); break; }
 		case 1 : { return _1990_coef_psi1_bat_fr(type); break; }
-		default : { return -1.; break; }
+		default : { BUG(-1.); break; }
 	}
 }
 
@@ -213,6 +214,6 @@ double _1990_coef_psi2_bat(int type, int pays)
 	{
 		case 0 : { return _1990_coef_psi2_bat_eu(type); break; }
 		case 1 : { return _1990_coef_psi2_bat_fr(type); break; }
-		default : { return -1.; break; }
+		default : { BUG(-1.); break; }
 	}
 }

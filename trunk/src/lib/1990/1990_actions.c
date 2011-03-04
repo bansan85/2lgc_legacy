@@ -24,6 +24,7 @@
 
 #include "1990_actions.h"
 #include "projet.h"
+#include "erreurs.h"
 
 // _1990_duree_projet_txt_eu : renvoie la description des catérogies des durées indicative de la norme européenne
 // Renvoie NULL si la catégorie n'existe pas
@@ -32,24 +33,24 @@ char *_1990_action_categorie_bat_txt_eu(int type)
 {
 	switch(type)
 	{
-		case 1 : { return gettext("Permanente"); break; }
-		case 2 : { return gettext("Précontrainte"); break; }
-		case 3 : { return gettext("Exploitation : Catégorie A : habitation, zones résidentielles"); break; }
-		case 4 : { return gettext("Exploitation : Catégorie B : bureaux"); break; }
-		case 5 : { return gettext("Exploitation : Catégorie C : lieux de réunion"); break; }
-		case 6 : { return gettext("Exploitation : Catégorie D : commerces"); break; }
-		case 7 : { return gettext("Exploitation : Catégorie E : stockage"); break; }
-		case 8 : { return gettext("Exploitation : Catégorie F : zone de trafic, véhicules de poids inférieur à 30 kN"); break; }
-		case 9 : { return gettext("Exploitation : Catégorie G : zone de trafic, véhicules de poids entre 30 kN et 160 kN"); break; }
-		case 10 : { return gettext("Exploitation : Catégorie H : toits"); break; }
-		case 11 : { return gettext("Neige : Finlande, Islande, Norvège, Suède"); break; }
-		case 12 : { return gettext("Neige : Autres états membres CEN, altitude > 1000 m"); break; }
-		case 13 : { return gettext("Neige : Autres états membres CEN, altitude <= 1000 m"); break; }
-		case 14 : { return gettext("Vent"); break; }
-		case 15 : { return gettext("Température (hors incendie)"); break; }
-		case 16 : { return gettext("Accidentelle"); break; }
-		case 17 : { return gettext("Sismique"); break; }
-		default : { return NULL; break; }
+		case 0 : { return gettext("Permanente"); break; }
+		case 1 : { return gettext("Précontrainte"); break; }
+		case 2 : { return gettext("Exploitation : Catégorie A : habitation, zones résidentielles"); break; }
+		case 3 : { return gettext("Exploitation : Catégorie B : bureaux"); break; }
+		case 4 : { return gettext("Exploitation : Catégorie C : lieux de réunion"); break; }
+		case 5 : { return gettext("Exploitation : Catégorie D : commerces"); break; }
+		case 6 : { return gettext("Exploitation : Catégorie E : stockage"); break; }
+		case 7 : { return gettext("Exploitation : Catégorie F : zone de trafic, véhicules de poids inférieur à 30 kN"); break; }
+		case 8 : { return gettext("Exploitation : Catégorie G : zone de trafic, véhicules de poids entre 30 kN et 160 kN"); break; }
+		case 9 : { return gettext("Exploitation : Catégorie H : toits"); break; }
+		case 10 : { return gettext("Neige : Finlande, Islande, Norvège, Suède"); break; }
+		case 11 : { return gettext("Neige : Autres états membres CEN, altitude > 1000 m"); break; }
+		case 12 : { return gettext("Neige : Autres états membres CEN, altitude <= 1000 m"); break; }
+		case 13 : { return gettext("Vent"); break; }
+		case 14 : { return gettext("Température (hors incendie)"); break; }
+		case 15 : { return gettext("Accidentelle"); break; }
+		case 16 : { return gettext("Sismique"); break; }
+		default : { BUG(NULL); break; }
 	}
 }
 
@@ -60,29 +61,29 @@ char *_1990_action_categorie_bat_txt_fr(int type)
 {
 	switch(type)
 	{
-		case 1 : { return gettext("Permanente"); break; }
-		case 2 : { return gettext("Précontrainte"); break; }
-		case 3 : { return gettext("Exploitation : Catégorie A : habitation, zones résidentielles"); break; }
-		case 4 : { return gettext("Exploitation : Catégorie B : bureaux"); break; }
-		case 5 : { return gettext("Exploitation : Catégorie C : lieux de réunion"); break; }
-		case 6 : { return gettext("Exploitation : Catégorie D : commerces"); break; }
-		case 7 : { return gettext("Exploitation : Catégorie E : stockage"); break; }
-		case 8 : { return gettext("Exploitation : Catégorie F : zone de trafic, véhicules de poids inférieur à 30 kN"); break; }
-		case 9 : { return gettext("Exploitation : Catégorie G : zone de trafic, véhicules de poids entre 30 kN et 160 kN"); break; }
-		case 10 : { return gettext("Exploitation : Catégorie H : toits d'un bâtiment de catégorie A ou B"); break; }
-		case 11 : { return gettext("Exploitation : Catégorie I : toitures accessibles avec locaux des catégories A ou B"); break; }
-		case 12 : { return gettext("Exploitation : Catégorie I : toitures accessibles avec locaux des catégories C ou D"); break; }
-		case 13 : { return gettext("Exploitation : Catégorie K : Hélicoptère sur la toiture"); break; }
-		case 14 : { return gettext("Exploitation : Catégorie K : Hélicoptère sur la toiture, autres charges (fret, personnel, accessoires ou équipements divers)"); break; }
-		case 15 : { return gettext("Neige : Saint-Pierre-et-Miquelon"); break; }
-		case 16 : { return gettext("Neige : Altitude > 1000 m"); break; }
-		case 17 : { return gettext("Neige : Altitude <= 1000 m"); break; }
-		case 18 : { return gettext("Vent"); break; }
-		case 19 : { return gettext("Température (hors incendie)"); break; }
-		case 20 : { return gettext("Accidentelle"); break; }
-		case 21 : { return gettext("Sismique"); break; }
-		case 22 : { return gettext("Eaux souterraines"); break; }
-		default : { return NULL; break; }
+		case 0 : { return gettext("Permanente"); break; }
+		case 1 : { return gettext("Précontrainte"); break; }
+		case 2 : { return gettext("Exploitation : Catégorie A : habitation, zones résidentielles"); break; }
+		case 3 : { return gettext("Exploitation : Catégorie B : bureaux"); break; }
+		case 4 : { return gettext("Exploitation : Catégorie C : lieux de réunion"); break; }
+		case 5 : { return gettext("Exploitation : Catégorie D : commerces"); break; }
+		case 6 : { return gettext("Exploitation : Catégorie E : stockage"); break; }
+		case 7 : { return gettext("Exploitation : Catégorie F : zone de trafic, véhicules de poids inférieur à 30 kN"); break; }
+		case 8 : { return gettext("Exploitation : Catégorie G : zone de trafic, véhicules de poids entre 30 kN et 160 kN"); break; }
+		case 9 : { return gettext("Exploitation : Catégorie H : toits d'un bâtiment de catégorie A ou B"); break; }
+		case 10 : { return gettext("Exploitation : Catégorie I : toitures accessibles avec locaux des catégories A ou B"); break; }
+		case 11 : { return gettext("Exploitation : Catégorie I : toitures accessibles avec locaux des catégories C ou D"); break; }
+		case 12 : { return gettext("Exploitation : Catégorie K : Hélicoptère sur la toiture"); break; }
+		case 13 : { return gettext("Exploitation : Catégorie K : Hélicoptère sur la toiture, autres charges (fret, personnel, accessoires ou équipements divers)"); break; }
+		case 14 : { return gettext("Neige : Saint-Pierre-et-Miquelon"); break; }
+		case 15 : { return gettext("Neige : Altitude > 1000 m"); break; }
+		case 16 : { return gettext("Neige : Altitude <= 1000 m"); break; }
+		case 17 : { return gettext("Vent"); break; }
+		case 18 : { return gettext("Température (hors incendie)"); break; }
+		case 19 : { return gettext("Accidentelle"); break; }
+		case 20 : { return gettext("Sismique"); break; }
+		case 21 : { return gettext("Eaux souterraines"); break; }
+		default : { BUG(NULL); break; }
 	}
 }
 
@@ -92,7 +93,7 @@ char *_1990_action_categorie_bat_txt(int type, int pays)
 	{
 		case 0 : { return _1990_action_categorie_bat_txt_eu(type); break; }
 		case 1 : { return _1990_action_categorie_bat_txt_fr(type); break; }
-		default : { return NULL; break; }
+		default : { BUG(NULL); break; }
 	}
 }
 
@@ -105,18 +106,18 @@ char *_1990_action_categorie_bat_txt(int type, int pays)
 // type : catégorie de durée d'utilisation de projet
 int _1990_action_type_combinaison_bat_eu(int categorie)
 {
-	if (categorie == 1)
+	if (categorie == 0) // Poids propre
+		return 0;
+	else if (categorie == 1) // Charges d'exploitation
 		return 1;
-	else if (categorie == 2)
+	else if ((2 <= categorie) && (categorie <= 14))
 		return 2;
-	else if ((3 <= categorie) && (categorie <= 15))
+	else if (categorie == 15) // accidentelle
 		return 3;
-	else if (categorie == 16)
+	else if (categorie == 16) // sismique
 		return 4;
-	else if (categorie == 17)
-		return 5;
 	else
-		return -1;
+		BUG(-1);
 }
 
 // _1990_action_type_combinaison_bat_fr : renvoie le type d'une action pour les combinaisons d'action des bâtiments selon la norme française
@@ -128,20 +129,20 @@ int _1990_action_type_combinaison_bat_eu(int categorie)
 //		: 5 si eaux souterraines
 int _1990_action_type_combinaison_bat_fr(int categorie)
 {
-	if (categorie == 1)
+	if (categorie == 0) // Poids propre
+		return 0;
+	else if (categorie == 1) // Précontrainte
 		return 1;
-	else if (categorie == 2)
+	else if ((2 <= categorie) && (categorie <= 18)) // Charges d'exploitation
 		return 2;
-	else if ((3 <= categorie) && (categorie <= 19))
+	else if (categorie == 19) // Accidentelle
 		return 3;
-	else if (categorie == 20)
+	else if (categorie == 20) // Sismique
 		return 4;
-	else if (categorie == 21)
+	else if (categorie == 21) // Eaux souterraines
 		return 5;
-	else if (categorie == 22)
-		return 6;
 	else
-		return -1;
+		BUG(-1);
 }
 
 int _1990_action_type_combinaison_bat(int categorie, int pays)
@@ -150,7 +151,7 @@ int _1990_action_type_combinaison_bat(int categorie, int pays)
 	{
 		case 0 : { return _1990_action_type_combinaison_bat_eu(categorie); break; }
 		case 1 : { return _1990_action_type_combinaison_bat_fr(categorie); break; }
-		default : { return -1; break; }
+		default : { BUG(-1); break; }
 	}
 }
 
@@ -159,7 +160,7 @@ int _1990_action_init(Projet *projet)
 {
 	projet->actions = list_init();
 	if (projet->actions == NULL)
-		return -1;
+		BUG(-1);
 	else
 		return 0;
 }
@@ -173,19 +174,19 @@ int _1990_action_ajout(Projet *projet, int categorie)
 	Action *action_dernier, action_nouveau;
 
 	if (_1990_action_type_combinaison_bat(categorie, projet->pays) == -1)
-		return -1;
+		BUG(-1);
 	list_mvrear(projet->actions);
 	action_dernier = (Action *)list_rear(projet->actions);
 	action_nouveau.nom = NULL;
 	action_nouveau.description = NULL;
 	action_nouveau.categorie = categorie;
 	if (action_dernier == NULL)
-		action_nouveau.numero = 1;
+		action_nouveau.numero = 0;
 	else
 		action_nouveau.numero = action_dernier->numero+1;
 	
 	if (list_insert_after(projet->actions, &(action_nouveau), sizeof(action_nouveau)) == NULL)
-		return -2;
+		BUG(-2);
 	
 	return 0;
 }
@@ -198,6 +199,14 @@ int _1990_action_cherche(void *input, void *curr)
 		return FALSE;
 	else
 		return TRUE;
+}
+
+int _1990_action_cherche_et_positionne(Projet *projet, int numero)
+{
+	if (list_traverse(projet->actions, (void *)&(numero), _1990_action_cherche, LIST_ALTR) == LIST_OK)
+		return 0;
+	else
+		BUG(-1);
 }
 
 int _1990_action_affiche(__attribute__((unused)) void *input, void *curr)
