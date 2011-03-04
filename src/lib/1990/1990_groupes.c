@@ -22,15 +22,16 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "1990_actions.h"
 #include "projet.h"
+#include "erreurs.h"
+#include "1990_actions.h"
 #include "1990_groupes.h"
 
 int _1990_groupe_etage_init(Projet *projet)
 {
 	projet->groupes = list_init();
 	if (projet->groupes == NULL)
-		return -1;
+		BUG(-1);
 	else
 		return 0;
 }
@@ -63,31 +64,42 @@ int _1990_groupe_etage_ajout(Projet *projet, int etage)
 	etage_nouveau.etage = etage;
 	etage_nouveau.groupe = list_init();
 	if (etage_nouveau.groupe == NULL)
-		return -1;
+		BUG(-1);
 	if (list_insert_after(projet->groupes, &(etage_nouveau), sizeof(etage_nouveau)) == NULL)
-		return -2;
+		BUG(-2);
 	
 	return 0;
 }
 
-int _1990_groupe_ajout(Projet *projet, int etage, int numero, Type_Groupe_Combinaison combinaison)
+int _1990_groupe_traverse_et_positionne(Etage_Groupe *etage, int numero)
+{
+	if (list_traverse(etage->groupe, (void *)&numero, _1990_groupe_cherche, LIST_ALTR) != LIST_OK)
+		BUG(-1);
+	else
+		return 0;
+}
+
+int _1990_groupe_ajout(Projet *projet, int etage, int numero, Type_Groupe_Combinaison type_combinaison)
 {
 	Groupe		groupe_nouveau;
 	Etage_Groupe	*etage_groupe;
 	
 	if (list_traverse(projet->groupes, (void *)&etage, _1990_groupe_etage_cherche, LIST_ALTR) != LIST_OK)
-		return -1;
+		BUG(-1);
 	etage_groupe = list_curr(projet->groupes);
 	if (etage_groupe == NULL)
-		return -2;
+		BUG(-2);
 	list_mvrear(etage_groupe->groupe);
 	groupe_nouveau.numero = numero;
-	groupe_nouveau.combinaison = combinaison;
+	groupe_nouveau.type_combinaison = type_combinaison;
+	groupe_nouveau.tmp_combinaison.combinaisons = list_init();
+	if (groupe_nouveau.tmp_combinaison.combinaisons == NULL)
+		BUG(-3);
 	groupe_nouveau.elements = list_init();
 	if (groupe_nouveau.elements == NULL)
-		return -3;
+		BUG(-4);
 	if (list_insert_after(etage_groupe->groupe, &(groupe_nouveau), sizeof(groupe_nouveau)) == NULL)
-		return -4;
+		BUG(-5);
 	return 0;
 }
 
@@ -99,36 +111,41 @@ int _1990_groupe_ajout(Projet *projet, int etage, int numero, Type_Groupe_Combin
 // le deuxième étage contient tous les groupes du premier étage
 // Le dernier étage ne contient qu'un seul groupe
 // Renvoie -1 si 
-int _1990_groupe_ajout_element(Projet *projet, int etage, __attribute__((unused)) int groupe_n, int groupe_n_1)
+int _1990_groupe_ajout_element(Projet *projet, int etage, int groupe_n, int groupe_n_1)
 {
 	Etage_Groupe	*etage_groupe;
 	Groupe		*groupe;
 	Element		element_nouveau;
+	int		tmp;
 	
 	// On commence par positionner le numéro groupe_n_1 de l'étage n-1
-	if (etage == 1)
+	if (etage == 0)
 	{
 		if (list_traverse(projet->actions, (void *)&groupe_n_1, _1990_action_cherche, LIST_ALTR) != LIST_OK)
-			return -1;
+			BUG(-1);
 	}
 	else
 	{
-		if (list_traverse(projet->groupes, (void *)&groupe_n_1, _1990_groupe_etage_cherche, LIST_ALTR) != LIST_OK)
-			return -1;
+		tmp = etage-1;
+		if (list_traverse(projet->groupes, (void *)&tmp, _1990_groupe_etage_cherche, LIST_ALTR) != LIST_OK)
+			BUG(-2);
+		etage_groupe = list_curr(projet->groupes);
+		if (list_traverse(etage_groupe->groupe, (void *)&groupe_n_1, _1990_groupe_cherche, 0) != LIST_OK)
+			BUG(-3);
 	}
 	if (list_traverse(projet->groupes, (void *)&etage, _1990_groupe_etage_cherche, LIST_ALTR) != LIST_OK)
-		return -2;
+		BUG(-4);
 	etage_groupe = list_curr(projet->groupes);
 	if (etage_groupe == NULL)
-		return -3;
+		BUG(-5);
 	if (list_traverse(etage_groupe->groupe, (void *)&groupe_n, _1990_groupe_cherche, LIST_ALTR) != LIST_OK)
-		return -4;
+		BUG(-6);
 	groupe = list_curr(etage_groupe->groupe);
 	if (groupe == NULL)
-		return -5;
+		BUG(-7);
 	element_nouveau.numero = groupe_n_1;
 	if (list_insert_after(groupe->elements, &(element_nouveau), sizeof(element_nouveau)) == NULL)
-		return -6;
+		BUG(-8);
 	return 0;
 }
 
@@ -139,11 +156,48 @@ int _1990_groupe_affiche_element(__attribute__((unused)) void *input, void *curr
 	return TRUE;
 }
 
+int _1990_groupe_affiche_combinaison(__attribute__((unused)) void *input, void *curr)
+{
+	Combinaison_Element	*element = (Combinaison_Element*)curr;
+	Action	*action = (Action*)element->action;
+	printf("\t\t\telement : %d\n", action->numero);
+	return TRUE;
+}
+
+int _1990_groupe_affiche_combinaisons(__attribute__((unused)) void *input, void *curr)
+{
+	Combinaison *combinaison = (Combinaison*)curr;
+	printf("\t\tNouvelle combinaison :\n");
+	list_traverse(combinaison->elements, (void *)NULL, _1990_groupe_affiche_combinaison, 0);
+	return TRUE;
+}
+
 int _1990_groupe_affiche_groupe(__attribute__((unused)) void *input, void *curr)
 {
 	Groupe *groupe = (Groupe*)curr;
-	printf("\tgroupe : %d\n", groupe->numero);
+	printf("\tgroupe : %d", groupe->numero);
+	switch(groupe->type_combinaison)
+	{
+		case GROUPE_COMBINAISON_OR :
+		{
+			printf(" OR\n");
+			break;
+		}
+		case GROUPE_COMBINAISON_XOR :
+		{
+			printf(" XOR\n");
+			break;
+		}
+		case GROUPE_COMBINAISON_AND :
+		{
+			printf(" AND\n");
+			break;
+		}
+
+	}
 	list_traverse(groupe->elements, (void *)NULL, _1990_groupe_affiche_element, 0);
+	printf("\tCombinaisons :\n");
+	list_traverse(groupe->tmp_combinaison.combinaisons, (void *)NULL, _1990_groupe_affiche_combinaisons, 0);
 	return TRUE;
 }
 
@@ -151,7 +205,9 @@ int _1990_groupe_affiche_etage(__attribute__((unused)) void *input, void *curr)
 {
 	Etage_Groupe *etage = (Etage_Groupe*)curr;
 	printf("etage : %d\n", etage->etage);
+	printf("\tGroupes\n");
 	list_traverse(etage->groupe, (void *)NULL, _1990_groupe_affiche_groupe, 0);
+
 	return TRUE;
 }
 

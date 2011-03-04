@@ -19,12 +19,26 @@
 #ifndef __PROJET_H
 #define __PROJET_H
 
-#include "list.h"
+#include <list.h>
+
+typedef struct __CombinaisonsEL
+{
+	LIST		*elu_equ;
+	LIST		*elu_str;
+	LIST		*elu_geo;
+	LIST		*elu_fat;
+	LIST		*elu_acc;
+	LIST		*elu_sis;
+	LIST		*els_car;
+	LIST		*els_freq;
+	LIST		*els_perm;
+} CombinaisonsEL;
 
 typedef struct __Projet
 {
 	LIST			*actions;
 	LIST			*groupes;
+	CombinaisonsEL		combinaisons;
 	int			pays;		// 0 : norme européenne
 						// 1 : norme française
 } Projet;

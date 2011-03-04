@@ -23,4 +23,22 @@
 
 #include "projet.h"
 
+typedef struct __Combinaison_Element
+{
+	void*		action;
+} Combinaison_Element;
+
+typedef struct __Combinaison
+{
+	LIST		*elements; // Liste de pointeur Action*
+} Combinaison;
+
+typedef struct __Combinaisons
+{
+	LIST		*combinaisons; // Liste de "combinaison"
+} Combinaisons;
+
+int _1990_combinaisons_init(Projet *projet);
+int _1990_combinaisons_genere(Projet *projet);
+
 #endif

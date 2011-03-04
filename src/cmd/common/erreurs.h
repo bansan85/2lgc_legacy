@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <stdlib.h>
+
 // Pour les erreurs de programmes
-#define BUG free((int*)1)
+#define BUG(X) ({free((int*)1); return X;})
 

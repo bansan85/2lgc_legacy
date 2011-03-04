@@ -72,6 +72,7 @@ int _1990_action_type_combinaison_bat(int categorie, int pays);
 int _1990_action_init(Projet *projet);
 int _1990_action_ajout(Projet *projet, int categorie);
 int _1990_action_cherche(void *input, void *curr);
+int _1990_action_cherche_et_positionne(Projet *projet, int numero);
 void _1990_action_affiche_tout(Projet *projet);
 void _1990_action_free(Projet *projet);
 
