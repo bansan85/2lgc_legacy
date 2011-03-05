@@ -47,6 +47,20 @@ int _1990_combinaisons_init(Projet *projet)
 		return 0;
 }
 
+void _1990_combinaisons_free(Projet *projet)
+{
+	free(projet->combinaisons.elu_equ);
+	free(projet->combinaisons.elu_str);
+	free(projet->combinaisons.elu_geo);
+	free(projet->combinaisons.elu_fat);
+	free(projet->combinaisons.elu_acc);
+	free(projet->combinaisons.elu_sis);
+	free(projet->combinaisons.els_car);
+	free(projet->combinaisons.els_freq);
+	free(projet->combinaisons.els_perm);
+	return;
+}
+
 /*int _1990_combinaisons_genere_eu(__attribute__((unused)) Projet *projet)
 {
 	int	*coef_min, *coef_max;
@@ -161,7 +175,7 @@ int _1990_combinaisons_genere_groupe_xor(Projet *projet, Groupe *groupe)
 		}
 		while (list_mvnext(groupe->elements) != NULL);
 		
-		etage_tmp = etage->etage;
+		etage_tmp = etage->etage+1;
 		if (list_traverse(projet->groupes, (void *)&etage_tmp, _1990_groupe_etage_cherche, LIST_ALTR) != LIST_OK)
 			BUG(-12);
 	}
@@ -272,11 +286,12 @@ int _1990_combinaisons_genere_groupe_and(Projet *projet, Groupe *groupe)
 					}
 					list_mvnext(groupe_n_1->tmp_combinaison.combinaisons);
 				}
+				list_free(transition, &(_1990_groupe_free_groupe_tmp_combinaison));
 			}
 		}
 		while (list_mvnext(groupe->elements) != NULL);
 		
-		etage_tmp = etage->etage;
+		etage_tmp = etage->etage+1;
 		if (list_traverse(projet->groupes, (void *)&etage_tmp, _1990_groupe_etage_cherche, LIST_ALTR) != LIST_OK)
 			BUG(-15);
 	}
@@ -375,7 +390,7 @@ int _1990_combinaisons_genere_groupe_or(Projet *projet, Groupe *groupe)
 							}
 							list_mvfront(combs.combinaisons);
 							list_mvfront(groupe_n_1->tmp_combinaison.combinaisons);
-
+							
 							for (j=1;j<=list_size(groupe_n_1->tmp_combinaison.combinaisons);j++)
 							{
 								combinaison2 = (Combinaison*)list_curr(groupe_n_1->tmp_combinaison.combinaisons);
@@ -393,11 +408,16 @@ int _1990_combinaisons_genere_groupe_or(Projet *projet, Groupe *groupe)
 				}
 				tmp = tmp >> 1;
 				list_mvnext(groupe->elements);
+				list_free(transition, &(_1990_groupe_free_groupe_tmp_combinaison));
 			}
 			while (tmp != 0);
 			if (_1990_combinaisons_duplique_combinaisons(groupe->tmp_combinaison.combinaisons, combs.combinaisons) != 0)
 				BUG(-14);
+			list_free(combs.combinaisons, &(_1990_groupe_free_groupe_tmp_combinaison));
 		}
+		etage_tmp = etage->etage+1;
+		if (list_traverse(projet->groupes, (void *)&etage_tmp, _1990_groupe_etage_cherche, LIST_ALTR) != LIST_OK)
+			BUG(-15);
 	}
 	return 0;
 }

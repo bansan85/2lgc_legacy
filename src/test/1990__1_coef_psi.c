@@ -24,54 +24,17 @@
 
 #include <list.h>
 
-#include "1990_duree.h"
 #include "1990_coef_psi.h"
-#include "1990_actions.h"
-#include "1990_groupes.h"
-#include "maths.h"
 #include "erreurs.h"
-#include "projet.h"
+#include "maths.h"
 #define	TEST_BUG 0
 
 
 int main(void)
 {
-	int	i;
-	Projet	*projet;
-	
 	setlocale( LC_ALL, "" );
 	bindtextdomain(PACKAGE, LOCALEDIR);
 	textdomain(PACKAGE);
-	
-	// Test 1990_actions.c
-	
-	for (i=0;i<=16;i++)
-		if (_1990_action_categorie_bat_txt_eu(i) == NULL) BUG(-1);
-	
-	for (i=0;i<=21;i++)
-		if (_1990_action_categorie_bat_txt_fr(i) == NULL) BUG(-1);
-	
-	if (_1990_action_type_combinaison_bat_eu(0) != 0) BUG(-1);
-	if (_1990_action_type_combinaison_bat_eu(1) != 1) BUG(-1);
-	for (i=2;i<=14;i++)
-		if (_1990_action_type_combinaison_bat_eu(i) != 2) BUG(-1);
-	if (_1990_action_type_combinaison_bat_eu(15) != 3) BUG(-1);
-	if (_1990_action_type_combinaison_bat_eu(16) != 4) BUG(-1);
-	
-	if (_1990_action_type_combinaison_bat_fr(0) != 0) BUG(-1);
-	if (_1990_action_type_combinaison_bat_fr(1) != 1) BUG(-1);
-	for (i=2;i<=18;i++)
-		if (_1990_action_type_combinaison_bat_fr(i) != 2) BUG(-1);
-	if (_1990_action_type_combinaison_bat_fr(19) != 3) BUG(-1);
-	if (_1990_action_type_combinaison_bat_fr(20) != 4) BUG(-1);
-	if (_1990_action_type_combinaison_bat_fr(21) != 5) BUG(-1);
-	
-	#if TEST_BUG == 1
-	if (_1990_action_categorie_bat_txt_eu(17) != NULL) BUG(-1);
-	if (_1990_action_categorie_bat_txt_fr(22) != NULL) BUG(-1);
-	if (_1990_action_type_combinaison_bat_eu(17) != -1) BUG(-1);
-	if (_1990_action_type_combinaison_bat_fr(22) != -1) BUG(-1);
-	#endif
 	
 	// Test 1990_coef_psi.c
 	
@@ -207,70 +170,6 @@ int main(void)
 	if (!ERREUR_RELATIVE_EGALE(-1., _1990_coef_psi1_bat_fr(22), ERREUR_RELATIVE_MIN)) BUG(-1);
 	if (!ERREUR_RELATIVE_EGALE(-1., _1990_coef_psi2_bat_fr(22), ERREUR_RELATIVE_MIN)) BUG(-1);
 	#endif
-	
-	// Test 1990_duree.c
-	
-	if (_1990_duree_projet_eu(0) != 10) BUG(-1);
-	if (_1990_duree_projet_eu(1) != 25) BUG(-1);
-	if (_1990_duree_projet_eu(2) != 30) BUG(-1);
-	if (_1990_duree_projet_eu(3) != 50) BUG(-1);
-	if (_1990_duree_projet_eu(4) != 100) BUG(-1);
-	
-	if (_1990_duree_projet_fr(0) != 10) BUG(-1);
-	if (_1990_duree_projet_fr(1) != 25) BUG(-1);
-	if (_1990_duree_projet_fr(2) != 25) BUG(-1);
-	if (_1990_duree_projet_fr(3) != 50) BUG(-1);
-	if (_1990_duree_projet_fr(4) != 100) BUG(-1);
-	
-	for (i=0;i<=4;i++)
-		if (_1990_duree_projet_txt_eu(i) == NULL) BUG(-1);
-	
-	for (i=0;i<=4;i++)
-		if (_1990_duree_projet_txt_fr(i) == NULL) BUG(-1);
-	
-	#if TEST_BUG == 1
-	if (_1990_duree_projet_eu(5) != -1) BUG(-1);
-	if (_1990_duree_projet_fr(5) != -1) BUG(-1);
-	if (_1990_duree_projet_txt_eu(5) != NULL) BUG(-1);
-	if (_1990_duree_projet_txt_fr(5) != NULL) BUG(-1);
-	#endif
-	
-	// Combinaison
-	
-	projet = NULL;
-	projet = projet_init();
-	projet->pays = 1;
-	if (projet == NULL) BUG(-1);
-	if (_1990_action_ajout(projet, 0) != 0) BUG(-1);
-	if (_1990_action_ajout(projet, 1) != 0) BUG(-1);
-	if (_1990_action_ajout(projet, 2) != 0) BUG(-1);
-	if (_1990_action_ajout(projet, 3) != 0) BUG(-1);
-	if (_1990_action_ajout(projet, 4) != 0) BUG(-1);
-	if (_1990_action_ajout(projet, 5) != 0) BUG(-1);
-	if (_1990_action_ajout(projet, 19) != 0) BUG(-1);
-	if (_1990_action_ajout(projet, 20) != 0) BUG(-1);
-	_1990_action_affiche_tout(projet);
-	if (_1990_groupe_etage_init(projet) != 0) BUG(-1);
-	if (_1990_groupe_etage_ajout(projet, 0) != 0) BUG(-1);
-	if (_1990_groupe_etage_ajout(projet, 1) != 0) BUG(-1);
-	if (_1990_groupe_ajout(projet, 0, 0, GROUPE_COMBINAISON_AND) != 0) BUG(-1);
-	if (_1990_groupe_ajout(projet, 0, 1, GROUPE_COMBINAISON_XOR) != 0) BUG(-1);
-	if (_1990_groupe_ajout(projet, 0, 2, GROUPE_COMBINAISON_OR) != 0) BUG(-1);
-	if (_1990_groupe_ajout(projet, 1, 0, GROUPE_COMBINAISON_OR) != 0) BUG(-1);
-	if (_1990_groupe_ajout_element(projet, 0, 0, 0) != 0) BUG(-1);
-	if (_1990_groupe_ajout_element(projet, 0, 0, 1) != 0) BUG(-1);
-	if (_1990_groupe_ajout_element(projet, 0, 0, 2) != 0) BUG(-1);
-	if (_1990_groupe_ajout_element(projet, 0, 1, 3) != 0) BUG(-1);
-	if (_1990_groupe_ajout_element(projet, 0, 1, 4) != 0) BUG(-1);
-	if (_1990_groupe_ajout_element(projet, 0, 2, 5) != 0) BUG(-1);
-	if (_1990_groupe_ajout_element(projet, 0, 2, 6) != 0) BUG(-1);
-	if (_1990_groupe_ajout_element(projet, 0, 2, 7) != 0) BUG(-1);
-	if (_1990_groupe_ajout_element(projet, 1, 0, 0) != 0) BUG(-1);
-	if (_1990_groupe_ajout_element(projet, 1, 0, 1) != 0) BUG(-1);
-	if (_1990_groupe_ajout_element(projet, 1, 0, 2) != 0) BUG(-1);
-	if (_1990_combinaisons_genere(projet) != 0) BUG(-1);
-	_1990_groupe_affiche_tout(projet);
-	projet_free(projet);
 	
 	return EXIT_SUCCESS;
 }

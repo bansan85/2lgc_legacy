@@ -38,7 +38,7 @@ Projet *projet_init()
 		free(projet);
 		BUG(NULL);
 	}
-	if (_1990_groupe_etage_init(projet) != 0)
+	if (_1990_groupe_init(projet) != 0)
 	{
 		_1990_action_free(projet);
 		free(projet);
@@ -62,6 +62,8 @@ int projet_free(Projet *projet)
 		_1990_action_free(projet);
 	if (projet->groupes != NULL)
 		_1990_groupe_free(projet);
+	if (projet->combinaisons.elu_equ != NULL)
+		_1990_combinaisons_free(projet);
 	free(projet);
 	return 0;
 }

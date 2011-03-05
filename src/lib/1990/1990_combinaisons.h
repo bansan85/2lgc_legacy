@@ -40,5 +40,6 @@ typedef struct __Combinaisons
 
 int _1990_combinaisons_init(Projet *projet);
 int _1990_combinaisons_genere(Projet *projet);
+void _1990_combinaisons_free(Projet *projet);
 
 #endif

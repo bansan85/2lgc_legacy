@@ -2,16 +2,29 @@ DEFAULT_INCLUDES	=	-I../.. \
 				-I../lib/1990 \
 				-I../cmd/common
 
-TESTS = 1990__1
+TESTS	=	1990__1_actions \
+		1990__1_coef_psi \
+		1990__1_combinaisons_groupes \
+		1990__1_duree
 
-1990__1_SOURCES =	1990__1.c \
-			../cmd/common/cmd_text.c \
-			../cmd/common/erreurs.c \
-			../cmd/common/projet.c
+1990__1_actions_SOURCES	=	1990__1_actions.c
+1990__1_actions_LDADD	=	../lib/1990/lib1990.la
 
-EXTRA_PROGRAMS = 1990__1
+1990__1_coef_psi_SOURCES	=	1990__1_coef_psi.c
+1990__1_coef_psi_LDADD		=	../lib/1990/lib1990.la
 
-1990__1_LDADD =	../lib/1990/lib1990.la -llist
+1990__1_combinaisons_groupes_SOURCES	=	1990__1_combinaisons_groupes.c \
+						../cmd/common/projet.c
+1990__1_combinaisons_groupes_LDADD	=	../lib/1990/lib1990.la
+
+1990__1_duree_SOURCES	=	1990__1_duree.c
+1990__1_duree_LDADD	=	../lib/1990/lib1990.la
+
+#			../cmd/common/cmd_text.c \
+#			../cmd/common/erreurs.c \
+#			../cmd/common/projet.c
+
+EXTRA_PROGRAMS = $(TESTS)
 
 datadir		=       @datadir@
 localedir       =       $(datadir)/locale

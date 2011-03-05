@@ -50,13 +50,14 @@ typedef struct __Etage_Groupe
 	LIST			*groupe;
 } Etage_Groupe;
 
-int _1990_groupe_etage_init(Projet *projet);
+int _1990_groupe_init(Projet *projet);
 int _1990_groupe_etage_ajout(Projet *projet, int etage);
 int _1990_groupe_etage_cherche(void *input, void *curr);
 int _1990_groupe_traverse_et_positionne(Etage_Groupe *etage, int numero);
 int _1990_groupe_ajout(Projet *projet, int etage, int numero, Type_Groupe_Combinaison combinaison);
 int _1990_groupe_ajout_element(Projet *projet, int etage, int groupe_n, int groupe_n_1);
 void _1990_groupe_affiche_tout(Projet *projet);
+void _1990_groupe_free_groupe_tmp_combinaison(void *data);
 void _1990_groupe_free(Projet *projet);
 
 #endif
