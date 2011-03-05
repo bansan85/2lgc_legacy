@@ -27,7 +27,7 @@
 #include "1990_actions.h"
 #include "1990_groupes.h"
 
-int _1990_groupe_etage_init(Projet *projet)
+int _1990_groupe_init(Projet *projet)
 {
 	projet->groupes = list_init();
 	if (projet->groupes == NULL)
@@ -216,33 +216,50 @@ void _1990_groupe_affiche_tout(Projet *projet)
 	list_traverse(projet->groupes, (void *)NULL, _1990_groupe_affiche_etage, 0);
 }
 
-void _1990_groupe_free_free_free_free(void *data)
+void _1990_groupe_free_groupe_element(void *data)
 {
 	free(data);
 	return;
 }
 
-void _1990_groupe_free_free_free(void *data)
+void _1990_groupe_free_groupe_tmp_combinaison_element(void *data)
+{
+	free(data);
+	return;
+}
+
+void _1990_groupe_free_groupe_tmp_combinaison(void *data)
+{
+	Combinaison *combinaison = (Combinaison*)data;
+	if (combinaison->elements != NULL)
+		list_free(combinaison->elements, &(_1990_groupe_free_groupe_tmp_combinaison_element));
+	free(data);
+	return;
+}
+
+void _1990_groupe_free_groupe(void *data)
 {
 	Groupe *groupe = (Groupe*)data;
 	if (groupe->elements != NULL)
-		list_free(groupe->elements, &(_1990_groupe_free_free_free_free));
+		list_free(groupe->elements, &(_1990_groupe_free_groupe_element));
+	if (groupe->tmp_combinaison.combinaisons != NULL)
+		list_free(groupe->tmp_combinaison.combinaisons, &(_1990_groupe_free_groupe_tmp_combinaison));
 	free(groupe);
 	return;
 }
 
-void _1990_groupe_free_free(void *data)
+void _1990_groupe_free_etage(void *data)
 {
 	Etage_Groupe *etage = (Etage_Groupe*)data;
 	if (etage->groupe != NULL)
-		list_free(etage->groupe, &(_1990_groupe_free_free_free));
+		list_free(etage->groupe, &(_1990_groupe_free_groupe));
 	free(etage);
 	return;
 }
 
 void _1990_groupe_free(Projet *projet)
 {
-	list_free(projet->groupes, &(_1990_groupe_free_free));
+	list_free(projet->groupes, &(_1990_groupe_free_etage));
 	projet->groupes = NULL;
 	return;
 }
