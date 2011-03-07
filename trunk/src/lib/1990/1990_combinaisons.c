@@ -25,97 +25,137 @@
 
 #include "projet.h"
 #include "erreurs.h"
+#include "maths.h"
 #include "1990_actions.h"
 #include "1990_groupes.h"
 #include "1990_combinaisons.h"
 
 
-int _1990_combinaisons_init(Projet *projet)
+// Renvoie 0 si combinaison_a_verifier n'est pas dans ponderations
+int _1990_combinaisons_verifie_combinaison_double(LIST *combinaisons, Combinaison* combinaison_a_verifier)
 {
-	projet->combinaisons.elu_equ = list_init();
-	projet->combinaisons.elu_str = list_init();
-	projet->combinaisons.elu_geo = list_init();
-	projet->combinaisons.elu_fat = list_init();
-	projet->combinaisons.elu_acc = list_init();
-	projet->combinaisons.elu_sis = list_init();
-	projet->combinaisons.els_car = list_init();
-	projet->combinaisons.els_freq = list_init();
-	projet->combinaisons.els_perm = list_init();
-	if ((projet->combinaisons.elu_equ == NULL) || (projet->combinaisons.elu_str == NULL) || (projet->combinaisons.elu_geo == NULL) || (projet->combinaisons.elu_fat == NULL) || (projet->combinaisons.elu_acc == NULL) || (projet->combinaisons.elu_sis == NULL) || (projet->combinaisons.els_car == NULL) || (projet->combinaisons.els_freq == NULL) || (projet->combinaisons.els_perm == NULL))
-		BUG(-1);
-	else
+	Combinaison		*combinaison;
+	Combinaison_Element	*elem1, *elem2;
+	int			doublon;
+	if (list_size(combinaisons) == 0)
 		return 0;
-}
+	if (list_size(combinaison_a_verifier->elements) == 0)
+		return 1;
+	list_mvfront(combinaisons);
 
-void _1990_combinaisons_free(Projet *projet)
-{
-	free(projet->combinaisons.elu_equ);
-	free(projet->combinaisons.elu_str);
-	free(projet->combinaisons.elu_geo);
-	free(projet->combinaisons.elu_fat);
-	free(projet->combinaisons.elu_acc);
-	free(projet->combinaisons.elu_sis);
-	free(projet->combinaisons.els_car);
-	free(projet->combinaisons.els_freq);
-	free(projet->combinaisons.els_perm);
-	return;
-}
-
-/*int _1990_combinaisons_genere_eu(__attribute__((unused)) Projet *projet)
-{
-	int	*coef_min, *coef_max;
-	coef_min = (int*)malloc(5*sizeof(double));
-	if (coef_min == NULL)
-		return -1;
-	coef_max = (int*)malloc(5*sizeof(double));
-	if (coef_max == NULL)
-		return -2;
-	
-	// Pour ELU_EQU
-	coef_min[0] = 0.9; coef_max[0] = 1.1; // poids propre
-	coef_min[1] = 1.0; coef_max[1] = 1.3; // précontrainte (1992-1)
-	coef_min[2] = 0.0; coef_max[2] = 1.5; // charge d'exploitation
-	coef_min[3] = 0.0; coef_max[3] = 0.0; // Accidentelle
-	coef_min[4] = 0.0; coef_max[4] = 0.0; // Sismique
-	
+	do
+	{
+		doublon = 1;
+		combinaison = (Combinaison*)list_curr(combinaisons);
+		if (list_size(combinaison->elements) == list_size(combinaison_a_verifier->elements))
+		{
+			list_mvfront(combinaison->elements);
+			list_mvfront(combinaison_a_verifier->elements);
+			do
+			{
+				elem1 = list_curr(combinaison->elements);
+				elem2 = list_curr(combinaison_a_verifier->elements);
+				if ((elem1->action != elem2->action) || (elem1->flags != elem2->flags))
+					doublon = 0;
+			}
+			while ((list_mvnext(combinaison->elements) != NULL) && (list_mvnext(combinaison_a_verifier->elements) != NULL) && (doublon == 1));
+			if (doublon == 1)
+				return 1;
+		}
+	}
+	while (list_mvnext(combinaisons) != NULL);
 	return 0;
-}*/
+}
 
-int _1990_combinaisons_duplique_combinaisons(LIST *destination, LIST *source)
+int _1990_combinaisons_duplique_combinaisons_avec_double(LIST *destination, LIST *source)
 {
 	Combinaison		*combinaison_source;
 	Combinaison		combinaison_destination;
 	Combinaison_Element	*element_source;
 	Combinaison_Element	element_destination;
 	
-	if (list_size(source) == 0)
-		return 0;
 	list_mvrear(destination);
 	list_mvfront(source);
 	do
 	{
 		combinaison_source = list_curr(source);
-		if (list_size(combinaison_source->elements) != 0)
+		combinaison_destination.elements = list_init();
+		if (combinaison_destination.elements == NULL)
+			BUG(-2);
+		if ((combinaison_source != NULL) && (list_curr(combinaison_source->elements) != NULL))
 		{
-			combinaison_destination.elements = list_init();
-			if (combinaison_destination.elements == NULL)
-				BUG(-2);
 			list_mvfront(combinaison_source->elements);
 			do
 			{
 				element_source = list_curr(combinaison_source->elements);
 				element_destination.action = element_source->action;
+				element_destination.flags = element_source->flags;
 				if (list_insert_after(combinaison_destination.elements, (void*)&element_destination, sizeof(element_destination)) == NULL)
 					BUG(-3);
-
+	
 			}
 			while (list_mvnext(combinaison_source->elements) != NULL);
+		}
+		if (list_insert_after(destination, (void*)&combinaison_destination, sizeof(combinaison_destination)) == NULL)
+			BUG(-4);
+	}
+	while (list_mvnext(source) != NULL);
+	return 0;
+}
+
+int _1990_combinaisons_duplique_combinaisons_sans_double(LIST *destination, LIST *source)
+{
+	Combinaison		*combinaison_source;
+	Combinaison		combinaison_destination;
+	Combinaison_Element	*element_source;
+	Combinaison_Element	element_destination;
+	
+	list_mvrear(destination);
+	list_mvfront(source);
+	do
+	{
+		combinaison_source = list_curr(source);
+		if (_1990_combinaisons_verifie_combinaison_double(destination, combinaison_source) == 0)
+		{
+			combinaison_destination.elements = list_init();
+			if (combinaison_destination.elements == NULL)
+				BUG(-2);
+			if ((combinaison_source != NULL) && (list_curr(combinaison_source->elements) != NULL))
+			{
+				list_mvfront(combinaison_source->elements);
+				do
+				{
+					element_source = list_curr(combinaison_source->elements);
+					element_destination.action = element_source->action;
+					element_destination.flags = element_source->flags;
+					if (list_insert_after(combinaison_destination.elements, (void*)&element_destination, sizeof(element_destination)) == NULL)
+						BUG(-3);
+		
+				}
+				while (list_mvnext(combinaison_source->elements) != NULL);
+			}
 			if (list_insert_after(destination, (void*)&combinaison_destination, sizeof(combinaison_destination)) == NULL)
 				BUG(-4);
 		}
 	}
 	while (list_mvnext(source) != NULL);
 	return 0;
+}
+
+void _1990_combinaisons_flags_1(Combinaison *combinaison)
+{
+	Combinaison_Element *combinaison_element;
+	list_mvfront(combinaison->elements);
+	if (list_size(combinaison->elements) == 0)
+		return;
+	do
+	{
+		combinaison_element = list_curr(combinaison->elements);
+		if (_1990_action_type_combinaison_bat(combinaison_element->action->categorie, PAYS_EU) == 2)
+			combinaison_element->flags = 1;
+	}
+	while (list_mvnext(combinaison->elements));
+	return;
 }
 
 int _1990_combinaisons_genere_groupe_xor(Projet *projet, Groupe *groupe)
@@ -143,6 +183,7 @@ int _1990_combinaisons_genere_groupe_xor(Projet *projet, Groupe *groupe)
 			if (comb.elements == NULL)
 				BUG(-3);
 			element.action = list_curr(projet->actions);
+			element.flags = element.action->flags;
 			if (list_insert_after(comb.elements, (void*)&element, sizeof(element)) == NULL)
 				BUG(-4);
 			if (list_insert_after(groupe->tmp_combinaison.combinaisons, &(comb), sizeof(comb)) == NULL)
@@ -170,7 +211,7 @@ int _1990_combinaisons_genere_groupe_xor(Projet *projet, Groupe *groupe)
 			if (_1990_groupe_traverse_et_positionne(etage, element_tmp->numero) != 0)
 				BUG(-10);
 			groupe_n_1 = list_curr(etage->groupe);
-			if (_1990_combinaisons_duplique_combinaisons(groupe->tmp_combinaison.combinaisons, groupe_n_1->tmp_combinaison.combinaisons) != 0)
+			if (_1990_combinaisons_duplique_combinaisons_sans_double(groupe->tmp_combinaison.combinaisons, groupe_n_1->tmp_combinaison.combinaisons) != 0)
 				BUG(-11);
 		}
 		while (list_mvnext(groupe->elements) != NULL);
@@ -195,6 +236,7 @@ int _1990_combinaisons_ajout_combinaison(Combinaison *destination, Combinaison *
 	{
 		element_source = list_curr(source->elements);
 		element_destination.action = element_source->action;
+		element_destination.flags = element_source->flags;
 		if (list_insert_after(destination->elements, (void*)&element_destination, sizeof(element_destination)) == NULL)
 			BUG(-1);
 	}
@@ -207,10 +249,10 @@ int _1990_combinaisons_genere_groupe_and(Projet *projet, Groupe *groupe)
 	Etage_Groupe		*etage;
 	Groupe			*groupe_n_1;
 	Combinaison		comb, *combinaison1, *combinaison2;
-	Combinaison_Element	element;
+	Combinaison_Element	element, *comb_elem;
 	Element			*element_tmp;
-	int			etage_tmp, i, j, nbboucle;
-	LIST			*transition;
+	int			etage_tmp, i, j, nbboucle, action_predominante;
+	LIST			*transition, *nouvelles_combinaisons;
 	
 	if (list_size(projet->groupes) == 0)
 		BUG(-1);
@@ -224,16 +266,22 @@ int _1990_combinaisons_genere_groupe_and(Projet *projet, Groupe *groupe)
 		if (comb.elements == NULL)
 			BUG(-3);
 		list_mvfront(groupe->elements);
+		action_predominante = 0;
 		do
 		{
 			element_tmp = (Element*)list_curr(groupe->elements);
 			if (_1990_action_cherche_et_positionne(projet, element_tmp->numero) != 0)
 				BUG(-4);
 			element.action = list_curr(projet->actions);
+			element.flags = element.action->flags;
+			if ((element.flags & 1) != 0)
+				action_predominante = 1;
 			if (list_insert_after(comb.elements, (void*)&element, sizeof(element)) == NULL)
 				BUG(-5);
 		}
 		while (list_mvnext(groupe->elements) != NULL);
+		if (action_predominante == 1)
+			_1990_combinaisons_flags_1(&(comb));
 		if (list_insert_after(groupe->tmp_combinaison.combinaisons, &(comb), sizeof(comb)) == NULL)
 			BUG(-6);
 	}
@@ -245,55 +293,83 @@ int _1990_combinaisons_genere_groupe_and(Projet *projet, Groupe *groupe)
 			BUG(-7);
 		if (list_traverse(projet->groupes, (void *)&etage_tmp, _1990_groupe_etage_cherche, LIST_ALTR) != LIST_OK)
 			BUG(-8);
+		nouvelles_combinaisons = list_init();
+		if (nouvelles_combinaisons == NULL)
+			BUG(-9);
 		etage = list_curr(projet->groupes);
 		list_mvfront(groupe->elements);
 		do
 		{
 			element_tmp = (Element*)list_curr(groupe->elements);
 			if (_1990_groupe_traverse_et_positionne(etage, element_tmp->numero) != 0)
-				BUG(-9);
+				BUG(-10);
 			groupe_n_1 = list_curr(etage->groupe);
 			if (list_front(groupe->elements) == element_tmp)
 			{
-				if (_1990_combinaisons_duplique_combinaisons(groupe->tmp_combinaison.combinaisons, groupe_n_1->tmp_combinaison.combinaisons) != 0)
-					BUG(-10);
+				if (_1990_combinaisons_duplique_combinaisons_avec_double(nouvelles_combinaisons, groupe_n_1->tmp_combinaison.combinaisons) != 0)
+					BUG(-11);
 			}
 			else
 			{
 				transition = list_init();
 				if (transition == NULL)
-					BUG(-11);
-				if (_1990_combinaisons_duplique_combinaisons(transition, groupe->tmp_combinaison.combinaisons) != 0)
 					BUG(-12);
+				if (_1990_combinaisons_duplique_combinaisons_avec_double(transition, nouvelles_combinaisons) != 0)
+					BUG(-13);
 				nbboucle = list_size(groupe_n_1->tmp_combinaison.combinaisons);
-				for (i=1;i<=nbboucle;i++)
+				for (i=2;i<=nbboucle;i++)
 				{
-					if (_1990_combinaisons_duplique_combinaisons(groupe->tmp_combinaison.combinaisons, transition) != 0)
-						BUG(-13);
+					if (_1990_combinaisons_duplique_combinaisons_avec_double(nouvelles_combinaisons, transition) != 0)
+						BUG(-14);
 				}
 				
-				list_mvfront(groupe->tmp_combinaison.combinaisons);
+				list_mvfront(nouvelles_combinaisons);
 				list_mvfront(groupe_n_1->tmp_combinaison.combinaisons);
 				for (i=1;i<=nbboucle;i++)
 				{
 					combinaison2 = (Combinaison*)list_curr(groupe_n_1->tmp_combinaison.combinaisons);
 					for (j=1;j<=list_size(transition);j++)
 					{
-						combinaison1 = (Combinaison*)list_curr(groupe->tmp_combinaison.combinaisons);
+						combinaison1 = (Combinaison*)list_curr(nouvelles_combinaisons);
 						if (_1990_combinaisons_ajout_combinaison(combinaison1, combinaison2) != 0)
-							BUG(-14);
-						list_mvnext(groupe->tmp_combinaison.combinaisons);
+							BUG(-15);
+						list_mvnext(nouvelles_combinaisons);
 					}
 					list_mvnext(groupe_n_1->tmp_combinaison.combinaisons);
 				}
 				list_free(transition, &(_1990_groupe_free_groupe_tmp_combinaison));
 			}
+			if (list_size(nouvelles_combinaisons) != 0)
+			{
+				list_mvfront(nouvelles_combinaisons);
+				do
+				{
+					combinaison1 = (Combinaison*)list_curr(nouvelles_combinaisons);
+					if (list_size(combinaison1->elements) != 0)
+					{
+						list_mvfront(combinaison1->elements);
+						action_predominante = 0;
+						do
+						{
+							comb_elem = list_curr(combinaison1->elements);
+							if ((comb_elem->flags & 1) != 0)
+								action_predominante = 1;
+						} while (list_mvnext(combinaison1->elements) && (action_predominante == 0));
+						if (action_predominante == 1)
+							_1990_combinaisons_flags_1(combinaison1);
+					}
+					
+				}
+				while (list_mvnext(nouvelles_combinaisons) != NULL);
+			}
 		}
 		while (list_mvnext(groupe->elements) != NULL);
+		_1990_combinaisons_duplique_combinaisons_sans_double(groupe->tmp_combinaison.combinaisons, nouvelles_combinaisons);
+		list_free(nouvelles_combinaisons, &(_1990_groupe_free_groupe_tmp_combinaison));
 		
 		etage_tmp = etage->etage+1;
 		if (list_traverse(projet->groupes, (void *)&etage_tmp, _1990_groupe_etage_cherche, LIST_ALTR) != LIST_OK)
-			BUG(-15);
+			BUG(-16);
 	}
 	return 0;
 }
@@ -306,7 +382,7 @@ int _1990_combinaisons_genere_groupe_or(Projet *projet, Groupe *groupe)
 	Combinaisons		combs;
 	Combinaison_Element	element;
 	Element			*elem_tmp, *element_tmp;
-	int			etage_tmp, boucle = 2, i, j, k, tmp;
+	int			etage_tmp, boucle = 2, i, j, k, tmp, action_predominante;
 	LIST			*transition;
 	
 	if (list_size(groupe->elements) == 0)
@@ -325,7 +401,7 @@ int _1990_combinaisons_genere_groupe_or(Projet *projet, Groupe *groupe)
 			if (comb.elements == NULL)
 				BUG(-2);
 			list_mvfront(groupe->elements);
-			
+			action_predominante = 0;
 			do
 			{
 				if ((tmp & 1) == 1)
@@ -334,6 +410,9 @@ int _1990_combinaisons_genere_groupe_or(Projet *projet, Groupe *groupe)
 					if (_1990_action_cherche_et_positionne(projet, elem_tmp->numero) != 0)
 						BUG(-3);
 					element.action = list_curr(projet->actions);
+					element.flags = element.action->flags;
+					if ((element.flags & 1) != 0)
+						action_predominante = 1;
 					if (list_insert_after(comb.elements, (void*)&element, sizeof(element)) == NULL)
 						BUG(-4);
 				}
@@ -341,7 +420,8 @@ int _1990_combinaisons_genere_groupe_or(Projet *projet, Groupe *groupe)
 				list_mvnext(groupe->elements);
 			}
 			while (tmp != 0);
-			
+			if (action_predominante == 1)
+				_1990_combinaisons_flags_1(&(comb));
 			if (list_insert_after(groupe->tmp_combinaison.combinaisons, &(comb), sizeof(comb)) == NULL)
 				BUG(-5);
 		}
@@ -376,16 +456,16 @@ int _1990_combinaisons_genere_groupe_or(Projet *projet, Groupe *groupe)
 					{
 						if (list_size(combs.combinaisons) == 0)
 						{
-							if (_1990_combinaisons_duplique_combinaisons(combs.combinaisons, groupe_n_1->tmp_combinaison.combinaisons) != 0)
+							if (_1990_combinaisons_duplique_combinaisons_avec_double(combs.combinaisons, groupe_n_1->tmp_combinaison.combinaisons) != 0)
 								BUG(-10);
 						}
 						else
 						{
-							if (_1990_combinaisons_duplique_combinaisons(transition, combs.combinaisons) != 0)
+							if (_1990_combinaisons_duplique_combinaisons_avec_double(transition, combs.combinaisons) != 0)
 								BUG(-11);
 							for (j=2;j<=list_size(groupe_n_1->tmp_combinaison.combinaisons);j++)
 							{
-								if (_1990_combinaisons_duplique_combinaisons(combs.combinaisons, transition) != 0)
+								if (_1990_combinaisons_duplique_combinaisons_avec_double(combs.combinaisons, transition) != 0)
 									BUG(-12);
 							}
 							list_mvfront(combs.combinaisons);
@@ -411,7 +491,7 @@ int _1990_combinaisons_genere_groupe_or(Projet *projet, Groupe *groupe)
 				list_free(transition, &(_1990_groupe_free_groupe_tmp_combinaison));
 			}
 			while (tmp != 0);
-			if (_1990_combinaisons_duplique_combinaisons(groupe->tmp_combinaison.combinaisons, combs.combinaisons) != 0)
+			if (_1990_combinaisons_duplique_combinaisons_sans_double(groupe->tmp_combinaison.combinaisons, combs.combinaisons) != 0)
 				BUG(-14);
 			list_free(combs.combinaisons, &(_1990_groupe_free_groupe_tmp_combinaison));
 		}
@@ -422,50 +502,294 @@ int _1990_combinaisons_genere_groupe_or(Projet *projet, Groupe *groupe)
 	return 0;
 }
 
-int _1990_combinaisons_genere_groupe(void *input, void *curr)
+int _1990_combinaisons_init(Projet *projet)
 {
-	Projet		*projet = (Projet*)input;
-	Groupe		*groupe = (Groupe*)curr;
-	
-	switch (groupe->type_combinaison)
-	{
-		case GROUPE_COMBINAISON_OR :
-		{
-			if (_1990_combinaisons_genere_groupe_or(projet, groupe) != 0)
-				return FALSE;
-
-			break;
-		}
-		case GROUPE_COMBINAISON_XOR :
-		{
-			if (_1990_combinaisons_genere_groupe_xor(projet, groupe) != 0)
-				return FALSE;
-			break;
-		}
-		case GROUPE_COMBINAISON_AND :
-		{
-			if (_1990_combinaisons_genere_groupe_and(projet, groupe) != 0)
-				return FALSE;
-			break;
-		}
-	}
-	return TRUE;
-}
-
-int _1990_combinaisons_genere_etage(void *input, void *curr)
-{
-	Etage_Groupe	*etage = (Etage_Groupe*)curr;
-	Projet		*projet = (Projet*)input;
-	if (list_traverse(etage->groupe, (void *)projet, _1990_combinaisons_genere_groupe, 0) != LIST_EXTENT)
-		return FALSE;
-	else
-		return TRUE;
-}
-
-int _1990_combinaisons_genere(Projet *projet)
-{
-	if (list_traverse(projet->groupes, (void *)projet, _1990_combinaisons_genere_etage, LIST_ALTR) != LIST_EXTENT)
+	projet->combinaisons.elu_equ = list_init();
+	projet->combinaisons.elu_str = list_init();
+	projet->combinaisons.elu_geo = list_init();
+	projet->combinaisons.elu_fat = list_init();
+	projet->combinaisons.elu_acc = list_init();
+	projet->combinaisons.elu_sis = list_init();
+	projet->combinaisons.els_car = list_init();
+	projet->combinaisons.els_freq = list_init();
+	projet->combinaisons.els_perm = list_init();
+	if ((projet->combinaisons.elu_equ == NULL) || (projet->combinaisons.elu_str == NULL) || (projet->combinaisons.elu_geo == NULL) || (projet->combinaisons.elu_fat == NULL) || (projet->combinaisons.elu_acc == NULL) || (projet->combinaisons.elu_sis == NULL) || (projet->combinaisons.els_car == NULL) || (projet->combinaisons.els_freq == NULL) || (projet->combinaisons.els_perm == NULL))
 		BUG(-1);
 	else
 		return 0;
 }
+
+void _1990_combinaisons_free_free(void *data)
+{
+	Ponderation *ponderation = (Ponderation*)data;
+	list_free(ponderation->elements, LIST_DEALLOC);
+	free(data);
+	return;
+}
+
+void _1990_combinaisons_free(Projet *projet)
+{
+	list_free(projet->combinaisons.elu_equ, &(_1990_combinaisons_free_free));
+	list_free(projet->combinaisons.elu_str, &(_1990_combinaisons_free_free));
+	list_free(projet->combinaisons.elu_geo, &(_1990_combinaisons_free_free));
+	list_free(projet->combinaisons.elu_fat, &(_1990_combinaisons_free_free));
+	list_free(projet->combinaisons.elu_acc, &(_1990_combinaisons_free_free));
+	list_free(projet->combinaisons.elu_sis, &(_1990_combinaisons_free_free));
+	list_free(projet->combinaisons.els_car, &(_1990_combinaisons_free_free));
+	list_free(projet->combinaisons.els_freq, &(_1990_combinaisons_free_free));
+	list_free(projet->combinaisons.els_perm, &(_1990_combinaisons_free_free));
+	return;
+}
+
+// Renvoie 0 si ponderation_a_verifier n'est pas dans ponderations
+int _1990_combinaisons_verifie_ponderation_double(LIST *ponderations, Ponderation* ponderation_a_verifier)
+{
+	Ponderation		*ponderation;
+	Ponderation_Element	*elem1, *elem2;
+	int			doublon;
+	if (list_size(ponderations) == 0)
+		return 0;
+	if (list_size(ponderation_a_verifier->elements) == 0)
+		return 1;
+	list_mvfront(ponderations);
+
+	do
+	{
+		doublon = 1;
+		ponderation = (Ponderation*)list_curr(ponderations);
+		if (list_size(ponderation->elements) == list_size(ponderation_a_verifier->elements))
+		{
+			list_mvfront(ponderation->elements);
+			list_mvfront(ponderation_a_verifier->elements);
+			do
+			{
+				elem1 = list_curr(ponderation->elements);
+				elem2 = list_curr(ponderation_a_verifier->elements);
+				if ((elem1->action != elem2->action) || (elem1->flags != elem2->flags) || (!(ERREUR_RELATIVE_EGALE(elem1->ponderation, elem2->ponderation, ERREUR_RELATIVE_MIN))))
+					doublon = 0;
+			}
+			while ((list_mvnext(ponderation->elements) != NULL) && (list_mvnext(ponderation_a_verifier->elements) != NULL) && (doublon == 1));
+			if (doublon == 1)
+				return 1;
+		}
+	}
+	while (list_mvnext(ponderations) != NULL);
+	return 0;
+}
+
+int _1990_combinaisons_genere_ponderations(Projet *projet, LIST* combinaisons_destination, double* coef_min, double* coef_max, int dim_coef)
+{
+	int			nbboucle=1, j, suivant, categorie, tmp;
+	Ponderation		ponderation;
+	Ponderation_Element	ponderation_element;
+	Combinaison		*combinaison;
+	Combinaison_Element	*combinaison_element;
+	Groupe			*groupe;
+	Etage_Groupe		*etage;
+	
+	etage = list_rear(projet->groupes);
+	if (etage == NULL)
+		BUG(-1);
+	if (list_front(etage->groupe) != list_rear(etage->groupe))
+		BUG(-2);
+	groupe = list_front(etage->groupe);
+	
+	if (list_size(groupe->tmp_combinaison.combinaisons) == 0)
+		return 0;
+	
+	nbboucle = nbboucle << dim_coef;
+	
+	for (j=0;j<nbboucle;j++)
+	{
+		list_mvfront(groupe->tmp_combinaison.combinaisons);
+		do
+		{
+			suivant = 0;
+			combinaison = (Combinaison*) list_curr(groupe->tmp_combinaison.combinaisons);
+			ponderation.elements = list_init();
+			list_mvfront(combinaison->elements);
+			if (list_size(combinaison->elements) != 0)
+			{
+				do
+				{
+					combinaison_element = (Combinaison_Element*)list_curr(combinaison->elements);
+					ponderation_element.action = combinaison_element->action;
+					ponderation_element.flags = combinaison_element->flags;
+					categorie = _1990_action_type_combinaison_bat(ponderation_element.action->categorie, projet->pays);
+					if ((ERREUR_RELATIVE_EGALE(0., coef_min[categorie], ERREUR_RELATIVE_MIN)) && (ERREUR_RELATIVE_EGALE(0., coef_max[categorie], ERREUR_RELATIVE_MIN)))
+						suivant = 1;
+					else
+					{
+						tmp = 1 << categorie;
+						if ((j & tmp) != 0)
+							ponderation_element.ponderation = coef_max[categorie];
+						else
+							ponderation_element.ponderation = coef_min[categorie];
+						if (!(ERREUR_RELATIVE_EGALE(0., ponderation_element.ponderation, ERREUR_RELATIVE_MIN)))
+						{
+							if (list_insert_after(ponderation.elements, &ponderation_element, sizeof(ponderation_element)) == NULL)
+								BUG(-1);
+						}
+					}
+				}
+				while ((list_mvnext(combinaison->elements) != NULL) && (suivant != 1));
+			}
+			if ((suivant == 0) && (list_size(ponderation.elements) != 0) && (_1990_combinaisons_verifie_ponderation_double(combinaisons_destination, &ponderation) == 0))
+			{
+				if (list_insert_after(combinaisons_destination, &ponderation, sizeof(ponderation)) == NULL)
+					BUG(-1);
+			}
+			else
+				list_free(ponderation.elements, LIST_DEALLOC);
+		}
+		while (list_mvnext(groupe->tmp_combinaison.combinaisons) != NULL);
+	}
+	
+	return 0;
+}
+
+
+int _1990_combinaisons_genere_ponderation_eu(Projet *projet)
+{
+	double		*coef_min, *coef_max;
+	
+	
+	coef_min = (double*)malloc(5*sizeof(double));
+	if (coef_min == NULL)
+		BUG(-2);
+	coef_max = (double*)malloc(5*sizeof(double));
+	if (coef_max == NULL)
+	{
+		free(coef_min);
+		BUG(-3);
+	}
+	
+	// Pour ELU_EQU
+	coef_min[0] = 0.9; coef_max[0] = 1.1; // poids propre
+	coef_min[1] = 1.0; coef_max[1] = 1.3; // précontrainte (1992-1)
+	coef_min[2] = 0.0; coef_max[2] = 1.5; // variable
+	coef_min[3] = 0.0; coef_max[3] = 0.0; // Accidentelle
+	coef_min[4] = 0.0; coef_max[4] = 0.0; // Sismique
+	
+	_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.elu_equ, coef_min, coef_max, 5);
+	
+	free(coef_min);
+	free(coef_max);
+	
+	return 0;
+}
+
+int _1990_combinaisons_genere_ponderation(Projet *projet)
+{
+	switch (projet->pays)
+	{
+		case PAYS_EU : { return _1990_combinaisons_genere_ponderation_eu(projet); break; }
+//		case PAYS_FR : { return _1990_combinaisons_genere_ponderation_fr(projet); break; }
+		default : { BUG(-1.); break; }
+	}
+}
+
+int _1990_combinaisons_genere(Projet *projet)
+{
+	Etage_Groupe	*etage;
+	Groupe		*groupe;
+	Action		*action;
+	int		i, j;
+	
+	list_mvfront(projet->groupes);
+	if (list_curr(projet->groupes) == NULL)
+		return 0;
+	for (i=1;i<=list_size(projet->actions);i++)
+	{
+		_1990_groupe_free_seulement_tmp_combinaison(projet);
+		list_mvfront(projet->actions);
+		for (j=1;j<i;j++)
+		{
+			action = list_curr(projet->actions);
+			action->flags = 0;
+			list_mvnext(projet->actions);
+		}
+		action = list_curr(projet->actions);
+		if (_1990_action_type_combinaison_bat(action->categorie, PAYS_EU) == 2)
+			action->flags = 1;
+		else
+			action->flags = 0;
+		list_mvnext(projet->actions);
+		for (j=i+1;j<=list_size(projet->actions);j++)
+		{
+			action = list_curr(projet->actions);
+			action->flags = 0;
+			list_mvnext(projet->actions);
+		}
+			
+		list_mvfront(projet->groupes);
+		do
+		{
+			etage = (Etage_Groupe*)list_curr(projet->groupes);
+			
+			list_mvfront(etage->groupe);
+			if (list_curr(etage->groupe) != NULL)
+			{
+				do
+				{
+					groupe = (Groupe*)list_curr(etage->groupe);
+					switch (groupe->type_combinaison)
+					{
+						case GROUPE_COMBINAISON_OR :
+						{
+							if (_1990_combinaisons_genere_groupe_or(projet, groupe) != 0)
+								return FALSE;
+							break;
+						}
+						case GROUPE_COMBINAISON_XOR :
+						{
+							if (_1990_combinaisons_genere_groupe_xor(projet, groupe) != 0)
+								return FALSE;
+							break;
+						}
+						case GROUPE_COMBINAISON_AND :
+						{
+							if (_1990_combinaisons_genere_groupe_and(projet, groupe) != 0)
+								return FALSE;
+							break;
+						}
+					}
+				}
+				while (list_mvnext(etage->groupe));
+			}
+		}
+		while (list_mvnext(projet->groupes) != NULL);
+		
+		_1990_combinaisons_genere_ponderation(projet);
+	}
+	return 0;
+}
+
+void _1990_combinaisons_affiche(Projet *projet)
+{
+	Ponderation		*ponderation;
+	Ponderation_Element	*ponderation_element;
+	if (list_size(projet->combinaisons.elu_equ) != 0)
+	{
+		list_mvfront(projet->combinaisons.elu_equ);
+		do
+		{
+			ponderation = list_curr(projet->combinaisons.elu_equ);
+			if (list_size(ponderation->elements) != 0)
+			{
+				list_mvfront(ponderation->elements);
+				do
+				{
+					ponderation_element = list_curr(ponderation->elements);
+					printf("%f(%d)*%d+", ponderation_element->ponderation, ponderation_element->flags, ponderation_element->action->numero);
+				}
+				while (list_mvnext(ponderation->elements));
+				printf("\n");
+			}
+		}
+		while (list_mvnext(projet->combinaisons.elu_equ));
+	}
+
+	return;
+}
+

@@ -40,6 +40,7 @@ typedef struct __Action
 	int			numero;
 	int			categorie;			// Les catégories sont définies dans les fonctions _1990_action_categorie
 	LIST			*charges;
+	int			flags;				// 1 si les actions variables sont principales
 } Action;
 
 // _1990_action_categorie_bat_txt_eu : renvoie la description des catérogies des actions des bâtiments selon la norme européenne

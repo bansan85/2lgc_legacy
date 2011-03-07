@@ -91,8 +91,8 @@ char *_1990_action_categorie_bat_txt(int type, int pays)
 {
 	switch (pays)
 	{
-		case 0 : { return _1990_action_categorie_bat_txt_eu(type); break; }
-		case 1 : { return _1990_action_categorie_bat_txt_fr(type); break; }
+		case PAYS_EU : { return _1990_action_categorie_bat_txt_eu(type); break; }
+		case PAYS_FR : { return _1990_action_categorie_bat_txt_fr(type); break; }
 		default : { BUG(NULL); break; }
 	}
 }
@@ -149,8 +149,8 @@ int _1990_action_type_combinaison_bat(int categorie, int pays)
 {
 	switch (pays)
 	{
-		case 0 : { return _1990_action_type_combinaison_bat_eu(categorie); break; }
-		case 1 : { return _1990_action_type_combinaison_bat_fr(categorie); break; }
+		case PAYS_EU : { return _1990_action_type_combinaison_bat_eu(categorie); break; }
+		case PAYS_FR : { return _1990_action_type_combinaison_bat_fr(categorie); break; }
 		default : { BUG(-1); break; }
 	}
 }
@@ -180,6 +180,7 @@ int _1990_action_ajout(Projet *projet, int categorie)
 	action_nouveau.nom = NULL;
 	action_nouveau.description = NULL;
 	action_nouveau.categorie = categorie;
+	action_nouveau.flags = 0;
 	if (action_dernier == NULL)
 		action_nouveau.numero = 0;
 	else

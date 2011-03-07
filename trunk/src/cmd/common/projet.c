@@ -52,7 +52,7 @@ Projet *projet_init()
 		BUG(NULL);
 	}
 	
-	projet->pays = 0;
+	projet->pays = PAYS_EU;
 	return projet;
 }
 

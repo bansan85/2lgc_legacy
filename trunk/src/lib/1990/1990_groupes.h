@@ -59,5 +59,6 @@ int _1990_groupe_ajout_element(Projet *projet, int etage, int groupe_n, int grou
 void _1990_groupe_affiche_tout(Projet *projet);
 void _1990_groupe_free_groupe_tmp_combinaison(void *data);
 void _1990_groupe_free(Projet *projet);
+void _1990_groupe_free_seulement_tmp_combinaison(Projet *projet);
 
 #endif
