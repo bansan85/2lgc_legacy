@@ -152,7 +152,7 @@ int _1990_groupe_ajout_element(Projet *projet, int etage, int groupe_n, int grou
 int _1990_groupe_affiche_element(__attribute__((unused)) void *input, void *curr)
 {
 	Element *element = (Element*)curr;
-	printf("\t\telement : %d\n", element->numero);
+	printf("%d ", element->numero);
 	return TRUE;
 }
 
@@ -160,15 +160,16 @@ int _1990_groupe_affiche_combinaison(__attribute__((unused)) void *input, void *
 {
 	Combinaison_Element	*element = (Combinaison_Element*)curr;
 	Action	*action = (Action*)element->action;
-	printf("\t\t\telement : %d\n", action->numero);
+	printf("%d(%d) ", action->numero, element->flags);
 	return TRUE;
 }
 
 int _1990_groupe_affiche_combinaisons(__attribute__((unused)) void *input, void *curr)
 {
 	Combinaison *combinaison = (Combinaison*)curr;
-	printf("\t\tNouvelle combinaison :\n");
+	printf("\t\tNouvelle combinaison : ");
 	list_traverse(combinaison->elements, (void *)NULL, _1990_groupe_affiche_combinaison, 0);
+	printf("\n");
 	return TRUE;
 }
 
@@ -196,6 +197,7 @@ int _1990_groupe_affiche_groupe(__attribute__((unused)) void *input, void *curr)
 
 	}
 	list_traverse(groupe->elements, (void *)NULL, _1990_groupe_affiche_element, 0);
+	printf("\n");
 	printf("\tCombinaisons :\n");
 	list_traverse(groupe->tmp_combinaison.combinaisons, (void *)NULL, _1990_groupe_affiche_combinaisons, 0);
 	return TRUE;
@@ -237,30 +239,101 @@ void _1990_groupe_free_groupe_tmp_combinaison(void *data)
 	return;
 }
 
-void _1990_groupe_free_groupe(void *data)
-{
-	Groupe *groupe = (Groupe*)data;
-	if (groupe->elements != NULL)
-		list_free(groupe->elements, &(_1990_groupe_free_groupe_element));
-	if (groupe->tmp_combinaison.combinaisons != NULL)
-		list_free(groupe->tmp_combinaison.combinaisons, &(_1990_groupe_free_groupe_tmp_combinaison));
-	free(groupe);
-	return;
-}
-
-void _1990_groupe_free_etage(void *data)
-{
-	Etage_Groupe *etage = (Etage_Groupe*)data;
-	if (etage->groupe != NULL)
-		list_free(etage->groupe, &(_1990_groupe_free_groupe));
-	free(etage);
-	return;
-}
-
 void _1990_groupe_free(Projet *projet)
 {
-	list_free(projet->groupes, &(_1990_groupe_free_etage));
+	Etage_Groupe	*etage;
+	Groupe		*groupe;
+	Combinaison	*combinaison;
+	
+	if (projet->groupes == NULL)
+		return;
+	
+	list_mvfront(projet->groupes);
+	while (!list_empty(projet->groupes))
+	{
+		etage = list_front(projet->groupes);
+		if (etage->groupe != NULL)
+		{
+			list_mvfront(etage->groupe);
+			while (!list_empty(etage->groupe))
+			{
+				groupe = list_front(etage->groupe);
+				if (groupe->elements != NULL)
+				{
+					list_mvfront(groupe->elements);
+					while (!list_empty(groupe->elements))
+						free(list_remove_front(groupe->elements));
+					free(groupe->elements);
+				}
+				if (groupe->tmp_combinaison.combinaisons != NULL)
+				{
+					list_mvfront(groupe->tmp_combinaison.combinaisons);
+					while (!list_empty(groupe->tmp_combinaison.combinaisons))
+					{
+						combinaison = list_front(groupe->tmp_combinaison.combinaisons);
+						if (combinaison->elements != NULL)
+						{
+							list_mvfront(combinaison->elements);
+							while (!list_empty(combinaison->elements))
+								free(list_remove_front(combinaison->elements));
+							free(combinaison->elements);
+						}
+						free(list_remove_front(groupe->tmp_combinaison.combinaisons));
+					}
+					free(groupe->tmp_combinaison.combinaisons);
+				}
+				free(list_remove_front(etage->groupe));
+			}
+			free(etage->groupe);
+		}
+		free(list_remove_front(projet->groupes));
+	}
+	free(projet->groupes);
 	projet->groupes = NULL;
 	return;
 }
 
+void _1990_groupe_free_seulement_tmp_combinaison(Projet *projet)
+{
+	Etage_Groupe	*etage;
+	Groupe		*groupe;
+	Combinaison	*combinaison;
+	
+	if (projet->groupes == NULL)
+		return;
+	
+	if (list_front(projet->groupes) == NULL)
+		return;
+	list_mvfront(projet->groupes);
+	do
+	{
+		etage = list_curr(projet->groupes);
+		if ((etage->groupe != NULL) && (list_front(etage->groupe) != NULL) && (list_rear(projet->groupes) != list_curr(projet->groupes)))
+		{
+			list_mvfront(etage->groupe);
+			do
+			{
+				groupe = list_curr(etage->groupe);
+				if (groupe->tmp_combinaison.combinaisons != NULL)
+				{
+					list_mvfront(groupe->tmp_combinaison.combinaisons);
+					while (!list_empty(groupe->tmp_combinaison.combinaisons))
+					{
+						combinaison = list_front(groupe->tmp_combinaison.combinaisons);
+						if ((combinaison->elements != NULL) && (list_front(combinaison->elements) != NULL))
+						{
+							list_mvfront(combinaison->elements);
+							while (!list_empty(combinaison->elements))
+								free(list_remove_front(combinaison->elements));
+							free(combinaison->elements);
+						}
+						free(list_remove_front(groupe->tmp_combinaison.combinaisons));
+					}
+				}
+			}
+			while (list_mvnext(etage->groupe) != NULL);
+		}
+	}
+	while (list_mvnext(projet->groupes) != NULL);
+	return;
+}

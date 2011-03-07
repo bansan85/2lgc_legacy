@@ -21,6 +21,13 @@
 
 #include <list.h>
 
+typedef enum
+{
+	PAYS_EU,
+	PAYS_FR
+} Type_Pays;
+
+
 typedef struct __CombinaisonsEL
 {
 	LIST		*elu_equ;
@@ -39,8 +46,7 @@ typedef struct __Projet
 	LIST			*actions;
 	LIST			*groupes;
 	CombinaisonsEL		combinaisons;
-	int			pays;		// 0 : norme européenne
-						// 1 : norme française
+	Type_Pays		pays;
 } Projet;
 
 Projet *projet_init();

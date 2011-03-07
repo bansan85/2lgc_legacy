@@ -22,15 +22,30 @@
 #include <list.h>
 
 #include "projet.h"
+#include "1990_actions.h"
+
+typedef struct __Ponderation_Element
+{
+	double		ponderation;
+	int		flags;
+	Action		*action;
+} Ponderation_Element;
+
+typedef struct __Ponderation
+{
+	LIST		*elements; // Liste de pointeur Action* avec leur ponderation
+} Ponderation;
+
 
 typedef struct __Combinaison_Element
 {
-	void*		action;
+	Action		*action;
+	int		flags;
 } Combinaison_Element;
 
 typedef struct __Combinaison
 {
-	LIST		*elements; // Liste de pointeur Action*
+	LIST		*elements; // Liste de pointeur Combinaison_Element
 } Combinaison;
 
 typedef struct __Combinaisons
@@ -42,4 +57,7 @@ int _1990_combinaisons_init(Projet *projet);
 int _1990_combinaisons_genere(Projet *projet);
 void _1990_combinaisons_free(Projet *projet);
 
+int _1990_combinaisons_genere_ponderation(Projet *projet);
+int _1990_combinaisons_genere_ponderation_eu(Projet *projet);
+void _1990_combinaisons_affiche(Projet *projet);
 #endif

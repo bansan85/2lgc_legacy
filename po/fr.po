@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2011-03-04 17:01+0100\n"
+"POT-Creation-Date: 2011-03-05 18:04+0100\n"
 "PO-Revision-Date: 2011-02-28 14:53+0100\n"
 "Last-Translator: LE GARREC Vincent <vlg@2lgc.org>\n"
 "Language-Team: French\n"
@@ -347,11 +347,11 @@ msgstr "Neige : Altitude <= 1000 m"
 msgid "Eaux souterraines"
 msgstr "Eaux souterraines"
 
-#: src/lib/1990/1990_duree.c:68 src/lib/1990/1990_duree.c:82
+#: src/lib/1990/1990_duree.c:70 src/lib/1990/1990_duree.c:84
 msgid "Structures provisoires"
 msgstr "Structures provisoires"
 
-#: src/lib/1990/1990_duree.c:69 src/lib/1990/1990_duree.c:83
+#: src/lib/1990/1990_duree.c:71 src/lib/1990/1990_duree.c:85
 msgid ""
 "Éléments structuraux remplaçables, par exemple poutres de roulement, "
 "appareils d'appui"
@@ -359,15 +359,15 @@ msgstr ""
 "Éléments structuraux remplaçables, par exemple poutres de roulement, "
 "appareils d'appui"
 
-#: src/lib/1990/1990_duree.c:70 src/lib/1990/1990_duree.c:84
+#: src/lib/1990/1990_duree.c:72 src/lib/1990/1990_duree.c:86
 msgid "Structures agricoles et similaires"
 msgstr "Structures agricoles et similaires"
 
-#: src/lib/1990/1990_duree.c:71 src/lib/1990/1990_duree.c:85
+#: src/lib/1990/1990_duree.c:73 src/lib/1990/1990_duree.c:87
 msgid "Structures de bâtiments et autres structures courantes"
 msgstr "Structures de bâtiments et autres structures courantes"
 
-#: src/lib/1990/1990_duree.c:72 src/lib/1990/1990_duree.c:86
+#: src/lib/1990/1990_duree.c:74 src/lib/1990/1990_duree.c:88
 msgid ""
 "Structures monumentales de bâtiments, pont et autres ouvrages de génie civil"
 msgstr ""

@@ -21,6 +21,8 @@
 #include <libintl.h>
 #include <locale.h>
 
+#include "projet.h"
+
 // _1990_duree_projet_eu : renvoie la durée (en année) indicative de la norme européenne
 // Dans le cas où la durée indiquée par la norme européenne est un
 // intervalle d'année, la durée la plus importante est renvoyée.
@@ -84,6 +86,26 @@ char *_1990_duree_projet_txt_fr(int type)
 		case 2 : { return gettext("Structures agricoles et similaires"); break; }
 		case 3 : { return gettext("Structures de bâtiments et autres structures courantes"); break; }
 		case 4 : { return gettext("Structures monumentales de bâtiments, pont et autres ouvrages de génie civil"); break; }
+		default : { BUG(NULL); break; }
+	}
+}
+
+int _1990_duree_projet(int type, Type_Pays pays)
+{
+	switch (pays)
+	{
+		case PAYS_EU : { return _1990_duree_projet_eu(type); break; }
+		case PAYS_FR : { return _1990_duree_projet_fr(type); break; }
+		default : { BUG(-1); break; }
+	}
+}
+
+char *_1990_duree_projet_txt(int type, Type_Pays pays)
+{
+	switch (pays)
+	{
+		case PAYS_EU : { return _1990_duree_projet_txt_eu(type); break; }
+		case PAYS_FR : { return _1990_duree_projet_txt_fr(type); break; }
 		default : { BUG(NULL); break; }
 	}
 }
