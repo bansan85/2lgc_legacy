@@ -218,12 +218,6 @@ void _1990_groupe_affiche_tout(Projet *projet)
 	list_traverse(projet->groupes, (void *)NULL, _1990_groupe_affiche_etage, 0);
 }
 
-void _1990_groupe_free_groupe_element(void *data)
-{
-	free(data);
-	return;
-}
-
 void _1990_groupe_free_groupe_tmp_combinaison_element(void *data)
 {
 	free(data);
@@ -308,7 +302,7 @@ void _1990_groupe_free_seulement_tmp_combinaison(Projet *projet)
 	do
 	{
 		etage = list_curr(projet->groupes);
-		if ((etage->groupe != NULL) && (list_front(etage->groupe) != NULL) && (list_rear(projet->groupes) != list_curr(projet->groupes)))
+		if ((etage->groupe != NULL) && (list_front(etage->groupe) != NULL))
 		{
 			list_mvfront(etage->groupe);
 			do
