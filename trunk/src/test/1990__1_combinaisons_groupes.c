@@ -45,6 +45,7 @@ int main(void)
 	projet = NULL;
 	projet = projet_init();
 	projet->pays = PAYS_EU;
+	projet->combinaisons.flags = 0;
 	if (projet == NULL) BUG(-1);
 	if (_1990_action_ajout(projet, 0) != 0) BUG(-1);
 	if (_1990_action_ajout(projet, 0) != 0) BUG(-1);
@@ -58,7 +59,7 @@ int main(void)
 	if (_1990_groupe_ajout(projet, 0, 0, GROUPE_COMBINAISON_AND) != 0) BUG(-1);
 	if (_1990_groupe_ajout(projet, 0, 1, GROUPE_COMBINAISON_OR) != 0) BUG(-1);
 	if (_1990_groupe_ajout(projet, 0, 2, GROUPE_COMBINAISON_XOR) != 0) BUG(-1);
-	if (_1990_groupe_ajout(projet, 1, 0, GROUPE_COMBINAISON_AND) != 0) BUG(-1);
+	if (_1990_groupe_ajout(projet, 1, 0, GROUPE_COMBINAISON_OR) != 0) BUG(-1);
 	if (_1990_groupe_ajout_element(projet, 0, 0, 0) != 0) BUG(-1);
 	if (_1990_groupe_ajout_element(projet, 0, 0, 1) != 0) BUG(-1);
 	if (_1990_groupe_ajout_element(projet, 0, 1, 2) != 0) BUG(-1);
@@ -70,7 +71,7 @@ int main(void)
 	if (_1990_groupe_ajout_element(projet, 1, 0, 2) != 0) BUG(-1);
 	if (_1990_combinaisons_genere(projet) != 0) BUG(-1);
 	_1990_groupe_affiche_tout(projet);
-	_1990_combinaisons_affiche(projet);
+	_1990_combinaisons_affiche_ponderations(projet);
 	projet_free(projet);
 	
 	return EXIT_SUCCESS;

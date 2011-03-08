@@ -27,6 +27,7 @@
 typedef struct __Ponderation_Element
 {
 	double		ponderation;
+	int		psi;
 	int		flags;
 	Action		*action;
 } Ponderation_Element;
@@ -40,7 +41,7 @@ typedef struct __Ponderation
 typedef struct __Combinaison_Element
 {
 	Action		*action;
-	int		flags;
+	int		flags;	//
 } Combinaison_Element;
 
 typedef struct __Combinaison
@@ -59,5 +60,5 @@ void _1990_combinaisons_free(Projet *projet);
 
 int _1990_combinaisons_genere_ponderation(Projet *projet);
 int _1990_combinaisons_genere_ponderation_eu(Projet *projet);
-void _1990_combinaisons_affiche(Projet *projet);
+void _1990_combinaisons_affiche_ponderations(Projet *projet);
 #endif
