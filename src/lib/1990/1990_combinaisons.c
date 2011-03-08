@@ -31,6 +31,85 @@
 #include "1990_combinaisons.h"
 
 
+// Renvoie 0 si ponderation_a_verifier n'est pas dans ponderations
+int _1990_combinaisons_verifie_ponderation_double(LIST *ponderations, Ponderation* ponderation_a_verifier)
+{
+	Ponderation		*ponderation;
+	Ponderation_Element	*elem1, *elem2;
+	int			doublon;
+	if (list_size(ponderations) == 0)
+		return 0;
+	if (list_size(ponderation_a_verifier->elements) == 0)
+		return 1;
+	list_mvfront(ponderations);
+
+	do
+	{
+		doublon = 1;
+		ponderation = (Ponderation*)list_curr(ponderations);
+		if (list_size(ponderation->elements) == list_size(ponderation_a_verifier->elements))
+		{
+			list_mvfront(ponderation->elements);
+			list_mvfront(ponderation_a_verifier->elements);
+			do
+			{
+				elem1 = list_curr(ponderation->elements);
+				elem2 = list_curr(ponderation_a_verifier->elements);
+				if ((elem1->action != elem2->action) || (elem1->psi != elem2->psi) || (!(ERREUR_RELATIVE_EGALE(elem1->ponderation, elem2->ponderation, ERREUR_RELATIVE_MIN))))
+					doublon = 0;
+			}
+			while ((list_mvnext(ponderation->elements) != NULL) && (list_mvnext(ponderation_a_verifier->elements) != NULL) && (doublon == 1));
+			if (doublon == 1)
+				return 1;
+		}
+	}
+	while (list_mvnext(ponderations) != NULL);
+	return 0;
+}
+
+int _1990_combinaisons_duplique_ponderations_sans_double(LIST *destination, LIST *source)
+{
+	Ponderation		*ponderation_source;
+	Ponderation		ponderation_destination;
+	Ponderation_Element	*element_source;
+	Ponderation_Element	element_destination;
+	
+	if (list_size(source) == 0)
+		return 0;
+	list_mvrear(destination);
+	list_mvfront(source);
+	do
+	{
+		ponderation_source = list_curr(source);
+		if (_1990_combinaisons_verifie_ponderation_double(destination, ponderation_source) == 0)
+		{
+			ponderation_destination.elements = list_init();
+			if (ponderation_destination.elements == NULL)
+				BUG(-2);
+			if ((ponderation_source != NULL) && (list_curr(ponderation_source->elements) != NULL))
+			{
+				list_mvfront(ponderation_source->elements);
+				do
+				{
+					element_source = list_curr(ponderation_source->elements);
+					element_destination.action = element_source->action;
+					element_destination.flags = element_source->flags;
+					element_destination.psi = element_source->psi;
+					element_destination.ponderation = element_source->ponderation;
+					if (list_insert_after(ponderation_destination.elements, (void*)&element_destination, sizeof(element_destination)) == NULL)
+						BUG(-3);
+		
+				}
+				while (list_mvnext(ponderation_source->elements) != NULL);
+			}
+			if (list_insert_after(destination, (void*)&ponderation_destination, sizeof(ponderation_destination)) == NULL)
+				BUG(-4);
+		}
+	}
+	while (list_mvnext(source) != NULL);
+	return 0;
+}
+
 // Renvoie 0 si combinaison_a_verifier n'est pas dans ponderations
 int _1990_combinaisons_verifie_combinaison_double(LIST *combinaisons, Combinaison* combinaison_a_verifier)
 {
@@ -64,44 +143,6 @@ int _1990_combinaisons_verifie_combinaison_double(LIST *combinaisons, Combinaiso
 		}
 	}
 	while (list_mvnext(combinaisons) != NULL);
-	return 0;
-}
-
-int _1990_combinaisons_duplique_ponderations_avec_double(LIST *destination, LIST *source)
-{
-	Ponderation		*ponderation_source;
-	Ponderation		ponderation_destination;
-	Ponderation_Element	*element_source;
-	Ponderation_Element	element_destination;
-	
-	list_mvrear(destination);
-	list_mvfront(source);
-	do
-	{
-		ponderation_source = list_curr(source);
-		ponderation_destination.elements = list_init();
-		if (ponderation_destination.elements == NULL)
-			BUG(-2);
-		if ((ponderation_source != NULL) && (list_curr(ponderation_source->elements) != NULL))
-		{
-			list_mvfront(ponderation_source->elements);
-			do
-			{
-				element_source = list_curr(ponderation_source->elements);
-				element_destination.action = element_source->action;
-				element_destination.flags = element_source->flags;
-				element_destination.psi = element_source->psi;
-				element_destination.ponderation = element_source->ponderation;
-				if (list_insert_after(ponderation_destination.elements, (void*)&element_destination, sizeof(element_destination)) == NULL)
-					BUG(-3);
-	
-			}
-			while (list_mvnext(ponderation_source->elements) != NULL);
-		}
-		if (list_insert_after(destination, (void*)&ponderation_destination, sizeof(ponderation_destination)) == NULL)
-			BUG(-4);
-	}
-	while (list_mvnext(source) != NULL);
 	return 0;
 }
 
@@ -390,15 +431,10 @@ int _1990_combinaisons_genere_groupe_and(Projet *projet, Groupe *groupe)
 					if (list_size(combinaison1->elements) != 0)
 					{
 						list_mvfront(combinaison1->elements);
-						action_predominante = 0;
 						do
 						{
 							comb_elem = list_curr(combinaison1->elements);
-							if ((comb_elem->flags & 1) != 0)
-								action_predominante = 1;
-						} while (list_mvnext(combinaison1->elements) && (action_predominante == 0));
-						if (action_predominante == 1)
-							_1990_combinaisons_flags_1(combinaison1);
+						} while (list_mvnext(combinaison1->elements));
 					}
 					
 				}
@@ -583,42 +619,6 @@ void _1990_combinaisons_free(Projet *projet)
 	return;
 }
 
-// Renvoie 0 si ponderation_a_verifier n'est pas dans ponderations
-int _1990_combinaisons_verifie_ponderation_double(LIST *ponderations, Ponderation* ponderation_a_verifier)
-{
-	Ponderation		*ponderation;
-	Ponderation_Element	*elem1, *elem2;
-	int			doublon;
-	if (list_size(ponderations) == 0)
-		return 0;
-	if (list_size(ponderation_a_verifier->elements) == 0)
-		return 1;
-	list_mvfront(ponderations);
-
-	do
-	{
-		doublon = 1;
-		ponderation = (Ponderation*)list_curr(ponderations);
-		if (list_size(ponderation->elements) == list_size(ponderation_a_verifier->elements))
-		{
-			list_mvfront(ponderation->elements);
-			list_mvfront(ponderation_a_verifier->elements);
-			do
-			{
-				elem1 = list_curr(ponderation->elements);
-				elem2 = list_curr(ponderation_a_verifier->elements);
-				if ((elem1->action != elem2->action) || (elem1->flags != elem2->flags) || (elem1->psi != elem2->psi) || (!(ERREUR_RELATIVE_EGALE(elem1->ponderation, elem2->ponderation, ERREUR_RELATIVE_MIN))))
-					doublon = 0;
-			}
-			while ((list_mvnext(ponderation->elements) != NULL) && (list_mvnext(ponderation_a_verifier->elements) != NULL) && (doublon == 1));
-			if (doublon == 1)
-				return 1;
-		}
-	}
-	while (list_mvnext(ponderations) != NULL);
-	return 0;
-}
-
 int _1990_combinaisons_genere_ponderations(Projet *projet, LIST* combinaisons_destination, double* coef_min, double* coef_max, int dim_coef, int psi_dominante, int psi_accompagnement)
 {
 	int			nbboucle=1, j, suivant, categorie, tmp, variable, variable_dominante;
@@ -724,6 +724,7 @@ int _1990_combinaisons_genere_ponderation_eu(Projet *projet)
 	}
 	
 	// Pour ELU_EQU
+	// Equilibre seulement
 	if ((projet->combinaisons.flags & 1) == 0)
 	{
 		coef_min[0] = 0.9; coef_max[0] = 1.1; // poids propre
@@ -733,6 +734,7 @@ int _1990_combinaisons_genere_ponderation_eu(Projet *projet)
 		coef_min[4] = 0.0; coef_max[4] = 0.0; // Sismique
 		_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.elu_equ, coef_min, coef_max, 5, -1, 0);
 	}
+	// Equilibre + Résistance structurelle
 	else
 	{
 		coef_min[0] = 1.15; coef_max[0] = 1.35; // poids propre
@@ -748,77 +750,141 @@ int _1990_combinaisons_genere_ponderation_eu(Projet *projet)
 		coef_min[4] = 0.0; coef_max[4] = 0.0; // Sismique
 		_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.elu_equ, coef_min, coef_max, 5, -1, 0);
 	}
-	switch (projet->combinaisons.flags & 6)
+	// Equation 6.10a et 6.10b
+	if ((projet->combinaisons.flags & 8) == 0)
 	{
-		case 0:
+		switch (projet->combinaisons.flags & 6)
 		{
-			coef_min[0] = 1.0; coef_max[0] = 1.35; // poids propre
-			coef_min[1] = 1.0; coef_max[1] = 1.3; // précontrainte (1992-1)
-			coef_min[2] = 0.0; coef_max[2] = 1.5; // variable
-			coef_min[3] = 0.0; coef_max[3] = 0.0; // Accidentelle
-			coef_min[4] = 0.0; coef_max[4] = 0.0; // Sismique
-			_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.elu_str, coef_min, coef_max, 5, 0, 0);
-			coef_min[0] = 1.0; coef_max[0] = 1.15; // poids propre
-			coef_min[1] = 1.0; coef_max[1] = 1.3; // précontrainte (1992-1)
-			coef_min[2] = 0.0; coef_max[2] = 1.5; // variable
-			coef_min[3] = 0.0; coef_max[3] = 0.0; // Accidentelle
-			coef_min[4] = 0.0; coef_max[4] = 0.0; // Sismique
-			_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.elu_str, coef_min, coef_max, 5, -1, 0);
-			coef_min[0] = 1.0; coef_max[0] = 1.0; // poids propre
-			coef_min[1] = 1.0; coef_max[1] = 1.3; // précontrainte (1992-1)
-			coef_min[2] = 0.0; coef_max[2] = 1.3; // variable
-			coef_min[3] = 0.0; coef_max[3] = 0.0; // Accidentelle
-			coef_min[4] = 0.0; coef_max[4] = 0.0; // Sismique
-			_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.elu_str, coef_min, coef_max, 5, -1, 0);
-			_1990_combinaisons_duplique_ponderations_avec_double(projet->combinaisons.elu_geo, projet->combinaisons.elu_str);
-			break;
-		}
-		case 2:
-		{
-			coef_min[0] = 1.0; coef_max[0] = 1.35; // poids propre
-			coef_min[1] = 1.0; coef_max[1] = 1.3; // précontrainte (1992-1)
-			coef_min[2] = 0.0; coef_max[2] = 1.5; // variable
-			coef_min[3] = 0.0; coef_max[3] = 0.0; // Accidentelle
-			coef_min[4] = 0.0; coef_max[4] = 0.0; // Sismique
-			_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.elu_str, coef_min, coef_max, 5, 0, 0);
-			coef_min[0] = 1.0; coef_max[0] = 1.15; // poids propre
-			coef_min[1] = 1.0; coef_max[1] = 1.3; // précontrainte (1992-1)
-			coef_min[2] = 0.0; coef_max[2] = 1.5; // variable
-			coef_min[3] = 0.0; coef_max[3] = 0.0; // Accidentelle
-			coef_min[4] = 0.0; coef_max[4] = 0.0; // Sismique
-			_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.elu_str, coef_min, coef_max, 5, -1, 0);
-			_1990_combinaisons_duplique_ponderations_avec_double(projet->combinaisons.elu_geo, projet->combinaisons.elu_str);
-			break;
-		}
-		case 4:
-		{
-			coef_min[0] = 1.0; coef_max[0] = 1.35; // poids propre
-			coef_min[1] = 1.0; coef_max[1] = 1.3; // précontrainte (1992-1)
-			coef_min[2] = 0.0; coef_max[2] = 1.5; // variable
-			coef_min[3] = 0.0; coef_max[3] = 0.0; // Accidentelle
-			coef_min[4] = 0.0; coef_max[4] = 0.0; // Sismique
-			_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.elu_str, coef_min, coef_max, 5, 0, 0);
-			coef_min[0] = 1.0; coef_max[0] = 1.15; // poids propre
-			coef_min[1] = 1.0; coef_max[1] = 1.3; // précontrainte (1992-1)
-			coef_min[2] = 0.0; coef_max[2] = 1.5; // variable
-			coef_min[3] = 0.0; coef_max[3] = 0.0; // Accidentelle
-			coef_min[4] = 0.0; coef_max[4] = 0.0; // Sismique
-			_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.elu_str, coef_min, coef_max, 5, -1, 0);
-			coef_min[0] = 1.0; coef_max[0] = 1.0; // poids propre
-			coef_min[1] = 1.0; coef_max[1] = 1.3; // précontrainte (1992-1)
-			coef_min[2] = 0.0; coef_max[2] = 1.3; // variable
-			coef_min[3] = 0.0; coef_max[3] = 0.0; // Accidentelle
-			coef_min[4] = 0.0; coef_max[4] = 0.0; // Sismique
-			_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.elu_geo, coef_min, coef_max, 5, -1, 0);
-			break;
-		}
-		default :
-		{
-			BUG(-4);
-			break;
+			// Approche 1
+			case 0:
+			{
+				coef_min[0] = 1.0; coef_max[0] = 1.35; // poids propre
+				coef_min[1] = 1.0; coef_max[1] = 1.3; // précontrainte (1992-1)
+				coef_min[2] = 0.0; coef_max[2] = 1.5; // variable
+				coef_min[3] = 0.0; coef_max[3] = 0.0; // Accidentelle
+				coef_min[4] = 0.0; coef_max[4] = 0.0; // Sismique
+				_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.elu_str, coef_min, coef_max, 5, 0, 0);
+				coef_min[0] = 1.0; coef_max[0] = 1.15; // poids propre
+				coef_min[1] = 1.0; coef_max[1] = 1.3; // précontrainte (1992-1)
+				coef_min[2] = 0.0; coef_max[2] = 1.5; // variable
+				coef_min[3] = 0.0; coef_max[3] = 0.0; // Accidentelle
+				coef_min[4] = 0.0; coef_max[4] = 0.0; // Sismique
+				_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.elu_str, coef_min, coef_max, 5, -1, 0);
+				coef_min[0] = 1.0; coef_max[0] = 1.0; // poids propre
+				coef_min[1] = 1.0; coef_max[1] = 1.3; // précontrainte (1992-1)
+				coef_min[2] = 0.0; coef_max[2] = 1.3; // variable
+				coef_min[3] = 0.0; coef_max[3] = 0.0; // Accidentelle
+				coef_min[4] = 0.0; coef_max[4] = 0.0; // Sismique
+				_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.elu_str, coef_min, coef_max, 5, -1, 0);
+				_1990_combinaisons_duplique_ponderations_sans_double(projet->combinaisons.elu_geo, projet->combinaisons.elu_str);
+				break;
+			}
+			// Approche 2
+			case 2:
+			{
+				coef_min[0] = 1.0; coef_max[0] = 1.35; // poids propre
+				coef_min[1] = 1.0; coef_max[1] = 1.3; // précontrainte (1992-1)
+				coef_min[2] = 0.0; coef_max[2] = 1.5; // variable
+				coef_min[3] = 0.0; coef_max[3] = 0.0; // Accidentelle
+				coef_min[4] = 0.0; coef_max[4] = 0.0; // Sismique
+				_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.elu_str, coef_min, coef_max, 5, 0, 0);
+				coef_min[0] = 1.0; coef_max[0] = 1.15; // poids propre
+				coef_min[1] = 1.0; coef_max[1] = 1.3; // précontrainte (1992-1)
+				coef_min[2] = 0.0; coef_max[2] = 1.5; // variable
+				coef_min[3] = 0.0; coef_max[3] = 0.0; // Accidentelle
+				coef_min[4] = 0.0; coef_max[4] = 0.0; // Sismique
+				_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.elu_str, coef_min, coef_max, 5, -1, 0);
+				_1990_combinaisons_duplique_ponderations_sans_double(projet->combinaisons.elu_geo, projet->combinaisons.elu_str);
+				break;
+			}
+			case 4:
+			{
+				coef_min[0] = 1.0; coef_max[0] = 1.35; // poids propre
+				coef_min[1] = 1.0; coef_max[1] = 1.3; // précontrainte (1992-1)
+				coef_min[2] = 0.0; coef_max[2] = 1.5; // variable
+				coef_min[3] = 0.0; coef_max[3] = 0.0; // Accidentelle
+				coef_min[4] = 0.0; coef_max[4] = 0.0; // Sismique
+				_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.elu_str, coef_min, coef_max, 5, 0, 0);
+				coef_min[0] = 1.0; coef_max[0] = 1.15; // poids propre
+				coef_min[1] = 1.0; coef_max[1] = 1.3; // précontrainte (1992-1)
+				coef_min[2] = 0.0; coef_max[2] = 1.5; // variable
+				coef_min[3] = 0.0; coef_max[3] = 0.0; // Accidentelle
+				coef_min[4] = 0.0; coef_max[4] = 0.0; // Sismique
+				_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.elu_str, coef_min, coef_max, 5, -1, 0);
+				coef_min[0] = 1.0; coef_max[0] = 1.0; // poids propre
+				coef_min[1] = 1.0; coef_max[1] = 1.3; // précontrainte (1992-1)
+				coef_min[2] = 0.0; coef_max[2] = 1.3; // variable
+				coef_min[3] = 0.0; coef_max[3] = 0.0; // Accidentelle
+				coef_min[4] = 0.0; coef_max[4] = 0.0; // Sismique
+				_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.elu_geo, coef_min, coef_max, 5, -1, 0);
+				break;
+			}
+			default:
+			{
+				BUG(-4);
+				break;
+			}
 		}
 	}
-	if ((projet->combinaisons.flags & 8) == 0)
+	// Equation 6.10
+	else
+	{
+		switch (projet->combinaisons.flags & 6)
+		{
+			// Approche 1
+			case 0:
+			{
+				coef_min[0] = 1.0; coef_max[0] = 1.35; // poids propre
+				coef_min[1] = 1.0; coef_max[1] = 1.3; // précontrainte (1992-1)
+				coef_min[2] = 0.0; coef_max[2] = 1.5; // variable
+				coef_min[3] = 0.0; coef_max[3] = 0.0; // Accidentelle
+				coef_min[4] = 0.0; coef_max[4] = 0.0; // Sismique
+				_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.elu_str, coef_min, coef_max, 5, -1, 0);
+				coef_min[0] = 1.0; coef_max[0] = 1.0; // poids propre
+				coef_min[1] = 1.0; coef_max[1] = 1.3; // précontrainte (1992-1)
+				coef_min[2] = 0.0; coef_max[2] = 1.3; // variable
+				coef_min[3] = 0.0; coef_max[3] = 0.0; // Accidentelle
+				coef_min[4] = 0.0; coef_max[4] = 0.0; // Sismique
+				_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.elu_str, coef_min, coef_max, 5, -1, 0);
+				_1990_combinaisons_duplique_ponderations_sans_double(projet->combinaisons.elu_geo, projet->combinaisons.elu_str);
+				break;
+			}
+			// Approche 2
+			case 2:
+			{
+				coef_min[0] = 1.0; coef_max[0] = 1.35; // poids propre
+				coef_min[1] = 1.0; coef_max[1] = 1.3; // précontrainte (1992-1)
+				coef_min[2] = 0.0; coef_max[2] = 1.5; // variable
+				coef_min[3] = 0.0; coef_max[3] = 0.0; // Accidentelle
+				coef_min[4] = 0.0; coef_max[4] = 0.0; // Sismique
+				_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.elu_str, coef_min, coef_max, 5, -1, 0);
+				_1990_combinaisons_duplique_ponderations_sans_double(projet->combinaisons.elu_geo, projet->combinaisons.elu_str);
+				break;
+			}
+			case 4:
+			{
+				coef_min[0] = 1.0; coef_max[0] = 1.35; // poids propre
+				coef_min[1] = 1.0; coef_max[1] = 1.3; // précontrainte (1992-1)
+				coef_min[2] = 0.0; coef_max[2] = 1.5; // variable
+				coef_min[3] = 0.0; coef_max[3] = 0.0; // Accidentelle
+				coef_min[4] = 0.0; coef_max[4] = 0.0; // Sismique
+				_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.elu_str, coef_min, coef_max, 5, -1, 0);
+				coef_min[0] = 1.0; coef_max[0] = 1.0; // poids propre
+				coef_min[1] = 1.0; coef_max[1] = 1.3; // précontrainte (1992-1)
+				coef_min[2] = 0.0; coef_max[2] = 1.3; // variable
+				coef_min[3] = 0.0; coef_max[3] = 0.0; // Accidentelle
+				coef_min[4] = 0.0; coef_max[4] = 0.0; // Sismique
+				_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.elu_geo, coef_min, coef_max, 5, -1, 0);
+				break;
+			}
+			default :
+			{
+				BUG(-4);
+				break;
+			}
+		}
+	}
+	if ((projet->combinaisons.flags & 16) == 0)
 	{
 		coef_min[0] = 1.0; coef_max[0] = 1.0; // poids propre
 		coef_min[1] = 1.0; coef_max[1] = 1.0; // précontrainte (1992-1)
@@ -842,7 +908,7 @@ int _1990_combinaisons_genere_ponderation_eu(Projet *projet)
 	coef_min[2] = 0.0; coef_max[2] = 1.0; // variable
 	coef_min[3] = 0.0; coef_max[3] = 0.0; // Accidentelle
 	coef_min[4] = 1.0; coef_max[4] = 1.0; // Sismique
-	_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.elu_acc, coef_min, coef_max, 5, 2, 2);
+	_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.elu_sis, coef_min, coef_max, 5, 2, 2);
 	
 	coef_min[0] = 1.0; coef_max[0] = 1.0; // poids propre
 	coef_min[1] = 1.0; coef_max[1] = 1.0; // précontrainte (1992-1)
@@ -876,10 +942,10 @@ int _1990_combinaisons_genere_ponderation_fr(Projet *projet)
 	double		*coef_min, *coef_max;
 	
 	
-	coef_min = (double*)malloc(5*sizeof(double));
+	coef_min = (double*)malloc(6*sizeof(double));
 	if (coef_min == NULL)
 		BUG(-2);
-	coef_max = (double*)malloc(5*sizeof(double));
+	coef_max = (double*)malloc(6*sizeof(double));
 	if (coef_max == NULL)
 	{
 		free(coef_min);
@@ -895,7 +961,7 @@ int _1990_combinaisons_genere_ponderation_fr(Projet *projet)
 		coef_min[3] = 0.0; coef_max[3] = 0.0; // Accidentelle
 		coef_min[4] = 0.0; coef_max[4] = 0.0; // Sismique
 		coef_min[5] = 0.0; coef_max[5] = 1.2; // Eaux souterraines
-		_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.elu_equ, coef_min, coef_max, 5, -1, 0);
+		_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.elu_equ, coef_min, coef_max, 6, -1, 0);
 	}
 	else
 	{
@@ -905,94 +971,159 @@ int _1990_combinaisons_genere_ponderation_fr(Projet *projet)
 		coef_min[3] = 0.0; coef_max[3] = 0.0; // Accidentelle
 		coef_min[4] = 0.0; coef_max[4] = 0.0; // Sismique
 		coef_min[5] = 0.0; coef_max[5] = 1.2; // Eaux souterraines
-		_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.elu_equ, coef_min, coef_max, 5, -1, 0);
+		_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.elu_equ, coef_min, coef_max, 6, -1, 0);
 		coef_min[0] = 1.0; coef_max[0] = 1.0; // poids propre
 		coef_min[1] = 1.0; coef_max[1] = 1.3; // précontrainte (1992-1)
 		coef_min[2] = 0.0; coef_max[2] = 1.5; // variable
 		coef_min[3] = 0.0; coef_max[3] = 0.0; // Accidentelle
 		coef_min[4] = 0.0; coef_max[4] = 1.0; // Sismique
 		coef_min[5] = 0.0; coef_max[5] = 1.2; // Eaux souterraines
-		_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.elu_equ, coef_min, coef_max, 5, -1, 0);
+		_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.elu_equ, coef_min, coef_max, 6, -1, 0);
 	}
-	switch (projet->combinaisons.flags & 6)
-	{
-		case 0:
-		{
-			coef_min[0] = 1.0; coef_max[0] = 1.35; // poids propre
-			coef_min[1] = 1.0; coef_max[1] = 1.3; // précontrainte (1992-1)
-			coef_min[2] = 0.0; coef_max[2] = 1.5; // variable
-			coef_min[3] = 0.0; coef_max[3] = 0.0; // Accidentelle
-			coef_min[4] = 0.0; coef_max[4] = 0.0; // Sismique
-			coef_min[5] = 0.0; coef_max[5] = 1.2; // Eaux souterraines
-			_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.elu_str, coef_min, coef_max, 5, 0, 0);
-			coef_min[0] = 1.0; coef_max[0] = 1.15; // poids propre
-			coef_min[1] = 1.0; coef_max[1] = 1.3; // précontrainte (1992-1)
-			coef_min[2] = 0.0; coef_max[2] = 1.5; // variable
-			coef_min[3] = 0.0; coef_max[3] = 0.0; // Accidentelle
-			coef_min[4] = 0.0; coef_max[4] = 0.0; // Sismique
-			coef_min[5] = 0.0; coef_max[5] = 1.2; // Eaux souterraines
-			_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.elu_str, coef_min, coef_max, 5, -1, 0);
-			coef_min[0] = 1.0; coef_max[0] = 1.0; // poids propre
-			coef_min[1] = 1.0; coef_max[1] = 1.3; // précontrainte (1992-1)
-			coef_min[2] = 0.0; coef_max[2] = 1.3; // variable
-			coef_min[3] = 0.0; coef_max[3] = 0.0; // Accidentelle
-			coef_min[4] = 0.0; coef_max[4] = 0.0; // Sismique
-			coef_min[5] = 0.0; coef_max[5] = 1.2; // Eaux souterraines
-			_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.elu_str, coef_min, coef_max, 5, -1, 0);
-			_1990_combinaisons_duplique_ponderations_avec_double(projet->combinaisons.elu_geo, projet->combinaisons.elu_str);
-			break;
-		}
-		case 2:
-		{
-			coef_min[0] = 1.0; coef_max[0] = 1.35; // poids propre
-			coef_min[1] = 1.0; coef_max[1] = 1.3; // précontrainte (1992-1)
-			coef_min[2] = 0.0; coef_max[2] = 1.5; // variable
-			coef_min[3] = 0.0; coef_max[3] = 0.0; // Accidentelle
-			coef_min[4] = 0.0; coef_max[4] = 0.0; // Sismique
-			coef_min[5] = 0.0; coef_max[5] = 1.2; // Eaux souterraines
-			_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.elu_str, coef_min, coef_max, 5, 0, 0);
-			coef_min[0] = 1.0; coef_max[0] = 1.15; // poids propre
-			coef_min[1] = 1.0; coef_max[1] = 1.3; // précontrainte (1992-1)
-			coef_min[2] = 0.0; coef_max[2] = 1.5; // variable
-			coef_min[3] = 0.0; coef_max[3] = 0.0; // Accidentelle
-			coef_min[4] = 0.0; coef_max[4] = 0.0; // Sismique
-			coef_min[5] = 0.0; coef_max[5] = 1.2; // Eaux souterraines
-			_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.elu_str, coef_min, coef_max, 5, -1, 0);
-			_1990_combinaisons_duplique_ponderations_avec_double(projet->combinaisons.elu_geo, projet->combinaisons.elu_str);
-			break;
-		}
-		case 4:
-		{
-			coef_min[0] = 1.0; coef_max[0] = 1.35; // poids propre
-			coef_min[1] = 1.0; coef_max[1] = 1.3; // précontrainte (1992-1)
-			coef_min[2] = 0.0; coef_max[2] = 1.5; // variable
-			coef_min[3] = 0.0; coef_max[3] = 0.0; // Accidentelle
-			coef_min[4] = 0.0; coef_max[4] = 0.0; // Sismique
-			coef_min[5] = 0.0; coef_max[5] = 1.2; // Eaux souterraines
-			_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.elu_str, coef_min, coef_max, 5, 0, 0);
-			coef_min[0] = 1.0; coef_max[0] = 1.15; // poids propre
-			coef_min[1] = 1.0; coef_max[1] = 1.3; // précontrainte (1992-1)
-			coef_min[2] = 0.0; coef_max[2] = 1.5; // variable
-			coef_min[3] = 0.0; coef_max[3] = 0.0; // Accidentelle
-			coef_min[4] = 0.0; coef_max[4] = 0.0; // Sismique
-			coef_min[5] = 0.0; coef_max[5] = 1.2; // Eaux souterraines
-			_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.elu_str, coef_min, coef_max, 5, -1, 0);
-			coef_min[0] = 1.0; coef_max[0] = 1.0; // poids propre
-			coef_min[1] = 1.0; coef_max[1] = 1.3; // précontrainte (1992-1)
-			coef_min[2] = 0.0; coef_max[2] = 1.3; // variable
-			coef_min[3] = 0.0; coef_max[3] = 0.0; // Accidentelle
-			coef_min[4] = 0.0; coef_max[4] = 0.0; // Sismique
-			coef_min[5] = 0.0; coef_max[5] = 1.2; // Eaux souterraines
-			_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.elu_geo, coef_min, coef_max, 5, -1, 0);
-			break;
-		}
-		default :
-		{
-			BUG(-4);
-			break;
-		}
-	}
+	// On utilise l'équation 6.10a et 6.10b
 	if ((projet->combinaisons.flags & 8) == 0)
+	{
+		switch (projet->combinaisons.flags & 6)
+		{
+			case 0:
+			{
+				coef_min[0] = 1.0; coef_max[0] = 1.35; // poids propre
+				coef_min[1] = 1.0; coef_max[1] = 1.3; // précontrainte (1992-1)
+				coef_min[2] = 0.0; coef_max[2] = 1.5; // variable
+				coef_min[3] = 0.0; coef_max[3] = 0.0; // Accidentelle
+				coef_min[4] = 0.0; coef_max[4] = 0.0; // Sismique
+				coef_min[5] = 0.0; coef_max[5] = 1.2; // Eaux souterraines
+				_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.elu_str, coef_min, coef_max, 6, 0, 0);
+				coef_min[0] = 1.0; coef_max[0] = 1.15; // poids propre
+				coef_min[1] = 1.0; coef_max[1] = 1.3; // précontrainte (1992-1)
+				coef_min[2] = 0.0; coef_max[2] = 1.5; // variable
+				coef_min[3] = 0.0; coef_max[3] = 0.0; // Accidentelle
+				coef_min[4] = 0.0; coef_max[4] = 0.0; // Sismique
+				coef_min[5] = 0.0; coef_max[5] = 1.2; // Eaux souterraines
+				_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.elu_str, coef_min, coef_max, 6, -1, 0);
+				coef_min[0] = 1.0; coef_max[0] = 1.0; // poids propre
+				coef_min[1] = 1.0; coef_max[1] = 1.3; // précontrainte (1992-1)
+				coef_min[2] = 0.0; coef_max[2] = 1.3; // variable
+				coef_min[3] = 0.0; coef_max[3] = 0.0; // Accidentelle
+				coef_min[4] = 0.0; coef_max[4] = 0.0; // Sismique
+				coef_min[5] = 0.0; coef_max[5] = 1.2; // Eaux souterraines
+				_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.elu_str, coef_min, coef_max, 6, -1, 0);
+				_1990_combinaisons_duplique_ponderations_sans_double(projet->combinaisons.elu_geo, projet->combinaisons.elu_str);
+				break;
+			}
+			case 2:
+			{
+				coef_min[0] = 1.0; coef_max[0] = 1.35; // poids propre
+				coef_min[1] = 1.0; coef_max[1] = 1.3; // précontrainte (1992-1)
+				coef_min[2] = 0.0; coef_max[2] = 1.5; // variable
+				coef_min[3] = 0.0; coef_max[3] = 0.0; // Accidentelle
+				coef_min[4] = 0.0; coef_max[4] = 0.0; // Sismique
+				coef_min[5] = 0.0; coef_max[5] = 1.2; // Eaux souterraines
+				_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.elu_str, coef_min, coef_max, 6, 0, 0);
+				coef_min[0] = 1.0; coef_max[0] = 1.15; // poids propre
+				coef_min[1] = 1.0; coef_max[1] = 1.3; // précontrainte (1992-1)
+				coef_min[2] = 0.0; coef_max[2] = 1.5; // variable
+				coef_min[3] = 0.0; coef_max[3] = 0.0; // Accidentelle
+				coef_min[4] = 0.0; coef_max[4] = 0.0; // Sismique
+				coef_min[5] = 0.0; coef_max[5] = 1.2; // Eaux souterraines
+				_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.elu_str, coef_min, coef_max, 6, -1, 0);
+				_1990_combinaisons_duplique_ponderations_sans_double(projet->combinaisons.elu_geo, projet->combinaisons.elu_str);
+				break;
+			}
+			case 4:
+			{
+				coef_min[0] = 1.0; coef_max[0] = 1.35; // poids propre
+				coef_min[1] = 1.0; coef_max[1] = 1.3; // précontrainte (1992-1)
+				coef_min[2] = 0.0; coef_max[2] = 1.5; // variable
+				coef_min[3] = 0.0; coef_max[3] = 0.0; // Accidentelle
+				coef_min[4] = 0.0; coef_max[4] = 0.0; // Sismique
+				coef_min[5] = 0.0; coef_max[5] = 1.2; // Eaux souterraines
+				_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.elu_str, coef_min, coef_max, 6, 0, 0);
+				coef_min[0] = 1.0; coef_max[0] = 1.15; // poids propre
+				coef_min[1] = 1.0; coef_max[1] = 1.3; // précontrainte (1992-1)
+				coef_min[2] = 0.0; coef_max[2] = 1.5; // variable
+				coef_min[3] = 0.0; coef_max[3] = 0.0; // Accidentelle
+				coef_min[4] = 0.0; coef_max[4] = 0.0; // Sismique
+				coef_min[5] = 0.0; coef_max[5] = 1.2; // Eaux souterraines
+				_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.elu_str, coef_min, coef_max, 6, -1, 0);
+				coef_min[0] = 1.0; coef_max[0] = 1.0; // poids propre
+				coef_min[1] = 1.0; coef_max[1] = 1.3; // précontrainte (1992-1)
+				coef_min[2] = 0.0; coef_max[2] = 1.3; // variable
+				coef_min[3] = 0.0; coef_max[3] = 0.0; // Accidentelle
+				coef_min[4] = 0.0; coef_max[4] = 0.0; // Sismique
+				coef_min[5] = 0.0; coef_max[5] = 1.2; // Eaux souterraines
+				_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.elu_geo, coef_min, coef_max, 6, -1, 0);
+				break;
+			}
+			default :
+			{
+				BUG(-4);
+				break;
+			}
+		}
+	}
+	else
+	// équation 6.10
+	{
+		switch (projet->combinaisons.flags & 6)
+		{
+			case 0:
+			{
+				coef_min[0] = 1.0; coef_max[0] = 1.35; // poids propre
+				coef_min[1] = 1.0; coef_max[1] = 1.3; // précontrainte (1992-1)
+				coef_min[2] = 0.0; coef_max[2] = 1.5; // variable
+				coef_min[3] = 0.0; coef_max[3] = 0.0; // Accidentelle
+				coef_min[4] = 0.0; coef_max[4] = 0.0; // Sismique
+				coef_min[5] = 0.0; coef_max[5] = 1.2; // Eaux souterraines
+				_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.elu_str, coef_min, coef_max, 6, -1, 0);
+				coef_min[0] = 1.0; coef_max[0] = 1.0; // poids propre
+				coef_min[1] = 1.0; coef_max[1] = 1.3; // précontrainte (1992-1)
+				coef_min[2] = 0.0; coef_max[2] = 1.3; // variable
+				coef_min[3] = 0.0; coef_max[3] = 0.0; // Accidentelle
+				coef_min[4] = 0.0; coef_max[4] = 0.0; // Sismique
+				coef_min[5] = 0.0; coef_max[5] = 1.2; // Eaux souterraines
+				_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.elu_str, coef_min, coef_max, 6, -1, 0);
+				_1990_combinaisons_duplique_ponderations_sans_double(projet->combinaisons.elu_geo, projet->combinaisons.elu_str);
+				break;
+			}
+			case 2:
+			{
+				coef_min[0] = 1.0; coef_max[0] = 1.35; // poids propre
+				coef_min[1] = 1.0; coef_max[1] = 1.3; // précontrainte (1992-1)
+				coef_min[2] = 0.0; coef_max[2] = 1.5; // variable
+				coef_min[3] = 0.0; coef_max[3] = 0.0; // Accidentelle
+				coef_min[4] = 0.0; coef_max[4] = 0.0; // Sismique
+				coef_min[5] = 0.0; coef_max[5] = 1.2; // Eaux souterraines
+				_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.elu_str, coef_min, coef_max, 6, -1, 0);
+				_1990_combinaisons_duplique_ponderations_sans_double(projet->combinaisons.elu_geo, projet->combinaisons.elu_str);
+				break;
+			}
+			case 4:
+			{
+				coef_min[0] = 1.0; coef_max[0] = 1.35; // poids propre
+				coef_min[1] = 1.0; coef_max[1] = 1.3; // précontrainte (1992-1)
+				coef_min[2] = 0.0; coef_max[2] = 1.5; // variable
+				coef_min[3] = 0.0; coef_max[3] = 0.0; // Accidentelle
+				coef_min[4] = 0.0; coef_max[4] = 0.0; // Sismique
+				coef_min[5] = 0.0; coef_max[5] = 1.2; // Eaux souterraines
+				_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.elu_str, coef_min, coef_max, 6, -1, 0);
+				coef_min[0] = 1.0; coef_max[0] = 1.0; // poids propre
+				coef_min[1] = 1.0; coef_max[1] = 1.3; // précontrainte (1992-1)
+				coef_min[2] = 0.0; coef_max[2] = 1.3; // variable
+				coef_min[3] = 0.0; coef_max[3] = 0.0; // Accidentelle
+				coef_min[4] = 0.0; coef_max[4] = 0.0; // Sismique
+				coef_min[5] = 0.0; coef_max[5] = 1.2; // Eaux souterraines
+				_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.elu_geo, coef_min, coef_max, 6, -1, 0);
+				break;
+			}
+			default :
+			{
+				BUG(-4);
+				break;
+			}
+		}
+	}
+	if ((projet->combinaisons.flags & 16) == 0)
 	{
 		coef_min[0] = 1.0; coef_max[0] = 1.0; // poids propre
 		coef_min[1] = 1.0; coef_max[1] = 1.0; // précontrainte (1992-1)
@@ -1000,7 +1131,7 @@ int _1990_combinaisons_genere_ponderation_fr(Projet *projet)
 		coef_min[3] = 1.0; coef_max[3] = 1.0; // Accidentelle
 		coef_min[4] = 0.0; coef_max[4] = 0.0; // Sismique
 		coef_min[5] = 0.0; coef_max[5] = 1.0; // Eaux souterraines
-		_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.elu_acc, coef_min, coef_max, 5, 1, 2);
+		_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.elu_acc, coef_min, coef_max, 6, 1, 2);
 	}
 	else
 	{
@@ -1010,7 +1141,7 @@ int _1990_combinaisons_genere_ponderation_fr(Projet *projet)
 		coef_min[3] = 1.0; coef_max[3] = 1.0; // Accidentelle
 		coef_min[4] = 0.0; coef_max[4] = 0.0; // Sismique
 		coef_min[5] = 0.0; coef_max[5] = 1.0; // Eaux souterraines
-		_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.elu_acc, coef_min, coef_max, 5, 2, 2);
+		_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.elu_acc, coef_min, coef_max, 6, 2, 2);
 	}
 	
 	coef_min[0] = 1.0; coef_max[0] = 1.0; // poids propre
@@ -1019,7 +1150,7 @@ int _1990_combinaisons_genere_ponderation_fr(Projet *projet)
 	coef_min[3] = 0.0; coef_max[3] = 0.0; // Accidentelle
 	coef_min[4] = 1.0; coef_max[4] = 1.0; // Sismique
 	coef_min[5] = 0.0; coef_max[5] = 1.0; // Eaux souterraines
-	_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.elu_acc, coef_min, coef_max, 5, 2, 2);
+	_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.elu_acc, coef_min, coef_max, 6, 2, 2);
 	
 	coef_min[0] = 1.0; coef_max[0] = 1.0; // poids propre
 	coef_min[1] = 1.0; coef_max[1] = 1.0; // précontrainte (1992-1)
@@ -1027,7 +1158,7 @@ int _1990_combinaisons_genere_ponderation_fr(Projet *projet)
 	coef_min[3] = 0.0; coef_max[3] = 0.0; // Accidentelle
 	coef_min[4] = 0.0; coef_max[4] = 0.0; // Sismique
 	coef_min[5] = 0.0; coef_max[5] = 1.2; // Eaux souterraines
-	_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.els_car, coef_min, coef_max, 5, -1, 0);
+	_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.els_car, coef_min, coef_max, 6, -1, 0);
 
 	coef_min[0] = 1.0; coef_max[0] = 1.0; // poids propre
 	coef_min[1] = 1.0; coef_max[1] = 1.0; // précontrainte (1992-1)
@@ -1035,7 +1166,7 @@ int _1990_combinaisons_genere_ponderation_fr(Projet *projet)
 	coef_min[3] = 0.0; coef_max[3] = 0.0; // Accidentelle
 	coef_min[4] = 0.0; coef_max[4] = 0.0; // Sismique
 	coef_min[5] = 0.0; coef_max[5] = 1.0; // Eaux souterraines
-	_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.els_freq, coef_min, coef_max, 5, 1, 2);
+	_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.els_freq, coef_min, coef_max, 6, 1, 2);
 
 	coef_min[0] = 1.0; coef_max[0] = 1.0; // poids propre
 	coef_min[1] = 1.0; coef_max[1] = 1.0; // précontrainte (1992-1)
@@ -1043,7 +1174,7 @@ int _1990_combinaisons_genere_ponderation_fr(Projet *projet)
 	coef_min[3] = 0.0; coef_max[3] = 0.0; // Accidentelle
 	coef_min[4] = 0.0; coef_max[4] = 0.0; // Sismique
 	coef_min[5] = 0.0; coef_max[5] = 1.0; // Eaux souterraines
-	_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.els_perm, coef_min, coef_max, 5, 2, 2);
+	_1990_combinaisons_genere_ponderations(projet, projet->combinaisons.els_perm, coef_min, coef_max, 6, 2, 2);
 
 	free(coef_min);
 	free(coef_max);
@@ -1153,7 +1284,7 @@ void _1990_combinaisons_affiche_ponderation(LIST *ponderations)
 				do
 				{
 					ponderation_element = list_curr(ponderation->elements);
-					printf("%f(%d)*%d+", ponderation_element->ponderation, ponderation_element->psi, ponderation_element->action->numero);
+					printf("%d*%f(%d)+", ponderation_element->action->numero+1, ponderation_element->ponderation, ponderation_element->psi);
 				}
 				while (list_mvnext(ponderation->elements));
 				printf("\n");
