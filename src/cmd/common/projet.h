@@ -30,6 +30,13 @@ typedef enum
 
 typedef struct __CombinaisonsEL
 {
+	int		flags;		// bit 1	: ELU_EQU : méthode note 1 si le bit 1 = 0
+					//		: ELU_EQU : méthode note 2 si le bit 1 = 1
+					// bit 2 et 3	: ELU_GEO/STR : 00 méthode approche 1
+					// 		: ELU_GEO/STR : 01 méthode approche 2
+					// 		: ELU_GEO/STR : 10 méthode approche 3
+					// bit 4	: ELU_ACC : 0 si utilisation de psi1,1
+					// 		: ELU_ACC : 1 si utilisation de psi2,1
 	LIST		*elu_equ;
 	LIST		*elu_str;
 	LIST		*elu_geo;

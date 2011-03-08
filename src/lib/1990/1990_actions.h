@@ -53,20 +53,20 @@ char *_1990_action_categorie_bat_txt(int type, int pays);
 
 // _1990_action_type_combinaison_bat_eu : renvoie le type d'une action pour les combinaisons d'action des bâtiments selon la norme européenne
 // Renvoie	: -1 si la catégorie n'existe pas
-//		: 1 si Action permanente
-//		: 2 si action précontrainte
-//		: 3 si action variable
-//		: 4 si accidentelle
+//		: 0 si Action permanente
+//		: 1 si action précontrainte
+//		: 2 si action variable
+//		: 3 si accidentelle
 // type : catégorie de durée d'utilisation de projet
 int _1990_action_type_combinaison_bat_eu(int categorie);
 // _1990_action_type_combinaison_bat_fr : renvoie le type d'une action pour les combinaisons d'action des bâtiments selon la norme française
 int _1990_action_type_combinaison_bat_fr(int categorie);
 // Renvoie	: -1 si la catégorie n'existe pas
-//		: 1 si Action permanente
-//		: 2 si action précontrainte
-//		: 3 si action variable
-//		: 4 si accidentelle
-//		: 5 si eaux souterraines
+//		: 0 si Action permanente
+//		: 1 si action précontrainte
+//		: 2 si action variable
+//		: 3 si accidentelle
+//		: 4 si eaux souterraines
 int _1990_action_type_combinaison_bat(int categorie, int pays);
 
 // _1990_action_groupes 
