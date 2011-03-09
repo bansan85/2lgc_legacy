@@ -26,6 +26,7 @@
 #include "erreurs.h"
 #include "1990_actions.h"
 #include "1990_groupes.h"
+#include "1990_combinaisons.h"
 
 int _1990_groupe_init(Projet *projet)
 {
@@ -149,88 +150,87 @@ int _1990_groupe_ajout_element(Projet *projet, int etage, int groupe_n, int grou
 	return 0;
 }
 
-int _1990_groupe_affiche_element(__attribute__((unused)) void *input, void *curr)
-{
-	Element *element = (Element*)curr;
-	printf("%d ", element->numero);
-	return TRUE;
-}
-
-int _1990_groupe_affiche_combinaison(__attribute__((unused)) void *input, void *curr)
-{
-	Combinaison_Element	*element = (Combinaison_Element*)curr;
-	Action	*action = (Action*)element->action;
-	printf("%d(%d) ", action->numero, element->flags);
-	return TRUE;
-}
-
-int _1990_groupe_affiche_combinaisons(__attribute__((unused)) void *input, void *curr)
-{
-	Combinaison *combinaison = (Combinaison*)curr;
-	printf("\t\tNouvelle combinaison : ");
-	list_traverse(combinaison->elements, (void *)NULL, _1990_groupe_affiche_combinaison, 0);
-	printf("\n");
-	return TRUE;
-}
-
-int _1990_groupe_affiche_groupe(__attribute__((unused)) void *input, void *curr)
-{
-	Groupe *groupe = (Groupe*)curr;
-	printf("\tgroupe : %d", groupe->numero);
-	switch(groupe->type_combinaison)
-	{
-		case GROUPE_COMBINAISON_OR :
-		{
-			printf(" OR\n");
-			break;
-		}
-		case GROUPE_COMBINAISON_XOR :
-		{
-			printf(" XOR\n");
-			break;
-		}
-		case GROUPE_COMBINAISON_AND :
-		{
-			printf(" AND\n");
-			break;
-		}
-
-	}
-	list_traverse(groupe->elements, (void *)NULL, _1990_groupe_affiche_element, 0);
-	printf("\n");
-	printf("\tCombinaisons :\n");
-	list_traverse(groupe->tmp_combinaison.combinaisons, (void *)NULL, _1990_groupe_affiche_combinaisons, 0);
-	return TRUE;
-}
-
-int _1990_groupe_affiche_etage(__attribute__((unused)) void *input, void *curr)
-{
-	Etage_Groupe *etage = (Etage_Groupe*)curr;
-	printf("etage : %d\n", etage->etage);
-	printf("\tGroupes\n");
-	list_traverse(etage->groupe, (void *)NULL, _1990_groupe_affiche_groupe, 0);
-
-	return TRUE;
-}
-
 void _1990_groupe_affiche_tout(Projet *projet)
 {
-	list_traverse(projet->groupes, (void *)NULL, _1990_groupe_affiche_etage, 0);
-}
-
-void _1990_groupe_free_groupe_tmp_combinaison_element(void *data)
-{
-	free(data);
-	return;
-}
-
-void _1990_groupe_free_groupe_tmp_combinaison(void *data)
-{
-	Combinaison *combinaison = (Combinaison*)data;
-	if (combinaison->elements != NULL)
-		list_free(combinaison->elements, &(_1990_groupe_free_groupe_tmp_combinaison_element));
-	free(data);
-	return;
+	Etage_Groupe *etage;
+	Groupe *groupe;
+	Element *element;
+	Combinaison *combinaison;
+	Combinaison_Element *comb_element;
+	Action *action;
+	if ((projet->groupes != NULL) && (list_size(projet->groupes) != 0))
+	{
+		list_mvfront(projet->groupes);
+		do
+		{
+			etage = (Etage_Groupe*)list_curr(projet->groupes);
+			printf("etage : %d\n", etage->etage);
+			printf("\tGroupes\n");
+			if ((etage->groupe != NULL) && (list_size(etage->groupe) != 0))
+			{
+				list_mvfront(etage->groupe);
+				do
+				{
+					groupe = (Groupe*)list_curr(etage->groupe);
+					printf("\tgroupe : %d", groupe->numero);
+					switch(groupe->type_combinaison)
+					{
+						case GROUPE_COMBINAISON_OR :
+						{
+							printf(" OR\n");
+							break;
+						}
+						case GROUPE_COMBINAISON_XOR :
+						{
+							printf(" XOR\n");
+							break;
+						}
+						case GROUPE_COMBINAISON_AND :
+						{
+							printf(" AND\n");
+							break;
+						}
+					}
+					if ((groupe->elements != NULL) && (list_size(groupe->elements) != 0))
+					{
+						list_mvfront(groupe->elements);
+						do
+						{
+							element = (Element*)list_curr(groupe->elements);
+							printf("%d ", element->numero);
+						}
+						while (list_mvnext(groupe->elements) != NULL);
+					}
+					printf("\n");
+					printf("\tCombinaisons :\n");
+					if ((groupe->tmp_combinaison.combinaisons != NULL) && (list_size(groupe->tmp_combinaison.combinaisons) != 0))
+					{
+						list_mvfront(groupe->tmp_combinaison.combinaisons);
+						do
+						{
+							combinaison = (Combinaison*)list_curr(groupe->tmp_combinaison.combinaisons);
+							printf("\t\tNouvelle combinaison : ");
+							if ((combinaison->elements != NULL) && (list_size(combinaison->elements) != 0))
+							{
+								list_mvfront(combinaison->elements);
+								do
+								{
+									comb_element = (Combinaison_Element*)list_curr(combinaison->elements);
+									action = (Action*)comb_element->action;
+									printf("%d(%d) ", action->numero, comb_element->flags);
+								}
+								while (list_mvnext(combinaison->elements) != NULL);
+							}
+							printf("\n");
+						}
+						while (list_mvnext(groupe->tmp_combinaison.combinaisons) != NULL);
+					}
+				}
+				while (list_mvnext(etage->groupe) != NULL);
+			}
+		}
+		while (list_mvnext(projet->groupes) != NULL);
+	}
 }
 
 void _1990_groupe_free(Projet *projet)
@@ -314,13 +314,7 @@ void _1990_groupe_free_seulement_tmp_combinaison(Projet *projet)
 					while (!list_empty(groupe->tmp_combinaison.combinaisons))
 					{
 						combinaison = list_front(groupe->tmp_combinaison.combinaisons);
-						if ((combinaison->elements != NULL) && (list_front(combinaison->elements) != NULL))
-						{
-							list_mvfront(combinaison->elements);
-							while (!list_empty(combinaison->elements))
-								free(list_remove_front(combinaison->elements));
-							free(combinaison->elements);
-						}
+						list_free(combinaison->elements, LIST_DEALLOC);
 						free(list_remove_front(groupe->tmp_combinaison.combinaisons));
 					}
 				}

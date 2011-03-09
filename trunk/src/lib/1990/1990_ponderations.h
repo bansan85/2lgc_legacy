@@ -16,33 +16,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __1990_COMBINAISONS_H
-#define __1990_COMBINAISONS_H
+#ifndef __1990_PONDERATIONS_H
+#define __1990_PONDERATIONS_H
 
 #include <list.h>
 
 #include "projet.h"
 #include "1990_actions.h"
 
-typedef struct __Combinaison_Element
+typedef struct __Ponderation_Element
 {
+	double		ponderation;
+	int		psi;
+	int		flags;
 	Action		*action;
-	int		flags;	//
-} Combinaison_Element;
+} Ponderation_Element;
 
-typedef struct __Combinaison
+typedef struct __Ponderation
 {
-	LIST		*elements; // Liste de pointeur Combinaison_Element
-} Combinaison;
+	LIST		*elements; // Liste de pointeur Action* avec leur ponderation
+} Ponderation;
 
-typedef struct __Combinaisons
-{
-	LIST		*combinaisons; // Liste de "combinaison"
-} Combinaisons;
-
-int _1990_combinaisons_init(Projet *projet);
-int _1990_combinaisons_genere(Projet *projet);
-void _1990_combinaisons_free(Projet *projet);
-
-void _1990_groupe_free_groupe_tmp_combinaison(void *data);
+int _1990_ponderations_genere(Projet *projet);
+int _1990_ponderations_genere_eu(Projet *projet);
+void _1990_ponderations_affiche_tout(Projet *projet);
 #endif
