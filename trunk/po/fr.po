@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2011-03-05 18:04+0100\n"
+"POT-Creation-Date: 2011-03-09 16:57+0100\n"
 "PO-Revision-Date: 2011-02-28 14:53+0100\n"
 "Last-Translator: LE GARREC Vincent <vlg@2lgc.org>\n"
 "Language-Team: French\n"
@@ -17,25 +17,25 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: src/cmd/common/cmd_text.c:27
+#: src/lib/common/common_text.c:27
 #, c-format
 msgid "15. Disclaimer of Warranty.\n"
 msgstr "15. Déclaration d’absence de garantie.\n"
 
-#: src/cmd/common/cmd_text.c:28 src/cmd/common/cmd_text.c:37
-#: src/cmd/common/cmd_text.c:39 src/cmd/common/cmd_text.c:49
-#: src/cmd/common/cmd_text.c:51
+#: src/lib/common/common_text.c:28 src/lib/common/common_text.c:37
+#: src/lib/common/common_text.c:39 src/lib/common/common_text.c:49
+#: src/lib/common/common_text.c:51
 #, c-format
 msgid "\n"
 msgstr "\n"
 
-#: src/cmd/common/cmd_text.c:29
+#: src/lib/common/common_text.c:29
 #, c-format
 msgid "THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY\n"
 msgstr ""
 "IL N’Y A AUCUNE GARANTIE POUR LE PROGRAMME, DANS LES LIMITES PERMISES\n"
 
-#: src/cmd/common/cmd_text.c:30
+#: src/lib/common/common_text.c:30
 #, c-format
 msgid ""
 "APPLICABLE LAW.  EXCEPT WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT\n"
@@ -43,7 +43,7 @@ msgstr ""
 "PAR LA LOI APPLICABLE. À MOINS QUE CELA NE SOIT ÉTABLI DIFFÉREMMENT PAR "
 "ÉCRIT,\n"
 
-#: src/cmd/common/cmd_text.c:31
+#: src/lib/common/common_text.c:31
 #, c-format
 msgid ""
 "HOLDERS AND/OR OTHER PARTIES PROVIDE THE PROGRAM \"AS IS\" WITHOUT WARRANTY\n"
@@ -51,7 +51,7 @@ msgstr ""
 "LES PROPRIÉTAIRES DE DROITS ET/OU LES AUTRES PARTIES FOURNISSENT LE "
 "PROGRAMME \" EN L’ÉTAT \" SANS GARANTIE\n"
 
-#: src/cmd/common/cmd_text.c:32
+#: src/lib/common/common_text.c:32
 #, c-format
 msgid ""
 "OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO,\n"
@@ -59,7 +59,7 @@ msgstr ""
 "D’AUCUNE SORTE, QU’ELLE SOIT EXPRIMÉE OU IMPLICITE, CECI COMPRENANT, SANS SE "
 "LIMITER À CELLES-CI,\n"
 
-#: src/cmd/common/cmd_text.c:33
+#: src/lib/common/common_text.c:33
 #, c-format
 msgid ""
 "THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR\n"
@@ -67,7 +67,7 @@ msgstr ""
 "LES GARANTIES IMPLICITES DE COMMERCIALISABILITÉ ET D’ADÉQUATION À UN "
 "OBJECTIF\n"
 
-#: src/cmd/common/cmd_text.c:34
+#: src/lib/common/common_text.c:34
 #, c-format
 msgid ""
 "PURPOSE.  THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM\n"
@@ -75,7 +75,7 @@ msgstr ""
 "PARTICULIER. VOUS ASSUMEZ LE RISQUE ENTIER CONCERNANT LA QUALITÉ ET LES "
 "PERFORMANCES\n"
 
-#: src/cmd/common/cmd_text.c:35
+#: src/lib/common/common_text.c:35
 #, c-format
 msgid ""
 "IS WITH YOU.  SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF\n"
@@ -83,24 +83,24 @@ msgstr ""
 "DU PROGRAMME. DANS L’ÉVENTUALITÉ OÙ LE PROGRAMME S’AVÉRERAIT DÉFECTUEUX, "
 "VOUS ASSUMEZ LES COÛTS DE\n"
 
-#: src/cmd/common/cmd_text.c:36
+#: src/lib/common/common_text.c:36
 #, c-format
 msgid "ALL NECESSARY SERVICING, REPAIR OR CORRECTION.\n"
 msgstr "TOUS LES SERVICES, RÉPARATIONS OU CORRECTIONS NÉCESSAIRES.\n"
 
-#: src/cmd/common/cmd_text.c:38
+#: src/lib/common/common_text.c:38
 #, c-format
 msgid "16. Limitation of Liability.\n"
 msgstr "16. Limitation de responsabilité.\n"
 
-#: src/cmd/common/cmd_text.c:40
+#: src/lib/common/common_text.c:40
 #, c-format
 msgid "IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING\n"
 msgstr ""
 "EN AUCUNE AUTRE CIRCONSTANCE QUE CELLES REQUISES PAR LA LOI APPLICABLE OU "
 "ACCORDÉES PAR ÉCRIT,\n"
 
-#: src/cmd/common/cmd_text.c:41
+#: src/lib/common/common_text.c:41
 #, c-format
 msgid ""
 "WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MODIFIES AND/OR CONVEYS\n"
@@ -108,7 +108,7 @@ msgstr ""
 "UN TITULAIRE DE DROITS SUR LE PROGRAMME, OU TOUT AUTRE PARTIE QUI MODIFIE OU "
 "ACHEMINE\n"
 
-#: src/cmd/common/cmd_text.c:42
+#: src/lib/common/common_text.c:42
 #, c-format
 msgid ""
 "THE PROGRAM AS PERMITTED ABOVE, BE LIABLE TO YOU FOR DAMAGES, INCLUDING ANY\n"
@@ -116,7 +116,7 @@ msgstr ""
 "LE PROGRAMME COMME PERMIS CI-DESSUS, NE PEUT ÊTRE TENU POUR RESPONSABLE "
 "ENVERS VOUS POUR LES DOMMAGES,\n"
 
-#: src/cmd/common/cmd_text.c:43
+#: src/lib/common/common_text.c:43
 #, c-format
 msgid ""
 "GENERAL, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THE\n"
@@ -124,7 +124,7 @@ msgstr ""
 "INCLUANT TOUT DOMMAGE GÉNÉRAL, SPÉCIAL, ACCIDENTEL OU INDUIT SURVENANT PAR "
 "SUITE DE\n"
 
-#: src/cmd/common/cmd_text.c:44
+#: src/lib/common/common_text.c:44
 #, c-format
 msgid ""
 "USE OR INABILITY TO USE THE PROGRAM (INCLUDING BUT NOT LIMITED TO LOSS OF\n"
@@ -132,7 +132,7 @@ msgstr ""
 "L’UTILISATION OU DE L’INCAPACITÉ D’UTILISER LE PROGRAMME (Y COMPRIS, SANS SE "
 "LIMITER À CELLES-CI, LA PERTE\n"
 
-#: src/cmd/common/cmd_text.c:45
+#: src/lib/common/common_text.c:45
 #, c-format
 msgid ""
 "DATA OR DATA BEING RENDERED INACCURATE OR LOSSES SUSTAINED BY YOU OR THIRD\n"
@@ -140,7 +140,7 @@ msgstr ""
 "DE DONNÉES OU L’INEXACTITUDE DES DONNÉES RETOURNÉES OU LES PERTES SUBIES PAR "
 "VOUS OU DES PARTIES\n"
 
-#: src/cmd/common/cmd_text.c:46
+#: src/lib/common/common_text.c:46
 #, c-format
 msgid ""
 "PARTIES OR A FAILURE OF THE PROGRAM TO OPERATE WITH ANY OTHER PROGRAMS),\n"
@@ -148,7 +148,7 @@ msgstr ""
 "TIERCES OU L’INCAPACITÉ DU PROGRAMME À FONCTIONNER AVEC TOUT AUTRE "
 "PROGRAMME),\n"
 
-#: src/cmd/common/cmd_text.c:47
+#: src/lib/common/common_text.c:47
 #, c-format
 msgid ""
 "EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF\n"
@@ -156,69 +156,69 @@ msgstr ""
 "MÊME SI UN TEL TITULAIRE OU TOUTE AUTRE PARTIE A ÉTÉ AVISÉ DE LA "
 "POSSIBILITÉ.\n"
 
-#: src/cmd/common/cmd_text.c:48
+#: src/lib/common/common_text.c:48
 #, c-format
 msgid "SUCH DAMAGES.\n"
 msgstr "DE TELS DOMMAGES\n"
 
-#: src/cmd/common/cmd_text.c:50
+#: src/lib/common/common_text.c:50
 #, c-format
 msgid "17. Interpretation of Sections 15 and 16.\n"
 msgstr "17. Interprétation des sections 15 et 16.\n"
 
-#: src/cmd/common/cmd_text.c:52
+#: src/lib/common/common_text.c:52
 #, c-format
 msgid "If the disclaimer of warranty and limitation of liability provided\n"
 msgstr ""
 "Si la déclaration d’absence de garantie et la limitation de responsabilité "
 "fournies\n"
 
-#: src/cmd/common/cmd_text.c:53
+#: src/lib/common/common_text.c:53
 #, c-format
 msgid "above cannot be given local legal effect according to their terms,\n"
 msgstr "ci-dessus ne peuvent prendre effet localement selon leurs termes,\n"
 
-#: src/cmd/common/cmd_text.c:54
+#: src/lib/common/common_text.c:54
 #, c-format
 msgid "reviewing courts shall apply local law that most closely approximates\n"
 msgstr ""
 "les cours de justice qui les examinent doivent appliquer la législation "
 "locale qui approche au\n"
 
-#: src/cmd/common/cmd_text.c:55
+#: src/lib/common/common_text.c:55
 #, c-format
 msgid "an absolute waiver of all civil liability in connection with the\n"
 msgstr ""
 "plus près possible une levée absolue de toute responsabilité civile liée au\n"
 
-#: src/cmd/common/cmd_text.c:56
+#: src/lib/common/common_text.c:56
 #, c-format
 msgid "Program, unless a warranty or assumption of liability accompanies a\n"
 msgstr ""
 "Programme, à moins qu’une garantie ou assumation de responsabilité "
 "accompagne\n"
 
-#: src/cmd/common/cmd_text.c:57
+#: src/lib/common/common_text.c:57
 #, c-format
 msgid "copy of the Program in return for a fee.\n"
 msgstr "une copie du Programme en échange d’un paiement.\n"
 
-#: src/cmd/common/cmd_text.c:63
+#: src/lib/common/common_text.c:63
 #, c-format
 msgid "Utilisation : codegui [OPTION]... [FILE]...\n"
 msgstr "Utilisation : codegui [OPTION]... [FILE]...\n"
 
-#: src/cmd/common/cmd_text.c:64
+#: src/lib/common/common_text.c:64
 #, c-format
 msgid "Options :\n"
 msgstr "Options :\n"
 
-#: src/cmd/common/cmd_text.c:65
+#: src/lib/common/common_text.c:65
 #, c-format
 msgid "\t-h, --help : affiche le présent menu\n"
 msgstr "\t-h, --help : affiche le présent menu\n"
 
-#: src/cmd/common/cmd_text.c:66
+#: src/lib/common/common_text.c:66
 #, c-format
 msgid "\t-w, --warranty : affiche les limites de garantie du logiciel\n"
 msgstr "\t-w, --warranty : affiche les limites de garantie du logiciel\n"

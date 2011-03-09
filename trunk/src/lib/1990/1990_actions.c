@@ -23,8 +23,8 @@
 #include <stdlib.h>
 
 #include "1990_actions.h"
-#include "projet.h"
-#include "erreurs.h"
+#include "common_projet.h"
+#include "common_erreurs.h"
 
 // _1990_duree_projet_txt_eu : renvoie la description des catérogies des durées indicative de la norme européenne
 // Renvoie NULL si la catégorie n'existe pas

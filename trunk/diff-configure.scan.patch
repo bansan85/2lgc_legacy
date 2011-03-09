@@ -1,6 +1,6 @@
 --- configure.scan.old	2011-02-28 13:46:52.262000002 +0100
 +++ configure.scan	2011-02-28 13:47:53.250000002 +0100
-@@ -2,16 +2,20 @@
+@@ -2,16 +2,25@@
  # Process this file with autoconf to produce a configure script.
  
  AC_PREREQ([2.68])
@@ -13,7 +13,12 @@
  
  # Checks for programs.
  AC_PROG_CC
++AM_PROG_CC_C_O
 +AC_PROG_LIBTOOL
++GTK_REQUIRED_VERSION=2.0.0
++GLIB_REQUIRED_VERSION=$GTK_REQUIRED_VERSION
++AM_PATH_GTK_2_0($GTK_REQUIRED_VERSION, :, AC_MSG_ERROR(Test for GTK+ failed.))
++AM_PATH_GTK_2_0($GTK_REQUIRED_VERSION,,[AC_MSG_ERROR(Test for GTK failed.)])
 +AM_GNU_GETTEXT([external])
 +ALL_LINGUAS="fr"
  

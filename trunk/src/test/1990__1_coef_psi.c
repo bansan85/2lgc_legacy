@@ -25,8 +25,8 @@
 #include <list.h>
 
 #include "1990_coef_psi.h"
-#include "erreurs.h"
-#include "maths.h"
+#include "common_erreurs.h"
+#include "common_maths.h"
 #define	TEST_BUG 0
 
 

@@ -19,9 +19,9 @@
 #include "config.h"
 #include <libintl.h>
 #include <locale.h>
-#include "erreurs.h"
+#include "common_erreurs.h"
 
-#include "projet.h"
+#include "common_projet.h"
 
 // _1990_coef_psi0_bat_eu : renvoie le coefficient psi0 indiquée de la norme européenne
 // pour les bâtiment et les charges d'exploitation

@@ -17,11 +17,11 @@
  */
 
 #include "config.h"
-#include "erreurs.h"
+#include "common_erreurs.h"
 #include <libintl.h>
 #include <locale.h>
 
-#include "projet.h"
+#include "common_projet.h"
 
 // _1990_duree_projet_eu : renvoie la durée (en année) indicative de la norme européenne
 // Dans le cas où la durée indiquée par la norme européenne est un
