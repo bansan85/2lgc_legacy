@@ -21,7 +21,7 @@
 
 #include <list.h>
 
-#include "projet.h"
+#include "common_projet.h"
 #include "1990_actions.h"
 
 typedef struct __Combinaison_Element

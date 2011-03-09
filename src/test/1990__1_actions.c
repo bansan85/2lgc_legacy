@@ -25,7 +25,7 @@
 #include <list.h>
 
 #include "1990_actions.h"
-#include "erreurs.h"
+#include "common_erreurs.h"
 #define	TEST_BUG 0
 
 

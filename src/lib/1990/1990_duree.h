@@ -19,7 +19,7 @@
 #ifndef __1990_DUREE_H
 #define __1990_DUREE_H
 
-#include "projet.h"
+#include "common_projet.h"
 
 // _1990_duree_projet_eu : renvoie la durée (en année) indicative de la norme européenne
 // Dans le cas où la durée indiquée par la norme européenne est un

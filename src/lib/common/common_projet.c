@@ -21,8 +21,8 @@
 #include <libintl.h>
 #include <locale.h>
 
-#include "projet.h"
-#include "erreurs.h"
+#include "common_projet.h"
+#include "common_erreurs.h"
 #include "1990_actions.h"
 #include "1990_groupes.h"
 #include "1990_combinaisons.h"

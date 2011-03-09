@@ -28,8 +28,8 @@
 #include "1990_groupes.h"
 #include "1990_combinaisons.h"
 #include "1990_ponderations.h"
-#include "erreurs.h"
-#include "projet.h"
+#include "common_erreurs.h"
+#include "common_projet.h"
 #define	TEST_BUG 0
 
 

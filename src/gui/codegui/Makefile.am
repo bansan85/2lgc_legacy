@@ -1,9 +1,10 @@
 DEFAULT_INCLUDES	=	-I../../.. \
-				-I../../cmd/common
+				-I../../lib/common
 
 bin_PROGRAMS=codegui
-codegui_SOURCES =	main.c \
-			../../cmd/common/cmd_text.c
+codegui_SOURCES =	main.c
+codegui_CPPFLAGS	= @GTK_CFLAGS@
+codegui_LDADD		= @GTK_LIBS@ ../../lib/common/libcommon.la 
 
 # codegui_LDADD = ../../..b/libhello.la
 

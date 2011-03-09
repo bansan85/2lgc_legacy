@@ -1,5 +1,5 @@
 DEFAULT_INCLUDES	=	-I../../.. \
-				-I../../cmd/common
+				-I../common
 
 lib_LTLIBRARIES = lib1990.la
 

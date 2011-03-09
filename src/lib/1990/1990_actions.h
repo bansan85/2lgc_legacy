@@ -21,7 +21,7 @@
 
 #include <list.h>
 
-#include "projet.h"
+#include "common_projet.h"
 
 typedef struct __Charge
 {
