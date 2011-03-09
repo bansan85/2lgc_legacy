@@ -27,6 +27,7 @@
 #include "1990_actions.h"
 #include "1990_groupes.h"
 #include "1990_combinaisons.h"
+#include "1990_ponderations.h"
 #include "erreurs.h"
 #include "projet.h"
 #define	TEST_BUG 0
@@ -78,7 +79,7 @@ int main(void)
 	if (_1990_groupe_ajout_element(projet, 2, 0, 1) != 0) BUG(-1);
 	if (_1990_combinaisons_genere(projet) != 0) BUG(-1);
 	_1990_groupe_affiche_tout(projet);
-	_1990_combinaisons_affiche_ponderations(projet);
+	_1990_ponderations_affiche_tout(projet);
 	projet_free(projet);
 	
 	return EXIT_SUCCESS;
