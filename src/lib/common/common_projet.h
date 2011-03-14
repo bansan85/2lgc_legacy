@@ -48,12 +48,18 @@ typedef struct __CombinaisonsEL
 	LIST		*els_perm;
 } CombinaisonsEL;
 
+typedef struct __List_Gtk
+{
+	void		*_1990;
+} List_Gtk;
+
 typedef struct __Projet
 {
 	LIST			*actions;
-	LIST			*groupes;
+	LIST			*niveaux_groupes;
 	CombinaisonsEL		combinaisons;
 	Type_Pays		pays;
+	List_Gtk		list_gtk;
 } Projet;
 
 Projet *projet_init();

@@ -166,15 +166,15 @@ void _1990_combinaisons_flags_1(Combinaison *combinaison)
 int _1990_combinaisons_genere_groupe_xor(Projet *projet, Groupe *groupe)
 {
 	Groupe			*groupe_n_1;
-	Etage_Groupe		*etage;
-	int			etage_tmp;
+	Niveau_Groupe		*niveau;
+	int			niveau_tmp;
 	Element			*element_tmp;
 	Combinaison		comb;
 	Combinaison_Element	element;
 	Element			*tmp;
 	
 	// Premier étage
-	if (list_curr(projet->groupes) == list_front(projet->groupes))
+	if (list_curr(projet->niveaux_groupes) == list_front(projet->niveaux_groupes))
 	{
 		if (list_empty(groupe->elements) == TRUE)
 			BUG(-1);
@@ -198,31 +198,31 @@ int _1990_combinaisons_genere_groupe_xor(Projet *projet, Groupe *groupe)
 	}
 	else
 	{
-		etage = list_curr(projet->groupes);
-		if (etage == NULL)
+		niveau = list_curr(projet->niveaux_groupes);
+		if (niveau == NULL)
 			BUG(-6);
-		etage_tmp = etage->etage-1;
+		niveau_tmp = niveau->niveau-1;
 		if (list_empty(groupe->elements) == TRUE)
 			BUG(-7);
-		if (list_traverse(projet->groupes, (void *)&etage_tmp, _1990_groupe_etage_cherche, LIST_ALTR) != LIST_OK)
+		if (list_traverse(projet->niveaux_groupes, (void *)&niveau_tmp, _1990_groupe_niveau_cherche, LIST_ALTR) != LIST_OK)
 			BUG(-8);
-		etage = list_curr(projet->groupes);
-		if (etage == NULL)
+		niveau = list_curr(projet->niveaux_groupes);
+		if (niveau == NULL)
 			BUG(-9);
 		list_mvfront(groupe->elements);
 		do
 		{
 			element_tmp = (Element*)list_curr(groupe->elements);
-			if (_1990_groupe_traverse_et_positionne(etage, element_tmp->numero) != 0)
+			if (_1990_groupe_traverse_et_positionne(niveau, element_tmp->numero) != 0)
 				BUG(-10);
-			groupe_n_1 = list_curr(etage->groupe);
+			groupe_n_1 = list_curr(niveau->groupes);
 			if (_1990_combinaisons_duplique_sans_double(groupe->tmp_combinaison.combinaisons, groupe_n_1->tmp_combinaison.combinaisons) != 0)
 				BUG(-11);
 		}
 		while (list_mvnext(groupe->elements) != NULL);
 		
-		etage_tmp = etage->etage+1;
-		if (list_traverse(projet->groupes, (void *)&etage_tmp, _1990_groupe_etage_cherche, LIST_ALTR) != LIST_OK)
+		niveau_tmp = niveau->niveau+1;
+		if (list_traverse(projet->niveaux_groupes, (void *)&niveau_tmp, _1990_groupe_niveau_cherche, LIST_ALTR) != LIST_OK)
 			BUG(-12);
 	}
 	return 0;
@@ -251,19 +251,19 @@ int _1990_combinaisons_ajout(Combinaison *destination, Combinaison *source)
 
 int _1990_combinaisons_genere_groupe_and(Projet *projet, Groupe *groupe)
 {
-	Etage_Groupe		*etage;
+	Niveau_Groupe		*niveau;
 	Groupe			*groupe_n_1;
 	Combinaison		comb, *combinaison1, *combinaison2;
 	Combinaison_Element	element, *comb_elem;
 	Element			*element_tmp;
-	int			etage_tmp, i, j, nbboucle, action_predominante;
+	int			niveau_tmp, i, j, nbboucle, action_predominante;
 	LIST			*transition, *nouvelles_combinaisons;
 	
-	if (list_size(projet->groupes) == 0)
+	if (list_size(projet->niveaux_groupes) == 0)
 		BUG(-1);
 	
 	// Premier étage
-	if (list_curr(projet->groupes) == list_front(projet->groupes))
+	if (list_curr(projet->niveaux_groupes) == list_front(projet->niveaux_groupes))
 	{
 		if (list_empty(groupe->elements) == TRUE)
 			BUG(-2);
@@ -292,23 +292,23 @@ int _1990_combinaisons_genere_groupe_and(Projet *projet, Groupe *groupe)
 	}
 	else
 	{
-		etage = list_curr(projet->groupes);
-		etage_tmp = etage->etage-1;
+		niveau = list_curr(projet->niveaux_groupes);
+		niveau_tmp = niveau->niveau-1;
 		if (list_empty(groupe->elements) == TRUE)
 			BUG(-7);
-		if (list_traverse(projet->groupes, (void *)&etage_tmp, _1990_groupe_etage_cherche, LIST_ALTR) != LIST_OK)
+		if (list_traverse(projet->niveaux_groupes, (void *)&niveau_tmp, _1990_groupe_niveau_cherche, LIST_ALTR) != LIST_OK)
 			BUG(-8);
 		nouvelles_combinaisons = list_init();
 		if (nouvelles_combinaisons == NULL)
 			BUG(-9);
-		etage = list_curr(projet->groupes);
+		niveau = list_curr(projet->niveaux_groupes);
 		list_mvfront(groupe->elements);
 		do
 		{
 			element_tmp = (Element*)list_curr(groupe->elements);
-			if (_1990_groupe_traverse_et_positionne(etage, element_tmp->numero) != 0)
+			if (_1990_groupe_traverse_et_positionne(niveau, element_tmp->numero) != 0)
 				BUG(-10);
-			groupe_n_1 = list_curr(etage->groupe);
+			groupe_n_1 = list_curr(niveau->groupes);
 			if (list_front(groupe->elements) == element_tmp)
 			{
 				if (_1990_combinaisons_duplique_avec_double(nouvelles_combinaisons, groupe_n_1->tmp_combinaison.combinaisons) != 0)
@@ -367,8 +367,8 @@ int _1990_combinaisons_genere_groupe_and(Projet *projet, Groupe *groupe)
 		_1990_combinaisons_duplique_sans_double(groupe->tmp_combinaison.combinaisons, nouvelles_combinaisons);
 		list_free(nouvelles_combinaisons, &(_1990_groupe_free_groupe_tmp_combinaison));
 		
-		etage_tmp = etage->etage+1;
-		if (list_traverse(projet->groupes, (void *)&etage_tmp, _1990_groupe_etage_cherche, LIST_ALTR) != LIST_OK)
+		niveau_tmp = niveau->niveau+1;
+		if (list_traverse(projet->niveaux_groupes, (void *)&niveau_tmp, _1990_groupe_niveau_cherche, LIST_ALTR) != LIST_OK)
 			BUG(-16);
 	}
 	return 0;
@@ -376,13 +376,13 @@ int _1990_combinaisons_genere_groupe_and(Projet *projet, Groupe *groupe)
 
 int _1990_combinaisons_genere_groupe_or(Projet *projet, Groupe *groupe)
 {
-	Etage_Groupe		*etage;
+	Niveau_Groupe		*niveau;
 	Groupe			*groupe_n_1;
 	Combinaison		comb, *combinaison1, *combinaison2;
 	Combinaisons		combs;
 	Combinaison_Element	element;
 	Element			*elem_tmp, *element_tmp;
-	int			etage_tmp, boucle = 2, i, j, k, tmp, action_predominante;
+	int			niveau_tmp, boucle = 2, i, j, k, tmp, action_predominante;
 	LIST			*transition;
 	
 	if (list_size(groupe->elements) == 0)
@@ -392,7 +392,7 @@ int _1990_combinaisons_genere_groupe_or(Projet *projet, Groupe *groupe)
 		boucle = boucle*2;
 	
 	// Premier étage
-	if (list_curr(projet->groupes) == list_front(projet->groupes))
+	if (list_curr(projet->niveaux_groupes) == list_front(projet->niveaux_groupes))
 	{
 		for (i=0;i<boucle;i++)
 		{
@@ -428,11 +428,11 @@ int _1990_combinaisons_genere_groupe_or(Projet *projet, Groupe *groupe)
 	}
 	else
 	{
-		etage = list_curr(projet->groupes);
-		etage_tmp = etage->etage-1;
-		if (list_traverse(projet->groupes, (void *)&etage_tmp, _1990_groupe_etage_cherche, LIST_ALTR) != LIST_OK)
+		niveau = list_curr(projet->niveaux_groupes);
+		niveau_tmp = niveau->niveau-1;
+		if (list_traverse(projet->niveaux_groupes, (void *)&niveau_tmp, _1990_groupe_niveau_cherche, LIST_ALTR) != LIST_OK)
 			BUG(-6);
-		etage = list_curr(projet->groupes);
+		niveau = list_curr(projet->niveaux_groupes);
 		for (i=0;i<boucle;i++)
 		{
 			tmp = i;
@@ -449,9 +449,9 @@ int _1990_combinaisons_genere_groupe_or(Projet *projet, Groupe *groupe)
 				if ((tmp & 1) == 1)
 				{
 					element_tmp = (Element*)list_curr(groupe->elements);
-					if (_1990_groupe_traverse_et_positionne(etage, element_tmp->numero) != 0)
+					if (_1990_groupe_traverse_et_positionne(niveau, element_tmp->numero) != 0)
 						BUG(-9);
-					groupe_n_1 = list_curr(etage->groupe);
+					groupe_n_1 = list_curr(niveau->groupes);
 					if (list_size(groupe_n_1->tmp_combinaison.combinaisons) != 0)
 					{
 						if (list_size(combs.combinaisons) == 0)
@@ -495,8 +495,8 @@ int _1990_combinaisons_genere_groupe_or(Projet *projet, Groupe *groupe)
 				BUG(-14);
 			list_free(combs.combinaisons, &(_1990_groupe_free_groupe_tmp_combinaison));
 		}
-		etage_tmp = etage->etage+1;
-		if (list_traverse(projet->groupes, (void *)&etage_tmp, _1990_groupe_etage_cherche, LIST_ALTR) != LIST_OK)
+		niveau_tmp = niveau->niveau+1;
+		if (list_traverse(projet->niveaux_groupes, (void *)&niveau_tmp, _1990_groupe_niveau_cherche, LIST_ALTR) != LIST_OK)
 			BUG(-15);
 	}
 	return 0;
@@ -543,13 +543,13 @@ void _1990_combinaisons_free(Projet *projet)
 
 int _1990_combinaisons_genere(Projet *projet)
 {
-	Etage_Groupe	*etage;
+	Niveau_Groupe	*niveau;
 	Groupe		*groupe;
 	Action		*action;
 	int		i, j;
 	
-	list_mvfront(projet->groupes);
-	if (list_curr(projet->groupes) == NULL)
+	list_mvfront(projet->niveaux_groupes);
+	if (list_curr(projet->niveaux_groupes) == NULL)
 		return 0;
 	for (i=1;i<=list_size(projet->actions);i++)
 	{
@@ -574,17 +574,17 @@ int _1990_combinaisons_genere(Projet *projet)
 			list_mvnext(projet->actions);
 		}
 			
-		list_mvfront(projet->groupes);
+		list_mvfront(projet->niveaux_groupes);
 		do
 		{
-			etage = (Etage_Groupe*)list_curr(projet->groupes);
+			niveau = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
 			
-			list_mvfront(etage->groupe);
-			if (list_curr(etage->groupe) != NULL)
+			list_mvfront(niveau->groupes);
+			if (list_curr(niveau->groupes) != NULL)
 			{
 				do
 				{
-					groupe = (Groupe*)list_curr(etage->groupe);
+					groupe = (Groupe*)list_curr(niveau->groupes);
 					switch (groupe->type_combinaison)
 					{
 						case GROUPE_COMBINAISON_OR :
@@ -607,10 +607,10 @@ int _1990_combinaisons_genere(Projet *projet)
 						}
 					}
 				}
-				while (list_mvnext(etage->groupe));
+				while (list_mvnext(niveau->groupes));
 			}
 		}
-		while (list_mvnext(projet->groupes) != NULL);
+		while (list_mvnext(projet->niveaux_groupes) != NULL);
 		
 		_1990_ponderations_genere(projet);
 	}

@@ -60,7 +60,7 @@ int projet_free(Projet *projet)
 {
 	if (projet->actions != NULL)
 		_1990_action_free(projet);
-	if (projet->groupes != NULL)
+	if (projet->niveaux_groupes != NULL)
 		_1990_groupe_free(projet);
 	if (projet->combinaisons.elu_equ != NULL)
 		_1990_combinaisons_free(projet);

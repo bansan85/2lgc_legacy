@@ -119,14 +119,14 @@ int _1990_ponderations_genere_un(Projet *projet, LIST* combinaisons_destination,
 	Combinaison		*combinaison;
 	Combinaison_Element	*combinaison_element;
 	Groupe			*groupe;
-	Etage_Groupe		*etage;
+	Niveau_Groupe		*niveau;
 	
-	etage = list_rear(projet->groupes);
-	if (etage == NULL)
+	niveau = list_rear(projet->niveaux_groupes);
+	if (niveau == NULL)
 		BUG(-1);
-	if (list_front(etage->groupe) != list_rear(etage->groupe))
+	if (list_front(niveau->groupes) != list_rear(niveau->groupes))
 		BUG(-2);
-	groupe = list_front(etage->groupe);
+	groupe = list_front(niveau->groupes);
 	
 	if (list_size(groupe->tmp_combinaison.combinaisons) == 0)
 		return 0;
