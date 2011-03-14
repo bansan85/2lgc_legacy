@@ -26,6 +26,8 @@
 typedef struct __Element
 {
 	int			numero;
+	void			*pIter;
+	int			pIter_expand;
 } Element;
 
 typedef enum
@@ -42,22 +44,31 @@ typedef struct __Groupe
 	Type_Groupe_Combinaison	type_combinaison;
 	LIST			*elements;
 	Combinaisons		tmp_combinaison;
+	void			*pIter;
+	int			pIter_expand;
 } Groupe;
 
-typedef struct __Etage_Groupe
+typedef struct __Niveau_Groupe
 {
-	int			etage;
-	LIST			*groupe;
-} Etage_Groupe;
+	int			niveau;
+	LIST			*groupes;
+	void			*pIter;
+	int			pIter_expand;
+} Niveau_Groupe;
 
 int _1990_groupe_init(Projet *projet);
-int _1990_groupe_etage_cherche(void *input, void *curr);
+int _1990_groupe_niveau_cherche(void *input, void *curr);
 int _1990_groupe_cherche(void *input, void *curr);
-int _1990_groupe_etage_ajout(Projet *projet, int etage);
-int _1990_groupe_traverse_et_positionne(Etage_Groupe *etage, int numero);
-int _1990_groupe_ajout(Projet *projet, int etage, int numero, Type_Groupe_Combinaison combinaison);
-int _1990_groupe_ajout_element(Projet *projet, int etage, int groupe_n, int groupe_n_1);
+int _1990_groupe_niveau_ajout(Projet *projet, int niveau);
+int _1990_groupe_element_traverse_et_positionne(Groupe *groupe, int numero);
+int _1990_groupe_traverse_et_positionne(Niveau_Groupe *niveau, int numero);
+int _1990_groupe_niveau_traverse_et_positionne(LIST *source, int numero);
+int _1990_groupe_ajout(Projet *projet, int niveau, int numero, Type_Groupe_Combinaison combinaison);
+int _1990_groupe_ajout_element(Projet *projet, int niveau, int groupe_n, int groupe_n_1);
 void _1990_groupe_affiche_tout(Projet *projet);
+int _1990_groupe_free_element_numero(Projet *projet, int niveau, int numero, int element);
+int _1990_groupe_free_niveau_numero(Projet *projet, int numero);
+int _1990_groupe_free_groupe_numero(Projet *projet, int niveau, int numero);
 void _1990_groupe_free(Projet *projet);
 void _1990_groupe_free_seulement_tmp_combinaison(Projet *projet);
 

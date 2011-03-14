@@ -45,7 +45,7 @@ Si make check échoue, la ligne où le programme plante peut être obtenu par gd
 Par exemple, pour le programme test : src/test/1990__1 il y a deux possibilités :
 	- Soit le fichier est un exécutable et alors un simple "gdb src/test/1990__1" "run" "bt full" détecte l'emplacement exact du problème
 	- Soit le fichier est un script shell, il faut alors lancer src/test/.libs/1990__1. Il sera alors indiqué qu'il manque une librairie.
-		Pour chaque librairie manquante, il faudra compléter la variable shell : export LD_LIBRARY_PATH=src/lib/1990/.libs/
+		Pour chaque librairie manquante, il faudra compléter la variable shell : export LD_LIBRARY_PATH=src/lib/1990/.libs/:src/lib/common/.libs/
 		Ensuite, "gdb src/test/.libs/1990__1" "run" "bt full" détecte l'emplacement exact du problème
 
 

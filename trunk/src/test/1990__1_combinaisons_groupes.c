@@ -43,7 +43,6 @@ int main(void)
 	
 	// Combinaison
 	
-	projet = NULL;
 	projet = projet_init();
 	projet->pays = PAYS_EU;
 	projet->combinaisons.flags = 0 | 8 | 2;
@@ -55,9 +54,9 @@ int main(void)
 	if (_1990_action_ajout(projet, 10) != 0) BUG(-1); // 4
 	if (_1990_action_ajout(projet, 13) != 0) BUG(-1); // 5
 	_1990_action_affiche_tout(projet);
-	if (_1990_groupe_etage_ajout(projet, 0) != 0) BUG(-1);
-	if (_1990_groupe_etage_ajout(projet, 1) != 0) BUG(-1);
-	if (_1990_groupe_etage_ajout(projet, 2) != 0) BUG(-1);
+	if (_1990_groupe_niveau_ajout(projet, 0) != 0) BUG(-1);
+	if (_1990_groupe_niveau_ajout(projet, 1) != 0) BUG(-1);
+	if (_1990_groupe_niveau_ajout(projet, 2) != 0) BUG(-1);
 	if (_1990_groupe_ajout(projet, 0, 0, GROUPE_COMBINAISON_AND) != 0) BUG(-1); // Charges permanentes
 	if (_1990_groupe_ajout(projet, 0, 1, GROUPE_COMBINAISON_OR) != 0) BUG(-1); // Charges d'exploitation
 	if (_1990_groupe_ajout(projet, 0, 2, GROUPE_COMBINAISON_XOR) != 0) BUG(-1); // Neige
