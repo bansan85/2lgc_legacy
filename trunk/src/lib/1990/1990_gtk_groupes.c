@@ -28,6 +28,7 @@
 #include "1990_gtk_groupes.h"
 #include "common_erreurs.h"
 #include <gtk/gtk.h>
+#include "1990_ponderations.h"
 
 int _1990_gtk_affiche_niveau(Projet *projet, int niveau)
 {
@@ -458,6 +459,226 @@ int _1990_gtk_button_groupe_ok_clicked(GtkWidget *button __attribute__((unused))
 	return 0;
 }
 
+int _1990_gtk_button_generer_clicked(GtkWidget *button __attribute__((unused)), Projet *projet)
+{
+	if (_1990_combinaisons_genere(projet) != 0)
+		BUG(-1);
+	_1990_groupe_affiche_tout(projet);
+	_1990_ponderations_affiche_tout(projet);
+	return 0;
+}
+
+void _1990_gtk_radio_button_eluequ_equ_seul(GtkRadioButton *radiobutton __attribute__((unused)), Projet *projet)
+{
+	if ((projet->combinaisons.flags & 1) != 0)
+		projet->combinaisons.flags ^= 1;
+	return;
+}
+
+void _1990_gtk_radio_button_eluequ_equ_resist(GtkRadioButton *radiobutton __attribute__((unused)), Projet *projet)
+{
+	if ((projet->combinaisons.flags & 1) == 0)
+		projet->combinaisons.flags++;
+	return;
+}
+
+void _1990_gtk_radio_button_elustrgeo_1(GtkRadioButton *radiobutton __attribute__((unused)), Projet *projet)
+{
+	projet->combinaisons.flags = projet->combinaisons.flags - (projet->combinaisons.flags & 6);
+	projet->combinaisons.flags = projet->combinaisons.flags + 0;
+	return;
+}
+
+void _1990_gtk_radio_button_elustrgeo_2(GtkRadioButton *radiobutton __attribute__((unused)), Projet *projet)
+{
+	projet->combinaisons.flags = projet->combinaisons.flags - (projet->combinaisons.flags & 6);
+	projet->combinaisons.flags = projet->combinaisons.flags + 2;
+	return;
+}
+
+void _1990_gtk_radio_button_elustrgeo_3(GtkRadioButton *radiobutton __attribute__((unused)), Projet *projet)
+{
+	projet->combinaisons.flags = projet->combinaisons.flags - (projet->combinaisons.flags & 6);
+	projet->combinaisons.flags = projet->combinaisons.flags + 4;
+	return;
+}
+
+void _1990_gtk_radio_button_elustrgeo_6_10(GtkRadioButton *radiobutton __attribute__((unused)), Projet *projet)
+{
+	projet->combinaisons.flags = projet->combinaisons.flags - (projet->combinaisons.flags & 8);
+	projet->combinaisons.flags = projet->combinaisons.flags + 8;
+	return;
+}
+
+void _1990_gtk_radio_button_elustrgeo_6_10ab(GtkRadioButton *radiobutton __attribute__((unused)), Projet *projet)
+{
+	projet->combinaisons.flags = projet->combinaisons.flags - (projet->combinaisons.flags & 8);
+	projet->combinaisons.flags = projet->combinaisons.flags + 0;
+	return;
+}
+
+void _1990_gtk_radio_button_eluacc_frequente(GtkRadioButton *radiobutton __attribute__((unused)), Projet *projet)
+{
+	projet->combinaisons.flags = projet->combinaisons.flags - (projet->combinaisons.flags & 16);
+	projet->combinaisons.flags = projet->combinaisons.flags + 0;
+	return;
+}
+
+void _1990_gtk_radio_button_eluacc_quasi_permanente(GtkRadioButton *radiobutton __attribute__((unused)), Projet *projet)
+{
+	projet->combinaisons.flags = projet->combinaisons.flags - (projet->combinaisons.flags & 16);
+	projet->combinaisons.flags = projet->combinaisons.flags + 16;
+	return;
+}
+
+void _1990_gtk_radio_button_elustrgeo_1_tooltip(GtkWidget *widget __attribute__((unused)), gint x __attribute__((unused)), gint y __attribute__((unused)), gboolean keyboard_mode __attribute__((unused)), GtkTooltip *tooltip __attribute__((unused)), gpointer user_data __attribute__((unused)))
+{
+	gtk_tooltip_set_text(tooltip,"rthizarzeaze	rrzearurezhiraehp" );
+	return;
+}
+
+void wrapped_label_size_allocate_callback(GtkWidget *label, GtkAllocation *allocation, gpointer data __attribute__((unused)))
+{
+	gtk_widget_set_size_request(label, allocation->width, -1);
+	return;
+}
+
+int _1990_gtk_button_options_clicked(GtkWidget *button __attribute__((unused)), Projet *projet)
+{
+	GtkWidget	*pWindow, *pWindow2;
+	GtkWidget	*vBox, *vBox_inside;
+	GtkWidget	*frame;
+	GtkWidget	*label;
+	GtkWidget	*radio_button_maitre, *radio_button_esclave1, *radio_button_esclave2;
+	GtkWidget	*image;
+	GtkSettings	*settings;
+	List_Gtk_1990	*list_gtk_1990 = projet->list_gtk._1990;
+	GdkRGBA		color;
+	
+	pWindow = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+	gtk_window_set_position(GTK_WINDOW(pWindow), GTK_WIN_POS_CENTER);
+	gtk_window_set_default_size(GTK_WINDOW(pWindow), 600, -1);
+	gtk_window_set_title(GTK_WINDOW(pWindow), "Options des combinaisons");
+	pWindow2 = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+	gtk_window_set_position(GTK_WINDOW(pWindow2), GTK_WIN_POS_CENTER);
+	gtk_window_set_default_size(GTK_WINDOW(pWindow2), 50, 50);
+	gtk_window_set_title(GTK_WINDOW(pWindow2), "2");
+	
+	vBox = gtk_vbox_new(FALSE, 0);
+	gtk_container_add(GTK_CONTAINER(pWindow), vBox);
+	
+	frame = gtk_frame_new("ELU Équilibre :");
+	gtk_box_pack_start(GTK_BOX(vBox), frame, TRUE, TRUE, 0);
+	
+	vBox_inside = gtk_vbox_new(FALSE, 0);
+	gtk_container_add(GTK_CONTAINER(frame), vBox_inside);
+	label=gtk_label_new("A l'État Limite Ultime d'ÉQUilibre, il est possible de générer les combinaisons pour la vérification à l'équilibre statique seulement ou à l'équilibre statique incluant la résistance d'éléments structuraux.");
+	gtk_label_set_line_wrap(GTK_LABEL(label), TRUE);
+	gtk_label_set_justify(GTK_LABEL(label), GTK_JUSTIFY_FILL);
+	g_signal_connect(G_OBJECT(label), "size-allocate", G_CALLBACK(wrapped_label_size_allocate_callback), NULL);
+	gtk_box_pack_start(GTK_BOX(vBox_inside), label, TRUE, FALSE, 0);
+	
+	radio_button_maitre = gtk_radio_button_new_with_label_from_widget(NULL, "Équilibre seulement");
+	g_signal_connect(G_OBJECT(radio_button_maitre), "toggled", G_CALLBACK(_1990_gtk_radio_button_eluequ_equ_seul), projet);
+	gtk_box_pack_start(GTK_BOX(vBox_inside), radio_button_maitre, TRUE, FALSE, 0);
+	radio_button_esclave1 = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(radio_button_maitre), "Équilibre et résistance");
+	g_signal_connect(G_OBJECT(radio_button_esclave1), "toggled", G_CALLBACK(_1990_gtk_radio_button_eluequ_equ_resist), projet);
+	gtk_box_pack_start(GTK_BOX(vBox_inside), radio_button_esclave1, TRUE, FALSE, 0);
+	if ((projet->combinaisons.flags & 1) == 0)
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio_button_maitre), TRUE);
+	else
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio_button_esclave1), TRUE);
+	
+	frame = gtk_frame_new("ELU STR et GEO, formule de combinaison :");
+	gtk_box_pack_start(GTK_BOX(vBox), frame, TRUE, TRUE, 0);
+	
+	vBox_inside = gtk_vbox_new(FALSE, 0);
+	gtk_container_add(GTK_CONTAINER(frame), vBox_inside);
+	label = gtk_label_new("À l'État Limite Ultime STRucture et GÉOtechnique, deux formules de combinaison sont possibles. La première est la formule 6.10 et la deuxième est 6.10a et 6.10b");
+	gtk_label_set_line_wrap(GTK_LABEL(label), TRUE);
+	gtk_label_set_justify(GTK_LABEL(label), GTK_JUSTIFY_FILL);
+	g_signal_connect(G_OBJECT(label), "size-allocate", G_CALLBACK(wrapped_label_size_allocate_callback), NULL);
+	gtk_box_pack_start(GTK_BOX(vBox_inside), label, TRUE, FALSE, 0);
+	
+	radio_button_maitre = gtk_radio_button_new_with_label_from_widget(NULL, "6.10");
+	g_signal_connect(G_OBJECT(radio_button_maitre), "toggled", G_CALLBACK(_1990_gtk_radio_button_elustrgeo_6_10), projet);
+	gtk_box_pack_start(GTK_BOX(vBox_inside), radio_button_maitre, TRUE, FALSE, 0);
+	radio_button_esclave1 = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(radio_button_maitre), "6.10a et 6.10b");
+	g_signal_connect(G_OBJECT(radio_button_esclave1), "toggled", G_CALLBACK(_1990_gtk_radio_button_elustrgeo_6_10ab), projet);
+	gtk_box_pack_start(GTK_BOX(vBox_inside), radio_button_esclave1, TRUE, FALSE, 0);
+	if ((projet->combinaisons.flags & 8) == 0)
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio_button_esclave1), TRUE);
+	else
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio_button_maitre), TRUE);
+	
+	frame = gtk_frame_new("ELU STR et GEO, ensemble de calcul :");
+	gtk_box_pack_start(GTK_BOX(vBox), frame, TRUE, TRUE, 0);
+	
+	vBox_inside = gtk_vbox_new(FALSE, 0);
+	gtk_container_add(GTK_CONTAINER(frame), vBox_inside);
+	label = gtk_label_new("Lorsqu'il est nécessaire de réaliser un calcul à l'État Limite Ultime STRucture et GÉOtechnique, trois approches sont possibles. Approche 1 : vérification de la structure et du sol via les coefficients de l'ensemble B puis les coefficients de l'ensemble C. Approche 2 : vérification de la structure et du sol via les coefficients de l'ensemble B. Approche 3 : vérification de la structure et du sol via les coefficients de l'ensemble B pour les actions géotechniques et les coefficients de l'ensemble C pour les actions appliquées à la structure.");
+	gtk_label_set_line_wrap(GTK_LABEL(label), TRUE);
+	gtk_label_set_justify(GTK_LABEL(label), GTK_JUSTIFY_FILL);
+	g_signal_connect(G_OBJECT(label), "size-allocate", G_CALLBACK(wrapped_label_size_allocate_callback), NULL);
+	gtk_box_pack_start(GTK_BOX(vBox_inside), label, TRUE, FALSE, 0);
+	
+	radio_button_maitre = gtk_radio_button_new_with_label_from_widget(NULL, "Approche 1");
+	g_signal_connect(G_OBJECT(radio_button_maitre), "toggled", G_CALLBACK(_1990_gtk_radio_button_elustrgeo_1), projet);
+	gtk_widget_set_has_tooltip(radio_button_maitre, TRUE);
+	g_signal_connect(radio_button_maitre, "query-tooltip", G_CALLBACK(_1990_gtk_radio_button_elustrgeo_1_tooltip), projet);
+	gtk_widget_set_tooltip_window(radio_button_maitre, GTK_WINDOW(pWindow2));
+	settings = gtk_widget_get_settings(GTK_WIDGET(radio_button_maitre));
+	g_object_set(settings, "gtk-tooltip-timeout", 0, NULL);
+	gtk_box_pack_start(GTK_BOX(vBox_inside), radio_button_maitre, TRUE, FALSE, 0);
+	radio_button_esclave1 = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(radio_button_maitre), "Approche 2");
+	g_signal_connect(G_OBJECT(radio_button_esclave1), "toggled", G_CALLBACK(_1990_gtk_radio_button_elustrgeo_2), projet);
+	gtk_box_pack_start(GTK_BOX(vBox_inside), radio_button_esclave1, TRUE, FALSE, 0);
+	radio_button_esclave2 = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(radio_button_maitre), "Approche 3");
+	g_signal_connect(G_OBJECT(radio_button_esclave2), "toggled", G_CALLBACK(_1990_gtk_radio_button_elustrgeo_3), projet);
+	gtk_box_pack_start(GTK_BOX(vBox_inside), radio_button_esclave2, TRUE, FALSE, 0);
+	if ((projet->combinaisons.flags & 6) == 4)
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio_button_esclave2), TRUE);
+	else if ((projet->combinaisons.flags & 6) == 2)
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio_button_esclave1), TRUE);
+	else
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio_button_maitre), TRUE);
+	
+	frame = gtk_frame_new("ELU ACCidentel :");
+	gtk_box_pack_start(GTK_BOX(vBox), frame, TRUE, TRUE, 0);
+	
+	vBox_inside = gtk_vbox_new(FALSE, 0);
+	gtk_container_add(GTK_CONTAINER(frame), vBox_inside);
+	label = gtk_label_new("À l'État Limite Ultime ACCidentel, la charge variable dominante utilisée est soit la valeur fréquente, soit la valeur quasi-permanente.");
+	gtk_label_set_line_wrap(GTK_LABEL(label), TRUE);
+	gtk_label_set_justify(GTK_LABEL(label), GTK_JUSTIFY_FILL);
+	g_signal_connect(G_OBJECT(label), "size-allocate", G_CALLBACK(wrapped_label_size_allocate_callback), NULL);
+	gtk_box_pack_start(GTK_BOX(vBox_inside), label, TRUE, FALSE, 0);
+	
+	radio_button_maitre = gtk_radio_button_new_with_label_from_widget(NULL, "valeur fréquence");
+	g_signal_connect(G_OBJECT(radio_button_maitre), "toggled", G_CALLBACK(_1990_gtk_radio_button_eluacc_frequente), projet);
+	gtk_box_pack_start(GTK_BOX(vBox_inside), radio_button_maitre, TRUE, FALSE, 0);
+	radio_button_esclave1 = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(radio_button_maitre), "valeur quasi-permanente");
+	g_signal_connect(G_OBJECT(radio_button_esclave1), "toggled", G_CALLBACK(_1990_gtk_radio_button_eluacc_quasi_permanente), projet);
+	gtk_box_pack_start(GTK_BOX(vBox_inside), radio_button_esclave1, TRUE, FALSE, 0);
+	if ((projet->combinaisons.flags & 16) == 0)
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio_button_maitre), TRUE);
+	else
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio_button_esclave1), TRUE);
+	
+	image = gtk_image_new_from_file(DATADIR"/1990_6_10.svg");
+	gtk_window_set_decorated(GTK_WINDOW(pWindow2), FALSE);
+	gtk_widget_show(image);
+	gtk_container_add(GTK_CONTAINER(pWindow2), image);
+	color.red = 1.; color.green = 1.; color.blue = 0.75; color.alpha = 1.;
+	gtk_widget_override_background_color(pWindow2, GTK_STATE_FLAG_NORMAL, &color);
+	
+	gtk_window_set_transient_for(GTK_WINDOW(pWindow), GTK_WINDOW(list_gtk_1990->window_groupe));
+	gtk_window_set_modal(GTK_WINDOW(pWindow), TRUE);
+	gtk_widget_show_all(pWindow);
+	
+	return 0;
+}
+
 int _1990_gtk_groupes(GtkWidget *button __attribute__((unused)), Projet *projet)
 {
 	GtkWidget	*label;
@@ -470,10 +691,11 @@ int _1990_gtk_groupes(GtkWidget *button __attribute__((unused)), Projet *projet)
 		BUG(-2);
 	list_gtk_1990 = projet->list_gtk._1990;
 	list_gtk_1990->window_groupe = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-	list_gtk_1990->table_groupe = gtk_table_new (2, 4, FALSE);
+	list_gtk_1990->table_groupe = gtk_table_new (5, 4, FALSE);
 	list_gtk_1990->table_combinaison = gtk_table_new (1, 1, FALSE);
 	list_gtk_1990->table_groupes = gtk_table_new (7, 2, FALSE);
 	list_gtk_1990->table_dispo = gtk_table_new (2, 2, FALSE);
+	list_gtk_1990->table_bas = gtk_table_new (1, 2, FALSE);
 	
 	if ((projet->niveaux_groupes == NULL) || (list_size(projet->niveaux_groupes) == 0))
 	{
@@ -505,7 +727,7 @@ int _1990_gtk_groupes(GtkWidget *button __attribute__((unused)), Projet *projet)
 	
 	_1990_gtk_affiche_niveau(projet, gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(list_gtk_1990->spin_button_niveau)));
 	
-	gtk_window_set_title (GTK_WINDOW (list_gtk_1990->window_groupe), "Noeuds");
+	gtk_window_set_title (GTK_WINDOW (list_gtk_1990->window_groupe), "Combinaisons");
 	gtk_window_resize (GTK_WINDOW (list_gtk_1990->window_groupe), 600, 400);
 	gtk_window_set_position (GTK_WINDOW (list_gtk_1990->window_groupe), GTK_WIN_POS_CENTER_ALWAYS);
 	
@@ -571,7 +793,18 @@ int _1990_gtk_groupes(GtkWidget *button __attribute__((unused)), Projet *projet)
 	gtk_tree_view_append_column(list_gtk_1990->tree_view_dispo, pColumn);
 	gtk_table_attach (GTK_TABLE (list_gtk_1990->table_dispo), GTK_WIDGET(list_gtk_1990->tree_view_dispo), 0, 1, 0, 2, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
 	
+	gtk_table_attach (GTK_TABLE (list_gtk_1990->table_groupe), list_gtk_1990->table_bas, 0, 4, 3, 4, GTK_EXPAND | GTK_FILL, 0, 0, 0);
+	list_gtk_1990->button_generer = gtk_button_new_with_label("Générer");
+	gtk_table_attach (GTK_TABLE (list_gtk_1990->table_bas), list_gtk_1990->button_generer, 0, 1, 0, 1, GTK_EXPAND | GTK_FILL, 0, 0, 0);
+	g_signal_connect(G_OBJECT(list_gtk_1990->button_generer), "clicked", G_CALLBACK(_1990_gtk_button_generer_clicked), projet);
+	list_gtk_1990->button_options = gtk_button_new_with_label("Options");
+	gtk_table_attach (GTK_TABLE (list_gtk_1990->table_bas), list_gtk_1990->button_options, 1, 2, 0, 1, GTK_EXPAND | GTK_FILL, 0, 0, 0);
+	g_signal_connect(G_OBJECT(list_gtk_1990->button_options), "clicked", G_CALLBACK(_1990_gtk_button_options_clicked), projet);
 	
+//	list_gtk_1990->status_bar_main = gtk_statusbar_new();
+//	gtk_table_attach(GTK_TABLE(list_gtk_1990->table_groupe), list_gtk_1990->status_bar_main, 0, 4, 4, 5, GTK_EXPAND | GTK_FILL, 0, 0, 0);
+	
+	gtk_window_set_modal(GTK_WINDOW(list_gtk_1990->window_groupe), TRUE);
 	gtk_widget_show_all(list_gtk_1990->window_groupe);
 	
 	return 0;

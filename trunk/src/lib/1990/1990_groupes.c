@@ -376,16 +376,22 @@ int _1990_groupe_free_niveau_numero(Projet *projet, int numero)
 	Niveau_Groupe	*niveau_groupe;
 	if (_1990_groupe_niveau_traverse_et_positionne(projet->niveaux_groupes, numero) != 0)
 		BUG(-1);
+	niveau_groupe = list_curr(projet->niveaux_groupes);
 	do
 	{
-		niveau_groupe = list_curr(projet->niveaux_groupes);
-		if (niveau_groupe->niveau > numero)
+		if (niveau_groupe->niveau >= numero)
 		{
 			if (_1990_groupe_free_niveau_courant(projet) != 0)
 				BUG(-2);
+			niveau_groupe = list_curr(projet->niveaux_groupes);
+		}
+		else
+		{
+			list_mvnext(projet->niveaux_groupes);
+			niveau_groupe = list_curr(projet->niveaux_groupes);
 		}
 	}
-	while (list_curr(projet->niveaux_groupes) != NULL);
+	while ((list_size(projet->niveaux_groupes) != 0) && (niveau_groupe != NULL) && (niveau_groupe->niveau >= numero));
 	return 0;
 }
 
@@ -550,11 +556,9 @@ void _1990_groupe_free_seulement_tmp_combinaison(Projet *projet)
 	Groupe		*groupe;
 	Combinaison	*combinaison;
 	
-	if (projet->niveaux_groupes == NULL)
+	if ((projet->niveaux_groupes == NULL) || (list_size(projet->niveaux_groupes) == 0))
 		return;
 	
-	if (list_front(projet->niveaux_groupes) == NULL)
-		return;
 	list_mvfront(projet->niveaux_groupes);
 	do
 	{

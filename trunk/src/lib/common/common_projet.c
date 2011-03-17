@@ -51,6 +51,7 @@ Projet *projet_init()
 		free(projet);
 		BUG(NULL);
 	}
+	projet->list_gtk._1990 = NULL;
 	
 	projet->pays = PAYS_EU;
 	return projet;

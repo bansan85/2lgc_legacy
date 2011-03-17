@@ -35,7 +35,7 @@ aclocal
 libtoolize
 automake --add-missing --copy
 autoconf
-LDFLAGS="-Wl,-O0" CFLAGS="-march=nocona -O0 -g3 -ggdb3 -pipe -ftracer -fsched2-use-traces -Wl,--as-needed -Wl,-O0 -fno-inline -Wall -Wextra -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED -DGSEAL_ENABLE -pg -fprofile-arcs -ftest-coverage" ./configure --with-gtk
+CFLAGS="-march=nocona -O0 -g3 -ggdb3 -pipe -ftracer -fsched2-use-traces -Wl,--as-needed -Wl,-O0 -fno-inline -Wall -Wextra -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED -DGSEAL_ENABLE -pg -fprofile-arcs -ftest-coverage" ./configure --with-gtk --prefix=/usr/local
 make -j3 && make check -j3
 NOTA IMPORTANT :
 	-pg -fprofile-arcs -ftest-coverage sont des options de deboguage qui ne doivent pas être mises pour une utilisation courante.
@@ -54,11 +54,3 @@ si le programme ne permet pas une compilation sans erreur par la procédure ci-d
 La commande suivante permet de créer un nouveau fichier de traduction dans une langue.
 msginit -l fr -o fr.po -i `find . -name "*.pot"` : permet d'ajouter une langue (dans le cas ici, le français). L'abbréviation est compatible avec /usr/share/locale
 NOTA : avant de lancer msginit, il est nécessaire de compiler l'application
-Il n'est pas utile de lancer la commande pour mettre à jour le fichier contenant les traductions. Le Makefile le fait automatiquement.
-
-
-
-
-
-pour réaliser le diff entre deux versions, il faut utiliser la commande :
-patch -pu -N -r eurocode-0.0.0.0 eurocode-0.0.0.1 > eurocode-0.0.0.0-0.0.0.1.patch

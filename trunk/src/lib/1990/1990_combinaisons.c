@@ -504,6 +504,7 @@ int _1990_combinaisons_genere_groupe_or(Projet *projet, Groupe *groupe)
 
 int _1990_combinaisons_init(Projet *projet)
 {
+	projet->combinaisons.flags = 0;
 	projet->combinaisons.elu_equ = list_init();
 	projet->combinaisons.elu_str = list_init();
 	projet->combinaisons.elu_geo = list_init();
@@ -530,14 +531,92 @@ void _1990_combinaisons_free_free(void *data)
 void _1990_combinaisons_free(Projet *projet)
 {
 	list_free(projet->combinaisons.elu_equ, &(_1990_combinaisons_free_free));
+	projet->combinaisons.elu_equ = NULL;
 	list_free(projet->combinaisons.elu_str, &(_1990_combinaisons_free_free));
+	projet->combinaisons.elu_str = NULL;
 	list_free(projet->combinaisons.elu_geo, &(_1990_combinaisons_free_free));
+	projet->combinaisons.elu_geo = NULL;
 	list_free(projet->combinaisons.elu_fat, &(_1990_combinaisons_free_free));
+	projet->combinaisons.elu_fat = NULL;
 	list_free(projet->combinaisons.elu_acc, &(_1990_combinaisons_free_free));
+	projet->combinaisons.elu_acc = NULL;
 	list_free(projet->combinaisons.elu_sis, &(_1990_combinaisons_free_free));
+	projet->combinaisons.elu_sis = NULL;
 	list_free(projet->combinaisons.els_car, &(_1990_combinaisons_free_free));
+	projet->combinaisons.els_car = NULL;
 	list_free(projet->combinaisons.els_freq, &(_1990_combinaisons_free_free));
+	projet->combinaisons.els_freq = NULL;
 	list_free(projet->combinaisons.els_perm, &(_1990_combinaisons_free_free));
+	projet->combinaisons.els_perm = NULL;
+	return;
+}
+
+void _1990_combinaisons_empty(Projet *projet)
+{
+	Ponderation *ponderation;
+	list_mvfront(projet->combinaisons.elu_equ);
+	while (!list_empty(projet->combinaisons.elu_equ))
+	{
+		ponderation = list_remove_front(projet->combinaisons.elu_equ);
+		list_free(ponderation->elements, LIST_DEALLOC);
+		free(ponderation);
+	}
+	list_mvfront(projet->combinaisons.elu_str);
+	while (!list_empty(projet->combinaisons.elu_str))
+	{
+		ponderation = list_remove_front(projet->combinaisons.elu_str);
+		list_free(ponderation->elements, LIST_DEALLOC);
+		free(ponderation);
+	}
+	list_mvfront(projet->combinaisons.elu_geo);
+	while (!list_empty(projet->combinaisons.elu_geo))
+	{
+		ponderation = list_remove_front(projet->combinaisons.elu_geo);
+		list_free(ponderation->elements, LIST_DEALLOC);
+		free(ponderation);
+	}
+	list_mvfront(projet->combinaisons.elu_fat);
+	while (!list_empty(projet->combinaisons.elu_fat))
+	{
+		ponderation = list_remove_front(projet->combinaisons.elu_fat);
+		list_free(ponderation->elements, LIST_DEALLOC);
+		free(ponderation);
+	}
+	list_mvfront(projet->combinaisons.elu_acc);
+	while (!list_empty(projet->combinaisons.elu_acc))
+	{
+		ponderation = list_remove_front(projet->combinaisons.elu_acc);
+		list_free(ponderation->elements, LIST_DEALLOC);
+		free(ponderation);
+	}
+	list_mvfront(projet->combinaisons.elu_sis);
+	while (!list_empty(projet->combinaisons.elu_sis))
+	{
+		ponderation = list_remove_front(projet->combinaisons.elu_sis);
+		list_free(ponderation->elements, LIST_DEALLOC);
+		free(ponderation);
+	}
+	list_mvfront(projet->combinaisons.els_car);
+	while (!list_empty(projet->combinaisons.els_car))
+	{
+		ponderation = list_remove_front(projet->combinaisons.els_car);
+		list_free(ponderation->elements, LIST_DEALLOC);
+		free(ponderation);
+	}
+	list_mvfront(projet->combinaisons.els_freq);
+	while (!list_empty(projet->combinaisons.els_freq))
+	{
+		ponderation = list_remove_front(projet->combinaisons.els_freq);
+		list_free(ponderation->elements, LIST_DEALLOC);
+		free(ponderation);
+	}
+	list_mvfront(projet->combinaisons.els_perm);
+	while (!list_empty(projet->combinaisons.els_perm))
+	{
+		ponderation = list_remove_front(projet->combinaisons.els_perm);
+		list_free(ponderation->elements, LIST_DEALLOC);
+		free(ponderation);
+	}
 	return;
 }
 
@@ -548,6 +627,7 @@ int _1990_combinaisons_genere(Projet *projet)
 	Action		*action;
 	int		i, j;
 	
+	_1990_combinaisons_empty(projet);
 	list_mvfront(projet->niveaux_groupes);
 	if (list_curr(projet->niveaux_groupes) == NULL)
 		return 0;

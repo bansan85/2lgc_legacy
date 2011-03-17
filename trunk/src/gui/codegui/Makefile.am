@@ -9,7 +9,3 @@ codegui_CPPFLAGS	= @GTK_CFLAGS@
 codegui_LDADD		= @GTK_LIBS@ ../../lib/common/libcommon.la ../../lib/1990/lib1990.la
 endif
 
-datadir		=       @datadir@
-localedir       =       $(datadir)/locale
-DEFS		=       -DLOCALEDIR=\"$(localedir)\" @DEFS@
-

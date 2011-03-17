@@ -126,6 +126,8 @@ int _1990_ponderations_genere_un(Projet *projet, LIST* combinaisons_destination,
 		BUG(-1);
 	if (list_front(niveau->groupes) != list_rear(niveau->groupes))
 		BUG(-2);
+	if (list_size(niveau->groupes) == 0)
+		return 0;
 	groupe = list_front(niveau->groupes);
 	
 	if (list_size(groupe->tmp_combinaison.combinaisons) == 0)

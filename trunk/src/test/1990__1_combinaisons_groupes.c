@@ -38,6 +38,7 @@ int main(void)
 	Projet	*projet;
 	
 	setlocale( LC_ALL, "" );
+	printf("%s\n", LOCALEDIR);
 	bindtextdomain(PACKAGE, LOCALEDIR);
 	textdomain(PACKAGE);
 	
