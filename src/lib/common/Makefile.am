@@ -15,4 +15,5 @@ libcommon_la_HEADERS =	common_text.h \
 			common_erreurs.h \
 			common_maths.h \
 			common_projet.h
+
 libcommon_la_LIBADD = ../1990/lib1990.la

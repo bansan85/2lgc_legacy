@@ -2,4 +2,3 @@ SUBDIRS =	lib \
 		gui \
 		test
 
-

@@ -47,6 +47,10 @@ typedef struct __List_Gtk_1990
 	GtkTreeStore	*tree_store_dispo;
 	GtkTreeView	*tree_view_dispo;
 	GtkWidget	*button_ajout_dispo;
+	GtkWidget	*table_bas;
+	GtkWidget	*button_generer;
+	GtkWidget	*button_options;
+//	GtkWidget	*status_bar_main;
 } List_Gtk_1990;
 
 int _1990_gtk_groupes(GtkWidget *button __attribute__((unused)), Projet *projet);

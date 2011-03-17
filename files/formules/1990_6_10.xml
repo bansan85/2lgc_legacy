@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+ <semantics>
+  <mrow>
+   <mrow>
+    <mrow>
+     <munder>
+      <mo stretchy="false">∑</mo>
+      <mrow>
+       <mi>j</mi>
+       <mo stretchy="false">⩾</mo>
+       <mn>1</mn>
+      </mrow>
+     </munder>
+     <mfenced open="(" close=")">
+      <mrow>
+       <msub>
+        <mo stretchy="false">γ</mo>
+        <mrow>
+         <mi>G</mi>
+         <mi>,</mi>
+         <mi>j</mi>
+        </mrow>
+       </msub>
+       <msub>
+        <mi>G</mi>
+        <mrow>
+         <mi>k</mi>
+         <mi>,</mi>
+         <mi>j</mi>
+        </mrow>
+       </msub>
+      </mrow>
+     </mfenced>
+    </mrow>
+    <mo stretchy="false">+</mo>
+    <msub>
+     <mo stretchy="false">γ</mo>
+     <mi>p</mi>
+    </msub>
+   </mrow>
+   <mrow>
+    <mi>P</mi>
+    <mo stretchy="false">+</mo>
+    <msub>
+     <mo stretchy="false">γ</mo>
+     <mrow>
+      <mi>Q</mi>
+      <mn>,1</mn>
+     </mrow>
+    </msub>
+   </mrow>
+   <mrow>
+    <msub>
+     <mi>Q</mi>
+     <mrow>
+      <mi>k</mi>
+      <mn>,1</mn>
+     </mrow>
+    </msub>
+    <mo stretchy="false">+</mo>
+    <mrow>
+     <munder>
+      <mo stretchy="false">∑</mo>
+      <mrow>
+       <mi>i</mi>
+       <mo stretchy="false">⩾</mo>
+       <mn>2</mn>
+      </mrow>
+     </munder>
+     <mfenced open="(" close=")">
+      <mrow>
+       <msub>
+        <mo stretchy="false">γ</mo>
+        <mrow>
+         <mi>Q</mi>
+         <mi>,</mi>
+         <mi>i</mi>
+        </mrow>
+       </msub>
+       <msub>
+        <mo stretchy="false">ψ</mo>
+        <mrow>
+         <mn>0,</mn>
+         <mi>i</mi>
+        </mrow>
+       </msub>
+       <msub>
+        <mi>Q</mi>
+        <mrow>
+         <mi>k</mi>
+         <mi>,</mi>
+         <mi>i</mi>
+        </mrow>
+       </msub>
+      </mrow>
+     </mfenced>
+    </mrow>
+   </mrow>
+  </mrow>
+  <annotation encoding="StarMath 5.0">sum from{j geslant 1} left ( %gamma_{G,j} G_{k,j} right ) + %gamma_p P + %gamma_{Q,1} Q_{k,1} + sum from {i geslant 2} left ( %gamma_{Q,i} %psi_{0,i} Q_{k,i} right )</annotation>
+ </semantics>
+</math>

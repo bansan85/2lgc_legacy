@@ -19,13 +19,7 @@ TESTS	=	1990__1_actions \
 1990__1_duree_SOURCES	=	1990__1_duree.c
 1990__1_duree_LDADD	=	../lib/1990/lib1990.la
 
-#			../cmd/common/cmd_text.c \
-#			../cmd/common/erreurs.c \
-#			../cmd/common/projet.c
-
 EXTRA_PROGRAMS = $(TESTS)
 
 datadir		=       @datadir@
-localedir       =       $(datadir)/locale
-DEFS		=       -DLOCALEDIR=\"$(localedir)\" @DEFS@
-
+#localedir       =       $(datadir)/locale
