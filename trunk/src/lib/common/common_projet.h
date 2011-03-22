@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __PROJET_H
-#define __PROJET_H
+#ifndef __COMMON_PROJET_H
+#define __COMMON_PROJET_H
 
 #include <list.h>
 

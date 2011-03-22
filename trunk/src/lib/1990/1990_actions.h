@@ -40,41 +40,21 @@ typedef struct __Action
 	int			numero;
 	int			categorie;			// Les catégories sont définies dans les fonctions _1990_action_categorie
 	LIST			*charges;
-	int			flags;				// 1 si les actions variables sont principales
+	int			flags;
 } Action;
 
-// _1990_action_categorie_bat_txt_eu : renvoie la description des catérogies des actions des bâtiments selon la norme européenne
-// Renvoie NULL si la catégorie n'existe pas
-// type : catégorie de durée d'utilisation de projet
 char *_1990_action_categorie_bat_txt_eu(int type);
-// _1990_action_categorie_bat_txt_fr : renvoie la description des catérogies des actions des bâtimentsselon la norme française
 char *_1990_action_categorie_bat_txt_fr(int type);
-char *_1990_action_categorie_bat_txt(int type, int pays);
+char *_1990_action_categorie_bat_txt(int type, Type_Pays pays);
 
-// _1990_action_type_combinaison_bat_eu : renvoie le type d'une action pour les combinaisons d'action des bâtiments selon la norme européenne
-// Renvoie	: -1 si la catégorie n'existe pas
-//		: 0 si Action permanente
-//		: 1 si action précontrainte
-//		: 2 si action variable
-//		: 3 si accidentelle
-// type : catégorie de durée d'utilisation de projet
 int _1990_action_type_combinaison_bat_eu(int categorie);
-// _1990_action_type_combinaison_bat_fr : renvoie le type d'une action pour les combinaisons d'action des bâtiments selon la norme française
 int _1990_action_type_combinaison_bat_fr(int categorie);
-// Renvoie	: -1 si la catégorie n'existe pas
-//		: 0 si Action permanente
-//		: 1 si action précontrainte
-//		: 2 si action variable
-//		: 3 si accidentelle
-//		: 4 si eaux souterraines
-int _1990_action_type_combinaison_bat(int categorie, int pays);
+int _1990_action_type_combinaison_bat(int categorie, Type_Pays pays);
 
-// _1990_action_groupes 
 int _1990_action_init(Projet *projet);
 int _1990_action_ajout(Projet *projet, int categorie);
-int _1990_action_cherche(void *input, void *curr);
-int _1990_action_cherche_et_positionne(Projet *projet, int numero);
-void _1990_action_affiche_tout(Projet *projet);
-void _1990_action_free(Projet *projet);
+int _1990_action_positionne(Projet *projet, int numero);
+int _1990_action_affiche_tout(Projet *projet);
+int _1990_action_free(Projet *projet);
 
 #endif

@@ -30,6 +30,12 @@
 #include <string.h>
 #include <gtk/gtk.h>
 
+void gtk_window_destroy(GtkWidget *pWidget __attribute__((unused)), GdkEvent *event __attribute__((unused)), Projet *projet)
+{
+	projet_free(projet);
+	gtk_main_quit();
+	return;
+}
 
 int main(int argc, char *argv[])
 {
@@ -39,10 +45,12 @@ int main(int argc, char *argv[])
 	GtkWidget *pButton;
 	Projet *projet;
 	
+	// On charge la localisation
 	setlocale( LC_ALL, "" );
 	bindtextdomain(PACKAGE, LOCALEDIR);
 	textdomain(PACKAGE);
 	
+	// On traite les arguments du programme
 	switch (argc)
 	{
 		case 2:
@@ -63,29 +71,27 @@ int main(int argc, char *argv[])
 		}
 	}
 	
-	/* Initialisation de GTK+ */
+	// Initialisation de GTK+
 	if (gtk_init_check(&argc, &argv) == FALSE)
-	{
-		printf("Impossible d'initialiser gtk\n");
-		BUG(-1);
-	}
+		BUGTEXTE(-1, gettext("Impossible d'initialiser gtk.\n"));
 	
+	// Création d'un projet type
 	projet = projet_init();
-	if (_1990_action_ajout(projet, 0) != 0) BUG(-1); // 0
-	if (_1990_action_ajout(projet, 0) != 0) BUG(-1); // 1
-	if (_1990_action_ajout(projet, 2) != 0) BUG(-1); // 2
-	if (_1990_action_ajout(projet, 2) != 0) BUG(-1); // 3
-	if (_1990_action_ajout(projet, 10) != 0) BUG(-1); // 4
-	if (_1990_action_ajout(projet, 13) != 0) BUG(-1); // 5
-	if (_1990_groupe_niveau_ajout(projet, 0) != 0) BUG(-1);
-	if (_1990_groupe_niveau_ajout(projet, 1) != 0) BUG(-1);
-	if (_1990_groupe_niveau_ajout(projet, 2) != 0) BUG(-1);
+	if (_1990_action_ajout(projet, 0) != 0) BUG(-1);
+	if (_1990_action_ajout(projet, 0) != 0) BUG(-1);
+	if (_1990_action_ajout(projet, 2) != 0) BUG(-1);
+	if (_1990_action_ajout(projet, 2) != 0) BUG(-1);
+	if (_1990_action_ajout(projet, 10) != 0) BUG(-1);
+	if (_1990_action_ajout(projet, 13) != 0) BUG(-1);
+	if (_1990_groupe_niveau_ajout(projet) != 0) BUG(-1);
+	if (_1990_groupe_niveau_ajout(projet) != 0) BUG(-1);
+	if (_1990_groupe_niveau_ajout(projet) != 0) BUG(-1);
 	if (_1990_groupe_ajout(projet, 0, 0, GROUPE_COMBINAISON_AND) != 0) BUG(-1); // Charges permanentes
 	if (_1990_groupe_ajout(projet, 0, 1, GROUPE_COMBINAISON_OR) != 0) BUG(-1); // Charges d'exploitation
 	if (_1990_groupe_ajout(projet, 0, 2, GROUPE_COMBINAISON_XOR) != 0) BUG(-1); // Neige
 	if (_1990_groupe_ajout(projet, 0, 3, GROUPE_COMBINAISON_XOR) != 0) BUG(-1); // Vent
 	if (_1990_groupe_ajout(projet, 1, 0, GROUPE_COMBINAISON_AND) != 0) BUG(-1); // Charges permanentes
-	if (_1990_groupe_ajout(projet, 1, 1, GROUPE_COMBINAISON_OR) != 0) BUG(-1); // Charges permanentes
+	if (_1990_groupe_ajout(projet, 1, 1, GROUPE_COMBINAISON_OR) != 0) BUG(-1); // Charges variables
 	if (_1990_groupe_ajout(projet, 2, 0, GROUPE_COMBINAISON_AND) != 0) BUG(-1); // Tout
 	if (_1990_groupe_ajout_element(projet, 0, 0, 0) != 0) BUG(-1);
 	if (_1990_groupe_ajout_element(projet, 0, 0, 1) != 0) BUG(-1);
@@ -100,20 +106,19 @@ int main(int argc, char *argv[])
 	if (_1990_groupe_ajout_element(projet, 2, 0, 0) != 0) BUG(-1);
 	if (_1990_groupe_ajout_element(projet, 2, 0, 1) != 0) BUG(-1);
 
-	/*Création de la fenêtre */
+	// Création de la fenêtre principale
 	MainWindow = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-	g_signal_connect(G_OBJECT(MainWindow), "delete-event", G_CALLBACK(gtk_main_quit), NULL);
-	g_signal_connect(G_OBJECT(MainWindow), "destroy", G_CALLBACK(gtk_main_quit), NULL);
+	g_signal_connect(G_OBJECT(MainWindow), "delete-event", G_CALLBACK(gtk_window_destroy), projet);
+	g_signal_connect(GTK_WINDOW(MainWindow), "destroy", G_CALLBACK(gtk_window_destroy), projet);
 	pTable=gtk_table_new(1,1,TRUE);
 	gtk_container_add(GTK_CONTAINER(MainWindow), GTK_WIDGET(pTable));
 	pButton= gtk_button_new_with_label("Combinaisons");
 	gtk_table_attach(GTK_TABLE(pTable), pButton, 0, 1, 0, 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
 	g_signal_connect (pButton, "clicked", G_CALLBACK (_1990_gtk_groupes), projet);
 	
-	/* Affichage et boucle évènementielle */
+	// Affichage de l'interface graphique
 	gtk_widget_show_all(MainWindow);
 	gtk_main();
-	
 	
 	return 0;
 }

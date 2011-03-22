@@ -1,6 +1,6 @@
 --- configure.scan.old	2011-02-28 13:46:52.262000002 +0100
 +++ configure.scan	2011-02-28 13:47:53.250000002 +0100
-@@ -2,16 +2,33@@
+@@ -2,16 +2,37@@
  # Process this file with autoconf to produce a configure script.
  
  AC_PREREQ([2.68])
@@ -15,16 +15,20 @@
  AC_PROG_CC
 +AM_PROG_CC_C_O
 +AC_PROG_LIBTOOL
++LIBXML_REQUIRED_VERSION=2.7.0
++AC_SUBST(XML_CPPFLAGS)
++AC_SUBST(XML_LIBS)
++AM_PATH_XML2($LIBXML_REQUIRED_VERSION, :, AC_MSG_ERROR(Test for libXML failed.))
++AC_ARG_WITH(gtk,  [  --without-gtk           build without gtk support], [withgtk=true], [withgtk=false])
++AC_MSG_RESULT([XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
++with-gtk $withgtk
++XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX])
++AM_CONDITIONAL(ENABLE_GTK, test x$withgtk = xtrue)
++if test "x$withgtk" = "xtrue"; then
 +GTK_REQUIRED_VERSION=3.0.3
 +GLIB_REQUIRED_VERSION=2.28.3
 +AM_PATH_GTK_3_0($GTK_REQUIRED_VERSION, :, AC_MSG_ERROR(Test for GTK+ failed.))
 +AM_PATH_GLIB_2_0($GLIB_REQUIRED_VERSION, :, AC_MSG_ERROR(Test for GLIB failed.))
-+AC_ARG_WITH(gtk,  [  --without-gtk           build without gtk support], [withgtk=true], [withgtk=false])
-+AC_MSG_RESULT([XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-+with-gtk $withgtk
-+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX])
-+AM_CONDITIONAL(ENABLE_GTK, test x$withgtk = xtrue)
-+if test "x$withgtk" = "xtrue"; then
 +AC_DEFINE(ENABLE_GTK, 1, [Défini si GTK doit être supporté])
 +fi
 +AM_GNU_GETTEXT([external])

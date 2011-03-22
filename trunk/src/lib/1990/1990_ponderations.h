@@ -38,6 +38,5 @@ typedef struct __Ponderation
 } Ponderation;
 
 int _1990_ponderations_genere(Projet *projet);
-int _1990_ponderations_genere_eu(Projet *projet);
 void _1990_ponderations_affiche_tout(Projet *projet);
 #endif

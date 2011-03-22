@@ -22,6 +22,11 @@
 #include <locale.h>
 
 
+/* show_warranty
+ * Description : Affiche les limites de la garantie
+ * Paramètres : Aucun
+ * Valeur renvoyée : Aucune
+ */
 void show_warranty()
 {
 	printf(gettext("15. Disclaimer of Warranty.\n"));
@@ -58,6 +63,11 @@ void show_warranty()
 	return;
 }
 
+/* show_help
+ * Description : Affiche l'aide
+ * Paramètres : Aucun
+ * Valeur renvoyée : Aucune
+ */
 void show_help()
 {
 	printf(gettext("Utilisation : codegui [OPTION]... [FILE]...\n"));
@@ -66,4 +76,3 @@ void show_help()
 	printf(gettext("\t-w, --warranty : affiche les limites de garantie du logiciel\n"));
 	return;
 }
-

@@ -40,7 +40,7 @@ typedef struct __List_Gtk_1990
 	GtkWidget	*button_groupe_and;
 	GtkWidget	*button_groupe_or;
 	GtkWidget	*button_groupe_xor;
-	GtkWidget	*button_groupe_ok;
+	GtkWidget	*button_groupe_nom;
 	GtkWidget	*entry_groupe_nom;
 	GtkWidget	*frame_dispo;
 	GtkWidget	*table_dispo;
@@ -50,10 +50,10 @@ typedef struct __List_Gtk_1990
 	GtkWidget	*table_bas;
 	GtkWidget	*button_generer;
 	GtkWidget	*button_options;
-//	GtkWidget	*status_bar_main;
 } List_Gtk_1990;
 
-int _1990_gtk_groupes(GtkWidget *button __attribute__((unused)), Projet *projet);
+void _1990_gtk_groupes(GtkWidget *button __attribute__((unused)), Projet *projet);
+
 #endif
 
 #endif
