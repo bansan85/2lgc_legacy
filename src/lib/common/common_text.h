@@ -16,8 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Affiche les limites de garantie du logiciel
-void show_warranty();
+#ifndef __COMMON_TEXT_H
+#define __COMMON_TEXT_H
 
-// Affiche l'aide
+void show_warranty();
 void show_help();
+
+#endif

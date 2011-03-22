@@ -16,8 +16,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <libintl.h>
-#include <locale.h>
+#ifndef __COMMON_TOOLTIP_H
+#define __COMMON_TOOLTIP_H
 
+#include "config.h"
+
+#ifdef ENABLE_GTK
+#include <gtk/gtk.h>
+
+GtkWindow* common_generation_tooltip(const char *nom);
+#endif
+
+#endif

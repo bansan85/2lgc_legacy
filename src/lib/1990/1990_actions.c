@@ -26,9 +26,14 @@
 #include "common_projet.h"
 #include "common_erreurs.h"
 
-// _1990_duree_projet_txt_eu : renvoie la description des catérogies des durées indicative de la norme européenne
-// Renvoie NULL si la catégorie n'existe pas
-// type : catégorie de durée d'utilisation de projet
+
+/* _1990_action_categorie_bat_txt_eu
+ * Description : renvoie la description des catérogies des durées indicative de la norme européenne
+ * Paramètres : int type : catégorie de durée d'utilisation de projet
+ * Valeur renvoyée :
+ *   Succès : le texte correspondant
+ *   Échec : NULL si la catégorie n'existe pas
+ */
 char *_1990_action_categorie_bat_txt_eu(int type)
 {
 	switch(type)
@@ -50,13 +55,17 @@ char *_1990_action_categorie_bat_txt_eu(int type)
 		case 14 : { return gettext("Température (hors incendie)"); break; }
 		case 15 : { return gettext("Accidentelle"); break; }
 		case 16 : { return gettext("Sismique"); break; }
-		default : { BUG(NULL); break; }
+		default : { BUGTEXTE(NULL, gettext("Catégorie inconnue.\n")); break; }
 	}
 }
 
-// _1990_duree_projet_txt_fr : renvoie la description des catérogies des durées indicative de la norme européenne
-// Renvoie NULL si la catégorie n'existe pas
-// type : catégorie de durée d'utilisation de projet
+/* _1990_action_categorie_bat_txt_fr
+ * Description : renvoie la description des catérogies des durées indicative de la norme européenne
+ * Paramètres : int type : catégorie de durée d'utilisation de projet
+ * Valeur renvoyée :
+ *   Succès : le texte correspondant
+ *   Échec : NULL si la catégorie n'existe pas
+ */
 char *_1990_action_categorie_bat_txt_fr(int type)
 {
 	switch(type)
@@ -83,27 +92,39 @@ char *_1990_action_categorie_bat_txt_fr(int type)
 		case 19 : { return gettext("Accidentelle"); break; }
 		case 20 : { return gettext("Sismique"); break; }
 		case 21 : { return gettext("Eaux souterraines"); break; }
-		default : { BUG(NULL); break; }
+		default : { BUGTEXTE(NULL, gettext("Catégorie inconnue.\n")); break; }
 	}
 }
 
-char *_1990_action_categorie_bat_txt(int type, int pays)
+/* _1990_action_categorie_bat_txt
+ * Description : renvoie la description des catérogies des durées indicative en fonction du pays
+ * Paramètres : int type : catégorie de durée d'utilisation de projet
+ *            : Type_Pays pays : le numéro du pays
+ * Valeur renvoyée :
+ *   Succès : le texte correspondant
+ *   Échec : NULL si la catégorie n'existe pas
+ */
+char *_1990_action_categorie_bat_txt(int type, Type_Pays pays)
 {
 	switch (pays)
 	{
 		case PAYS_EU : { return _1990_action_categorie_bat_txt_eu(type); break; }
 		case PAYS_FR : { return _1990_action_categorie_bat_txt_fr(type); break; }
-		default : { BUG(NULL); break; }
+		default : { BUGTEXTE(NULL, gettext("Pays inconnu.\n")); break; }
 	}
 }
 
-// _1990_action_type_combinaison_bat_eu : renvoie le type d'une action pour les combinaisons d'action des bâtiments selon la norme européenne
-// Renvoie	: -1 si la catégorie n'existe pas
-//		: 1 si Action permanente
-//		: 2 si action précontrainte
-//		: 3 si action variable
-//		: 4 si accidentelle
-// type : catégorie de durée d'utilisation de projet
+/* _1990_action_type_combinaison_bat_eu
+ * Description : renvoie le type d'une action pour les combinaisons d'action des bâtiments selon la norme européenne
+ * Paramètres : int categorie : categorie de l'action
+ * Valeur renvoyée :
+ *   Succès : 0 : Poids propre
+ *            1 : Précontrainte
+ *            2 : Action variable
+ *            3 : Action accidentelle
+ *            4 : Action sismique
+ *   Échec : -1 si la catégorie n'existe pas
+ */
 int _1990_action_type_combinaison_bat_eu(int categorie)
 {
 	if (categorie == 0) // Poids propre
@@ -117,16 +138,21 @@ int _1990_action_type_combinaison_bat_eu(int categorie)
 	else if (categorie == 16) // sismique
 		return 4;
 	else
-		BUG(-1);
+		BUGTEXTE(-1, gettext("Catégorie inconnue.\n"));
 }
 
-// _1990_action_type_combinaison_bat_fr : renvoie le type d'une action pour les combinaisons d'action des bâtiments selon la norme française
-// Renvoie	: -1 si la catégorie n'existe pas
-//		: 1 si Action permanente
-//		: 2 si action précontrainte
-//		: 3 si action variable
-//		: 4 si accidentelle
-//		: 5 si eaux souterraines
+/* _1990_action_type_combinaison_bat_fr
+ * Description : renvoie le type d'une action pour les combinaisons d'action des bâtiments selon la norme française
+ * Paramètres : int categorie : categorie de l'action
+ * Valeur renvoyée :
+ *   Succès : 0 : Poids propre
+ *            1 : Précontrainte
+ *            2 : Action variable
+ *            3 : Action accidentelle
+ *            4 : Action sismique
+ *            5 : Action due aux eaux souterraines
+ *   Échec : -1 si la catégorie n'existe pas
+ */
 int _1990_action_type_combinaison_bat_fr(int categorie)
 {
 	if (categorie == 0) // Poids propre
@@ -142,101 +168,156 @@ int _1990_action_type_combinaison_bat_fr(int categorie)
 	else if (categorie == 21) // Eaux souterraines
 		return 5;
 	else
-		BUG(-1);
+		BUGTEXTE(-1, gettext("Catégorie inconnue.\n"));
 }
 
-int _1990_action_type_combinaison_bat(int categorie, int pays)
+/* _1990_action_categorie_bat
+ * Description : renvoie le type d'une action pour les combinaisons d'action des bâtiments en fonction du pays
+ * Paramètres : int type : catégorie de l'action
+ *            : Type_Pays pays : le numéro du pays
+ * Valeur renvoyée :
+ *   Succès : cf les fonctions _1990_action_categorie_bat_PAYS
+ *   Échec : -1 si le pays n'existe pas
+ */
+int _1990_action_type_combinaison_bat(int categorie, Type_Pays pays)
 {
 	switch (pays)
 	{
 		case PAYS_EU : { return _1990_action_type_combinaison_bat_eu(categorie); break; }
 		case PAYS_FR : { return _1990_action_type_combinaison_bat_fr(categorie); break; }
-		default : { BUG(-1); break; }
+		default : { BUGTEXTE(-1, gettext("Pays inconnu.\n")); break; }
 	}
 }
 
-// _1990_action_init : Initialise la liste des actions
+/* _1990_action_init
+ * Description : Initialise la liste des actions
+ * Paramètres : Projet *projet : la variable projet
+ * Valeur renvoyée :
+ *   Succès : 0
+ *   Échec : valeur négative
+ */
 int _1990_action_init(Projet *projet)
 {
+	if (projet == NULL)
+		BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
+	
 	projet->actions = list_init();
 	if (projet->actions == NULL)
-		BUG(-1);
+		BUGTEXTE(-2, gettext("Erreur d'allocation mémoire.\n"));
 	else
 		return 0;
 }
 
-// _1990_action_nouveau_init : ajouter une nouvelle action à la liste des actions
-// Renvoie -1 si le pays ou la catégorie n'est pas bon
-// Renvoie -2 si l'insertion a échoué
-// Renvoie 0 si tout va bien
+/* _1990_action_ajout
+ * Description : ajouter une nouvelle action à la liste des actions
+ * Paramètres : Projet *projet : la variable projet
+ *            : int categorie : la catégorie de l'action
+ * Valeur renvoyée :
+ *   Succès : 0
+ *   Échec : valeur négative
+ */
 int _1990_action_ajout(Projet *projet, int categorie)
 {
-	Action *action_dernier, action_nouveau;
-
-	if (_1990_action_type_combinaison_bat(categorie, projet->pays) == -1)
-		BUG(-1);
+	Action		*action_dernier, action_nouveau;
+	
+	if ((projet == NULL) || (_1990_action_type_combinaison_bat(categorie, projet->pays) < 0))
+		BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
+	
 	list_mvrear(projet->actions);
-	action_dernier = (Action *)list_rear(projet->actions);
 	action_nouveau.nom = NULL;
 	action_nouveau.description = NULL;
 	action_nouveau.categorie = categorie;
 	action_nouveau.flags = 0;
+	
+	action_dernier = (Action *)list_rear(projet->actions);
 	if (action_dernier == NULL)
 		action_nouveau.numero = 0;
 	else
 		action_nouveau.numero = action_dernier->numero+1;
 	
 	if (list_insert_after(projet->actions, &(action_nouveau), sizeof(action_nouveau)) == NULL)
-		BUG(-2);
+		BUGTEXTE(-2, gettext("Erreur d'allocation mémoire.\n"));
 	
 	return 0;
 }
 
-int _1990_action_cherche(void *input, void *curr)
+/* _1990_action_positionne
+ * Description : Cherche et marque l'action n°numero comme celle en cours
+ *             : l'action correspondant au numéro doit obligatoirement est existant
+ * Paramètres : Projet *projet : la variable projet
+ *            : int numero : le numéro de l'action dans projet->actions
+ * Valeur renvoyée :
+ *   Succès : 0
+ *   Échec : valeur négative
+ */
+int _1990_action_positionne(Projet *projet, int numero)
 {
-	Action *action = (Action*)curr;
-	int *numero = (int *)input;
-	if (action->numero == (*numero))
-		return FALSE;
-	else
-		return TRUE;
+	if ((projet == NULL) || (projet->actions == NULL) || (list_size(projet->actions) == 0))
+		BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
+	
+	list_mvfront(projet->actions);
+	do
+	{
+		Action		*action = list_curr(projet->actions);
+		
+		if (action->numero == numero)
+			return 0;
+	}
+	while (list_mvnext(projet->actions) != NULL);
+	BUGTEXTE(-2, gettext("Action %d introuvable.\n"), numero);
 }
 
-int _1990_action_cherche_et_positionne(Projet *projet, int numero)
+/* _1990_action_affiche_tout
+ * Description : Affiche dans l'entrée standard les actions existantes
+ * Paramètres : Projet *projet : la variable projet
+ * Valeur renvoyée :
+ *   Succès : 0 même si aucune action n'est existante
+ *   Échec : valeur négative si la liste des actions n'est pas initialisée
+ */
+int _1990_action_affiche_tout(Projet *projet)
 {
-	if (list_traverse(projet->actions, (void *)&(numero), _1990_action_cherche, LIST_ALTR) == LIST_OK)
+	if ((projet == NULL) || (projet->actions == NULL))
+		BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
+	if (list_size(projet->actions) == 0)
 		return 0;
-	else
-		BUG(-1);
+	
+	list_mvfront(projet->actions);
+	do
+	{
+		Action		*action = list_curr(projet->actions);
+		
+		printf("Action '%s', numéro %d, description '%s', catégorie n°%d\n", action->nom, action->numero, action->description, action->categorie);
+	}
+	while (list_mvnext(projet->actions) != NULL);
+	
+	return 0;
 }
 
-int _1990_action_affiche(__attribute__((unused)) void *input, void *curr)
+/* _1990_action_free
+ * Description : Libère l'ensemble des actions existantes
+ * Paramètres : Projet *projet : la variable projet
+ * Valeur renvoyée :
+ *   Succès : 0 même si aucune action n'est existante
+ *   Échec : valeur négative si la liste des actions n'est pas initialisée ou a déjà été libérée
+ */
+int _1990_action_free(Projet *projet)
 {
-	Action *action = (Action*)curr;
-	printf("%s %s %d %d\n", action->nom, action->description, action->numero, action->categorie);
-	return TRUE;
-}
-
-void _1990_action_affiche_tout(Projet *projet)
-{
-	list_traverse(projet->actions, (void *)NULL, _1990_action_affiche, 0);
-	return;
-}
-
-void _1990_action_free_free(void *data)
-{
-	Action *action = (Action*)data;
-	if (action->nom != NULL)
-		free(action->nom);
-	if (action->description != NULL)
-		free(action->description);
-	free(action);
-	return;
-}
-
-void _1990_action_free(Projet *projet)
-{
-	list_free(projet->actions, &(_1990_action_free_free));
+	if ((projet == NULL) || (projet->actions == NULL))
+		BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
+	
+	while (!list_empty(projet->actions))
+	{
+		Action		*action = list_remove_front(projet->actions);
+		
+		if (action->nom != NULL)
+			free(action->nom);
+		if (action->description != NULL)
+			free(action->description);
+		free(action);
+	}
+	
+	free(projet->actions);
 	projet->actions = NULL;
-	return;
+	
+	return 0;
 }

@@ -16,8 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef __COMMON_ERREURS_H
+#define __COMMON_ERREURS_H
+
 #include <stdlib.h>
+#include <stdio.h>
 
 // Pour les erreurs de programmes
 #define BUG(X) ({free((int*)1); return X;})
+#define BUGTEXTE(X, ...) ({printf(__VA_ARGS__); free((int*)1); return X;})
 
+#endif

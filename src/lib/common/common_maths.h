@@ -16,6 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef __COMMON_MATHS_H
+#define __COMMON_MATHS_H
+
 #define MAX(X, Y)  ((X) > (Y) ? (X) : (Y))
 #define MIN(X, Y)  ((X) < (Y) ? (X) : (Y))
 #define ABS(X) ((X) > 0 ? (X) : -(X))
@@ -29,3 +32,4 @@
 
 #define ERREUR_RELATIVE_MIN 1e-14
 
+#endif

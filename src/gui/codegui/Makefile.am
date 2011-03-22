@@ -8,4 +8,3 @@ codegui_SOURCES		= main.c
 codegui_CPPFLAGS	= @GTK_CFLAGS@
 codegui_LDADD		= @GTK_LIBS@ ../../lib/common/libcommon.la ../../lib/1990/lib1990.la
 endif
-

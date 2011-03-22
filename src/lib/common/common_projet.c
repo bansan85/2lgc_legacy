@@ -27,9 +27,17 @@
 #include "1990_groupes.h"
 #include "1990_combinaisons.h"
 
+/* projet_init
+ * Description : Initialise la variable projet
+ * Paramètres : Aucun
+ * Valeur renvoyée :
+ *   Succès : Un pointeur vers une zone mémoire projet
+ *   Échec : NULL
+ */
 Projet *projet_init()
 {
 	Projet *projet;
+	
 	projet = (Projet*)malloc(sizeof(Projet));
 	if (projet == NULL)
 		BUG(NULL);
@@ -57,6 +65,13 @@ Projet *projet_init()
 	return projet;
 }
 
+/* projet_free
+ * Description : Libère les allocations mémoires de l'ensemble de la variable projet
+ * Paramètres : Aucun
+ * Valeur renvoyée :
+ *   Succès : Un pointeur vers une zone mémoire projet
+ *   Échec : NULL
+ */
 int projet_free(Projet *projet)
 {
 	if (projet->actions != NULL)
