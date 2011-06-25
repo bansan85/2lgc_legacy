@@ -26,6 +26,9 @@
 #include "1990_actions.h"
 #include "1990_groupes.h"
 #include "1990_combinaisons.h"
+#include "EF_noeud.h"
+#include "1992_1_1_elements.h"
+#include "1992_1_1_section.h"
 
 /* projet_init
  * Description : Initialise la variable projet
@@ -59,6 +62,33 @@ Projet *projet_init()
 		free(projet);
 		BUG(NULL);
 	}
+	if (EF_noeuds_init(projet) != 0)
+	{
+		_1990_combinaisons_free(projet);
+		_1990_groupe_free(projet);
+		_1990_action_free(projet);
+		free(projet);
+		BUG(NULL);
+	}
+	if (_1992_1_1_sections_init(projet) != 0)
+	{
+		EF_noeuds_free(projet);
+		_1990_combinaisons_free(projet);
+		_1990_groupe_free(projet);
+		_1990_action_free(projet);
+		free(projet);
+		BUG(NULL);
+	}
+	if (_1992_1_1_elements_init(projet) != 0)
+	{
+		_1992_1_1_sections_free(projet);
+		EF_noeuds_free(projet);
+		_1990_combinaisons_free(projet);
+		_1990_groupe_free(projet);
+		_1990_action_free(projet);
+		free(projet);
+		BUG(NULL);
+	}
 	projet->list_gtk._1990 = NULL;
 	
 	projet->pays = PAYS_EU;
@@ -80,9 +110,17 @@ int projet_free(Projet *projet)
 		_1990_groupe_free(projet);
 	if (projet->combinaisons.elu_equ != NULL)
 		_1990_combinaisons_free(projet);
+	if (projet->noeuds != NULL)
+		EF_noeuds_free(projet);
+	if (projet->beton.sections != NULL)
+		_1992_1_1_sections_free(projet);
+	if (projet->beton.elements != NULL)
+		_1992_1_1_elements_free(projet);
 	
-	// On ne vérifie pas si l'élément est NULL car free sans charge avant de libérer la mémoire
+	// On ne vérifie pas si l'élément est NULL car free s'en charge avant de libérer la mémoire
 	free(projet->list_gtk._1990);
+	projet->list_gtk._1990 = NULL;
 	free(projet);
+	
 	return 0;
 }

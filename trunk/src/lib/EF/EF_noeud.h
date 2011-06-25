@@ -16,3 +16,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef __EF_NOEUD_H
+#define __EF_NOEUD_H
+
+#include "common_projet.h"
+
+typedef struct
+{
+	double		x;
+	double		y;
+	double		z;
+} EF_Point;
+
+
+typedef struct
+{
+	EF_Point	position;
+} EF_noeud;
+
+int EF_noeuds_init(Projet *projet);
+int EF_noeuds_free(Projet *projet);
+
+#endif

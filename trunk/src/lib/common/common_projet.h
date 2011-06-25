@@ -50,8 +50,14 @@ typedef struct __CombinaisonsEL
 
 typedef struct __List_Gtk
 {
-	void		*_1990;
+	void			*_1990;
 } List_Gtk;
+
+typedef struct
+{
+	LIST			*sections;
+	LIST			*elements;
+} Elements_Beton;
 
 typedef struct __Projet
 {
@@ -60,6 +66,8 @@ typedef struct __Projet
 	CombinaisonsEL		combinaisons;
 	Type_Pays		pays;
 	List_Gtk		list_gtk;
+	LIST			*noeuds;
+	Elements_Beton		beton;
 } Projet;
 
 Projet *projet_init();

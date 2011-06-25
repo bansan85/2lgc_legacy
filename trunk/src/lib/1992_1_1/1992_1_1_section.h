@@ -16,3 +16,47 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef __1992_1_1_SECTION_H
+#define __1992_1_1_SECTION_H
+
+typedef enum
+{
+	BETON_SECTION_RECTANGULAIRE,
+	BETON_SECTION_T,
+	BETON_SECTION_CARRE,
+	BETON_SECTION_CIRCULAIRE
+} Type_Beton_Section;
+
+
+typedef struct __Beton_Section_Rectangulaire
+{
+	double		largeur;
+	double		hauteur;
+} Beton_Section_Rectangulaire;
+
+
+typedef struct __Beton_Section_T
+{
+	double		largeur_table;
+	double		largeur_ame;
+	double		hauteur_table;
+	double		hauteur_ame;
+} Beton_Section_T;
+
+
+typedef struct __Beton_Section_Carre
+{
+	double		cote;
+} Beton_Section_Carre;
+
+
+typedef struct __Beton_Section_Circulaire
+{
+	double		diametre;
+} Beton_Section_Circulaire;
+
+
+int _1992_1_1_sections_init(Projet *projet);
+int _1992_1_1_sections_free(Projet *projet);
+
+#endif
