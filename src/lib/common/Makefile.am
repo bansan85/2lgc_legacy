@@ -1,6 +1,8 @@
 DEFAULT_INCLUDES	=	-I../../.. \
 				-I../1990 \
-				-I.
+				-I. \
+				-I../EF \
+				-I../1992_1_1
 
 lib_LTLIBRARIES = libcommon.la
 
@@ -16,7 +18,7 @@ libcommon_la_HEADERS =	common_text.h \
 			common_projet.h \
 			common_tooltip.h
 
-libcommon_la_LIBADD = ../1990/lib1990.la @XML_LIBS@
+libcommon_la_LIBADD = ../1990/lib1990.la ../1992_1_1/lib1992_1_1.la ../EF/libEF.la @XML_LIBS@
 libcommon_la_CPPFLAGS=@XML_CPPFLAGS@
 
 if ENABLE_GTK

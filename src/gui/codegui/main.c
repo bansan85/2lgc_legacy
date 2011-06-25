@@ -30,7 +30,7 @@
 #include <string.h>
 #include <gtk/gtk.h>
 
-void gtk_window_destroy(GtkWidget *pWidget __attribute__((unused)), GdkEvent *event __attribute__((unused)), Projet *projet)
+void gtk_window_delete_event(GtkWidget *pWidget __attribute__((unused)), GdkEvent *event __attribute__((unused)), Projet *projet)
 {
 	projet_free(projet);
 	gtk_main_quit();
