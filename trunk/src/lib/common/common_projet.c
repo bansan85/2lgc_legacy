@@ -80,6 +80,9 @@ int projet_free(Projet *projet)
 		_1990_groupe_free(projet);
 	if (projet->combinaisons.elu_equ != NULL)
 		_1990_combinaisons_free(projet);
+	
+	// On ne vérifie pas si l'élément est NULL car free sans charge avant de libérer la mémoire
+	free(projet->list_gtk._1990);
 	free(projet);
 	return 0;
 }

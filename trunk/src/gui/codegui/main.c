@@ -58,10 +58,12 @@ int main(int argc, char *argv[])
 			if ((strcmp(argv[1], "-w") == 0) || (strcmp(argv[1], "--warranty") == 0))
 			{
 				show_warranty();
+				return 0;
 			}
 			else if ((strcmp(argv[1], "-h") == 0) || (strcmp(argv[1], "--help") == 0))
 			{
 				show_help();
+				return 0;
 			}
 			break;
 		}
@@ -77,39 +79,43 @@ int main(int argc, char *argv[])
 	
 	// Création d'un projet type
 	projet = projet_init();
-	if (_1990_action_ajout(projet, 0) != 0) BUG(-1);
-	if (_1990_action_ajout(projet, 0) != 0) BUG(-1);
-	if (_1990_action_ajout(projet, 2) != 0) BUG(-1);
-	if (_1990_action_ajout(projet, 2) != 0) BUG(-1);
-	if (_1990_action_ajout(projet, 10) != 0) BUG(-1);
-	if (_1990_action_ajout(projet, 13) != 0) BUG(-1);
+	if (_1990_action_ajout(projet, 0) != 0) BUG(-1); // Poids prore
+	if (_1990_action_ajout(projet, 2) != 0) BUG(-1); // 2
+	if (_1990_action_ajout(projet, 12) != 0) BUG(-1); // 3
+	if (_1990_action_ajout(projet, 13) != 0) BUG(-1); // 4
+	if (_1990_groupe_niveau_ajout(projet) != 0) BUG(-1);
 	if (_1990_groupe_niveau_ajout(projet) != 0) BUG(-1);
 	if (_1990_groupe_niveau_ajout(projet) != 0) BUG(-1);
 	if (_1990_groupe_niveau_ajout(projet) != 0) BUG(-1);
 	if (_1990_groupe_ajout(projet, 0, 0, GROUPE_COMBINAISON_AND) != 0) BUG(-1); // Charges permanentes
-	if (_1990_groupe_ajout(projet, 0, 1, GROUPE_COMBINAISON_OR) != 0) BUG(-1); // Charges d'exploitation
+	if (_1990_groupe_ajout(projet, 0, 1, GROUPE_COMBINAISON_AND) != 0) BUG(-1); // Charges d'exploitation
 	if (_1990_groupe_ajout(projet, 0, 2, GROUPE_COMBINAISON_XOR) != 0) BUG(-1); // Neige
 	if (_1990_groupe_ajout(projet, 0, 3, GROUPE_COMBINAISON_XOR) != 0) BUG(-1); // Vent
 	if (_1990_groupe_ajout(projet, 1, 0, GROUPE_COMBINAISON_AND) != 0) BUG(-1); // Charges permanentes
-	if (_1990_groupe_ajout(projet, 1, 1, GROUPE_COMBINAISON_OR) != 0) BUG(-1); // Charges variables
+	if (_1990_groupe_ajout(projet, 1, 1, GROUPE_COMBINAISON_AND) != 0) BUG(-1); // Charges d'exploitation
+	if (_1990_groupe_ajout(projet, 1, 2, GROUPE_COMBINAISON_OR) != 0) BUG(-1); // Charges climatiques
 	if (_1990_groupe_ajout(projet, 2, 0, GROUPE_COMBINAISON_AND) != 0) BUG(-1); // Tout
+	if (_1990_groupe_ajout(projet, 2, 1, GROUPE_COMBINAISON_OR) != 0) BUG(-1); // Tout
+	if (_1990_groupe_ajout(projet, 3, 0, GROUPE_COMBINAISON_AND) != 0) BUG(-1); // Tout
 	if (_1990_groupe_ajout_element(projet, 0, 0, 0) != 0) BUG(-1);
-	if (_1990_groupe_ajout_element(projet, 0, 0, 1) != 0) BUG(-1);
-	if (_1990_groupe_ajout_element(projet, 0, 1, 2) != 0) BUG(-1);
-	if (_1990_groupe_ajout_element(projet, 0, 1, 3) != 0) BUG(-1);
-	if (_1990_groupe_ajout_element(projet, 0, 2, 4) != 0) BUG(-1);
-	if (_1990_groupe_ajout_element(projet, 0, 3, 5) != 0) BUG(-1);
+	if (_1990_groupe_ajout_element(projet, 0, 1, 1) != 0) BUG(-1);
+	if (_1990_groupe_ajout_element(projet, 0, 2, 2) != 0) BUG(-1);
+	if (_1990_groupe_ajout_element(projet, 0, 3, 3) != 0) BUG(-1);
 	if (_1990_groupe_ajout_element(projet, 1, 0, 0) != 0) BUG(-1);
 	if (_1990_groupe_ajout_element(projet, 1, 1, 1) != 0) BUG(-1);
-	if (_1990_groupe_ajout_element(projet, 1, 1, 2) != 0) BUG(-1);
-	if (_1990_groupe_ajout_element(projet, 1, 1, 3) != 0) BUG(-1);
+	if (_1990_groupe_ajout_element(projet, 1, 2, 2) != 0) BUG(-1);
+	if (_1990_groupe_ajout_element(projet, 1, 2, 3) != 0) BUG(-1);
 	if (_1990_groupe_ajout_element(projet, 2, 0, 0) != 0) BUG(-1);
-	if (_1990_groupe_ajout_element(projet, 2, 0, 1) != 0) BUG(-1);
+	if (_1990_groupe_ajout_element(projet, 2, 1, 1) != 0) BUG(-1);
+	if (_1990_groupe_ajout_element(projet, 2, 1, 2) != 0) BUG(-1);
+	if (_1990_groupe_ajout_element(projet, 3, 0, 0) != 0) BUG(-1);
+	if (_1990_groupe_ajout_element(projet, 3, 0, 1) != 0) BUG(-1);
 
 	// Création de la fenêtre principale
 	MainWindow = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-	g_signal_connect(G_OBJECT(MainWindow), "delete-event", G_CALLBACK(gtk_window_destroy), projet);
-	g_signal_connect(GTK_WINDOW(MainWindow), "destroy", G_CALLBACK(gtk_window_destroy), projet);
+	g_signal_connect(G_OBJECT(MainWindow), "delete-event", G_CALLBACK(gtk_window_delete_event), projet);
+	// Ne pas mettre sinon projet est libéré deux fois.
+	//g_signal_connect(GTK_WINDOW(MainWindow), "destroy", G_CALLBACK(gtk_window_destroy), projet);
 	pTable=gtk_table_new(1,1,TRUE);
 	gtk_container_add(GTK_CONTAINER(MainWindow), GTK_WIDGET(pTable));
 	pButton= gtk_button_new_with_label("Combinaisons");
