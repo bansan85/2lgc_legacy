@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2011-06-25 19:49+0200\n"
+"POT-Creation-Date: 2011-06-26 11:48+0200\n"
 "PO-Revision-Date: 2011-03-22 20:55+0100\n"
 "Last-Translator: LE GARREC Vincent <vlg@2lgc.org>\n"
 "Language-Team: French\n"
@@ -261,8 +261,12 @@ msgstr "Le fichier '%s' est vide.\n"
 #: src/lib/1990/1990_combinaisons.c:857
 #: src/lib/1992_1_1/1992_1_1_elements.c:27
 #: src/lib/1992_1_1/1992_1_1_elements.c:39
-#: src/lib/1992_1_1/1992_1_1_section.c:27
-#: src/lib/1992_1_1/1992_1_1_section.c:39 src/lib/EF/EF_noeud.c:35
+#: src/lib/1992_1_1/1992_1_1_section.c:35
+#: src/lib/1992_1_1/1992_1_1_section.c:59
+#: src/lib/1992_1_1/1992_1_1_section.c:95
+#: src/lib/1992_1_1/1992_1_1_section.c:130
+#: src/lib/1992_1_1/1992_1_1_section.c:162
+#: src/lib/1992_1_1/1992_1_1_section.c:190 src/lib/EF/EF_noeud.c:35
 #: src/lib/EF/EF_noeud.c:47
 msgid "Paramètres invalides.\n"
 msgstr "Paramètres invalides.\n"
@@ -292,7 +296,11 @@ msgstr "Paramètres invalides.\n"
 #: src/lib/1990/1990_combinaisons.c:632 src/lib/1990/1990_combinaisons.c:659
 #: src/lib/1990/1990_combinaisons.c:730
 #: src/lib/1992_1_1/1992_1_1_elements.c:31
-#: src/lib/1992_1_1/1992_1_1_section.c:31 src/lib/EF/EF_noeud.c:39
+#: src/lib/1992_1_1/1992_1_1_section.c:39
+#: src/lib/1992_1_1/1992_1_1_section.c:73
+#: src/lib/1992_1_1/1992_1_1_section.c:111
+#: src/lib/1992_1_1/1992_1_1_section.c:143
+#: src/lib/1992_1_1/1992_1_1_section.c:175 src/lib/EF/EF_noeud.c:39
 msgid "Erreur d'allocation mémoire.\n"
 msgstr "Erreur d'allocation mémoire.\n"
 

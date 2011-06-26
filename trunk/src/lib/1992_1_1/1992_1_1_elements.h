@@ -30,7 +30,6 @@ typedef enum
 
 typedef struct __Beton_Element_Poutre
 {
-	Type_Beton_Section	section;
 	Type_Beton_Element	element;
 	void			*dimensions;
 	
