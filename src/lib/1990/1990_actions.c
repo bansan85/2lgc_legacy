@@ -220,7 +220,7 @@ int _1990_action_ajout(Projet *projet, int categorie)
 {
 	Action		*action_dernier, action_nouveau;
 	
-	if ((projet == NULL) || (_1990_action_type_combinaison_bat(categorie, projet->pays) < 0))
+	if ((projet == NULL) || (projet->actions == NULL) || (_1990_action_type_combinaison_bat(categorie, projet->pays) < 0))
 		BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
 	
 	list_mvrear(projet->actions);

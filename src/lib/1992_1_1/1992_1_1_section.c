@@ -20,7 +20,15 @@
 #include <libintl.h>
 #include "common_projet.h"
 #include "common_erreurs.h"
+#include "1992_1_1_section.h"
 
+/* _1992_1_1_sections_init
+ * Description : Initialise la liste des section en béton
+ * Paramètres : Projet *projet : la variable projet
+ * Valeur renvoyée :
+ *   Succès : 0
+ *   Échec : valeur négative
+ */
 int _1992_1_1_sections_init(Projet *projet)
 {
 	if (projet == NULL)
@@ -33,6 +41,149 @@ int _1992_1_1_sections_init(Projet *projet)
 		return 0;
 }
 
+/* _1992_1_1_sections_ajout_rectangulaire
+ * Description : ajouter une nouvelle section rectangulaire à la liste des sections en béton
+ * Paramètres : Projet *projet : la variable projet
+ *            : double largeur : la largeur
+ *            : double hauteur : la hauteur
+ * Valeur renvoyée :
+ *   Succès : 0
+ *   Échec : valeur négative
+ */
+int _1992_1_1_sections_ajout_rectangulaire(Projet *projet, double largeur, double hauteur)
+{
+	Beton_Section_Extrait		*section_en_cours;
+	Beton_Section_Rectangulaire	section_nouvelle;
+	
+	if ((projet == NULL) || (projet->beton.sections == NULL))
+		BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
+	
+	list_mvrear(projet->beton.sections);
+	section_nouvelle.section = BETON_SECTION_RECTANGULAIRE;
+	section_nouvelle.largeur = largeur;
+	section_nouvelle.hauteur = hauteur;
+	
+	section_en_cours = (Beton_Section_Extrait *)list_rear(projet->beton.sections);
+	if (section_en_cours == NULL)
+		section_nouvelle.numero = 0;
+	else
+		section_nouvelle.numero = section_en_cours->numero+1;
+	
+	if (list_insert_after(projet->beton.sections, &(section_nouvelle), sizeof(section_nouvelle)) == NULL)
+		BUGTEXTE(-2, gettext("Erreur d'allocation mémoire.\n"));
+	
+	return 0;
+}
+
+/* _1992_1_1_sections_ajout_T
+ * Description : ajouter une nouvelle section en T à la liste des sections en béton
+ * Paramètres : Projet *projet : la variable projet
+ *            : double largeur_table : la largeur de la table
+ *            : double largeur_ame : la largeur de l'âme
+ *            : double hauteur_table : la hauteur de la table
+ *            : double hauteur_ame : la hauteur de l'âme
+ * Valeur renvoyée :
+ *   Succès : 0
+ *   Échec : valeur négative
+ */
+int _1992_1_1_sections_ajout_T(Projet *projet, double largeur_table, double largeur_ame, double hauteur_table, double hauteur_ame)
+{
+	Beton_Section_Extrait		*section_en_cours;
+	Beton_Section_T			section_nouvelle;
+	
+	if ((projet == NULL) || (projet->beton.sections == NULL))
+		BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
+	
+	list_mvrear(projet->beton.sections);
+	section_nouvelle.section = BETON_SECTION_T;
+	section_nouvelle.largeur_table = largeur_table;
+	section_nouvelle.largeur_ame = largeur_ame;
+	section_nouvelle.hauteur_table = hauteur_table;
+	section_nouvelle.hauteur_ame = hauteur_ame;
+	
+	section_en_cours = (Beton_Section_Extrait *)list_rear(projet->beton.sections);
+	if (section_en_cours == NULL)
+		section_nouvelle.numero = 0;
+	else
+		section_nouvelle.numero = section_en_cours->numero+1;
+	
+	if (list_insert_after(projet->beton.sections, &(section_nouvelle), sizeof(section_nouvelle)) == NULL)
+		BUGTEXTE(-2, gettext("Erreur d'allocation mémoire.\n"));
+	
+	return 0;
+}
+
+/* _1992_1_1_sections_ajout_carre
+ * Description : ajouter une nouvelle section carrée à la liste des sections en béton
+ * Paramètres : Projet *projet : la variable projet
+ *            : double cote : le coté
+ * Valeur renvoyée :
+ *   Succès : 0
+ *   Échec : valeur négative
+ */
+int _1992_1_1_sections_ajout_carre(Projet *projet, double cote)
+{
+	Beton_Section_Extrait		*section_en_cours;
+	Beton_Section_Carre		section_nouvelle;
+	
+	if ((projet == NULL) || (projet->beton.sections == NULL))
+		BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
+	
+	list_mvrear(projet->beton.sections);
+	section_nouvelle.section = BETON_SECTION_CARRE;
+	section_nouvelle.cote = cote;
+	
+	section_en_cours = (Beton_Section_Extrait *)list_rear(projet->beton.sections);
+	if (section_en_cours == NULL)
+		section_nouvelle.numero = 0;
+	else
+		section_nouvelle.numero = section_en_cours->numero+1;
+	
+	if (list_insert_after(projet->beton.sections, &(section_nouvelle), sizeof(section_nouvelle)) == NULL)
+		BUGTEXTE(-2, gettext("Erreur d'allocation mémoire.\n"));
+	
+	return 0;
+}
+
+/* _1992_1_1_sections_ajout_circulaire
+ * Description : ajouter une nouvelle section circulaire à la liste des sections en béton
+ * Paramètres : Projet *projet : la variable projet
+ *            : double diametre : le diamètre
+ * Valeur renvoyée :
+ *   Succès : 0
+ *   Échec : valeur négative
+ */
+int _1992_1_1_sections_ajout_circulaire(Projet *projet, double diametre)
+{
+	Beton_Section_Extrait		*section_en_cours;
+	Beton_Section_Circulaire	section_nouvelle;
+	
+	if ((projet == NULL) || (projet->beton.sections == NULL))
+		BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
+	
+	list_mvrear(projet->beton.sections);
+	section_nouvelle.section = BETON_SECTION_CIRCULAIRE;
+	section_nouvelle.diametre = diametre;
+	
+	section_en_cours = (Beton_Section_Extrait *)list_rear(projet->beton.sections);
+	if (section_en_cours == NULL)
+		section_nouvelle.numero = 0;
+	else
+		section_nouvelle.numero = section_en_cours->numero+1;
+	
+	if (list_insert_after(projet->beton.sections, &(section_nouvelle), sizeof(section_nouvelle)) == NULL)
+		BUGTEXTE(-2, gettext("Erreur d'allocation mémoire.\n"));
+	
+	return 0;
+}
+
+/* _1992_1_1_sections_free
+ * Description : Libère l'ensemble des sections en béton
+ * Paramètres : Projet *projet : la variable projet
+ * Valeur renvoyée :
+ *   Succès : 0 même si aucune section n'est existante
+ *   Échec : valeur négative si la liste des sections n'est pas initialisée ou a déjà été libérée
+ */
 int _1992_1_1_sections_free(Projet *projet)
 {
 	if ((projet == NULL) || (projet->beton.sections == NULL))

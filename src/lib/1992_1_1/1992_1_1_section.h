@@ -28,35 +28,54 @@ typedef enum
 } Type_Beton_Section;
 
 
+typedef struct __Beton_Section_Extrait
+{
+	Type_Beton_Section	section;
+	int			numero;
+} Beton_Section_Extrait;
+
+
 typedef struct __Beton_Section_Rectangulaire
 {
-	double		largeur;
-	double		hauteur;
+	Type_Beton_Section	section;
+	int			numero;
+	double			largeur;
+	double			hauteur;
 } Beton_Section_Rectangulaire;
 
 
 typedef struct __Beton_Section_T
 {
-	double		largeur_table;
-	double		largeur_ame;
-	double		hauteur_table;
-	double		hauteur_ame;
+	Type_Beton_Section	section;
+	int			numero;
+	double			largeur_table;
+	double			largeur_ame;
+	double			hauteur_table;
+	double			hauteur_ame;
 } Beton_Section_T;
 
 
 typedef struct __Beton_Section_Carre
 {
-	double		cote;
+	Type_Beton_Section	section;
+	int			numero;
+	double			cote;
 } Beton_Section_Carre;
 
 
 typedef struct __Beton_Section_Circulaire
 {
-	double		diametre;
+	Type_Beton_Section	section;
+	int			numero;
+	double			diametre;
 } Beton_Section_Circulaire;
 
 
 int _1992_1_1_sections_init(Projet *projet);
+int _1992_1_1_sections_ajout_rectangulaire(Projet *projet, double largeur, double hauteur);
+int _1992_1_1_sections_ajout_T(Projet *projet, double largeur_table, double largeur_ame, double hauteur_table, double hauteur_ame);
+int _1992_1_1_sections_ajout_carre(Projet *projet, double cote);
+int _1992_1_1_sections_ajout_circulaire(Projet *projet, double diametre);
 int _1992_1_1_sections_free(Projet *projet);
 
 #endif
