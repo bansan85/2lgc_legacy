@@ -23,6 +23,9 @@
 #include "1990_gtk_groupes.h"
 #include "1990_groupes.h"
 #include "1990_actions.h"
+#include "1992_1_1_elements.h"
+#include "1992_1_1_section.h"
+#include "EF_noeud.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <libintl.h>
@@ -79,10 +82,14 @@ int main(int argc, char *argv[])
 	
 	// Création d'un projet type
 	projet = projet_init();
-	if (_1990_action_ajout(projet, 0) != 0) BUG(-1); // Poids prore
-	if (_1990_action_ajout(projet, 2) != 0) BUG(-1); // 2
-	if (_1990_action_ajout(projet, 12) != 0) BUG(-1); // 3
-	if (_1990_action_ajout(projet, 13) != 0) BUG(-1); // 4
+	
+	// Création des actions
+	if (_1990_action_ajout(projet, 0) != 0) BUG(-1); // Poids propre
+	if (_1990_action_ajout(projet, 2) != 0) BUG(-1); // 2 Exploitation
+	if (_1990_action_ajout(projet, 12) != 0) BUG(-1); // 3 Neige
+	if (_1990_action_ajout(projet, 13) != 0) BUG(-1); // 4 Vent
+	
+	// Création des groupes d'actions
 	if (_1990_groupe_niveau_ajout(projet) != 0) BUG(-1);
 	if (_1990_groupe_niveau_ajout(projet) != 0) BUG(-1);
 	if (_1990_groupe_niveau_ajout(projet) != 0) BUG(-1);
@@ -110,7 +117,17 @@ int main(int argc, char *argv[])
 	if (_1990_groupe_ajout_element(projet, 2, 1, 2) != 0) BUG(-1);
 	if (_1990_groupe_ajout_element(projet, 3, 0, 0) != 0) BUG(-1);
 	if (_1990_groupe_ajout_element(projet, 3, 0, 1) != 0) BUG(-1);
-
+	
+	// Création des sections en béton
+	if (_1992_1_1_sections_ajout_rectangulaire(projet, 0.3, 0.5) != 0) BUG(-1);
+	
+	// Création des noeuds
+	if (EF_noeuds_ajout(projet, 0., 0., 0.) != 0) BUG(-1);
+	if (EF_noeuds_ajout(projet, 5., 0., 0.) != 0) BUG(-1);
+	
+	// Création de l'élément en béton
+	if (_1992_1_1_elements_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 1) != 0) BUG(-1);
+	
 	// Création de la fenêtre principale
 	MainWindow = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	g_signal_connect(G_OBJECT(MainWindow), "delete-event", G_CALLBACK(gtk_window_delete_event), projet);

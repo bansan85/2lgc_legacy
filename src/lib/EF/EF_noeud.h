@@ -31,10 +31,13 @@ typedef struct
 
 typedef struct
 {
+	int		numero;
 	EF_Point	position;
 } EF_noeud;
 
 int EF_noeuds_init(Projet *projet);
+int EF_noeuds_ajout(Projet *projet, double x, double y, double z);
+int EF_noeuds_cherche_numero(Projet *projet, int numero);
 int EF_noeuds_free(Projet *projet);
 
 #endif

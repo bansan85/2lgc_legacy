@@ -76,6 +76,7 @@ int _1992_1_1_sections_ajout_rectangulaire(Projet *projet, double largeur, doubl
 int _1992_1_1_sections_ajout_T(Projet *projet, double largeur_table, double largeur_ame, double hauteur_table, double hauteur_ame);
 int _1992_1_1_sections_ajout_carre(Projet *projet, double cote);
 int _1992_1_1_sections_ajout_circulaire(Projet *projet, double diametre);
+int _1992_1_1_sections_cherche_numero(Projet *projet, int numero);
 int _1992_1_1_sections_free(Projet *projet);
 
 #endif

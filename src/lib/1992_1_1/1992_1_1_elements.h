@@ -30,14 +30,16 @@ typedef enum
 
 typedef struct __Beton_Element_Poutre
 {
+	int			numero;
 	Type_Beton_Element	element;
-	void			*dimensions;
+	void			*section;
 	
-	EF_noeud		noeud_debut;
-	EF_noeud		noeud_fin;
-} Beton_Element_Poutre;
+	EF_noeud		*noeud_debut;
+	EF_noeud		*noeud_fin;
+} Beton_Element;
 
 int _1992_1_1_elements_init(Projet *projet);
+int _1992_1_1_elements_ajout(Projet *projet, Type_Beton_Element type, int section, int noeud_debut, int noeud_fin);
 int _1992_1_1_elements_free(Projet *projet);
 
 
