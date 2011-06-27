@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2011-06-26 11:48+0200\n"
+"POT-Creation-Date: 2011-06-26 18:05+0200\n"
 "PO-Revision-Date: 2011-03-22 20:55+0100\n"
 "Last-Translator: LE GARREC Vincent <vlg@2lgc.org>\n"
 "Language-Team: French\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: src/gui/codegui/main.c:78
+#: src/gui/codegui/main.c:81
 msgid "Impossible d'initialiser gtk.\n"
 msgstr "Impossible d'initialiser gtk.\n"
 
@@ -259,15 +259,17 @@ msgstr "Le fichier '%s' est vide.\n"
 #: src/lib/1990/1990_combinaisons.c:548 src/lib/1990/1990_combinaisons.c:552
 #: src/lib/1990/1990_combinaisons.c:717 src/lib/1990/1990_combinaisons.c:820
 #: src/lib/1990/1990_combinaisons.c:857
-#: src/lib/1992_1_1/1992_1_1_elements.c:27
-#: src/lib/1992_1_1/1992_1_1_elements.c:39
+#: src/lib/1992_1_1/1992_1_1_elements.c:35
+#: src/lib/1992_1_1/1992_1_1_elements.c:57
+#: src/lib/1992_1_1/1992_1_1_elements.c:97
 #: src/lib/1992_1_1/1992_1_1_section.c:35
 #: src/lib/1992_1_1/1992_1_1_section.c:59
 #: src/lib/1992_1_1/1992_1_1_section.c:95
 #: src/lib/1992_1_1/1992_1_1_section.c:130
 #: src/lib/1992_1_1/1992_1_1_section.c:162
-#: src/lib/1992_1_1/1992_1_1_section.c:190 src/lib/EF/EF_noeud.c:35
-#: src/lib/EF/EF_noeud.c:47
+#: src/lib/1992_1_1/1992_1_1_section.c:192
+#: src/lib/1992_1_1/1992_1_1_section.c:218 src/lib/EF/EF_noeud.c:35
+#: src/lib/EF/EF_noeud.c:60 src/lib/EF/EF_noeud.c:91 src/lib/EF/EF_noeud.c:117
 msgid "Paramètres invalides.\n"
 msgstr "Paramètres invalides.\n"
 
@@ -295,12 +297,14 @@ msgstr "Paramètres invalides.\n"
 #: src/lib/1990/1990_combinaisons.c:605 src/lib/1990/1990_combinaisons.c:616
 #: src/lib/1990/1990_combinaisons.c:632 src/lib/1990/1990_combinaisons.c:659
 #: src/lib/1990/1990_combinaisons.c:730
-#: src/lib/1992_1_1/1992_1_1_elements.c:31
+#: src/lib/1992_1_1/1992_1_1_elements.c:39
+#: src/lib/1992_1_1/1992_1_1_elements.c:81
 #: src/lib/1992_1_1/1992_1_1_section.c:39
 #: src/lib/1992_1_1/1992_1_1_section.c:73
 #: src/lib/1992_1_1/1992_1_1_section.c:111
 #: src/lib/1992_1_1/1992_1_1_section.c:143
 #: src/lib/1992_1_1/1992_1_1_section.c:175 src/lib/EF/EF_noeud.c:39
+#: src/lib/EF/EF_noeud.c:74
 msgid "Erreur d'allocation mémoire.\n"
 msgstr "Erreur d'allocation mémoire.\n"
 
@@ -498,3 +502,13 @@ msgid ""
 "Structures monumentales de bâtiments, pont et autres ouvrages de génie civil"
 msgstr ""
 "Structures monumentales de bâtiments, pont et autres ouvrages de génie civil"
+
+#: src/lib/1992_1_1/1992_1_1_section.c:204
+#, fuzzy, c-format
+msgid "Section en béton n°%d introuvable.\n"
+msgstr "Action %d introuvable.\n"
+
+#: src/lib/EF/EF_noeud.c:103
+#, fuzzy, c-format
+msgid "Noeud n°%d introuvable.\n"
+msgstr "Action %d introuvable.\n"

@@ -177,6 +177,34 @@ int _1992_1_1_sections_ajout_circulaire(Projet *projet, double diametre)
 	return 0;
 }
 
+
+/* _1992_1_1_sections_cherche_numero
+ * Description : Positionne dans la liste des sections en béton l'élément courant au numéro souhaité
+ * Paramètres : Projet *projet : la variable projet
+ *            : int numero : le numéro de la section
+ * Valeur renvoyée :
+ *   Succès : 0
+ *   Échec : valeur négative
+ */
+int _1992_1_1_sections_cherche_numero(Projet *projet, int numero)
+{
+	if ((projet == NULL) || (projet->beton.sections == NULL) || (list_size(projet->beton.sections) == 0))
+		BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
+	
+	list_mvfront(projet->beton.sections);
+	do
+	{
+		Beton_Section_Extrait	*section = list_curr(projet->beton.sections);
+		
+		if (section->numero == numero)
+			return 0;
+	}
+	while (list_mvnext(projet->beton.sections) != NULL);
+	
+	BUGTEXTE(-2, gettext("Section en béton n°%d introuvable.\n"), numero);
+}
+
+
 /* _1992_1_1_sections_free
  * Description : Libère l'ensemble des sections en béton
  * Paramètres : Projet *projet : la variable projet
