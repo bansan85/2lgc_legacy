@@ -27,6 +27,7 @@
 #include "1990_groupes.h"
 #include "1990_combinaisons.h"
 #include "EF_noeud.h"
+#include "EF_appui.h"
 #include "1992_1_1_elements.h"
 #include "1992_1_1_section.h"
 
@@ -89,6 +90,17 @@ Projet *projet_init()
 		free(projet);
 		BUG(NULL);
 	}
+	if (EF_appuis_init(projet) != 0)
+	{
+		_1992_1_1_elements_free(projet);
+		_1992_1_1_sections_free(projet);
+		EF_noeuds_free(projet);
+		_1990_combinaisons_free(projet);
+		_1990_groupe_free(projet);
+		_1990_action_free(projet);
+		free(projet);
+		BUG(NULL);
+	}
 	projet->list_gtk._1990 = NULL;
 	
 	projet->pays = PAYS_EU;
@@ -110,12 +122,14 @@ int projet_free(Projet *projet)
 		_1990_groupe_free(projet);
 	if (projet->combinaisons.elu_equ != NULL)
 		_1990_combinaisons_free(projet);
-	if (projet->noeuds != NULL)
+	if (projet->ef_donnees.noeuds != NULL)
 		EF_noeuds_free(projet);
 	if (projet->beton.sections != NULL)
 		_1992_1_1_sections_free(projet);
 	if (projet->beton.elements != NULL)
 		_1992_1_1_elements_free(projet);
+	if (projet->ef_donnees.appuis != NULL)
+		EF_appuis_init(projet);
 	
 	// On ne vérifie pas si l'élément est NULL car free s'en charge avant de libérer la mémoire
 	free(projet->list_gtk._1990);

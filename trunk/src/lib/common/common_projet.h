@@ -59,6 +59,12 @@ typedef struct
 	LIST			*elements;
 } Elements_Beton;
 
+typedef struct
+{
+	LIST			*noeuds;
+	LIST			*appuis;
+} EF;
+
 typedef struct __Projet
 {
 	LIST			*actions;
@@ -66,7 +72,7 @@ typedef struct __Projet
 	CombinaisonsEL		combinaisons;
 	Type_Pays		pays;
 	List_Gtk		list_gtk;
-	LIST			*noeuds;
+	EF			ef_donnees;
 	Elements_Beton		beton;
 } Projet;
 

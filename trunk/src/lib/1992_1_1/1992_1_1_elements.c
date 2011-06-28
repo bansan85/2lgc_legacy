@@ -65,11 +65,11 @@ int _1992_1_1_elements_ajout(Projet *projet, Type_Beton_Element type, int sectio
 	
 	if (EF_noeuds_cherche_numero(projet, noeud_debut) != 0)
 		return -3;
-	element_nouveau.noeud_debut = list_curr(projet->noeuds);
+	element_nouveau.noeud_debut = list_curr(projet->ef_donnees.noeuds);
 	
 	if (EF_noeuds_cherche_numero(projet, noeud_fin) != 0)
 		return -4;
-	element_nouveau.noeud_fin = list_curr(projet->noeuds);
+	element_nouveau.noeud_fin = list_curr(projet->ef_donnees.noeuds);
 	
 	element_en_cours = (Beton_Element *)list_rear(projet->beton.elements);
 	if (element_en_cours == NULL)

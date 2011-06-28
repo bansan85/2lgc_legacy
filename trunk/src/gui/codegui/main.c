@@ -121,9 +121,12 @@ int main(int argc, char *argv[])
 	// Création des sections en béton
 	if (_1992_1_1_sections_ajout_rectangulaire(projet, 0.3, 0.5) != 0) BUG(-1);
 	
+	// Création de l'appui
+	if (EF_appuis_ajout(projet, EF_APPUI_BLOQUE, EF_APPUI_BLOQUE, EF_APPUI_BLOQUE, EF_APPUI_BLOQUE, EF_APPUI_BLOQUE, EF_APPUI_BLOQUE) != 0) BUG(-1);
+	
 	// Création des noeuds
-	if (EF_noeuds_ajout(projet, 0., 0., 0.) != 0) BUG(-1);
-	if (EF_noeuds_ajout(projet, 5., 0., 0.) != 0) BUG(-1);
+	if (EF_noeuds_ajout(projet, 0., 0., 0., 0) != 0) BUG(-1);
+	if (EF_noeuds_ajout(projet, 5., 0., 0., 0) != 0) BUG(-1);
 	
 	// Création de l'élément en béton
 	if (_1992_1_1_elements_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 1) != 0) BUG(-1);
