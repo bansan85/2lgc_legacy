@@ -16,30 +16,37 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __EF_NOEUD_H
-#define __EF_NOEUD_H
+#ifndef __EF_APPUI_H
+#define __EF_APPUI_H
 
 #include "common_projet.h"
-#include "EF_appui.h"
 
-typedef struct
+typedef enum
 {
-	double		x;
-	double		y;
-	double		z;
-} EF_Point;
+	EF_APPUI_LIBRE,
+	EF_APPUI_BLOQUE
+} Type_EF_Appui;
 
-
-typedef struct
+typedef struct __EF_Appui
 {
 	int		numero;
-	EF_Point	position;
-	EF_Appui	*appui;
-} EF_noeud;
+	Type_EF_Appui	x;
+	void		*x_donnees;
+	Type_EF_Appui	y;
+	void		*y_donnees;
+	Type_EF_Appui	z;
+	void		*z_donnees;
+	Type_EF_Appui	rx;
+	void		*rx_donnees;
+	Type_EF_Appui	ry;
+	void		*ry_donnees;
+	Type_EF_Appui	rz;
+	void		*rz_donnees;
+} EF_Appui;
 
-int EF_noeuds_init(Projet *projet);
-int EF_noeuds_ajout(Projet *projet, double x, double y, double z, int appui);
-int EF_noeuds_cherche_numero(Projet *projet, int numero);
-int EF_noeuds_free(Projet *projet);
+int EF_appuis_init(Projet *projet);
+int EF_appuis_ajout(Projet *projet, Type_EF_Appui x, Type_EF_Appui y, Type_EF_Appui z, Type_EF_Appui rx, Type_EF_Appui ry, Type_EF_Appui rz);
+int EF_appuis_cherche_numero(Projet *projet, int numero);
+int EF_appuis_free(Projet *projet);
 
 #endif

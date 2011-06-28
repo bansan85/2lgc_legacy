@@ -21,6 +21,7 @@
 #include "common_projet.h"
 #include "common_erreurs.h"
 #include "EF_noeud.h"
+#include "EF_appui.h"
 
 /* EF_noeuds_init
  * Description : Initialise la liste des noeuds
@@ -34,8 +35,8 @@ int EF_noeuds_init(Projet *projet)
 	if (projet == NULL)
 		BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
 	
-	projet->noeuds = list_init();
-	if (projet->noeuds == NULL)
+	projet->ef_donnees.noeuds = list_init();
+	if (projet->ef_donnees.noeuds == NULL)
 		BUGTEXTE(-2, gettext("Erreur d'allocation mémoire.\n"));
 	else
 		return 0;
@@ -52,25 +53,34 @@ int EF_noeuds_init(Projet *projet)
  *   Succès : 0
  *   Échec : valeur négative
  */
-int EF_noeuds_ajout(Projet *projet, double x, double y, double z)
+int EF_noeuds_ajout(Projet *projet, double x, double y, double z, int appui)
 {
 	EF_noeud		*noeud_en_cours, noeud_nouveau;
 	
-	if ((projet == NULL) || (projet->noeuds == NULL))
+	if ((projet == NULL) || (projet->ef_donnees.noeuds == NULL))
 		BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
 	
-	list_mvrear(projet->noeuds);
+	list_mvrear(projet->ef_donnees.noeuds);
 	noeud_nouveau.position.x = x;
 	noeud_nouveau.position.y = y;
 	noeud_nouveau.position.z = z;
 	
-	noeud_en_cours = (EF_noeud *)list_rear(projet->noeuds);
+	if (appui == -1)
+		noeud_nouveau.appui = NULL;
+	else
+	{
+		if (EF_appuis_cherche_numero(projet, appui) != 0)
+			return -2;
+		noeud_nouveau.appui = (EF_Appui *)(list_curr(projet->ef_donnees.appuis));
+	}
+		
+	noeud_en_cours = (EF_noeud *)list_rear(projet->ef_donnees.noeuds);
 	if (noeud_en_cours == NULL)
 		noeud_nouveau.numero = 0;
 	else
 		noeud_nouveau.numero = noeud_en_cours->numero+1;
 	
-	if (list_insert_after(projet->noeuds, &(noeud_nouveau), sizeof(noeud_nouveau)) == NULL)
+	if (list_insert_after(projet->ef_donnees.noeuds, &(noeud_nouveau), sizeof(noeud_nouveau)) == NULL)
 		BUGTEXTE(-2, gettext("Erreur d'allocation mémoire.\n"));
 	
 	return 0;
@@ -87,18 +97,18 @@ int EF_noeuds_ajout(Projet *projet, double x, double y, double z)
  */
 int EF_noeuds_cherche_numero(Projet *projet, int numero)
 {
-	if ((projet == NULL) || (projet->noeuds == NULL) || (list_size(projet->noeuds) == 0))
+	if ((projet == NULL) || (projet->ef_donnees.noeuds == NULL) || (list_size(projet->ef_donnees.noeuds) == 0))
 		BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
 	
-	list_mvfront(projet->noeuds);
+	list_mvfront(projet->ef_donnees.noeuds);
 	do
 	{
-		EF_noeud	*noeud = list_curr(projet->noeuds);
+		EF_noeud	*noeud = list_curr(projet->ef_donnees.noeuds);
 		
 		if (noeud->numero == numero)
 			return 0;
 	}
-	while (list_mvnext(projet->noeuds) != NULL);
+	while (list_mvnext(projet->ef_donnees.noeuds) != NULL);
 	
 	BUGTEXTE(-2, gettext("Noeud n°%d introuvable.\n"), numero);
 }
@@ -113,18 +123,18 @@ int EF_noeuds_cherche_numero(Projet *projet, int numero)
  */
 int EF_noeuds_free(Projet *projet)
 {
-	if ((projet == NULL) || (projet->noeuds == NULL))
+	if ((projet == NULL) || (projet->ef_donnees.noeuds == NULL))
 		BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
 	
-	while (!list_empty(projet->noeuds))
+	while (!list_empty(projet->ef_donnees.noeuds))
 	{
-		EF_noeud	*noeud = list_remove_front(projet->noeuds);
+		EF_noeud	*noeud = list_remove_front(projet->ef_donnees.noeuds);
 		
 		free(noeud);
 	}
 	
-	free(projet->noeuds);
-	projet->noeuds = NULL;
+	free(projet->ef_donnees.noeuds);
+	projet->ef_donnees.noeuds = NULL;
 	
 	return 0;
 }
