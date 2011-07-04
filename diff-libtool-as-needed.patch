@@ -1,0 +1,11 @@
+--- libtool.old	2011-07-05 01:05:51.680005142 +0200
++++ libtool	2011-07-05 00:57:28.092004978 +0200
+@@ -308,7 +308,7 @@ with_gcc=yes
+ no_builtin_flag=" -fno-builtin"
+ 
+ # Additional compiler flags for building library objects.
+-pic_flag=" -fPIC -DPIC"
++pic_flag=" -fPIC -DPIC -Wl,--as-needed"
+ 
+ # How to pass a linker flag through the compiler.
+ wl="-Wl,"
