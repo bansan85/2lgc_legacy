@@ -61,7 +61,7 @@ int _1990_groupe_element_positionne(Groupe *groupe, int numero);
 int _1990_groupe_positionne(Niveau_Groupe *niveau, int numero);
 int _1990_groupe_niveau_positionne(LIST *source, int numero);
 int _1990_groupe_ajout(Projet *projet, int niveau, int numero, Type_Groupe_Combinaison combinaison);
-int _1990_groupe_ajout_element(Projet *projet, int niveau, int groupe_n, int groupe_n_1);
+int _1990_groupe_ajout_element(Projet *projet, unsigned int niveau, int groupe_n, int groupe_n_1);
 void _1990_groupe_affiche_tout(Projet *projet);
 void _1990_groupe_free_element_numero(Projet *projet, int niveau, int groupe, int element);
 void _1990_groupe_free_niveau_numero(Projet *projet, int numero);

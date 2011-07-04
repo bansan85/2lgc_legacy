@@ -209,13 +209,13 @@ int _1990_groupe_ajout(Projet *projet, int niveau, int numero, Type_Groupe_Combi
  *   Succès : 0
  *   Échec : valeur négative en cas d'erreur
  */
-int _1990_groupe_ajout_element(Projet *projet, int niveau, int groupe_n, int num_element)
+int _1990_groupe_ajout_element(Projet *projet, unsigned int niveau, int groupe_n, int num_element)
 {
 	Niveau_Groupe	*niveau_groupe;
 	Groupe		*groupe;
 	Element		*element, element_nouveau;
 	
-	if ((projet == NULL) || (projet->niveaux_groupes == NULL) || (niveau < 0) || (list_size(projet->niveaux_groupes)-1 < niveau))
+	if ((projet == NULL) || (projet->niveaux_groupes == NULL) || (list_size(projet->niveaux_groupes)-1 < niveau))
 		BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
 	
 	// On commence par positionner le numéro num_element de l'étage n-1
