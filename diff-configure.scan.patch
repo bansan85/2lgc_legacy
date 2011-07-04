@@ -1,6 +1,6 @@
---- configure.scan.old	2011-02-28 13:46:52.262000002 +0100
-+++ configure.scan	2011-02-28 13:47:53.250000002 +0100
-@@ -2,16 +2,37@@
+--- configure.scan.old	2011-07-04 16:33:28.649007767 +0200
++++ configure.scan	2011-07-04 16:33:11.590007763 +0200
+@@ -2,18 +2,37 @@
  # Process this file with autoconf to produce a configure script.
  
  AC_PREREQ([2.68])
@@ -9,7 +9,6 @@
 +AM_INIT_AUTOMAKE
  AC_CONFIG_SRCDIR([src/test/1990__1_duree.c])
  AC_CONFIG_HEADERS([config.h])
-+AC_CONFIG_MACRO_DIR([m4])
  
  # Checks for programs.
  AC_PROG_CC
@@ -35,9 +34,12 @@
 +ALL_LINGUAS="fr"
  
  # Checks for libraries.
+-# FIXME: Replace `main' with a function in `-lcholmod':
+-AC_CHECK_LIB([cholmod], [main])
 -# FIXME: Replace `main' with a function in `-llist':
 -AC_CHECK_LIB([list], [main])
 +PKG_CHECK_MODULES([LIBLIST], [liblist >= 2.3.1], [], [AC_MSG_ERROR([liblist ( http://ohnopub.net/liblist ) est necessaire])])
++AC_CHECK_LIB([cholmod], [cholmod_l_start], [], [AC_MSG_ERROR([spqr ( http://www.cise.ufl.edu/research/sparse/SPQR ) est necessaire])])
  
  # Checks for header files.
  AC_CHECK_HEADERS([libintl.h locale.h stdlib.h string.h])

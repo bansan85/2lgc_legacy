@@ -20,6 +20,7 @@
 #define __COMMON_PROJET_H
 
 #include <list.h>
+#include <cholmod.h>
 
 typedef enum
 {
@@ -61,6 +62,13 @@ typedef struct
 
 typedef struct
 {
+	cholmod_common		Common;
+	cholmod_common		*c;
+	cholmod_triplet		*a;
+	long			*ai;
+	long			*aj;
+	double			*ax;
+	cholmod_sparse		*A;
 	LIST			*noeuds;
 	LIST			*appuis;
 } EF;

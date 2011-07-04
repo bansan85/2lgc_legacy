@@ -40,7 +40,7 @@
  *   Succès : 0
  *   Échec : valeur négative en cas d'erreur
  */
-int _1990_gtk_affiche_niveau(Projet *projet, int niveau)
+int _1990_gtk_affiche_niveau(Projet *projet, unsigned int niveau)
 {
 	Niveau_Groupe	*niveau_groupe;
 	int		dispo_max, i, *dispos;

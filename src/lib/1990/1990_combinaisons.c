@@ -472,7 +472,8 @@ int _1990_combinaisons_genere_groupe_and(Projet *projet)
 			{
 				// transition est utilisée de façon temporaire pour dupliquer nouvelles_combinaisons en cas de besoin
 				LIST		*transition = list_init();
-				int		i, j, nbboucle;
+				unsigned int	j;
+				int		i, nbboucle;
 				
 				if (transition == NULL)
 					BUGTEXTE(-10, gettext("Erreur d'allocation mémoire.\n"));
@@ -537,7 +538,7 @@ int _1990_combinaisons_genere_groupe_or(Projet *projet)
 	Niveau_Groupe		*niveau;
 	Groupe			*groupe;
 	Combinaison_Element	element;
-	int			boucle, i, j, k;
+	unsigned int		boucle, i, j, k;
 	
 	if ((projet == NULL) || (projet->niveaux_groupes == NULL) || (list_size(projet->niveaux_groupes) == 0))
 		BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
@@ -851,7 +852,7 @@ int _1990_combinaisons_free(Projet *projet)
  */
 int _1990_combinaisons_genere(Projet *projet)
 {
-	int		i;
+	unsigned int		i;
 	
 	if ((projet == NULL) || (projet->niveaux_groupes == NULL) || (list_size(projet->niveaux_groupes) == 0))
 		BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
@@ -863,7 +864,7 @@ int _1990_combinaisons_genere(Projet *projet)
 	for (i=0;i<list_size(projet->actions);i++)
 	{
 		Action		*action;
-		int		j;
+		unsigned int	j;
 		
 		// On supprime les combinaisons temporaires générées lors du passage de la boucle précédente
 		list_mvfront(projet->niveaux_groupes);

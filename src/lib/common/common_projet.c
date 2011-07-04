@@ -20,9 +20,11 @@
 #include <stdlib.h>
 #include <libintl.h>
 #include <locale.h>
+#include <SuiteSparseQR_C.h>
 
 #include "common_projet.h"
 #include "common_erreurs.h"
+#include "common_maths.h"
 #include "1990_actions.h"
 #include "1990_groupes.h"
 #include "1990_combinaisons.h"
@@ -40,7 +42,9 @@
  */
 Projet *projet_init()
 {
-	Projet *projet;
+	Projet		*projet;
+	cholmod_dense	*X, *B;
+	
 	
 	projet = (Projet*)malloc(sizeof(Projet));
 	if (projet == NULL)
@@ -101,6 +105,72 @@ Projet *projet_init()
 		free(projet);
 		BUG(NULL);
 	}
+
+	projet->ef_donnees.c = &(projet->ef_donnees.Common);
+	cholmod_l_start(projet->ef_donnees.c);
+	printf("1.\n");
+	projet->ef_donnees.a = cholmod_l_allocate_triplet(3, 3, 9, 0, CHOLMOD_REAL, projet->ef_donnees.c);
+	projet->ef_donnees.ai = projet->ef_donnees.a->i;
+	projet->ef_donnees.aj = projet->ef_donnees.a->j;
+	projet->ef_donnees.ax = projet->ef_donnees.a->x;
+	projet->ef_donnees.ai[0] = 0;
+	projet->ef_donnees.aj[0] = 0;
+	projet->ef_donnees.ax[0] = 1;
+	projet->ef_donnees.ai[1] = 1;
+	projet->ef_donnees.aj[1] = 0;
+	projet->ef_donnees.ax[1] = 3;
+	projet->ef_donnees.ai[2] = 1;
+	projet->ef_donnees.aj[2] = 1;
+	projet->ef_donnees.ax[2] = 4;
+	projet->ef_donnees.ai[3] = 2;
+	projet->ef_donnees.aj[3] = 0;
+	projet->ef_donnees.ax[3] = 4;
+	projet->ef_donnees.ai[4] = 2;
+	projet->ef_donnees.aj[4] = 1;
+	projet->ef_donnees.ax[4] = 5;
+	projet->ef_donnees.ai[5] = 2;
+	projet->ef_donnees.aj[5] = 2;
+	projet->ef_donnees.ax[5] = 6;
+	projet->ef_donnees.ai[6] = 0;
+	projet->ef_donnees.aj[6] = 1;
+	projet->ef_donnees.ax[6] = 3;
+	projet->ef_donnees.ai[7] = 0;
+	projet->ef_donnees.aj[7] = 2;
+	projet->ef_donnees.ax[7] = 4;
+	projet->ef_donnees.ai[8] = 1;
+	projet->ef_donnees.aj[8] = 2;
+	projet->ef_donnees.ax[8] = 5;
+	projet->ef_donnees.a->nnz = 9;
+	
+	printf("2.\n");
+	projet->ef_donnees.A = cholmod_l_triplet_to_sparse(projet->ef_donnees.a, 0, projet->ef_donnees.c);
+	printf("3.\n");
+	cholmod_l_free_triplet(&(projet->ef_donnees.a), projet->ef_donnees.c);
+	projet->ef_donnees.a = NULL;
+	projet->ef_donnees.ai = NULL;
+	projet->ef_donnees.aj = NULL;
+	projet->ef_donnees.ax = NULL;
+	printf("4.\n");
+	cholmod_l_print_sparse(projet->ef_donnees.A, "A", projet->ef_donnees.c);
+	printf("5.\n");
+	cholmod_l_write_sparse(stdout, projet->ef_donnees.A, NULL, NULL, projet->ef_donnees.c);
+	
+	printf("trez\n");
+	B = cholmod_l_ones (projet->ef_donnees.A->nrow, 1, projet->ef_donnees.A->xtype, projet->ef_donnees.c);
+	
+	printf("treztrez\n");
+	X = SuiteSparseQR_C_backslash(SPQR_ORDERING_DEFAULT, ERREUR_RELATIVE_MIN, projet->ef_donnees.A, B, projet->ef_donnees.c);
+/*	cholmod_factor *L;
+	L = cholmod_l_analyze (projet->ef_donnees.A, projet->ef_donnees.c) ;
+	cholmod_l_factorize (projet->ef_donnees.A, L, projet->ef_donnees.c) ;
+	X = cholmod_l_solve (CHOLMOD_A, L, B, projet->ef_donnees.c) ;*/
+	printf("treztreztrez\n");
+	cholmod_l_print_dense(X, "X", projet->ef_donnees.c);
+	printf("treztreztreztrez\n");
+	cholmod_l_write_dense(stdout, X, NULL, projet->ef_donnees.c);
+	printf("treztreztreztreztrze\n");
+	
+	
 	projet->list_gtk._1990 = NULL;
 	
 	projet->pays = PAYS_EU;
@@ -130,6 +200,8 @@ int projet_free(Projet *projet)
 		_1992_1_1_elements_free(projet);
 	if (projet->ef_donnees.appuis != NULL)
 		EF_appuis_init(projet);
+	
+	cholmod_finish(projet->ef_donnees.c);
 	
 	// On ne vérifie pas si l'élément est NULL car free s'en charge avant de libérer la mémoire
 	free(projet->list_gtk._1990);

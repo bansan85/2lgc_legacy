@@ -12,5 +12,6 @@ codegui_LDADD		=	@GTK_LIBS@ \
 				../../lib/common/libcommon.la \
 				../../lib/1990/lib1990.la \
 				../../lib/1992_1_1/lib1992_1_1.la \
-				../../lib/EF/libEF.la
+				../../lib/EF/libEF.la \
+				/usr/lib/libspqr.la
 endif

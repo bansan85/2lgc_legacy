@@ -18,7 +18,11 @@ libcommon_la_HEADERS =	common_text.h \
 			common_projet.h \
 			common_tooltip.h
 
-libcommon_la_LIBADD = ../1990/lib1990.la ../1992_1_1/lib1992_1_1.la ../EF/libEF.la @XML_LIBS@
+libcommon_la_LIBADD =	../1990/lib1990.la \
+			../1992_1_1/lib1992_1_1.la \
+			../EF/libEF.la \
+			@XML_LIBS@ \
+			/usr/lib/libspqr.la
 libcommon_la_CPPFLAGS=@XML_CPPFLAGS@
 
 if ENABLE_GTK
