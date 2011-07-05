@@ -16,33 +16,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __1992_1_1_ELEMENTS_H
-#define __1992_1_1_ELEMENTS_H
+#ifndef __EF_RIGIDITE_H
+#define __EF_RIGIDITE_H
 
-#include "EF_noeud.h"
-#include "1992_1_1_section.h"
+#include "common_projet.h"
 
-typedef enum
+
+typedef struct
 {
-	BETON_ELEMENT_POTEAU,
-	BETON_ELEMENT_POUTRE
-} Type_Beton_Element;
+	int		noeud1;
+	int		noeud2;
+	double		**matrice;
+} EF_rigidite;
 
-typedef struct __Beton_Element_Poutre
-{
-	int			numero;
-	Type_Beton_Element	element;
-	void			*section;
-	
-	EF_noeud		*noeud_debut;
-	EF_noeud		*noeud_fin;
-	int			discretisation_element;
-	EF_noeud		**noeuds_intermediaires;
-} Beton_Element;
 
-int _1992_1_1_elements_init(Projet *projet);
-int _1992_1_1_elements_ajout(Projet *projet, Type_Beton_Element type, int section, int noeud_debut, int noeud_fin, int discretisation_element);
-int _1992_1_1_elements_free(Projet *projet);
-
+int EF_rigidite_init(Projet *projet);
+int EF_rigidite_free(Projet *projet);
 
 #endif

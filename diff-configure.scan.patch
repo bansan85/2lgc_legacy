@@ -1,6 +1,6 @@
 --- configure.scan.old	2011-07-04 16:33:28.649007767 +0200
 +++ configure.scan	2011-07-04 16:33:11.590007763 +0200
-@@ -2,20 +2,38 @@
+@@ -2,20 +2,39 @@
  # Process this file with autoconf to produce a configure script.
  
  AC_PREREQ([2.68])
@@ -9,6 +9,7 @@
 +AM_INIT_AUTOMAKE
  AC_CONFIG_SRCDIR([src/test/1990__1_duree.c])
  AC_CONFIG_HEADERS([config.h])
++AC_CONFIG_MACRO_DIR([m4])
  
  # Checks for programs.
  AC_PROG_CC

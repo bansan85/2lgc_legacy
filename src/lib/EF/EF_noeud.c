@@ -49,6 +49,7 @@ int EF_noeuds_init(Projet *projet)
  *            : double x : position en x
  *            : double y : position en y
  *            : double z : position en z
+ *            : int appui : numéro de l'appui. -1 si aucun appui.
  * Valeur renvoyée :
  *   Succès : 0
  *   Échec : valeur négative

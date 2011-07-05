@@ -45,13 +45,19 @@ int _1992_1_1_elements_init(Projet *projet)
  * Description : Ajoute un élément à la liste des éléments en béton
  * Paramètres : Projet *projet : la variable projet
  *            : Type_Beton_Element type : type de l'élément en béton
+ *            : int section : numéro de la section correspondant à l'élément
+ *            : int noeud_debut : numéro de départ de l'élément
+ *            : int noeud_fin : numéro de fin de l'élément
+ *            : int discretisation_element : nombre d'élément une fois discrétisé
  * Valeur renvoyée :
  *   Succès : 0 même si aucune section n'est existante
  *   Échec : valeur négative si la liste des éléments n'est pas initialisée ou a déjà été libérée
  */
-int _1992_1_1_elements_ajout(Projet *projet, Type_Beton_Element type, int section, int noeud_debut, int noeud_fin)
+int _1992_1_1_elements_ajout(Projet *projet, Type_Beton_Element type, int section, int noeud_debut, int noeud_fin, int discretisation_element)
 {
 	Beton_Element	*element_en_cours, element_nouveau;
+	int		i;
+	double		dx, dy, dz;
 	
 	if ((projet == NULL) || (projet->beton.elements == NULL))
 		BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
@@ -71,6 +77,25 @@ int _1992_1_1_elements_ajout(Projet *projet, Type_Beton_Element type, int sectio
 		return -4;
 	element_nouveau.noeud_fin = list_curr(projet->ef_donnees.noeuds);
 	
+	element_nouveau.discretisation_element = discretisation_element;
+	if (discretisation_element != 0)
+	{
+		element_nouveau.noeuds_intermediaires = malloc(sizeof(EF_noeud)*(discretisation_element-1));
+		if (element_nouveau.noeuds_intermediaires == NULL)
+			BUGTEXTE(-5, gettext("Erreur d'allocation mémoire.\n"));
+		for (i=0;i<=discretisation_element-2;i++)
+		{
+			dx = (element_nouveau.noeud_fin->position.x-element_nouveau.noeud_debut->position.x)/discretisation_element;
+			dy = (element_nouveau.noeud_fin->position.y-element_nouveau.noeud_debut->position.y)/discretisation_element;
+			dz = (element_nouveau.noeud_fin->position.z-element_nouveau.noeud_debut->position.z)/discretisation_element;
+			if (EF_noeuds_ajout(projet, element_nouveau.noeud_debut->position.x+dx*(i+1), element_nouveau.noeud_debut->position.y+dy*(i+1), element_nouveau.noeud_debut->position.z+dz*(i+1), -1) != 0)
+				return -6;
+			element_nouveau.noeuds_intermediaires[i] = list_rear(projet->ef_donnees.noeuds);
+		}
+	}
+	else
+		element_nouveau.noeuds_intermediaires = NULL;
+	
 	element_en_cours = (Beton_Element *)list_rear(projet->beton.elements);
 	if (element_en_cours == NULL)
 		element_nouveau.numero = 0;
@@ -78,7 +103,7 @@ int _1992_1_1_elements_ajout(Projet *projet, Type_Beton_Element type, int sectio
 		element_nouveau.numero = element_en_cours->numero+1;
 	
 	if (list_insert_after(projet->beton.elements, &(element_nouveau), sizeof(element_nouveau)) == NULL)
-		BUGTEXTE(-5, gettext("Erreur d'allocation mémoire.\n"));
+		BUGTEXTE(-6, gettext("Erreur d'allocation mémoire.\n"));
 	
 	return 0;
 }
