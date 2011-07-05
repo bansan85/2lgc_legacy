@@ -126,10 +126,10 @@ int main(int argc, char *argv[])
 	
 	// Création des noeuds
 	if (EF_noeuds_ajout(projet, 0., 0., 0., 0) != 0) BUG(-1);
-	if (EF_noeuds_ajout(projet, 5., 0., 0., 0) != 0) BUG(-1);
+	if (EF_noeuds_ajout(projet, 1., 0.5, 3., -1) != 0) BUG(-1);
 	
 	// Création de l'élément en béton
-	if (_1992_1_1_elements_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 1) != 0) BUG(-1);
+	if (_1992_1_1_elements_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 1, 10) != 0) BUG(-1);
 	
 	// Création de la fenêtre principale
 	MainWindow = gtk_window_new(GTK_WINDOW_TOPLEVEL);

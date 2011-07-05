@@ -30,6 +30,7 @@
 #include "1990_combinaisons.h"
 #include "EF_noeud.h"
 #include "EF_appui.h"
+#include "EF_rigidite.h"
 #include "1992_1_1_elements.h"
 #include "1992_1_1_section.h"
 
@@ -104,6 +105,18 @@ Projet *projet_init()
 		_1990_action_free(projet);
 		free(projet);
 		BUG(NULL);
+	}
+	if (EF_rigidite_init(projet) != 0)
+	{
+		EF_appuis_free(projet);
+		_1992_1_1_elements_free(projet);
+		_1992_1_1_sections_free(projet);
+		EF_noeuds_free(projet);
+		_1990_combinaisons_free(projet);
+		_1990_groupe_free(projet);
+		_1990_action_free(projet);
+		free(projet);
+		BUGTEXTE(NULL, gettext("Erreur d'allocation mémoire.\n"));
 	}
 
 	projet->ef_donnees.c = &(projet->ef_donnees.Common);
@@ -200,6 +213,8 @@ int projet_free(Projet *projet)
 		_1992_1_1_elements_free(projet);
 	if (projet->ef_donnees.appuis != NULL)
 		EF_appuis_init(projet);
+	if (projet->ef_donnees.rigidite != NULL)
+		EF_rigidite_free(projet);
 	
 	cholmod_finish(projet->ef_donnees.c);
 	
