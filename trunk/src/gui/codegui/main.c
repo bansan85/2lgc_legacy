@@ -33,10 +33,22 @@
 #include <string.h>
 #include <gtk/gtk.h>
 
-void gtk_window_delete_event(GtkWidget *pWidget __attribute__((unused)), GdkEvent *event __attribute__((unused)), Projet *projet)
+void gtk_window_destroy_event(GtkWidget *pWidget __attribute__((unused)), Projet *projet)
 {
 	projet_free(projet);
 	gtk_main_quit();
+	return;
+}
+
+/* gtk_window_option_destroy_button
+ * Description : Bouton de fermeture de la fenêtre
+ * Paramètres : GtkComboBox *widget : composant à l'origine de la demande
+ *            : GtkWidget *fenêtre : la fenêtre d'options
+ * Valeur renvoyée : Aucune
+ */
+void gtk_window_option_destroy_button(GtkWidget *object __attribute__((unused)), GtkWidget *fenetre __attribute__((unused)))
+{
+	gtk_widget_destroy(fenetre);
 	return;
 }
 
@@ -133,14 +145,19 @@ int main(int argc, char *argv[])
 	
 	// Création de la fenêtre principale
 	MainWindow = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-	g_signal_connect(G_OBJECT(MainWindow), "delete-event", G_CALLBACK(gtk_window_delete_event), projet);
-	// Ne pas mettre sinon projet est libéré deux fois.
-	//g_signal_connect(GTK_WINDOW(MainWindow), "destroy", G_CALLBACK(gtk_window_destroy), projet);
-	pTable=gtk_table_new(1,1,TRUE);
+	// Ne pas mettre la ligne ci-dessous sinon projet est libéré deux fois.
+	//g_signal_connect(G_OBJECT(MainWindow), "delete-event", G_CALLBACK(gtk_window_delete_event), projet);
+	g_signal_connect(GTK_WINDOW(MainWindow), "destroy", G_CALLBACK(gtk_window_destroy_event), projet);
+	pTable=gtk_table_new(2,1,TRUE);
 	gtk_container_add(GTK_CONTAINER(MainWindow), GTK_WIDGET(pTable));
 	pButton= gtk_button_new_with_label("Combinaisons");
 	gtk_table_attach(GTK_TABLE(pTable), pButton, 0, 1, 0, 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
 	g_signal_connect (pButton, "clicked", G_CALLBACK (_1990_gtk_groupes), projet);
+	
+	// Ajout du bouton de fermeture de l'application
+	pButton= gtk_button_new_with_label("Fermeture");
+	gtk_table_attach(GTK_TABLE(pTable), pButton, 0, 1, 1, 2, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
+	g_signal_connect (pButton, "clicked", G_CALLBACK (gtk_window_option_destroy_button), MainWindow);
 	
 	// Affichage de l'interface graphique
 	gtk_widget_show_all(MainWindow);

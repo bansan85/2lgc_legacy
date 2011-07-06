@@ -20,9 +20,9 @@
 +AC_SUBST(XML_LIBS)
 +AM_PATH_XML2($LIBXML_REQUIRED_VERSION, :, AC_MSG_ERROR(Test for libXML failed.))
 +AC_ARG_WITH(gtk,  [  --without-gtk           build without gtk support], [withgtk=true], [withgtk=false])
-+AC_MSG_RESULT([XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
++AC_MSG_RESULT([XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 +with-gtk $withgtk
-+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX])
++XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX])
 +AM_CONDITIONAL(ENABLE_GTK, test x$withgtk = xtrue)
 +if test "x$withgtk" = "xtrue"; then
 +GTK_REQUIRED_VERSION=3.0.3
@@ -42,8 +42,8 @@
 -# FIXME: Replace `main' with a function in `-lspqr':
 -AC_CHECK_LIB([spqr], [main])
 +PKG_CHECK_MODULES([LIBLIST], [liblist >= 2.3.1], [], [AC_MSG_ERROR([liblist ( http://ohnopub.net/liblist ) est necessaire])])
-+AC_CHECK_LIB([cholmod], [cholmod_l_start], [], [AC_MSG_ERROR([cholmod ( http://www.cise.ufl.edu/research/sparse/cholmod ) est necessaire])])
 +AC_CHECK_LIB([spqr], [SuiteSparseQR_C_backslash], [], [AC_MSG_ERROR([spqr ( http://www.cise.ufl.edu/research/sparse/SPQR ) est necessaire])])
++AC_CHECK_LIB([cholmod], [cholmod_l_start], [], [AC_MSG_ERROR([cholmod ( http://www.cise.ufl.edu/research/sparse/cholmod ) est necessaire])])
  
  # Checks for header files.
  AC_CHECK_HEADERS([libintl.h locale.h stdlib.h string.h])

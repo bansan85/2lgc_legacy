@@ -123,7 +123,11 @@ int _1992_1_1_elements_free(Projet *projet)
 	
 	while (!list_empty(projet->beton.elements))
 	{
-		free(list_remove_front(projet->beton.elements));
+		Beton_Element *element = list_remove_front(projet->beton.elements);
+		
+		free(element->noeuds_intermediaires);
+		
+		free(element);
 	}
 	
 	free(projet->beton.elements);
