@@ -183,6 +183,9 @@ Projet *projet_init()
 	cholmod_l_write_dense(stdout, X, NULL, projet->ef_donnees.c);
 	printf("treztreztreztreztrze\n");
 	
+	cholmod_l_free_sparse(&(projet->ef_donnees.A), projet->ef_donnees.c);
+	cholmod_l_free_dense(&B, projet->ef_donnees.c);
+	cholmod_l_free_dense(&X, projet->ef_donnees.c);
 	
 	projet->list_gtk._1990 = NULL;
 	
@@ -212,7 +215,7 @@ int projet_free(Projet *projet)
 	if (projet->beton.elements != NULL)
 		_1992_1_1_elements_free(projet);
 	if (projet->ef_donnees.appuis != NULL)
-		EF_appuis_init(projet);
+		EF_appuis_free(projet);
 	if (projet->ef_donnees.rigidite != NULL)
 		EF_rigidite_free(projet);
 	
