@@ -50,6 +50,7 @@ typedef struct __List_Gtk_1990
 	GtkWidget	*table_bas;
 	GtkWidget	*button_generer;
 	GtkWidget	*button_options;
+	GtkWidget	*button_quitter;
 } List_Gtk_1990;
 
 void _1990_gtk_groupes(GtkWidget *button __attribute__((unused)), Projet *projet);

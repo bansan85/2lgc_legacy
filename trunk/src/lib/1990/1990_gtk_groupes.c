@@ -828,6 +828,18 @@ void wrapped_label_size_allocate_callback(GtkWidget *label, GtkAllocation *alloc
 	return;
 }
 
+/* _1990_gtk_window_quitter_button
+ * Description : Bouton de fermeture de la fenêtre
+ * Paramètres : GtkComboBox *widget : composant à l'origine de la demande
+ *            : GtkWidget *fenêtre : la fenêtre d'options
+ * Valeur renvoyée : Aucune
+ */
+void _1990_gtk_window_quitter_button(GtkWidget *object __attribute__((unused)), GtkWidget *fenetre)
+{
+	gtk_widget_destroy(fenetre);
+	return;
+}
+
 /* _1990_gtk_button_options_clicked
  * Description : Affiche les différentes options
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement
@@ -1001,7 +1013,7 @@ void _1990_gtk_groupes(GtkWidget *button __attribute__((unused)), Projet *projet
 	list_gtk_1990->table_combinaison = gtk_table_new (1, 1, FALSE);
 	list_gtk_1990->table_groupes = gtk_table_new (7, 2, FALSE);
 	list_gtk_1990->table_dispo = gtk_table_new (2, 2, FALSE);
-	list_gtk_1990->table_bas = gtk_table_new (1, 2, FALSE);
+	list_gtk_1990->table_bas = gtk_table_new (1, 3, FALSE);
 	
 	// Réglage de la fenêtre graphique
 	gtk_window_set_title (GTK_WINDOW (list_gtk_1990->window_groupe), "Combinaisons");
@@ -1106,6 +1118,9 @@ void _1990_gtk_groupes(GtkWidget *button __attribute__((unused)), Projet *projet
 	list_gtk_1990->button_options = gtk_button_new_with_label("Options");
 	gtk_table_attach (GTK_TABLE (list_gtk_1990->table_bas), list_gtk_1990->button_options, 1, 2, 0, 1, GTK_EXPAND | GTK_FILL, 0, 0, 0);
 	g_signal_connect(G_OBJECT(list_gtk_1990->button_options), "clicked", G_CALLBACK(_1990_gtk_button_options_clicked), projet);
+	list_gtk_1990->button_quitter = gtk_button_new_with_label("Quitter");
+	gtk_table_attach (GTK_TABLE (list_gtk_1990->table_bas), list_gtk_1990->button_quitter, 2, 3, 0, 1, GTK_EXPAND | GTK_FILL, 0, 0, 0);
+	g_signal_connect(G_OBJECT(list_gtk_1990->button_quitter), "clicked", G_CALLBACK(_1990_gtk_window_quitter_button), list_gtk_1990->window_groupe);
 	
 	gtk_window_set_modal(GTK_WINDOW(list_gtk_1990->window_groupe), TRUE);
 	gtk_widget_show_all(list_gtk_1990->window_groupe);
