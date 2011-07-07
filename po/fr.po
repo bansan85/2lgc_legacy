@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2011-07-07 21:57+0200\n"
+"POT-Creation-Date: 2011-07-07 23:45+0200\n"
 "PO-Revision-Date: 2011-03-22 20:55+0100\n"
 "Last-Translator: LE GARREC Vincent <vlg@2lgc.org>\n"
 "Language-Team: French\n"
@@ -24,14 +24,17 @@ msgstr "Impossible d'initialiser gtk.\n"
 #: src/lib/1992_1_1/1992_1_1_section.c:36
 #: src/lib/1992_1_1/1992_1_1_section.c:61
 #: src/lib/1992_1_1/1992_1_1_section.c:113
-#: src/lib/1992_1_1/1992_1_1_section.c:167
-#: src/lib/1992_1_1/1992_1_1_section.c:210
-#: src/lib/1992_1_1/1992_1_1_section.c:251
-#: src/lib/1992_1_1/1992_1_1_section.c:277
+#: src/lib/1992_1_1/1992_1_1_section.c:169
+#: src/lib/1992_1_1/1992_1_1_section.c:212
+#: src/lib/1992_1_1/1992_1_1_section.c:253
+#: src/lib/1992_1_1/1992_1_1_section.c:279
 #: src/lib/1992_1_1/1992_1_1_elements.c:38
 #: src/lib/1992_1_1/1992_1_1_elements.c:66
 #: src/lib/1992_1_1/1992_1_1_elements.c:136
 #: src/lib/1992_1_1/1992_1_1_elements.c:258
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:37
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:60
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:152
 #: src/lib/1990/1990_ponderations.c:47 src/lib/1990/1990_ponderations.c:104
 #: src/lib/1990/1990_ponderations.c:176 src/lib/1990/1990_ponderations.c:297
 #: src/lib/1990/1990_ponderations.c:420 src/lib/1990/1990_ponderations.c:485
@@ -67,14 +70,16 @@ msgstr "Paramètres invalides.\n"
 #: src/lib/1992_1_1/1992_1_1_section.c:66
 #: src/lib/1992_1_1/1992_1_1_section.c:90
 #: src/lib/1992_1_1/1992_1_1_section.c:118
-#: src/lib/1992_1_1/1992_1_1_section.c:148
-#: src/lib/1992_1_1/1992_1_1_section.c:172
-#: src/lib/1992_1_1/1992_1_1_section.c:191
-#: src/lib/1992_1_1/1992_1_1_section.c:215
-#: src/lib/1992_1_1/1992_1_1_section.c:234
+#: src/lib/1992_1_1/1992_1_1_section.c:150
+#: src/lib/1992_1_1/1992_1_1_section.c:174
+#: src/lib/1992_1_1/1992_1_1_section.c:193
+#: src/lib/1992_1_1/1992_1_1_section.c:217
+#: src/lib/1992_1_1/1992_1_1_section.c:236
 #: src/lib/1992_1_1/1992_1_1_elements.c:42
 #: src/lib/1992_1_1/1992_1_1_elements.c:88
 #: src/lib/1992_1_1/1992_1_1_elements.c:109
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:41
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:136
 #: src/lib/1990/1990_ponderations.c:123 src/lib/1990/1990_ponderations.c:139
 #: src/lib/1990/1990_ponderations.c:144 src/lib/1990/1990_ponderations.c:259
 #: src/lib/1990/1990_ponderations.c:270 src/lib/1990/1990_ponderations.c:301
@@ -98,13 +103,14 @@ msgstr "Paramètres invalides.\n"
 #: src/lib/1990/1990_combinaisons.c:479 src/lib/1990/1990_combinaisons.c:590
 #: src/lib/1990/1990_combinaisons.c:606 src/lib/1990/1990_combinaisons.c:617
 #: src/lib/1990/1990_combinaisons.c:633 src/lib/1990/1990_combinaisons.c:660
-#: src/lib/1990/1990_combinaisons.c:731 src/lib/common/common_projet.c:119
-#: src/lib/EF/EF_noeud.c:40 src/lib/EF/EF_noeud.c:85 src/lib/EF/EF_appui.c:39
-#: src/lib/EF/EF_appui.c:164 src/lib/EF/EF_rigidite.c:39
+#: src/lib/1990/1990_combinaisons.c:731 src/lib/common/common_projet.c:120
+#: src/lib/common/common_projet.c:133 src/lib/EF/EF_noeud.c:40
+#: src/lib/EF/EF_noeud.c:85 src/lib/EF/EF_appui.c:39 src/lib/EF/EF_appui.c:164
+#: src/lib/EF/EF_rigidite.c:39
 msgid "Erreur d'allocation mémoire.\n"
 msgstr "Erreur d'allocation mémoire.\n"
 
-#: src/lib/1992_1_1/1992_1_1_section.c:263
+#: src/lib/1992_1_1/1992_1_1_section.c:265
 #, fuzzy, c-format
 msgid "Section en béton n°%d introuvable.\n"
 msgstr "Action %d introuvable.\n"

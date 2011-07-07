@@ -33,6 +33,7 @@
 #include "EF_rigidite.h"
 #include "1992_1_1_elements.h"
 #include "1992_1_1_section.h"
+#include "1992_1_1_materiaux.h"
 
 /* projet_init
  * Description : Initialise la variable projet
@@ -108,6 +109,19 @@ Projet *projet_init()
 	}
 	if (EF_rigidite_init(projet) != 0)
 	{
+		EF_appuis_free(projet);
+		_1992_1_1_elements_free(projet);
+		_1992_1_1_sections_free(projet);
+		EF_noeuds_free(projet);
+		_1990_combinaisons_free(projet);
+		_1990_groupe_free(projet);
+		_1990_action_free(projet);
+		free(projet);
+		BUGTEXTE(NULL, gettext("Erreur d'allocation mémoire.\n"));
+	}
+	if (_1992_1_1_materiaux_init(projet) != 0)
+	{
+		EF_rigidite_free(projet);
 		EF_appuis_free(projet);
 		_1992_1_1_elements_free(projet);
 		_1992_1_1_sections_free(projet);
@@ -222,6 +236,8 @@ int projet_free(Projet *projet)
 		EF_appuis_free(projet);
 	if (projet->ef_donnees.rigidite != NULL)
 		EF_rigidite_free(projet);
+	if (projet->beton.materiaux != NULL)
+		_1992_1_1_materiaux_free(projet);
 	
 	cholmod_finish(projet->ef_donnees.c);
 	

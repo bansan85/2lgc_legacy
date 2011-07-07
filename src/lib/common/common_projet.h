@@ -64,6 +64,7 @@ typedef struct
 {
 	LIST			*sections;
 	LIST			*elements;
+	LIST			*materiaux;
 } Beton_Donnees;
 
 typedef struct
