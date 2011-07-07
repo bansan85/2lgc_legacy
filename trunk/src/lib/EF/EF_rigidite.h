@@ -24,8 +24,8 @@
 
 typedef struct
 {
-	int		noeud1;
-	int		noeud2;
+	int		noeudD;
+	int		noeudF;
 	double		**matrice;
 } EF_rigidite;
 

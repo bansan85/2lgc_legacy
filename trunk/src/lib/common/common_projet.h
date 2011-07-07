@@ -54,11 +54,17 @@ typedef struct __List_Gtk
 	void			*_1990;
 } List_Gtk;
 
+typedef enum
+{
+	BETON_ELEMENT_POTEAU,
+	BETON_ELEMENT_POUTRE
+} Type_Element;
+
 typedef struct
 {
 	LIST			*sections;
 	LIST			*elements;
-} Elements_Beton;
+} Beton_Donnees;
 
 typedef struct
 {
@@ -82,7 +88,7 @@ typedef struct __Projet
 	Type_Pays		pays;
 	List_Gtk		list_gtk;
 	EF			ef_donnees;
-	Elements_Beton		beton;
+	Beton_Donnees		beton;
 } Projet;
 
 Projet *projet_init();

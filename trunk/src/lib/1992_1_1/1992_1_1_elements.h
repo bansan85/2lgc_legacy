@@ -21,27 +21,26 @@
 
 #include "EF_noeud.h"
 #include "1992_1_1_section.h"
-
-typedef enum
-{
-	BETON_ELEMENT_POTEAU,
-	BETON_ELEMENT_POUTRE
-} Type_Beton_Element;
+#include "common_projet.h"
+#include "cholmod.h"
 
 typedef struct __Beton_Element_Poutre
 {
 	int			numero;
-	Type_Beton_Element	element;
+	Type_Element		element;
 	void			*section;
 	
 	EF_noeud		*noeud_debut;
 	EF_noeud		*noeud_fin;
 	int			discretisation_element;
 	EF_noeud		**noeuds_intermediaires;
+	
+	cholmod_sparse		*matrice_rotation;
+	cholmod_sparse		*matrice_rigidite;
 } Beton_Element;
 
 int _1992_1_1_elements_init(Projet *projet);
-int _1992_1_1_elements_ajout(Projet *projet, Type_Beton_Element type, int section, int noeud_debut, int noeud_fin, int discretisation_element);
+int _1992_1_1_elements_ajout(Projet *projet, Type_Element type, int section, int noeud_debut, int noeud_fin, int discretisation_element);
 int _1992_1_1_elements_free(Projet *projet);
 
 
