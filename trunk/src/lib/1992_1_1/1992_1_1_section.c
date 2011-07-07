@@ -128,14 +128,16 @@ int _1992_1_1_sections_ajout_T(Projet *projet, double largeur_table, double larg
 	section_nouvelle.section->cdgg = largeur_table/2;
 	section_nouvelle.section->Iy = hauteur_table*largeur_table*largeur_table*largeur_table/12+hauteur_ame*largeur_ame*largeur_ame*largeur_ame/12;
 	section_nouvelle.section->Iz = largeur_table*hauteur_table*hauteur_table*hauteur_table/12+largeur_ame*hauteur_ame*hauteur_ame*hauteur_ame/12+largeur_table*hauteur_table*(hauteur_table/2-section_nouvelle.section->cdgh)*(hauteur_table/2-section_nouvelle.section->cdgh)+largeur_ame*hauteur_ame*(hauteur_ame/2-section_nouvelle.section->cdgb)*(hauteur_ame/2-section_nouvelle.section->cdgb);
+	
 	if (largeur_table > hauteur_table)
-	{ a = largeur_table; b = hauteur_table; }
+		{ a = largeur_table; b = hauteur_table; }
 	else
-	{ a = hauteur_table; b = largeur_table; }
+		{ a = hauteur_table; b = largeur_table; }
 	if (largeur_ame > hauteur_ame)
-	{ aa = largeur_ame; bb = hauteur_ame; }
+		{ aa = largeur_ame; bb = hauteur_ame; }
 	else
-	{ aa = hauteur_ame; bb = largeur_ame; }
+		{ aa = hauteur_ame; bb = largeur_ame; }
+	
 	section_nouvelle.section->J = a*b*b*b/16*(16/3-3.364*b/a*(1-b*b*b*b/(12*a*a*a*a)))+aa*bb*bb*bb/16*(16/3-3.364*bb/aa*(1-bb*bb*bb*bb/(12*aa*aa*aa*aa)));
 	
 	section_en_cours = (Beton_Section_T*)list_rear(projet->beton.sections);
