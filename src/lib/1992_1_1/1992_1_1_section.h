@@ -28,17 +28,24 @@ typedef enum
 } Type_Beton_Section;
 
 
-typedef struct __Beton_Section_Extrait
+typedef struct __Beton_Section_Commun
 {
-	Type_Beton_Section	section;
+	Type_Beton_Section	type;
 	int			numero;
-} Beton_Section_Extrait;
+	double			A;
+	double			cdgh;
+	double			cdgb;
+	double			cdgg;
+	double			cdgd;
+	double			Iy;
+	double			Iz;
+	double			J;
+} Beton_Section_Commun;
 
 
 typedef struct __Beton_Section_Rectangulaire
 {
-	Type_Beton_Section	section;
-	int			numero;
+	Beton_Section_Commun	*section;
 	double			largeur;
 	double			hauteur;
 } Beton_Section_Rectangulaire;
@@ -46,8 +53,7 @@ typedef struct __Beton_Section_Rectangulaire
 
 typedef struct __Beton_Section_T
 {
-	Type_Beton_Section	section;
-	int			numero;
+	Beton_Section_Commun	*section;
 	double			largeur_table;
 	double			largeur_ame;
 	double			hauteur_table;
@@ -57,16 +63,14 @@ typedef struct __Beton_Section_T
 
 typedef struct __Beton_Section_Carre
 {
-	Type_Beton_Section	section;
-	int			numero;
+	Beton_Section_Commun	*section;
 	double			cote;
 } Beton_Section_Carre;
 
 
 typedef struct __Beton_Section_Circulaire
 {
-	Type_Beton_Section	section;
-	int			numero;
+	Beton_Section_Commun	*section;
 	double			diametre;
 } Beton_Section_Circulaire;
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2011-07-06 17:18+0200\n"
+"POT-Creation-Date: 2011-07-07 21:57+0200\n"
 "PO-Revision-Date: 2011-03-22 20:55+0100\n"
 "Last-Translator: LE GARREC Vincent <vlg@2lgc.org>\n"
 "Language-Team: French\n"
@@ -21,16 +21,17 @@ msgstr ""
 msgid "Impossible d'initialiser gtk.\n"
 msgstr "Impossible d'initialiser gtk.\n"
 
-#: src/lib/1992_1_1/1992_1_1_section.c:35
-#: src/lib/1992_1_1/1992_1_1_section.c:59
-#: src/lib/1992_1_1/1992_1_1_section.c:95
-#: src/lib/1992_1_1/1992_1_1_section.c:130
-#: src/lib/1992_1_1/1992_1_1_section.c:162
-#: src/lib/1992_1_1/1992_1_1_section.c:192
-#: src/lib/1992_1_1/1992_1_1_section.c:218
-#: src/lib/1992_1_1/1992_1_1_elements.c:35
-#: src/lib/1992_1_1/1992_1_1_elements.c:63
-#: src/lib/1992_1_1/1992_1_1_elements.c:122
+#: src/lib/1992_1_1/1992_1_1_section.c:36
+#: src/lib/1992_1_1/1992_1_1_section.c:61
+#: src/lib/1992_1_1/1992_1_1_section.c:113
+#: src/lib/1992_1_1/1992_1_1_section.c:167
+#: src/lib/1992_1_1/1992_1_1_section.c:210
+#: src/lib/1992_1_1/1992_1_1_section.c:251
+#: src/lib/1992_1_1/1992_1_1_section.c:277
+#: src/lib/1992_1_1/1992_1_1_elements.c:38
+#: src/lib/1992_1_1/1992_1_1_elements.c:66
+#: src/lib/1992_1_1/1992_1_1_elements.c:136
+#: src/lib/1992_1_1/1992_1_1_elements.c:258
 #: src/lib/1990/1990_ponderations.c:47 src/lib/1990/1990_ponderations.c:104
 #: src/lib/1990/1990_ponderations.c:176 src/lib/1990/1990_ponderations.c:297
 #: src/lib/1990/1990_ponderations.c:420 src/lib/1990/1990_ponderations.c:485
@@ -42,7 +43,7 @@ msgstr "Impossible d'initialiser gtk.\n"
 #: src/lib/1990/1990_groupes.c:219 src/lib/1990/1990_actions.c:202
 #: src/lib/1990/1990_actions.c:224 src/lib/1990/1990_actions.c:256
 #: src/lib/1990/1990_actions.c:280 src/lib/1990/1990_actions.c:306
-#: src/lib/1990/1990_gtk_groupes.c:50 src/lib/1990/1990_gtk_groupes.c:1013
+#: src/lib/1990/1990_gtk_groupes.c:50 src/lib/1990/1990_gtk_groupes.c:1025
 #: src/lib/1990/1990_combinaisons.c:49 src/lib/1990/1990_combinaisons.c:99
 #: src/lib/1990/1990_combinaisons.c:149 src/lib/1990/1990_combinaisons.c:217
 #: src/lib/1990/1990_combinaisons.c:248 src/lib/1990/1990_combinaisons.c:253
@@ -51,12 +52,7 @@ msgstr "Impossible d'initialiser gtk.\n"
 #: src/lib/1990/1990_combinaisons.c:392 src/lib/1990/1990_combinaisons.c:544
 #: src/lib/1990/1990_combinaisons.c:549 src/lib/1990/1990_combinaisons.c:553
 #: src/lib/1990/1990_combinaisons.c:718 src/lib/1990/1990_combinaisons.c:821
-#: src/lib/1990/1990_combinaisons.c:858 src/lib/EF/EF_matrice_rigidite.c:35
-#: src/lib/EF/EF_matrice_rigidite.c:63 src/lib/EF/EF_matrice_rigidite.c:77
-#: src/lib/EF/EF_matrice_rigidite.c:92 src/lib/EF/EF_matrice_rigidite.c:107
-#: src/lib/EF/EF_matrice_rigidite.c:122 src/lib/EF/EF_matrice_rigidite.c:137
-#: src/lib/EF/EF_matrice_rigidite.c:152 src/lib/EF/EF_matrice_rigidite.c:181
-#: src/lib/EF/EF_matrice_rigidite.c:207 src/lib/EF/EF_noeud.c:36
+#: src/lib/1990/1990_combinaisons.c:858 src/lib/EF/EF_noeud.c:36
 #: src/lib/EF/EF_noeud.c:62 src/lib/EF/EF_noeud.c:102
 #: src/lib/EF/EF_noeud.c:128 src/lib/EF/EF_appui.c:35 src/lib/EF/EF_appui.c:63
 #: src/lib/EF/EF_appui.c:77 src/lib/EF/EF_appui.c:92 src/lib/EF/EF_appui.c:107
@@ -67,14 +63,18 @@ msgstr "Impossible d'initialiser gtk.\n"
 msgid "Paramètres invalides.\n"
 msgstr "Paramètres invalides.\n"
 
-#: src/lib/1992_1_1/1992_1_1_section.c:39
-#: src/lib/1992_1_1/1992_1_1_section.c:73
-#: src/lib/1992_1_1/1992_1_1_section.c:111
-#: src/lib/1992_1_1/1992_1_1_section.c:143
-#: src/lib/1992_1_1/1992_1_1_section.c:175
-#: src/lib/1992_1_1/1992_1_1_elements.c:39
-#: src/lib/1992_1_1/1992_1_1_elements.c:85
-#: src/lib/1992_1_1/1992_1_1_elements.c:106
+#: src/lib/1992_1_1/1992_1_1_section.c:40
+#: src/lib/1992_1_1/1992_1_1_section.c:66
+#: src/lib/1992_1_1/1992_1_1_section.c:90
+#: src/lib/1992_1_1/1992_1_1_section.c:118
+#: src/lib/1992_1_1/1992_1_1_section.c:148
+#: src/lib/1992_1_1/1992_1_1_section.c:172
+#: src/lib/1992_1_1/1992_1_1_section.c:191
+#: src/lib/1992_1_1/1992_1_1_section.c:215
+#: src/lib/1992_1_1/1992_1_1_section.c:234
+#: src/lib/1992_1_1/1992_1_1_elements.c:42
+#: src/lib/1992_1_1/1992_1_1_elements.c:88
+#: src/lib/1992_1_1/1992_1_1_elements.c:109
 #: src/lib/1990/1990_ponderations.c:123 src/lib/1990/1990_ponderations.c:139
 #: src/lib/1990/1990_ponderations.c:144 src/lib/1990/1990_ponderations.c:259
 #: src/lib/1990/1990_ponderations.c:270 src/lib/1990/1990_ponderations.c:301
@@ -87,7 +87,7 @@ msgstr "Paramètres invalides.\n"
 #: src/lib/1990/1990_actions.c:239 src/lib/1990/1990_gtk_groupes.c:74
 #: src/lib/1990/1990_gtk_groupes.c:102 src/lib/1990/1990_gtk_groupes.c:123
 #: src/lib/1990/1990_gtk_groupes.c:243 src/lib/1990/1990_gtk_groupes.c:391
-#: src/lib/1990/1990_gtk_groupes.c:460 src/lib/1990/1990_gtk_groupes.c:996
+#: src/lib/1990/1990_gtk_groupes.c:460 src/lib/1990/1990_gtk_groupes.c:1008
 #: src/lib/1990/1990_combinaisons.c:112 src/lib/1990/1990_combinaisons.c:124
 #: src/lib/1990/1990_combinaisons.c:129 src/lib/1990/1990_combinaisons.c:169
 #: src/lib/1990/1990_combinaisons.c:181 src/lib/1990/1990_combinaisons.c:187
@@ -99,13 +99,12 @@ msgstr "Paramètres invalides.\n"
 #: src/lib/1990/1990_combinaisons.c:606 src/lib/1990/1990_combinaisons.c:617
 #: src/lib/1990/1990_combinaisons.c:633 src/lib/1990/1990_combinaisons.c:660
 #: src/lib/1990/1990_combinaisons.c:731 src/lib/common/common_projet.c:119
-#: src/lib/EF/EF_matrice_rigidite.c:39 src/lib/EF/EF_matrice_rigidite.c:164
 #: src/lib/EF/EF_noeud.c:40 src/lib/EF/EF_noeud.c:85 src/lib/EF/EF_appui.c:39
 #: src/lib/EF/EF_appui.c:164 src/lib/EF/EF_rigidite.c:39
 msgid "Erreur d'allocation mémoire.\n"
 msgstr "Erreur d'allocation mémoire.\n"
 
-#: src/lib/1992_1_1/1992_1_1_section.c:204
+#: src/lib/1992_1_1/1992_1_1_section.c:263
 #, fuzzy, c-format
 msgid "Section en béton n°%d introuvable.\n"
 msgstr "Action %d introuvable.\n"
@@ -522,12 +521,12 @@ msgstr "Le fichier '%s' est introuvable ou corrompu.\n"
 msgid "Le fichier '%s' est vide.\n"
 msgstr "Le fichier '%s' est vide.\n"
 
-#: src/lib/EF/EF_matrice_rigidite.c:193 src/lib/EF/EF_appui.c:193
-#, fuzzy, c-format
-msgid "Appui n°%d introuvable.\n"
-msgstr "Action %d introuvable.\n"
-
 #: src/lib/EF/EF_noeud.c:114
 #, fuzzy, c-format
 msgid "Noeud n°%d introuvable.\n"
+msgstr "Action %d introuvable.\n"
+
+#: src/lib/EF/EF_appui.c:193
+#, fuzzy, c-format
+msgid "Appui n°%d introuvable.\n"
 msgstr "Action %d introuvable.\n"
