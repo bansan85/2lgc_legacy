@@ -24,13 +24,14 @@
 
 typedef struct
 {
-	int		noeudD;
-	int		noeudF;
-	double		**matrice;
+	int		noeudx;
+	int		noeudy;
+	double		matrice[6][6];
 } EF_rigidite;
 
 
 int EF_rigidite_init(Projet *projet);
+int EF_rigidite_ajout(Projet *projet, int noeudx, int noeudy, EF_rigidite **rigidite);
 int EF_rigidite_free(Projet *projet);
 
 #endif

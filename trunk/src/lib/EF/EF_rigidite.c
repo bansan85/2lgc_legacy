@@ -18,6 +18,7 @@
 
 #include <stdlib.h>
 #include <libintl.h>
+#include <string.h>
 #include "common_projet.h"
 #include "common_erreurs.h"
 #include "EF_rigidite.h"
@@ -42,6 +43,51 @@ int EF_rigidite_init(Projet *projet)
 }
 
 
+/* EF_rigidite_ajout
+ * Description : Ajoute (si nécessaire) l'élément correspondant aux numéros souhaités et le renvoi
+ *             : Il reste alors à remplir la matrice
+ * Paramètres : Projet *projet : la variable projet
+ *            : int noeud1 : le numéro 1
+ *            : int noeud2 : le numéro 2
+ *            : EF_rigidite *rigidite : la rigidité correspondant aux numéros
+ * Valeur renvoyée :
+ *   Succès : 0
+ *   Échec : valeur négative
+ */
+int EF_rigidite_ajout(Projet *projet, int noeudx, int noeudy, EF_rigidite **rigidite)
+{
+	EF_rigidite	*rigidite_en_cours, rigidite_nouvelle;
+	
+	if ((projet == NULL) || (projet->ef_donnees.rigidite == NULL))
+		BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
+	
+	if (list_size(projet->ef_donnees.rigidite) != 0)
+	{
+		list_mvfront(projet->ef_donnees.rigidite);
+		do
+		{
+			rigidite_en_cours = list_curr(projet->ef_donnees.rigidite);
+			
+			if ((rigidite_en_cours->noeudx == noeudx) && (rigidite_en_cours->noeudy == noeudy))
+			{
+				*rigidite = rigidite_en_cours;
+				return 0;
+			}
+		}
+		while (list_mvnext(projet->ef_donnees.rigidite) != NULL);
+	}
+	
+	rigidite_nouvelle.noeudx = noeudx;
+	rigidite_nouvelle.noeudy = noeudy;
+	memset(&(rigidite_nouvelle.matrice), 0, sizeof(rigidite_nouvelle.matrice));
+	if (list_insert_after(projet->ef_donnees.rigidite, &(rigidite_nouvelle), sizeof(rigidite_nouvelle)) == NULL)
+		BUGTEXTE(-2, gettext("Erreur d'allocation mémoire.\n"));
+	*rigidite = list_rear(projet->ef_donnees.rigidite);
+	
+	return 0;
+}
+
+
 /* EF_rigidite_free
  * Description : Libère la liste contenant la matrice de rigidité
  * Paramètres : Projet *projet : la variable projet
@@ -57,7 +103,6 @@ int EF_rigidite_free(Projet *projet)
 	while (!list_empty(projet->ef_donnees.rigidite))
 	{
 		EF_rigidite	*rigidite = list_remove_front(projet->ef_donnees.rigidite);
-		free(rigidite->matrice);
 		
 		free(rigidite);
 	}
