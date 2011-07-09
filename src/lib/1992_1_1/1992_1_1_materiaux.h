@@ -48,6 +48,7 @@ typedef struct __Beton_Materiau
 
 int _1992_1_1_materiaux_init(Projet *projet);
 int _1992_1_1_materiaux_ajout(Projet *projet, double fck, double nu);
+int _1992_1_1_materiaux_cherche_numero(Projet *projet, int numero);
 int _1992_1_1_materiaux_free(Projet *projet);
 
 

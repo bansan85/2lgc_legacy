@@ -45,8 +45,6 @@
 Projet *projet_init()
 {
 	Projet		*projet;
-	cholmod_dense	*X, *B;
-	
 	
 	projet = (Projet*)malloc(sizeof(Projet));
 	if (projet == NULL)
@@ -135,75 +133,6 @@ Projet *projet_init()
 
 	projet->ef_donnees.c = &(projet->ef_donnees.Common);
 	cholmod_l_start(projet->ef_donnees.c);
-	printf("1.\n");
-	projet->ef_donnees.a = cholmod_l_allocate_triplet(3, 3, 9, 0, CHOLMOD_REAL, projet->ef_donnees.c);
-	projet->ef_donnees.ai = projet->ef_donnees.a->i;
-	projet->ef_donnees.aj = projet->ef_donnees.a->j;
-	projet->ef_donnees.ax = projet->ef_donnees.a->x;
-	projet->ef_donnees.ai[0] = 0;
-	projet->ef_donnees.aj[0] = 0;
-	projet->ef_donnees.ax[0] = 1;
-	projet->ef_donnees.ai[8] = 1;
-	projet->ef_donnees.aj[8] = 0;
-	projet->ef_donnees.ax[8] = 3;
-	projet->ef_donnees.ai[1] = 1;
-	projet->ef_donnees.aj[1] = 1;
-	projet->ef_donnees.ax[1] = 4;
-	projet->ef_donnees.ai[7] = 2;
-	projet->ef_donnees.aj[7] = 0;
-	projet->ef_donnees.ax[7] = 4;
-	projet->ef_donnees.ai[3] = 2;
-	projet->ef_donnees.aj[3] = 1;
-	projet->ef_donnees.ax[3] = 5;
-	projet->ef_donnees.ai[6] = 2;
-	projet->ef_donnees.aj[6] = 2;
-	projet->ef_donnees.ax[6] = 6;
-	projet->ef_donnees.ai[5] = 0;
-	projet->ef_donnees.aj[5] = 1;
-	projet->ef_donnees.ax[5] = 3;
-	projet->ef_donnees.ai[4] = 0;
-	projet->ef_donnees.aj[4] = 2;
-	projet->ef_donnees.ax[4] = 4;
-	projet->ef_donnees.ai[2] = 1;
-	projet->ef_donnees.aj[2] = 2;
-	projet->ef_donnees.ax[2] = 5;
-	projet->ef_donnees.a->nnz = 9;
-	
-	printf("2.\n");
-	projet->ef_donnees.A = cholmod_l_triplet_to_sparse(projet->ef_donnees.a, 0, projet->ef_donnees.c);
-	printf("3.\n");
-	cholmod_l_free_triplet(&(projet->ef_donnees.a), projet->ef_donnees.c);
-	projet->ef_donnees.a = NULL;
-	projet->ef_donnees.ai = NULL;
-	projet->ef_donnees.aj = NULL;
-	projet->ef_donnees.ax = NULL;
-	printf("4.\n");
-	cholmod_l_print_sparse(projet->ef_donnees.A, "A", projet->ef_donnees.c);
-	printf("5.\n");
-	cholmod_l_write_sparse(stdout, projet->ef_donnees.A, NULL, NULL, projet->ef_donnees.c);
-	
-	printf("testt\n");
-	cholmod_sparse *AA = cholmod_l_copy_sparse(projet->ef_donnees.A, projet->ef_donnees.c);
-	cholmod_l_write_sparse(stdout, AA, NULL, NULL, projet->ef_donnees.c);
-	cholmod_sparse *testt = SuiteSparseQR_C_backslash_sparse(1, ERREUR_RELATIVE_MIN, projet->ef_donnees.A, AA, projet->ef_donnees.c);
-	cholmod_l_write_sparse(stdout, testt, NULL, NULL, projet->ef_donnees.c);
-	B = cholmod_l_ones (projet->ef_donnees.A->nrow, 1, projet->ef_donnees.A->xtype, projet->ef_donnees.c);
-	
-	printf("treztrez\n");
-	X = SuiteSparseQR_C_backslash(SPQR_ORDERING_DEFAULT, ERREUR_RELATIVE_MIN, projet->ef_donnees.A, B, projet->ef_donnees.c);
-/*	cholmod_factor *L;
-	L = cholmod_l_analyze (projet->ef_donnees.A, projet->ef_donnees.c) ;
-	cholmod_l_factorize (projet->ef_donnees.A, L, projet->ef_donnees.c) ;
-	X = cholmod_l_solve (CHOLMOD_A, L, B, projet->ef_donnees.c) ;*/
-	printf("treztreztrez\n");
-	cholmod_l_print_dense(X, "X", projet->ef_donnees.c);
-	printf("treztreztreztrez\n");
-	cholmod_l_write_dense(stdout, X, NULL, projet->ef_donnees.c);
-	printf("treztreztreztreztrze\n");
-	
-	cholmod_l_free_sparse(&(projet->ef_donnees.A), projet->ef_donnees.c);
-	cholmod_l_free_dense(&B, projet->ef_donnees.c);
-	cholmod_l_free_dense(&X, projet->ef_donnees.c);
 	
 	projet->list_gtk._1990 = NULL;
 	
@@ -239,7 +168,7 @@ int projet_free(Projet *projet)
 	if (projet->beton.materiaux != NULL)
 		_1992_1_1_materiaux_free(projet);
 	
-	cholmod_finish(projet->ef_donnees.c);
+	cholmod_l_finish(projet->ef_donnees.c);
 	
 	// On ne vérifie pas si l'élément est NULL car free s'en charge avant de libérer la mémoire
 	free(projet->list_gtk._1990);

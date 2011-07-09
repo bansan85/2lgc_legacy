@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2011-07-07 23:45+0200\n"
+"POT-Creation-Date: 2011-07-09 10:15+0200\n"
 "PO-Revision-Date: 2011-03-22 20:55+0100\n"
 "Last-Translator: LE GARREC Vincent <vlg@2lgc.org>\n"
 "Language-Team: French\n"
@@ -28,13 +28,15 @@ msgstr "Impossible d'initialiser gtk.\n"
 #: src/lib/1992_1_1/1992_1_1_section.c:212
 #: src/lib/1992_1_1/1992_1_1_section.c:253
 #: src/lib/1992_1_1/1992_1_1_section.c:279
-#: src/lib/1992_1_1/1992_1_1_elements.c:38
-#: src/lib/1992_1_1/1992_1_1_elements.c:66
-#: src/lib/1992_1_1/1992_1_1_elements.c:136
-#: src/lib/1992_1_1/1992_1_1_elements.c:258
+#: src/lib/1992_1_1/1992_1_1_elements.c:39
+#: src/lib/1992_1_1/1992_1_1_elements.c:68
+#: src/lib/1992_1_1/1992_1_1_elements.c:132
+#: src/lib/1992_1_1/1992_1_1_elements.c:172
+#: src/lib/1992_1_1/1992_1_1_elements.c:352
 #: src/lib/1992_1_1/1992_1_1_materiaux.c:37
 #: src/lib/1992_1_1/1992_1_1_materiaux.c:60
-#: src/lib/1992_1_1/1992_1_1_materiaux.c:152
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:153
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:179
 #: src/lib/1990/1990_ponderations.c:47 src/lib/1990/1990_ponderations.c:104
 #: src/lib/1990/1990_ponderations.c:176 src/lib/1990/1990_ponderations.c:297
 #: src/lib/1990/1990_ponderations.c:420 src/lib/1990/1990_ponderations.c:485
@@ -75,9 +77,9 @@ msgstr "Paramètres invalides.\n"
 #: src/lib/1992_1_1/1992_1_1_section.c:193
 #: src/lib/1992_1_1/1992_1_1_section.c:217
 #: src/lib/1992_1_1/1992_1_1_section.c:236
-#: src/lib/1992_1_1/1992_1_1_elements.c:42
-#: src/lib/1992_1_1/1992_1_1_elements.c:88
-#: src/lib/1992_1_1/1992_1_1_elements.c:109
+#: src/lib/1992_1_1/1992_1_1_elements.c:43
+#: src/lib/1992_1_1/1992_1_1_elements.c:94
+#: src/lib/1992_1_1/1992_1_1_elements.c:115
 #: src/lib/1992_1_1/1992_1_1_materiaux.c:41
 #: src/lib/1992_1_1/1992_1_1_materiaux.c:136
 #: src/lib/1990/1990_ponderations.c:123 src/lib/1990/1990_ponderations.c:139
@@ -113,6 +115,16 @@ msgstr "Erreur d'allocation mémoire.\n"
 #: src/lib/1992_1_1/1992_1_1_section.c:265
 #, fuzzy, c-format
 msgid "Section en béton n°%d introuvable.\n"
+msgstr "Action %d introuvable.\n"
+
+#: src/lib/1992_1_1/1992_1_1_elements.c:144
+#, fuzzy, c-format
+msgid "Élément en béton n°%d introuvable.\n"
+msgstr "Action %d introuvable.\n"
+
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:165
+#, fuzzy, c-format
+msgid "Materiau en béton n°%d introuvable.\n"
 msgstr "Action %d introuvable.\n"
 
 #: src/lib/1990/1990_ponderations.c:181
