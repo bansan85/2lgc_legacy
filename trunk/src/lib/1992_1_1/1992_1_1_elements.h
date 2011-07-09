@@ -21,6 +21,7 @@
 
 #include "EF_noeud.h"
 #include "1992_1_1_section.h"
+#include "1992_1_1_materiaux.h"
 #include "common_projet.h"
 #include "cholmod.h"
 
@@ -29,6 +30,7 @@ typedef struct __Beton_Element_Poutre
 	int			numero;
 	Type_Element		element;
 	void			*section;
+	Beton_Materiau		*materiau;
 	
 	EF_noeud		*noeud_debut;
 	EF_noeud		*noeud_fin;
@@ -36,11 +38,14 @@ typedef struct __Beton_Element_Poutre
 	EF_noeud		**noeuds_intermediaires;
 	
 	cholmod_sparse		*matrice_rotation;
-	cholmod_sparse		*matrice_rigidite;
+	cholmod_sparse		*matrice_rigidite_locale;
+	cholmod_sparse		*matrice_rigidite_globale;
 } Beton_Element;
 
 int _1992_1_1_elements_init(Projet *projet);
-int _1992_1_1_elements_ajout(Projet *projet, Type_Element type, int section, int noeud_debut, int noeud_fin, int discretisation_element);
+int _1992_1_1_elements_ajout(Projet *projet, Type_Element type, int section, int materiau, int noeud_debut, int noeud_fin, int discretisation_element);
+int _1992_1_1_elements_cherche_numero(Projet *projet, int numero);
+int _1992_1_1_elements_rigidite_ajout(Projet *projet, int element);
 int _1992_1_1_elements_free(Projet *projet);
 
 
