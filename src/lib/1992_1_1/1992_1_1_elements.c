@@ -160,18 +160,19 @@ int _1992_1_1_elements_cherche_numero(Projet *projet, int numero)
 int _1992_1_1_elements_rigidite_ajout(Projet *projet, int num_element)
 {
 //	Action		*action_dernier, action_nouveau;
-	int		noeudD, noeudF;
+	int		noeudx, noeudy;
 //	int		trouveDD = 0, trouveDF = 0, trouveFD = 0, trouveFF = 0; // La matrice de rigidité locale est décomposée en 4 parties en fonction du noeud de Départ et du noeud de Fin.
 	long		*ai, *aj; // Pointeur vers les données des triplets
 	double		*ax;      // Pointeur vers les données des triplets
 	double		y, cosx, sinx; // valeurs de la matrice de rotation
 	double		xx, yy, zz, ll; // Dimension de la barre dans 3D
-	int		i;
+	unsigned int	i;
 	cholmod_triplet	*triplet;
 	cholmod_sparse	*sparse_tmp, *sparse_rotation_transpose;
 	Beton_Element	*element;
 	Beton_Section_Carre	*section_donnees;
 	Beton_Section_Caracteristiques	*section_caract;
+	EF_rigidite	*rigidite_en_cours;
 	
 	if ((projet == NULL) || (projet->ef_donnees.rigidite == NULL))
 		BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
@@ -181,8 +182,8 @@ int _1992_1_1_elements_rigidite_ajout(Projet *projet, int num_element)
 	element = list_curr(projet->beton.elements);
 	section_donnees = element->section;
 	section_caract = section_donnees->caracteristiques;
-	noeudD = element->noeud_debut->numero;
-	noeudF = element->noeud_fin->numero;
+	noeudx = element->noeud_debut->numero;
+	noeudy = element->noeud_fin->numero;
 	
 	// On commence par calculer la matrice de rotation 3D.
 	triplet = cholmod_l_allocate_triplet(12, 12, 32, 0, CHOLMOD_REAL, projet->ef_donnees.c);
@@ -267,8 +268,13 @@ int _1992_1_1_elements_rigidite_ajout(Projet *projet, int num_element)
 	element->matrice_rigidite_globale = cholmod_l_ssmult(sparse_tmp, sparse_rotation_transpose, 0, 1, 0, projet->ef_donnees.c);
 	cholmod_l_free_sparse(&(sparse_tmp), projet->ef_donnees.c);
 	cholmod_l_free_sparse(&(sparse_rotation_transpose), projet->ef_donnees.c);
+	triplet = cholmod_l_sparse_to_triplet(element->matrice_rigidite_globale, projet->ef_donnees.c);
+	ai = triplet->i;
+	aj = triplet->j;
+	ax = triplet->x;
 	
-/*	printf("4\n");
+/*	// Exemple d'inversion de matrice
+	printf("4\n");
 	triplet = cholmod_l_allocate_triplet(6, 1, 6, 0, CHOLMOD_REAL, projet->ef_donnees.c);
 	ai = triplet->i;
 	aj = triplet->j;
@@ -289,36 +295,42 @@ int _1992_1_1_elements_rigidite_ajout(Projet *projet, int num_element)
 	cholmod_l_factorize (projet->ef_donnees.A, L, projet->ef_donnees.c) ;
 	X = cholmod_l_solve (CHOLMOD_A, L, B, projet->ef_donnees.c) ;*/
 	
-	
-	
-	if (list_size(projet->ef_donnees.rigidite) != 0)
+	// On met le quart en haut à gauche de la matrice de l'élément dans la matrice de rigidité globale
+	if (EF_rigidite_ajout(projet, noeudx, noeudx, &rigidite_en_cours) != 0)
+		BUG(-1);
+	for (i=0;i<triplet->nnz;i++)
 	{
-		list_mvfront(projet->ef_donnees.rigidite);
-		do
-		{
-			EF_rigidite	*rigidite_en_cours = list_curr(projet->actions);
-			if ((rigidite_en_cours->noeudD == noeudD) && (rigidite_en_cours->noeudF == noeudF))
-			{
-				
-			}
-		}
-		while (list_mvnext(projet->ef_donnees.rigidite) != NULL);
+		if ((ai[i] < 6) && (aj[i] < 6))
+			rigidite_en_cours->matrice[ai[i]][aj[i]] += ax[i];
 	}
 	
+	// On met le quart en haut à droite de la matrice de l'élément dans la matrice de rigidité globale
+	if (EF_rigidite_ajout(projet, noeudx, noeudy, &rigidite_en_cours) != 0)
+		BUG(-1);
+	for (i=0;i<triplet->nnz;i++)
+	{
+		if ((ai[i] < 6) && (aj[i] >= 6))
+			rigidite_en_cours->matrice[ai[i]][aj[i]-6] += ax[i];
+	}
 	
-/*	action_nouveau.nom = NULL;
-	action_nouveau.description = NULL;
-	action_nouveau.categorie = categorie;
-	action_nouveau.flags = 0;
+	// On met le quart en bas à gauche de la matrice de l'élément dans la matrice de rigidité globale
+	if (EF_rigidite_ajout(projet, noeudy, noeudx, &rigidite_en_cours) != 0)
+		BUG(-1);
+	for (i=0;i<triplet->nnz;i++)
+	{
+		if ((ai[i] >= 6) && (aj[i] < 6))
+			rigidite_en_cours->matrice[ai[i]-6][aj[i]] += ax[i];
+	}
 	
-	action_dernier = (Action *)list_rear(projet->actions);
-	if (action_dernier == NULL)
-		action_nouveau.numero = 0;
-	else
-		action_nouveau.numero = action_dernier->numero+1;
-	
-	if (list_insert_after(projet->actions, &(action_nouveau), sizeof(action_nouveau)) == NULL)
-		BUGTEXTE(-2, gettext("Erreur d'allocation mémoire.\n"));*/
+	// On met le quart en bas à droite de la matrice de l'élément dans la matrice de rigidité globale
+	if (EF_rigidite_ajout(projet, noeudy, noeudy, &rigidite_en_cours) != 0)
+		BUG(-1);
+	for (i=0;i<triplet->nnz;i++)
+	{
+		if ((ai[i] >= 6) && (aj[i] >= 6))
+			rigidite_en_cours->matrice[ai[i]-6][aj[i]-6] += ax[i];
+	}
+	cholmod_l_free_triplet(&triplet, projet->ef_donnees.c);
 	
 	return 0;
 }
