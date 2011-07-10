@@ -26,6 +26,7 @@
 #include "1992_1_1_elements.h"
 #include "1992_1_1_section.h"
 #include "EF_noeud.h"
+#include "EF_rigidite.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <libintl.h>
@@ -148,6 +149,8 @@ int main(int argc, char *argv[])
 	
 	// Ajout de la rigidité de l'élément à la matrice globale du projet
 	if (_1992_1_1_elements_rigidite_ajout(projet, 0) != 0) BUG(-1);
+	
+	if (EF_rigidite_genere_sparse(projet) != 0) BUG(-1);
 	
 	// Création de la fenêtre principale
 	MainWindow = gtk_window_new(GTK_WINDOW_TOPLEVEL);
