@@ -79,7 +79,8 @@ typedef struct
 	LIST			*noeuds;
 	LIST			*appuis;
 	LIST			*rigidite_list; // Liste temporaire avant transformation en matrice sparse
-	cholmod_sparse		*rigidite_matrice_calc; // La matrice ne contient
+	cholmod_sparse		*rigidite_matrice_calc; // La matrice contient la matrice de rigidité globale mais sans les lignes / colonnes dont on bloque les déplacements
+	cholmod_sparse		*inv_rigidite_matrice_calc; // Inverse de la matrice rigidite_matrice_calc
 } EF;
 
 typedef struct __Projet
