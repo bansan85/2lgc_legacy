@@ -174,7 +174,7 @@ int _1992_1_1_elements_rigidite_ajout(Projet *projet, int num_element)
 	Beton_Section_Caracteristiques	*section_caract;
 	EF_rigidite	*rigidite_en_cours;
 	
-	if ((projet == NULL) || (projet->ef_donnees.rigidite == NULL))
+	if ((projet == NULL) || (projet->ef_donnees.rigidite_list == NULL))
 		BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
 	
 	if (_1992_1_1_elements_cherche_numero(projet, num_element) != 0)

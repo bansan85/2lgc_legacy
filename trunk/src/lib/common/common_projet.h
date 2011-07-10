@@ -78,7 +78,8 @@ typedef struct
 	cholmod_sparse		*A;
 	LIST			*noeuds;
 	LIST			*appuis;
-	LIST			*rigidite; // Liste temporaire avant transformation en triplet (a) puis en matrice common (c)
+	LIST			*rigidite_list; // Liste temporaire avant transformation en matrice sparse
+	cholmod_sparse		*rigidite_matrice_calc; // La matrice ne contient
 } EF;
 
 typedef struct __Projet

@@ -163,7 +163,7 @@ int projet_free(Projet *projet)
 		_1992_1_1_elements_free(projet);
 	if (projet->ef_donnees.appuis != NULL)
 		EF_appuis_free(projet);
-	if (projet->ef_donnees.rigidite != NULL)
+	if (projet->ef_donnees.rigidite_list != NULL)
 		EF_rigidite_free(projet);
 	if (projet->beton.materiaux != NULL)
 		_1992_1_1_materiaux_free(projet);
