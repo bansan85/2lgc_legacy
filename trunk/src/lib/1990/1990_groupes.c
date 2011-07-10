@@ -222,7 +222,7 @@ int _1990_groupe_ajout_element(Projet *projet, unsigned int niveau, int groupe_n
 	// puis on positionne le niveau en cours au niveau 'niveau'
 	if (niveau == 0)
 	{
-		if (_1990_action_positionne(projet, num_element) != 0)
+		if (_1990_action_cherche_numero(projet, num_element) != 0)
 			BUG(-2);
 		list_mvfront(projet->niveaux_groupes);
 	}
@@ -241,8 +241,10 @@ int _1990_groupe_ajout_element(Projet *projet, unsigned int niveau, int groupe_n
 		BUG(-5);
 	groupe = list_curr(niveau_groupe->groupes);
 	element_nouveau.numero = num_element;
+	#ifdef ENABLE_GTK
 	element_nouveau.pIter = NULL;
 	element_nouveau.pIter_expand = 0;
+	#endif
 	// On ajoute le nouvel élément au groupe
 	if (list_size(groupe->elements) == 0)
 	{

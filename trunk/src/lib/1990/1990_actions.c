@@ -23,6 +23,7 @@
 #include <stdlib.h>
 
 #include "1990_actions.h"
+#include "1990_coef_psi.h"
 #include "common_projet.h"
 #include "common_erreurs.h"
 
@@ -227,7 +228,11 @@ int _1990_action_ajout(Projet *projet, int categorie)
 	action_nouveau.nom = NULL;
 	action_nouveau.description = NULL;
 	action_nouveau.categorie = categorie;
+	action_nouveau.charges = list_init();
 	action_nouveau.flags = 0;
+	action_nouveau.psi0 = _1990_coef_psi0_bat(categorie, projet->pays);
+	action_nouveau.psi1 = _1990_coef_psi1_bat(categorie, projet->pays);
+	action_nouveau.psi2 = _1990_coef_psi2_bat(categorie, projet->pays);
 	
 	action_dernier = (Action *)list_rear(projet->actions);
 	if (action_dernier == NULL)
@@ -250,7 +255,7 @@ int _1990_action_ajout(Projet *projet, int categorie)
  *   Succès : 0
  *   Échec : valeur négative
  */
-int _1990_action_positionne(Projet *projet, int numero)
+int _1990_action_cherche_numero(Projet *projet, int numero)
 {
 	if ((projet == NULL) || (projet->actions == NULL) || (list_size(projet->actions) == 0))
 		BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
@@ -313,6 +318,11 @@ int _1990_action_free(Projet *projet)
 			free(action->nom);
 		if (action->description != NULL)
 			free(action->description);
+		while (!list_empty(action->charges))
+		{
+			Charge	*charge = list_remove_front(action->charges);
+			free(charge);
+		}
 		free(action);
 	}
 	

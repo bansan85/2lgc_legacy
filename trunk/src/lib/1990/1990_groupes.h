@@ -26,8 +26,10 @@
 typedef struct __Element
 {
 	int			numero;
+#ifdef ENABLE_GTK
 	void			*pIter;
 	int			pIter_expand;
+#endif
 } Element;
 
 typedef enum

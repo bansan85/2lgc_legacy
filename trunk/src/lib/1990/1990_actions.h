@@ -28,9 +28,6 @@ typedef struct __Charge
 	char			*nom;
 	char			*description;
 	double			valeur_caracteristique;
-	double			valeur_combinaison;		// valeur_caracteristique * psi0
-	double			valeur_frequente;		// valeur_caracteristique * psi1
-	double			valeur_quasi_permanente;	// valeur_caracteristique * psi2
 } Charge;
 
 typedef struct __Action
@@ -41,6 +38,9 @@ typedef struct __Action
 	int			categorie;			// Les catégories sont définies dans les fonctions _1990_action_categorie
 	LIST			*charges;
 	int			flags;
+	double			psi0;		// valeur_combinaison
+	double			psi1;		// valeur_frequente
+	double			psi2;		// valeur_quasi_permanente
 } Action;
 
 char *_1990_action_categorie_bat_txt_eu(int type);
@@ -53,7 +53,7 @@ int _1990_action_type_combinaison_bat(int categorie, Type_Pays pays);
 
 int _1990_action_init(Projet *projet);
 int _1990_action_ajout(Projet *projet, int categorie);
-int _1990_action_positionne(Projet *projet, int numero);
+int _1990_action_cherche_numero(Projet *projet, int numero);
 int _1990_action_affiche_tout(Projet *projet);
 int _1990_action_free(Projet *projet);
 
