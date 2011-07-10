@@ -26,14 +26,14 @@
 
 /* _1990_coef_psi0_bat_eu
  * Description : renvoie le coefficient psi0 indiquée par la norme européenne pour les batiments
- * Paramètres : int type : catégorie de l'action
+ * Paramètres : int categorie : catégorie de l'action
  * Valeur renvoyée :
  *   Succès : valeur en double du coefficient psi0
  *   Échec : valeur en double -1. si la catégorie n'existe pas
  */
-double _1990_coef_psi0_bat_eu(int type)
+double _1990_coef_psi0_bat_eu(int categorie)
 {
-	switch (type)
+	switch (categorie)
 	{
 		case 0 : { return -1.; break; }
 		case 1 : { return -1.; break; }
@@ -58,14 +58,14 @@ double _1990_coef_psi0_bat_eu(int type)
 
 /* _1990_coef_psi1_bat_eu
  * Description : renvoie le coefficient psi1 indiquée par la norme européenne pour les batiments
- * Paramètres : int type : catégorie de l'action
+ * Paramètres : int categorie : catégorie de l'action
  * Valeur renvoyée :
  *   Succès : valeur en double du coefficient psi1
  *   Échec : valeur en double -1. si la catégorie n'existe pas
  */
-double _1990_coef_psi1_bat_eu(int type)
+double _1990_coef_psi1_bat_eu(int categorie)
 {
-	switch (type)
+	switch (categorie)
 	{
 		case 0 : { return -1.; break; }
 		case 1 : { return -1.; break; }
@@ -90,14 +90,14 @@ double _1990_coef_psi1_bat_eu(int type)
 
 /* _1990_coef_psi2_bat_eu
  * Description : renvoie le coefficient psi2 indiquée par la norme européenne pour les batiments
- * Paramètres : int type : catégorie de l'action
+ * Paramètres : int categorie : catégorie de l'action
  * Valeur renvoyée :
  *   Succès : valeur en double du coefficient psi2
  *   Échec : valeur en double -1. si la catégorie n'existe pas
  */
-double _1990_coef_psi2_bat_eu(int type)
+double _1990_coef_psi2_bat_eu(int categorie)
 {
-	switch (type)
+	switch (categorie)
 	{
 		case 0 : { return -1.; break; }
 		case 1 : { return -1.; break; }
@@ -122,14 +122,14 @@ double _1990_coef_psi2_bat_eu(int type)
 
 /* _1990_coef_psi0_bat_fr
  * Description : renvoie le coefficient psi0 indiquée par la norme française pour les batiments
- * Paramètres : int type : catégorie de l'action
+ * Paramètres : int categorie : catégorie de l'action
  * Valeur renvoyée :
  *   Succès : valeur en double du coefficient psi0
  *   Échec : valeur en double -1. si la catégorie n'existe pas
  */
-double _1990_coef_psi0_bat_fr(int type)
+double _1990_coef_psi0_bat_fr(int categorie)
 {
-	switch (type)
+	switch (categorie)
 	{
 		case 0 : { return -1.; break; }
 		case 1 : { return -1.; break; }
@@ -159,14 +159,14 @@ double _1990_coef_psi0_bat_fr(int type)
 
 /* _1990_coef_psi1_bat_fr
  * Description : renvoie le coefficient psi1 indiquée par la norme française pour les batiments
- * Paramètres : int type : catégorie de l'action
+ * Paramètres : int categorie : catégorie de l'action
  * Valeur renvoyée :
  *   Succès : valeur en double du coefficient psi1
  *   Échec : valeur en double -1. si la catégorie n'existe pas
  */
-double _1990_coef_psi1_bat_fr(int type)
+double _1990_coef_psi1_bat_fr(int categorie)
 {
-	switch (type)
+	switch (categorie)
 	{
 		case 0 : { return -1.; break; }
 		case 1 : { return -1.; break; }
@@ -196,14 +196,14 @@ double _1990_coef_psi1_bat_fr(int type)
 
 /* _1990_coef_psi2_bat_fr
  * Description : renvoie le coefficient psi2 indiquée par la norme française pour les batiments
- * Paramètres : int type : catégorie de l'action
+ * Paramètres : int categorie : catégorie de l'action
  * Valeur renvoyée :
  *   Succès : valeur en double du coefficient psi2
  *   Échec : valeur en double -1. si la catégorie n'existe pas
  */
-double _1990_coef_psi2_bat_fr(int type)
+double _1990_coef_psi2_bat_fr(int categorie)
 {
-	switch (type)
+	switch (categorie)
 	{
 		case 0 : { return -1.; break; }
 		case 1 : { return -1.; break; }
@@ -233,54 +233,54 @@ double _1990_coef_psi2_bat_fr(int type)
 
 /* _1990_coef_psi0_bat
  * Description : renvoie le coefficient psi0 en fonction de la norme du pays spécifié pour les batiments
- * Paramètres : int type : catégorie de l'action
+ * Paramètres : int categorie : catégorie de l'action
  *            : int pays : référence du pays
  * Valeur renvoyée :
  *   Succès : cf les fonctions _1990_coef_psi0_bat_PAYS
  *   Échec : valeur en double -1. si le pays n'existe pas
  */
-double _1990_coef_psi0_bat(int type, Type_Pays pays)
+double _1990_coef_psi0_bat(int categorie, Type_Pays pays)
 {
 	switch (pays)
 	{
-		case PAYS_EU : { return _1990_coef_psi0_bat_eu(type); break; }
-		case PAYS_FR : { return _1990_coef_psi0_bat_fr(type); break; }
+		case PAYS_EU : { return _1990_coef_psi0_bat_eu(categorie); break; }
+		case PAYS_FR : { return _1990_coef_psi0_bat_fr(categorie); break; }
 		default : { BUGTEXTE(-1., gettext("Pays inconnu.\n")); break; }
 	}
 }
 
 /* _1990_coef_psi1_bat
  * Description : renvoie le coefficient psi1 en fonction de la norme du pays spécifié pour les batiments
- * Paramètres : int type : catégorie de l'action
+ * Paramètres : int categorie : catégorie de l'action
  *            : int pays : référence du pays
  * Valeur renvoyée :
  *   Succès : cf les fonctions _1990_coef_psi1_bat_PAYS
  *   Échec : valeur en double -1. si le pays n'existe pas
  */
-double _1990_coef_psi1_bat(int type, Type_Pays pays)
+double _1990_coef_psi1_bat(int categorie, Type_Pays pays)
 {
 	switch (pays)
 	{
-		case PAYS_EU : { return _1990_coef_psi1_bat_eu(type); break; }
-		case PAYS_FR : { return _1990_coef_psi1_bat_fr(type); break; }
+		case PAYS_EU : { return _1990_coef_psi1_bat_eu(categorie); break; }
+		case PAYS_FR : { return _1990_coef_psi1_bat_fr(categorie); break; }
 		default : { BUGTEXTE(-1., gettext("Pays inconnu.\n")); break; }
 	}
 }
 
 /* _1990_coef_psi2_bat
  * Description : renvoie le coefficient psi2 en fonction de la norme du pays spécifié pour les batiments
- * Paramètres : int type : catégorie de l'action
+ * Paramètres : int categorie : catégorie de l'action
  *            : int pays : référence du pays
  * Valeur renvoyée :
  *   Succès : cf les fonctions _1990_coef_psi2_bat_PAYS
  *   Échec : valeur en double -1. si le pays n'existe pas
  */
-double _1990_coef_psi2_bat(int type, Type_Pays pays)
+double _1990_coef_psi2_bat(int categorie, Type_Pays pays)
 {
 	switch (pays)
 	{
-		case PAYS_EU : { return _1990_coef_psi2_bat_eu(type); break; }
-		case PAYS_FR : { return _1990_coef_psi2_bat_fr(type); break; }
+		case PAYS_EU : { return _1990_coef_psi2_bat_eu(categorie); break; }
+		case PAYS_FR : { return _1990_coef_psi2_bat_fr(categorie); break; }
 		default : { BUGTEXTE(-1., gettext("Pays inconnu.\n")); break; }
 	}
 }

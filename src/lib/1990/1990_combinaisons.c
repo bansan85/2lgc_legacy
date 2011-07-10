@@ -276,7 +276,7 @@ int _1990_combinaisons_genere_groupe_xor(Projet *projet)
 			Combinaison_Element	nouveau_element;
 			
 			element_en_cours = (Element*)list_curr(groupe->elements);
-			if (_1990_action_positionne(projet, element_en_cours->numero) != 0)
+			if (_1990_action_cherche_numero(projet, element_en_cours->numero) != 0)
 				BUG(-4);
 			nouvelle_combinaison.elements = list_init();
 			if (nouvelle_combinaison.elements == NULL)
@@ -411,7 +411,7 @@ int _1990_combinaisons_genere_groupe_and(Projet *projet)
 			Element			*element_en_cours = (Element*)list_curr(groupe->elements);
 			Combinaison_Element	nouveau_element;
 			
-			if (_1990_action_positionne(projet, element_en_cours->numero) != 0)
+			if (_1990_action_cherche_numero(projet, element_en_cours->numero) != 0)
 				BUG(-4);
 			nouveau_element.action = list_curr(projet->actions);
 			nouveau_element.flags = nouveau_element.action->flags;
@@ -596,7 +596,7 @@ int _1990_combinaisons_genere_groupe_or(Projet *projet)
 				{
 					Element		*element_en_cours = (Element*)list_curr(groupe->elements);
 					
-					if (_1990_action_positionne(projet, element_en_cours->numero) != 0)
+					if (_1990_action_cherche_numero(projet, element_en_cours->numero) != 0)
 						BUG(-5);
 					element.action = list_curr(projet->actions);
 					element.flags = element.action->flags;
