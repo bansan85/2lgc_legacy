@@ -19,6 +19,7 @@
 #include <stdlib.h>
 #include <libintl.h>
 #include <string.h>
+#include <SuiteSparseQR_C.h>
 #include "common_projet.h"
 #include "common_erreurs.h"
 #include "common_maths.h"
@@ -38,6 +39,8 @@ int EF_rigidite_init(Projet *projet)
 	if (projet == NULL)
 		BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
 	
+	projet->ef_donnees.rigidite_matrice_calc = NULL;
+	projet->ef_donnees.inv_rigidite_matrice_calc = NULL;
 	projet->ef_donnees.rigidite_list = list_init();
 	if (projet->ef_donnees.rigidite_list == NULL)
 		BUGTEXTE(-2, gettext("Erreur d'allocation mémoire.\n"));
@@ -133,7 +136,6 @@ int EF_rigidite_genere_sparse(Projet *projet)
 		}
 	}
 	while (list_mvnext(projet->ef_donnees.rigidite_list) != NULL);
-	printf("nnz_max %d\n", nnz_max);
 	
 	// Détermine pour chaque noeud si la ligne / colonne de la matrice de rigidité globale
 	// doit être pris en compte dans la résolution du système.
@@ -217,11 +219,28 @@ int EF_rigidite_genere_sparse(Projet *projet)
 		}
 	}
 	while (list_mvnext(projet->ef_donnees.rigidite_list) != NULL);
-	triplet_rigidite->nnz = k-1;
-	printf("%d\n",  k-1);
+	triplet_rigidite->nnz = k;
 	
+	// Puis en sparse matrice
 	projet->ef_donnees.rigidite_matrice_calc = cholmod_l_triplet_to_sparse(triplet_rigidite, 0, projet->ef_donnees.c);
 	cholmod_l_free_triplet(&triplet_rigidite, projet->ef_donnees.c);
+	
+	// Puis on inverse la matrice en cherchant la matrice x de tel sorte que Kx=1. Ainsi x est l'inverse
+	cholmod_triplet *zero_rigidite = cholmod_l_allocate_triplet(6, 6, 6, 0, CHOLMOD_REAL, projet->ef_donnees.c);
+	ai = zero_rigidite->i;
+	aj = zero_rigidite->j;
+	ax = zero_rigidite->x;
+	zero_rigidite->nnz=6;
+	for (i=0;i<6;i++)
+	{
+		ai[i] = i;
+		aj[i] = i;
+		ax[i] = 1.;
+	}
+	cholmod_sparse	*zeros_spars = cholmod_l_triplet_to_sparse(zero_rigidite, 0, projet->ef_donnees.c);
+	cholmod_l_free_triplet(&zero_rigidite, projet->ef_donnees.c);
+	projet->ef_donnees.inv_rigidite_matrice_calc = SuiteSparseQR_C_backslash_sparse(0, 0.000000000000000000000000000000001, projet->ef_donnees.rigidite_matrice_calc, zeros_spars, projet->ef_donnees.c);
+	cholmod_l_free_sparse(&zeros_spars, projet->ef_donnees.c);
 	
 	for (i=0;i<list_size(projet->ef_donnees.noeuds);i++)
 		free(noeuds_flags[i]);
@@ -256,6 +275,11 @@ int EF_rigidite_free(Projet *projet)
 	{
 		cholmod_l_free_sparse(&(projet->ef_donnees.rigidite_matrice_calc), projet->ef_donnees.c);
 		projet->ef_donnees.rigidite_matrice_calc = NULL;
+	}
+	if (projet->ef_donnees.inv_rigidite_matrice_calc != NULL)
+	{
+		cholmod_l_free_sparse(&(projet->ef_donnees.inv_rigidite_matrice_calc), projet->ef_donnees.c);
+		projet->ef_donnees.inv_rigidite_matrice_calc = NULL;
 	}
 	
 	return 0;
