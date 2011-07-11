@@ -35,7 +35,7 @@ typedef struct
 	int		numero;
 	EF_Point	position;
 	EF_Appui	*appui;
-} EF_noeud;
+} EF_Noeud;
 
 int EF_noeuds_init(Projet *projet);
 int EF_noeuds_ajout(Projet *projet, double x, double y, double z, int appui);

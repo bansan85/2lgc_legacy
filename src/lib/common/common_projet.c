@@ -155,6 +155,9 @@ int projet_free(Projet *projet)
 		_1990_groupe_free(projet);
 	if (projet->combinaisons.elu_equ != NULL)
 		_1990_combinaisons_free(projet);
+	// Rigidite doit être libéré avant noeud car pour libérer toute la mémoire, il est nécessaire d'avoir accès aux informations contenues dans les noeuds
+	if (projet->ef_donnees.rigidite_list != NULL)
+		EF_rigidite_free(projet);
 	if (projet->ef_donnees.noeuds != NULL)
 		EF_noeuds_free(projet);
 	if (projet->beton.sections != NULL)
@@ -163,8 +166,6 @@ int projet_free(Projet *projet)
 		_1992_1_1_elements_free(projet);
 	if (projet->ef_donnees.appuis != NULL)
 		EF_appuis_free(projet);
-	if (projet->ef_donnees.rigidite_list != NULL)
-		EF_rigidite_free(projet);
 	if (projet->beton.materiaux != NULL)
 		_1992_1_1_materiaux_free(projet);
 	

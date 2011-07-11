@@ -39,8 +39,8 @@ int EF_rigidite_init(Projet *projet)
 	if (projet == NULL)
 		BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
 	
-	projet->ef_donnees.rigidite_matrice_calc = NULL;
-	projet->ef_donnees.inv_rigidite_matrice_calc = NULL;
+	projet->ef_donnees.rigidite_matrice_partielle = NULL;
+	projet->ef_donnees.inv_rigidite_matrice_partielle = NULL;
 	projet->ef_donnees.rigidite_list = list_init();
 	if (projet->ef_donnees.rigidite_list == NULL)
 		BUGTEXTE(-2, gettext("Erreur d'allocation mémoire.\n"));
@@ -103,6 +103,8 @@ int EF_rigidite_ajout(Projet *projet, int noeudx, int noeudy, EF_rigidite **rigi
  */
 int EF_rigidite_free(Projet *projet)
 {
+	unsigned int	i;
+	
 	if ((projet == NULL) || (projet->ef_donnees.rigidite_list == NULL))
 		BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
 	
@@ -115,16 +117,24 @@ int EF_rigidite_free(Projet *projet)
 	
 	free(projet->ef_donnees.rigidite_list);
 	projet->ef_donnees.rigidite_list = NULL;
-	if (projet->ef_donnees.rigidite_matrice_calc != NULL)
+	if (projet->ef_donnees.rigidite_matrice_partielle != NULL)
 	{
-		cholmod_l_free_sparse(&(projet->ef_donnees.rigidite_matrice_calc), projet->ef_donnees.c);
-		projet->ef_donnees.rigidite_matrice_calc = NULL;
+		cholmod_l_free_sparse(&(projet->ef_donnees.rigidite_matrice_partielle), projet->ef_donnees.c);
+		projet->ef_donnees.rigidite_matrice_partielle = NULL;
 	}
-	if (projet->ef_donnees.inv_rigidite_matrice_calc != NULL)
+	if (projet->ef_donnees.inv_rigidite_matrice_partielle != NULL)
 	{
-		cholmod_l_free_sparse(&(projet->ef_donnees.inv_rigidite_matrice_calc), projet->ef_donnees.c);
-		projet->ef_donnees.inv_rigidite_matrice_calc = NULL;
+		cholmod_l_free_sparse(&(projet->ef_donnees.inv_rigidite_matrice_partielle), projet->ef_donnees.c);
+		projet->ef_donnees.inv_rigidite_matrice_partielle = NULL;
 	}
+	
+	if (projet->ef_donnees.noeuds_flags_partielle != NULL)
+	{
+		for (i=0;i<list_size(projet->ef_donnees.noeuds);i++)
+			free(projet->ef_donnees.noeuds_flags_partielle[i]);
+		free(projet->ef_donnees.noeuds_flags_partielle);
+	}
+	
 	
 	return 0;
 }

@@ -1,5 +1,6 @@
 DEFAULT_INCLUDES	=	-I../.. \
 				-I../lib/1990 \
+				-I../lib/EF \
 				-I../lib/common
 
 TESTS	=	1990__1_actions \

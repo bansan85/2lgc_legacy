@@ -56,7 +56,7 @@ int EF_noeuds_init(Projet *projet)
  */
 int EF_noeuds_ajout(Projet *projet, double x, double y, double z, int appui)
 {
-	EF_noeud		*noeud_en_cours, noeud_nouveau;
+	EF_Noeud		*noeud_en_cours, noeud_nouveau;
 	
 	if ((projet == NULL) || (projet->ef_donnees.noeuds == NULL))
 		BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
@@ -75,7 +75,7 @@ int EF_noeuds_ajout(Projet *projet, double x, double y, double z, int appui)
 		noeud_nouveau.appui = (EF_Appui *)(list_curr(projet->ef_donnees.appuis));
 	}
 		
-	noeud_en_cours = (EF_noeud *)list_rear(projet->ef_donnees.noeuds);
+	noeud_en_cours = (EF_Noeud *)list_rear(projet->ef_donnees.noeuds);
 	if (noeud_en_cours == NULL)
 		noeud_nouveau.numero = 0;
 	else
@@ -104,7 +104,7 @@ int EF_noeuds_cherche_numero(Projet *projet, int numero)
 	list_mvfront(projet->ef_donnees.noeuds);
 	do
 	{
-		EF_noeud	*noeud = list_curr(projet->ef_donnees.noeuds);
+		EF_Noeud	*noeud = list_curr(projet->ef_donnees.noeuds);
 		
 		if (noeud->numero == numero)
 			return 0;
@@ -129,7 +129,7 @@ int EF_noeuds_free(Projet *projet)
 	
 	while (!list_empty(projet->ef_donnees.noeuds))
 	{
-		EF_noeud	*noeud = list_remove_front(projet->ef_donnees.noeuds);
+		EF_Noeud	*noeud = list_remove_front(projet->ef_donnees.noeuds);
 		
 		free(noeud);
 	}

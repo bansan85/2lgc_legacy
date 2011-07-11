@@ -32,10 +32,10 @@ typedef struct __Beton_Element_Poutre
 	void			*section;
 	Beton_Materiau		*materiau;
 	
-	EF_noeud		*noeud_debut;
-	EF_noeud		*noeud_fin;
+	EF_Noeud		*noeud_debut;
+	EF_Noeud		*noeud_fin;
 	int			discretisation_element;
-	EF_noeud		**noeuds_intermediaires;
+	EF_Noeud		**noeuds_intermediaires;
 	
 	cholmod_sparse		*matrice_rotation;
 	cholmod_sparse		*matrice_rigidite_locale;

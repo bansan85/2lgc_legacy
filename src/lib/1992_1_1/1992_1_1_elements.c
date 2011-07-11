@@ -89,7 +89,7 @@ int _1992_1_1_elements_ajout(Projet *projet, Type_Element type, int section, int
 	element_nouveau.discretisation_element = discretisation_element;
 	if (discretisation_element != 0)
 	{
-		element_nouveau.noeuds_intermediaires = malloc(sizeof(EF_noeud)*(discretisation_element-1));
+		element_nouveau.noeuds_intermediaires = malloc(sizeof(EF_Noeud)*(discretisation_element-1));
 		if (element_nouveau.noeuds_intermediaires == NULL)
 			BUGTEXTE(-6, gettext("Erreur d'allocation mémoire.\n"));
 		for (i=0;i<=discretisation_element-2;i++)

@@ -20,8 +20,10 @@
 #define __1990_ACTIONS_H
 
 #include <list.h>
+#include <cholmod.h>
 
 #include "common_projet.h"
+#include "EF_noeud.h"
 
 typedef enum
 {
@@ -35,6 +37,7 @@ typedef struct __Charge_Ponctuelle
 	int			numero;
 	char			*nom;
 	char			*description;
+	EF_Noeud		*noeud;
 	double			x;
 	double			y;
 	double			z;
@@ -54,6 +57,7 @@ typedef struct __Action
 	double			psi0;		// valeur_combinaison
 	double			psi1;		// valeur_frequente
 	double			psi2;		// valeur_quasi_permanente
+	cholmod_sparse		*deplacement_partiel;
 } Action;
 
 char *_1990_action_categorie_bat_txt_eu(int type);
@@ -68,7 +72,7 @@ int _1990_action_init(Projet *projet);
 int _1990_action_ajout(Projet *projet, int categorie);
 int _1990_action_cherche_numero(Projet *projet, int numero);
 int _1990_action_affiche_tout(Projet *projet);
-int _1990_action_ajout_charge_ponctuelle(Projet *projet, int num_action, double fx, double fy, double fz, double rx, double ry, double rz);
+int _1990_action_ajout_charge_ponctuelle(Projet *projet, int num_action, int num_noeud, double fx, double fy, double fz, double rx, double ry, double rz);
 int _1990_action_free(Projet *projet);
 
 #endif
