@@ -27,6 +27,7 @@
 #include "1992_1_1_section.h"
 #include "EF_noeud.h"
 #include "EF_rigidite.h"
+#include "EF_calculs.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <libintl.h>
@@ -98,6 +99,7 @@ int main(int argc, char *argv[])
 	
 	// Création des actions
 	if (_1990_action_ajout(projet, 0) != 0) BUG(-1); // Poids propre
+	if (_1990_action_ajout_charge_ponctuelle(projet, 0, 500000., 450000., 400000., 0., 0., 0.) != 0) BUG(-1);
 	if (_1990_action_ajout(projet, 2) != 0) BUG(-1); // 2 Exploitation
 	if (_1990_action_ajout(projet, 12) != 0) BUG(-1); // 3 Neige
 	if (_1990_action_ajout(projet, 13) != 0) BUG(-1); // 4 Vent

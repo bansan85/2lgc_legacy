@@ -23,12 +23,25 @@
 
 #include "common_projet.h"
 
-typedef struct __Charge
+typedef enum
 {
+	CHARGE_PONCTUELLE
+} Charge_Type;
+
+
+typedef struct __Charge_Ponctuelle
+{
+	Charge_Type		type;
+	int			numero;
 	char			*nom;
 	char			*description;
-	double			valeur_caracteristique;
-} Charge;
+	double			x;
+	double			y;
+	double			z;
+	double			rx;
+	double			ry;
+	double			rz;
+} Charge_Ponctuelle;
 
 typedef struct __Action
 {
@@ -55,6 +68,7 @@ int _1990_action_init(Projet *projet);
 int _1990_action_ajout(Projet *projet, int categorie);
 int _1990_action_cherche_numero(Projet *projet, int numero);
 int _1990_action_affiche_tout(Projet *projet);
+int _1990_action_ajout_charge_ponctuelle(Projet *projet, int num_action, double fx, double fy, double fz, double rx, double ry, double rz);
 int _1990_action_free(Projet *projet);
 
 #endif

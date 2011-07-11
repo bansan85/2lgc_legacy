@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2011-07-10 18:01+0200\n"
+"POT-Creation-Date: 2011-07-11 16:00+0200\n"
 "PO-Revision-Date: 2011-03-22 20:55+0100\n"
 "Last-Translator: LE GARREC Vincent <vlg@2lgc.org>\n"
 "Language-Team: French\n"
@@ -45,9 +45,10 @@ msgstr "Impossible d'initialiser gtk.\n"
 #: src/lib/1990/1990_groupes.c:41 src/lib/1990/1990_groupes.c:64
 #: src/lib/1990/1990_groupes.c:90 src/lib/1990/1990_groupes.c:117
 #: src/lib/1990/1990_groupes.c:143 src/lib/1990/1990_groupes.c:172
-#: src/lib/1990/1990_groupes.c:219 src/lib/1990/1990_actions.c:202
-#: src/lib/1990/1990_actions.c:224 src/lib/1990/1990_actions.c:256
-#: src/lib/1990/1990_actions.c:280 src/lib/1990/1990_actions.c:306
+#: src/lib/1990/1990_groupes.c:219 src/lib/1990/1990_actions.c:203
+#: src/lib/1990/1990_actions.c:225 src/lib/1990/1990_actions.c:261
+#: src/lib/1990/1990_actions.c:285 src/lib/1990/1990_actions.c:321
+#: src/lib/1990/1990_actions.c:324 src/lib/1990/1990_actions.c:360
 #: src/lib/1990/1990_gtk_groupes.c:50 src/lib/1990/1990_gtk_groupes.c:1025
 #: src/lib/1990/1990_combinaisons.c:49 src/lib/1990/1990_combinaisons.c:99
 #: src/lib/1990/1990_combinaisons.c:149 src/lib/1990/1990_combinaisons.c:217
@@ -57,15 +58,14 @@ msgstr "Impossible d'initialiser gtk.\n"
 #: src/lib/1990/1990_combinaisons.c:392 src/lib/1990/1990_combinaisons.c:544
 #: src/lib/1990/1990_combinaisons.c:549 src/lib/1990/1990_combinaisons.c:553
 #: src/lib/1990/1990_combinaisons.c:718 src/lib/1990/1990_combinaisons.c:821
-#: src/lib/1990/1990_combinaisons.c:858 src/lib/EF/EF_noeud.c:36
-#: src/lib/EF/EF_noeud.c:62 src/lib/EF/EF_noeud.c:102
+#: src/lib/1990/1990_combinaisons.c:858 src/lib/EF/EF_calculs.c:46
+#: src/lib/EF/EF_noeud.c:36 src/lib/EF/EF_noeud.c:62 src/lib/EF/EF_noeud.c:102
 #: src/lib/EF/EF_noeud.c:128 src/lib/EF/EF_appui.c:35 src/lib/EF/EF_appui.c:63
 #: src/lib/EF/EF_appui.c:77 src/lib/EF/EF_appui.c:92 src/lib/EF/EF_appui.c:107
 #: src/lib/EF/EF_appui.c:122 src/lib/EF/EF_appui.c:137
 #: src/lib/EF/EF_appui.c:152 src/lib/EF/EF_appui.c:181
 #: src/lib/EF/EF_appui.c:207 src/lib/EF/EF_rigidite.c:40
-#: src/lib/EF/EF_rigidite.c:68 src/lib/EF/EF_rigidite.c:115
-#: src/lib/EF/EF_rigidite.c:263
+#: src/lib/EF/EF_rigidite.c:68 src/lib/EF/EF_rigidite.c:107
 msgid "Paramètres invalides.\n"
 msgstr "Paramètres invalides.\n"
 
@@ -90,27 +90,28 @@ msgstr "Paramètres invalides.\n"
 #: src/lib/1990/1990_ponderations.c:574 src/lib/1990/1990_groupes.c:46
 #: src/lib/1990/1990_groupes.c:70 src/lib/1990/1990_groupes.c:74
 #: src/lib/1990/1990_groupes.c:187 src/lib/1990/1990_groupes.c:191
-#: src/lib/1990/1990_groupes.c:193 src/lib/1990/1990_groupes.c:250
-#: src/lib/1990/1990_groupes.c:263 src/lib/1990/1990_actions.c:206
-#: src/lib/1990/1990_actions.c:239 src/lib/1990/1990_gtk_groupes.c:74
-#: src/lib/1990/1990_gtk_groupes.c:102 src/lib/1990/1990_gtk_groupes.c:123
-#: src/lib/1990/1990_gtk_groupes.c:243 src/lib/1990/1990_gtk_groupes.c:391
-#: src/lib/1990/1990_gtk_groupes.c:460 src/lib/1990/1990_gtk_groupes.c:1008
-#: src/lib/1990/1990_combinaisons.c:112 src/lib/1990/1990_combinaisons.c:124
-#: src/lib/1990/1990_combinaisons.c:129 src/lib/1990/1990_combinaisons.c:169
-#: src/lib/1990/1990_combinaisons.c:181 src/lib/1990/1990_combinaisons.c:187
-#: src/lib/1990/1990_combinaisons.c:283 src/lib/1990/1990_combinaisons.c:287
-#: src/lib/1990/1990_combinaisons.c:289 src/lib/1990/1990_combinaisons.c:347
-#: src/lib/1990/1990_combinaisons.c:406 src/lib/1990/1990_combinaisons.c:421
-#: src/lib/1990/1990_combinaisons.c:429 src/lib/1990/1990_combinaisons.c:451
-#: src/lib/1990/1990_combinaisons.c:479 src/lib/1990/1990_combinaisons.c:590
-#: src/lib/1990/1990_combinaisons.c:606 src/lib/1990/1990_combinaisons.c:617
-#: src/lib/1990/1990_combinaisons.c:633 src/lib/1990/1990_combinaisons.c:660
-#: src/lib/1990/1990_combinaisons.c:731 src/lib/common/common_projet.c:118
-#: src/lib/common/common_projet.c:131 src/lib/EF/EF_noeud.c:40
-#: src/lib/EF/EF_noeud.c:85 src/lib/EF/EF_appui.c:39 src/lib/EF/EF_appui.c:164
-#: src/lib/EF/EF_rigidite.c:46 src/lib/EF/EF_rigidite.c:90
-#: src/lib/EF/EF_rigidite.c:147 src/lib/EF/EF_rigidite.c:152
+#: src/lib/1990/1990_groupes.c:193 src/lib/1990/1990_groupes.c:252
+#: src/lib/1990/1990_groupes.c:265 src/lib/1990/1990_actions.c:207
+#: src/lib/1990/1990_actions.c:244 src/lib/1990/1990_actions.c:345
+#: src/lib/1990/1990_gtk_groupes.c:74 src/lib/1990/1990_gtk_groupes.c:102
+#: src/lib/1990/1990_gtk_groupes.c:123 src/lib/1990/1990_gtk_groupes.c:243
+#: src/lib/1990/1990_gtk_groupes.c:391 src/lib/1990/1990_gtk_groupes.c:460
+#: src/lib/1990/1990_gtk_groupes.c:1008 src/lib/1990/1990_combinaisons.c:112
+#: src/lib/1990/1990_combinaisons.c:124 src/lib/1990/1990_combinaisons.c:129
+#: src/lib/1990/1990_combinaisons.c:169 src/lib/1990/1990_combinaisons.c:181
+#: src/lib/1990/1990_combinaisons.c:187 src/lib/1990/1990_combinaisons.c:283
+#: src/lib/1990/1990_combinaisons.c:287 src/lib/1990/1990_combinaisons.c:289
+#: src/lib/1990/1990_combinaisons.c:347 src/lib/1990/1990_combinaisons.c:406
+#: src/lib/1990/1990_combinaisons.c:421 src/lib/1990/1990_combinaisons.c:429
+#: src/lib/1990/1990_combinaisons.c:451 src/lib/1990/1990_combinaisons.c:479
+#: src/lib/1990/1990_combinaisons.c:590 src/lib/1990/1990_combinaisons.c:606
+#: src/lib/1990/1990_combinaisons.c:617 src/lib/1990/1990_combinaisons.c:633
+#: src/lib/1990/1990_combinaisons.c:660 src/lib/1990/1990_combinaisons.c:731
+#: src/lib/common/common_projet.c:118 src/lib/common/common_projet.c:131
+#: src/lib/EF/EF_calculs.c:78 src/lib/EF/EF_calculs.c:83
+#: src/lib/EF/EF_noeud.c:40 src/lib/EF/EF_noeud.c:85 src/lib/EF/EF_appui.c:39
+#: src/lib/EF/EF_appui.c:164 src/lib/EF/EF_rigidite.c:46
+#: src/lib/EF/EF_rigidite.c:90
 msgid "Erreur d'allocation mémoire.\n"
 msgstr "Erreur d'allocation mémoire.\n"
 
@@ -152,84 +153,84 @@ msgstr ""
 msgid "Élément introuvable.\n"
 msgstr "Élément introuvable.\n"
 
-#: src/lib/1990/1990_actions.c:41 src/lib/1990/1990_actions.c:73
+#: src/lib/1990/1990_actions.c:42 src/lib/1990/1990_actions.c:74
 msgid "Permanente"
 msgstr "Permanente"
 
-#: src/lib/1990/1990_actions.c:42 src/lib/1990/1990_actions.c:74
+#: src/lib/1990/1990_actions.c:43 src/lib/1990/1990_actions.c:75
 msgid "Précontrainte"
 msgstr "Précontrainte"
 
-#: src/lib/1990/1990_actions.c:43 src/lib/1990/1990_actions.c:75
+#: src/lib/1990/1990_actions.c:44 src/lib/1990/1990_actions.c:76
 msgid "Exploitation : Catégorie A : habitation, zones résidentielles"
 msgstr "Exploitation : Catégorie A : habitation, zones résidentielles"
 
-#: src/lib/1990/1990_actions.c:44 src/lib/1990/1990_actions.c:76
+#: src/lib/1990/1990_actions.c:45 src/lib/1990/1990_actions.c:77
 msgid "Exploitation : Catégorie B : bureaux"
 msgstr "Exploitation : Catégorie B : bureaux"
 
-#: src/lib/1990/1990_actions.c:45 src/lib/1990/1990_actions.c:77
+#: src/lib/1990/1990_actions.c:46 src/lib/1990/1990_actions.c:78
 msgid "Exploitation : Catégorie C : lieux de réunion"
 msgstr "Exploitation : Catégorie C : lieux de réunion"
 
-#: src/lib/1990/1990_actions.c:46 src/lib/1990/1990_actions.c:78
+#: src/lib/1990/1990_actions.c:47 src/lib/1990/1990_actions.c:79
 msgid "Exploitation : Catégorie D : commerces"
 msgstr "Exploitation : Catégorie D : commerces"
 
-#: src/lib/1990/1990_actions.c:47 src/lib/1990/1990_actions.c:79
+#: src/lib/1990/1990_actions.c:48 src/lib/1990/1990_actions.c:80
 msgid "Exploitation : Catégorie E : stockage"
 msgstr "Exploitation : Catégorie E : stockage"
 
-#: src/lib/1990/1990_actions.c:48 src/lib/1990/1990_actions.c:80
-msgid ""
-"Exploitation : Catégorie F : zone de trafic, véhicules de poids inférieur à "
-"30 kN"
-msgstr ""
-"Exploitation : Catégorie F : zone de trafic, véhicules de poids inférieur à "
-"30 kN"
-
 #: src/lib/1990/1990_actions.c:49 src/lib/1990/1990_actions.c:81
 msgid ""
+"Exploitation : Catégorie F : zone de trafic, véhicules de poids inférieur à "
+"30 kN"
+msgstr ""
+"Exploitation : Catégorie F : zone de trafic, véhicules de poids inférieur à "
+"30 kN"
+
+#: src/lib/1990/1990_actions.c:50 src/lib/1990/1990_actions.c:82
+msgid ""
 "Exploitation : Catégorie G : zone de trafic, véhicules de poids entre 30 kN "
 "et 160 kN"
 msgstr ""
 "Exploitation : Catégorie G : zone de trafic, véhicules de poids entre 30 kN "
 "et 160 kN"
 
-#: src/lib/1990/1990_actions.c:50
+#: src/lib/1990/1990_actions.c:51
 msgid "Exploitation : Catégorie H : toits"
 msgstr "Exploitation : Catégorie H : toits"
 
-#: src/lib/1990/1990_actions.c:51
+#: src/lib/1990/1990_actions.c:52
 msgid "Neige : Finlande, Islande, Norvège, Suède"
 msgstr "Neige : Finlande, Islande, Norvège, Suède"
 
-#: src/lib/1990/1990_actions.c:52
+#: src/lib/1990/1990_actions.c:53
 msgid "Neige : Autres états membres CEN, altitude > 1000 m"
 msgstr "Neige : Autres états membres CEN, altitude > 1000 m"
 
-#: src/lib/1990/1990_actions.c:53
+#: src/lib/1990/1990_actions.c:54
 msgid "Neige : Autres états membres CEN, altitude <= 1000 m"
 msgstr "Neige : Autres états membres CEN, altitude <= 1000 m"
 
-#: src/lib/1990/1990_actions.c:54 src/lib/1990/1990_actions.c:90
+#: src/lib/1990/1990_actions.c:55 src/lib/1990/1990_actions.c:91
 msgid "Vent"
 msgstr "Vent"
 
-#: src/lib/1990/1990_actions.c:55 src/lib/1990/1990_actions.c:91
+#: src/lib/1990/1990_actions.c:56 src/lib/1990/1990_actions.c:92
 msgid "Température (hors incendie)"
 msgstr "Température (hors incendie)"
 
-#: src/lib/1990/1990_actions.c:56 src/lib/1990/1990_actions.c:92
+#: src/lib/1990/1990_actions.c:57 src/lib/1990/1990_actions.c:93
 msgid "Accidentelle"
 msgstr "Accidentelle"
 
-#: src/lib/1990/1990_actions.c:57 src/lib/1990/1990_actions.c:93
+#: src/lib/1990/1990_actions.c:58 src/lib/1990/1990_actions.c:94
 msgid "Sismique"
 msgstr "Sismique"
 
-#: src/lib/1990/1990_actions.c:58 src/lib/1990/1990_actions.c:95
-#: src/lib/1990/1990_actions.c:141 src/lib/1990/1990_actions.c:171
+#: src/lib/1990/1990_actions.c:59 src/lib/1990/1990_actions.c:96
+#: src/lib/1990/1990_actions.c:142 src/lib/1990/1990_actions.c:172
 #: src/lib/1990/1990_coef_psi.c:55 src/lib/1990/1990_coef_psi.c:87
 #: src/lib/1990/1990_coef_psi.c:119 src/lib/1990/1990_coef_psi.c:156
 #: src/lib/1990/1990_coef_psi.c:193 src/lib/1990/1990_coef_psi.c:230
@@ -238,31 +239,31 @@ msgstr "Sismique"
 msgid "Catégorie inconnue.\n"
 msgstr "Catégorie inconnue.\n"
 
-#: src/lib/1990/1990_actions.c:82
+#: src/lib/1990/1990_actions.c:83
 msgid "Exploitation : Catégorie H : toits d'un bâtiment de catégorie A ou B"
 msgstr "Exploitation : Catégorie H : toits d'un bâtiment de catégorie A ou B"
-
-#: src/lib/1990/1990_actions.c:83
-msgid ""
-"Exploitation : Catégorie I : toitures accessibles avec locaux des catégories "
-"A ou B"
-msgstr ""
-"Exploitation : Catégorie I : toitures accessibles avec locaux des catégories "
-"A ou B"
 
 #: src/lib/1990/1990_actions.c:84
 msgid ""
 "Exploitation : Catégorie I : toitures accessibles avec locaux des catégories "
+"A ou B"
+msgstr ""
+"Exploitation : Catégorie I : toitures accessibles avec locaux des catégories "
+"A ou B"
+
+#: src/lib/1990/1990_actions.c:85
+msgid ""
+"Exploitation : Catégorie I : toitures accessibles avec locaux des catégories "
 "C ou D"
 msgstr ""
 "Exploitation : Catégorie I : toitures accessibles avec locaux des catégories "
 "C ou D"
 
-#: src/lib/1990/1990_actions.c:85
+#: src/lib/1990/1990_actions.c:86
 msgid "Exploitation : Catégorie K : Hélicoptère sur la toiture"
 msgstr "Exploitation : Catégorie K : Hélicoptère sur la toiture"
 
-#: src/lib/1990/1990_actions.c:86
+#: src/lib/1990/1990_actions.c:87
 msgid ""
 "Exploitation : Catégorie K : Hélicoptère sur la toiture, autres charges "
 "(fret, personnel, accessoires ou équipements divers)"
@@ -270,30 +271,30 @@ msgstr ""
 "Exploitation : Catégorie K : Hélicoptère sur la toiture, autres charges "
 "(fret, personnel, accessoires ou équipements divers)"
 
-#: src/lib/1990/1990_actions.c:87
+#: src/lib/1990/1990_actions.c:88
 msgid "Neige : Saint-Pierre-et-Miquelon"
 msgstr "Neige : Saint-Pierre-et-Miquelon"
 
-#: src/lib/1990/1990_actions.c:88
+#: src/lib/1990/1990_actions.c:89
 msgid "Neige : Altitude > 1000 m"
 msgstr "Neige : Altitude > 1000 m"
 
-#: src/lib/1990/1990_actions.c:89
+#: src/lib/1990/1990_actions.c:90
 msgid "Neige : Altitude <= 1000 m"
 msgstr "Neige : Altitude <= 1000 m"
 
-#: src/lib/1990/1990_actions.c:94
+#: src/lib/1990/1990_actions.c:95
 msgid "Eaux souterraines"
 msgstr "Eaux souterraines"
 
-#: src/lib/1990/1990_actions.c:113 src/lib/1990/1990_actions.c:188
+#: src/lib/1990/1990_actions.c:114 src/lib/1990/1990_actions.c:189
 #: src/lib/1990/1990_coef_psi.c:248 src/lib/1990/1990_coef_psi.c:266
 #: src/lib/1990/1990_coef_psi.c:284 src/lib/1990/1990_duree.c:123
 #: src/lib/1990/1990_duree.c:141
 msgid "Pays inconnu.\n"
 msgstr "Pays inconnu.\n"
 
-#: src/lib/1990/1990_actions.c:267
+#: src/lib/1990/1990_actions.c:272
 #, c-format
 msgid "Action %d introuvable.\n"
 msgstr "Action %d introuvable.\n"
