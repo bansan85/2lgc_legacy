@@ -16,22 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __EF_RIGIDITE_H
-#define __EF_RIGIDITE_H
+#ifndef __EF_CALCULS_H
+#define __EF_CALCULS_H
 
 #include "common_projet.h"
 
-
-typedef struct
-{
-	int		noeudx;
-	int		noeudy;
-	double		matrice[6][6];
-} EF_rigidite;
-
-
-int EF_rigidite_init(Projet *projet);
-int EF_rigidite_ajout(Projet *projet, int noeudx, int noeudy, EF_rigidite **rigidite);
-int EF_rigidite_free(Projet *projet);
+int EF_rigidite_genere_sparse(Projet *projet);
 
 #endif

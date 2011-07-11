@@ -246,7 +246,7 @@ int _1990_action_ajout(Projet *projet, int categorie)
 	return 0;
 }
 
-/* _1990_action_positionne
+/* _1990_action_cherche_numero
  * Description : Cherche et marque l'action n°numero comme celle en cours
  *             : l'action correspondant au numéro doit obligatoirement est existant
  * Paramètres : Projet *projet : la variable projet
@@ -298,6 +298,55 @@ int _1990_action_affiche_tout(Projet *projet)
 	return 0;
 }
 
+/* _1990_action_ajout_charge_ponctuelle
+ * Description : ajouter une charge ponctuelle à une action
+ * Paramètres : Projet *projet : la variable projet
+ *            : int num_action : le numéro de l'action
+ *            : double fx : force suivant l'axe global x
+ *            : double fy : force suivant l'axe global y
+ *            : double fz : force suivant l'axe global z
+ *            : double rx : moment autour de l'axe global x
+ *            : double ry : moment autour de l'axe global y
+ *            : double rz : moment autour de l'axe global z
+ * Valeur renvoyée :
+ *   Succès : 0
+ *   Échec : valeur négative
+ */
+int _1990_action_ajout_charge_ponctuelle(Projet *projet, int num_action, double fx, double fy, double fz, double rx, double ry, double rz)
+{
+	Action			*action_en_cours;
+	Charge_Ponctuelle	*charge_dernier, charge_nouveau;
+	
+	if ((projet == NULL) || (projet->actions == NULL) || (list_size(projet->actions) == 0))
+		BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
+	
+	if (_1990_action_cherche_numero(projet, num_action) != 0)
+		BUGTEXTE(-2, gettext("Paramètres invalides.\n"));
+	action_en_cours = list_curr(projet->actions);
+	
+	charge_nouveau.type = CHARGE_PONCTUELLE;
+	charge_nouveau.nom = NULL;
+	charge_nouveau.description = NULL;
+	charge_nouveau.x = fx;
+	charge_nouveau.y = fy;
+	charge_nouveau.z = fz;
+	charge_nouveau.rx = rx;
+	charge_nouveau.ry = ry;
+	charge_nouveau.rz = rz;
+	
+	charge_dernier = (Charge_Ponctuelle *)list_rear(action_en_cours->charges);
+	if (charge_dernier == NULL)
+		charge_nouveau.numero = 0;
+	else
+		charge_nouveau.numero = charge_dernier->numero+1;
+	
+	list_mvrear(action_en_cours->charges);
+	if (list_insert_after(action_en_cours->charges, &(charge_nouveau), sizeof(charge_nouveau)) == NULL)
+		BUGTEXTE(-2, gettext("Erreur d'allocation mémoire.\n"));
+	
+	return 0;
+}
+
 /* _1990_action_free
  * Description : Libère l'ensemble des actions existantes
  * Paramètres : Projet *projet : la variable projet
@@ -320,9 +369,14 @@ int _1990_action_free(Projet *projet)
 			free(action->description);
 		while (!list_empty(action->charges))
 		{
-			Charge	*charge = list_remove_front(action->charges);
+			Charge_Ponctuelle	*charge = list_remove_front(action->charges);
+			if (charge->nom != NULL)
+				free(charge->nom);
+			if (charge->description != NULL)
+				free(charge->description);
 			free(charge);
 		}
+		free(action->charges);
 		free(action);
 	}
 	
