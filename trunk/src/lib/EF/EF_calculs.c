@@ -25,6 +25,7 @@
 #include "common_maths.h"
 #include "EF_rigidite.h"
 #include "EF_noeud.h"
+#include "1990_actions.h"
 
 /* EF_rigidite_genere_sparse
  * Description : Converti la matrice de rigidité complète de la structure sous forme de liste en une matrice de rigidité partielle (les lignes (et colonnes) dont on connait les déplacements ne sont pas insérées) sous forme d'une matrice sparse
@@ -39,7 +40,6 @@ int EF_rigidite_genere_sparse(Projet *projet)
 	double			max_rig = 0.;
 	int			nnz_max = 0, j, k;
 	unsigned int		i;
-	int			**noeuds_flags;
 	long			*ai, *aj;	// Pointeur vers les données des triplets
 	double			*ax;		// Pointeur vers les données des triplets
 	
@@ -74,51 +74,51 @@ int EF_rigidite_genere_sparse(Projet *projet)
 	// le nombre [0] indique la colonne/ligne correspondant au déplacement selon l'axe x
 	// le nombre [5] indique la colonne/ligne correspondant à la rotation autour de l'axe z
 	// le nombre vaut -1 si la colonne n'est pas inséré dans la matrice de rigidité globale
-	noeuds_flags = malloc(sizeof(int*)*list_size(projet->ef_donnees.noeuds));
-	if (noeuds_flags == NULL)
+	projet->ef_donnees.noeuds_flags_partielle = malloc(sizeof(int*)*list_size(projet->ef_donnees.noeuds));
+	if (projet->ef_donnees.noeuds_flags_partielle == NULL)
 		BUGTEXTE(-2, gettext("Erreur d'allocation mémoire.\n"));
 	for (i=0;i<list_size(projet->ef_donnees.noeuds);i++)
 	{
-		noeuds_flags[i] = malloc(6*sizeof(int));
-		if (noeuds_flags[i] == NULL)
+		projet->ef_donnees.noeuds_flags_partielle[i] = malloc(6*sizeof(int));
+		if (projet->ef_donnees.noeuds_flags_partielle[i] == NULL)
 			BUGTEXTE(-2, gettext("Erreur d'allocation mémoire.\n"));
 	}
 	i = 0; // Colonne en cours
 	list_mvfront(projet->ef_donnees.noeuds);
 	do
 	{
-		EF_noeud	*noeud = list_curr(projet->ef_donnees.noeuds);
+		EF_Noeud	*noeud = list_curr(projet->ef_donnees.noeuds);
 		
 		if (noeud->appui == NULL)
 		{
-			noeuds_flags[noeud->numero][0] = i; i++; // x
-			noeuds_flags[noeud->numero][1] = i; i++; // y
-			noeuds_flags[noeud->numero][2] = i; i++; // z
-			noeuds_flags[noeud->numero][3] = i; i++; // rx
-			noeuds_flags[noeud->numero][4] = i; i++; // ry
-			noeuds_flags[noeud->numero][5] = i; i++; // rz
+			projet->ef_donnees.noeuds_flags_partielle[noeud->numero][0] = i; i++; // x
+			projet->ef_donnees.noeuds_flags_partielle[noeud->numero][1] = i; i++; // y
+			projet->ef_donnees.noeuds_flags_partielle[noeud->numero][2] = i; i++; // z
+			projet->ef_donnees.noeuds_flags_partielle[noeud->numero][3] = i; i++; // rx
+			projet->ef_donnees.noeuds_flags_partielle[noeud->numero][4] = i; i++; // ry
+			projet->ef_donnees.noeuds_flags_partielle[noeud->numero][5] = i; i++; // rz
 		}
 		else
 		{
 			EF_Appui	*appui = noeud->appui;
 			if (appui->x == EF_APPUI_LIBRE)
-				{ noeuds_flags[noeud->numero][0] = i; i++; }
-			else noeuds_flags[noeud->numero][0] = -1;
+				{ projet->ef_donnees.noeuds_flags_partielle[noeud->numero][0] = i; i++; }
+			else projet->ef_donnees.noeuds_flags_partielle[noeud->numero][0] = -1;
 			if (appui->y == EF_APPUI_LIBRE)
-				{ noeuds_flags[noeud->numero][1] = i; i++; }
-			else noeuds_flags[noeud->numero][1] = -1;
+				{ projet->ef_donnees.noeuds_flags_partielle[noeud->numero][1] = i; i++; }
+			else projet->ef_donnees.noeuds_flags_partielle[noeud->numero][1] = -1;
 			if (appui->z == EF_APPUI_LIBRE)
-				{ noeuds_flags[noeud->numero][2] = i; i++; }
-			else noeuds_flags[noeud->numero][2] = -1;
+				{ projet->ef_donnees.noeuds_flags_partielle[noeud->numero][2] = i; i++; }
+			else projet->ef_donnees.noeuds_flags_partielle[noeud->numero][2] = -1;
 			if (appui->rx == EF_APPUI_LIBRE)
-				{ noeuds_flags[noeud->numero][3] = i; i++; }
-			else noeuds_flags[noeud->numero][3] = -1;
+				{ projet->ef_donnees.noeuds_flags_partielle[noeud->numero][3] = i; i++; }
+			else projet->ef_donnees.noeuds_flags_partielle[noeud->numero][3] = -1;
 			if (appui->ry == EF_APPUI_LIBRE)
-				{ noeuds_flags[noeud->numero][4] = i; i++; }
-			else noeuds_flags[noeud->numero][4] = -1;
+				{ projet->ef_donnees.noeuds_flags_partielle[noeud->numero][4] = i; i++; }
+			else projet->ef_donnees.noeuds_flags_partielle[noeud->numero][4] = -1;
 			if (appui->rz == EF_APPUI_LIBRE)
-				{ noeuds_flags[noeud->numero][5] = i; i++; }
-			else noeuds_flags[noeud->numero][5] = -1;
+				{ projet->ef_donnees.noeuds_flags_partielle[noeud->numero][5] = i; i++; }
+			else projet->ef_donnees.noeuds_flags_partielle[noeud->numero][5] = -1;
 		}
 	}
 	while (list_mvnext(projet->ef_donnees.noeuds) != NULL);
@@ -140,7 +140,7 @@ int EF_rigidite_genere_sparse(Projet *projet)
 		{
 			for (j=0;j<6;j++)
 			{
-				if ((noeuds_flags[rigidite->noeudx][i] != -1) && (noeuds_flags[rigidite->noeudy][j] != -1) && (max_rig*ERREUR_RELATIVE_MIN < ABS(rigidite->matrice[i][j])))
+				if ((projet->ef_donnees.noeuds_flags_partielle[rigidite->noeudx][i] != -1) && (projet->ef_donnees.noeuds_flags_partielle[rigidite->noeudy][j] != -1) && (max_rig*ERREUR_RELATIVE_MIN < ABS(rigidite->matrice[i][j])))
 				{
 					ai[k] = i;
 					aj[k] = j;
@@ -154,7 +154,7 @@ int EF_rigidite_genere_sparse(Projet *projet)
 	triplet_rigidite->nnz = k;
 	
 	// Puis en sparse matrice
-	projet->ef_donnees.rigidite_matrice_calc = cholmod_l_triplet_to_sparse(triplet_rigidite, 0, projet->ef_donnees.c);
+	projet->ef_donnees.rigidite_matrice_partielle = cholmod_l_triplet_to_sparse(triplet_rigidite, 0, projet->ef_donnees.c);
 	cholmod_l_free_triplet(&triplet_rigidite, projet->ef_donnees.c);
 	
 	// Puis on inverse la matrice en cherchant la matrice x de tel sorte que Kx=1. Ainsi x est l'inverse
@@ -171,12 +171,73 @@ int EF_rigidite_genere_sparse(Projet *projet)
 	}
 	cholmod_sparse	*zeros_spars = cholmod_l_triplet_to_sparse(zero_rigidite, 0, projet->ef_donnees.c);
 	cholmod_l_free_triplet(&zero_rigidite, projet->ef_donnees.c);
-	projet->ef_donnees.inv_rigidite_matrice_calc = SuiteSparseQR_C_backslash_sparse(0, 0.000000000000000000000000000000001, projet->ef_donnees.rigidite_matrice_calc, zeros_spars, projet->ef_donnees.c);
+	projet->ef_donnees.inv_rigidite_matrice_partielle = SuiteSparseQR_C_backslash_sparse(0, ERREUR_RELATIVE_MIN, projet->ef_donnees.rigidite_matrice_partielle, zeros_spars, projet->ef_donnees.c);
 	cholmod_l_free_sparse(&zeros_spars, projet->ef_donnees.c);
 	
-	for (i=0;i<list_size(projet->ef_donnees.noeuds);i++)
-		free(noeuds_flags[i]);
-	free(noeuds_flags);
+	return 0;
+}
+
+
+/* EF_calculs_resoud_charge
+ * Description : Déterminer à partir de la matrice de rigidité globale partielle les déplacements des noeuds pour une action particulière.
+ * Paramètres : Projet *projet : la variable projet
+ * Valeur renvoyée :
+ *   Succès : 0
+ *   Échec : valeur négative si la liste de rigidité n'est pas initialisée ou a déjà été libérée
+ */
+int EF_calculs_resoud_charge(Projet *projet, int num_action)
+{
+	Action			*action_en_cours;
+	cholmod_triplet		*triplet_force;
+	cholmod_sparse		*sparse_force;
+	long			*ai, *aj;	// Pointeur vers les données des triplets
+	double			*ax;		// Pointeur vers les données des triplets
+	unsigned int		i;
+	
+	if ((projet == NULL) || (projet->actions == NULL) || (list_size(projet->actions) == 0) || (_1990_action_cherche_numero(projet, num_action) != 0) || (projet->ef_donnees.inv_rigidite_matrice_partielle == NULL))
+		BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
+	
+	action_en_cours = list_curr(projet->actions);
+	triplet_force = cholmod_l_allocate_triplet(projet->ef_donnees.inv_rigidite_matrice_partielle->nrow, 1, projet->ef_donnees.inv_rigidite_matrice_partielle->nrow, 0, CHOLMOD_REAL, projet->ef_donnees.c);
+	ai = triplet_force->i;
+	aj = triplet_force->j;
+	ax = triplet_force->x;
+	triplet_force->nnz = projet->ef_donnees.inv_rigidite_matrice_partielle->nrow;
+	for (i=0;i<triplet_force->nnz;i++)
+	{
+		ai[i] = i;
+		aj[i] = 0;
+		ax[i] = 0.;
+	}
+	
+	if (list_size(action_en_cours->charges) != 0)
+	{
+		list_mvfront(action_en_cours->charges);
+		do
+		{
+			Charge_Ponctuelle	*charge = list_curr(action_en_cours->charges);
+			if (projet->ef_donnees.noeuds_flags_partielle[charge->noeud->numero][0] != -1)
+				ax[projet->ef_donnees.noeuds_flags_partielle[charge->noeud->numero][0]] += charge->x;
+			if (projet->ef_donnees.noeuds_flags_partielle[charge->noeud->numero][1] != -1)
+				ax[projet->ef_donnees.noeuds_flags_partielle[charge->noeud->numero][1]] += charge->y;
+			if (projet->ef_donnees.noeuds_flags_partielle[charge->noeud->numero][2] != -1)
+				ax[projet->ef_donnees.noeuds_flags_partielle[charge->noeud->numero][2]] += charge->z;
+			if (projet->ef_donnees.noeuds_flags_partielle[charge->noeud->numero][3] != -1)
+				ax[projet->ef_donnees.noeuds_flags_partielle[charge->noeud->numero][3]] += charge->rx;
+			if (projet->ef_donnees.noeuds_flags_partielle[charge->noeud->numero][4] != -1)
+				ax[projet->ef_donnees.noeuds_flags_partielle[charge->noeud->numero][4]] += charge->ry;
+			if (projet->ef_donnees.noeuds_flags_partielle[charge->noeud->numero][5] != -1)
+				ax[projet->ef_donnees.noeuds_flags_partielle[charge->noeud->numero][5]] += charge->rz;
+		}
+		while (list_mvnext(action_en_cours->charges) != NULL);
+	}
+	
+	sparse_force = cholmod_l_triplet_to_sparse(triplet_force, 0, projet->ef_donnees.c);
+	cholmod_l_free_triplet(&triplet_force, projet->ef_donnees.c);
+	
+	action_en_cours->deplacement_partiel = cholmod_l_ssmult(projet->ef_donnees.inv_rigidite_matrice_partielle, sparse_force, 0, 1, 0, projet->ef_donnees.c);
+	
+	cholmod_l_free_sparse(&sparse_force, projet->ef_donnees.c);
 	
 	return 0;
 }

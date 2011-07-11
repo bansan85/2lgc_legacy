@@ -99,7 +99,6 @@ int main(int argc, char *argv[])
 	
 	// Création des actions
 	if (_1990_action_ajout(projet, 0) != 0) BUG(-1); // Poids propre
-	if (_1990_action_ajout_charge_ponctuelle(projet, 0, 500000., 450000., 400000., 0., 0., 0.) != 0) BUG(-1);
 	if (_1990_action_ajout(projet, 2) != 0) BUG(-1); // 2 Exploitation
 	if (_1990_action_ajout(projet, 12) != 0) BUG(-1); // 3 Neige
 	if (_1990_action_ajout(projet, 13) != 0) BUG(-1); // 4 Vent
@@ -143,6 +142,9 @@ int main(int argc, char *argv[])
 	if (EF_noeuds_ajout(projet, 0., 0., 0., 0) != 0) BUG(-1);
 	if (EF_noeuds_ajout(projet, 1., 0.5, 3., -1) != 0) BUG(-1);
 	
+	// Ajout de l'action ponctuelle
+	if (_1990_action_ajout_charge_ponctuelle(projet, 0, 1, 500000., 450000., 400000., 0., 0., 0.) != 0) BUG(-1);
+	
 	// Création du matériau béton
 	if (_1992_1_1_materiaux_ajout(projet, 25., 0.2) != 0) BUG(-1);
 	
@@ -153,6 +155,7 @@ int main(int argc, char *argv[])
 	if (_1992_1_1_elements_rigidite_ajout(projet, 0) != 0) BUG(-1);
 	
 	if (EF_rigidite_genere_sparse(projet) != 0) BUG(-1);
+	if (EF_calculs_resoud_charge(projet, 0) != 0) BUG(-1);
 	
 	// Création de la fenêtre principale
 	MainWindow = gtk_window_new(GTK_WINDOW_TOPLEVEL);

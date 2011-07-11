@@ -1,13 +1,14 @@
 DEFAULT_INCLUDES	=	-I../../.. \
-				-I../common
+				-I../common \
+				-I../EF
 
 lib_LTLIBRARIES = lib1990.la
 
 if ENABLE_GTK
-lib1990_la_LIBADD = @GTK_LIBS@ -llist
+lib1990_la_LIBADD = @GTK_LIBS@ -llist -lcholmod
 lib1990_la_CPPFLAGS = @GTK_CFLAGS@
 else
-lib1990_la_LIBADD = -llist
+lib1990_la_LIBADD = -llist -lcholmod
 endif
 
 lib1990_la_SOURCES =	1990_duree.c \

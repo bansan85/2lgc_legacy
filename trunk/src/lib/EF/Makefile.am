@@ -1,5 +1,7 @@
 DEFAULT_INCLUDES	=	-I../../.. \
-				-I../common
+				-I../common \
+				-I../1990 \
+				-I.
 
 lib_LTLIBRARIES		=	libEF.la
 libEF_la_LIBADD		=	-lcholmod -lspqr -llist

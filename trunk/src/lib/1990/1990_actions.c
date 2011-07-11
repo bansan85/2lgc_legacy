@@ -21,11 +21,13 @@
 #include <locale.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <cholmod.h>
 
 #include "1990_actions.h"
 #include "1990_coef_psi.h"
 #include "common_projet.h"
 #include "common_erreurs.h"
+#include "EF_noeud.h"
 
 
 /* _1990_action_categorie_bat_txt_eu
@@ -229,6 +231,7 @@ int _1990_action_ajout(Projet *projet, int categorie)
 	action_nouveau.description = NULL;
 	action_nouveau.categorie = categorie;
 	action_nouveau.charges = list_init();
+	action_nouveau.deplacement_partiel = NULL;
 	action_nouveau.flags = 0;
 	action_nouveau.psi0 = _1990_coef_psi0_bat(categorie, projet->pays);
 	action_nouveau.psi1 = _1990_coef_psi1_bat(categorie, projet->pays);
@@ -312,9 +315,10 @@ int _1990_action_affiche_tout(Projet *projet)
  *   Succès : 0
  *   Échec : valeur négative
  */
-int _1990_action_ajout_charge_ponctuelle(Projet *projet, int num_action, double fx, double fy, double fz, double rx, double ry, double rz)
+int _1990_action_ajout_charge_ponctuelle(Projet *projet, int num_action, int num_noeud, double fx, double fy, double fz, double rx, double ry, double rz)
 {
 	Action			*action_en_cours;
+	EF_Noeud		*noeud_en_cours;
 	Charge_Ponctuelle	*charge_dernier, charge_nouveau;
 	
 	if ((projet == NULL) || (projet->actions == NULL) || (list_size(projet->actions) == 0))
@@ -324,9 +328,14 @@ int _1990_action_ajout_charge_ponctuelle(Projet *projet, int num_action, double 
 		BUGTEXTE(-2, gettext("Paramètres invalides.\n"));
 	action_en_cours = list_curr(projet->actions);
 	
+	if (EF_noeuds_cherche_numero(projet, num_noeud) != 0)
+		BUGTEXTE(-3, gettext("Paramètres invalides.\n"));
+	noeud_en_cours = list_curr(projet->ef_donnees.noeuds);
+	
 	charge_nouveau.type = CHARGE_PONCTUELLE;
 	charge_nouveau.nom = NULL;
 	charge_nouveau.description = NULL;
+	charge_nouveau.noeud = noeud_en_cours;
 	charge_nouveau.x = fx;
 	charge_nouveau.y = fy;
 	charge_nouveau.z = fz;
@@ -377,6 +386,8 @@ int _1990_action_free(Projet *projet)
 			free(charge);
 		}
 		free(action->charges);
+		if (action->deplacement_partiel != NULL)
+			cholmod_l_free_sparse(&action->deplacement_partiel, projet->ef_donnees.c);
 		free(action);
 	}
 	

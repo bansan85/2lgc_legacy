@@ -22,5 +22,6 @@
 #include "common_projet.h"
 
 int EF_rigidite_genere_sparse(Projet *projet);
+int EF_calculs_resoud_charge(Projet *projet, int num_action);
 
 #endif
