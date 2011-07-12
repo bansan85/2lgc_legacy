@@ -61,8 +61,6 @@ int _1992_1_1_elements_init(Projet *projet)
 int _1992_1_1_elements_ajout(Projet *projet, Type_Element type, int section, int materiau, int noeud_debut, int noeud_fin, int discretisation_element)
 {
 	Beton_Element	*element_en_cours, element_nouveau;
-	int		i;
-	double		dx, dy, dz;
 	
 	if ((projet == NULL) || (projet->beton.elements == NULL))
 		BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
@@ -89,11 +87,13 @@ int _1992_1_1_elements_ajout(Projet *projet, Type_Element type, int section, int
 	element_nouveau.discretisation_element = discretisation_element;
 	if (discretisation_element != 0)
 	{
-		element_nouveau.noeuds_intermediaires = malloc(sizeof(EF_Noeud)*(discretisation_element-1));
+		int		i;
+		element_nouveau.noeuds_intermediaires = malloc(sizeof(EF_Noeud)*(discretisation_element));
 		if (element_nouveau.noeuds_intermediaires == NULL)
 			BUGTEXTE(-6, gettext("Erreur d'allocation mémoire.\n"));
-		for (i=0;i<=discretisation_element-2;i++)
+		for (i=0;i<discretisation_element;i++)
 		{
+			double		dx, dy, dz;
 			dx = (element_nouveau.noeud_fin->position.x-element_nouveau.noeud_debut->position.x)/discretisation_element;
 			dy = (element_nouveau.noeud_fin->position.y-element_nouveau.noeud_debut->position.y)/discretisation_element;
 			dz = (element_nouveau.noeud_fin->position.z-element_nouveau.noeud_debut->position.z)/discretisation_element;
@@ -159,14 +159,13 @@ int _1992_1_1_elements_cherche_numero(Projet *projet, int numero)
  */
 int _1992_1_1_elements_rigidite_ajout(Projet *projet, int num_element)
 {
-//	Action		*action_dernier, action_nouveau;
-	int		noeudx, noeudy;
-//	int		trouveDD = 0, trouveDF = 0, trouveFD = 0, trouveFF = 0; // La matrice de rigidité locale est décomposée en 4 parties en fonction du noeud de Départ et du noeud de Fin.
+	EF_Noeud	*noeud1, *noeud2;
 	long		*ai, *aj; // Pointeur vers les données des triplets
 	double		*ax;      // Pointeur vers les données des triplets
 	double		y, cosx, sinx; // valeurs de la matrice de rotation
 	double		xx, yy, zz, ll; // Dimension de la barre dans 3D
 	unsigned int	i;
+	int		j;
 	cholmod_triplet	*triplet;
 	cholmod_sparse	*sparse_tmp, *sparse_rotation_transpose;
 	Beton_Element	*element;
@@ -182,8 +181,6 @@ int _1992_1_1_elements_rigidite_ajout(Projet *projet, int num_element)
 	element = list_curr(projet->beton.elements);
 	section_donnees = element->section;
 	section_caract = section_donnees->caracteristiques;
-	noeudx = element->noeud_debut->numero;
-	noeudy = element->noeud_fin->numero;
 	
 	// On commence par calculer la matrice de rotation 3D.
 	triplet = cholmod_l_allocate_triplet(12, 12, 32, 0, CHOLMOD_REAL, projet->ef_donnees.c);
@@ -212,129 +209,133 @@ int _1992_1_1_elements_rigidite_ajout(Projet *projet, int num_element)
 	element->matrice_rotation = cholmod_l_triplet_to_sparse(triplet, 0, projet->ef_donnees.c);
 	cholmod_l_free_triplet(&triplet, projet->ef_donnees.c);
 	
-	// On calcule la matrice de rigidité. locale
-	triplet = cholmod_l_allocate_triplet(12, 12, 40, 0, CHOLMOD_REAL, projet->ef_donnees.c);
-	ai = triplet->i;
-	aj = triplet->j;
-	ax = triplet->x;
-	ai[0] = 0;	aj[0] = 0;	ax[0] = element->materiau->ecm*section_caract->a/ll;
-	ai[1] = 0;	aj[1] = 6;	ax[1] = -ax[0];
-	ai[2] = 1;	aj[2] = 1;	ax[2] = 12*element->materiau->ecm*section_caract->iz/ll/ll/ll;
-	ai[3] = 1;	aj[3] = 5;	ax[3] = 6*element->materiau->ecm*section_caract->iz/ll/ll;
-	ai[4] = 1;	aj[4] = 7;	ax[4] = -ax[2];
-	ai[5] = 1;	aj[5] = 11;	ax[5] = ax[3];
-	ai[6] = 2;	aj[6] = 2;	ax[6] = 12*element->materiau->ecm*section_caract->iy/ll/ll/ll;
-	ai[7] = 2;	aj[7] = 4;	ax[7] = -6*element->materiau->ecm*section_caract->iy/ll/ll;
-	ai[8] = 2;	aj[8] = 8;	ax[8] = -ax[6];
-	ai[9] = 2;	aj[9] = 10;	ax[9] = ax[7];
-	ai[10] = 3;	aj[10] = 3;	ax[10] = element->materiau->gnu_0_2*section_caract->j/ll;
-	ai[11] = 3;	aj[11] = 9;	ax[11] = -ax[10];
-	ai[12] = 4;	aj[12] = 2;	ax[12] = ax[7];
-	ai[13] = 4;	aj[13] = 4;	ax[13] = 4*element->materiau->ecm*section_caract->iy/ll;
-	ai[14] = 4;	aj[14] = 8;	ax[14] = -ax[7];
-	ai[15] = 4;	aj[15] = 10;	ax[15] = 2*element->materiau->ecm*section_caract->iy/ll;
-	ai[16] = 5;	aj[16] = 1;	ax[16] = ax[3];
-	ai[17] = 5;	aj[17] = 5;	ax[17] = 4*element->materiau->ecm*section_caract->iz/ll;
-	ai[18] = 5;	aj[18] = 7;	ax[18] = -ax[3];
-	ai[19] = 5;	aj[19] = 11;	ax[19] = 2*element->materiau->ecm*section_caract->iz/ll;
-	ai[20] = 6;	aj[20] = 0;	ax[20] = -ax[0];
-	ai[21] = 6;	aj[21] = 6;	ax[21] = ax[0];
-	ai[22] = 7;	aj[22] = 1;	ax[22] = -ax[2];
-	ai[23] = 7;	aj[23] = 5;	ax[23] = -ax[3];
-	ai[24] = 7;	aj[24] = 7;	ax[24] = ax[2];
-	ai[25] = 7;	aj[25] = 11;	ax[25] = -ax[3];
-	ai[26] = 8;	aj[26] = 2;	ax[26] = -ax[6];
-	ai[27] = 8;	aj[27] = 4;	ax[27] = -ax[7];
-	ai[28] = 8;	aj[28] = 8;	ax[28] = ax[6];
-	ai[29] = 8;	aj[29] = 10;	ax[29] = -ax[7];
-	ai[30] = 9;	aj[30] = 3;	ax[30] = -ax[10];
-	ai[31] = 9;	aj[31] = 9;	ax[31] = ax[10];
-	ai[32] = 10;	aj[32] = 2;	ax[32] = ax[7];
-	ai[33] = 10;	aj[33] = 4;	ax[33] = ax[15];
-	ai[34] = 10;	aj[34] = 8;	ax[34] = -ax[7];
-	ai[35] = 10;	aj[35] = 10;	ax[35] = ax[13];
-	ai[36] = 11;	aj[36] = 1;	ax[36] = ax[3];
-	ai[37] = 11;	aj[37] = 5;	ax[37] = ax[19];
-	ai[38] = 11;	aj[38] = 7;	ax[38] = -ax[3];
-	ai[39] = 11;	aj[39] = 11;	ax[39] = ax[17]; 
-	triplet->nnz=40;
-	element->matrice_rigidite_locale = cholmod_l_triplet_to_sparse(triplet, 0, projet->ef_donnees.c);
-	cholmod_l_free_triplet(&triplet, projet->ef_donnees.c);
-	
-	// On calcule la matrice locale dans le repère globale.
-	// La matrice de rigidité globale est égale à R.K.R-1 mais commr R-1 = RT, on calcul R.K.RT
-	sparse_tmp = cholmod_l_ssmult(element->matrice_rotation, element->matrice_rigidite_locale, 0, 1, 0, projet->ef_donnees.c);
-	sparse_rotation_transpose = cholmod_l_transpose(element->matrice_rotation, 1, projet->ef_donnees.c);
-	element->matrice_rigidite_globale = cholmod_l_ssmult(sparse_tmp, sparse_rotation_transpose, 0, 1, 0, projet->ef_donnees.c);
-	cholmod_l_free_sparse(&(sparse_tmp), projet->ef_donnees.c);
-	cholmod_l_free_sparse(&(sparse_rotation_transpose), projet->ef_donnees.c);
-	triplet = cholmod_l_sparse_to_triplet(element->matrice_rigidite_globale, projet->ef_donnees.c);
-	ai = triplet->i;
-	aj = triplet->j;
-	ax = triplet->x;
-	
-/*	// Exemple d'inversion de matrice
-	printf("4\n");
-	triplet = cholmod_l_allocate_triplet(6, 1, 6, 0, CHOLMOD_REAL, projet->ef_donnees.c);
-	ai = triplet->i;
-	aj = triplet->j;
-	ax = triplet->x;
-	ai[0] = 0;	aj[0] = 0;	ax[0] = 500000.;
-	ai[1] = 1;	aj[1] = 0;	ax[1] = 450000.;
-	ai[2] = 2;	aj[2] = 0;	ax[2] = 400000.;
-	ai[3] = 3;	aj[3] = 0;	ax[3] = 0.;
-	ai[4] = 4;	aj[4] = 0;	ax[4] = 0.;
-	ai[5] = 5;	aj[5] = 0;	ax[5] = 0.;
-	triplet->nnz=6;
-	cholmod_sparse *test4 = cholmod_l_triplet_to_sparse(triplet, 0, projet->ef_donnees.c);
-	
-	cholmod_sparse *test3 = SuiteSparseQR_C_backslash_sparse(SPQR_ORDERING_DEFAULT, ERREUR_RELATIVE_MIN, element->matrice_rigidite_globale, test4, projet->ef_donnees.c);;
-	X = SuiteSparseQR_C_backslash(SPQR_ORDERING_DEFAULT, ERREUR_RELATIVE_MIN, projet->ef_donnees.A, B, projet->ef_donnees.c);
-	cholmod_factor *L;
-	L = cholmod_l_analyze (projet->ef_donnees.A, projet->ef_donnees.c) ;
-	cholmod_l_factorize (projet->ef_donnees.A, L, projet->ef_donnees.c) ;
-	X = cholmod_l_solve (CHOLMOD_A, L, B, projet->ef_donnees.c) ;*/
-	
-	// On met le quart en haut à gauche de la matrice de l'élément dans la matrice de rigidité globale
-	if (EF_rigidite_ajout(projet, noeudx, noeudx, &rigidite_en_cours) != 0)
-		BUG(-1);
-	for (i=0;i<triplet->nnz;i++)
+	for (j=0;j<element->discretisation_element+1;j++)
 	{
-		if ((ai[i] < 6) && (aj[i] < 6))
-			rigidite_en_cours->matrice[ai[i]][aj[i]] += ax[i];
+		// Si element->discretisation_element == 0, il n'y a pas besoin de recalculer ll
+		if (j==0)
+		{
+			noeud1 = element->noeud_debut;
+			if (element->discretisation_element != 0)
+				noeud2 = element->noeuds_intermediaires[0];
+			else
+				noeud2 = element->noeud_fin;
+		}
+		else if (j == element->discretisation_element)
+		{
+			noeud1 = element->noeuds_intermediaires[j-1];
+			noeud2 = element->noeud_fin;
+		}
+		else
+		{
+			noeud1 = element->noeuds_intermediaires[j-1];
+			noeud2 = element->noeuds_intermediaires[j];
+		}
+		xx = noeud2->position.x - noeud1->position.x;
+		yy = noeud2->position.y - noeud1->position.y;
+		zz = noeud2->position.z - noeud1->position.z;
+		ll = sqrt(xx*xx+yy*yy+zz*zz);
+		
+		// On calcule la matrice de rigidité. locale
+		triplet = cholmod_l_allocate_triplet(12, 12, 40, 0, CHOLMOD_REAL, projet->ef_donnees.c);
+		ai = triplet->i;
+		aj = triplet->j;
+		ax = triplet->x;
+		ai[0] = 0;	aj[0] = 0;	ax[0] = element->materiau->ecm*section_caract->a/ll;
+		ai[1] = 0;	aj[1] = 6;	ax[1] = -ax[0];
+		ai[2] = 1;	aj[2] = 1;	ax[2] = 12*element->materiau->ecm*section_caract->iz/ll/ll/ll;
+		ai[3] = 1;	aj[3] = 5;	ax[3] = 6*element->materiau->ecm*section_caract->iz/ll/ll;
+		ai[4] = 1;	aj[4] = 7;	ax[4] = -ax[2];
+		ai[5] = 1;	aj[5] = 11;	ax[5] = ax[3];
+		ai[6] = 2;	aj[6] = 2;	ax[6] = 12*element->materiau->ecm*section_caract->iy/ll/ll/ll;
+		ai[7] = 2;	aj[7] = 4;	ax[7] = -6*element->materiau->ecm*section_caract->iy/ll/ll;
+		ai[8] = 2;	aj[8] = 8;	ax[8] = -ax[6];
+		ai[9] = 2;	aj[9] = 10;	ax[9] = ax[7];
+		ai[10] = 3;	aj[10] = 3;	ax[10] = element->materiau->gnu_0_2*section_caract->j/ll;
+		ai[11] = 3;	aj[11] = 9;	ax[11] = -ax[10];
+		ai[12] = 4;	aj[12] = 2;	ax[12] = ax[7];
+		ai[13] = 4;	aj[13] = 4;	ax[13] = 4*element->materiau->ecm*section_caract->iy/ll;
+		ai[14] = 4;	aj[14] = 8;	ax[14] = -ax[7];
+		ai[15] = 4;	aj[15] = 10;	ax[15] = 2*element->materiau->ecm*section_caract->iy/ll;
+		ai[16] = 5;	aj[16] = 1;	ax[16] = ax[3];
+		ai[17] = 5;	aj[17] = 5;	ax[17] = 4*element->materiau->ecm*section_caract->iz/ll;
+		ai[18] = 5;	aj[18] = 7;	ax[18] = -ax[3];
+		ai[19] = 5;	aj[19] = 11;	ax[19] = 2*element->materiau->ecm*section_caract->iz/ll;
+		ai[20] = 6;	aj[20] = 0;	ax[20] = -ax[0];
+		ai[21] = 6;	aj[21] = 6;	ax[21] = ax[0];
+		ai[22] = 7;	aj[22] = 1;	ax[22] = -ax[2];
+		ai[23] = 7;	aj[23] = 5;	ax[23] = -ax[3];
+		ai[24] = 7;	aj[24] = 7;	ax[24] = ax[2];
+		ai[25] = 7;	aj[25] = 11;	ax[25] = -ax[3];
+		ai[26] = 8;	aj[26] = 2;	ax[26] = -ax[6];
+		ai[27] = 8;	aj[27] = 4;	ax[27] = -ax[7];
+		ai[28] = 8;	aj[28] = 8;	ax[28] = ax[6];
+		ai[29] = 8;	aj[29] = 10;	ax[29] = -ax[7];
+		ai[30] = 9;	aj[30] = 3;	ax[30] = -ax[10];
+		ai[31] = 9;	aj[31] = 9;	ax[31] = ax[10];
+		ai[32] = 10;	aj[32] = 2;	ax[32] = ax[7];
+		ai[33] = 10;	aj[33] = 4;	ax[33] = ax[15];
+		ai[34] = 10;	aj[34] = 8;	ax[34] = -ax[7];
+		ai[35] = 10;	aj[35] = 10;	ax[35] = ax[13];
+		ai[36] = 11;	aj[36] = 1;	ax[36] = ax[3];
+		ai[37] = 11;	aj[37] = 5;	ax[37] = ax[19];
+		ai[38] = 11;	aj[38] = 7;	ax[38] = -ax[3];
+		ai[39] = 11;	aj[39] = 11;	ax[39] = ax[17]; 
+		triplet->nnz=40;
+		element->matrice_rigidite_locale = cholmod_l_triplet_to_sparse(triplet, 0, projet->ef_donnees.c);
+		cholmod_l_free_triplet(&triplet, projet->ef_donnees.c);
+		
+		// On calcule la matrice locale dans le repère globale.
+		// La matrice de rigidité globale est égale à R.K.R-1 mais commr R-1 = RT, on calcul R.K.RT
+		sparse_tmp = cholmod_l_ssmult(element->matrice_rotation, element->matrice_rigidite_locale, 0, 1, 0, projet->ef_donnees.c);
+		sparse_rotation_transpose = cholmod_l_transpose(element->matrice_rotation, 1, projet->ef_donnees.c);
+		element->matrice_rigidite_globale = cholmod_l_ssmult(sparse_tmp, sparse_rotation_transpose, 0, 1, 0, projet->ef_donnees.c);
+		cholmod_l_free_sparse(&(sparse_tmp), projet->ef_donnees.c);
+		cholmod_l_free_sparse(&(sparse_rotation_transpose), projet->ef_donnees.c);
+		triplet = cholmod_l_sparse_to_triplet(element->matrice_rigidite_globale, projet->ef_donnees.c);
+		ai = triplet->i;
+		aj = triplet->j;
+		ax = triplet->x;
+		
+		// On met le quart en haut à gauche de la matrice de l'élément dans la matrice de rigidité globale
+		if (EF_rigidite_ajout(projet, noeud1->numero, noeud1->numero, &rigidite_en_cours) != 0)
+			BUG(-1);
+		for (i=0;i<triplet->nnz;i++)
+		{
+			if ((ai[i] < 6) && (aj[i] < 6))
+				rigidite_en_cours->matrice[ai[i]][aj[i]] += ax[i];
+		}
+		
+		// On met le quart en haut à droite de la matrice de l'élément dans la matrice de rigidité globale
+		if (EF_rigidite_ajout(projet, noeud1->numero, noeud2->numero, &rigidite_en_cours) != 0)
+			BUG(-1);
+		for (i=0;i<triplet->nnz;i++)
+		{
+			if ((ai[i] < 6) && (aj[i] >= 6))
+				rigidite_en_cours->matrice[ai[i]][aj[i]-6] += ax[i];
+		}
+		
+		// On met le quart en bas à gauche de la matrice de l'élément dans la matrice de rigidité globale
+		if (EF_rigidite_ajout(projet, noeud2->numero, noeud1->numero, &rigidite_en_cours) != 0)
+			BUG(-1);
+		for (i=0;i<triplet->nnz;i++)
+		{
+			if ((ai[i] >= 6) && (aj[i] < 6))
+				rigidite_en_cours->matrice[ai[i]-6][aj[i]] += ax[i];
+		}
+		
+		// On met le quart en bas à droite de la matrice de l'élément dans la matrice de rigidité globale
+		if (EF_rigidite_ajout(projet, noeud2->numero, noeud2->numero, &rigidite_en_cours) != 0)
+			BUG(-1);
+		for (i=0;i<triplet->nnz;i++)
+		{
+			if ((ai[i] >= 6) && (aj[i] >= 6))
+				rigidite_en_cours->matrice[ai[i]-6][aj[i]-6] += ax[i];
+		}
+		cholmod_l_free_triplet(&triplet, projet->ef_donnees.c);
 	}
-	
-	// On met le quart en haut à droite de la matrice de l'élément dans la matrice de rigidité globale
-	if (EF_rigidite_ajout(projet, noeudx, noeudy, &rigidite_en_cours) != 0)
-		BUG(-1);
-	for (i=0;i<triplet->nnz;i++)
-	{
-		if ((ai[i] < 6) && (aj[i] >= 6))
-			rigidite_en_cours->matrice[ai[i]][aj[i]-6] += ax[i];
-	}
-	
-	// On met le quart en bas à gauche de la matrice de l'élément dans la matrice de rigidité globale
-	if (EF_rigidite_ajout(projet, noeudy, noeudx, &rigidite_en_cours) != 0)
-		BUG(-1);
-	for (i=0;i<triplet->nnz;i++)
-	{
-		if ((ai[i] >= 6) && (aj[i] < 6))
-			rigidite_en_cours->matrice[ai[i]-6][aj[i]] += ax[i];
-	}
-	
-	// On met le quart en bas à droite de la matrice de l'élément dans la matrice de rigidité globale
-	if (EF_rigidite_ajout(projet, noeudy, noeudy, &rigidite_en_cours) != 0)
-		BUG(-1);
-	for (i=0;i<triplet->nnz;i++)
-	{
-		if ((ai[i] >= 6) && (aj[i] >= 6))
-			rigidite_en_cours->matrice[ai[i]-6][aj[i]-6] += ax[i];
-	}
-	cholmod_l_free_triplet(&triplet, projet->ef_donnees.c);
 	
 	return 0;
 }
-
 
 
 
