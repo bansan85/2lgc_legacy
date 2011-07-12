@@ -78,8 +78,10 @@ typedef struct
 	cholmod_sparse		*A;
 	LIST			*noeuds;
 	int			**noeuds_flags_partielle;
+	int			nb_colonne_matrice; // Nombre de colonne / ligne de la matrice de rigidité globale partielle
 	LIST			*appuis;
-	LIST			*rigidite_list; // Liste temporaire avant transformation en matrice sparse
+	cholmod_triplet		*rigidite_triplet; // Liste temporaire avant transformation en matrice sparse
+	unsigned int		rigidite_triplet_en_cours;
 	cholmod_sparse		*rigidite_matrice_partielle; // La matrice contient la matrice de rigidité globale mais sans les lignes / colonnes dont on bloque les déplacements
 	cholmod_sparse		*inv_rigidite_matrice_partielle; // Inverse de la matrice rigidite_matrice_calc
 } EF;

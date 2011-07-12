@@ -57,9 +57,9 @@ void gtk_window_option_destroy_button(GtkWidget *object __attribute__((unused)),
 int main(int argc, char *argv[])
 {
 	/* Variables */
-	GtkWidget * MainWindow = NULL;
+/*	GtkWidget * MainWindow = NULL;
 	GtkWidget *pTable;
-	GtkWidget *pButton;
+	GtkWidget *pButton;*/
 	Projet *projet;
 	
 	// On charge la localisation
@@ -153,15 +153,18 @@ int main(int argc, char *argv[])
 	if (_1992_1_1_elements_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 0, 1, 1000) != 0) BUG(-1);
 	if (_1992_1_1_elements_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 1, 2, 1000) != 0) BUG(-1);
 	
+	// Initialise les éléments nécessaire pour l'ajout des rigidités
+	if (EF_calculs_initialise(projet) != 0) BUG(-1);
+	
 	// Ajout de la rigidité de l'élément à la matrice globale du projet
 	if (_1992_1_1_elements_rigidite_ajout(projet, 0) != 0) BUG(-1);
 	if (_1992_1_1_elements_rigidite_ajout(projet, 1) != 0) BUG(-1);
 	
-	if (EF_rigidite_genere_sparse(projet) != 0) BUG(-1);
+	if (EF_calculs_genere_sparse(projet) != 0) BUG(-1);
 	if (EF_calculs_resoud_charge(projet, 0) != 0) BUG(-1);
 	
 	// Création de la fenêtre principale
-	MainWindow = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+/*	MainWindow = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	// Ne pas mettre la ligne ci-dessous sinon projet est libéré deux fois.
 	//g_signal_connect(G_OBJECT(MainWindow), "delete-event", G_CALLBACK(gtk_window_delete_event), projet);
 	g_signal_connect(GTK_WINDOW(MainWindow), "destroy", G_CALLBACK(gtk_window_destroy_event), projet);
@@ -178,7 +181,9 @@ int main(int argc, char *argv[])
 	
 	// Affichage de l'interface graphique
 	gtk_widget_show_all(MainWindow);
-	gtk_main();
+	gtk_main();*/
+	
+	projet_free(projet);
 	
 	return 0;
 }
