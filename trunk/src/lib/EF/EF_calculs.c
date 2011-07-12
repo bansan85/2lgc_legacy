@@ -83,7 +83,7 @@ int EF_rigidite_genere_sparse(Projet *projet)
 		if (projet->ef_donnees.noeuds_flags_partielle[i] == NULL)
 			BUGTEXTE(-2, gettext("Erreur d'allocation mémoire.\n"));
 	}
-	i = 0; // Colonne en cours
+	i = 0; // Nombre de colonnes/lignes de la matrice
 	list_mvfront(projet->ef_donnees.noeuds);
 	do
 	{
@@ -122,7 +122,17 @@ int EF_rigidite_genere_sparse(Projet *projet)
 		}
 	}
 	while (list_mvnext(projet->ef_donnees.noeuds) != NULL);
-
+	
+	// Cela signifie que tous les noeuds sont bloqués (cas d'une poutre sur deux appuis sans discrétisation par exemple)
+	if (i == 0)
+	{
+		triplet_rigidite = cholmod_l_allocate_triplet(0, 0, 0, 0, CHOLMOD_REAL, projet->ef_donnees.c);
+		projet->ef_donnees.rigidite_matrice_partielle = cholmod_l_triplet_to_sparse(triplet_rigidite, 0, projet->ef_donnees.c);
+		projet->ef_donnees.inv_rigidite_matrice_partielle = cholmod_l_triplet_to_sparse(triplet_rigidite, 0, projet->ef_donnees.c);
+		cholmod_l_free_triplet(&triplet_rigidite, projet->ef_donnees.c);
+		
+		return 0;
+	}
 	
 	// On crée le triplet correspondant à la matrice de rigidité
 	triplet_rigidite = cholmod_l_allocate_triplet(i, i, nnz_max, 0, CHOLMOD_REAL, projet->ef_donnees.c);
@@ -153,17 +163,17 @@ int EF_rigidite_genere_sparse(Projet *projet)
 	while (list_mvnext(projet->ef_donnees.rigidite_list) != NULL);
 	triplet_rigidite->nnz = k;
 	
-	// Puis en sparse matrice
+	// Puis en matrice sparse
 	projet->ef_donnees.rigidite_matrice_partielle = cholmod_l_triplet_to_sparse(triplet_rigidite, 0, projet->ef_donnees.c);
 	cholmod_l_free_triplet(&triplet_rigidite, projet->ef_donnees.c);
 	
-	// Puis on inverse la matrice en cherchant la matrice x de tel sorte que Kx=1. Ainsi x est l'inverse
-	cholmod_triplet *zero_rigidite = cholmod_l_allocate_triplet(6, 6, 6, 0, CHOLMOD_REAL, projet->ef_donnees.c);
+	// Puis on inverse la matrice en cherchant la matrice x de tel sorte que Kx=[1]. Ainsi x est l'inverse
+	cholmod_triplet *zero_rigidite = cholmod_l_allocate_triplet(projet->ef_donnees.rigidite_matrice_partielle->nrow, projet->ef_donnees.rigidite_matrice_partielle->ncol, projet->ef_donnees.rigidite_matrice_partielle->nrow, 0, CHOLMOD_REAL, projet->ef_donnees.c);
 	ai = zero_rigidite->i;
 	aj = zero_rigidite->j;
 	ax = zero_rigidite->x;
-	zero_rigidite->nnz=6;
-	for (i=0;i<6;i++)
+	zero_rigidite->nnz=projet->ef_donnees.rigidite_matrice_partielle->nrow;
+	for (i=0;i<zero_rigidite->nnz;i++)
 	{
 		ai[i] = i;
 		aj[i] = i;

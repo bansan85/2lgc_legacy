@@ -68,12 +68,12 @@ int _1992_1_1_sections_ajout_rectangulaire(Projet *projet, double largeur, doubl
 	section_nouvelle.largeur = largeur;
 	section_nouvelle.hauteur = hauteur;
 	section_nouvelle.caracteristiques->a = largeur*hauteur;
-	section_nouvelle.caracteristiques->cdgh = hauteur/2;
-	section_nouvelle.caracteristiques->cdgb = hauteur/2;
-	section_nouvelle.caracteristiques->cdgd = largeur/2;
-	section_nouvelle.caracteristiques->cdgg = largeur/2;
-	section_nouvelle.caracteristiques->iy = hauteur*largeur*largeur*largeur/12;
-	section_nouvelle.caracteristiques->iz = largeur*hauteur*hauteur*hauteur/12;
+	section_nouvelle.caracteristiques->cdgh = hauteur/2.;
+	section_nouvelle.caracteristiques->cdgb = hauteur/2.;
+	section_nouvelle.caracteristiques->cdgd = largeur/2.;
+	section_nouvelle.caracteristiques->cdgg = largeur/2.;
+	section_nouvelle.caracteristiques->iy = largeur*hauteur*hauteur*hauteur/12.;
+	section_nouvelle.caracteristiques->iz = hauteur*largeur*largeur*largeur/12.;
 	if (largeur > hauteur)
 	{ a = largeur; b = hauteur; }
 	else
@@ -126,8 +126,8 @@ int _1992_1_1_sections_ajout_T(Projet *projet, double largeur_table, double larg
 	section_nouvelle.caracteristiques->cdgb = (hauteur_table+hauteur_ame)-section_nouvelle.caracteristiques->cdgh;
 	section_nouvelle.caracteristiques->cdgd = largeur_table/2;
 	section_nouvelle.caracteristiques->cdgg = largeur_table/2;
-	section_nouvelle.caracteristiques->iy = hauteur_table*largeur_table*largeur_table*largeur_table/12+hauteur_ame*largeur_ame*largeur_ame*largeur_ame/12;
-	section_nouvelle.caracteristiques->iz = largeur_table*hauteur_table*hauteur_table*hauteur_table/12+largeur_ame*hauteur_ame*hauteur_ame*hauteur_ame/12+largeur_table*hauteur_table*(hauteur_table/2-section_nouvelle.caracteristiques->cdgh)*(hauteur_table/2-section_nouvelle.caracteristiques->cdgh)+largeur_ame*hauteur_ame*(hauteur_ame/2-section_nouvelle.caracteristiques->cdgb)*(hauteur_ame/2-section_nouvelle.caracteristiques->cdgb);
+	section_nouvelle.caracteristiques->iy = largeur_table*hauteur_table*hauteur_table*hauteur_table/12+largeur_ame*hauteur_ame*hauteur_ame*hauteur_ame/12+largeur_table*hauteur_table*(hauteur_table/2-section_nouvelle.caracteristiques->cdgh)*(hauteur_table/2-section_nouvelle.caracteristiques->cdgh)+largeur_ame*hauteur_ame*(hauteur_ame/2-section_nouvelle.caracteristiques->cdgb)*(hauteur_ame/2-section_nouvelle.caracteristiques->cdgb);
+	section_nouvelle.caracteristiques->iz = hauteur_table*largeur_table*largeur_table*largeur_table/12+hauteur_ame*largeur_ame*largeur_ame*largeur_ame/12;
 	
 	if (largeur_table > hauteur_table)
 		{ a = largeur_table; b = hauteur_table; }
@@ -175,13 +175,13 @@ int _1992_1_1_sections_ajout_carre(Projet *projet, double cote)
 	section_nouvelle.caracteristiques->type = BETON_SECTION_CARRE;
 	section_nouvelle.cote = cote;
 	section_nouvelle.caracteristiques->a = cote*cote;
-	section_nouvelle.caracteristiques->cdgh = cote/2;
-	section_nouvelle.caracteristiques->cdgb = cote/2;
-	section_nouvelle.caracteristiques->cdgd = cote/2;
-	section_nouvelle.caracteristiques->cdgg = cote/2;
-	section_nouvelle.caracteristiques->iy = cote*cote*cote*cote/12;
-	section_nouvelle.caracteristiques->iz = cote*cote*cote*cote/12;
-	section_nouvelle.caracteristiques->j = cote*cote*cote*cote/16*(16/3-3.364*(1-1/12));
+	section_nouvelle.caracteristiques->cdgh = cote/2.;
+	section_nouvelle.caracteristiques->cdgb = cote/2.;
+	section_nouvelle.caracteristiques->cdgd = cote/2.;
+	section_nouvelle.caracteristiques->cdgg = cote/2.;
+	section_nouvelle.caracteristiques->iy = cote*cote*cote*cote/12.;
+	section_nouvelle.caracteristiques->iz = section_nouvelle.caracteristiques->iy;
+	section_nouvelle.caracteristiques->j = cote*cote*cote*cote/16.*(16./3.-3.364*(1.-1./12.));
 	
 	section_en_cours = (Beton_Section_Carre*)list_rear(projet->beton.sections);
 	if (section_en_cours == NULL)
@@ -217,14 +217,14 @@ int _1992_1_1_sections_ajout_circulaire(Projet *projet, double diametre)
 		BUGTEXTE(-2, gettext("Erreur d'allocation mémoire.\n"));
 	section_nouvelle.caracteristiques->type = BETON_SECTION_CIRCULAIRE;
 	section_nouvelle.diametre = diametre;
-	section_nouvelle.caracteristiques->a = M_PI*diametre*diametre/4;
-	section_nouvelle.caracteristiques->cdgh = diametre/2;
-	section_nouvelle.caracteristiques->cdgb = diametre/2;
-	section_nouvelle.caracteristiques->cdgd = diametre/2;
-	section_nouvelle.caracteristiques->cdgg = diametre/2;
-	section_nouvelle.caracteristiques->iy = M_PI*diametre*diametre*diametre*diametre/64;
+	section_nouvelle.caracteristiques->a = M_PI*diametre*diametre/4.;
+	section_nouvelle.caracteristiques->cdgh = diametre/2.;
+	section_nouvelle.caracteristiques->cdgb = diametre/2.;
+	section_nouvelle.caracteristiques->cdgd = diametre/2.;
+	section_nouvelle.caracteristiques->cdgg = diametre/2.;
+	section_nouvelle.caracteristiques->iy = M_PI*diametre*diametre*diametre*diametre/64.;
 	section_nouvelle.caracteristiques->iz = section_nouvelle.caracteristiques->iy;
-	section_nouvelle.caracteristiques->j = M_PI*diametre*diametre*diametre*diametre/32;;
+	section_nouvelle.caracteristiques->j = M_PI*diametre*diametre*diametre*diametre/32.;
 	
 	section_en_cours = (Beton_Section_Circulaire*)list_rear(projet->beton.sections);
 	if (section_en_cours == NULL)
