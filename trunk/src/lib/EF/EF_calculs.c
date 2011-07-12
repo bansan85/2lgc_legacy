@@ -26,48 +26,18 @@
 #include "EF_rigidite.h"
 #include "EF_noeud.h"
 #include "1990_actions.h"
+#include "1992_1_1_elements.h"
 
-/* EF_rigidite_genere_sparse
- * Description : Converti la matrice de rigidité complète de la structure sous forme de liste en une matrice de rigidité partielle (les lignes (et colonnes) dont on connait les déplacements ne sont pas insérées) sous forme d'une matrice sparse
+/* EF_calculs_initialise
+ * Description : Initialise les divers variables nécessaire à l'ajout des rigidités
  * Paramètres : Projet *projet : la variable projet
  * Valeur renvoyée :
  *   Succès : 0
- *   Échec : valeur négative si la liste de rigidité n'est pas initialisée ou a déjà été libérée
+ *   Échec : valeur négative
  */
-int EF_rigidite_genere_sparse(Projet *projet)
+int EF_calculs_initialise(Projet *projet)
 {
-	cholmod_triplet		*triplet_rigidite;
-	double			max_rig = 0.;
-	int			nnz_max = 0, j, k;
-	unsigned int		i;
-	long			*ai, *aj;	// Pointeur vers les données des triplets
-	double			*ax;		// Pointeur vers les données des triplets
-	
-	if ((projet == NULL) || (projet->ef_donnees.rigidite_list == NULL) || (list_size(projet->ef_donnees.rigidite_list) == 0))
-		BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
-	
-	// On commence par déterminer la valeur maximale d'une case de la matrice.
-	// Cette valeur permettra de déterminer le "0" équivalent sur la base de ERREUR_RELATIVE_MIN.
-	// On déermine également le nombre de case non zéro. Il est pris pour zéro 0 et non
-	// max_rig*ERREUR_RELATIVE_MIN mais c'est pas grave, ça évite de parcourir 50 fois 
-	// la liste. TODO : A tester afin de vérifier que ça ralentisse vraiment devant le temps de 
-	// calcul de résolution du système.
-	list_mvfront(projet->ef_donnees.rigidite_list);
-	do
-	{
-		EF_rigidite	*rigidite = list_curr(projet->ef_donnees.rigidite_list);
-		for (i=0;i<6;i++)
-		{
-			for (j=0;j<6;j++)
-			{
-				if (ABS(rigidite->matrice[i][j]) > max_rig)
-					max_rig = ABS(rigidite->matrice[i][j]);
-				if (rigidite->matrice[i][j] != 0.)
-					nnz_max++;
-			}
-		}
-	}
-	while (list_mvnext(projet->ef_donnees.rigidite_list) != NULL);
+	unsigned int	i, nnz_max;
 	
 	// Détermine pour chaque noeud si la ligne / colonne de la matrice de rigidité globale
 	// doit être pris en compte dans la résolution du système.
@@ -76,7 +46,7 @@ int EF_rigidite_genere_sparse(Projet *projet)
 	// le nombre vaut -1 si la colonne n'est pas inséré dans la matrice de rigidité globale
 	projet->ef_donnees.noeuds_flags_partielle = malloc(sizeof(int*)*list_size(projet->ef_donnees.noeuds));
 	if (projet->ef_donnees.noeuds_flags_partielle == NULL)
-		BUGTEXTE(-2, gettext("Erreur d'allocation mémoire.\n"));
+		BUGTEXTE(-1, gettext("Erreur d'allocation mémoire.\n"));
 	for (i=0;i<list_size(projet->ef_donnees.noeuds);i++)
 	{
 		projet->ef_donnees.noeuds_flags_partielle[i] = malloc(6*sizeof(int));
@@ -122,9 +92,64 @@ int EF_rigidite_genere_sparse(Projet *projet)
 		}
 	}
 	while (list_mvnext(projet->ef_donnees.noeuds) != NULL);
+	projet->ef_donnees.nb_colonne_matrice = i;
+	
+	// On détermine au maximum le nombre de triplet il sera nécessaire pour obtenir la matrice de rigidité globale, soit 12*12*nombre_d'éléments (y compris discrétisation)
+	nnz_max = 0;
+	projet->ef_donnees.rigidite_triplet_en_cours = 0;
+	list_mvfront(projet->beton.elements);
+	do
+	{
+		Beton_Element	*element = list_curr(projet->beton.elements);
+		
+		nnz_max += 12*12*(element->discretisation_element+1);
+	}
+	while (list_mvnext(projet->beton.elements) != NULL);
+	projet->ef_donnees.rigidite_triplet = cholmod_l_allocate_triplet(projet->ef_donnees.nb_colonne_matrice, projet->ef_donnees.nb_colonne_matrice, nnz_max, 0, CHOLMOD_REAL, projet->ef_donnees.c);
+	
+	return 0;
+}
+
+/* EF_calculs_genere_sparse
+ * Description : Converti la matrice de rigidité complète de la structure sous forme de liste en une matrice de rigidité partielle (les lignes (et colonnes) dont on connait les déplacements ne sont pas insérées) sous forme d'une matrice sparse
+ * Paramètres : Projet *projet : la variable projet
+ * Valeur renvoyée :
+ *   Succès : 0
+ *   Échec : valeur négative si la liste de rigidité n'est pas initialisée ou a déjà été libérée
+ */
+int EF_calculs_genere_sparse(Projet *projet)
+{
+	cholmod_triplet		*triplet_rigidite;
+	double			max_rig = 0.;
+	int			nnz_max = 0;
+//	int			k;
+	unsigned int		i, j;
+/*	long			*ai2, *aj2;	// Pointeur vers les données des triplets
+	double			*ax2;		// Pointeur vers les données des triplets*/
+	long			*ai, *aj;	// Pointeur vers les données des triplets
+	double			*ax;		// Pointeur vers les données des triplets
+	
+	if ((projet == NULL) || (projet->ef_donnees.rigidite_triplet == NULL))
+		BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
+	
+	// On commence par déterminer la valeur maximale d'une case de la matrice pour 
+	// ensuite supprimer les valeurs négligeables.
+	ax = projet->ef_donnees.rigidite_triplet->x;
+	for (j=0;j<projet->ef_donnees.rigidite_triplet->nzmax;j++)
+	{
+		if (ABS(ax[j]) > max_rig)
+			max_rig = ABS(ax[j]);
+	}
+	for (j=0;j<projet->ef_donnees.rigidite_triplet->nzmax;j++)
+	{
+		if (ABS(ax[j]) < max_rig*ERREUR_RELATIVE_MIN)
+			ax[j] = 0.;
+		else
+			nnz_max++;
+	}
 	
 	// Cela signifie que tous les noeuds sont bloqués (cas d'une poutre sur deux appuis sans discrétisation par exemple)
-	if (i == 0)
+	if (projet->ef_donnees.nb_colonne_matrice == 0)
 	{
 		triplet_rigidite = cholmod_l_allocate_triplet(0, 0, 0, 0, CHOLMOD_REAL, projet->ef_donnees.c);
 		projet->ef_donnees.rigidite_matrice_partielle = cholmod_l_triplet_to_sparse(triplet_rigidite, 0, projet->ef_donnees.c);
@@ -134,38 +159,29 @@ int EF_rigidite_genere_sparse(Projet *projet)
 		return 0;
 	}
 	
-	// On crée le triplet correspondant à la matrice de rigidité
-	triplet_rigidite = cholmod_l_allocate_triplet(i, i, nnz_max, 0, CHOLMOD_REAL, projet->ef_donnees.c);
+	// On crée le triplet correspondant à la matrice de rigidité partielle
+/*	triplet_rigidite = cholmod_l_allocate_triplet(projet->ef_donnees.nb_colonne_matrice, projet->ef_donnees.nb_colonne_matrice, nnz_max, 0, CHOLMOD_REAL, projet->ef_donnees.c);
 	ai = triplet_rigidite->i;
 	aj = triplet_rigidite->j;
 	ax = triplet_rigidite->x;
+	ai2 = projet->ef_donnees.rigidite_triplet->i;
+	aj2 = projet->ef_donnees.rigidite_triplet->j;
+	ax2 = projet->ef_donnees.rigidite_triplet->x;
 	k = 0; // Dernier triplet ajouté
-	
-	// On converti la liste en triplet
-	list_mvfront(projet->ef_donnees.rigidite_list);
-	do
+	for (i=0;i<projet->ef_donnees.rigidite_triplet->nzmax;i++)
 	{
-		EF_rigidite	*rigidite = list_curr(projet->ef_donnees.rigidite_list);
-		for (i=0;i<6;i++)
+		if ((projet->ef_donnees.noeuds_flags_partielle[ai2[i]/6][ai2[i]%6] != -1) && (projet->ef_donnees.noeuds_flags_partielle[aj2[i]/6][aj2[i]%6] != -1) && (ax2[i] != 0.))
 		{
-			for (j=0;j<6;j++)
-			{
-				if ((projet->ef_donnees.noeuds_flags_partielle[rigidite->noeudx][i] != -1) && (projet->ef_donnees.noeuds_flags_partielle[rigidite->noeudy][j] != -1) && (max_rig*ERREUR_RELATIVE_MIN < ABS(rigidite->matrice[i][j])))
-				{
-					ai[k] = i;
-					aj[k] = j;
-					ax[k] = rigidite->matrice[i][j];
-					k++;
-				}
-			}
+			ai[k] = projet->ef_donnees.noeuds_flags_partielle[ai2[i]/6][ai2[i]%6];
+			aj[k] = projet->ef_donnees.noeuds_flags_partielle[aj2[i]/6][aj2[i]%6];
+			ax[k] = ax[i];
+			k++;
 		}
 	}
-	while (list_mvnext(projet->ef_donnees.rigidite_list) != NULL);
-	triplet_rigidite->nnz = k;
+	triplet_rigidite->nnz = k;*/
 	
-	// Puis en matrice sparse
-	projet->ef_donnees.rigidite_matrice_partielle = cholmod_l_triplet_to_sparse(triplet_rigidite, 0, projet->ef_donnees.c);
-	cholmod_l_free_triplet(&triplet_rigidite, projet->ef_donnees.c);
+	// On converti la liste des triplets en matrice sparse
+	projet->ef_donnees.rigidite_matrice_partielle = cholmod_l_triplet_to_sparse(projet->ef_donnees.rigidite_triplet, 0, projet->ef_donnees.c);
 	
 	// Puis on inverse la matrice en cherchant la matrice x de tel sorte que Kx=[1]. Ainsi x est l'inverse
 	cholmod_triplet *zero_rigidite = cholmod_l_allocate_triplet(projet->ef_donnees.rigidite_matrice_partielle->nrow, projet->ef_donnees.rigidite_matrice_partielle->ncol, projet->ef_donnees.rigidite_matrice_partielle->nrow, 0, CHOLMOD_REAL, projet->ef_donnees.c);

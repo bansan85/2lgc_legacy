@@ -31,7 +31,6 @@ typedef struct
 
 
 int EF_rigidite_init(Projet *projet);
-int EF_rigidite_ajout(Projet *projet, int noeudx, int noeudy, EF_rigidite **rigidite);
 int EF_rigidite_free(Projet *projet);
 
 #endif

@@ -1,6 +1,7 @@
 DEFAULT_INCLUDES	=	-I../../.. \
 				-I../common \
 				-I../1990 \
+				-I../1992_1_1 \
 				-I.
 
 lib_LTLIBRARIES		=	libEF.la

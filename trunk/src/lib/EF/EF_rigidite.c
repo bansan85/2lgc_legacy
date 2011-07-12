@@ -41,54 +41,8 @@ int EF_rigidite_init(Projet *projet)
 	
 	projet->ef_donnees.rigidite_matrice_partielle = NULL;
 	projet->ef_donnees.inv_rigidite_matrice_partielle = NULL;
-	projet->ef_donnees.rigidite_list = list_init();
-	if (projet->ef_donnees.rigidite_list == NULL)
-		BUGTEXTE(-2, gettext("Erreur d'allocation mémoire.\n"));
-	else
-		return 0;
-}
-
-
-/* EF_rigidite_ajout
- * Description : Ajoute (si nécessaire) l'élément correspondant aux numéros souhaités et le renvoi
- *             : Il reste alors à remplir la matrice
- * Paramètres : Projet *projet : la variable projet
- *            : int noeud1 : le numéro 1
- *            : int noeud2 : le numéro 2
- *            : EF_rigidite *rigidite : la rigidité correspondant aux numéros
- * Valeur renvoyée :
- *   Succès : 0
- *   Échec : valeur négative
- */
-int EF_rigidite_ajout(Projet *projet, int noeudx, int noeudy, EF_rigidite **rigidite)
-{
-	EF_rigidite	*rigidite_en_cours, rigidite_nouvelle;
-	
-	if ((projet == NULL) || (projet->ef_donnees.rigidite_list == NULL))
-		BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
-	
-	if (list_size(projet->ef_donnees.rigidite_list) != 0)
-	{
-		list_mvfront(projet->ef_donnees.rigidite_list);
-		do
-		{
-			rigidite_en_cours = list_curr(projet->ef_donnees.rigidite_list);
-			
-			if ((rigidite_en_cours->noeudx == noeudx) && (rigidite_en_cours->noeudy == noeudy))
-			{
-				*rigidite = rigidite_en_cours;
-				return 0;
-			}
-		}
-		while (list_mvnext(projet->ef_donnees.rigidite_list) != NULL);
-	}
-	
-	rigidite_nouvelle.noeudx = noeudx;
-	rigidite_nouvelle.noeudy = noeudy;
-	memset(&(rigidite_nouvelle.matrice), 0, sizeof(rigidite_nouvelle.matrice));
-	if (list_insert_after(projet->ef_donnees.rigidite_list, &(rigidite_nouvelle), sizeof(rigidite_nouvelle)) == NULL)
-		BUGTEXTE(-2, gettext("Erreur d'allocation mémoire.\n"));
-	*rigidite = list_rear(projet->ef_donnees.rigidite_list);
+	projet->ef_donnees.rigidite_triplet = NULL;
+	projet->ef_donnees.rigidite_triplet_en_cours = 0;
 	
 	return 0;
 }
@@ -105,18 +59,12 @@ int EF_rigidite_free(Projet *projet)
 {
 	unsigned int	i;
 	
-	if ((projet == NULL) || (projet->ef_donnees.rigidite_list == NULL))
+	if (projet == NULL)
 		BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
 	
-	while (!list_empty(projet->ef_donnees.rigidite_list))
-	{
-		EF_rigidite	*rigidite = list_remove_front(projet->ef_donnees.rigidite_list);
-		
-		free(rigidite);
-	}
+	if (projet->ef_donnees.rigidite_triplet != NULL)
+		cholmod_l_free_triplet(&projet->ef_donnees.rigidite_triplet, projet->ef_donnees.c);
 	
-	free(projet->ef_donnees.rigidite_list);
-	projet->ef_donnees.rigidite_list = NULL;
 	if (projet->ef_donnees.rigidite_matrice_partielle != NULL)
 	{
 		cholmod_l_free_sparse(&(projet->ef_donnees.rigidite_matrice_partielle), projet->ef_donnees.c);
