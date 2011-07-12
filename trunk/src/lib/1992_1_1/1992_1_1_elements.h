@@ -34,7 +34,7 @@ typedef struct __Beton_Element_Poutre
 	
 	EF_Noeud		*noeud_debut;
 	EF_Noeud		*noeud_fin;
-	int			discretisation_element;
+	int			discretisation_element; // Nombre de noeuds intermédiaires
 	EF_Noeud		**noeuds_intermediaires;
 	
 	cholmod_sparse		*matrice_rotation;

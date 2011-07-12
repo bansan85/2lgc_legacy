@@ -150,8 +150,8 @@ int main(int argc, char *argv[])
 	if (_1992_1_1_materiaux_ajout(projet, 25., 0.2) != 0) BUG(-1);
 	
 	// Création de l'élément en béton
-	if (_1992_1_1_elements_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 0, 1, 1) != 0) BUG(-1);
-	if (_1992_1_1_elements_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 1, 2, 1) != 0) BUG(-1);
+	if (_1992_1_1_elements_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 0, 1, 1000) != 0) BUG(-1);
+	if (_1992_1_1_elements_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 1, 2, 1000) != 0) BUG(-1);
 	
 	// Ajout de la rigidité de l'élément à la matrice globale du projet
 	if (_1992_1_1_elements_rigidite_ajout(projet, 0) != 0) BUG(-1);
