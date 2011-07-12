@@ -140,7 +140,8 @@ int main(int argc, char *argv[])
 	
 	// Création des noeuds
 	if (EF_noeuds_ajout(projet, 0., 0., 0., 0) != 0) BUG(-1);
-	if (EF_noeuds_ajout(projet, 1., 0.5, 3., -1) != 0) BUG(-1);
+	if (EF_noeuds_ajout(projet, 1., 0., 0., -1) != 0) BUG(-1);
+	if (EF_noeuds_ajout(projet, 2., 0., 0., 0) != 0) BUG(-1);
 	
 	// Ajout de l'action ponctuelle
 	if (_1990_action_ajout_charge_ponctuelle(projet, 0, 1, 500000., 450000., 400000., 0., 0., 0.) != 0) BUG(-1);
@@ -150,9 +151,11 @@ int main(int argc, char *argv[])
 	
 	// Création de l'élément en béton
 	if (_1992_1_1_elements_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 0, 1, 1) != 0) BUG(-1);
+	if (_1992_1_1_elements_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 1, 2, 1) != 0) BUG(-1);
 	
 	// Ajout de la rigidité de l'élément à la matrice globale du projet
 	if (_1992_1_1_elements_rigidite_ajout(projet, 0) != 0) BUG(-1);
+	if (_1992_1_1_elements_rigidite_ajout(projet, 1) != 0) BUG(-1);
 	
 	if (EF_rigidite_genere_sparse(projet) != 0) BUG(-1);
 	if (EF_calculs_resoud_charge(projet, 0) != 0) BUG(-1);
