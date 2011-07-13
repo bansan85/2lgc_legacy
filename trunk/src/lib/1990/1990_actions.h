@@ -57,7 +57,8 @@ typedef struct __Action
 	double			psi0;		// valeur_combinaison
 	double			psi1;		// valeur_frequente
 	double			psi2;		// valeur_quasi_permanente
-	cholmod_sparse		*deplacement_partiel;
+	cholmod_dense		*deplacement_partiel;
+	double			norm;
 } Action;
 
 char *_1990_action_categorie_bat_txt_eu(int type);

@@ -21,6 +21,7 @@
 
 #include <list.h>
 #include <cholmod.h>
+#include <SuiteSparseQR_C.h>
 
 typedef enum
 {
@@ -81,9 +82,12 @@ typedef struct
 	int			nb_colonne_matrice; // Nombre de colonne / ligne de la matrice de rigidité globale partielle
 	LIST			*appuis;
 	cholmod_triplet		*rigidite_triplet; // Liste temporaire avant transformation en matrice sparse
+	double			max_rigidite;
 	unsigned int		rigidite_triplet_en_cours;
 	cholmod_sparse		*rigidite_matrice_partielle; // La matrice contient la matrice de rigidité globale mais sans les lignes / colonnes dont on bloque les déplacements
-	cholmod_sparse		*inv_rigidite_matrice_partielle; // Inverse de la matrice rigidite_matrice_calc
+	cholmod_factor		*factor_rigidite_matrice_partielle; // Inverse de la matrice rigidite_matrice_calc
+	
+	SuiteSparseQR_C_factorization	*QR;
 } EF;
 
 typedef struct __Projet

@@ -18,7 +18,7 @@
 
 #include <stdlib.h>
 #include <libintl.h>
-#include <SuiteSparseQR_C.h>
+#include <cholmod.h>
 #include "common_projet.h"
 #include "common_erreurs.h"
 #include "common_maths.h"
@@ -87,16 +87,16 @@ int _1992_1_1_elements_ajout(Projet *projet, Type_Element type, int section, int
 	element_nouveau.discretisation_element = discretisation_element;
 	if (discretisation_element != 0)
 	{
-		int		i;
+		int	i;
 		element_nouveau.noeuds_intermediaires = malloc(sizeof(EF_Noeud)*(discretisation_element));
 		if (element_nouveau.noeuds_intermediaires == NULL)
 			BUGTEXTE(-6, gettext("Erreur d'allocation mémoire.\n"));
 		for (i=0;i<discretisation_element;i++)
 		{
 			double		dx, dy, dz;
-			dx = (element_nouveau.noeud_fin->position.x-element_nouveau.noeud_debut->position.x)/discretisation_element;
-			dy = (element_nouveau.noeud_fin->position.y-element_nouveau.noeud_debut->position.y)/discretisation_element;
-			dz = (element_nouveau.noeud_fin->position.z-element_nouveau.noeud_debut->position.z)/discretisation_element;
+			dx = (element_nouveau.noeud_fin->position.x-element_nouveau.noeud_debut->position.x)/(discretisation_element+1);
+			dy = (element_nouveau.noeud_fin->position.y-element_nouveau.noeud_debut->position.y)/(discretisation_element+1);
+			dz = (element_nouveau.noeud_fin->position.z-element_nouveau.noeud_debut->position.z)/(discretisation_element+1);
 			if (EF_noeuds_ajout(projet, element_nouveau.noeud_debut->position.x+dx*(i+1), element_nouveau.noeud_debut->position.y+dy*(i+1), element_nouveau.noeud_debut->position.z+dz*(i+1), -1) != 0)
 				BUG(-6);
 			element_nouveau.noeuds_intermediaires[i] = list_rear(projet->ef_donnees.noeuds);

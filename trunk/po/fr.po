@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2011-07-12 11:37+0200\n"
+"POT-Creation-Date: 2011-07-14 01:50+0200\n"
 "PO-Revision-Date: 2011-03-22 20:55+0100\n"
 "Last-Translator: LE GARREC Vincent <vlg@2lgc.org>\n"
 "Language-Team: French\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: src/gui/codegui/main.c:95
+#: src/gui/codegui/main.c:96
 msgid "Impossible d'initialiser gtk.\n"
 msgstr "Impossible d'initialiser gtk.\n"
 
@@ -31,8 +31,8 @@ msgstr "Impossible d'initialiser gtk.\n"
 #: src/lib/1992_1_1/1992_1_1_elements.c:39
 #: src/lib/1992_1_1/1992_1_1_elements.c:66
 #: src/lib/1992_1_1/1992_1_1_elements.c:136
-#: src/lib/1992_1_1/1992_1_1_elements.c:177
-#: src/lib/1992_1_1/1992_1_1_elements.c:369
+#: src/lib/1992_1_1/1992_1_1_elements.c:176
+#: src/lib/1992_1_1/1992_1_1_elements.c:351
 #: src/lib/1992_1_1/1992_1_1_materiaux.c:37
 #: src/lib/1992_1_1/1992_1_1_materiaux.c:60
 #: src/lib/1992_1_1/1992_1_1_materiaux.c:153
@@ -59,14 +59,14 @@ msgstr "Impossible d'initialiser gtk.\n"
 #: src/lib/1990/1990_combinaisons.c:544 src/lib/1990/1990_combinaisons.c:549
 #: src/lib/1990/1990_combinaisons.c:553 src/lib/1990/1990_combinaisons.c:718
 #: src/lib/1990/1990_combinaisons.c:821 src/lib/1990/1990_combinaisons.c:858
-#: src/lib/EF/EF_calculs.c:47 src/lib/EF/EF_calculs.c:208
+#: src/lib/EF/EF_calculs.c:129 src/lib/EF/EF_calculs.c:207
 #: src/lib/EF/EF_noeud.c:36 src/lib/EF/EF_noeud.c:62 src/lib/EF/EF_noeud.c:102
 #: src/lib/EF/EF_noeud.c:128 src/lib/EF/EF_appui.c:35 src/lib/EF/EF_appui.c:63
 #: src/lib/EF/EF_appui.c:77 src/lib/EF/EF_appui.c:92 src/lib/EF/EF_appui.c:107
 #: src/lib/EF/EF_appui.c:122 src/lib/EF/EF_appui.c:137
 #: src/lib/EF/EF_appui.c:152 src/lib/EF/EF_appui.c:181
 #: src/lib/EF/EF_appui.c:207 src/lib/EF/EF_rigidite.c:40
-#: src/lib/EF/EF_rigidite.c:68 src/lib/EF/EF_rigidite.c:109
+#: src/lib/EF/EF_rigidite.c:63
 msgid "Paramètres invalides.\n"
 msgstr "Paramètres invalides.\n"
 
@@ -108,11 +108,10 @@ msgstr "Paramètres invalides.\n"
 #: src/lib/1990/1990_combinaisons.c:590 src/lib/1990/1990_combinaisons.c:606
 #: src/lib/1990/1990_combinaisons.c:617 src/lib/1990/1990_combinaisons.c:633
 #: src/lib/1990/1990_combinaisons.c:660 src/lib/1990/1990_combinaisons.c:731
-#: src/lib/common/common_projet.c:118 src/lib/common/common_projet.c:131
-#: src/lib/EF/EF_calculs.c:79 src/lib/EF/EF_calculs.c:84
+#: src/lib/common/common_projet.c:117 src/lib/common/common_projet.c:130
+#: src/lib/EF/EF_calculs.c:49 src/lib/EF/EF_calculs.c:54
 #: src/lib/EF/EF_noeud.c:40 src/lib/EF/EF_noeud.c:85 src/lib/EF/EF_appui.c:39
-#: src/lib/EF/EF_appui.c:164 src/lib/EF/EF_rigidite.c:46
-#: src/lib/EF/EF_rigidite.c:90
+#: src/lib/EF/EF_appui.c:164
 msgid "Erreur d'allocation mémoire.\n"
 msgstr "Erreur d'allocation mémoire.\n"
 
