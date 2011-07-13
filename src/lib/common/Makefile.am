@@ -21,8 +21,7 @@ libcommon_la_HEADERS	=	common_text.h \
 libcommon_la_LIBADD	=	../1990/lib1990.la \
 				../1992_1_1/lib1992_1_1.la \
 				../EF/libEF.la \
-				@XML_LIBS@ \
-				-lspqr
+				@XML_LIBS@
 
 libcommon_la_CPPFLAGS	=	@XML_CPPFLAGS@
 

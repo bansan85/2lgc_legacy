@@ -20,7 +20,6 @@
 #include <stdlib.h>
 #include <libintl.h>
 #include <locale.h>
-#include <SuiteSparseQR_C.h>
 
 #include "common_projet.h"
 #include "common_erreurs.h"
@@ -133,6 +132,8 @@ Projet *projet_init()
 
 	projet->ef_donnees.c = &(projet->ef_donnees.Common);
 	cholmod_l_start(projet->ef_donnees.c);
+	projet->ef_donnees.c->supernodal = CHOLMOD_SIMPLICIAL;
+
 	
 	projet->list_gtk._1990 = NULL;
 	

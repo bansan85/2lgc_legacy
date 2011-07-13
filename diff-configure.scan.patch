@@ -42,8 +42,8 @@
 -# FIXME: Replace `main' with a function in `-lspqr':
 -AC_CHECK_LIB([spqr], [main])
 +PKG_CHECK_MODULES([LIBLIST], [liblist >= 2.3.1], [], [AC_MSG_ERROR([liblist ( http://ohnopub.net/liblist ) est necessaire])])
-+AC_CHECK_LIB([spqr], [SuiteSparseQR_C_backslash], [], [AC_MSG_ERROR([spqr ( http://www.cise.ufl.edu/research/sparse/SPQR ) est necessaire])])
 +AC_CHECK_LIB([cholmod], [cholmod_l_start], [], [AC_MSG_ERROR([cholmod ( http://www.cise.ufl.edu/research/sparse/cholmod ) est necessaire])])
++AC_CHECK_LIB([spqr], [SuiteSparseQR_C_factorize], [], [AC_MSG_ERROR([spqr ( www.cise.ufl.edu/research/sparse/SPQR ) est necessaire])])
  
  # Checks for header files.
  AC_CHECK_HEADERS([libintl.h locale.h stdlib.h string.h])
