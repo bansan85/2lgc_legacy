@@ -58,11 +58,11 @@ int _1992_1_1_elements_init(Projet *projet)
  *   Succès : 0 même si aucune section n'est existante
  *   Échec : valeur négative si la liste des éléments n'est pas initialisée ou a déjà été libérée
  */
-int _1992_1_1_elements_ajout(Projet *projet, Type_Element type, int section, int materiau, int noeud_debut, int noeud_fin, int discretisation_element)
+int _1992_1_1_elements_ajout(Projet *projet, Type_Element type, unsigned int section, unsigned int materiau, unsigned int noeud_debut, unsigned int noeud_fin, unsigned int discretisation_element)
 {
 	Beton_Element	*element_en_cours, element_nouveau;
 	
-	if ((projet == NULL) || (projet->beton.elements == NULL))
+	if ((projet == NULL) || (projet->beton.elements == NULL) || (noeud_debut == noeud_fin))
 		BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
 	
 	list_mvrear(projet->beton.elements);
@@ -87,7 +87,7 @@ int _1992_1_1_elements_ajout(Projet *projet, Type_Element type, int section, int
 	element_nouveau.discretisation_element = discretisation_element;
 	if (discretisation_element != 0)
 	{
-		int	i;
+		unsigned int	i;
 		element_nouveau.noeuds_intermediaires = malloc(sizeof(EF_Noeud)*(discretisation_element));
 		if (element_nouveau.noeuds_intermediaires == NULL)
 			BUGTEXTE(-6, gettext("Erreur d'allocation mémoire.\n"));
@@ -130,7 +130,7 @@ int _1992_1_1_elements_ajout(Projet *projet, Type_Element type, int section, int
  *   Succès : 0
  *   Échec : valeur négative
  */
-int _1992_1_1_elements_cherche_numero(Projet *projet, int numero)
+int _1992_1_1_elements_cherche_numero(Projet *projet, unsigned int numero)
 {
 	if ((projet == NULL) || (projet->beton.elements == NULL) || (list_size(projet->beton.elements) == 0))
 		BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
@@ -157,7 +157,7 @@ int _1992_1_1_elements_cherche_numero(Projet *projet, int numero)
  *   Succès : 0
  *   Échec : valeur négative
  */
-int _1992_1_1_elements_rigidite_ajout(Projet *projet, int num_element)
+int _1992_1_1_elements_rigidite_ajout(Projet *projet, unsigned int num_element)
 {
 	EF_Noeud	*noeud1, *noeud2;
 	long		*ai, *aj, *ai2, *aj2;	// Pointeur vers les données des triplets
@@ -165,7 +165,7 @@ int _1992_1_1_elements_rigidite_ajout(Projet *projet, int num_element)
 	double		y, cosx, sinx; // valeurs de la matrice de rotation
 	double		xx, yy, zz, ll; // Dimension de la barre dans 3D
 	unsigned int	i;
-	int		j;
+	unsigned int	j;
 	cholmod_triplet	*triplet;
 	cholmod_sparse	*sparse_tmp, *sparse_rotation_transpose;
 	Beton_Element	*element;

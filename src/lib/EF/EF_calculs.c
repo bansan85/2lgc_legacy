@@ -19,8 +19,10 @@
 #include <stdlib.h>
 #include <libintl.h>
 #include <string.h>
-#include <SuiteSparseQR_C.h>
+//#include <SuiteSparseQR_C.h>
 #include <time.h>
+#include <unistd.h>
+
 #include "common_projet.h"
 #include "common_erreurs.h"
 #include "common_maths.h"
@@ -122,7 +124,6 @@ int EF_calculs_initialise(Projet *projet)
 int EF_calculs_genere_sparse(Projet *projet)
 {
 	cholmod_triplet		*triplet_rigidite;
-//	int			nnz_max = 0;
 	unsigned int		j;
 	double			*ax;		// Pointeur vers les données des triplets
 	
@@ -139,13 +140,6 @@ int EF_calculs_genere_sparse(Projet *projet)
 		if (ABS(ax[j]) > projet->ef_donnees.max_rigidite)
 			projet->ef_donnees.max_rigidite = ABS(ax[j]);
 	}
-/*	for (j=0;j<projet->ef_donnees.rigidite_triplet->nzmax;j++)
-	{
-		if (ABS(ax[j]) < projet->ef_donnees.max_rigidite*ERREUR_RELATIVE_MIN)
-			ax[j] = 0.;
-		else
-			nnz_max++;
-	}*/
 	
 	// Cela signifie que tous les noeuds sont bloqués (cas d'une poutre sur deux appuis sans discrétisation par exemple)
 	if (projet->ef_donnees.nb_colonne_matrice == 0)
@@ -170,14 +164,10 @@ int EF_calculs_genere_sparse(Projet *projet)
 	projet->ef_donnees.factor_rigidite_matrice_partielle = cholmod_l_analyze (projet->ef_donnees.rigidite_matrice_partielle, projet->ef_donnees.c) ;
 	cholmod_l_factorize(projet->ef_donnees.rigidite_matrice_partielle, projet->ef_donnees.factor_rigidite_matrice_partielle, projet->ef_donnees.c);
 	
-//	Les deux méthodes ci-dessous marchent mais elles nécessite la librairie spqr qui ne semble pas apporter grand chose. En plus, spqr ne marche que avec les cholmod_l_ et non pas avec les cholmod_
+//	La méthode ci-dessous marche mais elle nécessite la librairie spqr qui ne semble pas apporter grand chose. Il est à noter que spqr ne semble marcher que avec les cholmod_l_ et non pas avec les cholmod_
 //	Il convient de les conserver car elles pourront toujours peut-être un jour être réutilisées.
 /*	projet->ef_donnees.rigidite_matrice_partielle->stype = 0;
-	start = clock();
-	projet->ef_donnees.QR = SuiteSparseQR_C_factorize(0, 0., projet->ef_donnees.rigidite_matrice_partielle, projet->ef_donnees.c);
-	end = clock();
-	cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
-	printf("Temps 2 : %lf\n", cpu_time_used);*/
+	projet->ef_donnees.QR = SuiteSparseQR_C_factorize(0, 0., projet->ef_donnees.rigidite_matrice_partielle, projet->ef_donnees.c);*/
 	
 	return 0;
 }
@@ -243,29 +233,31 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
 	dense_force = cholmod_l_sparse_to_dense(sparse_force, projet->ef_donnees.c);
 	cholmod_l_free_sparse(&sparse_force, projet->ef_donnees.c);
 	
+	printf("Solution 1\n");
 	action_en_cours->deplacement_partiel = cholmod_l_solve (CHOLMOD_A, projet->ef_donnees.factor_rigidite_matrice_partielle, dense_force, projet->ef_donnees.c);
 	double one [2] = {1,0}, m1 [2] = {-1,0} ;
-	cholmod_l_sdmult(projet->ef_donnees.rigidite_matrice_partielle, 0, m1, one, action_en_cours->deplacement_partiel, dense_force, projet->ef_donnees.c);
-	action_en_cours->norm = cholmod_l_norm_dense(dense_force, 0, projet->ef_donnees.c);
-	cholmod_l_free_dense(&dense_force, projet->ef_donnees.c);
+	cholmod_dense *r = cholmod_l_copy_dense (dense_force, projet->ef_donnees.c);
+	cholmod_l_sdmult(projet->ef_donnees.rigidite_matrice_partielle, 0, m1, one, action_en_cours->deplacement_partiel, r, projet->ef_donnees.c);
+	action_en_cours->norm = cholmod_l_norm_dense(r, 0, projet->ef_donnees.c);
+	cholmod_l_free_dense(&r, projet->ef_donnees.c);
 	
-/*	start = clock();
+/*	printf("Solution 2\n");
 	cholmod_dense *Y = SuiteSparseQR_C_qmult (SPQR_QTX, projet->ef_donnees.QR, dense_force, projet->ef_donnees.c);
 	cholmod_dense *AAA = SuiteSparseQR_C_solve(SPQR_RX_EQUALS_B, projet->ef_donnees.QR, Y, projet->ef_donnees.c);
-	cholmod_write_dense(stdout, AAA, NULL, projet->ef_donnees.c);
-	r = cholmod_l_copy_dense(dense_force, projet->ef_donnees.c);
+	r = cholmod_l_copy_dense (dense_force, projet->ef_donnees.c);
 	cholmod_l_sdmult(projet->ef_donnees.rigidite_matrice_partielle, 0, m1, one, AAA, r, projet->ef_donnees.c);
-	end = clock();
-	cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
 	printf("déplacement 4\n");
-	cholmod_l_write_dense(stdout, AAA, NULL, projet->ef_donnees.c);
-	printf("norme4 %lf\n", cholmod_l_norm_dense (r, 0, projet->ef_donnees.c));
-	printf("Temps 4 : %lf\n", cpu_time_used);
+	printf("Temps 4 : %lf précision %lf\n", cpu_time_used, cholmod_l_norm_dense(r, 0, projet->ef_donnees.c));
+	cholmod_l_free_dense(&Y, projet->ef_donnees.c);
+	cholmod_l_free_dense(&AAA, projet->ef_donnees.c);
+	cholmod_l_free_dense(&r, projet->ef_donnees.c);
+	SuiteSparseQR_C_free(&projet->ef_donnees.QR, projet->ef_donnees.c);*/
 	
-	projet->ef_donnees.rigidite_matrice_partielle->stype = 0;
-	cholmod_sparse *tttt = SuiteSparseQR_C_backslash_sparse(0, 0., projet->ef_donnees.rigidite_matrice_partielle, sparse_force, projet->ef_donnees.c);
-	printf("déplacement 5\n");
-	cholmod_l_write_sparse(stdout, tttt, NULL, NULL, projet->ef_donnees.c);*/
+	cholmod_l_free_dense(&dense_force, projet->ef_donnees.c);
+//	projet->ef_donnees.rigidite_matrice_partielle->stype = 0;
+//	cholmod_sparse *tttt = SuiteSparseQR_C_backslash_sparse(0, 0., projet->ef_donnees.rigidite_matrice_partielle, sparse_force, projet->ef_donnees.c);
+//	printf("déplacement 5\n");
+//	cholmod_l_write_sparse(stdout, tttt, NULL, NULL, projet->ef_donnees.c);*/
 
 	
 	cholmod_l_free_sparse(&sparse_force, projet->ef_donnees.c);

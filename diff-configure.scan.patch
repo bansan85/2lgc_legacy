@@ -1,6 +1,6 @@
 --- configure.scan.old	2011-07-04 16:33:28.649007767 +0200
 +++ configure.scan	2011-07-04 16:33:11.590007763 +0200
-@@ -2,20 +2,39 @@
+@@ -2,18 +2,39 @@
  # Process this file with autoconf to produce a configure script.
  
  AC_PREREQ([2.68])
@@ -39,11 +39,9 @@
 -AC_CHECK_LIB([cholmod], [main])
 -# FIXME: Replace `main' with a function in `-llist':
 -AC_CHECK_LIB([list], [main])
--# FIXME: Replace `main' with a function in `-lspqr':
--AC_CHECK_LIB([spqr], [main])
 +PKG_CHECK_MODULES([LIBLIST], [liblist >= 2.3.1], [], [AC_MSG_ERROR([liblist ( http://ohnopub.net/liblist ) est necessaire])])
 +AC_CHECK_LIB([cholmod], [cholmod_l_start], [], [AC_MSG_ERROR([cholmod ( http://www.cise.ufl.edu/research/sparse/cholmod ) est necessaire])])
-+AC_CHECK_LIB([spqr], [SuiteSparseQR_C_factorize], [], [AC_MSG_ERROR([spqr ( www.cise.ufl.edu/research/sparse/SPQR ) est necessaire])])
++#AC_CHECK_LIB([spqr], [SuiteSparseQR_C_factorize], [], [AC_MSG_ERROR([spqr ( www.cise.ufl.edu/research/sparse/SPQR ) est necessaire])])
  
  # Checks for header files.
- AC_CHECK_HEADERS([libintl.h locale.h stdlib.h string.h])
+ AC_CHECK_HEADERS([libintl.h locale.h stdlib.h string.h unistd.h])
