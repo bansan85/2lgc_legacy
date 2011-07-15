@@ -57,7 +57,7 @@ typedef struct __Action
 	double			psi0;		// valeur_combinaison
 	double			psi1;		// valeur_frequente
 	double			psi2;		// valeur_quasi_permanente
-	cholmod_dense		*deplacement_partiel;
+	cholmod_sparse		*deplacement_partiel;
 	double			norm;
 } Action;
 
