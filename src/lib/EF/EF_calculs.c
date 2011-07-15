@@ -162,7 +162,11 @@ int EF_calculs_genere_sparse(Projet *projet)
 	// On force la symétrie
 	projet->ef_donnees.rigidite_matrice_partielle->stype = 1;
 	projet->ef_donnees.factor_rigidite_matrice_partielle = cholmod_l_analyze (projet->ef_donnees.rigidite_matrice_partielle, projet->ef_donnees.c) ;
-	cholmod_l_factorize(projet->ef_donnees.rigidite_matrice_partielle, projet->ef_donnees.factor_rigidite_matrice_partielle, projet->ef_donnees.c);
+	if (cholmod_l_factorize(projet->ef_donnees.rigidite_matrice_partielle, projet->ef_donnees.factor_rigidite_matrice_partielle, projet->ef_donnees.c) == TRUE)
+	{
+		if (projet->ef_donnees.c->status == CHOLMOD_NOT_POSDEF)
+			BUGTEXTE(-1, "Matrice non définie positive.\n");
+	}
 	
 //	La méthode ci-dessous marche mais elle nécessite la librairie spqr qui ne semble pas apporter grand chose. Il est à noter que spqr ne semble marcher que avec les cholmod_l_ et non pas avec les cholmod_
 //	Il convient de les conserver car elles pourront toujours peut-être un jour être réutilisées.
@@ -185,7 +189,7 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
 	Action			*action_en_cours;
 	cholmod_triplet		*triplet_force;
 	cholmod_sparse		*sparse_force;
-	cholmod_dense		*dense_force;
+//	cholmod_dense		*dense_force;
 	long			*ai, *aj;	// Pointeur vers les données des triplets
 	double			*ax;		// Pointeur vers les données des triplets
 	unsigned int		i;
@@ -230,16 +234,16 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
 	
 	sparse_force = cholmod_l_triplet_to_sparse(triplet_force, 0, projet->ef_donnees.c);
 	cholmod_l_free_triplet(&triplet_force, projet->ef_donnees.c);
-	dense_force = cholmod_l_sparse_to_dense(sparse_force, projet->ef_donnees.c);
-	cholmod_l_free_sparse(&sparse_force, projet->ef_donnees.c);
+//	dense_force = cholmod_l_sparse_to_dense(sparse_force, projet->ef_donnees.c);
+//	cholmod_l_free_sparse(&sparse_force, projet->ef_donnees.c);
 	
 	printf("Solution 1\n");
-	action_en_cours->deplacement_partiel = cholmod_l_solve (CHOLMOD_A, projet->ef_donnees.factor_rigidite_matrice_partielle, dense_force, projet->ef_donnees.c);
-	double one [2] = {1,0}, m1 [2] = {-1,0} ;
-	cholmod_dense *r = cholmod_l_copy_dense (dense_force, projet->ef_donnees.c);
-	cholmod_l_sdmult(projet->ef_donnees.rigidite_matrice_partielle, 0, m1, one, action_en_cours->deplacement_partiel, r, projet->ef_donnees.c);
-	action_en_cours->norm = cholmod_l_norm_dense(r, 0, projet->ef_donnees.c);
-	cholmod_l_free_dense(&r, projet->ef_donnees.c);
+	action_en_cours->deplacement_partiel = cholmod_l_spsolve (CHOLMOD_A, projet->ef_donnees.factor_rigidite_matrice_partielle, sparse_force, projet->ef_donnees.c);
+	cholmod_sparse *r = cholmod_l_copy_sparse(sparse_force, projet->ef_donnees.c);
+	cholmod_l_ssmult(projet->ef_donnees.rigidite_matrice_partielle, action_en_cours->deplacement_partiel, 0, TRUE, TRUE, projet->ef_donnees.c);
+	action_en_cours->norm = cholmod_l_norm_sparse(r, 0, projet->ef_donnees.c);
+	cholmod_l_free_sparse(&r, projet->ef_donnees.c);
+	cholmod_l_write_sparse(stdout, action_en_cours->deplacement_partiel, NULL, NULL, projet->ef_donnees.c);
 	
 /*	printf("Solution 2\n");
 	cholmod_dense *Y = SuiteSparseQR_C_qmult (SPQR_QTX, projet->ef_donnees.QR, dense_force, projet->ef_donnees.c);
@@ -253,13 +257,13 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
 	cholmod_l_free_dense(&r, projet->ef_donnees.c);
 	SuiteSparseQR_C_free(&projet->ef_donnees.QR, projet->ef_donnees.c);*/
 	
-	cholmod_l_free_dense(&dense_force, projet->ef_donnees.c);
+//	cholmod_l_free_dense(&dense_force, projet->ef_donnees.c);
+
 //	projet->ef_donnees.rigidite_matrice_partielle->stype = 0;
 //	cholmod_sparse *tttt = SuiteSparseQR_C_backslash_sparse(0, 0., projet->ef_donnees.rigidite_matrice_partielle, sparse_force, projet->ef_donnees.c);
 //	printf("déplacement 5\n");
 //	cholmod_l_write_sparse(stdout, tttt, NULL, NULL, projet->ef_donnees.c);*/
 
-	
 	cholmod_l_free_sparse(&sparse_force, projet->ef_donnees.c);
 	
 	return 0;

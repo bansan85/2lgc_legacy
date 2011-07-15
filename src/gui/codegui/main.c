@@ -36,12 +36,12 @@
 #include <gtk/gtk.h>
 #include <time.h>
 
-void gtk_window_destroy_event(GtkWidget *pWidget __attribute__((unused)), Projet *projet)
+/*void gtk_window_destroy_event(GtkWidget *pWidget __attribute__((unused)), Projet *projet)
 {
 	projet_free(projet);
 	gtk_main_quit();
 	return;
-}
+}*/
 
 /* gtk_window_option_destroy_button
  * Description : Bouton de fermeture de la fenêtre
@@ -49,11 +49,11 @@ void gtk_window_destroy_event(GtkWidget *pWidget __attribute__((unused)), Projet
  *            : GtkWidget *fenêtre : la fenêtre d'options
  * Valeur renvoyée : Aucune
  */
-void gtk_window_option_destroy_button(GtkWidget *object __attribute__((unused)), GtkWidget *fenetre __attribute__((unused)))
+/*void gtk_window_option_destroy_button(GtkWidget *object __attribute__((unused)), GtkWidget *fenetre __attribute__((unused)))
 {
 	gtk_widget_destroy(fenetre);
 	return;
-}
+}*/
 
 int main(int argc, char *argv[])
 {
@@ -92,8 +92,8 @@ int main(int argc, char *argv[])
 	}
 	
 	// Initialisation de GTK+
-	if (gtk_init_check(&argc, &argv) == FALSE)
-		BUGTEXTE(-1, gettext("Impossible d'initialiser gtk.\n"));
+/*	if (gtk_init_check(&argc, &argv) == FALSE)
+		BUGTEXTE(-1, gettext("Impossible d'initialiser gtk.\n"));*/
 	
 	// Création d'un projet type
 	projet = projet_init();
@@ -141,22 +141,25 @@ int main(int argc, char *argv[])
 	
 	// Création des noeuds
 	if (EF_noeuds_ajout(projet, 0., 0., 0., 0) != 0) BUG(-1);
-	if (EF_noeuds_ajout(projet, 1., 0.5, 3., -1) != 0) BUG(-1);
+	if (EF_noeuds_ajout(projet, 1., 0., 0., -1) != 0) BUG(-1);
+	if (EF_noeuds_ajout(projet, 2., 0., 0., 0) != 0) BUG(-1);
 	
 	// Ajout de l'action ponctuelle
-	if (_1990_action_ajout_charge_ponctuelle(projet, 0, 1, 500000., 450000., 400000., 0., 0., 0.) != 0) BUG(-1);
+	if (_1990_action_ajout_charge_ponctuelle(projet, 0, 1, 0., 0., -400000., 0., 0., 0.) != 0) BUG(-1);
 	
 	// Création du matériau béton
 	if (_1992_1_1_materiaux_ajout(projet, 25., 0.2) != 0) BUG(-1);
 	
 	// Création de l'élément en béton
-	if (_1992_1_1_elements_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 0, 1, 10) != 0) BUG(-1);
+	if (_1992_1_1_elements_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 0, 1, 0) != 0) BUG(-1);
+	if (_1992_1_1_elements_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 1, 2, 0) != 0) BUG(-1);
 	
 	// Initialise les éléments nécessaire pour l'ajout des rigidités
 	if (EF_calculs_initialise(projet) != 0) BUG(-1);
 	
 	// Ajout de la rigidité de l'élément à la matrice globale du projet
 	if (_1992_1_1_elements_rigidite_ajout(projet, 0) != 0) BUG(-1);
+	if (_1992_1_1_elements_rigidite_ajout(projet, 1) != 0) BUG(-1);
 	
 	if (EF_calculs_genere_sparse(projet) != 0) BUG(-1);
 	if (EF_calculs_resoud_charge(projet, 0) != 0) BUG(-1);

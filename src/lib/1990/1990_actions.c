@@ -387,7 +387,7 @@ int _1990_action_free(Projet *projet)
 		}
 		free(action->charges);
 		if (action->deplacement_partiel != NULL)
-			cholmod_l_free_dense(&action->deplacement_partiel, projet->ef_donnees.c);
+			cholmod_l_free_sparse(&action->deplacement_partiel, projet->ef_donnees.c);
 		free(action);
 	}
 	
