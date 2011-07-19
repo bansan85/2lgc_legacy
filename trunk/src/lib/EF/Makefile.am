@@ -5,7 +5,7 @@ DEFAULT_INCLUDES	=	-I../../.. \
 				-I.
 
 lib_LTLIBRARIES		=	libEF.la
-libEF_la_LIBADD		=	-lcholmod -llist #-lspqr
+libEF_la_LIBADD		=	-lcholmod -llist -lspqr
 libEF_la_SOURCES	=	EF_noeud.c \
 				EF_appui.c \
 				EF_rigidite.c \

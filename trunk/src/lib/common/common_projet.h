@@ -85,7 +85,10 @@ typedef struct
 	double			max_rigidite;
 	unsigned int		rigidite_triplet_en_cours;
 	cholmod_sparse		*rigidite_matrice_partielle; // La matrice contient la matrice de rigidité globale mais sans les lignes / colonnes dont on bloque les déplacements
-	cholmod_factor		*factor_rigidite_matrice_partielle; // Inverse de la matrice rigidite_matrice_calc
+	SuiteSparseQR_C_factorization	*QR;
+	
+//	Pour utiliser cholmod dans les calculs de matrices.
+//	cholmod_factor		*factor_rigidite_matrice_partielle; // Inverse de la matrice rigidite_matrice_calc
 } EF;
 
 typedef struct __Projet
