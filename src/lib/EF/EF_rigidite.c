@@ -40,7 +40,9 @@ int EF_rigidite_init(Projet *projet)
 		BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
 	
 	projet->ef_donnees.rigidite_matrice_partielle = NULL;
-	projet->ef_donnees.factor_rigidite_matrice_partielle = NULL;
+//	Pour utiliser cholmod dans les calculs de matrices.
+//	projet->ef_donnees.factor_rigidite_matrice_partielle = NULL;
+	projet->ef_donnees.QR = NULL;
 	projet->ef_donnees.rigidite_triplet = NULL;
 	projet->ef_donnees.rigidite_triplet_en_cours = 0;
 	
@@ -70,10 +72,14 @@ int EF_rigidite_free(Projet *projet)
 		cholmod_l_free_sparse(&(projet->ef_donnees.rigidite_matrice_partielle), projet->ef_donnees.c);
 		projet->ef_donnees.rigidite_matrice_partielle = NULL;
 	}
-	if (projet->ef_donnees.factor_rigidite_matrice_partielle != NULL)
+//	Pour utiliser cholmod dans les calculs de matrices.
+//	if (projet->ef_donnees.factor_rigidite_matrice_partielle != NULL)
+	if (projet->ef_donnees.QR != NULL)
 	{
-		cholmod_l_free_factor(&(projet->ef_donnees.factor_rigidite_matrice_partielle), projet->ef_donnees.c);
-		projet->ef_donnees.factor_rigidite_matrice_partielle = NULL;
+		SuiteSparseQR_C_free(&projet->ef_donnees.QR, projet->ef_donnees.c);
+//		Pour utiliser cholmod dans les calculs de matrices.
+//		cholmod_l_free_factor(&(projet->ef_donnees.factor_rigidite_matrice_partielle), projet->ef_donnees.c);
+//		projet->ef_donnees.factor_rigidite_matrice_partielle = NULL;
 	}
 	
 	if (projet->ef_donnees.noeuds_flags_partielle != NULL)
