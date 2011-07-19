@@ -129,6 +129,20 @@ Projet *projet_init()
 		free(projet);
 		BUGTEXTE(NULL, gettext("Erreur d'allocation mémoire.\n"));
 	}
+	if (EF_relachement_init(projet) != 0)
+	{
+		_1992_1_1_materiaux_free(projet);
+		EF_rigidite_free(projet);
+		EF_appuis_free(projet);
+		_1992_1_1_elements_free(projet);
+		_1992_1_1_sections_free(projet);
+		EF_noeuds_free(projet);
+		_1990_combinaisons_free(projet);
+		_1990_groupe_free(projet);
+		_1990_action_free(projet);
+		free(projet);
+		BUGTEXTE(NULL, gettext("Erreur d'allocation mémoire.\n"));
+	}
 
 	projet->ef_donnees.c = &(projet->ef_donnees.Common);
 	cholmod_l_start(projet->ef_donnees.c);
@@ -168,6 +182,8 @@ int projet_free(Projet *projet)
 		EF_appuis_free(projet);
 	if (projet->beton.materiaux != NULL)
 		_1992_1_1_materiaux_free(projet);
+	if (projet->ef_donnees.relachements != NULL)
+		EF_relachement_free(projet);
 	
 	cholmod_l_finish(projet->ef_donnees.c);
 	

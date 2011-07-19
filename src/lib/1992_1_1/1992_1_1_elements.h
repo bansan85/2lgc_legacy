@@ -19,6 +19,7 @@
 #ifndef __1992_1_1_ELEMENTS_H
 #define __1992_1_1_ELEMENTS_H
 
+#include "EF_relachement.h"
 #include "EF_noeud.h"
 #include "1992_1_1_section.h"
 #include "1992_1_1_materiaux.h"
@@ -36,6 +37,7 @@ typedef struct __Beton_Element_Poutre
 	EF_Noeud		*noeud_fin;
 	unsigned int		discretisation_element; // Nombre de noeuds intermédiaires
 	EF_Noeud		**noeuds_intermediaires;
+	Relachement		*relachement;
 	
 	cholmod_sparse		*matrice_rotation;
 	cholmod_sparse		*matrice_rigidite_locale;
@@ -43,7 +45,7 @@ typedef struct __Beton_Element_Poutre
 } Beton_Element;
 
 int _1992_1_1_elements_init(Projet *projet);
-int _1992_1_1_elements_ajout(Projet *projet, Type_Element type, unsigned int section, unsigned int materiau, unsigned int noeud_debut, unsigned int noeud_fin, unsigned int discretisation_element);
+int _1992_1_1_elements_ajout(Projet *projet, Type_Element type, unsigned int section, unsigned int materiau, unsigned int noeud_debut, unsigned int noeud_fin, int relachement, unsigned int discretisation_element);
 int _1992_1_1_elements_cherche_numero(Projet *projet, unsigned int numero);
 int _1992_1_1_elements_rigidite_ajout(Projet *projet, unsigned int element);
 int _1992_1_1_elements_free(Projet *projet);

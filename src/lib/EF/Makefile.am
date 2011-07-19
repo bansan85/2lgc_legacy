@@ -9,9 +9,11 @@ libEF_la_LIBADD		=	-lcholmod -llist -lspqr
 libEF_la_SOURCES	=	EF_noeud.c \
 				EF_appui.c \
 				EF_rigidite.c \
-				EF_calculs.c
+				EF_calculs.c \
+				EF_relachement.c
 libEF_ladir		=	$(includedir)/2lgc
 libEF_la_HEADERS	=	EF_noeud.h \
 				EF_appui.h \
 				EF_rigidite.h \
-				EF_calculs.h
+				EF_calculs.h \
+				EF_relachement.h
