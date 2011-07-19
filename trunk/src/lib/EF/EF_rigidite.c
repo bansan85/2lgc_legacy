@@ -44,7 +44,6 @@ int EF_rigidite_init(Projet *projet)
 //	projet->ef_donnees.factor_rigidite_matrice_partielle = NULL;
 	projet->ef_donnees.QR = NULL;
 	projet->ef_donnees.rigidite_triplet = NULL;
-	projet->ef_donnees.rigidite_triplet_en_cours = 0;
 	
 	return 0;
 }

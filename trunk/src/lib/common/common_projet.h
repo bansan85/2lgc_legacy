@@ -81,6 +81,7 @@ typedef struct
 	int			**noeuds_flags_partielle;
 	int			nb_colonne_matrice; // Nombre de colonne / ligne de la matrice de rigidité globale partielle
 	LIST			*appuis;
+	LIST			*relachements;
 	cholmod_triplet		*rigidite_triplet; // Liste temporaire avant transformation en matrice sparse
 	double			max_rigidite;
 	unsigned int		rigidite_triplet_en_cours;

@@ -58,7 +58,7 @@ int _1992_1_1_elements_init(Projet *projet)
  *   Succès : 0 même si aucune section n'est existante
  *   Échec : valeur négative si la liste des éléments n'est pas initialisée ou a déjà été libérée
  */
-int _1992_1_1_elements_ajout(Projet *projet, Type_Element type, unsigned int section, unsigned int materiau, unsigned int noeud_debut, unsigned int noeud_fin, unsigned int discretisation_element)
+int _1992_1_1_elements_ajout(Projet *projet, Type_Element type, unsigned int section, unsigned int materiau, unsigned int noeud_debut, unsigned int noeud_fin, int relachement, unsigned int discretisation_element)
 {
 	Beton_Element	*element_en_cours, element_nouveau;
 	
@@ -83,6 +83,15 @@ int _1992_1_1_elements_ajout(Projet *projet, Type_Element type, unsigned int sec
 	if (EF_noeuds_cherche_numero(projet, noeud_fin) != 0)
 		BUG(-5);
 	element_nouveau.noeud_fin = list_curr(projet->ef_donnees.noeuds);
+	
+	if (relachement != -1)
+	{
+		if (EF_relachement_cherche_numero(projet, relachement) != 0)
+			BUG(-6);
+		element_nouveau.relachement = list_curr(projet->ef_donnees.relachements);
+	}
+	else
+		element_nouveau.relachement = NULL;
 	
 	element_nouveau.discretisation_element = discretisation_element;
 	if (discretisation_element != 0)

@@ -278,10 +278,9 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
 	cholmod_l_free_dense(&X, projet->ef_donnees.c);
 	cholmod_l_free_dense(&r, projet->ef_donnees.c);
 	cholmod_l_free_sparse(&sparse_force, projet->ef_donnees.c);
+	cholmod_l_free_dense(&dense_force, projet->ef_donnees.c);
 	
 //	Pour utiliser cholmod dans les calculs de matrices.
-//	cholmod_l_free_dense(&dense_force, projet->ef_donnees.c);
-	
 //	Troisième méthode de calcul donnant directement les calculs sans passer par une matrice intermédiaire.
 //	Est moins intéressant puisqu'il faut résoudre l'intégralité du système pour chaque cas de charge.
 //	projet->ef_donnees.rigidite_matrice_partielle->stype = 0;
