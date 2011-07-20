@@ -249,45 +249,311 @@ int _1992_1_1_elements_rigidite_ajout(Projet *projet, unsigned int num_element)
 		ax = triplet->x;
 		i = 0;
 		ai[i] = 0;	aj[i] = 0;	ax[i] = element->materiau->ecm*section_caract->a/ll; i++;
-		ai[i] = 0;	aj[i] = 6;	ax[i] = -ax[0]; i++;
-		ai[i] = 1;	aj[i] = 1;	ax[i] = 12*element->materiau->ecm*section_caract->iz/ll/ll/ll; i++;
-		ai[i] = 1;	aj[i] = 5;	ax[i] = 6*element->materiau->ecm*section_caract->iz/ll/ll; i++;
-		ai[i] = 1;	aj[i] = 7;	ax[i] = -ax[2]; i++;
-		ai[i] = 1;	aj[i] = 11;	ax[i] = ax[3]; i++;
-		ai[i] = 2;	aj[i] = 2;	ax[i] = 12*element->materiau->ecm*section_caract->iy/ll/ll/ll; i++;
-		ai[i] = 2;	aj[i] = 4;	ax[i] = -6*element->materiau->ecm*section_caract->iy/ll/ll; i++;
-		ai[i] = 2;	aj[i] = 8;	ax[i] = -ax[6]; i++;
-		ai[i] = 2;	aj[i] = 10;	ax[i] = ax[7]; i++;
+		ai[i] = 0;	aj[i] = 6;	ax[i] = -element->materiau->ecm*section_caract->a/ll; i++;
+		// On s'assure que le noeud de départ est bien bloqué en rotation
+		if ((((j==0) && ((element->relachement == NULL) || (element->relachement->rz_debut == EF_RELACHEMENT_BLOQUE))) || (j > 0)) && 
+		// On s'assure que le noeud de fin est bien bloqué en rotation
+		(((j==element->discretisation_element) && ((element->relachement == NULL) || (element->relachement->rz_fin == EF_RELACHEMENT_BLOQUE))) || (j < element->discretisation_element)))
+		// Alors, on met la matrice de rigidité pour une élément bi-encastré
+		{
+			ai[i] = 1;	aj[i] = 1;	ax[i] = 12*element->materiau->ecm*section_caract->iz/ll/ll/ll; i++;
+			ai[i] = 1;	aj[i] = 5;	ax[i] = 6*element->materiau->ecm*section_caract->iz/ll/ll; i++;
+			ai[i] = 1;	aj[i] = 7;	ax[i] = -12*element->materiau->ecm*section_caract->iz/ll/ll/ll; i++;
+			ai[i] = 1;	aj[i] = 11;	ax[i] = 6*element->materiau->ecm*section_caract->iz/ll/ll; i++;
+		}
+		// Dans ce cas, c'est articulé à droite et encastré à gauche
+		else if (((j==0) && (element->relachement != NULL) && (element->relachement->rz_debut == EF_RELACHEMENT_LIBRE)) &&
+		(((j==element->discretisation_element) && ((element->relachement == NULL) || (element->relachement->rz_fin == EF_RELACHEMENT_BLOQUE))) || (j < element->discretisation_element)))
+		{
+			ai[i] = 1;	aj[i] = 1;	ax[i] = 3*element->materiau->ecm*section_caract->iz/ll/ll/ll; i++;
+			ai[i] = 1;	aj[i] = 5;	ax[i] = 0; i++;
+			ai[i] = 1;	aj[i] = 7;	ax[i] = -3*element->materiau->ecm*section_caract->iz/ll/ll/ll; i++;
+			ai[i] = 1;	aj[i] = 11;	ax[i] = 3*element->materiau->ecm*section_caract->iz/ll/ll; i++;
+		}
+		// Dans ce cas, c'est encastré à droite et articulé à gauche
+		else if (((j==element->discretisation_element) && (element->relachement != NULL) && (element->relachement->rz_fin == EF_RELACHEMENT_LIBRE)) &&
+		(((j==0) && ((element->relachement == NULL) || (element->relachement->rz_debut == EF_RELACHEMENT_BLOQUE))) || (j > 0)))
+		{
+			ai[i] = 1;	aj[i] = 1;	ax[i] = 3*element->materiau->ecm*section_caract->iz/ll/ll/ll; i++;
+			ai[i] = 1;	aj[i] = 5;	ax[i] = 3*element->materiau->ecm*section_caract->iz/ll/ll; i++;
+			ai[i] = 1;	aj[i] = 7;	ax[i] = -3*element->materiau->ecm*section_caract->iz/ll/ll/ll; i++;
+			ai[i] = 1;	aj[i] = 11;	ax[i] = 0; i++;
+		}
+		else if ((element->discretisation_element == 0) && (element->relachement != NULL) && (element->relachement->rz_debut == EF_RELACHEMENT_LIBRE) && (element->relachement->rz_fin == EF_RELACHEMENT_LIBRE))
+		{
+			ai[i] = 1;	aj[i] = 1;	ax[i] = 0; i++;
+			ai[i] = 1;	aj[i] = 5;	ax[i] = 0; i++;
+			ai[i] = 1;	aj[i] = 7;	ax[i] = 0; i++;
+			ai[i] = 1;	aj[i] = 11;	ax[i] = 0; i++;
+		}
+		else
+			BUGTEXTE(-2, "Impossible\n");
+		
+		if ((((j==0) && ((element->relachement == NULL) || (element->relachement->ry_debut == EF_RELACHEMENT_BLOQUE))) || (j > 0)) && 
+		(((j==element->discretisation_element) && ((element->relachement == NULL) || (element->relachement->ry_fin == EF_RELACHEMENT_BLOQUE))) || (j < element->discretisation_element)))
+		// Alors, on met la matrice de rigidité pour une élément bi-encastré
+		{
+			ai[i] = 2;	aj[i] = 2;	ax[i] = 12*element->materiau->ecm*section_caract->iy/ll/ll/ll; i++;
+			ai[i] = 2;	aj[i] = 4;	ax[i] = -6*element->materiau->ecm*section_caract->iy/ll/ll; i++;
+			ai[i] = 2;	aj[i] = 8;	ax[i] = -12*element->materiau->ecm*section_caract->iy/ll/ll/ll; i++;
+			ai[i] = 2;	aj[i] = 10;	ax[i] = -6*element->materiau->ecm*section_caract->iy/ll/ll; i++;
+		}
+		// Dans ce cas, c'est articulé à droite et encastré à gauche
+		else if (((j==0) && (element->relachement != NULL) && (element->relachement->ry_debut == EF_RELACHEMENT_LIBRE)) &&
+		(((j==element->discretisation_element) && ((element->relachement == NULL) || (element->relachement->ry_fin == EF_RELACHEMENT_BLOQUE))) || (j < element->discretisation_element)))
+		{
+			ai[i] = 2;	aj[i] = 2;	ax[i] = 3*element->materiau->ecm*section_caract->iy/ll/ll/ll; i++;
+			ai[i] = 2;	aj[i] = 4;	ax[i] = 0; i++;
+			ai[i] = 2;	aj[i] = 8;	ax[i] = -3*element->materiau->ecm*section_caract->iy/ll/ll/ll; i++;
+			ai[i] = 2;	aj[i] = 10;	ax[i] = -3*element->materiau->ecm*section_caract->iy/ll/ll; i++;
+		}
+		// Dans ce cas, c'est encastré à droite et articulé à gauche
+		else if (((j==element->discretisation_element) && (element->relachement != NULL) && (element->relachement->ry_fin == EF_RELACHEMENT_LIBRE)) &&
+		(((j==0) && ((element->relachement == NULL) || (element->relachement->ry_debut == EF_RELACHEMENT_BLOQUE))) || (j > 0)))
+		{
+			ai[i] = 2;	aj[i] = 2;	ax[i] = 3*element->materiau->ecm*section_caract->iy/ll/ll/ll; i++;
+			ai[i] = 2;	aj[i] = 4;	ax[i] = -3*element->materiau->ecm*section_caract->iy/ll/ll; i++;
+			ai[i] = 2;	aj[i] = 8;	ax[i] = -3*element->materiau->ecm*section_caract->iy/ll/ll/ll; i++;
+			ai[i] = 2;	aj[i] = 10;	ax[i] = 0; i++;
+		}
+		else if ((element->discretisation_element == 0) && (element->relachement != NULL) && (element->relachement->ry_debut == EF_RELACHEMENT_LIBRE) && (element->relachement->ry_fin == EF_RELACHEMENT_LIBRE))
+		{
+			ai[i] = 2;	aj[i] = 2;	ax[i] = 0; i++;
+			ai[i] = 2;	aj[i] = 4;	ax[i] = 0; i++;
+			ai[i] = 2;	aj[i] = 8;	ax[i] = 0; i++;
+			ai[i] = 2;	aj[i] = 10;	ax[i] = 0; i++;
+		}
+		else
+			BUGTEXTE(-2, "Impossible\n");
+		
 		ai[i] = 3;	aj[i] = 3;	ax[i] = element->materiau->gnu_0_2*section_caract->j/ll; i++;
-		ai[i] = 3;	aj[i] = 9;	ax[i] = -ax[10]; i++;
-		ai[i] = 4;	aj[i] = 2;	ax[i] = ax[7]; i++;
-		ai[i] = 4;	aj[i] = 4;	ax[i] = 4*element->materiau->ecm*section_caract->iy/ll; i++;
-		ai[i] = 4;	aj[i] = 8;	ax[i] = -ax[7]; i++;
-		ai[i] = 4;	aj[i] = 10;	ax[i] = 2*element->materiau->ecm*section_caract->iy/ll; i++;
-		ai[i] = 5;	aj[i] = 1;	ax[i] = ax[3]; i++;
-		ai[i] = 5;	aj[i] = 5;	ax[i] = 4*element->materiau->ecm*section_caract->iz/ll; i++;
-		ai[i] = 5;	aj[i] = 7;	ax[i] = -ax[3]; i++;
-		ai[i] = 5;	aj[i] = 11;	ax[i] = 2*element->materiau->ecm*section_caract->iz/ll; i++;
-		ai[i] = 6;	aj[i] = 0;	ax[i] = -ax[0]; i++;
-		ai[i] = 6;	aj[i] = 6;	ax[i] = ax[0]; i++;
-		ai[i] = 7;	aj[i] = 1;	ax[i] = -ax[2]; i++;
-		ai[i] = 7;	aj[i] = 5;	ax[i] = -ax[3]; i++;
-		ai[i] = 7;	aj[i] = 7;	ax[i] = ax[2]; i++;
-		ai[i] = 7;	aj[i] = 11;	ax[i] = -ax[3]; i++;
-		ai[i] = 8;	aj[i] = 2;	ax[i] = -ax[6]; i++;
-		ai[i] = 8;	aj[i] = 4;	ax[i] = -ax[7]; i++;
-		ai[i] = 8;	aj[i] = 8;	ax[i] = ax[6]; i++;
-		ai[i] = 8;	aj[i] = 10;	ax[i] = -ax[7]; i++;
-		ai[i] = 9;	aj[i] = 3;	ax[i] = -ax[10]; i++;
-		ai[i] = 9;	aj[i] = 9;	ax[i] = ax[10]; i++;
-		ai[i] = 10;	aj[i] = 2;	ax[i] = ax[7]; i++;
-		ai[i] = 10;	aj[i] = 4;	ax[i] = ax[15]; i++;
-		ai[i] = 10;	aj[i] = 8;	ax[i] = -ax[7]; i++;
-		ai[i] = 10;	aj[i] = 10;	ax[i] = ax[13]; i++;
-		ai[i] = 11;	aj[i] = 1;	ax[i] = ax[3]; i++;
-		ai[i] = 11;	aj[i] = 5;	ax[i] = ax[19]; i++;
-		ai[i] = 11;	aj[i] = 7;	ax[i] = -ax[3]; i++;
-		ai[i] = 11;	aj[i] = 11;	ax[i] = ax[17];  i++;
+		ai[i] = 3;	aj[i] = 9;	ax[i] = -element->materiau->gnu_0_2*section_caract->j/ll; i++;
+		
+		if ((((j==0) && ((element->relachement == NULL) || (element->relachement->ry_debut == EF_RELACHEMENT_BLOQUE))) || (j > 0)) && 
+		(((j==element->discretisation_element) && ((element->relachement == NULL) || (element->relachement->ry_fin == EF_RELACHEMENT_BLOQUE))) || (j < element->discretisation_element)))
+		// Alors, on met la matrice de rigidité pour une élément bi-encastré
+		{
+			ai[i] = 4;	aj[i] = 2;	ax[i] = -6*element->materiau->ecm*section_caract->iy/ll/ll; i++;
+			ai[i] = 4;	aj[i] = 4;	ax[i] = 4*element->materiau->ecm*section_caract->iy/ll; i++;
+			ai[i] = 4;	aj[i] = 8;	ax[i] = 6*element->materiau->ecm*section_caract->iy/ll/ll; i++;
+			ai[i] = 4;	aj[i] = 10;	ax[i] = 2*element->materiau->ecm*section_caract->iy/ll; i++;
+		}
+		else if (((j==0) && (element->relachement != NULL) && (element->relachement->ry_debut == EF_RELACHEMENT_LIBRE)) &&
+		(((j==element->discretisation_element) && ((element->relachement == NULL) || (element->relachement->ry_fin == EF_RELACHEMENT_BLOQUE))) || (j < element->discretisation_element)))
+		{
+			ai[i] = 4;	aj[i] = 2;	ax[i] = 0; i++;
+			ai[i] = 4;	aj[i] = 4;	ax[i] = 0; i++;
+			ai[i] = 4;	aj[i] = 8;	ax[i] = 0; i++;
+			ai[i] = 4;	aj[i] = 10;	ax[i] = 0; i++;
+		}
+		// Dans ce cas, c'est encastré à droite et articulé à gauche
+		else if (((j==element->discretisation_element) && (element->relachement != NULL) && (element->relachement->ry_fin == EF_RELACHEMENT_LIBRE)) &&
+		(((j==0) && ((element->relachement == NULL) || (element->relachement->ry_debut == EF_RELACHEMENT_BLOQUE))) || (j > 0)))
+		{
+			ai[i] = 4;	aj[i] = 2;	ax[i] = -3*element->materiau->ecm*section_caract->iy/ll/ll; i++;
+			ai[i] = 4;	aj[i] = 4;	ax[i] = 3*element->materiau->ecm*section_caract->iy/ll; i++;
+			ai[i] = 4;	aj[i] = 8;	ax[i] = 3*element->materiau->ecm*section_caract->iy/ll/ll; i++;
+			ai[i] = 4;	aj[i] = 10;	ax[i] = 0; i++;
+		}
+		else if ((element->discretisation_element == 0) && (element->relachement != NULL) && (element->relachement->ry_debut == EF_RELACHEMENT_LIBRE) && (element->relachement->ry_fin == EF_RELACHEMENT_LIBRE))
+		{
+			ai[i] = 4;	aj[i] = 2;	ax[i] = 0; i++;
+			ai[i] = 4;	aj[i] = 4;	ax[i] = 0; i++;
+			ai[i] = 4;	aj[i] = 8;	ax[i] = 0; i++;
+			ai[i] = 4;	aj[i] = 10;	ax[i] = 0; i++;
+		}
+		else
+			BUGTEXTE(-2, "Impossible\n");
+
+		if ((((j==0) && ((element->relachement == NULL) || (element->relachement->rz_debut == EF_RELACHEMENT_BLOQUE))) || (j > 0)) && 
+		(((j==element->discretisation_element) && ((element->relachement == NULL) || (element->relachement->rz_fin == EF_RELACHEMENT_BLOQUE))) || (j < element->discretisation_element)))
+		// Dans ce cas, c'est encastré à droite et encastré à gauche
+		{
+			ai[i] = 5;	aj[i] = 1;	ax[i] = 6*element->materiau->ecm*section_caract->iz/ll/ll; i++;
+			ai[i] = 5;	aj[i] = 5;	ax[i] = 4*element->materiau->ecm*section_caract->iz/ll; i++;
+			ai[i] = 5;	aj[i] = 7;	ax[i] = -6*element->materiau->ecm*section_caract->iz/ll/ll; i++;
+			ai[i] = 5;	aj[i] = 11;	ax[i] = 2*element->materiau->ecm*section_caract->iz/ll; i++;
+		}
+		// Dans ce cas, c'est articulé à droite et encastré à gauche
+		else if (((j==0) && (element->relachement != NULL) && (element->relachement->rz_debut == EF_RELACHEMENT_LIBRE)) &&
+		(((j==element->discretisation_element) && ((element->relachement == NULL) || (element->relachement->rz_fin == EF_RELACHEMENT_BLOQUE))) || (j < element->discretisation_element)))
+		{
+			ai[i] = 5;	aj[i] = 1;	ax[i] = 0; i++;
+			ai[i] = 5;	aj[i] = 5;	ax[i] = 0; i++;
+			ai[i] = 5;	aj[i] = 7;	ax[i] = 0; i++;
+			ai[i] = 5;	aj[i] = 11;	ax[i] = 0; i++;
+		}
+		// Dans ce cas, c'est encastré à droite et articulé à gauche
+		else if (((j==element->discretisation_element) && (element->relachement != NULL) && (element->relachement->rz_fin == EF_RELACHEMENT_LIBRE)) &&
+		(((j==0) && ((element->relachement == NULL) || (element->relachement->rz_debut == EF_RELACHEMENT_BLOQUE))) || (j > 0)))
+		{
+			ai[i] = 5;	aj[i] = 1;	ax[i] = 3*element->materiau->ecm*section_caract->iz/ll/ll; i++;
+			ai[i] = 5;	aj[i] = 5;	ax[i] = 3*element->materiau->ecm*section_caract->iz/ll; i++;
+			ai[i] = 5;	aj[i] = 7;	ax[i] = -3*element->materiau->ecm*section_caract->iz/ll/ll; i++;
+			ai[i] = 5;	aj[i] = 11;	ax[i] = 0; i++;
+		}
+		else if ((element->discretisation_element == 0) && (element->relachement != NULL) && (element->relachement->rz_debut == EF_RELACHEMENT_LIBRE) && (element->relachement->rz_fin == EF_RELACHEMENT_LIBRE))
+		{
+			ai[i] = 5;	aj[i] = 1;	ax[i] = 0; i++;
+			ai[i] = 5;	aj[i] = 5;	ax[i] = 0; i++;
+			ai[i] = 5;	aj[i] = 7;	ax[i] = 0; i++;
+			ai[i] = 5;	aj[i] = 11;	ax[i] = 0; i++;
+		}
+		else
+			BUGTEXTE(-2, "Impossible\n");
+		
+		ai[i] = 6;	aj[i] = 0;	ax[i] = -element->materiau->ecm*section_caract->a/ll; i++;
+		ai[i] = 6;	aj[i] = 6;	ax[i] = element->materiau->ecm*section_caract->a/ll; i++;
+		
+		if ((((j==0) && ((element->relachement == NULL) || (element->relachement->rz_debut == EF_RELACHEMENT_BLOQUE))) || (j > 0)) && 
+		(((j==element->discretisation_element) && ((element->relachement == NULL) || (element->relachement->rz_fin == EF_RELACHEMENT_BLOQUE))) || (j < element->discretisation_element)))
+		// Dans ce cas, c'est encastré à droite et encastré à gauche
+		{
+			ai[i] = 7;	aj[i] = 1;	ax[i] = -12*element->materiau->ecm*section_caract->iz/ll/ll/ll; i++;
+			ai[i] = 7;	aj[i] = 5;	ax[i] = -6*element->materiau->ecm*section_caract->iz/ll/ll; i++;
+			ai[i] = 7;	aj[i] = 7;	ax[i] = 12*element->materiau->ecm*section_caract->iz/ll/ll/ll; i++;
+			ai[i] = 7;	aj[i] = 11;	ax[i] = -6*element->materiau->ecm*section_caract->iz/ll/ll; i++;
+		}
+		// Dans ce cas, c'est articulé à droite et encastré à gauche
+		else if (((j==0) && (element->relachement != NULL) && (element->relachement->rz_debut == EF_RELACHEMENT_LIBRE)) &&
+		(((j==element->discretisation_element) && ((element->relachement == NULL) || (element->relachement->rz_fin == EF_RELACHEMENT_BLOQUE))) || (j < element->discretisation_element)))
+		{
+			ai[i] = 7;	aj[i] = 1;	ax[i] = -3*element->materiau->ecm*section_caract->iz/ll/ll/ll; i++;
+			ai[i] = 7;	aj[i] = 5;	ax[i] = 0; i++;
+			ai[i] = 7;	aj[i] = 7;	ax[i] = 3*element->materiau->ecm*section_caract->iz/ll/ll/ll; i++;
+			ai[i] = 7;	aj[i] = 11;	ax[i] = -3*element->materiau->ecm*section_caract->iz/ll/ll; i++;
+		}
+		// Dans ce cas, c'est encastré à droite et articulé à gauche
+		else if (((j==element->discretisation_element) && (element->relachement != NULL) && (element->relachement->rz_fin == EF_RELACHEMENT_LIBRE)) &&
+		(((j==0) && ((element->relachement == NULL) || (element->relachement->rz_debut == EF_RELACHEMENT_BLOQUE))) || (j > 0)))
+		{
+			ai[i] = 7;	aj[i] = 1;	ax[i] = -3*element->materiau->ecm*section_caract->iz/ll/ll/ll; i++;
+			ai[i] = 7;	aj[i] = 5;	ax[i] = -3*element->materiau->ecm*section_caract->iz/ll/ll; i++;
+			ai[i] = 7;	aj[i] = 7;	ax[i] = 3*element->materiau->ecm*section_caract->iz/ll/ll/ll; i++;
+			ai[i] = 7;	aj[i] = 11;	ax[i] = 0; i++;
+		}
+		else if ((element->discretisation_element == 0) && (element->relachement != NULL) && (element->relachement->rz_debut == EF_RELACHEMENT_LIBRE) && (element->relachement->rz_fin == EF_RELACHEMENT_LIBRE))
+		{
+			ai[i] = 7;	aj[i] = 1;	ax[i] = 0; i++;
+			ai[i] = 7;	aj[i] = 5;	ax[i] = 0; i++;
+			ai[i] = 7;	aj[i] = 7;	ax[i] = 0; i++;
+			ai[i] = 7;	aj[i] = 11;	ax[i] = 0; i++;
+		}
+		else
+			BUGTEXTE(-2, "Impossible\n");
+		
+		if ((((j==0) && ((element->relachement == NULL) || (element->relachement->ry_debut == EF_RELACHEMENT_BLOQUE))) || (j > 0)) && 
+		(((j==element->discretisation_element) && ((element->relachement == NULL) || (element->relachement->ry_fin == EF_RELACHEMENT_BLOQUE))) || (j < element->discretisation_element)))
+		// Alors, on met la matrice de rigidité pour une élément bi-encastré
+		{
+			ai[i] = 8;	aj[i] = 2;	ax[i] = -12*element->materiau->ecm*section_caract->iy/ll/ll/ll; i++;
+			ai[i] = 8;	aj[i] = 4;	ax[i] = 6*element->materiau->ecm*section_caract->iy/ll/ll; i++;
+			ai[i] = 8;	aj[i] = 8;	ax[i] = 12*element->materiau->ecm*section_caract->iy/ll/ll/ll; i++;
+			ai[i] = 8;	aj[i] = 10;	ax[i] = 6*element->materiau->ecm*section_caract->iy/ll/ll; i++;
+		}
+		else if (((j==0) && (element->relachement != NULL) && (element->relachement->ry_debut == EF_RELACHEMENT_LIBRE)) &&
+		(((j==element->discretisation_element) && ((element->relachement == NULL) || (element->relachement->ry_fin == EF_RELACHEMENT_BLOQUE))) || (j < element->discretisation_element)))
+		{
+			ai[i] = 8;	aj[i] = 2;	ax[i] = -3*element->materiau->ecm*section_caract->iy/ll/ll/ll; i++;
+			ai[i] = 8;	aj[i] = 4;	ax[i] = 0; i++;
+			ai[i] = 8;	aj[i] = 8;	ax[i] = 3*element->materiau->ecm*section_caract->iy/ll/ll/ll; i++;
+			ai[i] = 8;	aj[i] = 10;	ax[i] = 3*element->materiau->ecm*section_caract->iy/ll/ll; i++;
+		}
+		// Dans ce cas, c'est encastré à droite et articulé à gauche
+		else if (((j==element->discretisation_element) && (element->relachement != NULL) && (element->relachement->ry_fin == EF_RELACHEMENT_LIBRE)) &&
+		(((j==0) && ((element->relachement == NULL) || (element->relachement->ry_debut == EF_RELACHEMENT_BLOQUE))) || (j > 0)))
+		{
+			ai[i] = 8;	aj[i] = 2;	ax[i] = -3*element->materiau->ecm*section_caract->iy/ll/ll/ll; i++;
+			ai[i] = 8;	aj[i] = 4;	ax[i] = 3*element->materiau->ecm*section_caract->iy/ll/ll; i++;
+			ai[i] = 8;	aj[i] = 8;	ax[i] = 3*element->materiau->ecm*section_caract->iy/ll/ll/ll; i++;
+			ai[i] = 8;	aj[i] = 10;	ax[i] = 0; i++;
+		}
+		else if ((element->discretisation_element == 0) && (element->relachement != NULL) && (element->relachement->ry_debut == EF_RELACHEMENT_LIBRE) && (element->relachement->ry_fin == EF_RELACHEMENT_LIBRE))
+		{
+			ai[i] = 8;	aj[i] = 2;	ax[i] = 0; i++;
+			ai[i] = 8;	aj[i] = 4;	ax[i] = 0; i++;
+			ai[i] = 8;	aj[i] = 8;	ax[i] = 0; i++;
+			ai[i] = 8;	aj[i] = 10;	ax[i] = 0; i++;
+		}
+		else
+			BUGTEXTE(-2, "Impossible\n");
+		
+		ai[i] = 9;	aj[i] = 3;	ax[i] = -element->materiau->gnu_0_2*section_caract->j/ll; i++;
+		ai[i] = 9;	aj[i] = 9;	ax[i] = element->materiau->gnu_0_2*section_caract->j/ll; i++;
+		
+		if ((((j==0) && ((element->relachement == NULL) || (element->relachement->ry_debut == EF_RELACHEMENT_BLOQUE))) || (j > 0)) && 
+		(((j==element->discretisation_element) && ((element->relachement == NULL) || (element->relachement->ry_fin == EF_RELACHEMENT_BLOQUE))) || (j < element->discretisation_element)))
+		// Alors, on met la matrice de rigidité pour une élément bi-encastré
+		{
+			ai[i] = 10;	aj[i] = 2;	ax[i] = -6*element->materiau->ecm*section_caract->iy/ll/ll; i++;
+			ai[i] = 10;	aj[i] = 4;	ax[i] = 2*element->materiau->ecm*section_caract->iy/ll; i++;
+			ai[i] = 10;	aj[i] = 8;	ax[i] = 6*element->materiau->ecm*section_caract->iy/ll/ll; i++;
+			ai[i] = 10;	aj[i] = 10;	ax[i] = 4*element->materiau->ecm*section_caract->iy/ll; i++;
+		}
+		else if (((j==0) && (element->relachement != NULL) && (element->relachement->ry_debut == EF_RELACHEMENT_LIBRE)) &&
+		(((j==element->discretisation_element) && ((element->relachement == NULL) || (element->relachement->ry_fin == EF_RELACHEMENT_BLOQUE))) || (j < element->discretisation_element)))
+		{
+			ai[i] = 10;	aj[i] = 2;	ax[i] = -3*element->materiau->ecm*section_caract->iy/ll/ll; i++;
+			ai[i] = 10;	aj[i] = 4;	ax[i] = 0; i++;
+			ai[i] = 10;	aj[i] = 8;	ax[i] = 3*element->materiau->ecm*section_caract->iy/ll/ll; i++;
+			ai[i] = 10;	aj[i] = 10;	ax[i] = 3*element->materiau->ecm*section_caract->iy/ll; i++;
+		}
+		// Dans ce cas, c'est encastré à droite et articulé à gauche
+		else if (((j==element->discretisation_element) && (element->relachement != NULL) && (element->relachement->ry_fin == EF_RELACHEMENT_LIBRE)) &&
+		(((j==0) && ((element->relachement == NULL) || (element->relachement->ry_debut == EF_RELACHEMENT_BLOQUE))) || (j > 0)))
+		{
+			ai[i] = 10;	aj[i] = 2;	ax[i] = 0; i++;
+			ai[i] = 10;	aj[i] = 4;	ax[i] = 0; i++;
+			ai[i] = 10;	aj[i] = 8;	ax[i] = 0; i++;
+			ai[i] = 10;	aj[i] = 10;	ax[i] = 0; i++;
+		}
+		else if ((element->discretisation_element == 0) && (element->relachement != NULL) && (element->relachement->ry_debut == EF_RELACHEMENT_LIBRE) && (element->relachement->ry_fin == EF_RELACHEMENT_LIBRE))
+		{
+			ai[i] = 10;	aj[i] = 2;	ax[i] = 0; i++;
+			ai[i] = 10;	aj[i] = 4;	ax[i] = 0; i++;
+			ai[i] = 10;	aj[i] = 8;	ax[i] = 0; i++;
+			ai[i] = 10;	aj[i] = 10;	ax[i] = 0; i++;
+		}
+		else
+			BUGTEXTE(-2, "Impossible\n");
+		
+		if ((((j==0) && ((element->relachement == NULL) || (element->relachement->rz_debut == EF_RELACHEMENT_BLOQUE))) || (j > 0)) && 
+		(((j==element->discretisation_element) && ((element->relachement == NULL) || (element->relachement->rz_fin == EF_RELACHEMENT_BLOQUE))) || (j < element->discretisation_element)))
+		// Dans ce cas, c'est encastré à droite et encastré à gauche
+		{
+			ai[i] = 11;	aj[i] = 1;	ax[i] = 6*element->materiau->ecm*section_caract->iz/ll/ll; i++;
+			ai[i] = 11;	aj[i] = 5;	ax[i] = 2*element->materiau->ecm*section_caract->iz/ll; i++;
+			ai[i] = 11;	aj[i] = 7;	ax[i] = -6*element->materiau->ecm*section_caract->iz/ll/ll; i++;
+			ai[i] = 11;	aj[i] = 11;	ax[i] = 4*element->materiau->ecm*section_caract->iz/ll;  i++;
+		}
+		// Dans ce cas, c'est articulé à droite et encastré à gauche
+		else if (((j==0) && (element->relachement != NULL) && (element->relachement->rz_debut == EF_RELACHEMENT_LIBRE)) &&
+		(((j==element->discretisation_element) && ((element->relachement == NULL) || (element->relachement->rz_fin == EF_RELACHEMENT_BLOQUE))) || (j < element->discretisation_element)))
+		{
+			ai[i] = 11;	aj[i] = 1;	ax[i] = 3*element->materiau->ecm*section_caract->iz/ll/ll; i++;
+			ai[i] = 11;	aj[i] = 5;	ax[i] = 0; i++;
+			ai[i] = 11;	aj[i] = 7;	ax[i] = -3*element->materiau->ecm*section_caract->iz/ll/ll; i++;
+			ai[i] = 11;	aj[i] = 11;	ax[i] = 3*element->materiau->ecm*section_caract->iz/ll;  i++;
+		}
+		// Dans ce cas, c'est encastré à droite et articulé à gauche
+		else if (((j==element->discretisation_element) && (element->relachement != NULL) && (element->relachement->rz_fin == EF_RELACHEMENT_LIBRE)) &&
+		(((j==0) && ((element->relachement == NULL) || (element->relachement->rz_debut == EF_RELACHEMENT_BLOQUE))) || (j > 0)))
+		{
+			ai[i] = 11;	aj[i] = 1;	ax[i] = 0; i++;
+			ai[i] = 11;	aj[i] = 5;	ax[i] = 0; i++;
+			ai[i] = 11;	aj[i] = 7;	ax[i] = 0; i++;
+			ai[i] = 11;	aj[i] = 11;	ax[i] = 0;  i++;
+		}
+		else if ((element->discretisation_element == 0) && (element->relachement != NULL) && (element->relachement->rz_debut == EF_RELACHEMENT_LIBRE) && (element->relachement->rz_fin == EF_RELACHEMENT_LIBRE))
+		{
+			ai[i] = 11;	aj[i] = 1;	ax[i] = 0; i++;
+			ai[i] = 11;	aj[i] = 5;	ax[i] = 0; i++;
+			ai[i] = 11;	aj[i] = 7;	ax[i] = 0; i++;
+			ai[i] = 11;	aj[i] = 11;	ax[i] = 0;  i++;
+		}
+		else
+			BUGTEXTE(-2, "Impossible\n");
+		
 		triplet->nnz=i;
 		element->matrice_rigidite_locale = cholmod_l_triplet_to_sparse(triplet, 0, projet->ef_donnees.c);
 		cholmod_l_free_triplet(&triplet, projet->ef_donnees.c);

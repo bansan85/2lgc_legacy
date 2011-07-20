@@ -20,21 +20,26 @@
 #define __EF_RELACHEMENT_H
 
 #include "common_projet.h"
-#include "EF_appui.h"
+
+typedef enum
+{
+	EF_RELACHEMENT_LIBRE,
+	EF_RELACHEMENT_BLOQUE
+} Type_EF_Relachement;
 
 typedef struct __Relachement
 {
 	unsigned int		numero;
-	Type_EF_Appui		rx_debut;
-	Type_EF_Appui		ry_debut;
-	Type_EF_Appui		rz_debut;
-	Type_EF_Appui		rx_fin;
-	Type_EF_Appui		ry_fin;
-	Type_EF_Appui		rz_fin;
+	Type_EF_Relachement	rx_debut;
+	Type_EF_Relachement	ry_debut;
+	Type_EF_Relachement	rz_debut;
+	Type_EF_Relachement	rx_fin;
+	Type_EF_Relachement	ry_fin;
+	Type_EF_Relachement	rz_fin;
 } Relachement;
 
 int EF_relachement_init(Projet *projet);
-int EF_relachement_ajout(Projet *projet, Type_EF_Appui rx_debut, Type_EF_Appui ry_debut, Type_EF_Appui rz_debut, Type_EF_Appui rx_fin, Type_EF_Appui ry_fin, Type_EF_Appui rz_fin);
+int EF_relachement_ajout(Projet *projet, Type_EF_Relachement rx_debut, Type_EF_Relachement ry_debut, Type_EF_Relachement rz_debut, Type_EF_Relachement rx_fin, Type_EF_Relachement ry_fin, Type_EF_Relachement rz_fin);
 int EF_relachement_cherche_numero(Projet *projet, unsigned int numero);
 int EF_relachement_free(Projet *projet);
 

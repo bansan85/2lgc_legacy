@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2011-07-19 18:36+0200\n"
+"POT-Creation-Date: 2011-07-21 01:42+0200\n"
 "PO-Revision-Date: 2011-03-22 20:55+0100\n"
 "Last-Translator: LE GARREC Vincent <vlg@2lgc.org>\n"
 "Language-Team: French\n"
@@ -26,9 +26,9 @@ msgstr ""
 #: src/lib/1992_1_1/1992_1_1_section.c:279
 #: src/lib/1992_1_1/1992_1_1_elements.c:39
 #: src/lib/1992_1_1/1992_1_1_elements.c:66
-#: src/lib/1992_1_1/1992_1_1_elements.c:136
-#: src/lib/1992_1_1/1992_1_1_elements.c:175
-#: src/lib/1992_1_1/1992_1_1_elements.c:351
+#: src/lib/1992_1_1/1992_1_1_elements.c:145
+#: src/lib/1992_1_1/1992_1_1_elements.c:184
+#: src/lib/1992_1_1/1992_1_1_elements.c:630
 #: src/lib/1992_1_1/1992_1_1_materiaux.c:37
 #: src/lib/1992_1_1/1992_1_1_materiaux.c:60
 #: src/lib/1992_1_1/1992_1_1_materiaux.c:153
@@ -57,12 +57,14 @@ msgstr ""
 #: src/lib/1990/1990_combinaisons.c:821 src/lib/1990/1990_combinaisons.c:858
 #: src/lib/EF/EF_calculs.c:131 src/lib/EF/EF_calculs.c:207
 #: src/lib/EF/EF_noeud.c:36 src/lib/EF/EF_noeud.c:62 src/lib/EF/EF_noeud.c:102
-#: src/lib/EF/EF_noeud.c:128 src/lib/EF/EF_appui.c:35 src/lib/EF/EF_appui.c:63
-#: src/lib/EF/EF_appui.c:77 src/lib/EF/EF_appui.c:92 src/lib/EF/EF_appui.c:107
-#: src/lib/EF/EF_appui.c:122 src/lib/EF/EF_appui.c:137
-#: src/lib/EF/EF_appui.c:152 src/lib/EF/EF_appui.c:181
-#: src/lib/EF/EF_appui.c:207 src/lib/EF/EF_rigidite.c:40
-#: src/lib/EF/EF_rigidite.c:65
+#: src/lib/EF/EF_noeud.c:128 src/lib/EF/EF_relachement.c:35
+#: src/lib/EF/EF_relachement.c:63 src/lib/EF/EF_relachement.c:97
+#: src/lib/EF/EF_relachement.c:123 src/lib/EF/EF_appui.c:35
+#: src/lib/EF/EF_appui.c:63 src/lib/EF/EF_appui.c:77 src/lib/EF/EF_appui.c:92
+#: src/lib/EF/EF_appui.c:107 src/lib/EF/EF_appui.c:122
+#: src/lib/EF/EF_appui.c:137 src/lib/EF/EF_appui.c:152
+#: src/lib/EF/EF_appui.c:181 src/lib/EF/EF_appui.c:207
+#: src/lib/EF/EF_rigidite.c:40 src/lib/EF/EF_rigidite.c:64
 msgid "Paramètres invalides.\n"
 msgstr "Paramètres invalides.\n"
 
@@ -76,8 +78,8 @@ msgstr "Paramètres invalides.\n"
 #: src/lib/1992_1_1/1992_1_1_section.c:217
 #: src/lib/1992_1_1/1992_1_1_section.c:236
 #: src/lib/1992_1_1/1992_1_1_elements.c:43
-#: src/lib/1992_1_1/1992_1_1_elements.c:93
-#: src/lib/1992_1_1/1992_1_1_elements.c:119
+#: src/lib/1992_1_1/1992_1_1_elements.c:102
+#: src/lib/1992_1_1/1992_1_1_elements.c:128
 #: src/lib/1992_1_1/1992_1_1_materiaux.c:41
 #: src/lib/1992_1_1/1992_1_1_materiaux.c:136
 #: src/lib/1990/1990_ponderations.c:123 src/lib/1990/1990_ponderations.c:139
@@ -105,8 +107,10 @@ msgstr "Paramètres invalides.\n"
 #: src/lib/1990/1990_combinaisons.c:617 src/lib/1990/1990_combinaisons.c:633
 #: src/lib/1990/1990_combinaisons.c:660 src/lib/1990/1990_combinaisons.c:731
 #: src/lib/common/common_projet.c:117 src/lib/common/common_projet.c:130
-#: src/lib/EF/EF_calculs.c:52 src/lib/EF/EF_calculs.c:57
-#: src/lib/EF/EF_noeud.c:40 src/lib/EF/EF_noeud.c:85 src/lib/EF/EF_appui.c:39
+#: src/lib/common/common_projet.c:144 src/lib/EF/EF_calculs.c:52
+#: src/lib/EF/EF_calculs.c:57 src/lib/EF/EF_noeud.c:40
+#: src/lib/EF/EF_noeud.c:85 src/lib/EF/EF_relachement.c:39
+#: src/lib/EF/EF_relachement.c:80 src/lib/EF/EF_appui.c:39
 #: src/lib/EF/EF_appui.c:164
 msgid "Erreur d'allocation mémoire.\n"
 msgstr "Erreur d'allocation mémoire.\n"
@@ -116,7 +120,7 @@ msgstr "Erreur d'allocation mémoire.\n"
 msgid "Section en béton n°%d introuvable.\n"
 msgstr "Action %d introuvable.\n"
 
-#: src/lib/1992_1_1/1992_1_1_elements.c:148
+#: src/lib/1992_1_1/1992_1_1_elements.c:157
 #, fuzzy, c-format
 msgid "Élément en béton n°%d introuvable.\n"
 msgstr "Action %d introuvable.\n"
@@ -541,6 +545,11 @@ msgstr "Le fichier '%s' est vide.\n"
 #: src/lib/EF/EF_noeud.c:114
 #, fuzzy, c-format
 msgid "Noeud n°%d introuvable.\n"
+msgstr "Action %d introuvable.\n"
+
+#: src/lib/EF/EF_relachement.c:109
+#, fuzzy, c-format
+msgid "Relachement n°%d introuvable.\n"
 msgstr "Action %d introuvable.\n"
 
 #: src/lib/EF/EF_appui.c:193

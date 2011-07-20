@@ -55,7 +55,7 @@ int EF_relachement_init(Projet *projet)
  *   Succès : 0
  *   Échec : valeur négative
  */
-int EF_relachement_ajout(Projet *projet, Type_EF_Appui rx_debut, Type_EF_Appui ry_debut, Type_EF_Appui rz_debut, Type_EF_Appui rx_fin, Type_EF_Appui ry_fin, Type_EF_Appui rz_fin)
+int EF_relachement_ajout(Projet *projet, Type_EF_Relachement rx_debut, Type_EF_Relachement ry_debut, Type_EF_Relachement rz_debut, Type_EF_Relachement rx_fin, Type_EF_Relachement ry_fin, Type_EF_Relachement rz_fin)
 {
 	Relachement		*relachement_en_cours, relachement_nouveau;
 	
