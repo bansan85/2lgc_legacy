@@ -29,7 +29,7 @@ typedef enum
 
 typedef struct __EF_Appui
 {
-	int		numero;
+	int	numero;
 	Type_EF_Appui	x;
 	void		*x_donnees;
 	Type_EF_Appui	y;
@@ -46,7 +46,7 @@ typedef struct __EF_Appui
 
 int EF_appuis_init(Projet *projet);
 int EF_appuis_ajout(Projet *projet, Type_EF_Appui x, Type_EF_Appui y, Type_EF_Appui z, Type_EF_Appui rx, Type_EF_Appui ry, Type_EF_Appui rz);
-int EF_appuis_cherche_numero(Projet *projet, int numero);
+EF_Appui* EF_appuis_cherche_numero(Projet *projet, int numero);
 int EF_appuis_free(Projet *projet);
 
 #endif

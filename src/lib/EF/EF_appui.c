@@ -172,13 +172,13 @@ int EF_appuis_ajout(Projet *projet, Type_EF_Appui x, Type_EF_Appui y, Type_EF_Ap
  * Paramètres : Projet *projet : la variable projet
  *            : int numero : le numéro de l'appui
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : valeur négative
+ *   Succès : poiteur vers l'appui
+ *   Échec : NULL
  */
-int EF_appuis_cherche_numero(Projet *projet, int numero)
+EF_Appui* EF_appuis_cherche_numero(Projet *projet, int numero)
 {
 	if ((projet == NULL) || (projet->ef_donnees.appuis == NULL) || (list_size(projet->ef_donnees.appuis) == 0))
-		BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
+		BUGTEXTE(NULL, gettext("Paramètres invalides.\n"));
 	
 	list_mvfront(projet->ef_donnees.appuis);
 	do
@@ -186,11 +186,11 @@ int EF_appuis_cherche_numero(Projet *projet, int numero)
 		EF_Appui	*appui = list_curr(projet->ef_donnees.appuis);
 		
 		if (appui->numero == numero)
-			return 0;
+			return appui;
 	}
 	while (list_mvnext(projet->ef_donnees.appuis) != NULL);
 	
-	BUGTEXTE(-2, gettext("Appui n°%d introuvable.\n"), numero);
+	BUGTEXTE(NULL, gettext("Appui n°%d introuvable.\n"), numero);
 }
 
 

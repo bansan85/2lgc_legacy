@@ -68,27 +68,24 @@ int _1992_1_1_elements_ajout(Projet *projet, Type_Element type, unsigned int sec
 	list_mvrear(projet->beton.elements);
 	element_nouveau.element = type;
 	
-	if (_1992_1_1_sections_cherche_numero(projet, section) != 0)
+	element_nouveau.section = _1992_1_1_sections_cherche_numero(projet, section);
+	if (element_nouveau.section == NULL)
 		BUG(-2);
-	element_nouveau.section = list_curr(projet->beton.sections);
-	
-	if (_1992_1_1_materiaux_cherche_numero(projet, materiau) != 0)
+	element_nouveau.materiau = _1992_1_1_materiaux_cherche_numero(projet, materiau);
+	if (element_nouveau.materiau == NULL)
 		BUG(-3);
-	element_nouveau.materiau = list_curr(projet->beton.materiaux);
-	
-	if (EF_noeuds_cherche_numero(projet, noeud_debut) != 0)
+	element_nouveau.noeud_debut = EF_noeuds_cherche_numero(projet, noeud_debut);
+	if (element_nouveau.noeud_debut == NULL)
 		BUG(-4);
-	element_nouveau.noeud_debut = list_curr(projet->ef_donnees.noeuds);
-	
-	if (EF_noeuds_cherche_numero(projet, noeud_fin) != 0)
+	element_nouveau.noeud_fin = EF_noeuds_cherche_numero(projet, noeud_fin);
+	if (element_nouveau.noeud_fin == NULL)
 		BUG(-5);
-	element_nouveau.noeud_fin = list_curr(projet->ef_donnees.noeuds);
 	
 	if (relachement != -1)
 	{
-		if (EF_relachement_cherche_numero(projet, relachement) != 0)
+		element_nouveau.relachement = EF_relachement_cherche_numero(projet, relachement);
+		if (element_nouveau.relachement == NULL)
 			BUG(-6);
-		element_nouveau.relachement = list_curr(projet->ef_donnees.relachements);
 	}
 	else
 		element_nouveau.relachement = NULL;
@@ -136,13 +133,13 @@ int _1992_1_1_elements_ajout(Projet *projet, Type_Element type, unsigned int sec
  * Paramètres : Projet *projet : la variable projet
  *            : int numero : le numéro de la section
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : valeur négative
+ *   Succès : Pointeur vers l'élément en béton
+ *   Échec : NULL
  */
-int _1992_1_1_elements_cherche_numero(Projet *projet, unsigned int numero)
+Beton_Element* _1992_1_1_elements_cherche_numero(Projet *projet, unsigned int numero)
 {
 	if ((projet == NULL) || (projet->beton.elements == NULL) || (list_size(projet->beton.elements) == 0))
-		BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
+		BUGTEXTE(NULL, gettext("Paramètres invalides.\n"));
 	
 	list_mvfront(projet->beton.elements);
 	do
@@ -150,11 +147,11 @@ int _1992_1_1_elements_cherche_numero(Projet *projet, unsigned int numero)
 		Beton_Element	*element = list_curr(projet->beton.elements);
 		
 		if (element->numero == numero)
-			return 0;
+			return element;
 	}
 	while (list_mvnext(projet->beton.elements) != NULL);
 	
-	BUGTEXTE(-2, gettext("Élément en béton n°%d introuvable.\n"), numero);
+	BUGTEXTE(NULL, gettext("Élément en béton n°%d introuvable.\n"), numero);
 }
 
 
@@ -166,7 +163,7 @@ int _1992_1_1_elements_cherche_numero(Projet *projet, unsigned int numero)
  *   Succès : 0
  *   Échec : valeur négative
  */
-int _1992_1_1_elements_rigidite_ajout(Projet *projet, unsigned int num_element)
+int _1992_1_1_elements_rigidite_ajout(Projet *projet, Beton_Element *element)
 {
 	EF_Noeud	*noeud1, *noeud2;
 	long		*ai, *aj, *ai2, *aj2;	// Pointeur vers les données des triplets
@@ -176,16 +173,12 @@ int _1992_1_1_elements_rigidite_ajout(Projet *projet, unsigned int num_element)
 	unsigned int	i, j;
 	cholmod_triplet	*triplet;
 	cholmod_sparse	*sparse_tmp, *sparse_rotation_transpose;
-	Beton_Element	*element;
 	Beton_Section_Carre	*section_donnees;
 	Beton_Section_Caracteristiques	*section_caract;
 	
-	if ((projet == NULL) || (projet->ef_donnees.rigidite_triplet == NULL))
+	if ((projet == NULL) || (projet->ef_donnees.rigidite_triplet == NULL) || (element == NULL))
 		BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
 	
-	if (_1992_1_1_elements_cherche_numero(projet, num_element) != 0)
-		BUG(-2);
-	element = list_curr(projet->beton.elements);
 	section_donnees = element->section;
 	section_caract = section_donnees->caracteristiques;
 	
@@ -627,6 +620,34 @@ int _1992_1_1_elements_rigidite_ajout(Projet *projet, unsigned int num_element)
 	return 0;
 }
 
+
+/* _1992_1_1_elements_rigidite_ajout_tout
+ * Description : Ajout à la matrice de rigidité tous les éléments en béton
+ * Paramètres : Projet *projet : la variable projet
+ * Valeur renvoyée :
+ *   Succès : 0 même si aucune section n'est existante
+ *   Échec : valeur négative si la liste des éléments n'est pas initialisée ou a déjà été libérée
+ */
+int _1992_1_1_elements_rigidite_ajout_tout(Projet *projet)
+{
+	if ((projet == NULL) || (projet->beton.elements == NULL))
+		BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
+	
+	if (list_size(projet->beton.elements) == 0)
+		return 0;
+	
+	list_mvfront(projet->beton.elements);
+	do
+	{
+		Beton_Element *element = list_curr(projet->beton.elements);
+		
+		if (_1992_1_1_elements_rigidite_ajout(projet, element) != 0)
+			BUG(-2);
+	}
+	while (list_mvnext(projet->beton.elements) != NULL);
+	
+	return 0;
+}
 
 
 /* _1992_1_1_elements_free
