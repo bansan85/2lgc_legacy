@@ -75,9 +75,9 @@ int _1992_1_1_sections_ajout_rectangulaire(Projet *projet, double largeur, doubl
 	section_nouvelle.caracteristiques->iy = largeur*hauteur*hauteur*hauteur/12.;
 	section_nouvelle.caracteristiques->iz = hauteur*largeur*largeur*largeur/12.;
 	if (largeur > hauteur)
-	{ a = largeur; b = hauteur; }
+		{ a = largeur; b = hauteur; }
 	else
-	{ a = hauteur; b = largeur; }
+		{ a = hauteur; b = largeur; }
 	section_nouvelle.caracteristiques->j = a*b*b*b/16.*(16./3.-3.364*b/a*(1.-b*b*b*b/(12.*a*a*a*a)));
 	
 	section_en_cours = (Beton_Section_Rectangulaire*)list_rear(projet->beton.sections);

@@ -326,8 +326,16 @@ int _1992_1_1_elements_rigidite_ajout(Projet *projet, unsigned int num_element)
 		else
 			BUGTEXTE(-2, "Impossible\n");
 		
-		ai[i] = 3;	aj[i] = 3;	ax[i] = element->materiau->gnu_0_2*section_caract->j/ll; i++;
-		ai[i] = 3;	aj[i] = 9;	ax[i] = -element->materiau->gnu_0_2*section_caract->j/ll; i++;
+		if (((j == 0) && (element->relachement != NULL) && (element->relachement->rx_debut == EF_RELACHEMENT_LIBRE)) || ((j==element->discretisation_element) && (element->relachement != NULL) && (element->relachement->rx_fin == EF_RELACHEMENT_LIBRE)))
+		{
+			ai[i] = 3;	aj[i] = 3;	ax[i] = 0; i++;
+			ai[i] = 3;	aj[i] = 9;	ax[i] = 0; i++;
+		}
+		else
+		{
+			ai[i] = 3;	aj[i] = 3;	ax[i] = element->materiau->gnu_0_2*section_caract->j/ll; i++;
+			ai[i] = 3;	aj[i] = 9;	ax[i] = -element->materiau->gnu_0_2*section_caract->j/ll; i++;
+		}
 		
 		if ((((j==0) && ((element->relachement == NULL) || (element->relachement->ry_debut == EF_RELACHEMENT_BLOQUE))) || (j > 0)) && 
 		(((j==element->discretisation_element) && ((element->relachement == NULL) || (element->relachement->ry_fin == EF_RELACHEMENT_BLOQUE))) || (j < element->discretisation_element)))
@@ -478,8 +486,16 @@ int _1992_1_1_elements_rigidite_ajout(Projet *projet, unsigned int num_element)
 		else
 			BUGTEXTE(-2, "Impossible\n");
 		
-		ai[i] = 9;	aj[i] = 3;	ax[i] = -element->materiau->gnu_0_2*section_caract->j/ll; i++;
-		ai[i] = 9;	aj[i] = 9;	ax[i] = element->materiau->gnu_0_2*section_caract->j/ll; i++;
+		if (((j==element->discretisation_element) && (element->relachement != NULL) && (element->relachement->rx_fin == EF_RELACHEMENT_LIBRE)) || ((j == 0) && (element->relachement != NULL) && (element->relachement->rx_debut == EF_RELACHEMENT_LIBRE)))
+		{
+			ai[i] = 9;	aj[i] = 3;	ax[i] = 0; i++;
+			ai[i] = 9;	aj[i] = 9;	ax[i] = 0; i++;
+		}
+		else
+		{
+			ai[i] = 9;	aj[i] = 3;	ax[i] = -element->materiau->gnu_0_2*section_caract->j/ll; i++;
+			ai[i] = 9;	aj[i] = 9;	ax[i] = element->materiau->gnu_0_2*section_caract->j/ll; i++;
+		}
 		
 		if ((((j==0) && ((element->relachement == NULL) || (element->relachement->ry_debut == EF_RELACHEMENT_BLOQUE))) || (j > 0)) && 
 		(((j==element->discretisation_element) && ((element->relachement == NULL) || (element->relachement->ry_fin == EF_RELACHEMENT_BLOQUE))) || (j < element->discretisation_element)))

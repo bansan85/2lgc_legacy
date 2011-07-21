@@ -59,7 +59,7 @@ int EF_relachement_ajout(Projet *projet, Type_EF_Relachement rx_debut, Type_EF_R
 {
 	Relachement		*relachement_en_cours, relachement_nouveau;
 	
-	if ((projet == NULL) || (projet->ef_donnees.relachements == NULL))
+	if ((projet == NULL) || (projet->ef_donnees.relachements == NULL) || ((rx_debut == EF_RELACHEMENT_LIBRE) && (rx_fin == EF_RELACHEMENT_LIBRE)))
 		BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
 	
 	list_mvrear(projet->ef_donnees.relachements);

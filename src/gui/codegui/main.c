@@ -154,7 +154,7 @@ int main(int argc, char *argv[])
 	if (_1992_1_1_materiaux_ajout(projet, 25., 0.2) != 0) BUG(-1);
 	
 	// Création du relâchment
-	if (EF_relachement_ajout(projet, EF_RELACHEMENT_BLOQUE, EF_RELACHEMENT_LIBRE, EF_RELACHEMENT_LIBRE, EF_RELACHEMENT_BLOQUE, EF_RELACHEMENT_LIBRE, EF_RELACHEMENT_LIBRE) != 0) BUG(-1);
+	if (EF_relachement_ajout(projet, EF_RELACHEMENT_LIBRE, EF_RELACHEMENT_LIBRE, EF_RELACHEMENT_LIBRE, EF_RELACHEMENT_BLOQUE, EF_RELACHEMENT_LIBRE, EF_RELACHEMENT_LIBRE) != 0) BUG(-1);
 	
 	// Création de l'élément en béton
 	if (_1992_1_1_elements_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 0, 1, -1, 100) != 0) BUG(-1);
