@@ -31,7 +31,7 @@ typedef enum
 typedef struct __Beton_Section_Caracteristiques
 {
 	Type_Beton_Section	type;
-	int			numero;
+	unsigned int		numero;
 	double			a;
 	double			cdgh;
 	double			cdgb;
@@ -80,7 +80,7 @@ int _1992_1_1_sections_ajout_rectangulaire(Projet *projet, double largeur, doubl
 int _1992_1_1_sections_ajout_T(Projet *projet, double largeur_table, double largeur_ame, double hauteur_table, double hauteur_ame);
 int _1992_1_1_sections_ajout_carre(Projet *projet, double cote);
 int _1992_1_1_sections_ajout_circulaire(Projet *projet, double diametre);
-int _1992_1_1_sections_cherche_numero(Projet *projet, int numero);
+void* _1992_1_1_sections_cherche_numero(Projet *projet, unsigned int numero);
 int _1992_1_1_sections_free(Projet *projet);
 
 #endif

@@ -328,9 +328,9 @@ int _1990_action_ajout_charge_ponctuelle(Projet *projet, int num_action, int num
 		BUGTEXTE(-2, gettext("Paramètres invalides.\n"));
 	action_en_cours = list_curr(projet->actions);
 	
-	if (EF_noeuds_cherche_numero(projet, num_noeud) != 0)
+	noeud_en_cours = EF_noeuds_cherche_numero(projet, num_noeud);
+	if (noeud_en_cours == NULL)
 		BUGTEXTE(-3, gettext("Paramètres invalides.\n"));
-	noeud_en_cours = list_curr(projet->ef_donnees.noeuds);
 	
 	charge_nouveau.type = CHARGE_PONCTUELLE;
 	charge_nouveau.nom = NULL;

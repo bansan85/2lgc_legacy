@@ -165,9 +165,7 @@ int main(int argc, char *argv[])
 	if (EF_calculs_initialise(projet) != 0) BUG(-1);
 	
 	// Ajout de la rigidité de l'élément à la matrice globale du projet
-	if (_1992_1_1_elements_rigidite_ajout(projet, 0) != 0) BUG(-1);
-	if (_1992_1_1_elements_rigidite_ajout(projet, 1) != 0) BUG(-1);
-	if (_1992_1_1_elements_rigidite_ajout(projet, 2) != 0) BUG(-1);
+	if (_1992_1_1_elements_rigidite_ajout_tout(projet) != 0) BUG(-1);
 	
 	if (EF_calculs_genere_sparse(projet) != 0) BUG(-1);
 	if (EF_calculs_resoud_charge(projet, 0) != 0) BUG(-1);

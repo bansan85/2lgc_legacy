@@ -84,17 +84,17 @@ int EF_relachement_ajout(Projet *projet, Type_EF_Relachement rx_debut, Type_EF_R
 
 
 /* EF_relachement_cherche_numero
- * Description : Positionne dans la liste des relachements l'élément courant au numéro souhaité
+ * Description : Renvoie le relachement cherché
  * Paramètres : Projet *projet : la variable projet
- *            : int numero : le numéro du noeud
+ *            : unsigned int numero : le numéro du noeud
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : valeur négative
+ *   Succès : pointeur vers le relachement recherché
+ *   Échec : NULL
  */
-int EF_relachement_cherche_numero(Projet *projet, unsigned int numero)
+Relachement* EF_relachement_cherche_numero(Projet *projet, unsigned int numero)
 {
 	if ((projet == NULL) || (projet->ef_donnees.relachements == NULL) || (list_size(projet->ef_donnees.relachements) == 0))
-		BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
+		BUGTEXTE(NULL, gettext("Paramètres invalides.\n"));
 	
 	list_mvfront(projet->ef_donnees.relachements);
 	do
@@ -102,11 +102,11 @@ int EF_relachement_cherche_numero(Projet *projet, unsigned int numero)
 		Relachement	*relachement = list_curr(projet->ef_donnees.relachements);
 		
 		if (relachement->numero == numero)
-			return 0;
+			return relachement;
 	}
 	while (list_mvnext(projet->ef_donnees.relachements) != NULL);
 	
-	BUGTEXTE(-2, gettext("Relachement n°%d introuvable.\n"), numero);
+	BUGTEXTE(NULL, gettext("Relachement n°%d introuvable.\n"), numero);
 }
 
 

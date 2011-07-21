@@ -144,13 +144,13 @@ int _1992_1_1_materiaux_ajout(Projet *projet, double fck, double nu)
  * Paramètres : Projet *projet : la variable projet
  *            : int numero : le numéro du matériau
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : valeur négative
+ *   Succès : pointeur vers le matériau en béton
+ *   Échec : NULL
  */
-int _1992_1_1_materiaux_cherche_numero(Projet *projet, int numero)
+Beton_Materiau* _1992_1_1_materiaux_cherche_numero(Projet *projet, unsigned int numero)
 {
 	if ((projet == NULL) || (projet->beton.materiaux == NULL) || (list_size(projet->beton.materiaux) == 0))
-		BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
+		BUGTEXTE(NULL, gettext("Paramètres invalides.\n"));
 	
 	list_mvfront(projet->beton.materiaux);
 	do
@@ -158,11 +158,11 @@ int _1992_1_1_materiaux_cherche_numero(Projet *projet, int numero)
 		Beton_Materiau	*materiau = list_curr(projet->beton.materiaux);
 		
 		if (materiau->numero == numero)
-			return 0;
+			return materiau;
 	}
 	while (list_mvnext(projet->beton.materiaux) != NULL);
 	
-	BUGTEXTE(-2, gettext("Materiau en béton n°%d introuvable.\n"), numero);
+	BUGTEXTE(NULL, gettext("Materiau en béton n°%d introuvable.\n"), numero);
 }
 
 

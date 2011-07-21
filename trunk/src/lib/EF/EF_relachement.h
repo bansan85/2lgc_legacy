@@ -40,7 +40,7 @@ typedef struct __Relachement
 
 int EF_relachement_init(Projet *projet);
 int EF_relachement_ajout(Projet *projet, Type_EF_Relachement rx_debut, Type_EF_Relachement ry_debut, Type_EF_Relachement rz_debut, Type_EF_Relachement rx_fin, Type_EF_Relachement ry_fin, Type_EF_Relachement rz_fin);
-int EF_relachement_cherche_numero(Projet *projet, unsigned int numero);
+Relachement* EF_relachement_cherche_numero(Projet *projet, unsigned int numero);
 int EF_relachement_free(Projet *projet);
 
 #endif

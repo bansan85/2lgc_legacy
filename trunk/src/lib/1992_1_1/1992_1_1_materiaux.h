@@ -23,32 +23,32 @@
 
 typedef struct __Beton_Materiau
 {
-	int			numero;
+	unsigned int	numero;
 	
-	// Caractéristique du matériau béton conformément à EN 1992_1_1, Tableau 3.1
-	double			fck;
-	double			fckcube;
-	double			fcm;
-	double			fctm;
-	double			fctk_0_05;
-	double			fctk_0_95;
-	double			ecm;
-	double			ec1;
-	double			ecu1;
-	double			ec2;
-	double			ecu2;
-	double			n;
-	double			ec3;
-	double			ecu3;
+	// Caractéristiqtériau béton conformément à EN 1992_1_1, Tableau 3.1
+	double		fck;
+	double		fckcube;
+	double		fcm;
+	double		fctm;
+	double		fctk_0_05;
+	double		fctk_0_95;
+	double		ecm;
+	double		ec1;
+	double		ecu1;
+	double		ec2;
+	double		ecu2;
+	double		n;
+	double		ec3;
+	double		ecu3;
 	
-	double			nu;
-	double			gnu_0_2;
-	double			gnu_0_0;
+	double		nu;
+	double		gnu_0_2;
+	double		gnu_0_0;
 } Beton_Materiau;
 
 int _1992_1_1_materiaux_init(Projet *projet);
 int _1992_1_1_materiaux_ajout(Projet *projet, double fck, double nu);
-int _1992_1_1_materiaux_cherche_numero(Projet *projet, int numero);
+Beton_Materiau* _1992_1_1_materiaux_cherche_numero(Projet *projet, unsigned int numero);
 int _1992_1_1_materiaux_free(Projet *projet);
 
 

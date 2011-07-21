@@ -70,9 +70,9 @@ int EF_noeuds_ajout(Projet *projet, double x, double y, double z, int appui)
 		noeud_nouveau.appui = NULL;
 	else
 	{
-		if (EF_appuis_cherche_numero(projet, appui) != 0)
+		noeud_nouveau.appui = EF_appuis_cherche_numero(projet, appui);
+		if (noeud_nouveau.appui == NULL)
 			return -2;
-		noeud_nouveau.appui = (EF_Appui *)(list_curr(projet->ef_donnees.appuis));
 	}
 		
 	noeud_en_cours = (EF_Noeud *)list_rear(projet->ef_donnees.noeuds);
@@ -93,13 +93,13 @@ int EF_noeuds_ajout(Projet *projet, double x, double y, double z, int appui)
  * Paramètres : Projet *projet : la variable projet
  *            : int numero : le numéro du noeud
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : valeur négative
+ *   Succès : pointeur vers le noeud recherché
+ *   Échec : NULL
  */
-int EF_noeuds_cherche_numero(Projet *projet, int numero)
+EF_Noeud* EF_noeuds_cherche_numero(Projet *projet, int numero)
 {
 	if ((projet == NULL) || (projet->ef_donnees.noeuds == NULL) || (list_size(projet->ef_donnees.noeuds) == 0))
-		BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
+		BUGTEXTE(NULL, gettext("Paramètres invalides.\n"));
 	
 	list_mvfront(projet->ef_donnees.noeuds);
 	do
@@ -107,11 +107,11 @@ int EF_noeuds_cherche_numero(Projet *projet, int numero)
 		EF_Noeud	*noeud = list_curr(projet->ef_donnees.noeuds);
 		
 		if (noeud->numero == numero)
-			return 0;
+			return noeud;
 	}
 	while (list_mvnext(projet->ef_donnees.noeuds) != NULL);
 	
-	BUGTEXTE(-2, gettext("Noeud n°%d introuvable.\n"), numero);
+	BUGTEXTE(NULL, gettext("Noeud n°%d introuvable.\n"), numero);
 }
 
 

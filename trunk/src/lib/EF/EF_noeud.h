@@ -39,7 +39,7 @@ typedef struct
 
 int EF_noeuds_init(Projet *projet);
 int EF_noeuds_ajout(Projet *projet, double x, double y, double z, int appui);
-int EF_noeuds_cherche_numero(Projet *projet, int numero);
+EF_Noeud* EF_noeuds_cherche_numero(Projet *projet, int numero);
 int EF_noeuds_free(Projet *projet);
 
 #endif
