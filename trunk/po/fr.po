@@ -1,14 +1,10 @@
 # French translations for 2lgc_code package.
-# Copyright (C) 2011 Free Software Foundation, Inc.
-# This file is distributed under the same license as the 2lgc_code package.
-#  <devel@2lgc.org>, 2011.
-#
 msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2011-07-21 01:42+0200\n"
-"PO-Revision-Date: 2011-03-22 20:55+0100\n"
+"POT-Creation-Date: 2011-07-21 15:01+0200\n"
+"PO-Revision-Date: 2011-07-21 15:15+0100\n"
 "Last-Translator: LE GARREC Vincent <vlg@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -17,121 +13,21 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: src/lib/1992_1_1/1992_1_1_section.c:36
-#: src/lib/1992_1_1/1992_1_1_section.c:61
-#: src/lib/1992_1_1/1992_1_1_section.c:113
-#: src/lib/1992_1_1/1992_1_1_section.c:169
-#: src/lib/1992_1_1/1992_1_1_section.c:212
-#: src/lib/1992_1_1/1992_1_1_section.c:253
-#: src/lib/1992_1_1/1992_1_1_section.c:279
-#: src/lib/1992_1_1/1992_1_1_elements.c:39
-#: src/lib/1992_1_1/1992_1_1_elements.c:66
-#: src/lib/1992_1_1/1992_1_1_elements.c:145
-#: src/lib/1992_1_1/1992_1_1_elements.c:184
-#: src/lib/1992_1_1/1992_1_1_elements.c:630
-#: src/lib/1992_1_1/1992_1_1_materiaux.c:37
-#: src/lib/1992_1_1/1992_1_1_materiaux.c:60
-#: src/lib/1992_1_1/1992_1_1_materiaux.c:153
-#: src/lib/1992_1_1/1992_1_1_materiaux.c:179
-#: src/lib/1990/1990_ponderations.c:47 src/lib/1990/1990_ponderations.c:104
-#: src/lib/1990/1990_ponderations.c:176 src/lib/1990/1990_ponderations.c:297
-#: src/lib/1990/1990_ponderations.c:420 src/lib/1990/1990_ponderations.c:485
-#: src/lib/1990/1990_ponderations.c:565 src/lib/1990/1990_ponderations.c:695
-#: src/lib/1990/1990_ponderations.c:763 src/lib/1990/1990_ponderations.c:846
-#: src/lib/1990/1990_groupes.c:41 src/lib/1990/1990_groupes.c:64
-#: src/lib/1990/1990_groupes.c:90 src/lib/1990/1990_groupes.c:117
-#: src/lib/1990/1990_groupes.c:143 src/lib/1990/1990_groupes.c:172
-#: src/lib/1990/1990_groupes.c:219 src/lib/1990/1990_actions.c:205
-#: src/lib/1990/1990_actions.c:227 src/lib/1990/1990_actions.c:264
-#: src/lib/1990/1990_actions.c:288 src/lib/1990/1990_actions.c:325
-#: src/lib/1990/1990_actions.c:328 src/lib/1990/1990_actions.c:332
-#: src/lib/1990/1990_actions.c:369 src/lib/1990/1990_gtk_groupes.c:50
-#: src/lib/1990/1990_gtk_groupes.c:1025 src/lib/1990/1990_combinaisons.c:49
-#: src/lib/1990/1990_combinaisons.c:99 src/lib/1990/1990_combinaisons.c:149
-#: src/lib/1990/1990_combinaisons.c:217 src/lib/1990/1990_combinaisons.c:248
-#: src/lib/1990/1990_combinaisons.c:253 src/lib/1990/1990_combinaisons.c:257
-#: src/lib/1990/1990_combinaisons.c:331 src/lib/1990/1990_combinaisons.c:383
-#: src/lib/1990/1990_combinaisons.c:388 src/lib/1990/1990_combinaisons.c:392
-#: src/lib/1990/1990_combinaisons.c:544 src/lib/1990/1990_combinaisons.c:549
-#: src/lib/1990/1990_combinaisons.c:553 src/lib/1990/1990_combinaisons.c:718
-#: src/lib/1990/1990_combinaisons.c:821 src/lib/1990/1990_combinaisons.c:858
-#: src/lib/EF/EF_calculs.c:131 src/lib/EF/EF_calculs.c:207
-#: src/lib/EF/EF_noeud.c:36 src/lib/EF/EF_noeud.c:62 src/lib/EF/EF_noeud.c:102
-#: src/lib/EF/EF_noeud.c:128 src/lib/EF/EF_relachement.c:35
-#: src/lib/EF/EF_relachement.c:63 src/lib/EF/EF_relachement.c:97
-#: src/lib/EF/EF_relachement.c:123 src/lib/EF/EF_appui.c:35
-#: src/lib/EF/EF_appui.c:63 src/lib/EF/EF_appui.c:77 src/lib/EF/EF_appui.c:92
-#: src/lib/EF/EF_appui.c:107 src/lib/EF/EF_appui.c:122
-#: src/lib/EF/EF_appui.c:137 src/lib/EF/EF_appui.c:152
-#: src/lib/EF/EF_appui.c:181 src/lib/EF/EF_appui.c:207
-#: src/lib/EF/EF_rigidite.c:40 src/lib/EF/EF_rigidite.c:64
 msgid "Paramètres invalides.\n"
 msgstr "Paramètres invalides.\n"
 
-#: src/lib/1992_1_1/1992_1_1_section.c:40
-#: src/lib/1992_1_1/1992_1_1_section.c:66
-#: src/lib/1992_1_1/1992_1_1_section.c:90
-#: src/lib/1992_1_1/1992_1_1_section.c:118
-#: src/lib/1992_1_1/1992_1_1_section.c:150
-#: src/lib/1992_1_1/1992_1_1_section.c:174
-#: src/lib/1992_1_1/1992_1_1_section.c:193
-#: src/lib/1992_1_1/1992_1_1_section.c:217
-#: src/lib/1992_1_1/1992_1_1_section.c:236
-#: src/lib/1992_1_1/1992_1_1_elements.c:43
-#: src/lib/1992_1_1/1992_1_1_elements.c:102
-#: src/lib/1992_1_1/1992_1_1_elements.c:128
-#: src/lib/1992_1_1/1992_1_1_materiaux.c:41
-#: src/lib/1992_1_1/1992_1_1_materiaux.c:136
-#: src/lib/1990/1990_ponderations.c:123 src/lib/1990/1990_ponderations.c:139
-#: src/lib/1990/1990_ponderations.c:144 src/lib/1990/1990_ponderations.c:259
-#: src/lib/1990/1990_ponderations.c:270 src/lib/1990/1990_ponderations.c:301
-#: src/lib/1990/1990_ponderations.c:306 src/lib/1990/1990_ponderations.c:569
-#: src/lib/1990/1990_ponderations.c:574 src/lib/1990/1990_groupes.c:46
-#: src/lib/1990/1990_groupes.c:70 src/lib/1990/1990_groupes.c:74
-#: src/lib/1990/1990_groupes.c:187 src/lib/1990/1990_groupes.c:191
-#: src/lib/1990/1990_groupes.c:193 src/lib/1990/1990_groupes.c:252
-#: src/lib/1990/1990_groupes.c:265 src/lib/1990/1990_actions.c:209
-#: src/lib/1990/1990_actions.c:247 src/lib/1990/1990_actions.c:354
-#: src/lib/1990/1990_gtk_groupes.c:74 src/lib/1990/1990_gtk_groupes.c:102
-#: src/lib/1990/1990_gtk_groupes.c:123 src/lib/1990/1990_gtk_groupes.c:243
-#: src/lib/1990/1990_gtk_groupes.c:391 src/lib/1990/1990_gtk_groupes.c:460
-#: src/lib/1990/1990_gtk_groupes.c:1008 src/lib/1990/1990_combinaisons.c:112
-#: src/lib/1990/1990_combinaisons.c:124 src/lib/1990/1990_combinaisons.c:129
-#: src/lib/1990/1990_combinaisons.c:169 src/lib/1990/1990_combinaisons.c:181
-#: src/lib/1990/1990_combinaisons.c:187 src/lib/1990/1990_combinaisons.c:283
-#: src/lib/1990/1990_combinaisons.c:287 src/lib/1990/1990_combinaisons.c:289
-#: src/lib/1990/1990_combinaisons.c:347 src/lib/1990/1990_combinaisons.c:406
-#: src/lib/1990/1990_combinaisons.c:421 src/lib/1990/1990_combinaisons.c:429
-#: src/lib/1990/1990_combinaisons.c:451 src/lib/1990/1990_combinaisons.c:479
-#: src/lib/1990/1990_combinaisons.c:590 src/lib/1990/1990_combinaisons.c:606
-#: src/lib/1990/1990_combinaisons.c:617 src/lib/1990/1990_combinaisons.c:633
-#: src/lib/1990/1990_combinaisons.c:660 src/lib/1990/1990_combinaisons.c:731
-#: src/lib/common/common_projet.c:117 src/lib/common/common_projet.c:130
-#: src/lib/common/common_projet.c:144 src/lib/EF/EF_calculs.c:52
-#: src/lib/EF/EF_calculs.c:57 src/lib/EF/EF_noeud.c:40
-#: src/lib/EF/EF_noeud.c:85 src/lib/EF/EF_relachement.c:39
-#: src/lib/EF/EF_relachement.c:80 src/lib/EF/EF_appui.c:39
-#: src/lib/EF/EF_appui.c:164
 msgid "Erreur d'allocation mémoire.\n"
 msgstr "Erreur d'allocation mémoire.\n"
 
-#: src/lib/1992_1_1/1992_1_1_section.c:265
-#, fuzzy, c-format
 msgid "Section en béton n°%d introuvable.\n"
-msgstr "Action %d introuvable.\n"
+msgstr "Section en béton n°%d introuvable.\n"
 
-#: src/lib/1992_1_1/1992_1_1_elements.c:157
-#, fuzzy, c-format
 msgid "Élément en béton n°%d introuvable.\n"
-msgstr "Action %d introuvable.\n"
+msgstr "Élément en béton n°%d introuvable.\n"
 
-#: src/lib/1992_1_1/1992_1_1_materiaux.c:165
-#, fuzzy, c-format
 msgid "Materiau en béton n°%d introuvable.\n"
-msgstr "Action %d introuvable.\n"
+msgstr "Materiau en béton n°%d introuvable.\n"
 
-#: src/lib/1990/1990_ponderations.c:181
-#, c-format
 msgid ""
 "La génération des pondérations est impossible.\n"
 "Le dernier niveau ne possède pas qu'un seul groupe.\n"
@@ -139,423 +35,220 @@ msgstr ""
 "La génération des pondérations est impossible.\n"
 "Le dernier niveau ne possède pas qu'un seul groupe.\n"
 
-#: src/lib/1990/1990_ponderations.c:189
-#, c-format
-msgid ""
-"Le dernier niveau ne possède aucune combinaison permettant la génération des "
-"pondérations.\n"
-msgstr ""
-"Le dernier niveau ne possède aucune combinaison permettant la génération des "
-"pondérations.\n"
+msgid "Le dernier niveau ne possède aucune combinaison permettant la génération des pondérations.\n"
+msgstr "Le dernier niveau ne possède aucune combinaison permettant la génération des pondérations.\n"
 
-#: src/lib/1990/1990_groupes.c:103 src/lib/1990/1990_groupes.c:127
-#: src/lib/1990/1990_groupes.c:153
 msgid "Élément introuvable.\n"
 msgstr "Élément introuvable.\n"
 
-#: src/lib/1990/1990_actions.c:44 src/lib/1990/1990_actions.c:76
 msgid "Permanente"
 msgstr "Permanente"
 
-#: src/lib/1990/1990_actions.c:45 src/lib/1990/1990_actions.c:77
 msgid "Précontrainte"
 msgstr "Précontrainte"
 
-#: src/lib/1990/1990_actions.c:46 src/lib/1990/1990_actions.c:78
 msgid "Exploitation : Catégorie A : habitation, zones résidentielles"
 msgstr "Exploitation : Catégorie A : habitation, zones résidentielles"
 
-#: src/lib/1990/1990_actions.c:47 src/lib/1990/1990_actions.c:79
 msgid "Exploitation : Catégorie B : bureaux"
 msgstr "Exploitation : Catégorie B : bureaux"
 
-#: src/lib/1990/1990_actions.c:48 src/lib/1990/1990_actions.c:80
 msgid "Exploitation : Catégorie C : lieux de réunion"
 msgstr "Exploitation : Catégorie C : lieux de réunion"
 
-#: src/lib/1990/1990_actions.c:49 src/lib/1990/1990_actions.c:81
 msgid "Exploitation : Catégorie D : commerces"
 msgstr "Exploitation : Catégorie D : commerces"
 
-#: src/lib/1990/1990_actions.c:50 src/lib/1990/1990_actions.c:82
 msgid "Exploitation : Catégorie E : stockage"
 msgstr "Exploitation : Catégorie E : stockage"
 
-#: src/lib/1990/1990_actions.c:51 src/lib/1990/1990_actions.c:83
-msgid ""
-"Exploitation : Catégorie F : zone de trafic, véhicules de poids inférieur à "
-"30 kN"
-msgstr ""
-"Exploitation : Catégorie F : zone de trafic, véhicules de poids inférieur à "
-"30 kN"
+msgid "Exploitation : Catégorie F : zone de trafic, véhicules de poids inférieur à 30 kN"
+msgstr "Exploitation : Catégorie F : zone de trafic, véhicules de poids inférieur à 30 kN"
 
-#: src/lib/1990/1990_actions.c:52 src/lib/1990/1990_actions.c:84
-msgid ""
-"Exploitation : Catégorie G : zone de trafic, véhicules de poids entre 30 kN "
-"et 160 kN"
-msgstr ""
-"Exploitation : Catégorie G : zone de trafic, véhicules de poids entre 30 kN "
-"et 160 kN"
+msgid "Exploitation : Catégorie G : zone de trafic, véhicules de poids entre 30 kN et 160 kN"
+msgstr "Exploitation : Catégorie G : zone de trafic, véhicules de poids entre 30 kN et 160 kN"
 
-#: src/lib/1990/1990_actions.c:53
 msgid "Exploitation : Catégorie H : toits"
 msgstr "Exploitation : Catégorie H : toits"
 
-#: src/lib/1990/1990_actions.c:54
 msgid "Neige : Finlande, Islande, Norvège, Suède"
 msgstr "Neige : Finlande, Islande, Norvège, Suède"
 
-#: src/lib/1990/1990_actions.c:55
 msgid "Neige : Autres états membres CEN, altitude > 1000 m"
 msgstr "Neige : Autres états membres CEN, altitude > 1000 m"
 
-#: src/lib/1990/1990_actions.c:56
 msgid "Neige : Autres états membres CEN, altitude <= 1000 m"
 msgstr "Neige : Autres états membres CEN, altitude <= 1000 m"
 
-#: src/lib/1990/1990_actions.c:57 src/lib/1990/1990_actions.c:93
 msgid "Vent"
 msgstr "Vent"
 
-#: src/lib/1990/1990_actions.c:58 src/lib/1990/1990_actions.c:94
 msgid "Température (hors incendie)"
 msgstr "Température (hors incendie)"
 
-#: src/lib/1990/1990_actions.c:59 src/lib/1990/1990_actions.c:95
 msgid "Accidentelle"
 msgstr "Accidentelle"
 
-#: src/lib/1990/1990_actions.c:60 src/lib/1990/1990_actions.c:96
 msgid "Sismique"
 msgstr "Sismique"
 
-#: src/lib/1990/1990_actions.c:61 src/lib/1990/1990_actions.c:98
-#: src/lib/1990/1990_actions.c:144 src/lib/1990/1990_actions.c:174
-#: src/lib/1990/1990_coef_psi.c:55 src/lib/1990/1990_coef_psi.c:87
-#: src/lib/1990/1990_coef_psi.c:119 src/lib/1990/1990_coef_psi.c:156
-#: src/lib/1990/1990_coef_psi.c:193 src/lib/1990/1990_coef_psi.c:230
-#: src/lib/1990/1990_duree.c:45 src/lib/1990/1990_duree.c:65
-#: src/lib/1990/1990_duree.c:85 src/lib/1990/1990_duree.c:105
 msgid "Catégorie inconnue.\n"
 msgstr "Catégorie inconnue.\n"
 
-#: src/lib/1990/1990_actions.c:85
 msgid "Exploitation : Catégorie H : toits d'un bâtiment de catégorie A ou B"
 msgstr "Exploitation : Catégorie H : toits d'un bâtiment de catégorie A ou B"
 
-#: src/lib/1990/1990_actions.c:86
-msgid ""
-"Exploitation : Catégorie I : toitures accessibles avec locaux des catégories "
-"A ou B"
-msgstr ""
-"Exploitation : Catégorie I : toitures accessibles avec locaux des catégories "
-"A ou B"
+msgid "Exploitation : Catégorie I : toitures accessibles avec locaux des catégories A ou B"
+msgstr "Exploitation : Catégorie I : toitures accessibles avec locaux des catégories A ou B"
 
-#: src/lib/1990/1990_actions.c:87
-msgid ""
-"Exploitation : Catégorie I : toitures accessibles avec locaux des catégories "
-"C ou D"
-msgstr ""
-"Exploitation : Catégorie I : toitures accessibles avec locaux des catégories "
-"C ou D"
+msgid "Exploitation : Catégorie I : toitures accessibles avec locaux des catégories C ou D"
+msgstr "Exploitation : Catégorie I : toitures accessibles avec locaux des catégories C ou D"
 
-#: src/lib/1990/1990_actions.c:88
 msgid "Exploitation : Catégorie K : Hélicoptère sur la toiture"
 msgstr "Exploitation : Catégorie K : Hélicoptère sur la toiture"
 
-#: src/lib/1990/1990_actions.c:89
-msgid ""
-"Exploitation : Catégorie K : Hélicoptère sur la toiture, autres charges "
-"(fret, personnel, accessoires ou équipements divers)"
-msgstr ""
-"Exploitation : Catégorie K : Hélicoptère sur la toiture, autres charges "
-"(fret, personnel, accessoires ou équipements divers)"
+msgid "Exploitation : Catégorie K : Hélicoptère sur la toiture, autres charges (fret, personnel, accessoires ou équipements divers)"
+msgstr "Exploitation : Catégorie K : Hélicoptère sur la toiture, autres charges (fret, personnel, accessoires ou équipements divers)"
 
-#: src/lib/1990/1990_actions.c:90
 msgid "Neige : Saint-Pierre-et-Miquelon"
 msgstr "Neige : Saint-Pierre-et-Miquelon"
 
-#: src/lib/1990/1990_actions.c:91
 msgid "Neige : Altitude > 1000 m"
 msgstr "Neige : Altitude > 1000 m"
 
-#: src/lib/1990/1990_actions.c:92
 msgid "Neige : Altitude <= 1000 m"
 msgstr "Neige : Altitude <= 1000 m"
 
-#: src/lib/1990/1990_actions.c:97
 msgid "Eaux souterraines"
 msgstr "Eaux souterraines"
 
-#: src/lib/1990/1990_actions.c:116 src/lib/1990/1990_actions.c:191
-#: src/lib/1990/1990_coef_psi.c:248 src/lib/1990/1990_coef_psi.c:266
-#: src/lib/1990/1990_coef_psi.c:284 src/lib/1990/1990_duree.c:123
-#: src/lib/1990/1990_duree.c:141
 msgid "Pays inconnu.\n"
 msgstr "Pays inconnu.\n"
 
-#: src/lib/1990/1990_actions.c:275
-#, c-format
 msgid "Action %d introuvable.\n"
 msgstr "Action %d introuvable.\n"
 
-#: src/lib/1990/1990_duree.c:80 src/lib/1990/1990_duree.c:100
 msgid "Structures provisoires"
 msgstr "Structures provisoires"
 
-#: src/lib/1990/1990_duree.c:81 src/lib/1990/1990_duree.c:101
-msgid ""
-"Éléments structuraux remplaçables, par exemple poutres de roulement, "
-"appareils d'appui"
-msgstr ""
-"Éléments structuraux remplaçables, par exemple poutres de roulement, "
-"appareils d'appui"
+msgid "Éléments structuraux remplaçables, par exemple poutres de roulement, appareils d'appui"
+msgstr "Éléments structuraux remplaçables, par exemple poutres de roulement, appareils d'appui"
 
-#: src/lib/1990/1990_duree.c:82 src/lib/1990/1990_duree.c:102
 msgid "Structures agricoles et similaires"
 msgstr "Structures agricoles et similaires"
 
-#: src/lib/1990/1990_duree.c:83 src/lib/1990/1990_duree.c:103
 msgid "Structures de bâtiments et autres structures courantes"
 msgstr "Structures de bâtiments et autres structures courantes"
 
-#: src/lib/1990/1990_duree.c:84 src/lib/1990/1990_duree.c:104
-msgid ""
-"Structures monumentales de bâtiments, pont et autres ouvrages de génie civil"
-msgstr ""
-"Structures monumentales de bâtiments, pont et autres ouvrages de génie civil"
+msgid "Structures monumentales de bâtiments, pont et autres ouvrages de génie civil"
+msgstr "Structures monumentales de bâtiments, pont et autres ouvrages de génie civil"
 
-#: src/lib/common/common_text.c:32
-#, c-format
 msgid "15. Disclaimer of Warranty.\n"
-msgstr ""
-"15. Déclaration d’absence de garantie. (seule la version anglaise fait foi)\n"
+msgstr "15. Déclaration d’absence de garantie. (seule la version anglaise fait foi)\n"
 
-#: src/lib/common/common_text.c:33 src/lib/common/common_text.c:42
-#: src/lib/common/common_text.c:44 src/lib/common/common_text.c:54
-#: src/lib/common/common_text.c:56
-#, c-format
 msgid "\n"
 msgstr "\n"
 
-#: src/lib/common/common_text.c:34
-#, c-format
 msgid "THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY\n"
-msgstr ""
-"IL N’Y A AUCUNE GARANTIE POUR LE PROGRAMME, DANS LES LIMITES PERMISES\n"
+msgstr "IL N’Y A AUCUNE GARANTIE POUR LE PROGRAMME, DANS LES LIMITES PERMISES\n"
 
-#: src/lib/common/common_text.c:35
-#, c-format
-msgid ""
-"APPLICABLE LAW.  EXCEPT WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT\n"
-msgstr ""
-"PAR LA LOI APPLICABLE. À MOINS QUE CELA NE SOIT ÉTABLI DIFFÉREMMENT PAR "
-"ÉCRIT,\n"
+msgid "APPLICABLE LAW.  EXCEPT WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT\n"
+msgstr "PAR LA LOI APPLICABLE. À MOINS QUE CELA NE SOIT ÉTABLI DIFFÉREMMENT PAR ÉCRIT,\n"
 
-#: src/lib/common/common_text.c:36
-#, c-format
-msgid ""
-"HOLDERS AND/OR OTHER PARTIES PROVIDE THE PROGRAM \"AS IS\" WITHOUT WARRANTY\n"
-msgstr ""
-"LES PROPRIÉTAIRES DE DROITS ET/OU LES AUTRES PARTIES FOURNISSENT LE "
-"PROGRAMME \" EN L’ÉTAT \" SANS GARANTIE\n"
+msgid "HOLDERS AND/OR OTHER PARTIES PROVIDE THE PROGRAM \"AS IS\" WITHOUT WARRANTY\n"
+msgstr "LES PROPRIÉTAIRES DE DROITS ET/OU LES AUTRES PARTIES FOURNISSENT LE PROGRAMME \" EN L’ÉTAT \" SANS GARANTIE\n"
 
-#: src/lib/common/common_text.c:37
-#, c-format
-msgid ""
-"OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO,\n"
-msgstr ""
-"D’AUCUNE SORTE, QU’ELLE SOIT EXPRIMÉE OU IMPLICITE, CECI COMPRENANT, SANS SE "
-"LIMITER À CELLES-CI,\n"
+msgid "OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO,\n"
+msgstr "D’AUCUNE SORTE, QU’ELLE SOIT EXPRIMÉE OU IMPLICITE, CECI COMPRENANT, SANS SE LIMITER À CELLES-CI,\n"
 
-#: src/lib/common/common_text.c:38
-#, c-format
-msgid ""
-"THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR\n"
-msgstr ""
-"LES GARANTIES IMPLICITES DE COMMERCIALISABILITÉ ET D’ADÉQUATION À UN "
-"OBJECTIF\n"
+msgid "THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR\n"
+msgstr "LES GARANTIES IMPLICITES DE COMMERCIALISABILITÉ ET D’ADÉQUATION À UN OBJECTIF\n"
 
-#: src/lib/common/common_text.c:39
-#, c-format
-msgid ""
-"PURPOSE.  THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM\n"
-msgstr ""
-"PARTICULIER. VOUS ASSUMEZ LE RISQUE ENTIER CONCERNANT LA QUALITÉ ET LES "
-"PERFORMANCES\n"
+msgid "PURPOSE.  THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM\n"
+msgstr "PARTICULIER. VOUS ASSUMEZ LE RISQUE ENTIER CONCERNANT LA QUALITÉ ET LES PERFORMANCES\n"
 
-#: src/lib/common/common_text.c:40
-#, c-format
-msgid ""
-"IS WITH YOU.  SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF\n"
-msgstr ""
-"DU PROGRAMME. DANS L’ÉVENTUALITÉ OÙ LE PROGRAMME S’AVÉRERAIT DÉFECTUEUX, "
-"VOUS ASSUMEZ LES COÛTS DE\n"
+msgid "IS WITH YOU.  SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF\n"
+msgstr "DU PROGRAMME. DANS L’ÉVENTUALITÉ OÙ LE PROGRAMME S’AVÉRERAIT DÉFECTUEUX, VOUS ASSUMEZ LES COÛTS DE\n"
 
-#: src/lib/common/common_text.c:41
-#, c-format
 msgid "ALL NECESSARY SERVICING, REPAIR OR CORRECTION.\n"
 msgstr "TOUS LES SERVICES, RÉPARATIONS OU CORRECTIONS NÉCESSAIRES.\n"
 
-#: src/lib/common/common_text.c:43
-#, c-format
 msgid "16. Limitation of Liability.\n"
 msgstr "16. Limitation de responsabilité.\n"
 
-#: src/lib/common/common_text.c:45
-#, c-format
 msgid "IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING\n"
-msgstr ""
-"EN AUCUNE AUTRE CIRCONSTANCE QUE CELLES REQUISES PAR LA LOI APPLICABLE OU "
-"ACCORDÉES PAR ÉCRIT,\n"
+msgstr "EN AUCUNE AUTRE CIRCONSTANCE QUE CELLES REQUISES PAR LA LOI APPLICABLE OU ACCORDÉES PAR ÉCRIT,\n"
 
-#: src/lib/common/common_text.c:46
-#, c-format
-msgid ""
-"WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MODIFIES AND/OR CONVEYS\n"
-msgstr ""
-"UN TITULAIRE DE DROITS SUR LE PROGRAMME, OU TOUT AUTRE PARTIE QUI MODIFIE OU "
-"ACHEMINE\n"
+msgid "WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MODIFIES AND/OR CONVEYS\n"
+msgstr "UN TITULAIRE DE DROITS SUR LE PROGRAMME, OU TOUT AUTRE PARTIE QUI MODIFIE OU ACHEMINE\n"
 
-#: src/lib/common/common_text.c:47
-#, c-format
-msgid ""
-"THE PROGRAM AS PERMITTED ABOVE, BE LIABLE TO YOU FOR DAMAGES, INCLUDING ANY\n"
-msgstr ""
-"LE PROGRAMME COMME PERMIS CI-DESSUS, NE PEUT ÊTRE TENU POUR RESPONSABLE "
-"ENVERS VOUS POUR LES DOMMAGES,\n"
+msgid "THE PROGRAM AS PERMITTED ABOVE, BE LIABLE TO YOU FOR DAMAGES, INCLUDING ANY\n"
+msgstr "LE PROGRAMME COMME PERMIS CI-DESSUS, NE PEUT ÊTRE TENU POUR RESPONSABLE ENVERS VOUS POUR LES DOMMAGES,\n"
 
-#: src/lib/common/common_text.c:48
-#, c-format
-msgid ""
-"GENERAL, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THE\n"
-msgstr ""
-"INCLUANT TOUT DOMMAGE GÉNÉRAL, SPÉCIAL, ACCIDENTEL OU INDUIT SURVENANT PAR "
-"SUITE DE\n"
+msgid "GENERAL, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THE\n"
+msgstr "INCLUANT TOUT DOMMAGE GÉNÉRAL, SPÉCIAL, ACCIDENTEL OU INDUIT SURVENANT PAR SUITE DE\n"
 
-#: src/lib/common/common_text.c:49
-#, c-format
-msgid ""
-"USE OR INABILITY TO USE THE PROGRAM (INCLUDING BUT NOT LIMITED TO LOSS OF\n"
-msgstr ""
-"L’UTILISATION OU DE L’INCAPACITÉ D’UTILISER LE PROGRAMME (Y COMPRIS, SANS SE "
-"LIMITER À CELLES-CI, LA PERTE\n"
+msgid "USE OR INABILITY TO USE THE PROGRAM (INCLUDING BUT NOT LIMITED TO LOSS OF\n"
+msgstr "L’UTILISATION OU DE L’INCAPACITÉ D’UTILISER LE PROGRAMME (Y COMPRIS, SANS SE LIMITER À CELLES-CI, LA PERTE\n"
 
-#: src/lib/common/common_text.c:50
-#, c-format
-msgid ""
-"DATA OR DATA BEING RENDERED INACCURATE OR LOSSES SUSTAINED BY YOU OR THIRD\n"
-msgstr ""
-"DE DONNÉES OU L’INEXACTITUDE DES DONNÉES RETOURNÉES OU LES PERTES SUBIES PAR "
-"VOUS OU DES PARTIES\n"
+msgid "DATA OR DATA BEING RENDERED INACCURATE OR LOSSES SUSTAINED BY YOU OR THIRD\n"
+msgstr "DE DONNÉES OU L’INEXACTITUDE DES DONNÉES RETOURNÉES OU LES PERTES SUBIES PAR VOUS OU DES PARTIES\n"
 
-#: src/lib/common/common_text.c:51
-#, c-format
-msgid ""
-"PARTIES OR A FAILURE OF THE PROGRAM TO OPERATE WITH ANY OTHER PROGRAMS),\n"
-msgstr ""
-"TIERCES OU L’INCAPACITÉ DU PROGRAMME À FONCTIONNER AVEC TOUT AUTRE "
-"PROGRAMME),\n"
+msgid "PARTIES OR A FAILURE OF THE PROGRAM TO OPERATE WITH ANY OTHER PROGRAMS),\n"
+msgstr "TIERCES OU L’INCAPACITÉ DU PROGRAMME À FONCTIONNER AVEC TOUT AUTRE PROGRAMME),\n"
 
-#: src/lib/common/common_text.c:52
-#, c-format
-msgid ""
-"EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF\n"
-msgstr ""
-"MÊME SI UN TEL TITULAIRE OU TOUTE AUTRE PARTIE A ÉTÉ AVISÉ DE LA "
-"POSSIBILITÉ.\n"
+msgid "EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF\n"
+msgstr "MÊME SI UN TEL TITULAIRE OU TOUTE AUTRE PARTIE A ÉTÉ AVISÉ DE LA POSSIBILITÉ.\n"
 
-#: src/lib/common/common_text.c:53
-#, c-format
 msgid "SUCH DAMAGES.\n"
 msgstr "DE TELS DOMMAGES\n"
 
-#: src/lib/common/common_text.c:55
-#, c-format
 msgid "17. Interpretation of Sections 15 and 16.\n"
 msgstr "17. Interprétation des sections 15 et 16.\n"
 
-#: src/lib/common/common_text.c:57
-#, c-format
 msgid "If the disclaimer of warranty and limitation of liability provided\n"
-msgstr ""
-"Si la déclaration d’absence de garantie et la limitation de responsabilité "
-"fournies\n"
+msgstr "Si la déclaration d’absence de garantie et la limitation de responsabilité fournies\n"
 
-#: src/lib/common/common_text.c:58
-#, c-format
 msgid "above cannot be given local legal effect according to their terms,\n"
 msgstr "ci-dessus ne peuvent prendre effet localement selon leurs termes,\n"
 
-#: src/lib/common/common_text.c:59
-#, c-format
 msgid "reviewing courts shall apply local law that most closely approximates\n"
-msgstr ""
-"les cours de justice qui les examinent doivent appliquer la législation "
-"locale qui approche au\n"
+msgstr "les cours de justice qui les examinent doivent appliquer la législation locale qui approche au\n"
 
-#: src/lib/common/common_text.c:60
-#, c-format
 msgid "an absolute waiver of all civil liability in connection with the\n"
-msgstr ""
-"plus près possible une levée absolue de toute responsabilité civile liée au\n"
+msgstr "plus près possible une levée absolue de toute responsabilité civile liée au\n"
 
-#: src/lib/common/common_text.c:61
-#, c-format
 msgid "Program, unless a warranty or assumption of liability accompanies a\n"
-msgstr ""
-"Programme, à moins qu’une garantie ou assumation de responsabilité "
-"accompagne\n"
+msgstr "Programme, à moins qu’une garantie ou assumation de responsabilité accompagne\n"
 
-#: src/lib/common/common_text.c:62
-#, c-format
 msgid "copy of the Program in return for a fee.\n"
 msgstr "une copie du Programme en échange d’un paiement.\n"
 
-#: src/lib/common/common_text.c:73
-#, c-format
 msgid "Utilisation : codegui [OPTION]... [FILE]...\n"
 msgstr "Utilisation : codegui [OPTION]... [FILE]...\n"
 
-#: src/lib/common/common_text.c:74
-#, c-format
 msgid "Options :\n"
 msgstr "Options :\n"
 
-#: src/lib/common/common_text.c:75
-#, c-format
 msgid "\t-h, --help : affiche le présent menu\n"
 msgstr "\t-h, --help : affiche le présent menu\n"
 
-#: src/lib/common/common_text.c:76
-#, c-format
 msgid "\t-w, --warranty : affiche les limites de garantie du logiciel\n"
 msgstr "\t-w, --warranty : affiche les limites de garantie du logiciel\n"
 
-#: src/lib/common/common_tooltip.c:62
-#, c-format
 msgid "Le fichier '%s' est introuvable ou corrompu.\n"
 msgstr "Le fichier '%s' est introuvable ou corrompu.\n"
 
-#: src/lib/common/common_tooltip.c:66
-#, c-format
 msgid "Le fichier '%s' est vide.\n"
 msgstr "Le fichier '%s' est vide.\n"
 
-#: src/lib/EF/EF_noeud.c:114
-#, fuzzy, c-format
 msgid "Noeud n°%d introuvable.\n"
-msgstr "Action %d introuvable.\n"
+msgstr "Noeud n°%d introuvable.\n"
 
-#: src/lib/EF/EF_relachement.c:109
-#, fuzzy, c-format
 msgid "Relachement n°%d introuvable.\n"
-msgstr "Action %d introuvable.\n"
+msgstr "Relachement n°%d introuvable.\n"
 
-#: src/lib/EF/EF_appui.c:193
-#, fuzzy, c-format
 msgid "Appui n°%d introuvable.\n"
-msgstr "Action %d introuvable.\n"
+msgstr "Appui n°%d introuvable.\n"
 
-#~ msgid "Impossible d'initialiser gtk.\n"
-#~ msgstr "Impossible d'initialiser gtk.\n"
+
