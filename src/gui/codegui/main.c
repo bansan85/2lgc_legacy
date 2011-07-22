@@ -140,26 +140,27 @@ int main(int argc, char *argv[])
 	
 	// Création de l'appui
 	if (EF_appuis_ajout(projet, EF_APPUI_BLOQUE, EF_APPUI_BLOQUE, EF_APPUI_BLOQUE, EF_APPUI_BLOQUE, EF_APPUI_BLOQUE, EF_APPUI_BLOQUE) != 0) BUG(-1);
+	if (EF_appuis_ajout(projet, EF_APPUI_BLOQUE, EF_APPUI_BLOQUE, EF_APPUI_BLOQUE, EF_APPUI_BLOQUE, EF_APPUI_BLOQUE, EF_APPUI_BLOQUE) != 0) BUG(-1);
 	
 	// Création des noeuds
 	if (EF_noeuds_ajout(projet, 0., 0., 0., 0) != 0) BUG(-1);
-	if (EF_noeuds_ajout(projet, 1., -0.5, -1., -1) != 0) BUG(-1);
-	if (EF_noeuds_ajout(projet, 2., 0., -1.5, -1) != 0) BUG(-1);
-	if (EF_noeuds_ajout(projet, 3.5, 0.50, 0.5, 0) != 0) BUG(-1);
+	if (EF_noeuds_ajout(projet, 0., 0., 2., -1) != 0) BUG(-1);
+	if (EF_noeuds_ajout(projet, 3., 0., 2., -1) != 0) BUG(-1);
+	if (EF_noeuds_ajout(projet, 3., 0., 0., 1) != 0) BUG(-1);
 	
 	// Ajout de l'action ponctuelle
-	if (_1990_action_ajout_charge_ponctuelle(projet, 0, 1, -400000., -400000., -400000., -400000., -400000., -400000.) != 0) BUG(-1);
+	if (_1990_action_ajout_charge_ponctuelle(projet, 0, 1, 400000., 0., -400000., 0., 0., 0.) != 0) BUG(-1);
 	
 	// Création du matériau béton
 	if (_1992_1_1_materiaux_ajout(projet, 25., 0.2) != 0) BUG(-1);
 	
 	// Création du relâchment
-	if (EF_relachement_ajout(projet, EF_RELACHEMENT_LIBRE, EF_RELACHEMENT_LIBRE, EF_RELACHEMENT_LIBRE, EF_RELACHEMENT_BLOQUE, EF_RELACHEMENT_LIBRE, EF_RELACHEMENT_LIBRE) != 0) BUG(-1);
-	
+	if (EF_relachement_ajout(projet, EF_RELACHEMENT_BLOQUE, EF_RELACHEMENT_BLOQUE, EF_RELACHEMENT_BLOQUE, EF_RELACHEMENT_BLOQUE, EF_RELACHEMENT_BLOQUE, EF_RELACHEMENT_BLOQUE) != 0) BUG(-1);
+
 	// Création de l'élément en béton
-	if (_1992_1_1_elements_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 0, 1, -1, 100) != 0) BUG(-1);
-	if (_1992_1_1_elements_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 1, 2, 0, 100) != 0) BUG(-1);
-	if (_1992_1_1_elements_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 2, 3, -1, 100) != 0) BUG(-1);
+	if (_1992_1_1_elements_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 0, 1, -1, 0) != 0) BUG(-1);
+	if (_1992_1_1_elements_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 1, 2, -1, 0) != 0) BUG(-1);
+	if (_1992_1_1_elements_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 2, 3, -1, 0) != 0) BUG(-1);
 	
 	// Initialise les éléments nécessaire pour l'ajout des rigidités
 	if (EF_calculs_initialise(projet) != 0) BUG(-1);
