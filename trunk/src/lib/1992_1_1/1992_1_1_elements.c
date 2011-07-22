@@ -192,8 +192,16 @@ int _1992_1_1_elements_rigidite_ajout(Projet *projet, Beton_Element *element)
 	zz = element->noeud_fin->position.z - element->noeud_debut->position.z;
 	ll = sqrt(xx*xx+yy*yy+zz*zz);
 	y = asin(zz/ll);
-	sinx = yy / sqrt(ll*ll-zz*zz);
-	cosx = copysign(1.0, xx)*sqrt((ll*ll-yy*yy-zz*zz)/(ll*ll-zz*zz));
+	if (ERREUR_RELATIVE_EGALE(ll*ll-zz*zz, 0., ERREUR_RELATIVE_MIN))
+	{
+		sinx = 0.;
+		cosx = 1.;
+	}
+	else
+	{
+		sinx = yy / sqrt(ll*ll-zz*zz);
+		cosx = copysign(1.0, xx)*sqrt((ll*ll-yy*yy-zz*zz)/(ll*ll-zz*zz));
+	}
 	for (i=0;i<4;i++)
 	{
 		ai[i*8+0] = i*3+0; aj[i*8+0] = i*3+0; ax[i*8+0] = cosx*cos(y);
