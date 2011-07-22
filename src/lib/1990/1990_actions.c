@@ -301,8 +301,8 @@ int _1990_action_affiche_tout(Projet *projet)
 	return 0;
 }
 
-/* _1990_action_ajout_charge_ponctuelle
- * Description : ajouter une charge ponctuelle à une action
+/* _1990_action_ajout_charge_ponctuelle_noeud
+ * Description : ajouter une charge ponctuelle à une action et à un noeud de la structure
  * Paramètres : Projet *projet : la variable projet
  *            : int num_action : le numéro de l'action
  *            : double fx : force suivant l'axe global x
@@ -315,7 +315,7 @@ int _1990_action_affiche_tout(Projet *projet)
  *   Succès : 0
  *   Échec : valeur négative
  */
-int _1990_action_ajout_charge_ponctuelle(Projet *projet, int num_action, int num_noeud, double fx, double fy, double fz, double rx, double ry, double rz)
+int _1990_action_ajout_charge_ponctuelle_noeud(Projet *projet, int num_action, int num_noeud, double fx, double fy, double fz, double rx, double ry, double rz)
 {
 	Action			*action_en_cours;
 	EF_Noeud		*noeud_en_cours;
