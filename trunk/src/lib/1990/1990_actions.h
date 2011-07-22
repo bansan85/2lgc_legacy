@@ -73,7 +73,7 @@ int _1990_action_init(Projet *projet);
 int _1990_action_ajout(Projet *projet, int categorie);
 int _1990_action_cherche_numero(Projet *projet, int numero);
 int _1990_action_affiche_tout(Projet *projet);
-int _1990_action_ajout_charge_ponctuelle(Projet *projet, int num_action, int num_noeud, double fx, double fy, double fz, double rx, double ry, double rz);
+int _1990_action_ajout_charge_ponctuelle_noeud(Projet *projet, int num_action, int num_noeud, double fx, double fy, double fz, double rx, double ry, double rz);
 int _1990_action_free(Projet *projet);
 
 #endif
