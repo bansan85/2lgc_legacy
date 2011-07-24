@@ -225,19 +225,22 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
 		list_mvfront(action_en_cours->charges);
 		do
 		{
-			Charge_Ponctuelle	*charge = list_curr(action_en_cours->charges);
-			if (projet->ef_donnees.noeuds_flags_partielle[charge->noeud->numero][0] != -1)
-				ax[projet->ef_donnees.noeuds_flags_partielle[charge->noeud->numero][0]] += charge->x;
-			if (projet->ef_donnees.noeuds_flags_partielle[charge->noeud->numero][1] != -1)
-				ax[projet->ef_donnees.noeuds_flags_partielle[charge->noeud->numero][1]] += charge->y;
-			if (projet->ef_donnees.noeuds_flags_partielle[charge->noeud->numero][2] != -1)
-				ax[projet->ef_donnees.noeuds_flags_partielle[charge->noeud->numero][2]] += charge->z;
-			if (projet->ef_donnees.noeuds_flags_partielle[charge->noeud->numero][3] != -1)
-				ax[projet->ef_donnees.noeuds_flags_partielle[charge->noeud->numero][3]] += charge->rx;
-			if (projet->ef_donnees.noeuds_flags_partielle[charge->noeud->numero][4] != -1)
-				ax[projet->ef_donnees.noeuds_flags_partielle[charge->noeud->numero][4]] += charge->ry;
-			if (projet->ef_donnees.noeuds_flags_partielle[charge->noeud->numero][5] != -1)
-				ax[projet->ef_donnees.noeuds_flags_partielle[charge->noeud->numero][5]] += charge->rz;
+			Charge_Ponctuelle_Noeud	*charge = list_curr(action_en_cours->charges);
+			if (charge->type == CHARGE_PONCTUELLE_NOEUD)
+			{
+				if (projet->ef_donnees.noeuds_flags_partielle[charge->noeud->numero][0] != -1)
+					ax[projet->ef_donnees.noeuds_flags_partielle[charge->noeud->numero][0]] += charge->x;
+				if (projet->ef_donnees.noeuds_flags_partielle[charge->noeud->numero][1] != -1)
+					ax[projet->ef_donnees.noeuds_flags_partielle[charge->noeud->numero][1]] += charge->y;
+				if (projet->ef_donnees.noeuds_flags_partielle[charge->noeud->numero][2] != -1)
+					ax[projet->ef_donnees.noeuds_flags_partielle[charge->noeud->numero][2]] += charge->z;
+				if (projet->ef_donnees.noeuds_flags_partielle[charge->noeud->numero][3] != -1)
+					ax[projet->ef_donnees.noeuds_flags_partielle[charge->noeud->numero][3]] += charge->rx;
+				if (projet->ef_donnees.noeuds_flags_partielle[charge->noeud->numero][4] != -1)
+					ax[projet->ef_donnees.noeuds_flags_partielle[charge->noeud->numero][4]] += charge->ry;
+				if (projet->ef_donnees.noeuds_flags_partielle[charge->noeud->numero][5] != -1)
+					ax[projet->ef_donnees.noeuds_flags_partielle[charge->noeud->numero][5]] += charge->rz;
+			}
 		}
 		while (list_mvnext(action_en_cours->charges) != NULL);
 	}
