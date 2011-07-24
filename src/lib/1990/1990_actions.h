@@ -27,11 +27,12 @@
 
 typedef enum
 {
-	CHARGE_PONCTUELLE
+	CHARGE_PONCTUELLE_NOEUD,
+	CHARGE_PONCTUELLE_BARRE
 } Charge_Type;
 
 
-typedef struct __Charge_Ponctuelle
+typedef struct __Charge_Ponctuelle_Noeud
 {
 	Charge_Type		type;
 	int			numero;
@@ -44,7 +45,23 @@ typedef struct __Charge_Ponctuelle
 	double			rx;
 	double			ry;
 	double			rz;
-} Charge_Ponctuelle;
+} Charge_Ponctuelle_Noeud;
+
+typedef struct __Charge_Ponctuelle_Barre
+{
+	Charge_Type		type;
+	int			numero;
+	char			*nom;
+	char			*description;
+	void			*barre; // Peut être Beton_Element, Acier_Element ou autre
+	double			position; // Position de la charge ponctuelle en mètre depuis le début de la barre
+	double			x;
+	double			y;
+	double			z;
+	double			rx;
+	double			ry;
+	double			rz;
+} Charge_Ponctuelle_Barre;
 
 typedef struct __Action
 {
@@ -73,7 +90,8 @@ int _1990_action_init(Projet *projet);
 int _1990_action_ajout(Projet *projet, int categorie);
 int _1990_action_cherche_numero(Projet *projet, int numero);
 int _1990_action_affiche_tout(Projet *projet);
-int _1990_action_ajout_charge_ponctuelle_noeud(Projet *projet, int num_action, int num_noeud, double fx, double fy, double fz, double rx, double ry, double rz);
+int _1990_action_ajout_charge_ponctuelle_noeud(Projet *projet, int num_action, EF_Noeud *noeud, double fx, double fy, double fz, double rx, double ry, double rz);
+//int _1990_action_ajout_charge_ponctuelle_barre(Projet *projet, int num_action, int num_barre, double position, double fx, double fy, double fz, double rx, double ry, double rz);
 int _1990_action_free(Projet *projet);
 
 #endif

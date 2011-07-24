@@ -149,7 +149,7 @@ int main(int argc, char *argv[])
 	if (EF_noeuds_ajout(projet, 3., 0., 0., 1) != 0) BUG(-1);
 	
 	// Ajout de l'action ponctuelle
-	if (_1990_action_ajout_charge_ponctuelle_noeud(projet, 0, 1, 400000., 0., -400000., 0., 0., 0.) != 0) BUG(-1);
+	if (_1990_action_ajout_charge_ponctuelle_noeud(projet, 0, EF_noeuds_cherche_numero(projet, 1), 400000., 0., -400000., 0., 0., 0.) != 0) BUG(-1);
 	
 	// Création du matériau béton
 	if (_1992_1_1_materiaux_ajout(projet, 25., 0.2) != 0) BUG(-1);

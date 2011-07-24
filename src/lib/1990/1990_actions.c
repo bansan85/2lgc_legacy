@@ -304,7 +304,8 @@ int _1990_action_affiche_tout(Projet *projet)
 /* _1990_action_ajout_charge_ponctuelle_noeud
  * Description : ajouter une charge ponctuelle à une action et à un noeud de la structure
  * Paramètres : Projet *projet : la variable projet
- *            : int num_action : le numéro de l'action
+ *            : int num_action : numero de l'action qui contiendra la charge
+ *            : EF_Noeud *action : pointeur vers le noeud qui supportera la charge
  *            : double fx : force suivant l'axe global x
  *            : double fy : force suivant l'axe global y
  *            : double fz : force suivant l'axe global z
@@ -315,27 +316,22 @@ int _1990_action_affiche_tout(Projet *projet)
  *   Succès : 0
  *   Échec : valeur négative
  */
-int _1990_action_ajout_charge_ponctuelle_noeud(Projet *projet, int num_action, int num_noeud, double fx, double fy, double fz, double rx, double ry, double rz)
+int _1990_action_ajout_charge_ponctuelle_noeud(Projet *projet, int num_action, EF_Noeud *noeud, double fx, double fy, double fz, double rx, double ry, double rz)
 {
 	Action			*action_en_cours;
-	EF_Noeud		*noeud_en_cours;
-	Charge_Ponctuelle	*charge_dernier, charge_nouveau;
+	Charge_Ponctuelle_Noeud	*charge_dernier, charge_nouveau;
 	
-	if ((projet == NULL) || (projet->actions == NULL) || (list_size(projet->actions) == 0))
+	if ((projet == NULL) || (projet->actions == NULL) || (list_size(projet->actions) == 0) || (noeud == NULL))
 		BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
 	
-	if (_1990_action_cherche_numero(projet, num_action) != 0)
-		BUGTEXTE(-2, gettext("Paramètres invalides.\n"));
-	action_en_cours = list_curr(projet->actions);
+       if (_1990_action_cherche_numero(projet, num_action) != 0)
+               BUGTEXTE(-2, gettext("Paramètres invalides.\n"));
+       action_en_cours = list_curr(projet->actions);
 	
-	noeud_en_cours = EF_noeuds_cherche_numero(projet, num_noeud);
-	if (noeud_en_cours == NULL)
-		BUGTEXTE(-3, gettext("Paramètres invalides.\n"));
-	
-	charge_nouveau.type = CHARGE_PONCTUELLE;
+	charge_nouveau.type = CHARGE_PONCTUELLE_NOEUD;
 	charge_nouveau.nom = NULL;
 	charge_nouveau.description = NULL;
-	charge_nouveau.noeud = noeud_en_cours;
+	charge_nouveau.noeud = noeud;
 	charge_nouveau.x = fx;
 	charge_nouveau.y = fy;
 	charge_nouveau.z = fz;
@@ -343,7 +339,7 @@ int _1990_action_ajout_charge_ponctuelle_noeud(Projet *projet, int num_action, i
 	charge_nouveau.ry = ry;
 	charge_nouveau.rz = rz;
 	
-	charge_dernier = (Charge_Ponctuelle *)list_rear(action_en_cours->charges);
+	charge_dernier = (Charge_Ponctuelle_Noeud *)list_rear(action_en_cours->charges);
 	if (charge_dernier == NULL)
 		charge_nouveau.numero = 0;
 	else
@@ -378,7 +374,7 @@ int _1990_action_free(Projet *projet)
 			free(action->description);
 		while (!list_empty(action->charges))
 		{
-			Charge_Ponctuelle	*charge = list_remove_front(action->charges);
+			Charge_Ponctuelle_Noeud	*charge = list_remove_front(action->charges);
 			if (charge->nom != NULL)
 				free(charge->nom);
 			if (charge->description != NULL)
