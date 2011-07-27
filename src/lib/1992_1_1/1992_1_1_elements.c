@@ -66,7 +66,7 @@ int _1992_1_1_elements_ajout(Projet *projet, Type_Element type, unsigned int sec
 		BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
 	
 	list_mvrear(projet->beton.elements);
-	element_nouveau.element = type;
+	element_nouveau.type = type;
 	
 	element_nouveau.section = _1992_1_1_sections_cherche_numero(projet, section);
 	if (element_nouveau.section == NULL)
@@ -219,7 +219,7 @@ int _1992_1_1_elements_rigidite_ajout(Projet *projet, Beton_Element *element)
 	
 	for (j=0;j<element->discretisation_element+1;j++)
 	{
-		// Si element->discretisation_element == 0, il n'y a pas besoin de recalculer ll
+		// On détermine le noeud de départ et de fin
 		if (j==0)
 		{
 			noeud1 = element->noeud_debut;

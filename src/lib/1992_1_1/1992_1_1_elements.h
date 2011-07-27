@@ -29,7 +29,7 @@
 typedef struct __Beton_Element_Poutre
 {
 	unsigned int		numero;
-	Type_Element		element;
+	Type_Element		type;
 	void			*section;
 	Beton_Materiau		*materiau;
 	
@@ -50,6 +50,5 @@ Beton_Element* _1992_1_1_elements_cherche_numero(Projet *projet, unsigned int nu
 int _1992_1_1_elements_rigidite_ajout(Projet *projet, Beton_Element *element);
 int _1992_1_1_elements_rigidite_ajout_tout(Projet *projet);
 int _1992_1_1_elements_free(Projet *projet);
-
 
 #endif

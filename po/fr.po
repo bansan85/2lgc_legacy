@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2011-07-22 21:32+0200\n"
+"POT-Creation-Date: 2011-07-26 12:14+0200\n"
 "PO-Revision-Date: 2011-07-21 15:15+0100\n"
 "Last-Translator: LE GARREC Vincent <vlg@2lgc.org>\n"
 "Language-Team: French\n"
@@ -41,19 +41,20 @@ msgstr ""
 #: src/lib/1990/1990_groupes.c:219 src/lib/1990/1990_actions.c:205
 #: src/lib/1990/1990_actions.c:227 src/lib/1990/1990_actions.c:264
 #: src/lib/1990/1990_actions.c:288 src/lib/1990/1990_actions.c:325
-#: src/lib/1990/1990_actions.c:328 src/lib/1990/1990_actions.c:333
-#: src/lib/1990/1990_actions.c:369 src/lib/1990/1990_gtk_groupes.c:50
-#: src/lib/1990/1990_gtk_groupes.c:1025 src/lib/1990/1990_combinaisons.c:49
-#: src/lib/1990/1990_combinaisons.c:99 src/lib/1990/1990_combinaisons.c:149
-#: src/lib/1990/1990_combinaisons.c:217 src/lib/1990/1990_combinaisons.c:248
-#: src/lib/1990/1990_combinaisons.c:253 src/lib/1990/1990_combinaisons.c:257
-#: src/lib/1990/1990_combinaisons.c:331 src/lib/1990/1990_combinaisons.c:383
-#: src/lib/1990/1990_combinaisons.c:388 src/lib/1990/1990_combinaisons.c:392
-#: src/lib/1990/1990_combinaisons.c:544 src/lib/1990/1990_combinaisons.c:549
-#: src/lib/1990/1990_combinaisons.c:553 src/lib/1990/1990_combinaisons.c:718
-#: src/lib/1990/1990_combinaisons.c:821 src/lib/1990/1990_combinaisons.c:858
-#: src/lib/EF/EF_calculs.c:131 src/lib/EF/EF_calculs.c:207
-#: src/lib/EF/EF_noeud.c:36 src/lib/EF/EF_noeud.c:62 src/lib/EF/EF_noeud.c:102
+#: src/lib/1990/1990_actions.c:328 src/lib/1990/1990_actions.c:379
+#: src/lib/1990/1990_actions.c:382 src/lib/1990/1990_actions.c:422
+#: src/lib/1990/1990_gtk_groupes.c:50 src/lib/1990/1990_gtk_groupes.c:1025
+#: src/lib/1990/1990_combinaisons.c:49 src/lib/1990/1990_combinaisons.c:99
+#: src/lib/1990/1990_combinaisons.c:149 src/lib/1990/1990_combinaisons.c:217
+#: src/lib/1990/1990_combinaisons.c:248 src/lib/1990/1990_combinaisons.c:253
+#: src/lib/1990/1990_combinaisons.c:257 src/lib/1990/1990_combinaisons.c:331
+#: src/lib/1990/1990_combinaisons.c:383 src/lib/1990/1990_combinaisons.c:388
+#: src/lib/1990/1990_combinaisons.c:392 src/lib/1990/1990_combinaisons.c:544
+#: src/lib/1990/1990_combinaisons.c:549 src/lib/1990/1990_combinaisons.c:553
+#: src/lib/1990/1990_combinaisons.c:718 src/lib/1990/1990_combinaisons.c:821
+#: src/lib/1990/1990_combinaisons.c:858 src/lib/EF/EF_calculs.c:133
+#: src/lib/EF/EF_calculs.c:213 src/lib/EF/EF_noeud.c:36
+#: src/lib/EF/EF_noeud.c:62 src/lib/EF/EF_noeud.c:102
 #: src/lib/EF/EF_noeud.c:128 src/lib/EF/EF_relachement.c:35
 #: src/lib/EF/EF_relachement.c:63 src/lib/EF/EF_relachement.c:97
 #: src/lib/EF/EF_relachement.c:123 src/lib/EF/EF_appui.c:35
@@ -88,27 +89,27 @@ msgstr "Paramètres invalides.\n"
 #: src/lib/1990/1990_groupes.c:187 src/lib/1990/1990_groupes.c:191
 #: src/lib/1990/1990_groupes.c:193 src/lib/1990/1990_groupes.c:252
 #: src/lib/1990/1990_groupes.c:265 src/lib/1990/1990_actions.c:209
-#: src/lib/1990/1990_actions.c:247 src/lib/1990/1990_actions.c:354
-#: src/lib/1990/1990_gtk_groupes.c:74 src/lib/1990/1990_gtk_groupes.c:102
-#: src/lib/1990/1990_gtk_groupes.c:123 src/lib/1990/1990_gtk_groupes.c:243
-#: src/lib/1990/1990_gtk_groupes.c:391 src/lib/1990/1990_gtk_groupes.c:460
-#: src/lib/1990/1990_gtk_groupes.c:1008 src/lib/1990/1990_combinaisons.c:112
-#: src/lib/1990/1990_combinaisons.c:124 src/lib/1990/1990_combinaisons.c:129
-#: src/lib/1990/1990_combinaisons.c:169 src/lib/1990/1990_combinaisons.c:181
-#: src/lib/1990/1990_combinaisons.c:187 src/lib/1990/1990_combinaisons.c:283
-#: src/lib/1990/1990_combinaisons.c:287 src/lib/1990/1990_combinaisons.c:289
-#: src/lib/1990/1990_combinaisons.c:347 src/lib/1990/1990_combinaisons.c:406
-#: src/lib/1990/1990_combinaisons.c:421 src/lib/1990/1990_combinaisons.c:429
-#: src/lib/1990/1990_combinaisons.c:451 src/lib/1990/1990_combinaisons.c:479
-#: src/lib/1990/1990_combinaisons.c:590 src/lib/1990/1990_combinaisons.c:606
-#: src/lib/1990/1990_combinaisons.c:617 src/lib/1990/1990_combinaisons.c:633
-#: src/lib/1990/1990_combinaisons.c:660 src/lib/1990/1990_combinaisons.c:731
-#: src/lib/common/common_projet.c:117 src/lib/common/common_projet.c:130
-#: src/lib/common/common_projet.c:144 src/lib/EF/EF_calculs.c:52
-#: src/lib/EF/EF_calculs.c:57 src/lib/EF/EF_noeud.c:40
-#: src/lib/EF/EF_noeud.c:85 src/lib/EF/EF_relachement.c:39
-#: src/lib/EF/EF_relachement.c:80 src/lib/EF/EF_appui.c:39
-#: src/lib/EF/EF_appui.c:164
+#: src/lib/1990/1990_actions.c:247 src/lib/1990/1990_actions.c:350
+#: src/lib/1990/1990_actions.c:406 src/lib/1990/1990_gtk_groupes.c:74
+#: src/lib/1990/1990_gtk_groupes.c:102 src/lib/1990/1990_gtk_groupes.c:123
+#: src/lib/1990/1990_gtk_groupes.c:243 src/lib/1990/1990_gtk_groupes.c:391
+#: src/lib/1990/1990_gtk_groupes.c:460 src/lib/1990/1990_gtk_groupes.c:1008
+#: src/lib/1990/1990_combinaisons.c:112 src/lib/1990/1990_combinaisons.c:124
+#: src/lib/1990/1990_combinaisons.c:129 src/lib/1990/1990_combinaisons.c:169
+#: src/lib/1990/1990_combinaisons.c:181 src/lib/1990/1990_combinaisons.c:187
+#: src/lib/1990/1990_combinaisons.c:283 src/lib/1990/1990_combinaisons.c:287
+#: src/lib/1990/1990_combinaisons.c:289 src/lib/1990/1990_combinaisons.c:347
+#: src/lib/1990/1990_combinaisons.c:406 src/lib/1990/1990_combinaisons.c:421
+#: src/lib/1990/1990_combinaisons.c:429 src/lib/1990/1990_combinaisons.c:451
+#: src/lib/1990/1990_combinaisons.c:479 src/lib/1990/1990_combinaisons.c:590
+#: src/lib/1990/1990_combinaisons.c:606 src/lib/1990/1990_combinaisons.c:617
+#: src/lib/1990/1990_combinaisons.c:633 src/lib/1990/1990_combinaisons.c:660
+#: src/lib/1990/1990_combinaisons.c:731 src/lib/common/common_projet.c:117
+#: src/lib/common/common_projet.c:130 src/lib/common/common_projet.c:144
+#: src/lib/EF/EF_calculs.c:54 src/lib/EF/EF_calculs.c:59
+#: src/lib/EF/EF_noeud.c:40 src/lib/EF/EF_noeud.c:85
+#: src/lib/EF/EF_relachement.c:39 src/lib/EF/EF_relachement.c:80
+#: src/lib/EF/EF_appui.c:39 src/lib/EF/EF_appui.c:164
 msgid "Erreur d'allocation mémoire.\n"
 msgstr "Erreur d'allocation mémoire.\n"
 

@@ -46,4 +46,4 @@
 +AC_CHECK_LIB([spqr], [SuiteSparseQR_C_factorize], [], [AC_MSG_ERROR([spqr ( www.cise.ufl.edu/research/sparse/SPQR ) est necessaire])])
  
  # Checks for header files.
- AC_CHECK_HEADERS([libintl.h locale.h stdlib.h string.h unistd.h])
+ AC_CHECK_HEADERS([libintl.h locale.h stdlib.h string.h unistd.h values.h])
