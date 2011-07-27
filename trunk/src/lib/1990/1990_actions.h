@@ -54,6 +54,7 @@ typedef struct __Charge_Ponctuelle_Barre
 	char			*nom;
 	char			*description;
 	void			*barre; // Peut être Beton_Element, Acier_Element ou autre
+	int			repere_local;
 	double			position; // Position de la charge ponctuelle en mètre depuis le début de la barre
 	double			x;
 	double			y;
@@ -91,7 +92,7 @@ int _1990_action_ajout(Projet *projet, int categorie);
 int _1990_action_cherche_numero(Projet *projet, int numero);
 int _1990_action_affiche_tout(Projet *projet);
 int _1990_action_ajout_charge_ponctuelle_noeud(Projet *projet, int num_action, EF_Noeud *noeud, double fx, double fy, double fz, double rx, double ry, double rz);
-//int _1990_action_ajout_charge_ponctuelle_barre(Projet *projet, int num_action, int num_barre, double position, double fx, double fy, double fz, double rx, double ry, double rz);
+int _1990_action_ajout_charge_ponctuelle_barre(Projet *projet, int num_action, void *barre, int repere_local, double position, double fx, double fy, double fz, double rx, double ry, double rz);
 int _1990_action_free(Projet *projet);
 
 #endif

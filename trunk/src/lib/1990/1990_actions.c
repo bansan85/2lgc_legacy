@@ -352,6 +352,63 @@ int _1990_action_ajout_charge_ponctuelle_noeud(Projet *projet, int num_action, E
 	return 0;
 }
 
+
+/* _1990_action_ajout_charge_ponctuelle_barre
+ * Description : ajouter une charge ponctuelle à une action et à l'intérieur d'une barre de la structure
+ * Paramètres : Projet *projet : la variable projet
+ *            : int num_action : numero de l'action qui contiendra la charge
+ *            : void *barre : barre qui supportera la charge
+ *            : int repere_local : TRUE si les charges doivent être prise dans le repère local, FALSE pour le repère global
+ *            : double position : position en mètre de la charge par rapport au début de la barre
+ *            : double fx : force suivant l'axe x
+ *            : double fy : force suivant l'axe y
+ *            : double fz : force suivant l'axe z
+ *            : double rx : moment autour de l'axe x
+ *            : double ry : moment autour de l'axe y
+ *            : double rz : moment autour de l'axe z
+ * Valeur renvoyée :
+ *   Succès : 0
+ *   Échec : valeur négative
+ */
+int _1990_action_ajout_charge_ponctuelle_barre(Projet *projet, int num_action, void *barre, int repere_local, double position, double fx, double fy, double fz, double rx, double ry, double rz)
+{
+	Action			*action_en_cours;
+	Charge_Ponctuelle_Barre	*charge_dernier, charge_nouveau;
+	
+	if ((projet == NULL) || (projet->actions == NULL) || (list_size(projet->actions) == 0) || (barre == NULL))
+		BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
+	
+       if (_1990_action_cherche_numero(projet, num_action) != 0)
+               BUGTEXTE(-2, gettext("Paramètres invalides.\n"));
+       action_en_cours = list_curr(projet->actions);
+	
+	charge_nouveau.type = CHARGE_PONCTUELLE_BARRE;
+	charge_nouveau.nom = NULL;
+	charge_nouveau.description = NULL;
+	charge_nouveau.barre = barre;
+	charge_nouveau.repere_local = repere_local;
+	charge_nouveau.position = position;
+	charge_nouveau.x = fx;
+	charge_nouveau.y = fy;
+	charge_nouveau.z = fz;
+	charge_nouveau.rx = rx;
+	charge_nouveau.ry = ry;
+	charge_nouveau.rz = rz;
+	
+	charge_dernier = (Charge_Ponctuelle_Barre *)list_rear(action_en_cours->charges);
+	if (charge_dernier == NULL)
+		charge_nouveau.numero = 0;
+	else
+		charge_nouveau.numero = charge_dernier->numero+1;
+	
+	list_mvrear(action_en_cours->charges);
+	if (list_insert_after(action_en_cours->charges, &(charge_nouveau), sizeof(charge_nouveau)) == NULL)
+		BUGTEXTE(-2, gettext("Erreur d'allocation mémoire.\n"));
+	
+	return 0;
+}
+
+
 /* _1990_action_free
  * Description : Libère l'ensemble des actions existantes
  * Paramètres : Projet *projet : la variable projet
