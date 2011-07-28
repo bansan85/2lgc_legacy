@@ -76,6 +76,9 @@ typedef struct __Action
 	double			psi1;		// valeur_frequente
 	double			psi2;		// valeur_quasi_permanente
 	cholmod_sparse		*deplacement_partiel;
+	cholmod_sparse		*deplacement_complet;
+	cholmod_sparse		*forces_complet;
+	cholmod_sparse		*efforts_noeuds;
 	double			norm;
 } Action;
 
