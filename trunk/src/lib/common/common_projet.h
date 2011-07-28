@@ -79,13 +79,18 @@ typedef struct
 	cholmod_sparse		*A;
 	LIST			*noeuds;
 	int			**noeuds_flags_partielle;
-	int			nb_colonne_matrice; // Nombre de colonne / ligne de la matrice de rigidité globale partielle
+	int			**noeuds_flags_complete;
+	int			nb_colonne_matrice_partielle; // Nombre de colonne / ligne de la matrice de rigidité globale partielle
+	int			nb_colonne_matrice_complete; // Nombre de colonne / ligne de la matrice de rigidité globale complete
 	LIST			*appuis;
 	LIST			*relachements;
-	cholmod_triplet		*rigidite_triplet; // Liste temporaire avant transformation en matrice sparse
+	cholmod_triplet		*triplet_rigidite_partielle; // Liste temporaire avant transformation en matrice sparse
+	cholmod_triplet		*triplet_rigidite_complete; // Liste temporaire avant transformation en matrice sparse
 	double			max_rigidite;
-	unsigned int		rigidite_triplet_en_cours;
+	unsigned int		triplet_rigidite_partielle_en_cours;
+	unsigned int		triplet_rigidite_complete_en_cours;
 	cholmod_sparse		*rigidite_matrice_partielle; // La matrice contient la matrice de rigidité globale mais sans les lignes / colonnes dont on bloque les déplacements
+	cholmod_sparse		*rigidite_matrice_complete; // La matrice contient la matrice de rigidité globale mais sans les lignes / colonnes dont on bloque les déplacements
 	SuiteSparseQR_C_factorization	*QR;
 	
 //	Pour utiliser cholmod dans les calculs de matrices.

@@ -232,6 +232,9 @@ int _1990_action_ajout(Projet *projet, int categorie)
 	action_nouveau.categorie = categorie;
 	action_nouveau.charges = list_init();
 	action_nouveau.deplacement_partiel = NULL;
+	action_nouveau.deplacement_complet = NULL;
+	action_nouveau.forces_complet = NULL;
+	action_nouveau.efforts_noeuds = NULL;
 	action_nouveau.flags = 0;
 	action_nouveau.psi0 = _1990_coef_psi0_bat(categorie, projet->pays);
 	action_nouveau.psi1 = _1990_coef_psi1_bat(categorie, projet->pays);
@@ -441,6 +444,12 @@ int _1990_action_free(Projet *projet)
 		free(action->charges);
 		if (action->deplacement_partiel != NULL)
 			cholmod_l_free_sparse(&action->deplacement_partiel, projet->ef_donnees.c);
+		if (action->deplacement_complet != NULL)
+			cholmod_l_free_sparse(&action->deplacement_complet, projet->ef_donnees.c);
+		if (action->forces_complet != NULL)
+			cholmod_l_free_sparse(&action->forces_complet, projet->ef_donnees.c);
+		if (action->efforts_noeuds != NULL)
+			cholmod_l_free_sparse(&action->efforts_noeuds, projet->ef_donnees.c);
 		free(action);
 	}
 	

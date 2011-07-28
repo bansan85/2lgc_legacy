@@ -58,11 +58,28 @@ int EF_calculs_initialise(Projet *projet)
 		if (projet->ef_donnees.noeuds_flags_partielle[i] == NULL)
 			BUGTEXTE(-2, gettext("Erreur d'allocation mémoire.\n"));
 	}
+	projet->ef_donnees.noeuds_flags_complete = (int**)malloc(sizeof(int*)*list_size(projet->ef_donnees.noeuds));
+	if (projet->ef_donnees.noeuds_flags_complete == NULL)
+		BUGTEXTE(-1, gettext("Erreur d'allocation mémoire.\n"));
+	for (i=0;i<list_size(projet->ef_donnees.noeuds);i++)
+	{
+		projet->ef_donnees.noeuds_flags_complete[i] = (int*)malloc(6*sizeof(int));
+		if (projet->ef_donnees.noeuds_flags_complete[i] == NULL)
+			BUGTEXTE(-2, gettext("Erreur d'allocation mémoire.\n"));
+	}
 	i = 0; // Nombre de colonnes/lignes de la matrice
+	projet->ef_donnees.nb_colonne_matrice_complete = 0;
 	list_mvfront(projet->ef_donnees.noeuds);
 	do
 	{
 		EF_Noeud	*noeud = list_curr(projet->ef_donnees.noeuds);
+		
+		projet->ef_donnees.noeuds_flags_complete[noeud->numero][0] = projet->ef_donnees.nb_colonne_matrice_complete; projet->ef_donnees.nb_colonne_matrice_complete++; // x
+		projet->ef_donnees.noeuds_flags_complete[noeud->numero][1] = projet->ef_donnees.nb_colonne_matrice_complete; projet->ef_donnees.nb_colonne_matrice_complete++; // y
+		projet->ef_donnees.noeuds_flags_complete[noeud->numero][2] = projet->ef_donnees.nb_colonne_matrice_complete; projet->ef_donnees.nb_colonne_matrice_complete++; // z
+		projet->ef_donnees.noeuds_flags_complete[noeud->numero][3] = projet->ef_donnees.nb_colonne_matrice_complete; projet->ef_donnees.nb_colonne_matrice_complete++; // rx
+		projet->ef_donnees.noeuds_flags_complete[noeud->numero][4] = projet->ef_donnees.nb_colonne_matrice_complete; projet->ef_donnees.nb_colonne_matrice_complete++; // ry
+		projet->ef_donnees.noeuds_flags_complete[noeud->numero][5] = projet->ef_donnees.nb_colonne_matrice_complete; projet->ef_donnees.nb_colonne_matrice_complete++; // rz
 		
 		if (noeud->appui == NULL)
 		{
@@ -97,11 +114,12 @@ int EF_calculs_initialise(Projet *projet)
 		}
 	}
 	while (list_mvnext(projet->ef_donnees.noeuds) != NULL);
-	projet->ef_donnees.nb_colonne_matrice = i;
+	projet->ef_donnees.nb_colonne_matrice_partielle = i;
 	
 	// On détermine au maximum le nombre de triplet il sera nécessaire pour obtenir la matrice de rigidité globale, soit 12*12*nombre_d'éléments (y compris discrétisation)
 	nnz_max = 0;
-	projet->ef_donnees.rigidite_triplet_en_cours = 0;
+	projet->ef_donnees.triplet_rigidite_partielle_en_cours = 0;
+	projet->ef_donnees.triplet_rigidite_complete_en_cours = 0;
 	list_mvfront(projet->beton.elements);
 	do
 	{
@@ -110,8 +128,10 @@ int EF_calculs_initialise(Projet *projet)
 		nnz_max += 12*12*(element->discretisation_element+1);
 	}
 	while (list_mvnext(projet->beton.elements) != NULL);
-	projet->ef_donnees.rigidite_triplet = cholmod_l_allocate_triplet(projet->ef_donnees.nb_colonne_matrice, projet->ef_donnees.nb_colonne_matrice, nnz_max, 0, CHOLMOD_REAL, projet->ef_donnees.c);
-	projet->ef_donnees.rigidite_triplet->nnz = nnz_max;
+	projet->ef_donnees.triplet_rigidite_partielle = cholmod_l_allocate_triplet(projet->ef_donnees.nb_colonne_matrice_partielle, projet->ef_donnees.nb_colonne_matrice_partielle, nnz_max, 0, CHOLMOD_REAL, projet->ef_donnees.c);
+	projet->ef_donnees.triplet_rigidite_partielle->nnz = nnz_max;
+	projet->ef_donnees.triplet_rigidite_complete = cholmod_l_allocate_triplet(projet->ef_donnees.nb_colonne_matrice_complete, projet->ef_donnees.nb_colonne_matrice_complete, nnz_max, 0, CHOLMOD_REAL, projet->ef_donnees.c);
+	projet->ef_donnees.triplet_rigidite_complete->nnz = nnz_max;
 	
 	return 0;
 }
@@ -129,26 +149,28 @@ int EF_calculs_genere_sparse(Projet *projet)
 	unsigned int		j;
 	double			*ax;		// Pointeur vers les données des triplets
 	
-	if ((projet == NULL) || (projet->ef_donnees.rigidite_triplet == NULL))
+	if ((projet == NULL) || (projet->ef_donnees.triplet_rigidite_partielle == NULL) || (projet->ef_donnees.triplet_rigidite_complete == NULL))
 		BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
 	
 	// On commence par déterminer la valeur maximale d'une case de la matrice pour 
 	// ensuite supprimer les valeurs négligeables.
 	projet->ef_donnees.max_rigidite = 0.;
-	ax = projet->ef_donnees.rigidite_triplet->x;
-	projet->ef_donnees.rigidite_triplet->nzmax = projet->ef_donnees.rigidite_triplet_en_cours;
-	for (j=0;j<projet->ef_donnees.rigidite_triplet->nzmax;j++)
+	ax = projet->ef_donnees.triplet_rigidite_complete->x;
+	projet->ef_donnees.triplet_rigidite_complete->nzmax = projet->ef_donnees.triplet_rigidite_complete_en_cours;
+	for (j=0;j<projet->ef_donnees.triplet_rigidite_complete->nzmax;j++)
 	{
 		if (ABS(ax[j]) > projet->ef_donnees.max_rigidite)
 			projet->ef_donnees.max_rigidite = ABS(ax[j]);
 	}
 	
 	// Cela signifie que tous les noeuds sont bloqués (cas d'une poutre sur deux appuis sans discrétisation par exemple)
-	if (projet->ef_donnees.nb_colonne_matrice == 0)
+	if (projet->ef_donnees.nb_colonne_matrice_partielle == 0)
 	{
 		triplet_rigidite = cholmod_l_allocate_triplet(0, 0, 0, 0, CHOLMOD_REAL, projet->ef_donnees.c);
 		projet->ef_donnees.rigidite_matrice_partielle = cholmod_l_triplet_to_sparse(triplet_rigidite, 0, projet->ef_donnees.c);
 		projet->ef_donnees.rigidite_matrice_partielle->stype = 0;
+		projet->ef_donnees.rigidite_matrice_complete = cholmod_l_triplet_to_sparse(projet->ef_donnees.triplet_rigidite_complete, 0, projet->ef_donnees.c);
+		cholmod_l_drop(projet->ef_donnees.max_rigidite*ERREUR_RELATIVE_MIN, projet->ef_donnees.rigidite_matrice_complete, projet->ef_donnees.c);
 		projet->ef_donnees.QR = SuiteSparseQR_C_factorize(0, 0., projet->ef_donnees.rigidite_matrice_partielle, projet->ef_donnees.c);
 //		Pour utiliser cholmod dans les calculs de matrices.
 //		projet->ef_donnees.factor_rigidite_matrice_partielle = cholmod_l_analyze (projet->ef_donnees.rigidite_matrice_partielle, projet->ef_donnees.c) ;
@@ -159,9 +181,11 @@ int EF_calculs_genere_sparse(Projet *projet)
 	}
 	
 	// On converti la liste des triplets en matrice sparse
-	projet->ef_donnees.rigidite_matrice_partielle = cholmod_l_triplet_to_sparse(projet->ef_donnees.rigidite_triplet, 0, projet->ef_donnees.c);
+	projet->ef_donnees.rigidite_matrice_partielle = cholmod_l_triplet_to_sparse(projet->ef_donnees.triplet_rigidite_partielle, 0, projet->ef_donnees.c);
+	projet->ef_donnees.rigidite_matrice_complete = cholmod_l_triplet_to_sparse(projet->ef_donnees.triplet_rigidite_complete, 0, projet->ef_donnees.c);
 	// On enlève les valeurs parasites
 	cholmod_l_drop(projet->ef_donnees.max_rigidite*ERREUR_RELATIVE_MIN, projet->ef_donnees.rigidite_matrice_partielle, projet->ef_donnees.c);
+	cholmod_l_drop(projet->ef_donnees.max_rigidite*ERREUR_RELATIVE_MIN, projet->ef_donnees.rigidite_matrice_complete, projet->ef_donnees.c);
 //	cholmod_l_sort(projet->ef_donnees.rigidite_matrice_partielle, projet->ef_donnees.c);
 	// On force la matrice à ne pas être symétrique.
 	if (projet->ef_donnees.rigidite_matrice_partielle->stype != 0)
@@ -169,6 +193,12 @@ int EF_calculs_genere_sparse(Projet *projet)
 		cholmod_sparse *A = cholmod_l_copy(projet->ef_donnees.rigidite_matrice_partielle, 0, 1, projet->ef_donnees.c);
 		cholmod_l_free_sparse(&projet->ef_donnees.rigidite_matrice_partielle, projet->ef_donnees.c);
 		projet->ef_donnees.rigidite_matrice_partielle = A;
+	}
+	if (projet->ef_donnees.rigidite_matrice_complete->stype != 0)
+	{
+		cholmod_sparse *A = cholmod_l_copy(projet->ef_donnees.rigidite_matrice_complete, 0, 1, projet->ef_donnees.c);
+		cholmod_l_free_sparse(&projet->ef_donnees.rigidite_matrice_complete, projet->ef_donnees.c);
+		projet->ef_donnees.rigidite_matrice_complete = A;
 	}
 	
 /*	Pour utiliser cholmod dans les calculs de matrices.
@@ -198,7 +228,8 @@ int EF_calculs_genere_sparse(Projet *projet)
 int EF_calculs_resoud_charge(Projet *projet, int num_action)
 {
 	Action			*action_en_cours;
-	cholmod_triplet		*triplet_force;
+	cholmod_triplet		*triplet_deplacements_totaux, *triplet_deplacements_partiels;
+	cholmod_triplet		*triplet_force_partielle, *triplet_force_complete;
 	cholmod_sparse		*sparse_force;
 	cholmod_dense		*dense_force;
 	cholmod_triplet		*triplet_efforts_locaux_finaux, *triplet_efforts_globaux_initiaux, *triplet_efforts_locaux_initiaux, *triplet_efforts_globaux_finaux;
@@ -207,6 +238,8 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
 	double			*ax;		// Pointeur vers les données des triplets
 	long			*ai2, *aj2;	// Pointeur vers les données des triplets
 	double			*ax2;		// Pointeur vers les données des triplets
+	long			*ai3, *aj3;	// Pointeur vers les données des triplets
+	double			*ax3;		// Pointeur vers les données des triplets
 	unsigned int		i;
 	
 	if ((projet == NULL) || (projet->actions == NULL) || (list_size(projet->actions) == 0) || (_1990_action_cherche_numero(projet, num_action) != 0) || (projet->ef_donnees.QR == NULL))
@@ -214,16 +247,27 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
 	
 	// On crée la vecteur sparse contenant les actions extérieures
 	action_en_cours = list_curr(projet->actions);
-	triplet_force = cholmod_l_allocate_triplet(projet->ef_donnees.rigidite_matrice_partielle->nrow, 1, projet->ef_donnees.rigidite_matrice_partielle->nrow, 0, CHOLMOD_REAL, projet->ef_donnees.c);
-	ai = triplet_force->i;
-	aj = triplet_force->j;
-	ax = triplet_force->x;
-	triplet_force->nnz = projet->ef_donnees.rigidite_matrice_partielle->nrow;
-	for (i=0;i<triplet_force->nnz;i++)
+	triplet_force_partielle = cholmod_l_allocate_triplet(projet->ef_donnees.rigidite_matrice_partielle->nrow, 1, projet->ef_donnees.rigidite_matrice_partielle->nrow, 0, CHOLMOD_REAL, projet->ef_donnees.c);
+	ai = triplet_force_partielle->i;
+	aj = triplet_force_partielle->j;
+	ax = triplet_force_partielle->x;
+	triplet_force_partielle->nnz = projet->ef_donnees.rigidite_matrice_partielle->nrow;
+	for (i=0;i<triplet_force_partielle->nnz;i++)
 	{
 		ai[i] = i;
 		aj[i] = 0;
 		ax[i] = 0.;
+	}
+	triplet_force_complete = cholmod_l_allocate_triplet(projet->ef_donnees.rigidite_matrice_complete->nrow, 1, projet->ef_donnees.rigidite_matrice_complete->nrow, 0, CHOLMOD_REAL, projet->ef_donnees.c);
+	ai3 = triplet_force_complete->i;
+	aj3 = triplet_force_complete->j;
+	ax3 = triplet_force_complete->x;
+	triplet_force_complete->nnz = projet->ef_donnees.rigidite_matrice_complete->nrow;
+	for (i=0;i<triplet_force_complete->nnz;i++)
+	{
+		ai3[i] = i;
+		aj3[i] = 0;
+		ax3[i] = 0.;
 	}
 	
 	if (list_size(action_en_cours->charges) != 0)
@@ -248,6 +292,12 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
 					ax[projet->ef_donnees.noeuds_flags_partielle[charge_noeud->noeud->numero][4]] += charge_noeud->ry;
 				if (projet->ef_donnees.noeuds_flags_partielle[charge_noeud->noeud->numero][5] != -1)
 					ax[projet->ef_donnees.noeuds_flags_partielle[charge_noeud->noeud->numero][5]] += charge_noeud->rz;
+				ax3[projet->ef_donnees.noeuds_flags_complete[charge_noeud->noeud->numero][0]] += charge_noeud->x;
+				ax3[projet->ef_donnees.noeuds_flags_complete[charge_noeud->noeud->numero][1]] += charge_noeud->y;
+				ax3[projet->ef_donnees.noeuds_flags_complete[charge_noeud->noeud->numero][2]] += charge_noeud->z;
+				ax3[projet->ef_donnees.noeuds_flags_complete[charge_noeud->noeud->numero][3]] += charge_noeud->rx;
+				ax3[projet->ef_donnees.noeuds_flags_complete[charge_noeud->noeud->numero][4]] += charge_noeud->ry;
+				ax3[projet->ef_donnees.noeuds_flags_complete[charge_noeud->noeud->numero][5]] += charge_noeud->rz;
 			}
 			// Les efforts ne sont pas aux noeuds mais dans la barre
 			else
@@ -524,7 +574,6 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
 						ai2[10] = 10;	aj2[10] = 0;	ax2[10] = MBy;
 						ai2[11] = 11;	aj2[11] = 0;	ax2[11] = MBz;
 						sparse_efforts_locaux_finaux = cholmod_l_triplet_to_sparse(triplet_efforts_locaux_finaux, 0, projet->ef_donnees.c);
-						cholmod_l_write_sparse(stdout, sparse_efforts_locaux_finaux, NULL, NULL, projet->ef_donnees.c);
 						cholmod_l_free_triplet(&triplet_efforts_locaux_finaux, projet->ef_donnees.c);
 						sparse_efforts_globaux_finaux = cholmod_l_ssmult(element_en_beton->matrice_rotation, sparse_efforts_locaux_finaux, 0, 1, 0, projet->ef_donnees.c);
 						cholmod_l_free_sparse(&(sparse_efforts_locaux_finaux), projet->ef_donnees.c);
@@ -532,7 +581,6 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
 						ai2 = triplet_efforts_globaux_finaux->i;
 						aj2 = triplet_efforts_globaux_finaux->j;
 						ax2 = triplet_efforts_globaux_finaux->x;
-						cholmod_l_write_sparse(stdout, sparse_efforts_globaux_finaux, NULL, NULL, projet->ef_donnees.c);
 						cholmod_l_free_sparse(&(sparse_efforts_globaux_finaux), projet->ef_donnees.c);
 						
 						// On ajoute les moments et les efforts dans le vecteur de force
@@ -542,11 +590,13 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
 							{
 								if (projet->ef_donnees.noeuds_flags_partielle[noeud_debut->numero][ai2[i]] != -1)
 									ax[projet->ef_donnees.noeuds_flags_partielle[noeud_debut->numero][ai2[i]]] += ax2[i];
+								ax3[projet->ef_donnees.noeuds_flags_complete[noeud_debut->numero][ai2[i]]] += ax2[i];
 							}
 							else
 							{
 								if (projet->ef_donnees.noeuds_flags_partielle[noeud_fin->numero][ai2[i]-6] != -1)
 									ax[projet->ef_donnees.noeuds_flags_partielle[noeud_fin->numero][ai2[i]-6]] += ax2[i];
+								ax3[projet->ef_donnees.noeuds_flags_complete[noeud_fin->numero][ai2[i]-6]] += ax2[i];
 							}
 						}
 						cholmod_l_free_triplet(&triplet_efforts_globaux_finaux, projet->ef_donnees.c);
@@ -562,10 +612,16 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
 		}
 		while (list_mvnext(action_en_cours->charges) != NULL);
 	}
-	sparse_force = cholmod_l_triplet_to_sparse(triplet_force, 0, projet->ef_donnees.c);
-	cholmod_l_free_triplet(&triplet_force, projet->ef_donnees.c);
+	
+	// On converti les données dans des structures permettant les calculs via les libraries
+	sparse_force = cholmod_l_triplet_to_sparse(triplet_force_partielle, 0, projet->ef_donnees.c);
+	cholmod_l_free_triplet(&triplet_force_partielle, projet->ef_donnees.c);
 	dense_force = cholmod_l_sparse_to_dense(sparse_force, projet->ef_donnees.c);
 	cholmod_l_free_sparse(&sparse_force, projet->ef_donnees.c);
+	action_en_cours->forces_complet = cholmod_l_triplet_to_sparse(triplet_force_complete, 0, projet->ef_donnees.c);
+	printf("forces_complet\n");
+	cholmod_l_write_sparse(stdout, action_en_cours->forces_complet, NULL, NULL, projet->ef_donnees.c);
+	cholmod_l_free_triplet(&triplet_force_complete, projet->ef_donnees.c);
 	
 //	Pour utiliser cholmod dans les calculs de matrices.
 /*	action_en_cours->deplacement_partiel = cholmod_l_spsolve (CHOLMOD_A, projet->ef_donnees.factor_rigidite_matrice_partielle, sparse_force, projet->ef_donnees.c);
@@ -577,10 +633,60 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
 	cholmod_l_write_sparse(stdout, action_en_cours->deplacement_partiel, NULL, NULL, projet->ef_donnees.c);*/
 	
 	// On résoud le système
-	cholmod_dense *Y = SuiteSparseQR_C_qmult (SPQR_QTX, projet->ef_donnees.QR, dense_force, projet->ef_donnees.c);
+	cholmod_dense *Y = SuiteSparseQR_C_qmult(SPQR_QTX, projet->ef_donnees.QR, dense_force, projet->ef_donnees.c);
 	cholmod_dense *X = SuiteSparseQR_C_solve(SPQR_RX_EQUALS_B, projet->ef_donnees.QR, Y, projet->ef_donnees.c);
 	action_en_cours->deplacement_partiel = cholmod_l_dense_to_sparse(X, TRUE, projet->ef_donnees.c);
+	printf("deplacement_partiel\n");
 	cholmod_l_write_sparse(stdout, action_en_cours->deplacement_partiel, NULL, NULL, projet->ef_donnees.c);
+	
+	// On crée le vecteur déplacement complet
+	triplet_deplacements_partiels = cholmod_l_sparse_to_triplet(action_en_cours->deplacement_partiel, projet->ef_donnees.c);
+	ai = triplet_deplacements_partiels->i;
+	aj = triplet_deplacements_partiels->j;
+	ax = triplet_deplacements_partiels->x;
+	triplet_deplacements_totaux = cholmod_l_allocate_triplet(projet->ef_donnees.nb_colonne_matrice_complete, 1, projet->ef_donnees.nb_colonne_matrice_complete, 0, CHOLMOD_REAL, projet->ef_donnees.c);
+	triplet_deplacements_totaux->nnz = projet->ef_donnees.nb_colonne_matrice_complete;
+	ai2 = triplet_deplacements_totaux->i;
+	aj2 = triplet_deplacements_totaux->j;
+	ax2 = triplet_deplacements_totaux->x;
+	for (i=0;i<list_size(projet->ef_donnees.noeuds);i++)
+	{
+		ai2[i*6] = i*6; aj2[i*6] = 0;
+		if (projet->ef_donnees.noeuds_flags_partielle[i][0] == -1)
+			ax2[i*6] = 0.;
+		else
+			ax2[i*6] = ax[projet->ef_donnees.noeuds_flags_partielle[i][0]];
+		ai2[i*6+1] = i*6+1; aj2[i*6+1] = 0;
+		if (projet->ef_donnees.noeuds_flags_partielle[i][1] == -1)
+			ax2[i*6+1] = 0.;
+		else
+			ax2[i*6+1] = ax[projet->ef_donnees.noeuds_flags_partielle[i][1]];
+		ai2[i*6+2] = i*6+2; aj2[i*6+2] = 0;
+		if (projet->ef_donnees.noeuds_flags_partielle[i][2] == -1)
+			ax2[i*6+2] = 0.;
+		else
+			ax2[i*6+2] = ax[projet->ef_donnees.noeuds_flags_partielle[i][2]];
+		ai2[i*6+3] = i*6+3; aj2[i*6+3] = 0;
+		if (projet->ef_donnees.noeuds_flags_partielle[i][3] == -1)
+			ax2[i*6+3] = 0.;
+		else
+			ax2[i*6+3] = ax[projet->ef_donnees.noeuds_flags_partielle[i][3]];
+		ai2[i*6+4] = i*6+4; aj2[i*6+4] = 0;
+		if (projet->ef_donnees.noeuds_flags_partielle[i][4] == -1)
+			ax2[i*6+4] = 0.;
+		else
+			ax2[i*6+4] = ax[projet->ef_donnees.noeuds_flags_partielle[i][4]];
+		ai2[i*6+5] = i*6+5; aj2[i*6+5] = 0;
+		if (projet->ef_donnees.noeuds_flags_partielle[i][5] == -1)
+			ax2[i*6+5] = 0.;
+		else
+			ax2[i*6+5] = ax[projet->ef_donnees.noeuds_flags_partielle[i][5]];
+	}
+	cholmod_l_free_triplet(&triplet_deplacements_partiels, projet->ef_donnees.c);
+	action_en_cours->deplacement_complet = cholmod_l_triplet_to_sparse(triplet_deplacements_totaux, 0, projet->ef_donnees.c);
+	cholmod_l_free_triplet(&triplet_deplacements_totaux, projet->ef_donnees.c);
+	printf("deplacement_complet\n");
+	cholmod_l_write_sparse(stdout, action_en_cours->deplacement_complet, NULL, NULL, projet->ef_donnees.c);
 	
 	// On calcul le résidu. Méthode trouvée dans le fichier cholmod_demo.c de la source de la librairie cholmod.
 	cholmod_dense *r = cholmod_l_copy_dense(dense_force, projet->ef_donnees.c);
@@ -593,6 +699,13 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
 	double axbnorm = (anorm * xnorm + bnorm) ;
 	action_en_cours->norm = rnorm / axbnorm ;
 	printf("résidu : %e\n", action_en_cours->norm);
+	
+	// On calcule les efforts dans tous les noeuds, y compris les réactions d'appuis.
+	action_en_cours->efforts_noeuds = cholmod_l_ssmult(projet->ef_donnees.rigidite_matrice_complete, action_en_cours->deplacement_complet, 0, TRUE, TRUE, projet->ef_donnees.c);
+	printf("forces_complet\n");
+	cholmod_l_write_sparse(stdout, action_en_cours->forces_complet, NULL, NULL, projet->ef_donnees.c);
+	printf("efforts_noeud\n");
+	cholmod_l_write_sparse(stdout, action_en_cours->efforts_noeuds, NULL, NULL, projet->ef_donnees.c);
 	
 	// On libère la mémoire
 	cholmod_l_free_dense(&Y, projet->ef_donnees.c);

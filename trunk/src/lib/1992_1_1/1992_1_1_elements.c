@@ -156,7 +156,7 @@ Beton_Element* _1992_1_1_elements_cherche_numero(Projet *projet, unsigned int nu
 
 
 /* _1992_1_1_elements_rigidite_ajout
- * Description : ajouter une de la rigidité à la matrice
+ * Description : ajouter un élément à la matrice de rigidité partielle et complete
  * Paramètres : Projet *projet : la variable projet
  *            : Beton_Element* element : pointeur vers l'élément en béton
  * Valeur renvoyée :
@@ -166,8 +166,12 @@ Beton_Element* _1992_1_1_elements_cherche_numero(Projet *projet, unsigned int nu
 int _1992_1_1_elements_rigidite_ajout(Projet *projet, Beton_Element *element)
 {
 	EF_Noeud	*noeud1, *noeud2;
-	long		*ai, *aj, *ai2, *aj2;	// Pointeur vers les données des triplets
-	double		*ax, *ax2;		// Pointeur vers les données des triplets
+	long		*ai, *aj;		// Pointeur vers les données des triplets
+	double		*ax;			// Pointeur vers les données des triplets
+	long		*ai2, *aj2;		// Pointeur vers les données des triplets
+	double		*ax2;			// Pointeur vers les données des triplets
+	long		*ai3, *aj3;		// Pointeur vers les données des triplets
+	double		*ax3;			// Pointeur vers les données des triplets
 	double		y, cosx, sinx; // valeurs de la matrice de rotation
 	double		xx, yy, zz, ll; // Dimension de la barre dans 3D
 	unsigned int	i, j;
@@ -176,7 +180,7 @@ int _1992_1_1_elements_rigidite_ajout(Projet *projet, Beton_Element *element)
 	Beton_Section_Carre	*section_donnees;
 	Beton_Section_Caracteristiques	*section_caract;
 	
-	if ((projet == NULL) || (projet->ef_donnees.rigidite_triplet == NULL) || (element == NULL))
+	if ((projet == NULL) || (projet->ef_donnees.triplet_rigidite_partielle == NULL) || (element == NULL) || (projet->ef_donnees.triplet_rigidite_complete == NULL))
 		BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
 	
 	section_donnees = element->section;
@@ -576,7 +580,7 @@ int _1992_1_1_elements_rigidite_ajout(Projet *projet, Beton_Element *element)
 		cholmod_l_free_triplet(&triplet, projet->ef_donnees.c);
 		
 		// On calcule la matrice locale dans le repère globale.
-		// La matrice de rigidité globale est égale à R.K.R-1 mais commr R-1 = RT, on calcul R.K.RT
+		// La matrice de rigidité globale est égale à R.K.R-1 mais comme R-1 = RT, on calcul R.K.RT
 		sparse_tmp = cholmod_l_ssmult(element->matrice_rotation, element->matrice_rigidite_locale, 0, 1, 0, projet->ef_donnees.c);
 		sparse_rotation_transpose = cholmod_l_transpose(element->matrice_rotation, 1, projet->ef_donnees.c);
 		element->matrice_rigidite_globale = cholmod_l_ssmult(sparse_tmp, sparse_rotation_transpose, 0, 1, 0, projet->ef_donnees.c);
@@ -586,40 +590,74 @@ int _1992_1_1_elements_rigidite_ajout(Projet *projet, Beton_Element *element)
 		ai = triplet->i;
 		aj = triplet->j;
 		ax = triplet->x;
-		ai2 = projet->ef_donnees.rigidite_triplet->i;
-		aj2 = projet->ef_donnees.rigidite_triplet->j;
-		ax2 = projet->ef_donnees.rigidite_triplet->x;
+		ai2 = projet->ef_donnees.triplet_rigidite_partielle->i;
+		aj2 = projet->ef_donnees.triplet_rigidite_partielle->j;
+		ax2 = projet->ef_donnees.triplet_rigidite_partielle->x;
+		ai3 = projet->ef_donnees.triplet_rigidite_complete->i;
+		aj3 = projet->ef_donnees.triplet_rigidite_complete->j;
+		ax3 = projet->ef_donnees.triplet_rigidite_complete->x;
 		
 		// On insère le quatre quarts de la matrice de rigidité globale
 		for (i=0;i<triplet->nnz;i++)
 		{
+			// On insère dans le triple rigidité partielle
 			if ((ai[i] < 6) && (aj[i] < 6) && (projet->ef_donnees.noeuds_flags_partielle[noeud1->numero][ai[i]] != -1) && (projet->ef_donnees.noeuds_flags_partielle[noeud1->numero][aj[i]] != -1))
 			{
-				ai2[projet->ef_donnees.rigidite_triplet_en_cours] = projet->ef_donnees.noeuds_flags_partielle[noeud1->numero][ai[i]];
-				aj2[projet->ef_donnees.rigidite_triplet_en_cours] = projet->ef_donnees.noeuds_flags_partielle[noeud1->numero][aj[i]];
-				ax2[projet->ef_donnees.rigidite_triplet_en_cours] = ax[i];
-				projet->ef_donnees.rigidite_triplet_en_cours++;
+				ai2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = projet->ef_donnees.noeuds_flags_partielle[noeud1->numero][ai[i]];
+				aj2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = projet->ef_donnees.noeuds_flags_partielle[noeud1->numero][aj[i]];
+				ax2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = ax[i];
+				projet->ef_donnees.triplet_rigidite_partielle_en_cours++;
 			}
 			else if ((ai[i] < 6) && (aj[i] >= 6) && (projet->ef_donnees.noeuds_flags_partielle[noeud1->numero][ai[i]] != -1) && (projet->ef_donnees.noeuds_flags_partielle[noeud2->numero][aj[i]-6] != -1))
 			{
-				ai2[projet->ef_donnees.rigidite_triplet_en_cours] = projet->ef_donnees.noeuds_flags_partielle[noeud1->numero][ai[i]];
-				aj2[projet->ef_donnees.rigidite_triplet_en_cours] = projet->ef_donnees.noeuds_flags_partielle[noeud2->numero][aj[i]-6];
-				ax2[projet->ef_donnees.rigidite_triplet_en_cours] = ax[i];
-				projet->ef_donnees.rigidite_triplet_en_cours++;
+				ai2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = projet->ef_donnees.noeuds_flags_partielle[noeud1->numero][ai[i]];
+				aj2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = projet->ef_donnees.noeuds_flags_partielle[noeud2->numero][aj[i]-6];
+				ax2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = ax[i];
+				projet->ef_donnees.triplet_rigidite_partielle_en_cours++;
 			}
 			else if ((ai[i] >= 6) && (aj[i] < 6) && (projet->ef_donnees.noeuds_flags_partielle[noeud2->numero][ai[i]-6] != -1) && (projet->ef_donnees.noeuds_flags_partielle[noeud1->numero][aj[i]] != -1))
 			{
-				ai2[projet->ef_donnees.rigidite_triplet_en_cours] = projet->ef_donnees.noeuds_flags_partielle[noeud2->numero][ai[i]-6];
-				aj2[projet->ef_donnees.rigidite_triplet_en_cours] = projet->ef_donnees.noeuds_flags_partielle[noeud1->numero][aj[i]];
-				ax2[projet->ef_donnees.rigidite_triplet_en_cours] = ax[i];
-				projet->ef_donnees.rigidite_triplet_en_cours++;
+				ai2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = projet->ef_donnees.noeuds_flags_partielle[noeud2->numero][ai[i]-6];
+				aj2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = projet->ef_donnees.noeuds_flags_partielle[noeud1->numero][aj[i]];
+				ax2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = ax[i];
+				projet->ef_donnees.triplet_rigidite_partielle_en_cours++;
 			}
 			else if ((ai[i] >= 6) && (aj[i] >= 6) && (projet->ef_donnees.noeuds_flags_partielle[noeud2->numero][ai[i]-6] != -1) && (projet->ef_donnees.noeuds_flags_partielle[noeud2->numero][aj[i]-6] != -1))
 			{
-				ai2[projet->ef_donnees.rigidite_triplet_en_cours] = projet->ef_donnees.noeuds_flags_partielle[noeud2->numero][ai[i]-6];
-				aj2[projet->ef_donnees.rigidite_triplet_en_cours] = projet->ef_donnees.noeuds_flags_partielle[noeud2->numero][aj[i]-6];
-				ax2[projet->ef_donnees.rigidite_triplet_en_cours] = ax[i];
-				projet->ef_donnees.rigidite_triplet_en_cours++;
+				ai2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = projet->ef_donnees.noeuds_flags_partielle[noeud2->numero][ai[i]-6];
+				aj2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = projet->ef_donnees.noeuds_flags_partielle[noeud2->numero][aj[i]-6];
+				ax2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = ax[i];
+				projet->ef_donnees.triplet_rigidite_partielle_en_cours++;
+			}
+			
+			// On insère dans le triplet rigidité complete
+			if ((ai[i] < 6) && (aj[i] < 6))
+			{
+				ai3[projet->ef_donnees.triplet_rigidite_complete_en_cours] = projet->ef_donnees.noeuds_flags_complete[noeud1->numero][ai[i]];
+				aj3[projet->ef_donnees.triplet_rigidite_complete_en_cours] = projet->ef_donnees.noeuds_flags_complete[noeud1->numero][aj[i]];
+				ax3[projet->ef_donnees.triplet_rigidite_complete_en_cours] = ax[i];
+				projet->ef_donnees.triplet_rigidite_complete_en_cours++;
+			}
+			else if ((ai[i] < 6) && (aj[i] >= 6))
+			{
+				ai3[projet->ef_donnees.triplet_rigidite_complete_en_cours] = projet->ef_donnees.noeuds_flags_complete[noeud1->numero][ai[i]];
+				aj3[projet->ef_donnees.triplet_rigidite_complete_en_cours] = projet->ef_donnees.noeuds_flags_complete[noeud2->numero][aj[i]-6];
+				ax3[projet->ef_donnees.triplet_rigidite_complete_en_cours] = ax[i];
+				projet->ef_donnees.triplet_rigidite_complete_en_cours++;
+			}
+			else if ((ai[i] >= 6) && (aj[i] < 6))
+			{
+				ai3[projet->ef_donnees.triplet_rigidite_complete_en_cours] = projet->ef_donnees.noeuds_flags_complete[noeud2->numero][ai[i]-6];
+				aj3[projet->ef_donnees.triplet_rigidite_complete_en_cours] = projet->ef_donnees.noeuds_flags_complete[noeud1->numero][aj[i]];
+				ax3[projet->ef_donnees.triplet_rigidite_complete_en_cours] = ax[i];
+				projet->ef_donnees.triplet_rigidite_complete_en_cours++;
+			}
+			else if ((ai[i] >= 6) && (aj[i] >= 6))
+			{
+				ai3[projet->ef_donnees.triplet_rigidite_complete_en_cours] = projet->ef_donnees.noeuds_flags_complete[noeud2->numero][ai[i]-6];
+				aj3[projet->ef_donnees.triplet_rigidite_complete_en_cours] = projet->ef_donnees.noeuds_flags_complete[noeud2->numero][aj[i]-6];
+				ax3[projet->ef_donnees.triplet_rigidite_complete_en_cours] = ax[i];
+				projet->ef_donnees.triplet_rigidite_complete_en_cours++;
 			}
 		}
 		cholmod_l_free_triplet(&triplet, projet->ef_donnees.c);
