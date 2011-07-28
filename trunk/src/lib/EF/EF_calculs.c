@@ -240,7 +240,7 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
 	double			*ax2;		// Pointeur vers les données des triplets
 	long			*ai3, *aj3;	// Pointeur vers les données des triplets
 	double			*ax3;		// Pointeur vers les données des triplets
-	unsigned int		i;
+	unsigned int		i, j;
 	
 	if ((projet == NULL) || (projet->actions == NULL) || (list_size(projet->actions) == 0) || (_1990_action_cherche_numero(projet, num_action) != 0) || (projet->ef_donnees.QR == NULL))
 		BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
@@ -649,38 +649,88 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
 	ai2 = triplet_deplacements_totaux->i;
 	aj2 = triplet_deplacements_totaux->j;
 	ax2 = triplet_deplacements_totaux->x;
+	j = 0;
 	for (i=0;i<list_size(projet->ef_donnees.noeuds);i++)
 	{
+		printf("%d %d %d %d %d %d\n", projet->ef_donnees.noeuds_flags_partielle[i][0], projet->ef_donnees.noeuds_flags_partielle[i][1], projet->ef_donnees.noeuds_flags_partielle[i][2], projet->ef_donnees.noeuds_flags_partielle[i][3], projet->ef_donnees.noeuds_flags_partielle[i][4], projet->ef_donnees.noeuds_flags_partielle[i][5]);
 		ai2[i*6] = i*6; aj2[i*6] = 0;
 		if (projet->ef_donnees.noeuds_flags_partielle[i][0] == -1)
 			ax2[i*6] = 0.;
 		else
-			ax2[i*6] = ax[projet->ef_donnees.noeuds_flags_partielle[i][0]];
+		{
+			if (ai[j] == projet->ef_donnees.noeuds_flags_partielle[i][0])
+			{
+				ax2[i*6] = ax[j];
+				j++;
+			}
+			else
+				ax2[i*6] = 0.;
+		}
 		ai2[i*6+1] = i*6+1; aj2[i*6+1] = 0;
 		if (projet->ef_donnees.noeuds_flags_partielle[i][1] == -1)
 			ax2[i*6+1] = 0.;
 		else
-			ax2[i*6+1] = ax[projet->ef_donnees.noeuds_flags_partielle[i][1]];
+		{
+			if (ai[j] == projet->ef_donnees.noeuds_flags_partielle[i][1])
+			{
+				ax2[i*6+1] = ax[j];
+				j++;
+			}
+			else
+				ax2[i*6+1] = 0.;
+		}
 		ai2[i*6+2] = i*6+2; aj2[i*6+2] = 0;
 		if (projet->ef_donnees.noeuds_flags_partielle[i][2] == -1)
 			ax2[i*6+2] = 0.;
 		else
-			ax2[i*6+2] = ax[projet->ef_donnees.noeuds_flags_partielle[i][2]];
+		{
+			if (ai[j] == projet->ef_donnees.noeuds_flags_partielle[i][2])
+			{
+				ax2[i*6+2] = ax[j];
+				j++;
+			}
+			else
+				ax2[i*6+2] = 0.;
+		}
 		ai2[i*6+3] = i*6+3; aj2[i*6+3] = 0;
 		if (projet->ef_donnees.noeuds_flags_partielle[i][3] == -1)
 			ax2[i*6+3] = 0.;
 		else
-			ax2[i*6+3] = ax[projet->ef_donnees.noeuds_flags_partielle[i][3]];
+		{
+			if (ai[j] == projet->ef_donnees.noeuds_flags_partielle[i][3])
+			{
+				ax2[i*6+3] = ax[j];
+				j++;
+			}
+			else
+				ax2[i*6+3] = 0.;
+		}
 		ai2[i*6+4] = i*6+4; aj2[i*6+4] = 0;
 		if (projet->ef_donnees.noeuds_flags_partielle[i][4] == -1)
 			ax2[i*6+4] = 0.;
 		else
-			ax2[i*6+4] = ax[projet->ef_donnees.noeuds_flags_partielle[i][4]];
+		{
+			if (ai[j] == projet->ef_donnees.noeuds_flags_partielle[i][4])
+			{
+				ax2[i*6+4] = ax[j];
+				j++;
+			}
+			else
+				ax2[i*6+4] = 0.;
+		}
 		ai2[i*6+5] = i*6+5; aj2[i*6+5] = 0;
 		if (projet->ef_donnees.noeuds_flags_partielle[i][5] == -1)
 			ax2[i*6+5] = 0.;
 		else
-			ax2[i*6+5] = ax[projet->ef_donnees.noeuds_flags_partielle[i][5]];
+		{
+			if (ai[j] == projet->ef_donnees.noeuds_flags_partielle[i][5])
+			{
+				ax2[i*6+5] = ax[j];
+				j++;
+			}
+			else
+				ax2[i*6+5] = 0.;
+		}
 	}
 	cholmod_l_free_triplet(&triplet_deplacements_partiels, projet->ef_donnees.c);
 	action_en_cours->deplacement_complet = cholmod_l_triplet_to_sparse(triplet_deplacements_totaux, 0, projet->ef_donnees.c);
