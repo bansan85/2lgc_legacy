@@ -241,6 +241,7 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
 	long			*ai3, *aj3;	// Pointeur vers les données des triplets
 	double			*ax3;		// Pointeur vers les données des triplets
 	unsigned int		i, j;
+	double			max_effort;
 	
 	if ((projet == NULL) || (projet->actions == NULL) || (list_size(projet->actions) == 0) || (_1990_action_cherche_numero(projet, num_action) != 0) || (projet->ef_donnees.QR == NULL))
 		BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
@@ -755,6 +756,14 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
 	printf("forces_complet\n");
 	cholmod_l_write_sparse(stdout, action_en_cours->forces_complet, NULL, NULL, projet->ef_donnees.c);
 	printf("efforts_noeud\n");
+	max_effort = 0.;
+	ax = action_en_cours->efforts_noeuds->x;
+	for (j=0;j<action_en_cours->efforts_noeuds->nzmax;j++)
+	{
+		if (ABS(ax[j]) > max_effort)
+			max_effort = ABS(ax[j]);
+	}
+	cholmod_l_drop(max_effort*ERREUR_RELATIVE_MIN, action_en_cours->efforts_noeuds, projet->ef_donnees.c);
 	cholmod_l_write_sparse(stdout, action_en_cours->efforts_noeuds, NULL, NULL, projet->ef_donnees.c);
 	
 	// On libère la mémoire
