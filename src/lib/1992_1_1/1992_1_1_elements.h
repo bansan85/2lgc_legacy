@@ -35,11 +35,12 @@ typedef struct __Beton_Element_Poutre
 	
 	EF_Noeud		*noeud_debut;
 	EF_Noeud		*noeud_fin;
-	unsigned int		discretisation_element; // Nombre de noeuds intermédiaires
+	unsigned int		discretisation_element;		// Nombre de noeuds intermédiaires
 	EF_Noeud		**noeuds_intermediaires;
 	Relachement		*relachement;
 	
 	cholmod_sparse		*matrice_rotation;
+	cholmod_sparse		*matrice_rotation_transpose;
 	cholmod_sparse		*matrice_rigidite_locale;
 	cholmod_sparse		*matrice_rigidite_globale;
 } Beton_Element;

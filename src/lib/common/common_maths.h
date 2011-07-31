@@ -28,7 +28,7 @@
 // erreur_relative_egale
 // Vérifie que x == y avec une erreur relative maximale D
 // y étant la valeur recherchée et x la valeur à vérifier
-#define ERREUR_RELATIVE_EGALE(x, y, D) ( ((x) == 0.) || ((y) == 0.) ? (MAX(ABS(x),ABS(y))-MIN(ABS(x),ABS(y)) < ABS(D)) : ((MAX(ABS(x),ABS(y))-MIN(ABS(x),ABS(y)))/(MIN(ABS(x),ABS(y))) < ABS(D) ))
+#define ERREUR_RELATIVE_EGALE(x, y) ( ((x) == 0.) || ((y) == 0.) ? (MAX(ABS(x),ABS(y))-MIN(ABS(x),ABS(y)) < (ERREUR_RELATIVE_MIN)) : ((MAX(ABS(x),ABS(y))-MIN(ABS(x),ABS(y)))/(MIN(ABS(x),ABS(y))) < (ERREUR_RELATIVE_MIN) ))
 
 #define ERREUR_RELATIVE_MIN 1e-14
 

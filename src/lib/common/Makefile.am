@@ -8,7 +8,8 @@ lib_LTLIBRARIES		=	libcommon.la
 
 libcommon_la_SOURCES	=	common_text.c \
 				common_projet.c \
-				common_tooltip.c
+				common_tooltip.c \
+				common_fonction.c
 
 libcommon_ladir		=	$(includedir)/2lgc
 
@@ -16,7 +17,8 @@ libcommon_la_HEADERS	=	common_text.h \
 				common_erreurs.h \
 				common_maths.h \
 				common_projet.h \
-				common_tooltip.h
+				common_tooltip.h \
+				common_fonction.h
 
 libcommon_la_LIBADD	=	../1990/lib1990.la \
 				../1992_1_1/lib1992_1_1.la \

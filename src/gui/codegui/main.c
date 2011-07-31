@@ -144,8 +144,8 @@ int main(int argc, char *argv[])
 	
 	// Création des noeuds
 	if (EF_noeuds_ajout(projet, 0., 0., 0., 0) != 0) BUG(-1);
-	if (EF_noeuds_ajout(projet, 0., 1., 3., -1) != 0) BUG(-1);
-	if (EF_noeuds_ajout(projet, 5., -1., 3., -1) != 0) BUG(-1);
+	if (EF_noeuds_ajout(projet, 0., 0., 3., -1) != 0) BUG(-1);
+	if (EF_noeuds_ajout(projet, 5., 0., 3., -1) != 0) BUG(-1);
 	if (EF_noeuds_ajout(projet, 5., 0., 0., 0) != 0) BUG(-1);
 	
 	// Création du matériau béton

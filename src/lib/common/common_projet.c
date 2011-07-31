@@ -164,6 +164,7 @@ Projet *projet_init()
  */
 int projet_free(Projet *projet)
 {
+	// Action doit être libéré avant projet->beton.elements
 	if (projet->actions != NULL)
 		_1990_action_free(projet);
 	if (projet->niveaux_groupes != NULL)

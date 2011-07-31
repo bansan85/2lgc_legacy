@@ -28,6 +28,7 @@
 #include "common_projet.h"
 #include "common_erreurs.h"
 #include "EF_noeud.h"
+#include "common_fonction.h"
 
 
 /* _1990_action_categorie_bat_txt_eu
@@ -231,6 +232,8 @@ int _1990_action_ajout(Projet *projet, int categorie)
 	action_nouveau.description = NULL;
 	action_nouveau.categorie = categorie;
 	action_nouveau.charges = list_init();
+	if (action_nouveau.charges == NULL)
+		BUGTEXTE(-2, gettext("Erreur d'allocation mémoire.\n"));
 	action_nouveau.deplacement_partiel = NULL;
 	action_nouveau.deplacement_complet = NULL;
 	action_nouveau.forces_complet = NULL;
@@ -239,6 +242,12 @@ int _1990_action_ajout(Projet *projet, int categorie)
 	action_nouveau.psi0 = _1990_coef_psi0_bat(categorie, projet->pays);
 	action_nouveau.psi1 = _1990_coef_psi1_bat(categorie, projet->pays);
 	action_nouveau.psi2 = _1990_coef_psi2_bat(categorie, projet->pays);
+	action_nouveau.fonctions_efforts[0] = NULL;
+	action_nouveau.fonctions_efforts[1] = NULL;
+	action_nouveau.fonctions_efforts[2] = NULL;
+	action_nouveau.fonctions_efforts[3] = NULL;
+	action_nouveau.fonctions_efforts[4] = NULL;
+	action_nouveau.fonctions_efforts[5] = NULL;
 	
 	action_dernier = (Action *)list_rear(projet->actions);
 	if (action_dernier == NULL)
@@ -450,6 +459,9 @@ int _1990_action_free(Projet *projet)
 			cholmod_l_free_sparse(&action->forces_complet, projet->ef_donnees.c);
 		if (action->efforts_noeuds != NULL)
 			cholmod_l_free_sparse(&action->efforts_noeuds, projet->ef_donnees.c);
+		
+		if (action->fonctions_efforts[0] != NULL)
+			common_fonction_free(projet, action);
 		free(action);
 	}
 	

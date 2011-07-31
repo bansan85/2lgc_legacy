@@ -28,6 +28,7 @@
 #include "common_projet.h"
 #include "common_erreurs.h"
 #include "common_maths.h"
+#include "common_fonction.h"
 #include "EF_rigidite.h"
 #include "EF_noeud.h"
 #include "1990_actions.h"
@@ -233,7 +234,7 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
 	cholmod_sparse		*sparse_force;
 	cholmod_dense		*dense_force;
 	cholmod_triplet		*triplet_efforts_locaux_finaux, *triplet_efforts_globaux_initiaux, *triplet_efforts_locaux_initiaux, *triplet_efforts_globaux_finaux;
-	cholmod_sparse		*rotation_transpose, *sparse_efforts_locaux_initaux, *sparse_efforts_locaux_finaux, *sparse_efforts_globaux_finaux, *sparse_efforts_globaux_initiaux;
+	cholmod_sparse		*sparse_efforts_locaux_initaux, *sparse_efforts_locaux_finaux, *sparse_efforts_globaux_finaux, *sparse_efforts_globaux_initiaux;
 	long			*ai, *aj;	// Pointeur vers les données des triplets
 	double			*ax;		// Pointeur vers les données des triplets
 	long			*ai2, *aj2;	// Pointeur vers les données des triplets
@@ -247,7 +248,9 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
 		BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
 	
 	// On crée la vecteur sparse contenant les actions extérieures
+	// On commence par initialiser les vecteurs "force partielle" et "force complet" par des 0.
 	action_en_cours = list_curr(projet->actions);
+	common_fonction_init(projet, action_en_cours);
 	triplet_force_partielle = cholmod_l_allocate_triplet(projet->ef_donnees.rigidite_matrice_partielle->nrow, 1, projet->ef_donnees.rigidite_matrice_partielle->nrow, 0, CHOLMOD_REAL, projet->ef_donnees.c);
 	ai = triplet_force_partielle->i;
 	aj = triplet_force_partielle->j;
@@ -271,6 +274,7 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
 		ax3[i] = 0.;
 	}
 	
+	// On ajoute les charges aux noeuds
 	if (list_size(action_en_cours->charges) != 0)
 	{
 		list_mvfront(action_en_cours->charges);
@@ -300,7 +304,8 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
 				ax3[projet->ef_donnees.noeuds_flags_complete[charge_noeud->noeud->numero][4]] += charge_noeud->ry;
 				ax3[projet->ef_donnees.noeuds_flags_complete[charge_noeud->noeud->numero][5]] += charge_noeud->rz;
 			}
-			// Les efforts ne sont pas aux noeuds mais dans la barre
+			// Les efforts ne sont pas aux noeuds mais dans la barre.
+			// Il faut donc calculer les réactions d'appuis pour chaque cas.
 			else
 			{
 				double		E;				// Module d'Young
@@ -327,7 +332,7 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
 					// Charge ponctuelle dans la barre
 					if (charge_barre->type == CHARGE_PONCTUELLE_BARRE)
 					{
-						// On converti les efforts globaux en efforts locaux
+						// On converti les efforts globaux en efforts locaux dans triplet_efforts_locaux_initiaux
 						if (charge_barre->repere_local == FALSE)
 						{
 							triplet_efforts_globaux_initiaux = cholmod_l_allocate_triplet(12, 1, 12, 0, CHOLMOD_REAL, projet->ef_donnees.c);
@@ -360,10 +365,8 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
 						{
 							sparse_efforts_globaux_initiaux = cholmod_l_triplet_to_sparse(triplet_efforts_globaux_initiaux, 0, projet->ef_donnees.c);
 							cholmod_l_free_triplet(&triplet_efforts_globaux_initiaux, projet->ef_donnees.c);
-							rotation_transpose = cholmod_l_transpose(element_en_beton->matrice_rotation, 1, projet->ef_donnees.c);
-							sparse_efforts_locaux_initaux = cholmod_l_ssmult(rotation_transpose, sparse_efforts_globaux_initiaux, 0, 1, 0, projet->ef_donnees.c);
+							sparse_efforts_locaux_initaux = cholmod_l_ssmult(element_en_beton->matrice_rotation_transpose, sparse_efforts_globaux_initiaux, 0, 1, 0, projet->ef_donnees.c);
 							cholmod_l_free_sparse(&(sparse_efforts_globaux_initiaux), projet->ef_donnees.c);
-							cholmod_l_free_sparse(&(rotation_transpose), projet->ef_donnees.c);
 							triplet_efforts_locaux_initiaux = cholmod_l_sparse_to_triplet(sparse_efforts_locaux_initaux, projet->ef_donnees.c);
 							ai2 = triplet_efforts_locaux_initiaux->i;
 							aj2 = triplet_efforts_locaux_initiaux->j;
@@ -416,7 +419,7 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
 						zz = noeud_fin->position.z - noeud_debut->position.z;
 						l = sqrt(xx*xx+yy*yy+zz*zz);
 						
-						// Définition des coefficient kA et kB
+						// Définition des coefficient kA et kB. Pour rappel, kA et kB correspondent à l'inverse de la raideur.
 						// Pas de relachement possible
 						if (element_en_beton->relachement == NULL)
 						{
@@ -470,7 +473,7 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
 							}
 						}
 						
-						// Détermination de la rotation de la partie de la poutre discrétisée en la supposant isostatique
+						// Détermination de la rotation au noeud de la partie de la poutre discrétisée en la supposant isostatique
 						phiAy =  ax2[2]*charge_barre->position/(6*E*Iy*l)*(l-charge_barre->position)*(2*l-charge_barre->position)+ax2[4]/(6*E*Iy*l)*(l*l-3*(l-charge_barre->position)*(l-charge_barre->position));
 						phiBy = -ax2[2]*charge_barre->position/(6*E*Iy*l)*(l*l-charge_barre->position*charge_barre->position)+ax2[4]/(6*E*Iy*l)*(l*l-3*charge_barre->position*charge_barre->position);
 						phiAz =  ax2[1]*charge_barre->position/(6*E*Iz*l)*(l-charge_barre->position)*(2*l-charge_barre->position)-ax2[5]/(6*E*Iz*l)*(l*l-3*(l-charge_barre->position)*(l-charge_barre->position));
@@ -527,6 +530,8 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
 						}
 						
 						// Réaction d'appui sur les noeuds
+						FAx = ax2[0]*(l-charge_barre->position)/l;
+						FBx = ax2[0]*(charge_barre->position)/l;
 						FAy = ax2[1]*(l-charge_barre->position)/l-ax2[5]/l+(MBz+MAz)/l;
 						FBy = ax2[1]*charge_barre->position/l+ax2[5]/l-(MBz+MAz)/l;
 						FAz = ax2[2]*(l-charge_barre->position)/l+ax2[4]/l-(MBy+MAy)/l;
@@ -551,8 +556,23 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
 						else
 							BUG(-1);
 						
-						FAx = ax2[0]*(l-charge_barre->position)/l;
-						FBx = ax2[0]*(charge_barre->position)/l;
+						// Détermination des fonctions des efforts
+						common_fonction_ajout(action_en_cours->fonctions_efforts[0][element_en_beton->numero], 0., charge_barre->position, -FAx, 0., 0., 0.);
+						common_fonction_ajout(action_en_cours->fonctions_efforts[0][element_en_beton->numero], charge_barre->position, l, FBx, 0., 0., 0.);
+						common_fonction_ajout(action_en_cours->fonctions_efforts[1][element_en_beton->numero], 0., charge_barre->position, -ax2[1]*(l-charge_barre->position)/l+ax2[5]/l, 0., 0., 0.);
+						common_fonction_ajout(action_en_cours->fonctions_efforts[1][element_en_beton->numero], charge_barre->position, l, ax2[1]*charge_barre->position/l+ax2[5]/l, 0., 0., 0.);
+						common_fonction_ajout(action_en_cours->fonctions_efforts[1][element_en_beton->numero], 0, l, (-MAz-MBz)/l, 0., 0., 0.);
+						common_fonction_ajout(action_en_cours->fonctions_efforts[2][element_en_beton->numero], 0., charge_barre->position, -ax2[2]*(l-charge_barre->position)/l-ax2[4]/l, 0., 0., 0.);
+						common_fonction_ajout(action_en_cours->fonctions_efforts[2][element_en_beton->numero], charge_barre->position, l, ax2[2]*charge_barre->position/l-ax2[4]/l, 0., 0., 0.);
+						common_fonction_ajout(action_en_cours->fonctions_efforts[2][element_en_beton->numero], 0, l, (+MAy+MBy)/l, 0., 0., 0.);
+						common_fonction_ajout(action_en_cours->fonctions_efforts[3][element_en_beton->numero], 0., charge_barre->position, -MAx, 0., 0., 0.);
+						common_fonction_ajout(action_en_cours->fonctions_efforts[3][element_en_beton->numero], charge_barre->position, l, MBx, 0., 0., 0.);
+						common_fonction_ajout(action_en_cours->fonctions_efforts[4][element_en_beton->numero], 0., charge_barre->position, 0., -ax2[2]*(l-charge_barre->position)/l-ax2[4]/l, 0., 0.);
+						common_fonction_ajout(action_en_cours->fonctions_efforts[4][element_en_beton->numero], charge_barre->position, l, -ax2[2]*charge_barre->position+ax2[4], ax2[2]*charge_barre->position/l-ax2[4]/l, 0., 0.);
+						common_fonction_ajout(action_en_cours->fonctions_efforts[4][element_en_beton->numero], 0., l, -MAy, (MAy+MBy)/l, 0., 0.);
+						common_fonction_ajout(action_en_cours->fonctions_efforts[5][element_en_beton->numero], 0., charge_barre->position, 0., ax2[1]*(l-charge_barre->position)/l-ax2[5]/l, 0., 0.);
+						common_fonction_ajout(action_en_cours->fonctions_efforts[5][element_en_beton->numero], charge_barre->position, l, ax2[1]*charge_barre->position+ax2[5], -ax2[1]*charge_barre->position/l-ax2[5]/l, 0., 0.);
+						common_fonction_ajout(action_en_cours->fonctions_efforts[5][element_en_beton->numero], 0., l, -MAz, (MAz+MBz)/l, 0., 0.);
 						
 						cholmod_l_free_triplet(&triplet_efforts_locaux_initiaux, projet->ef_donnees.c);
 						
@@ -620,8 +640,6 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
 	dense_force = cholmod_l_sparse_to_dense(sparse_force, projet->ef_donnees.c);
 	cholmod_l_free_sparse(&sparse_force, projet->ef_donnees.c);
 	action_en_cours->forces_complet = cholmod_l_triplet_to_sparse(triplet_force_complete, 0, projet->ef_donnees.c);
-	printf("forces_complet\n");
-	cholmod_l_write_sparse(stdout, action_en_cours->forces_complet, NULL, NULL, projet->ef_donnees.c);
 	cholmod_l_free_triplet(&triplet_force_complete, projet->ef_donnees.c);
 	
 //	Pour utiliser cholmod dans les calculs de matrices.
@@ -637,8 +655,6 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
 	cholmod_dense *Y = SuiteSparseQR_C_qmult(SPQR_QTX, projet->ef_donnees.QR, dense_force, projet->ef_donnees.c);
 	cholmod_dense *X = SuiteSparseQR_C_solve(SPQR_RX_EQUALS_B, projet->ef_donnees.QR, Y, projet->ef_donnees.c);
 	action_en_cours->deplacement_partiel = cholmod_l_dense_to_sparse(X, TRUE, projet->ef_donnees.c);
-	printf("deplacement_partiel\n");
-	cholmod_l_write_sparse(stdout, action_en_cours->deplacement_partiel, NULL, NULL, projet->ef_donnees.c);
 	
 	// On crée le vecteur déplacement complet
 	triplet_deplacements_partiels = cholmod_l_sparse_to_triplet(action_en_cours->deplacement_partiel, projet->ef_donnees.c);
@@ -653,7 +669,6 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
 	j = 0;
 	for (i=0;i<list_size(projet->ef_donnees.noeuds);i++)
 	{
-		printf("%d %d %d %d %d %d\n", projet->ef_donnees.noeuds_flags_partielle[i][0], projet->ef_donnees.noeuds_flags_partielle[i][1], projet->ef_donnees.noeuds_flags_partielle[i][2], projet->ef_donnees.noeuds_flags_partielle[i][3], projet->ef_donnees.noeuds_flags_partielle[i][4], projet->ef_donnees.noeuds_flags_partielle[i][5]);
 		ai2[i*6] = i*6; aj2[i*6] = 0;
 		if (projet->ef_donnees.noeuds_flags_partielle[i][0] == -1)
 			ax2[i*6] = 0.;
@@ -735,9 +750,6 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
 	}
 	cholmod_l_free_triplet(&triplet_deplacements_partiels, projet->ef_donnees.c);
 	action_en_cours->deplacement_complet = cholmod_l_triplet_to_sparse(triplet_deplacements_totaux, 0, projet->ef_donnees.c);
-	cholmod_l_free_triplet(&triplet_deplacements_totaux, projet->ef_donnees.c);
-	printf("deplacement_complet\n");
-	cholmod_l_write_sparse(stdout, action_en_cours->deplacement_complet, NULL, NULL, projet->ef_donnees.c);
 	
 	// On calcul le résidu. Méthode trouvée dans le fichier cholmod_demo.c de la source de la librairie cholmod.
 	cholmod_dense *r = cholmod_l_copy_dense(dense_force, projet->ef_donnees.c);
@@ -746,16 +758,13 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
 	double bnorm = cholmod_l_norm_dense(dense_force, 0, projet->ef_donnees.c);
 	double rnorm = cholmod_l_norm_dense(r, 0, projet->ef_donnees.c);
 	double xnorm = cholmod_l_norm_dense(X, 0, projet->ef_donnees.c);
-	double anorm = cholmod_l_norm_sparse (projet->ef_donnees.rigidite_matrice_partielle, 0, projet->ef_donnees.c) ;
+	double anorm = cholmod_l_norm_sparse(projet->ef_donnees.rigidite_matrice_partielle, 0, projet->ef_donnees.c);
 	double axbnorm = (anorm * xnorm + bnorm) ;
 	action_en_cours->norm = rnorm / axbnorm ;
 	printf("résidu : %e\n", action_en_cours->norm);
 	
 	// On calcule les efforts dans tous les noeuds, y compris les réactions d'appuis.
 	action_en_cours->efforts_noeuds = cholmod_l_ssmult(projet->ef_donnees.rigidite_matrice_complete, action_en_cours->deplacement_complet, 0, TRUE, TRUE, projet->ef_donnees.c);
-	printf("forces_complet\n");
-	cholmod_l_write_sparse(stdout, action_en_cours->forces_complet, NULL, NULL, projet->ef_donnees.c);
-	printf("efforts_noeud\n");
 	max_effort = 0.;
 	ax = action_en_cours->efforts_noeuds->x;
 	for (j=0;j<action_en_cours->efforts_noeuds->nzmax;j++)
@@ -764,7 +773,6 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
 			max_effort = ABS(ax[j]);
 	}
 	cholmod_l_drop(max_effort*ERREUR_RELATIVE_MIN, action_en_cours->efforts_noeuds, projet->ef_donnees.c);
-	cholmod_l_write_sparse(stdout, action_en_cours->efforts_noeuds, NULL, NULL, projet->ef_donnees.c);
 	
 	// On libère la mémoire
 	cholmod_l_free_dense(&Y, projet->ef_donnees.c);
@@ -780,6 +788,67 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
 //	cholmod_sparse *tttt = SuiteSparseQR_C_backslash_sparse(0, 0., projet->ef_donnees.rigidite_matrice_partielle, sparse_force, projet->ef_donnees.c);
 //	printf("déplacement 5\n");
 //	cholmod_l_write_sparse(stdout, tttt, NULL, NULL, projet->ef_donnees.c);*/
+	
+	// On parcours tous les éléments et on ajoute les efforts dus aux déplacements.
+	list_mvfront(projet->beton.elements);
+	do
+	{
+		Beton_Element		*element_en_beton = list_curr(projet->beton.elements);
+		cholmod_triplet		*triplet_deplacement_globaux, *triplet_deplacement_locaux;
+		cholmod_sparse		*sparse_deplacement_globaux, *sparse_deplacement_locaux;
+		double			xx, yy, zz, l;
+		Beton_Section_Rectangulaire	*section;
+		double			MA, MB;
+		
+		triplet_deplacement_globaux = cholmod_l_allocate_triplet(12, 1, 12, 0, CHOLMOD_REAL, projet->ef_donnees.c);
+		ai = triplet_deplacement_globaux->i;
+		aj = triplet_deplacement_globaux->j;
+		ax = triplet_deplacement_globaux->x;
+		triplet_deplacement_globaux->nnz = 12;
+		ax2 = triplet_deplacements_totaux->x;
+		for (i=0;i<6;i++)
+		{
+			ai[i] = i;
+			aj[i] = 0;
+			ax[i] = ax2[projet->ef_donnees.noeuds_flags_complete[element_en_beton->noeud_debut->numero][i]];
+		}
+		for (i=0;i<6;i++)
+		{
+			ai[i+6] = i+6;
+			aj[i+6] = 0;
+			ax[i+6] = ax2[projet->ef_donnees.noeuds_flags_complete[element_en_beton->noeud_fin->numero][i]];
+		}
+		sparse_deplacement_globaux = cholmod_l_triplet_to_sparse(triplet_deplacement_globaux, 0, projet->ef_donnees.c);
+		cholmod_l_free_triplet(&triplet_deplacement_globaux, projet->ef_donnees.c);
+		sparse_deplacement_locaux = cholmod_l_ssmult(element_en_beton->matrice_rotation_transpose, sparse_deplacement_globaux, 0, 1, 0, projet->ef_donnees.c);
+		cholmod_l_free_sparse(&sparse_deplacement_globaux, projet->ef_donnees.c);
+		triplet_deplacement_locaux = cholmod_l_sparse_to_triplet(sparse_deplacement_locaux, projet->ef_donnees.c);
+		cholmod_l_free_sparse(&sparse_deplacement_locaux, projet->ef_donnees.c);
+		ax = triplet_deplacement_locaux->x;
+		xx = element_en_beton->noeud_fin->position.x - element_en_beton->noeud_debut->position.x;
+		yy = element_en_beton->noeud_fin->position.y - element_en_beton->noeud_debut->position.y;
+		zz = element_en_beton->noeud_fin->position.z - element_en_beton->noeud_debut->position.z;
+		l = sqrt(xx*xx+yy*yy+zz*zz);
+		section = element_en_beton->section;
+		common_fonction_ajout(action_en_cours->fonctions_efforts[0][element_en_beton->numero], 0., l, element_en_beton->materiau->ecm*section->caracteristiques->a*(ax[0]-ax[6])/l, 0., 0., 0.);
+		MA = element_en_beton->materiau->ecm*section->caracteristiques->iz*(12*ax[1]/l/l/l-12*ax[7]/l/l/l+6*ax[5]/l/l+6*ax[11]/l/l);
+		MB = -element_en_beton->materiau->ecm*section->caracteristiques->iz*(-12*ax[1]/l/l/l+12*ax[7]/l/l/l-6*ax[5]/l/l-6*ax[11]/l/l);
+		common_fonction_ajout(action_en_cours->fonctions_efforts[1][element_en_beton->numero], 0., l, MA, (-MA+MB)/l, 0., 0.);
+		MA = element_en_beton->materiau->ecm*section->caracteristiques->iy*(12*ax[2]/l/l/l-12*ax[8]/l/l/l-6*ax[4]/l/l-6*ax[10]/l/l);
+		MB = -element_en_beton->materiau->ecm*section->caracteristiques->iy*(-12*ax[2]/l/l/l+12*ax[8]/l/l/l+6*ax[4]/l/l+6*ax[10]/l/l);
+		common_fonction_ajout(action_en_cours->fonctions_efforts[2][element_en_beton->numero], 0., l, MA, (-MA+MB)/l, 0., 0.);
+		common_fonction_ajout(action_en_cours->fonctions_efforts[3][element_en_beton->numero], 0., l, element_en_beton->materiau->gnu_0_2*section->caracteristiques->j*(ax[3]-ax[9])/l, 0., 0., 0.);
+		MA = element_en_beton->materiau->ecm*section->caracteristiques->iy*(6*(-ax[2]+ax[8])/l/l+4*ax[4]/l+2*ax[10]/l);
+		MB = -element_en_beton->materiau->ecm*section->caracteristiques->iy*(6*(-ax[2]+ax[8])/l/l+2*ax[4]/l+4*ax[10]/l);
+		common_fonction_ajout(action_en_cours->fonctions_efforts[4][element_en_beton->numero], 0., l, MA, (-MA+MB)/l, 0., 0.);
+		MA = element_en_beton->materiau->ecm*section->caracteristiques->iz*(6*ax[1]/l/l-6*ax[7]/l/l+4*ax[5]/l+2*ax[11]/l);
+		MB = -element_en_beton->materiau->ecm*section->caracteristiques->iz*(6*ax[1]/l/l-6*ax[7]/l/l+2*ax[5]/l+4*ax[11]/l);
+		common_fonction_ajout(action_en_cours->fonctions_efforts[5][element_en_beton->numero], 0., l, MA, (-MA+MB)/l, 0., 0.);
+		cholmod_l_free_triplet(&triplet_deplacement_locaux, projet->ef_donnees.c);
+	}
+	while (list_mvnext(projet->beton.elements) != NULL);
+	cholmod_l_free_triplet(&triplet_deplacements_totaux, projet->ef_donnees.c);
+	
 	
 	return 0;
 }
