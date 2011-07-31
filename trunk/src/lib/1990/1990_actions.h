@@ -23,6 +23,7 @@
 #include <cholmod.h>
 
 #include "common_projet.h"
+#include "common_fonction.h"
 #include "EF_noeud.h"
 
 typedef enum
@@ -80,6 +81,9 @@ typedef struct __Action
 	cholmod_sparse		*forces_complet;
 	cholmod_sparse		*efforts_noeuds;
 	double			norm;
+	Fonction		**fonctions_efforts[6];		// Les 6 fonctions (N, Ty, Tz, Mx, My, Mz) pour chaque barre.
+								// Les fonctions représentent la courbe des efforts dues aux charges dans
+								// les barres et dus aux déplacements calculés par la méthode des EF
 } Action;
 
 char *_1990_action_categorie_bat_txt_eu(int type);

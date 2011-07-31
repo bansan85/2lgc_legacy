@@ -75,7 +75,7 @@ int _1990_ponderations_verifie_double(LIST *liste_ponderations, Ponderation* pon
 				elem1 = list_curr(ponderation->elements);
 				elem2 = list_curr(ponderation_a_verifier->elements);
 				// Preuve ici
-				if ((elem1->action != elem2->action) || (elem1->psi != elem2->psi) || (!(ERREUR_RELATIVE_EGALE(elem1->ponderation, elem2->ponderation, ERREUR_RELATIVE_MIN))))
+				if ((elem1->action != elem2->action) || (elem1->psi != elem2->psi) || (!(ERREUR_RELATIVE_EGALE(elem1->ponderation, elem2->ponderation))))
 					doublon = 0;
 			}
 			while ((list_mvnext(ponderation->elements) != NULL) && (list_mvnext(ponderation_a_verifier->elements) != NULL) && (doublon == 1));
@@ -244,7 +244,7 @@ int _1990_ponderations_genere_un(Projet *projet, LIST* ponderations_destination,
 					else
 						ponderation_element.psi = -1;
 					categorie = _1990_action_type_combinaison_bat(ponderation_element.action->categorie, projet->pays);
-					if ((ERREUR_RELATIVE_EGALE(0., coef_min[categorie], ERREUR_RELATIVE_MIN)) && (ERREUR_RELATIVE_EGALE(0., coef_max[categorie], ERREUR_RELATIVE_MIN)))
+					if ((ERREUR_RELATIVE_EGALE(0., coef_min[categorie])) && (ERREUR_RELATIVE_EGALE(0., coef_max[categorie])))
 						suivant = 1;
 					else
 					{
@@ -253,7 +253,7 @@ int _1990_ponderations_genere_un(Projet *projet, LIST* ponderations_destination,
 							ponderation_element.ponderation = coef_max[categorie];
 						else
 							ponderation_element.ponderation = coef_min[categorie];
-						if (!(ERREUR_RELATIVE_EGALE(0., ponderation_element.ponderation, ERREUR_RELATIVE_MIN)))
+						if (!(ERREUR_RELATIVE_EGALE(0., ponderation_element.ponderation)))
 						{
 							if (list_insert_after(ponderation.elements, &ponderation_element, sizeof(ponderation_element)) == NULL)
 								BUGTEXTE(-2, gettext("Erreur d'allocation mémoire.\n"));

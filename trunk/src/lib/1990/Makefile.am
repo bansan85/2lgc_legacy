@@ -1,6 +1,7 @@
 DEFAULT_INCLUDES	=	-I../../.. \
 				-I../common \
-				-I../EF
+				-I../EF \
+				-I.
 
 lib_LTLIBRARIES = lib1990.la
 
