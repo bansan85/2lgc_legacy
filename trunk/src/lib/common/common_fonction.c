@@ -157,7 +157,7 @@ int common_fonction_ajout_troncon(Fonction* fonction, double coupure)
  */
 int common_fonction_ajout(Fonction* fonction, double debut_troncon, double fin_troncon, double coef_0, double coef_x, double coef_x2, double coef_x3)
 {
-	if ((fonction == NULL) || (fin_troncon <= debut_troncon))
+	if ((fonction == NULL) || (fin_troncon < debut_troncon) | (ERREUR_RELATIVE_EGALE(fin_troncon, debut_troncon)))
 		BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
 	
 	if (fonction->nb_troncons == 0)
