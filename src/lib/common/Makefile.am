@@ -9,7 +9,8 @@ lib_LTLIBRARIES		=	libcommon.la
 libcommon_la_SOURCES	=	common_text.c \
 				common_projet.c \
 				common_tooltip.c \
-				common_fonction.c
+				common_fonction.c \
+				common_maths.c
 
 libcommon_ladir		=	$(includedir)/2lgc
 

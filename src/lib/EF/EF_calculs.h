@@ -24,5 +24,6 @@
 int EF_calculs_initialise(Projet *projet);
 int EF_calculs_genere_sparse(Projet *projet);
 int EF_calculs_resoud_charge(Projet *projet, int num_action);
+int EF_calculs_affiche_resultats(Projet *projet, int num_action);
 
 #endif
