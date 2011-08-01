@@ -84,6 +84,7 @@ typedef struct __Action
 	Fonction		**fonctions_efforts[6];		// Les 6 fonctions (N, Ty, Tz, Mx, My, Mz) pour chaque barre.
 								// Les fonctions représentent la courbe des efforts dues aux charges dans
 								// les barres et dus aux déplacements calculés par la méthode des EF
+	Fonction		**fonctions_fleche[3];		// Les 3 flèches x, y, z pour chaque barre.
 } Action;
 
 char *_1990_action_categorie_bat_txt_eu(int type);

@@ -113,8 +113,6 @@ int _1992_1_1_elements_ajout(Projet *projet, Type_Element type, unsigned int sec
 	
 	element_nouveau.matrice_rotation = NULL;
 	element_nouveau.matrice_rotation_transpose = NULL;
-	element_nouveau.matrice_rigidite_locale = NULL;
-	element_nouveau.matrice_rigidite_globale = NULL;
 	
 	element_en_cours = (Beton_Element *)list_rear(projet->beton.elements);
 	if (element_en_cours == NULL)
@@ -177,7 +175,7 @@ int _1992_1_1_elements_rigidite_ajout(Projet *projet, Beton_Element *element)
 	double		xx, yy, zz, ll;		// Dimension de la barre dans 3D
 	unsigned int	i, j;
 	cholmod_triplet	*triplet;
-	cholmod_sparse	*sparse_tmp;
+	cholmod_sparse	*sparse_tmp, *matrice_rigidite_locale, *matrice_rigidite_globale;
 	Beton_Section_Carre	*section_donnees;
 	Beton_Section_Caracteristiques	*section_caract;
 	
@@ -578,15 +576,15 @@ int _1992_1_1_elements_rigidite_ajout(Projet *projet, Beton_Element *element)
 			BUGTEXTE(-2, "Impossible\n");
 		
 		triplet->nnz=i;
-		element->matrice_rigidite_locale = cholmod_l_triplet_to_sparse(triplet, 0, projet->ef_donnees.c);
+		matrice_rigidite_locale = cholmod_l_triplet_to_sparse(triplet, 0, projet->ef_donnees.c);
 		cholmod_l_free_triplet(&triplet, projet->ef_donnees.c);
 		
 		// On calcule la matrice locale dans le repère globale.
 		// La matrice de rigidité globale est égale à R.K.R-1 mais comme R-1 = RT, on calcul R.K.RT
-		sparse_tmp = cholmod_l_ssmult(element->matrice_rotation, element->matrice_rigidite_locale, 0, 1, 0, projet->ef_donnees.c);
-		element->matrice_rigidite_globale = cholmod_l_ssmult(sparse_tmp, element->matrice_rotation_transpose, 0, 1, 0, projet->ef_donnees.c);
+		sparse_tmp = cholmod_l_ssmult(element->matrice_rotation, matrice_rigidite_locale, 0, 1, 0, projet->ef_donnees.c);
+		matrice_rigidite_globale = cholmod_l_ssmult(sparse_tmp, element->matrice_rotation_transpose, 0, 1, 0, projet->ef_donnees.c);
 		cholmod_l_free_sparse(&(sparse_tmp), projet->ef_donnees.c);
-		triplet = cholmod_l_sparse_to_triplet(element->matrice_rigidite_globale, projet->ef_donnees.c);
+		triplet = cholmod_l_sparse_to_triplet(matrice_rigidite_globale, projet->ef_donnees.c);
 		ai = triplet->i;
 		aj = triplet->j;
 		ax = triplet->x;
@@ -661,6 +659,8 @@ int _1992_1_1_elements_rigidite_ajout(Projet *projet, Beton_Element *element)
 			}
 		}
 		cholmod_l_free_triplet(&triplet, projet->ef_donnees.c);
+		cholmod_l_free_sparse(&(matrice_rigidite_locale), projet->ef_donnees.c);
+		cholmod_l_free_sparse(&(matrice_rigidite_globale), projet->ef_donnees.c);
 	}
 	
 	return 0;
@@ -715,8 +715,6 @@ int _1992_1_1_elements_free(Projet *projet)
 		free(element->noeuds_intermediaires);
 		cholmod_l_free_sparse(&(element->matrice_rotation), projet->ef_donnees.c);
 		cholmod_l_free_sparse(&(element->matrice_rotation_transpose), projet->ef_donnees.c);
-		cholmod_l_free_sparse(&(element->matrice_rigidite_locale), projet->ef_donnees.c);
-		cholmod_l_free_sparse(&(element->matrice_rigidite_globale), projet->ef_donnees.c);
 		
 		free(element);
 	}
