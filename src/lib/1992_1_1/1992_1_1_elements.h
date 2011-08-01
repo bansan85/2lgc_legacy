@@ -41,8 +41,6 @@ typedef struct __Beton_Element_Poutre
 	
 	cholmod_sparse		*matrice_rotation;
 	cholmod_sparse		*matrice_rotation_transpose;
-	cholmod_sparse		*matrice_rigidite_locale;
-	cholmod_sparse		*matrice_rigidite_globale;
 } Beton_Element;
 
 int _1992_1_1_elements_init(Projet *projet);
