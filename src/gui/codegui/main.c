@@ -155,9 +155,9 @@ int main(int argc, char *argv[])
 	if (EF_relachement_ajout(projet, EF_RELACHEMENT_BLOQUE, EF_RELACHEMENT_BLOQUE, EF_RELACHEMENT_BLOQUE, EF_RELACHEMENT_BLOQUE, EF_RELACHEMENT_BLOQUE, EF_RELACHEMENT_BLOQUE) != 0) BUG(-1);
 
 	// Création de l'élément en béton
-	if (_1992_1_1_elements_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 0, 1, -1, 100) != 0) BUG(-1);
-	if (_1992_1_1_elements_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 1, 2, -1, 100) != 0) BUG(-1);
-	if (_1992_1_1_elements_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 2, 3, -1, 100) != 0) BUG(-1);
+	if (_1992_1_1_elements_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 0, 1, -1, 10) != 0) BUG(-1);
+	if (_1992_1_1_elements_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 1, 2, -1, 10) != 0) BUG(-1);
+	if (_1992_1_1_elements_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 2, 3, -1, 10) != 0) BUG(-1);
 	
 	// Ajout de l'action ponctuelle
 //	if (_1990_action_ajout_charge_ponctuelle_noeud(projet, 0, EF_noeuds_cherche_numero(projet, 1), 100000., 0., 0., 0., 0., 0.) != 0) BUG(-1);

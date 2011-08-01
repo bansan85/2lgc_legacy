@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2011-08-01 09:12+0200\n"
+"POT-Creation-Date: 2011-08-01 09:26+0200\n"
 "PO-Revision-Date: 2011-07-21 15:15+0100\n"
 "Last-Translator: LE GARREC Vincent <vlg@2lgc.org>\n"
 "Language-Team: French\n"
@@ -56,7 +56,7 @@ msgstr ""
 #: src/lib/common/common_fonction.c:80 src/lib/common/common_fonction.c:129
 #: src/lib/common/common_fonction.c:161 src/lib/common/common_fonction.c:214
 #: src/lib/common/common_fonction.c:240 src/lib/EF/EF_calculs.c:154
-#: src/lib/EF/EF_calculs.c:248 src/lib/EF/EF_calculs.c:873
+#: src/lib/EF/EF_calculs.c:248 src/lib/EF/EF_calculs.c:871
 #: src/lib/EF/EF_noeud.c:36 src/lib/EF/EF_noeud.c:62 src/lib/EF/EF_noeud.c:102
 #: src/lib/EF/EF_noeud.c:128 src/lib/EF/EF_relachement.c:35
 #: src/lib/EF/EF_relachement.c:63 src/lib/EF/EF_relachement.c:97
