@@ -852,3 +852,51 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
 	
 	return 0;
 }
+
+
+/* EF_calculs_affiche_resultats
+ * Description : Affiche tous les résultats d'une action
+ * Paramètres : Projet *projet : la variable projet
+ *            : int num_action : numéro de l'action
+ * Valeur renvoyée :
+ *   Succès : 0
+ *   Échec : valeur négative
+ */
+int EF_calculs_affiche_resultats(Projet *projet, int num_action)
+{
+	Action			*action_en_cours;
+	unsigned int		i;
+	
+	if ((projet == NULL) || (projet->actions == NULL) || (list_size(projet->actions) == 0) || (_1990_action_cherche_numero(projet, num_action) != 0))
+		BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
+	
+	// On crée la vecteur sparse contenant les actions extérieures
+	// On commence par initialiser les vecteurs "force partielle" et "force complet" par des 0.
+	action_en_cours = list_curr(projet->actions);
+	printf("Effort aux noeuds & Réactions d'appuis\n");
+	common_math_arrondi_sparse(action_en_cours->efforts_noeuds);
+	cholmod_l_write_sparse(stdout, action_en_cours->efforts_noeuds, NULL, NULL, projet->ef_donnees.c);
+	printf("Déplacements\n");
+	common_math_arrondi_sparse(action_en_cours->deplacement_complet);
+	cholmod_l_write_sparse(stdout, action_en_cours->deplacement_complet, NULL, NULL, projet->ef_donnees.c);
+	if (list_size(projet->beton.elements) != 0)
+	{
+		for (i=0;i<list_size(projet->beton.elements);i++)
+		{
+			printf("Barre n°%d, Effort normal\n", i);
+			common_fonction_affiche(action_en_cours->fonctions_efforts[0][i]);
+			printf("Barre n°%d, Effort Tranchant Y\n", i);
+			common_fonction_affiche(action_en_cours->fonctions_efforts[1][i]);
+			printf("Barre n°%d, Effort Tranchant Z\n", i);
+			common_fonction_affiche(action_en_cours->fonctions_efforts[2][i]);
+			printf("Barre n°%d, Moment de torsion\n", i);
+			common_fonction_affiche(action_en_cours->fonctions_efforts[3][i]);
+			printf("Barre n°%d, Moment de flexion Y\n", i);
+			common_fonction_affiche(action_en_cours->fonctions_efforts[4][i]);
+			printf("Barre n°%d, Moment de flexion Z\n", i);
+			common_fonction_affiche(action_en_cours->fonctions_efforts[5][i]);
+		}
+	}
+	
+	return 0;
+}
