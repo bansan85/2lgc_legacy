@@ -248,6 +248,12 @@ int _1990_action_ajout(Projet *projet, int categorie)
 	action_nouveau.fonctions_efforts[3] = NULL;
 	action_nouveau.fonctions_efforts[4] = NULL;
 	action_nouveau.fonctions_efforts[5] = NULL;
+	action_nouveau.fonctions_fleche[0] = NULL;
+	action_nouveau.fonctions_fleche[1] = NULL;
+	action_nouveau.fonctions_fleche[2] = NULL;
+	action_nouveau.fonctions_rotation[0] = NULL;
+	action_nouveau.fonctions_rotation[1] = NULL;
+	action_nouveau.fonctions_rotation[2] = NULL;
 	
 	action_dernier = (Action *)list_rear(projet->actions);
 	if (action_dernier == NULL)

@@ -426,8 +426,7 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
 						yy = noeud_fin->position.y - element_en_beton->noeud_debut->position.y;
 						zz = noeud_fin->position.z - element_en_beton->noeud_debut->position.z;
 						fin_barre = sqrt(xx*xx+yy*yy+zz*zz);
-						l = fin_barre-debut_barre;
-
+						l = ABS(fin_barre-debut_barre);
 						
 						// Définition des coefficient kA et kB. Pour rappel, kA et kB correspondent à l'inverse de la raideur.
 						// Pas de relachement possible
@@ -567,25 +566,189 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
 							BUG(-1);
 						
 						// Détermination des fonctions des efforts
-						common_fonction_ajout(action_en_cours->fonctions_efforts[0][element_en_beton->numero], debut_barre, charge_barre->position, -FAx, 0., 0., 0.);
-						common_fonction_ajout(action_en_cours->fonctions_efforts[0][element_en_beton->numero], charge_barre->position, fin_barre, FBx, 0., 0., 0.);
-						common_fonction_ajout(action_en_cours->fonctions_efforts[1][element_en_beton->numero], debut_barre, charge_barre->position, -ax2[1]*(l-charge_barre->position)/l+ax2[5]/l, 0., 0., 0.);
-						common_fonction_ajout(action_en_cours->fonctions_efforts[1][element_en_beton->numero], charge_barre->position, fin_barre, ax2[1]*charge_barre->position/l+ax2[5]/l, 0., 0., 0.);
-						common_fonction_ajout(action_en_cours->fonctions_efforts[1][element_en_beton->numero], debut_barre, fin_barre, (-MAz-MBz)/l, 0., 0., 0.);
-						common_fonction_ajout(action_en_cours->fonctions_efforts[2][element_en_beton->numero], debut_barre, charge_barre->position, -ax2[2]*(l-charge_barre->position)/l-ax2[4]/l, 0., 0., 0.);
-						common_fonction_ajout(action_en_cours->fonctions_efforts[2][element_en_beton->numero], charge_barre->position, fin_barre, ax2[2]*charge_barre->position/l-ax2[4]/l, 0., 0., 0.);
-						common_fonction_ajout(action_en_cours->fonctions_efforts[2][element_en_beton->numero], debut_barre, fin_barre, (+MAy+MBy)/l, 0., 0., 0.);
-						common_fonction_ajout(action_en_cours->fonctions_efforts[3][element_en_beton->numero], debut_barre, charge_barre->position, -MAx, 0., 0., 0.);
-						common_fonction_ajout(action_en_cours->fonctions_efforts[3][element_en_beton->numero], charge_barre->position, fin_barre, MBx, 0., 0., 0.);
-						common_fonction_ajout(action_en_cours->fonctions_efforts[4][element_en_beton->numero], debut_barre, charge_barre->position, 0., -ax2[2]*(l-charge_barre->position)/l-ax2[4]/l, 0., 0.);
-						common_fonction_ajout(action_en_cours->fonctions_efforts[4][element_en_beton->numero], charge_barre->position, fin_barre, -ax2[2]*charge_barre->position+ax2[4], ax2[2]*charge_barre->position/l-ax2[4]/l, 0., 0.);
-						common_fonction_ajout(action_en_cours->fonctions_efforts[4][element_en_beton->numero], debut_barre, fin_barre, -MAy, (MAy+MBy)/l, 0., 0.);
-						common_fonction_ajout(action_en_cours->fonctions_efforts[5][element_en_beton->numero], debut_barre, charge_barre->position, 0., ax2[1]*(l-charge_barre->position)/l-ax2[5]/l, 0., 0.);
-						common_fonction_ajout(action_en_cours->fonctions_efforts[5][element_en_beton->numero], charge_barre->position, fin_barre, ax2[1]*charge_barre->position+ax2[5], -ax2[1]*charge_barre->position/l-ax2[5]/l, 0., 0.);
-						common_fonction_ajout(action_en_cours->fonctions_efforts[5][element_en_beton->numero], debut_barre, fin_barre, -MAz, (MAz+MBz)/l, 0., 0.);
+						common_fonction_ajout(action_en_cours->fonctions_efforts[0][element_en_beton->numero],
+											  debut_barre,
+											  charge_barre->position,
+											  -FAx,
+											  0.,
+											  0.,
+											  0.,
+											  0.);
+						common_fonction_ajout(action_en_cours->fonctions_efforts[0][element_en_beton->numero],
+											  charge_barre->position,
+											  fin_barre,
+											  FBx,
+											  0.,
+											  0.,
+											  0.,
+											  0.);
+						common_fonction_ajout(action_en_cours->fonctions_efforts[1][element_en_beton->numero],
+											  debut_barre,
+											  charge_barre->position,
+											  -ax2[1]*(l-position_charge_relative)/l+ax2[5]/l,
+											  0.,
+											  0.,
+											  0.,
+											  0.);
+						common_fonction_ajout(action_en_cours->fonctions_efforts[1][element_en_beton->numero],
+											  charge_barre->position,
+											  fin_barre,
+											  ax2[1]*position_charge_relative/l+ax2[5]/l,
+											  0.,
+											  0.,
+											  0.,
+											  0.);
+						common_fonction_ajout(action_en_cours->fonctions_efforts[1][element_en_beton->numero],
+											  debut_barre,
+											  fin_barre,
+											  (-MAz-MBz)/l,
+											  0.,
+											  0.,
+											  0.,
+											  0.);
+						common_fonction_ajout(action_en_cours->fonctions_efforts[2][element_en_beton->numero],
+											  debut_barre,
+											  charge_barre->position,
+											  -ax2[2]*(l-position_charge_relative)/l-ax2[4]/l,
+											  0.,
+											  0.,
+											  0.,
+											  0.);
+						common_fonction_ajout(action_en_cours->fonctions_efforts[2][element_en_beton->numero],
+											  charge_barre->position,
+											  fin_barre,
+											  ax2[2]*position_charge_relative/l-ax2[4]/l,
+											  0.,
+											  0.,
+											  0.,
+											  0.);
+						common_fonction_ajout(action_en_cours->fonctions_efforts[2][element_en_beton->numero],
+											  debut_barre,
+											  fin_barre,
+											  (+MAy+MBy)/l,
+											  0.,
+											  0.,
+											  0.,
+											  0.);
+						common_fonction_ajout(action_en_cours->fonctions_efforts[3][element_en_beton->numero],
+											  debut_barre,
+											  charge_barre->position,
+											  -MAx,
+											  0.,
+											  0.,
+											  0.,
+											  0.);
+						common_fonction_ajout(action_en_cours->fonctions_efforts[3][element_en_beton->numero],
+											  charge_barre->position,
+											  fin_barre,
+											  MBx,
+											  0.,
+											  0.,
+											  0.,
+											  0.);
+						common_fonction_ajout(action_en_cours->fonctions_efforts[4][element_en_beton->numero],
+											  debut_barre,
+											  charge_barre->position,
+											  (ax2[2]*(l-position_charge_relative)/l-ax2[4]/l)*debut_barre,
+											  -ax2[2]*(l-position_charge_relative)/l-ax2[4]/l,
+											  0.,
+											  0.,
+											  0.);
+						common_fonction_ajout(action_en_cours->fonctions_efforts[4][element_en_beton->numero],
+											  charge_barre->position,
+											  fin_barre,
+											  (ax2[2]*(l-position_charge_relative)/l-ax2[4]/l)*debut_barre+charge_barre->position*(-ax2[2]*(l-position_charge_relative)/l-ax2[4]/l-(ax2[2]*position_charge_relative/l-ax2[4]/l)),
+											  ax2[2]*position_charge_relative/l-ax2[4]/l,
+											  0.,
+											  0.,
+											  0.);
+						common_fonction_ajout(action_en_cours->fonctions_efforts[4][element_en_beton->numero],
+											  debut_barre,
+											  fin_barre,
+											  -MAy-((MAy+MBy)/l)*debut_barre,
+											  (MAy+MBy)/l,
+											  0.,
+											  0.,
+											  0.);
+						common_fonction_ajout(action_en_cours->fonctions_efforts[5][element_en_beton->numero],
+											  debut_barre,
+											  charge_barre->position,
+											  -(ax2[1]*(l-position_charge_relative)/l-ax2[5]/l)*debut_barre,
+											  ax2[1]*(l-position_charge_relative)/l-ax2[5]/l,
+											  0.,
+											  0.,
+											  0.);
+						common_fonction_ajout(action_en_cours->fonctions_efforts[5][element_en_beton->numero],
+											  charge_barre->position,
+											  fin_barre,
+											  -(ax2[1]*(l-position_charge_relative)/l-ax2[5]/l)*debut_barre+charge_barre->position*(ax2[1]*(l-position_charge_relative)/l-ax2[5]/l-(-ax2[1]*position_charge_relative/l-ax2[5]/l)),
+											  -ax2[1]*position_charge_relative/l-ax2[5]/l,
+											  0.,
+											  0.,
+											  0.);
+						common_fonction_ajout(action_en_cours->fonctions_efforts[5][element_en_beton->numero],
+											  debut_barre,
+											  fin_barre,
+											  -MAz-((MAz+MBz)/l)*debut_barre,
+											  (MAz+MBz)/l,
+											  0.,
+											  0.,
+											  0.);
 						
 						cholmod_l_free_triplet(&triplet_efforts_locaux_initiaux, projet->ef_donnees.c);
 						
+						// Détermination des fonctions des rotations
+						common_fonction_ajout(action_en_cours->fonctions_rotation[2][element_en_beton->numero],
+											  debut_barre,
+											  charge_barre->position,
+											  ax2[1]*(l-position_charge_relative)/(6*element_en_beton->materiau->ecm*section->caracteristiques->iz*l)*position_charge_relative*(l+l-position_charge_relative),
+											  0,
+											  -3*ax2[1]*(l-position_charge_relative)/(6*element_en_beton->materiau->ecm*section->caracteristiques->iz*l),
+											  0.,
+											  0.);
+						common_fonction_ajout(action_en_cours->fonctions_rotation[2][element_en_beton->numero],
+											  charge_barre->position,
+											  fin_barre,
+											  ax2[1]*(position_charge_relative)/(6*element_en_beton->materiau->ecm*section->caracteristiques->iz*l)*(2*l*l+position_charge_relative*position_charge_relative),
+											  -ax2[1]*(position_charge_relative)/(6*element_en_beton->materiau->ecm*section->caracteristiques->iz*l)*6*l,
+											  ax2[1]*(position_charge_relative)/(6*element_en_beton->materiau->ecm*section->caracteristiques->iz*l)*3,
+											  0.,
+											  0.);
+						common_fonction_ajout(action_en_cours->fonctions_rotation[2][element_en_beton->numero],
+											  debut_barre,
+											  fin_barre,
+											  -l/(6*element_en_beton->materiau->ecm*section->caracteristiques->iz)*(2*MAz-MBz),
+											  -1/(6*element_en_beton->materiau->ecm*section->caracteristiques->iz)*(-6)*MAz,
+											  -1/(6*element_en_beton->materiau->ecm*section->caracteristiques->iz)*3*(MAz+MBz)/l,
+											  0,
+											  0.);
+						
+						// Détermination des fonctions des flèches
+						common_fonction_ajout(action_en_cours->fonctions_fleche[1][element_en_beton->numero],
+											  debut_barre,
+											  charge_barre->position,
+											  0.,
+											  ax2[1]*(l-position_charge_relative)/(6*element_en_beton->materiau->ecm*section->caracteristiques->iz*l)*(l*l-(l-position_charge_relative)*(l-position_charge_relative)),
+											  0.,
+											  -ax2[1]*(l-position_charge_relative)/(6*element_en_beton->materiau->ecm*section->caracteristiques->iz*l),
+											  debut_barre);
+						common_fonction_ajout(action_en_cours->fonctions_fleche[1][element_en_beton->numero],
+											  charge_barre->position,
+											  fin_barre,
+											  -ax2[1]*position_charge_relative*position_charge_relative*position_charge_relative/(6*element_en_beton->materiau->ecm*section->caracteristiques->iz),
+											  ax2[1]*position_charge_relative/(6*element_en_beton->materiau->ecm*section->caracteristiques->iz*l)*(position_charge_relative*position_charge_relative+2*l*l),
+											  -ax2[1]*position_charge_relative/(2*element_en_beton->materiau->ecm*section->caracteristiques->iz),
+											  ax2[1]*position_charge_relative/(6*element_en_beton->materiau->ecm*section->caracteristiques->iz*l),
+											  debut_barre);
+						common_fonction_ajout(action_en_cours->fonctions_fleche[1][element_en_beton->numero],
+											  debut_barre,
+											  fin_barre,
+											  0.,
+											  l/(element_en_beton->materiau->ecm*section->caracteristiques->iz)*(-MAz/3-MBz/6),
+											  MAz/(2*element_en_beton->materiau->ecm*section->caracteristiques->iz),
+											  (MBz-MAz)/(6*element_en_beton->materiau->ecm*section->caracteristiques->iz*l),
+											  debut_barre);
+											  
 						// Ensuite, on converti dans le repère global
 						triplet_efforts_locaux_finaux = cholmod_l_allocate_triplet(12, 1, 12, 0, CHOLMOD_REAL, projet->ef_donnees.c);
 						ai2 = triplet_efforts_locaux_finaux->i;
@@ -813,7 +976,7 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
 		for (j=0;j<=element_en_beton->discretisation_element;j++)
 		{
 			EF_Noeud	*noeud_debut, *noeud_fin; 	// Le noeud de départ et le noeud de fin, nécessaire en cas de discrétisation
-			double		l_debut, l_fin;
+			double		l_debut, l_fin, l_total;
 			if (j == 0)
 				noeud_debut = element_en_beton->noeud_debut;
 			else
@@ -852,25 +1015,83 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
 			yy = noeud_debut->position.y - element_en_beton->noeud_debut->position.y;
 			zz = noeud_debut->position.z - element_en_beton->noeud_debut->position.z;
 			l_debut = sqrt(xx*xx+yy*yy+zz*zz);
+			xx = element_en_beton->noeud_fin->position.x - element_en_beton->noeud_debut->position.x;
+			yy = element_en_beton->noeud_fin->position.y - element_en_beton->noeud_debut->position.y;
+			zz = element_en_beton->noeud_fin->position.z - element_en_beton->noeud_debut->position.z;
+			l_total = sqrt(xx*xx+yy*yy+zz*zz);
 			xx = noeud_fin->position.x - element_en_beton->noeud_debut->position.x;
 			yy = noeud_fin->position.y - element_en_beton->noeud_debut->position.y;
 			zz = noeud_fin->position.z - element_en_beton->noeud_debut->position.z;
 			l_fin = sqrt(xx*xx+yy*yy+zz*zz);
 			l = ABS(l_fin-l_debut);
-			common_fonction_ajout(action_en_cours->fonctions_efforts[0][element_en_beton->numero], l_debut, l_fin, element_en_beton->materiau->ecm*section->caracteristiques->a*(ax[0]-ax[6])/l, 0., 0., 0.);
+			common_fonction_ajout(action_en_cours->fonctions_efforts[0][element_en_beton->numero], l_debut, l_fin, element_en_beton->materiau->ecm*section->caracteristiques->a*(ax[0]-ax[6])/l, 0., 0., 0., 0.);
 			MA = element_en_beton->materiau->ecm*section->caracteristiques->iz*(12*ax[1]/l/l/l-12*ax[7]/l/l/l+6*ax[5]/l/l+6*ax[11]/l/l);
 			MB = -element_en_beton->materiau->ecm*section->caracteristiques->iz*(-12*ax[1]/l/l/l+12*ax[7]/l/l/l-6*ax[5]/l/l-6*ax[11]/l/l);
-			common_fonction_ajout(action_en_cours->fonctions_efforts[1][element_en_beton->numero], l_debut, l_fin, MA, (-MA+MB)/l, 0., 0.);
+			common_fonction_ajout(action_en_cours->fonctions_efforts[1][element_en_beton->numero], l_debut, l_fin, MA, (-MA+MB)/l, 0., 0., 0.);
 			MA = element_en_beton->materiau->ecm*section->caracteristiques->iy*(12*ax[2]/l/l/l-12*ax[8]/l/l/l-6*ax[4]/l/l-6*ax[10]/l/l);
 			MB = -element_en_beton->materiau->ecm*section->caracteristiques->iy*(-12*ax[2]/l/l/l+12*ax[8]/l/l/l+6*ax[4]/l/l+6*ax[10]/l/l);
-			common_fonction_ajout(action_en_cours->fonctions_efforts[2][element_en_beton->numero], l_debut, l_fin, MA, (-MA+MB)/l, 0., 0.);
-			common_fonction_ajout(action_en_cours->fonctions_efforts[3][element_en_beton->numero], l_debut, l_fin, element_en_beton->materiau->gnu_0_2*section->caracteristiques->j*(ax[3]-ax[9])/l, 0., 0., 0.);
+			common_fonction_ajout(action_en_cours->fonctions_efforts[2][element_en_beton->numero], l_debut, l_fin, MA, (-MA+MB)/l, 0., 0., 0.);
+			common_fonction_ajout(action_en_cours->fonctions_efforts[3][element_en_beton->numero], l_debut, l_fin, element_en_beton->materiau->gnu_0_2*section->caracteristiques->j*(ax[3]-ax[9])/l, 0., 0., 0., 0.);
 			MA = element_en_beton->materiau->ecm*section->caracteristiques->iy*(-6*ax[2]/l/l+6*ax[8]/l/l+4*ax[4]/l+2*ax[10]/l);
 			MB = -element_en_beton->materiau->ecm*section->caracteristiques->iy*(-6*ax[2]/l/l+6*ax[8]/l/l+2*ax[4]/l+4*ax[10]/l);
-			common_fonction_ajout(action_en_cours->fonctions_efforts[4][element_en_beton->numero], l_debut, l_fin, MA-(-MA+MB)/l*l_debut, (-MA+MB)/l, 0., 0.);
+			common_fonction_ajout(action_en_cours->fonctions_efforts[4][element_en_beton->numero], l_debut, l_fin, MA-(-MA+MB)/l*l_debut, (-MA+MB)/l, 0., 0., 0.);
 			MA = element_en_beton->materiau->ecm*section->caracteristiques->iz*(6*ax[1]/l/l-6*ax[7]/l/l+4*ax[5]/l+2*ax[11]/l);
 			MB = -element_en_beton->materiau->ecm*section->caracteristiques->iz*(6*ax[1]/l/l-6*ax[7]/l/l+2*ax[5]/l+4*ax[11]/l);
-			common_fonction_ajout(action_en_cours->fonctions_efforts[5][element_en_beton->numero], l_debut, l_fin, MA-(-MA+MB)/l*l_debut, (-MA+MB)/l, 0., 0.);
+			common_fonction_ajout(action_en_cours->fonctions_efforts[5][element_en_beton->numero], l_debut, l_fin, MA-(-MA+MB)/l*l_debut, (-MA+MB)/l, 0., 0., 0.);
+			common_fonction_ajout(action_en_cours->fonctions_rotation[2][element_en_beton->numero],
+								  l_debut,
+								  l_fin,
+								  MA/(6*element_en_beton->materiau->ecm*section->caracteristiques->iz*l)*2*l*l,
+								  MA/(6*element_en_beton->materiau->ecm*section->caracteristiques->iz*l)*-6*l,
+								  MA/(6*element_en_beton->materiau->ecm*section->caracteristiques->iz*l)*3,
+								  0,
+								  0.);
+			common_fonction_ajout(action_en_cours->fonctions_rotation[2][element_en_beton->numero],
+								  l_debut,
+								  l_fin,
+								  MB/(6*element_en_beton->materiau->ecm*section->caracteristiques->iz*l)*l*l,
+								  0.,
+								  -MB/(6*element_en_beton->materiau->ecm*section->caracteristiques->iz*l)*3,
+								  0,
+								  0.);
+/*			common_fonction_ajout(action_en_cours->fonctions_fleche[1][element_en_beton->numero],
+								  l_debut,
+								  l_fin,
+								  0.,
+								  MA*l/(3*element_en_beton->materiau->ecm*section->caracteristiques->iz),
+								  -MA/(2*element_en_beton->materiau->ecm*section->caracteristiques->iz),
+								  MA/(6*element_en_beton->materiau->ecm*section->caracteristiques->iz*l));
+			common_fonction_ajout(action_en_cours->fonctions_fleche[1][element_en_beton->numero],
+								  l_debut,
+								  l_fin,
+								  0.,
+								  -MB*l/(6*element_en_beton->materiau->ecm*section->caracteristiques->iz),
+								  0.,
+								  MB/(6*element_en_beton->materiau->ecm*section->caracteristiques->iz*l));*/
+			common_fonction_ajout(action_en_cours->fonctions_fleche[1][element_en_beton->numero],
+								  l_debut,
+								  l_fin,
+								  -MA*l/(3*element_en_beton->materiau->ecm*section->caracteristiques->iz)*l_debut+-MA/(2*element_en_beton->materiau->ecm*section->caracteristiques->iz)*l_debut*l_debut-MA/(6*element_en_beton->materiau->ecm*section->caracteristiques->iz*l)*l_debut*l_debut*l_debut,
+								  MA*l/(3*element_en_beton->materiau->ecm*section->caracteristiques->iz)-2*-MA/(2*element_en_beton->materiau->ecm*section->caracteristiques->iz)*l_debut+3*MA/(6*element_en_beton->materiau->ecm*section->caracteristiques->iz*l)*l_debut*l_debut,
+								  -MA/(2*element_en_beton->materiau->ecm*section->caracteristiques->iz)-3*MA/(6*element_en_beton->materiau->ecm*section->caracteristiques->iz*l)*l_debut,
+								  MA/(6*element_en_beton->materiau->ecm*section->caracteristiques->iz*l),
+								  0.);
+			common_fonction_ajout(action_en_cours->fonctions_fleche[1][element_en_beton->numero],
+								  l_debut,
+								  l_fin,
+								  MB*l/(6*element_en_beton->materiau->ecm*section->caracteristiques->iz)*l_debut-MB/(6*element_en_beton->materiau->ecm*section->caracteristiques->iz*l)*l_debut*l_debut*l_debut,
+								  -MB*l/(6*element_en_beton->materiau->ecm*section->caracteristiques->iz)+3*MB/(6*element_en_beton->materiau->ecm*section->caracteristiques->iz*l)*l_debut*l_debut,
+								  -3*MB/(6*element_en_beton->materiau->ecm*section->caracteristiques->iz*l)*l_debut,
+								  MB/(6*element_en_beton->materiau->ecm*section->caracteristiques->iz*l),
+								  0.);
+			common_fonction_ajout(action_en_cours->fonctions_fleche[1][element_en_beton->numero],
+								  l_debut,
+								  l_fin,
+								  (l_debut*ax[7]-l_fin*ax[1])/(l_debut-l_fin),
+								  (ax[1]-ax[7])/(l_debut-l_fin),
+								  0.,
+								  0.,
+								  0.);
 			cholmod_l_free_triplet(&triplet_deplacement_locaux, projet->ef_donnees.c);
 		}
 	}
@@ -922,6 +1143,24 @@ int EF_calculs_affiche_resultats(Projet *projet, int num_action)
 			common_fonction_affiche(action_en_cours->fonctions_efforts[4][i]);
 			printf("Barre n°%d, Moment de flexion Z\n", i);
 			common_fonction_affiche(action_en_cours->fonctions_efforts[5][i]);
+		}
+	}
+	if (list_size(projet->beton.elements) != 0)
+	{
+		for (i=0;i<list_size(projet->beton.elements);i++)
+		{
+//			printf("Barre n°%d, Flèche en X\n", i);
+//			common_fonction_affiche(action_en_cours->fonctions_fleche[0][i]);
+			printf("Barre n°%d, Flèche en Y\n", i);
+			common_fonction_affiche(action_en_cours->fonctions_fleche[1][i]);
+//			printf("Barre n°%d, Flèche en Z\n", i);
+//			common_fonction_affiche(action_en_cours->fonctions_fleche[2][i]);
+//			printf("Barre n°%d, Rotation en X\n", i);
+//			common_fonction_affiche(action_en_cours->fonctions_rotation[0][i]);
+//			printf("Barre n°%d, Rotation en Y\n", i);
+//			common_fonction_affiche(action_en_cours->fonctions_rotation[1][i]);
+			printf("Barre n°%d, Rotation en Z\n", i);
+			common_fonction_affiche(action_en_cours->fonctions_rotation[2][i]);
 		}
 	}
 	

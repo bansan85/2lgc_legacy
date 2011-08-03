@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2011-08-01 16:04+0200\n"
+"POT-Creation-Date: 2011-08-03 08:34+0200\n"
 "PO-Revision-Date: 2011-07-21 15:15+0100\n"
 "Last-Translator: LE GARREC Vincent <vlg@2lgc.org>\n"
 "Language-Team: French\n"
@@ -22,8 +22,8 @@ msgstr ""
 #: src/lib/1992_1_1/1992_1_1_section.c:279
 #: src/lib/1992_1_1/1992_1_1_elements.c:39
 #: src/lib/1992_1_1/1992_1_1_elements.c:66
-#: src/lib/1992_1_1/1992_1_1_elements.c:143
-#: src/lib/1992_1_1/1992_1_1_elements.c:185
+#: src/lib/1992_1_1/1992_1_1_elements.c:141
+#: src/lib/1992_1_1/1992_1_1_elements.c:183
 #: src/lib/1992_1_1/1992_1_1_elements.c:680
 #: src/lib/1992_1_1/1992_1_1_elements.c:709
 #: src/lib/1992_1_1/1992_1_1_materiaux.c:37
@@ -39,10 +39,10 @@ msgstr ""
 #: src/lib/1990/1990_groupes.c:90 src/lib/1990/1990_groupes.c:117
 #: src/lib/1990/1990_groupes.c:143 src/lib/1990/1990_groupes.c:172
 #: src/lib/1990/1990_groupes.c:219 src/lib/1990/1990_actions.c:206
-#: src/lib/1990/1990_actions.c:228 src/lib/1990/1990_actions.c:276
-#: src/lib/1990/1990_actions.c:300 src/lib/1990/1990_actions.c:337
-#: src/lib/1990/1990_actions.c:340 src/lib/1990/1990_actions.c:391
-#: src/lib/1990/1990_actions.c:394 src/lib/1990/1990_actions.c:434
+#: src/lib/1990/1990_actions.c:228 src/lib/1990/1990_actions.c:282
+#: src/lib/1990/1990_actions.c:306 src/lib/1990/1990_actions.c:343
+#: src/lib/1990/1990_actions.c:346 src/lib/1990/1990_actions.c:397
+#: src/lib/1990/1990_actions.c:400 src/lib/1990/1990_actions.c:440
 #: src/lib/1990/1990_gtk_groupes.c:50 src/lib/1990/1990_gtk_groupes.c:1025
 #: src/lib/1990/1990_combinaisons.c:49 src/lib/1990/1990_combinaisons.c:99
 #: src/lib/1990/1990_combinaisons.c:149 src/lib/1990/1990_combinaisons.c:217
@@ -53,10 +53,10 @@ msgstr ""
 #: src/lib/1990/1990_combinaisons.c:549 src/lib/1990/1990_combinaisons.c:553
 #: src/lib/1990/1990_combinaisons.c:718 src/lib/1990/1990_combinaisons.c:821
 #: src/lib/1990/1990_combinaisons.c:858 src/lib/common/common_fonction.c:45
-#: src/lib/common/common_fonction.c:80 src/lib/common/common_fonction.c:129
-#: src/lib/common/common_fonction.c:161 src/lib/common/common_fonction.c:214
-#: src/lib/common/common_fonction.c:240 src/lib/EF/EF_calculs.c:154
-#: src/lib/EF/EF_calculs.c:248 src/lib/EF/EF_calculs.c:898
+#: src/lib/common/common_fonction.c:107 src/lib/common/common_fonction.c:156
+#: src/lib/common/common_fonction.c:188 src/lib/common/common_fonction.c:241
+#: src/lib/common/common_fonction.c:267 src/lib/EF/EF_calculs.c:154
+#: src/lib/EF/EF_calculs.c:248 src/lib/EF/EF_calculs.c:1069
 #: src/lib/EF/EF_noeud.c:36 src/lib/EF/EF_noeud.c:62 src/lib/EF/EF_noeud.c:102
 #: src/lib/EF/EF_noeud.c:128 src/lib/EF/EF_relachement.c:35
 #: src/lib/EF/EF_relachement.c:63 src/lib/EF/EF_relachement.c:97
@@ -80,7 +80,7 @@ msgstr "Paramètres invalides.\n"
 #: src/lib/1992_1_1/1992_1_1_section.c:236
 #: src/lib/1992_1_1/1992_1_1_elements.c:43
 #: src/lib/1992_1_1/1992_1_1_elements.c:99
-#: src/lib/1992_1_1/1992_1_1_elements.c:126
+#: src/lib/1992_1_1/1992_1_1_elements.c:124
 #: src/lib/1992_1_1/1992_1_1_materiaux.c:41
 #: src/lib/1992_1_1/1992_1_1_materiaux.c:136
 #: src/lib/1990/1990_ponderations.c:123 src/lib/1990/1990_ponderations.c:139
@@ -92,8 +92,8 @@ msgstr "Paramètres invalides.\n"
 #: src/lib/1990/1990_groupes.c:187 src/lib/1990/1990_groupes.c:191
 #: src/lib/1990/1990_groupes.c:193 src/lib/1990/1990_groupes.c:252
 #: src/lib/1990/1990_groupes.c:265 src/lib/1990/1990_actions.c:210
-#: src/lib/1990/1990_actions.c:236 src/lib/1990/1990_actions.c:259
-#: src/lib/1990/1990_actions.c:362 src/lib/1990/1990_actions.c:418
+#: src/lib/1990/1990_actions.c:236 src/lib/1990/1990_actions.c:265
+#: src/lib/1990/1990_actions.c:368 src/lib/1990/1990_actions.c:424
 #: src/lib/1990/1990_gtk_groupes.c:74 src/lib/1990/1990_gtk_groupes.c:102
 #: src/lib/1990/1990_gtk_groupes.c:123 src/lib/1990/1990_gtk_groupes.c:243
 #: src/lib/1990/1990_gtk_groupes.c:391 src/lib/1990/1990_gtk_groupes.c:460
@@ -109,8 +109,10 @@ msgstr "Paramètres invalides.\n"
 #: src/lib/1990/1990_combinaisons.c:617 src/lib/1990/1990_combinaisons.c:633
 #: src/lib/1990/1990_combinaisons.c:660 src/lib/1990/1990_combinaisons.c:731
 #: src/lib/common/common_fonction.c:51 src/lib/common/common_fonction.c:56
-#: src/lib/common/common_fonction.c:90 src/lib/common/common_fonction.c:116
-#: src/lib/common/common_fonction.c:133 src/lib/common/common_fonction.c:168
+#: src/lib/common/common_fonction.c:66 src/lib/common/common_fonction.c:71
+#: src/lib/common/common_fonction.c:78 src/lib/common/common_fonction.c:83
+#: src/lib/common/common_fonction.c:117 src/lib/common/common_fonction.c:143
+#: src/lib/common/common_fonction.c:160 src/lib/common/common_fonction.c:195
 #: src/lib/common/common_projet.c:117 src/lib/common/common_projet.c:130
 #: src/lib/common/common_projet.c:144 src/lib/EF/EF_calculs.c:55
 #: src/lib/EF/EF_calculs.c:60 src/lib/EF/EF_calculs.c:64
@@ -126,7 +128,7 @@ msgstr "Erreur d'allocation mémoire.\n"
 msgid "Section en béton n°%d introuvable.\n"
 msgstr "Section en béton n°%d introuvable.\n"
 
-#: src/lib/1992_1_1/1992_1_1_elements.c:155
+#: src/lib/1992_1_1/1992_1_1_elements.c:153
 #, c-format
 msgid "Élément en béton n°%d introuvable.\n"
 msgstr "Élément en béton n°%d introuvable.\n"
@@ -300,7 +302,7 @@ msgstr "Eaux souterraines"
 msgid "Pays inconnu.\n"
 msgstr "Pays inconnu.\n"
 
-#: src/lib/1990/1990_actions.c:287
+#: src/lib/1990/1990_actions.c:293
 #, c-format
 msgid "Action %d introuvable.\n"
 msgstr "Action %d introuvable.\n"
@@ -538,7 +540,7 @@ msgstr "\t-h, --help : affiche le présent menu\n"
 msgid "\t-w, --warranty : affiche les limites de garantie du logiciel\n"
 msgstr "\t-w, --warranty : affiche les limites de garantie du logiciel\n"
 
-#: src/lib/common/common_fonction.c:217
+#: src/lib/common/common_fonction.c:244
 #, c-format
 msgid "Fonction indéfinie.\n"
 msgstr ""
