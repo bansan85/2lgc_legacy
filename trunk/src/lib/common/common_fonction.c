@@ -59,6 +59,33 @@ int common_fonction_init(Projet *projet, void *action_void)
 		}
 	}
 	
+	for (i=0;i<3;i++)
+	{
+		action->fonctions_fleche[i] = (Fonction**)malloc(sizeof(Fonction*)*list_size(projet->beton.elements));
+		if (action->fonctions_fleche[i] == NULL)
+			BUGTEXTE(-2, gettext("Erreur d'allocation mémoire.\n"));
+		for (j=0;j<list_size(projet->beton.elements);j++)
+		{
+			action->fonctions_fleche[i][j] = (Fonction*)malloc(sizeof(Fonction));
+			if (action->fonctions_fleche[i][j] == NULL)
+				BUGTEXTE(-2, gettext("Erreur d'allocation mémoire.\n"));
+			action->fonctions_fleche[i][j]->nb_troncons = 0;
+			action->fonctions_fleche[i][j]->troncons = NULL;
+		}
+		
+		action->fonctions_rotation[i] = (Fonction**)malloc(sizeof(Fonction*)*list_size(projet->beton.elements));
+		if (action->fonctions_rotation[i] == NULL)
+			BUGTEXTE(-2, gettext("Erreur d'allocation mémoire.\n"));
+		for (j=0;j<list_size(projet->beton.elements);j++)
+		{
+			action->fonctions_rotation[i][j] = (Fonction*)malloc(sizeof(Fonction));
+			if (action->fonctions_rotation[i][j] == NULL)
+				BUGTEXTE(-2, gettext("Erreur d'allocation mémoire.\n"));
+			action->fonctions_rotation[i][j]->nb_troncons = 0;
+			action->fonctions_rotation[i][j]->troncons = NULL;
+		}
+	}
+	
 	return 0;
 }
 
@@ -151,14 +178,26 @@ int common_fonction_ajout_troncon(Fonction* fonction, double coupure)
  *            : double coef_x  :
  *            : double coef_x2 :
  *            : double coef_x3 : coefficients de la formule coef_0 + coef_x*x + coef_x2*x*x + coef_x3*x*x*x
+ *            : int translate : modifie les coefficients ci-dessus afin d'effectuer une translation de la fonction de 0 à debut_troncon.
  * Valeur renvoyée :
  *   Succès : 0
  *   Échec : valeur négative
  */
-int common_fonction_ajout(Fonction* fonction, double debut_troncon, double fin_troncon, double coef_0, double coef_x, double coef_x2, double coef_x3)
+int common_fonction_ajout(Fonction* fonction, double debut_troncon, double fin_troncon, double coef_0, double coef_x, double coef_x2, double coef_x3, double translate)
 {
-	if ((fonction == NULL) || (fin_troncon < debut_troncon) | (ERREUR_RELATIVE_EGALE(fin_troncon, debut_troncon)))
+	double	coef_0_t, coef_x_t, coef_x2_t, coef_x3_t;
+	
+	if (ERREUR_RELATIVE_EGALE(fin_troncon, debut_troncon))
+		return 0;
+	
+	if ((fonction == NULL) || (fin_troncon < debut_troncon))
 		BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
+	
+	// On réajuste les coefficients en calculant f(x-translate)
+	coef_x3_t = coef_x3;
+	coef_x2_t = coef_x2 - 3*translate*coef_x3;
+	coef_x_t = 3*translate*translate*coef_x3-2*translate*coef_x2+coef_x;
+	coef_0_t = -translate*translate*translate*coef_x3+translate*translate*coef_x2-translate*coef_x+coef_0;
 	
 	if (fonction->nb_troncons == 0)
 	{
@@ -168,10 +207,10 @@ int common_fonction_ajout(Fonction* fonction, double debut_troncon, double fin_t
 			BUGTEXTE(-2, gettext("Erreur d'allocation mémoire.\n"));
 		fonction->troncons[0].debut_troncon = debut_troncon;
 		fonction->troncons[0].fin_troncon = fin_troncon;
-		fonction->troncons[0].coef_0 = coef_0;
-		fonction->troncons[0].coef_x = coef_x;
-		fonction->troncons[0].coef_x2 = coef_x2;
-		fonction->troncons[0].coef_x3 = coef_x3;
+		fonction->troncons[0].coef_0 = coef_0_t;
+		fonction->troncons[0].coef_x = coef_x_t;
+		fonction->troncons[0].coef_x2 = coef_x2_t;
+		fonction->troncons[0].coef_x3 = coef_x3_t;
 		return 0;
 	}
 	else
@@ -187,10 +226,10 @@ int common_fonction_ajout(Fonction* fonction, double debut_troncon, double fin_t
 			else if ((ERREUR_RELATIVE_EGALE(fonction->troncons[i].debut_troncon, debut_troncon)) || (fonction->troncons[i].debut_troncon > debut_troncon))
 			{
 				// Toute la fonction rentre dans le tronçon
-				fonction->troncons[i].coef_0 += coef_0;
-				fonction->troncons[i].coef_x += coef_x;
-				fonction->troncons[i].coef_x2 += coef_x2;
-				fonction->troncons[i].coef_x3 += coef_x3;
+				fonction->troncons[i].coef_0 += coef_0_t;
+				fonction->troncons[i].coef_x += coef_x_t;
+				fonction->troncons[i].coef_x2 += coef_x2_t;
+				fonction->troncons[i].coef_x3 += coef_x3_t;
 			}
 			i++;
 		}
@@ -250,6 +289,31 @@ int common_fonction_free(Projet *projet, void *action_void)
 			}
 			free(action->fonctions_efforts[i]);
 			action->fonctions_efforts[i] = NULL;
+		}
+	}
+	
+	for (i=0;i<3;i++)
+	{
+		if (action->fonctions_fleche[i] != NULL)
+		{
+			for (j=0;j<list_size(projet->beton.elements);j++)
+			{
+				free(action->fonctions_fleche[i][j]->troncons);
+				free(action->fonctions_fleche[i][j]);
+			}
+			free(action->fonctions_fleche[i]);
+			action->fonctions_fleche[i] = NULL;
+		}
+		
+		if (action->fonctions_rotation[i] != NULL)
+		{
+			for (j=0;j<list_size(projet->beton.elements);j++)
+			{
+				free(action->fonctions_rotation[i][j]->troncons);
+				free(action->fonctions_rotation[i][j]);
+			}
+			free(action->fonctions_rotation[i]);
+			action->fonctions_rotation[i] = NULL;
 		}
 	}
 	

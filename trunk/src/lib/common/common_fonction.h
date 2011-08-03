@@ -41,7 +41,7 @@ typedef struct
 
 // On est obligé de mettre action en void* et pas en Action* pour éviter une dépence circulaire des fichiers dû à l'inclusion du fichier en-tête "1990_actions.h"
 int common_fonction_init(Projet *projet, void *action_void);
-int common_fonction_ajout(Fonction* fonction, double debut_troncon, double fin_troncon, double coef_0, double coef_x, double coef_x2, double coef_x3);
+int common_fonction_ajout(Fonction* fonction, double debut_troncon, double fin_troncon, double coef_0, double coef_x, double coef_x2, double coef_x3, double translate);
 int common_fonction_affiche(Fonction* fonction);
 int common_fonction_free(Projet *projet, void *action_void);
 
