@@ -1,60 +1,61 @@
-SUBDIRS =	EF \
-		1990 \
-		1991_1_1 \
-		1991_1_2 \
-		1991_1_3 \
-		1991_1_4 \
-		1991_1_5 \
-		1991_1_6 \
-		1991_1_7 \
-		1991_2 \
-		1991_3 \
-		1991_4 \
-		1992_1_1 \
-		1992_1_2 \
-		1992_2 \
-		1992_3 \
-		1993_1_1 \
-		1993_1_10 \
-		1993_1_11 \
-		1993_1_12 \
-		1993_1_2 \
-		1993_1_3 \
-		1993_1_4 \
-		1993_1_5 \
-		1993_1_6 \
-		1993_1_7 \
-		1993_1_8 \
-		1993_1_9 \
-		1993_2 \
-		1993_3_1 \
-		1993_3_2 \
-		1993_4_1 \
-		1993_4_2 \
-		1993_4_3 \
-		1993_5 \
-		1993_6 \
-		1994_1_1 \
-		1994_1_2 \
-		1994_2 \
-		1995_1_1 \
-		1995_1_2 \
-		1995_2 \
-		1996_1_1 \
-		1996_1_2 \
-		1996_2 \
-		1996_3 \
-		1997_1 \
-		1997_2 \
-		1998_1 \
-		1998_2 \
-		1998_3 \
-		1998_4 \
-		1998_5 \
-		1998_6 \
-		1999_1_1 \
-		1999_1_2 \
-		1999_1_3 \
-		1999_1_4 \
-		1999_1_5 \
-		common
+DEFAULT_INCLUDES	=	-I../.. \
+						-Icommon \
+						-IEF \
+						-I1990 \
+						-I1992_1_1
+
+lib_LTLIBRARIES = libeurocodes.la
+
+libeurocodes_la_LIBADD		=	-llist -lcholmod -lspqr @XML_LIBS@
+libeurocodes_la_CFLAGS		=	$(AM_CFLAGS)
+if ENABLE_GTK
+libeurocodes_la_LIBADD		+=	@GTK_LIBS@
+libeurocodes_la_CFLAGS		+=	@GTK_CFLAGS@
+endif
+
+libeurocodes_la_CPPFLAGS	=	@XML_CPPFLAGS@
+
+libeurocodes_la_SOURCES =	1990/1990_duree.c \
+							1990/1990_coef_psi.c \
+							1990/1990_combinaisons.c \
+							1990/1990_actions.c \
+							1990/1990_groupes.c \
+							1990/1990_ponderations.c \
+							1990/1990_gtk_groupes.c \
+							1992_1_1/1992_1_1_elements.c \
+							1992_1_1/1992_1_1_section.c \
+							1992_1_1/1992_1_1_materiaux.c \
+							common/common_text.c \
+							common/common_projet.c \
+							common/common_tooltip.c \
+							common/common_fonction.c \
+							common/common_maths.c \
+							EF/EF_noeud.c \
+							EF/EF_appui.c \
+							EF/EF_rigidite.c \
+							EF/EF_calculs.c \
+							EF/EF_relachement.c
+
+libeurocodes_ladir = $(includedir)/2lgc
+libeurocodes_la_HEADERS =	1990/1990_duree.h \
+							1990/1990_coef_psi.h \
+							1990/1990_combinaisons.h \
+							1990/1990_actions.h \
+							1990/1990_groupes.h \
+							1990/1990_ponderations.h \
+							1990/1990_gtk_groupes.h \
+							1992_1_1/1992_1_1_elements.h \
+							1992_1_1/1992_1_1_section.h \
+							1992_1_1/1992_1_1_materiaux.h \
+							common/common_text.h \
+							common/common_projet.h \
+							common/common_erreurs.h \
+							common/common_tooltip.h \
+							common/common_fonction.h \
+							common/common_maths.h \
+							EF/EF_noeud.h \
+							EF/EF_appui.h \
+							EF/EF_rigidite.h \
+							EF/EF_calculs.h \
+							EF/EF_relachement.h
+
