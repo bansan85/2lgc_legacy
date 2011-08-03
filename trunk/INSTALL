@@ -37,7 +37,7 @@ automake --add-missing --copy
 autoconf
 CFLAGS="-march=native -O0 -g3 -ggdb3 -pipe -ftracer -fsched2-use-traces -Wl,-O0 -fno-inline -Wall -Wextra -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED" ./configure --with-gtk --prefix=/usr/local
 patch < diff-libtool-as-needed.patch
-make -j3 && sudo make install-data && make check -j3 && sudo make install
+make -j3 && make -C doc doc && sudo make install-data && make check -j3 && sudo make install
 NOTA IMPORTANT :
 	-pg -fprofile-arcs -ftest-coverage sont des options de deboguage qui ne doivent pas être mises pour une utilisation courante.
 	--with-gtk : compilation de l'interface graphique et du support GTK.
