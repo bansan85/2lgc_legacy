@@ -25,6 +25,7 @@
 #include <gtk/gtk.h>
 
 GtkWindow* common_generation_tooltip(const char *nom);
+void wrapped_label_size_allocate_callback(GtkWidget *label, GtkAllocation *allocation, gpointer data __attribute__((unused)));
 #endif
 
 #endif

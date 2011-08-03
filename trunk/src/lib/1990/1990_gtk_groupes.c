@@ -815,19 +815,6 @@ void _1990_gtk_tooltip(GtkWidget *widget __attribute__((unused)), gint x __attri
 	return;
 }
 
-/* wrapped_label_size_allocate_callback
- * Description : Permet un redimensionnement en temps réel du composant label
- * Paramètres : GtkWidget *label : composant label à redimensionner
- *            : GtkAllocation *allocation : nouvelle dimension
- *            : Projet *projet : la variable projet
- * Valeur renvoyée : Aucune
- */
-void wrapped_label_size_allocate_callback(GtkWidget *label, GtkAllocation *allocation, gpointer data __attribute__((unused)))
-{
-	gtk_widget_set_size_request(label, allocation->width, -1);
-	return;
-}
-
 /* _1990_gtk_window_quitter_button
  * Description : Bouton de fermeture de la fenêtre
  * Paramètres : GtkComboBox *widget : composant à l'origine de la demande
