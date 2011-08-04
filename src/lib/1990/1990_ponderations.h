@@ -26,15 +26,15 @@
 
 typedef struct __Ponderation_Element
 {
-	double		ponderation;
-	int		psi;
-	int		flags;
-	Action		*action;
+    double      ponderation;
+    int     psi;
+    int     flags;
+    Action      *action;
 } Ponderation_Element;
 
 typedef struct __Ponderation
 {
-	LIST		*elements; // Liste de pointeur Action* avec leur ponderation
+    LIST        *elements; // Liste de pointeur Action* avec leur ponderation
 } Ponderation;
 
 int _1990_ponderations_genere(Projet *projet);

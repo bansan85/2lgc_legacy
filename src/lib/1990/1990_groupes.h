@@ -25,36 +25,36 @@
 
 typedef struct __Element
 {
-	int			numero;
+    int         numero;
 #ifdef ENABLE_GTK
-	void			*pIter;
-	int			pIter_expand;
+    void            *pIter;
+    int         pIter_expand;
 #endif
 } Element;
 
 typedef enum
 {
-	GROUPE_COMBINAISON_OR,
-	GROUPE_COMBINAISON_XOR,
-	GROUPE_COMBINAISON_AND
+    GROUPE_COMBINAISON_OR,
+    GROUPE_COMBINAISON_XOR,
+    GROUPE_COMBINAISON_AND
 } Type_Groupe_Combinaison;
 
 typedef struct __Groupe
 {
-	char			*nom;
-	int			numero;
-	Type_Groupe_Combinaison	type_combinaison;
-	LIST			*elements;
-	Combinaisons		tmp_combinaison;
-	void			*pIter;
-	int			pIter_expand;
+    char            *nom;
+    int         numero;
+    Type_Groupe_Combinaison type_combinaison;
+    LIST            *elements;
+    Combinaisons        tmp_combinaison;
+    void            *pIter;
+    int         pIter_expand;
 } Groupe;
 
 typedef struct __Niveau_Groupe
 {
-	int			niveau;
-	LIST			*groupes;
-	void			*pIter;
+    int         niveau;
+    LIST            *groupes;
+    void            *pIter;
 } Niveau_Groupe;
 
 int _1990_groupe_init(Projet *projet);

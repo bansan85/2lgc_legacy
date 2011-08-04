@@ -25,87 +25,87 @@
 
 typedef enum
 {
-	PAYS_EU,
-	PAYS_FR
+    PAYS_EU,
+    PAYS_FR
 } Type_Pays;
 
 
 typedef struct __CombinaisonsEL
 {
-	int		flags;		// bit 1	: ELU_EQU : méthode note 1 si le bit 1 = 0
-					//		: ELU_EQU : méthode note 2 si le bit 1 = 1
-					// bit 2 et 3	: ELU_GEO/STR : 00 méthode approche 1
-					// 		: ELU_GEO/STR : 01 méthode approche 2
-					// 		: ELU_GEO/STR : 10 méthode approche 3
-					// bit 4	: ELU_ACC : 0 si utilisation de psi1,1
-					// 		: ELU_ACC : 1 si utilisation de psi2,1
-	LIST		*elu_equ;
-	LIST		*elu_str;
-	LIST		*elu_geo;
-	LIST		*elu_fat;
-	LIST		*elu_acc;
-	LIST		*elu_sis;
-	LIST		*els_car;
-	LIST		*els_freq;
-	LIST		*els_perm;
+    int     flags;      // bit 1    : ELU_EQU : méthode note 1 si le bit 1 = 0
+                    //      : ELU_EQU : méthode note 2 si le bit 1 = 1
+                    // bit 2 et 3   : ELU_GEO/STR : 00 méthode approche 1
+                    //      : ELU_GEO/STR : 01 méthode approche 2
+                    //      : ELU_GEO/STR : 10 méthode approche 3
+                    // bit 4    : ELU_ACC : 0 si utilisation de psi1,1
+                    //      : ELU_ACC : 1 si utilisation de psi2,1
+    LIST        *elu_equ;
+    LIST        *elu_str;
+    LIST        *elu_geo;
+    LIST        *elu_fat;
+    LIST        *elu_acc;
+    LIST        *elu_sis;
+    LIST        *els_car;
+    LIST        *els_freq;
+    LIST        *els_perm;
 } CombinaisonsEL;
 
 typedef struct __List_Gtk
 {
-	void			*_1990;
+    void            *_1990;
 } List_Gtk;
 
 typedef enum
 {
-	BETON_ELEMENT_POTEAU,
-	BETON_ELEMENT_POUTRE
+    BETON_ELEMENT_POTEAU,
+    BETON_ELEMENT_POUTRE
 } Type_Element;
 
 typedef struct
 {
-	LIST			*sections;
-	LIST			*elements;
-	LIST			*materiaux;
+    LIST            *sections;
+    LIST            *elements;
+    LIST            *materiaux;
 } Beton_Donnees;
 
 typedef struct
 {
-	cholmod_common		Common;
-	cholmod_common		*c;
-	cholmod_triplet		*a;
-	long			*ai;
-	long			*aj;
-	double			*ax;
-	cholmod_sparse		*A;
-	LIST			*noeuds;
-	int			**noeuds_flags_partielle;
-	int			**noeuds_flags_complete;
-	int			nb_colonne_matrice_partielle; // Nombre de colonne / ligne de la matrice de rigidité globale partielle
-	int			nb_colonne_matrice_complete; // Nombre de colonne / ligne de la matrice de rigidité globale complete
-	LIST			*appuis;
-	LIST			*relachements;
-	cholmod_triplet		*triplet_rigidite_partielle; // Liste temporaire avant transformation en matrice sparse
-	cholmod_triplet		*triplet_rigidite_complete; // Liste temporaire avant transformation en matrice sparse
-	double			max_rigidite;
-	unsigned int		triplet_rigidite_partielle_en_cours;
-	unsigned int		triplet_rigidite_complete_en_cours;
-	cholmod_sparse		*rigidite_matrice_partielle; // La matrice contient la matrice de rigidité globale mais sans les lignes / colonnes dont on bloque les déplacements
-	cholmod_sparse		*rigidite_matrice_complete; // La matrice contient la matrice de rigidité globale mais sans les lignes / colonnes dont on bloque les déplacements
-	SuiteSparseQR_C_factorization	*QR;
-	
-//	Pour utiliser cholmod dans les calculs de matrices.
-//	cholmod_factor		*factor_rigidite_matrice_partielle; // Inverse de la matrice rigidite_matrice_calc
+    cholmod_common      Common;
+    cholmod_common      *c;
+    cholmod_triplet     *a;
+    long            *ai;
+    long            *aj;
+    double          *ax;
+    cholmod_sparse      *A;
+    LIST            *noeuds;
+    int         **noeuds_flags_partielle;
+    int         **noeuds_flags_complete;
+    int         nb_colonne_matrice_partielle; // Nombre de colonne / ligne de la matrice de rigidité globale partielle
+    int         nb_colonne_matrice_complete; // Nombre de colonne / ligne de la matrice de rigidité globale complete
+    LIST            *appuis;
+    LIST            *relachements;
+    cholmod_triplet     *triplet_rigidite_partielle; // Liste temporaire avant transformation en matrice sparse
+    cholmod_triplet     *triplet_rigidite_complete; // Liste temporaire avant transformation en matrice sparse
+    double          max_rigidite;
+    unsigned int        triplet_rigidite_partielle_en_cours;
+    unsigned int        triplet_rigidite_complete_en_cours;
+    cholmod_sparse      *rigidite_matrice_partielle; // La matrice contient la matrice de rigidité globale mais sans les lignes / colonnes dont on bloque les déplacements
+    cholmod_sparse      *rigidite_matrice_complete; // La matrice contient la matrice de rigidité globale mais sans les lignes / colonnes dont on bloque les déplacements
+    SuiteSparseQR_C_factorization   *QR;
+    
+//  Pour utiliser cholmod dans les calculs de matrices.
+//  cholmod_factor      *factor_rigidite_matrice_partielle; // Inverse de la matrice rigidite_matrice_calc
 } EF;
 
 typedef struct __Projet
 {
-	LIST			*actions;
-	LIST			*niveaux_groupes;
-	CombinaisonsEL		combinaisons;
-	Type_Pays		pays;
-	List_Gtk		list_gtk;
-	EF			ef_donnees;
-	Beton_Donnees		beton;
+    LIST            *actions;
+    LIST            *niveaux_groupes;
+    CombinaisonsEL      combinaisons;
+    Type_Pays       pays;
+    List_Gtk        list_gtk;
+    EF          ef_donnees;
+    Beton_Donnees       beton;
 } Projet;
 
 Projet *projet_init();

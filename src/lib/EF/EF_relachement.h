@@ -23,19 +23,19 @@
 
 typedef enum
 {
-	EF_RELACHEMENT_LIBRE,
-	EF_RELACHEMENT_BLOQUE
+    EF_RELACHEMENT_LIBRE,
+    EF_RELACHEMENT_BLOQUE
 } Type_EF_Relachement;
 
 typedef struct __Relachement
 {
-	unsigned int		numero;
-	Type_EF_Relachement	rx_debut;
-	Type_EF_Relachement	ry_debut;
-	Type_EF_Relachement	rz_debut;
-	Type_EF_Relachement	rx_fin;
-	Type_EF_Relachement	ry_fin;
-	Type_EF_Relachement	rz_fin;
+    unsigned int        numero;
+    Type_EF_Relachement rx_debut;
+    Type_EF_Relachement ry_debut;
+    Type_EF_Relachement rz_debut;
+    Type_EF_Relachement rx_fin;
+    Type_EF_Relachement ry_fin;
+    Type_EF_Relachement rz_fin;
 } Relachement;
 
 int EF_relachement_init(Projet *projet);

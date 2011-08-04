@@ -43,116 +43,116 @@
  */
 Projet *projet_init()
 {
-	Projet		*projet;
-	
-	projet = (Projet*)malloc(sizeof(Projet));
-	if (projet == NULL)
-		BUG(NULL);
-	if (_1990_action_init(projet) != 0)
-	{
-		free(projet);
-		BUG(NULL);
-	}
-	if (_1990_groupe_init(projet) != 0)
-	{
-		_1990_action_free(projet);
-		free(projet);
-		BUG(NULL);
-	}
-	if (_1990_combinaisons_init(projet) != 0)
-	{
-		_1990_groupe_free(projet);
-		_1990_action_free(projet);
-		free(projet);
-		BUG(NULL);
-	}
-	if (EF_noeuds_init(projet) != 0)
-	{
-		_1990_combinaisons_free(projet);
-		_1990_groupe_free(projet);
-		_1990_action_free(projet);
-		free(projet);
-		BUG(NULL);
-	}
-	if (_1992_1_1_sections_init(projet) != 0)
-	{
-		EF_noeuds_free(projet);
-		_1990_combinaisons_free(projet);
-		_1990_groupe_free(projet);
-		_1990_action_free(projet);
-		free(projet);
-		BUG(NULL);
-	}
-	if (_1992_1_1_elements_init(projet) != 0)
-	{
-		_1992_1_1_sections_free(projet);
-		EF_noeuds_free(projet);
-		_1990_combinaisons_free(projet);
-		_1990_groupe_free(projet);
-		_1990_action_free(projet);
-		free(projet);
-		BUG(NULL);
-	}
-	if (EF_appuis_init(projet) != 0)
-	{
-		_1992_1_1_elements_free(projet);
-		_1992_1_1_sections_free(projet);
-		EF_noeuds_free(projet);
-		_1990_combinaisons_free(projet);
-		_1990_groupe_free(projet);
-		_1990_action_free(projet);
-		free(projet);
-		BUG(NULL);
-	}
-	if (EF_rigidite_init(projet) != 0)
-	{
-		EF_appuis_free(projet);
-		_1992_1_1_elements_free(projet);
-		_1992_1_1_sections_free(projet);
-		EF_noeuds_free(projet);
-		_1990_combinaisons_free(projet);
-		_1990_groupe_free(projet);
-		_1990_action_free(projet);
-		free(projet);
-		BUGTEXTE(NULL, gettext("Erreur d'allocation mémoire.\n"));
-	}
-	if (_1992_1_1_materiaux_init(projet) != 0)
-	{
-		EF_rigidite_free(projet);
-		EF_appuis_free(projet);
-		_1992_1_1_elements_free(projet);
-		_1992_1_1_sections_free(projet);
-		EF_noeuds_free(projet);
-		_1990_combinaisons_free(projet);
-		_1990_groupe_free(projet);
-		_1990_action_free(projet);
-		free(projet);
-		BUGTEXTE(NULL, gettext("Erreur d'allocation mémoire.\n"));
-	}
-	if (EF_relachement_init(projet) != 0)
-	{
-		_1992_1_1_materiaux_free(projet);
-		EF_rigidite_free(projet);
-		EF_appuis_free(projet);
-		_1992_1_1_elements_free(projet);
-		_1992_1_1_sections_free(projet);
-		EF_noeuds_free(projet);
-		_1990_combinaisons_free(projet);
-		_1990_groupe_free(projet);
-		_1990_action_free(projet);
-		free(projet);
-		BUGTEXTE(NULL, gettext("Erreur d'allocation mémoire.\n"));
-	}
+    Projet      *projet;
+    
+    projet = (Projet*)malloc(sizeof(Projet));
+    if (projet == NULL)
+        BUG(NULL);
+    if (_1990_action_init(projet) != 0)
+    {
+        free(projet);
+        BUG(NULL);
+    }
+    if (_1990_groupe_init(projet) != 0)
+    {
+        _1990_action_free(projet);
+        free(projet);
+        BUG(NULL);
+    }
+    if (_1990_combinaisons_init(projet) != 0)
+    {
+        _1990_groupe_free(projet);
+        _1990_action_free(projet);
+        free(projet);
+        BUG(NULL);
+    }
+    if (EF_noeuds_init(projet) != 0)
+    {
+        _1990_combinaisons_free(projet);
+        _1990_groupe_free(projet);
+        _1990_action_free(projet);
+        free(projet);
+        BUG(NULL);
+    }
+    if (_1992_1_1_sections_init(projet) != 0)
+    {
+        EF_noeuds_free(projet);
+        _1990_combinaisons_free(projet);
+        _1990_groupe_free(projet);
+        _1990_action_free(projet);
+        free(projet);
+        BUG(NULL);
+    }
+    if (_1992_1_1_elements_init(projet) != 0)
+    {
+        _1992_1_1_sections_free(projet);
+        EF_noeuds_free(projet);
+        _1990_combinaisons_free(projet);
+        _1990_groupe_free(projet);
+        _1990_action_free(projet);
+        free(projet);
+        BUG(NULL);
+    }
+    if (EF_appuis_init(projet) != 0)
+    {
+        _1992_1_1_elements_free(projet);
+        _1992_1_1_sections_free(projet);
+        EF_noeuds_free(projet);
+        _1990_combinaisons_free(projet);
+        _1990_groupe_free(projet);
+        _1990_action_free(projet);
+        free(projet);
+        BUG(NULL);
+    }
+    if (EF_rigidite_init(projet) != 0)
+    {
+        EF_appuis_free(projet);
+        _1992_1_1_elements_free(projet);
+        _1992_1_1_sections_free(projet);
+        EF_noeuds_free(projet);
+        _1990_combinaisons_free(projet);
+        _1990_groupe_free(projet);
+        _1990_action_free(projet);
+        free(projet);
+        BUGTEXTE(NULL, gettext("Erreur d'allocation mémoire.\n"));
+    }
+    if (_1992_1_1_materiaux_init(projet) != 0)
+    {
+        EF_rigidite_free(projet);
+        EF_appuis_free(projet);
+        _1992_1_1_elements_free(projet);
+        _1992_1_1_sections_free(projet);
+        EF_noeuds_free(projet);
+        _1990_combinaisons_free(projet);
+        _1990_groupe_free(projet);
+        _1990_action_free(projet);
+        free(projet);
+        BUGTEXTE(NULL, gettext("Erreur d'allocation mémoire.\n"));
+    }
+    if (EF_relachement_init(projet) != 0)
+    {
+        _1992_1_1_materiaux_free(projet);
+        EF_rigidite_free(projet);
+        EF_appuis_free(projet);
+        _1992_1_1_elements_free(projet);
+        _1992_1_1_sections_free(projet);
+        EF_noeuds_free(projet);
+        _1990_combinaisons_free(projet);
+        _1990_groupe_free(projet);
+        _1990_action_free(projet);
+        free(projet);
+        BUGTEXTE(NULL, gettext("Erreur d'allocation mémoire.\n"));
+    }
 
-	projet->ef_donnees.c = &(projet->ef_donnees.Common);
-	cholmod_l_start(projet->ef_donnees.c);
-	projet->ef_donnees.c->supernodal = CHOLMOD_SIMPLICIAL;
+    projet->ef_donnees.c = &(projet->ef_donnees.Common);
+    cholmod_l_start(projet->ef_donnees.c);
+    projet->ef_donnees.c->supernodal = CHOLMOD_SIMPLICIAL;
 
-	
-	projet->list_gtk._1990 = NULL;
-	
-	projet->pays = PAYS_EU;
-	return projet;
+    
+    projet->list_gtk._1990 = NULL;
+    
+    projet->pays = PAYS_EU;
+    return projet;
 }
 
 /* projet_free
@@ -164,34 +164,34 @@ Projet *projet_init()
  */
 int projet_free(Projet *projet)
 {
-	// Action doit être libéré avant projet->beton.elements
-	if (projet->actions != NULL)
-		_1990_action_free(projet);
-	if (projet->niveaux_groupes != NULL)
-		_1990_groupe_free(projet);
-	if (projet->combinaisons.elu_equ != NULL)
-		_1990_combinaisons_free(projet);
-	// Rigidite doit être libéré avant noeud car pour libérer toute la mémoire, il est nécessaire d'avoir accès aux informations contenues dans les noeuds
-	EF_rigidite_free(projet);
-	if (projet->ef_donnees.noeuds != NULL)
-		EF_noeuds_free(projet);
-	if (projet->beton.sections != NULL)
-		_1992_1_1_sections_free(projet);
-	if (projet->beton.elements != NULL)
-		_1992_1_1_elements_free(projet);
-	if (projet->ef_donnees.appuis != NULL)
-		EF_appuis_free(projet);
-	if (projet->beton.materiaux != NULL)
-		_1992_1_1_materiaux_free(projet);
-	if (projet->ef_donnees.relachements != NULL)
-		EF_relachement_free(projet);
-	
-	cholmod_l_finish(projet->ef_donnees.c);
-	
-	// On ne vérifie pas si l'élément est NULL car free s'en charge avant de libérer la mémoire
-	free(projet->list_gtk._1990);
-	projet->list_gtk._1990 = NULL;
-	free(projet);
-	
-	return 0;
+    // Action doit être libéré avant projet->beton.elements
+    if (projet->actions != NULL)
+        _1990_action_free(projet);
+    if (projet->niveaux_groupes != NULL)
+        _1990_groupe_free(projet);
+    if (projet->combinaisons.elu_equ != NULL)
+        _1990_combinaisons_free(projet);
+    // Rigidite doit être libéré avant noeud car pour libérer toute la mémoire, il est nécessaire d'avoir accès aux informations contenues dans les noeuds
+    EF_rigidite_free(projet);
+    if (projet->ef_donnees.noeuds != NULL)
+        EF_noeuds_free(projet);
+    if (projet->beton.sections != NULL)
+        _1992_1_1_sections_free(projet);
+    if (projet->beton.elements != NULL)
+        _1992_1_1_elements_free(projet);
+    if (projet->ef_donnees.appuis != NULL)
+        EF_appuis_free(projet);
+    if (projet->beton.materiaux != NULL)
+        _1992_1_1_materiaux_free(projet);
+    if (projet->ef_donnees.relachements != NULL)
+        EF_relachement_free(projet);
+    
+    cholmod_l_finish(projet->ef_donnees.c);
+    
+    // On ne vérifie pas si l'élément est NULL car free s'en charge avant de libérer la mémoire
+    free(projet->list_gtk._1990);
+    projet->list_gtk._1990 = NULL;
+    free(projet);
+    
+    return 0;
 }

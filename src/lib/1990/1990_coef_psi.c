@@ -33,27 +33,27 @@
  */
 double _1990_coef_psi0_bat_eu(int categorie)
 {
-	switch (categorie)
-	{
-		case 0 : { return -1.; break; }
-		case 1 : { return -1.; break; }
-		case 2 : { return 0.7; break; }
-		case 3 : { return 0.7; break; }
-		case 4 : { return 0.7; break; }
-		case 5 : { return 0.7; break; }
-		case 6 : { return 1.0; break; }
-		case 7 : { return 0.7; break; }
-		case 8 : { return 0.7; break; }
-		case 9 : { return 0.0; break; }
-		case 10 : { return 0.7; break; }
-		case 11 : { return 0.7; break; }
-		case 12 : { return 0.5; break; }
-		case 13 : { return 0.6; break; }
-		case 14 : { return 0.6; break; }
-		case 15 : { return -1.; break; }
-		case 16 : { return -1.; break; }
-		default : { BUGTEXTE(-1., gettext("Catégorie inconnue.\n")); break; }
-	}
+    switch (categorie)
+    {
+        case 0 : { return -1.; break; }
+        case 1 : { return -1.; break; }
+        case 2 : { return 0.7; break; }
+        case 3 : { return 0.7; break; }
+        case 4 : { return 0.7; break; }
+        case 5 : { return 0.7; break; }
+        case 6 : { return 1.0; break; }
+        case 7 : { return 0.7; break; }
+        case 8 : { return 0.7; break; }
+        case 9 : { return 0.0; break; }
+        case 10 : { return 0.7; break; }
+        case 11 : { return 0.7; break; }
+        case 12 : { return 0.5; break; }
+        case 13 : { return 0.6; break; }
+        case 14 : { return 0.6; break; }
+        case 15 : { return -1.; break; }
+        case 16 : { return -1.; break; }
+        default : { BUGTEXTE(-1., gettext("Catégorie inconnue.\n")); break; }
+    }
 }
 
 /* _1990_coef_psi1_bat_eu
@@ -65,27 +65,27 @@ double _1990_coef_psi0_bat_eu(int categorie)
  */
 double _1990_coef_psi1_bat_eu(int categorie)
 {
-	switch (categorie)
-	{
-		case 0 : { return -1.; break; }
-		case 1 : { return -1.; break; }
-		case 2 : { return 0.5; break; }
-		case 3 : { return 0.5; break; }
-		case 4 : { return 0.7; break; }
-		case 5 : { return 0.7; break; }
-		case 6 : { return 0.9; break; }
-		case 7 : { return 0.7; break; }
-		case 8 : { return 0.5; break; }
-		case 9 : { return 0.0; break; }
-		case 10 : { return 0.5; break; }
-		case 11 : { return 0.5; break; }
-		case 12 : { return 0.2; break; }
-		case 13 : { return 0.2; break; }
-		case 14 : { return 0.5; break; }
-		case 15 : { return -1.; break; }
-		case 16 : { return -1.; break; }
-		default : { BUGTEXTE(-1., gettext("Catégorie inconnue.\n")); break; }
-	}
+    switch (categorie)
+    {
+        case 0 : { return -1.; break; }
+        case 1 : { return -1.; break; }
+        case 2 : { return 0.5; break; }
+        case 3 : { return 0.5; break; }
+        case 4 : { return 0.7; break; }
+        case 5 : { return 0.7; break; }
+        case 6 : { return 0.9; break; }
+        case 7 : { return 0.7; break; }
+        case 8 : { return 0.5; break; }
+        case 9 : { return 0.0; break; }
+        case 10 : { return 0.5; break; }
+        case 11 : { return 0.5; break; }
+        case 12 : { return 0.2; break; }
+        case 13 : { return 0.2; break; }
+        case 14 : { return 0.5; break; }
+        case 15 : { return -1.; break; }
+        case 16 : { return -1.; break; }
+        default : { BUGTEXTE(-1., gettext("Catégorie inconnue.\n")); break; }
+    }
 }
 
 /* _1990_coef_psi2_bat_eu
@@ -97,27 +97,27 @@ double _1990_coef_psi1_bat_eu(int categorie)
  */
 double _1990_coef_psi2_bat_eu(int categorie)
 {
-	switch (categorie)
-	{
-		case 0 : { return -1.; break; }
-		case 1 : { return -1.; break; }
-		case 2 : { return 0.3; break; }
-		case 3 : { return 0.3; break; }
-		case 4 : { return 0.6; break; }
-		case 5 : { return 0.6; break; }
-		case 6 : { return 0.8; break; }
-		case 7 : { return 0.6; break; }
-		case 8 : { return 0.3; break; }
-		case 9 : { return 0.0; break; }
-		case 10 : { return 0.2; break; }
-		case 11 : { return 0.2; break; }
-		case 12 : { return 0.0; break; }
-		case 13 : { return 0.0; break; }
-		case 14 : { return 0.0; break; }
-		case 15 : { return -1.; break; }
-		case 16 : { return -1.; break; }
-		default : { BUGTEXTE(-1., gettext("Catégorie inconnue.\n")); break; }
-	}
+    switch (categorie)
+    {
+        case 0 : { return -1.; break; }
+        case 1 : { return -1.; break; }
+        case 2 : { return 0.3; break; }
+        case 3 : { return 0.3; break; }
+        case 4 : { return 0.6; break; }
+        case 5 : { return 0.6; break; }
+        case 6 : { return 0.8; break; }
+        case 7 : { return 0.6; break; }
+        case 8 : { return 0.3; break; }
+        case 9 : { return 0.0; break; }
+        case 10 : { return 0.2; break; }
+        case 11 : { return 0.2; break; }
+        case 12 : { return 0.0; break; }
+        case 13 : { return 0.0; break; }
+        case 14 : { return 0.0; break; }
+        case 15 : { return -1.; break; }
+        case 16 : { return -1.; break; }
+        default : { BUGTEXTE(-1., gettext("Catégorie inconnue.\n")); break; }
+    }
 }
 
 /* _1990_coef_psi0_bat_fr
@@ -129,32 +129,32 @@ double _1990_coef_psi2_bat_eu(int categorie)
  */
 double _1990_coef_psi0_bat_fr(int categorie)
 {
-	switch (categorie)
-	{
-		case 0 : { return -1.; break; }
-		case 1 : { return -1.; break; }
-		case 2 : { return 0.7; break; }
-		case 3 : { return 0.7; break; }
-		case 4 : { return 0.7; break; }
-		case 5 : { return 0.7; break; }
-		case 6 : { return 1.0; break; }
-		case 7 : { return 0.7; break; }
-		case 8 : { return 0.7; break; }
-		case 9 : { return 0.0; break; }
-		case 10 : { return 0.7; break; }
-		case 11 : { return 0.7; break; }
-		case 12 : { return 1.0; break; }
-		case 13 : { return 0.7; break; }
-		case 14 : { return 0.7; break; }
-		case 15 : { return 0.7; break; }
-		case 16 : { return 0.5; break; }
-		case 17 : { return 0.6; break; }
-		case 18 : { return 0.6; break; }
-		case 19 : { return -1.; break; }
-		case 20 : { return -1.; break; }
-		case 21 : { return -1.; break; }
-		default : { BUGTEXTE(-1., gettext("Catégorie inconnue.\n")); break; }
-	}
+    switch (categorie)
+    {
+        case 0 : { return -1.; break; }
+        case 1 : { return -1.; break; }
+        case 2 : { return 0.7; break; }
+        case 3 : { return 0.7; break; }
+        case 4 : { return 0.7; break; }
+        case 5 : { return 0.7; break; }
+        case 6 : { return 1.0; break; }
+        case 7 : { return 0.7; break; }
+        case 8 : { return 0.7; break; }
+        case 9 : { return 0.0; break; }
+        case 10 : { return 0.7; break; }
+        case 11 : { return 0.7; break; }
+        case 12 : { return 1.0; break; }
+        case 13 : { return 0.7; break; }
+        case 14 : { return 0.7; break; }
+        case 15 : { return 0.7; break; }
+        case 16 : { return 0.5; break; }
+        case 17 : { return 0.6; break; }
+        case 18 : { return 0.6; break; }
+        case 19 : { return -1.; break; }
+        case 20 : { return -1.; break; }
+        case 21 : { return -1.; break; }
+        default : { BUGTEXTE(-1., gettext("Catégorie inconnue.\n")); break; }
+    }
 }
 
 /* _1990_coef_psi1_bat_fr
@@ -166,32 +166,32 @@ double _1990_coef_psi0_bat_fr(int categorie)
  */
 double _1990_coef_psi1_bat_fr(int categorie)
 {
-	switch (categorie)
-	{
-		case 0 : { return -1.; break; }
-		case 1 : { return -1.; break; }
-		case 2 : { return 0.5; break; }
-		case 3 : { return 0.5; break; }
-		case 4 : { return 0.7; break; }
-		case 5 : { return 0.7; break; }
-		case 6 : { return 0.9; break; }
-		case 7 : { return 0.7; break; }
-		case 8 : { return 0.5; break; }
-		case 9 : { return 0.0; break; }
-		case 10 : { return 0.5; break; }
-		case 11 : { return 0.7; break; }
-		case 12 : { return 0.9; break; }
-		case 13 : { return 0.5; break; }
-		case 14 : { return 0.5; break; }
-		case 15 : { return 0.5; break; }
-		case 16 : { return 0.2; break; }
-		case 17 : { return 0.2; break; }
-		case 18 : { return 0.5; break; }
-		case 19 : { return -1.; break; }
-		case 20 : { return -1.; break; }
-		case 21 : { return -1.; break; }
-		default : { BUGTEXTE(-1., gettext("Catégorie inconnue.\n")); break; }
-	}
+    switch (categorie)
+    {
+        case 0 : { return -1.; break; }
+        case 1 : { return -1.; break; }
+        case 2 : { return 0.5; break; }
+        case 3 : { return 0.5; break; }
+        case 4 : { return 0.7; break; }
+        case 5 : { return 0.7; break; }
+        case 6 : { return 0.9; break; }
+        case 7 : { return 0.7; break; }
+        case 8 : { return 0.5; break; }
+        case 9 : { return 0.0; break; }
+        case 10 : { return 0.5; break; }
+        case 11 : { return 0.7; break; }
+        case 12 : { return 0.9; break; }
+        case 13 : { return 0.5; break; }
+        case 14 : { return 0.5; break; }
+        case 15 : { return 0.5; break; }
+        case 16 : { return 0.2; break; }
+        case 17 : { return 0.2; break; }
+        case 18 : { return 0.5; break; }
+        case 19 : { return -1.; break; }
+        case 20 : { return -1.; break; }
+        case 21 : { return -1.; break; }
+        default : { BUGTEXTE(-1., gettext("Catégorie inconnue.\n")); break; }
+    }
 }
 
 /* _1990_coef_psi2_bat_fr
@@ -203,32 +203,32 @@ double _1990_coef_psi1_bat_fr(int categorie)
  */
 double _1990_coef_psi2_bat_fr(int categorie)
 {
-	switch (categorie)
-	{
-		case 0 : { return -1.; break; }
-		case 1 : { return -1.; break; }
-		case 2 : { return 0.3; break; }
-		case 3 : { return 0.3; break; }
-		case 4 : { return 0.6; break; }
-		case 5 : { return 0.6; break; }
-		case 6 : { return 0.8; break; }
-		case 7 : { return 0.6; break; }
-		case 8 : { return 0.3; break; }
-		case 9 : { return 0.0; break; }
-		case 10 : { return 0.3; break; }
-		case 11 : { return 0.6; break; }
-		case 12 : { return 0.5; break; }
-		case 13 : { return 0.3; break; }
-		case 14 : { return 0.2; break; }
-		case 15 : { return 0.2; break; }
-		case 16 : { return 0.0; break; }
-		case 17 : { return 0.0; break; }
-		case 18 : { return 0.0; break; }
-		case 19 : { return -1.; break; }
-		case 20 : { return -1.; break; }
-		case 21 : { return -1.; break; }
-		default : { BUGTEXTE(-1., gettext("Catégorie inconnue.\n")); break; }
-	}
+    switch (categorie)
+    {
+        case 0 : { return -1.; break; }
+        case 1 : { return -1.; break; }
+        case 2 : { return 0.3; break; }
+        case 3 : { return 0.3; break; }
+        case 4 : { return 0.6; break; }
+        case 5 : { return 0.6; break; }
+        case 6 : { return 0.8; break; }
+        case 7 : { return 0.6; break; }
+        case 8 : { return 0.3; break; }
+        case 9 : { return 0.0; break; }
+        case 10 : { return 0.3; break; }
+        case 11 : { return 0.6; break; }
+        case 12 : { return 0.5; break; }
+        case 13 : { return 0.3; break; }
+        case 14 : { return 0.2; break; }
+        case 15 : { return 0.2; break; }
+        case 16 : { return 0.0; break; }
+        case 17 : { return 0.0; break; }
+        case 18 : { return 0.0; break; }
+        case 19 : { return -1.; break; }
+        case 20 : { return -1.; break; }
+        case 21 : { return -1.; break; }
+        default : { BUGTEXTE(-1., gettext("Catégorie inconnue.\n")); break; }
+    }
 }
 
 /* _1990_coef_psi0_bat
@@ -241,12 +241,12 @@ double _1990_coef_psi2_bat_fr(int categorie)
  */
 double _1990_coef_psi0_bat(int categorie, Type_Pays pays)
 {
-	switch (pays)
-	{
-		case PAYS_EU : { return _1990_coef_psi0_bat_eu(categorie); break; }
-		case PAYS_FR : { return _1990_coef_psi0_bat_fr(categorie); break; }
-		default : { BUGTEXTE(-1., gettext("Pays inconnu.\n")); break; }
-	}
+    switch (pays)
+    {
+        case PAYS_EU : { return _1990_coef_psi0_bat_eu(categorie); break; }
+        case PAYS_FR : { return _1990_coef_psi0_bat_fr(categorie); break; }
+        default : { BUGTEXTE(-1., gettext("Pays inconnu.\n")); break; }
+    }
 }
 
 /* _1990_coef_psi1_bat
@@ -259,12 +259,12 @@ double _1990_coef_psi0_bat(int categorie, Type_Pays pays)
  */
 double _1990_coef_psi1_bat(int categorie, Type_Pays pays)
 {
-	switch (pays)
-	{
-		case PAYS_EU : { return _1990_coef_psi1_bat_eu(categorie); break; }
-		case PAYS_FR : { return _1990_coef_psi1_bat_fr(categorie); break; }
-		default : { BUGTEXTE(-1., gettext("Pays inconnu.\n")); break; }
-	}
+    switch (pays)
+    {
+        case PAYS_EU : { return _1990_coef_psi1_bat_eu(categorie); break; }
+        case PAYS_FR : { return _1990_coef_psi1_bat_fr(categorie); break; }
+        default : { BUGTEXTE(-1., gettext("Pays inconnu.\n")); break; }
+    }
 }
 
 /* _1990_coef_psi2_bat
@@ -277,10 +277,10 @@ double _1990_coef_psi1_bat(int categorie, Type_Pays pays)
  */
 double _1990_coef_psi2_bat(int categorie, Type_Pays pays)
 {
-	switch (pays)
-	{
-		case PAYS_EU : { return _1990_coef_psi2_bat_eu(categorie); break; }
-		case PAYS_FR : { return _1990_coef_psi2_bat_fr(categorie); break; }
-		default : { BUGTEXTE(-1., gettext("Pays inconnu.\n")); break; }
-	}
+    switch (pays)
+    {
+        case PAYS_EU : { return _1990_coef_psi2_bat_eu(categorie); break; }
+        case PAYS_FR : { return _1990_coef_psi2_bat_fr(categorie); break; }
+        default : { BUGTEXTE(-1., gettext("Pays inconnu.\n")); break; }
+    }
 }

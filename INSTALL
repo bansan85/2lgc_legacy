@@ -2,11 +2,11 @@ Si vous êtes sous Windows, la compilation nécessite de créer un environnement
 Allez sur le site de cygwin http://cygwin.com/install.html et télécharger le fichier "setup.exe".
 
 Durant le processus d'installation :
-	- Choose a download Source : Install from Internet
-	- Dossier d'installation : choisissez un emplacement ne contenant pas d'espace ni de caractère "spéciaux" (avec accent)
-	- Choose a Download Site : choississez un site internet proche de chez vous. Pour la france, l'extension doit être en .fr, avec une préférence pour le protocole ftp.
-	- Select Packages : Les paquets nécessaires à un environnement de base sont sélectionnés par défaut.
-	- Paquets supplémentaires nécessaires : gdb, automake1.11, patchutils, gettext-devel, libtool, make, gcc4.5
+    - Choose a download Source : Install from Internet
+    - Dossier d'installation : choisissez un emplacement ne contenant pas d'espace ni de caractère "spéciaux" (avec accent)
+    - Choose a Download Site : choississez un site internet proche de chez vous. Pour la france, l'extension doit être en .fr, avec une préférence pour le protocole ftp.
+    - Select Packages : Les paquets nécessaires à un environnement de base sont sélectionnés par défaut.
+    - Paquets supplémentaires nécessaires : gdb, automake1.11, patchutils, gettext-devel, libtool, make, gcc4.5
 
 
 
@@ -39,8 +39,8 @@ CFLAGS="-march=native -O0 -g3 -ggdb3 -pipe -ftracer -fsched2-use-traces -Wl,-O0 
 patch < diff-libtool-as-needed.patch
 make -j3 && make -C doc doc && sudo make install-data && make check -j3 && sudo make install
 NOTA IMPORTANT :
-	-pg -fprofile-arcs -ftest-coverage sont des options de deboguage qui ne doivent pas être mises pour une utilisation courante.
-	--with-gtk : compilation de l'interface graphique et du support GTK.
+    -pg -fprofile-arcs -ftest-coverage sont des options de deboguage qui ne doivent pas être mises pour une utilisation courante.
+    --with-gtk : compilation de l'interface graphique et du support GTK.
 
 si le programme ne permet pas une compilation sans erreur par la procédure ci-dessus :
 1) vérifier le message d'erreur, il s'agit peut-être d'une application dont dépend le logiciel qui est non installée

@@ -35,15 +35,15 @@
  */
 int _1990_duree_projet_eu(int type)
 {
-	switch (type)
-	{
-		case 0 : { return 10; break; }
-		case 1 : { return 25; break; }
-		case 2 : { return 30; break; }
-		case 3 : { return 50; break; }
-		case 4 : { return 100; break; }
-		default : { BUGTEXTE(-1, gettext("Catégorie inconnue.\n")); break; }
-	}
+    switch (type)
+    {
+        case 0 : { return 10; break; }
+        case 1 : { return 25; break; }
+        case 2 : { return 30; break; }
+        case 3 : { return 50; break; }
+        case 4 : { return 100; break; }
+        default : { BUGTEXTE(-1, gettext("Catégorie inconnue.\n")); break; }
+    }
 }
 
 /* _1990_duree_projet_fr
@@ -55,15 +55,15 @@ int _1990_duree_projet_eu(int type)
  */
 int _1990_duree_projet_fr(int type)
 {
-	switch (type)
-	{
-		case 0 : { return 10; break; }
-		case 1 : { return 25; break; }
-		case 2 : { return 25; break; }
-		case 3 : { return 50; break; }
-		case 4 : { return 100; break; }
-		default : { BUGTEXTE(-1, gettext("Catégorie inconnue.\n")); break; }
-	}
+    switch (type)
+    {
+        case 0 : { return 10; break; }
+        case 1 : { return 25; break; }
+        case 2 : { return 25; break; }
+        case 3 : { return 50; break; }
+        case 4 : { return 100; break; }
+        default : { BUGTEXTE(-1, gettext("Catégorie inconnue.\n")); break; }
+    }
 }
 
 /* _1990_duree_projet_txt_eu
@@ -75,15 +75,15 @@ int _1990_duree_projet_fr(int type)
  */
 char *_1990_duree_projet_txt_eu(int type)
 {
-	switch(type)
-	{
-		case 0 : { return gettext("Structures provisoires"); break; }
-		case 1 : { return gettext("Éléments structuraux remplaçables, par exemple poutres de roulement, appareils d'appui"); break; }
-		case 2 : { return gettext("Structures agricoles et similaires"); break; }
-		case 3 : { return gettext("Structures de bâtiments et autres structures courantes"); break; }
-		case 4 : { return gettext("Structures monumentales de bâtiments, pont et autres ouvrages de génie civil"); break; }
-		default : { BUGTEXTE(NULL, gettext("Catégorie inconnue.\n")); break; }
-	}
+    switch(type)
+    {
+        case 0 : { return gettext("Structures provisoires"); break; }
+        case 1 : { return gettext("Éléments structuraux remplaçables, par exemple poutres de roulement, appareils d'appui"); break; }
+        case 2 : { return gettext("Structures agricoles et similaires"); break; }
+        case 3 : { return gettext("Structures de bâtiments et autres structures courantes"); break; }
+        case 4 : { return gettext("Structures monumentales de bâtiments, pont et autres ouvrages de génie civil"); break; }
+        default : { BUGTEXTE(NULL, gettext("Catégorie inconnue.\n")); break; }
+    }
 }
 
 /* _1990_duree_projet_txt_fr
@@ -95,15 +95,15 @@ char *_1990_duree_projet_txt_eu(int type)
  */
 char *_1990_duree_projet_txt_fr(int type)
 {
-	switch(type)
-	{
-		case 0 : { return gettext("Structures provisoires"); break; }
-		case 1 : { return gettext("Éléments structuraux remplaçables, par exemple poutres de roulement, appareils d'appui"); break; }
-		case 2 : { return gettext("Structures agricoles et similaires"); break; }
-		case 3 : { return gettext("Structures de bâtiments et autres structures courantes"); break; }
-		case 4 : { return gettext("Structures monumentales de bâtiments, pont et autres ouvrages de génie civil"); break; }
-		default : { BUGTEXTE(NULL, gettext("Catégorie inconnue.\n")); break; }
-	}
+    switch(type)
+    {
+        case 0 : { return gettext("Structures provisoires"); break; }
+        case 1 : { return gettext("Éléments structuraux remplaçables, par exemple poutres de roulement, appareils d'appui"); break; }
+        case 2 : { return gettext("Structures agricoles et similaires"); break; }
+        case 3 : { return gettext("Structures de bâtiments et autres structures courantes"); break; }
+        case 4 : { return gettext("Structures monumentales de bâtiments, pont et autres ouvrages de génie civil"); break; }
+        default : { BUGTEXTE(NULL, gettext("Catégorie inconnue.\n")); break; }
+    }
 }
 
 /* _1990_duree_projet
@@ -116,12 +116,12 @@ char *_1990_duree_projet_txt_fr(int type)
  */
 int _1990_duree_projet(int type, Type_Pays pays)
 {
-	switch (pays)
-	{
-		case PAYS_EU : { return _1990_duree_projet_eu(type); break; }
-		case PAYS_FR : { return _1990_duree_projet_fr(type); break; }
-		default : { BUGTEXTE(-1, gettext("Pays inconnu.\n")); break; }
-	}
+    switch (pays)
+    {
+        case PAYS_EU : { return _1990_duree_projet_eu(type); break; }
+        case PAYS_FR : { return _1990_duree_projet_fr(type); break; }
+        default : { BUGTEXTE(-1, gettext("Pays inconnu.\n")); break; }
+    }
 }
 
 /* _1990_duree_projet_txt
@@ -134,10 +134,10 @@ int _1990_duree_projet(int type, Type_Pays pays)
  */
 char *_1990_duree_projet_txt(int type, Type_Pays pays)
 {
-	switch (pays)
-	{
-		case PAYS_EU : { return _1990_duree_projet_txt_eu(type); break; }
-		case PAYS_FR : { return _1990_duree_projet_txt_fr(type); break; }
-		default : { BUGTEXTE(NULL, gettext("Pays inconnu.\n")); break; }
-	}
+    switch (pays)
+    {
+        case PAYS_EU : { return _1990_duree_projet_txt_eu(type); break; }
+        case PAYS_FR : { return _1990_duree_projet_txt_fr(type); break; }
+        default : { BUGTEXTE(NULL, gettext("Pays inconnu.\n")); break; }
+    }
 }

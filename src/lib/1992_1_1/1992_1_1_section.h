@@ -21,57 +21,57 @@
 
 typedef enum
 {
-	BETON_SECTION_RECTANGULAIRE,
-	BETON_SECTION_T,
-	BETON_SECTION_CARRE,
-	BETON_SECTION_CIRCULAIRE
+    BETON_SECTION_RECTANGULAIRE,
+    BETON_SECTION_T,
+    BETON_SECTION_CARRE,
+    BETON_SECTION_CIRCULAIRE
 } Type_Beton_Section;
 
 
 typedef struct __Beton_Section_Caracteristiques
 {
-	Type_Beton_Section	type;
-	unsigned int		numero;
-	double			a;
-	double			cdgh;
-	double			cdgb;
-	double			cdgg;
-	double			cdgd;
-	double			iy;
-	double			iz;
-	double			j;
+    Type_Beton_Section  type;
+    unsigned int        numero;
+    double          a;
+    double          cdgh;
+    double          cdgb;
+    double          cdgg;
+    double          cdgd;
+    double          iy;
+    double          iz;
+    double          j;
 } Beton_Section_Caracteristiques;
 
 
 typedef struct __Beton_Section_Rectangulaire
 {
-	Beton_Section_Caracteristiques	*caracteristiques;
-	double			largeur;
-	double			hauteur;
+    Beton_Section_Caracteristiques  *caracteristiques;
+    double          largeur;
+    double          hauteur;
 } Beton_Section_Rectangulaire;
 
 
 typedef struct __Beton_Section_T
 {
-	Beton_Section_Caracteristiques	*caracteristiques;
-	double			largeur_table;
-	double			largeur_ame;
-	double			hauteur_table;
-	double			hauteur_ame;
+    Beton_Section_Caracteristiques  *caracteristiques;
+    double          largeur_table;
+    double          largeur_ame;
+    double          hauteur_table;
+    double          hauteur_ame;
 } Beton_Section_T;
 
 
 typedef struct __Beton_Section_Carre
 {
-	Beton_Section_Caracteristiques	*caracteristiques;
-	double			cote;
+    Beton_Section_Caracteristiques  *caracteristiques;
+    double          cote;
 } Beton_Section_Carre;
 
 
 typedef struct __Beton_Section_Circulaire
 {
-	Beton_Section_Caracteristiques	*caracteristiques;
-	double			diametre;
+    Beton_Section_Caracteristiques  *caracteristiques;
+    double          diametre;
 } Beton_Section_Circulaire;
 
 

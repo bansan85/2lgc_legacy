@@ -1,38 +1,38 @@
 Règles de programmation et d'écriture
-	- Les nombres flottants doivent être de type 'double' car la librarie cxsparse utilise des types double et principalement car la précision est plus importante.
-	- Tous les macros doivent être en majuscule : #define BUG free((int*)1)
-	- Toutes les noms de définitions de structure doivent avoir la première lettre en majuscule. Le nom des propriétés est en minuscule.
+    - Les nombres flottants doivent être de type 'double' car la librarie cxsparse utilise des types double et principalement car la précision est plus importante.
+    - Tous les macros doivent être en majuscule : #define BUG free((int*)1)
+    - Toutes les noms de définitions de structure doivent avoir la première lettre en majuscule. Le nom des propriétés est en minuscule.
 typedef struct __Projet
 {
-	Actions		actions
+    Actions     actions
 } Projet;
-	- Les variables locales doivent être définies afin que leurs portée soient minimes
+    - Les variables locales doivent être définies afin que leurs portée soient minimes
 void fonction (...)
 {
-	...
-	{
-		int	variable;
-	}
+    ...
+    {
+        int variable;
+    }
 }
-	- Il existe deux façons d'effectuer un return. La première, la traditionnelle, est d'utiliser return. Cette méthode doit être utilisée lorsqu'il s'agit d'un comportement normal de la fonction. En cas de gestion d'erreur, il convient de remplacer 'return -1' par BUG(-1). La macro BUG est définie dans l'entête "src/lib/common/common_erreurs.h". Cette macro est remplacée (en usage normal) par un 'return -1' ou (en usage expérimental) est remplacée par un 'free((int*)1); return -1'. L'usage expérimentale permet de détecter instantanément la ligne ayant provoquée l'erreur, ce qui n'est pas le cas d'un 'return' normal. Il existe ainsi BUG(-1) qui équivaut donc à 'return -1' et BUGTEXTE(-1, "%s\n", gettext("message d'erreur")) qui équivant à 'printf("%s\n", gettext("message d'erreur")); return -1'. Il convient d'utiliser un ';' après un appel à BUG ou BUGTEXTE même si ce dernier est facultatif. Les messages d'erreurs les plus courants sont les suivants (pensez à rajouter gettext et à les terminer par un point) :
-		"Paramètres invalides.\n" : utilisé lorsque la vérification des paramètres de la fonction a échouée.
-		"Impossible d'initialiser gtk.\n" : Echec de la fonction gtk_init_check.
-		"Impossible d'ouvrir le fichier '%s'.\n"
-		"Le document est vide.\n"
-		"Erreur d'allocation mémoire.\n"
-	- Il est inutile d'utiliser BUGTEXTE sur une fonction qui renvoie déjà BUGTEXTE. Dans ce cas, l'utilisation de BUG est suffisante. L'objectif de BUGTEXTE est d'indiquer l'origine du problème et de dire que la fonction ne s'est pas déroulée correctement. Il est par contre nécessaire de tester la valeur retour de toutes les fonctions utilisant BUG et BUGTEXTE.
-	- La déclaration des variables locales doit toujours se trouvée en haut de leur portée respective (soit toujours juste en-dessous d'un '{'). Une ligne vide doit se trouver après la déclaration des variables pour leur déclaration du code.
+    - Il existe deux façons d'effectuer un return. La première, la traditionnelle, est d'utiliser return. Cette méthode doit être utilisée lorsqu'il s'agit d'un comportement normal de la fonction. En cas de gestion d'erreur, il convient de remplacer 'return -1' par BUG(-1). La macro BUG est définie dans l'entête "src/lib/common/common_erreurs.h". Cette macro est remplacée (en usage normal) par un 'return -1' ou (en usage expérimental) est remplacée par un 'free((int*)1); return -1'. L'usage expérimentale permet de détecter instantanément la ligne ayant provoquée l'erreur, ce qui n'est pas le cas d'un 'return' normal. Il existe ainsi BUG(-1) qui équivaut donc à 'return -1' et BUGTEXTE(-1, "%s\n", gettext("message d'erreur")) qui équivant à 'printf("%s\n", gettext("message d'erreur")); return -1'. Il convient d'utiliser un ';' après un appel à BUG ou BUGTEXTE même si ce dernier est facultatif. Les messages d'erreurs les plus courants sont les suivants (pensez à rajouter gettext et à les terminer par un point) :
+        "Paramètres invalides.\n" : utilisé lorsque la vérification des paramètres de la fonction a échouée.
+        "Impossible d'initialiser gtk.\n" : Echec de la fonction gtk_init_check.
+        "Impossible d'ouvrir le fichier '%s'.\n"
+        "Le document est vide.\n"
+        "Erreur d'allocation mémoire.\n"
+    - Il est inutile d'utiliser BUGTEXTE sur une fonction qui renvoie déjà BUGTEXTE. Dans ce cas, l'utilisation de BUG est suffisante. L'objectif de BUGTEXTE est d'indiquer l'origine du problème et de dire que la fonction ne s'est pas déroulée correctement. Il est par contre nécessaire de tester la valeur retour de toutes les fonctions utilisant BUG et BUGTEXTE.
+    - La déclaration des variables locales doit toujours se trouvée en haut de leur portée respective (soit toujours juste en-dessous d'un '{'). Une ligne vide doit se trouver après la déclaration des variables pour leur déclaration du code.
 void function(...)
 {
-	int variable;
-	
-	...
+    int variable;
+    
+    ...
 }
-	- Toujours utiliser des noms de variable explicites même si celà inclique des variables au nom long.
-	- Toujours vérifier en début de chaque fonction que les arguments sont corrects.
-	- Bien sûr, les commentaires dans le code ne sont pas facultatifs.
-	- Afin d'éviter la redondance d'informations (et donc d'éventuels contradiction), les commentaires des fonctions doivent dans un premier temps être réservés au fichier source '.c'. Les commentaires dans les fichiers entête '.h' sont donc facultatifs.
-	- Les fonctions doivent toujours être commentées de la façon ci-dessous. Lorsque les fonctions sont très longues, il est possible d'indiquer 'Échec : valeur négative'
+    - Toujours utiliser des noms de variable explicites même si celà inclique des variables au nom long.
+    - Toujours vérifier en début de chaque fonction que les arguments sont corrects.
+    - Bien sûr, les commentaires dans le code ne sont pas facultatifs.
+    - Afin d'éviter la redondance d'informations (et donc d'éventuels contradiction), les commentaires des fonctions doivent dans un premier temps être réservés au fichier source '.c'. Les commentaires dans les fichiers entête '.h' sont donc facultatifs.
+    - Les fonctions doivent toujours être commentées de la façon ci-dessous. Lorsque les fonctions sont très longues, il est possible d'indiquer 'Échec : valeur négative'
 /* _1990_duree_projet_fr
  * Description : Déterminer la durée (en année) indicative de la norme française
  * Paramètres : int type : catégorie de durée d'utilisation de projet
@@ -42,16 +42,16 @@ void function(...)
  */
 int _1990_duree_projet_fr(int type)
 {
-	...
+    ...
 }
-	- Les valeurs retours de fonction doivent être autant que faire se peut :
-		- dans le cas d'un retour 'int', le retour vaut 0 si tout s'est bien passé et une valeur négative en cas d'erreur.
-		- dans le cas d'un retour 'void*', le retour vaut le pointeur recherché si tout s'est bien passé et NULL en cas d'erreur.
-	- Le nom des variables définissant des boucles doit tenir sur un seul caractère : int i, j; et éventuellement accompagné d'un nombre void *n0, *n1;
-	- Vérification à faire avant de réaliser un commit :
-		- ./clean_config
-		- 'svn status' pour vérifier qu'il n'y a pas de fichiers indésirables, de fichiers manquants ou des fichiers à ajouter.
-		- lancer la commande 'grep BUGTEXTE * -r |grep -v gettext' pour vérifier que tous les BUGTEXTE contiennent bien un gettext
+    - Les valeurs retours de fonction doivent être autant que faire se peut :
+        - dans le cas d'un retour 'int', le retour vaut 0 si tout s'est bien passé et une valeur négative en cas d'erreur.
+        - dans le cas d'un retour 'void*', le retour vaut le pointeur recherché si tout s'est bien passé et NULL en cas d'erreur.
+    - Le nom des variables définissant des boucles doit tenir sur un seul caractère : int i, j; et éventuellement accompagné d'un nombre void *n0, *n1;
+    - Vérification à faire avant de réaliser un commit :
+        - ./clean_config
+        - 'svn status' pour vérifier qu'il n'y a pas de fichiers indésirables, de fichiers manquants ou des fichiers à ajouter.
+        - lancer la commande 'grep BUGTEXTE * -r |grep -v gettext' pour vérifier que tous les BUGTEXTE contiennent bien un gettext
 
 
 
@@ -61,33 +61,33 @@ int _1990_duree_projet_fr(int type)
 
 
 La source possède l'arborescence suivante :
-	- AUTHORS : contient la liste des auteurs du projet.
-	- ChangeLog : Le ChangeLog
-	- clean_config : supprimer tous les fichiers créés par les autotools et les différents make
-	- COPYING : la licence
-	- diff-configure.scan.patch : modifications à apporter au configure.scan après le lancement de la commande autoscan. Met à jour également le numéro de version
-	- diff-po-Makevars.template.patch : modifications à apporter au fichier Makevars du dossier po après le lancement de la commande gettextize
-	- doc : dossier contenant la documentation
-		- developpeur : documentation développeur
-		- utilisateur : documentation utilisateur
-	- files : dossier contenant les fichiers annexes que les programmes peuvent avoir besoin
-		- formules : dossier contenant les formules des normes au format SVG
-		- xml : dossier contenant divers documents au format XML
-			- tooltips.xml : contient les informations nécessaires à la génération de tooltips personnalisés
-	- INSTALL : liste des instructions pour compiler et installer l'application
-	- Makefile.am : pour autotools
-	- NEWS : les news
-	- po : dossier contenant les fichiers de traduction. Bien que cela semble superflu pour l'instant car l'application est rédigé en français, il est nécessaire de maintenir le fichier fr.po.
-		- La procédure de mise à jour des traductions et de création de nouvelles est rédigée dans le fichier INSTALL contenu dans la racine du projet
-	- README : readme
-	- src : dossier contenant les sources du programme
-		- calc : dossier contenant les programmes de calculs
-		- gui : dossier contenant les programmes gérant l'interface graphique et appelant les programmes de calculs
-		- lib : dossier contenant les librairies de calcul (une librairie par norme !!).
-			- sample : dossier pouvant servir de base viège pour créer une nouvelle norme
-				Un compromis, à la discrétion des développeurs, doit être trouvé entre un fichier regroupant toutes les formules et un fichier par formule.
-		- test : dossier contenant les programmes de test
-			
+    - AUTHORS : contient la liste des auteurs du projet.
+    - ChangeLog : Le ChangeLog
+    - clean_config : supprimer tous les fichiers créés par les autotools et les différents make
+    - COPYING : la licence
+    - diff-configure.scan.patch : modifications à apporter au configure.scan après le lancement de la commande autoscan. Met à jour également le numéro de version
+    - diff-po-Makevars.template.patch : modifications à apporter au fichier Makevars du dossier po après le lancement de la commande gettextize
+    - doc : dossier contenant la documentation
+        - developpeur : documentation développeur
+        - utilisateur : documentation utilisateur
+    - files : dossier contenant les fichiers annexes que les programmes peuvent avoir besoin
+        - formules : dossier contenant les formules des normes au format SVG
+        - xml : dossier contenant divers documents au format XML
+            - tooltips.xml : contient les informations nécessaires à la génération de tooltips personnalisés
+    - INSTALL : liste des instructions pour compiler et installer l'application
+    - Makefile.am : pour autotools
+    - NEWS : les news
+    - po : dossier contenant les fichiers de traduction. Bien que cela semble superflu pour l'instant car l'application est rédigé en français, il est nécessaire de maintenir le fichier fr.po.
+        - La procédure de mise à jour des traductions et de création de nouvelles est rédigée dans le fichier INSTALL contenu dans la racine du projet
+    - README : readme
+    - src : dossier contenant les sources du programme
+        - calc : dossier contenant les programmes de calculs
+        - gui : dossier contenant les programmes gérant l'interface graphique et appelant les programmes de calculs
+        - lib : dossier contenant les librairies de calcul (une librairie par norme !!).
+            - sample : dossier pouvant servir de base viège pour créer une nouvelle norme
+                Un compromis, à la discrétion des développeurs, doit être trouvé entre un fichier regroupant toutes les formules et un fichier par formule.
+        - test : dossier contenant les programmes de test
+            
 
 
 Description du fichier tooltips.xml
@@ -106,22 +106,22 @@ Description des normes une par une
 
 
 Lorsqu'un problème échoue, la ligne où le programme peut être obtenu par gdb. Il y a deux possibilités :
-	- Soit le fichier est un exécutable et alors un simple "gdb src/test/1990__1" "run" "bt full" détecte l'emplacement exact du problème
-	- Soit le fichier est un script shell, il faut alors lancer src/test/.libs/1990__1. Il sera alors indiqué qu'il manque une librairie.
-		Pour chaque librairie manquante, il faudra compléter la variable shell :
-			export LD_LIBRARY_PATH=src/lib/1990/.libs/:src/lib/common/.libs/
-		Ensuite, "gdb src/test/.libs/1990__1" "run" "bt full" détecte l'emplacement exact du problème ou valgrind
+    - Soit le fichier est un exécutable et alors un simple "gdb src/test/1990__1" "run" "bt full" détecte l'emplacement exact du problème
+    - Soit le fichier est un script shell, il faut alors lancer src/test/.libs/1990__1. Il sera alors indiqué qu'il manque une librairie.
+        Pour chaque librairie manquante, il faudra compléter la variable shell :
+            export LD_LIBRARY_PATH=src/lib/1990/.libs/:src/lib/common/.libs/
+        Ensuite, "gdb src/test/.libs/1990__1" "run" "bt full" détecte l'emplacement exact du problème ou valgrind
 
 
 
 Interface graphique :
 paramètre pour définir une action :
-	- nature (permanente, précontrainte, exploitation, accidentelle, sismique)
-	- catégorie
-	- action structurelle ou géotechnique ?
-	- variable dominante ou d'accompagnement ?
-	- stocker les valeurs : %y~0~, %y~1~, %y~2~
-	- coefficient de sécurité sur les actions : %g~F~
-	- coefficient majorateur dynamique : %j
-	- Pourcentage d'écart possible de la valeur caractéristique (sup et inf).
-	- Charge disponible à l'ELU et/ou ELS et/ou ELA
+    - nature (permanente, précontrainte, exploitation, accidentelle, sismique)
+    - catégorie
+    - action structurelle ou géotechnique ?
+    - variable dominante ou d'accompagnement ?
+    - stocker les valeurs : %y~0~, %y~1~, %y~2~
+    - coefficient de sécurité sur les actions : %g~F~
+    - coefficient majorateur dynamique : %j
+    - Pourcentage d'écart possible de la valeur caractéristique (sup et inf).
+    - Charge disponible à l'ELU et/ou ELS et/ou ELA

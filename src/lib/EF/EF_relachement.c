@@ -31,14 +31,14 @@
  */
 int EF_relachement_init(Projet *projet)
 {
-	if (projet == NULL)
-		BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
-	
-	projet->ef_donnees.relachements = list_init();
-	if (projet->ef_donnees.relachements == NULL)
-		BUGTEXTE(-2, gettext("Erreur d'allocation mémoire.\n"));
-	else
-		return 0;
+    if (projet == NULL)
+        BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
+    
+    projet->ef_donnees.relachements = list_init();
+    if (projet->ef_donnees.relachements == NULL)
+        BUGTEXTE(-2, gettext("Erreur d'allocation mémoire.\n"));
+    else
+        return 0;
 }
 
 
@@ -57,29 +57,29 @@ int EF_relachement_init(Projet *projet)
  */
 int EF_relachement_ajout(Projet *projet, Type_EF_Relachement rx_debut, Type_EF_Relachement ry_debut, Type_EF_Relachement rz_debut, Type_EF_Relachement rx_fin, Type_EF_Relachement ry_fin, Type_EF_Relachement rz_fin)
 {
-	Relachement		*relachement_en_cours, relachement_nouveau;
-	
-	if ((projet == NULL) || (projet->ef_donnees.relachements == NULL) || ((rx_debut == EF_RELACHEMENT_LIBRE) && (rx_fin == EF_RELACHEMENT_LIBRE)))
-		BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
-	
-	list_mvrear(projet->ef_donnees.relachements);
-	relachement_nouveau.rx_debut = rx_debut;
-	relachement_nouveau.ry_debut = ry_debut;
-	relachement_nouveau.rz_debut = rz_debut;
-	relachement_nouveau.rx_fin = rx_fin;
-	relachement_nouveau.ry_fin = ry_fin;
-	relachement_nouveau.rz_fin = rz_fin;
-	
-	relachement_en_cours = (Relachement *)list_rear(projet->ef_donnees.relachements);
-	if (relachement_en_cours == NULL)
-		relachement_nouveau.numero = 0;
-	else
-		relachement_nouveau.numero = relachement_en_cours->numero+1;
-	
-	if (list_insert_after(projet->ef_donnees.relachements, &(relachement_nouveau), sizeof(relachement_nouveau)) == NULL)
-		BUGTEXTE(-2, gettext("Erreur d'allocation mémoire.\n"));
-	
-	return 0;
+    Relachement     *relachement_en_cours, relachement_nouveau;
+    
+    if ((projet == NULL) || (projet->ef_donnees.relachements == NULL) || ((rx_debut == EF_RELACHEMENT_LIBRE) && (rx_fin == EF_RELACHEMENT_LIBRE)))
+        BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
+    
+    list_mvrear(projet->ef_donnees.relachements);
+    relachement_nouveau.rx_debut = rx_debut;
+    relachement_nouveau.ry_debut = ry_debut;
+    relachement_nouveau.rz_debut = rz_debut;
+    relachement_nouveau.rx_fin = rx_fin;
+    relachement_nouveau.ry_fin = ry_fin;
+    relachement_nouveau.rz_fin = rz_fin;
+    
+    relachement_en_cours = (Relachement *)list_rear(projet->ef_donnees.relachements);
+    if (relachement_en_cours == NULL)
+        relachement_nouveau.numero = 0;
+    else
+        relachement_nouveau.numero = relachement_en_cours->numero+1;
+    
+    if (list_insert_after(projet->ef_donnees.relachements, &(relachement_nouveau), sizeof(relachement_nouveau)) == NULL)
+        BUGTEXTE(-2, gettext("Erreur d'allocation mémoire.\n"));
+    
+    return 0;
 }
 
 
@@ -93,20 +93,20 @@ int EF_relachement_ajout(Projet *projet, Type_EF_Relachement rx_debut, Type_EF_R
  */
 Relachement* EF_relachement_cherche_numero(Projet *projet, unsigned int numero)
 {
-	if ((projet == NULL) || (projet->ef_donnees.relachements == NULL) || (list_size(projet->ef_donnees.relachements) == 0))
-		BUGTEXTE(NULL, gettext("Paramètres invalides.\n"));
-	
-	list_mvfront(projet->ef_donnees.relachements);
-	do
-	{
-		Relachement	*relachement = list_curr(projet->ef_donnees.relachements);
-		
-		if (relachement->numero == numero)
-			return relachement;
-	}
-	while (list_mvnext(projet->ef_donnees.relachements) != NULL);
-	
-	BUGTEXTE(NULL, gettext("Relachement n°%d introuvable.\n"), numero);
+    if ((projet == NULL) || (projet->ef_donnees.relachements == NULL) || (list_size(projet->ef_donnees.relachements) == 0))
+        BUGTEXTE(NULL, gettext("Paramètres invalides.\n"));
+    
+    list_mvfront(projet->ef_donnees.relachements);
+    do
+    {
+        Relachement *relachement = list_curr(projet->ef_donnees.relachements);
+        
+        if (relachement->numero == numero)
+            return relachement;
+    }
+    while (list_mvnext(projet->ef_donnees.relachements) != NULL);
+    
+    BUGTEXTE(NULL, gettext("Relachement n°%d introuvable.\n"), numero);
 }
 
 
@@ -119,19 +119,19 @@ Relachement* EF_relachement_cherche_numero(Projet *projet, unsigned int numero)
  */
 int EF_relachement_free(Projet *projet)
 {
-	if ((projet == NULL) || (projet->ef_donnees.relachements == NULL))
-		BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
-	
-	while (!list_empty(projet->ef_donnees.relachements))
-	{
-		Relachement	*relachement = list_remove_front(projet->ef_donnees.relachements);
-		
-		free(relachement);
-	}
-	
-	free(projet->ef_donnees.relachements);
-	projet->ef_donnees.relachements = NULL;
-	
-	return 0;
+    if ((projet == NULL) || (projet->ef_donnees.relachements == NULL))
+        BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
+    
+    while (!list_empty(projet->ef_donnees.relachements))
+    {
+        Relachement *relachement = list_remove_front(projet->ef_donnees.relachements);
+        
+        free(relachement);
+    }
+    
+    free(projet->ef_donnees.relachements);
+    projet->ef_donnees.relachements = NULL;
+    
+    return 0;
 }
 

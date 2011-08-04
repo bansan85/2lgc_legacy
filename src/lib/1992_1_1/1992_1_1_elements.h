@@ -28,19 +28,19 @@
 
 typedef struct __Beton_Element_Poutre
 {
-	unsigned int		numero;
-	Type_Element		type;
-	void			*section;
-	Beton_Materiau		*materiau;
-	
-	EF_Noeud		*noeud_debut;
-	EF_Noeud		*noeud_fin;
-	unsigned int		discretisation_element;		// Nombre de noeuds intermédiaires
-	EF_Noeud		**noeuds_intermediaires;
-	Relachement		*relachement;
-	
-	cholmod_sparse		*matrice_rotation;
-	cholmod_sparse		*matrice_rotation_transpose;
+    unsigned int        numero;
+    Type_Element        type;
+    void            *section;
+    Beton_Materiau      *materiau;
+    
+    EF_Noeud        *noeud_debut;
+    EF_Noeud        *noeud_fin;
+    unsigned int        discretisation_element;     // Nombre de noeuds intermédiaires
+    EF_Noeud        **noeuds_intermediaires;
+    Relachement     *relachement;
+    
+    cholmod_sparse      *matrice_rotation;
+    cholmod_sparse      *matrice_rotation_transpose;
 } Beton_Element;
 
 int _1992_1_1_elements_init(Projet *projet);
