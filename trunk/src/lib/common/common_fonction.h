@@ -21,22 +21,22 @@
 
 #include "common_projet.h"
 
-typedef struct				// Fonction de base : coef_0 + coef_x*x + coef_x2*x*x
+typedef struct                  // Fonction de base : coef_0 + coef_x*x + coef_x2*x*x
 {
-	double		debut_troncon;	// Début et la fin du tronçon de validité de la fonction
-	double		fin_troncon;
-	double		coef_0;	
-	double		coef_x;	
-	double		coef_x2;
-	double		coef_x3;
+    double      debut_troncon;  // Début et la fin du tronçon de validité de la fonction
+    double      fin_troncon;
+    double      coef_0;         // La fonction mathématique est définie par la formule :
+    double      coef_x;         // coef_0 + coef_x*x + coef_x2*x^2 + coef_x3*x^3
+    double      coef_x2;
+    double      coef_x3;
 } Troncon;
 
 typedef struct
 {
-	int		nb_troncons;	// Les fonctions n'étant pas forcément continues le long de la barre (par exemple charge ponctuelle),
-					// il est nécessaire de définir plusieurs tronçons avec pour chaque tronçon son fonction.
-					// Toutes les fonctions possèderont les mêmes tronçons afin de faciliter leur utilisation combinées.
-	Troncon		*troncons;	// Tableau dynamique contenant les fonctions par tronçons
+    int         nb_troncons;    // Les fonctions n'étant pas forcément continues le long de la barre (par exemple charge ponctuelle),
+                                // il est nécessaire de définir plusieurs tronçons avec pour chaque tronçon sa fonction.
+                                // int nb_troncons défini donc le nombre de tronçons que possède la fonction.
+    Troncon     *troncons;      // Tableau dynamique contenant les fonctions par tronçon.
 } Fonction;
 
 // On est obligé de mettre action en void* et pas en Action* pour éviter une dépence circulaire des fichiers dû à l'inclusion du fichier en-tête "1990_actions.h"

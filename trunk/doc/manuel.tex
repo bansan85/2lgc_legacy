@@ -1,10 +1,108 @@
-\documentclass{book}
+\documentclass{article}
+
+\usepackage[utf8]{inputenc} %Pour les accents puisque ce fichier est en format UTF-8
+\usepackage[T1]{fontenc}
+\usepackage[frenchb]{babel} % Pour la césure je crois
+\usepackage{geometry} %Pour geometry
+\usepackage[hyperindex=true, colorlinks=true]{hyperref} %Pour /url pour un affichage correcte en PDF
+
+\geometry
+{
+    a4paper,
+    body={160mm,247mm}, % 21*29.7-2.5*2
+    left=25mm,top=25mm,
+    headheight=7mm,headsep=4mm,
+    marginparsep=4mm,
+    marginparwidth=27mm
+}
+
 \begin{document}
-\chapter{Présentation}
-\chapter{Programme de base}
-\chapter{Description des fonctions}
-\section{testest}
+\author{LE GARREC Vincent, 2LGC, FRANCE}
+\title{Guide du développeur de la librairie libeurocodes, un outil de calcul de structure conformément aux Eurocodes}
+\maketitle
+\newpage
+\section{Présentation}
+La librairie libeurocodes, programmée en C, est un ensemble de fonctions permettant de réaliser des calculs de structures conformément aux Eurocodes, intégrant également un module de calculs aux éléments finis. L'objectif est de réaliser une bibliothèque légère et performante de modélisation d'une structure permettant ainsi le dimensionnement et la vérification d'ouvrages ou d'éléments en matériau béton, métal, bois, mixte (béton-acier), maçonnerie et aluminimum vis-à-vis des charges d'exploitation, climatique (vent, neige) ou encore accidentelles (chocs, sismiques).
+\par
+La librairie est distribuée sous licence GPL, ce qui signifie que seules des applications adoptant pour la licence GPL peuvent utiliser la présente bibliothèque. Veuillez contacter l'auteur du projet si vous souhaitez obtenir la librairie sous une autre licence.
+\par
+\par
+Les types, définis par {\texttt{typedef struct}} permettent de stocker toutes les informations du projet en mémoire telles que les noeuds, les barres ou encore les résultats des calculs et les fonctions permettent de gérer et d'ajouter des données au projet ou encore de réaliser les calculs pour en afficher les résultats.
+\par
+Les fonctions sont classées par norme. Ainsi, toute fonction se basant par exemple sur l'Eurocode~2-1-1 commencera par la dénomination {\texttt{\_1992\_1\_1}}. Ensuite, toujours sur le même principe, deux groupes de fonctions existent en plus sous la dénomination {\texttt{EF}}, qui contient tous les calculs aux éléments finis en exploitant les librairies {\texttt{cholmod}}\footnote{Sparse Cholesky factorization and update/downdate library : \url{http://www.cise.ufl.edu/research/sparse/cholmod}} et {\texttt{spqr}}\footnote{Multithreaded multifrontal sparse QR factorization library : \url{http://www.cise.ufl.edu/research/sparse/SPQR}}, et {\texttt{common}}, qui répertorie toutes les fonctions communes à toutes les normes (la gestion des allocations mémoire, le stockage des données de tout un projet et plus généralement toutes les fonctions divers et variées ne pouvant appartenir à aucune autre rubriques.)
+\newpage
+\section{Programme de base}
+L'objectif de ce paragraphe est de présenter les différentes fonctions de la librairie "libeurocodes" dans un contexte didactique. L'ensemble des fonctions sera ensuite présenté de manière plus détaillée dans le chapitre suivant notamment en présentant de façon précise les algorithmes utilisés. Il est possible, par exemple, d'utiliser les fonctions suivantes :
+\par
+\begin{enumerate}
+    \item {\texttt{projet\_init}} : doit être appelé en premier dans tous les cas.
+    \item {\texttt{EF\_appuis\_ajout}} : défini un type d'appui (rotule, appui simple, encastrement, ...).
+    \item {\texttt{EF\_noeuds\_ajout}} : ajoute les noeuds de la structure et attribut, si nécessaire, un type d'appui comme défini précédemment.
+    \item {\texttt{\_1992\_1\_1\_sections\_ajout\_rectangulaire}} : défini une section rectangulaire en béton conformément à l'Eurocode 2-1-1. Il est également possible de définir des sections en T, carrée ou circulaire.
+    \item {\texttt{\_1992\_1\_1\_materiaux\_ajout}} : défini le matériau béton en fonction de sa résistance caractéristique à la compression à 28 jours ($f_{ck}$).
+    \item {\texttt{EF\_relachement\_ajout}} : défini un type de relâchement. Il est possible de relâcher uniquement les rotations.
+    \item {\texttt{\_1992\_1\_1\_elements\_ajout}} : ajout un élément en béton (poteau, poutre, ...) à partir de toutes les données précédentes (section, matériau, noeuds, relachement). Il est également possible de discrétiser l'élément un nombre de tronçons de même longueur à définir.
+    \item {\texttt{\_1990\_action\_ajout}} : ajoute un type d'action. Chaque type d'action peut contenir plusieurs charges de projet de même nature.
+    \item {\texttt{\_1990\_groupe\_niveau\_ajout}} : défini différents niveaux de groupe. Les groupes de niveau 0 contien\-nent des actions, les groupes de niveau 1 contien\-nent des groupes de niveau 0, ...
+    \item {\texttt{\_1990\_groupe\_ajout}} : ajoute un groupe d'actions ou un groupe de groupes à l'intérieur d'un niveau défini par la fonction {\texttt{\_1990\_groupe\_niveau\_ajout}}. Les éléments à l'intérieur d'un même groupe peuvent être combinés par une opérande de type AND, OR ou XOR.
+    \item {\texttt{\_1990\_groupe\_ajout\_element}} : ajoute des éléments à l'intérieur des groupes définis par la fonction {\texttt{\_1990\_groupe\_ajout}}.
+    \item {\texttt{\_1990\_action\_ajout\_charge\_ponctuelle\_noeud}} : ajoute une charge ponctuelle s'appliquant à un noeud. Il est également possible d'appliquer une charge ponctuelle à l'intérieur d'une barre.
+    \item {\texttt{EF\_calculs\_initialise}} : initialise les calculs aux éléments finis.
+    \item {\texttt{\_1992\_1\_1\_elements\_rigidite\_ajout\_tout}} : ajoute à la matrice de rigidité globale la rigidité de l'ensemble des éléments en béton.
+    \item {\texttt{EF\_calculs\_genere\_sparse}} : calcule l'inverse de la matrice de rigidité globale partielle. Le terme partiel indique que la matrice de rigidité ne contient que les lignes et colonnes dont le déplacement est inconnu.
+    \item {\texttt{EF\_calculs\_resoud\_charge}} : détermine à partir de la matrice de rigidité calculée précédemment les déplacements des noeuds, les efforts aux noeuds et les fonctions décrivant les sollicitations ($N$, $T_y$, $T_z$, $M_x$, $M_y$ et $M_z$) et les déplacements ($\theta{}_x$, $\theta{}_y$, $\theta{}_z$, $f_x$, $f_y$ et $f_z$).
+    \item {\texttt{EF\_calculs\_affiche\_resultats}} : affiche les résultats d'une charge pour toutes les barres dans la console.
+    \item {\texttt{projet\_free}} : libère tous les résultats et les zones mémoires allouées pour les calculs.
+\end{enumerate}
+\section{Exemple d'application en C}
+\begin{verbatim}
+TODO : INSERER LE CODE SOURCE D'UNE APPLICATION DE BASE!!!
+\end{verbatim}
+Et expliquer ici succintement le but de l'application.
+\newpage
+\section{Module {\texttt{common}}}
+\subsection{Fichier {\texttt{common\_erreurs}}}
+Ce fichier permet de traiter les erreurs de l'application qui peuvent survenir pendant une utilisation normale ou anormale de l'application. Elles permettent de détecter plus facilement les erreurs et de remonter l'erreur jusqu'aux plus hautes instances du programme tout en assurant sa stabilité.
+\subsubsection{Macros}
+\begin{verbatim}
+#define BUG(X) ({free((int*)1); return X;})
+// La macro BUG(X) est l'équivalent d'un return X; cependant, afin de 
+// faciliter le débogage des erreurs via gdb, il est rajouté, pour la
+// version expérimentale du programme un "free((int*)1) qui s'assure de
+// créer une erreur de segmentation. Il va de soit que pour la version
+// de production, la commande free() doit être supprimée.
 
+#define BUGTEXTE(X, ...) ({printf(__VA_ARGS__); free((int*)1); return X;})
+// La macro BUGTEXTE(X) est identique à la commande BUG mais ajoute un
+// message d'erreur avant de réaliser l'erreur de segmentation. D'une
+// maniète générale, BUGTEXTE doit être utilisé dès que l'erreur arrive
+// et BUG doit être utilisé pour indiquer une erreur par la valeur retour
+// des fonctions utilisant déjà la macro BUGTEXTE.
+\end{verbatim}
+\subsubsection{Structures de données}
+\subsection{Fichier {\texttt{common\_fonction}}}
+Ce fichier permet de gérer des fonctions méthématiques plus ou moins complexes. Le principal intérêt est de pouvoir travailler avec une fonction différentes pour chaque tronçon défini par l'utilisateur. Par exemple avoir la fonction $x^2+3*x$ pour x variant de -1.5 à 1.5 et la fonction $-2*x+5$ pour x variant de 1.5 à 2.0.
+\subsubsection{Macros}
+Aucune
+\subsubsection{Structures de données}
+\begin{verbatim}
+typedef struct                  // Fonction de base : coef_0 + coef_x*x + coef_x2*x*x
+{
+    double      debut_troncon;  // Début et la fin du tronçon de validité de la fonction
+    double      fin_troncon;
+    double      coef_0;         // La fonction mathématique est définie par la formule :
+    double      coef_x;         // coef_0 + coef_x*x + coef_x2*x^2 + coef_x3*x^3
+    double      coef_x2;
+    double      coef_x3;
+} Troncon;
 
+typedef struct
+{
+    int         nb_troncons;    // Les fonctions n'étant pas forcément continues le long de la barre (par exemple charge ponctuelle),
+                                // il est nécessaire de définir plusieurs tronçons avec pour chaque tronçon sa fonction.
+                                // int nb_troncons défini donc le nombre de tronçons que possède la fonction.
+    Troncon     *troncons;      // Tableau dynamique contenant les fonctions par tronçon.
+} Fonction;
+\end{verbatim}
 
 \end{document}

@@ -28,64 +28,64 @@
 
 typedef enum
 {
-	CHARGE_PONCTUELLE_NOEUD,
-	CHARGE_PONCTUELLE_BARRE
+    CHARGE_PONCTUELLE_NOEUD,
+    CHARGE_PONCTUELLE_BARRE
 } Charge_Type;
 
 
 typedef struct __Charge_Ponctuelle_Noeud
 {
-	Charge_Type		type;
-	int			numero;
-	char			*nom;
-	char			*description;
-	EF_Noeud		*noeud;
-	double			x;
-	double			y;
-	double			z;
-	double			rx;
-	double			ry;
-	double			rz;
+    Charge_Type     type;
+    int         numero;
+    char            *nom;
+    char            *description;
+    EF_Noeud        *noeud;
+    double          x;
+    double          y;
+    double          z;
+    double          rx;
+    double          ry;
+    double          rz;
 } Charge_Ponctuelle_Noeud;
 
 typedef struct __Charge_Ponctuelle_Barre
 {
-	Charge_Type		type;
-	int			numero;
-	char			*nom;
-	char			*description;
-	void			*barre; // Peut être Beton_Element, Acier_Element ou autre
-	int			repere_local;
-	double			position; // Position de la charge ponctuelle en mètre depuis le début de la barre
-	double			x;
-	double			y;
-	double			z;
-	double			rx;
-	double			ry;
-	double			rz;
+    Charge_Type     type;
+    int         numero;
+    char            *nom;
+    char            *description;
+    void            *barre; // Peut être Beton_Element, Acier_Element ou autre
+    int         repere_local;
+    double          position; // Position de la charge ponctuelle en mètre depuis le début de la barre
+    double          x;
+    double          y;
+    double          z;
+    double          rx;
+    double          ry;
+    double          rz;
 } Charge_Ponctuelle_Barre;
 
 typedef struct __Action
 {
-	char			*nom;
-	char			*description;
-	int			numero;
-	int			categorie;			// Les catégories sont définies dans les fonctions _1990_action_categorie
-	LIST			*charges;
-	int			flags;
-	double			psi0;		// valeur_combinaison
-	double			psi1;		// valeur_frequente
-	double			psi2;		// valeur_quasi_permanente
-	cholmod_sparse		*deplacement_partiel;
-	cholmod_sparse		*deplacement_complet;
-	cholmod_sparse		*forces_complet;
-	cholmod_sparse		*efforts_noeuds;
-	double			norm;
-	Fonction		**fonctions_efforts[6];		// Les 6 fonctions (N, Ty, Tz, Mx, My, Mz) pour chaque barre.
-								// Les fonctions représentent la courbe des efforts dues aux charges dans
-								// les barres et dus aux déplacements calculés par la méthode des EF
-	Fonction		**fonctions_fleche[3];		// Les 3 flèches x, y, z pour chaque barre.
-	Fonction		**fonctions_rotation[3];	// Les 3 rotations rx, ry, rz pour chaque barre.
+    char            *nom;
+    char            *description;
+    int         numero;
+    int         categorie;          // Les catégories sont définies dans les fonctions _1990_action_categorie
+    LIST            *charges;
+    int         flags;
+    double          psi0;       // valeur_combinaison
+    double          psi1;       // valeur_frequente
+    double          psi2;       // valeur_quasi_permanente
+    cholmod_sparse      *deplacement_partiel;
+    cholmod_sparse      *deplacement_complet;
+    cholmod_sparse      *forces_complet;
+    cholmod_sparse      *efforts_noeuds;
+    double          norm;
+    Fonction        **fonctions_efforts[6];     // Les 6 fonctions (N, Ty, Tz, Mx, My, Mz) pour chaque barre.
+                                // Les fonctions représentent la courbe des efforts dues aux charges dans
+                                // les barres et dus aux déplacements calculés par la méthode des EF
+    Fonction        **fonctions_fleche[3];      // Les 3 flèches x, y, z pour chaque barre.
+    Fonction        **fonctions_rotation[3];    // Les 3 rotations rx, ry, rz pour chaque barre.
 } Action;
 
 char *_1990_action_categorie_bat_txt_eu(int type);

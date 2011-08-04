@@ -24,9 +24,9 @@
 
 typedef struct
 {
-	long		noeudx;
-	long		noeudy;
-	double		matrice[6][6];
+    long        noeudx;
+    long        noeudy;
+    double      matrice[6][6];
 } EF_rigidite;
 
 

@@ -31,14 +31,14 @@
  */
 double common_math_arrondi(double nombre)
 {
-	double		puissance;
-	
-	if (nombre == 0.)
-		return 0.;
-	puissance = ERREUR_RELATIVE_PUISSANCE-ceil(log10(ABS(nombre)));
-	nombre = nombre*pow(10, puissance);
-	modf(nombre, &nombre);
-	return nombre/pow(10., puissance);
+    double      puissance;
+    
+    if (nombre == 0.)
+        return 0.;
+    puissance = ERREUR_RELATIVE_PUISSANCE-ceil(log10(ABS(nombre)));
+    nombre = nombre*pow(10, puissance);
+    modf(nombre, &nombre);
+    return nombre/pow(10., puissance);
 }
 
 
@@ -49,14 +49,14 @@ double common_math_arrondi(double nombre)
  */
 void common_math_arrondi_triplet(cholmod_triplet *triplet)
 {
-	double		*ax;
-	unsigned int	i;
-	
-	ax = triplet->x;
-	for (i=0;i<triplet->nnz;i++)
-		ax[i] = common_math_arrondi(ax[i]);
-	
-	return;
+    double      *ax;
+    unsigned int    i;
+    
+    ax = triplet->x;
+    for (i=0;i<triplet->nnz;i++)
+        ax[i] = common_math_arrondi(ax[i]);
+    
+    return;
 }
 
 
@@ -67,26 +67,26 @@ void common_math_arrondi_triplet(cholmod_triplet *triplet)
  */
 void common_math_arrondi_sparse(cholmod_sparse *sparse)
 {
-	double		*ax;
-	unsigned int	i;
-	
-	ax = sparse->x;
-	for (i=0;i<sparse->nzmax;i++)
-		ax[i] = common_math_arrondi(ax[i]);
-	
-	return;
+    double      *ax;
+    unsigned int    i;
+    
+    ax = sparse->x;
+    for (i=0;i<sparse->nzmax;i++)
+        ax[i] = common_math_arrondi(ax[i]);
+    
+    return;
 }
 /*double common_math_arrondi(double nombre)
 {
-	double		retour;
-	unsigned int	width, x, y
-	
-	// On affiche la précision au maximum, provient de la librairie cholmod
-	for (width = 6 ; width < 50 ; width++)
-	{
-		sprintf (s, "%.*g", width, nombre) ;
-		sscanf (s, "%lg", &y) ;
-		if (x == y) break ;
-	}
-	printf("%s\n", s);
+    double      retour;
+    unsigned int    width, x, y
+    
+    // On affiche la précision au maximum, provient de la librairie cholmod
+    for (width = 6 ; width < 50 ; width++)
+    {
+        sprintf (s, "%.*g", width, nombre) ;
+        sscanf (s, "%lg", &y) ;
+        if (x == y) break ;
+    }
+    printf("%s\n", s);
 }*/

@@ -23,25 +23,25 @@
 
 typedef enum
 {
-	EF_APPUI_LIBRE,
-	EF_APPUI_BLOQUE
+    EF_APPUI_LIBRE,
+    EF_APPUI_BLOQUE
 } Type_EF_Appui;
 
 typedef struct __EF_Appui
 {
-	int	numero;
-	Type_EF_Appui	x;
-	void		*x_donnees;
-	Type_EF_Appui	y;
-	void		*y_donnees;
-	Type_EF_Appui	z;
-	void		*z_donnees;
-	Type_EF_Appui	rx;
-	void		*rx_donnees;
-	Type_EF_Appui	ry;
-	void		*ry_donnees;
-	Type_EF_Appui	rz;
-	void		*rz_donnees;
+    int numero;
+    Type_EF_Appui   x;
+    void        *x_donnees;
+    Type_EF_Appui   y;
+    void        *y_donnees;
+    Type_EF_Appui   z;
+    void        *z_donnees;
+    Type_EF_Appui   rx;
+    void        *rx_donnees;
+    Type_EF_Appui   ry;
+    void        *ry_donnees;
+    Type_EF_Appui   rz;
+    void        *rz_donnees;
 } EF_Appui;
 
 int EF_appuis_init(Projet *projet);

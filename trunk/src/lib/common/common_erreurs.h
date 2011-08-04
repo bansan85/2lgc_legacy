@@ -22,8 +22,18 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-// Pour les erreurs de programmes
 #define BUG(X) ({free((int*)1); return X;})
+// La macro BUG(X) est l'équivalent d'un return X; cependant, afin de 
+// faciliter le débogage des erreurs via gdb, il est rajouté, pour la
+// version expérimentale du programme un "free((int*)1) qui s'assure de
+// créer une erreur de segmentation. Il va de soit que pour la version
+// de production, la commande free() doit être supprimée.
+
 #define BUGTEXTE(X, ...) ({printf(__VA_ARGS__); free((int*)1); return X;})
+// La macro BUGTEXTE(X) est identique à la commande BUG mais ajoute un
+// message d'erreur avant de réaliser l'erreur de segmentation. D'une
+// maniète générale, BUGTEXTE doit être utilisé dès que l'erreur arrive
+// et BUG doit être utilisé pour indiquer une erreur par la valeur retour
+// des fonctions utilisant déjà la macro BUGTEXTE.
 
 #endif

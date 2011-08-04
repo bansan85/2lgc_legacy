@@ -24,17 +24,17 @@
 
 typedef struct
 {
-	double		x;
-	double		y;
-	double		z;
+    double      x;
+    double      y;
+    double      z;
 } EF_Point;
 
 
 typedef struct
 {
-	int		numero;
-	EF_Point	position;
-	EF_Appui	*appui;
+    int     numero;
+    EF_Point    position;
+    EF_Appui    *appui;
 } EF_Noeud;
 
 int EF_noeuds_init(Projet *projet);
