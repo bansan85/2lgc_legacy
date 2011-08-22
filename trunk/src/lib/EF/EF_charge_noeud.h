@@ -16,37 +16,39 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __EF_APPUI_H
-#define __EF_APPUI_H
+#ifndef __EF_CHARGE_NOEUD_H
+#define __EF_CHARGE_NOEUD_H
+
+#include "config.h"
+#include <list.h>
+#include <cholmod.h>
 
 #include "common_projet.h"
+#include "common_fonction.h"
+#include "EF_noeud.h"
 
-typedef enum
+typedef enum __Charge_Type
 {
-    EF_APPUI_LIBRE,
-    EF_APPUI_BLOQUE
-} Type_EF_Appui;
+    CHARGE_PONCTUELLE_NOEUD,
+    CHARGE_PONCTUELLE_BARRE
+} Charge_Type;
 
-typedef struct __EF_Appui
+
+typedef struct __Charge_Noeud
 {
-    int numero;
-    Type_EF_Appui   x;
-    void        *x_donnees;
-    Type_EF_Appui   y;
-    void        *y_donnees;
-    Type_EF_Appui   z;
-    void        *z_donnees;
-    Type_EF_Appui   rx;
-    void        *rx_donnees;
-    Type_EF_Appui   ry;
-    void        *ry_donnees;
-    Type_EF_Appui   rz;
-    void        *rz_donnees;
-} EF_Appui;
+    Charge_Type     type;
+    int             numero;
+    char            *nom;
+    char            *description;
+    EF_Noeud        *noeud;
+    double          x;
+    double          y;
+    double          z;
+    double          rx;
+    double          ry;
+    double          rz;
+} Charge_Noeud;
 
-int EF_appuis_init(Projet *projet);
-int EF_appuis_ajout(Projet *projet, Type_EF_Appui x, Type_EF_Appui y, Type_EF_Appui z, Type_EF_Appui rx, Type_EF_Appui ry, Type_EF_Appui rz);
-EF_Appui* EF_appuis_cherche_numero(Projet *projet, int numero);
-int EF_appuis_free(Projet *projet);
+int EF_charge_noeud_ajout(Projet *projet, int num_action, EF_Noeud *noeud, double fx, double fy, double fz, double rx, double ry, double rz);
 
 #endif

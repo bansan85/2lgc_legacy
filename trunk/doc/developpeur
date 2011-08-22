@@ -102,9 +102,6 @@ Les images et les textes sont insérés dans un composant GtkWidget de type VBox
 
 
 
-Description des normes une par une
-
-
 Lorsqu'un problème échoue, la ligne où le programme peut être obtenu par gdb. Il y a deux possibilités :
     - Soit le fichier est un exécutable et alors un simple "gdb src/test/1990__1" "run" "bt full" détecte l'emplacement exact du problème
     - Soit le fichier est un script shell, il faut alors lancer src/test/.libs/1990__1. Il sera alors indiqué qu'il manque une librairie.

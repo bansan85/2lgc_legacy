@@ -22,14 +22,6 @@
 #include "common_projet.h"
 
 
-typedef struct
-{
-    long        noeudx;
-    long        noeudy;
-    double      matrice[6][6];
-} EF_rigidite;
-
-
 int EF_rigidite_init(Projet *projet);
 int EF_rigidite_free(Projet *projet);
 

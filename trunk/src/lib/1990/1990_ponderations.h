@@ -19,6 +19,7 @@
 #ifndef __1990_PONDERATIONS_H
 #define __1990_PONDERATIONS_H
 
+#include "config.h"
 #include <list.h>
 
 #include "common_projet.h"
@@ -27,12 +28,13 @@
 typedef struct __Ponderation_Element
 {
     double      ponderation;
-    int     psi;
-    int     flags;
+    int         psi;
+    int         flags;
     Action      *action;
 } Ponderation_Element;
 
-typedef struct __Ponderation
+// Ne pas supprimer l'espace après le __Ponderation, c'est pour la génération du manuel Latex
+typedef struct __Ponderation 
 {
     LIST        *elements; // Liste de pointeur Action* avec leur ponderation
 } Ponderation;

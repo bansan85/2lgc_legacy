@@ -19,24 +19,11 @@
 #ifndef __1990_DUREE_H
 #define __1990_DUREE_H
 
+#include "config.h"
 #include "common_projet.h"
 
-// _1990_duree_projet_eu : renvoie la durée (en année) indicative de la norme européenne
-// Dans le cas où la durée indiquée par la norme européenne est un
-// intervalle d'année, la durée la plus importante est renvoyée.
-// Si la valeur de type ne correspond pas à une catégorie, la fonction renvoie -1.
-// type : categorie de durée d'utilisation de projet
-int _1990_duree_projet_eu(int type);
-// duree_projet_eu : renvoie la durée (en année) indicative de la norme française
-int _1990_duree_projet_fr(int type);
 int _1990_duree_projet(int type, Type_Pays pays);
 
-// _1990_duree_projet_txt_eu : renvoie la description des catérogies des durées indicative de la norme européenne
-// Renvoie NULL si la catégorie n'existe pas
-// type : catégorie de durée d'utilisation de projet
-char *_1990_duree_projet_txt_eu(int type);
-// _1990_duree_projet_txt_fr : renvoie la description des catérogies des durées indicative de la norme française
-char *_1990_duree_projet_txt_fr(int type);
 char *_1990_duree_projet_txt(int type, Type_Pays pays);
 
 #endif

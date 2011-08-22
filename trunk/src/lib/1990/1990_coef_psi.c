@@ -24,19 +24,37 @@
 #include "common_erreurs.h"
 #include "common_projet.h"
 
-/* _1990_coef_psi0_bat_eu
- * Description : renvoie le coefficient psi0 indiquée par la norme européenne pour les batiments
- * Paramètres : int categorie : catégorie de l'action
+double _1990_coef_psi0_bat_eu(int type)
+/* Description : renvoie le coefficient psi0 indiqué par la norme européenne pour les batiments
+ *                 FONCTION INTERNE. Utiliser _1990_coef_psi0_bat.
+ * Paramètres : int type : type de l'action
  * Valeur renvoyée :
- *   Succès : valeur en double du coefficient psi0
- *   Échec : valeur en double -1. si la catégorie n'existe pas
+ *   Succès : valeur en double du coefficient psi0.
+ *            0.0 : Permanente
+ *            0.0 : Précontrainte
+ *            0.7 : Exploitation : Catégorie A : habitation, zones résidentielles
+ *            0.7 : Exploitation : Catégorie B : bureaux
+ *            0.7 : Exploitation : Catégorie C : lieux de réunion
+ *            0.7 : Exploitation : Catégorie D : commerces
+ *            1.0 : Exploitation : Catégorie E : stockage
+ *            0.7 : Exploitation : Catégorie F : zone de trafic, véhicules inférieur à 30 kN
+ *            0.7 : Exploitation : Catégorie G : zone de trafic, véhicules de 30 kN et 160 kN
+ *            0.0 : Exploitation : Catégorie H : toits
+ *            0.7 : Neige : Finlande, Islande, Norvège, Suède
+ *            0.7 : Neige : Autres états membres CEN, altitude > 1000 m
+ *            0.5 : Neige : Autres états membres CEN, altitude <= 1000 m
+ *            0.6 : Vent
+ *            0.6 : Température (hors incendie)
+ *            0.0 : Accidentelle
+ *            0.0 : Sismique
+ *   Échec : valeur en double -1. si le type n'existe pas
  */
-double _1990_coef_psi0_bat_eu(int categorie)
 {
-    switch (categorie)
+    // Trivial
+    switch (type)
     {
-        case 0 : { return -1.; break; }
-        case 1 : { return -1.; break; }
+        case 0 : { return 0.0; break; }
+        case 1 : { return 0.0; break; }
         case 2 : { return 0.7; break; }
         case 3 : { return 0.7; break; }
         case 4 : { return 0.7; break; }
@@ -50,25 +68,43 @@ double _1990_coef_psi0_bat_eu(int categorie)
         case 12 : { return 0.5; break; }
         case 13 : { return 0.6; break; }
         case 14 : { return 0.6; break; }
-        case 15 : { return -1.; break; }
-        case 16 : { return -1.; break; }
-        default : { BUGTEXTE(-1., gettext("Catégorie inconnue.\n")); break; }
+        case 15 : { return 0.0; break; }
+        case 16 : { return 0.0; break; }
+        default : { BUGMSG(0, -1., gettext("Type %d inconnu.\n"), type); break; }
     }
 }
 
-/* _1990_coef_psi1_bat_eu
- * Description : renvoie le coefficient psi1 indiquée par la norme européenne pour les batiments
- * Paramètres : int categorie : catégorie de l'action
+double _1990_coef_psi1_bat_eu(int type)
+/* Description : renvoie le coefficient psi1 indiqué par la norme européenne pour les batiments
+ *                 FONCTION INTERNE. Utiliser _1990_coef_psi1_bat.
+ * Paramètres : int type : type de l'action
  * Valeur renvoyée :
- *   Succès : valeur en double du coefficient psi1
- *   Échec : valeur en double -1. si la catégorie n'existe pas
+ *   Succès : valeur en double du coefficient psi1.
+ *            0.0 : Permanente
+ *            0.0 : Précontrainte
+ *            0.5 : Exploitation : Catégorie A : habitation, zones résidentielles
+ *            0.5 : Exploitation : Catégorie B : bureaux
+ *            0.7 : Exploitation : Catégorie C : lieux de réunion
+ *            0.7 : Exploitation : Catégorie D : commerces
+ *            0.9 : Exploitation : Catégorie E : stockage
+ *            0.7 : Exploitation : Catégorie F : zone de trafic, véhicules inférieur à 30 kN
+ *            0.5 : Exploitation : Catégorie G : zone de trafic, véhicules de 30 kN et 160 kN
+ *            0.0 : Exploitation : Catégorie H : toits
+ *            0.5 : Neige : Finlande, Islande, Norvège, Suède
+ *            0.5 : Neige : Autres états membres CEN, altitude > 1000 m
+ *            0.2 : Neige : Autres états membres CEN, altitude <= 1000 m
+ *            0.2 : Vent
+ *            0.5 : Température (hors incendie)
+ *            0.0 : Accidentelle
+ *            0.0 : Sismique
+ *   Échec : valeur en double -1. si le type n'existe pas
  */
-double _1990_coef_psi1_bat_eu(int categorie)
 {
-    switch (categorie)
+    // Trivial
+    switch (type)
     {
-        case 0 : { return -1.; break; }
-        case 1 : { return -1.; break; }
+        case 0 : { return 0.0; break; }
+        case 1 : { return 0.0; break; }
         case 2 : { return 0.5; break; }
         case 3 : { return 0.5; break; }
         case 4 : { return 0.7; break; }
@@ -82,25 +118,43 @@ double _1990_coef_psi1_bat_eu(int categorie)
         case 12 : { return 0.2; break; }
         case 13 : { return 0.2; break; }
         case 14 : { return 0.5; break; }
-        case 15 : { return -1.; break; }
-        case 16 : { return -1.; break; }
-        default : { BUGTEXTE(-1., gettext("Catégorie inconnue.\n")); break; }
+        case 15 : { return 0.0; break; }
+        case 16 : { return 0.0; break; }
+        default : { BUGMSG(0, -1., gettext("Type %d inconnu.\n"), type); break; }
     }
 }
 
-/* _1990_coef_psi2_bat_eu
- * Description : renvoie le coefficient psi2 indiquée par la norme européenne pour les batiments
- * Paramètres : int categorie : catégorie de l'action
+double _1990_coef_psi2_bat_eu(int type)
+/* Description : renvoie le coefficient psi2 indiqué par la norme européenne pour les batiments
+ *                 FONCTION INTERNE. Utiliser _1990_coef_psi2_bat.
+ * Paramètres : int type : type de l'action
  * Valeur renvoyée :
- *   Succès : valeur en double du coefficient psi2
- *   Échec : valeur en double -1. si la catégorie n'existe pas
+ *   Succès : valeur en double du coefficient psi2.
+ *            0.0 : Permanente
+ *            0.0 : Précontrainte
+ *            0.3 : Exploitation : Catégorie A : habitation, zones résidentielles
+ *            0.3 : Exploitation : Catégorie B : bureaux
+ *            0.6 : Exploitation : Catégorie C : lieux de réunion
+ *            0.6 : Exploitation : Catégorie D : commerces
+ *            0.8 : Exploitation : Catégorie E : stockage
+ *            0.6 : Exploitation : Catégorie F : zone de trafic, véhicules inférieur à 30 kN
+ *            0.3 : Exploitation : Catégorie G : zone de trafic, véhicules de 30 kN et 160 kN
+ *            0.0 : Exploitation : Catégorie H : toits
+ *            0.2 : Neige : Finlande, Islande, Norvège, Suède
+ *            0.2 : Neige : Autres états membres CEN, altitude > 1000 m
+ *            0.0 : Neige : Autres états membres CEN, altitude <= 1000 m
+ *            0.0 : Vent
+ *            0.0 : Température (hors incendie)
+ *            0.0 : Accidentelle
+ *            0.0 : Sismique
+ *   Échec : valeur en double -1. si le type n'existe pas
  */
-double _1990_coef_psi2_bat_eu(int categorie)
 {
-    switch (categorie)
+    // Trivial
+    switch (type)
     {
-        case 0 : { return -1.; break; }
-        case 1 : { return -1.; break; }
+        case 0 : { return 0.0; break; }
+        case 1 : { return 0.0; break; }
         case 2 : { return 0.3; break; }
         case 3 : { return 0.3; break; }
         case 4 : { return 0.6; break; }
@@ -114,25 +168,48 @@ double _1990_coef_psi2_bat_eu(int categorie)
         case 12 : { return 0.0; break; }
         case 13 : { return 0.0; break; }
         case 14 : { return 0.0; break; }
-        case 15 : { return -1.; break; }
-        case 16 : { return -1.; break; }
-        default : { BUGTEXTE(-1., gettext("Catégorie inconnue.\n")); break; }
+        case 15 : { return 0.0; break; }
+        case 16 : { return 0.0; break; }
+        default : { BUGMSG(0, -1., gettext("Type %d inconnu.\n"), type); break; }
     }
 }
 
-/* _1990_coef_psi0_bat_fr
- * Description : renvoie le coefficient psi0 indiquée par la norme française pour les batiments
- * Paramètres : int categorie : catégorie de l'action
+double _1990_coef_psi0_bat_fr(int type)
+/* Description : renvoie le coefficient psi0 indiqué par la norme française pour les batiments.
+ *                 FONCTION INTERNE. Utiliser _1990_coef_psi0_bat.
+ * Paramètres : int type : type de l'action
  * Valeur renvoyée :
- *   Succès : valeur en double du coefficient psi0
- *   Échec : valeur en double -1. si la catégorie n'existe pas
+ *   Succès : valeur en double du coefficient psi0.
+ *            0.0 : Permanente
+ *            0.0 : Précontrainte
+ *            0.7 : Exploitation : Catégorie A : habitation, zones résidentielles
+ *            0.7 : Exploitation : Catégorie B : bureaux
+ *            0.7 : Exploitation : Catégorie C : lieux de réunion
+ *            0.7 : Exploitation : Catégorie D : commerces
+ *            1.0 : Exploitation : Catégorie E : stockage
+ *            0.7 : Exploitation : Catégorie F : zone de trafic, véhicules inférieur à 30 kN
+ *            0.7 : Exploitation : Catégorie G : zone de trafic, véhicules de 30 kN et 160 kN
+ *            0.0 : Exploitation : Catégorie H : toits d'un bâtiment de catégorie A ou B
+ *            0.7 : Exploitation : Catégorie I : toitures accessibles (locaux de type A ou B)
+ *            0.7 : Exploitation : Catégorie I : toitures accessibles (locaux de type C ou D)
+ *            1.0 : Exploitation : Catégorie K : Hélicoptère sur la toiture
+ *            0.7 : Exploitation : Catégorie K : Hélicoptère sur la toiture, autres charges
+ *            0.7 : Neige : Saint-Pierre-et-Miquelon
+ *            0.7 : Neige : Altitude > 1000 m
+ *            0.5 : Neige : Altitude <= 1000 m
+ *            0.6 : Vent
+ *            0.6 : Température (hors incendie)
+ *            0.0 : Accidentelle
+ *            0.0 : Sismique
+ *            0.0 : Eaux souterraines
+ *   Échec : valeur en double -1. si le type n'existe pas
  */
-double _1990_coef_psi0_bat_fr(int categorie)
 {
-    switch (categorie)
+    // Trivial
+    switch (type)
     {
-        case 0 : { return -1.; break; }
-        case 1 : { return -1.; break; }
+        case 0 : { return 0.0; break; }
+        case 1 : { return 0.0; break; }
         case 2 : { return 0.7; break; }
         case 3 : { return 0.7; break; }
         case 4 : { return 0.7; break; }
@@ -150,26 +227,49 @@ double _1990_coef_psi0_bat_fr(int categorie)
         case 16 : { return 0.5; break; }
         case 17 : { return 0.6; break; }
         case 18 : { return 0.6; break; }
-        case 19 : { return -1.; break; }
-        case 20 : { return -1.; break; }
-        case 21 : { return -1.; break; }
-        default : { BUGTEXTE(-1., gettext("Catégorie inconnue.\n")); break; }
+        case 19 : { return 0.0; break; }
+        case 20 : { return 0.0; break; }
+        case 21 : { return 0.0; break; }
+        default : { BUGMSG(0, -1., gettext("Type %d inconnu.\n"), type); break; }
     }
 }
 
-/* _1990_coef_psi1_bat_fr
- * Description : renvoie le coefficient psi1 indiquée par la norme française pour les batiments
- * Paramètres : int categorie : catégorie de l'action
+double _1990_coef_psi1_bat_fr(int type)
+/* Description : renvoie le coefficient psi1 indiqué par la norme française pour les batiments.
+ *                 FONCTION INTERNE. Utiliser _1990_coef_psi1_bat.
+ * Paramètres : int type : type de l'action
  * Valeur renvoyée :
- *   Succès : valeur en double du coefficient psi1
- *   Échec : valeur en double -1. si la catégorie n'existe pas
+ *   Succès : valeur en double du coefficient psi1.
+ *            0.0 : Permanente
+ *            0.0 : Précontrainte
+ *            0.5 : Exploitation : Catégorie A : habitation, zones résidentielles
+ *            0.5 : Exploitation : Catégorie B : bureaux
+ *            0.7 : Exploitation : Catégorie C : lieux de réunion
+ *            0.7 : Exploitation : Catégorie D : commerces
+ *            0.9 : Exploitation : Catégorie E : stockage
+ *            0.7 : Exploitation : Catégorie F : zone de trafic, véhicules inférieur à 30 kN
+ *            0.5 : Exploitation : Catégorie G : zone de trafic, véhicules de 30 kN et 160 kN
+ *            0.0 : Exploitation : Catégorie H : toits d'un bâtiment de catégorie A ou B
+ *            0.5 : Exploitation : Catégorie I : toitures accessibles (locaux de type A ou B)
+ *            0.7 : Exploitation : Catégorie I : toitures accessibles (locaux de type C ou D)
+ *            0.9 : Exploitation : Catégorie K : Hélicoptère sur la toiture
+ *            0.5 : Exploitation : Catégorie K : Hélicoptère sur la toiture, autres charges
+ *            0.5 : Neige : Saint-Pierre-et-Miquelon
+ *            0.5 : Neige : Altitude > 1000 m
+ *            0.2 : Neige : Altitude <= 1000 m
+ *            0.2 : Vent
+ *            0.5 : Température (hors incendie)
+ *            0.0 : Accidentelle
+ *            0.0 : Sismique
+ *            0.0 : Eaux souterraines
+ *   Échec : valeur en double -1. si le type n'existe pas
  */
-double _1990_coef_psi1_bat_fr(int categorie)
 {
-    switch (categorie)
+    // Trivial
+    switch (type)
     {
-        case 0 : { return -1.; break; }
-        case 1 : { return -1.; break; }
+        case 0 : { return 0.0; break; }
+        case 1 : { return 0.0; break; }
         case 2 : { return 0.5; break; }
         case 3 : { return 0.5; break; }
         case 4 : { return 0.7; break; }
@@ -187,26 +287,49 @@ double _1990_coef_psi1_bat_fr(int categorie)
         case 16 : { return 0.2; break; }
         case 17 : { return 0.2; break; }
         case 18 : { return 0.5; break; }
-        case 19 : { return -1.; break; }
-        case 20 : { return -1.; break; }
-        case 21 : { return -1.; break; }
-        default : { BUGTEXTE(-1., gettext("Catégorie inconnue.\n")); break; }
+        case 19 : { return 0.0; break; }
+        case 20 : { return 0.0; break; }
+        case 21 : { return 0.0; break; }
+        default : { BUGMSG(0, -1., gettext("Type %d inconnu.\n"), type); break; }
     }
 }
 
-/* _1990_coef_psi2_bat_fr
- * Description : renvoie le coefficient psi2 indiquée par la norme française pour les batiments
- * Paramètres : int categorie : catégorie de l'action
+double _1990_coef_psi2_bat_fr(int type)
+/* Description : renvoie le coefficient psi2 indiqué par la norme française pour les batiments.
+ *                 FONCTION INTERNE. Utiliser _1990_coef_psi2_bat.
+ * Paramètres : int type : type de l'action
  * Valeur renvoyée :
  *   Succès : valeur en double du coefficient psi2
- *   Échec : valeur en double -1. si la catégorie n'existe pas
+ *            0.0 : Permanente
+ *            0.0 : Précontrainte
+ *            0.3 : Exploitation : Catégorie A : habitation, zones résidentielles
+ *            0.3 : Exploitation : Catégorie B : bureaux
+ *            0.6 : Exploitation : Catégorie C : lieux de réunion
+ *            0.6 : Exploitation : Catégorie D : commerces
+ *            0.8 : Exploitation : Catégorie E : stockage
+ *            0.6 : Exploitation : Catégorie F : zone de trafic, véhicules inférieur à 30 kN
+ *            0.3 : Exploitation : Catégorie G : zone de trafic, véhicules de 30 kN et 160 kN
+ *            0.0 : Exploitation : Catégorie H : toits d'un bâtiment de catégorie A ou B
+ *            0.3 : Exploitation : Catégorie I : toitures accessibles (locaux de type A ou B)
+ *            0.6 : Exploitation : Catégorie I : toitures accessibles (locaux de type C ou D)
+ *            0.5 : Exploitation : Catégorie K : Hélicoptère sur la toiture
+ *            0.3 : Exploitation : Catégorie K : Hélicoptère sur la toiture, autres charges
+ *            0.2 : Neige : Saint-Pierre-et-Miquelon
+ *            0.2 : Neige : Altitude > 1000 m
+ *            0.0 : Neige : Altitude <= 1000 m
+ *            0.0 : Vent
+ *            0.0 : Température (hors incendie)
+ *            0.0 : Accidentelle
+ *            0.0 : Sismique
+ *            0.0 : Eaux souterraines
+ *   Échec : valeur en double -1. si le type n'existe pas
  */
-double _1990_coef_psi2_bat_fr(int categorie)
 {
-    switch (categorie)
+    // Trivial
+    switch (type)
     {
-        case 0 : { return -1.; break; }
-        case 1 : { return -1.; break; }
+        case 0 : { return 0.0; break; }
+        case 1 : { return 0.0; break; }
         case 2 : { return 0.3; break; }
         case 3 : { return 0.3; break; }
         case 4 : { return 0.6; break; }
@@ -224,63 +347,66 @@ double _1990_coef_psi2_bat_fr(int categorie)
         case 16 : { return 0.0; break; }
         case 17 : { return 0.0; break; }
         case 18 : { return 0.0; break; }
-        case 19 : { return -1.; break; }
-        case 20 : { return -1.; break; }
-        case 21 : { return -1.; break; }
-        default : { BUGTEXTE(-1., gettext("Catégorie inconnue.\n")); break; }
+        case 19 : { return 0.0; break; }
+        case 20 : { return 0.0; break; }
+        case 21 : { return 0.0; break; }
+        default : { BUGMSG(0, -1., gettext("Type %d inconnu.\n"), type); break; }
     }
 }
 
-/* _1990_coef_psi0_bat
- * Description : renvoie le coefficient psi0 en fonction de la norme du pays spécifié pour les batiments
- * Paramètres : int categorie : catégorie de l'action
+double _1990_coef_psi0_bat(int type, Type_Pays pays)
+/* Description : renvoie le coefficient psi0 en fonction de la norme du pays spécifié pour les
+ *                 batiments.
+ * Paramètres : int type : type de l'action
  *            : int pays : référence du pays
  * Valeur renvoyée :
  *   Succès : cf les fonctions _1990_coef_psi0_bat_PAYS
- *   Échec : valeur en double -1. si le pays n'existe pas
+ *   Échec : valeur en double -1. si le pays ou le type n'existe pas
  */
-double _1990_coef_psi0_bat(int categorie, Type_Pays pays)
 {
+    // Trivial
     switch (pays)
     {
-        case PAYS_EU : { return _1990_coef_psi0_bat_eu(categorie); break; }
-        case PAYS_FR : { return _1990_coef_psi0_bat_fr(categorie); break; }
-        default : { BUGTEXTE(-1., gettext("Pays inconnu.\n")); break; }
+        case PAYS_EU : { return _1990_coef_psi0_bat_eu(type); break; }
+        case PAYS_FR : { return _1990_coef_psi0_bat_fr(type); break; }
+        default : { BUGMSG(0, -1., gettext("Pays %d inconnu.\n"), pays); break; }
     }
 }
 
-/* _1990_coef_psi1_bat
- * Description : renvoie le coefficient psi1 en fonction de la norme du pays spécifié pour les batiments
- * Paramètres : int categorie : catégorie de l'action
+double _1990_coef_psi1_bat(int type, Type_Pays pays)
+/* Description : renvoie le coefficient psi1 en fonction de la norme du pays spécifié pour les
+ *                 batiments.
+ * Paramètres : int type : type de l'action
  *            : int pays : référence du pays
  * Valeur renvoyée :
  *   Succès : cf les fonctions _1990_coef_psi1_bat_PAYS
- *   Échec : valeur en double -1. si le pays n'existe pas
+ *   Échec : valeur en double -1. si le pays ou le type n'existe pas
  */
-double _1990_coef_psi1_bat(int categorie, Type_Pays pays)
 {
+    // Trivial
     switch (pays)
     {
-        case PAYS_EU : { return _1990_coef_psi1_bat_eu(categorie); break; }
-        case PAYS_FR : { return _1990_coef_psi1_bat_fr(categorie); break; }
-        default : { BUGTEXTE(-1., gettext("Pays inconnu.\n")); break; }
+        case PAYS_EU : { return _1990_coef_psi1_bat_eu(type); break; }
+        case PAYS_FR : { return _1990_coef_psi1_bat_fr(type); break; }
+        default : { BUGMSG(0, -1., gettext("Pays %d inconnu.\n"), pays); break; }
     }
 }
 
-/* _1990_coef_psi2_bat
- * Description : renvoie le coefficient psi2 en fonction de la norme du pays spécifié pour les batiments
- * Paramètres : int categorie : catégorie de l'action
+double _1990_coef_psi2_bat(int type, Type_Pays pays)
+/* Description : renvoie le coefficient psi2 en fonction de la norme du pays spécifié pour les
+ *                 batiments.
+ * Paramètres : int type : type de l'action
  *            : int pays : référence du pays
  * Valeur renvoyée :
  *   Succès : cf les fonctions _1990_coef_psi2_bat_PAYS
- *   Échec : valeur en double -1. si le pays n'existe pas
+ *   Échec : valeur en double -1. si le pays ou le type n'existe pas
  */
-double _1990_coef_psi2_bat(int categorie, Type_Pays pays)
 {
+    // Trivial
     switch (pays)
     {
-        case PAYS_EU : { return _1990_coef_psi2_bat_eu(categorie); break; }
-        case PAYS_FR : { return _1990_coef_psi2_bat_fr(categorie); break; }
-        default : { BUGTEXTE(-1., gettext("Pays inconnu.\n")); break; }
+        case PAYS_EU : { return _1990_coef_psi2_bat_eu(type); break; }
+        case PAYS_FR : { return _1990_coef_psi2_bat_fr(type); break; }
+        default : { BUGMSG(0, -1., gettext("Pays %d inconnu.\n"), pays); break; }
     }
 }

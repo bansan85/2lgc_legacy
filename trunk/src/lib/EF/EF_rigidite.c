@@ -25,46 +25,47 @@
 #include "common_maths.h"
 #include "EF_rigidite.h"
 #include "EF_noeud.h"
-#include "EF_appui.h"
 
-/* EF_rigidite_init
- * Description : Initialise la liste contenant la matrice de rigidité
+int EF_rigidite_init(Projet *projet)
+/* Description : Initialise à NULL les différentes matrices de rigidité
  * Paramètres : Projet *projet : la variable projet
  * Valeur renvoyée :
  *   Succès : 0
- *   Échec : valeur négative
+ *   Échec : -1 en cas de paramètres invalides :
+ *             (projet == NULL)
  */
-int EF_rigidite_init(Projet *projet)
 {
-    if (projet == NULL)
-        BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
+    BUGMSG(projet, -1, "EF_rigidite_init\n");
     
+    // Trivial
     projet->ef_donnees.rigidite_matrice_partielle = NULL;
     projet->ef_donnees.rigidite_matrice_complete = NULL;
-//  Pour utiliser cholmod dans les calculs de matrices.
-//  projet->ef_donnees.factor_rigidite_matrice_partielle = NULL;
+/*  Pour utiliser cholmod dans les calculs de matrices.
+ *  projet->ef_donnees.factor_rigidite_matrice_partielle = NULL; */
     projet->ef_donnees.QR = NULL;
     projet->ef_donnees.triplet_rigidite_partielle = NULL;
     projet->ef_donnees.triplet_rigidite_complete = NULL;
+    projet->ef_donnees.noeuds_pos_complete = NULL;
+    projet->ef_donnees.noeuds_pos_partielle = NULL;
     
     return 0;
 }
 
 
-/* EF_rigidite_free
- * Description : Libère la liste contenant la matrice de rigidité
+int EF_rigidite_free(Projet *projet)
+/* Description : Libère la liste contenant la matrice de rigidité
  * Paramètres : Projet *projet : la variable projet
  * Valeur renvoyée :
- *   Succès : 0 même si la matrice de rigidité est vide
- *   Échec : valeur négative si la liste n'est pas initialisée ou a déjà été libérée
+ *   Succès : 0
+ *   Échec : -1 en cas de paramètres invalides :
+ *             (projet == NULL)
  */
-int EF_rigidite_free(Projet *projet)
 {
     unsigned int    i;
     
-    if (projet == NULL)
-        BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
+    BUGMSG(projet, -1, "EF_rigidite_free\n");
     
+    // Trivial
     if (projet->ef_donnees.triplet_rigidite_partielle != NULL)
         cholmod_l_free_triplet(&projet->ef_donnees.triplet_rigidite_partielle, projet->ef_donnees.c);
     if (projet->ef_donnees.triplet_rigidite_complete != NULL)
@@ -80,27 +81,27 @@ int EF_rigidite_free(Projet *projet)
         cholmod_l_free_sparse(&(projet->ef_donnees.rigidite_matrice_partielle), projet->ef_donnees.c);
         projet->ef_donnees.rigidite_matrice_partielle = NULL;
     }
-//  Pour utiliser cholmod dans les calculs de matrices.
-//  if (projet->ef_donnees.factor_rigidite_matrice_partielle != NULL)
+/*  Pour utiliser cholmod dans les calculs de matrices.
+ *  if (projet->ef_donnees.factor_rigidite_matrice_partielle != NULL) */
     if (projet->ef_donnees.QR != NULL)
     {
         SuiteSparseQR_C_free(&projet->ef_donnees.QR, projet->ef_donnees.c);
-//      Pour utiliser cholmod dans les calculs de matrices.
-//      cholmod_l_free_factor(&(projet->ef_donnees.factor_rigidite_matrice_partielle), projet->ef_donnees.c);
-//      projet->ef_donnees.factor_rigidite_matrice_partielle = NULL;
+/*      Pour utiliser cholmod dans les calculs de matrices.
+ *      cholmod_l_free_factor(&(projet->ef_donnees.factor_rigidite_matrice_partielle), projet->ef_donnees.c);
+ *      projet->ef_donnees.factor_rigidite_matrice_partielle = NULL; */
     }
     
-    if (projet->ef_donnees.noeuds_flags_complete != NULL)
+    if (projet->ef_donnees.noeuds_pos_complete != NULL)
     {
         for (i=0;i<list_size(projet->ef_donnees.noeuds);i++)
-            free(projet->ef_donnees.noeuds_flags_complete[i]);
-        free(projet->ef_donnees.noeuds_flags_complete);
+            free(projet->ef_donnees.noeuds_pos_complete[i]);
+        free(projet->ef_donnees.noeuds_pos_complete);
     }
-    if (projet->ef_donnees.noeuds_flags_partielle != NULL)
+    if (projet->ef_donnees.noeuds_pos_partielle != NULL)
     {
         for (i=0;i<list_size(projet->ef_donnees.noeuds);i++)
-            free(projet->ef_donnees.noeuds_flags_partielle[i]);
-        free(projet->ef_donnees.noeuds_flags_partielle);
+            free(projet->ef_donnees.noeuds_pos_partielle[i]);
+        free(projet->ef_donnees.noeuds_pos_partielle);
     }
     
     

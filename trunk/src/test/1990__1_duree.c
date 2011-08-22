@@ -31,7 +31,6 @@
 #include "common_maths.h"
 #include "common_erreurs.h"
 #include "common_projet.h"
-#define TEST_BUG 0
 
 
 int main(void)
@@ -44,30 +43,28 @@ int main(void)
     
     // Test 1990_duree.c
     
-    if (_1990_duree_projet_eu(0) != 10) BUG(-1);
-    if (_1990_duree_projet_eu(1) != 25) BUG(-1);
-    if (_1990_duree_projet_eu(2) != 30) BUG(-1);
-    if (_1990_duree_projet_eu(3) != 50) BUG(-1);
-    if (_1990_duree_projet_eu(4) != 100) BUG(-1);
+    BUG(_1990_duree_projet(0, PAYS_EU) == 10, -1);
+    BUG(_1990_duree_projet(1, PAYS_EU) == 25, -1);
+    BUG(_1990_duree_projet(2, PAYS_EU) == 30, -1);
+    BUG(_1990_duree_projet(3, PAYS_EU) == 50, -1);
+    BUG(_1990_duree_projet(4, PAYS_EU) == 100, -1);
     
-    if (_1990_duree_projet_fr(0) != 10) BUG(-1);
-    if (_1990_duree_projet_fr(1) != 25) BUG(-1);
-    if (_1990_duree_projet_fr(2) != 25) BUG(-1);
-    if (_1990_duree_projet_fr(3) != 50) BUG(-1);
-    if (_1990_duree_projet_fr(4) != 100) BUG(-1);
-    
-    for (i=0;i<=4;i++)
-        if (_1990_duree_projet_txt_eu(i) == NULL) BUG(-1);
+    BUG(_1990_duree_projet(0, PAYS_FR) == 10, -1);
+    BUG(_1990_duree_projet(1, PAYS_FR) == 25, -1);
+    BUG(_1990_duree_projet(2, PAYS_FR) == 25, -1);
+    BUG(_1990_duree_projet(3, PAYS_FR) == 50, -1);
+    BUG(_1990_duree_projet(4, PAYS_FR) == 100, -1);
     
     for (i=0;i<=4;i++)
-        if (_1990_duree_projet_txt_fr(i) == NULL) BUG(-1);
+        BUG(_1990_duree_projet_txt(i, PAYS_EU), -1);
     
-    #if TEST_BUG == 1
-    if (_1990_duree_projet_eu(5) != -1) BUG(-1);
-    if (_1990_duree_projet_fr(5) != -1) BUG(-1);
-    if (_1990_duree_projet_txt_eu(5) != NULL) BUG(-1);
-    if (_1990_duree_projet_txt_fr(5) != NULL) BUG(-1);
-    #endif
+    for (i=0;i<=4;i++)
+        BUG(_1990_duree_projet_txt(i, PAYS_FR), -1);
+
+/*    BUG(_1990_duree_projet_eu(5) == -1, -1);
+    BUG(_1990_duree_projet_fr(5) == -1, -1);
+    BUG(_1990_duree_projet_txt_eu(5) == NULL, -1);
+    BUG(_1990_duree_projet_txt_fr(5) == NULL, -1);*/
     
     return EXIT_SUCCESS;
 }

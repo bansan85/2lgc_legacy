@@ -19,6 +19,8 @@
 #ifndef __1992_1_1_SECTION_H
 #define __1992_1_1_SECTION_H
 
+#include "config.h"
+
 typedef enum
 {
     BETON_SECTION_RECTANGULAIRE,
@@ -32,14 +34,14 @@ typedef struct __Beton_Section_Caracteristiques
 {
     Type_Beton_Section  type;
     unsigned int        numero;
-    double          a;
-    double          cdgh;
-    double          cdgb;
-    double          cdgg;
-    double          cdgd;
-    double          iy;
-    double          iz;
-    double          j;
+    double              s;
+    double              cdgh;
+    double              cdgb;
+    double              cdgg;
+    double              cdgd;
+    double              iy;
+    double              iz;
+    double              j;
 } Beton_Section_Caracteristiques;
 
 

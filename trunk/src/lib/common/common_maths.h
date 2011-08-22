@@ -19,21 +19,21 @@
 #ifndef __COMMON_MATHS_H
 #define __COMMON_MATHS_H
 
+#include "config.h"
 #include <cholmod.h>
+#include <cholmod_internal.h>
 
-#define MAX(X, Y)  ((X) > (Y) ? (X) : (Y))
-#define MIN(X, Y)  ((X) < (Y) ? (X) : (Y))
 #define ABS(X) ((X) > 0 ? (X) : -(X))
-
-// erreur_relative_egale
-// Vérifie que x == y avec une erreur relative maximale D
-// y étant la valeur recherchée et x la valeur à vérifier
-#define ERREUR_RELATIVE_EGALE(x, y) ( ((x) == 0.) || ((y) == 0.) ? (MAX(ABS(x),ABS(y))-MIN(ABS(x),ABS(y)) < (ERREUR_RELATIVE_MIN)) : ((MAX(ABS(x),ABS(y))-MIN(ABS(x),ABS(y)))/(MIN(ABS(x),ABS(y))) < (ERREUR_RELATIVE_MIN) ))
 
 #define ERREUR_RELATIVE_PUISSANCE 14 // Avec 15, on peut se retrouver avec 2 décimales fausses
 #define ERREUR_RELATIVE_MIN 1e-14
+#define ERREUR_RELATIVE_EGALE(x, y) ( ((x) == 0.) || ((y) == 0.) ? \
+  (MAX(ABS(x),ABS(y))-MIN(ABS(x),ABS(y)) < (ERREUR_RELATIVE_MIN)) : \
+  ((MAX(ABS(x),ABS(y))-MIN(ABS(x),ABS(y)))/(MIN(ABS(x),ABS(y))) < (ERREUR_RELATIVE_MIN) ))
+/* Vérifie si x == y avec une erreur relative maximale D,
+ * y étant la valeur recherchée et x la valeur à vérifier */
 
-double common_math_arrondi(double nombre);
+double common_math_arrondi_nombre(double nombre);
 void common_math_arrondi_triplet(cholmod_triplet *triplet);
 void common_math_arrondi_sparse(cholmod_sparse *sparse);
 

@@ -19,10 +19,11 @@
 #ifndef __EF_CALCULS_H
 #define __EF_CALCULS_H
 
+#include "config.h"
 #include "common_projet.h"
 
 int EF_calculs_initialise(Projet *projet);
-int EF_calculs_genere_sparse(Projet *projet);
+int EF_calculs_genere_mat_rig(Projet *projet);
 int EF_calculs_resoud_charge(Projet *projet, int num_action);
 int EF_calculs_affiche_resultats(Projet *projet, int num_action);
 

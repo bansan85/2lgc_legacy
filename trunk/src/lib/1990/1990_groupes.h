@@ -19,6 +19,7 @@
 #ifndef __1990_GROUPES_H
 #define __1990_GROUPES_H
 
+#include "config.h"
 #include <list.h>
 
 #include "1990_combinaisons.h"
@@ -27,12 +28,12 @@ typedef struct __Element
 {
     int         numero;
 #ifdef ENABLE_GTK
-    void            *pIter;
+    void        *pIter;
     int         pIter_expand;
 #endif
 } Element;
 
-typedef enum
+typedef enum __Type_Groupe_Combinaison
 {
     GROUPE_COMBINAISON_OR,
     GROUPE_COMBINAISON_XOR,
@@ -41,33 +42,41 @@ typedef enum
 
 typedef struct __Groupe
 {
-    char            *nom;
-    int         numero;
+    char                    *nom;
+    int                     numero;
     Type_Groupe_Combinaison type_combinaison;
-    LIST            *elements;
-    Combinaisons        tmp_combinaison;
-    void            *pIter;
-    int         pIter_expand;
+    LIST                    *elements;
+    Combinaisons            tmp_combinaison;
+#ifdef ENABLE_GTK
+    void                    *pIter;
+    int                     pIter_expand;
+#endif
 } Groupe;
 
 typedef struct __Niveau_Groupe
 {
     int         niveau;
     LIST            *groupes;
+#ifdef ENABLE_GTK
     void            *pIter;
+#endif
 } Niveau_Groupe;
 
 int _1990_groupe_init(Projet *projet);
-int _1990_groupe_niveau_ajout(Projet *projet);
-int _1990_groupe_element_positionne(Groupe *groupe, int numero);
-int _1990_groupe_positionne(Niveau_Groupe *niveau, int numero);
-int _1990_groupe_niveau_positionne(LIST *source, int numero);
-int _1990_groupe_ajout(Projet *projet, int niveau, int numero, Type_Groupe_Combinaison combinaison);
+
+int _1990_groupe_ajout_niveau(Projet *projet);
+int _1990_groupe_ajout_groupe(Projet *projet, int niveau, Type_Groupe_Combinaison combinaison);
 int _1990_groupe_ajout_element(Projet *projet, unsigned int niveau, int groupe_n, int groupe_n_1);
-void _1990_groupe_affiche_tout(Projet *projet);
-void _1990_groupe_free_element_numero(Projet *projet, int niveau, int groupe, int element);
-void _1990_groupe_free_niveau_numero(Projet *projet, int numero);
-void _1990_groupe_free_numero(Projet *projet, int niveau, int numero);
+
+int _1990_groupe_positionne_niveau(LIST *source, int numero);
+int _1990_groupe_positionne_groupe(Niveau_Groupe *niveau, int numero);
+int _1990_groupe_positionne_element(Groupe *groupe, int numero);
+
+void _1990_groupe_free_niveau(Projet *projet, int niveau);
+void _1990_groupe_free_groupe(Projet *projet, int niveau, int groupe);
+void _1990_groupe_free_element(Projet *projet, int niveau, int groupe, int element);
 void _1990_groupe_free(Projet *projet);
+
+int _1990_groupe_affiche_tout(Projet *projet);
 
 #endif

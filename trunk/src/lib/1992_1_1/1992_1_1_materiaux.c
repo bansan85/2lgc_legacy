@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "config.h"
 #include <stdlib.h>
 #include <libintl.h>
 #include <math.h>
@@ -34,11 +35,11 @@
 int _1992_1_1_materiaux_init(Projet *projet)
 {
     if (projet == NULL)
-        BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
+        BUGMSG(0, -1, gettext("Paramètres invalides.\n"));
     
     projet->beton.materiaux = list_init();
     if (projet->beton.materiaux == NULL)
-        BUGTEXTE(-2, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(0, -2, gettext("Erreur d'allocation mémoire.\n"));
     else
         return 0;
 }
@@ -57,7 +58,7 @@ int _1992_1_1_materiaux_ajout(Projet *projet, double fck, double nu)
     Beton_Materiau  *materiau_en_cours, materiau_nouveau;
     
     if ((projet == NULL) || (projet->beton.materiaux == NULL) || (fck > 90.))
-        BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
+        BUGMSG(0, -1, gettext("Paramètres invalides.\n"));
     
     list_mvrear(projet->beton.materiaux);
     materiau_nouveau.fck = fck*1000000.;
@@ -133,7 +134,7 @@ int _1992_1_1_materiaux_ajout(Projet *projet, double fck, double nu)
         materiau_nouveau.numero = materiau_en_cours->numero+1;
     
     if (list_insert_after(projet->beton.materiaux, &(materiau_nouveau), sizeof(materiau_nouveau)) == NULL)
-        BUGTEXTE(-6, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(0, -6, gettext("Erreur d'allocation mémoire.\n"));
     
     return 0;
 }
@@ -150,7 +151,7 @@ int _1992_1_1_materiaux_ajout(Projet *projet, double fck, double nu)
 Beton_Materiau* _1992_1_1_materiaux_cherche_numero(Projet *projet, unsigned int numero)
 {
     if ((projet == NULL) || (projet->beton.materiaux == NULL) || (list_size(projet->beton.materiaux) == 0))
-        BUGTEXTE(NULL, gettext("Paramètres invalides.\n"));
+        BUGMSG(0, NULL, gettext("Paramètres invalides.\n"));
     
     list_mvfront(projet->beton.materiaux);
     do
@@ -162,7 +163,7 @@ Beton_Materiau* _1992_1_1_materiaux_cherche_numero(Projet *projet, unsigned int 
     }
     while (list_mvnext(projet->beton.materiaux) != NULL);
     
-    BUGTEXTE(NULL, gettext("Materiau en béton n°%d introuvable.\n"), numero);
+    BUGMSG(0, NULL, gettext("Materiau en béton n°%d introuvable.\n"), numero);
 }
 
 
@@ -176,7 +177,7 @@ Beton_Materiau* _1992_1_1_materiaux_cherche_numero(Projet *projet, unsigned int 
 int _1992_1_1_materiaux_free(Projet *projet)
 {
     if ((projet == NULL) || (projet->beton.materiaux == NULL))
-        BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
+        BUGMSG(0, -1, gettext("Paramètres invalides.\n"));
     
     while (!list_empty(projet->beton.materiaux))
     {

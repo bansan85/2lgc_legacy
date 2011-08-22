@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "config.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <libintl.h>
@@ -24,15 +25,24 @@
 #include "common_maths.h"
 
 
-/* common_math_arrondi
- * Description : Arrondi un nombre en supprimant la partie négligeable (ERREUR_RELATIVE_MIN)
- * Paramètres : Projet *projet : la variable projet
+double common_math_arrondi_nombre(double nombre)
+/* Description : Arrondi un nombre en supprimant la partie négligeable (ERREUR_RELATIVE_MIN)
+ *   L'algorithme est perfectible puisque lors de l'arrondi, une nouvelle imprécision apparait
+ *   et certains nombres peuvent être arrondi en 1.09999999 ou -23.000000001.
+ * Paramètres : double nombre : le nombre à arrondir
  * Valeur renvoyée : le nombre arrondi
  */
-double common_math_arrondi(double nombre)
 {
-    double      puissance;
+    double          puissance;
     
+    // Si le nombre est égal parfaitement à 0. Alors
+    //     Renvoie 0.
+    // FinSi
+    // Multiplication du nombre par 10^(ERREUR_RELATIVE_PUISSANCE-ceil(log10(ABS(nombre))))
+    //   afin d'avoir une partie entière composée de ERREUR_RELATIVE_PUISSANCE chiffres.
+    // Conservation de la partie entière uniquement du nombre.
+    // Division par 10^(ERREUR_RELATIVE_PUISSANCE-ceil(log10(ABS(nombre)))).
+    // Renvoie du nombre.
     if (nombre == 0.)
         return 0.;
     puissance = ERREUR_RELATIVE_PUISSANCE-ceil(log10(ABS(nombre)));
@@ -42,37 +52,37 @@ double common_math_arrondi(double nombre)
 }
 
 
-/* common_math_arrondi_triplet
- * Description : Arrondi un triplet cholmod en supprimant la partie négligeable (ERREUR_RELATIVE_MIN)
- * Paramètres : Projet *projet : la variable projet
+void common_math_arrondi_triplet(cholmod_triplet *triplet)
+/* Description : Arrondi un triplet en supprimant la partie négligeable (ERREUR_RELATIVE_MIN)
+ * Paramètres : cholmod_triplet *triplet : la variable triplet à arrondir
  * Valeur renvoyée : void
  */
-void common_math_arrondi_triplet(cholmod_triplet *triplet)
 {
-    double      *ax;
+    double          *ax;
     unsigned int    i;
     
+    // Trivial
     ax = triplet->x;
     for (i=0;i<triplet->nnz;i++)
-        ax[i] = common_math_arrondi(ax[i]);
+        ax[i] = common_math_arrondi_nombre(ax[i]);
     
     return;
 }
 
 
-/* common_math_arrondi_sparse
- * Description : Arrondi un sparse cholmod en supprimant la partie négligeable (ERREUR_RELATIVE_MIN)
- * Paramètres : Projet *projet : la variable projet
+void common_math_arrondi_sparse(cholmod_sparse *sparse)
+/* Description : Arrondi un sparse en supprimant la partie négligeable (ERREUR_RELATIVE_MIN)
+ * Paramètres : cholmod_sparse *sparse : la matrice sparse à arrondir
  * Valeur renvoyée : void
  */
-void common_math_arrondi_sparse(cholmod_sparse *sparse)
 {
-    double      *ax;
+    double          *ax;
     unsigned int    i;
     
+    // Trivial
     ax = sparse->x;
     for (i=0;i<sparse->nzmax;i++)
-        ax[i] = common_math_arrondi(ax[i]);
+        ax[i] = common_math_arrondi_nombre(ax[i]);
     
     return;
 }

@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "config.h"
 #include <stdlib.h>
 #include <libintl.h>
 #include <math.h>
@@ -33,11 +34,11 @@
 int _1992_1_1_sections_init(Projet *projet)
 {
     if (projet == NULL)
-        BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
+        BUGMSG(0, -1, gettext("Paramètres invalides.\n"));
     
     projet->beton.sections = list_init();
     if (projet->beton.sections == NULL)
-        BUGTEXTE(-2, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(0, -2, gettext("Erreur d'allocation mémoire.\n"));
     else
         return 0;
 }
@@ -58,16 +59,16 @@ int _1992_1_1_sections_ajout_rectangulaire(Projet *projet, double largeur, doubl
     double              a, b;
     
     if ((projet == NULL) || (projet->beton.sections == NULL))
-        BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
+        BUGMSG(0, -1, gettext("Paramètres invalides.\n"));
     
     list_mvrear(projet->beton.sections);
     section_nouvelle.caracteristiques = (Beton_Section_Caracteristiques*)malloc(sizeof(Beton_Section_Caracteristiques));
     if (section_nouvelle.caracteristiques == NULL)
-        BUGTEXTE(-2, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(0, -2, gettext("Erreur d'allocation mémoire.\n"));
     section_nouvelle.caracteristiques->type = BETON_SECTION_RECTANGULAIRE;
     section_nouvelle.largeur = largeur;
     section_nouvelle.hauteur = hauteur;
-    section_nouvelle.caracteristiques->a = largeur*hauteur;
+    section_nouvelle.caracteristiques->s = largeur*hauteur;
     section_nouvelle.caracteristiques->cdgh = hauteur/2.;
     section_nouvelle.caracteristiques->cdgb = hauteur/2.;
     section_nouvelle.caracteristiques->cdgd = largeur/2.;
@@ -87,7 +88,7 @@ int _1992_1_1_sections_ajout_rectangulaire(Projet *projet, double largeur, doubl
         section_nouvelle.caracteristiques->numero = section_en_cours->caracteristiques->numero+1;
     
     if (list_insert_after(projet->beton.sections, &(section_nouvelle), sizeof(section_nouvelle)) == NULL)
-        BUGTEXTE(-3, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(0, -3, gettext("Erreur d'allocation mémoire.\n"));
     
     return 0;
 }
@@ -110,19 +111,19 @@ int _1992_1_1_sections_ajout_T(Projet *projet, double largeur_table, double larg
     double              a, b, aa, bb;
     
     if ((projet == NULL) || (projet->beton.sections == NULL))
-        BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
+        BUGMSG(0, -1, gettext("Paramètres invalides.\n"));
     
     list_mvrear(projet->beton.sections);
     section_nouvelle.caracteristiques = (Beton_Section_Caracteristiques*)malloc(sizeof(Beton_Section_Caracteristiques));
     if (section_nouvelle.caracteristiques == NULL)
-        BUGTEXTE(-2, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(0, -2, gettext("Erreur d'allocation mémoire.\n"));
     section_nouvelle.caracteristiques->type = BETON_SECTION_T;
     section_nouvelle.largeur_table = largeur_table;
     section_nouvelle.largeur_ame = largeur_ame;
     section_nouvelle.hauteur_table = hauteur_table;
     section_nouvelle.hauteur_ame = hauteur_ame;
-    section_nouvelle.caracteristiques->a = largeur_table*hauteur_table+largeur_ame*hauteur_ame;
-    section_nouvelle.caracteristiques->cdgh = (largeur_table*hauteur_table*hauteur_table/2+largeur_ame*hauteur_ame*(hauteur_table+hauteur_ame/2))/section_nouvelle.caracteristiques->a;
+    section_nouvelle.caracteristiques->s = largeur_table*hauteur_table+largeur_ame*hauteur_ame;
+    section_nouvelle.caracteristiques->cdgh = (largeur_table*hauteur_table*hauteur_table/2+largeur_ame*hauteur_ame*(hauteur_table+hauteur_ame/2))/section_nouvelle.caracteristiques->s;
     section_nouvelle.caracteristiques->cdgb = (hauteur_table+hauteur_ame)-section_nouvelle.caracteristiques->cdgh;
     section_nouvelle.caracteristiques->cdgd = largeur_table/2;
     section_nouvelle.caracteristiques->cdgg = largeur_table/2;
@@ -147,7 +148,7 @@ int _1992_1_1_sections_ajout_T(Projet *projet, double largeur_table, double larg
         section_nouvelle.caracteristiques->numero = section_en_cours->caracteristiques->numero+1;
     
     if (list_insert_after(projet->beton.sections, &(section_nouvelle), sizeof(section_nouvelle)) == NULL)
-        BUGTEXTE(-2, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(0, -2, gettext("Erreur d'allocation mémoire.\n"));
     
     return 0;
 }
@@ -166,15 +167,15 @@ int _1992_1_1_sections_ajout_carre(Projet *projet, double cote)
     Beton_Section_Carre     section_nouvelle;
     
     if ((projet == NULL) || (projet->beton.sections == NULL))
-        BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
+        BUGMSG(0, -1, gettext("Paramètres invalides.\n"));
     
     list_mvrear(projet->beton.sections);
     section_nouvelle.caracteristiques = (Beton_Section_Caracteristiques*)malloc(sizeof(Beton_Section_Caracteristiques));
     if (section_nouvelle.caracteristiques == NULL)
-        BUGTEXTE(-2, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(0, -2, gettext("Erreur d'allocation mémoire.\n"));
     section_nouvelle.caracteristiques->type = BETON_SECTION_CARRE;
     section_nouvelle.cote = cote;
-    section_nouvelle.caracteristiques->a = cote*cote;
+    section_nouvelle.caracteristiques->s = cote*cote;
     section_nouvelle.caracteristiques->cdgh = cote/2.;
     section_nouvelle.caracteristiques->cdgb = cote/2.;
     section_nouvelle.caracteristiques->cdgd = cote/2.;
@@ -190,7 +191,7 @@ int _1992_1_1_sections_ajout_carre(Projet *projet, double cote)
         section_nouvelle.caracteristiques->numero = section_en_cours->caracteristiques->numero+1;
     
     if (list_insert_after(projet->beton.sections, &(section_nouvelle), sizeof(section_nouvelle)) == NULL)
-        BUGTEXTE(-2, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(0, -2, gettext("Erreur d'allocation mémoire.\n"));
     
     return 0;
 }
@@ -209,15 +210,15 @@ int _1992_1_1_sections_ajout_circulaire(Projet *projet, double diametre)
     Beton_Section_Circulaire    section_nouvelle;
     
     if ((projet == NULL) || (projet->beton.sections == NULL))
-        BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
+        BUGMSG(0, -1, gettext("Paramètres invalides.\n"));
     
     list_mvrear(projet->beton.sections);
     section_nouvelle.caracteristiques = (Beton_Section_Caracteristiques*)malloc(sizeof(Beton_Section_Caracteristiques));
     if (section_nouvelle.caracteristiques == NULL)
-        BUGTEXTE(-2, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(0, -2, gettext("Erreur d'allocation mémoire.\n"));
     section_nouvelle.caracteristiques->type = BETON_SECTION_CIRCULAIRE;
     section_nouvelle.diametre = diametre;
-    section_nouvelle.caracteristiques->a = M_PI*diametre*diametre/4.;
+    section_nouvelle.caracteristiques->s = M_PI*diametre*diametre/4.;
     section_nouvelle.caracteristiques->cdgh = diametre/2.;
     section_nouvelle.caracteristiques->cdgb = diametre/2.;
     section_nouvelle.caracteristiques->cdgd = diametre/2.;
@@ -233,7 +234,7 @@ int _1992_1_1_sections_ajout_circulaire(Projet *projet, double diametre)
         section_nouvelle.caracteristiques->numero = section_en_cours->caracteristiques->numero+1;
     
     if (list_insert_after(projet->beton.sections, &(section_nouvelle), sizeof(section_nouvelle)) == NULL)
-        BUGTEXTE(-2, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(0, -2, gettext("Erreur d'allocation mémoire.\n"));
     
     return 0;
 }
@@ -250,7 +251,7 @@ int _1992_1_1_sections_ajout_circulaire(Projet *projet, double diametre)
 void* _1992_1_1_sections_cherche_numero(Projet *projet, unsigned int numero)
 {
     if ((projet == NULL) || (projet->beton.sections == NULL) || (list_size(projet->beton.sections) == 0))
-        BUGTEXTE(NULL, gettext("Paramètres invalides.\n"));
+        BUGMSG(0, NULL, gettext("Paramètres invalides.\n"));
     
     list_mvfront(projet->beton.sections);
     do
@@ -262,7 +263,7 @@ void* _1992_1_1_sections_cherche_numero(Projet *projet, unsigned int numero)
     }
     while (list_mvnext(projet->beton.sections) != NULL);
     
-    BUGTEXTE(NULL, gettext("Section en béton n°%d introuvable.\n"), numero);
+    BUGMSG(0, NULL, gettext("Section en béton n°%d introuvable.\n"), numero);
 }
 
 
@@ -276,7 +277,7 @@ void* _1992_1_1_sections_cherche_numero(Projet *projet, unsigned int numero)
 int _1992_1_1_sections_free(Projet *projet)
 {
     if ((projet == NULL) || (projet->beton.sections == NULL))
-        BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
+        BUGMSG(0, -1, gettext("Paramètres invalides.\n"));
     
     while (!list_empty(projet->beton.sections))
     {

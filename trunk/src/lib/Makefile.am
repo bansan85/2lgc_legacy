@@ -22,7 +22,7 @@ libeurocodes_la_SOURCES =	1990/1990_duree.c \
 							1990/1990_groupes.c \
 							1990/1990_ponderations.c \
 							1990/1990_gtk_groupes.c \
-							1992_1_1/1992_1_1_elements.c \
+							1992_1_1/1992_1_1_barres.c \
 							1992_1_1/1992_1_1_section.c \
 							1992_1_1/1992_1_1_materiaux.c \
 							common/common_text.c \
@@ -31,10 +31,12 @@ libeurocodes_la_SOURCES =	1990/1990_duree.c \
 							common/common_fonction.c \
 							common/common_maths.c \
 							EF/EF_noeud.c \
-							EF/EF_appui.c \
-							EF/EF_rigidite.c \
+							EF/EF_appuis.c \
 							EF/EF_calculs.c \
-							EF/EF_relachement.c
+							EF/EF_relachement.c \
+							EF/EF_rigidite.c \
+							EF/EF_charge_noeud.c \
+							EF/EF_charge_barre_ponctuelle.c
 
 libeurocodes_ladir = $(includedir)/2lgc
 libeurocodes_la_HEADERS =	1990/1990_duree.h \
@@ -44,7 +46,7 @@ libeurocodes_la_HEADERS =	1990/1990_duree.h \
 							1990/1990_groupes.h \
 							1990/1990_ponderations.h \
 							1990/1990_gtk_groupes.h \
-							1992_1_1/1992_1_1_elements.h \
+							1992_1_1/1992_1_1_barres.h \
 							1992_1_1/1992_1_1_section.h \
 							1992_1_1/1992_1_1_materiaux.h \
 							common/common_text.h \
@@ -54,8 +56,10 @@ libeurocodes_la_HEADERS =	1990/1990_duree.h \
 							common/common_fonction.h \
 							common/common_maths.h \
 							EF/EF_noeud.h \
-							EF/EF_appui.h \
-							EF/EF_rigidite.h \
+							EF/EF_appuis.h \
 							EF/EF_calculs.h \
-							EF/EF_relachement.h
+							EF/EF_relachement.h \
+							EF/EF_rigidite.h \
+							EF/EF_charge_noeud.h \
+							EF/EF_charge_barre_ponctuelle.h
 

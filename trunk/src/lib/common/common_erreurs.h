@@ -19,21 +19,40 @@
 #ifndef __COMMON_ERREURS_H
 #define __COMMON_ERREURS_H
 
+#include "config.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <assert.h>
 
-#define BUG(X) ({free((int*)1); return X;})
-// La macro BUG(X) est l'équivalent d'un return X; cependant, afin de 
-// faciliter le débogage des erreurs via gdb, il est rajouté, pour la
-// version expérimentale du programme un "free((int*)1) qui s'assure de
-// créer une erreur de segmentation. Il va de soit que pour la version
-// de production, la commande free() doit être supprimée.
+#ifdef NDEBUG
+#define BUG(X, Y) ({if (!(X)) return Y;})
+#else
+#define BUG(X, Y) ({assert(X);})
+#endif
+/* La macro BUG(X, Y) est l'équivalent d'un return Y; si la condition X n'est pas vérifiée
+ * cependant, afin de faciliter le débogage des erreurs via gdb, il est rajouté, pour la
+ * version expérimentale du programme un "assert" qui s'assure de créer une erreur si la
+ * condition X n'est pas respectée.*/
 
-#define BUGTEXTE(X, ...) ({printf(__VA_ARGS__); free((int*)1); return X;})
-// La macro BUGTEXTE(X) est identique à la commande BUG mais ajoute un
-// message d'erreur avant de réaliser l'erreur de segmentation. D'une
-// maniète générale, BUGTEXTE doit être utilisé dès que l'erreur arrive
-// et BUG doit être utilisé pour indiquer une erreur par la valeur retour
-// des fonctions utilisant déjà la macro BUGTEXTE.
+#ifdef NDEBUG
+#define BUGMSG(X, Y, ...) ({if (!(X)) \
+                       { \
+                           printf(__VA_ARGS__); \
+                           return Y; \
+                       } \
+                   })
+#else
+#define BUGMSG(X, Y, ...) ({if (!(X)) \
+                       { \
+                           printf(__VA_ARGS__); \
+                           assert(X); \
+                           return Y; \
+                       } \
+                   })
+#endif
+/* La macro BUGMSG(X, Y, ...) est identique à la commande BUG mais ajoute un message d'erreur
+ * avant l'arrêt du programme. D'une maniète générale, la macro BUGMSG doit être utilisée
+ * dès que l'erreur arrive et la macro BUG doit être utilisée pour indiquer une erreur par
+ * la valeur retour des fonctions utilisant déjà la macro BUGMSG.*/
 
 #endif

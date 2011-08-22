@@ -19,10 +19,11 @@
 #ifndef __EF_NOEUD_H
 #define __EF_NOEUD_H
 
+#include "config.h"
 #include "common_projet.h"
-#include "EF_appui.h"
+#include "EF_appuis.h"
 
-typedef struct
+typedef struct __EF_Point
 {
     double      x;
     double      y;
@@ -30,9 +31,9 @@ typedef struct
 } EF_Point;
 
 
-typedef struct
+typedef struct __EF_Noeud
 {
-    int     numero;
+    int         numero;
     EF_Point    position;
     EF_Appui    *appui;
 } EF_Noeud;

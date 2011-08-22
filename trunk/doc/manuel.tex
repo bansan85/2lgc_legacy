@@ -5,6 +5,8 @@
 \usepackage[frenchb]{babel} % Pour la césure je crois
 \usepackage{geometry} %Pour geometry
 \usepackage[hyperindex=true, colorlinks=true]{hyperref} %Pour /url pour un affichage correcte en PDF
+\usepackage{bookmark} % Pour éviter le message d'erreur "Rerun to get outlines right or use package `bookmark'
+\usepackage{amsmath} % Pour les maths "avancés"
 
 \geometry
 {
@@ -60,49 +62,394 @@ TODO : INSERER LE CODE SOURCE D'UNE APPLICATION DE BASE!!!
 \end{verbatim}
 Et expliquer ici succintement le but de l'application.
 \newpage
+\section{Informations générales}
+Les explications données dans le présent paragraphe sont valables pour toute la librarie quelque soit le module.
+\subsection{Règles de rédaction du code}
+L'usage de la tabulation est prohibé, elle doit être remplacée par 4 espaces afin que le code source soit lisible correctement à partir de l'importe quel ordinateur.\par
+La vérification pour chaque allocation mémoire que ce soit pour \texttt{malloc} (stdlib.h), \texttt{list\_init} (list.h) ou les fonctions cholmod (cholmod.h) tel que \texttt{cholmod\-\_l\-\_allocate\-\_triplet}, \texttt{cholmod\-\_l\-\_triplet\-\_to\-\_sparse} et autres.\par
+Rédigez la documentation en format latex par l'usage des commentaires //. L'ensemble des commentaires sera inséré dans le fichier latex et sera entouré des instructions \texttt{\\begin{verbatim}} et \texttt{\\end{verbatim}}.
+Ainsi, pour insérer des formules, il suffit d'encadrer la formule par \texttt{\\end\{verbatim\}} \texttt{\\begin\{align*\}} et de finir par \texttt{\\end\{align*\}} \texttt{\\begin\{verbatim\}}.
+Afin de rester sur la largeur de la page ne pas dépasser 95 caractères sur une même ligne en format verbatim. L'objectif de toujours insérer la documentation directement dans le code source permet d'avoir systématiquement une documentation à jour ainsi qu'un code source très clair.
+Les commentaires spécifiques au code source sont rédigés par les commentaires \verb+\*+. Pensez aussi à vérifier l'orthographe.\par
+Les malloc doivent être typé, cela afin d'être sûr d'allouer le bon type. Exemple : \begin{center}\texttt{(int*)malloc(6*sizeof(int));}\end{center}.
+Les commentaires décrivant les fonctions se trouve dans le fichier source (\texttt{.c}) juste en dessous de la déclaration de l'entête. Exemple :
+\begin{verbatim}
+/* Description : Divise un tronçon en deux à la position coupure.
+* Paramètres : Fonction* fonction : la variable contenant la fonction
+*            : double coupure : position de la coupure
+* Valeur renvoyée :
+*   Succès : 0
+*   Échec : -1 en cas de paramètres invalides :
+*             (fonction == NULL) ou
+*             (fonction->nb_troncons == 0)
+*           -2 en cas d'erreur d'allocation mémoire
+*/
+\end{verbatim}
+Il convient de toujours tester au début de la fonction la validité des paramètres, ceci principalement pour faciliter le debogage de l'application.
+Pour vérifier si deux nombres flottants sont identiques, il convient d'utiliser \texttt{ERREUR\_RELATIVE\_EGALE(nb1, nb2)}.
+En cas de vérification où l'échec est globalement critique pour l'application, il convient d'utiliser les fonctions \texttt{BUG} et \texttt{BUGTEXTE}. Voir la section \texttt{common\_erreurs} pour les détails.
 \section{Module {\texttt{common}}}
 \subsection{Fichier {\texttt{common\_erreurs}}}
 Ce fichier permet de traiter les erreurs de l'application qui peuvent survenir pendant une utilisation normale ou anormale de l'application. Elles permettent de détecter plus facilement les erreurs et de remonter l'erreur jusqu'aux plus hautes instances du programme tout en assurant sa stabilité.
 \subsubsection{Macros}
-\begin{verbatim}
-#define BUG(X) ({free((int*)1); return X;})
-// La macro BUG(X) est l'équivalent d'un return X; cependant, afin de 
-// faciliter le débogage des erreurs via gdb, il est rajouté, pour la
-// version expérimentale du programme un "free((int*)1) qui s'assure de
-// créer une erreur de segmentation. Il va de soit que pour la version
-// de production, la commande free() doit être supprimée.
-
-#define BUGTEXTE(X, ...) ({printf(__VA_ARGS__); free((int*)1); return X;})
-// La macro BUGTEXTE(X) est identique à la commande BUG mais ajoute un
-// message d'erreur avant de réaliser l'erreur de segmentation. D'une
-// maniète générale, BUGTEXTE doit être utilisé dès que l'erreur arrive
-// et BUG doit être utilisé pour indiquer une erreur par la valeur retour
-// des fonctions utilisant déjà la macro BUGTEXTE.
-\end{verbatim}
+\input{common_erreurs_BUG_func.tex.tmp}
+\input{common_erreurs_BUGTEXTE_func.tex.tmp}
 \subsubsection{Structures de données}
 \subsection{Fichier {\texttt{common\_fonction}}}
 Ce fichier permet de gérer des fonctions méthématiques plus ou moins complexes. Le principal intérêt est de pouvoir travailler avec une fonction différentes pour chaque tronçon défini par l'utilisateur. Par exemple avoir la fonction $x^2+3*x$ pour x variant de -1.5 à 1.5 et la fonction $-2*x+5$ pour x variant de 1.5 à 2.0.
 \subsubsection{Macros}
-Aucune
+Aucune.
 \subsubsection{Structures de données}
-\begin{verbatim}
-typedef struct                  // Fonction de base : coef_0 + coef_x*x + coef_x2*x*x
-{
-    double      debut_troncon;  // Début et la fin du tronçon de validité de la fonction
-    double      fin_troncon;
-    double      coef_0;         // La fonction mathématique est définie par la formule :
-    double      coef_x;         // coef_0 + coef_x*x + coef_x2*x^2 + coef_x3*x^3
-    double      coef_x2;
-    double      coef_x3;
-} Troncon;
-
-typedef struct
-{
-    int         nb_troncons;    // Les fonctions n'étant pas forcément continues le long de la barre (par exemple charge ponctuelle),
-                                // il est nécessaire de définir plusieurs tronçons avec pour chaque tronçon sa fonction.
-                                // int nb_troncons défini donc le nombre de tronçons que possède la fonction.
-    Troncon     *troncons;      // Tableau dynamique contenant les fonctions par tronçon.
-} Fonction;
-\end{verbatim}
-
+\input{common_fonction_Troncon_struct.tex.tmp}
+\input{common_fonction_Fonction_struct.tex.tmp}
+\subsubsection{Fonctions}
+\noindent\hrulefill
+\input{common_fonction_init_func.tex.tmp}
+\input{common_fonction_init_com.tex.tmp}
+\input{common_fonction_scinde_troncon_func.tex.tmp}
+\input{common_fonction_scinde_troncon_com.tex.tmp}
+\input{common_fonction_ajout_func.tex.tmp}
+\input{common_fonction_ajout_com.tex.tmp}
+\input{common_fonction_affiche_func.tex.tmp}
+\input{common_fonction_affiche_com.tex.tmp}
+\input{common_fonction_free_func.tex.tmp}
+\input{common_fonction_free_com.tex.tmp}
+\subsection{Fichier {\texttt{common\_maths}}}
+Ce fichier permet de gérer les calculs avec prise en compte des imprécisions provenant de l'utilisation des nombres flottants.
+\subsubsection{Macros}
+\input{common_maths_ERREUR_RELATIVE_EGALE_func.tex.tmp}
+\subsubsection{Structures de données}
+Aucune.
+\subsubsection{Fonctions}
+\noindent\hrulefill
+\input{common_math_arrondi_nombre_func.tex.tmp}
+\input{common_math_arrondi_nombre_com.tex.tmp}
+\input{common_math_arrondi_triplet_func.tex.tmp}
+\input{common_math_arrondi_triplet_com.tex.tmp}
+\input{common_math_arrondi_sparse_func.tex.tmp}
+\input{common_math_arrondi_sparse_com.tex.tmp}
+\subsection{Fichier {\texttt{common\_projet}}}
+Ce fichier permet de gérer l'initialisation et la libération de la totalité de la mémoire pour un projet entier. Il contient également la structure de toutes les informations nécessaires à la modélisation et au stockage des résultats de calculs.
+\subsubsection{Macros}
+Aucune.
+\subsubsection{Structures de données}
+\input{common_projet_Type_Pays_struct.tex.tmp}
+\input{common_projet_CombinaisonsEL_struct.tex.tmp}
+\input{common_projet_List_Gtk_struct.tex.tmp}
+\input{common_projet_Type_Element_struct.tex.tmp}
+\input{common_projet_Beton_Donnees_struct.tex.tmp}
+\input{common_projet_EF_struct.tex.tmp}
+\input{common_projet_Projet_struct.tex.tmp}
+\subsubsection{Fonctions}
+\noindent\hrulefill
+\input{common_projet_projet_init_func.tex.tmp}
+\input{common_projet_projet_init_com.tex.tmp}
+\input{common_projet_projet_free_func.tex.tmp}
+\input{common_projet_projet_free_com.tex.tmp}
+\subsection{Fichier {\texttt{common\_text}}}
+Ce fichier contient la liste des messages à afficher à l'utilisateur.
+\subsubsection{Macros}
+Aucune.
+\subsubsection{Structures de données}
+Aucune.
+\subsubsection{Fonctions}
+\noindent\hrulefill
+\input{common_text_show_warranty_func.tex.tmp}
+\input{common_text_show_warranty_com.tex.tmp}
+\input{common_text_show_help_func.tex.tmp}
+\input{common_text_show_help_com.tex.tmp}
+\subsection{Fichier {\texttt{common\_tooltip}}}
+Ce fichier génère les tooltips dans l'interface GTK+3.
+\subsubsection{Macros}
+Aucune.
+\subsubsection{Structures de données}
+Aucune.
+\subsubsection{Fonctions}
+\noindent\hrulefill
+\input{common_tooltip_generation_func.tex.tmp}
+\input{common_tooltip_generation_com.tex.tmp}
+\section{Module {\texttt{Éléments finis}}}
+\subsection{Fichier {\texttt{EF\_appui}}}
+Ce fichier permet de gérer les différents types d'appuis définis par l'utilisateur.\par
+Lors de la description des algorithmes des calculs éléments finis, un certain nombre de notations mathématiques et de symboles seront utilisées. Leur signification est la suivante :
+\begin{itemize}
+\item $[.]$ : matrice,
+\item \{.\} : vecteur,
+\item $[.]^T$ : matrice transposée,
+\item $[R]$ : matrice de rotation,
+\item $[K]$ : matrice de rigidité du système,
+\item $[Ke]$ : matrice de rigidité élémentaire,
+\item $\{\Delta\}$ : vecteur des déplacements,
+\item $\{F\}$ : vecteur des efforts.
+\end{itemize}
+\subsubsection{Macros}
+Aucune.
+\subsubsection{Structures de données}
+\input{EF_appuis_Type_EF_Appui_struct.tex.tmp}
+\input{EF_appuis_EF_Appui_struct.tex.tmp}
+\subsubsection{Fonctions}
+\input{EF_appuis_init_func.tex.tmp}
+\input{EF_appuis_init_com.tex.tmp}
+\input{EF_appuis_ajout_func.tex.tmp}
+\input{EF_appuis_ajout_com.tex.tmp}
+\input{EF_appuis_cherche_numero_func.tex.tmp}
+\input{EF_appuis_cherche_numero_com.tex.tmp}
+\input{EF_appuis_free_func.tex.tmp}
+\input{EF_appuis_free_com.tex.tmp}
+\subsection{Fichier {\texttt{EF\_charge\_noeud}}}
+Ce fichier gère les charges ponctuelles appliquées aux noeuds de la structure.
+\subsubsection{Macros}
+Aucune.
+\subsubsection{Structures de données}
+\input{EF_charge_noeud_Charge_Type_struct.tex.tmp}
+\input{EF_charge_noeud_Charge_Noeud_struct.tex.tmp}
+\subsubsection{Fonctions}
+\input{EF_charge_noeud_ajout_func.tex.tmp}
+\input{EF_charge_noeud_ajout_com.tex.tmp}
+\subsection{Fichier {\texttt{EF\_charge\_barre\_ponctuelle}}}
+Ce fichier gère les charges ponctuelles appliquées sur une barre à une position quelconque.
+\subsubsection{Macros}
+Aucune.
+\subsubsection{Structures de données}
+\input{EF_charge_barre_ponctuelle_Charge_Barre_Ponctuelle_struct.tex.tmp}
+\subsubsection{Fonctions}
+\input{EF_charge_barre_ponctuelle_ajout_func.tex.tmp}
+\input{EF_charge_barre_ponctuelle_ajout_com.tex.tmp}
+\subsection{Fichier {\texttt{EF\_calculs}}}
+Ce fichier permet de réaliser tous les calculs éléments finis tel que la factorisation de la matrice de rigidité globale ou encore la détermination des déplacements des noeuds et la courbe des sollicitations dans les barres.
+\subsubsection{Macros}
+Aucune.
+\subsubsection{Structures de données}
+Aucune.
+\subsubsection{Fonctions}
+\input{EF_calculs_initialise_func.tex.tmp}
+\input{EF_calculs_initialise_com.tex.tmp}
+\input{EF_calculs_genere_mat_rig_func.tex.tmp}
+\input{EF_calculs_genere_mat_rig_com.tex.tmp}
+\input{EF_calculs_resoud_charge_func.tex.tmp}
+\input{EF_calculs_resoud_charge_com.tex.tmp}
+\input{EF_calculs_affiche_resultats_func.tex.tmp}
+\input{EF_calculs_affiche_resultats_com.tex.tmp}
+\subsection{Fichier {\texttt{EF\_noeud}}}
+Ce fichier permet gérer les noeuds.
+\subsubsection{Macros}
+Aucune.
+\subsubsection{Structures de données}
+\input{EF_noeud_Type_EF_Point_struct.tex.tmp}
+\input{EF_noeud_Type_EF_Noeud_struct.tex.tmp}
+\subsubsection{Fonctions}
+\input{EF_noeuds_init_func.tex.tmp}
+\input{EF_noeuds_init_com.tex.tmp}
+\input{EF_noeuds_ajout_func.tex.tmp}
+\input{EF_noeuds_ajout_com.tex.tmp}
+\input{EF_noeuds_cherche_numero_func.tex.tmp}
+\input{EF_noeuds_cherche_numero_com.tex.tmp}
+\input{EF_noeuds_free_func.tex.tmp}
+\input{EF_noeuds_free_com.tex.tmp}
+\subsection{Fichier {\texttt{EF\_relachement}}}
+Ce fichier permet gérer la liste des relachements.
+\subsubsection{Macros}
+Aucune.
+\subsubsection{Structures de données}
+\input{EF_relachement_Type_EF_Relachement_struct.tex.tmp}
+\input{EF_relachement_EF_Relachement_struct.tex.tmp}
+\subsubsection{Fonctions}
+\input{EF_relachement_init_func.tex.tmp}
+\input{EF_relachement_init_com.tex.tmp}
+\input{EF_relachement_ajout_func.tex.tmp}
+\input{EF_relachement_ajout_com.tex.tmp}
+\input{EF_relachement_cherche_numero_func.tex.tmp}
+\input{EF_relachement_cherche_numero_com.tex.tmp}
+\input{EF_relachement_free_func.tex.tmp}
+\input{EF_relachement_free_com.tex.tmp}
+\subsection{Fichier {\texttt{EF\_rigidite}}}
+Ce fichier permet gérer l'initialisation à 0 des matrices de rigidité et leur libération.
+\subsubsection{Macros}
+Aucune.
+\subsubsection{Structures de données}
+Aucune.
+\subsubsection{Fonctions}
+\input{EF_rigidite_init_func.tex.tmp}
+\input{EF_rigidite_init_com.tex.tmp}
+\input{EF_rigidite_free_func.tex.tmp}
+\input{EF_rigidite_free_com.tex.tmp}
+\section{Module norme {\texttt{1990}}}
+\subsection{Fichier {\texttt{1990\_actions}}}
+Ce fichier permet gérer les actions, conformément à l'Eurocode 0.\par
+Le type d'une action correspond, par exemple, à la neige en Finlande, à une charge d'exploitation de type stockage. C'est à partir du type que sera déterminés les coefficients définissant les valeurs caractéristiques, fréquentes et quasi-permanentes, conformément au tableau A1.1 de l'Eurocode 0.\par
+La catégorie d'une action correspond, par exemple, au poids propre du bâtiment, aux charges variables (vent, neige ou charge d'exploitation sans distinction) ou encore aux charges accidentelles. C'est à partir de la catégorie que sera déterminés les coefficients partiels de sécurité, conformément à la section 6 de l'Eurocode 0.
+\subsubsection{Macros}
+Aucune.
+\subsubsection{Structures de données}
+\input{1990_actions_Action_Categorie_struct.tex.tmp}
+\input{1990_actions_Action_struct.tex.tmp}
+\subsubsection{Fonctions}
+\input{_1990_action_type_bat_txt_eu_func.tex.tmp}
+\input{_1990_action_type_bat_txt_eu_com.tex.tmp}
+\input{_1990_action_type_bat_txt_fr_func.tex.tmp}
+\input{_1990_action_type_bat_txt_fr_com.tex.tmp}
+\input{_1990_action_type_bat_txt_func.tex.tmp}
+\input{_1990_action_type_bat_txt_com.tex.tmp}
+\input{_1990_action_categorie_bat_eu_func.tex.tmp}
+\input{_1990_action_categorie_bat_eu_com.tex.tmp}
+\input{_1990_action_categorie_bat_fr_func.tex.tmp}
+\input{_1990_action_categorie_bat_fr_com.tex.tmp}
+\input{_1990_action_categorie_bat_func.tex.tmp}
+\input{_1990_action_categorie_bat_com.tex.tmp}
+\input{_1990_action_init_func.tex.tmp}
+\input{_1990_action_init_com.tex.tmp}
+\input{_1990_action_ajout_func.tex.tmp}
+\input{_1990_action_ajout_com.tex.tmp}
+\input{_1990_action_cherche_numero_func.tex.tmp}
+\input{_1990_action_cherche_numero_com.tex.tmp}
+\input{_1990_action_affiche_tout_func.tex.tmp}
+\input{_1990_action_affiche_tout_com.tex.tmp}
+\input{_1990_action_free_func.tex.tmp}
+\input{_1990_action_free_com.tex.tmp}
+\subsection{Fichier {\texttt{1990\_coef\_psi}}}
+Ce fichier permet gérer les coefficients psi définis par l'Eurocode 0 et nécessaire pour les combinaisons.
+\subsubsection{Macros}
+Aucune.
+\subsubsection{Structures de données}
+Aucune.
+\subsubsection{Fonctions}
+\input{_1990_coef_psi0_bat_eu_func.tex.tmp}
+\input{_1990_coef_psi0_bat_eu_com.tex.tmp}
+\input{_1990_coef_psi1_bat_eu_func.tex.tmp}
+\input{_1990_coef_psi1_bat_eu_com.tex.tmp}
+\input{_1990_coef_psi2_bat_eu_func.tex.tmp}
+\input{_1990_coef_psi2_bat_eu_com.tex.tmp}
+\input{_1990_coef_psi0_bat_fr_func.tex.tmp}
+\input{_1990_coef_psi0_bat_fr_com.tex.tmp}
+\input{_1990_coef_psi1_bat_fr_func.tex.tmp}
+\input{_1990_coef_psi1_bat_fr_com.tex.tmp}
+\input{_1990_coef_psi2_bat_fr_func.tex.tmp}
+\input{_1990_coef_psi2_bat_fr_com.tex.tmp}
+\input{_1990_coef_psi0_bat_func.tex.tmp}
+\input{_1990_coef_psi0_bat_com.tex.tmp}
+\input{_1990_coef_psi1_bat_func.tex.tmp}
+\input{_1990_coef_psi1_bat_com.tex.tmp}
+\input{_1990_coef_psi2_bat_func.tex.tmp}
+\input{_1990_coef_psi2_bat_com.tex.tmp}
+\subsection{Fichier {\texttt{1990\_combinaisons}}}
+Ce fichier permet gérer de générer les combinaisons conformément à celles définies dans l'Eurocode 0.
+\subsubsection{Macros}
+Aucune.
+\subsubsection{Structures de données}
+\input{1990_combinaisons_Combinaison_Element_struct.tex.tmp}
+\input{1990_combinaisons_Combinaison_struct.tex.tmp}
+\input{1990_combinaisons_Combinaisons_struct.tex.tmp}
+\subsubsection{Fonctions}
+\input{_1990_combinaisons_genere_xor_func.tex.tmp}
+\input{_1990_combinaisons_genere_xor_com.tex.tmp}
+\input{_1990_combinaisons_genere_and_func.tex.tmp}
+\input{_1990_combinaisons_genere_and_com.tex.tmp}
+\input{_1990_combinaisons_genere_or_func.tex.tmp}
+\input{_1990_combinaisons_genere_or_com.tex.tmp}
+\input{_1990_combinaisons_init_func.tex.tmp}
+\input{_1990_combinaisons_init_com.tex.tmp}
+\input{_1990_combinaisons_genere_func.tex.tmp}
+\input{_1990_combinaisons_genere_com.tex.tmp}
+\input{_1990_combinaisons_free_func.tex.tmp}
+\input{_1990_combinaisons_free_com.tex.tmp}
+\subsection{Fichier {\texttt{1990\_duree}}}
+Ce fichier permet de gérer les durées indicatives d'un projet conformément à l'Eurocode 0.
+\subsubsection{Macros}
+Aucune.
+\subsubsection{Structures de données}
+Aucune.
+\subsubsection{Fonctions}
+\input{_1990_duree_projet_eu_func.tex.tmp}
+\input{_1990_duree_projet_eu_com.tex.tmp}
+\input{_1990_duree_projet_fr_func.tex.tmp}
+\input{_1990_duree_projet_fr_com.tex.tmp}
+\input{_1990_duree_projet_func.tex.tmp}
+\input{_1990_duree_projet_com.tex.tmp}
+\input{_1990_duree_projet_txt_eu_func.tex.tmp}
+\input{_1990_duree_projet_txt_eu_com.tex.tmp}
+\input{_1990_duree_projet_txt_fr_func.tex.tmp}
+\input{_1990_duree_projet_txt_fr_com.tex.tmp}
+\input{_1990_duree_projet_txt_func.tex.tmp}
+\input{_1990_duree_projet_txt_com.tex.tmp}
+\subsection{Fichier {\texttt{1990\_groupes}}}
+Ce fichier permet gérer les groupes de combinaisons.
+\subsubsection{Macros}
+Aucune.
+\subsubsection{Structures de données}
+\input{1990_groupes_Element.tex.tmp}
+\input{1990_groupes_Type_Groupe_Combinaison.tex.tmp}
+\input{1990_groupes_Groupe.tex.tmp}
+\input{1990_groupes_Niveau_Groupe.tex.tmp}
+\subsubsection{Fonctions}
+\input{_1990_groupe_init_func.tex.tmp}
+\input{_1990_groupe_init_com.tex.tmp}
+\input{_1990_groupe_ajout_niveau_func.tex.tmp}
+\input{_1990_groupe_ajout_niveau_com.tex.tmp}
+\input{_1990_groupe_ajout_groupe_func.tex.tmp}
+\input{_1990_groupe_ajout_groupe_com.tex.tmp}
+\input{_1990_groupe_ajout_element_func.tex.tmp}
+\input{_1990_groupe_ajout_element_com.tex.tmp}
+\input{_1990_groupe_positionne_niveau_func.tex.tmp}
+\input{_1990_groupe_positionne_niveau_com.tex.tmp}
+\input{_1990_groupe_positionne_groupe_func.tex.tmp}
+\input{_1990_groupe_positionne_groupe_com.tex.tmp}
+\input{_1990_groupe_positionne_element_func.tex.tmp}
+\input{_1990_groupe_positionne_element_com.tex.tmp}
+\input{_1990_groupe_free_niveau_func.tex.tmp}
+\input{_1990_groupe_free_niveau_com.tex.tmp}
+\input{_1990_groupe_free_groupe_func.tex.tmp}
+\input{_1990_groupe_free_groupe_com.tex.tmp}
+\input{_1990_groupe_free_element_func.tex.tmp}
+\input{_1990_groupe_free_element_com.tex.tmp}
+\input{_1990_groupe_free_func.tex.tmp}
+\input{_1990_groupe_free_com.tex.tmp}
+\input{_1990_groupe_affiche_tout_func.tex.tmp}
+\input{_1990_groupe_affiche_tout_com.tex.tmp}
+\subsection{Fichier {\texttt{1990\_gtk\_groupes}}}
+Ce fichier permet gérer la création et la gestion des groupes ainsi que la génération des combinaisons et des pondérations par l'utilisation d'une interface gtk+3.
+\subsubsection{Macros}
+Aucune.
+\subsubsection{Structures de données}
+Aucune externe.
+\subsubsection{Fonctions}
+\input{_1990_gtk_groupes_func.tex.tmp}
+\input{_1990_gtk_groupes_com.tex.tmp}
+\subsection{Fichier {\texttt{1990\_ponderations}}}
+Ce fichier permet gérer les pondérations déduites des combinaisons.
+\subsubsection{Macros}
+Aucune.
+\subsubsection{Structures de données}
+\input{1990_ponderations_Ponderation_Element.tex.tmp}
+\input{1990_ponderations_Ponderation.tex.tmp}
+\subsubsection{Fonctions}
+\input{_1990_ponderations_genere_un_func.tex.tmp}
+\input{_1990_ponderations_genere_un_com.tex.tmp}
+\input{_1990_ponderations_genere_eu_func.tex.tmp}
+\input{_1990_ponderations_genere_eu_com.tex.tmp}
+\input{_1990_ponderations_genere_fr_func.tex.tmp}
+\input{_1990_ponderations_genere_fr_com.tex.tmp}
+\input{_1990_ponderations_genere_func.tex.tmp}
+\input{_1990_ponderations_genere_com.tex.tmp}
+\input{_1990_ponderations_affiche_tout_func.tex.tmp}
+\input{_1990_ponderations_affiche_tout_com.tex.tmp}
+\section{Module norme {\texttt{1992\_1\_1}}}
+\subsection{Fichier {\texttt{1992\_1\_1\_barres}}}
+Ce fichier permet gérer les barres en béton conformément à l'Eurocode 2, partie 1-1.\par
+\subsubsection{Macros}
+Aucune.
+\subsubsection{Structures de données}
+\input{1992_1_1_barres_Beton_Barre.tex.tmp}
+\subsubsection{Fonctions}
+\input{_1992_1_1_barres_init_func.tex.tmp}
+\input{_1992_1_1_barres_init_com.tex.tmp}
+\input{_1992_1_1_barres_ajout_func.tex.tmp}
+\input{_1992_1_1_barres_ajout_com.tex.tmp}
+\input{_1992_1_1_barres_cherche_numero_func.tex.tmp}
+\input{_1992_1_1_barres_cherche_numero_com.tex.tmp}
+\input{_1992_1_1_barres_rigidite_ajout_func.tex.tmp}
+\input{_1992_1_1_barres_rigidite_ajout_com.tex.tmp}
+\input{_1992_1_1_barres_rigidite_ajout_tout_func.tex.tmp}
+\input{_1992_1_1_barres_rigidite_ajout_tout_com.tex.tmp}
+\input{_1992_1_1_barres_free_func.tex.tmp}
+\input{_1992_1_1_barres_free_com.tex.tmp}
 \end{document}
