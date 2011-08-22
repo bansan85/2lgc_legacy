@@ -25,32 +25,32 @@
 
 typedef struct __List_Gtk_1990
 {
-    GtkWidget   *window_groupe;
-    GtkWidget   *table_groupe;
-    GtkWidget   *table_combinaison;
-    GtkWidget   *spin_button_niveau;
-    GtkWidget   *button_niveau_ajout;
-    GtkWidget   *button_niveau_suppr;
-    GtkWidget   *frame_groupe;
-    GtkWidget   *table_groupes;
+    GtkWidget       *window_groupe;
+    GtkWidget       *table_groupe;
+    GtkWidget       *table_combinaison;
+    GtkWidget       *spin_button_niveau;
+    GtkWidget       *button_niveau_ajout;
+    GtkWidget       *button_niveau_suppr;
+    GtkWidget       *frame_groupe;
+    GtkWidget       *table_groupes;
     GtkTreeStore    *tree_store_etat;
-    GtkTreeView *tree_view_etat;
-    GtkWidget   *button_groupe_ajout;
-    GtkWidget   *button_groupe_suppr;
-    GtkWidget   *button_groupe_and;
-    GtkWidget   *button_groupe_or;
-    GtkWidget   *button_groupe_xor;
-    GtkWidget   *button_groupe_nom;
-    GtkWidget   *entry_groupe_nom;
-    GtkWidget   *frame_dispo;
-    GtkWidget   *table_dispo;
+    GtkTreeView     *tree_view_etat;
+    GtkWidget       *button_groupe_ajout;
+    GtkWidget       *button_groupe_suppr;
+    GtkWidget       *button_groupe_and;
+    GtkWidget       *button_groupe_or;
+    GtkWidget       *button_groupe_xor;
+    GtkWidget       *button_groupe_nom;
+    GtkWidget       *entry_groupe_nom;
+    GtkWidget       *frame_dispo;
+    GtkWidget       *table_dispo;
     GtkTreeStore    *tree_store_dispo;
-    GtkTreeView *tree_view_dispo;
-    GtkWidget   *button_ajout_dispo;
-    GtkWidget   *table_bas;
-    GtkWidget   *button_generer;
-    GtkWidget   *button_options;
-    GtkWidget   *button_quitter;
+    GtkTreeView     *tree_view_dispo;
+    GtkWidget       *button_ajout_dispo;
+    GtkWidget       *table_bas;
+    GtkWidget       *button_generer;
+    GtkWidget       *button_options;
+    GtkWidget       *button_quitter;
 } List_Gtk_1990;
 
 void _1990_gtk_groupes(GtkWidget *button __attribute__((unused)), Projet *projet);

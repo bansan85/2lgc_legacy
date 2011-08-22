@@ -19,6 +19,7 @@
 #ifndef __1992_1_1_MATERIAUX_H
 #define __1992_1_1_MATERIAUX_H
 
+#include "config.h"
 #include "common_projet.h"
 
 typedef struct __Beton_Materiau

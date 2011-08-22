@@ -19,6 +19,7 @@
 #ifndef __1992_1_1_ELEMENTS_H
 #define __1992_1_1_ELEMENTS_H
 
+#include "config.h"
 #include "EF_relachement.h"
 #include "EF_noeud.h"
 #include "1992_1_1_section.h"
@@ -26,28 +27,29 @@
 #include "common_projet.h"
 #include "cholmod.h"
 
-typedef struct __Beton_Element_Poutre
+typedef struct __Beton_Barre
 {
     unsigned int        numero;
     Type_Element        type;
-    void            *section;
+    void                *section;
     Beton_Materiau      *materiau;
     
-    EF_Noeud        *noeud_debut;
-    EF_Noeud        *noeud_fin;
+    EF_Noeud            *noeud_debut;
+    EF_Noeud            *noeud_fin;
     unsigned int        discretisation_element;     // Nombre de noeuds intermédiaires
-    EF_Noeud        **noeuds_intermediaires;
-    Relachement     *relachement;
+    EF_Noeud            **noeuds_intermediaires;
+    EF_Relachement      *relachement;
     
     cholmod_sparse      *matrice_rotation;
     cholmod_sparse      *matrice_rotation_transpose;
-} Beton_Element;
+    cholmod_sparse      **matrice_rigidite_locale; // Une matrice de rigidité par élément
+} Beton_Barre;
 
-int _1992_1_1_elements_init(Projet *projet);
-int _1992_1_1_elements_ajout(Projet *projet, Type_Element type, unsigned int section, unsigned int materiau, unsigned int noeud_debut, unsigned int noeud_fin, int relachement, unsigned int discretisation_element);
-Beton_Element* _1992_1_1_elements_cherche_numero(Projet *projet, unsigned int numero);
-int _1992_1_1_elements_rigidite_ajout(Projet *projet, Beton_Element *element);
-int _1992_1_1_elements_rigidite_ajout_tout(Projet *projet);
-int _1992_1_1_elements_free(Projet *projet);
+int _1992_1_1_barres_init(Projet *projet);
+int _1992_1_1_barres_ajout(Projet *projet, Type_Element type, unsigned int section, unsigned int materiau, unsigned int noeud_debut, unsigned int noeud_fin, int relachement, unsigned int discretisation_element);
+Beton_Barre* _1992_1_1_barres_cherche_numero(Projet *projet, unsigned int numero);
+int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element);
+int _1992_1_1_barres_rigidite_ajout_tout(Projet *projet);
+int _1992_1_1_barres_free(Projet *projet);
 
 #endif

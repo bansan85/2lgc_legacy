@@ -16,34 +16,36 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "config.h"
 #include <stdlib.h>
 #include <libintl.h>
 #include "common_projet.h"
 #include "common_erreurs.h"
-#include "EF_appui.h"
+#include "EF_appuis.h"
 
-/* EF_appuis_init
- * Description : Initialise la liste des appuis
+int EF_appuis_init(Projet *projet)
+/* Description : Initialise la liste des types d'appuis
  * Paramètres : Projet *projet : la variable projet
  * Valeur renvoyée :
  *   Succès : 0
- *   Échec : valeur négative
+ *   Échec : -1 en cas de paramètres invalides :
+ *             (projet == NULL)
+ *           -2 en cas d'erreur d'allocation mémoire
  */
-int EF_appuis_init(Projet *projet)
 {
-    if (projet == NULL)
-        BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
+    BUGMSG(projet, -1, "EF_appuis_init\n");
     
+    // Trivial
     projet->ef_donnees.appuis = list_init();
-    if (projet->ef_donnees.appuis == NULL)
-        BUGTEXTE(-2, gettext("Erreur d'allocation mémoire.\n"));
-    else
-        return 0;
+    BUGMSG(projet->ef_donnees.appuis, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_appuis_init");
+    return 0;
 }
 
 
-/* EF_appuis_ajout
- * Description : Ajouter un appui à la structure
+int EF_appuis_ajout(Projet *projet, Type_EF_Appui x, Type_EF_Appui y, Type_EF_Appui z,
+  Type_EF_Appui rx, Type_EF_Appui ry, Type_EF_Appui rz)
+/* Description : Ajoute un appui à la structure en lui attribuant le numéro suivant le dernier
+ *                 appui existant.
  * Paramètres : Projet *projet : la variable projet
  *            : Type_EF_Appui x : définition du déplacement en x,
  *            : Type_EF_Appui y : définition du déplacement en y,
@@ -53,15 +55,19 @@ int EF_appuis_init(Projet *projet)
  *            : Type_EF_Appui rz : définition de la rotation autour de l'axe z.
  * Valeur renvoyée :
  *   Succès : 0
- *   Échec : valeur négative
+ *   Échec : -1 en cas de paramètres invalides :
+ *             (projet == NULL) ou
+ *             (projet->ef_donnees.appuis == NULL) ou
+ *             (x, y, z, rx, ry, rz sont de type inconnu)
+ *           -2 en cas d'erreur d'allocation mémoire
  */
-int EF_appuis_ajout(Projet *projet, Type_EF_Appui x, Type_EF_Appui y, Type_EF_Appui z, Type_EF_Appui rx, Type_EF_Appui ry, Type_EF_Appui rz)
 {
     EF_Appui        *appui_en_cours, appui_nouveau;
     
-    if ((projet == NULL) || (projet->ef_donnees.appuis == NULL))
-        BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
+    BUGMSG(projet, -1, "EF_appuis_ajout\n");
+    BUGMSG(projet->ef_donnees.appuis, -1, "EF_appuis_ajout\n");
     
+    // Trivial
     list_mvrear(projet->ef_donnees.appuis);
     appui_nouveau.x = x;
     switch (x)
@@ -74,7 +80,7 @@ int EF_appuis_ajout(Projet *projet, Type_EF_Appui x, Type_EF_Appui y, Type_EF_Ap
         }
         default:
         {
-            BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
+            BUGMSG(0, -1, "EF_appuis_ajout : x %d\n", x);
             break;
         }
     }
@@ -89,7 +95,7 @@ int EF_appuis_ajout(Projet *projet, Type_EF_Appui x, Type_EF_Appui y, Type_EF_Ap
         }
         default:
         {
-            BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
+            BUGMSG(0, -1, "EF_appuis_ajout : y %d\n", y);
             break;
         }
     }
@@ -104,7 +110,7 @@ int EF_appuis_ajout(Projet *projet, Type_EF_Appui x, Type_EF_Appui y, Type_EF_Ap
         }
         default:
         {
-            BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
+            BUGMSG(0, -1, "EF_appuis_ajout : z %d\n", z);
             break;
         }
     }
@@ -119,7 +125,7 @@ int EF_appuis_ajout(Projet *projet, Type_EF_Appui x, Type_EF_Appui y, Type_EF_Ap
         }
         default:
         {
-            BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
+            BUGMSG(0, -1, "EF_appuis_ajout : rx %d\n", rx);
             break;
         }
     }
@@ -134,7 +140,7 @@ int EF_appuis_ajout(Projet *projet, Type_EF_Appui x, Type_EF_Appui y, Type_EF_Ap
         }
         default:
         {
-            BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
+            BUGMSG(0, -1, "EF_appuis_ajout : ry %d\n", ry);
             break;
         }
     }
@@ -149,7 +155,7 @@ int EF_appuis_ajout(Projet *projet, Type_EF_Appui x, Type_EF_Appui y, Type_EF_Ap
         }
         default:
         {
-            BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
+            BUGMSG(0, -1, "EF_appuis_ajout : rz %d\n", rz);
             break;
         }
     }
@@ -160,26 +166,30 @@ int EF_appuis_ajout(Projet *projet, Type_EF_Appui x, Type_EF_Appui y, Type_EF_Ap
     else
         appui_nouveau.numero = appui_en_cours->numero+1;
     
-    if (list_insert_after(projet->ef_donnees.appuis, &(appui_nouveau), sizeof(appui_nouveau)) == NULL)
-        BUGTEXTE(-2, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(list_insert_after(projet->ef_donnees.appuis, &(appui_nouveau), sizeof(appui_nouveau)), -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_appuis_ajout");
     
     return 0;
 }
 
 
-/* EF_appuis_cherche_numero
- * Description : Positionne dans la liste des appuis au numéro souhaité
+EF_Appui* EF_appuis_cherche_numero(Projet *projet, int numero)
+/* Description : Renvoie l'appui correspondant au numéro souhaité
  * Paramètres : Projet *projet : la variable projet
  *            : int numero : le numéro de l'appui
  * Valeur renvoyée :
- *   Succès : poiteur vers l'appui
- *   Échec : NULL
+ *   Succès : pointeur vers l'appui
+ *   Échec : NULL en cas de paramètres invalides :
+ *             (projet == NULL) ou
+ *             (projet->ef_donnees.appuis == NULL) ou
+ *             (list_size(projet->ef_donnees.appuis) == 0) ou
+ *             l'appui n'existe pas.
  */
-EF_Appui* EF_appuis_cherche_numero(Projet *projet, int numero)
 {
-    if ((projet == NULL) || (projet->ef_donnees.appuis == NULL) || (list_size(projet->ef_donnees.appuis) == 0))
-        BUGTEXTE(NULL, gettext("Paramètres invalides.\n"));
+    BUGMSG(projet, NULL, "EF_appuis_cherche_numero\n");
+    BUGMSG(projet->ef_donnees.appuis, NULL, "EF_appuis_cherche_numero\n");
+    BUGMSG(list_size(projet->ef_donnees.appuis), NULL, "EF_appuis_cherche_numero\n");
     
+    // Trivial
     list_mvfront(projet->ef_donnees.appuis);
     do
     {
@@ -190,22 +200,24 @@ EF_Appui* EF_appuis_cherche_numero(Projet *projet, int numero)
     }
     while (list_mvnext(projet->ef_donnees.appuis) != NULL);
     
-    BUGTEXTE(NULL, gettext("Appui n°%d introuvable.\n"), numero);
+    BUGMSG(0, NULL, "EF_appuis_cherche_numero : numero %d\n", numero);
 }
 
 
-/* EF_appuis_free
- * Description : Libère l'ensemble des appuis
+int EF_appuis_free(Projet *projet)
+/* Description : Libère l'ensemble des types d'appuis ainsi que la liste les contenant
  * Paramètres : Projet *projet : la variable projet
  * Valeur renvoyée :
- *   Succès : 0 même si aucun appui n'est existant
- *   Échec : valeur négative si la liste des appuis n'est pas initialisée ou a déjà été libérée
+ *   Succès : 0
+ *   Échec : -1 en cas de paramètres invalides :
+ *             (projet == NULL) ou
+ *             (projet->ef_donnees.appuis == NULL)
  */
-int EF_appuis_free(Projet *projet)
 {
-    if ((projet == NULL) || (projet->ef_donnees.appuis == NULL))
-        BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
+    BUGMSG(projet, -1, "EF_appuis_cherche_numero\n");
+    BUGMSG(projet->ef_donnees.appuis, -1, "EF_appuis_cherche_numero\n");
     
+    // Trivial
     while (!list_empty(projet->ef_donnees.appuis))
     {
         EF_Appui    *appui = list_remove_front(projet->ef_donnees.appuis);

@@ -29,27 +29,27 @@
 #include <string.h>
 #include "common_erreurs.h"
 
-/* wrapped_label_size_allocate_callback
- * Description : Permet un redimensionnement en temps réel du composant label
+void wrapped_label_size_allocate_callback(GtkWidget *label, GtkAllocation *allocation, gpointer data __attribute__((unused)))
+/* Description : Permet un redimensionnement en temps réel du composant label
  * Paramètres : GtkWidget *label : composant label à redimensionner
  *            : GtkAllocation *allocation : nouvelle dimension
  *            : Projet *projet : la variable projet
  * Valeur renvoyée : Aucune
  */
-void wrapped_label_size_allocate_callback(GtkWidget *label, GtkAllocation *allocation, gpointer data __attribute__((unused)))
 {
     gtk_widget_set_size_request(label, allocation->width, -1);
     return;
 }
 
-/* common_generation_tooltip
- * Description : Génère une fenêtre de type tooltip contenant les informations spécifiées par le nom 'nom'.
- *             : les informations sont contenues dans le fichier DATADIR"/tooltips.xml" sous format XML.
- *             : L'ouverture de ce fichier permet de comprendre de la façon la plus rapide son format
+GtkWidget* common_tooltip_generation(const char *nom)
+/* Description : Génère une fenêtre de type tooltip contenant les informations spécifiées par
+ *                 le nom 'nom'. Les informations sont contenues dans le fichier 
+ *                 DATADIR"/tooltips.xml" sous format XML.
  * Paramètres : const char *nom : nom de la fenêtre
  * Valeur renvoyée : 
+ *   Succès : Un pointeur vers la fenêtre GTK+3
+ *   Échec : NULL
  */
-GtkWidget* common_generation_tooltip(const char *nom)
 {
     xmlDocPtr   doc;
     xmlNodePtr  racine;
@@ -57,25 +57,27 @@ GtkWidget* common_generation_tooltip(const char *nom)
     xmlChar     *nom1;
     int i = 0;
     
+    // Ouverture et vérification du fichier DATADIR"/tooltips.xml" par rapport au format XML.
     doc = xmlParseFile(DATADIR"/tooltips.xml");
-    if (doc == NULL)
-        BUGTEXTE(NULL, gettext("Le fichier '%s' est introuvable ou corrompu.\n"), DATADIR"/tooltips.xml");
+    BUGMSG(doc, NULL, gettext("%s : Le fichier '%s' est introuvable ou corrompu.\n"), "common_tooltip_generation", DATADIR"/tooltips.xml");
     
+    // Récupération du noeud racine.
     racine = xmlDocGetRootElement(doc);
-    if (racine == NULL)
-        BUGTEXTE(NULL, gettext("Le fichier '%s' est vide.\n"), DATADIR"/tooltips.xml");
+    BUGMSG(racine, NULL, gettext("%s : Le fichier '%s' est vide.\n"), "common_tooltip_generation", DATADIR"/tooltips.xml");
     
     for (n0 = racine; n0 != NULL; n0 = n0->next)
     {
+        // Vérification que le nom du noeud racine est bien "liste".
         if ((strcmp((char*)n0->name, "liste") == 0) && (n0->type == XML_ELEMENT_NODE) && (n0->children != NULL))
         {
             xmlNodePtr  n1;
             for (n1 = n0->children; n1 != NULL; n1 = n1->next)
             {
+                // Vérification que chaque noeud enfant d'un noeud "liste" est un noeud "tooltip".
                 if ((strcmp((char*)n1->name, "tooltip") == 0) && (n1->type == XML_ELEMENT_NODE) && (n1->children != NULL))
                 {
+                    // Si la propriété "reference" d'un noeud "tooltip" correspond à l'élément à afficher Alors
                     nom1 = xmlGetProp(n1, BAD_CAST "reference");
-                    // Si le nom du noeud correspond au noeud recherché
                     if (strcmp((char *) nom1, nom) == 0)
                     {
                         GtkWidget   *pwindow = gtk_window_new(GTK_WINDOW_TOPLEVEL);
@@ -83,7 +85,7 @@ GtkWidget* common_generation_tooltip(const char *nom)
                         GdkRGBA     color;
                         xmlNodePtr  n2;
                         
-                        // Initialisation de la fenêtre graphique
+                        //     Initialisation de la fenêtre graphique
                         gtk_widget_show(pvbox);
                         gtk_window_set_position(GTK_WINDOW(pwindow), GTK_WIN_POS_CENTER);
                         gtk_window_set_title(GTK_WINDOW(pwindow), (char *) nom1);
@@ -94,10 +96,13 @@ GtkWidget* common_generation_tooltip(const char *nom)
                         
                         for (n2 = n1->children; n2 != NULL; n2 = n2->next)
                         {
+                            //     Pour chaque noeud enfant
                             if (n2->type == XML_ELEMENT_NODE)
                             {
                                 xmlChar *contenu = xmlNodeGetContent(n2);
-                                // Contenu de type image
+                                //         Si le nom du noeud est "image" Alors
+                                //             Insertion de l'image dans la fenêtre tooltip.
+                                //         FinSi
                                 if (strcmp((char *) n2->name, "image") == 0)
                                 {
                                     char        *nom_fichier = malloc(sizeof(char)*(strlen(DATADIR)+strlen((char *) contenu)+2));
@@ -113,7 +118,9 @@ GtkWidget* common_generation_tooltip(const char *nom)
                                     gtk_widget_show(element);
                                     i++;
                                 }
-                                // Contenu de type texte
+                                //         Si le nom du noeud est "texte" Alors
+                                //             Insertion du texte dans la fenêtre tooltip.
+                                //         FinSi
                                 else if (strcmp((char *) n2->name, "texte") == 0)
                                 {
                                     GtkWidget   *element;
@@ -127,30 +134,34 @@ GtkWidget* common_generation_tooltip(const char *nom)
                                     gtk_widget_show(element);
                                     i++;
                                 }
-                                // Les dimensions de la fenêtre sont indiquées explicitement
+                                //         Si le nom du noeud est "dimensions" Alors
+                                //             Attribution des nouvelles dimensions de la fenêtre tooltip.
+                                //         FinSi
                                 else if (strcmp((char *) n2->name, "dimensions") == 0)
                                 {
                                     char    *fake = malloc(sizeof(char)*(strlen((char *)contenu)+1));
-                                    int largeur, hauteur;
+                                    int     largeur, hauteur;
                                     
                                     if (sscanf((char *)contenu, "%dx%d %s", &largeur, &hauteur, fake) != 2)
-                                        printf("'%s' n'est pas de la forme 'largeurxhauteur'.\n", (char *)contenu);
+                                        BUGMSG(0, NULL, gettext("%s : '%s' n'est pas de la forme 'largeurxhauteur'.\n"), "common_tooltip_generation", (char *)contenu);
                                     else
                                         gtk_window_set_default_size(GTK_WINDOW(pwindow), largeur, hauteur);
                                     free(fake);
                                 }
                                 xmlFree(contenu);
                             }
+                            //     FinPour
                         }
+                        xmlFreeDoc(doc);
                         return pwindow;
                     }
+                    // FinSi
                 }
             }
         }
     }
     
     xmlFreeDoc(doc);
-    
-    return NULL;
+    BUGMSG(0, NULL, gettext("%s : Paramètre invalide : %s %s\n"), "common_tooltip_generation", "nom", nom);
 }
 #endif

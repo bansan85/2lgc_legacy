@@ -19,28 +19,39 @@
 #ifndef __EF_RELACHEMENT_H
 #define __EF_RELACHEMENT_H
 
+#include "config.h"
 #include "common_projet.h"
 
-typedef enum
+typedef enum __Type_EF_Relachement
 {
     EF_RELACHEMENT_LIBRE,
     EF_RELACHEMENT_BLOQUE
 } Type_EF_Relachement;
 
-typedef struct __Relachement
+typedef struct __EF_Relachement
 {
     unsigned int        numero;
-    Type_EF_Relachement rx_debut;
+    Type_EF_Relachement rx_debut;   // Type de relachement du moment autour de l'axe x
+    void                *rx_d_data; // Paramètres complémentaires au relachement. N'est à 
+                                    // définir que si le type de relachement est différent
+                                    // de LIBRE et BLOQUE
     Type_EF_Relachement ry_debut;
+    void                *ry_d_data;
     Type_EF_Relachement rz_debut;
+    void                *rz_d_data;
     Type_EF_Relachement rx_fin;
+    void                *rx_f_data;
     Type_EF_Relachement ry_fin;
+    void                *ry_f_data;
     Type_EF_Relachement rz_fin;
-} Relachement;
+    void                *rz_f_data;
+} EF_Relachement;
 
 int EF_relachement_init(Projet *projet);
-int EF_relachement_ajout(Projet *projet, Type_EF_Relachement rx_debut, Type_EF_Relachement ry_debut, Type_EF_Relachement rz_debut, Type_EF_Relachement rx_fin, Type_EF_Relachement ry_fin, Type_EF_Relachement rz_fin);
-Relachement* EF_relachement_cherche_numero(Projet *projet, unsigned int numero);
+int EF_relachement_ajout(Projet *projet, Type_EF_Relachement rx_debut,
+  Type_EF_Relachement ry_debut, Type_EF_Relachement rz_debut, Type_EF_Relachement rx_fin,
+  Type_EF_Relachement ry_fin, Type_EF_Relachement rz_fin);
+EF_Relachement* EF_relachement_cherche_numero(Projet *projet, unsigned int numero);
 int EF_relachement_free(Projet *projet);
 
 #endif

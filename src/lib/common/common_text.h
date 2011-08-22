@@ -19,6 +19,7 @@
 #ifndef __COMMON_TEXT_H
 #define __COMMON_TEXT_H
 
+#include "config.h"
 void show_warranty();
 void show_help();
 

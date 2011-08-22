@@ -16,115 +16,136 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "config.h"
 #include <stdlib.h>
 #include <libintl.h>
 #include "common_projet.h"
 #include "common_erreurs.h"
 #include "EF_relachement.h"
 
-/* EF_relachement_init
- * Description : Initialise la liste des relachements
- * Paramètres : Projet *projet : la variable projet
- * Valeur renvoyée :
- *   Succès : 0
- *   Échec : valeur négative
- */
 int EF_relachement_init(Projet *projet)
-{
-    if (projet == NULL)
-        BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
-    
-    projet->ef_donnees.relachements = list_init();
-    if (projet->ef_donnees.relachements == NULL)
-        BUGTEXTE(-2, gettext("Erreur d'allocation mémoire.\n"));
-    else
-        return 0;
-}
-
-
-/* EF_relachement_ajout
- * Description : Ajouter un relachement
+/* Description : Initialise la liste des relachements
  * Paramètres : Projet *projet : la variable projet
- *            : Type_EF_Appui rx_debut : relachement de la rotation par rapport à l'axe x du début de la barre
- *            : Type_EF_Appui ry_debut : relachement de la rotation par rapport à l'axe y du début de la barre
- *            : Type_EF_Appui rz_debut : relachement de la rotation par rapport à l'axe z du début de la barre
- *            : Type_EF_Appui rx_fin : relachement de la rotation par rapport à l'axe x de la fin de la barre
- *            : Type_EF_Appui ry_fin : relachement de la rotation par rapport à l'axe y de la fin de la barre
- *            : Type_EF_Appui rz_fin : relachement de la rotation par rapport à l'axe z de la fin de la barre
  * Valeur renvoyée :
  *   Succès : 0
- *   Échec : valeur négative
+ *   Échec : -1 en cas de paramètres invalides :
+ *             (projet == NULL)
+ *           -2 en cas d'erreur d'allocation mémoire
  */
-int EF_relachement_ajout(Projet *projet, Type_EF_Relachement rx_debut, Type_EF_Relachement ry_debut, Type_EF_Relachement rz_debut, Type_EF_Relachement rx_fin, Type_EF_Relachement ry_fin, Type_EF_Relachement rz_fin)
 {
-    Relachement     *relachement_en_cours, relachement_nouveau;
+    BUGMSG(projet, -1, "EF_relachement_init\n");
     
-    if ((projet == NULL) || (projet->ef_donnees.relachements == NULL) || ((rx_debut == EF_RELACHEMENT_LIBRE) && (rx_fin == EF_RELACHEMENT_LIBRE)))
-        BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
-    
-    list_mvrear(projet->ef_donnees.relachements);
-    relachement_nouveau.rx_debut = rx_debut;
-    relachement_nouveau.ry_debut = ry_debut;
-    relachement_nouveau.rz_debut = rz_debut;
-    relachement_nouveau.rx_fin = rx_fin;
-    relachement_nouveau.ry_fin = ry_fin;
-    relachement_nouveau.rz_fin = rz_fin;
-    
-    relachement_en_cours = (Relachement *)list_rear(projet->ef_donnees.relachements);
-    if (relachement_en_cours == NULL)
-        relachement_nouveau.numero = 0;
-    else
-        relachement_nouveau.numero = relachement_en_cours->numero+1;
-    
-    if (list_insert_after(projet->ef_donnees.relachements, &(relachement_nouveau), sizeof(relachement_nouveau)) == NULL)
-        BUGTEXTE(-2, gettext("Erreur d'allocation mémoire.\n"));
+    // Trivial
+    projet->ef_donnees.relachements = list_init();
+    BUGMSG(projet->ef_donnees.relachements, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_relachement_init");
     
     return 0;
 }
 
 
-/* EF_relachement_cherche_numero
- * Description : Renvoie le relachement cherché
+int EF_relachement_ajout(Projet *projet, Type_EF_Relachement rx_debut,
+  Type_EF_Relachement ry_debut, Type_EF_Relachement rz_debut, Type_EF_Relachement rx_fin,
+  Type_EF_Relachement ry_fin, Type_EF_Relachement rz_fin)
+/* Description : Ajoute un relachement en lui attribuant le numéro suivant le dernier
+ *                 relachement existant
  * Paramètres : Projet *projet : la variable projet
- *            : unsigned int numero : le numéro du noeud
+ *            : Type_EF_Appui rx_debut : relachement de la rotation autour de l'axe x au début
+ *            : Type_EF_Appui ry_debut : relachement de la rotation autour de l'axe y au début
+ *            : Type_EF_Appui rz_debut : relachement de la rotation autour de l'axe z au début
+ *            : Type_EF_Appui rx_fin : relachement de la rotation autour de l'axe x à la fin
+ *            : Type_EF_Appui ry_fin : relachement de la rotation autour de l'axe y à la fin
+ *            : Type_EF_Appui rz_fin : relachement de la rotation autour de l'axe z à la fin
+ * Valeur renvoyée :
+ *   Succès : 0
+ *   Échec : -1 en cas de paramètres invalides :
+ *             (projet == NULL)
+ *             (projet->ef_donnees.relachements == NULL)
+ *             (rx_debut == EF_RELACHEMENT_LIBRE) && (rx_fin == EF_RELACHEMENT_LIBRE)
+ */
+{
+    EF_Relachement     *relachement_en_cours, relachement_nouveau;
+    
+    // Trivial
+    
+    BUGMSG(projet, -1, "EF_relachement_ajout\n");
+    BUGMSG(projet->ef_donnees.relachements, -1, "EF_relachement_ajout\n");
+    BUG(!((rx_debut == EF_RELACHEMENT_LIBRE) && (rx_fin == EF_RELACHEMENT_LIBRE)), -1);
+    
+    list_mvrear(projet->ef_donnees.relachements);
+    relachement_nouveau.rx_debut = rx_debut;
+    relachement_nouveau.rx_d_data = NULL;
+    relachement_nouveau.ry_debut = ry_debut;
+    relachement_nouveau.ry_d_data = NULL;
+    relachement_nouveau.rz_debut = rz_debut;
+    relachement_nouveau.rz_d_data = NULL;
+    relachement_nouveau.rx_fin = rx_fin;
+    relachement_nouveau.rx_f_data = NULL;
+    relachement_nouveau.ry_fin = ry_fin;
+    relachement_nouveau.ry_f_data = NULL;
+    relachement_nouveau.rz_fin = rz_fin;
+    relachement_nouveau.rz_f_data = NULL;
+    
+    relachement_en_cours = (EF_Relachement *)list_rear(projet->ef_donnees.relachements);
+    if (relachement_en_cours == NULL)
+        relachement_nouveau.numero = 0;
+    else
+        relachement_nouveau.numero = relachement_en_cours->numero+1;
+    
+    BUGMSG(list_insert_after(projet->ef_donnees.relachements, &(relachement_nouveau), sizeof(relachement_nouveau)), -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_relachement_ajout");
+    
+    return 0;
+}
+
+
+EF_Relachement* EF_relachement_cherche_numero(Projet *projet, unsigned int numero)
+/* Description : Renvoie le relachement cherché
+ * Paramètres : Projet *projet : la variable projet
+ *            : unsigned int numero : le numéro du relachement
  * Valeur renvoyée :
  *   Succès : pointeur vers le relachement recherché
- *   Échec : NULL
+ *   Échec : NULL en cas de paramètres invalides :
+ *             (projet == NULL) ou
+ *             (projet->ef_donnees.relachements == NULL) ou
+ *             (list_size(projet->ef_donnees.relachements) == 0) ou
+ *             relachement introuvable.
  */
-Relachement* EF_relachement_cherche_numero(Projet *projet, unsigned int numero)
 {
-    if ((projet == NULL) || (projet->ef_donnees.relachements == NULL) || (list_size(projet->ef_donnees.relachements) == 0))
-        BUGTEXTE(NULL, gettext("Paramètres invalides.\n"));
+    BUGMSG(projet, NULL, "EF_relachement_cherche_numero\n");
+    BUGMSG(projet->ef_donnees.relachements, NULL, "EF_relachement_cherche_numero\n");
+    BUGMSG(list_size(projet->ef_donnees.relachements), NULL, "EF_relachement_cherche_numero\n");
     
+    // Trivial
     list_mvfront(projet->ef_donnees.relachements);
     do
     {
-        Relachement *relachement = list_curr(projet->ef_donnees.relachements);
+        EF_Relachement *relachement = list_curr(projet->ef_donnees.relachements);
         
         if (relachement->numero == numero)
             return relachement;
     }
     while (list_mvnext(projet->ef_donnees.relachements) != NULL);
     
-    BUGTEXTE(NULL, gettext("Relachement n°%d introuvable.\n"), numero);
+    BUGMSG(0, NULL, gettext("Relachement n°%d introuvable.\n"), numero);
 }
 
 
-/* EF_relachement_free
- * Description : Libère l'ensemble des relachements
+int EF_relachement_free(Projet *projet)
+/* Description : Libère l'ensemble des relachements et la liste les contenant
  * Paramètres : Projet *projet : la variable projet
  * Valeur renvoyée :
- *   Succès : 0 même si aucun noeud n'est existant
- *   Échec : valeur négative si la liste des relachements n'est pas initialisée ou a déjà été libérée
+ *   Succès : 0
+ *   Échec : -1 en cas de paramètres invalides :
+ *             (projet == NULL) ou
+ *             (projet->ef_donnees.relachements == NULL)
  */
-int EF_relachement_free(Projet *projet)
 {
-    if ((projet == NULL) || (projet->ef_donnees.relachements == NULL))
-        BUGTEXTE(-1, gettext("Paramètres invalides.\n"));
+    BUGMSG(projet, -1, "EF_relachement_free\n");
+    BUGMSG(projet->ef_donnees.relachements, -1, "EF_relachement_free\n");
     
+    // Trivial
     while (!list_empty(projet->ef_donnees.relachements))
     {
-        Relachement *relachement = list_remove_front(projet->ef_donnees.relachements);
+        EF_Relachement *relachement = list_remove_front(projet->ef_donnees.relachements);
         
         free(relachement);
     }
@@ -134,4 +155,3 @@ int EF_relachement_free(Projet *projet)
     
     return 0;
 }
-

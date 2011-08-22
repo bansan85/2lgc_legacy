@@ -16,30 +16,36 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __COMMON_EQUATION_H
-#define __COMMON_EQUATION_H
+#ifndef __COMMON_FONCTION_H
+#define __COMMON_FONCTION_H
 
+#include "config.h"
 #include "common_projet.h"
 
-typedef struct                  // Fonction de base : coef_0 + coef_x*x + coef_x2*x*x
+typedef struct __Troncon // Définition de la structure Troncon qui contient le 
+                         // domaine de validité de la fonction
 {
-    double      debut_troncon;  // Début et la fin du tronçon de validité de la fonction
-    double      fin_troncon;
-    double      coef_0;         // La fonction mathématique est définie par la formule :
-    double      coef_x;         // coef_0 + coef_x*x + coef_x2*x^2 + coef_x3*x^3
-    double      coef_x2;
-    double      coef_x3;
+    double      debut_troncon;  // Début du tronçon de validité de la fonction
+    double      fin_troncon;    // Fin du tronçon de validité de la fonction
+    double      coef_0;         // La fonction mathématique est définie par :
+    double      coef_x;         // coef_0 + coef_x*x +
+    double      coef_x2;        // coef_x2*x^2 +
+    double      coef_x3;        // coef_x3*x^3
 } Troncon;
 
-typedef struct
+typedef struct __Fonction
 {
-    int         nb_troncons;    // Les fonctions n'étant pas forcément continues le long de la barre (par exemple charge ponctuelle),
-                                // il est nécessaire de définir plusieurs tronçons avec pour chaque tronçon sa fonction.
-                                // int nb_troncons défini donc le nombre de tronçons que possède la fonction.
-    Troncon     *troncons;      // Tableau dynamique contenant les fonctions par tronçon.
+    int          nb_troncons;    /* Les fonctions n'étant pas forcément continues
+                                 * le long de la barre (par exemple de part et 
+        * d'une charge ponctuelle), il est nécessaire de définir plusieurs
+        * tronçons avec pour chaque tronçon sa fonction.
+        * nb_troncons défini le nombre de tronçons que possède la fonction.*/
+    
+    Troncon      *troncons;      /* Tableau dynamique contenant les fonctions
+                                 * continues par tronçon. */
 } Fonction;
 
-// On est obligé de mettre action en void* et pas en Action* pour éviter une dépence circulaire des fichiers dû à l'inclusion du fichier en-tête "1990_actions.h"
+/* On est obligé de mettre action en void* et pas en Action* pour éviter une dépence circulaire des fichiers due à l'inclusion du fichier en-tête "1990_actions.h"*/
 int common_fonction_init(Projet *projet, void *action_void);
 int common_fonction_ajout(Fonction* fonction, double debut_troncon, double fin_troncon, double coef_0, double coef_x, double coef_x2, double coef_x3, double translate);
 int common_fonction_affiche(Fonction* fonction);

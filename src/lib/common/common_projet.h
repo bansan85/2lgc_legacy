@@ -19,96 +19,120 @@
 #ifndef __COMMON_PROJET_H
 #define __COMMON_PROJET_H
 
+#include "config.h"
 #include <list.h>
 #include <cholmod.h>
 #include <SuiteSparseQR_C.h>
 
-typedef enum
-{
-    PAYS_EU,
-    PAYS_FR
+typedef enum __Type_Pays
+{               // Spécifie le pays et l'annexe nationnale à utiliser.
+    PAYS_EU,    // Norme européenne sans application des annexes nationales
+    PAYS_FR     // Annexe nationale française
 } Type_Pays;
 
 
 typedef struct __CombinaisonsEL
-{
-    int     flags;      // bit 1    : ELU_EQU : méthode note 1 si le bit 1 = 0
-                    //      : ELU_EQU : méthode note 2 si le bit 1 = 1
-                    // bit 2 et 3   : ELU_GEO/STR : 00 méthode approche 1
-                    //      : ELU_GEO/STR : 01 méthode approche 2
-                    //      : ELU_GEO/STR : 10 méthode approche 3
-                    // bit 4    : ELU_ACC : 0 si utilisation de psi1,1
-                    //      : ELU_ACC : 1 si utilisation de psi2,1
-    LIST        *elu_equ;
-    LIST        *elu_str;
-    LIST        *elu_geo;
-    LIST        *elu_fat;
-    LIST        *elu_acc;
-    LIST        *elu_sis;
-    LIST        *els_car;
-    LIST        *els_freq;
-    LIST        *els_perm;
+{                           // Spécifie la méthode des combinaisons (E0,A1.3)
+    int     flags;          // bit 1      : ELU_EQU : méthode note 1 si le bit 1 = 0
+                            //            : ELU_EQU : méthode note 2 si le bit 1 = 1
+                            // bit 2 et 3 : ELU_GEO/STR : 00 méthode approche 1
+                            //            : ELU_GEO/STR : 01 méthode approche 2
+                            //            : ELU_GEO/STR : 10 méthode approche 3
+                            // bit 4      : ELU_ACC : 0 si utilisation de psi1,1
+                            //            : ELU_ACC : 1 si utilisation de psi2,1
+    LIST        *elu_equ;   // Liste des combinaisons selon l'ELU EQU
+    LIST        *elu_str;   // ..
+    LIST        *elu_geo;   //
+    LIST        *elu_fat;   //
+    LIST        *elu_acc;   //
+    LIST        *elu_sis;   //
+    LIST        *els_car;   //
+    LIST        *els_freq;  //
+    LIST        *els_perm;  //
 } CombinaisonsEL;
 
+#ifdef ENABLE_GTK
 typedef struct __List_Gtk
-{
-    void            *_1990;
+{                           // Contient toutes les données pour l'interface graphique GTK+3
+    void        *_1990; // pour l'Eurocode 0
 } List_Gtk;
+#endif
 
-typedef enum
-{
+typedef enum __Type_Element // La liste des différents éléments de type de barres gérés par le
+{                           // module élément fini.
     BETON_ELEMENT_POTEAU,
     BETON_ELEMENT_POUTRE
 } Type_Element;
 
-typedef struct
-{
+typedef struct __Beton_Donnees
+{                               // Liste des sections, matériaux et barres en béton.
     LIST            *sections;
-    LIST            *elements;
     LIST            *materiaux;
+    LIST            *barres;
 } Beton_Donnees;
 
-typedef struct
-{
-    cholmod_common      Common;
-    cholmod_common      *c;
-    cholmod_triplet     *a;
-    long            *ai;
-    long            *aj;
-    double          *ax;
-    cholmod_sparse      *A;
-    LIST            *noeuds;
-    int         **noeuds_flags_partielle;
-    int         **noeuds_flags_complete;
-    int         nb_colonne_matrice_partielle; // Nombre de colonne / ligne de la matrice de rigidité globale partielle
-    int         nb_colonne_matrice_complete; // Nombre de colonne / ligne de la matrice de rigidité globale complete
-    LIST            *appuis;
-    LIST            *relachements;
-    cholmod_triplet     *triplet_rigidite_partielle; // Liste temporaire avant transformation en matrice sparse
-    cholmod_triplet     *triplet_rigidite_complete; // Liste temporaire avant transformation en matrice sparse
-    double          max_rigidite;
-    unsigned int        triplet_rigidite_partielle_en_cours;
-    unsigned int        triplet_rigidite_complete_en_cours;
-    cholmod_sparse      *rigidite_matrice_partielle; // La matrice contient la matrice de rigidité globale mais sans les lignes / colonnes dont on bloque les déplacements
-    cholmod_sparse      *rigidite_matrice_complete; // La matrice contient la matrice de rigidité globale mais sans les lignes / colonnes dont on bloque les déplacements
-    SuiteSparseQR_C_factorization   *QR;
+typedef struct __EF
+{                               // Contient toutes les données nécessaires pour la réalisation
+                                // des calculs aux éléments finis et notamment les variables
+                                // utilisées par les librairies cholmod et spqr.
+    cholmod_common      Common; // Paramètres des calculs de la librairie cholmod.
+    cholmod_common      *c;     // Pointeur vers Common
+                                
+    LIST                *noeuds;       // Liste de tous les noeuds de la structure, que ce soit
+                                       // les noeuds définis par l'utilisateur ou les noeuds
+                                       // créés par la discrétisation des éléments.
+    LIST                *appuis;       // Liste des type d'appuis
+    LIST                *relachements; // Liste des relâchements des barres. Le relachement
+                                       // est ensuite appliqué à une barre
     
-//  Pour utiliser cholmod dans les calculs de matrices.
-//  cholmod_factor      *factor_rigidite_matrice_partielle; // Inverse de la matrice rigidite_matrice_calc
+    int                 **noeuds_pos_partielle; // Etabli une corrélation entre le degré de 
+    int                 **noeuds_pos_complete;  // liberté (x, y, z, rx, ry, rz) d'un noeud
+                                                // et sa position dans la matrice de rigidité
+    // globale partielle et complète. Par partielle, il faut comprendre la matrice de rigidité
+    // globale sans les lignes et les colonnes dont les déplacements sont connus ; cette même
+    // matrice qui permet de déterminer le déplacement des noeuds. La matrice de rigidité
+    // complète permet, sur la base du calcul des déplacements de déterminer les efforts aux
+    // noeuds et d'en déduire les sollicitations le long des barres. La position de la ligne /
+    // colonne dans la matrice se déterminera par la lecture de noeuds_pos_partielle[10][1]
+    // pour, par exemple, la position du noeud dont le numéro est le 10 et comme degré de
+    // liberté y. Si la valeur renvoyée est -1, cela signifie que le déplacement ou la rotation
+    // est bloquée et que le degré de liberté ne figure pas dans la matrice de rigidité
+    // partielle.
+    
+    cholmod_triplet     *triplet_rigidite_partielle; // Liste temporaire avant transformation
+    cholmod_triplet     *triplet_rigidite_complete;  // en matrice sparse. Les éléments sont 
+                                                     // ajoutés au fur et à mesure que la 
+    // rigidité des barres est ajoutée dans la matrice de rigidité.
+    
+    unsigned int        triplet_rigidite_partielle_en_cours; // Numéro du prochain triplet qui
+    unsigned int        triplet_rigidite_complete_en_cours;  // est à compléter.
+    
+    cholmod_sparse      *rigidite_matrice_partielle; // Matrice de rigidité globale ne
+                                                     // contenant pas les lignes et colonnes
+                                                     // dont les déplacements sont connus
+    cholmod_sparse      *rigidite_matrice_complete;  // Matrice de rigidité complète.
+    
+    SuiteSparseQR_C_factorization   *QR;             // Matrice partielle factorisée, utilisée
+                                                     // dans tous les calculs lors de la 
+    // résolution de chaque cas de charges.
+    
+    //  Pour utiliser cholmod dans les calculs de matrices sans la librarie QR.
+    //cholmod_factor      *factor; // Matrice partielle factorisée
 } EF;
 
 typedef struct __Projet
 {
-    LIST            *actions;
-    LIST            *niveaux_groupes;
-    CombinaisonsEL      combinaisons;
-    Type_Pays       pays;
-    List_Gtk        list_gtk;
-    EF          ef_donnees;
-    Beton_Donnees       beton;
+    LIST            *actions;           // Liste des actions contenant chacune des charges
+    LIST            *niveaux_groupes;   // Compatibilités entres actions
+    CombinaisonsEL  combinaisons;       // Combinaisons conformes aux Eurocodes
+    Type_Pays       pays;               // Pays de calculs
+    List_Gtk        list_gtk;           // Informations nécessaires pour l'interface graphique
+    EF              ef_donnees;         // Données communes à tous les éléments finis
+    Beton_Donnees   beton;              // Données spécifiques au béton
 } Projet;
 
-Projet *projet_init();
-int projet_free(Projet *projet);
+extern int cholmod_l_dump ;
+Projet *projet_init(Type_Pays pays);
+void projet_free(Projet *projet);
 
 #endif

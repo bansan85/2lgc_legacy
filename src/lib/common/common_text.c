@@ -16,19 +16,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "config.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <libintl.h>
 #include <locale.h>
 
 
-/* show_warranty
- * Description : Affiche les limites de la garantie
- * Paramètres : Aucun
- * Valeur renvoyée : Aucune
- */
 void show_warranty()
+/* Description : Affiche les limites de la garantie (articles 15, 16 et 17 de la licence GPL)
+ * Paramètres : Aucun
+ * Valeur renvoyée : void
+ */
 {
+    // Trivial
     printf(gettext("15. Disclaimer of Warranty.\n"));
     printf(gettext("\n"));
     printf(gettext("THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY\n"));
@@ -63,13 +64,13 @@ void show_warranty()
     return;
 }
 
-/* show_help
- * Description : Affiche l'aide
- * Paramètres : Aucun
- * Valeur renvoyée : Aucune
- */
 void show_help()
+/* Description : Affiche l'aide lorsque l'utilisateur lance le programme avec l'option -h
+ * Paramètres : Aucun
+ * Valeur renvoyée : void
+ */
 {
+    // Trivial
     printf(gettext("Utilisation : codegui [OPTION]... [FILE]...\n"));
     printf(gettext("Options :\n"));
     printf(gettext("\t-h, --help : affiche le présent menu\n"));

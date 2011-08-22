@@ -19,16 +19,11 @@
 #ifndef __1990_COEF_PSI_H
 #define __1990_COEF_PSI_H
 
+#include "config.h"
 #include "common_projet.h"
 
-double _1990_coef_psi0_bat_eu(int categorie);
-double _1990_coef_psi1_bat_eu(int categorie);
-double _1990_coef_psi2_bat_eu(int categorie);
-double _1990_coef_psi0_bat_fr(int categorie);
-double _1990_coef_psi1_bat_fr(int categorie);
-double _1990_coef_psi2_bat_fr(int categorie);
-double _1990_coef_psi0_bat(int categorie, Type_Pays pays);
-double _1990_coef_psi1_bat(int categorie, Type_Pays pays);
-double _1990_coef_psi2_bat(int categorie, Type_Pays pays);
+double _1990_coef_psi0_bat(int type, Type_Pays pays);
+double _1990_coef_psi1_bat(int type, Type_Pays pays);
+double _1990_coef_psi2_bat(int type, Type_Pays pays);
 
 #endif
