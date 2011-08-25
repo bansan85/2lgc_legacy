@@ -399,7 +399,6 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
                 double       xx, yy, zz, l;
                 double       a, b;                         /* Position de la charge par rapport au début de l'élément discrétisé */
                 double       debut_barre, fin_barre;       /* Début et fin de la barre discrétisée par rapport à la barre complète */
-                double       kAy, kBy, kAz, kBz; /* Inverse de la raideur autour de l'axe y et z (0 si encastré, infini si articulé) */
                 double       phiAy, phiBy, phiAz, phiBz;   /* Rotation sur appui lorsque la barre est isostatique */
                 double       MAx, MBx, MAy, MBy, MAz, MBz; /* Moments créés par la raideur */
                 double       FAx, FBx, FAy, FBy, FAz, FBz; /* Réactions d'appui*/
@@ -530,61 +529,6 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
                     l = ABS(fin_barre-debut_barre);
                     b = l-a;
                     
-    //             Calcul des coefficients kA et kB définissant l'inverse de la raideur aux
-    //               noeuds. Ainsi k = 0 en cas d'encastrement et infini en cas d'articulation.
-                    /* Moment en Y et Z */
-                    if (element_en_beton->relachement == NULL)
-                    {
-                        kAy = 0;
-                        kBy = 0;
-                        kAz = 0;
-                        kBz = 0;
-                    }
-                    else
-                    {
-                        if (noeud_debut != element_en_beton->noeud_debut)
-                        {
-                            kAy = 0;
-                            kAz = 0;
-                        }
-                        else
-                        {
-                            if (element_en_beton->relachement->ry_debut == EF_RELACHEMENT_BLOQUE)
-                                kAy = 0;
-                            else if (element_en_beton->relachement->ry_debut == EF_RELACHEMENT_LIBRE)
-                                kAy = MAXDOUBLE;
-                            else
-                                BUG(0, -1);
-                            if (element_en_beton->relachement->rz_debut == EF_RELACHEMENT_BLOQUE)
-                                kAz = 0;
-                            else if (element_en_beton->relachement->rz_debut == EF_RELACHEMENT_LIBRE)
-                                kAz = MAXDOUBLE;
-                            else
-                                BUG(0, -1);
-                        }
-                        
-                        if (noeud_fin != element_en_beton->noeud_fin)
-                        {
-                            kBy = 0;
-                            kBz = 0;
-                        }
-                        else
-                        {
-                            if (element_en_beton->relachement->ry_fin == EF_RELACHEMENT_BLOQUE)
-                                kBy = 0;
-                            else if (element_en_beton->relachement->ry_fin == EF_RELACHEMENT_LIBRE)
-                                kBy = MAXDOUBLE;
-                            else
-                                BUG(0, -1);
-                            if (element_en_beton->relachement->rz_fin == EF_RELACHEMENT_BLOQUE)
-                                kBz = 0;
-                            else if (element_en_beton->relachement->rz_fin == EF_RELACHEMENT_LIBRE)
-                                kBz = MAXDOUBLE;
-                            else
-                                BUG(0, -1);
-                        }
-                    }
-                    
     //             Détermination de la rotation aux noeuds de l'élément discrétidé en le
     //               supposant isostatique :\end{verbatim}\begin{align*}
     //               \varphi_{Ay} & = \frac{ F_z \cdot a}{6 \cdot E \cdot I_y \cdot l} b \cdot (2 \cdot l-a) + \frac{M_y}{6 \cdot E \cdot I_y \cdot l} \left(l^2-3*b^2 \right) \nonumber\\
@@ -608,45 +552,45 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
     //               M_{By} & = -\frac{b_y \cdot \varphi_{Ay}+(a_y+k_{Ay}) \cdot \varphi_{By}}{(a_y+k_{Ay}) \cdot (c_y+k_{By})-b_y^2} \nonumber\\
     //               M_{Az} & = \frac{b_z \cdot \varphi_{Bz}+(c_z+k_{Bz}) \cdot \varphi_{Az}}{(a_z+k_{Az}) \cdot (c_z+k_{Bz})-b_z^2} \nonumber\\
     //               M_{Bz} & = \frac{b_z \cdot \varphi_{Az}+(a_z+k_{Az}) \cdot \varphi_{Bz}}{(a_z+k_{Az}) \cdot (c_z+k_{Bz})-b_z^2}\end{align*}\begin{verbatim}
-                    if ((kAy == MAXDOUBLE) && (kBy == MAXDOUBLE))
+                    if ((element_en_beton->info_EF[pos].kAy == MAXDOUBLE) && (element_en_beton->info_EF[pos].kBy == MAXDOUBLE))
                     {
                         MAy = 0.;
                         MBy = 0.;
                     }
-                    else if (kAy == MAXDOUBLE)
+                    else if (element_en_beton->info_EF[pos].kAy == MAXDOUBLE)
                     {
                         MAy = 0.;
-                        MBy = -phiBy/(element_en_beton->info_EF[pos].cy+kBy);
+                        MBy = -phiBy/(element_en_beton->info_EF[pos].cy+element_en_beton->info_EF[pos].kBy);
                     }
-                    else if (kBy == MAXDOUBLE)
+                    else if (element_en_beton->info_EF[pos].kBy == MAXDOUBLE)
                     {
-                        MAy = -phiAy/(element_en_beton->info_EF[pos].ay+kAy);
+                        MAy = -phiAy/(element_en_beton->info_EF[pos].ay+element_en_beton->info_EF[pos].kAy);
                         MBy = 0.;
                     }
                     else
                     {
-                        MAy = -(element_en_beton->info_EF[pos].by*phiBy+(element_en_beton->info_EF[pos].cy+kBy)*phiAy)/((element_en_beton->info_EF[pos].ay+kAy)*(element_en_beton->info_EF[pos].cy+kBy)-element_en_beton->info_EF[pos].by*element_en_beton->info_EF[pos].by);
-                        MBy = -(element_en_beton->info_EF[pos].by*phiAy+(element_en_beton->info_EF[pos].ay+kAy)*phiBy)/((element_en_beton->info_EF[pos].ay+kAy)*(element_en_beton->info_EF[pos].cy+kBy)-element_en_beton->info_EF[pos].by*element_en_beton->info_EF[pos].by);
+                        MAy = -(element_en_beton->info_EF[pos].by*phiBy+(element_en_beton->info_EF[pos].cy+element_en_beton->info_EF[pos].kBy)*phiAy)/((element_en_beton->info_EF[pos].ay+element_en_beton->info_EF[pos].kAy)*(element_en_beton->info_EF[pos].cy+element_en_beton->info_EF[pos].kBy)-element_en_beton->info_EF[pos].by*element_en_beton->info_EF[pos].by);
+                        MBy = -(element_en_beton->info_EF[pos].by*phiAy+(element_en_beton->info_EF[pos].ay+element_en_beton->info_EF[pos].kAy)*phiBy)/((element_en_beton->info_EF[pos].ay+element_en_beton->info_EF[pos].kAy)*(element_en_beton->info_EF[pos].cy+element_en_beton->info_EF[pos].kBy)-element_en_beton->info_EF[pos].by*element_en_beton->info_EF[pos].by);
                     }
-                    if ((kAz == MAXDOUBLE) && (kBz == MAXDOUBLE))
+                    if ((element_en_beton->info_EF[pos].kAz == MAXDOUBLE) && (element_en_beton->info_EF[pos].kBz == MAXDOUBLE))
                     {
                         MAz = 0.;
                         MBz = 0.;
                     }
-                    else if (kAz == MAXDOUBLE)
+                    else if (element_en_beton->info_EF[pos].kAz == MAXDOUBLE)
                     {
                         MAz = 0.;
-                        MBz = phiBz/(element_en_beton->info_EF[pos].cz+kBz);
+                        MBz = phiBz/(element_en_beton->info_EF[pos].cz+element_en_beton->info_EF[pos].kBz);
                     }
-                    else if (kBz == MAXDOUBLE)
+                    else if (element_en_beton->info_EF[pos].kBz == MAXDOUBLE)
                     {
-                        MAz = phiAz/(element_en_beton->info_EF[pos].az+kAz);
+                        MAz = phiAz/(element_en_beton->info_EF[pos].az+element_en_beton->info_EF[pos].kAz);
                         MBz = 0.;
                     }
                     else
                     {
-                        MAz = (element_en_beton->info_EF[pos].bz*phiBz+(element_en_beton->info_EF[pos].cz+kBz)*phiAz)/((element_en_beton->info_EF[pos].az+kAz)*(element_en_beton->info_EF[pos].cz+kBz)-element_en_beton->info_EF[pos].bz*element_en_beton->info_EF[pos].bz);
-                        MBz = (element_en_beton->info_EF[pos].bz*phiAz+(element_en_beton->info_EF[pos].az+kAz)*phiBz)/((element_en_beton->info_EF[pos].az+kAz)*(element_en_beton->info_EF[pos].cz+kBz)-element_en_beton->info_EF[pos].bz*element_en_beton->info_EF[pos].bz);
+                        MAz = (element_en_beton->info_EF[pos].bz*phiBz+(element_en_beton->info_EF[pos].cz+element_en_beton->info_EF[pos].kBz)*phiAz)/((element_en_beton->info_EF[pos].az+element_en_beton->info_EF[pos].kAz)*(element_en_beton->info_EF[pos].cz+element_en_beton->info_EF[pos].kBz)-element_en_beton->info_EF[pos].bz*element_en_beton->info_EF[pos].bz);
+                        MBz = (element_en_beton->info_EF[pos].bz*phiAz+(element_en_beton->info_EF[pos].az+element_en_beton->info_EF[pos].kAz)*phiBz)/((element_en_beton->info_EF[pos].az+element_en_beton->info_EF[pos].kAz)*(element_en_beton->info_EF[pos].cz+element_en_beton->info_EF[pos].kBz)-element_en_beton->info_EF[pos].bz*element_en_beton->info_EF[pos].bz);
                     }
                     
     //             Réaction d'appui sur les noeuds :\end{verbatim}\begin{align*}

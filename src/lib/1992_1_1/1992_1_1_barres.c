@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include <libintl.h>
 #include <cholmod.h>
+#include <values.h>
 #include "common_projet.h"
 #include "common_erreurs.h"
 #include "common_maths.h"
@@ -343,7 +344,7 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
             noeud1 = element->noeuds_intermediaires[j-1];
             noeud2 = element->noeuds_intermediaires[j];
         }
-    //     Calcul de L_x, L_y, L_z et L.
+    //     Calcul des L_x, L_y, L_z et L.
         xx = noeud2->position.x - noeud1->position.x;
         yy = noeud2->position.y - noeud1->position.y;
         zz = noeud2->position.z - noeud1->position.z;
@@ -354,13 +355,67 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
     //               b_y & = \frac{l}{6 \cdot E \cdot I_y} \nonumber\\
     //               a_z = c_z & = \frac{l}{3 \cdot E \cdot I_z} \nonumber\\
     //               b_z & = \frac{l}{6 \cdot E \cdot I_z}\end{align*}\begin{verbatim}
-                    
         element->info_EF[j].ay = ll/(3*E*Iy);
         element->info_EF[j].by = ll/(6*E*Iy);
         element->info_EF[j].cy = ll/(3*E*Iy);
         element->info_EF[j].az = ll/(3*E*Iz);
         element->info_EF[j].bz = ll/(6*E*Iz);
         element->info_EF[j].cz = ll/(3*E*Iz);
+        
+    //     Calcul des coefficients kA et kB définissant l'inverse de la raideur aux
+    //       noeuds. Ainsi k = 0 en cas d'encastrement et infini en cas d'articulation.
+            /* Moment en Y et Z */
+        if (element->relachement == NULL)
+        {
+            element->info_EF[j].kAy = 0;
+            element->info_EF[j].kBy = 0;
+            element->info_EF[j].kAz = 0;
+            element->info_EF[j].kBz = 0;
+        }
+        else
+        {
+            if (noeud1 != element->noeud_debut)
+            {
+                element->info_EF[j].kAy = 0;
+                element->info_EF[j].kAz = 0;
+            }
+            else
+            {
+                if (element->relachement->ry_debut == EF_RELACHEMENT_BLOQUE)
+                    element->info_EF[j].kAy = 0;
+                else if (element->relachement->ry_debut == EF_RELACHEMENT_LIBRE)
+                    element->info_EF[j].kAy = MAXDOUBLE;
+                else
+                    BUG(0, -1);
+                if (element->relachement->rz_debut == EF_RELACHEMENT_BLOQUE)
+                    element->info_EF[j].kAz = 0;
+                else if (element->relachement->rz_debut == EF_RELACHEMENT_LIBRE)
+                    element->info_EF[j].kAz = MAXDOUBLE;
+                else
+                    BUG(0, -1);
+            }
+            
+            if (noeud2 != element->noeud_fin)
+            {
+                element->info_EF[j].kBy = 0;
+                element->info_EF[j].kBz = 0;
+            }
+            else
+            {
+                if (element->relachement->ry_fin == EF_RELACHEMENT_BLOQUE)
+                    element->info_EF[j].kBy = 0;
+                else if (element->relachement->ry_fin == EF_RELACHEMENT_LIBRE)
+                    element->info_EF[j].kBy = MAXDOUBLE;
+                else
+                    BUG(0, -1);
+                if (element->relachement->rz_fin == EF_RELACHEMENT_BLOQUE)
+                    element->info_EF[j].kBz = 0;
+                else if (element->relachement->rz_fin == EF_RELACHEMENT_LIBRE)
+                    element->info_EF[j].kBz = MAXDOUBLE;
+                else
+                    BUG(0, -1);
+            }
+        }
         
     //     Calcul des valeurs de la matrice de rigidité locale :
         triplet = cholmod_l_allocate_triplet(12, 12, 40, 0, CHOLMOD_REAL, projet->ef_donnees.c);
