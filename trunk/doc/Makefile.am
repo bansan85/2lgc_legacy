@@ -199,6 +199,7 @@ doc : manuel.tex
 	./input_com.sh "int _1990_ponderations_genere\(" '../src/lib/1990/1990_ponderations.c' _1990_ponderations_genere_com.tex.tmp || exit 1;
 	./input.sh "void _1990_ponderations_affiche_tout" '../src/lib/1990/1990_ponderations.c' _1990_ponderations_affiche_tout_func.tex.tmp || exit 1;
 	./input_com.sh "void _1990_ponderations_affiche_tout" '../src/lib/1990/1990_ponderations.c' _1990_ponderations_affiche_tout_com.tex.tmp || exit 1;
+	./input_struct.sh 'typedef struct __Barre_Info_EF' '../src/lib/1992_1_1/1992_1_1_barres.h' 1992_1_1_barres_Barre_Info_EF.tex.tmp || exit 1;
 	./input_struct.sh 'typedef struct __Beton_Barre' '../src/lib/1992_1_1/1992_1_1_barres.h' 1992_1_1_barres_Beton_Barre.tex.tmp || exit 1;
 	./input.sh "int _1992_1_1_barres_init" '../src/lib/1992_1_1/1992_1_1_barres.c' _1992_1_1_barres_init_func.tex.tmp || exit 1;
 	./input_com.sh "int _1992_1_1_barres_init" '../src/lib/1992_1_1/1992_1_1_barres.c' _1992_1_1_barres_init_com.tex.tmp || exit 1;
