@@ -37,6 +37,11 @@ typedef struct __Barre_Info_EF
     double              az;
     double              bz;
     double              cz;
+    
+    double              kAy; // coefficient défissant l'inverse de la raideur aux noeuds
+    double              kAz;
+    double              kBy;
+    double              kBz;
 } Barre_Info_EF;
 
 typedef struct __Beton_Barre
