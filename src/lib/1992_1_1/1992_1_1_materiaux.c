@@ -25,41 +25,49 @@
 #include "common_erreurs.h"
 #include "1992_1_1_materiaux.h"
 
-/* _1992_1_1_materiaux_init
- * Description : Initialise la liste des matériaux en béton
+int _1992_1_1_materiaux_init(Projet *projet)
+/* Description : Initialise la liste des matériaux en béton
  * Paramètres : Projet *projet : la variable projet
  * Valeur renvoyée :
  *   Succès : 0
- *   Échec : valeur négative
+ *   Échec : -1 en cas de paramètres invalides :
+ *             (projet == NULL)
+ *           -2 en cas d'erreur d'allocation mémoire
  */
-int _1992_1_1_materiaux_init(Projet *projet)
 {
-    if (projet == NULL)
-        BUGMSG(0, -1, gettext("Paramètres invalides.\n"));
+    BUGMSG(projet, -1, "_1992_1_1_materiaux_init\n");
     
+    // Trivial
     projet->beton.materiaux = list_init();
-    if (projet->beton.materiaux == NULL)
-        BUGMSG(0, -2, gettext("Erreur d'allocation mémoire.\n"));
-    else
-        return 0;
+    BUGMSG(projet->beton.materiaux, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1992_1_1_materiaux_init");
+    
+    return 0;
 }
 
-/* _1992_1_1_materiaux_ajout
- * Description : Ajoute un matériau en béton
- * Paramètres : Projet *projet : la variable projet
- *            : double fck : résistance à la compression du béton à 28 jours
- *            : double nu : coefficient de poisson pour un béton non fissuré
- * Valeur renvoyée :
- *   Succès : 0 même si aucun matériau n'est existant
- *   Échec : valeur négative si la liste des matériaux en béton  n'est pas initialisée ou a déjà été libérée
- */
 int _1992_1_1_materiaux_ajout(Projet *projet, double fck, double nu)
+/* Description : Ajoute un matériau en béton et calcule ses caractéristiques mécaniques.
+ *                 Les propriétés du béton sont déterminées conformément au tableau 3.1 de
+ *                 l'Eurocode 2-1-1 les valeurs de fckcube est déterminée par interpolation
+ *                 linéaire si nécessaire.
+ * Paramètres : Projet *projet : la variable projet
+ *            : double fck : résistance à la compression du béton à 28 jours.
+ *            : double nu : coefficient de poisson pour un béton non fissuré.
+ * Valeur renvoyée :
+ *   Succès : 0
+ *   Échec : -1 en cas de paramètres invalides :
+ *             (projet == NULL) ou
+ *             (projet->beton.materiaux == NULL) ou
+ *             (fck > 90.)
+ *           -2 en cas d'erreur d'allocation mémoire.
+ */
 {
     Beton_Materiau  *materiau_en_cours, materiau_nouveau;
     
-    if ((projet == NULL) || (projet->beton.materiaux == NULL) || (fck > 90.))
-        BUGMSG(0, -1, gettext("Paramètres invalides.\n"));
-    
+    // Trivial
+    BUGMSG(projet, -1, "_1992_1_1_materiaux_ajout\n");
+    BUGMSG(projet->beton.materiaux, -1, "_1992_1_1_materiaux_ajout\n");
+    BUGMSG(fck <= 90.*(1+ERREUR_RELATIVE_MIN), -1, "_1992_1_1_materiaux_ajout\n");
+
     list_mvrear(projet->beton.materiaux);
     materiau_nouveau.fck = fck*1000000.;
     if (fck < 12.)
@@ -133,26 +141,30 @@ int _1992_1_1_materiaux_ajout(Projet *projet, double fck, double nu)
     else
         materiau_nouveau.numero = materiau_en_cours->numero+1;
     
-    if (list_insert_after(projet->beton.materiaux, &(materiau_nouveau), sizeof(materiau_nouveau)) == NULL)
-        BUGMSG(0, -6, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(list_insert_after(projet->beton.materiaux, &(materiau_nouveau), sizeof(materiau_nouveau)), -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1992_1_1_materiaux_ajout");
     
     return 0;
 }
 
 
-/* _1992_1_1_materiaux_cherche_numero
- * Description : Positionne dans la liste des materiaux en béton l'élément courant au numéro souhaité
+Beton_Materiau* _1992_1_1_materiaux_cherche_numero(Projet *projet, unsigned int numero)
+/* Description : Positionne dans la liste des materiaux en béton l'élément courant au numéro
+ *                 souhaité
  * Paramètres : Projet *projet : la variable projet
  *            : int numero : le numéro du matériau
  * Valeur renvoyée :
  *   Succès : pointeur vers le matériau en béton
- *   Échec : NULL
+ *   Échec : NULL en cas de paramètres invalides :
+ *             (projet == NULL) ou
+ *             (projet->beton.materiaux == NULL) ou
+ *             (list_size(projet->beton.materiaux) == 0)
  */
-Beton_Materiau* _1992_1_1_materiaux_cherche_numero(Projet *projet, unsigned int numero)
 {
-    if ((projet == NULL) || (projet->beton.materiaux == NULL) || (list_size(projet->beton.materiaux) == 0))
-        BUGMSG(0, NULL, gettext("Paramètres invalides.\n"));
+    BUGMSG(projet, NULL, "_1992_1_1_materiaux_cherche_numero\n");
+    BUGMSG(projet->beton.materiaux, NULL, "_1992_1_1_materiaux_cherche_numero\n");
+    BUGMSG(list_size(projet->beton.materiaux), NULL, "_1992_1_1_materiaux_cherche_numero\n");
     
+    // Trivial
     list_mvfront(projet->beton.materiaux);
     do
     {
@@ -163,22 +175,24 @@ Beton_Materiau* _1992_1_1_materiaux_cherche_numero(Projet *projet, unsigned int 
     }
     while (list_mvnext(projet->beton.materiaux) != NULL);
     
-    BUGMSG(0, NULL, gettext("Materiau en béton n°%d introuvable.\n"), numero);
+    BUGMSG(0, NULL, gettext("%s : Matériau en béton n°%d introuvable.\n"), "_1992_1_1_materiaux_cherche_numero", numero);
 }
 
 
-/* _1992_1_1_materiaux_free
- * Description : Libère l'ensemble des matériaux en béton
+int _1992_1_1_materiaux_free(Projet *projet)
+/* Description : Libère l'ensemble des matériaux en béton
  * Paramètres : Projet *projet : la variable projet
  * Valeur renvoyée :
- *   Succès : 0 même si aucun matériau n'est existant
- *   Échec : valeur négative si la liste des matériaux en béton n'est pas initialisée ou a déjà été libérée
+ *   Succès : 0
+ *   Échec : -1 en cas de paramètres invalides :
+ *             (projet == NULL) ou
+ *             (projet->beton.materiaux == NULL)
  */
-int _1992_1_1_materiaux_free(Projet *projet)
 {
-    if ((projet == NULL) || (projet->beton.materiaux == NULL))
-        BUGMSG(0, -1, gettext("Paramètres invalides.\n"));
+    BUGMSG(projet, -1, "_1992_1_1_materiaux_free\n");
+    BUGMSG(projet->beton.materiaux, -1, "_1992_1_1_materiaux_free\n");
     
+    // Trivial
     while (!list_empty(projet->beton.materiaux))
     {
         Beton_Materiau *materiau = list_remove_front(projet->beton.materiaux);

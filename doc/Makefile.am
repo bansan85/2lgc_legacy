@@ -212,6 +212,35 @@ doc : manuel.tex
 	./input_com.sh "int _1992_1_1_barres_rigidite_ajout_tout" '../src/lib/1992_1_1/1992_1_1_barres.c' _1992_1_1_barres_rigidite_ajout_tout_com.tex.tmp || exit 1;
 	./input.sh "int _1992_1_1_barres_free" '../src/lib/1992_1_1/1992_1_1_barres.c' _1992_1_1_barres_free_func.tex.tmp || exit 1;
 	./input_com.sh "int _1992_1_1_barres_free" '../src/lib/1992_1_1/1992_1_1_barres.c' _1992_1_1_barres_free_com.tex.tmp || exit 1;
+	./input_struct.sh 'typedef struct __Beton_Materiau' '../src/lib/1992_1_1/1992_1_1_materiaux.h' 1992_1_1_materiaux_Beton_Materiau_struct.tex.tmp || exit 1;
+	./input.sh "int _1992_1_1_materiaux_init" '../src/lib/1992_1_1/1992_1_1_materiaux.c' _1992_1_1_materiaux_init_func.tex.tmp || exit 1;
+	./input_com.sh "int _1992_1_1_materiaux_init" '../src/lib/1992_1_1/1992_1_1_materiaux.c' _1992_1_1_materiaux_init_com.tex.tmp || exit 1;
+	./input.sh "int _1992_1_1_materiaux_ajout" '../src/lib/1992_1_1/1992_1_1_materiaux.c' _1992_1_1_materiaux_ajout_func.tex.tmp || exit 1;
+	./input_com.sh "int _1992_1_1_materiaux_ajout" '../src/lib/1992_1_1/1992_1_1_materiaux.c' _1992_1_1_materiaux_ajout_com.tex.tmp || exit 1;
+	./input.sh "Beton_Materiau\* _1992_1_1_materiaux_cherche_numero" '../src/lib/1992_1_1/1992_1_1_materiaux.c' _1992_1_1_materiaux_cherche_numero_func.tex.tmp || exit 1;
+	./input_com.sh "Beton_Materiau\* _1992_1_1_materiaux_cherche_numero" '../src/lib/1992_1_1/1992_1_1_materiaux.c' _1992_1_1_materiaux_cherche_numero_com.tex.tmp || exit 1;
+	./input.sh "int _1992_1_1_materiaux_free" '../src/lib/1992_1_1/1992_1_1_materiaux.c' _1992_1_1_materiaux_free_func.tex.tmp || exit 1;
+	./input_com.sh "int _1992_1_1_materiaux_free" '../src/lib/1992_1_1/1992_1_1_materiaux.c' _1992_1_1_materiaux_free_com.tex.tmp || exit 1;
+	./input_struct.sh 'typedef enum __Type_Beton_Section' '../src/lib/1992_1_1/1992_1_1_section.h' 1992_1_1_section_Type_Beton_Section_struct.tex.tmp || exit 1;
+	./input_struct.sh 'typedef struct __Beton_Section_Caracteristiques' '../src/lib/1992_1_1/1992_1_1_section.h' 1992_1_1_section_Beton_Section_Caracteristiques_struct.tex.tmp || exit 1;
+	./input_struct.sh 'typedef struct __Beton_Section_Rectangulaire' '../src/lib/1992_1_1/1992_1_1_section.h' 1992_1_1_section_Beton_Section_Rectangulaire_struct.tex.tmp || exit 1;
+	./input_struct.sh 'typedef struct __Beton_Section_T' '../src/lib/1992_1_1/1992_1_1_section.h' 1992_1_1_section_Beton_Section_T_struct.tex.tmp || exit 1;
+	./input_struct.sh 'typedef struct __Beton_Section_Carre' '../src/lib/1992_1_1/1992_1_1_section.h' 1992_1_1_section_Beton_Section_Carre_struct.tex.tmp || exit 1;
+	./input_struct.sh 'typedef struct __Beton_Section_Circulaire' '../src/lib/1992_1_1/1992_1_1_section.h' 1992_1_1_section_Beton_Section_Circulaire_struct.tex.tmp || exit 1;
+	./input.sh "int _1992_1_1_sections_init" '../src/lib/1992_1_1/1992_1_1_section.c' _1992_1_1_sections_init_func.tex.tmp || exit 1;
+	./input_com.sh "int _1992_1_1_sections_init" '../src/lib/1992_1_1/1992_1_1_section.c' _1992_1_1_sections_init_com.tex.tmp || exit 1;
+	./input.sh "int _1992_1_1_sections_ajout_rectangulaire" '../src/lib/1992_1_1/1992_1_1_section.c' _1992_1_1_sections_ajout_rectangulaire_func.tex.tmp || exit 1;
+	./input_com.sh "int _1992_1_1_sections_ajout_rectangulaire" '../src/lib/1992_1_1/1992_1_1_section.c' _1992_1_1_sections_ajout_rectangulaire_com.tex.tmp || exit 1;
+	./input.sh "int _1992_1_1_sections_ajout_T" '../src/lib/1992_1_1/1992_1_1_section.c' _1992_1_1_sections_ajout_T_func.tex.tmp || exit 1;
+	./input_com.sh "int _1992_1_1_sections_ajout_T" '../src/lib/1992_1_1/1992_1_1_section.c' _1992_1_1_sections_ajout_T_com.tex.tmp || exit 1;
+	./input.sh "int _1992_1_1_sections_ajout_carre" '../src/lib/1992_1_1/1992_1_1_section.c' _1992_1_1_sections_ajout_carre_func.tex.tmp || exit 1;
+	./input_com.sh "int _1992_1_1_sections_ajout_carre" '../src/lib/1992_1_1/1992_1_1_section.c' _1992_1_1_sections_ajout_carre_com.tex.tmp || exit 1;
+	./input.sh "int _1992_1_1_sections_ajout_circulaire" '../src/lib/1992_1_1/1992_1_1_section.c' _1992_1_1_sections_ajout_circulaire_func.tex.tmp || exit 1;
+	./input_com.sh "int _1992_1_1_sections_ajout_circulaire" '../src/lib/1992_1_1/1992_1_1_section.c' _1992_1_1_sections_ajout_circulaire_com.tex.tmp || exit 1;
+	./input.sh "void\* _1992_1_1_sections_cherche_numero" '../src/lib/1992_1_1/1992_1_1_section.c' _1992_1_1_sections_cherche_numero_func.tex.tmp || exit 1;
+	./input_com.sh "void\* _1992_1_1_sections_cherche_numero" '../src/lib/1992_1_1/1992_1_1_section.c' _1992_1_1_sections_cherche_numero_com.tex.tmp || exit 1;
+	./input.sh "int _1992_1_1_sections_free" '../src/lib/1992_1_1/1992_1_1_section.c' _1992_1_1_sections_free_func.tex.tmp || exit 1;
+	./input_com.sh "int _1992_1_1_sections_free" '../src/lib/1992_1_1/1992_1_1_section.c' _1992_1_1_sections_free_com.tex.tmp || exit 1;
 	pdflatex manuel.tex manuel.pdf
 
 CLEANFILES = *.log *.aux *pdf *.out *.tmp
