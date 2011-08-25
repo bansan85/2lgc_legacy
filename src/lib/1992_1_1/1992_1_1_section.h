@@ -78,8 +78,8 @@ typedef struct __Beton_Section_Circulaire
 
 
 int _1992_1_1_sections_init(Projet *projet);
-int _1992_1_1_sections_ajout_rectangulaire(Projet *projet, double largeur, double hauteur);
-int _1992_1_1_sections_ajout_T(Projet *projet, double largeur_table, double largeur_ame, double hauteur_table, double hauteur_ame);
+int _1992_1_1_sections_ajout_rectangulaire(Projet *projet, double l, double h);
+int _1992_1_1_sections_ajout_T(Projet *projet, double lt, double la, double ht, double ha);
 int _1992_1_1_sections_ajout_carre(Projet *projet, double cote);
 int _1992_1_1_sections_ajout_circulaire(Projet *projet, double diametre);
 void* _1992_1_1_sections_cherche_numero(Projet *projet, unsigned int numero);

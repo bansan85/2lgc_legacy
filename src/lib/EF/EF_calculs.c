@@ -302,22 +302,22 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
  *           -3 en cas d'erreur due à une fonction interne
  */
 {
-    Action              *action_en_cours;
-    cholmod_triplet     *triplet_deplacements_totaux, *triplet_deplacements_partiels;
-    cholmod_triplet     *triplet_force_partielle, *triplet_force_complete;
-    cholmod_sparse      *sparse_force, *deplacement_partiel;
-    cholmod_dense       *dense_force;
-    cholmod_triplet     *triplet_efforts_locaux_finaux, *triplet_efforts_globaux_initiaux, *triplet_efforts_locaux_initiaux, *triplet_efforts_globaux_finaux;
-    cholmod_sparse      *sparse_efforts_locaux_finaux,  *sparse_efforts_globaux_initiaux,  *sparse_efforts_locaux_initiaux,  *sparse_efforts_globaux_finaux;
-    long                *ai, *aj;
-    double              *ax;
-    long                *ai2, *aj2;
-    double              *ax2;
-    long                *ai3, *aj3;
-    double              *ax3;
-    unsigned int        i, j, k;
-    double              max_effort;
-    cholmod_dense       *X, *Y;
+    Action          *action_en_cours;
+    cholmod_triplet *triplet_deplacements_totaux, *triplet_deplacements_partiels;
+    cholmod_triplet *triplet_force_partielle, *triplet_force_complete;
+    cholmod_sparse  *sparse_force, *deplacement_partiel;
+    cholmod_dense   *dense_force;
+    cholmod_triplet *triplet_efforts_locaux_finaux, *triplet_efforts_globaux_initiaux, *triplet_efforts_locaux_initiaux, *triplet_efforts_globaux_finaux;
+    cholmod_sparse  *sparse_efforts_locaux_finaux,  *sparse_efforts_globaux_initiaux,  *sparse_efforts_locaux_initiaux,  *sparse_efforts_globaux_finaux;
+    long            *ai, *aj;
+    double          *ax;
+    long            *ai2, *aj2;
+    double          *ax2;
+    long            *ai3, *aj3;
+    double          *ax3;
+    unsigned int    i, j, k;
+    double          max_effort;
+    cholmod_dense   *X, *Y;
     
     BUGMSG(projet, -1, "EF_calculs_resoud_charge\n");
     BUGMSG(projet->actions, -1, "EF_calculs_resoud_charge\n");
@@ -399,14 +399,14 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
                 double       xx, yy, zz, l;
                 double       a, b;                         /* Position de la charge par rapport au début de l'élément discrétisé */
                 double       debut_barre, fin_barre;       /* Début et fin de la barre discrétisée par rapport à la barre complète */
-                double       kAx, kBx, kAy, kBy, kAz, kBz; /* Inverse de la raideur autour de l'axe y et z (0 si encastré, infini si articulé) */
+                double       kAy, kBy, kAz, kBz; /* Inverse de la raideur autour de l'axe y et z (0 si encastré, infini si articulé) */
                 double       phiAy, phiBy, phiAz, phiBz;   /* Rotation sur appui lorsque la barre est isostatique */
-                double       ay, by, cy, az, bz, cz;       /* Souplesse de la barre*/
                 double       MAx, MBx, MAy, MBy, MAz, MBz; /* Moments créés par la raideur */
                 double       FAx, FBx, FAy, FBy, FAz, FBz; /* Réactions d'appui*/
                 EF_Noeud    *noeud_debut, *noeud_fin;
                 Beton_Barre *element_en_beton = charge_barre->barre;
                 unsigned int num = element_en_beton->numero;
+                unsigned int pos;                         /* numéro de l'élément dans la discrétisation */
                 
     //         Récupération des caractéristiques mécaniques de l'élément.
                 if ((element_en_beton->type == BETON_ELEMENT_POTEAU) || (element_en_beton->type == BETON_ELEMENT_POUTRE))
@@ -481,26 +481,27 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
                     if (element_en_beton->discretisation_element == 0)
                     /* Pas de discrétisation */
                     {
+                        pos = 0;
                         noeud_debut = element_en_beton->noeud_debut;
                         noeud_fin = element_en_beton->noeud_fin;
                     }
                     else
                     /* On cherche le noeud de départ et le noeud de fin */
                     {
-                        i = 0;
+                        pos = 0;
                         l = -1.;
                         /* On regarde pour chaque noeud intermédiaire si la position de la charge devient inférieur à la distance entre le noeud de départ et le noeud intermédiaire */
-                        while ((i<element_en_beton->discretisation_element) && (l < charge_barre->position))
+                        while ((pos<element_en_beton->discretisation_element) && (l < charge_barre->position))
                         {
-                            xx = element_en_beton->noeuds_intermediaires[i]->position.x - element_en_beton->noeud_debut->position.x;
-                            yy = element_en_beton->noeuds_intermediaires[i]->position.y - element_en_beton->noeud_debut->position.y;
-                            zz = element_en_beton->noeuds_intermediaires[i]->position.z - element_en_beton->noeud_debut->position.z;
+                            xx = element_en_beton->noeuds_intermediaires[pos]->position.x - element_en_beton->noeud_debut->position.x;
+                            yy = element_en_beton->noeuds_intermediaires[pos]->position.y - element_en_beton->noeud_debut->position.y;
+                            zz = element_en_beton->noeuds_intermediaires[pos]->position.z - element_en_beton->noeud_debut->position.z;
                             l = sqrt(xx*xx+yy*yy+zz*zz);
-                            i++;
+                            pos++;
                         }
-                        i--;
+                        pos--;
                         /* Alors la position de la charge est compris entre le début du noeud et le premier noeud intermédiaire */
-                        if (i==0)
+                        if (pos==0)
                         {
                             noeud_debut = element_en_beton->noeud_debut;
                             noeud_fin = element_en_beton->noeuds_intermediaires[0];
@@ -508,13 +509,13 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
                         /* Alors la position de la charge est compris entre le dernier noeud intermédiaire et le noeud de fin de la barre */
                         else if (i == element_en_beton->discretisation_element-1)
                         {
-                            noeud_debut = element_en_beton->noeuds_intermediaires[i];
+                            noeud_debut = element_en_beton->noeuds_intermediaires[pos];
                             noeud_fin = element_en_beton->noeud_fin;
                         }
                         else
                         {
-                            noeud_debut = element_en_beton->noeuds_intermediaires[i-1];
-                            noeud_fin = element_en_beton->noeuds_intermediaires[i];
+                            noeud_debut = element_en_beton->noeuds_intermediaires[pos-1];
+                            noeud_fin = element_en_beton->noeuds_intermediaires[pos];
                         }
                     }
                     xx = noeud_debut->position.x - element_en_beton->noeud_debut->position.x;
@@ -531,24 +532,6 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
                     
     //             Calcul des coefficients kA et kB définissant l'inverse de la raideur aux
     //               noeuds. Ainsi k = 0 en cas d'encastrement et infini en cas d'articulation.
-                    /* Moment en X */
-                    if ((element_en_beton->relachement == NULL) || ((element_en_beton->relachement->rx_debut == EF_RELACHEMENT_BLOQUE) && (element_en_beton->relachement->rx_fin == EF_RELACHEMENT_BLOQUE)))
-                    {
-                        kAx = 0.;
-                        kBx = 0.;
-                    }
-                    else if ((element_en_beton->relachement->rx_debut == EF_RELACHEMENT_LIBRE) && (element_en_beton->relachement->rx_fin == EF_RELACHEMENT_BLOQUE))
-                    {
-                        kAx = MAXDOUBLE;
-                        kBx = 0.;
-                    }
-                    else if ((element_en_beton->relachement->rx_debut == EF_RELACHEMENT_BLOQUE) && (element_en_beton->relachement->rx_fin == EF_RELACHEMENT_LIBRE))
-                    {
-                        kAx = 0.;
-                        kBx = MAXDOUBLE;
-                    }
-                    else
-                        BUG(0, -1);
                     /* Moment en Y et Z */
                     if (element_en_beton->relachement == NULL)
                     {
@@ -613,18 +596,6 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
                     phiAz =  ax2[1]*a/(6*E*Iz*l)*b*(2*l-a)-ax2[5]/(6*E*Iz*l)*(l*l-3*b*b);
                     phiBz = -ax2[1]*a/(6*E*Iz*l)*(l*l-a*a)-ax2[5]/(6*E*Iz*l)*(l*l-3*a*a);
                     
-    //             Calcul des paramètres de souplesse de la poutre :\end{verbatim}\begin{align*}
-    //               a_y = c_y & = \frac{l}{3 \cdot E \cdot I_y} \nonumber\\
-    //               b_y & = \frac{l}{6 \cdot E \cdot I_y} \nonumber\\
-    //               a_z = c_z & = \frac{l}{3 \cdot E \cdot I_z} \nonumber\\
-    //               b_z & = \frac{l}{6 \cdot E \cdot I_z}\end{align*}\begin{verbatim}
-                    ay = l/(3*E*Iy);
-                    by = l/(6*E*Iy);
-                    cy = ay;
-                    az = l/(3*E*Iz);
-                    bz = l/(6*E*Iz);
-                    cz = az;
-                    
     //             Détermination des moments de rotation :\end{verbatim}\begin{align*}
     //             M_{Ax} & = M_x*b/l\nonumber\\
     //             M_{Bx} & = M_x*a/l\end{align*}\begin{verbatim}
@@ -645,17 +616,17 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
                     else if (kAy == MAXDOUBLE)
                     {
                         MAy = 0.;
-                        MBy = -phiBy/(cy+kBy);
+                        MBy = -phiBy/(element_en_beton->info_EF[pos].cy+kBy);
                     }
                     else if (kBy == MAXDOUBLE)
                     {
-                        MAy = -phiAy/(ay+kAy);
+                        MAy = -phiAy/(element_en_beton->info_EF[pos].ay+kAy);
                         MBy = 0.;
                     }
                     else
                     {
-                        MAy = -(by*phiBy+(cy+kBy)*phiAy)/((ay+kAy)*(cy+kBy)-by*by);
-                        MBy = -(by*phiAy+(ay+kAy)*phiBy)/((ay+kAy)*(cy+kBy)-by*by);
+                        MAy = -(element_en_beton->info_EF[pos].by*phiBy+(element_en_beton->info_EF[pos].cy+kBy)*phiAy)/((element_en_beton->info_EF[pos].ay+kAy)*(element_en_beton->info_EF[pos].cy+kBy)-element_en_beton->info_EF[pos].by*element_en_beton->info_EF[pos].by);
+                        MBy = -(element_en_beton->info_EF[pos].by*phiAy+(element_en_beton->info_EF[pos].ay+kAy)*phiBy)/((element_en_beton->info_EF[pos].ay+kAy)*(element_en_beton->info_EF[pos].cy+kBy)-element_en_beton->info_EF[pos].by*element_en_beton->info_EF[pos].by);
                     }
                     if ((kAz == MAXDOUBLE) && (kBz == MAXDOUBLE))
                     {
@@ -665,17 +636,17 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
                     else if (kAz == MAXDOUBLE)
                     {
                         MAz = 0.;
-                        MBz = phiBz/(cz+kBz);
+                        MBz = phiBz/(element_en_beton->info_EF[pos].cz+kBz);
                     }
                     else if (kBz == MAXDOUBLE)
                     {
-                        MAz = phiAz/(az+kAz);
+                        MAz = phiAz/(element_en_beton->info_EF[pos].az+kAz);
                         MBz = 0.;
                     }
                     else
                     {
-                        MAz = (bz*phiBz+(cz+kBz)*phiAz)/((az+kAz)*(cz+kBz)-bz*bz);
-                        MBz = (bz*phiAz+(az+kAz)*phiBz)/((az+kAz)*(cz+kBz)-bz*bz);
+                        MAz = (element_en_beton->info_EF[pos].bz*phiBz+(element_en_beton->info_EF[pos].cz+kBz)*phiAz)/((element_en_beton->info_EF[pos].az+kAz)*(element_en_beton->info_EF[pos].cz+kBz)-element_en_beton->info_EF[pos].bz*element_en_beton->info_EF[pos].bz);
+                        MBz = (element_en_beton->info_EF[pos].bz*phiAz+(element_en_beton->info_EF[pos].az+kAz)*phiBz)/((element_en_beton->info_EF[pos].az+kAz)*(element_en_beton->info_EF[pos].cz+kBz)-element_en_beton->info_EF[pos].bz*element_en_beton->info_EF[pos].bz);
                     }
                     
     //             Réaction d'appui sur les noeuds :\end{verbatim}\begin{align*}
@@ -1051,7 +1022,7 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
     //     Détermination des efforts (F_{Ax}, F_{Bx}, F_{Ay}, F_{By}, F_{Az}, F_{Bz}, M_{Ax},
     //       M_{Bx}, M_{Ay}, M_{By}, M_{Az} et M_{Bz}) dans le repère local : \end{verbatim}\begin{align*}
             // \{ F \}_{local} = [K] \cdot \{ \Delta \}_{local}\end{align*}\begin{verbatim}
-            sparse_effort_locaux = cholmod_l_ssmult(element_en_beton->matrice_rigidite_locale[j], sparse_deplacement_locaux, 0, 1, TRUE, projet->ef_donnees.c);
+            sparse_effort_locaux = cholmod_l_ssmult(element_en_beton->info_EF[j].matrice_rigidite_locale, sparse_deplacement_locaux, 0, 1, TRUE, projet->ef_donnees.c);
             BUGMSG(sparse_effort_locaux, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_resoud_charge");
             
             ax = sparse_deplacement_locaux->x;

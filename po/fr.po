@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2011-08-23 12:59+0200\n"
+"POT-Creation-Date: 2011-08-25 16:55+0200\n"
 "PO-Revision-Date: 2011-08-22 11:44+0100\n"
 "Last-Translator: LE GARREC Vincent <vlg@2lgc.org>\n"
 "Language-Team: French\n"
@@ -17,49 +17,25 @@ msgstr ""
 msgid "Impossible d'initialiser gtk.\n"
 msgstr "Impossible d'initialiser gtk.\n"
 
-#: src/lib/1992_1_1/1992_1_1_section.c:37
-#: src/lib/1992_1_1/1992_1_1_section.c:62
-#: src/lib/1992_1_1/1992_1_1_section.c:114
-#: src/lib/1992_1_1/1992_1_1_section.c:170
-#: src/lib/1992_1_1/1992_1_1_section.c:213
-#: src/lib/1992_1_1/1992_1_1_section.c:254
-#: src/lib/1992_1_1/1992_1_1_section.c:280
-#: src/lib/1990/1990_ponderations.c:489 src/lib/1990/1990_ponderations.c:574
-#: src/lib/1990/1990_ponderations.c:935 src/lib/1990/1990_ponderations.c:1036
-msgid "Paramètres invalides.\n"
-msgstr "Paramètres invalides.\n"
-
 #: src/lib/1992_1_1/1992_1_1_section.c:41
-#: src/lib/1992_1_1/1992_1_1_section.c:67
-#: src/lib/1992_1_1/1992_1_1_section.c:91
-#: src/lib/1992_1_1/1992_1_1_section.c:119
-#: src/lib/1992_1_1/1992_1_1_section.c:151
-#: src/lib/1992_1_1/1992_1_1_section.c:175
-#: src/lib/1992_1_1/1992_1_1_section.c:194
-#: src/lib/1992_1_1/1992_1_1_section.c:218
-#: src/lib/1992_1_1/1992_1_1_section.c:237
-#: src/lib/1990/1990_ponderations.c:127 src/lib/1990/1990_ponderations.c:143
-#: src/lib/1990/1990_ponderations.c:148
-msgid "Erreur d'allocation mémoire.\n"
-msgstr "Erreur d'allocation mémoire.\n"
-
-#: src/lib/1992_1_1/1992_1_1_section.c:266
-#, c-format
-msgid "Section en béton n°%d introuvable.\n"
-msgstr "Section en béton n°%d introuvable.\n"
-
-#: src/lib/1992_1_1/1992_1_1_barres.c:43
-#: src/lib/1992_1_1/1992_1_1_barres.c:101
-#: src/lib/1992_1_1/1992_1_1_barres.c:127
-#: src/lib/1992_1_1/1992_1_1_barres.c:278
-#: src/lib/1992_1_1/1992_1_1_barres.c:312
-#: src/lib/1992_1_1/1992_1_1_barres.c:314
-#: src/lib/1992_1_1/1992_1_1_barres.c:321
-#: src/lib/1992_1_1/1992_1_1_barres.c:352
-#: src/lib/1992_1_1/1992_1_1_barres.c:613
-#: src/lib/1992_1_1/1992_1_1_barres.c:619
-#: src/lib/1992_1_1/1992_1_1_barres.c:621
-#: src/lib/1992_1_1/1992_1_1_barres.c:624
+#: src/lib/1992_1_1/1992_1_1_section.c:68
+#: src/lib/1992_1_1/1992_1_1_section.c:126
+#: src/lib/1992_1_1/1992_1_1_section.c:164
+#: src/lib/1992_1_1/1992_1_1_section.c:189
+#: src/lib/1992_1_1/1992_1_1_section.c:211
+#: src/lib/1992_1_1/1992_1_1_section.c:236
+#: src/lib/1992_1_1/1992_1_1_section.c:259
+#: src/lib/1992_1_1/1992_1_1_barres.c:43 src/lib/1992_1_1/1992_1_1_barres.c:98
+#: src/lib/1992_1_1/1992_1_1_barres.c:105
+#: src/lib/1992_1_1/1992_1_1_barres.c:130
+#: src/lib/1992_1_1/1992_1_1_barres.c:281
+#: src/lib/1992_1_1/1992_1_1_barres.c:315
+#: src/lib/1992_1_1/1992_1_1_barres.c:317
+#: src/lib/1992_1_1/1992_1_1_barres.c:367
+#: src/lib/1992_1_1/1992_1_1_barres.c:629
+#: src/lib/1992_1_1/1992_1_1_barres.c:635
+#: src/lib/1992_1_1/1992_1_1_barres.c:637
+#: src/lib/1992_1_1/1992_1_1_barres.c:640
 #: src/lib/1992_1_1/1992_1_1_materiaux.c:42
 #: src/lib/1992_1_1/1992_1_1_materiaux.c:144
 #: src/lib/1990/1990_ponderations.c:244 src/lib/1990/1990_ponderations.c:289
@@ -108,15 +84,15 @@ msgstr "Section en béton n°%d introuvable.\n"
 #: src/lib/EF/EF_calculs.c:347 src/lib/EF/EF_calculs.c:434
 #: src/lib/EF/EF_calculs.c:443 src/lib/EF/EF_calculs.c:464
 #: src/lib/EF/EF_calculs.c:467 src/lib/EF/EF_calculs.c:470
-#: src/lib/EF/EF_calculs.c:812 src/lib/EF/EF_calculs.c:830
-#: src/lib/EF/EF_calculs.c:833 src/lib/EF/EF_calculs.c:836
-#: src/lib/EF/EF_calculs.c:873 src/lib/EF/EF_calculs.c:876
-#: src/lib/EF/EF_calculs.c:879 src/lib/EF/EF_calculs.c:894
-#: src/lib/EF/EF_calculs.c:896 src/lib/EF/EF_calculs.c:902
-#: src/lib/EF/EF_calculs.c:907 src/lib/EF/EF_calculs.c:934
-#: src/lib/EF/EF_calculs.c:940 src/lib/EF/EF_calculs.c:953
-#: src/lib/EF/EF_calculs.c:1023 src/lib/EF/EF_calculs.c:1046
-#: src/lib/EF/EF_calculs.c:1049 src/lib/EF/EF_calculs.c:1055
+#: src/lib/EF/EF_calculs.c:783 src/lib/EF/EF_calculs.c:801
+#: src/lib/EF/EF_calculs.c:804 src/lib/EF/EF_calculs.c:807
+#: src/lib/EF/EF_calculs.c:844 src/lib/EF/EF_calculs.c:847
+#: src/lib/EF/EF_calculs.c:850 src/lib/EF/EF_calculs.c:865
+#: src/lib/EF/EF_calculs.c:867 src/lib/EF/EF_calculs.c:873
+#: src/lib/EF/EF_calculs.c:878 src/lib/EF/EF_calculs.c:905
+#: src/lib/EF/EF_calculs.c:911 src/lib/EF/EF_calculs.c:924
+#: src/lib/EF/EF_calculs.c:994 src/lib/EF/EF_calculs.c:1017
+#: src/lib/EF/EF_calculs.c:1020 src/lib/EF/EF_calculs.c:1026
 #: src/lib/EF/EF_noeud.c:40 src/lib/EF/EF_noeud.c:87
 #: src/lib/EF/EF_charge_barre_ponctuelle.c:96 src/lib/EF/EF_appuis.c:40
 #: src/lib/EF/EF_appuis.c:169 src/lib/EF/EF_relachement.c:40
@@ -125,12 +101,22 @@ msgstr "Section en béton n°%d introuvable.\n"
 msgid "%s : Erreur d'allocation mémoire.\n"
 msgstr "%s : Erreur d'allocation mémoire.\n"
 
-#: src/lib/1992_1_1/1992_1_1_barres.c:161
+#: src/lib/1992_1_1/1992_1_1_section.c:97 src/lib/1990/1990_ponderations.c:127
+#: src/lib/1990/1990_ponderations.c:143 src/lib/1990/1990_ponderations.c:148
+msgid "Erreur d'allocation mémoire.\n"
+msgstr "Erreur d'allocation mémoire.\n"
+
+#: src/lib/1992_1_1/1992_1_1_section.c:294
+#, fuzzy, c-format
+msgid "%s : Section en béton n°%d introuvable.\n"
+msgstr "Section en béton n°%d introuvable.\n"
+
+#: src/lib/1992_1_1/1992_1_1_barres.c:164
 #, c-format
 msgid "Barre en béton %d introuvable.\n"
 msgstr "Barre en béton %d introuvable.\n"
 
-#: src/lib/1992_1_1/1992_1_1_materiaux.c:177
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:178
 #, fuzzy, c-format
 msgid "%s : Matériau en béton n°%d introuvable.\n"
 msgstr "Materiau en béton n°%d introuvable.\n"
@@ -152,6 +138,11 @@ msgid ""
 msgstr ""
 "Le dernier niveau ne possède aucune combinaison permettant la génération des "
 "pondérations.\n"
+
+#: src/lib/1990/1990_ponderations.c:489 src/lib/1990/1990_ponderations.c:574
+#: src/lib/1990/1990_ponderations.c:935 src/lib/1990/1990_ponderations.c:1036
+msgid "Paramètres invalides.\n"
+msgstr "Paramètres invalides.\n"
 
 #: src/lib/1990/1990_ponderations.c:844
 #, c-format

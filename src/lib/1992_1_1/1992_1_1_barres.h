@@ -27,6 +27,18 @@
 #include "common_projet.h"
 #include "cholmod.h"
 
+typedef struct __Barre_Info_EF
+{
+    cholmod_sparse      *matrice_rigidite_locale;
+    
+    double              ay; // Paramètres de souplesse de la poutre
+    double              by;
+    double              cy;
+    double              az;
+    double              bz;
+    double              cz;
+} Barre_Info_EF;
+
 typedef struct __Beton_Barre
 {
     unsigned int        numero;
@@ -37,12 +49,12 @@ typedef struct __Beton_Barre
     EF_Noeud            *noeud_debut;
     EF_Noeud            *noeud_fin;
     unsigned int        discretisation_element;     // Nombre de noeuds intermédiaires
+    Barre_Info_EF       *info_EF;                   // Une info par élément discrétisé
     EF_Noeud            **noeuds_intermediaires;
     EF_Relachement      *relachement;
     
     cholmod_sparse      *matrice_rotation;
     cholmod_sparse      *matrice_rotation_transpose;
-    cholmod_sparse      **matrice_rigidite_locale; // Une matrice de rigidité par élément
 } Beton_Barre;
 
 int _1992_1_1_barres_init(Projet *projet);

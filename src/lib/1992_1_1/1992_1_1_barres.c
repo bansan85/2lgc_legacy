@@ -93,6 +93,10 @@ int _1992_1_1_barres_ajout(Projet *projet, Type_Element type, unsigned int secti
         element_nouveau.relachement = NULL;
     
     element_nouveau.discretisation_element = discretisation_element;
+    
+    element_nouveau.info_EF = (Barre_Info_EF*)malloc(sizeof(Barre_Info_EF)*(discretisation_element+1));
+    BUGMSG(element_nouveau.info_EF, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1992_1_1_barres_ajout");
+    
     if (discretisation_element != 0)
     {
         unsigned int    i;
@@ -116,7 +120,6 @@ int _1992_1_1_barres_ajout(Projet *projet, Type_Element type, unsigned int secti
     
     element_nouveau.matrice_rotation = NULL;
     element_nouveau.matrice_rotation_transpose = NULL;
-    element_nouveau.matrice_rigidite_locale = NULL;
     
     element_en_cours = (Beton_Barre *)list_rear(projet->beton.barres);
     if (element_en_cours == NULL)
@@ -317,12 +320,11 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
     // Une fois la matrice de rotation déterminée, il est nécessaire de calculer la matrice de
     //   rigidité élémentaire dans le repère local. La poutre pouvant être discrétisée, une
     //   matrice de rigidité élémentaire est déterminée pour chaque tronçon.
-    element->matrice_rigidite_locale = (cholmod_sparse **)malloc(sizeof(cholmod_sparse *)*element->discretisation_element+1);
-    BUGMSG(element->matrice_rigidite_locale, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1992_1_1_barres_rigidite_ajout");
     // Pour chaque discrétisation
     for (j=0;j<element->discretisation_element+1;j++)
     {
-    //     Détermine du noeud de départ et de fin
+    
+    //     Détermination du noeud de départ et de fin
         if (j==0)
         {
             noeud1 = element->noeud_debut;
@@ -346,6 +348,19 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
         yy = noeud2->position.y - noeud1->position.y;
         zz = noeud2->position.z - noeud1->position.z;
         ll = sqrt(xx*xx+yy*yy+zz*zz);
+        
+    //     Détermination des paramètres de souplesse de l'élément de barre :\end{verbatim}\begin{align*}
+    //               a_y = c_y & = \frac{l}{3 \cdot E \cdot I_y} \nonumber\\
+    //               b_y & = \frac{l}{6 \cdot E \cdot I_y} \nonumber\\
+    //               a_z = c_z & = \frac{l}{3 \cdot E \cdot I_z} \nonumber\\
+    //               b_z & = \frac{l}{6 \cdot E \cdot I_z}\end{align*}\begin{verbatim}
+                    
+        element->info_EF[j].ay = ll/(3*E*Iy);
+        element->info_EF[j].by = ll/(6*E*Iy);
+        element->info_EF[j].cy = ll/(3*E*Iy);
+        element->info_EF[j].az = ll/(3*E*Iz);
+        element->info_EF[j].bz = ll/(6*E*Iz);
+        element->info_EF[j].cz = ll/(3*E*Iz);
         
     //     Calcul des valeurs de la matrice de rigidité locale :
         triplet = cholmod_l_allocate_triplet(12, 12, 40, 0, CHOLMOD_REAL, projet->ef_donnees.c);
@@ -610,13 +625,13 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
             ai[i] = 9;  aj[i] = 9;  ax[i] = G*J/ll;  i++;
         }
         
-        element->matrice_rigidite_locale[j] = cholmod_l_triplet_to_sparse(triplet, 0, projet->ef_donnees.c);
-        BUGMSG(element->matrice_rigidite_locale[j], -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1992_1_1_barres_rigidite_ajout");
+        element->info_EF[j].matrice_rigidite_locale = cholmod_l_triplet_to_sparse(triplet, 0, projet->ef_donnees.c);
+        BUGMSG(element->info_EF[j].matrice_rigidite_locale, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1992_1_1_barres_rigidite_ajout");
         cholmod_l_free_triplet(&triplet, projet->ef_donnees.c);
         
     //       Calcul la matrice locale dans le repère globale :\end{verbatim}\begin{displaymath}
     //       [K]_{global} = [R] \cdot [K]_{local} \cdot [R]^{-1} = [R] \cdot [K]_{local} \cdot [R]^T\end{displaymath}\begin{verbatim}
-        sparse_tmp = cholmod_l_ssmult(element->matrice_rotation, element->matrice_rigidite_locale[j], 0, 1, 0, projet->ef_donnees.c);
+        sparse_tmp = cholmod_l_ssmult(element->matrice_rotation, element->info_EF[j].matrice_rigidite_locale, 0, 1, 0, projet->ef_donnees.c);
         BUGMSG(sparse_tmp, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1992_1_1_barres_rigidite_ajout");
         matrice_rigidite_globale = cholmod_l_ssmult(sparse_tmp, element->matrice_rotation_transpose, 0, 1, 0, projet->ef_donnees.c);
         BUGMSG(matrice_rigidite_globale, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1992_1_1_barres_rigidite_ajout");
@@ -738,8 +753,10 @@ int _1992_1_1_barres_free(Projet *projet)
 /* Description : Libère l'ensemble des éléments  en béton
  * Paramètres : Projet *projet : la variable projet
  * Valeur renvoyée :
- *   Succès : 0 même si aucune section n'est existante
- *   Échec : valeur négative si la liste des éléments n'est pas initialisée ou a déjà été libérée
+ *   Succès : 0
+ *   Échec : -1 en cas de paramètres invalides :
+ *             (projet == NULL) ou
+ *             (projet->beton.barres == NULL)
  */
 {
     unsigned int     i;
@@ -756,8 +773,8 @@ int _1992_1_1_barres_free(Projet *projet)
         cholmod_l_free_sparse(&(element->matrice_rotation), projet->ef_donnees.c);
         cholmod_l_free_sparse(&(element->matrice_rotation_transpose), projet->ef_donnees.c);
         for (i=0;i<=element->discretisation_element;i++)
-            cholmod_l_free_sparse(&(element->matrice_rigidite_locale[i]), projet->ef_donnees.c);
-        free(element->matrice_rigidite_locale);
+            cholmod_l_free_sparse(&(element->info_EF[i].matrice_rigidite_locale), projet->ef_donnees.c);
+        free(element->info_EF);
         
         free(element);
     }
