@@ -354,15 +354,16 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
         aj = triplet->j;
         ax = triplet->x;
         triplet->nnz = 40;
+        i=0;
     //       Pour un élément travaillant en compression simple (aucune variante possible dues
     //       aux relachements) :\end{verbatim}\begin{displaymath}
     // \begin{bmatrix}  \frac{E \cdot S}{L} & -\frac{E \cdot S}{L} \\
     //                 -\frac{E \cdot S}{L} &  \frac{E \cdot S}{L}
     // \end{bmatrix}\end{displaymath}\begin{verbatim}
-        ai[i] = 0;  aj[i] = 0;  ax[i] = E*S/ll; i++;
+        ai[i] = 0;  aj[i] = 0;  ax[i] = E*S/ll;  i++;
         ai[i] = 0;  aj[i] = 6;  ax[i] = -E*S/ll; i++;
         ai[i] = 6;  aj[i] = 0;  ax[i] = -E*S/ll; i++;
-        ai[i] = 6;  aj[i] = 6;  ax[i] = E*S/ll; i++;
+        ai[i] = 6;  aj[i] = 6;  ax[i] = E*S/ll;  i++;
         
     //       Si l'élément ne possède pas de relachement de rotation autour de l'axe z Alors \end{verbatim}\begin{displaymath}
     // \begin{bmatrix}  \frac{ 12 \cdot E \cdot I_z}{L^3} & \frac{ 6 \cdot E \cdot I_z}{L^2} & \frac{-12 \cdot E \cdot I_z}{L^3} & \frac{ 6 \cdot E \cdot I_z}{L^2}\\
@@ -373,22 +374,22 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
         if ((((j==0) && ((element->relachement == NULL) || (element->relachement->rz_debut == EF_RELACHEMENT_BLOQUE))) || (j > 0)) && 
         (((j==element->discretisation_element) && ((element->relachement == NULL) || (element->relachement->rz_fin == EF_RELACHEMENT_BLOQUE))) || (j < element->discretisation_element)))
         {
-            ai[i] = 1;  aj[i] = 1;  ax[i] = 12*E*Iz/ll/ll/ll; i++;
-            ai[i] = 1;  aj[i] = 5;  ax[i] = 6*E*Iz/ll/ll; i++;
+            ai[i] = 1;  aj[i] = 1;  ax[i] = 12*E*Iz/ll/ll/ll;  i++;
+            ai[i] = 1;  aj[i] = 5;  ax[i] = 6*E*Iz/ll/ll;      i++;
             ai[i] = 1;  aj[i] = 7;  ax[i] = -12*E*Iz/ll/ll/ll; i++;
-            ai[i] = 1;  aj[i] = 11; ax[i] = 6*E*Iz/ll/ll; i++;
-            ai[i] = 5;  aj[i] = 1;  ax[i] = 6*E*Iz/ll/ll; i++;
-            ai[i] = 5;  aj[i] = 5;  ax[i] = 4*E*Iz/ll; i++;
-            ai[i] = 5;  aj[i] = 7;  ax[i] = -6*E*Iz/ll/ll; i++;
-            ai[i] = 5;  aj[i] = 11; ax[i] = 2*E*Iz/ll; i++;
+            ai[i] = 1;  aj[i] = 11; ax[i] = 6*E*Iz/ll/ll;      i++;
+            ai[i] = 5;  aj[i] = 1;  ax[i] = 6*E*Iz/ll/ll;      i++;
+            ai[i] = 5;  aj[i] = 5;  ax[i] = 4*E*Iz/ll;         i++;
+            ai[i] = 5;  aj[i] = 7;  ax[i] = -6*E*Iz/ll/ll;     i++;
+            ai[i] = 5;  aj[i] = 11; ax[i] = 2*E*Iz/ll;         i++;
             ai[i] = 7;  aj[i] = 1;  ax[i] = -12*E*Iz/ll/ll/ll; i++;
-            ai[i] = 7;  aj[i] = 5;  ax[i] = -6*E*Iz/ll/ll; i++;
-            ai[i] = 7;  aj[i] = 7;  ax[i] = 12*E*Iz/ll/ll/ll; i++;
-            ai[i] = 7;  aj[i] = 11; ax[i] = -6*E*Iz/ll/ll; i++;
-            ai[i] = 11; aj[i] = 1;  ax[i] = 6*E*Iz/ll/ll; i++;
-            ai[i] = 11; aj[i] = 5;  ax[i] = 2*E*Iz/ll; i++;
-            ai[i] = 11; aj[i] = 7;  ax[i] = -6*E*Iz/ll/ll; i++;
-            ai[i] = 11; aj[i] = 11; ax[i] = 4*E*Iz/ll;  i++;
+            ai[i] = 7;  aj[i] = 5;  ax[i] = -6*E*Iz/ll/ll;     i++;
+            ai[i] = 7;  aj[i] = 7;  ax[i] = 12*E*Iz/ll/ll/ll;  i++;
+            ai[i] = 7;  aj[i] = 11; ax[i] = -6*E*Iz/ll/ll;     i++;
+            ai[i] = 11; aj[i] = 1;  ax[i] = 6*E*Iz/ll/ll;      i++;
+            ai[i] = 11; aj[i] = 5;  ax[i] = 2*E*Iz/ll;         i++;
+            ai[i] = 11; aj[i] = 7;  ax[i] = -6*E*Iz/ll/ll;     i++;
+            ai[i] = 11; aj[i] = 11; ax[i] = 4*E*Iz/ll;         i++;
         }
     //       Sinon Si l'élément possède un relachement de la rotation autour de l'axe z au
     //         niveau de son noeud initial Alors \end{verbatim}\begin{displaymath}
@@ -400,22 +401,22 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
         else if (((j==0) && (element->relachement != NULL) && (element->relachement->rz_debut == EF_RELACHEMENT_LIBRE)) &&
         (((j==element->discretisation_element) && ((element->relachement == NULL) || (element->relachement->rz_fin == EF_RELACHEMENT_BLOQUE))) || (j < element->discretisation_element)))
         {
-            ai[i] = 1;  aj[i] = 1;  ax[i] = 3*E*Iz/ll/ll/ll; i++;
-            ai[i] = 1;  aj[i] = 5;  ax[i] = 0; i++;
+            ai[i] = 1;  aj[i] = 1;  ax[i] = 3*E*Iz/ll/ll/ll;  i++;
+            ai[i] = 1;  aj[i] = 5;  ax[i] = 0;                i++;
             ai[i] = 1;  aj[i] = 7;  ax[i] = -3*E*Iz/ll/ll/ll; i++;
-            ai[i] = 1;  aj[i] = 11; ax[i] = 3*E*Iz/ll/ll; i++;
-            ai[i] = 5;  aj[i] = 1;  ax[i] = 0; i++;
-            ai[i] = 5;  aj[i] = 5;  ax[i] = 0; i++;
-            ai[i] = 5;  aj[i] = 7;  ax[i] = 0; i++;
-            ai[i] = 5;  aj[i] = 11; ax[i] = 0; i++;
+            ai[i] = 1;  aj[i] = 11; ax[i] = 3*E*Iz/ll/ll;     i++;
+            ai[i] = 5;  aj[i] = 1;  ax[i] = 0;                i++;
+            ai[i] = 5;  aj[i] = 5;  ax[i] = 0;                i++;
+            ai[i] = 5;  aj[i] = 7;  ax[i] = 0;                i++;
+            ai[i] = 5;  aj[i] = 11; ax[i] = 0;                i++;
             ai[i] = 7;  aj[i] = 1;  ax[i] = -3*E*Iz/ll/ll/ll; i++;
-            ai[i] = 7;  aj[i] = 5;  ax[i] = 0; i++;
-            ai[i] = 7;  aj[i] = 7;  ax[i] = 3*E*Iz/ll/ll/ll; i++;
-            ai[i] = 7;  aj[i] = 11; ax[i] = -3*E*Iz/ll/ll; i++;
-            ai[i] = 11; aj[i] = 1;  ax[i] = 3*E*Iz/ll/ll; i++;
-            ai[i] = 11; aj[i] = 5;  ax[i] = 0; i++;
-            ai[i] = 11; aj[i] = 7;  ax[i] = -3*E*Iz/ll/ll; i++;
-            ai[i] = 11; aj[i] = 11; ax[i] = 3*E*Iz/ll;  i++;
+            ai[i] = 7;  aj[i] = 5;  ax[i] = 0;                i++;
+            ai[i] = 7;  aj[i] = 7;  ax[i] = 3*E*Iz/ll/ll/ll;  i++;
+            ai[i] = 7;  aj[i] = 11; ax[i] = -3*E*Iz/ll/ll;    i++;
+            ai[i] = 11; aj[i] = 1;  ax[i] = 3*E*Iz/ll/ll;     i++;
+            ai[i] = 11; aj[i] = 5;  ax[i] = 0;                i++;
+            ai[i] = 11; aj[i] = 7;  ax[i] = -3*E*Iz/ll/ll;    i++;
+            ai[i] = 11; aj[i] = 11; ax[i] = 3*E*Iz/ll;        i++;
         }
     //       Sinon Si l'élément possède un relachement de la rotation autour de l'axe z au
     //         niveau de son noeud final Alors \end{verbatim}\begin{displaymath}
@@ -427,22 +428,22 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
         else if (((j==element->discretisation_element) && (element->relachement != NULL) && (element->relachement->rz_fin == EF_RELACHEMENT_LIBRE)) &&
         (((j==0) && ((element->relachement == NULL) || (element->relachement->rz_debut == EF_RELACHEMENT_BLOQUE))) || (j > 0)))
         {
-            ai[i] = 1;  aj[i] = 1;  ax[i] = 3*E*Iz/ll/ll/ll; i++;
-            ai[i] = 1;  aj[i] = 5;  ax[i] = 3*E*Iz/ll/ll; i++;
+            ai[i] = 1;  aj[i] = 1;  ax[i] = 3*E*Iz/ll/ll/ll;  i++;
+            ai[i] = 1;  aj[i] = 5;  ax[i] = 3*E*Iz/ll/ll;     i++;
             ai[i] = 1;  aj[i] = 7;  ax[i] = -3*E*Iz/ll/ll/ll; i++;
-            ai[i] = 1;  aj[i] = 11; ax[i] = 0; i++;
-            ai[i] = 5;  aj[i] = 1;  ax[i] = 3*E*Iz/ll/ll; i++;
-            ai[i] = 5;  aj[i] = 5;  ax[i] = 3*E*Iz/ll; i++;
-            ai[i] = 5;  aj[i] = 7;  ax[i] = -3*E*Iz/ll/ll; i++;
-            ai[i] = 5;  aj[i] = 11; ax[i] = 0; i++;
+            ai[i] = 1;  aj[i] = 11; ax[i] = 0;                i++;
+            ai[i] = 5;  aj[i] = 1;  ax[i] = 3*E*Iz/ll/ll;     i++;
+            ai[i] = 5;  aj[i] = 5;  ax[i] = 3*E*Iz/ll;        i++;
+            ai[i] = 5;  aj[i] = 7;  ax[i] = -3*E*Iz/ll/ll;    i++;
+            ai[i] = 5;  aj[i] = 11; ax[i] = 0;                i++;
             ai[i] = 7;  aj[i] = 1;  ax[i] = -3*E*Iz/ll/ll/ll; i++;
-            ai[i] = 7;  aj[i] = 5;  ax[i] = -3*E*Iz/ll/ll; i++;
-            ai[i] = 7;  aj[i] = 7;  ax[i] = 3*E*Iz/ll/ll/ll; i++;
-            ai[i] = 7;  aj[i] = 11; ax[i] = 0; i++;
-            ai[i] = 11; aj[i] = 1;  ax[i] = 0; i++;
-            ai[i] = 11; aj[i] = 5;  ax[i] = 0; i++;
-            ai[i] = 11; aj[i] = 7;  ax[i] = 0; i++;
-            ai[i] = 11; aj[i] = 11; ax[i] = 0;  i++;
+            ai[i] = 7;  aj[i] = 5;  ax[i] = -3*E*Iz/ll/ll;    i++;
+            ai[i] = 7;  aj[i] = 7;  ax[i] = 3*E*Iz/ll/ll/ll;  i++;
+            ai[i] = 7;  aj[i] = 11; ax[i] = 0;                i++;
+            ai[i] = 11; aj[i] = 1;  ax[i] = 0;                i++;
+            ai[i] = 11; aj[i] = 5;  ax[i] = 0;                i++;
+            ai[i] = 11; aj[i] = 7;  ax[i] = 0;                i++;
+            ai[i] = 11; aj[i] = 11; ax[i] = 0;                i++;
         }
     //       Sinon Si l'élément possède un relachement de la rotation autour de l'axe z au
     //         niveau de son noeud initial et final Alors \end{verbatim}\begin{displaymath}
@@ -468,7 +469,7 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
             ai[i] = 11; aj[i] = 1;  ax[i] = 0; i++;
             ai[i] = 11; aj[i] = 5;  ax[i] = 0; i++;
             ai[i] = 11; aj[i] = 7;  ax[i] = 0; i++;
-            ai[i] = 11; aj[i] = 11; ax[i] = 0;  i++;
+            ai[i] = 11; aj[i] = 11; ax[i] = 0; i++;
         }
     //       FinSi
         else
@@ -483,22 +484,22 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
     //                  \frac{ -6 \cdot E \cdot I_y}{L^2} & \frac{ 2 \cdot E \cdot I_y}{L}   & \frac{  6 \cdot E \cdot I_y}{L^2} & \frac{ 4 \cdot E \cdot I_y}{L}
     // \end{bmatrix}\end{displaymath}\begin{verbatim}
         {
-            ai[i] = 2;  aj[i] = 2;  ax[i] = 12*E*Iy/ll/ll/ll; i++;
-            ai[i] = 2;  aj[i] = 4;  ax[i] = -6*E*Iy/ll/ll; i++;
+            ai[i] = 2;  aj[i] = 2;  ax[i] = 12*E*Iy/ll/ll/ll;  i++;
+            ai[i] = 2;  aj[i] = 4;  ax[i] = -6*E*Iy/ll/ll;     i++;
             ai[i] = 2;  aj[i] = 8;  ax[i] = -12*E*Iy/ll/ll/ll; i++;
-            ai[i] = 2;  aj[i] = 10; ax[i] = -6*E*Iy/ll/ll; i++;
-            ai[i] = 4;  aj[i] = 2;  ax[i] = -6*E*Iy/ll/ll; i++;
-            ai[i] = 4;  aj[i] = 4;  ax[i] = 4*E*Iy/ll; i++;
-            ai[i] = 4;  aj[i] = 8;  ax[i] = 6*E*Iy/ll/ll; i++;
-            ai[i] = 4;  aj[i] = 10; ax[i] = 2*E*Iy/ll; i++;
+            ai[i] = 2;  aj[i] = 10; ax[i] = -6*E*Iy/ll/ll;     i++;
+            ai[i] = 4;  aj[i] = 2;  ax[i] = -6*E*Iy/ll/ll;     i++;
+            ai[i] = 4;  aj[i] = 4;  ax[i] = 4*E*Iy/ll;         i++;
+            ai[i] = 4;  aj[i] = 8;  ax[i] = 6*E*Iy/ll/ll;      i++;
+            ai[i] = 4;  aj[i] = 10; ax[i] = 2*E*Iy/ll;         i++;
             ai[i] = 8;  aj[i] = 2;  ax[i] = -12*E*Iy/ll/ll/ll; i++;
-            ai[i] = 8;  aj[i] = 4;  ax[i] = 6*E*Iy/ll/ll; i++;
-            ai[i] = 8;  aj[i] = 8;  ax[i] = 12*E*Iy/ll/ll/ll; i++;
-            ai[i] = 8;  aj[i] = 10; ax[i] = 6*E*Iy/ll/ll; i++;
-            ai[i] = 10; aj[i] = 2;  ax[i] = -6*E*Iy/ll/ll; i++;
-            ai[i] = 10; aj[i] = 4;  ax[i] = 2*E*Iy/ll; i++;
-            ai[i] = 10; aj[i] = 8;  ax[i] = 6*E*Iy/ll/ll; i++;
-            ai[i] = 10; aj[i] = 10; ax[i] = 4*E*Iy/ll; i++;
+            ai[i] = 8;  aj[i] = 4;  ax[i] = 6*E*Iy/ll/ll;      i++;
+            ai[i] = 8;  aj[i] = 8;  ax[i] = 12*E*Iy/ll/ll/ll;  i++;
+            ai[i] = 8;  aj[i] = 10; ax[i] = 6*E*Iy/ll/ll;      i++;
+            ai[i] = 10; aj[i] = 2;  ax[i] = -6*E*Iy/ll/ll;     i++;
+            ai[i] = 10; aj[i] = 4;  ax[i] = 2*E*Iy/ll;         i++;
+            ai[i] = 10; aj[i] = 8;  ax[i] = 6*E*Iy/ll/ll;      i++;
+            ai[i] = 10; aj[i] = 10; ax[i] = 4*E*Iy/ll;         i++;
         }
     //       Sinon Si l'élément possède un relachement de la rotation autour de l'axe y au
     //         niveau de son noeud initial Alors \end{verbatim}\begin{displaymath}
@@ -510,22 +511,22 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
         else if (((j==0) && (element->relachement != NULL) && (element->relachement->ry_debut == EF_RELACHEMENT_LIBRE)) &&
         (((j==element->discretisation_element) && ((element->relachement == NULL) || (element->relachement->ry_fin == EF_RELACHEMENT_BLOQUE))) || (j < element->discretisation_element)))
         {
-            ai[i] = 2;  aj[i] = 2;  ax[i] = 3*E*Iy/ll/ll/ll; i++;
-            ai[i] = 2;  aj[i] = 4;  ax[i] = 0; i++;
+            ai[i] = 2;  aj[i] = 2;  ax[i] = 3*E*Iy/ll/ll/ll;  i++;
+            ai[i] = 2;  aj[i] = 4;  ax[i] = 0;                i++;
             ai[i] = 2;  aj[i] = 8;  ax[i] = -3*E*Iy/ll/ll/ll; i++;
-            ai[i] = 2;  aj[i] = 10; ax[i] = -3*E*Iy/ll/ll; i++;
-            ai[i] = 4;  aj[i] = 2;  ax[i] = 0; i++;
-            ai[i] = 4;  aj[i] = 4;  ax[i] = 0; i++;
-            ai[i] = 4;  aj[i] = 8;  ax[i] = 0; i++;
-            ai[i] = 4;  aj[i] = 10; ax[i] = 0; i++;
+            ai[i] = 2;  aj[i] = 10; ax[i] = -3*E*Iy/ll/ll;    i++;
+            ai[i] = 4;  aj[i] = 2;  ax[i] = 0;                i++;
+            ai[i] = 4;  aj[i] = 4;  ax[i] = 0;                i++;
+            ai[i] = 4;  aj[i] = 8;  ax[i] = 0;                i++;
+            ai[i] = 4;  aj[i] = 10; ax[i] = 0;                i++;
             ai[i] = 8;  aj[i] = 2;  ax[i] = -3*E*Iy/ll/ll/ll; i++;
-            ai[i] = 8;  aj[i] = 4;  ax[i] = 0; i++;
-            ai[i] = 8;  aj[i] = 8;  ax[i] = 3*E*Iy/ll/ll/ll; i++;
-            ai[i] = 8;  aj[i] = 10; ax[i] = 3*E*Iy/ll/ll; i++;
-            ai[i] = 10; aj[i] = 2;  ax[i] = -3*E*Iy/ll/ll; i++;
-            ai[i] = 10; aj[i] = 4;  ax[i] = 0; i++;
-            ai[i] = 10; aj[i] = 8;  ax[i] = 3*E*Iy/ll/ll; i++;
-            ai[i] = 10; aj[i] = 10; ax[i] = 3*E*Iy/ll; i++;
+            ai[i] = 8;  aj[i] = 4;  ax[i] = 0;                i++;
+            ai[i] = 8;  aj[i] = 8;  ax[i] = 3*E*Iy/ll/ll/ll;  i++;
+            ai[i] = 8;  aj[i] = 10; ax[i] = 3*E*Iy/ll/ll;     i++;
+            ai[i] = 10; aj[i] = 2;  ax[i] = -3*E*Iy/ll/ll;    i++;
+            ai[i] = 10; aj[i] = 4;  ax[i] = 0;                i++;
+            ai[i] = 10; aj[i] = 8;  ax[i] = 3*E*Iy/ll/ll;     i++;
+            ai[i] = 10; aj[i] = 10; ax[i] = 3*E*Iy/ll;        i++;
         }
     //       Sinon Si l'élément possède un relachement de la rotation autour de l'axe y au
     //         niveau de son noeud final Alors \end{verbatim}\begin{displaymath}
@@ -537,22 +538,22 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
         else if (((j==element->discretisation_element) && (element->relachement != NULL) && (element->relachement->ry_fin == EF_RELACHEMENT_LIBRE)) &&
         (((j==0) && ((element->relachement == NULL) || (element->relachement->ry_debut == EF_RELACHEMENT_BLOQUE))) || (j > 0)))
         {
-            ai[i] = 2;  aj[i] = 2;  ax[i] = 3*E*Iy/ll/ll/ll; i++;
-            ai[i] = 2;  aj[i] = 4;  ax[i] = -3*E*Iy/ll/ll; i++;
+            ai[i] = 2;  aj[i] = 2;  ax[i] = 3*E*Iy/ll/ll/ll;  i++;
+            ai[i] = 2;  aj[i] = 4;  ax[i] = -3*E*Iy/ll/ll;    i++;
             ai[i] = 2;  aj[i] = 8;  ax[i] = -3*E*Iy/ll/ll/ll; i++;
-            ai[i] = 2;  aj[i] = 10; ax[i] = 0; i++;
-            ai[i] = 4;  aj[i] = 2;  ax[i] = -3*E*Iy/ll/ll; i++;
-            ai[i] = 4;  aj[i] = 4;  ax[i] = 3*E*Iy/ll; i++;
-            ai[i] = 4;  aj[i] = 8;  ax[i] = 3*E*Iy/ll/ll; i++;
-            ai[i] = 4;  aj[i] = 10; ax[i] = 0; i++;
+            ai[i] = 2;  aj[i] = 10; ax[i] = 0;                i++;
+            ai[i] = 4;  aj[i] = 2;  ax[i] = -3*E*Iy/ll/ll;    i++;
+            ai[i] = 4;  aj[i] = 4;  ax[i] = 3*E*Iy/ll;        i++;
+            ai[i] = 4;  aj[i] = 8;  ax[i] = 3*E*Iy/ll/ll;     i++;
+            ai[i] = 4;  aj[i] = 10; ax[i] = 0;                i++;
             ai[i] = 8;  aj[i] = 2;  ax[i] = -3*E*Iy/ll/ll/ll; i++;
-            ai[i] = 8;  aj[i] = 4;  ax[i] = 3*E*Iy/ll/ll; i++;
-            ai[i] = 8;  aj[i] = 8;  ax[i] = 3*E*Iy/ll/ll/ll; i++;
-            ai[i] = 8;  aj[i] = 10; ax[i] = 0; i++;
-            ai[i] = 10; aj[i] = 2;  ax[i] = 0; i++;
-            ai[i] = 10; aj[i] = 4;  ax[i] = 0; i++;
-            ai[i] = 10; aj[i] = 8;  ax[i] = 0; i++;
-            ai[i] = 10; aj[i] = 10; ax[i] = 0; i++;
+            ai[i] = 8;  aj[i] = 4;  ax[i] = 3*E*Iy/ll/ll;     i++;
+            ai[i] = 8;  aj[i] = 8;  ax[i] = 3*E*Iy/ll/ll/ll;  i++;
+            ai[i] = 8;  aj[i] = 10; ax[i] = 0;                i++;
+            ai[i] = 10; aj[i] = 2;  ax[i] = 0;                i++;
+            ai[i] = 10; aj[i] = 4;  ax[i] = 0;                i++;
+            ai[i] = 10; aj[i] = 8;  ax[i] = 0;                i++;
+            ai[i] = 10; aj[i] = 10; ax[i] = 0;                i++;
         }
     //       Sinon Si l'élément possède un relachement de la rotation autour de l'axe y au
     //         niveau de son noeud initial et final Alors \end{verbatim}\begin{displaymath}
@@ -603,10 +604,10 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
     // \end{bmatrix}\end{displaymath}\begin{verbatim}
         else
         {
-            ai[i] = 3;  aj[i] = 3;  ax[i] = G*J/ll; i++;
+            ai[i] = 3;  aj[i] = 3;  ax[i] = G*J/ll;  i++;
             ai[i] = 3;  aj[i] = 9;  ax[i] = -G*J/ll; i++;
             ai[i] = 9;  aj[i] = 3;  ax[i] = -G*J/ll; i++;
-            ai[i] = 9;  aj[i] = 9;  ax[i] = G*J/ll; i++;
+            ai[i] = 9;  aj[i] = 9;  ax[i] = G*J/ll;  i++;
         }
         
         element->matrice_rigidite_locale[j] = cholmod_l_triplet_to_sparse(triplet, 0, projet->ef_donnees.c);

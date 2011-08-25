@@ -21,7 +21,7 @@
 
 #include "config.h"
 
-typedef enum
+typedef enum __Type_Beton_Section
 {
     BETON_SECTION_RECTANGULAIRE,
     BETON_SECTION_T,

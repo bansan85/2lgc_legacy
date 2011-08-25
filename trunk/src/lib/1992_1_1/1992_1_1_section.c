@@ -24,61 +24,70 @@
 #include "common_erreurs.h"
 #include "1992_1_1_section.h"
 
-/* _1992_1_1_sections_init
- * Description : Initialise la liste des section en béton
+int _1992_1_1_sections_init(Projet *projet)
+/* Description : Initialise la liste des section en béton
  * Paramètres : Projet *projet : la variable projet
  * Valeur renvoyée :
  *   Succès : 0
- *   Échec : valeur négative
+ *   Échec : -1 en cas de paramètres invalides :
+ *             (projet == NULL)
+ *           -2 en cas d'erreur d'allocation mémoire
  */
-int _1992_1_1_sections_init(Projet *projet)
 {
-    if (projet == NULL)
-        BUGMSG(0, -1, gettext("Paramètres invalides.\n"));
+    BUGMSG(projet, -1, "_1992_1_1_sections_init\n");
     
+    // Trivial
     projet->beton.sections = list_init();
-    if (projet->beton.sections == NULL)
-        BUGMSG(0, -2, gettext("Erreur d'allocation mémoire.\n"));
-    else
-        return 0;
+    BUGMSG(projet->beton.sections, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1992_1_1_sections_init");
+    
+    return 0;
 }
 
-/* _1992_1_1_sections_ajout_rectangulaire
- * Description : ajouter une nouvelle section rectangulaire à la liste des sections en béton
+int _1992_1_1_sections_ajout_rectangulaire(Projet *projet, double l, double h)
+/* Description : ajouter une nouvelle section rectangulaire à la liste des sections en béton
  * Paramètres : Projet *projet : la variable projet
- *            : double largeur : la largeur
- *            : double hauteur : la hauteur
+ *            : double l : la largeur
+ *            : double h : la hauteur
  * Valeur renvoyée :
  *   Succès : 0
- *   Échec : valeur négative
+ *   Échec : -1 en cas de paramètres invalides :
+ *             (projet == NULL) ou
+ *             (projet->beton.sections == NULL)
+ *           -2 en cas d'erreur d'allocation mémoire
  */
-int _1992_1_1_sections_ajout_rectangulaire(Projet *projet, double largeur, double hauteur)
 {
-    Beton_Section_Rectangulaire *section_en_cours; // Ici, on ne se préoccupe pas de la nature de la section par on utilisera seulement le champ section qui est par définition toujours le premier
-    Beton_Section_Rectangulaire section_nouvelle;
-    double              a, b;
+    Beton_Section_Rectangulaire     *section_en_cours;
+    Beton_Section_Rectangulaire     section_nouvelle;
+    double                          a, b;
     
-    if ((projet == NULL) || (projet->beton.sections == NULL))
-        BUGMSG(0, -1, gettext("Paramètres invalides.\n"));
+    BUGMSG(projet, -1, "_1992_1_1_sections_ajout_rectangulaire\n");
+    BUGMSG(projet->beton.sections, -1, "_1992_1_1_sections_ajout_rectangulaire\n");
     
+    // Trivial
     list_mvrear(projet->beton.sections);
     section_nouvelle.caracteristiques = (Beton_Section_Caracteristiques*)malloc(sizeof(Beton_Section_Caracteristiques));
-    if (section_nouvelle.caracteristiques == NULL)
-        BUGMSG(0, -2, gettext("Erreur d'allocation mémoire.\n"));
-    section_nouvelle.caracteristiques->type = BETON_SECTION_RECTANGULAIRE;
-    section_nouvelle.largeur = largeur;
-    section_nouvelle.hauteur = hauteur;
-    section_nouvelle.caracteristiques->s = largeur*hauteur;
-    section_nouvelle.caracteristiques->cdgh = hauteur/2.;
-    section_nouvelle.caracteristiques->cdgb = hauteur/2.;
-    section_nouvelle.caracteristiques->cdgd = largeur/2.;
-    section_nouvelle.caracteristiques->cdgg = largeur/2.;
-    section_nouvelle.caracteristiques->iy = largeur*hauteur*hauteur*hauteur/12.;
-    section_nouvelle.caracteristiques->iz = hauteur*largeur*largeur*largeur/12.;
-    if (largeur > hauteur)
-        { a = largeur; b = hauteur; }
+    BUGMSG(section_nouvelle.caracteristiques, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1992_1_1_sections_ajout_rectangulaire");
+    
+    // Les caractéristiques de la section sont les suivantes :\end{verbatim}\begin{displaymath}\substack{
+    //   S = l* \cdot h\texttt{  et  }cdg_{haut} = \frac{h}{2}\texttt{  et  }cdg_{bas} = \frac{h}{2}\texttt{  et  }cdg_{droite} = \frac{l}{2}\texttt{  et  }cdg_{gauche} = \frac{l}{2} \\
+    //   I_y = l*h^3/12
+    //   I_z = h*l^3/12
+    //   J = 
+    //   }\end{displaymath}\begin{verbatim}
+    section_nouvelle.cfudisqparacteristiques->type = BETON_SECTION_RECTANGULAIRE;
+    section_nouvelle.largeur = l;
+    section_nouvelle.hauteur = h;
+    section_nouvelle.caracteristiques->s = l*h;
+    section_nouvelle.caracteristiques->cdgh = h/2.;
+    section_nouvelle.caracteristiques->cdgb = h/2.;
+    section_nouvelle.caracteristiques->cdgd = l/2.;
+    section_nouvelle.caracteristiques->cdgg = l/2.;
+    section_nouvelle.caracteristiques->iy = l*h*h*h/12.;
+    section_nouvelle.caracteristiques->iz = h*l*l*l/12.;
+    if (l > h)
+        { a = l; b = h; }
     else
-        { a = hauteur; b = largeur; }
+        { a = h; b = l; }
     section_nouvelle.caracteristiques->j = a*b*b*b/16.*(16./3.-3.364*b/a*(1.-b*b*b*b/(12.*a*a*a*a)));
     
     section_en_cours = (Beton_Section_Rectangulaire*)list_rear(projet->beton.sections);
@@ -93,8 +102,8 @@ int _1992_1_1_sections_ajout_rectangulaire(Projet *projet, double largeur, doubl
     return 0;
 }
 
-/* _1992_1_1_sections_ajout_T
- * Description : ajouter une nouvelle section en T à la liste des sections en béton
+int _1992_1_1_sections_ajout_T(Projet *projet, double largeur_table, double largeur_ame, double hauteur_table, double hauteur_ame)
+/* Description : ajouter une nouvelle section en T à la liste des sections en béton
  * Paramètres : Projet *projet : la variable projet
  *            : double largeur_table : la largeur de la table
  *            : double largeur_ame : la largeur de l'âme
@@ -104,12 +113,12 @@ int _1992_1_1_sections_ajout_rectangulaire(Projet *projet, double largeur, doubl
  *   Succès : 0
  *   Échec : valeur négative
  */
-int _1992_1_1_sections_ajout_T(Projet *projet, double largeur_table, double largeur_ame, double hauteur_table, double hauteur_ame)
 {
     Beton_Section_T         *section_en_cours;
     Beton_Section_T         section_nouvelle;
     double              a, b, aa, bb;
     
+    // Trivial
     if ((projet == NULL) || (projet->beton.sections == NULL))
         BUGMSG(0, -1, gettext("Paramètres invalides.\n"));
     
@@ -153,19 +162,19 @@ int _1992_1_1_sections_ajout_T(Projet *projet, double largeur_table, double larg
     return 0;
 }
 
-/* _1992_1_1_sections_ajout_carre
- * Description : ajouter une nouvelle section carrée à la liste des sections en béton
+int _1992_1_1_sections_ajout_carre(Projet *projet, double cote)
+/* Description : ajouter une nouvelle section carrée à la liste des sections en béton
  * Paramètres : Projet *projet : la variable projet
  *            : double cote : le coté
  * Valeur renvoyée :
  *   Succès : 0
  *   Échec : valeur négative
  */
-int _1992_1_1_sections_ajout_carre(Projet *projet, double cote)
 {
     Beton_Section_Carre     *section_en_cours;
     Beton_Section_Carre     section_nouvelle;
     
+    // Trivial
     if ((projet == NULL) || (projet->beton.sections == NULL))
         BUGMSG(0, -1, gettext("Paramètres invalides.\n"));
     
@@ -196,15 +205,14 @@ int _1992_1_1_sections_ajout_carre(Projet *projet, double cote)
     return 0;
 }
 
-/* _1992_1_1_sections_ajout_circulaire
- * Description : ajouter une nouvelle section circulaire à la liste des sections en béton
+int _1992_1_1_sections_ajout_circulaire(Projet *projet, double diametre)
+/* Description : ajouter une nouvelle section circulaire à la liste des sections en béton
  * Paramètres : Projet *projet : la variable projet
  *            : double diametre : le diamètre
  * Valeur renvoyée :
  *   Succès : 0
  *   Échec : valeur négative
  */
-int _1992_1_1_sections_ajout_circulaire(Projet *projet, double diametre)
 {
     Beton_Section_Circulaire    *section_en_cours;
     Beton_Section_Circulaire    section_nouvelle;
@@ -240,19 +248,19 @@ int _1992_1_1_sections_ajout_circulaire(Projet *projet, double diametre)
 }
 
 
-/* _1992_1_1_sections_cherche_numero
- * Description : Positionne dans la liste des sections en béton l'élément courant au numéro souhaité
+void* _1992_1_1_sections_cherche_numero(Projet *projet, unsigned int numero)
+/* Description : Positionne dans la liste des sections en béton l'élément courant au numéro souhaité
  * Paramètres : Projet *projet : la variable projet
  *            : unsigned int numero : le numéro de la section
  * Valeur renvoyée :
  *   Succès : pointeur vers la section
  *   Échec : NULL
  */
-void* _1992_1_1_sections_cherche_numero(Projet *projet, unsigned int numero)
 {
     if ((projet == NULL) || (projet->beton.sections == NULL) || (list_size(projet->beton.sections) == 0))
         BUGMSG(0, NULL, gettext("Paramètres invalides.\n"));
     
+    // Trivial
     list_mvfront(projet->beton.sections);
     do
     {
@@ -267,18 +275,18 @@ void* _1992_1_1_sections_cherche_numero(Projet *projet, unsigned int numero)
 }
 
 
-/* _1992_1_1_sections_free
- * Description : Libère l'ensemble des sections en béton
+int _1992_1_1_sections_free(Projet *projet)
+/* Description : Libère l'ensemble des sections en béton
  * Paramètres : Projet *projet : la variable projet
  * Valeur renvoyée :
  *   Succès : 0 même si aucune section n'est existante
  *   Échec : valeur négative si la liste des sections n'est pas initialisée ou a déjà été libérée
  */
-int _1992_1_1_sections_free(Projet *projet)
 {
     if ((projet == NULL) || (projet->beton.sections == NULL))
         BUGMSG(0, -1, gettext("Paramètres invalides.\n"));
     
+    // Trivial
     while (!list_empty(projet->beton.sections))
     {
         

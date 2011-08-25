@@ -26,7 +26,7 @@ typedef struct __Beton_Materiau
 {
     unsigned int    numero;
     
-    // Caractéristiqtériau béton conformément à EN 1992_1_1, Tableau 3.1
+    // Caractéristique du matériau béton conformément à EN 1992_1_1, Tableau 3.1
     double      fck;
     double      fckcube;
     double      fcm;
