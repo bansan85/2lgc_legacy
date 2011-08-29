@@ -1,8 +1,8 @@
 EXTRA_DIST = manuel.tex
 
 doc : manuel.tex
-	./input.sh '#define BUG\(' '../src/lib/common/common_erreurs.h' common_erreurs_BUG_func.tex.tmp || exit 1;
-	./input.sh '#define BUGTEXTE\(' '../src/lib/common/common_erreurs.h' common_erreurs_BUGTEXTE_func.tex.tmp || exit 1;
+	./input_macro.sh '#define BUG\(' '../src/lib/common/common_erreurs.h' common_erreurs_BUG_func.tex.tmp || exit 1;
+	./input_macro.sh '#define BUGTEXTE\(' '../src/lib/common/common_erreurs.h' common_erreurs_BUGTEXTE_func.tex.tmp || exit 1;
 	./input_struct.sh 'typedef struct __Troncon' '../src/lib/common/common_fonction.h' common_fonction_Troncon_struct.tex.tmp || exit 1;
 	./input_struct.sh 'typedef struct __Fonction' '../src/lib/common/common_fonction.h' common_fonction_Fonction_struct.tex.tmp || exit 1;
 	./input.sh 'int common_fonction_init' '../src/lib/common/common_fonction.c' common_fonction_init_func.tex.tmp || exit 1;
@@ -15,7 +15,7 @@ doc : manuel.tex
 	./input_com.sh 'int common_fonction_affiche' '../src/lib/common/common_fonction.c' common_fonction_affiche_com.tex.tmp || exit 1;
 	./input.sh 'int common_fonction_free' '../src/lib/common/common_fonction.c' common_fonction_free_func.tex.tmp || exit 1;
 	./input_com.sh 'int common_fonction_free' '../src/lib/common/common_fonction.c' common_fonction_free_com.tex.tmp || exit 1;
-	./input.sh '#define ERREUR_RELATIVE_PUISSANCE' '../src/lib/common/common_maths.h' common_maths_ERREUR_RELATIVE_EGALE_func.tex.tmp || exit 1;
+	./input_macro.sh '#define ERREUR_RELATIVE_PUISSANCE' '../src/lib/common/common_maths.h' common_maths_ERREUR_RELATIVE_EGALE_func.tex.tmp || exit 1;
 	./input.sh 'double common_math_arrondi_nombre' '../src/lib/common/common_maths.c' common_math_arrondi_nombre_func.tex.tmp || exit 1;
 	./input_com.sh 'double common_math_arrondi_nombre' '../src/lib/common/common_maths.c' common_math_arrondi_nombre_com.tex.tmp || exit 1;
 	./input.sh 'void common_math_arrondi_triplet' '../src/lib/common/common_maths.c' common_math_arrondi_triplet_func.tex.tmp || exit 1;
@@ -29,8 +29,8 @@ doc : manuel.tex
 	./input_struct.sh 'typedef struct __Beton_Donnees' '../src/lib/common/common_projet.h' common_projet_Beton_Donnees_struct.tex.tmp || exit 1;
 	./input_struct.sh 'typedef struct __EF' '../src/lib/common/common_projet.h' common_projet_EF_struct.tex.tmp || exit 1;
 	./input_struct.sh 'typedef struct __Projet' '../src/lib/common/common_projet.h' common_projet_Projet_struct.tex.tmp || exit 1;
-	./input.sh "Projet \*projet_init" '../src/lib/common/common_projet.c' common_projet_projet_init_func.tex.tmp || exit 1;
-	./input_com.sh "Projet \*projet_init" '../src/lib/common/common_projet.c' common_projet_projet_init_com.tex.tmp || exit 1;
+	./input.sh "Projet\* projet_init" '../src/lib/common/common_projet.c' common_projet_projet_init_func.tex.tmp || exit 1;
+	./input_com.sh "Projet\* projet_init" '../src/lib/common/common_projet.c' common_projet_projet_init_com.tex.tmp || exit 1;
 	./input.sh "void projet_free" '../src/lib/common/common_projet.c' common_projet_projet_free_func.tex.tmp || exit 1;
 	./input_com.sh "void projet_free" '../src/lib/common/common_projet.c' common_projet_projet_free_com.tex.tmp || exit 1;
 	./input.sh "void show_warranty" '../src/lib/common/common_text.c' common_text_show_warranty_func.tex.tmp || exit 1;
@@ -53,6 +53,10 @@ doc : manuel.tex
 	./input_com.sh "int EF_calculs_initialise" '../src/lib/EF/EF_calculs.c' EF_calculs_initialise_com.tex.tmp || exit 1;
 	./input.sh "int EF_calculs_genere_mat_rig" '../src/lib/EF/EF_calculs.c' EF_calculs_genere_mat_rig_func.tex.tmp || exit 1;
 	./input_com.sh "int EF_calculs_genere_mat_rig" '../src/lib/EF/EF_calculs.c' EF_calculs_genere_mat_rig_com.tex.tmp || exit 1;
+	./input.sh "int EF_calculs_moment_hyper_y" '../src/lib/EF/EF_calculs.c' EF_calculs_moment_hyper_y_func.tex.tmp || exit 1;
+	./input_com.sh "int EF_calculs_moment_hyper_y" '../src/lib/EF/EF_calculs.c' EF_calculs_moment_hyper_y_com.tex.tmp || exit 1;
+	./input.sh "int EF_calculs_moment_hyper_z" '../src/lib/EF/EF_calculs.c' EF_calculs_moment_hyper_z_func.tex.tmp || exit 1;
+	./input_com.sh "int EF_calculs_moment_hyper_z" '../src/lib/EF/EF_calculs.c' EF_calculs_moment_hyper_z_com.tex.tmp || exit 1;
 	./input.sh "int EF_calculs_resoud_charge" '../src/lib/EF/EF_calculs.c' EF_calculs_resoud_charge_func.tex.tmp || exit 1;
 	./input_com.sh "int EF_calculs_resoud_charge" '../src/lib/EF/EF_calculs.c' EF_calculs_resoud_charge_com.tex.tmp || exit 1;
 	./input.sh "int EF_calculs_affiche_resultats" '../src/lib/EF/EF_calculs.c' EF_calculs_affiche_resultats_func.tex.tmp || exit 1;
@@ -67,12 +71,13 @@ doc : manuel.tex
 	./input_com.sh "EF_Noeud\* EF_noeuds_cherche_numero" '../src/lib/EF/EF_noeud.c' EF_noeuds_cherche_numero_com.tex.tmp || exit 1;
 	./input.sh "int EF_noeuds_free" '../src/lib/EF/EF_noeud.c' EF_noeuds_free_func.tex.tmp || exit 1;
 	./input_com.sh "int EF_noeuds_free" '../src/lib/EF/EF_noeud.c' EF_noeuds_free_com.tex.tmp || exit 1;
-	./input_struct.sh 'typedef enum __Type_EF_Relachement' '../src/lib/EF/EF_relachement.h' EF_relachement_Type_EF_Relachement_struct.tex.tmp || exit 1;
+	./input_struct.sh 'typedef struct __EF_Relachement_Donnees_Elastique_Linaire' '../src/lib/EF/EF_relachement.h' EF_relachement_EF_Relachement_Donnees_Elastique_Linaire_struct.tex.tmp || exit 1;
+	./input_struct.sh 'typedef enum __EF_Relachement_Type' '../src/lib/EF/EF_relachement.h' EF_relachement_EF_Relachement_Type_struct.tex.tmp || exit 1;
 	./input_struct.sh 'typedef struct __EF_Relachement' '../src/lib/EF/EF_relachement.h' EF_relachement_EF_Relachement_struct.tex.tmp || exit 1;
 	./input.sh "int EF_relachement_init" '../src/lib/EF/EF_relachement.c' EF_relachement_init_func.tex.tmp || exit 1;
 	./input_com.sh "int EF_relachement_init" '../src/lib/EF/EF_relachement.c' EF_relachement_init_com.tex.tmp || exit 1;
-	./input.sh "int EF_relachement_ajout" '../src/lib/EF/EF_relachement.c' EF_relachement_ajout_func.tex.tmp || exit 1;
-	./input_com.sh "int EF_relachement_ajout" '../src/lib/EF/EF_relachement.c' EF_relachement_ajout_com.tex.tmp || exit 1;
+	./input.sh "int EF_relachement_ajout\(" '../src/lib/EF/EF_relachement.c' EF_relachement_ajout_func.tex.tmp || exit 1;
+	./input_com.sh "int EF_relachement_ajout\(" '../src/lib/EF/EF_relachement.c' EF_relachement_ajout_com.tex.tmp || exit 1;
 	./input.sh "EF_Relachement\* EF_relachement_cherche_numero" '../src/lib/EF/EF_relachement.c' EF_relachement_cherche_numero_func.tex.tmp || exit 1;
 	./input_com.sh "EF_Relachement\* EF_relachement_cherche_numero" '../src/lib/EF/EF_relachement.c' EF_relachement_cherche_numero_com.tex.tmp || exit 1;
 	./input.sh "int EF_relachement_free" '../src/lib/EF/EF_relachement.c' EF_relachement_free_func.tex.tmp || exit 1;
@@ -90,12 +95,12 @@ doc : manuel.tex
 	./input_com.sh "int EF_charge_barre_ponctuelle_ajout" '../src/lib/EF/EF_charge_barre_ponctuelle.c' EF_charge_barre_ponctuelle_ajout_com.tex.tmp || exit 1;
 	./input_struct.sh 'typedef enum __Action_Categorie' '../src/lib/1990/1990_actions.h' 1990_actions_Action_Categorie_struct.tex.tmp || exit 1;
 	./input_struct.sh 'typedef struct __Action' '../src/lib/1990/1990_actions.h' 1990_actions_Action_struct.tex.tmp || exit 1;
-	./input.sh "char \*_1990_action_type_bat_txt_eu" '../src/lib/1990/1990_actions.c' _1990_action_type_bat_txt_eu_func.tex.tmp || exit 1;
-	./input_com.sh "char \*_1990_action_type_bat_txt_eu" '../src/lib/1990/1990_actions.c' _1990_action_type_bat_txt_eu_com.tex.tmp || exit 1;
-	./input.sh "char \*_1990_action_type_bat_txt_fr" '../src/lib/1990/1990_actions.c' _1990_action_type_bat_txt_fr_func.tex.tmp || exit 1;
-	./input_com.sh "char \*_1990_action_type_bat_txt_fr" '../src/lib/1990/1990_actions.c' _1990_action_type_bat_txt_fr_com.tex.tmp || exit 1;
-	./input.sh "char \*_1990_action_type_bat_txt\(" '../src/lib/1990/1990_actions.c' _1990_action_type_bat_txt_func.tex.tmp || exit 1;
-	./input_com.sh "char \*_1990_action_type_bat_txt\(" '../src/lib/1990/1990_actions.c' _1990_action_type_bat_txt_com.tex.tmp || exit 1;
+	./input.sh "char\* _1990_action_type_bat_txt_eu" '../src/lib/1990/1990_actions.c' _1990_action_type_bat_txt_eu_func.tex.tmp || exit 1;
+	./input_com.sh "char\* _1990_action_type_bat_txt_eu" '../src/lib/1990/1990_actions.c' _1990_action_type_bat_txt_eu_com.tex.tmp || exit 1;
+	./input.sh "char\* _1990_action_type_bat_txt_fr" '../src/lib/1990/1990_actions.c' _1990_action_type_bat_txt_fr_func.tex.tmp || exit 1;
+	./input_com.sh "char\* _1990_action_type_bat_txt_fr" '../src/lib/1990/1990_actions.c' _1990_action_type_bat_txt_fr_com.tex.tmp || exit 1;
+	./input.sh "char\* _1990_action_type_bat_txt\(" '../src/lib/1990/1990_actions.c' _1990_action_type_bat_txt_func.tex.tmp || exit 1;
+	./input_com.sh "char\* _1990_action_type_bat_txt\(" '../src/lib/1990/1990_actions.c' _1990_action_type_bat_txt_com.tex.tmp || exit 1;
 	./input.sh "Action_Categorie _1990_action_categorie_bat_eu" '../src/lib/1990/1990_actions.c' _1990_action_categorie_bat_eu_func.tex.tmp || exit 1;
 	./input_com.sh "Action_Categorie _1990_action_categorie_bat_eu" '../src/lib/1990/1990_actions.c' _1990_action_categorie_bat_eu_com.tex.tmp || exit 1;
 	./input.sh "Action_Categorie _1990_action_categorie_bat_fr" '../src/lib/1990/1990_actions.c' _1990_action_categorie_bat_fr_func.tex.tmp || exit 1;
@@ -151,12 +156,12 @@ doc : manuel.tex
 	./input_com.sh "int _1990_duree_projet_fr" '../src/lib/1990/1990_duree.c' _1990_duree_projet_fr_com.tex.tmp || exit 1;
 	./input.sh "int _1990_duree_projet\(" '../src/lib/1990/1990_duree.c' _1990_duree_projet_func.tex.tmp || exit 1;
 	./input_com.sh "int _1990_duree_projet\(" '../src/lib/1990/1990_duree.c' _1990_duree_projet_com.tex.tmp || exit 1;
-	./input.sh "char \*_1990_duree_projet_txt_eu" '../src/lib/1990/1990_duree.c' _1990_duree_projet_txt_eu_func.tex.tmp || exit 1;
-	./input_com.sh "char \*_1990_duree_projet_txt_eu" '../src/lib/1990/1990_duree.c' _1990_duree_projet_txt_eu_com.tex.tmp || exit 1;
-	./input.sh "char \*_1990_duree_projet_txt_fr" '../src/lib/1990/1990_duree.c' _1990_duree_projet_txt_fr_func.tex.tmp || exit 1;
-	./input_com.sh "char \*_1990_duree_projet_txt_fr" '../src/lib/1990/1990_duree.c' _1990_duree_projet_txt_fr_com.tex.tmp || exit 1;
-	./input.sh "char \*_1990_duree_projet_txt\(" '../src/lib/1990/1990_duree.c' _1990_duree_projet_txt_func.tex.tmp || exit 1;
-	./input_com.sh "char \*_1990_duree_projet_txt\(" '../src/lib/1990/1990_duree.c' _1990_duree_projet_txt_com.tex.tmp || exit 1;
+	./input.sh "char\* _1990_duree_projet_txt_eu" '../src/lib/1990/1990_duree.c' _1990_duree_projet_txt_eu_func.tex.tmp || exit 1;
+	./input_com.sh "char\* _1990_duree_projet_txt_eu" '../src/lib/1990/1990_duree.c' _1990_duree_projet_txt_eu_com.tex.tmp || exit 1;
+	./input.sh "char\* _1990_duree_projet_txt_fr" '../src/lib/1990/1990_duree.c' _1990_duree_projet_txt_fr_func.tex.tmp || exit 1;
+	./input_com.sh "char\* _1990_duree_projet_txt_fr" '../src/lib/1990/1990_duree.c' _1990_duree_projet_txt_fr_com.tex.tmp || exit 1;
+	./input.sh "char\* _1990_duree_projet_txt\(" '../src/lib/1990/1990_duree.c' _1990_duree_projet_txt_func.tex.tmp || exit 1;
+	./input_com.sh "char\* _1990_duree_projet_txt\(" '../src/lib/1990/1990_duree.c' _1990_duree_projet_txt_com.tex.tmp || exit 1;
 	./input_struct.sh 'typedef struct __Element' '../src/lib/1990/1990_groupes.h' 1990_groupes_Element.tex.tmp || exit 1;
 	./input_struct.sh 'typedef enum __Type_Groupe_Combinaison' '../src/lib/1990/1990_groupes.h' 1990_groupes_Type_Groupe_Combinaison.tex.tmp || exit 1;
 	./input_struct.sh 'typedef struct __Groupe' '../src/lib/1990/1990_groupes.h' 1990_groupes_Groupe.tex.tmp || exit 1;
@@ -243,5 +248,7 @@ doc : manuel.tex
 	./input.sh "int _1992_1_1_sections_free" '../src/lib/1992_1_1/1992_1_1_section.c' _1992_1_1_sections_free_func.tex.tmp || exit 1;
 	./input_com.sh "int _1992_1_1_sections_free" '../src/lib/1992_1_1/1992_1_1_section.c' _1992_1_1_sections_free_com.tex.tmp || exit 1;
 	pdflatex manuel.tex manuel.pdf
+# On le fait deux fois pour résoudre le problème du sommaire.
+	pdflatex manuel.tex manuel.pdf
 
-CLEANFILES = *.log *.aux *pdf *.out *.tmp
+CLEANFILES = *.log *.aux *pdf *.out *.tmp *.toc

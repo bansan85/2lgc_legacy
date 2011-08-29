@@ -902,7 +902,6 @@ int _1990_combinaisons_genere(Projet *projet)
  *             (projet == NULL) ou
  *             (projet->niveaux_groupes == NULL) ou
  *             (list_size(projet->niveaux_groupes) == 0)
- *           -2 en cas d'erreur d'allocation mémoire
  *           -3 en cas d'erreur due à une fonction interne
  */
 {
@@ -993,17 +992,22 @@ int _1990_combinaisons_genere(Projet *projet)
                     {
                         case GROUPE_COMBINAISON_OR :
                         {
-                            BUG(_1990_combinaisons_genere_or(projet) == 0, -2);
+                            BUG(_1990_combinaisons_genere_or(projet) == 0, -1);
                             break;
                         }
                         case GROUPE_COMBINAISON_XOR :
                         {
-                            BUG(_1990_combinaisons_genere_xor(projet) == 0, -3);
+                            BUG(_1990_combinaisons_genere_xor(projet) == 0, -1);
                             break;
                         }
                         case GROUPE_COMBINAISON_AND :
                         {
-                            BUG(_1990_combinaisons_genere_and(projet) == 0, -4);
+                            BUG(_1990_combinaisons_genere_and(projet) == 0, -1);
+                            break;
+                        }
+                        default :
+                        {
+                            BUG(0, -1);
                             break;
                         }
                     }
@@ -1015,7 +1019,7 @@ int _1990_combinaisons_genere(Projet *projet)
         
     //     Génération des pondérations (avec les coefficients de sécurité partiels) à partir
     //       des combinaisons.
-        _1990_ponderations_genere(projet);
+        BUG(_1990_ponderations_genere(projet) == 0, -3);
     }
     // FinPour
     

@@ -69,14 +69,14 @@ int common_fonction_init(Projet *projet, void *action_void)
     
     for (i=0;i<3;i++)
     {
-        action->fonctions_fleche[i] = (Fonction**)malloc(sizeof(Fonction*)*list_size(projet->beton.barres));
-        BUGMSG(action->fonctions_fleche[i], -2, gettext("%s : Erreur d'allocation mémoire.\n"), "common_fonction_init");
+        action->fonctions_deformation[i] = (Fonction**)malloc(sizeof(Fonction*)*list_size(projet->beton.barres));
+        BUGMSG(action->fonctions_deformation[i], -2, gettext("%s : Erreur d'allocation mémoire.\n"), "common_fonction_init");
         for (j=0;j<list_size(projet->beton.barres);j++)
         {
-            action->fonctions_fleche[i][j] = (Fonction*)malloc(sizeof(Fonction));
-            BUGMSG(action->fonctions_fleche[i][j], -2, gettext("%s : Erreur d'allocation mémoire.\n"), "common_fonction_init");
-            action->fonctions_fleche[i][j]->nb_troncons = 0;
-            action->fonctions_fleche[i][j]->troncons = NULL;
+            action->fonctions_deformation[i][j] = (Fonction*)malloc(sizeof(Fonction));
+            BUGMSG(action->fonctions_deformation[i][j], -2, gettext("%s : Erreur d'allocation mémoire.\n"), "common_fonction_init");
+            action->fonctions_deformation[i][j]->nb_troncons = 0;
+            action->fonctions_deformation[i][j]->troncons = NULL;
         }
         
         action->fonctions_rotation[i] = (Fonction**)malloc(sizeof(Fonction*)*list_size(projet->beton.barres));
@@ -338,15 +338,15 @@ int common_fonction_free(Projet *projet, void *action_void)
     
     for (i=0;i<3;i++)
     {
-        if (action->fonctions_fleche[i] != NULL)
+        if (action->fonctions_deformation[i] != NULL)
         {
             for (j=0;j<list_size(projet->beton.barres);j++)
             {
-                free(action->fonctions_fleche[i][j]->troncons);
-                free(action->fonctions_fleche[i][j]);
+                free(action->fonctions_deformation[i][j]->troncons);
+                free(action->fonctions_deformation[i][j]);
             }
-            free(action->fonctions_fleche[i]);
-            action->fonctions_fleche[i] = NULL;
+            free(action->fonctions_deformation[i]);
+            action->fonctions_deformation[i] = NULL;
         }
         
         if (action->fonctions_rotation[i] != NULL)

@@ -21,10 +21,12 @@
 #include <libintl.h>
 #include <cholmod.h>
 #include <values.h>
+#include <string.h>
 #include "common_projet.h"
 #include "common_erreurs.h"
 #include "common_maths.h"
 #include "1992_1_1_barres.h"
+#include "EF_calculs.h"
 #include "math.h"
 
 int _1992_1_1_barres_init(Projet *projet)
@@ -324,6 +326,8 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
     // Pour chaque discrétisation
     for (j=0;j<element->discretisation_element+1;j++)
     {
+        double          MA, MB;
+        Barre_Info_EF   infos;
     
     //     Détermination du noeud de départ et de fin
         if (j==0)
@@ -381,18 +385,65 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
             }
             else
             {
-                if (element->relachement->ry_debut == EF_RELACHEMENT_BLOQUE)
-                    element->info_EF[j].kAy = 0;
-                else if (element->relachement->ry_debut == EF_RELACHEMENT_LIBRE)
-                    element->info_EF[j].kAy = MAXDOUBLE;
-                else
-                    BUG(0, -1);
-                if (element->relachement->rz_debut == EF_RELACHEMENT_BLOQUE)
-                    element->info_EF[j].kAz = 0;
-                else if (element->relachement->rz_debut == EF_RELACHEMENT_LIBRE)
-                    element->info_EF[j].kAz = MAXDOUBLE;
-                else
-                    BUG(0, -1);
+                switch (element->relachement->ry_debut)
+                {
+                    case EF_RELACHEMENT_BLOQUE :
+                    {
+                        element->info_EF[j].kAy = 0;
+                        break;
+                    }
+                    case EF_RELACHEMENT_LIBRE :
+                    {
+                        element->info_EF[j].kAy = MAXDOUBLE;
+                        break;
+                    }
+                    case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
+                    {
+                        EF_Relachement_Donnees_Elastique_Linaire *donnees;
+                        
+                        donnees = element->relachement->ry_d_data;
+                        if (donnees->raideur == 0.)
+                            element->info_EF[j].kAy = MAXDOUBLE;
+                        else
+                            element->info_EF[j].kAy = 1./donnees->raideur;
+                        break;
+                    }
+                    default :
+                    {
+                        BUG(0, -1);
+                        break;
+                    }
+                }
+                
+                switch (element->relachement->rz_debut)
+                {
+                    case EF_RELACHEMENT_BLOQUE :
+                    {
+                        element->info_EF[j].kAz = 0;
+                        break;
+                    }
+                    case EF_RELACHEMENT_LIBRE :
+                    {
+                        element->info_EF[j].kAz = MAXDOUBLE;
+                        break;
+                    }
+                    case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
+                    {
+                        EF_Relachement_Donnees_Elastique_Linaire *donnees;
+                        
+                        donnees = element->relachement->rz_d_data;
+                        if (donnees->raideur == 0.)
+                            element->info_EF[j].kAz = MAXDOUBLE;
+                        else
+                            element->info_EF[j].kAz = 1./donnees->raideur;
+                        break;
+                    }
+                    default :
+                    {
+                        BUG(0, -1);
+                        break;
+                    }
+                }
             }
             
             if (noeud2 != element->noeud_fin)
@@ -402,18 +453,65 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
             }
             else
             {
-                if (element->relachement->ry_fin == EF_RELACHEMENT_BLOQUE)
-                    element->info_EF[j].kBy = 0;
-                else if (element->relachement->ry_fin == EF_RELACHEMENT_LIBRE)
-                    element->info_EF[j].kBy = MAXDOUBLE;
-                else
-                    BUG(0, -1);
-                if (element->relachement->rz_fin == EF_RELACHEMENT_BLOQUE)
-                    element->info_EF[j].kBz = 0;
-                else if (element->relachement->rz_fin == EF_RELACHEMENT_LIBRE)
-                    element->info_EF[j].kBz = MAXDOUBLE;
-                else
-                    BUG(0, -1);
+                switch (element->relachement->ry_fin)
+                {
+                    case EF_RELACHEMENT_BLOQUE :
+                    {
+                        element->info_EF[j].kBy = 0;
+                        break;
+                    }
+                    case EF_RELACHEMENT_LIBRE :
+                    {
+                        element->info_EF[j].kBy = MAXDOUBLE;
+                        break;
+                    }
+                    case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
+                    {
+                        EF_Relachement_Donnees_Elastique_Linaire *donnees;
+                        
+                        donnees = element->relachement->ry_f_data;
+                        if (donnees->raideur == 0.)
+                            element->info_EF[j].kBy = MAXDOUBLE;
+                        else
+                            element->info_EF[j].kBy = 1./donnees->raideur;
+                        break;
+                    }
+                    default :
+                    {
+                        BUG(0, -1);
+                        break;
+                    }
+                }
+                
+                switch (element->relachement->rz_fin)
+                {
+                    case EF_RELACHEMENT_BLOQUE :
+                    {
+                        element->info_EF[j].kBz = 0;
+                        break;
+                    }
+                    case EF_RELACHEMENT_LIBRE :
+                    {
+                        element->info_EF[j].kBz = MAXDOUBLE;
+                        break;
+                    }
+                    case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
+                    {
+                        EF_Relachement_Donnees_Elastique_Linaire *donnees;
+                        
+                        donnees = element->relachement->rz_f_data;
+                        if (donnees->raideur == 0.)
+                            element->info_EF[j].kBz = MAXDOUBLE;
+                        else
+                            element->info_EF[j].kBz = 1./donnees->raideur;
+                        break;
+                    }
+                    default :
+                    {
+                        BUG(0, -1);
+                        break;
+                    }
+                }
             }
         }
         
@@ -430,230 +528,222 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
     // \begin{bmatrix}  \frac{E \cdot S}{L} & -\frac{E \cdot S}{L} \\
     //                 -\frac{E \cdot S}{L} &  \frac{E \cdot S}{L}
     // \end{bmatrix}\end{displaymath}\begin{verbatim}
-        ai[i] = 0;  aj[i] = 0;  ax[i] = E*S/ll;  i++;
+        ai[i] = 0;  aj[i] = 0;  ax[i] =  E*S/ll; i++;
         ai[i] = 0;  aj[i] = 6;  ax[i] = -E*S/ll; i++;
         ai[i] = 6;  aj[i] = 0;  ax[i] = -E*S/ll; i++;
-        ai[i] = 6;  aj[i] = 6;  ax[i] = E*S/ll;  i++;
+        ai[i] = 6;  aj[i] = 6;  ax[i] =  E*S/ll; i++;
         
-    //       Si l'élément ne possède pas de relachement de rotation autour de l'axe z Alors \end{verbatim}\begin{displaymath}
-    // \begin{bmatrix}  \frac{ 12 \cdot E \cdot I_z}{L^3} & \frac{ 6 \cdot E \cdot I_z}{L^2} & \frac{-12 \cdot E \cdot I_z}{L^3} & \frac{ 6 \cdot E \cdot I_z}{L^2}\\
-    //                  \frac{  6 \cdot E \cdot I_z}{L^2} & \frac{ 4 \cdot E \cdot I_z}{L}   & \frac{ -6 \cdot E \cdot I_z}{L^2} & \frac{ 2 \cdot E \cdot I_z}{L}\\
-    //                  \frac{-12 \cdot E \cdot I_z}{L^3} & \frac{-6 \cdot E \cdot I_z}{L^2} & \frac{ 12 \cdot E \cdot I_z}{L^3} & \frac{-6 \cdot E \cdot I_z}{L^2}\\
-    //                  \frac{  6 \cdot E \cdot I_z}{L^2} & \frac{ 2 \cdot E \cdot I_z}{L}   & \frac{ -6 \cdot E \cdot I_z}{L^2} & \frac{ 4 \cdot E \cdot I_z}{L}
-    // \end{bmatrix}\end{displaymath}\begin{verbatim}
-        if ((((j==0) && ((element->relachement == NULL) || (element->relachement->rz_debut == EF_RELACHEMENT_BLOQUE))) || (j > 0)) && 
-        (((j==element->discretisation_element) && ((element->relachement == NULL) || (element->relachement->rz_fin == EF_RELACHEMENT_BLOQUE))) || (j < element->discretisation_element)))
-        {
-            ai[i] = 1;  aj[i] = 1;  ax[i] = 12*E*Iz/ll/ll/ll;  i++;
-            ai[i] = 1;  aj[i] = 5;  ax[i] = 6*E*Iz/ll/ll;      i++;
-            ai[i] = 1;  aj[i] = 7;  ax[i] = -12*E*Iz/ll/ll/ll; i++;
-            ai[i] = 1;  aj[i] = 11; ax[i] = 6*E*Iz/ll/ll;      i++;
-            ai[i] = 5;  aj[i] = 1;  ax[i] = 6*E*Iz/ll/ll;      i++;
-            ai[i] = 5;  aj[i] = 5;  ax[i] = 4*E*Iz/ll;         i++;
-            ai[i] = 5;  aj[i] = 7;  ax[i] = -6*E*Iz/ll/ll;     i++;
-            ai[i] = 5;  aj[i] = 11; ax[i] = 2*E*Iz/ll;         i++;
-            ai[i] = 7;  aj[i] = 1;  ax[i] = -12*E*Iz/ll/ll/ll; i++;
-            ai[i] = 7;  aj[i] = 5;  ax[i] = -6*E*Iz/ll/ll;     i++;
-            ai[i] = 7;  aj[i] = 7;  ax[i] = 12*E*Iz/ll/ll/ll;  i++;
-            ai[i] = 7;  aj[i] = 11; ax[i] = -6*E*Iz/ll/ll;     i++;
-            ai[i] = 11; aj[i] = 1;  ax[i] = 6*E*Iz/ll/ll;      i++;
-            ai[i] = 11; aj[i] = 5;  ax[i] = 2*E*Iz/ll;         i++;
-            ai[i] = 11; aj[i] = 7;  ax[i] = -6*E*Iz/ll/ll;     i++;
-            ai[i] = 11; aj[i] = 11; ax[i] = 4*E*Iz/ll;         i++;
-        }
-    //       Sinon Si l'élément possède un relachement de la rotation autour de l'axe z au
-    //         niveau de son noeud initial Alors \end{verbatim}\begin{displaymath}
-    // \begin{bmatrix}  \frac{  3 \cdot E \cdot I_z}{L^3} &                0                 & \frac{ -3 \cdot E \cdot I_z}{L^3} & \frac{ 3 \cdot E \cdot I_z}{L^2}\\
-    //                                  0                 &                0                 &                 0                 &                0              \\
-    //                  \frac{ -3 \cdot E \cdot I_z}{L^3} &                0                 & \frac{  3 \cdot E \cdot I_z}{L^3} & \frac{-3 \cdot E \cdot I_z}{L^2}\\
-    //                  \frac{  3 \cdot E \cdot I_z}{L^2} &                0                 & \frac{ -3 \cdot E \cdot I_z}{L^2} & \frac{ 3 \cdot E \cdot I_z}{L}
-    // \end{bmatrix}\end{displaymath}\begin{verbatim}
-        else if (((j==0) && (element->relachement != NULL) && (element->relachement->rz_debut == EF_RELACHEMENT_LIBRE)) &&
-        (((j==element->discretisation_element) && ((element->relachement == NULL) || (element->relachement->rz_fin == EF_RELACHEMENT_BLOQUE))) || (j < element->discretisation_element)))
-        {
-            ai[i] = 1;  aj[i] = 1;  ax[i] = 3*E*Iz/ll/ll/ll;  i++;
-            ai[i] = 1;  aj[i] = 5;  ax[i] = 0;                i++;
-            ai[i] = 1;  aj[i] = 7;  ax[i] = -3*E*Iz/ll/ll/ll; i++;
-            ai[i] = 1;  aj[i] = 11; ax[i] = 3*E*Iz/ll/ll;     i++;
-            ai[i] = 5;  aj[i] = 1;  ax[i] = 0;                i++;
-            ai[i] = 5;  aj[i] = 5;  ax[i] = 0;                i++;
-            ai[i] = 5;  aj[i] = 7;  ax[i] = 0;                i++;
-            ai[i] = 5;  aj[i] = 11; ax[i] = 0;                i++;
-            ai[i] = 7;  aj[i] = 1;  ax[i] = -3*E*Iz/ll/ll/ll; i++;
-            ai[i] = 7;  aj[i] = 5;  ax[i] = 0;                i++;
-            ai[i] = 7;  aj[i] = 7;  ax[i] = 3*E*Iz/ll/ll/ll;  i++;
-            ai[i] = 7;  aj[i] = 11; ax[i] = -3*E*Iz/ll/ll;    i++;
-            ai[i] = 11; aj[i] = 1;  ax[i] = 3*E*Iz/ll/ll;     i++;
-            ai[i] = 11; aj[i] = 5;  ax[i] = 0;                i++;
-            ai[i] = 11; aj[i] = 7;  ax[i] = -3*E*Iz/ll/ll;    i++;
-            ai[i] = 11; aj[i] = 11; ax[i] = 3*E*Iz/ll;        i++;
-        }
-    //       Sinon Si l'élément possède un relachement de la rotation autour de l'axe z au
-    //         niveau de son noeud final Alors \end{verbatim}\begin{displaymath}
-    // \begin{bmatrix}  \frac{  3 \cdot E \cdot I_z}{L^3} & \frac{ 3 \cdot E \cdot I_z}{L^2} & \frac{ -3 \cdot E \cdot I_z}{L^3} &                0                \\
-    //                  \frac{  3 \cdot E \cdot I_z}{L^2} & \frac{ 3 \cdot E \cdot I_z}{L}   & \frac{ -3 \cdot E \cdot I_z}{L^2} &                0              \\
-    //                  \frac{ -3 \cdot E \cdot I_z}{L^3} & \frac{-3 \cdot E \cdot I_z}{L^2} & \frac{  3 \cdot E \cdot I_z}{L^3} &                0                \\
-    //                                  0                 &                0                 &                 0                 &                0              
-    // \end{bmatrix}\end{displaymath}\begin{verbatim}
-        else if (((j==element->discretisation_element) && (element->relachement != NULL) && (element->relachement->rz_fin == EF_RELACHEMENT_LIBRE)) &&
-        (((j==0) && ((element->relachement == NULL) || (element->relachement->rz_debut == EF_RELACHEMENT_BLOQUE))) || (j > 0)))
-        {
-            ai[i] = 1;  aj[i] = 1;  ax[i] = 3*E*Iz/ll/ll/ll;  i++;
-            ai[i] = 1;  aj[i] = 5;  ax[i] = 3*E*Iz/ll/ll;     i++;
-            ai[i] = 1;  aj[i] = 7;  ax[i] = -3*E*Iz/ll/ll/ll; i++;
-            ai[i] = 1;  aj[i] = 11; ax[i] = 0;                i++;
-            ai[i] = 5;  aj[i] = 1;  ax[i] = 3*E*Iz/ll/ll;     i++;
-            ai[i] = 5;  aj[i] = 5;  ax[i] = 3*E*Iz/ll;        i++;
-            ai[i] = 5;  aj[i] = 7;  ax[i] = -3*E*Iz/ll/ll;    i++;
-            ai[i] = 5;  aj[i] = 11; ax[i] = 0;                i++;
-            ai[i] = 7;  aj[i] = 1;  ax[i] = -3*E*Iz/ll/ll/ll; i++;
-            ai[i] = 7;  aj[i] = 5;  ax[i] = -3*E*Iz/ll/ll;    i++;
-            ai[i] = 7;  aj[i] = 7;  ax[i] = 3*E*Iz/ll/ll/ll;  i++;
-            ai[i] = 7;  aj[i] = 11; ax[i] = 0;                i++;
-            ai[i] = 11; aj[i] = 1;  ax[i] = 0;                i++;
-            ai[i] = 11; aj[i] = 5;  ax[i] = 0;                i++;
-            ai[i] = 11; aj[i] = 7;  ax[i] = 0;                i++;
-            ai[i] = 11; aj[i] = 11; ax[i] = 0;                i++;
-        }
-    //       Sinon Si l'élément possède un relachement de la rotation autour de l'axe z au
-    //         niveau de son noeud initial et final Alors \end{verbatim}\begin{displaymath}
-    // \begin{bmatrix}                  0                 &                0                 &                 0                 &                0                \\
-    //                                  0                 &                0                 &                 0                 &                0              \\
-    //                                  0                 &                0                 &                 0                 &                0              \\
-    //                                  0                 &                0                 &                 0                 &                0              
-    // \end{bmatrix}\end{displaymath}\begin{verbatim}
-        else if ((element->discretisation_element == 0) && (element->relachement != NULL) && (element->relachement->rz_debut == EF_RELACHEMENT_LIBRE) && (element->relachement->rz_fin == EF_RELACHEMENT_LIBRE))
-        {
-            ai[i] = 1;  aj[i] = 1;  ax[i] = 0; i++;
-            ai[i] = 1;  aj[i] = 5;  ax[i] = 0; i++;
-            ai[i] = 1;  aj[i] = 7;  ax[i] = 0; i++;
-            ai[i] = 1;  aj[i] = 11; ax[i] = 0; i++;
-            ai[i] = 5;  aj[i] = 1;  ax[i] = 0; i++;
-            ai[i] = 5;  aj[i] = 5;  ax[i] = 0; i++;
-            ai[i] = 5;  aj[i] = 7;  ax[i] = 0; i++;
-            ai[i] = 5;  aj[i] = 11; ax[i] = 0; i++;
-            ai[i] = 7;  aj[i] = 1;  ax[i] = 0; i++;
-            ai[i] = 7;  aj[i] = 5;  ax[i] = 0; i++;
-            ai[i] = 7;  aj[i] = 7;  ax[i] = 0; i++;
-            ai[i] = 7;  aj[i] = 11; ax[i] = 0; i++;
-            ai[i] = 11; aj[i] = 1;  ax[i] = 0; i++;
-            ai[i] = 11; aj[i] = 5;  ax[i] = 0; i++;
-            ai[i] = 11; aj[i] = 7;  ax[i] = 0; i++;
-            ai[i] = 11; aj[i] = 11; ax[i] = 0; i++;
-        }
-    //       FinSi
-        else
-            BUGMSG(0, -2, "Impossible\n");
+    //       Détermination de la matrice de rigidité après prise en compte des relachements
+    //         autour de l'axe z :
+    //         Pour cela, il convient de prendre comme modèle de base une poutre reposant sur
+    //         deux appuis avec encastrement élastique, kAz et kAy, et de déterminer l'effort
+    //         tranchant et le moment fléchissant au droit de chaque noeud. Les quatres cas de
+    //         charge à étudier sont :
+    //         1) Déplacement vertical imposé au noeud A. Les résultats sont exprimés en
+    //           fontion de la valeur du déplacement.
+    //         2) Rotation imposée au noeud A avec relachement au noeud A ignoré pour permettre
+    //           la rotation. Les résultats sont exprimés en fonction de la rotation.
+    //         3) Déplacement vertical imposé au noeud B. Les résultats sont exprimés en
+    //           fontion de la valeur du déplacement.
+    //         4) Rotation imposée au noeud B avec relachement au noeud B ignoré pour permettre
+    //           la rotation. Les résultats sont exprimés en fonction de la rotation.
+    //         Pour chaque cas, il est d'abord calculé la rotation au noeud en supposant le
+    //         système isostatique (relachements remplacés par des rotules). Ensuite les
+    //         moments isostatiques sont déterminés sur la base des rotations isostatiques.
+    //         
+    //         Etude du cas 1 :\end{verbatim}\begin{displaymath}
+    //         \varphi_{A_{iso}} = arctan \left( \frac{v}{L} \right)\end{displaymath}\begin{displaymath}
+    //         \varphi_{B_{iso}} = arctan \left( \frac{v}{L} \right)\end{displaymath}\begin{displaymath}
+    //         M_{A_{iso}} = 0\end{displaymath}\begin{displaymath}
+    //         M_{B_{iso}} = 0\end{displaymath}\begin{displaymath}
+    //         b = M_{A_{hyp}} = \frac{b \cdot \varphi_{B_{iso}}+(c+k_B) \cdot \varphi_{A_{iso}}}{(a+k_A)(c+k_B)-b^2} = \varphi_{iso} \frac{b+c+k_B}{(a+k_A)(c+k_B)-b^2}\end{displaymath}\begin{verbatim}
+    //         Afin de pouvoir exprimer le moment en fonction de la dénivelé, il est appliqué
+    //         un développement de Taylor de arctan (hypothèse des petites déplacements).
+    //         Ainsi arctan(v/L) # v/L + O(v^3)\end{verbatim}\begin{displaymath}
+    //         d = M_{B_{hyp}} = \frac{b \cdot \varphi_{A_{iso}}+(a+k_A) \cdot \varphi_{B_{iso}}}{(a+k_A)(c+k_B)-b^2} = \varphi_{iso} \frac{b+a+k_A}{(a+k_A)(c+k_B)-b^2}\end{displaymath}\begin{displaymath}
+    //         a = \frac{b}{L}+\frac{d}{L}\end{displaymath}\begin{displaymath}
+    //         c = -\frac{b}{L}-\frac{d}{L}\end{displaymath}\begin{verbatim}
+        memcpy(&infos, &(element->info_EF[j]), sizeof(infos));
+        EF_calculs_moment_hyper_z(&infos, 1./ll, 1./ll, &MA, &MB);
+        ai[i] = 1;  aj[i] = 1;  ax[i] = +MA/ll+MB/ll; i++;
+        printf("%f\n", (+MA/ll+MB/ll)/(E*Iz/ll/ll/ll));
+        ai[i] = 5;  aj[i] = 1;  ax[i] = MA;           i++;
+        printf("%f\n", (MA)/(E*Iz/ll/ll));
+        ai[i] = 7;  aj[i] = 1;  ax[i] = -MA/ll-MB/ll; i++;
+        printf("%f\n", (-MA/ll-MB/ll)/(E*Iz/ll/ll/ll));
+        ai[i] = 11; aj[i] = 1;  ax[i] = MB;           i++;
+        printf("%f\n", (MB)/(E*Iz/ll/ll));
         
-        if ((((j==0) && ((element->relachement == NULL) || (element->relachement->ry_debut == EF_RELACHEMENT_BLOQUE))) || (j > 0)) && 
-        (((j==element->discretisation_element) && ((element->relachement == NULL) || (element->relachement->ry_fin == EF_RELACHEMENT_BLOQUE))) || (j < element->discretisation_element)))
-    //       Si l'élément ne possède pas de relachement de rotation autour de l'axe y Alors \end{verbatim}\begin{displaymath}
-    // \begin{bmatrix}  \frac{ 12 \cdot E \cdot I_y}{L^3} & \frac{-6 \cdot E \cdot I_y}{L^2} & \frac{-12 \cdot E \cdot I_y}{L^3} & \frac{-6 \cdot E \cdot I_y}{L^2}\\
-    //                  \frac{ -6 \cdot E \cdot I_y}{L^2} & \frac{ 4 \cdot E \cdot I_y}{L}   & \frac{  6 \cdot E \cdot I_y}{L^2} & \frac{ 2 \cdot E \cdot I_y}{L}\\
-    //                  \frac{-12 \cdot E \cdot I_y}{L^3} & \frac{ 6 \cdot E \cdot I_y}{L^2} & \frac{ 12 \cdot E \cdot I_y}{L^3} & \frac{ 6 \cdot E \cdot I_y}{L^2}\\
-    //                  \frac{ -6 \cdot E \cdot I_y}{L^2} & \frac{ 2 \cdot E \cdot I_y}{L}   & \frac{  6 \cdot E \cdot I_y}{L^2} & \frac{ 4 \cdot E \cdot I_y}{L}
-    // \end{bmatrix}\end{displaymath}\begin{verbatim}
+    //         Etude du cas 2 :\end{verbatim}\begin{displaymath}
+    //         \varphi_{A_{iso}} = \frac{C \cdot L}{3 \cdot E \cdot I_z}\end{displaymath}\begin{displaymath}
+    //         \varphi_{B_{iso}} = -\frac{C \cdot L}{6 \cdot E \cdot I_z}\end{displaymath}\begin{displaymath}
+    //         M_{A_{iso}} = C\end{displaymath}\begin{displaymath}
+    //         M_{B_{iso}} = 0\end{displaymath}\begin{displaymath}
+    //         M_{A_{hyp}} = 0\end{displaymath}\begin{displaymath}
+    //         M_{B_{hyp}} = \frac{b \cdot \varphi_{A_{iso}}+(a+k_A) \cdot \varphi_{B_{iso}}}{(a+k_A)(c+k_B)-b^2} =  \varphi_{A_{iso}} \cdot \frac{b-(a+k_A)/2}{(a+k_A)(c+k_B)-b^2} = \frac{C \cdot L}{3 \cdot E \cdot I_z} \cdot \frac{b-(a+k_A)/2}{(a+k_A)(c+k_B)-b^2}\end{displaymath}\begin{displaymath}
+    //         M_{B_{hyp}} = \lim_{k_A\rightarrow \infty} \frac{C \cdot L}{3 \cdot E \cdot I_z} \cdot \frac{b-(a+k_A)/2}{(a+k_A)(c+k_B)-b^2} = -\frac{C \cdot L}{6 \cdot E \cdot I_z \cdot (c+k_B)}\end{displaymath}\begin{displaymath}
+    //         \phi_A = \varphi_{A_{iso}} + b \cdot M_{B_{hyp}} = \frac{C \cdot L}{3 \cdot E \cdot I_z} - b \cdot \frac{C \cdot L}{6 \cdot E \cdot I_z \cdot (c+k_B)} = \frac{C \cdot L}{3 \cdot E \cdot I_z} \left( 1 - \frac{b}{2 \cdot (c+k_B)} \right)\end{displaymath}\begin{displaymath}
+    //         f = M_{A_{iso}} = C = \frac{3 \cdot E \cdot I_z}{L \cdot \left( 1-\frac{b}{2\cdot(c+k_B)} \right)} \cdot \phi_A \end{displaymath}\begin{displaymath}
+    //         h = M_{B_{hyp}} = -\frac{C \cdot L}{6 \cdot E \cdot I_z \cdot (c+k_B)}\end{displaymath}\begin{displaymath}
+    //         e = \frac{f}{L}+\frac{h}{L}\end{displaymath}\begin{displaymath}
+    //         g = -\frac{f}{L}-\frac{h}{L}\end{displaymath}\begin{verbatim}
+        memcpy(&infos, &(element->info_EF[j]), sizeof(infos));
+        infos.kAz = MAXDOUBLE;
+        if (ERREUR_RELATIVE_EGALE(infos.kBz, MAXDOUBLE))
         {
-            ai[i] = 2;  aj[i] = 2;  ax[i] = 12*E*Iy/ll/ll/ll;  i++;
-            ai[i] = 2;  aj[i] = 4;  ax[i] = -6*E*Iy/ll/ll;     i++;
-            ai[i] = 2;  aj[i] = 8;  ax[i] = -12*E*Iy/ll/ll/ll; i++;
-            ai[i] = 2;  aj[i] = 10; ax[i] = -6*E*Iy/ll/ll;     i++;
-            ai[i] = 4;  aj[i] = 2;  ax[i] = -6*E*Iy/ll/ll;     i++;
-            ai[i] = 4;  aj[i] = 4;  ax[i] = 4*E*Iy/ll;         i++;
-            ai[i] = 4;  aj[i] = 8;  ax[i] = 6*E*Iy/ll/ll;      i++;
-            ai[i] = 4;  aj[i] = 10; ax[i] = 2*E*Iy/ll;         i++;
-            ai[i] = 8;  aj[i] = 2;  ax[i] = -12*E*Iy/ll/ll/ll; i++;
-            ai[i] = 8;  aj[i] = 4;  ax[i] = 6*E*Iy/ll/ll;      i++;
-            ai[i] = 8;  aj[i] = 8;  ax[i] = 12*E*Iy/ll/ll/ll;  i++;
-            ai[i] = 8;  aj[i] = 10; ax[i] = 6*E*Iy/ll/ll;      i++;
-            ai[i] = 10; aj[i] = 2;  ax[i] = -6*E*Iy/ll/ll;     i++;
-            ai[i] = 10; aj[i] = 4;  ax[i] = 2*E*Iy/ll;         i++;
-            ai[i] = 10; aj[i] = 8;  ax[i] = 6*E*Iy/ll/ll;      i++;
-            ai[i] = 10; aj[i] = 10; ax[i] = 4*E*Iy/ll;         i++;
+            MA = 3*E*Iz/ll;
+            MB = 0.;
         }
-    //       Sinon Si l'élément possède un relachement de la rotation autour de l'axe y au
-    //         niveau de son noeud initial Alors \end{verbatim}\begin{displaymath}
-    // \begin{bmatrix}  \frac{  3 \cdot E \cdot I_y}{L^3} &                0                 & \frac{ -3 \cdot E \cdot I_y}{L^3} & \frac{-3 \cdot E \cdot I_y}{L^2}\\
-    //                                  0                 &                0                 &                 0                 &                0              \\
-    //                  \frac{ -3 \cdot E \cdot I_y}{L^3} &                0                 & \frac{  3 \cdot E \cdot I_y}{L^3} & \frac{ 3 \cdot E \cdot I_y}{L^2}\\
-    //                  \frac{ -3 \cdot E \cdot I_y}{L^2} &                0                 & \frac{  3 \cdot E \cdot I_y}{L^2} & \frac{ 3 \cdot E \cdot I_y}{L}
-    // \end{bmatrix}\end{displaymath}\begin{verbatim}
-        else if (((j==0) && (element->relachement != NULL) && (element->relachement->ry_debut == EF_RELACHEMENT_LIBRE)) &&
-        (((j==element->discretisation_element) && ((element->relachement == NULL) || (element->relachement->ry_fin == EF_RELACHEMENT_BLOQUE))) || (j < element->discretisation_element)))
-        {
-            ai[i] = 2;  aj[i] = 2;  ax[i] = 3*E*Iy/ll/ll/ll;  i++;
-            ai[i] = 2;  aj[i] = 4;  ax[i] = 0;                i++;
-            ai[i] = 2;  aj[i] = 8;  ax[i] = -3*E*Iy/ll/ll/ll; i++;
-            ai[i] = 2;  aj[i] = 10; ax[i] = -3*E*Iy/ll/ll;    i++;
-            ai[i] = 4;  aj[i] = 2;  ax[i] = 0;                i++;
-            ai[i] = 4;  aj[i] = 4;  ax[i] = 0;                i++;
-            ai[i] = 4;  aj[i] = 8;  ax[i] = 0;                i++;
-            ai[i] = 4;  aj[i] = 10; ax[i] = 0;                i++;
-            ai[i] = 8;  aj[i] = 2;  ax[i] = -3*E*Iy/ll/ll/ll; i++;
-            ai[i] = 8;  aj[i] = 4;  ax[i] = 0;                i++;
-            ai[i] = 8;  aj[i] = 8;  ax[i] = 3*E*Iy/ll/ll/ll;  i++;
-            ai[i] = 8;  aj[i] = 10; ax[i] = 3*E*Iy/ll/ll;     i++;
-            ai[i] = 10; aj[i] = 2;  ax[i] = -3*E*Iy/ll/ll;    i++;
-            ai[i] = 10; aj[i] = 4;  ax[i] = 0;                i++;
-            ai[i] = 10; aj[i] = 8;  ax[i] = 3*E*Iy/ll/ll;     i++;
-            ai[i] = 10; aj[i] = 10; ax[i] = 3*E*Iy/ll;        i++;
-        }
-    //       Sinon Si l'élément possède un relachement de la rotation autour de l'axe y au
-    //         niveau de son noeud final Alors \end{verbatim}\begin{displaymath}
-    // \begin{bmatrix}  \frac{  3 \cdot E \cdot I_y}{L^3} & \frac{-3 \cdot E \cdot I_y}{L^2} & \frac{ -3 \cdot E \cdot I_y}{L^3} &                0                \\
-    //                  \frac{ -3 \cdot E \cdot I_y}{L^2} & \frac{ 3 \cdot E \cdot I_y}{L}   & \frac{  3 \cdot E \cdot I_y}{L^2} &                0              \\
-    //                  \frac{ -3 \cdot E \cdot I_y}{L^3} & \frac{ 3 \cdot E \cdot I_y}{L^2} & \frac{  3 \cdot E \cdot I_y}{L^3} &                0                \\
-    //                                  0                 &                0                 &                 0                 &                0              
-    // \end{bmatrix}\end{displaymath}\begin{verbatim}
-        else if (((j==element->discretisation_element) && (element->relachement != NULL) && (element->relachement->ry_fin == EF_RELACHEMENT_LIBRE)) &&
-        (((j==0) && ((element->relachement == NULL) || (element->relachement->ry_debut == EF_RELACHEMENT_BLOQUE))) || (j > 0)))
-        {
-            ai[i] = 2;  aj[i] = 2;  ax[i] = 3*E*Iy/ll/ll/ll;  i++;
-            ai[i] = 2;  aj[i] = 4;  ax[i] = -3*E*Iy/ll/ll;    i++;
-            ai[i] = 2;  aj[i] = 8;  ax[i] = -3*E*Iy/ll/ll/ll; i++;
-            ai[i] = 2;  aj[i] = 10; ax[i] = 0;                i++;
-            ai[i] = 4;  aj[i] = 2;  ax[i] = -3*E*Iy/ll/ll;    i++;
-            ai[i] = 4;  aj[i] = 4;  ax[i] = 3*E*Iy/ll;        i++;
-            ai[i] = 4;  aj[i] = 8;  ax[i] = 3*E*Iy/ll/ll;     i++;
-            ai[i] = 4;  aj[i] = 10; ax[i] = 0;                i++;
-            ai[i] = 8;  aj[i] = 2;  ax[i] = -3*E*Iy/ll/ll/ll; i++;
-            ai[i] = 8;  aj[i] = 4;  ax[i] = 3*E*Iy/ll/ll;     i++;
-            ai[i] = 8;  aj[i] = 8;  ax[i] = 3*E*Iy/ll/ll/ll;  i++;
-            ai[i] = 8;  aj[i] = 10; ax[i] = 0;                i++;
-            ai[i] = 10; aj[i] = 2;  ax[i] = 0;                i++;
-            ai[i] = 10; aj[i] = 4;  ax[i] = 0;                i++;
-            ai[i] = 10; aj[i] = 8;  ax[i] = 0;                i++;
-            ai[i] = 10; aj[i] = 10; ax[i] = 0;                i++;
-        }
-    //       Sinon Si l'élément possède un relachement de la rotation autour de l'axe y au
-    //         niveau de son noeud initial et final Alors \end{verbatim}\begin{displaymath}
-    // \begin{bmatrix}                  0                 &                0                 &                 0                 &                0                \\
-    //                                  0                 &                0                 &                 0                 &                0              \\
-    //                                  0                 &                0                 &                 0                 &                0              \\
-    //                                  0                 &                0                 &                 0                 &                0              
-    // \end{bmatrix}\end{displaymath}\begin{verbatim}
-        else if ((element->discretisation_element == 0) && (element->relachement != NULL) && (element->relachement->ry_debut == EF_RELACHEMENT_LIBRE) && (element->relachement->ry_fin == EF_RELACHEMENT_LIBRE))
-        {
-            ai[i] = 2;  aj[i] = 2;  ax[i] = 0; i++;
-            ai[i] = 2;  aj[i] = 4;  ax[i] = 0; i++;
-            ai[i] = 2;  aj[i] = 8;  ax[i] = 0; i++;
-            ai[i] = 2;  aj[i] = 10; ax[i] = 0; i++;
-            ai[i] = 4;  aj[i] = 2;  ax[i] = 0; i++;
-            ai[i] = 4;  aj[i] = 4;  ax[i] = 0; i++;
-            ai[i] = 4;  aj[i] = 8;  ax[i] = 0; i++;
-            ai[i] = 4;  aj[i] = 10; ax[i] = 0; i++;
-            ai[i] = 8;  aj[i] = 2;  ax[i] = 0; i++;
-            ai[i] = 8;  aj[i] = 4;  ax[i] = 0; i++;
-            ai[i] = 8;  aj[i] = 8;  ax[i] = 0; i++;
-            ai[i] = 8;  aj[i] = 10; ax[i] = 0; i++;
-            ai[i] = 10; aj[i] = 2;  ax[i] = 0; i++;
-            ai[i] = 10; aj[i] = 4;  ax[i] = 0; i++;
-            ai[i] = 10; aj[i] = 8;  ax[i] = 0; i++;
-            ai[i] = 10; aj[i] = 10; ax[i] = 0; i++;
-        }
-    //       FinSi
         else
-            BUGMSG(0, -2, "Impossible\n");
+        {
+            MA = 3*E*Iz/ll/(1-infos.bz/(2*(infos.cz+infos.kBz)));
+            MB = MA*ll/(6*E*Iz*(infos.cz+infos.kBz));
+        }
+        ai[i] = 1;  aj[i] = 5;  ax[i] = MA/ll+MB/ll;  i++;
+        printf("%f\n", (MA/ll+MB/ll)/(E*Iz/ll/ll));
+        ai[i] = 5;  aj[i] = 5;  ax[i] = MA;           i++;
+        printf("%f\n", (MA)/(E*Iz/ll));
+        ai[i] = 7;  aj[i] = 5;  ax[i] = -MA/ll-MB/ll; i++;
+        printf("%f\n", (-MA/ll-MB/ll)/(E*Iz/ll/ll));
+        ai[i] = 11; aj[i] = 5;  ax[i] = MB;           i++;
+        printf("%f\n", (MB)/(E*Iz/ll));
+        
+    //         Etude du cas 3 :\end{verbatim}\begin{displaymath}
+    //         \varphi_{A_{iso}} = -arctan \left( \frac{v}{L} \right)\end{displaymath}\begin{displaymath}
+    //         \varphi_{B_{iso}} = -arctan \left( \frac{v}{L} \right)\end{displaymath}\begin{displaymath}
+    //         M_{A_{iso}} = 0\end{displaymath}\begin{displaymath}
+    //         M_{B_{iso}} = 0\end{displaymath}\begin{displaymath}
+    //         j = M_{A_{hyp}} = \frac{b \cdot \varphi_{B_{iso}}+(c+k_B) \cdot \varphi_{A_{iso}}}{(a+k_A)(c+k_B)-b^2} = \varphi_{iso} \frac{b+c+k_B}{(a+k_A)(c+k_B)-b^2}\end{displaymath}\begin{verbatim}
+    //         Afin de pouvoir exprimer le moment en fonction de la dénivelé, il est appliqué
+    //         un développement de Taylor de arctan (hypothèse des petites déplacements).
+    //         Ainsi -arctan(v/L) # -v/L + O(v^3)\end{verbatim}\begin{displaymath}
+    //         l = M_{B_{hyp}} = \frac{b \cdot \varphi_{A_{iso}}+(a+k_A) \cdot \varphi_{B_{iso}}}{(a+k_A)(c+k_B)-b^2} = \varphi_{iso} \frac{b+a+k_A}{(a+k_A)(c+k_B)-b^2}\end{displaymath}\begin{displaymath}
+    //         i = \frac{j}{L}+\frac{l}{L}\end{displaymath}\begin{displaymath}
+    //         k = -\frac{j}{L}-\frac{l}{L}\end{displaymath}\begin{verbatim}
+        memcpy(&infos, &(element->info_EF[j]), sizeof(infos));
+        EF_calculs_moment_hyper_z(&infos, -1./ll, -1./ll, &MA, &MB);
+        ai[i] = 1;  aj[i] = 7;  ax[i] =  MA/ll+MB/ll; i++;
+        printf("%f\n", (MA/ll+MB/ll)/(E*Iz/ll/ll/ll));
+        ai[i] = 5;  aj[i] = 7;  ax[i] =  MA;          i++;
+        printf("%f\n", (MA)/(E*Iz/ll/ll));
+        ai[i] = 7;  aj[i] = 7;  ax[i] = -MA/ll-MB/ll; i++;
+        printf("%f\n", (-MA/ll-MB/ll)/(E*Iz/ll/ll/ll));
+        ai[i] = 11; aj[i] = 7;  ax[i] =  MB;          i++;
+        printf("%f\n", (MB)/(E*Iz/ll/ll));
+        
+    //         Etude du cas 4 :\end{verbatim}\begin{displaymath}
+    //         \varphi_{A_{iso}} = -\frac{C \cdot L}{6 \cdot E \cdot I_z}\end{displaymath}\begin{displaymath}
+    //         \varphi_{B_{iso}} = \frac{C \cdot L}{3 \cdot E \cdot I_z}\end{displaymath}\begin{displaymath}
+    //         M_{A_{iso}} = 0\end{displaymath}\begin{displaymath}
+    //         M_{B_{iso}} = C\end{displaymath}\begin{displaymath}
+    //         M_{A_{hyp}} = \frac{b \cdot \varphi_{B_{iso}}+(c+k_B) \cdot \varphi_{A_{iso}}}{(a+k_A)(c+k_B)-b^2} =  \varphi_{B_{iso}} \cdot \frac{b-(c+k_B)/2}{(a+k_A)(c+k_B)-b^2} = \frac{C \cdot L}{3 \cdot E \cdot I_z} \cdot \frac{b-(c+k_B)/2}{(a+k_A)(c+k_B)-b^2}\end{displaymath}\begin{displaymath}
+    //         M_{A_{hyp}} = \lim_{k_B\rightarrow \infty} \frac{C \cdot L}{3 \cdot E \cdot I_z} \cdot \frac{b-(c+k_B)/2}{(a+k_A)(c+k_B)-b^2} = -\frac{C \cdot L}{6 \cdot E \cdot I_z \cdot (a+k_A)}\end{displaymath}\begin{displaymath}
+    //         M_{B_{hyp}} = 0\end{displaymath}\begin{displaymath}
+    //         \phi_B = \varphi_{B_{iso}} + b \cdot M_{A_{hyp}} = \frac{C \cdot L}{3 \cdot E \cdot I_z} - b \cdot \frac{C \cdot L}{6 \cdot E \cdot I_z \cdot (a+k_A)} = \frac{C \cdot L}{3 \cdot E \cdot I_z} \left( 1 - \frac{b}{2 \cdot (a+k_A)} \right)\end{displaymath}\begin{displaymath}
+    //         p = M_{B_{iso}} = C = \frac{3 \cdot E \cdot I_z}{L \cdot \left( 1-\frac{b}{2\cdot(a+k_A)} \right)} \cdot \phi_B\end{displaymath}\begin{displaymath}
+    //         n = M_{A_{hyp}} = -\frac{C \cdot L}{6 \cdot E \cdot I_z \cdot (a+k_A)}\end{displaymath}\begin{displaymath}
+    //         m = \frac{n}{L}+\frac{p}{L}\end{displaymath}\begin{displaymath}
+    //         o = -\frac{n}{L}-\frac{p}{L}\end{displaymath}\begin{verbatim}
+    //         L'ensemble des valeurs sont à inséré dans la matrice suivante et permet
+    //         d'obtenir la matrice de rigidité élémentaire.\end{verbatim}\begin{displaymath}
+        memcpy(&infos, &(element->info_EF[j]), sizeof(infos));
+        infos.kBz = MAXDOUBLE;
+        if (ERREUR_RELATIVE_EGALE(infos.kAz, MAXDOUBLE))
+        {
+            /* MA et MB sont bien ici inversés ;) */
+            MB = 3*E*Iz/ll;
+            MA = 0.;
+        }
+        else
+        {
+            MB = 3*E*Iz/ll/(1-infos.bz/(2*(infos.az+infos.kAz)));
+            MA = MB*ll/(6*E*Iz*(infos.az+infos.kAz));
+        }
+        ai[i] = 1;  aj[i] = 11; ax[i] =  MA/ll+MB/ll; i++;
+        printf("%f\n", (MA/ll+MB/ll)/(E*Iz/ll/ll));
+        ai[i] = 5;  aj[i] = 11; ax[i] =  MA;          i++;
+        printf("%f\n", (MA)/(E*Iz/ll));
+        ai[i] = 7;  aj[i] = 11; ax[i] = -MA/ll-MB/ll; i++;
+        printf("%f\n", (-MA/ll-MB/ll)/(E*Iz/ll/ll));
+        ai[i] = 11; aj[i] = 11; ax[i] =  MB;          i++;
+        printf("%f\n", (MB)/(E*Iz/ll));
+    // \begin{bmatrix}K_e\end{bmatrix} = 
+    // \begin{bmatrix}  a & e & i & m\\
+    //                  b & f & j & n\\
+    //                  c & g & k & o\\
+    //                  d & h & l & p
+    // \end{bmatrix}\end{displaymath}\begin{verbatim}
+        
+    //       Détermination de la matrice de rigidité après prise en compte des relachements
+    //         autour de l'axe y. Cette matrice de rigidité se calcule exactement de la même
+    //         façon que la matrice précédente. Il suffit de remplacer les relachements kAz et
+    //         kBz par kAy et lBy, les inerties Iz par Iy et les coefficients de souplesse az,
+    //         bz et cz par ay, by et cy. Le changement repère entraine également un changement
+    //         de signe des coefficients de la matrice a, c, e, g, i, k, m et o.
+        memcpy(&infos, &(element->info_EF[j]), sizeof(infos));
+        EF_calculs_moment_hyper_y(&infos, 1./ll, 1./ll, &MA, &MB);
+        ai[i] = 2;  aj[i] = 2;  ax[i] = -MA/ll-MB/ll; i++;
+        printf("%f\n", (-MA/ll-MB/ll)/(E*Iy/ll/ll/ll));
+        ai[i] = 4;  aj[i] = 2;  ax[i] = MA;           i++;
+        printf("%f\n", (MA)/(E*Iy/ll/ll));
+        ai[i] = 8;  aj[i] = 2;  ax[i] = +MA/ll+MB/ll; i++;
+        printf("%f\n", (+MA/ll+MB/ll)/(E*Iy/ll/ll/ll));
+        ai[i] = 10; aj[i] = 2;  ax[i] = MB;           i++;
+        printf("%f\n", (MB)/(E*Iy/ll/ll));
+        
+        memcpy(&infos, &(element->info_EF[j]), sizeof(infos));
+        infos.kAy = MAXDOUBLE;
+        if (ERREUR_RELATIVE_EGALE(infos.kBy, MAXDOUBLE))
+        {
+            MA = 3*E*Iy/ll;
+            MB = 0.;
+        }
+        else
+        {
+            MA = 3*E*Iy/ll/(1-infos.by/(2*(infos.cy+infos.kBy)));
+            MB = MA*ll/(6*E*Iy*(infos.cy+infos.kBy));
+        }
+        ai[i] = 2;  aj[i] = 4;  ax[i] = -MA/ll-MB/ll; i++;
+        printf("%f\n", (-MA/ll-MB/ll)/(E*Iy/ll/ll));
+        ai[i] = 4;  aj[i] = 4;  ax[i] = MA;           i++;
+        printf("%f\n", (MA)/(E*Iy/ll));
+        ai[i] = 8;  aj[i] = 4;  ax[i] = +MA/ll+MB/ll; i++;
+        printf("%f\n", (+MA/ll+MB/ll)/(E*Iy/ll/ll));
+        ai[i] = 10; aj[i] = 4;  ax[i] = MB;           i++;
+        printf("%f\n", (MB)/(E*Iy/ll));
+        
+        memcpy(&infos, &(element->info_EF[j]), sizeof(infos));
+        EF_calculs_moment_hyper_y(&infos, -1./ll, -1./ll, &MA, &MB);
+        ai[i] = 2;  aj[i] = 8;  ax[i] = -MA/ll-MB/ll; i++;
+        printf("%f\n", (-MA/ll-MB/ll)/(E*Iy/ll/ll/ll));
+        ai[i] = 4;  aj[i] = 8;  ax[i] =  MA;          i++;
+        printf("%f\n", (MA)/(E*Iy/ll/ll));
+        ai[i] = 8;  aj[i] = 8;  ax[i] = +MA/ll+MB/ll; i++;
+        printf("%f\n", (+MA/ll+MB/ll)/(E*Iy/ll/ll/ll));
+        ai[i] = 10; aj[i] = 8;  ax[i] =  MB;          i++;
+        printf("%f\n", (MB)/(E*Iy/ll/ll));
+        
+        memcpy(&infos, &(element->info_EF[j]), sizeof(infos));
+        infos.kBy = MAXDOUBLE;
+        if (ERREUR_RELATIVE_EGALE(infos.kAy, MAXDOUBLE))
+        {
+            /* MA et MB sont bien ici inversés ;) */
+            MB = 3*E*Iy/ll;
+            MA = 0.;
+        }
+        else
+        {
+            MB = 3*E*Iy/ll/(1-infos.by/(2*(infos.ay+infos.kAy)));
+            MA = MB*ll/(6*E*Iy*(infos.ay+infos.kAy));
+        }
+        ai[i] = 2;  aj[i] = 10; ax[i] = -MA/ll-MB/ll; i++;
+        printf("%f\n", (-MA/ll-MB/ll)/(E*Iy/ll/ll));
+        ai[i] = 4;  aj[i] = 10; ax[i] = MA;           i++;
+        printf("%f\n", (MA)/(E*Iy/ll));
+        ai[i] = 8;  aj[i] = 10; ax[i] = MA/ll+MB/ll;  i++;
+        printf("%f\n", (MA/ll+MB/ll)/(E*Iy/ll/ll));
+        ai[i] = 10; aj[i] = 10; ax[i] = MB;           i++;
+        printf("%f\n", (MB)/(E*Iy/ll));
         
     //       Pour un élément travaillant en torsion simple dont l'une des extrémités est
     //         relaxée :\end{verbatim}\begin{displaymath}

@@ -21,9 +21,14 @@
 
 #include "config.h"
 #include "common_projet.h"
+#include "1992_1_1_barres.h"
 
 int EF_calculs_initialise(Projet *projet);
 int EF_calculs_genere_mat_rig(Projet *projet);
+int EF_calculs_moment_hyper_y(Barre_Info_EF *infos, double phia, double phib,
+  double *ma, double *mb);
+int EF_calculs_moment_hyper_z(Barre_Info_EF *infos, double phia, double phib,
+  double *ma, double *mb);
 int EF_calculs_resoud_charge(Projet *projet, int num_action);
 int EF_calculs_affiche_resultats(Projet *projet, int num_action);
 

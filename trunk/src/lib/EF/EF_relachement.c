@@ -43,18 +43,26 @@ int EF_relachement_init(Projet *projet)
 }
 
 
-int EF_relachement_ajout(Projet *projet, Type_EF_Relachement rx_debut,
-  Type_EF_Relachement ry_debut, Type_EF_Relachement rz_debut, Type_EF_Relachement rx_fin,
-  Type_EF_Relachement ry_fin, Type_EF_Relachement rz_fin)
+int EF_relachement_ajout(Projet *projet, EF_Relachement_Type rx_debut, void* rx_d_data,
+  EF_Relachement_Type ry_debut, void* ry_d_data, EF_Relachement_Type rz_debut, void* rz_d_data,
+  EF_Relachement_Type rx_fin, void* rx_f_data, EF_Relachement_Type ry_fin, void* ry_f_data,
+  EF_Relachement_Type rz_fin, void* rz_f_data)
 /* Description : Ajoute un relachement en lui attribuant le numéro suivant le dernier
- *                 relachement existant
+ *                 relachement existant. Les données fournis dans les paramètres additionnels
+ *                 doivent avoir été stockées en mémoire par l'utilisation de malloc.
  * Paramètres : Projet *projet : la variable projet
  *            : Type_EF_Appui rx_debut : relachement de la rotation autour de l'axe x au début
+ *            : void* rx_d_data : paramètre additionnel de la rotation si nécessaire
  *            : Type_EF_Appui ry_debut : relachement de la rotation autour de l'axe y au début
+ *            : void* ry_d_data : paramètre additionnel de la rotation si nécessaire
  *            : Type_EF_Appui rz_debut : relachement de la rotation autour de l'axe z au début
+ *            : void* rz_d_data : paramètre additionnel de la rotation si nécessaire
  *            : Type_EF_Appui rx_fin : relachement de la rotation autour de l'axe x à la fin
+ *            : void* rx_f_data : paramètre additionnel de la rotation si nécessaire
  *            : Type_EF_Appui ry_fin : relachement de la rotation autour de l'axe y à la fin
+ *            : void* ry_f_data : paramètre additionnel de la rotation si nécessaire
  *            : Type_EF_Appui rz_fin : relachement de la rotation autour de l'axe z à la fin
+ *            : void* rz_f_data : paramètre additionnel de la rotation si nécessaire
  * Valeur renvoyée :
  *   Succès : 0
  *   Échec : -1 en cas de paramètres invalides :
@@ -73,17 +81,17 @@ int EF_relachement_ajout(Projet *projet, Type_EF_Relachement rx_debut,
     
     list_mvrear(projet->ef_donnees.relachements);
     relachement_nouveau.rx_debut = rx_debut;
-    relachement_nouveau.rx_d_data = NULL;
+    relachement_nouveau.rx_d_data = rx_d_data;
     relachement_nouveau.ry_debut = ry_debut;
-    relachement_nouveau.ry_d_data = NULL;
+    relachement_nouveau.ry_d_data = ry_d_data;
     relachement_nouveau.rz_debut = rz_debut;
-    relachement_nouveau.rz_d_data = NULL;
+    relachement_nouveau.rz_d_data = rz_d_data;
     relachement_nouveau.rx_fin = rx_fin;
-    relachement_nouveau.rx_f_data = NULL;
+    relachement_nouveau.rx_f_data = rx_f_data;
     relachement_nouveau.ry_fin = ry_fin;
-    relachement_nouveau.ry_f_data = NULL;
+    relachement_nouveau.ry_f_data = ry_f_data;
     relachement_nouveau.rz_fin = rz_fin;
-    relachement_nouveau.rz_f_data = NULL;
+    relachement_nouveau.rz_f_data = rz_f_data;
     
     relachement_en_cours = (EF_Relachement *)list_rear(projet->ef_donnees.relachements);
     if (relachement_en_cours == NULL)
@@ -146,6 +154,12 @@ int EF_relachement_free(Projet *projet)
     while (!list_empty(projet->ef_donnees.relachements))
     {
         EF_Relachement *relachement = list_remove_front(projet->ef_donnees.relachements);
+        free(relachement->rx_d_data);
+        free(relachement->ry_d_data);
+        free(relachement->rz_d_data);
+        free(relachement->rx_f_data);
+        free(relachement->ry_f_data);
+        free(relachement->rz_f_data);
         
         free(relachement);
     }
