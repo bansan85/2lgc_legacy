@@ -20,8 +20,8 @@ Pour compiler et installer l'application, il suffit de lancer les commandes suiv
 autoscan
 patch < diff-configure.scan.patch
 mv configure.scan configure.ac
-
 gettextize -c -f --no-changelog
+
 cd po
 patch < ../diff-po-Makevars.template.patch
 cd ..
@@ -37,7 +37,8 @@ automake --add-missing --copy
 autoconf
 ./configure --with-gtk --with-debug --prefix=/usr/local
 patch < diff-libtool-as-needed.patch
-make -j3 && make -C doc doc && sudo make install-data && make check -j3 && sudo make install
+make -C doc doc
+make -j3 && sudo make install-data && make check -j3 && sudo make install && codegui
 NOTA IMPORTANT :
     -pg -fprofile-arcs -ftest-coverage sont des options de deboguage qui ne doivent pas être mises pour une utilisation courante.
     --with-gtk : compilation de l'interface graphique et du support GTK.

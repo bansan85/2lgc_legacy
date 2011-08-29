@@ -37,7 +37,7 @@
 #include "1992_1_1_section.h"
 #include "1992_1_1_materiaux.h"
 
-Projet *projet_init(Type_Pays pays)
+Projet* projet_init(Type_Pays pays)
 /* Description : Initialise la variable projet
  * Paramètres : Type_Pays pays : pays du calcul
  * Valeur renvoyée :

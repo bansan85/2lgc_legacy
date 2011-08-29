@@ -170,7 +170,8 @@ int _1990_groupe_positionne_niveau(LIST *source, int numero)
 }
 
 
-int _1990_groupe_ajout_groupe(Projet *projet, int niveau, Type_Groupe_Combinaison type_combinaison)
+int _1990_groupe_ajout_groupe(Projet *projet, int niveau,
+  Type_Groupe_Combinaison type_combinaison)
 /* Description : Ajoute un groupe au niveau choisi avec le type de combinaison spécifié.
  * Paramètres : Projet *projet : la variable projet
  *            : int niveau : le niveau où le groupe doit être inséré

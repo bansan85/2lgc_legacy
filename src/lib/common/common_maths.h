@@ -25,8 +25,9 @@
 
 #define ABS(X) ((X) > 0 ? (X) : -(X))
 
-#define ERREUR_RELATIVE_PUISSANCE 14 // Avec 15, on peut se retrouver avec 2 décimales fausses
-#define ERREUR_RELATIVE_MIN 1e-14
+#define ERREUR_RELATIVE_PUISSANCE 13 // Avec 14, max(matrice)*drop peut ne pas supprimer toutes les
+                                     // valeurs négligeable.
+#define ERREUR_RELATIVE_MIN 1e-13
 #define ERREUR_RELATIVE_EGALE(x, y) ( ((x) == 0.) || ((y) == 0.) ? \
   (MAX(ABS(x),ABS(y))-MIN(ABS(x),ABS(y)) < (ERREUR_RELATIVE_MIN)) : \
   ((MAX(ABS(x),ABS(y))-MIN(ABS(x),ABS(y)))/(MIN(ABS(x),ABS(y))) < (ERREUR_RELATIVE_MIN) ))

@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2011-08-25 17:28+0200\n"
+"POT-Creation-Date: 2011-08-29 09:46+0200\n"
 "PO-Revision-Date: 2011-08-22 11:44+0100\n"
 "Last-Translator: LE GARREC Vincent <vlg@2lgc.org>\n"
 "Language-Team: French\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: src/gui/codegui/main.c:97
+#: src/gui/codegui/main.c:99
 msgid "Impossible d'initialiser gtk.\n"
 msgstr "Impossible d'initialiser gtk.\n"
 
@@ -25,30 +25,31 @@ msgstr "Impossible d'initialiser gtk.\n"
 #: src/lib/1992_1_1/1992_1_1_section.c:211
 #: src/lib/1992_1_1/1992_1_1_section.c:236
 #: src/lib/1992_1_1/1992_1_1_section.c:259
-#: src/lib/1992_1_1/1992_1_1_barres.c:43 src/lib/1992_1_1/1992_1_1_barres.c:98
-#: src/lib/1992_1_1/1992_1_1_barres.c:105
-#: src/lib/1992_1_1/1992_1_1_barres.c:130
-#: src/lib/1992_1_1/1992_1_1_barres.c:281
-#: src/lib/1992_1_1/1992_1_1_barres.c:315
-#: src/lib/1992_1_1/1992_1_1_barres.c:317
-#: src/lib/1992_1_1/1992_1_1_barres.c:421
-#: src/lib/1992_1_1/1992_1_1_barres.c:683
-#: src/lib/1992_1_1/1992_1_1_barres.c:689
-#: src/lib/1992_1_1/1992_1_1_barres.c:691
-#: src/lib/1992_1_1/1992_1_1_barres.c:694
+#: src/lib/1992_1_1/1992_1_1_barres.c:46
+#: src/lib/1992_1_1/1992_1_1_barres.c:101
+#: src/lib/1992_1_1/1992_1_1_barres.c:108
+#: src/lib/1992_1_1/1992_1_1_barres.c:133
+#: src/lib/1992_1_1/1992_1_1_barres.c:284
+#: src/lib/1992_1_1/1992_1_1_barres.c:318
+#: src/lib/1992_1_1/1992_1_1_barres.c:320
+#: src/lib/1992_1_1/1992_1_1_barres.c:520
+#: src/lib/1992_1_1/1992_1_1_barres.c:742
+#: src/lib/1992_1_1/1992_1_1_barres.c:748
+#: src/lib/1992_1_1/1992_1_1_barres.c:750
+#: src/lib/1992_1_1/1992_1_1_barres.c:753
 #: src/lib/1992_1_1/1992_1_1_materiaux.c:42
 #: src/lib/1992_1_1/1992_1_1_materiaux.c:144
 #: src/lib/1990/1990_ponderations.c:244 src/lib/1990/1990_ponderations.c:289
 #: src/lib/1990/1990_ponderations.c:301 src/lib/1990/1990_groupes.c:46
 #: src/lib/1990/1990_groupes.c:73 src/lib/1990/1990_groupes.c:76
-#: src/lib/1990/1990_groupes.c:208 src/lib/1990/1990_groupes.c:211
-#: src/lib/1990/1990_groupes.c:212 src/lib/1990/1990_groupes.c:277
-#: src/lib/1990/1990_groupes.c:292 src/lib/1990/1990_groupes.c:300
+#: src/lib/1990/1990_groupes.c:209 src/lib/1990/1990_groupes.c:212
+#: src/lib/1990/1990_groupes.c:213 src/lib/1990/1990_groupes.c:278
+#: src/lib/1990/1990_groupes.c:293 src/lib/1990/1990_groupes.c:301
 #: src/lib/1990/1990_actions.c:275 src/lib/1990/1990_actions.c:310
 #: src/lib/1990/1990_actions.c:340 src/lib/1990/1990_gtk_groupes.c:80
 #: src/lib/1990/1990_gtk_groupes.c:105 src/lib/1990/1990_gtk_groupes.c:125
 #: src/lib/1990/1990_gtk_groupes.c:259 src/lib/1990/1990_gtk_groupes.c:413
-#: src/lib/1990/1990_gtk_groupes.c:485 src/lib/1990/1990_gtk_groupes.c:1041
+#: src/lib/1990/1990_gtk_groupes.c:485 src/lib/1990/1990_gtk_groupes.c:1044
 #: src/lib/1990/1990_combinaisons.c:132 src/lib/1990/1990_combinaisons.c:143
 #: src/lib/1990/1990_combinaisons.c:148 src/lib/1990/1990_combinaisons.c:260
 #: src/lib/1990/1990_combinaisons.c:263 src/lib/1990/1990_combinaisons.c:264
@@ -76,27 +77,28 @@ msgstr "Impossible d'initialiser gtk.\n"
 #: src/lib/EF/EF_calculs.c:66 src/lib/EF/EF_calculs.c:70
 #: src/lib/EF/EF_calculs.c:73 src/lib/EF/EF_calculs.c:77
 #: src/lib/EF/EF_calculs.c:159 src/lib/EF/EF_calculs.c:162
-#: src/lib/EF/EF_calculs.c:228 src/lib/EF/EF_calculs.c:230
-#: src/lib/EF/EF_calculs.c:233 src/lib/EF/EF_calculs.c:236
-#: src/lib/EF/EF_calculs.c:248 src/lib/EF/EF_calculs.c:250
-#: src/lib/EF/EF_calculs.c:257 src/lib/EF/EF_calculs.c:264
-#: src/lib/EF/EF_calculs.c:282 src/lib/EF/EF_calculs.c:335
-#: src/lib/EF/EF_calculs.c:347 src/lib/EF/EF_calculs.c:434
-#: src/lib/EF/EF_calculs.c:443 src/lib/EF/EF_calculs.c:464
-#: src/lib/EF/EF_calculs.c:467 src/lib/EF/EF_calculs.c:470
-#: src/lib/EF/EF_calculs.c:728 src/lib/EF/EF_calculs.c:746
-#: src/lib/EF/EF_calculs.c:749 src/lib/EF/EF_calculs.c:752
-#: src/lib/EF/EF_calculs.c:789 src/lib/EF/EF_calculs.c:792
-#: src/lib/EF/EF_calculs.c:795 src/lib/EF/EF_calculs.c:810
-#: src/lib/EF/EF_calculs.c:812 src/lib/EF/EF_calculs.c:818
-#: src/lib/EF/EF_calculs.c:823 src/lib/EF/EF_calculs.c:850
-#: src/lib/EF/EF_calculs.c:856 src/lib/EF/EF_calculs.c:869
-#: src/lib/EF/EF_calculs.c:939 src/lib/EF/EF_calculs.c:962
-#: src/lib/EF/EF_calculs.c:965 src/lib/EF/EF_calculs.c:971
-#: src/lib/EF/EF_noeud.c:40 src/lib/EF/EF_noeud.c:87
-#: src/lib/EF/EF_charge_barre_ponctuelle.c:96 src/lib/EF/EF_appuis.c:40
-#: src/lib/EF/EF_appuis.c:169 src/lib/EF/EF_relachement.c:40
-#: src/lib/EF/EF_relachement.c:94 src/lib/EF/EF_charge_noeud.c:87
+#: src/lib/EF/EF_calculs.c:229 src/lib/EF/EF_calculs.c:231
+#: src/lib/EF/EF_calculs.c:234 src/lib/EF/EF_calculs.c:237
+#: src/lib/EF/EF_calculs.c:249 src/lib/EF/EF_calculs.c:251
+#: src/lib/EF/EF_calculs.c:258 src/lib/EF/EF_calculs.c:265
+#: src/lib/EF/EF_calculs.c:283 src/lib/EF/EF_calculs.c:439
+#: src/lib/EF/EF_calculs.c:451 src/lib/EF/EF_calculs.c:537
+#: src/lib/EF/EF_calculs.c:546 src/lib/EF/EF_calculs.c:567
+#: src/lib/EF/EF_calculs.c:570 src/lib/EF/EF_calculs.c:573
+#: src/lib/EF/EF_calculs.c:798 src/lib/EF/EF_calculs.c:816
+#: src/lib/EF/EF_calculs.c:819 src/lib/EF/EF_calculs.c:822
+#: src/lib/EF/EF_calculs.c:859 src/lib/EF/EF_calculs.c:862
+#: src/lib/EF/EF_calculs.c:864 src/lib/EF/EF_calculs.c:879
+#: src/lib/EF/EF_calculs.c:881 src/lib/EF/EF_calculs.c:887
+#: src/lib/EF/EF_calculs.c:892 src/lib/EF/EF_calculs.c:919
+#: src/lib/EF/EF_calculs.c:925 src/lib/EF/EF_calculs.c:939
+#: src/lib/EF/EF_calculs.c:941 src/lib/EF/EF_calculs.c:1012
+#: src/lib/EF/EF_calculs.c:1035 src/lib/EF/EF_calculs.c:1038
+#: src/lib/EF/EF_calculs.c:1044 src/lib/EF/EF_noeud.c:40
+#: src/lib/EF/EF_noeud.c:87 src/lib/EF/EF_charge_barre_ponctuelle.c:96
+#: src/lib/EF/EF_appuis.c:40 src/lib/EF/EF_appuis.c:169
+#: src/lib/EF/EF_relachement.c:40 src/lib/EF/EF_relachement.c:102
+#: src/lib/EF/EF_charge_noeud.c:87
 #, c-format
 msgid "%s : Erreur d'allocation mémoire.\n"
 msgstr "%s : Erreur d'allocation mémoire.\n"
@@ -111,7 +113,7 @@ msgstr "Erreur d'allocation mémoire.\n"
 msgid "%s : Section en béton n°%d introuvable.\n"
 msgstr "Section en béton n°%d introuvable.\n"
 
-#: src/lib/1992_1_1/1992_1_1_barres.c:164
+#: src/lib/1992_1_1/1992_1_1_barres.c:167
 #, c-format
 msgid "Barre en béton %d introuvable.\n"
 msgstr "Barre en béton %d introuvable.\n"
@@ -308,11 +310,11 @@ msgstr "%s : Action %d introuvable.\n"
 msgid "%s : Élément %d existant.\n"
 msgstr "%s : Élément %d existant.\n"
 
-#: src/lib/1990/1990_gtk_groupes.c:895
+#: src/lib/1990/1990_gtk_groupes.c:898
 msgid "Options des combinaisons"
 msgstr "Options des combinaisons"
 
-#: src/lib/1990/1990_gtk_groupes.c:909
+#: src/lib/1990/1990_gtk_groupes.c:912
 msgid ""
 "A l'État Limite Ultime d'ÉQUilibre, il est possible de générer les "
 "combinaisons pour la vérification à l'équilibre statique seulement ou à "
@@ -322,19 +324,19 @@ msgstr ""
 "combinaisons pour la vérification à l'équilibre statique seulement ou à "
 "l'équilibre statique incluant la résistance d'éléments structuraux."
 
-#: src/lib/1990/1990_gtk_groupes.c:915
+#: src/lib/1990/1990_gtk_groupes.c:918
 msgid "Équilibre seulement"
 msgstr "Équilibre seulement"
 
-#: src/lib/1990/1990_gtk_groupes.c:918
+#: src/lib/1990/1990_gtk_groupes.c:921
 msgid "Équilibre et résistance"
 msgstr "Équilibre et résistance"
 
-#: src/lib/1990/1990_gtk_groupes.c:929
+#: src/lib/1990/1990_gtk_groupes.c:932
 msgid "ELU STR et GEO, formule de combinaison :"
 msgstr "ELU STR et GEO, formule de combinaison :"
 
-#: src/lib/1990/1990_gtk_groupes.c:934
+#: src/lib/1990/1990_gtk_groupes.c:937
 msgid ""
 "À l'État Limite Ultime STRucture et GÉOtechnique, deux formules de "
 "combinaison sont possibles. La première est la formule 6.10 et la deuxième "
@@ -344,15 +346,15 @@ msgstr ""
 "combinaison sont possibles. La première est la formule 6.10 et la deuxième "
 "est 6.10a et 6.10b"
 
-#: src/lib/1990/1990_gtk_groupes.c:948
+#: src/lib/1990/1990_gtk_groupes.c:951
 msgid "6.10a et 6.10b"
 msgstr "6.10a et 6.10b"
 
-#: src/lib/1990/1990_gtk_groupes.c:964
+#: src/lib/1990/1990_gtk_groupes.c:967
 msgid "ELU STR et GEO, ensemble de calcul :"
 msgstr "ELU STR et GEO, ensemble de calcul :"
 
-#: src/lib/1990/1990_gtk_groupes.c:969
+#: src/lib/1990/1990_gtk_groupes.c:972
 msgid ""
 "Lorsqu'il est nécessaire de réaliser un calcul à l'État Limite Ultime "
 "STRucture et GÉOtechnique, trois approches sont possibles. Approche 1 : "
@@ -372,23 +374,23 @@ msgstr ""
 "pour les actions géotechniques et les coefficients de l'ensemble C pour les "
 "actions appliquées à la structure."
 
-#: src/lib/1990/1990_gtk_groupes.c:975
+#: src/lib/1990/1990_gtk_groupes.c:978
 msgid "Approche 1"
 msgstr "Approche 1"
 
-#: src/lib/1990/1990_gtk_groupes.c:978
+#: src/lib/1990/1990_gtk_groupes.c:981
 msgid "Approche 2"
 msgstr "Approche 2"
 
-#: src/lib/1990/1990_gtk_groupes.c:981
+#: src/lib/1990/1990_gtk_groupes.c:984
 msgid "Approche 3"
 msgstr "Approche 3"
 
-#: src/lib/1990/1990_gtk_groupes.c:993
+#: src/lib/1990/1990_gtk_groupes.c:996
 msgid "ELU ACCidentel :"
 msgstr "ELU ACCidentel :"
 
-#: src/lib/1990/1990_gtk_groupes.c:998
+#: src/lib/1990/1990_gtk_groupes.c:1001
 msgid ""
 "À l'État Limite Ultime ACCidentel, la charge variable dominante utilisée est "
 "soit la valeur fréquente, soit la valeur quasi-permanente."
@@ -396,55 +398,55 @@ msgstr ""
 "À l'État Limite Ultime ACCidentel, la charge variable dominante utilisée est "
 "soit la valeur fréquente, soit la valeur quasi-permanente."
 
-#: src/lib/1990/1990_gtk_groupes.c:1004
+#: src/lib/1990/1990_gtk_groupes.c:1007
 msgid "valeur fréquence"
 msgstr "valeur fréquence"
 
-#: src/lib/1990/1990_gtk_groupes.c:1007
+#: src/lib/1990/1990_gtk_groupes.c:1010
 msgid "valeur quasi-permanente"
 msgstr "valeur quasi-permanente"
 
-#: src/lib/1990/1990_gtk_groupes.c:1052
+#: src/lib/1990/1990_gtk_groupes.c:1055
 msgid "Combinaisons"
 msgstr "Combinaisons"
 
-#: src/lib/1990/1990_gtk_groupes.c:1090
+#: src/lib/1990/1990_gtk_groupes.c:1093
 msgid "Groupes"
 msgstr "Groupes"
 
-#: src/lib/1990/1990_gtk_groupes.c:1094
+#: src/lib/1990/1990_gtk_groupes.c:1097
 msgid "Groupe"
 msgstr "Groupe"
 
-#: src/lib/1990/1990_gtk_groupes.c:1097
+#: src/lib/1990/1990_gtk_groupes.c:1100
 msgid "Element"
 msgstr "Element"
 
-#: src/lib/1990/1990_gtk_groupes.c:1100 src/lib/1990/1990_gtk_groupes.c:1138
+#: src/lib/1990/1990_gtk_groupes.c:1103 src/lib/1990/1990_gtk_groupes.c:1141
 msgid "Description"
 msgstr "Description"
 
-#: src/lib/1990/1990_gtk_groupes.c:1117
+#: src/lib/1990/1990_gtk_groupes.c:1120
 msgid "OK"
 msgstr "OK"
 
-#: src/lib/1990/1990_gtk_groupes.c:1130
+#: src/lib/1990/1990_gtk_groupes.c:1133
 msgid "Disponibles :"
 msgstr "Disponibles :"
 
-#: src/lib/1990/1990_gtk_groupes.c:1135
+#: src/lib/1990/1990_gtk_groupes.c:1138
 msgid "Disponibles"
 msgstr "Disponibles"
 
-#: src/lib/1990/1990_gtk_groupes.c:1144
+#: src/lib/1990/1990_gtk_groupes.c:1147
 msgid "Générer"
 msgstr "Générer"
 
-#: src/lib/1990/1990_gtk_groupes.c:1147
+#: src/lib/1990/1990_gtk_groupes.c:1150
 msgid "Options"
 msgstr "Options"
 
-#: src/lib/1990/1990_gtk_groupes.c:1150
+#: src/lib/1990/1990_gtk_groupes.c:1153
 msgid "Quitter"
 msgstr "Quitter"
 
@@ -731,7 +733,7 @@ msgstr "%s : Paramètre invalide : %s %s\n"
 msgid "Noeud n°%d introuvable.\n"
 msgstr "Noeud n°%d introuvable.\n"
 
-#: src/lib/EF/EF_relachement.c:128
+#: src/lib/EF/EF_relachement.c:136
 #, c-format
 msgid "Relachement n°%d introuvable.\n"
 msgstr "Relachement n°%d introuvable.\n"

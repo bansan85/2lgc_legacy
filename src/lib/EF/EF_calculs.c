@@ -170,6 +170,7 @@ int EF_calculs_initialise(Projet *projet)
     return 0;
 }
 
+
 int EF_calculs_genere_mat_rig(Projet *projet)
 /* Description : Convertion des triplets contenant la matrice de rigidité 
  *               partielle et complète sous forme d'une matrice sparse et
@@ -285,6 +286,108 @@ int EF_calculs_genere_mat_rig(Projet *projet)
 }
 
 
+int EF_calculs_moment_hyper_y(Barre_Info_EF *infos, double phia, double phib,
+  double *ma, double *mb)
+/* Description : Calcul le moment hyperstatique à partir de la rotation au point A et B autour
+ *                 de l'axe Y.
+ * Paramètres : Barre_Info_EF *infos : contient les paramètres ay, by, cy et kAy et kBy.
+ *              double phia : rotation au noeud A.
+ *              double phib : rotation au noeud B.
+ *              double *ma : moment au noeud A. Peut être NULL.
+ *              double *mb : moment au noeud B. Peut être NULL.
+ * Valeur renvoyée :
+ *   Succès : 0
+ *   Échec : -1 en cas de paramètres invalides :
+ *             (infos == NULL)
+ */
+{
+    BUGMSG(infos, -1, "EF_calculs_moment_hyper_y\n");
+    // Calcul des moments créés par les raideurs :\end{verbatim}\begin{align*}
+    //               M_{Ay} & = -\frac{b_y \cdot \varphi_{By}+(c_y+k_{By}) \cdot \varphi_{Ay}}{(a_y+k_{Ay}) \cdot (c_y+k_{By})-b_y^2} \nonumber\\
+    //               M_{By} & = -\frac{b_y \cdot \varphi_{Ay}+(a_y+k_{Ay}) \cdot \varphi_{By}}{(a_y+k_{Ay}) \cdot (c_y+k_{By})-b_y^2} \end{align*}\begin{verbatim}
+    if ((ERREUR_RELATIVE_EGALE(infos->kAy, MAXDOUBLE)) && (ERREUR_RELATIVE_EGALE(infos->kBy, MAXDOUBLE)))
+    {
+        if (ma != NULL)
+            *ma = 0.;
+        if (mb != NULL)
+            *mb = 0.;
+    }
+    else if (ERREUR_RELATIVE_EGALE(infos->kAy, MAXDOUBLE))
+    {
+        if (ma != NULL)
+            *ma = 0.;
+        if (mb != NULL)
+            *mb = -phib/(infos->cy+infos->kBy);
+    }
+    else if (ERREUR_RELATIVE_EGALE(infos->kBy, MAXDOUBLE))
+    {
+        if (ma != NULL)
+            *ma = -phia/(infos->ay+infos->kAy);
+        if (mb != NULL)
+        *mb = 0.;
+    }
+    else
+    {
+        if (ma != NULL)
+            *ma = -(infos->by*phib+(infos->cy+infos->kBy)*phia)/((infos->ay+infos->kAy)*(infos->cy+infos->kBy)-infos->by*infos->by);
+        if (mb != NULL)
+            *mb = -(infos->by*phia+(infos->ay+infos->kAy)*phib)/((infos->ay+infos->kAy)*(infos->cy+infos->kBy)-infos->by*infos->by);
+    }
+    return 0;
+}
+
+
+int EF_calculs_moment_hyper_z(Barre_Info_EF *infos, double phia, double phib,
+  double *ma, double *mb)
+/* Description : Calcul le moment hyperstatique à partir de la rotation au point A et B autour
+ *                 de l'axe Z.
+ * Paramètres : Barre_Info_EF *infos : contient les paramètres az, bz, cz et kAz et kBz.
+ *              double phia : rotation au noeud A.
+ *              double phib : rotation au noeud B.
+ *              double *ma : moment au noeud A. Peut être NULL.
+ *              double *mb : moment au noeud B. Peut être NULL.
+ * Valeur renvoyée :
+ *   Succès : 0
+ *   Échec : -1 en cas de paramètres invalides :
+ *             (infos == NULL)
+ */
+{
+    BUGMSG(infos, -1, "EF_calculs_moment_hyper_z\n");
+    // Calcul des moments créés par les raideurs :\end{verbatim}\begin{align*}
+    //               M_{Az} & = \frac{b_z \cdot \varphi_{Bz}+(c_z+k_{Bz}) \cdot \varphi_{Az}}{(a_z+k_{Az}) \cdot (c_z+k_{Bz})-b_z^2} \nonumber\\
+    //               M_{Bz} & = \frac{b_z \cdot \varphi_{Az}+(a_z+k_{Az}) \cdot \varphi_{Bz}}{(a_z+k_{Az}) \cdot (c_z+k_{Bz})-b_z^2}\end{align*}\begin{verbatim}
+    if ((ERREUR_RELATIVE_EGALE(infos->kAz, MAXDOUBLE)) && (ERREUR_RELATIVE_EGALE(infos->kBz, MAXDOUBLE)))
+    {
+        if (ma != NULL)
+            *ma = 0.;
+        if (mb != NULL)
+            *mb = 0.;
+    }
+    else if (ERREUR_RELATIVE_EGALE(infos->kAz, MAXDOUBLE))
+    {
+        if (ma != NULL)
+            *ma = 0.;
+        if (mb != NULL)
+            *mb = phib/(infos->cz+infos->kBz);
+    }
+    else if (ERREUR_RELATIVE_EGALE(infos->kBz, MAXDOUBLE))
+    {
+        if (ma != NULL)
+            *ma = phia/(infos->az+infos->kAz);
+        if (mb != NULL)
+            *mb = 0.;
+    }
+    else
+    {
+        if (ma != NULL)
+            *ma = (infos->bz*phib+(infos->cz+infos->kBz)*phia)/((infos->az+infos->kAz)*(infos->cz+infos->kBz)-infos->bz*infos->bz);
+        if (mb != NULL)
+            *mb = (infos->bz*phia+(infos->az+infos->kAz)*phib)/((infos->az+infos->kAz)*(infos->cz+infos->kBz)-infos->bz*infos->bz);
+    }
+    return 0;
+}
+
+
 int EF_calculs_resoud_charge(Projet *projet, int num_action)
 /* Description : Détermine à partir de la matrice de rigidité partielle factorisée les
  *               déplacements et les efforts dans les noeuds pour l'action demandée
@@ -318,6 +421,7 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
     unsigned int    i, j, k;
     double          max_effort;
     cholmod_dense   *X, *Y;
+    cholmod_sparse  *sparse_tmp;
     
     BUGMSG(projet, -1, "EF_calculs_resoud_charge\n");
     BUGMSG(projet->actions, -1, "EF_calculs_resoud_charge\n");
@@ -490,11 +594,20 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
                         pos = 0;
                         l = -1.;
                         /* On regarde pour chaque noeud intermédiaire si la position de la charge devient inférieur à la distance entre le noeud de départ et le noeud intermédiaire */
-                        while ((pos<element_en_beton->discretisation_element) && (l < charge_barre->position))
+                        while ((pos<=element_en_beton->discretisation_element) && (l < charge_barre->position))
                         {
-                            xx = element_en_beton->noeuds_intermediaires[pos]->position.x - element_en_beton->noeud_debut->position.x;
-                            yy = element_en_beton->noeuds_intermediaires[pos]->position.y - element_en_beton->noeud_debut->position.y;
-                            zz = element_en_beton->noeuds_intermediaires[pos]->position.z - element_en_beton->noeud_debut->position.z;
+                            if (pos==element_en_beton->discretisation_element)
+                            {
+                                xx = element_en_beton->noeud_fin->position.x - element_en_beton->noeud_debut->position.x;
+                                yy = element_en_beton->noeud_fin->position.y - element_en_beton->noeud_debut->position.y;
+                                zz = element_en_beton->noeud_fin->position.z - element_en_beton->noeud_debut->position.z;
+                            }
+                            else
+                            {
+                                xx = element_en_beton->noeuds_intermediaires[pos]->position.x - element_en_beton->noeud_debut->position.x;
+                                yy = element_en_beton->noeuds_intermediaires[pos]->position.y - element_en_beton->noeud_debut->position.y;
+                                zz = element_en_beton->noeuds_intermediaires[pos]->position.z - element_en_beton->noeud_debut->position.z;
+                            }
                             l = sqrt(xx*xx+yy*yy+zz*zz);
                             pos++;
                         }
@@ -506,9 +619,9 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
                             noeud_fin = element_en_beton->noeuds_intermediaires[0];
                         }
                         /* Alors la position de la charge est compris entre le dernier noeud intermédiaire et le noeud de fin de la barre */
-                        else if (i == element_en_beton->discretisation_element-1)
+                        else if (pos == element_en_beton->discretisation_element)
                         {
-                            noeud_debut = element_en_beton->noeuds_intermediaires[pos];
+                            noeud_debut = element_en_beton->noeuds_intermediaires[pos-1];
                             noeud_fin = element_en_beton->noeud_fin;
                         }
                         else
@@ -547,51 +660,9 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
                     MAx = ax2[3]*b/l;
                     MBx = ax2[3]*a/l;
                     
-    //             Calcul des moments créés par les raideurs (paramètre k non infini) :\end{verbatim}\begin{align*}
-    //               M_{Ay} & = -\frac{b_y \cdot \varphi_{By}+(c_y+k_{By}) \cdot \varphi_{Ay}}{(a_y+k_{Ay}) \cdot (c_y+k_{By})-b_y^2} \nonumber\\
-    //               M_{By} & = -\frac{b_y \cdot \varphi_{Ay}+(a_y+k_{Ay}) \cdot \varphi_{By}}{(a_y+k_{Ay}) \cdot (c_y+k_{By})-b_y^2} \nonumber\\
-    //               M_{Az} & = \frac{b_z \cdot \varphi_{Bz}+(c_z+k_{Bz}) \cdot \varphi_{Az}}{(a_z+k_{Az}) \cdot (c_z+k_{Bz})-b_z^2} \nonumber\\
-    //               M_{Bz} & = \frac{b_z \cdot \varphi_{Az}+(a_z+k_{Az}) \cdot \varphi_{Bz}}{(a_z+k_{Az}) \cdot (c_z+k_{Bz})-b_z^2}\end{align*}\begin{verbatim}
-                    if ((element_en_beton->info_EF[pos].kAy == MAXDOUBLE) && (element_en_beton->info_EF[pos].kBy == MAXDOUBLE))
-                    {
-                        MAy = 0.;
-                        MBy = 0.;
-                    }
-                    else if (element_en_beton->info_EF[pos].kAy == MAXDOUBLE)
-                    {
-                        MAy = 0.;
-                        MBy = -phiBy/(element_en_beton->info_EF[pos].cy+element_en_beton->info_EF[pos].kBy);
-                    }
-                    else if (element_en_beton->info_EF[pos].kBy == MAXDOUBLE)
-                    {
-                        MAy = -phiAy/(element_en_beton->info_EF[pos].ay+element_en_beton->info_EF[pos].kAy);
-                        MBy = 0.;
-                    }
-                    else
-                    {
-                        MAy = -(element_en_beton->info_EF[pos].by*phiBy+(element_en_beton->info_EF[pos].cy+element_en_beton->info_EF[pos].kBy)*phiAy)/((element_en_beton->info_EF[pos].ay+element_en_beton->info_EF[pos].kAy)*(element_en_beton->info_EF[pos].cy+element_en_beton->info_EF[pos].kBy)-element_en_beton->info_EF[pos].by*element_en_beton->info_EF[pos].by);
-                        MBy = -(element_en_beton->info_EF[pos].by*phiAy+(element_en_beton->info_EF[pos].ay+element_en_beton->info_EF[pos].kAy)*phiBy)/((element_en_beton->info_EF[pos].ay+element_en_beton->info_EF[pos].kAy)*(element_en_beton->info_EF[pos].cy+element_en_beton->info_EF[pos].kBy)-element_en_beton->info_EF[pos].by*element_en_beton->info_EF[pos].by);
-                    }
-                    if ((element_en_beton->info_EF[pos].kAz == MAXDOUBLE) && (element_en_beton->info_EF[pos].kBz == MAXDOUBLE))
-                    {
-                        MAz = 0.;
-                        MBz = 0.;
-                    }
-                    else if (element_en_beton->info_EF[pos].kAz == MAXDOUBLE)
-                    {
-                        MAz = 0.;
-                        MBz = phiBz/(element_en_beton->info_EF[pos].cz+element_en_beton->info_EF[pos].kBz);
-                    }
-                    else if (element_en_beton->info_EF[pos].kBz == MAXDOUBLE)
-                    {
-                        MAz = phiAz/(element_en_beton->info_EF[pos].az+element_en_beton->info_EF[pos].kAz);
-                        MBz = 0.;
-                    }
-                    else
-                    {
-                        MAz = (element_en_beton->info_EF[pos].bz*phiBz+(element_en_beton->info_EF[pos].cz+element_en_beton->info_EF[pos].kBz)*phiAz)/((element_en_beton->info_EF[pos].az+element_en_beton->info_EF[pos].kAz)*(element_en_beton->info_EF[pos].cz+element_en_beton->info_EF[pos].kBz)-element_en_beton->info_EF[pos].bz*element_en_beton->info_EF[pos].bz);
-                        MBz = (element_en_beton->info_EF[pos].bz*phiAz+(element_en_beton->info_EF[pos].az+element_en_beton->info_EF[pos].kAz)*phiBz)/((element_en_beton->info_EF[pos].az+element_en_beton->info_EF[pos].kAz)*(element_en_beton->info_EF[pos].cz+element_en_beton->info_EF[pos].kBz)-element_en_beton->info_EF[pos].bz*element_en_beton->info_EF[pos].bz);
-                    }
+    //             Calcul des moments créés par les raideurs (EF_calculs_moment_hyper_y et z) :
+                    EF_calculs_moment_hyper_y(&(element_en_beton->info_EF[pos]), phiAy, phiBy, &MAy, &MBy);
+                    EF_calculs_moment_hyper_z(&(element_en_beton->info_EF[pos]), phiAz, phiBz, &MAz, &MBz);
                     
     //             Réaction d'appui sur les noeuds :\end{verbatim}\begin{align*}
                     // F_{Ax} & = \frac{F_x \cdot b}{l}\nonumber\\
@@ -640,9 +711,9 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
                     // M_y(x) & = -\frac{F_z \cdot b \cdot x}{l}-\frac{M_y \cdot x}{l} - M_{Ay} + \frac{M_{Ay}+M_{By}}{l} \cdot x & &\textrm{ pour x variant de 0 à a}\nonumber\\
                     // M_y(x) & = -F_z \cdot a+M_y+\frac{F_z \cdot a \cdot x}{l}-\frac{M_y}{l} \cdot x - M_{Ay} + \frac{M_{Ay}+M_{By}}{l} \cdot x & &\textrm{ pour x variant de a à l}\nonumber\\
                     
-                    BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[4][num], 0., a,  0,                -ax2[2]*b/l-ax2[4]/l, 0., 0., debut_barre) == 0, -3);
+                    BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[4][num], 0., a,  0,               -ax2[2]*b/l-ax2[4]/l, 0., 0., debut_barre) == 0, -3);
                     BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[4][num], a,  l, -ax2[2]*a+ax2[4], ax2[2]*a/l-ax2[4]/l,  0., 0., debut_barre) == 0, -3);
-                    BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[4][num], 0., l,  -MAy,             (MAy+MBy)/l,          0., 0., debut_barre) == 0, -3);
+                    BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[4][num], 0., l,  -MAy,            (MAy+MBy)/l,          0., 0., debut_barre) == 0, -3);
                     
                     // M_z(x) & = \frac{F_y \cdot b \cdot x}{l}-\frac{M_z \cdot x}{l} -M_{Az} + \frac{M_{Az}+M_{Bz}}{l} \cdot x & &\textrm{ pour x variant de 0 à a}\nonumber\\
                     // M_z(x) & = F_y \cdot a+M_z -\frac{F_y \cdot a \cdot x}{l}-\frac{M_z}{l} \cdot x -M_{Az} + \frac{M_{Az}+M_{Bz}}{l} \cdot x & &\textrm{ pour x variant de a à l}
@@ -653,8 +724,8 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
                     // \end{align*}\begin{verbatim}
                     
                     
-    //             Détermination des fonctions de flèche et rotation de la même façon que pour
-    //               les sollicitations (cas isostatique + encastrement) :\end{verbatim}\begin{align*}
+    //             Détermination des fonctions de déformation et rotation de la même façon que
+    //               pour les sollicitations (cas isostatique + encastrement) :\end{verbatim}\begin{align*}
                     
                     // r_x(x) = & \frac{M_{Ax}}{G \cdot J} \cdot x & &\textrm{ pour x variant de 0 à a}\nonumber\\
                     // r_x(x) = & \frac{M_{Bx} \cdot l}{G \cdot J} -\frac{M_{Bx}}{G \cdot J} \cdot x & &\textrm{ pour x variant de a à l}\end{align*}\begin{align*}
@@ -690,8 +761,8 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
                     // f_x(x) = & \frac{F_{Ax} \cdot x}{E \cdot S} & &\textrm{ pour x variant de 0 à a}\nonumber\\
                     // f_x(x) = & \frac{l \cdot F_{Ax} \cdot a}{E \cdot S \cdot b} -\frac{F_{Ax} \cdot a \cdot x}{E \cdot S \cdot b} & &\textrm{ pour x variant de a à l}\end{align*}\begin{align*}
                     
-                    BUG(common_fonction_ajout(action_en_cours->fonctions_fleche[0][num], 0., a, 0.,              FAx/(E*S),      0., 0., debut_barre) == 0, -3);
-                    BUG(common_fonction_ajout(action_en_cours->fonctions_fleche[0][num], a,  l, l*FAx*a/(E*S*b), -FAx*a/(E*S*b), 0., 0., debut_barre) == 0, -3);
+                    BUG(common_fonction_ajout(action_en_cours->fonctions_deformation[0][num], 0., a, 0.,              FAx/(E*S),      0., 0., debut_barre) == 0, -3);
+                    BUG(common_fonction_ajout(action_en_cours->fonctions_deformation[0][num], a,  l, l*FAx*a/(E*S*b), -FAx*a/(E*S*b), 0., 0., debut_barre) == 0, -3);
                     
                     // f_y(x) = & \frac{F_y \cdot b \cdot x}{6 \cdot E \cdot I_z \cdot l}  \cdot \left( l^2-b^2 - x^2 \right) & &\\
                     //          & + \frac{M_z \cdot x}{6 \cdot E \cdot I_z \cdot l} \cdot \left( -l^2+3 \cdot b^2 + x^2 \right) & &\\
@@ -700,11 +771,11 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
                     //          & + \frac{M_z}{6 \cdot E \cdot I_z \cdot l} \left(-3 \cdot a^2 \cdot l + (2 \cdot l^2+3 \cdot a^2) \cdot x -3 \cdot l \cdot x^2 + x^3 \right) & &\\
                     //          & + \frac{x}{6 \cdot E \cdot I_z} \cdot \left( l \cdot (-2 \cdot M_{Az}+M_{Bz}) + 3 \cdot M_{Az} \cdot x - \frac{M_{Bz}+M_{Az}}{l} \cdot x^2 \right) & &\textrm{ pour x variant de a à l}\end{align*}\begin{align*}
                     
-                    BUG(common_fonction_ajout(action_en_cours->fonctions_fleche[1][num], 0., a, 0.,                     ax2[1]*b/(6*E*Iz*l)*(l*l-b*b),   0.,                 -ax2[1]*b/(6*E*Iz*l),  debut_barre) == 0, -3);
-                    BUG(common_fonction_ajout(action_en_cours->fonctions_fleche[1][num], a,  l, -ax2[1]*a*a*a/(6*E*Iz), ax2[1]*a/(6*E*Iz*l)*(a*a+2*l*l), -ax2[1]*a/(2*E*Iz), ax2[1]*a/(6*E*Iz*l),   debut_barre) == 0, -3);
-                    BUG(common_fonction_ajout(action_en_cours->fonctions_fleche[1][num], 0., a, 0.,                     ax2[5]/(6*E*Iz*l)*(-l*l+3*b*b),  0.,                 ax2[5]/(6*E*Iz*l),     debut_barre) == 0, -3);
-                    BUG(common_fonction_ajout(action_en_cours->fonctions_fleche[1][num], a,  l, -ax2[5]/(2*E*Iz)*(a*a), ax2[5]/(6*E*Iz*l)*(2*l*l+3*a*a), -ax2[5]/(2*E*Iz),   ax2[5]/(6*E*Iz*l),     debut_barre) == 0, -3);
-                    BUG(common_fonction_ajout(action_en_cours->fonctions_fleche[1][num], 0., l, 0.,                     l/(6*E*Iz)*(-2*MAz+MBz),         MAz/(2*E*Iz),       -(MBz+MAz)/(6*E*Iz*l), debut_barre) == 0, -3);
+                    BUG(common_fonction_ajout(action_en_cours->fonctions_deformation[1][num], 0., a, 0.,                     ax2[1]*b/(6*E*Iz*l)*(l*l-b*b),   0.,                 -ax2[1]*b/(6*E*Iz*l),  debut_barre) == 0, -3);
+                    BUG(common_fonction_ajout(action_en_cours->fonctions_deformation[1][num], a,  l, -ax2[1]*a*a*a/(6*E*Iz), ax2[1]*a/(6*E*Iz*l)*(a*a+2*l*l), -ax2[1]*a/(2*E*Iz), ax2[1]*a/(6*E*Iz*l),   debut_barre) == 0, -3);
+                    BUG(common_fonction_ajout(action_en_cours->fonctions_deformation[1][num], 0., a, 0.,                     ax2[5]/(6*E*Iz*l)*(-l*l+3*b*b),  0.,                 ax2[5]/(6*E*Iz*l),     debut_barre) == 0, -3);
+                    BUG(common_fonction_ajout(action_en_cours->fonctions_deformation[1][num], a,  l, -ax2[5]/(2*E*Iz)*(a*a), ax2[5]/(6*E*Iz*l)*(2*l*l+3*a*a), -ax2[5]/(2*E*Iz),   ax2[5]/(6*E*Iz*l),     debut_barre) == 0, -3);
+                    BUG(common_fonction_ajout(action_en_cours->fonctions_deformation[1][num], 0., l, 0.,                     l/(6*E*Iz)*(-2*MAz+MBz),         MAz/(2*E*Iz),       -(MBz+MAz)/(6*E*Iz*l), debut_barre) == 0, -3);
                     
                     // f_z(x) = & \frac{F_z \cdot b \cdot x}{6 \cdot E \cdot I_y \cdot l}  \cdot \left( l^2-b^2 - x^2 \right) & &\\
                     //          & + \frac{M_y \cdot x}{6 \cdot E \cdot I_y \cdot l} \cdot \left( l^2-3 \cdot b^2 - x^2 \right) & &\\
@@ -713,11 +784,11 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
                     //          & + \frac{M_y}{6 \cdot E \cdot I_y \cdot l} \left(3 \cdot a^2 \cdot l - (2 \cdot l^2+3 \cdot a^2) \cdot x + 3 \cdot l \cdot x^2 - x^3 \right) & &\\
                     //          & + \frac{x}{6 \cdot E \cdot I_y} \cdot \left( l \cdot (2 \cdot M_{Ay}-M_{By}) - 3 \cdot M_{Ay} \cdot x + \frac{M_{By}+M_{Ay}}{l} \cdot x^2 \right) & &\textrm{ pour x variant de a à l}\nonumber
                     
-                    BUG(common_fonction_ajout(action_en_cours->fonctions_fleche[2][num], 0., a, 0.,                      ax2[2]*b/(6*E*Iy*l)*(l*l-b*b),    0.,                      -ax2[2]*b/(6*E*Iy*l), debut_barre) == 0, -3);
-                    BUG(common_fonction_ajout(action_en_cours->fonctions_fleche[2][num], a,  l, -ax2[2]*a*a*a/(6*E*Iy),  ax2[2]*a/(6*E*Iy*l)*(a*a+2*l*l),  -ax2[2]*a/(2*E*Iy),      ax2[2]*a/(6*E*Iy*l),  debut_barre) == 0, -3);
-                    BUG(common_fonction_ajout(action_en_cours->fonctions_fleche[2][num], 0., a, 0.,                      ax2[4]/(6*E*Iy*l)*(l*l-3*b*b),    0.,                      -ax2[4]/(6*E*Iy*l),   debut_barre) == 0, -3);
-                    BUG(common_fonction_ajout(action_en_cours->fonctions_fleche[2][num], a,  l, ax2[4]/(6*E*Iy)*(3*a*a), -ax2[4]/(6*E*Iy*l)*(2*l*l+3*a*a), ax2[4]/(6*E*Iy*l)*(3*l), -ax2[4]/(6*E*Iy*l),   debut_barre) == 0, -3);
-                    BUG(common_fonction_ajout(action_en_cours->fonctions_fleche[2][num], 0., l, 0.,                      l/(6*E*Iy)*(2*MAy-MBy),           -MAy/(2*E*Iy),           (MBy+MAy)/(6*E*Iy*l), debut_barre) == 0, -3);
+                    BUG(common_fonction_ajout(action_en_cours->fonctions_deformation[2][num], 0., a, 0.,                      ax2[2]*b/(6*E*Iy*l)*(l*l-b*b),    0.,                      -ax2[2]*b/(6*E*Iy*l), debut_barre) == 0, -3);
+                    BUG(common_fonction_ajout(action_en_cours->fonctions_deformation[2][num], a,  l, -ax2[2]*a*a*a/(6*E*Iy),  ax2[2]*a/(6*E*Iy*l)*(a*a+2*l*l),  -ax2[2]*a/(2*E*Iy),      ax2[2]*a/(6*E*Iy*l),  debut_barre) == 0, -3);
+                    BUG(common_fonction_ajout(action_en_cours->fonctions_deformation[2][num], 0., a, 0.,                      ax2[4]/(6*E*Iy*l)*(l*l-3*b*b),    0.,                      -ax2[4]/(6*E*Iy*l),   debut_barre) == 0, -3);
+                    BUG(common_fonction_ajout(action_en_cours->fonctions_deformation[2][num], a,  l, ax2[4]/(6*E*Iy)*(3*a*a), -ax2[4]/(6*E*Iy*l)*(2*l*l+3*a*a), ax2[4]/(6*E*Iy*l)*(3*l), -ax2[4]/(6*E*Iy*l),   debut_barre) == 0, -3);
+                    BUG(common_fonction_ajout(action_en_cours->fonctions_deformation[2][num], 0., l, 0.,                      l/(6*E*Iy)*(2*MAy-MBy),           -MAy/(2*E*Iy),           (MBy+MAy)/(6*E*Iy*l), debut_barre) == 0, -3);
                     // \end{align*}\begin{verbatim}
                     cholmod_l_free_triplet(&triplet_efforts_locaux_initiaux, projet->ef_donnees.c);
                     
@@ -789,7 +860,6 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
     cholmod_l_free_triplet(&triplet_force_partielle, projet->ef_donnees.c);
     dense_force = cholmod_l_sparse_to_dense(sparse_force, projet->ef_donnees.c);
     BUGMSG(dense_force, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_resoud_charge");
-    cholmod_l_free_sparse(&sparse_force, projet->ef_donnees.c);
     action_en_cours->forces_complet = cholmod_l_triplet_to_sparse(triplet_force_complete, 0, projet->ef_donnees.c);
     BUGMSG(action_en_cours->forces_complet, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_resoud_charge");
     cholmod_l_free_triplet(&triplet_force_complete, projet->ef_donnees.c);
@@ -863,8 +933,11 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
     action_en_cours->norm = rnorm / axbnorm ;
     printf("résidu : %e\n", action_en_cours->norm);
     
-    /* Calcule des efforts dans tous les noeuds, y compris les réactions d'appuis : */
-    action_en_cours->efforts_noeuds = cholmod_l_ssmult(projet->ef_donnees.rigidite_matrice_complete, action_en_cours->deplacement_complet, 0, TRUE, TRUE, projet->ef_donnees.c);
+    // Calcule des réactions d'appuis :\end{verbatim}\begin{displaymath}
+    // \{F\} = [K] \cdot \{\Delta\} - \{F_0\} \end{displaymath}\begin{verbatim}
+    sparse_tmp = cholmod_l_ssmult(projet->ef_donnees.rigidite_matrice_complete, action_en_cours->deplacement_complet, 0, TRUE, TRUE, projet->ef_donnees.c);
+    BUGMSG(sparse_tmp, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_resoud_charge");
+    action_en_cours->efforts_noeuds = cholmod_l_add(sparse_tmp, action_en_cours->forces_complet, one, minusone, TRUE, TRUE, projet->ef_donnees.c);
     BUGMSG(action_en_cours->efforts_noeuds, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_resoud_charge");
     max_effort = 0.;
     ax = action_en_cours->efforts_noeuds->x;
@@ -880,6 +953,7 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
     cholmod_l_free_dense(&X, projet->ef_donnees.c);
     cholmod_l_free_dense(&r, projet->ef_donnees.c);
     cholmod_l_free_sparse(&sparse_force, projet->ef_donnees.c);
+    cholmod_l_free_sparse(&sparse_tmp, projet->ef_donnees.c);
     cholmod_l_free_dense(&dense_force, projet->ef_donnees.c);
     
 /*  Pour utiliser cholmod dans les calculs de matrices.
@@ -1000,28 +1074,28 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
             
     //     Ajout des déplacements & rotations entre deux noeuds dus à leur déplacement relatif,
     //       la courbe vient s'ajouter à la courbe (si existante) déja définie précédemment.
-    //       La flèche en x est obtenue comme une variation linéaire entre les deux noeuds.
-    //       La flèche  en y et z est obtenue par double intégration de la courbe des moments.
+    //       La déformée en x est obtenue comme une variation linéaire entre les deux noeuds.
+    //       La déformée en y et z est obtenue par double intégration de la courbe des moments.
     //       Les deux constantes sont obtenues par la connaissance des déplacements en x=0 et
     //       x=l. La rotation (ry et rz) est obtenue par la dérivée de la flèche.
     //       La rotation rx est obtenue par intégration du moment en x. La constante est
     //       déterminée pour f(0) égal à la rotation au noeud à gauche (s'il n'y a pas de
     //       relachement sinon f(l) égal à la rotation à droite).\end{verbatim}\begin{align*}
-            // r_x(x) = r_x(x) + \theta_{Ax} - \frac{M_{Ax}}{G \cdot J} \cdot x + \frac{M_{Ax}+M_{Bx}}{2 \cdot G \cdot J \cdot l} \cdot x^2\end{align*}\begin{align*}
-            // r_y(x) = r_y(x) - \frac{-\frac{M_{Ay} \cdot l^2}{2 \cdot E \cdot Iy}+\frac{(M_{Ay}+M_{By}) \cdot l^3}{6 \cdot l \cdot E \cdot Iy}-w_A+w_B}{l} -\frac{M_{Ay}}{E \cdot Iy} \cdot x + \frac{M_{Ay}+M_{By}}{2 \cdot l \cdot E \cdot Iy} \cdot x^2\end{align*}\begin{align*}
-            // r_z(x) = r_z(x) + \frac{\frac{M_{Az} \cdot l^2}{2 \cdot E \cdot Iz}+\frac{(-M_{Az}-M_{Bz}) \cdot l^3}{6 \cdot l \cdot E \cdot Iz}-v_A+v_B}{l} -\frac{M_{Az}}{E \cdot Iz} \cdot x + \frac{M_{Az}+M_{Bz}}{2 \cdot l \cdot E \cdot Iz} \cdot x^2\end{align*}\begin{align*}
-            // f_x(x) = f_x(x) + u_A + \frac{-u_A+u_B}{l} \cdot x\end{align*}\begin{align*}
-            // f_y(x) = f_y(x) + v_A + \frac{ \frac{M_{Az} \cdot l^2}{2 \cdot E \cdot Iz}-\frac{(M_{Az}+M_{Bz}) \cdot l^2}{6 \cdot E \cdot Iz}-v_A+v_B}{l} \cdot x -\frac{M_{Az}}{2 \cdot E \cdot Iz} \cdot x^2 + \frac{M_{Az}+M_{Bz}}{6 \cdot l \cdot E \cdot Iz} \cdot x^3\end{align*}\begin{align*}
-            // f_z(x) = f_z(x) + w_A + \frac{-\frac{M_{Ay} \cdot l^2}{2 \cdot E \cdot Iy}+\frac{(M_{Ay}+M_{By}) \cdot l^2}{6 \cdot E \cdot Iy}-w_A+w_B}{l} \cdot x +\frac{M_{Ay}}{2 \cdot E \cdot Iy} \cdot x^2 - \frac{M_{Ay}+M_{By}}{6 \cdot l \cdot E \cdot Iy} \cdot x^3
+    // r_x(x) = r_x(x) + \theta_{Ax} - \frac{M_{Ax}}{G \cdot J} \cdot x + \frac{M_{Ax}+M_{Bx}}{2 \cdot G \cdot J \cdot l} \cdot x^2\end{align*}\begin{align*}
+    // r_y(x) = r_y(x) - \frac{-\frac{M_{Ay} \cdot l^2}{2 \cdot E \cdot Iy}+\frac{(M_{Ay}+M_{By}) \cdot l^3}{6 \cdot l \cdot E \cdot Iy}-w_A+w_B}{l} -\frac{M_{Ay}}{E \cdot Iy} \cdot x + \frac{M_{Ay}+M_{By}}{2 \cdot l \cdot E \cdot Iy} \cdot x^2\end{align*}\begin{align*}
+    // r_z(x) = r_z(x) + \frac{\frac{M_{Az} \cdot l^2}{2 \cdot E \cdot Iz}+\frac{(-M_{Az}-M_{Bz}) \cdot l^3}{6 \cdot l \cdot E \cdot Iz}-v_A+v_B}{l} -\frac{M_{Az}}{E \cdot Iz} \cdot x + \frac{M_{Az}+M_{Bz}}{2 \cdot l \cdot E \cdot Iz} \cdot x^2\end{align*}\begin{align*}
+    // f_x(x) = f_x(x) + u_A + \frac{-u_A+u_B}{l} \cdot x\end{align*}\begin{align*}
+    // f_y(x) = f_y(x) + v_A + \frac{ \frac{M_{Az} \cdot l^2}{2 \cdot E \cdot Iz}-\frac{(M_{Az}+M_{Bz}) \cdot l^2}{6 \cdot E \cdot Iz}-v_A+v_B}{l} \cdot x -\frac{M_{Az}}{2 \cdot E \cdot Iz} \cdot x^2 + \frac{M_{Az}+M_{Bz}}{6 \cdot l \cdot E \cdot Iz} \cdot x^3\end{align*}\begin{align*}
+    // f_z(x) = f_z(x) + w_A + \frac{-\frac{M_{Ay} \cdot l^2}{2 \cdot E \cdot Iy}+\frac{(M_{Ay}+M_{By}) \cdot l^2}{6 \cdot E \cdot Iy}-w_A+w_B}{l} \cdot x +\frac{M_{Ay}}{2 \cdot E \cdot Iy} \cdot x^2 - \frac{M_{Ay}+M_{By}}{6 \cdot l \cdot E \cdot Iy} \cdot x^3
             if ((j == 0) && (element_en_beton->relachement != NULL) && (element_en_beton->relachement->rx_debut != EF_RELACHEMENT_BLOQUE))
                 BUG(common_fonction_ajout(action_en_cours->fonctions_rotation[0][element_en_beton->numero], 0., l, ax2[3]/(G*J)*l-(ax2[3]+ax2[9])/(2*G*J*l)*l*l+ax[9], -ax2[3]/(G*J), (ax2[3]+ax2[9])/(2*G*J*l), 0., l_debut) == 0, -3);
             else
                 BUG(common_fonction_ajout(action_en_cours->fonctions_rotation[0][element_en_beton->numero], 0., l, ax[3], -ax2[3]/(G*J), (ax2[3]+ax2[9])/(2*G*J*l), 0., l_debut) == 0, -3);
             BUG(common_fonction_ajout(action_en_cours->fonctions_rotation[1][element_en_beton->numero], 0., l, -(-ax2[4]/(2*E*Iy)*l*l+(ax2[4]+ax2[10])/(6*E*Iy)*l*l-ax[2]+ax[8])/l, -ax2[4]/(E*Iy), (ax2[4]+ax2[10])/(2*l*E*Iy), 0., l_debut) == 0, -3);
             BUG(common_fonction_ajout(action_en_cours->fonctions_rotation[2][element_en_beton->numero], 0., l,  (ax2[5]/(2*E*Iz)*l*l+(-ax2[5]-ax2[11])/(6*E*Iz)*l*l-ax[1]+ax[7])/l, -ax2[5]/(E*Iz), (ax2[5]+ax2[11])/(2*l*E*Iz), 0., l_debut) == 0, -3);
-            BUG(common_fonction_ajout(action_en_cours->fonctions_fleche[0][element_en_beton->numero], 0., l, ax[0], (-ax[0]+ax[6])/l, 0., 0., l_debut) == 0, -3);
-            BUG(common_fonction_ajout(action_en_cours->fonctions_fleche[1][element_en_beton->numero], 0., l, ax[1], (ax2[5]/(2*E*Iz)*l*l+(-ax2[5]-ax2[11])/(6*E*Iz)*l*l-ax[1]+ax[7])/l, -ax2[5]/(2*E*Iz),  (ax2[5]+ax2[11])/(6*l*E*Iz), l_debut) == 0, -3);
-            BUG(common_fonction_ajout(action_en_cours->fonctions_fleche[2][element_en_beton->numero], 0., l, ax[2], (-ax2[4]/(2*E*Iy)*l*l+(ax2[4]+ax2[10])/(6*E*Iy)*l*l-ax[2]+ax[8])/l,  ax2[4]/(2*E*Iy), -(ax2[4]+ax2[10])/(6*l*E*Iy), l_debut) == 0, -3);
+            BUG(common_fonction_ajout(action_en_cours->fonctions_deformation[0][element_en_beton->numero], 0., l, ax[0], (-ax[0]+ax[6])/l, 0., 0., l_debut) == 0, -3);
+            BUG(common_fonction_ajout(action_en_cours->fonctions_deformation[1][element_en_beton->numero], 0., l, ax[1], (ax2[5]/(2*E*Iz)*l*l+(-ax2[5]-ax2[11])/(6*E*Iz)*l*l-ax[1]+ax[7])/l, -ax2[5]/(2*E*Iz),  (ax2[5]+ax2[11])/(6*l*E*Iz), l_debut) == 0, -3);
+            BUG(common_fonction_ajout(action_en_cours->fonctions_deformation[2][element_en_beton->numero], 0., l, ax[2], (-ax2[4]/(2*E*Iy)*l*l+(ax2[4]+ax2[10])/(6*E*Iy)*l*l-ax[2]+ax[8])/l,  ax2[4]/(2*E*Iy), -(ax2[4]+ax2[10])/(6*l*E*Iy), l_debut) == 0, -3);
             
     //     \end{align*}\begin{verbatim}
 
@@ -1095,15 +1169,15 @@ int EF_calculs_affiche_resultats(Projet *projet, int num_action)
     }
     for (i=0;i<list_size(projet->beton.barres);i++)
     {
-    //     Affichage de la courbe de flèche selon l'axe X
-        printf("Barre n°%d, Flèche en X\n", i);
-        BUG(common_fonction_affiche(action_en_cours->fonctions_fleche[0][i]) == 0, -3);
-    //     Affichage de la courbe de flèche selon l'axe Y
-        printf("Barre n°%d, Flèche en Y\n", i);
-        BUG(common_fonction_affiche(action_en_cours->fonctions_fleche[1][i]) == 0, -3);
-    //     Affichage de la courbe de flèche selon l'axe Z
-        printf("Barre n°%d, Flèche en Z\n", i);
-        BUG(common_fonction_affiche(action_en_cours->fonctions_fleche[2][i]) == 0, -3);
+    //     Affichage de la courbe de déformation selon l'axe X
+        printf("Barre n°%d, Déformation en X\n", i);
+        BUG(common_fonction_affiche(action_en_cours->fonctions_deformation[0][i]) == 0, -3);
+    //     Affichage de la courbe de déformation selon l'axe Y
+        printf("Barre n°%d, Déformation en Y\n", i);
+        BUG(common_fonction_affiche(action_en_cours->fonctions_deformation[1][i]) == 0, -3);
+    //     Affichage de la courbe de déformation selon l'axe Z
+        printf("Barre n°%d, Déformation en Z\n", i);
+        BUG(common_fonction_affiche(action_en_cours->fonctions_deformation[2][i]) == 0, -3);
     //     Affichage de la courbe de rotation selon l'axe X
         printf("Barre n°%d, Rotation en X\n", i);
         BUG(common_fonction_affiche(action_en_cours->fonctions_rotation[0][i]) == 0, -3);

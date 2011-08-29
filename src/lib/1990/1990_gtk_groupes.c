@@ -622,7 +622,10 @@ void _1990_gtk_tree_view_etat_cursor_changed(GtkTreeView *tree_view, Projet *pro
             gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(list_gtk_1990->button_groupe_and), TRUE);
             break;
         }
-
+        default :
+        {
+            break;
+        }
     }
     return;
 }

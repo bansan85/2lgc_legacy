@@ -33,7 +33,7 @@
 #include "EF_charge_barre_ponctuelle.h"
 
 
-char *_1990_action_type_bat_txt_eu(int type)
+char* _1990_action_type_bat_txt_eu(int type)
 /* Description : renvoie la description des types de charge pour les bâtiments de la norme
  *                 européenne.
  *               FONCTION INTERNE. Utiliser _1990_action_type_bat_txt.
@@ -86,7 +86,7 @@ char *_1990_action_type_bat_txt_eu(int type)
 }
 
 
-char *_1990_action_type_bat_txt_fr(int type)
+char* _1990_action_type_bat_txt_fr(int type)
 /* Description : renvoie la description des types de charge pour les bâtiments de la norme
  *                 française.
  *               FONCTION INTERNE. Utiliser _1990_action_type_bat_txt.
@@ -149,7 +149,7 @@ char *_1990_action_type_bat_txt_fr(int type)
 }
 
 
-char *_1990_action_type_bat_txt(int type, Type_Pays pays)
+char* _1990_action_type_bat_txt(int type, Type_Pays pays)
 /* Description : renvoie la description des types de charge pour les bâtiments en fonction de
  *                 la norme demandée.
  * Paramètres : int type : type de charge
@@ -324,9 +324,9 @@ int _1990_action_ajout(Projet *projet, int type)
     action_nouveau.fonctions_efforts[3] = NULL;
     action_nouveau.fonctions_efforts[4] = NULL;
     action_nouveau.fonctions_efforts[5] = NULL;
-    action_nouveau.fonctions_fleche[0] = NULL;
-    action_nouveau.fonctions_fleche[1] = NULL;
-    action_nouveau.fonctions_fleche[2] = NULL;
+    action_nouveau.fonctions_deformation[0] = NULL;
+    action_nouveau.fonctions_deformation[1] = NULL;
+    action_nouveau.fonctions_deformation[2] = NULL;
     action_nouveau.fonctions_rotation[0] = NULL;
     action_nouveau.fonctions_rotation[1] = NULL;
     action_nouveau.fonctions_rotation[2] = NULL;
