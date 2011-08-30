@@ -29,8 +29,8 @@ typedef struct __EF_Relachement_Donnees_Elastique_Linaire
 
 typedef enum __EF_Relachement_Type
 {
-    EF_RELACHEMENT_LIBRE,
     EF_RELACHEMENT_BLOQUE,
+    EF_RELACHEMENT_LIBRE,
     EF_RELACHEMENT_ELASTIQUE_LINEAIRE
 } EF_Relachement_Type;
 

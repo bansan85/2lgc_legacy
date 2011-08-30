@@ -105,7 +105,7 @@ GtkWidget* common_tooltip_generation(const char *nom)
                                 //         FinSi
                                 if (strcmp((char *) n2->name, "image") == 0)
                                 {
-                                    char        *nom_fichier = malloc(sizeof(char)*(strlen(DATADIR)+strlen((char *) contenu)+2));
+                                    char        *nom_fichier = (char*)malloc(sizeof(char)*(strlen(DATADIR)+strlen((char *) contenu)+2));
                                     GtkWidget   *element;
                                     
                                     strcpy(nom_fichier, DATADIR);
@@ -139,7 +139,7 @@ GtkWidget* common_tooltip_generation(const char *nom)
                                 //         FinSi
                                 else if (strcmp((char *) n2->name, "dimensions") == 0)
                                 {
-                                    char    *fake = malloc(sizeof(char)*(strlen((char *)contenu)+1));
+                                    char    *fake = (char*)malloc(sizeof(char)*(strlen((char *)contenu)+1));
                                     int     largeur, hauteur;
                                     
                                     if (sscanf((char *)contenu, "%dx%d %s", &largeur, &hauteur, fake) != 2)

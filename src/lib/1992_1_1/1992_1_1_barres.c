@@ -104,7 +104,7 @@ int _1992_1_1_barres_ajout(Projet *projet, Type_Element type, unsigned int secti
     {
         unsigned int    i;
         
-        element_nouveau.noeuds_intermediaires = malloc(sizeof(EF_Noeud)*(discretisation_element));
+        element_nouveau.noeuds_intermediaires = (EF_Noeud**)malloc(sizeof(EF_Noeud*)*(discretisation_element));
         BUGMSG(element_nouveau.noeuds_intermediaires, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1992_1_1_barres_ajout");
 
         /* Création des noeuds intermédiaires */
@@ -327,7 +327,6 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
     for (j=0;j<element->discretisation_element+1;j++)
     {
         double          MA, MB;
-        Barre_Info_EF   infos;
     
     //     Détermination du noeud de départ et de fin
         if (j==0)
@@ -563,50 +562,36 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
     //         d = M_{B_{hyp}} = \frac{b \cdot \varphi_{A_{iso}}+(a+k_A) \cdot \varphi_{B_{iso}}}{(a+k_A)(c+k_B)-b^2} = \varphi_{iso} \frac{b+a+k_A}{(a+k_A)(c+k_B)-b^2}\end{displaymath}\begin{displaymath}
     //         a = \frac{b}{L}+\frac{d}{L}\end{displaymath}\begin{displaymath}
     //         c = -\frac{b}{L}-\frac{d}{L}\end{displaymath}\begin{verbatim}
-        memcpy(&infos, &(element->info_EF[j]), sizeof(infos));
-        EF_calculs_moment_hyper_z(&infos, 1./ll, 1./ll, &MA, &MB);
+        EF_calculs_moment_hyper_z(&(element->info_EF[j]), 1./ll, 1./ll, &MA, &MB);
         ai[i] = 1;  aj[i] = 1;  ax[i] = +MA/ll+MB/ll; i++;
-        printf("%f\n", (+MA/ll+MB/ll)/(E*Iz/ll/ll/ll));
         ai[i] = 5;  aj[i] = 1;  ax[i] = MA;           i++;
-        printf("%f\n", (MA)/(E*Iz/ll/ll));
         ai[i] = 7;  aj[i] = 1;  ax[i] = -MA/ll-MB/ll; i++;
-        printf("%f\n", (-MA/ll-MB/ll)/(E*Iz/ll/ll/ll));
         ai[i] = 11; aj[i] = 1;  ax[i] = MB;           i++;
-        printf("%f\n", (MB)/(E*Iz/ll/ll));
         
-    //         Etude du cas 2 :\end{verbatim}\begin{displaymath}
+    //         Etude du cas 2, rotation imposée r :\end{verbatim}\begin{displaymath}
     //         \varphi_{A_{iso}} = \frac{C \cdot L}{3 \cdot E \cdot I_z}\end{displaymath}\begin{displaymath}
     //         \varphi_{B_{iso}} = -\frac{C \cdot L}{6 \cdot E \cdot I_z}\end{displaymath}\begin{displaymath}
     //         M_{A_{iso}} = C\end{displaymath}\begin{displaymath}
     //         M_{B_{iso}} = 0\end{displaymath}\begin{displaymath}
     //         M_{A_{hyp}} = 0\end{displaymath}\begin{displaymath}
-    //         M_{B_{hyp}} = \frac{b \cdot \varphi_{A_{iso}}+(a+k_A) \cdot \varphi_{B_{iso}}}{(a+k_A)(c+k_B)-b^2} =  \varphi_{A_{iso}} \cdot \frac{b-(a+k_A)/2}{(a+k_A)(c+k_B)-b^2} = \frac{C \cdot L}{3 \cdot E \cdot I_z} \cdot \frac{b-(a+k_A)/2}{(a+k_A)(c+k_B)-b^2}\end{displaymath}\begin{displaymath}
+    //         M_{B_{hyp}} = \frac{b \cdot \varphi_{A_{iso}}+(a+k_A) \cdot \varphi_{B_{iso}}}{(a+k_A)(c+k_B)-b^2} =  \varphi_{A_{iso}} \frac{b-(a+k_A)/2}{(a+k_A)(c+k_B)-b^2} = \frac{C \cdot L}{3 \cdot E \cdot I_z} \cdot \frac{b-(a+k_A)/2}{(a+k_A)(c+k_B)-b^2}\end{displaymath}\begin{displaymath}
     //         M_{B_{hyp}} = \lim_{k_A\rightarrow \infty} \frac{C \cdot L}{3 \cdot E \cdot I_z} \cdot \frac{b-(a+k_A)/2}{(a+k_A)(c+k_B)-b^2} = -\frac{C \cdot L}{6 \cdot E \cdot I_z \cdot (c+k_B)}\end{displaymath}\begin{displaymath}
-    //         \phi_A = \varphi_{A_{iso}} + b \cdot M_{B_{hyp}} = \frac{C \cdot L}{3 \cdot E \cdot I_z} - b \cdot \frac{C \cdot L}{6 \cdot E \cdot I_z \cdot (c+k_B)} = \frac{C \cdot L}{3 \cdot E \cdot I_z} \left( 1 - \frac{b}{2 \cdot (c+k_B)} \right)\end{displaymath}\begin{displaymath}
-    //         f = M_{A_{iso}} = C = \frac{3 \cdot E \cdot I_z}{L \cdot \left( 1-\frac{b}{2\cdot(c+k_B)} \right)} \cdot \phi_A \end{displaymath}\begin{displaymath}
+    //         \phi_A = r - C \cdot k_A = \varphi_{A_{iso}} + b \cdot M_{B_{hyp}} = \frac{C \cdot L}{3 \cdot E \cdot I_z} - b \cdot \frac{C \cdot L}{6 \cdot E \cdot I_z \cdot (c+k_B)} = \frac{C \cdot L}{3 \cdot E \cdot I_z} \left( 1 - \frac{b}{2 \cdot (c+k_B)} \right)\end{displaymath}\begin{displaymath}
+    //         f = M_{A_{iso}} = C = \frac{r}{ \frac{L}{3 \cdot E \cdot I_z} \cdot \left( 1-\frac{b}{2\cdot(c+k_B)} \right) + k_A} \end{displaymath}\begin{displaymath}
     //         h = M_{B_{hyp}} = -\frac{C \cdot L}{6 \cdot E \cdot I_z \cdot (c+k_B)}\end{displaymath}\begin{displaymath}
     //         e = \frac{f}{L}+\frac{h}{L}\end{displaymath}\begin{displaymath}
     //         g = -\frac{f}{L}-\frac{h}{L}\end{displaymath}\begin{verbatim}
-        memcpy(&infos, &(element->info_EF[j]), sizeof(infos));
-        infos.kAz = MAXDOUBLE;
-        if (ERREUR_RELATIVE_EGALE(infos.kBz, MAXDOUBLE))
-        {
-            MA = 3*E*Iz/ll;
-            MB = 0.;
-        }
+        if (ERREUR_RELATIVE_EGALE(element->info_EF[j].kAz, MAXDOUBLE))
+            MA = 0.;
+        else if (ERREUR_RELATIVE_EGALE(element->info_EF[j].kBz, MAXDOUBLE))
+            MA = 3*E*Iz/(3*E*Iz*element->info_EF[j].kAz+ll);
         else
-        {
-            MA = 3*E*Iz/ll/(1-infos.bz/(2*(infos.cz+infos.kBz)));
-            MB = MA*ll/(6*E*Iz*(infos.cz+infos.kBz));
-        }
+            MA = 1/(ll/(3*E*Iz)*(1-element->info_EF[j].bz/(2*(element->info_EF[j].cz+element->info_EF[j].kBz)))+element->info_EF[j].kAz);
+        MB = MA*ll/(6*E*Iz*(element->info_EF[j].cz+element->info_EF[j].kBz));
         ai[i] = 1;  aj[i] = 5;  ax[i] = MA/ll+MB/ll;  i++;
-        printf("%f\n", (MA/ll+MB/ll)/(E*Iz/ll/ll));
         ai[i] = 5;  aj[i] = 5;  ax[i] = MA;           i++;
-        printf("%f\n", (MA)/(E*Iz/ll));
         ai[i] = 7;  aj[i] = 5;  ax[i] = -MA/ll-MB/ll; i++;
-        printf("%f\n", (-MA/ll-MB/ll)/(E*Iz/ll/ll));
         ai[i] = 11; aj[i] = 5;  ax[i] = MB;           i++;
-        printf("%f\n", (MB)/(E*Iz/ll));
         
     //         Etude du cas 3 :\end{verbatim}\begin{displaymath}
     //         \varphi_{A_{iso}} = -arctan \left( \frac{v}{L} \right)\end{displaymath}\begin{displaymath}
@@ -620,16 +605,11 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
     //         l = M_{B_{hyp}} = \frac{b \cdot \varphi_{A_{iso}}+(a+k_A) \cdot \varphi_{B_{iso}}}{(a+k_A)(c+k_B)-b^2} = \varphi_{iso} \frac{b+a+k_A}{(a+k_A)(c+k_B)-b^2}\end{displaymath}\begin{displaymath}
     //         i = \frac{j}{L}+\frac{l}{L}\end{displaymath}\begin{displaymath}
     //         k = -\frac{j}{L}-\frac{l}{L}\end{displaymath}\begin{verbatim}
-        memcpy(&infos, &(element->info_EF[j]), sizeof(infos));
-        EF_calculs_moment_hyper_z(&infos, -1./ll, -1./ll, &MA, &MB);
+        EF_calculs_moment_hyper_z(&(element->info_EF[j]), -1./ll, -1./ll, &MA, &MB);
         ai[i] = 1;  aj[i] = 7;  ax[i] =  MA/ll+MB/ll; i++;
-        printf("%f\n", (MA/ll+MB/ll)/(E*Iz/ll/ll/ll));
         ai[i] = 5;  aj[i] = 7;  ax[i] =  MA;          i++;
-        printf("%f\n", (MA)/(E*Iz/ll/ll));
         ai[i] = 7;  aj[i] = 7;  ax[i] = -MA/ll-MB/ll; i++;
-        printf("%f\n", (-MA/ll-MB/ll)/(E*Iz/ll/ll/ll));
         ai[i] = 11; aj[i] = 7;  ax[i] =  MB;          i++;
-        printf("%f\n", (MB)/(E*Iz/ll/ll));
         
     //         Etude du cas 4 :\end{verbatim}\begin{displaymath}
     //         \varphi_{A_{iso}} = -\frac{C \cdot L}{6 \cdot E \cdot I_z}\end{displaymath}\begin{displaymath}
@@ -639,34 +619,24 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
     //         M_{A_{hyp}} = \frac{b \cdot \varphi_{B_{iso}}+(c+k_B) \cdot \varphi_{A_{iso}}}{(a+k_A)(c+k_B)-b^2} =  \varphi_{B_{iso}} \cdot \frac{b-(c+k_B)/2}{(a+k_A)(c+k_B)-b^2} = \frac{C \cdot L}{3 \cdot E \cdot I_z} \cdot \frac{b-(c+k_B)/2}{(a+k_A)(c+k_B)-b^2}\end{displaymath}\begin{displaymath}
     //         M_{A_{hyp}} = \lim_{k_B\rightarrow \infty} \frac{C \cdot L}{3 \cdot E \cdot I_z} \cdot \frac{b-(c+k_B)/2}{(a+k_A)(c+k_B)-b^2} = -\frac{C \cdot L}{6 \cdot E \cdot I_z \cdot (a+k_A)}\end{displaymath}\begin{displaymath}
     //         M_{B_{hyp}} = 0\end{displaymath}\begin{displaymath}
-    //         \phi_B = \varphi_{B_{iso}} + b \cdot M_{A_{hyp}} = \frac{C \cdot L}{3 \cdot E \cdot I_z} - b \cdot \frac{C \cdot L}{6 \cdot E \cdot I_z \cdot (a+k_A)} = \frac{C \cdot L}{3 \cdot E \cdot I_z} \left( 1 - \frac{b}{2 \cdot (a+k_A)} \right)\end{displaymath}\begin{displaymath}
-    //         p = M_{B_{iso}} = C = \frac{3 \cdot E \cdot I_z}{L \cdot \left( 1-\frac{b}{2\cdot(a+k_A)} \right)} \cdot \phi_B\end{displaymath}\begin{displaymath}
+    //         \phi_B = r - C \cdot k_B = \varphi_{B_{iso}} + b \cdot M_{A_{hyp}} = \frac{C \cdot L}{3 \cdot E \cdot I_z} - b \cdot \frac{C \cdot L}{6 \cdot E \cdot I_z \cdot (a+k_A)} = \frac{C \cdot L}{3 \cdot E \cdot I_z} \left( 1 - \frac{b}{2 \cdot (a+k_A)} \right)\end{displaymath}\begin{displaymath}
+    //         p = M_{B_{iso}} = C = \frac{r}{ \frac{L}{3 \cdot E \cdot I_z} \cdot \left( 1-\frac{b}{2\cdot(a+k_A)} \right) + k_B} \end{displaymath}\begin{displaymath}
     //         n = M_{A_{hyp}} = -\frac{C \cdot L}{6 \cdot E \cdot I_z \cdot (a+k_A)}\end{displaymath}\begin{displaymath}
     //         m = \frac{n}{L}+\frac{p}{L}\end{displaymath}\begin{displaymath}
     //         o = -\frac{n}{L}-\frac{p}{L}\end{displaymath}\begin{verbatim}
     //         L'ensemble des valeurs sont à inséré dans la matrice suivante et permet
     //         d'obtenir la matrice de rigidité élémentaire.\end{verbatim}\begin{displaymath}
-        memcpy(&infos, &(element->info_EF[j]), sizeof(infos));
-        infos.kBz = MAXDOUBLE;
-        if (ERREUR_RELATIVE_EGALE(infos.kAz, MAXDOUBLE))
-        {
-            /* MA et MB sont bien ici inversés ;) */
-            MB = 3*E*Iz/ll;
-            MA = 0.;
-        }
+        if (ERREUR_RELATIVE_EGALE(element->info_EF[j].kBz, MAXDOUBLE))
+            MB = 0.;
+        else if (ERREUR_RELATIVE_EGALE(element->info_EF[j].kAz, MAXDOUBLE))
+            MB = 3*E*Iz/(3*E*Iz*element->info_EF[j].kBz+ll);
         else
-        {
-            MB = 3*E*Iz/ll/(1-infos.bz/(2*(infos.az+infos.kAz)));
-            MA = MB*ll/(6*E*Iz*(infos.az+infos.kAz));
-        }
+            MB = 1/(ll/(3*E*Iz)*(1-element->info_EF[j].bz/(2*(element->info_EF[j].az+element->info_EF[j].kAz)))+element->info_EF[j].kBz);
+        MA = MB*ll/(6*E*Iz*(element->info_EF[j].az+element->info_EF[j].kAz));
         ai[i] = 1;  aj[i] = 11; ax[i] =  MA/ll+MB/ll; i++;
-        printf("%f\n", (MA/ll+MB/ll)/(E*Iz/ll/ll));
         ai[i] = 5;  aj[i] = 11; ax[i] =  MA;          i++;
-        printf("%f\n", (MA)/(E*Iz/ll));
         ai[i] = 7;  aj[i] = 11; ax[i] = -MA/ll-MB/ll; i++;
-        printf("%f\n", (-MA/ll-MB/ll)/(E*Iz/ll/ll));
         ai[i] = 11; aj[i] = 11; ax[i] =  MB;          i++;
-        printf("%f\n", (MB)/(E*Iz/ll));
     // \begin{bmatrix}K_e\end{bmatrix} = 
     // \begin{bmatrix}  a & e & i & m\\
     //                  b & f & j & n\\
@@ -680,70 +650,41 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
     //         kBz par kAy et lBy, les inerties Iz par Iy et les coefficients de souplesse az,
     //         bz et cz par ay, by et cy. Le changement repère entraine également un changement
     //         de signe des coefficients de la matrice a, c, e, g, i, k, m et o.
-        memcpy(&infos, &(element->info_EF[j]), sizeof(infos));
-        EF_calculs_moment_hyper_y(&infos, 1./ll, 1./ll, &MA, &MB);
+        EF_calculs_moment_hyper_y(&(element->info_EF[j]), 1./ll, 1./ll, &MA, &MB);
         ai[i] = 2;  aj[i] = 2;  ax[i] = -MA/ll-MB/ll; i++;
-        printf("%f\n", (-MA/ll-MB/ll)/(E*Iy/ll/ll/ll));
         ai[i] = 4;  aj[i] = 2;  ax[i] = MA;           i++;
-        printf("%f\n", (MA)/(E*Iy/ll/ll));
         ai[i] = 8;  aj[i] = 2;  ax[i] = +MA/ll+MB/ll; i++;
-        printf("%f\n", (+MA/ll+MB/ll)/(E*Iy/ll/ll/ll));
         ai[i] = 10; aj[i] = 2;  ax[i] = MB;           i++;
-        printf("%f\n", (MB)/(E*Iy/ll/ll));
         
-        memcpy(&infos, &(element->info_EF[j]), sizeof(infos));
-        infos.kAy = MAXDOUBLE;
-        if (ERREUR_RELATIVE_EGALE(infos.kBy, MAXDOUBLE))
-        {
-            MA = 3*E*Iy/ll;
-            MB = 0.;
-        }
-        else
-        {
-            MA = 3*E*Iy/ll/(1-infos.by/(2*(infos.cy+infos.kBy)));
-            MB = MA*ll/(6*E*Iy*(infos.cy+infos.kBy));
-        }
-        ai[i] = 2;  aj[i] = 4;  ax[i] = -MA/ll-MB/ll; i++;
-        printf("%f\n", (-MA/ll-MB/ll)/(E*Iy/ll/ll));
-        ai[i] = 4;  aj[i] = 4;  ax[i] = MA;           i++;
-        printf("%f\n", (MA)/(E*Iy/ll));
-        ai[i] = 8;  aj[i] = 4;  ax[i] = +MA/ll+MB/ll; i++;
-        printf("%f\n", (+MA/ll+MB/ll)/(E*Iy/ll/ll));
-        ai[i] = 10; aj[i] = 4;  ax[i] = MB;           i++;
-        printf("%f\n", (MB)/(E*Iy/ll));
-        
-        memcpy(&infos, &(element->info_EF[j]), sizeof(infos));
-        EF_calculs_moment_hyper_y(&infos, -1./ll, -1./ll, &MA, &MB);
-        ai[i] = 2;  aj[i] = 8;  ax[i] = -MA/ll-MB/ll; i++;
-        printf("%f\n", (-MA/ll-MB/ll)/(E*Iy/ll/ll/ll));
-        ai[i] = 4;  aj[i] = 8;  ax[i] =  MA;          i++;
-        printf("%f\n", (MA)/(E*Iy/ll/ll));
-        ai[i] = 8;  aj[i] = 8;  ax[i] = +MA/ll+MB/ll; i++;
-        printf("%f\n", (+MA/ll+MB/ll)/(E*Iy/ll/ll/ll));
-        ai[i] = 10; aj[i] = 8;  ax[i] =  MB;          i++;
-        printf("%f\n", (MB)/(E*Iy/ll/ll));
-        
-        memcpy(&infos, &(element->info_EF[j]), sizeof(infos));
-        infos.kBy = MAXDOUBLE;
-        if (ERREUR_RELATIVE_EGALE(infos.kAy, MAXDOUBLE))
-        {
-            /* MA et MB sont bien ici inversés ;) */
-            MB = 3*E*Iy/ll;
+        if (ERREUR_RELATIVE_EGALE(element->info_EF[j].kAy, MAXDOUBLE))
             MA = 0.;
-        }
+        else if (ERREUR_RELATIVE_EGALE(element->info_EF[j].kBy, MAXDOUBLE))
+            MA = 3*E*Iy/(3*E*Iy*element->info_EF[j].kAy+ll);
         else
-        {
-            MB = 3*E*Iy/ll/(1-infos.by/(2*(infos.ay+infos.kAy)));
-            MA = MB*ll/(6*E*Iy*(infos.ay+infos.kAy));
-        }
+            MA = 1/(ll/(3*E*Iy)*(1-element->info_EF[j].by/(2*(element->info_EF[j].cy+element->info_EF[j].kBy)))+element->info_EF[j].kAy);
+        MB = MA*ll/(6*E*Iy*(element->info_EF[j].cy+element->info_EF[j].kBy));
+        ai[i] = 2;  aj[i] = 4;  ax[i] = -MA/ll-MB/ll; i++;
+        ai[i] = 4;  aj[i] = 4;  ax[i] = MA;           i++;
+        ai[i] = 8;  aj[i] = 4;  ax[i] = +MA/ll+MB/ll; i++;
+        ai[i] = 10; aj[i] = 4;  ax[i] = MB;           i++;
+        
+        EF_calculs_moment_hyper_y(&(element->info_EF[j]), -1./ll, -1./ll, &MA, &MB);
+        ai[i] = 2;  aj[i] = 8;  ax[i] = -MA/ll-MB/ll; i++;
+        ai[i] = 4;  aj[i] = 8;  ax[i] =  MA;          i++;
+        ai[i] = 8;  aj[i] = 8;  ax[i] = +MA/ll+MB/ll; i++;
+        ai[i] = 10; aj[i] = 8;  ax[i] =  MB;          i++;
+        
+        if (ERREUR_RELATIVE_EGALE(element->info_EF[j].kBy, MAXDOUBLE))
+            MB = 0.;
+        else if (ERREUR_RELATIVE_EGALE(element->info_EF[j].kAy, MAXDOUBLE))
+            MB = 3*E*Iy/(3*E*Iy*element->info_EF[j].kBy+ll);
+        else
+            MB = 1/(ll/(3*E*Iy)*(1-element->info_EF[j].by/(2*(element->info_EF[j].ay+element->info_EF[j].kAy)))+element->info_EF[j].kBy);
+        MA = MB*ll/(6*E*Iy*(element->info_EF[j].ay+element->info_EF[j].kAy));
         ai[i] = 2;  aj[i] = 10; ax[i] = -MA/ll-MB/ll; i++;
-        printf("%f\n", (-MA/ll-MB/ll)/(E*Iy/ll/ll));
         ai[i] = 4;  aj[i] = 10; ax[i] = MA;           i++;
-        printf("%f\n", (MA)/(E*Iy/ll));
         ai[i] = 8;  aj[i] = 10; ax[i] = MA/ll+MB/ll;  i++;
-        printf("%f\n", (MA/ll+MB/ll)/(E*Iy/ll/ll));
         ai[i] = 10; aj[i] = 10; ax[i] = MB;           i++;
-        printf("%f\n", (MB)/(E*Iy/ll));
         
     //       Pour un élément travaillant en torsion simple dont l'une des extrémités est
     //         relaxée :\end{verbatim}\begin{displaymath}
