@@ -121,7 +121,7 @@ int _1990_gtk_affiche_niveau(Projet *projet, unsigned int niveau)
                 /* puis ajout de la ligne dans le tree_store */
                 if (element->pIter == NULL)
                 {
-                    element->pIter = malloc(sizeof(GtkTreeIter));
+                    element->pIter = (GtkTreeIter*)malloc(sizeof(GtkTreeIter));
                     BUGMSG(element->pIter, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_gtk_affiche_niveau");
                 }
                 gtk_tree_store_append(list_gtk_1990->tree_store_etat, element->pIter, groupe->pIter);
@@ -481,7 +481,7 @@ void _1990_gtk_button_ajout_dispo_clicked(GtkWidget *button __attribute__((unuse
     /* On ajoute la ligne dans l'interface graphique */
     if (element->pIter == NULL)
     {
-        element->pIter = malloc(sizeof(GtkTreeIter));
+        element->pIter = (GtkTreeIter*)malloc(sizeof(GtkTreeIter));
         BUGMSG(element->pIter, , gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_gtk_button_ajout_dispo_clicked");
     }
     if (list_front(groupe->elements) == element)
@@ -710,7 +710,7 @@ void _1990_gtk_button_groupe_nom_clicked(GtkWidget *button __attribute__((unused
     sText = gtk_entry_get_text(GTK_ENTRY(list_gtk_1990->entry_groupe_nom));
     if (groupe->nom != NULL)
         free(groupe->nom);
-    groupe->nom = malloc(sizeof(char)*(strlen(sText)+1));
+    groupe->nom = (char*)malloc(sizeof(char)*(strlen(sText)+1));
     strcpy(groupe->nom, sText);
     gtk_tree_store_set(list_gtk_1990->tree_store_etat, groupe->pIter, 0, ngroupe, 1, -1, 2, groupe->nom, -1);
     
@@ -1040,7 +1040,7 @@ void _1990_gtk_groupes(GtkWidget *button __attribute__((unused)), Projet *projet
     // Trivial
     if (projet->list_gtk._1990 == NULL)
     {
-        projet->list_gtk._1990 = malloc(sizeof(List_Gtk_1990));
+        projet->list_gtk._1990 = (List_Gtk_1990*)malloc(sizeof(List_Gtk_1990));
         BUGMSG(projet->list_gtk._1990, , gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_gtk_groupes");
     }
     list_gtk_1990 = projet->list_gtk._1990;
