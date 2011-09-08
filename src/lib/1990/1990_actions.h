@@ -56,7 +56,7 @@ typedef struct __Action
     Fonction        **fonctions_efforts[6]; // 6 fonctions (N, Ty, Tz, Mx, My, Mz) par barre.
                     // Les fonctions représentent la courbe des efforts dues aux charges dans
                     // les barres et dus aux déplacements calculés par la méthode des EF.
-    Fonction        **fonctions_deformation[3]; // Les 3 déformations x, y, z pour chaque barre.
+    Fonction        **fonctions_deformation[3]; // Les 3 déformations x, y, z pour chaque barre
     Fonction        **fonctions_rotation[3];    // Les 3 rotations rx, ry, rz pour chaque barre
 } Action;
 

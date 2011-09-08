@@ -22,10 +22,10 @@
 #include "config.h"
 #include "common_projet.h"
 
-typedef struct __EF_Relachement_Donnees_Elastique_Linaire
+typedef struct __EF_Relachement_Donnees_Elastique_Lineaire
 {
     double              raideur;    // La raideur doit être indiquée en N.m/rad
-} EF_Relachement_Donnees_Elastique_Linaire;
+} EF_Relachement_Donnees_Elastique_Lineaire;
 
 typedef enum __EF_Relachement_Type
 {

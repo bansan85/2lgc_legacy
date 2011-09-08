@@ -26,6 +26,9 @@
 #include "common_projet.h"
 #include "common_fonction.h"
 #include "EF_noeud.h"
+#include "EF_calculs.h"
+#include "EF_charge_noeud.h"
+#include "1992_1_1_barres.h"
 
 typedef struct __Charge_Barre_Ponctuelle
 {
@@ -40,11 +43,29 @@ typedef struct __Charge_Barre_Ponctuelle
     double          x;
     double          y;
     double          z;
-    double          rx;
-    double          ry;
-    double          rz;
+    double          mx;
+    double          my;
+    double          mz;
 } Charge_Barre_Ponctuelle;
 
-int EF_charge_barre_ponctuelle_ajout(Projet *projet, int num_action, void *barre, int repere_local, double position, double fx, double fy, double fz, double rx, double ry, double rz);
+int EF_charge_barre_ponctuelle_ajout(Projet *projet, int num_action, void *barre, 
+  int repere_local, double position, double fx, double fy, double fz, double mx, double my,
+  double mz);
+int EF_charge_barre_ponctuelle_mx(Beton_Barre *barre, unsigned int discretisation,
+  double position, Barre_Info_EF *infos, double mx, double *ma, double *mb);
+int EF_charge_barre_ponctuelle_def_ang_iso_y(Beton_Barre *barre, unsigned int discretisation,
+  double position, double fz, double my, double *phia, double *phib);
+int EF_charge_barre_ponctuelle_def_ang_iso_z(Beton_Barre *barre, unsigned int discretisation,
+  double position, double fy, double mz, double *phia, double *phib);
+int EF_charge_barre_ponctuelle_ajout_fonc_rx(Fonction *fonction, Beton_Barre *barre,
+  unsigned int discretisation, double a, double max, double mbx);
+int EF_charge_barre_ponctuelle_ajout_fonc_ry(Fonction *f_rotation, Fonction* f_deform,
+  Beton_Barre *barre, unsigned int discretisation, double position, double fz, double my,
+  double may, double mby);
+int EF_charge_barre_ponctuelle_ajout_fonc_rz(Fonction *f_rotation, Fonction* f_deform,
+  Beton_Barre *barre, unsigned int discretisation, double a, double fy, double mz,
+  double maz, double mbz);
+int EF_charge_barre_ponctuelle_n(Fonction *fonction, Beton_Barre *barre,
+  unsigned int discretisation, double a, double fax, double fbx);
 
 #endif

@@ -26,6 +26,8 @@
 #include "common_erreurs.h"
 #include "common_maths.h"
 #include "1992_1_1_barres.h"
+#include "1992_1_1_section.h"
+#include "EF_charge_barre_ponctuelle.h"
 #include "EF_calculs.h"
 #include "math.h"
 
@@ -198,8 +200,7 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
     cholmod_triplet     *triplet;
     cholmod_sparse      *sparse_tmp, *matrice_rigidite_globale;
     Beton_Section_Carre *section_donnees;
-    Beton_Section_Caracteristiques  *section_caract;
-    double              E, S, Iz, Iy, J, G;
+    double              E, G;
     
     BUGMSG(projet, -1, "_1992_1_1_barres_rigidite_ajout\n");
     BUGMSG(projet->ef_donnees.triplet_rigidite_partielle, -1, "_1992_1_1_barres_rigidite_ajout\n");
@@ -208,12 +209,7 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
     
     BUGMSG(element->section, -1, "_1992_1_1_barres_rigidite_ajout\n");
     section_donnees = element->section;
-    section_caract = section_donnees->caracteristiques;
     E = element->materiau->ecm;
-    S = section_caract->s;
-    Iy = section_caract->iy;
-    Iz = section_caract->iz;
-    J = section_caract->j;
     G = element->materiau->gnu_0_2;
     
     // Calcul de la matrice de rotation 3D qui permet de passer du repère local au repère
@@ -327,7 +323,9 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
     for (j=0;j<element->discretisation_element+1;j++)
     {
         double          MA, MB;
-    
+        double          phia_iso, phib_iso;
+        double          es_l;
+        
     //     Détermination du noeud de départ et de fin
         if (j==0)
         {
@@ -353,23 +351,22 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
         zz = noeud2->position.z - noeud1->position.z;
         ll = sqrt(xx*xx+yy*yy+zz*zz);
         
-    //     Détermination des paramètres de souplesse de l'élément de barre :\end{verbatim}\begin{align*}
-    //               a_y = c_y & = \frac{l}{3 \cdot E \cdot I_y} \nonumber\\
-    //               b_y & = \frac{l}{6 \cdot E \cdot I_y} \nonumber\\
-    //               a_z = c_z & = \frac{l}{3 \cdot E \cdot I_z} \nonumber\\
-    //               b_z & = \frac{l}{6 \cdot E \cdot I_z}\end{align*}\begin{verbatim}
-        element->info_EF[j].ay = ll/(3*E*Iy);
-        element->info_EF[j].by = ll/(6*E*Iy);
-        element->info_EF[j].cy = ll/(3*E*Iy);
-        element->info_EF[j].az = ll/(3*E*Iz);
-        element->info_EF[j].bz = ll/(6*E*Iz);
-        element->info_EF[j].cz = ll/(3*E*Iz);
+    //     Détermination des paramètres de souplesse de l'élément de barre par l'utilisation
+    //       des fonctions _1992_1_1_sections_ay, by, cy, az, bz et cz.
+        element->info_EF[j].ay = _1992_1_1_sections_ay(element, j);
+        element->info_EF[j].by = _1992_1_1_sections_by(element, j);
+        element->info_EF[j].cy = _1992_1_1_sections_cy(element, j);
+        element->info_EF[j].az = _1992_1_1_sections_az(element, j);
+        element->info_EF[j].bz = _1992_1_1_sections_bz(element, j);
+        element->info_EF[j].cz = _1992_1_1_sections_cz(element, j);
         
     //     Calcul des coefficients kA et kB définissant l'inverse de la raideur aux
     //       noeuds. Ainsi k = 0 en cas d'encastrement et infini en cas d'articulation.
             /* Moment en Y et Z */
         if (element->relachement == NULL)
         {
+            element->info_EF[j].kAx = 0;
+            element->info_EF[j].kBx = 0;
             element->info_EF[j].kAy = 0;
             element->info_EF[j].kBy = 0;
             element->info_EF[j].kAz = 0;
@@ -379,11 +376,42 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
         {
             if (noeud1 != element->noeud_debut)
             {
+                element->info_EF[j].kAx = 0;
                 element->info_EF[j].kAy = 0;
                 element->info_EF[j].kAz = 0;
             }
             else
             {
+                switch (element->relachement->rx_debut)
+                {
+                    case EF_RELACHEMENT_BLOQUE :
+                    {
+                        element->info_EF[j].kAx = 0.;
+                        break;
+                    }
+                    case EF_RELACHEMENT_LIBRE :
+                    {
+                        element->info_EF[j].kAx = MAXDOUBLE;
+                        break;
+                    }
+                    case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
+                    {
+                        EF_Relachement_Donnees_Elastique_Lineaire *donnees;
+                        
+                        donnees = element->relachement->rx_d_data;
+                        if (donnees->raideur == 0.)
+                            element->info_EF[j].kAx = MAXDOUBLE;
+                        else
+                            element->info_EF[j].kAx = 1./donnees->raideur;
+                        break;
+                    }
+                    default :
+                    {
+                        BUG(0, -1);
+                        break;
+                    }
+                }
+                
                 switch (element->relachement->ry_debut)
                 {
                     case EF_RELACHEMENT_BLOQUE :
@@ -398,7 +426,7 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
                     }
                     case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
                     {
-                        EF_Relachement_Donnees_Elastique_Linaire *donnees;
+                        EF_Relachement_Donnees_Elastique_Lineaire *donnees;
                         
                         donnees = element->relachement->ry_d_data;
                         if (donnees->raideur == 0.)
@@ -428,7 +456,7 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
                     }
                     case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
                     {
-                        EF_Relachement_Donnees_Elastique_Linaire *donnees;
+                        EF_Relachement_Donnees_Elastique_Lineaire *donnees;
                         
                         donnees = element->relachement->rz_d_data;
                         if (donnees->raideur == 0.)
@@ -447,11 +475,42 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
             
             if (noeud2 != element->noeud_fin)
             {
+                element->info_EF[j].kBx = 0;
                 element->info_EF[j].kBy = 0;
                 element->info_EF[j].kBz = 0;
             }
             else
             {
+                switch (element->relachement->rx_fin)
+                {
+                    case EF_RELACHEMENT_BLOQUE :
+                    {
+                        element->info_EF[j].kBx = 0;
+                        break;
+                    }
+                    case EF_RELACHEMENT_LIBRE :
+                    {
+                        element->info_EF[j].kBx = MAXDOUBLE;
+                        break;
+                    }
+                    case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
+                    {
+                        EF_Relachement_Donnees_Elastique_Lineaire *donnees;
+                        
+                        donnees = element->relachement->rx_f_data;
+                        if (donnees->raideur == 0.)
+                            element->info_EF[j].kBx = MAXDOUBLE;
+                        else
+                            element->info_EF[j].kBx = 1./donnees->raideur;
+                        break;
+                    }
+                    default :
+                    {
+                        BUG(0, -1);
+                        break;
+                    }
+                }
+                
                 switch (element->relachement->ry_fin)
                 {
                     case EF_RELACHEMENT_BLOQUE :
@@ -466,7 +525,7 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
                     }
                     case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
                     {
-                        EF_Relachement_Donnees_Elastique_Linaire *donnees;
+                        EF_Relachement_Donnees_Elastique_Lineaire *donnees;
                         
                         donnees = element->relachement->ry_f_data;
                         if (donnees->raideur == 0.)
@@ -496,7 +555,7 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
                     }
                     case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
                     {
-                        EF_Relachement_Donnees_Elastique_Linaire *donnees;
+                        EF_Relachement_Donnees_Elastique_Lineaire *donnees;
                         
                         donnees = element->relachement->rz_f_data;
                         if (donnees->raideur == 0.)
@@ -522,15 +581,18 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
         ax = triplet->x;
         triplet->nnz = 40;
         i=0;
+        
     //       Pour un élément travaillant en compression simple (aucune variante possible dues
-    //       aux relachements) :\end{verbatim}\begin{displaymath}
+    //       aux relachements). Les valeurs de ES/L sont obtenues par la fonction
+    //       _1992_1_1_sections_es_l :\end{verbatim}\begin{displaymath}
     // \begin{bmatrix}  \frac{E \cdot S}{L} & -\frac{E \cdot S}{L} \\
     //                 -\frac{E \cdot S}{L} &  \frac{E \cdot S}{L}
     // \end{bmatrix}\end{displaymath}\begin{verbatim}
-        ai[i] = 0;  aj[i] = 0;  ax[i] =  E*S/ll; i++;
-        ai[i] = 0;  aj[i] = 6;  ax[i] = -E*S/ll; i++;
-        ai[i] = 6;  aj[i] = 0;  ax[i] = -E*S/ll; i++;
-        ai[i] = 6;  aj[i] = 6;  ax[i] =  E*S/ll; i++;
+        es_l = _1992_1_1_sections_es_l(element, j, 0., ll);
+        ai[i] = 0;  aj[i] = 0;  ax[i] =  es_l; i++;
+        ai[i] = 0;  aj[i] = 6;  ax[i] = -es_l; i++;
+        ai[i] = 6;  aj[i] = 0;  ax[i] = -es_l; i++;
+        ai[i] = 6;  aj[i] = 6;  ax[i] =  es_l; i++;
         
     //       Détermination de la matrice de rigidité après prise en compte des relachements
     //         autour de l'axe z :
@@ -550,93 +612,68 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
     //         système isostatique (relachements remplacés par des rotules). Ensuite les
     //         moments isostatiques sont déterminés sur la base des rotations isostatiques.
     //         
-    //         Etude du cas 1 :\end{verbatim}\begin{displaymath}
-    //         \varphi_{A_{iso}} = arctan \left( \frac{v}{L} \right)\end{displaymath}\begin{displaymath}
-    //         \varphi_{B_{iso}} = arctan \left( \frac{v}{L} \right)\end{displaymath}\begin{displaymath}
-    //         M_{A_{iso}} = 0\end{displaymath}\begin{displaymath}
-    //         M_{B_{iso}} = 0\end{displaymath}\begin{displaymath}
-    //         b = M_{A_{hyp}} = \frac{b \cdot \varphi_{B_{iso}}+(c+k_B) \cdot \varphi_{A_{iso}}}{(a+k_A)(c+k_B)-b^2} = \varphi_{iso} \frac{b+c+k_B}{(a+k_A)(c+k_B)-b^2}\end{displaymath}\begin{verbatim}
-    //         Afin de pouvoir exprimer le moment en fonction de la dénivelé, il est appliqué
-    //         un développement de Taylor de arctan (hypothèse des petites déplacements).
-    //         Ainsi arctan(v/L) # v/L + O(v^3)\end{verbatim}\begin{displaymath}
-    //         d = M_{B_{hyp}} = \frac{b \cdot \varphi_{A_{iso}}+(a+k_A) \cdot \varphi_{B_{iso}}}{(a+k_A)(c+k_B)-b^2} = \varphi_{iso} \frac{b+a+k_A}{(a+k_A)(c+k_B)-b^2}\end{displaymath}\begin{displaymath}
-    //         a = \frac{b}{L}+\frac{d}{L}\end{displaymath}\begin{displaymath}
-    //         c = -\frac{b}{L}-\frac{d}{L}\end{displaymath}\begin{verbatim}
+    //         Etude du cas 1 :
+    //         Les moments MA et MB sont obtenues par la fonction EF_calculs_moment_hyper_z en
+    //         supposant arctan(v/l) = 1/l (hypothèse des petites déplacements).\end{verbatim}\begin{align*}
+    //         a = & \frac{M_A}{L}+\frac{M_B}{L} & b = & M_A\nonumber\\
+    //         c = & -\frac{M_A}{L}-\frac{M_B}{L} & d = & M_B\end{align*}\begin{verbatim}
         EF_calculs_moment_hyper_z(&(element->info_EF[j]), 1./ll, 1./ll, &MA, &MB);
-        ai[i] = 1;  aj[i] = 1;  ax[i] = +MA/ll+MB/ll; i++;
+        ai[i] = 1;  aj[i] = 1;  ax[i] = MA/ll+MB/ll; i++;
         ai[i] = 5;  aj[i] = 1;  ax[i] = MA;           i++;
         ai[i] = 7;  aj[i] = 1;  ax[i] = -MA/ll-MB/ll; i++;
         ai[i] = 11; aj[i] = 1;  ax[i] = MB;           i++;
         
-    //         Etude du cas 2, rotation imposée r :\end{verbatim}\begin{displaymath}
-    //         \varphi_{A_{iso}} = \frac{C \cdot L}{3 \cdot E \cdot I_z}\end{displaymath}\begin{displaymath}
-    //         \varphi_{B_{iso}} = -\frac{C \cdot L}{6 \cdot E \cdot I_z}\end{displaymath}\begin{displaymath}
-    //         M_{A_{iso}} = C\end{displaymath}\begin{displaymath}
-    //         M_{B_{iso}} = 0\end{displaymath}\begin{displaymath}
-    //         M_{A_{hyp}} = 0\end{displaymath}\begin{displaymath}
-    //         M_{B_{hyp}} = \frac{b \cdot \varphi_{A_{iso}}+(a+k_A) \cdot \varphi_{B_{iso}}}{(a+k_A)(c+k_B)-b^2} =  \varphi_{A_{iso}} \frac{b-(a+k_A)/2}{(a+k_A)(c+k_B)-b^2} = \frac{C \cdot L}{3 \cdot E \cdot I_z} \cdot \frac{b-(a+k_A)/2}{(a+k_A)(c+k_B)-b^2}\end{displaymath}\begin{displaymath}
-    //         M_{B_{hyp}} = \lim_{k_A\rightarrow \infty} \frac{C \cdot L}{3 \cdot E \cdot I_z} \cdot \frac{b-(a+k_A)/2}{(a+k_A)(c+k_B)-b^2} = -\frac{C \cdot L}{6 \cdot E \cdot I_z \cdot (c+k_B)}\end{displaymath}\begin{displaymath}
-    //         \phi_A = r - C \cdot k_A = \varphi_{A_{iso}} + b \cdot M_{B_{hyp}} = \frac{C \cdot L}{3 \cdot E \cdot I_z} - b \cdot \frac{C \cdot L}{6 \cdot E \cdot I_z \cdot (c+k_B)} = \frac{C \cdot L}{3 \cdot E \cdot I_z} \left( 1 - \frac{b}{2 \cdot (c+k_B)} \right)\end{displaymath}\begin{displaymath}
-    //         f = M_{A_{iso}} = C = \frac{r}{ \frac{L}{3 \cdot E \cdot I_z} \cdot \left( 1-\frac{b}{2\cdot(c+k_B)} \right) + k_A} \end{displaymath}\begin{displaymath}
-    //         h = M_{B_{hyp}} = -\frac{C \cdot L}{6 \cdot E \cdot I_z \cdot (c+k_B)}\end{displaymath}\begin{displaymath}
-    //         e = \frac{f}{L}+\frac{h}{L}\end{displaymath}\begin{displaymath}
-    //         g = -\frac{f}{L}-\frac{h}{L}\end{displaymath}\begin{verbatim}
+    //         Etude du cas 2, rotation imposée r. phiA (positif) et phiB (négatif) sont
+    //           déterminés par la fonction EF_charge_barre_ponctuelle_def_ang_iso_z :\end{verbatim}\begin{displaymath}
+    //         M_A = \frac{1}{ k_A + \varphi_A \cdot \left(1-\frac{b}{2 \cdot (c+k_B)}\right)}\end{displaymath}\begin{displaymath}
+    //         M_B = \frac{M_A*\varphi_B}{c+k_B}\end{displaymath}\begin{align*}
+    //         e = & \frac{M_A}{L}-\frac{M_B}{L} & f = & M_A\nonumber\\
+    //         g = & -\frac{M_A}{L}+\frac{M_B}{L} & h = & -M_B\end{align*}\begin{verbatim}
+        EF_charge_barre_ponctuelle_def_ang_iso_z(element, j, 0., 0., 1., &phia_iso, &phib_iso);
         if (ERREUR_RELATIVE_EGALE(element->info_EF[j].kAz, MAXDOUBLE))
             MA = 0.;
         else if (ERREUR_RELATIVE_EGALE(element->info_EF[j].kBz, MAXDOUBLE))
-            MA = 3*E*Iz/(3*E*Iz*element->info_EF[j].kAz+ll);
+            MA = 1./(element->info_EF[j].kAz + phia_iso);
         else
-            MA = 1/(ll/(3*E*Iz)*(1-element->info_EF[j].bz/(2*(element->info_EF[j].cz+element->info_EF[j].kBz)))+element->info_EF[j].kAz);
-        MB = MA*ll/(6*E*Iz*(element->info_EF[j].cz+element->info_EF[j].kBz));
-        ai[i] = 1;  aj[i] = 5;  ax[i] = MA/ll+MB/ll;  i++;
+            MA = 1./(element->info_EF[j].kAz + phia_iso*(1-element->info_EF[j].bz/(2*(element->info_EF[j].cz+element->info_EF[j].kBz))));
+        MB = MA*phib_iso/(element->info_EF[j].cz+element->info_EF[j].kBz);
+        ai[i] = 1;  aj[i] = 5;  ax[i] = MA/ll-MB/ll;  i++;
         ai[i] = 5;  aj[i] = 5;  ax[i] = MA;           i++;
-        ai[i] = 7;  aj[i] = 5;  ax[i] = -MA/ll-MB/ll; i++;
-        ai[i] = 11; aj[i] = 5;  ax[i] = MB;           i++;
+        ai[i] = 7;  aj[i] = 5;  ax[i] = -MA/ll+MB/ll; i++;
+        ai[i] = 11; aj[i] = 5;  ax[i] = -MB;           i++;
         
-    //         Etude du cas 3 :\end{verbatim}\begin{displaymath}
-    //         \varphi_{A_{iso}} = -arctan \left( \frac{v}{L} \right)\end{displaymath}\begin{displaymath}
-    //         \varphi_{B_{iso}} = -arctan \left( \frac{v}{L} \right)\end{displaymath}\begin{displaymath}
-    //         M_{A_{iso}} = 0\end{displaymath}\begin{displaymath}
-    //         M_{B_{iso}} = 0\end{displaymath}\begin{displaymath}
-    //         j = M_{A_{hyp}} = \frac{b \cdot \varphi_{B_{iso}}+(c+k_B) \cdot \varphi_{A_{iso}}}{(a+k_A)(c+k_B)-b^2} = \varphi_{iso} \frac{b+c+k_B}{(a+k_A)(c+k_B)-b^2}\end{displaymath}\begin{verbatim}
-    //         Afin de pouvoir exprimer le moment en fonction de la dénivelé, il est appliqué
-    //         un développement de Taylor de arctan (hypothèse des petites déplacements).
-    //         Ainsi -arctan(v/L) # -v/L + O(v^3)\end{verbatim}\begin{displaymath}
-    //         l = M_{B_{hyp}} = \frac{b \cdot \varphi_{A_{iso}}+(a+k_A) \cdot \varphi_{B_{iso}}}{(a+k_A)(c+k_B)-b^2} = \varphi_{iso} \frac{b+a+k_A}{(a+k_A)(c+k_B)-b^2}\end{displaymath}\begin{displaymath}
-    //         i = \frac{j}{L}+\frac{l}{L}\end{displaymath}\begin{displaymath}
-    //         k = -\frac{j}{L}-\frac{l}{L}\end{displaymath}\begin{verbatim}
+    //         Etude du cas 3 :
+    //         Les moments MA et MB sont obtenues par la fonction EF_calculs_moment_hyper_z en
+    //         supposant arctan(-1/l) = -1/l (hypothèse des petites déplacements).\end{verbatim}\begin{align*}
+    //         i = & \frac{M_A}{L}+\frac{M_B}{L} & j = & M_A\nonumber\\
+    //         k = & -\frac{M_A}{L}-\frac{M_B}{L} & l = & M_B\end{align*}\begin{verbatim}
         EF_calculs_moment_hyper_z(&(element->info_EF[j]), -1./ll, -1./ll, &MA, &MB);
         ai[i] = 1;  aj[i] = 7;  ax[i] =  MA/ll+MB/ll; i++;
         ai[i] = 5;  aj[i] = 7;  ax[i] =  MA;          i++;
         ai[i] = 7;  aj[i] = 7;  ax[i] = -MA/ll-MB/ll; i++;
         ai[i] = 11; aj[i] = 7;  ax[i] =  MB;          i++;
         
-    //         Etude du cas 4 :\end{verbatim}\begin{displaymath}
-    //         \varphi_{A_{iso}} = -\frac{C \cdot L}{6 \cdot E \cdot I_z}\end{displaymath}\begin{displaymath}
-    //         \varphi_{B_{iso}} = \frac{C \cdot L}{3 \cdot E \cdot I_z}\end{displaymath}\begin{displaymath}
-    //         M_{A_{iso}} = 0\end{displaymath}\begin{displaymath}
-    //         M_{B_{iso}} = C\end{displaymath}\begin{displaymath}
-    //         M_{A_{hyp}} = \frac{b \cdot \varphi_{B_{iso}}+(c+k_B) \cdot \varphi_{A_{iso}}}{(a+k_A)(c+k_B)-b^2} =  \varphi_{B_{iso}} \cdot \frac{b-(c+k_B)/2}{(a+k_A)(c+k_B)-b^2} = \frac{C \cdot L}{3 \cdot E \cdot I_z} \cdot \frac{b-(c+k_B)/2}{(a+k_A)(c+k_B)-b^2}\end{displaymath}\begin{displaymath}
-    //         M_{A_{hyp}} = \lim_{k_B\rightarrow \infty} \frac{C \cdot L}{3 \cdot E \cdot I_z} \cdot \frac{b-(c+k_B)/2}{(a+k_A)(c+k_B)-b^2} = -\frac{C \cdot L}{6 \cdot E \cdot I_z \cdot (a+k_A)}\end{displaymath}\begin{displaymath}
-    //         M_{B_{hyp}} = 0\end{displaymath}\begin{displaymath}
-    //         \phi_B = r - C \cdot k_B = \varphi_{B_{iso}} + b \cdot M_{A_{hyp}} = \frac{C \cdot L}{3 \cdot E \cdot I_z} - b \cdot \frac{C \cdot L}{6 \cdot E \cdot I_z \cdot (a+k_A)} = \frac{C \cdot L}{3 \cdot E \cdot I_z} \left( 1 - \frac{b}{2 \cdot (a+k_A)} \right)\end{displaymath}\begin{displaymath}
-    //         p = M_{B_{iso}} = C = \frac{r}{ \frac{L}{3 \cdot E \cdot I_z} \cdot \left( 1-\frac{b}{2\cdot(a+k_A)} \right) + k_B} \end{displaymath}\begin{displaymath}
-    //         n = M_{A_{hyp}} = -\frac{C \cdot L}{6 \cdot E \cdot I_z \cdot (a+k_A)}\end{displaymath}\begin{displaymath}
-    //         m = \frac{n}{L}+\frac{p}{L}\end{displaymath}\begin{displaymath}
-    //         o = -\frac{n}{L}-\frac{p}{L}\end{displaymath}\begin{verbatim}
+    //         Etude du cas 4, rotation imposée r. phiA (négatif) et phiB (positif) sont
+    //           déterminés par la fonction EF_charge_barre_ponctuelle_def_ang_iso_z :\end{verbatim}\begin{displaymath}
+    //         M_B = \frac{1}{ k_B + \varphi_B \cdot \left(1-\frac{b}{2 \cdot (c+k_A)}\right)}\end{displaymath}\begin{displaymath}
+    //         M_A = \frac{M_B*\varphi_A}{c+k_A}\end{displaymath}\begin{align*}
+    //         m = & -\frac{M_A}{L}+\frac{M_B}{L} & n = & -M_A\nonumber\\
+    //         o = & \frac{M_A}{L}-\frac{M_B}{L} & p = & M_B\end{align*}\begin{verbatim}
     //         L'ensemble des valeurs sont à inséré dans la matrice suivante et permet
     //         d'obtenir la matrice de rigidité élémentaire.\end{verbatim}\begin{displaymath}
+        EF_charge_barre_ponctuelle_def_ang_iso_z(element, j, ll, 0., 1., &phia_iso, &phib_iso);
         if (ERREUR_RELATIVE_EGALE(element->info_EF[j].kBz, MAXDOUBLE))
             MB = 0.;
         else if (ERREUR_RELATIVE_EGALE(element->info_EF[j].kAz, MAXDOUBLE))
-            MB = 3*E*Iz/(3*E*Iz*element->info_EF[j].kBz+ll);
+            MB = 1./(element->info_EF[j].kBz + phib_iso);
         else
-            MB = 1/(ll/(3*E*Iz)*(1-element->info_EF[j].bz/(2*(element->info_EF[j].az+element->info_EF[j].kAz)))+element->info_EF[j].kBz);
-        MA = MB*ll/(6*E*Iz*(element->info_EF[j].az+element->info_EF[j].kAz));
-        ai[i] = 1;  aj[i] = 11; ax[i] =  MA/ll+MB/ll; i++;
-        ai[i] = 5;  aj[i] = 11; ax[i] =  MA;          i++;
-        ai[i] = 7;  aj[i] = 11; ax[i] = -MA/ll-MB/ll; i++;
-        ai[i] = 11; aj[i] = 11; ax[i] =  MB;          i++;
+            MB = 1./(element->info_EF[j].kBz + phib_iso*(1-element->info_EF[j].bz/(2*(element->info_EF[j].cz+element->info_EF[j].kAz))));
+        MA = MB*phia_iso/(element->info_EF[j].cz+element->info_EF[j].kAz);
+        
+        ai[i] = 1;  aj[i] = 11; ax[i] = -MA/ll+MB/ll; i++;
+        ai[i] = 5;  aj[i] = 11; ax[i] = -MA;          i++;
+        ai[i] = 7;  aj[i] = 11; ax[i] = MA/ll-MB/ll; i++;
+        ai[i] = 11; aj[i] = 11; ax[i] = MB;          i++;
     // \begin{bmatrix}K_e\end{bmatrix} = 
     // \begin{bmatrix}  a & e & i & m\\
     //                  b & f & j & n\\
@@ -645,42 +682,62 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
     // \end{bmatrix}\end{displaymath}\begin{verbatim}
         
     //       Détermination de la matrice de rigidité après prise en compte des relachements
-    //         autour de l'axe y. Cette matrice de rigidité se calcule exactement de la même
-    //         façon que la matrice précédente. Il suffit de remplacer les relachements kAz et
-    //         kBz par kAy et lBy, les inerties Iz par Iy et les coefficients de souplesse az,
-    //         bz et cz par ay, by et cy. Le changement repère entraine également un changement
-    //         de signe des coefficients de la matrice a, c, e, g, i, k, m et o.
+    //         autour de l'axe y. La méthode est identique que précédemment, au signe près.
+    //         Etude du cas 1 :
+    //         Les moments MA et MB sont obtenues par la fonction EF_calculs_moment_hyper_y en
+    //         supposant arctan(v/l) = 1/l (hypothèse des petites déplacements).\end{verbatim}\begin{align*}
+    //         a = & -\frac{M_A}{L}-\frac{M_B}{L} & b = & M_A\nonumber\\
+    //         c = & \frac{M_A}{L}+\frac{M_B}{L} & d = & M_B\end{align*}\begin{verbatim}
         EF_calculs_moment_hyper_y(&(element->info_EF[j]), 1./ll, 1./ll, &MA, &MB);
         ai[i] = 2;  aj[i] = 2;  ax[i] = -MA/ll-MB/ll; i++;
         ai[i] = 4;  aj[i] = 2;  ax[i] = MA;           i++;
         ai[i] = 8;  aj[i] = 2;  ax[i] = +MA/ll+MB/ll; i++;
         ai[i] = 10; aj[i] = 2;  ax[i] = MB;           i++;
         
+    //         Etude du cas 2, rotation imposée r. phiA (positif) et phiB (négatif) sont
+    //           déterminés par la fonction EF_charge_barre_ponctuelle_def_ang_iso_y :\end{verbatim}\begin{displaymath}
+    //         M_A = \frac{1}{ k_A - \varphi_A \cdot \left(1-\frac{b}{2 \cdot (c+k_B)}\right)}\end{displaymath}\begin{displaymath}
+    //         M_B = \frac{M_A*\varphi_B}{c+k_B}\end{displaymath}\begin{align*}
+    //         e = & \-frac{M_A}{L}-\frac{M_B}{L} & f = & M_A\nonumber\\
+    //         g = & \frac{M_A}{L}+\frac{M_B}{L} & h = & -M_B\end{align*}\begin{verbatim}
+        EF_charge_barre_ponctuelle_def_ang_iso_y(element, j, 0., 0., 1., &phia_iso, &phib_iso);
         if (ERREUR_RELATIVE_EGALE(element->info_EF[j].kAy, MAXDOUBLE))
             MA = 0.;
         else if (ERREUR_RELATIVE_EGALE(element->info_EF[j].kBy, MAXDOUBLE))
-            MA = 3*E*Iy/(3*E*Iy*element->info_EF[j].kAy+ll);
+            MA = 1./(element->info_EF[j].kAy - phia_iso);
         else
-            MA = 1/(ll/(3*E*Iy)*(1-element->info_EF[j].by/(2*(element->info_EF[j].cy+element->info_EF[j].kBy)))+element->info_EF[j].kAy);
-        MB = MA*ll/(6*E*Iy*(element->info_EF[j].cy+element->info_EF[j].kBy));
+            MA = 1./(element->info_EF[j].kAy - phia_iso*(1-element->info_EF[j].by/(2*(element->info_EF[j].cy+element->info_EF[j].kBy))));
+        MB = MA*phib_iso/(element->info_EF[j].cy+element->info_EF[j].kBy);
         ai[i] = 2;  aj[i] = 4;  ax[i] = -MA/ll-MB/ll; i++;
         ai[i] = 4;  aj[i] = 4;  ax[i] = MA;           i++;
-        ai[i] = 8;  aj[i] = 4;  ax[i] = +MA/ll+MB/ll; i++;
+        ai[i] = 8;  aj[i] = 4;  ax[i] = MA/ll+MB/ll; i++;
         ai[i] = 10; aj[i] = 4;  ax[i] = MB;           i++;
         
+    //         Etude du cas 3 :
+    //         Les moments MA et MB sont obtenues par la fonction EF_calculs_moment_hyper_y en
+    //         supposant arctan(-1/l) = -1/l (hypothèse des petites déplacements).\end{verbatim}\begin{align*}
+    //         i = & -\frac{M_A}{L}-\frac{M_B}{L} & j = & M_A\nonumber\\
+    //         k = & \frac{M_A}{L}\frac{M_B}{L} & l = & M_B\end{align*}\begin{verbatim}
         EF_calculs_moment_hyper_y(&(element->info_EF[j]), -1./ll, -1./ll, &MA, &MB);
         ai[i] = 2;  aj[i] = 8;  ax[i] = -MA/ll-MB/ll; i++;
         ai[i] = 4;  aj[i] = 8;  ax[i] =  MA;          i++;
         ai[i] = 8;  aj[i] = 8;  ax[i] = +MA/ll+MB/ll; i++;
         ai[i] = 10; aj[i] = 8;  ax[i] =  MB;          i++;
         
+    //         Etude du cas 4, rotation imposée r. phiA (négatif) et phiB (positif) sont
+    //           déterminés par la fonction EF_charge_barre_ponctuelle_def_ang_iso_y :\end{verbatim}\begin{displaymath}
+    //         M_B = \frac{1}{ k_B - \varphi_B \cdot \left(1-\frac{b}{2 \cdot (c+k_A)}\right)}\end{displaymath}\begin{displaymath}
+    //         M_A = \frac{M_B*\varphi_A}{c+k_A}\end{displaymath}\begin{align*}
+    //         m = & -\frac{M_A}{L}-\frac{M_B}{L} & n = & M_A\nonumber\\
+    //         o = & \frac{M_A}{L}+\frac{M_B}{L} & p = & M_B\end{align*}\begin{verbatim}
+        EF_charge_barre_ponctuelle_def_ang_iso_y(element, j, ll, 0., 1., &phia_iso, &phib_iso);
         if (ERREUR_RELATIVE_EGALE(element->info_EF[j].kBy, MAXDOUBLE))
             MB = 0.;
         else if (ERREUR_RELATIVE_EGALE(element->info_EF[j].kAy, MAXDOUBLE))
-            MB = 3*E*Iy/(3*E*Iy*element->info_EF[j].kBy+ll);
+            MB = 1./(element->info_EF[j].kBy - phib_iso);
         else
-            MB = 1/(ll/(3*E*Iy)*(1-element->info_EF[j].by/(2*(element->info_EF[j].ay+element->info_EF[j].kAy)))+element->info_EF[j].kBy);
-        MA = MB*ll/(6*E*Iy*(element->info_EF[j].ay+element->info_EF[j].kAy));
+            MB = 1./(element->info_EF[j].kBy - phib_iso*(1-element->info_EF[j].by/(2*(element->info_EF[j].cy+element->info_EF[j].kAy))));
+        MA = MB*phia_iso/(element->info_EF[j].cy+element->info_EF[j].kAy);
         ai[i] = 2;  aj[i] = 10; ax[i] = -MA/ll-MB/ll; i++;
         ai[i] = 4;  aj[i] = 10; ax[i] = MA;           i++;
         ai[i] = 8;  aj[i] = 10; ax[i] = MA/ll+MB/ll;  i++;
@@ -705,10 +762,11 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
     // \end{bmatrix}\end{displaymath}\begin{verbatim}
         else
         {
-            ai[i] = 3;  aj[i] = 3;  ax[i] = G*J/ll;  i++;
-            ai[i] = 3;  aj[i] = 9;  ax[i] = -G*J/ll; i++;
-            ai[i] = 9;  aj[i] = 3;  ax[i] = -G*J/ll; i++;
-            ai[i] = 9;  aj[i] = 9;  ax[i] = G*J/ll;  i++;
+            double gj_l = _1992_1_1_sections_gj_l(element, j);
+            ai[i] = 3;  aj[i] = 3;  ax[i] = gj_l;  i++;
+            ai[i] = 3;  aj[i] = 9;  ax[i] = -gj_l; i++;
+            ai[i] = 9;  aj[i] = 3;  ax[i] = -gj_l; i++;
+            ai[i] = 9;  aj[i] = 9;  ax[i] = gj_l;  i++;
         }
         
         element->info_EF[j].matrice_rigidite_locale = cholmod_l_triplet_to_sparse(triplet, 0, projet->ef_donnees.c);

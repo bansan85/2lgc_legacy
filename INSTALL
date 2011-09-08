@@ -1,18 +1,5 @@
-Si vous êtes sous Windows, la compilation nécessite de créer un environnement très proche de Linux. Une application est faite pour ça : Cygwin.
-Allez sur le site de cygwin http://cygwin.com/install.html et télécharger le fichier "setup.exe".
-
-Durant le processus d'installation :
-    - Choose a download Source : Install from Internet
-    - Dossier d'installation : choisissez un emplacement ne contenant pas d'espace ni de caractère "spéciaux" (avec accent)
-    - Choose a Download Site : choississez un site internet proche de chez vous. Pour la france, l'extension doit être en .fr, avec une préférence pour le protocole ftp.
-    - Select Packages : Les paquets nécessaires à un environnement de base sont sélectionnés par défaut.
-    - Paquets supplémentaires nécessaires : gdb, automake1.11, patchutils, gettext-devel, libtool, make, gcc4.5
-
-
-
-
-
-
+Compilation sous Linux
+======================
 
 Pour compiler et installer l'application, il suffit de lancer les commandes suivantes :
 ./clean_config
@@ -42,6 +29,164 @@ make -j3 && sudo make install-data && make check -j3 && sudo make install && cod
 NOTA IMPORTANT :
     -pg -fprofile-arcs -ftest-coverage sont des options de deboguage qui ne doivent pas être mises pour une utilisation courante.
     --with-gtk : compilation de l'interface graphique et du support GTK.
+
+
+Compilation sous Windows
+========================
+
+Aucun prérequis n'est nécessaire pour Windows. La présente procédure explique la compilation depuis un ordinateur supposé "vierge".
+
+Le choix pour compiler l'application s'est porté sur l'application MinGW et son environnement proche de Linux.
+Exécutez le programme : mingw-get-inst-20110530.exe (http://sourceforge.net/projects/mingw/files/Automated%20MinGW%20Installer/mingw-get-inst/).
+Lors de l'installation cochez "Download latest repository catalogues", laissez c:\MinGW pour le dossier par défaut et cochez dans les options d'installation "MinGW Compiler Suite" et "MinGW Developer ToolKit".
+Une fois l'installation terminée, lancez MinGW en mode administrateur (nécessaire uniquement pour compiler gtk+3) et exécutez les commandes suivantes :
+
+mingw-get install msys-wget
+mkdir sources
+cd sources
+wget http://ftp.gnome.org/pub/gnome/binaries/win32/dependencies/pkg-config_0.23-3_win32.zip
+wget http://zlib.net/zlib-1.2.5.tar.bz2
+wget http://ftp.acc.umu.se/pub/gnome/sources/glib/2.28/glib-2.28.8.tar.xz
+wget ftp://xmlsoft.org/libxml2/libxml2-2.7.8.tar.gz
+wget http://www.ijg.org/files/jpegsrc.v8c.tar.gz
+wget http://download.osgeo.org/libtiff/tiff-4.0.0beta7.tar.gz
+wget ftp://ftp.simplesystems.org/pub/png/src/libpng-1.4.8.tar.xz
+wget ftp://sourceware.org/pub/libffi/libffi-3.0.9.tar.gz
+wget http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/2.23/gdk-pixbuf-2.23.5.tar.xz
+wget http://cairographics.org/releases/pixman-0.22.2.tar.gz
+wget http://downloads.sourceforge.net/project/freetype/freetype2/2.4.6/freetype-2.4.6.tar.bz2?r=&ts=1313862356
+wget http://freedesktop.org/software/fontconfig/release/fontconfig-2.8.0.tar.gz
+wget http://downloads.sourceforge.net/project/glew/glew/1.6.0/glew-1.6.0.tgz?r=http%3A%2F%2Fglew.sourceforge.net%2F&ts=1314085342
+wget http://cairographics.org/releases/cairo-1.10.2.tar.gz
+wget http://ftp.gnome.org/pub/gnome/sources/pango/1.29/pango-1.29.3.tar.xz
+wget http://ftp.gnome.org/pub/GNOME/sources/libcroco/0.6/libcroco-0.6.2.tar.bz2
+wget http://ftp.gnome.org/pub/GNOME/sources/librsvg/2.34/librsvg-2.34.0.tar.bz2
+wget http://poppler.freedesktop.org/poppler-0.16.7.tar.gz
+wget http://ftp.gnome.org/pub/gnome/sources/atk/1.30/atk-1.30.0.tar.bz2
+wget http://ftp.gnome.org/pub/gnome/sources/gtk+/3.0/gtk+-3.0.12.tar.xz
+cd ..
+mkdir comp
+cd comp
+
+tar xvjf ../sources/zlib-1.2.5.tar.bz2
+cd zlib-1.2.5
+make -f win32/Makefile.gcc
+make -f win32/Makefile.gcc install BINARY_PATH="c:/MinGW/bin" LIBRARY_PATH="c:/MinGW/lib" INCLUDE_PATH="c:/MinGW/include"
+cp zlib1.dll c:/MinGW/lib/libz.dll
+cd ..
+
+tar xvaf ../sources/glib-2.28.8.tar.xz
+cd glib-2.28.8
+./configure --disable-static --enable-shared --prefix=c:/MinGW/
+make -j3 && make install && cd ..
+
+mettre pkg-config.exe manuellement (contenu dans pkg-config_0.23-3_win32.zip qui a été récupéré par le script sources.sh) dans c:/MinGW/bin
+
+tar xvzf ../sources/libxml2-2.7.8.tar.gz
+cd libxml2-2.7.8
+./configure --disable-static --enable-shared --without-icu --without-python --disable-ipv6 --without-threads --prefix=c:/MinGW/
+make -j3 && make install && cd ..
+
+tar xvzf ../sources/jpegsrc.v8c.tar.gz
+cd jpeg-8c
+sed -i 's/long INT32/int INT32/g' jmorecfg.h
+./configure --disable-static --enable-shared --prefix=c:/MinGW/
+make -j3 && make install && cd ..
+
+tar xvzf ../sources/tiff-4.0.0beta7.tar.gz
+cd tiff-4.0.0beta7
+./configure --disable-static --enable-shared --enable-zlib --enable-jpeg --without-x --prefix=c:/MinGW/
+make -j3 && make install && cd ..
+
+tar xvaf ../sources/libpng-1.4.8.tar.xz
+cd libpng-1.4.8
+./configure --disable-static --enable-shared --prefix=c:/MinGW/
+make -j3 && make install && cd ..
+
+tar xvzf ../sources/libffi-3.0.9.tar.gz
+cd libffi-3.0.9
+./configure --disable-static --enable-shared --prefix=c:/MinGW/
+make -j3 && make install && cd ..
+
+tar xvaf ../sources/gdk-pixbuf-2.23.5.tar.xz
+cd gdk-pixbuf-2.23.5
+PKG_CONFIG_PATH="c:/MinGW/lib/pkgconfig" ./configure --disable-static --enable-shared --with-libjpeg --with-libtiff --with-libpng --disable-introspection --prefix=c:/MinGW/
+make -j3 && make install && cd ..
+
+tar xvzf ../sources/pixman-0.22.2.tar.gz
+cd pixman-0.22.2
+./configure --disable-static --enable-shared --enable-mmx --enable-sse2 --prefix=c:/MinGW/
+make -j3 && make install && cd ..
+
+tar xvjf ../sources/freetype-2.4.6.tar.bz2
+cd freetype-2.4.6
+./configure --disable-static --enable-shared --prefix=c:/MinGW/
+make -j3 && make install && cd ..
+
+tar xvzf ../sources/fontconfig-2.8.0.tar.gz
+cd fontconfig-2.8.0
+PKG_CONFIg_PATH="c:/MinGW/lib/pkgconfig" ./configure --disable-static --enable-shared --prefix=c:/MinGW/
+make -j3 && make install && cd ..
+
+tar xvzf ../sources/glew-1.6.0.tgz
+cd glew-1.6.0
+make -j3 && make GLEW_DEST="c:/MinGW/" install.all && cd ..
+
+tar xvzf ../sources/cairo-1.10.2.tar.gz
+cd cairo-1.10.2
+sed -i 's/\"-lGL\"/\"-lopengl32\"/g' configure
+PKG_CONFIG_PATH="c:/MinGW/lib/pkgconfig" ./configure --disable-static --enable-shared --enable-svg --enable-pdf --enable-ps --enable-png --enable-xml --enable-pthread --enable-gobject --enable-gl --prefix=c:/MinGW/
+sed -i 's/cairo gl/cairo/g' src/cairo-gl.pc
+sed -i 's/gl libpng/libpng/g' src/cairo.pc
+make -j3 && make install && cd ..
+
+tar xvaf ../sources/pango-1.29.3.tar.xz
+cd pango-1.29.3
+sed -i "s/G_DEFINE_ABSTRACT_TYPE (PangoFallbackEngine/G_DEFINE_TYPE (PangoFallbackEngine/g" pango/pango-engine.c
+PKG_CONFIG_PATH="c:/MinGW/lib/pkgconfig" ./configure --with-included-modules=basic-win32 --disable-static --enable-shared --prefix=c:/MinGW/
+make -j3 && make install && cd ..
+
+tar xvjf ../sources/libcroco-0.6.2.tar.bz2
+cd libcroco-0.6.2
+PKG_CONFIG_PATH="c:/MinGW/lib/pkgconfig" ./configure --disable-static --enable-shared --prefix=c:/MinGW/
+make -j3 && make install && cd ..
+
+tar xvjf ../sources/librsvg-2.34.0.tar.bz2
+cd librsvg-2.34.0
+PKG_CONFIG_PATH="c:/MinGW/lib/pkgconfig" ./configure --disable-static --enable-shared --with-croco --prefix=c:/MinGW/
+make -j3 && make install && cd ..
+
+tar xvzf ../sources/poppler-0.16.7.tar.gz
+cd poppler-0.16.7
+PKG_CONFIG_PATH="c:/MinGW/lib/pkgconfig" ./configure --without-x --disable-static --enable-shared --enable-zlib --enable-libjpeg --enable-libpng --enable-cairo-output --disable-introspection --prefix=c:/MinGW/
+make -j3 && make install && cd ..
+
+tar xvjf ../sources/atk-1.30.0.tar.bz2
+cd atk-1.30.0
+PKG_CONFIG_PATH="c:/MinGW/lib/pkgconfig" ./configure --disable-static --enable-shared --prefix=c:/MinGW/
+make -j3 && make install && cd ..
+
+tar xvaf ../sources/gtk+-3.0.12.tar.xz
+cd gtk+-3.0.12
+sed -i 's/modules demos tests perf examples//g' Makefile.in Makefile.am
+sed -i 's/\. tests/\./g' gtk/Makefile.in gtk/Makefile.am gdk/Makefile.in gdk/Makefile.am
+sed -i 's/quartz tests/quartz/g' gdk/Makefile.in gdk/Makefile.am
+sed -i 's/ -luuid/ /g' gtk/Makefile.am gtk/Makefile.in
+PKG_CONFIG_PATH="c:/MinGW/lib/pkgconfig" ./configure --disable-modules --disable-packagekit --disable-papi --disable-introspection --disable-static --enable-shared --prefix=c:/MinGW/
+make -j3
+make -j3
+make install && cd ..
+
+
+
+
+
+
+
+
+
+
+
 
 si le programme ne permet pas une compilation sans erreur par la procédure ci-dessus :
 1) vérifier le message d'erreur, il s'agit peut-être d'une application dont dépend le logiciel qui est non installée

@@ -20,6 +20,8 @@
 #define __1992_1_1_SECTION_H
 
 #include "config.h"
+#include "1992_1_1_barres.h"
+#include "common_projet.h"
 
 typedef enum __Type_Beton_Section
 {
@@ -30,50 +32,39 @@ typedef enum __Type_Beton_Section
 } Type_Beton_Section;
 
 
-typedef struct __Beton_Section_Caracteristiques
+typedef struct __Beton_Section_Rectangulaire
 {
     Type_Beton_Section  type;
     unsigned int        numero;
-    double              s;
-    double              cdgh;
-    double              cdgb;
-    double              cdgg;
-    double              cdgd;
-    double              iy;
-    double              iz;
-    double              j;
-} Beton_Section_Caracteristiques;
-
-
-typedef struct __Beton_Section_Rectangulaire
-{
-    Beton_Section_Caracteristiques  *caracteristiques;
-    double          largeur;
-    double          hauteur;
+    double              largeur;
+    double              hauteur;
 } Beton_Section_Rectangulaire;
 
 
 typedef struct __Beton_Section_T
 {
-    Beton_Section_Caracteristiques  *caracteristiques;
-    double          largeur_table;
-    double          largeur_ame;
-    double          hauteur_table;
-    double          hauteur_ame;
+    Type_Beton_Section  type;
+    unsigned int        numero;
+    double              largeur_table;
+    double              largeur_ame;
+    double              hauteur_table;
+    double              hauteur_ame;
 } Beton_Section_T;
 
 
 typedef struct __Beton_Section_Carre
 {
-    Beton_Section_Caracteristiques  *caracteristiques;
-    double          cote;
+    Type_Beton_Section  type;
+    unsigned int        numero;
+    double              cote;
 } Beton_Section_Carre;
 
 
 typedef struct __Beton_Section_Circulaire
 {
-    Beton_Section_Caracteristiques  *caracteristiques;
-    double          diametre;
+    Type_Beton_Section  type;
+    unsigned int        numero;
+    double              diametre;
 } Beton_Section_Circulaire;
 
 
@@ -82,7 +73,24 @@ int _1992_1_1_sections_ajout_rectangulaire(Projet *projet, double l, double h);
 int _1992_1_1_sections_ajout_T(Projet *projet, double lt, double la, double ht, double ha);
 int _1992_1_1_sections_ajout_carre(Projet *projet, double cote);
 int _1992_1_1_sections_ajout_circulaire(Projet *projet, double diametre);
+
 void* _1992_1_1_sections_cherche_numero(Projet *projet, unsigned int numero);
+
+double _1992_1_1_sections_ay(Beton_Barre *barre, unsigned int discretisation);
+double _1992_1_1_sections_by(Beton_Barre *barre, unsigned int discretisation);
+double _1992_1_1_sections_cy(Beton_Barre *barre, unsigned int discretisation);
+double _1992_1_1_sections_az(Beton_Barre *barre, unsigned int discretisation);
+double _1992_1_1_sections_bz(Beton_Barre *barre, unsigned int discretisation);
+double _1992_1_1_sections_cz(Beton_Barre *barre, unsigned int discretisation);
+
+double _1992_1_1_sections_s(void *sect);
+double _1992_1_1_sections_es_l(Beton_Barre *barre, unsigned int discretisation,
+  double debut, double fin);
+double _1992_1_1_sections_gj_l(Beton_Barre *barre, unsigned int discretisation);
+double _1992_1_1_sections_j(void* section);
+double _1992_1_1_sections_iy(void* section);
+double _1992_1_1_sections_iz(void* section);
+
 int _1992_1_1_sections_free(Projet *projet);
 
 #endif

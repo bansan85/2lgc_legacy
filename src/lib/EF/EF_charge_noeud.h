@@ -44,11 +44,12 @@ typedef struct __Charge_Noeud
     double          x;
     double          y;
     double          z;
-    double          rx;
-    double          ry;
-    double          rz;
+    double          mx;
+    double          my;
+    double          mz;
 } Charge_Noeud;
 
-int EF_charge_noeud_ajout(Projet *projet, int num_action, EF_Noeud *noeud, double fx, double fy, double fz, double rx, double ry, double rz);
+int EF_charge_noeud_ajout(Projet *projet, int num_action, EF_Noeud *noeud,
+  double fx, double fy, double fz, double mx, double my, double mz);
 
 #endif
