@@ -86,17 +86,17 @@ void common_math_arrondi_sparse(cholmod_sparse *sparse)
     
     return;
 }
-/*double common_math_arrondi(double nombre)
-{
-    double      retour;
-    unsigned int    width, x, y
-    
-    // On affiche la précision au maximum, provient de la librairie cholmod
-    for (width = 6 ; width < 50 ; width++)
+    /*double common_math_arrondi(double nombre)
     {
-        sprintf (s, "%.*g", width, nombre) ;
-        sscanf (s, "%lg", &y) ;
-        if (x == y) break ;
-    }
-    printf("%s\n", s);
-}*/
+        double      retour;
+        unsigned int    width, x, y
+        
+        // On affiche la précision au maximum, provient de la librairie cholmod
+        for (width = 6 ; width < 50 ; width++)
+        {
+            sprintf (s, "%.*g", width, nombre) ;
+            sscanf (s, "%lg", &y) ;
+            if (x == y) break ;
+        }
+        printf("%s\n", s);
+    }*/

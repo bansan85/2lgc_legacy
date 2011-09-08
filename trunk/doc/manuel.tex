@@ -94,16 +94,14 @@ En cas de vérification où l'échec est globalement critique pour l'application
 \subsection{Fichier {\texttt{common\_erreurs}}}
 Ce fichier permet de traiter les erreurs de l'application qui peuvent survenir pendant une utilisation normale ou anormale de l'application. Elles permettent de détecter plus facilement les erreurs et de remonter l'erreur jusqu'aux plus hautes instances du programme tout en assurant sa stabilité.
 \subsubsection{Macros}
-\input{common_erreurs_BUG_func.tex.tmp}
-\input{common_erreurs_BUGTEXTE_func.tex.tmp}
+\input{common_erreurs.h_define.tex.tmp}
 \subsubsection{Structures de données}
 \subsection{Fichier {\texttt{common\_fonction}}}
 Ce fichier permet de gérer des fonctions méthématiques plus ou moins complexes. Le principal intérêt est de pouvoir travailler avec une fonction différentes pour chaque tronçon défini par l'utilisateur. Par exemple avoir la fonction $x^2+3*x$ pour x variant de -1.5 à 1.5 et la fonction $-2*x+5$ pour x variant de 1.5 à 2.0.
 \subsubsection{Macros}
 Aucune.
 \subsubsection{Structures de données}
-\input{common_fonction_Troncon_struct.tex.tmp}
-\input{common_fonction_Fonction_struct.tex.tmp}
+\input{common_fonction.h_struct.tex.tmp}
 \input{common_fonction_init_func.tex.tmp}
 \input{common_fonction_init_com.tex.tmp}
 \input{common_fonction_scinde_troncon_func.tex.tmp}
@@ -117,7 +115,7 @@ Aucune.
 \subsection{Fichier {\texttt{common\_maths}}}
 Ce fichier permet de gérer les calculs avec prise en compte des imprécisions provenant de l'utilisation des nombres flottants.
 \subsubsection{Macros}
-\input{common_maths_ERREUR_RELATIVE_EGALE_func.tex.tmp}
+\input{common_maths.h_define.tex.tmp}
 \subsubsection{Structures de données}
 Aucune.
 \input{common_math_arrondi_nombre_func.tex.tmp}
@@ -131,27 +129,21 @@ Ce fichier permet de gérer l'initialisation et la libération de la totalité d
 \subsubsection{Macros}
 Aucune.
 \subsubsection{Structures de données}
-\input{common_projet_Type_Pays_struct.tex.tmp}
-\input{common_projet_CombinaisonsEL_struct.tex.tmp}
-\input{common_projet_List_Gtk_struct.tex.tmp}
-\input{common_projet_Type_Element_struct.tex.tmp}
-\input{common_projet_Beton_Donnees_struct.tex.tmp}
-\input{common_projet_EF_struct.tex.tmp}
-\input{common_projet_Projet_struct.tex.tmp}
-\input{common_projet_projet_init_func.tex.tmp}
-\input{common_projet_projet_init_com.tex.tmp}
-\input{common_projet_projet_free_func.tex.tmp}
-\input{common_projet_projet_free_com.tex.tmp}
+\input{common_projet.h_struct.tex.tmp}
+\input{projet_init_func.tex.tmp}
+\input{projet_init_com.tex.tmp}
+\input{projet_free_func.tex.tmp}
+\input{projet_free_com.tex.tmp}
 \subsection{Fichier {\texttt{common\_text}}}
 Ce fichier contient la liste des messages à afficher à l'utilisateur.
 \subsubsection{Macros}
 Aucune.
 \subsubsection{Structures de données}
 Aucune.
-\input{common_text_show_warranty_func.tex.tmp}
-\input{common_text_show_warranty_com.tex.tmp}
-\input{common_text_show_help_func.tex.tmp}
-\input{common_text_show_help_com.tex.tmp}
+\input{show_warranty_func.tex.tmp}
+\input{show_warranty_com.tex.tmp}
+\input{show_help_func.tex.tmp}
+\input{show_help_com.tex.tmp}
 \subsection{Fichier {\texttt{common\_tooltip}}}
 Ce fichier génère les tooltips dans l'interface GTK+3.
 \subsubsection{Macros}
@@ -177,8 +169,7 @@ Lors de la description des algorithmes des calculs éléments finis, un certain 
 \subsubsection{Macros}
 Aucune.
 \subsubsection{Structures de données}
-\input{EF_appuis_Type_EF_Appui_struct.tex.tmp}
-\input{EF_appuis_EF_Appui_struct.tex.tmp}
+\input{EF_appuis.h_struct.tex.tmp}
 \input{EF_appuis_init_func.tex.tmp}
 \input{EF_appuis_init_com.tex.tmp}
 \input{EF_appuis_ajout_func.tex.tmp}
@@ -192,8 +183,7 @@ Ce fichier gère les charges ponctuelles appliquées aux noeuds de la structure.
 \subsubsection{Macros}
 Aucune.
 \subsubsection{Structures de données}
-\input{EF_charge_noeud_Charge_Type_struct.tex.tmp}
-\input{EF_charge_noeud_Charge_Noeud_struct.tex.tmp}
+\input{EF_charge_noeud.h_struct.tex.tmp}
 \input{EF_charge_noeud_ajout_func.tex.tmp}
 \input{EF_charge_noeud_ajout_com.tex.tmp}
 \subsection{Fichier {\texttt{EF\_charge\_barre\_ponctuelle}}}
@@ -201,9 +191,23 @@ Ce fichier gère les charges ponctuelles appliquées sur une barre à une positi
 \subsubsection{Macros}
 Aucune.
 \subsubsection{Structures de données}
-\input{EF_charge_barre_ponctuelle_Charge_Barre_Ponctuelle_struct.tex.tmp}
+\input{EF_charge_barre_ponctuelle.h_struct.tex.tmp}
 \input{EF_charge_barre_ponctuelle_ajout_func.tex.tmp}
 \input{EF_charge_barre_ponctuelle_ajout_com.tex.tmp}
+\input{EF_charge_barre_ponctuelle_mx_func.tex.tmp}
+\input{EF_charge_barre_ponctuelle_mx_com.tex.tmp}
+\input{EF_charge_barre_ponctuelle_def_ang_iso_y_func.tex.tmp}
+\input{EF_charge_barre_ponctuelle_def_ang_iso_y_com.tex.tmp}
+\input{EF_charge_barre_ponctuelle_def_ang_iso_z_func.tex.tmp}
+\input{EF_charge_barre_ponctuelle_def_ang_iso_z_com.tex.tmp}
+\input{EF_charge_barre_ponctuelle_ajout_fonc_rx_func.tex.tmp}
+\input{EF_charge_barre_ponctuelle_ajout_fonc_rx_com.tex.tmp}
+\input{EF_charge_barre_ponctuelle_ajout_fonc_ry_func.tex.tmp}
+\input{EF_charge_barre_ponctuelle_ajout_fonc_ry_com.tex.tmp}
+\input{EF_charge_barre_ponctuelle_ajout_fonc_rz_func.tex.tmp}
+\input{EF_charge_barre_ponctuelle_ajout_fonc_rz_com.tex.tmp}
+\input{EF_charge_barre_ponctuelle_n_func.tex.tmp}
+\input{EF_charge_barre_ponctuelle_n_com.tex.tmp}
 \subsection{Fichier {\texttt{EF\_calculs}}}
 Ce fichier permet de réaliser tous les calculs éléments finis tel que la factorisation de la matrice de rigidité globale ou encore la détermination des déplacements des noeuds et la courbe des sollicitations dans les barres.
 \subsubsection{Macros}
@@ -227,8 +231,7 @@ Ce fichier permet gérer les noeuds.
 \subsubsection{Macros}
 Aucune.
 \subsubsection{Structures de données}
-\input{EF_noeud_Type_EF_Point_struct.tex.tmp}
-\input{EF_noeud_Type_EF_Noeud_struct.tex.tmp}
+\input{EF_noeud.h_struct.tex.tmp}
 \input{EF_noeuds_init_func.tex.tmp}
 \input{EF_noeuds_init_com.tex.tmp}
 \input{EF_noeuds_ajout_func.tex.tmp}
@@ -242,9 +245,7 @@ Ce fichier permet gérer la liste des relachements.
 \subsubsection{Macros}
 Aucune.
 \subsubsection{Structures de données}
-\input{EF_relachement_EF_Relachement_Donnees_Elastique_Linaire_struct.tex.tmp}
-\input{EF_relachement_EF_Relachement_Type_struct.tex.tmp}
-\input{EF_relachement_EF_Relachement_struct.tex.tmp}
+\input{EF_relachement.h_struct.tex.tmp}
 \input{EF_relachement_init_func.tex.tmp}
 \input{EF_relachement_init_com.tex.tmp}
 \input{EF_relachement_ajout_func.tex.tmp}
@@ -271,8 +272,7 @@ La catégorie d'une action correspond, par exemple, au poids propre du bâtiment
 \subsubsection{Macros}
 Aucune.
 \subsubsection{Structures de données}
-\input{1990_actions_Action_Categorie_struct.tex.tmp}
-\input{1990_actions_Action_struct.tex.tmp}
+\input{1990_actions.h_struct.tex.tmp}
 \input{_1990_action_type_bat_txt_eu_func.tex.tmp}
 \input{_1990_action_type_bat_txt_eu_com.tex.tmp}
 \input{_1990_action_type_bat_txt_fr_func.tex.tmp}
@@ -324,9 +324,7 @@ Ce fichier permet gérer de générer les combinaisons conformément à celles d
 \subsubsection{Macros}
 Aucune.
 \subsubsection{Structures de données}
-\input{1990_combinaisons_Combinaison_Element_struct.tex.tmp}
-\input{1990_combinaisons_Combinaison_struct.tex.tmp}
-\input{1990_combinaisons_Combinaisons_struct.tex.tmp}
+\input{1990_combinaisons.h_struct.tex.tmp}
 \input{_1990_combinaisons_genere_xor_func.tex.tmp}
 \input{_1990_combinaisons_genere_xor_com.tex.tmp}
 \input{_1990_combinaisons_genere_and_func.tex.tmp}
@@ -344,7 +342,6 @@ Ce fichier permet de gérer les durées indicatives d'un projet conformément à
 \subsubsection{Macros}
 Aucune.
 \subsubsection{Structures de données}
-Aucune.
 \input{_1990_duree_projet_eu_func.tex.tmp}
 \input{_1990_duree_projet_eu_com.tex.tmp}
 \input{_1990_duree_projet_fr_func.tex.tmp}
@@ -362,10 +359,7 @@ Ce fichier permet gérer les groupes de combinaisons.
 \subsubsection{Macros}
 Aucune.
 \subsubsection{Structures de données}
-\input{1990_groupes_Element.tex.tmp}
-\input{1990_groupes_Type_Groupe_Combinaison.tex.tmp}
-\input{1990_groupes_Groupe.tex.tmp}
-\input{1990_groupes_Niveau_Groupe.tex.tmp}
+\input{1990_groupes.h_struct.tex.tmp}
 \input{_1990_groupe_init_func.tex.tmp}
 \input{_1990_groupe_init_com.tex.tmp}
 \input{_1990_groupe_ajout_niveau_func.tex.tmp}
@@ -403,8 +397,7 @@ Ce fichier permet gérer les pondérations déduites des combinaisons.
 \subsubsection{Macros}
 Aucune.
 \subsubsection{Structures de données}
-\input{1990_ponderations_Ponderation_Element.tex.tmp}
-\input{1990_ponderations_Ponderation.tex.tmp}
+\input{1990_ponderations.h_struct.tex.tmp}
 \input{_1990_ponderations_genere_un_func.tex.tmp}
 \input{_1990_ponderations_genere_un_com.tex.tmp}
 \input{_1990_ponderations_genere_eu_func.tex.tmp}
@@ -421,8 +414,7 @@ Ce fichier permet gérer les barres en béton conformément à l'Eurocode 2, par
 \subsubsection{Macros}
 Aucune.
 \subsubsection{Structures de données}
-\input{1992_1_1_barres_Barre_Info_EF.tex.tmp}
-\input{1992_1_1_barres_Beton_Barre.tex.tmp}
+\input{1992_1_1_barres.h_struct.tex.tmp}
 \input{_1992_1_1_barres_init_func.tex.tmp}
 \input{_1992_1_1_barres_init_com.tex.tmp}
 \input{_1992_1_1_barres_ajout_func.tex.tmp}
@@ -440,7 +432,7 @@ Ce fichier permet gérer les matériaux en béton.
 \subsubsection{Macros}
 Aucune.
 \subsubsection{Structures de données}
-\input{1992_1_1_materiaux_Beton_Materiau_struct.tex.tmp}
+\input{1992_1_1_materiaux.h_struct.tex.tmp}
 \input{_1992_1_1_materiaux_init_func.tex.tmp}
 \input{_1992_1_1_materiaux_init_com.tex.tmp}
 \input{_1992_1_1_materiaux_ajout_func.tex.tmp}
@@ -454,12 +446,7 @@ Ce fichier permet gérer les sections en béton.
 \subsubsection{Macros}
 Aucune.
 \subsubsection{Structures de données}
-\input{1992_1_1_section_Type_Beton_Section_struct.tex.tmp}
-\input{1992_1_1_section_Beton_Section_Caracteristiques_struct.tex.tmp}
-\input{1992_1_1_section_Beton_Section_Rectangulaire_struct.tex.tmp}
-\input{1992_1_1_section_Beton_Section_T_struct.tex.tmp}
-\input{1992_1_1_section_Beton_Section_Carre_struct.tex.tmp}
-\input{1992_1_1_section_Beton_Section_Circulaire_struct.tex.tmp}
+\input{1992_1_1_section.h_struct.tex.tmp}
 \input{_1992_1_1_sections_init_func.tex.tmp}
 \input{_1992_1_1_sections_init_com.tex.tmp}
 \input{_1992_1_1_sections_ajout_rectangulaire_func.tex.tmp}
@@ -472,6 +459,22 @@ Aucune.
 \input{_1992_1_1_sections_ajout_circulaire_com.tex.tmp}
 \input{_1992_1_1_sections_cherche_numero_func.tex.tmp}
 \input{_1992_1_1_sections_cherche_numero_com.tex.tmp}
+\input{_1992_1_1_sections_ay_func.tex.tmp}
+\input{_1992_1_1_sections_ay_com.tex.tmp}
+\input{_1992_1_1_sections_by_func.tex.tmp}
+\input{_1992_1_1_sections_by_com.tex.tmp}
+\input{_1992_1_1_sections_cy_func.tex.tmp}
+\input{_1992_1_1_sections_cy_com.tex.tmp}
+\input{_1992_1_1_sections_az_func.tex.tmp}
+\input{_1992_1_1_sections_az_com.tex.tmp}
+\input{_1992_1_1_sections_bz_func.tex.tmp}
+\input{_1992_1_1_sections_bz_com.tex.tmp}
+\input{_1992_1_1_sections_cz_func.tex.tmp}
+\input{_1992_1_1_sections_cz_com.tex.tmp}
+\input{_1992_1_1_sections_es_l_func.tex.tmp}
+\input{_1992_1_1_sections_es_l_com.tex.tmp}
+\input{_1992_1_1_sections_gj_l_func.tex.tmp}
+\input{_1992_1_1_sections_gj_l_com.tex.tmp}
 \input{_1992_1_1_sections_free_func.tex.tmp}
 \input{_1992_1_1_sections_free_com.tex.tmp}
 \end{document}

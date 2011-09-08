@@ -32,7 +32,7 @@
 
 
 int EF_charge_noeud_ajout(Projet *projet, int num_action, EF_Noeud *noeud,
-  double fx, double fy, double fz, double rx, double ry, double rz)
+  double fx, double fy, double fz, double mx, double my, double mz)
 /* Description : ajouter une charge ponctuelle à une action et à un noeud de la structure en
  *                 lui attribuant le numéro suivant la dernière charge de l'action.
  * Paramètres : Projet *projet : la variable projet
@@ -41,9 +41,9 @@ int EF_charge_noeud_ajout(Projet *projet, int num_action, EF_Noeud *noeud,
  *            : double fx : force suivant l'axe global x
  *            : double fy : force suivant l'axe global y
  *            : double fz : force suivant l'axe global z
- *            : double rx : moment autour de l'axe global x
- *            : double ry : moment autour de l'axe global y
- *            : double rz : moment autour de l'axe global z
+ *            : double mx : moment autour de l'axe global x
+ *            : double my : moment autour de l'axe global y
+ *            : double mz : moment autour de l'axe global z
  * Valeur renvoyée :
  *   Succès : 0
  *   Échec : -1 en cas de paramètres invalides :
@@ -73,9 +73,9 @@ int EF_charge_noeud_ajout(Projet *projet, int num_action, EF_Noeud *noeud,
     charge_nouveau.x = fx;
     charge_nouveau.y = fy;
     charge_nouveau.z = fz;
-    charge_nouveau.rx = rx;
-    charge_nouveau.ry = ry;
-    charge_nouveau.rz = rz;
+    charge_nouveau.mx = mx;
+    charge_nouveau.my = my;
+    charge_nouveau.mz = mz;
     
     charge_dernier = (Charge_Noeud *)list_rear(action_en_cours->charges);
     if (charge_dernier == NULL)

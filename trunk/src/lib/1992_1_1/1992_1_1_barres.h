@@ -16,13 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __1992_1_1_ELEMENTS_H
-#define __1992_1_1_ELEMENTS_H
+#ifndef __1992_1_1_BARRES_H
+#define __1992_1_1_BARRES_H
 
 #include "config.h"
 #include "EF_relachement.h"
 #include "EF_noeud.h"
-#include "1992_1_1_section.h"
 #include "1992_1_1_materiaux.h"
 #include "common_projet.h"
 #include "cholmod.h"
@@ -38,8 +37,10 @@ typedef struct __Barre_Info_EF
     double              bz;
     double              cz;
     
+    double              kAx;
     double              kAy; // coefficient défissant l'inverse de la raideur aux noeuds
     double              kAz;
+    double              kBx;
     double              kBy;
     double              kBz;
 } Barre_Info_EF;

@@ -277,6 +277,47 @@ int common_fonction_ajout(Fonction* fonction, double debut_troncon, double fin_t
 }
 
 
+int common_fonction_compacte(Fonction* fonction)
+/* Description : Fusionne dans une fonction les tronçons identiques.
+ * Paramètres : Fonction* fonction : fonction à afficher
+ * Valeur renvoyée :
+ *   Succès : 0
+ *   Échec : -1 en cas de paramètres invalides :
+ *             (fonction == NULL)
+ *           -2 en cas d'erreur d'allocation mémoire
+ */
+{
+    int i; /* Numéro du tronçon en cours */
+    int j; /* Nombre de tronçons à conserver */
+    int k; /* Numéro du précédent tronçon identique */
+    
+    // Trivial
+    BUGMSG(fonction, -1, "%s\n", "common_fonction_compacte");
+    
+    if ((fonction->nb_troncons == 0) || (fonction->nb_troncons == 1))
+        return 0;
+    j = 1;
+    k = 0;
+    for (i=1;i<fonction->nb_troncons;i++)
+    {
+        if ((ERREUR_RELATIVE_EGALE(fonction->troncons[i].coef_0, fonction->troncons[k].coef_0)) && (ERREUR_RELATIVE_EGALE(fonction->troncons[i].coef_x, fonction->troncons[k].coef_x)) && (ERREUR_RELATIVE_EGALE(fonction->troncons[i].coef_x2, fonction->troncons[k].coef_x2)) && (ERREUR_RELATIVE_EGALE(fonction->troncons[i].coef_x3, fonction->troncons[k].coef_x3)))
+        {
+            fonction->troncons[j-1].fin_troncon = fonction->troncons[i].fin_troncon;
+        }
+        else
+        {
+            j++;
+            if (j-1 != i)
+                memcpy(&(fonction->troncons[j-1]), &(fonction->troncons[i]), sizeof(Troncon));
+            k = i;
+        }
+    }
+    memmove(fonction->troncons, fonction->troncons, sizeof(Troncon)*j);
+    fonction->nb_troncons = j;
+    return 0;
+}
+
+
 int common_fonction_affiche(Fonction* fonction)
 /* Description : Affiche la fonction (coefficients pour chaque tronçon) ainsi que la valeur
  *                 de la fonction pour chaque extrémité du tronçon.
@@ -294,6 +335,7 @@ int common_fonction_affiche(Fonction* fonction)
     
     if (fonction->nb_troncons == 0)
         printf(gettext("Fonction indéfinie.\n"));
+    common_fonction_compacte(fonction);
     for (i=0;i<fonction->nb_troncons;i++)
     {
         printf("debut_troncon : %f\tfin_troncon : %f\t0 : %f\tx : %f\tx2 : %f\tx3 : %f\tsoit f(%f) = %f\tf(%f) = %f\n", fonction->troncons[i].debut_troncon, fonction->troncons[i].fin_troncon, fonction->troncons[i].coef_0, fonction->troncons[i].coef_x, fonction->troncons[i].coef_x2, fonction->troncons[i].coef_x3, fonction->troncons[i].debut_troncon, fonction->troncons[i].coef_0+fonction->troncons[i].coef_x*fonction->troncons[i].debut_troncon+fonction->troncons[i].coef_x2*fonction->troncons[i].debut_troncon*fonction->troncons[i].debut_troncon+fonction->troncons[i].coef_x3*fonction->troncons[i].debut_troncon*fonction->troncons[i].debut_troncon*fonction->troncons[i].debut_troncon, fonction->troncons[i].fin_troncon, fonction->troncons[i].coef_0+fonction->troncons[i].coef_x*fonction->troncons[i].fin_troncon+fonction->troncons[i].coef_x2*fonction->troncons[i].fin_troncon*fonction->troncons[i].fin_troncon+fonction->troncons[i].coef_x3*fonction->troncons[i].fin_troncon*fonction->troncons[i].fin_troncon*fonction->troncons[i].fin_troncon);
