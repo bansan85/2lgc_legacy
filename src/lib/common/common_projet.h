@@ -22,7 +22,7 @@
 #include "config.h"
 #include <list.h>
 #include <cholmod.h>
-#include <SuiteSparseQR_C.h>
+#include <umfpack.h>
 
 typedef enum __Type_Pays
 {               // Spécifie le pays et l'annexe nationnale à utiliser.
@@ -74,7 +74,7 @@ typedef struct __Beton_Donnees
 typedef struct __EF
 {                               // Contient toutes les données nécessaires pour la réalisation
                                 // des calculs aux éléments finis et notamment les variables
-                                // utilisées par les librairies cholmod et spqr.
+                                // utilisées par les librairies cholmod.
     cholmod_common      Common; // Paramètres des calculs de la librairie cholmod.
     cholmod_common      *c;     // Pointeur vers Common
                                 
@@ -112,12 +112,9 @@ typedef struct __EF
                                                      // dont les déplacements sont connus
     cholmod_sparse      *rigidite_matrice_complete;  // Matrice de rigidité complète.
     
-    SuiteSparseQR_C_factorization   *QR;             // Matrice partielle factorisée, utilisée
-                                                     // dans tous les calculs lors de la 
-    // résolution de chaque cas de charges.
-    
-    //  Pour utiliser cholmod dans les calculs de matrices sans la librarie QR.
-    //cholmod_factor      *factor; // Matrice partielle factorisée
+    void                *numeric;            // Matrice partielle factorisée, utilisée dans
+    long                *ap, *ai, *map;      // tous les calculs lors de la résolution de
+    double              *ax;                 // chaque cas de charges.
 } EF;
 
 typedef struct __Projet
