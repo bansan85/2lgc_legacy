@@ -8,8 +8,20 @@ cat list_sources_c.tmp | while read LINE ; do
     cat $nom".tmp" | while read LINE2 ; do
         nom2=`echo $LINE2 |sed 's/^.* //'`
         echo "$LINE2"
-        ./input.sh "$LINE2" "$LINE" "$nom2"_func.tex.tmp
-        ./input_com.sh "$LINE2" "$LINE" "$nom2"_com.tex.tmp
+        
+        rm -f "$nom2"_func.tex.tmp
+        echo "\\noindent\\hrulefill\\subsubsection{`echo "$LINE2" |sed 's/\\\*//g' |sed 's/^.* //g' |sed 's/_/\\\_/g' |sed 's/(//g'`}\\small\\begin{verbatim}" > "$nom2"_func.tex.tmp
+        awk "/""$LINE2""/ , /\*\//" "$LINE" >> "$nom2"_func.tex.tmp
+        echo "\\end{verbatim}\\normalsize{}" >> "$nom2"_func.tex.tmp
+        
+        rm -f "$nom2"_com.tex.tmp "$nom2"_com.tex.tmp_1.tmp "$nom2"_com.tex.tmp_2.tmp
+        echo "\\begin{itemize}\\item\\textbf{Présentation de l'algorithme :}\\end{itemize}\\small\\begin{verbatim}" > "$nom2"_com.tex.tmp
+        awk "/""$LINE2""/ , /^}$/" "$LINE" > "$nom2"_com.tex.tmp_1.tmp
+        awk "/^{$/,/^}$/" "$nom2"_com.tex.tmp_1.tmp > "$nom2"_com.tex.tmp_2.tmp
+        awk "/\/\//" "$nom2"_com.tex.tmp_2.tmp >> "$nom2"_com.tex.tmp
+        sed -i 's/^.*\/\/ //' "$nom2"_com.tex.tmp
+        echo "\\end{verbatim}" >> "$nom2"_com.tex.tmp
+        echo "\\par\\noindent\\hrulefill\\normalsize" >> "$nom2"_com.tex.tmp
     done
 done
 

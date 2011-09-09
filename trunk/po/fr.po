@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2011-09-07 17:03+0200\n"
+"POT-Creation-Date: 2011-09-09 15:16+0200\n"
 "PO-Revision-Date: 2011-08-30 16:28+0100\n"
 "Last-Translator: LE GARREC Vincent <vlg@2lgc.org>\n"
 "Language-Team: French\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: src/gui/codegui/main.c:99
+#: src/gui/codegui/main.c:183
 msgid "Impossible d'initialiser gtk.\n"
 msgstr "Impossible d'initialiser gtk.\n"
 
@@ -26,13 +26,13 @@ msgstr "Impossible d'initialiser gtk.\n"
 #: src/lib/1992_1_1/1992_1_1_barres.c:110
 #: src/lib/1992_1_1/1992_1_1_barres.c:135
 #: src/lib/1992_1_1/1992_1_1_barres.c:280
-#: src/lib/1992_1_1/1992_1_1_barres.c:315
-#: src/lib/1992_1_1/1992_1_1_barres.c:317
-#: src/lib/1992_1_1/1992_1_1_barres.c:579
-#: src/lib/1992_1_1/1992_1_1_barres.c:785
-#: src/lib/1992_1_1/1992_1_1_barres.c:791
-#: src/lib/1992_1_1/1992_1_1_barres.c:793
-#: src/lib/1992_1_1/1992_1_1_barres.c:796
+#: src/lib/1992_1_1/1992_1_1_barres.c:314
+#: src/lib/1992_1_1/1992_1_1_barres.c:316
+#: src/lib/1992_1_1/1992_1_1_barres.c:578
+#: src/lib/1992_1_1/1992_1_1_barres.c:773
+#: src/lib/1992_1_1/1992_1_1_barres.c:779
+#: src/lib/1992_1_1/1992_1_1_barres.c:781
+#: src/lib/1992_1_1/1992_1_1_barres.c:784
 #: src/lib/1992_1_1/1992_1_1_materiaux.c:42
 #: src/lib/1992_1_1/1992_1_1_materiaux.c:144
 #: src/lib/1990/1990_ponderations.c:244 src/lib/1990/1990_ponderations.c:289
@@ -70,27 +70,28 @@ msgstr "Impossible d'initialiser gtk.\n"
 #: src/lib/common/common_projet.c:58 src/lib/common/common_projet.c:59
 #: src/lib/common/common_projet.c:62 src/lib/common/common_projet.c:63
 #: src/lib/common/common_projet.c:64 src/lib/common/common_projet.c:65
-#: src/lib/EF/EF_calculs.c:67 src/lib/EF/EF_calculs.c:71
-#: src/lib/EF/EF_calculs.c:74 src/lib/EF/EF_calculs.c:78
-#: src/lib/EF/EF_calculs.c:160 src/lib/EF/EF_calculs.c:163
-#: src/lib/EF/EF_calculs.c:230 src/lib/EF/EF_calculs.c:232
-#: src/lib/EF/EF_calculs.c:235 src/lib/EF/EF_calculs.c:238
-#: src/lib/EF/EF_calculs.c:250 src/lib/EF/EF_calculs.c:252
-#: src/lib/EF/EF_calculs.c:259 src/lib/EF/EF_calculs.c:266
-#: src/lib/EF/EF_calculs.c:284 src/lib/EF/EF_calculs.c:440
-#: src/lib/EF/EF_calculs.c:452 src/lib/EF/EF_calculs.c:539
-#: src/lib/EF/EF_calculs.c:548 src/lib/EF/EF_calculs.c:569
-#: src/lib/EF/EF_calculs.c:572 src/lib/EF/EF_calculs.c:575
-#: src/lib/EF/EF_calculs.c:737 src/lib/EF/EF_calculs.c:755
-#: src/lib/EF/EF_calculs.c:758 src/lib/EF/EF_calculs.c:761
-#: src/lib/EF/EF_calculs.c:798 src/lib/EF/EF_calculs.c:801
-#: src/lib/EF/EF_calculs.c:803 src/lib/EF/EF_calculs.c:820
-#: src/lib/EF/EF_calculs.c:822 src/lib/EF/EF_calculs.c:830
-#: src/lib/EF/EF_calculs.c:835 src/lib/EF/EF_calculs.c:862
-#: src/lib/EF/EF_calculs.c:870 src/lib/EF/EF_calculs.c:884
-#: src/lib/EF/EF_calculs.c:886 src/lib/EF/EF_calculs.c:953
-#: src/lib/EF/EF_calculs.c:976 src/lib/EF/EF_calculs.c:979
-#: src/lib/EF/EF_calculs.c:985 src/lib/EF/EF_noeud.c:40
+#: src/lib/EF/EF_calculs.c:66 src/lib/EF/EF_calculs.c:70
+#: src/lib/EF/EF_calculs.c:73 src/lib/EF/EF_calculs.c:77
+#: src/lib/EF/EF_calculs.c:159 src/lib/EF/EF_calculs.c:162
+#: src/lib/EF/EF_calculs.c:219 src/lib/EF/EF_calculs.c:221
+#: src/lib/EF/EF_calculs.c:224 src/lib/EF/EF_calculs.c:234
+#: src/lib/EF/EF_calculs.c:236 src/lib/EF/EF_calculs.c:241
+#: src/lib/EF/EF_calculs.c:248 src/lib/EF/EF_calculs.c:267
+#: src/lib/EF/EF_calculs.c:269 src/lib/EF/EF_calculs.c:271
+#: src/lib/EF/EF_calculs.c:273 src/lib/EF/EF_calculs.c:279
+#: src/lib/EF/EF_calculs.c:281 src/lib/EF/EF_calculs.c:436
+#: src/lib/EF/EF_calculs.c:448 src/lib/EF/EF_calculs.c:535
+#: src/lib/EF/EF_calculs.c:544 src/lib/EF/EF_calculs.c:565
+#: src/lib/EF/EF_calculs.c:568 src/lib/EF/EF_calculs.c:571
+#: src/lib/EF/EF_calculs.c:733 src/lib/EF/EF_calculs.c:751
+#: src/lib/EF/EF_calculs.c:754 src/lib/EF/EF_calculs.c:757
+#: src/lib/EF/EF_calculs.c:794 src/lib/EF/EF_calculs.c:796
+#: src/lib/EF/EF_calculs.c:803 src/lib/EF/EF_calculs.c:818
+#: src/lib/EF/EF_calculs.c:845 src/lib/EF/EF_calculs.c:847
+#: src/lib/EF/EF_calculs.c:853 src/lib/EF/EF_calculs.c:867
+#: src/lib/EF/EF_calculs.c:869 src/lib/EF/EF_calculs.c:920
+#: src/lib/EF/EF_calculs.c:943 src/lib/EF/EF_calculs.c:946
+#: src/lib/EF/EF_calculs.c:952 src/lib/EF/EF_noeud.c:40
 #: src/lib/EF/EF_noeud.c:87 src/lib/EF/EF_charge_barre_ponctuelle.c:98
 #: src/lib/EF/EF_appuis.c:40 src/lib/EF/EF_appuis.c:169
 #: src/lib/EF/EF_relachement.c:40 src/lib/EF/EF_relachement.c:102

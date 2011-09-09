@@ -20,7 +20,6 @@
 #include <stdlib.h>
 #include <libintl.h>
 #include <string.h>
-#include <SuiteSparseQR_C.h>
 #include <time.h>
 #include <unistd.h>
 #include <values.h>
@@ -186,10 +185,9 @@ int EF_calculs_genere_mat_rig(Projet *projet)
  *           -2 en cas d'erreur d'allocation mémoire
  */
 {
-    unsigned int        j, i;
+    unsigned int        i;
     long                *ai, *aj;
     double              *ax;
-    double              max_rigidite;
     
     BUGMSG(projet, -1, "EF_calculs_genere_mat_rig\n");
     BUGMSG(projet->ef_donnees.triplet_rigidite_partielle, -1, "EF_calculs_genere_mat_rig\n");
@@ -206,15 +204,6 @@ int EF_calculs_genere_mat_rig(Projet *projet)
         ax[i] = 0.;
     }
         
-    // Détermination de la valeur maximale d'une case de la matrice de rigidité
-    // Élimination des valeurs négligeables.
-    max_rigidite = 0.;
-    for (j=0;j<projet->ef_donnees.triplet_rigidite_complete->nzmax;j++)
-    {
-        if (ABS(ax[j]) > max_rigidite)
-            max_rigidite = ABS(ax[j]);
-    }
-    
     // Si le nombre de lignes du triplet rigidité partielle == 0, cela signifie que tous les
     //   noeuds sont bloqués (cas d'une poutre sur deux appuis sans discrétisation) Alors
     //     Initialisation d'un matrice de rigidité partielle vide.
@@ -233,25 +222,18 @@ int EF_calculs_genere_mat_rig(Projet *projet)
         projet->ef_donnees.rigidite_matrice_partielle->stype = 0;
         projet->ef_donnees.rigidite_matrice_complete = cholmod_l_triplet_to_sparse(projet->ef_donnees.triplet_rigidite_complete, 0, projet->ef_donnees.c);
         BUGMSG(projet->ef_donnees.rigidite_matrice_complete, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_genere_mat_rig");
-        cholmod_l_drop(max_rigidite*ERREUR_RELATIVE_MIN, projet->ef_donnees.rigidite_matrice_complete, projet->ef_donnees.c);
+/*        fhri    l
         projet->ef_donnees.QR = SuiteSparseQR_C_factorize(0, 0., projet->ef_donnees.rigidite_matrice_partielle, projet->ef_donnees.c);
-        BUGMSG(projet->ef_donnees.QR, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_genere_mat_rig");
-/*      Pour utiliser cholmod dans les calculs de matrices.
- *      projet->ef_donnees.factor_rigidite_matrice_partielle = cholmod_l_analyze (projet->ef_donnees.rigidite_matrice_partielle, projet->ef_donnees.c) ;
- *      cholmod_l_factorize(projet->ef_donnees.rigidite_matrice_partielle, projet->ef_donnees.factor_rigidite_matrice_partielle, projet->ef_donnees.c); */
+        BUGMSG(projet->ef_donnees.QR, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_genere_mat_rig");*/
         cholmod_l_free_triplet(&triplet_rigidite, projet->ef_donnees.c);
         
         return 0;
     }
     
-    // Convertion du triplet de rigidité partielle en matrice.
-    // Convertion du triplet de rigidité complète en matrice.
     projet->ef_donnees.rigidite_matrice_partielle = cholmod_l_triplet_to_sparse(projet->ef_donnees.triplet_rigidite_partielle, 0, projet->ef_donnees.c);
     BUGMSG(projet->ef_donnees.rigidite_matrice_partielle, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_genere_mat_rig");
     projet->ef_donnees.rigidite_matrice_complete = cholmod_l_triplet_to_sparse(projet->ef_donnees.triplet_rigidite_complete, 0, projet->ef_donnees.c);
     BUGMSG(projet->ef_donnees.rigidite_matrice_complete, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_genere_mat_rig");
-    cholmod_l_drop(max_rigidite*ERREUR_RELATIVE_MIN, projet->ef_donnees.rigidite_matrice_partielle, projet->ef_donnees.c);
-    cholmod_l_drop(max_rigidite*ERREUR_RELATIVE_MIN, projet->ef_donnees.rigidite_matrice_complete, projet->ef_donnees.c);
     /* On force les matrices à ne pas être symétriques.*/
     if (projet->ef_donnees.rigidite_matrice_partielle->stype != 0)
     {
@@ -280,8 +262,24 @@ int EF_calculs_genere_mat_rig(Projet *projet)
     }*/
     
     // Factorisation de la matrice de rigidité partielle.
-    projet->ef_donnees.QR = SuiteSparseQR_C_factorize(0, 0., projet->ef_donnees.rigidite_matrice_partielle, projet->ef_donnees.c);
-    BUGMSG(projet->ef_donnees.QR, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_genere_mat_rig");
+    void *symbolic;
+    projet->ef_donnees.ap = (long*)malloc(sizeof(long)*(projet->ef_donnees.triplet_rigidite_partielle->ncol+1));
+    BUGMSG(projet->ef_donnees.ap, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_genere_mat_rig");
+    projet->ef_donnees.ai = (long*)malloc(sizeof(long)*projet->ef_donnees.triplet_rigidite_partielle->nnz);
+    BUGMSG(projet->ef_donnees.ai, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_genere_mat_rig");
+    projet->ef_donnees.map= (long*)malloc(sizeof(long)*projet->ef_donnees.triplet_rigidite_partielle->nnz);
+    BUGMSG(projet->ef_donnees.map, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_genere_mat_rig");
+    projet->ef_donnees.ax= (double*)malloc(sizeof(double)*projet->ef_donnees.triplet_rigidite_partielle->nnz);
+    BUGMSG(projet->ef_donnees.ax, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_genere_mat_rig");
+    ai=projet->ef_donnees.triplet_rigidite_partielle->i;
+    aj=projet->ef_donnees.triplet_rigidite_partielle->j;
+    ax=projet->ef_donnees.triplet_rigidite_partielle->x;
+    umfpack_dl_triplet_to_col(projet->ef_donnees.triplet_rigidite_partielle->nrow, projet->ef_donnees.triplet_rigidite_partielle->ncol, projet->ef_donnees.triplet_rigidite_partielle->nnz, ai, aj, ax, projet->ef_donnees.ap, projet->ef_donnees.ai, projet->ef_donnees.ax, projet->ef_donnees.map);
+    umfpack_dl_symbolic(projet->ef_donnees.triplet_rigidite_partielle->nrow, projet->ef_donnees.triplet_rigidite_partielle->ncol, projet->ef_donnees.ap, projet->ef_donnees.ai, projet->ef_donnees.ax, &symbolic, NULL, NULL);
+    BUGMSG(symbolic, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_genere_mat_rig");
+    umfpack_dl_numeric(projet->ef_donnees.ap, projet->ef_donnees.ai, projet->ef_donnees.ax, symbolic, &projet->ef_donnees.numeric, NULL, NULL);
+    BUGMSG(projet->ef_donnees.numeric, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_genere_mat_rig");
+    free(symbolic);
     
     return 0;
 }
@@ -401,7 +399,7 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
  *             (projet->actions == NULL) ou
  *             (list_size(projet->actions) == 0) ou
  *             (_1990_action_cherche_numero(projet, num_action) != 0) ou
- *             (projet->ef_donnees.QR == NULL)
+ *             (projet->ef_donnees.numeric == NULL)
  *           -2 en cas d'erreur d'allocation mémoire
  *           -3 en cas d'erreur due à une fonction interne
  */
@@ -409,7 +407,6 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
     Action          *action_en_cours;
     cholmod_triplet *triplet_deplacements_totaux, *triplet_deplacements_partiels;
     cholmod_triplet *triplet_force_partielle, *triplet_force_complete;
-    cholmod_sparse  *sparse_force, *deplacement_partiel;
     cholmod_dense   *dense_force;
     cholmod_triplet *triplet_efforts_locaux_finaux, *triplet_efforts_globaux_initiaux, *triplet_efforts_locaux_initiaux, *triplet_efforts_globaux_finaux;
     cholmod_sparse  *sparse_efforts_locaux_finaux,  *sparse_efforts_globaux_initiaux,  *sparse_efforts_locaux_initiaux,  *sparse_efforts_globaux_finaux;
@@ -420,7 +417,6 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
     long            *ai3, *aj3;
     double          *ax3;
     unsigned int    i, j, k;
-    double          max_effort;
     cholmod_dense   *X, *Y;
     cholmod_sparse  *sparse_tmp;
     
@@ -428,7 +424,7 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
     BUGMSG(projet->actions, -1, "EF_calculs_resoud_charge\n");
     BUGMSG(list_size(projet->actions), -1, "EF_calculs_resoud_charge\n");
     BUGMSG(_1990_action_cherche_numero(projet, num_action) == 0, -1, "EF_calculs_resoud_charge : num_action %d\n", num_action);
-    BUGMSG(projet->ef_donnees.QR, -1, "EF_calculs_resoud_charge\n");
+    BUGMSG(projet->ef_donnees.numeric, -1, "EF_calculs_resoud_charge\n");
     
     // Création du triplet sparse partiel et complet contenant les forces extérieures
     //   sur les noeuds et initialisation des valeurs à 0. Le vecteur partiel sera 
@@ -794,43 +790,30 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
     // FinPour
     
     /* On converti les données dans des structures permettant les calculs via les libraries */
-    sparse_force = cholmod_l_triplet_to_sparse(triplet_force_partielle, 0, projet->ef_donnees.c);
-    BUGMSG(sparse_force, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_resoud_charge");
-    cholmod_l_free_triplet(&triplet_force_partielle, projet->ef_donnees.c);
-    dense_force = cholmod_l_sparse_to_dense(sparse_force, projet->ef_donnees.c);
-    BUGMSG(dense_force, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_resoud_charge");
     action_en_cours->forces_complet = cholmod_l_triplet_to_sparse(triplet_force_complete, 0, projet->ef_donnees.c);
     BUGMSG(action_en_cours->forces_complet, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_resoud_charge");
-    printf("forces_complet \n");
-    cholmod_l_write_sparse(stdout, action_en_cours->forces_complet, NULL, NULL, projet->ef_donnees.c);
+    dense_force = cholmod_l_sparse_to_dense(action_en_cours->forces_complet, projet->ef_donnees.c);
+    BUGMSG(dense_force, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_resoud_charge");
     cholmod_l_free_triplet(&triplet_force_complete, projet->ef_donnees.c);
-    
-/*  Pour utiliser cholmod dans les calculs de matrices.
-    action_en_cours->deplacement_partiel = cholmod_l_spsolve (CHOLMOD_A, projet->ef_donnees.factor_rigidite_matrice_partielle, sparse_force, projet->ef_donnees.c);
-    cholmod_sparse *r = cholmod_l_copy_sparse(sparse_force, projet->ef_donnees.c);
-    cholmod_l_ssmult(projet->ef_donnees.rigidite_matrice_partielle, action_en_cours->deplacement_partiel, 0, TRUE, TRUE, projet->ef_donnees.c);
-    action_en_cours->norm = cholmod_l_norm_sparse(r, 0, projet->ef_donnees.c);
-    printf("résidu : %f\n", action_en_cours->norm);
-    cholmod_l_free_sparse(&r, projet->ef_donnees.c);
-    cholmod_l_write_sparse(stdout, action_en_cours->deplacement_partiel, NULL, NULL, projet->ef_donnees.c);*/
     
     // Calcul des déplacements des noeuds :\end{verbatim}\begin{align*}
     // \{ \Delta \}_{global} = [K]^{-1} \cdot \{ F \}_{global}\end{align*}\begin{verbatim}
-    Y = SuiteSparseQR_C_qmult(SPQR_QTX, projet->ef_donnees.QR, dense_force, projet->ef_donnees.c);
-    BUGMSG(Y, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_resoud_charge");
-    X = SuiteSparseQR_C_solve(SPQR_RX_EQUALS_B, projet->ef_donnees.QR, Y, projet->ef_donnees.c);
-    BUGMSG(X, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_resoud_charge");
-    deplacement_partiel = cholmod_l_dense_to_sparse(X, TRUE, projet->ef_donnees.c);
     
-    /* Création du vecteur déplacement complet */
-    printf("deplacement partiel\n");
-    cholmod_l_write_sparse(stdout, deplacement_partiel, NULL, NULL, projet->ef_donnees.c);
-    triplet_deplacements_partiels = cholmod_l_sparse_to_triplet(deplacement_partiel, projet->ef_donnees.c);
-    cholmod_l_free_sparse(&deplacement_partiel, projet->ef_donnees.c);
+    triplet_deplacements_partiels = cholmod_l_allocate_triplet(projet->ef_donnees.rigidite_matrice_partielle->nrow, 1, projet->ef_donnees.rigidite_matrice_partielle->nrow, 0, CHOLMOD_REAL, projet->ef_donnees.c);
     BUGMSG(triplet_deplacements_partiels, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_resoud_charge");
+    triplet_deplacements_partiels->nnz = projet->ef_donnees.rigidite_matrice_partielle->nrow;
     ai = triplet_deplacements_partiels->i;
     aj = triplet_deplacements_partiels->j;
     ax = triplet_deplacements_partiels->x;
+    ax2 = triplet_force_partielle->x;
+    umfpack_dl_solve(UMFPACK_A, projet->ef_donnees.ap, projet->ef_donnees.ai, projet->ef_donnees.ax, ax, ax2, projet->ef_donnees.numeric, NULL, NULL) ;
+    for (i=0;i<projet->ef_donnees.rigidite_matrice_partielle->nrow;i++)
+    {
+        ai[i] = i;
+        aj[i] = 0;
+    }
+    
+    /* Création du vecteur déplacement complet */
     triplet_deplacements_totaux = cholmod_l_allocate_triplet(action_en_cours->forces_complet->nrow, 1, action_en_cours->forces_complet->nrow, 0, CHOLMOD_REAL, projet->ef_donnees.c);
     BUGMSG(triplet_deplacements_totaux, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_resoud_charge");
     triplet_deplacements_totaux->nnz = action_en_cours->forces_complet->nrow;
@@ -860,8 +843,8 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
     cholmod_l_free_triplet(&triplet_deplacements_partiels, projet->ef_donnees.c);
     action_en_cours->deplacement_complet = cholmod_l_triplet_to_sparse(triplet_deplacements_totaux, 0, projet->ef_donnees.c);
     BUGMSG(action_en_cours->deplacement_complet, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_resoud_charge");
-    printf("deplacementçcomplet \n");
-    cholmod_l_write_sparse(stdout, action_en_cours->deplacement_complet, NULL, NULL, projet->ef_donnees.c);
+    X = cholmod_l_sparse_to_dense(action_en_cours->deplacement_complet, projet->ef_donnees.c);
+    BUGMSG(X, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_resoud_charge");
     
     // Calcul du résidu :\end{verbatim}\begin{align*}
     // res = \frac{norme{\{[K]*\{\Delta\}+\{F\}\}}}{norme([K])*norme(\{\Delta\})+norme(\{F\})}\end{align*}\begin{verbatim}
@@ -869,11 +852,11 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
     cholmod_dense *r = cholmod_l_copy_dense(dense_force, projet->ef_donnees.c);
     BUGMSG(r, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_resoud_charge");
     double minusone[2] = {-1., 0.}, one[2] = {1., 0.};
-    BUG(cholmod_l_sdmult(projet->ef_donnees.rigidite_matrice_partielle, 0, minusone, one, X, r, projet->ef_donnees.c) == TRUE, -2);
+    BUG(cholmod_l_sdmult(projet->ef_donnees.rigidite_matrice_complete, 0, minusone, one, X, r, projet->ef_donnees.c) == TRUE, -2);
     double bnorm = cholmod_l_norm_dense(dense_force, 0, projet->ef_donnees.c);
     double rnorm = cholmod_l_norm_dense(r, 0, projet->ef_donnees.c);
     double xnorm = cholmod_l_norm_dense(X, 0, projet->ef_donnees.c);
-    double anorm = cholmod_l_norm_sparse(projet->ef_donnees.rigidite_matrice_partielle, 0, projet->ef_donnees.c);
+    double anorm = cholmod_l_norm_sparse(projet->ef_donnees.rigidite_matrice_complete, 0, projet->ef_donnees.c);
     double axbnorm = (anorm * xnorm + bnorm) ;
     action_en_cours->norm = rnorm / axbnorm ;
     printf("résidu : %e\n", action_en_cours->norm);
@@ -884,30 +867,14 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
     BUGMSG(sparse_tmp, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_resoud_charge");
     action_en_cours->efforts_noeuds = cholmod_l_add(sparse_tmp, action_en_cours->forces_complet, one, minusone, TRUE, TRUE, projet->ef_donnees.c);
     BUGMSG(action_en_cours->efforts_noeuds, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_resoud_charge");
-    max_effort = 0.;
-    ax = action_en_cours->efforts_noeuds->x;
-    for (j=0;j<action_en_cours->efforts_noeuds->nzmax;j++)
-    {
-        if (ABS(ax[j]) > max_effort)
-            max_effort = ABS(ax[j]);
-    }
-    cholmod_l_drop(max_effort*ERREUR_RELATIVE_MIN, action_en_cours->efforts_noeuds, projet->ef_donnees.c);
     
     /* Libération de la mémoire */
     cholmod_l_free_dense(&Y, projet->ef_donnees.c);
     cholmod_l_free_dense(&X, projet->ef_donnees.c);
     cholmod_l_free_dense(&r, projet->ef_donnees.c);
-    cholmod_l_free_sparse(&sparse_force, projet->ef_donnees.c);
     cholmod_l_free_sparse(&sparse_tmp, projet->ef_donnees.c);
     cholmod_l_free_dense(&dense_force, projet->ef_donnees.c);
-    
-/*  Pour utiliser cholmod dans les calculs de matrices.
-  Troisième méthode de calcul donnant directement les calculs sans passer par une matrice intermédiaire.
-  Est moins intéressant puisqu'il faut résoudre l'intégralité du système pour chaque cas de charge.
-  projet->ef_donnees.rigidite_matrice_partielle->stype = 0;
-  cholmod_sparse *tttt = SuiteSparseQR_C_backslash_sparse(0, 0., projet->ef_donnees.rigidite_matrice_partielle, sparse_force, projet->ef_donnees.c);
-  printf("déplacement 5\n");
-  cholmod_l_write_sparse(stdout, tttt, NULL, NULL, projet->ef_donnees.c);*/
+    cholmod_l_free_triplet(&triplet_force_partielle, projet->ef_donnees.c);
     
     // Pour chaque barre, ajout des efforts dus aux déplacements
     list_mvfront(projet->beton.barres);

@@ -95,9 +95,6 @@ int main(int argc, char *argv[])
         }
     }
     
-    // Initialisation de GTK+
-    BUGMSG(gtk_init_check(&argc, &argv) == TRUE, -1, gettext("Impossible d'initialiser gtk.\n"));
-    
     // Création d'un projet type
     projet = projet_init(PAYS_FR);
     
@@ -164,8 +161,8 @@ int main(int argc, char *argv[])
 //    BUG(EF_relachement_ajout(projet, EF_RELACHEMENT_LIBRE, NULL, EF_RELACHEMENT_LIBRE, NULL, EF_RELACHEMENT_LIBRE, NULL, EF_RELACHEMENT_BLOQUE, NULL, EF_RELACHEMENT_BLOQUE, NULL, EF_RELACHEMENT_BLOQUE, NULL) == 0, -1);
     
     // Création de l'élément en béton
-    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 0, 1, -1, 10) == 0, -1);
-    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 1, 2, 0, 10) == 0, -1);
+    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 0, 1, -1, 1000) == 0, -1);
+    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 1, 2, 0, 1000) == 0, -1);
 //    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 1, 2, -1, 0) == 0, -1);
     
     // Ajout de l'action ponctuelle
@@ -182,10 +179,11 @@ int main(int argc, char *argv[])
     BUG(EF_calculs_resoud_charge(projet, 0) == 0, -1);
     BUG(EF_calculs_affiche_resultats(projet, 0) == 0, -1);
     
+    // Initialisation de GTK+
+    BUGMSG(gtk_init_check(&argc, &argv) == TRUE, -1, gettext("Impossible d'initialiser gtk.\n"));
+    
     // Création de la fenêtre principale
     MainWindow = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-    // Ne pas mettre la ligne ci-dessous sinon projet est libéré deux fois.
-    //g_signal_connect(G_OBJECT(MainWindow), "delete-event", G_CALLBACK(gtk_window_delete_event), projet);
     g_signal_connect(GTK_WINDOW(MainWindow), "destroy", G_CALLBACK(gtk_window_destroy_event), projet);
     pTable=gtk_table_new(2,1,TRUE);
     gtk_container_add(GTK_CONTAINER(MainWindow), GTK_WIDGET(pTable));
