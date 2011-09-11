@@ -22,7 +22,6 @@
 #include <string.h>
 #include <time.h>
 #include <unistd.h>
-#include <values.h>
 #include <math.h>
 
 #include "common_projet.h"
@@ -234,32 +233,6 @@ int EF_calculs_genere_mat_rig(Projet *projet)
     BUGMSG(projet->ef_donnees.rigidite_matrice_partielle, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_genere_mat_rig");
     projet->ef_donnees.rigidite_matrice_complete = cholmod_l_triplet_to_sparse(projet->ef_donnees.triplet_rigidite_complete, 0, projet->ef_donnees.c);
     BUGMSG(projet->ef_donnees.rigidite_matrice_complete, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_genere_mat_rig");
-    /* On force les matrices à ne pas être symétriques.*/
-    if (projet->ef_donnees.rigidite_matrice_partielle->stype != 0)
-    {
-        cholmod_sparse *A = cholmod_l_copy(projet->ef_donnees.rigidite_matrice_partielle, 0, 1, projet->ef_donnees.c);
-        BUGMSG(A, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_genere_mat_rig");
-        cholmod_l_free_sparse(&projet->ef_donnees.rigidite_matrice_partielle, projet->ef_donnees.c);
-        projet->ef_donnees.rigidite_matrice_partielle = A;
-    }
-    if (projet->ef_donnees.rigidite_matrice_complete->stype != 0)
-    {
-        cholmod_sparse *A = cholmod_l_copy(projet->ef_donnees.rigidite_matrice_complete, 0, 1, projet->ef_donnees.c);
-        BUGMSG(A, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_genere_mat_rig");
-        cholmod_l_free_sparse(&projet->ef_donnees.rigidite_matrice_complete, projet->ef_donnees.c);
-        projet->ef_donnees.rigidite_matrice_complete = A;
-    }
-    
-/*  Pour utiliser cholmod dans les calculs de matrices.
-     Et on factorise la matrice
-    projet->ef_donnees.factor_rigidite_matrice_partielle = cholmod_l_analyze (projet->ef_donnees.rigidite_matrice_partielle, projet->ef_donnees.c) ;
-    Normalement, c'est par cette méthode qu'on résoud une matrice non symétrique. Mais en pratique, ça ne marche pas. Pourquoi ?!?
-    double beta[2] = {1.e-6, 0.};
-    if (cholmod_l_factorize_p(projet->ef_donnees.rigidite_matrice_partielle, beta, NULL, 0, projet->ef_donnees.factor_rigidite_matrice_partielle, projet->ef_donnees.c) == TRUE)
-    {
-        if (projet->ef_donnees.c->status == CHOLMOD_NOT_POSDEF)
-            BUGMSG(0, -1, "Matrice non définie positive.\n");
-    }*/
     
     // Factorisation de la matrice de rigidité partielle.
     void *symbolic;
@@ -279,7 +252,7 @@ int EF_calculs_genere_mat_rig(Projet *projet)
     BUGMSG(symbolic, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_genere_mat_rig");
     umfpack_dl_numeric(projet->ef_donnees.ap, projet->ef_donnees.ai, projet->ef_donnees.ax, symbolic, &projet->ef_donnees.numeric, NULL, NULL);
     BUGMSG(projet->ef_donnees.numeric, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_genere_mat_rig");
-    free(symbolic);
+    umfpack_dl_free_symbolic(&symbolic);
     
     return 0;
 }

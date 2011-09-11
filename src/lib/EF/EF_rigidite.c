@@ -40,8 +40,6 @@ int EF_rigidite_init(Projet *projet)
     // Trivial
     projet->ef_donnees.rigidite_matrice_partielle = NULL;
     projet->ef_donnees.rigidite_matrice_complete = NULL;
-/*  Pour utiliser cholmod dans les calculs de matrices.
- *  projet->ef_donnees.factor_rigidite_matrice_partielle = NULL; */
     projet->ef_donnees.numeric = NULL;
     projet->ef_donnees.ap = NULL;
     projet->ef_donnees.ai = NULL;
@@ -85,7 +83,11 @@ int EF_rigidite_free(Projet *projet)
         cholmod_l_free_sparse(&(projet->ef_donnees.rigidite_matrice_partielle), projet->ef_donnees.c);
         projet->ef_donnees.rigidite_matrice_partielle = NULL;
     }
-    free(projet->ef_donnees.numeric);
+    umfpack_dl_free_numeric(&projet->ef_donnees.numeric);
+    free(projet->ef_donnees.ap);
+    free(projet->ef_donnees.ai);
+    free(projet->ef_donnees.map);
+    free(projet->ef_donnees.ax);
     
     if (projet->ef_donnees.noeuds_pos_complete != NULL)
     {

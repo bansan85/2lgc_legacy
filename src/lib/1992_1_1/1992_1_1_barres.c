@@ -20,7 +20,6 @@
 #include <stdlib.h>
 #include <libintl.h>
 #include <cholmod.h>
-#include <values.h>
 #include <string.h>
 #include "common_projet.h"
 #include "common_erreurs.h"

@@ -22,6 +22,11 @@
 #include "config.h"
 #include <cholmod.h>
 #include <cholmod_internal.h>
+#include <values.h>
+
+#ifndef MAXDOUBLE
+#define MAXDOUBLE   1.7976931348623158e+308
+#endif
 
 #define ABS(X) ((X) > 0 ? (X) : -(X))
 

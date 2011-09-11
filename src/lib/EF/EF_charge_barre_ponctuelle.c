@@ -21,7 +21,6 @@
 #include <locale.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <values.h>
 #include <cholmod.h>
 
 #include "1990_actions.h"
