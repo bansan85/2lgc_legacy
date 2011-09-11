@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2011-09-09 15:16+0200\n"
+"POT-Creation-Date: 2011-09-10 18:56+0200\n"
 "PO-Revision-Date: 2011-08-30 16:28+0100\n"
 "Last-Translator: LE GARREC Vincent <vlg@2lgc.org>\n"
 "Language-Team: French\n"
@@ -21,18 +21,18 @@ msgstr "Impossible d'initialiser gtk.\n"
 #: src/lib/1992_1_1/1992_1_1_section.c:126
 #: src/lib/1992_1_1/1992_1_1_section.c:163
 #: src/lib/1992_1_1/1992_1_1_section.c:201
-#: src/lib/1992_1_1/1992_1_1_barres.c:48
-#: src/lib/1992_1_1/1992_1_1_barres.c:103
-#: src/lib/1992_1_1/1992_1_1_barres.c:110
-#: src/lib/1992_1_1/1992_1_1_barres.c:135
-#: src/lib/1992_1_1/1992_1_1_barres.c:280
-#: src/lib/1992_1_1/1992_1_1_barres.c:314
-#: src/lib/1992_1_1/1992_1_1_barres.c:316
-#: src/lib/1992_1_1/1992_1_1_barres.c:578
-#: src/lib/1992_1_1/1992_1_1_barres.c:773
-#: src/lib/1992_1_1/1992_1_1_barres.c:779
-#: src/lib/1992_1_1/1992_1_1_barres.c:781
-#: src/lib/1992_1_1/1992_1_1_barres.c:784
+#: src/lib/1992_1_1/1992_1_1_barres.c:47
+#: src/lib/1992_1_1/1992_1_1_barres.c:102
+#: src/lib/1992_1_1/1992_1_1_barres.c:109
+#: src/lib/1992_1_1/1992_1_1_barres.c:134
+#: src/lib/1992_1_1/1992_1_1_barres.c:279
+#: src/lib/1992_1_1/1992_1_1_barres.c:313
+#: src/lib/1992_1_1/1992_1_1_barres.c:315
+#: src/lib/1992_1_1/1992_1_1_barres.c:577
+#: src/lib/1992_1_1/1992_1_1_barres.c:772
+#: src/lib/1992_1_1/1992_1_1_barres.c:778
+#: src/lib/1992_1_1/1992_1_1_barres.c:780
+#: src/lib/1992_1_1/1992_1_1_barres.c:783
 #: src/lib/1992_1_1/1992_1_1_materiaux.c:42
 #: src/lib/1992_1_1/1992_1_1_materiaux.c:144
 #: src/lib/1990/1990_ponderations.c:244 src/lib/1990/1990_ponderations.c:289
@@ -70,29 +70,29 @@ msgstr "Impossible d'initialiser gtk.\n"
 #: src/lib/common/common_projet.c:58 src/lib/common/common_projet.c:59
 #: src/lib/common/common_projet.c:62 src/lib/common/common_projet.c:63
 #: src/lib/common/common_projet.c:64 src/lib/common/common_projet.c:65
-#: src/lib/EF/EF_calculs.c:66 src/lib/EF/EF_calculs.c:70
-#: src/lib/EF/EF_calculs.c:73 src/lib/EF/EF_calculs.c:77
-#: src/lib/EF/EF_calculs.c:159 src/lib/EF/EF_calculs.c:162
-#: src/lib/EF/EF_calculs.c:219 src/lib/EF/EF_calculs.c:221
-#: src/lib/EF/EF_calculs.c:224 src/lib/EF/EF_calculs.c:234
-#: src/lib/EF/EF_calculs.c:236 src/lib/EF/EF_calculs.c:241
-#: src/lib/EF/EF_calculs.c:248 src/lib/EF/EF_calculs.c:267
-#: src/lib/EF/EF_calculs.c:269 src/lib/EF/EF_calculs.c:271
-#: src/lib/EF/EF_calculs.c:273 src/lib/EF/EF_calculs.c:279
-#: src/lib/EF/EF_calculs.c:281 src/lib/EF/EF_calculs.c:436
-#: src/lib/EF/EF_calculs.c:448 src/lib/EF/EF_calculs.c:535
-#: src/lib/EF/EF_calculs.c:544 src/lib/EF/EF_calculs.c:565
-#: src/lib/EF/EF_calculs.c:568 src/lib/EF/EF_calculs.c:571
-#: src/lib/EF/EF_calculs.c:733 src/lib/EF/EF_calculs.c:751
-#: src/lib/EF/EF_calculs.c:754 src/lib/EF/EF_calculs.c:757
-#: src/lib/EF/EF_calculs.c:794 src/lib/EF/EF_calculs.c:796
-#: src/lib/EF/EF_calculs.c:803 src/lib/EF/EF_calculs.c:818
-#: src/lib/EF/EF_calculs.c:845 src/lib/EF/EF_calculs.c:847
-#: src/lib/EF/EF_calculs.c:853 src/lib/EF/EF_calculs.c:867
-#: src/lib/EF/EF_calculs.c:869 src/lib/EF/EF_calculs.c:920
-#: src/lib/EF/EF_calculs.c:943 src/lib/EF/EF_calculs.c:946
-#: src/lib/EF/EF_calculs.c:952 src/lib/EF/EF_noeud.c:40
-#: src/lib/EF/EF_noeud.c:87 src/lib/EF/EF_charge_barre_ponctuelle.c:98
+#: src/lib/EF/EF_calculs.c:65 src/lib/EF/EF_calculs.c:69
+#: src/lib/EF/EF_calculs.c:72 src/lib/EF/EF_calculs.c:76
+#: src/lib/EF/EF_calculs.c:158 src/lib/EF/EF_calculs.c:161
+#: src/lib/EF/EF_calculs.c:218 src/lib/EF/EF_calculs.c:220
+#: src/lib/EF/EF_calculs.c:223 src/lib/EF/EF_calculs.c:233
+#: src/lib/EF/EF_calculs.c:235 src/lib/EF/EF_calculs.c:240
+#: src/lib/EF/EF_calculs.c:247 src/lib/EF/EF_calculs.c:266
+#: src/lib/EF/EF_calculs.c:268 src/lib/EF/EF_calculs.c:270
+#: src/lib/EF/EF_calculs.c:272 src/lib/EF/EF_calculs.c:278
+#: src/lib/EF/EF_calculs.c:280 src/lib/EF/EF_calculs.c:435
+#: src/lib/EF/EF_calculs.c:447 src/lib/EF/EF_calculs.c:534
+#: src/lib/EF/EF_calculs.c:543 src/lib/EF/EF_calculs.c:564
+#: src/lib/EF/EF_calculs.c:567 src/lib/EF/EF_calculs.c:570
+#: src/lib/EF/EF_calculs.c:732 src/lib/EF/EF_calculs.c:750
+#: src/lib/EF/EF_calculs.c:753 src/lib/EF/EF_calculs.c:756
+#: src/lib/EF/EF_calculs.c:793 src/lib/EF/EF_calculs.c:795
+#: src/lib/EF/EF_calculs.c:802 src/lib/EF/EF_calculs.c:817
+#: src/lib/EF/EF_calculs.c:844 src/lib/EF/EF_calculs.c:846
+#: src/lib/EF/EF_calculs.c:852 src/lib/EF/EF_calculs.c:866
+#: src/lib/EF/EF_calculs.c:868 src/lib/EF/EF_calculs.c:919
+#: src/lib/EF/EF_calculs.c:942 src/lib/EF/EF_calculs.c:945
+#: src/lib/EF/EF_calculs.c:951 src/lib/EF/EF_noeud.c:40
+#: src/lib/EF/EF_noeud.c:87 src/lib/EF/EF_charge_barre_ponctuelle.c:97
 #: src/lib/EF/EF_appuis.c:40 src/lib/EF/EF_appuis.c:169
 #: src/lib/EF/EF_relachement.c:40 src/lib/EF/EF_relachement.c:102
 #: src/lib/EF/EF_charge_noeud.c:87
@@ -110,7 +110,7 @@ msgstr "Erreur d'allocation mémoire.\n"
 msgid "%s : Section en béton n°%d introuvable.\n"
 msgstr "%s : Section en béton n°%d introuvable.\n"
 
-#: src/lib/1992_1_1/1992_1_1_barres.c:169
+#: src/lib/1992_1_1/1992_1_1_barres.c:168
 #, c-format
 msgid "Barre en béton %d introuvable.\n"
 msgstr "Barre en béton %d introuvable.\n"

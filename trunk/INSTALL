@@ -22,7 +22,8 @@ libtoolize
 automake --add-missing --copy
 autoconf
 ./configure --with-gtk --with-debug --prefix=/usr/local
-patch < diff-libtool-as-needed.patch
+sed -i 's/-DPIC/-DPIC -Wl,--as-needed/g' libtool
+sed -i 's/-lcolamd -lcholmod/-lcholmod -lcolamd -no-undefined/g' `find . -name "Makefile"`
 make -C doc doc
 make -j3 && sudo make install-data && make check -j3 && sudo make install && codegui
 NOTA IMPORTANT :
@@ -71,7 +72,7 @@ tar xvjf ../sources/zlib-1.2.5.tar.bz2
 cd zlib-1.2.5
 make -f win32/Makefile.gcc
 make -f win32/Makefile.gcc install BINARY_PATH="c:/MinGW/bin" LIBRARY_PATH="c:/MinGW/lib" INCLUDE_PATH="c:/MinGW/include"
-cp zlib1.dll c:/MinGW/lib/libz.dll
+cp zlib1.dll c:/MinGW/bin/libz.dll
 cd ..
 
 tar xvaf ../sources/glib-2.28.8.tar.xz

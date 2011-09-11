@@ -1,10 +1,10 @@
---- configure.scan.old	2011-08-10 10:53:19.157001295 +0200
-+++ configure.scan	2011-08-10 10:53:02.886001289 +0200
+--- configure.scan.old	2011-09-10 19:40:15.109918470 +0200
++++ configure.scan	2011-09-10 19:40:05.964918617 +0200
 @@ -5,1 +5,2 @@
 -AC_INIT([FULL-PACKAGE-NAME], [VERSION], [BUG-REPORT-ADDRESS])
 +AC_INIT(2lgc_code, 0.0.0.2, devel@2lgc.org, 2lgc_code, http://2lgc.org)
 +AM_INIT_AUTOMAKE
-@@ -8,15 +6,40 @@
+@@ -8,22 +6,43 @@
 +AC_CONFIG_MACRO_DIR([m4])
  
  # Checks for programs.
@@ -39,15 +39,26 @@
 +ALL_LINGUAS="fr"
  
  # Checks for libraries.
+-# FIXME: Replace `main' with a function in `-lamd':
+-AC_CHECK_LIB([amd], [main])
+-# FIXME: Replace `main' with a function in `-lblas':
+-AC_CHECK_LIB([blas], [main])
 -# FIXME: Replace `main' with a function in `-lcholmod':
 -AC_CHECK_LIB([cholmod], [main])
+-# FIXME: Replace `main' with a function in `-lcolamd':
+-AC_CHECK_LIB([colamd], [main])
+-# FIXME: Replace `main' with a function in `-lgfortran':
+-AC_CHECK_LIB([gfortran], [main])
 -# FIXME: Replace `main' with a function in `-llist':
 -AC_CHECK_LIB([list], [main])
 -# FIXME: Replace `main' with a function in `-lumfpack':
 -AC_CHECK_LIB([umfpack], [main])
 +PKG_CHECK_MODULES([LIBLIST], [liblist >= 2.3.1], [], [AC_MSG_ERROR([liblist ( http://ohnopub.net/liblist ) est necessaire])])
++AC_CHECK_LIB([amd], [amd_malloc], [], [AC_MSG_ERROR([amd ( http://www.cise.ufl.edu/research/sparse/amd ) est necessaire])])
++AC_CHECK_LIB([gfortran], [_gfortran_st_write], [], [AC_MSG_ERROR([ gfortran est necessaire ])])
++AC_CHECK_LIB([blas], [dtrsv_], [], [AC_MSG_ERROR([blas ( http://netlib.org/lapack ) est necessaire])])
 +AC_CHECK_LIB([cholmod], [cholmod_l_start], [], [AC_MSG_ERROR([cholmod ( http://www.cise.ufl.edu/research/sparse/cholmod ) est necessaire])])
-+AC_CHECK_LIB([umfpack], [umfpack_dl_solve], [], [AC_MSG_ERROR([spqr ( www.cise.ufl.edu/research/sparse/umfpack ) est necessaire])])
++AC_CHECK_LIB([colamd], [colamd_l_recommended], [], [AC_MSG_ERROR([colamd ( www.cise.ufl.edu/research/sparse/colamd ) est necessaire])])
++AC_CHECK_LIB([umfpack], [umfpack_dl_solve], [], [AC_MSG_ERROR([umfpack ( www.cise.ufl.edu/research/sparse/umfpack ) est necessaire])])
  
  # Checks for header files.
- AC_CHECK_HEADERS([libintl.h locale.h stdlib.h string.h unistd.h values.h])
