@@ -27,25 +27,24 @@
 #include "common_fonction.h"
 #include "EF_noeud.h"
 #include "EF_calculs.h"
-#include "EF_charge_noeud.h"
 #include "1992_1_1_barres.h"
 
 typedef struct __Charge_Barre_Ponctuelle
 {
-    Charge_Type     type;
-    int             numero;
-    char            *nom;
-    char            *description;
-    void            *barre;
-    int             repere_local;
-    double          position; // Position de la charge ponctuelle en mètre
-                              // depuis le début de la barre
-    double          x;
-    double          y;
-    double          z;
-    double          mx;
-    double          my;
-    double          mz;
+    Barre_Charge_Type   type;
+    int                 numero;
+    char                *nom;
+    char                *description;
+    void                *barre;
+    int                 repere_local;
+    double              position; // Position de la charge ponctuelle en mètre
+                                  // depuis le début de la barre
+    double              fx;
+    double              fy;
+    double              fz;
+    double              mx;
+    double              my;
+    double              mz;
 } Charge_Barre_Ponctuelle;
 
 int EF_charge_barre_ponctuelle_ajout(Projet *projet, int num_action, void *barre, 

@@ -27,10 +27,13 @@ typedef struct __Troncon // Définition de la structure Troncon qui contient le
 {
     double      debut_troncon;  // Début du tronçon de validité de la fonction
     double      fin_troncon;    // Fin du tronçon de validité de la fonction
-    double      coef_0;         // La fonction mathématique est définie par :
-    double      coef_x;         // coef_0 + coef_x*x +
-    double      coef_x2;        // coef_x2*x^2 +
-    double      coef_x3;        // coef_x3*x^3
+    double      x0;        // La fonction mathématique est définie par :
+    double      x1;        // coef_0 + coef_x*x +
+    double      x2;        // coef_x2*x^2 +
+    double      x3;        // coef_x3*x^3 +
+    double      x4;        // coef_x4*x^4 +
+    double      x5;        // coef_x5*x^5 +
+    double      x6;        // coef_x6*x^6
 } Troncon;
 
 typedef struct __Fonction
@@ -47,7 +50,7 @@ typedef struct __Fonction
 
 /* On est obligé de mettre action en void* et pas en Action* pour éviter une dépence circulaire des fichiers due à l'inclusion du fichier en-tête "1990_actions.h"*/
 int common_fonction_init(Projet *projet, void *action_void);
-int common_fonction_ajout(Fonction* fonction, double debut_troncon, double fin_troncon, double coef_0, double coef_x, double coef_x2, double coef_x3, double translate);
+int common_fonction_ajout(Fonction* fonction, double debut_troncon, double fin_troncon, double coef_0, double coef_x, double coef_x2, double coef_x3, double coef_x4, double coef_x5, double coef_x6, double translate);
 int common_fonction_affiche(Fonction* fonction);
 int common_fonction_free(Projet *projet, void *action_void);
 

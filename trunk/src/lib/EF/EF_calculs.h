@@ -23,6 +23,14 @@
 #include "common_projet.h"
 #include "1992_1_1_barres.h"
 
+typedef enum __Charge_Type
+{
+    CHARGE_NOEUD,
+    CHARGE_BARRE_PONCTUELLE,
+    CHARGE_BARRE_REPARTIE_UNIFORME
+} Barre_Charge_Type;
+
+
 int EF_calculs_initialise(Projet *projet);
 int EF_calculs_genere_mat_rig(Projet *projet);
 int EF_calculs_moment_hyper_y(Barre_Info_EF *infos, double phia, double phib,

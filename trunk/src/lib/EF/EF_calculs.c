@@ -31,6 +31,7 @@
 #include "EF_noeud.h"
 #include "EF_charge_noeud.h"
 #include "EF_charge_barre_ponctuelle.h"
+#include "EF_charge_barre_repartie_uniforme.h"
 #include "1990_actions.h"
 #include "1992_1_1_barres.h"
 #include "1992_1_1_section.h"
@@ -221,9 +222,6 @@ int EF_calculs_genere_mat_rig(Projet *projet)
         projet->ef_donnees.rigidite_matrice_partielle->stype = 0;
         projet->ef_donnees.rigidite_matrice_complete = cholmod_l_triplet_to_sparse(projet->ef_donnees.triplet_rigidite_complete, 0, projet->ef_donnees.c);
         BUGMSG(projet->ef_donnees.rigidite_matrice_complete, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_genere_mat_rig");
-/*        fhri    l
-        projet->ef_donnees.QR = SuiteSparseQR_C_factorize(0, 0., projet->ef_donnees.rigidite_matrice_partielle, projet->ef_donnees.c);
-        BUGMSG(projet->ef_donnees.QR, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_genere_mat_rig");*/
         cholmod_l_free_triplet(&triplet_rigidite, projet->ef_donnees.c);
         
         return 0;
@@ -360,6 +358,55 @@ int EF_calculs_moment_hyper_z(Barre_Info_EF *infos, double phia, double phib,
 }
 
 
+double EF_calculs_resid(long *Ap, long *Ai, double *Ax, double *b, int n, double *x)
+/* Description : Détermine le résidu lors de la résolution du système matriciel pour obtenir
+ *                 les déplacements aux noeuds (A.x = b).
+ * Paramètres : long *Ap : paramètres représentant la matrice
+ *              long *Ai : de rigidité sous une forme
+ *              double *Ax : compatible avec umfpack,
+ *              double *b : Résultat à obtenir,
+ *              int n : nombre de ligne dans le vecteur b,
+ *              double x : résultat obtenu.
+ * Valeur renvoyée :
+ *   Succès : valeur du résidu
+ *   Échec : NAN en cas de paramètres invalides :
+ *             (Ap == NULL) ou
+ *             (Ai == NULL) ou
+ *             (Ax == NULL) ou
+ *             (b == NULL) ou
+ *             (x == NULL)
+ *           NAN en cas d'erreur d'allocation mémoire
+ */
+{
+    UF_long i, j, p ;
+    double norm ;
+    double *r = malloc(sizeof(double)*n);
+    
+    // Fonction tirée de umfpack_dl_demo.c
+    BUGMSG(Ap, NAN, "EF_calculs_resid\n");
+    BUGMSG(Ai, NAN, "EF_calculs_resid\n");
+    BUGMSG(Ax, NAN, "EF_calculs_resid\n");
+    BUGMSG(b, NAN, "EF_calculs_resid\n");
+    BUGMSG(x, NAN, "EF_calculs_resid\n");
+    BUGMSG(r, NAN, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_resid");
+    for (i=0;i<n;i++)
+    	r[i] = -b[i] ;
+    for (j=0;j<n;j++)
+    {
+        for (p=Ap[j];p<Ap[j+1];p++)
+        {
+        	i = Ai[p];
+    		r[i] += Ax[p]*x[j];
+        }
+    }
+    norm = 0.;
+    for (i=0;i<n;i++)
+    	norm = MAX(ABS(r[i]), norm);
+    free(r);
+    return (norm);
+}
+
+
 int EF_calculs_resoud_charge(Projet *projet, int num_action)
 /* Description : Détermine à partir de la matrice de rigidité partielle factorisée les
  *               déplacements et les efforts dans les noeuds pour l'action demandée
@@ -392,6 +439,7 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
     unsigned int    i, j, k;
     cholmod_dense   *X, *Y;
     cholmod_sparse  *sparse_tmp;
+    double minusone[2] = {-1., 0.}, one[2] = {1., 0.};
     
     BUGMSG(projet, -1, "EF_calculs_resoud_charge\n");
     BUGMSG(projet->actions, -1, "EF_calculs_resoud_charge\n");
@@ -437,69 +485,69 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
         list_mvfront(action_en_cours->charges);
         do
         {
-            Charge_Barre_Ponctuelle *charge_barre = list_curr(action_en_cours->charges);
-            if (charge_barre->type == CHARGE_PONCTUELLE_NOEUD)
+            switch (((Charge_Barre_Ponctuelle *)list_curr(action_en_cours->charges))->type)
             {
-    //     Si la charge en cours est une charge ponctuelle au noeud Alors
+                case CHARGE_NOEUD :
+                {
+    //     Si la charge en cours est une charge au noeud Alors
     //         On ajoute au vecteur des efforts partiels et complets les efforts aux noeuds
     //           directement saisis par l'utilisateur dans le repère global.
-                Charge_Noeud *charge_noeud = list_curr(action_en_cours->charges);
-                if (projet->ef_donnees.noeuds_pos_partielle[charge_noeud->noeud->numero][0] != -1)
-                    ax[projet->ef_donnees.noeuds_pos_partielle[charge_noeud->noeud->numero][0]] += charge_noeud->x;
-                if (projet->ef_donnees.noeuds_pos_partielle[charge_noeud->noeud->numero][1] != -1)
-                    ax[projet->ef_donnees.noeuds_pos_partielle[charge_noeud->noeud->numero][1]] += charge_noeud->y;
-                if (projet->ef_donnees.noeuds_pos_partielle[charge_noeud->noeud->numero][2] != -1)
-                    ax[projet->ef_donnees.noeuds_pos_partielle[charge_noeud->noeud->numero][2]] += charge_noeud->z;
-                if (projet->ef_donnees.noeuds_pos_partielle[charge_noeud->noeud->numero][3] != -1)
-                    ax[projet->ef_donnees.noeuds_pos_partielle[charge_noeud->noeud->numero][3]] += charge_noeud->mx;
-                if (projet->ef_donnees.noeuds_pos_partielle[charge_noeud->noeud->numero][4] != -1)
-                    ax[projet->ef_donnees.noeuds_pos_partielle[charge_noeud->noeud->numero][4]] += charge_noeud->my;
-                if (projet->ef_donnees.noeuds_pos_partielle[charge_noeud->noeud->numero][5] != -1)
-                    ax[projet->ef_donnees.noeuds_pos_partielle[charge_noeud->noeud->numero][5]] += charge_noeud->mz;
-                ax3[projet->ef_donnees.noeuds_pos_complete[charge_noeud->noeud->numero][0]] += charge_noeud->x;
-                ax3[projet->ef_donnees.noeuds_pos_complete[charge_noeud->noeud->numero][1]] += charge_noeud->y;
-                ax3[projet->ef_donnees.noeuds_pos_complete[charge_noeud->noeud->numero][2]] += charge_noeud->z;
-                ax3[projet->ef_donnees.noeuds_pos_complete[charge_noeud->noeud->numero][3]] += charge_noeud->mx;
-                ax3[projet->ef_donnees.noeuds_pos_complete[charge_noeud->noeud->numero][4]] += charge_noeud->my;
-                ax3[projet->ef_donnees.noeuds_pos_complete[charge_noeud->noeud->numero][5]] += charge_noeud->mz;
-            }
-    //     Sinon Les efforts ne sont pas aux noeuds mais dans la barre, il faut donc calculer
-    //       les réactions d'appuis pour chaque charge en prenant en compte les conditions aux
-    //       appuis (relachements)
-            else
-            {
-                double       E, G;                      /* Caractéristiques du matériau de la barre */
-                double       xx, yy, zz, l;
-                double       a, b;                         /* Position de la charge par rapport au début de l'élément discrétisé */
-                double       debut_barre, fin_barre;       /* Début et fin de la barre discrétisée par rapport à la barre complète */
-                double       phiAy, phiBy, phiAz, phiBz;   /* Rotation sur appui lorsque la barre est isostatique */
-                double       MAx, MBx, MAy, MBy, MAz, MBz; /* Moments créés par la raideur */
-                double       FAx, FBx, FAy, FBy, FAz, FBz; /* Réactions d'appui*/
-                EF_Noeud    *noeud_debut, *noeud_fin;
-                Beton_Barre *element_en_beton = charge_barre->barre;
-                unsigned int num = element_en_beton->numero;
-                unsigned int pos;                         /* numéro de l'élément dans la discrétisation */
-                
-    //         Récupération des caractéristiques mécaniques de l'élément.
-                switch (element_en_beton->type)
-                {
-                    case BETON_ELEMENT_POTEAU :
-                    case BETON_ELEMENT_POUTRE :
-                    {
-                        E = element_en_beton->materiau->ecm;
-                        G = element_en_beton->materiau->gnu_0_2;
-                        break;
-                    }
-                    /* Type d'élément inconnu*/
-                    default :
-                    {
-                        BUG(0, -1);
-                    }
+                    Charge_Noeud *charge_noeud = list_curr(action_en_cours->charges);
+                    if (projet->ef_donnees.noeuds_pos_partielle[charge_noeud->noeud->numero][0] != -1)
+                        ax[projet->ef_donnees.noeuds_pos_partielle[charge_noeud->noeud->numero][0]] += charge_noeud->x;
+                    if (projet->ef_donnees.noeuds_pos_partielle[charge_noeud->noeud->numero][1] != -1)
+                        ax[projet->ef_donnees.noeuds_pos_partielle[charge_noeud->noeud->numero][1]] += charge_noeud->y;
+                    if (projet->ef_donnees.noeuds_pos_partielle[charge_noeud->noeud->numero][2] != -1)
+                        ax[projet->ef_donnees.noeuds_pos_partielle[charge_noeud->noeud->numero][2]] += charge_noeud->z;
+                    if (projet->ef_donnees.noeuds_pos_partielle[charge_noeud->noeud->numero][3] != -1)
+                        ax[projet->ef_donnees.noeuds_pos_partielle[charge_noeud->noeud->numero][3]] += charge_noeud->mx;
+                    if (projet->ef_donnees.noeuds_pos_partielle[charge_noeud->noeud->numero][4] != -1)
+                        ax[projet->ef_donnees.noeuds_pos_partielle[charge_noeud->noeud->numero][4]] += charge_noeud->my;
+                    if (projet->ef_donnees.noeuds_pos_partielle[charge_noeud->noeud->numero][5] != -1)
+                        ax[projet->ef_donnees.noeuds_pos_partielle[charge_noeud->noeud->numero][5]] += charge_noeud->mz;
+                    ax3[projet->ef_donnees.noeuds_pos_complete[charge_noeud->noeud->numero][0]] += charge_noeud->x;
+                    ax3[projet->ef_donnees.noeuds_pos_complete[charge_noeud->noeud->numero][1]] += charge_noeud->y;
+                    ax3[projet->ef_donnees.noeuds_pos_complete[charge_noeud->noeud->numero][2]] += charge_noeud->z;
+                    ax3[projet->ef_donnees.noeuds_pos_complete[charge_noeud->noeud->numero][3]] += charge_noeud->mx;
+                    ax3[projet->ef_donnees.noeuds_pos_complete[charge_noeud->noeud->numero][4]] += charge_noeud->my;
+                    ax3[projet->ef_donnees.noeuds_pos_complete[charge_noeud->noeud->numero][5]] += charge_noeud->mz;
+                    break;
                 }
-                
-    //         Si la charge est une charge ponctuelle Alors
-                if (charge_barre->type == CHARGE_PONCTUELLE_BARRE)
+    //     Sinon Si la charge est une charge ponctuelle sur la barre Alors
+                case CHARGE_BARRE_PONCTUELLE :
                 {
+                    Charge_Barre_Ponctuelle *charge_barre = list_curr(action_en_cours->charges);
+                    double       E, G;                         /* Caractéristiques du matériau de la barre */
+                    double       xx, yy, zz, l;
+                    double       a, b;                         /* Position de la charge par rapport au début et à la fin de l'élément discrétisé */
+                    double       debut_barre, fin_barre;       /* Début et fin de la barre discrétisée par rapport à la barre complète */
+                    double       phiAy, phiBy, phiAz, phiBz;   /* Rotation sur appui lorsque la barre est isostatique */
+                    double       MAx, MBx, MAy, MBy, MAz, MBz; /* Moments créés par la raideur */
+                    double       FAx, FBx;
+                    double       FAy_i, FAy_h, FBy_i, FBy_h; /* Réactions d'appui */
+                    double       FAz_i, FAz_h, FBz_i, FBz_h;
+                    EF_Noeud    *noeud_debut, *noeud_fin;
+                    Beton_Barre *element_en_beton = charge_barre->barre;
+                    unsigned int num = element_en_beton->numero;
+                    unsigned int pos;                          /* numéro de l'élément dans la discrétisation */
+                    
+    //         Récupération des caractéristiques mécaniques de l'élément.
+                    switch (element_en_beton->type)
+                    {
+                        case BETON_ELEMENT_POTEAU :
+                        case BETON_ELEMENT_POUTRE :
+                        {
+                            E = element_en_beton->materiau->ecm;
+                            G = element_en_beton->materiau->gnu_0_2;
+                            break;
+                        }
+                        /* Type d'élément inconnu*/
+                        default :
+                        {
+                            BUG(0, -1);
+                        }
+                    }
+                    
     //             Convertion des efforts globaux en efforts locaux si nécessaire :\end{verbatim}\begin{center}
     //               $\{ F \}_{local} = [K]^T \cdot \{ F \}_{global}$\end{center}\begin{verbatim}
                     if (charge_barre->repere_local == FALSE)
@@ -520,9 +568,9 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
                         ax2 = triplet_efforts_locaux_initiaux->x;
                         triplet_efforts_locaux_initiaux->nnz = 12;
                     }
-                    ai2[0] = 0;     aj2[0] = 0;     ax2[0] = charge_barre->x;
-                    ai2[1] = 1;     aj2[1] = 0;     ax2[1] = charge_barre->y;
-                    ai2[2] = 2;     aj2[2] = 0;     ax2[2] = charge_barre->z;
+                    ai2[0] = 0;     aj2[0] = 0;     ax2[0] = charge_barre->fx;
+                    ai2[1] = 1;     aj2[1] = 0;     ax2[1] = charge_barre->fy;
+                    ai2[2] = 2;     aj2[2] = 0;     ax2[2] = charge_barre->fz;
                     ai2[3] = 3;     aj2[3] = 0;     ax2[3] = charge_barre->mx;
                     ai2[4] = 4;     aj2[4] = 0;     ax2[4] = charge_barre->my;
                     ai2[5] = 5;     aj2[5] = 0;     ax2[5] = charge_barre->mz;
@@ -626,62 +674,66 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
                     BUG(EF_calculs_moment_hyper_z(&(element_en_beton->info_EF[pos]), phiAz, phiBz, &MAz, &MBz) == 0, -3);
                     
     //             Réaction d'appui sur les noeuds :\end{verbatim}\begin{align*}
-          // F_{Ax} & = F_x \cdot \frac{\int_0^l \frac{1}{E \cdot S(x)}}{\int_a^l \frac{1}{E \cdot S(x)}}\nonumber\\
+          // F_{Ax} & = F_x \cdot \frac{\int_a^l \frac{1}{E \cdot S(x)}}{\int_0^l \frac{1}{E \cdot S(x)}}\nonumber\\
           // F_{Bx} & = F_x - F_{Ax}\nonumber\\
-          // F_{Ay} & = \frac{F_y \cdot b}{l}-\frac{M_z}{l}+\frac{M_{Bz}+M_{Az}}{l}\nonumber\\
-          // F_{By} & = \frac{F_y \cdot a}{l}+\frac{M_z}{l}-\frac{M_{Bz}+M_{Az}}{l}\nonumber\\
-          // F_{Az} & = \frac{F_z \cdot b}{l}+\frac{M_y}{l}-\frac{M_{By}+M_{Ay}}{l}\nonumber\\
-          // F_{Bz} & = \frac{F_z \cdot a}{l}-\frac{M_y}{l}+\frac{M_{By}+M_{Ay}}{l}\end{align*}\begin{verbatim}
+          // F_{Ay_{iso}}   & = \frac{F_y \cdot b}{l}-\frac{M_z}{l}\nonumber\\
+          // F_{Ay_{hyper}} & = \frac{M_{Bz}+M_{Az}}{l}\nonumber\\
+          // F_{By_{iso}}   & = \frac{F_y \cdot a}{l}+\frac{M_z}{l}\nonumber\\
+          // F_{By_{hyper}} & = -\frac{M_{Bz}+M_{Az}}{l}\nonumber\\
+          // F_{Az_{iso}}   & = \frac{F_z \cdot b}{l}+\frac{M_y}{l}\nonumber\\
+          // F_{Az_{hyper}} & = -\frac{M_{By}+M_{Ay}}{l}\nonumber\\
+          // F_{Bz_{iso}}   & = \frac{F_z \cdot a}{l}-\frac{M_y}{l}\nonumber\\
+          // F_{Bz_{hyper}} & = \frac{M_{By}+M_{Ay}}{l}\end{align*}\begin{verbatim}
                     FAx = ax2[0]*_1992_1_1_sections_es_l(element_en_beton, pos, 0, l)/_1992_1_1_sections_es_l(element_en_beton, pos, a, l);
                     FBx = ax2[0] - FAx;
-                    FAy = ax2[1]*b/l-ax2[5]/l+(MBz+MAz)/l;
-                    FBy = ax2[1]*a/l+ax2[5]/l-(MBz+MAz)/l;
-                    FAz = ax2[2]*b/l+ax2[4]/l-(MBy+MAy)/l;
-                    FBz = ax2[2]*a/l-ax2[4]/l+(MBy+MAy)/l;
+                    FAy_i = ax2[1]*b/l-ax2[5]/l;
+                    FAy_h = (MBz+MAz)/l;
+                    FBy_i = ax2[1]*a/l+ax2[5]/l;
+                    FBy_h = -(MBz+MAz)/l;
+                    FAz_i = ax2[2]*b/l+ax2[4]/l;
+                    FAz_h = -(MBy+MAy)/l;
+                    FBz_i = ax2[2]*a/l-ax2[4]/l;
+                    FBz_h = (MBy+MAy)/l;
                     
     //             Détermination des fonctions des efforts dus à la charge (x, a et l sont
     //               calculés par rapport à l'élément discrétisé et non pour toute la barre).
     //               Pour cela on calcule la sollicitation due au cas isostatique puis on ajoute
     //               la sollicitation due à l'éventuel encastrement (MAx, MBx, MAy, MAz, MBy, MBz) :\end{verbatim}\begin{align*}
-                    // N(x) & = -F_{Ax} & &\textrm{ pour x variant de 0 à a}\nonumber\\
+                    // N(x) & = -(F_Ax) & &\textrm{ pour x variant de 0 à a}\nonumber\\
                     // N(x) & = F_{Bx} & &\textrm{ pour x variant de a à l}\nonumber\\
                     
-                    BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[0][num], 0., a, -FAx, 0., 0., 0., debut_barre) == 0, -3);
-                    BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[0][num], a,  l, FBx,  0., 0., 0., debut_barre) == 0, -3);
+                    BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[0][num], 0., a, -FAx, 0., 0., 0., 0., 0., 0., debut_barre) == 0, -3);
+                    BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[0][num], a,  l,  FBx, 0., 0., 0., 0., 0., 0., debut_barre) == 0, -3);
                     
-                    // T_y(x) & = -\frac{F_y \cdot b}{l} + \frac{M_z}{l} - \frac{M_{Az}+M_{Bz}}{l} & &\textrm{ pour x variant de 0 à a}\nonumber\\
-                    // T_y(x) & = \frac{F_y \cdot a}{l} + \frac{M_z}{l} - \frac{M_{Az}+M_{Bz}}{l} & &\textrm{ pour x variant de a à l}\nonumber\\
+                    // T_y(x) & = -F_{Ay_{iso}} - F_{Ay_{hyper}} & &\textrm{ pour x variant de 0 à a}\nonumber\\
+                    // T_y(x) & =  F_{By_{iso}} + F_{By_{hyper}} & &\textrm{ pour x variant de a à l}\nonumber\\
                     
-                    BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[1][num], 0., a, -ax2[1]*b/l+ax2[5]/l, 0., 0., 0., debut_barre) == 0, -3);
-                    BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[1][num], a,  l, ax2[1]*a/l+ax2[5]/l,  0., 0., 0., debut_barre) == 0, -3);
-                    BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[1][num], 0., l, -(MAz+MBz)/l,         0., 0., 0., debut_barre) == 0, -3);
+                    BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[1][num], 0., a, -FAy_i-FAy_h, 0., 0., 0., 0., 0., 0., debut_barre) == 0, -3);
+                    BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[1][num], a,  l,  FBy_i+FBy_h, 0., 0., 0., 0., 0., 0., debut_barre) == 0, -3);
                     
-                    // T_z(x) & = -\frac{F_z \cdot b}{l}-\frac{M_y}{l} + \frac{M_{Ay}+M_{By}}{l} & &\textrm{ pour x variant de 0 à a}\nonumber\\
-                    // T_z(x) & = \frac{F_z \cdot a}{l}-\frac{M_y}{l} + \frac{M_{Ay}+M_{By}}{l} & &\textrm{ pour x variant de a à l}\nonumber\\
+                    // T_z(x) & = -F_{Az_{iso}} - F_{Az_{hyper}} & &\textrm{ pour x variant de 0 à a}\nonumber\\
+                    // T_z(x) & =  F_{Bz_{iso}} + F_{Bz_{hyper}} & &\textrm{ pour x variant de a à l}\nonumber\\
                     
-                    BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[2][num], 0., a, -ax2[2]*b/l-ax2[4]/l, 0., 0., 0., debut_barre) == 0, -3);
-                    BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[2][num], a,  l, ax2[2]*a/l-ax2[4]/l,  0., 0., 0., debut_barre) == 0, -3);
-                    BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[2][num], 0., l, (MAy+MBy)/l,          0., 0., 0., debut_barre) == 0, -3);
+                    BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[2][num], 0., a, -FAz_i-FAz_h, 0., 0., 0., 0., 0., 0., debut_barre) == 0, -3);
+                    BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[2][num], a,  l,  FBz_i+FBz_h, 0., 0., 0., 0., 0., 0., debut_barre) == 0, -3);
                     
                     // M_x(x) & = -M_{Ax} & &\textrm{ pour x variant de 0 à a}\nonumber\\
                     // M_x(x) & = M_{Bx} & &\textrm{ pour x variant de a à l}\nonumber\\
                     
-                    BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[3][num], 0., a, -MAx, 0., 0., 0., debut_barre) == 0, -3);
-                    BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[3][num], a,  l, MBx,  0., 0., 0., debut_barre) == 0, -3);
+                    BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[3][num], 0., a, -MAx, 0., 0., 0., 0., 0., 0., debut_barre) == 0, -3);
+                    BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[3][num], a,  l,  MBx, 0., 0., 0., 0., 0., 0., debut_barre) == 0, -3);
                     
-                    // M_y(x) & = -\frac{F_z \cdot b \cdot x}{l}-\frac{M_y \cdot x}{l} - M_{Ay} + \frac{M_{Ay}+M_{By}}{l} \cdot x & &\textrm{ pour x variant de 0 à a}\nonumber\\
-                    // M_y(x) & = -F_z \cdot a+M_y+\frac{F_z \cdot a \cdot x}{l}-\frac{M_y}{l} \cdot x - M_{Ay} + \frac{M_{Ay}+M_{By}}{l} \cdot x & &\textrm{ pour x variant de a à l}\nonumber\\
+                    // M_y(x) & = -M_{Ay} - (F_{Az_{iso}}+F_{Az_{hyper}}) \cdot x & &\textrm{ pour x variant de 0 à a}\nonumber\\
+                    // M_y(x) & = F_{Bz_{iso}} \cdot L - M_{Ay} + (F_{Bz_{iso}}+F_{Bz_{hyper}}) \cdot x & &\textrm{ pour x variant de a à l}\nonumber\\
                     
-                    BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[4][num], 0., a,  0,               -ax2[2]*b/l-ax2[4]/l, 0., 0., debut_barre) == 0, -3);
-                    BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[4][num], a,  l, -ax2[2]*a+ax2[4], ax2[2]*a/l-ax2[4]/l,  0., 0., debut_barre) == 0, -3);
-                    BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[4][num], 0., l,  -MAy,            (MAy+MBy)/l,          0., 0., debut_barre) == 0, -3);
+                    BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[4][num], 0., a, -MAy,         -FAz_i-FAz_h, 0., 0., 0., 0., 0., debut_barre) == 0, -3);
+                    BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[4][num], a,  l, -FBz_i*l-MAy,  FBz_i+FBz_h, 0., 0., 0., 0., 0., debut_barre) == 0, -3);
                     
-                    // M_z(x) & = \frac{F_y \cdot b \cdot x}{l}-\frac{M_z \cdot x}{l} -M_{Az} + \frac{M_{Az}+M_{Bz}}{l} \cdot x & &\textrm{ pour x variant de 0 à a}\nonumber\\
-                    // M_z(x) & = F_y \cdot a+M_z -\frac{F_y \cdot a \cdot x}{l}-\frac{M_z}{l} \cdot x -M_{Az} + \frac{M_{Az}+M_{Bz}}{l} \cdot x & &\textrm{ pour x variant de a à l}
+                    // M_z(x) & = -M_{Az} + (F_{Ay_{iso}}+F_{Ay_{hyper}}) \cdot x & &\textrm{ pour x variant de 0 à a}\nonumber\\
+                    // M_z(x) & = F_{By_{iso}} \cdot L - M_{Az} - (F_{By_{iso}}+F_{By_{hyper}}) \cdot x & &\textrm{ pour x variant de a à l}
                     
-                    BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[5][num], 0., a, 0.,              ax2[1]*b/l-ax2[5]/l,  0., 0., debut_barre) == 0, -3);
-                    BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[5][num], a,  l, ax2[1]*a+ax2[5], -ax2[1]*a/l-ax2[5]/l, 0., 0., debut_barre) == 0, -3);
-                    BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[5][num], 0., l, -MAz,            (MAz+MBz)/l,          0., 0., debut_barre) == 0, -3);
+                    BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[5][num], 0., a, -MAz,         FAy_i+FAy_h, 0., 0., 0., 0., 0., debut_barre) == 0, -3);
+                    BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[5][num], a,  l, FBy_i*l-MAz, -FBy_i-FBy_h, 0., 0., 0., 0., 0., debut_barre) == 0, -3);
                     // \end{align*}\begin{verbatim}
                     
                     
@@ -694,9 +746,7 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
                     BUG(EF_charge_barre_ponctuelle_ajout_fonc_rx(action_en_cours->fonctions_rotation[0][num], element_en_beton, pos, a, MAx, MBx) == 0, -3);
                     BUG(EF_charge_barre_ponctuelle_ajout_fonc_ry(action_en_cours->fonctions_rotation[1][num], action_en_cours->fonctions_deformation[2][num], element_en_beton, pos, a, ax2[2], ax2[4], MAy, MBy) == 0, -3);
                     BUG(EF_charge_barre_ponctuelle_ajout_fonc_rz(action_en_cours->fonctions_rotation[2][num], action_en_cours->fonctions_deformation[1][num], element_en_beton, pos, a, ax2[1], ax2[5], MAz, MBz) == 0, -3);
-                    
-                    
-                    EF_charge_barre_ponctuelle_n(action_en_cours->fonctions_deformation[0][num], element_en_beton, pos, a, FAx, FBx);
+                    BUG(EF_charge_barre_ponctuelle_n(action_en_cours->fonctions_deformation[0][num], element_en_beton, pos, a, FAx, FBx) == 0, -3);
                     
                     cholmod_l_free_triplet(&triplet_efforts_locaux_initiaux, projet->ef_donnees.c);
                     
@@ -709,18 +759,20 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
                     ax2 = triplet_efforts_locaux_finaux->x;
                     triplet_efforts_locaux_finaux->nnz = 12;
                     ai2[0] = 0;   aj2[0] = 0;  ax2[0] = FAx;
-                    ai2[1] = 1;   aj2[1] = 0;  ax2[1] = FAy;
-                    ai2[2] = 2;   aj2[2] = 0;  ax2[2] = FAz;
+                    ai2[1] = 1;   aj2[1] = 0;  ax2[1] = FAy_i + FAy_h;
+                    ai2[2] = 2;   aj2[2] = 0;  ax2[2] = FAz_i + FAz_h;
                     ai2[3] = 3;   aj2[3] = 0;  ax2[3] = MAx;
                     ai2[4] = 4;   aj2[4] = 0;  ax2[4] = MAy;
                     ai2[5] = 5;   aj2[5] = 0;  ax2[5] = MAz;
                     ai2[6] = 6;   aj2[6] = 0;  ax2[6] = FBx;
-                    ai2[7] = 7;   aj2[7] = 0;  ax2[7] = FBy;
-                    ai2[8] = 8;   aj2[8] = 0;  ax2[8] = FBz;
+                    ai2[7] = 7;   aj2[7] = 0;  ax2[7] = FBy_i + FBy_h;
+                    ai2[8] = 8;   aj2[8] = 0;  ax2[8] = FBz_i + FBz_h;
                     ai2[9] = 9;   aj2[9] = 0;  ax2[9] = MBx;
                     ai2[10] = 10; aj2[10] = 0; ax2[10] = MBy;
                     ai2[11] = 11; aj2[11] = 0; ax2[11] = MBz;
                     sparse_efforts_locaux_finaux = cholmod_l_triplet_to_sparse(triplet_efforts_locaux_finaux, 0, projet->ef_donnees.c);
+                    printf("Matrice effort\n");
+                    cholmod_l_write_sparse(stdout, sparse_efforts_locaux_finaux, NULL, NULL, projet->ef_donnees.c);
                     BUGMSG(sparse_efforts_locaux_finaux, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_resoud_charge");
                     cholmod_l_free_triplet(&triplet_efforts_locaux_finaux, projet->ef_donnees.c);
                     sparse_efforts_globaux_finaux = cholmod_l_ssmult(element_en_beton->matrice_rotation, sparse_efforts_locaux_finaux, 0, 1, 0, projet->ef_donnees.c);
@@ -750,13 +802,374 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
                         }
                     }
                     cholmod_l_free_triplet(&triplet_efforts_globaux_finaux, projet->ef_donnees.c);
+                    break;
                 }
-    //         Fin Charge ponctuelle sur barre
-                /* Charge inconnue */
-                else
-                    BUG(0, -1);
-            }
+    //     Sinon Si la charge est une charge répartie uniforme sur la barre Alors
+                case CHARGE_BARRE_REPARTIE_UNIFORME :
+                {
+                    double       xx, yy, zz, l, ll;
+                    unsigned int j_d, j_f;                  /* numéro de l'élément dans la discrétisation */
+                    Charge_Barre_Repartie_Uniforme *charge_barre = list_curr(action_en_cours->charges);
+                    Beton_Barre  *element_en_beton = charge_barre->barre;
+                    double       E, G;                         /* Caractéristiques du matériau de la barre */
+                    
+    //         Récupération des caractéristiques mécaniques de l'élément.
+                    switch (element_en_beton->type)
+                    {
+                        case BETON_ELEMENT_POTEAU :
+                        case BETON_ELEMENT_POUTRE :
+                        {
+                            E = element_en_beton->materiau->ecm;
+                            G = element_en_beton->materiau->gnu_0_2;
+                            break;
+                        }
+                        /* Type d'élément inconnu*/
+                        default :
+                        {
+                            BUG(0, -1);
+                            break;
+                        }
+                    }
+                    
+    //         Convertion des efforts globaux en efforts locaux si nécessaire :\end{verbatim}\begin{center}
+    //           $\{ F \}_{local} = [K]^T \cdot \{ F \}_{global}$\end{center}\begin{verbatim}
+                    if (charge_barre->repere_local == FALSE)
+                    {
+                        triplet_efforts_globaux_initiaux = cholmod_l_allocate_triplet(12, 1, 12, 0, CHOLMOD_REAL, projet->ef_donnees.c);
+                        BUGMSG(triplet_efforts_globaux_initiaux, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_resoud_charge");
+                        ai2 = triplet_efforts_globaux_initiaux->i;
+                        aj2 = triplet_efforts_globaux_initiaux->j;
+                        ax2 = triplet_efforts_globaux_initiaux->x;
+                        triplet_efforts_globaux_initiaux->nnz = 12;
+                    }
+                    else
+                    {
+                        triplet_efforts_locaux_initiaux = cholmod_l_allocate_triplet(12, 1, 12, 0, CHOLMOD_REAL, projet->ef_donnees.c);
+                        BUGMSG(triplet_efforts_locaux_initiaux, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_resoud_charge");
+                        ai2 = triplet_efforts_locaux_initiaux->i;
+                        aj2 = triplet_efforts_locaux_initiaux->j;
+                        ax2 = triplet_efforts_locaux_initiaux->x;
+                        triplet_efforts_locaux_initiaux->nnz = 12;
+                    }
+                    xx = element_en_beton->noeud_fin->position.x - element_en_beton->noeud_debut->position.x;
+                    yy = element_en_beton->noeud_fin->position.y - element_en_beton->noeud_debut->position.y;
+                    zz = element_en_beton->noeud_fin->position.z - element_en_beton->noeud_debut->position.z;
+                    ll = sqrt(xx*xx+yy*yy+zz*zz);
+                    if (charge_barre->projection == TRUE)
+                    {
+                        ai2[0] = 0;     aj2[0] = 0;     ax2[0] = charge_barre->fx*sqrt(yy*yy+zz*zz)/ll;
+                        ai2[1] = 1;     aj2[1] = 0;     ax2[1] = charge_barre->fy*sqrt(xx*xx+zz*zz)/ll;
+                        ai2[2] = 2;     aj2[2] = 0;     ax2[2] = charge_barre->fz*sqrt(xx*xx+yy*yy)/ll;
+                        ai2[3] = 3;     aj2[3] = 0;     ax2[3] = charge_barre->mx*sqrt(yy*yy+zz*zz)/ll;
+                        ai2[4] = 4;     aj2[4] = 0;     ax2[4] = charge_barre->my*sqrt(xx*xx+zz*zz)/ll;
+                        ai2[5] = 5;     aj2[5] = 0;     ax2[5] = charge_barre->mz*sqrt(xx*xx+yy*yy)/ll;
+                    }
+                    else
+                    {
+                        ai2[0] = 0;     aj2[0] = 0;     ax2[0] = charge_barre->fx;
+                        ai2[1] = 1;     aj2[1] = 0;     ax2[1] = charge_barre->fy;
+                        ai2[2] = 2;     aj2[2] = 0;     ax2[2] = charge_barre->fz;
+                        ai2[3] = 3;     aj2[3] = 0;     ax2[3] = charge_barre->mx;
+                        ai2[4] = 4;     aj2[4] = 0;     ax2[4] = charge_barre->my;
+                        ai2[5] = 5;     aj2[5] = 0;     ax2[5] = charge_barre->mz;
+                    }
+                    ai2[6] = 6;     aj2[6] = 0;     ax2[6] = 0.;
+                    ai2[7] = 7;     aj2[7] = 0;     ax2[7] = 0.;
+                    ai2[8] = 8;     aj2[8] = 0;     ax2[8] = 0.;
+                    ai2[9] = 9;     aj2[9] = 0;     ax2[9] = 0.;
+                    ai2[10] = 10;   aj2[10] = 0;    ax2[10] = 0.;
+                    ai2[11] = 11;   aj2[11] = 0;    ax2[11] = 0.;
+                    if (charge_barre->repere_local == FALSE)
+                    {
+                        sparse_efforts_globaux_initiaux = cholmod_l_triplet_to_sparse(triplet_efforts_globaux_initiaux, 0, projet->ef_donnees.c);
+                        BUGMSG(sparse_efforts_globaux_initiaux, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_resoud_charge");
+                        cholmod_l_free_triplet(&triplet_efforts_globaux_initiaux, projet->ef_donnees.c);
+                        sparse_efforts_locaux_initiaux = cholmod_l_ssmult(element_en_beton->matrice_rotation_transpose, sparse_efforts_globaux_initiaux, 0, 1, 0, projet->ef_donnees.c);
+                        BUGMSG(sparse_efforts_locaux_initiaux, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_resoud_charge");
+                        cholmod_l_free_sparse(&(sparse_efforts_globaux_initiaux), projet->ef_donnees.c);
+                        triplet_efforts_locaux_initiaux = cholmod_l_sparse_to_triplet(sparse_efforts_locaux_initiaux, projet->ef_donnees.c);
+                        BUGMSG(triplet_efforts_locaux_initiaux, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_resoud_charge");
+                        ai2 = triplet_efforts_locaux_initiaux->i;
+                        aj2 = triplet_efforts_locaux_initiaux->j;
+                        ax2 = triplet_efforts_locaux_initiaux->x;
+                        cholmod_l_free_sparse(&(sparse_efforts_locaux_initiaux), projet->ef_donnees.c);
+                    }
+                    /* A ce stade ax2 pointent vers les charges dans le repère local*/
+                    
+    //         Détermination des deux barres discrétisée (j_d et j_f) qui entoure la charge
+    //           répartie.
+                    if (element_en_beton->discretisation_element == 0)
+                    /* Pas de discrétisation */
+                    {
+                        j_d = 0;
+                        j_f = 0;
+                    }
+                    else
+                    /* On cherche le noeud de départ et le noeud de fin */
+                    {
+                        j_d = 0;
+                        l = -1.;
+                        /* On regarde pour chaque noeud intermédiaire si la position de la charge devient inférieur à la distance entre le noeud de départ et le noeud intermédiaire */
+                        while ((j_d<=element_en_beton->discretisation_element) && (l < charge_barre->debut))
+                        {
+                            if (j_d==element_en_beton->discretisation_element)
+                            {
+                                xx = element_en_beton->noeud_fin->position.x - element_en_beton->noeud_debut->position.x;
+                                yy = element_en_beton->noeud_fin->position.y - element_en_beton->noeud_debut->position.y;
+                                zz = element_en_beton->noeud_fin->position.z - element_en_beton->noeud_debut->position.z;
+                            }
+                            else
+                            {
+                                xx = element_en_beton->noeuds_intermediaires[j_d]->position.x - element_en_beton->noeud_debut->position.x;
+                                yy = element_en_beton->noeuds_intermediaires[j_d]->position.y - element_en_beton->noeud_debut->position.y;
+                                zz = element_en_beton->noeuds_intermediaires[j_d]->position.z - element_en_beton->noeud_debut->position.z;
+                            }
+                            l = sqrt(xx*xx+yy*yy+zz*zz);
+                            j_d++;
+                        }
+                        j_d--;
+                        j_f = j_d;
+                        l = -1.;
+                        /* On regarde pour chaque noeud intermédiaire si la position de la charge devient inférieur à la distance entre le noeud de départ et le noeud intermédiaire */
+                        while ((j_f<=element_en_beton->discretisation_element) && (l < ll-charge_barre->fin))
+                        {
+                            if (j_f==element_en_beton->discretisation_element)
+                            {
+                                xx = element_en_beton->noeud_fin->position.x - element_en_beton->noeud_debut->position.x;
+                                yy = element_en_beton->noeud_fin->position.y - element_en_beton->noeud_debut->position.y;
+                                zz = element_en_beton->noeud_fin->position.z - element_en_beton->noeud_debut->position.z;
+                            }
+                            else
+                            {
+                                xx = element_en_beton->noeuds_intermediaires[j_f]->position.x - element_en_beton->noeud_debut->position.x;
+                                yy = element_en_beton->noeuds_intermediaires[j_f]->position.y - element_en_beton->noeud_debut->position.y;
+                                zz = element_en_beton->noeuds_intermediaires[j_f]->position.z - element_en_beton->noeud_debut->position.z;
+                            }
+                            l = sqrt(xx*xx+yy*yy+zz*zz);
+                            j_f++;
+                        }
+                        j_f--;
+                    }
+                    
+    //         Pour chaque barre comprises entre j_d et j_f inclus Faire
+                    for (i=j_d;i<=j_f;i++)
+                    {
+                        double       a, b;                         /* Position de la charge par rapport au début et à la fin de l'élément discrétisé */
+                        double       debut_barre, fin_barre;       /* Début et fin de la barre discrétisée par rapport à la barre complète */
+                        double       phiAy, phiBy, phiAz, phiBz;   /* Rotation sur appui lorsque la barre est isostatique */
+                        double       MAx, MBx, MAy, MBy, MAz, MBz; /* Moments créés par la raideur */
+                        double       FAx, FBx;
+                        double       FAy_i, FAy_h, FBy_i, FBy_h; /* Réactions d'appui */
+                        double       FAz_i, FAz_h, FBz_i, FBz_h;
+                        long         *ai4, *aj4;
+                        double       *ax4;
+                        EF_Noeud     *noeud_debut, *noeud_fin;
+                        unsigned int num = element_en_beton->numero;
+                        
+                        if (i == 0)
+                            noeud_debut = element_en_beton->noeud_debut;
+                        else
+                            noeud_debut = element_en_beton->noeuds_intermediaires[i-1];
+                        if (i == element_en_beton->discretisation_element)
+                            noeud_fin = element_en_beton->noeud_fin;
+                        else
+                            noeud_fin = element_en_beton->noeuds_intermediaires[i];
+                        xx = noeud_debut->position.x - element_en_beton->noeud_debut->position.x;
+                        yy = noeud_debut->position.y - element_en_beton->noeud_debut->position.y;
+                        zz = noeud_debut->position.z - element_en_beton->noeud_debut->position.z;
+                        debut_barre = sqrt(xx*xx+yy*yy+zz*zz);
+                        if (i == j_d)
+                            a = charge_barre->debut-debut_barre;
+                        else
+                            a = 0.;
+                        xx = noeud_fin->position.x - element_en_beton->noeud_debut->position.x;
+                        yy = noeud_fin->position.y - element_en_beton->noeud_debut->position.y;
+                        zz = noeud_fin->position.z - element_en_beton->noeud_debut->position.z;
+                        fin_barre = sqrt(xx*xx+yy*yy+zz*zz);
+                        l = ABS(fin_barre-debut_barre);
+                        if (i == j_f)
+                        {
+                            xx = noeud_fin->position.x - element_en_beton->noeud_fin->position.x;
+                            yy = noeud_fin->position.y - element_en_beton->noeud_fin->position.y;
+                            zz = noeud_fin->position.z - element_en_beton->noeud_fin->position.z;
+                            fin_barre = sqrt(xx*xx+yy*yy+zz*zz);
+                            b = charge_barre->fin-fin_barre;
+                        }
+                        else
+                            b = 0.;
+                        
+    //             Détermination des moments mx de rotation
+    //               (EF_charge_barre_repartie_uniforme_mx):
+                        BUG(EF_charge_barre_repartie_uniforme_mx(element_en_beton, i, a, b, &(element_en_beton->info_EF[i]), ax2[3], &MAx, &MBx) == 0, -3);
+                        
+    //             Détermination de la rotation y et z aux noeuds de l'élément discrétisé en
+    //               le supposant isostatique 
+    //               (EF_charge_barre_repartie_uniforme_def_ang_iso_y et z):
+                        BUG(EF_charge_barre_repartie_uniforme_def_ang_iso_y(element_en_beton, i, a, b, ax2[2], ax2[4], &phiAy, &phiBy) == 0, -3);
+                        BUG(EF_charge_barre_repartie_uniforme_def_ang_iso_z(element_en_beton, i, a, b, ax2[1], ax2[5], &phiAz, &phiBz) == 0, -3);
+                        
+    //             Calcul des moments créés par les raideurs (EF_calculs_moment_hyper_y et z):
+                        BUG(EF_calculs_moment_hyper_y(&(element_en_beton->info_EF[i]), phiAy, phiBy, &MAy, &MBy) == 0, -3);
+                        MAy = -MAy;
+                        MBy = -MBy;
+                        BUG(EF_calculs_moment_hyper_z(&(element_en_beton->info_EF[i]), phiAz, phiBz, &MAz, &MBz) == 0, -3);
+                    
+    //             Réaction d'appui sur les noeuds (X représente la position de la résultante
+    //               pour une force équivalente, déterminée par la fonction
+    //               EF_charge_barre_repartie_uniforme_position_resultante_x) :\end{verbatim}\begin{align*}
+          // F_{Ax} & = F_x \cdot (L-a-b) \cdot \frac{\int_0^l \frac{1}{E \cdot S(x)}}{\int_X^l \frac{1}{E \cdot S(x)}}\nonumber\\
+          // F_{Bx} & = F_x \cdot (L-a-b) - F_{Ax}\nonumber\\
+          // F_{Ay_{iso}}   & = \frac{F_y \cdot (L-a-b) \cdot (L-a+b)}{2 \cdot L}-\frac{M_z \cdot (L-a+b)}{l}\nonumber\\
+          // F_{Ay_{hyper}} & = \frac{M_{Bz}+M_{Az}}{l}\nonumber\\
+          // F_{By_{iso}}   & = \frac{F_y \cdot (L-a-b) \cdot (L+a-b)}{2 \cdot L}+\frac{M_z \cdot (L-a+b)}{l}\nonumber\\
+          // F_{By_{hyper}} & = -\frac{M_{Bz}+M_{Az}}{l}\nonumber\\
+          // F_{Az_{iso}}   & = \frac{F_z \cdot (L-a-b) \cdot (L-a+b)}{2 \cdot L}+\frac{M_y \cdot (L-a+b)}{l}\nonumber\\
+          // F_{Az_{hyper}} & = -\frac{M_{By}+M_{Ay}}{l}\nonumber\\
+          // F_{Bz_{iso}}   & = \frac{F_z \cdot (L-a-b) \cdot (L+a-b)}{2 \cdot L}-\frac{M_y \cdot (L-a+b)}{l}\nonumber\\
+          // F_{Bz_{hyper}} & = \frac{M_{By}+M_{Ay}}{l}\end{align*}\begin{verbatim}
+                        FAx = ax2[0]*(l-a-b)*_1992_1_1_sections_es_l(element_en_beton, i, 0, l)/_1992_1_1_sections_es_l(element_en_beton, i, EF_charge_barre_repartie_uniforme_position_resultante_x(element_en_beton->section, a, b, l), l);
+                        FBx = ax2[0]*(l-a-b) - FAx;
+                        FAy_i = ax2[1]*(l-a-b)*(l-a+b)/(2.*l)-ax2[5]*(l-a-b)/l;
+                        FAy_h = (MBz+MAz)/l;
+                        FBy_i = ax2[1]*(l-a-b)*(l+a-b)/(2.*l)+ax2[5]*(l-a-b)/l;
+                        FBy_h = -(MBz+MAz)/l;
+                        FAz_i = ax2[2]*(l-a-b)*(l-a+b)/(2.*l)+ax2[4]*(l-a-b)/l;
+                        FAz_h = -(MBy+MAy)/l;
+                        FBz_i = ax2[2]*(l-a-b)*(l+a-b)/(2.*l)-ax2[4]*(l-a-b)/l;
+                        FBz_h = (MBy+MAy)/l;
+                        
+    //             Détermination des fonctions des efforts dus à la charge (x, a et l sont
+    //               calculés par rapport à l'élément discrétisé et non pour toute la barre).
+    //               Pour cela, on calcule la sollicitation due au cas isostatique puis on
+    //               ajoute la sollicitation due à l'éventuel encastrement (MAx, MBx, MAy,
+    //               MAz, MBy, MBz) :\end{verbatim}\begin{align*}
+    //               N(x) & = -F_{Ax} & &\textrm{ pour x variant de 0 à a}\nonumber\\
+    //               N(x) & = \frac{((F_{Ax}+F_{Bx}) \cdot x - a \cdot F_{Bx} + (b-L) \cdot F_{Ax})}{L-a-b}
+    //               N(x) & = F_{Bx} & &\textrm{ pour x variant de L-b à L}\nonumber\\
+                        
+                        BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[0][num], 0.,  a,   -FAx, 0., 0., 0., 0., 0., 0., debut_barre) == 0, -3);
+                        BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[0][num], a,   l-b, (-a*FBx-(l-b)*FAx)/(l-a-b), (FAx+FBx)/(l-a-b), 0., 0., 0., 0., 0., debut_barre) == 0, -3);
+                        BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[0][num], l-b, l,   FBx,  0., 0., 0., 0., 0., 0., debut_barre) == 0, -3);
+                        
+                    // T_y(x) & = -F_{Ay_{iso}} - F_{Ay_{hyper}} & &\textrm{ pour x variant de 0 à a}\nonumber\\
+                    // T_y(x) & = \frac{-a*(F_{By_{iso}}+F_{By_{hyper}})-(L-b)*(F_{Ay_{iso}}+F_{Ay_{hyper}})}{L-a-b} + \frac{F_{Ay_{iso}}+F_{Ay_{hyper}}+F_{By_{iso}}+F_{By_{hyper}}}{L-a-b} \cdot x & &\textrm{ pour x variant de a à L-b}\nonumber\\
+                    // T_y(x) & =  F_{By_{iso}} + F_{By_{hyper}} & &\textrm{ pour x variant de L-b à L}\nonumber\\
+                        
+                        BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[1][num], 0., a,  -FAy_i-FAy_h, 0., 0., 0., 0., 0., 0., debut_barre) == 0, -3);
+                        BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[1][num], a, l-b, (-a*(FBy_i+FBy_h)-(l-b)*(FAy_i+FAy_h))/(l-a-b), (FAy_i+FAy_h+FBy_i+FBy_h)/(l-a-b), 0., 0., 0., 0., 0., debut_barre) == 0, -3);
+                        BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[1][num], l-b, l, FBy_i+FBy_h, 0., 0., 0., 0., 0., 0., debut_barre) == 0, -3);
+                        
+                    // T_z(x) & = -F_{Az_{iso}} - F_{Az_{hyper}} & &\textrm{ pour x variant de 0 à a}\nonumber\\
+                    // T_z(x) & = \frac{-a*(F_{Bz_{iso}}+F_{Bz_{hyper}})-(L-b)*(F_{Az_{iso}}+F_{Az_{hyper}})}{L-a-b} + \frac{F_{Az_{iso}}+F_{Az_{hyper}}+F_{Bz_{iso}}+F_{Bz_{hyper}}}{L-a-b} \cdot x & &\textrm{ pour x variant de a à L-b}\nonumber\\
+                    // T_z(x) & =  F_{Bz_{iso}} + F_{Bz_{hyper}} & &\textrm{ pour x variant de L-b à L}\nonumber\\
+                        
+                        BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[2][num], 0., a, -FAz_i-FAz_h, 0., 0., 0., 0., 0., 0., debut_barre) == 0, -3);
+                        BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[2][num], a, l-b, (-a*(FBz_i+FBz_h)-(l-b)*(FAz_i+FAz_h))/(l-a-b), (FAz_i+FAz_h+FBz_i+FBz_h)/(l-a-b), 0., 0., 0., 0., 0., debut_barre) == 0, -3);
+                        BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[2][num], l-b,  l,  FBz_i+FBz_h, 0., 0., 0., 0., 0., 0., debut_barre) == 0, -3);
+                        
+                    // M_x(x) & = -M_{Ax} & &\textrm{ pour x variant de 0 à a}\nonumber\\
+                    // M_x(x) & = \frac{-a*M_{Bx}-(L-b)*M_{Ax}}{L-a-b} + \frac{M_{Ax}+M_{Bx}}{L-a-b} \cdot x & &\textrm{ pour x variant de a à L-b}\nonumber\\
+                    // M_x(x) & = M_{Bx} & &\textrm{ pour x variant de L-b à L}\nonumber\\
+                        
+                        BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[3][num], 0., a,  -MAx, 0., 0., 0., 0., 0., 0., debut_barre) == 0, -3);
+                        BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[3][num], a, l-b, (-a*MBx-(l-b)*MAx)/(l-a-b), (MAx+MBx)/(l-a-b), 0., 0., 0., 0., 0., debut_barre) == 0, -3);
+                        BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[3][num], l-b,  l, MBx, 0., 0., 0., 0., 0., 0., debut_barre) == 0, -3);
+                        
+                    // M_y(x) & = -M_{Ay} - (F_{Az_{iso}}+F_{Az_{hyper}}) \cdot x & &\textrm{ pour x variant de 0 à a}\nonumber\\
+                    // M_y(x) & = -(F_{Bz_{iso}}+F_{Bz_{hyper}}) \cdot (L-x) + M_{By} + M_y \cdot (L-b-x) - F_z \cdot \frac{(L-b-x)^2}{2} & &\textrm{ pour x variant de 0 à a}\nonumber\\
+                    // M_y(x) & =  M_{By} - L \cdot (F_{Bz_{iso}}+F_{Bz_{hyper}}) + (F_{Bz_{iso}}+F_{Bz_{hyper}}) \cdot x & &\textrm{ pour x variant de L-b à L}\nonumber\\
+                        
+                        BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[4][num], 0., a, -MAy, -FAz_i-FAz_h, 0., 0., 0., 0., 0., debut_barre) == 0, -3);
+                        BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[4][num], a, l-b, b*b*ax2[2]/2.+b*(ax2[4]-ax2[2]*l)+ax2[2]*l*l/2.-l*(ax2[4]+FBz_i+FBz_h)+MBy, -ax2[2]*(l-b)+ax2[4]+FBz_i+FBz_h, ax2[2]/2., 0., 0., 0., 0., debut_barre) == 0, -3);
+                        BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[4][num], l-b,  l, MBy-l*(FBz_i+FBz_h), FBz_i+FBz_h, 0., 0., 0., 0., 0., debut_barre) == 0, -3);
+                        
+                    // M_z(x) & = -M_{Az} + (F_{Ay_{iso}}+F_{Ay_{hyper}}) \cdot x & &\textrm{ pour x variant de 0 à a}\nonumber\\
+                    // M_z(x) & = (F_{By_{iso}}+F_{By_{hyper}}) \cdot (L-x) - M_{Bz} - M_z \cdot (L-b-x) - F_y \cdot \frac{(L-b-x)^2}{2} & &\textrm{ pour x variant de a à L-b}\nonumber\\
+                    // M_z(x) & =  M_{Bz} - L \cdot (F_{By_{iso}}+F_{By_{hyper}}) + (F_{By_{iso}}+F_{By_{hyper}}) \cdot x & &\textrm{ pour x variant de L-b à L}
+                        
+                        BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[5][num], 0., a, -MAz, +FAy_i+FAy_h, 0., 0., 0., 0., 0., debut_barre) == 0, -3);
+                        BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[5][num], a, l-b, -b*b*ax2[1]/2.+b*(ax2[1]*l+ax2[5])-ax2[1]*l*l/2.-l*(-FBy_i-FBy_h+ax2[5])+MBz, ax2[1]*(l-b)+ax2[5]-FBy_i-FBy_h, -ax2[1]/2., 0., 0., 0., 0., debut_barre) == 0, -3);
+                        BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[5][num], l-b,  l, MBz+l*(FBy_i+FBy_h), -FBy_i-FBy_h, 0., 0., 0., 0., 0., debut_barre) == 0, -3);
+                    // \end{align*}\begin{verbatim}
+                        
+                        
+    //             Détermination des fonctions de déformation et rotation de la même façon que
+    //             pour les sollicitations (cas isostatique + encastrement) :
+    //               EF_charge_barre_repartie_uniforme_ajout_fonc_rx,
+    //               EF_charge_barre_repartie_uniforme_ajout_fonc_ry,
+    //               EF_charge_barre_repartie_uniforme_ajout_fonc_rz,
+    //               EF_charge_barre_repartie_uniforme_n) :
+                        BUG(EF_charge_barre_repartie_uniforme_ajout_fonc_rx(action_en_cours->fonctions_rotation[0][num], element_en_beton, i, a, b, MAx, MBx) == 0, -3);
+                        BUG(EF_charge_barre_repartie_uniforme_ajout_fonc_ry(action_en_cours->fonctions_rotation[1][num], action_en_cours->fonctions_deformation[2][num], element_en_beton, i, a, b, ax2[2], ax2[4], MAy, MBy) == 0, -3);
+                        BUG(EF_charge_barre_repartie_uniforme_ajout_fonc_rz(action_en_cours->fonctions_rotation[2][num], action_en_cours->fonctions_deformation[1][num], element_en_beton, i, a, b, ax2[1], ax2[5], MAz, MBz) == 0, -3);
+                        BUG(EF_charge_barre_repartie_uniforme_n(action_en_cours->fonctions_deformation[0][num], element_en_beton, i, a, b, FAx, FBx) == 0, -3);
+                        
+                    
+    //             Convertion des réactions d'appuis locales dans le repère global :\end{verbatim}\begin{center}
+    //           $\{ R \}_{global} = [K] \cdot \{ F \}_{local}$\end{center}\begin{verbatim}
+                        triplet_efforts_locaux_finaux = cholmod_l_allocate_triplet(12, 1, 12, 0, CHOLMOD_REAL, projet->ef_donnees.c);
+                        BUGMSG(triplet_efforts_locaux_finaux, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_resoud_charge");
+                        ai4 = triplet_efforts_locaux_finaux->i;
+                        aj4 = triplet_efforts_locaux_finaux->j;
+                        ax4 = triplet_efforts_locaux_finaux->x;
+                        triplet_efforts_locaux_finaux->nnz = 12;
+                        ai4[0] = 0;   aj4[0] = 0;  ax4[0] = FAx;
+                        ai4[1] = 1;   aj4[1] = 0;  ax4[1] = FAy_i+FAy_h;
+                        ai4[2] = 2;   aj4[2] = 0;  ax4[2] = FAz_i+FAz_h;
+                        ai4[3] = 3;   aj4[3] = 0;  ax4[3] = MAx;
+                        ai4[4] = 4;   aj4[4] = 0;  ax4[4] = MAy;
+                        ai4[5] = 5;   aj4[5] = 0;  ax4[5] = MAz;
+                        ai4[6] = 6;   aj4[6] = 0;  ax4[6] = FBx;
+                        ai4[7] = 7;   aj4[7] = 0;  ax4[7] = FBy_i+FBy_h;
+                        ai4[8] = 8;   aj4[8] = 0;  ax4[8] = FBz_i+FBz_h;
+                        ai4[9] = 9;   aj4[9] = 0;  ax4[9] = MBx;
+                        ai4[10] = 10; aj4[10] = 0; ax4[10] = MBy;
+                        ai4[11] = 11; aj4[11] = 0; ax4[11] = MBz;
+                        sparse_efforts_locaux_finaux = cholmod_l_triplet_to_sparse(triplet_efforts_locaux_finaux, 0, projet->ef_donnees.c);
+                        printf("Matrice effort\n");
+                        cholmod_l_write_sparse(stdout, sparse_efforts_locaux_finaux, NULL, NULL, projet->ef_donnees.c);
+                        BUGMSG(sparse_efforts_locaux_finaux, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_resoud_charge");
+                        cholmod_l_free_triplet(&triplet_efforts_locaux_finaux, projet->ef_donnees.c);
+                        sparse_efforts_globaux_finaux = cholmod_l_ssmult(element_en_beton->matrice_rotation, sparse_efforts_locaux_finaux, 0, 1, 0, projet->ef_donnees.c);
+                        BUGMSG(sparse_efforts_globaux_finaux, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_resoud_charge");
+                        cholmod_l_free_sparse(&(sparse_efforts_locaux_finaux), projet->ef_donnees.c);
+                        triplet_efforts_globaux_finaux = cholmod_l_sparse_to_triplet(sparse_efforts_globaux_finaux, projet->ef_donnees.c);
+                        BUGMSG(triplet_efforts_globaux_finaux, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_resoud_charge");
+                        ai4 = triplet_efforts_globaux_finaux->i;
+                        aj4 = triplet_efforts_globaux_finaux->j;
+                        ax4 = triplet_efforts_globaux_finaux->x;
+                        cholmod_l_free_sparse(&(sparse_efforts_globaux_finaux), projet->ef_donnees.c);
+                    
+    //             Ajout des moments et les efforts dans le vecteur des forces aux noeuds {F}
+                        for (j=0;j<12;j++)
+                        {
+                            if (ai4[j] < 6)
+                            {
+                                if (projet->ef_donnees.noeuds_pos_partielle[noeud_debut->numero][ai4[j]] != -1)
+                                    ax[projet->ef_donnees.noeuds_pos_partielle[noeud_debut->numero][ai4[j]]] += ax4[j];
+                                ax3[projet->ef_donnees.noeuds_pos_complete[noeud_debut->numero][ai4[j]]] += ax4[j];
+                            }
+                            else
+                            {
+                                if (projet->ef_donnees.noeuds_pos_partielle[noeud_fin->numero][ai4[j]-6] != -1)
+                                    ax[projet->ef_donnees.noeuds_pos_partielle[noeud_fin->numero][ai4[j]-6]] += ax4[j];
+                                ax3[projet->ef_donnees.noeuds_pos_complete[noeud_fin->numero][ai4[j]-6]] += ax4[j];
+                            }
+                        }
+                        cholmod_l_free_triplet(&triplet_efforts_globaux_finaux, projet->ef_donnees.c);
+                    }
+    //         FinPour
+                    cholmod_l_free_triplet(&triplet_efforts_locaux_initiaux, projet->ef_donnees.c);
+                    break;
+                }
     //     FinSi
+                /* Charge inconnue */
+                default :
+                {
+                    BUG(0, -1);
+                    break;
+                }
+            }
         }
         while (list_mvnext(action_en_cours->charges) != NULL);
     }
@@ -780,6 +1193,8 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
     ax = triplet_deplacements_partiels->x;
     ax2 = triplet_force_partielle->x;
     umfpack_dl_solve(UMFPACK_A, projet->ef_donnees.ap, projet->ef_donnees.ai, projet->ef_donnees.ax, ax, ax2, projet->ef_donnees.numeric, NULL, NULL) ;
+    projet->ef_donnees.residu = EF_calculs_resid (projet->ef_donnees.ap, projet->ef_donnees.ai, projet->ef_donnees.ax, ax2, projet->ef_donnees.triplet_rigidite_partielle->nrow, ax);
+    printf("maxnorm of residual: %g\n\n", projet->ef_donnees.residu);
     for (i=0;i<projet->ef_donnees.rigidite_matrice_partielle->nrow;i++)
     {
         ai[i] = i;
@@ -819,21 +1234,6 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
     X = cholmod_l_sparse_to_dense(action_en_cours->deplacement_complet, projet->ef_donnees.c);
     BUGMSG(X, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_resoud_charge");
     
-    // Calcul du résidu :\end{verbatim}\begin{align*}
-    // res = \frac{norme{\{[K]*\{\Delta\}+\{F\}\}}}{norme([K])*norme(\{\Delta\})+norme(\{F\})}\end{align*}\begin{verbatim}
-    /* Méthode trouvée dans le fichier cholmod_demo.c de la source de la librairie cholmod. */
-    cholmod_dense *r = cholmod_l_copy_dense(dense_force, projet->ef_donnees.c);
-    BUGMSG(r, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_resoud_charge");
-    double minusone[2] = {-1., 0.}, one[2] = {1., 0.};
-    BUG(cholmod_l_sdmult(projet->ef_donnees.rigidite_matrice_complete, 0, minusone, one, X, r, projet->ef_donnees.c) == TRUE, -2);
-    double bnorm = cholmod_l_norm_dense(dense_force, 0, projet->ef_donnees.c);
-    double rnorm = cholmod_l_norm_dense(r, 0, projet->ef_donnees.c);
-    double xnorm = cholmod_l_norm_dense(X, 0, projet->ef_donnees.c);
-    double anorm = cholmod_l_norm_sparse(projet->ef_donnees.rigidite_matrice_complete, 0, projet->ef_donnees.c);
-    double axbnorm = (anorm * xnorm + bnorm) ;
-    action_en_cours->norm = rnorm / axbnorm ;
-    printf("résidu : %e\n", action_en_cours->norm);
-    
     // Calcule des réactions d'appuis :\end{verbatim}\begin{displaymath}
     // \{F\} = [K] \cdot \{\Delta\} - \{F_0\} \end{displaymath}\begin{verbatim}
     sparse_tmp = cholmod_l_ssmult(projet->ef_donnees.rigidite_matrice_complete, action_en_cours->deplacement_complet, 0, TRUE, TRUE, projet->ef_donnees.c);
@@ -844,7 +1244,6 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
     /* Libération de la mémoire */
     cholmod_l_free_dense(&Y, projet->ef_donnees.c);
     cholmod_l_free_dense(&X, projet->ef_donnees.c);
-    cholmod_l_free_dense(&r, projet->ef_donnees.c);
     cholmod_l_free_sparse(&sparse_tmp, projet->ef_donnees.c);
     cholmod_l_free_dense(&dense_force, projet->ef_donnees.c);
     cholmod_l_free_triplet(&triplet_force_partielle, projet->ef_donnees.c);
@@ -879,14 +1278,20 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
                 noeud_fin = element_en_beton->noeuds_intermediaires[j];
             
             /* Récupération des caractéristiques de la barre en fonction du matériau */
-            if ((element_en_beton->type == BETON_ELEMENT_POTEAU) || (element_en_beton->type == BETON_ELEMENT_POUTRE))
+            switch (element_en_beton->type)
             {
-                E = element_en_beton->materiau->ecm;
-                G = element_en_beton->materiau->gnu_0_2;
+                case BETON_ELEMENT_POTEAU :
+                case BETON_ELEMENT_POUTRE :
+                {
+                    E = element_en_beton->materiau->ecm;
+                    G = element_en_beton->materiau->gnu_0_2;
+                    break;
+                }
+                default :
+                {
+                    BUG(0, -1);
+                }
             }
-            /* Type d'élément inconnu*/
-            else
-                BUG(0, -1);
             
     //     Récupération des déplacements du noeud de départ et du noeud final de l'élément
             triplet_deplacement_globaux = cholmod_l_allocate_triplet(12, 1, 12, 0, CHOLMOD_REAL, projet->ef_donnees.c);
@@ -946,12 +1351,12 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
             // M_y(x) & = M_y(x) + M_{Ay} - (M_{Ay}+M_{By})/l\nonumber\\
             // M_z(x) & = M_z(x) + M_{Az} - (M_{Az}+M_{Bz})/l
             // \end{align*}\begin{verbatim}
-            BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[0][element_en_beton->numero], 0., l, ax2[0], -(ax2[0]+ax2[6])/l,  0., 0., l_debut) == 0, -3);
-            BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[1][element_en_beton->numero], 0., l, ax2[1], -(ax2[1]+ax2[7])/l,  0., 0., l_debut) == 0, -3);
-            BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[2][element_en_beton->numero], 0., l, ax2[2], -(ax2[2]+ax2[8])/l,  0., 0., l_debut) == 0, -3);
-            BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[3][element_en_beton->numero], 0., l, ax2[3], -(ax2[3]+ax2[9])/l,  0., 0., l_debut) == 0, -3);
-            BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[4][element_en_beton->numero], 0., l, ax2[4], -(ax2[4]+ax2[10])/l, 0., 0., l_debut) == 0, -3);
-            BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[5][element_en_beton->numero], 0., l, ax2[5], -(ax2[5]+ax2[11])/l, 0., 0., l_debut) == 0, -3);
+            BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[0][element_en_beton->numero], 0., l, ax2[0], -(ax2[0]+ax2[6])/l,  0., 0., 0., 0., 0., l_debut) == 0, -3);
+            BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[1][element_en_beton->numero], 0., l, ax2[1], -(ax2[1]+ax2[7])/l,  0., 0., 0., 0., 0., l_debut) == 0, -3);
+            BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[2][element_en_beton->numero], 0., l, ax2[2], -(ax2[2]+ax2[8])/l,  0., 0., 0., 0., 0., l_debut) == 0, -3);
+            BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[3][element_en_beton->numero], 0., l, ax2[3], -(ax2[3]+ax2[9])/l,  0., 0., 0., 0., 0., l_debut) == 0, -3);
+            BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[4][element_en_beton->numero], 0., l, ax2[4], -(ax2[4]+ax2[10])/l, 0., 0., 0., 0., 0., l_debut) == 0, -3);
+            BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[5][element_en_beton->numero], 0., l, ax2[5], -(ax2[5]+ax2[11])/l, 0., 0., 0., 0., 0., l_debut) == 0, -3);
             
     //     Ajout des déplacements & rotations entre deux noeuds dus à leur déplacement relatif,
     //       la courbe vient s'ajouter à la courbe (si existante) déja définie précédemment.
@@ -973,14 +1378,14 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
                     double Iy = _1992_1_1_sections_iy(section_tmp);
                     double Iz = _1992_1_1_sections_iz(section_tmp);
                     if ((j == 0) && (element_en_beton->relachement != NULL) && (element_en_beton->relachement->rx_debut != EF_RELACHEMENT_BLOQUE))
-                        BUG(common_fonction_ajout(action_en_cours->fonctions_rotation[0][element_en_beton->numero], 0., l, ax2[3]/(G*J)*l-(ax2[3]+ax2[9])/(2*G*J*l)*l*l+ax[9], -ax2[3]/(G*J), (ax2[3]+ax2[9])/(2*G*J*l), 0., l_debut) == 0, -3);
+                        BUG(common_fonction_ajout(action_en_cours->fonctions_rotation[0][element_en_beton->numero], 0., l, ax2[3]/(G*J)*l-(ax2[3]+ax2[9])/(2*G*J*l)*l*l+ax[9], -ax2[3]/(G*J), (ax2[3]+ax2[9])/(2*G*J*l), 0., 0., 0., 0., l_debut) == 0, -3);
                     else
-                        BUG(common_fonction_ajout(action_en_cours->fonctions_rotation[0][element_en_beton->numero], 0., l, ax[3], -ax2[3]/(G*J), (ax2[3]+ax2[9])/(2*G*J*l), 0., l_debut) == 0, -3);
-                    BUG(common_fonction_ajout(action_en_cours->fonctions_rotation[1][element_en_beton->numero], 0., l, -(-ax2[4]/(2*E*Iy)*l*l+(ax2[4]+ax2[10])/(6*E*Iy)*l*l-ax[2]+ax[8])/l, -ax2[4]/(E*Iy), (ax2[4]+ax2[10])/(2*l*E*Iy), 0., l_debut) == 0, -3);
-                    BUG(common_fonction_ajout(action_en_cours->fonctions_rotation[2][element_en_beton->numero], 0., l,  (ax2[5]/(2*E*Iz)*l*l+(-ax2[5]-ax2[11])/(6*E*Iz)*l*l-ax[1]+ax[7])/l, -ax2[5]/(E*Iz), (ax2[5]+ax2[11])/(2*l*E*Iz), 0., l_debut) == 0, -3);
-                    BUG(common_fonction_ajout(action_en_cours->fonctions_deformation[0][element_en_beton->numero], 0., l, ax[0], -ax2[0]/(E*S), (ax2[0]+ax2[6])/l/(2*E*S), 0., l_debut) == 0, -3);
-                    BUG(common_fonction_ajout(action_en_cours->fonctions_deformation[1][element_en_beton->numero], 0., l, ax[1], (ax2[5]/(2*E*Iz)*l*l+(-ax2[5]-ax2[11])/(6*E*Iz)*l*l-ax[1]+ax[7])/l, -ax2[5]/(2*E*Iz),  (ax2[5]+ax2[11])/(6*l*E*Iz), l_debut) == 0, -3);
-                    BUG(common_fonction_ajout(action_en_cours->fonctions_deformation[2][element_en_beton->numero], 0., l, ax[2], (-ax2[4]/(2*E*Iy)*l*l+(ax2[4]+ax2[10])/(6*E*Iy)*l*l-ax[2]+ax[8])/l,  ax2[4]/(2*E*Iy), -(ax2[4]+ax2[10])/(6*l*E*Iy), l_debut) == 0, -3);
+                        BUG(common_fonction_ajout(action_en_cours->fonctions_rotation[0][element_en_beton->numero], 0., l, ax[3], -ax2[3]/(G*J), (ax2[3]+ax2[9])/(2*G*J*l), 0., 0., 0., 0., l_debut) == 0, -3);
+                    BUG(common_fonction_ajout(action_en_cours->fonctions_rotation[1][element_en_beton->numero], 0., l, -(-ax2[4]/(2*E*Iy)*l*l+(ax2[4]+ax2[10])/(6*E*Iy)*l*l-ax[2]+ax[8])/l, -ax2[4]/(E*Iy), (ax2[4]+ax2[10])/(2*l*E*Iy), 0., 0., 0., 0., l_debut) == 0, -3);
+                    BUG(common_fonction_ajout(action_en_cours->fonctions_rotation[2][element_en_beton->numero], 0., l,  (ax2[5]/(2*E*Iz)*l*l+(-ax2[5]-ax2[11])/(6*E*Iz)*l*l-ax[1]+ax[7])/l, -ax2[5]/(E*Iz), (ax2[5]+ax2[11])/(2*l*E*Iz), 0., 0., 0., 0., l_debut) == 0, -3);
+                    BUG(common_fonction_ajout(action_en_cours->fonctions_deformation[0][element_en_beton->numero], 0., l, ax[0], -ax2[0]/(E*S), (ax2[0]+ax2[6])/l/(2*E*S), 0., 0., 0., 0., l_debut) == 0, -3);
+                    BUG(common_fonction_ajout(action_en_cours->fonctions_deformation[1][element_en_beton->numero], 0., l, ax[1], (ax2[5]/(2*E*Iz)*l*l+(-ax2[5]-ax2[11])/(6*E*Iz)*l*l-ax[1]+ax[7])/l, -ax2[5]/(2*E*Iz),  (ax2[5]+ax2[11])/(6*l*E*Iz), 0., 0., 0., l_debut) == 0, -3);
+                    BUG(common_fonction_ajout(action_en_cours->fonctions_deformation[2][element_en_beton->numero], 0., l, ax[2], (-ax2[4]/(2*E*Iy)*l*l+(ax2[4]+ax2[10])/(6*E*Iy)*l*l-ax[2]+ax[8])/l,  ax2[4]/(2*E*Iy), -(ax2[4]+ax2[10])/(6*l*E*Iy), 0., 0., 0., l_debut) == 0, -3);
                     break;
                 }
                 default :
