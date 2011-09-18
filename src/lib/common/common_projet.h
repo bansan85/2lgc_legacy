@@ -115,6 +115,7 @@ typedef struct __EF
     void                *numeric;            // Matrice partielle factorisée, utilisée dans
     long                *ap, *ai, *map;      // tous les calculs lors de la résolution de
     double              *ax;                 // chaque cas de charges.
+    double              residu;
 } EF;
 
 typedef struct __Projet

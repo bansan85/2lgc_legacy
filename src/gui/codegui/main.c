@@ -31,6 +31,7 @@
 #include "EF_calculs.h"
 #include "EF_charge_noeud.h"
 #include "EF_charge_barre_ponctuelle.h"
+#include "EF_charge_barre_repartie_uniforme.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <libintl.h>
@@ -137,10 +138,8 @@ int main(int argc, char *argv[])
     BUG(EF_appuis_ajout(projet, EF_APPUI_BLOQUE, EF_APPUI_BLOQUE, EF_APPUI_BLOQUE, EF_APPUI_BLOQUE, EF_APPUI_BLOQUE, EF_APPUI_BLOQUE) == 0, -1);
     
     // Création des noeuds
-    BUG(EF_noeuds_ajout(projet, 0.0, 1.0, 0.0, 0) == 0, -1);
-    BUG(EF_noeuds_ajout(projet, -1.0, -1.0, 6.0, -1) == 0, -1);
-    BUG(EF_noeuds_ajout(projet, 8.0, 1.0, 8.0, -1) == 0, -1);
-    BUG(EF_noeuds_ajout(projet, 7.0, -1.0, 0.0, 0) == 0, -1);
+    BUG(EF_noeuds_ajout(projet, 0.0, 0.0, 0.0, 0) == 0, -1);
+    BUG(EF_noeuds_ajout(projet, 8.0, 0.0, 0.0, 0) == 0, -1);
     
     // Création des sections en béton
     BUG(_1992_1_1_sections_ajout_rectangulaire(projet, 0.1, 0.3) == 0, -1);
@@ -152,24 +151,23 @@ int main(int argc, char *argv[])
     ry_d = malloc(sizeof(EF_Relachement_Donnees_Elastique_Lineaire));
     ry_d->raideur = 3000000.;
     rz_d = malloc(sizeof(EF_Relachement_Donnees_Elastique_Lineaire));
-    rz_d->raideur = 2000000.;
+    rz_d->raideur =  400000.;
     ry_f = malloc(sizeof(EF_Relachement_Donnees_Elastique_Lineaire));
-    ry_f->raideur = 4000000.;
+    ry_f->raideur = 2300000.;
     rz_f = malloc(sizeof(EF_Relachement_Donnees_Elastique_Lineaire));
-    rz_f->raideur = 5000000.;
+    rz_f->raideur =  340000.;
     BUG(EF_relachement_ajout(projet, EF_RELACHEMENT_BLOQUE, NULL, EF_RELACHEMENT_ELASTIQUE_LINEAIRE, ry_d, EF_RELACHEMENT_ELASTIQUE_LINEAIRE, rz_d, EF_RELACHEMENT_BLOQUE, NULL, EF_RELACHEMENT_ELASTIQUE_LINEAIRE, ry_f, EF_RELACHEMENT_ELASTIQUE_LINEAIRE, rz_f) == 0, -1);
 //    BUG(EF_relachement_ajout(projet, EF_RELACHEMENT_BLOQUE, NULL, EF_RELACHEMENT_BLOQUE, NULL, EF_RELACHEMENT_BLOQUE, NULL, EF_RELACHEMENT_LIBRE, NULL, EF_RELACHEMENT_LIBRE, NULL, EF_RELACHEMENT_LIBRE, NULL) == 0, -1);
 //    BUG(EF_relachement_ajout(projet, EF_RELACHEMENT_LIBRE, NULL, EF_RELACHEMENT_LIBRE, NULL, EF_RELACHEMENT_LIBRE, NULL, EF_RELACHEMENT_BLOQUE, NULL, EF_RELACHEMENT_BLOQUE, NULL, EF_RELACHEMENT_BLOQUE, NULL) == 0, -1);
     
     // Création de l'élément en béton
-    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 0, 1, -1, 1000) == 0, -1);
-    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 1, 2, 0, 1000) == 0, -1);
-    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 2, 3, -1, 1000) == 0, -1);
+    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 0, 1, 0, 19) == 0, -1);
 //    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 1, 2, -1, 0) == 0, -1);
     
     // Ajout de l'action ponctuelle
-    BUG(EF_charge_noeud_ajout(projet, 0, EF_noeuds_cherche_numero(projet, 1), 1000., 500., 1000., 3000., 5000., 5000.) == 0, -1);
-    BUG(EF_charge_barre_ponctuelle_ajout(projet, 0, _1992_1_1_barres_cherche_numero(projet, 2), FALSE, 2.0, 1000., 1000., 10000., 10000., 10000., 5000.) == 0, -1);
+//    BUG(EF_charge_noeud_ajout(projet, 0, EF_noeuds_cherche_numero(projet, 1), 1000., 500., 1000., 3000., 5000., 5000.) == 0, -1);
+//    BUG(EF_charge_barre_ponctuelle_ajout(projet, 0, _1992_1_1_barres_cherche_numero(projet, 0), FALSE, 2.3, 000., 0000., 10000., 0000., 0000., 000.) == 0, -1);
+    BUG(EF_charge_barre_repartie_uniforme_ajout(projet, 0, _1992_1_1_barres_cherche_numero(projet, 0), FALSE, FALSE, 1., 0.5, 10000., 9000., 8000., 7000., 6000., 5000.) == 0, -1);
     
     // Initialise les éléments nécessaire pour l'ajout des rigidités
     BUG(EF_calculs_initialise(projet) == 0, -1);

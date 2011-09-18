@@ -26,27 +26,21 @@
 #include "common_projet.h"
 #include "common_fonction.h"
 #include "EF_noeud.h"
-
-typedef enum __Charge_Type
-{
-    CHARGE_PONCTUELLE_NOEUD,
-    CHARGE_PONCTUELLE_BARRE
-} Charge_Type;
-
+#include "EF_calculs.h"
 
 typedef struct __Charge_Noeud
 {
-    Charge_Type     type;
-    int             numero;
-    char            *nom;
-    char            *description;
-    EF_Noeud        *noeud;
-    double          x;
-    double          y;
-    double          z;
-    double          mx;
-    double          my;
-    double          mz;
+    Barre_Charge_Type   type;
+    int                 numero;
+    char                *nom;
+    char                *description;
+    EF_Noeud            *noeud;
+    double              x;
+    double              y;
+    double              z;
+    double              mx;
+    double              my;
+    double              mz;
 } Charge_Noeud;
 
 int EF_charge_noeud_ajout(Projet *projet, int num_action, EF_Noeud *noeud,

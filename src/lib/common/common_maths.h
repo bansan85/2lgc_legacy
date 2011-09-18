@@ -30,9 +30,9 @@
 
 #define ABS(X) ((X) > 0 ? (X) : -(X))
 
- #define ERREUR_RELATIVE_PUISSANCE 7 // Avec 13, common_fonction_compate peut ne pas marcher
+ #define ERREUR_RELATIVE_PUISSANCE 8 // Avec 13, common_fonction_compate peut ne pas marcher
                                      // correctement.
- #define ERREUR_RELATIVE_MIN 1e-7
+ #define ERREUR_RELATIVE_MIN 1e-8
  #define ERREUR_RELATIVE_EGALE(x, y) ( \
    (((ABS(x)) < ERREUR_RELATIVE_MIN) || ((ABS(y)) < ERREUR_RELATIVE_MIN)) ? \
    (MAX(ABS(x),ABS(y))-MIN(ABS(x),ABS(y)) < (ERREUR_RELATIVE_MIN)) : \

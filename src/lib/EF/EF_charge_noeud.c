@@ -66,7 +66,7 @@ int EF_charge_noeud_ajout(Projet *projet, int num_action, EF_Noeud *noeud,
     
     action_en_cours = list_curr(projet->actions);
     
-    charge_nouveau.type = CHARGE_PONCTUELLE_NOEUD;
+    charge_nouveau.type = CHARGE_NOEUD;
     charge_nouveau.nom = NULL;
     charge_nouveau.description = NULL;
     charge_nouveau.noeud = noeud;

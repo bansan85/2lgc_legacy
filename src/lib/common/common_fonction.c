@@ -127,10 +127,13 @@ int common_fonction_scinde_troncon(Fonction* fonction, double coupure)
             memcpy(&(fonction->troncons[i+1]), &(fonction->troncons[i]), sizeof(Troncon));
         fonction->troncons[0].debut_troncon = coupure;
         fonction->troncons[0].fin_troncon = fonction->troncons[1].debut_troncon;
-        fonction->troncons[0].coef_0 = 0.;
-        fonction->troncons[0].coef_x = 0.;
-        fonction->troncons[0].coef_x2 = 0.;
-        fonction->troncons[0].coef_x3 = 0.;
+        fonction->troncons[0].x0 = 0.;
+        fonction->troncons[0].x1 = 0.;
+        fonction->troncons[0].x2 = 0.;
+        fonction->troncons[0].x3 = 0.;
+        fonction->troncons[0].x4 = 0.;
+        fonction->troncons[0].x5 = 0.;
+        fonction->troncons[0].x6 = 0.;
         return 0;
     }
     else
@@ -172,28 +175,34 @@ int common_fonction_scinde_troncon(Fonction* fonction, double coupure)
         BUGMSG(fonction->troncons, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "common_fonction_scinde_troncon");
         fonction->troncons[fonction->nb_troncons-1].debut_troncon = fonction->troncons[fonction->nb_troncons-2].fin_troncon;
         fonction->troncons[fonction->nb_troncons-1].fin_troncon = coupure;
-        fonction->troncons[fonction->nb_troncons-1].coef_0 = 0.;
-        fonction->troncons[fonction->nb_troncons-1].coef_x = 0.;
-        fonction->troncons[fonction->nb_troncons-1].coef_x2 = 0.;
-        fonction->troncons[fonction->nb_troncons-1].coef_x3 = 0.;
+        fonction->troncons[fonction->nb_troncons-1].x0 = 0.;
+        fonction->troncons[fonction->nb_troncons-1].x1 = 0.;
+        fonction->troncons[fonction->nb_troncons-1].x2 = 0.;
+        fonction->troncons[fonction->nb_troncons-1].x3 = 0.;
+        fonction->troncons[fonction->nb_troncons-1].x4 = 0.;
+        fonction->troncons[fonction->nb_troncons-1].x5 = 0.;
+        fonction->troncons[fonction->nb_troncons-1].x6 = 0.;
         return 0;
     }
 }
 
 
 int common_fonction_ajout(Fonction* fonction, double debut_troncon, double fin_troncon,
-  double coef_0, double coef_x, double coef_x2, double coef_x3, double translate)
+  double x0, double x1, double x2, double x3, double x4, double x5, double x6, double t)
 /* Description : Additionne une fonction à une fonction existante dont le domaine de 
  *   validité est compris entre debut_troncon et fin_troncon.
  * Paramètres : Fonction* fonction : la variable contenant la fonction
  *            : double debut_troncon : début du tronçon de validité de la fonction
  *            : double fin_troncon : fin du tronçon de validité de la fonction
- *            : double coef_0  : coefficients de la formule coef_0 +
- *            : double coef_x  : coef_x*x +
- *            : double coef_x2 : coef_x2*x^2
- *            : double coef_x3 : coef_x3*x^3
- *            : double translate : modifie les coefficients ci-dessus afin d'effectuer une
- *                                 translation de la fonction de 0 à translate.
+ *            : double x0 : coefficients de la formule x0 +
+ *            : double x1 : x1*x +
+ *            : double x2 : x2*x^2
+ *            : double x3 : x3*x^3
+ *            : double x4 : x4*x^4
+ *            : double x5 : x5*x^5
+ *            : double x6 : x6*x^6
+ *            : double t : modifie les coefficients ci-dessus afin d'effectuer une
+ *                                 translation de la fonction de 0 à t.
  * Valeur renvoyée :
  *   Succès : 0
  *   Échec : -1 en cas de paramètres invalides :
@@ -203,7 +212,7 @@ int common_fonction_ajout(Fonction* fonction, double debut_troncon, double fin_t
  *           -3 en cas d'erreur due à une fonction interne
  */
 {
-    double  coef_0_t, coef_x_t, coef_x2_t, coef_x3_t;
+    double  x0_t, x1_t, x2_t, x3_t, x4_t, x5_t, x6_t;
     
     BUGMSG(fonction, -1, "common_fonction_ajout\n");
     // Si fin_troncon == debut_troncon Alors
@@ -214,19 +223,17 @@ int common_fonction_ajout(Fonction* fonction, double debut_troncon, double fin_t
     
     BUGMSG(fin_troncon > debut_troncon, -1, "common_fonction_ajout : debut_troncon %f > fin_troncon %f\n", debut_troncon, fin_troncon);
     
-    debut_troncon = debut_troncon + translate;
-    fin_troncon = fin_troncon + translate;
+    debut_troncon = debut_troncon + t;
+    fin_troncon = fin_troncon + t;
     
-    // Détermination les coefficients à partir du résultat de f(x-translate). Ainsi, les
-    //   nouveaux coefficients (indice t) deviennent :\end{verbatim}\begin{align*}
-    //   &coef_{x^3t} = coef_{x^3}\nonumber\\
-    //   &coef_{x^2t} = coef_{x^2} - 3*translate*coef_{x^3}\nonumber\\
-    //   &coef_{xt} = 3*translate^2*coef_{x^3}-2*translate*coef_{x^2}+coef_x\nonumber\\
-    //   &coef_{0t} = -translate^3*coef_{x^3}+translate^2*coef_{x^2}-translate*coef_x+coef_0\end{align*}\begin{verbatim}
-    coef_x3_t = coef_x3;
-    coef_x2_t = coef_x2 - 3*translate*coef_x3;
-    coef_x_t = 3*translate*translate*coef_x3-2*translate*coef_x2+coef_x;
-    coef_0_t = -translate*translate*translate*coef_x3+translate*translate*coef_x2-translate*coef_x+coef_0;
+    // Détermination les nouveaux coefficients à partir du résultat de f(x-t).
+    x6_t = x6;
+    x5_t = -6*x6*t+x5;
+    x4_t = 15*x6*t*t-5*x5*t+x4;
+    x3_t = -20*x6*t*t*t+10*x5*t*t-4*x4*t+x3;
+    x2_t = 15*x6*t*t*t*t-10*x5*t*t*t+6*x4*t*t-3*x3*t+x2;
+    x1_t = -6.*x6*t*t*t*t*t+5*x5*t*t*t*t-4*x4*t*t*t+3*x3*t*t-2*x2*t+x1;
+    x0_t = x6*t*t*t*t*t*t-x5*t*t*t*t*t+x4*t*t*t*t-x3*t*t*t+x2*t*t-x1*t+x0;
     
     // Si aucun troncon n'est présent (fonction vide) Alors
     //     Création d'un tronçon avec pour borne debut_troncon .. fin_troncon.
@@ -238,10 +245,13 @@ int common_fonction_ajout(Fonction* fonction, double debut_troncon, double fin_t
         BUGMSG(fonction->troncons, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "common_fonction_ajout");
         fonction->troncons[0].debut_troncon = debut_troncon;
         fonction->troncons[0].fin_troncon = fin_troncon;
-        fonction->troncons[0].coef_0 = coef_0_t;
-        fonction->troncons[0].coef_x = coef_x_t;
-        fonction->troncons[0].coef_x2 = coef_x2_t;
-        fonction->troncons[0].coef_x3 = coef_x3_t;
+        fonction->troncons[0].x0 = x0_t;
+        fonction->troncons[0].x1 = x1_t;
+        fonction->troncons[0].x2 = x2_t;
+        fonction->troncons[0].x3 = x3_t;
+        fonction->troncons[0].x4 = x4_t;
+        fonction->troncons[0].x5 = x5_t;
+        fonction->troncons[0].x6 = x6_t;
         return 0;
     }
     // Sinon
@@ -265,10 +275,13 @@ int common_fonction_ajout(Fonction* fonction, double debut_troncon, double fin_t
                 return 0;
             else if ((ERREUR_RELATIVE_EGALE(fonction->troncons[i].debut_troncon, debut_troncon)) || (fonction->troncons[i].debut_troncon > debut_troncon))
             {
-                fonction->troncons[i].coef_0 += coef_0_t;
-                fonction->troncons[i].coef_x += coef_x_t;
-                fonction->troncons[i].coef_x2 += coef_x2_t;
-                fonction->troncons[i].coef_x3 += coef_x3_t;
+                fonction->troncons[i].x0 += x0_t;
+                fonction->troncons[i].x1 += x1_t;
+                fonction->troncons[i].x2 += x2_t;
+                fonction->troncons[i].x3 += x3_t;
+                fonction->troncons[i].x4 += x4_t;
+                fonction->troncons[i].x5 += x5_t;
+                fonction->troncons[i].x6 += x6_t;
             }
             i++;
         }
@@ -300,10 +313,8 @@ int common_fonction_compacte(Fonction* fonction)
     k = 0;
     for (i=1;i<fonction->nb_troncons;i++)
     {
-        if ((ERREUR_RELATIVE_EGALE(fonction->troncons[i].coef_0, fonction->troncons[k].coef_0)) && (ERREUR_RELATIVE_EGALE(fonction->troncons[i].coef_x, fonction->troncons[k].coef_x)) && (ERREUR_RELATIVE_EGALE(fonction->troncons[i].coef_x2, fonction->troncons[k].coef_x2)) && (ERREUR_RELATIVE_EGALE(fonction->troncons[i].coef_x3, fonction->troncons[k].coef_x3)))
-        {
+        if ((ERREUR_RELATIVE_EGALE(fonction->troncons[i].x0, fonction->troncons[k].x0)) && (ERREUR_RELATIVE_EGALE(fonction->troncons[i].x1, fonction->troncons[k].x1)) && (ERREUR_RELATIVE_EGALE(fonction->troncons[i].x2, fonction->troncons[k].x2)) && (ERREUR_RELATIVE_EGALE(fonction->troncons[i].x3, fonction->troncons[k].x3)) && (ERREUR_RELATIVE_EGALE(fonction->troncons[i].x4, fonction->troncons[k].x4)) && (ERREUR_RELATIVE_EGALE(fonction->troncons[i].x5, fonction->troncons[k].x5)) && (ERREUR_RELATIVE_EGALE(fonction->troncons[i].x6, fonction->troncons[k].x6)))
             fonction->troncons[j-1].fin_troncon = fonction->troncons[i].fin_troncon;
-        }
         else
         {
             j++;
@@ -338,7 +349,20 @@ int common_fonction_affiche(Fonction* fonction)
     common_fonction_compacte(fonction);
     for (i=0;i<fonction->nb_troncons;i++)
     {
-        printf("debut_troncon : %f\tfin_troncon : %f\t0 : %f\tx : %f\tx2 : %f\tx3 : %f\tsoit f(%f) = %f\tf(%f) = %f\n", fonction->troncons[i].debut_troncon, fonction->troncons[i].fin_troncon, fonction->troncons[i].coef_0, fonction->troncons[i].coef_x, fonction->troncons[i].coef_x2, fonction->troncons[i].coef_x3, fonction->troncons[i].debut_troncon, fonction->troncons[i].coef_0+fonction->troncons[i].coef_x*fonction->troncons[i].debut_troncon+fonction->troncons[i].coef_x2*fonction->troncons[i].debut_troncon*fonction->troncons[i].debut_troncon+fonction->troncons[i].coef_x3*fonction->troncons[i].debut_troncon*fonction->troncons[i].debut_troncon*fonction->troncons[i].debut_troncon, fonction->troncons[i].fin_troncon, fonction->troncons[i].coef_0+fonction->troncons[i].coef_x*fonction->troncons[i].fin_troncon+fonction->troncons[i].coef_x2*fonction->troncons[i].fin_troncon*fonction->troncons[i].fin_troncon+fonction->troncons[i].coef_x3*fonction->troncons[i].fin_troncon*fonction->troncons[i].fin_troncon*fonction->troncons[i].fin_troncon);
+        printf("debut_troncon : %.5f\tfin_troncon : %.5f\t0 : %.20f\tx : %.20f\tx2 : %.20f\tx3 : %.20f\tx4 : %.20f\tx5 : %.20f\tx6 : %.20f\tsoit f(%.5f) = %.10f\tf(%.5f) = %.10f\n",
+          fonction->troncons[i].debut_troncon,
+          fonction->troncons[i].fin_troncon,
+          fonction->troncons[i].x0,
+          fonction->troncons[i].x1,
+          fonction->troncons[i].x2,
+          fonction->troncons[i].x3,
+          fonction->troncons[i].x4,
+          fonction->troncons[i].x5,
+          fonction->troncons[i].x6,
+          fonction->troncons[i].debut_troncon,
+          fonction->troncons[i].x0+fonction->troncons[i].x1*fonction->troncons[i].debut_troncon+fonction->troncons[i].x2*fonction->troncons[i].debut_troncon*fonction->troncons[i].debut_troncon+fonction->troncons[i].x3*fonction->troncons[i].debut_troncon*fonction->troncons[i].debut_troncon*fonction->troncons[i].debut_troncon+fonction->troncons[i].x4*fonction->troncons[i].debut_troncon*fonction->troncons[i].debut_troncon*fonction->troncons[i].debut_troncon*fonction->troncons[i].debut_troncon+fonction->troncons[i].x5*fonction->troncons[i].debut_troncon*fonction->troncons[i].debut_troncon*fonction->troncons[i].debut_troncon*fonction->troncons[i].debut_troncon*fonction->troncons[i].debut_troncon+fonction->troncons[i].x6*fonction->troncons[i].debut_troncon*fonction->troncons[i].debut_troncon*fonction->troncons[i].debut_troncon*fonction->troncons[i].debut_troncon*fonction->troncons[i].debut_troncon*fonction->troncons[i].debut_troncon,
+          fonction->troncons[i].fin_troncon,
+          fonction->troncons[i].x0+fonction->troncons[i].x1*fonction->troncons[i].fin_troncon+fonction->troncons[i].x2*fonction->troncons[i].fin_troncon*fonction->troncons[i].fin_troncon+fonction->troncons[i].x3*fonction->troncons[i].fin_troncon*fonction->troncons[i].fin_troncon*fonction->troncons[i].fin_troncon+fonction->troncons[i].x4*fonction->troncons[i].fin_troncon*fonction->troncons[i].fin_troncon*fonction->troncons[i].fin_troncon*fonction->troncons[i].fin_troncon+fonction->troncons[i].x5*fonction->troncons[i].fin_troncon*fonction->troncons[i].fin_troncon*fonction->troncons[i].fin_troncon*fonction->troncons[i].fin_troncon*fonction->troncons[i].fin_troncon+fonction->troncons[i].x6*fonction->troncons[i].fin_troncon*fonction->troncons[i].fin_troncon*fonction->troncons[i].fin_troncon*fonction->troncons[i].fin_troncon*fonction->troncons[i].fin_troncon*fonction->troncons[i].fin_troncon);
     }
     return 0;
 }
