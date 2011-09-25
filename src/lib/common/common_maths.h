@@ -35,8 +35,8 @@
  #define ERREUR_RELATIVE_MIN 1e-8
  #define ERREUR_RELATIVE_EGALE(x, y) ( \
    (((ABS(x)) < ERREUR_RELATIVE_MIN) || ((ABS(y)) < ERREUR_RELATIVE_MIN)) ? \
-   (MAX(ABS(x),ABS(y))-MIN(ABS(x),ABS(y)) < (ERREUR_RELATIVE_MIN)) : \
-   ((MAX(ABS(x),ABS(y))-MIN(ABS(x),ABS(y)))/(MIN(ABS(x),ABS(y))) < (ERREUR_RELATIVE_MIN) ))
+   ((ABS(MAX(x,y)-MIN(x,y))) < (ERREUR_RELATIVE_MIN)) : \
+   ((ABS((MAX(x,y)-MIN(x,y))/(MIN(x,y)))) < (ERREUR_RELATIVE_MIN) ))
 /* Vérifie si x == y avec une erreur relative maximale D,
  * y étant la valeur recherchée et x la valeur à vérifier */
 

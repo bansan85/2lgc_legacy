@@ -43,7 +43,6 @@ int EF_rigidite_init(Projet *projet)
     projet->ef_donnees.numeric = NULL;
     projet->ef_donnees.ap = NULL;
     projet->ef_donnees.ai = NULL;
-    projet->ef_donnees.map = NULL;
     projet->ef_donnees.ax = NULL;
     projet->ef_donnees.triplet_rigidite_partielle = NULL;
     projet->ef_donnees.triplet_rigidite_complete = NULL;
@@ -86,7 +85,6 @@ int EF_rigidite_free(Projet *projet)
     umfpack_dl_free_numeric(&projet->ef_donnees.numeric);
     free(projet->ef_donnees.ap);
     free(projet->ef_donnees.ai);
-    free(projet->ef_donnees.map);
     free(projet->ef_donnees.ax);
     
     if (projet->ef_donnees.noeuds_pos_complete != NULL)

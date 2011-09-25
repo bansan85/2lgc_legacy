@@ -671,8 +671,8 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
         
         ai[i] = 1;  aj[i] = 11; ax[i] = -MA/ll+MB/ll; i++;
         ai[i] = 5;  aj[i] = 11; ax[i] = -MA;          i++;
-        ai[i] = 7;  aj[i] = 11; ax[i] = MA/ll-MB/ll; i++;
-        ai[i] = 11; aj[i] = 11; ax[i] = MB;          i++;
+        ai[i] = 7;  aj[i] = 11; ax[i] = +MA/ll-MB/ll; i++;
+        ai[i] = 11; aj[i] = 11; ax[i] = +MB;          i++;
     // \begin{bmatrix}K_e\end{bmatrix} = 
     // \begin{bmatrix}  a & e & i & m\\
     //                  b & f & j & n\\
@@ -688,10 +688,10 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
     //         a = & -\frac{M_A}{L}-\frac{M_B}{L} & b = & M_A\nonumber\\
     //         c = & \frac{M_A}{L}+\frac{M_B}{L} & d = & M_B\end{align*}\begin{verbatim}
         EF_calculs_moment_hyper_y(&(element->info_EF[j]), 1./ll, 1./ll, &MA, &MB);
-        ai[i] = 2;  aj[i] = 2;  ax[i] = -MA/ll-MB/ll; i++;
-        ai[i] = 4;  aj[i] = 2;  ax[i] = MA;           i++;
-        ai[i] = 8;  aj[i] = 2;  ax[i] = +MA/ll+MB/ll; i++;
-        ai[i] = 10; aj[i] = 2;  ax[i] = MB;           i++;
+        ai[i] = 2;  aj[i] = 2;  ax[i] = MA/ll+MB/ll; i++;
+        ai[i] = 4;  aj[i] = 2;  ax[i] = -MA;           i++;
+        ai[i] = 8;  aj[i] = 2;  ax[i] = -MA/ll-MB/ll; i++;
+        ai[i] = 10; aj[i] = 2;  ax[i] = -MB;           i++;
         
     //         Etude du cas 2, rotation imposée r. phiA (positif) et phiB (négatif) sont
     //           déterminés par la fonction EF_charge_barre_ponctuelle_def_ang_iso_y :\end{verbatim}\begin{displaymath}
@@ -707,9 +707,9 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
         else
             MA = 1./(element->info_EF[j].kAy - phia_iso*(1-element->info_EF[j].by/(2*(element->info_EF[j].cy+element->info_EF[j].kBy))));
         MB = MA*phib_iso/(element->info_EF[j].cy+element->info_EF[j].kBy);
-        ai[i] = 2;  aj[i] = 4;  ax[i] = -MA/ll-MB/ll; i++;
-        ai[i] = 4;  aj[i] = 4;  ax[i] = MA;           i++;
-        ai[i] = 8;  aj[i] = 4;  ax[i] = MA/ll+MB/ll; i++;
+        ai[i] = 2;  aj[i] = 4;  ax[i] = +MA/ll-MB/ll; i++;
+        ai[i] = 4;  aj[i] = 4;  ax[i] = -MA;           i++;
+        ai[i] = 8;  aj[i] = 4;  ax[i] = -MA/ll+MB/ll; i++;
         ai[i] = 10; aj[i] = 4;  ax[i] = MB;           i++;
         
     //         Etude du cas 3 :
@@ -718,10 +718,10 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
     //         i = & -\frac{M_A}{L}-\frac{M_B}{L} & j = & M_A\nonumber\\
     //         k = & \frac{M_A}{L}\frac{M_B}{L} & l = & M_B\end{align*}\begin{verbatim}
         EF_calculs_moment_hyper_y(&(element->info_EF[j]), -1./ll, -1./ll, &MA, &MB);
-        ai[i] = 2;  aj[i] = 8;  ax[i] = -MA/ll-MB/ll; i++;
-        ai[i] = 4;  aj[i] = 8;  ax[i] =  MA;          i++;
-        ai[i] = 8;  aj[i] = 8;  ax[i] = +MA/ll+MB/ll; i++;
-        ai[i] = 10; aj[i] = 8;  ax[i] =  MB;          i++;
+        ai[i] = 2;  aj[i] = 8;  ax[i] = +MA/ll+MB/ll; i++;
+        ai[i] = 4;  aj[i] = 8;  ax[i] = -MA;          i++;
+        ai[i] = 8;  aj[i] = 8;  ax[i] = -MA/ll-MB/ll; i++;
+        ai[i] = 10; aj[i] = 8;  ax[i] = -MB;          i++;
         
     //         Etude du cas 4, rotation imposée r. phiA (négatif) et phiB (positif) sont
     //           déterminés par la fonction EF_charge_barre_ponctuelle_def_ang_iso_y :\end{verbatim}\begin{displaymath}
@@ -737,10 +737,10 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
         else
             MB = 1./(element->info_EF[j].kBy - phib_iso*(1-element->info_EF[j].by/(2*(element->info_EF[j].cy+element->info_EF[j].kAy))));
         MA = MB*phia_iso/(element->info_EF[j].cy+element->info_EF[j].kAy);
-        ai[i] = 2;  aj[i] = 10; ax[i] = -MA/ll-MB/ll; i++;
+        ai[i] = 2;  aj[i] = 10; ax[i] = -MA/ll+MB/ll; i++;
         ai[i] = 4;  aj[i] = 10; ax[i] = MA;           i++;
-        ai[i] = 8;  aj[i] = 10; ax[i] = MA/ll+MB/ll;  i++;
-        ai[i] = 10; aj[i] = 10; ax[i] = MB;           i++;
+        ai[i] = 8;  aj[i] = 10; ax[i] = +MA/ll-MB/ll;  i++;
+        ai[i] = 10; aj[i] = 10; ax[i] = -MB;           i++;
         
     //       Pour un élément travaillant en torsion simple dont l'une des extrémités est
     //         relaxée :\end{verbatim}\begin{displaymath}
