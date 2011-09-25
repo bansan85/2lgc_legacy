@@ -161,13 +161,13 @@ int main(int argc, char *argv[])
 //    BUG(EF_relachement_ajout(projet, EF_RELACHEMENT_LIBRE, NULL, EF_RELACHEMENT_LIBRE, NULL, EF_RELACHEMENT_LIBRE, NULL, EF_RELACHEMENT_BLOQUE, NULL, EF_RELACHEMENT_BLOQUE, NULL, EF_RELACHEMENT_BLOQUE, NULL) == 0, -1);
     
     // Création de l'élément en béton
-    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 0, 1, 0, 19) == 0, -1);
+    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 0, 1, -1, 0) == 0, -1);
 //    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 1, 2, -1, 0) == 0, -1);
     
     // Ajout de l'action ponctuelle
 //    BUG(EF_charge_noeud_ajout(projet, 0, EF_noeuds_cherche_numero(projet, 1), 1000., 500., 1000., 3000., 5000., 5000.) == 0, -1);
-//    BUG(EF_charge_barre_ponctuelle_ajout(projet, 0, _1992_1_1_barres_cherche_numero(projet, 0), FALSE, 2.3, 000., 0000., 10000., 0000., 0000., 000.) == 0, -1);
-    BUG(EF_charge_barre_repartie_uniforme_ajout(projet, 0, _1992_1_1_barres_cherche_numero(projet, 0), FALSE, FALSE, 1., 0.5, 10000., 9000., 8000., 7000., 6000., 5000.) == 0, -1);
+//    BUG(EF_charge_barre_ponctuelle_ajout(projet, 0, _1992_1_1_barres_cherche_numero(projet, 0), FALSE, 2.3, 10000., 9000., 8000., 7000., 6000., 5000.) == 0, -1);
+    BUG(EF_charge_barre_repartie_uniforme_ajout(projet, 0, _1992_1_1_barres_cherche_numero(projet, 0), FALSE, FALSE, 1.5, 1.0, 10000., 9000., 8000., 7000., 6000., 5000.) == 0, -1);
     
     // Initialise les éléments nécessaire pour l'ajout des rigidités
     BUG(EF_calculs_initialise(projet) == 0, -1);
@@ -177,7 +177,7 @@ int main(int argc, char *argv[])
     
     BUG(EF_calculs_genere_mat_rig(projet) == 0, -1);
     BUG(EF_calculs_resoud_charge(projet, 0) == 0, -1);
-    BUG(EF_calculs_affiche_resultats(projet, 0) == 0, -1);
+    BUG(_1990_action_affiche_resultats(projet, 0) == 0, -1);
     
     // Initialisation de GTK+
     BUGMSG(gtk_init_check(&argc, &argv) == TRUE, -1, gettext("Impossible d'initialiser gtk.\n"));

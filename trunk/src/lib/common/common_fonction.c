@@ -30,15 +30,15 @@
 #include "1990_actions.h"
 
 int common_fonction_init(Projet *projet, void *action_void)
-/* Description : Initialise les fonctions décrivant les sollicitations, les rotations et les
- * déplacements des barres. Cette fonction doit être appelée lorsque toutes les barres ont été
- * modélisées. En effet, il est nécessaire de connaître leur nombre afin de stocker dans un
- * tableau dynamique unique les fonctions décrivant les efforts internes, les rotations et les
- * flèches. L'initialisation des fonctions consiste à définir un nombre de tronçon à 0 et les
- * données à NULL.
- * Paramètres : Projet *projet : la variable projet
- *            : void *action_void : pointeur vers l'action. Il est utilisé void *
- *                à la place de Action* pour éviter une dépendence circulaire.
+/* Description : Initialise les fonctions décrivant les sollicitations, les rotations ou les
+ *               déplacements des barres. Cette fonction doit être appelée lorsque toutes les
+ *               barres ont été modélisées. En effet, il est nécessaire de connaître leur
+ *               nombre afin de stocker dans un tableau dynamique unique les fonctions.
+ *               L'initialisation des fonctions consiste à définir un nombre de tronçon à 0 et
+ *               les données à NULL.
+ * Paramètres : Projet *projet : la variable projet,
+ *            : void *action_void : pointeur vers l'action. Il est utilisé void à la place de
+ *              Action* pour éviter une dépendence circulaire.
  * Valeur renvoyée :
  *   Succès : 0
  *   Échec : -1 en cas de paramètres invalides :
@@ -96,8 +96,12 @@ int common_fonction_init(Projet *projet, void *action_void)
 
 int common_fonction_scinde_troncon(Fonction* fonction, double coupure)
 /* Description : Divise un tronçon en deux à la position coupure.
- * Paramètres : Fonction* fonction : la variable contenant la fonction
- *            : double coupure : position de la coupure
+ *               Si la coupure est en dehors de la borne de validité actuelle de la fonction,
+ *               les bornes s'en trouvent modifiées.
+ *               Si la coupure correspond déjà à une jonction entre deux tronçons, la
+ *               fonction ne fait rien et renvoie 0.
+ * Paramètres : Fonction* fonction : la variable contenant la fonction,
+ *            : double coupure : position de la coupure.
  * Valeur renvoyée :
  *   Succès : 0
  *   Échec : -1 en cas de paramètres invalides :
@@ -111,13 +115,14 @@ int common_fonction_scinde_troncon(Fonction* fonction, double coupure)
     BUGMSG(fonction, -1, "common_fonction_scinde_troncon\n");
     BUGMSG(fonction->nb_troncons, -1, "common_fonction_scinde_troncon\n");
     
-    // Si la coupure est égale au début du premier tronçon Alors
-    //     Fin.
+    // Trivial
+    /* Si la coupure est égale au début du premier tronçon Alors
+     *     Fin. */
     if (ERREUR_RELATIVE_EGALE(fonction->troncons[0].debut_troncon, coupure))
         return 0;
-    // Sinon Si la coupure est inférieure au début du premier troncon Alors
-    //     Insertion d'un tronçon en première position.
-    //     Initialisation de tous les coefficients à 0.
+    /* Sinon Si la coupure est inférieure au début du premier troncon Alors
+     *     Insertion d'un tronçon en première position.
+     *     Initialisation de tous les coefficients à 0.*/
     else if (coupure < fonction->troncons[0].debut_troncon)
     {
         fonction->nb_troncons++;
@@ -138,17 +143,17 @@ int common_fonction_scinde_troncon(Fonction* fonction, double coupure)
     }
     else
     {
-        // Sinon
-        //     Pour chaque tronçon
-        //         Si la coupure correspond exactement à la borne supérieure
-        //             Fin.
-        //         Sinon si la coupure est à l'intérieur du tronçon étudié
-        //             Scindage du tronçon en deux.
-        //             Attribution des mêmes coefficients pour les deux tronçons.
-        //             Fin.
-        //         FinSi
-        //     FinPour
-        // FinSi
+    /* Sinon
+     *     Pour chaque tronçon
+     *         Si la coupure correspond exactement à la borne supérieure
+     *             Fin.
+     *         Sinon si la coupure est à l'intérieur du tronçon étudié
+     *             Scindage du tronçon en deux.
+     *             Attribution des mêmes coefficients pour les deux tronçons.
+     *             Fin.
+     *         FinSi
+     *     FinPour
+     * FinSi */
         for (i=0;i<fonction->nb_troncons;i++)
         {
             if (ERREUR_RELATIVE_EGALE(fonction->troncons[i].fin_troncon, coupure))
@@ -165,11 +170,11 @@ int common_fonction_scinde_troncon(Fonction* fonction, double coupure)
                 return 0;
             }
         }
-        // Si la position de la coupure est au-delà à la borne supérieure du dernier tronçon
-        //     Ajout d'un nouveau tronçon en dernière position.
-        //     Initialisation de tous les coefficients à 0.
-        //     Fin.
-        // FinSi
+    /* Si la position de la coupure est au-delà à la borne supérieure du dernier tronçon
+     *     Ajout d'un nouveau tronçon en dernière position.
+     *     Initialisation de tous les coefficients à 0.
+     *     Fin.
+     * FinSi */
         fonction->nb_troncons++;
         fonction->troncons = (Troncon*)realloc(fonction->troncons, fonction->nb_troncons*sizeof(Troncon));
         BUGMSG(fonction->troncons, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "common_fonction_scinde_troncon");
@@ -189,17 +194,23 @@ int common_fonction_scinde_troncon(Fonction* fonction, double coupure)
 
 int common_fonction_ajout(Fonction* fonction, double debut_troncon, double fin_troncon,
   double x0, double x1, double x2, double x3, double x4, double x5, double x6, double t)
-/* Description : Additionne une fonction à une fonction existante dont le domaine de 
- *   validité est compris entre debut_troncon et fin_troncon.
+/* Description : Additionne une fonction à une fonction existante dont le domaine de validité
+ *               est compris entre debut_troncon et fin_troncon.
+ *               Si la fonction ne possède pas un tronçon commençant à debut_troncon ou un
+ *               tronçon finissant à fin_troncon, une scission sera effectuée par la fonction
+ *               common_fonction_scinde_troncon.
+ *               Si le domaine de validité du nouveau tronçon est totalement en dehors du
+ *               domaine de validité de l'actuelle fonction, un tronçon intermédiaire sera
+ *               créé et possèdera une fonction f(x)=0.
  * Paramètres : Fonction* fonction : la variable contenant la fonction
  *            : double debut_troncon : début du tronçon de validité de la fonction
  *            : double fin_troncon : fin du tronçon de validité de la fonction
  *            : double x0 : coefficients de la formule x0 +
  *            : double x1 : x1*x +
- *            : double x2 : x2*x^2
- *            : double x3 : x3*x^3
- *            : double x4 : x4*x^4
- *            : double x5 : x5*x^5
+ *            : double x2 : x2*x^2 +
+ *            : double x3 : x3*x^3 +
+ *            : double x4 : x4*x^4 +
+ *            : double x5 : x5*x^5 +
  *            : double x6 : x6*x^6
  *            : double t : modifie les coefficients ci-dessus afin d'effectuer une
  *                                 translation de la fonction de 0 à t.
@@ -221,18 +232,18 @@ int common_fonction_ajout(Fonction* fonction, double debut_troncon, double fin_t
     if (ERREUR_RELATIVE_EGALE(fin_troncon, debut_troncon))
         return 0;
     
-    BUGMSG(fin_troncon > debut_troncon, -1, "common_fonction_ajout : debut_troncon %f > fin_troncon %f\n", debut_troncon, fin_troncon);
+    BUGMSG(fin_troncon > debut_troncon, -1, "common_fonction_ajout : debut_troncon %.20f > fin_troncon %.20f\n", debut_troncon, fin_troncon);
     
     debut_troncon = debut_troncon + t;
     fin_troncon = fin_troncon + t;
     
     // Détermination les nouveaux coefficients à partir du résultat de f(x-t).
     x6_t = x6;
-    x5_t = -6*x6*t+x5;
-    x4_t = 15*x6*t*t-5*x5*t+x4;
-    x3_t = -20*x6*t*t*t+10*x5*t*t-4*x4*t+x3;
-    x2_t = 15*x6*t*t*t*t-10*x5*t*t*t+6*x4*t*t-3*x3*t+x2;
-    x1_t = -6.*x6*t*t*t*t*t+5*x5*t*t*t*t-4*x4*t*t*t+3*x3*t*t-2*x2*t+x1;
+    x5_t = -6.*x6*t+x5;
+    x4_t = 15.*x6*t*t-5.*x5*t+x4;
+    x3_t = -20.*x6*t*t*t+10.*x5*t*t-4.*x4*t+x3;
+    x2_t = 15.*x6*t*t*t*t-10.*x5*t*t*t+6.*x4*t*t-3.*x3*t+x2;
+    x1_t = -6.*x6*t*t*t*t*t+5.*x5*t*t*t*t-4.*x4*t*t*t+3.*x3*t*t-2.*x2*t+x1;
     x0_t = x6*t*t*t*t*t*t-x5*t*t*t*t*t+x4*t*t*t*t-x3*t*t*t+x2*t*t-x1*t+x0;
     
     // Si aucun troncon n'est présent (fonction vide) Alors
@@ -258,15 +269,14 @@ int common_fonction_ajout(Fonction* fonction, double debut_troncon, double fin_t
     //     Scission de la fonction à debut_troncon. Pour rappel, si la scission existe déjà
     //       aucun nouveau tronçon n'est créé.
     //     Scission de la fonction à fin_troncon.
-    //     Pour chaque tronçon
-    //         Si le troncon étudié est compris entre debut_troncon et fin_troncon
-    //             Addition de la fonction existante avec les nouveaux coefficients.
-    //         FinSi
+    //     Pour chaque tronçon compris entre debut_troncon et fin_troncon Faire
+    //         Addition de la fonction existante avec les nouveaux coefficients.
     //     FinPour
     // FinSi
     else
     {
         int i = 0;
+        
         BUG(common_fonction_scinde_troncon(fonction, debut_troncon) == 0, -3);
         BUG(common_fonction_scinde_troncon(fonction, fin_troncon) == 0, -3);
         while ((i<fonction->nb_troncons))
@@ -291,7 +301,7 @@ int common_fonction_ajout(Fonction* fonction, double debut_troncon, double fin_t
 
 
 int common_fonction_compacte(Fonction* fonction)
-/* Description : Fusionne dans une fonction les tronçons identiques.
+/* Description : Fusionne les tronçons voisins ayant une fonction identique.
  * Paramètres : Fonction* fonction : fonction à afficher
  * Valeur renvoyée :
  *   Succès : 0
@@ -324,6 +334,7 @@ int common_fonction_compacte(Fonction* fonction)
         }
     }
     memmove(fonction->troncons, fonction->troncons, sizeof(Troncon)*j);
+    BUGMSG(fonction->troncons, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "common_fonction_compacte");
     fonction->nb_troncons = j;
     return 0;
 }
@@ -342,7 +353,7 @@ int common_fonction_affiche(Fonction* fonction)
     int i;
     
     // Trivial
-    BUGMSG(fonction, -1, "%s\n", "common_fonction_affiche");
+    BUGMSG(fonction, -1, "common_fonction_affiche\n");
     
     if (fonction->nb_troncons == 0)
         printf(gettext("Fonction indéfinie.\n"));

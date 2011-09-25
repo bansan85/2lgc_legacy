@@ -26,6 +26,7 @@
 #include "1990_actions.h"
 #include "1990_coef_psi.h"
 #include "common_projet.h"
+#include "common_maths.h"
 #include "common_erreurs.h"
 #include "common_fonction.h"
 #include "EF_noeud.h"
@@ -400,6 +401,88 @@ int _1990_action_affiche_tout(Projet *projet)
         printf("Action '%s', numéro %d, description '%s', type n°%d\n", action->nom, action->numero, action->description, action->type);
     }
     while (list_mvnext(projet->actions) != NULL);
+    
+    return 0;
+}
+
+
+int _1990_action_affiche_resultats(Projet *projet, int num_action)
+/* Description : Affiche tous les résultats d'une action
+ * Paramètres : Projet *projet : la variable projet
+ *            : int num_action : numéro de l'action
+ * Valeur renvoyée :
+ *   Succès : 0
+ *   Échec : -1 en cas de paramètres invalides :
+ *             (projet == NULL) ou
+ *             (projet->actions == NULL) ou
+ *             (list_size(projet->actions) == 0) ou
+ *             (_1990_action_cherche_numero(projet, num_action) != 0) ou
+ *             (projet->beton.barres == NULL)
+ *           -3 en cas d'erreur due à une fonction interne
+ */
+{
+    Action          *action_en_cours;
+    unsigned int    i;
+    
+    BUGMSG(projet, -1, "EF_calculs_affiche_resultats\n");
+    BUGMSG(projet->actions, -1, "EF_calculs_affiche_resultats\n");
+    BUGMSG(list_size(projet->actions), -1, "EF_calculs_affiche_resultats\n");
+    BUGMSG(_1990_action_cherche_numero(projet, num_action) == 0, -1, "EF_calculs_affiche_resultats : num_action %d\n", num_action);
+    BUGMSG(projet->beton.barres,  -1, "EF_calculs_affiche_resultats\n");
+    
+    // Affichage des efforts aux noeuds et des réactions d'appuis
+    action_en_cours = list_curr(projet->actions);
+    printf("Effort aux noeuds & Réactions d'appuis\n");
+    common_math_arrondi_sparse(action_en_cours->efforts_noeuds);
+    cholmod_l_write_sparse(stdout, action_en_cours->efforts_noeuds, NULL, NULL, projet->ef_donnees.c);
+    // Affichage des déplacements des noeuds
+    printf("Déplacements\n");
+    common_math_arrondi_sparse(action_en_cours->deplacement_complet);
+    cholmod_l_write_sparse(stdout, action_en_cours->deplacement_complet, NULL, NULL, projet->ef_donnees.c);
+    // Pour chaque barre
+    for (i=0;i<list_size(projet->beton.barres);i++)
+    {
+    //     Affichage de la courbe des sollicitations vis-à-vis de l'effort normal
+        printf("Barre n°%d, Effort normal\n", i);
+        BUG(common_fonction_affiche(action_en_cours->fonctions_efforts[0][i]) == 0, -3);
+    //     Affichage de la courbe des sollicitations vis-à-vis de l'effort tranchant selon Y
+        printf("Barre n°%d, Effort Tranchant Y\n", i);
+        BUG(common_fonction_affiche(action_en_cours->fonctions_efforts[1][i]) == 0, -3);
+    //     Affichage de la courbe des sollicitations vis-à-vis de l'effort tranchant selon Z
+        printf("Barre n°%d, Effort Tranchant Z\n", i);
+        BUG(common_fonction_affiche(action_en_cours->fonctions_efforts[2][i]) == 0, -3);
+    //     Affichage de la courbe des sollicitations vis-à-vis du moment de torsion
+        printf("Barre n°%d, Moment de torsion\n", i);
+        BUG(common_fonction_affiche(action_en_cours->fonctions_efforts[3][i]) == 0, -3);
+    //     Affichage de la courbe des sollicitations vis-à-vis du moment fléchissant selon Y
+        printf("Barre n°%d, Moment de flexion Y\n", i);
+        BUG(common_fonction_affiche(action_en_cours->fonctions_efforts[4][i]) == 0, -3);
+    //     Affichage de la courbe des sollicitations vis-à-vis du moment fléchissant selon Z
+        printf("Barre n°%d, Moment de flexion Z\n", i);
+        BUG(common_fonction_affiche(action_en_cours->fonctions_efforts[5][i]) == 0, -3);
+    }
+    for (i=0;i<list_size(projet->beton.barres);i++)
+    {
+    //     Affichage de la courbe de déformation selon l'axe X
+        printf("Barre n°%d, Déformation en X\n", i);
+        BUG(common_fonction_affiche(action_en_cours->fonctions_deformation[0][i]) == 0, -3);
+    //     Affichage de la courbe de déformation selon l'axe Y
+        printf("Barre n°%d, Déformation en Y\n", i);
+        BUG(common_fonction_affiche(action_en_cours->fonctions_deformation[1][i]) == 0, -3);
+    //     Affichage de la courbe de déformation selon l'axe Z
+        printf("Barre n°%d, Déformation en Z\n", i);
+        BUG(common_fonction_affiche(action_en_cours->fonctions_deformation[2][i]) == 0, -3);
+    //     Affichage de la courbe de rotation selon l'axe X
+        printf("Barre n°%d, Rotation en X\n", i);
+        BUG(common_fonction_affiche(action_en_cours->fonctions_rotation[0][i]) == 0, -3);
+    //     Affichage de la courbe de rotation selon l'axe Y
+        printf("Barre n°%d, Rotation en Y\n", i);
+        BUG(common_fonction_affiche(action_en_cours->fonctions_rotation[1][i]) == 0, -3);
+    //     Affichage de la courbe de rotation selon l'axe Z
+        printf("Barre n°%d, Rotation en Z\n", i);
+        BUG(common_fonction_affiche(action_en_cours->fonctions_rotation[2][i]) == 0, -3);
+    }
+    // FinPour
     
     return 0;
 }

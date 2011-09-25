@@ -41,6 +41,7 @@ typedef struct __EF_Noeud
 int EF_noeuds_init(Projet *projet);
 int EF_noeuds_ajout(Projet *projet, double x, double y, double z, int appui);
 EF_Noeud* EF_noeuds_cherche_numero(Projet *projet, int numero);
+double EF_noeuds_distance(EF_Noeud* n1, EF_Noeud* n2);
 int EF_noeuds_free(Projet *projet);
 
 #endif

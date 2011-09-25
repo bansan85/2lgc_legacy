@@ -28,8 +28,10 @@
 #include <gtk/gtk.h>
 #include <string.h>
 #include "common_erreurs.h"
+#include "common_projet.h"
 
-void wrapped_label_size_allocate_callback(GtkWidget *label, GtkAllocation *allocation, gpointer data __attribute__((unused)))
+void wrapped_label_size_allocate_callback(GtkWidget *label, GtkAllocation *allocation,
+  Projet *projet __attribute__((unused)))
 /* Description : Permet un redimensionnement en temps réel du composant label
  * Paramètres : GtkWidget *label : composant label à redimensionner
  *            : GtkAllocation *allocation : nouvelle dimension
@@ -37,9 +39,11 @@ void wrapped_label_size_allocate_callback(GtkWidget *label, GtkAllocation *alloc
  * Valeur renvoyée : Aucune
  */
 {
+    // Fonction interne
     gtk_widget_set_size_request(label, allocation->width, -1);
     return;
 }
+
 
 GtkWidget* common_tooltip_generation(const char *nom)
 /* Description : Génère une fenêtre de type tooltip contenant les informations spécifiées par

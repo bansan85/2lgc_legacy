@@ -18,6 +18,7 @@
 
 #include "config.h"
 #include <stdlib.h>
+#include <math.h>
 #include <libintl.h>
 #include "common_projet.h"
 #include "common_erreurs.h"
@@ -118,6 +119,29 @@ EF_Noeud* EF_noeuds_cherche_numero(Projet *projet, int numero)
     while (list_mvnext(projet->ef_donnees.noeuds) != NULL);
     
     BUGMSG(0, NULL, gettext("Noeud n°%d introuvable.\n"), numero);
+}
+
+
+double EF_noeuds_distance(EF_Noeud* n1, EF_Noeud* n2)
+/* Description : Renvoie la distance entre deux noeuds.
+ * Paramètres : EF_Noeud* n1 : noeud de départ
+ *            : EF_Noeud* n2 : noeud de fin
+ * Valeur renvoyée :
+ *   Succès : 0
+ *   Échec : -1 en cas de paramètres invalides :
+ *             (projet == NULL) ou
+ *             (projet->ef_donnees.noeuds == NULL)
+ */
+{
+    double x, y, z;
+    
+    BUGMSG(n1, NAN, "EF_noeuds_distance\n");
+    BUGMSG(n2, NAN, "EF_noeuds_distance\n");
+    
+    x = n2->position.x - n1->position.x;
+    y = n2->position.y - n1->position.y;
+    z = n2->position.z - n1->position.z;
+    return sqrt(x*x+y*y+z*z);
 }
 
 

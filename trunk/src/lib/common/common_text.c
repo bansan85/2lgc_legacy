@@ -70,7 +70,8 @@ void show_help()
  * Valeur renvoyée : void
  */
 {
-    // Trivial
+    // -h, --help : affiche le présent menu
+    // -w, --warranty : affiche les limites de garantie du logiciel
     printf(gettext("Utilisation : codegui [OPTION]... [FILE]...\n"));
     printf(gettext("Options :\n"));
     printf(gettext("\t-h, --help : affiche le présent menu\n"));

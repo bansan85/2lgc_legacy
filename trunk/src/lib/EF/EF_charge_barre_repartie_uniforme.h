@@ -38,8 +38,8 @@ typedef struct __Charge_Barre_Repartie_Uniforme
     void                *barre;
     int                 repere_local;
     int                 projection;
-    double              debut; // Position du début de la charge répartie par rapport au début
-    double              fin;   // Position de la fin de la charge par rapport à la fin
+    double              a; // Position du début de la charge répartie par rapport au début
+    double              b;   // Position de la fin de la charge par rapport à la fin
     double              fx;
     double              fy;
     double              fz;
@@ -48,7 +48,9 @@ typedef struct __Charge_Barre_Repartie_Uniforme
     double              mz;
 } Charge_Barre_Repartie_Uniforme;
 
-int EF_charge_barre_repartie_uniforme_ajout(Projet *projet, int num_action, void *barre, int repere_local, int projection, double debut, double fin, double fx, double fy, double fz, double mx, double my, double mz);
+int EF_charge_barre_repartie_uniforme_ajout(Projet *projet, int num_action, Beton_Barre *barre,
+  int repere_local, int projection, double a, double b, double fx, double fy, double fz,
+  double mx, double my, double mz);
 int EF_charge_barre_repartie_uniforme_mx(Beton_Barre *barre, unsigned int discretisation,
   double a, double b, Barre_Info_EF *infos, double mx, double *ma, double *mb);
 int EF_charge_barre_repartie_uniforme_def_ang_iso_y(Beton_Barre *barre,
@@ -59,12 +61,12 @@ int EF_charge_barre_repartie_uniforme_def_ang_iso_z(Beton_Barre *barre,
   double *phia, double *phib);
 double EF_charge_barre_repartie_uniforme_position_resultante_x(void *section,
   double a, double b, double l);
-int EF_charge_barre_repartie_uniforme_ajout_fonc_rx(Fonction *fonction, Beton_Barre *barre,
+int EF_charge_barre_repartie_uniforme_fonc_rx(Fonction *fonction, Beton_Barre *barre,
   unsigned int discretisation, double a, double b, double max, double mbx);
-int EF_charge_barre_repartie_uniforme_ajout_fonc_ry(Fonction *f_rotation, Fonction* f_deform,
+int EF_charge_barre_repartie_uniforme_fonc_ry(Fonction *f_rotation, Fonction* f_deform,
   Beton_Barre *barre, unsigned int discretisation, double a, double b, double fz, double my,
   double may, double mby);
-int EF_charge_barre_repartie_uniforme_ajout_fonc_rz(Fonction *f_rotation, Fonction* f_deform,
+int EF_charge_barre_repartie_uniforme_fonc_rz(Fonction *f_rotation, Fonction* f_deform,
   Beton_Barre *barre, unsigned int discretisation, double a, double b, double fy, double mz,
   double maz, double mbz);
 int EF_charge_barre_repartie_uniforme_n(Fonction *fonction, Beton_Barre *barre,

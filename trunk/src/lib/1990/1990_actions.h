@@ -68,6 +68,7 @@ int _1990_action_init(Projet *projet);
 int _1990_action_ajout(Projet *projet, int categorie);
 int _1990_action_cherche_numero(Projet *projet, int numero);
 int _1990_action_affiche_tout(Projet *projet);
+int _1990_action_affiche_resultats(Projet *projet, int num_action);
 int _1990_action_free(Projet *projet);
 
 #endif

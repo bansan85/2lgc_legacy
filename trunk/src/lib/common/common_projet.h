@@ -25,7 +25,7 @@
 #include <umfpack.h>
 
 typedef enum __Type_Pays
-{               // Spécifie le pays et l'annexe nationnale à utiliser.
+{               // Spécifie le pays et l'annexe nationnale à utiliser :
     PAYS_EU,    // Norme européenne sans application des annexes nationales
     PAYS_FR     // Annexe nationale française
 } Type_Pays;
@@ -51,18 +51,21 @@ typedef struct __CombinaisonsEL
     LIST        *els_perm;  //
 } CombinaisonsEL;
 
+
 #ifdef ENABLE_GTK
 typedef struct __List_Gtk
-{                           // Contient toutes les données pour l'interface graphique GTK+3
+{                       // Contient toutes les données pour l'interface graphique GTK+3
     void        *_1990; // pour l'Eurocode 0
 } List_Gtk;
 #endif
+
 
 typedef enum __Type_Element // La liste des différents éléments de type de barres gérés par le
 {                           // module élément fini.
     BETON_ELEMENT_POTEAU,
     BETON_ELEMENT_POUTRE
 } Type_Element;
+
 
 typedef struct __Beton_Donnees
 {                               // Liste des sections, matériaux et barres en béton.
@@ -71,19 +74,19 @@ typedef struct __Beton_Donnees
     LIST            *barres;
 } Beton_Donnees;
 
+
 typedef struct __EF
 {                               // Contient toutes les données nécessaires pour la réalisation
                                 // des calculs aux éléments finis et notamment les variables
-                                // utilisées par les librairies cholmod.
+                                // utilisées par les librairies cholmod et umfpack :
     cholmod_common      Common; // Paramètres des calculs de la librairie cholmod.
     cholmod_common      *c;     // Pointeur vers Common
                                 
     LIST                *noeuds;       // Liste de tous les noeuds de la structure, que ce soit
                                        // les noeuds définis par l'utilisateur ou les noeuds
                                        // créés par la discrétisation des éléments.
-    LIST                *appuis;       // Liste des type d'appuis
-    LIST                *relachements; // Liste des relâchements des barres. Le relachement
-                                       // est ensuite appliqué à une barre
+    LIST                *appuis;       // Liste des types d'appuis
+    LIST                *relachements; // Liste des types de relâchements des barres.
     
     int                 **noeuds_pos_partielle; // Etabli une corrélation entre le degré de 
     int                 **noeuds_pos_complete;  // liberté (x, y, z, rx, ry, rz) d'un noeud
@@ -113,10 +116,11 @@ typedef struct __EF
     cholmod_sparse      *rigidite_matrice_complete;  // Matrice de rigidité complète.
     
     void                *numeric;            // Matrice partielle factorisée, utilisée dans
-    long                *ap, *ai, *map;      // tous les calculs lors de la résolution de
+    long                *ap, *ai;            // tous les calculs lors de la résolution de
     double              *ax;                 // chaque cas de charges.
-    double              residu;
+    double              residu;              // Erreur non relative des réactions d'appuis.
 } EF;
+
 
 typedef struct __Projet
 {
@@ -128,6 +132,7 @@ typedef struct __Projet
     EF              ef_donnees;         // Données communes à tous les éléments finis
     Beton_Donnees   beton;              // Données spécifiques au béton
 } Projet;
+
 
 extern int cholmod_l_dump ;
 Projet *projet_init(Type_Pays pays);

@@ -22,30 +22,29 @@
 #include "config.h"
 #include "common_projet.h"
 
-typedef struct __Troncon // Définition de la structure Troncon qui contient le 
-                         // domaine de validité de la fonction
+typedef struct __Troncon // Définition de la structure Troncon qui contient une fonction
+                         // avec un domaine de validité précis.
 {
     double      debut_troncon;  // Début du tronçon de validité de la fonction
     double      fin_troncon;    // Fin du tronçon de validité de la fonction
-    double      x0;        // La fonction mathématique est définie par :
-    double      x1;        // coef_0 + coef_x*x +
-    double      x2;        // coef_x2*x^2 +
-    double      x3;        // coef_x3*x^3 +
-    double      x4;        // coef_x4*x^4 +
-    double      x5;        // coef_x5*x^5 +
-    double      x6;        // coef_x6*x^6
+    double      x0;             // La fonction mathématique est définie par :
+    double      x1;             // x0 + x1*x +
+    double      x2;             // x2*x^2 +
+    double      x3;             // x3*x^3 +
+    double      x4;             // x4*x^4 +
+    double      x5;             // x5*x^5 +
+    double      x6;             // x6*x^6
 } Troncon;
 
 typedef struct __Fonction
 {
-    int          nb_troncons;    /* Les fonctions n'étant pas forcément continues
-                                 * le long de la barre (par exemple de part et 
-        * d'une charge ponctuelle), il est nécessaire de définir plusieurs
-        * tronçons avec pour chaque tronçon sa fonction.
-        * nb_troncons défini le nombre de tronçons que possède la fonction.*/
+    int          nb_troncons;    /* Les fonctions n'étant pas forcément continues le long de
+                                  * la barre (par exemple de part et d'une charge ponctuelle),
+    * il est nécessaire de définir plusieurs tronçons avec pour chaque tronçon sa fonction.
+    * nb_troncons défini le nombre de tronçons que possède la fonction.*/
     
-    Troncon      *troncons;      /* Tableau dynamique contenant les fonctions
-                                 * continues par tronçon. */
+    Troncon      *troncons;      /* Tableau dynamique contenant les fonctions continues par
+                                  * tronçon. */
 } Fonction;
 
 /* On est obligé de mettre action en void* et pas en Action* pour éviter une dépence circulaire des fichiers due à l'inclusion du fichier en-tête "1990_actions.h"*/
