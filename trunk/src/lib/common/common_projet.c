@@ -27,6 +27,7 @@
 #include "common_projet.h"
 #include "common_erreurs.h"
 #include "common_maths.h"
+#include "common_m3d.hpp"
 #include "1990_actions.h"
 #include "1990_groupes.h"
 #include "1990_combinaisons.h"
@@ -63,6 +64,7 @@ Projet* projet_init(Type_Pays pays)
     BUGMSG(EF_rigidite_init(projet) == 0, NULL, gettext("%s : Erreur d'allocation mémoire.\n"), "projet_init");
     BUGMSG(EF_relachement_init(projet) == 0, NULL, gettext("%s : Erreur d'allocation mémoire.\n"), "projet_init");
     BUGMSG(EF_noeuds_init(projet) == 0, NULL, gettext("%s : Erreur d'allocation mémoire.\n"), "projet_init");
+    BUGMSG(m3d_init(projet) == 0, NULL, gettext("%s : Erreur d'allocation mémoire.\n"), "projet_init");
     
     projet->ef_donnees.c = &(projet->ef_donnees.Common);
     cholmod_l_start(projet->ef_donnees.c);
@@ -102,10 +104,12 @@ void projet_free(Projet *projet)
         _1992_1_1_materiaux_free(projet);
     if (projet->ef_donnees.relachements != NULL)
         EF_relachement_free(projet);
+    if (projet->list_gtk.m3d != NULL)
+        m3d_free(projet);
+    free(projet->list_gtk._1990);
     
     cholmod_l_finish(projet->ef_donnees.c);
     
-    free(projet->list_gtk._1990);
     free(projet);
     
     return;

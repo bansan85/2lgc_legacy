@@ -17,6 +17,10 @@
  */
 
 #include "config.h"
+
+#include "common_m3d.hpp"
+
+extern "C" {
 #include "common_text.h"
 #include "common_erreurs.h"
 #include "common_projet.h"
@@ -32,6 +36,7 @@
 #include "EF_charge_noeud.h"
 #include "EF_charge_barre_ponctuelle.h"
 #include "EF_charge_barre_repartie_uniforme.h"
+}
 #include <stdio.h>
 #include <stdlib.h>
 #include <libintl.h>
@@ -39,13 +44,22 @@
 #include <string.h>
 #include <gtk/gtk.h>
 #include <time.h>
+#include <M3d++.hpp>
+
+struct SGlobalData
+{
+    CM3dScene *scene;
+    CM3dCamera *camera;
+};
 
 void gtk_window_destroy_event(GtkWidget *pWidget __attribute__((unused)), Projet *projet)
 {
     projet_free(projet);
+    gtk_widget_destroy(pWidget);
     gtk_main_quit();
     return;
 }
+
 
 void gtk_window_option_destroy_button(GtkWidget *object __attribute__((unused)), GtkWidget *fenetre __attribute__((unused)))
 /* Description : Bouton de fermeture de la fenêtre
@@ -58,6 +72,7 @@ void gtk_window_option_destroy_button(GtkWidget *object __attribute__((unused)),
     return;
 }
 
+
 int main(int argc, char *argv[])
 {
     /* Variables */
@@ -65,6 +80,12 @@ int main(int argc, char *argv[])
     GtkWidget *pTable;
     GtkWidget *pButton;
     Projet *projet;
+    List_Gtk_m3d *m3d;
+    SGlobalData data;
+    CM3dLight *light = NULL;
+    GdkPixbuf *pixbuf = NULL;
+    CM3dObject *cube = NULL;
+
     
     EF_Relachement_Donnees_Elastique_Lineaire *ry_d, *rz_d, *ry_f, *rz_f;
     
@@ -95,6 +116,9 @@ int main(int argc, char *argv[])
             break;
         }
     }
+    
+    // Initialisation de GTK+, gtk doit être initialisé avant m3dlib.
+    BUGMSG(gtk_init_check(&argc, &argv) == TRUE, -1, gettext("Impossible d'initialiser gtk.\n"));
     
     // Création d'un projet type
     projet = projet_init(PAYS_FR);
@@ -179,23 +203,60 @@ int main(int argc, char *argv[])
     BUG(EF_calculs_resoud_charge(projet, 0) == 0, -1);
     BUG(_1990_action_affiche_resultats(projet, 0) == 0, -1);
     
-    // Initialisation de GTK+
-    BUGMSG(gtk_init_check(&argc, &argv) == TRUE, -1, gettext("Impossible d'initialiser gtk.\n"));
-    
     // Création de la fenêtre principale
     MainWindow = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     g_signal_connect(GTK_WINDOW(MainWindow), "destroy", G_CALLBACK(gtk_window_destroy_event), projet);
-    pTable=gtk_table_new(2,1,TRUE);
+    pTable=gtk_table_new(3,1,FALSE);
     gtk_container_add(GTK_CONTAINER(MainWindow), GTK_WIDGET(pTable));
     pButton= gtk_button_new_with_label("Combinaisons");
-    gtk_table_attach(GTK_TABLE(pTable), pButton, 0, 1, 0, 1, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 0, 0);
+    gtk_table_attach(GTK_TABLE(pTable), pButton, 0, 1, 0, 1, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(0), 0, 0);
     g_signal_connect (pButton, "clicked", G_CALLBACK (_1990_gtk_groupes), projet);
     
     // Ajout du bouton de fermeture de l'application
     pButton= gtk_button_new_with_label("Fermeture");
-    gtk_table_attach(GTK_TABLE(pTable), pButton, 0, 1, 1, 2, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 0, 0);
+    gtk_table_attach(GTK_TABLE(pTable), pButton, 0, 1, 1, 2, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(0), 0, 0);
     g_signal_connect (pButton, "clicked", G_CALLBACK (gtk_window_option_destroy_button), MainWindow);
     
+// Initialisation d'une caméra
+data.camera = new CM3dCamera (100, 150, -350, 0, 0, 0, 45, 200, 200);
+
+// Initialisation de la scène
+data.scene = new CM3dScene ();
+data.scene->show_repere(true);
+data.scene->set_ambient_light (1);
+data.scene->set_show_type (SOLID);
+
+// Ajout d'une lumière diffuse
+light = new CM3dLight ("lumiere 1", DIFFUS, 1);
+light->set_position (100, 200, -200);
+data.scene->add_light (light);
+
+// Chargement d'une texture.
+pixbuf = M3d_texture_load ("./aaa.jpg");
+
+// Initialisation d'un cube.
+cube = M3d_cube_new ("cube", 80);
+cube->set_ambient_reflexion (0.8);
+cube->set_smooth(GOURAUD);
+cube->set_texture (pixbuf);
+
+/* Ajout du cube à la scène. */
+data.scene->add_object(cube);
+
+/* On déplace maintenant le cube fini légèrement sur la gauche histoire de
+ * voir sur la même vue le cube et le repère de scène.
+ */
+cube->set_position(-100, 0, 0);
+
+/* Test de rotation du cube. */
+cube->rotations(45,45,0);
+
+    // L'affichage graphique
+    m3d = (List_Gtk_m3d*)projet->list_gtk.m3d;
+    gtk_table_attach(GTK_TABLE(pTable), m3d->drawing, 0, 1, 2, 3, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 0, 0);
+    g_signal_connect(m3d->drawing, "draw", G_CALLBACK(m3d_draw), &data);
+    g_signal_connect(m3d->drawing, "configure-event", G_CALLBACK(m3d_configure_event), &data);
+
     // Affichage de l'interface graphique
     gtk_widget_show_all(MainWindow);
     gtk_main();

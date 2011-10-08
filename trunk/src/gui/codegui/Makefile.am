@@ -6,7 +6,7 @@ DEFAULT_INCLUDES	=	-I../../.. \
 
 if ENABLE_GTK
 bin_PROGRAMS		=	codegui
-codegui_SOURCES		=	main.c
+codegui_SOURCES		=	main.cc
 codegui_CPPFLAGS	=	@GTK_CFLAGS@
 codegui_LDADD		=	-llist -lcholmod -lamd -lcolamd -lumfpack -lblas -lgfortran @GTK_LIBS@ \
 						../../lib/libeurocodes.la

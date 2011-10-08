@@ -10,8 +10,10 @@ libeurocodes_la_LIBADD		=	-llist -lcholmod -lamd -lcolamd -lumfpack -lblas -lgfo
 libeurocodes_la_CFLAGS		=	$(AM_CFLAGS)
 if ENABLE_GTK
 libeurocodes_la_LIBADD		+=	@GTK_LIBS@
-libeurocodes_la_CFLAGS		+=	@GTK_CFLAGS@
+libeurocodes_la_CFLAGS		+=	@GTK_CFLAGS@ `pkg-config --cflags M3d++-1.0`
 endif
+
+libeurocodes_la_LDFLAGS		= `pkg-config --libs M3d++-1.0`
 
 libeurocodes_la_CPPFLAGS	=	@XML_CPPFLAGS@
 
@@ -28,6 +30,7 @@ libeurocodes_la_SOURCES =	1990/1990_actions.c \
 							common/common_fonction.c \
 							common/common_maths.c \
 							common/common_projet.c \
+							common/common_m3d.cc \
 							common/common_text.c \
 							common/common_tooltip.c \
 							EF/EF_appuis.c \
@@ -54,6 +57,7 @@ libeurocodes_la_HEADERS =	1990/1990_actions.h \
 							common/common_fonction.h \
 							common/common_maths.h \
 							common/common_projet.h \
+							common/common_m3d.hpp \
 							common/common_text.h \
 							common/common_tooltip.h \
 							EF/EF_appuis.h \
