@@ -102,24 +102,24 @@ int main(int argc, char *argv[])
     // Création des actions
     BUG(_1990_action_ajout(projet, 0) == 0, -1); // Poids propre
     BUG(_1990_action_ajout(projet, 2) == 0, -1); // 2 Exploitation
-    BUG(_1990_action_ajout(projet, 12) == 0, -1); // 3 Neige
-    BUG(_1990_action_ajout(projet, 13) == 0, -1); // 4 Vent
+    BUG(_1990_action_ajout(projet, 16) == 0, -1); // 3 Neige
+    BUG(_1990_action_ajout(projet, 17) == 0, -1); // 4 Vent
     
     // Création des groupes d'actions
     BUG(_1990_groupe_ajout_niveau(projet) == 0, -1);
     BUG(_1990_groupe_ajout_niveau(projet) == 0, -1);
     BUG(_1990_groupe_ajout_niveau(projet) == 0, -1);
     BUG(_1990_groupe_ajout_niveau(projet) == 0, -1);
-    BUG(_1990_groupe_ajout_groupe(projet, 0, GROUPE_COMBINAISON_AND) == 0, -1); // Charges permanentes
-    BUG(_1990_groupe_ajout_groupe(projet, 0, GROUPE_COMBINAISON_AND) == 0, -1); // Charges d'exploitation
-    BUG(_1990_groupe_ajout_groupe(projet, 0, GROUPE_COMBINAISON_XOR) == 0, -1); // Neige
-    BUG(_1990_groupe_ajout_groupe(projet, 0, GROUPE_COMBINAISON_XOR) == 0, -1); // Vent
-    BUG(_1990_groupe_ajout_groupe(projet, 1, GROUPE_COMBINAISON_AND) == 0, -1); // Charges permanentes
-    BUG(_1990_groupe_ajout_groupe(projet, 1, GROUPE_COMBINAISON_AND) == 0, -1); // Charges d'exploitation
-    BUG(_1990_groupe_ajout_groupe(projet, 1, GROUPE_COMBINAISON_OR) == 0, -1); // Charges climatiques
-    BUG(_1990_groupe_ajout_groupe(projet, 2, GROUPE_COMBINAISON_AND) == 0, -1); // Tout
-    BUG(_1990_groupe_ajout_groupe(projet, 2, GROUPE_COMBINAISON_OR) == 0, -1); // Tout
-    BUG(_1990_groupe_ajout_groupe(projet, 3, GROUPE_COMBINAISON_AND) == 0, -1); // Tout
+    BUG(_1990_groupe_ajout_groupe(projet, 0, GROUPE_COMBINAISON_AND, _1990_action_type_bat_txt(0, projet->pays)) == 0, -1); // Charges permanentes
+    BUG(_1990_groupe_ajout_groupe(projet, 0, GROUPE_COMBINAISON_AND, _1990_action_type_bat_txt(3, projet->pays)) == 0, -1); // Charges d'exploitation
+    BUG(_1990_groupe_ajout_groupe(projet, 0, GROUPE_COMBINAISON_XOR, _1990_action_type_bat_txt(14, projet->pays)) == 0, -1); // Neige
+    BUG(_1990_groupe_ajout_groupe(projet, 0, GROUPE_COMBINAISON_XOR, _1990_action_type_bat_txt(17, projet->pays)) == 0, -1); // Vent
+    BUG(_1990_groupe_ajout_groupe(projet, 1, GROUPE_COMBINAISON_AND, _1990_action_type_bat_txt(0, projet->pays)) == 0, -1); // Charges permanentes
+    BUG(_1990_groupe_ajout_groupe(projet, 1, GROUPE_COMBINAISON_AND, _1990_action_type_bat_txt(3, projet->pays)) == 0, -1); // Charges d'exploitation
+    BUG(_1990_groupe_ajout_groupe(projet, 1, GROUPE_COMBINAISON_OR, (char*)"Charges climatiques") == 0, -1); // Charges climatiques
+    BUG(_1990_groupe_ajout_groupe(projet, 2, GROUPE_COMBINAISON_AND, (char*)"Charges permanentes") == 0, -1); // Tout
+    BUG(_1990_groupe_ajout_groupe(projet, 2, GROUPE_COMBINAISON_OR, (char*)"Charges variables") == 0, -1); // Tout
+    BUG(_1990_groupe_ajout_groupe(projet, 3, GROUPE_COMBINAISON_AND, (char*)"Combinaisons complètes") == 0, -1); // Tout
     BUG(_1990_groupe_ajout_element(projet, 0, 0, 0) == 0, -1);
     BUG(_1990_groupe_ajout_element(projet, 0, 1, 1) == 0, -1);
     BUG(_1990_groupe_ajout_element(projet, 0, 2, 2) == 0, -1);
@@ -148,13 +148,13 @@ int main(int argc, char *argv[])
     BUG(_1992_1_1_materiaux_ajout(projet, 25., 0.2) == 0, -1);
     
     // Création du relâchment
-    ry_d = malloc(sizeof(EF_Relachement_Donnees_Elastique_Lineaire));
+    ry_d = (EF_Relachement_Donnees_Elastique_Lineaire*)malloc(sizeof(EF_Relachement_Donnees_Elastique_Lineaire));
     ry_d->raideur = 3000000.;
-    rz_d = malloc(sizeof(EF_Relachement_Donnees_Elastique_Lineaire));
+    rz_d = (EF_Relachement_Donnees_Elastique_Lineaire*)malloc(sizeof(EF_Relachement_Donnees_Elastique_Lineaire));
     rz_d->raideur =  400000.;
-    ry_f = malloc(sizeof(EF_Relachement_Donnees_Elastique_Lineaire));
+    ry_f = (EF_Relachement_Donnees_Elastique_Lineaire*)malloc(sizeof(EF_Relachement_Donnees_Elastique_Lineaire));
     ry_f->raideur = 2300000.;
-    rz_f = malloc(sizeof(EF_Relachement_Donnees_Elastique_Lineaire));
+    rz_f = (EF_Relachement_Donnees_Elastique_Lineaire*)malloc(sizeof(EF_Relachement_Donnees_Elastique_Lineaire));
     rz_f->raideur =  340000.;
     BUG(EF_relachement_ajout(projet, EF_RELACHEMENT_BLOQUE, NULL, EF_RELACHEMENT_ELASTIQUE_LINEAIRE, ry_d, EF_RELACHEMENT_ELASTIQUE_LINEAIRE, rz_d, EF_RELACHEMENT_BLOQUE, NULL, EF_RELACHEMENT_ELASTIQUE_LINEAIRE, ry_f, EF_RELACHEMENT_ELASTIQUE_LINEAIRE, rz_f) == 0, -1);
 //    BUG(EF_relachement_ajout(projet, EF_RELACHEMENT_BLOQUE, NULL, EF_RELACHEMENT_BLOQUE, NULL, EF_RELACHEMENT_BLOQUE, NULL, EF_RELACHEMENT_LIBRE, NULL, EF_RELACHEMENT_LIBRE, NULL, EF_RELACHEMENT_LIBRE, NULL) == 0, -1);
@@ -188,12 +188,12 @@ int main(int argc, char *argv[])
     pTable=gtk_table_new(2,1,TRUE);
     gtk_container_add(GTK_CONTAINER(MainWindow), GTK_WIDGET(pTable));
     pButton= gtk_button_new_with_label("Combinaisons");
-    gtk_table_attach(GTK_TABLE(pTable), pButton, 0, 1, 0, 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
+    gtk_table_attach(GTK_TABLE(pTable), pButton, 0, 1, 0, 1, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 0, 0);
     g_signal_connect (pButton, "clicked", G_CALLBACK (_1990_gtk_groupes), projet);
     
     // Ajout du bouton de fermeture de l'application
     pButton= gtk_button_new_with_label("Fermeture");
-    gtk_table_attach(GTK_TABLE(pTable), pButton, 0, 1, 1, 2, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
+    gtk_table_attach(GTK_TABLE(pTable), pButton, 0, 1, 1, 2, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 0, 0);
     g_signal_connect (pButton, "clicked", G_CALLBACK (gtk_window_option_destroy_button), MainWindow);
     
     // Affichage de l'interface graphique

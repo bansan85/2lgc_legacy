@@ -193,7 +193,7 @@ EF_Appui* EF_appuis_cherche_numero(Projet *projet, int numero)
     list_mvfront(projet->ef_donnees.appuis);
     do
     {
-        EF_Appui    *appui = list_curr(projet->ef_donnees.appuis);
+        EF_Appui    *appui = (EF_Appui*)list_curr(projet->ef_donnees.appuis);
         
         if (appui->numero == numero)
             return appui;
@@ -220,7 +220,7 @@ int EF_appuis_free(Projet *projet)
     // Trivial
     while (!list_empty(projet->ef_donnees.appuis))
     {
-        EF_Appui    *appui = list_remove_front(projet->ef_donnees.appuis);
+        EF_Appui    *appui = (EF_Appui*)list_remove_front(projet->ef_donnees.appuis);
         
         free(appui);
     }

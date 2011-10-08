@@ -21,6 +21,7 @@
 #include <locale.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "common_projet.h"
 #include "common_erreurs.h"
@@ -100,7 +101,7 @@ int _1990_groupe_positionne_element(Groupe *groupe, int numero)
     {
         Element     *element_en_cours;
     
-        element_en_cours = list_curr(groupe->elements);
+        element_en_cours = (Element*)list_curr(groupe->elements);
         if (element_en_cours->numero == numero)
             return 0;
     }
@@ -131,7 +132,7 @@ int _1990_groupe_positionne_groupe(Niveau_Groupe *niveau, int numero)
     list_mvfront(niveau->groupes);
     do
     {
-        Groupe *groupe = list_curr(niveau->groupes);
+        Groupe *groupe = (Groupe*)list_curr(niveau->groupes);
         if (groupe->numero == numero)
             return 0;
     }
@@ -161,7 +162,7 @@ int _1990_groupe_positionne_niveau(LIST *source, int numero)
     list_mvfront(source);
     do
     {
-        niveau = list_curr(source);
+        niveau = (Niveau_Groupe*)list_curr(source);
         if (niveau->niveau == numero)
             return 0;
     }
@@ -171,7 +172,7 @@ int _1990_groupe_positionne_niveau(LIST *source, int numero)
 
 
 int _1990_groupe_ajout_groupe(Projet *projet, int niveau,
-  Type_Groupe_Combinaison type_combinaison)
+  Type_Groupe_Combinaison type_combinaison, char* nom)
 /* Description : Ajoute un groupe au niveau choisi avec le type de combinaison spécifié.
  * Paramètres : Projet *projet : la variable projet
  *            : int niveau : le niveau où le groupe doit être inséré
@@ -197,13 +198,15 @@ int _1990_groupe_ajout_groupe(Projet *projet, int niveau,
     
     BUG(_1990_groupe_positionne_niveau(projet->niveaux_groupes, niveau) == 0, -3);
     
-    niveau_groupe = list_curr(projet->niveaux_groupes);
+    niveau_groupe = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
     list_mvrear(niveau_groupe->groupes);
     groupe_nouveau.numero = list_size(niveau_groupe->groupes);
-    groupe_nouveau.nom = NULL;
+    groupe_nouveau.nom = (char*)malloc(sizeof(char)*(strlen(nom)+1));
+    BUGMSG(groupe_nouveau.nom, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_groupe_ajout_groupe");
+    strcpy(groupe_nouveau.nom, nom);
     groupe_nouveau.type_combinaison = type_combinaison;
     groupe_nouveau.pIter = NULL;
-    groupe_nouveau.pIter_expand = 0;
+    groupe_nouveau.pIter_expand = 1;
     
     groupe_nouveau.tmp_combinaison.combinaisons = list_init();
     BUGMSG(groupe_nouveau.tmp_combinaison.combinaisons, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_groupe_ajout_groupe");
@@ -258,18 +261,18 @@ int _1990_groupe_ajout_element(Projet *projet, unsigned int niveau, int groupe_n
     else
     {
         BUG(_1990_groupe_positionne_niveau(projet->niveaux_groupes, niveau-1) == 0, -3);
-        niveau_groupe = list_curr(projet->niveaux_groupes);
+        niveau_groupe = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
         BUG(_1990_groupe_positionne_groupe(niveau_groupe, num_element) == 0, -3);
         list_mvnext(projet->niveaux_groupes);
     }
     
-    niveau_groupe = list_curr(projet->niveaux_groupes);
+    niveau_groupe = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
     BUG(_1990_groupe_positionne_groupe(niveau_groupe, groupe_n) == 0, -3);
-    groupe = list_curr(niveau_groupe->groupes);
+    groupe = (Groupe*)list_curr(niveau_groupe->groupes);
     element_nouveau.numero = num_element;
     #ifdef ENABLE_GTK
     element_nouveau.pIter = NULL;
-    element_nouveau.pIter_expand = 0;
+    element_nouveau.pIter_expand = 1;
     #endif
     
     /* On ajoute le nouvel élément au groupe */
@@ -286,7 +289,7 @@ int _1990_groupe_ajout_element(Projet *projet, unsigned int niveau, int groupe_n
         /* On l'ajoute en triant pour faire plus joli */
         do
         {
-            element = list_curr(groupe->elements);
+            element = (Element*)list_curr(groupe->elements);
             BUGMSG(element->numero != num_element, -1, "%s : le numéro %d est déjà présent.\n", "_1990_groupe_ajout_element", num_element);
             if (element->numero > num_element)
             {
@@ -424,10 +427,9 @@ void _1990_groupe_free_element_courant(LIST *elements)
     BUGMSG(elements, , "_1990_groupe_free_element_courant\n");
     BUGMSG(list_curr(elements), , "_1990_groupe_free_element_courant\n");
     
-    element = list_curr(elements);
+    element = (Element*)list_curr(elements);
     
-    if (element->pIter != NULL)
-        free(element->pIter);
+    free(element->pIter);
     free(list_remove_curr(elements));
     
     return;
@@ -453,13 +455,13 @@ void _1990_groupe_free_element(Projet *projet, int niveau, int groupe, int eleme
     BUGMSG(list_size(projet->niveaux_groupes), , "_1990_groupe_free_element\n");
     BUGMSG(_1990_groupe_positionne_niveau(projet->niveaux_groupes, niveau) == 0, , "_1990_groupe_free_element\n");
     
-    niveau_groupe = list_curr(projet->niveaux_groupes);
+    niveau_groupe = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
     
     BUGMSG(niveau_groupe->groupes, , "_1990_groupe_free_element\n");
     BUGMSG(list_size(niveau_groupe->groupes), , "_1990_groupe_free_element\n");
     BUGMSG(_1990_groupe_positionne_groupe(niveau_groupe, groupe) == 0, , "_1990_groupe_free_element\n");
     
-    groupe_en_cours = list_curr(niveau_groupe->groupes);
+    groupe_en_cours = (Groupe*)list_curr(niveau_groupe->groupes);
     
     BUGMSG(groupe_en_cours->elements, , "_1990_groupe_free_element\n");
     BUGMSG(list_size(groupe_en_cours->elements), , "_1990_groupe_free_element\n");
@@ -486,7 +488,7 @@ void _1990_groupe_free_niveau(Projet *projet, int niveau)
     BUGMSG(list_size(projet->niveaux_groupes), , "_1990_groupe_free_niveau\n");
     BUGMSG(_1990_groupe_positionne_niveau(projet->niveaux_groupes, niveau) == 0, , "_1990_groupe_free_niveau\n");
     
-    niveau_groupe = list_curr(projet->niveaux_groupes);
+    niveau_groupe = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
     
     do
     {
@@ -504,9 +506,9 @@ void _1990_groupe_free_niveau(Projet *projet, int niveau)
                 list_mvfront(niveau_groupe->groupes);
                 while (!list_empty(niveau_groupe->groupes))
                 {
-                    Groupe      *groupe = list_curr(niveau_groupe->groupes);
-                    if (groupe->pIter != NULL)
-                        free(groupe->pIter);
+                    Groupe      *groupe = (Groupe*)list_curr(niveau_groupe->groupes);
+                    free(groupe->pIter);
+                    free(groupe->nom);
                     
                     /* On libère tous les éléments contenus dans le groupe */
                     if (groupe->elements != NULL)
@@ -514,7 +516,7 @@ void _1990_groupe_free_niveau(Projet *projet, int niveau)
                         list_mvfront(groupe->elements);
                         while (!list_empty(groupe->elements))
                         {
-                            Element     *element = list_front(groupe->elements);
+                            Element     *element = (Element*)list_front(groupe->elements);
                             
                             free(element->pIter);
                             free(list_remove_front(groupe->elements));
@@ -528,7 +530,7 @@ void _1990_groupe_free_niveau(Projet *projet, int niveau)
                         list_mvfront(groupe->tmp_combinaison.combinaisons);
                         while (!list_empty(groupe->tmp_combinaison.combinaisons))
                         {
-                            Combinaison *combinaison = list_front(groupe->tmp_combinaison.combinaisons);
+                            Combinaison *combinaison = (Combinaison*)list_front(groupe->tmp_combinaison.combinaisons);
                             if (combinaison->elements != NULL)
                             {
                                 list_mvfront(combinaison->elements);
@@ -549,12 +551,12 @@ void _1990_groupe_free_niveau(Projet *projet, int niveau)
             
             free(list_remove_curr(projet->niveaux_groupes));
             
-            niveau_groupe = list_curr(projet->niveaux_groupes);
+            niveau_groupe = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
         }
         else
         {
             list_mvnext(projet->niveaux_groupes);
-            niveau_groupe = list_curr(projet->niveaux_groupes);
+            niveau_groupe = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
         }
     }
     while ((list_size(projet->niveaux_groupes) != 0) && (niveau_groupe != NULL) && (niveau_groupe->niveau >= niveau));
@@ -583,16 +585,16 @@ void _1990_groupe_free_groupe(Projet *projet, int niveau, int groupe)
     BUGMSG(list_size(projet->niveaux_groupes), , "_1990_groupe_free_groupe\n");
     BUGMSG(_1990_groupe_positionne_niveau(projet->niveaux_groupes, niveau) == 0, , "_1990_groupe_free_groupe\n");
     
-    niveau_groupe = list_curr(projet->niveaux_groupes);
+    niveau_groupe = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
     
     BUGMSG(niveau_groupe->groupes, , "_1990_groupe_free_groupe\n");
     BUGMSG(list_size(niveau_groupe->groupes), , "_1990_groupe_free_groupe\n");
     BUGMSG(_1990_groupe_positionne_groupe(niveau_groupe, groupe) == 0, , "_1990_groupe_free_groupe\n");
     
-    groupe_curr = list_curr(niveau_groupe->groupes);
+    groupe_curr = (Groupe*)list_curr(niveau_groupe->groupes);
     
-    if (groupe_curr->pIter != NULL)
-        free(groupe_curr->pIter);
+    free(groupe_curr->pIter);
+    free(groupe_curr->nom);
     
     /* On libère tous les éléments contenus dans le groupe */
     if (groupe_curr->elements != NULL)
@@ -609,7 +611,7 @@ void _1990_groupe_free_groupe(Projet *projet, int niveau, int groupe)
         list_mvfront(groupe_curr->tmp_combinaison.combinaisons);
         while (!list_empty(groupe_curr->tmp_combinaison.combinaisons))
         {
-            Combinaison *combinaison = list_front(groupe_curr->tmp_combinaison.combinaisons);
+            Combinaison *combinaison = (Combinaison*)list_front(groupe_curr->tmp_combinaison.combinaisons);
             if (combinaison->elements != NULL)
             {
                 list_mvfront(combinaison->elements);
@@ -632,7 +634,7 @@ void _1990_groupe_free_groupe(Projet *projet, int niveau, int groupe)
         list_mvfront(niveau_groupe->groupes);
         do
         {
-            groupe_curr = list_curr(niveau_groupe->groupes);
+            groupe_curr = (Groupe*)list_curr(niveau_groupe->groupes);
             if (groupe_curr->numero > groupe)
                 groupe_curr->numero--;
         }
@@ -642,7 +644,7 @@ void _1990_groupe_free_groupe(Projet *projet, int niveau, int groupe)
     /* On passe au niveau suivant (s'il existe) */
     if (list_mvnext(projet->niveaux_groupes) != NULL)
     {
-        niveau_groupe = list_curr(projet->niveaux_groupes);
+        niveau_groupe = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
         if ((niveau_groupe->groupes != NULL) && (list_size(niveau_groupe->groupes) != 0))
         {
             list_mvfront(niveau_groupe->groupes);
@@ -653,21 +655,21 @@ void _1990_groupe_free_groupe(Projet *projet, int niveau, int groupe)
                  * On ne s'arrête pas volontairement au premier élément qu'on trouve.
                  * Il est possible que quelqu'un trouve utile de pouvoir insérer un même
                  * élément dans plusieurs groupes */
-                groupe_curr = list_curr(niveau_groupe->groupes);
+                groupe_curr = (Groupe*)list_curr(niveau_groupe->groupes);
                 if ((groupe_curr->elements != NULL) && (list_size(groupe_curr->elements) != 0))
                 {
                     list_mvfront(groupe_curr->elements);
                     do
                     {
                         int         dernier = 0;
-                        Element     *element = list_curr(groupe_curr->elements);
+                        Element     *element = (Element*)list_curr(groupe_curr->elements);
                         
                         if (element->numero == groupe)
                         {
                             if (element == list_rear(groupe_curr->elements))
                                 dernier = 1;
                             free(list_remove_curr(groupe_curr->elements));
-                            element = list_curr(groupe_curr->elements);
+                            element = (Element*)list_curr(groupe_curr->elements);
                         }
                         if ((dernier == 0) && (element->numero > groupe))
                             element->numero--;

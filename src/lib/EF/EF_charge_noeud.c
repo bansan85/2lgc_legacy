@@ -64,7 +64,7 @@ int EF_charge_noeud_ajout(Projet *projet, int num_action, EF_Noeud *noeud,
     BUGMSG(noeud, -1, "EF_charge_noeud_ajout\n");
     BUG(_1990_action_cherche_numero(projet, num_action) == 0, -1);
     
-    action_en_cours = list_curr(projet->actions);
+    action_en_cours = (Action*)list_curr(projet->actions);
     
     charge_nouveau.type = CHARGE_NOEUD;
     charge_nouveau.nom = NULL;

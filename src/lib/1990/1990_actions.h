@@ -41,7 +41,6 @@ typedef enum __Action_Categorie
 typedef struct __Action
 {
     char            *nom;
-    char            *description;
     int             numero;
     int             type;  // Les catégories sont conformes à _1990_action_type
     LIST            *charges;

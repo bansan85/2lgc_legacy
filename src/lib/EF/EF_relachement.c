@@ -126,7 +126,7 @@ EF_Relachement* EF_relachement_cherche_numero(Projet *projet, unsigned int numer
     list_mvfront(projet->ef_donnees.relachements);
     do
     {
-        EF_Relachement *relachement = list_curr(projet->ef_donnees.relachements);
+        EF_Relachement *relachement = (EF_Relachement*)list_curr(projet->ef_donnees.relachements);
         
         if (relachement->numero == numero)
             return relachement;
@@ -153,7 +153,7 @@ int EF_relachement_free(Projet *projet)
     // Trivial
     while (!list_empty(projet->ef_donnees.relachements))
     {
-        EF_Relachement *relachement = list_remove_front(projet->ef_donnees.relachements);
+        EF_Relachement *relachement = (EF_Relachement*)list_remove_front(projet->ef_donnees.relachements);
         free(relachement->rx_d_data);
         free(relachement->ry_d_data);
         free(relachement->rz_d_data);

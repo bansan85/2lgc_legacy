@@ -88,7 +88,7 @@ int EF_charge_barre_repartie_uniforme_ajout(Projet *projet, int num_action, Beto
     BUGMSG(!((a > l-b) && (!(ERREUR_RELATIVE_EGALE(a, l-b)))), -1, "%s : a = %.20f, l = %.20f, b = %.20f\n", "EF_charge_barre_repartie_uniforme_ajout", a, l, b);
     
     BUG(_1990_action_cherche_numero(projet, num_action) == 0, -1);
-    action_en_cours = list_curr(projet->actions);
+    action_en_cours = (Action*)list_curr(projet->actions);
     
     charge_nouveau.type = CHARGE_BARRE_REPARTIE_UNIFORME;
     charge_nouveau.nom = NULL;

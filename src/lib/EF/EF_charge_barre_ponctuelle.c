@@ -71,7 +71,7 @@ int EF_charge_barre_ponctuelle_ajout(Projet *projet, int num_action, Beton_Barre
     BUGMSG(list_size(projet->actions), -1, "EF_charge_barre_ponctuelle_ajout\n");
     BUGMSG(barre, -1, "EF_charge_barre_ponctuelle_ajout\n");
     BUG(_1990_action_cherche_numero(projet, num_action) == 0, -1);
-    action_en_cours = list_curr(projet->actions);
+    action_en_cours = (Action*)list_curr(projet->actions);
     BUGMSG(!((a < 0.) && (!(ERREUR_RELATIVE_EGALE(a, 0.)))), -1, "EF_charge_barre_ponctuelle_ajout");
     BUGMSG(!((a > EF_noeuds_distance(barre->noeud_debut, barre->noeud_fin)) && (!(ERREUR_RELATIVE_EGALE(a, EF_noeuds_distance(barre->noeud_debut, barre->noeud_fin))))), -1, "EF_charge_barre_ponctuelle_ajout");
     

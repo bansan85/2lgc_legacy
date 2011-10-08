@@ -116,7 +116,7 @@ int _1992_1_1_barres_ajout(Projet *projet, Type_Element type, unsigned int secti
             dy = (element_nouveau.noeud_fin->position.y-element_nouveau.noeud_debut->position.y)/(discretisation_element+1);
             dz = (element_nouveau.noeud_fin->position.z-element_nouveau.noeud_debut->position.z)/(discretisation_element+1);
             BUG(EF_noeuds_ajout(projet, element_nouveau.noeud_debut->position.x+dx*(i+1), element_nouveau.noeud_debut->position.y+dy*(i+1), element_nouveau.noeud_debut->position.z+dz*(i+1), -1) == 0, -2);
-            element_nouveau.noeuds_intermediaires[i] = list_rear(projet->ef_donnees.noeuds);
+            element_nouveau.noeuds_intermediaires[i] = (EF_Noeud*)list_rear(projet->ef_donnees.noeuds);
         }
     }
     else
@@ -158,7 +158,7 @@ Beton_Barre* _1992_1_1_barres_cherche_numero(Projet *projet, unsigned int numero
     list_mvfront(projet->beton.barres);
     do
     {
-        Beton_Barre   *element = list_curr(projet->beton.barres);
+        Beton_Barre   *element = (Beton_Barre*)list_curr(projet->beton.barres);
         
         if (element->numero == numero)
             return element;
@@ -207,7 +207,7 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
     BUGMSG(projet->ef_donnees.triplet_rigidite_complete, -1, "_1992_1_1_barres_rigidite_ajout\n");
     
     BUGMSG(element->section, -1, "_1992_1_1_barres_rigidite_ajout\n");
-    section_donnees = element->section;
+    section_donnees = (Beton_Section_Carre*)element->section;
     E = element->materiau->ecm;
     G = element->materiau->gnu_0_2;
     
@@ -277,9 +277,9 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
     //   cos(z) = signe\{L_x\} \cdot \sqrt{\frac{L_x^2}{L^2-L_z^2}}\texttt{ et }sin(z) = \frac{yy}{\sqrt{L^2-L_z^2}}\end{displaymath}\begin{verbatim}
     triplet = cholmod_l_allocate_triplet(12, 12, 32, 0, CHOLMOD_REAL, projet->ef_donnees.c);
     BUGMSG(triplet, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1992_1_1_barres_rigidite_ajout");
-    ai = triplet->i;
-    aj = triplet->j;
-    ax = triplet->x;
+    ai = (long*)triplet->i;
+    aj = (long*)triplet->j;
+    ax = (double*)triplet->x;
     xx = element->noeud_fin->position.x - element->noeud_debut->position.x;
     yy = element->noeud_fin->position.y - element->noeud_debut->position.y;
     zz = element->noeud_fin->position.z - element->noeud_debut->position.z;
@@ -397,7 +397,7 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
                     {
                         EF_Relachement_Donnees_Elastique_Lineaire *donnees;
                         
-                        donnees = element->relachement->rx_d_data;
+                        donnees = (EF_Relachement_Donnees_Elastique_Lineaire*)element->relachement->rx_d_data;
                         if (donnees->raideur == 0.)
                             element->info_EF[j].kAx = MAXDOUBLE;
                         else
@@ -427,7 +427,7 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
                     {
                         EF_Relachement_Donnees_Elastique_Lineaire *donnees;
                         
-                        donnees = element->relachement->ry_d_data;
+                        donnees = (EF_Relachement_Donnees_Elastique_Lineaire*)element->relachement->ry_d_data;
                         if (donnees->raideur == 0.)
                             element->info_EF[j].kAy = MAXDOUBLE;
                         else
@@ -457,7 +457,7 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
                     {
                         EF_Relachement_Donnees_Elastique_Lineaire *donnees;
                         
-                        donnees = element->relachement->rz_d_data;
+                        donnees = (EF_Relachement_Donnees_Elastique_Lineaire*)element->relachement->rz_d_data;
                         if (donnees->raideur == 0.)
                             element->info_EF[j].kAz = MAXDOUBLE;
                         else
@@ -496,7 +496,7 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
                     {
                         EF_Relachement_Donnees_Elastique_Lineaire *donnees;
                         
-                        donnees = element->relachement->rx_f_data;
+                        donnees = (EF_Relachement_Donnees_Elastique_Lineaire*)element->relachement->rx_f_data;
                         if (donnees->raideur == 0.)
                             element->info_EF[j].kBx = MAXDOUBLE;
                         else
@@ -526,7 +526,7 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
                     {
                         EF_Relachement_Donnees_Elastique_Lineaire *donnees;
                         
-                        donnees = element->relachement->ry_f_data;
+                        donnees = (EF_Relachement_Donnees_Elastique_Lineaire*)element->relachement->ry_f_data;
                         if (donnees->raideur == 0.)
                             element->info_EF[j].kBy = MAXDOUBLE;
                         else
@@ -556,7 +556,7 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
                     {
                         EF_Relachement_Donnees_Elastique_Lineaire *donnees;
                         
-                        donnees = element->relachement->rz_f_data;
+                        donnees = (EF_Relachement_Donnees_Elastique_Lineaire*)element->relachement->rz_f_data;
                         if (donnees->raideur == 0.)
                             element->info_EF[j].kBz = MAXDOUBLE;
                         else
@@ -575,9 +575,9 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
     //     Calcul des valeurs de la matrice de rigidité locale :
         triplet = cholmod_l_allocate_triplet(12, 12, 40, 0, CHOLMOD_REAL, projet->ef_donnees.c);
         BUGMSG(triplet, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1992_1_1_barres_rigidite_ajout");
-        ai = triplet->i;
-        aj = triplet->j;
-        ax = triplet->x;
+        ai = (long*)triplet->i;
+        aj = (long*)triplet->j;
+        ax = (double*)triplet->x;
         triplet->nnz = 40;
         i=0;
         
@@ -781,15 +781,15 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
         cholmod_l_free_sparse(&(sparse_tmp), projet->ef_donnees.c);
         triplet = cholmod_l_sparse_to_triplet(matrice_rigidite_globale, projet->ef_donnees.c);
         BUGMSG(triplet, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1992_1_1_barres_rigidite_ajout");
-        ai = triplet->i;
-        aj = triplet->j;
-        ax = triplet->x;
-        ai2 = projet->ef_donnees.triplet_rigidite_partielle->i;
-        aj2 = projet->ef_donnees.triplet_rigidite_partielle->j;
-        ax2 = projet->ef_donnees.triplet_rigidite_partielle->x;
-        ai3 = projet->ef_donnees.triplet_rigidite_complete->i;
-        aj3 = projet->ef_donnees.triplet_rigidite_complete->j;
-        ax3 = projet->ef_donnees.triplet_rigidite_complete->x;
+        ai = (long*)triplet->i;
+        aj = (long*)triplet->j;
+        ax = (double*)triplet->x;
+        ai2 = (long*)projet->ef_donnees.triplet_rigidite_partielle->i;
+        aj2 = (long*)projet->ef_donnees.triplet_rigidite_partielle->j;
+        ax2 = (double*)projet->ef_donnees.triplet_rigidite_partielle->x;
+        ai3 = (long*)projet->ef_donnees.triplet_rigidite_complete->i;
+        aj3 = (long*)projet->ef_donnees.triplet_rigidite_complete->j;
+        ax3 = (double*)projet->ef_donnees.triplet_rigidite_complete->x;
         
     //       Insertion de la matrice de rigidité élémentaire dans la matrice de rigidité
     //         globale partielle et complète.
@@ -882,7 +882,7 @@ int _1992_1_1_barres_rigidite_ajout_tout(Projet *projet)
     list_mvfront(projet->beton.barres);
     do
     {
-        Beton_Barre *element = list_curr(projet->beton.barres);
+        Beton_Barre *element = (Beton_Barre*)list_curr(projet->beton.barres);
         
         BUG(_1992_1_1_barres_rigidite_ajout(projet, element) == 0, -2);
     }
@@ -910,7 +910,7 @@ int _1992_1_1_barres_free(Projet *projet)
     
     while (!list_empty(projet->beton.barres))
     {
-        Beton_Barre *element = list_remove_front(projet->beton.barres);
+        Beton_Barre *element = (Beton_Barre*)list_remove_front(projet->beton.barres);
         
         free(element->noeuds_intermediaires);
         cholmod_l_free_sparse(&(element->matrice_rotation), projet->ef_donnees.c);

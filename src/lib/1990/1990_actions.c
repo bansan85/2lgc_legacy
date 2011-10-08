@@ -22,6 +22,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <cholmod.h>
+#include <string.h>
 
 #include "1990_actions.h"
 #include "1990_coef_psi.h"
@@ -304,8 +305,9 @@ int _1990_action_ajout(Projet *projet, int type)
     BUG(_1990_action_categorie_bat(type, projet->pays) != ACTION_INCONNUE, -1);
     
     list_mvrear(projet->actions);
-    action_nouveau.nom = NULL;
-    action_nouveau.description = NULL;
+    action_nouveau.nom = (char*)malloc(sizeof(char)*(strlen(_1990_action_type_bat_txt(type, projet->pays))+1));
+    BUGMSG(action_nouveau.nom, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_action_ajout");
+    strcpy(action_nouveau.nom, _1990_action_type_bat_txt(type, projet->pays));
     action_nouveau.type = type;
     action_nouveau.charges = list_init();
     BUGMSG(action_nouveau.charges, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_action_ajout");
@@ -365,7 +367,7 @@ int _1990_action_cherche_numero(Projet *projet, int numero)
     list_mvfront(projet->actions);
     do
     {
-        Action      *action = list_curr(projet->actions);
+        Action      *action = (Action*)list_curr(projet->actions);
         
         if (action->numero == numero)
             return 0;
@@ -396,9 +398,9 @@ int _1990_action_affiche_tout(Projet *projet)
     list_mvfront(projet->actions);
     do
     {
-        Action      *action = list_curr(projet->actions);
+        Action      *action = (Action*)list_curr(projet->actions);
         
-        printf("Action '%s', numéro %d, description '%s', type n°%d\n", action->nom, action->numero, action->description, action->type);
+        printf("Action '%s', numéro %d, nom '%s', type n°%d\n", action->nom, action->numero, action->nom, action->type);
     }
     while (list_mvnext(projet->actions) != NULL);
     
@@ -431,7 +433,7 @@ int _1990_action_affiche_resultats(Projet *projet, int num_action)
     BUGMSG(projet->beton.barres,  -1, "EF_calculs_affiche_resultats\n");
     
     // Affichage des efforts aux noeuds et des réactions d'appuis
-    action_en_cours = list_curr(projet->actions);
+    action_en_cours = (Action*)list_curr(projet->actions);
     printf("Effort aux noeuds & Réactions d'appuis\n");
     common_math_arrondi_sparse(action_en_cours->efforts_noeuds);
     cholmod_l_write_sparse(stdout, action_en_cours->efforts_noeuds, NULL, NULL, projet->ef_donnees.c);
@@ -504,19 +506,13 @@ int _1990_action_free(Projet *projet)
     // Trivial
     while (!list_empty(projet->actions))
     {
-        Action      *action = list_remove_front(projet->actions);
+        Action      *action = (Action*)list_remove_front(projet->actions);
         
-        if (action->nom != NULL)
-            free(action->nom);
-        if (action->description != NULL)
-            free(action->description);
+        free(action->nom);
         while (!list_empty(action->charges))
         {
-            Charge_Barre_Ponctuelle *charge = list_remove_front(action->charges);
-            if (charge->nom != NULL)
-                free(charge->nom);
-            if (charge->description != NULL)
-                free(charge->description);
+            Charge_Barre_Ponctuelle *charge = (Charge_Barre_Ponctuelle*)list_remove_front(action->charges);
+            free(charge->nom);
             free(charge);
         }
         free(action->charges);

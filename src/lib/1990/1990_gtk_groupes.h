@@ -23,6 +23,11 @@
 #ifdef ENABLE_GTK
 #include <gtk/gtk.h>
 
+const GtkTargetEntry drag_targets_1 = { (gchar*)PACKAGE"1_SAME_PROC", GTK_TARGET_SAME_APP, 0}; 
+const GtkTargetEntry drag_targets_2 = { (gchar*)PACKAGE"2_SAME_PROC", GTK_TARGET_SAME_APP, 0}; 
+const GtkTargetEntry drag_targets_3[] = { {(gchar*)PACKAGE"1_SAME_PROC", GTK_TARGET_SAME_APP, 0},
+                                          {(gchar*)PACKAGE"2_SAME_PROC", GTK_TARGET_SAME_APP, 0}}; 
+
 typedef struct __List_Gtk_1990
 {
     GtkWidget       *window_groupe;
@@ -35,6 +40,7 @@ typedef struct __List_Gtk_1990
     GtkWidget       *table_groupes;
     GtkTreeStore    *tree_store_etat;
     GtkTreeView     *tree_view_etat;
+    GtkWidget       *scroll_etat;
     GtkWidget       *button_groupe_ajout;
     GtkWidget       *button_groupe_suppr;
     GtkWidget       *button_groupe_and;
@@ -46,11 +52,13 @@ typedef struct __List_Gtk_1990
     GtkWidget       *table_dispo;
     GtkTreeStore    *tree_store_dispo;
     GtkTreeView     *tree_view_dispo;
+    GtkWidget       *scroll_dispo;
     GtkWidget       *button_ajout_dispo;
     GtkWidget       *table_bas;
     GtkWidget       *button_generer;
     GtkWidget       *button_options;
     GtkWidget       *button_quitter;
+    GtkWidget       *drag_from;
 } List_Gtk_1990;
 
 void _1990_gtk_groupes(GtkWidget *button __attribute__((unused)), Projet *projet);
