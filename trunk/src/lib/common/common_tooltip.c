@@ -85,15 +85,16 @@ GtkWidget* common_tooltip_generation(const char *nom)
                     if (strcmp((char *) nom1, nom) == 0)
                     {
                         GtkWidget   *pwindow = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-                        GtkWidget   *pvbox = gtk_vbox_new(FALSE, 0);
+                        GtkWidget   *pgrid = gtk_grid_new();
+                        GtkWidget   *w_prev = NULL;
                         GdkRGBA     color;
                         xmlNodePtr  n2;
                         
                         //     Initialisation de la fenêtre graphique
-                        gtk_widget_show(pvbox);
+                        gtk_widget_show(pgrid);
                         gtk_window_set_position(GTK_WINDOW(pwindow), GTK_WIN_POS_CENTER);
                         gtk_window_set_title(GTK_WINDOW(pwindow), (char *) nom1);
-                        gtk_container_add(GTK_CONTAINER(pwindow), pvbox);
+                        gtk_container_add(GTK_CONTAINER(pwindow), pgrid);
                         gtk_window_set_decorated(GTK_WINDOW(pwindow), FALSE);
                         color.red = 1.; color.green = 1.; color.blue = 0.75; color.alpha = 1.;
                         gtk_widget_override_background_color(pwindow, GTK_STATE_FLAG_NORMAL, &color);
@@ -118,7 +119,11 @@ GtkWidget* common_tooltip_generation(const char *nom)
                                     element = gtk_image_new_from_file(nom_fichier);
                                     free(nom_fichier);
                                     gtk_misc_set_alignment(GTK_MISC(element), 0., 0.5);
-                                    gtk_box_pack_start(GTK_BOX(pvbox), element, FALSE, FALSE, 0);
+                                    if (w_prev == NULL)
+                                        gtk_grid_attach(GTK_GRID(pgrid), element, 0, 0, 1, 1);
+                                    else
+                                        gtk_grid_attach_next_to(GTK_GRID(pgrid), element, w_prev, GTK_POS_BOTTOM, 1, 1);
+                                    w_prev = element;
                                     gtk_widget_show(element);
                                     i++;
                                 }
@@ -134,7 +139,11 @@ GtkWidget* common_tooltip_generation(const char *nom)
                                     gtk_label_set_justify(GTK_LABEL(element), GTK_JUSTIFY_FILL);
                                     g_signal_connect(G_OBJECT(element), "size-allocate", G_CALLBACK(wrapped_label_size_allocate_callback), NULL);
                                     gtk_misc_set_alignment(GTK_MISC(element), 0., 0.5);
-                                    gtk_box_pack_start(GTK_BOX(pvbox), element, TRUE, TRUE, 0);
+                                    if (w_prev == NULL)
+                                        gtk_grid_attach(GTK_GRID(pgrid), element, 0, 0, 1, 1);
+                                    else
+                                        gtk_grid_attach_next_to(GTK_GRID(pgrid), element, w_prev, GTK_POS_BOTTOM, 1, 1);
+                                    w_prev = element;
                                     gtk_widget_show(element);
                                     i++;
                                 }
