@@ -54,8 +54,9 @@ typedef struct __CombinaisonsEL
 
 #ifdef ENABLE_GTK
 typedef struct __List_Gtk
-{                       // Contient toutes les données pour l'interface graphique GTK+3
+{                     // Contient toutes les données pour l'interface graphique GTK+3
     void      *_1990; // pour l'Eurocode 0
+    void      *m3d;   // pour l'affichage graphique de la structure
 } List_Gtk;
 #endif
 
