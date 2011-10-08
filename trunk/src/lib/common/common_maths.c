@@ -62,7 +62,7 @@ void common_math_arrondi_triplet(cholmod_triplet *triplet)
     unsigned int    i;
     
     // Trivial
-    ax = triplet->x;
+    ax = (double*)triplet->x;
     for (i=0;i<triplet->nnz;i++)
         ax[i] = common_math_arrondi_nombre(ax[i]);
     
@@ -80,7 +80,7 @@ void common_math_arrondi_sparse(cholmod_sparse *sparse)
     unsigned int    i;
     
     // Trivial
-    ax = sparse->x;
+    ax = (double*)sparse->x;
     for (i=0;i<sparse->nzmax;i++)
         ax[i] = common_math_arrondi_nombre(ax[i]);
     

@@ -75,8 +75,8 @@ int _1990_ponderations_verifie_double(LIST *liste_ponderations, Ponderation* pon
             {
                 Ponderation_Element *elem1, *elem2;
                 
-                elem1 = list_curr(ponderation->elements);
-                elem2 = list_curr(pond_a_verifier->elements);
+                elem1 = (Ponderation_Element*)list_curr(ponderation->elements);
+                elem2 = (Ponderation_Element*)list_curr(pond_a_verifier->elements);
                 /* Preuve ici */
                 if ((elem1->action != elem2->action) || (elem1->psi != elem2->psi) || (!(ERREUR_RELATIVE_EGALE(elem1->ponderation, elem2->ponderation))))
                     doublon = 0;
@@ -116,7 +116,7 @@ int _1990_ponderations_duplique_sans_double(LIST *liste_pond_destination, LIST *
     {
         Ponderation     *ponderation_source;
         
-        ponderation_source = list_curr(liste_pond_source);
+        ponderation_source = (Ponderation*)list_curr(liste_pond_source);
         /* Si la ponderation n'existe pas, on l'ajoute à la fin */
         if (_1990_ponderations_verifie_double(liste_pond_destination, ponderation_source) == 0)
         {
@@ -134,7 +134,7 @@ int _1990_ponderations_duplique_sans_double(LIST *liste_pond_destination, LIST *
                     Ponderation_Element *element_source;
                     Ponderation_Element element_destination;
                     
-                    element_source = list_curr(ponderation_source->elements);
+                    element_source = (Ponderation_Element*)list_curr(ponderation_source->elements);
                     element_destination.action = element_source->action;
                     element_destination.flags = element_source->flags;
                     element_destination.psi = element_source->psi;
@@ -196,13 +196,13 @@ int _1990_ponderations_genere_un(Projet *projet, LIST* ponderations_destination,
     // Si le dernier niveau ne possède pas un seul et unique groupe Alors
     //     Fin.
     // FinSi
-    niveau = list_rear(projet->niveaux_groupes);
+    niveau = (Niveau_Groupe*)list_rear(projet->niveaux_groupes);
     if (list_size(niveau->groupes) != 1)
     {
         printf(gettext("La génération des pondérations est impossible.\nLe dernier niveau ne possède pas qu'un seul groupe.\n"));
         return -1;
     }
-    groupe = list_front(niveau->groupes);
+    groupe = (Groupe*)list_front(niveau->groupes);
     
     // Si le groupe du dernier niveau ne possède pas de combinaison Alors
     //     Fin.
@@ -1048,14 +1048,14 @@ void _1990_ponderations_affiche(LIST *ponderations)
         list_mvfront(ponderations);
         do
         {
-            Ponderation *ponderation = list_curr(ponderations);
+            Ponderation *ponderation = (Ponderation*)list_curr(ponderations);
             
             if (list_size(ponderation->elements) != 0)
             {
                 list_mvfront(ponderation->elements);
                 do
                 {
-                    Ponderation_Element *ponderation_element = list_curr(ponderation->elements);
+                    Ponderation_Element *ponderation_element = (Ponderation_Element*)list_curr(ponderation->elements);
                     printf("%d*%f(%d)+", ponderation_element->action->numero+1, ponderation_element->ponderation, ponderation_element->psi);
                 }
                 while (list_mvnext(ponderation->elements));

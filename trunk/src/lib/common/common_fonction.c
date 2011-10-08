@@ -47,7 +47,7 @@ int common_fonction_init(Projet *projet, void *action_void)
  *           -2 en cas d'erreur d'allocation mémoire
  */
 {
-    Action              *action = action_void;
+    Action              *action = (Action*)action_void;
     unsigned int        i, j;
     
     BUGMSG(projet, -1, "common_fonction_init\n");
@@ -360,7 +360,7 @@ int common_fonction_affiche(Fonction* fonction)
     common_fonction_compacte(fonction);
     for (i=0;i<fonction->nb_troncons;i++)
     {
-        printf("debut_troncon : %.5f\tfin_troncon : %.5f\t0 : %.20f\tx : %.20f\tx2 : %.20f\tx3 : %.20f\tx4 : %.20f\tx5 : %.20f\tx6 : %.20f\tsoit f(%.5f) = %.10f\tf(%.5f) = %.10f\n",
+        printf("debut_troncon : %.5f\tfin_troncon : %.5f\t0 : %.20f\tx : %.20f\tx2 : %.20f\tx3 : %.20f\tx4 : %.20f\tx5 : %.20f\tx6 : %.20f\tsoit f(%.5f) = %.20f\tf(%.5f) = %.20f\n",
           fonction->troncons[i].debut_troncon,
           fonction->troncons[i].fin_troncon,
           fonction->troncons[i].x0,
@@ -391,7 +391,7 @@ int common_fonction_free(Projet *projet, void *action_void)
  *             (action == NULL)
  */
 {
-    Action *action = action_void;
+    Action *action = (Action*)action_void;
     unsigned int        i, j;
     
     BUGMSG(projet, -1, "common_fonction_free\n");

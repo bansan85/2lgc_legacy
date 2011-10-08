@@ -168,7 +168,7 @@ Beton_Materiau* _1992_1_1_materiaux_cherche_numero(Projet *projet, unsigned int 
     list_mvfront(projet->beton.materiaux);
     do
     {
-        Beton_Materiau  *materiau = list_curr(projet->beton.materiaux);
+        Beton_Materiau  *materiau = (Beton_Materiau*)list_curr(projet->beton.materiaux);
         
         if (materiau->numero == numero)
             return materiau;
@@ -195,7 +195,7 @@ int _1992_1_1_materiaux_free(Projet *projet)
     // Trivial
     while (!list_empty(projet->beton.materiaux))
     {
-        Beton_Materiau *materiau = list_remove_front(projet->beton.materiaux);
+        Beton_Materiau *materiau = (Beton_Materiau*)list_remove_front(projet->beton.materiaux);
         
         free(materiau);
     }

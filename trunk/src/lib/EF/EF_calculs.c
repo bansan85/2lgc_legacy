@@ -97,7 +97,7 @@ int EF_calculs_initialise(Projet *projet)
     list_mvfront(projet->ef_donnees.noeuds);
     do
     {
-        EF_Noeud    *noeud = list_curr(projet->ef_donnees.noeuds);
+        EF_Noeud    *noeud = (EF_Noeud*)list_curr(projet->ef_donnees.noeuds);
         
         projet->ef_donnees.noeuds_pos_complete[noeud->numero][0] = nb_col_complete; nb_col_complete++;
         projet->ef_donnees.noeuds_pos_complete[noeud->numero][1] = nb_col_complete; nb_col_complete++;
@@ -147,7 +147,7 @@ int EF_calculs_initialise(Projet *projet)
     list_mvfront(projet->beton.barres);
     do
     {
-        Beton_Barre   *element = list_curr(projet->beton.barres);
+        Beton_Barre   *element = (Beton_Barre*)list_curr(projet->beton.barres);
         
         nnz_max += 12*12*(element->discretisation_element+1);
     }
@@ -172,9 +172,7 @@ int EF_calculs_initialise(Projet *projet)
 
 
 int EF_calculs_genere_mat_rig(Projet *projet)
-/* Description : Convertion des triplets contenant la matrice de rigidité partielle et
- *               complète sous forme d'une matrice sparse et factorisation de la matrice
- *               partielle.
+/* Description : Factorisation de la matrice de rigidité.
  * Paramètres : Projet *projet : la variable projet
  * Valeur renvoyée :
  *   Succès : 0
@@ -194,9 +192,9 @@ int EF_calculs_genere_mat_rig(Projet *projet)
     BUGMSG(projet->ef_donnees.triplet_rigidite_partielle, -1, "EF_calculs_genere_mat_rig\n");
     BUGMSG(projet->ef_donnees.triplet_rigidite_complete, -1, "EF_calculs_genere_mat_rig\n");
     
-    ai = projet->ef_donnees.triplet_rigidite_partielle->i;
-    aj = projet->ef_donnees.triplet_rigidite_partielle->j;
-    ax = projet->ef_donnees.triplet_rigidite_partielle->x;
+    ai = (long*)projet->ef_donnees.triplet_rigidite_partielle->i;
+    aj = (long*)projet->ef_donnees.triplet_rigidite_partielle->j;
+    ax = (double*)projet->ef_donnees.triplet_rigidite_partielle->x;
     /* On initialise à 0 les valeurs non utilisée dans le triplet rigidite partiel. */
     for(i=projet->ef_donnees.triplet_rigidite_partielle_en_cours;i<projet->ef_donnees.triplet_rigidite_partielle->nzmax;i++)
     {
@@ -212,6 +210,7 @@ int EF_calculs_genere_mat_rig(Projet *projet)
     //     Factorisation de la matrice de rigidité partielle vide.
     //     Fin.
     // FinSi
+    projet->ef_donnees.triplet_rigidite_complete->nnz = projet->ef_donnees.triplet_rigidite_complete_en_cours;
     if (projet->ef_donnees.triplet_rigidite_partielle->nrow == 0)
     {
         cholmod_triplet     *triplet_rigidite;
@@ -240,11 +239,11 @@ int EF_calculs_genere_mat_rig(Projet *projet)
     BUGMSG(projet->ef_donnees.ap, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_genere_mat_rig");
     projet->ef_donnees.ai = (long*)malloc(sizeof(long)*projet->ef_donnees.triplet_rigidite_partielle->nnz);
     BUGMSG(projet->ef_donnees.ai, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_genere_mat_rig");
-    projet->ef_donnees.ax= (double*)malloc(sizeof(double)*projet->ef_donnees.triplet_rigidite_partielle->nnz);
+    projet->ef_donnees.ax = (double*)malloc(sizeof(double)*projet->ef_donnees.triplet_rigidite_partielle->nnz);
     BUGMSG(projet->ef_donnees.ax, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_genere_mat_rig");
-    ai=projet->ef_donnees.triplet_rigidite_partielle->i;
-    aj=projet->ef_donnees.triplet_rigidite_partielle->j;
-    ax=projet->ef_donnees.triplet_rigidite_partielle->x;
+    ai = (long*)projet->ef_donnees.triplet_rigidite_partielle->i;
+    aj = (long*)projet->ef_donnees.triplet_rigidite_partielle->j;
+    ax = (double*)projet->ef_donnees.triplet_rigidite_partielle->x;
     umfpack_dl_triplet_to_col(projet->ef_donnees.triplet_rigidite_partielle->nrow, projet->ef_donnees.triplet_rigidite_partielle->ncol, projet->ef_donnees.triplet_rigidite_partielle->nnz, ai, aj, ax, projet->ef_donnees.ap, projet->ef_donnees.ai, projet->ef_donnees.ax, NULL);
     umfpack_dl_symbolic(projet->ef_donnees.triplet_rigidite_partielle->nrow, projet->ef_donnees.triplet_rigidite_partielle->ncol, projet->ef_donnees.ap, projet->ef_donnees.ai, projet->ef_donnees.ax, &symbolic, NULL, NULL);
     BUGMSG(symbolic, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_genere_mat_rig");
@@ -380,7 +379,7 @@ double EF_calculs_resid(long *Ap, long *Ai, double *Ax, double *b, int n, double
 {
     UF_long i, j, p ;
     double norm ;
-    double *r = malloc(sizeof(double)*n);
+    double *r = (double*)malloc(sizeof(double)*n);
     
     // Fonction tirée de la librarie UMFPACK, du fichier umfpack_dl_demo.c
     BUGMSG(Ap, NAN, "EF_calculs_resid\n");
@@ -449,13 +448,13 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
     /* Création du triplet partiel et complet contenant les forces extérieures
      * sur les noeuds et initialisation des valeurs à 0. Le vecteur partiel sera 
      * utilisé dans l'équation finale : {F} = [K]{D}*/
-    action_en_cours = list_curr(projet->actions);
+    action_en_cours = (Action*)list_curr(projet->actions);
     BUG(common_fonction_init(projet, action_en_cours) == 0, -3);
     triplet_force_partielle = cholmod_l_allocate_triplet(projet->ef_donnees.rigidite_matrice_partielle->nrow, 1, projet->ef_donnees.rigidite_matrice_partielle->nrow, 0, CHOLMOD_REAL, projet->ef_donnees.c);
     BUGMSG(triplet_force_partielle, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_resoud_charge");
-    ai = triplet_force_partielle->i;
-    aj = triplet_force_partielle->j;
-    ax = triplet_force_partielle->x;
+    ai = (long*)triplet_force_partielle->i;
+    aj = (long*)triplet_force_partielle->j;
+    ax = (double*)triplet_force_partielle->x;
     triplet_force_partielle->nnz = projet->ef_donnees.rigidite_matrice_partielle->nrow;
     for (i=0;i<triplet_force_partielle->nnz;i++)
     {
@@ -465,9 +464,9 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
     }
     triplet_force_complete = cholmod_l_allocate_triplet(projet->ef_donnees.rigidite_matrice_complete->nrow, 1, projet->ef_donnees.rigidite_matrice_complete->nrow, 0, CHOLMOD_REAL, projet->ef_donnees.c);
     BUGMSG(triplet_force_complete, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_resoud_charge");
-    ai3 = triplet_force_complete->i;
-    aj3 = triplet_force_complete->j;
-    ax3 = triplet_force_complete->x;
+    ai3 = (long*)triplet_force_complete->i;
+    aj3 = (long*)triplet_force_complete->j;
+    ax3 = (double*)triplet_force_complete->x;
     triplet_force_complete->nnz = projet->ef_donnees.rigidite_matrice_complete->nrow;
     for (i=0;i<triplet_force_complete->nnz;i++)
     {
@@ -490,7 +489,7 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
     //     Si la charge en cours est une charge au noeud Alors
     //         On ajoute au vecteur des efforts les efforts aux noeuds directement saisis par
     //           l'utilisateur dans le repère global.
-                    Charge_Noeud *charge_noeud = list_curr(action_en_cours->charges);
+                    Charge_Noeud *charge_noeud = (Charge_Noeud*)list_curr(action_en_cours->charges);
                     if (projet->ef_donnees.noeuds_pos_partielle[charge_noeud->noeud->numero][0] != -1)
                         ax[projet->ef_donnees.noeuds_pos_partielle[charge_noeud->noeud->numero][0]] += charge_noeud->x;
                     if (projet->ef_donnees.noeuds_pos_partielle[charge_noeud->noeud->numero][1] != -1)
@@ -514,7 +513,7 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
     //     Sinon Si la charge est une charge ponctuelle sur la barre Alors
                 case CHARGE_BARRE_PONCTUELLE :
                 {
-                    Charge_Barre_Ponctuelle *charge_barre = list_curr(action_en_cours->charges);
+                    Charge_Barre_Ponctuelle *charge_barre = (Charge_Barre_Ponctuelle*)list_curr(action_en_cours->charges);
                     double       E, G;                         /* Caractéristiques du matériau de la barre */
                     double       xx, yy, zz, l;
                     double       a, b;                         /* Position de la charge par rapport au début et à la fin de l'élément discrétisé */
@@ -525,7 +524,7 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
                     double       FAy_i, FAy_h, FBy_i, FBy_h;   /* Force opposé à la réaction d'appui */
                     double       FAz_i, FAz_h, FBz_i, FBz_h;
                     EF_Noeud    *noeud_debut, *noeud_fin;
-                    Beton_Barre *element_en_beton = charge_barre->barre;
+                    Beton_Barre *element_en_beton = (Beton_Barre*)charge_barre->barre;
                     unsigned int num = element_en_beton->numero;
                     unsigned int pos;                          /* numéro de l'élément dans la discrétisation */
                     
@@ -552,18 +551,18 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
                     {
                         triplet_efforts_globaux_initiaux = cholmod_l_allocate_triplet(12, 1, 12, 0, CHOLMOD_REAL, projet->ef_donnees.c);
                         BUGMSG(triplet_efforts_globaux_initiaux, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_resoud_charge");
-                        ai2 = triplet_efforts_globaux_initiaux->i;
-                        aj2 = triplet_efforts_globaux_initiaux->j;
-                        ax2 = triplet_efforts_globaux_initiaux->x;
+                        ai2 = (long*)triplet_efforts_globaux_initiaux->i;
+                        aj2 = (long*)triplet_efforts_globaux_initiaux->j;
+                        ax2 = (double*)triplet_efforts_globaux_initiaux->x;
                         triplet_efforts_globaux_initiaux->nnz = 12;
                     }
                     else
                     {
                         triplet_efforts_locaux_initiaux = cholmod_l_allocate_triplet(12, 1, 12, 0, CHOLMOD_REAL, projet->ef_donnees.c);
                         BUGMSG(triplet_efforts_locaux_initiaux, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_resoud_charge");
-                        ai2 = triplet_efforts_locaux_initiaux->i;
-                        aj2 = triplet_efforts_locaux_initiaux->j;
-                        ax2 = triplet_efforts_locaux_initiaux->x;
+                        ai2 = (long*)triplet_efforts_locaux_initiaux->i;
+                        aj2 = (long*)triplet_efforts_locaux_initiaux->j;
+                        ax2 = (double*)triplet_efforts_locaux_initiaux->x;
                         triplet_efforts_locaux_initiaux->nnz = 12;
                     }
                     ai2[0] = 0;     aj2[0] = 0;     ax2[0] = charge_barre->fx;
@@ -585,12 +584,12 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
                         cholmod_l_free_triplet(&triplet_efforts_globaux_initiaux, projet->ef_donnees.c);
                         sparse_efforts_locaux_initiaux = cholmod_l_ssmult(element_en_beton->matrice_rotation_transpose, sparse_efforts_globaux_initiaux, 0, 1, 0, projet->ef_donnees.c);
                         BUGMSG(sparse_efforts_locaux_initiaux, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_resoud_charge");
-                        cholmod_l_free_sparse(&(sparse_efforts_globaux_initiaux), projet->ef_donnees.c);
+                        cholmod_l_free_sparse(&sparse_efforts_globaux_initiaux, projet->ef_donnees.c);
                         triplet_efforts_locaux_initiaux = cholmod_l_sparse_to_triplet(sparse_efforts_locaux_initiaux, projet->ef_donnees.c);
                         BUGMSG(triplet_efforts_locaux_initiaux, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_resoud_charge");
-                        ai2 = triplet_efforts_locaux_initiaux->i;
-                        aj2 = triplet_efforts_locaux_initiaux->j;
-                        ax2 = triplet_efforts_locaux_initiaux->x;
+                        ai2 = (long*)triplet_efforts_locaux_initiaux->i;
+                        aj2 = (long*)triplet_efforts_locaux_initiaux->j;
+                        ax2 = (double*)triplet_efforts_locaux_initiaux->x;
                         cholmod_l_free_sparse(&(sparse_efforts_locaux_initiaux), projet->ef_donnees.c);
                     }
                     /* A ce stade ax2 pointent vers les charges dans le repère local*/
@@ -752,9 +751,9 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
     //           $\{ R \}_{global} = [K] \cdot \{ F \}_{local}$\end{center}\begin{verbatim}
                     triplet_efforts_locaux_finaux = cholmod_l_allocate_triplet(12, 1, 12, 0, CHOLMOD_REAL, projet->ef_donnees.c);
                     BUGMSG(triplet_efforts_locaux_finaux, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_resoud_charge");
-                    ai2 = triplet_efforts_locaux_finaux->i;
-                    aj2 = triplet_efforts_locaux_finaux->j;
-                    ax2 = triplet_efforts_locaux_finaux->x;
+                    ai2 = (long*)triplet_efforts_locaux_finaux->i;
+                    aj2 = (long*)triplet_efforts_locaux_finaux->j;
+                    ax2 = (double*)triplet_efforts_locaux_finaux->x;
                     triplet_efforts_locaux_finaux->nnz = 12;
                     ai2[0] = 0;   aj2[0] = 0;  ax2[0] = FAx;
                     ai2[1] = 1;   aj2[1] = 0;  ax2[1] = FAy_i + FAy_h;
@@ -776,9 +775,9 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
                     cholmod_l_free_sparse(&(sparse_efforts_locaux_finaux), projet->ef_donnees.c);
                     triplet_efforts_globaux_finaux = cholmod_l_sparse_to_triplet(sparse_efforts_globaux_finaux, projet->ef_donnees.c);
                     BUGMSG(triplet_efforts_globaux_finaux, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_resoud_charge");
-                    ai2 = triplet_efforts_globaux_finaux->i;
-                    aj2 = triplet_efforts_globaux_finaux->j;
-                    ax2 = triplet_efforts_globaux_finaux->x;
+                    ai2 = (long*)triplet_efforts_globaux_finaux->i;
+                    aj2 = (long*)triplet_efforts_globaux_finaux->j;
+                    ax2 = (double*)triplet_efforts_globaux_finaux->x;
                     cholmod_l_free_sparse(&(sparse_efforts_globaux_finaux), projet->ef_donnees.c);
                     
     //         Ajout des moments et les efforts dans le vecteur des forces aux noeuds {F}
@@ -805,8 +804,8 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
                 {
                     double       xx, yy, zz, l, ll;
                     unsigned int j_d, j_f;                  /* numéro de l'élément dans la discrétisation */
-                    Charge_Barre_Repartie_Uniforme *charge_barre = list_curr(action_en_cours->charges);
-                    Beton_Barre  *element_en_beton = charge_barre->barre;
+                    Charge_Barre_Repartie_Uniforme *charge_barre = (Charge_Barre_Repartie_Uniforme*)list_curr(action_en_cours->charges);
+                    Beton_Barre  *element_en_beton = (Beton_Barre*)charge_barre->barre;
                     double       E, G;                         /* Caractéristiques du matériau de la barre */
                     
     //         Récupération des caractéristiques mécaniques de l'élément.
@@ -833,18 +832,18 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
                     {
                         triplet_efforts_globaux_initiaux = cholmod_l_allocate_triplet(12, 1, 12, 0, CHOLMOD_REAL, projet->ef_donnees.c);
                         BUGMSG(triplet_efforts_globaux_initiaux, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_resoud_charge");
-                        ai2 = triplet_efforts_globaux_initiaux->i;
-                        aj2 = triplet_efforts_globaux_initiaux->j;
-                        ax2 = triplet_efforts_globaux_initiaux->x;
+                        ai2 = (long*)triplet_efforts_globaux_initiaux->i;
+                        aj2 = (long*)triplet_efforts_globaux_initiaux->j;
+                        ax2 = (double*)triplet_efforts_globaux_initiaux->x;
                         triplet_efforts_globaux_initiaux->nnz = 12;
                     }
                     else
                     {
                         triplet_efforts_locaux_initiaux = cholmod_l_allocate_triplet(12, 1, 12, 0, CHOLMOD_REAL, projet->ef_donnees.c);
                         BUGMSG(triplet_efforts_locaux_initiaux, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_resoud_charge");
-                        ai2 = triplet_efforts_locaux_initiaux->i;
-                        aj2 = triplet_efforts_locaux_initiaux->j;
-                        ax2 = triplet_efforts_locaux_initiaux->x;
+                        ai2 = (long*)triplet_efforts_locaux_initiaux->i;
+                        aj2 = (long*)triplet_efforts_locaux_initiaux->j;
+                        ax2 = (double*)triplet_efforts_locaux_initiaux->x;
                         triplet_efforts_locaux_initiaux->nnz = 12;
                     }
                     xx = element_en_beton->noeud_fin->position.x - element_en_beton->noeud_debut->position.x;
@@ -885,9 +884,9 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
                         cholmod_l_free_sparse(&(sparse_efforts_globaux_initiaux), projet->ef_donnees.c);
                         triplet_efforts_locaux_initiaux = cholmod_l_sparse_to_triplet(sparse_efforts_locaux_initiaux, projet->ef_donnees.c);
                         BUGMSG(triplet_efforts_locaux_initiaux, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_resoud_charge");
-                        ai2 = triplet_efforts_locaux_initiaux->i;
-                        aj2 = triplet_efforts_locaux_initiaux->j;
-                        ax2 = triplet_efforts_locaux_initiaux->x;
+                        ai2 = (long*)triplet_efforts_locaux_initiaux->i;
+                        aj2 = (long*)triplet_efforts_locaux_initiaux->j;
+                        ax2 = (double*)triplet_efforts_locaux_initiaux->x;
                         cholmod_l_free_sparse(&(sparse_efforts_locaux_initiaux), projet->ef_donnees.c);
                     }
                     /* A ce stade ax2 pointent vers les charges dans le repère local*/
@@ -1101,9 +1100,9 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
     //           $\{ R \}_{global} = [K] \cdot \{ F \}_{local}$\end{center}\begin{verbatim}
                         triplet_efforts_locaux_finaux = cholmod_l_allocate_triplet(12, 1, 12, 0, CHOLMOD_REAL, projet->ef_donnees.c);
                         BUGMSG(triplet_efforts_locaux_finaux, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_resoud_charge");
-                        ai4 = triplet_efforts_locaux_finaux->i;
-                        aj4 = triplet_efforts_locaux_finaux->j;
-                        ax4 = triplet_efforts_locaux_finaux->x;
+                        ai4 = (long*)triplet_efforts_locaux_finaux->i;
+                        aj4 = (long*)triplet_efforts_locaux_finaux->j;
+                        ax4 = (double*)triplet_efforts_locaux_finaux->x;
                         triplet_efforts_locaux_finaux->nnz = 12;
                         ai4[0] = 0;   aj4[0] = 0;  ax4[0] = FAx;
                         ai4[1] = 1;   aj4[1] = 0;  ax4[1] = FAy_i+FAy_h;
@@ -1125,9 +1124,9 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
                         cholmod_l_free_sparse(&(sparse_efforts_locaux_finaux), projet->ef_donnees.c);
                         triplet_efforts_globaux_finaux = cholmod_l_sparse_to_triplet(sparse_efforts_globaux_finaux, projet->ef_donnees.c);
                         BUGMSG(triplet_efforts_globaux_finaux, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_resoud_charge");
-                        ai4 = triplet_efforts_globaux_finaux->i;
-                        aj4 = triplet_efforts_globaux_finaux->j;
-                        ax4 = triplet_efforts_globaux_finaux->x;
+                        ai4 = (long*)triplet_efforts_globaux_finaux->i;
+                        aj4 = (long*)triplet_efforts_globaux_finaux->j;
+                        ax4 = (double*)triplet_efforts_globaux_finaux->x;
                         cholmod_l_free_sparse(&(sparse_efforts_globaux_finaux), projet->ef_donnees.c);
                     
     //             Ajout des moments et les efforts dans le vecteur des forces aux noeuds {F}
@@ -1176,13 +1175,13 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
     triplet_deplacements_partiels = cholmod_l_allocate_triplet(projet->ef_donnees.rigidite_matrice_partielle->nrow, 1, projet->ef_donnees.rigidite_matrice_partielle->nrow, 0, CHOLMOD_REAL, projet->ef_donnees.c);
     BUGMSG(triplet_deplacements_partiels, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_resoud_charge");
     triplet_deplacements_partiels->nnz = projet->ef_donnees.rigidite_matrice_partielle->nrow;
-    ai = triplet_deplacements_partiels->i;
-    aj = triplet_deplacements_partiels->j;
-    ax = triplet_deplacements_partiels->x;
+    ai = (long*)triplet_deplacements_partiels->i;
+    aj = (long*)triplet_deplacements_partiels->j;
+    ax = (double*)triplet_deplacements_partiels->x;
     if (projet->ef_donnees.rigidite_matrice_partielle->nrow != 0)
     {
-        ax2 = triplet_force_partielle->x;
-        umfpack_dl_solve(UMFPACK_A, projet->ef_donnees.ap, projet->ef_donnees.ai, projet->ef_donnees.ax, ax, ax2, projet->ef_donnees.numeric, NULL, NULL) ;
+        ax2 = (double*)triplet_force_partielle->x;
+        BUGMSG(umfpack_dl_solve(UMFPACK_A, projet->ef_donnees.ap, projet->ef_donnees.ai, projet->ef_donnees.ax, ax, ax2, projet->ef_donnees.numeric, NULL, NULL) == UMFPACK_OK, -3, gettext("Erreur lors de la résolution de la matrice.\n"));
         projet->ef_donnees.residu = EF_calculs_resid (projet->ef_donnees.ap, projet->ef_donnees.ai, projet->ef_donnees.ax, ax2, projet->ef_donnees.triplet_rigidite_partielle->nrow, ax);
         printf("Residu sur les déplacements : %g\n", projet->ef_donnees.residu);
         for (i=0;i<projet->ef_donnees.rigidite_matrice_partielle->nrow;i++)
@@ -1199,9 +1198,9 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
     triplet_deplacements_totaux = cholmod_l_allocate_triplet(action_en_cours->forces_complet->nrow, 1, action_en_cours->forces_complet->nrow, 0, CHOLMOD_REAL, projet->ef_donnees.c);
     BUGMSG(triplet_deplacements_totaux, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_resoud_charge");
     triplet_deplacements_totaux->nnz = action_en_cours->forces_complet->nrow;
-    ai2 = triplet_deplacements_totaux->i;
-    aj2 = triplet_deplacements_totaux->j;
-    ax2 = triplet_deplacements_totaux->x;
+    ai2 = (long*)triplet_deplacements_totaux->i;
+    aj2 = (long*)triplet_deplacements_totaux->j;
+    ax2 = (double*)triplet_deplacements_totaux->x;
     j = 0;
     for (i=0;i<list_size(projet->ef_donnees.noeuds);i++)
     {
@@ -1240,9 +1239,9 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
     list_mvfront(projet->beton.barres);
     do
     {
-        Beton_Barre         *element_en_beton = list_curr(projet->beton.barres);
-        Beton_Section_Rectangulaire *section_tmp = element_en_beton->section;
-        double              S = _1992_1_1_sections_s(section_tmp);
+        Beton_Barre                 *element_en_beton = (Beton_Barre*)list_curr(projet->beton.barres);
+        Beton_Section_Rectangulaire *section_tmp = (Beton_Section_Rectangulaire*)element_en_beton->section;
+        double                      S = _1992_1_1_sections_s(section_tmp);
         
     //     Pour chaque discrétisation de la barre
         for (j=0;j<=element_en_beton->discretisation_element;j++)
@@ -1284,11 +1283,11 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
     //         Récupération des déplacements du noeud de départ et du noeud final de l'élément
             triplet_deplacement_globaux = cholmod_l_allocate_triplet(12, 1, 12, 0, CHOLMOD_REAL, projet->ef_donnees.c);
             BUGMSG(triplet_deplacement_globaux, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_resoud_charge");
-            ai = triplet_deplacement_globaux->i;
-            aj = triplet_deplacement_globaux->j;
-            ax = triplet_deplacement_globaux->x;
+            ai = (long*)triplet_deplacement_globaux->i;
+            aj = (long*)triplet_deplacement_globaux->j;
+            ax = (double*)triplet_deplacement_globaux->x;
             triplet_deplacement_globaux->nnz = 12;
-            ax2 = triplet_deplacements_totaux->x;
+            ax2 = (double*)triplet_deplacements_totaux->x;
             for (i=0;i<6;i++)
             {
                 ai[i] = i;
@@ -1318,8 +1317,8 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
             sparse_effort_locaux = cholmod_l_ssmult(element_en_beton->info_EF[j].matrice_rigidite_locale, sparse_deplacement_locaux, 0, 1, TRUE, projet->ef_donnees.c);
             BUGMSG(sparse_effort_locaux, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_calculs_resoud_charge");
             
-            ax = sparse_deplacement_locaux->x;
-            ax2 = sparse_effort_locaux->x;
+            ax = (double*)sparse_deplacement_locaux->x;
+            ax2 = (double*)sparse_effort_locaux->x;
             xx = noeud_debut->position.x - element_en_beton->noeud_debut->position.x;
             yy = noeud_debut->position.y - element_en_beton->noeud_debut->position.y;
             zz = noeud_debut->position.z - element_en_beton->noeud_debut->position.z;

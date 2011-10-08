@@ -111,7 +111,7 @@ EF_Noeud* EF_noeuds_cherche_numero(Projet *projet, int numero)
     list_mvfront(projet->ef_donnees.noeuds);
     do
     {
-        EF_Noeud    *noeud = list_curr(projet->ef_donnees.noeuds);
+        EF_Noeud    *noeud = (EF_Noeud*)list_curr(projet->ef_donnees.noeuds);
         
         if (noeud->numero == numero)
             return noeud;
@@ -135,6 +135,7 @@ double EF_noeuds_distance(EF_Noeud* n1, EF_Noeud* n2)
 {
     double x, y, z;
     
+    // \end{verbatim}\texttt{distance }$= \sqrt{x^2+y^2+z^2}$\begin{verbatim}
     BUGMSG(n1, NAN, "EF_noeuds_distance\n");
     BUGMSG(n2, NAN, "EF_noeuds_distance\n");
     
@@ -161,7 +162,7 @@ int EF_noeuds_free(Projet *projet)
     // Trivial
     while (!list_empty(projet->ef_donnees.noeuds))
     {
-        EF_Noeud    *noeud = list_remove_front(projet->ef_donnees.noeuds);
+        EF_Noeud    *noeud = (EF_Noeud*)list_remove_front(projet->ef_donnees.noeuds);
         
         free(noeud);
     }

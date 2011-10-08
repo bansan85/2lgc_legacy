@@ -55,16 +55,16 @@ int main(void)
     BUG(_1990_groupe_ajout_niveau(projet) == 0, -1);
     BUG(_1990_groupe_ajout_niveau(projet) == 0, -1);
     BUG(_1990_groupe_ajout_niveau(projet) == 0, -1);
-    BUG(_1990_groupe_ajout_groupe(projet, 0, GROUPE_COMBINAISON_AND) == 0, -1); // Charges permanentes
-    BUG(_1990_groupe_ajout_groupe(projet, 0, GROUPE_COMBINAISON_AND) == 0, -1); // Charges d'exploitation
-    BUG(_1990_groupe_ajout_groupe(projet, 0, GROUPE_COMBINAISON_XOR) == 0, -1); // Neige
-    BUG(_1990_groupe_ajout_groupe(projet, 0, GROUPE_COMBINAISON_XOR) == 0, -1); // Vent
-    BUG(_1990_groupe_ajout_groupe(projet, 1, GROUPE_COMBINAISON_AND) == 0, -1); // Charges permanentes
-    BUG(_1990_groupe_ajout_groupe(projet, 1, GROUPE_COMBINAISON_AND) == 0, -1); // Charges d'exploitation
-    BUG(_1990_groupe_ajout_groupe(projet, 1, GROUPE_COMBINAISON_OR) == 0, -1); // Charges climatiques
-    BUG(_1990_groupe_ajout_groupe(projet, 2, GROUPE_COMBINAISON_AND) == 0, -1); // Tout
-    BUG(_1990_groupe_ajout_groupe(projet, 2, GROUPE_COMBINAISON_OR) == 0, -1); // Tout
-    BUG(_1990_groupe_ajout_groupe(projet, 3, GROUPE_COMBINAISON_AND) == 0, -1); // Tout
+    BUG(_1990_groupe_ajout_groupe(projet, 0, GROUPE_COMBINAISON_AND, "") == 0, -1); // Charges permanentes
+    BUG(_1990_groupe_ajout_groupe(projet, 0, GROUPE_COMBINAISON_AND, "") == 0, -1); // Charges d'exploitation
+    BUG(_1990_groupe_ajout_groupe(projet, 0, GROUPE_COMBINAISON_XOR, "") == 0, -1); // Neige
+    BUG(_1990_groupe_ajout_groupe(projet, 0, GROUPE_COMBINAISON_XOR, "") == 0, -1); // Vent
+    BUG(_1990_groupe_ajout_groupe(projet, 1, GROUPE_COMBINAISON_AND, "") == 0, -1); // Charges permanentes
+    BUG(_1990_groupe_ajout_groupe(projet, 1, GROUPE_COMBINAISON_AND, "") == 0, -1); // Charges d'exploitation
+    BUG(_1990_groupe_ajout_groupe(projet, 1, GROUPE_COMBINAISON_OR, "") == 0, -1); // Charges climatiques
+    BUG(_1990_groupe_ajout_groupe(projet, 2, GROUPE_COMBINAISON_AND, "") == 0, -1); // Tout
+    BUG(_1990_groupe_ajout_groupe(projet, 2, GROUPE_COMBINAISON_OR, "") == 0, -1); // Tout
+    BUG(_1990_groupe_ajout_groupe(projet, 3, GROUPE_COMBINAISON_AND, "") == 0, -1); // Tout
     BUG(_1990_groupe_ajout_element(projet, 0, 0, 0) == 0, -1);
     BUG(_1990_groupe_ajout_element(projet, 0, 1, 1) == 0, -1);
     BUG(_1990_groupe_ajout_element(projet, 0, 2, 2) == 0, -1);

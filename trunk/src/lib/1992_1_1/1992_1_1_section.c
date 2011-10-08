@@ -226,7 +226,7 @@ void* _1992_1_1_sections_cherche_numero(Projet *projet, unsigned int numero)
     list_mvfront(projet->beton.sections);
     do
     {
-        Beton_Section_Circulaire    *section = list_curr(projet->beton.sections);
+        Beton_Section_Circulaire    *section = (Beton_Section_Circulaire*)list_curr(projet->beton.sections);
         
         if (section->numero == numero)
             return section;
@@ -252,7 +252,7 @@ double _1992_1_1_sections_j(void* sect)
     {
         case BETON_SECTION_RECTANGULAIRE :
         {
-            Beton_Section_Rectangulaire *section = sect;
+            Beton_Section_Rectangulaire *section = (Beton_Section_Rectangulaire*)sect;
             double      l = section->largeur;
             double      h = section->hauteur;
             double      a, b;
@@ -269,7 +269,7 @@ double _1992_1_1_sections_j(void* sect)
         }
         case BETON_SECTION_T :
         {
-            Beton_Section_T *section = sect;
+            Beton_Section_T *section = (Beton_Section_T*)sect;
             double      lt = section->largeur_table;
             double      la = section->largeur_ame;
             double      ht = section->hauteur_table;
@@ -293,7 +293,7 @@ double _1992_1_1_sections_j(void* sect)
         }
         case BETON_SECTION_CARRE :
         {
-            Beton_Section_Carre *section = sect;
+            Beton_Section_Carre *section = (Beton_Section_Carre*)sect;
             return section->cote*section->cote*section->cote*section->cote/16.*(16./3.-3.364*(1.-1./12.));
             
     // Pour une section carrée de section constante, J vaut :\end{verbatim}\begin{displaymath}
@@ -302,7 +302,7 @@ double _1992_1_1_sections_j(void* sect)
         }
         case BETON_SECTION_CIRCULAIRE :
         {
-            Beton_Section_Circulaire *section = sect;
+            Beton_Section_Circulaire *section = (Beton_Section_Circulaire*)sect;
             return M_PI*section->diametre*section->diametre*section->diametre*section->diametre/32.;
     // Pour une section circulaire de section constante, J vaut :\end{verbatim}\begin{displaymath}
     // J = \frac{\pi \cdot \phi^4}{32}\end{displaymath}\begin{verbatim}
@@ -332,7 +332,7 @@ double _1992_1_1_sections_iy(void* sect)
     {
         case BETON_SECTION_RECTANGULAIRE :
         {
-            Beton_Section_Rectangulaire *section = sect;
+            Beton_Section_Rectangulaire *section = (Beton_Section_Rectangulaire*)sect;
             return section->largeur*section->hauteur*section->hauteur*section->hauteur/12.;
     // Pour une section rectantulaire de section constante, Iy vaut :\end{verbatim}\begin{displaymath}
     // I_y = \frac{l \cdot h^3}{12} \end{displaymath}\begin{verbatim}
@@ -340,7 +340,7 @@ double _1992_1_1_sections_iy(void* sect)
         }
         case BETON_SECTION_T :
         {
-            Beton_Section_T *section = sect;
+            Beton_Section_T *section = (Beton_Section_T*)sect;
             double      lt = section->largeur_table;
             double      la = section->largeur_ame;
             double      ht = section->hauteur_table;
@@ -358,7 +358,7 @@ double _1992_1_1_sections_iy(void* sect)
         }
         case BETON_SECTION_CARRE :
         {
-            Beton_Section_Carre *section = sect;
+            Beton_Section_Carre *section = (Beton_Section_Carre*)sect;
             return section->cote*section->cote*section->cote*section->cote/12.;
             
     // Pour une section carrée de section constante, Iy vaut :\end{verbatim}\begin{displaymath}
@@ -367,7 +367,7 @@ double _1992_1_1_sections_iy(void* sect)
         }
         case BETON_SECTION_CIRCULAIRE :
         {
-            Beton_Section_Circulaire *section = sect;
+            Beton_Section_Circulaire *section = (Beton_Section_Circulaire*)sect;
             return M_PI*section->diametre*section->diametre*section->diametre*section->diametre/64.;
     // Pour une section circulaire de section constante, Iy vaut :\end{verbatim}\begin{displaymath}
     // I_y = \frac{\pi \cdot \phi^4}{64} \end{displaymath}\begin{verbatim}
@@ -397,7 +397,7 @@ double _1992_1_1_sections_iz(void* sect)
     {
         case BETON_SECTION_RECTANGULAIRE :
         {
-            Beton_Section_Rectangulaire *section = sect;
+            Beton_Section_Rectangulaire *section = (Beton_Section_Rectangulaire*)sect;
             return section->hauteur*section->largeur*section->largeur*section->largeur/12.;
             
     // Pour une section rectantulaire de section constante, I vaut :\end{verbatim}\begin{displaymath}
@@ -406,7 +406,7 @@ double _1992_1_1_sections_iz(void* sect)
         }
         case BETON_SECTION_T :
         {
-            Beton_Section_T *section = sect;
+            Beton_Section_T *section = (Beton_Section_T*)sect;
             double      lt = section->largeur_table;
             double      la = section->largeur_ame;
             double      ht = section->hauteur_table;
@@ -419,7 +419,7 @@ double _1992_1_1_sections_iz(void* sect)
         }
         case BETON_SECTION_CARRE :
         {
-            Beton_Section_Carre *section = sect;
+            Beton_Section_Carre *section = (Beton_Section_Carre*)sect;
             return section->cote*section->cote*section->cote*section->cote/12.;
     // Pour une section carrée de section constante, I vaut :\end{verbatim}\begin{displaymath}
     // I = \frac{c^4}{12} \end{displaymath}\begin{verbatim}
@@ -427,7 +427,7 @@ double _1992_1_1_sections_iz(void* sect)
         }
         case BETON_SECTION_CIRCULAIRE :
         {
-            Beton_Section_Circulaire *section = sect;
+            Beton_Section_Circulaire *section = (Beton_Section_Circulaire*)sect;
             return M_PI*section->diametre*section->diametre*section->diametre*section->diametre/64.;
     // Pour une section circulaire de section constante, I vaut :\end{verbatim}\begin{displaymath}
     // I = \frac{\pi \cdot \phi^4}{64} \end{displaymath}\begin{verbatim}
@@ -471,7 +471,7 @@ double _1992_1_1_sections_ay(Beton_Barre *barre, unsigned int discretisation)
     
     // Le coefficient a est défini par la formule :\end{verbatim}\begin{displaymath}
     // a_y = \frac{1}{l^2}\int_0^l \frac{(l-x)^2}{E \cdot I_y(x)} dx\end{displaymath}\begin{verbatim}
-    section_tmp = barre->section;
+    section_tmp = (Beton_Section_Rectangulaire*)barre->section;
     
     if (discretisation == 0)
         debut = barre->noeud_debut;
@@ -537,7 +537,7 @@ double _1992_1_1_sections_by(Beton_Barre *barre, unsigned int discretisation)
     
     // Le coefficient b est défini par la formule :\end{verbatim}\begin{displaymath}
     // b_y = \frac{1}{l^2}\int_0^l \frac{x \cdot (l-x)^2}{E \cdot I_y(x)} dx\end{displaymath}\begin{verbatim}
-    section_tmp = barre->section;
+    section_tmp = (Beton_Section_Rectangulaire*)barre->section;
     
     if (discretisation == 0)
         debut = barre->noeud_debut;
@@ -603,7 +603,7 @@ double _1992_1_1_sections_cy(Beton_Barre *barre, unsigned int discretisation)
     
     // Le coefficient c est défini par la formule :\end{verbatim}\begin{displaymath}
     // c_y = \frac{1}{l^2}\int_0^l \frac{x^2}{E \cdot I_y(x)} dx\end{displaymath}\begin{verbatim}
-    section_tmp = barre->section;
+    section_tmp = (Beton_Section_Rectangulaire*)barre->section;
     
     if (discretisation == 0)
         debut = barre->noeud_debut;
@@ -669,7 +669,7 @@ double _1992_1_1_sections_az(Beton_Barre *barre, unsigned int discretisation)
     
     // Le coefficient a est défini par la formule :\end{verbatim}\begin{displaymath}
     // a_z = \frac{1}{l^2}\int_0^l \frac{(l-x)^2}{E \cdot I_z(x)} dx\end{displaymath}\begin{verbatim}
-    section_tmp = barre->section;
+    section_tmp = (Beton_Section_Rectangulaire*)barre->section;
     
     if (discretisation == 0)
         debut = barre->noeud_debut;
@@ -735,7 +735,7 @@ double _1992_1_1_sections_bz(Beton_Barre *barre, unsigned int discretisation)
     
     // Le coefficient b est défini par la formule :\end{verbatim}\begin{displaymath}
     // b_z = \frac{1}{l^2}\int_0^l \frac{x \cdot (l-x)^2}{E \cdot I_z(x)} dx\end{displaymath}\begin{verbatim}
-    section_tmp = barre->section;
+    section_tmp = (Beton_Section_Rectangulaire*)barre->section;
     
     if (discretisation == 0)
         debut = barre->noeud_debut;
@@ -801,7 +801,7 @@ double _1992_1_1_sections_cz(Beton_Barre *barre, unsigned int discretisation)
     
     // Le coefficient c est défini par la formule :\end{verbatim}\begin{displaymath}
     // c_z = \frac{1}{l^2}\int_0^l \frac{x^2}{E \cdot I_y(x)} dx\end{displaymath}\begin{verbatim}
-    section_tmp = barre->section;
+    section_tmp = (Beton_Section_Rectangulaire*)barre->section;
     
     if (discretisation == 0)
         debut = barre->noeud_debut;
@@ -853,7 +853,7 @@ double _1992_1_1_sections_s(void *sect)
     {
         case BETON_SECTION_RECTANGULAIRE :
         {
-            Beton_Section_Rectangulaire *section = sect;
+            Beton_Section_Rectangulaire *section = (Beton_Section_Rectangulaire*)sect;
             return section->hauteur*section->largeur;
             
     // Pour une section rectantulaire de section constante, S vaut :\end{verbatim}\begin{displaymath}
@@ -862,7 +862,7 @@ double _1992_1_1_sections_s(void *sect)
         }
         case BETON_SECTION_T :
         {
-            Beton_Section_T *section = sect;
+            Beton_Section_T *section = (Beton_Section_T*)sect;
             return section->hauteur_table*section->largeur_table+section->hauteur_ame*section->largeur_ame;
             
     // Pour une section en T de section constante (lt : largeur de la table, la : largeur de
@@ -872,7 +872,7 @@ double _1992_1_1_sections_s(void *sect)
         }
         case BETON_SECTION_CARRE :
         {
-            Beton_Section_Carre *section = sect;
+            Beton_Section_Carre *section = (Beton_Section_Carre*)sect;
             return section->cote*section->cote;
             
     // Pour une section carrée de section constante, S vaut :\end{verbatim}\begin{displaymath}
@@ -881,7 +881,7 @@ double _1992_1_1_sections_s(void *sect)
         }
         case BETON_SECTION_CIRCULAIRE :
         {
-            Beton_Section_Circulaire *section = sect;
+            Beton_Section_Circulaire *section = (Beton_Section_Circulaire*)sect;
             return M_PI*section->diametre*section->diametre/4.;
     // Pour une section circulaire de section constante, S vaut :\end{verbatim}\begin{displaymath}
     // S = \frac{\pi \cdot \phi^2}{4} \end{displaymath}\begin{verbatim}
@@ -930,7 +930,7 @@ double _1992_1_1_sections_es_l(Beton_Barre *barre, unsigned int discretisation,
     
     // Le facteur ES/L est défini par la formule :\end{verbatim}\begin{displaymath}
     // \frac{E \cdot S}{L} = \frac{E}{\int_d^f \frac{1}{S(x)} dx}\end{displaymath}\begin{verbatim}
-    section_tmp = barre->section;
+    section_tmp = (Beton_Section_Rectangulaire*)barre->section;
     
     if (discretisation == 0)
         debut = barre->noeud_debut;
@@ -952,7 +952,7 @@ double _1992_1_1_sections_es_l(Beton_Barre *barre, unsigned int discretisation,
     {
         case BETON_SECTION_RECTANGULAIRE :
         {
-            Beton_Section_Rectangulaire *section = barre->section;
+            Beton_Section_Rectangulaire *section = (Beton_Section_Rectangulaire*)barre->section;
             double      S = section->hauteur*section->largeur;
             
     // Pour une section rectantulaire de section constante, ES/L vaut :\end{verbatim}\begin{displaymath}
@@ -962,7 +962,7 @@ double _1992_1_1_sections_es_l(Beton_Barre *barre, unsigned int discretisation,
         }
         case BETON_SECTION_T :
         {
-            Beton_Section_T *section = barre->section;
+            Beton_Section_T *section = (Beton_Section_T*)barre->section;
             double      lt = section->largeur_table;
             double      la = section->largeur_ame;
             double      ht = section->hauteur_table;
@@ -977,7 +977,7 @@ double _1992_1_1_sections_es_l(Beton_Barre *barre, unsigned int discretisation,
         }
         case BETON_SECTION_CARRE :
         {
-            Beton_Section_Carre *section = barre->section;
+            Beton_Section_Carre *section = (Beton_Section_Carre*)barre->section;
             double      S = section->cote*section->cote;
             
     // Pour une section carrée de section constante, ES/L vaut :\end{verbatim}\begin{displaymath}
@@ -987,7 +987,7 @@ double _1992_1_1_sections_es_l(Beton_Barre *barre, unsigned int discretisation,
         }
         case BETON_SECTION_CIRCULAIRE :
         {
-            Beton_Section_Circulaire *section = barre->section;
+            Beton_Section_Circulaire *section = (Beton_Section_Circulaire*)barre->section;
             double      S = M_PI*section->diametre*section->diametre/4.;
     // Pour une section circulaire de section constante, ES/L vaut :\end{verbatim}\begin{displaymath}
     // \frac{E \cdot S}{L} = \frac{E \cdot \pi \cdot \phi^2}{4 \cdot L} \end{displaymath}\begin{verbatim}
@@ -1032,7 +1032,7 @@ double _1992_1_1_sections_gj_l(Beton_Barre *barre, unsigned int discretisation)
     
     // Le facteur GJ/L est défini par la formule :\end{verbatim}\begin{displaymath}
     // \frac{G \cdot J}{L} = \frac{G}{\int_0^l \frac{1}{J(x)} dx}\end{displaymath}\begin{verbatim}
-    section_tmp = barre->section;
+    section_tmp = (Beton_Section_Rectangulaire*)barre->section;
     
     if (discretisation == 0)
         debut = barre->noeud_debut;
@@ -1054,7 +1054,7 @@ double _1992_1_1_sections_gj_l(Beton_Barre *barre, unsigned int discretisation)
     {
         case BETON_SECTION_RECTANGULAIRE :
         {
-            Beton_Section_Rectangulaire *section = barre->section;
+            Beton_Section_Rectangulaire *section = (Beton_Section_Rectangulaire*)barre->section;
             double      l = section->largeur;
             double      h = section->hauteur;
             double      J;
@@ -1073,7 +1073,7 @@ double _1992_1_1_sections_gj_l(Beton_Barre *barre, unsigned int discretisation)
         }
         case BETON_SECTION_T :
         {
-            Beton_Section_T *section = barre->section;
+            Beton_Section_T *section = (Beton_Section_T*)barre->section;
             double      lt = section->largeur_table;
             double      la = section->largeur_ame;
             double      ht = section->hauteur_table;
@@ -1099,7 +1099,7 @@ double _1992_1_1_sections_gj_l(Beton_Barre *barre, unsigned int discretisation)
         }
         case BETON_SECTION_CARRE :
         {
-            Beton_Section_Carre *section = barre->section;
+            Beton_Section_Carre *section = (Beton_Section_Carre*)barre->section;
             double      J = section->cote*section->cote*section->cote*section->cote/16.*(16./3.-3.364*(1.-1./12.));
             
     // Pour une section carrée de section constante, GJ/L vaut :\end{verbatim}\begin{displaymath}
@@ -1109,7 +1109,7 @@ double _1992_1_1_sections_gj_l(Beton_Barre *barre, unsigned int discretisation)
         }
         case BETON_SECTION_CIRCULAIRE :
         {
-            Beton_Section_Circulaire *section = barre->section;
+            Beton_Section_Circulaire *section = (Beton_Section_Circulaire*)barre->section;
             double      J = M_PI*section->diametre*section->diametre*section->diametre*section->diametre/32.;
     // Pour une section circulaire de section constante, GJ/L vaut :\end{verbatim}\begin{displaymath}
     // \frac{G \cdot J}{L} \texttt{ avec } J = \frac{\pi \cdot \phi^4}{32}\end{displaymath}\begin{verbatim}
@@ -1140,12 +1140,7 @@ int _1992_1_1_sections_free(Projet *projet)
     
     // Trivial
     while (!list_empty(projet->beton.sections))
-    {
-        
-        Beton_Section_Circulaire    *section;
-        section = list_remove_front(projet->beton.sections);
-        free(section);
-    }
+        free((Beton_Section_Circulaire*)list_remove_front(projet->beton.sections));
     
     free(projet->beton.sections);
     projet->beton.sections = NULL;

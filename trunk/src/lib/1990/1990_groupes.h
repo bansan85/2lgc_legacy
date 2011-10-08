@@ -21,6 +21,9 @@
 
 #include "config.h"
 #include <list.h>
+#ifdef ENABLE_GTK
+#include <gtk/gtk.h>
+#endif
 
 #include "1990_combinaisons.h"
 
@@ -28,7 +31,7 @@ typedef struct __Element
 {
     int         numero;
 #ifdef ENABLE_GTK
-    void        *pIter;
+    GtkTreeIter *pIter;
     int         pIter_expand;
 #endif
 } Element;
@@ -48,24 +51,25 @@ typedef struct __Groupe
     LIST                    *elements;
     Combinaisons            tmp_combinaison;
 #ifdef ENABLE_GTK
-    void                    *pIter;
+    GtkTreeIter             *pIter;
     int                     pIter_expand;
 #endif
 } Groupe;
 
 typedef struct __Niveau_Groupe
 {
-    int         niveau;
+    int             niveau;
     LIST            *groupes;
 #ifdef ENABLE_GTK
-    void            *pIter;
+    GtkTreeIter     *pIter;
 #endif
 } Niveau_Groupe;
 
 int _1990_groupe_init(Projet *projet);
 
 int _1990_groupe_ajout_niveau(Projet *projet);
-int _1990_groupe_ajout_groupe(Projet *projet, int niveau, Type_Groupe_Combinaison combinaison);
+int _1990_groupe_ajout_groupe(Projet *projet, int niveau,
+  Type_Groupe_Combinaison type_combinaison, char* nom);
 int _1990_groupe_ajout_element(Projet *projet, unsigned int niveau, int groupe_n, int groupe_n_1);
 
 int _1990_groupe_positionne_niveau(LIST *source, int numero);

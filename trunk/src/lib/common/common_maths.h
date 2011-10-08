@@ -23,14 +23,13 @@
 #include <cholmod.h>
 #include <cholmod_internal.h>
 #include <values.h>
+#include <glib/gmacros.h>
 
 #ifndef MAXDOUBLE
 #define MAXDOUBLE   1.7976931348623158e+308
 #endif
 
-#define ABS(X) ((X) > 0 ? (X) : -(X))
-
- #define ERREUR_RELATIVE_PUISSANCE 8 // Avec 13, common_fonction_compate peut ne pas marcher
+#define ERREUR_RELATIVE_PUISSANCE 8 // Avec 13, common_fonction_compate peut ne pas marcher
                                      // correctement.
  #define ERREUR_RELATIVE_MIN 1e-8
  #define ERREUR_RELATIVE_EGALE(x, y) ( \
