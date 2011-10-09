@@ -1185,7 +1185,6 @@ void _1990_gtk_button_options_clicked(GtkWidget *button __attribute__((unused)),
         
     /* Définition de la fenêtre */
     pWindow = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-    gtk_window_resize (GTK_WINDOW (pWindow), 600, 400);
     gtk_window_set_position(GTK_WINDOW(pWindow), GTK_WIN_POS_CENTER);
     gtk_window_set_title(GTK_WINDOW(pWindow), gettext("Options des combinaisons"));
     

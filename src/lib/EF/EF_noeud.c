@@ -91,6 +91,75 @@ int EF_noeuds_ajout(Projet *projet, double x, double y, double z, int appui)
 }
 
 
+int EF_noeuds_min_max(Projet *projet, double *x_min, double *x_max, double *y_min,
+  double *y_max, double *z_min, double *z_max)
+/* Description : Détermine le cube contenant tous les points de la structure. 
+ *               Une ou plusieurs valeurs min ou max peuvent valoir NULL.
+ * Paramètres : Projet *projet : la variable projet
+ *            : double *x_min : coordonnée du point ayant la valeur x minimale
+ *            : double *x_max : coordonnée du point ayant la valeur x maximale
+ *            : double *y_max : coordonnée du point ayant la valeur y minimale
+ *            : double *y_max : coordonnée du point ayant la valeur y maximale
+ *            : double *z_max : coordonnée du point ayant la valeur z minimale
+ *            : double *z_max : coordonnée du point ayant la valeur z maximale
+ * Valeur renvoyée :
+ *   Succès : 0
+ *   Échec : -1 en cas de paramètres invalides :
+ *             (projet == NULL) ou
+ *             (projet->ef_donnees.noeuds == NULL) ou
+ *             (list_size(projet->ef_donnees.noeuds) == 0)
+ */
+{
+    EF_Noeud    *noeud;
+    double      x_mi, x_ma, y_mi, y_ma, z_mi, z_ma;
+    
+    BUGMSG(projet, -1, "EF_noeuds_min_max\n");
+    BUGMSG(projet->ef_donnees.noeuds, -1, "EF_noeuds_min_max\n");
+    BUGMSG(list_size(projet->ef_donnees.noeuds), -1, "EF_noeuds_min_max\n");
+    
+    list_mvfront(projet->ef_donnees.noeuds);
+    noeud = (EF_Noeud*)list_curr(projet->ef_donnees.noeuds);
+    x_mi = noeud->position.x;
+    x_ma = noeud->position.x;
+    y_mi = noeud->position.y;
+    y_ma = noeud->position.y;
+    z_mi = noeud->position.z;
+    z_ma = noeud->position.z;
+    while (list_mvnext(projet->ef_donnees.noeuds) != NULL)
+    {
+        noeud = (EF_Noeud*)list_curr(projet->ef_donnees.noeuds);
+        
+        if (noeud->position.x < x_mi)
+            x_mi = noeud->position.x;
+        if (noeud->position.x > x_ma)
+            x_ma = noeud->position.x;
+        if (noeud->position.y < y_mi)
+            y_mi = noeud->position.y;
+        if (noeud->position.y > y_ma)
+            y_ma = noeud->position.y;
+        if (noeud->position.z < z_mi)
+            z_mi = noeud->position.z;
+        if (noeud->position.z > z_ma)
+            z_ma = noeud->position.z;
+    }
+    
+    if (x_min != NULL)
+        *x_min = x_mi;
+    if (x_max != NULL)
+        *x_max = x_ma;
+    if (y_min != NULL)
+        *y_min = y_mi;
+    if (y_max != NULL)
+        *y_max = y_ma;
+    if (z_min != NULL)
+        *z_min = z_mi;
+    if (z_max != NULL)
+        *z_max = z_ma;
+    
+    return 0;
+}
+
+
 EF_Noeud* EF_noeuds_cherche_numero(Projet *projet, int numero)
 /* Description : Positionne dans la liste des noeuds le noeud souhaité et le renvoie
  * Paramètres : Projet *projet : la variable projet

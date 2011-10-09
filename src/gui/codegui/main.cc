@@ -20,7 +20,9 @@
 
 #include "common_m3d.hpp"
 
+#ifdef __cplusplus
 extern "C" {
+#endif
 #include "common_text.h"
 #include "common_erreurs.h"
 #include "common_projet.h"
@@ -36,7 +38,10 @@ extern "C" {
 #include "EF_charge_noeud.h"
 #include "EF_charge_barre_ponctuelle.h"
 #include "EF_charge_barre_repartie_uniforme.h"
+#ifdef __cplusplus
 }
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <libintl.h>
@@ -81,10 +86,6 @@ int main(int argc, char *argv[])
     GtkWidget *pButton;
     Projet *projet;
     List_Gtk_m3d *m3d;
-    SGlobalData data;
-    CM3dLight *light = NULL;
-    GdkPixbuf *pixbuf = NULL;
-    CM3dObject *cube = NULL;
 
     
     EF_Relachement_Donnees_Elastique_Lineaire *ry_d, *rz_d, *ry_f, *rz_f;
@@ -163,6 +164,8 @@ int main(int argc, char *argv[])
     
     // Création des noeuds
     BUG(EF_noeuds_ajout(projet, 0.0, 0.0, 0.0, 0) == 0, -1);
+    BUG(EF_noeuds_ajout(projet, 0.0, 0.0, 8.0, -1) == 0, -1);
+    BUG(EF_noeuds_ajout(projet, 8.0, 0.0, 8.0, -1) == 0, -1);
     BUG(EF_noeuds_ajout(projet, 8.0, 0.0, 0.0, 0) == 0, -1);
     
     // Création des sections en béton
@@ -185,7 +188,9 @@ int main(int argc, char *argv[])
 //    BUG(EF_relachement_ajout(projet, EF_RELACHEMENT_LIBRE, NULL, EF_RELACHEMENT_LIBRE, NULL, EF_RELACHEMENT_LIBRE, NULL, EF_RELACHEMENT_BLOQUE, NULL, EF_RELACHEMENT_BLOQUE, NULL, EF_RELACHEMENT_BLOQUE, NULL) == 0, -1);
     
     // Création de l'élément en béton
-    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 0, 1, -1, 0) == 0, -1);
+    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 0, 1, -1, 10) == 0, -1);
+    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 1, 2, -1, 10) == 0, -1);
+    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 2, 3, -1, 10) == 0, -1);
 //    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 1, 2, -1, 0) == 0, -1);
     
     // Ajout de l'action ponctuelle
@@ -217,46 +222,13 @@ int main(int argc, char *argv[])
     gtk_table_attach(GTK_TABLE(pTable), pButton, 0, 1, 1, 2, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(0), 0, 0);
     g_signal_connect (pButton, "clicked", G_CALLBACK (gtk_window_option_destroy_button), MainWindow);
     
-// Initialisation d'une caméra
-data.camera = new CM3dCamera (100, 150, -350, 0, 0, 0, 45, 200, 200);
-
-// Initialisation de la scène
-data.scene = new CM3dScene ();
-data.scene->show_repere(true);
-data.scene->set_ambient_light (1);
-data.scene->set_show_type (SOLID);
-
-// Ajout d'une lumière diffuse
-light = new CM3dLight ("lumiere 1", DIFFUS, 1);
-light->set_position (100, 200, -200);
-data.scene->add_light (light);
-
-// Chargement d'une texture.
-pixbuf = M3d_texture_load ("./aaa.jpg");
-
-// Initialisation d'un cube.
-cube = M3d_cube_new ("cube", 80);
-cube->set_ambient_reflexion (0.8);
-cube->set_smooth(GOURAUD);
-cube->set_texture (pixbuf);
-
-/* Ajout du cube à la scène. */
-data.scene->add_object(cube);
-
-/* On déplace maintenant le cube fini légèrement sur la gauche histoire de
- * voir sur la même vue le cube et le repère de scène.
- */
-cube->set_position(-100, 0, 0);
-
-/* Test de rotation du cube. */
-cube->rotations(45,45,0);
-
     // L'affichage graphique
     m3d = (List_Gtk_m3d*)projet->list_gtk.m3d;
     gtk_table_attach(GTK_TABLE(pTable), m3d->drawing, 0, 1, 2, 3, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 0, 0);
-    g_signal_connect(m3d->drawing, "draw", G_CALLBACK(m3d_draw), &data);
-    g_signal_connect(m3d->drawing, "configure-event", G_CALLBACK(m3d_configure_event), &data);
-
+    
+    m3d_camera_axe_x_z(projet);
+    m3d_genere_graphique(projet);
+    
     // Affichage de l'interface graphique
     gtk_widget_show_all(MainWindow);
     gtk_main();
