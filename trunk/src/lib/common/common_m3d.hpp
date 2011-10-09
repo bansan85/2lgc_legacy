@@ -20,20 +20,27 @@
 #define __COMMON_SHOW_H
 
 #include <gtk/gtk.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
+
 #include "common_projet.h"
 
 typedef struct __List_Gtk_m3d
 {
     GtkWidget   *drawing;
+    gpointer    data;
 } List_Gtk_m3d;
 
 
 int m3d_init(Projet *projet);
+
 gboolean m3d_draw(GtkWidget *drawing, GdkEventExpose* ev, gpointer *data);
 gboolean m3d_configure_event(GtkWidget *drawing, GdkEventConfigure * ev, gpointer *data);
+
+int m3d_camera_axe_x_z(Projet *projet);
+int m3d_genere_graphique(Projet *projet);
 
 void m3d_free(Projet *projet);
 
