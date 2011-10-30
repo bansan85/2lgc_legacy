@@ -23,7 +23,7 @@
 #include <cholmod.h>
 #include <cholmod_internal.h>
 #include <values.h>
-#include <glib/gmacros.h>
+#include <glib.h>
 
 #ifndef MAXDOUBLE
 #define MAXDOUBLE   1.7976931348623158e+308

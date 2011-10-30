@@ -135,7 +135,6 @@ typedef struct __Projet
 } Projet;
 
 
-extern int cholmod_l_dump ;
 Projet *projet_init(Type_Pays pays);
 void projet_free(Projet *projet);
 

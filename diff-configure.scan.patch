@@ -4,7 +4,7 @@
 -AC_INIT([FULL-PACKAGE-NAME], [VERSION], [BUG-REPORT-ADDRESS])
 +AC_INIT(2lgc_code, 0.0.0.2, devel@2lgc.org, 2lgc_code, http://2lgc.org)
 +AM_INIT_AUTOMAKE
-@@ -8,24 +10,46 @@
+@@ -8,24 +10,55 @@
 +AM_GNU_GETTEXT([external])
 +AC_CONFIG_MACRO_DIR([m4])
  
@@ -14,6 +14,8 @@
  AC_PROG_CC
  AC_PROG_MAKE_SET
 +AM_PROG_CC_C_O
++AC_PROG_F77
++AC_PROG_INSTALL
 +AC_PROG_LIBTOOL
 +LIBXML_REQUIRED_VERSION=2.7.0
 +AC_SUBST(XML_CPPFLAGS)
@@ -40,6 +42,7 @@
 +fi
 +AM_GNU_GETTEXT([external])
 +ALL_LINGUAS="fr"
++PKG_PROG_PKG_CONFIG
  
  # Checks for libraries.
 -# FIXME: Replace `main' with a function in `-lamd':
@@ -56,12 +59,18 @@
 -AC_CHECK_LIB([list], [main])
 -# FIXME: Replace `main' with a function in `-lumfpack':
 -AC_CHECK_LIB([umfpack], [main])
++AC_CHECK_LIB(m, sqrt)
 +PKG_CHECK_MODULES([LIBLIST], [liblist >= 2.3.1], [], [AC_MSG_ERROR([liblist ( http://ohnopub.net/liblist ) est necessaire])])
 +AC_CHECK_LIB([amd], [amd_malloc], [], [AC_MSG_ERROR([amd ( http://www.cise.ufl.edu/research/sparse/amd ) est necessaire])])
-+AC_CHECK_LIB([gfortran], [_gfortran_st_write], [], [AC_MSG_ERROR([ gfortran est necessaire ])])
-+AC_CHECK_LIB([blas], [dtrsv_], [], [AC_MSG_ERROR([blas ( http://netlib.org/lapack ) est necessaire])])
++sinclude(acx_blas.m4)
++sinclude(acx_lapack.m4)
++ACX_BLAS
++if test x"$BLAS_LIBS" = x; then
++    AC_MSG_ERROR([Cannot find blas libraries])
++fi
 +AC_CHECK_LIB([cholmod], [cholmod_l_start], [], [AC_MSG_ERROR([cholmod ( http://www.cise.ufl.edu/research/sparse/cholmod ) est necessaire])])
 +AC_CHECK_LIB([colamd], [colamd_l_recommended], [], [AC_MSG_ERROR([colamd ( www.cise.ufl.edu/research/sparse/colamd ) est necessaire])])
 +AC_CHECK_LIB([umfpack], [umfpack_dl_solve], [], [AC_MSG_ERROR([umfpack ( www.cise.ufl.edu/research/sparse/umfpack ) est necessaire])])
++PKG_CHECK_MODULES([M3d], [M3d++-1.0])
  
  # Checks for header files.

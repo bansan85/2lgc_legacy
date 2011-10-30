@@ -169,6 +169,48 @@ Beton_Barre* _1992_1_1_barres_cherche_numero(Projet *projet, unsigned int numero
 }
 
 
+int _1992_1_1_barres_angle_rotation(Beton_Barre *barre, double *y, double *z)
+/* Description : Calcule les deux angles de rotation pour faire tourner une barre horizontale
+ *               en une barre parallèle à celle fournie dans l'argument 1.
+ * Paramètres : Beton_Barre *barre : barre dont on souhaite connaitre les angles de rotation,
+ *            : double *y : angle autour de l'axe y,
+ *            : double *z : angle autour de l'axe z,
+ * Valeur renvoyée :
+ *   Succès : 0
+ *   Échec : -1 en cas de paramètres invalides :
+ *             (barre == NULL) ou
+ *             (y == NULL) ou
+ *             (z == NULL)
+ */
+{
+    double  xx, yy, zz, ll;
+    
+    BUGMSG(barre, 0, "_1992_1_1_barres_angle_rotation\n");
+    BUGMSG(y, -1, "_1992_1_1_barres_angle_rotation\n");
+    BUGMSG(z, -1, "_1992_1_1_barres_angle_rotation\n");
+    
+    xx = barre->noeud_fin->position.x - barre->noeud_debut->position.x;
+    yy = barre->noeud_fin->position.y - barre->noeud_debut->position.y;
+    zz = barre->noeud_fin->position.z - barre->noeud_debut->position.z;
+    ll = sqrt(xx*xx+yy*yy+zz*zz);
+    BUGMSG(!ERREUR_RELATIVE_EGALE(0.0, ll), -1, "_1992_1_1_barres_angle_rotation\n");
+    
+    // Détermination de l'angle de rotation autour de l'axe Y.
+    *y = asin(zz/ll);
+    if (ERREUR_RELATIVE_EGALE(ll*ll-zz*zz, 0.))
+        *z = 0.;
+    else
+    {
+        if (xx > 0.)
+            *z = asin(yy / sqrt(ll*ll-zz*zz));
+        else
+            *z = M_PI - asin(yy / sqrt(ll*ll-zz*zz));
+    }
+    
+    return 0;
+}
+
+
 int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
 /* Description : ajouter un élément à la matrice de rigidité partielle et complete
  * Paramètres : Projet *projet : la variable projet
@@ -193,7 +235,7 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
     double              *ax2;
     long                *ai3, *aj3;
     double              *ax3;
-    double              y, cosz, sinz;
+    double              y, z;
     double              xx, yy, zz, ll;
     unsigned int        i, j;
     cholmod_triplet     *triplet;
@@ -280,31 +322,15 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
     ai = (long*)triplet->i;
     aj = (long*)triplet->j;
     ax = (double*)triplet->x;
-    xx = element->noeud_fin->position.x - element->noeud_debut->position.x;
-    yy = element->noeud_fin->position.y - element->noeud_debut->position.y;
-    zz = element->noeud_fin->position.z - element->noeud_debut->position.z;
-    ll = sqrt(xx*xx+yy*yy+zz*zz);
-    BUGMSG(!ERREUR_RELATIVE_EGALE(0.0, ll), -1, "_1992_1_1_barres_rigidite_ajout");
-    // Détermination de l'angle de rotation autour de l'axe Y.
-    y = asin(zz/ll);
-    if (ERREUR_RELATIVE_EGALE(ll*ll-zz*zz, 0.))
-    {
-        sinz = 0.;
-        cosz = 1.;
-    }
-    else
-    {
-        sinz = yy / sqrt(ll*ll-zz*zz);
-        cosz = copysign(1.0, xx)*sqrt(xx*xx/(ll*ll-zz*zz));
-    }
+    _1992_1_1_barres_angle_rotation(element, &y, &z);
     for (i=0;i<4;i++)
     {
-        ai[i*8+0] = i*3+0; aj[i*8+0] = i*3+0; ax[i*8+0] = cosz*cos(y);
-        ai[i*8+1] = i*3+0; aj[i*8+1] = i*3+1; ax[i*8+1] = -sinz;
-        ai[i*8+2] = i*3+0; aj[i*8+2] = i*3+2; ax[i*8+2] = -cosz*sin(y);
-        ai[i*8+3] = i*3+1; aj[i*8+3] = i*3+0; ax[i*8+3] = sinz*cos(y);
-        ai[i*8+4] = i*3+1; aj[i*8+4] = i*3+1; ax[i*8+4] = cosz;
-        ai[i*8+5] = i*3+1; aj[i*8+5] = i*3+2; ax[i*8+5] = -sinz*sin(y);
+        ai[i*8+0] = i*3+0; aj[i*8+0] = i*3+0; ax[i*8+0] = cos(z)*cos(y);
+        ai[i*8+1] = i*3+0; aj[i*8+1] = i*3+1; ax[i*8+1] = -sin(z);
+        ai[i*8+2] = i*3+0; aj[i*8+2] = i*3+2; ax[i*8+2] = -cos(z)*sin(y);
+        ai[i*8+3] = i*3+1; aj[i*8+3] = i*3+0; ax[i*8+3] = sin(z)*cos(y);
+        ai[i*8+4] = i*3+1; aj[i*8+4] = i*3+1; ax[i*8+4] = cos(z);
+        ai[i*8+5] = i*3+1; aj[i*8+5] = i*3+2; ax[i*8+5] = -sin(z)*sin(y);
         ai[i*8+6] = i*3+2; aj[i*8+6] = i*3+0; ax[i*8+6] = sin(y);
         ai[i*8+7] = i*3+2; aj[i*8+7] = i*3+2; ax[i*8+7] = cos(y);
     }

@@ -68,7 +68,6 @@ Projet* projet_init(Type_Pays pays)
     
     projet->ef_donnees.c = &(projet->ef_donnees.Common);
     cholmod_l_start(projet->ef_donnees.c);
-    cholmod_l_dump = 0;
     
     projet->list_gtk._1990 = NULL;
     
