@@ -164,12 +164,12 @@ int main(int argc, char *argv[])
     
     // Création des noeuds
     BUG(EF_noeuds_ajout(projet, 0.0, 0.0, 0.0, 0) == 0, -1);
-    BUG(EF_noeuds_ajout(projet, 0.0, 0.0, 8.0, -1) == 0, -1);
+    BUG(EF_noeuds_ajout(projet, -1.0, 0.0, 8.0, -1) == 0, -1);
     BUG(EF_noeuds_ajout(projet, 8.0, 0.0, 8.0, -1) == 0, -1);
     BUG(EF_noeuds_ajout(projet, 8.0, 0.0, 0.0, 0) == 0, -1);
     
     // Création des sections en béton
-    BUG(_1992_1_1_sections_ajout_rectangulaire(projet, 0.1, 0.3) == 0, -1);
+    BUG(_1992_1_1_sections_ajout_circulaire(projet, 0.3) == 0, -1);
     
     // Création du matériau béton
     BUG(_1992_1_1_materiaux_ajout(projet, 25., 0.2) == 0, -1);

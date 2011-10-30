@@ -350,7 +350,7 @@ double _1992_1_1_sections_iy(void* sect)
     // I_y = \frac{l_t \cdot h_t^3}{12}+\frac{l_a \cdot h_a^3}{12}+l_t \cdot h_t \cdot \left(\frac{h_t}{2}-cdg_h \right)^2+l_a \cdot h_a \cdot \left(\frac{h_a}{2}-cdg_b \right)^2 \texttt{, }\end{displaymath}\begin{displaymath}
     // cdg_h = \frac{\frac{l_t \cdot h_t^2}{2}+l_a \cdot h_a \cdot \left(h_t+\frac{h_a}{2} \right)}{S}  \texttt{, } cdg_b = h_t+h_a-cdg_h \texttt{ et } S = l_t \cdot h_t+l_a \cdot h_a \end{displaymath}\begin{verbatim}
             double      S = lt*ht+la*ha;
-            double      cdgh = (lt*ht*ht/2+la*ha*(ht+ha/2))/S;
+            double      cdgh = (lt*ht*ht/2.+la*ha*(ht+ha/2.))/S;
             double      cdgb = (ht+ha)-cdgh;
             return lt*ht*ht*ht/12.+la*ha*ha*ha/12.+lt*ht*(ht/2.-cdgh)*(ht/2.-cdgh)+la*ha*(ha/2.-cdgb)*(ha/2.-cdgb);
             
