@@ -66,6 +66,7 @@ int m3d_init(Projet *projet)
     
     global_data = (struct SGlobalData*)m3d->data;
     global_data->scene = new CM3dScene();
+    global_data->scene->reverse_y_axis();
     global_data->scene->show_repere(true, 1.1);
     global_data->scene->set_ambient_light(1.);
     global_data->scene->set_show_type(SOLID);
@@ -151,7 +152,7 @@ int m3d_camera_axe_x_z(Projet *projet)
     vue = (struct SGlobalData*)m3d->data;
     
     if (vue->camera == NULL)
-        vue->camera = new CM3dCamera (x, -y*1.1, z, x, 0., z, 90, x_max-x_min, z_max-z_min);
+        vue->camera = new CM3dCamera (x, y*1.1, z, x, 0., z, 90, x_max-x_min, z_max-z_min);
     else
     {
         vue->camera->set_position(x, y, z);
@@ -258,11 +259,11 @@ int m3d_genere_graphique(Projet *projet)
                         default : break;
 
                     }
-                    tout->set_ambient_reflexion (0.8);
                     tout->set_smooth(GOURAUD);
                     _1992_1_1_barres_angle_rotation(barre, &y, &z);
                     tout->rotations(0., -y/M_PI*180., z/M_PI*180.);
                     tout->set_position((barre->noeud_debut->position.x+barre->noeud_fin->position.x)/2., (barre->noeud_debut->position.y+barre->noeud_fin->position.y)/2., (barre->noeud_debut->position.z+barre->noeud_fin->position.z)/2.);
+                    tout->set_ambient_reflexion(0.8);
                     
                     vue->scene->add_object(tout);
                     break;

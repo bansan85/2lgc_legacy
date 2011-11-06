@@ -13,4 +13,4 @@ AM_CXXFLAGS		= $(AM_CFLAGS)
 
 export AM_CFLAGS AM_CXXFLAGS
 
-EXTRA_DIST = config.rpath  config.rpath  config.rpath
+EXTRA_DIST = config.rpath

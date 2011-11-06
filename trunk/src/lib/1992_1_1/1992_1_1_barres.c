@@ -185,7 +185,7 @@ int _1992_1_1_barres_angle_rotation(Beton_Barre *barre, double *y, double *z)
 {
     double  xx, yy, zz, ll;
     
-    BUGMSG(barre, 0, "_1992_1_1_barres_angle_rotation\n");
+    BUGMSG(barre, -1, "_1992_1_1_barres_angle_rotation\n");
     BUGMSG(y, -1, "_1992_1_1_barres_angle_rotation\n");
     BUGMSG(z, -1, "_1992_1_1_barres_angle_rotation\n");
     

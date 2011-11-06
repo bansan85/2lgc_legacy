@@ -33,6 +33,11 @@
 #include "common_tooltip.h"
 
 
+const GtkTargetEntry drag_targets_1 = { (gchar*)PACKAGE"1_SAME_PROC", GTK_TARGET_SAME_APP, 0}; 
+const GtkTargetEntry drag_targets_2 = { (gchar*)PACKAGE"2_SAME_PROC", GTK_TARGET_SAME_APP, 0}; 
+const GtkTargetEntry drag_targets_3[] = { {(gchar*)PACKAGE"1_SAME_PROC", GTK_TARGET_SAME_APP, 0},
+                                          {(gchar*)PACKAGE"2_SAME_PROC", GTK_TARGET_SAME_APP, 0}}; 
+
 int _1990_gtk_affiche_niveau(Projet *projet, unsigned int niveau)
 /* Description : Affiche le niveau souhaité dans l'interface graphique
  * Paramètres : Projet *projet : variable projet
