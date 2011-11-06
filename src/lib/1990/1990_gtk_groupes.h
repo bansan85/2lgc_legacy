@@ -23,11 +23,6 @@
 #ifdef ENABLE_GTK
 #include <gtk/gtk.h>
 
-const GtkTargetEntry drag_targets_1 = { (gchar*)PACKAGE"1_SAME_PROC", GTK_TARGET_SAME_APP, 0}; 
-const GtkTargetEntry drag_targets_2 = { (gchar*)PACKAGE"2_SAME_PROC", GTK_TARGET_SAME_APP, 0}; 
-const GtkTargetEntry drag_targets_3[] = { {(gchar*)PACKAGE"1_SAME_PROC", GTK_TARGET_SAME_APP, 0},
-                                          {(gchar*)PACKAGE"2_SAME_PROC", GTK_TARGET_SAME_APP, 0}}; 
-
 typedef struct __List_Gtk_1990
 {
     GtkWidget       *window_groupe;

@@ -30,6 +30,7 @@
 #include "common_m3d.hpp"
 #include "1990_actions.h"
 #include "1990_groupes.h"
+#include "1990_gtk_groupes.h"
 #include "1990_combinaisons.h"
 #include "EF_appuis.h"
 #include "EF_noeud.h"
@@ -74,6 +75,88 @@ Projet* projet_init(Type_Pays pays)
     projet->pays = pays;
     return projet;
 }
+
+
+void gui_window_destroy_event(GtkWidget *pWidget __attribute__((unused)), Projet *projet)
+{
+    projet_free(projet);
+    gtk_widget_destroy(pWidget);
+    gtk_main_quit();
+    return;
+}
+
+
+void gui_window_option_destroy_button(GtkWidget *fenetre)
+/* Description : Bouton de fermeture de la fenêtre
+ * Paramètres : GtkWidget *object : composant à l'origine de la demande
+ *            : GtkWidget *fenetre : la fenêtre d'options
+ * Valeur renvoyée : Aucune
+ */
+{
+    gtk_widget_destroy(fenetre);
+    return;
+}
+
+
+void gui_affiche_combinaisons(Projet *projet)
+/* Description : Affiche la fenêtre des combinaisons
+ * Paramètres : GtkComboBox *widget : composant à l'origine de la demande,
+ *            : gpointer *data : donnée.
+ * Valeur renvoyée : Aucune
+ */
+{
+    _1990_gtk_groupes(NULL, projet);
+    return;
+}
+
+int projet_init_graphique(Projet *projet)
+/* Description : Crée une fenêtre graphique avec toute l'interface (menu, vue 3D, ...)
+ * Paramètres : Projet *projet : variable projet
+ * Valeur renvoyée :
+ *   Succès : 0
+ *   Échec : -1 en cas de paramètres invalides :
+ *             (projet == NULL)
+ */
+{
+    Comp_Gtk        *comps;
+    List_Gtk_m3d    *m3d;
+    
+    BUGMSG(projet, -1, "projet_init_graphique\n");
+    
+    comps = &(projet->list_gtk.comp);
+    
+    comps->window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+    g_signal_connect(GTK_WINDOW(comps->window), "destroy", G_CALLBACK(gui_window_destroy_event), projet);
+    comps->main_table = gtk_table_new(3,1,FALSE);
+    gtk_container_add(GTK_CONTAINER(comps->window), GTK_WIDGET(comps->main_table));
+    
+    m3d = (List_Gtk_m3d*)projet->list_gtk.m3d;
+    gtk_table_attach(GTK_TABLE(comps->main_table), m3d->drawing, 0, 1, 1, 2, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 0, 0);
+    
+    comps->menu = gtk_menu_bar_new();
+    gtk_table_attach(GTK_TABLE(comps->main_table), comps->menu, 0, 1, 0, 1, (GtkAttachOptions)(GTK_SHRINK | GTK_FILL), (GtkAttachOptions)(GTK_SHRINK | GTK_FILL), 0, 0);
+    comps->menu_fichier_list = gtk_menu_new();
+    
+    comps->menu_fichier = gtk_menu_item_new_with_label(gettext("Fichier"));
+    gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu), comps->menu_fichier);
+    gtk_menu_item_set_submenu(GTK_MENU_ITEM(comps->menu_fichier), comps->menu_fichier_list);
+    
+    comps->menu_fichier_quitter = gtk_menu_item_new_with_label(gettext("Quitter"));
+    gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_fichier_list), comps->menu_fichier_quitter);
+    g_signal_connect_swapped(comps->menu_fichier_quitter, "activate", G_CALLBACK(gui_window_option_destroy_button), comps->window);
+    
+    comps->menu_actions_list = gtk_menu_new();
+    comps->menu_actions = gtk_menu_item_new_with_label(gettext("Actions"));
+    gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu), comps->menu_actions);
+    gtk_menu_item_set_submenu(GTK_MENU_ITEM(comps->menu_actions), comps->menu_actions_list);
+    
+    comps->menu_actions_combinaisons = gtk_menu_item_new_with_label(gettext("Combinaisons"));
+    gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_actions_list), comps->menu_actions_combinaisons);
+    g_signal_connect_swapped(comps->menu_actions_combinaisons, "activate", G_CALLBACK(gui_affiche_combinaisons), projet);
+    
+    return 0;
+}
+
 
 void projet_free(Projet *projet)
 /* Description : Libère les allocations mémoires de l'ensemble de la variable projet

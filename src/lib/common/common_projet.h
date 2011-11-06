@@ -24,6 +24,10 @@
 #include <cholmod.h>
 #include <umfpack.h>
 
+#ifdef ENABLE_GTK
+#include <gtk/gtk.h>
+#endif
+
 typedef enum __Type_Pays
 {               // Spécifie le pays et l'annexe nationnale à utiliser :
     PAYS_EU,    // Norme européenne sans application des annexes nationales
@@ -53,10 +57,28 @@ typedef struct __CombinaisonsEL
 
 
 #ifdef ENABLE_GTK
+typedef struct __Comp_Gtk
+{
+    // Fenêtre
+    GtkWidget   *window;
+    GtkWidget   *main_table;
+    
+    // Menu
+    GtkWidget   *menu;
+    GtkWidget   *menu_fichier;
+    GtkWidget   *menu_fichier_list;
+    GtkWidget   *menu_fichier_quitter;
+    GtkWidget   *menu_actions;
+    GtkWidget   *menu_actions_list;
+    GtkWidget   *menu_actions_combinaisons;
+} Comp_Gtk;
+
+
 typedef struct __List_Gtk
-{                     // Contient toutes les données pour l'interface graphique GTK+3
-    void      *_1990; // pour l'Eurocode 0
-    void      *m3d;   // pour l'affichage graphique de la structure
+{                       // Contient toutes les données pour l'interface graphique GTK+3
+    void        *_1990;     // pour l'Eurocode 0
+    void        *m3d;       // pour l'affichage graphique de la structure
+    Comp_Gtk    comp;      // tous les composants grahpiques
 } List_Gtk;
 #endif
 
@@ -136,6 +158,7 @@ typedef struct __Projet
 
 
 Projet *projet_init(Type_Pays pays);
+int projet_init_graphique(Projet *projet);
 void projet_free(Projet *projet);
 
 #endif

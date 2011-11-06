@@ -27,7 +27,6 @@ extern "C" {
 #include "common_erreurs.h"
 #include "common_projet.h"
 #include "1990_groupes.h"
-#include "1990_gtk_groupes.h"
 #include "1990_actions.h"
 #include "1992_1_1_barres.h"
 #include "1992_1_1_section.h"
@@ -57,35 +56,11 @@ struct SGlobalData
     CM3dCamera *camera;
 };
 
-void gtk_window_destroy_event(GtkWidget *pWidget __attribute__((unused)), Projet *projet)
-{
-    projet_free(projet);
-    gtk_widget_destroy(pWidget);
-    gtk_main_quit();
-    return;
-}
-
-
-void gtk_window_option_destroy_button(GtkWidget *object __attribute__((unused)), GtkWidget *fenetre __attribute__((unused)))
-/* Description : Bouton de fermeture de la fenêtre
- * Paramètres : GtkComboBox *widget : composant à l'origine de la demande
- *            : GtkWidget *fenêtre : la fenêtre d'options
- * Valeur renvoyée : Aucune
- */
-{
-    gtk_widget_destroy(fenetre);
-    return;
-}
-
 
 int main(int argc, char *argv[])
 {
     /* Variables */
-    GtkWidget * MainWindow = NULL;
-    GtkWidget *pTable;
-    GtkWidget *pButton;
     Projet *projet;
-    List_Gtk_m3d *m3d;
 
     
     EF_Relachement_Donnees_Elastique_Lineaire *ry_d, *rz_d, *ry_f, *rz_f;
@@ -163,13 +138,13 @@ int main(int argc, char *argv[])
     BUG(EF_appuis_ajout(projet, EF_APPUI_BLOQUE, EF_APPUI_BLOQUE, EF_APPUI_BLOQUE, EF_APPUI_BLOQUE, EF_APPUI_BLOQUE, EF_APPUI_BLOQUE) == 0, -1);
     
     // Création des noeuds
-    BUG(EF_noeuds_ajout(projet, 0.0, 0.0, 0.0, 0) == 0, -1);
+    BUG(EF_noeuds_ajout(projet, 2.0, 0.0, 0.0, 0) == 0, -1);
     BUG(EF_noeuds_ajout(projet, -1.0, 0.0, 8.0, -1) == 0, -1);
     BUG(EF_noeuds_ajout(projet, 8.0, 0.0, 8.0, -1) == 0, -1);
     BUG(EF_noeuds_ajout(projet, 8.0, 0.0, 0.0, 0) == 0, -1);
     
     // Création des sections en béton
-    BUG(_1992_1_1_sections_ajout_circulaire(projet, 0.3) == 0, -1);
+    BUG(_1992_1_1_sections_ajout_rectangulaire(projet, 0.3, 0.5) == 0, -1);
     
     // Création du matériau béton
     BUG(_1992_1_1_materiaux_ajout(projet, 25., 0.2) == 0, -1);
@@ -209,28 +184,14 @@ int main(int argc, char *argv[])
     BUG(_1990_action_affiche_resultats(projet, 0) == 0, -1);
     
     // Création de la fenêtre principale
-    MainWindow = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-    g_signal_connect(GTK_WINDOW(MainWindow), "destroy", G_CALLBACK(gtk_window_destroy_event), projet);
-    pTable=gtk_table_new(3,1,FALSE);
-    gtk_container_add(GTK_CONTAINER(MainWindow), GTK_WIDGET(pTable));
-    pButton= gtk_button_new_with_label("Combinaisons");
-    gtk_table_attach(GTK_TABLE(pTable), pButton, 0, 1, 0, 1, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(0), 0, 0);
-    g_signal_connect (pButton, "clicked", G_CALLBACK (_1990_gtk_groupes), projet);
-    
-    // Ajout du bouton de fermeture de l'application
-    pButton= gtk_button_new_with_label("Fermeture");
-    gtk_table_attach(GTK_TABLE(pTable), pButton, 0, 1, 1, 2, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(0), 0, 0);
-    g_signal_connect (pButton, "clicked", G_CALLBACK (gtk_window_option_destroy_button), MainWindow);
-    
-    // L'affichage graphique
-    m3d = (List_Gtk_m3d*)projet->list_gtk.m3d;
-    gtk_table_attach(GTK_TABLE(pTable), m3d->drawing, 0, 1, 2, 3, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 0, 0);
+    projet_init_graphique(projet);
+//    g_signal_connect (pButton, "clicked", G_CALLBACK (_1990_gtk_groupes), projet);
     
     m3d_camera_axe_x_z(projet);
     m3d_genere_graphique(projet);
     
     // Affichage de l'interface graphique
-    gtk_widget_show_all(MainWindow);
+    gtk_widget_show_all(projet->list_gtk.comp.window);
     gtk_main();
     
     return 0;

@@ -24,8 +24,8 @@ autoconf
 ./configure --with-gtk --with-debug --prefix=/usr/local CFLAGS=""
 sed -i 's/-DPIC/-DPIC -Wl,--as-needed/g' libtool
 sed -i 's/-lcolamd -lcholmod/-lcholmod -lcolamd -no-undefined/g' `find . -name "Makefile"`
+make -j3 && sudo make install-data && make check -j3 && sudo make install && /usr/local/bin/codegui
 make -C doc doc
-make -j3 && sudo make install-data && make check -j3 && sudo make install && codegui
 NOTA :
     -pg
     --coverage est une option de deboguage qui permet à chaque lancement d'un programme de lister les lignes de code qui ont été exécutées et celles obsolètes.
