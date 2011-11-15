@@ -10,10 +10,9 @@ libeurocodes_la_LIBADD		=	-llist -lcholmod -lamd -lcolamd -lumfpack @BLAS_LIBS@ 
 libeurocodes_la_CFLAGS		=	$(AM_CFLAGS)
 if ENABLE_GTK
 libeurocodes_la_LIBADD		+=	@GTK_LIBS@
-libeurocodes_la_CFLAGS		+=	@GTK_CFLAGS@ `pkg-config --cflags M3d++-1.0`
 endif
 
-libeurocodes_la_LDFLAGS		= `pkg-config --libs M3d++-1.0`
+libeurocodes_la_LDFLAGS		= 	$(AM_LDFLAGS) -no-undefined -version-info 0:0:0
 
 libeurocodes_la_CPPFLAGS	=	@XML_CPPFLAGS@
 

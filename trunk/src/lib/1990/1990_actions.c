@@ -321,6 +321,7 @@ int _1990_action_ajout(Projet *projet, int type)
     BUGMSG(action_nouveau.psi1 >= 0, -1, "type : %d, pays : %d\n", type, projet->pays);
     action_nouveau.psi2 = _1990_coef_psi2_bat(type, projet->pays);
     BUGMSG(action_nouveau.psi2 >= 0, -1, "type : %d, pays : %d\n", type, projet->pays);
+    action_nouveau.pIter = NULL;
     action_nouveau.fonctions_efforts[0] = NULL;
     action_nouveau.fonctions_efforts[1] = NULL;
     action_nouveau.fonctions_efforts[2] = NULL;
@@ -359,9 +360,9 @@ int _1990_action_cherche_numero(Projet *projet, int numero)
  *             action introuvable
  */
 {
-    BUGMSG(projet, -1, "%s\n", "_1990_action_cherche_numero");
-    BUGMSG(projet->actions, -1, "%s\n", "_1990_action_cherche_numero");
-    BUGMSG(list_size(projet->actions), -1, "%s\n", "_1990_action_cherche_numero");
+    BUGMSG(projet, -1, "_1990_action_cherche_numero\n");
+    BUGMSG(projet->actions, -1, "_1990_action_cherche_numero\n");
+    BUGMSG(list_size(projet->actions), -1, "_1990_action_cherche_numero\n");
     
     // Trivial
     list_mvfront(projet->actions);
@@ -387,8 +388,8 @@ int _1990_action_affiche_tout(Projet *projet)
  *             (projet->actions == NULL)
  */
 {
-    BUGMSG(projet, -1, "%s\n", "_1990_action_affiche_tout");
-    BUGMSG(projet->actions, -1, "%s\n", "_1990_action_affiche_tout");
+    BUGMSG(projet, -1, "_1990_action_affiche_tout\n");
+    BUGMSG(projet->actions, -1, "_1990_action_affiche_tout\n");
     
     // Trivial
     

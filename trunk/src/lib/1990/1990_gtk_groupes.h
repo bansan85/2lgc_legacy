@@ -23,7 +23,7 @@
 #ifdef ENABLE_GTK
 #include <gtk/gtk.h>
 
-typedef struct __List_Gtk_1990
+typedef struct __List_Gtk_1990_Groupes
 {
     GtkWidget       *window_groupe;
     GtkWidget       *table_groupe;
@@ -54,9 +54,24 @@ typedef struct __List_Gtk_1990
     GtkWidget       *button_options;
     GtkWidget       *button_quitter;
     GtkWidget       *drag_from;
-} List_Gtk_1990;
+} List_Gtk_1990_Groupes;
+
+
+typedef struct __List_Gtk_1990_Actions
+{
+    GtkWidget       *window;
+    GtkWidget       *table;
+    GtkWidget       *scroll_actions;
+    GtkTreeStore    *tree_store_actions;
+    GtkTreeView     *tree_view_actions;
+    GtkWidget       *scroll_charges;
+    GtkTreeStore    *tree_store_charges;
+    GtkTreeView     *tree_view_charges;
+} List_Gtk_1990_Actions;
+
 
 void _1990_gtk_groupes(GtkWidget *button __attribute__((unused)), Projet *projet);
+void _1990_gtk_actions(Projet *projet);
 
 #endif
 

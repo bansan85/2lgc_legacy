@@ -22,6 +22,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <cholmod.h>
+#include <string.h>
 
 #include "1990_actions.h"
 #include "1992_1_1_section.h"
@@ -36,7 +37,7 @@
 
 int EF_charge_barre_repartie_uniforme_ajout(Projet *projet, int num_action, Beton_Barre *barre,
   int repere_local, int projection, double a, double b, double fx, double fy, double fz,
-  double mx, double my, double mz)
+  double mx, double my, double mz, char* nom)
 /* Description : Ajoute une charge répartie uniforme à une action et le long d'une barre en
  *               lui attribuant le numéro suivant la dernière charge de l'action.
  * Paramètres : Projet *projet : la variable projet,
@@ -91,7 +92,9 @@ int EF_charge_barre_repartie_uniforme_ajout(Projet *projet, int num_action, Beto
     action_en_cours = (Action*)list_curr(projet->actions);
     
     charge_nouveau.type = CHARGE_BARRE_REPARTIE_UNIFORME;
-    charge_nouveau.nom = NULL;
+    charge_nouveau.nom = (char*)malloc(sizeof(char)*(strlen(nom)+1));
+    BUGMSG(charge_nouveau.nom, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_charge_barre_repartie_uniforme_ajout");
+    strcpy(charge_nouveau.nom, nom);
     charge_nouveau.description = NULL;
     charge_nouveau.barre = barre;
     charge_nouveau.repere_local = repere_local;
@@ -104,6 +107,7 @@ int EF_charge_barre_repartie_uniforme_ajout(Projet *projet, int num_action, Beto
     charge_nouveau.mx = mx;
     charge_nouveau.my = my;
     charge_nouveau.mz = mz;
+    charge_nouveau.pIter = NULL;
     
     charge_dernier = (Charge_Barre_Repartie_Uniforme *)list_rear(action_en_cours->charges);
     if (charge_dernier == NULL)

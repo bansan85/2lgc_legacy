@@ -31,7 +31,7 @@ typedef struct __Element
 {
     int         numero;
 #ifdef ENABLE_GTK
-    GtkTreeIter *pIter;
+    GtkTreeIter *pIter;         // Pour la fenêtre groupes
     int         pIter_expand;
 #endif
 } Element;
@@ -51,7 +51,7 @@ typedef struct __Groupe
     LIST                    *elements;
     Combinaisons            tmp_combinaison;
 #ifdef ENABLE_GTK
-    GtkTreeIter             *pIter;
+    GtkTreeIter             *pIter;         // Pour la fenêtre groupes
     int                     pIter_expand;
 #endif
 } Groupe;
@@ -61,7 +61,7 @@ typedef struct __Niveau_Groupe
     int             niveau;
     LIST            *groupes;
 #ifdef ENABLE_GTK
-    GtkTreeIter     *pIter;
+    GtkTreeIter     *pIter;                 // Pour la fenêtre groupes
 #endif
 } Niveau_Groupe;
 

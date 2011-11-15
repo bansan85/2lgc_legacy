@@ -52,6 +52,8 @@ typedef struct __Action
     cholmod_sparse  *forces_complet;
     cholmod_sparse  *efforts_noeuds;
     double          norm;
+    GtkTreeIter     *pIter;
+    
     Fonction        **fonctions_efforts[6]; // 6 fonctions (N, Ty, Tz, Mx, My, Mz) par barre.
                     // Les fonctions représentent la courbe des efforts dues aux charges dans
                     // les barres et dus aux déplacements calculés par la méthode des EF.

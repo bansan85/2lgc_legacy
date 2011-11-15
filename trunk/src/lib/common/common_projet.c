@@ -70,7 +70,8 @@ Projet* projet_init(Type_Pays pays)
     projet->ef_donnees.c = &(projet->ef_donnees.Common);
     cholmod_l_start(projet->ef_donnees.c);
     
-    projet->list_gtk._1990 = NULL;
+    projet->list_gtk._1990_groupes = NULL;
+    projet->list_gtk._1990_actions = NULL;
     
     projet->pays = pays;
     return projet;
@@ -98,8 +99,8 @@ void gui_window_option_destroy_button(GtkWidget *fenetre)
 }
 
 
-void gui_affiche_combinaisons(Projet *projet)
-/* Description : Affiche la fenêtre des combinaisons
+void gui_affiche_groupes(Projet *projet)
+/* Description : Affiche la fenêtre des groupes
  * Paramètres : GtkComboBox *widget : composant à l'origine de la demande,
  *            : gpointer *data : donnée.
  * Valeur renvoyée : Aucune
@@ -108,6 +109,19 @@ void gui_affiche_combinaisons(Projet *projet)
     _1990_gtk_groupes(NULL, projet);
     return;
 }
+
+
+void gui_affiche_actions(Projet *projet)
+/* Description : Affiche la fenêtre des actions
+ * Paramètres : GtkComboBox *widget : composant à l'origine de la demande,
+ *            : gpointer *data : donnée.
+ * Valeur renvoyée : Aucune
+ */
+{
+    _1990_gtk_actions(projet);
+    return;
+}
+
 
 int projet_init_graphique(Projet *projet)
 /* Description : Crée une fenêtre graphique avec toute l'interface (menu, vue 3D, ...)
@@ -126,8 +140,10 @@ int projet_init_graphique(Projet *projet)
     comps = &(projet->list_gtk.comp);
     
     comps->window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+    gtk_window_resize(GTK_WINDOW(comps->window), 800, 600);
+    gtk_window_set_position(GTK_WINDOW(comps->window), GTK_WIN_POS_CENTER_ALWAYS);
     g_signal_connect(GTK_WINDOW(comps->window), "destroy", G_CALLBACK(gui_window_destroy_event), projet);
-    comps->main_table = gtk_table_new(3,1,FALSE);
+    comps->main_table = gtk_table_new(3, 1, FALSE);
     gtk_container_add(GTK_CONTAINER(comps->window), GTK_WIDGET(comps->main_table));
     
     m3d = (List_Gtk_m3d*)projet->list_gtk.m3d;
@@ -145,14 +161,18 @@ int projet_init_graphique(Projet *projet)
     gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_fichier_list), comps->menu_fichier_quitter);
     g_signal_connect_swapped(comps->menu_fichier_quitter, "activate", G_CALLBACK(gui_window_option_destroy_button), comps->window);
     
-    comps->menu_actions_list = gtk_menu_new();
-    comps->menu_actions = gtk_menu_item_new_with_label(gettext("Actions"));
-    gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu), comps->menu_actions);
-    gtk_menu_item_set_submenu(GTK_MENU_ITEM(comps->menu_actions), comps->menu_actions_list);
+    comps->menu_charges_list = gtk_menu_new();
+    comps->menu_charges = gtk_menu_item_new_with_label(gettext("Charges"));
+    gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu), comps->menu_charges);
+    gtk_menu_item_set_submenu(GTK_MENU_ITEM(comps->menu_charges), comps->menu_charges_list);
     
-    comps->menu_actions_combinaisons = gtk_menu_item_new_with_label(gettext("Combinaisons"));
-    gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_actions_list), comps->menu_actions_combinaisons);
-    g_signal_connect_swapped(comps->menu_actions_combinaisons, "activate", G_CALLBACK(gui_affiche_combinaisons), projet);
+    comps->menu_charges_groupes = gtk_menu_item_new_with_label(gettext("Actions"));
+    gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_charges_list), comps->menu_charges_groupes);
+    g_signal_connect_swapped(comps->menu_charges_groupes, "activate", G_CALLBACK(gui_affiche_actions), projet);
+    
+    comps->menu_charges_groupes = gtk_menu_item_new_with_label(gettext("Groupes"));
+    gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_charges_list), comps->menu_charges_groupes);
+    g_signal_connect_swapped(comps->menu_charges_groupes, "activate", G_CALLBACK(gui_affiche_groupes), projet);
     
     return 0;
 }
@@ -188,7 +208,7 @@ void projet_free(Projet *projet)
         EF_relachement_free(projet);
     if (projet->list_gtk.m3d != NULL)
         m3d_free(projet);
-    free(projet->list_gtk._1990);
+    free(projet->list_gtk._1990_groupes);
     
     cholmod_l_finish(projet->ef_donnees.c);
     

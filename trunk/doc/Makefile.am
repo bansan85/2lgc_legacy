@@ -1,3 +1,6 @@
+docdir = $(pkgdatadir)
+doc_DATA = manuel.tex
+
 EXTRA_DIST = manuel.tex
 
 doc : manuel.tex
