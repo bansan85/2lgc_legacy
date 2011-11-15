@@ -10,4 +10,5 @@ codegui_SOURCES		=	main.cc
 codegui_CPPFLAGS	=	@GTK_CFLAGS@
 codegui_LDADD		=	-llist -lcholmod @BLAS_LIBS@ -lcolamd -lumfpack -lblas -lgfortran @GTK_LIBS@ \
 						../../lib/libeurocodes.la
+codegui_LDFLAGS		=   $(AM_LDFLAGS) -no-undefined
 endif

@@ -71,6 +71,6 @@
 +AC_CHECK_LIB([cholmod], [cholmod_l_start], [], [AC_MSG_ERROR([cholmod ( http://www.cise.ufl.edu/research/sparse/cholmod ) est necessaire])])
 +AC_CHECK_LIB([colamd], [colamd_l_recommended], [], [AC_MSG_ERROR([colamd ( www.cise.ufl.edu/research/sparse/colamd ) est necessaire])])
 +AC_CHECK_LIB([umfpack], [umfpack_dl_solve], [], [AC_MSG_ERROR([umfpack ( www.cise.ufl.edu/research/sparse/umfpack ) est necessaire])])
-+PKG_CHECK_MODULES([M3d], [M3d++-1.0])
++AC_CHECK_LIB([M3d++], [cairo_image_surface_create], [], [AC_MSG_ERROR([M3d++ ( http://m3dlib.tuxfamily.org ) est necessaire])])
  
  # Checks for header files.

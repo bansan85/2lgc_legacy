@@ -22,6 +22,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <cholmod.h>
+#include <string.h>
 
 #include "1990_actions.h"
 #include "common_projet.h"
@@ -32,7 +33,7 @@
 
 
 int EF_charge_noeud_ajout(Projet *projet, int num_action, EF_Noeud *noeud,
-  double fx, double fy, double fz, double mx, double my, double mz)
+  double fx, double fy, double fz, double mx, double my, double mz, char* nom)
 /* Description : Ajoute une charge ponctuelle à une action et à un noeud de la structure en
  *               lui attribuant le numéro suivant la dernière charge de l'action.
  * Paramètres : Projet *projet : la variable projet
@@ -67,7 +68,9 @@ int EF_charge_noeud_ajout(Projet *projet, int num_action, EF_Noeud *noeud,
     action_en_cours = (Action*)list_curr(projet->actions);
     
     charge_nouveau.type = CHARGE_NOEUD;
-    charge_nouveau.nom = NULL;
+    charge_nouveau.nom = (char*)malloc(sizeof(char)*(strlen(nom)+1));
+    BUGMSG(charge_nouveau.nom, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_charge_noeud_ajout");
+    strcpy(charge_nouveau.nom, nom);
     charge_nouveau.description = NULL;
     charge_nouveau.noeud = noeud;
     charge_nouveau.x = fx;
@@ -76,6 +79,7 @@ int EF_charge_noeud_ajout(Projet *projet, int num_action, EF_Noeud *noeud,
     charge_nouveau.mx = mx;
     charge_nouveau.my = my;
     charge_nouveau.mz = mz;
+    charge_nouveau.pIter = NULL;
     
     charge_dernier = (Charge_Noeud *)list_rear(action_en_cours->charges);
     if (charge_dernier == NULL)

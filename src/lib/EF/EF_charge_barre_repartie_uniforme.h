@@ -46,11 +46,12 @@ typedef struct __Charge_Barre_Repartie_Uniforme
     double              mx;
     double              my;
     double              mz;
+    GtkTreeIter         *pIter;
 } Charge_Barre_Repartie_Uniforme;
 
 int EF_charge_barre_repartie_uniforme_ajout(Projet *projet, int num_action, Beton_Barre *barre,
   int repere_local, int projection, double a, double b, double fx, double fy, double fz,
-  double mx, double my, double mz);
+  double mx, double my, double mz, char *nom);
 int EF_charge_barre_repartie_uniforme_mx(Beton_Barre *barre, unsigned int discretisation,
   double a, double b, Barre_Info_EF *infos, double mx, double *ma, double *mb);
 int EF_charge_barre_repartie_uniforme_def_ang_iso_y(Beton_Barre *barre,

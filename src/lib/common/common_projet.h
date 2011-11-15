@@ -68,15 +68,17 @@ typedef struct __Comp_Gtk
     GtkWidget   *menu_fichier;
     GtkWidget   *menu_fichier_list;
     GtkWidget   *menu_fichier_quitter;
-    GtkWidget   *menu_actions;
-    GtkWidget   *menu_actions_list;
-    GtkWidget   *menu_actions_combinaisons;
+    GtkWidget   *menu_charges;
+    GtkWidget   *menu_charges_list;
+    GtkWidget   *menu_charges_actions;
+    GtkWidget   *menu_charges_groupes;
 } Comp_Gtk;
 
 
 typedef struct __List_Gtk
 {                       // Contient toutes les données pour l'interface graphique GTK+3
-    void        *_1990;     // pour l'Eurocode 0
+    void        *_1990_actions;     // pour l'Eurocode 0
+    void        *_1990_groupes;     // pour l'Eurocode 0
     void        *m3d;       // pour l'affichage graphique de la structure
     Comp_Gtk    comp;      // tous les composants grahpiques
 } List_Gtk;

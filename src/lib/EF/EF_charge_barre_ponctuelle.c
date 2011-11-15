@@ -22,6 +22,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <cholmod.h>
+#include <string.h>
 
 #include "1990_actions.h"
 #include "1992_1_1_section.h"
@@ -35,7 +36,7 @@
 
 int EF_charge_barre_ponctuelle_ajout(Projet *projet, int num_action, Beton_Barre *barre, 
   int repere_local, double a, double fx, double fy, double fz, double mx, double my,
-  double mz)
+  double mz, char* nom)
 /* Description : Ajoute une charge ponctuelle à une action et à l'intérieur d'une barre en lui
  *               attribuant le numéro suivant la dernière charge de l'action.
  * Paramètres : Projet *projet : la variable projet,
@@ -76,7 +77,9 @@ int EF_charge_barre_ponctuelle_ajout(Projet *projet, int num_action, Beton_Barre
     BUGMSG(!((a > EF_noeuds_distance(barre->noeud_debut, barre->noeud_fin)) && (!(ERREUR_RELATIVE_EGALE(a, EF_noeuds_distance(barre->noeud_debut, barre->noeud_fin))))), -1, "EF_charge_barre_ponctuelle_ajout");
     
     charge_nouveau.type = CHARGE_BARRE_PONCTUELLE;
-    charge_nouveau.nom = NULL;
+    charge_nouveau.nom = (char*)malloc(sizeof(char)*(strlen(nom)+1));
+    BUGMSG(charge_nouveau.nom, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_charge_barre_ponctuelle_ajout");
+    strcpy(charge_nouveau.nom, nom);
     charge_nouveau.description = NULL;
     charge_nouveau.barre = barre;
     charge_nouveau.repere_local = repere_local;
@@ -87,6 +90,7 @@ int EF_charge_barre_ponctuelle_ajout(Projet *projet, int num_action, Beton_Barre
     charge_nouveau.mx = mx;
     charge_nouveau.my = my;
     charge_nouveau.mz = mz;
+    charge_nouveau.pIter = NULL;
     
     charge_dernier = (Charge_Barre_Ponctuelle *)list_rear(action_en_cours->charges);
     if (charge_dernier == NULL)

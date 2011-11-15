@@ -41,9 +41,10 @@ typedef struct __Charge_Noeud
     double              mx;
     double              my;
     double              mz;
+    GtkTreeIter         *pIter;
 } Charge_Noeud;
 
 int EF_charge_noeud_ajout(Projet *projet, int num_action, EF_Noeud *noeud,
-  double fx, double fy, double fz, double mx, double my, double mz);
+  double fx, double fy, double fz, double mx, double my, double mz, char* nom);
 
 #endif

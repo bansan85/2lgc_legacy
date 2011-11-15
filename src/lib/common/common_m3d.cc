@@ -69,10 +69,10 @@ int m3d_init(Projet *projet)
     global_data->scene->reverse_y_axis();
     global_data->scene->show_repere(true, 1.1);
     global_data->scene->set_ambient_light(1.);
-    global_data->scene->set_show_type(SOLID);
+    global_data->scene->set_show_type(FULL);
     
     light = new CM3dLight("lumiere 1", DIFFUS, 1);
-    light->set_position(100., 200., -200.);
+    light->set_position(10., 20., -20.);
     global_data->scene->add_light(light);
     
     g_signal_connect(m3d->drawing, "draw", G_CALLBACK(m3d_draw), global_data);
