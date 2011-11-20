@@ -25,9 +25,11 @@
 #include <string.h>
 #include <gtk/gtk.h>
 
+#include "1990_actions.h"
 #include "1990_groupes.h"
 #include "1990_gtk_groupes.h"
 #include "1990_ponderations.h"
+#include "1990_combinaisons.h"
 #include "common_erreurs.h"
 #include "common_projet.h"
 #include "common_tooltip.h"

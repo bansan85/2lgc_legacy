@@ -26,13 +26,461 @@
 
 #ifdef ENABLE_GTK
 #include <gtk/gtk.h>
+
+typedef struct __List_Gtk_1990_Groupes
+{
+    GtkWidget       *window_groupe;
+    GtkWidget       *table_groupe;
+    GtkWidget       *table_combinaison;
+    GtkWidget       *spin_button_niveau;
+    GtkWidget       *button_niveau_ajout;
+    GtkWidget       *button_niveau_suppr;
+    GtkWidget       *frame_groupe;
+    GtkWidget       *table_groupes;
+    GtkTreeStore    *tree_store_etat;
+    GtkTreeView     *tree_view_etat;
+    GtkWidget       *scroll_etat;
+    GtkWidget       *button_groupe_ajout;
+    GtkWidget       *button_groupe_suppr;
+    GtkWidget       *button_groupe_and;
+    GtkWidget       *button_groupe_or;
+    GtkWidget       *button_groupe_xor;
+    GtkWidget       *button_groupe_nom;
+    GtkWidget       *entry_groupe_nom;
+    GtkWidget       *frame_dispo;
+    GtkWidget       *table_dispo;
+    GtkTreeStore    *tree_store_dispo;
+    GtkTreeView     *tree_view_dispo;
+    GtkWidget       *scroll_dispo;
+    GtkWidget       *button_ajout_dispo;
+    GtkWidget       *table_bas;
+    GtkWidget       *button_generer;
+    GtkWidget       *button_options;
+    GtkWidget       *button_quitter;
+    GtkWidget       *drag_from;
+} List_Gtk_1990_Groupes;
+
+
+typedef struct __List_Gtk_1990_Actions
+{
+    GtkWidget       *window;
+    GtkWidget       *table;
+    GtkWidget       *scroll_actions;
+    GtkTreeStore    *tree_store_actions;
+    GtkTreeView     *tree_view_actions;
+    GtkWidget       *scroll_charges;
+    GtkTreeStore    *tree_store_charges;
+    GtkTreeView     *tree_view_charges;
+} List_Gtk_1990_Actions;
+
 #endif
+
+typedef enum __Type_Element // La liste des différents éléments de type de barres gérés par le
+{                           // module élément fini.
+    BETON_ELEMENT_POTEAU,
+    BETON_ELEMENT_POUTRE
+} Type_Element;
+
 
 typedef enum __Type_Pays
 {               // Spécifie le pays et l'annexe nationnale à utiliser :
     PAYS_EU,    // Norme européenne sans application des annexes nationales
     PAYS_FR     // Annexe nationale française
 } Type_Pays;
+
+
+typedef enum __Type_Groupe_Combinaison
+{
+    GROUPE_COMBINAISON_OR,
+    GROUPE_COMBINAISON_XOR,
+    GROUPE_COMBINAISON_AND
+} Type_Groupe_Combinaison;
+
+
+typedef enum __Action_Categorie
+{
+    ACTION_POIDS_PROPRE,
+    ACTION_PRECONTRAINTE,
+    ACTION_VARIABLE,
+    ACTION_ACCIDENTELLE,
+    ACTION_SISMIQUE,
+    ACTION_EAUX_SOUTERRAINES,
+    ACTION_INCONNUE
+} Action_Categorie;
+
+
+typedef struct __EF_Point
+{
+    double      x;
+    double      y;
+    double      z;
+} EF_Point;
+
+
+typedef enum __Type_EF_Appui
+{
+    EF_APPUI_LIBRE,                 // Déplacement libre
+    EF_APPUI_BLOQUE                 // Déplacement bloqué
+} Type_EF_Appui;
+
+
+typedef enum __EF_Relachement_Type
+{
+    EF_RELACHEMENT_BLOQUE,
+    EF_RELACHEMENT_LIBRE,
+    EF_RELACHEMENT_ELASTIQUE_LINEAIRE
+} EF_Relachement_Type;
+
+
+typedef enum __Type_Beton_Section
+{
+    BETON_SECTION_RECTANGULAIRE,
+    BETON_SECTION_T,
+    BETON_SECTION_CARRE,
+    BETON_SECTION_CIRCULAIRE
+} Type_Beton_Section;
+
+
+typedef enum __Charge_Type
+{
+    CHARGE_NOEUD,
+    CHARGE_BARRE_PONCTUELLE,
+    CHARGE_BARRE_REPARTIE_UNIFORME
+} Barre_Charge_Type;
+
+
+typedef struct __EF_Appui
+{
+    int numero;                     // Numéro de l'appui
+    Type_EF_Appui   x;              // Degré de liberté de la direction x
+    void            *x_donnees;     // Données complémentaire si nécessaire.
+    Type_EF_Appui   y;
+    void            *y_donnees;
+    Type_EF_Appui   z;
+    void            *z_donnees;
+    Type_EF_Appui   rx;             // Degré de liberté de la rotation autour de l'axe x
+    void            *rx_donnees;
+    Type_EF_Appui   ry;
+    void            *ry_donnees;
+    Type_EF_Appui   rz;
+    void            *rz_donnees;
+} EF_Appui;
+
+
+typedef struct __EF_Noeud
+{
+    int         numero;
+    EF_Point    position;
+    EF_Appui    *appui;
+} EF_Noeud;
+
+
+typedef struct __Charge_Barre_Ponctuelle
+{
+    Barre_Charge_Type   type;
+    int                 numero;
+    char                *nom;
+    char                *description;
+    void                *barre;
+    int                 repere_local;
+    double              position; // Position de la charge ponctuelle en mètre
+                                  // depuis le début de la barre
+    double              fx;
+    double              fy;
+    double              fz;
+    double              mx;
+    double              my;
+    double              mz;
+    
+    GtkTreeIter         *pIter;
+} Charge_Barre_Ponctuelle;
+
+
+typedef struct __Charge_Barre_Repartie_Uniforme
+{
+    Barre_Charge_Type   type;
+    int                 numero;
+    char                *nom;
+    char                *description;
+    void                *barre;
+    int                 repere_local;
+    int                 projection;
+    double              a; // Position du début de la charge répartie par rapport au début
+    double              b;   // Position de la fin de la charge par rapport à la fin
+    double              fx;
+    double              fy;
+    double              fz;
+    double              mx;
+    double              my;
+    double              mz;
+    GtkTreeIter         *pIter;
+} Charge_Barre_Repartie_Uniforme;
+
+
+typedef struct __Charge_Noeud
+{
+    Barre_Charge_Type   type;
+    int                 numero;
+    char                *nom;
+    char                *description;
+    EF_Noeud            *noeud;
+    double              x;
+    double              y;
+    double              z;
+    double              mx;
+    double              my;
+    double              mz;
+    GtkTreeIter         *pIter;
+} Charge_Noeud;
+
+
+typedef struct __Beton_Section_Rectangulaire
+{
+    Type_Beton_Section  type;
+    unsigned int        numero;
+    double              largeur;
+    double              hauteur;
+} Beton_Section_Rectangulaire;
+
+
+typedef struct __Beton_Section_T
+{
+    Type_Beton_Section  type;
+    unsigned int        numero;
+    double              largeur_table;
+    double              largeur_ame;
+    double              hauteur_table;
+    double              hauteur_ame;
+} Beton_Section_T;
+
+
+typedef struct __Beton_Section_Carre
+{
+    Type_Beton_Section  type;
+    unsigned int        numero;
+    double              cote;
+} Beton_Section_Carre;
+
+
+typedef struct __Beton_Section_Circulaire
+{
+    Type_Beton_Section  type;
+    unsigned int        numero;
+    double              diametre;
+} Beton_Section_Circulaire;
+
+
+typedef struct __EF_Relachement_Donnees_Elastique_Lineaire
+{
+    double              raideur;    // La raideur doit être indiquée en N.m/rad
+} EF_Relachement_Donnees_Elastique_Lineaire;
+
+
+typedef struct __EF_Relachement
+{
+    unsigned int        numero;
+    EF_Relachement_Type rx_debut;   // Type de relachement du moment autour de l'axe x
+    void                *rx_d_data; // Paramètres complémentaires au relachement. N'est à 
+                                    // définir que si le type de relachement est différent
+                                    // de LIBRE et BLOQUE
+    EF_Relachement_Type ry_debut;
+    void                *ry_d_data;
+    EF_Relachement_Type rz_debut;
+    void                *rz_d_data;
+    EF_Relachement_Type rx_fin;
+    void                *rx_f_data;
+    EF_Relachement_Type ry_fin;
+    void                *ry_f_data;
+    EF_Relachement_Type rz_fin;
+    void                *rz_f_data;
+} EF_Relachement;
+
+
+typedef struct __Beton_Materiau
+{
+    unsigned int    numero;
+    
+    // Caractéristique du matériau béton conformément à EN 1992_1_1, Tableau 3.1
+    double      fck;
+    double      fckcube;
+    double      fcm;
+    double      fctm;
+    double      fctk_0_05;
+    double      fctk_0_95;
+    double      ecm;
+    double      ec1;
+    double      ecu1;
+    double      ec2;
+    double      ecu2;
+    double      n;
+    double      ec3;
+    double      ecu3;
+    
+    double      nu;
+    double      gnu_0_2;
+    double      gnu_0_0;
+} Beton_Materiau;
+
+
+typedef struct __Barre_Info_EF
+{
+    cholmod_sparse      *matrice_rigidite_locale;
+    
+    double              ay; // Paramètres de souplesse de la poutre
+    double              by;
+    double              cy;
+    double              az;
+    double              bz;
+    double              cz;
+    
+    double              kAx;
+    double              kAy; // coefficient défissant l'inverse de la raideur aux noeuds
+    double              kAz;
+    double              kBx;
+    double              kBy;
+    double              kBz;
+} Barre_Info_EF;
+
+
+typedef struct __Beton_Barre
+{
+    unsigned int        numero;
+    Type_Element        type;
+    void                *section;
+    Beton_Materiau      *materiau;
+    
+    EF_Noeud            *noeud_debut;
+    EF_Noeud            *noeud_fin;
+    unsigned int        discretisation_element;     // Nombre de noeuds intermédiaires
+    Barre_Info_EF       *info_EF;                   // Une info par élément discrétisé
+    EF_Noeud            **noeuds_intermediaires;
+    EF_Relachement      *relachement;
+    
+    cholmod_sparse      *matrice_rotation;
+    cholmod_sparse      *matrice_rotation_transpose;
+} Beton_Barre;
+
+
+typedef struct __Troncon // Définition de la structure Troncon qui contient une fonction
+                         // avec un domaine de validité précis.
+{
+    double      debut_troncon;  // Début du tronçon de validité de la fonction
+    double      fin_troncon;    // Fin du tronçon de validité de la fonction
+    double      x0;             // La fonction mathématique est définie par :
+    double      x1;             // x0 + x1*x +
+    double      x2;             // x2*x^2 +
+    double      x3;             // x3*x^3 +
+    double      x4;             // x4*x^4 +
+    double      x5;             // x5*x^5 +
+    double      x6;             // x6*x^6
+} Troncon;
+
+
+typedef struct __Fonction
+{
+    int          nb_troncons;    /* Les fonctions n'étant pas forcément continues le long de
+                                  * la barre (par exemple de part et d'une charge ponctuelle),
+    * il est nécessaire de définir plusieurs tronçons avec pour chaque tronçon sa fonction.
+    * nb_troncons défini le nombre de tronçons que possède la fonction.*/
+    
+    Troncon      *troncons;      /* Tableau dynamique contenant les fonctions continues par
+                                  * tronçon. */
+} Fonction;
+
+
+typedef struct __Action
+{
+    char            *nom;
+    int             numero;
+    int             type;  // Les catégories sont conformes à _1990_action_type
+    LIST            *charges;
+    int             flags;
+    double          psi0;       // valeur_combinaison
+    double          psi1;       // valeur_frequente
+    double          psi2;       // valeur_quasi_permanente
+    cholmod_sparse  *deplacement_complet;
+    cholmod_sparse  *forces_complet;
+    cholmod_sparse  *efforts_noeuds;
+    double          norm;
+    GtkTreeIter     *pIter;
+    
+    Fonction        **fonctions_efforts[6]; // 6 fonctions (N, Ty, Tz, Mx, My, Mz) par barre.
+                    // Les fonctions représentent la courbe des efforts dues aux charges dans
+                    // les barres et dus aux déplacements calculés par la méthode des EF.
+    Fonction        **fonctions_deformation[3]; // Les 3 déformations x, y, z pour chaque barre
+    Fonction        **fonctions_rotation[3];    // Les 3 rotations rx, ry, rz pour chaque barre
+} Action;
+
+
+typedef struct __Ponderation_Element
+{
+    double      ponderation;
+    int         psi;
+    int         flags;
+    Action      *action;
+} Ponderation_Element;
+
+
+// Ne pas supprimer l'espace après le __Ponderation, c'est pour la génération du manuel Latex
+typedef struct __Ponderation 
+{
+    LIST        *elements; // Liste de pointeur Action* avec leur ponderation
+} Ponderation;
+
+
+typedef struct __Element
+{
+    int         numero;
+#ifdef ENABLE_GTK
+    GtkTreeIter *pIter;         // Pour la fenêtre groupes
+    int         pIter_expand;
+#endif
+} Element;
+
+
+typedef struct __Combinaison_Element
+{
+    Action      *action;
+    int         flags;          // bit 1 : 1 si les actions variables sont prédominantes
+} Combinaison_Element;
+
+
+// Nota : L'espace après __Combinaison est nécessaire pour la génération du document Latex.
+//        A ne surtout pas supprimer!!!
+typedef struct __Combinaison 
+{
+    LIST        *elements;      // Liste de pointeurs Combinaison_Element
+} Combinaison;
+
+
+typedef struct __Combinaisons
+{
+    LIST        *combinaisons;  // Liste de "combinaison"
+} Combinaisons;
+
+
+typedef struct __Groupe
+{
+    char                    *nom;
+    int                     numero;
+    Type_Groupe_Combinaison type_combinaison;
+    LIST                    *elements;
+    Combinaisons            tmp_combinaison;
+#ifdef ENABLE_GTK
+    GtkTreeIter             *pIter;         // Pour la fenêtre groupes
+    int                     pIter_expand;
+#endif
+} Groupe;
+
+
+typedef struct __Niveau_Groupe
+{
+    int             niveau;
+    LIST            *groupes;
+#ifdef ENABLE_GTK
+    GtkTreeIter     *pIter;                 // Pour la fenêtre groupes
+#endif
+} Niveau_Groupe;
 
 
 typedef struct __CombinaisonsEL
@@ -85,21 +533,6 @@ typedef struct __List_Gtk
 #endif
 
 
-typedef enum __Type_Element // La liste des différents éléments de type de barres gérés par le
-{                           // module élément fini.
-    BETON_ELEMENT_POTEAU,
-    BETON_ELEMENT_POUTRE
-} Type_Element;
-
-
-typedef struct __Beton_Donnees
-{                               // Liste des sections, matériaux et barres en béton.
-    LIST            *sections;
-    LIST            *materiaux;
-    LIST            *barres;
-} Beton_Donnees;
-
-
 typedef struct __EF
 {                               // Contient toutes les données nécessaires pour la réalisation
                                 // des calculs aux éléments finis et notamment les variables
@@ -147,13 +580,23 @@ typedef struct __EF
 } EF;
 
 
+typedef struct __Beton_Donnees
+{                               // Liste des sections, matériaux et barres en béton.
+    LIST            *sections;
+    LIST            *materiaux;
+    LIST            *barres;
+} Beton_Donnees;
+
+
 typedef struct __Projet
 {
     LIST            *actions;           // Liste des actions contenant chacune des charges
     LIST            *niveaux_groupes;   // Compatibilités entres actions
     CombinaisonsEL  combinaisons;       // Combinaisons conformes aux Eurocodes
     Type_Pays       pays;               // Pays de calculs
+#ifdef ENABLE_GTK
     List_Gtk        list_gtk;           // Informations nécessaires pour l'interface graphique
+#endif
     EF              ef_donnees;         // Données communes à tous les éléments finis
     Beton_Donnees   beton;              // Données spécifiques au béton
 } Projet;

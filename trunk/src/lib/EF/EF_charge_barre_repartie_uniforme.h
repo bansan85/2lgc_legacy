@@ -20,34 +20,7 @@
 #define __EF_CHARGE_BARRE_REPARTIE_UNIFORME
 
 #include "config.h"
-#include <list.h>
-#include <cholmod.h>
-
 #include "common_projet.h"
-#include "common_fonction.h"
-#include "EF_noeud.h"
-#include "EF_calculs.h"
-#include "1992_1_1_barres.h"
-
-typedef struct __Charge_Barre_Repartie_Uniforme
-{
-    Barre_Charge_Type   type;
-    int                 numero;
-    char                *nom;
-    char                *description;
-    void                *barre;
-    int                 repere_local;
-    int                 projection;
-    double              a; // Position du début de la charge répartie par rapport au début
-    double              b;   // Position de la fin de la charge par rapport à la fin
-    double              fx;
-    double              fy;
-    double              fz;
-    double              mx;
-    double              my;
-    double              mz;
-    GtkTreeIter         *pIter;
-} Charge_Barre_Repartie_Uniforme;
 
 int EF_charge_barre_repartie_uniforme_ajout(Projet *projet, int num_action, Beton_Barre *barre,
   int repere_local, int projection, double a, double b, double fx, double fy, double fz,

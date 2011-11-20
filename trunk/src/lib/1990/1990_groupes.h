@@ -21,55 +21,12 @@
 
 #include "config.h"
 #include <list.h>
-#ifdef ENABLE_GTK
-#include <gtk/gtk.h>
-#endif
-
-#include "1990_combinaisons.h"
-
-typedef struct __Element
-{
-    int         numero;
-#ifdef ENABLE_GTK
-    GtkTreeIter *pIter;         // Pour la fenêtre groupes
-    int         pIter_expand;
-#endif
-} Element;
-
-typedef enum __Type_Groupe_Combinaison
-{
-    GROUPE_COMBINAISON_OR,
-    GROUPE_COMBINAISON_XOR,
-    GROUPE_COMBINAISON_AND
-} Type_Groupe_Combinaison;
-
-typedef struct __Groupe
-{
-    char                    *nom;
-    int                     numero;
-    Type_Groupe_Combinaison type_combinaison;
-    LIST                    *elements;
-    Combinaisons            tmp_combinaison;
-#ifdef ENABLE_GTK
-    GtkTreeIter             *pIter;         // Pour la fenêtre groupes
-    int                     pIter_expand;
-#endif
-} Groupe;
-
-typedef struct __Niveau_Groupe
-{
-    int             niveau;
-    LIST            *groupes;
-#ifdef ENABLE_GTK
-    GtkTreeIter     *pIter;                 // Pour la fenêtre groupes
-#endif
-} Niveau_Groupe;
+#include "common_projet.h"
 
 int _1990_groupe_init(Projet *projet);
 
 int _1990_groupe_ajout_niveau(Projet *projet);
-int _1990_groupe_ajout_groupe(Projet *projet, int niveau,
-  Type_Groupe_Combinaison type_combinaison, char* nom);
+int _1990_groupe_ajout_groupe(Projet *projet, int niveau, Type_Groupe_Combinaison type_combinaison, char* nom);
 int _1990_groupe_ajout_element(Projet *projet, unsigned int niveau, int groupe_n, int groupe_n_1);
 
 int _1990_groupe_positionne_niveau(LIST *source, int numero);

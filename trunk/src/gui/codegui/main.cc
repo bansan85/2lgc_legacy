@@ -30,6 +30,7 @@ extern "C" {
 #include "1990_actions.h"
 #include "1992_1_1_barres.h"
 #include "1992_1_1_section.h"
+#include "1992_1_1_materiaux.h"
 #include "EF_appuis.h"
 #include "EF_relachement.h"
 #include "EF_noeud.h"

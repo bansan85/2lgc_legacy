@@ -19,6 +19,7 @@
 #ifndef __EF_RIGIDITE_H
 #define __EF_RIGIDITE_H
 
+#include "config.h"
 #include "common_projet.h"
 
 

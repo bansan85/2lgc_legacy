@@ -22,28 +22,6 @@
 #include "config.h"
 #include "common_projet.h"
 
-typedef enum __Type_EF_Appui
-{
-    EF_APPUI_LIBRE,                 // Déplacement libre
-    EF_APPUI_BLOQUE                 // Déplacement bloqué
-} Type_EF_Appui;
-
-typedef struct __EF_Appui
-{
-    int numero;                     // Numéro de l'appui
-    Type_EF_Appui   x;              // Degré de liberté de la direction x
-    void            *x_donnees;     // Données complémentaire si nécessaire.
-    Type_EF_Appui   y;
-    void            *y_donnees;
-    Type_EF_Appui   z;
-    void            *z_donnees;
-    Type_EF_Appui   rx;             // Degré de liberté de la rotation autour de l'axe x
-    void            *rx_donnees;
-    Type_EF_Appui   ry;
-    void            *ry_donnees;
-    Type_EF_Appui   rz;
-    void            *rz_donnees;
-} EF_Appui;
 
 int EF_appuis_init(Projet *projet);
 int EF_appuis_ajout(Projet *projet, Type_EF_Appui x, Type_EF_Appui y, Type_EF_Appui z, Type_EF_Appui rx, Type_EF_Appui ry, Type_EF_Appui rz);
