@@ -22,37 +22,6 @@
 #include "config.h"
 #include "common_projet.h"
 
-typedef struct __EF_Relachement_Donnees_Elastique_Lineaire
-{
-    double              raideur;    // La raideur doit être indiquée en N.m/rad
-} EF_Relachement_Donnees_Elastique_Lineaire;
-
-typedef enum __EF_Relachement_Type
-{
-    EF_RELACHEMENT_BLOQUE,
-    EF_RELACHEMENT_LIBRE,
-    EF_RELACHEMENT_ELASTIQUE_LINEAIRE
-} EF_Relachement_Type;
-
-typedef struct __EF_Relachement
-{
-    unsigned int        numero;
-    EF_Relachement_Type rx_debut;   // Type de relachement du moment autour de l'axe x
-    void                *rx_d_data; // Paramètres complémentaires au relachement. N'est à 
-                                    // définir que si le type de relachement est différent
-                                    // de LIBRE et BLOQUE
-    EF_Relachement_Type ry_debut;
-    void                *ry_d_data;
-    EF_Relachement_Type rz_debut;
-    void                *rz_d_data;
-    EF_Relachement_Type rx_fin;
-    void                *rx_f_data;
-    EF_Relachement_Type ry_fin;
-    void                *ry_f_data;
-    EF_Relachement_Type rz_fin;
-    void                *rz_f_data;
-} EF_Relachement;
-
 int EF_relachement_init(Projet *projet);
 int EF_relachement_ajout(Projet *projet, EF_Relachement_Type rx_debut, void* rx_d_data,
   EF_Relachement_Type ry_debut, void* ry_d_data, EF_Relachement_Type rz_debut, void* rz_d_data,

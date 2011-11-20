@@ -23,51 +23,7 @@
 #ifdef ENABLE_GTK
 #include <gtk/gtk.h>
 
-typedef struct __List_Gtk_1990_Groupes
-{
-    GtkWidget       *window_groupe;
-    GtkWidget       *table_groupe;
-    GtkWidget       *table_combinaison;
-    GtkWidget       *spin_button_niveau;
-    GtkWidget       *button_niveau_ajout;
-    GtkWidget       *button_niveau_suppr;
-    GtkWidget       *frame_groupe;
-    GtkWidget       *table_groupes;
-    GtkTreeStore    *tree_store_etat;
-    GtkTreeView     *tree_view_etat;
-    GtkWidget       *scroll_etat;
-    GtkWidget       *button_groupe_ajout;
-    GtkWidget       *button_groupe_suppr;
-    GtkWidget       *button_groupe_and;
-    GtkWidget       *button_groupe_or;
-    GtkWidget       *button_groupe_xor;
-    GtkWidget       *button_groupe_nom;
-    GtkWidget       *entry_groupe_nom;
-    GtkWidget       *frame_dispo;
-    GtkWidget       *table_dispo;
-    GtkTreeStore    *tree_store_dispo;
-    GtkTreeView     *tree_view_dispo;
-    GtkWidget       *scroll_dispo;
-    GtkWidget       *button_ajout_dispo;
-    GtkWidget       *table_bas;
-    GtkWidget       *button_generer;
-    GtkWidget       *button_options;
-    GtkWidget       *button_quitter;
-    GtkWidget       *drag_from;
-} List_Gtk_1990_Groupes;
-
-
-typedef struct __List_Gtk_1990_Actions
-{
-    GtkWidget       *window;
-    GtkWidget       *table;
-    GtkWidget       *scroll_actions;
-    GtkTreeStore    *tree_store_actions;
-    GtkTreeView     *tree_view_actions;
-    GtkWidget       *scroll_charges;
-    GtkTreeStore    *tree_store_charges;
-    GtkTreeView     *tree_view_charges;
-} List_Gtk_1990_Actions;
+#include "common_projet.h"
 
 
 void _1990_gtk_groupes(GtkWidget *button __attribute__((unused)), Projet *projet);

@@ -20,48 +20,8 @@
 #define __1992_1_1_BARRES_H
 
 #include "config.h"
-#include "EF_relachement.h"
-#include "EF_noeud.h"
-#include "1992_1_1_materiaux.h"
 #include "common_projet.h"
-#include "cholmod.h"
 
-typedef struct __Barre_Info_EF
-{
-    cholmod_sparse      *matrice_rigidite_locale;
-    
-    double              ay; // Paramètres de souplesse de la poutre
-    double              by;
-    double              cy;
-    double              az;
-    double              bz;
-    double              cz;
-    
-    double              kAx;
-    double              kAy; // coefficient défissant l'inverse de la raideur aux noeuds
-    double              kAz;
-    double              kBx;
-    double              kBy;
-    double              kBz;
-} Barre_Info_EF;
-
-typedef struct __Beton_Barre
-{
-    unsigned int        numero;
-    Type_Element        type;
-    void                *section;
-    Beton_Materiau      *materiau;
-    
-    EF_Noeud            *noeud_debut;
-    EF_Noeud            *noeud_fin;
-    unsigned int        discretisation_element;     // Nombre de noeuds intermédiaires
-    Barre_Info_EF       *info_EF;                   // Une info par élément discrétisé
-    EF_Noeud            **noeuds_intermediaires;
-    EF_Relachement      *relachement;
-    
-    cholmod_sparse      *matrice_rotation;
-    cholmod_sparse      *matrice_rotation_transpose;
-} Beton_Barre;
 
 int _1992_1_1_barres_init(Projet *projet);
 int _1992_1_1_barres_ajout(Projet *projet, Type_Element type, unsigned int section, unsigned int materiau, unsigned int noeud_debut, unsigned int noeud_fin, int relachement, unsigned int discretisation_element);

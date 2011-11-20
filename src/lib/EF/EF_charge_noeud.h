@@ -20,29 +20,7 @@
 #define __EF_CHARGE_NOEUD_H
 
 #include "config.h"
-#include <list.h>
-#include <cholmod.h>
-
 #include "common_projet.h"
-#include "common_fonction.h"
-#include "EF_noeud.h"
-#include "EF_calculs.h"
-
-typedef struct __Charge_Noeud
-{
-    Barre_Charge_Type   type;
-    int                 numero;
-    char                *nom;
-    char                *description;
-    EF_Noeud            *noeud;
-    double              x;
-    double              y;
-    double              z;
-    double              mx;
-    double              my;
-    double              mz;
-    GtkTreeIter         *pIter;
-} Charge_Noeud;
 
 int EF_charge_noeud_ajout(Projet *projet, int num_action, EF_Noeud *noeud,
   double fx, double fy, double fz, double mx, double my, double mz, char* nom);

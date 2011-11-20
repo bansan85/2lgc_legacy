@@ -29,7 +29,7 @@
 #include "common_maths.h"
 #include "1990_actions.h"
 
-int common_fonction_init(Projet *projet, void *action_void)
+int common_fonction_init(Projet *projet, Action *action)
 /* Description : Initialise les fonctions décrivant les sollicitations, les rotations ou les
  *               déplacements des barres. Cette fonction doit être appelée lorsque toutes les
  *               barres ont été modélisées. En effet, il est nécessaire de connaître leur
@@ -37,21 +37,19 @@ int common_fonction_init(Projet *projet, void *action_void)
  *               L'initialisation des fonctions consiste à définir un nombre de tronçon à 0 et
  *               les données à NULL.
  * Paramètres : Projet *projet : la variable projet,
- *            : void *action_void : pointeur vers l'action. Il est utilisé void à la place de
- *              Action* pour éviter une dépendence circulaire.
+ *            : Action *action : pointeur vers l'action.
  * Valeur renvoyée :
  *   Succès : 0
  *   Échec : -1 en cas de paramètres invalides :
  *             (projet == NULL) ou
- *             (action_void == NULL)
+ *             (action == NULL)
  *           -2 en cas d'erreur d'allocation mémoire
  */
 {
-    Action              *action = (Action*)action_void;
     unsigned int        i, j;
     
     BUGMSG(projet, -1, "common_fonction_init\n");
-    BUGMSG(action_void, -1, "common_fonction_init\n");
+    BUGMSG(action, -1, "common_fonction_init\n");
     
     // Trivial
     for (i=0;i<6;i++)
@@ -379,19 +377,18 @@ int common_fonction_affiche(Fonction* fonction)
 }
 
 
-int common_fonction_free(Projet *projet, void *action_void)
+int common_fonction_free(Projet *projet, Action *action)
 /* Description : Libère les fonctions de toutes les barres de l'action souhaitée.
  * Paramètres : Projet *projet : la variable projet
- *            : void *action_void : pointeur vers l'action. Il est utilisé void * à la place
- *                                  de Action* pour éviter une dépendence circulaire.
+ *            : Action *action : pointeur vers l'action.
  * Valeur renvoyée :
  *   Succès : 0
  *   Échec : -1 en cas de paramètres invalides :
  *             (projet == NULL) ou
- *             (action == NULL)
+ *             (action == NULL) ou
+ *             (projet->beton.barres == NULL)
  */
 {
-    Action *action = (Action*)action_void;
     unsigned int        i, j;
     
     BUGMSG(projet, -1, "common_fonction_free\n");

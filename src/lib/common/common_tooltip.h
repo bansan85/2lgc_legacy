@@ -20,6 +20,7 @@
 #define __COMMON_TOOLTIP_H
 
 #include "config.h"
+#include "common_projet.h"
 
 #ifdef ENABLE_GTK
 #include <gtk/gtk.h>

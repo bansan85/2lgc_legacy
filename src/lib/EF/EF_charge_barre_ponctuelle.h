@@ -20,35 +20,8 @@
 #define __EF_CHARGE_BARRE_PONCTUELLE_H
 
 #include "config.h"
-#include <list.h>
-#include <cholmod.h>
-#include <gtk/gtk.h>
-
 #include "common_projet.h"
-#include "common_fonction.h"
-#include "EF_noeud.h"
-#include "EF_calculs.h"
-#include "1992_1_1_barres.h"
 
-typedef struct __Charge_Barre_Ponctuelle
-{
-    Barre_Charge_Type   type;
-    int                 numero;
-    char                *nom;
-    char                *description;
-    void                *barre;
-    int                 repere_local;
-    double              position; // Position de la charge ponctuelle en mètre
-                                  // depuis le début de la barre
-    double              fx;
-    double              fy;
-    double              fz;
-    double              mx;
-    double              my;
-    double              mz;
-    
-    GtkTreeIter         *pIter;
-} Charge_Barre_Ponctuelle;
 
 int EF_charge_barre_ponctuelle_ajout(Projet *projet, int num_action, Beton_Barre *barre, 
   int repere_local, double a, double fx, double fy, double fz, double mx, double my,

@@ -10,6 +10,7 @@ libeurocodes_la_LIBADD		=	-llist -lcholmod -lamd -lcolamd -lumfpack @BLAS_LIBS@ 
 libeurocodes_la_CFLAGS		=	$(AM_CFLAGS)
 if ENABLE_GTK
 libeurocodes_la_LIBADD		+=	@GTK_LIBS@
+libeurocodes_la_CFLAGS		+=	@GTK_CFLAGS@
 endif
 
 libeurocodes_la_LDFLAGS		= 	$(AM_LDFLAGS) -no-undefined -version-info 0:0:0

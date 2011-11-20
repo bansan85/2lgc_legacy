@@ -20,24 +20,8 @@
 #define __1990_PONDERATIONS_H
 
 #include "config.h"
-#include <list.h>
-
 #include "common_projet.h"
-#include "1990_actions.h"
 
-typedef struct __Ponderation_Element
-{
-    double      ponderation;
-    int         psi;
-    int         flags;
-    Action      *action;
-} Ponderation_Element;
-
-// Ne pas supprimer l'espace après le __Ponderation, c'est pour la génération du manuel Latex
-typedef struct __Ponderation 
-{
-    LIST        *elements; // Liste de pointeur Action* avec leur ponderation
-} Ponderation;
 
 int _1990_ponderations_genere(Projet *projet);
 void _1990_ponderations_affiche_tout(Projet *projet);

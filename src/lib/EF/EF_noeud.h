@@ -21,22 +21,6 @@
 
 #include "config.h"
 #include "common_projet.h"
-#include "EF_appuis.h"
-
-typedef struct __EF_Point
-{
-    double      x;
-    double      y;
-    double      z;
-} EF_Point;
-
-
-typedef struct __EF_Noeud
-{
-    int         numero;
-    EF_Point    position;
-    EF_Appui    *appui;
-} EF_Noeud;
 
 int EF_noeuds_init(Projet *projet);
 int EF_noeuds_ajout(Projet *projet, double x, double y, double z, int appui);
