@@ -916,8 +916,6 @@ double _1992_1_1_sections_es_l(Beton_Barre *barre, unsigned int discretisation,
  */
 {
     Beton_Section_Rectangulaire *section_tmp;
-    EF_Noeud    *debut, *fin;
-    double      xx, yy, zz, ll;
     double      E;
     
     BUGMSG(barre, 0., "_1992_1_1_sections_es_l\n");
@@ -931,20 +929,6 @@ double _1992_1_1_sections_es_l(Beton_Barre *barre, unsigned int discretisation,
     // Le facteur ES/L est défini par la formule :\end{verbatim}\begin{displaymath}
     // \frac{E \cdot S}{L} = \frac{E}{\int_d^f \frac{1}{S(x)} dx}\end{displaymath}\begin{verbatim}
     section_tmp = (Beton_Section_Rectangulaire*)barre->section;
-    
-    if (discretisation == 0)
-        debut = barre->noeud_debut;
-    else
-        debut = barre->noeuds_intermediaires[discretisation-1];
-    if (discretisation == barre->discretisation_element)
-        fin = barre->noeud_fin;
-    else
-        fin = barre->noeuds_intermediaires[discretisation];
-    
-    xx = fin->position.x - debut->position.x;
-    yy = fin->position.y - debut->position.y;
-    zz = fin->position.z - debut->position.z;
-    ll = sqrt(xx*xx+yy*yy+zz*zz);
     
     E = barre->materiau->ecm;
     
