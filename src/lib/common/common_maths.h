@@ -42,5 +42,6 @@
 double common_math_arrondi_nombre(double nombre);
 void common_math_arrondi_triplet(cholmod_triplet *triplet);
 void common_math_arrondi_sparse(cholmod_sparse *sparse);
+void common_math_double_to_char(double nombre, char *dest);
 
 #endif
