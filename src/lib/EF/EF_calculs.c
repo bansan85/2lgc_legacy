@@ -514,7 +514,6 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
                 case CHARGE_BARRE_PONCTUELLE :
                 {
                     Charge_Barre_Ponctuelle *charge_barre = (Charge_Barre_Ponctuelle*)list_curr(action_en_cours->charges);
-                    double       E, G;                         /* Caractéristiques du matériau de la barre */
                     double       xx, yy, zz, l;
                     double       a, b;                         /* Position de la charge par rapport au début et à la fin de l'élément discrétisé */
                     double       debut_barre, fin_barre;       /* Début et fin de la barre discrétisée par rapport à la barre complète */
@@ -527,23 +526,6 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
                     Beton_Barre *element_en_beton = (Beton_Barre*)charge_barre->barre;
                     unsigned int num = element_en_beton->numero;
                     unsigned int pos;                          /* numéro de l'élément dans la discrétisation */
-                    
-    //         Récupération des caractéristiques mécaniques de l'élément.
-                    switch (element_en_beton->type)
-                    {
-                        case BETON_ELEMENT_POTEAU :
-                        case BETON_ELEMENT_POUTRE :
-                        {
-                            E = element_en_beton->materiau->ecm;
-                            G = element_en_beton->materiau->gnu_0_2;
-                            break;
-                        }
-                        /* Type d'élément inconnu*/
-                        default :
-                        {
-                            BUG(0, -1);
-                        }
-                    }
                     
     //         Convertion des efforts globaux en efforts locaux si nécessaire :\end{verbatim}\begin{center}
     //         $\{ F \}_{local} = [R]^T \cdot \{ F \}_{global}$\end{center}\begin{verbatim}
@@ -806,25 +788,6 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
                     unsigned int j_d, j_f;                  /* numéro de l'élément dans la discrétisation */
                     Charge_Barre_Repartie_Uniforme *charge_barre = (Charge_Barre_Repartie_Uniforme*)list_curr(action_en_cours->charges);
                     Beton_Barre  *element_en_beton = (Beton_Barre*)charge_barre->barre;
-                    double       E, G;                         /* Caractéristiques du matériau de la barre */
-                    
-    //         Récupération des caractéristiques mécaniques de l'élément.
-                    switch (element_en_beton->type)
-                    {
-                        case BETON_ELEMENT_POTEAU :
-                        case BETON_ELEMENT_POUTRE :
-                        {
-                            E = element_en_beton->materiau->ecm;
-                            G = element_en_beton->materiau->gnu_0_2;
-                            break;
-                        }
-                        /* Type d'élément inconnu*/
-                        default :
-                        {
-                            BUG(0, -1);
-                            break;
-                        }
-                    }
                     
     //         Convertion des efforts globaux en efforts locaux si nécessaire :\end{verbatim}\begin{center}
     //           $\{ F \}_{local} = [R_e]^T \cdot \{ F \}_{global}$\end{center}\begin{verbatim}

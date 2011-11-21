@@ -243,8 +243,6 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
     unsigned int        i, j;
     cholmod_triplet     *triplet;
     cholmod_sparse      *sparse_tmp, *matrice_rigidite_globale;
-    Beton_Section_Carre *section_donnees;
-    double              E, G;
     
     BUGMSG(projet, -1, "_1992_1_1_barres_rigidite_ajout\n");
     BUGMSG(projet->ef_donnees.triplet_rigidite_partielle, -1, "_1992_1_1_barres_rigidite_ajout\n");
@@ -252,9 +250,6 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
     BUGMSG(projet->ef_donnees.triplet_rigidite_complete, -1, "_1992_1_1_barres_rigidite_ajout\n");
     
     BUGMSG(element->section, -1, "_1992_1_1_barres_rigidite_ajout\n");
-    section_donnees = (Beton_Section_Carre*)element->section;
-    E = element->materiau->ecm;
-    G = element->materiau->gnu_0_2;
     
     // Calcul de la matrice de rotation 3D qui permet de passer du repère local au repère
     //   global. Elle est déterminée par le calcul de deux angles : z faisant une rotation

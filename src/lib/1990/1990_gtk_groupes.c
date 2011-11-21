@@ -1407,7 +1407,6 @@ void _1990_gtk_groupes(GtkWidget *button __attribute__((unused)), Projet *projet
  */
 {
     GtkWidget           *label;
-    Niveau_Groupe       *niveau;
     List_Gtk_1990_Groupes       *list_gtk_1990_groupes;
     GtkCellRenderer     *pCellRenderer;
     GtkTreeViewColumn   *pColumn;
@@ -1444,9 +1443,6 @@ void _1990_gtk_groupes(GtkWidget *button __attribute__((unused)), Projet *projet
     g_signal_connect(G_OBJECT(list_gtk_1990_groupes->button_niveau_ajout), "clicked", G_CALLBACK(_1990_gtk_button_niveau_ajout_clicked), projet);
     list_gtk_1990_groupes->button_niveau_suppr = gtk_button_new_with_label("  -  ");
     g_signal_connect(G_OBJECT(list_gtk_1990_groupes->button_niveau_suppr), "clicked", G_CALLBACK(_1990_gtk_button_niveau_suppr_clicked), projet);
-    
-    list_mvfront(projet->niveaux_groupes);
-    niveau = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
     
     /* Création des composants graphiques affichant l'état du niveau en cours */
     list_gtk_1990_groupes->scroll_etat = gtk_scrolled_window_new(NULL, NULL);
