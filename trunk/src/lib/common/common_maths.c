@@ -22,6 +22,7 @@
 #include <libintl.h>
 #include <locale.h>
 #include <math.h>
+#include <string.h>
 #include "common_maths.h"
 
 
@@ -84,6 +85,43 @@ void common_math_arrondi_sparse(cholmod_sparse *sparse)
     for (i=0;i<sparse->nzmax;i++)
         ax[i] = common_math_arrondi_nombre(ax[i]);
     
+    return;
+}
+
+
+void common_math_double_to_char(double nombre, char *dest)
+/* Description : Converti un nombre double en char *.
+                 Dest doit déjà être alloué. 30 caractères devrait être suffisant.
+ * Paramètres : double nombre : nombre à convertir,
+ *              char *dest : nombre converti
+ * Valeur renvoyée : void
+ */
+{
+    double  test;
+    int     width;
+    
+    // Si le nombre est supérieur à 1e15, on affiche sous forme scientifique
+    if (ABS(nombre) > 1e15)
+    {
+        for (width = 0; width<80; width++)
+        {
+            sprintf(dest, "%.*le", width, nombre);
+            sscanf(dest, "%le", &test);
+            if (nombre == test)
+                break;
+        }
+    }
+    // Sinon on affiche sous forme normale
+    else
+    {
+        for (width = 0; width<80; width++)
+        {
+            sprintf(dest, "%.*lf", width, nombre);
+            sscanf(dest, "%lf", &test);
+            if (nombre == test)
+                break;
+        }
+    }
     return;
 }
     /*double common_math_arrondi(double nombre)

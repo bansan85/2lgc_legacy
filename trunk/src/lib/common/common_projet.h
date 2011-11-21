@@ -175,48 +175,6 @@ typedef struct __EF_Noeud
 } EF_Noeud;
 
 
-typedef struct __Charge_Barre_Ponctuelle
-{
-    Barre_Charge_Type   type;
-    int                 numero;
-    char                *nom;
-    char                *description;
-    void                *barre;
-    int                 repere_local;
-    double              position; // Position de la charge ponctuelle en mètre
-                                  // depuis le début de la barre
-    double              fx;
-    double              fy;
-    double              fz;
-    double              mx;
-    double              my;
-    double              mz;
-    
-    GtkTreeIter         *pIter;
-} Charge_Barre_Ponctuelle;
-
-
-typedef struct __Charge_Barre_Repartie_Uniforme
-{
-    Barre_Charge_Type   type;
-    int                 numero;
-    char                *nom;
-    char                *description;
-    void                *barre;
-    int                 repere_local;
-    int                 projection;
-    double              a; // Position du début de la charge répartie par rapport au début
-    double              b;   // Position de la fin de la charge par rapport à la fin
-    double              fx;
-    double              fy;
-    double              fz;
-    double              mx;
-    double              my;
-    double              mz;
-    GtkTreeIter         *pIter;
-} Charge_Barre_Repartie_Uniforme;
-
-
 typedef struct __Charge_Noeud
 {
     Barre_Charge_Type   type;
@@ -359,6 +317,48 @@ typedef struct __Beton_Barre
     cholmod_sparse      *matrice_rotation;
     cholmod_sparse      *matrice_rotation_transpose;
 } Beton_Barre;
+
+
+typedef struct __Charge_Barre_Ponctuelle
+{
+    Barre_Charge_Type   type;
+    int                 numero;
+    char                *nom;
+    char                *description;
+    Beton_Barre         *barre;
+    int                 repere_local;
+    double              position; // Position de la charge ponctuelle en mètre
+                                  // depuis le début de la barre
+    double              fx;
+    double              fy;
+    double              fz;
+    double              mx;
+    double              my;
+    double              mz;
+    
+    GtkTreeIter         *pIter;
+} Charge_Barre_Ponctuelle;
+
+
+typedef struct __Charge_Barre_Repartie_Uniforme
+{
+    Barre_Charge_Type   type;
+    int                 numero;
+    char                *nom;
+    char                *description;
+    Beton_Barre         *barre;
+    int                 repere_local;
+    int                 projection;
+    double              a; // Position du début de la charge répartie par rapport au début
+    double              b;   // Position de la fin de la charge par rapport à la fin
+    double              fx;
+    double              fy;
+    double              fz;
+    double              mx;
+    double              my;
+    double              mz;
+    GtkTreeIter         *pIter;
+} Charge_Barre_Repartie_Uniforme;
 
 
 typedef struct __Troncon // Définition de la structure Troncon qui contient une fonction

@@ -33,6 +33,7 @@
 #include "common_erreurs.h"
 #include "common_projet.h"
 #include "common_tooltip.h"
+#include "common_maths.h"
 #include "EF_charge_barre_ponctuelle.h"
 #include "EF_charge_noeud.h"
 #include "EF_charge_barre_repartie_uniforme.h"
@@ -1614,7 +1615,7 @@ void _1990_gtk_tree_view_actions_cursor_changed(GtkTreeView *tree_view __attribu
     GtkTreeModel    *model;
     GtkTreeIter     iter;
     int             numero;
-    char            *nom, *description, tmp[256];
+    char            *nom, *description, tmp[30];
     Action          *action;
     
     BUGMSG(projet, , "_1990_gtk_tree_view_actions_cursor_changed\n");
@@ -1649,6 +1650,42 @@ void _1990_gtk_tree_view_actions_cursor_changed(GtkTreeView *tree_view __attribu
                     sprintf(tmp, "%d", charge->noeud->numero);
                     description = realloc(description, (strlen(description) + strlen(tmp)+1)*sizeof(char));
                     strcat(description, tmp);
+                    common_math_double_to_char(charge->x, tmp);
+                    description = realloc(description, (strlen(description) + strlen(",  N") + strlen("Fx : ") + strlen(tmp)+1)*sizeof(char));
+                    strcat(description, ", ");
+                    strcat(description, "Fx : ");
+                    strcat(description, tmp);
+                    strcat(description, " N");
+                    common_math_double_to_char(charge->y, tmp);
+                    description = realloc(description, (strlen(description) + strlen(",  N") + strlen("Fy : ") + strlen(tmp)+1)*sizeof(char));
+                    strcat(description, ", ");
+                    strcat(description, "Fy : ");
+                    strcat(description, tmp);
+                    strcat(description, " N");
+                    common_math_double_to_char(charge->z, tmp);
+                    description = realloc(description, (strlen(description) + strlen(",  N") + strlen("Fz : ") + strlen(tmp)+1)*sizeof(char));
+                    strcat(description, ", ");
+                    strcat(description, "Fz : ");
+                    strcat(description, tmp);
+                    strcat(description, " N");
+                    common_math_double_to_char(charge->mx, tmp);
+                    description = realloc(description, (strlen(description) + strlen(",  N") + strlen("Mx : ") + strlen(tmp)+1)*sizeof(char));
+                    strcat(description, ", ");
+                    strcat(description, "Mx : ");
+                    strcat(description, tmp);
+                    strcat(description, " N");
+                    common_math_double_to_char(charge->my, tmp);
+                    description = realloc(description, (strlen(description) + strlen(",  N") + strlen("My : ") + strlen(tmp)+1)*sizeof(char));
+                    strcat(description, ", ");
+                    strcat(description, "My : ");
+                    strcat(description, tmp);
+                    strcat(description, " N");
+                    common_math_double_to_char(charge->mz, tmp);
+                    description = realloc(description, (strlen(description) + strlen(",  N") + strlen("Mz : ") + strlen(tmp)+1)*sizeof(char));
+                    strcat(description, ", ");
+                    strcat(description, "Mz : ");
+                    strcat(description, tmp);
+                    strcat(description, " N");
                     
                     if (charge->pIter == NULL)
                     {
@@ -1657,6 +1694,7 @@ void _1990_gtk_tree_view_actions_cursor_changed(GtkTreeView *tree_view __attribu
                     }
                     gtk_tree_store_append(list_gtk_1990_actions->tree_store_charges, charge->pIter, NULL);
                     gtk_tree_store_set(list_gtk_1990_actions->tree_store_charges, charge->pIter, 0, charge->numero, 1, charge->nom, 2, description, -1);
+                    free(description);
                     
                     break;
                 }
@@ -1664,13 +1702,63 @@ void _1990_gtk_tree_view_actions_cursor_changed(GtkTreeView *tree_view __attribu
                 {
                     Charge_Barre_Ponctuelle *charge = list_curr(action->charges);
                     
+                    description = malloc(sizeof(char)*(strlen(gettext("Barre : "))+1));
+                    strcpy(description, gettext("Barre : "));
+                    sprintf(tmp, "%d", charge->barre->numero);
+                    description = realloc(description, (strlen(description) + strlen(tmp)+1)*sizeof(char));
+                    strcat(description, tmp);
+                    common_math_double_to_char(charge->position, tmp);
+                    description = realloc(description, (strlen(description) + strlen(",  :  m") + strlen(gettext("position")) + strlen(tmp) + 1)*sizeof(char));
+                    strcat(description, ", ");
+                    strcat(description, gettext("position"));
+                    strcat(description, " : ");
+                    strcat(description, tmp);
+                    strcat(description, " m");
+                    common_math_double_to_char(charge->fx, tmp);
+                    description = realloc(description, (strlen(description) + strlen(",  N") + strlen("Fx : ") + strlen(tmp)+1)*sizeof(char));
+                    strcat(description, ", ");
+                    strcat(description, "Fx : ");
+                    strcat(description, tmp);
+                    strcat(description, " N");
+                    common_math_double_to_char(charge->fy, tmp);
+                    description = realloc(description, (strlen(description) + strlen(",  N") + strlen("Fy : ") + strlen(tmp)+1)*sizeof(char));
+                    strcat(description, ", ");
+                    strcat(description, "Fy : ");
+                    strcat(description, tmp);
+                    strcat(description, " N");
+                    common_math_double_to_char(charge->fz, tmp);
+                    description = realloc(description, (strlen(description) + strlen(",  N") + strlen("Fz : ") + strlen(tmp)+1)*sizeof(char));
+                    strcat(description, ", ");
+                    strcat(description, "Fz : ");
+                    strcat(description, tmp);
+                    strcat(description, " N");
+                    common_math_double_to_char(charge->mx, tmp);
+                    description = realloc(description, (strlen(description) + strlen(",  N") + strlen("Mx : ") + strlen(tmp)+1)*sizeof(char));
+                    strcat(description, ", ");
+                    strcat(description, "Mx : ");
+                    strcat(description, tmp);
+                    strcat(description, " N");
+                    common_math_double_to_char(charge->my, tmp);
+                    description = realloc(description, (strlen(description) + strlen(",  N") + strlen("My : ") + strlen(tmp)+1)*sizeof(char));
+                    strcat(description, ", ");
+                    strcat(description, "My : ");
+                    strcat(description, tmp);
+                    strcat(description, " N");
+                    common_math_double_to_char(charge->mz, tmp);
+                    description = realloc(description, (strlen(description) + strlen(",  N") + strlen("Mz : ") + strlen(tmp)+1)*sizeof(char));
+                    strcat(description, ", ");
+                    strcat(description, "Mz : ");
+                    strcat(description, tmp);
+                    strcat(description, " N");
+                    
                     if (charge->pIter == NULL)
                     {
                         charge->pIter = (GtkTreeIter*)malloc(sizeof(GtkTreeIter));
                         BUGMSG(charge->pIter, , gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_gtk_tree_view_actions_cursor_changed");
                     }
                     gtk_tree_store_append(list_gtk_1990_actions->tree_store_charges, charge->pIter, NULL);
-                    gtk_tree_store_set(list_gtk_1990_actions->tree_store_charges, charge->pIter, 0, charge->numero, 1, charge->nom, -1);
+                    gtk_tree_store_set(list_gtk_1990_actions->tree_store_charges, charge->pIter, 0, charge->numero, 1, charge->nom, 2, description, -1);
+                    free(description);
                     
                     break;
                 }
@@ -1678,13 +1766,80 @@ void _1990_gtk_tree_view_actions_cursor_changed(GtkTreeView *tree_view __attribu
                 {
                     Charge_Barre_Repartie_Uniforme *charge = list_curr(action->charges);
                     
+                    description = malloc(sizeof(char)*(strlen(gettext("Barre : "))+1));
+                    strcpy(description, gettext("Barre : "));
+                    sprintf(tmp, "%d", charge->barre->numero);
+                    description = realloc(description, (strlen(description) + strlen(tmp)+1)*sizeof(char));
+                    strcat(description, tmp);
+                    common_math_double_to_char(charge->a, tmp);
+                    description = realloc(description, (strlen(description) + strlen(",  :  m") + strlen(gettext("départ")) + strlen(tmp) +1)*sizeof(char));
+                    strcat(description, ", ");
+                    strcat(description, gettext("départ"));
+                    strcat(description, " : ");
+                    strcat(description, tmp);
+                    strcat(description, " m");
+                    common_math_double_to_char(charge->b, tmp);
+                    description = realloc(description, (strlen(description) + strlen(",  :  m") + strlen(gettext("fin (par rapport à la fin)")) + strlen(tmp) + 1)*sizeof(char));
+                    strcat(description, ", ");
+                    strcat(description, gettext("fin (par rapport à la fin)"));
+                    strcat(description, " : ");
+                    strcat(description, tmp);
+                    strcat(description, " m");
+                    if (charge->projection == TRUE)
+                    {
+                        description = realloc(description, (strlen(description) + strlen(gettext(", projection : oui")) +1)*sizeof(char));
+                        strcat(description, gettext(", projection : oui"));
+                    }
+                    else
+                    {
+                        description = realloc(description, (strlen(description) + strlen(gettext(", projection : non")) +1)*sizeof(char));
+                        strcat(description, gettext(", projection : non"));
+                    }
+                    common_math_double_to_char(charge->fx, tmp);
+                    description = realloc(description, (strlen(description) + strlen(",  N") + strlen("Fx : ") + strlen(tmp)+1)*sizeof(char));
+                    strcat(description, ", ");
+                    strcat(description, "Fx : ");
+                    strcat(description, tmp);
+                    strcat(description, " N");
+                    common_math_double_to_char(charge->fy, tmp);
+                    description = realloc(description, (strlen(description) + strlen(",  N") + strlen("Fy : ") + strlen(tmp)+1)*sizeof(char));
+                    strcat(description, ", ");
+                    strcat(description, "Fy : ");
+                    strcat(description, tmp);
+                    strcat(description, " N");
+                    common_math_double_to_char(charge->fz, tmp);
+                    description = realloc(description, (strlen(description) + strlen(",  N") + strlen("Fz : ") + strlen(tmp)+1)*sizeof(char));
+                    strcat(description, ", ");
+                    strcat(description, "Fz : ");
+                    strcat(description, tmp);
+                    strcat(description, " N");
+                    common_math_double_to_char(charge->mx, tmp);
+                    description = realloc(description, (strlen(description) + strlen(",  N") + strlen("Mx : ") + strlen(tmp)+1)*sizeof(char));
+                    strcat(description, ", ");
+                    strcat(description, "Mx : ");
+                    strcat(description, tmp);
+                    strcat(description, " N");
+                    common_math_double_to_char(charge->my, tmp);
+                    description = realloc(description, (strlen(description) + strlen(",  N") + strlen("My : ") + strlen(tmp)+1)*sizeof(char));
+                    strcat(description, ", ");
+                    strcat(description, "My : ");
+                    strcat(description, tmp);
+                    strcat(description, " N");
+                    common_math_double_to_char(charge->mz, tmp);
+                    description = realloc(description, (strlen(description) + strlen(",  N") + strlen("Mz : ") + strlen(tmp)+1)*sizeof(char));
+                    strcat(description, ", ");
+                    strcat(description, "Mz : ");
+                    strcat(description, tmp);
+                    strcat(description, " N");
+                    
                     if (charge->pIter == NULL)
                     {
                         charge->pIter = (GtkTreeIter*)malloc(sizeof(GtkTreeIter));
                         BUGMSG(charge->pIter, , gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_gtk_tree_view_actions_cursor_changed");
                     }
                     gtk_tree_store_append(list_gtk_1990_actions->tree_store_charges, charge->pIter, NULL);
-                    gtk_tree_store_set(list_gtk_1990_actions->tree_store_charges, charge->pIter, 0, charge->numero, 1, charge->nom, -1);
+                    gtk_tree_store_set(list_gtk_1990_actions->tree_store_charges, charge->pIter, 0, charge->numero, 1, charge->nom, 2, description, -1);
+                    free(description);
                     
                     break;
                 }

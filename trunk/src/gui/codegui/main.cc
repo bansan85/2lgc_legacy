@@ -25,6 +25,7 @@ extern "C" {
 #endif
 #include "common_text.h"
 #include "common_erreurs.h"
+#include "common_maths.h"
 #include "common_projet.h"
 #include "1990_groupes.h"
 #include "1990_actions.h"
