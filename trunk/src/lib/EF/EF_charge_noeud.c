@@ -68,10 +68,9 @@ int EF_charge_noeud_ajout(Projet *projet, int num_action, EF_Noeud *noeud,
     action_en_cours = (Action*)list_curr(projet->actions);
     
     charge_nouveau.type = CHARGE_NOEUD;
-    charge_nouveau.nom = (char*)malloc(sizeof(char)*(strlen(nom)+1));
-    BUGMSG(charge_nouveau.nom, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_charge_noeud_ajout");
-    strcpy(charge_nouveau.nom, nom);
-    charge_nouveau.description = NULL;
+    charge_nouveau.description = (char*)malloc(sizeof(char)*(strlen(nom)+1));
+    BUGMSG(charge_nouveau.description, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_charge_noeud_ajout");
+    strcpy(charge_nouveau.description, nom);
     charge_nouveau.noeud = noeud;
     charge_nouveau.x = fx;
     charge_nouveau.y = fy;
@@ -79,7 +78,6 @@ int EF_charge_noeud_ajout(Projet *projet, int num_action, EF_Noeud *noeud,
     charge_nouveau.mx = mx;
     charge_nouveau.my = my;
     charge_nouveau.mz = mz;
-    charge_nouveau.pIter = NULL;
     
     charge_dernier = (Charge_Noeud *)list_rear(action_en_cours->charges);
     if (charge_dernier == NULL)

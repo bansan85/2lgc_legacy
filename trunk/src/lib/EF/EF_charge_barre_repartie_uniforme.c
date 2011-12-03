@@ -92,10 +92,9 @@ int EF_charge_barre_repartie_uniforme_ajout(Projet *projet, int num_action, Beto
     action_en_cours = (Action*)list_curr(projet->actions);
     
     charge_nouveau.type = CHARGE_BARRE_REPARTIE_UNIFORME;
-    charge_nouveau.nom = (char*)malloc(sizeof(char)*(strlen(nom)+1));
-    BUGMSG(charge_nouveau.nom, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_charge_barre_repartie_uniforme_ajout");
-    strcpy(charge_nouveau.nom, nom);
-    charge_nouveau.description = NULL;
+    charge_nouveau.description = (char*)malloc(sizeof(char)*(strlen(nom)+1));
+    BUGMSG(charge_nouveau.description, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_charge_barre_repartie_uniforme_ajout");
+    strcpy(charge_nouveau.description, nom);
     charge_nouveau.barre = barre;
     charge_nouveau.repere_local = repere_local;
     charge_nouveau.projection = projection;
@@ -107,7 +106,6 @@ int EF_charge_barre_repartie_uniforme_ajout(Projet *projet, int num_action, Beto
     charge_nouveau.mx = mx;
     charge_nouveau.my = my;
     charge_nouveau.mz = mz;
-    charge_nouveau.pIter = NULL;
     
     charge_dernier = (Charge_Barre_Repartie_Uniforme *)list_rear(action_en_cours->charges);
     if (charge_dernier == NULL)

@@ -305,9 +305,9 @@ int _1990_action_ajout(Projet *projet, int type)
     BUG(_1990_action_categorie_bat(type, projet->pays) != ACTION_INCONNUE, -1);
     
     list_mvrear(projet->actions);
-    action_nouveau.nom = (char*)malloc(sizeof(char)*(strlen(_1990_action_type_bat_txt(type, projet->pays))+1));
-    BUGMSG(action_nouveau.nom, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_action_ajout");
-    strcpy(action_nouveau.nom, _1990_action_type_bat_txt(type, projet->pays));
+    action_nouveau.description = (char*)malloc(sizeof(char)*(strlen(_1990_action_type_bat_txt(type, projet->pays))+1));
+    BUGMSG(action_nouveau.description, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_action_ajout");
+    strcpy(action_nouveau.description, _1990_action_type_bat_txt(type, projet->pays));
     action_nouveau.type = type;
     action_nouveau.charges = list_init();
     BUGMSG(action_nouveau.charges, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_action_ajout");
@@ -321,7 +321,6 @@ int _1990_action_ajout(Projet *projet, int type)
     BUGMSG(action_nouveau.psi1 >= 0, -1, "type : %d, pays : %d\n", type, projet->pays);
     action_nouveau.psi2 = _1990_coef_psi2_bat(type, projet->pays);
     BUGMSG(action_nouveau.psi2 >= 0, -1, "type : %d, pays : %d\n", type, projet->pays);
-    action_nouveau.pIter = NULL;
     action_nouveau.fonctions_efforts[0] = NULL;
     action_nouveau.fonctions_efforts[1] = NULL;
     action_nouveau.fonctions_efforts[2] = NULL;
@@ -347,10 +346,10 @@ int _1990_action_ajout(Projet *projet, int type)
 }
 
 
-int _1990_action_cherche_numero(Projet *projet, int numero)
+int _1990_action_cherche_numero(Projet *projet, size_t numero)
 /* Description : Cherche et marque l'action numero comme celle en cours.
  * Paramètres : Projet *projet : la variable projet
- *            : int numero : le numéro de l'action
+ *            : size_t numero : le numéro de l'action
  * Valeur renvoyée :
  *   Succès : 0
  *   Échec : -1 en cas de paramètres invalides :
@@ -374,7 +373,157 @@ int _1990_action_cherche_numero(Projet *projet, int numero)
             return 0;
     }
     while (list_mvnext(projet->actions) != NULL);
-    BUGMSG(0, -2, gettext("%s : Action %d introuvable.\n"), "_1990_action_cherche_numero", numero);
+    BUGMSG(0, -2, gettext("%s : Action %zu introuvable.\n"), "_1990_action_cherche_numero", numero);
+}
+
+
+void *_1990_action_cherche_charge(Projet *projet, size_t num_action, size_t num_charge)
+/* Description : Renvoie la charge demandée.
+ * Paramètres : Projet *projet : la variable projet
+ *            : size_t num_action : le numéro de l'action
+ *            : size_t num_charge : le numéro de la charge
+ * Valeur renvoyée :
+ *   Succès : 0
+ *   Échec : -1 en cas de paramètres invalides :
+ *             (projet == NULL) ou
+ *             (projet->actions == NULL) ou
+ *             (list_size(projet->actions) == 0) ou
+ *             action introuvable
+ */
+{
+    Action *action;
+    
+    BUGMSG(projet, NULL, "_1990_action_cherche_charge\n");
+    BUGMSG(projet->actions, NULL, "_1990_action_cherche_charge\n");
+    BUGMSG(list_size(projet->actions), NULL, "_1990_action_cherche_charge\n");
+    
+    BUG(_1990_action_cherche_numero(projet, num_action) == 0, NULL);
+    action = list_curr(projet->actions);
+    
+    BUGMSG(list_size(action->charges), NULL, "_1990_action_cherche_charge\n");
+    
+    list_mvfront(action->charges);
+    do
+    {
+        Charge_Noeud *charge = list_curr(action->charges);
+        
+        if (charge->numero == num_charge)
+            return charge;
+    }
+    while (list_mvnext(action->charges));
+    
+    BUGMSG(NULL, NULL, "_1990_action_cherche_charge\n");
+}
+
+
+int _1990_action_deplace_charge(Projet *projet, size_t action_src, size_t charge_src,
+  size_t action_dest)
+/* Description : Déplace une charge d'une action à l'autre
+ * Paramètres : Projet *projet : la variable projet,
+ *              size_t action_src : numéro de l'action où se situe la charge à déplacer,
+ *              size_t charge_src : numéro de la charge à déplacer,
+ *              size_t action_dest : numéro de l'action où sera déplacer la charge.
+ * Valeur renvoyée :
+ *   Succès : 0
+ *   Échec : -1 en cas de paramètres invalides :
+ *             (projet == NULL) ou
+ *             (projet->actions == NULL) ou
+ *             (list_size(projet->actions)-1 < MAX(action_src, action_dest))
+ */
+{
+    Charge_Noeud            *charge_data = NULL;
+    List_Gtk_1990_Actions   *list_gtk_1990_actions = &projet->list_gtk._1990_actions;
+    
+    BUGMSG(projet, -1, "_1990_action_deplace_charge\n");
+    BUGMSG(projet->actions, -1, "_1990_action_deplace_charge\n");
+    BUGMSG(list_size(projet->actions)-1 >= MAX(action_src, action_dest), -1, "_1990_action_deplace_charge\n");
+    
+    if (action_src == action_dest)
+        return 0;
+    list_mvfront(projet->actions);
+    do
+    {
+        Action *action = (Action*)list_curr(projet->actions);
+        
+        if (action->numero == action_src)
+        {
+            BUGMSG(action->charges, -1, "_1990_action_deplace_charge\n");
+            BUGMSG(list_size(action->charges), -1, "_1990_action_deplace_charge\n");
+            
+            list_mvfront(action->charges);
+            do
+            {
+                Charge_Noeud *charge = (Charge_Noeud*)list_curr(action->charges);
+                
+                if (charge->numero == charge_src)
+                {
+                    gtk_tree_store_remove(list_gtk_1990_actions->tree_store_charges, &charge->pIter);
+                    charge = (Charge_Noeud*)list_curr(action->charges);
+                    charge_data = list_remove_curr(action->charges);
+                    charge = (Charge_Noeud*)list_curr(action->charges);
+                }
+                
+                if ((charge_data != NULL) && (charge != NULL) && (charge->numero > charge_src))
+                {
+                    charge->numero--;
+                    gtk_tree_store_set(list_gtk_1990_actions->tree_store_charges, &charge->pIter, 0, charge->numero, -1);
+                }
+            }
+            while (list_mvnext(action->charges) != NULL);
+        }
+    }
+    while ((list_mvnext(projet->actions) != NULL) && (charge_data == NULL));
+    
+    BUGMSG(charge_data, -1, "_1990_action_deplace_charge\n");
+    
+    list_mvfront(projet->actions);
+    do
+    {
+        Action  *action = (Action*)list_curr(projet->actions);
+        
+        if (action->numero == action_dest)
+        {
+            BUGMSG(action->charges, -1, "_1990_action_deplace_charge\n");
+            
+            switch (charge_data->type)
+            {
+                case CHARGE_NOEUD :
+                {
+                    charge_data->numero = list_size(action->charges);
+                    list_mvrear(action->charges);
+                    list_insert_after(action->charges, charge_data, sizeof(Charge_Noeud));
+                    charge_data = NULL;
+                    break;
+                }
+                case CHARGE_BARRE_PONCTUELLE :
+                {
+                    Charge_Barre_Ponctuelle *charge = (Charge_Barre_Ponctuelle*)charge_data;
+                    charge->numero = list_size(action->charges);
+                    list_mvrear(action->charges);
+                    list_insert_after(action->charges, charge, sizeof(Charge_Barre_Ponctuelle));
+                    charge_data = NULL;
+                    break;
+                }
+                case CHARGE_BARRE_REPARTIE_UNIFORME :
+                {
+                    Charge_Barre_Repartie_Uniforme *charge = (Charge_Barre_Repartie_Uniforme*)charge_data;
+                    charge->numero = list_size(action->charges);
+                    list_mvrear(action->charges);
+                    list_insert_after(action->charges, charge, sizeof(Charge_Barre_Repartie_Uniforme));
+                    charge_data = NULL;
+                    break;
+                }
+                default :
+                {
+                    BUGMSG(0, -1, "_1990_action_deplace_charge : charge_data->type\n");
+                    break;
+                }
+            }
+        }
+    }
+    while ((list_mvnext(projet->actions) != NULL) && (charge_data != NULL));
+    
+    return 0;
 }
 
 
@@ -401,7 +550,7 @@ int _1990_action_affiche_tout(Projet *projet)
     {
         Action      *action = (Action*)list_curr(projet->actions);
         
-        printf("Action '%s', numéro %d, nom '%s', type n°%d\n", action->nom, action->numero, action->nom, action->type);
+        printf("Action n° %zu, description '%s', type n°%d\n", action->numero, action->description, action->type);
     }
     while (list_mvnext(projet->actions) != NULL);
     
@@ -509,11 +658,10 @@ int _1990_action_free(Projet *projet)
     {
         Action      *action = (Action*)list_remove_front(projet->actions);
         
-        free(action->nom);
+        free(action->description);
         while (!list_empty(action->charges))
         {
             Charge_Barre_Ponctuelle *charge = (Charge_Barre_Ponctuelle*)list_remove_front(action->charges);
-            free(charge->nom);
             free(charge);
         }
         free(action->charges);

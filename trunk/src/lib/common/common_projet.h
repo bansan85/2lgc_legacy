@@ -65,6 +65,7 @@ typedef struct __List_Gtk_1990_Actions
 {
     GtkWidget       *window;
     GtkWidget       *table;
+    GtkWidget       *paned;
     GtkWidget       *scroll_actions;
     GtkTreeStore    *tree_store_actions;
     GtkTreeView     *tree_view_actions;
@@ -151,7 +152,7 @@ typedef enum __Charge_Type
 
 typedef struct __EF_Appui
 {
-    int numero;                     // Numéro de l'appui
+    int             numero;         // Numéro de l'appui
     Type_EF_Appui   x;              // Degré de liberté de la direction x
     void            *x_donnees;     // Données complémentaire si nécessaire.
     Type_EF_Appui   y;
@@ -178,8 +179,8 @@ typedef struct __EF_Noeud
 typedef struct __Charge_Noeud
 {
     Barre_Charge_Type   type;
-    int                 numero;
-    char                *nom;
+    size_t              numero;
+    GtkTreeIter         pIter;
     char                *description;
     EF_Noeud            *noeud;
     double              x;
@@ -188,7 +189,6 @@ typedef struct __Charge_Noeud
     double              mx;
     double              my;
     double              mz;
-    GtkTreeIter         *pIter;
 } Charge_Noeud;
 
 
@@ -322,8 +322,8 @@ typedef struct __Beton_Barre
 typedef struct __Charge_Barre_Ponctuelle
 {
     Barre_Charge_Type   type;
-    int                 numero;
-    char                *nom;
+    size_t              numero;
+    GtkTreeIter         pIter;
     char                *description;
     Beton_Barre         *barre;
     int                 repere_local;
@@ -336,15 +336,14 @@ typedef struct __Charge_Barre_Ponctuelle
     double              my;
     double              mz;
     
-    GtkTreeIter         *pIter;
 } Charge_Barre_Ponctuelle;
 
 
 typedef struct __Charge_Barre_Repartie_Uniforme
 {
     Barre_Charge_Type   type;
-    int                 numero;
-    char                *nom;
+    size_t              numero;
+    GtkTreeIter         pIter;
     char                *description;
     Beton_Barre         *barre;
     int                 repere_local;
@@ -357,7 +356,6 @@ typedef struct __Charge_Barre_Repartie_Uniforme
     double              mx;
     double              my;
     double              mz;
-    GtkTreeIter         *pIter;
 } Charge_Barre_Repartie_Uniforme;
 
 
@@ -390,8 +388,8 @@ typedef struct __Fonction
 
 typedef struct __Action
 {
-    char            *nom;
-    int             numero;
+    char            *description;
+    size_t          numero;
     int             type;  // Les catégories sont conformes à _1990_action_type
     LIST            *charges;
     int             flags;
@@ -402,7 +400,7 @@ typedef struct __Action
     cholmod_sparse  *forces_complet;
     cholmod_sparse  *efforts_noeuds;
     double          norm;
-    GtkTreeIter     *pIter;
+    GtkTreeIter     pIter;
     
     Fonction        **fonctions_efforts[6]; // 6 fonctions (N, Ty, Tz, Mx, My, Mz) par barre.
                     // Les fonctions représentent la courbe des efforts dues aux charges dans
@@ -432,7 +430,7 @@ typedef struct __Element
 {
     int         numero;
 #ifdef ENABLE_GTK
-    GtkTreeIter *pIter;         // Pour la fenêtre groupes
+    GtkTreeIter pIter;         // Pour la fenêtre groupes
     int         pIter_expand;
 #endif
 } Element;
@@ -467,7 +465,7 @@ typedef struct __Groupe
     LIST                    *elements;
     Combinaisons            tmp_combinaison;
 #ifdef ENABLE_GTK
-    GtkTreeIter             *pIter;         // Pour la fenêtre groupes
+    GtkTreeIter             pIter;         // Pour la fenêtre groupes
     int                     pIter_expand;
 #endif
 } Groupe;
@@ -478,7 +476,7 @@ typedef struct __Niveau_Groupe
     int             niveau;
     LIST            *groupes;
 #ifdef ENABLE_GTK
-    GtkTreeIter     *pIter;                 // Pour la fenêtre groupes
+    GtkTreeIter     pIter;                 // Pour la fenêtre groupes
 #endif
 } Niveau_Groupe;
 
@@ -525,10 +523,10 @@ typedef struct __Comp_Gtk
 
 typedef struct __List_Gtk
 {                       // Contient toutes les données pour l'interface graphique GTK+3
-    void        *_1990_actions;     // pour l'Eurocode 0
-    void        *_1990_groupes;     // pour l'Eurocode 0
-    void        *m3d;       // pour l'affichage graphique de la structure
-    Comp_Gtk    comp;      // tous les composants grahpiques
+    List_Gtk_1990_Actions   _1990_actions;     // pour l'Eurocode 0
+    List_Gtk_1990_Groupes   _1990_groupes;     // pour l'Eurocode 0
+    void                    *m3d;       // pour l'affichage graphique de la structure
+    Comp_Gtk                comp;      // tous les composants grahpiques
 } List_Gtk;
 #endif
 

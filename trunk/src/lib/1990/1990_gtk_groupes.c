@@ -63,10 +63,9 @@ int _1990_gtk_affiche_niveau(Projet *projet, unsigned int niveau)
     List_Gtk_1990_Groupes   *list_gtk_1990_groupes;
     
     BUGMSG(projet, -1, "_1990_gtk_affiche_niveau\n");
-    BUGMSG(projet->list_gtk._1990_groupes, -1, "_1990_gtk_affiche_niveau\n");
     BUGMSG(list_size(projet->niveaux_groupes)-1 >= niveau, -1, "_1990_gtk_affiche_niveau\n");
     
-    list_gtk_1990_groupes = (List_Gtk_1990_Groupes*)projet->list_gtk._1990_groupes;
+    list_gtk_1990_groupes = &projet->list_gtk._1990_groupes;
     /* On supprime le contenu des deux composants tree_view */
     gtk_tree_store_clear(list_gtk_1990_groupes->tree_store_etat);
     gtk_tree_store_clear(list_gtk_1990_groupes->tree_store_dispo);
@@ -106,16 +105,9 @@ int _1990_gtk_affiche_niveau(Projet *projet, unsigned int niveau)
         {
             Groupe      *groupe = (Groupe*)list_curr(niveau_groupe->groupes);
             
-            /* Vérification si la ligne existe déjà */
-            if (groupe->pIter == NULL)
-            {
-                groupe->pIter = (GtkTreeIter*)malloc(sizeof(GtkTreeIter));
-                BUGMSG(groupe->pIter, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_gtk_affiche_niveau");
-            }
-            
             /* Ajoute de la ligne dans le tree_store */
-            gtk_tree_store_append(list_gtk_1990_groupes->tree_store_etat, groupe->pIter, NULL);
-            gtk_tree_store_set(list_gtk_1990_groupes->tree_store_etat, groupe->pIter, 0, groupe->numero, 1, groupe->nom, -1);
+            gtk_tree_store_append(list_gtk_1990_groupes->tree_store_etat, &groupe->pIter, NULL);
+            gtk_tree_store_set(list_gtk_1990_groupes->tree_store_etat, &groupe->pIter, 0, groupe->numero, 1, groupe->nom, -1);
             
             if ((groupe->elements != NULL) && (list_size(groupe->elements) != 0))
             {
@@ -127,19 +119,14 @@ int _1990_gtk_affiche_niveau(Projet *projet, unsigned int niveau)
                     /* On signale que l'élément a déjà été inséré */
                     dispos[element->numero] = 1;
                     /* puis ajout de la ligne dans le tree_store */
-                    if (element->pIter == NULL)
-                    {
-                        element->pIter = (GtkTreeIter*)malloc(sizeof(GtkTreeIter));
-                        BUGMSG(element->pIter, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_gtk_affiche_niveau");
-                    }
-                    gtk_tree_store_append(list_gtk_1990_groupes->tree_store_etat, element->pIter, groupe->pIter);
+                    gtk_tree_store_append(list_gtk_1990_groupes->tree_store_etat, &element->pIter, &groupe->pIter);
                     if (niveau == 0)
                     {
                         Action *action;
                         
                         BUG(_1990_action_cherche_numero(projet, element->numero) == 0, -3);
                         action = (Action*)list_curr(projet->actions);
-                        gtk_tree_store_set(list_gtk_1990_groupes->tree_store_etat, element->pIter, 0, element->numero, 1, action->nom, -1);
+                        gtk_tree_store_set(list_gtk_1990_groupes->tree_store_etat, &element->pIter, 0, element->numero, 1, action->description, -1);
                     }
                     else
                     {
@@ -149,7 +136,7 @@ int _1990_gtk_affiche_niveau(Projet *projet, unsigned int niveau)
                         groupe_niveau_moins_1 = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
                         BUG(_1990_groupe_positionne_groupe(groupe_niveau_moins_1, element->numero) == 0, -3);
                         groupe_moins_1 = (Groupe*)list_curr(groupe_niveau_moins_1->groupes);
-                        gtk_tree_store_set(list_gtk_1990_groupes->tree_store_etat, element->pIter, 0, element->numero, 1, groupe_moins_1->nom, -1);
+                        gtk_tree_store_set(list_gtk_1990_groupes->tree_store_etat, &element->pIter, 0, element->numero, 1, groupe_moins_1->nom, -1);
                     }
                 }
                 while (list_mvnext(groupe->elements));
@@ -159,7 +146,7 @@ int _1990_gtk_affiche_niveau(Projet *projet, unsigned int niveau)
             if (groupe->pIter_expand == 1)
             {
                 GtkTreePath *path;
-                path = gtk_tree_model_get_path(GTK_TREE_MODEL(list_gtk_1990_groupes->tree_store_etat), groupe->pIter);
+                path = gtk_tree_model_get_path(GTK_TREE_MODEL(list_gtk_1990_groupes->tree_store_etat), &groupe->pIter);
                 gtk_tree_view_expand_row(list_gtk_1990_groupes->tree_view_etat, path, FALSE);
                 gtk_tree_path_free(path);
             }
@@ -180,7 +167,7 @@ int _1990_gtk_affiche_niveau(Projet *projet, unsigned int niveau)
                 
                 BUG(_1990_action_cherche_numero(projet, i) == 0, -3);
                 action = (Action*)list_curr(projet->actions);
-                gtk_tree_store_set(list_gtk_1990_groupes->tree_store_dispo, &Iter, 0, i, 1, action->nom, -1);
+                gtk_tree_store_set(list_gtk_1990_groupes->tree_store_dispo, &Iter, 0, i, 1, action->description, -1);
             }
             else
             {
@@ -210,9 +197,8 @@ void _1990_gtk_spin_button_niveau_change(GtkWidget *button __attribute__((unused
     List_Gtk_1990_Groupes   *list_gtk_1990_groupes;
     
     BUGMSG(projet, , "_1990_gtk_spin_button_niveau_change\n");
-    BUGMSG(projet->list_gtk._1990_groupes, , "_1990_gtk_spin_button_niveau_change\n");
     
-    list_gtk_1990_groupes = (List_Gtk_1990_Groupes*)projet->list_gtk._1990_groupes;
+    list_gtk_1990_groupes = &projet->list_gtk._1990_groupes;
     _1990_gtk_affiche_niveau(projet, gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(list_gtk_1990_groupes->spin_button_niveau)));
     return;
 }
@@ -227,10 +213,8 @@ void _1990_gtk_button_niveau_suppr_clicked(GtkWidget *button __attribute__((unus
     List_Gtk_1990_Groupes   *list_gtk_1990_groupes;
     
     BUGMSG(projet, , "_1990_gtk_button_niveau_suppr_clicked\n");
-    BUGMSG(projet->list_gtk._1990_groupes, , "_1990_gtk_button_niveau_suppr_clicked\n");
-    BUGMSG(projet->niveaux_groupes, , "_1990_gtk_button_niveau_suppr_clicked\n");
     
-    list_gtk_1990_groupes = (List_Gtk_1990_Groupes*)projet->list_gtk._1990_groupes;
+    list_gtk_1990_groupes = &projet->list_gtk._1990_groupes;
     _1990_groupe_free_niveau(projet, gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(list_gtk_1990_groupes->spin_button_niveau)));
     
     /* On oblige la liste des niveaux à posséder au moins un niveau vide */
@@ -256,9 +240,8 @@ void _1990_gtk_button_niveau_ajout_clicked(GtkWidget *button __attribute__((unus
     List_Gtk_1990_Groupes   *list_gtk_1990_groupes;
     
     BUGMSG(projet, , "_1990_gtk_button_niveau_ajout_clicked\n");
-    BUGMSG(projet->list_gtk._1990_groupes, , "_1990_gtk_button_niveau_ajout_clicked\n");
     
-    list_gtk_1990_groupes = (List_Gtk_1990_Groupes*)projet->list_gtk._1990_groupes;
+    list_gtk_1990_groupes = &projet->list_gtk._1990_groupes;
     BUG(_1990_groupe_ajout_niveau(projet) == 0, );
     
     /* Mise à jour des limites du composant spin_button */
@@ -283,9 +266,8 @@ void _1990_gtk_button_groupe_ajout_clicked(GtkWidget *button __attribute__((unus
     GtkTreePath     *path;
     
     BUGMSG(projet, , "_1990_gtk_button_groupe_ajout_clicked\n");
-    BUGMSG(projet->list_gtk._1990_groupes, , "_1990_gtk_button_groupe_ajout_clicked\n");
     
-    list_gtk_1990_groupes = (List_Gtk_1990_Groupes*)projet->list_gtk._1990_groupes;
+    list_gtk_1990_groupes = &projet->list_gtk._1990_groupes;
     
     BUGMSG(projet->niveaux_groupes, , "_1990_gtk_button_groupe_ajout_clicked\n");
     BUGMSG(list_size(projet->niveaux_groupes), , "_1990_gtk_button_groupe_ajout_clicked\n");
@@ -296,14 +278,9 @@ void _1990_gtk_button_groupe_ajout_clicked(GtkWidget *button __attribute__((unus
     groupe = (Groupe*)list_rear(niveau_groupe->groupes);
     
     /* Et on met à jour l'affichage */
-    if (groupe->pIter == NULL)
-    {
-        groupe->pIter = (GtkTreeIter*)malloc(sizeof(GtkTreeIter));
-        BUGMSG(groupe->pIter, , gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_gtk_button_groupe_ajout_clicked");
-    }
-    gtk_tree_store_append(list_gtk_1990_groupes->tree_store_etat, groupe->pIter, NULL);
-    gtk_tree_store_set(list_gtk_1990_groupes->tree_store_etat, groupe->pIter, 0, groupe->numero, 1, "", -1);
-    path = gtk_tree_model_get_path(GTK_TREE_MODEL(list_gtk_1990_groupes->tree_store_etat), groupe->pIter);
+    gtk_tree_store_append(list_gtk_1990_groupes->tree_store_etat, &groupe->pIter, NULL);
+    gtk_tree_store_set(list_gtk_1990_groupes->tree_store_etat, &groupe->pIter, 0, groupe->numero, 1, "", -1);
+    path = gtk_tree_model_get_path(GTK_TREE_MODEL(list_gtk_1990_groupes->tree_store_etat), &groupe->pIter);
     gtk_tree_selection_select_path(gtk_tree_view_get_selection(GTK_TREE_VIEW (list_gtk_1990_groupes->tree_view_etat)), path);
     gtk_tree_path_free(path);
 }
@@ -328,9 +305,8 @@ int _1990_gtk_insert_dispo(Projet *projet, int numero)
     char            *nom;
     
     BUGMSG(projet, -1, "_1990_gtk_insert_dispo\n");
-    BUGMSG(projet->list_gtk._1990_groupes, -1, "_1990_gtk_insert_dispo\n");
     
-    list_gtk_1990_groupes = (List_Gtk_1990_Groupes*)projet->list_gtk._1990_groupes;
+    list_gtk_1990_groupes = &projet->list_gtk._1990_groupes;
     model = gtk_tree_view_get_model(list_gtk_1990_groupes->tree_view_dispo);
     
     /* On parcours la liste des éléments disponibles à la recherche du numéro */
@@ -362,7 +338,7 @@ int _1990_gtk_insert_dispo(Projet *projet, int numero)
         
         BUG(_1990_action_cherche_numero(projet, numero) == 0, -3);
         action = (Action*)list_curr(projet->actions);
-        gtk_tree_store_set(list_gtk_1990_groupes->tree_store_dispo, &iter, 0, numero, 1, action->nom, -1);
+        gtk_tree_store_set(list_gtk_1990_groupes->tree_store_dispo, &iter, 0, numero, 1, action->description, -1);
     }
     else
     {
@@ -416,9 +392,8 @@ void _1990_gtk_button_groupe_suppr_clicked(GtkWidget *button __attribute__((unus
     
     BUGMSG(projet, , "_1990_gtk_button_groupe_suppr_clicked\n");
     BUGMSG(projet->niveaux_groupes, , "_1990_gtk_button_groupe_suppr_clicked\n");
-    BUGMSG(projet->list_gtk._1990_groupes, , "_1990_gtk_button_groupe_suppr_clicked\n");
     
-    list_gtk_1990_groupes = (List_Gtk_1990_Groupes*)projet->list_gtk._1990_groupes;
+    list_gtk_1990_groupes = &projet->list_gtk._1990_groupes;
     selection = gtk_tree_view_get_selection(list_gtk_1990_groupes->tree_view_etat);
     if (selection == NULL)
         return;
@@ -494,7 +469,7 @@ void _1990_gtk_button_groupe_suppr_clicked(GtkWidget *button __attribute__((unus
                     /* On récupère le numéro du groupe */
                     g_value_set_int (&nouvelle_valeur, groupe->numero);
                     /* Et on modifie la ligne */
-                    gtk_tree_store_set_value(list_gtk_1990_groupes->tree_store_etat, groupe->pIter, 0, &nouvelle_valeur);
+                    gtk_tree_store_set_value(list_gtk_1990_groupes->tree_store_etat, &groupe->pIter, 0, &nouvelle_valeur);
                 }
             }
             while (list_mvnext(niveau_groupe->groupes));
@@ -520,7 +495,8 @@ void _1990_gtk_tree_view_drag_begin (GtkWidget *widget,
     gtk_1990->drag_from = widget;
 }
 
-void _1990_gtk_tree_view_dispo_drag(GtkWidget *widget __attribute__((unused)),
+
+gboolean _1990_gtk_tree_view_dispo_drag(GtkWidget *widget __attribute__((unused)),
   GdkDragContext *drag_context __attribute__((unused)),
   gint x __attribute__((unused)), gint y __attribute__((unused)),
   guint tim __attribute__((unused)), Projet *projet)
@@ -535,7 +511,7 @@ void _1990_gtk_tree_view_dispo_drag(GtkWidget *widget __attribute__((unused)),
  */
 {
     _1990_gtk_button_groupe_suppr_clicked(widget, projet);
-    return;
+    return FALSE;
 }
 
 
@@ -549,7 +525,7 @@ void _1990_gtk_button_ajout_dispo_proc(int ngroupe, Projet *projet)
     Groupe          *groupe;
     Element         *element, *element2;
     GList           *list;
-    List_Gtk_1990_Groupes   *list_gtk_1990_groupes = (List_Gtk_1990_Groupes*)projet->list_gtk._1990_groupes;
+    List_Gtk_1990_Groupes   *list_gtk_1990_groupes = &projet->list_gtk._1990_groupes;
     GtkTreeSelection *selection1 = gtk_tree_view_get_selection(list_gtk_1990_groupes->tree_view_dispo);
     
     list = gtk_tree_selection_get_selected_rows(selection1, &model1);
@@ -578,18 +554,13 @@ void _1990_gtk_button_ajout_dispo_proc(int ngroupe, Projet *projet)
         element = (Element*)list_curr(groupe->elements);
         
         /* On ajoute la ligne dans l'interface graphique */
-        if (element->pIter == NULL)
-        {
-            element->pIter = (GtkTreeIter*)malloc(sizeof(GtkTreeIter));
-            BUGMSG(element->pIter, , gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_gtk_button_ajout_dispo_proc");
-        }
         if (list_front(groupe->elements) == element)
-            gtk_tree_store_prepend(list_gtk_1990_groupes->tree_store_etat, element->pIter, groupe->pIter);
+            gtk_tree_store_prepend(list_gtk_1990_groupes->tree_store_etat, &element->pIter, &groupe->pIter);
         else
         {
             list_mvprev(groupe->elements);
             element2 = (Element*)list_curr(groupe->elements);
-            gtk_tree_store_insert_after(list_gtk_1990_groupes->tree_store_etat, element->pIter, groupe->pIter, element2->pIter);
+            gtk_tree_store_insert_after(list_gtk_1990_groupes->tree_store_etat, &element->pIter, &groupe->pIter, &element2->pIter);
         }
         
         if (list_front(projet->niveaux_groupes) == list_curr(projet->niveaux_groupes))
@@ -598,7 +569,7 @@ void _1990_gtk_button_ajout_dispo_proc(int ngroupe, Projet *projet)
             
             BUG(_1990_action_cherche_numero(projet, numero) == 0, -3);
             action = (Action*)list_curr(projet->actions);
-            gtk_tree_store_set(list_gtk_1990_groupes->tree_store_etat, element->pIter, 0, numero, 1, action->nom, -1);
+            gtk_tree_store_set(list_gtk_1990_groupes->tree_store_etat, &element->pIter, 0, numero, 1, action->description, -1);
         }
         else
         {
@@ -609,11 +580,11 @@ void _1990_gtk_button_ajout_dispo_proc(int ngroupe, Projet *projet)
             groupe_niveau_moins_1 = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
             BUG(_1990_groupe_positionne_groupe(groupe_niveau_moins_1, numero) == 0, -3);
             groupe_moins_1 = (Groupe*)list_curr(groupe_niveau_moins_1->groupes);
-            gtk_tree_store_set(list_gtk_1990_groupes->tree_store_etat, element->pIter, 0, numero, 1, groupe_moins_1->nom, -1);
+            gtk_tree_store_set(list_gtk_1990_groupes->tree_store_etat, &element->pIter, 0, numero, 1, groupe_moins_1->nom, -1);
         }
        
         groupe->pIter_expand = 1;
-        path = gtk_tree_model_get_path(GTK_TREE_MODEL(list_gtk_1990_groupes->tree_store_etat), groupe->pIter);
+        path = gtk_tree_model_get_path(GTK_TREE_MODEL(list_gtk_1990_groupes->tree_store_etat), &groupe->pIter);
         gtk_tree_view_expand_row(list_gtk_1990_groupes->tree_view_etat, path, FALSE);
         gtk_tree_path_free(path);
     }
@@ -630,14 +601,13 @@ void _1990_gtk_button_ajout_dispo_clicked(GtkWidget *button __attribute__((unuse
  */
 {
     // Pour toutes les variables, les indices 1 désignent 'dispo' et les indices 2 désignent 'etat'
-    List_Gtk_1990_Groupes   *list_gtk_1990_groupes = (List_Gtk_1990_Groupes*)projet->list_gtk._1990_groupes;
+    List_Gtk_1990_Groupes   *list_gtk_1990_groupes = &projet->list_gtk._1990_groupes;
     GtkTreeSelection *selection2;
     GtkTreeIter     iter2;
     GtkTreeModel    *model2;
     int             ngroupe;
     
     BUGMSG(projet, , "_1990_gtk_button_ajout_dispo_clicked\n");
-    BUGMSG(projet->list_gtk._1990_groupes, , "_1990_gtk_button_ajout_dispo_clicked\n");
     BUGMSG(projet->niveaux_groupes, , "_1990_gtk_button_ajout_dispo_clicked\n");
     
     selection2 = gtk_tree_view_get_selection(list_gtk_1990_groupes->tree_view_etat);
@@ -668,7 +638,7 @@ void _1990_gtk_tree_view_etat_drag(GtkWidget *widget __attribute__((unused)), Gd
  */
 {
     gint            cx, cy;
-    List_Gtk_1990_Groupes   *list_gtk_1990_groupes = (List_Gtk_1990_Groupes*)projet->list_gtk._1990_groupes;
+    List_Gtk_1990_Groupes   *list_gtk_1990_groupes = &projet->list_gtk._1990_groupes;
     GtkTreePath     *path;
     GtkTreeIter     iter, iter_tmp;
     GtkTreeModel    *list_store2;
@@ -710,19 +680,14 @@ void _1990_gtk_tree_view_etat_drag(GtkWidget *widget __attribute__((unused)), Gd
                 element = (Element*)list_curr(groupe->elements);
                 
                 /* On ajoute la ligne dans l'interface graphique */
-                if (element->pIter == NULL)
-                {
-                    element->pIter = (GtkTreeIter*)malloc(sizeof(GtkTreeIter));
-                    BUGMSG(element->pIter, , gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_gtk_button_ajout_dispo_proc");
-                }
                 if (list_front(groupe->elements) == element)
-                    gtk_tree_store_prepend(list_gtk_1990_groupes->tree_store_etat, element->pIter, groupe->pIter);
+                    gtk_tree_store_prepend(list_gtk_1990_groupes->tree_store_etat, &element->pIter, &groupe->pIter);
                 else
                 {
                     Element*    element2;
                     list_mvprev(groupe->elements);
                     element2 = (Element*)list_curr(groupe->elements);
-                    gtk_tree_store_insert_after(list_gtk_1990_groupes->tree_store_etat, element->pIter, groupe->pIter, element2->pIter);
+                    gtk_tree_store_insert_after(list_gtk_1990_groupes->tree_store_etat, &element->pIter, &groupe->pIter, &element2->pIter);
                 }
                 
                 if (list_front(projet->niveaux_groupes) == list_curr(projet->niveaux_groupes))
@@ -731,7 +696,7 @@ void _1990_gtk_tree_view_etat_drag(GtkWidget *widget __attribute__((unused)), Gd
                     
                     BUG(_1990_action_cherche_numero(projet, numero) == 0, -3);
                     action = (Action*)list_curr(projet->actions);
-                    gtk_tree_store_set(list_gtk_1990_groupes->tree_store_etat, element->pIter, 0, numero, 1, action->nom, -1);
+                    gtk_tree_store_set(list_gtk_1990_groupes->tree_store_etat, &element->pIter, 0, numero, 1, action->description, -1);
                 }
                 else
                 {
@@ -742,14 +707,14 @@ void _1990_gtk_tree_view_etat_drag(GtkWidget *widget __attribute__((unused)), Gd
                     groupe_niveau_moins_1 = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
                     BUG(_1990_groupe_positionne_groupe(groupe_niveau_moins_1, numero) == 0, -3);
                     groupe_moins_1 = (Groupe*)list_curr(groupe_niveau_moins_1->groupes);
-                    gtk_tree_store_set(list_gtk_1990_groupes->tree_store_etat, element->pIter, 0, numero, 1, groupe_moins_1->nom, -1);
+                    gtk_tree_store_set(list_gtk_1990_groupes->tree_store_etat, &element->pIter, 0, numero, 1, groupe_moins_1->nom, -1);
                 }
                 
                 groupe->pIter_expand = 1;
-                path = gtk_tree_model_get_path(GTK_TREE_MODEL(list_gtk_1990_groupes->tree_store_etat), groupe->pIter);
+                path = gtk_tree_model_get_path(GTK_TREE_MODEL(list_gtk_1990_groupes->tree_store_etat), &groupe->pIter);
                 gtk_tree_view_expand_row(list_gtk_1990_groupes->tree_view_etat, path, FALSE);
                 gtk_tree_path_free(path);
-                path = gtk_tree_model_get_path(GTK_TREE_MODEL(list_gtk_1990_groupes->tree_store_etat), element->pIter);
+                path = gtk_tree_model_get_path(GTK_TREE_MODEL(list_gtk_1990_groupes->tree_store_etat), &element->pIter);
                 gtk_tree_selection_select_path(gtk_tree_view_get_selection(GTK_TREE_VIEW (list_gtk_1990_groupes->tree_view_etat)), path);
                 gtk_tree_path_free(path);
             }
@@ -776,10 +741,9 @@ void _1990_gtk_tree_view_etat_row_expanded(GtkTreeView *tree_view, GtkTreeIter *
     Groupe          *groupe;
     
     BUGMSG(projet, , "_1990_gtk_tree_view_etat_row_expanded\n");
-    BUGMSG(projet->list_gtk._1990_groupes, , "_1990_gtk_tree_view_etat_row_expanded\n");
     BUGMSG(projet->niveaux_groupes, , "_1990_gtk_tree_view_etat_row_expanded\n");
     
-    list_gtk_1990_groupes = (List_Gtk_1990_Groupes*)projet->list_gtk._1990_groupes;
+    list_gtk_1990_groupes = &projet->list_gtk._1990_groupes;
     
     // On détermine le groupe ayant entraîné une ouverture
     // En effet, seul un groupe dans le tree_view_etat peut entraîner une ouverture
@@ -813,10 +777,9 @@ void _1990_gtk_tree_view_etat_row_collapsed(GtkTreeView *tree_view, GtkTreeIter 
     Groupe          *groupe;
     
     BUGMSG(projet, , "_1990_gtk_tree_view_etat_row_collapsed\n");
-    BUGMSG(projet->list_gtk._1990_groupes, , "_1990_gtk_tree_view_etat_row_collapsed\n");
     BUGMSG(projet->niveaux_groupes, , "_1990_gtk_tree_view_etat_row_collapsed\n");
     
-    list_gtk_1990_groupes = (List_Gtk_1990_Groupes*)projet->list_gtk._1990_groupes;
+    list_gtk_1990_groupes = &projet->list_gtk._1990_groupes;
     
     // On détermine le groupe ayant entraîné une fermeture
     // En effet, seul un groupe dans le tree_view_etat peut entraîner une fermeture
@@ -850,10 +813,9 @@ void _1990_gtk_tree_view_etat_cursor_changed(GtkTreeView *tree_view, Projet *pro
     Groupe          *groupe;
     
     BUGMSG(projet, , "_1990_gtk_tree_view_etat_cursor_changed\n");
-    BUGMSG(projet->list_gtk._1990_groupes, , "_1990_gtk_tree_view_etat_cursor_changed\n");
     BUGMSG(projet->niveaux_groupes, , "_1990_gtk_tree_view_etat_cursor_changed\n");
     
-    list_gtk_1990_groupes = (List_Gtk_1990_Groupes*)projet->list_gtk._1990_groupes;
+    list_gtk_1990_groupes = &projet->list_gtk._1990_groupes;
     
     /* Détermine le groupe sélectionné */
     if (!gtk_tree_selection_get_selected(selection, &model, &iter))
@@ -909,10 +871,9 @@ void _1990_gtk_button_groupe_toggled(GtkRadioButton *radiobutton, Projet *projet
     Groupe           *groupe;
     
     BUGMSG(projet, , "_1990_gtk_button_groupe_toggled\n");
-    BUGMSG(projet->list_gtk._1990_groupes, , "_1990_gtk_button_groupe_toggled\n");
     BUGMSG(projet->niveaux_groupes, , "_1990_gtk_button_groupe_toggled\n");
     
-    list_gtk_1990_groupes = (List_Gtk_1990_Groupes*)projet->list_gtk._1990_groupes;
+    list_gtk_1990_groupes = &projet->list_gtk._1990_groupes;
     selection = gtk_tree_view_get_selection(list_gtk_1990_groupes->tree_view_etat);
     
     /* On détermine le groupe sélectionné */
@@ -954,10 +915,9 @@ void _1990_gtk_button_groupe_nom_clicked(GtkWidget *button __attribute__((unused
     int              ngroupe;
     
     BUGMSG(projet, , "_1990_gtk_button_groupe_nom_clicked\n");
-    BUGMSG(projet->list_gtk._1990_groupes, , "_1990_gtk_button_groupe_nom_clicked\n");
     BUGMSG(projet->niveaux_groupes, , "_1990_gtk_button_groupe_nom_clicked\n");
     
-    list_gtk_1990_groupes = (List_Gtk_1990_Groupes*)projet->list_gtk._1990_groupes;
+    list_gtk_1990_groupes = &projet->list_gtk._1990_groupes;
     selection = gtk_tree_view_get_selection(list_gtk_1990_groupes->tree_view_etat);
     
     /* On détermine le groupe sélectionné */
@@ -978,7 +938,7 @@ void _1990_gtk_button_groupe_nom_clicked(GtkWidget *button __attribute__((unused
         groupe->nom = (char*)malloc(sizeof(char)*(strlen(sText)+1));
         BUGMSG(groupe->nom, , "_1990_gtk_button_groupe_nom_clicked\n");
         strcpy(groupe->nom, sText);
-        gtk_tree_store_set(list_gtk_1990_groupes->tree_store_etat, groupe->pIter, 0, ngroupe, 1, groupe->nom, -1);
+        gtk_tree_store_set(list_gtk_1990_groupes->tree_store_etat, &groupe->pIter, 0, ngroupe, 1, groupe->nom, -1);
     }
     else
     {
@@ -989,12 +949,12 @@ void _1990_gtk_button_groupe_nom_clicked(GtkWidget *button __attribute__((unused
             
             BUG(_1990_action_cherche_numero(projet, element) == 0, -3);
             action = (Action*)list_curr(projet->actions);
-            free(action->nom);
-            action->nom = (char*)malloc(sizeof(char)*(strlen(sText)+1));
-            strcpy(action->nom, sText);
+            free(action->description);
+            action->description = (char*)malloc(sizeof(char)*(strlen(sText)+1));
+            strcpy(action->description, sText);
             BUG(_1990_groupe_positionne_element(groupe, element) == 0, -3);
             element_ = (Element*)list_curr(groupe->elements);
-            gtk_tree_store_set(list_gtk_1990_groupes->tree_store_etat, element_->pIter, 0, element, 1, action->nom, -1);
+            gtk_tree_store_set(list_gtk_1990_groupes->tree_store_etat, &element_->pIter, 0, element, 1, action->description, -1);
         }
         else
         {
@@ -1012,7 +972,7 @@ void _1990_gtk_button_groupe_nom_clicked(GtkWidget *button __attribute__((unused
             groupe_moins_1->nom = (char*)malloc(sizeof(char)*(strlen(sText)+1));
             BUGMSG(groupe_moins_1->nom, , "_1990_gtk_button_groupe_nom_clicked\n");
             strcpy(groupe_moins_1->nom, sText);
-            gtk_tree_store_set(list_gtk_1990_groupes->tree_store_etat, element_->pIter, 0, element, 1, groupe_moins_1->nom, -1);
+            gtk_tree_store_set(list_gtk_1990_groupes->tree_store_etat, &element_->pIter, 0, element, 1, groupe_moins_1->nom, -1);
         }
     }
     
@@ -1189,9 +1149,8 @@ void _1990_gtk_button_options_clicked(GtkWidget *button __attribute__((unused)),
     List_Gtk_1990_Groupes   *list_gtk_1990_groupes;
     
     BUGMSG(projet, , "_1990_gtk_button_options_clicked\n");
-    BUGMSG(projet->list_gtk._1990_groupes, , "_1990_gtk_button_options_clicked\n");
     
-    list_gtk_1990_groupes = (List_Gtk_1990_Groupes*)projet->list_gtk._1990_groupes;
+    list_gtk_1990_groupes = &projet->list_gtk._1990_groupes;
     g_type_init();
         
     /* Définition de la fenêtre */
@@ -1326,7 +1285,7 @@ void _1990_gtk_button_options_clicked(GtkWidget *button __attribute__((unused)),
 
 void _1990_gtk_tree_view_etat_cell_edited(GtkCellRendererText *cell __attribute__((unused)), gchar *path_string, gchar *new_text, Projet *projet)
 {
-    List_Gtk_1990_Groupes *list_gtk_1990_groupes = (List_Gtk_1990_Groupes*)projet->list_gtk._1990_groupes;
+    List_Gtk_1990_Groupes *list_gtk_1990_groupes = &projet->list_gtk._1990_groupes;
     GtkTreePath   *path = gtk_tree_path_new_from_string (path_string);
     GtkTreeIter   iter;
     GtkTreeModel  *model = gtk_tree_view_get_model(GTK_TREE_VIEW(list_gtk_1990_groupes->tree_view_etat));
@@ -1361,10 +1320,10 @@ void _1990_gtk_tree_view_etat_cell_edited(GtkCellRendererText *cell __attribute_
             Action      *action;
             _1990_action_cherche_numero(projet, numero);
             action = (Action*)list_curr(projet->actions);
-            free(action->nom);
-            action->nom = (char*)malloc(sizeof(char)*(strlen(new_text)+1));
-            BUGMSG(action->nom, , gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_gtk_tree_view_etat_cell_edited");
-            strcpy(action->nom, new_text);
+            free(action->description);
+            action->description = (char*)malloc(sizeof(char)*(strlen(new_text)+1));
+            BUGMSG(action->description, , gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_gtk_tree_view_etat_cell_edited");
+            strcpy(action->description, new_text);
         }
         else // Le nom est celui d'un groupe du niveau n-1
         {
@@ -1411,13 +1370,7 @@ void _1990_gtk_groupes(GtkWidget *button __attribute__((unused)), Projet *projet
     GtkCellRenderer     *pCellRenderer;
     GtkTreeViewColumn   *pColumn;
     
-    // Trivial
-    if (projet->list_gtk._1990_groupes == NULL)
-    {
-        projet->list_gtk._1990_groupes = (List_Gtk_1990_Groupes*)malloc(sizeof(List_Gtk_1990_Groupes));
-        BUGMSG(projet->list_gtk._1990_groupes, , gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_gtk_groupes");
-    }
-    list_gtk_1990_groupes = (List_Gtk_1990_Groupes*)projet->list_gtk._1990_groupes;
+    list_gtk_1990_groupes = &projet->list_gtk._1990_groupes;
     list_gtk_1990_groupes->window_groupe = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     list_gtk_1990_groupes->table_groupe = gtk_table_new(5, 4, FALSE);
     list_gtk_1990_groupes->table_combinaison = gtk_table_new(1, 1, FALSE);
@@ -1569,28 +1522,74 @@ void _1990_gtk_tree_view_actions_cell_edited(GtkCellRendererText *cell __attribu
  * Valeur renvoyée : Aucune
  */
 {
-    List_Gtk_1990_Actions *list_gtk_1990_actions = (List_Gtk_1990_Actions*)projet->list_gtk._1990_actions;
+    List_Gtk_1990_Actions *list_gtk_1990_actions = &projet->list_gtk._1990_actions;
     GtkTreePath   *path = gtk_tree_path_new_from_string (path_string);
     GtkTreeIter   iter;
     GtkTreeModel  *model = gtk_tree_view_get_model(GTK_TREE_VIEW(list_gtk_1990_actions->tree_view_actions));
     GValue        nouvelle_valeur;
     int           numero;
-    char          *nom;
+    char          *description;
     Action        *action;
     
     gtk_tree_model_get_iter (model, &iter, path);
-    gtk_tree_model_get(model, &iter, 0, &numero, 1, &nom, -1);
+    gtk_tree_model_get(model, &iter, 0, &numero, 1, &description, -1);
     
     BUGMSG(_1990_action_cherche_numero(projet, numero) == 0, , "_1990_gtk_tree_view_action_cell_edited\n");
     action = list_curr(projet->actions);
-    action->nom = realloc(action->nom, sizeof(gchar)*(strlen(new_text)+1));
-    BUGMSG(action->nom, , gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_gtk_tree_view_action_cell_edited");
-    strcpy(action->nom, new_text);
+    action->description = realloc(action->description, sizeof(gchar)*(strlen(new_text)+1));
+    BUGMSG(action->description, , gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_gtk_tree_view_action_cell_edited");
+    strcpy(action->description, new_text);
     
     memset(&nouvelle_valeur, 0, sizeof(nouvelle_valeur));
     g_value_init (&nouvelle_valeur, G_TYPE_STRING);
     g_value_set_string (&nouvelle_valeur, new_text);
     gtk_tree_store_set_value(list_gtk_1990_actions->tree_store_actions, &iter, 1, &nouvelle_valeur);
+    
+    gtk_tree_path_free (path);
+    
+    return;
+}
+
+
+void _1990_gtk_tree_view_charges_cell_edited(GtkCellRendererText *cell __attribute__((unused)), gchar *path_string, gchar *new_text, Projet *projet)
+/* Description : Pour éditer le nom des charges via la fenêtre d'actions.
+ * Paramètres : GtkCellRendererText *cell : la cellule éditée,
+ *            : gchar *path_string : chemin vers la cellule,
+ *            : gchar *new_text : nouveau texte,
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : Aucune
+ */
+{
+    List_Gtk_1990_Actions *list_gtk_1990_actions = &projet->list_gtk._1990_actions;
+    GtkTreeSelection *selection = gtk_tree_view_get_selection(list_gtk_1990_actions->tree_view_actions);
+    GtkTreePath     *path = gtk_tree_path_new_from_string (path_string);
+    GtkTreeIter     iter, iter_action;
+    GtkTreeModel    *model_action;
+    GtkTreeModel    *model = gtk_tree_view_get_model(GTK_TREE_VIEW(list_gtk_1990_actions->tree_view_charges));
+    GValue          nouvelle_valeur;
+    int             numero_action, numero_charge;
+    char            *description;
+    Charge_Noeud    *charge;
+    
+    /* Détermine le groupe sélectionné */
+    if (!gtk_tree_selection_get_selected(selection, &model_action, &iter_action))
+        return;
+    gtk_tree_model_get(model_action, &iter_action, 0, &numero_action, -1);
+    
+    gtk_tree_model_get_iter (model, &iter, path);
+    gtk_tree_model_get(model, &iter, 0, &numero_charge, 1, &description, -1);
+    
+    charge = _1990_action_cherche_charge(projet, numero_action, numero_charge);
+    BUG(charge, );
+    
+    charge->description = realloc(charge->description, sizeof(gchar)*(strlen(new_text)+1));
+    BUGMSG(charge->description, , gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_gtk_tree_view_action_cell_edited");
+    strcpy(charge->description, new_text);
+    
+    memset(&nouvelle_valeur, 0, sizeof(nouvelle_valeur));
+    g_value_init (&nouvelle_valeur, G_TYPE_STRING);
+    g_value_set_string (&nouvelle_valeur, new_text);
+    gtk_tree_store_set_value(list_gtk_1990_actions->tree_store_charges, &iter, 1, &nouvelle_valeur);
     
     gtk_tree_path_free (path);
     
@@ -1615,10 +1614,9 @@ void _1990_gtk_tree_view_actions_cursor_changed(GtkTreeView *tree_view __attribu
     Action          *action;
     
     BUGMSG(projet, , "_1990_gtk_tree_view_actions_cursor_changed\n");
-    BUGMSG(projet->list_gtk._1990_actions, , "_1990_gtk_tree_view_actions_cursor_changed\n");
     BUGMSG(list_size(projet->actions), , "_1990_gtk_tree_view_actions_cursor_changed\n");
     
-    list_gtk_1990_actions = (List_Gtk_1990_Actions*)projet->list_gtk._1990_actions;
+    list_gtk_1990_actions = &projet->list_gtk._1990_actions;
     
     /* Détermine le groupe sélectionné */
     if (!gtk_tree_selection_get_selected(selection, &model, &iter))
@@ -1683,13 +1681,8 @@ void _1990_gtk_tree_view_actions_cursor_changed(GtkTreeView *tree_view __attribu
                     strcat(description, tmp);
                     strcat(description, " N");
                     
-                    if (charge->pIter == NULL)
-                    {
-                        charge->pIter = (GtkTreeIter*)malloc(sizeof(GtkTreeIter));
-                        BUGMSG(charge->pIter, , gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_gtk_tree_view_actions_cursor_changed");
-                    }
-                    gtk_tree_store_append(list_gtk_1990_actions->tree_store_charges, charge->pIter, NULL);
-                    gtk_tree_store_set(list_gtk_1990_actions->tree_store_charges, charge->pIter, 0, charge->numero, 1, charge->nom, 2, description, -1);
+                    gtk_tree_store_append(list_gtk_1990_actions->tree_store_charges, &charge->pIter, NULL);
+                    gtk_tree_store_set(list_gtk_1990_actions->tree_store_charges, &charge->pIter, 0, charge->numero, 1, charge->description, 2, description, -1);
                     free(description);
                     
                     break;
@@ -1747,13 +1740,8 @@ void _1990_gtk_tree_view_actions_cursor_changed(GtkTreeView *tree_view __attribu
                     strcat(description, tmp);
                     strcat(description, " N");
                     
-                    if (charge->pIter == NULL)
-                    {
-                        charge->pIter = (GtkTreeIter*)malloc(sizeof(GtkTreeIter));
-                        BUGMSG(charge->pIter, , gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_gtk_tree_view_actions_cursor_changed");
-                    }
-                    gtk_tree_store_append(list_gtk_1990_actions->tree_store_charges, charge->pIter, NULL);
-                    gtk_tree_store_set(list_gtk_1990_actions->tree_store_charges, charge->pIter, 0, charge->numero, 1, charge->nom, 2, description, -1);
+                    gtk_tree_store_append(list_gtk_1990_actions->tree_store_charges, &charge->pIter, NULL);
+                    gtk_tree_store_set(list_gtk_1990_actions->tree_store_charges, &charge->pIter, 0, charge->numero, 1, charge->description, 2, description, -1);
                     free(description);
                     
                     break;
@@ -1828,13 +1816,8 @@ void _1990_gtk_tree_view_actions_cursor_changed(GtkTreeView *tree_view __attribu
                     strcat(description, tmp);
                     strcat(description, " N");
                     
-                    if (charge->pIter == NULL)
-                    {
-                        charge->pIter = (GtkTreeIter*)malloc(sizeof(GtkTreeIter));
-                        BUGMSG(charge->pIter, , gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_gtk_tree_view_actions_cursor_changed");
-                    }
-                    gtk_tree_store_append(list_gtk_1990_actions->tree_store_charges, charge->pIter, NULL);
-                    gtk_tree_store_set(list_gtk_1990_actions->tree_store_charges, charge->pIter, 0, charge->numero, 1, charge->nom, 2, description, -1);
+                    gtk_tree_store_append(list_gtk_1990_actions->tree_store_charges, &charge->pIter, NULL);
+                    gtk_tree_store_set(list_gtk_1990_actions->tree_store_charges, &charge->pIter, 0, charge->numero, 1, charge->description, 2, description, -1);
                     free(description);
                     
                     break;
@@ -1852,6 +1835,67 @@ void _1990_gtk_tree_view_actions_cursor_changed(GtkTreeView *tree_view __attribu
 }
 
 
+void _1990_gtk_actions_tree_view_drag_begin(GtkWidget *widget __attribute__((unused)), 
+  GdkDragContext *drag_context __attribute__((unused)), void *data __attribute__((unused)))
+{
+    return;
+}
+
+
+gboolean _1990_gtk_actions_tree_view_drag(GtkWidget *widget __attribute__((unused)),
+  GdkDragContext *drag_context __attribute__((unused)),
+  gint x __attribute__((unused)), gint y __attribute__((unused)),
+  guint tim __attribute__((unused)), Projet *projet __attribute__((unused)))
+/* Description : Charge d'action la charge sélectionnée.
+ * Paramètres : GtkWidget *button : composant ayant réalisé l'évènement,
+ *            : GdkDragContext *drag_context : inutile,
+ *            : GtkSelectionData *data : inutile,
+ *            : guint info : inutile,
+ *            : guint time : inutile,
+ *            : Projet *projet : la variable projet
+ * Valeur renvoyée : FALSE
+ */
+{
+    gint                    cx, cy;
+    List_Gtk_1990_Actions   *list_gtk_1990_actions = &projet->list_gtk._1990_actions;
+    GtkTreePath             *path;
+    GtkTreeModel            *list_store;
+    
+    gdk_window_get_geometry(gtk_tree_view_get_bin_window(GTK_TREE_VIEW(list_gtk_1990_actions->tree_view_actions)), &cx, &cy, NULL, NULL);
+    gtk_tree_view_get_path_at_pos(GTK_TREE_VIEW(widget), x -=cx, y -=cy, &path, NULL, &cx, &cy);
+    list_store = gtk_tree_view_get_model(GTK_TREE_VIEW(list_gtk_1990_actions->tree_view_actions));
+    if (path != NULL)
+    {
+        int                 num_action_dest,  num_charge_source,  num_action_source;
+        GtkTreeIter         iter_action_dest, iter_charge_source, iter_action_source;
+        GtkTreeSelection    *selection_charge_source, *selection_action_source;
+        GtkTreeModel        *model_charge_source, *model_action_source;
+        
+        gtk_tree_model_get_iter(list_store, &iter_action_dest, path);
+        gtk_tree_model_get(list_store, &iter_action_dest, 0, &num_action_dest, -1);
+        
+        selection_action_source = gtk_tree_view_get_selection(list_gtk_1990_actions->tree_view_actions);
+        if (selection_action_source == NULL)
+            return FALSE;
+        if (!gtk_tree_selection_get_selected(selection_action_source, &model_action_source, &iter_action_source))
+            return FALSE;
+        gtk_tree_model_get(model_action_source, &iter_action_source, 0, &num_action_source, -1);
+        
+        selection_charge_source = gtk_tree_view_get_selection(list_gtk_1990_actions->tree_view_charges);
+        if (selection_charge_source == NULL)
+            return FALSE;
+        if (!gtk_tree_selection_get_selected(selection_charge_source, &model_charge_source, &iter_charge_source))
+            return FALSE;
+        gtk_tree_model_get(model_charge_source, &iter_charge_source, 0, &num_charge_source, -1);
+        
+        _1990_action_deplace_charge(projet, num_action_source, num_charge_source, num_action_dest);
+    }
+    
+//    _1990_gtk_button_groupe_suppr_clicked(widget, projet);
+    return FALSE;
+}
+
+
 void _1990_gtk_actions(Projet *projet)
 /* Description : Affichage de la fenêtre permettant de gérer les actions
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement
@@ -1865,28 +1909,25 @@ void _1990_gtk_actions(Projet *projet)
     BUGMSG(projet, , "_1990_gtk_actions\n");
     BUGMSG(projet->actions, , "_1990_gtk_actions\n");
     
-    if (projet->list_gtk._1990_actions == NULL)
-    {
-        projet->list_gtk._1990_actions = (List_Gtk_1990_Actions*)malloc(sizeof(List_Gtk_1990_Actions));
-        BUGMSG(projet->list_gtk._1990_actions, , gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_gtk_actions");
-    }
-    
-    list_gtk_1990_actions = (List_Gtk_1990_Actions*)projet->list_gtk._1990_actions;
+    list_gtk_1990_actions = &projet->list_gtk._1990_actions;
     list_gtk_1990_actions->window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_set_title(GTK_WINDOW(list_gtk_1990_actions->window), gettext("Actions"));
     gtk_window_resize(GTK_WINDOW(list_gtk_1990_actions->window), 800, 600);
     gtk_window_set_position(GTK_WINDOW(list_gtk_1990_actions->window), GTK_WIN_POS_CENTER_ALWAYS);
     
-    list_gtk_1990_actions->table = gtk_table_new(2, 2, FALSE);
+    list_gtk_1990_actions->table = gtk_table_new(1, 1, FALSE);
     gtk_container_add(GTK_CONTAINER(list_gtk_1990_actions->window), list_gtk_1990_actions->table);
+    
+    list_gtk_1990_actions->paned = gtk_paned_new(GTK_ORIENTATION_HORIZONTAL);
+    gtk_paned_set_position(GTK_PANED(list_gtk_1990_actions->paned), 400);
+    gtk_table_attach(GTK_TABLE(list_gtk_1990_actions->table), list_gtk_1990_actions->paned, 0, 1, 0, 1, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 0, 0);
     
     list_gtk_1990_actions->scroll_actions = gtk_scrolled_window_new(NULL, NULL);
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(list_gtk_1990_actions->scroll_actions), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
     list_gtk_1990_actions->tree_store_actions = gtk_tree_store_new(2, G_TYPE_INT, G_TYPE_STRING);
     list_gtk_1990_actions->tree_view_actions = (GtkTreeView*)gtk_tree_view_new_with_model(GTK_TREE_MODEL(list_gtk_1990_actions->tree_store_actions));
     gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(list_gtk_1990_actions->scroll_actions), GTK_WIDGET(list_gtk_1990_actions->tree_view_actions));
-    gtk_tree_view_set_reorderable(GTK_TREE_VIEW(list_gtk_1990_actions->tree_view_actions), TRUE);
-    gtk_table_attach(GTK_TABLE(list_gtk_1990_actions->table), list_gtk_1990_actions->scroll_actions, 0, 1, 0, 1, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 0, 0);
+    gtk_paned_add1(GTK_PANED(list_gtk_1990_actions->paned), list_gtk_1990_actions->scroll_actions);
     pCellRenderer = gtk_cell_renderer_text_new();
     gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW(list_gtk_1990_actions->tree_view_actions), -1, gettext("Numéro"), pCellRenderer, "text", 0, NULL);
     pCellRenderer = gtk_cell_renderer_text_new();
@@ -1902,13 +1943,21 @@ void _1990_gtk_actions(Projet *projet)
     list_gtk_1990_actions->tree_view_charges = (GtkTreeView*)gtk_tree_view_new_with_model(GTK_TREE_MODEL(list_gtk_1990_actions->tree_store_charges));
     gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(list_gtk_1990_actions->scroll_charges), GTK_WIDGET(list_gtk_1990_actions->tree_view_charges));
     gtk_tree_view_set_reorderable(GTK_TREE_VIEW(list_gtk_1990_actions->tree_view_charges), TRUE);
-    gtk_table_attach(GTK_TABLE(list_gtk_1990_actions->table), list_gtk_1990_actions->scroll_charges, 1, 2, 0, 1, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 0, 0);
+    gtk_paned_add2(GTK_PANED(list_gtk_1990_actions->paned), list_gtk_1990_actions->scroll_charges);
     pCellRenderer = gtk_cell_renderer_text_new();
     gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW(list_gtk_1990_actions->tree_view_charges), -1, gettext("Numéro"), pCellRenderer, "text", 0, NULL);
     pCellRenderer = gtk_cell_renderer_text_new();
+    g_object_set(pCellRenderer, "editable", TRUE, NULL);
+    g_signal_connect(pCellRenderer, "edited", G_CALLBACK(_1990_gtk_tree_view_charges_cell_edited), projet);
     gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW(list_gtk_1990_actions->tree_view_charges), -1, gettext("Description"), pCellRenderer, "text", 1, NULL);
     pCellRenderer = gtk_cell_renderer_text_new();
     gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW(list_gtk_1990_actions->tree_view_charges), -1, gettext("Charge"), pCellRenderer, "text", 2, NULL);
+    g_signal_connect(GTK_WIDGET(list_gtk_1990_actions->tree_view_charges), "drag-begin", G_CALLBACK(_1990_gtk_actions_tree_view_drag_begin), NULL);
+    g_signal_connect(GTK_WIDGET(list_gtk_1990_actions->tree_view_actions), "drag-drop", G_CALLBACK(_1990_gtk_actions_tree_view_drag), projet);
+    
+    /* Défini le comportement du glissé etat vers dispo*/
+    gtk_drag_source_set(GTK_WIDGET(list_gtk_1990_actions->tree_view_charges), GDK_BUTTON1_MASK, &drag_targets_1, 1, GDK_ACTION_MOVE); 
+    gtk_drag_dest_set(GTK_WIDGET(list_gtk_1990_actions->tree_view_actions), GTK_DEST_DEFAULT_ALL, &drag_targets_1, 1, GDK_ACTION_MOVE);
     
     if (list_size(projet->actions) != 0)
     {
@@ -1917,13 +1966,8 @@ void _1990_gtk_actions(Projet *projet)
         {
             Action  *action = (Action*)list_curr(projet->actions); 
             
-            if (action->pIter == NULL)
-            {
-                action->pIter = (GtkTreeIter*)malloc(sizeof(GtkTreeIter));
-                BUGMSG(action->pIter, , gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_gtk_button_ajout_dispo_proc");
-            }
-            gtk_tree_store_append(list_gtk_1990_actions->tree_store_actions, action->pIter, NULL);
-            gtk_tree_store_set(list_gtk_1990_actions->tree_store_actions, action->pIter, 0, action->numero, 1, action->nom, -1);
+            gtk_tree_store_append(list_gtk_1990_actions->tree_store_actions, &action->pIter, NULL);
+            gtk_tree_store_set(list_gtk_1990_actions->tree_store_actions, &action->pIter, 0, action->numero, 1, action->description, -1);
             
             
         } while (list_mvnext(projet->actions) != NULL);

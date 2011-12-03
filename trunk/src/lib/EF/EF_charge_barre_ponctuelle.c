@@ -77,10 +77,9 @@ int EF_charge_barre_ponctuelle_ajout(Projet *projet, int num_action, Beton_Barre
     BUGMSG(!((a > EF_noeuds_distance(barre->noeud_debut, barre->noeud_fin)) && (!(ERREUR_RELATIVE_EGALE(a, EF_noeuds_distance(barre->noeud_debut, barre->noeud_fin))))), -1, "EF_charge_barre_ponctuelle_ajout");
     
     charge_nouveau.type = CHARGE_BARRE_PONCTUELLE;
-    charge_nouveau.nom = (char*)malloc(sizeof(char)*(strlen(nom)+1));
-    BUGMSG(charge_nouveau.nom, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_charge_barre_ponctuelle_ajout");
-    strcpy(charge_nouveau.nom, nom);
-    charge_nouveau.description = NULL;
+    charge_nouveau.description = (char*)malloc(sizeof(char)*(strlen(nom)+1));
+    BUGMSG(charge_nouveau.description, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_charge_barre_ponctuelle_ajout");
+    strcpy(charge_nouveau.description, nom);
     charge_nouveau.barre = barre;
     charge_nouveau.repere_local = repere_local;
     charge_nouveau.position = a;
@@ -90,7 +89,6 @@ int EF_charge_barre_ponctuelle_ajout(Projet *projet, int num_action, Beton_Barre
     charge_nouveau.mx = mx;
     charge_nouveau.my = my;
     charge_nouveau.mz = mz;
-    charge_nouveau.pIter = NULL;
     
     charge_dernier = (Charge_Barre_Ponctuelle *)list_rear(action_en_cours->charges);
     if (charge_dernier == NULL)
