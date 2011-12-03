@@ -73,7 +73,6 @@ int _1990_groupe_ajout_niveau(Projet *projet)
     niveau_nouveau.groupes = list_init();
     BUGMSG(niveau_nouveau.groupes, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_groupe_ajout_niveau");
     
-    niveau_nouveau.pIter = NULL;
     BUGMSG(list_insert_after(projet->niveaux_groupes, &(niveau_nouveau), sizeof(niveau_nouveau)) , -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_groupe_ajout_niveau");
     
     return 0;
@@ -205,7 +204,6 @@ int _1990_groupe_ajout_groupe(Projet *projet, int niveau,
     BUGMSG(groupe_nouveau.nom, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_groupe_ajout_groupe");
     strcpy(groupe_nouveau.nom, nom);
     groupe_nouveau.type_combinaison = type_combinaison;
-    groupe_nouveau.pIter = NULL;
     groupe_nouveau.pIter_expand = 1;
     
     groupe_nouveau.tmp_combinaison.combinaisons = list_init();
@@ -271,7 +269,6 @@ int _1990_groupe_ajout_element(Projet *projet, unsigned int niveau, int groupe_n
     groupe = (Groupe*)list_curr(niveau_groupe->groupes);
     element_nouveau.numero = num_element;
     #ifdef ENABLE_GTK
-    element_nouveau.pIter = NULL;
     element_nouveau.pIter_expand = 1;
     #endif
     
@@ -397,7 +394,7 @@ int _1990_groupe_affiche_tout(Projet *projet)
                                 Combinaison_Element *comb_element = (Combinaison_Element*)list_curr(combinaison->elements);
                                 Action          *action = (Action*)comb_element->action;
                                 
-                                printf("%d(%d) ", action->numero, comb_element->flags);
+                                printf("%zu(%d) ", action->numero, comb_element->flags);
                             }
                             while (list_mvnext(combinaison->elements) != NULL);
                         }
@@ -420,16 +417,11 @@ void _1990_groupe_free_element_courant(LIST *elements)
  * Valeur renvoyée : Aucune.
  */
 {
-    Element     *element;
-    
     // Trivial
     
     BUGMSG(elements, , "_1990_groupe_free_element_courant\n");
     BUGMSG(list_curr(elements), , "_1990_groupe_free_element_courant\n");
     
-    element = (Element*)list_curr(elements);
-    
-    free(element->pIter);
     free(list_remove_curr(elements));
     
     return;
@@ -498,16 +490,12 @@ void _1990_groupe_free_niveau(Projet *projet, int niveau)
              * mais cette dernier analyse également le niveau supérieur pour supprimer les 
              * références devenues obsolète, ce qui est inutile ici puisque tous les niveaux
              * supérieurs vont également être supprimé. */
-            if (niveau_groupe->pIter != NULL)
-                free(niveau_groupe->pIter);
-            
             if (niveau_groupe->groupes != NULL)
             {
                 list_mvfront(niveau_groupe->groupes);
                 while (!list_empty(niveau_groupe->groupes))
                 {
                     Groupe      *groupe = (Groupe*)list_curr(niveau_groupe->groupes);
-                    free(groupe->pIter);
                     free(groupe->nom);
                     
                     /* On libère tous les éléments contenus dans le groupe */
@@ -516,9 +504,6 @@ void _1990_groupe_free_niveau(Projet *projet, int niveau)
                         list_mvfront(groupe->elements);
                         while (!list_empty(groupe->elements))
                         {
-                            Element     *element = (Element*)list_front(groupe->elements);
-                            
-                            free(element->pIter);
                             free(list_remove_front(groupe->elements));
                         }
                         free(groupe->elements);
@@ -593,7 +578,6 @@ void _1990_groupe_free_groupe(Projet *projet, int niveau, int groupe)
     
     groupe_curr = (Groupe*)list_curr(niveau_groupe->groupes);
     
-    free(groupe_curr->pIter);
     free(groupe_curr->nom);
     
     /* On libère tous les éléments contenus dans le groupe */

@@ -1056,7 +1056,7 @@ void _1990_ponderations_affiche(LIST *ponderations)
                 do
                 {
                     Ponderation_Element *ponderation_element = (Ponderation_Element*)list_curr(ponderation->elements);
-                    printf("%d*%f(%d)+", ponderation_element->action->numero+1, ponderation_element->ponderation, ponderation_element->psi);
+                    printf("%zu*%f(%d)+", ponderation_element->action->numero+1, ponderation_element->ponderation, ponderation_element->psi);
                 }
                 while (list_mvnext(ponderation->elements));
                 printf("\n");

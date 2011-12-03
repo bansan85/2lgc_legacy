@@ -71,9 +71,6 @@ Projet* projet_init(Type_Pays pays)
     projet->ef_donnees.c = &(projet->ef_donnees.Common);
     cholmod_l_start(projet->ef_donnees.c);
     
-    projet->list_gtk._1990_groupes = NULL;
-    projet->list_gtk._1990_actions = NULL;
-    
     projet->pays = pays;
     return projet;
 }
@@ -209,7 +206,6 @@ void projet_free(Projet *projet)
         EF_relachement_free(projet);
     if (projet->list_gtk.m3d != NULL)
         m3d_free(projet);
-    free(projet->list_gtk._1990_groupes);
     
     cholmod_l_finish(projet->ef_donnees.c);
     
