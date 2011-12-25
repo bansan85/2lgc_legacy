@@ -38,11 +38,10 @@
 #include "EF_charge_noeud.h"
 #include "EF_charge_barre_repartie_uniforme.h"
 
-
-const GtkTargetEntry drag_targets_1 = { (gchar*)PACKAGE"1_SAME_PROC", GTK_TARGET_SAME_APP, 0}; 
-const GtkTargetEntry drag_targets_2 = { (gchar*)PACKAGE"2_SAME_PROC", GTK_TARGET_SAME_APP, 0}; 
-const GtkTargetEntry drag_targets_3[] = { {(gchar*)PACKAGE"1_SAME_PROC", GTK_TARGET_SAME_APP, 0},
-                                          {(gchar*)PACKAGE"2_SAME_PROC", GTK_TARGET_SAME_APP, 0}}; 
+const GtkTargetEntry drag_targets_groupes_1[] = { {(gchar*)PACKAGE"1_SAME_PROC", GTK_TARGET_SAME_APP, 0}}; 
+const GtkTargetEntry drag_targets_groupes_2[] = { {(gchar*)PACKAGE"2_SAME_PROC", GTK_TARGET_SAME_APP, 0}}; 
+const GtkTargetEntry drag_targets_groupes_3[] = { {(gchar*)PACKAGE"1_SAME_PROC", GTK_TARGET_SAME_APP, 0},
+                                                  {(gchar*)PACKAGE"2_SAME_PROC", GTK_TARGET_SAME_APP, 0}}; 
 
 int _1990_gtk_affiche_niveau(Projet *projet, unsigned int niveau)
 /* Description : Affiche le niveau souhaité dans l'interface graphique
@@ -58,9 +57,11 @@ int _1990_gtk_affiche_niveau(Projet *projet, unsigned int niveau)
  *            -3 en cas d'erreur due à une fonction interne
  */
 {
-    Niveau_Groupe   *niveau_groupe;
-    int             dispo_max, i, *dispos;
+    Niveau_Groupe           *niveau_groupe;
+    int                     dispo_max, i, *dispos;
+    gboolean                premier = TRUE;
     List_Gtk_1990_Groupes   *list_gtk_1990_groupes;
+    GtkTreePath             *path;
     
     BUGMSG(projet, -1, "_1990_gtk_affiche_niveau\n");
     BUGMSG(list_size(projet->niveaux_groupes)-1 >= niveau, -1, "_1990_gtk_affiche_niveau\n");
@@ -106,8 +107,16 @@ int _1990_gtk_affiche_niveau(Projet *projet, unsigned int niveau)
             Groupe      *groupe = (Groupe*)list_curr(niveau_groupe->groupes);
             
             /* Ajoute de la ligne dans le tree_store */
-            gtk_tree_store_append(list_gtk_1990_groupes->tree_store_etat, &groupe->pIter, NULL);
-            gtk_tree_store_set(list_gtk_1990_groupes->tree_store_etat, &groupe->pIter, 0, groupe->numero, 1, groupe->nom, -1);
+            gtk_tree_store_append(list_gtk_1990_groupes->tree_store_etat, &groupe->Iter, NULL);
+            gtk_tree_store_set(list_gtk_1990_groupes->tree_store_etat, &groupe->Iter, 0, groupe->numero, 1, groupe->nom, -1);
+            
+            /* Sélection de la première ligne du tree_view_etat */
+            if (list_curr(niveau_groupe->groupes) == list_front(niveau_groupe->groupes))
+            {
+                path = gtk_tree_model_get_path(GTK_TREE_MODEL(list_gtk_1990_groupes->tree_store_etat), &groupe->Iter);
+                gtk_tree_selection_select_path(list_gtk_1990_groupes->tree_select_etat, path);
+                gtk_tree_path_free(path);
+            }
             
             if ((groupe->elements != NULL) && (list_size(groupe->elements) != 0))
             {
@@ -119,14 +128,14 @@ int _1990_gtk_affiche_niveau(Projet *projet, unsigned int niveau)
                     /* On signale que l'élément a déjà été inséré */
                     dispos[element->numero] = 1;
                     /* puis ajout de la ligne dans le tree_store */
-                    gtk_tree_store_append(list_gtk_1990_groupes->tree_store_etat, &element->pIter, &groupe->pIter);
+                    gtk_tree_store_append(list_gtk_1990_groupes->tree_store_etat, &element->Iter, &groupe->Iter);
                     if (niveau == 0)
                     {
                         Action *action;
                         
                         BUG(_1990_action_cherche_numero(projet, element->numero) == 0, -3);
                         action = (Action*)list_curr(projet->actions);
-                        gtk_tree_store_set(list_gtk_1990_groupes->tree_store_etat, &element->pIter, 0, element->numero, 1, action->description, -1);
+                        gtk_tree_store_set(list_gtk_1990_groupes->tree_store_etat, &element->Iter, 0, element->numero, 1, action->description, -1);
                     }
                     else
                     {
@@ -136,17 +145,16 @@ int _1990_gtk_affiche_niveau(Projet *projet, unsigned int niveau)
                         groupe_niveau_moins_1 = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
                         BUG(_1990_groupe_positionne_groupe(groupe_niveau_moins_1, element->numero) == 0, -3);
                         groupe_moins_1 = (Groupe*)list_curr(groupe_niveau_moins_1->groupes);
-                        gtk_tree_store_set(list_gtk_1990_groupes->tree_store_etat, &element->pIter, 0, element->numero, 1, groupe_moins_1->nom, -1);
+                        gtk_tree_store_set(list_gtk_1990_groupes->tree_store_etat, &element->Iter, 0, element->numero, 1, groupe_moins_1->nom, -1);
                     }
                 }
                 while (list_mvnext(groupe->elements));
             }
             /* Si la dernière fois que la ligne était affiché, elle était 'expand',
              * on rétablit son attribut */
-            if (groupe->pIter_expand == 1)
+            if (groupe->Iter_expand == 1)
             {
-                GtkTreePath *path;
-                path = gtk_tree_model_get_path(GTK_TREE_MODEL(list_gtk_1990_groupes->tree_store_etat), &groupe->pIter);
+                path = gtk_tree_model_get_path(GTK_TREE_MODEL(list_gtk_1990_groupes->tree_store_etat), &groupe->Iter);
                 gtk_tree_view_expand_row(list_gtk_1990_groupes->tree_view_etat, path, FALSE);
                 gtk_tree_path_free(path);
             }
@@ -161,6 +169,16 @@ int _1990_gtk_affiche_niveau(Projet *projet, unsigned int niveau)
         {
             GtkTreeIter Iter;
             gtk_tree_store_append(list_gtk_1990_groupes->tree_store_dispo, &Iter, NULL);
+            
+            /* Sélection de la première ligne du tree_view_dispo */
+            if (premier == TRUE)
+            {
+                path = gtk_tree_model_get_path(GTK_TREE_MODEL(list_gtk_1990_groupes->tree_store_dispo), &Iter);
+                gtk_tree_selection_select_path(list_gtk_1990_groupes->tree_select_dispo, path);
+                gtk_tree_path_free(path);
+                premier = FALSE;
+            }
+            
             if (niveau == 0)
             {
                 Action *action;
@@ -181,7 +199,7 @@ int _1990_gtk_affiche_niveau(Projet *projet, unsigned int niveau)
             }
         }
     }
-    
+
     free(dispos);
     
     return 0;
@@ -274,14 +292,14 @@ void _1990_gtk_button_groupe_ajout_clicked(GtkWidget *button __attribute__((unus
     /* On ajoute un niveau */
     BUG(_1990_groupe_positionne_niveau(projet->niveaux_groupes, gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(list_gtk_1990_groupes->spin_button_niveau))) == 0, -3);
     niveau_groupe = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
-    BUG(_1990_groupe_ajout_groupe(projet, niveau_groupe->niveau, GROUPE_COMBINAISON_AND, (char*)gtk_entry_get_text(GTK_ENTRY(list_gtk_1990_groupes->entry_groupe_nom))) == 0, );
+    BUG(_1990_groupe_ajout_groupe(projet, niveau_groupe->niveau, GROUPE_COMBINAISON_AND, gettext("Sans nom")) == 0, );
     groupe = (Groupe*)list_rear(niveau_groupe->groupes);
     
     /* Et on met à jour l'affichage */
-    gtk_tree_store_append(list_gtk_1990_groupes->tree_store_etat, &groupe->pIter, NULL);
-    gtk_tree_store_set(list_gtk_1990_groupes->tree_store_etat, &groupe->pIter, 0, groupe->numero, 1, "", -1);
-    path = gtk_tree_model_get_path(GTK_TREE_MODEL(list_gtk_1990_groupes->tree_store_etat), &groupe->pIter);
-    gtk_tree_selection_select_path(gtk_tree_view_get_selection(GTK_TREE_VIEW (list_gtk_1990_groupes->tree_view_etat)), path);
+    gtk_tree_store_append(list_gtk_1990_groupes->tree_store_etat, &groupe->Iter, NULL);
+    gtk_tree_store_set(list_gtk_1990_groupes->tree_store_etat, &groupe->Iter, 0, groupe->numero, 1, "", -1);
+    path = gtk_tree_model_get_path(GTK_TREE_MODEL(list_gtk_1990_groupes->tree_store_etat), &groupe->Iter);
+    gtk_tree_view_set_cursor(GTK_TREE_VIEW(list_gtk_1990_groupes->tree_view_etat), path, gtk_tree_view_get_column(GTK_TREE_VIEW(list_gtk_1990_groupes->tree_view_etat), 1), TRUE);
     gtk_tree_path_free(path);
 }
 
@@ -303,6 +321,7 @@ int _1990_gtk_insert_dispo(Projet *projet, int numero)
     GtkTreeIter     iter, iter2;
     int             nombre;
     char            *nom;
+    GtkTreePath     *path;
     
     BUGMSG(projet, -1, "_1990_gtk_insert_dispo\n");
     
@@ -331,6 +350,9 @@ int _1990_gtk_insert_dispo(Projet *projet, int numero)
     /* Sinon, on l'ajoute avant le dernier numéro trouvé */
     else
         gtk_tree_store_insert_before(list_gtk_1990_groupes->tree_store_dispo, &iter, NULL, &iter2);
+    path = gtk_tree_model_get_path(GTK_TREE_MODEL(list_gtk_1990_groupes->tree_store_dispo), &iter);
+    gtk_tree_selection_select_path(list_gtk_1990_groupes->tree_select_dispo, path);
+    gtk_tree_path_free(path);
     
     if (list_front(projet->niveaux_groupes) == list_curr(projet->niveaux_groupes))
     {
@@ -383,7 +405,6 @@ void _1990_gtk_button_groupe_suppr_clicked(GtkWidget *button __attribute__((unus
  */
 {
     List_Gtk_1990_Groupes       *list_gtk_1990_groupes;
-    GtkTreeSelection    *selection;
     GtkTreeModel        *model;
     GtkTreePath         *path;
     GtkTreeIter         iter, iter_tmp;
@@ -394,10 +415,7 @@ void _1990_gtk_button_groupe_suppr_clicked(GtkWidget *button __attribute__((unus
     BUGMSG(projet->niveaux_groupes, , "_1990_gtk_button_groupe_suppr_clicked\n");
     
     list_gtk_1990_groupes = &projet->list_gtk._1990_groupes;
-    selection = gtk_tree_view_get_selection(list_gtk_1990_groupes->tree_view_etat);
-    if (selection == NULL)
-        return;
-    if (!gtk_tree_selection_get_selected(selection, &model, &iter))
+    if (!gtk_tree_selection_get_selected(list_gtk_1990_groupes->tree_select_etat, &model, &iter))
         return;
     
     /* On récupère les informations de la ligne sélectionnée */
@@ -406,16 +424,16 @@ void _1990_gtk_button_groupe_suppr_clicked(GtkWidget *button __attribute__((unus
 
     path = gtk_tree_model_get_path(GTK_TREE_MODEL(list_gtk_1990_groupes->tree_store_etat), &iter);
     gtk_tree_path_next(path);
-    gtk_tree_selection_select_path(selection, path);
-    if (!gtk_tree_selection_path_is_selected(selection, path))
+    gtk_tree_selection_select_path(list_gtk_1990_groupes->tree_select_etat, path);
+    if (!gtk_tree_selection_path_is_selected(list_gtk_1990_groupes->tree_select_etat, path))
     {
         gtk_tree_path_prev(path);
         if (gtk_tree_path_prev(path))
-        {
-            gtk_tree_selection_select_path(selection, path);
-        }
+            gtk_tree_selection_select_path(list_gtk_1990_groupes->tree_select_etat, path);
     }
+    gtk_tree_path_free(path);
     
+    gtk_tree_selection_unselect_all(list_gtk_1990_groupes->tree_select_dispo);
     niveau = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(list_gtk_1990_groupes->spin_button_niveau));
     /* Il s'agit d'un groupe */
     if (!gtk_tree_model_iter_parent(model, &iter_tmp, &iter))
@@ -469,7 +487,7 @@ void _1990_gtk_button_groupe_suppr_clicked(GtkWidget *button __attribute__((unus
                     /* On récupère le numéro du groupe */
                     g_value_set_int (&nouvelle_valeur, groupe->numero);
                     /* Et on modifie la ligne */
-                    gtk_tree_store_set_value(list_gtk_1990_groupes->tree_store_etat, &groupe->pIter, 0, &nouvelle_valeur);
+                    gtk_tree_store_set_value(list_gtk_1990_groupes->tree_store_etat, &groupe->Iter, 0, &nouvelle_valeur);
                 }
             }
             while (list_mvnext(niveau_groupe->groupes));
@@ -526,9 +544,8 @@ void _1990_gtk_button_ajout_dispo_proc(int ngroupe, Projet *projet)
     Element         *element, *element2;
     GList           *list;
     List_Gtk_1990_Groupes   *list_gtk_1990_groupes = &projet->list_gtk._1990_groupes;
-    GtkTreeSelection *selection1 = gtk_tree_view_get_selection(list_gtk_1990_groupes->tree_view_dispo);
     
-    list = gtk_tree_selection_get_selected_rows(selection1, &model1);
+    list = gtk_tree_selection_get_selected_rows(list_gtk_1990_groupes->tree_select_dispo, &model1);
     list = g_list_last(list);
     
     for(;list != NULL; list = g_list_previous(list))
@@ -555,12 +572,12 @@ void _1990_gtk_button_ajout_dispo_proc(int ngroupe, Projet *projet)
         
         /* On ajoute la ligne dans l'interface graphique */
         if (list_front(groupe->elements) == element)
-            gtk_tree_store_prepend(list_gtk_1990_groupes->tree_store_etat, &element->pIter, &groupe->pIter);
+            gtk_tree_store_prepend(list_gtk_1990_groupes->tree_store_etat, &element->Iter, &groupe->Iter);
         else
         {
             list_mvprev(groupe->elements);
             element2 = (Element*)list_curr(groupe->elements);
-            gtk_tree_store_insert_after(list_gtk_1990_groupes->tree_store_etat, &element->pIter, &groupe->pIter, &element2->pIter);
+            gtk_tree_store_insert_after(list_gtk_1990_groupes->tree_store_etat, &element->Iter, &groupe->Iter, &element2->Iter);
         }
         
         if (list_front(projet->niveaux_groupes) == list_curr(projet->niveaux_groupes))
@@ -569,7 +586,7 @@ void _1990_gtk_button_ajout_dispo_proc(int ngroupe, Projet *projet)
             
             BUG(_1990_action_cherche_numero(projet, numero) == 0, -3);
             action = (Action*)list_curr(projet->actions);
-            gtk_tree_store_set(list_gtk_1990_groupes->tree_store_etat, &element->pIter, 0, numero, 1, action->description, -1);
+            gtk_tree_store_set(list_gtk_1990_groupes->tree_store_etat, &element->Iter, 0, numero, 1, action->description, -1);
         }
         else
         {
@@ -580,16 +597,15 @@ void _1990_gtk_button_ajout_dispo_proc(int ngroupe, Projet *projet)
             groupe_niveau_moins_1 = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
             BUG(_1990_groupe_positionne_groupe(groupe_niveau_moins_1, numero) == 0, -3);
             groupe_moins_1 = (Groupe*)list_curr(groupe_niveau_moins_1->groupes);
-            gtk_tree_store_set(list_gtk_1990_groupes->tree_store_etat, &element->pIter, 0, numero, 1, groupe_moins_1->nom, -1);
+            gtk_tree_store_set(list_gtk_1990_groupes->tree_store_etat, &element->Iter, 0, numero, 1, groupe_moins_1->nom, -1);
         }
        
-        groupe->pIter_expand = 1;
-        path = gtk_tree_model_get_path(GTK_TREE_MODEL(list_gtk_1990_groupes->tree_store_etat), &groupe->pIter);
+        groupe->Iter_expand = 1;
+        path = gtk_tree_model_get_path(GTK_TREE_MODEL(list_gtk_1990_groupes->tree_store_etat), &groupe->Iter);
         gtk_tree_view_expand_row(list_gtk_1990_groupes->tree_view_etat, path, FALSE);
         gtk_tree_path_free(path);
+        gtk_tree_path_free((GtkTreePath*)list->data);
     }
-    g_list_foreach(list, (GFunc)gtk_tree_path_free, NULL);
-    g_list_free(list);
 }
 
 
@@ -602,7 +618,6 @@ void _1990_gtk_button_ajout_dispo_clicked(GtkWidget *button __attribute__((unuse
 {
     // Pour toutes les variables, les indices 1 désignent 'dispo' et les indices 2 désignent 'etat'
     List_Gtk_1990_Groupes   *list_gtk_1990_groupes = &projet->list_gtk._1990_groupes;
-    GtkTreeSelection *selection2;
     GtkTreeIter     iter2;
     GtkTreeModel    *model2;
     int             ngroupe;
@@ -610,17 +625,43 @@ void _1990_gtk_button_ajout_dispo_clicked(GtkWidget *button __attribute__((unuse
     BUGMSG(projet, , "_1990_gtk_button_ajout_dispo_clicked\n");
     BUGMSG(projet->niveaux_groupes, , "_1990_gtk_button_ajout_dispo_clicked\n");
     
-    selection2 = gtk_tree_view_get_selection(list_gtk_1990_groupes->tree_view_etat);
     
     /* On vérifie s'il y a des éléments sélectionnés */
-    if (selection2 == NULL)
-        return;
-    
-    if (!gtk_tree_selection_get_selected(selection2, &model2, &iter2))
+    if (!gtk_tree_selection_get_selected(list_gtk_1990_groupes->tree_select_etat, &model2, &iter2))
         return;
     ngroupe = _1990_gtk_get_groupe(model2, &iter2);
     
     _1990_gtk_button_ajout_dispo_proc(ngroupe, projet);
+    
+    return;
+}
+
+
+void _1990_gtk_button_ajout_tout_dispo_clicked(GtkWidget *button __attribute__((unused)), Projet *projet)
+/* Description : Ajoute l'élément disponible sélectionné dans le groupe sélectionné
+ * Paramètres : GtkWidget *button : composant spin_button ayant réalisé l'évènement
+ *            : Projet *projet : la variable projet
+ * Valeur renvoyée : Aucune
+ */
+{
+    // Pour toutes les variables, les indices 1 désignent 'dispo' et les indices 2 désignent 'etat'
+    List_Gtk_1990_Groupes   *list_gtk_1990_groupes = &projet->list_gtk._1990_groupes;
+    GtkTreeIter     iter2;
+    GtkTreeModel    *model2;
+    int             ngroupe;
+    
+    BUGMSG(projet, , "_1990_gtk_button_ajout_dispo_clicked\n");
+    BUGMSG(projet->niveaux_groupes, , "_1990_gtk_button_ajout_dispo_clicked\n");
+    
+    gtk_tree_selection_select_all(list_gtk_1990_groupes->tree_select_dispo);
+    
+    /* On vérifie s'il y a des éléments sélectionnés */
+    if (!gtk_tree_selection_get_selected(list_gtk_1990_groupes->tree_select_etat, &model2, &iter2))
+        return;
+    ngroupe = _1990_gtk_get_groupe(model2, &iter2);
+    
+    _1990_gtk_button_ajout_dispo_proc(ngroupe, projet);
+    
     return;
 }
 
@@ -656,7 +697,6 @@ void _1990_gtk_tree_view_etat_drag(GtkWidget *widget __attribute__((unused)), Gd
         else
         {
             int ngroupe_source;
-            GtkTreeSelection *selection = gtk_tree_view_get_selection(list_gtk_1990_groupes->tree_view_etat);
             GtkTreeModel     *model;
             int              numero;
             int              niveau;
@@ -666,7 +706,7 @@ void _1990_gtk_tree_view_etat_drag(GtkWidget *widget __attribute__((unused)), Gd
             Element          *element;
             
             niveau = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(list_gtk_1990_groupes->spin_button_niveau));
-            gtk_tree_selection_get_selected(selection, &model, &iter);
+            gtk_tree_selection_get_selected(list_gtk_1990_groupes->tree_select_etat, &model, &iter);
             if (gtk_tree_model_iter_parent(list_store2, &iter_tmp, &iter))
             {
                 ngroupe_source = _1990_gtk_get_groupe(model, &iter);
@@ -681,13 +721,13 @@ void _1990_gtk_tree_view_etat_drag(GtkWidget *widget __attribute__((unused)), Gd
                 
                 /* On ajoute la ligne dans l'interface graphique */
                 if (list_front(groupe->elements) == element)
-                    gtk_tree_store_prepend(list_gtk_1990_groupes->tree_store_etat, &element->pIter, &groupe->pIter);
+                    gtk_tree_store_prepend(list_gtk_1990_groupes->tree_store_etat, &element->Iter, &groupe->Iter);
                 else
                 {
                     Element*    element2;
                     list_mvprev(groupe->elements);
                     element2 = (Element*)list_curr(groupe->elements);
-                    gtk_tree_store_insert_after(list_gtk_1990_groupes->tree_store_etat, &element->pIter, &groupe->pIter, &element2->pIter);
+                    gtk_tree_store_insert_after(list_gtk_1990_groupes->tree_store_etat, &element->Iter, &groupe->Iter, &element2->Iter);
                 }
                 
                 if (list_front(projet->niveaux_groupes) == list_curr(projet->niveaux_groupes))
@@ -696,7 +736,7 @@ void _1990_gtk_tree_view_etat_drag(GtkWidget *widget __attribute__((unused)), Gd
                     
                     BUG(_1990_action_cherche_numero(projet, numero) == 0, -3);
                     action = (Action*)list_curr(projet->actions);
-                    gtk_tree_store_set(list_gtk_1990_groupes->tree_store_etat, &element->pIter, 0, numero, 1, action->description, -1);
+                    gtk_tree_store_set(list_gtk_1990_groupes->tree_store_etat, &element->Iter, 0, numero, 1, action->description, -1);
                 }
                 else
                 {
@@ -707,15 +747,15 @@ void _1990_gtk_tree_view_etat_drag(GtkWidget *widget __attribute__((unused)), Gd
                     groupe_niveau_moins_1 = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
                     BUG(_1990_groupe_positionne_groupe(groupe_niveau_moins_1, numero) == 0, -3);
                     groupe_moins_1 = (Groupe*)list_curr(groupe_niveau_moins_1->groupes);
-                    gtk_tree_store_set(list_gtk_1990_groupes->tree_store_etat, &element->pIter, 0, numero, 1, groupe_moins_1->nom, -1);
+                    gtk_tree_store_set(list_gtk_1990_groupes->tree_store_etat, &element->Iter, 0, numero, 1, groupe_moins_1->nom, -1);
                 }
                 
-                groupe->pIter_expand = 1;
-                path = gtk_tree_model_get_path(GTK_TREE_MODEL(list_gtk_1990_groupes->tree_store_etat), &groupe->pIter);
+                groupe->Iter_expand = 1;
+                path = gtk_tree_model_get_path(GTK_TREE_MODEL(list_gtk_1990_groupes->tree_store_etat), &groupe->Iter);
                 gtk_tree_view_expand_row(list_gtk_1990_groupes->tree_view_etat, path, FALSE);
                 gtk_tree_path_free(path);
-                path = gtk_tree_model_get_path(GTK_TREE_MODEL(list_gtk_1990_groupes->tree_store_etat), &element->pIter);
-                gtk_tree_selection_select_path(gtk_tree_view_get_selection(GTK_TREE_VIEW (list_gtk_1990_groupes->tree_view_etat)), path);
+                path = gtk_tree_model_get_path(GTK_TREE_MODEL(list_gtk_1990_groupes->tree_store_etat), &element->Iter);
+                gtk_tree_selection_select_path(list_gtk_1990_groupes->tree_select_etat, path);
                 gtk_tree_path_free(path);
             }
         }
@@ -754,7 +794,7 @@ void _1990_gtk_tree_view_etat_row_expanded(GtkTreeView *tree_view, GtkTreeIter *
     groupe = (Groupe*)list_curr(niveau_groupe->groupes);
     
     // On le marque comme ouvert.
-    groupe->pIter_expand = 1;
+    groupe->Iter_expand = 1;
     
     return;
 }
@@ -790,12 +830,12 @@ void _1990_gtk_tree_view_etat_row_collapsed(GtkTreeView *tree_view, GtkTreeIter 
     groupe = (Groupe*)list_curr(niveau_groupe->groupes);
     
     // On le marque comme fermé.
-    groupe->pIter_expand = 0;
+    groupe->Iter_expand = 0;
     
     return;
 }
 
-void _1990_gtk_tree_view_etat_cursor_changed(GtkTreeView *tree_view, Projet *projet)
+void _1990_gtk_tree_view_etat_cursor_changed(__attribute__((unused)) GtkTreeView *tree_view, Projet *projet)
 /* Description : Evènement lorsqu'il y a un changement de ligne sélectionnée
  *             : Permet de mettre à jour si le groupe sélectionné est de type OR, XOR ou AND
  * Paramètres : GtkTreeView *tree_view : composant tree_view à l'origine de l'évènement
@@ -804,7 +844,6 @@ void _1990_gtk_tree_view_etat_cursor_changed(GtkTreeView *tree_view, Projet *pro
  */
 {
     List_Gtk_1990_Groupes   *list_gtk_1990_groupes;
-    GtkTreeSelection *selection = gtk_tree_view_get_selection(tree_view);
     GtkTreeModel    *model;
     GtkTreeIter     iter;
     int             tmp, ngroupe;
@@ -818,7 +857,7 @@ void _1990_gtk_tree_view_etat_cursor_changed(GtkTreeView *tree_view, Projet *pro
     list_gtk_1990_groupes = &projet->list_gtk._1990_groupes;
     
     /* Détermine le groupe sélectionné */
-    if (!gtk_tree_selection_get_selected(selection, &model, &iter))
+    if (!gtk_tree_selection_get_selected(list_gtk_1990_groupes->tree_select_etat, &model, &iter))
         return;
     gtk_tree_model_get(model, &iter, 0, &tmp, 1, &nom, -1);
     ngroupe = _1990_gtk_get_groupe(model, &iter);
@@ -832,17 +871,17 @@ void _1990_gtk_tree_view_etat_cursor_changed(GtkTreeView *tree_view, Projet *pro
     {
         case GROUPE_COMBINAISON_OR :
         {
-            gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(list_gtk_1990_groupes->button_groupe_or), TRUE);
+            gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(list_gtk_1990_groupes->item_groupe_or), TRUE);
             break;
         }
         case GROUPE_COMBINAISON_XOR :
         {
-            gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(list_gtk_1990_groupes->button_groupe_xor), TRUE);
+            gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(list_gtk_1990_groupes->item_groupe_xor), TRUE);
             break;
         }
         case GROUPE_COMBINAISON_AND :
         {
-            gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(list_gtk_1990_groupes->button_groupe_and), TRUE);
+            gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(list_gtk_1990_groupes->item_groupe_and), TRUE);
             break;
         }
         default :
@@ -851,11 +890,10 @@ void _1990_gtk_tree_view_etat_cursor_changed(GtkTreeView *tree_view, Projet *pro
         }
     }
     
-    gtk_entry_set_text(GTK_ENTRY(list_gtk_1990_groupes->entry_groupe_nom), nom);
     return;
 }
 
-void _1990_gtk_button_groupe_toggled(GtkRadioButton *radiobutton, Projet *projet)
+void _1990_gtk_button_groupe_toggled(GtkRadioToolButton *radiobutton, Projet *projet)
 /* Description : Evènement lorsqu'il y a un changement de type de combinaison (OR, XOR ou AND)
  * Paramètres : GtkRadioButton *radiobutton : composant radiobutton à l'origine de l'évènement
  *            : Projet *projet : la variable projet
@@ -863,7 +901,6 @@ void _1990_gtk_button_groupe_toggled(GtkRadioButton *radiobutton, Projet *projet
  */
 {
     List_Gtk_1990_Groupes    *list_gtk_1990_groupes;
-    GtkTreeSelection *selection;
     GtkTreeModel     *model;
     GtkTreeIter      iter;
     int              ngroupe;
@@ -874,10 +911,9 @@ void _1990_gtk_button_groupe_toggled(GtkRadioButton *radiobutton, Projet *projet
     BUGMSG(projet->niveaux_groupes, , "_1990_gtk_button_groupe_toggled\n");
     
     list_gtk_1990_groupes = &projet->list_gtk._1990_groupes;
-    selection = gtk_tree_view_get_selection(list_gtk_1990_groupes->tree_view_etat);
     
     /* On détermine le groupe sélectionné */
-    if (!gtk_tree_selection_get_selected(selection, &model, &iter))
+    if (!gtk_tree_selection_get_selected(list_gtk_1990_groupes->tree_select_etat, &model, &iter))
         return;
     ngroupe = _1990_gtk_get_groupe(model, &iter);
     BUG(_1990_groupe_positionne_niveau(projet->niveaux_groupes, gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(list_gtk_1990_groupes->spin_button_niveau))) == 0, );
@@ -886,98 +922,16 @@ void _1990_gtk_button_groupe_toggled(GtkRadioButton *radiobutton, Projet *projet
     groupe = (Groupe*)list_curr(niveau_groupe->groupes);
     
     /* On attribue le nouveau type de combinaison */
-    if (radiobutton == (void*)list_gtk_1990_groupes->button_groupe_and)
+    if (radiobutton == (void*)list_gtk_1990_groupes->item_groupe_and)
         groupe->type_combinaison = GROUPE_COMBINAISON_AND;
-    else if (radiobutton == (void*)list_gtk_1990_groupes->button_groupe_or)
+    else if (radiobutton == (void*)list_gtk_1990_groupes->item_groupe_or)
         groupe->type_combinaison = GROUPE_COMBINAISON_OR;
-    else if (radiobutton == (void*)list_gtk_1990_groupes->button_groupe_xor)
+    else if (radiobutton == (void*)list_gtk_1990_groupes->item_groupe_xor)
         groupe->type_combinaison = GROUPE_COMBINAISON_XOR;
     
     return;
 }
 
-void _1990_gtk_button_groupe_nom_clicked(GtkWidget *button __attribute__((unused)), Projet *projet)
-/* Description : Change le nom du groupe en cours
- * Paramètres : GtkWidget *button : composant bouton à l'origine de l'évènement
- *            : Projet *projet : la variable projet
- * Valeur renvoyée : Aucune
- */
-{
-    List_Gtk_1990_Groupes    *list_gtk_1990_groupes;
-    GtkTreeSelection *selection;
-    GtkTreeModel     *model;
-    GtkTreeIter      iter, iter_tmp;
-    int              element;
-    char             *nom;
-    Niveau_Groupe    *niveau_groupe;
-    Groupe           *groupe;
-    const gchar      *sText;
-    int              ngroupe;
-    
-    BUGMSG(projet, , "_1990_gtk_button_groupe_nom_clicked\n");
-    BUGMSG(projet->niveaux_groupes, , "_1990_gtk_button_groupe_nom_clicked\n");
-    
-    list_gtk_1990_groupes = &projet->list_gtk._1990_groupes;
-    selection = gtk_tree_view_get_selection(list_gtk_1990_groupes->tree_view_etat);
-    
-    /* On détermine le groupe sélectionné */
-    if (!gtk_tree_selection_get_selected(selection, &model, &iter))
-        return;
-    gtk_tree_model_get(model, &iter, 0, &element, 1, &nom, -1);
-    ngroupe = _1990_gtk_get_groupe(model, &iter);
-    BUG(_1990_groupe_positionne_niveau(projet->niveaux_groupes, gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(list_gtk_1990_groupes->spin_button_niveau))) == 0, );
-    niveau_groupe = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
-    BUG(_1990_groupe_positionne_groupe(niveau_groupe, ngroupe) == 0, );
-    groupe = (Groupe*)list_curr(niveau_groupe->groupes);
-    
-    /* On attribue le nouveau type de combinaison */
-    sText = gtk_entry_get_text(GTK_ENTRY(list_gtk_1990_groupes->entry_groupe_nom));
-    if (!gtk_tree_model_iter_parent(model, &iter_tmp, &iter))
-    {
-        free(groupe->nom);
-        groupe->nom = (char*)malloc(sizeof(char)*(strlen(sText)+1));
-        BUGMSG(groupe->nom, , "_1990_gtk_button_groupe_nom_clicked\n");
-        strcpy(groupe->nom, sText);
-        gtk_tree_store_set(list_gtk_1990_groupes->tree_store_etat, &groupe->pIter, 0, ngroupe, 1, groupe->nom, -1);
-    }
-    else
-    {
-        if (list_front(projet->niveaux_groupes) == list_curr(projet->niveaux_groupes))
-        {
-            Action *action;
-            Element *element_;
-            
-            BUG(_1990_action_cherche_numero(projet, element) == 0, -3);
-            action = (Action*)list_curr(projet->actions);
-            free(action->description);
-            action->description = (char*)malloc(sizeof(char)*(strlen(sText)+1));
-            strcpy(action->description, sText);
-            BUG(_1990_groupe_positionne_element(groupe, element) == 0, -3);
-            element_ = (Element*)list_curr(groupe->elements);
-            gtk_tree_store_set(list_gtk_1990_groupes->tree_store_etat, &element_->pIter, 0, element, 1, action->description, -1);
-        }
-        else
-        {
-            Niveau_Groupe *groupe_niveau_moins_1;
-            Groupe *groupe_moins_1;
-            Element *element_;
-            
-            BUG(_1990_groupe_positionne_element(groupe, element) == 0, -3);
-            element_ = (Element*)list_curr(groupe->elements);
-            list_mvprev(projet->niveaux_groupes);
-            groupe_niveau_moins_1 = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
-            BUG(_1990_groupe_positionne_groupe(groupe_niveau_moins_1, element) == 0, -3);
-            groupe_moins_1 = (Groupe*)list_curr(groupe_niveau_moins_1->groupes);
-            free(groupe_moins_1->nom);
-            groupe_moins_1->nom = (char*)malloc(sizeof(char)*(strlen(sText)+1));
-            BUGMSG(groupe_moins_1->nom, , "_1990_gtk_button_groupe_nom_clicked\n");
-            strcpy(groupe_moins_1->nom, sText);
-            gtk_tree_store_set(list_gtk_1990_groupes->tree_store_etat, &element_->pIter, 0, element, 1, groupe_moins_1->nom, -1);
-        }
-    }
-    
-    return;
-}
 
 void _1990_gtk_button_generer_clicked(GtkWidget *button __attribute__((unused)), Projet *projet)
 /* Description : Génère les combinaisons
@@ -1358,6 +1312,52 @@ gboolean _1990_gtk_tree_view_etat_key_press_event(GtkWidget *widget __attribute_
 }
 
 
+void _1990_gtk_tree_select_changed(GtkTreeSelection *treeselection __attribute__((unused)), Projet *projet)
+/* Description : Permet de activer/désactiver les boutons ajout en fonction de la selection
+ * Paramètres : GtkWidget *button : composant à l'origine de l'évènement
+ *            : Projet *projet : la variable projet
+ * Valeur renvoyée : Aucune
+ */
+{
+    List_Gtk_1990_Groupes   *list_gtk_1990_groupes = &projet->list_gtk._1990_groupes;
+    GtkTreeIter             iter;
+    
+    // Si le tree_view est vide ou qu'aucun groupe n'est sélectionné
+    if ( (!gtk_tree_model_get_iter_first(GTK_TREE_MODEL(list_gtk_1990_groupes->tree_store_dispo), &iter)) ||
+         (!gtk_tree_selection_get_selected(list_gtk_1990_groupes->tree_select_etat, NULL, NULL)) )
+        gtk_widget_set_sensitive(GTK_WIDGET(list_gtk_1990_groupes->item_ajout_tout_dispo), FALSE);
+    else
+        gtk_widget_set_sensitive(GTK_WIDGET(list_gtk_1990_groupes->item_ajout_tout_dispo), TRUE);
+    
+    // Si aucun groupe n'est sélectionné
+    if (!gtk_tree_selection_get_selected(list_gtk_1990_groupes->tree_select_etat, NULL, NULL))
+    {
+        gtk_widget_set_sensitive(GTK_WIDGET(list_gtk_1990_groupes->item_ajout_dispo), FALSE);
+        gtk_widget_set_sensitive(GTK_WIDGET(list_gtk_1990_groupes->item_groupe_suppr), FALSE);
+        gtk_widget_set_sensitive(GTK_WIDGET(list_gtk_1990_groupes->item_groupe_and), FALSE);
+        gtk_widget_set_sensitive(GTK_WIDGET(list_gtk_1990_groupes->item_groupe_or), FALSE);
+        gtk_widget_set_sensitive(GTK_WIDGET(list_gtk_1990_groupes->item_groupe_xor), FALSE);
+    }
+    else
+    {
+        gtk_widget_set_sensitive(GTK_WIDGET(list_gtk_1990_groupes->item_groupe_suppr), TRUE);
+        gtk_widget_set_sensitive(GTK_WIDGET(list_gtk_1990_groupes->item_groupe_and), TRUE);
+        gtk_widget_set_sensitive(GTK_WIDGET(list_gtk_1990_groupes->item_groupe_or), TRUE);
+        gtk_widget_set_sensitive(GTK_WIDGET(list_gtk_1990_groupes->item_groupe_xor), TRUE);
+        
+        // Si aucune sélection dans la liste des éléments disponibles
+        GList   *list_orig = gtk_tree_selection_get_selected_rows(list_gtk_1990_groupes->tree_select_dispo, NULL);
+        GList   *list = g_list_last(list_orig);
+        if (list == NULL)
+            gtk_widget_set_sensitive(GTK_WIDGET(list_gtk_1990_groupes->item_ajout_dispo), FALSE);
+        else
+            gtk_widget_set_sensitive(GTK_WIDGET(list_gtk_1990_groupes->item_ajout_dispo), TRUE);
+        g_list_foreach(list_orig, (GFunc)gtk_tree_path_free, NULL);
+        g_list_free(list_orig);
+    }
+}
+
+
 void _1990_gtk_groupes(GtkWidget *button __attribute__((unused)), Projet *projet)
 /* Description : Affichage de la fenêtre permettant de gérer les groupes
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement
@@ -1369,11 +1369,12 @@ void _1990_gtk_groupes(GtkWidget *button __attribute__((unused)), Projet *projet
     List_Gtk_1990_Groupes       *list_gtk_1990_groupes;
     GtkCellRenderer     *pCellRenderer;
     GtkTreeViewColumn   *pColumn;
+    GList               *list;
     
     list_gtk_1990_groupes = &projet->list_gtk._1990_groupes;
     list_gtk_1990_groupes->window_groupe = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-    list_gtk_1990_groupes->table_groupe = gtk_table_new(5, 4, FALSE);
-    list_gtk_1990_groupes->table_combinaison = gtk_table_new(1, 1, FALSE);
+    list_gtk_1990_groupes->table = gtk_table_new(3, 1, FALSE);
+    list_gtk_1990_groupes->table_niveau = gtk_table_new(1, 3, FALSE);
     list_gtk_1990_groupes->table_groupes = gtk_table_new(7, 2, FALSE);
     list_gtk_1990_groupes->table_dispo = gtk_table_new(2, 2, FALSE);
     list_gtk_1990_groupes->table_bas = gtk_table_new(1, 3, FALSE);
@@ -1381,33 +1382,41 @@ void _1990_gtk_groupes(GtkWidget *button __attribute__((unused)), Projet *projet
     /* Réglage de la fenêtre graphique */
     gtk_window_set_title(GTK_WINDOW(list_gtk_1990_groupes->window_groupe), gettext("Groupes"));
     gtk_window_resize(GTK_WINDOW(list_gtk_1990_groupes->window_groupe), 800, 600);
-    gtk_window_set_position(GTK_WINDOW(list_gtk_1990_groupes->window_groupe), GTK_WIN_POS_CENTER_ALWAYS);
-    gtk_container_add(GTK_CONTAINER(list_gtk_1990_groupes->window_groupe), list_gtk_1990_groupes->table_groupe);
+    gtk_window_set_position(GTK_WINDOW(list_gtk_1990_groupes->window_groupe), GTK_WIN_POS_CENTER);
+    gtk_container_add(GTK_CONTAINER(list_gtk_1990_groupes->window_groupe), list_gtk_1990_groupes->table);
     
     BUGMSG(projet->niveaux_groupes, , "_1990_gtk_groupes\n");
     if (list_size(projet->niveaux_groupes) == 0)
         BUG(_1990_groupe_ajout_niveau(projet) == 0, );
     
     /* Création des composants graphiques gérant les niveaux */
+    label = gtk_label_new(gettext("Niveau : "));
     list_gtk_1990_groupes->spin_button_niveau = gtk_spin_button_new_with_range(0, list_size(projet->niveaux_groupes)-1, 1);
-    g_signal_connect (list_gtk_1990_groupes->spin_button_niveau, "value-changed", G_CALLBACK (_1990_gtk_spin_button_niveau_change), projet);
-    
+    g_signal_connect(list_gtk_1990_groupes->spin_button_niveau, "value-changed", G_CALLBACK (_1990_gtk_spin_button_niveau_change), projet);
     list_gtk_1990_groupes->button_niveau_ajout = gtk_button_new_with_label(" + ");
     g_signal_connect(G_OBJECT(list_gtk_1990_groupes->button_niveau_ajout), "clicked", G_CALLBACK(_1990_gtk_button_niveau_ajout_clicked), projet);
     list_gtk_1990_groupes->button_niveau_suppr = gtk_button_new_with_label("  -  ");
     g_signal_connect(G_OBJECT(list_gtk_1990_groupes->button_niveau_suppr), "clicked", G_CALLBACK(_1990_gtk_button_niveau_suppr_clicked), projet);
+    gtk_table_attach(GTK_TABLE(list_gtk_1990_groupes->table_niveau), label, 0, 1, 0, 1, (GtkAttachOptions)0, (GtkAttachOptions)0, 0, 0);
+    gtk_table_attach(GTK_TABLE(list_gtk_1990_groupes->table_niveau), list_gtk_1990_groupes->spin_button_niveau, 1, 2, 0, 1, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
+    gtk_table_attach(GTK_TABLE(list_gtk_1990_groupes->table_niveau), list_gtk_1990_groupes->button_niveau_ajout, 2, 3, 0, 1, (GtkAttachOptions)GTK_FILL, (GtkAttachOptions)0, 0, 0);
+    gtk_table_attach(GTK_TABLE(list_gtk_1990_groupes->table_niveau), list_gtk_1990_groupes->button_niveau_suppr, 3, 4, 0, 1, (GtkAttachOptions)GTK_FILL, (GtkAttachOptions)0, 0, 0);
+    gtk_table_attach(GTK_TABLE(list_gtk_1990_groupes->table), list_gtk_1990_groupes->table_niveau, 0, 1, 0, 1, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_SHRINK | GTK_FILL), 0, 0);
+    
     
     /* Création des composants graphiques affichant l'état du niveau en cours */
     list_gtk_1990_groupes->scroll_etat = gtk_scrolled_window_new(NULL, NULL);
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(list_gtk_1990_groupes->scroll_etat), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
     list_gtk_1990_groupes->tree_store_etat = gtk_tree_store_new(2, G_TYPE_INT, G_TYPE_STRING);
     list_gtk_1990_groupes->tree_view_etat = (GtkTreeView*)gtk_tree_view_new_with_model(GTK_TREE_MODEL(list_gtk_1990_groupes->tree_store_etat));
+    list_gtk_1990_groupes->tree_select_etat = gtk_tree_view_get_selection(list_gtk_1990_groupes->tree_view_etat);
     gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(list_gtk_1990_groupes->scroll_etat), GTK_WIDGET(list_gtk_1990_groupes->tree_view_etat));
     gtk_tree_view_set_reorderable(GTK_TREE_VIEW(list_gtk_1990_groupes->tree_view_etat), TRUE);
     list_gtk_1990_groupes->scroll_dispo = gtk_scrolled_window_new(NULL, NULL);
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(list_gtk_1990_groupes->scroll_dispo), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
     list_gtk_1990_groupes->tree_store_dispo = gtk_tree_store_new(2, G_TYPE_INT, G_TYPE_STRING);
     list_gtk_1990_groupes->tree_view_dispo = (GtkTreeView*)gtk_tree_view_new_with_model(GTK_TREE_MODEL(list_gtk_1990_groupes->tree_store_dispo));
+    list_gtk_1990_groupes->tree_select_dispo = gtk_tree_view_get_selection(list_gtk_1990_groupes->tree_view_dispo);
     gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(list_gtk_1990_groupes->scroll_dispo), GTK_WIDGET(list_gtk_1990_groupes->tree_view_dispo));
     gtk_tree_view_set_reorderable(GTK_TREE_VIEW(list_gtk_1990_groupes->tree_view_dispo), TRUE);
     
@@ -1415,30 +1424,23 @@ void _1990_gtk_groupes(GtkWidget *button __attribute__((unused)), Projet *projet
     g_signal_connect(GTK_WIDGET(list_gtk_1990_groupes->tree_view_etat), "drag-begin", G_CALLBACK(_1990_gtk_tree_view_drag_begin), list_gtk_1990_groupes);
     g_signal_connect(GTK_WIDGET(list_gtk_1990_groupes->tree_view_dispo), "drag-drop", G_CALLBACK(_1990_gtk_tree_view_dispo_drag), projet);
     g_signal_connect(GTK_WIDGET(list_gtk_1990_groupes->tree_view_etat), "drag-drop", G_CALLBACK(_1990_gtk_tree_view_etat_drag), projet);
-    g_signal_connect(G_OBJECT(list_gtk_1990_groupes->tree_view_etat), "row-expanded", G_CALLBACK(_1990_gtk_tree_view_etat_row_expanded), projet);
-    g_signal_connect(G_OBJECT(list_gtk_1990_groupes->tree_view_etat), "row-collapsed", G_CALLBACK(_1990_gtk_tree_view_etat_row_collapsed), projet);
-    g_signal_connect(G_OBJECT(list_gtk_1990_groupes->tree_view_etat), "cursor-changed", G_CALLBACK(_1990_gtk_tree_view_etat_cursor_changed), projet);
-    g_signal_connect(G_OBJECT(list_gtk_1990_groupes->tree_view_etat), "key-press-event", G_CALLBACK(_1990_gtk_tree_view_etat_key_press_event), projet);
+    g_signal_connect(GTK_WIDGET(list_gtk_1990_groupes->tree_view_etat), "row-expanded", G_CALLBACK(_1990_gtk_tree_view_etat_row_expanded), projet);
+    g_signal_connect(GTK_WIDGET(list_gtk_1990_groupes->tree_view_etat), "row-collapsed", G_CALLBACK(_1990_gtk_tree_view_etat_row_collapsed), projet);
+    g_signal_connect(GTK_WIDGET(list_gtk_1990_groupes->tree_view_etat), "cursor-changed", G_CALLBACK(_1990_gtk_tree_view_etat_cursor_changed), projet);
+    g_signal_connect(GTK_WIDGET(list_gtk_1990_groupes->tree_view_etat), "key-press-event", G_CALLBACK(_1990_gtk_tree_view_etat_key_press_event), projet);
+    g_signal_connect(G_OBJECT(list_gtk_1990_groupes->tree_select_dispo), "changed", G_CALLBACK(_1990_gtk_tree_select_changed), projet);
+    g_signal_connect(G_OBJECT(list_gtk_1990_groupes->tree_select_etat), "changed", G_CALLBACK(_1990_gtk_tree_select_changed), projet);
     
     /* Défini le comportement du glissé etat vers dispo*/
-    gtk_drag_source_set(GTK_WIDGET(list_gtk_1990_groupes->tree_view_etat), GDK_BUTTON1_MASK, &drag_targets_1, 1, GDK_ACTION_MOVE); 
-    gtk_drag_dest_set(GTK_WIDGET(list_gtk_1990_groupes->tree_view_dispo), GTK_DEST_DEFAULT_ALL, &drag_targets_1, 1, GDK_ACTION_MOVE);
+    gtk_drag_source_set(GTK_WIDGET(list_gtk_1990_groupes->tree_view_etat), GDK_BUTTON1_MASK, drag_targets_groupes_1, 1, GDK_ACTION_MOVE); 
+    gtk_drag_dest_set(GTK_WIDGET(list_gtk_1990_groupes->tree_view_dispo), GTK_DEST_DEFAULT_ALL, drag_targets_groupes_1, 1, GDK_ACTION_MOVE);
     
-    gtk_drag_source_set(GTK_WIDGET(list_gtk_1990_groupes->tree_view_dispo), GDK_BUTTON1_MASK, &drag_targets_2, 1, GDK_ACTION_MOVE); 
-    gtk_drag_dest_set(GTK_WIDGET(list_gtk_1990_groupes->tree_view_etat), GTK_DEST_DEFAULT_ALL, drag_targets_3, 2, GDK_ACTION_MOVE);
+    gtk_drag_source_set(GTK_WIDGET(list_gtk_1990_groupes->tree_view_dispo), GDK_BUTTON1_MASK, drag_targets_groupes_2, 1, GDK_ACTION_MOVE); 
+    gtk_drag_dest_set(GTK_WIDGET(list_gtk_1990_groupes->tree_view_etat), GTK_DEST_DEFAULT_ALL, drag_targets_groupes_3, 2, GDK_ACTION_MOVE);
     
-    gtk_tree_selection_set_mode(gtk_tree_view_get_selection(GTK_TREE_VIEW (list_gtk_1990_groupes->tree_view_dispo)), GTK_SELECTION_MULTIPLE);
-    _1990_gtk_affiche_niveau(projet, gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(list_gtk_1990_groupes->spin_button_niveau)));
+    gtk_tree_selection_set_mode(list_gtk_1990_groupes->tree_select_dispo, GTK_SELECTION_MULTIPLE);
     
-    gtk_table_attach (GTK_TABLE (list_gtk_1990_groupes->table_groupe), list_gtk_1990_groupes->spin_button_niveau, 1, 2, 0, 1, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
-    gtk_table_attach (GTK_TABLE (list_gtk_1990_groupes->table_groupe), list_gtk_1990_groupes->button_niveau_ajout, 2, 3, 0, 1, (GtkAttachOptions)GTK_FILL, (GtkAttachOptions)0, 0, 0);
-    gtk_table_attach (GTK_TABLE (list_gtk_1990_groupes->table_groupe), list_gtk_1990_groupes->button_niveau_suppr, 3, 4, 0, 1, (GtkAttachOptions)GTK_FILL, (GtkAttachOptions)0, 0, 0);
-    label = gtk_label_new(gettext("Niveau : "));
-    gtk_table_attach (GTK_TABLE (list_gtk_1990_groupes->table_groupe), label, 0, 1, 0, 1, (GtkAttachOptions)0, (GtkAttachOptions)0, 0, 0);
-    gtk_table_attach (GTK_TABLE (list_gtk_1990_groupes->table_groupe), list_gtk_1990_groupes->table_combinaison, 0, 4, 2, 3, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 0, 0);
-    
-    list_gtk_1990_groupes->frame_groupe = gtk_frame_new(gettext("Groupes"));
-    gtk_table_attach (GTK_TABLE (list_gtk_1990_groupes->table_combinaison), list_gtk_1990_groupes->frame_groupe, 0, 1, 0, 1, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 0, 0);
+    list_gtk_1990_groupes->frame_groupe = gtk_frame_new(gettext("Groupes :"));
     gtk_container_add(GTK_CONTAINER(list_gtk_1990_groupes->frame_groupe), list_gtk_1990_groupes->table_groupes);
     pCellRenderer = gtk_cell_renderer_text_new();
     gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW(list_gtk_1990_groupes->tree_view_etat), -1, gettext("Numéro"), pCellRenderer, "text", 0, NULL);
@@ -1446,36 +1448,48 @@ void _1990_gtk_groupes(GtkWidget *button __attribute__((unused)), Projet *projet
     g_object_set(pCellRenderer, "editable", TRUE, NULL);
     g_signal_connect(pCellRenderer, "edited", G_CALLBACK(_1990_gtk_tree_view_etat_cell_edited), projet);
     gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW(list_gtk_1990_groupes->tree_view_etat), -1, gettext("Description"), pCellRenderer, "text", 1, NULL);
-    gtk_table_attach (GTK_TABLE (list_gtk_1990_groupes->table_groupes), GTK_WIDGET(list_gtk_1990_groupes->scroll_etat), 0, 1, 0, 6, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 0, 0);
+    list = gtk_tree_view_get_columns(GTK_TREE_VIEW(list_gtk_1990_groupes->tree_view_etat));
+    g_list_first(list);
+    g_list_foreach(list, (GFunc)gtk_tree_view_column_set_resizable, (gpointer)TRUE);
+    g_list_free(list);
     
-    /* Composants permettant la suppression / ajout des groupes, gestion des éléments disponibles et du type de combinaison du groupe en cours */
-    list_gtk_1990_groupes->button_groupe_ajout = gtk_button_new_with_label(" + ");
-    g_signal_connect(G_OBJECT(list_gtk_1990_groupes->button_groupe_ajout), "clicked", G_CALLBACK(_1990_gtk_button_groupe_ajout_clicked), projet);
-    list_gtk_1990_groupes->button_groupe_suppr = gtk_button_new_with_label("-");
-    g_signal_connect(G_OBJECT(list_gtk_1990_groupes->button_groupe_suppr), "clicked", G_CALLBACK(_1990_gtk_button_groupe_suppr_clicked), projet);
-    list_gtk_1990_groupes->button_ajout_dispo = gtk_button_new_with_label("<-");
-    g_signal_connect(G_OBJECT(list_gtk_1990_groupes->button_ajout_dispo), "clicked", G_CALLBACK(_1990_gtk_button_ajout_dispo_clicked), projet);
-    list_gtk_1990_groupes->button_groupe_and = gtk_radio_button_new_with_label_from_widget(NULL, "AND");
-    g_signal_connect(G_OBJECT(list_gtk_1990_groupes->button_groupe_and), "toggled", G_CALLBACK(_1990_gtk_button_groupe_toggled), projet);
-    list_gtk_1990_groupes->button_groupe_or = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(list_gtk_1990_groupes->button_groupe_and), "OR");
-    g_signal_connect(G_OBJECT(list_gtk_1990_groupes->button_groupe_or), "toggled", G_CALLBACK(_1990_gtk_button_groupe_toggled), projet);
-    list_gtk_1990_groupes->button_groupe_xor = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(list_gtk_1990_groupes->button_groupe_and), "XOR");
-    g_signal_connect(G_OBJECT(list_gtk_1990_groupes->button_groupe_xor), "toggled", G_CALLBACK(_1990_gtk_button_groupe_toggled), projet);
-    list_gtk_1990_groupes->button_groupe_nom = gtk_button_new_with_label(gettext("OK"));
-    g_signal_connect(G_OBJECT(list_gtk_1990_groupes->button_groupe_nom), "clicked", G_CALLBACK(_1990_gtk_button_groupe_nom_clicked), projet);
-    list_gtk_1990_groupes->entry_groupe_nom = gtk_entry_new();
-    gtk_table_attach (GTK_TABLE (list_gtk_1990_groupes->table_groupes), list_gtk_1990_groupes->button_groupe_ajout, 1, 2, 0, 1, (GtkAttachOptions)GTK_FILL, (GtkAttachOptions)0, 0, 0);
-    gtk_table_attach (GTK_TABLE (list_gtk_1990_groupes->table_groupes), list_gtk_1990_groupes->button_groupe_suppr, 1, 2, 1, 2, (GtkAttachOptions)GTK_FILL, (GtkAttachOptions)0, 0, 0);
-    gtk_table_attach (GTK_TABLE (list_gtk_1990_groupes->table_groupes), list_gtk_1990_groupes->button_ajout_dispo, 1, 2, 2, 3, (GtkAttachOptions)GTK_FILL, (GtkAttachOptions)0, 0, 0);
-    gtk_table_attach (GTK_TABLE (list_gtk_1990_groupes->table_groupes), list_gtk_1990_groupes->button_groupe_and, 1, 2, 3, 4, (GtkAttachOptions)GTK_FILL, (GtkAttachOptions)0, 0, 0);
-    gtk_table_attach (GTK_TABLE (list_gtk_1990_groupes->table_groupes), list_gtk_1990_groupes->button_groupe_or, 1, 2, 4, 5, (GtkAttachOptions)GTK_FILL, (GtkAttachOptions)0, 0, 0);
-    gtk_table_attach (GTK_TABLE (list_gtk_1990_groupes->table_groupes), list_gtk_1990_groupes->button_groupe_xor, 1, 2, 5, 6, (GtkAttachOptions)GTK_FILL, (GtkAttachOptions)0, 0, 0);
-    gtk_table_attach (GTK_TABLE (list_gtk_1990_groupes->table_groupes), list_gtk_1990_groupes->button_groupe_nom, 1, 2, 6, 7, (GtkAttachOptions)GTK_FILL, (GtkAttachOptions)0, 0, 0);
-    gtk_table_attach (GTK_TABLE (list_gtk_1990_groupes->table_groupes), list_gtk_1990_groupes->entry_groupe_nom, 0, 1, 6, 7, (GtkAttachOptions)GTK_FILL, (GtkAttachOptions)0, 0, 0);
+    // Génération de la toolbar pour les groupes
+    list_gtk_1990_groupes->toolbar_groupe = gtk_toolbar_new();
+    gtk_orientable_set_orientation(GTK_ORIENTABLE(list_gtk_1990_groupes->toolbar_groupe), GTK_ORIENTATION_HORIZONTAL);
+    gtk_toolbar_set_style(GTK_TOOLBAR(list_gtk_1990_groupes->toolbar_groupe), GTK_TOOLBAR_ICONS);
+    gtk_container_set_border_width(GTK_CONTAINER(list_gtk_1990_groupes->toolbar_groupe), 0);
+    list_gtk_1990_groupes->img_groupe_ajout = gtk_image_new_from_file(DATADIR"/images/ajouter.xpm");
+    list_gtk_1990_groupes->item_groupe_ajout = gtk_tool_button_new(list_gtk_1990_groupes->img_groupe_ajout, gettext("Ajouter"));
+    g_signal_connect(G_OBJECT(list_gtk_1990_groupes->item_groupe_ajout), "clicked", G_CALLBACK(_1990_gtk_button_groupe_ajout_clicked), projet);
+    list_gtk_1990_groupes->img_groupe_suppr = gtk_image_new_from_file(DATADIR"/images/fleche_droite.xpm");
+    list_gtk_1990_groupes->item_groupe_suppr = gtk_tool_button_new(list_gtk_1990_groupes->img_groupe_suppr, gettext("Supprimer"));
+    g_signal_connect(G_OBJECT(list_gtk_1990_groupes->item_groupe_suppr), "clicked", G_CALLBACK(_1990_gtk_button_groupe_suppr_clicked), projet);
+
+    
+    // Génération des composants permettant la suppression / ajout des groupes, gestion des éléments disponibles et du type de combinaison du groupe en cours */
+    list_gtk_1990_groupes->item_groupe_and = gtk_radio_tool_button_new_from_widget(NULL);
+    gtk_tool_button_set_label(GTK_TOOL_BUTTON(list_gtk_1990_groupes->item_groupe_and), "AND");
+    g_signal_connect(G_OBJECT(list_gtk_1990_groupes->item_groupe_and), "toggled", G_CALLBACK(_1990_gtk_button_groupe_toggled), projet);
+    list_gtk_1990_groupes->item_groupe_or = gtk_radio_tool_button_new_from_widget(GTK_RADIO_TOOL_BUTTON(list_gtk_1990_groupes->item_groupe_and));
+    gtk_tool_button_set_label(GTK_TOOL_BUTTON(list_gtk_1990_groupes->item_groupe_or), "OR");
+    g_signal_connect(G_OBJECT(list_gtk_1990_groupes->item_groupe_or), "toggled", G_CALLBACK(_1990_gtk_button_groupe_toggled), projet);
+    list_gtk_1990_groupes->item_groupe_xor = gtk_radio_tool_button_new_from_widget(GTK_RADIO_TOOL_BUTTON(list_gtk_1990_groupes->item_groupe_and));
+    gtk_tool_button_set_label(GTK_TOOL_BUTTON(list_gtk_1990_groupes->item_groupe_xor), "XOR");
+    g_signal_connect(G_OBJECT(list_gtk_1990_groupes->item_groupe_xor), "toggled", G_CALLBACK(_1990_gtk_button_groupe_toggled), projet);
+    gtk_toolbar_insert(GTK_TOOLBAR(list_gtk_1990_groupes->toolbar_groupe), list_gtk_1990_groupes->item_groupe_ajout, -1);
+    gtk_toolbar_insert(GTK_TOOLBAR(list_gtk_1990_groupes->toolbar_groupe), list_gtk_1990_groupes->item_groupe_and, -1);
+    gtk_toolbar_insert(GTK_TOOLBAR(list_gtk_1990_groupes->toolbar_groupe), list_gtk_1990_groupes->item_groupe_or, -1);
+    gtk_toolbar_insert(GTK_TOOLBAR(list_gtk_1990_groupes->toolbar_groupe), list_gtk_1990_groupes->item_groupe_xor, -1);
+    gtk_toolbar_insert(GTK_TOOLBAR(list_gtk_1990_groupes->toolbar_groupe), list_gtk_1990_groupes->item_groupe_suppr, -1);
+    
+    gtk_table_attach(GTK_TABLE(list_gtk_1990_groupes->table_groupes), GTK_WIDGET(list_gtk_1990_groupes->scroll_etat), 0, 1, 0, 1, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 0, 0);
+    gtk_table_attach(GTK_TABLE(list_gtk_1990_groupes->table_groupes), list_gtk_1990_groupes->toolbar_groupe, 0, 1, 1, 2, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_SHRINK | GTK_FILL), 0, 0);
+//    gtk_table_attach (GTK_TABLE (list_gtk_1990_groupes->table_groupes), list_gtk_1990_groupes->button_groupe_and, 1, 2, 3, 4, (GtkAttachOptions)GTK_FILL, (GtkAttachOptions)0, 0, 0);
+//    gtk_table_attach (GTK_TABLE (list_gtk_1990_groupes->table_groupes), list_gtk_1990_groupes->button_groupe_or, 1, 2, 4, 5, (GtkAttachOptions)GTK_FILL, (GtkAttachOptions)0, 0, 0);
+//    gtk_table_attach (GTK_TABLE (list_gtk_1990_groupes->table_groupes), list_gtk_1990_groupes->button_groupe_xor, 1, 2, 5, 6, (GtkAttachOptions)GTK_FILL, (GtkAttachOptions)0, 0, 0);
     
     /* Composants gérant les éléments disponibles */
     list_gtk_1990_groupes->frame_dispo = gtk_frame_new(gettext("Éléments disponibles :"));
-    gtk_table_attach (GTK_TABLE (list_gtk_1990_groupes->table_combinaison), list_gtk_1990_groupes->frame_dispo, 1, 2, 0, 1, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 0, 0);
     gtk_container_add(GTK_CONTAINER(list_gtk_1990_groupes->frame_dispo), list_gtk_1990_groupes->table_dispo);
     
     pCellRenderer = gtk_cell_renderer_text_new();
@@ -1484,10 +1498,40 @@ void _1990_gtk_groupes(GtkWidget *button __attribute__((unused)), Projet *projet
     pCellRenderer = gtk_cell_renderer_text_new();
     pColumn = gtk_tree_view_column_new_with_attributes(gettext("Description"), pCellRenderer, "text", 1, NULL);
     gtk_tree_view_append_column(list_gtk_1990_groupes->tree_view_dispo, pColumn);
-    gtk_table_attach (GTK_TABLE (list_gtk_1990_groupes->table_dispo), GTK_WIDGET(list_gtk_1990_groupes->scroll_dispo), 0, 1, 0, 2, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 0, 0);
+    list = gtk_tree_view_get_columns(GTK_TREE_VIEW(list_gtk_1990_groupes->tree_view_dispo));
+    g_list_first(list);
+    g_list_foreach(list, (GFunc)gtk_tree_view_column_set_resizable, (gpointer)TRUE);
+    g_list_free(list);
+    gtk_table_attach (GTK_TABLE (list_gtk_1990_groupes->table_dispo), GTK_WIDGET(list_gtk_1990_groupes->scroll_dispo), 0, 1, 0, 1, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 0, 0);
+    
+    list_gtk_1990_groupes->paned_groupe_dispo = gtk_paned_new(GTK_ORIENTATION_HORIZONTAL);
+    gtk_paned_set_position(GTK_PANED(list_gtk_1990_groupes->paned_groupe_dispo), 400);
+    gtk_table_attach(GTK_TABLE(list_gtk_1990_groupes->table), list_gtk_1990_groupes->paned_groupe_dispo, 0, 1, 1, 2, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 0, 0);
+    gtk_paned_add1(GTK_PANED(list_gtk_1990_groupes->paned_groupe_dispo), list_gtk_1990_groupes->frame_groupe);
+    gtk_paned_add2(GTK_PANED(list_gtk_1990_groupes->paned_groupe_dispo), list_gtk_1990_groupes->frame_dispo);
+    
+    list_gtk_1990_groupes->toolbar_dispo = gtk_toolbar_new();
+    gtk_orientable_set_orientation(GTK_ORIENTABLE(list_gtk_1990_groupes->toolbar_dispo), GTK_ORIENTATION_HORIZONTAL);
+    gtk_toolbar_set_style(GTK_TOOLBAR(list_gtk_1990_groupes->toolbar_dispo), GTK_TOOLBAR_ICONS);
+    gtk_container_set_border_width(GTK_CONTAINER(list_gtk_1990_groupes->toolbar_dispo), 0);
+    list_gtk_1990_groupes->img_ajout_dispo = gtk_image_new_from_file(DATADIR"/images/fleche_gauche.xpm");
+    list_gtk_1990_groupes->item_ajout_dispo = gtk_tool_button_new(list_gtk_1990_groupes->img_ajout_dispo, gettext("Ajouter"));
+    g_signal_connect(G_OBJECT(list_gtk_1990_groupes->item_ajout_dispo), "clicked", G_CALLBACK(_1990_gtk_button_ajout_dispo_clicked), projet);
+    gtk_toolbar_insert(GTK_TOOLBAR(list_gtk_1990_groupes->toolbar_dispo), list_gtk_1990_groupes->item_ajout_dispo, -1);
+    list_gtk_1990_groupes->img_ajout_tout_dispo = gtk_image_new_from_file(DATADIR"/images/fast_fleche_gauche.xpm");
+    list_gtk_1990_groupes->item_ajout_tout_dispo = gtk_tool_button_new(list_gtk_1990_groupes->img_ajout_tout_dispo, gettext("Ajouter tout"));
+    g_signal_connect(G_OBJECT(list_gtk_1990_groupes->item_ajout_tout_dispo), "clicked", G_CALLBACK(_1990_gtk_button_ajout_tout_dispo_clicked), projet);
+    gtk_toolbar_insert(GTK_TOOLBAR(list_gtk_1990_groupes->toolbar_dispo), list_gtk_1990_groupes->item_ajout_tout_dispo, -1);
+    gtk_table_attach(GTK_TABLE(list_gtk_1990_groupes->table_dispo), list_gtk_1990_groupes->toolbar_dispo, 0, 1, 1, 2, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_SHRINK | GTK_FILL), 0, 0);
+    gtk_widget_set_sensitive(GTK_WIDGET(list_gtk_1990_groupes->item_ajout_dispo), FALSE);
+    gtk_widget_set_sensitive(GTK_WIDGET(list_gtk_1990_groupes->item_ajout_tout_dispo), FALSE);
+    gtk_widget_set_sensitive(GTK_WIDGET(list_gtk_1990_groupes->item_groupe_suppr), FALSE);
+    gtk_widget_set_sensitive(GTK_WIDGET(list_gtk_1990_groupes->item_groupe_and), FALSE);
+    gtk_widget_set_sensitive(GTK_WIDGET(list_gtk_1990_groupes->item_groupe_or), FALSE);
+    gtk_widget_set_sensitive(GTK_WIDGET(list_gtk_1990_groupes->item_groupe_xor), FALSE);
     
     /* Composants gérant les options et la génération des combinaisons */
-    gtk_table_attach (GTK_TABLE (list_gtk_1990_groupes->table_groupe), list_gtk_1990_groupes->table_bas, 0, 4, 3, 4, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
+    gtk_table_attach (GTK_TABLE (list_gtk_1990_groupes->table), list_gtk_1990_groupes->table_bas, 0, 4, 3, 4, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
     list_gtk_1990_groupes->button_generer = gtk_button_new_with_label(gettext("Générer"));
     gtk_table_attach (GTK_TABLE (list_gtk_1990_groupes->table_bas), list_gtk_1990_groupes->button_generer, 0, 1, 0, 1, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
     g_signal_connect(G_OBJECT(list_gtk_1990_groupes->button_generer), "clicked", G_CALLBACK(_1990_gtk_button_generer_clicked), projet);
@@ -1498,490 +1542,11 @@ void _1990_gtk_groupes(GtkWidget *button __attribute__((unused)), Projet *projet
     gtk_table_attach (GTK_TABLE (list_gtk_1990_groupes->table_bas), list_gtk_1990_groupes->button_quitter, 2, 3, 0, 1, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
     g_signal_connect(G_OBJECT(list_gtk_1990_groupes->button_quitter), "clicked", G_CALLBACK(_1990_gtk_window_quitter_button), list_gtk_1990_groupes->window_groupe);
     
+    _1990_gtk_affiche_niveau(projet, gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(list_gtk_1990_groupes->spin_button_niveau)));
+    
     gtk_window_set_modal(GTK_WINDOW(list_gtk_1990_groupes->window_groupe), TRUE);
     gtk_widget_show_all(list_gtk_1990_groupes->window_groupe);
     
     return;
 }
-
-
-
-
-
-
-
-
-/********************************************************************************************/
-
-void _1990_gtk_tree_view_actions_cell_edited(GtkCellRendererText *cell __attribute__((unused)), gchar *path_string, gchar *new_text, Projet *projet)
-/* Description : Pour éditer le nom des actions via la fenêtre d'actions.
- * Paramètres : GtkCellRendererText *cell : la cellule éditée,
- *            : gchar *path_string : chemin vers la cellule,
- *            : gchar *new_text : nouveau texte,
- *            : Projet *projet : la variable projet.
- * Valeur renvoyée : Aucune
- */
-{
-    List_Gtk_1990_Actions *list_gtk_1990_actions = &projet->list_gtk._1990_actions;
-    GtkTreePath   *path = gtk_tree_path_new_from_string (path_string);
-    GtkTreeIter   iter;
-    GtkTreeModel  *model = gtk_tree_view_get_model(GTK_TREE_VIEW(list_gtk_1990_actions->tree_view_actions));
-    GValue        nouvelle_valeur;
-    int           numero;
-    char          *description;
-    Action        *action;
-    
-    gtk_tree_model_get_iter (model, &iter, path);
-    gtk_tree_model_get(model, &iter, 0, &numero, 1, &description, -1);
-    
-    BUGMSG(_1990_action_cherche_numero(projet, numero) == 0, , "_1990_gtk_tree_view_action_cell_edited\n");
-    action = list_curr(projet->actions);
-    action->description = realloc(action->description, sizeof(gchar)*(strlen(new_text)+1));
-    BUGMSG(action->description, , gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_gtk_tree_view_action_cell_edited");
-    strcpy(action->description, new_text);
-    
-    memset(&nouvelle_valeur, 0, sizeof(nouvelle_valeur));
-    g_value_init (&nouvelle_valeur, G_TYPE_STRING);
-    g_value_set_string (&nouvelle_valeur, new_text);
-    gtk_tree_store_set_value(list_gtk_1990_actions->tree_store_actions, &iter, 1, &nouvelle_valeur);
-    
-    gtk_tree_path_free (path);
-    
-    return;
-}
-
-
-void _1990_gtk_tree_view_charges_cell_edited(GtkCellRendererText *cell __attribute__((unused)), gchar *path_string, gchar *new_text, Projet *projet)
-/* Description : Pour éditer le nom des charges via la fenêtre d'actions.
- * Paramètres : GtkCellRendererText *cell : la cellule éditée,
- *            : gchar *path_string : chemin vers la cellule,
- *            : gchar *new_text : nouveau texte,
- *            : Projet *projet : la variable projet.
- * Valeur renvoyée : Aucune
- */
-{
-    List_Gtk_1990_Actions *list_gtk_1990_actions = &projet->list_gtk._1990_actions;
-    GtkTreeSelection *selection = gtk_tree_view_get_selection(list_gtk_1990_actions->tree_view_actions);
-    GtkTreePath     *path = gtk_tree_path_new_from_string (path_string);
-    GtkTreeIter     iter, iter_action;
-    GtkTreeModel    *model_action;
-    GtkTreeModel    *model = gtk_tree_view_get_model(GTK_TREE_VIEW(list_gtk_1990_actions->tree_view_charges));
-    GValue          nouvelle_valeur;
-    int             numero_action, numero_charge;
-    char            *description;
-    Charge_Noeud    *charge;
-    
-    /* Détermine le groupe sélectionné */
-    if (!gtk_tree_selection_get_selected(selection, &model_action, &iter_action))
-        return;
-    gtk_tree_model_get(model_action, &iter_action, 0, &numero_action, -1);
-    
-    gtk_tree_model_get_iter (model, &iter, path);
-    gtk_tree_model_get(model, &iter, 0, &numero_charge, 1, &description, -1);
-    
-    charge = _1990_action_cherche_charge(projet, numero_action, numero_charge);
-    BUG(charge, );
-    
-    charge->description = realloc(charge->description, sizeof(gchar)*(strlen(new_text)+1));
-    BUGMSG(charge->description, , gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_gtk_tree_view_action_cell_edited");
-    strcpy(charge->description, new_text);
-    
-    memset(&nouvelle_valeur, 0, sizeof(nouvelle_valeur));
-    g_value_init (&nouvelle_valeur, G_TYPE_STRING);
-    g_value_set_string (&nouvelle_valeur, new_text);
-    gtk_tree_store_set_value(list_gtk_1990_actions->tree_store_charges, &iter, 1, &nouvelle_valeur);
-    
-    gtk_tree_path_free (path);
-    
-    return;
-}
-
-
-void _1990_gtk_tree_view_actions_cursor_changed(GtkTreeView *tree_view __attribute__((unused)), Projet *projet)
-/* Description : Evènement lorsqu'il y a un changement de ligne sélectionnée dans la liste
- *                 des actions
- * Paramètres : GtkTreeView *tree_view : composant tree_view à l'origine de l'évènement
- *            : Projet *projet : la variable projet
- * Valeur renvoyée : Aucune
- */
-{
-    List_Gtk_1990_Actions   *list_gtk_1990_actions;
-    GtkTreeSelection *selection = gtk_tree_view_get_selection(tree_view);
-    GtkTreeModel    *model;
-    GtkTreeIter     iter;
-    int             numero;
-    char            *nom, *description, tmp[30];
-    Action          *action;
-    
-    BUGMSG(projet, , "_1990_gtk_tree_view_actions_cursor_changed\n");
-    BUGMSG(list_size(projet->actions), , "_1990_gtk_tree_view_actions_cursor_changed\n");
-    
-    list_gtk_1990_actions = &projet->list_gtk._1990_actions;
-    
-    /* Détermine le groupe sélectionné */
-    if (!gtk_tree_selection_get_selected(selection, &model, &iter))
-        return;
-    gtk_tree_model_get(model, &iter, 0, &numero, 1, &nom, -1);
-    
-    BUGMSG(_1990_action_cherche_numero(projet, numero) == 0, , "_1990_gtk_tree_view_actions_cursor_changed\n");
-    action = list_curr(projet->actions);
-    
-    gtk_tree_store_clear(list_gtk_1990_actions->tree_store_charges);
-    if (list_size(action->charges))
-    {
-        list_mvfront(action->charges);
-        do
-        {
-            Charge_Barre_Ponctuelle *charge_tmp = list_curr(action->charges);
-            switch (charge_tmp->type)
-            {
-                case CHARGE_NOEUD :
-                {
-                    Charge_Noeud *charge = list_curr(action->charges);
-                    
-                    description = malloc(sizeof(char)*(strlen(gettext("Noeud : "))+1));
-                    strcpy(description, gettext("Noeud : "));
-                    sprintf(tmp, "%d", charge->noeud->numero);
-                    description = realloc(description, (strlen(description) + strlen(tmp)+1)*sizeof(char));
-                    strcat(description, tmp);
-                    common_math_double_to_char(charge->x, tmp);
-                    description = realloc(description, (strlen(description) + strlen(",  N") + strlen("Fx : ") + strlen(tmp)+1)*sizeof(char));
-                    strcat(description, ", ");
-                    strcat(description, "Fx : ");
-                    strcat(description, tmp);
-                    strcat(description, " N");
-                    common_math_double_to_char(charge->y, tmp);
-                    description = realloc(description, (strlen(description) + strlen(",  N") + strlen("Fy : ") + strlen(tmp)+1)*sizeof(char));
-                    strcat(description, ", ");
-                    strcat(description, "Fy : ");
-                    strcat(description, tmp);
-                    strcat(description, " N");
-                    common_math_double_to_char(charge->z, tmp);
-                    description = realloc(description, (strlen(description) + strlen(",  N") + strlen("Fz : ") + strlen(tmp)+1)*sizeof(char));
-                    strcat(description, ", ");
-                    strcat(description, "Fz : ");
-                    strcat(description, tmp);
-                    strcat(description, " N");
-                    common_math_double_to_char(charge->mx, tmp);
-                    description = realloc(description, (strlen(description) + strlen(",  N") + strlen("Mx : ") + strlen(tmp)+1)*sizeof(char));
-                    strcat(description, ", ");
-                    strcat(description, "Mx : ");
-                    strcat(description, tmp);
-                    strcat(description, " N");
-                    common_math_double_to_char(charge->my, tmp);
-                    description = realloc(description, (strlen(description) + strlen(",  N") + strlen("My : ") + strlen(tmp)+1)*sizeof(char));
-                    strcat(description, ", ");
-                    strcat(description, "My : ");
-                    strcat(description, tmp);
-                    strcat(description, " N");
-                    common_math_double_to_char(charge->mz, tmp);
-                    description = realloc(description, (strlen(description) + strlen(",  N") + strlen("Mz : ") + strlen(tmp)+1)*sizeof(char));
-                    strcat(description, ", ");
-                    strcat(description, "Mz : ");
-                    strcat(description, tmp);
-                    strcat(description, " N");
-                    
-                    gtk_tree_store_append(list_gtk_1990_actions->tree_store_charges, &charge->pIter, NULL);
-                    gtk_tree_store_set(list_gtk_1990_actions->tree_store_charges, &charge->pIter, 0, charge->numero, 1, charge->description, 2, description, -1);
-                    free(description);
-                    
-                    break;
-                }
-                case CHARGE_BARRE_PONCTUELLE :
-                {
-                    Charge_Barre_Ponctuelle *charge = list_curr(action->charges);
-                    
-                    description = malloc(sizeof(char)*(strlen(gettext("Barre : "))+1));
-                    strcpy(description, gettext("Barre : "));
-                    sprintf(tmp, "%d", charge->barre->numero);
-                    description = realloc(description, (strlen(description) + strlen(tmp)+1)*sizeof(char));
-                    strcat(description, tmp);
-                    common_math_double_to_char(charge->position, tmp);
-                    description = realloc(description, (strlen(description) + strlen(",  :  m") + strlen(gettext("position")) + strlen(tmp) + 1)*sizeof(char));
-                    strcat(description, ", ");
-                    strcat(description, gettext("position"));
-                    strcat(description, " : ");
-                    strcat(description, tmp);
-                    strcat(description, " m");
-                    common_math_double_to_char(charge->fx, tmp);
-                    description = realloc(description, (strlen(description) + strlen(",  N") + strlen("Fx : ") + strlen(tmp)+1)*sizeof(char));
-                    strcat(description, ", ");
-                    strcat(description, "Fx : ");
-                    strcat(description, tmp);
-                    strcat(description, " N");
-                    common_math_double_to_char(charge->fy, tmp);
-                    description = realloc(description, (strlen(description) + strlen(",  N") + strlen("Fy : ") + strlen(tmp)+1)*sizeof(char));
-                    strcat(description, ", ");
-                    strcat(description, "Fy : ");
-                    strcat(description, tmp);
-                    strcat(description, " N");
-                    common_math_double_to_char(charge->fz, tmp);
-                    description = realloc(description, (strlen(description) + strlen(",  N") + strlen("Fz : ") + strlen(tmp)+1)*sizeof(char));
-                    strcat(description, ", ");
-                    strcat(description, "Fz : ");
-                    strcat(description, tmp);
-                    strcat(description, " N");
-                    common_math_double_to_char(charge->mx, tmp);
-                    description = realloc(description, (strlen(description) + strlen(",  N") + strlen("Mx : ") + strlen(tmp)+1)*sizeof(char));
-                    strcat(description, ", ");
-                    strcat(description, "Mx : ");
-                    strcat(description, tmp);
-                    strcat(description, " N");
-                    common_math_double_to_char(charge->my, tmp);
-                    description = realloc(description, (strlen(description) + strlen(",  N") + strlen("My : ") + strlen(tmp)+1)*sizeof(char));
-                    strcat(description, ", ");
-                    strcat(description, "My : ");
-                    strcat(description, tmp);
-                    strcat(description, " N");
-                    common_math_double_to_char(charge->mz, tmp);
-                    description = realloc(description, (strlen(description) + strlen(",  N") + strlen("Mz : ") + strlen(tmp)+1)*sizeof(char));
-                    strcat(description, ", ");
-                    strcat(description, "Mz : ");
-                    strcat(description, tmp);
-                    strcat(description, " N");
-                    
-                    gtk_tree_store_append(list_gtk_1990_actions->tree_store_charges, &charge->pIter, NULL);
-                    gtk_tree_store_set(list_gtk_1990_actions->tree_store_charges, &charge->pIter, 0, charge->numero, 1, charge->description, 2, description, -1);
-                    free(description);
-                    
-                    break;
-                }
-                case CHARGE_BARRE_REPARTIE_UNIFORME :
-                {
-                    Charge_Barre_Repartie_Uniforme *charge = list_curr(action->charges);
-                    
-                    description = malloc(sizeof(char)*(strlen(gettext("Barre : "))+1));
-                    strcpy(description, gettext("Barre : "));
-                    sprintf(tmp, "%d", charge->barre->numero);
-                    description = realloc(description, (strlen(description) + strlen(tmp)+1)*sizeof(char));
-                    strcat(description, tmp);
-                    common_math_double_to_char(charge->a, tmp);
-                    description = realloc(description, (strlen(description) + strlen(",  :  m") + strlen(gettext("départ")) + strlen(tmp) +1)*sizeof(char));
-                    strcat(description, ", ");
-                    strcat(description, gettext("départ"));
-                    strcat(description, " : ");
-                    strcat(description, tmp);
-                    strcat(description, " m");
-                    common_math_double_to_char(charge->b, tmp);
-                    description = realloc(description, (strlen(description) + strlen(",  :  m") + strlen(gettext("fin (par rapport à la fin)")) + strlen(tmp) + 1)*sizeof(char));
-                    strcat(description, ", ");
-                    strcat(description, gettext("fin (par rapport à la fin)"));
-                    strcat(description, " : ");
-                    strcat(description, tmp);
-                    strcat(description, " m");
-                    if (charge->projection == TRUE)
-                    {
-                        description = realloc(description, (strlen(description) + strlen(gettext(", projection : oui")) +1)*sizeof(char));
-                        strcat(description, gettext(", projection : oui"));
-                    }
-                    else
-                    {
-                        description = realloc(description, (strlen(description) + strlen(gettext(", projection : non")) +1)*sizeof(char));
-                        strcat(description, gettext(", projection : non"));
-                    }
-                    common_math_double_to_char(charge->fx, tmp);
-                    description = realloc(description, (strlen(description) + strlen(",  N") + strlen("Fx : ") + strlen(tmp)+1)*sizeof(char));
-                    strcat(description, ", ");
-                    strcat(description, "Fx : ");
-                    strcat(description, tmp);
-                    strcat(description, " N");
-                    common_math_double_to_char(charge->fy, tmp);
-                    description = realloc(description, (strlen(description) + strlen(",  N") + strlen("Fy : ") + strlen(tmp)+1)*sizeof(char));
-                    strcat(description, ", ");
-                    strcat(description, "Fy : ");
-                    strcat(description, tmp);
-                    strcat(description, " N");
-                    common_math_double_to_char(charge->fz, tmp);
-                    description = realloc(description, (strlen(description) + strlen(",  N") + strlen("Fz : ") + strlen(tmp)+1)*sizeof(char));
-                    strcat(description, ", ");
-                    strcat(description, "Fz : ");
-                    strcat(description, tmp);
-                    strcat(description, " N");
-                    common_math_double_to_char(charge->mx, tmp);
-                    description = realloc(description, (strlen(description) + strlen(",  N") + strlen("Mx : ") + strlen(tmp)+1)*sizeof(char));
-                    strcat(description, ", ");
-                    strcat(description, "Mx : ");
-                    strcat(description, tmp);
-                    strcat(description, " N");
-                    common_math_double_to_char(charge->my, tmp);
-                    description = realloc(description, (strlen(description) + strlen(",  N") + strlen("My : ") + strlen(tmp)+1)*sizeof(char));
-                    strcat(description, ", ");
-                    strcat(description, "My : ");
-                    strcat(description, tmp);
-                    strcat(description, " N");
-                    common_math_double_to_char(charge->mz, tmp);
-                    description = realloc(description, (strlen(description) + strlen(",  N") + strlen("Mz : ") + strlen(tmp)+1)*sizeof(char));
-                    strcat(description, ", ");
-                    strcat(description, "Mz : ");
-                    strcat(description, tmp);
-                    strcat(description, " N");
-                    
-                    gtk_tree_store_append(list_gtk_1990_actions->tree_store_charges, &charge->pIter, NULL);
-                    gtk_tree_store_set(list_gtk_1990_actions->tree_store_charges, &charge->pIter, 0, charge->numero, 1, charge->description, 2, description, -1);
-                    free(description);
-                    
-                    break;
-                }
-                default :
-                {
-                    BUGMSG(0, , "_1990_gtk_tree_view_actions_cursor_changed\n");
-                    break;
-                }
-            }
-        } while (list_mvnext(action->charges) != NULL);
-    }
-    
-    return;
-}
-
-
-void _1990_gtk_actions_tree_view_drag_begin(GtkWidget *widget __attribute__((unused)), 
-  GdkDragContext *drag_context __attribute__((unused)), void *data __attribute__((unused)))
-{
-    return;
-}
-
-
-gboolean _1990_gtk_actions_tree_view_drag(GtkWidget *widget __attribute__((unused)),
-  GdkDragContext *drag_context __attribute__((unused)),
-  gint x __attribute__((unused)), gint y __attribute__((unused)),
-  guint tim __attribute__((unused)), Projet *projet __attribute__((unused)))
-/* Description : Charge d'action la charge sélectionnée.
- * Paramètres : GtkWidget *button : composant ayant réalisé l'évènement,
- *            : GdkDragContext *drag_context : inutile,
- *            : GtkSelectionData *data : inutile,
- *            : guint info : inutile,
- *            : guint time : inutile,
- *            : Projet *projet : la variable projet
- * Valeur renvoyée : FALSE
- */
-{
-    gint                    cx, cy;
-    List_Gtk_1990_Actions   *list_gtk_1990_actions = &projet->list_gtk._1990_actions;
-    GtkTreePath             *path;
-    GtkTreeModel            *list_store;
-    
-    gdk_window_get_geometry(gtk_tree_view_get_bin_window(GTK_TREE_VIEW(list_gtk_1990_actions->tree_view_actions)), &cx, &cy, NULL, NULL);
-    gtk_tree_view_get_path_at_pos(GTK_TREE_VIEW(widget), x -=cx, y -=cy, &path, NULL, &cx, &cy);
-    list_store = gtk_tree_view_get_model(GTK_TREE_VIEW(list_gtk_1990_actions->tree_view_actions));
-    if (path != NULL)
-    {
-        int                 num_action_dest,  num_charge_source,  num_action_source;
-        GtkTreeIter         iter_action_dest, iter_charge_source, iter_action_source;
-        GtkTreeSelection    *selection_charge_source, *selection_action_source;
-        GtkTreeModel        *model_charge_source, *model_action_source;
-        
-        gtk_tree_model_get_iter(list_store, &iter_action_dest, path);
-        gtk_tree_model_get(list_store, &iter_action_dest, 0, &num_action_dest, -1);
-        
-        selection_action_source = gtk_tree_view_get_selection(list_gtk_1990_actions->tree_view_actions);
-        if (selection_action_source == NULL)
-            return FALSE;
-        if (!gtk_tree_selection_get_selected(selection_action_source, &model_action_source, &iter_action_source))
-            return FALSE;
-        gtk_tree_model_get(model_action_source, &iter_action_source, 0, &num_action_source, -1);
-        
-        selection_charge_source = gtk_tree_view_get_selection(list_gtk_1990_actions->tree_view_charges);
-        if (selection_charge_source == NULL)
-            return FALSE;
-        if (!gtk_tree_selection_get_selected(selection_charge_source, &model_charge_source, &iter_charge_source))
-            return FALSE;
-        gtk_tree_model_get(model_charge_source, &iter_charge_source, 0, &num_charge_source, -1);
-        
-        _1990_action_deplace_charge(projet, num_action_source, num_charge_source, num_action_dest);
-    }
-    
-//    _1990_gtk_button_groupe_suppr_clicked(widget, projet);
-    return FALSE;
-}
-
-
-void _1990_gtk_actions(Projet *projet)
-/* Description : Affichage de la fenêtre permettant de gérer les actions
- * Paramètres : GtkWidget *button : composant à l'origine de l'évènement
- *            : Projet *projet : la variable projet
- * Valeur renvoyée : Aucune
- */
-{
-    List_Gtk_1990_Actions   *list_gtk_1990_actions;
-    GtkCellRenderer         *pCellRenderer;
-    
-    BUGMSG(projet, , "_1990_gtk_actions\n");
-    BUGMSG(projet->actions, , "_1990_gtk_actions\n");
-    
-    list_gtk_1990_actions = &projet->list_gtk._1990_actions;
-    list_gtk_1990_actions->window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-    gtk_window_set_title(GTK_WINDOW(list_gtk_1990_actions->window), gettext("Actions"));
-    gtk_window_resize(GTK_WINDOW(list_gtk_1990_actions->window), 800, 600);
-    gtk_window_set_position(GTK_WINDOW(list_gtk_1990_actions->window), GTK_WIN_POS_CENTER_ALWAYS);
-    
-    list_gtk_1990_actions->table = gtk_table_new(1, 1, FALSE);
-    gtk_container_add(GTK_CONTAINER(list_gtk_1990_actions->window), list_gtk_1990_actions->table);
-    
-    list_gtk_1990_actions->paned = gtk_paned_new(GTK_ORIENTATION_HORIZONTAL);
-    gtk_paned_set_position(GTK_PANED(list_gtk_1990_actions->paned), 400);
-    gtk_table_attach(GTK_TABLE(list_gtk_1990_actions->table), list_gtk_1990_actions->paned, 0, 1, 0, 1, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 0, 0);
-    
-    list_gtk_1990_actions->scroll_actions = gtk_scrolled_window_new(NULL, NULL);
-    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(list_gtk_1990_actions->scroll_actions), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-    list_gtk_1990_actions->tree_store_actions = gtk_tree_store_new(2, G_TYPE_INT, G_TYPE_STRING);
-    list_gtk_1990_actions->tree_view_actions = (GtkTreeView*)gtk_tree_view_new_with_model(GTK_TREE_MODEL(list_gtk_1990_actions->tree_store_actions));
-    gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(list_gtk_1990_actions->scroll_actions), GTK_WIDGET(list_gtk_1990_actions->tree_view_actions));
-    gtk_paned_add1(GTK_PANED(list_gtk_1990_actions->paned), list_gtk_1990_actions->scroll_actions);
-    pCellRenderer = gtk_cell_renderer_text_new();
-    gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW(list_gtk_1990_actions->tree_view_actions), -1, gettext("Numéro"), pCellRenderer, "text", 0, NULL);
-    pCellRenderer = gtk_cell_renderer_text_new();
-    g_object_set(pCellRenderer, "editable", TRUE, NULL);
-    g_signal_connect(pCellRenderer, "edited", G_CALLBACK(_1990_gtk_tree_view_actions_cell_edited), projet);
-    gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW(list_gtk_1990_actions->tree_view_actions), -1, gettext("Description"), pCellRenderer, "text", 1, NULL);
-    g_signal_connect(G_OBJECT(list_gtk_1990_actions->tree_view_actions), "cursor-changed", G_CALLBACK(_1990_gtk_tree_view_actions_cursor_changed), projet);
-    
-    
-    list_gtk_1990_actions->scroll_charges = gtk_scrolled_window_new(NULL, NULL);
-    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(list_gtk_1990_actions->scroll_charges), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-    list_gtk_1990_actions->tree_store_charges = gtk_tree_store_new(3, G_TYPE_INT, G_TYPE_STRING, G_TYPE_STRING);
-    list_gtk_1990_actions->tree_view_charges = (GtkTreeView*)gtk_tree_view_new_with_model(GTK_TREE_MODEL(list_gtk_1990_actions->tree_store_charges));
-    gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(list_gtk_1990_actions->scroll_charges), GTK_WIDGET(list_gtk_1990_actions->tree_view_charges));
-    gtk_tree_view_set_reorderable(GTK_TREE_VIEW(list_gtk_1990_actions->tree_view_charges), TRUE);
-    gtk_paned_add2(GTK_PANED(list_gtk_1990_actions->paned), list_gtk_1990_actions->scroll_charges);
-    pCellRenderer = gtk_cell_renderer_text_new();
-    gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW(list_gtk_1990_actions->tree_view_charges), -1, gettext("Numéro"), pCellRenderer, "text", 0, NULL);
-    pCellRenderer = gtk_cell_renderer_text_new();
-    g_object_set(pCellRenderer, "editable", TRUE, NULL);
-    g_signal_connect(pCellRenderer, "edited", G_CALLBACK(_1990_gtk_tree_view_charges_cell_edited), projet);
-    gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW(list_gtk_1990_actions->tree_view_charges), -1, gettext("Description"), pCellRenderer, "text", 1, NULL);
-    pCellRenderer = gtk_cell_renderer_text_new();
-    gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW(list_gtk_1990_actions->tree_view_charges), -1, gettext("Charge"), pCellRenderer, "text", 2, NULL);
-    g_signal_connect(GTK_WIDGET(list_gtk_1990_actions->tree_view_charges), "drag-begin", G_CALLBACK(_1990_gtk_actions_tree_view_drag_begin), NULL);
-    g_signal_connect(GTK_WIDGET(list_gtk_1990_actions->tree_view_actions), "drag-drop", G_CALLBACK(_1990_gtk_actions_tree_view_drag), projet);
-    
-    /* Défini le comportement du glissé etat vers dispo*/
-    gtk_drag_source_set(GTK_WIDGET(list_gtk_1990_actions->tree_view_charges), GDK_BUTTON1_MASK, &drag_targets_1, 1, GDK_ACTION_MOVE); 
-    gtk_drag_dest_set(GTK_WIDGET(list_gtk_1990_actions->tree_view_actions), GTK_DEST_DEFAULT_ALL, &drag_targets_1, 1, GDK_ACTION_MOVE);
-    
-    if (list_size(projet->actions) != 0)
-    {
-        list_mvfront(projet->actions);
-        do
-        {
-            Action  *action = (Action*)list_curr(projet->actions); 
-            
-            gtk_tree_store_append(list_gtk_1990_actions->tree_store_actions, &action->pIter, NULL);
-            gtk_tree_store_set(list_gtk_1990_actions->tree_store_actions, &action->pIter, 0, action->numero, 1, action->description, -1);
-            
-            
-        } while (list_mvnext(projet->actions) != NULL);
-    }
-    
-    
-    
-    
-    
-    
-    gtk_window_set_modal(GTK_WINDOW(list_gtk_1990_actions->window), TRUE);
-    gtk_widget_show_all(list_gtk_1990_actions->window);
-    
-    return;
-}
-
 #endif

@@ -171,7 +171,7 @@ int _1990_groupe_positionne_niveau(LIST *source, int numero)
 
 
 int _1990_groupe_ajout_groupe(Projet *projet, int niveau,
-  Type_Groupe_Combinaison type_combinaison, char* nom)
+  Type_Groupe_Combinaison type_combinaison, const char* nom)
 /* Description : Ajoute un groupe au niveau choisi avec le type de combinaison spécifié.
  * Paramètres : Projet *projet : la variable projet
  *            : int niveau : le niveau où le groupe doit être inséré
@@ -204,7 +204,9 @@ int _1990_groupe_ajout_groupe(Projet *projet, int niveau,
     BUGMSG(groupe_nouveau.nom, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_groupe_ajout_groupe");
     strcpy(groupe_nouveau.nom, nom);
     groupe_nouveau.type_combinaison = type_combinaison;
-    groupe_nouveau.pIter_expand = 1;
+#ifdef ENABLE_GTK
+    groupe_nouveau.Iter_expand = 1;
+#endif
     
     groupe_nouveau.tmp_combinaison.combinaisons = list_init();
     BUGMSG(groupe_nouveau.tmp_combinaison.combinaisons, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_groupe_ajout_groupe");
@@ -269,7 +271,7 @@ int _1990_groupe_ajout_element(Projet *projet, unsigned int niveau, int groupe_n
     groupe = (Groupe*)list_curr(niveau_groupe->groupes);
     element_nouveau.numero = num_element;
     #ifdef ENABLE_GTK
-    element_nouveau.pIter_expand = 1;
+    element_nouveau.Iter_expand = 1;
     #endif
     
     /* On ajoute le nouvel élément au groupe */

@@ -16,24 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __1990_ACTIONS_H
-#define __1990_ACTIONS_H
+#ifndef __1990_GTK_ACTIONS_H
+#define __1990_GTK_ACTIONS_H
 
 #include "config.h"
+#ifdef ENABLE_GTK
+#include <gtk/gtk.h>
+
 #include "common_projet.h"
 
-int _1990_action_num_bat_txt(Type_Pays pays);
-char *_1990_action_type_bat_txt(int type, Type_Pays pays);
-Action_Categorie _1990_action_categorie_bat(int type, Type_Pays pays);
+void _1990_gtk_actions(Projet *projet);
 
-int _1990_action_init(Projet *projet);
-int _1990_action_ajout(Projet *projet, int categorie, const char* description);
-int _1990_action_cherche_numero(Projet *projet, size_t numero);
-void *_1990_action_cherche_charge(Projet *projet, size_t num_action, size_t num_charge);
-int _1990_action_deplace_charge(Projet *projet, size_t action_src, size_t charge_src, size_t action_dest);
-int _1990_action_affiche_tout(Projet *projet);
-int _1990_action_affiche_resultats(Projet *projet, int num_action);
-int _1990_action_free_num(Projet *projet, size_t num);
-int _1990_action_free(Projet *projet);
+#endif
 
 #endif

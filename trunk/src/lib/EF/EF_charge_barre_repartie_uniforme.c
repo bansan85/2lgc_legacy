@@ -37,7 +37,7 @@
 
 int EF_charge_barre_repartie_uniforme_ajout(Projet *projet, int num_action, Beton_Barre *barre,
   int repere_local, int projection, double a, double b, double fx, double fy, double fz,
-  double mx, double my, double mz, char* nom)
+  double mx, double my, double mz, const char* nom)
 /* Description : Ajoute une charge répartie uniforme à une action et le long d'une barre en
  *               lui attribuant le numéro suivant la dernière charge de l'action.
  * Paramètres : Projet *projet : la variable projet,

@@ -33,7 +33,7 @@
 
 
 int EF_charge_noeud_ajout(Projet *projet, int num_action, EF_Noeud *noeud,
-  double fx, double fy, double fz, double mx, double my, double mz, char* nom)
+  double fx, double fy, double fz, double mx, double my, double mz, const char* nom)
 /* Description : Ajoute une charge ponctuelle à une action et à un noeud de la structure en
  *               lui attribuant le numéro suivant la dernière charge de l'action.
  * Paramètres : Projet *projet : la variable projet

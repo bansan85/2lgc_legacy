@@ -27,10 +27,13 @@
 #include "common_projet.h"
 #include "common_erreurs.h"
 #include "common_maths.h"
+#ifdef ENABLE_GTK
 #include "common_m3d.hpp"
+#include "1990_gtk_groupes.h"
+#include "1990_gtk_actions.h"
+#endif
 #include "1990_actions.h"
 #include "1990_groupes.h"
-#include "1990_gtk_groupes.h"
 #include "1990_combinaisons.h"
 #include "EF_appuis.h"
 #include "EF_noeud.h"
@@ -66,7 +69,9 @@ Projet* projet_init(Type_Pays pays)
     BUGMSG(EF_rigidite_init(projet) == 0, NULL, gettext("%s : Erreur d'allocation mémoire.\n"), "projet_init");
     BUGMSG(EF_relachement_init(projet) == 0, NULL, gettext("%s : Erreur d'allocation mémoire.\n"), "projet_init");
     BUGMSG(EF_noeuds_init(projet) == 0, NULL, gettext("%s : Erreur d'allocation mémoire.\n"), "projet_init");
+#ifdef ENABLE_GTK
     BUGMSG(m3d_init(projet) == 0, NULL, gettext("%s : Erreur d'allocation mémoire.\n"), "projet_init");
+#endif
     
     projet->ef_donnees.c = &(projet->ef_donnees.Common);
     cholmod_l_start(projet->ef_donnees.c);
@@ -76,6 +81,7 @@ Projet* projet_init(Type_Pays pays)
 }
 
 
+#ifdef ENABLE_GTK
 void gui_window_destroy_event(GtkWidget *pWidget __attribute__((unused)), Projet *projet)
 {
     projet_free(projet);
@@ -139,7 +145,7 @@ int projet_init_graphique(Projet *projet)
     
     comps->window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_resize(GTK_WINDOW(comps->window), 800, 600);
-    gtk_window_set_position(GTK_WINDOW(comps->window), GTK_WIN_POS_CENTER_ALWAYS);
+    gtk_window_set_position(GTK_WINDOW(comps->window), GTK_WIN_POS_CENTER);
     g_signal_connect(GTK_WINDOW(comps->window), "destroy", G_CALLBACK(gui_window_destroy_event), projet);
     comps->main_table = gtk_table_new(3, 1, FALSE);
     gtk_container_add(GTK_CONTAINER(comps->window), GTK_WIDGET(comps->main_table));
@@ -164,16 +170,17 @@ int projet_init_graphique(Projet *projet)
     gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu), comps->menu_charges);
     gtk_menu_item_set_submenu(GTK_MENU_ITEM(comps->menu_charges), comps->menu_charges_list);
     
-    comps->menu_charges_groupes = gtk_menu_item_new_with_label(gettext("Actions"));
+    comps->menu_charges_groupes = gtk_menu_item_new_with_label(gettext("Actions..."));
     gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_charges_list), comps->menu_charges_groupes);
     g_signal_connect_swapped(comps->menu_charges_groupes, "activate", G_CALLBACK(gui_affiche_actions), projet);
     
-    comps->menu_charges_groupes = gtk_menu_item_new_with_label(gettext("Groupes"));
+    comps->menu_charges_groupes = gtk_menu_item_new_with_label(gettext("Groupes..."));
     gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_charges_list), comps->menu_charges_groupes);
     g_signal_connect_swapped(comps->menu_charges_groupes, "activate", G_CALLBACK(gui_affiche_groupes), projet);
     
     return 0;
 }
+#endif
 
 
 void projet_free(Projet *projet)
@@ -204,8 +211,10 @@ void projet_free(Projet *projet)
         _1992_1_1_materiaux_free(projet);
     if (projet->ef_donnees.relachements != NULL)
         EF_relachement_free(projet);
+#ifdef ENABLE_GTK
     if (projet->list_gtk.m3d != NULL)
         m3d_free(projet);
+#endif
     
     cholmod_l_finish(projet->ef_donnees.c);
     

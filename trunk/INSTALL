@@ -21,10 +21,11 @@ aclocal
 libtoolize
 automake --add-missing --copy
 autoconf
-./configure --with-gtk --with-debug --prefix=/usr/local CFLAGS=""
+./configure --with-gtk --with-debug --prefix=/usr/local CFLAGS="" CXXFLAGS=""
 sed -i 's/-DPIC/-DPIC -Wl,--as-needed/g' libtool
 sed -i 's/-lcolamd -lcholmod/-lcholmod -lcolamd/g' `find . -name "Makefile"`
-make -j3 && sudo make install-data && make check -j3 && sudo make install && /usr/local/bin/codegui
+make -j3 && sudo make install && /usr/local/bin/codegui
+sudo make install-data && make check -j3
 make -C doc doc
 NOTA :
     -pg

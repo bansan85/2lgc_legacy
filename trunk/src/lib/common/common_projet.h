@@ -29,30 +29,42 @@
 
 typedef struct __List_Gtk_1990_Groupes
 {
-    GtkWidget       *window_groupe;
-    GtkWidget       *table_groupe;
-    GtkWidget       *table_combinaison;
+    GtkWidget       *window_groupe;         // La fenêtre
+    GtkWidget       *table;                 // Table contenant les composants graphiques
+    
+    GtkWidget       *table_niveau;
     GtkWidget       *spin_button_niveau;
     GtkWidget       *button_niveau_ajout;
     GtkWidget       *button_niveau_suppr;
+    
+    GtkWidget       *paned_groupe_dispo;
     GtkWidget       *frame_groupe;
     GtkWidget       *table_groupes;
     GtkTreeStore    *tree_store_etat;
     GtkTreeView     *tree_view_etat;
+    GtkTreeSelection *tree_select_etat;
     GtkWidget       *scroll_etat;
-    GtkWidget       *button_groupe_ajout;
-    GtkWidget       *button_groupe_suppr;
-    GtkWidget       *button_groupe_and;
-    GtkWidget       *button_groupe_or;
-    GtkWidget       *button_groupe_xor;
-    GtkWidget       *button_groupe_nom;
-    GtkWidget       *entry_groupe_nom;
+    GtkWidget       *toolbar_groupe;
+    GtkWidget       *img_groupe_ajout;
+    GtkToolItem     *item_groupe_ajout;
+    GtkWidget       *img_groupe_suppr;
+    GtkToolItem     *item_groupe_suppr;
+    GtkToolItem     *item_groupe_and;
+    GtkToolItem     *item_groupe_or;
+    GtkToolItem     *item_groupe_xor;
+    
     GtkWidget       *frame_dispo;
     GtkWidget       *table_dispo;
     GtkTreeStore    *tree_store_dispo;
     GtkTreeView     *tree_view_dispo;
+    GtkTreeSelection *tree_select_dispo;
     GtkWidget       *scroll_dispo;
-    GtkWidget       *button_ajout_dispo;
+    GtkWidget       *toolbar_dispo;
+    GtkWidget       *img_ajout_dispo;
+    GtkToolItem     *item_ajout_dispo;
+    GtkWidget       *img_ajout_tout_dispo;
+    GtkToolItem     *item_ajout_tout_dispo;
+    
     GtkWidget       *table_bas;
     GtkWidget       *button_generer;
     GtkWidget       *button_options;
@@ -65,10 +77,21 @@ typedef struct __List_Gtk_1990_Actions
 {
     GtkWidget       *window;
     GtkWidget       *table;
+    
     GtkWidget       *paned;
+    GtkWidget       *table_actions;
     GtkWidget       *scroll_actions;
     GtkTreeStore    *tree_store_actions;
     GtkTreeView     *tree_view_actions;
+    GtkListStore    *choix_type_action;
+    GtkWidget       *toolbar_actions;
+    GtkWidget       *menu_type_list;
+    LIST            *menu_list_widget;
+    GtkWidget       *img_action_ajout;
+    GtkToolItem     *item_action_ajout;
+    GtkWidget       *img_action_suppr;
+    GtkToolItem     *item_action_suppr;
+    
     GtkWidget       *scroll_charges;
     GtkTreeStore    *tree_store_charges;
     GtkTreeView     *tree_view_charges;
@@ -180,7 +203,9 @@ typedef struct __Charge_Noeud
 {
     Barre_Charge_Type   type;
     size_t              numero;
-    GtkTreeIter         pIter;
+#ifdef ENABLE_GTK
+    GtkTreeIter         Iter;
+#endif                  
     char                *description;
     EF_Noeud            *noeud;
     double              x;
@@ -323,7 +348,9 @@ typedef struct __Charge_Barre_Ponctuelle
 {
     Barre_Charge_Type   type;
     size_t              numero;
-    GtkTreeIter         pIter;
+#ifdef ENABLE_GTK
+    GtkTreeIter         Iter;
+#endif
     char                *description;
     Beton_Barre         *barre;
     int                 repere_local;
@@ -343,7 +370,9 @@ typedef struct __Charge_Barre_Repartie_Uniforme
 {
     Barre_Charge_Type   type;
     size_t              numero;
-    GtkTreeIter         pIter;
+#ifdef ENABLE_GTK
+    GtkTreeIter         Iter;
+#endif    
     char                *description;
     Beton_Barre         *barre;
     int                 repere_local;
@@ -400,7 +429,9 @@ typedef struct __Action
     cholmod_sparse  *forces_complet;
     cholmod_sparse  *efforts_noeuds;
     double          norm;
-    GtkTreeIter     pIter;
+#ifdef ENABLE_GTK
+    GtkTreeIter     Iter;
+#endif
     
     Fonction        **fonctions_efforts[6]; // 6 fonctions (N, Ty, Tz, Mx, My, Mz) par barre.
                     // Les fonctions représentent la courbe des efforts dues aux charges dans
@@ -430,8 +461,8 @@ typedef struct __Element
 {
     int         numero;
 #ifdef ENABLE_GTK
-    GtkTreeIter pIter;         // Pour la fenêtre groupes
-    int         pIter_expand;
+    GtkTreeIter Iter;         // Pour la fenêtre groupes
+    int         Iter_expand;
 #endif
 } Element;
 
@@ -465,8 +496,8 @@ typedef struct __Groupe
     LIST                    *elements;
     Combinaisons            tmp_combinaison;
 #ifdef ENABLE_GTK
-    GtkTreeIter             pIter;         // Pour la fenêtre groupes
-    int                     pIter_expand;
+    GtkTreeIter             Iter;         // Pour la fenêtre groupes
+    int                     Iter_expand;
 #endif
 } Groupe;
 
@@ -476,7 +507,7 @@ typedef struct __Niveau_Groupe
     int             niveau;
     LIST            *groupes;
 #ifdef ENABLE_GTK
-    GtkTreeIter     pIter;                 // Pour la fenêtre groupes
+    GtkTreeIter     Iter;                 // Pour la fenêtre groupes
 #endif
 } Niveau_Groupe;
 
@@ -601,7 +632,9 @@ typedef struct __Projet
 
 
 Projet *projet_init(Type_Pays pays);
+#ifdef ENABLE_GTK
 int projet_init_graphique(Projet *projet);
+#endif
 void projet_free(Projet *projet);
 
 #endif

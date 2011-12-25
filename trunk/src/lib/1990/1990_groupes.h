@@ -26,7 +26,7 @@
 int _1990_groupe_init(Projet *projet);
 
 int _1990_groupe_ajout_niveau(Projet *projet);
-int _1990_groupe_ajout_groupe(Projet *projet, int niveau, Type_Groupe_Combinaison type_combinaison, char* nom);
+int _1990_groupe_ajout_groupe(Projet *projet, int niveau, Type_Groupe_Combinaison type_combinaison, const char* nom);
 int _1990_groupe_ajout_element(Projet *projet, unsigned int niveau, int groupe_n, int groupe_n_1);
 
 int _1990_groupe_positionne_niveau(LIST *source, int numero);
