@@ -69,7 +69,7 @@ int m3d_init(Projet *projet)
     global_data->scene->reverse_y_axis();
     global_data->scene->show_repere(true, 1.1);
     global_data->scene->set_ambient_light(1.);
-    global_data->scene->set_show_type(FULL);
+    global_data->scene->set_show_type(SOLID);
     
     light = new CM3dLight("lumiere 1", DIFFUS, 1);
     light->set_position(10., 20., -20.);
@@ -225,13 +225,14 @@ int m3d_genere_graphique(Projet *projet)
                     CM3dObject  *bas, *haut, *gauche, *droite, *tout;
                     
                     droite = M3d_plan_new("", longueur, section_tmp->hauteur, 1);
+                    droite->rotations(180., 0., 0.);
                     droite->set_position(0., -section_tmp->largeur/2., 0.);
                     
                     gauche = M3d_plan_new("", longueur, section_tmp->hauteur, 1);
                     gauche->set_position(0., section_tmp->largeur/2., 0.);
                     
                     bas = M3d_plan_new("", longueur, section_tmp->largeur, 1);
-                    bas->rotations(90., 0., 0.);
+                    bas->rotations(90., 180., 0.);
                     bas->set_position(0., 0., -section_tmp->hauteur/2.);
                     
                     haut = M3d_plan_new("", longueur, section_tmp->largeur, 1);
@@ -243,17 +244,17 @@ int m3d_genere_graphique(Projet *projet)
                     {
                         case 0:
                         {
-                            tout->set_color(255, 000, 000);
+                            tout->set_color(255, 0, 0);
                             break;
                         }
                         case 1:
                         {
-                            tout->set_color(000, 255, 000);
+                            tout->set_color(0, 255, 0);
                             break;
                         }
                         case 2:
                         {
-                            tout->set_color(000, 000, 255);
+                            tout->set_color(0, 0, 255);
                             break;
                         }
                         default : break;
@@ -285,24 +286,26 @@ int m3d_genere_graphique(Projet *projet)
                     CM3dObject  *ame_inf, *ame_droite, *ame_gauche, *dalle_bas_droite, *dalle_bas_gauche, *dalle_droite, *dalle_gauche, *dalle_sup, *tout;
                     
                     ame_inf = M3d_plan_new("", longueur, la, 1);
-                    ame_inf->rotations(90., 0., 0.);
+                    ame_inf->rotations(90., 180., 0.);
                     ame_inf->set_position(0., 0., -cdgb);
                     
                     ame_droite = M3d_plan_new("", longueur, ha, 1);
+                    ame_droite->rotations(180., 0., 0.);
                     ame_droite->set_position(0., -la/2., -cdgb+ha/2.);
                     
                     ame_gauche = M3d_plan_new("", longueur, ha, 1);
                     ame_gauche->set_position(0., la/2., -cdgb+ha/2.);
                     
-                    dalle_bas_droite = M3d_plan_new("", longueur, (lt-la)/2., 1);
-                    dalle_bas_droite->rotations(90., 0., 0.);
-                    dalle_bas_droite->set_position(0., la/2.+(lt-la)/4., -cdgb+ha);
-                    
                     dalle_bas_gauche = M3d_plan_new("", longueur, (lt-la)/2., 1);
                     dalle_bas_gauche->rotations(90., 0., 0.);
-                    dalle_bas_gauche->set_position(0., -la/2.-(lt-la)/4., -cdgb+ha);
+                    dalle_bas_gauche->set_position(0., la/2.+(lt-la)/4., -cdgb+ha);
+                    
+                    dalle_bas_droite = M3d_plan_new("", longueur, (lt-la)/2., 1);
+                    dalle_bas_droite->rotations(90., 180., 0.);
+                    dalle_bas_droite->set_position(0., -la/2.-(lt-la)/4., -cdgb+ha);
                     
                     dalle_droite = M3d_plan_new("", longueur, ht, 1);
+                    dalle_droite->rotations(180., 0., 0.);
                     dalle_droite->set_position(0., -lt/2., -cdgb+ha+ht/2.);
                     
                     dalle_gauche = M3d_plan_new("", longueur, ht, 1);
@@ -353,13 +356,14 @@ int m3d_genere_graphique(Projet *projet)
                     CM3dObject  *bas, *haut, *gauche, *droite, *tout;
                     
                     droite = M3d_plan_new("", longueur, section->cote, 1);
+                    droite->rotations(180., 0., 0.);
                     droite->set_position(0., -section->cote/2., 0.);
                     
                     gauche = M3d_plan_new("", longueur, section->cote, 1);
                     gauche->set_position(0., section->cote/2., 0.);
                     
                     bas = M3d_plan_new("", longueur, section->cote, 1);
-                    bas->rotations(90., 0., 0.);
+                    bas->rotations(90., 180., 0.);
                     bas->set_position(0., 0., -section->cote/2.);
                     
                     haut = M3d_plan_new("", longueur, section->cote, 1);

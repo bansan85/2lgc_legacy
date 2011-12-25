@@ -260,6 +260,25 @@ Action_Categorie _1990_action_categorie_bat(int type, Type_Pays pays)
 }
 
 
+int _1990_action_num_bat_txt(Type_Pays pays)
+/* Description : renvoie le nombre de catégorie d'actions des bâtiments en fonction du pays.
+ * Paramètres : Type_Pays pays : le numéro du pays
+ * Valeur renvoyée :
+ *   Succès : le nombre de catégorie d'actions
+ *   Échec : ACTION_INCONNUE en cas de paramètres invalides :
+ *             Le pays n'existe pas.
+ */
+{
+    // Trivial
+    switch (pays)
+    {
+        case PAYS_EU : { return 17; break; }
+        case PAYS_FR : { return 22; break; }
+        default : { BUGMSG(0, ACTION_INCONNUE, gettext("%s : Pays %d inconnu.\n"), "_1990_action_num_bat_txt", pays); break; }
+    }
+}
+
+
 int _1990_action_init(Projet *projet)
 /* Description : Initialise la liste des actions.
  * Paramètres : Projet *projet : la variable projet
@@ -280,7 +299,7 @@ int _1990_action_init(Projet *projet)
 }
 
 
-int _1990_action_ajout(Projet *projet, int type)
+int _1990_action_ajout(Projet *projet, int type, const char* description)
 /* Description : ajoute une nouvelle action à la liste des actions en lui attribuant le numéro
  *                 suivant le dernier relachement existant.
  * Paramètres : Projet *projet : la variable projet
@@ -305,9 +324,9 @@ int _1990_action_ajout(Projet *projet, int type)
     BUG(_1990_action_categorie_bat(type, projet->pays) != ACTION_INCONNUE, -1);
     
     list_mvrear(projet->actions);
-    action_nouveau.description = (char*)malloc(sizeof(char)*(strlen(_1990_action_type_bat_txt(type, projet->pays))+1));
+    action_nouveau.description = (char*)malloc(sizeof(char)*(strlen(description)+1));
     BUGMSG(action_nouveau.description, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_action_ajout");
-    strcpy(action_nouveau.description, _1990_action_type_bat_txt(type, projet->pays));
+    strcpy(action_nouveau.description, description);
     action_nouveau.type = type;
     action_nouveau.charges = list_init();
     BUGMSG(action_nouveau.charges, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_action_ajout");
@@ -432,7 +451,9 @@ int _1990_action_deplace_charge(Projet *projet, size_t action_src, size_t charge
  */
 {
     Charge_Noeud            *charge_data = NULL;
+#ifdef ENABLE_GTK
     List_Gtk_1990_Actions   *list_gtk_1990_actions = &projet->list_gtk._1990_actions;
+#endif
     
     BUGMSG(projet, -1, "_1990_action_deplace_charge\n");
     BUGMSG(projet->actions, -1, "_1990_action_deplace_charge\n");
@@ -457,7 +478,9 @@ int _1990_action_deplace_charge(Projet *projet, size_t action_src, size_t charge
                 
                 if (charge->numero == charge_src)
                 {
-                    gtk_tree_store_remove(list_gtk_1990_actions->tree_store_charges, &charge->pIter);
+#ifdef ENABLE_GTK
+                    gtk_tree_store_remove(list_gtk_1990_actions->tree_store_charges, &charge->Iter);
+#endif
                     charge = (Charge_Noeud*)list_curr(action->charges);
                     charge_data = list_remove_curr(action->charges);
                     charge = (Charge_Noeud*)list_curr(action->charges);
@@ -466,7 +489,9 @@ int _1990_action_deplace_charge(Projet *projet, size_t action_src, size_t charge
                 if ((charge_data != NULL) && (charge != NULL) && (charge->numero > charge_src))
                 {
                     charge->numero--;
-                    gtk_tree_store_set(list_gtk_1990_actions->tree_store_charges, &charge->pIter, 0, charge->numero, -1);
+#ifdef ENABLE_GTK
+                    gtk_tree_store_set(list_gtk_1990_actions->tree_store_charges, &charge->Iter, 0, charge->numero, -1);
+#endif
                 }
             }
             while (list_mvnext(action->charges) != NULL);
@@ -635,6 +660,56 @@ int _1990_action_affiche_resultats(Projet *projet, int num_action)
         BUG(common_fonction_affiche(action_en_cours->fonctions_rotation[2][i]) == 0, -3);
     }
     // FinPour
+    
+    return 0;
+}
+
+
+int _1990_action_free_num(Projet *projet, size_t num)
+/* Description : Libère l'action souhaitée.
+ * Paramètres : Projet *projet : la variable projet,
+ *            : size_t num : le numéro de l'action à supprimer.
+ * Valeur renvoyée :
+ *   Succès : 0
+ *   Échec : -1 en cas de paramètres invalides :
+ *             (projet == NULL) ou
+ *             (projet->actions == NULL)
+ */
+{
+    BUGMSG(projet, -1, "_1990_action_free\n");
+    BUGMSG(projet->actions, -1, "_1990_action_free\n");
+    
+    // Trivial
+    _1990_action_cherche_numero(projet, num);
+    list_mvrear(projet->actions);
+    do
+    {
+        Action      *action = (Action*)list_curr(projet->actions);
+        
+        if (action->numero == num)
+        {
+            action = list_remove_curr(projet->actions);
+            free(action->description);
+            while (!list_empty(action->charges))
+            {
+                Charge_Barre_Ponctuelle *charge = (Charge_Barre_Ponctuelle*)list_remove_front(action->charges);
+                free(charge);
+            }
+            free(action->charges);
+            if (action->deplacement_complet != NULL)
+                cholmod_l_free_sparse(&action->deplacement_complet, projet->ef_donnees.c);
+            if (action->forces_complet != NULL)
+                cholmod_l_free_sparse(&action->forces_complet, projet->ef_donnees.c);
+            if (action->efforts_noeuds != NULL)
+                cholmod_l_free_sparse(&action->efforts_noeuds, projet->ef_donnees.c);
+            
+            if (action->fonctions_efforts[0] != NULL)
+                common_fonction_free(projet, action);
+            free(action);
+        }
+        else if (action->numero > num)
+            action->numero--;
+    } while (list_mvprev(projet->actions) != NULL);
     
     return 0;
 }

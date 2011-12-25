@@ -46,10 +46,10 @@ int main(void)
     projet = projet_init(PAYS_EU);
     BUG(projet, -1);
     projet->combinaisons.flags = 0 | 8 | 2;
-    BUG(_1990_action_ajout(projet, 0) == 0, -1); // Poids prore
-    BUG(_1990_action_ajout(projet, 2) == 0, -1); // 2
-    BUG(_1990_action_ajout(projet, 12) == 0, -1); // 3
-    BUG(_1990_action_ajout(projet, 13) == 0, -1); // 4
+    BUG(_1990_action_ajout(projet, 0, "Poids propre") == 0, -1); // Poids prore
+    BUG(_1990_action_ajout(projet, 2, "Exploitation") == 0, -1); // 2
+    BUG(_1990_action_ajout(projet, 12, "Neige") == 0, -1); // 3
+    BUG(_1990_action_ajout(projet, 13, "Vent") == 0, -1); // 4
     _1990_action_affiche_tout(projet);
     BUG(_1990_groupe_ajout_niveau(projet) == 0, -1);
     BUG(_1990_groupe_ajout_niveau(projet) == 0, -1);

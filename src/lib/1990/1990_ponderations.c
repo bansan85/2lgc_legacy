@@ -210,7 +210,7 @@ int _1990_ponderations_genere_un(Projet *projet, LIST* ponderations_destination,
     if (list_size(groupe->tmp_combinaison.combinaisons) == 0)
     {
         printf(gettext("Le dernier niveau ne possède aucune combinaison permettant la génération des pondérations.\n"));
-        return -1;
+        return 0;
     }
     
     // Génération d'une boucle contenant 2^(nom de ligne dans coef_min et coef_max) permettant

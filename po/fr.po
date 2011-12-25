@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2011-11-21 07:50+0100\n"
-"PO-Revision-Date: 2011-11-21 07:53+0100\n"
+"POT-Creation-Date: 2011-12-19 21:19+0100\n"
+"PO-Revision-Date: 2011-12-25 22:09+0100\n"
 "Last-Translator: LE GARREC Vincent <vlg@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -26,6 +26,72 @@ msgstr "Barre en béton %d introuvable.\n"
 
 msgid "%s : Matériau en béton n°%d introuvable.\n"
 msgstr "%s : Matériau en béton n°%d introuvable.\n"
+
+msgid "Noeud : "
+msgstr "Noeud : "
+
+msgid "Ponctuelle sur noeud"
+msgstr "Ponctuelle sur noeud"
+
+msgid "Barre : "
+msgstr "Barre : "
+
+msgid "position"
+msgstr "position"
+
+msgid "Ponctuelle sur barre"
+msgstr "Ponctuelle sur barre"
+
+msgid "départ"
+msgstr "départ"
+
+msgid "fin (par rapport à la fin)"
+msgstr "fin (par rapport à la fin)"
+
+msgid ", projection : oui"
+msgstr ", projection : oui"
+
+msgid ", projection : non"
+msgstr ", projection : non"
+
+msgid "Répartie uniforme sur barre"
+msgstr "Répartie uniforme sur barre"
+
+msgid "Sans nom"
+msgstr "Sans nom"
+
+msgid "Actions"
+msgstr "Actions"
+
+msgid "Numéro"
+msgstr "Numéro"
+
+msgid "Description"
+msgstr "Description"
+
+msgid "Type"
+msgstr "Type"
+
+msgid "psi0"
+msgstr "psi0"
+
+msgid "psi1"
+msgstr "psi1"
+
+msgid "psi2"
+msgstr "psi2"
+
+msgid "Ajouter"
+msgstr "Ajouter"
+
+msgid "Supprimer"
+msgstr "Supprimer"
+
+msgid "Charge"
+msgstr "Charge"
+
+msgid "Valeur"
+msgstr "Valeur"
 
 msgid ""
 "La génération des pondérations est impossible.\n"
@@ -136,8 +202,8 @@ msgstr "Eaux souterraines"
 msgid "%s : Pays %d inconnu.\n"
 msgstr "%s : Pays %d inconnu.\n"
 
-msgid "%s : Action %d introuvable.\n"
-msgstr "%s : Action %d introuvable.\n"
+msgid "%s : Action %zu introuvable.\n"
+msgstr "%s : Action %zu introuvable.\n"
 
 msgid "%s : Élément %d existant.\n"
 msgstr "%s : Élément %d existant.\n"
@@ -196,17 +262,14 @@ msgstr "Groupes"
 msgid "Niveau : "
 msgstr "Niveau : "
 
-msgid "Numéro"
-msgstr "Numéro"
-
-msgid "Description"
-msgstr "Description"
-
-msgid "OK"
-msgstr "OK"
+msgid "Groupes :"
+msgstr "Groupes :"
 
 msgid "Éléments disponibles :"
 msgstr "Éléments disponibles :"
+
+msgid "Ajouter tout"
+msgstr "Ajouter tout"
 
 msgid "Générer"
 msgstr "Générer"
@@ -216,33 +279,6 @@ msgstr "Options"
 
 msgid "Quitter"
 msgstr "Quitter"
-
-msgid "Noeud : "
-msgstr "Noeud : "
-
-msgid "Barre : "
-msgstr "Barre : "
-
-msgid "position"
-msgstr "position"
-
-msgid "départ"
-msgstr "départ"
-
-msgid "fin (par rapport à la fin)"
-msgstr "fin (par rapport à la fin)"
-
-msgid ", projection : oui"
-msgstr ", projection : oui"
-
-msgid ", projection : non"
-msgstr ", projection : non"
-
-msgid "Actions"
-msgstr "Actions"
-
-msgid "Charge"
-msgstr "Charge"
 
 msgid "Type %d inconnu.\n"
 msgstr "Type %d inconnu.\n"
@@ -369,6 +405,12 @@ msgstr "Fichier"
 
 msgid "Charges"
 msgstr "Charges"
+
+msgid "Actions..."
+msgstr "Actions..."
+
+msgid "Groupes..."
+msgstr "Groupes..."
 
 msgid "%s : Le fichier '%s' est introuvable ou corrompu.\n"
 msgstr "%s : Le fichier '%s' est introuvable ou corrompu.\n"

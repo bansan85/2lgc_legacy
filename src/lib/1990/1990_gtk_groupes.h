@@ -25,9 +25,7 @@
 
 #include "common_projet.h"
 
-
 void _1990_gtk_groupes(GtkWidget *button __attribute__((unused)), Projet *projet);
-void _1990_gtk_actions(Projet *projet);
 
 #endif
 
