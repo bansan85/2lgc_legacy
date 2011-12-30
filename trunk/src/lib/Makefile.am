@@ -22,8 +22,6 @@ libeurocodes_la_SOURCES =	1990/1990_actions.c \
 							1990/1990_combinaisons.c \
 							1990/1990_duree.c \
 							1990/1990_groupes.c \
-							1990/1990_gtk_groupes.c \
-							1990/1990_gtk_actions.c \
 							1990/1990_ponderations.c \
 							1992_1_1/1992_1_1_barres.c \
 							1992_1_1/1992_1_1_materiaux.c \
@@ -43,7 +41,9 @@ libeurocodes_la_SOURCES =	1990/1990_actions.c \
 							EF/EF_rigidite.c
 
 if ENABLE_GTK
-libeurocodes_la_SOURCES +=	common/common_m3d.cc
+libeurocodes_la_SOURCES +=	common/common_m3d.cc \
+							1990/1990_gtk_groupes.c \
+							1990/1990_gtk_actions.c
 endif
 
 libeurocodes_ladir = $(includedir)/2lgc
@@ -52,8 +52,6 @@ libeurocodes_la_HEADERS =	1990/1990_actions.h \
 							1990/1990_combinaisons.h \
 							1990/1990_duree.h \
 							1990/1990_groupes.h \
-							1990/1990_gtk_groupes.h \
-							1990/1990_gtk_actions.h \
 							1990/1990_ponderations.h \
 							1992_1_1/1992_1_1_barres.h \
 							1992_1_1/1992_1_1_materiaux.h \
@@ -62,7 +60,6 @@ libeurocodes_la_HEADERS =	1990/1990_actions.h \
 							common/common_fonction.h \
 							common/common_maths.h \
 							common/common_projet.h \
-							common/common_m3d.hpp \
 							common/common_text.h \
 							common/common_tooltip.h \
 							EF/EF_appuis.h \
@@ -74,3 +71,8 @@ libeurocodes_la_HEADERS =	1990/1990_actions.h \
 							EF/EF_relachement.h \
 							EF/EF_rigidite.h
 
+if ENABLE_GTK
+libeurocodes_la_HEADERS +=	common/common_m3d.hpp \
+							1990/1990_gtk_groupes.h \
+							1990/1990_gtk_actions.h
+endif
