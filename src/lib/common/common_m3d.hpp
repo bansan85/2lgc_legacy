@@ -19,6 +19,8 @@
 #ifndef __COMMON_SHOW_H
 #define __COMMON_SHOW_H
 
+#include "config.h"
+#ifdef ENABLE_GTK
 #include <gtk/gtk.h>
 
 #ifdef __cplusplus
@@ -48,4 +50,5 @@ void m3d_free(Projet *projet);
 }
 #endif
 
+#endif
 #endif

@@ -17,6 +17,7 @@
  */
 
 #include "config.h"
+#ifdef ENABLE_GTK
 #include <M3d++.hpp>
 
 extern "C" {
@@ -480,3 +481,5 @@ void m3d_free(Projet *projet)
 
 
 }
+
+#endif

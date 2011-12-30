@@ -4,7 +4,7 @@
 -AC_INIT([FULL-PACKAGE-NAME], [VERSION], [BUG-REPORT-ADDRESS])
 +AC_INIT(2lgc_code, 0.0.0.2, devel@2lgc.org, 2lgc_code, http://2lgc.org)
 +AM_INIT_AUTOMAKE
-@@ -8,24 +10,55 @@
+@@ -8,24 +10,56 @@
 +AM_GNU_GETTEXT([external])
 +AC_CONFIG_MACRO_DIR([m4])
  
@@ -26,7 +26,7 @@
 +with-gtk $withgtk
 +XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX])
 +AM_CONDITIONAL(ENABLE_GTK, test x$withgtk = xtrue)
-+if test "x$withgtk" = "xtrue"; then
++if test x$withgtk = xtrue; then
 +GTK_REQUIRED_VERSION=3.0.3
 +GLIB_REQUIRED_VERSION=2.28.3
 +AM_PATH_GTK_3_0($GTK_REQUIRED_VERSION, :, AC_MSG_ERROR(Test for GTK+ failed.))
@@ -34,6 +34,7 @@
 +AC_CHECK_LIB([M3d++], [cairo_image_surface_create], [], [AC_MSG_ERROR([M3d++ ( http://m3dlib.tuxfamily.org ) est necessaire])])
 +AC_DEFINE(ENABLE_GTK, 1, [Défini si GTK doit être supporté])
 +fi
++AM_CONDITIONAL([ENABLE_GTK], [test x$withgtk = xtrue])
 +AC_ARG_WITH(debug,  [  --without-debug       build without debug support], [withdebug=true], [withdebug=false])
 +AC_MSG_RESULT([XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 +with-debug $withdebug
