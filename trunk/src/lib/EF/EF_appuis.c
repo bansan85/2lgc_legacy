@@ -69,13 +69,13 @@ int EF_appuis_ajout(Projet *projet, Type_EF_Appui x, Type_EF_Appui y, Type_EF_Ap
     
     // Trivial
     list_mvrear(projet->ef_donnees.appuis);
-    appui_nouveau.x = x;
+    appui_nouveau.ux = x;
     switch (x)
     {
         case EF_APPUI_LIBRE :
         case EF_APPUI_BLOQUE :
         {
-            appui_nouveau.x_donnees = NULL;
+            appui_nouveau.ux_donnees = NULL;
             break;
         }
         default:
@@ -84,13 +84,13 @@ int EF_appuis_ajout(Projet *projet, Type_EF_Appui x, Type_EF_Appui y, Type_EF_Ap
             break;
         }
     }
-    appui_nouveau.y = y;
+    appui_nouveau.uy = y;
     switch (y)
     {
         case EF_APPUI_LIBRE :
         case EF_APPUI_BLOQUE :
         {
-            appui_nouveau.y_donnees = NULL;
+            appui_nouveau.uy_donnees = NULL;
             break;
         }
         default:
@@ -99,13 +99,13 @@ int EF_appuis_ajout(Projet *projet, Type_EF_Appui x, Type_EF_Appui y, Type_EF_Ap
             break;
         }
     }
-    appui_nouveau.z = z;
+    appui_nouveau.uz = z;
     switch (z)
     {
         case EF_APPUI_LIBRE :
         case EF_APPUI_BLOQUE :
         {
-            appui_nouveau.z_donnees = NULL;
+            appui_nouveau.uz_donnees = NULL;
             break;
         }
         default:

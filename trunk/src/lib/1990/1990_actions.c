@@ -437,7 +437,8 @@ void *_1990_action_cherche_charge(Projet *projet, size_t num_action, size_t num_
 
 int _1990_action_deplace_charge(Projet *projet, size_t action_src, size_t charge_src,
   size_t action_dest)
-/* Description : Déplace une charge d'une action à l'autre
+/* Description : Déplace une charge d'une action à l'autre. Décrémente également le numéro
+ *               des charges afin que la liste des numéros soit toujours continue.
  * Paramètres : Projet *projet : la variable projet,
  *              size_t action_src : numéro de l'action où se situe la charge à déplacer,
  *              size_t charge_src : numéro de la charge à déplacer,
@@ -462,37 +463,46 @@ int _1990_action_deplace_charge(Projet *projet, size_t action_src, size_t charge
     if (action_src == action_dest)
         return 0;
     list_mvfront(projet->actions);
+    // On cherche l'action qui contient la charge
     do
     {
         Action *action = (Action*)list_curr(projet->actions);
         
+    // Lorsqu'elle est trouvée,
         if (action->numero == action_src)
         {
             BUGMSG(action->charges, -1, "_1990_action_deplace_charge\n");
             BUGMSG(list_size(action->charges), -1, "_1990_action_deplace_charge\n");
             
             list_mvfront(action->charges);
+    //     Pour chaque charge de l'action en cours Faire
             do
             {
                 Charge_Noeud *charge = (Charge_Noeud*)list_curr(action->charges);
                 
+    //         Si la charge est celle à supprimer Alors
                 if (charge->numero == charge_src)
                 {
 #ifdef ENABLE_GTK
+    //             On la supprime du tree-view-charge
                     gtk_tree_store_remove(list_gtk_1990_actions->tree_store_charges, &charge->Iter);
 #endif
-                    charge = (Charge_Noeud*)list_curr(action->charges);
+    //             et de la liste des charges tout en conservant les données
+    //               de la charge dans charge_data.
                     charge_data = list_remove_curr(action->charges);
                     charge = (Charge_Noeud*)list_curr(action->charges);
                 }
                 
+    //         Sinon Si la charge possède un numéro supérieur à la charge supprimée alors
                 if ((charge_data != NULL) && (charge != NULL) && (charge->numero > charge_src))
                 {
+    //             On décrémente son numéro dans le tree-view
                     charge->numero--;
 #ifdef ENABLE_GTK
                     gtk_tree_store_set(list_gtk_1990_actions->tree_store_charges, &charge->Iter, 0, charge->numero, -1);
 #endif
                 }
+    //     FinPour
             }
             while (list_mvnext(action->charges) != NULL);
         }
@@ -547,6 +557,108 @@ int _1990_action_deplace_charge(Projet *projet, size_t action_src, size_t charge
         }
     }
     while ((list_mvnext(projet->actions) != NULL) && (charge_data != NULL));
+    
+    return 0;
+}
+
+
+int _1990_action_supprime_charge(Projet *projet, size_t action_num, size_t charge_num)
+/* Description : Supprime une charge. Décrémente également le numéro des charges afin que
+ *               la liste des numéros soit toujours continue.
+ * Paramètres : Projet *projet : la variable projet,
+ *              size_t action_num : numéro de l'action où se situe la charge à déplacer,
+ *              size_t charge_num : numéro de la charge à déplacer,
+ * Valeur renvoyée :
+ *   Succès : 0
+ *   Échec : -1 en cas de paramètres invalides :
+ *             (projet == NULL) ou
+ *             (projet->actions == NULL) ou
+ *             (list_size(projet->actions)-1 < MAX(action_src, action_dest))
+ */
+{
+    Charge_Noeud            *charge_data = NULL;
+#ifdef ENABLE_GTK
+    List_Gtk_1990_Actions   *list_gtk_1990_actions = &projet->list_gtk._1990_actions;
+#endif
+    
+    BUGMSG(projet, -1, "_1990_action_supprime_charge\n");
+    BUGMSG(projet->actions, -1, "_1990_action_supprime_charge\n");
+    BUGMSG(list_size(projet->actions)-1 >= action_num, -1, "_1990_action_supprime_charge\n");
+    
+    list_mvfront(projet->actions);
+    // On cherche l'action qui contient la charge
+    do
+    {
+        Action *action = (Action*)list_curr(projet->actions);
+    // Lorsqu'elle est trouvée,
+        if (action->numero == action_num)
+        {
+            BUGMSG(action->charges, -1, "_1990_action_supprime_charge\n");
+            BUGMSG(list_size(action->charges), -1, "_1990_action_supprime_charge\n");
+            
+            list_mvfront(action->charges);
+    //     Pour chaque charge de l'action en cours Faire
+            do
+            {
+                Charge_Noeud *charge = (Charge_Noeud*)list_curr(action->charges);
+    //         Si la charge est celle à supprimer Alors
+                if (charge->numero == charge_num)
+                {
+#ifdef ENABLE_GTK
+    //             On la supprime du tree-view-charge
+                    gtk_tree_store_remove(list_gtk_1990_actions->tree_store_charges, &charge->Iter);
+#endif
+    //             et de la liste des charges tout en conservant les données
+    //               de la charge dans charge_data.
+                    charge_data = list_remove_curr(action->charges);
+                    charge = (Charge_Noeud*)list_curr(action->charges);
+                }
+    //         Sinon Si la charge possède un numéro supérieur à la charge supprimée alors
+                if ((charge_data != NULL) && (charge != NULL) && (charge->numero > charge_num))
+                {
+    //             On décrémente son numéro dans le tree-view
+                    charge->numero--;
+#ifdef ENABLE_GTK
+                    gtk_tree_store_set(list_gtk_1990_actions->tree_store_charges, &charge->Iter, 0, charge->numero, -1);
+#endif
+                }
+    //     FinPour
+            }
+            while (list_mvnext(action->charges) != NULL);
+        }
+    }
+    while ((list_mvnext(projet->actions) != NULL) && (charge_data == NULL));
+    
+    BUGMSG(charge_data, -1, "_1990_action_supprime_charge\n");
+    
+    switch (charge_data->type)
+    {
+        case CHARGE_NOEUD :
+        {
+            free(charge_data->description);
+            free(charge_data);
+            break;
+        }
+        case CHARGE_BARRE_PONCTUELLE :
+        {
+            Charge_Barre_Ponctuelle *charge = (Charge_Barre_Ponctuelle*)charge_data;
+            free(charge->description);
+            free(charge);
+            break;
+        }
+        case CHARGE_BARRE_REPARTIE_UNIFORME :
+        {
+            Charge_Barre_Repartie_Uniforme *charge = (Charge_Barre_Repartie_Uniforme*)charge_data;
+            free(charge->description);
+            free(charge);
+            break;
+        }
+        default :
+        {
+            BUGMSG(0, -1, "_1990_action_supprime_charge : charge_data->type\n");
+            break;
+        }
+    }
     
     return 0;
 }

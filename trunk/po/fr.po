@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2011-12-19 21:19+0100\n"
-"PO-Revision-Date: 2011-12-25 22:09+0100\n"
+"POT-Creation-Date: 2012-01-08 22:22+0100\n"
+"PO-Revision-Date: 2012-01-08 22:23+0100\n"
 "Last-Translator: LE GARREC Vincent <vlg@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -92,6 +92,9 @@ msgstr "Charge"
 
 msgid "Valeur"
 msgstr "Valeur"
+
+msgid "Charge nodale"
+msgstr "Charge nodale"
 
 msgid ""
 "La génération des pondérations est impossible.\n"
@@ -426,6 +429,42 @@ msgstr "%s : Paramètre invalide : %s %s\n"
 
 msgid "Erreur lors de la résolution de la matrice.\n"
 msgstr "Erreur lors de la résolution de la matrice.\n"
+
+msgid "Ajout d'une charge au noeud"
+msgstr "Ajout d'une charge au noeud"
+
+msgid "Modification d'une charge au noeud"
+msgstr "Modification d'une charge au noeud"
+
+msgid "Charge :"
+msgstr "Charge :"
+
+msgid "Description :"
+msgstr "Description :"
+
+msgid "Fx :"
+msgstr ""
+
+msgid "Fy :"
+msgstr ""
+
+msgid "Fz :"
+msgstr ""
+
+msgid "Mx :"
+msgstr ""
+
+msgid "My :"
+msgstr ""
+
+msgid "Mz :"
+msgstr ""
+
+msgid "Noeud :"
+msgstr "Noeud :"
+
+msgid "Annuler"
+msgstr ""
 
 msgid "Noeud n°%d introuvable.\n"
 msgstr "Noeud n°%d introuvable.\n"

@@ -83,19 +83,65 @@ typedef struct __List_Gtk_1990_Actions
     GtkWidget       *scroll_actions;
     GtkTreeStore    *tree_store_actions;
     GtkTreeView     *tree_view_actions;
+    GtkTreeSelection *tree_select_actions;
     GtkListStore    *choix_type_action;
     GtkWidget       *toolbar_actions;
-    GtkWidget       *menu_type_list;
-    LIST            *menu_list_widget;
+    GtkWidget       *menu_type_list_action;
+    LIST            *menu_list_widget_action;
     GtkWidget       *img_action_ajout;
     GtkToolItem     *item_action_ajout;
     GtkWidget       *img_action_suppr;
     GtkToolItem     *item_action_suppr;
     
     GtkWidget       *scroll_charges;
+    GtkWidget       *table_charges;
     GtkTreeStore    *tree_store_charges;
     GtkTreeView     *tree_view_charges;
+    GtkTreeSelection *tree_select_charges;
+    GtkWidget       *toolbar_charges;
+    GtkWidget       *menu_type_list_charge;
+    LIST            *menu_list_widget_charge;
+    GtkWidget       *img_charge_ajout;
+    GtkToolItem     *item_charge_ajout;
+    GtkWidget       *img_charge_suppr;
+    GtkToolItem     *item_charge_suppr;
 } List_Gtk_1990_Actions;
+
+
+typedef struct __List_Gtk_EF_Charge_Noeud
+{
+    GtkWidget       *window;
+    GtkWidget       *table;
+    
+    GtkWidget       *label_charge;
+    GtkWidget       *combobox_charge;
+    GtkWidget       *label_description;
+    GtkWidget       *text_view_description;
+    GtkWidget       *label_fx;
+    GtkWidget       *text_view_fx;
+    GtkWidget       *sw_fx;
+    GtkWidget       *label_fy;
+    GtkWidget       *text_view_fy;
+    GtkWidget       *sw_fy;
+    GtkWidget       *label_fz;
+    GtkWidget       *text_view_fz;
+    GtkWidget       *sw_fz;
+    GtkWidget       *label_mx;
+    GtkWidget       *text_view_mx;
+    GtkWidget       *sw_mx;
+    GtkWidget       *label_my;
+    GtkWidget       *text_view_my;
+    GtkWidget       *sw_my;
+    GtkWidget       *label_mz;
+    GtkWidget       *text_view_mz;
+    GtkWidget       *sw_mz;
+    GtkWidget       *label_noeud;
+    GtkWidget       *text_view_noeud;
+    GtkWidget       *sw_noeud;
+    GtkWidget       *table_buttons;
+    GtkWidget       *button_ajouter;
+    GtkWidget       *button_annuler;
+} List_Gtk_EF_Charge_Noeud;
 
 #endif
 
@@ -176,12 +222,12 @@ typedef enum __Charge_Type
 typedef struct __EF_Appui
 {
     int             numero;         // Numéro de l'appui
-    Type_EF_Appui   x;              // Degré de liberté de la direction x
-    void            *x_donnees;     // Données complémentaire si nécessaire.
-    Type_EF_Appui   y;
-    void            *y_donnees;
-    Type_EF_Appui   z;
-    void            *z_donnees;
+    Type_EF_Appui   ux;              // Degré de liberté de la direction x
+    void            *ux_donnees;     // Données complémentaire si nécessaire.
+    Type_EF_Appui   uy;
+    void            *uy_donnees;
+    Type_EF_Appui   uz;
+    void            *uz_donnees;
     Type_EF_Appui   rx;             // Degré de liberté de la rotation autour de l'axe x
     void            *rx_donnees;
     Type_EF_Appui   ry;
@@ -208,9 +254,9 @@ typedef struct __Charge_Noeud
 #endif                  
     char                *description;
     EF_Noeud            *noeud;
-    double              x;
-    double              y;
-    double              z;
+    double              fx;
+    double              fy;
+    double              fz;
     double              mx;
     double              my;
     double              mz;
@@ -552,11 +598,19 @@ typedef struct __Comp_Gtk
 } Comp_Gtk;
 
 
+typedef struct __List_Gtk_m3d
+{
+    GtkWidget   *drawing;
+    gpointer    data;
+} List_Gtk_m3d;
+
+
 typedef struct __List_Gtk
 {                       // Contient toutes les données pour l'interface graphique GTK+3
     List_Gtk_1990_Actions   _1990_actions;     // pour l'Eurocode 0
     List_Gtk_1990_Groupes   _1990_groupes;     // pour l'Eurocode 0
-    void                    *m3d;       // pour l'affichage graphique de la structure
+    List_Gtk_EF_Charge_Noeud ef_charge_noeud;
+    List_Gtk_m3d            m3d;       // pour l'affichage graphique de la structure
     Comp_Gtk                comp;      // tous les composants grahpiques
 } List_Gtk;
 #endif

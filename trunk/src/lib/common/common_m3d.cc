@@ -56,10 +56,8 @@ int m3d_init(Projet *projet)
     
     BUGMSG(projet, -1, "m3d_init\n");
     
-    projet->list_gtk.m3d = (List_Gtk_m3d*)malloc(sizeof(List_Gtk_m3d));
-    BUGMSG(projet->list_gtk.m3d, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "m3d_init");
     M3d_init();
-    m3d = (List_Gtk_m3d*)projet->list_gtk.m3d;
+    m3d = &projet->list_gtk.m3d;
     m3d->drawing = gtk_drawing_area_new();
     m3d->data = malloc(sizeof(struct SGlobalData));
     BUGMSG(m3d->data, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "m3d_init");
@@ -129,7 +127,6 @@ int m3d_camera_axe_x_z(Projet *projet)
     EF_Noeud            *noeud;
     
     BUGMSG(projet, -1, "m3d_camera_axe_x_z\n");
-    BUGMSG(projet->list_gtk.m3d, -1, "m3d_camera_axe_x_z\n");
     BUGMSG(projet->ef_donnees.noeuds, -1, "m3d_camera_axe_x_z\n");
     if (list_size(projet->ef_donnees.noeuds) <= 1)
         return 0;
@@ -148,7 +145,7 @@ int m3d_camera_axe_x_z(Projet *projet)
         y = MIN(y, noeud->position.y-sqrt((noeud->position.x-x)*(noeud->position.x-x)+(noeud->position.z-z)*(noeud->position.z-z)));
     }
     
-    m3d = (List_Gtk_m3d*)projet->list_gtk.m3d;
+    m3d = &projet->list_gtk.m3d;
     BUGMSG(m3d->data, -1, "m3d_camera_axe_x_z\n");
     vue = (struct SGlobalData*)m3d->data;
     
@@ -180,9 +177,8 @@ int m3d_genere_graphique(Projet *projet)
     struct SGlobalData  *vue;
     
     BUGMSG(projet, -1, "m3d_genere_graphique\n");
-    BUGMSG(projet->list_gtk.m3d, -1, "m3d_genere_graphique\n");
     BUGMSG(projet->ef_donnees.noeuds, -1, "m3d_genere_graphique\n");
-    m3d = (List_Gtk_m3d*)projet->list_gtk.m3d;
+    m3d = &projet->list_gtk.m3d;
     BUGMSG(m3d->data, -1, "m3d_genere_graphique\n");
     vue = (struct SGlobalData*)m3d->data;
     
@@ -469,12 +465,10 @@ void m3d_free(Projet *projet)
     List_Gtk_m3d *m3d;
     
     BUGMSG(projet, , "m3d_free\n");
-    BUGMSG(projet->list_gtk.m3d, , "m3d_free\n");
     
-    m3d = (List_Gtk_m3d*)projet->list_gtk.m3d;
+    m3d = &projet->list_gtk.m3d;
     free(m3d->data);
-    free(projet->list_gtk.m3d);
-    projet->list_gtk.m3d = NULL;
+    m3d->data = NULL;
     
     return;
 }
