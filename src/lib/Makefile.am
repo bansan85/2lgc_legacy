@@ -43,7 +43,9 @@ libeurocodes_la_SOURCES =	1990/1990_actions.c \
 if ENABLE_GTK
 libeurocodes_la_SOURCES +=	common/common_m3d.cc \
 							1990/1990_gtk_groupes.c \
-							1990/1990_gtk_actions.c
+							1990/1990_gtk_actions.c \
+							EF/EF_gtk_charge_noeud.c \
+							common/common_gtk.c
 endif
 
 libeurocodes_ladir = $(includedir)/2lgc
@@ -74,5 +76,7 @@ libeurocodes_la_HEADERS =	1990/1990_actions.h \
 if ENABLE_GTK
 libeurocodes_la_HEADERS +=	common/common_m3d.hpp \
 							1990/1990_gtk_groupes.h \
-							1990/1990_gtk_actions.h
+							1990/1990_gtk_actions.h \
+							EF/EF_gtk_charge_noeud.h \
+							common/common_gtk.h
 endif

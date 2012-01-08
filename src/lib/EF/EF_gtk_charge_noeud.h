@@ -16,32 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __COMMON_SHOW_H
-#define __COMMON_SHOW_H
+#ifndef __EF_GTK_CHARGE_NOEUD_H
+#define __EF_GTK_CHARGE_NOEUD_H
 
 #include "config.h"
 #ifdef ENABLE_GTK
 #include <gtk/gtk.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include "common_projet.h"
 
-int m3d_init(Projet *projet);
-
-gboolean m3d_draw(GtkWidget *drawing, GdkEventExpose* ev, gpointer *data);
-gboolean m3d_configure_event(GtkWidget *drawing, GdkEventConfigure * ev, gpointer *data);
-
-int m3d_camera_axe_x_z(Projet *projet);
-int m3d_genere_graphique(Projet *projet);
-
-void m3d_free(Projet *projet);
-
-#ifdef __cplusplus
-}
-#endif
+void EF_gtk_charge_noeud(Projet *projet, gboolean nouveau, gint action_defaut);
 
 #endif
+
 #endif

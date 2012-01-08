@@ -36,9 +36,11 @@
 #include "common_projet.h"
 #include "common_tooltip.h"
 #include "common_maths.h"
+#include "common_gtk.h"
 #include "EF_charge_barre_ponctuelle.h"
 #include "EF_charge_noeud.h"
 #include "EF_charge_barre_repartie_uniforme.h"
+#include "EF_gtk_charge_noeud.h"
 
 const GtkTargetEntry drag_targets_actions[] = { {(gchar*)PACKAGE"1_SAME_PROC", GTK_TARGET_SAME_APP, 0}}; 
 
@@ -90,7 +92,6 @@ void _1990_gtk_tree_view_charges_cell_edited(GtkCellRendererText *cell __attribu
  */
 {
     List_Gtk_1990_Actions *list_gtk_1990_actions = &projet->list_gtk._1990_actions;
-    GtkTreeSelection *selection = gtk_tree_view_get_selection(list_gtk_1990_actions->tree_view_actions);
     GtkTreePath     *path = gtk_tree_path_new_from_string (path_string);
     GtkTreeIter     iter, iter_action;
     GtkTreeModel    *model_action;
@@ -100,7 +101,7 @@ void _1990_gtk_tree_view_charges_cell_edited(GtkCellRendererText *cell __attribu
     char            *description;
     Charge_Noeud    *charge;
     
-    if (!gtk_tree_selection_get_selected(selection, &model_action, &iter_action))
+    if (!gtk_tree_selection_get_selected(list_gtk_1990_actions->tree_select_actions, &model_action, &iter_action))
         return;
     gtk_tree_model_get(model_action, &iter_action, 0, &numero_action, -1);
     
@@ -134,7 +135,6 @@ void _1990_gtk_tree_view_actions_cursor_changed(GtkTreeView *tree_view __attribu
  */
 {
     List_Gtk_1990_Actions   *list_gtk_1990_actions;
-    GtkTreeSelection *selection = gtk_tree_view_get_selection(tree_view);
     GtkTreeModel    *model;
     GtkTreeIter     iter;
     int             numero;
@@ -146,7 +146,7 @@ void _1990_gtk_tree_view_actions_cursor_changed(GtkTreeView *tree_view __attribu
     
     list_gtk_1990_actions = &projet->list_gtk._1990_actions;
     
-    if (!gtk_tree_selection_get_selected(selection, &model, &iter))
+    if (!gtk_tree_selection_get_selected(list_gtk_1990_actions->tree_select_actions, &model, &iter))
         return;
     gtk_tree_model_get(model, &iter, 0, &numero, 1, &nom, -1);
     
@@ -171,40 +171,34 @@ void _1990_gtk_tree_view_actions_cursor_changed(GtkTreeView *tree_view __attribu
                     sprintf(tmp, "%d", charge->noeud->numero);
                     description = realloc(description, (strlen(description) + strlen(tmp)+1)*sizeof(char));
                     strcat(description, tmp);
-                    common_math_double_to_char(charge->x, tmp);
-                    description = realloc(description, (strlen(description) + strlen(",  N") + strlen("Fx : ") + strlen(tmp)+1)*sizeof(char));
-                    strcat(description, ", ");
-                    strcat(description, "Fx : ");
+                    common_math_double_to_char(charge->fx, tmp);
+                    description = realloc(description, (strlen(description) + strlen(", Fx :  N") + strlen(tmp)+1)*sizeof(char));
+                    strcat(description, ", Fx : ");
                     strcat(description, tmp);
                     strcat(description, " N");
-                    common_math_double_to_char(charge->y, tmp);
-                    description = realloc(description, (strlen(description) + strlen(",  N") + strlen("Fy : ") + strlen(tmp)+1)*sizeof(char));
-                    strcat(description, ", ");
-                    strcat(description, "Fy : ");
+                    common_math_double_to_char(charge->fy, tmp);
+                    description = realloc(description, (strlen(description) + strlen(", Fy :  N") + strlen(tmp)+1)*sizeof(char));
+                    strcat(description, ", Fy : ");
                     strcat(description, tmp);
                     strcat(description, " N");
-                    common_math_double_to_char(charge->z, tmp);
-                    description = realloc(description, (strlen(description) + strlen(",  N") + strlen("Fz : ") + strlen(tmp)+1)*sizeof(char));
-                    strcat(description, ", ");
-                    strcat(description, "Fz : ");
+                    common_math_double_to_char(charge->fz, tmp);
+                    description = realloc(description, (strlen(description) + strlen(", Fz :  N") + strlen(tmp)+1)*sizeof(char));
+                    strcat(description, ", Fz : ");
                     strcat(description, tmp);
                     strcat(description, " N");
                     common_math_double_to_char(charge->mx, tmp);
-                    description = realloc(description, (strlen(description) + strlen(",  N") + strlen("Mx : ") + strlen(tmp)+1)*sizeof(char));
-                    strcat(description, ", ");
-                    strcat(description, "Mx : ");
+                    description = realloc(description, (strlen(description) + strlen(", Mx :  N") + strlen(tmp)+1)*sizeof(char));
+                    strcat(description, ", Mx : ");
                     strcat(description, tmp);
                     strcat(description, " N");
                     common_math_double_to_char(charge->my, tmp);
-                    description = realloc(description, (strlen(description) + strlen(",  N") + strlen("My : ") + strlen(tmp)+1)*sizeof(char));
-                    strcat(description, ", ");
-                    strcat(description, "My : ");
+                    description = realloc(description, (strlen(description) + strlen(", My :  N") + strlen(tmp)+1)*sizeof(char));
+                    strcat(description, ", My : ");
                     strcat(description, tmp);
                     strcat(description, " N");
                     common_math_double_to_char(charge->mz, tmp);
-                    description = realloc(description, (strlen(description) + strlen(",  N") + strlen("Mz : ") + strlen(tmp)+1)*sizeof(char));
-                    strcat(description, ", ");
-                    strcat(description, "Mz : ");
+                    description = realloc(description, (strlen(description) + strlen(", Mz :  N") + strlen(tmp)+1)*sizeof(char));
+                    strcat(description, ", Mz : ");
                     strcat(description, tmp);
                     strcat(description, " N");
                     
@@ -231,39 +225,33 @@ void _1990_gtk_tree_view_actions_cursor_changed(GtkTreeView *tree_view __attribu
                     strcat(description, tmp);
                     strcat(description, " m");
                     common_math_double_to_char(charge->fx, tmp);
-                    description = realloc(description, (strlen(description) + strlen(",  N") + strlen("Fx : ") + strlen(tmp)+1)*sizeof(char));
-                    strcat(description, ", ");
-                    strcat(description, "Fx : ");
+                    description = realloc(description, (strlen(description) + strlen(", Fx :  N") + strlen(tmp)+1)*sizeof(char));
+                    strcat(description, ", Fx : ");
                     strcat(description, tmp);
                     strcat(description, " N");
                     common_math_double_to_char(charge->fy, tmp);
-                    description = realloc(description, (strlen(description) + strlen(",  N") + strlen("Fy : ") + strlen(tmp)+1)*sizeof(char));
-                    strcat(description, ", ");
-                    strcat(description, "Fy : ");
+                    description = realloc(description, (strlen(description) + strlen(", Fy :  N") + strlen(tmp)+1)*sizeof(char));
+                    strcat(description, ", Fy : ");
                     strcat(description, tmp);
                     strcat(description, " N");
                     common_math_double_to_char(charge->fz, tmp);
-                    description = realloc(description, (strlen(description) + strlen(",  N") + strlen("Fz : ") + strlen(tmp)+1)*sizeof(char));
-                    strcat(description, ", ");
-                    strcat(description, "Fz : ");
+                    description = realloc(description, (strlen(description) + strlen(", Fz :  N") + strlen(tmp)+1)*sizeof(char));
+                    strcat(description, ", Fz : ");
                     strcat(description, tmp);
                     strcat(description, " N");
                     common_math_double_to_char(charge->mx, tmp);
-                    description = realloc(description, (strlen(description) + strlen(",  N") + strlen("Mx : ") + strlen(tmp)+1)*sizeof(char));
-                    strcat(description, ", ");
-                    strcat(description, "Mx : ");
+                    description = realloc(description, (strlen(description) + strlen(", Mx :  N") + strlen(tmp)+1)*sizeof(char));
+                    strcat(description, ", Mx : ");
                     strcat(description, tmp);
                     strcat(description, " N");
                     common_math_double_to_char(charge->my, tmp);
-                    description = realloc(description, (strlen(description) + strlen(",  N") + strlen("My : ") + strlen(tmp)+1)*sizeof(char));
-                    strcat(description, ", ");
-                    strcat(description, "My : ");
+                    description = realloc(description, (strlen(description) + strlen(", My :  N") + strlen(tmp)+1)*sizeof(char));
+                    strcat(description, ", My : ");
                     strcat(description, tmp);
                     strcat(description, " N");
                     common_math_double_to_char(charge->mz, tmp);
-                    description = realloc(description, (strlen(description) + strlen(",  N") + strlen("Mz : ") + strlen(tmp)+1)*sizeof(char));
-                    strcat(description, ", ");
-                    strcat(description, "Mz : ");
+                    description = realloc(description, (strlen(description) + strlen(", Mz :  N") + strlen(tmp)+1)*sizeof(char));
+                    strcat(description, ", Mz : ");
                     strcat(description, tmp);
                     strcat(description, " N");
                     
@@ -308,38 +296,32 @@ void _1990_gtk_tree_view_actions_cursor_changed(GtkTreeView *tree_view __attribu
                     }
                     common_math_double_to_char(charge->fx, tmp);
                     description = realloc(description, (strlen(description) + strlen(",  N") + strlen("Fx : ") + strlen(tmp)+1)*sizeof(char));
-                    strcat(description, ", ");
-                    strcat(description, "Fx : ");
+                    strcat(description, ", Fx : ");
                     strcat(description, tmp);
                     strcat(description, " N");
                     common_math_double_to_char(charge->fy, tmp);
                     description = realloc(description, (strlen(description) + strlen(",  N") + strlen("Fy : ") + strlen(tmp)+1)*sizeof(char));
-                    strcat(description, ", ");
-                    strcat(description, "Fy : ");
+                    strcat(description, ", Fy : ");
                     strcat(description, tmp);
                     strcat(description, " N");
                     common_math_double_to_char(charge->fz, tmp);
                     description = realloc(description, (strlen(description) + strlen(",  N") + strlen("Fz : ") + strlen(tmp)+1)*sizeof(char));
-                    strcat(description, ", ");
-                    strcat(description, "Fz : ");
+                    strcat(description, ", Fz : ");
                     strcat(description, tmp);
                     strcat(description, " N");
                     common_math_double_to_char(charge->mx, tmp);
                     description = realloc(description, (strlen(description) + strlen(",  N") + strlen("Mx : ") + strlen(tmp)+1)*sizeof(char));
-                    strcat(description, ", ");
-                    strcat(description, "Mx : ");
+                    strcat(description, ", Mx : ");
                     strcat(description, tmp);
                     strcat(description, " N");
                     common_math_double_to_char(charge->my, tmp);
                     description = realloc(description, (strlen(description) + strlen(",  N") + strlen("My : ") + strlen(tmp)+1)*sizeof(char));
-                    strcat(description, ", ");
-                    strcat(description, "My : ");
+                    strcat(description, ", My : ");
                     strcat(description, tmp);
                     strcat(description, " N");
                     common_math_double_to_char(charge->mz, tmp);
                     description = realloc(description, (strlen(description) + strlen(",  N") + strlen("Mz : ") + strlen(tmp)+1)*sizeof(char));
-                    strcat(description, ", ");
-                    strcat(description, "Mz : ");
+                    strcat(description, ", Mz : ");
                     strcat(description, tmp);
                     strcat(description, " N");
                     
@@ -395,27 +377,37 @@ gboolean _1990_gtk_actions_tree_view_drag(GtkWidget *widget __attribute__((unuse
     {
         int                 num_action_dest,  num_charge_source,  num_action_source;
         GtkTreeIter         iter_action_dest, iter_charge_source, iter_action_source;
-        GtkTreeSelection    *selection_charge_source, *selection_action_source;
         GtkTreeModel        *model_charge_source, *model_action_source;
+        GList               *list, *list_fixe, *list_parcours;
         
         gtk_tree_model_get_iter(list_store, &iter_action_dest, path);
         gtk_tree_model_get(list_store, &iter_action_dest, 0, &num_action_dest, -1);
         
-        selection_action_source = gtk_tree_view_get_selection(list_gtk_1990_actions->tree_view_actions);
-        if (selection_action_source == NULL)
-            return FALSE;
-        if (!gtk_tree_selection_get_selected(selection_action_source, &model_action_source, &iter_action_source))
+        if (!gtk_tree_selection_get_selected(list_gtk_1990_actions->tree_select_actions, &model_action_source, &iter_action_source))
             return FALSE;
         gtk_tree_model_get(model_action_source, &iter_action_source, 0, &num_action_source, -1);
         
-        selection_charge_source = gtk_tree_view_get_selection(list_gtk_1990_actions->tree_view_charges);
-        if (selection_charge_source == NULL)
-            return FALSE;
-        if (!gtk_tree_selection_get_selected(selection_charge_source, &model_charge_source, &iter_charge_source))
-            return FALSE;
-        gtk_tree_model_get(model_charge_source, &iter_charge_source, 0, &num_charge_source, -1);
+        list = gtk_tree_selection_get_selected_rows(list_gtk_1990_actions->tree_select_charges, &model_charge_source);
+        // On converti les lignes en ligne fixe
+        list_parcours = g_list_last(list);
+        list_fixe = NULL;
+        for(;list_parcours != NULL; list_parcours = g_list_previous(list_parcours))
+            list_fixe = g_list_append(list_fixe, gtk_tree_row_reference_new(model_charge_source, (GtkTreePath*)list_parcours->data));
+        g_list_foreach(list, (GFunc)gtk_tree_path_free, NULL);
+        g_list_free(list);
         
-        _1990_action_deplace_charge(projet, num_action_source, num_charge_source, num_action_dest);
+        // On travaille sur les lignes fixes
+        list_parcours = g_list_last(list_fixe);
+        for(;list_parcours != NULL; list_parcours = g_list_previous(list_parcours))
+        {
+            if (gtk_tree_model_get_iter(model_charge_source, &iter_charge_source, gtk_tree_row_reference_get_path((GtkTreeRowReference*)list_parcours->data)))
+            {
+                gtk_tree_model_get(model_charge_source, &iter_charge_source, 0, &num_charge_source, -1);
+                _1990_action_deplace_charge(projet, num_action_source, num_charge_source, num_action_dest);
+            }
+        }
+        g_list_foreach(list_fixe, (GFunc)gtk_tree_row_reference_free, NULL);
+        g_list_free(list_fixe);
     }
     
     return FALSE;
@@ -528,12 +520,12 @@ void _1990_gtk_menu_nouvelle_action_activate(GtkMenuItem *menuitem, Projet *proj
     int                     i = 0;
     char                    *tmp = (char*)malloc(sizeof(char)*(strlen(gettext("Sans nom")+10)));
     
-    if (list_size(list_gtk_1990_actions->menu_list_widget) == 0)
+    if (list_size(list_gtk_1990_actions->menu_list_widget_action) == 0)
         return;
-    list_mvfront(list_gtk_1990_actions->menu_list_widget);
+    list_mvfront(list_gtk_1990_actions->menu_list_widget_action);
     do
     {
-        if ((GTK_IS_MENU_TOOL_BUTTON(menuitem)) || (*(GtkMenuItem **)list_curr(list_gtk_1990_actions->menu_list_widget) == menuitem))
+        if ((GTK_IS_MENU_TOOL_BUTTON(menuitem)) || (*(GtkMenuItem **)list_curr(list_gtk_1990_actions->menu_list_widget_action) == menuitem))
         {
             Action      *action;
             GtkTreePath *path;
@@ -551,7 +543,7 @@ void _1990_gtk_menu_nouvelle_action_activate(GtkMenuItem *menuitem, Projet *proj
             return;
         }
         i++;
-    } while (list_mvnext(list_gtk_1990_actions->menu_list_widget));
+    } while (list_mvnext(list_gtk_1990_actions->menu_list_widget_action));
     
     return;
 }
@@ -565,16 +557,15 @@ void _1990_gtk_menu_suppr_action_activate(GtkToolButton *toolbutton __attribute_
  */
 {
     List_Gtk_1990_Actions *list_gtk_1990_actions = &projet->list_gtk._1990_actions;
-    GtkTreeSelection *selection = gtk_tree_view_get_selection(list_gtk_1990_actions->tree_view_actions);
     GtkTreeIter     iter;
     GtkTreeModel    *model;
     size_t          numero_action;
     int             numer;
     
-    if (!gtk_tree_selection_get_selected(selection, &model, &iter))
+    if (!gtk_tree_selection_get_selected(list_gtk_1990_actions->tree_select_actions, &model, &iter))
         return;
     
-    gtk_tree_model_get(GTK_TREE_MODEL(list_gtk_1990_actions->tree_store_actions), &iter, 0, &numer, -1);
+    gtk_tree_model_get(model, &iter, 0, &numer, -1);
     numero_action = numer;
     gtk_tree_store_remove(list_gtk_1990_actions->tree_store_actions, &iter);
     _1990_action_free_num(projet, numero_action);
@@ -590,6 +581,98 @@ void _1990_gtk_menu_suppr_action_activate(GtkToolButton *toolbutton __attribute_
         } while (list_mvnext(projet->actions) != NULL);
     }
     gtk_tree_store_clear(list_gtk_1990_actions->tree_store_charges);
+    return;
+}
+
+
+void _1990_gtk_menu_nouvelle_charge_ponctuel_activate(GtkMenuItem *menuitem __attribute__((unused)), Projet* projet)
+{
+    Action  *action;
+    
+    BUGMSG(projet, , "_1990_gtk_menu_nouvelle_charge_ponctuel_activate\n");
+    BUGMSG(projet->actions, , "_1990_gtk_menu_nouvelle_charge_ponctuel_activate\n");
+    BUGMSG(list_size(projet->actions) != 0, , "_1990_gtk_menu_nouvelle_charge_ponctuel_activate\n");
+    
+    action = list_curr(projet->actions);
+    
+    EF_gtk_charge_noeud(projet, TRUE, action->numero);
+    return;
+}
+
+
+void _1990_gtk_actions_select_changed(GtkTreeSelection *treeselection __attribute__((unused)), Projet *projet)
+{
+    List_Gtk_1990_Actions   *list_gtk_1990_actions = &projet->list_gtk._1990_actions;
+    
+    if (!gtk_tree_selection_get_selected(list_gtk_1990_actions->tree_select_actions, NULL, NULL))
+    {
+        gtk_widget_set_sensitive(GTK_WIDGET(list_gtk_1990_actions->item_action_suppr), FALSE);
+        gtk_widget_set_sensitive(GTK_WIDGET(list_gtk_1990_actions->item_charge_ajout), FALSE);
+    }
+    else
+    {
+        gtk_widget_set_sensitive(GTK_WIDGET(list_gtk_1990_actions->item_action_suppr), TRUE);
+        gtk_widget_set_sensitive(GTK_WIDGET(list_gtk_1990_actions->item_charge_ajout), TRUE);
+    }
+    
+    if (gtk_tree_selection_count_selected_rows(list_gtk_1990_actions->tree_select_charges) == 0)
+        gtk_widget_set_sensitive(GTK_WIDGET(list_gtk_1990_actions->item_charge_suppr), FALSE);
+    else
+        gtk_widget_set_sensitive(GTK_WIDGET(list_gtk_1990_actions->item_charge_suppr), TRUE);
+    
+    return;
+}
+
+
+void _1990_gtk_menu_suppr_charge_clicked(GtkToolButton *toolbutton __attribute__((unused)), Projet *projet)
+/* Description : Supprimer l'action sélectionnée
+ * Paramètres : GtkToolButton *toolbutton : composant à l'origine de l'évènement
+ *            : Projet *projet : la variable projet
+ * Valeur renvoyée : Aucune
+ */
+{
+    List_Gtk_1990_Actions *list_gtk_1990_actions = &projet->list_gtk._1990_actions;
+    GtkTreeIter     iter;
+    GtkTreeModel    *model;
+    size_t          numero_action, numero_charge;
+    int             numer;
+    GList           *list, *list_fixe, *list_parcours;
+    
+    if (!gtk_tree_selection_get_selected(list_gtk_1990_actions->tree_select_actions, &model, &iter))
+        return;
+    gtk_tree_model_get(model, &iter, 0, &numer, -1);
+    numero_action = numer;
+    
+    list = gtk_tree_selection_get_selected_rows(list_gtk_1990_actions->tree_select_charges, &model);
+    // On converti les lignes en ligne fixe
+    list_parcours = g_list_last(list);
+    list_fixe = NULL;
+    for(;list_parcours != NULL; list_parcours = g_list_previous(list_parcours))
+        list_fixe = g_list_append(list_fixe, gtk_tree_row_reference_new(model, (GtkTreePath*)list_parcours->data));
+    g_list_foreach(list, (GFunc)gtk_tree_path_free, NULL);
+    g_list_free(list);
+    
+    // On travaille sur les lignes fixes
+    list_parcours = g_list_first(list_fixe);
+    for(;list_parcours != NULL; list_parcours = g_list_next(list_parcours))
+    {
+        if (gtk_tree_model_get_iter(model, &iter, gtk_tree_row_reference_get_path((GtkTreeRowReference*)list_parcours->data)))
+        {
+            gtk_tree_model_get(model, &iter, 0, &numer, -1);
+            numero_charge = numer;
+            _1990_action_supprime_charge(projet, numero_action, numero_charge);
+        }
+    }
+    g_list_foreach(list_fixe, (GFunc)gtk_tree_row_reference_free, NULL);
+    g_list_free(list_fixe);
+    
+    return;
+}
+
+
+void _1990_gtk_actions_window_destroy(GtkWidget *object __attribute__((unused)), Projet *projet)
+{
+    projet->list_gtk._1990_actions.window = NULL;
     return;
 }
 
@@ -613,10 +696,8 @@ void _1990_gtk_actions(Projet *projet)
     BUGMSG(projet->actions, , "_1990_gtk_actions\n");
     
     list_gtk_1990_actions = &projet->list_gtk._1990_actions;
-    list_gtk_1990_actions->window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-    gtk_window_set_title(GTK_WINDOW(list_gtk_1990_actions->window), gettext("Actions"));
-    gtk_window_resize(GTK_WINDOW(list_gtk_1990_actions->window), 800, 600);
-    gtk_window_set_position(GTK_WINDOW(list_gtk_1990_actions->window), GTK_WIN_POS_CENTER);
+    GTK_NOUVELLE_FENETRE(list_gtk_1990_actions->window, gettext("Actions"), 800, 600);
+    g_signal_connect(G_OBJECT(list_gtk_1990_actions->window), "destroy", G_CALLBACK(_1990_gtk_actions_window_destroy), projet);
     
     list_gtk_1990_actions->table = gtk_table_new(1, 1, FALSE);
     gtk_container_add(GTK_CONTAINER(list_gtk_1990_actions->window), list_gtk_1990_actions->table);
@@ -634,6 +715,7 @@ void _1990_gtk_actions(Projet *projet)
     // 0 : numero, 1 : description, 2 : type, 3 : psi0, 4 : psi1, 5 : psi2
     list_gtk_1990_actions->tree_store_actions = gtk_tree_store_new(6, G_TYPE_INT, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_DOUBLE, G_TYPE_DOUBLE, G_TYPE_DOUBLE);
     list_gtk_1990_actions->tree_view_actions = (GtkTreeView*)gtk_tree_view_new_with_model(GTK_TREE_MODEL(list_gtk_1990_actions->tree_store_actions));
+    list_gtk_1990_actions->tree_select_actions = gtk_tree_view_get_selection(list_gtk_1990_actions->tree_view_actions);
     gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(list_gtk_1990_actions->scroll_actions), GTK_WIDGET(list_gtk_1990_actions->tree_view_actions));
     gtk_table_attach(GTK_TABLE(list_gtk_1990_actions->table_actions), list_gtk_1990_actions->scroll_actions, 0, 1, 0, 1, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 0, 0);
     // Colonne numéro
@@ -679,6 +761,7 @@ void _1990_gtk_actions(Projet *projet)
     column = gtk_tree_view_get_column(list_gtk_1990_actions->tree_view_actions, 2);
     gtk_tree_view_column_set_sizing(column, GTK_TREE_VIEW_COLUMN_FIXED);
     gtk_tree_view_column_set_fixed_width(column, 180);
+    g_signal_connect(G_OBJECT(list_gtk_1990_actions->tree_select_actions), "changed", G_CALLBACK(_1990_gtk_actions_select_changed), projet);
     
     // Génération de la toolbar pour les actions
     list_gtk_1990_actions->toolbar_actions = gtk_toolbar_new();
@@ -688,34 +771,40 @@ void _1990_gtk_actions(Projet *projet)
     gtk_table_attach(GTK_TABLE(list_gtk_1990_actions->table_actions), list_gtk_1990_actions->toolbar_actions, 0, 1, 1, 2, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_SHRINK | GTK_FILL), 0, 0);
     list_gtk_1990_actions->img_action_ajout = gtk_image_new_from_file(DATADIR"/images/ajouter.xpm");
     list_gtk_1990_actions->item_action_ajout = gtk_menu_tool_button_new(list_gtk_1990_actions->img_action_ajout, gettext("Ajouter"));
-    list_gtk_1990_actions->menu_type_list = gtk_menu_new();
-    list_gtk_1990_actions->menu_list_widget = list_init();
+    list_gtk_1990_actions->menu_type_list_action = gtk_menu_new();
+    list_gtk_1990_actions->menu_list_widget_action = list_init();
     for (i=0;i<_1990_action_num_bat_txt(projet->pays);i++)
     {
         w_temp = gtk_menu_item_new_with_label(_1990_action_type_bat_txt(i, projet->pays));
-        gtk_menu_shell_append(GTK_MENU_SHELL(list_gtk_1990_actions->menu_type_list), w_temp);
-        list_insert_after(list_gtk_1990_actions->menu_list_widget, &w_temp, sizeof(&w_temp));
+        gtk_menu_shell_append(GTK_MENU_SHELL(list_gtk_1990_actions->menu_type_list_action), w_temp);
+        list_insert_after(list_gtk_1990_actions->menu_list_widget_action, &w_temp, sizeof(&w_temp));
         g_signal_connect(w_temp, "activate", G_CALLBACK(_1990_gtk_menu_nouvelle_action_activate), projet);
     }
-    gtk_menu_tool_button_set_menu(GTK_MENU_TOOL_BUTTON(list_gtk_1990_actions->item_action_ajout), list_gtk_1990_actions->menu_type_list);
-    gtk_widget_show_all(list_gtk_1990_actions->menu_type_list);
+    gtk_menu_tool_button_set_menu(GTK_MENU_TOOL_BUTTON(list_gtk_1990_actions->item_action_ajout), list_gtk_1990_actions->menu_type_list_action);
+    gtk_widget_show_all(list_gtk_1990_actions->menu_type_list_action);
     gtk_toolbar_insert(GTK_TOOLBAR(list_gtk_1990_actions->toolbar_actions), list_gtk_1990_actions->item_action_ajout, -1);
     g_signal_connect(G_OBJECT(list_gtk_1990_actions->item_action_ajout), "clicked", G_CALLBACK(_1990_gtk_menu_nouvelle_action_activate), projet);
     list_gtk_1990_actions->img_action_suppr = gtk_image_new_from_file(DATADIR"/images/supprimer.xpm");
     list_gtk_1990_actions->item_action_suppr = gtk_tool_button_new(list_gtk_1990_actions->img_action_suppr, gettext("Supprimer"));
     gtk_toolbar_insert(GTK_TOOLBAR(list_gtk_1990_actions->toolbar_actions), list_gtk_1990_actions->item_action_suppr, -1);
     g_signal_connect(G_OBJECT(list_gtk_1990_actions->item_action_suppr), "clicked", G_CALLBACK(_1990_gtk_menu_suppr_action_activate), projet);
+    gtk_widget_set_sensitive(GTK_WIDGET(list_gtk_1990_actions->item_action_suppr), FALSE);
     
     
     
     // Le coté charges
+    list_gtk_1990_actions->table_charges = gtk_table_new(2, 1, FALSE);
+    gtk_paned_add2(GTK_PANED(list_gtk_1990_actions->paned), list_gtk_1990_actions->table_charges);
     list_gtk_1990_actions->scroll_charges = gtk_scrolled_window_new(NULL, NULL);
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(list_gtk_1990_actions->scroll_charges), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
     list_gtk_1990_actions->tree_store_charges = gtk_tree_store_new(4, G_TYPE_INT, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
     list_gtk_1990_actions->tree_view_charges = (GtkTreeView*)gtk_tree_view_new_with_model(GTK_TREE_MODEL(list_gtk_1990_actions->tree_store_charges));
+    list_gtk_1990_actions->tree_select_charges = gtk_tree_view_get_selection(list_gtk_1990_actions->tree_view_charges);
+    gtk_tree_selection_set_mode(list_gtk_1990_actions->tree_select_charges, GTK_SELECTION_MULTIPLE);
     gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(list_gtk_1990_actions->scroll_charges), GTK_WIDGET(list_gtk_1990_actions->tree_view_charges));
     gtk_tree_view_set_reorderable(GTK_TREE_VIEW(list_gtk_1990_actions->tree_view_charges), TRUE);
-    gtk_paned_add2(GTK_PANED(list_gtk_1990_actions->paned), list_gtk_1990_actions->scroll_charges);
+    gtk_table_attach(GTK_TABLE(list_gtk_1990_actions->table_charges), list_gtk_1990_actions->scroll_charges, 0, 1, 0, 1, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 0, 0);
+    // Génération des colonnes
     pCellRenderer = gtk_cell_renderer_text_new();
     gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW(list_gtk_1990_actions->tree_view_charges), -1, gettext("Numéro"), pCellRenderer, "text", 0, NULL);
     pCellRenderer = gtk_cell_renderer_text_new();
@@ -732,6 +821,36 @@ void _1990_gtk_actions(Projet *projet)
     g_list_free(list);
     g_signal_connect(GTK_WIDGET(list_gtk_1990_actions->tree_view_charges), "drag-begin", G_CALLBACK(_1990_gtk_actions_tree_view_drag_begin), NULL);
     g_signal_connect(GTK_WIDGET(list_gtk_1990_actions->tree_view_actions), "drag-drop", G_CALLBACK(_1990_gtk_actions_tree_view_drag), projet);
+    // Génération de la toolbar pour les charges
+    list_gtk_1990_actions->toolbar_charges = gtk_toolbar_new();
+    gtk_orientable_set_orientation(GTK_ORIENTABLE(list_gtk_1990_actions->toolbar_charges), GTK_ORIENTATION_HORIZONTAL);
+    gtk_toolbar_set_style(GTK_TOOLBAR(list_gtk_1990_actions->toolbar_charges), GTK_TOOLBAR_ICONS);
+    gtk_container_set_border_width(GTK_CONTAINER(list_gtk_1990_actions->toolbar_charges), 0);
+    gtk_table_attach(GTK_TABLE(list_gtk_1990_actions->table_charges), list_gtk_1990_actions->toolbar_charges, 0, 1, 1, 2, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_SHRINK | GTK_FILL), 0, 0);
+    
+    list_gtk_1990_actions->img_charge_ajout = gtk_image_new_from_file(DATADIR"/images/ajouter.xpm");
+    list_gtk_1990_actions->item_charge_ajout = gtk_menu_tool_button_new(list_gtk_1990_actions->img_charge_ajout, gettext("Ajouter"));
+    list_gtk_1990_actions->menu_type_list_charge = gtk_menu_new();
+    list_gtk_1990_actions->menu_list_widget_charge = list_init();
+    
+    w_temp = gtk_menu_item_new_with_label(gettext("Charge nodale"));
+    gtk_menu_shell_append(GTK_MENU_SHELL(list_gtk_1990_actions->menu_type_list_charge), w_temp);
+    list_insert_after(list_gtk_1990_actions->menu_list_widget_charge, &w_temp, sizeof(&w_temp));
+    g_signal_connect(w_temp, "activate", G_CALLBACK(_1990_gtk_menu_nouvelle_charge_ponctuel_activate), projet);
+    gtk_menu_tool_button_set_menu(GTK_MENU_TOOL_BUTTON(list_gtk_1990_actions->item_charge_ajout), list_gtk_1990_actions->menu_type_list_charge);
+    gtk_widget_show_all(list_gtk_1990_actions->menu_type_list_charge);
+    gtk_toolbar_insert(GTK_TOOLBAR(list_gtk_1990_actions->toolbar_charges), list_gtk_1990_actions->item_charge_ajout, -1);
+    gtk_widget_set_sensitive(GTK_WIDGET(list_gtk_1990_actions->item_charge_ajout), FALSE);
+//    g_signal_connect(G_OBJECT(list_gtk_1990_actions->item_action_ajout), "clicked", G_CALLBACK(_1990_gtk_menu_nouvelle_action_activate), projet);
+    list_gtk_1990_actions->img_charge_suppr = gtk_image_new_from_file(DATADIR"/images/supprimer.xpm");
+    list_gtk_1990_actions->item_charge_suppr = gtk_tool_button_new(list_gtk_1990_actions->img_charge_suppr, gettext("Supprimer"));
+    gtk_toolbar_insert(GTK_TOOLBAR(list_gtk_1990_actions->toolbar_charges), list_gtk_1990_actions->item_charge_suppr, -1);
+    gtk_widget_set_sensitive(GTK_WIDGET(list_gtk_1990_actions->item_charge_suppr), FALSE);
+    g_signal_connect(G_OBJECT(list_gtk_1990_actions->item_charge_suppr), "clicked", G_CALLBACK(_1990_gtk_menu_suppr_charge_clicked), projet);
+    g_signal_connect(G_OBJECT(list_gtk_1990_actions->tree_select_charges), "changed", G_CALLBACK(_1990_gtk_actions_select_changed), projet);
+    
+    
+    
     
     /* Défini le comportement du glissé etat vers dispo*/
     gtk_drag_source_set(GTK_WIDGET(list_gtk_1990_actions->tree_view_charges), GDK_BUTTON1_MASK, drag_targets_actions, 1, GDK_ACTION_MOVE); 
@@ -752,6 +871,7 @@ void _1990_gtk_actions(Projet *projet)
     }
     
     gtk_window_set_modal(GTK_WINDOW(list_gtk_1990_actions->window), TRUE);
+    gtk_window_set_transient_for(GTK_WINDOW(list_gtk_1990_actions->window), GTK_WINDOW(projet->list_gtk.comp.window));
     gtk_widget_show_all(list_gtk_1990_actions->window);
     
     return;

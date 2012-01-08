@@ -118,13 +118,13 @@ int EF_calculs_initialise(Projet *projet)
         else
         {
             EF_Appui    *appui = noeud->appui;
-            if (appui->x == EF_APPUI_LIBRE)
+            if (appui->ux == EF_APPUI_LIBRE)
                 { projet->ef_donnees.noeuds_pos_partielle[noeud->numero][0] = nb_col_partielle; nb_col_partielle++; }
             else projet->ef_donnees.noeuds_pos_partielle[noeud->numero][0] = -1;
-            if (appui->y == EF_APPUI_LIBRE)
+            if (appui->uy == EF_APPUI_LIBRE)
                 { projet->ef_donnees.noeuds_pos_partielle[noeud->numero][1] = nb_col_partielle; nb_col_partielle++; }
             else projet->ef_donnees.noeuds_pos_partielle[noeud->numero][1] = -1;
-            if (appui->z == EF_APPUI_LIBRE)
+            if (appui->uz == EF_APPUI_LIBRE)
                 { projet->ef_donnees.noeuds_pos_partielle[noeud->numero][2] = nb_col_partielle; nb_col_partielle++; }
             else projet->ef_donnees.noeuds_pos_partielle[noeud->numero][2] = -1;
             if (appui->rx == EF_APPUI_LIBRE)
@@ -491,20 +491,20 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
     //           l'utilisateur dans le repère global.
                     Charge_Noeud *charge_noeud = (Charge_Noeud*)list_curr(action_en_cours->charges);
                     if (projet->ef_donnees.noeuds_pos_partielle[charge_noeud->noeud->numero][0] != -1)
-                        ax[projet->ef_donnees.noeuds_pos_partielle[charge_noeud->noeud->numero][0]] += charge_noeud->x;
+                        ax[projet->ef_donnees.noeuds_pos_partielle[charge_noeud->noeud->numero][0]] += charge_noeud->fx;
                     if (projet->ef_donnees.noeuds_pos_partielle[charge_noeud->noeud->numero][1] != -1)
-                        ax[projet->ef_donnees.noeuds_pos_partielle[charge_noeud->noeud->numero][1]] += charge_noeud->y;
+                        ax[projet->ef_donnees.noeuds_pos_partielle[charge_noeud->noeud->numero][1]] += charge_noeud->fy;
                     if (projet->ef_donnees.noeuds_pos_partielle[charge_noeud->noeud->numero][2] != -1)
-                        ax[projet->ef_donnees.noeuds_pos_partielle[charge_noeud->noeud->numero][2]] += charge_noeud->z;
+                        ax[projet->ef_donnees.noeuds_pos_partielle[charge_noeud->noeud->numero][2]] += charge_noeud->fz;
                     if (projet->ef_donnees.noeuds_pos_partielle[charge_noeud->noeud->numero][3] != -1)
                         ax[projet->ef_donnees.noeuds_pos_partielle[charge_noeud->noeud->numero][3]] += charge_noeud->mx;
                     if (projet->ef_donnees.noeuds_pos_partielle[charge_noeud->noeud->numero][4] != -1)
                         ax[projet->ef_donnees.noeuds_pos_partielle[charge_noeud->noeud->numero][4]] += charge_noeud->my;
                     if (projet->ef_donnees.noeuds_pos_partielle[charge_noeud->noeud->numero][5] != -1)
                         ax[projet->ef_donnees.noeuds_pos_partielle[charge_noeud->noeud->numero][5]] += charge_noeud->mz;
-                    ax3[projet->ef_donnees.noeuds_pos_complete[charge_noeud->noeud->numero][0]] += charge_noeud->x;
-                    ax3[projet->ef_donnees.noeuds_pos_complete[charge_noeud->noeud->numero][1]] += charge_noeud->y;
-                    ax3[projet->ef_donnees.noeuds_pos_complete[charge_noeud->noeud->numero][2]] += charge_noeud->z;
+                    ax3[projet->ef_donnees.noeuds_pos_complete[charge_noeud->noeud->numero][0]] += charge_noeud->fx;
+                    ax3[projet->ef_donnees.noeuds_pos_complete[charge_noeud->noeud->numero][1]] += charge_noeud->fy;
+                    ax3[projet->ef_donnees.noeuds_pos_complete[charge_noeud->noeud->numero][2]] += charge_noeud->fz;
                     ax3[projet->ef_donnees.noeuds_pos_complete[charge_noeud->noeud->numero][3]] += charge_noeud->mx;
                     ax3[projet->ef_donnees.noeuds_pos_complete[charge_noeud->noeud->numero][4]] += charge_noeud->my;
                     ax3[projet->ef_donnees.noeuds_pos_complete[charge_noeud->noeud->numero][5]] += charge_noeud->mz;

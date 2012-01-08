@@ -72,9 +72,9 @@ int EF_charge_noeud_ajout(Projet *projet, int num_action, EF_Noeud *noeud,
     BUGMSG(charge_nouveau.description, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_charge_noeud_ajout");
     strcpy(charge_nouveau.description, nom);
     charge_nouveau.noeud = noeud;
-    charge_nouveau.x = fx;
-    charge_nouveau.y = fy;
-    charge_nouveau.z = fz;
+    charge_nouveau.fx = fx;
+    charge_nouveau.fy = fy;
+    charge_nouveau.fz = fz;
     charge_nouveau.mx = mx;
     charge_nouveau.my = my;
     charge_nouveau.mz = mz;

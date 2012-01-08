@@ -34,6 +34,7 @@
 #include "common_projet.h"
 #include "common_tooltip.h"
 #include "common_maths.h"
+#include "common_gtk.h"
 #include "EF_charge_barre_ponctuelle.h"
 #include "EF_charge_noeud.h"
 #include "EF_charge_barre_repartie_uniforme.h"
@@ -542,11 +543,11 @@ void _1990_gtk_button_ajout_dispo_proc(int ngroupe, Projet *projet)
     Niveau_Groupe   *niveau_groupe;
     Groupe          *groupe;
     Element         *element, *element2;
-    GList           *list;
+    GList           *list, *list_orig;
     List_Gtk_1990_Groupes   *list_gtk_1990_groupes = &projet->list_gtk._1990_groupes;
     
-    list = gtk_tree_selection_get_selected_rows(list_gtk_1990_groupes->tree_select_dispo, &model1);
-    list = g_list_last(list);
+    list_orig = gtk_tree_selection_get_selected_rows(list_gtk_1990_groupes->tree_select_dispo, &model1);
+    list = g_list_last(list_orig);
     
     for(;list != NULL; list = g_list_previous(list))
     {
@@ -604,8 +605,9 @@ void _1990_gtk_button_ajout_dispo_proc(int ngroupe, Projet *projet)
         path = gtk_tree_model_get_path(GTK_TREE_MODEL(list_gtk_1990_groupes->tree_store_etat), &groupe->Iter);
         gtk_tree_view_expand_row(list_gtk_1990_groupes->tree_view_etat, path, FALSE);
         gtk_tree_path_free(path);
-        gtk_tree_path_free((GtkTreePath*)list->data);
     }
+    g_list_foreach(list_orig, (GFunc)gtk_tree_path_free, NULL);
+    g_list_free(list_orig);
 }
 
 
@@ -799,6 +801,7 @@ void _1990_gtk_tree_view_etat_row_expanded(GtkTreeView *tree_view, GtkTreeIter *
     return;
 }
 
+
 /* _1990_gtk_tree_view_etat_row_collapsed
  * Description : Evènement lorsqu'on ferme une ligne contenant un enfant
  *             : Est utilisé pour se souvenir des lignes qui sont ouvertes et fermées
@@ -834,6 +837,7 @@ void _1990_gtk_tree_view_etat_row_collapsed(GtkTreeView *tree_view, GtkTreeIter 
     
     return;
 }
+
 
 void _1990_gtk_tree_view_etat_cursor_changed(__attribute__((unused)) GtkTreeView *tree_view, Projet *projet)
 /* Description : Evènement lorsqu'il y a un changement de ligne sélectionnée
@@ -893,6 +897,7 @@ void _1990_gtk_tree_view_etat_cursor_changed(__attribute__((unused)) GtkTreeView
     return;
 }
 
+
 void _1990_gtk_button_groupe_toggled(GtkRadioToolButton *radiobutton, Projet *projet)
 /* Description : Evènement lorsqu'il y a un changement de type de combinaison (OR, XOR ou AND)
  * Paramètres : GtkRadioButton *radiobutton : composant radiobutton à l'origine de l'évènement
@@ -946,6 +951,7 @@ void _1990_gtk_button_generer_clicked(GtkWidget *button __attribute__((unused)),
     return;
 }
 
+
 void _1990_gtk_radio_button_eluequ_equ_seul(GtkRadioButton *radiobutton __attribute__((unused)), Projet *projet)
 /* Description : Modifie les options de combinaison pour que l'ELU EQU calcule à l'équilibre seulement
  * Paramètres : GtkRadioButton *radiobutton : composant radiobutton à l'origine de l'évènement
@@ -958,6 +964,7 @@ void _1990_gtk_radio_button_eluequ_equ_seul(GtkRadioButton *radiobutton __attrib
         projet->combinaisons.flags ^= 1;
     return;
 }
+
 
 void _1990_gtk_radio_button_eluequ_equ_resist(GtkRadioButton *radiobutton __attribute__((unused)), Projet *projet)
 /* Description : Modifie les options de combinaison pour que l'ELU EQU calcule à l'équilibre et à la résistance structurelle
@@ -972,6 +979,7 @@ void _1990_gtk_radio_button_eluequ_equ_resist(GtkRadioButton *radiobutton __attr
     return;
 }
 
+
 void _1990_gtk_radio_button_elustrgeo_1(GtkRadioButton *radiobutton __attribute__((unused)), Projet *projet)
 /* Description : Modifie les options de combinaison pour que l'ELU STR/GEO calcule selon l'approche 1
  * Paramètres : GtkRadioButton *radiobutton : composant radiobutton à l'origine de l'évènement
@@ -984,6 +992,7 @@ void _1990_gtk_radio_button_elustrgeo_1(GtkRadioButton *radiobutton __attribute_
     projet->combinaisons.flags = projet->combinaisons.flags + 0;
     return;
 }
+
 
 void _1990_gtk_radio_button_elustrgeo_2(GtkRadioButton *radiobutton __attribute__((unused)), Projet *projet)
 /* Description : Modifie les options de combinaison pour que l'ELU STR/GEO calcule selon l'approche 2
@@ -998,6 +1007,7 @@ void _1990_gtk_radio_button_elustrgeo_2(GtkRadioButton *radiobutton __attribute_
     return;
 }
 
+
 void _1990_gtk_radio_button_elustrgeo_3(GtkRadioButton *radiobutton __attribute__((unused)), Projet *projet)
 /* Description : Modifie les options de combinaison pour que l'ELU STR/GEO calcule selon l'approche 3
  * Paramètres : GtkRadioButton *radiobutton : composant radiobutton à l'origine de l'évènement
@@ -1010,6 +1020,7 @@ void _1990_gtk_radio_button_elustrgeo_3(GtkRadioButton *radiobutton __attribute_
     projet->combinaisons.flags = projet->combinaisons.flags + 4;
     return;
 }
+
 
 void _1990_gtk_radio_button_elustrgeo_6_10(GtkRadioButton *radiobutton __attribute__((unused)), Projet *projet)
 /* Description : Modifie les options de combinaison pour que l'ELU STR/GEO calcule selon la formule 6.10 de l'EN 1990
@@ -1024,6 +1035,7 @@ void _1990_gtk_radio_button_elustrgeo_6_10(GtkRadioButton *radiobutton __attribu
     return;
 }
 
+
 void _1990_gtk_radio_button_elustrgeo_6_10ab(GtkRadioButton *radiobutton __attribute__((unused)), Projet *projet)
 /* Description : Modifie les options de combinaison pour que l'ELU STR/GEO calcule selon la formule 6.10 (a) et (b) de l'EN 1990
  * Paramètres : GtkRadioButton *radiobutton : composant radiobutton à l'origine de l'évènement
@@ -1036,6 +1048,7 @@ void _1990_gtk_radio_button_elustrgeo_6_10ab(GtkRadioButton *radiobutton __attri
     projet->combinaisons.flags = projet->combinaisons.flags + 0;
     return;
 }
+
 
 void _1990_gtk_radio_button_eluacc_frequente(GtkRadioButton *radiobutton __attribute__((unused)), Projet *projet)
 /* Description : Modifie les options de combinaison pour que l'ELU ACC calcule avec les valeurs fréquentes des actions variables
@@ -1050,6 +1063,7 @@ void _1990_gtk_radio_button_eluacc_frequente(GtkRadioButton *radiobutton __attri
     return;
 }
 
+
 void _1990_gtk_radio_button_eluacc_quasi_permanente(GtkRadioButton *radiobutton __attribute__((unused)), Projet *projet)
 /* Description : Modifie les options de combinaison pour que l'ELU ACC calcule avec les valeurs quasi_permanente des actions variables
  * Paramètres : GtkRadioButton *radiobutton : composant radiobutton à l'origine de l'évènement
@@ -1063,6 +1077,7 @@ void _1990_gtk_radio_button_eluacc_quasi_permanente(GtkRadioButton *radiobutton 
     return;
 }
 
+
 void _1990_gtk_tooltip(GtkWidget *widget __attribute__((unused)), gint x __attribute__((unused)), gint y __attribute__((unused)), gboolean keyboard_mode __attribute__((unused)), GtkTooltip *tooltip __attribute__((unused)), gpointer user_data __attribute__((unused)))
 /* Description : Cette fonction doit obligatoirement être relié à l'évènement "query-tooltip" pour qu'apparaisse la fenêtre tooltip
  * Paramètres : GtkWidget *widget : composant à l'origine de l'évènement
@@ -1073,6 +1088,7 @@ void _1990_gtk_tooltip(GtkWidget *widget __attribute__((unused)), gint x __attri
 {
     return;
 }
+
 
 void _1990_gtk_window_quitter_button(GtkWidget *object __attribute__((unused)), GtkWidget *fenetre)
 /* Description : Bouton de fermeture de la fenêtre
@@ -1085,6 +1101,7 @@ void _1990_gtk_window_quitter_button(GtkWidget *object __attribute__((unused)), 
     gtk_widget_destroy(fenetre);
     return;
 }
+
 
 void _1990_gtk_button_options_clicked(GtkWidget *button __attribute__((unused)), Projet *projet)
 /* Description : Affiche les différentes options pour la génération des combinaisons
@@ -1108,9 +1125,7 @@ void _1990_gtk_button_options_clicked(GtkWidget *button __attribute__((unused)),
     g_type_init();
         
     /* Définition de la fenêtre */
-    pWindow = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-    gtk_window_set_position(GTK_WINDOW(pWindow), GTK_WIN_POS_CENTER);
-    gtk_window_set_title(GTK_WINDOW(pWindow), gettext("Options des combinaisons"));
+    GTK_NOUVELLE_FENETRE(pWindow, gettext("Options des combinaisons"), 800, 600);
     
     grid = gtk_grid_new();
     gtk_container_add(GTK_CONTAINER(pWindow), grid);
@@ -1372,7 +1387,6 @@ void _1990_gtk_groupes(GtkWidget *button __attribute__((unused)), Projet *projet
     GList               *list;
     
     list_gtk_1990_groupes = &projet->list_gtk._1990_groupes;
-    list_gtk_1990_groupes->window_groupe = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     list_gtk_1990_groupes->table = gtk_table_new(3, 1, FALSE);
     list_gtk_1990_groupes->table_niveau = gtk_table_new(1, 3, FALSE);
     list_gtk_1990_groupes->table_groupes = gtk_table_new(7, 2, FALSE);
@@ -1380,9 +1394,7 @@ void _1990_gtk_groupes(GtkWidget *button __attribute__((unused)), Projet *projet
     list_gtk_1990_groupes->table_bas = gtk_table_new(1, 3, FALSE);
     
     /* Réglage de la fenêtre graphique */
-    gtk_window_set_title(GTK_WINDOW(list_gtk_1990_groupes->window_groupe), gettext("Groupes"));
-    gtk_window_resize(GTK_WINDOW(list_gtk_1990_groupes->window_groupe), 800, 600);
-    gtk_window_set_position(GTK_WINDOW(list_gtk_1990_groupes->window_groupe), GTK_WIN_POS_CENTER);
+    GTK_NOUVELLE_FENETRE(list_gtk_1990_groupes->window_groupe, gettext("Groupes"), 800, 600);
     gtk_container_add(GTK_CONTAINER(list_gtk_1990_groupes->window_groupe), list_gtk_1990_groupes->table);
     
     BUGMSG(projet->niveaux_groupes, , "_1990_gtk_groupes\n");
@@ -1545,6 +1557,7 @@ void _1990_gtk_groupes(GtkWidget *button __attribute__((unused)), Projet *projet
     _1990_gtk_affiche_niveau(projet, gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(list_gtk_1990_groupes->spin_button_niveau)));
     
     gtk_window_set_modal(GTK_WINDOW(list_gtk_1990_groupes->window_groupe), TRUE);
+    gtk_window_set_transient_for(GTK_WINDOW(list_gtk_1990_groupes->window_groupe), GTK_WINDOW(projet->list_gtk.comp.window));
     gtk_widget_show_all(list_gtk_1990_groupes->window_groupe);
     
     return;

@@ -150,7 +150,7 @@ int projet_init_graphique(Projet *projet)
     comps->main_table = gtk_table_new(3, 1, FALSE);
     gtk_container_add(GTK_CONTAINER(comps->window), GTK_WIDGET(comps->main_table));
     
-    m3d = (List_Gtk_m3d*)projet->list_gtk.m3d;
+    m3d = &projet->list_gtk.m3d;
     gtk_table_attach(GTK_TABLE(comps->main_table), m3d->drawing, 0, 1, 1, 2, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 0, 0);
     
     comps->menu = gtk_menu_bar_new();
@@ -177,6 +177,8 @@ int projet_init_graphique(Projet *projet)
     comps->menu_charges_groupes = gtk_menu_item_new_with_label(gettext("Groupes..."));
     gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_charges_list), comps->menu_charges_groupes);
     g_signal_connect_swapped(comps->menu_charges_groupes, "activate", G_CALLBACK(gui_affiche_groupes), projet);
+    
+    projet->list_gtk._1990_actions.window = NULL;
     
     return 0;
 }
@@ -212,7 +214,7 @@ void projet_free(Projet *projet)
     if (projet->ef_donnees.relachements != NULL)
         EF_relachement_free(projet);
 #ifdef ENABLE_GTK
-    if (projet->list_gtk.m3d != NULL)
+    if (projet->list_gtk.m3d.data != NULL)
         m3d_free(projet);
 #endif
     
