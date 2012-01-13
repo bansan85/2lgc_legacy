@@ -166,45 +166,7 @@ void _1990_gtk_tree_view_actions_cursor_changed(GtkTreeView *tree_view __attribu
                 {
                     Charge_Noeud *charge = list_curr(action->charges);
                     
-                    description = malloc(sizeof(char)*(strlen(gettext("Noeud : "))+1));
-                    strcpy(description, gettext("Noeud : "));
-                    sprintf(tmp, "%d", charge->noeud->numero);
-                    description = realloc(description, (strlen(description) + strlen(tmp)+1)*sizeof(char));
-                    strcat(description, tmp);
-                    common_math_double_to_char(charge->fx, tmp);
-                    description = realloc(description, (strlen(description) + strlen(", Fx :  N") + strlen(tmp)+1)*sizeof(char));
-                    strcat(description, ", Fx : ");
-                    strcat(description, tmp);
-                    strcat(description, " N");
-                    common_math_double_to_char(charge->fy, tmp);
-                    description = realloc(description, (strlen(description) + strlen(", Fy :  N") + strlen(tmp)+1)*sizeof(char));
-                    strcat(description, ", Fy : ");
-                    strcat(description, tmp);
-                    strcat(description, " N");
-                    common_math_double_to_char(charge->fz, tmp);
-                    description = realloc(description, (strlen(description) + strlen(", Fz :  N") + strlen(tmp)+1)*sizeof(char));
-                    strcat(description, ", Fz : ");
-                    strcat(description, tmp);
-                    strcat(description, " N");
-                    common_math_double_to_char(charge->mx, tmp);
-                    description = realloc(description, (strlen(description) + strlen(", Mx :  N") + strlen(tmp)+1)*sizeof(char));
-                    strcat(description, ", Mx : ");
-                    strcat(description, tmp);
-                    strcat(description, " N");
-                    common_math_double_to_char(charge->my, tmp);
-                    description = realloc(description, (strlen(description) + strlen(", My :  N") + strlen(tmp)+1)*sizeof(char));
-                    strcat(description, ", My : ");
-                    strcat(description, tmp);
-                    strcat(description, " N");
-                    common_math_double_to_char(charge->mz, tmp);
-                    description = realloc(description, (strlen(description) + strlen(", Mz :  N") + strlen(tmp)+1)*sizeof(char));
-                    strcat(description, ", Mz : ");
-                    strcat(description, tmp);
-                    strcat(description, " N");
-                    
-                    gtk_tree_store_append(list_gtk_1990_actions->tree_store_charges, &charge->Iter, NULL);
-                    gtk_tree_store_set(list_gtk_1990_actions->tree_store_charges, &charge->Iter, 0, charge->numero, 1, charge->description, 2, gettext("Ponctuelle sur noeud"), 3, description, -1);
-                    free(description);
+                    EF_gtk_charge_noeud_ajout_affichage(charge, projet);
                     
                     break;
                 }
@@ -439,8 +401,8 @@ void _1990_gtk_tree_view_actions_type_edited(GtkCellRendererText *cell __attribu
         if (strcmp(new_text, _1990_action_type_bat_txt(j, projet->pays)) == 0)
             break;
     }
-    BUG(j != _1990_action_num_bat_txt(projet->pays), "cell_edited");
-    BUG(_1990_action_cherche_numero(projet, i) == 0, "cell_edited");
+    BUGMSG(j != _1990_action_num_bat_txt(projet->pays), , "cell_edited");
+    BUGMSG(_1990_action_cherche_numero(projet, i) == 0, , "cell_edited");
     action = list_curr(projet->actions);
     action->type = j;
     action->psi0 = _1990_coef_psi0_bat(j, projet->pays);
@@ -478,7 +440,7 @@ void _1990_gtk_tree_view_actions_psi_edited(GtkCellRendererText *cell, gchar *pa
     if (sscanf(new_text, "%lf%s", &convertion, fake) == 1)
     {
         gtk_tree_store_set(list_gtk_1990_actions->tree_store_actions, &iter, column, convertion, -1);
-        BUG(_1990_action_cherche_numero(projet, i) == 0, "_1990_gtk_tree_view_actions_psi_edited");
+        BUGMSG(_1990_action_cherche_numero(projet, i) == 0, , "_1990_gtk_tree_view_actions_psi_edited");
         action = list_curr(projet->actions);
         switch (column)
         {

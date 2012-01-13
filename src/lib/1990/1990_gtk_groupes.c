@@ -291,7 +291,7 @@ void _1990_gtk_button_groupe_ajout_clicked(GtkWidget *button __attribute__((unus
     BUGMSG(projet->niveaux_groupes, , "_1990_gtk_button_groupe_ajout_clicked\n");
     BUGMSG(list_size(projet->niveaux_groupes), , "_1990_gtk_button_groupe_ajout_clicked\n");
     /* On ajoute un niveau */
-    BUG(_1990_groupe_positionne_niveau(projet->niveaux_groupes, gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(list_gtk_1990_groupes->spin_button_niveau))) == 0, -3);
+    BUG(_1990_groupe_positionne_niveau(projet->niveaux_groupes, gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(list_gtk_1990_groupes->spin_button_niveau))) == 0, );
     niveau_groupe = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
     BUG(_1990_groupe_ajout_groupe(projet, niveau_groupe->niveau, GROUPE_COMBINAISON_AND, gettext("Sans nom")) == 0, );
     groupe = (Groupe*)list_rear(niveau_groupe->groupes);
@@ -585,7 +585,7 @@ void _1990_gtk_button_ajout_dispo_proc(int ngroupe, Projet *projet)
         {
             Action *action;
             
-            BUG(_1990_action_cherche_numero(projet, numero) == 0, -3);
+            BUG(_1990_action_cherche_numero(projet, numero) == 0, );
             action = (Action*)list_curr(projet->actions);
             gtk_tree_store_set(list_gtk_1990_groupes->tree_store_etat, &element->Iter, 0, numero, 1, action->description, -1);
         }
@@ -596,7 +596,7 @@ void _1990_gtk_button_ajout_dispo_proc(int ngroupe, Projet *projet)
             
             list_mvprev(projet->niveaux_groupes);
             groupe_niveau_moins_1 = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
-            BUG(_1990_groupe_positionne_groupe(groupe_niveau_moins_1, numero) == 0, -3);
+            BUG(_1990_groupe_positionne_groupe(groupe_niveau_moins_1, numero) == 0, );
             groupe_moins_1 = (Groupe*)list_curr(groupe_niveau_moins_1->groupes);
             gtk_tree_store_set(list_gtk_1990_groupes->tree_store_etat, &element->Iter, 0, numero, 1, groupe_moins_1->nom, -1);
         }
@@ -736,7 +736,7 @@ void _1990_gtk_tree_view_etat_drag(GtkWidget *widget __attribute__((unused)), Gd
                 {
                     Action *action;
                     
-                    BUG(_1990_action_cherche_numero(projet, numero) == 0, -3);
+                    BUG(_1990_action_cherche_numero(projet, numero) == 0, );
                     action = (Action*)list_curr(projet->actions);
                     gtk_tree_store_set(list_gtk_1990_groupes->tree_store_etat, &element->Iter, 0, numero, 1, action->description, -1);
                 }
@@ -747,7 +747,7 @@ void _1990_gtk_tree_view_etat_drag(GtkWidget *widget __attribute__((unused)), Gd
                     
                     list_mvprev(projet->niveaux_groupes);
                     groupe_niveau_moins_1 = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
-                    BUG(_1990_groupe_positionne_groupe(groupe_niveau_moins_1, numero) == 0, -3);
+                    BUG(_1990_groupe_positionne_groupe(groupe_niveau_moins_1, numero) == 0, );
                     groupe_moins_1 = (Groupe*)list_curr(groupe_niveau_moins_1->groupes);
                     gtk_tree_store_set(list_gtk_1990_groupes->tree_store_etat, &element->Iter, 0, numero, 1, groupe_moins_1->nom, -1);
                 }
@@ -1272,9 +1272,9 @@ void _1990_gtk_tree_view_etat_cell_edited(GtkCellRendererText *cell __attribute_
     {
         Niveau_Groupe *groupe_niveau;
         Groupe        *groupe;
-        BUG(_1990_groupe_positionne_niveau(projet->niveaux_groupes, niveau) == 0, -3);
+        BUG(_1990_groupe_positionne_niveau(projet->niveaux_groupes, niveau) == 0, );
         groupe_niveau = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
-        BUG(_1990_groupe_positionne_groupe(groupe_niveau, numero) == 0, -3);
+        BUG(_1990_groupe_positionne_groupe(groupe_niveau, numero) == 0, );
         groupe = (Groupe*)list_curr(groupe_niveau->groupes);
         free(groupe->nom);
         groupe->nom = (char*)malloc(sizeof(char)*(strlen(new_text)+1));
@@ -1298,9 +1298,9 @@ void _1990_gtk_tree_view_etat_cell_edited(GtkCellRendererText *cell __attribute_
         {
             Niveau_Groupe *groupe_niveau;
             Groupe        *groupe;
-            BUG(_1990_groupe_positionne_niveau(projet->niveaux_groupes, niveau-1) == 0, -3);
+            BUG(_1990_groupe_positionne_niveau(projet->niveaux_groupes, niveau-1) == 0, );
             groupe_niveau = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
-            BUG(_1990_groupe_positionne_groupe(groupe_niveau, numero) == 0, -3);
+            BUG(_1990_groupe_positionne_groupe(groupe_niveau, numero) == 0, );
             groupe = (Groupe*)list_curr(groupe_niveau->groupes);
             free(groupe->nom);
             groupe->nom = (char*)malloc(sizeof(char)*(strlen(new_text)+1));
