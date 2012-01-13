@@ -103,7 +103,7 @@ void common_math_double_to_char(double nombre, char *dest)
     // Si le nombre est supérieur à 1e15, on affiche sous forme scientifique
     if (ABS(nombre) > 1e15)
     {
-        for (width = 0; width<80; width++)
+        for (width = 0; width<20; width++)
         {
             sprintf(dest, "%.*le", width, nombre);
             sscanf(dest, "%le", &test);
@@ -114,7 +114,7 @@ void common_math_double_to_char(double nombre, char *dest)
     // Sinon on affiche sous forme normale
     else
     {
-        for (width = 0; width<80; width++)
+        for (width = 0; width<20; width++)
         {
             sprintf(dest, "%.*lf", width, nombre);
             sscanf(dest, "%lf", &test);

@@ -46,6 +46,15 @@
             g_signal_connect(gtk_text_view_get_buffer(GTK_TEXT_VIEW(textview)), "changed", G_CALLBACK(gtk_common_entry_check_double), NULL); \
             }
 
+#define GTK_TEXT_VIEW_VERIFIE_INT(textview) {\
+            gtk_text_buffer_create_tag(gtk_text_view_get_buffer(GTK_TEXT_VIEW(textview)), "mauvais", "foreground", "red", "weight", PANGO_WEIGHT_BOLD, NULL); \
+            gtk_text_buffer_create_tag(gtk_text_view_get_buffer(GTK_TEXT_VIEW(textview)), "OK", "foreground", "black", "weight", PANGO_WEIGHT_NORMAL, NULL); \
+            g_signal_connect(gtk_text_view_get_buffer(GTK_TEXT_VIEW(textview)), "changed", G_CALLBACK(gtk_common_entry_check_int), NULL); \
+            }
+
 void gtk_common_entry_check_double(GtkEntry *entry, gchar *preedit, gpointer user_data);
+double gtk_common_entry_renvoie_double(GtkTextBuffer *textbuffer);
+void gtk_common_entry_check_int(GtkEntry *entry, gchar *preedit, gpointer user_data);
+int gtk_common_entry_renvoie_int(GtkTextBuffer *textbuffer);
 
 #endif

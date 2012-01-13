@@ -23,8 +23,15 @@
 #include <locale.h>
 #include <string.h>
 #include <gtk/gtk.h>
+#include <math.h>
 
 void gtk_common_entry_check_double(GtkTextBuffer *textbuffer, gpointer user_data __attribute__((unused)))
+/* Description : Vérifie en temps réel si le GtkTextBuffer contient bien un nombre flottant.
+ *               S'il ne contient pas de nombre, le texte passe en rouge.
+ * Paramètres : GtkTextBuffer *textbuffer : composant à l'origine de l'évènement
+ *            : gpointer user_data : ne sert à rien
+ * Valeur renvoyée : Aucune
+ */
 {
     gchar       *texte;
     GtkTextIter start, end;
@@ -49,3 +56,98 @@ void gtk_common_entry_check_double(GtkTextBuffer *textbuffer, gpointer user_data
     free(fake);
     return;
 }
+
+
+double gtk_common_entry_renvoie_double(GtkTextBuffer *textbuffer)
+/* Description : Renvoie le nombre flottant si le GtkTextBuffer en contient bien un.
+ *               Renvoie nan sinon.
+ * Paramètres : GtkTextBuffer *textbuffer : composant à vérifier
+ * Valeur renvoyée : Aucune
+ */
+{
+    gchar       *texte;
+    GtkTextIter start, end;
+    double      nombre;
+    char        *fake;
+    
+    gtk_text_buffer_get_iter_at_offset(textbuffer, &start, 0);
+    gtk_text_buffer_get_iter_at_offset(textbuffer, &end, -1);
+    texte = gtk_text_buffer_get_text(textbuffer, &start, &end, FALSE);
+    fake = (char*)malloc(sizeof(char)*(strlen(texte)+1));
+    if (sscanf(texte, "%lf%s", &nombre, fake) != 1)
+    {
+        free(texte);
+        free(fake);
+        return NAN;
+    }
+    else
+    {
+        free(texte);
+        free(fake);
+        return nombre;
+    }
+}
+
+void gtk_common_entry_check_int(GtkTextBuffer *textbuffer, gpointer user_data __attribute__((unused)))
+/* Description : Vérifie en temps réel si le GtkTextBuffer contient bien un nombre entier.
+ *               S'il ne contient pas de nombre, le texte passe en rouge.
+ * Paramètres : GtkTextBuffer *textbuffer : composant à l'origine de l'évènement
+ *            : gpointer user_data : ne sert à rien
+ * Valeur renvoyée : Aucune
+ */
+{
+    gchar       *texte;
+    GtkTextIter start, end;
+    int         nombre;
+    char        *fake;
+    
+    gtk_text_buffer_get_iter_at_offset(textbuffer, &start, 0);
+    gtk_text_buffer_get_iter_at_offset(textbuffer, &end, -1);
+    texte = gtk_text_buffer_get_text(textbuffer, &start, &end, FALSE);
+    fake = (char*)malloc(sizeof(char)*(strlen(texte)+1));
+    if (sscanf(texte, "%d%s", &nombre, fake) != 1)
+    {
+        gtk_text_buffer_remove_all_tags(textbuffer, &start, &end);
+        gtk_text_buffer_apply_tag_by_name(textbuffer, "mauvais", &start, &end);
+    }
+    else
+    {
+        gtk_text_buffer_remove_all_tags(textbuffer, &start, &end);
+        gtk_text_buffer_apply_tag_by_name(textbuffer, "OK", &start, &end);
+    }
+    free(texte);
+    free(fake);
+    return;
+}
+
+
+int gtk_common_entry_renvoie_int(GtkTextBuffer *textbuffer)
+/* Description : Renvoie le nombre entier si le GtkTextBuffer en contient bien un.
+ *               Renvoie INT_MIN sinon.
+ * Paramètres : GtkTextBuffer *textbuffer : composant à vérifier
+ * Valeur renvoyée : Aucune
+ */
+{
+    gchar       *texte;
+    GtkTextIter start, end;
+    int         nombre;
+    char        *fake;
+    
+    gtk_text_buffer_get_iter_at_offset(textbuffer, &start, 0);
+    gtk_text_buffer_get_iter_at_offset(textbuffer, &end, -1);
+    texte = gtk_text_buffer_get_text(textbuffer, &start, &end, FALSE);
+    fake = (char*)malloc(sizeof(char)*(strlen(texte)+1));
+    if (sscanf(texte, "%d%s", &nombre, fake) != 1)
+    {
+        free(texte);
+        free(fake);
+        return -1;
+    }
+    else
+    {
+        free(texte);
+        free(fake);
+        return nombre;
+    }
+}
+

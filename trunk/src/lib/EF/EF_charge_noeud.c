@@ -32,7 +32,7 @@
 #include "EF_charge_noeud.h"
 
 
-int EF_charge_noeud_ajout(Projet *projet, int num_action, EF_Noeud *noeud,
+Charge_Noeud*  EF_charge_noeud_ajout(Projet *projet, int num_action, EF_Noeud *noeud,
   double fx, double fy, double fz, double mx, double my, double mz, const char* nom)
 /* Description : Ajoute une charge ponctuelle à une action et à un noeud de la structure en
  *               lui attribuant le numéro suivant la dernière charge de l'action.
@@ -46,30 +46,30 @@ int EF_charge_noeud_ajout(Projet *projet, int num_action, EF_Noeud *noeud,
  *            : double my : moment autour de l'axe global y
  *            : double mz : moment autour de l'axe global z
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : -1 en cas de paramètres invalides :
+ *   Succès : un pointeur vers la nouvelle charge
+ *   Échec : NULL en cas de paramètres invalides :
  *             (projet == NULL) ou
  *             (projet->actions == NULL) ou
  *             (list_size(projet->actions) == 0) ou
  *             (noeud == NULL)
- *           -2 en cas d'erreur d'allocation mémoire
+ *           NULL en cas d'erreur d'allocation mémoire
  */
 {
     Action          *action_en_cours;
     Charge_Noeud    *charge_dernier, charge_nouveau;
     
     // Trivial
-    BUGMSG(projet, -1, "EF_charge_noeud_ajout\n");
-    BUGMSG(projet->actions, -1, "EF_charge_noeud_ajout\n");
-    BUGMSG(list_size(projet->actions), -1, "EF_charge_noeud_ajout\n");
-    BUGMSG(noeud, -1, "EF_charge_noeud_ajout\n");
-    BUG(_1990_action_cherche_numero(projet, num_action) == 0, -1);
+    BUGMSG(projet, NULL, "EF_charge_noeud_ajout\n");
+    BUGMSG(projet->actions, NULL, "EF_charge_noeud_ajout\n");
+    BUGMSG(list_size(projet->actions), NULL, "EF_charge_noeud_ajout\n");
+    BUGMSG(noeud, NULL, "EF_charge_noeud_ajout\n");
+    BUG(_1990_action_cherche_numero(projet, num_action) == 0, NULL);
     
     action_en_cours = (Action*)list_curr(projet->actions);
     
     charge_nouveau.type = CHARGE_NOEUD;
     charge_nouveau.description = (char*)malloc(sizeof(char)*(strlen(nom)+1));
-    BUGMSG(charge_nouveau.description, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_charge_noeud_ajout");
+    BUGMSG(charge_nouveau.description, NULL, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_charge_noeud_ajout");
     strcpy(charge_nouveau.description, nom);
     charge_nouveau.noeud = noeud;
     charge_nouveau.fx = fx;
@@ -86,7 +86,7 @@ int EF_charge_noeud_ajout(Projet *projet, int num_action, EF_Noeud *noeud,
         charge_nouveau.numero = charge_dernier->numero+1;
     
     list_mvrear(action_en_cours->charges);
-    BUGMSG(list_insert_after(action_en_cours->charges, &(charge_nouveau), sizeof(charge_nouveau)), -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_charge_noeud_ajout");
+    BUGMSG(list_insert_after(action_en_cours->charges, &(charge_nouveau), sizeof(charge_nouveau)), NULL, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_charge_noeud_ajout");
     
-    return 0;
+    return (Charge_Noeud*)list_curr(action_en_cours->charges);
 }

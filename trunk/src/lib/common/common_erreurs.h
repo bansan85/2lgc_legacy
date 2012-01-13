@@ -24,17 +24,17 @@
 #include <stdio.h>
 #include <assert.h>
 
-#ifdef NDEBUG
+//#ifdef NDEBUG
 #define BUG(X, Y) ({if (!(X)) return Y;})
 /* La macro BUG(X, Y) est l'équivalent d'un return Y; si la condition X n'est pas vérifiée
  * cependant, afin de faciliter le débogage des erreurs via gdb, il est rajouté, pour la
  * version expérimentale du programme un "assert" qui s'assure de créer une erreur si la
  * condition X n'est pas respectée.*/
-#else
- #define BUG(X, Y) ({assert(X);})
-#endif
+//#else
+// #define BUG(X, Y) ({assert(X);})
+//#endif
 
-#ifdef NDEBUG
+//#ifdef NDEBUG
 #define BUGMSG(X, Y, ...) ({if (!(X)) \
                        { \
                            printf(__VA_ARGS__); \
@@ -45,14 +45,14 @@
  * avant l'arrêt du programme. D'une maniète générale, la macro BUGMSG doit être utilisée
  * dès que l'erreur arrive et la macro BUG doit être utilisée pour indiquer une erreur par
  * la valeur retour des fonctions utilisant déjà la macro BUGMSG.*/
-#else
-#define BUGMSG(X, Y, ...) ({if (!(X)) \
-                       { \
-                           printf(__VA_ARGS__); \
-                           assert(X); \
-                           return Y; \
-                       } \
-                   })
-#endif
+//#else
+//#define BUGMSG(X, Y, ...) ({if (!(X)) \
+//                       { \
+//                           printf(__VA_ARGS__); \
+//                           assert(X); \
+//                           return Y; \
+//                       } \
+//                   })
+//#endif
 
 #endif
