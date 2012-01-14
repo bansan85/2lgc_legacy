@@ -33,9 +33,9 @@
 #include "common_maths.h"
 #include "EF_noeud.h"
 #include "EF_charge_noeud.h"
+#include "1990_actions.h"
 
-
-void EF_gtk_charge_noeud_ajout_affichage(Charge_Noeud *charge, Projet *projet)
+void EF_gtk_charge_noeud_ajout_affichage(Charge_Noeud *charge, Projet *projet, gboolean nouvelle_ligne)
 {
     char                    *description, tmp[30];
     List_Gtk_1990_Actions   *list_gtk_1990_actions = &projet->list_gtk._1990_actions;
@@ -78,8 +78,10 @@ void EF_gtk_charge_noeud_ajout_affichage(Charge_Noeud *charge, Projet *projet)
     strcat(description, tmp);
     strcat(description, " N");
     
-    gtk_tree_store_append(list_gtk_1990_actions->tree_store_charges, &charge->Iter, NULL);
+    if (nouvelle_ligne == TRUE)
+        gtk_tree_store_append(list_gtk_1990_actions->tree_store_charges, &charge->Iter, NULL);
     gtk_tree_store_set(list_gtk_1990_actions->tree_store_charges, &charge->Iter, 0, charge->numero, 1, charge->description, 2, gettext("Ponctuelle sur noeud"), 3, description, -1);
+    
     free(description);
 }
 
@@ -100,71 +102,63 @@ void EF_gtk_charge_noeud_annuler_clicked(GtkButton *button __attribute__((unused
 }
 
 
-
-void EF_gtk_charge_noeud_ajouter_clicked(GtkButton *button __attribute__((unused)), Projet *projet)
-/* Description : Ferme la fenêtre sans effectuer les modifications
- * Paramètres : GtkWidget *button : composant à l'origine de l'évènement
- *            : Projet *projet : la variable projet
- * Valeur renvoyée : Aucune
- */
+gboolean EF_gtk_charge_noeud_recupere_donnees(Projet *projet, int *num_action, EF_Noeud **noeud, double *fx, double *fy, double *fz, double *mx, double *my, double *mz, gchar **texte)
 {
-    List_Gtk_EF_Charge_Noeud    *ef_gtk;
     GtkWidget                   *dialog;
-    double                      fx, fy, fz, mx, my, mz;
+    List_Gtk_EF_Charge_Noeud    *ef_gtk;
     int                         num_noeud;
-    EF_Noeud                    *noeud;
     
-    BUGMSG(projet, , "_EF_gtk_charge_noeud\n");
+    BUGMSG(projet, FALSE, "_EF_gtk_charge_noeud\n");
     
     ef_gtk = &projet->list_gtk.ef_charge_noeud;
     
-    fx = gtk_common_entry_renvoie_double(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_fx)));
-    if (isnan(fx))
+    *fx = gtk_common_entry_renvoie_double(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_fx)));
+    if (isnan(*fx))
     {
         dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("La valeur de %s est incorrecte."), "Fx");
         gtk_dialog_run(GTK_DIALOG(dialog));
         gtk_widget_destroy(dialog);
-        return;
+        return FALSE;
     }
-    fy = gtk_common_entry_renvoie_double(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_fy)));
-    if (isnan(fy))
+    *fy = gtk_common_entry_renvoie_double(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_fy)));
+    if (isnan(*fy))
     {
         dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("La valeur de %s est incorrecte."), "Fy");
         gtk_dialog_run(GTK_DIALOG(dialog));
         gtk_widget_destroy(dialog);
-        return;
+        return FALSE;
     }
-    fz = gtk_common_entry_renvoie_double(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_fz)));
-    if (isnan(fz))
+    *fz = gtk_common_entry_renvoie_double(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_fz)));
+    if (isnan(*fz))
     {
         dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("La valeur de %s est incorrecte."), "Fz");
         gtk_dialog_run(GTK_DIALOG(dialog));
         gtk_widget_destroy(dialog);
-        return;
+        return FALSE;
     }
-    mx = gtk_common_entry_renvoie_double(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_mx)));
-    if (isnan(mx))
+    *mx = gtk_common_entry_renvoie_double(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_mx)));
+    if (isnan(*mx))
     {
         dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("La valeur de %s est incorrecte."), "Mx");
         gtk_dialog_run(GTK_DIALOG(dialog));
         gtk_widget_destroy(dialog);
-        return;
+        return FALSE;
     }
-    my = gtk_common_entry_renvoie_double(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_my)));
-    if (isnan(my))
+    *my = gtk_common_entry_renvoie_double(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_my)));
+    if (isnan(*my))
     {
         dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("La valeur de %s est incorrecte."), "My");
         gtk_dialog_run(GTK_DIALOG(dialog));
         gtk_widget_destroy(dialog);
-        return;
+        return FALSE;
     }
-    mz = gtk_common_entry_renvoie_double(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_mz)));
-    if (isnan(mz))
+    *mz = gtk_common_entry_renvoie_double(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_mz)));
+    if (isnan(*mz))
     {
         dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("La valeur de %s est incorrecte."), "Mz");
         gtk_dialog_run(GTK_DIALOG(dialog));
         gtk_widget_destroy(dialog);
-        return;
+        return FALSE;
     }
     num_noeud = gtk_common_entry_renvoie_int(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_noeud)));
     if (num_noeud == -1)
@@ -172,50 +166,116 @@ void EF_gtk_charge_noeud_ajouter_clicked(GtkButton *button __attribute__((unused
         dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("La valeur du noeud est incorrecte."));
         gtk_dialog_run(GTK_DIALOG(dialog));
         gtk_widget_destroy(dialog);
-        return;
+        return FALSE;
     }
     else
     {
-        noeud = EF_noeuds_cherche_numero(projet, num_noeud);
-        if (noeud == NULL)
+        *noeud = EF_noeuds_cherche_numero(projet, num_noeud);
+        if (*noeud == NULL)
         {
             dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("Le noeud %d n'existe pas."), num_noeud);
             gtk_dialog_run(GTK_DIALOG(dialog));
             gtk_widget_destroy(dialog);
-            return;
+            return FALSE;
         }
         else
         {
             // Si tous les paramètres sont corrects
             GtkTextIter     start, end;
             GtkTextBuffer   *textbuffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_description));
-            gchar           *texte;
-            gint            num_action;
-            Charge_Noeud    *charge_noeud;
             
             gtk_text_buffer_get_iter_at_offset(textbuffer, &start, 0);
             gtk_text_buffer_get_iter_at_offset(textbuffer, &end, -1);
-            texte = gtk_text_buffer_get_text(textbuffer, &start, &end, FALSE);
+            *texte = gtk_text_buffer_get_text(textbuffer, &start, &end, FALSE);
             
-            num_action = gtk_combo_box_get_active(GTK_COMBO_BOX(ef_gtk->combobox_charge));
+            *num_action = gtk_combo_box_get_active(GTK_COMBO_BOX(ef_gtk->combobox_charge));
             
-            // Création de la nouvelle charge ponctuelle au noeud
-            charge_noeud = EF_charge_noeud_ajout(projet, num_action, noeud, fx, fy, fz, mx, my, mz, texte);
-            BUG(charge_noeud, );
-            
-            free(texte);
-            
-            // Actualisation de l'affichage graphique
-            EF_gtk_charge_noeud_ajout_affichage(charge_noeud, projet);
-            //if ()
-            
-            return;
+            return TRUE;
         }
     }
 }
 
 
-void EF_gtk_charge_noeud(Projet *projet, gboolean nouveau, gint action_defaut)
+void EF_gtk_charge_noeud_ajouter_clicked(GtkButton *button __attribute__((unused)), Projet *projet)
+/* Description : Ferme la fenêtre en ajoutant la charge
+ * Paramètres : GtkWidget *button : composant à l'origine de l'évènement
+ *            : Projet *projet : la variable projet
+ * Valeur renvoyée : Aucune
+ */
+{
+    List_Gtk_EF_Charge_Noeud    *ef_gtk;
+    double                      fx, fy, fz, mx, my, mz;
+    int                         num_action;
+    EF_Noeud                    *noeud;
+    gchar                       *texte;
+    Charge_Noeud                *charge_noeud;
+    
+    BUGMSG(projet, , "_EF_gtk_charge_noeud\n");
+    
+    ef_gtk = &projet->list_gtk.ef_charge_noeud;
+    
+    if (!EF_gtk_charge_noeud_recupere_donnees(projet, &num_action, &noeud, &fx, &fy, &fz, &mx, &my, &mz, &texte))
+        return;
+    
+    num_action = gtk_combo_box_get_active(GTK_COMBO_BOX(ef_gtk->combobox_charge));
+    
+    // Création de la nouvelle charge ponctuelle au noeud
+    charge_noeud = EF_charge_noeud_ajout(projet, num_action, noeud, fx, fy, fz, mx, my, mz, texte);
+    BUG(charge_noeud, );
+    
+    free(texte);
+    
+    // Actualisation de l'affichage graphique
+    EF_gtk_charge_noeud_ajout_affichage(charge_noeud, projet, TRUE);
+    
+    return;
+}
+
+
+void EF_gtk_charge_noeud_editer_clicked(GtkButton *button __attribute__((unused)), Projet *projet)
+/* Description : Ferme la fenêtre en appliquant les modifications
+ * Paramètres : GtkWidget *button : composant à l'origine de l'évènement
+ *            : Projet *projet : la variable projet
+ * Valeur renvoyée : Aucune
+ */
+{
+    List_Gtk_EF_Charge_Noeud    *ef_gtk;
+    double                      fx, fy, fz, mx, my, mz;
+    int                         num_action;
+    EF_Noeud                    *noeud;
+    gchar                       *texte;
+    Charge_Noeud                *charge_noeud;
+    
+    BUGMSG(projet, , "_EF_gtk_charge_noeud\n");
+    
+    ef_gtk = &projet->list_gtk.ef_charge_noeud;
+    
+    if (!EF_gtk_charge_noeud_recupere_donnees(projet, &num_action, &noeud, &fx, &fy, &fz, &mx, &my, &mz, &texte))
+        return;
+    
+    num_action = gtk_combo_box_get_active(GTK_COMBO_BOX(ef_gtk->combobox_charge));
+    
+    // Création de la nouvelle charge ponctuelle au noeud
+    charge_noeud = _1990_action_cherche_charge(projet, ef_gtk->action, ef_gtk->charge);
+    free(charge_noeud->description);
+    charge_noeud->description = texte;
+    charge_noeud->fx = fx;
+    charge_noeud->fy = fy;
+    charge_noeud->fz = fz;
+    charge_noeud->mx = mx;
+    charge_noeud->my = my;
+    charge_noeud->mz = mz;
+    charge_noeud->noeud = noeud;
+    if (num_action != ef_gtk->action)
+        _1990_action_deplace_charge(projet, ef_gtk->action, ef_gtk->charge, num_action);
+    else
+        EF_gtk_charge_noeud_ajout_affichage(charge_noeud, projet, FALSE);
+    
+    return;
+}
+
+
+void EF_gtk_charge_noeud(Projet *projet, gint action_defaut, gint charge)
 /* Description : Affichage de la fenêtre permettant de créer ou modifier une action de type
  *               charge ponctuelle au noeud
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement
@@ -225,7 +285,8 @@ void EF_gtk_charge_noeud(Projet *projet, gboolean nouveau, gint action_defaut)
  * Valeur renvoyée : Aucune
  */
 {
-    List_Gtk_EF_Charge_Noeud *ef_gtk;
+    List_Gtk_EF_Charge_Noeud    *ef_gtk;
+    Charge_Noeud                *charge_noeud;
     
     BUGMSG(projet, , "_EF_gtk_charge_noeud\n");
     BUGMSG(projet->actions, , "_EF_gtk_charge_noeud\n");
@@ -234,10 +295,19 @@ void EF_gtk_charge_noeud(Projet *projet, gboolean nouveau, gint action_defaut)
     
     ef_gtk = &projet->list_gtk.ef_charge_noeud;
     
-    if (nouveau == TRUE)
+    if (charge == -1)
+    {
         GTK_NOUVELLE_FENETRE(ef_gtk->window, gettext("Ajout d'une charge au noeud"), 400, 1)
+        charge_noeud = NULL;
+    }
     else
+    {
+        ef_gtk->action = action_defaut;
+        ef_gtk->charge = charge;
         GTK_NOUVELLE_FENETRE(ef_gtk->window, gettext("Modification d'une charge au noeud"), 400, 1)
+        charge_noeud = _1990_action_cherche_charge(projet, action_defaut, charge);
+        BUG(charge_noeud, );
+    }
     
     ef_gtk->table = gtk_table_new(7, 4, FALSE);
     gtk_container_add(GTK_CONTAINER(ef_gtk->window), ef_gtk->table);
@@ -312,12 +382,39 @@ void EF_gtk_charge_noeud(Projet *projet, gboolean nouveau, gint action_defaut)
     GTK_TEXT_VIEW_VERIFIE_INT(ef_gtk->text_view_noeud)
     gtk_table_attach(GTK_TABLE(ef_gtk->table), ef_gtk->sw_noeud, 1, 4, 5, 6, GTK_EXPAND | GTK_FILL, GTK_SHRINK | GTK_FILL, 0, 0);
     
+    if (charge_noeud != NULL)
+    {
+        gchar   tmp[30];
+        gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_description)), charge_noeud->description, -1);
+        common_math_double_to_char(charge_noeud->fx, tmp);
+        gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_fx)), tmp, -1);
+        common_math_double_to_char(charge_noeud->fy, tmp);
+        gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_fy)), tmp, -1);
+        common_math_double_to_char(charge_noeud->fz, tmp);
+        gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_fz)), tmp, -1);
+        common_math_double_to_char(charge_noeud->mx, tmp);
+        gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_mx)), tmp, -1);
+        common_math_double_to_char(charge_noeud->my, tmp);
+        gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_my)), tmp, -1);
+        common_math_double_to_char(charge_noeud->mz, tmp);
+        gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_mz)), tmp, -1);
+        sprintf(tmp, "%d", charge_noeud->noeud->numero);
+        gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_noeud)), tmp, -1);
+    }
     ef_gtk->table_buttons = gtk_table_new(1, 2, FALSE);
     gtk_table_attach(GTK_TABLE(ef_gtk->table), ef_gtk->table_buttons, 0, 4, 6, 7, GTK_EXPAND | GTK_FILL, GTK_SHRINK | GTK_FILL, 0, 0);
-    ef_gtk->button_ajouter = gtk_button_new_with_label(gettext("Ajouter"));
-    g_signal_connect(ef_gtk->button_ajouter, "clicked", G_CALLBACK(EF_gtk_charge_noeud_ajouter_clicked), projet);
+    if (charge == -1)
+    {
+        ef_gtk->button_ajouter = gtk_button_new_from_stock(GTK_STOCK_ADD);
+        g_signal_connect(ef_gtk->button_ajouter, "clicked", G_CALLBACK(EF_gtk_charge_noeud_ajouter_clicked), projet);
+    }
+    else
+    {
+        ef_gtk->button_ajouter = gtk_button_new_from_stock(GTK_STOCK_EDIT);
+        g_signal_connect(ef_gtk->button_ajouter, "clicked", G_CALLBACK(EF_gtk_charge_noeud_editer_clicked), projet);
+    }
     gtk_table_attach(GTK_TABLE(ef_gtk->table_buttons), ef_gtk->button_ajouter, 0, 1, 0, 1, GTK_EXPAND | GTK_FILL, GTK_SHRINK | GTK_FILL, 0, 0);
-    ef_gtk->button_annuler = gtk_button_new_with_label(gettext("Annuler"));
+    ef_gtk->button_annuler = gtk_button_new_from_stock(GTK_STOCK_CANCEL);
     g_signal_connect(ef_gtk->button_annuler, "clicked", G_CALLBACK(EF_gtk_charge_noeud_annuler_clicked), ef_gtk->window);
     gtk_table_attach(GTK_TABLE(ef_gtk->table_buttons), ef_gtk->button_annuler, 1, 2, 0, 1, GTK_EXPAND | GTK_FILL, GTK_SHRINK | GTK_FILL, 0, 0);
     

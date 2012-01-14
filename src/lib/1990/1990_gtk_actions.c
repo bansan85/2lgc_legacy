@@ -166,7 +166,7 @@ void _1990_gtk_tree_view_actions_cursor_changed(GtkTreeView *tree_view __attribu
                 {
                     Charge_Noeud *charge = list_curr(action->charges);
                     
-                    EF_gtk_charge_noeud_ajout_affichage(charge, projet);
+                    EF_gtk_charge_noeud_ajout_affichage(charge, projet, TRUE);
                     
                     break;
                 }
@@ -557,7 +557,7 @@ void _1990_gtk_menu_nouvelle_charge_ponctuel_activate(GtkMenuItem *menuitem __at
     
     action = list_curr(projet->actions);
     
-    EF_gtk_charge_noeud(projet, TRUE, action->numero);
+    EF_gtk_charge_noeud(projet, action->numero, -1);
     return;
 }
 
@@ -578,9 +578,15 @@ void _1990_gtk_actions_select_changed(GtkTreeSelection *treeselection __attribut
     }
     
     if (gtk_tree_selection_count_selected_rows(list_gtk_1990_actions->tree_select_charges) == 0)
+    {
+        gtk_widget_set_sensitive(GTK_WIDGET(list_gtk_1990_actions->item_charge_edit), FALSE);
         gtk_widget_set_sensitive(GTK_WIDGET(list_gtk_1990_actions->item_charge_suppr), FALSE);
+    }
     else
+    {
+        gtk_widget_set_sensitive(GTK_WIDGET(list_gtk_1990_actions->item_charge_edit), TRUE);
         gtk_widget_set_sensitive(GTK_WIDGET(list_gtk_1990_actions->item_charge_suppr), TRUE);
+    }
     
     return;
 }
@@ -627,6 +633,65 @@ void _1990_gtk_menu_suppr_charge_clicked(GtkToolButton *toolbutton __attribute__
     }
     g_list_foreach(list_fixe, (GFunc)gtk_tree_row_reference_free, NULL);
     g_list_free(list_fixe);
+    
+    return;
+}
+
+
+void _1990_gtk_menu_edit_charge_clicked(GtkToolButton *toolbutton __attribute__((unused)), Projet *projet)
+/* Description : Supprimer l'action sélectionnée
+ * Paramètres : GtkToolButton *toolbutton : composant à l'origine de l'évènement
+ *            : Projet *projet : la variable projet
+ * Valeur renvoyée : Aucune
+ */
+{
+    List_Gtk_1990_Actions *list_gtk_1990_actions = &projet->list_gtk._1990_actions;
+    GtkTreeIter     iter;
+    GtkTreeModel    *model;
+    size_t          numero_action, numero_charge;
+    int             numer;
+    GList           *list, *list_parcours;
+    
+    if (!gtk_tree_selection_get_selected(list_gtk_1990_actions->tree_select_actions, &model, &iter))
+        return;
+    gtk_tree_model_get(model, &iter, 0, &numer, -1);
+    numero_action = numer;
+    
+    list = gtk_tree_selection_get_selected_rows(list_gtk_1990_actions->tree_select_charges, &model);
+    list_parcours = g_list_first(list);
+    for(;list_parcours != NULL; list_parcours = g_list_next(list_parcours))
+    {
+        if (gtk_tree_model_get_iter(model, &iter, (GtkTreePath*)list_parcours->data))
+        {
+            Charge_Noeud    *charge_noeud;
+            gtk_tree_model_get(model, &iter, 0, &numer, -1);
+            numero_charge = numer;
+            charge_noeud = _1990_action_cherche_charge(projet, numero_action, numero_charge);
+            switch (charge_noeud->type)
+            {
+                case CHARGE_NOEUD :
+                {
+                    EF_gtk_charge_noeud(projet, numero_action, numero_charge);
+                    break;
+                }
+                case CHARGE_BARRE_PONCTUELLE :
+                {
+                    break;
+                }
+                case CHARGE_BARRE_REPARTIE_UNIFORME :
+                {
+                    break;
+                }
+                default :
+                {
+                    BUG(0, );
+                    break;
+                }
+            }
+        }
+    }
+    g_list_foreach(list, (GFunc)gtk_tree_path_free, NULL);
+    g_list_free(list);
     
     return;
 }
@@ -803,7 +868,11 @@ void _1990_gtk_actions(Projet *projet)
     gtk_widget_show_all(list_gtk_1990_actions->menu_type_list_charge);
     gtk_toolbar_insert(GTK_TOOLBAR(list_gtk_1990_actions->toolbar_charges), list_gtk_1990_actions->item_charge_ajout, -1);
     gtk_widget_set_sensitive(GTK_WIDGET(list_gtk_1990_actions->item_charge_ajout), FALSE);
-//    g_signal_connect(G_OBJECT(list_gtk_1990_actions->item_action_ajout), "clicked", G_CALLBACK(_1990_gtk_menu_nouvelle_action_activate), projet);
+    list_gtk_1990_actions->img_charge_edit = gtk_image_new_from_stock(GTK_STOCK_EDIT, GTK_ICON_SIZE_SMALL_TOOLBAR);
+    list_gtk_1990_actions->item_charge_edit = gtk_tool_button_new(list_gtk_1990_actions->img_charge_edit, gettext("Éditer"));
+    gtk_toolbar_insert(GTK_TOOLBAR(list_gtk_1990_actions->toolbar_charges), list_gtk_1990_actions->item_charge_edit, -1);
+    gtk_widget_set_sensitive(GTK_WIDGET(list_gtk_1990_actions->item_charge_edit), FALSE);
+    g_signal_connect(G_OBJECT(list_gtk_1990_actions->item_charge_edit), "clicked", G_CALLBACK(_1990_gtk_menu_edit_charge_clicked), projet);
     list_gtk_1990_actions->img_charge_suppr = gtk_image_new_from_stock(GTK_STOCK_DELETE, GTK_ICON_SIZE_SMALL_TOOLBAR);
     list_gtk_1990_actions->item_charge_suppr = gtk_tool_button_new(list_gtk_1990_actions->img_charge_suppr, gettext("Supprimer"));
     gtk_toolbar_insert(GTK_TOOLBAR(list_gtk_1990_actions->toolbar_charges), list_gtk_1990_actions->item_charge_suppr, -1);
