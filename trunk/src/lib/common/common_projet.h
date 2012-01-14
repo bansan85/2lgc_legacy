@@ -103,6 +103,8 @@ typedef struct __List_Gtk_1990_Actions
     LIST            *menu_list_widget_charge;
     GtkWidget       *img_charge_ajout;
     GtkToolItem     *item_charge_ajout;
+    GtkWidget       *img_charge_edit;
+    GtkToolItem     *item_charge_edit;
     GtkWidget       *img_charge_suppr;
     GtkToolItem     *item_charge_suppr;
 } List_Gtk_1990_Actions;
@@ -112,6 +114,9 @@ typedef struct __List_Gtk_EF_Charge_Noeud
 {
     GtkWidget       *window;
     GtkWidget       *table;
+    
+    gint            action;
+    gint            charge;
     
     GtkWidget       *label_charge;
     GtkWidget       *combobox_charge;
