@@ -1470,10 +1470,10 @@ void _1990_gtk_groupes(GtkWidget *button __attribute__((unused)), Projet *projet
     gtk_orientable_set_orientation(GTK_ORIENTABLE(list_gtk_1990_groupes->toolbar_groupe), GTK_ORIENTATION_HORIZONTAL);
     gtk_toolbar_set_style(GTK_TOOLBAR(list_gtk_1990_groupes->toolbar_groupe), GTK_TOOLBAR_ICONS);
     gtk_container_set_border_width(GTK_CONTAINER(list_gtk_1990_groupes->toolbar_groupe), 0);
-    list_gtk_1990_groupes->img_groupe_ajout = gtk_image_new_from_file(DATADIR"/images/ajouter.xpm");
+    list_gtk_1990_groupes->img_groupe_ajout = gtk_image_new_from_stock(GTK_STOCK_ADD, GTK_ICON_SIZE_SMALL_TOOLBAR);
     list_gtk_1990_groupes->item_groupe_ajout = gtk_tool_button_new(list_gtk_1990_groupes->img_groupe_ajout, gettext("Ajouter"));
     g_signal_connect(G_OBJECT(list_gtk_1990_groupes->item_groupe_ajout), "clicked", G_CALLBACK(_1990_gtk_button_groupe_ajout_clicked), projet);
-    list_gtk_1990_groupes->img_groupe_suppr = gtk_image_new_from_file(DATADIR"/images/fleche_droite.xpm");
+    list_gtk_1990_groupes->img_groupe_suppr = gtk_image_new_from_stock(GTK_STOCK_GO_FORWARD, GTK_ICON_SIZE_SMALL_TOOLBAR);
     list_gtk_1990_groupes->item_groupe_suppr = gtk_tool_button_new(list_gtk_1990_groupes->img_groupe_suppr, gettext("Supprimer"));
     g_signal_connect(G_OBJECT(list_gtk_1990_groupes->item_groupe_suppr), "clicked", G_CALLBACK(_1990_gtk_button_groupe_suppr_clicked), projet);
 
@@ -1526,11 +1526,11 @@ void _1990_gtk_groupes(GtkWidget *button __attribute__((unused)), Projet *projet
     gtk_orientable_set_orientation(GTK_ORIENTABLE(list_gtk_1990_groupes->toolbar_dispo), GTK_ORIENTATION_HORIZONTAL);
     gtk_toolbar_set_style(GTK_TOOLBAR(list_gtk_1990_groupes->toolbar_dispo), GTK_TOOLBAR_ICONS);
     gtk_container_set_border_width(GTK_CONTAINER(list_gtk_1990_groupes->toolbar_dispo), 0);
-    list_gtk_1990_groupes->img_ajout_dispo = gtk_image_new_from_file(DATADIR"/images/fleche_gauche.xpm");
+    list_gtk_1990_groupes->img_ajout_dispo = gtk_image_new_from_stock(GTK_STOCK_GO_BACK, GTK_ICON_SIZE_SMALL_TOOLBAR);
     list_gtk_1990_groupes->item_ajout_dispo = gtk_tool_button_new(list_gtk_1990_groupes->img_ajout_dispo, gettext("Ajouter"));
     g_signal_connect(G_OBJECT(list_gtk_1990_groupes->item_ajout_dispo), "clicked", G_CALLBACK(_1990_gtk_button_ajout_dispo_clicked), projet);
     gtk_toolbar_insert(GTK_TOOLBAR(list_gtk_1990_groupes->toolbar_dispo), list_gtk_1990_groupes->item_ajout_dispo, -1);
-    list_gtk_1990_groupes->img_ajout_tout_dispo = gtk_image_new_from_file(DATADIR"/images/fast_fleche_gauche.xpm");
+    list_gtk_1990_groupes->img_ajout_tout_dispo = gtk_image_new_from_stock(GTK_STOCK_GOTO_FIRST, GTK_ICON_SIZE_SMALL_TOOLBAR);
     list_gtk_1990_groupes->item_ajout_tout_dispo = gtk_tool_button_new(list_gtk_1990_groupes->img_ajout_tout_dispo, gettext("Ajouter tout"));
     g_signal_connect(G_OBJECT(list_gtk_1990_groupes->item_ajout_tout_dispo), "clicked", G_CALLBACK(_1990_gtk_button_ajout_tout_dispo_clicked), projet);
     gtk_toolbar_insert(GTK_TOOLBAR(list_gtk_1990_groupes->toolbar_dispo), list_gtk_1990_groupes->item_ajout_tout_dispo, -1);

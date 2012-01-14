@@ -731,7 +731,7 @@ void _1990_gtk_actions(Projet *projet)
     gtk_toolbar_set_style(GTK_TOOLBAR(list_gtk_1990_actions->toolbar_actions), GTK_TOOLBAR_ICONS);
     gtk_container_set_border_width(GTK_CONTAINER(list_gtk_1990_actions->toolbar_actions), 0);
     gtk_table_attach(GTK_TABLE(list_gtk_1990_actions->table_actions), list_gtk_1990_actions->toolbar_actions, 0, 1, 1, 2, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_SHRINK | GTK_FILL), 0, 0);
-    list_gtk_1990_actions->img_action_ajout = gtk_image_new_from_file(DATADIR"/images/ajouter.xpm");
+    list_gtk_1990_actions->img_action_ajout = gtk_image_new_from_stock(GTK_STOCK_ADD, GTK_ICON_SIZE_SMALL_TOOLBAR);
     list_gtk_1990_actions->item_action_ajout = gtk_menu_tool_button_new(list_gtk_1990_actions->img_action_ajout, gettext("Ajouter"));
     list_gtk_1990_actions->menu_type_list_action = gtk_menu_new();
     list_gtk_1990_actions->menu_list_widget_action = list_init();
@@ -746,7 +746,7 @@ void _1990_gtk_actions(Projet *projet)
     gtk_widget_show_all(list_gtk_1990_actions->menu_type_list_action);
     gtk_toolbar_insert(GTK_TOOLBAR(list_gtk_1990_actions->toolbar_actions), list_gtk_1990_actions->item_action_ajout, -1);
     g_signal_connect(G_OBJECT(list_gtk_1990_actions->item_action_ajout), "clicked", G_CALLBACK(_1990_gtk_menu_nouvelle_action_activate), projet);
-    list_gtk_1990_actions->img_action_suppr = gtk_image_new_from_file(DATADIR"/images/supprimer.xpm");
+    list_gtk_1990_actions->img_action_suppr = gtk_image_new_from_stock(GTK_STOCK_DELETE, GTK_ICON_SIZE_SMALL_TOOLBAR);
     list_gtk_1990_actions->item_action_suppr = gtk_tool_button_new(list_gtk_1990_actions->img_action_suppr, gettext("Supprimer"));
     gtk_toolbar_insert(GTK_TOOLBAR(list_gtk_1990_actions->toolbar_actions), list_gtk_1990_actions->item_action_suppr, -1);
     g_signal_connect(G_OBJECT(list_gtk_1990_actions->item_action_suppr), "clicked", G_CALLBACK(_1990_gtk_menu_suppr_action_activate), projet);
@@ -790,7 +790,7 @@ void _1990_gtk_actions(Projet *projet)
     gtk_container_set_border_width(GTK_CONTAINER(list_gtk_1990_actions->toolbar_charges), 0);
     gtk_table_attach(GTK_TABLE(list_gtk_1990_actions->table_charges), list_gtk_1990_actions->toolbar_charges, 0, 1, 1, 2, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_SHRINK | GTK_FILL), 0, 0);
     
-    list_gtk_1990_actions->img_charge_ajout = gtk_image_new_from_file(DATADIR"/images/ajouter.xpm");
+    list_gtk_1990_actions->img_charge_ajout = gtk_image_new_from_stock(GTK_STOCK_ADD, GTK_ICON_SIZE_SMALL_TOOLBAR);
     list_gtk_1990_actions->item_charge_ajout = gtk_menu_tool_button_new(list_gtk_1990_actions->img_charge_ajout, gettext("Ajouter"));
     list_gtk_1990_actions->menu_type_list_charge = gtk_menu_new();
     list_gtk_1990_actions->menu_list_widget_charge = list_init();
@@ -804,7 +804,7 @@ void _1990_gtk_actions(Projet *projet)
     gtk_toolbar_insert(GTK_TOOLBAR(list_gtk_1990_actions->toolbar_charges), list_gtk_1990_actions->item_charge_ajout, -1);
     gtk_widget_set_sensitive(GTK_WIDGET(list_gtk_1990_actions->item_charge_ajout), FALSE);
 //    g_signal_connect(G_OBJECT(list_gtk_1990_actions->item_action_ajout), "clicked", G_CALLBACK(_1990_gtk_menu_nouvelle_action_activate), projet);
-    list_gtk_1990_actions->img_charge_suppr = gtk_image_new_from_file(DATADIR"/images/supprimer.xpm");
+    list_gtk_1990_actions->img_charge_suppr = gtk_image_new_from_stock(GTK_STOCK_DELETE, GTK_ICON_SIZE_SMALL_TOOLBAR);
     list_gtk_1990_actions->item_charge_suppr = gtk_tool_button_new(list_gtk_1990_actions->img_charge_suppr, gettext("Supprimer"));
     gtk_toolbar_insert(GTK_TOOLBAR(list_gtk_1990_actions->toolbar_charges), list_gtk_1990_actions->item_charge_suppr, -1);
     gtk_widget_set_sensitive(GTK_WIDGET(list_gtk_1990_actions->item_charge_suppr), FALSE);
