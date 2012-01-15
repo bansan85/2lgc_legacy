@@ -27,9 +27,6 @@
 #include "1990_actions.h"
 #include "common_projet.h"
 #include "common_erreurs.h"
-#include "common_fonction.h"
-#include "EF_noeud.h"
-#include "EF_charge_noeud.h"
 
 
 Charge_Noeud*  EF_charge_noeud_ajout(Projet *projet, int num_action, EF_Noeud *noeud,

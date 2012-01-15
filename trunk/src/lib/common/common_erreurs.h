@@ -22,7 +22,6 @@
 #include "config.h"
 #include <stdlib.h>
 #include <stdio.h>
-#include <assert.h>
 
 //#ifdef NDEBUG
 #define BUG(X, Y) ({if (!(X)) return Y;})

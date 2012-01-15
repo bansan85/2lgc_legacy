@@ -24,14 +24,12 @@
 #include "common_projet.h"
 #include "common_erreurs.h"
 #include "common_maths.h"
-#include "1992_1_1_barres.h"
 #include "1992_1_1_materiaux.h"
 #include "1992_1_1_section.h"
 #include "EF_charge_barre_ponctuelle.h"
 #include "EF_calculs.h"
 #include "EF_noeud.h"
 #include "EF_relachement.h"
-#include "math.h"
 
 int _1992_1_1_barres_init(Projet *projet)
 /* Description : Initialise la liste des éléments en béton

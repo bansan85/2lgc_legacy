@@ -24,10 +24,8 @@
 #include <list.h>
 #include <string.h>
 #include "common_projet.h"
-#include "common_fonction.h"
 #include "common_erreurs.h"
 #include "common_maths.h"
-#include "1990_actions.h"
 
 int common_fonction_init(Projet *projet, Action *action)
 /* Description : Initialise les fonctions décrivant les sollicitations, les rotations ou les

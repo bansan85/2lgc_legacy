@@ -27,9 +27,6 @@
 #include "common_erreurs.h"
 #include "common_maths.h"
 #include "1990_actions.h"
-#include "1990_groupes.h"
-#include "1990_combinaisons.h"
-#include "1990_ponderations.h"
 
 
 int _1990_ponderations_verifie_double(LIST *liste_ponderations, Ponderation* pond_a_verifier)

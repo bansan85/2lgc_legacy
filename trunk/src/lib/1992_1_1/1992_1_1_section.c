@@ -23,7 +23,6 @@
 #include "common_projet.h"
 #include "common_erreurs.h"
 #include "common_maths.h"
-#include "1992_1_1_section.h"
 
 int _1992_1_1_sections_init(Projet *projet)
 /* Description : Initialise la liste des section en béton

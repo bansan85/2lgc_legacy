@@ -31,8 +31,6 @@
 #include "common_maths.h"
 #include "common_fonction.h"
 #include "EF_noeud.h"
-#include "EF_charge_barre_ponctuelle.h"
-
 
 Charge_Barre_Ponctuelle *EF_charge_barre_ponctuelle_ajout(Projet *projet, int num_action,
   Beton_Barre *barre, int repere_local, double a, double fx, double fy, double fz, double mx,

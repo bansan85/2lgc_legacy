@@ -16,16 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __COMMON_FONCTION_H
-#define __COMMON_FONCTION_H
+#ifndef __COMMON_SELECTION_H
+#define __COMMON_SELECTION_H
 
 #include "config.h"
 #include "common_projet.h"
 
 
-int common_fonction_init(Projet *projet, Action *action);
-int common_fonction_ajout(Fonction* fonction, double debut_troncon, double fin_troncon, double coef_0, double coef_x, double coef_x2, double coef_x3, double coef_x4, double coef_x5, double coef_x6, double translate);
-int common_fonction_affiche(Fonction* fonction);
-int common_fonction_free(Projet *projet, Action *action);
+LIST *common_selection_renvoie_numeros(char *texte);
 
 #endif

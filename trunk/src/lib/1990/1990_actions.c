@@ -24,16 +24,11 @@
 #include <cholmod.h>
 #include <string.h>
 
-#include "1990_actions.h"
 #include "1990_coef_psi.h"
 #include "common_projet.h"
 #include "common_maths.h"
 #include "common_erreurs.h"
 #include "common_fonction.h"
-#include "EF_noeud.h"
-#include "EF_charge_noeud.h"
-#include "EF_charge_barre_ponctuelle.h"
-
 
 char* _1990_action_type_bat_txt_eu(int type)
 /* Description : renvoie la description des types de charge pour les bâtiments de la norme

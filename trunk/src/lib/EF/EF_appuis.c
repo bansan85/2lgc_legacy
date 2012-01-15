@@ -21,7 +21,6 @@
 #include <libintl.h>
 #include "common_projet.h"
 #include "common_erreurs.h"
-#include "EF_appuis.h"
 
 int EF_appuis_init(Projet *projet)
 /* Description : Initialise la liste des types d'appuis
