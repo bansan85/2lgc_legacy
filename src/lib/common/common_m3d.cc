@@ -22,16 +22,15 @@
 
 extern "C" {
 
-#include "common_projet.h"
-#include "common_erreurs.h"
-#include "EF_noeud.h"
-#include "1992_1_1_barres.h"
-#include "1992_1_1_section.h"
-#include "common_m3d.hpp"
 #include <gtk/gtk.h>
 #include <libintl.h>
 #include <locale.h>
 #include <string.h>
+#include "common_projet.h"
+#include "common_erreurs.h"
+#include "EF_noeud.h"
+#include "1992_1_1_barres.h"
+#include "common_m3d.hpp"
 
 struct SGlobalData
 {

@@ -21,7 +21,6 @@
 #include <libintl.h>
 #include "common_projet.h"
 #include "common_erreurs.h"
-#include "EF_relachement.h"
 
 int EF_relachement_init(Projet *projet)
 /* Description : Initialise la liste des relachements

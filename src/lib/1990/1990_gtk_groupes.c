@@ -27,17 +27,12 @@
 
 #include "1990_actions.h"
 #include "1990_groupes.h"
-#include "1990_gtk_groupes.h"
 #include "1990_ponderations.h"
 #include "1990_combinaisons.h"
 #include "common_erreurs.h"
 #include "common_projet.h"
 #include "common_tooltip.h"
-#include "common_maths.h"
 #include "common_gtk.h"
-#include "EF_charge_barre_ponctuelle.h"
-#include "EF_charge_noeud.h"
-#include "EF_charge_barre_repartie_uniforme.h"
 
 const GtkTargetEntry drag_targets_groupes_1[] = { {(gchar*)PACKAGE"1_SAME_PROC", GTK_TARGET_SAME_APP, 0}}; 
 const GtkTargetEntry drag_targets_groupes_2[] = { {(gchar*)PACKAGE"2_SAME_PROC", GTK_TARGET_SAME_APP, 0}}; 

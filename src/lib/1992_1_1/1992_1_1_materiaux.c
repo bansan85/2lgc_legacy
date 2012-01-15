@@ -23,7 +23,6 @@
 #include "common_projet.h"
 #include "common_maths.h"
 #include "common_erreurs.h"
-#include "1992_1_1_materiaux.h"
 
 int _1992_1_1_materiaux_init(Projet *projet)
 /* Description : Initialise la liste des matériaux en béton

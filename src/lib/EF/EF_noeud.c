@@ -22,7 +22,6 @@
 #include <libintl.h>
 #include "common_projet.h"
 #include "common_erreurs.h"
-#include "EF_noeud.h"
 #include "EF_appuis.h"
 
 int EF_noeuds_init(Projet *projet)

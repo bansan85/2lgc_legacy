@@ -22,9 +22,6 @@
 #include <cholmod.h>
 #include "common_projet.h"
 #include "common_erreurs.h"
-#include "common_maths.h"
-#include "EF_rigidite.h"
-#include "EF_noeud.h"
 
 int EF_rigidite_init(Projet *projet)
 /* Description : Initialise à NULL les différentes matrices de rigidité

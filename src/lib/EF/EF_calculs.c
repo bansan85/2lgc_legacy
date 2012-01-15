@@ -28,12 +28,9 @@
 #include "common_erreurs.h"
 #include "common_maths.h"
 #include "common_fonction.h"
-#include "EF_noeud.h"
-#include "EF_charge_noeud.h"
 #include "EF_charge_barre_ponctuelle.h"
 #include "EF_charge_barre_repartie_uniforme.h"
 #include "1990_actions.h"
-#include "1992_1_1_barres.h"
 #include "1992_1_1_section.h"
 
 int EF_calculs_initialise(Projet *projet)

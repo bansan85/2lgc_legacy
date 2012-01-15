@@ -31,9 +31,6 @@
 #include "common_maths.h"
 #include "common_fonction.h"
 #include "EF_noeud.h"
-#include "EF_charge_noeud.h"
-#include "EF_charge_barre_repartie_uniforme.h"
-
 
 Charge_Barre_Repartie_Uniforme *EF_charge_barre_repartie_uniforme_ajout(Projet *projet,
   int num_action, Beton_Barre *barre, int repere_local, int projection, double a, double b,
