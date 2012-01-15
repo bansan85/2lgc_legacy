@@ -1380,11 +1380,11 @@ void _1990_gtk_groupes(GtkWidget *button __attribute__((unused)), Projet *projet
  * Valeur renvoyée : Aucune
  */
 {
-    GtkWidget           *label;
-    List_Gtk_1990_Groupes       *list_gtk_1990_groupes;
-    GtkCellRenderer     *pCellRenderer;
-    GtkTreeViewColumn   *pColumn;
-    GList               *list;
+    GtkWidget               *label;
+    List_Gtk_1990_Groupes   *list_gtk_1990_groupes;
+    GtkCellRenderer         *pCellRenderer;
+    GtkTreeViewColumn       *pColumn;
+    GList                   *list;
     
     list_gtk_1990_groupes = &projet->list_gtk._1990_groupes;
     list_gtk_1990_groupes->table = gtk_table_new(3, 1, FALSE);
@@ -1464,6 +1464,9 @@ void _1990_gtk_groupes(GtkWidget *button __attribute__((unused)), Projet *projet
     g_list_first(list);
     g_list_foreach(list, (GFunc)gtk_tree_view_column_set_resizable, (gpointer)TRUE);
     g_list_free(list);
+    // On cache la colonne avec les numéros
+    pColumn = gtk_tree_view_get_column(list_gtk_1990_groupes->tree_view_etat, 0);
+    gtk_tree_view_column_set_visible(pColumn, FALSE);
     
     // Génération de la toolbar pour les groupes
     list_gtk_1990_groupes->toolbar_groupe = gtk_toolbar_new();
@@ -1514,6 +1517,9 @@ void _1990_gtk_groupes(GtkWidget *button __attribute__((unused)), Projet *projet
     g_list_first(list);
     g_list_foreach(list, (GFunc)gtk_tree_view_column_set_resizable, (gpointer)TRUE);
     g_list_free(list);
+    // On cache la colonne avec les numéros
+    pColumn = gtk_tree_view_get_column(list_gtk_1990_groupes->tree_view_dispo, 0);
+    gtk_tree_view_column_set_visible(pColumn, FALSE);
     gtk_table_attach (GTK_TABLE (list_gtk_1990_groupes->table_dispo), GTK_WIDGET(list_gtk_1990_groupes->scroll_dispo), 0, 1, 0, 1, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 0, 0);
     
     list_gtk_1990_groupes->paned_groupe_dispo = gtk_paned_new(GTK_ORIENTATION_HORIZONTAL);
