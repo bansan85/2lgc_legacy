@@ -235,6 +235,8 @@ void EF_gtk_charge_noeud_ajouter_clicked(GtkButton *button __attribute__((unused
     if (numero_action == num_action)
         EF_gtk_charge_noeud_ajout_affichage(charge_noeud, projet, TRUE);
     
+    gtk_widget_destroy(projet->list_gtk.ef_charge_noeud.window);
+    
     return;
 }
 
@@ -277,6 +279,8 @@ void EF_gtk_charge_noeud_editer_clicked(GtkButton *button __attribute__((unused)
         _1990_action_deplace_charge(projet, ef_gtk->action, ef_gtk->charge, num_action);
     else
         EF_gtk_charge_noeud_ajout_affichage(charge_noeud, projet, FALSE);
+    
+    gtk_widget_destroy(projet->list_gtk.ef_charge_noeud.window);
     
     return;
 }
