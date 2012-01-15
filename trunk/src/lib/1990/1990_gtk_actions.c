@@ -41,6 +41,7 @@
 #include "EF_charge_noeud.h"
 #include "EF_charge_barre_repartie_uniforme.h"
 #include "EF_gtk_charge_noeud.h"
+#include "EF_gtk_charge_barre_ponctuelle.h"
 
 const GtkTargetEntry drag_targets_actions[] = { {(gchar*)PACKAGE"1_SAME_PROC", GTK_TARGET_SAME_APP, 0}}; 
 
@@ -174,52 +175,7 @@ void _1990_gtk_tree_view_actions_cursor_changed(GtkTreeView *tree_view __attribu
                 {
                     Charge_Barre_Ponctuelle *charge = list_curr(action->charges);
                     
-                    description = malloc(sizeof(char)*(strlen(gettext("Barre : "))+1));
-                    strcpy(description, gettext("Barre : "));
-                    sprintf(tmp, "%d", charge->barre->numero);
-                    description = realloc(description, (strlen(description) + strlen(tmp)+1)*sizeof(char));
-                    strcat(description, tmp);
-                    common_math_double_to_char(charge->position, tmp);
-                    description = realloc(description, (strlen(description) + strlen(",  :  m") + strlen(gettext("position")) + strlen(tmp) + 1)*sizeof(char));
-                    strcat(description, ", ");
-                    strcat(description, gettext("position"));
-                    strcat(description, " : ");
-                    strcat(description, tmp);
-                    strcat(description, " m");
-                    common_math_double_to_char(charge->fx, tmp);
-                    description = realloc(description, (strlen(description) + strlen(", Fx :  N") + strlen(tmp)+1)*sizeof(char));
-                    strcat(description, ", Fx : ");
-                    strcat(description, tmp);
-                    strcat(description, " N");
-                    common_math_double_to_char(charge->fy, tmp);
-                    description = realloc(description, (strlen(description) + strlen(", Fy :  N") + strlen(tmp)+1)*sizeof(char));
-                    strcat(description, ", Fy : ");
-                    strcat(description, tmp);
-                    strcat(description, " N");
-                    common_math_double_to_char(charge->fz, tmp);
-                    description = realloc(description, (strlen(description) + strlen(", Fz :  N") + strlen(tmp)+1)*sizeof(char));
-                    strcat(description, ", Fz : ");
-                    strcat(description, tmp);
-                    strcat(description, " N");
-                    common_math_double_to_char(charge->mx, tmp);
-                    description = realloc(description, (strlen(description) + strlen(", Mx :  N") + strlen(tmp)+1)*sizeof(char));
-                    strcat(description, ", Mx : ");
-                    strcat(description, tmp);
-                    strcat(description, " N");
-                    common_math_double_to_char(charge->my, tmp);
-                    description = realloc(description, (strlen(description) + strlen(", My :  N") + strlen(tmp)+1)*sizeof(char));
-                    strcat(description, ", My : ");
-                    strcat(description, tmp);
-                    strcat(description, " N");
-                    common_math_double_to_char(charge->mz, tmp);
-                    description = realloc(description, (strlen(description) + strlen(", Mz :  N") + strlen(tmp)+1)*sizeof(char));
-                    strcat(description, ", Mz : ");
-                    strcat(description, tmp);
-                    strcat(description, " N");
-                    
-                    gtk_tree_store_append(list_gtk_1990_actions->tree_store_charges, &charge->Iter, NULL);
-                    gtk_tree_store_set(list_gtk_1990_actions->tree_store_charges, &charge->Iter, 0, charge->numero, 1, charge->description, 2, gettext("Ponctuelle sur barre"), 3, description, -1);
-                    free(description);
+                    EF_gtk_charge_barre_ponctuelle_ajout_affichage(charge, projet, TRUE);
                     
                     break;
                 }
@@ -547,17 +503,40 @@ void _1990_gtk_menu_suppr_action_activate(GtkToolButton *toolbutton __attribute_
 }
 
 
-void _1990_gtk_menu_nouvelle_charge_ponctuel_activate(GtkMenuItem *menuitem __attribute__((unused)), Projet* projet)
+void _1990_gtk_menu_nouvelle_charge_nodale_activate(GtkMenuItem *menuitem __attribute__((unused)), Projet* projet)
 {
-    Action  *action;
+    GtkTreeIter                 iter_action;
+    GtkTreeModel                *model_action;
+    int                         numero_action;
     
     BUGMSG(projet, , "_1990_gtk_menu_nouvelle_charge_ponctuel_activate\n");
     BUGMSG(projet->actions, , "_1990_gtk_menu_nouvelle_charge_ponctuel_activate\n");
     BUGMSG(list_size(projet->actions) != 0, , "_1990_gtk_menu_nouvelle_charge_ponctuel_activate\n");
     
-    action = list_curr(projet->actions);
+    if (!gtk_tree_selection_get_selected(projet->list_gtk._1990_actions.tree_select_actions, &model_action, &iter_action))
+        return;
+    gtk_tree_model_get(model_action, &iter_action, 0, &numero_action, -1);
+    EF_gtk_charge_noeud(projet, numero_action, -1);
     
-    EF_gtk_charge_noeud(projet, action->numero, -1);
+    return;
+}
+
+
+void _1990_gtk_menu_nouvelle_charge_barre_ponctuelle_activate(GtkMenuItem *menuitem __attribute__((unused)), Projet* projet)
+{
+    GtkTreeIter                 iter_action;
+    GtkTreeModel                *model_action;
+    int                         numero_action;
+    
+    BUGMSG(projet, , "_1990_gtk_menu_nouvelle_charge_ponctuel_activate\n");
+    BUGMSG(projet->actions, , "_1990_gtk_menu_nouvelle_charge_ponctuel_activate\n");
+    BUGMSG(list_size(projet->actions) != 0, , "_1990_gtk_menu_nouvelle_charge_ponctuel_activate\n");
+    
+    if (!gtk_tree_selection_get_selected(projet->list_gtk._1990_actions.tree_select_actions, &model_action, &iter_action))
+        return;
+    gtk_tree_model_get(model_action, &iter_action, 0, &numero_action, -1);
+    EF_gtk_charge_barre_ponctuelle(projet, numero_action, -1);
+    
     return;
 }
 
@@ -676,6 +655,7 @@ void _1990_gtk_menu_edit_charge_clicked(GtkToolButton *toolbutton __attribute__(
                 }
                 case CHARGE_BARRE_PONCTUELLE :
                 {
+                    EF_gtk_charge_barre_ponctuelle(projet, numero_action, numero_charge);
                     break;
                 }
                 case CHARGE_BARRE_REPARTIE_UNIFORME :
@@ -863,7 +843,12 @@ void _1990_gtk_actions(Projet *projet)
     w_temp = gtk_menu_item_new_with_label(gettext("Charge nodale"));
     gtk_menu_shell_append(GTK_MENU_SHELL(list_gtk_1990_actions->menu_type_list_charge), w_temp);
     list_insert_after(list_gtk_1990_actions->menu_list_widget_charge, &w_temp, sizeof(&w_temp));
-    g_signal_connect(w_temp, "activate", G_CALLBACK(_1990_gtk_menu_nouvelle_charge_ponctuel_activate), projet);
+    g_signal_connect(w_temp, "activate", G_CALLBACK(_1990_gtk_menu_nouvelle_charge_nodale_activate), projet);
+    gtk_menu_tool_button_set_menu(GTK_MENU_TOOL_BUTTON(list_gtk_1990_actions->item_charge_ajout), list_gtk_1990_actions->menu_type_list_charge);
+    w_temp = gtk_menu_item_new_with_label(gettext("Charge ponctuelle sur barre"));
+    gtk_menu_shell_append(GTK_MENU_SHELL(list_gtk_1990_actions->menu_type_list_charge), w_temp);
+    list_insert_after(list_gtk_1990_actions->menu_list_widget_charge, &w_temp, sizeof(&w_temp));
+    g_signal_connect(w_temp, "activate", G_CALLBACK(_1990_gtk_menu_nouvelle_charge_barre_ponctuelle_activate), projet);
     gtk_menu_tool_button_set_menu(GTK_MENU_TOOL_BUTTON(list_gtk_1990_actions->item_charge_ajout), list_gtk_1990_actions->menu_type_list_charge);
     gtk_widget_show_all(list_gtk_1990_actions->menu_type_list_charge);
     gtk_toolbar_insert(GTK_TOOLBAR(list_gtk_1990_actions->toolbar_charges), list_gtk_1990_actions->item_charge_ajout, -1);

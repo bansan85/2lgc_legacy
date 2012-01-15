@@ -45,6 +45,7 @@ libeurocodes_la_SOURCES +=	common/common_m3d.cc \
 							1990/1990_gtk_groupes.c \
 							1990/1990_gtk_actions.c \
 							EF/EF_gtk_charge_noeud.c \
+							EF/EF_gtk_charge_barre_ponctuelle.c \
 							common/common_gtk.c
 endif
 
@@ -78,5 +79,6 @@ libeurocodes_la_HEADERS +=	common/common_m3d.hpp \
 							1990/1990_gtk_groupes.h \
 							1990/1990_gtk_actions.h \
 							EF/EF_gtk_charge_noeud.h \
+							EF/EF_gtk_charge_barre_ponctuelle.h \
 							common/common_gtk.h
 endif

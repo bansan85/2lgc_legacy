@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2012-01-14 08:56+0100\n"
-"PO-Revision-Date: 2012-01-14 08:57+0100\n"
+"POT-Creation-Date: 2012-01-15 07:24+0100\n"
+"PO-Revision-Date: 2012-01-15 07:28+0100\n"
 "Last-Translator: LE GARREC Vincent <vlg@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -29,12 +29,6 @@ msgstr "%s : Matériau en béton n°%d introuvable.\n"
 
 msgid "Barre : "
 msgstr "Barre : "
-
-msgid "position"
-msgstr "position"
-
-msgid "Ponctuelle sur barre"
-msgstr "Ponctuelle sur barre"
 
 msgid "départ"
 msgstr "départ"
@@ -89,6 +83,9 @@ msgstr "Valeur"
 
 msgid "Charge nodale"
 msgstr "Charge nodale"
+
+msgid "Charge ponctuelle sur barre"
+msgstr "Charge ponctuelle sur barre"
 
 msgid "Éditer"
 msgstr "Éditer"
@@ -424,29 +421,35 @@ msgstr "%s : '%s' n'est pas de la forme 'largeurxhauteur'.\n"
 msgid "%s : Paramètre invalide : %s %s\n"
 msgstr "%s : Paramètre invalide : %s %s\n"
 
-msgid "Erreur lors de la résolution de la matrice.\n"
-msgstr "Erreur lors de la résolution de la matrice.\n"
+msgid "position"
+msgstr "position"
 
-msgid "Noeud : "
-msgstr "Noeud : "
+msgid "repère : local"
+msgstr "repère : local"
 
-msgid "Ponctuelle sur noeud"
-msgstr "Ponctuelle sur noeud"
+msgid "repère : global"
+msgstr "repère : global"
+
+msgid "Ponctuelle sur barre"
+msgstr "Ponctuelle sur barre"
 
 msgid "La valeur de %s est incorrecte."
 msgstr "La valeur de %s est incorrecte."
 
-msgid "La valeur du noeud est incorrecte."
-msgstr "La valeur du noeud est incorrecte."
+msgid "La valeur de la position est incorrecte."
+msgstr "La valeur de la position est incorrecte."
 
-msgid "Le noeud %d n'existe pas."
-msgstr "Le noeud %d n'existe pas."
+msgid "La valeur de la barre est incorrecte."
+msgstr "La valeur de la barre est incorrecte."
 
-msgid "Ajout d'une charge au noeud"
-msgstr "Ajout d'une charge au noeud"
+msgid "La barre %d n'existe pas."
+msgstr "La barre %d n'existe pas."
 
-msgid "Modification d'une charge au noeud"
-msgstr "Modification d'une charge au noeud"
+msgid "Ajout d'une charge ponctuelle sur barre"
+msgstr "Ajout d'une charge ponctuelle sur barre"
+
+msgid "Modification d'une charge ponctuelle sur barre"
+msgstr "Modification d'une charge ponctuelle sur barre"
 
 msgid "Charge :"
 msgstr "Charge :"
@@ -472,6 +475,36 @@ msgstr "My :"
 msgid "Mz :"
 msgstr "Mz :"
 
+msgid "Repère local"
+msgstr "Repère local"
+
+msgid "Position :"
+msgstr "Position :"
+
+msgid "Barre :"
+msgstr "Barre :"
+
+msgid "Erreur lors de la résolution de la matrice.\n"
+msgstr "Erreur lors de la résolution de la matrice.\n"
+
+msgid "Noeud : "
+msgstr "Noeud : "
+
+msgid "Ponctuelle sur noeud"
+msgstr "Ponctuelle sur noeud"
+
+msgid "La valeur du noeud est incorrecte."
+msgstr "La valeur du noeud est incorrecte."
+
+msgid "Le noeud %d n'existe pas."
+msgstr "Le noeud %d n'existe pas."
+
+msgid "Ajout d'une charge au noeud"
+msgstr "Ajout d'une charge au noeud"
+
+msgid "Modification d'une charge au noeud"
+msgstr "Modification d'une charge au noeud"
+
 msgid "Noeud :"
 msgstr "Noeud :"
 
@@ -480,5 +513,4 @@ msgstr "Noeud n°%d introuvable.\n"
 
 msgid "Relachement n°%d introuvable.\n"
 msgstr "Relachement n°%d introuvable.\n"
-
 
