@@ -23,6 +23,6 @@
 #include "common_projet.h"
 
 
-LIST *common_selection_renvoie_numeros(char *texte);
+LIST *common_selection_renvoie_numeros(const char *texte);
 
 #endif
