@@ -728,6 +728,9 @@ void _1990_gtk_actions(Projet *projet)
     gtk_tree_view_column_set_sizing(column, GTK_TREE_VIEW_COLUMN_FIXED);
     gtk_tree_view_column_set_fixed_width(column, 180);
     g_signal_connect(G_OBJECT(list_gtk_1990_actions->tree_select_actions), "changed", G_CALLBACK(_1990_gtk_actions_select_changed), projet);
+    // On cache la colonne où les numéros s'affichent.
+    column = gtk_tree_view_get_column(list_gtk_1990_actions->tree_view_actions, 0);
+    gtk_tree_view_column_set_visible(column, FALSE);
     
     // Génération de la toolbar pour les actions
     list_gtk_1990_actions->toolbar_actions = gtk_toolbar_new();
@@ -787,6 +790,9 @@ void _1990_gtk_actions(Projet *projet)
     g_list_free(list);
     g_signal_connect(GTK_WIDGET(list_gtk_1990_actions->tree_view_charges), "drag-begin", G_CALLBACK(_1990_gtk_actions_tree_view_drag_begin), NULL);
     g_signal_connect(GTK_WIDGET(list_gtk_1990_actions->tree_view_actions), "drag-drop", G_CALLBACK(_1990_gtk_actions_tree_view_drag), projet);
+    // On cache la colonne avec les numéros
+    column = gtk_tree_view_get_column(list_gtk_1990_actions->tree_view_charges, 0);
+    gtk_tree_view_column_set_visible(column, FALSE);
     // Génération de la toolbar pour les charges
     list_gtk_1990_actions->toolbar_charges = gtk_toolbar_new();
     gtk_orientable_set_orientation(GTK_ORIENTABLE(list_gtk_1990_actions->toolbar_charges), GTK_ORIENTATION_HORIZONTAL);
