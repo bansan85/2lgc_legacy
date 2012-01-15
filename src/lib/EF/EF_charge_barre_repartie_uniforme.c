@@ -35,9 +35,9 @@
 #include "EF_charge_barre_repartie_uniforme.h"
 
 
-int EF_charge_barre_repartie_uniforme_ajout(Projet *projet, int num_action, Beton_Barre *barre,
-  int repere_local, int projection, double a, double b, double fx, double fy, double fz,
-  double mx, double my, double mz, const char* nom)
+Charge_Barre_Repartie_Uniforme *EF_charge_barre_repartie_uniforme_ajout(Projet *projet,
+  int num_action, Beton_Barre *barre, int repere_local, int projection, double a, double b,
+  double fx, double fy, double fz, double mx, double my, double mz, const char* nom)
 /* Description : Ajoute une charge répartie uniforme à une action et le long d'une barre en
  *               lui attribuant le numéro suivant la dernière charge de l'action.
  * Paramètres : Projet *projet : la variable projet,
@@ -58,7 +58,7 @@ int EF_charge_barre_repartie_uniforme_ajout(Projet *projet, int num_action, Beto
  *            : double mz : moment autour de l'axe z.
  * Valeur renvoyée :
  *   Succès : 0
- *   Échec : -1 en cas de paramètres invalides :
+ *   Échec : NULL en cas de paramètres invalides :
  *             (projet == NULL) ou
  *             (projet->actions == NULL) ou
  *             (list_size(projet->actions) == 0) ou
@@ -68,7 +68,7 @@ int EF_charge_barre_repartie_uniforme_ajout(Projet *projet, int num_action, Beto
  *             (a < 0) ou (a > l) ou
  *             (b < 0) ou (b > l) ou
  *             (a > l-b)
- *           -2 en cas d'erreur d'allocation mémoire
+ *           NULL en cas d'erreur d'allocation mémoire
  */
 {
     Action          *action_en_cours;
@@ -76,24 +76,24 @@ int EF_charge_barre_repartie_uniforme_ajout(Projet *projet, int num_action, Beto
     double          l;
     
     // Trivial
-    BUGMSG(projet, -1, "EF_charge_barre_repartie_uniforme_ajout\n");
-    BUGMSG(projet->actions, -1, "EF_charge_barre_repartie_uniforme_ajout\n");
-    BUGMSG(list_size(projet->actions), -1, "EF_charge_barre_repartie_uniforme_ajout\n");
-    BUGMSG(barre, -1, "EF_charge_barre_repartie_uniforme_ajout\n");
-    BUGMSG((projection == FALSE) || (repere_local == FALSE), -1, "EF_charge_barre_repartie_uniforme_ajout\n");
+    BUGMSG(projet, NULL, "EF_charge_barre_repartie_uniforme_ajout\n");
+    BUGMSG(projet->actions, NULL, "EF_charge_barre_repartie_uniforme_ajout\n");
+    BUGMSG(list_size(projet->actions), NULL, "EF_charge_barre_repartie_uniforme_ajout\n");
+    BUGMSG(barre, NULL, "EF_charge_barre_repartie_uniforme_ajout\n");
+    BUGMSG((projection == FALSE) || (repere_local == FALSE), NULL, "EF_charge_barre_repartie_uniforme_ajout\n");
     l = EF_noeuds_distance(barre->noeud_debut, barre->noeud_fin);
-    BUGMSG(!((a < 0.) && (!(ERREUR_RELATIVE_EGALE(a, 0.)))), -1, "%s : a = %.20f\n", "EF_charge_barre_repartie_uniforme_ajout", a);
-    BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), -1, "%s : a = %.20f\n", "EF_charge_barre_repartie_uniforme_ajout", a);
-    BUGMSG(!((b < 0.) && (!(ERREUR_RELATIVE_EGALE(b, 0.)))), -1, "%s : b = %.20f\n", "EF_charge_barre_repartie_uniforme_ajout", b);
-    BUGMSG(!((b > l) && (!(ERREUR_RELATIVE_EGALE(b, l)))), -1, "%s : b = %.20f\n", "EF_charge_barre_repartie_uniforme_ajout", b);
-    BUGMSG(!((a > l-b) && (!(ERREUR_RELATIVE_EGALE(a, l-b)))), -1, "%s : a = %.20f, l = %.20f, b = %.20f\n", "EF_charge_barre_repartie_uniforme_ajout", a, l, b);
+    BUGMSG(!((a < 0.) && (!(ERREUR_RELATIVE_EGALE(a, 0.)))), NULL, "%s : a = %.20f\n", "EF_charge_barre_repartie_uniforme_ajout", a);
+    BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), NULL, "%s : a = %.20f\n", "EF_charge_barre_repartie_uniforme_ajout", a);
+    BUGMSG(!((b < 0.) && (!(ERREUR_RELATIVE_EGALE(b, 0.)))), NULL, "%s : b = %.20f\n", "EF_charge_barre_repartie_uniforme_ajout", b);
+    BUGMSG(!((b > l) && (!(ERREUR_RELATIVE_EGALE(b, l)))), NULL, "%s : b = %.20f\n", "EF_charge_barre_repartie_uniforme_ajout", b);
+    BUGMSG(!((a > l-b) && (!(ERREUR_RELATIVE_EGALE(a, l-b)))), NULL, "%s : a = %.20f, l = %.20f, b = %.20f\n", "EF_charge_barre_repartie_uniforme_ajout", a, l, b);
     
-    BUG(_1990_action_cherche_numero(projet, num_action) == 0, -1);
+    BUG(_1990_action_cherche_numero(projet, num_action) == 0, NULL);
     action_en_cours = (Action*)list_curr(projet->actions);
     
     charge_nouveau.type = CHARGE_BARRE_REPARTIE_UNIFORME;
     charge_nouveau.description = (char*)malloc(sizeof(char)*(strlen(nom)+1));
-    BUGMSG(charge_nouveau.description, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_charge_barre_repartie_uniforme_ajout");
+    BUGMSG(charge_nouveau.description, NULL, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_charge_barre_repartie_uniforme_ajout");
     strcpy(charge_nouveau.description, nom);
     charge_nouveau.barre = barre;
     charge_nouveau.repere_local = repere_local;
@@ -114,9 +114,9 @@ int EF_charge_barre_repartie_uniforme_ajout(Projet *projet, int num_action, Beto
         charge_nouveau.numero = charge_dernier->numero+1;
     
     list_mvrear(action_en_cours->charges);
-    BUGMSG(list_insert_after(action_en_cours->charges, &(charge_nouveau), sizeof(charge_nouveau)), -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_charge_barre_repartie_uniforme_ajout");
+    BUGMSG(list_insert_after(action_en_cours->charges, &(charge_nouveau), sizeof(charge_nouveau)), NULL, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_charge_barre_repartie_uniforme_ajout");
     
-    return 0;
+    return list_curr(action_en_cours->charges);
 }
 
 

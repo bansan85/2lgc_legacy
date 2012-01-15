@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2012-01-15 07:24+0100\n"
-"PO-Revision-Date: 2012-01-15 07:28+0100\n"
+"POT-Creation-Date: 2012-01-15 09:41+0100\n"
+"PO-Revision-Date: 2012-01-15 09:43+0100\n"
 "Last-Translator: LE GARREC Vincent <vlg@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -26,24 +26,6 @@ msgstr "Barre en béton %d introuvable.\n"
 
 msgid "%s : Matériau en béton n°%d introuvable.\n"
 msgstr "%s : Matériau en béton n°%d introuvable.\n"
-
-msgid "Barre : "
-msgstr "Barre : "
-
-msgid "départ"
-msgstr "départ"
-
-msgid "fin (par rapport à la fin)"
-msgstr "fin (par rapport à la fin)"
-
-msgid ", projection : oui"
-msgstr ", projection : oui"
-
-msgid ", projection : non"
-msgstr ", projection : non"
-
-msgid "Répartie uniforme sur barre"
-msgstr "Répartie uniforme sur barre"
 
 msgid "Sans nom"
 msgstr "Sans nom"
@@ -86,6 +68,9 @@ msgstr "Charge nodale"
 
 msgid "Charge ponctuelle sur barre"
 msgstr "Charge ponctuelle sur barre"
+
+msgid "Charge répartie uniforme sur barre"
+msgstr "Charge répartie uniforme sur barre"
 
 msgid "Éditer"
 msgstr "Éditer"
@@ -421,6 +406,9 @@ msgstr "%s : '%s' n'est pas de la forme 'largeurxhauteur'.\n"
 msgid "%s : Paramètre invalide : %s %s\n"
 msgstr "%s : Paramètre invalide : %s %s\n"
 
+msgid "Barre : "
+msgstr "Barre : "
+
 msgid "position"
 msgstr "position"
 
@@ -511,6 +499,46 @@ msgstr "Noeud :"
 msgid "Noeud n°%d introuvable.\n"
 msgstr "Noeud n°%d introuvable.\n"
 
+msgid "début"
+msgstr "début"
+
+msgid "fin (par rapport à la fin)"
+msgstr "fin (par rapport à la fin)"
+
+msgid ", projection : oui"
+msgstr ", projection : oui"
+
+msgid ", projection : non"
+msgstr ", projection : non"
+
+msgid "Répartie uniforme sur barre"
+msgstr "Répartie uniforme sur barre"
+
+msgid "La valeur de a est incorrecte."
+msgstr "La valeur de a est incorrecte."
+
+msgid "La valeur de b est incorrecte."
+msgstr "La valeur de b est incorrecte."
+
+msgid "Ajout d'une charge répartie uniforme sur barre"
+msgstr "Ajout d'une charge répartie uniforme sur barre"
+
+msgid "Modification d'une charge répartie uniforme sur barre"
+msgstr "Modification d'une charge répartie uniforme sur barre"
+
+msgid "Projection"
+msgstr "Projection"
+
+msgid "a :"
+msgstr "a :"
+
+msgid "b :"
+msgstr "b :"
+
+msgid "Il n'est pas possible d'activer à la fois la projection et l'utilisation du repère local."
+msgstr "Il n'est pas possible d'activer à la fois la projection et l'utilisation du repère local."
+
 msgid "Relachement n°%d introuvable.\n"
 msgstr "Relachement n°%d introuvable.\n"
+
 
