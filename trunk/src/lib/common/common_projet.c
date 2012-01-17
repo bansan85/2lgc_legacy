@@ -155,8 +155,8 @@ int projet_init_graphique(Projet *projet)
     
     comps->menu = gtk_menu_bar_new();
     gtk_table_attach(GTK_TABLE(comps->main_table), comps->menu, 0, 1, 0, 1, (GtkAttachOptions)(GTK_SHRINK | GTK_FILL), (GtkAttachOptions)(GTK_SHRINK | GTK_FILL), 0, 0);
+
     comps->menu_fichier_list = gtk_menu_new();
-    
     comps->menu_fichier = gtk_menu_item_new_with_label(gettext("Fichier"));
     gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu), comps->menu_fichier);
     gtk_menu_item_set_submenu(GTK_MENU_ITEM(comps->menu_fichier), comps->menu_fichier_list);
@@ -164,6 +164,19 @@ int projet_init_graphique(Projet *projet)
     comps->menu_fichier_quitter = gtk_menu_item_new_with_label(gettext("Quitter"));
     gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_fichier_list), comps->menu_fichier_quitter);
     g_signal_connect_swapped(comps->menu_fichier_quitter, "activate", G_CALLBACK(gui_window_option_destroy_button), comps->window);
+    
+    comps->menu_structure_list = gtk_menu_new();
+    comps->menu_structure = gtk_menu_item_new_with_label(gettext("Structure"));
+    gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu), comps->menu_structure);
+    gtk_menu_item_set_submenu(GTK_MENU_ITEM(comps->menu_structure), comps->menu_structure_list);
+    
+    comps->menu_structure_noeud_list = gtk_menu_new();
+    comps->menu_structure_noeud = gtk_menu_item_new_with_label(gettext("Noeuds"));
+    gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_structure_list), comps->menu_structure_noeud);
+    gtk_menu_item_set_submenu(GTK_MENU_ITEM(comps->menu_structure_noeud), comps->menu_structure_noeud_list);
+    
+    comps->menu_structure_noeud_gerer = gtk_menu_item_new_with_label(gettext("Gérer..."));
+    gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_structure_noeud_list), comps->menu_structure_noeud_gerer);
     
     comps->menu_charges_list = gtk_menu_new();
     comps->menu_charges = gtk_menu_item_new_with_label(gettext("Charges"));
