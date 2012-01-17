@@ -186,3 +186,24 @@ void gtk_common_entry_check_liste(GtkTextBuffer *textbuffer, gpointer user_data 
 }
 
 
+gboolean common_gtk_key_press(GtkWidget *widget __attribute__((unused)), GdkEvent *event __attribute__((unused)), GtkWidget *fenetre)
+/* Description : Détruit la fenêtre si la touche d'échappement est appuiée.
+ * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
+ *            : GdkEvent *event : description de l'évènement,
+ *            : GtkWidget *fenetre : la fenêtre à détruire.
+ *            : gboolean nouveau : vaut TRUE si une nouvelle charge doit être ajoutée,
+ *                                 vaut FALSE si la charge en cours doit être modifiée
+ * Valeur renvoyée : TRUE pour arrêter le traitement des touches,
+ *                 : FALSE si ce n'est pas la touche Escape.
+ */
+{
+    if (event->key.keyval == GDK_KEY_Escape)
+    {
+        gtk_widget_destroy(fenetre);
+        return TRUE;
+    }
+    else
+        return FALSE;
+}
+
+

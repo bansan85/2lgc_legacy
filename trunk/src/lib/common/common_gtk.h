@@ -28,6 +28,7 @@
             gtk_window_set_title(GTK_WINDOW(window), titre); \
             gtk_window_resize(GTK_WINDOW(window), taillex, tailley); \
             gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER); \
+            g_signal_connect(GTK_WINDOW(window), "key-press-event", G_CALLBACK(common_gtk_key_press), GTK_WINDOW(window)); \
             }
 
 #define GTK_NOUVEAU_TEXT_VIEW_AVEC_SCROLLED_WINDOW(textview, scrolled) {\
@@ -63,5 +64,6 @@ double gtk_common_entry_renvoie_double(GtkTextBuffer *textbuffer);
 void gtk_common_entry_check_int(GtkEntry *entry, gchar *preedit, gpointer user_data);
 int gtk_common_entry_renvoie_int(GtkTextBuffer *textbuffer);
 void gtk_common_entry_check_liste(GtkEntry *entry, gchar *preedit, gpointer user_data);
+gboolean common_gtk_key_press(GtkWidget *widget __attribute__((unused)), GdkEvent *event __attribute__((unused)), GtkWidget *fenetre);
 
 #endif
