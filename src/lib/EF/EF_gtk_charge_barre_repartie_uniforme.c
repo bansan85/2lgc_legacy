@@ -87,35 +87,35 @@ void EF_gtk_charge_barre_repartie_uniforme_ajout_affichage(Charge_Barre_Repartie
         strcat(description, gettext("repère : global"));
     }
     common_math_double_to_char(charge->fx, tmp);
-    description = realloc(description, (strlen(description) + strlen(",  N") + strlen("Fx : ") + strlen(tmp)+1)*sizeof(char));
+    description = realloc(description, (strlen(description) + strlen(", Fx :  N/m") + strlen(tmp)+1)*sizeof(char));
     strcat(description, ", Fx : ");
     strcat(description, tmp);
-    strcat(description, " N");
+    strcat(description, " N/m");
     common_math_double_to_char(charge->fy, tmp);
-    description = realloc(description, (strlen(description) + strlen(",  N") + strlen("Fy : ") + strlen(tmp)+1)*sizeof(char));
+    description = realloc(description, (strlen(description) + strlen(", Fy :  N/m") + strlen(tmp)+1)*sizeof(char));
     strcat(description, ", Fy : ");
     strcat(description, tmp);
-    strcat(description, " N");
+    strcat(description, " N/m");
     common_math_double_to_char(charge->fz, tmp);
-    description = realloc(description, (strlen(description) + strlen(",  N") + strlen("Fz : ") + strlen(tmp)+1)*sizeof(char));
+    description = realloc(description, (strlen(description) + strlen(", Fz :  N/m") + strlen(tmp)+1)*sizeof(char));
     strcat(description, ", Fz : ");
     strcat(description, tmp);
-    strcat(description, " N");
+    strcat(description, " N/m");
     common_math_double_to_char(charge->mx, tmp);
-    description = realloc(description, (strlen(description) + strlen(",  N") + strlen("Mx : ") + strlen(tmp)+1)*sizeof(char));
+    description = realloc(description, (strlen(description) + strlen(", Mx :  N/m") + strlen(tmp)+1)*sizeof(char));
     strcat(description, ", Mx : ");
     strcat(description, tmp);
-    strcat(description, " N");
+    strcat(description, " N/m");
     common_math_double_to_char(charge->my, tmp);
-    description = realloc(description, (strlen(description) + strlen(",  N") + strlen("My : ") + strlen(tmp)+1)*sizeof(char));
+    description = realloc(description, (strlen(description) + strlen(", My :  N/m") + strlen(tmp)+1)*sizeof(char));
     strcat(description, ", My : ");
     strcat(description, tmp);
-    strcat(description, " N");
+    strcat(description, " N/m");
     common_math_double_to_char(charge->mz, tmp);
-    description = realloc(description, (strlen(description) + strlen(",  N") + strlen("Mz : ") + strlen(tmp)+1)*sizeof(char));
+    description = realloc(description, (strlen(description) + strlen(", Mz :  N/m") + strlen(tmp)+1)*sizeof(char));
     strcat(description, ", Mz : ");
     strcat(description, tmp);
-    strcat(description, " N");
+    strcat(description, " N/m");
     
     if (nouvelle_ligne == TRUE)
         gtk_tree_store_append(list_gtk_1990_actions->tree_store_charges, &charge->Iter, NULL);
