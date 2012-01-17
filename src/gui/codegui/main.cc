@@ -23,9 +23,11 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+#include <list.h>
 #include "common_text.h"
 #include "common_erreurs.h"
 #include "common_maths.h"
+#include "common_selection.h"
 #include "common_projet.h"
 #include "1990_groupes.h"
 #include "1990_actions.h"
@@ -51,6 +53,7 @@ extern "C" {
 #include <gtk/gtk.h>
 #include <time.h>
 #include <M3d++.hpp>
+#include <list.h>
 
 struct SGlobalData
 {
@@ -172,9 +175,9 @@ int main(int argc, char *argv[])
 //    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 1, 2, -1, 0) == 0, -1);
     
     // Ajout de l'action ponctuelle
-    BUG(EF_charge_noeud_ajout(projet, 0, EF_noeuds_cherche_numero(projet, 1), 1000., 500., 1000., 3000., 5000., 5000., "test1"), -1);
-    BUG(EF_charge_barre_ponctuelle_ajout(projet, 0, _1992_1_1_barres_cherche_numero(projet, 0), FALSE, 2.3, 10000., 9000., 8000., 7000., 6000., 5000., "test2"), -1);
-    BUG(EF_charge_barre_repartie_uniforme_ajout(projet, 0, _1992_1_1_barres_cherche_numero(projet, 0), FALSE, FALSE, 1.5, 1.0, 10000., 9000., 8000., 7000., 6000., 5000., "test3"), -1);
+    BUG(EF_charge_noeud_ajout(projet, 0, common_selection_converti_numeros_en_noeuds(common_selection_renvoie_numeros("1;3-5"), projet), 1000., 500., 1000., 3000., 5000., 5000., "test1"), -1);
+    BUG(EF_charge_barre_ponctuelle_ajout(projet, 0, common_selection_converti_numeros_en_barres(common_selection_renvoie_numeros("0-2"), projet), FALSE, 2.3, 10000., 9000., 8000., 7000., 6000., 5000., "test2"), -1);
+    BUG(EF_charge_barre_repartie_uniforme_ajout(projet, 0, common_selection_converti_numeros_en_barres(common_selection_renvoie_numeros("0-2/2"), projet), FALSE, FALSE, 1.5, 1.0, 10000., 9000., 8000., 7000., 6000., 5000., "test3"), -1);
     
     // Initialise les éléments nécessaire pour l'ajout des rigidités
     BUG(EF_calculs_initialise(projet) == 0, -1);

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2012-01-15 09:41+0100\n"
-"PO-Revision-Date: 2012-01-15 09:43+0100\n"
+"POT-Creation-Date: 2012-01-17 17:42+0100\n"
+"PO-Revision-Date: 2012-01-17 17:52+0100\n"
 "Last-Translator: LE GARREC Vincent <vlg@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -427,11 +427,11 @@ msgstr "La valeur de %s est incorrecte."
 msgid "La valeur de la position est incorrecte."
 msgstr "La valeur de la position est incorrecte."
 
-msgid "La valeur de la barre est incorrecte."
-msgstr "La valeur de la barre est incorrecte."
+msgid "La valeur des barres est incorrecte."
+msgstr "La valeur des barres est incorrecte."
 
-msgid "La barre %d n'existe pas."
-msgstr "La barre %d n'existe pas."
+msgid "La liste des barres %s n'existe pas."
+msgstr "La liste des barres %s n'existe pas."
 
 msgid "Ajout d'une charge ponctuelle sur barre"
 msgstr "Ajout d'une charge ponctuelle sur barre"
@@ -481,11 +481,11 @@ msgstr "Noeud : "
 msgid "Ponctuelle sur noeud"
 msgstr "Ponctuelle sur noeud"
 
-msgid "La valeur du noeud est incorrecte."
-msgstr "La valeur du noeud est incorrecte."
+msgid "La valeur des noeuds est incorrecte."
+msgstr "La valeur des noeuds est incorrecte."
 
-msgid "Le noeud %d n'existe pas."
-msgstr "Le noeud %d n'existe pas."
+msgid "La listes de noeuds %s n'existe pas."
+msgstr "La listes de noeuds %s n'existe pas."
 
 msgid "Ajout d'une charge au noeud"
 msgstr "Ajout d'une charge au noeud"
@@ -520,6 +520,9 @@ msgstr "La valeur de a est incorrecte."
 msgid "La valeur de b est incorrecte."
 msgstr "La valeur de b est incorrecte."
 
+msgid "La barre %s n'existe pas."
+msgstr "La barre %s n'existe pas."
+
 msgid "Ajout d'une charge répartie uniforme sur barre"
 msgstr "Ajout d'une charge répartie uniforme sur barre"
 
@@ -540,5 +543,4 @@ msgstr "Il n'est pas possible d'activer à la fois la projection et l'utilisatio
 
 msgid "Relachement n°%d introuvable.\n"
 msgstr "Relachement n°%d introuvable.\n"
-
 

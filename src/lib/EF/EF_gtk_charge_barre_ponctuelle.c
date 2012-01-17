@@ -34,10 +34,11 @@
 #include "1992_1_1_barres.h"
 #include "EF_charge_barre_ponctuelle.h"
 #include "1990_actions.h"
+#include "common_selection.h"
 
 void EF_gtk_charge_barre_ponctuelle_ajout_affichage(Charge_Barre_Ponctuelle *charge, Projet *projet, gboolean nouvelle_ligne)
 {
-    char                    *description, tmp[30];
+    char                    *description, tmp[30], *tmp2;
     List_Gtk_1990_Actions   *list_gtk_1990_actions = &projet->list_gtk._1990_actions;
     
     if (list_gtk_1990_actions->window == NULL)
@@ -45,9 +46,10 @@ void EF_gtk_charge_barre_ponctuelle_ajout_affichage(Charge_Barre_Ponctuelle *cha
     
     description = malloc(sizeof(char)*(strlen(gettext("Barre : "))+1));
     strcpy(description, gettext("Barre : "));
-    sprintf(tmp, "%d", charge->barre->numero);
-    description = realloc(description, (strlen(description) + strlen(tmp)+1)*sizeof(char));
-    strcat(description, tmp);
+    tmp2 = common_selection_converti_barres_en_texte(charge->barres);
+    description = realloc(description, (strlen(description) + strlen(tmp2)+1)*sizeof(char));
+    strcat(description, tmp2);
+    free(tmp2);
     common_math_double_to_char(charge->position, tmp);
     description = realloc(description, (strlen(description) + strlen(",  :  m") + strlen(gettext("position")) + strlen(tmp) + 1)*sizeof(char));
     strcat(description, ", ");
@@ -120,11 +122,14 @@ void EF_gtk_charge_barre_ponctuelle_annuler_clicked(GtkButton *button __attribut
 }
 
 
-gboolean EF_gtk_charge_barre_ponctuelle_recupere_donnees(Projet *projet, int *num_action, Beton_Barre **barre, double *fx, double *fy, double *fz, double *mx, double *my, double *mz, gchar **description, int *repere_local, double *position)
+gboolean EF_gtk_charge_barre_ponctuelle_recupere_donnees(Projet *projet, int *num_action, LIST **barres, double *fx, double *fy, double *fz, double *mx, double *my, double *mz, gchar **description, int *repere_local, double *position)
 {
     GtkWidget                           *dialog;
     List_Gtk_EF_Charge_Barre_Ponctuelle *ef_gtk;
-    int                                 num_barre;
+    LIST                                *num_barres;
+    GtkTextIter                         start, end;
+    gchar                               *texte_tmp;
+    GtkTextBuffer                       *textbuffer;
     
     BUGMSG(projet, FALSE, "EF_gtk_charge_barre_ponctuelle_recupere_donnees\n");
     
@@ -189,34 +194,39 @@ gboolean EF_gtk_charge_barre_ponctuelle_recupere_donnees(Projet *projet, int *nu
         return FALSE;
     }
     *repere_local = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ef_gtk->check_button_repere_local));
-    num_barre = gtk_common_entry_renvoie_int(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_barre)));
-    if (num_barre == -1)
+    textbuffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_barre));
+    gtk_text_buffer_get_iter_at_offset(textbuffer, &start, 0);
+    gtk_text_buffer_get_iter_at_offset(textbuffer, &end, -1);
+    texte_tmp = gtk_text_buffer_get_text(textbuffer, &start, &end, FALSE);
+    num_barres = common_selection_renvoie_numeros(texte_tmp);
+    if (num_barres == NULL)
     {
-        dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("La valeur de la barre est incorrecte."));
+        dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("La valeur des barres est incorrecte."));
         gtk_dialog_run(GTK_DIALOG(dialog));
         gtk_widget_destroy(dialog);
+        free(texte_tmp);
         return FALSE;
     }
     else
     {
-        *barre = _1992_1_1_barres_cherche_numero(projet, num_barre);
-        if (*barre == NULL)
+        *barres = common_selection_converti_numeros_en_barres(num_barres, projet);
+        if (*barres == NULL)
         {
-            dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("La barre %d n'existe pas."), num_barre);
+            dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("La liste des barres %s n'existe pas."), texte_tmp);
             gtk_dialog_run(GTK_DIALOG(dialog));
             gtk_widget_destroy(dialog);
+            free(texte_tmp);
             return FALSE;
         }
         else
         {
             // Si tous les paramètres sont corrects
-            GtkTextIter     start, end;
-            GtkTextBuffer   *textbuffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_description));
+            textbuffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_description));
             
             gtk_text_buffer_get_iter_at_offset(textbuffer, &start, 0);
             gtk_text_buffer_get_iter_at_offset(textbuffer, &end, -1);
             *description = gtk_text_buffer_get_text(textbuffer, &start, &end, FALSE);
-            
+            free(texte_tmp);
             return TRUE;
         }
     }
@@ -232,7 +242,7 @@ void EF_gtk_charge_barre_ponctuelle_ajouter_clicked(GtkButton *button __attribut
 {
     double                      fx, fy, fz, mx, my, mz, position;
     int                         num_action, repere_local;
-    Beton_Barre                 *barre;
+    LIST                        *barres;
     gchar                       *texte;
     Charge_Barre_Ponctuelle     *charge;
     GtkTreeModel                *model_action;
@@ -241,11 +251,11 @@ void EF_gtk_charge_barre_ponctuelle_ajouter_clicked(GtkButton *button __attribut
     
     BUGMSG(projet, , "EF_gtk_charge_barre_ponctuelle_ajouter_clicked\n");
     
-    if (!EF_gtk_charge_barre_ponctuelle_recupere_donnees(projet, &num_action, &barre, &fx, &fy, &fz, &mx, &my, &mz, &texte, &repere_local, &position))
+    if (!EF_gtk_charge_barre_ponctuelle_recupere_donnees(projet, &num_action, &barres, &fx, &fy, &fz, &mx, &my, &mz, &texte, &repere_local, &position))
         return;
     
     // Création de la nouvelle charge ponctuelle sur barre
-    charge = EF_charge_barre_ponctuelle_ajout(projet, num_action, barre, repere_local, position, fx, fy, fz, mx, my, mz, texte);
+    charge = EF_charge_barre_ponctuelle_ajout(projet, num_action, barres, repere_local, position, fx, fy, fz, mx, my, mz, texte);
     BUG(charge, );
     
     free(texte);
@@ -273,7 +283,7 @@ void EF_gtk_charge_barre_ponctuelle_editer_clicked(GtkButton *button __attribute
     List_Gtk_EF_Charge_Barre_Ponctuelle    *ef_gtk;
     double                      fx, fy, fz, mx, my, mz, position;
     int                         num_action, repere_local;
-    Beton_Barre                 *barre;
+    LIST                        *barres;
     gchar                       *texte;
     Charge_Barre_Ponctuelle     *charge;
     
@@ -281,7 +291,7 @@ void EF_gtk_charge_barre_ponctuelle_editer_clicked(GtkButton *button __attribute
     
     ef_gtk = &projet->list_gtk.ef_charge_barre_ponctuelle;
     
-    if (!EF_gtk_charge_barre_ponctuelle_recupere_donnees(projet, &num_action, &barre, &fx, &fy, &fz, &mx, &my, &mz, &texte, &repere_local, &position))
+    if (!EF_gtk_charge_barre_ponctuelle_recupere_donnees(projet, &num_action, &barres, &fx, &fy, &fz, &mx, &my, &mz, &texte, &repere_local, &position))
         return;
     
     // Création de la nouvelle charge ponctuelle sur barre
@@ -294,7 +304,8 @@ void EF_gtk_charge_barre_ponctuelle_editer_clicked(GtkButton *button __attribute
     charge->mx = mx;
     charge->my = my;
     charge->mz = mz;
-    charge->barre = barre;
+    list_free(charge->barres, (list_dealloc_func_t)free);
+    charge->barres = barres;
     charge->position = position;
     charge->repere_local = repere_local;
     if (num_action != ef_gtk->action)
@@ -422,12 +433,12 @@ void EF_gtk_charge_barre_ponctuelle(Projet *projet, gint action_defaut, gint cha
     ef_gtk->label_barre = gtk_label_new(gettext("Barre :"));
     gtk_table_attach(GTK_TABLE(ef_gtk->table), ef_gtk->label_barre, 0, 1, 6, 7, GTK_SHRINK | GTK_FILL, GTK_SHRINK | GTK_FILL, 0, 0);
     GTK_NOUVEAU_TEXT_VIEW_AVEC_SCROLLED_WINDOW(ef_gtk->text_view_barre, ef_gtk->sw_barre)
-    GTK_TEXT_VIEW_VERIFIE_INT(ef_gtk->text_view_barre)
+    GTK_TEXT_VIEW_VERIFIE_LISTE(ef_gtk->text_view_barre)
     gtk_table_attach(GTK_TABLE(ef_gtk->table), ef_gtk->sw_barre, 1, 4, 6, 7, GTK_EXPAND | GTK_FILL, GTK_SHRINK | GTK_FILL, 0, 0);
     
     if (charge_barre != NULL)
     {
-        gchar   tmp[30];
+        gchar   tmp[30], *tmp2;
         gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_description)), charge_barre->description, -1);
         common_math_double_to_char(charge_barre->fx, tmp);
         gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_fx)), tmp, -1);
@@ -444,8 +455,9 @@ void EF_gtk_charge_barre_ponctuelle(Projet *projet, gint action_defaut, gint cha
         common_math_double_to_char(charge_barre->position, tmp);
         gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_position)), tmp, -1);
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ef_gtk->check_button_repere_local), charge_barre->repere_local);
-        sprintf(tmp, "%d", charge_barre->barre->numero);
-        gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_barre)), tmp, -1);
+        tmp2 = common_selection_converti_barres_en_texte(charge_barre->barres);
+        gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_barre)), tmp2, -1);
+        free(tmp2);
     }
     ef_gtk->table_buttons = gtk_table_new(1, 2, FALSE);
     gtk_table_attach(GTK_TABLE(ef_gtk->table), ef_gtk->table_buttons, 0, 4, 7, 8, GTK_EXPAND | GTK_FILL, GTK_SHRINK | GTK_FILL, 0, 0);

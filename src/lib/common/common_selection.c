@@ -22,6 +22,8 @@
 #include <list.h>
 #include <string.h>
 #include "common_projet.h"
+#include "EF_noeud.h"
+#include "1992_1_1_barres.h"
 
 int common_selection_ajout_nombre(unsigned int nombre, LIST *liste)
 /* Description : ajoute un nombre à la liste chainée.
@@ -177,3 +179,143 @@ LIST *common_selection_renvoie_numeros(const char *texte)
     
     return list;
 }
+
+
+LIST *common_selection_converti_numeros_en_noeuds(LIST *liste_numeros, Projet *projet)
+/* Description : Renvoie sous forme d'une liste de noeuds la liste des numéros.
+ * Paramètres : LIST *liste_numeros : la liste des numéros à convertir en liste de noeuds,
+ *              Projet *projet : la variable projet.
+ * Valeur renvoyée :
+ *   Succès : Un pointeur vers une liste des noeuds
+ *   Échec : NULL en cas de problème.
+ */
+{
+    LIST    *liste_noeuds = list_init();
+    
+    if ((liste_numeros != NULL) && (list_size(liste_numeros) != 0))
+    {
+        list_mvfront(liste_numeros);
+        do
+        {
+            unsigned int    *numero = list_curr(liste_numeros);
+            EF_Noeud        *noeud = EF_noeuds_cherche_numero(projet, *numero);
+            
+            if (noeud == NULL)
+            {
+                free(liste_noeuds);
+                return NULL;
+            }
+            else
+                list_insert_after(liste_noeuds, &noeud, sizeof(EF_Noeud**));
+        }
+        while (list_mvnext(liste_numeros) != NULL);
+    }
+    
+    return liste_noeuds;
+}
+
+
+LIST *common_selection_converti_numeros_en_barres(LIST *liste_numeros, Projet *projet)
+/* Description : Renvoie sous forme d'une liste de barres la liste des numéros.
+ * Paramètres : LIST *liste_numeros : la liste des numéros à convertir en liste de barres,
+ *              Projet *projet : la variable projet.
+ * Valeur renvoyée :
+ *   Succès : Un pointeur vers une liste des barres
+ *   Échec : NULL en cas de problème.
+ */
+{
+    LIST    *liste_barres = list_init();
+    
+    if ((liste_numeros != NULL) && (list_size(liste_numeros) != 0))
+    {
+        list_mvfront(liste_numeros);
+        do
+        {
+            unsigned int    *numero = list_curr(liste_numeros);
+            Beton_Barre     *barre = _1992_1_1_barres_cherche_numero(projet, *numero);
+            
+            if (barre == NULL)
+            {
+                free(liste_barres);
+                return NULL;
+            }
+            else
+                list_insert_after(liste_barres, &barre, sizeof(Beton_Barre**));
+        }
+        while (list_mvnext(liste_numeros) != NULL);
+    }
+    
+    return liste_barres;
+}
+
+
+char *common_selection_converti_noeuds_en_texte(LIST *liste_noeuds)
+/* Description : Renvoie sous forme de texte une liste de noeuds.
+ * Paramètres : LIST *liste_noeuds : la liste des noeuds à convertir en texte,
+ * Valeur renvoyée :
+ *   Succès : le texte correspondant.
+ *   Échec : NULL en cas de problème.
+ */
+{
+    char        *tmp;
+    
+    if ((liste_noeuds != NULL) && (list_size(liste_noeuds) != 0))
+    {
+        EF_Noeud    **noeud;
+        
+        tmp = malloc(sizeof(char)*(15)*list_size(liste_noeuds));
+        list_mvfront(liste_noeuds);
+        noeud = list_curr(liste_noeuds);
+        sprintf(tmp, "%d", (*noeud)->numero);
+        if (list_size(liste_noeuds) > 1)
+        {
+            list_mvnext(liste_noeuds);
+            do
+            {
+                noeud = list_curr(liste_noeuds);
+                sprintf(tmp, "%s; %d", tmp, (*noeud)->numero);
+            }
+            while (list_mvnext(liste_noeuds) != NULL);
+        }
+        return tmp;
+    }
+    else
+        return NULL;
+}
+
+
+char *common_selection_converti_barres_en_texte(LIST *liste_barres)
+/* Description : Renvoie sous forme de texte une liste de barres.
+ * Paramètres : LIST *liste_barres : la liste des barres à convertir en texte,
+ * Valeur renvoyée :
+ *   Succès : le texte correspondant.
+ *   Échec : NULL en cas de problème.
+ */
+{
+    char        *tmp;
+    
+    if ((liste_barres != NULL) && (list_size(liste_barres) != 0))
+    {
+        Beton_Barre **barre;
+        
+        tmp = malloc(sizeof(char)*(15)*list_size(liste_barres));
+        list_mvfront(liste_barres);
+        barre = list_curr(liste_barres);
+        sprintf(tmp, "%d", (*barre)->numero);
+        if (list_size(liste_barres) > 1)
+        {
+            list_mvnext(liste_barres);
+            do
+            {
+                barre = list_curr(liste_barres);
+                sprintf(tmp, "%s; %d", tmp, (*barre)->numero);
+            }
+            while (list_mvnext(liste_barres) != NULL);
+        }
+        return tmp;
+    }
+    else
+        return NULL;
+}
+
+
