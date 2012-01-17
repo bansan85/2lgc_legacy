@@ -20,9 +20,10 @@
 #define __EF_CHARGE_NOEUD_H
 
 #include "config.h"
+#include <list.h>
 #include "common_projet.h"
 
-Charge_Noeud*  EF_charge_noeud_ajout(Projet *projet, int num_action, EF_Noeud *noeud,
+Charge_Noeud*  EF_charge_noeud_ajout(Projet *projet, int num_action, LIST *noeud,
   double fx, double fy, double fz, double mx, double my, double mz, const char* nom);
 
 #endif

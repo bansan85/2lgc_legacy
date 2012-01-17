@@ -346,7 +346,7 @@ typedef struct __Charge_Noeud
     GtkTreeIter         Iter;
 #endif                  
     char                *description;
-    EF_Noeud            *noeud;
+    LIST                *noeuds;
     double              fx;
     double              fy;
     double              fz;
@@ -491,7 +491,7 @@ typedef struct __Charge_Barre_Ponctuelle
     GtkTreeIter         Iter;
 #endif
     char                *description;
-    Beton_Barre         *barre;
+    LIST                *barres;
     int                 repere_local;
     double              position; // Position de la charge ponctuelle en mètre
                                   // depuis le début de la barre
@@ -513,7 +513,7 @@ typedef struct __Charge_Barre_Repartie_Uniforme
     GtkTreeIter         Iter;
 #endif    
     char                *description;
-    Beton_Barre         *barre;
+    LIST                *barres;
     int                 repere_local;
     int                 projection;
     double              a; // Position du début de la charge répartie par rapport au début

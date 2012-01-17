@@ -204,6 +204,8 @@ double EF_noeuds_distance(EF_Noeud* n1, EF_Noeud* n2)
     double x, y, z;
     
     // \end{verbatim}\texttt{distance }$= \sqrt{x^2+y^2+z^2}$\begin{verbatim}
+    if ((n1 == NULL) || (n2 == NULL))
+        free((void*)1);
     BUGMSG(n1, NAN, "EF_noeuds_distance\n");
     BUGMSG(n2, NAN, "EF_noeuds_distance\n");
     

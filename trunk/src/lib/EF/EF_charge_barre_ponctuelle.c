@@ -33,7 +33,7 @@
 #include "EF_noeud.h"
 
 Charge_Barre_Ponctuelle *EF_charge_barre_ponctuelle_ajout(Projet *projet, int num_action,
-  Beton_Barre *barre, int repere_local, double a, double fx, double fy, double fz, double mx,
+  LIST *barres, int repere_local, double a, double fx, double fy, double fz, double mx,
   double my, double mz, const char* nom)
 /* Description : Ajoute une charge ponctuelle à une action et à l'intérieur d'une barre en lui
  *               attribuant le numéro suivant la dernière charge de l'action.
@@ -61,24 +61,35 @@ Charge_Barre_Ponctuelle *EF_charge_barre_ponctuelle_ajout(Projet *projet, int nu
  *           NULL en cas d'erreur d'allocation mémoire
  */
 {
-    Action          *action_en_cours;
+    Action                  *action_en_cours;
     Charge_Barre_Ponctuelle *charge_dernier, charge_nouveau;
     
     // Trivial
     BUGMSG(projet, NULL, "EF_charge_barre_ponctuelle_ajout\n");
     BUGMSG(projet->actions, NULL, "EF_charge_barre_ponctuelle_ajout\n");
     BUGMSG(list_size(projet->actions), NULL, "EF_charge_barre_ponctuelle_ajout\n");
-    BUGMSG(barre, NULL, "EF_charge_barre_ponctuelle_ajout\n");
+    BUGMSG(barres, NULL, "EF_charge_barre_ponctuelle_ajout\n");
     BUG(_1990_action_cherche_numero(projet, num_action) == 0, NULL);
     action_en_cours = (Action*)list_curr(projet->actions);
     BUGMSG(!((a < 0.) && (!(ERREUR_RELATIVE_EGALE(a, 0.)))), NULL, "EF_charge_barre_ponctuelle_ajout");
-    BUGMSG(!((a > EF_noeuds_distance(barre->noeud_debut, barre->noeud_fin)) && (!(ERREUR_RELATIVE_EGALE(a, EF_noeuds_distance(barre->noeud_debut, barre->noeud_fin))))), NULL, "EF_charge_barre_ponctuelle_ajout");
+    if (list_size(barres) != 0)
+    {
+        list_mvfront(barres);
+        do
+        {
+            Beton_Barre *barre = *(Beton_Barre **)list_curr(barres);
+            
+            double distance = EF_noeuds_distance(barre->noeud_debut, barre->noeud_fin);
+            BUGMSG(!((a > distance) && (!(ERREUR_RELATIVE_EGALE(a, distance)))), NULL, "EF_charge_barre_ponctuelle_ajout");
+        }
+        while (list_mvnext(barres) != NULL);
+    }
     
     charge_nouveau.type = CHARGE_BARRE_PONCTUELLE;
     charge_nouveau.description = (char*)malloc(sizeof(char)*(strlen(nom)+1));
     BUGMSG(charge_nouveau.description, NULL, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_charge_barre_ponctuelle_ajout");
     strcpy(charge_nouveau.description, nom);
-    charge_nouveau.barre = barre;
+    charge_nouveau.barres = barres;
     charge_nouveau.repere_local = repere_local;
     charge_nouveau.position = a;
     charge_nouveau.fx = fx;

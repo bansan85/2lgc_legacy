@@ -24,6 +24,8 @@
 #include <string.h>
 #include <gtk/gtk.h>
 #include <math.h>
+#include <list.h>
+#include "common_selection.h"
 
 void gtk_common_entry_check_double(GtkTextBuffer *textbuffer, gpointer user_data __attribute__((unused)))
 /* Description : Vérifie en temps réel si le GtkTextBuffer contient bien un nombre flottant.
@@ -150,4 +152,37 @@ int gtk_common_entry_renvoie_int(GtkTextBuffer *textbuffer)
         return nombre;
     }
 }
+
+
+void gtk_common_entry_check_liste(GtkTextBuffer *textbuffer, gpointer user_data __attribute__((unused)))
+/* Description : Vérifie en temps réel si le GtkTextBuffer contient bien un nombre entier.
+ *               S'il ne contient pas de nombre, le texte passe en rouge.
+ * Paramètres : GtkTextBuffer *textbuffer : composant à l'origine de l'évènement
+ *            : gpointer user_data : ne sert à rien
+ * Valeur renvoyée : Aucune
+ */
+{
+    gchar       *texte;
+    GtkTextIter start, end;
+    LIST        *retour;
+    
+    gtk_text_buffer_get_iter_at_offset(textbuffer, &start, 0);
+    gtk_text_buffer_get_iter_at_offset(textbuffer, &end, -1);
+    texte = gtk_text_buffer_get_text(textbuffer, &start, &end, FALSE);
+    retour = common_selection_renvoie_numeros(texte);
+    if (retour == NULL)
+    {
+        gtk_text_buffer_remove_all_tags(textbuffer, &start, &end);
+        gtk_text_buffer_apply_tag_by_name(textbuffer, "mauvais", &start, &end);
+    }
+    else
+    {
+        gtk_text_buffer_remove_all_tags(textbuffer, &start, &end);
+        gtk_text_buffer_apply_tag_by_name(textbuffer, "OK", &start, &end);
+        list_free(retour, (list_dealloc_func_t)free);
+    }
+    free(texte);
+    return;
+}
+
 
