@@ -634,6 +634,22 @@ void _1990_gtk_actions_window_destroy(GtkWidget *object __attribute__((unused)),
 }
 
 
+gboolean _1990_gtk_actions_charge_double_clicked(GtkWidget *widget __attribute__((unused)), GdkEvent *event, Projet *projet)
+/* Description : Lance la fenêtre d'édition de la charge sélectionnée
+ * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
+ *            : GdkEvent *event : Information sur l'évènement,
+ *            : Projet *projet : la variable projet
+ *            : gboolean nouveau : vaut TRUE si une nouvelle charge doit être ajoutée,
+ *                                 vaut FALSE si la charge en cours doit être modifiée
+ * Valeur renvoyée : Aucune
+ */
+{
+    if ((event->type == GDK_2BUTTON_PRESS) && (gtk_widget_get_sensitive(GTK_WIDGET(projet->list_gtk._1990_actions.item_charge_edit))))
+        _1990_gtk_menu_edit_charge_clicked(NULL, projet);
+    return FALSE;
+}
+
+
 void _1990_gtk_actions(Projet *projet)
 /* Description : Affichage de la fenêtre permettant de gérer les actions
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement
@@ -763,6 +779,7 @@ void _1990_gtk_actions(Projet *projet)
     gtk_tree_selection_set_mode(list_gtk_1990_actions->tree_select_charges, GTK_SELECTION_MULTIPLE);
     gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(list_gtk_1990_actions->scroll_charges), GTK_WIDGET(list_gtk_1990_actions->tree_view_charges));
     gtk_tree_view_set_reorderable(GTK_TREE_VIEW(list_gtk_1990_actions->tree_view_charges), TRUE);
+    g_signal_connect(G_OBJECT(list_gtk_1990_actions->tree_view_charges), "button-press-event", G_CALLBACK(_1990_gtk_actions_charge_double_clicked), projet);
     gtk_table_attach(GTK_TABLE(list_gtk_1990_actions->table_charges), list_gtk_1990_actions->scroll_charges, 0, 1, 0, 1, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 0, 0);
     // Génération des colonnes
     pCellRenderer = gtk_cell_renderer_text_new();
