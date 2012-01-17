@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2012-01-17 17:42+0100\n"
-"PO-Revision-Date: 2012-01-17 17:52+0100\n"
+"POT-Creation-Date: 2012-01-17 21:24+0100\n"
+"PO-Revision-Date: 2012-01-17 21:36+0100\n"
 "Last-Translator: LE GARREC Vincent <vlg@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -384,6 +384,15 @@ msgstr "Fonction indéfinie.\n"
 
 msgid "Fichier"
 msgstr "Fichier"
+
+msgid "Structure"
+msgstr "Structure"
+
+msgid "Noeuds"
+msgstr "Noeuds"
+
+msgid "Gérer..."
+msgstr "Gérer..."
 
 msgid "Charges"
 msgstr "Charges"

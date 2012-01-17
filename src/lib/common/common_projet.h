@@ -684,6 +684,11 @@ typedef struct __Comp_Gtk
     GtkWidget   *menu_fichier;
     GtkWidget   *menu_fichier_list;
     GtkWidget   *menu_fichier_quitter;
+    GtkWidget   *menu_structure;
+    GtkWidget   *menu_structure_list;
+    GtkWidget   *menu_structure_noeud;
+    GtkWidget   *menu_structure_noeud_list;
+    GtkWidget   *menu_structure_noeud_gerer;
     GtkWidget   *menu_charges;
     GtkWidget   *menu_charges_list;
     GtkWidget   *menu_charges_actions;
