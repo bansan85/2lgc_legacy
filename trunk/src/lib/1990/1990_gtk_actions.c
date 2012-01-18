@@ -139,6 +139,9 @@ void _1990_gtk_tree_view_actions_cursor_changed(GtkTreeView *tree_view __attribu
     
     list_gtk_1990_actions = &projet->list_gtk._1990_actions;
     
+    if (list_gtk_1990_actions->window == NULL)
+        return;
+    
     if (!gtk_tree_selection_get_selected(list_gtk_1990_actions->tree_select_actions, &model, &iter))
         return;
     gtk_tree_model_get(model, &iter, 0, &numero, 1, &nom, -1);
