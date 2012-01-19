@@ -112,7 +112,7 @@ LIST *common_selection_renvoie_numeros(const char *texte)
         }
         else
         {
-            free(list);
+            list_free(list, LIST_DEALLOC);
             free(texte_clean);
             return NULL;
         }
@@ -165,7 +165,8 @@ LIST *common_selection_renvoie_numeros(const char *texte)
                 {
                     free(tmp);
                     free(fake);
-                    free(list);
+                    list_free(list, LIST_DEALLOC);
+                    free(texte_clean);
                     return NULL;
                 }
                 
@@ -177,6 +178,7 @@ LIST *common_selection_renvoie_numeros(const char *texte)
     }
     while (i < strlen(texte_clean));
     
+    free(texte_clean);
     return list;
 }
 

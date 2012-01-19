@@ -324,7 +324,7 @@ void EF_gtk_charge_barre_repartie_uniforme_editer_clicked(GtkButton *button __at
     charge = _1990_action_cherche_charge(projet, ef_gtk->action, ef_gtk->charge);
     free(charge->description);
     charge->description = texte;
-    list_free(charge->barres, (list_dealloc_func_t)free);
+    list_free(charge->barres, LIST_DEALLOC);
     charge->barres = barres;
     charge->repere_local = repere_local;
     charge->projection = projection;

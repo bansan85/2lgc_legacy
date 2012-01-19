@@ -25,5 +25,6 @@
 
 Charge_Noeud*  EF_charge_noeud_ajout(Projet *projet, int num_action, LIST *noeud,
   double fx, double fy, double fz, double mx, double my, double mz, const char* nom);
+void EF_charge_noeud_free(Charge_Noeud *charge);
 
 #endif

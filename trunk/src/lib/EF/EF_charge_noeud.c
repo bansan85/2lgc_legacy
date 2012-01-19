@@ -87,3 +87,15 @@ Charge_Noeud*  EF_charge_noeud_ajout(Projet *projet, int num_action, LIST *noeud
     
     return (Charge_Noeud*)list_curr(action_en_cours->charges);
 }
+
+
+void EF_charge_noeud_free(Charge_Noeud *charge)
+{
+/* Description : Libère le contenu alloué dans une charge nodale.
+ * Paramètres : Charge_Noeud *charge : la charge à libérer.
+ * Valeur renvoyée : void
+ */
+    free(charge->description);
+    list_free(charge->noeuds, LIST_DEALLOC);
+    return;
+}

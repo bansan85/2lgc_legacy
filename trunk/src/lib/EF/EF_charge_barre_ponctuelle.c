@@ -807,3 +807,15 @@ int EF_charge_barre_ponctuelle_n(Fonction *fonction, Beton_Barre *barre,
         }
     }
 }
+
+
+void EF_charge_barre_ponctuelle_free(Charge_Barre_Ponctuelle *charge)
+{
+/* Description : Libère le contenu alloué dans une charge ponctuelle sur barre.
+ * Paramètres : Charge_Barre_Ponctuelle *charge : la charge à libérer.
+ * Valeur renvoyée : void
+ */
+    free(charge->description);
+    list_free(charge->barres, LIST_DEALLOC);
+    return;
+}
