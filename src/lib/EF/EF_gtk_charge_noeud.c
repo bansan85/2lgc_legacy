@@ -285,7 +285,7 @@ void EF_gtk_charge_noeud_editer_clicked(GtkButton *button __attribute__((unused)
     charge_noeud->mx = mx;
     charge_noeud->my = my;
     charge_noeud->mz = mz;
-    list_free(charge_noeud->noeuds, (list_dealloc_func_t)free);
+    list_free(charge_noeud->noeuds, LIST_DEALLOC);
     charge_noeud->noeuds = noeuds;
     if (num_action != ef_gtk->action)
         _1990_action_deplace_charge(projet, ef_gtk->action, ef_gtk->charge, num_action);

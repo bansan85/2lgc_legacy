@@ -492,26 +492,27 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
                         list_mvfront(charge_noeud->noeuds);
                         do
                         {
-                            EF_Noeud     **noeud = list_curr(charge_noeud->noeuds);
+                            EF_Noeud     **noeud_p = list_curr(charge_noeud->noeuds);
+                            EF_Noeud     *noeud = *noeud_p;
                             
-                            if (projet->ef_donnees.noeuds_pos_partielle[(*noeud)->numero][0] != -1)
-                                ax[projet->ef_donnees.noeuds_pos_partielle[(*noeud)->numero][0]] += charge_noeud->fx;
-                            if (projet->ef_donnees.noeuds_pos_partielle[(*noeud)->numero][1] != -1)
-                                ax[projet->ef_donnees.noeuds_pos_partielle[(*noeud)->numero][1]] += charge_noeud->fy;
-                            if (projet->ef_donnees.noeuds_pos_partielle[(*noeud)->numero][2] != -1)
-                                ax[projet->ef_donnees.noeuds_pos_partielle[(*noeud)->numero][2]] += charge_noeud->fz;
-                            if (projet->ef_donnees.noeuds_pos_partielle[(*noeud)->numero][3] != -1)
-                                ax[projet->ef_donnees.noeuds_pos_partielle[(*noeud)->numero][3]] += charge_noeud->mx;
-                            if (projet->ef_donnees.noeuds_pos_partielle[(*noeud)->numero][4] != -1)
-                                ax[projet->ef_donnees.noeuds_pos_partielle[(*noeud)->numero][4]] += charge_noeud->my;
-                            if (projet->ef_donnees.noeuds_pos_partielle[(*noeud)->numero][5] != -1)
-                                ax[projet->ef_donnees.noeuds_pos_partielle[(*noeud)->numero][5]] += charge_noeud->mz;
-                            ax3[projet->ef_donnees.noeuds_pos_complete[(*noeud)->numero][0]] += charge_noeud->fx;
-                            ax3[projet->ef_donnees.noeuds_pos_complete[(*noeud)->numero][1]] += charge_noeud->fy;
-                            ax3[projet->ef_donnees.noeuds_pos_complete[(*noeud)->numero][2]] += charge_noeud->fz;
-                            ax3[projet->ef_donnees.noeuds_pos_complete[(*noeud)->numero][3]] += charge_noeud->mx;
-                            ax3[projet->ef_donnees.noeuds_pos_complete[(*noeud)->numero][4]] += charge_noeud->my;
-                            ax3[projet->ef_donnees.noeuds_pos_complete[(*noeud)->numero][5]] += charge_noeud->mz;
+                            if (projet->ef_donnees.noeuds_pos_partielle[noeud->numero][0] != -1)
+                                ax[projet->ef_donnees.noeuds_pos_partielle[noeud->numero][0]] += charge_noeud->fx;
+                            if (projet->ef_donnees.noeuds_pos_partielle[noeud->numero][1] != -1)
+                                ax[projet->ef_donnees.noeuds_pos_partielle[noeud->numero][1]] += charge_noeud->fy;
+                            if (projet->ef_donnees.noeuds_pos_partielle[noeud->numero][2] != -1)
+                                ax[projet->ef_donnees.noeuds_pos_partielle[noeud->numero][2]] += charge_noeud->fz;
+                            if (projet->ef_donnees.noeuds_pos_partielle[noeud->numero][3] != -1)
+                                ax[projet->ef_donnees.noeuds_pos_partielle[noeud->numero][3]] += charge_noeud->mx;
+                            if (projet->ef_donnees.noeuds_pos_partielle[noeud->numero][4] != -1)
+                                ax[projet->ef_donnees.noeuds_pos_partielle[noeud->numero][4]] += charge_noeud->my;
+                            if (projet->ef_donnees.noeuds_pos_partielle[noeud->numero][5] != -1)
+                                ax[projet->ef_donnees.noeuds_pos_partielle[noeud->numero][5]] += charge_noeud->mz;
+                            ax3[projet->ef_donnees.noeuds_pos_complete[noeud->numero][0]] += charge_noeud->fx;
+                            ax3[projet->ef_donnees.noeuds_pos_complete[noeud->numero][1]] += charge_noeud->fy;
+                            ax3[projet->ef_donnees.noeuds_pos_complete[noeud->numero][2]] += charge_noeud->fz;
+                            ax3[projet->ef_donnees.noeuds_pos_complete[noeud->numero][3]] += charge_noeud->mx;
+                            ax3[projet->ef_donnees.noeuds_pos_complete[noeud->numero][4]] += charge_noeud->my;
+                            ax3[projet->ef_donnees.noeuds_pos_complete[noeud->numero][5]] += charge_noeud->mz;
                         }
                         while (list_mvnext(charge_noeud->noeuds) != NULL);
                     }

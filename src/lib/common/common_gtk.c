@@ -179,7 +179,7 @@ void gtk_common_entry_check_liste(GtkTextBuffer *textbuffer, gpointer user_data 
     {
         gtk_text_buffer_remove_all_tags(textbuffer, &start, &end);
         gtk_text_buffer_apply_tag_by_name(textbuffer, "OK", &start, &end);
-        list_free(retour, (list_dealloc_func_t)free);
+        list_free(retour, LIST_DEALLOC);
     }
     free(texte);
     return;

@@ -304,7 +304,7 @@ void EF_gtk_charge_barre_ponctuelle_editer_clicked(GtkButton *button __attribute
     charge->mx = mx;
     charge->my = my;
     charge->mz = mz;
-    list_free(charge->barres, (list_dealloc_func_t)free);
+    list_free(charge->barres, LIST_DEALLOC);
     charge->barres = barres;
     charge->position = position;
     charge->repere_local = repere_local;

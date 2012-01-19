@@ -45,5 +45,6 @@ int EF_charge_barre_repartie_uniforme_fonc_rz(Fonction *f_rotation, Fonction* f_
   double maz, double mbz);
 int EF_charge_barre_repartie_uniforme_n(Fonction *fonction, Beton_Barre *barre,
   unsigned int discretisation, double a, double b, double fax, double fbx);
+void EF_charge_barre_repartie_uniforme_free(Charge_Barre_Repartie_Uniforme *charge);
 
 #endif

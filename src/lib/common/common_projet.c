@@ -22,7 +22,6 @@
 #include <libintl.h>
 #include <locale.h>
 #include <cholmod.h>
-#include <cholmod_internal.h>
 
 #include "common_projet.h"
 #include "common_erreurs.h"

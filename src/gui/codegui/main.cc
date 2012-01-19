@@ -175,9 +175,19 @@ int main(int argc, char *argv[])
 //    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 1, 2, -1, 0) == 0, -1);
     
     // Ajout de l'action ponctuelle
-    BUG(EF_charge_noeud_ajout(projet, 0, common_selection_converti_numeros_en_noeuds(common_selection_renvoie_numeros("1;3-5"), projet), 1000., 500., 1000., 3000., 5000., 5000., "test1"), -1);
-    BUG(EF_charge_barre_ponctuelle_ajout(projet, 0, common_selection_converti_numeros_en_barres(common_selection_renvoie_numeros("0-2"), projet), FALSE, 2.3, 10000., 9000., 8000., 7000., 6000., 5000., "test2"), -1);
-    BUG(EF_charge_barre_repartie_uniforme_ajout(projet, 0, common_selection_converti_numeros_en_barres(common_selection_renvoie_numeros("0-2/2"), projet), FALSE, FALSE, 1.5, 1.0, 10000., 9000., 8000., 7000., 6000., 5000., "test3"), -1);
+    LIST    *tmp1, *tmp2;
+    tmp1 = common_selection_renvoie_numeros("1;3-5");
+    tmp2 = common_selection_converti_numeros_en_noeuds(tmp1, projet);
+    BUG(EF_charge_noeud_ajout(projet, 0, tmp2, 1000., 500., 1000., 3000., 5000., 5000., "test1"), -1);
+    list_free(tmp1, LIST_DEALLOC);
+    tmp1 = common_selection_renvoie_numeros("0-2");
+    tmp2 = common_selection_converti_numeros_en_barres(tmp1, projet);
+    BUG(EF_charge_barre_ponctuelle_ajout(projet, 0, tmp2, FALSE, 2.3, 10000., 9000., 8000., 7000., 6000., 5000., "test2"), -1);
+    list_free(tmp1, LIST_DEALLOC);
+    tmp1 = common_selection_renvoie_numeros("0-2/2");
+    tmp2 = common_selection_converti_numeros_en_barres(tmp1, projet);
+    BUG(EF_charge_barre_repartie_uniforme_ajout(projet, 0, tmp2, FALSE, FALSE, 1.5, 1.0, 10000., 9000., 8000., 7000., 6000., 5000., "test3"), -1);
+    list_free(tmp1, LIST_DEALLOC);
     
     // Initialise les éléments nécessaire pour l'ajout des rigidités
     BUG(EF_calculs_initialise(projet) == 0, -1);

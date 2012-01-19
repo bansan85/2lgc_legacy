@@ -236,6 +236,19 @@ typedef struct __List_Gtk_EF_Charge_Barre_Repartie_Uniforme
     GtkWidget       *button_annuler;
 } List_Gtk_EF_Charge_Barre_Repartie_Uniforme;
 
+typedef struct __List_Gtk_EF_Noeud
+{
+    GtkWidget       *window;
+    GtkWidget       *table;
+    
+    GtkTreeStore    *tree_store;
+    GtkTreeView     *tree_view;
+    GtkTreeSelection *tree_select;
+    GtkWidget       *table_buttons;
+    GtkWidget       *button_valider;
+    GtkWidget       *button_annuler;
+} List_Gtk_EF_Noeud;
+
 #endif
 
 typedef enum __Type_Element // La liste des différents éléments de type de barres gérés par le

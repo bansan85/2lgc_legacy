@@ -21,6 +21,7 @@
 #include <libintl.h>
 #include <cholmod.h>
 #include <string.h>
+#include <math.h>
 #include "common_projet.h"
 #include "common_erreurs.h"
 #include "common_maths.h"

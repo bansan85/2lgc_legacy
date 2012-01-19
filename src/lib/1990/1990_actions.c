@@ -29,6 +29,10 @@
 #include "common_maths.h"
 #include "common_erreurs.h"
 #include "common_fonction.h"
+#include "EF_charge_noeud.h"
+#include "EF_charge_barre_ponctuelle.h"
+#include "EF_charge_barre_repartie_uniforme.h"
+
 
 char* _1990_action_type_bat_txt_eu(int type)
 /* Description : renvoie la description des types de charge pour les bâtiments de la norme
@@ -800,6 +804,31 @@ int _1990_action_free_num(Projet *projet, size_t num)
             while (!list_empty(action->charges))
             {
                 Charge_Barre_Ponctuelle *charge = (Charge_Barre_Ponctuelle*)list_remove_front(action->charges);
+                switch (charge->type)
+                {
+                    case CHARGE_NOEUD :
+                    {
+                        Charge_Noeud *charge2 = (Charge_Noeud *)charge;
+                        EF_charge_noeud_free(charge2);
+                        break;
+                    }
+                    case CHARGE_BARRE_PONCTUELLE :
+                    {
+                        EF_charge_barre_ponctuelle_free(charge);
+                        break;
+                    }
+                    case CHARGE_BARRE_REPARTIE_UNIFORME :
+                    {
+                        Charge_Barre_Repartie_Uniforme *charge2 = (Charge_Barre_Repartie_Uniforme *)charge;
+                        EF_charge_barre_repartie_uniforme_free(charge2);
+                        break;
+                    }
+                    default :
+                    {
+                        BUGMSG(0, -1, "_1990_action_free\n");
+                        break;
+                    }
+                }
                 free(charge);
             }
             free(action->charges);
@@ -844,6 +873,31 @@ int _1990_action_free(Projet *projet)
         while (!list_empty(action->charges))
         {
             Charge_Barre_Ponctuelle *charge = (Charge_Barre_Ponctuelle*)list_remove_front(action->charges);
+            switch (charge->type)
+            {
+                case CHARGE_NOEUD :
+                {
+                    Charge_Noeud *charge2 = (Charge_Noeud *)charge;
+                    EF_charge_noeud_free(charge2);
+                    break;
+                }
+                case CHARGE_BARRE_PONCTUELLE :
+                {
+                    EF_charge_barre_ponctuelle_free(charge);
+                    break;
+                }
+                case CHARGE_BARRE_REPARTIE_UNIFORME :
+                {
+                    Charge_Barre_Repartie_Uniforme *charge2 = (Charge_Barre_Repartie_Uniforme *)charge;
+                    EF_charge_barre_repartie_uniforme_free(charge2);
+                    break;
+                }
+                default :
+                {
+                    BUGMSG(0, -1, "_1990_action_free\n");
+                    break;
+                }
+            }
             free(charge);
         }
         free(action->charges);

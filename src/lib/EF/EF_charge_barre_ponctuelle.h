@@ -43,5 +43,6 @@ int EF_charge_barre_ponctuelle_fonc_rz(Fonction *f_rotation, Fonction* f_deform,
   double maz, double mbz);
 int EF_charge_barre_ponctuelle_n(Fonction *fonction, Beton_Barre *barre,
   unsigned int discretisation, double a, double fax, double fbx);
+void EF_charge_barre_ponctuelle_free(Charge_Barre_Ponctuelle *charge);
 
 #endif
