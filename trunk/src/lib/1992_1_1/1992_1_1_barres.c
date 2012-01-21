@@ -103,27 +103,6 @@ int _1992_1_1_barres_ajout(Projet *projet, Type_Element type, unsigned int secti
     element_nouveau.info_EF = (Barre_Info_EF*)malloc(sizeof(Barre_Info_EF)*(discretisation_element+1));
     BUGMSG(element_nouveau.info_EF, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1992_1_1_barres_ajout");
     
-    if (discretisation_element != 0)
-    {
-        unsigned int    i;
-        
-        element_nouveau.noeuds_intermediaires = (EF_Noeud**)malloc(sizeof(EF_Noeud*)*(discretisation_element));
-        BUGMSG(element_nouveau.noeuds_intermediaires, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1992_1_1_barres_ajout");
-
-        /* Création des noeuds intermédiaires */
-        for (i=0;i<discretisation_element;i++)
-        {
-            double      dx, dy, dz;
-            dx = (element_nouveau.noeud_fin->position.x-element_nouveau.noeud_debut->position.x)/(discretisation_element+1);
-            dy = (element_nouveau.noeud_fin->position.y-element_nouveau.noeud_debut->position.y)/(discretisation_element+1);
-            dz = (element_nouveau.noeud_fin->position.z-element_nouveau.noeud_debut->position.z)/(discretisation_element+1);
-            BUG(EF_noeuds_ajout(projet, element_nouveau.noeud_debut->position.x+dx*(i+1), element_nouveau.noeud_debut->position.y+dy*(i+1), element_nouveau.noeud_debut->position.z+dz*(i+1), -1) == 0, -2);
-            element_nouveau.noeuds_intermediaires[i] = (EF_Noeud*)list_rear(projet->ef_donnees.noeuds);
-        }
-    }
-    else
-        element_nouveau.noeuds_intermediaires = NULL;
-    
     element_nouveau.matrice_rotation = NULL;
     element_nouveau.matrice_rotation_transpose = NULL;
     
@@ -134,6 +113,24 @@ int _1992_1_1_barres_ajout(Projet *projet, Type_Element type, unsigned int secti
         element_nouveau.numero = element_en_cours->numero+1;
     
     BUGMSG(list_insert_after(projet->beton.barres, &(element_nouveau), sizeof(element_nouveau)), -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1992_1_1_barres_ajout");
+    element_en_cours = list_curr(projet->beton.barres);
+    
+    if (discretisation_element != 0)
+    {
+        unsigned int    i;
+        
+        element_en_cours->noeuds_intermediaires = (EF_Noeud**)malloc(sizeof(EF_Noeud*)*(discretisation_element));
+        BUGMSG(element_en_cours->noeuds_intermediaires, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1992_1_1_barres_ajout");
+        
+        /* Création des noeuds intermédiaires */
+        for (i=0;i<discretisation_element;i++)
+        {
+            BUG(EF_noeuds_ajout_noeud_barre(projet, element_en_cours, (i+1.)/(discretisation_element+1.), -1) == 0, -2);
+            element_en_cours->noeuds_intermediaires[i] = (EF_Noeud*)list_rear(projet->ef_donnees.noeuds);
+        }
+    }
+    else
+        element_en_cours->noeuds_intermediaires = NULL;
     
     return 0;
 }
@@ -185,16 +182,20 @@ int _1992_1_1_barres_angle_rotation(Beton_Barre *barre, double *y, double *z)
  *             (z == NULL)
  */
 {
-    double  xx, yy, zz, ll;
+    EF_Point    *debut = EF_noeuds_renvoie_position(barre->noeud_debut);
+    EF_Point    *fin = EF_noeuds_renvoie_position(barre->noeud_fin);
+    double      xx, yy, zz, ll;
     
     BUGMSG(barre, -1, "_1992_1_1_barres_angle_rotation\n");
     BUGMSG(y, -1, "_1992_1_1_barres_angle_rotation\n");
     BUGMSG(z, -1, "_1992_1_1_barres_angle_rotation\n");
     
-    xx = barre->noeud_fin->position.x - barre->noeud_debut->position.x;
-    yy = barre->noeud_fin->position.y - barre->noeud_debut->position.y;
-    zz = barre->noeud_fin->position.z - barre->noeud_debut->position.z;
+    xx = fin->x - debut->x;
+    yy = fin->y - debut->y;
+    zz = fin->z - debut->z;
     ll = sqrt(xx*xx+yy*yy+zz*zz);
+    free(debut);
+    free(fin);
     BUGMSG(!ERREUR_RELATIVE_EGALE(0.0, ll), -1, "_1992_1_1_barres_angle_rotation\n");
     
     // Détermination de l'angle de rotation autour de l'axe Y.
@@ -238,7 +239,7 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
     long                *ai3, *aj3;
     double              *ax3;
     double              y, z;
-    double              xx, yy, zz, ll;
+    double              ll;
     unsigned int        i, j;
     cholmod_triplet     *triplet;
     cholmod_sparse      *sparse_tmp, *matrice_rigidite_globale;
@@ -368,10 +369,7 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
             noeud2 = element->noeuds_intermediaires[j];
         }
     //     Calcul des L_x, L_y, L_z et L.
-        xx = noeud2->position.x - noeud1->position.x;
-        yy = noeud2->position.y - noeud1->position.y;
-        zz = noeud2->position.z - noeud1->position.z;
-        ll = sqrt(xx*xx+yy*yy+zz*zz);
+        ll = EF_noeuds_distance(noeud2, noeud1);
         
     //     Détermination des paramètres de souplesse de l'élément de barre par l'utilisation
     //       des fonctions _1992_1_1_sections_ay, by, cy, az, bz et cz.

@@ -23,6 +23,7 @@
 #include "common_projet.h"
 #include "common_erreurs.h"
 #include "common_maths.h"
+#include "EF_noeud.h"
 
 int _1992_1_1_sections_init(Projet *projet)
 /* Description : Initialise la liste des section en béton
@@ -458,7 +459,7 @@ double _1992_1_1_sections_ay(Beton_Barre *barre, unsigned int discretisation)
 {
     Beton_Section_Rectangulaire *section_tmp;
     EF_Noeud    *debut, *fin;
-    double      xx, yy, zz, ll;
+    double      ll;
     double      E;
     
     BUGMSG(barre, 0., "_1992_1_1_sections_ay\n");
@@ -481,10 +482,7 @@ double _1992_1_1_sections_ay(Beton_Barre *barre, unsigned int discretisation)
     else
         fin = barre->noeuds_intermediaires[discretisation];
     
-    xx = fin->position.x - debut->position.x;
-    yy = fin->position.y - debut->position.y;
-    zz = fin->position.z - debut->position.z;
-    ll = sqrt(xx*xx+yy*yy+zz*zz);
+    ll = EF_noeuds_distance(fin, debut);
     
     E = barre->materiau->ecm;
     
@@ -524,7 +522,7 @@ double _1992_1_1_sections_by(Beton_Barre *barre, unsigned int discretisation)
 {
     Beton_Section_Rectangulaire *section_tmp;
     EF_Noeud    *debut, *fin;
-    double      xx, yy, zz, ll;
+    double      ll;
     double      E;
     
     BUGMSG(barre, 0., "_1992_1_1_sections_by\n");
@@ -547,10 +545,7 @@ double _1992_1_1_sections_by(Beton_Barre *barre, unsigned int discretisation)
     else
         fin = barre->noeuds_intermediaires[discretisation];
     
-    xx = fin->position.x - debut->position.x;
-    yy = fin->position.y - debut->position.y;
-    zz = fin->position.z - debut->position.z;
-    ll = sqrt(xx*xx+yy*yy+zz*zz);
+    ll = EF_noeuds_distance(fin, debut);
     
     E = barre->materiau->ecm;
     
@@ -590,7 +585,7 @@ double _1992_1_1_sections_cy(Beton_Barre *barre, unsigned int discretisation)
 {
     Beton_Section_Rectangulaire *section_tmp;
     EF_Noeud    *debut, *fin;
-    double      xx, yy, zz, ll;
+    double      ll;
     double      E;
     
     BUGMSG(barre, 0., "_1992_1_1_sections_cy\n");
@@ -613,10 +608,7 @@ double _1992_1_1_sections_cy(Beton_Barre *barre, unsigned int discretisation)
     else
         fin = barre->noeuds_intermediaires[discretisation];
     
-    xx = fin->position.x - debut->position.x;
-    yy = fin->position.y - debut->position.y;
-    zz = fin->position.z - debut->position.z;
-    ll = sqrt(xx*xx+yy*yy+zz*zz);
+    ll = EF_noeuds_distance(fin, debut);
     
     E = barre->materiau->ecm;
     
@@ -656,7 +648,7 @@ double _1992_1_1_sections_az(Beton_Barre *barre, unsigned int discretisation)
 {
     Beton_Section_Rectangulaire *section_tmp;
     EF_Noeud    *debut, *fin;
-    double      xx, yy, zz, ll;
+    double      ll;
     double      E;
     
     BUGMSG(barre, 0., "_1992_1_1_sections_az\n");
@@ -679,10 +671,7 @@ double _1992_1_1_sections_az(Beton_Barre *barre, unsigned int discretisation)
     else
         fin = barre->noeuds_intermediaires[discretisation];
     
-    xx = fin->position.x - debut->position.x;
-    yy = fin->position.y - debut->position.y;
-    zz = fin->position.z - debut->position.z;
-    ll = sqrt(xx*xx+yy*yy+zz*zz);
+    ll = EF_noeuds_distance(fin, debut);
     
     E = barre->materiau->ecm;
     
@@ -722,7 +711,7 @@ double _1992_1_1_sections_bz(Beton_Barre *barre, unsigned int discretisation)
 {
     Beton_Section_Rectangulaire *section_tmp;
     EF_Noeud    *debut, *fin;
-    double      xx, yy, zz, ll;
+    double      ll;
     double      E;
     
     BUGMSG(barre, 0., "_1992_1_1_sections_bz\n");
@@ -745,10 +734,7 @@ double _1992_1_1_sections_bz(Beton_Barre *barre, unsigned int discretisation)
     else
         fin = barre->noeuds_intermediaires[discretisation];
     
-    xx = fin->position.x - debut->position.x;
-    yy = fin->position.y - debut->position.y;
-    zz = fin->position.z - debut->position.z;
-    ll = sqrt(xx*xx+yy*yy+zz*zz);
+    ll = EF_noeuds_distance(fin, debut);
     
     E = barre->materiau->ecm;
     
@@ -788,7 +774,7 @@ double _1992_1_1_sections_cz(Beton_Barre *barre, unsigned int discretisation)
 {
     Beton_Section_Rectangulaire *section_tmp;
     EF_Noeud    *debut, *fin;
-    double      xx, yy, zz, ll;
+    double      ll;
     double      E;
     
     BUGMSG(barre, 0., "_1992_1_1_sections_cz\n");
@@ -811,10 +797,7 @@ double _1992_1_1_sections_cz(Beton_Barre *barre, unsigned int discretisation)
     else
         fin = barre->noeuds_intermediaires[discretisation];
     
-    xx = fin->position.x - debut->position.x;
-    yy = fin->position.y - debut->position.y;
-    zz = fin->position.z - debut->position.z;
-    ll = sqrt(xx*xx+yy*yy+zz*zz);
+    ll = EF_noeuds_distance(fin, debut);
     
     E = barre->materiau->ecm;
     
@@ -1003,7 +986,7 @@ double _1992_1_1_sections_gj_l(Beton_Barre *barre, unsigned int discretisation)
 {
     Beton_Section_Rectangulaire *section_tmp;
     EF_Noeud    *debut, *fin;
-    double      xx, yy, zz, ll;
+    double      ll;
     double      G;
     
     BUGMSG(barre, 0., "_1992_1_1_sections_gj_l\n");
@@ -1026,10 +1009,7 @@ double _1992_1_1_sections_gj_l(Beton_Barre *barre, unsigned int discretisation)
     else
         fin = barre->noeuds_intermediaires[discretisation];
     
-    xx = fin->position.x - debut->position.x;
-    yy = fin->position.y - debut->position.y;
-    zz = fin->position.z - debut->position.z;
-    ll = sqrt(xx*xx+yy*yy+zz*zz);
+    ll = EF_noeuds_distance(fin, debut);
     
     G = barre->materiau->gnu_0_2;
     

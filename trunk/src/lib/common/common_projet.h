@@ -353,10 +353,18 @@ typedef struct __EF_Appui
 } EF_Appui;
 
 
+typedef enum __Type_Noeud
+{
+    NOEUD_LIBRE,
+    NOEUD_BARRE
+} Type_Noeud;
+
+
 typedef struct __EF_Noeud
 {
     int         numero;
-    EF_Point    position;
+    Type_Noeud  type;
+    void        *data; // Contient les données permettant de récupérer les coordonnées en fonction dy type de noeud.
     EF_Appui    *appui;
 } EF_Noeud;
 
@@ -505,6 +513,13 @@ typedef struct __Beton_Barre
     cholmod_sparse      *matrice_rotation;
     cholmod_sparse      *matrice_rotation_transpose;
 } Beton_Barre;
+
+
+typedef struct __EF_Noeud_Barre
+{
+    Beton_Barre *barre;
+    double      position_relative_barre;
+} EF_Noeud_Barre;
 
 
 typedef struct __Charge_Barre_Ponctuelle

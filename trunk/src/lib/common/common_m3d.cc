@@ -124,6 +124,7 @@ int m3d_camera_axe_x_z(Projet *projet)
     struct SGlobalData  *vue;
     double              x_min, x_max, z_min, z_max, x, y, z;
     EF_Noeud            *noeud;
+    EF_Point            *point;
     
     BUGMSG(projet, -1, "m3d_camera_axe_x_z\n");
     BUGMSG(projet->ef_donnees.noeuds, -1, "m3d_camera_axe_x_z\n");
@@ -136,12 +137,16 @@ int m3d_camera_axe_x_z(Projet *projet)
     
     list_mvfront(projet->ef_donnees.noeuds);
     noeud = (EF_Noeud*)list_curr(projet->ef_donnees.noeuds);
-    y = noeud->position.y-sqrt((noeud->position.x-x)*(noeud->position.x-x)+(noeud->position.z-z)*(noeud->position.z-z));
+    point = EF_noeuds_renvoie_position(noeud);
+    y = point->y-sqrt((point->x-x)*(point->x-x)+(point->z-z)*(point->z-z));
+    free(point);
     
     while (list_mvnext(projet->ef_donnees.noeuds) != NULL)
     {
         noeud = (EF_Noeud*)list_curr(projet->ef_donnees.noeuds);
-        y = MIN(y, noeud->position.y-sqrt((noeud->position.x-x)*(noeud->position.x-x)+(noeud->position.z-z)*(noeud->position.z-z)));
+        point = EF_noeuds_renvoie_position(noeud);
+        y = MIN(y, point->y-sqrt((point->x-x)*(point->x-x)+(point->z-z)*(point->z-z)));
+        free(point);
     }
     
     m3d = &projet->list_gtk.m3d;
@@ -187,6 +192,7 @@ int m3d_genere_graphique(Projet *projet)
         do
         {
             EF_Noeud    *noeud = (EF_Noeud*)list_curr(projet->ef_donnees.noeuds);
+            EF_Point    *point = EF_noeuds_renvoie_position(noeud);
             CM3dObject  *cube;
             char        tmp[256];
             
@@ -196,7 +202,9 @@ int m3d_genere_graphique(Projet *projet)
             cube->set_ambient_reflexion (1.);
             cube->set_smooth(GOURAUD);
             vue->scene->add_object(cube);
-            cube->set_position(noeud->position.x, noeud->position.y, noeud->position.z);
+            cube->set_position(point->x, point->y, point->z);
+            
+            free(point);
         }
         while (list_mvnext(projet->ef_donnees.noeuds) != NULL);
     }
@@ -214,6 +222,7 @@ int m3d_genere_graphique(Projet *projet)
             
             switch (section_tmp->type)
             {
+                EF_Point *p_d, *p_f;
                 case BETON_SECTION_RECTANGULAIRE :
                 {
                     double  longueur = EF_noeuds_distance(barre->noeud_debut, barre->noeud_fin);
@@ -259,8 +268,12 @@ int m3d_genere_graphique(Projet *projet)
                     tout->set_smooth(GOURAUD);
                     _1992_1_1_barres_angle_rotation(barre, &y, &z);
                     tout->rotations(0., -y/M_PI*180., z/M_PI*180.);
-                    tout->set_position((barre->noeud_debut->position.x+barre->noeud_fin->position.x)/2., (barre->noeud_debut->position.y+barre->noeud_fin->position.y)/2., (barre->noeud_debut->position.z+barre->noeud_fin->position.z)/2.);
+                    p_d = EF_noeuds_renvoie_position(barre->noeud_debut);
+                    p_f = EF_noeuds_renvoie_position(barre->noeud_fin);
+                    tout->set_position((p_d->x+p_f->x)/2., (p_d->y+p_f->y)/2., (p_d->z+p_f->z)/2.);
                     tout->set_ambient_reflexion(0.8);
+                    free(p_d);
+                    free(p_f);
                     
                     vue->scene->add_object(tout);
                     break;
@@ -336,7 +349,11 @@ int m3d_genere_graphique(Projet *projet)
                     tout->set_smooth(GOURAUD);
                     _1992_1_1_barres_angle_rotation(barre, &y, &z);
                     tout->rotations(0., -y/M_PI*180., z/M_PI*180.);
-                    tout->set_position((barre->noeud_debut->position.x+barre->noeud_fin->position.x)/2., (barre->noeud_debut->position.y+barre->noeud_fin->position.y)/2., (barre->noeud_debut->position.z+barre->noeud_fin->position.z)/2.);
+                    p_d = EF_noeuds_renvoie_position(barre->noeud_debut);
+                    p_f = EF_noeuds_renvoie_position(barre->noeud_fin);
+                    tout->set_position((p_d->x+p_f->x)/2., (p_d->y+p_f->y)/2., (p_d->z+p_f->z)/2.);
+                    free(p_d);
+                    free(p_f);
                     
                     vue->scene->add_object(tout);
                     break;
@@ -391,7 +408,11 @@ int m3d_genere_graphique(Projet *projet)
                     tout->set_smooth(GOURAUD);
                     _1992_1_1_barres_angle_rotation(barre, &y, &z);
                     tout->rotations(0., -y/M_PI*180., z/M_PI*180.);
-                    tout->set_position((barre->noeud_debut->position.x+barre->noeud_fin->position.x)/2., (barre->noeud_debut->position.y+barre->noeud_fin->position.y)/2., (barre->noeud_debut->position.z+barre->noeud_fin->position.z)/2.);
+                    p_d = EF_noeuds_renvoie_position(barre->noeud_debut);
+                    p_f = EF_noeuds_renvoie_position(barre->noeud_fin);
+                    tout->set_position((p_d->x+p_f->x)/2., (p_d->y+p_f->y)/2., (p_d->z+p_f->z)/2.);
+                    free(p_d);
+                    free(p_f);
                     
                     vue->scene->add_object(tout);
                     break;
@@ -432,7 +453,11 @@ int m3d_genere_graphique(Projet *projet)
                     tout->set_smooth(GOURAUD);
                     _1992_1_1_barres_angle_rotation(barre, &y, &z);
                     tout->rotations(0., -y/M_PI*180., z/M_PI*180.);
-                    tout->set_position((barre->noeud_debut->position.x+barre->noeud_fin->position.x)/2., (barre->noeud_debut->position.y+barre->noeud_fin->position.y)/2., (barre->noeud_debut->position.z+barre->noeud_fin->position.z)/2.);
+                    p_d = EF_noeuds_renvoie_position(barre->noeud_debut);
+                    p_f = EF_noeuds_renvoie_position(barre->noeud_fin);
+                    tout->set_position((p_d->x+p_f->x)/2., (p_d->y+p_f->y)/2., (p_d->z+p_f->z)/2.);
+                    free(p_d);
+                    free(p_f);
                     
                     vue->scene->add_object(tout);
                     break;

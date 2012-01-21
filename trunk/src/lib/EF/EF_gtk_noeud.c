@@ -111,11 +111,13 @@ void EF_gtk_noeud(Projet *projet)
         do
         {
             EF_Noeud    *noeud = list_curr(projet->ef_donnees.noeuds);
+            EF_Point    *point = EF_noeuds_renvoie_position(noeud);
             GtkTreeIter iter;
             
             gtk_tree_store_append(ef_gtk->tree_store, &iter, NULL);
-            gtk_tree_store_set(ef_gtk->tree_store, &iter, 0, noeud->numero, 1, noeud->position.x, 2, noeud->position.y, 3, noeud->position.z, 4, (noeud->appui == NULL ? gettext("Aucun") : noeud->appui->nom), -1);
-
+            gtk_tree_store_set(ef_gtk->tree_store, &iter, 0, noeud->numero, 1, point->x, 2, point->y, 3, point->z, 4, (noeud->appui == NULL ? gettext("Aucun") : noeud->appui->nom), -1);
+            
+            free(point);
         }
         while (list_mvnext(projet->ef_donnees.noeuds) != NULL);
     }

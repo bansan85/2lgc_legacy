@@ -30,6 +30,7 @@
 #include "common_fonction.h"
 #include "EF_charge_barre_ponctuelle.h"
 #include "EF_charge_barre_repartie_uniforme.h"
+#include "EF_noeud.h"
 #include "1990_actions.h"
 #include "1992_1_1_section.h"
 
@@ -522,7 +523,7 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
                 case CHARGE_BARRE_PONCTUELLE :
                 {
                     Charge_Barre_Ponctuelle *charge_barre = (Charge_Barre_Ponctuelle*)list_curr(action_en_cours->charges);
-                    double       xx, yy, zz, l;
+                    double       l;
                     double       a, b;                         /* Position de la charge par rapport au début et à la fin de l'élément discrétisé */
                     double       debut_barre, fin_barre;       /* Début et fin de la barre discrétisée par rapport à la barre complète */
                     double       phiAy, phiBy, phiAz, phiBz;   /* Rotation sur appui lorsque la barre est isostatique */
@@ -610,18 +611,9 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
                                 while ((pos<=element_en_beton->discretisation_element) && (l < charge_barre->position))
                                 {
                                     if (pos==element_en_beton->discretisation_element)
-                                    {
-                                        xx = element_en_beton->noeud_fin->position.x - element_en_beton->noeud_debut->position.x;
-                                        yy = element_en_beton->noeud_fin->position.y - element_en_beton->noeud_debut->position.y;
-                                        zz = element_en_beton->noeud_fin->position.z - element_en_beton->noeud_debut->position.z;
-                                    }
+                                        l = EF_noeuds_distance(element_en_beton->noeud_fin, element_en_beton->noeud_debut);
                                     else
-                                    {
-                                        xx = element_en_beton->noeuds_intermediaires[pos]->position.x - element_en_beton->noeud_debut->position.x;
-                                        yy = element_en_beton->noeuds_intermediaires[pos]->position.y - element_en_beton->noeud_debut->position.y;
-                                        zz = element_en_beton->noeuds_intermediaires[pos]->position.z - element_en_beton->noeud_debut->position.z;
-                                    }
-                                    l = sqrt(xx*xx+yy*yy+zz*zz);
+                                        l = EF_noeuds_distance(element_en_beton->noeuds_intermediaires[pos], element_en_beton->noeud_debut);
                                     pos++;
                                 }
                                 pos--;
@@ -643,15 +635,9 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
                                     noeud_fin = element_en_beton->noeuds_intermediaires[pos];
                                 }
                             }
-                            xx = noeud_debut->position.x - element_en_beton->noeud_debut->position.x;
-                            yy = noeud_debut->position.y - element_en_beton->noeud_debut->position.y;
-                            zz = noeud_debut->position.z - element_en_beton->noeud_debut->position.z;
-                            debut_barre = sqrt(xx*xx+yy*yy+zz*zz);
+                            debut_barre = EF_noeuds_distance(noeud_debut, element_en_beton->noeud_debut);
                             a = charge_barre->position-debut_barre;
-                            xx = noeud_fin->position.x - element_en_beton->noeud_debut->position.x;
-                            yy = noeud_fin->position.y - element_en_beton->noeud_debut->position.y;
-                            zz = noeud_fin->position.z - element_en_beton->noeud_debut->position.z;
-                            fin_barre = sqrt(xx*xx+yy*yy+zz*zz);
+                            fin_barre = EF_noeuds_distance(noeud_fin, element_en_beton->noeud_debut);
                             l = ABS(fin_barre-debut_barre);
                             b = l-a;
                             
@@ -835,10 +821,7 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
                                 ax2 = (double*)triplet_efforts_locaux_initiaux->x;
                                 triplet_efforts_locaux_initiaux->nnz = 12;
                             }
-                            xx = element_en_beton->noeud_fin->position.x - element_en_beton->noeud_debut->position.x;
-                            yy = element_en_beton->noeud_fin->position.y - element_en_beton->noeud_debut->position.y;
-                            zz = element_en_beton->noeud_fin->position.z - element_en_beton->noeud_debut->position.z;
-                            ll = sqrt(xx*xx+yy*yy+zz*zz);
+                            ll = EF_noeuds_distance_x_y_z(element_en_beton->noeud_fin, element_en_beton->noeud_debut, &xx, &yy, &zz);
                             if (charge_barre->projection == TRUE)
                             {
                                 ai2[0] = 0;     aj2[0] = 0;     ax2[0] = charge_barre->fx*sqrt(yy*yy+zz*zz)/ll;
@@ -897,18 +880,9 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
                                 while ((j_d<=element_en_beton->discretisation_element) && (l < charge_barre->a))
                                 {
                                     if (j_d==element_en_beton->discretisation_element)
-                                    {
-                                        xx = element_en_beton->noeud_fin->position.x - element_en_beton->noeud_debut->position.x;
-                                        yy = element_en_beton->noeud_fin->position.y - element_en_beton->noeud_debut->position.y;
-                                        zz = element_en_beton->noeud_fin->position.z - element_en_beton->noeud_debut->position.z;
-                                    }
+                                        l = EF_noeuds_distance(element_en_beton->noeud_fin, element_en_beton->noeud_debut);
                                     else
-                                    {
-                                        xx = element_en_beton->noeuds_intermediaires[j_d]->position.x - element_en_beton->noeud_debut->position.x;
-                                        yy = element_en_beton->noeuds_intermediaires[j_d]->position.y - element_en_beton->noeud_debut->position.y;
-                                        zz = element_en_beton->noeuds_intermediaires[j_d]->position.z - element_en_beton->noeud_debut->position.z;
-                                    }
-                                    l = sqrt(xx*xx+yy*yy+zz*zz);
+                                        l = EF_noeuds_distance(element_en_beton->noeuds_intermediaires[j_d], element_en_beton->noeud_debut);
                                     j_d++;
                                 }
                                 j_d--;
@@ -918,18 +892,9 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
                                 while ((j_f<=element_en_beton->discretisation_element) && (l < ll-charge_barre->b))
                                 {
                                     if (j_f==element_en_beton->discretisation_element)
-                                    {
-                                        xx = element_en_beton->noeud_fin->position.x - element_en_beton->noeud_debut->position.x;
-                                        yy = element_en_beton->noeud_fin->position.y - element_en_beton->noeud_debut->position.y;
-                                        zz = element_en_beton->noeud_fin->position.z - element_en_beton->noeud_debut->position.z;
-                                    }
+                                        l = EF_noeuds_distance(element_en_beton->noeud_fin, element_en_beton->noeud_debut);
                                     else
-                                    {
-                                        xx = element_en_beton->noeuds_intermediaires[j_f]->position.x - element_en_beton->noeud_debut->position.x;
-                                        yy = element_en_beton->noeuds_intermediaires[j_f]->position.y - element_en_beton->noeud_debut->position.y;
-                                        zz = element_en_beton->noeuds_intermediaires[j_f]->position.z - element_en_beton->noeud_debut->position.z;
-                                    }
-                                    l = sqrt(xx*xx+yy*yy+zz*zz);
+                                        l = EF_noeuds_distance(element_en_beton->noeuds_intermediaires[j_f], element_en_beton->noeud_debut);
                                     j_f++;
                                 }
                                 j_f--;
@@ -958,25 +923,16 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
                                     noeud_fin = element_en_beton->noeud_fin;
                                 else
                                     noeud_fin = element_en_beton->noeuds_intermediaires[i];
-                                xx = noeud_debut->position.x - element_en_beton->noeud_debut->position.x;
-                                yy = noeud_debut->position.y - element_en_beton->noeud_debut->position.y;
-                                zz = noeud_debut->position.z - element_en_beton->noeud_debut->position.z;
-                                debut_barre = sqrt(xx*xx+yy*yy+zz*zz);
+                                debut_barre = EF_noeuds_distance(noeud_debut, element_en_beton->noeud_debut);
                                 if (i == j_d)
                                     a = charge_barre->a-debut_barre;
                                 else
                                     a = 0.;
-                                xx = noeud_fin->position.x - element_en_beton->noeud_debut->position.x;
-                                yy = noeud_fin->position.y - element_en_beton->noeud_debut->position.y;
-                                zz = noeud_fin->position.z - element_en_beton->noeud_debut->position.z;
-                                fin_barre = sqrt(xx*xx+yy*yy+zz*zz);
+                                fin_barre = EF_noeuds_distance(noeud_fin, element_en_beton->noeud_debut);
                                 l = ABS(fin_barre-debut_barre);
                                 if (i == j_f)
                                 {
-                                    xx = noeud_fin->position.x - element_en_beton->noeud_fin->position.x;
-                                    yy = noeud_fin->position.y - element_en_beton->noeud_fin->position.y;
-                                    zz = noeud_fin->position.z - element_en_beton->noeud_fin->position.z;
-                                    fin_barre = sqrt(xx*xx+yy*yy+zz*zz);
+                                    fin_barre = EF_noeuds_distance(noeud_fin, element_en_beton->noeud_fin);
                                     b = charge_barre->b-fin_barre;
                                 }
                                 else
@@ -1244,7 +1200,7 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
             double              E, G;
             cholmod_triplet     *triplet_deplacement_globaux;
             cholmod_sparse      *sparse_deplacement_globaux, *sparse_deplacement_locaux;
-            double              xx, yy, zz, l;
+            double              l;
             
             /* Récupération du noeud de départ et de fin de la partie discrétisée */
             if (j == 0)
@@ -1311,14 +1267,8 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
             
             ax = (double*)sparse_deplacement_locaux->x;
             ax2 = (double*)sparse_effort_locaux->x;
-            xx = noeud_debut->position.x - element_en_beton->noeud_debut->position.x;
-            yy = noeud_debut->position.y - element_en_beton->noeud_debut->position.y;
-            zz = noeud_debut->position.z - element_en_beton->noeud_debut->position.z;
-            l_debut = sqrt(xx*xx+yy*yy+zz*zz);
-            xx = noeud_fin->position.x - element_en_beton->noeud_debut->position.x;
-            yy = noeud_fin->position.y - element_en_beton->noeud_debut->position.y;
-            zz = noeud_fin->position.z - element_en_beton->noeud_debut->position.z;
-            l_fin = sqrt(xx*xx+yy*yy+zz*zz);
+            l_debut = EF_noeuds_distance(noeud_debut, element_en_beton->noeud_debut);
+            l_fin = EF_noeuds_distance(noeud_fin, element_en_beton->noeud_debut);
             l = ABS(l_fin-l_debut);
             
     //         Ajout des efforts entre deux noeuds dus à leur déplacement relatif, la courbe

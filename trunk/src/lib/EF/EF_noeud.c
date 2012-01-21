@@ -42,7 +42,7 @@ int EF_noeuds_init(Projet *projet)
 }
 
 
-int EF_noeuds_ajout(Projet *projet, double x, double y, double z, int appui)
+int EF_noeuds_ajout_noeud_libre(Projet *projet, double x, double y, double z, int appui)
 /* Description : Ajouter un noeud à la liste des noeuds en lui attribuant le numéro suivant le
  *                 dernier noeud existant
  * Paramètres : Projet *projet : la variable projet
@@ -60,15 +60,18 @@ int EF_noeuds_ajout(Projet *projet, double x, double y, double z, int appui)
  */
 {
     EF_Noeud        *noeud_en_cours, noeud_nouveau;
+    EF_Point        *data = malloc(sizeof(EF_Point));
     
     BUGMSG(projet, -1, "EF_noeuds_ajout\n");
     BUGMSG(projet->ef_donnees.noeuds, -1, "EF_noeuds_ajout\n");
     
     // Trivial
     list_mvrear(projet->ef_donnees.noeuds);
-    noeud_nouveau.position.x = x;
-    noeud_nouveau.position.y = y;
-    noeud_nouveau.position.z = z;
+    noeud_nouveau.type = NOEUD_LIBRE;
+    noeud_nouveau.data = data;
+    data->x = x;
+    data->y = y;
+    data->z = z;
     
     if (appui == -1)
         noeud_nouveau.appui = NULL;
@@ -87,6 +90,109 @@ int EF_noeuds_ajout(Projet *projet, double x, double y, double z, int appui)
     BUGMSG(list_insert_after(projet->ef_donnees.noeuds, &(noeud_nouveau), sizeof(noeud_nouveau)), -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_noeuds_ajout");
     
     return 0;
+}
+
+
+int EF_noeuds_ajout_noeud_barre(Projet *projet, Beton_Barre *barre, double position_relative_barre, int appui)
+/* Description : Ajouter un noeud à la liste des noeuds en lui attribuant le numéro suivant le
+ *                 dernier noeud existant. Ce noeud se situe à l'intérieur d'une barre et
+ *                 permet la discrétisation.
+ * Paramètres : Projet *projet : la variable projet
+ *            : double position_relative_barre : position relative à l'intérieur de la barre (compris entre 0.0 et 1.0)
+ *            : int appui : numéro de l'appui. -1 si aucun.
+ * Valeur renvoyée :
+ *   Succès : 0
+ *   Échec : -1 en cas de paramètres invalides :
+ *             (projet == NULL) ou
+ *             (projet->ef_donnees.noeuds == NULL) ou
+ *             (EF_appuis_cherche_numero(projet, appui) == NULL)
+ *           -2 en cas d'erreur d'allocation mémoire
+ */
+{
+    EF_Noeud        *noeud_en_cours, noeud_nouveau;
+    EF_Noeud_Barre  *data = malloc(sizeof(EF_Noeud_Barre));
+    
+    BUGMSG(projet, -1, "EF_noeuds_ajout\n");
+    BUGMSG(projet->ef_donnees.noeuds, -1, "EF_noeuds_ajout\n");
+    
+    // Trivial
+    list_mvrear(projet->ef_donnees.noeuds);
+    noeud_nouveau.type = NOEUD_BARRE;
+    noeud_nouveau.data = data;
+    data->barre = barre;
+    data->position_relative_barre = position_relative_barre;
+    
+    if (appui == -1)
+        noeud_nouveau.appui = NULL;
+    else
+    {
+        noeud_nouveau.appui = EF_appuis_cherche_numero(projet, appui);
+        BUGMSG(noeud_nouveau.appui, -1, "%s : %s %d\n", "EF_noeuds_ajout", "appui", appui);
+    }
+        
+    noeud_en_cours = (EF_Noeud *)list_rear(projet->ef_donnees.noeuds);
+    if (noeud_en_cours == NULL)
+        noeud_nouveau.numero = 0;
+    else
+        noeud_nouveau.numero = noeud_en_cours->numero+1;
+    
+    BUGMSG(list_insert_after(projet->ef_donnees.noeuds, &(noeud_nouveau), sizeof(noeud_nouveau)), -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_noeuds_ajout");
+    
+    return 0;
+}
+
+
+EF_Point *EF_noeuds_renvoie_position(EF_Noeud *noeud) 
+/* Description : Renvoie un point contenant la position du noeud.
+ *               La valeur de retour doit être libérée par l'appel à la fonction free();
+ * Paramètres : EF_Noeud *noeud : le noeud à étudier.
+ * Valeur renvoyée :
+ *   Succès : pointeur vers la position du noeud.
+ *   Échec : NULL en cas de paramètres invalides
+ *             (noeud == NULL)
+ */
+{
+    EF_Point *retour;
+    
+    BUGMSG(noeud, NULL, "EF_noeuds_renvoie_position\n");
+    retour = malloc(sizeof(EF_Point));
+    
+    switch (noeud->type)
+    {
+        case NOEUD_LIBRE :
+        {
+            EF_Point    *tmp = noeud->data;
+            
+            retour->x = tmp->x;
+            retour->y = tmp->y;
+            retour->z = tmp->z;
+            
+            break;
+        }
+        case NOEUD_BARRE :
+        {
+            EF_Noeud_Barre  *data = noeud->data;
+            EF_Point        *point1, *point2;
+            
+            point1 = EF_noeuds_renvoie_position(data->barre->noeud_debut);
+            point2 = EF_noeuds_renvoie_position(data->barre->noeud_fin);
+            
+            retour->x = point1->x + (point2->x-point1->x)*data->position_relative_barre;
+            retour->y = point1->y + (point2->y-point1->y)*data->position_relative_barre;
+            retour->z = point1->z + (point2->z-point1->z)*data->position_relative_barre;
+            free(point1);
+            free(point2);
+            
+            break;
+        }
+        default :
+        {
+            BUGMSG(0, NULL, "EF_noeuds_renvoie_position\n");
+            break;
+        }
+    }
+    
+    return retour;
 }
 
 
@@ -110,6 +216,7 @@ int EF_noeuds_min_max(Projet *projet, double *x_min, double *x_max, double *y_mi
  */
 {
     EF_Noeud    *noeud;
+    EF_Point    *point;
     double      x_mi, x_ma, y_mi, y_ma, z_mi, z_ma;
     
     BUGMSG(projet, -1, "EF_noeuds_min_max\n");
@@ -118,28 +225,33 @@ int EF_noeuds_min_max(Projet *projet, double *x_min, double *x_max, double *y_mi
     
     list_mvfront(projet->ef_donnees.noeuds);
     noeud = (EF_Noeud*)list_curr(projet->ef_donnees.noeuds);
-    x_mi = noeud->position.x;
-    x_ma = noeud->position.x;
-    y_mi = noeud->position.y;
-    y_ma = noeud->position.y;
-    z_mi = noeud->position.z;
-    z_ma = noeud->position.z;
+    point = EF_noeuds_renvoie_position(noeud);
+    x_mi = point->x;
+    x_ma = point->x;
+    y_mi = point->y;
+    y_ma = point->y;
+    z_mi = point->z;
+    z_ma = point->z;
+    free(point);
     while (list_mvnext(projet->ef_donnees.noeuds) != NULL)
     {
         noeud = (EF_Noeud*)list_curr(projet->ef_donnees.noeuds);
+        point = EF_noeuds_renvoie_position(noeud);
         
-        if (noeud->position.x < x_mi)
-            x_mi = noeud->position.x;
-        if (noeud->position.x > x_ma)
-            x_ma = noeud->position.x;
-        if (noeud->position.y < y_mi)
-            y_mi = noeud->position.y;
-        if (noeud->position.y > y_ma)
-            y_ma = noeud->position.y;
-        if (noeud->position.z < z_mi)
-            z_mi = noeud->position.z;
-        if (noeud->position.z > z_ma)
-            z_ma = noeud->position.z;
+        if (point->x < x_mi)
+            x_mi = point->x;
+        if (point->x > x_ma)
+            x_ma = point->x;
+        if (point->y < y_mi)
+            y_mi = point->y;
+        if (point->y > y_ma)
+            y_ma = point->y;
+        if (point->z < z_mi)
+            z_mi = point->z;
+        if (point->z > z_ma)
+            z_ma = point->z;
+        
+        free(point);
     }
     
     if (x_min != NULL)
@@ -195,24 +307,65 @@ double EF_noeuds_distance(EF_Noeud* n1, EF_Noeud* n2)
  * Paramètres : EF_Noeud* n1 : noeud de départ
  *            : EF_Noeud* n2 : noeud de fin
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : -1 en cas de paramètres invalides :
+ *   Succès : distance entre les deux noeuds
+ *   Échec : NAN en cas de paramètres invalides :
  *             (projet == NULL) ou
  *             (projet->ef_donnees.noeuds == NULL)
  */
 {
-    double x, y, z;
+    EF_Point    *p1, *p2;
+    double      x, y, z;
     
     // \end{verbatim}\texttt{distance }$= \sqrt{x^2+y^2+z^2}$\begin{verbatim}
-    if ((n1 == NULL) || (n2 == NULL))
-        free((void*)1);
     BUGMSG(n1, NAN, "EF_noeuds_distance\n");
     BUGMSG(n2, NAN, "EF_noeuds_distance\n");
     
-    x = n2->position.x - n1->position.x;
-    y = n2->position.y - n1->position.y;
-    z = n2->position.z - n1->position.z;
+    p1 = EF_noeuds_renvoie_position(n1);
+    p2 = EF_noeuds_renvoie_position(n2);
+    
+    x = p2->x - p1->x;
+    y = p2->y - p1->y;
+    z = p2->z - p1->z;
+    
+    free(p1);
+    free(p2);
+    
     return sqrt(x*x+y*y+z*z);
+}
+
+
+double EF_noeuds_distance_x_y_z(EF_Noeud* n1, EF_Noeud* n2, double *x, double *y, double *z)
+/* Description : Renvoie la distance entre deux noeuds par retour de fonction et renvoie la
+ *               distance entre deux noeuds selon les 3 axes par argument.
+ * Paramètres : EF_Noeud* n1 : noeud de départ
+ *            : EF_Noeud* n2 : noeud de fin
+ *            : double *x : distance selon l'axe x,
+ *            : double *y : distance selon l'axe y,
+ *            : double *z : distance selon l'axe z.
+ * Valeur renvoyée :
+ *   Succès : distance entre les deux points.
+ *   Échec : NAN en cas de paramètres invalides :
+ *             (n1 == NULL) || 
+ *             (n2 == NULL)
+ */
+{
+    EF_Point    *p1, *p2;
+    
+    // \end{verbatim}\texttt{distance }$= \sqrt{x^2+y^2+z^2}$\begin{verbatim}
+    BUGMSG(n1, NAN, "EF_noeuds_distance_x_y_z\n");
+    BUGMSG(n2, NAN, "EF_noeuds_distance_x_y_z\n");
+    
+    p1 = EF_noeuds_renvoie_position(n1);
+    p2 = EF_noeuds_renvoie_position(n2);
+
+    *x = p2->x - p1->x;
+    *y = p2->y - p1->y;
+    *z = p2->z - p1->z;
+    
+    free(p1);
+    free(p2);
+    
+    return sqrt((*x)*(*x)+(*y)*(*y)+(*z)*(*z));
 }
 
 
@@ -234,6 +387,7 @@ int EF_noeuds_free(Projet *projet)
     {
         EF_Noeud    *noeud = (EF_Noeud*)list_remove_front(projet->ef_donnees.noeuds);
         
+        free(noeud->data);
         free(noeud);
     }
     
