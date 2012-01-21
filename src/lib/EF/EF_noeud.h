@@ -23,11 +23,14 @@
 #include "common_projet.h"
 
 int EF_noeuds_init(Projet *projet);
-int EF_noeuds_ajout(Projet *projet, double x, double y, double z, int appui);
+int EF_noeuds_ajout_noeud_libre(Projet *projet, double x, double y, double z, int appui);
+int EF_noeuds_ajout_noeud_barre(Projet *projet, Beton_Barre *barre, double position_relative_barre, int appui);
+EF_Point *EF_noeuds_renvoie_position(EF_Noeud *noeud);
 int EF_noeuds_min_max(Projet *projet, double *x_min, double *x_max, double *y_min,
   double *y_max, double *z_min, double *z_max);
 EF_Noeud* EF_noeuds_cherche_numero(Projet *projet, int numero);
 double EF_noeuds_distance(EF_Noeud* n1, EF_Noeud* n2);
+double EF_noeuds_distance_x_y_z(EF_Noeud* n1, EF_Noeud* n2, double *x, double *y, double *z);
 int EF_noeuds_free(Projet *projet);
 
 #endif

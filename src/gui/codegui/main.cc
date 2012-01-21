@@ -144,10 +144,10 @@ int main(int argc, char *argv[])
     BUG(EF_appuis_ajout(projet, "Encastrement", EF_APPUI_BLOQUE, EF_APPUI_BLOQUE, EF_APPUI_BLOQUE, EF_APPUI_BLOQUE, EF_APPUI_BLOQUE, EF_APPUI_BLOQUE) == 0, -1);
     
     // Création des noeuds
-    BUG(EF_noeuds_ajout(projet, 0.0, 0.0, 0.0, 0) == 0, -1);
-    BUG(EF_noeuds_ajout(projet, 0.0, 0.0, 8.0, -1) == 0, -1);
-    BUG(EF_noeuds_ajout(projet, 8.0, 0.0, 8.0, -1) == 0, -1);
-    BUG(EF_noeuds_ajout(projet, 8.0, 0.0, 0.0, 0) == 0, -1);
+    BUG(EF_noeuds_ajout_noeud_libre(projet, 0.0, 0.0, 0.0, 0) == 0, -1);
+    BUG(EF_noeuds_ajout_noeud_libre(projet, 0.0, 0.0, 8.0, -1) == 0, -1);
+    BUG(EF_noeuds_ajout_noeud_libre(projet, 8.0, 0.0, 8.0, -1) == 0, -1);
+    BUG(EF_noeuds_ajout_noeud_libre(projet, 8.0, 0.0, 0.0, 0) == 0, -1);
     
     // Création des sections en béton
     BUG(_1992_1_1_sections_ajout_rectangulaire(projet, 0.3, 0.5) == 0, -1);
