@@ -19,8 +19,12 @@
 #include "config.h"
 #include <stdlib.h>
 #include <libintl.h>
+#include <string.h>
 #include "common_projet.h"
 #include "common_erreurs.h"
+#ifdef ENABLE_GTK
+#include <gtk/gtk.h>
+#endif
 
 int EF_appuis_init(Projet *projet)
 /* Description : Initialise la liste des types d'appuis
@@ -32,16 +36,26 @@ int EF_appuis_init(Projet *projet)
  *           -2 en cas d'erreur d'allocation mémoire
  */
 {
-    BUGMSG(projet, -1, "EF_appuis_init\n");
+#ifdef ENABLE_GTK
+    GtkTreeIter     iter;
+#endif
     
+    BUGMSG(projet, -1, "EF_appuis_init\n");
+
     // Trivial
     projet->ef_donnees.appuis = list_init();
     BUGMSG(projet->ef_donnees.appuis, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_appuis_init");
+    
+#ifdef ENABLE_GTK
+    projet->list_gtk.ef_noeud.liste_appuis = gtk_list_store_new(1, G_TYPE_STRING);
+    gtk_list_store_append(projet->list_gtk.ef_noeud.liste_appuis, &iter);
+    gtk_list_store_set(projet->list_gtk.ef_noeud.liste_appuis, &iter, 0, gettext("Aucun"), -1);
+#endif    
     return 0;
 }
 
 
-int EF_appuis_ajout(Projet *projet, Type_EF_Appui x, Type_EF_Appui y, Type_EF_Appui z,
+int EF_appuis_ajout(Projet *projet, const char *nom, Type_EF_Appui x, Type_EF_Appui y, Type_EF_Appui z,
   Type_EF_Appui rx, Type_EF_Appui ry, Type_EF_Appui rz)
 /* Description : Ajoute un appui à la structure en lui attribuant le numéro suivant le dernier
  *                 appui existant.
@@ -62,12 +76,18 @@ int EF_appuis_ajout(Projet *projet, Type_EF_Appui x, Type_EF_Appui y, Type_EF_Ap
  */
 {
     EF_Appui        *appui_en_cours, appui_nouveau;
+#ifdef ENABLE_GTK
+    GtkTreeIter     iter;
+#endif
+
     
     BUGMSG(projet, -1, "EF_appuis_ajout\n");
     BUGMSG(projet->ef_donnees.appuis, -1, "EF_appuis_ajout\n");
     
     // Trivial
     list_mvrear(projet->ef_donnees.appuis);
+    appui_nouveau.nom = malloc(sizeof(char)*(strlen(nom)+1));
+    strcpy(appui_nouveau.nom, nom);
     appui_nouveau.ux = x;
     switch (x)
     {
@@ -167,6 +187,12 @@ int EF_appuis_ajout(Projet *projet, Type_EF_Appui x, Type_EF_Appui y, Type_EF_Ap
     
     BUGMSG(list_insert_after(projet->ef_donnees.appuis, &(appui_nouveau), sizeof(appui_nouveau)), -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_appuis_ajout");
     
+#ifdef ENABLE_GTK
+    gtk_list_store_append(projet->list_gtk.ef_noeud.liste_appuis, &iter);
+    gtk_list_store_set(projet->list_gtk.ef_noeud.liste_appuis, &iter, 0, nom, -1);
+#endif
+
+    
     return 0;
 }
 
@@ -221,11 +247,16 @@ int EF_appuis_free(Projet *projet)
     {
         EF_Appui    *appui = (EF_Appui*)list_remove_front(projet->ef_donnees.appuis);
         
+        free(appui->nom);
         free(appui);
     }
     
     free(projet->ef_donnees.appuis);
     projet->ef_donnees.appuis = NULL;
+    
+#ifdef ENABLE_GTK
+    g_object_unref(projet->list_gtk.ef_noeud.liste_appuis);
+#endif
     
     return 0;
 }

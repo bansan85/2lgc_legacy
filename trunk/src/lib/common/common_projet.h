@@ -244,10 +244,19 @@ typedef struct __List_Gtk_EF_Noeud
     GtkTreeStore    *tree_store;
     GtkTreeView     *tree_view;
     GtkTreeSelection *tree_select;
+    GtkListStore    *liste_appuis;
+    GtkWidget       *scroll;
+    
     GtkWidget       *table_buttons;
     GtkWidget       *button_valider;
     GtkWidget       *button_annuler;
 } List_Gtk_EF_Noeud;
+
+
+typedef struct __List_Gtk_EF_Barre
+{
+    GtkListStore    *liste_relachements;
+} List_Gtk_EF_Barre;
 
 #endif
 
@@ -328,6 +337,7 @@ typedef enum __Charge_Type
 typedef struct __EF_Appui
 {
     int             numero;         // Numéro de l'appui
+    char            *nom;
     Type_EF_Appui   ux;              // Degré de liberté de la direction x
     void            *ux_donnees;     // Données complémentaire si nécessaire.
     Type_EF_Appui   uy;
@@ -414,6 +424,7 @@ typedef struct __EF_Relachement_Donnees_Elastique_Lineaire
 typedef struct __EF_Relachement
 {
     unsigned int        numero;
+    char                *nom;
     EF_Relachement_Type rx_debut;   // Type de relachement du moment autour de l'axe x
     void                *rx_d_data; // Paramètres complémentaires au relachement. N'est à 
                                     // définir que si le type de relachement est différent
@@ -724,6 +735,8 @@ typedef struct __List_Gtk
     List_Gtk_EF_Charge_Barre_Ponctuelle ef_charge_barre_ponctuelle;
     List_Gtk_EF_Charge_Barre_Repartie_Uniforme ef_charge_barre_repartie_uniforme;
     List_Gtk_m3d            m3d;       // pour l'affichage graphique de la structure
+    List_Gtk_EF_Noeud       ef_noeud;
+    List_Gtk_EF_Barre       ef_barre;
     Comp_Gtk                comp;      // tous les composants grahpiques
 } List_Gtk;
 #endif

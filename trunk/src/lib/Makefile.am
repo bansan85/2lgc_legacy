@@ -48,6 +48,7 @@ libeurocodes_la_SOURCES +=	common/common_m3d.cc \
 							EF/EF_gtk_charge_noeud.c \
 							EF/EF_gtk_charge_barre_ponctuelle.c \
 							EF/EF_gtk_charge_barre_repartie_uniforme.c \
+							EF/EF_gtk_noeud.c \
 							common/common_gtk.c
 endif
 
@@ -84,5 +85,6 @@ libeurocodes_la_HEADERS +=	common/common_m3d.hpp \
 							EF/EF_gtk_charge_noeud.h \
 							EF/EF_gtk_charge_barre_ponctuelle.h \
 							EF/EF_gtk_charge_barre_repartie_uniforme.h \
+							EF/EF_gtk_noeud.h
 							common/common_gtk.h
 endif
