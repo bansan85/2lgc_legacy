@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2012-01-17 21:24+0100\n"
-"PO-Revision-Date: 2012-01-17 21:36+0100\n"
+"POT-Creation-Date: 2012-01-21 12:32+0100\n"
+"PO-Revision-Date: 2012-01-21 12:34+0100\n"
 "Last-Translator: LE GARREC Vincent <vlg@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -414,6 +414,15 @@ msgstr "%s : '%s' n'est pas de la forme 'largeurxhauteur'.\n"
 
 msgid "%s : Paramètre invalide : %s %s\n"
 msgstr "%s : Paramètre invalide : %s %s\n"
+
+msgid "Gestion des noeuds"
+msgstr "Gestion des noeuds"
+
+msgid "Appui"
+msgstr "Appui"
+
+msgid "Aucun"
+msgstr "Aucun"
 
 msgid "Barre : "
 msgstr "Barre : "

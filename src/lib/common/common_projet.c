@@ -37,6 +37,7 @@
 #include "EF_appuis.h"
 #include "EF_noeud.h"
 #include "EF_rigidite.h"
+#include "EF_gtk_noeud.h"
 #include "EF_relachement.h"
 #include "1992_1_1_barres.h"
 #include "1992_1_1_section.h"
@@ -176,6 +177,7 @@ int projet_init_graphique(Projet *projet)
     
     comps->menu_structure_noeud_gerer = gtk_menu_item_new_with_label(gettext("Gérer..."));
     gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_structure_noeud_list), comps->menu_structure_noeud_gerer);
+    g_signal_connect_swapped(comps->menu_structure_noeud_gerer, "activate", G_CALLBACK(EF_gtk_noeud), projet);
     
     comps->menu_charges_list = gtk_menu_new();
     comps->menu_charges = gtk_menu_item_new_with_label(gettext("Charges"));

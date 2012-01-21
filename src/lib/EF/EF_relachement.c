@@ -19,8 +19,12 @@
 #include "config.h"
 #include <stdlib.h>
 #include <libintl.h>
+#include <string.h>
 #include "common_projet.h"
 #include "common_erreurs.h"
+#ifdef ENABLE_GTK
+#include <gtk/gtk.h>
+#endif
 
 int EF_relachement_init(Projet *projet)
 /* Description : Initialise la liste des relachements
@@ -32,20 +36,30 @@ int EF_relachement_init(Projet *projet)
  *           -2 en cas d'erreur d'allocation mémoire
  */
 {
+#ifdef ENABLE_GTK
+    GtkTreeIter     iter;
+#endif
+    
     BUGMSG(projet, -1, "EF_relachement_init\n");
     
     // Trivial
     projet->ef_donnees.relachements = list_init();
     BUGMSG(projet->ef_donnees.relachements, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_relachement_init");
     
+#ifdef ENABLE_GTK
+    projet->list_gtk.ef_barre.liste_relachements = gtk_list_store_new(1, G_TYPE_STRING);
+    gtk_list_store_append(projet->list_gtk.ef_barre.liste_relachements, &iter);
+    gtk_list_store_set(projet->list_gtk.ef_barre.liste_relachements, &iter, 0, gettext("Aucun"), -1);
+#endif
+    
     return 0;
 }
 
 
-int EF_relachement_ajout(Projet *projet, EF_Relachement_Type rx_debut, void* rx_d_data,
-  EF_Relachement_Type ry_debut, void* ry_d_data, EF_Relachement_Type rz_debut, void* rz_d_data,
-  EF_Relachement_Type rx_fin, void* rx_f_data, EF_Relachement_Type ry_fin, void* ry_f_data,
-  EF_Relachement_Type rz_fin, void* rz_f_data)
+int EF_relachement_ajout(Projet *projet, const char *nom, EF_Relachement_Type rx_debut,
+  void* rx_d_data, EF_Relachement_Type ry_debut, void* ry_d_data, EF_Relachement_Type rz_debut,
+  void* rz_d_data, EF_Relachement_Type rx_fin, void* rx_f_data, EF_Relachement_Type ry_fin,
+  void* ry_f_data, EF_Relachement_Type rz_fin, void* rz_f_data)
 /* Description : Ajoute un relachement en lui attribuant le numéro suivant le dernier
  *                 relachement existant. Les données fournis dans les paramètres additionnels
  *                 doivent avoir été stockées en mémoire par l'utilisation de malloc.
@@ -62,6 +76,7 @@ int EF_relachement_ajout(Projet *projet, EF_Relachement_Type rx_debut, void* rx_
  *            : void* ry_f_data : paramètre additionnel de la rotation si nécessaire
  *            : Type_EF_Appui rz_fin : relachement de la rotation autour de l'axe z à la fin
  *            : void* rz_f_data : paramètre additionnel de la rotation si nécessaire
+ *            : const char *nom : nom du relâchement.
  * Valeur renvoyée :
  *   Succès : 0
  *   Échec : -1 en cas de paramètres invalides :
@@ -70,7 +85,10 @@ int EF_relachement_ajout(Projet *projet, EF_Relachement_Type rx_debut, void* rx_
  *             (rx_debut == EF_RELACHEMENT_LIBRE) && (rx_fin == EF_RELACHEMENT_LIBRE)
  */
 {
-    EF_Relachement     *relachement_en_cours, relachement_nouveau;
+    EF_Relachement  *relachement_en_cours, relachement_nouveau;
+#ifdef ENABLE_GTK
+    GtkTreeIter     iter;
+#endif
     
     // Trivial
     
@@ -91,6 +109,8 @@ int EF_relachement_ajout(Projet *projet, EF_Relachement_Type rx_debut, void* rx_
     relachement_nouveau.ry_f_data = ry_f_data;
     relachement_nouveau.rz_fin = rz_fin;
     relachement_nouveau.rz_f_data = rz_f_data;
+    relachement_nouveau.nom = malloc(sizeof(char)*(strlen(nom)+1));
+    strcpy(relachement_nouveau.nom, nom);
     
     relachement_en_cours = (EF_Relachement *)list_rear(projet->ef_donnees.relachements);
     if (relachement_en_cours == NULL)
@@ -99,6 +119,11 @@ int EF_relachement_ajout(Projet *projet, EF_Relachement_Type rx_debut, void* rx_
         relachement_nouveau.numero = relachement_en_cours->numero+1;
     
     BUGMSG(list_insert_after(projet->ef_donnees.relachements, &(relachement_nouveau), sizeof(relachement_nouveau)), -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_relachement_ajout");
+    
+#ifdef ENABLE_GTK
+    gtk_list_store_append(projet->list_gtk.ef_barre.liste_relachements, &iter);
+    gtk_list_store_set(projet->list_gtk.ef_barre.liste_relachements, &iter, 0, nom, -1);
+#endif
     
     return 0;
 }
@@ -159,12 +184,17 @@ int EF_relachement_free(Projet *projet)
         free(relachement->rx_f_data);
         free(relachement->ry_f_data);
         free(relachement->rz_f_data);
+        free(relachement->nom);
         
         free(relachement);
     }
     
     free(projet->ef_donnees.relachements);
     projet->ef_donnees.relachements = NULL;
+    
+#ifdef ENABLE_GTK
+    g_object_unref(projet->list_gtk.ef_barre.liste_relachements);
+#endif
     
     return 0;
 }
