@@ -35,14 +35,15 @@ int _1992_1_1_sections_init(Projet *projet)
  *           -2 en cas d'erreur d'allocation mémoire
  */
 {
-    BUGMSG(projet, -1, "_1992_1_1_sections_init\n");
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
     
     // Trivial
     projet->beton.sections = list_init();
-    BUGMSG(projet->beton.sections, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1992_1_1_sections_init");
+    BUGMSG(projet->beton.sections, -2, gettext("Erreur d'allocation mémoire.\n"));
     
     return 0;
 }
+
 
 int _1992_1_1_sections_ajout_rectangulaire(Projet *projet, double l, double h)
 /* Description : ajouter une nouvelle section rectangulaire à la liste des sections en béton
@@ -60,8 +61,8 @@ int _1992_1_1_sections_ajout_rectangulaire(Projet *projet, double l, double h)
     Beton_Section_Rectangulaire     *section_en_cours;
     Beton_Section_Rectangulaire     section_nouvelle;
     
-    BUGMSG(projet, -1, "_1992_1_1_sections_ajout_rectangulaire\n");
-    BUGMSG(projet->beton.sections, -1, "_1992_1_1_sections_ajout_rectangulaire\n");
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->beton.sections, -1, gettext("Paramètre incorrect\n"));
     
     list_mvrear(projet->beton.sections);
     
@@ -76,11 +77,11 @@ int _1992_1_1_sections_ajout_rectangulaire(Projet *projet, double l, double h)
     else
         section_nouvelle.numero = section_en_cours->numero+1;
     
-    if (list_insert_after(projet->beton.sections, &(section_nouvelle), sizeof(section_nouvelle)) == NULL)
-        BUGMSG(0, -3, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(list_insert_after(projet->beton.sections, &(section_nouvelle), sizeof(section_nouvelle)), -2, gettext("Erreur d'allocation mémoire.\n"));
     
     return 0;
 }
+
 
 int _1992_1_1_sections_ajout_T(Projet *projet, double lt, double la, double ht, double ha)
 /* Description : ajouter une nouvelle section en T à la liste des sections en béton
@@ -100,8 +101,8 @@ int _1992_1_1_sections_ajout_T(Projet *projet, double lt, double la, double ht, 
     Beton_Section_T     *section_en_cours;
     Beton_Section_T     section_nouvelle;
     
-    BUGMSG(projet, -1, "_1992_1_1_sections_ajout_T\n");
-    BUGMSG(projet->beton.sections, -1, "_1992_1_1_sections_ajout_T\n");
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->beton.sections, -1, gettext("Paramètre incorrect\n"));
     
     list_mvrear(projet->beton.sections);
     
@@ -123,10 +124,11 @@ int _1992_1_1_sections_ajout_T(Projet *projet, double lt, double la, double ht, 
     else
         section_nouvelle.numero = section_en_cours->numero+1;
     
-    BUGMSG(list_insert_after(projet->beton.sections, &(section_nouvelle), sizeof(section_nouvelle)), -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1992_1_1_sections_ajout_T");
+    BUGMSG(list_insert_after(projet->beton.sections, &(section_nouvelle), sizeof(section_nouvelle)), -2, gettext("Erreur d'allocation mémoire.\n"));
     
     return 0;
 }
+
 
 int _1992_1_1_sections_ajout_carre(Projet *projet, double cote)
 /* Description : ajouter une nouvelle section carrée à la liste des sections en béton
@@ -143,8 +145,8 @@ int _1992_1_1_sections_ajout_carre(Projet *projet, double cote)
     Beton_Section_Carre     *section_en_cours;
     Beton_Section_Carre     section_nouvelle;
     
-    BUGMSG(projet, -1, "_1992_1_1_sections_ajout_carre\n");
-    BUGMSG(projet->beton.sections, -1, "_1992_1_1_sections_ajout_carre\n");
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->beton.sections, -1, gettext("Paramètre incorrect\n"));
     
     list_mvrear(projet->beton.sections);
     
@@ -160,10 +162,11 @@ int _1992_1_1_sections_ajout_carre(Projet *projet, double cote)
     else
         section_nouvelle.numero = section_en_cours->numero+1;
     
-    BUGMSG(list_insert_after(projet->beton.sections, &(section_nouvelle), sizeof(section_nouvelle)), -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1992_1_1_sections_ajout_carre");
+    BUGMSG(list_insert_after(projet->beton.sections, &(section_nouvelle), sizeof(section_nouvelle)), -2, gettext("Erreur d'allocation mémoire.\n"));
     
     return 0;
 }
+
 
 int _1992_1_1_sections_ajout_circulaire(Projet *projet, double diametre)
 /* Description : ajouter une nouvelle section circulaire à la liste des sections en béton
@@ -180,8 +183,8 @@ int _1992_1_1_sections_ajout_circulaire(Projet *projet, double diametre)
     Beton_Section_Circulaire    *section_en_cours;
     Beton_Section_Circulaire    section_nouvelle;
     
-    BUGMSG(projet, -1, "_1992_1_1_sections_ajout_circulaire\n");
-    BUGMSG(projet->beton.sections, -1, "_1992_1_1_sections_ajout_circulaire\n");
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->beton.sections, -1, gettext("Paramètre incorrect\n"));
     
     list_mvrear(projet->beton.sections);
     
@@ -198,7 +201,7 @@ int _1992_1_1_sections_ajout_circulaire(Projet *projet, double diametre)
     else
         section_nouvelle.numero = section_en_cours->numero+1;
     
-    BUGMSG(list_insert_after(projet->beton.sections, &(section_nouvelle), sizeof(section_nouvelle)), -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1992_1_1_sections_ajout_circulaire");
+    BUGMSG(list_insert_after(projet->beton.sections, &(section_nouvelle), sizeof(section_nouvelle)), -2, gettext("Erreur d'allocation mémoire.\n"));
     
     return 0;
 }
@@ -218,9 +221,9 @@ void* _1992_1_1_sections_cherche_numero(Projet *projet, unsigned int numero)
  *             numéro introuvable.
  */
 {
-    BUGMSG(projet, NULL, "_1992_1_1_sections_cherche_numero\n");
-    BUGMSG(projet->beton.sections, NULL, "_1992_1_1_sections_cherche_numero\n");
-    BUGMSG(list_size(projet->beton.sections), NULL, "_1992_1_1_sections_cherche_numero\n");
+    BUGMSG(projet, NULL, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->beton.sections, NULL, gettext("Paramètre incorrect\n"));
+    BUGMSG(list_size(projet->beton.sections), NULL, gettext("Paramètre incorrect\n"));
     
     // Trivial
     list_mvfront(projet->beton.sections);
@@ -233,7 +236,7 @@ void* _1992_1_1_sections_cherche_numero(Projet *projet, unsigned int numero)
     }
     while (list_mvnext(projet->beton.sections) != NULL);
     
-    BUGMSG(0, NULL, gettext("%s : Section en béton n°%d introuvable.\n"), "_1992_1_1_sections_cherche_numero", numero);
+    BUGMSG(0, NULL, gettext("Section en béton n°%d introuvable.\n"), numero);
 }
 
 
@@ -246,7 +249,7 @@ double _1992_1_1_sections_j(void* sect)
  *             (sect == NULL)
  */
 {
-    BUGMSG(sect, 0., "_1992_1_1_sections_j\n");
+    BUGMSG(sect, NAN, gettext("Paramètre incorrect\n"));
     
     switch(((Beton_Section_Rectangulaire*) sect)->type)
     {
@@ -310,7 +313,7 @@ double _1992_1_1_sections_j(void* sect)
         }
         default :
         {
-            BUGMSG(0, 0., "_1992_1_1_sections_j\n");
+            BUGMSG(0, NAN, gettext("Type de section %d inconnu."), ((Beton_Section_Rectangulaire*) sect)->type);
             break;
         }
     }
@@ -326,7 +329,7 @@ double _1992_1_1_sections_iy(void* sect)
  *             (section == NULL)
  */
 {
-    BUGMSG(sect, 0., "_1992_1_1_sections_iy\n");
+    BUGMSG(sect, NAN, gettext("Paramètre incorrect\n"));
     
     switch(((Beton_Section_Rectangulaire*) sect)->type)
     {
@@ -375,7 +378,7 @@ double _1992_1_1_sections_iy(void* sect)
         }
         default :
         {
-            BUGMSG(0, 0., "_1992_1_1_sections_iy\n");
+            BUGMSG(0, NAN, gettext("Type de section %d inconnu."), ((Beton_Section_Rectangulaire*) sect)->type);
             break;
         }
     }
@@ -391,7 +394,7 @@ double _1992_1_1_sections_iz(void* sect)
  *             (section == NULL)
  */
 {
-    BUGMSG(sect, 0., "_1992_1_1_sections_iz\n");
+    BUGMSG(sect, NAN, gettext("Paramètre incorrect\n"));
     
     switch(((Beton_Section_Rectangulaire*) sect)->type)
     {
@@ -435,7 +438,7 @@ double _1992_1_1_sections_iz(void* sect)
         }
         default :
         {
-            BUGMSG(0, 0., "_1992_1_1_sections_iz\n");
+            BUGMSG(0, NAN, gettext("Type de section %d inconnu."), ((Beton_Section_Rectangulaire*) sect)->type);
             break;
         }
     }
@@ -462,12 +465,12 @@ double _1992_1_1_sections_ay(Beton_Barre *barre, unsigned int discretisation)
     double      ll;
     double      E;
     
-    BUGMSG(barre, 0., "_1992_1_1_sections_ay\n");
-    BUGMSG(barre->section, 0., "_1992_1_1_sections_ay\n");
-    BUGMSG(barre->materiau, 0., "_1992_1_1_sections_ay\n");
-    BUGMSG(barre->noeud_debut, 0., "_1992_1_1_sections_ay\n");
-    BUGMSG(barre->noeud_fin, 0., "_1992_1_1_sections_ay\n");
-    BUGMSG(discretisation<=barre->discretisation_element, 0., "_1992_1_1_sections_ay\n");
+    BUGMSG(barre, NAN, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->section, NAN, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->materiau, NAN, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->noeud_debut, NAN, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->noeud_fin, NAN, gettext("Paramètre incorrect\n"));
+    BUGMSG(discretisation<=barre->discretisation_element, NAN, gettext("Paramètre incorrect\n"));
     
     // Le coefficient a est défini par la formule :\end{verbatim}\begin{displaymath}
     // a_y = \frac{1}{l^2}\int_0^l \frac{(l-x)^2}{E \cdot I_y(x)} dx\end{displaymath}\begin{verbatim}
@@ -483,6 +486,7 @@ double _1992_1_1_sections_ay(Beton_Barre *barre, unsigned int discretisation)
         fin = barre->noeuds_intermediaires[discretisation];
     
     ll = EF_noeuds_distance(fin, debut);
+    BUG(!isnan(ll), NAN);
     
     E = barre->materiau->ecm;
     
@@ -498,7 +502,7 @@ double _1992_1_1_sections_ay(Beton_Barre *barre, unsigned int discretisation)
         }
         default :
         {
-            BUGMSG(0, 0., "_1992_1_1_sections_ay\n");
+            BUGMSG(0, NAN, gettext("Type de section %d inconnu."), section_tmp->type);
             break;
         }
     }
@@ -525,12 +529,12 @@ double _1992_1_1_sections_by(Beton_Barre *barre, unsigned int discretisation)
     double      ll;
     double      E;
     
-    BUGMSG(barre, 0., "_1992_1_1_sections_by\n");
-    BUGMSG(barre->section, 0., "_1992_1_1_sections_by\n");
-    BUGMSG(barre->materiau, 0., "_1992_1_1_sections_by\n");
-    BUGMSG(barre->noeud_debut, 0., "_1992_1_1_sections_by\n");
-    BUGMSG(barre->noeud_fin, 0., "_1992_1_1_sections_by\n");
-    BUGMSG(discretisation<=barre->discretisation_element, 0., "_1992_1_1_sections_by\n");
+    BUGMSG(barre, NAN, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->section, NAN, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->materiau, NAN, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->noeud_debut, NAN, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->noeud_fin, NAN, gettext("Paramètre incorrect\n"));
+    BUGMSG(discretisation<=barre->discretisation_element, NAN, gettext("Paramètre incorrect\n"));
     
     // Le coefficient b est défini par la formule :\end{verbatim}\begin{displaymath}
     // b_y = \frac{1}{l^2}\int_0^l \frac{x \cdot (l-x)^2}{E \cdot I_y(x)} dx\end{displaymath}\begin{verbatim}
@@ -546,6 +550,7 @@ double _1992_1_1_sections_by(Beton_Barre *barre, unsigned int discretisation)
         fin = barre->noeuds_intermediaires[discretisation];
     
     ll = EF_noeuds_distance(fin, debut);
+    BUG(!isnan(ll), NAN);
     
     E = barre->materiau->ecm;
     
@@ -561,7 +566,7 @@ double _1992_1_1_sections_by(Beton_Barre *barre, unsigned int discretisation)
         }
         default :
         {
-            BUGMSG(0, 0., "_1992_1_1_sections_by\n");
+            BUGMSG(0, NAN, gettext("Type de section %d inconnu."), section_tmp->type);
             break;
         }
     }
@@ -588,12 +593,12 @@ double _1992_1_1_sections_cy(Beton_Barre *barre, unsigned int discretisation)
     double      ll;
     double      E;
     
-    BUGMSG(barre, 0., "_1992_1_1_sections_cy\n");
-    BUGMSG(barre->section, 0., "_1992_1_1_sections_cy\n");
-    BUGMSG(barre->materiau, 0., "_1992_1_1_sections_cy\n");
-    BUGMSG(barre->noeud_debut, 0., "_1992_1_1_sections_cy\n");
-    BUGMSG(barre->noeud_fin, 0., "_1992_1_1_sections_cy\n");
-    BUGMSG(discretisation<=barre->discretisation_element, 0., "_1992_1_1_sections_cy\n");
+    BUGMSG(barre, NAN, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->section, NAN, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->materiau, NAN, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->noeud_debut, NAN, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->noeud_fin, NAN, gettext("Paramètre incorrect\n"));
+    BUGMSG(discretisation<=barre->discretisation_element, NAN, gettext("Paramètre incorrect\n"));
     
     // Le coefficient c est défini par la formule :\end{verbatim}\begin{displaymath}
     // c_y = \frac{1}{l^2}\int_0^l \frac{x^2}{E \cdot I_y(x)} dx\end{displaymath}\begin{verbatim}
@@ -609,6 +614,7 @@ double _1992_1_1_sections_cy(Beton_Barre *barre, unsigned int discretisation)
         fin = barre->noeuds_intermediaires[discretisation];
     
     ll = EF_noeuds_distance(fin, debut);
+    BUG(!isnan(ll), NAN);
     
     E = barre->materiau->ecm;
     
@@ -624,7 +630,7 @@ double _1992_1_1_sections_cy(Beton_Barre *barre, unsigned int discretisation)
         }
         default :
         {
-            BUGMSG(0, 0., "_1992_1_1_sections_cy\n");
+            BUGMSG(0, NAN, gettext("Type de section %d inconnu."), section_tmp->type);
             break;
         }
     }
@@ -651,12 +657,12 @@ double _1992_1_1_sections_az(Beton_Barre *barre, unsigned int discretisation)
     double      ll;
     double      E;
     
-    BUGMSG(barre, 0., "_1992_1_1_sections_az\n");
-    BUGMSG(barre->section, 0., "_1992_1_1_sections_az\n");
-    BUGMSG(barre->materiau, 0., "_1992_1_1_sections_az\n");
-    BUGMSG(barre->noeud_debut, 0., "_1992_1_1_sections_az\n");
-    BUGMSG(barre->noeud_fin, 0., "_1992_1_1_sections_az\n");
-    BUGMSG(discretisation<=barre->discretisation_element, 0., "_1992_1_1_sections_az\n");
+    BUGMSG(barre, NAN, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->section, NAN, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->materiau, NAN, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->noeud_debut, NAN, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->noeud_fin, NAN, gettext("Paramètre incorrect\n"));
+    BUGMSG(discretisation<=barre->discretisation_element, NAN, gettext("Paramètre incorrect\n"));
     
     // Le coefficient a est défini par la formule :\end{verbatim}\begin{displaymath}
     // a_z = \frac{1}{l^2}\int_0^l \frac{(l-x)^2}{E \cdot I_z(x)} dx\end{displaymath}\begin{verbatim}
@@ -672,6 +678,7 @@ double _1992_1_1_sections_az(Beton_Barre *barre, unsigned int discretisation)
         fin = barre->noeuds_intermediaires[discretisation];
     
     ll = EF_noeuds_distance(fin, debut);
+    BUG(!isnan(ll), NAN);
     
     E = barre->materiau->ecm;
     
@@ -687,7 +694,7 @@ double _1992_1_1_sections_az(Beton_Barre *barre, unsigned int discretisation)
         }
         default :
         {
-            BUGMSG(0, 0., "_1992_1_1_sections_az\n");
+            BUGMSG(0, NAN, gettext("Type de section %d inconnu."), section_tmp->type);
             break;
         }
     }
@@ -714,12 +721,12 @@ double _1992_1_1_sections_bz(Beton_Barre *barre, unsigned int discretisation)
     double      ll;
     double      E;
     
-    BUGMSG(barre, 0., "_1992_1_1_sections_bz\n");
-    BUGMSG(barre->section, 0., "_1992_1_1_sections_bz\n");
-    BUGMSG(barre->materiau, 0., "_1992_1_1_sections_bz\n");
-    BUGMSG(barre->noeud_debut, 0., "_1992_1_1_sections_bz\n");
-    BUGMSG(barre->noeud_fin, 0., "_1992_1_1_sections_bz\n");
-    BUGMSG(discretisation<=barre->discretisation_element, 0., "_1992_1_1_sections_bz\n");
+    BUGMSG(barre, NAN, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->section, NAN, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->materiau, NAN, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->noeud_debut, NAN, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->noeud_fin, NAN, gettext("Paramètre incorrect\n"));
+    BUGMSG(discretisation<=barre->discretisation_element, NAN, gettext("Paramètre incorrect\n"));
     
     // Le coefficient b est défini par la formule :\end{verbatim}\begin{displaymath}
     // b_z = \frac{1}{l^2}\int_0^l \frac{x \cdot (l-x)^2}{E \cdot I_z(x)} dx\end{displaymath}\begin{verbatim}
@@ -735,6 +742,7 @@ double _1992_1_1_sections_bz(Beton_Barre *barre, unsigned int discretisation)
         fin = barre->noeuds_intermediaires[discretisation];
     
     ll = EF_noeuds_distance(fin, debut);
+    BUG(!isnan(ll), NAN);
     
     E = barre->materiau->ecm;
     
@@ -750,7 +758,7 @@ double _1992_1_1_sections_bz(Beton_Barre *barre, unsigned int discretisation)
         }
         default :
         {
-            BUGMSG(0, 0., "_1992_1_1_sections_bz\n");
+            BUGMSG(0, NAN, gettext("Type de section %d inconnu."), section_tmp->type);
             break;
         }
     }
@@ -777,12 +785,12 @@ double _1992_1_1_sections_cz(Beton_Barre *barre, unsigned int discretisation)
     double      ll;
     double      E;
     
-    BUGMSG(barre, 0., "_1992_1_1_sections_cz\n");
-    BUGMSG(barre->section, 0., "_1992_1_1_sections_cz\n");
-    BUGMSG(barre->materiau, 0., "_1992_1_1_sections_cz\n");
-    BUGMSG(barre->noeud_debut, 0., "_1992_1_1_sections_cz\n");
-    BUGMSG(barre->noeud_fin, 0., "_1992_1_1_sections_cz\n");
-    BUGMSG(discretisation<=barre->discretisation_element, 0., "_1992_1_1_sections_cz\n");
+    BUGMSG(barre, NAN, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->section, NAN, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->materiau, NAN, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->noeud_debut, NAN, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->noeud_fin, NAN, gettext("Paramètre incorrect\n"));
+    BUGMSG(discretisation<=barre->discretisation_element, NAN, gettext("Paramètre incorrect\n"));
     
     // Le coefficient c est défini par la formule :\end{verbatim}\begin{displaymath}
     // c_z = \frac{1}{l^2}\int_0^l \frac{x^2}{E \cdot I_y(x)} dx\end{displaymath}\begin{verbatim}
@@ -798,6 +806,7 @@ double _1992_1_1_sections_cz(Beton_Barre *barre, unsigned int discretisation)
         fin = barre->noeuds_intermediaires[discretisation];
     
     ll = EF_noeuds_distance(fin, debut);
+    BUG(!isnan(ll), NAN);
     
     E = barre->materiau->ecm;
     
@@ -813,7 +822,7 @@ double _1992_1_1_sections_cz(Beton_Barre *barre, unsigned int discretisation)
         }
         default :
         {
-            BUGMSG(0, 0., "_1992_1_1_sections_cz\n");
+            BUGMSG(0, NAN, gettext("Type de section %d inconnu."), section_tmp->type);
             break;
         }
     }
@@ -829,7 +838,7 @@ double _1992_1_1_sections_s(void *sect)
  *             (sect == NULL) ou
  */
 {
-    BUGMSG(sect, 0., "_1992_1_1_sections_s\n");
+    BUGMSG(sect, NAN, gettext("Paramètre incorrect\n"));
     
     switch(((Beton_Section_Rectangulaire*) sect)->type)
     {
@@ -871,7 +880,7 @@ double _1992_1_1_sections_s(void *sect)
         }
         default :
         {
-            BUGMSG(0, 0., "_1992_1_1_sections_s\n");
+            BUGMSG(0, NAN, gettext("Type de section %d inconnu."), ((Beton_Section_Rectangulaire*) sect)->type);
             break;
         }
     }
@@ -900,13 +909,13 @@ double _1992_1_1_sections_es_l(Beton_Barre *barre, unsigned int discretisation,
     Beton_Section_Rectangulaire *section_tmp;
     double      E;
     
-    BUGMSG(barre, 0., "_1992_1_1_sections_es_l\n");
-    BUGMSG(barre->section, 0., "_1992_1_1_sections_es_l\n");
-    BUGMSG(barre->materiau, 0., "_1992_1_1_sections_es_l\n");
-    BUGMSG(barre->noeud_debut, 0., "_1992_1_1_sections_es_l\n");
-    BUGMSG(barre->noeud_fin, 0., "_1992_1_1_sections_es_l\n");
-    BUGMSG(discretisation<=barre->discretisation_element, 0., "_1992_1_1_sections_es_l\n");
-    BUGMSG(!((d>f) && (!(ERREUR_RELATIVE_EGALE(d, f)))), 0., "_1992_1_1_sections_es_l\n");
+    BUGMSG(barre, NAN, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->section, NAN, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->materiau, NAN, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->noeud_debut, NAN, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->noeud_fin, NAN, gettext("Paramètre incorrect\n"));
+    BUGMSG(discretisation<=barre->discretisation_element, NAN, gettext("Paramètre incorrect\n"));
+    BUGMSG(!((d>f) && (!(ERREUR_RELATIVE_EGALE(d, f)))), NAN, gettext("Paramètre incorrect\n"));
     
     // Le facteur ES/L est défini par la formule :\end{verbatim}\begin{displaymath}
     // \frac{E \cdot S}{L} = \frac{E}{\int_d^f \frac{1}{S(x)} dx}\end{displaymath}\begin{verbatim}
@@ -962,7 +971,7 @@ double _1992_1_1_sections_es_l(Beton_Barre *barre, unsigned int discretisation,
         }
         default :
         {
-            BUGMSG(0, 0., "_1992_1_1_sections_es_l\n");
+            BUGMSG(0, NAN, gettext("Type de section %d inconnu."), section_tmp->type);
             break;
         }
     }
@@ -989,12 +998,12 @@ double _1992_1_1_sections_gj_l(Beton_Barre *barre, unsigned int discretisation)
     double      ll;
     double      G;
     
-    BUGMSG(barre, 0., "_1992_1_1_sections_gj_l\n");
-    BUGMSG(barre->section, 0., "_1992_1_1_sections_gj_l\n");
-    BUGMSG(barre->materiau, 0., "_1992_1_1_sections_gj_l\n");
-    BUGMSG(barre->noeud_debut, 0., "_1992_1_1_sections_gj_l\n");
-    BUGMSG(barre->noeud_fin, 0., "_1992_1_1_sections_gj_l\n");
-    BUGMSG(discretisation<=barre->discretisation_element, 0., "_1992_1_1_sections_gj_l\n");
+    BUGMSG(barre, NAN, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->section, NAN, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->materiau, NAN, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->noeud_debut, NAN, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->noeud_fin, NAN, gettext("Paramètre incorrect\n"));
+    BUGMSG(discretisation<=barre->discretisation_element, NAN, gettext("Paramètre incorrect\n"));
     
     // Le facteur GJ/L est défini par la formule :\end{verbatim}\begin{displaymath}
     // \frac{G \cdot J}{L} = \frac{G}{\int_0^l \frac{1}{J(x)} dx}\end{displaymath}\begin{verbatim}
@@ -1010,6 +1019,7 @@ double _1992_1_1_sections_gj_l(Beton_Barre *barre, unsigned int discretisation)
         fin = barre->noeuds_intermediaires[discretisation];
     
     ll = EF_noeuds_distance(fin, debut);
+    BUG(!isnan(ll), NAN);
     
     G = barre->materiau->gnu_0_2;
     
@@ -1081,7 +1091,7 @@ double _1992_1_1_sections_gj_l(Beton_Barre *barre, unsigned int discretisation)
         }
         default :
         {
-            BUGMSG(0, 0., "_1992_1_1_sections_gj_l\n");
+            BUGMSG(0, NAN, gettext("Type de section %d inconnu."), section_tmp->type);
             break;
         }
     }
@@ -1098,8 +1108,8 @@ int _1992_1_1_sections_free(Projet *projet)
  *             (projet->beton.sections == NULL)
  */
 {
-    BUGMSG(projet, -1, "_1992_1_1_sections_free\n");
-    BUGMSG(projet->beton.sections, -1, "_1992_1_1_sections_free\n");
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->beton.sections, -1, gettext("Paramètre incorrect\n"));
     
     // Trivial
     while (!list_empty(projet->beton.sections))

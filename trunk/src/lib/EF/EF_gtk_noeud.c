@@ -44,7 +44,7 @@ void EF_gtk_noeud_annuler(GtkButton *button __attribute__((unused)), GtkWidget *
  * Valeur renvoyée : Aucune
  */
 {
-    BUGMSG(fenetre, , "_EF_gtk_charge_noeud\n");
+    BUGMSG(fenetre, , gettext("Paramètre incorrect\n"));
     gtk_widget_destroy(fenetre);
     return;
 }
@@ -62,8 +62,8 @@ void EF_gtk_noeud(Projet *projet)
 /*    GtkTreeIter         iter;
     GtkTreeViewColumn   *column;*/
     
-    BUGMSG(projet, , "_EF_gtk_charge_noeud\n");
-    BUGMSG(projet->ef_donnees.noeuds, , "_EF_gtk_charge_noeud\n");
+    BUGMSG(projet, , gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->ef_donnees.noeuds, , gettext("Paramètre incorrect\n"));
     
     ef_gtk = &projet->list_gtk.ef_noeud;
     
@@ -113,6 +113,8 @@ void EF_gtk_noeud(Projet *projet)
             EF_Noeud    *noeud = list_curr(projet->ef_donnees.noeuds);
             EF_Point    *point = EF_noeuds_renvoie_position(noeud);
             GtkTreeIter iter;
+            
+            BUG(point, );
             
             gtk_tree_store_append(ef_gtk->tree_store, &iter, NULL);
             gtk_tree_store_set(ef_gtk->tree_store, &iter, 0, noeud->numero, 1, point->x, 2, point->y, 3, point->z, 4, (noeud->appui == NULL ? gettext("Aucun") : noeud->appui->nom), -1);

@@ -54,23 +54,23 @@ Projet* projet_init(Type_Pays pays)
     Projet      *projet;
     // Alloue toutes les zones mémoires du projet à savoir (par module) :
     projet = (Projet*)malloc(sizeof(Projet));
-    BUGMSG(projet, NULL, gettext("%s : Erreur d'allocation mémoire.\n"), "projet_init");
+    BUGMSG(projet, NULL, gettext("Erreur d'allocation mémoire.\n"));
     //     - 1990 : la liste des actions, des groupes et des combinaisons,
-    BUGMSG(_1990_action_init(projet) == 0, NULL, gettext("%s : Erreur d'allocation mémoire.\n"), "projet_init");
-    BUGMSG(_1990_groupe_init(projet) == 0, NULL, gettext("%s : Erreur d'allocation mémoire.\n"), "projet_init");
-    BUGMSG(_1990_combinaisons_init(projet) == 0, NULL, gettext("%s : Erreur d'allocation mémoire.\n"), "projet_init");
+    BUGMSG(_1990_action_init(projet) == 0, NULL, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(_1990_groupe_init(projet) == 0, NULL, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(_1990_combinaisons_init(projet) == 0, NULL, gettext("Erreur d'allocation mémoire.\n"));
     //     - 1992-1-1 : la liste des sections, des barres et des matériaux
-    BUGMSG(_1992_1_1_sections_init(projet) == 0, NULL, gettext("%s : Erreur d'allocation mémoire.\n"), "projet_init");
-    BUGMSG(_1992_1_1_barres_init(projet) == 0, NULL, gettext("%s : Erreur d'allocation mémoire.\n"), "projet_init");
-    BUGMSG(_1992_1_1_materiaux_init(projet) == 0, NULL, gettext("%s : Erreur d'allocation mémoire.\n"), "projet_init");
+    BUGMSG(_1992_1_1_sections_init(projet) == 0, NULL, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(_1992_1_1_barres_init(projet) == 0, NULL, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(_1992_1_1_materiaux_init(projet) == 0, NULL, gettext("Erreur d'allocation mémoire.\n"));
     //     - EF : la liste des appuis, des relâchements et des noeuds ainsi que les éléments
     //              nécessaire pour les calculs aux éléments finis.
-    BUGMSG(EF_appuis_init(projet) == 0, NULL, gettext("%s : Erreur d'allocation mémoire.\n"), "projet_init");
-    BUGMSG(EF_rigidite_init(projet) == 0, NULL, gettext("%s : Erreur d'allocation mémoire.\n"), "projet_init");
-    BUGMSG(EF_relachement_init(projet) == 0, NULL, gettext("%s : Erreur d'allocation mémoire.\n"), "projet_init");
-    BUGMSG(EF_noeuds_init(projet) == 0, NULL, gettext("%s : Erreur d'allocation mémoire.\n"), "projet_init");
+    BUGMSG(EF_appuis_init(projet) == 0, NULL, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(EF_rigidite_init(projet) == 0, NULL, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(EF_relachement_init(projet) == 0, NULL, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(EF_noeuds_init(projet) == 0, NULL, gettext("Erreur d'allocation mémoire.\n"));
 #ifdef ENABLE_GTK
-    BUGMSG(m3d_init(projet) == 0, NULL, gettext("%s : Erreur d'allocation mémoire.\n"), "projet_init");
+    BUGMSG(m3d_init(projet) == 0, NULL, gettext("Erreur d'allocation mémoire.\n"));
 #endif
     
     projet->ef_donnees.c = &(projet->ef_donnees.Common);
@@ -84,7 +84,7 @@ Projet* projet_init(Type_Pays pays)
 #ifdef ENABLE_GTK
 void gui_window_destroy_event(GtkWidget *pWidget __attribute__((unused)), Projet *projet)
 {
-    projet_free(projet);
+    BUG(projet_free(projet) == 0, );
     gtk_widget_destroy(pWidget);
     gtk_main_quit();
     return;
@@ -139,7 +139,7 @@ int projet_init_graphique(Projet *projet)
     Comp_Gtk        *comps;
     List_Gtk_m3d    *m3d;
     
-    BUGMSG(projet, -1, "projet_init_graphique\n");
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
     
     comps = &(projet->list_gtk.comp);
     
@@ -193,13 +193,14 @@ int projet_init_graphique(Projet *projet)
     g_signal_connect_swapped(comps->menu_charges_groupes, "activate", G_CALLBACK(gui_affiche_groupes), projet);
     
     projet->list_gtk._1990_actions.window = NULL;
+    projet->list_gtk._1990_groupes.window_groupe = NULL;
     
     return 0;
 }
 #endif
 
 
-void projet_free(Projet *projet)
+int projet_free(Projet *projet)
 /* Description : Libère les allocations mémoires de l'ensemble de la variable projet
  * Paramètres : Projet *projet : variable projet
  * Valeur renvoyée : void
@@ -208,33 +209,33 @@ void projet_free(Projet *projet)
     /* Action doit être libéré avant projet->beton.barres */
     // Trivial
     if (projet->actions != NULL)
-        _1990_action_free(projet);
+        BUG(_1990_action_free(projet) == 0, -3);
     if (projet->niveaux_groupes != NULL)
-        _1990_groupe_free(projet);
+        BUG(_1990_groupe_free(projet) == 0, -3);
     if (projet->combinaisons.elu_equ != NULL)
-        _1990_combinaisons_free(projet);
+        BUG(_1990_combinaisons_free(projet) == 0, -3);
     /* Rigidite doit être libéré avant noeud car pour libérer toute la mémoire, il est nécessaire d'avoir accès aux informations contenues dans les noeuds */
-    EF_rigidite_free(projet);
+    BUG(EF_rigidite_free(projet) == 0, -3);
     if (projet->ef_donnees.noeuds != NULL)
-        EF_noeuds_free(projet);
+        BUG(EF_noeuds_free(projet) == 0, -3);
     if (projet->beton.sections != NULL)
-        _1992_1_1_sections_free(projet);
+        BUG(_1992_1_1_sections_free(projet) == 0, -3);
     if (projet->beton.barres != NULL)
-        _1992_1_1_barres_free(projet);
+        BUG(_1992_1_1_barres_free(projet) == 0, -3);
     if (projet->ef_donnees.appuis != NULL)
-        EF_appuis_free(projet);
+        BUG(EF_appuis_free(projet) == 0, -3);
     if (projet->beton.materiaux != NULL)
-        _1992_1_1_materiaux_free(projet);
+        BUG(_1992_1_1_materiaux_free(projet) == 0, -3);
     if (projet->ef_donnees.relachements != NULL)
-        EF_relachement_free(projet);
+        BUG(EF_relachement_free(projet) == 0, -3);
 #ifdef ENABLE_GTK
     if (projet->list_gtk.m3d.data != NULL)
-        m3d_free(projet);
+        BUG(m3d_free(projet) == 0, -3);
 #endif
     
     cholmod_l_finish(projet->ef_donnees.c);
     
     free(projet);
     
-    return;
+    return 0;
 }

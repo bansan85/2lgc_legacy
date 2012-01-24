@@ -25,8 +25,8 @@
 
 #include "common_projet.h"
 
-void EF_gtk_charge_barre_ponctuelle(Projet *projet, gint action_defaut, gint charge);
-void EF_gtk_charge_barre_ponctuelle_ajout_affichage(Charge_Barre_Ponctuelle *charge, Projet *projet, gboolean nouvelle_ligne);
+int EF_gtk_charge_barre_ponctuelle(Projet *projet, gint action_defaut, gint charge);
+int EF_gtk_charge_barre_ponctuelle_ajout_affichage(Charge_Barre_Ponctuelle *charge, Projet *projet, gboolean nouvelle_ligne);
 
 #endif
 

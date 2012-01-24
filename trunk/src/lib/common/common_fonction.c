@@ -46,18 +46,18 @@ int common_fonction_init(Projet *projet, Action *action)
 {
     unsigned int        i, j;
     
-    BUGMSG(projet, -1, "common_fonction_init\n");
-    BUGMSG(action, -1, "common_fonction_init\n");
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(action, -1, gettext("Paramètre incorrect\n"));
     
     // Trivial
     for (i=0;i<6;i++)
     {
         action->fonctions_efforts[i] = (Fonction**)malloc(sizeof(Fonction*)*list_size(projet->beton.barres));
-        BUGMSG(action->fonctions_efforts[i], -2, gettext("%s : Erreur d'allocation mémoire.\n"), "common_fonction_init");
+        BUGMSG(action->fonctions_efforts[i], -2, gettext("Erreur d'allocation mémoire.\n"));
         for (j=0;j<list_size(projet->beton.barres);j++)
         {
             action->fonctions_efforts[i][j] = (Fonction*)malloc(sizeof(Fonction));
-            BUGMSG(action->fonctions_efforts[i][j], -2, gettext("%s : Erreur d'allocation mémoire.\n"), "common_fonction_init");
+            BUGMSG(action->fonctions_efforts[i][j], -2, gettext("Erreur d'allocation mémoire.\n"));
             action->fonctions_efforts[i][j]->nb_troncons = 0;
             action->fonctions_efforts[i][j]->troncons = NULL;
         }
@@ -66,21 +66,21 @@ int common_fonction_init(Projet *projet, Action *action)
     for (i=0;i<3;i++)
     {
         action->fonctions_deformation[i] = (Fonction**)malloc(sizeof(Fonction*)*list_size(projet->beton.barres));
-        BUGMSG(action->fonctions_deformation[i], -2, gettext("%s : Erreur d'allocation mémoire.\n"), "common_fonction_init");
+        BUGMSG(action->fonctions_deformation[i], -2, gettext("Erreur d'allocation mémoire.\n"));
         for (j=0;j<list_size(projet->beton.barres);j++)
         {
             action->fonctions_deformation[i][j] = (Fonction*)malloc(sizeof(Fonction));
-            BUGMSG(action->fonctions_deformation[i][j], -2, gettext("%s : Erreur d'allocation mémoire.\n"), "common_fonction_init");
+            BUGMSG(action->fonctions_deformation[i][j], -2, gettext("Erreur d'allocation mémoire.\n"));
             action->fonctions_deformation[i][j]->nb_troncons = 0;
             action->fonctions_deformation[i][j]->troncons = NULL;
         }
         
         action->fonctions_rotation[i] = (Fonction**)malloc(sizeof(Fonction*)*list_size(projet->beton.barres));
-        BUGMSG(action->fonctions_rotation[i], -2, gettext("%s : Erreur d'allocation mémoire.\n"), "common_fonction_init");
+        BUGMSG(action->fonctions_rotation[i], -2, gettext("Erreur d'allocation mémoire.\n"));
         for (j=0;j<list_size(projet->beton.barres);j++)
         {
             action->fonctions_rotation[i][j] = (Fonction*)malloc(sizeof(Fonction));
-            BUGMSG(action->fonctions_rotation[i][j], -2, gettext("%s : Erreur d'allocation mémoire.\n"), "common_fonction_init");
+            BUGMSG(action->fonctions_rotation[i][j], -2, gettext("Erreur d'allocation mémoire.\n"));
             action->fonctions_rotation[i][j]->nb_troncons = 0;
             action->fonctions_rotation[i][j]->troncons = NULL;
         }
@@ -108,8 +108,8 @@ int common_fonction_scinde_troncon(Fonction* fonction, double coupure)
 {
     int i, j;
     
-    BUGMSG(fonction, -1, "common_fonction_scinde_troncon\n");
-    BUGMSG(fonction->nb_troncons, -1, "common_fonction_scinde_troncon\n");
+    BUGMSG(fonction, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(fonction->nb_troncons, -1, gettext("Paramètre incorrect\n"));
     
     // Trivial
     /* Si la coupure est égale au début du premier tronçon Alors
@@ -123,7 +123,7 @@ int common_fonction_scinde_troncon(Fonction* fonction, double coupure)
     {
         fonction->nb_troncons++;
         fonction->troncons = (Troncon*)realloc(fonction->troncons, fonction->nb_troncons*sizeof(Troncon));
-        BUGMSG(fonction->troncons, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "common_fonction_scinde_troncon");
+        BUGMSG(fonction->troncons, -2, gettext("Erreur d'allocation mémoire.\n"));
         for(i=fonction->nb_troncons-2;i>=0;i--)
             memcpy(&(fonction->troncons[i+1]), &(fonction->troncons[i]), sizeof(Troncon));
         fonction->troncons[0].debut_troncon = coupure;
@@ -158,7 +158,7 @@ int common_fonction_scinde_troncon(Fonction* fonction, double coupure)
             {
                 fonction->nb_troncons++;
                 fonction->troncons = (Troncon*)realloc(fonction->troncons, fonction->nb_troncons*sizeof(Troncon));
-                BUGMSG(fonction->troncons, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "common_fonction_scinde_troncon");
+                BUGMSG(fonction->troncons, -2, gettext("Erreur d'allocation mémoire.\n"));
                 for(j=fonction->nb_troncons-2;j>=i;j--)
                     memcpy(&(fonction->troncons[j+1]), &(fonction->troncons[j]), sizeof(Troncon));
                 fonction->troncons[i+1].debut_troncon = coupure;
@@ -173,7 +173,7 @@ int common_fonction_scinde_troncon(Fonction* fonction, double coupure)
      * FinSi */
         fonction->nb_troncons++;
         fonction->troncons = (Troncon*)realloc(fonction->troncons, fonction->nb_troncons*sizeof(Troncon));
-        BUGMSG(fonction->troncons, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "common_fonction_scinde_troncon");
+        BUGMSG(fonction->troncons, -2, gettext("Erreur d'allocation mémoire.\n"));
         fonction->troncons[fonction->nb_troncons-1].debut_troncon = fonction->troncons[fonction->nb_troncons-2].fin_troncon;
         fonction->troncons[fonction->nb_troncons-1].fin_troncon = coupure;
         fonction->troncons[fonction->nb_troncons-1].x0 = 0.;
@@ -221,14 +221,14 @@ int common_fonction_ajout(Fonction* fonction, double debut_troncon, double fin_t
 {
     double  x0_t, x1_t, x2_t, x3_t, x4_t, x5_t, x6_t;
     
-    BUGMSG(fonction, -1, "common_fonction_ajout\n");
+    BUGMSG(fonction, -1, gettext("Paramètre incorrect\n"));
     // Si fin_troncon == debut_troncon Alors
     //     Fin.
     // FinSi
     if (ERREUR_RELATIVE_EGALE(fin_troncon, debut_troncon))
         return 0;
     
-    BUGMSG(fin_troncon > debut_troncon, -1, "common_fonction_ajout : debut_troncon %.20f > fin_troncon %.20f\n", debut_troncon, fin_troncon);
+    BUGMSG(fin_troncon > debut_troncon, -1, "debut_troncon %.20f > fin_troncon %.20f\n", debut_troncon, fin_troncon);
     
     debut_troncon = debut_troncon + t;
     fin_troncon = fin_troncon + t;
@@ -249,7 +249,7 @@ int common_fonction_ajout(Fonction* fonction, double debut_troncon, double fin_t
     {
         fonction->nb_troncons = 1;
         fonction->troncons = (Troncon *)malloc(sizeof(Troncon));
-        BUGMSG(fonction->troncons, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "common_fonction_ajout");
+        BUGMSG(fonction->troncons, -2, gettext("Erreur d'allocation mémoire.\n"));
         fonction->troncons[0].debut_troncon = debut_troncon;
         fonction->troncons[0].fin_troncon = fin_troncon;
         fonction->troncons[0].x0 = x0_t;
@@ -311,7 +311,7 @@ int common_fonction_compacte(Fonction* fonction)
     int k; /* Numéro du précédent tronçon identique */
     
     // Trivial
-    BUGMSG(fonction, -1, "%s\n", "common_fonction_compacte");
+    BUGMSG(fonction, -1, gettext("Paramètre incorrect\n"));
     
     if ((fonction->nb_troncons == 0) || (fonction->nb_troncons == 1))
         return 0;
@@ -330,7 +330,7 @@ int common_fonction_compacte(Fonction* fonction)
         }
     }
     memmove(fonction->troncons, fonction->troncons, sizeof(Troncon)*j);
-    BUGMSG(fonction->troncons, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "common_fonction_compacte");
+    BUGMSG(fonction->troncons, -2, gettext("Erreur d'allocation mémoire.\n"));
     fonction->nb_troncons = j;
     return 0;
 }
@@ -349,7 +349,7 @@ int common_fonction_affiche(Fonction* fonction)
     int i;
     
     // Trivial
-    BUGMSG(fonction, -1, "common_fonction_affiche\n");
+    BUGMSG(fonction, -1, gettext("Paramètre incorrect\n"));
     
     if (fonction->nb_troncons == 0)
         printf(gettext("Fonction indéfinie.\n"));
@@ -389,9 +389,9 @@ int common_fonction_free(Projet *projet, Action *action)
 {
     unsigned int        i, j;
     
-    BUGMSG(projet, -1, "common_fonction_free\n");
-    BUGMSG(action, -1, "common_fonction_free\n");
-    BUGMSG(projet->beton.barres, -1, "common_fonction_free\n");
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(action, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->beton.barres, -1, gettext("Paramètre incorrect\n"));
     
     // Trivial
     for (i=0;i<6;i++)

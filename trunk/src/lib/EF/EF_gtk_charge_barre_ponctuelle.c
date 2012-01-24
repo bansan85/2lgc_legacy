@@ -36,22 +36,25 @@
 #include "1990_actions.h"
 #include "common_selection.h"
 
-void EF_gtk_charge_barre_ponctuelle_ajout_affichage(Charge_Barre_Ponctuelle *charge, Projet *projet, gboolean nouvelle_ligne)
+int EF_gtk_charge_barre_ponctuelle_ajout_affichage(Charge_Barre_Ponctuelle *charge, Projet *projet, gboolean nouvelle_ligne)
 {
     char                    *description, tmp[30], *tmp2;
-    List_Gtk_1990_Actions   *list_gtk_1990_actions = &projet->list_gtk._1990_actions;
+    List_Gtk_1990_Actions   *list_gtk_1990_actions;
     
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    
+    list_gtk_1990_actions = &projet->list_gtk._1990_actions;
     if (list_gtk_1990_actions->window == NULL)
-        return;
+        return -1;
     
-    description = malloc(sizeof(char)*(strlen(gettext("Barre : "))+1));
+    BUGMSG(description = malloc(sizeof(char)*(strlen(gettext("Barre : "))+1)), -2, gettext("Erreur d'allocation mémoire.\n"));
     strcpy(description, gettext("Barre : "));
-    tmp2 = common_selection_converti_barres_en_texte(charge->barres);
+    BUGMSG(tmp2 = common_selection_converti_barres_en_texte(charge->barres), -2, gettext("Erreur d'allocation mémoire.\n"));
     description = realloc(description, (strlen(description) + strlen(tmp2)+1)*sizeof(char));
     strcat(description, tmp2);
     free(tmp2);
     common_math_double_to_char(charge->position, tmp);
-    description = realloc(description, (strlen(description) + strlen(",  :  m") + strlen(gettext("position")) + strlen(tmp) + 1)*sizeof(char));
+    BUGMSG(description = realloc(description, (strlen(description) + strlen(",  :  m") + strlen(gettext("position")) + strlen(tmp) + 1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
     strcat(description, ", ");
     strcat(description, gettext("position"));
     strcat(description, " : ");
@@ -59,43 +62,43 @@ void EF_gtk_charge_barre_ponctuelle_ajout_affichage(Charge_Barre_Ponctuelle *cha
     strcat(description, " m");
     if (charge->repere_local)
     {
-        description = realloc(description, (strlen(description) + strlen(", ") + strlen(gettext("repère : local")) + strlen(tmp) + 1)*sizeof(char));
+        BUGMSG(description = realloc(description, (strlen(description) + strlen(", ") + strlen(gettext("repère : local")) + strlen(tmp) + 1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
         strcat(description, ", ");
         strcat(description, gettext("repère : local"));
     }
     else
     {
-        description = realloc(description, (strlen(description) + strlen(", ") + strlen(gettext("repère : global")) + strlen(tmp) + 1)*sizeof(char));
+        BUGMSG(description = realloc(description, (strlen(description) + strlen(", ") + strlen(gettext("repère : global")) + strlen(tmp) + 1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
         strcat(description, ", ");
         strcat(description, gettext("repère : global"));
     }
     common_math_double_to_char(charge->fx, tmp);
-    description = realloc(description, (strlen(description) + strlen(", Fx :  N") + strlen(tmp)+1)*sizeof(char));
+    BUGMSG(description = realloc(description, (strlen(description) + strlen(", Fx :  N") + strlen(tmp)+1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
     strcat(description, ", Fx : ");
     strcat(description, tmp);
     strcat(description, " N");
     common_math_double_to_char(charge->fy, tmp);
-    description = realloc(description, (strlen(description) + strlen(", Fy :  N") + strlen(tmp)+1)*sizeof(char));
+    BUGMSG(description = realloc(description, (strlen(description) + strlen(", Fy :  N") + strlen(tmp)+1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
     strcat(description, ", Fy : ");
     strcat(description, tmp);
     strcat(description, " N");
     common_math_double_to_char(charge->fz, tmp);
-    description = realloc(description, (strlen(description) + strlen(", Fz :  N") + strlen(tmp)+1)*sizeof(char));
+    BUGMSG(description = realloc(description, (strlen(description) + strlen(", Fz :  N") + strlen(tmp)+1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
     strcat(description, ", Fz : ");
     strcat(description, tmp);
     strcat(description, " N");
     common_math_double_to_char(charge->mx, tmp);
-    description = realloc(description, (strlen(description) + strlen(", Mx :  N") + strlen(tmp)+1)*sizeof(char));
+    BUGMSG(description = realloc(description, (strlen(description) + strlen(", Mx :  N") + strlen(tmp)+1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
     strcat(description, ", Mx : ");
     strcat(description, tmp);
     strcat(description, " N");
     common_math_double_to_char(charge->my, tmp);
-    description = realloc(description, (strlen(description) + strlen(", My :  N") + strlen(tmp)+1)*sizeof(char));
+    BUGMSG(description = realloc(description, (strlen(description) + strlen(", My :  N") + strlen(tmp)+1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
     strcat(description, ", My : ");
     strcat(description, tmp);
     strcat(description, " N");
     common_math_double_to_char(charge->mz, tmp);
-    description = realloc(description, (strlen(description) + strlen(", Mz :  N") + strlen(tmp)+1)*sizeof(char));
+    BUGMSG(description = realloc(description, (strlen(description) + strlen(", Mz :  N") + strlen(tmp)+1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
     strcat(description, ", Mz : ");
     strcat(description, tmp);
     strcat(description, " N");
@@ -104,6 +107,8 @@ void EF_gtk_charge_barre_ponctuelle_ajout_affichage(Charge_Barre_Ponctuelle *cha
         gtk_tree_store_append(list_gtk_1990_actions->tree_store_charges, &charge->Iter, NULL);
     gtk_tree_store_set(list_gtk_1990_actions->tree_store_charges, &charge->Iter, 0, charge->numero, 1, charge->description, 2, gettext("Ponctuelle sur barre"), 3, description, -1);
     free(description);
+    
+    return 0;
 }
 
 
@@ -116,7 +121,7 @@ void EF_gtk_charge_barre_ponctuelle_annuler_clicked(GtkButton *button __attribut
  * Valeur renvoyée : Aucune
  */
 {
-    BUGMSG(fenetre, , "EF_gtk_charge_barre_ponctuelle_annuler_clicked\n");
+    BUGMSG(fenetre, , gettext("Paramètre incorrect\n"));
     gtk_widget_destroy(fenetre);
     return;
 }
@@ -131,7 +136,18 @@ gboolean EF_gtk_charge_barre_ponctuelle_recupere_donnees(Projet *projet, int *nu
     gchar                               *texte_tmp;
     GtkTextBuffer                       *textbuffer;
     
-    BUGMSG(projet, FALSE, "EF_gtk_charge_barre_ponctuelle_recupere_donnees\n");
+    BUGMSG(projet, FALSE, gettext("Paramètre incorrect\n"));
+    BUGMSG(num_action, FALSE, gettext("Paramètre incorrect\n"));
+    BUGMSG(barres, FALSE, gettext("Paramètre incorrect\n"));
+    BUGMSG(fx, FALSE, gettext("Paramètre incorrect\n"));
+    BUGMSG(fy, FALSE, gettext("Paramètre incorrect\n"));
+    BUGMSG(fz, FALSE, gettext("Paramètre incorrect\n"));
+    BUGMSG(mx, FALSE, gettext("Paramètre incorrect\n"));
+    BUGMSG(my, FALSE, gettext("Paramètre incorrect\n"));
+    BUGMSG(mz, FALSE, gettext("Paramètre incorrect\n"));
+    BUGMSG(description, FALSE, gettext("Paramètre incorrect\n"));
+    BUGMSG(repere_local, FALSE, gettext("Paramètre incorrect\n"));
+    BUGMSG(position, FALSE, gettext("Paramètre incorrect\n"));
     
     ef_gtk = &projet->list_gtk.ef_charge_barre_ponctuelle;
     
@@ -249,14 +265,12 @@ void EF_gtk_charge_barre_ponctuelle_ajouter_clicked(GtkButton *button __attribut
     GtkTreeIter                 iter_action;
     int                         numero_action;
     
-    BUGMSG(projet, , "EF_gtk_charge_barre_ponctuelle_ajouter_clicked\n");
+    BUGMSG(projet, , gettext("Paramètre incorrect\n"));
     
-    if (!EF_gtk_charge_barre_ponctuelle_recupere_donnees(projet, &num_action, &barres, &fx, &fy, &fz, &mx, &my, &mz, &texte, &repere_local, &position))
-        return;
+    BUG(EF_gtk_charge_barre_ponctuelle_recupere_donnees(projet, &num_action, &barres, &fx, &fy, &fz, &mx, &my, &mz, &texte, &repere_local, &position) == TRUE, );
     
     // Création de la nouvelle charge ponctuelle sur barre
-    charge = EF_charge_barre_ponctuelle_ajout(projet, num_action, barres, repere_local, position, fx, fy, fz, mx, my, mz, texte);
-    BUG(charge, );
+    BUG(charge = EF_charge_barre_ponctuelle_ajout(projet, num_action, barres, repere_local, position, fx, fy, fz, mx, my, mz, texte), );
     
     free(texte);
     
@@ -265,7 +279,7 @@ void EF_gtk_charge_barre_ponctuelle_ajouter_clicked(GtkButton *button __attribut
         return;
     gtk_tree_model_get(model_action, &iter_action, 0, &numero_action, -1);
     if (numero_action == num_action)
-        EF_gtk_charge_barre_ponctuelle_ajout_affichage(charge, projet, TRUE);
+        BUG(EF_gtk_charge_barre_ponctuelle_ajout_affichage(charge, projet, TRUE) == 0, );
     
     gtk_widget_destroy(projet->list_gtk.ef_charge_barre_ponctuelle.window);
     
@@ -287,15 +301,15 @@ void EF_gtk_charge_barre_ponctuelle_editer_clicked(GtkButton *button __attribute
     gchar                       *texte;
     Charge_Barre_Ponctuelle     *charge;
     
-    BUGMSG(projet, , "_EF_gtk_charge_barre_ponctuelle_editer_clicked\n");
+    BUGMSG(projet, , gettext("Paramètre incorrect\n"));
     
     ef_gtk = &projet->list_gtk.ef_charge_barre_ponctuelle;
     
-    if (!EF_gtk_charge_barre_ponctuelle_recupere_donnees(projet, &num_action, &barres, &fx, &fy, &fz, &mx, &my, &mz, &texte, &repere_local, &position))
-        return;
+    BUG(EF_gtk_charge_barre_ponctuelle_recupere_donnees(projet, &num_action, &barres, &fx, &fy, &fz, &mx, &my, &mz, &texte, &repere_local, &position) == TRUE, );
     
     // Création de la nouvelle charge ponctuelle sur barre
     charge = _1990_action_cherche_charge(projet, ef_gtk->action, ef_gtk->charge);
+    BUG(charge, );
     free(charge->description);
     charge->description = texte;
     charge->fx = fx;
@@ -309,9 +323,9 @@ void EF_gtk_charge_barre_ponctuelle_editer_clicked(GtkButton *button __attribute
     charge->position = position;
     charge->repere_local = repere_local;
     if (num_action != ef_gtk->action)
-        _1990_action_deplace_charge(projet, ef_gtk->action, ef_gtk->charge, num_action);
+        BUG(_1990_action_deplace_charge(projet, ef_gtk->action, ef_gtk->charge, num_action) == 0, );
     else
-        EF_gtk_charge_barre_ponctuelle_ajout_affichage(charge, projet, FALSE);
+        BUG(EF_gtk_charge_barre_ponctuelle_ajout_affichage(charge, projet, FALSE) == 0, );
     
     gtk_widget_destroy(projet->list_gtk.ef_charge_barre_ponctuelle.window);
     
@@ -319,7 +333,7 @@ void EF_gtk_charge_barre_ponctuelle_editer_clicked(GtkButton *button __attribute
 }
 
 
-void EF_gtk_charge_barre_ponctuelle(Projet *projet, gint action_defaut, gint charge)
+int EF_gtk_charge_barre_ponctuelle(Projet *projet, gint action_defaut, gint charge)
 /* Description : Affichage de la fenêtre permettant de créer ou modifier une action de type
  *               charge ponctuelle sur barre
  * Paramètres : Projet *projet : la variable projet
@@ -332,10 +346,9 @@ void EF_gtk_charge_barre_ponctuelle(Projet *projet, gint action_defaut, gint cha
     List_Gtk_EF_Charge_Barre_Ponctuelle    *ef_gtk;
     Charge_Barre_Ponctuelle                *charge_barre;
     
-    BUGMSG(projet, , "EF_gtk_charge_barre_ponctuelle\n");
-    BUGMSG(projet->actions, , "EF_gtk_charge_barre_ponctuelle\n");
-    
-    BUGMSG(list_size(projet->actions) > 0, , "EF_gtk_charge_barre_ponctuelle\n");
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->actions, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(list_size(projet->actions) > 0, -1, gettext("Paramètre incorrect\n"));
     
     ef_gtk = &projet->list_gtk.ef_charge_barre_ponctuelle;
     
@@ -349,8 +362,7 @@ void EF_gtk_charge_barre_ponctuelle(Projet *projet, gint action_defaut, gint cha
         ef_gtk->action = action_defaut;
         ef_gtk->charge = charge;
         GTK_NOUVELLE_FENETRE(ef_gtk->window, gettext("Modification d'une charge ponctuelle sur barre"), 400, 1)
-        charge_barre = _1990_action_cherche_charge(projet, action_defaut, charge);
-        BUG(charge_barre, );
+        BUG(charge_barre = _1990_action_cherche_charge(projet, action_defaut, charge), -1);
     }
     
     ef_gtk->table = gtk_table_new(7, 4, FALSE);
@@ -367,6 +379,7 @@ void EF_gtk_charge_barre_ponctuelle(Projet *projet, gint action_defaut, gint cha
         gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(ef_gtk->combobox_charge), action->description);
     }
     while (list_mvnext(projet->actions) != NULL);
+    
     gtk_combo_box_set_active(GTK_COMBO_BOX(ef_gtk->combobox_charge), action_defaut);
     gtk_table_attach(GTK_TABLE(ef_gtk->table), ef_gtk->combobox_charge, 1, 4, 0, 1, GTK_EXPAND | GTK_FILL, GTK_SHRINK | GTK_FILL, 0, 0);
     
@@ -455,7 +468,7 @@ void EF_gtk_charge_barre_ponctuelle(Projet *projet, gint action_defaut, gint cha
         common_math_double_to_char(charge_barre->position, tmp);
         gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_position)), tmp, -1);
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ef_gtk->check_button_repere_local), charge_barre->repere_local);
-        tmp2 = common_selection_converti_barres_en_texte(charge_barre->barres);
+        BUG(tmp2 = common_selection_converti_barres_en_texte(charge_barre->barres), -3);
         gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_barre)), tmp2, -1);
         free(tmp2);
     }
@@ -483,7 +496,7 @@ void EF_gtk_charge_barre_ponctuelle(Projet *projet, gint action_defaut, gint cha
     gtk_window_set_modal(GTK_WINDOW(ef_gtk->window), TRUE);
     gtk_widget_show_all(ef_gtk->window);
     
-    return;
+    return 0;
 }
 
 #endif

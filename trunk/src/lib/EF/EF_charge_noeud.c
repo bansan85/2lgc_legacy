@@ -56,17 +56,17 @@ Charge_Noeud*  EF_charge_noeud_ajout(Projet *projet, int num_action, LIST *noeud
     Charge_Noeud    *charge_dernier, charge_nouveau;
     
     // Trivial
-    BUGMSG(projet, NULL, "EF_charge_noeud_ajout\n");
-    BUGMSG(projet->actions, NULL, "EF_charge_noeud_ajout\n");
-    BUGMSG(list_size(projet->actions), NULL, "EF_charge_noeud_ajout\n");
-    BUGMSG(noeuds, NULL, "EF_charge_noeud_ajout\n");
+    BUGMSG(projet, NULL, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->actions, NULL, gettext("Paramètre incorrect\n"));
+    BUGMSG(list_size(projet->actions), NULL, gettext("Paramètre incorrect\n"));
+    BUGMSG(noeuds, NULL, gettext("Paramètre incorrect\n"));
     BUG(_1990_action_cherche_numero(projet, num_action) == 0, NULL);
     
     action_en_cours = (Action*)list_curr(projet->actions);
     
     charge_nouveau.type = CHARGE_NOEUD;
     charge_nouveau.description = (char*)malloc(sizeof(char)*(strlen(nom)+1));
-    BUGMSG(charge_nouveau.description, NULL, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_charge_noeud_ajout");
+    BUGMSG(charge_nouveau.description, NULL, gettext("Erreur d'allocation mémoire.\n"));
     strcpy(charge_nouveau.description, nom);
     charge_nouveau.noeuds = noeuds;
     charge_nouveau.fx = fx;
@@ -83,19 +83,30 @@ Charge_Noeud*  EF_charge_noeud_ajout(Projet *projet, int num_action, LIST *noeud
         charge_nouveau.numero = charge_dernier->numero+1;
     
     list_mvrear(action_en_cours->charges);
-    BUGMSG(list_insert_after(action_en_cours->charges, &(charge_nouveau), sizeof(charge_nouveau)), NULL, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_charge_noeud_ajout");
+    BUGMSG(list_insert_after(action_en_cours->charges, &(charge_nouveau), sizeof(charge_nouveau)), NULL, gettext("Erreur d'allocation mémoire.\n"));
     
     return (Charge_Noeud*)list_curr(action_en_cours->charges);
 }
 
 
-void EF_charge_noeud_free(Charge_Noeud *charge)
+int EF_charge_noeud_free(Charge_Noeud *charge)
 {
-/* Description : Libère le contenu alloué dans une charge nodale.
+/* Description : Libère une charge nodale.
  * Paramètres : Charge_Noeud *charge : la charge à libérer.
- * Valeur renvoyée : void
+ * Valeur renvoyée :
+ *   Succès : 0
+ *   Échec : -1 en cas de paraètres invalides :
+ *             (charge == NULL) ou
+ *             (charge->description == NULL) ou
+ *             (charge->noeuds == NULL)
  */
+    BUGMSG(charge, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(charge->description, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(charge->noeuds, -1, gettext("Paramètre incorrect\n"));
+    
     free(charge->description);
     list_free(charge->noeuds, LIST_DEALLOC);
-    return;
+    free(charge);
+    
+    return 0;
 }

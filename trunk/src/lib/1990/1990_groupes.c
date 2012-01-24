@@ -39,12 +39,12 @@ int _1990_groupe_init(Projet *projet)
  *           -2 en cas d'erreur d'allocation mémoire
  */
 {
-    BUGMSG(projet, -1, "_1990_groupe_init\n");
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
     
     // Trivial
     projet->niveaux_groupes = list_init();
     
-    BUGMSG(projet->niveaux_groupes, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_groupe_init");
+    BUGMSG(projet->niveaux_groupes, -2, gettext("Erreur d'allocation mémoire.\n"));
     
     return 0;
 }
@@ -65,15 +65,15 @@ int _1990_groupe_ajout_niveau(Projet *projet)
     Niveau_Groupe   niveau_nouveau;
     
     // Trivial
-    BUGMSG(projet, -1, "_1990_groupe_ajout_niveau\n");
-    BUGMSG(projet->niveaux_groupes, -1, "_1990_groupe_ajout_niveau\n");
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->niveaux_groupes, -1, gettext("Paramètre incorrect\n"));
     
     list_mvrear(projet->niveaux_groupes);
     niveau_nouveau.niveau = list_size(projet->niveaux_groupes);
     niveau_nouveau.groupes = list_init();
-    BUGMSG(niveau_nouveau.groupes, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_groupe_ajout_niveau");
+    BUGMSG(niveau_nouveau.groupes, -2, gettext("Erreur d'allocation mémoire.\n"));
     
-    BUGMSG(list_insert_after(projet->niveaux_groupes, &(niveau_nouveau), sizeof(niveau_nouveau)) , -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_groupe_ajout_niveau");
+    BUGMSG(list_insert_after(projet->niveaux_groupes, &(niveau_nouveau), sizeof(niveau_nouveau)) , -2, gettext("Erreur d'allocation mémoire.\n"));
     
     return 0;
 }
@@ -91,8 +91,8 @@ int _1990_groupe_positionne_element(Groupe *groupe, int numero)
  *             élément introuvable.
  */
 {
-    BUGMSG(groupe, -1, "_1990_groupe_positionne_element\n");
-    BUGMSG(list_size(groupe->elements), -1, "_1990_groupe_positionne_element\n");
+    BUGMSG(groupe, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(list_size(groupe->elements), -1, gettext("Paramètre incorrect\n"));
     
     // Trivial
     list_mvfront(groupe->elements);
@@ -123,9 +123,9 @@ int _1990_groupe_positionne_groupe(Niveau_Groupe *niveau, int numero)
  *             groupe introuvable.
  */
 {
-    BUGMSG(niveau, -1, "_1990_groupe_positionne_groupe\n");
-    BUGMSG(niveau->groupes, -1, "_1990_groupe_positionne_groupe\n");
-    BUGMSG(list_size(niveau->groupes), -1, "_1990_groupe_positionne_groupe\n");
+    BUGMSG(niveau, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(niveau->groupes, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(list_size(niveau->groupes), -1, gettext("Paramètre incorrect\n"));
     
     // Trivial
     list_mvfront(niveau->groupes);
@@ -136,7 +136,7 @@ int _1990_groupe_positionne_groupe(Niveau_Groupe *niveau, int numero)
             return 0;
     }
     while (list_mvnext(niveau->groupes) != NULL);
-    BUGMSG(0, -2, gettext("Élément introuvable.\n"));
+    BUGMSG(0, -2, gettext("Élément %d introuvable.\n"), numero);
 }
 
 
@@ -154,8 +154,8 @@ int _1990_groupe_positionne_niveau(LIST *source, int numero)
 {
     Niveau_Groupe *niveau;
     
-    BUGMSG(source, -1, "_1990_groupe_positionne_niveau\n");
-    BUGMSG(list_size(source), -1, "_1990_groupe_positionne_niveau\n");
+    BUGMSG(source, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(list_size(source), -1, gettext("Paramètre incorrect\n"));
     
     // Trivial
     list_mvfront(source);
@@ -189,9 +189,9 @@ int _1990_groupe_ajout_groupe(Projet *projet, int niveau,
     Groupe          groupe_nouveau;
     Niveau_Groupe   *niveau_groupe;
     
-    BUGMSG(projet, -1, "_1990_groupe_ajout_groupe\n");
-    BUGMSG(projet->niveaux_groupes, -1, "_1990_groupe_ajout_groupe\n");
-    BUGMSG(list_size(projet->niveaux_groupes), -1, "_1990_groupe_ajout_groupe\n");
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->niveaux_groupes, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(list_size(projet->niveaux_groupes), -1, gettext("Paramètre incorrect\n"));
     
     // Trivial
     
@@ -201,7 +201,7 @@ int _1990_groupe_ajout_groupe(Projet *projet, int niveau,
     list_mvrear(niveau_groupe->groupes);
     groupe_nouveau.numero = list_size(niveau_groupe->groupes);
     groupe_nouveau.nom = (char*)malloc(sizeof(char)*(strlen(nom)+1));
-    BUGMSG(groupe_nouveau.nom, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_groupe_ajout_groupe");
+    BUGMSG(groupe_nouveau.nom, -2, gettext("Erreur d'allocation mémoire.\n"));
     strcpy(groupe_nouveau.nom, nom);
     groupe_nouveau.type_combinaison = type_combinaison;
 #ifdef ENABLE_GTK
@@ -209,14 +209,15 @@ int _1990_groupe_ajout_groupe(Projet *projet, int niveau,
 #endif
     
     groupe_nouveau.tmp_combinaison.combinaisons = list_init();
-    BUGMSG(groupe_nouveau.tmp_combinaison.combinaisons, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_groupe_ajout_groupe");
+    BUGMSG(groupe_nouveau.tmp_combinaison.combinaisons, -2, gettext("Erreur d'allocation mémoire.\n"));
     
     groupe_nouveau.elements = list_init();
-    BUGMSG(groupe_nouveau.elements, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_groupe_ajout_groupe");
-    BUGMSG(list_insert_after(niveau_groupe->groupes, &(groupe_nouveau), sizeof(groupe_nouveau)), -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_groupe_ajout_groupe");
+    BUGMSG(groupe_nouveau.elements, -2, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(list_insert_after(niveau_groupe->groupes, &(groupe_nouveau), sizeof(groupe_nouveau)), -2, gettext("Erreur d'allocation mémoire.\n"));
     
     return 0;
 }
+
 
 int _1990_groupe_ajout_element(Projet *projet, unsigned int niveau, int groupe_n,
   int num_element)
@@ -246,9 +247,9 @@ int _1990_groupe_ajout_element(Projet *projet, unsigned int niveau, int groupe_n
     Groupe          *groupe;
     Element         *element, element_nouveau;
     
-    BUGMSG(projet, -1, "_1990_groupe_ajout_element\n");
-    BUGMSG(projet->niveaux_groupes, -1, "_1990_groupe_ajout_element\n");
-    BUGMSG(list_size(projet->niveaux_groupes)-1 >= niveau, -1, "_1990_groupe_ajout_element\n");
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->niveaux_groupes, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(list_size(projet->niveaux_groupes)-1 >= niveau, -1, gettext("Paramètre incorrect\n"));
     
     // Trivial
     /* On commence par positionner le numéro num_element de l'étage n-1
@@ -276,9 +277,7 @@ int _1990_groupe_ajout_element(Projet *projet, unsigned int niveau, int groupe_n
     
     /* On ajoute le nouvel élément au groupe */
     if (list_size(groupe->elements) == 0)
-    {
-        BUGMSG(list_insert_after(groupe->elements, &(element_nouveau), sizeof(element_nouveau)), -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_groupe_ajout_element");
-    }
+        BUGMSG(list_insert_after(groupe->elements, &(element_nouveau), sizeof(element_nouveau)), -2, gettext("Erreur d'allocation mémoire.\n"));
     else
     {
         int element_ajoute = 0;
@@ -289,20 +288,19 @@ int _1990_groupe_ajout_element(Projet *projet, unsigned int niveau, int groupe_n
         do
         {
             element = (Element*)list_curr(groupe->elements);
-            BUGMSG(element->numero != num_element, -1, "%s : le numéro %d est déjà présent.\n", "_1990_groupe_ajout_element", num_element);
+            BUGMSG(element->numero != num_element, -1, "le numéro %d est déjà présent.\n", num_element);
             if (element->numero > num_element)
             {
-                BUGMSG(list_insert_before(groupe->elements, &(element_nouveau), sizeof(element_nouveau)), -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_groupe_ajout_element");
+                BUGMSG(list_insert_before(groupe->elements, &(element_nouveau), sizeof(element_nouveau)), -2, gettext("Erreur d'allocation mémoire.\n"));
                 element_ajoute = 1;
             }
         }
         while (list_mvnext(groupe->elements) && (element_ajoute == 0));
         /* Si pas encore ajouté, on l'ajoute à la fin de la liste */
         if (element_ajoute == 0)
-        {
-            BUGMSG(list_insert_after(groupe->elements, &(element_nouveau), sizeof(element_nouveau)), -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_groupe_ajout_element");
-        }
+            BUGMSG(list_insert_after(groupe->elements, &(element_nouveau), sizeof(element_nouveau)), -2, gettext("Erreur d'allocation mémoire.\n"));
     }
+    
     return 0;
 }
 
@@ -320,16 +318,17 @@ int _1990_groupe_affiche_tout(Projet *projet)
  *             (list_size(projet->niveaux_groupes) != 0)
  */
 {
-    BUGMSG(projet, -1, "_1990_groupe_affiche_tout\n");
-    BUGMSG(projet->niveaux_groupes, -1, "_1990_groupe_affiche_tout\n");
-    BUGMSG(list_size(projet->niveaux_groupes), -1, "_1990_groupe_affiche_tout\n");
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->niveaux_groupes, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(list_size(projet->niveaux_groupes), -1, gettext("Paramètre incorrect\n"));
+    
     // Trivial
     list_mvfront(projet->niveaux_groupes);
     do
     {
         Niveau_Groupe   *niveau = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
         
-        printf("niveau : %d\n", niveau->niveau);
+        printf(gettext("niveau : %d\n"), niveau->niveau);
         if ((niveau->groupes != NULL) && (list_size(niveau->groupes) != 0))
         {
             list_mvfront(niveau->groupes);
@@ -338,7 +337,7 @@ int _1990_groupe_affiche_tout(Projet *projet)
             {
                 Groupe  *groupe = (Groupe*)list_curr(niveau->groupes);
                 
-                printf("\tgroupe : %d, combinaison : ", groupe->numero);
+                printf(gettext("\tgroupe : %d, combinaison : "), groupe->numero);
                 switch(groupe->type_combinaison)
                 {
                     case GROUPE_COMBINAISON_OR :
@@ -358,14 +357,14 @@ int _1990_groupe_affiche_tout(Projet *projet)
                     }
                     default :
                     {
-                        BUGMSG(0, -1, "%s : Combinaison %d inconnue", "_1990_groupe_affiche_tout", groupe->type_combinaison);
+                        BUGMSG(0, -1, gettext("Combinaison %d inconnue"), groupe->type_combinaison);
                         break;
                     }
                 }
                 if (list_front(projet->niveaux_groupes) == list_curr(projet->niveaux_groupes))
-                    printf("\t\tActions contenus dans ce groupe : ");
+                    printf(gettext("\t\tActions contenus dans ce groupe : "));
                 else
-                    printf("\t\tGroupes du niveau %d contenus dans ce groupe : ", niveau->niveau-1);
+                    printf(gettext("\t\tGroupes du niveau %d contenus dans ce groupe : "), niveau->niveau-1);
                 
                 if ((groupe->elements != NULL) && (list_size(groupe->elements) != 0))
                 {
@@ -379,7 +378,7 @@ int _1990_groupe_affiche_tout(Projet *projet)
                     while (list_mvnext(groupe->elements) != NULL);
                 }
                 printf("\n");
-                printf("\t\tCombinaisons :\n");
+                printf(gettext("\t\tCombinaisons :\n"));
                 if ((groupe->tmp_combinaison.combinaisons != NULL) && (list_size(groupe->tmp_combinaison.combinaisons) != 0))
                 {
                     list_mvfront(groupe->tmp_combinaison.combinaisons);
@@ -409,11 +408,12 @@ int _1990_groupe_affiche_tout(Projet *projet)
         }
     }
     while (list_mvnext(projet->niveaux_groupes) != NULL);
+    
     return 0;
 }
 
 
-void _1990_groupe_free_element_courant(LIST *elements)
+int _1990_groupe_free_element_courant(LIST *elements)
 /* Description : Libère l'élément en cours dans une liste d'éléments
  * Paramètres : LIST *elements : une liste d'éléments
  * Valeur renvoyée : Aucune.
@@ -421,22 +421,28 @@ void _1990_groupe_free_element_courant(LIST *elements)
 {
     // Trivial
     
-    BUGMSG(elements, , "_1990_groupe_free_element_courant\n");
-    BUGMSG(list_curr(elements), , "_1990_groupe_free_element_courant\n");
+    BUGMSG(elements, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(list_curr(elements), -1, gettext("Paramètre incorrect\n"));
     
     free(list_remove_curr(elements));
     
-    return;
+    return 0;
 }
 
 
-void _1990_groupe_free_element(Projet *projet, int niveau, int groupe, int element)
+int _1990_groupe_free_element(Projet *projet, int niveau, int groupe, int element)
 /* Description : Libère l'élément désigné par les paramètres.
  * Paramètres : Projet *projet : variable projet
  *            : int niveau : le numéro du niveau contenant l'élément
  *            : int groupe : le numéro du groupe contenant l'élément
  *            : int element : le numéro de l'élément
- * Valeur renvoyée : Aucune
+ * Valeur renvoyée :
+ *   Succès : 0
+ *   Échec : -1 en cas de paramètres invalides :
+ *             (projet != NULL) ou
+ *             (projet->niveaux_groupes != NULL) ou
+ *             (list_size(projet->niveaux_groupes) != 0)
+ *
  */
 {
     Niveau_Groupe   *niveau_groupe;
@@ -444,43 +450,45 @@ void _1990_groupe_free_element(Projet *projet, int niveau, int groupe, int eleme
     
     // Trivial
     
-    BUGMSG(projet, , "_1990_groupe_free_element\n");
-    BUGMSG(projet->niveaux_groupes, , "_1990_groupe_free_element\n");
-    BUGMSG(list_size(projet->niveaux_groupes), , "_1990_groupe_free_element\n");
-    BUGMSG(_1990_groupe_positionne_niveau(projet->niveaux_groupes, niveau) == 0, , "_1990_groupe_free_element\n");
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->niveaux_groupes, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(list_size(projet->niveaux_groupes), -1, gettext("Paramètre incorrect\n"));
+    BUG(_1990_groupe_positionne_niveau(projet->niveaux_groupes, niveau) == 0, -3);
     
     niveau_groupe = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
     
-    BUGMSG(niveau_groupe->groupes, , "_1990_groupe_free_element\n");
-    BUGMSG(list_size(niveau_groupe->groupes), , "_1990_groupe_free_element\n");
-    BUGMSG(_1990_groupe_positionne_groupe(niveau_groupe, groupe) == 0, , "_1990_groupe_free_element\n");
+    BUGMSG(niveau_groupe->groupes, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(list_size(niveau_groupe->groupes), -1, gettext("Paramètre incorrect\n"));
+    BUG(_1990_groupe_positionne_groupe(niveau_groupe, groupe) == 0, -3);
     
     groupe_en_cours = (Groupe*)list_curr(niveau_groupe->groupes);
     
-    BUGMSG(groupe_en_cours->elements, , "_1990_groupe_free_element\n");
-    BUGMSG(list_size(groupe_en_cours->elements), , "_1990_groupe_free_element\n");
-    BUGMSG(_1990_groupe_positionne_element(groupe_en_cours, element) == 0, , "_1990_groupe_free_element\n");
+    BUGMSG(groupe_en_cours->elements, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(list_size(groupe_en_cours->elements), -1, gettext("Paramètre incorrect\n"));
+    BUG(_1990_groupe_positionne_element(groupe_en_cours, element) == 0, -3);
     
-    _1990_groupe_free_element_courant(groupe_en_cours->elements);
+    BUG(_1990_groupe_free_element_courant(groupe_en_cours->elements) == 0, -3);
     
-    return;
+    return 0;
 }
 
 
-void _1990_groupe_free_niveau(Projet *projet, int niveau)
+int _1990_groupe_free_niveau(Projet *projet, int niveau)
 /* Description : Libère le niveau en cours ainsi que tous les niveaux supérieurs
  * Paramètres : Projet *projet : la variable projet
  *            : numéro du niveau à libérer
- * Valeur renvoyée : Aucune
+ * Valeur renvoyée :
+ *   Succès : 0
+ *   Échec : -1 en cas de paramètres invalides
  */
 {
     Niveau_Groupe   *niveau_groupe;
     
     // Trivial
-    BUGMSG(projet, , "_1990_groupe_free_niveau\n");
-    BUGMSG(projet->niveaux_groupes, , "_1990_groupe_free_niveau\n");
-    BUGMSG(list_size(projet->niveaux_groupes), , "_1990_groupe_free_niveau\n");
-    BUGMSG(_1990_groupe_positionne_niveau(projet->niveaux_groupes, niveau) == 0, , "_1990_groupe_free_niveau\n");
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->niveaux_groupes, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(list_size(projet->niveaux_groupes), -1, gettext("Paramètre incorrect\n"));
+    BUG(_1990_groupe_positionne_niveau(projet->niveaux_groupes, niveau) == 0, -3);
     
     niveau_groupe = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
     
@@ -548,11 +556,11 @@ void _1990_groupe_free_niveau(Projet *projet, int niveau)
     }
     while ((list_size(projet->niveaux_groupes) != 0) && (niveau_groupe != NULL) && (niveau_groupe->niveau >= niveau));
     
-    return;
+    return 0;
 }
 
 
-void _1990_groupe_free_groupe(Projet *projet, int niveau, int groupe)
+int _1990_groupe_free_groupe(Projet *projet, int niveau, int groupe)
 /* Description : Libère le groupe demandé. La suppression d'un groupe entraine la modification
  *                 du numéro (moins 1) des groupes supérieurs du même niveau et sa suppression
  *                 dans le nuveau supérieur (si existant) lorsqu'il est présent dans une
@@ -560,23 +568,25 @@ void _1990_groupe_free_groupe(Projet *projet, int niveau, int groupe)
  * Paramètres : Projet *projet : la variable projet
  *            : int niveau : niveau contenant le groupe
  *            : int groupe : numéro du groupe à libérer
- * Valeur renvoyée : Aucune
+ * Valeur renvoyée :
+ *   Succès : 0
+ *   Échec : -1 en cas de paramètres invalides
  */
 {
     Niveau_Groupe   *niveau_groupe;
     Groupe          *groupe_curr;
     
     // Trivial
-    BUGMSG(projet, , "_1990_groupe_free_groupe\n");
-    BUGMSG(projet->niveaux_groupes, , "_1990_groupe_free_groupe\n");
-    BUGMSG(list_size(projet->niveaux_groupes), , "_1990_groupe_free_groupe\n");
-    BUGMSG(_1990_groupe_positionne_niveau(projet->niveaux_groupes, niveau) == 0, , "_1990_groupe_free_groupe\n");
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->niveaux_groupes, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(list_size(projet->niveaux_groupes), -1, gettext("Paramètre incorrect\n"));
+    BUG(_1990_groupe_positionne_niveau(projet->niveaux_groupes, niveau) == 0, -3);
     
     niveau_groupe = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
     
-    BUGMSG(niveau_groupe->groupes, , "_1990_groupe_free_groupe\n");
-    BUGMSG(list_size(niveau_groupe->groupes), , "_1990_groupe_free_groupe\n");
-    BUGMSG(_1990_groupe_positionne_groupe(niveau_groupe, groupe) == 0, , "_1990_groupe_free_groupe\n");
+    BUGMSG(niveau_groupe->groupes, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(list_size(niveau_groupe->groupes), -1, gettext("Paramètre incorrect\n"));
+    BUG(_1990_groupe_positionne_groupe(niveau_groupe, groupe) == 0, -1);
     
     groupe_curr = (Groupe*)list_curr(niveau_groupe->groupes);
     
@@ -587,7 +597,7 @@ void _1990_groupe_free_groupe(Projet *projet, int niveau, int groupe)
     {
         list_mvfront(groupe_curr->elements);
         while (!list_empty(groupe_curr->elements))
-            _1990_groupe_free_element_courant(groupe_curr->elements);
+            BUG(_1990_groupe_free_element_courant(groupe_curr->elements) == 0, -3);
         free(groupe_curr->elements);
     }
     
@@ -667,25 +677,26 @@ void _1990_groupe_free_groupe(Projet *projet, int niveau, int groupe)
         }
     }
     
-    return;
+    return 0;
 }
 
 
-void _1990_groupe_free(Projet *projet)
+int _1990_groupe_free(Projet *projet)
 /* Description : Libère l'ensemble des groupes et niveaux
  * Paramètres : Projet *projet : la variable projet
  * Valeur renvoyée : Aucune
  */
 {
-    BUGMSG(projet, , "_1990_groupe_free\n");
-    BUGMSG(projet->niveaux_groupes, , "_1990_groupe_free\n");
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->niveaux_groupes, -1, gettext("Paramètre incorrect\n"));
     
     // Trivial
     /* On supprime tous les niveaux */
-    _1990_groupe_free_niveau(projet, 0);
+    BUG(_1990_groupe_free_niveau(projet, 0) == 0, -3);
     
     /* Et on libère la liste */
     free(projet->niveaux_groupes);
     projet->niveaux_groupes = NULL;
-    return;
+    
+    return 0;
 }

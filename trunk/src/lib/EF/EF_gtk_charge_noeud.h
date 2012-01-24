@@ -25,8 +25,8 @@
 
 #include "common_projet.h"
 
-void EF_gtk_charge_noeud(Projet *projet, gint action_defaut, gint charge);
-void EF_gtk_charge_noeud_ajout_affichage(Charge_Noeud *charge, Projet *projet, gboolean nouvelle_ligne);
+int EF_gtk_charge_noeud(Projet *projet, gint action_defaut, gint charge);
+int EF_gtk_charge_noeud_ajout_affichage(Charge_Noeud *charge, Projet *projet, gboolean nouvelle_ligne);
 
 #endif
 

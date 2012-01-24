@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2012-01-21 12:32+0100\n"
-"PO-Revision-Date: 2012-01-21 12:34+0100\n"
+"POT-Creation-Date: 2012-01-24 21:56+0100\n"
+"PO-Revision-Date: 2012-01-24 22:03+0100\n"
 "Last-Translator: LE GARREC Vincent <vlg@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -12,23 +12,38 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-msgid "%s : Erreur d'allocation mémoire.\n"
-msgstr "%s : Erreur d'allocation mémoire.\n"
+msgid "Paramètre incorrect\n"
+msgstr "Paramètre incorrect\n"
 
 msgid "Erreur d'allocation mémoire.\n"
 msgstr "Erreur d'allocation mémoire.\n"
 
-msgid "%s : Section en béton n°%d introuvable.\n"
-msgstr "%s : Section en béton n°%d introuvable.\n"
+msgid "Section en béton n°%d introuvable.\n"
+msgstr "Section en béton n°%d introuvable.\n"
+
+msgid "Type de section %d inconnu."
+msgstr "Type de section %d inconnu."
 
 msgid "Barre en béton %d introuvable.\n"
 msgstr "Barre en béton %d introuvable.\n"
 
-msgid "%s : Matériau en béton n°%d introuvable.\n"
-msgstr "%s : Matériau en béton n°%d introuvable.\n"
+msgid "La longueur de la barre %d est nulle\n"
+msgstr "La longueur de la barre %d est nulle\n"
+
+msgid "Relachement %d inconnu."
+msgstr "Relachement %d inconnu."
+
+msgid "La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"
+msgstr "La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"
+
+msgid "Matériau en béton n°%d introuvable.\n"
+msgstr "Matériau en béton n°%d introuvable.\n"
 
 msgid "Sans nom"
 msgstr "Sans nom"
+
+msgid "Type de charge %d inconnu."
+msgstr "Type de charge %d inconnu."
 
 msgid "Actions"
 msgstr "Actions"
@@ -85,20 +100,29 @@ msgstr ""
 msgid "Le dernier niveau ne possède aucune combinaison permettant la génération des pondérations.\n"
 msgstr "Le dernier niveau ne possède aucune combinaison permettant la génération des pondérations.\n"
 
-msgid "Paramètres invalides.\n"
-msgstr "Paramètres invalides.\n"
-
-msgid "%s : Paramètres invalides.\n"
-msgstr "%s : Paramètres invalides.\n"
-
 msgid "Élément %d introuvable.\n"
 msgstr "Élément %d introuvable.\n"
 
-msgid "Élément introuvable.\n"
-msgstr "Élément introuvable.\n"
-
 msgid "Niveau %d introuvable.\n"
 msgstr "Niveau %d introuvable.\n"
+
+msgid "niveau : %d\n"
+msgstr "niveau : %d\n"
+
+msgid "\tgroupe : %d, combinaison : "
+msgstr "\tgroupe : %d, combinaison : "
+
+msgid "Combinaison %d inconnue"
+msgstr "Combinaison %d inconnue"
+
+msgid "\t\tActions contenus dans ce groupe : "
+msgstr "\t\tActions contenus dans ce groupe : "
+
+msgid "\t\tGroupes du niveau %d contenus dans ce groupe : "
+msgstr "\t\tGroupes du niveau %d contenus dans ce groupe : "
+
+msgid "\t\tCombinaisons :\n"
+msgstr "\t\tCombinaisons :\n"
 
 msgid "Permanente"
 msgstr "Permanente"
@@ -151,8 +175,8 @@ msgstr "Accidentelle"
 msgid "Sismique"
 msgstr "Sismique"
 
-msgid "%s : Catégorie %d inconnue.\n"
-msgstr "%s : Catégorie %d inconnue.\n"
+msgid "Catégorie %d inconnue.\n"
+msgstr "Catégorie %d inconnue.\n"
 
 msgid "Exploitation : Catégorie H : toits d'un bâtiment de catégorie A ou B"
 msgstr "Exploitation : Catégorie H : toits d'un bâtiment de catégorie A ou B"
@@ -181,14 +205,26 @@ msgstr "Neige : Altitude <= 1000 m"
 msgid "Eaux souterraines"
 msgstr "Eaux souterraines"
 
-msgid "%s : Pays %d inconnu.\n"
-msgstr "%s : Pays %d inconnu.\n"
+msgid "Pays %d inconnu.\n"
+msgstr "Pays %d inconnu.\n"
 
-msgid "%s : Action %zu introuvable.\n"
-msgstr "%s : Action %zu introuvable.\n"
+msgid "Action %zu introuvable.\n"
+msgstr "Action %zu introuvable.\n"
 
-msgid "%s : Élément %d existant.\n"
-msgstr "%s : Élément %d existant.\n"
+msgid "Charge %zu introuvable.\n"
+msgstr "Charge %zu introuvable.\n"
+
+msgid "Paramètre incorrect : %zu\n"
+msgstr "Paramètre incorrect : %zu\n"
+
+msgid "Action n° %zu, description '%s', type n°%d\n"
+msgstr "Action n° %zu, description '%s', type n°%d\n"
+
+msgid "Paramètre incorrect %d\n"
+msgstr "Paramètre incorrect %d\n"
+
+msgid "Élément %d existant.\n"
+msgstr "Élément %d existant.\n"
 
 msgid "Options des combinaisons"
 msgstr "Options des combinaisons"
@@ -264,12 +300,6 @@ msgstr "Quitter"
 
 msgid "Type %d inconnu.\n"
 msgstr "Type %d inconnu.\n"
-
-msgid "Pays %d inconnu.\n"
-msgstr "Pays %d inconnu.\n"
-
-msgid "Catégorie %d inconnue.\n"
-msgstr "Catégorie %d inconnue.\n"
 
 msgid "Structures provisoires"
 msgstr "Structures provisoires"
@@ -403,17 +433,23 @@ msgstr "Actions..."
 msgid "Groupes..."
 msgstr "Groupes..."
 
-msgid "%s : Le fichier '%s' est introuvable ou corrompu.\n"
-msgstr "%s : Le fichier '%s' est introuvable ou corrompu.\n"
+msgid "fichier %s, fonction %s, ligne %d, test : %s\n"
+msgstr "fichier %s, fonction %s, ligne %d, test : %s\n"
 
-msgid "%s : Le fichier '%s' est vide.\n"
-msgstr "%s : Le fichier '%s' est vide.\n"
+msgid "fichier %s, fonction %s, ligne %d, test : %s, texte : "
+msgstr "fichier %s, fonction %s, ligne %d, test : %s, texte : "
 
-msgid "%s : '%s' n'est pas de la forme 'largeurxhauteur'.\n"
-msgstr "%s : '%s' n'est pas de la forme 'largeurxhauteur'.\n"
+msgid "Le fichier '%s' est introuvable ou corrompu.\n"
+msgstr "Le fichier '%s' est introuvable ou corrompu.\n"
 
-msgid "%s : Paramètre invalide : %s %s\n"
-msgstr "%s : Paramètre invalide : %s %s\n"
+msgid "Le fichier '%s' est vide.\n"
+msgstr "Le fichier '%s' est vide.\n"
+
+msgid "'%s' n'est pas de la forme 'largeurxhauteur'.\n"
+msgstr "'%s' n'est pas de la forme 'largeurxhauteur'.\n"
+
+msgid "Paramètre invalide\n"
+msgstr "Paramètre invalide\n"
 
 msgid "Gestion des noeuds"
 msgstr "Gestion des noeuds"
@@ -423,6 +459,9 @@ msgstr "Appui"
 
 msgid "Aucun"
 msgstr "Aucun"
+
+msgid "Type de section %d inconnu.\n"
+msgstr "Type de section %d inconnu.\n"
 
 msgid "Barre : "
 msgstr "Barre : "

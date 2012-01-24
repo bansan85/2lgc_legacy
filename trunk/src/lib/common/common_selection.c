@@ -24,6 +24,7 @@
 #include "common_projet.h"
 #include "EF_noeud.h"
 #include "1992_1_1_barres.h"
+#include "common_erreurs.h"
 
 int common_selection_ajout_nombre(unsigned int nombre, LIST *liste)
 /* Description : ajoute un nombre à la liste chainée.
@@ -40,16 +41,17 @@ int common_selection_ajout_nombre(unsigned int nombre, LIST *liste)
     list_mvfront(liste);
     if (list_size(liste) == 0)
     {
-        list_insert_after(liste, &nombre, sizeof(nombre));
+        BUGMSG(list_insert_after(liste, &nombre, sizeof(nombre)), -2, gettext("Erreur d'allocation mémoire.\n"));
         return 0;
     }
+    
     nombre_liste = list_curr(liste);
     
     if (*nombre_liste == nombre)
         return 0;
     else if (*nombre_liste > nombre)
     {
-        list_insert_before(liste, &nombre, sizeof(nombre));
+        BUGMSG(list_insert_before(liste, &nombre, sizeof(nombre)), -2, gettext("Erreur d'allocation mémoire.\n"));
         return 0;
     }
     
@@ -62,13 +64,13 @@ int common_selection_ajout_nombre(unsigned int nombre, LIST *liste)
             return 0;
         else if (*nombre_liste > nombre)
         {
-            list_insert_before(liste, &nombre, sizeof(nombre));
+            BUGMSG(list_insert_before(liste, &nombre, sizeof(nombre)), -2, gettext("Erreur d'allocation mémoire.\n"));
             return 0;
         }
         liste_tmp = list_mvnext(liste);
     }
     
-    list_insert_after(liste, &nombre, sizeof(nombre));
+    BUGMSG(list_insert_after(liste, &nombre, sizeof(nombre)), -2, gettext("Erreur d'allocation mémoire.\n"));
     return 0;
 }
 
@@ -88,11 +90,11 @@ LIST *common_selection_renvoie_numeros(const char *texte)
     LIST            *list;
     unsigned int    i, j;
     
-    list = list_init();
+    BUGMSG(list = list_init(), NULL, gettext("Erreur d'allocation mémoire.\n"));
     if (texte == NULL)
         return list;
     
-    texte_clean = malloc(sizeof(char)*(strlen(texte)+1));
+    BUGMSG(texte_clean = malloc(sizeof(char)*(strlen(texte)+1)), NULL, gettext("Erreur d'allocation mémoire.\n"));
     
     // On vérifie si le texte contient bien une liste correcte de numéros
     i=0;
@@ -143,6 +145,9 @@ LIST *common_selection_renvoie_numeros(const char *texte)
                 char            *fake = malloc(sizeof(char)*(j-i+2));
                 unsigned int    debut, fin, pas;
                 
+                BUGMSG(tmp, NULL, gettext("Erreur d'allocation mémoire.\n"));
+                BUGMSG(fake, NULL, gettext("Erreur d'allocation mémoire.\n"));
+                
                 strncpy(tmp, texte_clean+i, j-i+1);
                 tmp[j-i+1] = 0;
                 
@@ -150,17 +155,17 @@ LIST *common_selection_renvoie_numeros(const char *texte)
                 if (sscanf(tmp, "%u-%u/%u%s", &debut, &fin, &pas, fake) == 3)
                 {
                     for (i=debut;i<=fin;i=i+pas)
-                        common_selection_ajout_nombre(i, list);
+                        BUG(common_selection_ajout_nombre(i, list) == 0, NULL);
                 }
                 // Si c'est du format debut-fin
                 else if (sscanf(tmp, "%u-%u%s", &debut, &fin, fake) == 2)
                 {
                     for (i=debut;i<=fin;i++)
-                        common_selection_ajout_nombre(i, list);
+                        BUG(common_selection_ajout_nombre(i, list) == 0, NULL);
                 }
                 // Si c'est du format nombre simple
                 else if (sscanf(tmp, "%u%s", &debut, fake) == 1)
-                    common_selection_ajout_nombre(debut, list);
+                    BUG(common_selection_ajout_nombre(debut, list) == 0, NULL);
                 else
                 {
                     free(tmp);
@@ -194,6 +199,8 @@ LIST *common_selection_converti_numeros_en_noeuds(LIST *liste_numeros, Projet *p
 {
     LIST    *liste_noeuds = list_init();
     
+    BUGMSG(liste_noeuds, NULL, gettext("Erreur d'allocation mémoire.\n"));
+    
     if ((liste_numeros != NULL) && (list_size(liste_numeros) != 0))
     {
         list_mvfront(liste_numeros);
@@ -202,13 +209,15 @@ LIST *common_selection_converti_numeros_en_noeuds(LIST *liste_numeros, Projet *p
             unsigned int    *numero = list_curr(liste_numeros);
             EF_Noeud        *noeud = EF_noeuds_cherche_numero(projet, *numero);
             
+            BUG(noeud, NULL);
+            
             if (noeud == NULL)
             {
                 free(liste_noeuds);
                 return NULL;
             }
             else
-                list_insert_after(liste_noeuds, &noeud, sizeof(EF_Noeud**));
+                BUGMSG(list_insert_after(liste_noeuds, &noeud, sizeof(EF_Noeud**)), NULL, gettext("Erreur d'allocation mémoire.\n"));
         }
         while (list_mvnext(liste_numeros) != NULL);
     }
@@ -236,13 +245,15 @@ LIST *common_selection_converti_numeros_en_barres(LIST *liste_numeros, Projet *p
             unsigned int    *numero = list_curr(liste_numeros);
             Beton_Barre     *barre = _1992_1_1_barres_cherche_numero(projet, *numero);
             
+            BUG(barre, NULL);
+            
             if (barre == NULL)
             {
                 free(liste_barres);
                 return NULL;
             }
             else
-                list_insert_after(liste_barres, &barre, sizeof(Beton_Barre**));
+                BUGMSG(list_insert_after(liste_barres, &barre, sizeof(Beton_Barre**)), NULL, gettext("Erreur d'allocation mémoire.\n"));
         }
         while (list_mvnext(liste_numeros) != NULL);
     }
@@ -265,7 +276,7 @@ char *common_selection_converti_noeuds_en_texte(LIST *liste_noeuds)
     {
         EF_Noeud    **noeud;
         
-        tmp = malloc(sizeof(char)*(15)*list_size(liste_noeuds));
+        BUGMSG(tmp = malloc(sizeof(char)*(15)*list_size(liste_noeuds)), NULL, gettext("Erreur d'allocation mémoire.\n"));
         list_mvfront(liste_noeuds);
         noeud = list_curr(liste_noeuds);
         sprintf(tmp, "%d", (*noeud)->numero);
@@ -300,7 +311,7 @@ char *common_selection_converti_barres_en_texte(LIST *liste_barres)
     {
         Beton_Barre **barre;
         
-        tmp = malloc(sizeof(char)*(15)*list_size(liste_barres));
+        BUGMSG(tmp = malloc(sizeof(char)*(15)*list_size(liste_barres)), NULL, gettext("Erreur d'allocation mémoire.\n"));
         list_mvfront(liste_barres);
         barre = list_curr(liste_barres);
         sprintf(tmp, "%d", (*barre)->numero);
@@ -319,5 +330,3 @@ char *common_selection_converti_barres_en_texte(LIST *liste_barres)
     else
         return NULL;
 }
-
-

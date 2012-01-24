@@ -36,29 +36,33 @@
 #include "1990_actions.h"
 #include "common_selection.h"
 
-void EF_gtk_charge_barre_repartie_uniforme_ajout_affichage(Charge_Barre_Repartie_Uniforme *charge, Projet *projet, gboolean nouvelle_ligne)
+int EF_gtk_charge_barre_repartie_uniforme_ajout_affichage(Charge_Barre_Repartie_Uniforme *charge, Projet *projet, gboolean nouvelle_ligne)
 {
     char                    *description, tmp[30], *tmp2;
-    List_Gtk_1990_Actions   *list_gtk_1990_actions = &projet->list_gtk._1990_actions;
+    List_Gtk_1990_Actions   *list_gtk_1990_actions;
+    
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    
+    list_gtk_1990_actions = &projet->list_gtk._1990_actions;
     
     if (list_gtk_1990_actions->window == NULL)
-        return;
+        return -1;
     
-    description = malloc(sizeof(char)*(strlen(gettext("Barre : "))+1));
+    BUGMSG(description = malloc(sizeof(char)*(strlen(gettext("Barre : "))+1)), -2, gettext("Erreur d'allocation mémoire.\n"));
     strcpy(description, gettext("Barre : "));
-    tmp2 = common_selection_converti_barres_en_texte(charge->barres);
-    description = realloc(description, (strlen(description) + strlen(tmp2)+1)*sizeof(char));
+    BUG(tmp2 = common_selection_converti_barres_en_texte(charge->barres), -3);
+    BUGMSG(description = realloc(description, (strlen(description) + strlen(tmp2)+1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
     strcat(description, tmp2);
     free(tmp2);
     common_math_double_to_char(charge->a, tmp);
-    description = realloc(description, (strlen(description) + strlen(",  :  m") + strlen(gettext("début")) + strlen(tmp) +1)*sizeof(char));
+    BUGMSG(description = realloc(description, (strlen(description) + strlen(",  :  m") + strlen(gettext("début")) + strlen(tmp) +1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
     strcat(description, ", ");
     strcat(description, gettext("début"));
     strcat(description, " : ");
     strcat(description, tmp);
     strcat(description, " m");
     common_math_double_to_char(charge->b, tmp);
-    description = realloc(description, (strlen(description) + strlen(",  :  m") + strlen(gettext("fin (par rapport à la fin)")) + strlen(tmp) + 1)*sizeof(char));
+    BUGMSG(description = realloc(description, (strlen(description) + strlen(",  :  m") + strlen(gettext("fin (par rapport à la fin)")) + strlen(tmp) + 1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
     strcat(description, ", ");
     strcat(description, gettext("fin (par rapport à la fin)"));
     strcat(description, " : ");
@@ -66,53 +70,53 @@ void EF_gtk_charge_barre_repartie_uniforme_ajout_affichage(Charge_Barre_Repartie
     strcat(description, " m");
     if (charge->projection == TRUE)
     {
-        description = realloc(description, (strlen(description) + strlen(gettext(", projection : oui")) +1)*sizeof(char));
+        BUGMSG(description = realloc(description, (strlen(description) + strlen(gettext(", projection : oui")) +1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
         strcat(description, gettext(", projection : oui"));
     }
     else
     {
-        description = realloc(description, (strlen(description) + strlen(gettext(", projection : non")) +1)*sizeof(char));
+        BUGMSG(description = realloc(description, (strlen(description) + strlen(gettext(", projection : non")) +1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
         strcat(description, gettext(", projection : non"));
     }
     if (charge->repere_local)
     {
-        description = realloc(description, (strlen(description) + strlen(", ") + strlen(gettext("repère : local")) + strlen(tmp) + 1)*sizeof(char));
+        BUGMSG(description = realloc(description, (strlen(description) + strlen(", ") + strlen(gettext("repère : local")) + strlen(tmp) + 1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
         strcat(description, ", ");
         strcat(description, gettext("repère : local"));
     }
     else
     {
-        description = realloc(description, (strlen(description) + strlen(", ") + strlen(gettext("repère : global")) + strlen(tmp) + 1)*sizeof(char));
+        BUGMSG(description = realloc(description, (strlen(description) + strlen(", ") + strlen(gettext("repère : global")) + strlen(tmp) + 1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
         strcat(description, ", ");
         strcat(description, gettext("repère : global"));
     }
     common_math_double_to_char(charge->fx, tmp);
-    description = realloc(description, (strlen(description) + strlen(", Fx :  N/m") + strlen(tmp)+1)*sizeof(char));
+    BUGMSG(description = realloc(description, (strlen(description) + strlen(", Fx :  N/m") + strlen(tmp)+1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
     strcat(description, ", Fx : ");
     strcat(description, tmp);
     strcat(description, " N/m");
     common_math_double_to_char(charge->fy, tmp);
-    description = realloc(description, (strlen(description) + strlen(", Fy :  N/m") + strlen(tmp)+1)*sizeof(char));
+    BUGMSG(description = realloc(description, (strlen(description) + strlen(", Fy :  N/m") + strlen(tmp)+1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
     strcat(description, ", Fy : ");
     strcat(description, tmp);
     strcat(description, " N/m");
     common_math_double_to_char(charge->fz, tmp);
-    description = realloc(description, (strlen(description) + strlen(", Fz :  N/m") + strlen(tmp)+1)*sizeof(char));
+    BUGMSG(description = realloc(description, (strlen(description) + strlen(", Fz :  N/m") + strlen(tmp)+1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
     strcat(description, ", Fz : ");
     strcat(description, tmp);
     strcat(description, " N/m");
     common_math_double_to_char(charge->mx, tmp);
-    description = realloc(description, (strlen(description) + strlen(", Mx :  N/m") + strlen(tmp)+1)*sizeof(char));
+    BUGMSG(description = realloc(description, (strlen(description) + strlen(", Mx :  N/m") + strlen(tmp)+1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
     strcat(description, ", Mx : ");
     strcat(description, tmp);
     strcat(description, " N/m");
     common_math_double_to_char(charge->my, tmp);
-    description = realloc(description, (strlen(description) + strlen(", My :  N/m") + strlen(tmp)+1)*sizeof(char));
+    BUGMSG(description = realloc(description, (strlen(description) + strlen(", My :  N/m") + strlen(tmp)+1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
     strcat(description, ", My : ");
     strcat(description, tmp);
     strcat(description, " N/m");
     common_math_double_to_char(charge->mz, tmp);
-    description = realloc(description, (strlen(description) + strlen(", Mz :  N/m") + strlen(tmp)+1)*sizeof(char));
+    BUGMSG(description = realloc(description, (strlen(description) + strlen(", Mz :  N/m") + strlen(tmp)+1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
     strcat(description, ", Mz : ");
     strcat(description, tmp);
     strcat(description, " N/m");
@@ -121,6 +125,8 @@ void EF_gtk_charge_barre_repartie_uniforme_ajout_affichage(Charge_Barre_Repartie
         gtk_tree_store_append(list_gtk_1990_actions->tree_store_charges, &charge->Iter, NULL);
     gtk_tree_store_set(list_gtk_1990_actions->tree_store_charges, &charge->Iter, 0, charge->numero, 1, charge->description, 2, gettext("Répartie uniforme sur barre"), 3, description, -1);
     free(description);
+    
+    return 0;
 }
 
 
@@ -133,7 +139,7 @@ void EF_gtk_charge_barre_repartie_uniforme_annuler_clicked(GtkButton *button __a
  * Valeur renvoyée : Aucune
  */
 {
-    BUGMSG(fenetre, , "EF_gtk_charge_barre_repartie_uniforme_annuler_clicked\n");
+    BUGMSG(fenetre, , gettext("Paramètre incorrect\n"));
     gtk_widget_destroy(fenetre);
     return;
 }
@@ -148,7 +154,7 @@ gboolean EF_gtk_charge_barre_repartie_uniforme_recupere_donnees(Projet *projet, 
     gchar                                       *texte_tmp;
     GtkTextBuffer                               *textbuffer;
     
-    BUGMSG(projet, FALSE, "EF_gtk_charge_barre_repartie_uniforme_recupere_donnees\n");
+    BUGMSG(projet, FALSE, gettext("Paramètre incorrect\n"));
     
     ef_gtk = &projet->list_gtk.ef_charge_barre_repartie_uniforme;
     
@@ -276,13 +282,11 @@ void EF_gtk_charge_barre_repartie_uniforme_ajouter_clicked(GtkButton *button __a
     GtkTreeIter                     iter_action;
     int                             numero_action;
     
-    BUGMSG(projet, , "EF_gtk_charge_barre_repartie_uniforme_ajouter_clicked\n");
-    if (!EF_gtk_charge_barre_repartie_uniforme_recupere_donnees(projet, &num_action, &barres, &fx, &fy, &fz, &mx, &my, &mz, &texte, &repere_local, &projection, &a, &b))
-        return;
+    BUGMSG(projet, , gettext("Paramètre incorrect\n"));
+    BUG(EF_gtk_charge_barre_repartie_uniforme_recupere_donnees(projet, &num_action, &barres, &fx, &fy, &fz, &mx, &my, &mz, &texte, &repere_local, &projection, &a, &b) == TRUE, );
     
     // Création de la nouvelle charge ponctuelle sur barre
-    charge = EF_charge_barre_repartie_uniforme_ajout(projet, num_action, barres, repere_local, projection, a, b, fx, fy, fz, mx, my, mz, texte);
-    BUG(charge, );
+    BUG(charge = EF_charge_barre_repartie_uniforme_ajout(projet, num_action, barres, repere_local, projection, a, b, fx, fy, fz, mx, my, mz, texte), );
     
     free(texte);
     
@@ -291,7 +295,7 @@ void EF_gtk_charge_barre_repartie_uniforme_ajouter_clicked(GtkButton *button __a
         return;
     gtk_tree_model_get(model_action, &iter_action, 0, &numero_action, -1);
     if (numero_action == num_action)
-        EF_gtk_charge_barre_repartie_uniforme_ajout_affichage(charge, projet, TRUE);
+        BUG(EF_gtk_charge_barre_repartie_uniforme_ajout_affichage(charge, projet, TRUE) == 0, );
     
     gtk_widget_destroy(projet->list_gtk.ef_charge_barre_repartie_uniforme.window);
     
@@ -313,15 +317,14 @@ void EF_gtk_charge_barre_repartie_uniforme_editer_clicked(GtkButton *button __at
     gchar                           *texte;
     Charge_Barre_Repartie_Uniforme  *charge;
     
-    BUGMSG(projet, , "_EF_gtk_charge_barre_ponctuelle_editer_clicked\n");
+    BUGMSG(projet, , gettext("Paramètre incorrect\n"));
     
     ef_gtk = &projet->list_gtk.ef_charge_barre_repartie_uniforme;
     
-    if (!EF_gtk_charge_barre_repartie_uniforme_recupere_donnees(projet, &num_action, &barres, &fx, &fy, &fz, &mx, &my, &mz, &texte, &repere_local, &projection, &a, &b))
-        return;
+    BUG(EF_gtk_charge_barre_repartie_uniforme_recupere_donnees(projet, &num_action, &barres, &fx, &fy, &fz, &mx, &my, &mz, &texte, &repere_local, &projection, &a, &b) == TRUE, );
     
     // Création de la nouvelle charge ponctuelle sur barre
-    charge = _1990_action_cherche_charge(projet, ef_gtk->action, ef_gtk->charge);
+    BUG(charge = _1990_action_cherche_charge(projet, ef_gtk->action, ef_gtk->charge), );
     free(charge->description);
     charge->description = texte;
     list_free(charge->barres, LIST_DEALLOC);
@@ -337,9 +340,9 @@ void EF_gtk_charge_barre_repartie_uniforme_editer_clicked(GtkButton *button __at
     charge->my = my;
     charge->mz = mz;
     if (num_action != ef_gtk->action)
-        _1990_action_deplace_charge(projet, ef_gtk->action, ef_gtk->charge, num_action);
+        BUG(_1990_action_deplace_charge(projet, ef_gtk->action, ef_gtk->charge, num_action), );
     else
-        EF_gtk_charge_barre_repartie_uniforme_ajout_affichage(charge, projet, FALSE);
+        BUG(EF_gtk_charge_barre_repartie_uniforme_ajout_affichage(charge, projet, FALSE) == 0, );
     
     gtk_widget_destroy(projet->list_gtk.ef_charge_barre_repartie_uniforme.window);
     
@@ -357,7 +360,7 @@ void EF_gtk_charge_barre_repartie_uniforme_toggled(GtkToggleButton *togglebutton
 {
     List_Gtk_EF_Charge_Barre_Repartie_Uniforme  *ef_gtk;
     
-    BUGMSG(projet, , "EF_gtk_charge_barre_repartie_uniforme_toggle\n");
+    BUGMSG(projet, , gettext("Paramètre incorrect\n"));
     
     ef_gtk = &projet->list_gtk.ef_charge_barre_repartie_uniforme;
     if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ef_gtk->check_button_repere_local)))
@@ -378,7 +381,7 @@ void EF_gtk_charge_barre_repartie_uniforme_toggled(GtkToggleButton *togglebutton
 }
 
 
-void EF_gtk_charge_barre_repartie_uniforme(Projet *projet, gint action_defaut, gint charge)
+int EF_gtk_charge_barre_repartie_uniforme(Projet *projet, gint action_defaut, gint charge)
 /* Description : Affichage de la fenêtre permettant de créer ou modifier une action de type
  *               charge repartie uniforme sur barre
  * Paramètres : Projet *projet : la variable projet
@@ -391,10 +394,9 @@ void EF_gtk_charge_barre_repartie_uniforme(Projet *projet, gint action_defaut, g
     List_Gtk_EF_Charge_Barre_Repartie_Uniforme  *ef_gtk;
     Charge_Barre_Repartie_Uniforme              *charge_barre;
     
-    BUGMSG(projet, , "EF_gtk_charge_barre_repartie_uniforme\n");
-    BUGMSG(projet->actions, , "EF_gtk_charge_barre_repartie_uniforme\n");
-    
-    BUGMSG(list_size(projet->actions) > 0, , "EF_gtk_charge_barre_repartie_uniforme\n");
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->actions, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(list_size(projet->actions) > 0, -1, gettext("Paramètre incorrect\n"));
     
     ef_gtk = &projet->list_gtk.ef_charge_barre_repartie_uniforme;
     
@@ -408,8 +410,7 @@ void EF_gtk_charge_barre_repartie_uniforme(Projet *projet, gint action_defaut, g
         ef_gtk->action = action_defaut;
         ef_gtk->charge = charge;
         GTK_NOUVELLE_FENETRE(ef_gtk->window, gettext("Modification d'une charge répartie uniforme sur barre"), 400, 1)
-        charge_barre = _1990_action_cherche_charge(projet, action_defaut, charge);
-        BUG(charge_barre, );
+        BUG(charge_barre = _1990_action_cherche_charge(projet, action_defaut, charge), -3);
     }
     
     ef_gtk->table = gtk_table_new(7, 4, FALSE);
@@ -531,11 +532,11 @@ void EF_gtk_charge_barre_repartie_uniforme(Projet *projet, gint action_defaut, g
             GtkWidget *dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("Il n'est pas possible d'activer à la fois la projection et l'utilisation du repère local."));
             gtk_dialog_run(GTK_DIALOG(dialog));
             gtk_widget_destroy(dialog);
-            return;
+            return -1;
         }
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ef_gtk->check_button_repere_local), charge_barre->repere_local);
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ef_gtk->check_button_projection), charge_barre->projection);
-        tmp2 = common_selection_converti_barres_en_texte(charge_barre->barres);
+        BUG(tmp2 = common_selection_converti_barres_en_texte(charge_barre->barres), -3);
         gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_barre)), tmp2, -1);
         free(tmp2);
     }
@@ -563,7 +564,7 @@ void EF_gtk_charge_barre_repartie_uniforme(Projet *projet, gint action_defaut, g
     gtk_window_set_modal(GTK_WINDOW(ef_gtk->window), TRUE);
     gtk_widget_show_all(ef_gtk->window);
     
-    return;
+    return 0;
 }
 
 #endif

@@ -23,6 +23,7 @@
 #include <stdlib.h>
 #include <cholmod.h>
 #include <string.h>
+#include <math.h>
 
 #include "1990_actions.h"
 #include "1992_1_1_section.h"
@@ -72,13 +73,13 @@ Charge_Barre_Repartie_Uniforme *EF_charge_barre_repartie_uniforme_ajout(Projet *
     Charge_Barre_Repartie_Uniforme *charge_dernier, charge_nouveau;
     
     // Trivial
-    BUGMSG(projet, NULL, "EF_charge_barre_repartie_uniforme_ajout\n");
-    BUGMSG(projet->actions, NULL, "EF_charge_barre_repartie_uniforme_ajout\n");
-    BUGMSG(list_size(projet->actions), NULL, "EF_charge_barre_repartie_uniforme_ajout\n");
-    BUGMSG(barres, NULL, "EF_charge_barre_repartie_uniforme_ajout\n");
-    BUGMSG((projection == FALSE) || (repere_local == FALSE), NULL, "EF_charge_barre_repartie_uniforme_ajout\n");
-    BUGMSG(!((a < 0.) && (!(ERREUR_RELATIVE_EGALE(a, 0.)))), NULL, "%s : a = %.20f\n", "EF_charge_barre_repartie_uniforme_ajout", a);
-    BUGMSG(!((b < 0.) && (!(ERREUR_RELATIVE_EGALE(b, 0.)))), NULL, "%s : b = %.20f\n", "EF_charge_barre_repartie_uniforme_ajout", b);
+    BUGMSG(projet, NULL, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->actions, NULL, gettext("Paramètre incorrect\n"));
+    BUGMSG(list_size(projet->actions), NULL, gettext("Paramètre incorrect\n"));
+    BUGMSG(barres, NULL, gettext("Paramètre incorrect\n"));
+    BUGMSG((projection == FALSE) || (repere_local == FALSE), NULL, gettext("Paramètre incorrect\n"));
+    BUGMSG(!((a < 0.) && (!(ERREUR_RELATIVE_EGALE(a, 0.)))), NULL, "a = %.20f\n", a);
+    BUGMSG(!((b < 0.) && (!(ERREUR_RELATIVE_EGALE(b, 0.)))), NULL, "b = %.20f\n", b);
     if (list_size(barres) != 0)
     {
         list_mvfront(barres);
@@ -87,9 +88,9 @@ Charge_Barre_Repartie_Uniforme *EF_charge_barre_repartie_uniforme_ajout(Projet *
             Beton_Barre **barre_p = list_curr(barres);
             Beton_Barre *barre = *barre_p;
             double l = EF_noeuds_distance(barre->noeud_debut, barre->noeud_fin);
-            BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), NULL, "%s : a = %.20f\n", "EF_charge_barre_repartie_uniforme_ajout", a);
-            BUGMSG(!((b > l) && (!(ERREUR_RELATIVE_EGALE(b, l)))), NULL, "%s : b = %.20f\n", "EF_charge_barre_repartie_uniforme_ajout", b);
-            BUGMSG(!((a > l-b) && (!(ERREUR_RELATIVE_EGALE(a, l-b)))), NULL, "%s : a = %.20f, l = %.20f, b = %.20f\n", "EF_charge_barre_repartie_uniforme_ajout", a, l, b);
+            BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), NULL, "a = %.20f\n", a);
+            BUGMSG(!((b > l) && (!(ERREUR_RELATIVE_EGALE(b, l)))), NULL, "b = %.20f\n", b);
+            BUGMSG(!((a > l-b) && (!(ERREUR_RELATIVE_EGALE(a, l-b)))), NULL, "a = %.20f, l = %.20f, b = %.20f\n", a, l, b);
         }
         while (list_mvnext(barres) != NULL);
     }
@@ -99,7 +100,7 @@ Charge_Barre_Repartie_Uniforme *EF_charge_barre_repartie_uniforme_ajout(Projet *
     
     charge_nouveau.type = CHARGE_BARRE_REPARTIE_UNIFORME;
     charge_nouveau.description = (char*)malloc(sizeof(char)*(strlen(nom)+1));
-    BUGMSG(charge_nouveau.description, NULL, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_charge_barre_repartie_uniforme_ajout");
+    BUGMSG(charge_nouveau.description, NULL, gettext("Erreur d'allocation mémoire.\n"));
     strcpy(charge_nouveau.description, nom);
     charge_nouveau.barres = barres;
     charge_nouveau.repere_local = repere_local;
@@ -120,7 +121,7 @@ Charge_Barre_Repartie_Uniforme *EF_charge_barre_repartie_uniforme_ajout(Projet *
         charge_nouveau.numero = charge_dernier->numero+1;
     
     list_mvrear(action_en_cours->charges);
-    BUGMSG(list_insert_after(action_en_cours->charges, &(charge_nouveau), sizeof(charge_nouveau)), NULL, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_charge_barre_repartie_uniforme_ajout");
+    BUGMSG(list_insert_after(action_en_cours->charges, &(charge_nouveau), sizeof(charge_nouveau)), NULL, gettext("Erreur d'allocation mémoire.\n"));
     
     return list_curr(action_en_cours->charges);
 }
@@ -161,16 +162,16 @@ int EF_charge_barre_repartie_uniforme_mx(Beton_Barre *barre, unsigned int discre
     EF_Noeud    *debut, *fin;
     double      l, G;
     
-    BUGMSG(barre, -1, "EF_charge_barre_repartie_uniforme_mx\n");
-    BUGMSG(infos, -1, "EF_charge_barre_repartie_uniforme_mx\n");
-    BUGMSG(barre->section, -1, "EF_charge_barre_repartie_uniforme_mx\n");
-    BUGMSG(barre->materiau, -1, "EF_charge_barre_repartie_uniforme_mx\n");
-    BUGMSG(barre->noeud_debut, -1, "EF_charge_barre_repartie_uniforme_mx\n");
-    BUGMSG(barre->noeud_fin, -1, "EF_charge_barre_repartie_uniforme_mx\n");
-    BUGMSG(discretisation<=barre->discretisation_element, -1, "EF_charge_barre_repartie_uniforme_mx\n");
-    BUGMSG(ma, -1, "EF_charge_barre_repartie_uniforme_mx\n");
-    BUGMSG(mb, -1, "EF_charge_barre_repartie_uniforme_mx\n");
-    BUGMSG(!((ERREUR_RELATIVE_EGALE(infos->kAx, MAXDOUBLE)) && (ERREUR_RELATIVE_EGALE(infos->kBx, MAXDOUBLE))), -1, "EF_charge_barre_repartie_uniforme_mx\n");
+    BUGMSG(barre, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(infos, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->section, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->materiau, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->noeud_debut, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->noeud_fin, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(discretisation<=barre->discretisation_element, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(ma, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(mb, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(!((ERREUR_RELATIVE_EGALE(infos->kAx, MAXDOUBLE)) && (ERREUR_RELATIVE_EGALE(infos->kBx, MAXDOUBLE))), -1, gettext("Paramètre incorrect\n"));
     
     // Les moments aux extrémités de la barre sont déterminés par les intégrales de Mohr
     //   et valent dans le cas général :\end{verbatim}\begin{center}
@@ -188,11 +189,11 @@ int EF_charge_barre_repartie_uniforme_mx(Beton_Barre *barre, unsigned int discre
         fin = barre->noeuds_intermediaires[discretisation];
     
     l = EF_noeuds_distance(debut, fin);
-    BUGMSG(!((a < 0.) && (!(ERREUR_RELATIVE_EGALE(a, 0.)))), -1, "%s : a = %.20f, l = %.20f\n", "EF_charge_barre_repartie_uniforme_mx", a, l);
-    BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), -1, "%s : a = %.20f, l=%.20f\n", "EF_charge_barre_repartie_uniforme_mx", a, l);
-    BUGMSG(!((b < 0.) && (!(ERREUR_RELATIVE_EGALE(b, 0.)))), -1, "%s : b = %.20f, l=%.20f\n", "EF_charge_barre_repartie_uniforme_mx", b, l);
-    BUGMSG(!((b > l) && (!(ERREUR_RELATIVE_EGALE(b, l)))), -1, "%s : b = %.20f, l=%.20f\n", "EF_charge_barre_repartie_uniforme_mx", b, l);
-    BUGMSG(!((a > l-b) && (!(ERREUR_RELATIVE_EGALE(a, l-b)))), -1, "%s : a = %.20f, l = %.20f, b = %.20f\n", "EF_charge_barre_repartie_uniforme_mx", a, l, b);
+    BUGMSG(!((a < 0.) && (!(ERREUR_RELATIVE_EGALE(a, 0.)))), -1, "a = %.20f, l = %.20f\n", a, l);
+    BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), -1, "a = %.20f, l=%.20f\n", a, l);
+    BUGMSG(!((b < 0.) && (!(ERREUR_RELATIVE_EGALE(b, 0.)))), -1, "b = %.20f, l=%.20f\n", b, l);
+    BUGMSG(!((b > l) && (!(ERREUR_RELATIVE_EGALE(b, l)))), -1, "b = %.20f, l=%.20f\n", b, l);
+    BUGMSG(!((a > l-b) && (!(ERREUR_RELATIVE_EGALE(a, l-b)))), -1, "a = %.20f, l = %.20f, b = %.20f\n", a, l, b);
     
     G = barre->materiau->gnu_0_2;
     
@@ -204,6 +205,8 @@ int EF_charge_barre_repartie_uniforme_mx(Beton_Barre *barre, unsigned int discre
         case BETON_SECTION_CIRCULAIRE :
         {
             double      J = _1992_1_1_sections_j(barre->section);
+            
+            BUG(!isnan(J), -1);
             
     // Pour une section section constante, les moments valent :\end{verbatim}\begin{displaymath}
     // M_{Bx} = \frac{(L-a-b) \cdot m_x \cdot (a-b+2 \cdot G \cdot J \cdot k_A+l)}{2 \cdot (G \cdot J \cdot (k_A+k_B)+l)}\end{displaymath}\begin{verbatim}
@@ -219,7 +222,7 @@ int EF_charge_barre_repartie_uniforme_mx(Beton_Barre *barre, unsigned int discre
         }
         default :
         {
-            BUGMSG(0, 0., "EF_charge_barre_repartie_uniforme_mx\n");
+            BUGMSG(0, -1, gettext("Type de section %d inconnu.\n"), ((Beton_Section_Rectangulaire*)(barre->section))->type);
             break;
         }
     }
@@ -261,14 +264,14 @@ int EF_charge_barre_repartie_uniforme_def_ang_iso_y(Beton_Barre *barre,
     double      l;
     double      E;
     
-    BUGMSG(barre, -1, "EF_charge_barre_repartie_uniforme_def_ang_iso_y\n");
-    BUGMSG(barre->section, -1, "EF_charge_barre_repartie_uniforme_def_ang_iso_y\n");
-    BUGMSG(barre->materiau, -1, "EF_charge_barre_repartie_uniforme_def_ang_iso_y\n");
-    BUGMSG(barre->noeud_debut, -1, "EF_charge_barre_repartie_uniforme_def_ang_iso_y\n");
-    BUGMSG(barre->noeud_fin, -1, "EF_charge_barre_repartie_uniforme_def_ang_iso_y\n");
-    BUGMSG(discretisation<=barre->discretisation_element, -1, "EF_charge_barre_repartie_uniforme_def_ang_iso_y\n");
-    BUGMSG(phia, -1, "EF_charge_barre_repartie_uniforme_def_ang_iso_y\n");
-    BUGMSG(phib, -1, "EF_charge_barre_repartie_uniforme_def_ang_iso_y\n");
+    BUGMSG(barre, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->section, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->materiau, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->noeud_debut, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->noeud_fin, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(discretisation<=barre->discretisation_element, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(phia, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(phib, -1, gettext("Paramètre incorrect\n"));
     
     // Les angles phi_A et phi_B sont déterminés par les intégrales de Mohr
     //   et valent dans le cas général :\end{verbatim}\begin{center}
@@ -294,11 +297,12 @@ int EF_charge_barre_repartie_uniforme_def_ang_iso_y(Beton_Barre *barre,
         fin = barre->noeuds_intermediaires[discretisation];
     
     l = EF_noeuds_distance(debut, fin);
-    BUGMSG(!((a < 0.) && (!(ERREUR_RELATIVE_EGALE(a, 0.)))), -1, "%s : a = %.20f, l = %.20f\n", "EF_charge_barre_repartie_uniforme_def_ang_iso_y", a, l);
-    BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), -1, "%s : a = %.20f, l=%.20f\n", "EF_charge_barre_repartie_uniforme_def_ang_iso_y", a, l);
-    BUGMSG(!((b < 0.) && (!(ERREUR_RELATIVE_EGALE(b, 0.)))), -1, "%s : b = %.20f, l=%.20f\n", "EF_charge_barre_repartie_uniforme_def_ang_iso_y", b, l);
-    BUGMSG(!((b > l) && (!(ERREUR_RELATIVE_EGALE(b, l)))), -1, "%s : b = %.20f, l=%.20f\n", "EF_charge_barre_repartie_uniforme_def_ang_iso_y", b, l);
-    BUGMSG(!((a > l-b) && (!(ERREUR_RELATIVE_EGALE(a, l-b)))), -1, "%s : a = %.20f, l = %.20f, b = %.20f\n", "EF_charge_barre_repartie_uniforme_def_ang_iso_y", a, l, b);
+    BUG(!isnan(l), -1);
+    BUGMSG(!((a < 0.) && (!(ERREUR_RELATIVE_EGALE(a, 0.)))), -1, "a = %.20f, l = %.20f\n", a, l);
+    BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), -1, "a = %.20f, l=%.20f\n", a, l);
+    BUGMSG(!((b < 0.) && (!(ERREUR_RELATIVE_EGALE(b, 0.)))), -1, "b = %.20f, l=%.20f\n", b, l);
+    BUGMSG(!((b > l) && (!(ERREUR_RELATIVE_EGALE(b, l)))), -1, "b = %.20f, l=%.20f\n", b, l);
+    BUGMSG(!((a > l-b) && (!(ERREUR_RELATIVE_EGALE(a, l-b)))), -1, "a = %.20f, l = %.20f, b = %.20f\n", a, l, b);
     
     E = barre->materiau->ecm;
     
@@ -310,6 +314,9 @@ int EF_charge_barre_repartie_uniforme_def_ang_iso_y(Beton_Barre *barre,
         case BETON_SECTION_CIRCULAIRE :
         {
             double      I = _1992_1_1_sections_iy(barre->section);
+            
+            BUG(!isnan(I), -1);
+            
     // Pour une section constante, les angles valent :\end{verbatim}\begin{displaymath}
     // \varphi_A = \frac{[a^2-a \cdot (b+2 \cdot L) + b \cdot (b+L)] \cdot m_y \cdot (L-a-b)}{6 \cdot E \cdot I_y \cdot L} - \frac{f_z \cdot (L-a-b) \cdot (L-a+b) \cdot (L^2-a^2-b^2+2 \cdot a \cdot L)}{24 \cdot E \cdot I_y \cdot L}\end{displaymath}\begin{displaymath}
     // \varphi_B = \frac{[a^2+a \cdot (L-b) - b \cdot (2L-b)] \cdot m_y \cdot (L-a-b)}{6 \cdot E \cdot I_y \cdot L} + \frac{F \cdot (L-a-b) \cdot (L+a-b) \cdot (L^2-a^2-b^2+2 \cdot b \cdot L)}{24 \cdot E \cdot I_y \cdot L}\end{displaymath}\begin{verbatim}
@@ -320,7 +327,7 @@ int EF_charge_barre_repartie_uniforme_def_ang_iso_y(Beton_Barre *barre,
         }
         default :
         {
-            BUGMSG(0, 0, "EF_charge_barre_repartie_uniforme_def_ang_iso_y\n");
+            BUGMSG(0, -1, gettext("Type de section %d inconnu.\n"), ((Beton_Section_Rectangulaire*)(barre->section))->type);
             break;
         }
     }
@@ -361,14 +368,14 @@ int EF_charge_barre_repartie_uniforme_def_ang_iso_z(Beton_Barre *barre,
     double      l;
     double      E;
     
-    BUGMSG(barre, -1, "EF_charge_barre_repartie_uniforme_def_ang_iso_z\n");
-    BUGMSG(barre->section, -1, "EF_charge_barre_repartie_uniforme_def_ang_iso_z\n");
-    BUGMSG(barre->materiau, -1, "EF_charge_barre_repartie_uniforme_def_ang_iso_z\n");
-    BUGMSG(barre->noeud_debut, -1, "EF_charge_barre_repartie_uniforme_def_ang_iso_z\n");
-    BUGMSG(barre->noeud_fin, -1, "EF_charge_barre_repartie_uniforme_def_ang_iso_z\n");
-    BUGMSG(discretisation<=barre->discretisation_element, -1, "EF_charge_barre_repartie_uniforme_def_ang_iso_z\n");
-    BUGMSG(phia, -1, "EF_charge_barre_repartie_uniforme_def_ang_iso_z\n");
-    BUGMSG(phib, -1, "EF_charge_barre_repartie_uniforme_def_ang_iso_z\n");
+    BUGMSG(barre, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->section, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->materiau, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->noeud_debut, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->noeud_fin, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(discretisation<=barre->discretisation_element, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(phia, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(phib, -1, gettext("Paramètre incorrect\n"));
     
     if (discretisation == 0)
         debut = barre->noeud_debut;
@@ -394,11 +401,12 @@ int EF_charge_barre_repartie_uniforme_def_ang_iso_z(Beton_Barre *barre,
     // A_1 = & -m_z \cdot \frac{L-a-b}{L}                  & B_1 = & m_z \cdot \frac{L-a-b}{L} \nonumber\\
     // A_2 = & \frac{f_y \cdot (L-a-b)(L-a+b)}{2 \cdot L} & B_2 = & \frac{f_y \cdot (L-a-b)(L+a-b)}{2 \cdot L}\end{align*}\begin{verbatim}
     l = EF_noeuds_distance(debut, fin);
-    BUGMSG(!((a < 0.) && (!(ERREUR_RELATIVE_EGALE(a, 0.)))), -1, "%s : a = %.20f, l = %.20f\n", "EF_charge_barre_repartie_uniforme_def_ang_iso_y", a, l);
-    BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), -1, "%s : a = %.20f, l=%.20f\n", "EF_charge_barre_repartie_uniforme_def_ang_iso_y", a, l);
-    BUGMSG(!((b < 0.) && (!(ERREUR_RELATIVE_EGALE(b, 0.)))), -1, "%s : b = %.20f, l=%.20f\n", "EF_charge_barre_repartie_uniforme_def_ang_iso_y", b, l);
-    BUGMSG(!((b > l) && (!(ERREUR_RELATIVE_EGALE(b, l)))), -1, "%s : b = %.20f, l=%.20f\n", "EF_charge_barre_repartie_uniforme_def_ang_iso_y", b, l);
-    BUGMSG(!((a > l-b) && (!(ERREUR_RELATIVE_EGALE(a, l-b)))), -1, "%s : a = %.20f, l = %.20f, b = %.20f\n", "EF_charge_barre_repartie_uniforme_def_ang_iso_y", a, l, b);
+    BUG(!isnan(l), -1);
+    BUGMSG(!((a < 0.) && (!(ERREUR_RELATIVE_EGALE(a, 0.)))), -1, "a = %.20f, l = %.20f\n", a, l);
+    BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), -1, "a = %.20f, l=%.20f\n", a, l);
+    BUGMSG(!((b < 0.) && (!(ERREUR_RELATIVE_EGALE(b, 0.)))), -1, "b = %.20f, l=%.20f\n", b, l);
+    BUGMSG(!((b > l) && (!(ERREUR_RELATIVE_EGALE(b, l)))), -1, "b = %.20f, l=%.20f\n", b, l);
+    BUGMSG(!((a > l-b) && (!(ERREUR_RELATIVE_EGALE(a, l-b)))), -1, "a = %.20f, l = %.20f, b = %.20f\n", a, l, b);
     
     E = barre->materiau->ecm;
     
@@ -410,6 +418,9 @@ int EF_charge_barre_repartie_uniforme_def_ang_iso_z(Beton_Barre *barre,
         case BETON_SECTION_CIRCULAIRE :
         {
             double      I = _1992_1_1_sections_iz(barre->section);
+            
+            BUG(!isnan(I), -1);
+            
     // Pour une section constante, les angles valent :\end{verbatim}\begin{displaymath}
     // \varphi_A = \frac{[a^2-a \cdot (b+2 \cdot L) + b \cdot (b+L)] \cdot m_z \cdot (L-a-b)}{6 \cdot E \cdot I_z \cdot L} + \frac{f_y \cdot (L-a-b) \cdot (L-a+b) \cdot (L^2-a^2-b^2+2 \cdot a \cdot L)}{24 \cdot E \cdot I_z \cdot L}\end{displaymath}\begin{displaymath}
     // \varphi_B = \frac{[a^2+a \cdot (L-b) - b \cdot (2L-b)] \cdot m_z \cdot (L-a-b)}{6 \cdot E \cdot I_z \cdot L} - \frac{f_y \cdot (L-a-b) \cdot (L+a-b) \cdot (L^2-a^2-b^2+2 \cdot b \cdot L)}{24 \cdot E \cdot I_z \cdot L}\end{displaymath}\begin{verbatim}
@@ -420,7 +431,7 @@ int EF_charge_barre_repartie_uniforme_def_ang_iso_z(Beton_Barre *barre,
         }
         default :
         {
-            BUGMSG(0, 0, "EF_charge_barre_repartie_uniforme_def_ang_iso_z\n");
+            BUGMSG(0, -1, gettext("Type de section %d inconnu.\n"), ((Beton_Section_Rectangulaire*)(barre->section))->type);
             break;
         }
     }
@@ -437,7 +448,7 @@ double EF_charge_barre_repartie_uniforme_position_resultante_x(void *section, do
  *              double l : longueur de la barre.
  * Valeur renvoyée :
  *   Succès : Résultat
- *   Échec : 0. en cas de paramètres invalides :
+ *   Échec : NAN en cas de paramètres invalides :
  *             (section == NULL) ou
  *             (a < 0) ou (a > l) ou
  *             (b < 0) ou (b > l) ou
@@ -445,12 +456,12 @@ double EF_charge_barre_repartie_uniforme_position_resultante_x(void *section, do
  */
 {
     
-    BUGMSG(section, 0., "EF_charge_barre_repartie_uniforme_position_resultante_x\n");
-    BUGMSG(!((a < 0.) && (!(ERREUR_RELATIVE_EGALE(a, 0.)))), -1, "%s : a = %.20f, l = %.20f\n", "EF_charge_barre_repartie_uniforme_position_resultante_x", a, l);
-    BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), -1, "%s : a = %.20f, l=%.20f\n", "EF_charge_barre_repartie_uniforme_position_resultante_x", a, l);
-    BUGMSG(!((b < 0.) && (!(ERREUR_RELATIVE_EGALE(b, 0.)))), -1, "%s : b = %.20f, l=%.20f\n", "EF_charge_barre_repartie_uniforme_position_resultante_x", b, l);
-    BUGMSG(!((b > l) && (!(ERREUR_RELATIVE_EGALE(b, l)))), -1, "%s : b = %.20f, l=%.20f\n", "EF_charge_barre_repartie_uniforme_position_resultante_x", b, l);
-    BUGMSG(!((a > l-b) && (!(ERREUR_RELATIVE_EGALE(a, l-b)))), -1, "%s : a = %.20f, l = %.20f, b = %.20f\n", "EF_charge_barre_repartie_uniforme_position_resultante_x", a, l, b);
+    BUGMSG(section, NAN, gettext("Paramètre incorrect\n"));
+    BUGMSG(!((a < 0.) && (!(ERREUR_RELATIVE_EGALE(a, 0.)))), NAN, "a = %.20f, l = %.20f\n", a, l);
+    BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), NAN, "a = %.20f, l=%.20f\n", a, l);
+    BUGMSG(!((b < 0.) && (!(ERREUR_RELATIVE_EGALE(b, 0.)))), NAN, "b = %.20f, l=%.20f\n", b, l);
+    BUGMSG(!((b > l) && (!(ERREUR_RELATIVE_EGALE(b, l)))), NAN, "b = %.20f, l=%.20f\n", b, l);
+    BUGMSG(!((a > l-b) && (!(ERREUR_RELATIVE_EGALE(a, l-b)))), NAN, "a = %.20f, l = %.20f, b = %.20f\n", a, l, b);
     
     // La position de la résultante de la charge est obtenue en résolvant X dans la formule :\end{verbatim}\begin{center}
     // \includegraphics[width=8cm]{images/charge_barre_rep_uni_n.pdf}\end{center}\begin{displaymath}
@@ -471,7 +482,7 @@ double EF_charge_barre_repartie_uniforme_position_resultante_x(void *section, do
         }
         default :
         {
-            BUGMSG(0, 0., "EF_charge_barre_repartie_uniforme_position_resultante_x\n");
+            BUGMSG(0, NAN, gettext("Type de section %d inconnu.\n"), ((Beton_Section_Rectangulaire*)section)->type);
             break;
         }
     }
@@ -509,15 +520,15 @@ int EF_charge_barre_repartie_uniforme_fonc_rx(Fonction *fonction, Beton_Barre *b
     double      l;
     double      G, debut_barre;
 
-    BUGMSG(fonction, -1, "EF_charge_barre_repartie_uniforme_fonc_rx\n");
-    BUGMSG(barre, -1, "EF_charge_barre_repartie_uniforme_fonc_rx\n");
-    BUGMSG(barre->section, -1, "EF_charge_barre_repartie_uniforme_fonc_rx\n");
-    BUGMSG(barre->materiau, -1, "EF_charge_barre_repartie_uniforme_fonc_rx\n");
-    BUGMSG(barre->noeud_debut, -1, "EF_charge_barre_repartie_uniforme_fonc_rx\n");
-    BUGMSG(barre->noeud_fin, -1, "EF_charge_barre_repartie_uniforme_fonc_rx\n");
-    BUGMSG(discretisation<=barre->discretisation_element, -1, "EF_charge_barre_repartie_uniforme_fonc_rx\n");
+    BUGMSG(fonction, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->section, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->materiau, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->noeud_debut, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->noeud_fin, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(discretisation<=barre->discretisation_element, -1, gettext("Paramètre incorrect\n"));
     infos = &(barre->info_EF[discretisation]);
-    BUGMSG(!((ERREUR_RELATIVE_EGALE(infos->kAx, MAXDOUBLE)) && (ERREUR_RELATIVE_EGALE(infos->kBx, MAXDOUBLE))), -1, "EF_charge_barre_repartie_uniforme_fonc_rx\n");
+    BUGMSG(!((ERREUR_RELATIVE_EGALE(infos->kAx, MAXDOUBLE)) && (ERREUR_RELATIVE_EGALE(infos->kBx, MAXDOUBLE))), -1, gettext("Paramètre incorrect\n"));
     
     // La déformation d'une barre soumise à un effort de torsion est défini par les formules :\end{verbatim}\begin{center}
     //   \includegraphics[width=8cm]{images/charge_barre_rep_uni_mx2.pdf}\end{center}\begin{verbatim}
@@ -542,12 +553,14 @@ int EF_charge_barre_repartie_uniforme_fonc_rx(Fonction *fonction, Beton_Barre *b
         fin = barre->noeuds_intermediaires[discretisation];
     
     debut_barre = EF_noeuds_distance(debut, barre->noeud_debut);
+    BUG(!isnan(debut_barre), -3);
     l = EF_noeuds_distance(debut, fin);
-    BUGMSG(!((a < 0.) && (!(ERREUR_RELATIVE_EGALE(a, 0.)))), -1, "%s : a = %.20f, l = %.20f\n", "EF_charge_barre_repartie_uniforme_fonc_rx", a, l);
-    BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), -1, "%s : a = %.20f, l=%.20f\n", "EF_charge_barre_repartie_uniforme_fonc_rx", a, l);
-    BUGMSG(!((b < 0.) && (!(ERREUR_RELATIVE_EGALE(b, 0.)))), -1, "%s : b = %.20f, l=%.20f\n", "EF_charge_barre_repartie_uniforme_fonc_rx", b, l);
-    BUGMSG(!((b > l) && (!(ERREUR_RELATIVE_EGALE(b, l)))), -1, "%s : b = %.20f, l=%.20f\n", "EF_charge_barre_repartie_uniforme_fonc_rx", b, l);
-    BUGMSG(!((a > l-b) && (!(ERREUR_RELATIVE_EGALE(a, l-b)))), -1, "%s : a = %.20f, l = %.20f, b = %.20f\n", "EF_charge_barre_repartie_uniforme_fonc_rx", a, l, b);
+    BUG(!isnan(l), -3);
+    BUGMSG(!((a < 0.) && (!(ERREUR_RELATIVE_EGALE(a, 0.)))), -1, "a = %.20f, l = %.20f\n", a, l);
+    BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), -1, "a = %.20f, l=%.20f\n", a, l);
+    BUGMSG(!((b < 0.) && (!(ERREUR_RELATIVE_EGALE(b, 0.)))), -1, "b = %.20f, l=%.20f\n", b, l);
+    BUGMSG(!((b > l) && (!(ERREUR_RELATIVE_EGALE(b, l)))), -1, "b = %.20f, l=%.20f\n", b, l);
+    BUGMSG(!((a > l-b) && (!(ERREUR_RELATIVE_EGALE(a, l-b)))), -1, "a = %.20f, l = %.20f, b = %.20f\n", a, l, b);
     
     G = barre->materiau->gnu_0_2;
     
@@ -559,6 +572,8 @@ int EF_charge_barre_repartie_uniforme_fonc_rx(Fonction *fonction, Beton_Barre *b
         case BETON_SECTION_CIRCULAIRE :
         {
             double      J = _1992_1_1_sections_j(barre->section);
+            
+            BUG(!isnan(J), -3);
             
             if (ERREUR_RELATIVE_EGALE(infos->kBx, MAXDOUBLE))
             {
@@ -588,7 +603,7 @@ int EF_charge_barre_repartie_uniforme_fonc_rx(Fonction *fonction, Beton_Barre *b
         }
         default :
         {
-            BUGMSG(0, 0., "EF_charge_barre_repartie_uniforme_fonc_rx\n");
+            BUGMSG(0, -1, gettext("Type de section %d inconnu.\n"), ((Beton_Section_Rectangulaire*)(barre->section))->type);
             break;
         }
     }
@@ -630,14 +645,14 @@ int EF_charge_barre_repartie_uniforme_fonc_ry(Fonction *f_rotation, Fonction* f_
     double      l;
     double      E, debut_barre;
     
-    BUGMSG(f_rotation, -1, "EF_charge_barre_repartie_uniforme_fonc_ry\n");
-    BUGMSG(f_deform, -1, "EF_charge_barre_repartie_uniforme_fonc_ry\n");
-    BUGMSG(barre, -1, "EF_charge_barre_repartie_uniforme_fonc_ry\n");
-    BUGMSG(barre->section, -1, "EF_charge_barre_repartie_uniforme_fonc_ry\n");
-    BUGMSG(barre->materiau, -1, "EF_charge_barre_repartie_uniforme_fonc_ry\n");
-    BUGMSG(barre->noeud_debut, -1, "EF_charge_barre_repartie_uniforme_fonc_ry\n");
-    BUGMSG(barre->noeud_fin, -1, "EF_charge_barre_repartie_uniforme_fonc_ry\n");
-    BUGMSG(discretisation<=barre->discretisation_element, -1, "EF_charge_barre_repartie_uniforme_fonc_ry\n");
+    BUGMSG(f_rotation, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(f_deform, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->section, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->materiau, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->noeud_debut, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->noeud_fin, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(discretisation<=barre->discretisation_element, -1, gettext("Paramètre incorrect\n"));
     
     // La déformation et la  rotation d'une barre soumise à un effort de flexion autour de
     // l'axe y est calculée selon le principe des intégrales de Mohr et est définie par les
@@ -691,12 +706,14 @@ int EF_charge_barre_repartie_uniforme_fonc_ry(Fonction *f_rotation, Fonction* f_
         fin = barre->noeuds_intermediaires[discretisation];
     
     debut_barre = EF_noeuds_distance(debut, barre->noeud_debut);
+    BUG(!isnan(debut_barre), -3);
     l = EF_noeuds_distance(debut, fin);
-    BUGMSG(!((a < 0.) && (!(ERREUR_RELATIVE_EGALE(a, 0.)))), -1, "%s : a = %.20f, l = %.20f\n", "EF_charge_barre_repartie_uniforme_fonc_ry", a, l);
-    BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), -1, "%s : a = %.20f, l=%.20f\n", "EF_charge_barre_repartie_uniforme_fonc_ry", a, l);
-    BUGMSG(!((b < 0.) && (!(ERREUR_RELATIVE_EGALE(b, 0.)))), -1, "%s : b = %.20f, l=%.20f\n", "EF_charge_barre_repartie_uniforme_fonc_ry", b, l);
-    BUGMSG(!((b > l) && (!(ERREUR_RELATIVE_EGALE(b, l)))), -1, "%s : b = %.20f, l=%.20f\n", "EF_charge_barre_repartie_uniforme_fonc_ry", b, l);
-    BUGMSG(!((a > l-b) && (!(ERREUR_RELATIVE_EGALE(a, l-b)))), -1, "%s : a = %.20f, l = %.20f, b = %.20f\n", "EF_charge_barre_repartie_uniforme_fonc_ry", a, l, b);
+    BUG(!isnan(l), -3);
+    BUGMSG(!((a < 0.) && (!(ERREUR_RELATIVE_EGALE(a, 0.)))), -1, "a = %.20f, l = %.20f\n", a, l);
+    BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), -1, "a = %.20f, l=%.20f\n", a, l);
+    BUGMSG(!((b < 0.) && (!(ERREUR_RELATIVE_EGALE(b, 0.)))), -1, "b = %.20f, l=%.20f\n", b, l);
+    BUGMSG(!((b > l) && (!(ERREUR_RELATIVE_EGALE(b, l)))), -1, "b = %.20f, l=%.20f\n", b, l);
+    BUGMSG(!((a > l-b) && (!(ERREUR_RELATIVE_EGALE(a, l-b)))), -1, "a = %.20f, l = %.20f, b = %.20f\n", a, l, b);
     
     E = barre->materiau->ecm;
     
@@ -708,6 +725,9 @@ int EF_charge_barre_repartie_uniforme_fonc_ry(Fonction *f_rotation, Fonction* f_
         case BETON_SECTION_CIRCULAIRE :
         {
             double      I = _1992_1_1_sections_iy(barre->section);
+            
+            BUG(!isnan(I), -3);
+            
             BUG(common_fonction_ajout(f_rotation, 0., a, -fz*(l-a-b)*(l-a+b)*(l*l-a*a-b*b+2*a*l)/(24.*l*E*I), 0., fz*(l-a-b)*(l-a+b)*(6.)/(24.*l*E*I), 0., 0., 0., 0., debut_barre) == 0, -3);
             BUG(common_fonction_ajout(f_rotation, a, l-b, fz*(a*a*a*a+4.*a*a*l*l-b*b*b*b+2.*b*b*l*l-l*l*l*l)/(24.*l*E*I), fz*(-12.*a*a*l)/(24.*l*E*I), fz*(6.*a*a-6.*b*b+6.*l*l)/(24.*l*E*I), fz*(-4.*l)/(24.*l*E*I), 0., 0., 0., debut_barre) == 0, -3);
             BUG(common_fonction_ajout(f_rotation, l-b, l, fz*(a*a*a*a+4.*a*a*l*l-b*b*b*b+4.*b*b*b*l-10.*b*b*l*l+12.*b*l*l*l-5.*l*l*l*l)/(24.*l*E*I), fz*(-12.*a*a*l+12.*b*b*l-24.*b*l*l+12.*l*l*l)/(24.*l*E*I), fz*(6.*a*a-6.*b*b+12.*b*l-6.*l*l)/(24.*l*E*I), 0., 0., 0., 0., debut_barre) == 0, -3);
@@ -747,7 +767,7 @@ int EF_charge_barre_repartie_uniforme_fonc_ry(Fonction *f_rotation, Fonction* f_
         }
         default :
         {
-            BUGMSG(0, 0, "EF_charge_barre_repartie_uniforme_fonc_ry\n");
+            BUGMSG(0, -1, gettext("Type de section %d inconnu.\n"), ((Beton_Section_Rectangulaire*)(barre->section))->type);
             break;
         }
     }
@@ -789,14 +809,14 @@ int EF_charge_barre_repartie_uniforme_fonc_rz(Fonction *f_rotation, Fonction* f_
     double      l;
     double      E, debut_barre;
     
-    BUGMSG(f_rotation, -1, "EF_charge_barre_repartie_uniforme_fonc_rz\n");
-    BUGMSG(f_deform, -1, "EF_charge_barre_repartie_uniforme_fonc_rz\n");
-    BUGMSG(barre, -1, "EF_charge_barre_repartie_uniforme_fonc_rz\n");
-    BUGMSG(barre->section, -1, "EF_charge_barre_repartie_uniforme_fonc_rz\n");
-    BUGMSG(barre->materiau, -1, "EF_charge_barre_repartie_uniforme_fonc_rz\n");
-    BUGMSG(barre->noeud_debut, -1, "EF_charge_barre_repartie_uniforme_fonc_rz\n");
-    BUGMSG(barre->noeud_fin, -1, "EF_charge_barre_repartie_uniforme_fonc_rz\n");
-    BUGMSG(discretisation<=barre->discretisation_element, -1, "EF_charge_barre_repartie_uniforme_fonc_rz\n");
+    BUGMSG(f_rotation, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(f_deform, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->section, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->materiau, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->noeud_debut, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->noeud_fin, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(discretisation<=barre->discretisation_element, -1, gettext("Paramètre incorrect\n"));
     
     // La déformation et la rotation d'une barre soumise à un effort de flexion autour de
     //   l'axe y est calculée selon le principe des intégrales de Mohr et est définie par les
@@ -816,12 +836,14 @@ int EF_charge_barre_repartie_uniforme_fonc_rz(Fonction *f_rotation, Fonction* f_
         fin = barre->noeuds_intermediaires[discretisation];
     
     debut_barre = EF_noeuds_distance(debut, barre->noeud_debut);
+    BUG(!isnan(debut_barre), -3);
     l = EF_noeuds_distance(debut, fin);
-    BUGMSG(!((a < 0.) && (!(ERREUR_RELATIVE_EGALE(a, 0.)))), -1, "%s : a = %.20f, l = %.20f\n", "EF_charge_barre_repartie_uniforme_fonc_rz", a, l);
-    BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), -1, "%s : a = %.20f, l=%.20f\n", "EF_charge_barre_repartie_uniforme_fonc_rz", a, l);
-    BUGMSG(!((b < 0.) && (!(ERREUR_RELATIVE_EGALE(b, 0.)))), -1, "%s : b = %.20f, l=%.20f\n", "EF_charge_barre_repartie_uniforme_fonc_rz", b, l);
-    BUGMSG(!((b > l) && (!(ERREUR_RELATIVE_EGALE(b, l)))), -1, "%s : b = %.20f, l=%.20f\n", "EF_charge_barre_repartie_uniforme_fonc_rz", b, l);
-    BUGMSG(!((a > l-b) && (!(ERREUR_RELATIVE_EGALE(a, l-b)))), -1, "%s : a = %.20f, l = %.20f, b = %.20f\n", "EF_charge_barre_repartie_uniforme_fonc_rz", a, l, b);
+    BUG(!isnan(l), -3);
+    BUGMSG(!((a < 0.) && (!(ERREUR_RELATIVE_EGALE(a, 0.)))), -1, "a = %.20f, l = %.20f\n", a, l);
+    BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), -1, "a = %.20f, l=%.20f\n", a, l);
+    BUGMSG(!((b < 0.) && (!(ERREUR_RELATIVE_EGALE(b, 0.)))), -1, "b = %.20f, l=%.20f\n", b, l);
+    BUGMSG(!((b > l) && (!(ERREUR_RELATIVE_EGALE(b, l)))), -1, "b = %.20f, l=%.20f\n", b, l);
+    BUGMSG(!((a > l-b) && (!(ERREUR_RELATIVE_EGALE(a, l-b)))), -1, "a = %.20f, l = %.20f, b = %.20f\n", a, l, b);
     
     E = barre->materiau->ecm;
     
@@ -833,6 +855,9 @@ int EF_charge_barre_repartie_uniforme_fonc_rz(Fonction *f_rotation, Fonction* f_
         case BETON_SECTION_CIRCULAIRE :
         {
             double      I = _1992_1_1_sections_iz(barre->section);
+            
+            BUG(!isnan(I), -3);
+            
             BUG(common_fonction_ajout(f_rotation, 0., a, fy*(l-a-b)*(l-a+b)*(l*l-a*a-b*b+2*a*l)/(24.*l*E*I), 0., -fy*(l-a-b)*(l-a+b)*(6.)/(24.*l*E*I), 0., 0., 0., 0., debut_barre) == 0, -3);
             BUG(common_fonction_ajout(f_rotation, a, l-b, -fy*(a*a*a*a+4.*a*a*l*l-b*b*b*b+2.*b*b*l*l-l*l*l*l)/(24.*l*E*I), -fy*(-12.*a*a*l)/(24.*l*E*I), -fy*(6.*a*a-6.*b*b+6.*l*l)/(24.*l*E*I), -fy*(-4.*l)/(24.*l*E*I), 0., 0., 0., debut_barre) == 0, -3);
             BUG(common_fonction_ajout(f_rotation, l-b, l, -fy*(a*a*a*a+4.*a*a*l*l-b*b*b*b+4.*b*b*b*l-10.*b*b*l*l+12.*b*l*l*l-5.*l*l*l*l)/(24.*l*E*I), -fy*(-12.*a*a*l+12.*b*b*l-24.*b*l*l+12.*l*l*l)/(24.*l*E*I), -fy*(6.*a*a-6.*b*b+12.*b*l-6.*l*l)/(24.*l*E*I), 0., 0., 0., 0., debut_barre) == 0, -3);
@@ -853,7 +878,7 @@ int EF_charge_barre_repartie_uniforme_fonc_rz(Fonction *f_rotation, Fonction* f_
         }
         default :
         {
-            BUGMSG(0, 0, "EF_charge_barre_repartie_uniforme_fonc_rz\n");
+            BUGMSG(0, -1, gettext("Type de section %d inconnu.\n"), ((Beton_Section_Rectangulaire*)(barre->section))->type);
             break;
         }
     }
@@ -888,13 +913,13 @@ int EF_charge_barre_repartie_uniforme_n(Fonction *fonction, Beton_Barre *barre,
     double      l, debut_barre;
     double      E;
     
-    BUGMSG(fonction, 0., "EF_charge_barre_repartie_uniforme_n\n");
-    BUGMSG(barre, 0., "EF_charge_barre_repartie_uniforme_n\n");
-    BUGMSG(barre->section, 0., "EF_charge_barre_repartie_uniforme_n\n");
-    BUGMSG(barre->materiau, 0., "EF_charge_barre_repartie_uniforme_n\n");
-    BUGMSG(barre->noeud_debut, 0., "EF_charge_barre_repartie_uniforme_n\n");
-    BUGMSG(barre->noeud_fin, 0., "EF_charge_barre_repartie_uniforme_n\n");
-    BUGMSG(discretisation<=barre->discretisation_element, 0., "EF_charge_barre_repartie_uniforme_n\n");
+    BUGMSG(fonction, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->section, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->materiau, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->noeud_debut, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre->noeud_fin, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(discretisation<=barre->discretisation_element, -1, gettext("Paramètre incorrect\n"));
     
     // La déformation selon l'axe x est par la formule :\end{verbatim}\begin{center}
     // \includegraphics[width=8cm]{images/charge_barre_rep_uni_n2.pdf}\includegraphics[width=8cm]{images/charge_barre_ponctuelle_n2.pdf}\end{center}\begin{align*}
@@ -916,12 +941,14 @@ int EF_charge_barre_repartie_uniforme_n(Fonction *fonction, Beton_Barre *barre,
         fin = barre->noeuds_intermediaires[discretisation];
     
     debut_barre = EF_noeuds_distance(debut, barre->noeud_debut);
+    BUG(!isnan(debut_barre), -3);
     l = EF_noeuds_distance(debut, fin);
-    BUGMSG(!((a < 0.) && (!(ERREUR_RELATIVE_EGALE(a, 0.)))), -1, "%s : a = %.20f, l = %.20f\n", "EF_charge_barre_repartie_uniforme_n", a, l);
-    BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), -1, "%s : a = %.20f, l=%.20f\n", "EF_charge_barre_repartie_uniforme_n", a, l);
-    BUGMSG(!((b < 0.) && (!(ERREUR_RELATIVE_EGALE(b, 0.)))), -1, "%s : b = %.20f, l=%.20f\n", "EF_charge_barre_repartie_uniforme_n", b, l);
-    BUGMSG(!((b > l) && (!(ERREUR_RELATIVE_EGALE(b, l)))), -1, "%s : b = %.20f, l=%.20f\n", "EF_charge_barre_repartie_uniforme_n", b, l);
-    BUGMSG(!((a > l-b) && (!(ERREUR_RELATIVE_EGALE(a, l-b)))), -1, "%s : a = %.20f, l = %.20f, b = %.20f\n", "EF_charge_barre_repartie_uniforme_n", a, l, b);
+    BUG(!isnan(l), -3);
+    BUGMSG(!((a < 0.) && (!(ERREUR_RELATIVE_EGALE(a, 0.)))), -1, "a = %.20f, l = %.20f\n", a, l);
+    BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), -1, "a = %.20f, l=%.20f\n", a, l);
+    BUGMSG(!((b < 0.) && (!(ERREUR_RELATIVE_EGALE(b, 0.)))), -1, "b = %.20f, l=%.20f\n", b, l);
+    BUGMSG(!((b > l) && (!(ERREUR_RELATIVE_EGALE(b, l)))), -1, "b = %.20f, l=%.20f\n", b, l);
+    BUGMSG(!((a > l-b) && (!(ERREUR_RELATIVE_EGALE(a, l-b)))), -1, "a = %.20f, l = %.20f, b = %.20f\n", a, l, b);
     
     E = barre->materiau->ecm;
     
@@ -933,6 +960,8 @@ int EF_charge_barre_repartie_uniforme_n(Fonction *fonction, Beton_Barre *barre,
         case BETON_SECTION_CIRCULAIRE :
         {
             double      S = _1992_1_1_sections_s(barre->section);
+            
+            BUG(!isnan(S), -3);
             
     // Pour une section constante, les déformations valent :\end{verbatim}\begin{align*}
     // f_x(x) = &\frac{F_{Ax} \cdot (L-a+b) \cdot (F_{Ax} + F_{Bx}) x}{2 \cdot L \cdot E \cdot S} & & \textrm{ pour x variant de 0 à a}\nonumber\\
@@ -946,20 +975,30 @@ int EF_charge_barre_repartie_uniforme_n(Fonction *fonction, Beton_Barre *barre,
         }
         default :
         {
-            BUGMSG(0, 0., "EF_charge_barre_repartie_uniforme_n\n");
+            BUGMSG(0, -1, gettext("Type de section %d inconnu.\n"), ((Beton_Section_Rectangulaire*)(barre->section))->type);
             break;
         }
     }
 }
 
 
-void EF_charge_barre_repartie_uniforme_free(Charge_Barre_Repartie_Uniforme *charge)
+int EF_charge_barre_repartie_uniforme_free(Charge_Barre_Repartie_Uniforme *charge)
 {
 /* Description : Libère le contenu alloué dans une charge répartie uniforme sur barre.
  * Paramètres : Charge_Barre_Repartie_Uniforme *charge : la charge à libérer.
- * Valeur renvoyée : void
+ * Valeur renvoyée :
+ *   Succès : 0
+ *   Échec : -1 en cas de paraètres invalides :
+ *             (charge == NULL) ou
+ *             (charge->description == NULL) ou
+ *             (charge->barres == NULL)
  */
+    BUGMSG(charge, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(charge->description, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(charge->barres, -1, gettext("Paramètre incorrect\n"));
+    
     free(charge->description);
     list_free(charge->barres, LIST_DEALLOC);
-    return;
+    free(charge);
+    return 0;
 }

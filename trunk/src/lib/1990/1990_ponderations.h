@@ -24,5 +24,5 @@
 
 
 int _1990_ponderations_genere(Projet *projet);
-void _1990_ponderations_affiche_tout(Projet *projet);
+int _1990_ponderations_affiche_tout(Projet *projet);
 #endif

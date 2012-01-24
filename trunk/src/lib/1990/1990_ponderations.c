@@ -42,8 +42,8 @@ int _1990_ponderations_verifie_double(LIST *liste_ponderations, Ponderation* pon
  *             (pond_a_verifier == NULL)
  */
 {
-    BUGMSG(liste_ponderations, -1, "_1990_ponderations_verifie_double\n");
-    BUGMSG(pond_a_verifier, -1, "_1990_ponderations_verifie_double\n");
+    BUGMSG(liste_ponderations, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(pond_a_verifier, -1, gettext("Paramètre incorrect\n"));
     
     if (list_size(liste_ponderations) == 0)
         return 0;
@@ -98,11 +98,12 @@ int _1990_ponderations_duplique_sans_double(LIST *liste_pond_destination, LIST *
  * Valeur renvoyée :
  *   Succès : 0
  *   Échec : -1 en cas de paramètres invalides :
- *             
+ *          (liste_pond_destination == NULL) ou
+ *          (liste_pond_source == NULL)
  */
 {
-    BUGMSG(liste_pond_destination, -1, "_1990_ponderations_duplique_sans_double\n");
-    BUGMSG(liste_pond_source, -1, "_1990_ponderations_duplique_sans_double\n");
+    BUGMSG(liste_pond_destination, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(liste_pond_source, -1, gettext("Paramètre incorrect\n"));
     
     if (list_size(liste_pond_source) == 0)
         return 0;
@@ -115,34 +116,43 @@ int _1990_ponderations_duplique_sans_double(LIST *liste_pond_destination, LIST *
         
         ponderation_source = (Ponderation*)list_curr(liste_pond_source);
         /* Si la ponderation n'existe pas, on l'ajoute à la fin */
-        if (_1990_ponderations_verifie_double(liste_pond_destination, ponderation_source) == 0)
+        switch (_1990_ponderations_verifie_double(liste_pond_destination, ponderation_source) == 0)
         {
-            Ponderation     ponderation_destination;
-            
-            ponderation_destination.elements = list_init();
-            if (ponderation_destination.elements == NULL)
-                BUGMSG(0, -2, gettext("Erreur d'allocation mémoire.\n"));
-            
-            if ((ponderation_source != NULL) && (list_curr(ponderation_source->elements) != NULL))
+            case 0 :
             {
-                list_mvfront(ponderation_source->elements);
-                do
+                Ponderation     ponderation_destination;
+                
+                BUGMSG(ponderation_destination.elements = list_init(), -2, gettext("Erreur d'allocation mémoire.\n"));
+                
+                if ((ponderation_source != NULL) && (list_curr(ponderation_source->elements) != NULL))
                 {
-                    Ponderation_Element *element_source;
-                    Ponderation_Element element_destination;
-                    
-                    element_source = (Ponderation_Element*)list_curr(ponderation_source->elements);
-                    element_destination.action = element_source->action;
-                    element_destination.flags = element_source->flags;
-                    element_destination.psi = element_source->psi;
-                    element_destination.ponderation = element_source->ponderation;
-                    if (list_insert_after(ponderation_destination.elements, (void*)&element_destination, sizeof(element_destination)) == NULL)
-                        BUGMSG(0, -3, gettext("Erreur d'allocation mémoire.\n"));
+                    list_mvfront(ponderation_source->elements);
+                    do
+                    {
+                        Ponderation_Element *element_source;
+                        Ponderation_Element element_destination;
+                        
+                        element_source = (Ponderation_Element*)list_curr(ponderation_source->elements);
+                        element_destination.action = element_source->action;
+                        element_destination.flags = element_source->flags;
+                        element_destination.psi = element_source->psi;
+                        element_destination.ponderation = element_source->ponderation;
+                        BUGMSG(list_insert_after(ponderation_destination.elements, (void*)&element_destination, sizeof(element_destination)), -2, gettext("Erreur d'allocation mémoire.\n"));
+                    }
+                    while (list_mvnext(ponderation_source->elements) != NULL);
                 }
-                while (list_mvnext(ponderation_source->elements) != NULL);
+                BUGMSG(list_insert_after(liste_pond_destination, (void*)&ponderation_destination, sizeof(ponderation_destination)), -2, gettext("Erreur d'allocation mémoire.\n"));
+                break;
             }
-            if (list_insert_after(liste_pond_destination, (void*)&ponderation_destination, sizeof(ponderation_destination)) == NULL)
-                BUGMSG(0, -4, gettext("Erreur d'allocation mémoire.\n"));
+            case 1 :
+            {
+                break;
+            }
+            default :
+            {
+                BUG(0, -3);
+                break;
+            }
         }
     }
     while (list_mvnext(liste_pond_source) != NULL);
@@ -186,29 +196,21 @@ int _1990_ponderations_genere_un(Projet *projet, LIST* ponderations_destination,
     Groupe          *groupe;
     Niveau_Groupe   *niveau;
     
-    BUGMSG(projet, -1, "_1990_ponderations_genere_un\n");
-    BUGMSG(projet->niveaux_groupes, -1, "_1990_ponderations_genere_un\n");
-    BUGMSG(list_size(projet->niveaux_groupes), -1, "_1990_ponderations_genere_un\n");
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->niveaux_groupes, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(list_size(projet->niveaux_groupes), -1, gettext("Paramètre incorrect\n"));
     
     // Si le dernier niveau ne possède pas un seul et unique groupe Alors
     //     Fin.
     // FinSi
     niveau = (Niveau_Groupe*)list_rear(projet->niveaux_groupes);
-    if (list_size(niveau->groupes) != 1)
-    {
-        printf(gettext("La génération des pondérations est impossible.\nLe dernier niveau ne possède pas qu'un seul groupe.\n"));
-        return -1;
-    }
+    BUGMSG(list_size(niveau->groupes) == 1, -1, gettext("La génération des pondérations est impossible.\nLe dernier niveau ne possède pas qu'un seul groupe.\n"));
     groupe = (Groupe*)list_front(niveau->groupes);
     
     // Si le groupe du dernier niveau ne possède pas de combinaison Alors
     //     Fin.
     // FinSi
-    if (list_size(groupe->tmp_combinaison.combinaisons) == 0)
-    {
-        printf(gettext("Le dernier niveau ne possède aucune combinaison permettant la génération des pondérations.\n"));
-        return 0;
-    }
+    BUGMSG(list_size(groupe->tmp_combinaison.combinaisons), -1, gettext("Le dernier niveau ne possède aucune combinaison permettant la génération des pondérations.\n"));
     
     // Génération d'une boucle contenant 2^(nom de ligne dans coef_min et coef_max) permettant
     //   ainsi à à chaque passage de déterminer si le coefficient min ou max doit être pris.
@@ -238,7 +240,7 @@ int _1990_ponderations_genere_un(Projet *projet, LIST* ponderations_destination,
             
             combinaison = (Combinaison*) list_curr(groupe->tmp_combinaison.combinaisons);
             ponderation.elements = list_init();
-            BUGMSG(ponderation.elements, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_ponderations_genere_un");
+            BUGMSG(ponderation.elements, -2, gettext("Erreur d'allocation mémoire.\n"));
             list_mvfront(combinaison->elements);
             if (list_size(combinaison->elements) != 0)
             {
@@ -283,7 +285,7 @@ int _1990_ponderations_genere_un(Projet *projet, LIST* ponderations_destination,
                         else
                             ponderation_element.ponderation = coef_min[categorie];
                         if (!(ERREUR_RELATIVE_EGALE(0., ponderation_element.ponderation)))
-                            BUGMSG(list_insert_after(ponderation.elements, &ponderation_element, sizeof(ponderation_element)), -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_ponderations_genere_un");
+                            BUGMSG(list_insert_after(ponderation.elements, &ponderation_element, sizeof(ponderation_element)), -2, gettext("Erreur d'allocation mémoire.\n"));
                     }
                 }
                 while ((list_mvnext(combinaison->elements) != NULL) && (suivant != 1));
@@ -295,7 +297,7 @@ int _1990_ponderations_genere_un(Projet *projet, LIST* ponderations_destination,
             if ((variable_accompagnement == 1) && (variable_dominante == 0))
                 suivant = 1;
             if ((suivant == 0) && (list_size(ponderation.elements) != 0) && (_1990_ponderations_verifie_double(ponderations_destination, &ponderation) == 0))
-                BUGMSG(list_insert_after(ponderations_destination, &ponderation, sizeof(ponderation)), -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_ponderations_genere_un");
+                BUGMSG(list_insert_after(ponderations_destination, &ponderation, sizeof(ponderation)), -2, gettext("Erreur d'allocation mémoire.\n"));
             else
                 list_free(ponderation.elements, LIST_DEALLOC);
         }
@@ -326,7 +328,7 @@ int _1990_ponderations_genere_eu(Projet *projet)
 {
     double      coef_min[ACTION_INCONNUE], coef_max[ACTION_INCONNUE];
     
-    BUGMSG(projet, -1, "_1990_ponderations_genere_eu\n");
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
     
     // Pour ELU_EQU, générer les pondérations suivantes :
     //     Si à l'équilibre seulement Alors
@@ -483,7 +485,7 @@ int _1990_ponderations_genere_eu(Projet *projet)
             }
             default:
             {
-                BUGMSG(0, -1, gettext("Paramètres invalides.\n"));
+                BUGMSG(0, -1, gettext("Paramètre incorrect\n"));
                 break;
             }
         }
@@ -568,7 +570,7 @@ int _1990_ponderations_genere_eu(Projet *projet)
     //     FinSi
             default :
             {
-                BUGMSG(0, -1, gettext("Paramètres invalides.\n"));
+                BUGMSG(0, -1, gettext("Paramètre incorrect\n"));
                 break;
             }
         }
@@ -670,7 +672,7 @@ int _1990_ponderations_genere_fr(Projet *projet)
 {
     double      coef_min[ACTION_INCONNUE], coef_max[ACTION_INCONNUE];
     
-    BUGMSG(projet, -1, "_1990_ponderations_genere_fr\n");
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
     
     // Pour ELU_EQU, générer les pondérations suivantes :
     //     Si à l'équilibre seulement Alors
@@ -838,7 +840,7 @@ int _1990_ponderations_genere_fr(Projet *projet)
             }
             default :
             {
-                BUGMSG(0, -3, gettext("%s : Paramètres invalides.\n"), "_1990_ponderations_genere_fr");
+                BUGMSG(0, -3, gettext("Paramètre incorrect\n"));
                 break;
             }
         }
@@ -929,7 +931,7 @@ int _1990_ponderations_genere_fr(Projet *projet)
     //     FinSi
             default :
             {
-                BUGMSG(0, -3, gettext("Paramètres invalides.\n"));
+                BUGMSG(0, -3, gettext("Paramètre incorrect\n"));
                 break;
             }
         }
@@ -1025,12 +1027,14 @@ int _1990_ponderations_genere(Projet *projet)
  *   Échec : valeur négative en cas d'erreur
  */
 {
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    
     // Trivial
     switch (projet->pays)
     {
         case PAYS_EU : { return _1990_ponderations_genere_eu(projet); break; }
         case PAYS_FR : { return _1990_ponderations_genere_fr(projet); break; }
-        default : { BUGMSG(0, -1, gettext("Paramètres invalides.\n")); break; }
+        default : { BUGMSG(0, -1, gettext("Paramètre incorrect\n")); break; }
     }
 }
 
@@ -1040,6 +1044,8 @@ void _1990_ponderations_affiche(LIST *ponderations)
  * Valeur renvoyée : Aucun
  */
 {
+    BUGMSG(ponderations, , gettext("Paramètre incorrect\n"));
+    
     if ((ponderations != NULL) && (list_size(ponderations) != 0))
     {
         list_mvfront(ponderations);
@@ -1065,12 +1071,14 @@ void _1990_ponderations_affiche(LIST *ponderations)
     return;
 }
 
-void _1990_ponderations_affiche_tout(Projet *projet)
+int _1990_ponderations_affiche_tout(Projet *projet)
 /* Description : Affiche toutes les pondérations du projet
  * Paramètres : Projet *projet : la variable projet
  * Valeur renvoyée : Aucun
  */
 {
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    
     // Trivial
     printf("elu_equ\n");
     _1990_ponderations_affiche(projet->combinaisons.elu_equ);
@@ -1090,5 +1098,6 @@ void _1990_ponderations_affiche_tout(Projet *projet)
     _1990_ponderations_affiche(projet->combinaisons.els_freq);
     printf("els_perm\n");
     _1990_ponderations_affiche(projet->combinaisons.els_perm);
-    return;
+    
+    return 0;
 }

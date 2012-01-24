@@ -33,10 +33,10 @@ int _1990_groupe_positionne_niveau(LIST *source, int numero);
 int _1990_groupe_positionne_groupe(Niveau_Groupe *niveau, int numero);
 int _1990_groupe_positionne_element(Groupe *groupe, int numero);
 
-void _1990_groupe_free_niveau(Projet *projet, int niveau);
-void _1990_groupe_free_groupe(Projet *projet, int niveau, int groupe);
-void _1990_groupe_free_element(Projet *projet, int niveau, int groupe, int element);
-void _1990_groupe_free(Projet *projet);
+int _1990_groupe_free_niveau(Projet *projet, int niveau);
+int _1990_groupe_free_groupe(Projet *projet, int niveau, int groupe);
+int _1990_groupe_free_element(Projet *projet, int niveau, int groupe, int element);
+int _1990_groupe_free(Projet *projet);
 
 int _1990_groupe_affiche_tout(Projet *projet);
 
