@@ -53,13 +53,13 @@ int m3d_init(Projet *projet)
     struct SGlobalData  *global_data;
     CM3dLight           *light;
     
-    BUGMSG(projet, -1, "m3d_init\n");
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
     
     M3d_init();
     m3d = &projet->list_gtk.m3d;
     m3d->drawing = gtk_drawing_area_new();
     m3d->data = malloc(sizeof(struct SGlobalData));
-    BUGMSG(m3d->data, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "m3d_init");
+    BUGMSG(m3d->data, -2, gettext("reur d'allocation mémoire.\n"));
     memset(m3d->data, 0, sizeof(struct SGlobalData));
     
     global_data = (struct SGlobalData*)m3d->data;
@@ -126,8 +126,8 @@ int m3d_camera_axe_x_z(Projet *projet)
     EF_Noeud            *noeud;
     EF_Point            *point;
     
-    BUGMSG(projet, -1, "m3d_camera_axe_x_z\n");
-    BUGMSG(projet->ef_donnees.noeuds, -1, "m3d_camera_axe_x_z\n");
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->ef_donnees.noeuds, -1, gettext("Paramètre incorrect\n"));
     if (list_size(projet->ef_donnees.noeuds) <= 1)
         return 0;
     BUG(EF_noeuds_min_max(projet, &x_min, &x_max, NULL, NULL, &z_min, &z_max) == 0, -3);
@@ -137,20 +137,20 @@ int m3d_camera_axe_x_z(Projet *projet)
     
     list_mvfront(projet->ef_donnees.noeuds);
     noeud = (EF_Noeud*)list_curr(projet->ef_donnees.noeuds);
-    point = EF_noeuds_renvoie_position(noeud);
+    BUG(point = EF_noeuds_renvoie_position(noeud), -3);
     y = point->y-sqrt((point->x-x)*(point->x-x)+(point->z-z)*(point->z-z));
     free(point);
     
     while (list_mvnext(projet->ef_donnees.noeuds) != NULL)
     {
         noeud = (EF_Noeud*)list_curr(projet->ef_donnees.noeuds);
-        point = EF_noeuds_renvoie_position(noeud);
+        BUG(point = EF_noeuds_renvoie_position(noeud), -3);
         y = MIN(y, point->y-sqrt((point->x-x)*(point->x-x)+(point->z-z)*(point->z-z)));
         free(point);
     }
     
     m3d = &projet->list_gtk.m3d;
-    BUGMSG(m3d->data, -1, "m3d_camera_axe_x_z\n");
+    BUGMSG(m3d->data, -1, gettext("Paramètre incorrect\n"));
     vue = (struct SGlobalData*)m3d->data;
     
     if (vue->camera == NULL)
@@ -180,10 +180,10 @@ int m3d_genere_graphique(Projet *projet)
     List_Gtk_m3d        *m3d;
     struct SGlobalData  *vue;
     
-    BUGMSG(projet, -1, "m3d_genere_graphique\n");
-    BUGMSG(projet->ef_donnees.noeuds, -1, "m3d_genere_graphique\n");
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->ef_donnees.noeuds, -1, gettext("Paramètre incorrect\n"));
     m3d = &projet->list_gtk.m3d;
-    BUGMSG(m3d->data, -1, "m3d_genere_graphique\n");
+    BUGMSG(m3d->data, -1, gettext("Paramètre incorrect\n"));
     vue = (struct SGlobalData*)m3d->data;
     
     list_mvfront(projet->ef_donnees.noeuds);
@@ -192,10 +192,11 @@ int m3d_genere_graphique(Projet *projet)
         do
         {
             EF_Noeud    *noeud = (EF_Noeud*)list_curr(projet->ef_donnees.noeuds);
-            EF_Point    *point = EF_noeuds_renvoie_position(noeud);
+            EF_Point    *point;
             CM3dObject  *cube;
             char        tmp[256];
             
+            BUG(point = EF_noeuds_renvoie_position(noeud), -3);
             sprintf(tmp, "noeud_%d", noeud->numero);
             cube = M3d_cube_new (tmp, .1);
             
@@ -225,9 +226,12 @@ int m3d_genere_graphique(Projet *projet)
                 EF_Point *p_d, *p_f;
                 case BETON_SECTION_RECTANGULAIRE :
                 {
-                    double  longueur = EF_noeuds_distance(barre->noeud_debut, barre->noeud_fin);
+                    double  longueur;
                     double  y, z;
                     CM3dObject  *bas, *haut, *gauche, *droite, *tout;
+                    
+                    longueur = EF_noeuds_distance(barre->noeud_debut, barre->noeud_fin);
+                    BUG(!isnan(longueur), -3);
                     
                     droite = M3d_plan_new("", longueur, section_tmp->hauteur, 1);
                     droite->rotations(180., 0., 0.);
@@ -266,10 +270,10 @@ int m3d_genere_graphique(Projet *projet)
 
                     }
                     tout->set_smooth(GOURAUD);
-                    _1992_1_1_barres_angle_rotation(barre, &y, &z);
+                    BUG(_1992_1_1_barres_angle_rotation(barre, &y, &z) == 0, -3);
                     tout->rotations(0., -y/M_PI*180., z/M_PI*180.);
-                    p_d = EF_noeuds_renvoie_position(barre->noeud_debut);
-                    p_f = EF_noeuds_renvoie_position(barre->noeud_fin);
+                    BUG(p_d = EF_noeuds_renvoie_position(barre->noeud_debut), -3);
+                    BUG(p_f = EF_noeuds_renvoie_position(barre->noeud_fin), -3);
                     tout->set_position((p_d->x+p_f->x)/2., (p_d->y+p_f->y)/2., (p_d->z+p_f->z)/2.);
                     tout->set_ambient_reflexion(0.8);
                     free(p_d);
@@ -347,10 +351,10 @@ int m3d_genere_graphique(Projet *projet)
                     }
                     tout->set_ambient_reflexion(0.8);
                     tout->set_smooth(GOURAUD);
-                    _1992_1_1_barres_angle_rotation(barre, &y, &z);
+                    BUG(_1992_1_1_barres_angle_rotation(barre, &y, &z) == 0, -3);
                     tout->rotations(0., -y/M_PI*180., z/M_PI*180.);
-                    p_d = EF_noeuds_renvoie_position(barre->noeud_debut);
-                    p_f = EF_noeuds_renvoie_position(barre->noeud_fin);
+                    BUG(p_d = EF_noeuds_renvoie_position(barre->noeud_debut), -3);
+                    BUG(p_f = EF_noeuds_renvoie_position(barre->noeud_fin), -3);
                     tout->set_position((p_d->x+p_f->x)/2., (p_d->y+p_f->y)/2., (p_d->z+p_f->z)/2.);
                     free(p_d);
                     free(p_f);
@@ -363,10 +367,13 @@ int m3d_genere_graphique(Projet *projet)
                 {
                     Beton_Section_Carre *section = (Beton_Section_Carre*)barre->section;
                     
-                    double  longueur = EF_noeuds_distance(barre->noeud_debut, barre->noeud_fin);
+                    double  longueur;
                     double  y, z;
                     
                     CM3dObject  *bas, *haut, *gauche, *droite, *tout;
+                    
+                    longueur = EF_noeuds_distance(barre->noeud_debut, barre->noeud_fin);
+                    BUG(!isnan(longueur), -3);
                     
                     droite = M3d_plan_new("", longueur, section->cote, 1);
                     droite->rotations(180., 0., 0.);
@@ -406,10 +413,10 @@ int m3d_genere_graphique(Projet *projet)
                     }
                     tout->set_ambient_reflexion(0.8);
                     tout->set_smooth(GOURAUD);
-                    _1992_1_1_barres_angle_rotation(barre, &y, &z);
+                    BUG(_1992_1_1_barres_angle_rotation(barre, &y, &z) == 0, -3);
                     tout->rotations(0., -y/M_PI*180., z/M_PI*180.);
-                    p_d = EF_noeuds_renvoie_position(barre->noeud_debut);
-                    p_f = EF_noeuds_renvoie_position(barre->noeud_fin);
+                    BUG(p_d = EF_noeuds_renvoie_position(barre->noeud_debut), -3);
+                    BUG(p_f = EF_noeuds_renvoie_position(barre->noeud_fin), -3);
                     tout->set_position((p_d->x+p_f->x)/2., (p_d->y+p_f->y)/2., (p_d->z+p_f->z)/2.);
                     free(p_d);
                     free(p_f);
@@ -451,10 +458,10 @@ int m3d_genere_graphique(Projet *projet)
                     }
                     tout->set_ambient_reflexion(0.8);
                     tout->set_smooth(GOURAUD);
-                    _1992_1_1_barres_angle_rotation(barre, &y, &z);
+                    BUG(_1992_1_1_barres_angle_rotation(barre, &y, &z) == 0, -3);
                     tout->rotations(0., -y/M_PI*180., z/M_PI*180.);
-                    p_d = EF_noeuds_renvoie_position(barre->noeud_debut);
-                    p_f = EF_noeuds_renvoie_position(barre->noeud_fin);
+                    BUG(p_d = EF_noeuds_renvoie_position(barre->noeud_debut), -3);
+                    BUG(p_f = EF_noeuds_renvoie_position(barre->noeud_fin), -3);
                     tout->set_position((p_d->x+p_f->x)/2., (p_d->y+p_f->y)/2., (p_d->z+p_f->z)/2.);
                     free(p_d);
                     free(p_f);
@@ -475,7 +482,7 @@ int m3d_genere_graphique(Projet *projet)
     return 0;
 }
 
-void m3d_free(Projet *projet)
+int m3d_free(Projet *projet)
 /* Description : Libère l'espace mémoire alloué pour l'affichage graphique de la structure.
  * Paramètres : Projet *projet : la variable projet
  * Valeur renvoyée :
@@ -488,13 +495,13 @@ void m3d_free(Projet *projet)
     // Trivial
     List_Gtk_m3d *m3d;
     
-    BUGMSG(projet, , "m3d_free\n");
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
     
     m3d = &projet->list_gtk.m3d;
     free(m3d->data);
     m3d->data = NULL;
     
-    return;
+    return 0;
 }
 
 

@@ -40,11 +40,10 @@ int EF_relachement_init(Projet *projet)
     GtkTreeIter     iter;
 #endif
     
-    BUGMSG(projet, -1, "EF_relachement_init\n");
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
     
     // Trivial
-    projet->ef_donnees.relachements = list_init();
-    BUGMSG(projet->ef_donnees.relachements, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_relachement_init");
+    BUGMSG(projet->ef_donnees.relachements = list_init(), -2, gettext("Erreur d'allocation mémoire.\n"));
     
 #ifdef ENABLE_GTK
     projet->list_gtk.ef_barre.liste_relachements = gtk_list_store_new(1, G_TYPE_STRING);
@@ -92,8 +91,8 @@ int EF_relachement_ajout(Projet *projet, const char *nom, EF_Relachement_Type rx
     
     // Trivial
     
-    BUGMSG(projet, -1, "EF_relachement_ajout\n");
-    BUGMSG(projet->ef_donnees.relachements, -1, "EF_relachement_ajout\n");
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->ef_donnees.relachements, -1, gettext("Paramètre incorrect\n"));
     BUG(!((rx_debut == EF_RELACHEMENT_LIBRE) && (rx_fin == EF_RELACHEMENT_LIBRE)), -1);
     
     list_mvrear(projet->ef_donnees.relachements);
@@ -109,7 +108,7 @@ int EF_relachement_ajout(Projet *projet, const char *nom, EF_Relachement_Type rx
     relachement_nouveau.ry_f_data = ry_f_data;
     relachement_nouveau.rz_fin = rz_fin;
     relachement_nouveau.rz_f_data = rz_f_data;
-    relachement_nouveau.nom = malloc(sizeof(char)*(strlen(nom)+1));
+    BUGMSG(relachement_nouveau.nom = malloc(sizeof(char)*(strlen(nom)+1)), -2, gettext("Erreur d'allocation mémoire.\n"));
     strcpy(relachement_nouveau.nom, nom);
     
     relachement_en_cours = (EF_Relachement *)list_rear(projet->ef_donnees.relachements);
@@ -118,7 +117,7 @@ int EF_relachement_ajout(Projet *projet, const char *nom, EF_Relachement_Type rx
     else
         relachement_nouveau.numero = relachement_en_cours->numero+1;
     
-    BUGMSG(list_insert_after(projet->ef_donnees.relachements, &(relachement_nouveau), sizeof(relachement_nouveau)), -2, gettext("%s : Erreur d'allocation mémoire.\n"), "EF_relachement_ajout");
+    BUGMSG(list_insert_after(projet->ef_donnees.relachements, &(relachement_nouveau), sizeof(relachement_nouveau)), -2, gettext("Erreur d'allocation mémoire.\n"));
     
 #ifdef ENABLE_GTK
     gtk_list_store_append(projet->list_gtk.ef_barre.liste_relachements, &iter);
@@ -142,9 +141,9 @@ EF_Relachement* EF_relachement_cherche_numero(Projet *projet, unsigned int numer
  *             relachement introuvable.
  */
 {
-    BUGMSG(projet, NULL, "EF_relachement_cherche_numero\n");
-    BUGMSG(projet->ef_donnees.relachements, NULL, "EF_relachement_cherche_numero\n");
-    BUGMSG(list_size(projet->ef_donnees.relachements), NULL, "EF_relachement_cherche_numero\n");
+    BUGMSG(projet, NULL, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->ef_donnees.relachements, NULL, gettext("Paramètre incorrect\n"));
+    BUGMSG(list_size(projet->ef_donnees.relachements), NULL, gettext("Paramètre incorrect\n"));
     
     // Trivial
     list_mvfront(projet->ef_donnees.relachements);
@@ -171,8 +170,8 @@ int EF_relachement_free(Projet *projet)
  *             (projet->ef_donnees.relachements == NULL)
  */
 {
-    BUGMSG(projet, -1, "EF_relachement_free\n");
-    BUGMSG(projet->ef_donnees.relachements, -1, "EF_relachement_free\n");
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->ef_donnees.relachements, -1, gettext("Paramètre incorrect\n"));
     
     // Trivial
     while (!list_empty(projet->ef_donnees.relachements))

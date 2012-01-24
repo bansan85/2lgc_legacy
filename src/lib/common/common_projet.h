@@ -830,6 +830,6 @@ Projet *projet_init(Type_Pays pays);
 #ifdef ENABLE_GTK
 int projet_init_graphique(Projet *projet);
 #endif
-void projet_free(Projet *projet);
+int projet_free(Projet *projet);
 
 #endif

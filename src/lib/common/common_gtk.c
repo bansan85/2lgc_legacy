@@ -26,6 +26,7 @@
 #include <math.h>
 #include <list.h>
 #include "common_selection.h"
+#include "common_erreurs.h"
 
 void gtk_common_entry_check_double(GtkTextBuffer *textbuffer, gpointer user_data __attribute__((unused)))
 /* Description : Vérifie en temps réel si le GtkTextBuffer contient bien un nombre flottant.
@@ -43,7 +44,7 @@ void gtk_common_entry_check_double(GtkTextBuffer *textbuffer, gpointer user_data
     gtk_text_buffer_get_iter_at_offset(textbuffer, &start, 0);
     gtk_text_buffer_get_iter_at_offset(textbuffer, &end, -1);
     texte = gtk_text_buffer_get_text(textbuffer, &start, &end, FALSE);
-    fake = (char*)malloc(sizeof(char)*(strlen(texte)+1));
+    BUGMSG(fake = (char*)malloc(sizeof(char)*(strlen(texte)+1)), , gettext("Erreur d'allocation mémoire.\n"));
     if (sscanf(texte, "%lf%s", &nombre, fake) != 1)
     {
         gtk_text_buffer_remove_all_tags(textbuffer, &start, &end);
@@ -56,6 +57,7 @@ void gtk_common_entry_check_double(GtkTextBuffer *textbuffer, gpointer user_data
     }
     free(texte);
     free(fake);
+    
     return;
 }
 
@@ -75,7 +77,8 @@ double gtk_common_entry_renvoie_double(GtkTextBuffer *textbuffer)
     gtk_text_buffer_get_iter_at_offset(textbuffer, &start, 0);
     gtk_text_buffer_get_iter_at_offset(textbuffer, &end, -1);
     texte = gtk_text_buffer_get_text(textbuffer, &start, &end, FALSE);
-    fake = (char*)malloc(sizeof(char)*(strlen(texte)+1));
+    BUGMSG(fake = (char*)malloc(sizeof(char)*(strlen(texte)+1)), -2, gettext("Erreur d'allocation mémoire.\n"));
+    
     if (sscanf(texte, "%lf%s", &nombre, fake) != 1)
     {
         free(texte);
@@ -106,7 +109,7 @@ void gtk_common_entry_check_int(GtkTextBuffer *textbuffer, gpointer user_data __
     gtk_text_buffer_get_iter_at_offset(textbuffer, &start, 0);
     gtk_text_buffer_get_iter_at_offset(textbuffer, &end, -1);
     texte = gtk_text_buffer_get_text(textbuffer, &start, &end, FALSE);
-    fake = (char*)malloc(sizeof(char)*(strlen(texte)+1));
+    BUGMSG(fake = (char*)malloc(sizeof(char)*(strlen(texte)+1)), , gettext("Erreur d'allocation mémoire.\n"));
     if (sscanf(texte, "%d%s", &nombre, fake) != 1)
     {
         gtk_text_buffer_remove_all_tags(textbuffer, &start, &end);
@@ -119,6 +122,7 @@ void gtk_common_entry_check_int(GtkTextBuffer *textbuffer, gpointer user_data __
     }
     free(texte);
     free(fake);
+    
     return;
 }
 
@@ -138,7 +142,8 @@ int gtk_common_entry_renvoie_int(GtkTextBuffer *textbuffer)
     gtk_text_buffer_get_iter_at_offset(textbuffer, &start, 0);
     gtk_text_buffer_get_iter_at_offset(textbuffer, &end, -1);
     texte = gtk_text_buffer_get_text(textbuffer, &start, &end, FALSE);
-    fake = (char*)malloc(sizeof(char)*(strlen(texte)+1));
+    BUGMSG(fake = (char*)malloc(sizeof(char)*(strlen(texte)+1)), -2, gettext("Erreur d'allocation mémoire.\n"));
+    
     if (sscanf(texte, "%d%s", &nombre, fake) != 1)
     {
         free(texte);

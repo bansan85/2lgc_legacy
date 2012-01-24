@@ -24,6 +24,7 @@
 #include "common_maths.h"
 #include "common_erreurs.h"
 
+
 int _1992_1_1_materiaux_init(Projet *projet)
 /* Description : Initialise la liste des matériaux en béton
  * Paramètres : Projet *projet : la variable projet
@@ -34,14 +35,15 @@ int _1992_1_1_materiaux_init(Projet *projet)
  *           -2 en cas d'erreur d'allocation mémoire
  */
 {
-    BUGMSG(projet, -1, "_1992_1_1_materiaux_init\n");
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
     
     // Trivial
     projet->beton.materiaux = list_init();
-    BUGMSG(projet->beton.materiaux, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1992_1_1_materiaux_init");
+    BUGMSG(projet->beton.materiaux, -2, gettext("Erreur d'allocation mémoire.\n"));
     
     return 0;
 }
+
 
 int _1992_1_1_materiaux_ajout(Projet *projet, double fck, double nu)
 /* Description : Ajoute un matériau en béton et calcule ses caractéristiques mécaniques.
@@ -63,9 +65,9 @@ int _1992_1_1_materiaux_ajout(Projet *projet, double fck, double nu)
     Beton_Materiau  *materiau_en_cours, materiau_nouveau;
     
     // Trivial
-    BUGMSG(projet, -1, "_1992_1_1_materiaux_ajout\n");
-    BUGMSG(projet->beton.materiaux, -1, "_1992_1_1_materiaux_ajout\n");
-    BUGMSG(fck <= 90.*(1+ERREUR_RELATIVE_MIN), -1, "_1992_1_1_materiaux_ajout\n");
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->beton.materiaux, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(fck <= 90.*(1+ERREUR_RELATIVE_MIN), -1, gettext("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"));
 
     list_mvrear(projet->beton.materiaux);
     materiau_nouveau.fck = fck*1000000.;
@@ -140,7 +142,7 @@ int _1992_1_1_materiaux_ajout(Projet *projet, double fck, double nu)
     else
         materiau_nouveau.numero = materiau_en_cours->numero+1;
     
-    BUGMSG(list_insert_after(projet->beton.materiaux, &(materiau_nouveau), sizeof(materiau_nouveau)), -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1992_1_1_materiaux_ajout");
+    BUGMSG(list_insert_after(projet->beton.materiaux, &(materiau_nouveau), sizeof(materiau_nouveau)), -2, gettext("Erreur d'allocation mémoire.\n"));
     
     return 0;
 }
@@ -159,9 +161,9 @@ Beton_Materiau* _1992_1_1_materiaux_cherche_numero(Projet *projet, unsigned int 
  *             (list_size(projet->beton.materiaux) == 0)
  */
 {
-    BUGMSG(projet, NULL, "_1992_1_1_materiaux_cherche_numero\n");
-    BUGMSG(projet->beton.materiaux, NULL, "_1992_1_1_materiaux_cherche_numero\n");
-    BUGMSG(list_size(projet->beton.materiaux), NULL, "_1992_1_1_materiaux_cherche_numero\n");
+    BUGMSG(projet, NULL, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->beton.materiaux, NULL, gettext("Paramètre incorrect\n"));
+    BUGMSG(list_size(projet->beton.materiaux), NULL, gettext("Paramètre incorrect\n"));
     
     // Trivial
     list_mvfront(projet->beton.materiaux);
@@ -174,7 +176,7 @@ Beton_Materiau* _1992_1_1_materiaux_cherche_numero(Projet *projet, unsigned int 
     }
     while (list_mvnext(projet->beton.materiaux) != NULL);
     
-    BUGMSG(0, NULL, gettext("%s : Matériau en béton n°%d introuvable.\n"), "_1992_1_1_materiaux_cherche_numero", numero);
+    BUGMSG(0, NULL, gettext("Matériau en béton n°%d introuvable.\n"), numero);
 }
 
 
@@ -188,8 +190,8 @@ int _1992_1_1_materiaux_free(Projet *projet)
  *             (projet->beton.materiaux == NULL)
  */
 {
-    BUGMSG(projet, -1, "_1992_1_1_materiaux_free\n");
-    BUGMSG(projet->beton.materiaux, -1, "_1992_1_1_materiaux_free\n");
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->beton.materiaux, -1, gettext("Paramètre incorrect\n"));
     
     // Trivial
     while (!list_empty(projet->beton.materiaux))

@@ -103,7 +103,7 @@ int main(int argc, char *argv[])
     BUGMSG(gtk_init_check(&argc, &argv) == TRUE, -1, gettext("Impossible d'initialiser gtk.\n"));
     
     // Création d'un projet type
-    projet = projet_init(PAYS_FR);
+    BUG(projet = projet_init(PAYS_FR), -1);
     
     // Création des actions
     BUG(_1990_action_ajout(projet, 0, "Poids propre") == 0, -1); // Poids propre
@@ -176,16 +176,16 @@ int main(int argc, char *argv[])
     
     // Ajout de l'action ponctuelle
     LIST    *tmp1, *tmp2;
-    tmp1 = common_selection_renvoie_numeros("1;3-5");
-    tmp2 = common_selection_converti_numeros_en_noeuds(tmp1, projet);
+    BUG(tmp1 = common_selection_renvoie_numeros("1;3-5"), -1);
+    BUG(tmp2 = common_selection_converti_numeros_en_noeuds(tmp1, projet), -1);
     BUG(EF_charge_noeud_ajout(projet, 0, tmp2, 1000., 500., 1000., 3000., 5000., 5000., "test1"), -1);
     list_free(tmp1, LIST_DEALLOC);
-    tmp1 = common_selection_renvoie_numeros("0-2");
-    tmp2 = common_selection_converti_numeros_en_barres(tmp1, projet);
+    BUG(tmp1 = common_selection_renvoie_numeros("0-2"), -1);
+    BUG(tmp2 = common_selection_converti_numeros_en_barres(tmp1, projet), -1);
     BUG(EF_charge_barre_ponctuelle_ajout(projet, 0, tmp2, FALSE, 2.3, 10000., 9000., 8000., 7000., 6000., 5000., "test2"), -1);
     list_free(tmp1, LIST_DEALLOC);
-    tmp1 = common_selection_renvoie_numeros("0-2/2");
-    tmp2 = common_selection_converti_numeros_en_barres(tmp1, projet);
+    BUG(tmp1 = common_selection_renvoie_numeros("0-2/2"), -1);
+    BUG(tmp2 = common_selection_converti_numeros_en_barres(tmp1, projet), -1);
     BUG(EF_charge_barre_repartie_uniforme_ajout(projet, 0, tmp2, FALSE, FALSE, 1.5, 1.0, 10000., 9000., 8000., 7000., 6000., 5000., "test3"), -1);
     list_free(tmp1, LIST_DEALLOC);
     
@@ -200,11 +200,11 @@ int main(int argc, char *argv[])
     BUG(_1990_action_affiche_resultats(projet, 0) == 0, -1);
     
     // Création de la fenêtre principale
-    projet_init_graphique(projet);
+    BUG(projet_init_graphique(projet) == 0, -1);
 //    g_signal_connect (pButton, "clicked", G_CALLBACK (_1990_gtk_groupes), projet);
     
-    m3d_camera_axe_x_z(projet);
-    m3d_genere_graphique(projet);
+    BUG(m3d_camera_axe_x_z(projet) == 0, -1);
+    BUG(m3d_genere_graphique(projet) == 0, -1);
     
     // Affichage de l'interface graphique
     gtk_widget_show_all(projet->list_gtk.comp.window);

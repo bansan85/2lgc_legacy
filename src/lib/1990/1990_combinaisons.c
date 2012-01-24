@@ -34,8 +34,8 @@
 int _1990_combinaisons_verifie_double(LIST *liste_combinaisons, Combinaison *comb_a_verifier)
 /* Description : Vérifie si une combinaison est déjà présente dans une liste de combinaisons.
  *               FONCTION INTERNE.
- * Paramètres : LIST *combinaisons : liste de combinaisons
- *            : Combinaison *comb_a_verifier : combinaison à vérifier
+ * Paramètres : LIST *combinaisons : liste de combinaisons,
+ *            : Combinaison *comb_a_verifier : combinaison à vérifier.
  * Valeur renvoyée :
  *   Succès : 0 si la combinaison n'est pas présente
  *          : 1 si la combinaison est présente
@@ -45,10 +45,9 @@ int _1990_combinaisons_verifie_double(LIST *liste_combinaisons, Combinaison *com
  *             (comb_a_verifier == NULL)
  */
 {
-    BUGMSG(liste_combinaisons, -1, "_1990_combinaisons_verifie_double\n");
-    BUGMSG(comb_a_verifier, -1, "_1990_combinaisons_verifie_double\n");
+    BUGMSG(liste_combinaisons, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(comb_a_verifier, -1, gettext("Paramètre incorrect\n"));
     
-    // NE PAS INSÉRER
     if (list_size(liste_combinaisons) == 0)
         return 0;
     if (list_size(comb_a_verifier->elements) == 0)
@@ -65,6 +64,7 @@ int _1990_combinaisons_verifie_double(LIST *liste_combinaisons, Combinaison *com
         {
             list_mvfront(comb_en_cours->elements);
             list_mvfront(comb_a_verifier->elements);
+            
             do
             {
                 Combinaison_Element *elem1 = (Combinaison_Element*)list_curr(comb_en_cours->elements);
@@ -75,6 +75,7 @@ int _1990_combinaisons_verifie_double(LIST *liste_combinaisons, Combinaison *com
                     doublon = 0;
             }
             while ((list_mvnext(comb_en_cours->elements) != NULL) && (list_mvnext(comb_a_verifier->elements) != NULL) && (doublon == 1));
+            
             if (doublon == 1)
                 return 1;
         }
@@ -83,6 +84,7 @@ int _1990_combinaisons_verifie_double(LIST *liste_combinaisons, Combinaison *com
     
     return 0;
 }
+
 
 int _1990_combinaisons_duplique(LIST *liste_comb_destination, LIST *liste_comb_source,
   int sans_double)
@@ -100,10 +102,9 @@ int _1990_combinaisons_duplique(LIST *liste_comb_destination, LIST *liste_comb_s
  *           -2 en cas d'erreur d'allocation mémoire
  */
 {
-    BUGMSG(liste_comb_destination, -1, "_1990_combinaisons_duplique\n");
-    BUGMSG(liste_comb_source, -1, "_1990_combinaisons_duplique\n");
+    BUGMSG(liste_comb_destination, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(liste_comb_source, -1, gettext("Paramètre incorrect\n"));
     
-    // NE PAS INSÉRER
     if (list_size(liste_comb_source) == 0)
         return 0;
     
@@ -127,7 +128,7 @@ int _1990_combinaisons_duplique(LIST *liste_comb_destination, LIST *liste_comb_s
                 
                 /* Duplication de la combinaison */
                 combinaison_destination.elements = list_init();
-                BUGMSG(combinaison_destination.elements, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_combinaisons_duplique");
+                BUGMSG(combinaison_destination.elements, -2, gettext("Erreur d'allocation mémoire.\n"));
                 if ((combinaison_source != NULL) && (list_curr(combinaison_source->elements) != NULL))
                 {
                     list_mvfront(combinaison_source->elements);
@@ -138,12 +139,12 @@ int _1990_combinaisons_duplique(LIST *liste_comb_destination, LIST *liste_comb_s
                         
                         element_destination.action = element_source->action;
                         element_destination.flags = element_source->flags;
-                        BUGMSG(list_insert_after(combinaison_destination.elements, (void*)&element_destination, sizeof(element_destination)), -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_combinaisons_duplique");
+                        BUGMSG(list_insert_after(combinaison_destination.elements, (void*)&element_destination, sizeof(element_destination)), -2, gettext("Erreur d'allocation mémoire.\n"));
                     }
                     while (list_mvnext(combinaison_source->elements) != NULL);
                 }
                 /* Insertion de la combinaison dans liste_comb_destination */
-                BUGMSG(list_insert_after(liste_comb_destination, (void*)&combinaison_destination, sizeof(combinaison_destination)), -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_combinaisons_duplique");
+                BUGMSG(list_insert_after(liste_comb_destination, (void*)&combinaison_destination, sizeof(combinaison_destination)), -2, gettext("Erreur d'allocation mémoire.\n"));
                 
                 break;
             }
@@ -155,7 +156,7 @@ int _1990_combinaisons_duplique(LIST *liste_comb_destination, LIST *liste_comb_s
             /* BUG */
             default :
             {
-                BUG(0, -5);
+                BUG(0, -3);
             }
         }
     }
@@ -163,6 +164,7 @@ int _1990_combinaisons_duplique(LIST *liste_comb_destination, LIST *liste_comb_s
     
     return 0;
 }
+
 
 int _1990_combinaisons_action_predominante(Combinaison *combinaison, Type_Pays pays)
 /* Description : modifie le flag de toutes les actions variables d'une combinaison afin de les
@@ -174,10 +176,11 @@ int _1990_combinaisons_action_predominante(Combinaison *combinaison, Type_Pays p
  *   Succès : 0
  *   Échec : -1 en cas de paramètres invalides :
  *             (combinaison == NULL)
+ *           -3 en cas d'erreur due à une fonction interne
  */
 {
-    BUGMSG(combinaison, -1, "_1990_combinaisons_action_predominante\n");
-    // NE PAS INSÉRER
+    BUGMSG(combinaison, -1, gettext("Paramètre incorrect\n"));
+    
     if (list_size(combinaison->elements) == 0)
         return 0;
     
@@ -185,13 +188,16 @@ int _1990_combinaisons_action_predominante(Combinaison *combinaison, Type_Pays p
     do
     {
         Combinaison_Element *combinaison_element = (Combinaison_Element*)list_curr(combinaison->elements);
-        if (_1990_action_categorie_bat(combinaison_element->action->type, pays) == ACTION_VARIABLE)
+        Action_Categorie    categorie = _1990_action_categorie_bat(combinaison_element->action->type, pays);
+        BUG(categorie != ACTION_INCONNUE, -3);
+        if (categorie == ACTION_VARIABLE)
             combinaison_element->flags = 1;
     }
     while (list_mvnext(combinaison->elements));
     
     return 0;
 }
+
 
 int _1990_combinaisons_genere_xor(Projet *projet)
 /* Description : Génère toutes les combinaisons d'un groupe possédant comme type de combinaison
@@ -218,17 +224,17 @@ int _1990_combinaisons_genere_xor(Projet *projet)
     Groupe              *groupe;
     Niveau_Groupe       *niveau;
     
-    BUGMSG(projet, -1, "_1990_combinaisons_genere_xor\n");
-    BUGMSG(projet->niveaux_groupes, -1, "_1990_combinaisons_genere_xor\n");
-    BUGMSG(list_size(projet->niveaux_groupes), -1, "_1990_combinaisons_genere_xor\n");
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->niveaux_groupes, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(list_size(projet->niveaux_groupes), -1, gettext("Paramètre incorrect\n"));
     
     niveau = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
     
-    BUGMSG(niveau->groupes, -1, "_1990_combinaisons_genere_xor\n");
-    BUGMSG(list_size(niveau->groupes), -1, "_1990_combinaisons_genere_xor\n");
+    BUGMSG(niveau->groupes, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(list_size(niveau->groupes), -1, gettext("Paramètre incorrect\n"));
     
     groupe = (Groupe*)list_curr(niveau->groupes);
-    BUGMSG(groupe->type_combinaison == GROUPE_COMBINAISON_XOR, -1, "_1990_combinaisons_genere_xor\n");
+    BUGMSG(groupe->type_combinaison == GROUPE_COMBINAISON_XOR, -1, gettext("Paramètre incorrect\n"));
     
     // Si le nombre d'éléments est nul Alors
     //     Fin.
@@ -255,11 +261,11 @@ int _1990_combinaisons_genere_xor(Projet *projet)
             element_en_cours = (Element*)list_curr(groupe->elements);
             BUG(_1990_action_cherche_numero(projet, element_en_cours->numero) == 0, -3);
             nouvelle_combinaison.elements = list_init();
-            BUGMSG(nouvelle_combinaison.elements, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_combinaisons_genere_xor");
+            BUGMSG(nouvelle_combinaison.elements, -2, gettext("Erreur d'allocation mémoire.\n"));
             nouveau_element.action = (Action*)list_curr(projet->actions);
             nouveau_element.flags = nouveau_element.action->flags;
-            BUGMSG(list_insert_after(nouvelle_combinaison.elements, (void*)&nouveau_element, sizeof(nouveau_element)), -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_combinaisons_genere_xor");
-            BUGMSG(list_insert_after(groupe->tmp_combinaison.combinaisons, &(nouvelle_combinaison), sizeof(nouvelle_combinaison)), -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_combinaisons_genere_xor");
+            BUGMSG(list_insert_after(nouvelle_combinaison.elements, (void*)&nouveau_element, sizeof(nouveau_element)), -2, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(list_insert_after(groupe->tmp_combinaison.combinaisons, &(nouvelle_combinaison), sizeof(nouvelle_combinaison)), -2, gettext("Erreur d'allocation mémoire.\n"));
         }
         while (list_mvnext(groupe->elements) != NULL);
     }
@@ -277,7 +283,7 @@ int _1990_combinaisons_genere_xor(Projet *projet)
             
             BUG(_1990_groupe_positionne_groupe(niveau, element_tmp->numero) == 0, -3);
             groupe_n_1 = (Groupe*)list_curr(niveau->groupes);
-            BUGMSG(_1990_combinaisons_duplique(groupe->tmp_combinaison.combinaisons, groupe_n_1->tmp_combinaison.combinaisons, TRUE) == 0, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_combinaisons_genere_xor");
+            BUGMSG(_1990_combinaisons_duplique(groupe->tmp_combinaison.combinaisons, groupe_n_1->tmp_combinaison.combinaisons, TRUE) == 0, -2, gettext("Erreur d'allocation mémoire.\n"));
         }
         while (list_mvnext(groupe->elements) != NULL);
         
@@ -287,6 +293,7 @@ int _1990_combinaisons_genere_xor(Projet *projet)
     
     return 0;
 }
+
 
 int _1990_combinaisons_fusion(Combinaison *destination, Combinaison *source)
 /* Description : fusionne deux combinaisons. Les éléments de la combinaison source sont
@@ -304,12 +311,11 @@ int _1990_combinaisons_fusion(Combinaison *destination, Combinaison *source)
  *           -2 en cas d'erreur d'allocation mémoire
  */
 {
-    BUGMSG(destination, -1, "_1990_combinaisons_fusion\n");
-    BUGMSG(source, -1, "_1990_combinaisons_fusion\n");
-    BUGMSG(destination->elements, -1, "_1990_combinaisons_fusion\n");
-    BUGMSG(source->elements, -1, "_1990_combinaisons_fusion\n");
+    BUGMSG(destination, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(source, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(destination->elements, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(source->elements, -1, gettext("Paramètre incorrect\n"));
     
-    // NE PAS INSÉRER
     if (list_size(source->elements) == 0)
         return 0;
     
@@ -322,26 +328,33 @@ int _1990_combinaisons_fusion(Combinaison *destination, Combinaison *source)
         
         element_destination.action = element_source->action;
         element_destination.flags = element_source->flags;
-        BUGMSG(list_insert_after(destination->elements, (void*)&element_destination, sizeof(element_destination)), -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_combinaisons_fusion");
+        BUGMSG(list_insert_after(destination->elements, (void*)&element_destination, sizeof(element_destination)), -2, gettext("Erreur d'allocation mémoire.\n"));
     }
     while (list_mvnext(source->elements) != NULL);
     
     return 0;
 }
 
+
 void _1990_groupe_free_groupe_tmp_combinaison(void *data)
 /* Description : Permet de supprimer toutes les combinaisons temporaires contenues dans les
  *                 groupes. À utiliser avec la fonction list_traverse
  *               FONCTION INTERNE.
  * Paramètres : void *data : donnée à libérer
- * Valeur renvoyée : Aucune
+ * Valeur renvoyée :
+ *   Succès : 0
+ *   Échec : -1 en cas de paramètres invalides :
+ *             (data == NULL)
  */
 {
-    // NE PAS INSÉRER
     Combinaison *combinaison = (Combinaison*)data;
+    
+    BUGMSG(data, , gettext("Paramètre incorrect\n"));
+    
     if (combinaison->elements != NULL)
         list_free(combinaison->elements, LIST_DEALLOC);
     free(data);
+    
     return;
 }
 
@@ -370,17 +383,18 @@ int _1990_combinaisons_genere_and(Projet *projet)
     Niveau_Groupe       *niveau;
     Groupe              *groupe_n_1, *groupe;
     
-    BUGMSG(projet, -1, "_1990_combinaisons_genere_and\n");
-    BUGMSG(projet->niveaux_groupes, -1, "_1990_combinaisons_genere_and\n");
-    BUGMSG(list_size(projet->niveaux_groupes), -1, "_1990_combinaisons_genere_and\n");
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->niveaux_groupes, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(list_size(projet->niveaux_groupes), -1, gettext("Paramètre incorrect\n"));
     
     niveau = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
     
-    BUGMSG(niveau->groupes, -1, "_1990_combinaisons_genere_and\n");
-    BUGMSG(list_size(niveau->groupes), -1, "_1990_combinaisons_genere_and\n");
+    BUGMSG(niveau->groupes, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(list_size(niveau->groupes), -1, gettext("Paramètre incorrect\n"));
     
     groupe = (Groupe*)list_curr(niveau->groupes);
-    BUGMSG(groupe->type_combinaison == GROUPE_COMBINAISON_AND, -1, "_1990_combinaisons_genere_and\n");
+    BUGMSG(groupe->type_combinaison == GROUPE_COMBINAISON_AND, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(groupe->elements, -1, gettext("Paramètre incorrect\n"));
     
     if (list_empty(groupe->elements) == TRUE)
         return 0;
@@ -396,7 +410,7 @@ int _1990_combinaisons_genere_and(Projet *projet)
         int         action_predominante = 0;
         
         comb.elements = list_init();
-        BUGMSG(comb.elements, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_combinaisons_genere_and");
+        BUGMSG(comb.elements, -2, gettext("Erreur d'allocation mémoire.\n"));
         
         list_mvfront(groupe->elements);
         do
@@ -409,13 +423,13 @@ int _1990_combinaisons_genere_and(Projet *projet)
             nouveau_element.flags = nouveau_element.action->flags;
             if ((nouveau_element.flags & 1) != 0)
                 action_predominante = 1;
-            BUGMSG(list_insert_after(comb.elements, (void*)&nouveau_element, sizeof(nouveau_element)), -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_combinaisons_genere_and");
+            BUGMSG(list_insert_after(comb.elements, (void*)&nouveau_element, sizeof(nouveau_element)), -2, gettext("Erreur d'allocation mémoire.\n"));
         }
         while (list_mvnext(groupe->elements) != NULL);
         
         if (action_predominante == 1)
-            _1990_combinaisons_action_predominante(&(comb), projet->pays);
-        BUGMSG(list_insert_after(groupe->tmp_combinaison.combinaisons, &(comb), sizeof(comb)), -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_combinaisons_genere_and");
+            BUG(_1990_combinaisons_action_predominante(&(comb), projet->pays) == 0, -3);
+        BUGMSG(list_insert_after(groupe->tmp_combinaison.combinaisons, &(comb), sizeof(comb)), -2, gettext("Erreur d'allocation mémoire.\n"));
     }
     // Sinon
     //     La génération consiste à créer un nombre de combinaisons égal au produit du nombre
@@ -442,7 +456,7 @@ int _1990_combinaisons_genere_and(Projet *projet)
         LIST        *nouvelles_combinaisons;
         
         nouvelles_combinaisons = list_init();
-        BUGMSG(nouvelles_combinaisons, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_combinaisons_genere_and");
+        BUGMSG(nouvelles_combinaisons, -2, gettext("Erreur d'allocation mémoire.\n"));
         
         list_mvprev(projet->niveaux_groupes);
         niveau = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
@@ -467,7 +481,7 @@ int _1990_combinaisons_genere_and(Projet *projet)
                 unsigned int    j;
                 int     i, nbboucle;
                 
-                BUGMSG(transition, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_combinaisons_genere_and");
+                BUGMSG(transition, -2, gettext("Erreur d'allocation mémoire.\n"));
                 
                 /* On duplique les combinaisons actuellement dans nouvelles_combinaisons autant
                  * de fois (moins 1) qu'il y a d'éléments dans le groupe de la passe actuelle.
@@ -475,7 +489,7 @@ int _1990_combinaisons_genere_and(Projet *projet)
                 BUG(_1990_combinaisons_duplique(transition, nouvelles_combinaisons, FALSE) == 0, -3);
                 nbboucle = list_size(groupe_n_1->tmp_combinaison.combinaisons);
                 for (i=2;i<=nbboucle;i++)
-                    BUG(_1990_combinaisons_duplique(nouvelles_combinaisons, transition, FALSE) == 0, -12);
+                    BUG(_1990_combinaisons_duplique(nouvelles_combinaisons, transition, FALSE) == 0, -3);
                 
                 /* On ajoute à la fin de toutes les combinaisons dupliquées les combinaisons
                  * contenues dans le groupe en cours (deuxième partie de la passe 2) */
@@ -513,6 +527,7 @@ int _1990_combinaisons_genere_and(Projet *projet)
     return 0;
 }
 
+
 int _1990_combinaisons_genere_or(Projet *projet)
 /* Description : Génère toutes les combinaisons d'un groupe possédant comme type de combinaison
  *                 GROUPE_COMBINAISON_OR. Il convient auparavant que l'élément courant dans la
@@ -536,22 +551,23 @@ int _1990_combinaisons_genere_or(Projet *projet)
  */
 {
     Niveau_Groupe       *niveau;
-    Groupe          *groupe;
+    Groupe              *groupe;
     Combinaison_Element element;
     unsigned int        boucle, i, j, k;
     
-    BUGMSG(projet, -1, "_1990_combinaisons_genere_or\n");
-    BUGMSG(projet->niveaux_groupes, -1, "_1990_combinaisons_genere_or\n");
-    BUGMSG(list_size(projet->niveaux_groupes), -1, "_1990_combinaisons_genere_or\n");
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->niveaux_groupes, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(list_size(projet->niveaux_groupes), -1, gettext("Paramètre incorrect\n"));
     
     niveau = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
     
-    BUGMSG(niveau->groupes, -1, "_1990_combinaisons_genere_or\n");
-    BUGMSG(list_size(niveau->groupes), -1, "_1990_combinaisons_genere_or\n");
+    BUGMSG(niveau->groupes, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(list_size(niveau->groupes), -1, gettext("Paramètre incorrect\n"));
     
     groupe = (Groupe*)list_curr(niveau->groupes);
     
-    BUGMSG(groupe->type_combinaison == GROUPE_COMBINAISON_OR, -1, "_1990_combinaisons_genere_or\n");
+    BUGMSG(groupe->type_combinaison == GROUPE_COMBINAISON_OR, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(groupe->elements, -1, gettext("Paramètre incorrect\n"));
     
     if (list_size(groupe->elements) == 0)
         return 0;
@@ -579,8 +595,7 @@ int _1990_combinaisons_genere_or(Projet *projet)
             Combinaison nouvelle_combinaison;
             
             nouvelle_combinaison.elements = list_init();
-
-            BUGMSG(nouvelle_combinaison.elements, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_combinaisons_genere_or");
+            BUGMSG(nouvelle_combinaison.elements, -2, gettext("Erreur d'allocation mémoire.\n"));
             
             list_mvfront(groupe->elements);
             do
@@ -594,7 +609,7 @@ int _1990_combinaisons_genere_or(Projet *projet)
                     element.flags = element.action->flags;
                     if ((element.flags & 1) != 0)
                         action_predominante = 1;
-                    BUGMSG(list_insert_after(nouvelle_combinaison.elements, (void*)&element, sizeof(element)), -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_combinaisons_genere_or");
+                    BUGMSG(list_insert_after(nouvelle_combinaison.elements, (void*)&element, sizeof(element)), -2, gettext("Erreur d'allocation mémoire.\n"));
                 }
                 parcours_bits = parcours_bits >> 1;
                 list_mvnext(groupe->elements);
@@ -602,8 +617,8 @@ int _1990_combinaisons_genere_or(Projet *projet)
             while (parcours_bits != 0);
             
             if (action_predominante == 1)
-                _1990_combinaisons_action_predominante(&(nouvelle_combinaison), projet->pays);
-            BUGMSG(list_insert_after(groupe->tmp_combinaison.combinaisons, &(nouvelle_combinaison), sizeof(nouvelle_combinaison)), -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_combinaisons_genere_or");
+                BUG(_1990_combinaisons_action_predominante(&(nouvelle_combinaison), projet->pays) == 0, -3);
+            BUGMSG(list_insert_after(groupe->tmp_combinaison.combinaisons, &(nouvelle_combinaison), sizeof(nouvelle_combinaison)), -2, gettext("Erreur d'allocation mémoire.\n"));
         }
     }
     else
@@ -633,7 +648,7 @@ int _1990_combinaisons_genere_or(Projet *projet)
             LIST    *nouvelles_combinaisons;
             
             nouvelles_combinaisons = list_init();
-            BUGMSG(nouvelles_combinaisons, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_combinaisons_genere_or");
+            BUGMSG(nouvelles_combinaisons, -2, gettext("Erreur d'allocation mémoire.\n"));
             
             list_mvfront(groupe->elements);
             do
@@ -649,16 +664,14 @@ int _1990_combinaisons_genere_or(Projet *projet)
                     {
   /* Il s'agit de la première passe. On duplique donc simplement. */
                         if (list_size(nouvelles_combinaisons) == 0)
-                        {
                             BUG(_1990_combinaisons_duplique(nouvelles_combinaisons, groupe_n_1->tmp_combinaison.combinaisons, FALSE) == 0, -3);
-                        }
                         else
                         {
   /* transition est utilisée de façon temporaire pour dupliquer nouvelles_combinaisons en cas
    * de besoin */
                             LIST        *transition = list_init();
                             
-                            BUGMSG(transition, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_combinaisons_genere_or");
+                            BUGMSG(transition, -2, gettext("Erreur d'allocation mémoire.\n"));
                             
                             BUG(_1990_combinaisons_duplique(transition, nouvelles_combinaisons, FALSE) == 0, -3);
                             
@@ -704,6 +717,7 @@ int _1990_combinaisons_genere_or(Projet *projet)
     return 0;
 }
 
+
 int _1990_combinaisons_init(Projet *projet)
 /* Description : Initialise la mémoire pour les combinaisons à l'ELU et l'ELS
  * Paramètres : Projet  *projet : la variable projet
@@ -714,31 +728,32 @@ int _1990_combinaisons_init(Projet *projet)
  *           -2 en cas d'erreur d'allocation mémoire
  */
 {
-    BUGMSG(projet, -1, "_1990_combinaisons_init\n");
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
     // Trivial
     
     projet->combinaisons.flags = 0;
     projet->combinaisons.elu_equ = list_init();
-    BUGMSG(projet->combinaisons.elu_equ, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_combinaisons_init");
+    BUGMSG(projet->combinaisons.elu_equ, -2, gettext("Erreur d'allocation mémoire.\n"));
     projet->combinaisons.elu_str = list_init();
-    BUGMSG(projet->combinaisons.elu_str, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_combinaisons_init");
+    BUGMSG(projet->combinaisons.elu_str, -2, gettext("Erreur d'allocation mémoire.\n"));
     projet->combinaisons.elu_geo = list_init();
-    BUGMSG(projet->combinaisons.elu_geo, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_combinaisons_init");
+    BUGMSG(projet->combinaisons.elu_geo, -2, gettext("Erreur d'allocation mémoire.\n"));
     projet->combinaisons.elu_fat = list_init();
-    BUGMSG(projet->combinaisons.elu_fat, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_combinaisons_init");
+    BUGMSG(projet->combinaisons.elu_fat, -2, gettext("Erreur d'allocation mémoire.\n"));
     projet->combinaisons.elu_acc = list_init();
-    BUGMSG(projet->combinaisons.elu_acc, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_combinaisons_init");
+    BUGMSG(projet->combinaisons.elu_acc, -2, gettext("Erreur d'allocation mémoire.\n"));
     projet->combinaisons.elu_sis = list_init();
-    BUGMSG(projet->combinaisons.elu_sis, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_combinaisons_init");
+    BUGMSG(projet->combinaisons.elu_sis, -2, gettext("Erreur d'allocation mémoire.\n"));
     projet->combinaisons.els_car = list_init();
-    BUGMSG(projet->combinaisons.els_car, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_combinaisons_init");
+    BUGMSG(projet->combinaisons.els_car, -2, gettext("Erreur d'allocation mémoire.\n"));
     projet->combinaisons.els_freq = list_init();
-    BUGMSG(projet->combinaisons.els_freq, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_combinaisons_init");
+    BUGMSG(projet->combinaisons.els_freq, -2, gettext("Erreur d'allocation mémoire.\n"));
     projet->combinaisons.els_perm = list_init();
-    BUGMSG(projet->combinaisons.els_perm, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_combinaisons_init");
+    BUGMSG(projet->combinaisons.els_perm, -2, gettext("Erreur d'allocation mémoire.\n"));
     
     return 0;
 }
+
 
 int _1990_combinaisons_empty(Projet *projet)
 /* Description : libère l'ensemble des combinaisons à l'ELU et l'ELS sans libérer la liste
@@ -761,10 +776,18 @@ int _1990_combinaisons_empty(Projet *projet)
 {
     Ponderation *ponderation;
     
-    BUGMSG(projet, -1, "_1990_combinaisons_empty\n");
-    // NE PAS INSÉRER
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
     
-    BUGMSG(projet->combinaisons.elu_equ, -1, "_1990_combinaisons_empty\n");
+    BUGMSG(projet->combinaisons.elu_equ, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->combinaisons.elu_str, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->combinaisons.elu_geo, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->combinaisons.elu_fat, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->combinaisons.elu_acc, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->combinaisons.elu_sis, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->combinaisons.els_car, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->combinaisons.els_freq, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->combinaisons.els_perm, -1, gettext("Paramètre incorrect\n"));
+    
     list_mvfront(projet->combinaisons.elu_equ);
     while (!list_empty(projet->combinaisons.elu_equ))
     {
@@ -772,7 +795,6 @@ int _1990_combinaisons_empty(Projet *projet)
         list_free(ponderation->elements, LIST_DEALLOC);
         free(ponderation);
     }
-    BUGMSG(projet->combinaisons.elu_str, -1, "_1990_combinaisons_empty\n");
     list_mvfront(projet->combinaisons.elu_str);
     while (!list_empty(projet->combinaisons.elu_str))
     {
@@ -780,7 +802,6 @@ int _1990_combinaisons_empty(Projet *projet)
         list_free(ponderation->elements, LIST_DEALLOC);
         free(ponderation);
     }
-    BUGMSG(projet->combinaisons.elu_geo, -1, "_1990_combinaisons_empty\n");
     list_mvfront(projet->combinaisons.elu_geo);
     while (!list_empty(projet->combinaisons.elu_geo))
     {
@@ -788,7 +809,6 @@ int _1990_combinaisons_empty(Projet *projet)
         list_free(ponderation->elements, LIST_DEALLOC);
         free(ponderation);
     }
-    BUGMSG(projet->combinaisons.elu_fat, -1, "_1990_combinaisons_empty\n");
     list_mvfront(projet->combinaisons.elu_fat);
     while (!list_empty(projet->combinaisons.elu_fat))
     {
@@ -796,7 +816,6 @@ int _1990_combinaisons_empty(Projet *projet)
         list_free(ponderation->elements, LIST_DEALLOC);
         free(ponderation);
     }
-    BUGMSG(projet->combinaisons.elu_acc, -1, "_1990_combinaisons_empty\n");
     list_mvfront(projet->combinaisons.elu_acc);
     while (!list_empty(projet->combinaisons.elu_acc))
     {
@@ -804,7 +823,6 @@ int _1990_combinaisons_empty(Projet *projet)
         list_free(ponderation->elements, LIST_DEALLOC);
         free(ponderation);
     }
-    BUGMSG(projet->combinaisons.elu_sis, -1, "_1990_combinaisons_empty\n");
     list_mvfront(projet->combinaisons.elu_sis);
     while (!list_empty(projet->combinaisons.elu_sis))
     {
@@ -812,7 +830,6 @@ int _1990_combinaisons_empty(Projet *projet)
         list_free(ponderation->elements, LIST_DEALLOC);
         free(ponderation);
     }
-    BUGMSG(projet->combinaisons.els_car, -1, "_1990_combinaisons_empty\n");
     list_mvfront(projet->combinaisons.els_car);
     while (!list_empty(projet->combinaisons.els_car))
     {
@@ -820,7 +837,6 @@ int _1990_combinaisons_empty(Projet *projet)
         list_free(ponderation->elements, LIST_DEALLOC);
         free(ponderation);
     }
-    BUGMSG(projet->combinaisons.els_freq, -1, "_1990_combinaisons_empty\n");
     list_mvfront(projet->combinaisons.els_freq);
     while (!list_empty(projet->combinaisons.els_freq))
     {
@@ -828,7 +844,6 @@ int _1990_combinaisons_empty(Projet *projet)
         list_free(ponderation->elements, LIST_DEALLOC);
         free(ponderation);
     }
-    BUGMSG(projet->combinaisons.els_perm, -1, "_1990_combinaisons_empty\n");
     list_mvfront(projet->combinaisons.els_perm);
     while (!list_empty(projet->combinaisons.els_perm))
     {
@@ -836,8 +851,10 @@ int _1990_combinaisons_empty(Projet *projet)
         list_free(ponderation->elements, LIST_DEALLOC);
         free(ponderation);
     }
+    
     return 0;
 }
+
 
 int _1990_combinaisons_free(Projet *projet)
 /* Description : libère la mémoire pour les combinaisons à l'ELU et l'ELS
@@ -857,18 +874,21 @@ int _1990_combinaisons_free(Projet *projet)
  *           -3 en cas d'erreur due à une fonction interne
  */
 {
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+
     // Trivial
-    BUGMSG(projet->combinaisons.elu_equ, -1, "EF_calculs_resoud_charge\n");
-    BUGMSG(projet->combinaisons.elu_str, -1, "EF_calculs_resoud_charge\n");
-    BUGMSG(projet->combinaisons.elu_geo, -1, "EF_calculs_resoud_charge\n");
-    BUGMSG(projet->combinaisons.elu_fat, -1, "EF_calculs_resoud_charge\n");
-    BUGMSG(projet->combinaisons.elu_acc, -1, "EF_calculs_resoud_charge\n");
-    BUGMSG(projet->combinaisons.elu_sis, -1, "EF_calculs_resoud_charge\n");
-    BUGMSG(projet->combinaisons.els_car, -1, "EF_calculs_resoud_charge\n");
-    BUGMSG(projet->combinaisons.els_freq, -1, "EF_calculs_resoud_charge\n");
-    BUGMSG(projet->combinaisons.els_perm, -1, "EF_calculs_resoud_charge\n");
+    BUGMSG(projet->combinaisons.elu_equ, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->combinaisons.elu_str, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->combinaisons.elu_geo, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->combinaisons.elu_fat, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->combinaisons.elu_acc, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->combinaisons.elu_sis, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->combinaisons.els_car, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->combinaisons.els_freq, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->combinaisons.els_perm, -1, gettext("Paramètre incorrect\n"));
     
     BUG(_1990_combinaisons_empty(projet) == 0, -3);
+    
     free(projet->combinaisons.elu_equ);
     projet->combinaisons.elu_equ = NULL;
     free(projet->combinaisons.elu_str);
@@ -891,6 +911,7 @@ int _1990_combinaisons_free(Projet *projet)
     return 0;
 }
 
+
 int _1990_combinaisons_genere(Projet *projet)
 /* Description : Génère l'ensemble des combinaisons et pondérations du projet
  * Paramètres : Projet  *projet : la variable projet
@@ -905,9 +926,9 @@ int _1990_combinaisons_genere(Projet *projet)
 {
     unsigned int        i;
     
-    BUGMSG(projet, -1, "_1990_combinaisons_genere\n");
-    BUGMSG(projet->niveaux_groupes, -1, "_1990_combinaisons_genere\n");
-    BUGMSG(list_size(projet->niveaux_groupes), -1, "_1990_combinaisons_genere\n");
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->niveaux_groupes, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(list_size(projet->niveaux_groupes), -1, gettext("Paramètre incorrect\n"));
     
     BUG(_1990_combinaisons_empty(projet) == 0, -3);
     
@@ -919,6 +940,7 @@ int _1990_combinaisons_genere(Projet *projet)
     {
         Action          *action;
         unsigned int    j;
+        Action_Categorie categorie;
         
  /* On supprime les combinaisons temporaires générées lors du passage de la boucle précédente*/
         list_mvfront(projet->niveaux_groupes);
@@ -926,24 +948,27 @@ int _1990_combinaisons_genere(Projet *projet)
         {
             Niveau_Groupe   *niveau = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
             
-            list_mvfront(niveau->groupes);
-            do
+            if (list_size(niveau->groupes) > 0)
             {
-                Groupe      *groupe = (Groupe*)list_curr(niveau->groupes);
-                
-                if (groupe->tmp_combinaison.combinaisons != NULL)
+                list_mvfront(niveau->groupes);
+                do
                 {
-                    list_mvfront(groupe->tmp_combinaison.combinaisons);
-                    while (!list_empty(groupe->tmp_combinaison.combinaisons))
+                    Groupe      *groupe = (Groupe*)list_curr(niveau->groupes);
+                    
+                    if (groupe->tmp_combinaison.combinaisons != NULL)
                     {
-                        Combinaison *combinaison = (Combinaison*)list_front(groupe->tmp_combinaison.combinaisons);
-                        
-                        list_free(combinaison->elements, LIST_DEALLOC);
-                        free(list_remove_front(groupe->tmp_combinaison.combinaisons));
+                        list_mvfront(groupe->tmp_combinaison.combinaisons);
+                        while (!list_empty(groupe->tmp_combinaison.combinaisons))
+                        {
+                            Combinaison *combinaison = (Combinaison*)list_front(groupe->tmp_combinaison.combinaisons);
+                            
+                            list_free(combinaison->elements, LIST_DEALLOC);
+                            free(list_remove_front(groupe->tmp_combinaison.combinaisons));
+                        }
                     }
                 }
+                while (list_mvnext(niveau->groupes) != NULL);
             }
-            while (list_mvnext(niveau->groupes) != NULL);
         }
         while (list_mvnext(projet->niveaux_groupes) != NULL);
         
@@ -957,7 +982,9 @@ int _1990_combinaisons_genere(Projet *projet)
             list_mvnext(projet->actions);
         }
         action = (Action*)list_curr(projet->actions);
-        if (_1990_action_categorie_bat(action->type, projet->pays) == ACTION_VARIABLE)
+        categorie = _1990_action_categorie_bat(action->type, projet->pays);
+        BUG(categorie != ACTION_INCONNUE, -3);
+        if (categorie == ACTION_VARIABLE)
             action->flags = 1;
         else
             action->flags = 0;
@@ -980,9 +1007,9 @@ int _1990_combinaisons_genere(Projet *projet)
         {
             Niveau_Groupe   *niveau = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
             
-            list_mvfront(niveau->groupes);
-            if (list_curr(niveau->groupes) != NULL)
+            if (list_size(niveau->groupes) > 0)
             {
+                list_mvfront(niveau->groupes);
                 do
                 {
                     Groupe  *groupe = (Groupe*)list_curr(niveau->groupes);
@@ -990,17 +1017,17 @@ int _1990_combinaisons_genere(Projet *projet)
                     {
                         case GROUPE_COMBINAISON_OR :
                         {
-                            BUG(_1990_combinaisons_genere_or(projet) == 0, -1);
+                            BUG(_1990_combinaisons_genere_or(projet) == 0, -3);
                             break;
                         }
                         case GROUPE_COMBINAISON_XOR :
                         {
-                            BUG(_1990_combinaisons_genere_xor(projet) == 0, -1);
+                            BUG(_1990_combinaisons_genere_xor(projet) == 0, -3);
                             break;
                         }
                         case GROUPE_COMBINAISON_AND :
                         {
-                            BUG(_1990_combinaisons_genere_and(projet) == 0, -1);
+                            BUG(_1990_combinaisons_genere_and(projet) == 0, -3);
                             break;
                         }
                         default :

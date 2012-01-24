@@ -37,7 +37,7 @@ gboolean m3d_configure_event(GtkWidget *drawing, GdkEventConfigure * ev, gpointe
 int m3d_camera_axe_x_z(Projet *projet);
 int m3d_genere_graphique(Projet *projet);
 
-void m3d_free(Projet *projet);
+int m3d_free(Projet *projet);
 
 #ifdef __cplusplus
 }

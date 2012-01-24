@@ -63,11 +63,11 @@ GtkWidget* common_tooltip_generation(const char *nom)
     
     // Ouverture et vérification du fichier DATADIR"/tooltips.xml" par rapport au format XML.
     doc = xmlParseFile(DATADIR"/tooltips.xml");
-    BUGMSG(doc, NULL, gettext("%s : Le fichier '%s' est introuvable ou corrompu.\n"), "common_tooltip_generation", DATADIR"/tooltips.xml");
+    BUGMSG(doc, NULL, gettext("Le fichier '%s' est introuvable ou corrompu.\n"), DATADIR"/tooltips.xml");
     
     // Récupération du noeud racine.
     racine = xmlDocGetRootElement(doc);
-    BUGMSG(racine, NULL, gettext("%s : Le fichier '%s' est vide.\n"), "common_tooltip_generation", DATADIR"/tooltips.xml");
+    BUGMSG(racine, NULL, gettext("Le fichier '%s' est vide.\n"), DATADIR"/tooltips.xml");
     
     for (n0 = racine; n0 != NULL; n0 = n0->next)
     {
@@ -113,6 +113,8 @@ GtkWidget* common_tooltip_generation(const char *nom)
                                     char        *nom_fichier = (char*)malloc(sizeof(char)*(strlen(DATADIR)+strlen((char *) contenu)+2));
                                     GtkWidget   *element;
                                     
+                                    BUGMSG(nom_fichier, NULL, gettext("Erreur d'allocation mémoire.\n"));
+                                    
                                     strcpy(nom_fichier, DATADIR);
                                     strcat(nom_fichier, "/");
                                     strcat(nom_fichier, (char *)contenu);
@@ -155,8 +157,10 @@ GtkWidget* common_tooltip_generation(const char *nom)
                                     char    *fake = (char*)malloc(sizeof(char)*(strlen((char *)contenu)+1));
                                     int     largeur, hauteur;
                                     
+                                    BUGMSG(fake, NULL, gettext("Erreur d'allocation mémoire.\n"));
+                                    
                                     if (sscanf((char *)contenu, "%dx%d %s", &largeur, &hauteur, fake) != 2)
-                                        BUGMSG(0, NULL, gettext("%s : '%s' n'est pas de la forme 'largeurxhauteur'.\n"), "common_tooltip_generation", (char *)contenu);
+                                        BUGMSG(0, NULL, gettext("'%s' n'est pas de la forme 'largeurxhauteur'.\n"), (char *)contenu);
                                     else
                                         gtk_window_set_default_size(GTK_WINDOW(pwindow), largeur, hauteur);
                                     free(fake);
@@ -175,6 +179,6 @@ GtkWidget* common_tooltip_generation(const char *nom)
     }
     
     xmlFreeDoc(doc);
-    BUGMSG(0, NULL, gettext("%s : Paramètre invalide : %s %s\n"), "common_tooltip_generation", "nom", nom);
+    BUGMSG(0, NULL, gettext("Paramètre invalide\n"));
 }
 #endif

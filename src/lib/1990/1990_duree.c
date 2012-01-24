@@ -52,6 +52,7 @@ int _1990_duree_projet_eu(int type)
     }
 }
 
+
 int _1990_duree_projet_fr(int type)
 /* Description : Renvoie la durée (en année) indicative de la norme française
  *               FONCTION INTERNE. Utiliser _1990_duree_projet.
@@ -77,6 +78,7 @@ int _1990_duree_projet_fr(int type)
         default : { BUGMSG(0, -1, gettext("Catégorie %d inconnue.\n"), type); break; }
     }
 }
+
 
 char* _1990_duree_projet_txt_eu(int type)
 /* Description : renvoie la description des catérogies des durées indicative de la norme
@@ -105,6 +107,7 @@ char* _1990_duree_projet_txt_eu(int type)
     }
 }
 
+
 char* _1990_duree_projet_txt_fr(int type)
 /* Description : renvoie la description des catérogies des durées indicative de la norme
  *                 française
@@ -132,6 +135,7 @@ char* _1990_duree_projet_txt_fr(int type)
     }
 }
 
+
 int _1990_duree_projet(int type, Type_Pays pays)
 /* Description : Renvoie la durée (en année) indicative de la norme du pays spécifié.
  * Paramètres : int type : categorie de durée d'utilisation de projet
@@ -149,6 +153,7 @@ int _1990_duree_projet(int type, Type_Pays pays)
         default : { BUGMSG(0, -1, gettext("Pays %d inconnu.\n"), pays); break; }
     }
 }
+
 
 char* _1990_duree_projet_txt(int type, Type_Pays pays)
 /* Description : Renvoie la description des catérogies des durées indicatives de la norme du

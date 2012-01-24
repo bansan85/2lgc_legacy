@@ -36,46 +36,49 @@
 #include "1990_actions.h"
 #include "common_selection.h"
 
-void EF_gtk_charge_noeud_ajout_affichage(Charge_Noeud *charge, Projet *projet, gboolean nouvelle_ligne)
+int EF_gtk_charge_noeud_ajout_affichage(Charge_Noeud *charge, Projet *projet, gboolean nouvelle_ligne)
 {
     char                    *description, tmp[30], *tmp2;
-    List_Gtk_1990_Actions   *list_gtk_1990_actions = &projet->list_gtk._1990_actions;
+    List_Gtk_1990_Actions   *list_gtk_1990_actions;
     
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    
+    list_gtk_1990_actions = &projet->list_gtk._1990_actions;
     if (list_gtk_1990_actions->window == NULL)
-        return;
-    description = malloc(sizeof(char)*(strlen(gettext("Noeud : "))+1));
+        return -1;
+    BUGMSG(description = malloc(sizeof(char)*(strlen(gettext("Noeud : "))+1)), -2, gettext("Erreur d'allocation mémoire.\n"));
     strcpy(description, gettext("Noeud : "));
-    tmp2 = common_selection_converti_noeuds_en_texte(charge->noeuds);
-    description = realloc(description, (strlen(description) + strlen(tmp2)+1)*sizeof(char));
+    BUG(tmp2 = common_selection_converti_noeuds_en_texte(charge->noeuds), -3);
+    BUGMSG(description = realloc(description, (strlen(description) + strlen(tmp2)+1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
     strcat(description, tmp2);
     free(tmp2);
     common_math_double_to_char(charge->fx, tmp);
-    description = realloc(description, (strlen(description) + strlen(", Fx :  N") + strlen(tmp)+1)*sizeof(char));
+    BUGMSG(description = realloc(description, (strlen(description) + strlen(", Fx :  N") + strlen(tmp)+1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
     strcat(description, ", Fx : ");
     strcat(description, tmp);
     strcat(description, " N");
     common_math_double_to_char(charge->fy, tmp);
-    description = realloc(description, (strlen(description) + strlen(", Fy :  N") + strlen(tmp)+1)*sizeof(char));
+    BUGMSG(description = realloc(description, (strlen(description) + strlen(", Fy :  N") + strlen(tmp)+1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
     strcat(description, ", Fy : ");
     strcat(description, tmp);
     strcat(description, " N");
     common_math_double_to_char(charge->fz, tmp);
-    description = realloc(description, (strlen(description) + strlen(", Fz :  N") + strlen(tmp)+1)*sizeof(char));
+    BUGMSG(description = realloc(description, (strlen(description) + strlen(", Fz :  N") + strlen(tmp)+1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
     strcat(description, ", Fz : ");
     strcat(description, tmp);
     strcat(description, " N");
     common_math_double_to_char(charge->mx, tmp);
-    description = realloc(description, (strlen(description) + strlen(", Mx :  N") + strlen(tmp)+1)*sizeof(char));
+    BUGMSG(description = realloc(description, (strlen(description) + strlen(", Mx :  N") + strlen(tmp)+1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
     strcat(description, ", Mx : ");
     strcat(description, tmp);
     strcat(description, " N");
     common_math_double_to_char(charge->my, tmp);
-    description = realloc(description, (strlen(description) + strlen(", My :  N") + strlen(tmp)+1)*sizeof(char));
+    BUGMSG(description = realloc(description, (strlen(description) + strlen(", My :  N") + strlen(tmp)+1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
     strcat(description, ", My : ");
     strcat(description, tmp);
     strcat(description, " N");
     common_math_double_to_char(charge->mz, tmp);
-    description = realloc(description, (strlen(description) + strlen(", Mz :  N") + strlen(tmp)+1)*sizeof(char));
+    BUGMSG(description = realloc(description, (strlen(description) + strlen(", Mz :  N") + strlen(tmp)+1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
     strcat(description, ", Mz : ");
     strcat(description, tmp);
     strcat(description, " N");
@@ -85,6 +88,8 @@ void EF_gtk_charge_noeud_ajout_affichage(Charge_Noeud *charge, Projet *projet, g
     gtk_tree_store_set(list_gtk_1990_actions->tree_store_charges, &charge->Iter, 0, charge->numero, 1, charge->description, 2, gettext("Ponctuelle sur noeud"), 3, description, -1);
     
     free(description);
+    
+    return 0;
 }
 
 
@@ -98,7 +103,7 @@ void EF_gtk_charge_noeud_annuler_clicked(GtkButton *button __attribute__((unused
  * Valeur renvoyée : Aucune
  */
 {
-    BUGMSG(fenetre, , "_EF_gtk_charge_noeud\n");
+    BUGMSG(fenetre, , gettext("Paramètre incorrect\n"));
     gtk_widget_destroy(fenetre);
     return;
 }
@@ -113,7 +118,7 @@ gboolean EF_gtk_charge_noeud_recupere_donnees(Projet *projet, int *num_action, L
     gchar                       *texte_tmp;
     GtkTextBuffer               *textbuffer;
     
-    BUGMSG(projet, FALSE, "_EF_gtk_charge_noeud\n");
+    BUGMSG(projet, FALSE, gettext("Paramètre incorrect\n"));
     
     ef_gtk = &projet->list_gtk.ef_charge_noeud;
     
@@ -224,18 +229,16 @@ void EF_gtk_charge_noeud_ajouter_clicked(GtkButton *button __attribute__((unused
     GtkTreeModel                *model_action;
     int                         numero_action;
     
-    BUGMSG(projet, , "_EF_gtk_charge_noeud\n");
+    BUGMSG(projet, , gettext("Paramètre incorrect\n"));
     
     ef_gtk = &projet->list_gtk.ef_charge_noeud;
     
-    if (!EF_gtk_charge_noeud_recupere_donnees(projet, &num_action, &noeuds, &fx, &fy, &fz, &mx, &my, &mz, &texte))
-        return;
+    BUG(EF_gtk_charge_noeud_recupere_donnees(projet, &num_action, &noeuds, &fx, &fy, &fz, &mx, &my, &mz, &texte) == TRUE, );
     
     num_action = gtk_combo_box_get_active(GTK_COMBO_BOX(ef_gtk->combobox_charge));
     
     // Création de la nouvelle charge ponctuelle au noeud
-    charge_noeud = EF_charge_noeud_ajout(projet, num_action, noeuds, fx, fy, fz, mx, my, mz, texte);
-    BUG(charge_noeud, );
+    BUG(charge_noeud = EF_charge_noeud_ajout(projet, num_action, noeuds, fx, fy, fz, mx, my, mz, texte), );
     
     free(texte);
     
@@ -244,7 +247,7 @@ void EF_gtk_charge_noeud_ajouter_clicked(GtkButton *button __attribute__((unused
         return;
     gtk_tree_model_get(model_action, &iter_action, 0, &numero_action, -1);
     if (numero_action == num_action)
-        EF_gtk_charge_noeud_ajout_affichage(charge_noeud, projet, TRUE);
+        BUG(EF_gtk_charge_noeud_ajout_affichage(charge_noeud, projet, TRUE) == 0, );
     
     gtk_widget_destroy(projet->list_gtk.ef_charge_noeud.window);
     
@@ -266,17 +269,16 @@ void EF_gtk_charge_noeud_editer_clicked(GtkButton *button __attribute__((unused)
     gchar                       *texte;
     Charge_Noeud                *charge_noeud;
     
-    BUGMSG(projet, , "_EF_gtk_charge_noeud\n");
+    BUGMSG(projet, , gettext("Paramètre incorrect\n"));
     
     ef_gtk = &projet->list_gtk.ef_charge_noeud;
     
-    if (!EF_gtk_charge_noeud_recupere_donnees(projet, &num_action, &noeuds, &fx, &fy, &fz, &mx, &my, &mz, &texte))
-        return;
+    BUG(EF_gtk_charge_noeud_recupere_donnees(projet, &num_action, &noeuds, &fx, &fy, &fz, &mx, &my, &mz, &texte) == TRUE, );
     
     num_action = gtk_combo_box_get_active(GTK_COMBO_BOX(ef_gtk->combobox_charge));
     
     // Création de la nouvelle charge ponctuelle au noeud
-    charge_noeud = _1990_action_cherche_charge(projet, ef_gtk->action, ef_gtk->charge);
+    BUG(charge_noeud = _1990_action_cherche_charge(projet, ef_gtk->action, ef_gtk->charge), );
     free(charge_noeud->description);
     charge_noeud->description = texte;
     charge_noeud->fx = fx;
@@ -288,9 +290,9 @@ void EF_gtk_charge_noeud_editer_clicked(GtkButton *button __attribute__((unused)
     list_free(charge_noeud->noeuds, LIST_DEALLOC);
     charge_noeud->noeuds = noeuds;
     if (num_action != ef_gtk->action)
-        _1990_action_deplace_charge(projet, ef_gtk->action, ef_gtk->charge, num_action);
+        BUG(_1990_action_deplace_charge(projet, ef_gtk->action, ef_gtk->charge, num_action) == 0, );
     else
-        EF_gtk_charge_noeud_ajout_affichage(charge_noeud, projet, FALSE);
+        BUG(EF_gtk_charge_noeud_ajout_affichage(charge_noeud, projet, FALSE) == 0, );
     
     gtk_widget_destroy(projet->list_gtk.ef_charge_noeud.window);
     
@@ -298,7 +300,7 @@ void EF_gtk_charge_noeud_editer_clicked(GtkButton *button __attribute__((unused)
 }
 
 
-void EF_gtk_charge_noeud(Projet *projet, gint action_defaut, gint charge)
+int EF_gtk_charge_noeud(Projet *projet, gint action_defaut, gint charge)
 /* Description : Affichage de la fenêtre permettant de créer ou modifier une action de type
  *               charge ponctuelle au noeud
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement
@@ -311,10 +313,10 @@ void EF_gtk_charge_noeud(Projet *projet, gint action_defaut, gint charge)
     List_Gtk_EF_Charge_Noeud    *ef_gtk;
     Charge_Noeud                *charge_noeud;
     
-    BUGMSG(projet, , "_EF_gtk_charge_noeud\n");
-    BUGMSG(projet->actions, , "_EF_gtk_charge_noeud\n");
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->actions, -1, gettext("Paramètre incorrect\n"));
     
-    BUGMSG(list_size(projet->actions) > 0, , "_EF_gtk_charge_noeud\n");
+    BUGMSG(list_size(projet->actions) > 0, -1, gettext("Paramètre incorrect\n"));
     
     ef_gtk = &projet->list_gtk.ef_charge_noeud;
     
@@ -328,8 +330,7 @@ void EF_gtk_charge_noeud(Projet *projet, gint action_defaut, gint charge)
         ef_gtk->action = action_defaut;
         ef_gtk->charge = charge;
         GTK_NOUVELLE_FENETRE(ef_gtk->window, gettext("Modification d'une charge au noeud"), 400, 1)
-        charge_noeud = _1990_action_cherche_charge(projet, action_defaut, charge);
-        BUG(charge_noeud, );
+        BUG(charge_noeud = _1990_action_cherche_charge(projet, action_defaut, charge), -1);
     }
     
     ef_gtk->table = gtk_table_new(7, 4, FALSE);
@@ -421,7 +422,7 @@ void EF_gtk_charge_noeud(Projet *projet, gint action_defaut, gint charge)
         gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_my)), tmp, -1);
         common_math_double_to_char(charge_noeud->mz, tmp);
         gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_mz)), tmp, -1);
-        tmp2 = common_selection_converti_noeuds_en_texte(charge_noeud->noeuds);
+        BUG(tmp2 = common_selection_converti_noeuds_en_texte(charge_noeud->noeuds), -3);
         gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_noeud)), tmp2, -1);
         free(tmp2);
     }
@@ -449,7 +450,7 @@ void EF_gtk_charge_noeud(Projet *projet, gint action_defaut, gint charge)
     gtk_window_set_modal(GTK_WINDOW(ef_gtk->window), TRUE);
     gtk_widget_show_all(ef_gtk->window);
     
-    return;
+    return 0;
 }
 
 

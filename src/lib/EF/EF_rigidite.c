@@ -32,7 +32,7 @@ int EF_rigidite_init(Projet *projet)
  *             (projet == NULL)
  */
 {
-    BUGMSG(projet, -1, "EF_rigidite_init\n");
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
     
     // Trivial
     projet->ef_donnees.rigidite_matrice_partielle = NULL;
@@ -61,7 +61,7 @@ int EF_rigidite_free(Projet *projet)
 {
     unsigned int    i;
     
-    BUGMSG(projet, -1, "EF_rigidite_free\n");
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
     
     // Trivial
     if (projet->ef_donnees.triplet_rigidite_partielle != NULL)
@@ -96,7 +96,6 @@ int EF_rigidite_free(Projet *projet)
             free(projet->ef_donnees.noeuds_pos_partielle[i]);
         free(projet->ef_donnees.noeuds_pos_partielle);
     }
-    
     
     return 0;
 }

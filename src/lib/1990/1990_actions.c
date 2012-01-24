@@ -82,7 +82,7 @@ char* _1990_action_type_bat_txt_eu(int type)
         case 14 : { return gettext("Température (hors incendie)"); break; }
         case 15 : { return gettext("Accidentelle"); break; }
         case 16 : { return gettext("Sismique"); break; }
-        default : { BUGMSG(0, NULL, gettext("%s : Catégorie %d inconnue.\n"), "_1990_action_type_bat_txt_eu", type); break; }
+        default : { BUGMSG(0, NULL, gettext("Catégorie %d inconnue.\n"), type); break; }
     }
 }
 
@@ -145,7 +145,7 @@ char* _1990_action_type_bat_txt_fr(int type)
         case 19 : { return gettext("Accidentelle"); break; }
         case 20 : { return gettext("Sismique"); break; }
         case 21 : { return gettext("Eaux souterraines"); break; }
-        default : { BUGMSG(0, NULL, gettext("%s : Catégorie %d inconnue.\n"), "_1990_action_type_bat_txt_fr", type); break; }
+        default : { BUGMSG(0, NULL, gettext("Catégorie %d inconnue.\n"), type); break; }
     }
 }
 
@@ -167,7 +167,7 @@ char* _1990_action_type_bat_txt(int type, Type_Pays pays)
     {
         case PAYS_EU : { return _1990_action_type_bat_txt_eu(type); break; }
         case PAYS_FR : { return _1990_action_type_bat_txt_fr(type); break; }
-        default : { BUGMSG(0, NULL, gettext("%s : Pays %d inconnu.\n"), "_1990_action_type_bat_txt", pays); break; }
+        default : { BUGMSG(0, NULL, gettext("Pays %d inconnu.\n"), pays); break; }
     }
 }
 
@@ -199,7 +199,7 @@ Action_Categorie _1990_action_categorie_bat_eu(int type)
     else if (type == 16)
         return ACTION_SISMIQUE;
     else
-        BUGMSG(0, ACTION_INCONNUE, gettext("%s : Catégorie %d inconnue.\n"), "_1990_action_categorie_bat_eu", type);
+        BUGMSG(0, ACTION_INCONNUE, gettext("Catégorie %d inconnue.\n"), type);
 }
 
 
@@ -233,7 +233,7 @@ Action_Categorie _1990_action_categorie_bat_fr(int type)
     else if (type == 21)
         return ACTION_EAUX_SOUTERRAINES;
     else
-        BUGMSG(0, ACTION_INCONNUE, gettext("%s : Catégorie %d inconnue.\n"), "_1990_action_categorie_bat_fr", type);
+        BUGMSG(0, ACTION_INCONNUE, gettext("Catégorie %d inconnue.\n"), type);
 }
 
 
@@ -254,7 +254,7 @@ Action_Categorie _1990_action_categorie_bat(int type, Type_Pays pays)
     {
         case PAYS_EU : { return _1990_action_categorie_bat_eu(type); break; }
         case PAYS_FR : { return _1990_action_categorie_bat_fr(type); break; }
-        default : { BUGMSG(0, ACTION_INCONNUE, gettext("%s : Pays %d inconnu.\n"), "_1990_action_categorie_bat", pays); break; }
+        default : { BUGMSG(0, ACTION_INCONNUE, gettext("Pays %d inconnu.\n"), pays); break; }
     }
 }
 
@@ -264,7 +264,7 @@ int _1990_action_num_bat_txt(Type_Pays pays)
  * Paramètres : Type_Pays pays : le numéro du pays
  * Valeur renvoyée :
  *   Succès : le nombre de catégorie d'actions
- *   Échec : ACTION_INCONNUE en cas de paramètres invalides :
+ *   Échec : 0 en cas de paramètres invalides :
  *             Le pays n'existe pas.
  */
 {
@@ -273,7 +273,7 @@ int _1990_action_num_bat_txt(Type_Pays pays)
     {
         case PAYS_EU : { return 17; break; }
         case PAYS_FR : { return 22; break; }
-        default : { BUGMSG(0, ACTION_INCONNUE, gettext("%s : Pays %d inconnu.\n"), "_1990_action_num_bat_txt", pays); break; }
+        default : { BUGMSG(0, 0, gettext("Pays %d inconnu.\n"), pays); break; }
     }
 }
 
@@ -289,10 +289,10 @@ int _1990_action_init(Projet *projet)
  */
 {
     // Trivial
-    BUGMSG(projet, -1, "%s\n", "_1990_action_init");
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
     
     projet->actions = list_init();
-    BUGMSG(projet->actions, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_action_init");
+    BUGMSG(projet->actions, -2, gettext("Erreur d'allocation mémoire.\n"));
     
     return 0;
 }
@@ -308,37 +308,32 @@ int _1990_action_ajout(Projet *projet, int type, const char* description)
  *   Échec : -1 en cas de paramètres invalides :
  *             (projet == NULL) ou
  *             (projet->actions == NULL) ou
- *             _1990_action_categorie_bat(categorie, projet->pays) < 0 ou
- *             _1990_coef_psi0_bat(categorie, projet->pays) < 0 ou
- *             _1990_coef_psi1_bat(categorie, projet->pays) < 0 ou
- *             _1990_coef_psi2_bat(categorie, projet->pays) < 0
  *           -2 en cas d'erreur d'allocation mémoire
+ *           -3 en cas d'erreur due à une fonction interne
  */
 {
     // Trivial
     Action      *action_dernier, action_nouveau;
     
-    BUGMSG(projet, -1, "%s\n", "_1990_action_ajout");
-    BUGMSG(projet->actions, -1, "%s\n", "_1990_action_ajout");
-    BUG(_1990_action_categorie_bat(type, projet->pays) != ACTION_INCONNUE, -1);
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->actions, -1, gettext("Paramètre incorrect\n"));
+    BUG(_1990_action_categorie_bat(type, projet->pays) != ACTION_INCONNUE, -3);
     
     list_mvrear(projet->actions);
-    action_nouveau.description = (char*)malloc(sizeof(char)*(strlen(description)+1));
-    BUGMSG(action_nouveau.description, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_action_ajout");
+    BUGMSG(action_nouveau.description = (char*)malloc(sizeof(char)*(strlen(description)+1)), -2, gettext("Erreur d'allocation mémoire.\n"));
     strcpy(action_nouveau.description, description);
     action_nouveau.type = type;
-    action_nouveau.charges = list_init();
-    BUGMSG(action_nouveau.charges, -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_action_ajout");
+    BUGMSG(action_nouveau.charges = list_init(), -2, gettext("Erreur d'allocation mémoire.\n"));
     action_nouveau.deplacement_complet = NULL;
     action_nouveau.forces_complet = NULL;
     action_nouveau.efforts_noeuds = NULL;
     action_nouveau.flags = 0;
     action_nouveau.psi0 = _1990_coef_psi0_bat(type, projet->pays);
-    BUGMSG(action_nouveau.psi0 >= 0, -1, "type : %d, pays : %d\n", type, projet->pays);
+    BUG(action_nouveau.psi0 >= 0, -3);
     action_nouveau.psi1 = _1990_coef_psi1_bat(type, projet->pays);
-    BUGMSG(action_nouveau.psi1 >= 0, -1, "type : %d, pays : %d\n", type, projet->pays);
+    BUG(action_nouveau.psi1 >= 0, -3);
     action_nouveau.psi2 = _1990_coef_psi2_bat(type, projet->pays);
-    BUGMSG(action_nouveau.psi2 >= 0, -1, "type : %d, pays : %d\n", type, projet->pays);
+    BUG(action_nouveau.psi2 >= 0, -3);
     action_nouveau.fonctions_efforts[0] = NULL;
     action_nouveau.fonctions_efforts[1] = NULL;
     action_nouveau.fonctions_efforts[2] = NULL;
@@ -358,7 +353,7 @@ int _1990_action_ajout(Projet *projet, int type, const char* description)
     else
         action_nouveau.numero = action_dernier->numero+1;
     
-    BUGMSG(list_insert_after(projet->actions, &(action_nouveau), sizeof(action_nouveau)), -2, gettext("%s : Erreur d'allocation mémoire.\n"), "_1990_action_ajout");
+    BUGMSG(list_insert_after(projet->actions, &(action_nouveau), sizeof(action_nouveau)), -2, gettext("Erreur d'allocation mémoire.\n"));
     
     return 0;
 }
@@ -377,9 +372,9 @@ int _1990_action_cherche_numero(Projet *projet, size_t numero)
  *             action introuvable
  */
 {
-    BUGMSG(projet, -1, "_1990_action_cherche_numero\n");
-    BUGMSG(projet->actions, -1, "_1990_action_cherche_numero\n");
-    BUGMSG(list_size(projet->actions), -1, "_1990_action_cherche_numero\n");
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->actions, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(list_size(projet->actions), -1, gettext("Paramètre incorrect\n"));
     
     // Trivial
     list_mvfront(projet->actions);
@@ -391,7 +386,8 @@ int _1990_action_cherche_numero(Projet *projet, size_t numero)
             return 0;
     }
     while (list_mvnext(projet->actions) != NULL);
-    BUGMSG(0, -2, gettext("%s : Action %zu introuvable.\n"), "_1990_action_cherche_numero", numero);
+    
+    BUGMSG(0, -1, gettext("Action %zu introuvable.\n"), numero);
 }
 
 
@@ -401,24 +397,26 @@ void *_1990_action_cherche_charge(Projet *projet, size_t num_action, size_t num_
  *            : size_t num_action : le numéro de l'action
  *            : size_t num_charge : le numéro de la charge
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : -1 en cas de paramètres invalides :
+ *   Succès : Pointeur vers la charge recherchée.
+ *   Échec : NULL en cas de paramètres invalides :
  *             (projet == NULL) ou
  *             (projet->actions == NULL) ou
  *             (list_size(projet->actions) == 0) ou
+ *             (list_size(projet->charges) == 0)
+ *           NULL en cas d'erreur due à une fonction interne :
  *             action introuvable
  */
 {
     Action *action;
     
-    BUGMSG(projet, NULL, "_1990_action_cherche_charge\n");
-    BUGMSG(projet->actions, NULL, "_1990_action_cherche_charge\n");
-    BUGMSG(list_size(projet->actions), NULL, "_1990_action_cherche_charge\n");
+    BUGMSG(projet, NULL, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->actions, NULL, gettext("Paramètre incorrect\n"));
+    BUGMSG(list_size(projet->actions), NULL, gettext("Paramètre incorrect\n"));
     
     BUG(_1990_action_cherche_numero(projet, num_action) == 0, NULL);
     action = list_curr(projet->actions);
     
-    BUGMSG(list_size(action->charges), NULL, "_1990_action_cherche_charge\n");
+    BUGMSG(list_size(action->charges), NULL, gettext("Paramètre incorrect\n"));
     
     list_mvfront(action->charges);
     do
@@ -430,7 +428,7 @@ void *_1990_action_cherche_charge(Projet *projet, size_t num_action, size_t num_
     }
     while (list_mvnext(action->charges));
     
-    BUGMSG(NULL, NULL, "_1990_action_cherche_charge\n");
+    BUGMSG(NULL, NULL, gettext("Charge %zu introuvable.\n"), num_charge);
 }
 
 
@@ -447,20 +445,29 @@ int _1990_action_deplace_charge(Projet *projet, size_t action_src, size_t charge
  *   Échec : -1 en cas de paramètres invalides :
  *             (projet == NULL) ou
  *             (projet->actions == NULL) ou
- *             (list_size(projet->actions)-1 < MAX(action_src, action_dest))
+ *             (list_size(projet->actions)-1 < MAX(action_src, action_dest)) ou
+ *             (action->charges == NULL) avec action = action_en_cours ou
+ *             charge introuvable
+ *           -2 en cas d'erreur d'allocation mémoire
  */
 {
     Charge_Noeud            *charge_data = NULL;
 #ifdef ENABLE_GTK
-    List_Gtk_1990_Actions   *list_gtk_1990_actions = &projet->list_gtk._1990_actions;
+    List_Gtk_1990_Actions   *list_gtk_1990_actions;
 #endif
     
-    BUGMSG(projet, -1, "_1990_action_deplace_charge\n");
-    BUGMSG(projet->actions, -1, "_1990_action_deplace_charge\n");
-    BUGMSG(list_size(projet->actions)-1 >= MAX(action_src, action_dest), -1, "_1990_action_deplace_charge\n");
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->actions, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(list_size(projet->actions)-1 >= action_src, -1, gettext("Paramètre incorrect : %zu\n"), action_src);
+    BUGMSG(list_size(projet->actions)-1 >= action_dest, -1, gettext("Paramètre incorrect : %zu\n"), action_dest);
+    
+#ifdef ENABLE_GTK
+    list_gtk_1990_actions = &projet->list_gtk._1990_actions;
+#endif
     
     if (action_src == action_dest)
         return 0;
+    
     list_mvfront(projet->actions);
     // On cherche l'action qui contient la charge
     do
@@ -470,8 +477,8 @@ int _1990_action_deplace_charge(Projet *projet, size_t action_src, size_t charge
     // Lorsqu'elle est trouvée,
         if (action->numero == action_src)
         {
-            BUGMSG(action->charges, -1, "_1990_action_deplace_charge\n");
-            BUGMSG(list_size(action->charges), -1, "_1990_action_deplace_charge\n");
+            BUGMSG(action->charges, -1, gettext("Paramètre incorrect\n"));
+            BUGMSG(list_size(action->charges), -1, gettext("Charge %zu introuvable.\n"), charge_src);
             
             list_mvfront(action->charges);
     //     Pour chaque charge de l'action en cours Faire
@@ -495,7 +502,7 @@ int _1990_action_deplace_charge(Projet *projet, size_t action_src, size_t charge
     //         Sinon Si la charge possède un numéro supérieur à la charge supprimée alors
                 if ((charge_data != NULL) && (charge != NULL) && (charge->numero > charge_src))
                 {
-    //             On décrémente son numéro dans le tree-view
+    //             On décrémente son numéro dans le tree-view-charges
                     charge->numero--;
 #ifdef ENABLE_GTK
                     gtk_tree_store_set(list_gtk_1990_actions->tree_store_charges, &charge->Iter, 0, charge->numero, -1);
@@ -504,20 +511,25 @@ int _1990_action_deplace_charge(Projet *projet, size_t action_src, size_t charge
     //     FinPour
             }
             while (list_mvnext(action->charges) != NULL);
+            
+            BUGMSG(charge_data, -1, gettext("Charge %zu introuvable.\n"), charge_src);
         }
     }
     while ((list_mvnext(projet->actions) != NULL) && (charge_data == NULL));
     
-    BUGMSG(charge_data, -1, "_1990_action_deplace_charge\n");
+    BUGMSG(charge_data, -1, gettext("Action %zu introuvable.\n"), action_src);
+    
+    // On cherche l'action qui contiendra la charge.
     
     list_mvfront(projet->actions);
     do
     {
         Action  *action = (Action*)list_curr(projet->actions);
-        
+    // Lorsqu'elle est trouvée, on l'insère à la fin de la liste des charges
+    //   en modifiant son numéro.
         if (action->numero == action_dest)
         {
-            BUGMSG(action->charges, -1, "_1990_action_deplace_charge\n");
+            BUGMSG(action->charges, -1, gettext("Paramètre incorrect\n"));
             
             switch (charge_data->type)
             {
@@ -525,7 +537,7 @@ int _1990_action_deplace_charge(Projet *projet, size_t action_src, size_t charge
                 {
                     charge_data->numero = list_size(action->charges);
                     list_mvrear(action->charges);
-                    list_insert_after(action->charges, charge_data, sizeof(Charge_Noeud));
+                    BUGMSG(list_insert_after(action->charges, charge_data, sizeof(Charge_Noeud)), -2, gettext("Erreur d'allocation mémoire.\n"));
                     charge_data = NULL;
                     break;
                 }
@@ -534,7 +546,7 @@ int _1990_action_deplace_charge(Projet *projet, size_t action_src, size_t charge
                     Charge_Barre_Ponctuelle *charge = (Charge_Barre_Ponctuelle*)charge_data;
                     charge->numero = list_size(action->charges);
                     list_mvrear(action->charges);
-                    list_insert_after(action->charges, charge, sizeof(Charge_Barre_Ponctuelle));
+                    BUGMSG(list_insert_after(action->charges, charge, sizeof(Charge_Barre_Ponctuelle)), -2, gettext("Erreur d'allocation mémoire.\n"));
                     charge_data = NULL;
                     break;
                 }
@@ -543,21 +555,24 @@ int _1990_action_deplace_charge(Projet *projet, size_t action_src, size_t charge
                     Charge_Barre_Repartie_Uniforme *charge = (Charge_Barre_Repartie_Uniforme*)charge_data;
                     charge->numero = list_size(action->charges);
                     list_mvrear(action->charges);
-                    list_insert_after(action->charges, charge, sizeof(Charge_Barre_Repartie_Uniforme));
+                    BUGMSG(list_insert_after(action->charges, charge, sizeof(Charge_Barre_Repartie_Uniforme)), -2, gettext("Erreur d'allocation mémoire.\n"));
                     charge_data = NULL;
                     break;
                 }
                 default :
                 {
-                    BUGMSG(0, -1, "_1990_action_deplace_charge : charge_data->type\n");
+                    BUGMSG(0, -1, gettext("Type de charge %d inconnu."), charge_data->type);
                     break;
                 }
             }
+            return 0;
         }
     }
     while ((list_mvnext(projet->actions) != NULL) && (charge_data != NULL));
     
-    return 0;
+    BUGMSG(charge_data != NULL, -1, gettext("Action %zu introuvable.\n"), action_dest);
+    
+    return -1;
 }
 
 
@@ -565,24 +580,29 @@ int _1990_action_supprime_charge(Projet *projet, size_t action_num, size_t charg
 /* Description : Supprime une charge. Décrémente également le numéro des charges afin que
  *               la liste des numéros soit toujours continue.
  * Paramètres : Projet *projet : la variable projet,
- *              size_t action_num : numéro de l'action où se situe la charge à déplacer,
- *              size_t charge_num : numéro de la charge à déplacer,
+ *              size_t action_num : numéro de l'action où se situe la charge à supprimer,
+ *              size_t charge_num : numéro de la charge à supprimer,
  * Valeur renvoyée :
  *   Succès : 0
  *   Échec : -1 en cas de paramètres invalides :
  *             (projet == NULL) ou
  *             (projet->actions == NULL) ou
- *             (list_size(projet->actions)-1 < MAX(action_src, action_dest))
+ *             (list_size(projet->actions)-1 < action_num)
+ *           -3 en cas d'erreur due à une fonction interne
  */
 {
     Charge_Noeud            *charge_data = NULL;
 #ifdef ENABLE_GTK
-    List_Gtk_1990_Actions   *list_gtk_1990_actions = &projet->list_gtk._1990_actions;
+    List_Gtk_1990_Actions   *list_gtk_1990_actions;
 #endif
     
-    BUGMSG(projet, -1, "_1990_action_supprime_charge\n");
-    BUGMSG(projet->actions, -1, "_1990_action_supprime_charge\n");
-    BUGMSG(list_size(projet->actions)-1 >= action_num, -1, "_1990_action_supprime_charge\n");
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->actions, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(list_size(projet->actions)-1 >= action_num, -1, gettext("Paramètre incorrect : %zu\n"), action_num);
+    
+#ifdef ENABLE_GTK
+    list_gtk_1990_actions = &projet->list_gtk._1990_actions;
+#endif
     
     list_mvfront(projet->actions);
     // On cherche l'action qui contient la charge
@@ -592,8 +612,8 @@ int _1990_action_supprime_charge(Projet *projet, size_t action_num, size_t charg
     // Lorsqu'elle est trouvée,
         if (action->numero == action_num)
         {
-            BUGMSG(action->charges, -1, "_1990_action_supprime_charge\n");
-            BUGMSG(list_size(action->charges), -1, "_1990_action_supprime_charge\n");
+            BUGMSG(action->charges, -1, gettext("Paramètre incorrect\n"));
+            BUGMSG(list_size(action->charges), -1, gettext("Charge %zu introuvable.\n"), charge_num);
             
             list_mvfront(action->charges);
     //     Pour chaque charge de l'action en cours Faire
@@ -608,9 +628,36 @@ int _1990_action_supprime_charge(Projet *projet, size_t action_num, size_t charg
                     gtk_tree_store_remove(list_gtk_1990_actions->tree_store_charges, &charge->Iter);
 #endif
     //             et de la liste des charges tout en conservant les données
-    //               de la charge dans charge_data.
+    //               de la charge dans charge_data
                     charge_data = list_remove_curr(action->charges);
                     charge = (Charge_Noeud*)list_curr(action->charges);
+    
+    //             On libère la charge charge_data
+                    switch (charge_data->type)
+                    {
+                        case CHARGE_NOEUD :
+                        {
+                            BUG(EF_charge_noeud_free(charge_data) == 0, -3);
+                            break;
+                        }
+                        case CHARGE_BARRE_PONCTUELLE :
+                        {
+                            Charge_Barre_Ponctuelle *charge2 = (Charge_Barre_Ponctuelle*)charge_data;
+                            BUG(EF_charge_barre_ponctuelle_free(charge2) == 0, -3);
+                            break;
+                        }
+                        case CHARGE_BARRE_REPARTIE_UNIFORME :
+                        {
+                            Charge_Barre_Repartie_Uniforme *charge2 = (Charge_Barre_Repartie_Uniforme*)charge_data;
+                            BUG(EF_charge_barre_repartie_uniforme_free(charge2) == 0, -3);
+                            break;
+                        }
+                        default :
+                        {
+                            BUGMSG(0, -1, gettext("Type de charge %d inconnu."), charge_data->type);
+                            break;
+                        }
+                    }
                 }
     //         Sinon Si la charge possède un numéro supérieur à la charge supprimée alors
                 if ((charge_data != NULL) && (charge != NULL) && (charge->numero > charge_num))
@@ -624,40 +671,13 @@ int _1990_action_supprime_charge(Projet *projet, size_t action_num, size_t charg
     //     FinPour
             }
             while (list_mvnext(action->charges) != NULL);
+            
+            BUGMSG(charge_data, -1, gettext("Charge %zu introuvable.\n"), charge_num);
         }
     }
     while ((list_mvnext(projet->actions) != NULL) && (charge_data == NULL));
     
-    BUGMSG(charge_data, -1, "_1990_action_supprime_charge\n");
-    
-    switch (charge_data->type)
-    {
-        case CHARGE_NOEUD :
-        {
-            free(charge_data->description);
-            free(charge_data);
-            break;
-        }
-        case CHARGE_BARRE_PONCTUELLE :
-        {
-            Charge_Barre_Ponctuelle *charge = (Charge_Barre_Ponctuelle*)charge_data;
-            free(charge->description);
-            free(charge);
-            break;
-        }
-        case CHARGE_BARRE_REPARTIE_UNIFORME :
-        {
-            Charge_Barre_Repartie_Uniforme *charge = (Charge_Barre_Repartie_Uniforme*)charge_data;
-            free(charge->description);
-            free(charge);
-            break;
-        }
-        default :
-        {
-            BUGMSG(0, -1, "_1990_action_supprime_charge : charge_data->type\n");
-            break;
-        }
-    }
+    BUGMSG(charge_data, -1, gettext("Action %zu introuvable.\n"), action_num);
     
     return 0;
 }
@@ -673,11 +693,10 @@ int _1990_action_affiche_tout(Projet *projet)
  *             (projet->actions == NULL)
  */
 {
-    BUGMSG(projet, -1, "_1990_action_affiche_tout\n");
-    BUGMSG(projet->actions, -1, "_1990_action_affiche_tout\n");
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->actions, -1, gettext("Paramètre incorrect\n"));
     
     // Trivial
-    
     if (list_size(projet->actions) == 0)
         return 0;
     
@@ -686,7 +705,7 @@ int _1990_action_affiche_tout(Projet *projet)
     {
         Action      *action = (Action*)list_curr(projet->actions);
         
-        printf("Action n° %zu, description '%s', type n°%d\n", action->numero, action->description, action->type);
+        printf(gettext("Action n° %zu, description '%s', type n°%d\n"), action->numero, action->description, action->type);
     }
     while (list_mvnext(projet->actions) != NULL);
     
@@ -704,7 +723,6 @@ int _1990_action_affiche_resultats(Projet *projet, int num_action)
  *             (projet == NULL) ou
  *             (projet->actions == NULL) ou
  *             (list_size(projet->actions) == 0) ou
- *             (_1990_action_cherche_numero(projet, num_action) != 0) ou
  *             (projet->beton.barres == NULL)
  *           -3 en cas d'erreur due à une fonction interne
  */
@@ -712,11 +730,11 @@ int _1990_action_affiche_resultats(Projet *projet, int num_action)
     Action          *action_en_cours;
     unsigned int    i;
     
-    BUGMSG(projet, -1, "EF_calculs_affiche_resultats\n");
-    BUGMSG(projet->actions, -1, "EF_calculs_affiche_resultats\n");
-    BUGMSG(list_size(projet->actions), -1, "EF_calculs_affiche_resultats\n");
-    BUGMSG(_1990_action_cherche_numero(projet, num_action) == 0, -1, "EF_calculs_affiche_resultats : num_action %d\n", num_action);
-    BUGMSG(projet->beton.barres,  -1, "EF_calculs_affiche_resultats\n");
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->actions, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(list_size(projet->actions), -1, gettext("Paramètre incorrect\n"));
+    BUG(_1990_action_cherche_numero(projet, num_action) == 0, -3);
+    BUGMSG(projet->beton.barres,  -1, gettext("Paramètre incorrect\n"));
     
     // Affichage des efforts aux noeuds et des réactions d'appuis
     action_en_cours = (Action*)list_curr(projet->actions);
@@ -777,7 +795,8 @@ int _1990_action_affiche_resultats(Projet *projet, int num_action)
 
 
 int _1990_action_free_num(Projet *projet, size_t num)
-/* Description : Libère l'action souhaitée.
+/* Description : Libère l'action souhaitée et décrémente de 1 les actions dons le
+ *                 numéro est supérieur.
  * Paramètres : Projet *projet : la variable projet,
  *            : size_t num : le numéro de l'action à supprimer.
  * Valeur renvoyée :
@@ -785,13 +804,17 @@ int _1990_action_free_num(Projet *projet, size_t num)
  *   Échec : -1 en cas de paramètres invalides :
  *             (projet == NULL) ou
  *             (projet->actions == NULL)
+ *             (list_size(projet->actions) == NULL)
+ *           -3 en cas d'erreur due à une fonction interne :
+ *             action introuvable.
  */
 {
-    BUGMSG(projet, -1, "_1990_action_free\n");
-    BUGMSG(projet->actions, -1, "_1990_action_free\n");
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->actions, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(list_size(projet->actions), -1, gettext("Paramètre incorrect\n"));
     
     // Trivial
-    _1990_action_cherche_numero(projet, num);
+    BUG(_1990_action_cherche_numero(projet, num) == 0, -3);
     list_mvrear(projet->actions);
     do
     {
@@ -809,27 +832,26 @@ int _1990_action_free_num(Projet *projet, size_t num)
                     case CHARGE_NOEUD :
                     {
                         Charge_Noeud *charge2 = (Charge_Noeud *)charge;
-                        EF_charge_noeud_free(charge2);
+                        BUG(EF_charge_noeud_free(charge2) == 0, -3);
                         break;
                     }
                     case CHARGE_BARRE_PONCTUELLE :
                     {
-                        EF_charge_barre_ponctuelle_free(charge);
+                        BUG(EF_charge_barre_ponctuelle_free(charge) == 0, -3);
                         break;
                     }
                     case CHARGE_BARRE_REPARTIE_UNIFORME :
                     {
                         Charge_Barre_Repartie_Uniforme *charge2 = (Charge_Barre_Repartie_Uniforme *)charge;
-                        EF_charge_barre_repartie_uniforme_free(charge2);
+                        BUG(EF_charge_barre_repartie_uniforme_free(charge2) == 0, -3);
                         break;
                     }
                     default :
                     {
-                        BUGMSG(0, -1, "_1990_action_free\n");
+                        BUGMSG(0, -1, gettext("Type de charge %d inconnu."), charge->type);
                         break;
                     }
                 }
-                free(charge);
             }
             free(action->charges);
             if (action->deplacement_complet != NULL)
@@ -859,10 +881,11 @@ int _1990_action_free(Projet *projet)
  *   Échec : -1 en cas de paramètres invalides :
  *             (projet == NULL) ou
  *             (projet->actions == NULL)
+ *           -3 en cas d'erreur due à une fonction interne
  */
 {
-    BUGMSG(projet, -1, "_1990_action_free\n");
-    BUGMSG(projet->actions, -1, "_1990_action_free\n");
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->actions, -1, gettext("Paramètre incorrect\n"));
     
     // Trivial
     while (!list_empty(projet->actions))
@@ -878,27 +901,26 @@ int _1990_action_free(Projet *projet)
                 case CHARGE_NOEUD :
                 {
                     Charge_Noeud *charge2 = (Charge_Noeud *)charge;
-                    EF_charge_noeud_free(charge2);
+                    BUG(EF_charge_noeud_free(charge2) == 0, -3);
                     break;
                 }
                 case CHARGE_BARRE_PONCTUELLE :
                 {
-                    EF_charge_barre_ponctuelle_free(charge);
+                    BUG(EF_charge_barre_ponctuelle_free(charge) == 0, -3);
                     break;
                 }
                 case CHARGE_BARRE_REPARTIE_UNIFORME :
                 {
                     Charge_Barre_Repartie_Uniforme *charge2 = (Charge_Barre_Repartie_Uniforme *)charge;
-                    EF_charge_barre_repartie_uniforme_free(charge2);
+                    BUG(EF_charge_barre_repartie_uniforme_free(charge2) == 0, -3);
                     break;
                 }
                 default :
                 {
-                    BUGMSG(0, -1, "_1990_action_free\n");
+                    BUGMSG(0, -1, gettext("Type de charge %d inconnu."), charge->type);
                     break;
                 }
             }
-            free(charge);
         }
         free(action->charges);
         if (action->deplacement_complet != NULL)
@@ -909,7 +931,9 @@ int _1990_action_free(Projet *projet)
             cholmod_l_free_sparse(&action->efforts_noeuds, projet->ef_donnees.c);
         
         if (action->fonctions_efforts[0] != NULL)
-            common_fonction_free(projet, action);
+        {
+            BUG(common_fonction_free(projet, action) == 0, -3);
+        }
         free(action);
     }
     
