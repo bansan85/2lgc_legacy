@@ -241,13 +241,24 @@ typedef struct __List_Gtk_EF_Noeud
     GtkWidget       *window;
     GtkWidget       *table;
     
-    GtkTreeStore    *tree_store;
-    GtkTreeView     *tree_view;
-    GtkTreeSelection *tree_select;
-    GtkListStore    *liste_appuis;
-    GtkWidget       *scroll;
+    GtkWidget       *notebook;
+    GtkWidget       *table_noeud_libre;
+    GtkWidget       *label_noeud_libre;
+    GtkWidget       *table_noeud_barre;
+    GtkWidget       *label_noeud_barre;
     
-    GtkWidget       *table_buttons;
+    GtkTreeStore    *tree_store_libre;
+    GtkTreeView     *tree_view_libre;
+    GtkTreeSelection *tree_select_libre;
+    GtkWidget       *scroll_libre;
+    
+    GtkTreeStore    *tree_store_barre;
+    GtkTreeView     *tree_view_barre;
+    GtkTreeSelection *tree_select_barre;
+    GtkWidget       *scroll_barre;
+    
+    GtkListStore    *liste_appuis;
+    
     GtkWidget       *button_valider;
     GtkWidget       *button_annuler;
 } List_Gtk_EF_Noeud;
