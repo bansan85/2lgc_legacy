@@ -277,6 +277,43 @@ void EF_gtk_noeud_edit_pos_relat(GtkCellRendererText *cell, gchar *path_string, 
 }
 
 
+void EF_gtk_render_actualise_position(GtkTreeViewColumn *tree_column __attribute__((unused)), GtkCellRenderer *cell, GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data)
+/* Description : personnalise l'affichage des nombres de type double dans un treeview.
+ * Paramètres : GtkTreeViewColumn *tree_column : la colonne,
+ *            : GtkCellRenderer *cell : la cellule,
+ *            : GtkTreeModel *tree_model : le tree_model,
+ *            : GtkTreeIter *iter : et le paramètre iter,
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : void
+ */
+{
+    Projet      *projet = data;
+    gchar       texte[30];
+    gint        colonne;
+    int         noeud;
+    EF_Point    *point;
+    
+    colonne = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cell), "column"));
+    gtk_tree_model_get(tree_model, iter, 0, &noeud, -1);
+    BUG(point = EF_noeuds_renvoie_position(EF_noeuds_cherche_numero(projet, noeud)), );
+    
+    if (colonne == 1)
+        common_math_double_to_char(point->x, texte, GTK_DECIMAL_DISTANCE);
+    else if (colonne == 2)
+        common_math_double_to_char(point->y, texte, GTK_DECIMAL_DISTANCE);
+    else if (colonne == 3)
+        common_math_double_to_char(point->z, texte, GTK_DECIMAL_DISTANCE);
+    else
+        BUGMSG(NULL, , gettext("Paramètre incorrect\n"));
+    
+    g_object_set(GTK_CELL_RENDERER_TEXT(cell), "text", texte, NULL);
+    
+    free(point);
+    
+    return;
+}
+
+
 void EF_gtk_noeud(Projet *projet)
 /* Description : Affichage de la fenêtre permettant de créer ou modifier la liste des noeuds.
  * Paramètres : Projet *projet : la variable projet
@@ -284,9 +321,7 @@ void EF_gtk_noeud(Projet *projet)
  */
 {
     List_Gtk_EF_Noeud   *ef_gtk;
-//    Charge_Noeud        *charge_noeud;
     GtkCellRenderer     *pCellRenderer;
-/*    GtkTreeIter         iter; */
     GtkTreeViewColumn   *column;
     
     BUGMSG(projet, , gettext("Paramètre incorrect\n"));
@@ -379,7 +414,7 @@ void EF_gtk_noeud(Projet *projet)
     gtk_tree_view_append_column(GTK_TREE_VIEW(ef_gtk->tree_view_barre), column);
     gtk_tree_view_column_pack_start(column, pCellRenderer, TRUE);
     g_object_set_data(G_OBJECT(pCellRenderer), "column", GINT_TO_POINTER(1));
-    gtk_tree_view_column_set_cell_data_func(column, pCellRenderer, gtk_common_render_double, GINT_TO_POINTER(GTK_DECIMAL_DISTANCE), NULL);
+    gtk_tree_view_column_set_cell_data_func(column, pCellRenderer, EF_gtk_render_actualise_position, projet, NULL);
     // Colonne y
     pCellRenderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new();
@@ -387,7 +422,7 @@ void EF_gtk_noeud(Projet *projet)
     gtk_tree_view_append_column(GTK_TREE_VIEW(ef_gtk->tree_view_barre), column);
     gtk_tree_view_column_pack_start(column, pCellRenderer, TRUE);
     g_object_set_data(G_OBJECT(pCellRenderer), "column", GINT_TO_POINTER(2));
-    gtk_tree_view_column_set_cell_data_func(column, pCellRenderer, gtk_common_render_double, GINT_TO_POINTER(GTK_DECIMAL_DISTANCE), NULL);
+    gtk_tree_view_column_set_cell_data_func(column, pCellRenderer, EF_gtk_render_actualise_position, projet, NULL);
     // Colonne z
     pCellRenderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new();
@@ -395,7 +430,7 @@ void EF_gtk_noeud(Projet *projet)
     gtk_tree_view_append_column(GTK_TREE_VIEW(ef_gtk->tree_view_barre), column);
     gtk_tree_view_column_pack_start(column, pCellRenderer, TRUE);
     g_object_set_data(G_OBJECT(pCellRenderer), "column", GINT_TO_POINTER(3));
-    gtk_tree_view_column_set_cell_data_func(column, pCellRenderer, gtk_common_render_double, GINT_TO_POINTER(GTK_DECIMAL_DISTANCE), NULL);
+    gtk_tree_view_column_set_cell_data_func(column, pCellRenderer, EF_gtk_render_actualise_position, projet, NULL);
     // Colonne Appui
     pCellRenderer = gtk_cell_renderer_combo_new();
     g_object_set(pCellRenderer, "editable", TRUE, "model", ef_gtk->liste_appuis, "text-column", 0, "has-entry", FALSE, NULL);
