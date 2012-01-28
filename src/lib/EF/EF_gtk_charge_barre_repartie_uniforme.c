@@ -54,14 +54,14 @@ int EF_gtk_charge_barre_repartie_uniforme_ajout_affichage(Charge_Barre_Repartie_
     BUGMSG(description = realloc(description, (strlen(description) + strlen(tmp2)+1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
     strcat(description, tmp2);
     free(tmp2);
-    common_math_double_to_char(charge->a, tmp);
+    common_math_double_to_char(charge->a, tmp, GTK_DECIMAL_DISTANCE);
     BUGMSG(description = realloc(description, (strlen(description) + strlen(",  :  m") + strlen(gettext("début")) + strlen(tmp) +1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
     strcat(description, ", ");
     strcat(description, gettext("début"));
     strcat(description, " : ");
     strcat(description, tmp);
     strcat(description, " m");
-    common_math_double_to_char(charge->b, tmp);
+    common_math_double_to_char(charge->b, tmp, GTK_DECIMAL_DISTANCE);
     BUGMSG(description = realloc(description, (strlen(description) + strlen(",  :  m") + strlen(gettext("fin (par rapport à la fin)")) + strlen(tmp) + 1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
     strcat(description, ", ");
     strcat(description, gettext("fin (par rapport à la fin)"));
@@ -90,36 +90,36 @@ int EF_gtk_charge_barre_repartie_uniforme_ajout_affichage(Charge_Barre_Repartie_
         strcat(description, ", ");
         strcat(description, gettext("repère : global"));
     }
-    common_math_double_to_char(charge->fx, tmp);
+    common_math_double_to_char(charge->fx, tmp, GTK_DECIMAL_DISTANCE);
     BUGMSG(description = realloc(description, (strlen(description) + strlen(", Fx :  N/m") + strlen(tmp)+1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
     strcat(description, ", Fx : ");
     strcat(description, tmp);
     strcat(description, " N/m");
-    common_math_double_to_char(charge->fy, tmp);
+    common_math_double_to_char(charge->fy, tmp, GTK_DECIMAL_DISTANCE);
     BUGMSG(description = realloc(description, (strlen(description) + strlen(", Fy :  N/m") + strlen(tmp)+1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
     strcat(description, ", Fy : ");
     strcat(description, tmp);
     strcat(description, " N/m");
-    common_math_double_to_char(charge->fz, tmp);
+    common_math_double_to_char(charge->fz, tmp, GTK_DECIMAL_DISTANCE);
     BUGMSG(description = realloc(description, (strlen(description) + strlen(", Fz :  N/m") + strlen(tmp)+1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
     strcat(description, ", Fz : ");
     strcat(description, tmp);
     strcat(description, " N/m");
-    common_math_double_to_char(charge->mx, tmp);
-    BUGMSG(description = realloc(description, (strlen(description) + strlen(", Mx :  N/m") + strlen(tmp)+1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
+    common_math_double_to_char(charge->mx, tmp, GTK_DECIMAL_MOMENT);
+    BUGMSG(description = realloc(description, (strlen(description) + strlen(", Mx :  N.m/m") + strlen(tmp)+1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
     strcat(description, ", Mx : ");
     strcat(description, tmp);
-    strcat(description, " N/m");
-    common_math_double_to_char(charge->my, tmp);
-    BUGMSG(description = realloc(description, (strlen(description) + strlen(", My :  N/m") + strlen(tmp)+1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
+    strcat(description, " N.m/m");
+    common_math_double_to_char(charge->my, tmp, GTK_DECIMAL_MOMENT);
+    BUGMSG(description = realloc(description, (strlen(description) + strlen(", My :  N.m/m") + strlen(tmp)+1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
     strcat(description, ", My : ");
     strcat(description, tmp);
-    strcat(description, " N/m");
-    common_math_double_to_char(charge->mz, tmp);
-    BUGMSG(description = realloc(description, (strlen(description) + strlen(", Mz :  N/m") + strlen(tmp)+1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
+    strcat(description, " N.m/m");
+    common_math_double_to_char(charge->mz, tmp, GTK_DECIMAL_MOMENT);
+    BUGMSG(description = realloc(description, (strlen(description) + strlen(", Mz :  N.m/m") + strlen(tmp)+1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
     strcat(description, ", Mz : ");
     strcat(description, tmp);
-    strcat(description, " N/m");
+    strcat(description, " N.m/m");
     
     if (nouvelle_ligne == TRUE)
         gtk_tree_store_append(list_gtk_1990_actions->tree_store_charges, &charge->Iter, NULL);
@@ -511,21 +511,21 @@ int EF_gtk_charge_barre_repartie_uniforme(Projet *projet, gint action_defaut, gi
     {
         gchar   tmp[30], *tmp2;
         gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_description)), charge_barre->description, -1);
-        common_math_double_to_char(charge_barre->fx, tmp);
+        common_math_double_to_char(charge_barre->fx, tmp, GTK_DECIMAL_FORCE);
         gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_fx)), tmp, -1);
-        common_math_double_to_char(charge_barre->fy, tmp);
+        common_math_double_to_char(charge_barre->fy, tmp, GTK_DECIMAL_FORCE);
         gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_fy)), tmp, -1);
-        common_math_double_to_char(charge_barre->fz, tmp);
+        common_math_double_to_char(charge_barre->fz, tmp, GTK_DECIMAL_FORCE);
         gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_fz)), tmp, -1);
-        common_math_double_to_char(charge_barre->mx, tmp);
+        common_math_double_to_char(charge_barre->mx, tmp, GTK_DECIMAL_MOMENT);
         gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_mx)), tmp, -1);
-        common_math_double_to_char(charge_barre->my, tmp);
+        common_math_double_to_char(charge_barre->my, tmp, GTK_DECIMAL_MOMENT);
         gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_my)), tmp, -1);
-        common_math_double_to_char(charge_barre->mz, tmp);
+        common_math_double_to_char(charge_barre->mz, tmp, GTK_DECIMAL_MOMENT);
         gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_mz)), tmp, -1);
-        common_math_double_to_char(charge_barre->a, tmp);
+        common_math_double_to_char(charge_barre->a, tmp, GTK_DECIMAL_DISTANCE);
         gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_a)), tmp, -1);
-        common_math_double_to_char(charge_barre->b, tmp);
+        common_math_double_to_char(charge_barre->b, tmp, GTK_DECIMAL_DISTANCE);
         gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_b)), tmp, -1);
         if ((charge_barre->repere_local) && (charge_barre->projection))
         {

@@ -27,6 +27,7 @@
 #include <list.h>
 #include "common_selection.h"
 #include "common_erreurs.h"
+#include "common_maths.h"
 
 void gtk_common_entry_check_double(GtkTextBuffer *textbuffer, gpointer user_data __attribute__((unused)))
 /* Description : Vérifie en temps réel si le GtkTextBuffer contient bien un nombre flottant.
@@ -196,8 +197,6 @@ gboolean common_gtk_key_press(GtkWidget *widget __attribute__((unused)), GdkEven
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
  *            : GdkEvent *event : description de l'évènement,
  *            : GtkWidget *fenetre : la fenêtre à détruire.
- *            : gboolean nouveau : vaut TRUE si une nouvelle charge doit être ajoutée,
- *                                 vaut FALSE si la charge en cours doit être modifiée
  * Valeur renvoyée : TRUE pour arrêter le traitement des touches,
  *                 : FALSE si ce n'est pas la touche Escape.
  */
@@ -212,3 +211,26 @@ gboolean common_gtk_key_press(GtkWidget *widget __attribute__((unused)), GdkEven
 }
 
 
+void gtk_common_render_double(GtkTreeViewColumn *tree_column __attribute__((unused)), GtkCellRenderer *cell, GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data)
+/* Description : personnalise l'affichage des nombres de type double dans un treeview.
+ * Paramètres : GtkTreeViewColumn *tree_column : la colonne,
+ *            : GtkCellRenderer *cell : la cellule,
+ *            : GtkTreeModel *tree_model : le tree_model,
+ *            : GtkTreeIter *iter : et le paramètre iter,
+ *            : gpointer data : le nombre de décimale.
+ * Valeur renvoyée : void
+ */
+{
+    gchar   texte[30];
+    gint    colonne;
+    double  nombre;
+    gint    decimales = GPOINTER_TO_INT(data);
+    
+    colonne = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cell), "column"));
+    gtk_tree_model_get(tree_model, iter, colonne, &nombre, -1);
+    
+    common_math_double_to_char(nombre, texte, decimales);
+    g_object_set(GTK_CELL_RENDERER_TEXT(cell), "text", texte, NULL);
+    
+    return;
+}
