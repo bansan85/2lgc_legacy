@@ -59,11 +59,17 @@
             g_signal_connect(gtk_text_view_get_buffer(GTK_TEXT_VIEW(textview)), "changed", G_CALLBACK(gtk_common_entry_check_liste), NULL); \
             }
 
+#define GTK_DECIMAL_DISTANCE 3
+#define GTK_DECIMAL_FORCE 3
+#define GTK_DECIMAL_MOMENT 3
+
+
 void gtk_common_entry_check_double(GtkEntry *entry, gchar *preedit, gpointer user_data);
 double gtk_common_entry_renvoie_double(GtkTextBuffer *textbuffer);
 void gtk_common_entry_check_int(GtkEntry *entry, gchar *preedit, gpointer user_data);
 int gtk_common_entry_renvoie_int(GtkTextBuffer *textbuffer);
 void gtk_common_entry_check_liste(GtkEntry *entry, gchar *preedit, gpointer user_data);
-gboolean common_gtk_key_press(GtkWidget *widget __attribute__((unused)), GdkEvent *event __attribute__((unused)), GtkWidget *fenetre);
+gboolean common_gtk_key_press(GtkWidget *widget, GdkEvent *event, GtkWidget *fenetre);
+void gtk_common_render_double(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell, GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data);
 
 #endif

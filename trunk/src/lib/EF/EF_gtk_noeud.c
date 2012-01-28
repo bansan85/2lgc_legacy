@@ -217,8 +217,8 @@ void EF_gtk_noeud(Projet *projet)
     List_Gtk_EF_Noeud   *ef_gtk;
 //    Charge_Noeud        *charge_noeud;
     GtkCellRenderer     *pCellRenderer;
-/*    GtkTreeIter         iter;
-    GtkTreeViewColumn   *column;*/
+/*    GtkTreeIter         iter; */
+    GtkTreeViewColumn   *column;
     
     BUGMSG(projet, , gettext("Paramètre incorrect\n"));
     BUGMSG(projet->ef_donnees.noeuds, , gettext("Paramètre incorrect\n"));
@@ -258,21 +258,33 @@ void EF_gtk_noeud(Projet *projet)
     // Colonne x
     pCellRenderer = gtk_cell_renderer_text_new();
     g_object_set(pCellRenderer, "editable", TRUE, NULL);
+    column = gtk_tree_view_column_new();
     g_signal_connect(pCellRenderer, "edited", G_CALLBACK(EF_gtk_noeud_edit_pos), projet);
+    gtk_tree_view_column_set_title(GTK_TREE_VIEW_COLUMN(column), "x");
+    gtk_tree_view_append_column(GTK_TREE_VIEW(ef_gtk->tree_view_libre), column);
+    gtk_tree_view_column_pack_start(column, pCellRenderer, TRUE);
     g_object_set_data(G_OBJECT(pCellRenderer), "column", GINT_TO_POINTER(1));
-    gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW(ef_gtk->tree_view_libre), -1, "x", pCellRenderer, "text", 1, NULL);
+    gtk_tree_view_column_set_cell_data_func(column, pCellRenderer, gtk_common_render_double, GINT_TO_POINTER(GTK_DECIMAL_DISTANCE), NULL);
     // Colonne y
     pCellRenderer = gtk_cell_renderer_text_new();
     g_object_set(pCellRenderer, "editable", TRUE, NULL);
+    column = gtk_tree_view_column_new();
     g_signal_connect(pCellRenderer, "edited", G_CALLBACK(EF_gtk_noeud_edit_pos), projet);
+    gtk_tree_view_column_set_title(GTK_TREE_VIEW_COLUMN(column), "y");
+    gtk_tree_view_append_column(GTK_TREE_VIEW(ef_gtk->tree_view_libre), column);
+    gtk_tree_view_column_pack_start(column, pCellRenderer, TRUE);
     g_object_set_data(G_OBJECT(pCellRenderer), "column", GINT_TO_POINTER(2));
-    gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW(ef_gtk->tree_view_libre), -1, "y", pCellRenderer, "text", 2, NULL);
+    gtk_tree_view_column_set_cell_data_func(column, pCellRenderer, gtk_common_render_double, GINT_TO_POINTER(GTK_DECIMAL_DISTANCE), NULL);
     // Colonne z
     pCellRenderer = gtk_cell_renderer_text_new();
     g_object_set(pCellRenderer, "editable", TRUE, NULL);
+    column = gtk_tree_view_column_new();
     g_signal_connect(pCellRenderer, "edited", G_CALLBACK(EF_gtk_noeud_edit_pos), projet);
+    gtk_tree_view_column_set_title(GTK_TREE_VIEW_COLUMN(column), "z");
+    gtk_tree_view_append_column(GTK_TREE_VIEW(ef_gtk->tree_view_libre), column);
+    gtk_tree_view_column_pack_start(column, pCellRenderer, TRUE);
     g_object_set_data(G_OBJECT(pCellRenderer), "column", GINT_TO_POINTER(3));
-    gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW(ef_gtk->tree_view_libre), -1, "z", pCellRenderer, "text", 3, NULL);
+    gtk_tree_view_column_set_cell_data_func(column, pCellRenderer, gtk_common_render_double, GINT_TO_POINTER(GTK_DECIMAL_DISTANCE), NULL);
     // Colonne Appui
     pCellRenderer = gtk_cell_renderer_combo_new();
     g_object_set(pCellRenderer, "editable", TRUE, "model", ef_gtk->liste_appuis, "text-column", 0, "has-entry", FALSE, NULL);
@@ -293,13 +305,28 @@ void EF_gtk_noeud(Projet *projet)
     gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW(ef_gtk->tree_view_barre), -1, gettext("Numéro"), pCellRenderer, "text", 0, NULL);
     // Colonne x
     pCellRenderer = gtk_cell_renderer_text_new();
-    gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW(ef_gtk->tree_view_barre), -1, "x", pCellRenderer, "text", 1, NULL);
+    column = gtk_tree_view_column_new();
+    gtk_tree_view_column_set_title(GTK_TREE_VIEW_COLUMN(column), "x");
+    gtk_tree_view_append_column(GTK_TREE_VIEW(ef_gtk->tree_view_barre), column);
+    gtk_tree_view_column_pack_start(column, pCellRenderer, TRUE);
+    g_object_set_data(G_OBJECT(pCellRenderer), "column", GINT_TO_POINTER(1));
+    gtk_tree_view_column_set_cell_data_func(column, pCellRenderer, gtk_common_render_double, GINT_TO_POINTER(GTK_DECIMAL_DISTANCE), NULL);
     // Colonne y
     pCellRenderer = gtk_cell_renderer_text_new();
-    gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW(ef_gtk->tree_view_barre), -1, "y", pCellRenderer, "text", 2, NULL);
+    column = gtk_tree_view_column_new();
+    gtk_tree_view_column_set_title(GTK_TREE_VIEW_COLUMN(column), "y");
+    gtk_tree_view_append_column(GTK_TREE_VIEW(ef_gtk->tree_view_barre), column);
+    gtk_tree_view_column_pack_start(column, pCellRenderer, TRUE);
+    g_object_set_data(G_OBJECT(pCellRenderer), "column", GINT_TO_POINTER(2));
+    gtk_tree_view_column_set_cell_data_func(column, pCellRenderer, gtk_common_render_double, GINT_TO_POINTER(GTK_DECIMAL_DISTANCE), NULL);
     // Colonne z
     pCellRenderer = gtk_cell_renderer_text_new();
-    gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW(ef_gtk->tree_view_barre), -1, "z", pCellRenderer, "text", 3, NULL);
+    column = gtk_tree_view_column_new();
+    gtk_tree_view_column_set_title(GTK_TREE_VIEW_COLUMN(column), "z");
+    gtk_tree_view_append_column(GTK_TREE_VIEW(ef_gtk->tree_view_barre), column);
+    gtk_tree_view_column_pack_start(column, pCellRenderer, TRUE);
+    g_object_set_data(G_OBJECT(pCellRenderer), "column", GINT_TO_POINTER(3));
+    gtk_tree_view_column_set_cell_data_func(column, pCellRenderer, gtk_common_render_double, GINT_TO_POINTER(GTK_DECIMAL_DISTANCE), NULL);
     // Colonne Appui
     pCellRenderer = gtk_cell_renderer_combo_new();
     g_object_set(pCellRenderer, "editable", TRUE, "model", ef_gtk->liste_appuis, "text-column", 0, "has-entry", FALSE, NULL);
@@ -310,11 +337,12 @@ void EF_gtk_noeud(Projet *projet)
     gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW(ef_gtk->tree_view_barre), -1, gettext("Barre"), pCellRenderer, "text", 5, NULL);
     // Colonne Position relative
     pCellRenderer = gtk_cell_renderer_text_new();
-    g_object_set(pCellRenderer, "editable", TRUE, NULL);
-    g_signal_connect(pCellRenderer, "edited", G_CALLBACK(EF_gtk_noeud_edit_barre), projet);
+    column = gtk_tree_view_column_new();
+    gtk_tree_view_column_set_title(GTK_TREE_VIEW_COLUMN(column), gettext("Position relative"));
+    gtk_tree_view_append_column(GTK_TREE_VIEW(ef_gtk->tree_view_barre), column);
+    gtk_tree_view_column_pack_start(column, pCellRenderer, TRUE);
     g_object_set_data(G_OBJECT(pCellRenderer), "column", GINT_TO_POINTER(6));
-    gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW(ef_gtk->tree_view_barre), -1, gettext("Position relative"), pCellRenderer, "text", 6, NULL);
-    
+    gtk_tree_view_column_set_cell_data_func(column, pCellRenderer, gtk_common_render_double, GINT_TO_POINTER(GTK_DECIMAL_DISTANCE), NULL);
     
     // On ajoute les noeuds existants.
     if ((projet->ef_donnees.noeuds != NULL) && (list_size(projet->ef_donnees.noeuds) != 0))

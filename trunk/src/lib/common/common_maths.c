@@ -89,21 +89,25 @@ void common_math_arrondi_sparse(cholmod_sparse *sparse)
 }
 
 
-void common_math_double_to_char(double nombre, char *dest)
+void common_math_double_to_char(double nombre, char *dest, int decimales)
 /* Description : Converti un nombre double en char *.
                  Dest doit déjà être alloué. 30 caractères devrait être suffisant.
  * Paramètres : double nombre : nombre à convertir,
- *              char *dest : nombre converti
+ *              char *dest : nombre converti,
+ *              int decimales : nombre de décimales au maximum.
  * Valeur renvoyée : void
  */
 {
     double  test;
     int     width;
     
+    if (decimales > 20)
+        decimales = 20;
+    
     // Si le nombre est supérieur à 1e15, on affiche sous forme scientifique
     if (ABS(nombre) > 1e15)
     {
-        for (width = 0; width<20; width++)
+        for (width = 0; width<=decimales; width++)
         {
             sprintf(dest, "%.*le", width, nombre);
             sscanf(dest, "%le", &test);
@@ -114,7 +118,7 @@ void common_math_double_to_char(double nombre, char *dest)
     // Sinon on affiche sous forme normale
     else
     {
-        for (width = 0; width<20; width++)
+        for (width = 0; width<=decimales; width++)
         {
             sprintf(dest, "%.*lf", width, nombre);
             sscanf(dest, "%lf", &test);

@@ -84,6 +84,8 @@ Projet* projet_init(Type_Pays pays)
 #ifdef ENABLE_GTK
 void gui_window_destroy_event(GtkWidget *pWidget __attribute__((unused)), Projet *projet)
 {
+    BUGMSG(projet, , gettext("Paramètre incorrect\n"));
+    
     BUG(projet_free(projet) == 0, );
     gtk_widget_destroy(pWidget);
     gtk_main_quit();
