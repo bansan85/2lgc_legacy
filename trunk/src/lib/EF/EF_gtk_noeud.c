@@ -110,7 +110,7 @@ void EF_gtk_noeud_edit_barre(GtkCellRendererText *cell, gchar *path_string, gcha
 }
 
 
-void EF_gtk_noeud_edit_pos(GtkCellRendererText *cell, gchar *path_string, gchar *new_text, Projet *projet)
+void EF_gtk_noeud_edit_pos_abs(GtkCellRendererText *cell, gchar *path_string, gchar *new_text, Projet *projet)
 /* Description : Changement de la position d'un noeud
  * Paramètres : GtkCellRendererText *cell : cellule en cours,
  *            : gchar *path_string : path de la ligne en cours,
@@ -181,6 +181,74 @@ void EF_gtk_noeud_edit_pos(GtkCellRendererText *cell, gchar *path_string, gchar 
             }
             case NOEUD_BARRE :
             {
+                BUGMSG(NULL, , gettext("Paramètre incorrect\n"));
+                break;
+            }
+            default :
+            {
+                BUGMSG(NULL, , gettext("Paramètre incorrect\n"));
+                break;
+            }
+        }
+        
+        // On modifie le tree-view-actions
+        gtk_tree_store_set(gtk_noeud->tree_store_libre, &iter, column, convertion, -1);
+    }
+    
+    free(fake);
+    gtk_tree_path_free(path);
+     
+    return;
+}
+
+
+void EF_gtk_noeud_edit_pos_relat(GtkCellRendererText *cell, gchar *path_string, gchar *new_text, Projet *projet)
+/* Description : Changement de la position d'un noeud de type barre.
+ * Paramètres : GtkCellRendererText *cell : cellule en cours,
+ *            : gchar *path_string : path de la ligne en cours,
+ *            : gchar *new_text : nouvelle valeur,
+ *            : Projet *projet : la variable projet
+ * Valeur renvoyée : Aucune
+ */
+{
+    List_Gtk_EF_Noeud       *gtk_noeud;
+    GtkTreeModel            *model;
+    GtkTreePath             *path;
+    GtkTreeIter             iter;
+    gint                    i;
+    char                    *fake = (char*)malloc(sizeof(char)*(strlen(new_text)+1));
+    double                  convertion;
+    EF_Noeud                *noeud;
+    gint                    column = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cell), "column"));
+    
+    BUGMSG(projet, , gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->ef_donnees.noeuds, , gettext("Paramètre incorrect\n"));
+    BUGMSG(list_size(projet->ef_donnees.noeuds), , gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->list_gtk.ef_noeud.window, , gettext("Paramètre incorrect\n"));
+    BUGMSG(fake, , gettext("Erreur d'allocation mémoire.\n"));
+    
+    gtk_noeud = &projet->list_gtk.ef_noeud;
+    model = GTK_TREE_MODEL(gtk_noeud->tree_store_barre);
+    path = gtk_tree_path_new_from_string(path_string);
+    
+    gtk_tree_model_get_iter(model, &iter, path);
+    gtk_tree_model_get(model, &iter, 0, &i, -1);
+    
+    // On vérifie si le texte contient bien un nombre flottant
+    if (sscanf(new_text, "%lf%s", &convertion, fake) == 1)
+    {
+        // On modifie l'action
+        BUG(noeud = EF_noeuds_cherche_numero(projet, i), );
+        
+        switch (noeud->type)
+        {
+            case NOEUD_LIBRE :
+            {
+                BUGMSG(NULL, , gettext("Paramètre incorrect\n"));
+                break;
+            }
+            case NOEUD_BARRE :
+            {
                 if (column == 6)
                 {
                     EF_Noeud_Barre  *info = noeud->data;
@@ -194,11 +262,12 @@ void EF_gtk_noeud_edit_pos(GtkCellRendererText *cell, gchar *path_string, gchar 
             default :
             {
                 BUGMSG(NULL, , gettext("Paramètre incorrect\n"));
+                break;
             }
         }
         
         // On modifie le tree-view-actions
-        gtk_tree_store_set(gtk_noeud->tree_store_libre, &iter, column, convertion, -1);
+        gtk_tree_store_set(gtk_noeud->tree_store_barre, &iter, column, convertion, -1);
     }
     
     free(fake);
@@ -259,7 +328,7 @@ void EF_gtk_noeud(Projet *projet)
     pCellRenderer = gtk_cell_renderer_text_new();
     g_object_set(pCellRenderer, "editable", TRUE, NULL);
     column = gtk_tree_view_column_new();
-    g_signal_connect(pCellRenderer, "edited", G_CALLBACK(EF_gtk_noeud_edit_pos), projet);
+    g_signal_connect(pCellRenderer, "edited", G_CALLBACK(EF_gtk_noeud_edit_pos_abs), projet);
     gtk_tree_view_column_set_title(GTK_TREE_VIEW_COLUMN(column), "x");
     gtk_tree_view_append_column(GTK_TREE_VIEW(ef_gtk->tree_view_libre), column);
     gtk_tree_view_column_pack_start(column, pCellRenderer, TRUE);
@@ -269,7 +338,7 @@ void EF_gtk_noeud(Projet *projet)
     pCellRenderer = gtk_cell_renderer_text_new();
     g_object_set(pCellRenderer, "editable", TRUE, NULL);
     column = gtk_tree_view_column_new();
-    g_signal_connect(pCellRenderer, "edited", G_CALLBACK(EF_gtk_noeud_edit_pos), projet);
+    g_signal_connect(pCellRenderer, "edited", G_CALLBACK(EF_gtk_noeud_edit_pos_abs), projet);
     gtk_tree_view_column_set_title(GTK_TREE_VIEW_COLUMN(column), "y");
     gtk_tree_view_append_column(GTK_TREE_VIEW(ef_gtk->tree_view_libre), column);
     gtk_tree_view_column_pack_start(column, pCellRenderer, TRUE);
@@ -279,7 +348,7 @@ void EF_gtk_noeud(Projet *projet)
     pCellRenderer = gtk_cell_renderer_text_new();
     g_object_set(pCellRenderer, "editable", TRUE, NULL);
     column = gtk_tree_view_column_new();
-    g_signal_connect(pCellRenderer, "edited", G_CALLBACK(EF_gtk_noeud_edit_pos), projet);
+    g_signal_connect(pCellRenderer, "edited", G_CALLBACK(EF_gtk_noeud_edit_pos_abs), projet);
     gtk_tree_view_column_set_title(GTK_TREE_VIEW_COLUMN(column), "z");
     gtk_tree_view_append_column(GTK_TREE_VIEW(ef_gtk->tree_view_libre), column);
     gtk_tree_view_column_pack_start(column, pCellRenderer, TRUE);
@@ -338,6 +407,8 @@ void EF_gtk_noeud(Projet *projet)
     // Colonne Position relative
     pCellRenderer = gtk_cell_renderer_text_new();
     column = gtk_tree_view_column_new();
+    g_object_set(pCellRenderer, "editable", TRUE, NULL);
+    g_signal_connect(pCellRenderer, "edited", G_CALLBACK(EF_gtk_noeud_edit_pos_relat), projet);
     gtk_tree_view_column_set_title(GTK_TREE_VIEW_COLUMN(column), gettext("Position relative"));
     gtk_tree_view_append_column(GTK_TREE_VIEW(ef_gtk->tree_view_barre), column);
     gtk_tree_view_column_pack_start(column, pCellRenderer, TRUE);
