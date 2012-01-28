@@ -350,7 +350,7 @@ void _1990_gtk_tree_view_actions_type_edited(GtkCellRendererText *cell __attribu
     action->psi2 = _1990_coef_psi2_bat(j, projet->pays);
     gtk_tree_store_set(list_gtk_1990_actions->tree_store_actions, &iter, 2, new_text, 3, action->psi0, 4, action->psi1, 5, action->psi2, -1);
     
-    gtk_tree_path_free (path);
+    gtk_tree_path_free(path);
 }
 
 
