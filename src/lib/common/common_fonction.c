@@ -52,12 +52,10 @@ int common_fonction_init(Projet *projet, Action *action)
     // Trivial
     for (i=0;i<6;i++)
     {
-        action->fonctions_efforts[i] = (Fonction**)malloc(sizeof(Fonction*)*list_size(projet->beton.barres));
-        BUGMSG(action->fonctions_efforts[i], -2, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(action->fonctions_efforts[i] = (Fonction**)malloc(sizeof(Fonction*)*list_size(projet->beton.barres)), -2, gettext("Erreur d'allocation mémoire.\n"));
         for (j=0;j<list_size(projet->beton.barres);j++)
         {
-            action->fonctions_efforts[i][j] = (Fonction*)malloc(sizeof(Fonction));
-            BUGMSG(action->fonctions_efforts[i][j], -2, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(action->fonctions_efforts[i][j] = (Fonction*)malloc(sizeof(Fonction)), -2, gettext("Erreur d'allocation mémoire.\n"));
             action->fonctions_efforts[i][j]->nb_troncons = 0;
             action->fonctions_efforts[i][j]->troncons = NULL;
         }
@@ -65,22 +63,18 @@ int common_fonction_init(Projet *projet, Action *action)
     
     for (i=0;i<3;i++)
     {
-        action->fonctions_deformation[i] = (Fonction**)malloc(sizeof(Fonction*)*list_size(projet->beton.barres));
-        BUGMSG(action->fonctions_deformation[i], -2, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(action->fonctions_deformation[i] = (Fonction**)malloc(sizeof(Fonction*)*list_size(projet->beton.barres)), -2, gettext("Erreur d'allocation mémoire.\n"));
         for (j=0;j<list_size(projet->beton.barres);j++)
         {
-            action->fonctions_deformation[i][j] = (Fonction*)malloc(sizeof(Fonction));
-            BUGMSG(action->fonctions_deformation[i][j], -2, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(action->fonctions_deformation[i][j] = (Fonction*)malloc(sizeof(Fonction)), -2, gettext("Erreur d'allocation mémoire.\n"));
             action->fonctions_deformation[i][j]->nb_troncons = 0;
             action->fonctions_deformation[i][j]->troncons = NULL;
         }
         
-        action->fonctions_rotation[i] = (Fonction**)malloc(sizeof(Fonction*)*list_size(projet->beton.barres));
-        BUGMSG(action->fonctions_rotation[i], -2, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(action->fonctions_rotation[i] = (Fonction**)malloc(sizeof(Fonction*)*list_size(projet->beton.barres)), -2, gettext("Erreur d'allocation mémoire.\n"));
         for (j=0;j<list_size(projet->beton.barres);j++)
         {
-            action->fonctions_rotation[i][j] = (Fonction*)malloc(sizeof(Fonction));
-            BUGMSG(action->fonctions_rotation[i][j], -2, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(action->fonctions_rotation[i][j] = (Fonction*)malloc(sizeof(Fonction)), -2, gettext("Erreur d'allocation mémoire.\n"));
             action->fonctions_rotation[i][j]->nb_troncons = 0;
             action->fonctions_rotation[i][j]->troncons = NULL;
         }
@@ -248,8 +242,7 @@ int common_fonction_ajout(Fonction* fonction, double debut_troncon, double fin_t
     if (fonction->nb_troncons == 0)
     {
         fonction->nb_troncons = 1;
-        fonction->troncons = (Troncon *)malloc(sizeof(Troncon));
-        BUGMSG(fonction->troncons, -2, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(fonction->troncons = (Troncon *)malloc(sizeof(Troncon)), -2, gettext("Erreur d'allocation mémoire.\n"));
         fonction->troncons[0].debut_troncon = debut_troncon;
         fonction->troncons[0].fin_troncon = fin_troncon;
         fonction->troncons[0].x0 = x0_t;

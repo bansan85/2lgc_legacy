@@ -85,8 +85,7 @@ int _1990_gtk_affiche_niveau(Projet *projet, unsigned int niveau)
      * quelques sont les éléments du niveau n-1 encore non placés */
     if (dispo_max != 0)
     {
-        dispos = (int*)malloc(sizeof(int)*dispo_max);
-        BUGMSG(dispos, -2, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(dispos = (int*)malloc(sizeof(int)*dispo_max), -2, gettext("Erreur d'allocation mémoire.\n"));
         for (i=0;i<dispo_max;i++)
             dispos[i] = 0;
     }
@@ -1354,9 +1353,7 @@ void _1990_gtk_tree_view_etat_cell_edited(GtkCellRendererText *cell __attribute_
         BUG(_1990_groupe_positionne_groupe(groupe_niveau, numero) == 0, );
         groupe = (Groupe*)list_curr(groupe_niveau->groupes);
         free(groupe->nom);
-        groupe->nom = (char*)malloc(sizeof(char)*(strlen(new_text)+1));
-        BUGMSG(groupe->nom, , gettext("Erreur d'allocation mémoire.\n"));
-        strcpy(groupe->nom, new_text);
+        BUGMSG(groupe->nom = g_strdup_printf("%s", new_text), , gettext("Erreur d'allocation mémoire.\n"));
     }
     else // On prend niveau-1
     {
@@ -1367,9 +1364,7 @@ void _1990_gtk_tree_view_etat_cell_edited(GtkCellRendererText *cell __attribute_
             _1990_action_cherche_numero(projet, numero);
             action = (Action*)list_curr(projet->actions);
             free(action->description);
-            action->description = (char*)malloc(sizeof(char)*(strlen(new_text)+1));
-            BUGMSG(action->description, , gettext("Erreur d'allocation mémoire.\n"));
-            strcpy(action->description, new_text);
+            BUGMSG(action->description = g_strdup_printf("%s", new_text), , gettext("Erreur d'allocation mémoire.\n"));
         }
         else // Le nom est celui d'un groupe du niveau n-1
         {
@@ -1380,9 +1375,7 @@ void _1990_gtk_tree_view_etat_cell_edited(GtkCellRendererText *cell __attribute_
             BUG(_1990_groupe_positionne_groupe(groupe_niveau, numero) == 0, );
             groupe = (Groupe*)list_curr(groupe_niveau->groupes);
             free(groupe->nom);
-            groupe->nom = (char*)malloc(sizeof(char)*(strlen(new_text)+1));
-            BUGMSG(groupe->nom, , gettext("Erreur d'allocation mémoire.\n"));
-            strcpy(groupe->nom, new_text);
+            BUGMSG(groupe->nom = g_strdup_printf("%s", new_text), , gettext("Erreur d'allocation mémoire.\n"));
         }
     }
     

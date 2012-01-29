@@ -840,7 +840,7 @@ int _1990_ponderations_genere_fr(Projet *projet)
             }
             default :
             {
-                BUGMSG(0, -3, gettext("Paramètre incorrect\n"));
+                BUGMSG(0, -2, gettext("Paramètre incorrect\n"));
                 break;
             }
         }
@@ -931,7 +931,7 @@ int _1990_ponderations_genere_fr(Projet *projet)
     //     FinSi
             default :
             {
-                BUGMSG(0, -3, gettext("Paramètre incorrect\n"));
+                BUGMSG(0, -2, gettext("Paramètre incorrect\n"));
                 break;
             }
         }

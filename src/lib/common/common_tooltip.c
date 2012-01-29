@@ -110,14 +110,10 @@ GtkWidget* common_tooltip_generation(const char *nom)
                                 //         FinSi
                                 if (strcmp((char *) n2->name, "image") == 0)
                                 {
-                                    char        *nom_fichier = (char*)malloc(sizeof(char)*(strlen(DATADIR)+strlen((char *) contenu)+2));
+                                    char        *nom_fichier;
                                     GtkWidget   *element;
                                     
-                                    BUGMSG(nom_fichier, NULL, gettext("Erreur d'allocation mémoire.\n"));
-                                    
-                                    strcpy(nom_fichier, DATADIR);
-                                    strcat(nom_fichier, "/");
-                                    strcat(nom_fichier, (char *)contenu);
+                                    BUGMSG(nom_fichier = g_strdup_printf("%s/%s", DATADIR, contenu), NULL, gettext("Erreur d'allocation mémoire.\n"));
                                     element = gtk_image_new_from_file(nom_fichier);
                                     free(nom_fichier);
                                     gtk_misc_set_alignment(GTK_MISC(element), 0., 0.5);

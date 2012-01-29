@@ -200,9 +200,7 @@ int _1990_groupe_ajout_groupe(Projet *projet, int niveau,
     niveau_groupe = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
     list_mvrear(niveau_groupe->groupes);
     groupe_nouveau.numero = list_size(niveau_groupe->groupes);
-    groupe_nouveau.nom = (char*)malloc(sizeof(char)*(strlen(nom)+1));
-    BUGMSG(groupe_nouveau.nom, -2, gettext("Erreur d'allocation mémoire.\n"));
-    strcpy(groupe_nouveau.nom, nom);
+    BUGMSG(groupe_nouveau.nom = g_strdup_printf("%s", nom), -2, gettext("Erreur d'allocation mémoire.\n"));
     groupe_nouveau.type_combinaison = type_combinaison;
 #ifdef ENABLE_GTK
     groupe_nouveau.Iter_expand = 1;

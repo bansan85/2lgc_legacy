@@ -86,8 +86,7 @@ int EF_appuis_ajout(Projet *projet, const char *nom, Type_EF_Appui x, Type_EF_Ap
     
     // Trivial
     list_mvrear(projet->ef_donnees.appuis);
-    BUGMSG(appui_nouveau.nom = malloc(sizeof(char)*(strlen(nom)+1)), -2, gettext("Erreur d'allocation mémoire.\n"));
-    strcpy(appui_nouveau.nom, nom);
+    BUGMSG(appui_nouveau.nom =  g_strdup_printf("%s", nom), -2, gettext("Erreur d'allocation mémoire.\n"));
     appui_nouveau.ux = x;
     switch (x)
     {
