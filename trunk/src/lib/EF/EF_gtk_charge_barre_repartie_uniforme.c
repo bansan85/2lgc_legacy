@@ -38,7 +38,8 @@
 
 int EF_gtk_charge_barre_repartie_uniforme_ajout_affichage(Charge_Barre_Repartie_Uniforme *charge, Projet *projet, gboolean nouvelle_ligne)
 {
-    char                    *description, tmp[30], *tmp2;
+    char                    *description, *txt_liste_barres, txt_debut[30], txt_fin[30];
+    char                    txt_fx[30], txt_fy[30], txt_fz[30], txt_mx[30], txt_my[30], txt_mz[30];
     List_Gtk_1990_Actions   *list_gtk_1990_actions;
     
     BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
@@ -48,79 +49,19 @@ int EF_gtk_charge_barre_repartie_uniforme_ajout_affichage(Charge_Barre_Repartie_
     if (list_gtk_1990_actions->window == NULL)
         return -1;
     
-    BUGMSG(description = malloc(sizeof(char)*(strlen(gettext("Barre : "))+1)), -2, gettext("Erreur d'allocation mémoire.\n"));
-    strcpy(description, gettext("Barre : "));
-    BUG(tmp2 = common_selection_converti_barres_en_texte(charge->barres), -3);
-    BUGMSG(description = realloc(description, (strlen(description) + strlen(tmp2)+1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
-    strcat(description, tmp2);
-    free(tmp2);
-    common_math_double_to_char(charge->a, tmp, GTK_DECIMAL_DISTANCE);
-    BUGMSG(description = realloc(description, (strlen(description) + strlen(",  :  m") + strlen(gettext("début")) + strlen(tmp) +1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
-    strcat(description, ", ");
-    strcat(description, gettext("début"));
-    strcat(description, " : ");
-    strcat(description, tmp);
-    strcat(description, " m");
-    common_math_double_to_char(charge->b, tmp, GTK_DECIMAL_DISTANCE);
-    BUGMSG(description = realloc(description, (strlen(description) + strlen(",  :  m") + strlen(gettext("fin (par rapport à la fin)")) + strlen(tmp) + 1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
-    strcat(description, ", ");
-    strcat(description, gettext("fin (par rapport à la fin)"));
-    strcat(description, " : ");
-    strcat(description, tmp);
-    strcat(description, " m");
-    if (charge->projection == TRUE)
-    {
-        BUGMSG(description = realloc(description, (strlen(description) + strlen(gettext(", projection : oui")) +1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
-        strcat(description, gettext(", projection : oui"));
-    }
-    else
-    {
-        BUGMSG(description = realloc(description, (strlen(description) + strlen(gettext(", projection : non")) +1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
-        strcat(description, gettext(", projection : non"));
-    }
-    if (charge->repere_local)
-    {
-        BUGMSG(description = realloc(description, (strlen(description) + strlen(", ") + strlen(gettext("repère : local")) + strlen(tmp) + 1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
-        strcat(description, ", ");
-        strcat(description, gettext("repère : local"));
-    }
-    else
-    {
-        BUGMSG(description = realloc(description, (strlen(description) + strlen(", ") + strlen(gettext("repère : global")) + strlen(tmp) + 1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
-        strcat(description, ", ");
-        strcat(description, gettext("repère : global"));
-    }
-    common_math_double_to_char(charge->fx, tmp, GTK_DECIMAL_DISTANCE);
-    BUGMSG(description = realloc(description, (strlen(description) + strlen(", Fx :  N/m") + strlen(tmp)+1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
-    strcat(description, ", Fx : ");
-    strcat(description, tmp);
-    strcat(description, " N/m");
-    common_math_double_to_char(charge->fy, tmp, GTK_DECIMAL_DISTANCE);
-    BUGMSG(description = realloc(description, (strlen(description) + strlen(", Fy :  N/m") + strlen(tmp)+1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
-    strcat(description, ", Fy : ");
-    strcat(description, tmp);
-    strcat(description, " N/m");
-    common_math_double_to_char(charge->fz, tmp, GTK_DECIMAL_DISTANCE);
-    BUGMSG(description = realloc(description, (strlen(description) + strlen(", Fz :  N/m") + strlen(tmp)+1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
-    strcat(description, ", Fz : ");
-    strcat(description, tmp);
-    strcat(description, " N/m");
-    common_math_double_to_char(charge->mx, tmp, GTK_DECIMAL_MOMENT);
-    BUGMSG(description = realloc(description, (strlen(description) + strlen(", Mx :  N.m/m") + strlen(tmp)+1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
-    strcat(description, ", Mx : ");
-    strcat(description, tmp);
-    strcat(description, " N.m/m");
-    common_math_double_to_char(charge->my, tmp, GTK_DECIMAL_MOMENT);
-    BUGMSG(description = realloc(description, (strlen(description) + strlen(", My :  N.m/m") + strlen(tmp)+1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
-    strcat(description, ", My : ");
-    strcat(description, tmp);
-    strcat(description, " N.m/m");
-    common_math_double_to_char(charge->mz, tmp, GTK_DECIMAL_MOMENT);
-    BUGMSG(description = realloc(description, (strlen(description) + strlen(", Mz :  N.m/m") + strlen(tmp)+1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
-    strcat(description, ", Mz : ");
-    strcat(description, tmp);
-    strcat(description, " N.m/m");
+    BUG(txt_liste_barres = common_selection_converti_barres_en_texte(charge->barres), -3);
+    common_math_double_to_char(charge->a, txt_debut, GTK_DECIMAL_DISTANCE);
+    common_math_double_to_char(charge->b, txt_fin, GTK_DECIMAL_DISTANCE);
+    common_math_double_to_char(charge->fx, txt_fx, GTK_DECIMAL_FORCE);
+    common_math_double_to_char(charge->fy, txt_fy, GTK_DECIMAL_FORCE);
+    common_math_double_to_char(charge->fz, txt_fz, GTK_DECIMAL_FORCE);
+    common_math_double_to_char(charge->mx, txt_mx, GTK_DECIMAL_MOMENT);
+    common_math_double_to_char(charge->my, txt_my, GTK_DECIMAL_MOMENT);
+    common_math_double_to_char(charge->mz, txt_mz, GTK_DECIMAL_MOMENT);
     
+    BUGMSG(description = g_strdup_printf("%s : %s, %s : %s m, %s : %s m, %s, %s, Fx : %s N/m, Fy : %s N/m, Fz : %s N/m, Mx : %s N.m/m, My : %s N.m/m, Mz : %s N.m/m", strstr(txt_liste_barres, ";") == NULL ? gettext("Barre") : gettext("Barres"), txt_liste_barres, gettext("début"), txt_debut, gettext("fin (par rapport à la fin)"), txt_fin, charge->projection == TRUE ? gettext("projection : oui") : gettext("projection : non"), charge->repere_local ? gettext("repère : local") : gettext("repère : global"), txt_fx, txt_fy, txt_fz, txt_mx, txt_my, txt_mz), -2, gettext("Erreur d'allocation mémoire.\n"));
+    
+    free(txt_liste_barres);
     if (nouvelle_ligne == TRUE)
         gtk_tree_store_append(list_gtk_1990_actions->tree_store_charges, &charge->Iter, NULL);
     gtk_tree_store_set(list_gtk_1990_actions->tree_store_charges, &charge->Iter, 0, charge->numero, 1, charge->description, 2, gettext("Répartie uniforme sur barre"), 3, description, -1);

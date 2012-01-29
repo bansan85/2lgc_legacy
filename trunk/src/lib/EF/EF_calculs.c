@@ -1099,7 +1099,7 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
     if (projet->ef_donnees.rigidite_matrice_partielle->nrow != 0)
     {
         ax2 = (double*)triplet_force_partielle->x;
-        BUGMSG(umfpack_dl_solve(UMFPACK_A, projet->ef_donnees.ap, projet->ef_donnees.ai, projet->ef_donnees.ax, ax, ax2, projet->ef_donnees.numeric, NULL, NULL) == UMFPACK_OK, -3, gettext("Erreur lors de la résolution de la matrice.\n"));
+        BUGMSG(umfpack_dl_solve(UMFPACK_A, projet->ef_donnees.ap, projet->ef_donnees.ai, projet->ef_donnees.ax, ax, ax2, projet->ef_donnees.numeric, NULL, NULL) == UMFPACK_OK, -2, gettext("Erreur lors de la résolution de la matrice.\n"));
         projet->ef_donnees.residu = EF_calculs_resid(projet->ef_donnees.ap, projet->ef_donnees.ai, projet->ef_donnees.ax, ax2, projet->ef_donnees.triplet_rigidite_partielle->nrow, ax);
         BUG(!isnan(projet->ef_donnees.residu), -3);
         printf("Residu sur les déplacements : %g\n", projet->ef_donnees.residu);

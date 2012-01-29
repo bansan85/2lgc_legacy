@@ -52,8 +52,7 @@ int m3d_init(Projet *projet)
     M3d_init();
     m3d = &projet->list_gtk.m3d;
     m3d->drawing = gtk_drawing_area_new();
-    m3d->data = malloc(sizeof(SGlobalData));
-    BUGMSG(m3d->data, -2, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(m3d->data = malloc(sizeof(SGlobalData)), -2, gettext("Erreur d'allocation mémoire.\n"));
     memset(m3d->data, 0, sizeof(SGlobalData));
     
     global_data = (SGlobalData*)m3d->data;

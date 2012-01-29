@@ -99,9 +99,7 @@ Charge_Barre_Repartie_Uniforme *EF_charge_barre_repartie_uniforme_ajout(Projet *
     action_en_cours = (Action*)list_curr(projet->actions);
     
     charge_nouveau.type = CHARGE_BARRE_REPARTIE_UNIFORME;
-    charge_nouveau.description = (char*)malloc(sizeof(char)*(strlen(nom)+1));
-    BUGMSG(charge_nouveau.description, NULL, gettext("Erreur d'allocation mémoire.\n"));
-    strcpy(charge_nouveau.description, nom);
+    BUGMSG(charge_nouveau.description = g_strdup_printf("%s", nom), NULL, gettext("Erreur d'allocation mémoire.\n"));
     charge_nouveau.barres = barres;
     charge_nouveau.repere_local = repere_local;
     charge_nouveau.projection = projection;

@@ -100,8 +100,7 @@ int _1992_1_1_barres_ajout(Projet *projet, Type_Element type, unsigned int secti
     
     element_nouveau.discretisation_element = discretisation_element;
     
-    element_nouveau.info_EF = (Barre_Info_EF*)malloc(sizeof(Barre_Info_EF)*(discretisation_element+1));
-    BUGMSG(element_nouveau.info_EF, -2, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(element_nouveau.info_EF = (Barre_Info_EF*)malloc(sizeof(Barre_Info_EF)*(discretisation_element+1)), -2, gettext("Erreur d'allocation mémoire.\n"));
     
     element_nouveau.matrice_rotation = NULL;
     element_nouveau.matrice_rotation_transpose = NULL;
@@ -119,8 +118,7 @@ int _1992_1_1_barres_ajout(Projet *projet, Type_Element type, unsigned int secti
     {
         unsigned int    i;
         
-        element_en_cours->noeuds_intermediaires = (EF_Noeud**)malloc(sizeof(EF_Noeud*)*(discretisation_element));
-        BUGMSG(element_en_cours->noeuds_intermediaires, -2, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(element_en_cours->noeuds_intermediaires = (EF_Noeud**)malloc(sizeof(EF_Noeud*)*(discretisation_element)), -2, gettext("Erreur d'allocation mémoire.\n"));
         
         /* Création des noeuds intermédiaires */
         for (i=0;i<discretisation_element;i++)

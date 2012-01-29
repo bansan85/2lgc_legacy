@@ -320,8 +320,7 @@ int _1990_action_ajout(Projet *projet, int type, const char* description)
     BUG(_1990_action_categorie_bat(type, projet->pays) != ACTION_INCONNUE, -3);
     
     list_mvrear(projet->actions);
-    BUGMSG(action_nouveau.description = (char*)malloc(sizeof(char)*(strlen(description)+1)), -2, gettext("Erreur d'allocation mémoire.\n"));
-    strcpy(action_nouveau.description, description);
+    BUGMSG(action_nouveau.description = g_strdup_printf("%s", description), -2, gettext("Erreur d'allocation mémoire.\n"));
     action_nouveau.type = type;
     BUGMSG(action_nouveau.charges = list_init(), -2, gettext("Erreur d'allocation mémoire.\n"));
     action_nouveau.deplacement_complet = NULL;

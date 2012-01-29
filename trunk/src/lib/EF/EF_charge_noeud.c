@@ -65,9 +65,7 @@ Charge_Noeud*  EF_charge_noeud_ajout(Projet *projet, int num_action, LIST *noeud
     action_en_cours = (Action*)list_curr(projet->actions);
     
     charge_nouveau.type = CHARGE_NOEUD;
-    charge_nouveau.description = (char*)malloc(sizeof(char)*(strlen(nom)+1));
-    BUGMSG(charge_nouveau.description, NULL, gettext("Erreur d'allocation mémoire.\n"));
-    strcpy(charge_nouveau.description, nom);
+    BUGMSG(charge_nouveau.description = g_strdup_printf("%s", nom), NULL, gettext("Erreur d'allocation mémoire.\n"));
     charge_nouveau.noeuds = noeuds;
     charge_nouveau.fx = fx;
     charge_nouveau.fy = fy;

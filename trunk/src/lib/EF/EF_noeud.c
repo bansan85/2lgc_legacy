@@ -60,10 +60,12 @@ int EF_noeuds_ajout_noeud_libre(Projet *projet, double x, double y, double z, in
  */
 {
     EF_Noeud        *noeud_en_cours, noeud_nouveau;
-    EF_Point        *data = malloc(sizeof(EF_Point));
+    EF_Point        *data;
     
     BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
     BUGMSG(projet->ef_donnees.noeuds, -1, gettext("Paramètre incorrect\n"));
+    
+    BUGMSG(data = malloc(sizeof(EF_Point)), -2, gettext("Erreur d'allocation mémoire.\n"));
     
     // Trivial
     list_mvrear(projet->ef_donnees.noeuds);
@@ -107,10 +109,12 @@ int EF_noeuds_ajout_noeud_barre(Projet *projet, Beton_Barre *barre, double posit
  */
 {
     EF_Noeud        *noeud_en_cours, noeud_nouveau;
-    EF_Noeud_Barre  *data = malloc(sizeof(EF_Noeud_Barre));
+    EF_Noeud_Barre  *data;
     
     BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
     BUGMSG(projet->ef_donnees.noeuds, -1, gettext("Paramètre incorrect\n"));
+    
+    BUGMSG(data = malloc(sizeof(EF_Noeud_Barre)), -2, gettext("Erreur d'allocation mémoire.\n"));
     
     // Trivial
     list_mvrear(projet->ef_donnees.noeuds);

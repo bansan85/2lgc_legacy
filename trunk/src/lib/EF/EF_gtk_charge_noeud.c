@@ -38,7 +38,7 @@
 
 int EF_gtk_charge_noeud_ajout_affichage(Charge_Noeud *charge, Projet *projet, gboolean nouvelle_ligne)
 {
-    char                    *description, tmp[30], *tmp2;
+    char                    *description, txt_fx[30], txt_fy[30], txt_fz[30], txt_mx[30], txt_my[30], txt_mz[30], *txt_liste_noeuds;
     List_Gtk_1990_Actions   *list_gtk_1990_actions;
     
     BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
@@ -46,42 +46,18 @@ int EF_gtk_charge_noeud_ajout_affichage(Charge_Noeud *charge, Projet *projet, gb
     list_gtk_1990_actions = &projet->list_gtk._1990_actions;
     if (list_gtk_1990_actions->window == NULL)
         return -1;
-    BUGMSG(description = malloc(sizeof(char)*(strlen(gettext("Noeud : "))+1)), -2, gettext("Erreur d'allocation mémoire.\n"));
-    strcpy(description, gettext("Noeud : "));
-    BUG(tmp2 = common_selection_converti_noeuds_en_texte(charge->noeuds), -3);
-    BUGMSG(description = realloc(description, (strlen(description) + strlen(tmp2)+1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
-    strcat(description, tmp2);
-    free(tmp2);
-    common_math_double_to_char(charge->fx, tmp, GTK_DECIMAL_FORCE);
-    BUGMSG(description = realloc(description, (strlen(description) + strlen(", Fx :  N") + strlen(tmp)+1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
-    strcat(description, ", Fx : ");
-    strcat(description, tmp);
-    strcat(description, " N");
-    common_math_double_to_char(charge->fy, tmp, GTK_DECIMAL_FORCE);
-    BUGMSG(description = realloc(description, (strlen(description) + strlen(", Fy :  N") + strlen(tmp)+1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
-    strcat(description, ", Fy : ");
-    strcat(description, tmp);
-    strcat(description, " N");
-    common_math_double_to_char(charge->fz, tmp, GTK_DECIMAL_FORCE);
-    BUGMSG(description = realloc(description, (strlen(description) + strlen(", Fz :  N") + strlen(tmp)+1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
-    strcat(description, ", Fz : ");
-    strcat(description, tmp);
-    strcat(description, " N");
-    common_math_double_to_char(charge->mx, tmp, GTK_DECIMAL_MOMENT);
-    BUGMSG(description = realloc(description, (strlen(description) + strlen(", Mx :  N.m") + strlen(tmp)+1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
-    strcat(description, ", Mx : ");
-    strcat(description, tmp);
-    strcat(description, " N.m");
-    common_math_double_to_char(charge->my, tmp, GTK_DECIMAL_MOMENT);
-    BUGMSG(description = realloc(description, (strlen(description) + strlen(", My :  N.m") + strlen(tmp)+1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
-    strcat(description, ", My : ");
-    strcat(description, tmp);
-    strcat(description, " N.m");
-    common_math_double_to_char(charge->mz, tmp, GTK_DECIMAL_MOMENT);
-    BUGMSG(description = realloc(description, (strlen(description) + strlen(", Mz :  N.m") + strlen(tmp)+1)*sizeof(char)), -2, gettext("Erreur d'allocation mémoire.\n"));
-    strcat(description, ", Mz : ");
-    strcat(description, tmp);
-    strcat(description, " N.m");
+     
+    BUG(txt_liste_noeuds = common_selection_converti_noeuds_en_texte(charge->noeuds), -3);
+    common_math_double_to_char(charge->fx, txt_fx, GTK_DECIMAL_FORCE);
+    common_math_double_to_char(charge->fy, txt_fy, GTK_DECIMAL_FORCE);
+    common_math_double_to_char(charge->fz, txt_fz, GTK_DECIMAL_FORCE);
+    common_math_double_to_char(charge->mx, txt_mx, GTK_DECIMAL_MOMENT);
+    common_math_double_to_char(charge->my, txt_my, GTK_DECIMAL_MOMENT);
+    common_math_double_to_char(charge->mz, txt_mz, GTK_DECIMAL_MOMENT);
+    
+    BUGMSG(description = g_strdup_printf("%s : %s, Fx : %s N, Fy : %s N, Fz : %s N, Mx : %s N.m, My : %s N.m, Mz : %s N.m", strstr(txt_liste_noeuds, ";") == NULL ? gettext("Noeud") : gettext("Noeuds"), txt_liste_noeuds, txt_fx, txt_fy, txt_fz, txt_mx, txt_my, txt_mz), -2, gettext("Erreur d'allocation mémoire.\n"));
+    
+    free(txt_liste_noeuds);
     
     if (nouvelle_ligne == TRUE)
         gtk_tree_store_append(list_gtk_1990_actions->tree_store_charges, &charge->Iter, NULL);

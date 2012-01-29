@@ -108,8 +108,7 @@ int EF_relachement_ajout(Projet *projet, const char *nom, EF_Relachement_Type rx
     relachement_nouveau.ry_f_data = ry_f_data;
     relachement_nouveau.rz_fin = rz_fin;
     relachement_nouveau.rz_f_data = rz_f_data;
-    BUGMSG(relachement_nouveau.nom = malloc(sizeof(char)*(strlen(nom)+1)), -2, gettext("Erreur d'allocation mémoire.\n"));
-    strcpy(relachement_nouveau.nom, nom);
+    BUGMSG(relachement_nouveau.nom = g_strdup_printf("%s", nom), -2, gettext("Erreur d'allocation mémoire.\n"));
     
     relachement_en_cours = (EF_Relachement *)list_rear(projet->ef_donnees.relachements);
     if (relachement_en_cours == NULL)

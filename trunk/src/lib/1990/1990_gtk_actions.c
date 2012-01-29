@@ -368,7 +368,7 @@ void _1990_gtk_tree_view_actions_psi_edited(GtkCellRendererText *cell, gchar *pa
     GtkTreePath             *path;
     GtkTreeIter             iter;
     gint                    i;
-    char                    *fake = (char*)malloc(sizeof(char)*(strlen(new_text)+1));
+    char                    *fake;
     double                  convertion;
     Action                  *action;
     gint                    column = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cell), "column"));
@@ -377,6 +377,7 @@ void _1990_gtk_tree_view_actions_psi_edited(GtkCellRendererText *cell, gchar *pa
     BUGMSG(projet->actions, , gettext("Paramètre incorrect\n"));
     BUGMSG(list_size(projet->actions), , gettext("Paramètre incorrect\n"));
     BUGMSG(projet->list_gtk._1990_actions.window, , gettext("Paramètre incorrect\n"));
+    fake = (char*)malloc(sizeof(char)*(strlen(new_text)+1));
     BUGMSG(fake, , gettext("Erreur d'allocation mémoire.\n"));
     
     list_gtk_1990_actions = &projet->list_gtk._1990_actions;
@@ -390,7 +391,7 @@ void _1990_gtk_tree_view_actions_psi_edited(GtkCellRendererText *cell, gchar *pa
     // On vérifie si le texte contient bien un nombre flottant
     if (sscanf(new_text, "%lf%s", &convertion, fake) == 1)
     {
-        // On modifie le tree-view-actions
+        // On modifie le tree-view-action
         gtk_tree_store_set(list_gtk_1990_actions->tree_store_actions, &iter, column, convertion, -1);
         
         // On modifie l'action
@@ -437,12 +438,10 @@ void _1990_gtk_menu_nouvelle_action_activate(GtkMenuItem *menuitem, Projet *proj
 {
     List_Gtk_1990_Actions   *list_gtk_1990_actions;
     int                     i = 0;
-    char                    *tmp = (char*)malloc(sizeof(char)*(strlen(gettext("Sans nom")+10)));
     
     BUGMSG(projet, , gettext("Paramètre incorrect\n"));
     BUGMSG(projet->actions, , gettext("Paramètre incorrect\n"));
     BUGMSG(projet->list_gtk._1990_actions.window, , gettext("Paramètre incorrect\n"));
-    BUGMSG(tmp, , gettext("Erreur d'allocation mémoire.\n"));
     
     list_gtk_1990_actions = &projet->list_gtk._1990_actions;
     
@@ -453,12 +452,14 @@ void _1990_gtk_menu_nouvelle_action_activate(GtkMenuItem *menuitem, Projet *proj
     {
         if ((GTK_IS_MENU_TOOL_BUTTON(menuitem)) || (*(GtkMenuItem **)list_curr(list_gtk_1990_actions->menu_list_widget_action) == menuitem))
         {
+            char        *tmp;
             Action      *action;
             GtkTreePath *path;
             
-            sprintf(tmp, "%s %zu", gettext("Sans nom"), list_size(projet->actions));
+            BUGMSG(tmp = g_strdup_printf("%s %zu", gettext("Sans nom"), list_size(projet->actions)), , gettext("Erreur d'allocation mémoire.\n"));
             // On crée l'action en fonction de la catégorie sélectionnée dans le menu déroulant.
             BUG(_1990_action_ajout(projet, i, tmp) == 0, );
+            free(tmp);
             
             // On actualise l'affichage
             action = list_curr(projet->actions);
