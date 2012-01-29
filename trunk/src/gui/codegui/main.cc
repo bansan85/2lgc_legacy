@@ -55,12 +55,6 @@ extern "C" {
 #include <M3d++.hpp>
 #include <list.h>
 
-struct SGlobalData
-{
-    CM3dScene *scene;
-    CM3dCamera *camera;
-};
-
 
 int main(int argc, char *argv[])
 {

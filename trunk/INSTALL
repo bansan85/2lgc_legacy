@@ -14,7 +14,7 @@ patch < ../diff-po-Makevars.template.patch
 cd ..
 mv po/Makevars.template po/Makevars
 rm -f po/POTFILES.in
-find . -name "*.c" -o -name "*.h" > po/POTFILES.in
+find . -name "*.c" -o -name "*.cc" > po/POTFILES.in
 
 autoheader
 aclocal

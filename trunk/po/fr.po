@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2012-01-26 22:56+0100\n"
-"PO-Revision-Date: 2012-01-26 22:58+0100\n"
+"POT-Creation-Date: 2012-01-29 11:25+0100\n"
+"PO-Revision-Date: 2012-01-29 11:27+0100\n"
 "Last-Translator: LE GARREC Vincent <vlg@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -11,6 +11,9 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+msgid "Impossible d'initialiser gtk.\n"
+msgstr "Impossible d'initialiser gtk.\n"
 
 msgid "Paramètre incorrect\n"
 msgstr "Paramètre incorrect\n"
@@ -451,27 +454,6 @@ msgstr "'%s' n'est pas de la forme 'largeurxhauteur'.\n"
 msgid "Paramètre invalide\n"
 msgstr "Paramètre invalide\n"
 
-msgid "Gestion des noeuds"
-msgstr "Gestion des noeuds"
-
-msgid "Noeuds libres"
-msgstr "Noeuds libres"
-
-msgid "Noeuds intermédiaires"
-msgstr "Noeuds intermédiaires"
-
-msgid "Appui"
-msgstr "Appui"
-
-msgid "Barre"
-msgstr "Barre"
-
-msgid "Position relative"
-msgstr "Position relative"
-
-msgid "Aucun"
-msgstr "Aucun"
-
 msgid "Type de section %d inconnu.\n"
 msgstr "Type de section %d inconnu.\n"
 
@@ -568,6 +550,9 @@ msgstr "Noeud :"
 msgid "Noeud n°%d introuvable.\n"
 msgstr "Noeud n°%d introuvable.\n"
 
+msgid "Aucun"
+msgstr "Aucun"
+
 msgid "début"
 msgstr "début"
 
@@ -612,4 +597,25 @@ msgstr "Il n'est pas possible d'activer à la fois la projection et l'utilisatio
 
 msgid "Relachement n°%d introuvable.\n"
 msgstr "Relachement n°%d introuvable.\n"
+
+msgid "Appui %s introuvable.\n"
+msgstr "Appui %s introuvable.\n"
+
+msgid "Gestion des noeuds"
+msgstr "Gestion des noeuds"
+
+msgid "Noeuds libres"
+msgstr "Noeuds libres"
+
+msgid "Noeuds intermédiaires"
+msgstr "Noeuds intermédiaires"
+
+msgid "Appui"
+msgstr "Appui"
+
+msgid "Barre"
+msgstr "Barre"
+
+msgid "Position relative"
+msgstr "Position relative"
 

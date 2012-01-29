@@ -27,6 +27,10 @@
 #include <gtk/gtk.h>
 #include <math.h>
 
+#include "common_m3d.hpp"
+
+extern "C" {
+
 #include "common_projet.h"
 #include "common_erreurs.h"
 #include "common_gtk.h"
@@ -35,7 +39,6 @@
 #include "EF_charge_noeud.h"
 #include "1990_actions.h"
 #include "common_selection.h"
-
 
 void EF_gtk_noeud_annuler(GtkButton *button __attribute__((unused)), GtkWidget *fenetre)
 /* Description : Ferme la fenêtre sans effectuer les modifications
@@ -89,7 +92,7 @@ void EF_gtk_noeud_edit_barre(GtkCellRendererText *cell, gchar *path_string, gcha
     {
         if (column == 6)
         {
-            EF_Noeud_Barre  *info = noeud->data;
+            EF_Noeud_Barre  *info = (EF_Noeud_Barre *)noeud->data;
             
             if (sscanf(new_text, "%lf%s", &convertion, fake) == 1)
             {
@@ -134,6 +137,7 @@ void EF_gtk_noeud_edit_pos_abs(GtkCellRendererText *cell, gchar *path_string, gc
     BUGMSG(list_size(projet->ef_donnees.noeuds), , gettext("Paramètre incorrect\n"));
     BUGMSG(projet->list_gtk.ef_noeud.window, , gettext("Paramètre incorrect\n"));
     BUGMSG(fake, , gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(&projet->list_gtk.m3d.data, , gettext("Paramètre incorrect\n"));
     
     gtk_noeud = &projet->list_gtk.ef_noeud;
     model = GTK_TREE_MODEL(gtk_noeud->tree_store_libre);
@@ -152,23 +156,62 @@ void EF_gtk_noeud_edit_pos_abs(GtkCellRendererText *cell, gchar *path_string, gc
         {
             case NOEUD_LIBRE :
             {
-                EF_Point    *point = noeud->data;
+                EF_Point    *point = (EF_Point *)noeud->data;
                 
                 switch (column)
                 {
                     case 1:
                     {
+                        char        *texte;
+                        CM3dObject  *objet;
+                        SGlobalData *vue = (SGlobalData*)projet->list_gtk.m3d.data;
+                        
                         point->x = convertion;
+                        
+                        texte = g_strdup_printf("noeud_%d", i);
+                        objet = vue->scene->get_object_by_name(texte);
+                        objet->set_position(point->x, point->y, point->z);
+                        
+                        vue->scene->rendering(vue->camera);
+                        gtk_widget_queue_draw(projet->list_gtk.m3d.drawing);
+                        
+                        free(texte);
                         break;
                     }
                     case 2:
                     {
+                        char        *texte;
+                        CM3dObject  *objet;
+                        SGlobalData *vue = (SGlobalData*)projet->list_gtk.m3d.data;
+                        
                         point->y = convertion;
+                        
+                        texte = g_strdup_printf("noeud_%d", i);
+                        objet = vue->scene->get_object_by_name(texte);
+                        objet->set_position(point->x, point->y, point->z);
+                        
+                        vue->scene->rendering(vue->camera);
+                        gtk_widget_queue_draw(projet->list_gtk.m3d.drawing);
+                        
+                        free(texte);
                         break;
                     }
                     case 3:
                     {
+                        char        *texte;
+                        CM3dObject  *objet;
+                        SGlobalData *vue = (SGlobalData*)projet->list_gtk.m3d.data;
+                        
                         point->z = convertion;
+                        
+                        texte = g_strdup_printf("noeud_%d", i);
+                        objet = vue->scene->get_object_by_name(texte);
+                        objet->set_position(point->x, point->y, point->z);
+                        
+                        vue->scene->rendering(vue->camera);
+                        gtk_widget_queue_draw(projet->list_gtk.m3d.drawing);
+                        
+                        free(texte);
                         break;
                     }
                     default :
@@ -251,7 +294,7 @@ void EF_gtk_noeud_edit_pos_relat(GtkCellRendererText *cell, gchar *path_string, 
             {
                 if (column == 6)
                 {
-                    EF_Noeud_Barre  *info = noeud->data;
+                    EF_Noeud_Barre  *info = (EF_Noeud_Barre *)noeud->data;
                     
                     info->position_relative_barre = convertion;
                 }
@@ -287,7 +330,7 @@ void EF_gtk_render_actualise_position(GtkTreeViewColumn *tree_column __attribute
  * Valeur renvoyée : void
  */
 {
-    Projet      *projet = data;
+    Projet      *projet = (Projet *)data;
     gchar       texte[30];
     gint        colonne;
     int         noeud;
@@ -358,7 +401,7 @@ void EF_gtk_noeud_edit_noeud_libre_appui(GtkCellRendererText *cell __attribute__
     list_mvfront(projet->ef_donnees.appuis);
     do
     {
-        appui = list_curr(projet->ef_donnees.appuis);
+        appui = (EF_Appui *)list_curr(projet->ef_donnees.appuis);
         if (strcmp(new_text, appui->nom) == 0)
         {
             EF_Noeud    *noeud = EF_noeuds_cherche_numero(projet, numero_noeud);
@@ -425,7 +468,7 @@ void EF_gtk_noeud_edit_noeud_barre_appui(GtkCellRendererText *cell __attribute__
     list_mvfront(projet->ef_donnees.appuis);
     do
     {
-        appui = list_curr(projet->ef_donnees.appuis);
+        appui = (EF_Appui *)list_curr(projet->ef_donnees.appuis);
         if (strcmp(new_text, appui->nom) == 0)
         {
             EF_Noeud    *noeud = EF_noeuds_cherche_numero(projet, numero_noeud);
@@ -472,7 +515,7 @@ void EF_gtk_noeud(Projet *projet)
     // Le notebook
     ef_gtk->notebook = gtk_notebook_new();
     gtk_notebook_set_tab_pos(GTK_NOTEBOOK(ef_gtk->notebook), GTK_POS_TOP);
-    gtk_table_attach(GTK_TABLE(ef_gtk->table), ef_gtk->notebook, 0, 2, 0, 1, GTK_EXPAND|GTK_FILL, GTK_EXPAND|GTK_FILL, 0, 0);
+    gtk_table_attach(GTK_TABLE(ef_gtk->table), ef_gtk->notebook, 0, 2, 0, 1, (GtkAttachOptions)(GTK_EXPAND|GTK_FILL), (GtkAttachOptions)(GTK_EXPAND|GTK_FILL), 0, 0);
     
     ef_gtk->table_noeud_libre = gtk_table_new(1, 1, FALSE);
     ef_gtk->label_noeud_libre = gtk_label_new(gettext("Noeuds libres"));
@@ -489,7 +532,7 @@ void EF_gtk_noeud(Projet *projet)
     ef_gtk->scroll_libre = gtk_scrolled_window_new(NULL, NULL);
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(ef_gtk->scroll_libre), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
     gtk_container_add(GTK_CONTAINER(ef_gtk->scroll_libre), GTK_WIDGET(ef_gtk->tree_view_libre));
-    gtk_table_attach(GTK_TABLE(ef_gtk->table_noeud_libre), GTK_WIDGET(ef_gtk->scroll_libre), 0, 2, 0, 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
+    gtk_table_attach(GTK_TABLE(ef_gtk->table_noeud_libre), GTK_WIDGET(ef_gtk->scroll_libre), 0, 2, 0, 1, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 0, 0);
     // Colonne numéro
     pCellRenderer = gtk_cell_renderer_text_new();
     g_object_set(pCellRenderer, "background", "#EEEEEE", NULL);
@@ -541,7 +584,7 @@ void EF_gtk_noeud(Projet *projet)
     ef_gtk->scroll_barre = gtk_scrolled_window_new(NULL, NULL);
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(ef_gtk->scroll_barre), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
     gtk_container_add(GTK_CONTAINER(ef_gtk->scroll_barre), GTK_WIDGET(ef_gtk->tree_view_barre));
-    gtk_table_attach(GTK_TABLE(ef_gtk->table_noeud_barre), GTK_WIDGET(ef_gtk->scroll_barre), 0, 2, 0, 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
+    gtk_table_attach(GTK_TABLE(ef_gtk->table_noeud_barre), GTK_WIDGET(ef_gtk->scroll_barre), 0, 2, 0, 1, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 0, 0);
     // Colonne numéro
     pCellRenderer = gtk_cell_renderer_text_new();
     g_object_set(pCellRenderer, "background", "#EEEEEE", NULL);
@@ -599,8 +642,8 @@ void EF_gtk_noeud(Projet *projet)
         list_mvfront(projet->ef_donnees.noeuds);
         do
         {
-            EF_Noeud    *noeud = list_curr(projet->ef_donnees.noeuds);
-            EF_Point    *point = EF_noeuds_renvoie_position(noeud);
+            EF_Noeud    *noeud = (EF_Noeud *)list_curr(projet->ef_donnees.noeuds);
+            EF_Point    *point = (EF_Point *)EF_noeuds_renvoie_position(noeud);
             GtkTreeIter iter;
             
             BUG(point, );
@@ -612,7 +655,7 @@ void EF_gtk_noeud(Projet *projet)
             }
             else if (noeud->type == NOEUD_BARRE)
             {
-                EF_Noeud_Barre  *info = noeud->data;
+                EF_Noeud_Barre  *info = (EF_Noeud_Barre *)noeud->data;
                 
                 gtk_tree_store_append(ef_gtk->tree_store_barre, &iter, NULL);
                 gtk_tree_store_set(ef_gtk->tree_store_barre, &iter, 0, noeud->numero, 1, point->x, 2, point->y, 3, point->z, 4, (noeud->appui == NULL ? gettext("Aucun") : noeud->appui->nom), 5, info->barre->numero, 6, info->position_relative_barre, -1);
@@ -625,11 +668,11 @@ void EF_gtk_noeud(Projet *projet)
     
     ef_gtk->button_valider = gtk_button_new_from_stock(GTK_STOCK_OK);
     //g_signal_connect(ef_gtk->button_fermer, "clicked", G_CALLBACK(EF_gtk_noeud_annuler), ef_gtk->window);
-    gtk_table_attach(GTK_TABLE(ef_gtk->table), ef_gtk->button_valider, 0, 1, 1, 2, GTK_EXPAND | GTK_FILL, GTK_SHRINK | GTK_FILL, 0, 0);
+    gtk_table_attach(GTK_TABLE(ef_gtk->table), ef_gtk->button_valider, 0, 1, 1, 2, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_SHRINK | GTK_FILL), 0, 0);
     
     ef_gtk->button_annuler = gtk_button_new_from_stock(GTK_STOCK_CANCEL);
     g_signal_connect(ef_gtk->button_annuler, "clicked", G_CALLBACK(EF_gtk_noeud_annuler), ef_gtk->window);
-    gtk_table_attach(GTK_TABLE(ef_gtk->table), ef_gtk->button_annuler, 1, 2, 1, 2, GTK_EXPAND | GTK_FILL, GTK_SHRINK | GTK_FILL, 0, 0);
+    gtk_table_attach(GTK_TABLE(ef_gtk->table), ef_gtk->button_annuler, 1, 2, 1, 2, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_SHRINK | GTK_FILL), 0, 0);
     
     gtk_window_set_transient_for(GTK_WINDOW(ef_gtk->window), GTK_WINDOW(projet->list_gtk.comp.window));
     gtk_window_set_modal(GTK_WINDOW(ef_gtk->window), TRUE);
@@ -638,5 +681,6 @@ void EF_gtk_noeud(Projet *projet)
     return;
 }
 
+}
 
 #endif
