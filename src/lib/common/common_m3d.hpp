@@ -23,7 +23,17 @@
 #ifdef ENABLE_GTK
 #include <gtk/gtk.h>
 
+
 #ifdef __cplusplus
+#include <M3d++.hpp>
+
+typedef struct
+{
+    CM3dScene *scene;
+    CM3dCamera *camera;
+} SGlobalData;
+
+
 extern "C" {
 #endif
 

@@ -32,12 +32,6 @@ extern "C" {
 #include "1992_1_1_barres.h"
 #include "common_m3d.hpp"
 
-struct SGlobalData
-{
-    CM3dScene *scene;
-    CM3dCamera *camera;
-};
-
 int m3d_init(Projet *projet)
 /* Description : Initialise l'affichage graphique de la structure.
  * Paramètres : Projet *projet : la variable projet
@@ -49,20 +43,20 @@ int m3d_init(Projet *projet)
  */
 {
     // Trivial
-    List_Gtk_m3d        *m3d;
-    struct SGlobalData  *global_data;
-    CM3dLight           *light;
+    List_Gtk_m3d    *m3d;
+    SGlobalData     *global_data;
+    CM3dLight       *light;
     
     BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
     
     M3d_init();
     m3d = &projet->list_gtk.m3d;
     m3d->drawing = gtk_drawing_area_new();
-    m3d->data = malloc(sizeof(struct SGlobalData));
-    BUGMSG(m3d->data, -2, gettext("reur d'allocation mémoire.\n"));
-    memset(m3d->data, 0, sizeof(struct SGlobalData));
+    m3d->data = malloc(sizeof(SGlobalData));
+    BUGMSG(m3d->data, -2, gettext("Erreur d'allocation mémoire.\n"));
+    memset(m3d->data, 0, sizeof(SGlobalData));
     
-    global_data = (struct SGlobalData*)m3d->data;
+    global_data = (SGlobalData*)m3d->data;
     global_data->scene = new CM3dScene();
     global_data->scene->reverse_y_axis();
     global_data->scene->show_repere(true, 1.1);
@@ -82,13 +76,13 @@ int m3d_init(Projet *projet)
 gboolean m3d_configure_event(GtkWidget *drawing __attribute__((unused)), GdkEventConfigure * ev, gpointer *data2)
 {
     SGlobalData *data = (SGlobalData*)data2;
-    data->camera->set_size_of_window (ev->width, ev->height);
+    data->camera->set_size_of_window(ev->width, ev->height);
     
-    if (data->camera->get_window_height () < data->camera->get_window_width ())
-        data->camera->set_d (data->camera->get_window_height () / (2 * tan (data->camera->get_angle () / 2)));
+    if (data->camera->get_window_height() < data->camera->get_window_width())
+        data->camera->set_d(data->camera->get_window_height() / (2 * tan(data->camera->get_angle() / 2)));
     else
-        data->camera->set_d (data->camera->get_window_width () / (2 * tan (data->camera->get_angle () / 2)));
-    data->scene->rendering (data->camera);
+        data->camera->set_d(data->camera->get_window_width() / (2 * tan(data->camera->get_angle() / 2)));
+    data->scene->rendering(data->camera);
     return FALSE;
 }
 
@@ -120,8 +114,8 @@ int m3d_camera_axe_x_z(Projet *projet)
  *           -3 en cas d'erreur due à une fonction interne
  */
 {
-    List_Gtk_m3d        *m3d;
-    struct SGlobalData  *vue;
+    List_Gtk_m3d    *m3d;
+    SGlobalData     *vue;
     double              x_min, x_max, z_min, z_max, x, y, z;
     EF_Noeud            *noeud;
     EF_Point            *point;
@@ -151,7 +145,7 @@ int m3d_camera_axe_x_z(Projet *projet)
     
     m3d = &projet->list_gtk.m3d;
     BUGMSG(m3d->data, -1, gettext("Paramètre incorrect\n"));
-    vue = (struct SGlobalData*)m3d->data;
+    vue = (SGlobalData*)m3d->data;
     
     if (vue->camera == NULL)
         vue->camera = new CM3dCamera (x, y*1.1, z, x, 0., z, 90, x_max-x_min, z_max-z_min);
@@ -177,14 +171,14 @@ int m3d_genere_graphique(Projet *projet)
  *           -3 en cas d'erreur due à une fonction interne
  */
 {
-    List_Gtk_m3d        *m3d;
-    struct SGlobalData  *vue;
+    List_Gtk_m3d    *m3d;
+    SGlobalData     *vue;
     
     BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
     BUGMSG(projet->ef_donnees.noeuds, -1, gettext("Paramètre incorrect\n"));
     m3d = &projet->list_gtk.m3d;
     BUGMSG(m3d->data, -1, gettext("Paramètre incorrect\n"));
-    vue = (struct SGlobalData*)m3d->data;
+    vue = (SGlobalData*)m3d->data;
     
     list_mvfront(projet->ef_donnees.noeuds);
     if (list_size(projet->ef_donnees.noeuds) != 0)
@@ -198,7 +192,7 @@ int m3d_genere_graphique(Projet *projet)
             
             BUG(point = EF_noeuds_renvoie_position(noeud), -3);
             sprintf(tmp, "noeud_%d", noeud->numero);
-            cube = M3d_cube_new (tmp, .1);
+            cube = M3d_cube_new(tmp, .1);
             
             cube->set_ambient_reflexion (1.);
             cube->set_smooth(GOURAUD);
@@ -493,7 +487,7 @@ int m3d_free(Projet *projet)
  */
 {
     // Trivial
-    List_Gtk_m3d *m3d;
+    List_Gtk_m3d        *m3d;
     
     BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
     

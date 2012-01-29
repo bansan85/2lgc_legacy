@@ -37,7 +37,7 @@
 #include "EF_appuis.h"
 #include "EF_noeud.h"
 #include "EF_rigidite.h"
-#include "EF_gtk_noeud.h"
+#include "EF_gtk_noeud.hpp"
 #include "EF_relachement.h"
 #include "1992_1_1_barres.h"
 #include "1992_1_1_section.h"
