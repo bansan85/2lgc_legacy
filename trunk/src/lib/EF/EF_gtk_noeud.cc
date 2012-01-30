@@ -150,92 +150,115 @@ void EF_gtk_noeud_edit_pos_abs(GtkCellRendererText *cell, gchar *path_string, gc
     // On vérifie si le texte contient bien un nombre flottant
     if (sscanf(new_text, "%lf%s", &convertion, fake) == 1)
     {
+        GList       *noeuds_todo = NULL, *noeuds_done = NULL;
+        SGlobalData *vue = (SGlobalData*)projet->list_gtk.m3d.data;
+        
         // On modifie l'action
         BUG(noeud = EF_noeuds_cherche_numero(projet, i), );
-        switch (noeud->type)
+        
+        if ((g_list_find(noeuds_done, noeud) == NULL) && (g_list_find(noeuds_todo, noeud) == NULL))
+            noeuds_todo = g_list_append(noeuds_todo, noeud);
+        
+        while (noeuds_todo != NULL)
         {
-            case NOEUD_LIBRE :
+            noeud = (EF_Noeud *)noeuds_todo->data;
+        
+            switch (noeud->type)
             {
-                EF_Point    *point = (EF_Point *)noeud->data;
-                
-                switch (column)
+                case NOEUD_LIBRE :
+                case NOEUD_BARRE :
                 {
-                    case 1:
+                    EF_Point    *position;
+                    char        *texte;
+                    CM3dObject  *objet;
+                    
+                    // On modifie la position seulement si c'est de type Noeud_libre car pour
+                    // rappel, cette fonction n'est appelé que pour les noeuds de type libre.
+                    if (noeud->type == NOEUD_LIBRE)
                     {
-                        char        *texte;
-                        CM3dObject  *objet;
-                        SGlobalData *vue = (SGlobalData*)projet->list_gtk.m3d.data;
-                        
-                        point->x = convertion;
-                        
-                        texte = g_strdup_printf("noeud_%d", i);
-                        objet = vue->scene->get_object_by_name(texte);
-                        objet->set_position(point->x, point->y, point->z);
-                        
-                        vue->scene->rendering(vue->camera);
-                        gtk_widget_queue_draw(projet->list_gtk.m3d.drawing);
-                        
-                        free(texte);
-                        break;
+                        EF_Point    *point = (EF_Point *)noeud->data;
+                        switch (column)
+                        {
+                            case 1:
+                            {
+                                point->x = convertion;
+                                break;
+                            }
+                            case 2:
+                            {
+                                point->y = convertion;
+                                break;
+                            }
+                            case 3:
+                            {
+                                point->z = convertion;
+                                break;
+                            }
+                            default :
+                            {
+                                BUGMSG(NULL, , gettext("Paramètre incorrect\n"));
+                                break;
+                            }
+                        }
                     }
-                    case 2:
+                    
+                    // On déplace le noeud
+                    position = EF_noeuds_renvoie_position(noeud);
+                    texte = g_strdup_printf("noeud %d", noeud->numero);
+                    objet = vue->scene->get_object_by_name(texte);
+                    objet->set_position(position->x, position->y, position->z);
+                    
+                    if ((projet->beton.barres != NULL) && (list_size(projet->beton.barres) != 0))
                     {
-                        char        *texte;
-                        CM3dObject  *objet;
-                        SGlobalData *vue = (SGlobalData*)projet->list_gtk.m3d.data;
-                        
-                        point->y = convertion;
-                        
-                        texte = g_strdup_printf("noeud_%d", i);
-                        objet = vue->scene->get_object_by_name(texte);
-                        objet->set_position(point->x, point->y, point->z);
-                        
-                        vue->scene->rendering(vue->camera);
-                        gtk_widget_queue_draw(projet->list_gtk.m3d.drawing);
-                        
-                        free(texte);
-                        break;
+                        list_mvfront(projet->beton.barres);
+                        do
+                        {
+                            Beton_Barre *barre = (Beton_Barre *)list_curr(projet->beton.barres);
+                            
+                            if (((barre->noeud_debut) && (barre->noeud_debut->numero == i)) || ((barre->noeud_fin) && (barre->noeud_fin->numero == i)))
+                            {
+                                unsigned int    j;
+                                
+                                // On actualise la barre
+                                m3d_barre(projet, barre);
+                                
+                                for (j = 0 ; j<barre->discretisation_element ; j++)
+                                {
+                                    if ((g_list_find(noeuds_done, barre->noeuds_intermediaires[j]) == NULL) && (g_list_find(noeuds_todo, barre->noeuds_intermediaires[j]) == NULL))
+                                        noeuds_todo = g_list_append(noeuds_todo, barre->noeuds_intermediaires[j]);
+                                }
+                                
+                            }
+                            
+                        } while (list_mvnext(projet->beton.barres) != NULL);
                     }
-                    case 3:
-                    {
-                        char        *texte;
-                        CM3dObject  *objet;
-                        SGlobalData *vue = (SGlobalData*)projet->list_gtk.m3d.data;
-                        
-                        point->z = convertion;
-                        
-                        texte = g_strdup_printf("noeud_%d", i);
-                        objet = vue->scene->get_object_by_name(texte);
-                        objet->set_position(point->x, point->y, point->z);
-                        
-                        vue->scene->rendering(vue->camera);
-                        gtk_widget_queue_draw(projet->list_gtk.m3d.drawing);
-                        
-                        free(texte);
-                        break;
-                    }
-                    default :
-                    {
-                        BUGMSG(NULL, , gettext("Paramètre incorrect\n"));
-                        break;
-                    }
+                    
+                    free(texte);
+                    free(position);
+                    
+                    break;
                 }
-                break;
+                default :
+                {
+                    BUGMSG(NULL, , gettext("Paramètre incorrect\n"));
+                    break;
+                }
             }
-            case NOEUD_BARRE :
-            {
-                BUGMSG(NULL, , gettext("Paramètre incorrect\n"));
-                break;
-            }
-            default :
-            {
-                BUGMSG(NULL, , gettext("Paramètre incorrect\n"));
-                break;
-            }
+            
+            noeuds_done = g_list_append(noeuds_done, noeud);
+            noeuds_todo = g_list_remove(noeuds_todo, noeud);
         }
         
         // On modifie le tree-view-actions
         gtk_tree_store_set(gtk_noeud->tree_store_libre, &iter, column, convertion, -1);
+        
+        // On force l'actualisation de l'affichage
+        vue->scene->rendering(vue->camera);
+        gtk_widget_queue_draw(projet->list_gtk.m3d.drawing);
+        
+        
+        // On libère la mémoire
+        g_list_free(noeuds_done);
     }
     
     free(fake);

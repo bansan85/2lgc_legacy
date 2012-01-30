@@ -46,6 +46,7 @@ gboolean m3d_configure_event(GtkWidget *drawing, GdkEventConfigure * ev, gpointe
 
 int m3d_camera_axe_x_z(Projet *projet);
 int m3d_genere_graphique(Projet *projet);
+int m3d_barre(Projet *projet, Beton_Barre *barre);
 
 int m3d_free(Projet *projet);
 

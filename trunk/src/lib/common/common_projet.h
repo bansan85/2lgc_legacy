@@ -509,7 +509,7 @@ typedef struct __Barre_Info_EF
 
 typedef struct __Beton_Barre
 {
-    unsigned int        numero;
+    size_t              numero;
     Type_Element        type;
     void                *section;
     Beton_Materiau      *materiau;
