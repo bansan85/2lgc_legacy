@@ -270,23 +270,25 @@ char *common_selection_converti_noeuds_en_texte(LIST *liste_noeuds)
  *   Échec : NULL en cas de problème.
  */
 {
-    char        *tmp;
+    char        *tmp = NULL, *tmp2 = NULL;
     
     if ((liste_noeuds != NULL) && (list_size(liste_noeuds) != 0))
     {
         EF_Noeud    **noeud;
         
-        BUGMSG(tmp = malloc(sizeof(char)*(15)*list_size(liste_noeuds)), NULL, gettext("Erreur d'allocation mémoire.\n"));
         list_mvfront(liste_noeuds);
         noeud = list_curr(liste_noeuds);
-        sprintf(tmp, "%d", (*noeud)->numero);
+        BUGMSG(tmp = g_strdup_printf("%d", (*noeud)->numero), NULL, gettext("Erreur d'allocation mémoire.\n"));
         if (list_size(liste_noeuds) > 1)
         {
             list_mvnext(liste_noeuds);
             do
             {
                 noeud = list_curr(liste_noeuds);
-                sprintf(tmp, "%s; %d", tmp, (*noeud)->numero);
+                BUGMSG(tmp2 = g_strdup_printf("%s; %d", tmp, (*noeud)->numero), NULL, gettext("Erreur d'allocation mémoire.\n"));
+                free(tmp);
+                tmp = tmp2;
+                tmp2 = NULL;
             }
             while (list_mvnext(liste_noeuds) != NULL);
         }
@@ -305,23 +307,25 @@ char *common_selection_converti_barres_en_texte(LIST *liste_barres)
  *   Échec : NULL en cas de problème.
  */
 {
-    char        *tmp;
+    char        *tmp, *tmp2;
     
     if ((liste_barres != NULL) && (list_size(liste_barres) != 0))
     {
         Beton_Barre **barre;
         
-        BUGMSG(tmp = malloc(sizeof(char)*(15)*list_size(liste_barres)), NULL, gettext("Erreur d'allocation mémoire.\n"));
         list_mvfront(liste_barres);
         barre = list_curr(liste_barres);
-        sprintf(tmp, "%zu", (*barre)->numero);
+        BUGMSG(tmp = g_strdup_printf("%zu", (*barre)->numero), NULL, gettext("Erreur d'allocation mémoire.\n"));
         if (list_size(liste_barres) > 1)
         {
             list_mvnext(liste_barres);
             do
             {
                 barre = list_curr(liste_barres);
-                sprintf(tmp, "%s; %zu", tmp, (*barre)->numero);
+                BUGMSG(tmp2 = g_strdup_printf("%s; %zu", tmp, (*barre)->numero), NULL, gettext("Erreur d'allocation mémoire.\n"));
+                free(tmp);
+                tmp = tmp2;
+                tmp2 = NULL;
             }
             while (list_mvnext(liste_barres) != NULL);
         }

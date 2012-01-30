@@ -163,7 +163,7 @@ int m3d_barre(Projet *projet, Beton_Barre *barre)
     List_Gtk_m3d    *m3d;
     SGlobalData     *vue;
     CM3dObject      *objet;
-    char            tmp[256];
+    char            *tmp;
     Beton_Section_Rectangulaire *section_tmp = (Beton_Section_Rectangulaire*)barre->section;
     
     BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
@@ -173,7 +173,8 @@ int m3d_barre(Projet *projet, Beton_Barre *barre)
     BUGMSG(barre, -1, gettext("Paramètre incorrect\n"));
     
     // On supprime l'élément s'il existe déjà
-    sprintf(tmp, "barre %zu", barre->numero);
+    BUGMSG(tmp = g_strdup_printf("barre %zu", barre->numero), -2, gettext("Erreur d'allocation mémoire.\n"));
+
     objet = vue->scene->get_object_by_name(tmp);
     if (objet != NULL)
         vue->scene->remove_object(objet);
@@ -436,6 +437,8 @@ int m3d_barre(Projet *projet, Beton_Barre *barre)
         }
     }
     
+    free(tmp);
+    
     return 0;
 }
 
@@ -470,11 +473,12 @@ int m3d_genere_graphique(Projet *projet)
             EF_Noeud    *noeud = (EF_Noeud*)list_curr(projet->ef_donnees.noeuds);
             EF_Point    *point;
             CM3dObject  *cube;
-            char        tmp[256];
+            char        *tmp;
             
             BUG(point = EF_noeuds_renvoie_position(noeud), -3);
-            sprintf(tmp, "noeud %d", noeud->numero);
+            BUGMSG(tmp = g_strdup_printf("noeud %d", noeud->numero), -2, gettext("Erreur d'allocation mémoire.\n"));
             cube = M3d_cube_new(tmp, .1);
+            free(tmp);
             
             cube->set_ambient_reflexion (1.);
             cube->set_smooth(GOURAUD);
