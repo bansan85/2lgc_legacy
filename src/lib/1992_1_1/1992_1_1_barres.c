@@ -134,7 +134,7 @@ int _1992_1_1_barres_ajout(Projet *projet, Type_Element type, unsigned int secti
 }
 
 
-Beton_Barre* _1992_1_1_barres_cherche_numero(Projet *projet, unsigned int numero)
+Beton_Barre* _1992_1_1_barres_cherche_numero(Projet *projet, size_t numero)
 /* Description : Positionne dans la liste des éléments en béton l'élément courant au numéro
  * Paramètres : Projet *projet : la variable projet
  *            : int numero : le numéro de la section
@@ -162,7 +162,7 @@ Beton_Barre* _1992_1_1_barres_cherche_numero(Projet *projet, unsigned int numero
     }
     while (list_mvnext(projet->beton.barres) != NULL);
     
-    BUGMSG(0, NULL, gettext("Barre en béton %d introuvable.\n"), numero);
+    BUGMSG(0, NULL, gettext("Barre en béton %zu introuvable.\n"), numero);
 }
 
 
@@ -189,7 +189,7 @@ int _1992_1_1_barres_angle_rotation(Beton_Barre *barre, double *y, double *z)
     ll = EF_noeuds_distance_x_y_z(barre->noeud_debut, barre->noeud_fin, &xx, &yy, &zz);
     
     BUG(!isnan(ll), -3);
-    BUGMSG(!ERREUR_RELATIVE_EGALE(0.0, ll), -1, gettext("La longueur de la barre %d est nulle\n"), barre->numero);
+    BUGMSG(!ERREUR_RELATIVE_EGALE(0.0, ll), -1, gettext("La longueur de la barre %zu est nulle\n"), barre->numero);
     
     // Détermination de l'angle de rotation autour de l'axe Y.
     *y = asin(zz/ll);

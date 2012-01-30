@@ -115,9 +115,9 @@ int m3d_camera_axe_x_z(Projet *projet)
 {
     List_Gtk_m3d    *m3d;
     SGlobalData     *vue;
-    double              x_min, x_max, z_min, z_max, x, y, z;
-    EF_Noeud            *noeud;
-    EF_Point            *point;
+    double          x_min, x_max, z_min, z_max, x, y, z;
+    EF_Noeud        *noeud;
+    EF_Point        *point;
     
     BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
     BUGMSG(projet->ef_donnees.noeuds, -1, gettext("Paramètre incorrect\n"));
@@ -157,6 +157,289 @@ int m3d_camera_axe_x_z(Projet *projet)
     return 0;
 }
 
+
+int m3d_barre(Projet *projet, Beton_Barre *barre)
+{
+    List_Gtk_m3d    *m3d;
+    SGlobalData     *vue;
+    CM3dObject      *objet;
+    char            tmp[256];
+    Beton_Section_Rectangulaire *section_tmp = (Beton_Section_Rectangulaire*)barre->section;
+    
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    m3d = &projet->list_gtk.m3d;
+    BUGMSG(m3d->data, -1, gettext("Paramètre incorrect\n"));
+    vue = (SGlobalData*)m3d->data;
+    BUGMSG(barre, -1, gettext("Paramètre incorrect\n"));
+    
+    // On supprime l'élément s'il existe déjà
+    sprintf(tmp, "barre %zu", barre->numero);
+    objet = vue->scene->get_object_by_name(tmp);
+    if (objet != NULL)
+        vue->scene->remove_object(objet);
+    
+    // On l'(ré)ajoute
+    section_tmp = (Beton_Section_Rectangulaire*)barre->section;
+    switch (section_tmp->type)
+    {
+        EF_Point *p_d, *p_f;
+        case BETON_SECTION_RECTANGULAIRE :
+        {
+            double      longueur;
+            double      y, z;
+            CM3dObject  *bas, *haut, *gauche, *droite, *tout;
+            
+            longueur = EF_noeuds_distance(barre->noeud_debut, barre->noeud_fin);
+            BUG(!isnan(longueur), -3);
+            
+            droite = M3d_plan_new("", longueur, section_tmp->hauteur, 1);
+            droite->rotations(180., 0., 0.);
+            droite->set_position(0., -section_tmp->largeur/2., 0.);
+            
+            gauche = M3d_plan_new("", longueur, section_tmp->hauteur, 1);
+            gauche->set_position(0., section_tmp->largeur/2., 0.);
+            
+            bas = M3d_plan_new("", longueur, section_tmp->largeur, 1);
+            bas->rotations(90., 180., 0.);
+            bas->set_position(0., 0., -section_tmp->hauteur/2.);
+            
+            haut = M3d_plan_new("", longueur, section_tmp->largeur, 1);
+            haut->rotations(90., 0., 0.);
+            haut->set_position(0., 0., section_tmp->hauteur/2.);
+            
+            tout = M3d_object_new_group(tmp, droite, gauche, bas, haut, NULL);
+            switch(barre->numero)
+            {
+                case 0:
+                {
+                    tout->set_color(255, 0, 0);
+                    break;
+                }
+                case 1:
+                {
+                    tout->set_color(0, 255, 0);
+                    break;
+                }
+                case 2:
+                {
+                    tout->set_color(0, 0, 255);
+                    break;
+                }
+                default : break;
+
+            }
+            tout->set_smooth(GOURAUD);
+            BUG(_1992_1_1_barres_angle_rotation(barre, &y, &z) == 0, -3);
+            tout->rotations(0., -y/M_PI*180., z/M_PI*180.);
+            BUG(p_d = EF_noeuds_renvoie_position(barre->noeud_debut), -3);
+            BUG(p_f = EF_noeuds_renvoie_position(barre->noeud_fin), -3);
+            tout->set_position((p_d->x+p_f->x)/2., (p_d->y+p_f->y)/2., (p_d->z+p_f->z)/2.);
+            tout->set_ambient_reflexion(0.8);
+            free(p_d);
+            free(p_f);
+            
+            vue->scene->add_object(tout);
+            break;
+            
+        }
+        case BETON_SECTION_T :
+        {
+            Beton_Section_T *section = (Beton_Section_T*)barre->section;
+            
+            double  longueur = EF_noeuds_distance(barre->noeud_debut, barre->noeud_fin);
+            double  y, z;
+            double  lt = section->largeur_table;
+            double  la = section->largeur_ame;
+            double  ht = section->hauteur_table;
+            double  ha = section->hauteur_ame;
+            double  cdgh = (lt*ht*ht/2.+la*ha*(ht+ha/2.))/(lt*ht+la*ha);
+            double  cdgb = (ht+ha)-cdgh;
+            
+            CM3dObject  *ame_inf, *ame_droite, *ame_gauche, *dalle_bas_droite, *dalle_bas_gauche, *dalle_droite, *dalle_gauche, *dalle_sup, *tout;
+            
+            ame_inf = M3d_plan_new("", longueur, la, 1);
+            ame_inf->rotations(90., 180., 0.);
+            ame_inf->set_position(0., 0., -cdgb);
+            
+            ame_droite = M3d_plan_new("", longueur, ha, 1);
+            ame_droite->rotations(180., 0., 0.);
+            ame_droite->set_position(0., -la/2., -cdgb+ha/2.);
+            
+            ame_gauche = M3d_plan_new("", longueur, ha, 1);
+            ame_gauche->set_position(0., la/2., -cdgb+ha/2.);
+            
+            dalle_bas_gauche = M3d_plan_new("", longueur, (lt-la)/2., 1);
+            dalle_bas_gauche->rotations(90., 0., 0.);
+            dalle_bas_gauche->set_position(0., la/2.+(lt-la)/4., -cdgb+ha);
+            
+            dalle_bas_droite = M3d_plan_new("", longueur, (lt-la)/2., 1);
+            dalle_bas_droite->rotations(90., 180., 0.);
+            dalle_bas_droite->set_position(0., -la/2.-(lt-la)/4., -cdgb+ha);
+            
+            dalle_droite = M3d_plan_new("", longueur, ht, 1);
+            dalle_droite->rotations(180., 0., 0.);
+            dalle_droite->set_position(0., -lt/2., -cdgb+ha+ht/2.);
+            
+            dalle_gauche = M3d_plan_new("", longueur, ht, 1);
+            dalle_gauche->set_position(0., lt/2., -cdgb+ha+ht/2.);
+            
+            dalle_sup = M3d_plan_new("", longueur, lt, 1);
+            dalle_sup->rotations(90., 0., 0.);
+            dalle_sup->set_position(0., 0, -cdgb+ha+ht);
+            
+            tout = M3d_object_new_group(tmp, ame_inf, ame_droite, ame_gauche, dalle_bas_droite, dalle_bas_gauche, dalle_droite, dalle_gauche, dalle_sup, NULL);
+            switch(barre->numero)
+            {
+                case 0:
+                {
+                    tout->set_color(255, 0, 0);
+                    break;
+                }
+                case 1:
+                {
+                    tout->set_color(0, 255, 0);
+                    break;
+                }
+                case 2:
+                {
+                    tout->set_color(0, 0, 255);
+                    break;
+                }
+                default : break;
+
+            }
+            tout->set_ambient_reflexion(0.8);
+            tout->set_smooth(GOURAUD);
+            BUG(_1992_1_1_barres_angle_rotation(barre, &y, &z) == 0, -3);
+            tout->rotations(0., -y/M_PI*180., z/M_PI*180.);
+            BUG(p_d = EF_noeuds_renvoie_position(barre->noeud_debut), -3);
+            BUG(p_f = EF_noeuds_renvoie_position(barre->noeud_fin), -3);
+            tout->set_position((p_d->x+p_f->x)/2., (p_d->y+p_f->y)/2., (p_d->z+p_f->z)/2.);
+            free(p_d);
+            free(p_f);
+            
+            vue->scene->add_object(tout);
+            break;
+            
+        }
+        case BETON_SECTION_CARRE :
+        {
+            Beton_Section_Carre *section = (Beton_Section_Carre*)barre->section;
+            
+            double  longueur;
+            double  y, z;
+            
+            CM3dObject  *bas, *haut, *gauche, *droite, *tout;
+            
+            longueur = EF_noeuds_distance(barre->noeud_debut, barre->noeud_fin);
+            BUG(!isnan(longueur), -3);
+            
+            droite = M3d_plan_new("", longueur, section->cote, 1);
+            droite->rotations(180., 0., 0.);
+            droite->set_position(0., -section->cote/2., 0.);
+            
+            gauche = M3d_plan_new("", longueur, section->cote, 1);
+            gauche->set_position(0., section->cote/2., 0.);
+            
+            bas = M3d_plan_new("", longueur, section->cote, 1);
+            bas->rotations(90., 180., 0.);
+            bas->set_position(0., 0., -section->cote/2.);
+            
+            haut = M3d_plan_new("", longueur, section->cote, 1);
+            haut->rotations(90., 0., 0.);
+            haut->set_position(0., 0., section->cote/2.);
+            
+            tout = M3d_object_new_group(tmp, droite, gauche, bas, haut, NULL);
+            switch(barre->numero)
+            {
+                case 0:
+                {
+                    tout->set_color(255, 0, 0);
+                    break;
+                }
+                case 1:
+                {
+                    tout->set_color(0, 255, 0);
+                    break;
+                }
+                case 2:
+                {
+                    tout->set_color(0, 0, 255);
+                    break;
+                }
+                default : break;
+
+            }
+            tout->set_ambient_reflexion(0.8);
+            tout->set_smooth(GOURAUD);
+            BUG(_1992_1_1_barres_angle_rotation(barre, &y, &z) == 0, -3);
+            tout->rotations(0., -y/M_PI*180., z/M_PI*180.);
+            BUG(p_d = EF_noeuds_renvoie_position(barre->noeud_debut), -3);
+            BUG(p_f = EF_noeuds_renvoie_position(barre->noeud_fin), -3);
+            tout->set_position((p_d->x+p_f->x)/2., (p_d->y+p_f->y)/2., (p_d->z+p_f->z)/2.);
+            free(p_d);
+            free(p_f);
+            
+            vue->scene->add_object(tout);
+            break;
+            
+        }
+        case BETON_SECTION_CIRCULAIRE :
+        {
+            Beton_Section_Circulaire *section = (Beton_Section_Circulaire*)barre->section;
+            
+            double  longueur = EF_noeuds_distance(barre->noeud_debut, barre->noeud_fin);
+            double  y, z;
+            
+            CM3dObject  *tout;
+            
+            tout = M3d_cylindre_new(tmp, section->diametre/2., longueur, 12);
+            tout->rotations(0., 0., 90.);
+            switch(barre->numero)
+            {
+                case 0:
+                {
+                    tout->set_color(255, 0, 0);
+                    break;
+                }
+                case 1:
+                {
+                    tout->set_color(0, 255, 0);
+                    break;
+                }
+                case 2:
+                {
+                    tout->set_color(0, 0, 255);
+                    break;
+                }
+                default : break;
+
+            }
+            tout->set_ambient_reflexion(0.8);
+            tout->set_smooth(GOURAUD);
+            BUG(_1992_1_1_barres_angle_rotation(barre, &y, &z) == 0, -3);
+            tout->rotations(0., -y/M_PI*180., z/M_PI*180.);
+            BUG(p_d = EF_noeuds_renvoie_position(barre->noeud_debut), -3);
+            BUG(p_f = EF_noeuds_renvoie_position(barre->noeud_fin), -3);
+            tout->set_position((p_d->x+p_f->x)/2., (p_d->y+p_f->y)/2., (p_d->z+p_f->z)/2.);
+            free(p_d);
+            free(p_f);
+            
+            vue->scene->add_object(tout);
+            break;
+            
+        }
+        default :
+        {
+            BUGMSG(0, -1, gettext("Paramètre incorrect\n"));
+            break;
+        }
+    }
+    
+    return 0;
+}
+
+
 int m3d_genere_graphique(Projet *projet)
 /* Description : Génère l'affichage 3D
  * Paramètres : Projet *projet
@@ -190,7 +473,7 @@ int m3d_genere_graphique(Projet *projet)
             char        tmp[256];
             
             BUG(point = EF_noeuds_renvoie_position(noeud), -3);
-            sprintf(tmp, "noeud_%d", noeud->numero);
+            sprintf(tmp, "noeud %d", noeud->numero);
             cube = M3d_cube_new(tmp, .1);
             
             cube->set_ambient_reflexion (1.);
@@ -209,266 +492,8 @@ int m3d_genere_graphique(Projet *projet)
         do
         {
             Beton_Barre *barre = (Beton_Barre*)list_curr(projet->beton.barres);
-            char        tmp[256];
-            Beton_Section_Rectangulaire *section_tmp = (Beton_Section_Rectangulaire*)barre->section;
             
-            sprintf(tmp, "barre_%d", barre->numero);
-            
-            switch (section_tmp->type)
-            {
-                EF_Point *p_d, *p_f;
-                case BETON_SECTION_RECTANGULAIRE :
-                {
-                    double  longueur;
-                    double  y, z;
-                    CM3dObject  *bas, *haut, *gauche, *droite, *tout;
-                    
-                    longueur = EF_noeuds_distance(barre->noeud_debut, barre->noeud_fin);
-                    BUG(!isnan(longueur), -3);
-                    
-                    droite = M3d_plan_new("", longueur, section_tmp->hauteur, 1);
-                    droite->rotations(180., 0., 0.);
-                    droite->set_position(0., -section_tmp->largeur/2., 0.);
-                    
-                    gauche = M3d_plan_new("", longueur, section_tmp->hauteur, 1);
-                    gauche->set_position(0., section_tmp->largeur/2., 0.);
-                    
-                    bas = M3d_plan_new("", longueur, section_tmp->largeur, 1);
-                    bas->rotations(90., 180., 0.);
-                    bas->set_position(0., 0., -section_tmp->hauteur/2.);
-                    
-                    haut = M3d_plan_new("", longueur, section_tmp->largeur, 1);
-                    haut->rotations(90., 0., 0.);
-                    haut->set_position(0., 0., section_tmp->hauteur/2.);
-                    
-                    tout = M3d_object_new_group(tmp, droite, gauche, bas, haut, NULL);
-                    switch(barre->numero)
-                    {
-                        case 0:
-                        {
-                            tout->set_color(255, 0, 0);
-                            break;
-                        }
-                        case 1:
-                        {
-                            tout->set_color(0, 255, 0);
-                            break;
-                        }
-                        case 2:
-                        {
-                            tout->set_color(0, 0, 255);
-                            break;
-                        }
-                        default : break;
-
-                    }
-                    tout->set_smooth(GOURAUD);
-                    BUG(_1992_1_1_barres_angle_rotation(barre, &y, &z) == 0, -3);
-                    tout->rotations(0., -y/M_PI*180., z/M_PI*180.);
-                    BUG(p_d = EF_noeuds_renvoie_position(barre->noeud_debut), -3);
-                    BUG(p_f = EF_noeuds_renvoie_position(barre->noeud_fin), -3);
-                    tout->set_position((p_d->x+p_f->x)/2., (p_d->y+p_f->y)/2., (p_d->z+p_f->z)/2.);
-                    tout->set_ambient_reflexion(0.8);
-                    free(p_d);
-                    free(p_f);
-                    
-                    vue->scene->add_object(tout);
-                    break;
-                    
-                }
-                case BETON_SECTION_T :
-                {
-                    Beton_Section_T *section = (Beton_Section_T*)barre->section;
-                    
-                    double  longueur = EF_noeuds_distance(barre->noeud_debut, barre->noeud_fin);
-                    double  y, z;
-                    double  lt = section->largeur_table;
-                    double  la = section->largeur_ame;
-                    double  ht = section->hauteur_table;
-                    double  ha = section->hauteur_ame;
-                    double  cdgh = (lt*ht*ht/2.+la*ha*(ht+ha/2.))/(lt*ht+la*ha);
-                    double  cdgb = (ht+ha)-cdgh;
-                    
-                    CM3dObject  *ame_inf, *ame_droite, *ame_gauche, *dalle_bas_droite, *dalle_bas_gauche, *dalle_droite, *dalle_gauche, *dalle_sup, *tout;
-                    
-                    ame_inf = M3d_plan_new("", longueur, la, 1);
-                    ame_inf->rotations(90., 180., 0.);
-                    ame_inf->set_position(0., 0., -cdgb);
-                    
-                    ame_droite = M3d_plan_new("", longueur, ha, 1);
-                    ame_droite->rotations(180., 0., 0.);
-                    ame_droite->set_position(0., -la/2., -cdgb+ha/2.);
-                    
-                    ame_gauche = M3d_plan_new("", longueur, ha, 1);
-                    ame_gauche->set_position(0., la/2., -cdgb+ha/2.);
-                    
-                    dalle_bas_gauche = M3d_plan_new("", longueur, (lt-la)/2., 1);
-                    dalle_bas_gauche->rotations(90., 0., 0.);
-                    dalle_bas_gauche->set_position(0., la/2.+(lt-la)/4., -cdgb+ha);
-                    
-                    dalle_bas_droite = M3d_plan_new("", longueur, (lt-la)/2., 1);
-                    dalle_bas_droite->rotations(90., 180., 0.);
-                    dalle_bas_droite->set_position(0., -la/2.-(lt-la)/4., -cdgb+ha);
-                    
-                    dalle_droite = M3d_plan_new("", longueur, ht, 1);
-                    dalle_droite->rotations(180., 0., 0.);
-                    dalle_droite->set_position(0., -lt/2., -cdgb+ha+ht/2.);
-                    
-                    dalle_gauche = M3d_plan_new("", longueur, ht, 1);
-                    dalle_gauche->set_position(0., lt/2., -cdgb+ha+ht/2.);
-                    
-                    dalle_sup = M3d_plan_new("", longueur, lt, 1);
-                    dalle_sup->rotations(90., 0., 0.);
-                    dalle_sup->set_position(0., 0, -cdgb+ha+ht);
-                    
-                    tout = M3d_object_new_group(tmp, ame_inf, ame_droite, ame_gauche, dalle_bas_droite, dalle_bas_gauche, dalle_droite, dalle_gauche, dalle_sup, NULL);
-                    switch(barre->numero)
-                    {
-                        case 0:
-                        {
-                            tout->set_color(255, 0, 0);
-                            break;
-                        }
-                        case 1:
-                        {
-                            tout->set_color(0, 255, 0);
-                            break;
-                        }
-                        case 2:
-                        {
-                            tout->set_color(0, 0, 255);
-                            break;
-                        }
-                        default : break;
-
-                    }
-                    tout->set_ambient_reflexion(0.8);
-                    tout->set_smooth(GOURAUD);
-                    BUG(_1992_1_1_barres_angle_rotation(barre, &y, &z) == 0, -3);
-                    tout->rotations(0., -y/M_PI*180., z/M_PI*180.);
-                    BUG(p_d = EF_noeuds_renvoie_position(barre->noeud_debut), -3);
-                    BUG(p_f = EF_noeuds_renvoie_position(barre->noeud_fin), -3);
-                    tout->set_position((p_d->x+p_f->x)/2., (p_d->y+p_f->y)/2., (p_d->z+p_f->z)/2.);
-                    free(p_d);
-                    free(p_f);
-                    
-                    vue->scene->add_object(tout);
-                    break;
-                    
-                }
-                case BETON_SECTION_CARRE :
-                {
-                    Beton_Section_Carre *section = (Beton_Section_Carre*)barre->section;
-                    
-                    double  longueur;
-                    double  y, z;
-                    
-                    CM3dObject  *bas, *haut, *gauche, *droite, *tout;
-                    
-                    longueur = EF_noeuds_distance(barre->noeud_debut, barre->noeud_fin);
-                    BUG(!isnan(longueur), -3);
-                    
-                    droite = M3d_plan_new("", longueur, section->cote, 1);
-                    droite->rotations(180., 0., 0.);
-                    droite->set_position(0., -section->cote/2., 0.);
-                    
-                    gauche = M3d_plan_new("", longueur, section->cote, 1);
-                    gauche->set_position(0., section->cote/2., 0.);
-                    
-                    bas = M3d_plan_new("", longueur, section->cote, 1);
-                    bas->rotations(90., 180., 0.);
-                    bas->set_position(0., 0., -section->cote/2.);
-                    
-                    haut = M3d_plan_new("", longueur, section->cote, 1);
-                    haut->rotations(90., 0., 0.);
-                    haut->set_position(0., 0., section->cote/2.);
-                    
-                    tout = M3d_object_new_group(tmp, droite, gauche, bas, haut, NULL);
-                    switch(barre->numero)
-                    {
-                        case 0:
-                        {
-                            tout->set_color(255, 0, 0);
-                            break;
-                        }
-                        case 1:
-                        {
-                            tout->set_color(0, 255, 0);
-                            break;
-                        }
-                        case 2:
-                        {
-                            tout->set_color(0, 0, 255);
-                            break;
-                        }
-                        default : break;
-
-                    }
-                    tout->set_ambient_reflexion(0.8);
-                    tout->set_smooth(GOURAUD);
-                    BUG(_1992_1_1_barres_angle_rotation(barre, &y, &z) == 0, -3);
-                    tout->rotations(0., -y/M_PI*180., z/M_PI*180.);
-                    BUG(p_d = EF_noeuds_renvoie_position(barre->noeud_debut), -3);
-                    BUG(p_f = EF_noeuds_renvoie_position(barre->noeud_fin), -3);
-                    tout->set_position((p_d->x+p_f->x)/2., (p_d->y+p_f->y)/2., (p_d->z+p_f->z)/2.);
-                    free(p_d);
-                    free(p_f);
-                    
-                    vue->scene->add_object(tout);
-                    break;
-                    
-                }
-                case BETON_SECTION_CIRCULAIRE :
-                {
-                    Beton_Section_Circulaire *section = (Beton_Section_Circulaire*)barre->section;
-                    
-                    double  longueur = EF_noeuds_distance(barre->noeud_debut, barre->noeud_fin);
-                    double  y, z;
-                    
-                    CM3dObject  *tout;
-                    
-                    tout = M3d_cylindre_new(tmp, section->diametre/2., longueur, 12);
-                    tout->rotations(0., 0., 90.);
-                    switch(barre->numero)
-                    {
-                        case 0:
-                        {
-                            tout->set_color(255, 0, 0);
-                            break;
-                        }
-                        case 1:
-                        {
-                            tout->set_color(0, 255, 0);
-                            break;
-                        }
-                        case 2:
-                        {
-                            tout->set_color(0, 0, 255);
-                            break;
-                        }
-                        default : break;
-
-                    }
-                    tout->set_ambient_reflexion(0.8);
-                    tout->set_smooth(GOURAUD);
-                    BUG(_1992_1_1_barres_angle_rotation(barre, &y, &z) == 0, -3);
-                    tout->rotations(0., -y/M_PI*180., z/M_PI*180.);
-                    BUG(p_d = EF_noeuds_renvoie_position(barre->noeud_debut), -3);
-                    BUG(p_f = EF_noeuds_renvoie_position(barre->noeud_fin), -3);
-                    tout->set_position((p_d->x+p_f->x)/2., (p_d->y+p_f->y)/2., (p_d->z+p_f->z)/2.);
-                    free(p_d);
-                    free(p_f);
-                    
-                    vue->scene->add_object(tout);
-                    break;
-                    
-                }
-                default :
-                {
-                    BUGMSG(0, 0., "m3d_genere_graphique\n");
-                }
-            }
-            
+            m3d_barre(projet, barre);
         }
         while (list_mvnext(projet->beton.barres) != NULL);
     }
