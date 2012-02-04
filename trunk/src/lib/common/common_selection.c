@@ -315,14 +315,14 @@ char *common_selection_converti_barres_en_texte(LIST *liste_barres)
         
         list_mvfront(liste_barres);
         barre = list_curr(liste_barres);
-        BUGMSG(tmp = g_strdup_printf("%zu", (*barre)->numero), NULL, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(tmp = g_strdup_printf("%u", (*barre)->numero), NULL, gettext("Erreur d'allocation mémoire.\n"));
         if (list_size(liste_barres) > 1)
         {
             list_mvnext(liste_barres);
             do
             {
                 barre = list_curr(liste_barres);
-                BUGMSG(tmp2 = g_strdup_printf("%s; %zu", tmp, (*barre)->numero), NULL, gettext("Erreur d'allocation mémoire.\n"));
+                BUGMSG(tmp2 = g_strdup_printf("%s; %u", tmp, (*barre)->numero), NULL, gettext("Erreur d'allocation mémoire.\n"));
                 free(tmp);
                 tmp = tmp2;
                 tmp2 = NULL;
