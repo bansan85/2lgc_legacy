@@ -383,7 +383,7 @@ typedef struct __EF_Noeud
 typedef struct __Charge_Noeud
 {
     Barre_Charge_Type   type;
-    size_t              numero;
+    unsigned int        numero;
 #ifdef ENABLE_GTK
     GtkTreeIter         Iter;
 #endif                  
@@ -509,7 +509,7 @@ typedef struct __Barre_Info_EF
 
 typedef struct __Beton_Barre
 {
-    size_t              numero;
+    unsigned int        numero;
     Type_Element        type;
     void                *section;
     Beton_Materiau      *materiau;
@@ -536,7 +536,7 @@ typedef struct __EF_Noeud_Barre
 typedef struct __Charge_Barre_Ponctuelle
 {
     Barre_Charge_Type   type;
-    size_t              numero;
+    unsigned int        numero;
 #ifdef ENABLE_GTK
     GtkTreeIter         Iter;
 #endif
@@ -558,7 +558,7 @@ typedef struct __Charge_Barre_Ponctuelle
 typedef struct __Charge_Barre_Repartie_Uniforme
 {
     Barre_Charge_Type   type;
-    size_t              numero;
+    unsigned int        numero;
 #ifdef ENABLE_GTK
     GtkTreeIter         Iter;
 #endif    
@@ -607,7 +607,7 @@ typedef struct __Fonction
 typedef struct __Action
 {
     char            *description;
-    size_t          numero;
+    unsigned int    numero;
     int             type;  // Les catégories sont conformes à _1990_action_type
     LIST            *charges;
     int             flags;

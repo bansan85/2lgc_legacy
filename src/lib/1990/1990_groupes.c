@@ -393,7 +393,7 @@ int _1990_groupe_affiche_tout(Projet *projet)
                                 Combinaison_Element *comb_element = (Combinaison_Element*)list_curr(combinaison->elements);
                                 Action          *action = (Action*)comb_element->action;
                                 
-                                printf("%zu(%d) ", action->numero, comb_element->flags);
+                                printf("%u(%d) ", action->numero, comb_element->flags);
                             }
                             while (list_mvnext(combinaison->elements) != NULL);
                         }

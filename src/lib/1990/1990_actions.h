@@ -28,13 +28,13 @@ Action_Categorie _1990_action_categorie_bat(int type, Type_Pays pays);
 
 int _1990_action_init(Projet *projet);
 int _1990_action_ajout(Projet *projet, int categorie, const char* description);
-int _1990_action_cherche_numero(Projet *projet, size_t numero);
-void *_1990_action_cherche_charge(Projet *projet, size_t num_action, size_t num_charge);
-int _1990_action_deplace_charge(Projet *projet, size_t action_src, size_t charge_src, size_t action_dest);
-int _1990_action_supprime_charge(Projet *projet, size_t action_num, size_t charge_num);
+int _1990_action_cherche_numero(Projet *projet, unsigned int numero);
+void *_1990_action_cherche_charge(Projet *projet, unsigned int num_action, unsigned int num_charge);
+int _1990_action_deplace_charge(Projet *projet, unsigned int action_src, unsigned int charge_src, unsigned int action_dest);
+int _1990_action_supprime_charge(Projet *projet, unsigned int action_num, unsigned int charge_num);
 int _1990_action_affiche_tout(Projet *projet);
 int _1990_action_affiche_resultats(Projet *projet, int num_action);
-int _1990_action_free_num(Projet *projet, size_t num);
+int _1990_action_free_num(Projet *projet, unsigned int num);
 int _1990_action_free(Projet *projet);
 
 #endif

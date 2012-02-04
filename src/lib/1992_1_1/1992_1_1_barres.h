@@ -25,7 +25,7 @@
 
 int _1992_1_1_barres_init(Projet *projet);
 int _1992_1_1_barres_ajout(Projet *projet, Type_Element type, unsigned int section, unsigned int materiau, unsigned int noeud_debut, unsigned int noeud_fin, int relachement, unsigned int discretisation_element);
-Beton_Barre* _1992_1_1_barres_cherche_numero(Projet *projet, size_t numero);
+Beton_Barre* _1992_1_1_barres_cherche_numero(Projet *projet, unsigned int numero);
 int _1992_1_1_barres_angle_rotation(Beton_Barre *barre, double *y, double *z);
 int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element);
 int _1992_1_1_barres_rigidite_ajout_tout(Projet *projet);

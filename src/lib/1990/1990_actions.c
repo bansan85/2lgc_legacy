@@ -358,10 +358,10 @@ int _1990_action_ajout(Projet *projet, int type, const char* description)
 }
 
 
-int _1990_action_cherche_numero(Projet *projet, size_t numero)
+int _1990_action_cherche_numero(Projet *projet, unsigned int numero)
 /* Description : Cherche et marque l'action numero comme celle en cours.
  * Paramètres : Projet *projet : la variable projet
- *            : size_t numero : le numéro de l'action
+ *            : unsigned int numero : le numéro de l'action
  * Valeur renvoyée :
  *   Succès : 0
  *   Échec : -1 en cas de paramètres invalides :
@@ -386,15 +386,15 @@ int _1990_action_cherche_numero(Projet *projet, size_t numero)
     }
     while (list_mvnext(projet->actions) != NULL);
     
-    BUGMSG(0, -1, gettext("Action %zu introuvable.\n"), numero);
+    BUGMSG(0, -1, gettext("Action %u introuvable.\n"), numero);
 }
 
 
-void *_1990_action_cherche_charge(Projet *projet, size_t num_action, size_t num_charge)
+void *_1990_action_cherche_charge(Projet *projet, unsigned int num_action, unsigned int num_charge)
 /* Description : Renvoie la charge demandée.
  * Paramètres : Projet *projet : la variable projet
- *            : size_t num_action : le numéro de l'action
- *            : size_t num_charge : le numéro de la charge
+ *            : unsigned int num_action : le numéro de l'action
+ *            : unsigned int num_charge : le numéro de la charge
  * Valeur renvoyée :
  *   Succès : Pointeur vers la charge recherchée.
  *   Échec : NULL en cas de paramètres invalides :
@@ -427,18 +427,18 @@ void *_1990_action_cherche_charge(Projet *projet, size_t num_action, size_t num_
     }
     while (list_mvnext(action->charges));
     
-    BUGMSG(NULL, NULL, gettext("Charge %zu introuvable.\n"), num_charge);
+    BUGMSG(NULL, NULL, gettext("Charge %u introuvable.\n"), num_charge);
 }
 
 
-int _1990_action_deplace_charge(Projet *projet, size_t action_src, size_t charge_src,
-  size_t action_dest)
+int _1990_action_deplace_charge(Projet *projet, unsigned int action_src, unsigned int charge_src,
+  unsigned int action_dest)
 /* Description : Déplace une charge d'une action à l'autre. Décrémente également le numéro
  *               des charges afin que la liste des numéros soit toujours continue.
  * Paramètres : Projet *projet : la variable projet,
- *              size_t action_src : numéro de l'action où se situe la charge à déplacer,
- *              size_t charge_src : numéro de la charge à déplacer,
- *              size_t action_dest : numéro de l'action où sera déplacer la charge.
+ *              unsigned int action_src : numéro de l'action où se situe la charge à déplacer,
+ *              unsigned int charge_src : numéro de la charge à déplacer,
+ *              unsigned int action_dest : numéro de l'action où sera déplacer la charge.
  * Valeur renvoyée :
  *   Succès : 0
  *   Échec : -1 en cas de paramètres invalides :
@@ -457,8 +457,8 @@ int _1990_action_deplace_charge(Projet *projet, size_t action_src, size_t charge
     
     BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
     BUGMSG(projet->actions, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(list_size(projet->actions)-1 >= action_src, -1, gettext("Paramètre incorrect : %zu\n"), action_src);
-    BUGMSG(list_size(projet->actions)-1 >= action_dest, -1, gettext("Paramètre incorrect : %zu\n"), action_dest);
+    BUGMSG(list_size(projet->actions)-1 >= action_src, -1, gettext("Paramètre incorrect : %u\n"), action_src);
+    BUGMSG(list_size(projet->actions)-1 >= action_dest, -1, gettext("Paramètre incorrect : %u\n"), action_dest);
     
 #ifdef ENABLE_GTK
     list_gtk_1990_actions = &projet->list_gtk._1990_actions;
@@ -477,7 +477,7 @@ int _1990_action_deplace_charge(Projet *projet, size_t action_src, size_t charge
         if (action->numero == action_src)
         {
             BUGMSG(action->charges, -1, gettext("Paramètre incorrect\n"));
-            BUGMSG(list_size(action->charges), -1, gettext("Charge %zu introuvable.\n"), charge_src);
+            BUGMSG(list_size(action->charges), -1, gettext("Charge %u introuvable.\n"), charge_src);
             
             list_mvfront(action->charges);
     //     Pour chaque charge de l'action en cours Faire
@@ -511,12 +511,12 @@ int _1990_action_deplace_charge(Projet *projet, size_t action_src, size_t charge
             }
             while (list_mvnext(action->charges) != NULL);
             
-            BUGMSG(charge_data, -1, gettext("Charge %zu introuvable.\n"), charge_src);
+            BUGMSG(charge_data, -1, gettext("Charge %u introuvable.\n"), charge_src);
         }
     }
     while ((list_mvnext(projet->actions) != NULL) && (charge_data == NULL));
     
-    BUGMSG(charge_data, -1, gettext("Action %zu introuvable.\n"), action_src);
+    BUGMSG(charge_data, -1, gettext("Action %u introuvable.\n"), action_src);
     
     // On cherche l'action qui contiendra la charge.
     
@@ -569,18 +569,18 @@ int _1990_action_deplace_charge(Projet *projet, size_t action_src, size_t charge
     }
     while ((list_mvnext(projet->actions) != NULL) && (charge_data != NULL));
     
-    BUGMSG(charge_data != NULL, -1, gettext("Action %zu introuvable.\n"), action_dest);
+    BUGMSG(charge_data != NULL, -1, gettext("Action %u introuvable.\n"), action_dest);
     
     return -1;
 }
 
 
-int _1990_action_supprime_charge(Projet *projet, size_t action_num, size_t charge_num)
+int _1990_action_supprime_charge(Projet *projet, unsigned int action_num, unsigned int charge_num)
 /* Description : Supprime une charge. Décrémente également le numéro des charges afin que
  *               la liste des numéros soit toujours continue.
  * Paramètres : Projet *projet : la variable projet,
- *              size_t action_num : numéro de l'action où se situe la charge à supprimer,
- *              size_t charge_num : numéro de la charge à supprimer,
+ *              unsigned int action_num : numéro de l'action où se situe la charge à supprimer,
+ *              unsigned int charge_num : numéro de la charge à supprimer,
  * Valeur renvoyée :
  *   Succès : 0
  *   Échec : -1 en cas de paramètres invalides :
@@ -597,7 +597,7 @@ int _1990_action_supprime_charge(Projet *projet, size_t action_num, size_t charg
     
     BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
     BUGMSG(projet->actions, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(list_size(projet->actions)-1 >= action_num, -1, gettext("Paramètre incorrect : %zu\n"), action_num);
+    BUGMSG(list_size(projet->actions)-1 >= action_num, -1, gettext("Paramètre incorrect : %u\n"), action_num);
     
 #ifdef ENABLE_GTK
     list_gtk_1990_actions = &projet->list_gtk._1990_actions;
@@ -612,7 +612,7 @@ int _1990_action_supprime_charge(Projet *projet, size_t action_num, size_t charg
         if (action->numero == action_num)
         {
             BUGMSG(action->charges, -1, gettext("Paramètre incorrect\n"));
-            BUGMSG(list_size(action->charges), -1, gettext("Charge %zu introuvable.\n"), charge_num);
+            BUGMSG(list_size(action->charges), -1, gettext("Charge %u introuvable.\n"), charge_num);
             
             list_mvfront(action->charges);
     //     Pour chaque charge de l'action en cours Faire
@@ -671,12 +671,12 @@ int _1990_action_supprime_charge(Projet *projet, size_t action_num, size_t charg
             }
             while (list_mvnext(action->charges) != NULL);
             
-            BUGMSG(charge_data, -1, gettext("Charge %zu introuvable.\n"), charge_num);
+            BUGMSG(charge_data, -1, gettext("Charge %u introuvable.\n"), charge_num);
         }
     }
     while ((list_mvnext(projet->actions) != NULL) && (charge_data == NULL));
     
-    BUGMSG(charge_data, -1, gettext("Action %zu introuvable.\n"), action_num);
+    BUGMSG(charge_data, -1, gettext("Action %u introuvable.\n"), action_num);
     
     return 0;
 }
@@ -704,7 +704,7 @@ int _1990_action_affiche_tout(Projet *projet)
     {
         Action      *action = (Action*)list_curr(projet->actions);
         
-        printf(gettext("Action n° %zu, description '%s', type n°%d\n"), action->numero, action->description, action->type);
+        printf(gettext("Action n° %u, description '%s', type n°%d\n"), action->numero, action->description, action->type);
     }
     while (list_mvnext(projet->actions) != NULL);
     
@@ -793,11 +793,11 @@ int _1990_action_affiche_resultats(Projet *projet, int num_action)
 }
 
 
-int _1990_action_free_num(Projet *projet, size_t num)
+int _1990_action_free_num(Projet *projet, unsigned int num)
 /* Description : Libère l'action souhaitée et décrémente de 1 les actions dons le
  *                 numéro est supérieur.
  * Paramètres : Projet *projet : la variable projet,
- *            : size_t num : le numéro de l'action à supprimer.
+ *            : unsigned int num : le numéro de l'action à supprimer.
  * Valeur renvoyée :
  *   Succès : 0
  *   Échec : -1 en cas de paramètres invalides :

@@ -488,8 +488,7 @@ void _1990_gtk_menu_suppr_action_activate(GtkToolButton *toolbutton __attribute_
     List_Gtk_1990_Actions *list_gtk_1990_actions = &projet->list_gtk._1990_actions;
     GtkTreeIter     iter;
     GtkTreeModel    *model;
-    size_t          numero_action;
-    int             numer;
+    unsigned int    numero_action;
     
     BUGMSG(projet, , gettext("Paramètre incorrect\n"));
     BUGMSG(projet->actions, , gettext("Paramètre incorrect\n"));
@@ -502,8 +501,7 @@ void _1990_gtk_menu_suppr_action_activate(GtkToolButton *toolbutton __attribute_
         return;
     
     // On récupère l'action sélectionnée
-    gtk_tree_model_get(model, &iter, 0, &numer, -1);
-    numero_action = numer;
+    gtk_tree_model_get(model, &iter, 0, &numero_action, -1);
     
     // Et on la supprime ainsi que les charges la contenant
     gtk_tree_store_remove(list_gtk_1990_actions->tree_store_actions, &iter);
@@ -648,8 +646,7 @@ void _1990_gtk_menu_suppr_charge_clicked(GtkToolButton *toolbutton __attribute__
     List_Gtk_1990_Actions *list_gtk_1990_actions;
     GtkTreeIter     iter;
     GtkTreeModel    *model;
-    size_t          numero_action, numero_charge;
-    int             numer;
+    unsigned int    numero_action, numero_charge;
     GList           *list, *list_fixe, *list_parcours;
     
     BUGMSG(projet, , gettext("Paramètre incorrect\n"));
@@ -662,8 +659,7 @@ void _1990_gtk_menu_suppr_charge_clicked(GtkToolButton *toolbutton __attribute__
     // On récupère le numéro de l'action qui contient les charges à supprimer.
     if (!gtk_tree_selection_get_selected(list_gtk_1990_actions->tree_select_actions, &model, &iter))
         return;
-    gtk_tree_model_get(model, &iter, 0, &numer, -1);
-    numero_action = numer;
+    gtk_tree_model_get(model, &iter, 0, &numero_action, -1);
     
     // On récupère la liste des charges à supprimer.
     list = gtk_tree_selection_get_selected_rows(list_gtk_1990_actions->tree_select_charges, &model);
@@ -681,8 +677,7 @@ void _1990_gtk_menu_suppr_charge_clicked(GtkToolButton *toolbutton __attribute__
     {
         if (gtk_tree_model_get_iter(model, &iter, gtk_tree_row_reference_get_path((GtkTreeRowReference*)list_parcours->data)))
         {
-            gtk_tree_model_get(model, &iter, 0, &numer, -1);
-            numero_charge = numer;
+            gtk_tree_model_get(model, &iter, 0, &numero_charge, -1);
             BUG(_1990_action_supprime_charge(projet, numero_action, numero_charge) == 0, );
         }
     }
@@ -703,8 +698,7 @@ void _1990_gtk_menu_edit_charge_clicked(GtkToolButton *toolbutton __attribute__(
     List_Gtk_1990_Actions *list_gtk_1990_actions;
     GtkTreeIter     iter;
     GtkTreeModel    *model;
-    size_t          numero_action, numero_charge;
-    int             numer;
+    unsigned int    numero_action, numero_charge;
     GList           *list, *list_parcours;
     
     BUGMSG(projet, , gettext("Paramètre incorrect\n"));
@@ -717,8 +711,7 @@ void _1990_gtk_menu_edit_charge_clicked(GtkToolButton *toolbutton __attribute__(
     // On récupère le numéro de l'action qui contient les charges à éditer.
     if (!gtk_tree_selection_get_selected(list_gtk_1990_actions->tree_select_actions, &model, &iter))
         return;
-    gtk_tree_model_get(model, &iter, 0, &numer, -1);
-    numero_action = numer;
+    gtk_tree_model_get(model, &iter, 0, &numero_action, -1);
     
     // On récupère la liste des charges à éditer.
     list = gtk_tree_selection_get_selected_rows(list_gtk_1990_actions->tree_select_charges, &model);
@@ -729,8 +722,7 @@ void _1990_gtk_menu_edit_charge_clicked(GtkToolButton *toolbutton __attribute__(
         {
     // Et on les édite les unes après les autres.
             Charge_Noeud    *charge_noeud;
-            gtk_tree_model_get(model, &iter, 0, &numer, -1);
-            numero_charge = numer;
+            gtk_tree_model_get(model, &iter, 0, &numero_charge, -1);
             charge_noeud = _1990_action_cherche_charge(projet, numero_action, numero_charge);
             BUG(charge_noeud, );
             switch (charge_noeud->type)

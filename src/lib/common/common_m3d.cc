@@ -173,7 +173,7 @@ int m3d_barre(Projet *projet, Beton_Barre *barre)
     BUGMSG(barre, -1, gettext("Paramètre incorrect\n"));
     
     // On supprime l'élément s'il existe déjà
-    BUGMSG(tmp = g_strdup_printf("barre %zu", barre->numero), -2, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(tmp = g_strdup_printf("barre %u", barre->numero), -2, gettext("Erreur d'allocation mémoire.\n"));
 
     objet = vue->scene->get_object_by_name(tmp);
     if (objet != NULL)

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2012-01-29 15:09+0100\n"
-"PO-Revision-Date: 2012-01-29 15:09+0100\n"
+"POT-Creation-Date: 2012-02-04 22:16+0100\n"
+"PO-Revision-Date: 2012-02-04 22:16+0100\n"
 "Last-Translator: LE GARREC Vincent <vlg@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -27,11 +27,11 @@ msgstr "Section en béton n°%d introuvable.\n"
 msgid "Type de section %d inconnu."
 msgstr "Type de section %d inconnu."
 
-msgid "Barre en béton %d introuvable.\n"
-msgstr "Barre en béton %d introuvable.\n"
+msgid "Barre en béton %u introuvable.\n"
+msgstr "Barre en béton %u introuvable.\n"
 
-msgid "La longueur de la barre %d est nulle\n"
-msgstr "La longueur de la barre %d est nulle\n"
+msgid "La longueur de la barre %u est nulle\n"
+msgstr "La longueur de la barre %u est nulle\n"
 
 msgid "Relachement %d inconnu."
 msgstr "Relachement %d inconnu."
@@ -211,17 +211,17 @@ msgstr "Eaux souterraines"
 msgid "Pays %d inconnu.\n"
 msgstr "Pays %d inconnu.\n"
 
-msgid "Action %zu introuvable.\n"
-msgstr "Action %zu introuvable.\n"
+msgid "Action %u introuvable.\n"
+msgstr "Action %u introuvable.\n"
 
-msgid "Charge %zu introuvable.\n"
-msgstr "Charge %zu introuvable.\n"
+msgid "Charge %u introuvable.\n"
+msgstr "Charge %u introuvable.\n"
 
-msgid "Paramètre incorrect : %zu\n"
-msgstr "Paramètre incorrect : %zu\n"
+msgid "Paramètre incorrect : %u\n"
+msgstr "Paramètre incorrect : %u\n"
 
-msgid "Action n° %zu, description '%s', type n°%d\n"
-msgstr "Action n° %zu, description '%s', type n°%d\n"
+msgid "Action n° %u, description '%s', type n°%d\n"
+msgstr "Action n° %u, description '%s', type n°%d\n"
 
 msgid "Paramètre incorrect %d\n"
 msgstr "Paramètre incorrect %d\n"
@@ -436,12 +436,6 @@ msgstr "Actions..."
 msgid "Groupes..."
 msgstr "Groupes..."
 
-msgid "fichier %s, fonction %s, ligne %d, test : %s\n"
-msgstr "fichier %s, fonction %s, ligne %d, test : %s\n"
-
-msgid "fichier %s, fonction %s, ligne %d, test : %s, texte : "
-msgstr "fichier %s, fonction %s, ligne %d, test : %s, texte : "
-
 msgid "Le fichier '%s' est introuvable ou corrompu.\n"
 msgstr "Le fichier '%s' est introuvable ou corrompu.\n"
 
@@ -618,6 +612,4 @@ msgstr "Appui"
 
 msgid "Position relative"
 msgstr "Position relative"
-
-
 
