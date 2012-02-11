@@ -469,7 +469,7 @@ void _1990_gtk_menu_nouvelle_action_activate(GtkMenuItem *menuitem, Projet *proj
 }
 
 
-void _1990_gtk_menu_suppr_action_activate(GtkToolButton *toolbutton __attribute__((unused)), Projet *projet)
+void _1990_gtk_menu_suppr_action_activate(GtkWidget *toolbutton __attribute__((unused)), Projet *projet)
 /* Description : Supprimer l'action sélectionnée
  * Paramètres : GtkToolButton *toolbutton : composant à l'origine de l'évènement
  *            : Projet *projet : la variable projet
@@ -625,7 +625,7 @@ void _1990_gtk_actions_select_changed(GtkTreeSelection *treeselection __attribut
 }
 
 
-void _1990_gtk_menu_suppr_charge_clicked(GtkToolButton *toolbutton __attribute__((unused)), Projet *projet)
+void _1990_gtk_menu_suppr_charge_clicked(GtkWidget *toolbutton __attribute__((unused)), Projet *projet)
 /* Description : Supprimer les actions sélectionnées
  * Paramètres : GtkToolButton *toolbutton : composant à l'origine de l'évènement
  *            : Projet *projet : la variable projet
@@ -774,6 +774,24 @@ gboolean _1990_gtk_actions_charge_double_clicked(GtkWidget *widget __attribute__
 }
 
 
+gboolean _1990_gtk_tree_view_actions_key_press_event(GtkWidget *widget, GdkEvent *event, Projet *projet)
+{
+    BUGMSG(projet, FALSE, gettext("Paramètre incorrect\n"));
+    if (event->key.keyval == GDK_KEY_Delete)
+        _1990_gtk_menu_suppr_action_activate(widget, projet);
+    return FALSE; /* Pour permettre aux autres touches d'être fonctionnelles  */
+}
+
+
+gboolean _1990_gtk_actions_charge_key_press_event(GtkWidget *widget, GdkEvent *event, Projet *projet)
+{
+    BUGMSG(projet, FALSE, gettext("Paramètre incorrect\n"));
+    if (event->key.keyval == GDK_KEY_Delete)
+        _1990_gtk_menu_suppr_charge_clicked(widget, projet);
+    return FALSE; /* Pour permettre aux autres touches d'être fonctionnelles  */
+}
+
+
 void _1990_gtk_actions(Projet *projet)
 /* Description : Affichage de la fenêtre permettant de gérer les actions
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement
@@ -815,6 +833,7 @@ void _1990_gtk_actions(Projet *projet)
     list_gtk_1990_actions->tree_select_actions = gtk_tree_view_get_selection(list_gtk_1990_actions->tree_view_actions);
     gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(list_gtk_1990_actions->scroll_actions), GTK_WIDGET(list_gtk_1990_actions->tree_view_actions));
     g_signal_connect(G_OBJECT(list_gtk_1990_actions->tree_view_actions), "cursor-changed", G_CALLBACK(_1990_gtk_tree_view_actions_cursor_changed), projet);
+    g_signal_connect(G_OBJECT(list_gtk_1990_actions->tree_view_actions), "key-press-event", G_CALLBACK(_1990_gtk_tree_view_actions_key_press_event), projet);
     g_signal_connect(G_OBJECT(list_gtk_1990_actions->tree_select_actions), "changed", G_CALLBACK(_1990_gtk_actions_select_changed), projet);
     gtk_table_attach(GTK_TABLE(list_gtk_1990_actions->table_actions), list_gtk_1990_actions->scroll_actions, 0, 1, 0, 1, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 0, 0);
     // Colonne numéro
@@ -904,6 +923,7 @@ void _1990_gtk_actions(Projet *projet)
     gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(list_gtk_1990_actions->scroll_charges), GTK_WIDGET(list_gtk_1990_actions->tree_view_charges));
     gtk_tree_view_set_reorderable(GTK_TREE_VIEW(list_gtk_1990_actions->tree_view_charges), TRUE);
     g_signal_connect(G_OBJECT(list_gtk_1990_actions->tree_view_charges), "button-press-event", G_CALLBACK(_1990_gtk_actions_charge_double_clicked), projet);
+    g_signal_connect(G_OBJECT(list_gtk_1990_actions->tree_view_charges), "key-press-event", G_CALLBACK(_1990_gtk_actions_charge_key_press_event), projet);
     gtk_table_attach(GTK_TABLE(list_gtk_1990_actions->table_charges), list_gtk_1990_actions->scroll_charges, 0, 1, 0, 1, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 0, 0);
     // Génération des colonnes
     pCellRenderer = gtk_cell_renderer_text_new();
