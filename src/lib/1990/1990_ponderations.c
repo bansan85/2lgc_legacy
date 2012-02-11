@@ -127,11 +127,11 @@ int _1990_ponderations_duplique_sans_double(GList **liste_pond_destination, GLis
             case 0 :
             {
                 Ponderation     *ponderation_destination = malloc(sizeof(Ponderation));
+                GList   *list_parcours2 = ponderation_source->elements;
                 
                 BUGMSG(ponderation_destination, -2, gettext("Erreur d'allocation mémoire.\n"));
                 ponderation_destination->elements = NULL;
                 
-                GList   *list_parcours2 = ponderation_source->elements;
                 do
                 {
                     Ponderation_Element *element_source;
