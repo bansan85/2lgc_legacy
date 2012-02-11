@@ -5,7 +5,7 @@ SUBDIRS =	po \
 			files \
 			doc
 
-AM_CFLAGS = @CFLAGS@ -march=native -O0 -g3 -ggdb3 -pipe -ftracer -fsched2-use-traces -Wl,-O0 -fno-inline -Wall -Wextra -Wfloat-equal -Wconversion -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED -DGDK_PIXBUF_DISABLE_DEPRECATED -DG_DISABLE_DEPRECATED -Wno-comment -Wswitch-enum -Wswitch-default -Wshadow -Werror -DLOCALEDIR=\""@localedir@"\" -DDATADIR=\""@datadir@/2lgc"\" `pkg-config --cflags glib-2.0`
+AM_CFLAGS = @CFLAGS@ -march=native -O0 -g3 -ggdb3 -pipe -ftracer -fsched2-use-traces -Wl,-O0 -fno-inline -Wall -Wextra -Wfloat-equal -Wconversion -Wdeclaration-after-statement -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED -DGDK_PIXBUF_DISABLE_DEPRECATED -DG_DISABLE_DEPRECATED -Wno-comment -Wswitch-enum -Wswitch-default -Wshadow -Werror -DLOCALEDIR=\""@localedir@"\" -DDATADIR=\""@datadir@/2lgc"\" `pkg-config --cflags glib-2.0`
 if ENABLE_GTK
 AM_CFLAGS      +=  @GTK_CFLAGS@
 endif

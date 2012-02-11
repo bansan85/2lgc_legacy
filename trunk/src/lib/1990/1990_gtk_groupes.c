@@ -1397,14 +1397,16 @@ void _1990_gtk_tree_select_changed(GtkTreeSelection *treeselection __attribute__
     }
     else
     {
+        GList   *list_orig;
+        GList   *list;
         gtk_widget_set_sensitive(GTK_WIDGET(list_gtk_1990_groupes->item_groupe_suppr), TRUE);
         gtk_widget_set_sensitive(GTK_WIDGET(list_gtk_1990_groupes->item_groupe_and), TRUE);
         gtk_widget_set_sensitive(GTK_WIDGET(list_gtk_1990_groupes->item_groupe_or), TRUE);
         gtk_widget_set_sensitive(GTK_WIDGET(list_gtk_1990_groupes->item_groupe_xor), TRUE);
         
         // Si aucune sélection dans la liste des éléments disponibles
-        GList   *list_orig = gtk_tree_selection_get_selected_rows(list_gtk_1990_groupes->tree_select_dispo, NULL);
-        GList   *list = g_list_last(list_orig);
+        list_orig = gtk_tree_selection_get_selected_rows(list_gtk_1990_groupes->tree_select_dispo, NULL);
+        list = g_list_last(list_orig);
         
         if (list == NULL)
             gtk_widget_set_sensitive(GTK_WIDGET(list_gtk_1990_groupes->item_ajout_dispo), FALSE);
