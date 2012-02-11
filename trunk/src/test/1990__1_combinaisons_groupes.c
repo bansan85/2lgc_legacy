@@ -22,8 +22,6 @@
 #include <libintl.h>
 #include <locale.h>
 
-#include <list.h>
-
 #include "1990_actions.h"
 #include "1990_groupes.h"
 #include "1990_combinaisons.h"
@@ -46,25 +44,25 @@ int main(void)
     projet = projet_init(PAYS_EU);
     BUG(projet, -1);
     projet->combinaisons.flags = 0 | 8 | 2;
-    BUG(_1990_action_ajout(projet, 0, "Poids propre") == 0, -1); // Poids prore
-    BUG(_1990_action_ajout(projet, 2, "Exploitation") == 0, -1); // 2
-    BUG(_1990_action_ajout(projet, 12, "Neige") == 0, -1); // 3
-    BUG(_1990_action_ajout(projet, 13, "Vent") == 0, -1); // 4
+    BUG(_1990_action_ajout(projet, 0, "Poids propre"), -1); // Poids prore
+    BUG(_1990_action_ajout(projet, 2, "Exploitation"), -1); // 2
+    BUG(_1990_action_ajout(projet, 12, "Neige"), -1); // 3
+    BUG(_1990_action_ajout(projet, 13, "Vent"), -1); // 4
     _1990_action_affiche_tout(projet);
     BUG(_1990_groupe_ajout_niveau(projet) == 0, -1);
     BUG(_1990_groupe_ajout_niveau(projet) == 0, -1);
     BUG(_1990_groupe_ajout_niveau(projet) == 0, -1);
     BUG(_1990_groupe_ajout_niveau(projet) == 0, -1);
-    BUG(_1990_groupe_ajout_groupe(projet, 0, GROUPE_COMBINAISON_AND, "") == 0, -1); // Charges permanentes
-    BUG(_1990_groupe_ajout_groupe(projet, 0, GROUPE_COMBINAISON_AND, "") == 0, -1); // Charges d'exploitation
-    BUG(_1990_groupe_ajout_groupe(projet, 0, GROUPE_COMBINAISON_XOR, "") == 0, -1); // Neige
-    BUG(_1990_groupe_ajout_groupe(projet, 0, GROUPE_COMBINAISON_XOR, "") == 0, -1); // Vent
-    BUG(_1990_groupe_ajout_groupe(projet, 1, GROUPE_COMBINAISON_AND, "") == 0, -1); // Charges permanentes
-    BUG(_1990_groupe_ajout_groupe(projet, 1, GROUPE_COMBINAISON_AND, "") == 0, -1); // Charges d'exploitation
-    BUG(_1990_groupe_ajout_groupe(projet, 1, GROUPE_COMBINAISON_OR, "") == 0, -1); // Charges climatiques
-    BUG(_1990_groupe_ajout_groupe(projet, 2, GROUPE_COMBINAISON_AND, "") == 0, -1); // Tout
-    BUG(_1990_groupe_ajout_groupe(projet, 2, GROUPE_COMBINAISON_OR, "") == 0, -1); // Tout
-    BUG(_1990_groupe_ajout_groupe(projet, 3, GROUPE_COMBINAISON_AND, "") == 0, -1); // Tout
+    BUG(_1990_groupe_ajout_groupe(projet, 0, GROUPE_COMBINAISON_AND, ""), -1); // Charges permanentes
+    BUG(_1990_groupe_ajout_groupe(projet, 0, GROUPE_COMBINAISON_AND, ""), -1); // Charges d'exploitation
+    BUG(_1990_groupe_ajout_groupe(projet, 0, GROUPE_COMBINAISON_XOR, ""), -1); // Neige
+    BUG(_1990_groupe_ajout_groupe(projet, 0, GROUPE_COMBINAISON_XOR, ""), -1); // Vent
+    BUG(_1990_groupe_ajout_groupe(projet, 1, GROUPE_COMBINAISON_AND, ""), -1); // Charges permanentes
+    BUG(_1990_groupe_ajout_groupe(projet, 1, GROUPE_COMBINAISON_AND, ""), -1); // Charges d'exploitation
+    BUG(_1990_groupe_ajout_groupe(projet, 1, GROUPE_COMBINAISON_OR, ""), -1); // Charges climatiques
+    BUG(_1990_groupe_ajout_groupe(projet, 2, GROUPE_COMBINAISON_AND, ""), -1); // Tout
+    BUG(_1990_groupe_ajout_groupe(projet, 2, GROUPE_COMBINAISON_OR, ""), -1); // Tout
+    BUG(_1990_groupe_ajout_groupe(projet, 3, GROUPE_COMBINAISON_AND, ""), -1); // Tout
     BUG(_1990_groupe_ajout_element(projet, 0, 0, 0) == 0, -1);
     BUG(_1990_groupe_ajout_element(projet, 0, 1, 1) == 0, -1);
     BUG(_1990_groupe_ajout_element(projet, 0, 2, 2) == 0, -1);

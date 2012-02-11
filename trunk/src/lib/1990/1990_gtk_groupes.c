@@ -61,7 +61,6 @@ int _1990_gtk_affiche_niveau(Projet *projet, unsigned int niveau)
     
     BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
     BUGMSG(projet->list_gtk._1990_groupes.window_groupe, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(list_size(projet->niveaux_groupes)-1 >= niveau, -1, gettext("Paramètre incorrect %d\n"), niveau);
     
     list_gtk_1990_groupes = &projet->list_gtk._1990_groupes;
     /* On supprime le contenu des deux composants tree_view */
@@ -71,13 +70,12 @@ int _1990_gtk_affiche_niveau(Projet *projet, unsigned int niveau)
     /* dispo_max contient le nombre d'éléments maximum pouvant être disponible depuis le 
      * niveau 'niveau'-1 */
     if (niveau == 0)
-        dispo_max = list_size(projet->actions);
+        dispo_max = g_list_length(projet->actions);
     else
     {
-        BUG(_1990_groupe_positionne_niveau(projet->niveaux_groupes, niveau-1) == 0, -3);
-        niveau_groupe = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
+        BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, niveau-1), -3);
         BUGMSG(niveau_groupe->groupes, -1, gettext("Paramètre incorrect\n"));
-        dispo_max = list_size(niveau_groupe->groupes);
+        dispo_max = g_list_length(niveau_groupe->groupes);
     }
     
     /* Ensuite, on initialise un tableau contenant une liste de boolean
@@ -92,34 +90,35 @@ int _1990_gtk_affiche_niveau(Projet *projet, unsigned int niveau)
     else
         dispos = NULL;
     
-    BUG(_1990_groupe_positionne_niveau(projet->niveaux_groupes, niveau) == 0, -3);
-    niveau_groupe = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
-    if (list_size(niveau_groupe->groupes) != 0)
+    BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, niveau), -3);
+    if (niveau_groupe->groupes != NULL)
     {
+        GList   *list_parcours = niveau_groupe->groupes;
+        
         /* Parcours le niveau à afficher */
-        list_mvfront(niveau_groupe->groupes);
         do
         {
-            Groupe      *groupe = (Groupe*)list_curr(niveau_groupe->groupes);
+            Groupe      *groupe = list_parcours->data;
             
             /* Ajoute de la ligne dans le tree_store */
             gtk_tree_store_append(list_gtk_1990_groupes->tree_store_etat, &groupe->Iter, NULL);
             gtk_tree_store_set(list_gtk_1990_groupes->tree_store_etat, &groupe->Iter, 0, groupe->numero, 1, groupe->nom, -1);
             
             /* Sélection de la première ligne du tree_view_etat */
-            if (list_curr(niveau_groupe->groupes) == list_front(niveau_groupe->groupes))
+            if (list_parcours->data == list_parcours->data)
             {
                 path = gtk_tree_model_get_path(GTK_TREE_MODEL(list_gtk_1990_groupes->tree_store_etat), &groupe->Iter);
                 gtk_tree_selection_select_path(list_gtk_1990_groupes->tree_select_etat, path);
                 gtk_tree_path_free(path);
             }
             
-            if ((groupe->elements != NULL) && (list_size(groupe->elements) != 0))
+            if (groupe->elements != NULL)
             {
-                list_mvfront(groupe->elements);
+                GList *list_parcours2 = groupe->elements;
+                
                 do
                 {
-                    Element     *element = (Element*)list_curr(groupe->elements);
+                    Element     *element = list_parcours2->data;
                     
                     /* On signale que l'élément a déjà été inséré */
                     dispos[element->numero] = 1;
@@ -129,22 +128,21 @@ int _1990_gtk_affiche_niveau(Projet *projet, unsigned int niveau)
                     {
                         Action *action;
                         
-                        BUG(_1990_action_cherche_numero(projet, element->numero) == 0, -3);
-                        action = (Action*)list_curr(projet->actions);
+                        BUG(action = _1990_action_cherche_numero(projet, element->numero), -3);
                         gtk_tree_store_set(list_gtk_1990_groupes->tree_store_etat, &element->Iter, 0, element->numero, 1, action->description, -1);
                     }
                     else
                     {
                         Niveau_Groupe *groupe_niveau_moins_1;
                         Groupe *groupe_moins_1;
-                        BUG(_1990_groupe_positionne_niveau(projet->niveaux_groupes, niveau-1) == 0, -3);
-                        groupe_niveau_moins_1 = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
-                        BUG(_1990_groupe_positionne_groupe(groupe_niveau_moins_1, element->numero) == 0, -3);
-                        groupe_moins_1 = (Groupe*)list_curr(groupe_niveau_moins_1->groupes);
+                        BUG(groupe_niveau_moins_1 = _1990_groupe_positionne_niveau(projet, niveau-1), -3);
+                        BUG(groupe_moins_1 = _1990_groupe_positionne_groupe(groupe_niveau_moins_1, element->numero), -3);
                         gtk_tree_store_set(list_gtk_1990_groupes->tree_store_etat, &element->Iter, 0, element->numero, 1, groupe_moins_1->nom, -1);
                     }
+                    
+                    list_parcours2 = g_list_next(list_parcours2);
                 }
-                while (list_mvnext(groupe->elements));
+                while (list_parcours2 != NULL);
             }
             /* Si la dernière fois que la ligne était affiché, elle était 'expand',
              * on rétablit son attribut */
@@ -154,8 +152,9 @@ int _1990_gtk_affiche_niveau(Projet *projet, unsigned int niveau)
                 gtk_tree_view_expand_row(list_gtk_1990_groupes->tree_view_etat, path, FALSE);
                 gtk_tree_path_free(path);
             }
+            list_parcours = g_list_next(list_parcours);
         }
-        while (list_mvnext(niveau_groupe->groupes) != NULL);
+        while (list_parcours != NULL);
     }
     
     /* On affiche tous les éléments disponibles dans le tree_view_dispo */
@@ -179,18 +178,15 @@ int _1990_gtk_affiche_niveau(Projet *projet, unsigned int niveau)
             {
                 Action *action;
                 
-                BUG(_1990_action_cherche_numero(projet, i) == 0, -3);
-                action = (Action*)list_curr(projet->actions);
+                BUG(action = _1990_action_cherche_numero(projet, i), -3);
                 gtk_tree_store_set(list_gtk_1990_groupes->tree_store_dispo, &Iter, 0, i, 1, action->description, -1);
             }
             else
             {
                 Niveau_Groupe *groupe_niveau_moins_1;
                 Groupe *groupe_moins_1;
-                BUG(_1990_groupe_positionne_niveau(projet->niveaux_groupes, niveau-1) == 0, -3);
-                groupe_niveau_moins_1 = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
-                BUG(_1990_groupe_positionne_groupe(groupe_niveau_moins_1, i) == 0, -3);
-                groupe_moins_1 = (Groupe*)list_curr(groupe_niveau_moins_1->groupes);
+                BUG(groupe_niveau_moins_1 = _1990_groupe_positionne_niveau(projet, niveau-1), -3);
+                BUG(groupe_moins_1 = _1990_groupe_positionne_groupe(groupe_niveau_moins_1, i), -3);
                 gtk_tree_store_set(list_gtk_1990_groupes->tree_store_dispo, &Iter, 0, i, 1, groupe_moins_1->nom, -1);
             }
         }
@@ -236,7 +232,7 @@ void _1990_gtk_button_niveau_suppr_clicked(GtkWidget *button __attribute__((unus
     BUG(_1990_groupe_free_niveau(projet, gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(list_gtk_1990_groupes->spin_button_niveau))) == 0, );
     
     /* On oblige la liste des niveaux à posséder au moins un niveau vide */
-    if (list_size(projet->niveaux_groupes) == 0)
+    if (projet->niveaux_groupes == NULL)
     {
         BUG(_1990_groupe_ajout_niveau(projet) == 0, );
         gtk_tree_store_clear(list_gtk_1990_groupes->tree_store_etat);
@@ -244,7 +240,7 @@ void _1990_gtk_button_niveau_suppr_clicked(GtkWidget *button __attribute__((unus
     }
     
     /* On réajuste les limites du spin_button */
-    gtk_spin_button_set_range(GTK_SPIN_BUTTON(list_gtk_1990_groupes->spin_button_niveau), 0, list_size(projet->niveaux_groupes)-1);
+    gtk_spin_button_set_range(GTK_SPIN_BUTTON(list_gtk_1990_groupes->spin_button_niveau), 0, g_list_length(projet->niveaux_groupes)-1);
     
     return;
 }
@@ -267,11 +263,11 @@ void _1990_gtk_button_niveau_ajout_clicked(GtkWidget *button __attribute__((unus
     
     /* Mise à jour des limites du composant spin_button */
     gtk_tree_store_clear(list_gtk_1990_groupes->tree_store_etat);
-    gtk_spin_button_set_range(GTK_SPIN_BUTTON(list_gtk_1990_groupes->spin_button_niveau), 0, list_size(projet->niveaux_groupes)-1);
+    gtk_spin_button_set_range(GTK_SPIN_BUTTON(list_gtk_1990_groupes->spin_button_niveau), 0, g_list_length(projet->niveaux_groupes)-1);
     
     /* La modification de la valeur du composant spin_button execute automatiquement
      * _1990_gtk_spin_button_niveau_change qui met à jour l'interface graphique */
-    gtk_spin_button_set_value(GTK_SPIN_BUTTON(list_gtk_1990_groupes->spin_button_niveau), list_size(projet->niveaux_groupes)-1);
+    gtk_spin_button_set_value(GTK_SPIN_BUTTON(list_gtk_1990_groupes->spin_button_niveau), g_list_length(projet->niveaux_groupes)-1);
     
     return;
 }
@@ -292,15 +288,12 @@ void _1990_gtk_button_groupe_ajout_clicked(GtkWidget *button __attribute__((unus
     BUGMSG(projet, , gettext("Paramètre incorrect\n"));
     BUGMSG(projet->list_gtk._1990_groupes.window_groupe, , gettext("Paramètre incorrect\n"));
     BUGMSG(projet->niveaux_groupes, , gettext("Paramètre incorrect\n"));
-    BUGMSG(list_size(projet->niveaux_groupes), , gettext("Paramètre incorrect\n"));
     
     list_gtk_1990_groupes = &projet->list_gtk._1990_groupes;
     
     /* On ajoute un niveau */
-    BUG(_1990_groupe_positionne_niveau(projet->niveaux_groupes, gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(list_gtk_1990_groupes->spin_button_niveau))) == 0, );
-    niveau_groupe = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
-    BUG(_1990_groupe_ajout_groupe(projet, niveau_groupe->niveau, GROUPE_COMBINAISON_AND, gettext("Sans nom")) == 0, );
-    groupe = (Groupe*)list_rear(niveau_groupe->groupes);
+    BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(list_gtk_1990_groupes->spin_button_niveau))), );
+    BUG(groupe = _1990_groupe_ajout_groupe(projet, niveau_groupe->niveau, GROUPE_COMBINAISON_AND, gettext("Sans nom")), );
     
     /* Et on met à jour l'affichage */
     gtk_tree_store_append(list_gtk_1990_groupes->tree_store_etat, &groupe->Iter, NULL);
@@ -312,7 +305,7 @@ void _1990_gtk_button_groupe_ajout_clicked(GtkWidget *button __attribute__((unus
     return;
 }
 
-int _1990_gtk_insert_dispo(Projet *projet, int numero)
+int _1990_gtk_insert_dispo(Projet *projet, int numero, Niveau_Groupe *niveau)
 /* Description : Ajoute dans le tree_view_dispo le numéro de l'élément disponible.
  *             : Cette fonction ne gère que l'interface graphique de tree_view_dispo
  * Paramètres : Projet *projet : la variable projet
@@ -366,12 +359,11 @@ int _1990_gtk_insert_dispo(Projet *projet, int numero)
     gtk_tree_selection_select_path(list_gtk_1990_groupes->tree_select_dispo, path);
     gtk_tree_path_free(path);
     
-    if (list_front(projet->niveaux_groupes) == list_curr(projet->niveaux_groupes))
+    if (projet->niveaux_groupes->data == niveau)
     {
         Action *action;
         
-        BUG(_1990_action_cherche_numero(projet, numero) == 0, -3);
-        action = (Action*)list_curr(projet->actions);
+        BUG(action = _1990_action_cherche_numero(projet, numero), -3);
         gtk_tree_store_set(list_gtk_1990_groupes->tree_store_dispo, &iter, 0, numero, 1, action->description, -1);
     }
     else
@@ -379,10 +371,8 @@ int _1990_gtk_insert_dispo(Projet *projet, int numero)
         Niveau_Groupe *groupe_niveau_moins_1;
         Groupe *groupe_moins_1;
         
-        list_mvprev(projet->niveaux_groupes);
-        groupe_niveau_moins_1 = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
-        BUG(_1990_groupe_positionne_groupe(groupe_niveau_moins_1, numero) == 0, -3);
-        groupe_moins_1 = (Groupe*)list_curr(groupe_niveau_moins_1->groupes);
+        BUG(groupe_niveau_moins_1 = _1990_groupe_positionne_niveau(projet, niveau->niveau-1), -3);
+        BUG(groupe_moins_1 = _1990_groupe_positionne_groupe(groupe_niveau_moins_1, numero), -3);
         gtk_tree_store_set(list_gtk_1990_groupes->tree_store_dispo, &iter, 0, numero, 1, groupe_moins_1->nom, -1);
     }
     
@@ -462,23 +452,23 @@ void _1990_gtk_button_groupe_suppr_clicked(GtkWidget *button __attribute__((unus
         /* On supprimer la ligne */
         gtk_tree_store_remove(list_gtk_1990_groupes->tree_store_etat, &iter);
         /* On positionne le groupe en cours */
-        BUG(_1990_groupe_positionne_niveau(projet->niveaux_groupes, niveau) == 0, );
-        niveau_groupe = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
-        BUG(_1990_groupe_positionne_groupe(niveau_groupe, ngroupe) == 0, );
-        groupe = (Groupe*)list_curr(niveau_groupe->groupes);
+        BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, niveau), );
+        BUG(groupe = _1990_groupe_positionne_groupe(niveau_groupe, ngroupe), );
         
   /* On ajoute tous les éléments associés au groupe dans la liste des éléments disponibles */
-        if (list_size(groupe->elements) != 0)
+        if (groupe->elements != NULL)
         {
-            list_mvfront(groupe->elements);
+            GList   *list_parcours = groupe->elements;
+            
             do
             {
-                Element     *element;
+                Element     *element = list_parcours->data;
                 
-                element = (Element*)list_curr(groupe->elements);
-                BUG(_1990_gtk_insert_dispo(projet, element->numero) == 0, );
+                BUG(_1990_gtk_insert_dispo(projet, element->numero, niveau_groupe) == 0, );
+                
+                list_parcours = g_list_next(list_parcours);
             }
-            while (list_mvnext(groupe->elements));
+            while (list_parcours != NULL);
         }
         
         /* On supprime le groupe */
@@ -488,12 +478,13 @@ void _1990_gtk_button_groupe_suppr_clicked(GtkWidget *button __attribute__((unus
          * _1990_gtk_affiche_niveau (optimisation). Une mise à jour du composant graphique
          * est nécessaire car, en supprimant le groupe en cours, tous les groupes avec un
          * numéro supérieur se retrouvent avec leur numéro diminué de 1. */
-        if (list_curr(niveau_groupe->groupes) != NULL)
+        if (niveau_groupe->groupes != NULL)
         {
-            list_mvfront(niveau_groupe->groupes);
+            GList   *list_parcours  = niveau_groupe->groupes;
+            
             do
             {
-                groupe = (Groupe*)list_curr(niveau_groupe->groupes);
+                groupe = list_parcours->data;
                 if (groupe->numero >= ngroupe)
                 {
                     GValue      nouvelle_valeur;
@@ -507,8 +498,9 @@ void _1990_gtk_button_groupe_suppr_clicked(GtkWidget *button __attribute__((unus
                     /* Et on modifie la ligne */
                     gtk_tree_store_set_value(list_gtk_1990_groupes->tree_store_etat, &groupe->Iter, 0, &nouvelle_valeur);
                 }
+                list_parcours = g_list_next(list_parcours);
             }
-            while (list_mvnext(niveau_groupe->groupes));
+            while (list_parcours);
         }
     }
     /* Si c'est un élément, on l'ajoute à la liste des éléments disponibles
@@ -517,7 +509,7 @@ void _1990_gtk_button_groupe_suppr_clicked(GtkWidget *button __attribute__((unus
     {
         /* On supprimer la ligne */
         gtk_tree_store_remove(list_gtk_1990_groupes->tree_store_etat, &iter);
-        BUG(_1990_gtk_insert_dispo(projet, numero) == 0, );
+        BUG(_1990_gtk_insert_dispo(projet, numero, _1990_groupe_positionne_niveau(projet, niveau)) == 0, );
         BUG(_1990_groupe_free_element(projet, niveau, ngroupe, numero) == 0, );
     }
     
@@ -554,22 +546,24 @@ gboolean _1990_gtk_tree_view_dispo_drag(GtkWidget *widget __attribute__((unused)
 
 int _1990_gtk_button_ajout_dispo_proc(int ngroupe, Projet *projet)
 {
-    GtkTreeModel    *model1;
-    GtkTreeIter     iter1;
-    int             numero;
-    char            *nom;
-    Niveau_Groupe   *niveau_groupe;
-    Groupe          *groupe;
-    Element         *element, *element2;
-    GList           *list, *list_orig;
+    GtkTreeModel   	        *model1;
+    GtkTreeIter    	        iter1;
+    int            	        numero, niveau;
+    char           	        *nom;
+    Niveau_Groupe  	        *niveau_groupe;
+    Groupe         	        *groupe;
+    Element        	        *element, *element2;
+    GList                   *list, *list_orig;
     List_Gtk_1990_Groupes   *list_gtk_1990_groupes;
     
     BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
     BUGMSG(projet->niveaux_groupes, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(list_size(projet->niveaux_groupes), -1, gettext("Paramètre incorrect\n"));
     BUGMSG(projet->list_gtk._1990_groupes.window_groupe, -1, gettext("Paramètre incorrect\n"));
     
     list_gtk_1990_groupes = &projet->list_gtk._1990_groupes;
+    niveau = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(list_gtk_1990_groupes->spin_button_niveau));
+    BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, niveau), -3);
+    BUG(groupe = _1990_groupe_positionne_groupe(niveau_groupe, ngroupe), -3);
     list_orig = gtk_tree_selection_get_selected_rows(list_gtk_1990_groupes->tree_select_dispo, &model1);
     list = g_list_last(list_orig);
     
@@ -587,30 +581,25 @@ int _1990_gtk_button_ajout_dispo_proc(int ngroupe, Projet *projet)
         gtk_tree_store_remove(list_gtk_1990_groupes->tree_store_dispo, &iter1);
         
         /* On ajoute l'élément au groupe */
-        BUG(_1990_groupe_ajout_element(projet, gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(list_gtk_1990_groupes->spin_button_niveau)), ngroupe, numero) == 0, -3);
+        BUG(_1990_groupe_ajout_element(projet, niveau, ngroupe, numero) == 0, -3);
         
         /* On positionne l'élément en cours */
-        niveau_groupe = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
-        groupe = (Groupe*)list_curr(niveau_groupe->groupes);
-        BUG(_1990_groupe_positionne_element(groupe, numero) == 0, -1);
-        element = (Element*)list_curr(groupe->elements);
+        BUG(element = _1990_groupe_positionne_element(groupe, numero), -3);
         
         /* On ajoute la ligne dans l'interface graphique */
-        if (list_front(groupe->elements) == element)
+        if (groupe->elements->data == element)
             gtk_tree_store_prepend(list_gtk_1990_groupes->tree_store_etat, &element->Iter, &groupe->Iter);
         else
         {
-            list_mvprev(groupe->elements);
-            element2 = (Element*)list_curr(groupe->elements);
+            element2 = g_list_previous(g_list_find(groupe->elements, element))->data;
             gtk_tree_store_insert_after(list_gtk_1990_groupes->tree_store_etat, &element->Iter, &groupe->Iter, &element2->Iter);
         }
         
-        if (list_front(projet->niveaux_groupes) == list_curr(projet->niveaux_groupes))
+        if (projet->niveaux_groupes->data == niveau_groupe)
         {
             Action *action;
             
-            BUG(_1990_action_cherche_numero(projet, numero) == 0, -3);
-            action = (Action*)list_curr(projet->actions);
+            BUG(action = _1990_action_cherche_numero(projet, numero), -3);
             gtk_tree_store_set(list_gtk_1990_groupes->tree_store_etat, &element->Iter, 0, numero, 1, action->description, -1);
         }
         else
@@ -618,10 +607,8 @@ int _1990_gtk_button_ajout_dispo_proc(int ngroupe, Projet *projet)
             Niveau_Groupe *groupe_niveau_moins_1;
             Groupe *groupe_moins_1;
             
-            list_mvprev(projet->niveaux_groupes);
-            groupe_niveau_moins_1 = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
-            BUG(_1990_groupe_positionne_groupe(groupe_niveau_moins_1, numero) == 0, -3);
-            groupe_moins_1 = (Groupe*)list_curr(groupe_niveau_moins_1->groupes);
+            BUG(groupe_niveau_moins_1 = _1990_groupe_positionne_niveau(projet, niveau-1), -3);
+            BUG(groupe_moins_1 = _1990_groupe_positionne_groupe(groupe_niveau_moins_1, numero), -3);
             gtk_tree_store_set(list_gtk_1990_groupes->tree_store_etat, &element->Iter, 0, numero, 1, groupe_moins_1->nom, -1);
         }
        
@@ -709,37 +696,37 @@ void _1990_gtk_tree_view_etat_drag(GtkWidget *widget __attribute__((unused)), Gd
  * Valeur renvoyée : Aucune
  */
 {
-    gint            cx, cy;
+    gint                    cx, cy;
     List_Gtk_1990_Groupes   *list_gtk_1990_groupes = &projet->list_gtk._1990_groupes;
-    GtkTreePath     *path;
-    GtkTreeIter     iter, iter_tmp;
-    GtkTreeModel    *list_store2;
+    GtkTreePath             *path;
+    GtkTreeIter             iter, iter_tmp;
+    GtkTreeModel            *list_store2;
     
     BUGMSG(projet, , gettext("Paramètre incorrect\n"));
     BUGMSG(projet->niveaux_groupes, , gettext("Paramètre incorrect\n"));
-    BUGMSG(list_size(projet->niveaux_groupes), , gettext("Paramètre incorrect\n"));
     BUGMSG(projet->list_gtk._1990_groupes.window_groupe, , gettext("Paramètre incorrect\n"));
     
-    gdk_window_get_geometry (gtk_tree_view_get_bin_window (GTK_TREE_VIEW(list_gtk_1990_groupes->tree_view_etat)), &cx, &cy, NULL, NULL);
+    gdk_window_get_geometry(gtk_tree_view_get_bin_window(GTK_TREE_VIEW(list_gtk_1990_groupes->tree_view_etat)), &cx, &cy, NULL, NULL);
     gtk_tree_view_get_path_at_pos(GTK_TREE_VIEW(widget), x -=cx, y -=cy, &path, NULL, &cx, &cy);
     list_store2 = gtk_tree_view_get_model(GTK_TREE_VIEW(list_gtk_1990_groupes->tree_view_etat));
     if (path != NULL)
     {
         int     ngroupe_dest;
+        
         gtk_tree_model_get_iter(list_store2, &iter, path);
         ngroupe_dest = _1990_gtk_get_groupe(list_store2, &iter);
         if (list_gtk_1990_groupes->drag_from == GTK_WIDGET(list_gtk_1990_groupes->tree_view_dispo))
             BUG(_1990_gtk_button_ajout_dispo_proc(ngroupe_dest, projet) == 0, );
         else
         {
-            int ngroupe_source;
-            GtkTreeModel     *model;
-            int              numero;
-            int              niveau;
-            char             *nom;
-            Niveau_Groupe    *niveau_groupe;
-            Groupe           *groupe;
-            Element          *element;
+            int             ngroupe_source;
+            GtkTreeModel    *model;
+            int             numero;
+            int             niveau;
+            char            *nom;
+            Niveau_Groupe   *niveau_groupe;
+            Groupe          *groupe;
+            Element         *element;
             
             niveau = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(list_gtk_1990_groupes->spin_button_niveau));
             gtk_tree_selection_get_selected(list_gtk_1990_groupes->tree_select_etat, &model, &iter);
@@ -750,28 +737,26 @@ void _1990_gtk_tree_view_etat_drag(GtkWidget *widget __attribute__((unused)), Gd
                 BUG(_1990_groupe_free_element(projet, niveau, ngroupe_source, numero) == 0, );
                 BUG(_1990_groupe_ajout_element(projet, niveau, ngroupe_dest, numero) == 0, );
                 gtk_tree_store_remove(list_gtk_1990_groupes->tree_store_etat, &iter);
-                niveau_groupe = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
-                groupe = (Groupe*)list_curr(niveau_groupe->groupes);
-                BUG(_1990_groupe_positionne_element(groupe, numero) == 0, );
-                element = (Element*)list_curr(groupe->elements);
+                BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, niveau), );
+                BUG(groupe = _1990_groupe_positionne_groupe(niveau_groupe, ngroupe_dest), );
+                BUG(element = _1990_groupe_positionne_element(groupe, numero), );
                 
                 /* On ajoute la ligne dans l'interface graphique */
-                if (list_front(groupe->elements) == element)
+                if (groupe->elements->data == element)
                     gtk_tree_store_prepend(list_gtk_1990_groupes->tree_store_etat, &element->Iter, &groupe->Iter);
                 else
                 {
                     Element*    element2;
-                    list_mvprev(groupe->elements);
-                    element2 = (Element*)list_curr(groupe->elements);
+                    
+                    BUG(element2 = _1990_groupe_positionne_element(groupe, numero-1), );
                     gtk_tree_store_insert_after(list_gtk_1990_groupes->tree_store_etat, &element->Iter, &groupe->Iter, &element2->Iter);
                 }
                 
-                if (list_front(projet->niveaux_groupes) == list_curr(projet->niveaux_groupes))
+                if (projet->niveaux_groupes->data == niveau_groupe)
                 {
                     Action *action;
                     
-                    BUG(_1990_action_cherche_numero(projet, numero) == 0, );
-                    action = (Action*)list_curr(projet->actions);
+                    BUG(action = _1990_action_cherche_numero(projet, numero), );
                     gtk_tree_store_set(list_gtk_1990_groupes->tree_store_etat, &element->Iter, 0, numero, 1, action->description, -1);
                 }
                 else
@@ -779,10 +764,8 @@ void _1990_gtk_tree_view_etat_drag(GtkWidget *widget __attribute__((unused)), Gd
                     Niveau_Groupe *groupe_niveau_moins_1;
                     Groupe *groupe_moins_1;
                     
-                    list_mvprev(projet->niveaux_groupes);
-                    groupe_niveau_moins_1 = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
-                    BUG(_1990_groupe_positionne_groupe(groupe_niveau_moins_1, numero) == 0, );
-                    groupe_moins_1 = (Groupe*)list_curr(groupe_niveau_moins_1->groupes);
+                    BUG(groupe_niveau_moins_1 = _1990_groupe_positionne_niveau(projet, niveau-1), );
+                    BUG(groupe_moins_1 = _1990_groupe_positionne_groupe(groupe_niveau_moins_1, numero), );
                     gtk_tree_store_set(list_gtk_1990_groupes->tree_store_etat, &element->Iter, 0, numero, 1, groupe_moins_1->nom, -1);
                 }
                 
@@ -826,10 +809,8 @@ void _1990_gtk_tree_view_etat_row_expanded(GtkTreeView *tree_view, GtkTreeIter *
     // On détermine le groupe ayant entraîné une ouverture
     // En effet, seul un groupe dans le tree_view_etat peut entraîner une ouverture
     ngroupe = _1990_gtk_get_groupe(model, iter);
-    BUG(_1990_groupe_positionne_niveau(projet->niveaux_groupes, gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(list_gtk_1990_groupes->spin_button_niveau))) == 0, );
-    niveau_groupe = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
-    BUG(_1990_groupe_positionne_groupe(niveau_groupe, ngroupe) == 0, );
-    groupe = (Groupe*)list_curr(niveau_groupe->groupes);
+    BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(list_gtk_1990_groupes->spin_button_niveau))), );
+    BUG(groupe = _1990_groupe_positionne_groupe(niveau_groupe, ngroupe), );
     
     // On le marque comme ouvert.
     groupe->Iter_expand = 1;
@@ -864,10 +845,8 @@ void _1990_gtk_tree_view_etat_row_collapsed(GtkTreeView *tree_view, GtkTreeIter 
     // On détermine le groupe ayant entraîné une fermeture
     // En effet, seul un groupe dans le tree_view_etat peut entraîner une fermeture
     ngroupe = _1990_gtk_get_groupe(model, iter);
-    BUG(_1990_groupe_positionne_niveau(projet->niveaux_groupes, gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(list_gtk_1990_groupes->spin_button_niveau))) == 0, );
-    niveau_groupe = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
-    BUG(_1990_groupe_positionne_groupe(niveau_groupe, ngroupe) == 0, );
-    groupe = (Groupe*)list_curr(niveau_groupe->groupes);
+    BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(list_gtk_1990_groupes->spin_button_niveau))), );
+    BUG(groupe = _1990_groupe_positionne_groupe(niveau_groupe, ngroupe), );
     
     // On le marque comme fermé.
     groupe->Iter_expand = 0;
@@ -903,10 +882,8 @@ void _1990_gtk_tree_view_etat_cursor_changed(__attribute__((unused)) GtkTreeView
         return;
     gtk_tree_model_get(model, &iter, 0, &tmp, 1, &nom, -1);
     ngroupe = _1990_gtk_get_groupe(model, &iter);
-    BUG(_1990_groupe_positionne_niveau(projet->niveaux_groupes, gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(list_gtk_1990_groupes->spin_button_niveau))) == 0, );
-    niveau_groupe = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
-    BUG(_1990_groupe_positionne_groupe(niveau_groupe, ngroupe) == 0, );
-    groupe = (Groupe*)list_curr(niveau_groupe->groupes);
+    BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(list_gtk_1990_groupes->spin_button_niveau))), );
+    BUG(groupe = _1990_groupe_positionne_groupe(niveau_groupe, ngroupe), );
     
     /* On active le toggle_button correspondant au type de combinaison du groupe */
     switch (groupe->type_combinaison)
@@ -960,10 +937,8 @@ void _1990_gtk_button_groupe_toggled(GtkRadioToolButton *radiobutton, Projet *pr
     if (!gtk_tree_selection_get_selected(list_gtk_1990_groupes->tree_select_etat, &model, &iter))
         return;
     ngroupe = _1990_gtk_get_groupe(model, &iter);
-    BUG(_1990_groupe_positionne_niveau(projet->niveaux_groupes, gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(list_gtk_1990_groupes->spin_button_niveau))) == 0, );
-    niveau_groupe = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
-    BUG(_1990_groupe_positionne_groupe(niveau_groupe, ngroupe) == 0, );
-    groupe = (Groupe*)list_curr(niveau_groupe->groupes);
+    BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(list_gtk_1990_groupes->spin_button_niveau))), );
+    BUG(groupe = _1990_groupe_positionne_groupe(niveau_groupe, ngroupe), );
     
     /* On attribue le nouveau type de combinaison */
     if (radiobutton == (void*)list_gtk_1990_groupes->item_groupe_and)
@@ -1348,10 +1323,8 @@ void _1990_gtk_tree_view_etat_cell_edited(GtkCellRendererText *cell __attribute_
         Niveau_Groupe *groupe_niveau;
         Groupe        *groupe;
         
-        BUG(_1990_groupe_positionne_niveau(projet->niveaux_groupes, niveau) == 0, );
-        groupe_niveau = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
-        BUG(_1990_groupe_positionne_groupe(groupe_niveau, numero) == 0, );
-        groupe = (Groupe*)list_curr(groupe_niveau->groupes);
+        BUG(groupe_niveau = _1990_groupe_positionne_niveau(projet, niveau), );
+        BUG(groupe = _1990_groupe_positionne_groupe(groupe_niveau, numero), );
         free(groupe->nom);
         BUGMSG(groupe->nom = g_strdup_printf("%s", new_text), , gettext("Erreur d'allocation mémoire.\n"));
     }
@@ -1361,8 +1334,8 @@ void _1990_gtk_tree_view_etat_cell_edited(GtkCellRendererText *cell __attribute_
         if (niveau == 0)
         {
             Action      *action;
-            _1990_action_cherche_numero(projet, numero);
-            action = (Action*)list_curr(projet->actions);
+            
+            BUG(action = _1990_action_cherche_numero(projet, numero), );
             free(action->description);
             BUGMSG(action->description = g_strdup_printf("%s", new_text), , gettext("Erreur d'allocation mémoire.\n"));
         }
@@ -1370,10 +1343,8 @@ void _1990_gtk_tree_view_etat_cell_edited(GtkCellRendererText *cell __attribute_
         {
             Niveau_Groupe *groupe_niveau;
             Groupe        *groupe;
-            BUG(_1990_groupe_positionne_niveau(projet->niveaux_groupes, niveau-1) == 0, );
-            groupe_niveau = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
-            BUG(_1990_groupe_positionne_groupe(groupe_niveau, numero) == 0, );
-            groupe = (Groupe*)list_curr(groupe_niveau->groupes);
+            BUG(groupe_niveau = _1990_groupe_positionne_niveau(projet, niveau-1), );
+            BUG(groupe = _1990_groupe_positionne_groupe(groupe_niveau, numero), );
             free(groupe->nom);
             BUGMSG(groupe->nom = g_strdup_printf("%s", new_text), , gettext("Erreur d'allocation mémoire.\n"));
         }
@@ -1491,12 +1462,12 @@ void _1990_gtk_groupes(GtkWidget *button __attribute__((unused)), Projet *projet
     gtk_container_add(GTK_CONTAINER(list_gtk_1990_groupes->window_groupe), list_gtk_1990_groupes->table);
     
     BUGMSG(projet->niveaux_groupes, , "_1990_gtk_groupes\n");
-    if (list_size(projet->niveaux_groupes) == 0)
+    if (projet->niveaux_groupes == NULL)
         BUG(_1990_groupe_ajout_niveau(projet) == 0, );
     
     /* Création des composants graphiques gérant les niveaux */
     label = gtk_label_new(gettext("Niveau : "));
-    list_gtk_1990_groupes->spin_button_niveau = gtk_spin_button_new_with_range(0, list_size(projet->niveaux_groupes)-1, 1);
+    list_gtk_1990_groupes->spin_button_niveau = gtk_spin_button_new_with_range(0, g_list_length(projet->niveaux_groupes)-1, 1);
     g_signal_connect(list_gtk_1990_groupes->spin_button_niveau, "value-changed", G_CALLBACK (_1990_gtk_spin_button_niveau_change), projet);
     list_gtk_1990_groupes->button_niveau_ajout = gtk_button_new_with_label(" + ");
     g_signal_connect(G_OBJECT(list_gtk_1990_groupes->button_niveau_ajout), "clicked", G_CALLBACK(_1990_gtk_button_niveau_ajout_clicked), projet);

@@ -6,7 +6,7 @@ DEFAULT_INCLUDES	=	-I../.. \
 
 lib_LTLIBRARIES = libeurocodes.la
 
-libeurocodes_la_LIBADD		=	-llist -lcholmod -lamd -lcolamd -lumfpack @BLAS_LIBS@ -lgfortran @XML_LIBS@
+libeurocodes_la_LIBADD		=	-lcholmod -lamd -lcolamd -lumfpack @BLAS_LIBS@ -lgfortran @XML_LIBS@
 libeurocodes_la_CFLAGS		=	$(AM_CFLAGS)
 if ENABLE_GTK
 libeurocodes_la_LIBADD		+=	@GTK_LIBS@

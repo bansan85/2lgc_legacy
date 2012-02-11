@@ -45,8 +45,7 @@ int _1992_1_1_barres_init(Projet *projet)
     BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
     
     // Trivial
-    projet->beton.barres = list_init();
-    BUGMSG(projet->beton.barres, -2, gettext("Erreur d'allocation mémoire.\n"));
+    projet->beton.barres = NULL;
     
     return 0;
 }
@@ -78,57 +77,51 @@ int _1992_1_1_barres_ajout(Projet *projet, Type_Element type, unsigned int secti
  *           -3 en cas d'erreur due à une fonction interne
  */
 {
-    Beton_Barre   *element_en_cours, element_nouveau;
+    Beton_Barre   *element_nouveau = malloc(sizeof(Beton_Barre));
     
     // Trivial
     BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->beton.barres, -1, gettext("Paramètre incorrect\n"));
     BUGMSG(noeud_debut != noeud_fin, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(element_nouveau, -2, gettext("Erreur d'allocation mémoire.\n"));
     
-    list_mvrear(projet->beton.barres);
-    element_nouveau.type = type;
+    element_nouveau->type = type;
     
-    BUG(element_nouveau.section = _1992_1_1_sections_cherche_numero(projet, section), -3);
-    BUG(element_nouveau.materiau = _1992_1_1_materiaux_cherche_numero(projet, materiau), -3);
-    BUG(element_nouveau.noeud_debut = EF_noeuds_cherche_numero(projet, noeud_debut), -3);
-    BUG(element_nouveau.noeud_fin = EF_noeuds_cherche_numero(projet, noeud_fin), -3);
+    BUG(element_nouveau->section = _1992_1_1_sections_cherche_numero(projet, section), -3);
+    BUG(element_nouveau->materiau = _1992_1_1_materiaux_cherche_numero(projet, materiau), -3);
+    BUG(element_nouveau->noeud_debut = EF_noeuds_cherche_numero(projet, noeud_debut), -3);
+    BUG(element_nouveau->noeud_fin = EF_noeuds_cherche_numero(projet, noeud_fin), -3);
     
     if (relachement != -1)
-        BUG(element_nouveau.relachement = EF_relachement_cherche_numero(projet, relachement), -1);
+        BUG(element_nouveau->relachement = EF_relachement_cherche_numero(projet, relachement), -1);
     else
-        element_nouveau.relachement = NULL;
+        element_nouveau->relachement = NULL;
     
-    element_nouveau.discretisation_element = discretisation_element;
+    element_nouveau->discretisation_element = discretisation_element;
     
-    BUGMSG(element_nouveau.info_EF = (Barre_Info_EF*)malloc(sizeof(Barre_Info_EF)*(discretisation_element+1)), -2, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(element_nouveau->info_EF = (Barre_Info_EF*)malloc(sizeof(Barre_Info_EF)*(discretisation_element+1)), -2, gettext("Erreur d'allocation mémoire.\n"));
     
-    element_nouveau.matrice_rotation = NULL;
-    element_nouveau.matrice_rotation_transpose = NULL;
+    element_nouveau->matrice_rotation = NULL;
+    element_nouveau->matrice_rotation_transpose = NULL;
     
-    element_en_cours = (Beton_Barre *)list_rear(projet->beton.barres);
-    if (element_en_cours == NULL)
-        element_nouveau.numero = 0;
-    else
-        element_nouveau.numero = element_en_cours->numero+1;
-    
-    BUGMSG(list_insert_after(projet->beton.barres, &(element_nouveau), sizeof(element_nouveau)), -2, gettext("Erreur d'allocation mémoire.\n"));
-    element_en_cours = list_curr(projet->beton.barres);
+    element_nouveau->numero = g_list_length(projet->beton.barres);
     
     if (discretisation_element != 0)
     {
         unsigned int    i;
         
-        BUGMSG(element_en_cours->noeuds_intermediaires = (EF_Noeud**)malloc(sizeof(EF_Noeud*)*(discretisation_element)), -2, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(element_nouveau->noeuds_intermediaires = (EF_Noeud**)malloc(sizeof(EF_Noeud*)*(discretisation_element)), -2, gettext("Erreur d'allocation mémoire.\n"));
         
         /* Création des noeuds intermédiaires */
         for (i=0;i<discretisation_element;i++)
         {
-            BUG(EF_noeuds_ajout_noeud_barre(projet, element_en_cours, (i+1.)/(discretisation_element+1.), -1) == 0, -3);
-            element_en_cours->noeuds_intermediaires[i] = (EF_Noeud*)list_rear(projet->ef_donnees.noeuds);
+            BUG(EF_noeuds_ajout_noeud_barre(projet, element_nouveau, (i+1.)/(discretisation_element+1.), -1) == 0, -3);
+            element_nouveau->noeuds_intermediaires[i] = g_list_last(projet->ef_donnees.noeuds)->data;
         }
     }
     else
-        element_en_cours->noeuds_intermediaires = NULL;
+        element_nouveau->noeuds_intermediaires = NULL;
+    
+    projet->beton.barres = g_list_append(projet->beton.barres, element_nouveau);
     
     return 0;
 }
@@ -147,20 +140,22 @@ Beton_Barre* _1992_1_1_barres_cherche_numero(Projet *projet, unsigned int numero
  *             Barre en béton introuvable.
  */
 {
+    GList   *list_parcours;
     BUGMSG(projet, NULL, gettext("Paramètre incorrect\n"));
     BUGMSG(projet->beton.barres, NULL, gettext("Paramètre incorrect\n"));
-    BUGMSG(list_size(projet->beton.barres), NULL, gettext("Paramètre incorrect\n"));
     
     // Trivial
-    list_mvfront(projet->beton.barres);
+    list_parcours = projet->beton.barres;
     do
     {
-        Beton_Barre   *element = (Beton_Barre*)list_curr(projet->beton.barres);
+        Beton_Barre   *element = list_parcours->data;
         
         if (element->numero == numero)
             return element;
+        
+        list_parcours = g_list_next(list_parcours);
     }
-    while (list_mvnext(projet->beton.barres) != NULL);
+    while (list_parcours != NULL);
     
     BUGMSG(0, NULL, gettext("Barre en béton %u introuvable.\n"), numero);
 }
@@ -312,7 +307,7 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
     ai = (long*)triplet->i;
     aj = (long*)triplet->j;
     ax = (double*)triplet->x;
-    _1992_1_1_barres_angle_rotation(element, &y, &z);
+    BUG(_1992_1_1_barres_angle_rotation(element, &y, &z) == 0, -3);
     for (i=0;i<4;i++)
     {
         ai[i*8+0] = i*3+0; aj[i*8+0] = i*3+0; ax[i*8+0] = cos(z)*cos(y);
@@ -412,7 +407,7 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
                         EF_Relachement_Donnees_Elastique_Lineaire *donnees;
                         
                         donnees = (EF_Relachement_Donnees_Elastique_Lineaire*)element->relachement->rx_d_data;
-                        if (donnees->raideur == 0.)
+                        if (ERREUR_RELATIVE_EGALE(donnees->raideur, 0.))
                             element->info_EF[j].kAx = MAXDOUBLE;
                         else
                             element->info_EF[j].kAx = 1./donnees->raideur;
@@ -442,7 +437,7 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
                         EF_Relachement_Donnees_Elastique_Lineaire *donnees;
                         
                         donnees = (EF_Relachement_Donnees_Elastique_Lineaire*)element->relachement->ry_d_data;
-                        if (donnees->raideur == 0.)
+                        if (ERREUR_RELATIVE_EGALE(donnees->raideur, 0.))
                             element->info_EF[j].kAy = MAXDOUBLE;
                         else
                             element->info_EF[j].kAy = 1./donnees->raideur;
@@ -472,7 +467,7 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
                         EF_Relachement_Donnees_Elastique_Lineaire *donnees;
                         
                         donnees = (EF_Relachement_Donnees_Elastique_Lineaire*)element->relachement->rz_d_data;
-                        if (donnees->raideur == 0.)
+                        if (ERREUR_RELATIVE_EGALE(donnees->raideur, 0.))
                             element->info_EF[j].kAz = MAXDOUBLE;
                         else
                             element->info_EF[j].kAz = 1./donnees->raideur;
@@ -511,7 +506,7 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
                         EF_Relachement_Donnees_Elastique_Lineaire *donnees;
                         
                         donnees = (EF_Relachement_Donnees_Elastique_Lineaire*)element->relachement->rx_f_data;
-                        if (donnees->raideur == 0.)
+                        if (ERREUR_RELATIVE_EGALE(donnees->raideur, 0.))
                             element->info_EF[j].kBx = MAXDOUBLE;
                         else
                             element->info_EF[j].kBx = 1./donnees->raideur;
@@ -541,7 +536,7 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
                         EF_Relachement_Donnees_Elastique_Lineaire *donnees;
                         
                         donnees = (EF_Relachement_Donnees_Elastique_Lineaire*)element->relachement->ry_f_data;
-                        if (donnees->raideur == 0.)
+                        if (ERREUR_RELATIVE_EGALE(donnees->raideur, 0.))
                             element->info_EF[j].kBy = MAXDOUBLE;
                         else
                             element->info_EF[j].kBy = 1./donnees->raideur;
@@ -571,7 +566,7 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
                         EF_Relachement_Donnees_Elastique_Lineaire *donnees;
                         
                         donnees = (EF_Relachement_Donnees_Elastique_Lineaire*)element->relachement->rz_f_data;
-                        if (donnees->raideur == 0.)
+                        if (ERREUR_RELATIVE_EGALE(donnees->raideur, 0.))
                             element->info_EF[j].kBz = MAXDOUBLE;
                         else
                             element->info_EF[j].kBz = 1./donnees->raideur;
@@ -887,21 +882,23 @@ int _1992_1_1_barres_rigidite_ajout_tout(Projet *projet)
  *             (projet->beton.barres == NULL)
  */
 {
+    GList   *list_parcours;
     BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->beton.barres, -1, gettext("Paramètre incorrect\n"));
     
     // Trivial
-    if (list_size(projet->beton.barres) == 0)
+    if (projet->beton.barres == NULL)
         return 0;
     
-    list_mvfront(projet->beton.barres);
+    list_parcours = projet->beton.barres;
     do
     {
-        Beton_Barre *element = (Beton_Barre*)list_curr(projet->beton.barres);
+        Beton_Barre *element = list_parcours->data;
         
         BUG(_1992_1_1_barres_rigidite_ajout(projet, element) == 0, -3);
+        
+        list_parcours = g_list_next(list_parcours);
     }
-    while (list_mvnext(projet->beton.barres) != NULL);
+    while (list_parcours != NULL);
     
     return 0;
 }
@@ -923,10 +920,11 @@ int _1992_1_1_barres_free(Projet *projet)
     BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
     BUGMSG(projet->beton.barres, -1, gettext("Paramètre incorrect\n"));
     
-    while (!list_empty(projet->beton.barres))
+    while (projet->beton.barres != NULL)
     {
-        Beton_Barre *element = (Beton_Barre*)list_remove_front(projet->beton.barres);
+        Beton_Barre *element = projet->beton.barres->data;
         
+        projet->beton.barres = g_list_delete_link(projet->beton.barres, projet->beton.barres);
         free(element->noeuds_intermediaires);
         cholmod_l_free_sparse(&(element->matrice_rotation), projet->ef_donnees.c);
         cholmod_l_free_sparse(&(element->matrice_rotation_transpose), projet->ef_donnees.c);
@@ -936,9 +934,6 @@ int _1992_1_1_barres_free(Projet *projet)
         
         free(element);
     }
-    
-    free(projet->beton.barres);
-    projet->beton.barres = NULL;
     
     return 0;
 }

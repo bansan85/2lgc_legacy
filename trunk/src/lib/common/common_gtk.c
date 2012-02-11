@@ -24,7 +24,6 @@
 #include <string.h>
 #include <gtk/gtk.h>
 #include <math.h>
-#include <list.h>
 #include "common_selection.h"
 #include "common_erreurs.h"
 #include "common_maths.h"
@@ -172,7 +171,7 @@ void gtk_common_entry_check_liste(GtkTextBuffer *textbuffer, gpointer user_data 
 {
     gchar       *texte;
     GtkTextIter start, end;
-    LIST        *retour;
+    GList       *retour;
     
     gtk_text_buffer_get_iter_at_offset(textbuffer, &start, 0);
     gtk_text_buffer_get_iter_at_offset(textbuffer, &end, -1);
@@ -187,7 +186,7 @@ void gtk_common_entry_check_liste(GtkTextBuffer *textbuffer, gpointer user_data 
     {
         gtk_text_buffer_remove_all_tags(textbuffer, &start, &end);
         gtk_text_buffer_apply_tag_by_name(textbuffer, "OK", &start, &end);
-        list_free(retour, LIST_DEALLOC);
+        g_list_free(retour);
     }
     free(texte);
     return;

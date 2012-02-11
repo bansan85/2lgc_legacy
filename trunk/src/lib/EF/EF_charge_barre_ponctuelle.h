@@ -20,12 +20,11 @@
 #define __EF_CHARGE_BARRE_PONCTUELLE_H
 
 #include "config.h"
-#include <list.h>
 #include "common_projet.h"
 
 
 Charge_Barre_Ponctuelle *EF_charge_barre_ponctuelle_ajout(Projet *projet, int num_action,
-  LIST *barre, int repere_local, double a, double fx, double fy, double fz, double mx,
+  GList *barre, int repere_local, double a, double fx, double fy, double fz, double mx,
   double my, double mz, const char* nom);
 int EF_charge_barre_ponctuelle_mx(Beton_Barre *barre, unsigned int discretisation,
   double position, Barre_Info_EF *infos, double mx, double *ma, double *mb);

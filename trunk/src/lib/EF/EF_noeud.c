@@ -36,8 +36,8 @@ int EF_noeuds_init(Projet *projet)
 {
     BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
     // Trivial
-    projet->ef_donnees.noeuds = list_init();
-    BUGMSG(projet->ef_donnees.noeuds, -2, gettext("Erreur d'allocation mémoire.\n"));
+    projet->ef_donnees.noeuds = NULL;
+    
     return 0;
 }
 
@@ -59,34 +59,29 @@ int EF_noeuds_ajout_noeud_libre(Projet *projet, double x, double y, double z, in
  *           -2 en cas d'erreur d'allocation mémoire
  */
 {
-    EF_Noeud        *noeud_en_cours, noeud_nouveau;
+    EF_Noeud        *noeud_nouveau = malloc(sizeof(EF_Noeud));
     EF_Point        *data;
     
     BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->ef_donnees.noeuds, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(noeud_nouveau, -2, gettext("Erreur d'allocation mémoire.\n"));
     
     BUGMSG(data = malloc(sizeof(EF_Point)), -2, gettext("Erreur d'allocation mémoire.\n"));
     
     // Trivial
-    list_mvrear(projet->ef_donnees.noeuds);
-    noeud_nouveau.type = NOEUD_LIBRE;
-    noeud_nouveau.data = data;
+    noeud_nouveau->type = NOEUD_LIBRE;
+    noeud_nouveau->data = data;
     data->x = x;
     data->y = y;
     data->z = z;
     
     if (appui == -1)
-        noeud_nouveau.appui = NULL;
+        noeud_nouveau->appui = NULL;
     else
-        BUG(noeud_nouveau.appui = EF_appuis_cherche_numero(projet, appui), -3);
+        BUG(noeud_nouveau->appui = EF_appuis_cherche_numero(projet, appui), -3);
         
-    noeud_en_cours = (EF_Noeud *)list_rear(projet->ef_donnees.noeuds);
-    if (noeud_en_cours == NULL)
-        noeud_nouveau.numero = 0;
-    else
-        noeud_nouveau.numero = noeud_en_cours->numero+1;
+    noeud_nouveau->numero = g_list_length(projet->ef_donnees.noeuds);
     
-    BUGMSG(list_insert_after(projet->ef_donnees.noeuds, &(noeud_nouveau), sizeof(noeud_nouveau)), -2, gettext("Erreur d'allocation mémoire.\n"));
+    projet->ef_donnees.noeuds = g_list_append(projet->ef_donnees.noeuds, noeud_nouveau);
     
     return 0;
 }
@@ -108,33 +103,29 @@ int EF_noeuds_ajout_noeud_barre(Projet *projet, Beton_Barre *barre, double posit
  *           -2 en cas d'erreur d'allocation mémoire
  */
 {
-    EF_Noeud        *noeud_en_cours, noeud_nouveau;
+    EF_Noeud        *noeud_nouveau = malloc(sizeof(EF_Noeud));
     EF_Noeud_Barre  *data;
     
     BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
     BUGMSG(projet->ef_donnees.noeuds, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(noeud_nouveau, -2, gettext("Erreur d'allocation mémoire.\n"));
     
     BUGMSG(data = malloc(sizeof(EF_Noeud_Barre)), -2, gettext("Erreur d'allocation mémoire.\n"));
     
     // Trivial
-    list_mvrear(projet->ef_donnees.noeuds);
-    noeud_nouveau.type = NOEUD_BARRE;
-    noeud_nouveau.data = data;
+    noeud_nouveau->type = NOEUD_BARRE;
+    noeud_nouveau->data = data;
     data->barre = barre;
     data->position_relative_barre = position_relative_barre;
     
     if (appui == -1)
-        noeud_nouveau.appui = NULL;
+        noeud_nouveau->appui = NULL;
     else
-        BUG(noeud_nouveau.appui = EF_appuis_cherche_numero(projet, appui), -3);
+        BUG(noeud_nouveau->appui = EF_appuis_cherche_numero(projet, appui), -3);
         
-    noeud_en_cours = (EF_Noeud *)list_rear(projet->ef_donnees.noeuds);
-    if (noeud_en_cours == NULL)
-        noeud_nouveau.numero = 0;
-    else
-        noeud_nouveau.numero = noeud_en_cours->numero+1;
+    noeud_nouveau->numero = g_list_length(projet->ef_donnees.noeuds);
     
-    BUGMSG(list_insert_after(projet->ef_donnees.noeuds, &(noeud_nouveau), sizeof(noeud_nouveau)), -2, gettext("Erreur d'allocation mémoire.\n"));
+    projet->ef_donnees.noeuds = g_list_append(projet->ef_donnees.noeuds, noeud_nouveau);
     
     return 0;
 }
@@ -213,16 +204,16 @@ int EF_noeuds_min_max(Projet *projet, double *x_min, double *x_max, double *y_mi
  *             (list_size(projet->ef_donnees.noeuds) == 0)
  */
 {
+    GList       *list_parcours;
     EF_Noeud    *noeud;
     EF_Point    *point;
     double      x_mi, x_ma, y_mi, y_ma, z_mi, z_ma;
     
     BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
     BUGMSG(projet->ef_donnees.noeuds, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(list_size(projet->ef_donnees.noeuds), -1, gettext("Paramètre incorrect\n"));
     
-    list_mvfront(projet->ef_donnees.noeuds);
-    noeud = (EF_Noeud*)list_curr(projet->ef_donnees.noeuds);
+    list_parcours = projet->ef_donnees.noeuds;
+    noeud = list_parcours->data;
     BUG(point = EF_noeuds_renvoie_position(noeud), -3);
     x_mi = point->x;
     x_ma = point->x;
@@ -231,9 +222,10 @@ int EF_noeuds_min_max(Projet *projet, double *x_min, double *x_max, double *y_mi
     z_mi = point->z;
     z_ma = point->z;
     free(point);
-    while (list_mvnext(projet->ef_donnees.noeuds) != NULL)
+    list_parcours = g_list_next(list_parcours);
+    while (list_parcours != NULL)
     {
-        noeud = (EF_Noeud*)list_curr(projet->ef_donnees.noeuds);
+        noeud = list_parcours->data;
         BUG(point = EF_noeuds_renvoie_position(noeud), -3);
         
         if (point->x < x_mi)
@@ -250,6 +242,8 @@ int EF_noeuds_min_max(Projet *projet, double *x_min, double *x_max, double *y_mi
             z_ma = point->z;
         
         free(point);
+        
+        list_parcours = g_list_next(list_parcours);
     }
     
     if (x_min != NULL)
@@ -282,19 +276,23 @@ EF_Noeud* EF_noeuds_cherche_numero(Projet *projet, int numero)
  *             noeud introuvable
  */
 {
+    GList   *list_parcours;
+    
     BUGMSG(projet, NULL, gettext("Paramètre incorrect\n"));
     BUGMSG(projet->ef_donnees.noeuds, NULL, gettext("Paramètre incorrect\n"));
-    BUGMSG(list_size(projet->ef_donnees.noeuds), NULL, gettext("Paramètre incorrect\n"));
+    
     // Trivial
-    list_mvfront(projet->ef_donnees.noeuds);
+    list_parcours = projet->ef_donnees.noeuds;
     do
     {
-        EF_Noeud    *noeud = (EF_Noeud*)list_curr(projet->ef_donnees.noeuds);
+        EF_Noeud    *noeud = list_parcours->data;
         
         if (noeud->numero == numero)
             return noeud;
+        
+        list_parcours = g_list_next(list_parcours);
     }
-    while (list_mvnext(projet->ef_donnees.noeuds) != NULL);
+    while (list_parcours != NULL);
     
     BUGMSG(0, NULL, gettext("Noeud n°%d introuvable.\n"), numero);
 }
@@ -381,16 +379,15 @@ int EF_noeuds_free(Projet *projet)
     BUGMSG(projet->ef_donnees.noeuds, -1, gettext("Paramètre incorrect\n"));
     
     // Trivial
-    while (!list_empty(projet->ef_donnees.noeuds))
+    while (projet->ef_donnees.noeuds != NULL)
     {
-        EF_Noeud    *noeud = (EF_Noeud*)list_remove_front(projet->ef_donnees.noeuds);
+        EF_Noeud    *noeud = projet->ef_donnees.noeuds->data;
         
         free(noeud->data);
         free(noeud);
+        
+        projet->ef_donnees.noeuds = g_list_delete_link(projet->ef_donnees.noeuds, projet->ef_donnees.noeuds);
     }
-    
-    free(projet->ef_donnees.noeuds);
-    projet->ef_donnees.noeuds = NULL;
     
     return 0;
 }

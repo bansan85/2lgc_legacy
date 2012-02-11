@@ -21,7 +21,6 @@
 #include <stdlib.h>
 #include <libintl.h>
 #include <locale.h>
-#include <list.h>
 #include <string.h>
 #include "common_projet.h"
 #include "common_erreurs.h"
@@ -52,8 +51,8 @@ int common_fonction_init(Projet *projet, Action *action)
     // Trivial
     for (i=0;i<6;i++)
     {
-        BUGMSG(action->fonctions_efforts[i] = (Fonction**)malloc(sizeof(Fonction*)*list_size(projet->beton.barres)), -2, gettext("Erreur d'allocation mémoire.\n"));
-        for (j=0;j<list_size(projet->beton.barres);j++)
+        BUGMSG(action->fonctions_efforts[i] = (Fonction**)malloc(sizeof(Fonction*)*g_list_length(projet->beton.barres)), -2, gettext("Erreur d'allocation mémoire.\n"));
+        for (j=0;j<g_list_length(projet->beton.barres);j++)
         {
             BUGMSG(action->fonctions_efforts[i][j] = (Fonction*)malloc(sizeof(Fonction)), -2, gettext("Erreur d'allocation mémoire.\n"));
             action->fonctions_efforts[i][j]->nb_troncons = 0;
@@ -63,16 +62,16 @@ int common_fonction_init(Projet *projet, Action *action)
     
     for (i=0;i<3;i++)
     {
-        BUGMSG(action->fonctions_deformation[i] = (Fonction**)malloc(sizeof(Fonction*)*list_size(projet->beton.barres)), -2, gettext("Erreur d'allocation mémoire.\n"));
-        for (j=0;j<list_size(projet->beton.barres);j++)
+        BUGMSG(action->fonctions_deformation[i] = (Fonction**)malloc(sizeof(Fonction*)*g_list_length(projet->beton.barres)), -2, gettext("Erreur d'allocation mémoire.\n"));
+        for (j=0;j<g_list_length(projet->beton.barres);j++)
         {
             BUGMSG(action->fonctions_deformation[i][j] = (Fonction*)malloc(sizeof(Fonction)), -2, gettext("Erreur d'allocation mémoire.\n"));
             action->fonctions_deformation[i][j]->nb_troncons = 0;
             action->fonctions_deformation[i][j]->troncons = NULL;
         }
         
-        BUGMSG(action->fonctions_rotation[i] = (Fonction**)malloc(sizeof(Fonction*)*list_size(projet->beton.barres)), -2, gettext("Erreur d'allocation mémoire.\n"));
-        for (j=0;j<list_size(projet->beton.barres);j++)
+        BUGMSG(action->fonctions_rotation[i] = (Fonction**)malloc(sizeof(Fonction*)*g_list_length(projet->beton.barres)), -2, gettext("Erreur d'allocation mémoire.\n"));
+        for (j=0;j<g_list_length(projet->beton.barres);j++)
         {
             BUGMSG(action->fonctions_rotation[i][j] = (Fonction*)malloc(sizeof(Fonction)), -2, gettext("Erreur d'allocation mémoire.\n"));
             action->fonctions_rotation[i][j]->nb_troncons = 0;
@@ -384,14 +383,13 @@ int common_fonction_free(Projet *projet, Action *action)
     
     BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
     BUGMSG(action, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->beton.barres, -1, gettext("Paramètre incorrect\n"));
     
     // Trivial
     for (i=0;i<6;i++)
     {
         if (action->fonctions_efforts[i] != NULL)
         {
-            for (j=0;j<list_size(projet->beton.barres);j++)
+            for (j=0;j<g_list_length(projet->beton.barres);j++)
             {
                 free(action->fonctions_efforts[i][j]->troncons);
                 free(action->fonctions_efforts[i][j]);
@@ -405,7 +403,7 @@ int common_fonction_free(Projet *projet, Action *action)
     {
         if (action->fonctions_deformation[i] != NULL)
         {
-            for (j=0;j<list_size(projet->beton.barres);j++)
+            for (j=0;j<g_list_length(projet->beton.barres);j++)
             {
                 free(action->fonctions_deformation[i][j]->troncons);
                 free(action->fonctions_deformation[i][j]);
@@ -416,7 +414,7 @@ int common_fonction_free(Projet *projet, Action *action)
         
         if (action->fonctions_rotation[i] != NULL)
         {
-            for (j=0;j<list_size(projet->beton.barres);j++)
+            for (j=0;j<g_list_length(projet->beton.barres);j++)
             {
                 free(action->fonctions_rotation[i][j]->troncons);
                 free(action->fonctions_rotation[i][j]);

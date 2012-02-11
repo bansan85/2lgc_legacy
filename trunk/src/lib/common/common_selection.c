@@ -19,58 +19,47 @@
 #include "config.h"
 #include <libintl.h>
 #include <locale.h>
-#include <list.h>
 #include <string.h>
 #include "common_projet.h"
 #include "EF_noeud.h"
 #include "1992_1_1_barres.h"
 #include "common_erreurs.h"
 
-int common_selection_ajout_nombre(unsigned int nombre, LIST *liste)
+int common_selection_ajout_nombre(unsigned int nombre, GList **liste)
 /* Description : ajoute un nombre à la liste chainée.
  * Paramètres : unsigned int nombre : nombre à ajouter,
- *              LIST *liste : liste où le nombre doit être ajouter.
+ *              GList **liste : liste où le nombre doit être ajouter.
  * Valeur renvoyée :
  *   Succès : 0
  *   Échec : -1 en cas d'échec.
  */
 {
-    unsigned int    *nombre_liste;
-    LIST            *liste_tmp;
+    GList           *list_parcours;
+    unsigned int    nombre_liste;
     
-    list_mvfront(liste);
-    if (list_size(liste) == 0)
+    if (*liste == NULL)
     {
-        BUGMSG(list_insert_after(liste, &nombre, sizeof(nombre)), -2, gettext("Erreur d'allocation mémoire.\n"));
+        *liste = g_list_append(*liste, GUINT_TO_POINTER(nombre));
         return 0;
     }
     
-    nombre_liste = list_curr(liste);
-    
-    if (*nombre_liste == nombre)
-        return 0;
-    else if (*nombre_liste > nombre)
+    list_parcours = *liste;
+    do
     {
-        BUGMSG(list_insert_before(liste, &nombre, sizeof(nombre)), -2, gettext("Erreur d'allocation mémoire.\n"));
-        return 0;
-    }
-    
-    liste_tmp = list_mvnext(liste);
-    
-    while (liste_tmp != NULL)
-    {
-        nombre_liste = list_curr(liste);
-        if (*nombre_liste == nombre)
+        nombre_liste = GPOINTER_TO_UINT(list_parcours->data);
+        
+        if (nombre_liste == nombre)
             return 0;
-        else if (*nombre_liste > nombre)
+        else if (nombre_liste > nombre)
         {
-            BUGMSG(list_insert_before(liste, &nombre, sizeof(nombre)), -2, gettext("Erreur d'allocation mémoire.\n"));
+            *liste = g_list_insert_before(*liste, list_parcours, GUINT_TO_POINTER(nombre));
             return 0;
         }
-        liste_tmp = list_mvnext(liste);
-    }
+        list_parcours = g_list_next(list_parcours);
+    } while (list_parcours != NULL);
     
-    BUGMSG(list_insert_after(liste, &nombre, sizeof(nombre)), -2, gettext("Erreur d'allocation mémoire.\n"));
+    *liste = g_list_append(*liste, GUINT_TO_POINTER(nombre));
+    
     return 0;
 }
 
@@ -78,7 +67,7 @@ int common_selection_ajout_nombre(unsigned int nombre, LIST *liste)
 // Le format de texte est le suivant : 
 // 1;2;3-4;6-9;10-20/2 donne les numéros :
 // 1 2 3 4 6 7 8 9 10 12 14 16 18 20
-LIST *common_selection_renvoie_numeros(const char *texte)
+GList *common_selection_renvoie_numeros(const char *texte)
 /* Description : Renvoie sous forme d'une liste de numéros les numéros sous forme de texte.
  * Paramètres : const char *texte : le texte à convertir en numéros
  * Valeur renvoyée :
@@ -87,10 +76,10 @@ LIST *common_selection_renvoie_numeros(const char *texte)
  */
 {
     char            *texte_clean;
-    LIST            *list;
+    GList           *list;
     unsigned int    i, j;
     
-    BUGMSG(list = list_init(), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    list = NULL;
     if (texte == NULL)
         return list;
     
@@ -114,7 +103,7 @@ LIST *common_selection_renvoie_numeros(const char *texte)
         }
         else
         {
-            list_free(list, LIST_DEALLOC);
+            g_list_free(list);
             free(texte_clean);
             return NULL;
         }
@@ -155,22 +144,22 @@ LIST *common_selection_renvoie_numeros(const char *texte)
                 if (sscanf(tmp, "%u-%u/%u%s", &debut, &fin, &pas, fake) == 3)
                 {
                     for (i=debut;i<=fin;i=i+pas)
-                        BUG(common_selection_ajout_nombre(i, list) == 0, NULL);
+                        BUG(common_selection_ajout_nombre(i, &list) == 0, NULL);
                 }
                 // Si c'est du format debut-fin
                 else if (sscanf(tmp, "%u-%u%s", &debut, &fin, fake) == 2)
                 {
                     for (i=debut;i<=fin;i++)
-                        BUG(common_selection_ajout_nombre(i, list) == 0, NULL);
+                        BUG(common_selection_ajout_nombre(i, &list) == 0, NULL);
                 }
                 // Si c'est du format nombre simple
                 else if (sscanf(tmp, "%u%s", &debut, fake) == 1)
-                    BUG(common_selection_ajout_nombre(debut, list) == 0, NULL);
+                    BUG(common_selection_ajout_nombre(debut, &list) == 0, NULL);
                 else
                 {
                     free(tmp);
                     free(fake);
-                    list_free(list, LIST_DEALLOC);
+                    g_list_free(list);
                     free(texte_clean);
                     return NULL;
                 }
@@ -188,83 +177,82 @@ LIST *common_selection_renvoie_numeros(const char *texte)
 }
 
 
-LIST *common_selection_converti_numeros_en_noeuds(LIST *liste_numeros, Projet *projet)
+GList *common_selection_converti_numeros_en_noeuds(GList *liste_numeros, Projet *projet)
 /* Description : Renvoie sous forme d'une liste de noeuds la liste des numéros.
- * Paramètres : LIST *liste_numeros : la liste des numéros à convertir en liste de noeuds,
+ * Paramètres : GList *liste_numeros : la liste des numéros à convertir en liste de noeuds,
  *              Projet *projet : la variable projet.
  * Valeur renvoyée :
  *   Succès : Un pointeur vers une liste des noeuds
  *   Échec : NULL en cas de problème.
  */
 {
-    LIST    *liste_noeuds = list_init();
+    GList   *liste_noeuds = NULL;
+    GList   *list_parcours;
     
-    BUGMSG(liste_noeuds, NULL, gettext("Erreur d'allocation mémoire.\n"));
-    
-    if ((liste_numeros != NULL) && (list_size(liste_numeros) != 0))
+    if (liste_numeros != NULL)
     {
-        list_mvfront(liste_numeros);
+        list_parcours = liste_numeros;
         do
         {
-            unsigned int    *numero = list_curr(liste_numeros);
-            EF_Noeud        *noeud = EF_noeuds_cherche_numero(projet, *numero);
-            
-            BUG(noeud, NULL);
+            unsigned int    numero = GPOINTER_TO_UINT(list_parcours->data);
+            EF_Noeud        *noeud = EF_noeuds_cherche_numero(projet, numero);
             
             if (noeud == NULL)
             {
-                free(liste_noeuds);
+                g_list_free(liste_noeuds);
                 return NULL;
             }
             else
-                BUGMSG(list_insert_after(liste_noeuds, &noeud, sizeof(EF_Noeud**)), NULL, gettext("Erreur d'allocation mémoire.\n"));
+                liste_noeuds = g_list_append(liste_noeuds, noeud);
+            
+            list_parcours = g_list_next(list_parcours);
         }
-        while (list_mvnext(liste_numeros) != NULL);
+        while (list_parcours != NULL);
     }
     
     return liste_noeuds;
 }
 
 
-LIST *common_selection_converti_numeros_en_barres(LIST *liste_numeros, Projet *projet)
+GList *common_selection_converti_numeros_en_barres(GList *liste_numeros, Projet *projet)
 /* Description : Renvoie sous forme d'une liste de barres la liste des numéros.
- * Paramètres : LIST *liste_numeros : la liste des numéros à convertir en liste de barres,
+ * Paramètres : GList *liste_numeros : la liste des numéros à convertir en liste de barres,
  *              Projet *projet : la variable projet.
  * Valeur renvoyée :
  *   Succès : Un pointeur vers une liste des barres
  *   Échec : NULL en cas de problème.
  */
 {
-    LIST    *liste_barres = list_init();
+    GList   *list_parcours;
+    GList   *liste_barres = NULL;
     
-    if ((liste_numeros != NULL) && (list_size(liste_numeros) != 0))
+    if (liste_numeros != NULL)
     {
-        list_mvfront(liste_numeros);
+        list_parcours = liste_numeros;
         do
         {
-            unsigned int    *numero = list_curr(liste_numeros);
-            Beton_Barre     *barre = _1992_1_1_barres_cherche_numero(projet, *numero);
-            
-            BUG(barre, NULL);
+            unsigned int    numero = GPOINTER_TO_UINT(list_parcours->data);
+            Beton_Barre     *barre = _1992_1_1_barres_cherche_numero(projet, numero);
             
             if (barre == NULL)
             {
-                free(liste_barres);
+                g_list_free(liste_barres);
                 return NULL;
             }
             else
-                BUGMSG(list_insert_after(liste_barres, &barre, sizeof(Beton_Barre**)), NULL, gettext("Erreur d'allocation mémoire.\n"));
+                liste_barres = g_list_append(liste_barres, barre);
+            list_parcours = g_list_next(list_parcours);
         }
-        while (list_mvnext(liste_numeros) != NULL);
+        while (list_parcours != NULL);
     }
     
     return liste_barres;
 }
 
 
-char *common_selection_converti_noeuds_en_texte(LIST *liste_noeuds)
+char *common_selection_converti_noeuds_en_texte(GList *liste_noeuds)
 /* Description : Renvoie sous forme de texte une liste de noeuds.
- * Paramètres : LIST *liste_noeuds : la liste des noeuds à convertir en texte,
+ * Paramètres : GList *liste_noeuds : la liste des noeuds à convertir en texte,
  * Valeur renvoyée :
  *   Succès : le texte correspondant.
  *   Échec : NULL en cas de problème.
@@ -272,25 +260,27 @@ char *common_selection_converti_noeuds_en_texte(LIST *liste_noeuds)
 {
     char        *tmp = NULL, *tmp2 = NULL;
     
-    if ((liste_noeuds != NULL) && (list_size(liste_noeuds) != 0))
+    if (liste_noeuds != NULL)
     {
-        EF_Noeud    **noeud;
+        GList       *list_parcours;
+        EF_Noeud    *noeud;
         
-        list_mvfront(liste_noeuds);
-        noeud = list_curr(liste_noeuds);
-        BUGMSG(tmp = g_strdup_printf("%d", (*noeud)->numero), NULL, gettext("Erreur d'allocation mémoire.\n"));
-        if (list_size(liste_noeuds) > 1)
+        list_parcours = liste_noeuds;
+        noeud = list_parcours->data;
+        BUGMSG(tmp = g_strdup_printf("%d", noeud->numero), NULL, gettext("Erreur d'allocation mémoire.\n"));
+        if (g_list_next(list_parcours) != NULL)
         {
-            list_mvnext(liste_noeuds);
+            list_parcours = g_list_next(list_parcours);
             do
             {
-                noeud = list_curr(liste_noeuds);
-                BUGMSG(tmp2 = g_strdup_printf("%s; %d", tmp, (*noeud)->numero), NULL, gettext("Erreur d'allocation mémoire.\n"));
+                noeud = list_parcours->data;
+                BUGMSG(tmp2 = g_strdup_printf("%s; %d", tmp, noeud->numero), NULL, gettext("Erreur d'allocation mémoire.\n"));
                 free(tmp);
                 tmp = tmp2;
                 tmp2 = NULL;
+                list_parcours = g_list_next(list_parcours);
             }
-            while (list_mvnext(liste_noeuds) != NULL);
+            while (list_parcours != NULL);
         }
         return tmp;
     }
@@ -299,9 +289,9 @@ char *common_selection_converti_noeuds_en_texte(LIST *liste_noeuds)
 }
 
 
-char *common_selection_converti_barres_en_texte(LIST *liste_barres)
+char *common_selection_converti_barres_en_texte(GList *liste_barres)
 /* Description : Renvoie sous forme de texte une liste de barres.
- * Paramètres : LIST *liste_barres : la liste des barres à convertir en texte,
+ * Paramètres : GList *liste_barres : la liste des barres à convertir en texte,
  * Valeur renvoyée :
  *   Succès : le texte correspondant.
  *   Échec : NULL en cas de problème.
@@ -309,25 +299,27 @@ char *common_selection_converti_barres_en_texte(LIST *liste_barres)
 {
     char        *tmp, *tmp2;
     
-    if ((liste_barres != NULL) && (list_size(liste_barres) != 0))
+    if (liste_barres != NULL)
     {
-        Beton_Barre **barre;
+        GList       *list_parcours;
+        Beton_Barre *barre;
         
-        list_mvfront(liste_barres);
-        barre = list_curr(liste_barres);
-        BUGMSG(tmp = g_strdup_printf("%u", (*barre)->numero), NULL, gettext("Erreur d'allocation mémoire.\n"));
-        if (list_size(liste_barres) > 1)
+        list_parcours = liste_barres;
+        barre = list_parcours->data;
+        BUGMSG(tmp = g_strdup_printf("%u", barre->numero), NULL, gettext("Erreur d'allocation mémoire.\n"));
+        if (g_list_next(list_parcours) != NULL)
         {
-            list_mvnext(liste_barres);
+            list_parcours = g_list_next(list_parcours);
             do
             {
-                barre = list_curr(liste_barres);
-                BUGMSG(tmp2 = g_strdup_printf("%s; %u", tmp, (*barre)->numero), NULL, gettext("Erreur d'allocation mémoire.\n"));
+                barre = list_parcours->data;
+                BUGMSG(tmp2 = g_strdup_printf("%s; %u", tmp, barre->numero), NULL, gettext("Erreur d'allocation mémoire.\n"));
                 free(tmp);
                 tmp = tmp2;
                 tmp2 = NULL;
+                list_parcours = g_list_next(list_parcours);
             }
-            while (list_mvnext(liste_barres) != NULL);
+            while (list_parcours != NULL);
         }
         return tmp;
     }

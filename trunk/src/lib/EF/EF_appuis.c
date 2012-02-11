@@ -43,8 +43,7 @@ int EF_appuis_init(Projet *projet)
     BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
 
     // Trivial
-    projet->ef_donnees.appuis = list_init();
-    BUGMSG(projet->ef_donnees.appuis, -2, gettext("Erreur d'allocation mémoire.\n"));
+    projet->ef_donnees.appuis = NULL;
     
 #ifdef ENABLE_GTK
     projet->list_gtk.ef_noeud.liste_appuis = gtk_list_store_new(1, G_TYPE_STRING);
@@ -75,25 +74,24 @@ int EF_appuis_ajout(Projet *projet, const char *nom, Type_EF_Appui x, Type_EF_Ap
  *           -2 en cas d'erreur d'allocation mémoire
  */
 {
-    EF_Appui        *appui_en_cours, appui_nouveau;
+    EF_Appui        *appui_nouveau = malloc(sizeof(EF_Appui));
 #ifdef ENABLE_GTK
     GtkTreeIter     iter;
 #endif
 
     
     BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->ef_donnees.appuis, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(appui_nouveau, -2, gettext("Erreur d'allocation mémoire.\n"));
     
     // Trivial
-    list_mvrear(projet->ef_donnees.appuis);
-    BUGMSG(appui_nouveau.nom =  g_strdup_printf("%s", nom), -2, gettext("Erreur d'allocation mémoire.\n"));
-    appui_nouveau.ux = x;
+    BUGMSG(appui_nouveau->nom =  g_strdup_printf("%s", nom), -2, gettext("Erreur d'allocation mémoire.\n"));
+    appui_nouveau->ux = x;
     switch (x)
     {
         case EF_APPUI_LIBRE :
         case EF_APPUI_BLOQUE :
         {
-            appui_nouveau.ux_donnees = NULL;
+            appui_nouveau->ux_donnees = NULL;
             break;
         }
         default:
@@ -102,13 +100,13 @@ int EF_appuis_ajout(Projet *projet, const char *nom, Type_EF_Appui x, Type_EF_Ap
             break;
         }
     }
-    appui_nouveau.uy = y;
+    appui_nouveau->uy = y;
     switch (y)
     {
         case EF_APPUI_LIBRE :
         case EF_APPUI_BLOQUE :
         {
-            appui_nouveau.uy_donnees = NULL;
+            appui_nouveau->uy_donnees = NULL;
             break;
         }
         default:
@@ -117,13 +115,13 @@ int EF_appuis_ajout(Projet *projet, const char *nom, Type_EF_Appui x, Type_EF_Ap
             break;
         }
     }
-    appui_nouveau.uz = z;
+    appui_nouveau->uz = z;
     switch (z)
     {
         case EF_APPUI_LIBRE :
         case EF_APPUI_BLOQUE :
         {
-            appui_nouveau.uz_donnees = NULL;
+            appui_nouveau->uz_donnees = NULL;
             break;
         }
         default:
@@ -132,13 +130,13 @@ int EF_appuis_ajout(Projet *projet, const char *nom, Type_EF_Appui x, Type_EF_Ap
             break;
         }
     }
-    appui_nouveau.rx = rx;
+    appui_nouveau->rx = rx;
     switch (rx)
     {
         case EF_APPUI_LIBRE :
         case EF_APPUI_BLOQUE :
         {
-            appui_nouveau.rx_donnees = NULL;
+            appui_nouveau->rx_donnees = NULL;
             break;
         }
         default:
@@ -147,13 +145,13 @@ int EF_appuis_ajout(Projet *projet, const char *nom, Type_EF_Appui x, Type_EF_Ap
             break;
         }
     }
-    appui_nouveau.ry = ry;
+    appui_nouveau->ry = ry;
     switch (ry)
     {
         case EF_APPUI_LIBRE :
         case EF_APPUI_BLOQUE :
         {
-            appui_nouveau.ry_donnees = NULL;
+            appui_nouveau->ry_donnees = NULL;
             break;
         }
         default:
@@ -162,13 +160,13 @@ int EF_appuis_ajout(Projet *projet, const char *nom, Type_EF_Appui x, Type_EF_Ap
             break;
         }
     }
-    appui_nouveau.rz = rz;
+    appui_nouveau->rz = rz;
     switch (rz)
     {
         case EF_APPUI_LIBRE :
         case EF_APPUI_BLOQUE :
         {
-            appui_nouveau.rz_donnees = NULL;
+            appui_nouveau->rz_donnees = NULL;
             break;
         }
         default:
@@ -178,13 +176,9 @@ int EF_appuis_ajout(Projet *projet, const char *nom, Type_EF_Appui x, Type_EF_Ap
         }
     }
     
-    appui_en_cours = (EF_Appui *)list_rear(projet->ef_donnees.appuis);
-    if (appui_en_cours == NULL)
-        appui_nouveau.numero = 0;
-    else
-        appui_nouveau.numero = appui_en_cours->numero+1;
+    appui_nouveau->numero = g_list_length(projet->ef_donnees.appuis);
     
-    BUGMSG(list_insert_after(projet->ef_donnees.appuis, &(appui_nouveau), sizeof(appui_nouveau)), -2, gettext("Erreur d'allocation mémoire.\n"));
+    projet->ef_donnees.appuis = g_list_append(projet->ef_donnees.appuis, appui_nouveau);
     
 #ifdef ENABLE_GTK
     gtk_list_store_append(projet->list_gtk.ef_noeud.liste_appuis, &iter);
@@ -208,20 +202,22 @@ EF_Appui* EF_appuis_cherche_numero(Projet *projet, int numero)
  *             l'appui n'existe pas.
  */
 {
+    GList   *list_parcours;
     BUGMSG(projet, NULL, gettext("Paramètre incorrect\n"));
     BUGMSG(projet->ef_donnees.appuis, NULL, gettext("Paramètre incorrect\n"));
-    BUGMSG(list_size(projet->ef_donnees.appuis), NULL, gettext("Paramètre incorrect\n"));
     
     // Trivial
-    list_mvfront(projet->ef_donnees.appuis);
+    list_parcours = projet->ef_donnees.appuis;
     do
     {
-        EF_Appui    *appui = (EF_Appui*)list_curr(projet->ef_donnees.appuis);
+        EF_Appui    *appui = list_parcours->data;
         
         if (appui->numero == numero)
             return appui;
+        
+        list_parcours = g_list_next(list_parcours);
     }
-    while (list_mvnext(projet->ef_donnees.appuis) != NULL);
+    while (list_parcours != NULL);
     
     BUGMSG(0, NULL, "Appui %d est introuvable.\n", numero);
 }
@@ -238,13 +234,13 @@ int EF_appuis_free(Projet *projet)
  */
 {
     BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->ef_donnees.appuis, -1, gettext("Paramètre incorrect\n"));
     
     // Trivial
-    while (!list_empty(projet->ef_donnees.appuis))
+    while (projet->ef_donnees.appuis != NULL)
     {
-        EF_Appui    *appui = (EF_Appui*)list_remove_front(projet->ef_donnees.appuis);
+        EF_Appui    *appui = projet->ef_donnees.appuis->data;
         
+        projet->ef_donnees.appuis = g_list_delete_link(projet->ef_donnees.appuis, projet->ef_donnees.appuis);
         free(appui->nom);
         free(appui);
     }

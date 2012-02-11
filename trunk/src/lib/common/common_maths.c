@@ -44,7 +44,7 @@ double common_math_arrondi_nombre(double nombre)
     // Conservation de la partie entière uniquement du nombre.
     // Division par 10^(ERREUR_RELATIVE_PUISSANCE-ceil(log10(ABS(nombre)))).
     // Renvoie du nombre.
-    if (nombre == 0.)
+    if (ERREUR_RELATIVE_EGALE(nombre, 0.))
         return 0.;
     puissance = ERREUR_RELATIVE_PUISSANCE-ceil(log10(ABS(nombre)));
     nombre = nombre*pow(10, puissance);
@@ -111,7 +111,7 @@ void common_math_double_to_char(double nombre, char *dest, int decimales)
         {
             sprintf(dest, "%.*le", width, nombre);
             sscanf(dest, "%le", &test);
-            if (nombre == test)
+            if ((nombre*0.99999999999999999999999999 <= test) && (test <= nombre*1.00000000000000000000000001))
                 break;
         }
     }
@@ -122,7 +122,7 @@ void common_math_double_to_char(double nombre, char *dest, int decimales)
         {
             sprintf(dest, "%.*lf", width, nombre);
             sscanf(dest, "%lf", &test);
-            if (nombre == test)
+            if ((nombre*0.99999999999999999999999999 <= test) && (test <= nombre*1.00000000000000000000000001))
                 break;
         }
     }

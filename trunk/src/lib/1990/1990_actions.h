@@ -27,8 +27,8 @@ char *_1990_action_type_bat_txt(int type, Type_Pays pays);
 Action_Categorie _1990_action_categorie_bat(int type, Type_Pays pays);
 
 int _1990_action_init(Projet *projet);
-int _1990_action_ajout(Projet *projet, int categorie, const char* description);
-int _1990_action_cherche_numero(Projet *projet, unsigned int numero);
+Action *_1990_action_ajout(Projet *projet, int categorie, const char* description);
+Action *_1990_action_cherche_numero(Projet *projet, unsigned int numero);
 void *_1990_action_cherche_charge(Projet *projet, unsigned int num_action, unsigned int num_charge);
 int _1990_action_deplace_charge(Projet *projet, unsigned int action_src, unsigned int charge_src, unsigned int action_dest);
 int _1990_action_supprime_charge(Projet *projet, unsigned int action_num, unsigned int charge_num);

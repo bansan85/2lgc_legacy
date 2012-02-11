@@ -50,21 +50,20 @@ int EF_calculs_initialise(Projet *projet)
  */
 {
     unsigned int    i, nnz_max, nb_col_partielle, nb_col_complete;
+    GList           *list_parcours;
     
     BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
     BUGMSG(projet->ef_donnees.noeuds, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(list_size(projet->ef_donnees.noeuds), -1, gettext("Paramètre incorrect\n"));
     BUGMSG(projet->beton.barres, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(list_size(projet->beton.barres), -1, gettext("Paramètre incorrect\n"));
     
     // Allocation de la mémoire nécessaire pour contenir la position de chaque degré de
     //   liberté des noeuds (via noeuds_pos_partielle et noeuds_pos_complete) dans la matrice
     //   de rigidité globale partielle et complète.
-    BUGMSG(projet->ef_donnees.noeuds_pos_partielle = (int**)malloc(sizeof(int*)*list_size(projet->ef_donnees.noeuds)), -2, gettext("Erreur d'allocation mémoire.\n"));
-    for (i=0;i<list_size(projet->ef_donnees.noeuds);i++)
+    BUGMSG(projet->ef_donnees.noeuds_pos_partielle = (int**)malloc(sizeof(int*)*g_list_length(projet->ef_donnees.noeuds)), -2, gettext("Erreur d'allocation mémoire.\n"));
+    for (i=0;i<g_list_length(projet->ef_donnees.noeuds);i++)
         BUGMSG(projet->ef_donnees.noeuds_pos_partielle[i] = (int*)malloc(6*sizeof(int)), -2, gettext("Erreur d'allocation mémoire.\n"));
-    BUGMSG(projet->ef_donnees.noeuds_pos_complete = (int**)malloc(sizeof(int*)*list_size(projet->ef_donnees.noeuds)), -2, gettext("Erreur d'allocation mémoire.\n"));
-    for (i=0;i<list_size(projet->ef_donnees.noeuds);i++)
+    BUGMSG(projet->ef_donnees.noeuds_pos_complete = (int**)malloc(sizeof(int*)*g_list_length(projet->ef_donnees.noeuds)), -2, gettext("Erreur d'allocation mémoire.\n"));
+    for (i=0;i<g_list_length(projet->ef_donnees.noeuds);i++)
         BUGMSG(projet->ef_donnees.noeuds_pos_complete[i] = (int*)malloc(6*sizeof(int)), -2, gettext("Erreur d'allocation mémoire.\n"));
     
     // Détermination du nombre de colonnes pour la matrice de rigidité complète et partielle :
@@ -84,10 +83,10 @@ int EF_calculs_initialise(Projet *projet)
     // FinPour
     nb_col_partielle = 0;
     nb_col_complete = 0;
-    list_mvfront(projet->ef_donnees.noeuds);
+    list_parcours = projet->ef_donnees.noeuds;
     do
     {
-        EF_Noeud    *noeud = (EF_Noeud*)list_curr(projet->ef_donnees.noeuds);
+        EF_Noeud    *noeud = list_parcours->data;
         
         projet->ef_donnees.noeuds_pos_complete[noeud->numero][0] = nb_col_complete; nb_col_complete++;
         projet->ef_donnees.noeuds_pos_complete[noeud->numero][1] = nb_col_complete; nb_col_complete++;
@@ -128,21 +127,24 @@ int EF_calculs_initialise(Projet *projet)
                 { projet->ef_donnees.noeuds_pos_partielle[noeud->numero][5] = nb_col_partielle; nb_col_partielle++; }
             else projet->ef_donnees.noeuds_pos_partielle[noeud->numero][5] = -1;
         }
+        list_parcours = g_list_next(list_parcours);
     }
-    while (list_mvnext(projet->ef_donnees.noeuds) != NULL);
+    while (list_parcours != NULL);
     
     // Détermination du nombre de matrices de rigidité globale élémentaire du système
     //   (y compris la discrétisation).
     // Détermination du nombre de triplets, soit 12*12*nombre_de_matrices.
     nnz_max = 0;
-    list_mvfront(projet->beton.barres);
+    list_parcours = projet->beton.barres;
     do
     {
-        Beton_Barre   *element = (Beton_Barre*)list_curr(projet->beton.barres);
+        Beton_Barre   *element = list_parcours->data;
         
         nnz_max += 12*12*(element->discretisation_element+1);
+        
+        list_parcours = g_list_next(list_parcours);
     }
-    while (list_mvnext(projet->beton.barres) != NULL);
+    while (list_parcours != NULL);
     
     // Allocation des triplets de la matrice de rigidité partielle (triplet_rigidite_partielle)
     //   et la matrice de rigidité globale (triplet_rigidite_globale).
@@ -399,7 +401,7 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
  *             (projet == NULL) ou
  *             (projet->actions == NULL) ou
  *             (list_size(projet->actions) == 0) ou
- *             (_1990_action_cherche_numero(projet, num_action) != 0) ou
+ *             (_1990_action_cherche_numero(projet, num_action) == NULL) ou
  *             (projet->ef_donnees.numeric == NULL) && (matrice_partielle->nrow != 0)
  *           -2 en cas d'erreur d'allocation mémoire
  *           -3 en cas d'erreur due à une fonction interne
@@ -418,18 +420,17 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
     double          *ax3;
     unsigned int    i, j, k;
     cholmod_sparse  *sparse_tmp;
-    double minusone[2] = {-1., 0.}, one[2] = {1., 0.};
+    double          minusone[2] = {-1., 0.}, one[2] = {1., 0.};
+    GList           *list_parcours;
     
     BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
     BUGMSG(projet->actions, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(list_size(projet->actions), -1, gettext("Paramètre incorrect\n"));
-    BUG(_1990_action_cherche_numero(projet, num_action) == 0, -1);
+    BUG(action_en_cours = _1990_action_cherche_numero(projet, num_action), -1);
     BUGMSG(!((projet->ef_donnees.numeric == NULL) && (projet->ef_donnees.rigidite_matrice_partielle->nrow != 0)), -1, gettext("Paramètre incorrect\n"));
     
     /* Création du triplet partiel et complet contenant les forces extérieures
      * sur les noeuds et initialisation des valeurs à 0. Le vecteur partiel sera 
      * utilisé dans l'équation finale : {F} = [K]{D}*/
-    action_en_cours = (Action*)list_curr(projet->actions);
     BUG(common_fonction_init(projet, action_en_cours) == 0, -3);
     BUGMSG(triplet_force_partielle = cholmod_l_allocate_triplet(projet->ef_donnees.rigidite_matrice_partielle->nrow, 1, projet->ef_donnees.rigidite_matrice_partielle->nrow, 0, CHOLMOD_REAL, projet->ef_donnees.c), -2, gettext("Erreur d'allocation mémoire.\n"));
     ai = (long*)triplet_force_partielle->i;
@@ -456,26 +457,25 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
     
     // Détermination des charges aux noeuds :
     //   Pour chaque charge dans l'action
-    if (list_size(action_en_cours->charges) != 0)
+    if (action_en_cours->charges != NULL)
     {
-        list_mvfront(action_en_cours->charges);
+        list_parcours = action_en_cours->charges;
         do
         {
-            switch (((Charge_Barre_Ponctuelle *)list_curr(action_en_cours->charges))->type)
+            switch (((Charge_Barre_Ponctuelle *)list_parcours->data)->type)
             {
                 case CHARGE_NOEUD :
                 {
     //     Si la charge en cours est une charge au noeud Alors
     //         On ajoute au vecteur des efforts les efforts aux noeuds directement saisis par
     //           l'utilisateur dans le repère global.
-                    Charge_Noeud *charge_noeud = (Charge_Noeud*)list_curr(action_en_cours->charges);
-                    if ((charge_noeud->noeuds != NULL) && (list_size(charge_noeud->noeuds) != 0))
+                    Charge_Noeud *charge_noeud = list_parcours->data;
+                    if (charge_noeud->noeuds != NULL)
                     {
-                        list_mvfront(charge_noeud->noeuds);
+                        GList   *list_parcours2 = charge_noeud->noeuds;
                         do
                         {
-                            EF_Noeud     **noeud_p = list_curr(charge_noeud->noeuds);
-                            EF_Noeud     *noeud = *noeud_p;
+                            EF_Noeud     *noeud = list_parcours2->data;
                             
                             if (projet->ef_donnees.noeuds_pos_partielle[noeud->numero][0] != -1)
                                 ax[projet->ef_donnees.noeuds_pos_partielle[noeud->numero][0]] += charge_noeud->fx;
@@ -495,15 +495,17 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
                             ax3[projet->ef_donnees.noeuds_pos_complete[noeud->numero][3]] += charge_noeud->mx;
                             ax3[projet->ef_donnees.noeuds_pos_complete[noeud->numero][4]] += charge_noeud->my;
                             ax3[projet->ef_donnees.noeuds_pos_complete[noeud->numero][5]] += charge_noeud->mz;
+                            
+                            list_parcours2 = g_list_next(list_parcours2);
                         }
-                        while (list_mvnext(charge_noeud->noeuds) != NULL);
+                        while (list_parcours2 != NULL);
                     }
                     break;
                 }
     //     Sinon Si la charge est une charge ponctuelle sur la barre Alors
                 case CHARGE_BARRE_PONCTUELLE :
                 {
-                    Charge_Barre_Ponctuelle *charge_barre = (Charge_Barre_Ponctuelle*)list_curr(action_en_cours->charges);
+                    Charge_Barre_Ponctuelle *charge_barre = list_parcours->data;
                     double       l;
                     double       a, b;                         /* Position de la charge par rapport au début et à la fin de l'élément discrétisé */
                     double       debut_barre, fin_barre;       /* Début et fin de la barre discrétisée par rapport à la barre complète */
@@ -515,13 +517,12 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
                     EF_Noeud    *noeud_debut, *noeud_fin;
                     unsigned int pos;                          /* numéro de l'élément dans la discrétisation */
                     
-                    if ((charge_barre->barres != NULL) && (list_size(charge_barre->barres) != 0))
+                    if (charge_barre->barres != NULL)
                     {
-                        list_mvfront(charge_barre->barres);
+                        GList   *list_parcours2 = charge_barre->barres;
                         do
                         {
-                            Beton_Barre **element_en_beton_p = list_curr(charge_barre->barres);
-                            Beton_Barre *element_en_beton = *element_en_beton_p;
+                            Beton_Barre *element_en_beton = list_parcours2->data;
                             unsigned int num = element_en_beton->numero;
                     
             //         Convertion des efforts globaux en efforts locaux si nécessaire :\end{verbatim}\begin{center}
@@ -756,8 +757,10 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
                                 }
                             }
                             cholmod_l_free_triplet(&triplet_efforts_globaux_finaux, projet->ef_donnees.c);
+                            
+                            list_parcours2 = g_list_next(list_parcours2);
                         }
-                        while (list_mvnext(charge_barre->barres) != NULL);
+                        while (list_parcours2 != NULL);
                     }
                     break;
                 }
@@ -766,15 +769,14 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
                 {
                     double       xx, yy, zz, l, ll;
                     unsigned int j_d, j_f;                  /* numéro de l'élément dans la discrétisation */
-                    Charge_Barre_Repartie_Uniforme *charge_barre = (Charge_Barre_Repartie_Uniforme*)list_curr(action_en_cours->charges);
+                    Charge_Barre_Repartie_Uniforme *charge_barre = list_parcours->data;
                     
-                    if ((charge_barre->barres != NULL) && (list_size(charge_barre->barres) != 0))
+                    if (charge_barre->barres != NULL)
                     {
-                        list_mvfront(charge_barre->barres);
+                        GList   *list_parcours2 = charge_barre->barres;
                         do
                         {
-                            Beton_Barre  **element_en_beton_p = list_curr(charge_barre->barres);
-                            Beton_Barre  *element_en_beton = *element_en_beton_p;
+                            Beton_Barre  *element_en_beton = list_parcours2->data;
                             
             //         Convertion des efforts globaux en efforts locaux si nécessaire :\end{verbatim}\begin{center}
             //           $\{ F \}_{local} = [R_e]^T \cdot \{ F \}_{global}$\end{center}\begin{verbatim}
@@ -1066,8 +1068,10 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
                             }
             //         FinPour
                             cholmod_l_free_triplet(&triplet_efforts_locaux_initiaux, projet->ef_donnees.c);
+                            
+                            list_parcours2 = g_list_next(list_parcours2);
                         }
-                        while (list_mvnext(charge_barre->barres) != NULL);
+                        while (list_parcours2 != NULL);
                     }
                     break;
                 }
@@ -1079,8 +1083,9 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
                     break;
                 }
             }
+            list_parcours = g_list_next(list_parcours);
         }
-        while (list_mvnext(action_en_cours->charges) != NULL);
+        while (list_parcours != NULL);
     }
     // FinPour
     
@@ -1120,7 +1125,7 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
     aj2 = (long*)triplet_deplacements_totaux->j;
     ax2 = (double*)triplet_deplacements_totaux->x;
     j = 0;
-    for (i=0;i<list_size(projet->ef_donnees.noeuds);i++)
+    for (i=0;i<g_list_length(projet->ef_donnees.noeuds);i++)
     {
         for (k=0;k<6;k++)
         {
@@ -1150,10 +1155,10 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
     
     // Pour chaque barre, ajout des efforts et déplacement dus au mouvement de l'ensemble de
     //   la structure.
-    list_mvfront(projet->beton.barres);
+    list_parcours = projet->beton.barres;
     do
     {
-        Beton_Barre                 *element_en_beton = (Beton_Barre*)list_curr(projet->beton.barres);
+        Beton_Barre                 *element_en_beton = list_parcours->data;
         Beton_Section_Rectangulaire *section_tmp = (Beton_Section_Rectangulaire*)element_en_beton->section;
         double                      S = _1992_1_1_sections_s(section_tmp);
         
@@ -1314,9 +1319,10 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
             cholmod_l_free_sparse(&sparse_effort_locaux, projet->ef_donnees.c);
         }
     //     FinPour
+        list_parcours = g_list_next(list_parcours);
     }
     // FinPour
-    while (list_mvnext(projet->beton.barres) != NULL);
+    while (list_parcours != NULL);
     cholmod_l_free_triplet(&triplet_deplacements_totaux, projet->ef_donnees.c);
     
     return 0;
