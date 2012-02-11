@@ -20,9 +20,10 @@
 #define __COMMON_PROJET_H
 
 #include "config.h"
-#include <list.h>
 #include <cholmod.h>
 #include <umfpack.h>
+
+#include <glib.h>
 
 #ifdef ENABLE_GTK
 #include <gtk/gtk.h>
@@ -87,7 +88,7 @@ typedef struct __List_Gtk_1990_Actions
     GtkListStore    *choix_type_action;
     GtkWidget       *toolbar_actions;
     GtkWidget       *menu_type_list_action;
-    LIST            *menu_list_widget_action;
+    GList           *menu_list_widget_action;
     GtkWidget       *img_action_ajout;
     GtkToolItem     *item_action_ajout;
     GtkWidget       *img_action_suppr;
@@ -100,7 +101,7 @@ typedef struct __List_Gtk_1990_Actions
     GtkTreeSelection *tree_select_charges;
     GtkWidget       *toolbar_charges;
     GtkWidget       *menu_type_list_charge;
-    LIST            *menu_list_widget_charge;
+    GList           *menu_list_widget_charge;
     GtkWidget       *img_charge_ajout;
     GtkToolItem     *item_charge_ajout;
     GtkWidget       *img_charge_edit;
@@ -388,7 +389,7 @@ typedef struct __Charge_Noeud
     GtkTreeIter         Iter;
 #endif                  
     char                *description;
-    LIST                *noeuds;
+    GList               *noeuds;
     double              fx;
     double              fy;
     double              fz;
@@ -541,7 +542,7 @@ typedef struct __Charge_Barre_Ponctuelle
     GtkTreeIter         Iter;
 #endif
     char                *description;
-    LIST                *barres;
+    GList               *barres;
     int                 repere_local;
     double              position; // Position de la charge ponctuelle en mètre
                                   // depuis le début de la barre
@@ -563,7 +564,7 @@ typedef struct __Charge_Barre_Repartie_Uniforme
     GtkTreeIter         Iter;
 #endif    
     char                *description;
-    LIST                *barres;
+    GList               *barres;
     int                 repere_local;
     int                 projection;
     double              a; // Position du début de la charge répartie par rapport au début
@@ -609,7 +610,7 @@ typedef struct __Action
     char            *description;
     unsigned int    numero;
     int             type;  // Les catégories sont conformes à _1990_action_type
-    LIST            *charges;
+    GList           *charges;
     int             flags;
     double          psi0;       // valeur_combinaison
     double          psi1;       // valeur_frequente
@@ -642,7 +643,7 @@ typedef struct __Ponderation_Element
 // Ne pas supprimer l'espace après le __Ponderation, c'est pour la génération du manuel Latex
 typedef struct __Ponderation 
 {
-    LIST        *elements; // Liste de pointeur Action* avec leur ponderation
+    GList       *elements; // Liste de pointeur Action* avec leur ponderation
 } Ponderation;
 
 
@@ -667,13 +668,13 @@ typedef struct __Combinaison_Element
 //        A ne surtout pas supprimer!!!
 typedef struct __Combinaison 
 {
-    LIST        *elements;      // Liste de pointeurs Combinaison_Element
+    GList       *elements;      // Liste de pointeurs Combinaison_Element
 } Combinaison;
 
 
 typedef struct __Combinaisons
 {
-    LIST        *combinaisons;  // Liste de "combinaison"
+    GList       *combinaisons;  // Liste de "combinaison"
 } Combinaisons;
 
 
@@ -682,7 +683,7 @@ typedef struct __Groupe
     char                    *nom;
     int                     numero;
     Type_Groupe_Combinaison type_combinaison;
-    LIST                    *elements;
+    GList                   *elements;
     Combinaisons            tmp_combinaison;
 #ifdef ENABLE_GTK
     GtkTreeIter             Iter;         // Pour la fenêtre groupes
@@ -694,7 +695,7 @@ typedef struct __Groupe
 typedef struct __Niveau_Groupe
 {
     int             niveau;
-    LIST            *groupes;
+    GList           *groupes;
 #ifdef ENABLE_GTK
     GtkTreeIter     Iter;                 // Pour la fenêtre groupes
 #endif
@@ -710,15 +711,15 @@ typedef struct __CombinaisonsEL
                             //            : ELU_GEO/STR : 10 méthode approche 3
                             // bit 4      : ELU_ACC : 0 si utilisation de psi1,1
                             //            : ELU_ACC : 1 si utilisation de psi2,1
-    LIST        *elu_equ;   // Liste des combinaisons selon l'ELU EQU
-    LIST        *elu_str;   // ..
-    LIST        *elu_geo;   //
-    LIST        *elu_fat;   //
-    LIST        *elu_acc;   //
-    LIST        *elu_sis;   //
-    LIST        *els_car;   //
-    LIST        *els_freq;  //
-    LIST        *els_perm;  //
+    GList       *elu_equ;   // Liste des combinaisons selon l'ELU EQU
+    GList       *elu_str;   // ..
+    GList       *elu_geo;   //
+    GList       *elu_fat;   //
+    GList       *elu_acc;   //
+    GList       *elu_sis;   //
+    GList       *els_car;   //
+    GList       *els_freq;  //
+    GList       *els_perm;  //
 } CombinaisonsEL;
 
 
@@ -775,11 +776,11 @@ typedef struct __EF
     cholmod_common      Common; // Paramètres des calculs de la librairie cholmod.
     cholmod_common      *c;     // Pointeur vers Common
                                 
-    LIST                *noeuds;       // Liste de tous les noeuds de la structure, que ce soit
+    GList               *noeuds;       // Liste de tous les noeuds de la structure, que ce soit
                                        // les noeuds définis par l'utilisateur ou les noeuds
                                        // créés par la discrétisation des éléments.
-    LIST                *appuis;       // Liste des types d'appuis
-    LIST                *relachements; // Liste des types de relâchements des barres.
+    GList               *appuis;       // Liste des types d'appuis
+    GList               *relachements; // Liste des types de relâchements des barres.
     
     int                 **noeuds_pos_partielle; // Etabli une corrélation entre le degré de 
     int                 **noeuds_pos_complete;  // liberté (x, y, z, rx, ry, rz) d'un noeud
@@ -817,16 +818,16 @@ typedef struct __EF
 
 typedef struct __Beton_Donnees
 {                               // Liste des sections, matériaux et barres en béton.
-    LIST            *sections;
-    LIST            *materiaux;
-    LIST            *barres;
+    GList           *sections;
+    GList           *materiaux;
+    GList           *barres;
 } Beton_Donnees;
 
 
 typedef struct __Projet
 {
-    LIST            *actions;           // Liste des actions contenant chacune des charges
-    LIST            *niveaux_groupes;   // Compatibilités entres actions
+    GList           *actions;           // Liste des actions contenant chacune des charges
+    GList           *niveaux_groupes;   // Compatibilités entres actions
     CombinaisonsEL  combinaisons;       // Combinaisons conformes aux Eurocodes
     Type_Pays       pays;               // Pays de calculs
 #ifdef ENABLE_GTK

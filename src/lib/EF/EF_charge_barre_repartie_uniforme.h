@@ -23,7 +23,7 @@
 #include "common_projet.h"
 
 Charge_Barre_Repartie_Uniforme *EF_charge_barre_repartie_uniforme_ajout(Projet *projet,
-  int num_action, LIST *barres, int repere_local, int projection, double a, double b,
+  int num_action, GList *barres, int repere_local, int projection, double a, double b,
   double fx, double fy, double fz, double mx, double my, double mz, const char *nom);
 int EF_charge_barre_repartie_uniforme_mx(Beton_Barre *barre, unsigned int discretisation,
   double a, double b, Barre_Info_EF *infos, double mx, double *ma, double *mb);

@@ -29,13 +29,13 @@
 #include "common_erreurs.h"
 
 
-Charge_Noeud*  EF_charge_noeud_ajout(Projet *projet, int num_action, LIST *noeuds,
+Charge_Noeud*  EF_charge_noeud_ajout(Projet *projet, int num_action, GList *noeuds,
   double fx, double fy, double fz, double mx, double my, double mz, const char* nom)
 /* Description : Ajoute une charge ponctuelle à une action et à un noeud de la structure en
  *               lui attribuant le numéro suivant la dernière charge de l'action.
  * Paramètres : Projet *projet : la variable projet
  *            : int num_action : numero de l'action qui contiendra la charge
- *            : EF_Noeud *action : pointeur vers le noeud qui supportera la charge
+ *            : GList *noeuds : liste des noeuds qui supportera la charge
  *            : double fx : force suivant l'axe global x
  *            : double fy : force suivant l'axe global y
  *            : double fz : force suivant l'axe global z
@@ -53,37 +53,29 @@ Charge_Noeud*  EF_charge_noeud_ajout(Projet *projet, int num_action, LIST *noeud
  */
 {
     Action          *action_en_cours;
-    Charge_Noeud    *charge_dernier, charge_nouveau;
+    Charge_Noeud    *charge_nouveau = malloc(sizeof(Charge_Noeud));
     
     // Trivial
     BUGMSG(projet, NULL, gettext("Paramètre incorrect\n"));
     BUGMSG(projet->actions, NULL, gettext("Paramètre incorrect\n"));
-    BUGMSG(list_size(projet->actions), NULL, gettext("Paramètre incorrect\n"));
-    BUGMSG(noeuds, NULL, gettext("Paramètre incorrect\n"));
-    BUG(_1990_action_cherche_numero(projet, num_action) == 0, NULL);
+    BUG(action_en_cours = _1990_action_cherche_numero(projet, num_action), NULL);
+    BUGMSG(charge_nouveau, NULL, gettext("Erreur d'allocation mémoire.\n"));
     
-    action_en_cours = (Action*)list_curr(projet->actions);
+    charge_nouveau->type = CHARGE_NOEUD;
+    BUGMSG(charge_nouveau->description = g_strdup_printf("%s", nom), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    charge_nouveau->noeuds = noeuds;
+    charge_nouveau->fx = fx;
+    charge_nouveau->fy = fy;
+    charge_nouveau->fz = fz;
+    charge_nouveau->mx = mx;
+    charge_nouveau->my = my;
+    charge_nouveau->mz = mz;
     
-    charge_nouveau.type = CHARGE_NOEUD;
-    BUGMSG(charge_nouveau.description = g_strdup_printf("%s", nom), NULL, gettext("Erreur d'allocation mémoire.\n"));
-    charge_nouveau.noeuds = noeuds;
-    charge_nouveau.fx = fx;
-    charge_nouveau.fy = fy;
-    charge_nouveau.fz = fz;
-    charge_nouveau.mx = mx;
-    charge_nouveau.my = my;
-    charge_nouveau.mz = mz;
+    charge_nouveau->numero = g_list_length(action_en_cours->charges);
     
-    charge_dernier = (Charge_Noeud *)list_rear(action_en_cours->charges);
-    if (charge_dernier == NULL)
-        charge_nouveau.numero = 0;
-    else
-        charge_nouveau.numero = charge_dernier->numero+1;
+    action_en_cours->charges = g_list_append(action_en_cours->charges, charge_nouveau);
     
-    list_mvrear(action_en_cours->charges);
-    BUGMSG(list_insert_after(action_en_cours->charges, &(charge_nouveau), sizeof(charge_nouveau)), NULL, gettext("Erreur d'allocation mémoire.\n"));
-    
-    return (Charge_Noeud*)list_curr(action_en_cours->charges);
+    return charge_nouveau;
 }
 
 
@@ -103,7 +95,7 @@ int EF_charge_noeud_free(Charge_Noeud *charge)
     BUGMSG(charge->noeuds, -1, gettext("Paramètre incorrect\n"));
     
     free(charge->description);
-    list_free(charge->noeuds, LIST_DEALLOC);
+    g_list_free(charge->noeuds);
     free(charge);
     
     return 0;

@@ -22,8 +22,6 @@
 #include <libintl.h>
 #include <locale.h>
 
-#include <list.h>
-
 #include "1990_duree.h"
 #include "1990_coef_psi.h"
 #include "1990_actions.h"

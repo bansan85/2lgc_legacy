@@ -86,13 +86,13 @@ int EF_rigidite_free(Projet *projet)
     
     if (projet->ef_donnees.noeuds_pos_complete != NULL)
     {
-        for (i=0;i<list_size(projet->ef_donnees.noeuds);i++)
+        for (i=0;i<g_list_length(projet->ef_donnees.noeuds);i++)
             free(projet->ef_donnees.noeuds_pos_complete[i]);
         free(projet->ef_donnees.noeuds_pos_complete);
     }
     if (projet->ef_donnees.noeuds_pos_partielle != NULL)
     {
-        for (i=0;i<list_size(projet->ef_donnees.noeuds);i++)
+        for (i=0;i<g_list_length(projet->ef_donnees.noeuds);i++)
             free(projet->ef_donnees.noeuds_pos_partielle[i]);
         free(projet->ef_donnees.noeuds_pos_partielle);
     }

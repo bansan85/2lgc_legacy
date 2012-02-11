@@ -38,8 +38,7 @@ int _1992_1_1_materiaux_init(Projet *projet)
     BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
     
     // Trivial
-    projet->beton.materiaux = list_init();
-    BUGMSG(projet->beton.materiaux, -2, gettext("Erreur d'allocation mémoire.\n"));
+    projet->beton.materiaux = NULL;
     
     return 0;
 }
@@ -62,87 +61,81 @@ int _1992_1_1_materiaux_ajout(Projet *projet, double fck, double nu)
  *           -2 en cas d'erreur d'allocation mémoire.
  */
 {
-    Beton_Materiau  *materiau_en_cours, materiau_nouveau;
+    Beton_Materiau  *materiau_nouveau = malloc(sizeof(Beton_Materiau));
     
     // Trivial
     BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->beton.materiaux, -1, gettext("Paramètre incorrect\n"));
     BUGMSG(fck <= 90.*(1+ERREUR_RELATIVE_MIN), -1, gettext("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"));
+    BUGMSG(materiau_nouveau, -2, gettext("Erreur d'allocation mémoire.\n"));
 
-    list_mvrear(projet->beton.materiaux);
-    materiau_nouveau.fck = fck*1000000.;
+    materiau_nouveau->fck = fck*1000000.;
     if (fck < 12.)
-        materiau_nouveau.fckcube = fck*1.25*1000000.;
+        materiau_nouveau->fckcube = fck*1.25*1000000.;
     else if (fck < 16.)
-        materiau_nouveau.fckcube = 5.*fck/4.*1000000.;
+        materiau_nouveau->fckcube = 5.*fck/4.*1000000.;
     else if (fck < 20.)
-        materiau_nouveau.fckcube = 5.*fck/4.*1000000.;
+        materiau_nouveau->fckcube = 5.*fck/4.*1000000.;
     else if (fck < 25.)
-        materiau_nouveau.fckcube = (fck+5.)*1000000.;
+        materiau_nouveau->fckcube = (fck+5.)*1000000.;
     else if (fck < 30.)
-        materiau_nouveau.fckcube = (7.*fck/5.-5.)*1000000.;
+        materiau_nouveau->fckcube = (7.*fck/5.-5.)*1000000.;
     else if (fck < 35.)
-        materiau_nouveau.fckcube = (8.*fck/5.-11.)*1000000.;
+        materiau_nouveau->fckcube = (8.*fck/5.-11.)*1000000.;
     else if (fck < 40.)
-        materiau_nouveau.fckcube = (fck+10.)*1000000.;
+        materiau_nouveau->fckcube = (fck+10.)*1000000.;
     else if (fck < 45.)
-        materiau_nouveau.fckcube = (fck+10.)*1000000.;
+        materiau_nouveau->fckcube = (fck+10.)*1000000.;
     else if (fck < 50.)
-        materiau_nouveau.fckcube = (fck+10.)*1000000.;
+        materiau_nouveau->fckcube = (fck+10.)*1000000.;
     else if (fck < 55.)
-        materiau_nouveau.fckcube = (7.*fck/5.-10.)*1000000.;
+        materiau_nouveau->fckcube = (7.*fck/5.-10.)*1000000.;
     else if (fck < 60.)
-        materiau_nouveau.fckcube = (8.*fck/5.-21.)*1000000.;
+        materiau_nouveau->fckcube = (8.*fck/5.-21.)*1000000.;
     else if (fck < 70.)
-        materiau_nouveau.fckcube = (fck+15.)*1000000.;
+        materiau_nouveau->fckcube = (fck+15.)*1000000.;
     else if (fck < 80.)
-        materiau_nouveau.fckcube = (fck+15.)*1000000.;
+        materiau_nouveau->fckcube = (fck+15.)*1000000.;
     else if (fck <= 90.)
-        materiau_nouveau.fckcube = (fck+15.)*1000000.;
-    materiau_nouveau.fcm = (fck+8.)*1000000.;
+        materiau_nouveau->fckcube = (fck+15.)*1000000.;
+    materiau_nouveau->fcm = (fck+8.)*1000000.;
     if (fck <= 50.)
-        materiau_nouveau.fctm = 0.3*pow(fck,2./3.)*1000000.;
+        materiau_nouveau->fctm = 0.3*pow(fck,2./3.)*1000000.;
     else
-        materiau_nouveau.fctm = 2.12*log(1.+(materiau_nouveau.fcm/10./1000000.))*1000000.;
-    materiau_nouveau.fctk_0_05 = 0.7*materiau_nouveau.fctm;
-    materiau_nouveau.fctk_0_95 = 1.3*materiau_nouveau.fctm;
-    materiau_nouveau.ecm = 22.*pow(materiau_nouveau.fcm/10./1000000., 0.3)*1000000000.;
-    materiau_nouveau.ec1 = MIN(0.7*pow(materiau_nouveau.fcm/1000000., 0.31), 2.8)/1000.;
+        materiau_nouveau->fctm = 2.12*log(1.+(materiau_nouveau->fcm/10./1000000.))*1000000.;
+    materiau_nouveau->fctk_0_05 = 0.7*materiau_nouveau->fctm;
+    materiau_nouveau->fctk_0_95 = 1.3*materiau_nouveau->fctm;
+    materiau_nouveau->ecm = 22.*pow(materiau_nouveau->fcm/10./1000000., 0.3)*1000000000.;
+    materiau_nouveau->ec1 = MIN(0.7*pow(materiau_nouveau->fcm/1000000., 0.31), 2.8)/1000.;
     if (fck < 50.)
-        materiau_nouveau.ecu1 = 3.5/1000.;
+        materiau_nouveau->ecu1 = 3.5/1000.;
     else
-        materiau_nouveau.ecu1 = (2.8 + 27.*pow((98.-materiau_nouveau.fcm/1000000.)/100.,4.))/1000.;
+        materiau_nouveau->ecu1 = (2.8 + 27.*pow((98.-materiau_nouveau->fcm/1000000.)/100.,4.))/1000.;
     if (fck < 50.)
-        materiau_nouveau.ec2 = 2./1000.;
+        materiau_nouveau->ec2 = 2./1000.;
     else
-        materiau_nouveau.ec2 = (2. + 0.085*pow(fck-50., 0.53))/1000.;
+        materiau_nouveau->ec2 = (2. + 0.085*pow(fck-50., 0.53))/1000.;
     if (fck < 50.)
-        materiau_nouveau.ecu2 = 3.5/1000.;
+        materiau_nouveau->ecu2 = 3.5/1000.;
     else
-        materiau_nouveau.ecu2 = (2.6 + 35.*pow((90.-fck)/100.,4.))/1000.;
+        materiau_nouveau->ecu2 = (2.6 + 35.*pow((90.-fck)/100.,4.))/1000.;
     if (fck < 50.)
-        materiau_nouveau.n = 2./1000.;
+        materiau_nouveau->n = 2./1000.;
     else
-        materiau_nouveau.n = (1.4 + 23.4*pow((90.-fck)/100., 4.))/1000.;
+        materiau_nouveau->n = (1.4 + 23.4*pow((90.-fck)/100., 4.))/1000.;
     if (fck < 50.)
-        materiau_nouveau.ec3 = 1.75/1000.;
+        materiau_nouveau->ec3 = 1.75/1000.;
     else
-        materiau_nouveau.ec3 = (1.75 + 0.55*(fck-50.)/40.)/1000.;
+        materiau_nouveau->ec3 = (1.75 + 0.55*(fck-50.)/40.)/1000.;
     if (fck < 50.)
-        materiau_nouveau.ecu3 = 3.5/1000.;
+        materiau_nouveau->ecu3 = 3.5/1000.;
     else
-        materiau_nouveau.ecu3 = (2.6 + 35*pow((90.-fck)/100., 4.))/1000.;
-    materiau_nouveau.nu = nu;
-    materiau_nouveau.gnu_0_2 = materiau_nouveau.ecm/(2.*(1.+nu));
-    materiau_nouveau.gnu_0_0 = materiau_nouveau.ecm/2.;
+        materiau_nouveau->ecu3 = (2.6 + 35*pow((90.-fck)/100., 4.))/1000.;
+    materiau_nouveau->nu = nu;
+    materiau_nouveau->gnu_0_2 = materiau_nouveau->ecm/(2.*(1.+nu));
+    materiau_nouveau->gnu_0_0 = materiau_nouveau->ecm/2.;
+    materiau_nouveau->numero = g_list_length(projet->beton.materiaux);
     
-    materiau_en_cours = (Beton_Materiau*)list_rear(projet->beton.materiaux);
-    if (materiau_en_cours == NULL)
-        materiau_nouveau.numero = 0;
-    else
-        materiau_nouveau.numero = materiau_en_cours->numero+1;
-    
-    BUGMSG(list_insert_after(projet->beton.materiaux, &(materiau_nouveau), sizeof(materiau_nouveau)), -2, gettext("Erreur d'allocation mémoire.\n"));
+    projet->beton.materiaux = g_list_append(projet->beton.materiaux, materiau_nouveau);
     
     return 0;
 }
@@ -161,20 +154,22 @@ Beton_Materiau* _1992_1_1_materiaux_cherche_numero(Projet *projet, unsigned int 
  *             (list_size(projet->beton.materiaux) == 0)
  */
 {
+    GList   *list_parcours;
     BUGMSG(projet, NULL, gettext("Paramètre incorrect\n"));
     BUGMSG(projet->beton.materiaux, NULL, gettext("Paramètre incorrect\n"));
-    BUGMSG(list_size(projet->beton.materiaux), NULL, gettext("Paramètre incorrect\n"));
     
     // Trivial
-    list_mvfront(projet->beton.materiaux);
+    list_parcours = projet->beton.materiaux;
     do
     {
-        Beton_Materiau  *materiau = (Beton_Materiau*)list_curr(projet->beton.materiaux);
+        Beton_Materiau  *materiau = list_parcours->data;
         
         if (materiau->numero == numero)
             return materiau;
+        
+        list_parcours = g_list_next(list_parcours);
     }
-    while (list_mvnext(projet->beton.materiaux) != NULL);
+    while (list_parcours != NULL);
     
     BUGMSG(0, NULL, gettext("Matériau en béton n°%d introuvable.\n"), numero);
 }
@@ -194,15 +189,13 @@ int _1992_1_1_materiaux_free(Projet *projet)
     BUGMSG(projet->beton.materiaux, -1, gettext("Paramètre incorrect\n"));
     
     // Trivial
-    while (!list_empty(projet->beton.materiaux))
+    while (projet->beton.materiaux != NULL)
     {
-        Beton_Materiau *materiau = (Beton_Materiau*)list_remove_front(projet->beton.materiaux);
+        Beton_Materiau *materiau = projet->beton.materiaux->data;
+        projet->beton.materiaux = g_list_delete_link(projet->beton.materiaux, projet->beton.materiaux);
         
         free(materiau);
     }
-    
-    free(projet->beton.materiaux);
-    projet->beton.materiaux = NULL;
     
     return 0;
 }

@@ -52,6 +52,8 @@ Projet* projet_init(Type_Pays pays)
  */
 {
     Projet      *projet;
+    
+    g_type_init();
     // Alloue toutes les zones mémoires du projet à savoir (par module) :
     BUGMSG(projet = (Projet*)malloc(sizeof(Projet)), NULL, gettext("Erreur d'allocation mémoire.\n"));
     //     - 1990 : la liste des actions, des groupes et des combinaisons,

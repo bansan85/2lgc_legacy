@@ -113,6 +113,7 @@ int m3d_camera_axe_x_z(Projet *projet)
  *           -3 en cas d'erreur due à une fonction interne
  */
 {
+    GList           *list_parcours;
     List_Gtk_m3d    *m3d;
     SGlobalData     *vue;
     double          x_min, x_max, z_min, z_max, x, y, z;
@@ -121,25 +122,27 @@ int m3d_camera_axe_x_z(Projet *projet)
     
     BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
     BUGMSG(projet->ef_donnees.noeuds, -1, gettext("Paramètre incorrect\n"));
-    if (list_size(projet->ef_donnees.noeuds) <= 1)
+    if (g_list_length(projet->ef_donnees.noeuds) <= 1)
         return 0;
     BUG(EF_noeuds_min_max(projet, &x_min, &x_max, NULL, NULL, &z_min, &z_max) == 0, -3);
     
     x = (x_min+x_max)/2.;
     z = (z_min+z_max)/2.;
     
-    list_mvfront(projet->ef_donnees.noeuds);
-    noeud = (EF_Noeud*)list_curr(projet->ef_donnees.noeuds);
+    list_parcours = projet->ef_donnees.noeuds;
+    noeud = (EF_Noeud *)list_parcours->data;
     BUG(point = EF_noeuds_renvoie_position(noeud), -3);
     y = point->y-sqrt((point->x-x)*(point->x-x)+(point->z-z)*(point->z-z));
     free(point);
     
-    while (list_mvnext(projet->ef_donnees.noeuds) != NULL)
+    list_parcours = g_list_next(list_parcours);
+    while (list_parcours != NULL)
     {
-        noeud = (EF_Noeud*)list_curr(projet->ef_donnees.noeuds);
+        noeud = (EF_Noeud *)list_parcours->data;
         BUG(point = EF_noeuds_renvoie_position(noeud), -3);
         y = MIN(y, point->y-sqrt((point->x-x)*(point->x-x)+(point->z-z)*(point->z-z)));
         free(point);
+        list_parcours = g_list_next(list_parcours);
     }
     
     m3d = &projet->list_gtk.m3d;
@@ -456,6 +459,7 @@ int m3d_genere_graphique(Projet *projet)
  *           -3 en cas d'erreur due à une fonction interne
  */
 {
+    GList           *list_parcours;
     List_Gtk_m3d    *m3d;
     SGlobalData     *vue;
     
@@ -465,12 +469,12 @@ int m3d_genere_graphique(Projet *projet)
     BUGMSG(m3d->data, -1, gettext("Paramètre incorrect\n"));
     vue = (SGlobalData*)m3d->data;
     
-    list_mvfront(projet->ef_donnees.noeuds);
-    if (list_size(projet->ef_donnees.noeuds) != 0)
+    list_parcours = projet->ef_donnees.noeuds;
+    if (list_parcours != NULL)
     {
         do
         {
-            EF_Noeud    *noeud = (EF_Noeud*)list_curr(projet->ef_donnees.noeuds);
+            EF_Noeud    *noeud = (EF_Noeud *)list_parcours->data;
             EF_Point    *point;
             CM3dObject  *cube;
             char        *tmp;
@@ -486,20 +490,23 @@ int m3d_genere_graphique(Projet *projet)
             cube->set_position(point->x, point->y, point->z);
             
             free(point);
+            list_parcours = g_list_next(list_parcours);
         }
-        while (list_mvnext(projet->ef_donnees.noeuds) != NULL);
+        while (list_parcours != NULL);
     }
     
-    list_mvfront(projet->beton.barres);
-    if (list_size(projet->beton.barres) != 0)
+    list_parcours = projet->beton.barres;
+    if (list_parcours != NULL)
     {
         do
         {
-            Beton_Barre *barre = (Beton_Barre*)list_curr(projet->beton.barres);
+            Beton_Barre *barre = (Beton_Barre *) list_parcours->data;
             
             m3d_barre(projet, barre);
+            
+            list_parcours = g_list_next(list_parcours);
         }
-        while (list_mvnext(projet->beton.barres) != NULL);
+        while (list_parcours != NULL);
     }
     return 0;
 }

@@ -34,13 +34,13 @@
 #include "EF_noeud.h"
 
 Charge_Barre_Ponctuelle *EF_charge_barre_ponctuelle_ajout(Projet *projet, int num_action,
-  LIST *barres, int repere_local, double a, double fx, double fy, double fz, double mx,
+  GList *barres, int repere_local, double a, double fx, double fy, double fz, double mx,
   double my, double mz, const char* nom)
 /* Description : Ajoute une charge ponctuelle à une action et à l'intérieur d'une barre en lui
  *               attribuant le numéro suivant la dernière charge de l'action.
  * Paramètres : Projet *projet : la variable projet,
  *            : int num_action : numero de l'action qui contiendra la charge,
- *            : void *barre : barre qui supportera la charge,
+ *            : GList *barres : liste des barres qui supportera la charge,
  *            : int repere_local : TRUE si les charges doivent être prise dans le repère local,
  *                                 FALSE pour le repère global,
  *            : double a : position en mètre de la charge par rapport au début de la barre,
@@ -57,57 +57,52 @@ Charge_Barre_Ponctuelle *EF_charge_barre_ponctuelle_ajout(Projet *projet, int nu
  *             (projet->actions == NULL) ou
  *             (list_size(projet->actions) == 0) ou
  *             (barre == NULL) ou
- *             (_1990_action_cherche_numero(projet, num_action) != 0) ou
+ *             (_1990_action_cherche_numero(projet, num_action) == NULL) ou
  *             (a < 0) ou (a > l)
  *           NULL en cas d'erreur d'allocation mémoire
  */
 {
     Action                  *action_en_cours;
-    Charge_Barre_Ponctuelle *charge_dernier, charge_nouveau;
+    Charge_Barre_Ponctuelle *charge_nouveau = malloc(sizeof(Charge_Barre_Ponctuelle));
     
     // Trivial
     BUGMSG(projet, NULL, gettext("Paramètre incorrect\n"));
     BUGMSG(projet->actions, NULL, gettext("Paramètre incorrect\n"));
-    BUGMSG(list_size(projet->actions), NULL, gettext("Paramètre incorrect\n"));
-    BUGMSG(barres, NULL, gettext("Paramètre incorrect\n"));
-    BUG(_1990_action_cherche_numero(projet, num_action) == 0, NULL);
-    action_en_cours = (Action*)list_curr(projet->actions);
+    BUG(action_en_cours = _1990_action_cherche_numero(projet, num_action), NULL);
     BUGMSG(!((a < 0.) && (!(ERREUR_RELATIVE_EGALE(a, 0.)))), NULL, gettext("Paramètre incorrect\n"));
-    if (list_size(barres) != 0)
+    BUGMSG(charge_nouveau, NULL, gettext("Erreur d'allocation mémoire.\n"));
+    if (barres != NULL)
     {
-        list_mvfront(barres);
+        GList   *list_parcours = barres;
         do
         {
-            Beton_Barre *barre = *(Beton_Barre **)list_curr(barres);
+            Beton_Barre *barre = list_parcours->data;
             
             double distance = EF_noeuds_distance(barre->noeud_debut, barre->noeud_fin);
             BUGMSG(!((a > distance) && (!(ERREUR_RELATIVE_EGALE(a, distance)))), NULL, gettext("Paramètre incorrect\n"));
+            
+            list_parcours = g_list_next(list_parcours);
         }
-        while (list_mvnext(barres) != NULL);
+        while (list_parcours != NULL);
     }
     
-    charge_nouveau.type = CHARGE_BARRE_PONCTUELLE;
-    BUGMSG(charge_nouveau.description = g_strdup_printf("%s", nom), NULL, gettext("Erreur d'allocation mémoire.\n"));
-    charge_nouveau.barres = barres;
-    charge_nouveau.repere_local = repere_local;
-    charge_nouveau.position = a;
-    charge_nouveau.fx = fx;
-    charge_nouveau.fy = fy;
-    charge_nouveau.fz = fz;
-    charge_nouveau.mx = mx;
-    charge_nouveau.my = my;
-    charge_nouveau.mz = mz;
+    charge_nouveau->type = CHARGE_BARRE_PONCTUELLE;
+    BUGMSG(charge_nouveau->description = g_strdup_printf("%s", nom), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    charge_nouveau->barres = barres;
+    charge_nouveau->repere_local = repere_local;
+    charge_nouveau->position = a;
+    charge_nouveau->fx = fx;
+    charge_nouveau->fy = fy;
+    charge_nouveau->fz = fz;
+    charge_nouveau->mx = mx;
+    charge_nouveau->my = my;
+    charge_nouveau->mz = mz;
     
-    charge_dernier = (Charge_Barre_Ponctuelle *)list_rear(action_en_cours->charges);
-    if (charge_dernier == NULL)
-        charge_nouveau.numero = 0;
-    else
-        charge_nouveau.numero = charge_dernier->numero+1;
+    charge_nouveau->numero = g_list_length(action_en_cours->charges);
     
-    list_mvrear(action_en_cours->charges);
-    BUGMSG(list_insert_after(action_en_cours->charges, &(charge_nouveau), sizeof(charge_nouveau)), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    action_en_cours->charges = g_list_append(action_en_cours->charges, charge_nouveau);
     
-    return list_curr(action_en_cours->charges);
+    return charge_nouveau;
 }
 
 
@@ -847,7 +842,7 @@ int EF_charge_barre_ponctuelle_free(Charge_Barre_Ponctuelle *charge)
     BUGMSG(charge->barres, -1, gettext("Paramètre incorrect\n"));
     
     free(charge->description);
-    list_free(charge->barres, LIST_DEALLOC);
+    g_list_free(charge->barres);
     free(charge);
     
     return 0;

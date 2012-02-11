@@ -42,9 +42,7 @@ int _1990_groupe_init(Projet *projet)
     BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
     
     // Trivial
-    projet->niveaux_groupes = list_init();
-    
-    BUGMSG(projet->niveaux_groupes, -2, gettext("Erreur d'allocation mémoire.\n"));
+    projet->niveaux_groupes = NULL;
     
     return 0;
 }
@@ -62,24 +60,22 @@ int _1990_groupe_ajout_niveau(Projet *projet)
  *           -2 en cas d'erreur d'allocation mémoire
  */
 {
-    Niveau_Groupe   niveau_nouveau;
+    Niveau_Groupe   *niveau_nouveau = malloc(sizeof(Niveau_Groupe));
     
     // Trivial
+    BUGMSG(niveau_nouveau, -2, gettext("Erreur d'allocation mémoire.\n"));
     BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->niveaux_groupes, -1, gettext("Paramètre incorrect\n"));
     
-    list_mvrear(projet->niveaux_groupes);
-    niveau_nouveau.niveau = list_size(projet->niveaux_groupes);
-    niveau_nouveau.groupes = list_init();
-    BUGMSG(niveau_nouveau.groupes, -2, gettext("Erreur d'allocation mémoire.\n"));
+    niveau_nouveau->niveau = g_list_length(projet->niveaux_groupes);
+    niveau_nouveau->groupes = NULL;
     
-    BUGMSG(list_insert_after(projet->niveaux_groupes, &(niveau_nouveau), sizeof(niveau_nouveau)) , -2, gettext("Erreur d'allocation mémoire.\n"));
+    projet->niveaux_groupes = g_list_append(projet->niveaux_groupes, niveau_nouveau);
     
     return 0;
 }
 
 
-int _1990_groupe_positionne_element(Groupe *groupe, int numero)
+Element *_1990_groupe_positionne_element(Groupe *groupe, int numero)
 /* Description : Positionne l'élément courant d'un groupe en fonction de son numéro
  * Paramètres : Groupe *groupe : groupe à analyser
  *            : int numero : numéro de l'élément à trouver
@@ -91,129 +87,135 @@ int _1990_groupe_positionne_element(Groupe *groupe, int numero)
  *             élément introuvable.
  */
 {
-    BUGMSG(groupe, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(list_size(groupe->elements), -1, gettext("Paramètre incorrect\n"));
+    GList   *list_parcours;
+    
+    BUGMSG(groupe, NULL, gettext("Paramètre incorrect\n"));
+    BUGMSG(groupe->elements, NULL, gettext("Paramètre incorrect\n"));
     
     // Trivial
-    list_mvfront(groupe->elements);
+    list_parcours = groupe->elements;
     do
     {
-        Element     *element_en_cours;
-    
-        element_en_cours = (Element*)list_curr(groupe->elements);
+        Element     *element_en_cours = list_parcours->data;
+        
         if (element_en_cours->numero == numero)
-            return 0;
+            return element_en_cours;
+        
+        list_parcours = g_list_next(list_parcours);
     }
-    while (list_mvnext(groupe->elements) != NULL);
+    while (list_parcours != NULL);
     
-    BUGMSG(0, -1, gettext("Élément %d introuvable.\n"), numero);
+    BUGMSG(0, NULL, gettext("Élément %d introuvable.\n"), numero);
 }
 
 
-int _1990_groupe_positionne_groupe(Niveau_Groupe *niveau, int numero)
-/* Description : Positionne le groupe courant d'un niveau en fonction de son numéro
+Groupe *_1990_groupe_positionne_groupe(Niveau_Groupe *niveau, int numero)
+/* Description : Renvoie le groupe d'un niveau en fonction de son numéro
  * Paramètres : Niveau_Groupe *niveau : niveau à analyser
  *            : int numero : numéro du groupe à trouver
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : -1 en cas de paramètres invalides :
+ *   Succès : pointeur vers le groupe
+ *   Échec : NULL en cas de paramètres invalides :
  *             (niveau == NULL) ou
  *             (niveau->groupes == NULL) ou
- *             (list_size(niveau->groupes) == 0) ou
  *             groupe introuvable.
  */
 {
-    BUGMSG(niveau, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(niveau->groupes, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(list_size(niveau->groupes), -1, gettext("Paramètre incorrect\n"));
+    GList   *list_parcours;
+    
+    BUGMSG(niveau, NULL, gettext("Paramètre incorrect\n"));
+    BUGMSG(niveau->groupes, NULL, gettext("Paramètre incorrect\n"));
     
     // Trivial
-    list_mvfront(niveau->groupes);
+    list_parcours = niveau->groupes;
     do
     {
-        Groupe *groupe = (Groupe*)list_curr(niveau->groupes);
+        Groupe *groupe = list_parcours->data;
         if (groupe->numero == numero)
-            return 0;
+            return groupe;
+         
+        list_parcours = g_list_next(list_parcours);
     }
-    while (list_mvnext(niveau->groupes) != NULL);
-    BUGMSG(0, -2, gettext("Élément %d introuvable.\n"), numero);
+    while (list_parcours != NULL);
+    
+    BUGMSG(0, NULL, gettext("Élément %d introuvable.\n"), numero);
 }
 
 
-int _1990_groupe_positionne_niveau(LIST *source, int numero)
+Niveau_Groupe *_1990_groupe_positionne_niveau(Projet *projet, int numero)
 /* Description : Positionne le niveau courant en fonction de son numéro
- * Paramètres : LIST *source : liste des niveaux
+ * Paramètres : Projet *projet : la variable projet
  *            : int numero : numéro du groupe à trouver
  * Valeur renvoyée :
  *   Succès : 0
  *   Échec : -1 en cas de paramètres invalides :
- *             (source == NULL) ou
- *             (list_size(source) == 0) ou
+ *             (projet == NULL) ou
+ *             (projet->niveaux_groupes == NULL) ou
  *             niveau introuvable.
  */
 {
-    Niveau_Groupe *niveau;
+    GList           *list_parcours;
+    Niveau_Groupe   *niveau;
     
-    BUGMSG(source, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(list_size(source), -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, NULL, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->niveaux_groupes, NULL, gettext("Paramètre incorrect\n"));
     
     // Trivial
-    list_mvfront(source);
+    list_parcours = projet->niveaux_groupes;
     do
     {
-        niveau = (Niveau_Groupe*)list_curr(source);
+        niveau = list_parcours->data;
         if (niveau->niveau == numero)
-            return 0;
+            return niveau;
+        
+        list_parcours = g_list_next(list_parcours);
     }
-    while (list_mvnext(source) != NULL);
-    BUGMSG(0, -1, gettext("Niveau %d introuvable.\n"), numero);
+    while (list_parcours != NULL);
+    
+    BUGMSG(0, NULL, gettext("Niveau %d introuvable.\n"), numero);
 }
 
 
-int _1990_groupe_ajout_groupe(Projet *projet, int niveau,
+Groupe *_1990_groupe_ajout_groupe(Projet *projet, int niveau,
   Type_Groupe_Combinaison type_combinaison, const char* nom)
 /* Description : Ajoute un groupe au niveau choisi avec le type de combinaison spécifié.
  * Paramètres : Projet *projet : la variable projet
  *            : int niveau : le niveau où le groupe doit être inséré
  *            : Type_Groupe_Combinaison type_combinaison : combinaison du nouveau groupe
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : -1 en cas de paramètres invalides :
+ *   Succès : Pointeur vers le nouveau groupe.
+ *   Échec : NULL en cas de paramètres invalides :
  *             (projet == NULL) ou
  *             (projet->niveaux_groupes == NULL) ou
  *             (list_size(projet->niveaux_groupes) == 0)
- *             -2 en cas d'erreur d'allocation mémoire
- *             -3 en cas d'erreur due à une fonction interne
+ *           NULL en cas d'erreur d'allocation mémoire
+ *           NULL en cas d'erreur due à une fonction interne
  */
 {
-    Groupe          groupe_nouveau;
+    Groupe          *groupe_nouveau = malloc(sizeof(Groupe));
     Niveau_Groupe   *niveau_groupe;
     
-    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->niveaux_groupes, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(list_size(projet->niveaux_groupes), -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, NULL, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->niveaux_groupes, NULL, gettext("Paramètre incorrect\n"));
+    BUGMSG(groupe_nouveau, NULL, gettext("Erreur d'allocation mémoire.\n"));
     
     // Trivial
     
-    BUG(_1990_groupe_positionne_niveau(projet->niveaux_groupes, niveau) == 0, -3);
+    BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, niveau), NULL);
     
-    niveau_groupe = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
-    list_mvrear(niveau_groupe->groupes);
-    groupe_nouveau.numero = list_size(niveau_groupe->groupes);
-    BUGMSG(groupe_nouveau.nom = g_strdup_printf("%s", nom), -2, gettext("Erreur d'allocation mémoire.\n"));
-    groupe_nouveau.type_combinaison = type_combinaison;
+    groupe_nouveau->numero = g_list_length(niveau_groupe->groupes);
+    BUGMSG(groupe_nouveau->nom = g_strdup_printf("%s", nom), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    groupe_nouveau->type_combinaison = type_combinaison;
 #ifdef ENABLE_GTK
-    groupe_nouveau.Iter_expand = 1;
+    groupe_nouveau->Iter_expand = 1;
 #endif
     
-    groupe_nouveau.tmp_combinaison.combinaisons = list_init();
-    BUGMSG(groupe_nouveau.tmp_combinaison.combinaisons, -2, gettext("Erreur d'allocation mémoire.\n"));
+    groupe_nouveau->tmp_combinaison.combinaisons = NULL;
     
-    groupe_nouveau.elements = list_init();
-    BUGMSG(groupe_nouveau.elements, -2, gettext("Erreur d'allocation mémoire.\n"));
-    BUGMSG(list_insert_after(niveau_groupe->groupes, &(groupe_nouveau), sizeof(groupe_nouveau)), -2, gettext("Erreur d'allocation mémoire.\n"));
+    groupe_nouveau->elements = NULL;
+    niveau_groupe->groupes = g_list_append(niveau_groupe->groupes, groupe_nouveau);
     
-    return 0;
+    return groupe_nouveau;
 }
 
 
@@ -228,7 +230,7 @@ int _1990_groupe_ajout_element(Projet *projet, unsigned int niveau, int groupe_n
  *                   niveau 'niveau'-1
  *                 Le dernier niveau ne doit contenir qu'un seul groupe
  * Paramètres : Projet *projet : la variable projet
- *            : int niveau : le niveau où le groupe doit être inséré.
+ *            : unsigned int niveau : le niveau où le groupe doit être inséré.
  *            : int groupe_n : numéro du groupe où ajouter l'élément.
  *            : int num_element : numéro de l'élément à ajouter.
  * Valeur renvoyée :
@@ -243,60 +245,64 @@ int _1990_groupe_ajout_element(Projet *projet, unsigned int niveau, int groupe_n
 {
     Niveau_Groupe   *niveau_groupe;
     Groupe          *groupe;
-    Element         *element, element_nouveau;
+    Element         *element;
+    Element         *element_nouveau = malloc(sizeof(Element));
     
     BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
     BUGMSG(projet->niveaux_groupes, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(list_size(projet->niveaux_groupes)-1 >= niveau, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(g_list_length(projet->niveaux_groupes)-1 >= niveau, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(element_nouveau, -2, gettext("Erreur d'allocation mémoire.\n"));
     
     // Trivial
     /* On commence par positionner le numéro num_element de l'étage n-1
      * puis on positionne le niveau en cours au niveau 'niveau' */
     if (niveau == 0)
     {
-        BUG(_1990_action_cherche_numero(projet, num_element) == 0, -3);
-        list_mvfront(projet->niveaux_groupes);
+        // On vérifie si l'action num_element existe.
+        BUG(_1990_action_cherche_numero(projet, num_element), -3);
+        niveau_groupe = projet->niveaux_groupes->data;
     }
     else
     {
-        BUG(_1990_groupe_positionne_niveau(projet->niveaux_groupes, niveau-1) == 0, -3);
-        niveau_groupe = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
-        BUG(_1990_groupe_positionne_groupe(niveau_groupe, num_element) == 0, -3);
-        list_mvnext(projet->niveaux_groupes);
+        // On vérifie si le groupe du niveau n-1 existe;
+        BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, niveau-1), -3);
+        BUG(_1990_groupe_positionne_groupe(niveau_groupe, num_element), -3);
+        BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, niveau), -3);
     }
     
-    niveau_groupe = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
-    BUG(_1990_groupe_positionne_groupe(niveau_groupe, groupe_n) == 0, -3);
-    groupe = (Groupe*)list_curr(niveau_groupe->groupes);
-    element_nouveau.numero = num_element;
+    BUG(groupe = _1990_groupe_positionne_groupe(niveau_groupe, groupe_n), -3);
+    element_nouveau->numero = num_element;
     #ifdef ENABLE_GTK
-    element_nouveau.Iter_expand = 1;
+    element_nouveau->Iter_expand = 1;
     #endif
     
     /* On ajoute le nouvel élément au groupe */
-    if (list_size(groupe->elements) == 0)
-        BUGMSG(list_insert_after(groupe->elements, &(element_nouveau), sizeof(element_nouveau)), -2, gettext("Erreur d'allocation mémoire.\n"));
+    if (groupe->elements == NULL)
+        groupe->elements = g_list_append(groupe->elements, element_nouveau);
     else
     {
-        int element_ajoute = 0;
+        int     element_ajoute = 0;
+        GList   *list_parcours;
         
-        list_mvfront(groupe->elements);
+        list_parcours = groupe->elements;
         element_ajoute = 0;
         /* On l'ajoute en triant pour faire plus joli */
         do
         {
-            element = (Element*)list_curr(groupe->elements);
+            element = list_parcours->data;
             BUGMSG(element->numero != num_element, -1, "le numéro %d est déjà présent.\n", num_element);
             if (element->numero > num_element)
             {
-                BUGMSG(list_insert_before(groupe->elements, &(element_nouveau), sizeof(element_nouveau)), -2, gettext("Erreur d'allocation mémoire.\n"));
+                groupe->elements = g_list_insert_before(groupe->elements, list_parcours, element_nouveau);
                 element_ajoute = 1;
             }
+            
+            list_parcours = g_list_next(list_parcours);
         }
-        while (list_mvnext(groupe->elements) && (element_ajoute == 0));
+        while ((list_parcours != NULL) && (element_ajoute == 0));
         /* Si pas encore ajouté, on l'ajoute à la fin de la liste */
         if (element_ajoute == 0)
-            BUGMSG(list_insert_after(groupe->elements, &(element_nouveau), sizeof(element_nouveau)), -2, gettext("Erreur d'allocation mémoire.\n"));
+            groupe->elements = g_list_append(groupe->elements, element_nouveau);
     }
     
     return 0;
@@ -316,24 +322,24 @@ int _1990_groupe_affiche_tout(Projet *projet)
  *             (list_size(projet->niveaux_groupes) != 0)
  */
 {
+    GList   *list_parcours;
     BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
     BUGMSG(projet->niveaux_groupes, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(list_size(projet->niveaux_groupes), -1, gettext("Paramètre incorrect\n"));
     
     // Trivial
-    list_mvfront(projet->niveaux_groupes);
+    list_parcours = projet->niveaux_groupes;
     do
     {
-        Niveau_Groupe   *niveau = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
+        Niveau_Groupe   *niveau = list_parcours->data;
         
         printf(gettext("niveau : %d\n"), niveau->niveau);
-        if ((niveau->groupes != NULL) && (list_size(niveau->groupes) != 0))
+        if (niveau->groupes != NULL)
         {
-            list_mvfront(niveau->groupes);
+            GList   *list_parcours2 = niveau->groupes;
             
             do
             {
-                Groupe  *groupe = (Groupe*)list_curr(niveau->groupes);
+                Groupe  *groupe = list_parcours2->data;
                 
                 printf(gettext("\tgroupe : %d, combinaison : "), groupe->numero);
                 switch(groupe->type_combinaison)
@@ -359,70 +365,60 @@ int _1990_groupe_affiche_tout(Projet *projet)
                         break;
                     }
                 }
-                if (list_front(projet->niveaux_groupes) == list_curr(projet->niveaux_groupes))
+                if (projet->niveaux_groupes->data == list_parcours->data)
                     printf(gettext("\t\tActions contenus dans ce groupe : "));
                 else
                     printf(gettext("\t\tGroupes du niveau %d contenus dans ce groupe : "), niveau->niveau-1);
                 
-                if ((groupe->elements != NULL) && (list_size(groupe->elements) != 0))
+                if (groupe->elements != NULL)
                 {
-                    list_mvfront(groupe->elements);
+                    GList   *list_parcours3 = groupe->elements;
                     
                     do
                     {
-                        Element *element = (Element*)list_curr(groupe->elements);
+                        Element *element = list_parcours3->data;
                         printf("%d ", element->numero);
+                        
+                        list_parcours3 = g_list_next(list_parcours3);
                     }
-                    while (list_mvnext(groupe->elements) != NULL);
+                    while (list_parcours3 != NULL);
                 }
                 printf("\n");
                 printf(gettext("\t\tCombinaisons :\n"));
-                if ((groupe->tmp_combinaison.combinaisons != NULL) && (list_size(groupe->tmp_combinaison.combinaisons) != 0))
+                if (groupe->tmp_combinaison.combinaisons != NULL)
                 {
-                    list_mvfront(groupe->tmp_combinaison.combinaisons);
+                    GList   *list_parcours3 = groupe->tmp_combinaison.combinaisons;
                     
                     do
                     {
-                        Combinaison *combinaison = (Combinaison*)list_curr(groupe->tmp_combinaison.combinaisons);
+                        Combinaison *combinaison = list_parcours3->data;
                         printf("\t\t\t");
-                        if ((combinaison->elements != NULL) && (list_size(combinaison->elements) != 0))
+                        if (combinaison->elements != NULL)
                         {
-                            list_mvfront(combinaison->elements);
+                            GList   *list_parcours4 = combinaison->elements;
                             do
                             {
-                                Combinaison_Element *comb_element = (Combinaison_Element*)list_curr(combinaison->elements);
+                                Combinaison_Element *comb_element = list_parcours4->data;
                                 Action          *action = (Action*)comb_element->action;
                                 
                                 printf("%u(%d) ", action->numero, comb_element->flags);
+                                
+                                list_parcours4 = g_list_next(list_parcours4);
                             }
-                            while (list_mvnext(combinaison->elements) != NULL);
+                            while (list_parcours4 != NULL);
                         }
                         printf("\n");
+                        list_parcours3 = g_list_next(list_parcours3);
                     }
-                    while (list_mvnext(groupe->tmp_combinaison.combinaisons) != NULL);
+                    while (list_parcours3 != NULL);
                 }
+                list_parcours2 = g_list_next(list_parcours2);
             }
-            while (list_mvnext(niveau->groupes) != NULL);
+            while (list_parcours2 != NULL);
         }
+        list_parcours = g_list_next(list_parcours);
     }
-    while (list_mvnext(projet->niveaux_groupes) != NULL);
-    
-    return 0;
-}
-
-
-int _1990_groupe_free_element_courant(LIST *elements)
-/* Description : Libère l'élément en cours dans une liste d'éléments
- * Paramètres : LIST *elements : une liste d'éléments
- * Valeur renvoyée : Aucune.
- */
-{
-    // Trivial
-    
-    BUGMSG(elements, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(list_curr(elements), -1, gettext("Paramètre incorrect\n"));
-    
-    free(list_remove_curr(elements));
+    while (list_parcours != NULL);
     
     return 0;
 }
@@ -445,27 +441,18 @@ int _1990_groupe_free_element(Projet *projet, int niveau, int groupe, int elemen
 {
     Niveau_Groupe   *niveau_groupe;
     Groupe          *groupe_en_cours;
+    Element         *element_en_cours;
     
     // Trivial
     
     BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
     BUGMSG(projet->niveaux_groupes, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(list_size(projet->niveaux_groupes), -1, gettext("Paramètre incorrect\n"));
-    BUG(_1990_groupe_positionne_niveau(projet->niveaux_groupes, niveau) == 0, -3);
-    
-    niveau_groupe = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
-    
+    BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, niveau), -3);
     BUGMSG(niveau_groupe->groupes, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(list_size(niveau_groupe->groupes), -1, gettext("Paramètre incorrect\n"));
-    BUG(_1990_groupe_positionne_groupe(niveau_groupe, groupe) == 0, -3);
-    
-    groupe_en_cours = (Groupe*)list_curr(niveau_groupe->groupes);
-    
+    BUG(groupe_en_cours = _1990_groupe_positionne_groupe(niveau_groupe, groupe), -3);
     BUGMSG(groupe_en_cours->elements, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(list_size(groupe_en_cours->elements), -1, gettext("Paramètre incorrect\n"));
-    BUG(_1990_groupe_positionne_element(groupe_en_cours, element) == 0, -3);
-    
-    BUG(_1990_groupe_free_element_courant(groupe_en_cours->elements) == 0, -3);
+    BUG(element_en_cours = _1990_groupe_positionne_element(groupe_en_cours, element), -3);
+    groupe_en_cours->elements = g_list_remove(groupe_en_cours->elements, element_en_cours);
     
     return 0;
 }
@@ -480,79 +467,66 @@ int _1990_groupe_free_niveau(Projet *projet, int niveau)
  *   Échec : -1 en cas de paramètres invalides
  */
 {
+    GList           *list_parcours;
     Niveau_Groupe   *niveau_groupe;
     
     // Trivial
     BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
     BUGMSG(projet->niveaux_groupes, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(list_size(projet->niveaux_groupes), -1, gettext("Paramètre incorrect\n"));
-    BUG(_1990_groupe_positionne_niveau(projet->niveaux_groupes, niveau) == 0, -3);
+    BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, niveau), -3);
     
-    niveau_groupe = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
-    
+    list_parcours = projet->niveaux_groupes;
     do
     {
+        niveau_groupe = list_parcours->data;
         if (niveau_groupe->niveau >= niveau)
         {
             /* Il peut être possible d'utiliser la fonction _1990_groupe_free_groupe
              * mais cette dernier analyse également le niveau supérieur pour supprimer les 
              * références devenues obsolète, ce qui est inutile ici puisque tous les niveaux
              * supérieurs vont également être supprimé. */
-            if (niveau_groupe->groupes != NULL)
+            while (niveau_groupe->groupes != NULL)
             {
-                list_mvfront(niveau_groupe->groupes);
-                while (!list_empty(niveau_groupe->groupes))
+                Groupe      *groupe = niveau_groupe->groupes->data;
+                
+                free(groupe->nom);
+                
+                /* On libère tous les éléments contenus dans le groupe */
+                if (groupe->elements != NULL)
+                    g_list_free_full(groupe->elements, free);
+                
+                /* On libère toutes les combinaisons temporaires */
+                if (groupe->tmp_combinaison.combinaisons != NULL)
                 {
-                    Groupe      *groupe = (Groupe*)list_curr(niveau_groupe->groupes);
-                    free(groupe->nom);
-                    
-                    /* On libère tous les éléments contenus dans le groupe */
-                    if (groupe->elements != NULL)
+                    while (groupe->tmp_combinaison.combinaisons != NULL)
                     {
-                        list_mvfront(groupe->elements);
-                        while (!list_empty(groupe->elements))
-                        {
-                            free(list_remove_front(groupe->elements));
-                        }
-                        free(groupe->elements);
+                        Combinaison *combinaison = groupe->tmp_combinaison.combinaisons->data;
+                        if (combinaison->elements != NULL)
+                            g_list_free_full(combinaison->elements, free);
+                        free(combinaison);
+                        groupe->tmp_combinaison.combinaisons = g_list_delete_link(groupe->tmp_combinaison.combinaisons, groupe->tmp_combinaison.combinaisons);
                     }
-                    
-                    /* On libère toutes les combinaisons temporaires */
-                    if (groupe->tmp_combinaison.combinaisons != NULL)
-                    {
-                        list_mvfront(groupe->tmp_combinaison.combinaisons);
-                        while (!list_empty(groupe->tmp_combinaison.combinaisons))
-                        {
-                            Combinaison *combinaison = (Combinaison*)list_front(groupe->tmp_combinaison.combinaisons);
-                            if (combinaison->elements != NULL)
-                            {
-                                list_mvfront(combinaison->elements);
-                                while (!list_empty(combinaison->elements))
-                                    free(list_remove_front(combinaison->elements));
-                                free(combinaison->elements);
-                            }
-                            free(list_remove_front(groupe->tmp_combinaison.combinaisons));
-                        }
-                        free(groupe->tmp_combinaison.combinaisons);
-                    }
-                    
-                    /* Et enfin, on supprime l'élément courant */
-                    free(list_remove_curr(niveau_groupe->groupes));
+                    free(groupe->tmp_combinaison.combinaisons);
                 }
-                free(niveau_groupe->groupes);
+                
+                free(groupe);
+                
+                /* Et enfin, on supprime l'élément courant */
+                niveau_groupe->groupes = g_list_delete_link(niveau_groupe->groupes, niveau_groupe->groupes);
             }
             
-            free(list_remove_curr(projet->niveaux_groupes));
-            
-            niveau_groupe = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
+            list_parcours = g_list_next(list_parcours);
+            projet->niveaux_groupes = g_list_remove(projet->niveaux_groupes, niveau_groupe);
         }
         else
-        {
-            list_mvnext(projet->niveaux_groupes);
-            niveau_groupe = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
-        }
+            list_parcours = g_list_next(list_parcours);
+        free(niveau_groupe);
+        if (list_parcours != NULL)
+            niveau_groupe = list_parcours->data;
+        else
+            niveau_groupe = NULL;
     }
-    while ((list_size(projet->niveaux_groupes) != 0) && (niveau_groupe != NULL) && (niveau_groupe->niveau >= niveau));
+    while ((projet->niveaux_groupes != NULL) && (list_parcours != NULL) && (niveau_groupe->niveau >= niveau));
     
     return 0;
 }
@@ -573,75 +547,66 @@ int _1990_groupe_free_groupe(Projet *projet, int niveau, int groupe)
 {
     Niveau_Groupe   *niveau_groupe;
     Groupe          *groupe_curr;
+    GList           *list_parcours;
     
     // Trivial
     BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
     BUGMSG(projet->niveaux_groupes, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(list_size(projet->niveaux_groupes), -1, gettext("Paramètre incorrect\n"));
-    BUG(_1990_groupe_positionne_niveau(projet->niveaux_groupes, niveau) == 0, -3);
-    
-    niveau_groupe = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
-    
+    BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, niveau), -3);
     BUGMSG(niveau_groupe->groupes, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(list_size(niveau_groupe->groupes), -1, gettext("Paramètre incorrect\n"));
-    BUG(_1990_groupe_positionne_groupe(niveau_groupe, groupe) == 0, -1);
-    
-    groupe_curr = (Groupe*)list_curr(niveau_groupe->groupes);
+    BUG(groupe_curr = _1990_groupe_positionne_groupe(niveau_groupe, groupe), -1);
     
     free(groupe_curr->nom);
     
     /* On libère tous les éléments contenus dans le groupe */
     if (groupe_curr->elements != NULL)
-    {
-        list_mvfront(groupe_curr->elements);
-        while (!list_empty(groupe_curr->elements))
-            BUG(_1990_groupe_free_element_courant(groupe_curr->elements) == 0, -3);
-        free(groupe_curr->elements);
-    }
+        g_list_free_full(groupe_curr->elements, free);
     
     /* On libère toutes les combinaisons temporaires */
     if (groupe_curr->tmp_combinaison.combinaisons != NULL)
     {
-        list_mvfront(groupe_curr->tmp_combinaison.combinaisons);
-        while (!list_empty(groupe_curr->tmp_combinaison.combinaisons))
+        while (groupe_curr->tmp_combinaison.combinaisons != NULL)
         {
-            Combinaison *combinaison = (Combinaison*)list_front(groupe_curr->tmp_combinaison.combinaisons);
+            Combinaison *combinaison = groupe_curr->tmp_combinaison.combinaisons->data;
             if (combinaison->elements != NULL)
-            {
-                list_mvfront(combinaison->elements);
-                while (!list_empty(combinaison->elements))
-                    free(list_remove_front(combinaison->elements));
-                free(combinaison->elements);
-            }
-            free(list_remove_front(groupe_curr->tmp_combinaison.combinaisons));
+                g_list_free_full(combinaison->elements, free);
+            free(combinaison);
+            groupe_curr->tmp_combinaison.combinaisons = g_list_delete_link(groupe_curr->tmp_combinaison.combinaisons, groupe_curr->tmp_combinaison.combinaisons);
         }
-        free(groupe_curr->tmp_combinaison.combinaisons);
     }
     
     /* Et enfin, on supprime l'élément courant */
-    free(list_remove_curr(niveau_groupe->groupes));
+    niveau_groupe->groupes = g_list_remove(niveau_groupe->groupes, groupe_curr);
+    free(groupe_curr);
     
     /* Après la suppression du groupe, on décale d'un numéro tous les groupes supérieurs
      * afin de ne pas avoir de séparation entre les numéros */
-    if (list_size(niveau_groupe->groupes) != 0)
+    if (niveau_groupe->groupes != NULL)
     {
-        list_mvfront(niveau_groupe->groupes);
+        list_parcours = niveau_groupe->groupes;
         do
         {
-            groupe_curr = (Groupe*)list_curr(niveau_groupe->groupes);
+            groupe_curr = list_parcours->data;
+            
             if (groupe_curr->numero > groupe)
                 groupe_curr->numero--;
+            
+            list_parcours = g_list_next(list_parcours);
         }
-        while (list_mvnext(niveau_groupe->groupes));
+        while (list_parcours != NULL);
     }
     
+    list_parcours = g_list_find(projet->niveaux_groupes, niveau_groupe);
+    
+    list_parcours = g_list_next(list_parcours);
+    
     /* On passe au niveau suivant (s'il existe) */
-    if (list_mvnext(projet->niveaux_groupes) != NULL)
+    if (list_parcours != NULL)
     {
-        niveau_groupe = (Niveau_Groupe*)list_curr(projet->niveaux_groupes);
-        if ((niveau_groupe->groupes != NULL) && (list_size(niveau_groupe->groupes) != 0))
+        niveau_groupe = list_parcours->data;
+        if (niveau_groupe->groupes != NULL)
         {
-            list_mvfront(niveau_groupe->groupes);
+            GList   *list_parcours2 = niveau_groupe->groupes;
             do
             {
                 /* On parcours tous les groupes pour vérifier si l'un possède l'élément
@@ -649,29 +614,26 @@ int _1990_groupe_free_groupe(Projet *projet, int niveau, int groupe)
                  * On ne s'arrête pas volontairement au premier élément qu'on trouve.
                  * Il est possible que quelqu'un trouve utile de pouvoir insérer un même
                  * élément dans plusieurs groupes */
-                groupe_curr = (Groupe*)list_curr(niveau_groupe->groupes);
-                if ((groupe_curr->elements != NULL) && (list_size(groupe_curr->elements) != 0))
+                groupe_curr = list_parcours2->data;
+                if (groupe_curr->elements != NULL)
                 {
-                    list_mvfront(groupe_curr->elements);
+                    GList   *list_parcours3 = groupe_curr->elements;
                     do
                     {
-                        int         dernier = 0;
-                        Element     *element = (Element*)list_curr(groupe_curr->elements);
+                        Element     *element = list_parcours3->data;
+                        
+                        list_parcours3 = g_list_next(list_parcours3);
                         
                         if (element->numero == groupe)
-                        {
-                            if (element == list_rear(groupe_curr->elements))
-                                dernier = 1;
-                            free(list_remove_curr(groupe_curr->elements));
-                            element = (Element*)list_curr(groupe_curr->elements);
-                        }
-                        if ((dernier == 0) && (element->numero > groupe))
+                            groupe_curr->elements = g_list_remove(groupe_curr->elements, element);
+                        else if (element->numero > groupe)
                             element->numero--;
                     }
-                    while (list_mvnext(groupe_curr->elements) != NULL);
+                    while (list_parcours3 != NULL);
                 }
+                list_parcours2 = g_list_next(list_parcours2);
             }
-            while (list_mvnext(niveau_groupe->groupes));
+            while (list_parcours2 != NULL);
         }
     }
     

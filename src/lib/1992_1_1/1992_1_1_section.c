@@ -38,8 +38,7 @@ int _1992_1_1_sections_init(Projet *projet)
     BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
     
     // Trivial
-    projet->beton.sections = list_init();
-    BUGMSG(projet->beton.sections, -2, gettext("Erreur d'allocation mémoire.\n"));
+    projet->beton.sections = NULL;
     
     return 0;
 }
@@ -58,26 +57,18 @@ int _1992_1_1_sections_ajout_rectangulaire(Projet *projet, double l, double h)
  *           -2 en cas d'erreur d'allocation mémoire
  */
 {
-    Beton_Section_Rectangulaire     *section_en_cours;
-    Beton_Section_Rectangulaire     section_nouvelle;
+    Beton_Section_Rectangulaire     *section_nouvelle = malloc(sizeof(Beton_Section_Rectangulaire));
     
     BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->beton.sections, -1, gettext("Paramètre incorrect\n"));
-    
-    list_mvrear(projet->beton.sections);
+    BUGMSG(section_nouvelle, -2, gettext("Erreur d'allocation mémoire.\n"));
     
     // Trivial
-    section_nouvelle.type = BETON_SECTION_RECTANGULAIRE;
-    section_nouvelle.largeur = l;
-    section_nouvelle.hauteur = h;
+    section_nouvelle->type = BETON_SECTION_RECTANGULAIRE;
+    section_nouvelle->largeur = l;
+    section_nouvelle->hauteur = h;
+    section_nouvelle->numero = g_list_length(projet->beton.sections);
     
-    section_en_cours = (Beton_Section_Rectangulaire*)list_rear(projet->beton.sections);
-    if (section_en_cours == NULL)
-        section_nouvelle.numero = 0;
-    else
-        section_nouvelle.numero = section_en_cours->numero+1;
-    
-    BUGMSG(list_insert_after(projet->beton.sections, &(section_nouvelle), sizeof(section_nouvelle)), -2, gettext("Erreur d'allocation mémoire.\n"));
+    projet->beton.sections = g_list_append(projet->beton.sections, section_nouvelle);
     
     return 0;
 }
@@ -98,13 +89,10 @@ int _1992_1_1_sections_ajout_T(Projet *projet, double lt, double la, double ht, 
  *           -2 en cas d'erreur d'allocation mémoire
  */
 {
-    Beton_Section_T     *section_en_cours;
-    Beton_Section_T     section_nouvelle;
+    Beton_Section_T     *section_nouvelle = malloc(sizeof(Beton_Section_T));
     
     BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->beton.sections, -1, gettext("Paramètre incorrect\n"));
-    
-    list_mvrear(projet->beton.sections);
+    BUGMSG(section_nouvelle, -2, gettext("Erreur d'allocation mémoire.\n"));
     
     // Les caractéristiques de la section sont les suivantes :\end{verbatim}\begin{displaymath}
     //   S = lt \cdot ht+la \cdot ha\end{displaymath}\begin{displaymath}
@@ -112,19 +100,14 @@ int _1992_1_1_sections_ajout_T(Projet *projet, double lt, double la, double ht, 
     //   I_y = \frac{lt \cdot ht^3}{12}+\frac{la \cdot ha^3}{12}+lt \cdot ht \cdot \left(\frac{ht}{2}-cdg_{haut} \right)^2+la \cdot ha \cdot \left(\frac{ha}{2}-cdg_{bas} \right)^2\texttt{  et  }I_z = \frac{ht \cdot lt^3}{12}+\frac{ha \cdot la^3}{12}\end{displaymath}\begin{displaymath}
     //   J = \frac{a \cdot b^3}{16} \cdot \left[\frac{16}{3}-3.364 \cdot \frac{b}{a} \cdot \left(1-\frac{b^4}{12 \cdot a^4}\right)\right]+\frac{aa \cdot bb^3}{16} \cdot \left[\frac{16}{3}-3.364 \cdot \frac{bb}{aa} \cdot \left(1-\frac{bb^4}{12 \cdot aa^4}\right)\right]\texttt{ avec }\substack{a=max(ht,lt)\\b=min(ht,lt)\\aa=max(ha,la)\\bb=min(ha,la)}
     //   \end{displaymath}\begin{verbatim}
-    section_nouvelle.type = BETON_SECTION_T;
-    section_nouvelle.largeur_table = lt;
-    section_nouvelle.largeur_ame = la;
-    section_nouvelle.hauteur_table = ht;
-    section_nouvelle.hauteur_ame = ha;
+    section_nouvelle->type = BETON_SECTION_T;
+    section_nouvelle->largeur_table = lt;
+    section_nouvelle->largeur_ame = la;
+    section_nouvelle->hauteur_table = ht;
+    section_nouvelle->hauteur_ame = ha;
+    section_nouvelle->numero = g_list_length(projet->beton.sections);
     
-    section_en_cours = (Beton_Section_T*)list_rear(projet->beton.sections);
-    if (section_en_cours == NULL)
-        section_nouvelle.numero = 0;
-    else
-        section_nouvelle.numero = section_en_cours->numero+1;
-    
-    BUGMSG(list_insert_after(projet->beton.sections, &(section_nouvelle), sizeof(section_nouvelle)), -2, gettext("Erreur d'allocation mémoire.\n"));
+    projet->beton.sections = g_list_append(projet->beton.sections, section_nouvelle);
     
     return 0;
 }
@@ -142,27 +125,19 @@ int _1992_1_1_sections_ajout_carre(Projet *projet, double cote)
  *           -2 en cas d'erreur d'allocation mémoire
  */
 {
-    Beton_Section_Carre     *section_en_cours;
-    Beton_Section_Carre     section_nouvelle;
+    Beton_Section_Carre     *section_nouvelle = malloc(sizeof(Beton_Section_Carre));
     
     BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->beton.sections, -1, gettext("Paramètre incorrect\n"));
-    
-    list_mvrear(projet->beton.sections);
+    BUGMSG(section_nouvelle, -2, gettext("Erreur d'allocation mémoire.\n"));
     
     // Les caractéristiques de la section sont les suivantes :\end{verbatim}\begin{displaymath}
     //   S = cote^2\texttt{  et  }cdg_{haut} = \frac{cote}{2}\texttt{  et  }cdg_{bas} = \frac{cote}{2}\texttt{  et  }cdg_{droite} = \frac{cote}{2}\texttt{  et  }cdg_{gauche} = \frac{cote}{2}\end{displaymath}\begin{displaymath}
     //   I_y = \frac{cote^4}{12}\texttt{  et  }I_z = I_y\texttt{  et  }J = \frac{cote^4}{16} \cdot \left[\frac{16}{3}-3.364 \cdot \left(1-\frac{1}{12}\right)\right]\end{displaymath}\begin{verbatim}
-    section_nouvelle.type = BETON_SECTION_CARRE;
-    section_nouvelle.cote = cote;
+    section_nouvelle->type = BETON_SECTION_CARRE;
+    section_nouvelle->cote = cote;
+    section_nouvelle->numero = g_list_length(projet->beton.sections);
     
-    section_en_cours = (Beton_Section_Carre*)list_rear(projet->beton.sections);
-    if (section_en_cours == NULL)
-        section_nouvelle.numero = 0;
-    else
-        section_nouvelle.numero = section_en_cours->numero+1;
-    
-    BUGMSG(list_insert_after(projet->beton.sections, &(section_nouvelle), sizeof(section_nouvelle)), -2, gettext("Erreur d'allocation mémoire.\n"));
+    projet->beton.sections = g_list_append(projet->beton.sections, section_nouvelle);
     
     return 0;
 }
@@ -180,28 +155,20 @@ int _1992_1_1_sections_ajout_circulaire(Projet *projet, double diametre)
  *           -2 en cas d'erreur d'allocation mémoire
  */
 {
-    Beton_Section_Circulaire    *section_en_cours;
-    Beton_Section_Circulaire    section_nouvelle;
+    Beton_Section_Circulaire    *section_nouvelle = malloc(sizeof(Beton_Section_Circulaire));
     
     BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->beton.sections, -1, gettext("Paramètre incorrect\n"));
-    
-    list_mvrear(projet->beton.sections);
+    BUGMSG(section_nouvelle, -2, gettext("Erreur d'allocation mémoire.\n"));
     
     // Les caractéristiques de la section sont les suivantes :\end{verbatim}\begin{displaymath}
     //   S = \frac{\pi \cdot diametre^2}{4}\end{displaymath}\begin{displaymath}
     //   cdg_{haut} = \frac{diametre}{2}\texttt{  et  }cdg_{bas} = \frac{diametre}{2}\texttt{  et  }cdg_{droite} = \frac{diametre}{2}\texttt{  et  }cdg_{gauche} = \frac{diametre}{2}\end{displaymath}\begin{displaymath}
     //   I_y = \frac{\pi \cdot diametre^4}{64}\texttt{  et  }I_z = I_y\texttt{  et  }J = \frac{\pi \cdot diametre^4}{32}\end{displaymath}\begin{verbatim}
-    section_nouvelle.type = BETON_SECTION_CIRCULAIRE;
-    section_nouvelle.diametre = diametre;
+    section_nouvelle->type = BETON_SECTION_CIRCULAIRE;
+    section_nouvelle->diametre = diametre;
+    section_nouvelle->numero = g_list_length(projet->beton.sections);
     
-    section_en_cours = (Beton_Section_Circulaire*)list_rear(projet->beton.sections);
-    if (section_en_cours == NULL)
-        section_nouvelle.numero = 0;
-    else
-        section_nouvelle.numero = section_en_cours->numero+1;
-    
-    BUGMSG(list_insert_after(projet->beton.sections, &(section_nouvelle), sizeof(section_nouvelle)), -2, gettext("Erreur d'allocation mémoire.\n"));
+    projet->beton.sections = g_list_append(projet->beton.sections, section_nouvelle);
     
     return 0;
 }
@@ -221,20 +188,23 @@ void* _1992_1_1_sections_cherche_numero(Projet *projet, unsigned int numero)
  *             numéro introuvable.
  */
 {
+    GList   *list_parcours;
+    
     BUGMSG(projet, NULL, gettext("Paramètre incorrect\n"));
     BUGMSG(projet->beton.sections, NULL, gettext("Paramètre incorrect\n"));
-    BUGMSG(list_size(projet->beton.sections), NULL, gettext("Paramètre incorrect\n"));
     
     // Trivial
-    list_mvfront(projet->beton.sections);
+    list_parcours = projet->beton.sections;
     do
     {
-        Beton_Section_Circulaire    *section = (Beton_Section_Circulaire*)list_curr(projet->beton.sections);
+        Beton_Section_Circulaire    *section = list_parcours->data;
         
         if (section->numero == numero)
             return section;
+        
+        list_parcours = g_list_next(list_parcours);
     }
-    while (list_mvnext(projet->beton.sections) != NULL);
+    while (list_parcours != NULL);
     
     BUGMSG(0, NULL, gettext("Section en béton n°%d introuvable.\n"), numero);
 }
@@ -1109,13 +1079,14 @@ int _1992_1_1_sections_free(Projet *projet)
  */
 {
     BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->beton.sections, -1, gettext("Paramètre incorrect\n"));
     
     // Trivial
-    while (!list_empty(projet->beton.sections))
-        free((Beton_Section_Circulaire*)list_remove_front(projet->beton.sections));
+    if (projet->beton.sections != NULL)
+    {
+        g_list_free_full(projet->beton.sections, free);
+        projet->beton.sections = NULL;
+    }
     
-    free(projet->beton.sections);
     projet->beton.sections = NULL;
     
     return 0;

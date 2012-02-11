@@ -74,7 +74,6 @@ void EF_gtk_noeud_edit_barre(GtkCellRendererText *cell, gchar *path_string, gcha
     
     BUGMSG(projet, , gettext("Paramètre incorrect\n"));
     BUGMSG(projet->ef_donnees.noeuds, , gettext("Paramètre incorrect\n"));
-    BUGMSG(list_size(projet->ef_donnees.noeuds), , gettext("Paramètre incorrect\n"));
     BUGMSG(projet->list_gtk.ef_noeud.window, , gettext("Paramètre incorrect\n"));
     BUGMSG(fake, , gettext("Erreur d'allocation mémoire.\n"));
     
@@ -134,7 +133,6 @@ void EF_gtk_noeud_edit_pos_abs(GtkCellRendererText *cell, gchar *path_string, gc
     
     BUGMSG(projet, , gettext("Paramètre incorrect\n"));
     BUGMSG(projet->ef_donnees.noeuds, , gettext("Paramètre incorrect\n"));
-    BUGMSG(list_size(projet->ef_donnees.noeuds), , gettext("Paramètre incorrect\n"));
     BUGMSG(projet->list_gtk.ef_noeud.window, , gettext("Paramètre incorrect\n"));
     BUGMSG(fake, , gettext("Erreur d'allocation mémoire.\n"));
     BUGMSG(&projet->list_gtk.m3d.data, , gettext("Paramètre incorrect\n"));
@@ -208,12 +206,13 @@ void EF_gtk_noeud_edit_pos_abs(GtkCellRendererText *cell, gchar *path_string, gc
                     objet = vue->scene->get_object_by_name(texte);
                     objet->set_position(position->x, position->y, position->z);
                     
-                    if ((projet->beton.barres != NULL) && (list_size(projet->beton.barres) != 0))
+                    if (projet->beton.barres != NULL)
                     {
-                        list_mvfront(projet->beton.barres);
+                        GList   *list_parcours = projet->beton.barres;
+                        
                         do
                         {
-                            Beton_Barre *barre = (Beton_Barre *)list_curr(projet->beton.barres);
+                            Beton_Barre *barre = (Beton_Barre *)list_parcours->data;
                             
                             if (((barre->noeud_debut) && (barre->noeud_debut->numero == i)) || ((barre->noeud_fin) && (barre->noeud_fin->numero == i)))
                             {
@@ -230,7 +229,8 @@ void EF_gtk_noeud_edit_pos_abs(GtkCellRendererText *cell, gchar *path_string, gc
                                 
                             }
                             
-                        } while (list_mvnext(projet->beton.barres) != NULL);
+                            list_parcours = g_list_next(list_parcours);
+                        } while (list_parcours != NULL);
                     }
                     
                     free(texte);
@@ -289,7 +289,6 @@ void EF_gtk_noeud_edit_pos_relat(GtkCellRendererText *cell, gchar *path_string, 
     
     BUGMSG(projet, , gettext("Paramètre incorrect\n"));
     BUGMSG(projet->ef_donnees.noeuds, , gettext("Paramètre incorrect\n"));
-    BUGMSG(list_size(projet->ef_donnees.noeuds), , gettext("Paramètre incorrect\n"));
     BUGMSG(projet->list_gtk.ef_noeud.window, , gettext("Paramètre incorrect\n"));
     BUGMSG(fake, , gettext("Erreur d'allocation mémoire.\n"));
     
@@ -395,12 +394,12 @@ void EF_gtk_noeud_edit_noeud_libre_appui(GtkCellRendererText *cell __attribute__
     GtkTreeIter         iter;
     gint                numero_noeud;
     EF_Appui            *appui = NULL;
+    GList               *list_parcours;
     
     BUGMSG(projet, , gettext("Paramètre incorrect\n"));
     BUGMSG(projet->list_gtk.ef_noeud.window, , gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->ef_donnees.appuis, , gettext("Paramètre incorrect\n"));
     
-    if (list_size(projet->ef_donnees.appuis) == 0)
+    if (projet->ef_donnees.appuis == NULL)
         return;
     
     ef_gtk = &projet->list_gtk.ef_noeud;
@@ -421,10 +420,10 @@ void EF_gtk_noeud_edit_noeud_libre_appui(GtkCellRendererText *cell __attribute__
         return;
     }
     
-    list_mvfront(projet->ef_donnees.appuis);
+    list_parcours = projet->ef_donnees.appuis;
     do
     {
-        appui = (EF_Appui *)list_curr(projet->ef_donnees.appuis);
+        appui = (EF_Appui *)list_parcours->data;
         if (strcmp(new_text, appui->nom) == 0)
         {
             EF_Noeud    *noeud = EF_noeuds_cherche_numero(projet, numero_noeud);
@@ -436,8 +435,9 @@ void EF_gtk_noeud_edit_noeud_libre_appui(GtkCellRendererText *cell __attribute__
             gtk_tree_path_free (path);
             return;
         }
+        list_parcours = g_list_next(list_parcours);
     }
-    while (list_mvnext(projet->ef_donnees.appuis) != NULL);
+    while (list_parcours != NULL);
     
     path = gtk_tree_path_new_from_string (path_string);
     
@@ -462,12 +462,12 @@ void EF_gtk_noeud_edit_noeud_barre_appui(GtkCellRendererText *cell __attribute__
     GtkTreeIter         iter;
     gint                numero_noeud;
     EF_Appui            *appui = NULL;
+    GList               *list_parcours;
     
     BUGMSG(projet, , gettext("Paramètre incorrect\n"));
     BUGMSG(projet->list_gtk.ef_noeud.window, , gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->ef_donnees.appuis, , gettext("Paramètre incorrect\n"));
     
-    if (list_size(projet->ef_donnees.appuis) == 0)
+    if (projet->ef_donnees.appuis == NULL)
         return;
     
     ef_gtk = &projet->list_gtk.ef_noeud;
@@ -488,10 +488,10 @@ void EF_gtk_noeud_edit_noeud_barre_appui(GtkCellRendererText *cell __attribute__
         return;
     }
     
-    list_mvfront(projet->ef_donnees.appuis);
+    list_parcours = projet->ef_donnees.appuis;
     do
     {
-        appui = (EF_Appui *)list_curr(projet->ef_donnees.appuis);
+        appui = (EF_Appui *)list_parcours->data;
         if (strcmp(new_text, appui->nom) == 0)
         {
             EF_Noeud    *noeud = EF_noeuds_cherche_numero(projet, numero_noeud);
@@ -503,8 +503,10 @@ void EF_gtk_noeud_edit_noeud_barre_appui(GtkCellRendererText *cell __attribute__
             gtk_tree_path_free (path);
             return;
         }
+        
+        list_parcours = g_list_next(list_parcours);
     }
-    while (list_mvnext(projet->ef_donnees.appuis) != NULL);
+    while (list_parcours != NULL);
     
     path = gtk_tree_path_new_from_string (path_string);
     
@@ -660,12 +662,13 @@ void EF_gtk_noeud(Projet *projet)
     g_list_free(list);
     
     // On ajoute les noeuds existants.
-    if ((projet->ef_donnees.noeuds != NULL) && (list_size(projet->ef_donnees.noeuds) != 0))
+    if (projet->ef_donnees.noeuds != NULL)
     {
-        list_mvfront(projet->ef_donnees.noeuds);
+        GList   *list_parcours = projet->ef_donnees.noeuds;
+        
         do
         {
-            EF_Noeud    *noeud = (EF_Noeud *)list_curr(projet->ef_donnees.noeuds);
+            EF_Noeud    *noeud = (EF_Noeud *)list_parcours->data;
             EF_Point    *point = (EF_Point *)EF_noeuds_renvoie_position(noeud);
             GtkTreeIter iter;
             
@@ -685,8 +688,10 @@ void EF_gtk_noeud(Projet *projet)
             }
             
             free(point);
+            
+            list_parcours = g_list_next(list_parcours);
         }
-        while (list_mvnext(projet->ef_donnees.noeuds) != NULL);
+        while (list_parcours != NULL);
     }
     
     ef_gtk->button_valider = gtk_button_new_from_stock(GTK_STOCK_OK);

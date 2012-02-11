@@ -86,11 +86,11 @@ void EF_gtk_charge_barre_repartie_uniforme_annuler_clicked(GtkButton *button __a
 }
 
 
-gboolean EF_gtk_charge_barre_repartie_uniforme_recupere_donnees(Projet *projet, int *num_action, LIST **barres, double *fx, double *fy, double *fz, double *mx, double *my, double *mz, gchar **description, int *repere_local, int *projection, double *a, double *b)
+gboolean EF_gtk_charge_barre_repartie_uniforme_recupere_donnees(Projet *projet, int *num_action, GList **barres, double *fx, double *fy, double *fz, double *mx, double *my, double *mz, gchar **description, int *repere_local, int *projection, double *a, double *b)
 {
     GtkWidget                                  *dialog;
     List_Gtk_EF_Charge_Barre_Repartie_Uniforme *ef_gtk;
-    LIST                                       *num_barres;
+    GList                                      *num_barres;
     GtkTextIter                                 start, end;
     gchar                                       *texte_tmp;
     GtkTextBuffer                               *textbuffer;
@@ -216,7 +216,7 @@ void EF_gtk_charge_barre_repartie_uniforme_ajouter_clicked(GtkButton *button __a
 {
     double                          fx, fy, fz, mx, my, mz, a, b;
     int                             num_action, repere_local, projection;
-    LIST                            *barres;
+    GList                           *barres;
     gchar                           *texte;
     Charge_Barre_Repartie_Uniforme  *charge;
     GtkTreeModel                    *model_action;
@@ -254,7 +254,7 @@ void EF_gtk_charge_barre_repartie_uniforme_editer_clicked(GtkButton *button __at
     List_Gtk_EF_Charge_Barre_Repartie_Uniforme *ef_gtk;
     double                          fx, fy, fz, mx, my, mz, a, b;
     int                             num_action, repere_local, projection;
-    LIST                            *barres;
+    GList                           *barres;
     gchar                           *texte;
     Charge_Barre_Repartie_Uniforme  *charge;
     
@@ -268,7 +268,7 @@ void EF_gtk_charge_barre_repartie_uniforme_editer_clicked(GtkButton *button __at
     BUG(charge = _1990_action_cherche_charge(projet, ef_gtk->action, ef_gtk->charge), );
     free(charge->description);
     charge->description = texte;
-    list_free(charge->barres, LIST_DEALLOC);
+    g_list_free(charge->barres);
     charge->barres = barres;
     charge->repere_local = repere_local;
     charge->projection = projection;
@@ -334,10 +334,10 @@ int EF_gtk_charge_barre_repartie_uniforme(Projet *projet, gint action_defaut, gi
 {
     List_Gtk_EF_Charge_Barre_Repartie_Uniforme  *ef_gtk;
     Charge_Barre_Repartie_Uniforme              *charge_barre;
+    GList                                       *list_parcours;
     
     BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
     BUGMSG(projet->actions, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(list_size(projet->actions) > 0, -1, gettext("Paramètre incorrect\n"));
     
     ef_gtk = &projet->list_gtk.ef_charge_barre_repartie_uniforme;
     
@@ -361,13 +361,14 @@ int EF_gtk_charge_barre_repartie_uniforme(Projet *projet, gint action_defaut, gi
     gtk_table_attach(GTK_TABLE(ef_gtk->table), ef_gtk->label_charge, 0, 1, 0, 1, GTK_SHRINK | GTK_FILL, GTK_SHRINK | GTK_FILL, 0, 0);
     
     ef_gtk->combobox_charge = gtk_combo_box_text_new();
-    list_mvfront(projet->actions);
+    list_parcours = projet->actions;
     do
     {
-        Action *action = list_curr(projet->actions);
+        Action *action = list_parcours->data;
         gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(ef_gtk->combobox_charge), action->description);
+        list_parcours = g_list_next(list_parcours);
     }
-    while (list_mvnext(projet->actions) != NULL);
+    while (list_parcours != NULL);
     gtk_combo_box_set_active(GTK_COMBO_BOX(ef_gtk->combobox_charge), action_defaut);
     gtk_table_attach(GTK_TABLE(ef_gtk->table), ef_gtk->combobox_charge, 1, 4, 0, 1, GTK_EXPAND | GTK_FILL, GTK_SHRINK | GTK_FILL, 0, 0);
     

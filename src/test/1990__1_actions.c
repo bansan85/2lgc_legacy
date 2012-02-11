@@ -22,8 +22,6 @@
 #include <libintl.h>
 #include <locale.h>
 
-#include <list.h>
-
 #include "1990_actions.h"
 #include "common_erreurs.h"
 

@@ -34,13 +34,13 @@
 #include "EF_noeud.h"
 
 Charge_Barre_Repartie_Uniforme *EF_charge_barre_repartie_uniforme_ajout(Projet *projet,
-  int num_action, LIST *barres, int repere_local, int projection, double a, double b,
+  int num_action, GList *barres, int repere_local, int projection, double a, double b,
   double fx, double fy, double fz, double mx, double my, double mz, const char* nom)
 /* Description : Ajoute une charge répartie uniforme à une action et le long d'une barre en
  *               lui attribuant le numéro suivant la dernière charge de l'action.
  * Paramètres : Projet *projet : la variable projet,
  *            : int num_action : numero de l'action qui contiendra la charge,
- *            : void *barre : barre qui supportera la charge,
+ *            : GList *barres : liste des barres qui supportera la charge,
  *            : int repere_local : TRUE si les charges doivent être prise dans le repère local,
  *                                 FALSE pour le repère global,
  *            : int projection : TRUE si la charge doit être projetée sur la barre,
@@ -62,66 +62,61 @@ Charge_Barre_Repartie_Uniforme *EF_charge_barre_repartie_uniforme_ajout(Projet *
  *             (list_size(projet->actions) == 0) ou
  *             (barre == NULL) ou
  *             (projection == TRUE) && (repere_local == TRUE) ou
- *             (_1990_action_cherche_numero(projet, num_action) != 0) ou
+ *             (_1990_action_cherche_numero(projet, num_action) == NULL) ou
  *             (a < 0) ou (a > l) ou
  *             (b < 0) ou (b > l) ou
  *             (a > l-b)
  *           NULL en cas d'erreur d'allocation mémoire
  */
 {
-    Action          *action_en_cours;
-    Charge_Barre_Repartie_Uniforme *charge_dernier, charge_nouveau;
+    Action                          *action_en_cours;
+    Charge_Barre_Repartie_Uniforme  *charge_nouveau = malloc(sizeof(Charge_Barre_Repartie_Uniforme));
     
     // Trivial
     BUGMSG(projet, NULL, gettext("Paramètre incorrect\n"));
     BUGMSG(projet->actions, NULL, gettext("Paramètre incorrect\n"));
-    BUGMSG(list_size(projet->actions), NULL, gettext("Paramètre incorrect\n"));
-    BUGMSG(barres, NULL, gettext("Paramètre incorrect\n"));
     BUGMSG((projection == FALSE) || (repere_local == FALSE), NULL, gettext("Paramètre incorrect\n"));
     BUGMSG(!((a < 0.) && (!(ERREUR_RELATIVE_EGALE(a, 0.)))), NULL, "a = %.20f\n", a);
     BUGMSG(!((b < 0.) && (!(ERREUR_RELATIVE_EGALE(b, 0.)))), NULL, "b = %.20f\n", b);
-    if (list_size(barres) != 0)
+    BUGMSG(charge_nouveau, NULL, gettext("Erreur d'allocation mémoire.\n"));
+    if (barres != 0)
     {
-        list_mvfront(barres);
+        GList   *list_parcours = barres;
         do
         {
-            Beton_Barre **barre_p = list_curr(barres);
-            Beton_Barre *barre = *barre_p;
+            Beton_Barre *barre = list_parcours->data;
+            
             double l = EF_noeuds_distance(barre->noeud_debut, barre->noeud_fin);
             BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), NULL, "a = %.20f\n", a);
             BUGMSG(!((b > l) && (!(ERREUR_RELATIVE_EGALE(b, l)))), NULL, "b = %.20f\n", b);
             BUGMSG(!((a > l-b) && (!(ERREUR_RELATIVE_EGALE(a, l-b)))), NULL, "a = %.20f, l = %.20f, b = %.20f\n", a, l, b);
+            
+            list_parcours = g_list_next(list_parcours);
         }
-        while (list_mvnext(barres) != NULL);
+        while (list_parcours != NULL);
     }
     
-    BUG(_1990_action_cherche_numero(projet, num_action) == 0, NULL);
-    action_en_cours = (Action*)list_curr(projet->actions);
+    BUG(action_en_cours = _1990_action_cherche_numero(projet, num_action), NULL);
     
-    charge_nouveau.type = CHARGE_BARRE_REPARTIE_UNIFORME;
-    BUGMSG(charge_nouveau.description = g_strdup_printf("%s", nom), NULL, gettext("Erreur d'allocation mémoire.\n"));
-    charge_nouveau.barres = barres;
-    charge_nouveau.repere_local = repere_local;
-    charge_nouveau.projection = projection;
-    charge_nouveau.a = a;
-    charge_nouveau.b = b;
-    charge_nouveau.fx = fx;
-    charge_nouveau.fy = fy;
-    charge_nouveau.fz = fz;
-    charge_nouveau.mx = mx;
-    charge_nouveau.my = my;
-    charge_nouveau.mz = mz;
+    charge_nouveau->type = CHARGE_BARRE_REPARTIE_UNIFORME;
+    BUGMSG(charge_nouveau->description = g_strdup_printf("%s", nom), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    charge_nouveau->barres = barres;
+    charge_nouveau->repere_local = repere_local;
+    charge_nouveau->projection = projection;
+    charge_nouveau->a = a;
+    charge_nouveau->b = b;
+    charge_nouveau->fx = fx;
+    charge_nouveau->fy = fy;
+    charge_nouveau->fz = fz;
+    charge_nouveau->mx = mx;
+    charge_nouveau->my = my;
+    charge_nouveau->mz = mz;
     
-    charge_dernier = (Charge_Barre_Repartie_Uniforme *)list_rear(action_en_cours->charges);
-    if (charge_dernier == NULL)
-        charge_nouveau.numero = 0;
-    else
-        charge_nouveau.numero = charge_dernier->numero+1;
+    charge_nouveau->numero = g_list_length(action_en_cours->charges);
     
-    list_mvrear(action_en_cours->charges);
-    BUGMSG(list_insert_after(action_en_cours->charges, &(charge_nouveau), sizeof(charge_nouveau)), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    action_en_cours->charges = g_list_append(action_en_cours->charges, charge_nouveau);
     
-    return list_curr(action_en_cours->charges);
+    return charge_nouveau;
 }
 
 
@@ -996,7 +991,7 @@ int EF_charge_barre_repartie_uniforme_free(Charge_Barre_Repartie_Uniforme *charg
     BUGMSG(charge->barres, -1, gettext("Paramètre incorrect\n"));
     
     free(charge->description);
-    list_free(charge->barres, LIST_DEALLOC);
+    g_list_free(charge->barres);
     free(charge);
     return 0;
 }

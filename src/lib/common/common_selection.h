@@ -21,13 +21,12 @@
 
 #include "config.h"
 #include "common_projet.h"
-#include <list.h>
 
 
-LIST *common_selection_renvoie_numeros(const char *texte);
-LIST *common_selection_converti_numeros_en_noeuds(LIST *liste_numeros, Projet *projet);
-LIST *common_selection_converti_numeros_en_barres(LIST *liste_numeros, Projet *projet);
-char *common_selection_converti_noeuds_en_texte(LIST *liste_noeuds);
-char *common_selection_converti_barres_en_texte(LIST *liste_barres);
+GList *common_selection_renvoie_numeros(const char *texte);
+GList *common_selection_converti_numeros_en_noeuds(GList *liste_numeros, Projet *projet);
+GList *common_selection_converti_numeros_en_barres(GList *liste_numeros, Projet *projet);
+char *common_selection_converti_noeuds_en_texte(GList *liste_noeuds);
+char *common_selection_converti_barres_en_texte(GList *liste_barres);
 
 #endif

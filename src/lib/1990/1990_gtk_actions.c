@@ -57,7 +57,6 @@ void _1990_gtk_tree_view_actions_cell_edited(GtkCellRendererText *cell __attribu
     
     BUGMSG(projet, , gettext("Paramètre incorrect\n"));
     BUGMSG(projet->actions, , gettext("Paramètre incorrect\n"));
-    BUGMSG(list_size(projet->actions), , gettext("Paramètre incorrect\n"));
     BUGMSG(projet->list_gtk._1990_actions.window, , gettext("Paramètre incorrect\n"));
     
     // On récupère l'action en cours d'édition
@@ -68,8 +67,7 @@ void _1990_gtk_tree_view_actions_cell_edited(GtkCellRendererText *cell __attribu
     gtk_tree_model_get_iter (model, &iter, path);
     gtk_tree_model_get(model, &iter, 0, &numero, 1, &description, -1);
     
-    BUG(_1990_action_cherche_numero(projet, numero) == 0, );
-    action = list_curr(projet->actions);
+    BUG(action = _1990_action_cherche_numero(projet, numero), );
     
     // On lui modifie son nom
     action->description = realloc(action->description, sizeof(gchar)*(strlen(new_text)+1));
@@ -109,7 +107,6 @@ void _1990_gtk_tree_view_charges_cell_edited(GtkCellRendererText *cell __attribu
     
     BUGMSG(projet, , gettext("Paramètre incorrect\n"));
     BUGMSG(projet->actions, , gettext("Paramètre incorrect\n"));
-    BUGMSG(list_size(projet->actions), , gettext("Paramètre incorrect\n"));
     BUGMSG(projet->list_gtk._1990_actions.window, , gettext("Paramètre incorrect\n"));
     
     // On recherche la charge en cours d'édition
@@ -160,7 +157,6 @@ void _1990_gtk_tree_view_actions_cursor_changed(GtkTreeView *tree_view __attribu
     
     BUGMSG(projet, , gettext("Paramètre incorrect\n"));
     BUGMSG(projet->actions, , gettext("Paramètre incorrect\n"));
-    BUGMSG(list_size(projet->actions), , gettext("Paramètre incorrect\n"));
     
     list_gtk_1990_actions = &projet->list_gtk._1990_actions;
     
@@ -172,22 +168,22 @@ void _1990_gtk_tree_view_actions_cursor_changed(GtkTreeView *tree_view __attribu
         return;
     gtk_tree_model_get(model, &iter, 0, &numero, 1, &nom, -1);
     
-    BUG(_1990_action_cherche_numero(projet, numero) == 0, );
-    action = list_curr(projet->actions);
+    BUG(action = _1990_action_cherche_numero(projet, numero), );
     
     // On actualise la liste des charges
     gtk_tree_store_clear(list_gtk_1990_actions->tree_store_charges);
-    if (list_size(action->charges))
+    if (action->charges != NULL)
     {
-        list_mvfront(action->charges);
+        GList   *list_parcours = action->charges;
+        
         do
         {
-            Charge_Barre_Ponctuelle *charge_tmp = list_curr(action->charges);
+            Charge_Barre_Ponctuelle *charge_tmp = list_parcours->data;
             switch (charge_tmp->type)
             {
                 case CHARGE_NOEUD :
                 {
-                    Charge_Noeud *charge = list_curr(action->charges);
+                    Charge_Noeud *charge = list_parcours->data;
                     
                     BUG(EF_gtk_charge_noeud_ajout_affichage(charge, projet, TRUE) == 0, );
                     
@@ -195,7 +191,7 @@ void _1990_gtk_tree_view_actions_cursor_changed(GtkTreeView *tree_view __attribu
                 }
                 case CHARGE_BARRE_PONCTUELLE :
                 {
-                    Charge_Barre_Ponctuelle *charge = list_curr(action->charges);
+                    Charge_Barre_Ponctuelle *charge = list_parcours->data;
                     
                     BUG(EF_gtk_charge_barre_ponctuelle_ajout_affichage(charge, projet, TRUE) == 0, );
                     
@@ -203,7 +199,7 @@ void _1990_gtk_tree_view_actions_cursor_changed(GtkTreeView *tree_view __attribu
                 }
                 case CHARGE_BARRE_REPARTIE_UNIFORME :
                 {
-                    Charge_Barre_Repartie_Uniforme *charge = list_curr(action->charges);
+                    Charge_Barre_Repartie_Uniforme *charge = list_parcours->data;
                     
                     BUG(EF_gtk_charge_barre_repartie_uniforme_ajout_affichage(charge, projet, TRUE) == 0, );
                     
@@ -215,7 +211,8 @@ void _1990_gtk_tree_view_actions_cursor_changed(GtkTreeView *tree_view __attribu
                     break;
                 }
             }
-        } while (list_mvnext(action->charges) != NULL);
+            list_parcours = g_list_next(list_parcours);
+        } while (list_parcours != NULL);
     }
     
     return;
@@ -325,7 +322,6 @@ void _1990_gtk_tree_view_actions_type_edited(GtkCellRendererText *cell __attribu
     
     BUGMSG(projet, , gettext("Paramètre incorrect\n"));
     BUGMSG(projet->actions, , gettext("Paramètre incorrect\n"));
-    BUGMSG(list_size(projet->actions), , gettext("Paramètre incorrect\n"));
     BUGMSG(projet->list_gtk._1990_actions.window, , gettext("Paramètre incorrect\n"));
     
     list_gtk_1990_actions = &projet->list_gtk._1990_actions;
@@ -342,8 +338,7 @@ void _1990_gtk_tree_view_actions_type_edited(GtkCellRendererText *cell __attribu
             break;
     }
     BUGMSG(j != _1990_action_num_bat_txt(projet->pays), , gettext("Paramètre incorrect\n"));
-    BUG(_1990_action_cherche_numero(projet, i) == 0, );
-    action = list_curr(projet->actions);
+    BUG(action = _1990_action_cherche_numero(projet, i), );
     action->type = j;
     action->psi0 = _1990_coef_psi0_bat(j, projet->pays);
     action->psi1 = _1990_coef_psi1_bat(j, projet->pays);
@@ -375,7 +370,6 @@ void _1990_gtk_tree_view_actions_psi_edited(GtkCellRendererText *cell, gchar *pa
     
     BUGMSG(projet, , gettext("Paramètre incorrect\n"));
     BUGMSG(projet->actions, , gettext("Paramètre incorrect\n"));
-    BUGMSG(list_size(projet->actions), , gettext("Paramètre incorrect\n"));
     BUGMSG(projet->list_gtk._1990_actions.window, , gettext("Paramètre incorrect\n"));
     fake = (char*)malloc(sizeof(char)*(strlen(new_text)+1));
     BUGMSG(fake, , gettext("Erreur d'allocation mémoire.\n"));
@@ -395,8 +389,7 @@ void _1990_gtk_tree_view_actions_psi_edited(GtkCellRendererText *cell, gchar *pa
         gtk_tree_store_set(list_gtk_1990_actions->tree_store_actions, &iter, column, convertion, -1);
         
         // On modifie l'action
-        BUG(_1990_action_cherche_numero(projet, i) == 0, );
-        action = list_curr(projet->actions);
+        BUG(action = _1990_action_cherche_numero(projet, i), );
         switch (column)
         {
             case 3:
@@ -438,6 +431,7 @@ void _1990_gtk_menu_nouvelle_action_activate(GtkMenuItem *menuitem, Projet *proj
 {
     List_Gtk_1990_Actions   *list_gtk_1990_actions;
     int                     i = 0;
+    GList                   *list_parcours;
     
     BUGMSG(projet, , gettext("Paramètre incorrect\n"));
     BUGMSG(projet->actions, , gettext("Paramètre incorrect\n"));
@@ -445,24 +439,23 @@ void _1990_gtk_menu_nouvelle_action_activate(GtkMenuItem *menuitem, Projet *proj
     
     list_gtk_1990_actions = &projet->list_gtk._1990_actions;
     
-    BUGMSG(list_size(list_gtk_1990_actions->menu_list_widget_action), , gettext("Paramètre incorrect\n"));
+    BUGMSG(g_list_length(list_gtk_1990_actions->menu_list_widget_action) != 0, , gettext("Paramètre incorrect\n"));
     
-    list_mvfront(list_gtk_1990_actions->menu_list_widget_action);
+    list_parcours = list_gtk_1990_actions->menu_list_widget_action;
     do
     {
-        if ((GTK_IS_MENU_TOOL_BUTTON(menuitem)) || (*(GtkMenuItem **)list_curr(list_gtk_1990_actions->menu_list_widget_action) == menuitem))
+        if ((GTK_IS_MENU_TOOL_BUTTON(menuitem)) || ((GtkMenuItem *)list_parcours->data == menuitem))
         {
             char        *tmp;
             Action      *action;
             GtkTreePath *path;
             
-            BUGMSG(tmp = g_strdup_printf("%s %zu", gettext("Sans nom"), list_size(projet->actions)), , gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(tmp = g_strdup_printf("%s %u", gettext("Sans nom"), g_list_length(projet->actions)), , gettext("Erreur d'allocation mémoire.\n"));
             // On crée l'action en fonction de la catégorie sélectionnée dans le menu déroulant.
-            BUG(_1990_action_ajout(projet, i, tmp) == 0, );
+            BUG(action = _1990_action_ajout(projet, i, tmp), );
             free(tmp);
             
             // On actualise l'affichage
-            action = list_curr(projet->actions);
             gtk_tree_store_append(list_gtk_1990_actions->tree_store_actions, &action->Iter, NULL);
             gtk_tree_store_set(list_gtk_1990_actions->tree_store_actions, &action->Iter, 0, action->numero, 1, action->description, 2, _1990_action_type_bat_txt(action->type, projet->pays), 3, action->psi0, 4, action->psi1, 5, action->psi2, -1);
             path = gtk_tree_model_get_path(GTK_TREE_MODEL(list_gtk_1990_actions->tree_store_actions), &action->Iter);
@@ -472,7 +465,8 @@ void _1990_gtk_menu_nouvelle_action_activate(GtkMenuItem *menuitem, Projet *proj
             return;
         }
         i++;
-    } while (list_mvnext(list_gtk_1990_actions->menu_list_widget_action));
+        list_parcours = g_list_next(list_parcours);
+    } while (list_parcours != NULL);
     
     BUGMSG(NULL, , gettext("Paramètre incorrect\n"));
 }
@@ -491,8 +485,6 @@ void _1990_gtk_menu_suppr_action_activate(GtkToolButton *toolbutton __attribute_
     unsigned int    numero_action;
     
     BUGMSG(projet, , gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->actions, , gettext("Paramètre incorrect\n"));
-    BUGMSG(list_size(projet->actions), , gettext("Paramètre incorrect\n"));
     BUGMSG(projet->list_gtk._1990_actions.window, , gettext("Paramètre incorrect\n"));
     
     list_gtk_1990_actions = &projet->list_gtk._1990_actions;
@@ -507,17 +499,20 @@ void _1990_gtk_menu_suppr_action_activate(GtkToolButton *toolbutton __attribute_
     gtk_tree_store_remove(list_gtk_1990_actions->tree_store_actions, &iter);
     gtk_tree_store_clear(list_gtk_1990_actions->tree_store_charges);
     BUG(_1990_action_free_num(projet, numero_action) == 0, );
-    list_mvfront(projet->actions);
-    if (list_size(projet->actions) != 0)
+    if (projet->actions != NULL)
     {
+        GList   *list_parcours = projet->actions;
+        
         do
         {
-            Action *action = list_curr(projet->actions);
+            Action *action = list_parcours->data;
             
             // On met à jour les actions qui ont eu leur numérotation modifiée.
             if (action->numero >= numero_action)
                 gtk_tree_store_set(list_gtk_1990_actions->tree_store_actions, &action->Iter, 0, action->numero, -1);
-        } while (list_mvnext(projet->actions) != NULL);
+            
+            list_parcours = g_list_next(list_parcours);
+        } while (list_parcours != NULL);
     }
     return;
 }
@@ -536,7 +531,6 @@ void _1990_gtk_menu_nouvelle_charge_nodale_activate(GtkMenuItem *menuitem __attr
     
     BUGMSG(projet, , gettext("Paramètre incorrect\n"));
     BUGMSG(projet->actions, , gettext("Paramètre incorrect\n"));
-    BUGMSG(list_size(projet->actions) != 0, , gettext("Paramètre incorrect\n"));
     BUGMSG(projet->list_gtk._1990_actions.window, , gettext("Paramètre incorrect\n"));
     
     if (!gtk_tree_selection_get_selected(projet->list_gtk._1990_actions.tree_select_actions, &model_action, &iter_action))
@@ -559,7 +553,6 @@ void _1990_gtk_menu_nouvelle_charge_barre_ponctuelle_activate(GtkMenuItem *menui
     
     BUGMSG(projet, , gettext("Paramètre incorrect\n"));
     BUGMSG(projet->actions, , gettext("Paramètre incorrect\n"));
-    BUGMSG(list_size(projet->actions) != 0, , gettext("Paramètre incorrect\n"));
     BUGMSG(projet->list_gtk._1990_actions.window, , gettext("Paramètre incorrect\n"));
     
     if (!gtk_tree_selection_get_selected(projet->list_gtk._1990_actions.tree_select_actions, &model_action, &iter_action))
@@ -584,7 +577,6 @@ void _1990_gtk_menu_nouvelle_charge_barre_repartie_uniforme_activate(GtkMenuItem
     
     BUGMSG(projet, , gettext("Paramètre incorrect\n"));
     BUGMSG(projet->actions, , gettext("Paramètre incorrect\n"));
-    BUGMSG(list_size(projet->actions) != 0, , gettext("Paramètre incorrect\n"));
     BUGMSG(projet->list_gtk._1990_actions.window, , gettext("Paramètre incorrect\n"));
     
     if (!gtk_tree_selection_get_selected(projet->list_gtk._1990_actions.tree_select_actions, &model_action, &iter_action))
@@ -651,7 +643,6 @@ void _1990_gtk_menu_suppr_charge_clicked(GtkToolButton *toolbutton __attribute__
     
     BUGMSG(projet, , gettext("Paramètre incorrect\n"));
     BUGMSG(projet->actions, , gettext("Paramètre incorrect\n"));
-    BUGMSG(list_size(projet->actions), , gettext("Paramètre incorrect\n"));
     BUGMSG(projet->list_gtk._1990_actions.window, , gettext("Paramètre incorrect\n"));
     
     list_gtk_1990_actions = &projet->list_gtk._1990_actions;
@@ -703,7 +694,6 @@ void _1990_gtk_menu_edit_charge_clicked(GtkToolButton *toolbutton __attribute__(
     
     BUGMSG(projet, , gettext("Paramètre incorrect\n"));
     BUGMSG(projet->actions, , gettext("Paramètre incorrect\n"));
-    BUGMSG(list_size(projet->actions), , gettext("Paramètre incorrect\n"));
     BUGMSG(projet->list_gtk._1990_actions.window, , gettext("Paramètre incorrect\n"));
     
     list_gtk_1990_actions = &projet->list_gtk._1990_actions;
@@ -886,13 +876,12 @@ void _1990_gtk_actions(Projet *projet)
     list_gtk_1990_actions->img_action_ajout = gtk_image_new_from_stock(GTK_STOCK_ADD, GTK_ICON_SIZE_SMALL_TOOLBAR);
     list_gtk_1990_actions->item_action_ajout = gtk_menu_tool_button_new(list_gtk_1990_actions->img_action_ajout, gettext("Ajouter"));
     list_gtk_1990_actions->menu_type_list_action = gtk_menu_new();
-    list_gtk_1990_actions->menu_list_widget_action = list_init();
-    BUGMSG(list_gtk_1990_actions->menu_list_widget_action, , gettext("Erreur d'allocation mémoire.\n"));
+    list_gtk_1990_actions->menu_list_widget_action = NULL;
     for (i=0;i<_1990_action_num_bat_txt(projet->pays);i++)
     {
         w_temp = gtk_menu_item_new_with_label(_1990_action_type_bat_txt(i, projet->pays));
         gtk_menu_shell_append(GTK_MENU_SHELL(list_gtk_1990_actions->menu_type_list_action), w_temp);
-        BUGMSG(list_insert_after(list_gtk_1990_actions->menu_list_widget_action, &w_temp, sizeof(&w_temp)), , gettext("Erreur d'allocation mémoire.\n"));
+        list_gtk_1990_actions->menu_list_widget_action = g_list_append(list_gtk_1990_actions->menu_list_widget_action, w_temp);
         g_signal_connect(w_temp, "activate", G_CALLBACK(_1990_gtk_menu_nouvelle_action_activate), projet);
     }
     gtk_menu_tool_button_set_menu(GTK_MENU_TOOL_BUTTON(list_gtk_1990_actions->item_action_ajout), list_gtk_1990_actions->menu_type_list_action);
@@ -949,22 +938,21 @@ void _1990_gtk_actions(Projet *projet)
     list_gtk_1990_actions->img_charge_ajout = gtk_image_new_from_stock(GTK_STOCK_ADD, GTK_ICON_SIZE_SMALL_TOOLBAR);
     list_gtk_1990_actions->item_charge_ajout = gtk_menu_tool_button_new(list_gtk_1990_actions->img_charge_ajout, gettext("Ajouter"));
     list_gtk_1990_actions->menu_type_list_charge = gtk_menu_new();
-    list_gtk_1990_actions->menu_list_widget_charge = list_init();
-    BUGMSG(list_gtk_1990_actions->menu_list_widget_charge, , gettext("Erreur d'allocation mémoire.\n"));
+    list_gtk_1990_actions->menu_list_widget_charge = NULL;
     
     w_temp = gtk_menu_item_new_with_label(gettext("Charge nodale"));
     gtk_menu_shell_append(GTK_MENU_SHELL(list_gtk_1990_actions->menu_type_list_charge), w_temp);
-    BUGMSG(list_insert_after(list_gtk_1990_actions->menu_list_widget_charge, &w_temp, sizeof(&w_temp)), , gettext("Erreur d'allocation mémoire.\n"));
+    list_gtk_1990_actions->menu_list_widget_charge = g_list_append(list_gtk_1990_actions->menu_list_widget_charge, w_temp);
     g_signal_connect(w_temp, "activate", G_CALLBACK(_1990_gtk_menu_nouvelle_charge_nodale_activate), projet);
     gtk_menu_tool_button_set_menu(GTK_MENU_TOOL_BUTTON(list_gtk_1990_actions->item_charge_ajout), list_gtk_1990_actions->menu_type_list_charge);
     w_temp = gtk_menu_item_new_with_label(gettext("Charge ponctuelle sur barre"));
     gtk_menu_shell_append(GTK_MENU_SHELL(list_gtk_1990_actions->menu_type_list_charge), w_temp);
-    BUGMSG(list_insert_after(list_gtk_1990_actions->menu_list_widget_charge, &w_temp, sizeof(&w_temp)), , gettext("Erreur d'allocation mémoire.\n"));
+    list_gtk_1990_actions->menu_list_widget_charge = g_list_append(list_gtk_1990_actions->menu_list_widget_charge, w_temp);
     g_signal_connect(w_temp, "activate", G_CALLBACK(_1990_gtk_menu_nouvelle_charge_barre_ponctuelle_activate), projet);
     gtk_menu_tool_button_set_menu(GTK_MENU_TOOL_BUTTON(list_gtk_1990_actions->item_charge_ajout), list_gtk_1990_actions->menu_type_list_charge);
     w_temp = gtk_menu_item_new_with_label(gettext("Charge répartie uniforme sur barre"));
     gtk_menu_shell_append(GTK_MENU_SHELL(list_gtk_1990_actions->menu_type_list_charge), w_temp);
-    BUGMSG(list_insert_after(list_gtk_1990_actions->menu_list_widget_charge, &w_temp, sizeof(&w_temp)), , gettext("Erreur d'allocation mémoire.\n"));
+    list_gtk_1990_actions->menu_list_widget_charge = g_list_append(list_gtk_1990_actions->menu_list_widget_charge, w_temp);
     g_signal_connect(w_temp, "activate", G_CALLBACK(_1990_gtk_menu_nouvelle_charge_barre_repartie_uniforme_activate), projet);
     gtk_menu_tool_button_set_menu(GTK_MENU_TOOL_BUTTON(list_gtk_1990_actions->item_charge_ajout), list_gtk_1990_actions->menu_type_list_charge);
     gtk_widget_show_all(list_gtk_1990_actions->menu_type_list_charge);
@@ -988,18 +976,19 @@ void _1990_gtk_actions(Projet *projet)
     gtk_drag_dest_set(GTK_WIDGET(list_gtk_1990_actions->tree_view_actions), GTK_DEST_DEFAULT_ALL, drag_targets_actions, 1, GDK_ACTION_MOVE);
     
     // Affiche la liste des actions
-    if (list_size(projet->actions) != 0)
+    if (projet->actions != NULL)
     {
-        list_mvfront(projet->actions);
+        GList   *list_parcours = projet->actions;
+        
         do
         {
-            Action  *action = (Action*)list_curr(projet->actions); 
+            Action  *action = list_parcours->data;
             
             gtk_tree_store_append(list_gtk_1990_actions->tree_store_actions, &action->Iter, NULL);
             gtk_tree_store_set(list_gtk_1990_actions->tree_store_actions, &action->Iter, 0, action->numero, 1, action->description, 2, _1990_action_type_bat_txt(action->type, projet->pays), 3, action->psi0, 4, action->psi1, 5, action->psi2, -1);
             
-            
-        } while (list_mvnext(projet->actions) != NULL);
+            list_parcours = g_list_next(list_parcours);
+        } while (list_parcours != NULL);
     }
     
     gtk_window_set_modal(GTK_WINDOW(list_gtk_1990_actions->window), TRUE);

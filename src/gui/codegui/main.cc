@@ -23,7 +23,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include <list.h>
 #include "common_text.h"
 #include "common_erreurs.h"
 #include "common_maths.h"
@@ -53,7 +52,6 @@ extern "C" {
 #include <gtk/gtk.h>
 #include <time.h>
 #include <M3d++.hpp>
-#include <list.h>
 
 
 int main(int argc, char *argv[])
@@ -100,26 +98,26 @@ int main(int argc, char *argv[])
     BUG(projet = projet_init(PAYS_FR), -1);
     
     // Création des actions
-    BUG(_1990_action_ajout(projet, 0, "Poids propre") == 0, -1); // Poids propre
-    BUG(_1990_action_ajout(projet, 2, "Chargement") == 0, -1); // 2 Exploitation
-    BUG(_1990_action_ajout(projet, 16, "Neige") == 0, -1); // 3 Neige
-    BUG(_1990_action_ajout(projet, 17, "Vent") == 0, -1); // 4 Vent
+    BUG(_1990_action_ajout(projet, 0, "Poids propre"), -1); // Poids propre
+    BUG(_1990_action_ajout(projet, 2, "Chargement"), -1); // 2 Exploitation
+    BUG(_1990_action_ajout(projet, 16, "Neige"), -1); // 3 Neige
+    BUG(_1990_action_ajout(projet, 17, "Vent"), -1); // 4 Vent
     
     // Création des groupes d'actions
     BUG(_1990_groupe_ajout_niveau(projet) == 0, -1);
     BUG(_1990_groupe_ajout_niveau(projet) == 0, -1);
     BUG(_1990_groupe_ajout_niveau(projet) == 0, -1);
     BUG(_1990_groupe_ajout_niveau(projet) == 0, -1);
-    BUG(_1990_groupe_ajout_groupe(projet, 0, GROUPE_COMBINAISON_AND, _1990_action_type_bat_txt(0, projet->pays)) == 0, -1); // Charges permanentes
-    BUG(_1990_groupe_ajout_groupe(projet, 0, GROUPE_COMBINAISON_AND, _1990_action_type_bat_txt(3, projet->pays)) == 0, -1); // Charges d'exploitation
-    BUG(_1990_groupe_ajout_groupe(projet, 0, GROUPE_COMBINAISON_XOR, _1990_action_type_bat_txt(14, projet->pays)) == 0, -1); // Neige
-    BUG(_1990_groupe_ajout_groupe(projet, 0, GROUPE_COMBINAISON_XOR, _1990_action_type_bat_txt(17, projet->pays)) == 0, -1); // Vent
-    BUG(_1990_groupe_ajout_groupe(projet, 1, GROUPE_COMBINAISON_AND, _1990_action_type_bat_txt(0, projet->pays)) == 0, -1); // Charges permanentes
-    BUG(_1990_groupe_ajout_groupe(projet, 1, GROUPE_COMBINAISON_AND, _1990_action_type_bat_txt(3, projet->pays)) == 0, -1); // Charges d'exploitation
-    BUG(_1990_groupe_ajout_groupe(projet, 1, GROUPE_COMBINAISON_OR, "Charges climatiques") == 0, -1); // Charges climatiques
-    BUG(_1990_groupe_ajout_groupe(projet, 2, GROUPE_COMBINAISON_AND, "Charges permanentes") == 0, -1); // Tout
-    BUG(_1990_groupe_ajout_groupe(projet, 2, GROUPE_COMBINAISON_OR, "Charges variables") == 0, -1); // Tout
-    BUG(_1990_groupe_ajout_groupe(projet, 3, GROUPE_COMBINAISON_AND, "Combinaisons complètes") == 0, -1); // Tout
+    BUG(_1990_groupe_ajout_groupe(projet, 0, GROUPE_COMBINAISON_AND, _1990_action_type_bat_txt(0, projet->pays)), -1); // Charges permanentes
+    BUG(_1990_groupe_ajout_groupe(projet, 0, GROUPE_COMBINAISON_AND, _1990_action_type_bat_txt(3, projet->pays)), -1); // Charges d'exploitation
+    BUG(_1990_groupe_ajout_groupe(projet, 0, GROUPE_COMBINAISON_XOR, _1990_action_type_bat_txt(14, projet->pays)), -1); // Neige
+    BUG(_1990_groupe_ajout_groupe(projet, 0, GROUPE_COMBINAISON_XOR, _1990_action_type_bat_txt(17, projet->pays)), -1); // Vent
+    BUG(_1990_groupe_ajout_groupe(projet, 1, GROUPE_COMBINAISON_AND, _1990_action_type_bat_txt(0, projet->pays)), -1); // Charges permanentes
+    BUG(_1990_groupe_ajout_groupe(projet, 1, GROUPE_COMBINAISON_AND, _1990_action_type_bat_txt(3, projet->pays)), -1); // Charges d'exploitation
+    BUG(_1990_groupe_ajout_groupe(projet, 1, GROUPE_COMBINAISON_OR, "Charges climatiques"), -1); // Charges climatiques
+    BUG(_1990_groupe_ajout_groupe(projet, 2, GROUPE_COMBINAISON_AND, "Charges permanentes"), -1); // Tout
+    BUG(_1990_groupe_ajout_groupe(projet, 2, GROUPE_COMBINAISON_OR, "Charges variables"), -1); // Tout
+    BUG(_1990_groupe_ajout_groupe(projet, 3, GROUPE_COMBINAISON_AND, "Combinaisons complètes"), -1); // Tout
     BUG(_1990_groupe_ajout_element(projet, 0, 0, 0) == 0, -1);
     BUG(_1990_groupe_ajout_element(projet, 0, 1, 1) == 0, -1);
     BUG(_1990_groupe_ajout_element(projet, 0, 2, 2) == 0, -1);
@@ -169,19 +167,19 @@ int main(int argc, char *argv[])
 //    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 1, 2, -1, 0) == 0, -1);
     
     // Ajout de l'action ponctuelle
-    LIST    *tmp1, *tmp2;
+    GList   *tmp1, *tmp2;
     BUG(tmp1 = common_selection_renvoie_numeros("1;3-5"), -1);
     BUG(tmp2 = common_selection_converti_numeros_en_noeuds(tmp1, projet), -1);
     BUG(EF_charge_noeud_ajout(projet, 0, tmp2, 1000., 500., 1000., 3000., 5000., 5000., "test1"), -1);
-    list_free(tmp1, LIST_DEALLOC);
+    g_list_free(tmp1);
     BUG(tmp1 = common_selection_renvoie_numeros("0-2"), -1);
     BUG(tmp2 = common_selection_converti_numeros_en_barres(tmp1, projet), -1);
     BUG(EF_charge_barre_ponctuelle_ajout(projet, 0, tmp2, FALSE, 2.3, 10000., 9000., 8000., 7000., 6000., 5000., "test2"), -1);
-    list_free(tmp1, LIST_DEALLOC);
+    g_list_free(tmp1);
     BUG(tmp1 = common_selection_renvoie_numeros("0-2/2"), -1);
     BUG(tmp2 = common_selection_converti_numeros_en_barres(tmp1, projet), -1);
     BUG(EF_charge_barre_repartie_uniforme_ajout(projet, 0, tmp2, FALSE, FALSE, 1.5, 1.0, 10000., 9000., 8000., 7000., 6000., 5000., "test3"), -1);
-    list_free(tmp1, LIST_DEALLOC);
+    g_list_free(tmp1);
     
     // Initialise les éléments nécessaire pour l'ajout des rigidités
     BUG(EF_calculs_initialise(projet) == 0, -1);
