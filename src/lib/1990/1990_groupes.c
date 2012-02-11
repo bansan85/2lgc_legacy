@@ -75,7 +75,7 @@ int _1990_groupe_ajout_niveau(Projet *projet)
 }
 
 
-Element *_1990_groupe_positionne_element(Groupe *groupe, int numero)
+Element *_1990_groupe_positionne_element(Groupe *groupe, unsigned int numero)
 /* Description : Positionne l'élément courant d'un groupe en fonction de son numéro
  * Paramètres : Groupe *groupe : groupe à analyser
  *            : int numero : numéro de l'élément à trouver
@@ -109,7 +109,7 @@ Element *_1990_groupe_positionne_element(Groupe *groupe, int numero)
 }
 
 
-Groupe *_1990_groupe_positionne_groupe(Niveau_Groupe *niveau, int numero)
+Groupe *_1990_groupe_positionne_groupe(Niveau_Groupe *niveau, unsigned int numero)
 /* Description : Renvoie le groupe d'un niveau en fonction de son numéro
  * Paramètres : Niveau_Groupe *niveau : niveau à analyser
  *            : int numero : numéro du groupe à trouver
@@ -142,7 +142,7 @@ Groupe *_1990_groupe_positionne_groupe(Niveau_Groupe *niveau, int numero)
 }
 
 
-Niveau_Groupe *_1990_groupe_positionne_niveau(Projet *projet, int numero)
+Niveau_Groupe *_1990_groupe_positionne_niveau(Projet *projet, unsigned int numero)
 /* Description : Positionne le niveau courant en fonction de son numéro
  * Paramètres : Projet *projet : la variable projet
  *            : int numero : numéro du groupe à trouver
@@ -176,7 +176,7 @@ Niveau_Groupe *_1990_groupe_positionne_niveau(Projet *projet, int numero)
 }
 
 
-Groupe *_1990_groupe_ajout_groupe(Projet *projet, int niveau,
+Groupe *_1990_groupe_ajout_groupe(Projet *projet, unsigned int niveau,
   Type_Groupe_Combinaison type_combinaison, const char* nom)
 /* Description : Ajoute un groupe au niveau choisi avec le type de combinaison spécifié.
  * Paramètres : Projet *projet : la variable projet
@@ -219,8 +219,8 @@ Groupe *_1990_groupe_ajout_groupe(Projet *projet, int niveau,
 }
 
 
-int _1990_groupe_ajout_element(Projet *projet, unsigned int niveau, int groupe_n,
-  int num_element)
+int _1990_groupe_ajout_element(Projet *projet, unsigned int niveau, unsigned int groupe_n,
+  unsigned int num_element)
 /* Description : Ajoute l'élément 'num_element' au groupe 'groupe_n' du niveau 'niveau'.
  *                 L'élément appartient au niveau directement inférieur à 'niveau' et possède
  *                   le numéro 'num_element'.
@@ -424,7 +424,7 @@ int _1990_groupe_affiche_tout(Projet *projet)
 }
 
 
-int _1990_groupe_free_element(Projet *projet, int niveau, int groupe, int element)
+int _1990_groupe_free_element(Projet *projet, unsigned int niveau, unsigned int groupe, unsigned int element)
 /* Description : Libère l'élément désigné par les paramètres.
  * Paramètres : Projet *projet : variable projet
  *            : int niveau : le numéro du niveau contenant l'élément
@@ -458,7 +458,7 @@ int _1990_groupe_free_element(Projet *projet, int niveau, int groupe, int elemen
 }
 
 
-int _1990_groupe_free_niveau(Projet *projet, int niveau)
+int _1990_groupe_free_niveau(Projet *projet, unsigned int niveau)
 /* Description : Libère le niveau en cours ainsi que tous les niveaux supérieurs
  * Paramètres : Projet *projet : la variable projet
  *            : numéro du niveau à libérer
@@ -532,7 +532,7 @@ int _1990_groupe_free_niveau(Projet *projet, int niveau)
 }
 
 
-int _1990_groupe_free_groupe(Projet *projet, int niveau, int groupe)
+int _1990_groupe_free_groupe(Projet *projet, unsigned int niveau, unsigned int groupe)
 /* Description : Libère le groupe demandé. La suppression d'un groupe entraine la modification
  *                 du numéro (moins 1) des groupes supérieurs du même niveau et sa suppression
  *                 dans le nuveau supérieur (si existant) lorsqu'il est présent dans une

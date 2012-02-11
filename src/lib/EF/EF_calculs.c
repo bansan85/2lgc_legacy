@@ -59,12 +59,12 @@ int EF_calculs_initialise(Projet *projet)
     // Allocation de la mémoire nécessaire pour contenir la position de chaque degré de
     //   liberté des noeuds (via noeuds_pos_partielle et noeuds_pos_complete) dans la matrice
     //   de rigidité globale partielle et complète.
-    BUGMSG(projet->ef_donnees.noeuds_pos_partielle = (int**)malloc(sizeof(int*)*g_list_length(projet->ef_donnees.noeuds)), -2, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(projet->ef_donnees.noeuds_pos_partielle = (unsigned int**)malloc(sizeof(unsigned int*)*g_list_length(projet->ef_donnees.noeuds)), -2, gettext("Erreur d'allocation mémoire.\n"));
     for (i=0;i<g_list_length(projet->ef_donnees.noeuds);i++)
-        BUGMSG(projet->ef_donnees.noeuds_pos_partielle[i] = (int*)malloc(6*sizeof(int)), -2, gettext("Erreur d'allocation mémoire.\n"));
-    BUGMSG(projet->ef_donnees.noeuds_pos_complete = (int**)malloc(sizeof(int*)*g_list_length(projet->ef_donnees.noeuds)), -2, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(projet->ef_donnees.noeuds_pos_partielle[i] = (unsigned int*)malloc(6*sizeof(unsigned int)), -2, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(projet->ef_donnees.noeuds_pos_complete = (unsigned int**)malloc(sizeof(unsigned int*)*g_list_length(projet->ef_donnees.noeuds)), -2, gettext("Erreur d'allocation mémoire.\n"));
     for (i=0;i<g_list_length(projet->ef_donnees.noeuds);i++)
-        BUGMSG(projet->ef_donnees.noeuds_pos_complete[i] = (int*)malloc(6*sizeof(int)), -2, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(projet->ef_donnees.noeuds_pos_complete[i] = (unsigned int*)malloc(6*sizeof(unsigned int)), -2, gettext("Erreur d'allocation mémoire.\n"));
     
     // Détermination du nombre de colonnes pour la matrice de rigidité complète et partielle :
     // nb_col_partielle = 0.
@@ -110,22 +110,22 @@ int EF_calculs_initialise(Projet *projet)
             
             if (appui->ux == EF_APPUI_LIBRE)
                 { projet->ef_donnees.noeuds_pos_partielle[noeud->numero][0] = nb_col_partielle; nb_col_partielle++; }
-            else projet->ef_donnees.noeuds_pos_partielle[noeud->numero][0] = -1;
+            else projet->ef_donnees.noeuds_pos_partielle[noeud->numero][0] = G_MAXUINT;
             if (appui->uy == EF_APPUI_LIBRE)
                 { projet->ef_donnees.noeuds_pos_partielle[noeud->numero][1] = nb_col_partielle; nb_col_partielle++; }
-            else projet->ef_donnees.noeuds_pos_partielle[noeud->numero][1] = -1;
+            else projet->ef_donnees.noeuds_pos_partielle[noeud->numero][1] = G_MAXUINT;
             if (appui->uz == EF_APPUI_LIBRE)
                 { projet->ef_donnees.noeuds_pos_partielle[noeud->numero][2] = nb_col_partielle; nb_col_partielle++; }
-            else projet->ef_donnees.noeuds_pos_partielle[noeud->numero][2] = -1;
+            else projet->ef_donnees.noeuds_pos_partielle[noeud->numero][2] = G_MAXUINT;
             if (appui->rx == EF_APPUI_LIBRE)
                 { projet->ef_donnees.noeuds_pos_partielle[noeud->numero][3] = nb_col_partielle; nb_col_partielle++; }
-            else projet->ef_donnees.noeuds_pos_partielle[noeud->numero][3] = -1;
+            else projet->ef_donnees.noeuds_pos_partielle[noeud->numero][3] = G_MAXUINT;
             if (appui->ry == EF_APPUI_LIBRE)
                 { projet->ef_donnees.noeuds_pos_partielle[noeud->numero][4] = nb_col_partielle; nb_col_partielle++; }
-            else projet->ef_donnees.noeuds_pos_partielle[noeud->numero][4] = -1;
+            else projet->ef_donnees.noeuds_pos_partielle[noeud->numero][4] = G_MAXUINT;
             if (appui->rz == EF_APPUI_LIBRE)
                 { projet->ef_donnees.noeuds_pos_partielle[noeud->numero][5] = nb_col_partielle; nb_col_partielle++; }
-            else projet->ef_donnees.noeuds_pos_partielle[noeud->numero][5] = -1;
+            else projet->ef_donnees.noeuds_pos_partielle[noeud->numero][5] = G_MAXUINT;
         }
         list_parcours = g_list_next(list_parcours);
     }
@@ -227,8 +227,8 @@ int EF_calculs_genere_mat_rig(Projet *projet)
     ai = (long*)projet->ef_donnees.triplet_rigidite_partielle->i;
     aj = (long*)projet->ef_donnees.triplet_rigidite_partielle->j;
     ax = (double*)projet->ef_donnees.triplet_rigidite_partielle->x;
-    umfpack_dl_triplet_to_col(projet->ef_donnees.triplet_rigidite_partielle->nrow, projet->ef_donnees.triplet_rigidite_partielle->ncol, projet->ef_donnees.triplet_rigidite_partielle->nnz, ai, aj, ax, projet->ef_donnees.ap, projet->ef_donnees.ai, projet->ef_donnees.ax, NULL);
-    umfpack_dl_symbolic(projet->ef_donnees.triplet_rigidite_partielle->nrow, projet->ef_donnees.triplet_rigidite_partielle->ncol, projet->ef_donnees.ap, projet->ef_donnees.ai, projet->ef_donnees.ax, &symbolic, NULL, NULL);
+    umfpack_dl_triplet_to_col((long int)projet->ef_donnees.triplet_rigidite_partielle->nrow, (long int)projet->ef_donnees.triplet_rigidite_partielle->ncol, (long int)projet->ef_donnees.triplet_rigidite_partielle->nnz, ai, aj, ax, projet->ef_donnees.ap, projet->ef_donnees.ai, projet->ef_donnees.ax, NULL);
+    umfpack_dl_symbolic((long int)projet->ef_donnees.triplet_rigidite_partielle->nrow, (long int)projet->ef_donnees.triplet_rigidite_partielle->ncol, projet->ef_donnees.ap, projet->ef_donnees.ai, projet->ef_donnees.ax, &symbolic, NULL, NULL);
     BUGMSG(symbolic, -2, gettext("Erreur d'allocation mémoire.\n"));
     umfpack_dl_numeric(projet->ef_donnees.ap, projet->ef_donnees.ai, projet->ef_donnees.ax, symbolic, &projet->ef_donnees.numeric, NULL, NULL);
     BUGMSG(projet->ef_donnees.numeric, -2, gettext("Erreur d'allocation mémoire.\n"));
@@ -340,7 +340,7 @@ int EF_calculs_moment_hyper_z(Barre_Info_EF *infos, double phia, double phib,
 }
 
 
-double EF_calculs_resid(long *Ap, long *Ai, double *Ax, double *b, int n, double *x)
+double EF_calculs_resid(long *Ap, long *Ai, double *Ax, double *b, unsigned int n, double *x)
 /* Description : Détermine le résidu lors de la résolution du système matriciel pour obtenir
  *               les déplacements aux noeuds (A.x = b).
  * Paramètres : long *Ap   : paramètres représentant la matrice
@@ -389,7 +389,7 @@ double EF_calculs_resid(long *Ap, long *Ai, double *Ax, double *b, int n, double
 }
 
 
-int EF_calculs_resoud_charge(Projet *projet, int num_action)
+int EF_calculs_resoud_charge(Projet *projet, unsigned int num_action)
 /* Description : Détermine à partir de la matrice de rigidité partielle factorisée les
  *               déplacements et les efforts dans les noeuds pour l'action demandée ainsi
  *               que la courbe des sollicitations dans les barres.
@@ -477,17 +477,17 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
                         {
                             EF_Noeud     *noeud = list_parcours2->data;
                             
-                            if (projet->ef_donnees.noeuds_pos_partielle[noeud->numero][0] != -1)
+                            if (projet->ef_donnees.noeuds_pos_partielle[noeud->numero][0] != G_MAXUINT)
                                 ax[projet->ef_donnees.noeuds_pos_partielle[noeud->numero][0]] += charge_noeud->fx;
-                            if (projet->ef_donnees.noeuds_pos_partielle[noeud->numero][1] != -1)
+                            if (projet->ef_donnees.noeuds_pos_partielle[noeud->numero][1] != G_MAXUINT)
                                 ax[projet->ef_donnees.noeuds_pos_partielle[noeud->numero][1]] += charge_noeud->fy;
-                            if (projet->ef_donnees.noeuds_pos_partielle[noeud->numero][2] != -1)
+                            if (projet->ef_donnees.noeuds_pos_partielle[noeud->numero][2] != G_MAXUINT)
                                 ax[projet->ef_donnees.noeuds_pos_partielle[noeud->numero][2]] += charge_noeud->fz;
-                            if (projet->ef_donnees.noeuds_pos_partielle[noeud->numero][3] != -1)
+                            if (projet->ef_donnees.noeuds_pos_partielle[noeud->numero][3] != G_MAXUINT)
                                 ax[projet->ef_donnees.noeuds_pos_partielle[noeud->numero][3]] += charge_noeud->mx;
-                            if (projet->ef_donnees.noeuds_pos_partielle[noeud->numero][4] != -1)
+                            if (projet->ef_donnees.noeuds_pos_partielle[noeud->numero][4] != G_MAXUINT)
                                 ax[projet->ef_donnees.noeuds_pos_partielle[noeud->numero][4]] += charge_noeud->my;
-                            if (projet->ef_donnees.noeuds_pos_partielle[noeud->numero][5] != -1)
+                            if (projet->ef_donnees.noeuds_pos_partielle[noeud->numero][5] != G_MAXUINT)
                                 ax[projet->ef_donnees.noeuds_pos_partielle[noeud->numero][5]] += charge_noeud->mz;
                             ax3[projet->ef_donnees.noeuds_pos_complete[noeud->numero][0]] += charge_noeud->fx;
                             ax3[projet->ef_donnees.noeuds_pos_complete[noeud->numero][1]] += charge_noeud->fy;
@@ -745,13 +745,13 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
                             {
                                 if (ai2[i] < 6)
                                 {
-                                    if (projet->ef_donnees.noeuds_pos_partielle[noeud_debut->numero][ai2[i]] != -1)
+                                    if (projet->ef_donnees.noeuds_pos_partielle[noeud_debut->numero][ai2[i]] != G_MAXUINT)
                                         ax[projet->ef_donnees.noeuds_pos_partielle[noeud_debut->numero][ai2[i]]] += ax2[i];
                                     ax3[projet->ef_donnees.noeuds_pos_complete[noeud_debut->numero][ai2[i]]] += ax2[i];
                                 }
                                 else
                                 {
-                                    if (projet->ef_donnees.noeuds_pos_partielle[noeud_fin->numero][ai2[i]-6] != -1)
+                                    if (projet->ef_donnees.noeuds_pos_partielle[noeud_fin->numero][ai2[i]-6] != G_MAXUINT)
                                         ax[projet->ef_donnees.noeuds_pos_partielle[noeud_fin->numero][ai2[i]-6]] += ax2[i];
                                     ax3[projet->ef_donnees.noeuds_pos_complete[noeud_fin->numero][ai2[i]-6]] += ax2[i];
                                 }
@@ -1053,13 +1053,13 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
                                 {
                                     if (ai4[j] < 6)
                                     {
-                                        if (projet->ef_donnees.noeuds_pos_partielle[noeud_debut->numero][ai4[j]] != -1)
+                                        if (projet->ef_donnees.noeuds_pos_partielle[noeud_debut->numero][ai4[j]] != G_MAXUINT)
                                             ax[projet->ef_donnees.noeuds_pos_partielle[noeud_debut->numero][ai4[j]]] += ax4[j];
                                         ax3[projet->ef_donnees.noeuds_pos_complete[noeud_debut->numero][ai4[j]]] += ax4[j];
                                     }
                                     else
                                     {
-                                        if (projet->ef_donnees.noeuds_pos_partielle[noeud_fin->numero][ai4[j]-6] != -1)
+                                        if (projet->ef_donnees.noeuds_pos_partielle[noeud_fin->numero][ai4[j]-6] != G_MAXUINT)
                                             ax[projet->ef_donnees.noeuds_pos_partielle[noeud_fin->numero][ai4[j]-6]] += ax4[j];
                                         ax3[projet->ef_donnees.noeuds_pos_complete[noeud_fin->numero][ai4[j]-6]] += ax4[j];
                                     }
@@ -1105,7 +1105,7 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
     {
         ax2 = (double*)triplet_force_partielle->x;
         BUGMSG(umfpack_dl_solve(UMFPACK_A, projet->ef_donnees.ap, projet->ef_donnees.ai, projet->ef_donnees.ax, ax, ax2, projet->ef_donnees.numeric, NULL, NULL) == UMFPACK_OK, -2, gettext("Erreur lors de la résolution de la matrice.\n"));
-        projet->ef_donnees.residu = EF_calculs_resid(projet->ef_donnees.ap, projet->ef_donnees.ai, projet->ef_donnees.ax, ax2, projet->ef_donnees.triplet_rigidite_partielle->nrow, ax);
+        projet->ef_donnees.residu = EF_calculs_resid(projet->ef_donnees.ap, projet->ef_donnees.ai, projet->ef_donnees.ax, ax2, (unsigned int)projet->ef_donnees.triplet_rigidite_partielle->nrow, ax);
         BUG(!isnan(projet->ef_donnees.residu), -3);
         printf("Residu sur les déplacements : %g\n", projet->ef_donnees.residu);
         for (i=0;i<projet->ef_donnees.rigidite_matrice_partielle->nrow;i++)
@@ -1130,7 +1130,7 @@ int EF_calculs_resoud_charge(Projet *projet, int num_action)
         for (k=0;k<6;k++)
         {
             ai2[i*6+k] = i*6+k; aj2[i*6+k] = 0;
-            if (projet->ef_donnees.noeuds_pos_partielle[i][k] == -1)
+            if (projet->ef_donnees.noeuds_pos_partielle[i][k] == G_MAXUINT)
                 ax2[i*6+k] = 0.;
             else
             {

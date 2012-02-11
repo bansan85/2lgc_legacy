@@ -28,6 +28,6 @@ int EF_calculs_moment_hyper_y(Barre_Info_EF *infos, double phia, double phib,
   double *ma, double *mb);
 int EF_calculs_moment_hyper_z(Barre_Info_EF *infos, double phia, double phib,
   double *ma, double *mb);
-int EF_calculs_resoud_charge(Projet *projet, int num_action);
+int EF_calculs_resoud_charge(Projet *projet, unsigned int num_action);
 
 #endif

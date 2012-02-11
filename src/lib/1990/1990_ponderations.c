@@ -256,7 +256,8 @@ int _1990_ponderations_genere_un(Projet *projet, GList **ponderations_destinatio
                 do
                 {
                     Combinaison_Element *combinaison_element;
-                    int                 categorie, pond;
+                    unsigned int        categorie;
+                    double              pond;
                     
                     combinaison_element = list_parcours2->data;
                     categorie = _1990_action_categorie_bat(combinaison_element->action->type, projet->pays);

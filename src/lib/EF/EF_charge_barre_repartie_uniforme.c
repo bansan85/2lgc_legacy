@@ -34,7 +34,7 @@
 #include "EF_noeud.h"
 
 Charge_Barre_Repartie_Uniforme *EF_charge_barre_repartie_uniforme_ajout(Projet *projet,
-  int num_action, GList *barres, int repere_local, int projection, double a, double b,
+  unsigned int num_action, GList *barres, int repere_local, int projection, double a, double b,
   double fx, double fy, double fz, double mx, double my, double mz, const char* nom)
 /* Description : Ajoute une charge répartie uniforme à une action et le long d'une barre en
  *               lui attribuant le numéro suivant la dernière charge de l'action.

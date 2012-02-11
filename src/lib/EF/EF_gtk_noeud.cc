@@ -125,7 +125,7 @@ void EF_gtk_noeud_edit_pos_abs(GtkCellRendererText *cell, gchar *path_string, gc
     GtkTreeModel            *model;
     GtkTreePath             *path;
     GtkTreeIter             iter;
-    gint                    i;
+    unsigned int            i;
     char                    *fake = (char*)malloc(sizeof(char)*(strlen(new_text)+1));
     double                  convertion;
     EF_Noeud                *noeud;
@@ -142,8 +142,7 @@ void EF_gtk_noeud_edit_pos_abs(GtkCellRendererText *cell, gchar *path_string, gc
     path = gtk_tree_path_new_from_string(path_string);
     
     gtk_tree_model_get_iter(model, &iter, path);
-    
-    i = gtk_tree_path_get_indices(path)[0];
+    gtk_tree_model_get(model, &iter, 0, &i, -1);
     
     // On vérifie si le texte contient bien un nombre flottant
     if (sscanf(new_text, "%lf%s", &convertion, fake) == 1)
@@ -551,7 +550,7 @@ void EF_gtk_noeud(Projet *projet)
     gtk_notebook_insert_page(GTK_NOTEBOOK(ef_gtk->notebook), ef_gtk->table_noeud_barre, ef_gtk->label_noeud_barre, -1);
     
     // Le treeview : 0 : numero, 1 : x, 2 : y, 3 : z, 4 : appui/
-    ef_gtk->tree_store_libre = gtk_tree_store_new(5, G_TYPE_INT, G_TYPE_DOUBLE, G_TYPE_DOUBLE, G_TYPE_DOUBLE, G_TYPE_STRING);
+    ef_gtk->tree_store_libre = gtk_tree_store_new(5, G_TYPE_UINT, G_TYPE_DOUBLE, G_TYPE_DOUBLE, G_TYPE_DOUBLE, G_TYPE_STRING);
     ef_gtk->tree_view_libre = (GtkTreeView*)gtk_tree_view_new_with_model(GTK_TREE_MODEL(ef_gtk->tree_store_libre));
     ef_gtk->tree_select_libre = gtk_tree_view_get_selection(ef_gtk->tree_view_libre);
     ef_gtk->scroll_libre = gtk_scrolled_window_new(NULL, NULL);
@@ -603,7 +602,7 @@ void EF_gtk_noeud(Projet *projet)
     g_list_free(list);
     
     // Le treeview : 0 : numero, 1 : x, 2 : y, 3 : z, 4 : appui, 5 : barre, 6 : position relative
-    ef_gtk->tree_store_barre = gtk_tree_store_new(7, G_TYPE_INT, G_TYPE_DOUBLE, G_TYPE_DOUBLE, G_TYPE_DOUBLE, G_TYPE_STRING, G_TYPE_INT, G_TYPE_DOUBLE);
+    ef_gtk->tree_store_barre = gtk_tree_store_new(7, G_TYPE_UINT, G_TYPE_DOUBLE, G_TYPE_DOUBLE, G_TYPE_DOUBLE, G_TYPE_STRING, G_TYPE_UINT, G_TYPE_DOUBLE);
     ef_gtk->tree_view_barre = (GtkTreeView*)gtk_tree_view_new_with_model(GTK_TREE_MODEL(ef_gtk->tree_store_barre));
     ef_gtk->tree_select_barre = gtk_tree_view_get_selection(ef_gtk->tree_view_barre);
     ef_gtk->scroll_barre = gtk_scrolled_window_new(NULL, NULL);

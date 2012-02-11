@@ -150,7 +150,8 @@ int m3d_camera_axe_x_z(Projet *projet)
     vue = (SGlobalData*)m3d->data;
     
     if (vue->camera == NULL)
-        vue->camera = new CM3dCamera (x, y*1.1, z, x, 0., z, 90, x_max-x_min, z_max-z_min);
+        // TODO
+        vue->camera = new CM3dCamera (x, y*1.1, z, x, 0., z, 90, (int)(x_max-x_min), (int)(z_max-z_min));
     else
     {
         vue->camera->set_position(x, y, z);
@@ -234,7 +235,8 @@ int m3d_barre(Projet *projet, Beton_Barre *barre)
             }
             tout->set_smooth(GOURAUD);
             BUG(_1992_1_1_barres_angle_rotation(barre, &y, &z) == 0, -3);
-            tout->rotations(0., -y/M_PI*180., z/M_PI*180.);
+            // TODO
+            tout->rotations(0., (int)(-y/M_PI*180.), (int)(z/M_PI*180.));
             BUG(p_d = EF_noeuds_renvoie_position(barre->noeud_debut), -3);
             BUG(p_f = EF_noeuds_renvoie_position(barre->noeud_fin), -3);
             tout->set_position((p_d->x+p_f->x)/2., (p_d->y+p_f->y)/2., (p_d->z+p_f->z)/2.);
@@ -315,7 +317,8 @@ int m3d_barre(Projet *projet, Beton_Barre *barre)
             tout->set_ambient_reflexion(0.8);
             tout->set_smooth(GOURAUD);
             BUG(_1992_1_1_barres_angle_rotation(barre, &y, &z) == 0, -3);
-            tout->rotations(0., -y/M_PI*180., z/M_PI*180.);
+            //TODO
+            tout->rotations(0., (int)(-y/M_PI*180.), (int)(z/M_PI*180.));
             BUG(p_d = EF_noeuds_renvoie_position(barre->noeud_debut), -3);
             BUG(p_f = EF_noeuds_renvoie_position(barre->noeud_fin), -3);
             tout->set_position((p_d->x+p_f->x)/2., (p_d->y+p_f->y)/2., (p_d->z+p_f->z)/2.);
@@ -377,7 +380,8 @@ int m3d_barre(Projet *projet, Beton_Barre *barre)
             tout->set_ambient_reflexion(0.8);
             tout->set_smooth(GOURAUD);
             BUG(_1992_1_1_barres_angle_rotation(barre, &y, &z) == 0, -3);
-            tout->rotations(0., -y/M_PI*180., z/M_PI*180.);
+            //TODO
+            tout->rotations(0., (int)(-y/M_PI*180.), (int)(z/M_PI*180.));
             BUG(p_d = EF_noeuds_renvoie_position(barre->noeud_debut), -3);
             BUG(p_f = EF_noeuds_renvoie_position(barre->noeud_fin), -3);
             tout->set_position((p_d->x+p_f->x)/2., (p_d->y+p_f->y)/2., (p_d->z+p_f->z)/2.);
@@ -422,7 +426,8 @@ int m3d_barre(Projet *projet, Beton_Barre *barre)
             tout->set_ambient_reflexion(0.8);
             tout->set_smooth(GOURAUD);
             BUG(_1992_1_1_barres_angle_rotation(barre, &y, &z) == 0, -3);
-            tout->rotations(0., -y/M_PI*180., z/M_PI*180.);
+            //TODO
+            tout->rotations(0., (int)(-y/M_PI*180.), (int)(z/M_PI*180.));
             BUG(p_d = EF_noeuds_renvoie_position(barre->noeud_debut), -3);
             BUG(p_f = EF_noeuds_renvoie_position(barre->noeud_fin), -3);
             tout->set_position((p_d->x+p_f->x)/2., (p_d->y+p_f->y)/2., (p_d->z+p_f->z)/2.);

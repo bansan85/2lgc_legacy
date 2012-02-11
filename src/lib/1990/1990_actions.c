@@ -34,7 +34,7 @@
 #include "EF_charge_barre_repartie_uniforme.h"
 
 
-char* _1990_action_type_bat_txt_eu(int type)
+char* _1990_action_type_bat_txt_eu(unsigned int type)
 /* Description : renvoie la description des types de charge pour les bâtiments de la norme
  *                 européenne.
  *               FONCTION INTERNE. Utiliser _1990_action_type_bat_txt.
@@ -87,7 +87,7 @@ char* _1990_action_type_bat_txt_eu(int type)
 }
 
 
-char* _1990_action_type_bat_txt_fr(int type)
+char* _1990_action_type_bat_txt_fr(unsigned int type)
 /* Description : renvoie la description des types de charge pour les bâtiments de la norme
  *                 française.
  *               FONCTION INTERNE. Utiliser _1990_action_type_bat_txt.
@@ -150,7 +150,7 @@ char* _1990_action_type_bat_txt_fr(int type)
 }
 
 
-char* _1990_action_type_bat_txt(int type, Type_Pays pays)
+char* _1990_action_type_bat_txt(unsigned int type, Type_Pays pays)
 /* Description : renvoie la description des types de charge pour les bâtiments en fonction de
  *                 la norme demandée.
  * Paramètres : int type : type de charge
@@ -172,7 +172,7 @@ char* _1990_action_type_bat_txt(int type, Type_Pays pays)
 }
 
 
-Action_Categorie _1990_action_categorie_bat_eu(int type)
+unsigned int _1990_action_categorie_bat_eu(unsigned int type)
 /* Description : renvoie la categorie d'une action pour les combinaisons d'action des bâtiments
  *                 selon la norme européenne.
  *               FONCTION INTERNE. Utiliser _1990_action_categorie_bat.
@@ -203,7 +203,7 @@ Action_Categorie _1990_action_categorie_bat_eu(int type)
 }
 
 
-Action_Categorie _1990_action_categorie_bat_fr(int type)
+unsigned int _1990_action_categorie_bat_fr(unsigned int type)
 /* Description : renvoie la catégorie d'une action pour les combinaisons d'action des bâtiments
  *                 selon la norme française.
  *               FONCTION INTERNE. Utiliser _1990_action_categorie_bat.
@@ -237,7 +237,7 @@ Action_Categorie _1990_action_categorie_bat_fr(int type)
 }
 
 
-Action_Categorie _1990_action_categorie_bat(int type, Type_Pays pays)
+unsigned int _1990_action_categorie_bat(unsigned int type, Type_Pays pays)
 /* Description : renvoie la catégorie d'une action pour les combinaisons d'action des bâtiments
  *                 en fonction du pays.
  * Paramètres : int type : type de l'action
@@ -259,7 +259,7 @@ Action_Categorie _1990_action_categorie_bat(int type, Type_Pays pays)
 }
 
 
-int _1990_action_num_bat_txt(Type_Pays pays)
+unsigned int _1990_action_num_bat_txt(Type_Pays pays)
 /* Description : renvoie le nombre de catégorie d'actions des bâtiments en fonction du pays.
  * Paramètres : Type_Pays pays : le numéro du pays
  * Valeur renvoyée :
@@ -297,7 +297,7 @@ int _1990_action_init(Projet *projet)
 }
 
 
-Action *_1990_action_ajout(Projet *projet, int type, const char* description)
+Action *_1990_action_ajout(Projet *projet, unsigned int type, const char* description)
 /* Description : ajoute une nouvelle action à la liste des actions en lui attribuant le numéro
  *                 suivant le dernier relachement existant.
  * Paramètres : Projet *projet : la variable projet
@@ -700,7 +700,7 @@ int _1990_action_affiche_tout(Projet *projet)
 }
 
 
-int _1990_action_affiche_resultats(Projet *projet, int num_action)
+int _1990_action_affiche_resultats(Projet *projet, unsigned int num_action)
 /* Description : Affiche tous les résultats d'une action
  * Paramètres : Projet *projet : la variable projet
  *            : int num_action : numéro de l'action

@@ -189,7 +189,7 @@ int EF_appuis_ajout(Projet *projet, const char *nom, Type_EF_Appui x, Type_EF_Ap
 }
 
 
-EF_Appui* EF_appuis_cherche_numero(Projet *projet, int numero)
+EF_Appui* EF_appuis_cherche_numero(Projet *projet, unsigned int numero)
 /* Description : Renvoie l'appui correspondant au numéro souhaité
  * Paramètres : Projet *projet : la variable projet
  *            : int numero : le numéro de l'appui

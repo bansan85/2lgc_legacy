@@ -24,7 +24,7 @@
 #include "common_erreurs.h"
 #include "common_projet.h"
 
-double _1990_coef_psi0_bat_eu(int type)
+double _1990_coef_psi0_bat_eu(unsigned int type)
 /* Description : renvoie le coefficient psi0 indiqué par la norme européenne pour les batiments
  *                 FONCTION INTERNE. Utiliser _1990_coef_psi0_bat.
  * Paramètres : int type : type de l'action
@@ -74,7 +74,7 @@ double _1990_coef_psi0_bat_eu(int type)
     }
 }
 
-double _1990_coef_psi1_bat_eu(int type)
+double _1990_coef_psi1_bat_eu(unsigned int type)
 /* Description : renvoie le coefficient psi1 indiqué par la norme européenne pour les batiments
  *                 FONCTION INTERNE. Utiliser _1990_coef_psi1_bat.
  * Paramètres : int type : type de l'action
@@ -124,7 +124,7 @@ double _1990_coef_psi1_bat_eu(int type)
     }
 }
 
-double _1990_coef_psi2_bat_eu(int type)
+double _1990_coef_psi2_bat_eu(unsigned int type)
 /* Description : renvoie le coefficient psi2 indiqué par la norme européenne pour les batiments
  *                 FONCTION INTERNE. Utiliser _1990_coef_psi2_bat.
  * Paramètres : int type : type de l'action
@@ -174,7 +174,7 @@ double _1990_coef_psi2_bat_eu(int type)
     }
 }
 
-double _1990_coef_psi0_bat_fr(int type)
+double _1990_coef_psi0_bat_fr(unsigned int type)
 /* Description : renvoie le coefficient psi0 indiqué par la norme française pour les batiments.
  *                 FONCTION INTERNE. Utiliser _1990_coef_psi0_bat.
  * Paramètres : int type : type de l'action
@@ -234,7 +234,7 @@ double _1990_coef_psi0_bat_fr(int type)
     }
 }
 
-double _1990_coef_psi1_bat_fr(int type)
+double _1990_coef_psi1_bat_fr(unsigned int type)
 /* Description : renvoie le coefficient psi1 indiqué par la norme française pour les batiments.
  *                 FONCTION INTERNE. Utiliser _1990_coef_psi1_bat.
  * Paramètres : int type : type de l'action
@@ -294,7 +294,7 @@ double _1990_coef_psi1_bat_fr(int type)
     }
 }
 
-double _1990_coef_psi2_bat_fr(int type)
+double _1990_coef_psi2_bat_fr(unsigned int type)
 /* Description : renvoie le coefficient psi2 indiqué par la norme française pour les batiments.
  *                 FONCTION INTERNE. Utiliser _1990_coef_psi2_bat.
  * Paramètres : int type : type de l'action
@@ -354,7 +354,7 @@ double _1990_coef_psi2_bat_fr(int type)
     }
 }
 
-double _1990_coef_psi0_bat(int type, Type_Pays pays)
+double _1990_coef_psi0_bat(unsigned int type, Type_Pays pays)
 /* Description : renvoie le coefficient psi0 en fonction de la norme du pays spécifié pour les
  *                 batiments.
  * Paramètres : int type : type de l'action
@@ -373,7 +373,7 @@ double _1990_coef_psi0_bat(int type, Type_Pays pays)
     }
 }
 
-double _1990_coef_psi1_bat(int type, Type_Pays pays)
+double _1990_coef_psi1_bat(unsigned int type, Type_Pays pays)
 /* Description : renvoie le coefficient psi1 en fonction de la norme du pays spécifié pour les
  *                 batiments.
  * Paramètres : int type : type de l'action
@@ -392,7 +392,7 @@ double _1990_coef_psi1_bat(int type, Type_Pays pays)
     }
 }
 
-double _1990_coef_psi2_bat(int type, Type_Pays pays)
+double _1990_coef_psi2_bat(unsigned int type, Type_Pays pays)
 /* Description : renvoie le coefficient psi2 en fonction de la norme du pays spécifié pour les
  *                 batiments.
  * Paramètres : int type : type de l'action

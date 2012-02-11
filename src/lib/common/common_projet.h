@@ -116,8 +116,8 @@ typedef struct __List_Gtk_EF_Charge_Noeud
     GtkWidget       *window;
     GtkWidget       *table;
     
-    gint            action;
-    gint            charge;
+    unsigned int    action;
+    unsigned int    charge;
     
     GtkWidget       *label_charge;
     GtkWidget       *combobox_charge;
@@ -154,8 +154,8 @@ typedef struct __List_Gtk_EF_Charge_Barre_Ponctuelle
     GtkWidget       *window;
     GtkWidget       *table;
     
-    gint            action;
-    gint            charge;
+    unsigned int    action;
+    unsigned int    charge;
     
     GtkWidget       *label_charge;
     GtkWidget       *combobox_charge;
@@ -196,8 +196,8 @@ typedef struct __List_Gtk_EF_Charge_Barre_Repartie_Uniforme
     GtkWidget       *window;
     GtkWidget       *table;
     
-    gint            action;
-    gint            charge;
+    unsigned int    action;
+    unsigned int    charge;
     
     GtkWidget       *label_charge;
     GtkWidget       *combobox_charge;
@@ -348,7 +348,7 @@ typedef enum __Charge_Type
 
 typedef struct __EF_Appui
 {
-    int             numero;         // Numéro de l'appui
+    unsigned int    numero;         // Numéro de l'appui
     char            *nom;
     Type_EF_Appui   ux;              // Degré de liberté de la direction x
     void            *ux_donnees;     // Données complémentaire si nécessaire.
@@ -374,10 +374,10 @@ typedef enum __Type_Noeud
 
 typedef struct __EF_Noeud
 {
-    int         numero;
-    Type_Noeud  type;
-    void        *data; // Contient les données permettant de récupérer les coordonnées en fonction dy type de noeud.
-    EF_Appui    *appui;
+    unsigned int    numero;
+    Type_Noeud      type;
+    void            *data; // Contient les données permettant de récupérer les coordonnées en fonction dy type de noeud.
+    EF_Appui        *appui;
 } EF_Noeud;
 
 
@@ -543,7 +543,7 @@ typedef struct __Charge_Barre_Ponctuelle
 #endif
     char                *description;
     GList               *barres;
-    int                 repere_local;
+    gboolean            repere_local;
     double              position; // Position de la charge ponctuelle en mètre
                                   // depuis le début de la barre
     double              fx;
@@ -565,8 +565,8 @@ typedef struct __Charge_Barre_Repartie_Uniforme
 #endif    
     char                *description;
     GList               *barres;
-    int                 repere_local;
-    int                 projection;
+    gboolean            repere_local;
+    gboolean            projection;
     double              a; // Position du début de la charge répartie par rapport au début
     double              b;   // Position de la fin de la charge par rapport à la fin
     double              fx;
@@ -595,12 +595,12 @@ typedef struct __Troncon // Définition de la structure Troncon qui contient une
 
 typedef struct __Fonction
 {
-    int          nb_troncons;    /* Les fonctions n'étant pas forcément continues le long de
+    unsigned int     nb_troncons;    /* Les fonctions n'étant pas forcément continues le long de
                                   * la barre (par exemple de part et d'une charge ponctuelle),
     * il est nécessaire de définir plusieurs tronçons avec pour chaque tronçon sa fonction.
     * nb_troncons défini le nombre de tronçons que possède la fonction.*/
     
-    Troncon      *troncons;      /* Tableau dynamique contenant les fonctions continues par
+    Troncon          *troncons;      /* Tableau dynamique contenant les fonctions continues par
                                   * tronçon. */
 } Fonction;
 
@@ -609,7 +609,7 @@ typedef struct __Action
 {
     char            *description;
     unsigned int    numero;
-    int             type;  // Les catégories sont conformes à _1990_action_type
+    unsigned int    type;  // Les catégories sont conformes à _1990_action_type
     GList           *charges;
     int             flags;
     double          psi0;       // valeur_combinaison
@@ -649,10 +649,10 @@ typedef struct __Ponderation
 
 typedef struct __Element
 {
-    int         numero;
+    unsigned int    numero;
 #ifdef ENABLE_GTK
-    GtkTreeIter Iter;         // Pour la fenêtre groupes
-    int         Iter_expand;
+    GtkTreeIter     Iter;         // Pour la fenêtre groupes
+    int             Iter_expand;
 #endif
 } Element;
 
@@ -681,7 +681,7 @@ typedef struct __Combinaisons
 typedef struct __Groupe
 {
     char                    *nom;
-    int                     numero;
+    unsigned int            numero;
     Type_Groupe_Combinaison type_combinaison;
     GList                   *elements;
     Combinaisons            tmp_combinaison;
@@ -694,7 +694,7 @@ typedef struct __Groupe
 
 typedef struct __Niveau_Groupe
 {
-    int             niveau;
+    unsigned int    niveau;
     GList           *groupes;
 #ifdef ENABLE_GTK
     GtkTreeIter     Iter;                 // Pour la fenêtre groupes
@@ -782,8 +782,8 @@ typedef struct __EF
     GList               *appuis;       // Liste des types d'appuis
     GList               *relachements; // Liste des types de relâchements des barres.
     
-    int                 **noeuds_pos_partielle; // Etabli une corrélation entre le degré de 
-    int                 **noeuds_pos_complete;  // liberté (x, y, z, rx, ry, rz) d'un noeud
+    unsigned int        **noeuds_pos_partielle; // Etabli une corrélation entre le degré de 
+    unsigned int        **noeuds_pos_complete;  // liberté (x, y, z, rx, ry, rz) d'un noeud
                                                 // et sa position dans la matrice de rigidité
     // globale partielle et complète. Par partielle, il faut comprendre la matrice de rigidité
     // globale sans les lignes et les colonnes dont les déplacements sont connus ; cette même

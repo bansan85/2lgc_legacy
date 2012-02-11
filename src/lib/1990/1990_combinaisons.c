@@ -493,8 +493,7 @@ int _1990_combinaisons_genere_and(Projet *projet, Niveau_Groupe *niveau, Groupe 
                 /* transition est utilisée de façon temporaire pour dupliquer nouvelles_combinaisons en cas de besoin */
                 GList           *transition = NULL;
                 GList           *list_parcours2, *list_parcours3;
-                unsigned int    j;
-                int             i, nbboucle;
+                unsigned int    j, i, nbboucle;
                 
                 /* On duplique les combinaisons actuellement dans nouvelles_combinaisons autant
                  * de fois (moins 1) qu'il y a d'éléments dans le groupe de la passe actuelle.
@@ -595,9 +594,9 @@ int _1990_combinaisons_genere_or(Projet *projet, Niveau_Groupe *niveau, Groupe *
     {
         for (i=0;i<boucle;i++)
         {
-            int         parcours_bits = i;
-            int         action_predominante = 0;
-            Combinaison *nouvelle_combinaison = malloc(sizeof(Combinaison));
+            unsigned int    parcours_bits = i;
+            int             action_predominante = 0;
+            Combinaison     *nouvelle_combinaison = malloc(sizeof(Combinaison));
             
             BUGMSG(nouvelle_combinaison, -2, gettext("Erreur d'allocation mémoire.\n"));
             nouvelle_combinaison->elements = NULL;
@@ -655,8 +654,8 @@ int _1990_combinaisons_genere_or(Projet *projet, Niveau_Groupe *niveau, Groupe *
         
         for (i=0;i<boucle;i++)
         {
-            int     parcours_bits = i;
-            GList   *nouvelles_combinaisons;
+            unsigned int    parcours_bits = i;
+            GList           *nouvelles_combinaisons;
             
             nouvelles_combinaisons = NULL;
             
