@@ -23,9 +23,9 @@
 #include "common_projet.h"
 
 
-Charge_Barre_Ponctuelle *EF_charge_barre_ponctuelle_ajout(Projet *projet, int num_action,
-  GList *barre, int repere_local, double a, double fx, double fy, double fz, double mx,
-  double my, double mz, const char* nom);
+Charge_Barre_Ponctuelle *EF_charge_barre_ponctuelle_ajout(Projet *projet,
+  unsigned int num_action, GList *barre, int repere_local, double a, double fx, double fy,
+  double fz, double mx, double my, double mz, const char* nom);
 int EF_charge_barre_ponctuelle_mx(Beton_Barre *barre, unsigned int discretisation,
   double position, Barre_Info_EF *infos, double mx, double *ma, double *mb);
 int EF_charge_barre_ponctuelle_def_ang_iso_y(Beton_Barre *barre, unsigned int discretisation,

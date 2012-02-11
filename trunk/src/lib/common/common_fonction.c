@@ -99,7 +99,7 @@ int common_fonction_scinde_troncon(Fonction* fonction, double coupure)
  *           -2 en cas d'erreur d'allocation mémoire
  */
 {
-    int i, j;
+    unsigned int i, j;
     
     BUGMSG(fonction, -1, gettext("Paramètre incorrect\n"));
     BUGMSG(fonction->nb_troncons, -1, gettext("Paramètre incorrect\n"));
@@ -117,8 +117,8 @@ int common_fonction_scinde_troncon(Fonction* fonction, double coupure)
         fonction->nb_troncons++;
         fonction->troncons = (Troncon*)realloc(fonction->troncons, fonction->nb_troncons*sizeof(Troncon));
         BUGMSG(fonction->troncons, -2, gettext("Erreur d'allocation mémoire.\n"));
-        for(i=fonction->nb_troncons-2;i>=0;i--)
-            memcpy(&(fonction->troncons[i+1]), &(fonction->troncons[i]), sizeof(Troncon));
+        for(i=fonction->nb_troncons-1;i>0;i--)
+            memcpy(&(fonction->troncons[i]), &(fonction->troncons[i-1]), sizeof(Troncon));
         fonction->troncons[0].debut_troncon = coupure;
         fonction->troncons[0].fin_troncon = fonction->troncons[1].debut_troncon;
         fonction->troncons[0].x0 = 0.;
@@ -152,8 +152,8 @@ int common_fonction_scinde_troncon(Fonction* fonction, double coupure)
                 fonction->nb_troncons++;
                 fonction->troncons = (Troncon*)realloc(fonction->troncons, fonction->nb_troncons*sizeof(Troncon));
                 BUGMSG(fonction->troncons, -2, gettext("Erreur d'allocation mémoire.\n"));
-                for(j=fonction->nb_troncons-2;j>=i;j--)
-                    memcpy(&(fonction->troncons[j+1]), &(fonction->troncons[j]), sizeof(Troncon));
+                for(j=fonction->nb_troncons-1;j>i;j--)
+                    memcpy(&(fonction->troncons[j]), &(fonction->troncons[j-1]), sizeof(Troncon));
                 fonction->troncons[i+1].debut_troncon = coupure;
                 fonction->troncons[i].fin_troncon = coupure;
                 return 0;
@@ -263,7 +263,7 @@ int common_fonction_ajout(Fonction* fonction, double debut_troncon, double fin_t
     // FinSi
     else
     {
-        int i = 0;
+        unsigned int i = 0;
         
         BUG(common_fonction_scinde_troncon(fonction, debut_troncon) == 0, -3);
         BUG(common_fonction_scinde_troncon(fonction, fin_troncon) == 0, -3);
@@ -298,9 +298,9 @@ int common_fonction_compacte(Fonction* fonction)
  *           -2 en cas d'erreur d'allocation mémoire
  */
 {
-    int i; /* Numéro du tronçon en cours */
-    int j; /* Nombre de tronçons à conserver */
-    int k; /* Numéro du précédent tronçon identique */
+    unsigned int i; /* Numéro du tronçon en cours */
+    unsigned int j; /* Nombre de tronçons à conserver */
+    unsigned int k; /* Numéro du précédent tronçon identique */
     
     // Trivial
     BUGMSG(fonction, -1, gettext("Paramètre incorrect\n"));
@@ -338,7 +338,7 @@ int common_fonction_affiche(Fonction* fonction)
  *             (fonction == NULL)
  */
 {
-    int i;
+    unsigned int i;
     
     // Trivial
     BUGMSG(fonction, -1, gettext("Paramètre incorrect\n"));

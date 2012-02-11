@@ -136,10 +136,10 @@ int main(int argc, char *argv[])
     BUG(EF_appuis_ajout(projet, "Encastrement", EF_APPUI_BLOQUE, EF_APPUI_BLOQUE, EF_APPUI_BLOQUE, EF_APPUI_BLOQUE, EF_APPUI_BLOQUE, EF_APPUI_BLOQUE) == 0, -1);
     
     // Création des noeuds
-    BUG(EF_noeuds_ajout_noeud_libre(projet, 0.0, 0.0, 0.0, 0) == 0, -1);
-    BUG(EF_noeuds_ajout_noeud_libre(projet, 0.0, 0.0, 8.0, -1) == 0, -1);
-    BUG(EF_noeuds_ajout_noeud_libre(projet, 8.0, 0.0, 8.0, -1) == 0, -1);
-    BUG(EF_noeuds_ajout_noeud_libre(projet, 8.0, 0.0, 0.0, 0) == 0, -1);
+    BUG(EF_noeuds_ajout_noeud_libre(projet, 0.0, 0.0, 0.0, EF_appuis_cherche_numero(projet, 0)) == 0, -1);
+    BUG(EF_noeuds_ajout_noeud_libre(projet, 0.0, 0.0, 8.0, NULL) == 0, -1);
+    BUG(EF_noeuds_ajout_noeud_libre(projet, 8.0, 0.0, 8.0, NULL) == 0, -1);
+    BUG(EF_noeuds_ajout_noeud_libre(projet, 8.0, 0.0, 0.0, EF_appuis_cherche_numero(projet, 0)) == 0, -1);
     
     // Création des sections en béton
     BUG(_1992_1_1_sections_ajout_rectangulaire(projet, 0.3, 0.5) == 0, -1);
@@ -161,10 +161,10 @@ int main(int argc, char *argv[])
 //    BUG(EF_relachement_ajout(projet, EF_RELACHEMENT_LIBRE, NULL, EF_RELACHEMENT_LIBRE, NULL, EF_RELACHEMENT_LIBRE, NULL, EF_RELACHEMENT_BLOQUE, NULL, EF_RELACHEMENT_BLOQUE, NULL, EF_RELACHEMENT_BLOQUE, NULL) == 0, -1);
     
     // Création de l'élément en béton
-    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 0, 1, -1, 9) == 0, -1);
-    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 1, 2, -1, 9) == 0, -1);
-    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 2, 3, -1, 9) == 0, -1);
-//    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 1, 2, -1, 0) == 0, -1);
+    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 0, 1, NULL, 9) == 0, -1);
+    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 1, 2, NULL, 9) == 0, -1);
+    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 2, 3, NULL, 9) == 0, -1);
+//    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 1, 2, NULL, 0) == 0, -1);
     
     // Ajout de l'action ponctuelle
     GList   *tmp1, *tmp2;

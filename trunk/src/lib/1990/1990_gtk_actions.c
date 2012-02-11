@@ -51,7 +51,7 @@ void _1990_gtk_tree_view_actions_cell_edited(GtkCellRendererText *cell __attribu
     GtkTreeIter   iter;
     GtkTreeModel  *model;
     GValue        nouvelle_valeur;
-    int           numero;
+    unsigned int  numero;
     char          *description;
     Action        *action;
     
@@ -101,7 +101,7 @@ void _1990_gtk_tree_view_charges_cell_edited(GtkCellRendererText *cell __attribu
     GtkTreeIter     iter, iter_action;
     GtkTreeModel    *model_action;
     GValue          nouvelle_valeur;
-    int             numero_action, numero_charge;
+    unsigned int    numero_action, numero_charge;
     char            *description;
     Charge_Noeud    *charge;
     
@@ -151,8 +151,7 @@ void _1990_gtk_tree_view_actions_cursor_changed(GtkTreeView *tree_view __attribu
     List_Gtk_1990_Actions   *list_gtk_1990_actions;
     GtkTreeModel    *model;
     GtkTreeIter     iter;
-    int             numero;
-    char            *nom;
+    unsigned int    numero;
     Action          *action;
     
     BUGMSG(projet, , gettext("Paramètre incorrect\n"));
@@ -166,7 +165,7 @@ void _1990_gtk_tree_view_actions_cursor_changed(GtkTreeView *tree_view __attribu
     // On récupère l'action sélectionnée.
     if (!gtk_tree_selection_get_selected(list_gtk_1990_actions->tree_select_actions, &model, &iter))
         return;
-    gtk_tree_model_get(model, &iter, 0, &numero, 1, &nom, -1);
+    gtk_tree_model_get(model, &iter, 0, &numero, -1);
     
     BUG(action = _1990_action_cherche_numero(projet, numero), );
     
@@ -252,10 +251,10 @@ gboolean _1990_gtk_actions_tree_view_drag(GtkWidget *widget,
     list_store = gtk_tree_view_get_model(GTK_TREE_VIEW(list_gtk_1990_actions->tree_view_actions));
     if (path != NULL)
     {
-        int                 num_action_dest,  num_charge_source,  num_action_source;
-        GtkTreeIter         iter_action_dest, iter_charge_source, iter_action_source;
-        GtkTreeModel        *model_charge_source, *model_action_source;
-        GList               *list, *list_fixe, *list_parcours;
+        unsigned int    num_action_dest,  num_charge_source,  num_action_source;
+        GtkTreeIter     iter_action_dest, iter_charge_source, iter_action_source;
+        GtkTreeModel    *model_charge_source, *model_action_source;
+        GList           *list, *list_fixe, *list_parcours;
         
         // On récupère le numéro de l'action de destination
         gtk_tree_model_get_iter(list_store, &iter_action_dest, path);
@@ -317,7 +316,7 @@ void _1990_gtk_tree_view_actions_type_edited(GtkCellRendererText *cell __attribu
     GtkTreeModel            *model;
     GtkTreePath             *path;
     GtkTreeIter             iter;
-    gint                    i, j;
+    unsigned int            i, j;
     Action                  *action;
     
     BUGMSG(projet, , gettext("Paramètre incorrect\n"));
@@ -329,8 +328,7 @@ void _1990_gtk_tree_view_actions_type_edited(GtkCellRendererText *cell __attribu
     path = gtk_tree_path_new_from_string (path_string);
     
     gtk_tree_model_get_iter(model, &iter, path);
-    
-    i = gtk_tree_path_get_indices(path)[0];
+    gtk_tree_model_get(model, &iter, 0, &i, -1);
     
     for (j=0;j<_1990_action_num_bat_txt(projet->pays);j++)
     {
@@ -362,7 +360,7 @@ void _1990_gtk_tree_view_actions_psi_edited(GtkCellRendererText *cell, gchar *pa
     GtkTreeModel            *model;
     GtkTreePath             *path;
     GtkTreeIter             iter;
-    gint                    i;
+    unsigned int            i;
     char                    *fake;
     double                  convertion;
     Action                  *action;
@@ -379,8 +377,7 @@ void _1990_gtk_tree_view_actions_psi_edited(GtkCellRendererText *cell, gchar *pa
     path = gtk_tree_path_new_from_string(path_string);
     
     gtk_tree_model_get_iter(model, &iter, path);
-    
-    i = gtk_tree_path_get_indices(path)[0];
+    gtk_tree_model_get(model, &iter, 0, &i, -1);
     
     // On vérifie si le texte contient bien un nombre flottant
     if (sscanf(new_text, "%lf%s", &convertion, fake) == 1)
@@ -430,7 +427,7 @@ void _1990_gtk_menu_nouvelle_action_activate(GtkMenuItem *menuitem, Projet *proj
  */
 {
     List_Gtk_1990_Actions   *list_gtk_1990_actions;
-    int                     i = 0;
+    unsigned int            i = 0;
     GList                   *list_parcours;
     
     BUGMSG(projet, , gettext("Paramètre incorrect\n"));
@@ -525,9 +522,9 @@ void _1990_gtk_menu_nouvelle_charge_nodale_activate(GtkMenuItem *menuitem __attr
  * Valeur renvoyée : Aucune
  */
 {
-    GtkTreeIter                 iter_action;
-    GtkTreeModel                *model_action;
-    int                         numero_action;
+    GtkTreeIter     iter_action;
+    GtkTreeModel    *model_action;
+    unsigned int    numero_action;
     
     BUGMSG(projet, , gettext("Paramètre incorrect\n"));
     BUGMSG(projet->actions, , gettext("Paramètre incorrect\n"));
@@ -536,7 +533,7 @@ void _1990_gtk_menu_nouvelle_charge_nodale_activate(GtkMenuItem *menuitem __attr
     if (!gtk_tree_selection_get_selected(projet->list_gtk._1990_actions.tree_select_actions, &model_action, &iter_action))
         return;
     gtk_tree_model_get(model_action, &iter_action, 0, &numero_action, -1);
-    BUG(EF_gtk_charge_noeud(projet, numero_action, -1) == 0, );
+    BUG(EF_gtk_charge_noeud(projet, numero_action, G_MAXUINT) == 0, );
 }
 
 
@@ -549,7 +546,7 @@ void _1990_gtk_menu_nouvelle_charge_barre_ponctuelle_activate(GtkMenuItem *menui
 {
     GtkTreeIter                 iter_action;
     GtkTreeModel                *model_action;
-    int                         numero_action;
+    unsigned int                numero_action;
     
     BUGMSG(projet, , gettext("Paramètre incorrect\n"));
     BUGMSG(projet->actions, , gettext("Paramètre incorrect\n"));
@@ -558,7 +555,7 @@ void _1990_gtk_menu_nouvelle_charge_barre_ponctuelle_activate(GtkMenuItem *menui
     if (!gtk_tree_selection_get_selected(projet->list_gtk._1990_actions.tree_select_actions, &model_action, &iter_action))
         return;
     gtk_tree_model_get(model_action, &iter_action, 0, &numero_action, -1);
-    BUG(EF_gtk_charge_barre_ponctuelle(projet, numero_action, -1) == 0, );
+    BUG(EF_gtk_charge_barre_ponctuelle(projet, numero_action, G_MAXUINT) == 0, );
     
     return;
 }
@@ -573,7 +570,7 @@ void _1990_gtk_menu_nouvelle_charge_barre_repartie_uniforme_activate(GtkMenuItem
 {
     GtkTreeIter                 iter_action;
     GtkTreeModel                *model_action;
-    int                         numero_action;
+    unsigned int                numero_action;
     
     BUGMSG(projet, , gettext("Paramètre incorrect\n"));
     BUGMSG(projet->actions, , gettext("Paramètre incorrect\n"));
@@ -582,7 +579,7 @@ void _1990_gtk_menu_nouvelle_charge_barre_repartie_uniforme_activate(GtkMenuItem
     if (!gtk_tree_selection_get_selected(projet->list_gtk._1990_actions.tree_select_actions, &model_action, &iter_action))
         return;
     gtk_tree_model_get(model_action, &iter_action, 0, &numero_action, -1);
-    BUG(EF_gtk_charge_barre_repartie_uniforme(projet, numero_action, -1) == 0, );
+    BUG(EF_gtk_charge_barre_repartie_uniforme(projet, numero_action, G_MAXUINT) == 0, );
     
     return;
 }
@@ -788,7 +785,7 @@ void _1990_gtk_actions(Projet *projet)
     GtkCellRenderer         *pCellRenderer;
     GList                   *list;
     GtkTreeIter             iter;
-    int                     i;
+    unsigned int            i;
     GtkWidget               *w_temp;
     GtkTreeViewColumn       *column;
     
@@ -813,7 +810,7 @@ void _1990_gtk_actions(Projet *projet)
     list_gtk_1990_actions->scroll_actions = gtk_scrolled_window_new(NULL, NULL);
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(list_gtk_1990_actions->scroll_actions), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
     // 0 : numero, 1 : description, 2 : type, 3 : psi0, 4 : psi1, 5 : psi2
-    list_gtk_1990_actions->tree_store_actions = gtk_tree_store_new(6, G_TYPE_INT, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_DOUBLE, G_TYPE_DOUBLE, G_TYPE_DOUBLE);
+    list_gtk_1990_actions->tree_store_actions = gtk_tree_store_new(6, G_TYPE_UINT, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_DOUBLE, G_TYPE_DOUBLE, G_TYPE_DOUBLE);
     list_gtk_1990_actions->tree_view_actions = (GtkTreeView*)gtk_tree_view_new_with_model(GTK_TREE_MODEL(list_gtk_1990_actions->tree_store_actions));
     list_gtk_1990_actions->tree_select_actions = gtk_tree_view_get_selection(list_gtk_1990_actions->tree_view_actions);
     gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(list_gtk_1990_actions->scroll_actions), GTK_WIDGET(list_gtk_1990_actions->tree_view_actions));
@@ -900,7 +897,7 @@ void _1990_gtk_actions(Projet *projet)
     gtk_paned_add2(GTK_PANED(list_gtk_1990_actions->paned), list_gtk_1990_actions->table_charges);
     list_gtk_1990_actions->scroll_charges = gtk_scrolled_window_new(NULL, NULL);
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(list_gtk_1990_actions->scroll_charges), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-    list_gtk_1990_actions->tree_store_charges = gtk_tree_store_new(4, G_TYPE_INT, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
+    list_gtk_1990_actions->tree_store_charges = gtk_tree_store_new(4, G_TYPE_UINT, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
     list_gtk_1990_actions->tree_view_charges = (GtkTreeView*)gtk_tree_view_new_with_model(GTK_TREE_MODEL(list_gtk_1990_actions->tree_store_charges));
     list_gtk_1990_actions->tree_select_charges = gtk_tree_view_get_selection(list_gtk_1990_actions->tree_view_charges);
     gtk_tree_selection_set_mode(list_gtk_1990_actions->tree_select_charges, GTK_SELECTION_MULTIPLE);

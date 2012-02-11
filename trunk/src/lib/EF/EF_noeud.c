@@ -42,7 +42,7 @@ int EF_noeuds_init(Projet *projet)
 }
 
 
-int EF_noeuds_ajout_noeud_libre(Projet *projet, double x, double y, double z, int appui)
+int EF_noeuds_ajout_noeud_libre(Projet *projet, double x, double y, double z, EF_Appui *appui)
 /* Description : Ajouter un noeud à la liste des noeuds en lui attribuant le numéro suivant le
  *                 dernier noeud existant
  * Paramètres : Projet *projet : la variable projet
@@ -74,10 +74,7 @@ int EF_noeuds_ajout_noeud_libre(Projet *projet, double x, double y, double z, in
     data->y = y;
     data->z = z;
     
-    if (appui == -1)
-        noeud_nouveau->appui = NULL;
-    else
-        BUG(noeud_nouveau->appui = EF_appuis_cherche_numero(projet, appui), -3);
+    noeud_nouveau->appui = appui;
         
     noeud_nouveau->numero = g_list_length(projet->ef_donnees.noeuds);
     
@@ -87,7 +84,7 @@ int EF_noeuds_ajout_noeud_libre(Projet *projet, double x, double y, double z, in
 }
 
 
-int EF_noeuds_ajout_noeud_barre(Projet *projet, Beton_Barre *barre, double position_relative_barre, int appui)
+int EF_noeuds_ajout_noeud_barre(Projet *projet, Beton_Barre *barre, double position_relative_barre, EF_Appui *appui)
 /* Description : Ajouter un noeud à la liste des noeuds en lui attribuant le numéro suivant le
  *                 dernier noeud existant. Ce noeud se situe à l'intérieur d'une barre et
  *                 permet la discrétisation.
@@ -118,10 +115,7 @@ int EF_noeuds_ajout_noeud_barre(Projet *projet, Beton_Barre *barre, double posit
     data->barre = barre;
     data->position_relative_barre = position_relative_barre;
     
-    if (appui == -1)
-        noeud_nouveau->appui = NULL;
-    else
-        BUG(noeud_nouveau->appui = EF_appuis_cherche_numero(projet, appui), -3);
+    noeud_nouveau->appui = appui;
         
     noeud_nouveau->numero = g_list_length(projet->ef_donnees.noeuds);
     
@@ -263,7 +257,7 @@ int EF_noeuds_min_max(Projet *projet, double *x_min, double *x_max, double *y_mi
 }
 
 
-EF_Noeud* EF_noeuds_cherche_numero(Projet *projet, int numero)
+EF_Noeud* EF_noeuds_cherche_numero(Projet *projet, unsigned int numero)
 /* Description : Positionne dans la liste des noeuds le noeud souhaité et le renvoie
  * Paramètres : Projet *projet : la variable projet
  *            : int numero : le numéro du noeud

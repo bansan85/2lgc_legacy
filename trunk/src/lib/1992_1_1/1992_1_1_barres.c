@@ -51,8 +51,8 @@ int _1992_1_1_barres_init(Projet *projet)
 }
 
 int _1992_1_1_barres_ajout(Projet *projet, Type_Element type, unsigned int section,
-  unsigned int materiau, unsigned int noeud_debut, unsigned int noeud_fin, int relachement,
-  unsigned int discretisation_element)
+  unsigned int materiau, unsigned int noeud_debut, unsigned int noeud_fin,
+  EF_Relachement* relachement, unsigned int discretisation_element)
 /* Description : Ajoute un élément à la liste des éléments en béton
  * Paramètres : Projet *projet : la variable projet
  *            : Type_Beton_Barre type : type de l'élément en béton
@@ -60,7 +60,7 @@ int _1992_1_1_barres_ajout(Projet *projet, Type_Element type, unsigned int secti
  *            : int materiau : numéro du matériau en béton de l'élément
  *            : int noeud_debut : numéro de départ de l'élément
  *            : int noeud_fin : numéro de fin de l'élément
- *            : int relachement : relachement de la barre (-1 si aucun).
+ *            : EF_Relachement* relachement : relachement de la barre (NULL si aucun).
  *            : int discretisation_element : nombre d'élément une fois discrétisé
  * Valeur renvoyée :
  *   Succès : 0
@@ -91,10 +91,7 @@ int _1992_1_1_barres_ajout(Projet *projet, Type_Element type, unsigned int secti
     BUG(element_nouveau->noeud_debut = EF_noeuds_cherche_numero(projet, noeud_debut), -3);
     BUG(element_nouveau->noeud_fin = EF_noeuds_cherche_numero(projet, noeud_fin), -3);
     
-    if (relachement != -1)
-        BUG(element_nouveau->relachement = EF_relachement_cherche_numero(projet, relachement), -1);
-    else
-        element_nouveau->relachement = NULL;
+    element_nouveau->relachement = relachement;
     
     element_nouveau->discretisation_element = discretisation_element;
     
@@ -114,7 +111,7 @@ int _1992_1_1_barres_ajout(Projet *projet, Type_Element type, unsigned int secti
         /* Création des noeuds intermédiaires */
         for (i=0;i<discretisation_element;i++)
         {
-            BUG(EF_noeuds_ajout_noeud_barre(projet, element_nouveau, (i+1.)/(discretisation_element+1.), -1) == 0, -3);
+            BUG(EF_noeuds_ajout_noeud_barre(projet, element_nouveau, (i+1.)/(discretisation_element+1.), NULL) == 0, -3);
             element_nouveau->noeuds_intermediaires[i] = g_list_last(projet->ef_donnees.noeuds)->data;
         }
     }
@@ -805,28 +802,28 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
     //         globale partielle et complète.
         for (i=0;i<triplet->nnz;i++)
         {
-            if ((ai[i] < 6) && (aj[i] < 6) && (projet->ef_donnees.noeuds_pos_partielle[noeud1->numero][ai[i]] != -1) && (projet->ef_donnees.noeuds_pos_partielle[noeud1->numero][aj[i]] != -1))
+            if ((ai[i] < 6) && (aj[i] < 6) && (projet->ef_donnees.noeuds_pos_partielle[noeud1->numero][ai[i]] != G_MAXUINT) && (projet->ef_donnees.noeuds_pos_partielle[noeud1->numero][aj[i]] != G_MAXUINT))
             {
                 ai2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = projet->ef_donnees.noeuds_pos_partielle[noeud1->numero][ai[i]];
                 aj2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = projet->ef_donnees.noeuds_pos_partielle[noeud1->numero][aj[i]];
                 ax2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = ax[i];
                 projet->ef_donnees.triplet_rigidite_partielle_en_cours++;
             }
-            else if ((ai[i] < 6) && (aj[i] >= 6) && (projet->ef_donnees.noeuds_pos_partielle[noeud1->numero][ai[i]] != -1) && (projet->ef_donnees.noeuds_pos_partielle[noeud2->numero][aj[i]-6] != -1))
+            else if ((ai[i] < 6) && (aj[i] >= 6) && (projet->ef_donnees.noeuds_pos_partielle[noeud1->numero][ai[i]] != G_MAXUINT) && (projet->ef_donnees.noeuds_pos_partielle[noeud2->numero][aj[i]-6] != G_MAXUINT))
             {
                 ai2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = projet->ef_donnees.noeuds_pos_partielle[noeud1->numero][ai[i]];
                 aj2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = projet->ef_donnees.noeuds_pos_partielle[noeud2->numero][aj[i]-6];
                 ax2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = ax[i];
                 projet->ef_donnees.triplet_rigidite_partielle_en_cours++;
             }
-            else if ((ai[i] >= 6) && (aj[i] < 6) && (projet->ef_donnees.noeuds_pos_partielle[noeud2->numero][ai[i]-6] != -1) && (projet->ef_donnees.noeuds_pos_partielle[noeud1->numero][aj[i]] != -1))
+            else if ((ai[i] >= 6) && (aj[i] < 6) && (projet->ef_donnees.noeuds_pos_partielle[noeud2->numero][ai[i]-6] != G_MAXUINT) && (projet->ef_donnees.noeuds_pos_partielle[noeud1->numero][aj[i]] != G_MAXUINT))
             {
                 ai2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = projet->ef_donnees.noeuds_pos_partielle[noeud2->numero][ai[i]-6];
                 aj2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = projet->ef_donnees.noeuds_pos_partielle[noeud1->numero][aj[i]];
                 ax2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = ax[i];
                 projet->ef_donnees.triplet_rigidite_partielle_en_cours++;
             }
-            else if ((ai[i] >= 6) && (aj[i] >= 6) && (projet->ef_donnees.noeuds_pos_partielle[noeud2->numero][ai[i]-6] != -1) && (projet->ef_donnees.noeuds_pos_partielle[noeud2->numero][aj[i]-6] != -1))
+            else if ((ai[i] >= 6) && (aj[i] >= 6) && (projet->ef_donnees.noeuds_pos_partielle[noeud2->numero][ai[i]-6] != G_MAXUINT) && (projet->ef_donnees.noeuds_pos_partielle[noeud2->numero][aj[i]-6] != G_MAXUINT))
             {
                 ai2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = projet->ef_donnees.noeuds_pos_partielle[noeud2->numero][ai[i]-6];
                 aj2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = projet->ef_donnees.noeuds_pos_partielle[noeud2->numero][aj[i]-6];

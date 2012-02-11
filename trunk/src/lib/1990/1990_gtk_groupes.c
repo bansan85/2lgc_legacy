@@ -54,7 +54,8 @@ int _1990_gtk_affiche_niveau(Projet *projet, unsigned int niveau)
  */
 {
     Niveau_Groupe           *niveau_groupe;
-    int                     dispo_max, i, *dispos;
+    unsigned int            dispo_max, i;
+    char                    *dispos;
     gboolean                premier = TRUE;
     List_Gtk_1990_Groupes   *list_gtk_1990_groupes;
     GtkTreePath             *path;
@@ -83,7 +84,7 @@ int _1990_gtk_affiche_niveau(Projet *projet, unsigned int niveau)
      * quelques sont les éléments du niveau n-1 encore non placés */
     if (dispo_max != 0)
     {
-        BUGMSG(dispos = (int*)malloc(sizeof(int)*dispo_max), -2, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(dispos = (char*)malloc(sizeof(char)*dispo_max), -2, gettext("Erreur d'allocation mémoire.\n"));
         for (i=0;i<dispo_max;i++)
             dispos[i] = 0;
     }
@@ -211,7 +212,7 @@ void _1990_gtk_spin_button_niveau_change(GtkWidget *button __attribute__((unused
     BUGMSG(projet->list_gtk._1990_groupes.window_groupe, , gettext("Paramètre incorrect\n"));
     
     list_gtk_1990_groupes = &projet->list_gtk._1990_groupes;
-    BUG(_1990_gtk_affiche_niveau(projet, gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(list_gtk_1990_groupes->spin_button_niveau))) == 0, );
+    BUG(_1990_gtk_affiche_niveau(projet, GTK_COMMON_SPINBUTTON_AS_UINT(GTK_SPIN_BUTTON(list_gtk_1990_groupes->spin_button_niveau))) == 0, );
     return;
 }
 
@@ -229,7 +230,7 @@ void _1990_gtk_button_niveau_suppr_clicked(GtkWidget *button __attribute__((unus
     BUGMSG(projet->list_gtk._1990_groupes.window_groupe, , gettext("Paramètre incorrect\n"));
     
     list_gtk_1990_groupes = &projet->list_gtk._1990_groupes;
-    BUG(_1990_groupe_free_niveau(projet, gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(list_gtk_1990_groupes->spin_button_niveau))) == 0, );
+    BUG(_1990_groupe_free_niveau(projet, GTK_COMMON_SPINBUTTON_AS_UINT(GTK_SPIN_BUTTON(list_gtk_1990_groupes->spin_button_niveau))) == 0, );
     
     /* On oblige la liste des niveaux à posséder au moins un niveau vide */
     if (projet->niveaux_groupes == NULL)
@@ -292,7 +293,7 @@ void _1990_gtk_button_groupe_ajout_clicked(GtkWidget *button __attribute__((unus
     list_gtk_1990_groupes = &projet->list_gtk._1990_groupes;
     
     /* On ajoute un niveau */
-    BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(list_gtk_1990_groupes->spin_button_niveau))), );
+    BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, GTK_COMMON_SPINBUTTON_AS_UINT(GTK_SPIN_BUTTON(list_gtk_1990_groupes->spin_button_niveau))), );
     BUG(groupe = _1990_groupe_ajout_groupe(projet, niveau_groupe->niveau, GROUPE_COMBINAISON_AND, gettext("Sans nom")), );
     
     /* Et on met à jour l'affichage */
@@ -305,7 +306,7 @@ void _1990_gtk_button_groupe_ajout_clicked(GtkWidget *button __attribute__((unus
     return;
 }
 
-int _1990_gtk_insert_dispo(Projet *projet, int numero, Niveau_Groupe *niveau)
+int _1990_gtk_insert_dispo(Projet *projet, unsigned int numero, Niveau_Groupe *niveau)
 /* Description : Ajoute dans le tree_view_dispo le numéro de l'élément disponible.
  *             : Cette fonction ne gère que l'interface graphique de tree_view_dispo
  * Paramètres : Projet *projet : la variable projet
@@ -321,7 +322,7 @@ int _1990_gtk_insert_dispo(Projet *projet, int numero, Niveau_Groupe *niveau)
     gboolean        retour;
     GtkTreeModel    *model;
     GtkTreeIter     iter, iter2;
-    int             nombre;
+    unsigned int    nombre;
     char            *nom;
     GtkTreePath     *path;
     
@@ -380,25 +381,24 @@ int _1990_gtk_insert_dispo(Projet *projet, int numero, Niveau_Groupe *niveau)
 }
 
 
-int _1990_gtk_get_groupe(GtkTreeModel *tree_model, GtkTreeIter *iter)
+unsigned int _1990_gtk_get_groupe(GtkTreeModel *tree_model, GtkTreeIter *iter)
 /* Description : Renvoie le numéro du groupe de l'élément iter.
  * Paramètres : GtkTreeModel *tree_model : tree_model contenant la liste des éléments
  *            : GtkTreeIter *iter : contient la ligne à étudier.
  * Valeur renvoyée : le numéro du groupe
  */
 {
-    int     numero;
-    char*   nom;
-    GtkTreeIter iter_parent;
+    unsigned int    numero;
+    GtkTreeIter     iter_parent;
     
     if (gtk_tree_model_iter_parent(tree_model, &iter_parent, iter))
     {
-        gtk_tree_model_get(tree_model, &iter_parent, 0, &numero, 1, &nom, -1);
+        gtk_tree_model_get(tree_model, &iter_parent, 0, &numero, -1);
         return numero;
     }
     else
     {
-        gtk_tree_model_get(tree_model, iter, 0, &numero, 1, &nom, -1);
+        gtk_tree_model_get(tree_model, iter, 0, &numero, -1);
         return numero;
     }
 }
@@ -415,7 +415,8 @@ void _1990_gtk_button_groupe_suppr_clicked(GtkWidget *button __attribute__((unus
     GtkTreeModel        *model;
     GtkTreePath         *path;
     GtkTreeIter         iter, iter_tmp;
-    int                 niveau, numero, ngroupe;
+    unsigned int        niveau;
+    unsigned int        numero, ngroupe;
     char                *nom;
     
     BUGMSG(projet, , gettext("Paramètre incorrect\n"));
@@ -442,7 +443,7 @@ void _1990_gtk_button_groupe_suppr_clicked(GtkWidget *button __attribute__((unus
     gtk_tree_path_free(path);
     
     gtk_tree_selection_unselect_all(list_gtk_1990_groupes->tree_select_dispo);
-    niveau = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(list_gtk_1990_groupes->spin_button_niveau));
+    niveau = GTK_COMMON_SPINBUTTON_AS_UINT(GTK_SPIN_BUTTON(list_gtk_1990_groupes->spin_button_niveau));
     /* Il s'agit d'un groupe */
     if (!gtk_tree_model_iter_parent(model, &iter_tmp, &iter))
     {
@@ -491,10 +492,10 @@ void _1990_gtk_button_groupe_suppr_clicked(GtkWidget *button __attribute__((unus
                     /* Il est INDISPENSABLE de faire un memset avant g_value_init !!! */
                     memset(&nouvelle_valeur, 0, sizeof(nouvelle_valeur));
                     
-                    g_value_init (&nouvelle_valeur, G_TYPE_INT);
+                    g_value_init(&nouvelle_valeur, G_TYPE_UINT);
         
                     /* On récupère le numéro du groupe */
-                    g_value_set_int (&nouvelle_valeur, groupe->numero);
+                    g_value_set_uint(&nouvelle_valeur, groupe->numero);
                     /* Et on modifie la ligne */
                     gtk_tree_store_set_value(list_gtk_1990_groupes->tree_store_etat, &groupe->Iter, 0, &nouvelle_valeur);
                 }
@@ -544,11 +545,11 @@ gboolean _1990_gtk_tree_view_dispo_drag(GtkWidget *widget __attribute__((unused)
 }
 
 
-int _1990_gtk_button_ajout_dispo_proc(int ngroupe, Projet *projet)
+int _1990_gtk_button_ajout_dispo_proc(unsigned int ngroupe, Projet *projet)
 {
     GtkTreeModel   	        *model1;
     GtkTreeIter    	        iter1;
-    int            	        numero, niveau;
+    unsigned int            numero, niveau;
     char           	        *nom;
     Niveau_Groupe  	        *niveau_groupe;
     Groupe         	        *groupe;
@@ -561,7 +562,7 @@ int _1990_gtk_button_ajout_dispo_proc(int ngroupe, Projet *projet)
     BUGMSG(projet->list_gtk._1990_groupes.window_groupe, -1, gettext("Paramètre incorrect\n"));
     
     list_gtk_1990_groupes = &projet->list_gtk._1990_groupes;
-    niveau = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(list_gtk_1990_groupes->spin_button_niveau));
+    niveau = GTK_COMMON_SPINBUTTON_AS_UINT(GTK_SPIN_BUTTON(list_gtk_1990_groupes->spin_button_niveau));
     BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, niveau), -3);
     BUG(groupe = _1990_groupe_positionne_groupe(niveau_groupe, ngroupe), -3);
     list_orig = gtk_tree_selection_get_selected_rows(list_gtk_1990_groupes->tree_select_dispo, &model1);
@@ -635,7 +636,7 @@ void _1990_gtk_button_ajout_dispo_clicked(GtkWidget *button __attribute__((unuse
     List_Gtk_1990_Groupes   *list_gtk_1990_groupes;
     GtkTreeIter     iter2;
     GtkTreeModel    *model2;
-    int             ngroupe;
+    unsigned int    ngroupe;
     
     BUGMSG(projet, , gettext("Paramètre incorrect\n"));
     BUGMSG(projet->niveaux_groupes, , gettext("Paramètre incorrect\n"));
@@ -665,7 +666,7 @@ void _1990_gtk_button_ajout_tout_dispo_clicked(GtkWidget *button __attribute__((
     List_Gtk_1990_Groupes   *list_gtk_1990_groupes = &projet->list_gtk._1990_groupes;
     GtkTreeIter     iter2;
     GtkTreeModel    *model2;
-    int             ngroupe;
+    unsigned int    ngroupe;
     
     BUGMSG(projet, , gettext("Paramètre incorrect\n"));
     BUGMSG(projet->niveaux_groupes, , gettext("Paramètre incorrect\n"));
@@ -711,7 +712,7 @@ void _1990_gtk_tree_view_etat_drag(GtkWidget *widget __attribute__((unused)), Gd
     list_store2 = gtk_tree_view_get_model(GTK_TREE_VIEW(list_gtk_1990_groupes->tree_view_etat));
     if (path != NULL)
     {
-        int     ngroupe_dest;
+        unsigned int    ngroupe_dest;
         
         gtk_tree_model_get_iter(list_store2, &iter, path);
         ngroupe_dest = _1990_gtk_get_groupe(list_store2, &iter);
@@ -719,16 +720,16 @@ void _1990_gtk_tree_view_etat_drag(GtkWidget *widget __attribute__((unused)), Gd
             BUG(_1990_gtk_button_ajout_dispo_proc(ngroupe_dest, projet) == 0, );
         else
         {
-            int             ngroupe_source;
+            unsigned int    ngroupe_source;
             GtkTreeModel    *model;
-            int             numero;
-            int             niveau;
+            unsigned int    numero;
+            unsigned int    niveau;
             char            *nom;
             Niveau_Groupe   *niveau_groupe;
             Groupe          *groupe;
             Element         *element;
             
-            niveau = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(list_gtk_1990_groupes->spin_button_niveau));
+            niveau = GTK_COMMON_SPINBUTTON_AS_UINT(GTK_SPIN_BUTTON(list_gtk_1990_groupes->spin_button_niveau));
             gtk_tree_selection_get_selected(list_gtk_1990_groupes->tree_select_etat, &model, &iter);
             if (gtk_tree_model_iter_parent(list_store2, &iter_tmp, &iter))
             {
@@ -796,7 +797,7 @@ void _1990_gtk_tree_view_etat_row_expanded(GtkTreeView *tree_view, GtkTreeIter *
 {
     List_Gtk_1990_Groupes   *list_gtk_1990_groupes;
     GtkTreeModel    *model = gtk_tree_view_get_model(tree_view);
-    int             ngroupe;
+    unsigned int    ngroupe;
     Niveau_Groupe   *niveau_groupe;
     Groupe          *groupe;
     
@@ -809,7 +810,7 @@ void _1990_gtk_tree_view_etat_row_expanded(GtkTreeView *tree_view, GtkTreeIter *
     // On détermine le groupe ayant entraîné une ouverture
     // En effet, seul un groupe dans le tree_view_etat peut entraîner une ouverture
     ngroupe = _1990_gtk_get_groupe(model, iter);
-    BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(list_gtk_1990_groupes->spin_button_niveau))), );
+    BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, GTK_COMMON_SPINBUTTON_AS_UINT(GTK_SPIN_BUTTON(list_gtk_1990_groupes->spin_button_niveau))), );
     BUG(groupe = _1990_groupe_positionne_groupe(niveau_groupe, ngroupe), );
     
     // On le marque comme ouvert.
@@ -832,7 +833,7 @@ void _1990_gtk_tree_view_etat_row_collapsed(GtkTreeView *tree_view, GtkTreeIter 
 {
     List_Gtk_1990_Groupes   *list_gtk_1990_groupes;
     GtkTreeModel    *model = gtk_tree_view_get_model(tree_view);
-    int             ngroupe;
+    unsigned int    ngroupe;
     Niveau_Groupe   *niveau_groupe;
     Groupe          *groupe;
     
@@ -845,7 +846,7 @@ void _1990_gtk_tree_view_etat_row_collapsed(GtkTreeView *tree_view, GtkTreeIter 
     // On détermine le groupe ayant entraîné une fermeture
     // En effet, seul un groupe dans le tree_view_etat peut entraîner une fermeture
     ngroupe = _1990_gtk_get_groupe(model, iter);
-    BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(list_gtk_1990_groupes->spin_button_niveau))), );
+    BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, GTK_COMMON_SPINBUTTON_AS_UINT(GTK_SPIN_BUTTON(list_gtk_1990_groupes->spin_button_niveau))), );
     BUG(groupe = _1990_groupe_positionne_groupe(niveau_groupe, ngroupe), );
     
     // On le marque comme fermé.
@@ -866,8 +867,7 @@ void _1990_gtk_tree_view_etat_cursor_changed(__attribute__((unused)) GtkTreeView
     List_Gtk_1990_Groupes   *list_gtk_1990_groupes;
     GtkTreeModel    *model;
     GtkTreeIter     iter;
-    int             tmp, ngroupe;
-    char            *nom;
+    unsigned int    ngroupe;
     Niveau_Groupe   *niveau_groupe;
     Groupe          *groupe;
     
@@ -880,9 +880,8 @@ void _1990_gtk_tree_view_etat_cursor_changed(__attribute__((unused)) GtkTreeView
     /* Détermine le groupe sélectionné */
     if (!gtk_tree_selection_get_selected(list_gtk_1990_groupes->tree_select_etat, &model, &iter))
         return;
-    gtk_tree_model_get(model, &iter, 0, &tmp, 1, &nom, -1);
     ngroupe = _1990_gtk_get_groupe(model, &iter);
-    BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(list_gtk_1990_groupes->spin_button_niveau))), );
+    BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, GTK_COMMON_SPINBUTTON_AS_UINT(GTK_SPIN_BUTTON(list_gtk_1990_groupes->spin_button_niveau))), );
     BUG(groupe = _1990_groupe_positionne_groupe(niveau_groupe, ngroupe), );
     
     /* On active le toggle_button correspondant au type de combinaison du groupe */
@@ -923,7 +922,7 @@ void _1990_gtk_button_groupe_toggled(GtkRadioToolButton *radiobutton, Projet *pr
     List_Gtk_1990_Groupes    *list_gtk_1990_groupes;
     GtkTreeModel     *model;
     GtkTreeIter      iter;
-    int              ngroupe;
+    unsigned int     ngroupe;
     Niveau_Groupe    *niveau_groupe;
     Groupe           *groupe;
     
@@ -937,7 +936,7 @@ void _1990_gtk_button_groupe_toggled(GtkRadioToolButton *radiobutton, Projet *pr
     if (!gtk_tree_selection_get_selected(list_gtk_1990_groupes->tree_select_etat, &model, &iter))
         return;
     ngroupe = _1990_gtk_get_groupe(model, &iter);
-    BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(list_gtk_1990_groupes->spin_button_niveau))), );
+    BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, GTK_COMMON_SPINBUTTON_AS_UINT(GTK_SPIN_BUTTON(list_gtk_1990_groupes->spin_button_niveau))), );
     BUG(groupe = _1990_groupe_positionne_groupe(niveau_groupe, ngroupe), );
     
     /* On attribue le nouveau type de combinaison */
@@ -1303,8 +1302,7 @@ void _1990_gtk_tree_view_etat_cell_edited(GtkCellRendererText *cell __attribute_
     GtkTreeIter   iter;
     GtkTreeModel  *model;
     GValue        nouvelle_valeur;
-    int           numero, niveau;
-    char          *nom;
+    unsigned int  numero, niveau;
     GtkTreeIter   iter_parent;
     
     BUGMSG(projet, , gettext("Paramètre incorrect\n"));
@@ -1314,9 +1312,9 @@ void _1990_gtk_tree_view_etat_cell_edited(GtkCellRendererText *cell __attribute_
     path = gtk_tree_path_new_from_string(path_string);
     model = gtk_tree_view_get_model(GTK_TREE_VIEW(list_gtk_1990_groupes->tree_view_etat));
     gtk_tree_model_get_iter (model, &iter, path);
-    gtk_tree_model_get(model, &iter, 0, &numero, 1, &nom, -1);
+    gtk_tree_model_get(model, &iter, 0, &numero, -1);
     
-    niveau = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(list_gtk_1990_groupes->spin_button_niveau));
+    niveau = GTK_COMMON_SPINBUTTON_AS_UINT(GTK_SPIN_BUTTON(list_gtk_1990_groupes->spin_button_niveau));
     // On prend le niveau correspondant à niveau
     if (!gtk_tree_model_iter_parent(model, &iter_parent, &iter))
     {
@@ -1483,14 +1481,14 @@ void _1990_gtk_groupes(GtkWidget *button __attribute__((unused)), Projet *projet
     /* Création des composants graphiques affichant l'état du niveau en cours */
     list_gtk_1990_groupes->scroll_etat = gtk_scrolled_window_new(NULL, NULL);
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(list_gtk_1990_groupes->scroll_etat), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-    list_gtk_1990_groupes->tree_store_etat = gtk_tree_store_new(2, G_TYPE_INT, G_TYPE_STRING);
+    list_gtk_1990_groupes->tree_store_etat = gtk_tree_store_new(2, G_TYPE_UINT, G_TYPE_STRING);
     list_gtk_1990_groupes->tree_view_etat = (GtkTreeView*)gtk_tree_view_new_with_model(GTK_TREE_MODEL(list_gtk_1990_groupes->tree_store_etat));
     list_gtk_1990_groupes->tree_select_etat = gtk_tree_view_get_selection(list_gtk_1990_groupes->tree_view_etat);
     gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(list_gtk_1990_groupes->scroll_etat), GTK_WIDGET(list_gtk_1990_groupes->tree_view_etat));
     gtk_tree_view_set_reorderable(GTK_TREE_VIEW(list_gtk_1990_groupes->tree_view_etat), TRUE);
     list_gtk_1990_groupes->scroll_dispo = gtk_scrolled_window_new(NULL, NULL);
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(list_gtk_1990_groupes->scroll_dispo), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-    list_gtk_1990_groupes->tree_store_dispo = gtk_tree_store_new(2, G_TYPE_INT, G_TYPE_STRING);
+    list_gtk_1990_groupes->tree_store_dispo = gtk_tree_store_new(2, G_TYPE_UINT, G_TYPE_STRING);
     list_gtk_1990_groupes->tree_view_dispo = (GtkTreeView*)gtk_tree_view_new_with_model(GTK_TREE_MODEL(list_gtk_1990_groupes->tree_store_dispo));
     list_gtk_1990_groupes->tree_select_dispo = gtk_tree_view_get_selection(list_gtk_1990_groupes->tree_view_dispo);
     gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(list_gtk_1990_groupes->scroll_dispo), GTK_WIDGET(list_gtk_1990_groupes->tree_view_dispo));
@@ -1625,7 +1623,7 @@ void _1990_gtk_groupes(GtkWidget *button __attribute__((unused)), Projet *projet
     gtk_table_attach (GTK_TABLE (list_gtk_1990_groupes->table_bas), list_gtk_1990_groupes->button_quitter, 2, 3, 0, 1, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
     g_signal_connect(G_OBJECT(list_gtk_1990_groupes->button_quitter), "clicked", G_CALLBACK(_1990_gtk_window_quitter_button), list_gtk_1990_groupes->window_groupe);
     
-    BUG(_1990_gtk_affiche_niveau(projet, gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(list_gtk_1990_groupes->spin_button_niveau))) == 0, );
+    BUG(_1990_gtk_affiche_niveau(projet, GTK_COMMON_SPINBUTTON_AS_UINT(GTK_SPIN_BUTTON(list_gtk_1990_groupes->spin_button_niveau))) == 0, );
     
     gtk_window_set_modal(GTK_WINDOW(list_gtk_1990_groupes->window_groupe), TRUE);
     gtk_window_set_transient_for(GTK_WINDOW(list_gtk_1990_groupes->window_groupe), GTK_WINDOW(projet->list_gtk.comp.window));

@@ -33,9 +33,9 @@
 #include "common_fonction.h"
 #include "EF_noeud.h"
 
-Charge_Barre_Ponctuelle *EF_charge_barre_ponctuelle_ajout(Projet *projet, int num_action,
-  GList *barres, int repere_local, double a, double fx, double fy, double fz, double mx,
-  double my, double mz, const char* nom)
+Charge_Barre_Ponctuelle *EF_charge_barre_ponctuelle_ajout(Projet *projet,
+  unsigned int num_action, GList *barres, gboolean repere_local, double a, double fx,
+  double fy, double fz, double mx, double my, double mz, const char* nom)
 /* Description : Ajoute une charge ponctuelle à une action et à l'intérieur d'une barre en lui
  *               attribuant le numéro suivant la dernière charge de l'action.
  * Paramètres : Projet *projet : la variable projet,

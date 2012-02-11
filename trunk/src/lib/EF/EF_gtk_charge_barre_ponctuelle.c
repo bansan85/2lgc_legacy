@@ -84,7 +84,7 @@ void EF_gtk_charge_barre_ponctuelle_annuler_clicked(GtkButton *button __attribut
 }
 
 
-gboolean EF_gtk_charge_barre_ponctuelle_recupere_donnees(Projet *projet, int *num_action, GList **barres, double *fx, double *fy, double *fz, double *mx, double *my, double *mz, gchar **description, int *repere_local, double *position)
+gboolean EF_gtk_charge_barre_ponctuelle_recupere_donnees(Projet *projet, unsigned int *num_action, GList **barres, double *fx, double *fy, double *fz, double *mx, double *my, double *mz, gchar **description, gboolean *repere_local, double *position)
 {
     GtkWidget                           *dialog;
     List_Gtk_EF_Charge_Barre_Ponctuelle *ef_gtk;
@@ -108,7 +108,10 @@ gboolean EF_gtk_charge_barre_ponctuelle_recupere_donnees(Projet *projet, int *nu
     
     ef_gtk = &projet->list_gtk.ef_charge_barre_ponctuelle;
     
-    *num_action = gtk_combo_box_get_active(GTK_COMBO_BOX(ef_gtk->combobox_charge));
+    if (gtk_combo_box_get_active(GTK_COMBO_BOX(ef_gtk->combobox_charge)) < 0)
+        return FALSE;
+    else
+        *num_action = (unsigned int)gtk_combo_box_get_active(GTK_COMBO_BOX(ef_gtk->combobox_charge));
     
     *fx = gtk_common_entry_renvoie_double(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_fx)));
     if (isnan(*fx))
@@ -214,13 +217,14 @@ void EF_gtk_charge_barre_ponctuelle_ajouter_clicked(GtkButton *button __attribut
  */
 {
     double                      fx, fy, fz, mx, my, mz, position;
-    int                         num_action, repere_local;
+    unsigned int                num_action;
+    gboolean                    repere_local;
     GList                       *barres;
     gchar                       *texte;
     Charge_Barre_Ponctuelle     *charge;
     GtkTreeModel                *model_action;
     GtkTreeIter                 iter_action;
-    int                         numero_action;
+    unsigned int                numero_action;
     
     BUGMSG(projet, , gettext("Paramètre incorrect\n"));
     
@@ -253,7 +257,8 @@ void EF_gtk_charge_barre_ponctuelle_editer_clicked(GtkButton *button __attribute
 {
     List_Gtk_EF_Charge_Barre_Ponctuelle    *ef_gtk;
     double                      fx, fy, fz, mx, my, mz, position;
-    int                         num_action, repere_local;
+    unsigned int                num_action;
+    gboolean                    repere_local;
     GList                       *barres;
     gchar                       *texte;
     Charge_Barre_Ponctuelle     *charge;
@@ -290,7 +295,7 @@ void EF_gtk_charge_barre_ponctuelle_editer_clicked(GtkButton *button __attribute
 }
 
 
-int EF_gtk_charge_barre_ponctuelle(Projet *projet, gint action_defaut, gint charge)
+int EF_gtk_charge_barre_ponctuelle(Projet *projet, unsigned int action_defaut, unsigned int charge)
 /* Description : Affichage de la fenêtre permettant de créer ou modifier une action de type
  *               charge ponctuelle sur barre
  * Paramètres : Projet *projet : la variable projet
@@ -309,7 +314,7 @@ int EF_gtk_charge_barre_ponctuelle(Projet *projet, gint action_defaut, gint char
     
     ef_gtk = &projet->list_gtk.ef_charge_barre_ponctuelle;
     
-    if (charge == -1)
+    if (charge == G_MAXUINT)
     {
         GTK_NOUVELLE_FENETRE(ef_gtk->window, gettext("Ajout d'une charge ponctuelle sur barre"), 400, 1)
         charge_barre = NULL;
@@ -339,7 +344,7 @@ int EF_gtk_charge_barre_ponctuelle(Projet *projet, gint action_defaut, gint char
     }
     while (list_parcours != NULL);
     
-    gtk_combo_box_set_active(GTK_COMBO_BOX(ef_gtk->combobox_charge), action_defaut);
+    gtk_combo_box_set_active(GTK_COMBO_BOX(ef_gtk->combobox_charge), (gint)action_defaut);
     gtk_table_attach(GTK_TABLE(ef_gtk->table), ef_gtk->combobox_charge, 1, 4, 0, 1, GTK_EXPAND | GTK_FILL, GTK_SHRINK | GTK_FILL, 0, 0);
     
     ef_gtk->label_description = gtk_label_new(gettext("Description :"));
@@ -433,7 +438,7 @@ int EF_gtk_charge_barre_ponctuelle(Projet *projet, gint action_defaut, gint char
     }
     ef_gtk->table_buttons = gtk_table_new(1, 2, FALSE);
     gtk_table_attach(GTK_TABLE(ef_gtk->table), ef_gtk->table_buttons, 0, 4, 7, 8, GTK_EXPAND | GTK_FILL, GTK_SHRINK | GTK_FILL, 0, 0);
-    if (charge == -1)
+    if (charge == G_MAXUINT)
     {
         ef_gtk->button_ajouter = gtk_button_new_from_stock(GTK_STOCK_ADD);
         g_signal_connect(ef_gtk->button_ajouter, "clicked", G_CALLBACK(EF_gtk_charge_barre_ponctuelle_ajouter_clicked), projet);

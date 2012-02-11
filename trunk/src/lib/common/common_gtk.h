@@ -21,6 +21,7 @@
 
 #include "config.h"
 #include "common_projet.h"
+#include <math.h>
 #include <gtk/gtk.h>
 
 #define GTK_NOUVELLE_FENETRE(window, titre, taillex, tailley) {\
@@ -63,6 +64,7 @@
 #define GTK_DECIMAL_FORCE 3
 #define GTK_DECIMAL_MOMENT 3
 
+#define GTK_COMMON_SPINBUTTON_AS_UINT(spinbutton) ((unsigned int)round(gtk_spin_button_get_value(spinbutton)))
 
 void gtk_common_entry_check_double(GtkEntry *entry, gchar *preedit, gpointer user_data);
 double gtk_common_entry_renvoie_double(GtkTextBuffer *textbuffer);

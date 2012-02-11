@@ -85,7 +85,7 @@ void EF_gtk_charge_noeud_annuler_clicked(GtkButton *button __attribute__((unused
 }
 
 
-gboolean EF_gtk_charge_noeud_recupere_donnees(Projet *projet, int *num_action, GList **noeuds, double *fx, double *fy, double *fz, double *mx, double *my, double *mz, gchar **texte)
+gboolean EF_gtk_charge_noeud_recupere_donnees(Projet *projet, unsigned int *num_action, GList **noeuds, double *fx, double *fy, double *fz, double *mx, double *my, double *mz, gchar **texte)
 {
     GtkWidget                   *dialog;
     List_Gtk_EF_Charge_Noeud    *ef_gtk;
@@ -93,12 +93,17 @@ gboolean EF_gtk_charge_noeud_recupere_donnees(Projet *projet, int *num_action, G
     GtkTextIter                 start, end;
     gchar                       *texte_tmp;
     GtkTextBuffer               *textbuffer;
+    gint                        get_active;
     
     BUGMSG(projet, FALSE, gettext("Paramètre incorrect\n"));
     
     ef_gtk = &projet->list_gtk.ef_charge_noeud;
     
-    *num_action = gtk_combo_box_get_active(GTK_COMBO_BOX(ef_gtk->combobox_charge));
+    get_active = gtk_combo_box_get_active(GTK_COMBO_BOX(ef_gtk->combobox_charge));
+    if (get_active < 0)
+        return FALSE;
+    else
+        *num_action = (unsigned int)get_active;
     
     *fx = gtk_common_entry_renvoie_double(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_fx)));
     if (isnan(*fx))
@@ -195,23 +200,18 @@ void EF_gtk_charge_noeud_ajouter_clicked(GtkButton *button __attribute__((unused
  * Valeur renvoyée : Aucune
  */
 {
-    List_Gtk_EF_Charge_Noeud    *ef_gtk;
     double                      fx, fy, fz, mx, my, mz;
-    int                         num_action;
+    unsigned int                num_action;
     GList                       *noeuds;
     gchar                       *texte;
     Charge_Noeud                *charge_noeud;
     GtkTreeIter                 iter_action;
     GtkTreeModel                *model_action;
-    int                         numero_action;
+    unsigned int                numero_action;
     
     BUGMSG(projet, , gettext("Paramètre incorrect\n"));
     
-    ef_gtk = &projet->list_gtk.ef_charge_noeud;
-    
     BUG(EF_gtk_charge_noeud_recupere_donnees(projet, &num_action, &noeuds, &fx, &fy, &fz, &mx, &my, &mz, &texte) == TRUE, );
-    
-    num_action = gtk_combo_box_get_active(GTK_COMBO_BOX(ef_gtk->combobox_charge));
     
     // Création de la nouvelle charge ponctuelle au noeud
     BUG(charge_noeud = EF_charge_noeud_ajout(projet, num_action, noeuds, fx, fy, fz, mx, my, mz, texte), );
@@ -240,7 +240,7 @@ void EF_gtk_charge_noeud_editer_clicked(GtkButton *button __attribute__((unused)
 {
     List_Gtk_EF_Charge_Noeud    *ef_gtk;
     double                      fx, fy, fz, mx, my, mz;
-    int                         num_action;
+    unsigned int                num_action;
     GList                       *noeuds;
     gchar                       *texte;
     Charge_Noeud                *charge_noeud;
@@ -250,8 +250,6 @@ void EF_gtk_charge_noeud_editer_clicked(GtkButton *button __attribute__((unused)
     ef_gtk = &projet->list_gtk.ef_charge_noeud;
     
     BUG(EF_gtk_charge_noeud_recupere_donnees(projet, &num_action, &noeuds, &fx, &fy, &fz, &mx, &my, &mz, &texte) == TRUE, );
-    
-    num_action = gtk_combo_box_get_active(GTK_COMBO_BOX(ef_gtk->combobox_charge));
     
     // Création de la nouvelle charge ponctuelle au noeud
     BUG(charge_noeud = _1990_action_cherche_charge(projet, ef_gtk->action, ef_gtk->charge), );
@@ -276,7 +274,7 @@ void EF_gtk_charge_noeud_editer_clicked(GtkButton *button __attribute__((unused)
 }
 
 
-int EF_gtk_charge_noeud(Projet *projet, gint action_defaut, gint charge)
+int EF_gtk_charge_noeud(Projet *projet, unsigned int action_defaut, unsigned int charge)
 /* Description : Affichage de la fenêtre permettant de créer ou modifier une action de type
  *               charge ponctuelle au noeud
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement
@@ -295,7 +293,7 @@ int EF_gtk_charge_noeud(Projet *projet, gint action_defaut, gint charge)
     
     ef_gtk = &projet->list_gtk.ef_charge_noeud;
     
-    if (charge == -1)
+    if (charge == G_MAXUINT)
     {
         GTK_NOUVELLE_FENETRE(ef_gtk->window, gettext("Ajout d'une charge au noeud"), 400, 1)
         charge_noeud = NULL;
@@ -323,7 +321,7 @@ int EF_gtk_charge_noeud(Projet *projet, gint action_defaut, gint charge)
         list_parcours = g_list_next(list_parcours);
     }
     while (list_parcours != NULL);
-    gtk_combo_box_set_active(GTK_COMBO_BOX(ef_gtk->combobox_charge), action_defaut);
+    gtk_combo_box_set_active(GTK_COMBO_BOX(ef_gtk->combobox_charge), (gint)action_defaut);
     gtk_table_attach(GTK_TABLE(ef_gtk->table), ef_gtk->combobox_charge, 1, 4, 0, 1, GTK_EXPAND | GTK_FILL, GTK_SHRINK | GTK_FILL, 0, 0);
     
     ef_gtk->label_description = gtk_label_new(gettext("Description :"));
@@ -404,7 +402,7 @@ int EF_gtk_charge_noeud(Projet *projet, gint action_defaut, gint charge)
     }
     ef_gtk->table_buttons = gtk_table_new(1, 2, FALSE);
     gtk_table_attach(GTK_TABLE(ef_gtk->table), ef_gtk->table_buttons, 0, 4, 6, 7, GTK_EXPAND | GTK_FILL, GTK_SHRINK | GTK_FILL, 0, 0);
-    if (charge == -1)
+    if (charge == G_MAXUINT)
     {
         ef_gtk->button_ajouter = gtk_button_new_from_stock(GTK_STOCK_ADD);
         g_signal_connect(ef_gtk->button_ajouter, "clicked", G_CALLBACK(EF_gtk_charge_noeud_ajouter_clicked), projet);

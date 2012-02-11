@@ -25,7 +25,7 @@
 
 int EF_appuis_init(Projet *projet);
 int EF_appuis_ajout(Projet *projet, const char *nom, Type_EF_Appui x, Type_EF_Appui y, Type_EF_Appui z, Type_EF_Appui rx, Type_EF_Appui ry, Type_EF_Appui rz);
-EF_Appui* EF_appuis_cherche_numero(Projet *projet, int numero);
+EF_Appui* EF_appuis_cherche_numero(Projet *projet, unsigned int numero);
 int EF_appuis_free(Projet *projet);
 
 #endif
