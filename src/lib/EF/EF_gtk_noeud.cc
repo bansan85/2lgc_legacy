@@ -53,6 +53,58 @@ void EF_gtk_noeud_fermer(GtkButton *button __attribute__((unused)), GtkWidget *f
 }
 
 
+void EF_gtk_noeud_ajouter(GtkButton *button __attribute__((unused)), Projet *projet)
+/* Description : Ajoute un nouveau noeud
+ * Paramètres : GtkWidget *button : composant à l'origine de l'évènement
+ *            : Projet *projet : la variable projet
+ * Valeur renvoyée : Aucune
+ */
+{
+    List_Gtk_EF_Noeud   *ef_gtk;
+    
+    BUGMSG(projet, , gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->list_gtk.ef_noeud.window, , gettext("Paramètre incorrect\n"));
+    
+    ef_gtk = &projet->list_gtk.ef_noeud;
+    
+    // On ajoute un noeud libre
+    if (gtk_notebook_get_current_page(GTK_NOTEBOOK(ef_gtk->notebook)) == 0)
+    {
+        EF_Noeud    *noeud;
+        EF_Point    *point;
+        GtkTreeIter iter;
+        
+        BUG(noeud = EF_noeuds_ajout_noeud_libre(projet, 0., 0., 0., NULL), );
+        BUG(point = EF_noeuds_renvoie_position(noeud), );
+        gtk_tree_store_append(ef_gtk->tree_store_libre, &iter, NULL);
+        gtk_tree_store_set(ef_gtk->tree_store_libre, &iter, 0, noeud->numero, 1, point->x, 2, point->y, 3, point->z, 4, (noeud->appui == NULL ? gettext("Aucun") : noeud->appui->nom), -1);
+        
+        free(point);
+    }
+    // On ajoute un noeud intermédiaire
+    else
+    {
+        EF_Noeud    *noeud;
+        EF_Point        *point;
+        GtkTreeIter     iter;
+        EF_Noeud_Barre  *info;
+        
+        if (projet->beton.barres == NULL)
+            return;
+        
+        BUG(noeud = EF_noeuds_ajout_noeud_barre(projet, (Beton_Barre*)projet->beton.barres->data, 0.5, NULL), );
+        BUG(point = EF_noeuds_renvoie_position(noeud), );
+        info = (EF_Noeud_Barre *)noeud->data;
+        gtk_tree_store_append(ef_gtk->tree_store_barre, &iter, NULL);
+        gtk_tree_store_set(ef_gtk->tree_store_barre, &iter, 0, noeud->numero, 1, point->x, 2, point->y, 3, point->z, 4, (noeud->appui == NULL ? gettext("Aucun") : noeud->appui->nom), 5, info->barre->numero, 6, info->position_relative_barre, -1);
+        
+        free(point);
+    }
+    
+    return;
+}
+
+
 void EF_gtk_noeud_edit_pos_abs(GtkCellRendererText *cell, gchar *path_string, gchar *new_text, Projet *projet)
 /* Description : Changement de la position d'un noeud
  * Paramètres : GtkCellRendererText *cell : cellule en cours,
@@ -141,10 +193,13 @@ void EF_gtk_noeud_edit_pos_abs(GtkCellRendererText *cell, gchar *path_string, gc
                     }
                     
                     // On déplace le noeud
-                    position = EF_noeuds_renvoie_position(noeud);
+                    BUG(position = EF_noeuds_renvoie_position(noeud), );
                     texte = g_strdup_printf("noeud %d", noeud->numero);
                     objet = vue->scene->get_object_by_name(texte);
-                    objet->set_position(position->x, position->y, position->z);
+                    if (objet != NULL)
+                        objet->set_position(position->x, position->y, position->z);
+                    else
+                        m3d_noeud(texte, position, vue);
                     
                     if (projet->beton.barres != NULL)
                     {
@@ -609,7 +664,7 @@ void EF_gtk_noeud(Projet *projet)
         do
         {
             EF_Noeud    *noeud = (EF_Noeud *)list_parcours->data;
-            EF_Point    *point = (EF_Point *)EF_noeuds_renvoie_position(noeud);
+            EF_Point    *point = EF_noeuds_renvoie_position(noeud);
             GtkTreeIter iter;
             
             BUG(point, );
@@ -635,7 +690,7 @@ void EF_gtk_noeud(Projet *projet)
     }
     
     ef_gtk->button_ajouter = gtk_button_new_from_stock(GTK_STOCK_ADD);
-    //g_signal_connect(ef_gtk->button_ajouter, "clicked", G_CALLBACK(EF_gtk_noeud_ajouter), projet);
+    g_signal_connect(ef_gtk->button_ajouter, "clicked", G_CALLBACK(EF_gtk_noeud_ajouter), projet);
     gtk_table_attach(GTK_TABLE(ef_gtk->table), ef_gtk->button_ajouter, 0, 1, 1, 2, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_SHRINK | GTK_FILL), 0, 0);
     
     ef_gtk->button_fermer = gtk_button_new_from_stock(GTK_STOCK_CLOSE);

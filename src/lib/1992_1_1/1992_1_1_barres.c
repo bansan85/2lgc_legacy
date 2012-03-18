@@ -111,7 +111,7 @@ int _1992_1_1_barres_ajout(Projet *projet, Type_Element type, unsigned int secti
         /* Création des noeuds intermédiaires */
         for (i=0;i<discretisation_element;i++)
         {
-            BUG(EF_noeuds_ajout_noeud_barre(projet, element_nouveau, (i+1.)/(discretisation_element+1.), NULL) == 0, -3);
+            BUG(EF_noeuds_ajout_noeud_barre(projet, element_nouveau, (i+1.)/(discretisation_element+1.), NULL), -3);
             element_nouveau->noeuds_intermediaires[i] = g_list_last(projet->ef_donnees.noeuds)->data;
         }
     }
