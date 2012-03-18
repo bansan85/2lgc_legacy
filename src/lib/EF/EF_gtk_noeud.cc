@@ -53,65 +53,6 @@ void EF_gtk_noeud_fermer(GtkButton *button __attribute__((unused)), GtkWidget *f
 }
 
 
-void EF_gtk_noeud_edit_barre(GtkCellRendererText *cell, gchar *path_string, gchar *new_text, Projet *projet)
-/* Description : Changement de la barre ou la position relative d'un noeud
- * Paramètres : GtkCellRendererText *cell : cellule en cours,
- *            : gchar *path_string : path de la ligne en cours,
- *            : gchar *new_text : nouvelle valeur,
- *            : Projet *projet : la variable projet
- * Valeur renvoyée : Aucune
- */
-{
-    List_Gtk_EF_Noeud       *gtk_noeud;
-    GtkTreeModel            *model;
-    GtkTreePath             *path;
-    GtkTreeIter             iter;
-    gint                    i;
-    char                    *fake = (char*)malloc(sizeof(char)*(strlen(new_text)+1));
-    double                  convertion;
-    EF_Noeud                *noeud;
-    gint                    column = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cell), "column"));
-    
-    BUGMSG(projet, , gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->ef_donnees.noeuds, , gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->list_gtk.ef_noeud.window, , gettext("Paramètre incorrect\n"));
-    BUGMSG(fake, , gettext("Erreur d'allocation mémoire.\n"));
-    
-    gtk_noeud = &projet->list_gtk.ef_noeud;
-    model = GTK_TREE_MODEL(gtk_noeud->tree_store_barre);
-    path = gtk_tree_path_new_from_string(path_string);
-    
-    gtk_tree_model_get_iter(model, &iter, path);
-    gtk_tree_model_get(model, &iter, 0, &i, -1);
-    
-    // On vérifie si le texte contient bien un nombre flottant
-    BUG(noeud = EF_noeuds_cherche_numero(projet, i), );
-    
-    if (noeud->type == NOEUD_BARRE)
-    {
-        if (column == 6)
-        {
-            EF_Noeud_Barre  *info = (EF_Noeud_Barre *)noeud->data;
-            
-            if (sscanf(new_text, "%lf%s", &convertion, fake) == 1)
-            {
-                info->position_relative_barre = convertion;
-                gtk_tree_store_set(gtk_noeud->tree_store_barre, &iter, column, convertion, -1);
-            }
-        }
-        else
-            BUGMSG(NULL, , gettext("Paramètre incorrect\n"));
-    }
-    else
-        BUGMSG(NULL, , gettext("Paramètre incorrect\n"));
-    
-    free(fake);
-    gtk_tree_path_free(path);
-     
-    return;
-}
-
-
 void EF_gtk_noeud_edit_pos_abs(GtkCellRendererText *cell, gchar *path_string, gchar *new_text, Projet *projet)
 /* Description : Changement de la position d'un noeud
  * Paramètres : GtkCellRendererText *cell : cellule en cours,
