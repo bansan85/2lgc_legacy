@@ -40,7 +40,7 @@ extern "C" {
 #include "1990_actions.h"
 #include "common_selection.h"
 
-void EF_gtk_noeud_annuler(GtkButton *button __attribute__((unused)), GtkWidget *fenetre)
+void EF_gtk_noeud_fermer(GtkButton *button __attribute__((unused)), GtkWidget *fenetre)
 /* Description : Ferme la fenêtre sans effectuer les modifications
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement
  *            : Projet *projet : la variable projet
@@ -693,13 +693,13 @@ void EF_gtk_noeud(Projet *projet)
         while (list_parcours != NULL);
     }
     
-    ef_gtk->button_valider = gtk_button_new_from_stock(GTK_STOCK_OK);
-    //g_signal_connect(ef_gtk->button_fermer, "clicked", G_CALLBACK(EF_gtk_noeud_annuler), ef_gtk->window);
-    gtk_table_attach(GTK_TABLE(ef_gtk->table), ef_gtk->button_valider, 0, 1, 1, 2, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_SHRINK | GTK_FILL), 0, 0);
+    ef_gtk->button_ajouter = gtk_button_new_from_stock(GTK_STOCK_ADD);
+    //g_signal_connect(ef_gtk->button_ajouter, "clicked", G_CALLBACK(EF_gtk_noeud_ajouter), projet);
+    gtk_table_attach(GTK_TABLE(ef_gtk->table), ef_gtk->button_ajouter, 0, 1, 1, 2, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_SHRINK | GTK_FILL), 0, 0);
     
-    ef_gtk->button_annuler = gtk_button_new_from_stock(GTK_STOCK_CANCEL);
-    g_signal_connect(ef_gtk->button_annuler, "clicked", G_CALLBACK(EF_gtk_noeud_annuler), ef_gtk->window);
-    gtk_table_attach(GTK_TABLE(ef_gtk->table), ef_gtk->button_annuler, 1, 2, 1, 2, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_SHRINK | GTK_FILL), 0, 0);
+    ef_gtk->button_fermer = gtk_button_new_from_stock(GTK_STOCK_CLOSE);
+    g_signal_connect(ef_gtk->button_fermer, "clicked", G_CALLBACK(EF_gtk_noeud_fermer), ef_gtk->window);
+    gtk_table_attach(GTK_TABLE(ef_gtk->table), ef_gtk->button_fermer, 1, 2, 1, 2, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_SHRINK | GTK_FILL), 0, 0);
     
     gtk_window_set_transient_for(GTK_WINDOW(ef_gtk->window), GTK_WINDOW(projet->list_gtk.comp.window));
     gtk_window_set_modal(GTK_WINDOW(ef_gtk->window), TRUE);

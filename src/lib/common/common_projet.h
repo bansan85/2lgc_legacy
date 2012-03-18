@@ -260,8 +260,8 @@ typedef struct __List_Gtk_EF_Noeud
     
     GtkListStore    *liste_appuis;
     
-    GtkWidget       *button_valider;
-    GtkWidget       *button_annuler;
+    GtkWidget       *button_ajouter;
+    GtkWidget       *button_fermer;
 } List_Gtk_EF_Noeud;
 
 
