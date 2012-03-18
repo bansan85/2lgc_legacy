@@ -162,6 +162,21 @@ int m3d_camera_axe_x_z(Projet *projet)
 }
 
 
+void* m3d_noeud(const char *nom, EF_Point *point, void *vue)
+{
+    CM3dObject *cube;
+    
+    cube = M3d_cube_new(nom, .1);
+    cube->set_ambient_reflexion (1.);
+    cube->set_smooth(GOURAUD);
+    ((SGlobalData*)vue)->scene->add_object(cube);
+    cube->set_position(point->x, point->y, point->z);
+    
+    return cube;
+    
+}
+
+
 int m3d_barre(Projet *projet, Beton_Barre *barre)
 {
     List_Gtk_m3d    *m3d;
@@ -481,19 +496,14 @@ int m3d_genere_graphique(Projet *projet)
         {
             EF_Noeud    *noeud = (EF_Noeud *)list_parcours->data;
             EF_Point    *point;
-            CM3dObject  *cube;
             char        *tmp;
             
             BUG(point = EF_noeuds_renvoie_position(noeud), -3);
             BUGMSG(tmp = g_strdup_printf("noeud %d", noeud->numero), -2, gettext("Erreur d'allocation mémoire.\n"));
-            cube = M3d_cube_new(tmp, .1);
+            if (vue->scene->get_object_by_name(tmp) == NULL)
+                m3d_noeud(tmp, point, vue);
+            
             free(tmp);
-            
-            cube->set_ambient_reflexion (1.);
-            cube->set_smooth(GOURAUD);
-            vue->scene->add_object(cube);
-            cube->set_position(point->x, point->y, point->z);
-            
             free(point);
             list_parcours = g_list_next(list_parcours);
         }

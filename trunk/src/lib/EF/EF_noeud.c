@@ -42,7 +42,7 @@ int EF_noeuds_init(Projet *projet)
 }
 
 
-int EF_noeuds_ajout_noeud_libre(Projet *projet, double x, double y, double z, EF_Appui *appui)
+EF_Noeud *EF_noeuds_ajout_noeud_libre(Projet *projet, double x, double y, double z, EF_Appui *appui)
 /* Description : Ajouter un noeud à la liste des noeuds en lui attribuant le numéro suivant le
  *                 dernier noeud existant
  * Paramètres : Projet *projet : la variable projet
@@ -51,21 +51,21 @@ int EF_noeuds_ajout_noeud_libre(Projet *projet, double x, double y, double z, EF
  *            : double z : position en z
  *            : int appui : numéro de l'appui. -1 si aucun.
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : -1 en cas de paramètres invalides :
+ *   Succès : Pointeur vers le nouveau noeud
+ *   Échec : NULL en cas de paramètres invalides :
  *             (projet == NULL) ou
  *             (projet->ef_donnees.noeuds == NULL) ou
  *             (EF_appuis_cherche_numero(projet, appui) == NULL)
- *           -2 en cas d'erreur d'allocation mémoire
+ *           NULL en cas d'erreur d'allocation mémoire
  */
 {
     EF_Noeud        *noeud_nouveau = malloc(sizeof(EF_Noeud));
     EF_Point        *data;
     
-    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(noeud_nouveau, -2, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(projet, NULL, gettext("Paramètre incorrect\n"));
+    BUGMSG(noeud_nouveau, NULL, gettext("Erreur d'allocation mémoire.\n"));
     
-    BUGMSG(data = malloc(sizeof(EF_Point)), -2, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(data = malloc(sizeof(EF_Point)), NULL, gettext("Erreur d'allocation mémoire.\n"));
     
     // Trivial
     noeud_nouveau->type = NOEUD_LIBRE;
@@ -80,11 +80,22 @@ int EF_noeuds_ajout_noeud_libre(Projet *projet, double x, double y, double z, EF
     
     projet->ef_donnees.noeuds = g_list_append(projet->ef_donnees.noeuds, noeud_nouveau);
     
-    return 0;
+    if (projet->ef_donnees.noeuds_pos_partielle != NULL)
+    {
+        BUGMSG(projet->ef_donnees.noeuds_pos_partielle = (unsigned int**)realloc(projet->ef_donnees.noeuds_pos_partielle, sizeof(unsigned int*)*(noeud_nouveau->numero+1)), NULL, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(projet->ef_donnees.noeuds_pos_partielle[noeud_nouveau->numero] = (unsigned int*)malloc(6*sizeof(unsigned int)), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    }
+    if (projet->ef_donnees.noeuds_pos_complete != NULL)
+    {
+        BUGMSG(projet->ef_donnees.noeuds_pos_complete = (unsigned int**)realloc(projet->ef_donnees.noeuds_pos_complete, sizeof(unsigned int*)*(noeud_nouveau->numero+1)), NULL, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(projet->ef_donnees.noeuds_pos_complete[noeud_nouveau->numero] = (unsigned int*)malloc(6*sizeof(unsigned int)), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    }
+    
+    return noeud_nouveau;
 }
 
 
-int EF_noeuds_ajout_noeud_barre(Projet *projet, Beton_Barre *barre, double position_relative_barre, EF_Appui *appui)
+EF_Noeud* EF_noeuds_ajout_noeud_barre(Projet *projet, Beton_Barre *barre, double position_relative_barre, EF_Appui *appui)
 /* Description : Ajouter un noeud à la liste des noeuds en lui attribuant le numéro suivant le
  *                 dernier noeud existant. Ce noeud se situe à l'intérieur d'une barre et
  *                 permet la discrétisation.
@@ -92,22 +103,22 @@ int EF_noeuds_ajout_noeud_barre(Projet *projet, Beton_Barre *barre, double posit
  *            : double position_relative_barre : position relative à l'intérieur de la barre (compris entre 0.0 et 1.0)
  *            : int appui : numéro de l'appui. -1 si aucun.
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : -1 en cas de paramètres invalides :
+ *   Succès : Pointeur vers le nouveau noeud
+ *   Échec : NULL en cas de paramètres invalides :
  *             (projet == NULL) ou
  *             (projet->ef_donnees.noeuds == NULL) ou
  *             (EF_appuis_cherche_numero(projet, appui) == NULL)
- *           -2 en cas d'erreur d'allocation mémoire
+ *           NULL en cas d'erreur d'allocation mémoire
  */
 {
     EF_Noeud        *noeud_nouveau = malloc(sizeof(EF_Noeud));
     EF_Noeud_Barre  *data;
     
-    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->ef_donnees.noeuds, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(noeud_nouveau, -2, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(projet, NULL, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->ef_donnees.noeuds, NULL, gettext("Paramètre incorrect\n"));
+    BUGMSG(noeud_nouveau, NULL, gettext("Erreur d'allocation mémoire.\n"));
     
-    BUGMSG(data = malloc(sizeof(EF_Noeud_Barre)), -2, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(data = malloc(sizeof(EF_Noeud_Barre)), NULL, gettext("Erreur d'allocation mémoire.\n"));
     
     // Trivial
     noeud_nouveau->type = NOEUD_BARRE;
@@ -121,7 +132,18 @@ int EF_noeuds_ajout_noeud_barre(Projet *projet, Beton_Barre *barre, double posit
     
     projet->ef_donnees.noeuds = g_list_append(projet->ef_donnees.noeuds, noeud_nouveau);
     
-    return 0;
+    if (projet->ef_donnees.noeuds_pos_partielle != NULL)
+    {
+        BUGMSG(projet->ef_donnees.noeuds_pos_partielle = (unsigned int**)realloc(projet->ef_donnees.noeuds_pos_partielle, sizeof(unsigned int*)*(noeud_nouveau->numero+1)), NULL, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(projet->ef_donnees.noeuds_pos_partielle[noeud_nouveau->numero] = (unsigned int*)malloc(6*sizeof(unsigned int)), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    }
+    if (projet->ef_donnees.noeuds_pos_complete != NULL)
+    {
+        BUGMSG(projet->ef_donnees.noeuds_pos_complete = (unsigned int**)realloc(projet->ef_donnees.noeuds_pos_complete, sizeof(unsigned int*)*(noeud_nouveau->numero+1)), NULL, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(projet->ef_donnees.noeuds_pos_complete[noeud_nouveau->numero] = (unsigned int*)malloc(6*sizeof(unsigned int)), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    }
+    
+    return noeud_nouveau;
 }
 
 
