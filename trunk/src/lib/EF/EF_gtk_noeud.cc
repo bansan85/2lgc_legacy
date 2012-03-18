@@ -374,7 +374,7 @@ void EF_gtk_render_actualise_position(GtkTreeViewColumn *tree_column __attribute
 }
 
 
-void EF_gtk_noeud_edit_noeud_libre_appui(GtkCellRendererText *cell __attribute__((unused)), const gchar *path_string, const gchar *new_text, Projet *projet)
+void EF_gtk_noeud_edit_noeud_appui(GtkCellRendererText *cell __attribute__((unused)), const gchar *path_string, const gchar *new_text, Projet *projet)
 /* Description : Changement du type d'appui d'un noeud.
  * Paramètres : GtkCellRendererText *cell : cellule en cours,
  *            : gchar *path_string : path de la ligne en cours,
@@ -399,7 +399,11 @@ void EF_gtk_noeud_edit_noeud_libre_appui(GtkCellRendererText *cell __attribute__
     
     ef_gtk = &projet->list_gtk.ef_noeud;
     
-    model = GTK_TREE_MODEL(ef_gtk->tree_store_libre);
+    // Noeud libre
+    if (gtk_notebook_get_current_page(GTK_NOTEBOOK(ef_gtk->notebook)) == 0)
+        model = GTK_TREE_MODEL(ef_gtk->tree_store_libre);
+    else
+        model = GTK_TREE_MODEL(ef_gtk->tree_store_barre);
     path = gtk_tree_path_new_from_string (path_string);
     
     gtk_tree_model_get_iter(model, &iter, path);
@@ -409,75 +413,10 @@ void EF_gtk_noeud_edit_noeud_libre_appui(GtkCellRendererText *cell __attribute__
     {
         EF_Noeud    *noeud = EF_noeuds_cherche_numero(projet, numero_noeud);
         noeud->appui = NULL;
-        gtk_tree_store_set(ef_gtk->tree_store_libre, &iter, 4, new_text, -1);
-        
-        gtk_tree_path_free (path);
-        return;
-    }
-    
-    list_parcours = projet->ef_donnees.appuis;
-    do
-    {
-        appui = (EF_Appui *)list_parcours->data;
-        if (strcmp(new_text, appui->nom) == 0)
-        {
-            EF_Noeud    *noeud = EF_noeuds_cherche_numero(projet, numero_noeud);
-            BUG(noeud, );
-            
-            noeud->appui = appui;
+        if (gtk_notebook_get_current_page(GTK_NOTEBOOK(ef_gtk->notebook)) == 0)
             gtk_tree_store_set(ef_gtk->tree_store_libre, &iter, 4, new_text, -1);
-            
-            gtk_tree_path_free (path);
-            return;
-        }
-        list_parcours = g_list_next(list_parcours);
-    }
-    while (list_parcours != NULL);
-    
-    path = gtk_tree_path_new_from_string (path_string);
-    
-    BUGMSG(NULL, , gettext("Appui %s introuvable.\n"), new_text);
-    
-    return;
-}
-
-
-void EF_gtk_noeud_edit_noeud_barre_appui(GtkCellRendererText *cell __attribute__((unused)), const gchar *path_string, const gchar *new_text, Projet *projet)
-/* Description : Changement du type d'appui d'un noeud.
- * Paramètres : GtkCellRendererText *cell : cellule en cours,
- *            : gchar *path_string : path de la ligne en cours,
- *            : gchar *new_text : nom de l'appui,
- *            : Projet *projet : la variable projet
- * Valeur renvoyée : Aucune
-*/
-{
-    List_Gtk_EF_Noeud   *ef_gtk;
-    GtkTreeModel        *model;
-    GtkTreePath         *path;
-    GtkTreeIter         iter;
-    gint                numero_noeud;
-    EF_Appui            *appui = NULL;
-    GList               *list_parcours;
-    
-    BUGMSG(projet, , gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->list_gtk.ef_noeud.window, , gettext("Paramètre incorrect\n"));
-    
-    if (projet->ef_donnees.appuis == NULL)
-        return;
-    
-    ef_gtk = &projet->list_gtk.ef_noeud;
-    
-    model = GTK_TREE_MODEL(ef_gtk->tree_store_barre);
-    path = gtk_tree_path_new_from_string (path_string);
-    
-    gtk_tree_model_get_iter(model, &iter, path);
-    gtk_tree_model_get(model, &iter, 0, &numero_noeud, -1);
-    
-    if (strcmp(new_text, gettext("Aucun")) == 0)
-    {
-        EF_Noeud    *noeud = EF_noeuds_cherche_numero(projet, numero_noeud);
-        noeud->appui = NULL;
-        gtk_tree_store_set(ef_gtk->tree_store_barre, &iter, 4, new_text, -1);
+        else
+            gtk_tree_store_set(ef_gtk->tree_store_barre, &iter, 4, new_text, -1);
         
         gtk_tree_path_free (path);
         return;
@@ -493,17 +432,17 @@ void EF_gtk_noeud_edit_noeud_barre_appui(GtkCellRendererText *cell __attribute__
             BUG(noeud, );
             
             noeud->appui = appui;
-            gtk_tree_store_set(ef_gtk->tree_store_barre, &iter, 4, new_text, -1);
+            if (gtk_notebook_get_current_page(GTK_NOTEBOOK(ef_gtk->notebook)) == 0)
+                gtk_tree_store_set(ef_gtk->tree_store_libre, &iter, 4, new_text, -1);
+            else
+                gtk_tree_store_set(ef_gtk->tree_store_barre, &iter, 4, new_text, -1);
             
             gtk_tree_path_free (path);
             return;
         }
-        
         list_parcours = g_list_next(list_parcours);
     }
     while (list_parcours != NULL);
-    
-    path = gtk_tree_path_new_from_string (path_string);
     
     BUGMSG(NULL, , gettext("Appui %s introuvable.\n"), new_text);
     
@@ -590,7 +529,7 @@ void EF_gtk_noeud(Projet *projet)
     // Colonne Appui
     pCellRenderer = gtk_cell_renderer_combo_new();
     g_object_set(pCellRenderer, "editable", TRUE, "model", ef_gtk->liste_appuis, "text-column", 0, "has-entry", FALSE, NULL);
-    g_signal_connect(pCellRenderer, "edited", G_CALLBACK(EF_gtk_noeud_edit_noeud_libre_appui), projet);
+    g_signal_connect(pCellRenderer, "edited", G_CALLBACK(EF_gtk_noeud_edit_noeud_appui), projet);
     gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW(ef_gtk->tree_view_libre), -1, gettext("Appui"), pCellRenderer, "text", 4, NULL);
     list = gtk_tree_view_get_columns(GTK_TREE_VIEW(ef_gtk->tree_view_libre));
     g_list_first(list);
@@ -636,7 +575,7 @@ void EF_gtk_noeud(Projet *projet)
     // Colonne Appui
     pCellRenderer = gtk_cell_renderer_combo_new();
     g_object_set(pCellRenderer, "editable", TRUE, "model", ef_gtk->liste_appuis, "text-column", 0, "has-entry", FALSE, NULL);
-    g_signal_connect(pCellRenderer, "edited", G_CALLBACK(EF_gtk_noeud_edit_noeud_barre_appui), projet);
+    g_signal_connect(pCellRenderer, "edited", G_CALLBACK(EF_gtk_noeud_edit_noeud_appui), projet);
     gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW(ef_gtk->tree_view_barre), -1, gettext("Appui"), pCellRenderer, "text", 4, NULL);
     // Colonne Barre
     pCellRenderer = gtk_cell_renderer_text_new();
