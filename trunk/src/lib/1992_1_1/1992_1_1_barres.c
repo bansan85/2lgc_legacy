@@ -106,13 +106,13 @@ int _1992_1_1_barres_ajout(Projet *projet, Type_Element type, unsigned int secti
     {
         unsigned int    i;
         
-        BUGMSG(element_nouveau->noeuds_intermediaires = (EF_Noeud**)malloc(sizeof(EF_Noeud*)*(discretisation_element)), -2, gettext("Erreur d'allocation mémoire.\n"));
+        element_nouveau->noeuds_intermediaires = NULL;
         
         /* Création des noeuds intermédiaires */
         for (i=0;i<discretisation_element;i++)
         {
             BUG(EF_noeuds_ajout_noeud_barre(projet, element_nouveau, (i+1.)/(discretisation_element+1.), NULL), -3);
-            element_nouveau->noeuds_intermediaires[i] = g_list_last(projet->ef_donnees.noeuds)->data;
+            element_nouveau->noeuds_intermediaires = g_list_append(element_nouveau->noeuds_intermediaires, g_list_last(projet->ef_donnees.noeuds)->data);
         }
     }
     else
@@ -338,19 +338,19 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
         {
             noeud1 = element->noeud_debut;
             if (element->discretisation_element != 0)
-                noeud2 = element->noeuds_intermediaires[0];
+                noeud2 = g_list_first(element->noeuds_intermediaires)->data;
             else
                 noeud2 = element->noeud_fin;
         }
         else if (j == element->discretisation_element)
         {
-            noeud1 = element->noeuds_intermediaires[j-1];
+            noeud1 = g_list_nth_data(element->noeuds_intermediaires, j-1);
             noeud2 = element->noeud_fin;
         }
         else
         {
-            noeud1 = element->noeuds_intermediaires[j-1];
-            noeud2 = element->noeuds_intermediaires[j];
+            noeud1 = g_list_nth_data(element->noeuds_intermediaires, j-1);
+            noeud2 = g_list_nth_data(element->noeuds_intermediaires, j);
         }
     //     Calcul des L_x, L_y, L_z et L.
         ll = EF_noeuds_distance(noeud2, noeud1);
@@ -922,7 +922,7 @@ int _1992_1_1_barres_free(Projet *projet)
         Beton_Barre *element = projet->beton.barres->data;
         
         projet->beton.barres = g_list_delete_link(projet->beton.barres, projet->beton.barres);
-        free(element->noeuds_intermediaires);
+        g_list_free(element->noeuds_intermediaires);
         cholmod_l_free_sparse(&(element->matrice_rotation), projet->ef_donnees.c);
         cholmod_l_free_sparse(&(element->matrice_rotation_transpose), projet->ef_donnees.c);
         for (i=0;i<=element->discretisation_element;i++)

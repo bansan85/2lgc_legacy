@@ -175,11 +175,11 @@ int EF_charge_barre_repartie_uniforme_mx(Beton_Barre *barre, unsigned int discre
     if (discretisation == 0)
         debut = barre->noeud_debut;
     else
-        debut = barre->noeuds_intermediaires[discretisation-1];
+        debut = g_list_nth_data(barre->noeuds_intermediaires, discretisation-1);
     if (discretisation == barre->discretisation_element)
         fin = barre->noeud_fin;
     else
-        fin = barre->noeuds_intermediaires[discretisation];
+        fin = g_list_nth_data(barre->noeuds_intermediaires, discretisation);
     
     l = EF_noeuds_distance(debut, fin);
     BUGMSG(!((a < 0.) && (!(ERREUR_RELATIVE_EGALE(a, 0.)))), -1, "a = %.20f, l = %.20f\n", a, l);
@@ -283,11 +283,11 @@ int EF_charge_barre_repartie_uniforme_def_ang_iso_y(Beton_Barre *barre,
     if (discretisation == 0)
         debut = barre->noeud_debut;
     else
-        debut = barre->noeuds_intermediaires[discretisation-1];
+        debut = g_list_nth_data(barre->noeuds_intermediaires, discretisation-1);
     if (discretisation == barre->discretisation_element)
         fin = barre->noeud_fin;
     else
-        fin = barre->noeuds_intermediaires[discretisation];
+        fin = g_list_nth_data(barre->noeuds_intermediaires, discretisation);
     
     l = EF_noeuds_distance(debut, fin);
     BUG(!isnan(l), -1);
@@ -373,11 +373,11 @@ int EF_charge_barre_repartie_uniforme_def_ang_iso_z(Beton_Barre *barre,
     if (discretisation == 0)
         debut = barre->noeud_debut;
     else
-        debut = barre->noeuds_intermediaires[discretisation-1];
+        debut = g_list_nth_data(barre->noeuds_intermediaires, discretisation-1);
     if (discretisation == barre->discretisation_element)
         fin = barre->noeud_fin;
     else
-        fin = barre->noeuds_intermediaires[discretisation];
+        fin = g_list_nth_data(barre->noeuds_intermediaires, discretisation);
     
     // Les angles phi_A et phi_B sont déterminés par les intégrales de Mohr
     //   et valent dans le cas général :\end{verbatim}\begin{center}
@@ -539,11 +539,11 @@ int EF_charge_barre_repartie_uniforme_fonc_rx(Fonction *fonction, Beton_Barre *b
     if (discretisation == 0)
         debut = barre->noeud_debut;
     else
-        debut = barre->noeuds_intermediaires[discretisation-1];
+        debut = g_list_nth_data(barre->noeuds_intermediaires, discretisation-1);
     if (discretisation == barre->discretisation_element)
         fin = barre->noeud_fin;
     else
-        fin = barre->noeuds_intermediaires[discretisation];
+        fin = g_list_nth_data(barre->noeuds_intermediaires, discretisation);
     
     debut_barre = EF_noeuds_distance(debut, barre->noeud_debut);
     BUG(!isnan(debut_barre), -3);
@@ -692,11 +692,11 @@ int EF_charge_barre_repartie_uniforme_fonc_ry(Fonction *f_rotation, Fonction* f_
     if (discretisation == 0)
         debut = barre->noeud_debut;
     else
-        debut = barre->noeuds_intermediaires[discretisation-1];
+        debut = g_list_nth_data(barre->noeuds_intermediaires, discretisation-1);
     if (discretisation == barre->discretisation_element)
         fin = barre->noeud_fin;
     else
-        fin = barre->noeuds_intermediaires[discretisation];
+        fin = g_list_nth_data(barre->noeuds_intermediaires, discretisation);
     
     debut_barre = EF_noeuds_distance(debut, barre->noeud_debut);
     BUG(!isnan(debut_barre), -3);
@@ -822,11 +822,11 @@ int EF_charge_barre_repartie_uniforme_fonc_rz(Fonction *f_rotation, Fonction* f_
     if (discretisation == 0)
         debut = barre->noeud_debut;
     else
-        debut = barre->noeuds_intermediaires[discretisation-1];
+        debut = g_list_nth_data(barre->noeuds_intermediaires, discretisation-1);
     if (discretisation == barre->discretisation_element)
         fin = barre->noeud_fin;
     else
-        fin = barre->noeuds_intermediaires[discretisation];
+        fin = g_list_nth_data(barre->noeuds_intermediaires, discretisation);
     
     debut_barre = EF_noeuds_distance(debut, barre->noeud_debut);
     BUG(!isnan(debut_barre), -3);
@@ -927,11 +927,11 @@ int EF_charge_barre_repartie_uniforme_n(Fonction *fonction, Beton_Barre *barre,
     if (discretisation == 0)
         debut = barre->noeud_debut;
     else
-        debut = barre->noeuds_intermediaires[discretisation-1];
+        debut = g_list_nth_data(barre->noeuds_intermediaires, discretisation-1);
     if (discretisation == barre->discretisation_element)
         fin = barre->noeud_fin;
     else
-        fin = barre->noeuds_intermediaires[discretisation];
+        fin = g_list_nth_data(barre->noeuds_intermediaires, discretisation);
     
     debut_barre = EF_noeuds_distance(debut, barre->noeud_debut);
     BUG(!isnan(debut_barre), -3);

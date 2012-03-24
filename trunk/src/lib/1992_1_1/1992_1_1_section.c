@@ -449,11 +449,11 @@ double _1992_1_1_sections_ay(Beton_Barre *barre, unsigned int discretisation)
     if (discretisation == 0)
         debut = barre->noeud_debut;
     else
-        debut = barre->noeuds_intermediaires[discretisation-1];
+        debut = g_list_nth_data(barre->noeuds_intermediaires, discretisation-1);
     if (discretisation == barre->discretisation_element)
         fin = barre->noeud_fin;
     else
-        fin = barre->noeuds_intermediaires[discretisation];
+        fin = g_list_nth_data(barre->noeuds_intermediaires, discretisation);
     
     ll = EF_noeuds_distance(fin, debut);
     BUG(!isnan(ll), NAN);
@@ -513,11 +513,11 @@ double _1992_1_1_sections_by(Beton_Barre *barre, unsigned int discretisation)
     if (discretisation == 0)
         debut = barre->noeud_debut;
     else
-        debut = barre->noeuds_intermediaires[discretisation-1];
+        debut = g_list_nth_data(barre->noeuds_intermediaires, discretisation-1);
     if (discretisation == barre->discretisation_element)
         fin = barre->noeud_fin;
     else
-        fin = barre->noeuds_intermediaires[discretisation];
+        fin = g_list_nth_data(barre->noeuds_intermediaires, discretisation);
     
     ll = EF_noeuds_distance(fin, debut);
     BUG(!isnan(ll), NAN);
@@ -577,11 +577,11 @@ double _1992_1_1_sections_cy(Beton_Barre *barre, unsigned int discretisation)
     if (discretisation == 0)
         debut = barre->noeud_debut;
     else
-        debut = barre->noeuds_intermediaires[discretisation-1];
+        debut = g_list_nth_data(barre->noeuds_intermediaires, discretisation-1);
     if (discretisation == barre->discretisation_element)
         fin = barre->noeud_fin;
     else
-        fin = barre->noeuds_intermediaires[discretisation];
+        fin = g_list_nth_data(barre->noeuds_intermediaires, discretisation);
     
     ll = EF_noeuds_distance(fin, debut);
     BUG(!isnan(ll), NAN);
@@ -641,11 +641,11 @@ double _1992_1_1_sections_az(Beton_Barre *barre, unsigned int discretisation)
     if (discretisation == 0)
         debut = barre->noeud_debut;
     else
-        debut = barre->noeuds_intermediaires[discretisation-1];
+        debut = g_list_nth_data(barre->noeuds_intermediaires, discretisation-1);
     if (discretisation == barre->discretisation_element)
         fin = barre->noeud_fin;
     else
-        fin = barre->noeuds_intermediaires[discretisation];
+        fin = g_list_nth_data(barre->noeuds_intermediaires, discretisation);
     
     ll = EF_noeuds_distance(fin, debut);
     BUG(!isnan(ll), NAN);
@@ -705,11 +705,11 @@ double _1992_1_1_sections_bz(Beton_Barre *barre, unsigned int discretisation)
     if (discretisation == 0)
         debut = barre->noeud_debut;
     else
-        debut = barre->noeuds_intermediaires[discretisation-1];
+        debut = g_list_nth_data(barre->noeuds_intermediaires, discretisation-1);
     if (discretisation == barre->discretisation_element)
         fin = barre->noeud_fin;
     else
-        fin = barre->noeuds_intermediaires[discretisation];
+        fin = g_list_nth_data(barre->noeuds_intermediaires, discretisation);
     
     ll = EF_noeuds_distance(fin, debut);
     BUG(!isnan(ll), NAN);
@@ -769,11 +769,11 @@ double _1992_1_1_sections_cz(Beton_Barre *barre, unsigned int discretisation)
     if (discretisation == 0)
         debut = barre->noeud_debut;
     else
-        debut = barre->noeuds_intermediaires[discretisation-1];
+        debut = g_list_nth_data(barre->noeuds_intermediaires, discretisation-1);
     if (discretisation == barre->discretisation_element)
         fin = barre->noeud_fin;
     else
-        fin = barre->noeuds_intermediaires[discretisation];
+        fin = g_list_nth_data(barre->noeuds_intermediaires, discretisation);
     
     ll = EF_noeuds_distance(fin, debut);
     BUG(!isnan(ll), NAN);
@@ -982,11 +982,11 @@ double _1992_1_1_sections_gj_l(Beton_Barre *barre, unsigned int discretisation)
     if (discretisation == 0)
         debut = barre->noeud_debut;
     else
-        debut = barre->noeuds_intermediaires[discretisation-1];
+        debut = g_list_nth_data(barre->noeuds_intermediaires, discretisation-1);
     if (discretisation == barre->discretisation_element)
         fin = barre->noeud_fin;
     else
-        fin = barre->noeuds_intermediaires[discretisation];
+        fin = g_list_nth_data(barre->noeuds_intermediaires, discretisation);
     
     ll = EF_noeuds_distance(fin, debut);
     BUG(!isnan(ll), NAN);

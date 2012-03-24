@@ -39,6 +39,7 @@ extern "C" {
 #include "EF_charge_noeud.h"
 #include "1990_actions.h"
 #include "common_selection.h"
+#include "1992_1_1_barres.h"
 
 void EF_gtk_noeud_fermer(GtkButton *button __attribute__((unused)), GtkWidget *fenetre)
 /* Description : Ferme la fenêtre sans effectuer les modifications
@@ -114,15 +115,15 @@ void EF_gtk_noeud_edit_pos_abs(GtkCellRendererText *cell, gchar *path_string, gc
  * Valeur renvoyée : Aucune
  */
 {
-    List_Gtk_EF_Noeud       *gtk_noeud;
-    GtkTreeModel            *model;
-    GtkTreePath             *path;
-    GtkTreeIter             iter;
-    unsigned int            i;
-    char                    *fake = (char*)malloc(sizeof(char)*(strlen(new_text)+1));
-    double                  convertion;
-    EF_Noeud                *noeud;
-    gint                    column = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cell), "column"));
+    List_Gtk_EF_Noeud   *gtk_noeud;
+    GtkTreeModel        *model;
+    GtkTreePath         *path;
+    GtkTreeIter         iter;
+    unsigned int        i;
+    char                *fake = (char*)malloc(sizeof(char)*(strlen(new_text)+1));
+    double              conversion;
+    EF_Noeud            *noeud;
+    gint                column = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cell), "column"));
     
     BUGMSG(projet, , gettext("Paramètre incorrect\n"));
     BUGMSG(projet->ef_donnees.noeuds, , gettext("Paramètre incorrect\n"));
@@ -138,7 +139,7 @@ void EF_gtk_noeud_edit_pos_abs(GtkCellRendererText *cell, gchar *path_string, gc
     gtk_tree_model_get(model, &iter, 0, &i, -1);
     
     // On vérifie si le texte contient bien un nombre flottant
-    if (sscanf(new_text, "%lf%s", &convertion, fake) == 1)
+    if (sscanf(new_text, "%lf%s", &conversion, fake) == 1)
     {
         GList       *noeuds_todo = NULL, *noeuds_done = NULL;
         SGlobalData *vue = (SGlobalData*)projet->list_gtk.m3d.data;
@@ -146,8 +147,7 @@ void EF_gtk_noeud_edit_pos_abs(GtkCellRendererText *cell, gchar *path_string, gc
         // On modifie l'action
         BUG(noeud = EF_noeuds_cherche_numero(projet, i), );
         
-        if ((g_list_find(noeuds_done, noeud) == NULL) && (g_list_find(noeuds_todo, noeud) == NULL))
-            noeuds_todo = g_list_append(noeuds_todo, noeud);
+        noeuds_todo = g_list_append(noeuds_todo, noeud);
         
         while (noeuds_todo != NULL)
         {
@@ -171,17 +171,17 @@ void EF_gtk_noeud_edit_pos_abs(GtkCellRendererText *cell, gchar *path_string, gc
                         {
                             case 1:
                             {
-                                point->x = convertion;
+                                point->x = conversion;
                                 break;
                             }
                             case 2:
                             {
-                                point->y = convertion;
+                                point->y = conversion;
                                 break;
                             }
                             case 3:
                             {
-                                point->z = convertion;
+                                point->z = conversion;
                                 break;
                             }
                             default :
@@ -211,15 +211,16 @@ void EF_gtk_noeud_edit_pos_abs(GtkCellRendererText *cell, gchar *path_string, gc
                             
                             if (((barre->noeud_debut) && (barre->noeud_debut->numero == i)) || ((barre->noeud_fin) && (barre->noeud_fin->numero == i)))
                             {
-                                unsigned int    j;
+                                GList   *list_parcours2 = barre->noeuds_intermediaires;
                                 
                                 // On actualise la barre
                                 m3d_barre(projet, barre);
                                 
-                                for (j = 0 ; j<barre->discretisation_element ; j++)
+                                while (list_parcours2 != NULL)
                                 {
-                                    if ((g_list_find(noeuds_done, barre->noeuds_intermediaires[j]) == NULL) && (g_list_find(noeuds_todo, barre->noeuds_intermediaires[j]) == NULL))
-                                        noeuds_todo = g_list_append(noeuds_todo, barre->noeuds_intermediaires[j]);
+                                    if ((g_list_find(noeuds_done, list_parcours2->data) == NULL) && (g_list_find(noeuds_todo, list_parcours2->data) == NULL))
+                                        noeuds_todo = g_list_append(noeuds_todo, list_parcours2->data);
+                                    list_parcours2 = g_list_next(list_parcours2);
                                 }
                                 
                             }
@@ -245,7 +246,7 @@ void EF_gtk_noeud_edit_pos_abs(GtkCellRendererText *cell, gchar *path_string, gc
         }
         
         // On modifie le tree-view-actions
-        gtk_tree_store_set(gtk_noeud->tree_store_libre, &iter, column, convertion, -1);
+        gtk_tree_store_set(gtk_noeud->tree_store_libre, &iter, column, conversion, -1);
         
         // On force l'actualisation de l'affichage
         vue->scene->rendering(vue->camera);
@@ -278,8 +279,7 @@ void EF_gtk_noeud_edit_pos_relat(GtkCellRendererText *cell, gchar *path_string, 
     GtkTreeIter             iter;
     gint                    i;
     char                    *fake = (char*)malloc(sizeof(char)*(strlen(new_text)+1));
-    double                  convertion;
-    EF_Noeud                *noeud;
+    double                  conversion;
     gint                    column = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cell), "column"));
     
     BUGMSG(projet, , gettext("Paramètre incorrect\n"));
@@ -295,8 +295,10 @@ void EF_gtk_noeud_edit_pos_relat(GtkCellRendererText *cell, gchar *path_string, 
     gtk_tree_model_get(model, &iter, 0, &i, -1);
     
     // On vérifie si le texte contient bien un nombre flottant
-    if (sscanf(new_text, "%lf%s", &convertion, fake) == 1)
+    if (sscanf(new_text, "%lf%s", &conversion, fake) == 1)
     {
+        EF_Noeud                *noeud;
+        
         // On modifie l'action
         BUG(noeud = EF_noeuds_cherche_numero(projet, i), );
         
@@ -313,7 +315,7 @@ void EF_gtk_noeud_edit_pos_relat(GtkCellRendererText *cell, gchar *path_string, 
                 {
                     EF_Noeud_Barre  *info = (EF_Noeud_Barre *)noeud->data;
                     
-                    info->position_relative_barre = convertion;
+                    info->position_relative_barre = conversion;
                 }
                 else
                     BUGMSG(NULL, , gettext("Paramètre incorrect\n"));
@@ -326,8 +328,10 @@ void EF_gtk_noeud_edit_pos_relat(GtkCellRendererText *cell, gchar *path_string, 
             }
         }
         
-        // On modifie le tree-view-actions
-        gtk_tree_store_set(gtk_noeud->tree_store_barre, &iter, column, convertion, -1);
+        m3d_actualise_graphique_deplace_noeud(projet, noeud);
+        
+        // On modifie le tree-view-barre
+        gtk_tree_store_set(gtk_noeud->tree_store_barre, &iter, column, conversion, -1);
     }
     
     free(fake);
@@ -445,6 +449,71 @@ void EF_gtk_noeud_edit_noeud_appui(GtkCellRendererText *cell __attribute__((unus
     while (list_parcours != NULL);
     
     BUGMSG(NULL, , gettext("Appui %s introuvable.\n"), new_text);
+    
+    return;
+}
+
+
+void EF_gtk_noeud_edit_noeud_barre_barre(GtkCellRendererText *cell __attribute__((unused)), const gchar *path_string, const gchar *new_text, Projet *projet)
+/* Description : Changement de barre d'un noeud intermédiaire.
+ * Paramètres : GtkCellRendererText *cell : cellule en cours,
+ *            : gchar *path_string : path de la ligne en cours,
+ *            : gchar *new_text : nom de l'appui,
+ *            : Projet *projet : la variable projet
+ * Valeur renvoyée : Aucune
+*/
+{
+    List_Gtk_EF_Noeud   *gtk_noeud;
+    char                *fake = (char*)malloc(sizeof(char)*(strlen(new_text)+1));
+    unsigned int        numero, conversion;
+    GtkTreeModel        *model;
+    GtkTreePath         *path;
+    GtkTreeIter         iter;
+    
+    BUGMSG(projet, , gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->ef_donnees.noeuds, , gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->list_gtk.ef_noeud.window, , gettext("Paramètre incorrect\n"));
+    BUGMSG(fake, , gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(&projet->list_gtk.m3d.data, , gettext("Paramètre incorrect\n"));
+    
+    gtk_noeud = &projet->list_gtk.ef_noeud;
+    model = GTK_TREE_MODEL(gtk_noeud->tree_store_barre);
+    path = gtk_tree_path_new_from_string(path_string);
+    
+    gtk_tree_model_get_iter(model, &iter, path);
+    gtk_tree_path_free(path);
+    gtk_tree_model_get(model, &iter, 0, &numero, -1);
+    
+    // On vérifie si le texte contient bien un numéro
+    if (sscanf(new_text, "%u%s", &conversion, fake) == 1)
+    {
+        Beton_Barre *barre;
+        EF_Noeud    *noeud;
+        
+        free(fake);
+        
+        // On modifie l'action
+        BUG(noeud = EF_noeuds_cherche_numero(projet, numero), );
+        barre = _1992_1_1_barres_cherche_numero(projet, conversion);
+        if (barre == NULL)
+            return;
+        
+        if (noeud->type == NOEUD_BARRE)
+        {
+            EF_Noeud_Barre  *info = (EF_Noeud_Barre *)noeud->data;
+            
+            info->barre = barre;
+        }
+        else
+            BUGMSG(NULL, , gettext("Paramètre incorrect\n"));
+        
+        m3d_actualise_graphique_deplace_noeud(projet, noeud);
+        
+        // On modifie le tree-view-actions
+        gtk_tree_store_set(gtk_noeud->tree_store_barre, &iter, 5, conversion, -1);
+    }
+    else
+        free(fake);
     
     return;
 }
@@ -579,6 +648,8 @@ void EF_gtk_noeud(Projet *projet)
     gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW(ef_gtk->tree_view_barre), -1, gettext("Appui"), pCellRenderer, "text", 4, NULL);
     // Colonne Barre
     pCellRenderer = gtk_cell_renderer_text_new();
+    g_object_set(pCellRenderer, "editable", TRUE, NULL);
+    g_signal_connect(pCellRenderer, "edited", G_CALLBACK(EF_gtk_noeud_edit_noeud_barre_barre), projet);
     gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW(ef_gtk->tree_view_barre), -1, gettext("Barre"), pCellRenderer, "text", 5, NULL);
     // Colonne Position relative
     pCellRenderer = gtk_cell_renderer_text_new();

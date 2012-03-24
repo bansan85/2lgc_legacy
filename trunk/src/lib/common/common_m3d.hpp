@@ -46,6 +46,9 @@ gboolean m3d_configure_event(GtkWidget *drawing, GdkEventConfigure * ev, gpointe
 
 int m3d_camera_axe_x_z(Projet *projet);
 int m3d_genere_graphique(Projet *projet);
+
+void m3d_actualise_graphique_deplace_noeud(Projet *projet, EF_Noeud *noeud);
+
 void* m3d_noeud(const char *nom, EF_Point *point, void *vue);
 int m3d_barre(Projet *projet, Beton_Barre *barre);
 

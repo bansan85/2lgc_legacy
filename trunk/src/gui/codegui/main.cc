@@ -142,7 +142,7 @@ int main(int argc, char *argv[])
     BUG(EF_noeuds_ajout_noeud_libre(projet, 8.0, 0.0, 0.0, EF_appuis_cherche_numero(projet, 0)), -1);
     
     // Création des sections en béton
-    BUG(_1992_1_1_sections_ajout_rectangulaire(projet, 0.3, 0.5) == 0, -1);
+    BUG(_1992_1_1_sections_ajout_rectangulaire(projet, 0.05, 0.05) == 0, -1);
     
     // Création du matériau béton
     BUG(_1992_1_1_materiaux_ajout(projet, 25., 0.2) == 0, -1);

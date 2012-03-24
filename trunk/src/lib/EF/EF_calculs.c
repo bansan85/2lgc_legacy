@@ -590,7 +590,7 @@ int EF_calculs_resoud_charge(Projet *projet, unsigned int num_action)
                                     if (pos==element_en_beton->discretisation_element)
                                         l = EF_noeuds_distance(element_en_beton->noeud_fin, element_en_beton->noeud_debut);
                                     else
-                                        l = EF_noeuds_distance(element_en_beton->noeuds_intermediaires[pos], element_en_beton->noeud_debut);
+                                        l = EF_noeuds_distance(g_list_nth_data(element_en_beton->noeuds_intermediaires, pos), element_en_beton->noeud_debut);
                                     BUG(!isnan(l), -3);
                                     pos++;
                                 }
@@ -599,18 +599,18 @@ int EF_calculs_resoud_charge(Projet *projet, unsigned int num_action)
                                 if (pos==0)
                                 {
                                     noeud_debut = element_en_beton->noeud_debut;
-                                    noeud_fin = element_en_beton->noeuds_intermediaires[0];
+                                    noeud_fin = g_list_nth_data(element_en_beton->noeuds_intermediaires, 0);
                                 }
                                 /* Alors la position de la charge est compris entre le dernier noeud intermédiaire et le noeud de fin de la barre */
                                 else if (pos == element_en_beton->discretisation_element)
                                 {
-                                    noeud_debut = element_en_beton->noeuds_intermediaires[pos-1];
+                                    noeud_debut = g_list_nth_data(element_en_beton->noeuds_intermediaires, pos-1);
                                     noeud_fin = element_en_beton->noeud_fin;
                                 }
                                 else
                                 {
-                                    noeud_debut = element_en_beton->noeuds_intermediaires[pos-1];
-                                    noeud_fin = element_en_beton->noeuds_intermediaires[pos];
+                                    noeud_debut = g_list_nth_data(element_en_beton->noeuds_intermediaires, pos-1);
+                                    noeud_fin = g_list_nth_data(element_en_beton->noeuds_intermediaires, pos);
                                 }
                             }
                             debut_barre = EF_noeuds_distance(noeud_debut, element_en_beton->noeud_debut);
@@ -855,7 +855,7 @@ int EF_calculs_resoud_charge(Projet *projet, unsigned int num_action)
                                     if (j_d==element_en_beton->discretisation_element)
                                         l = EF_noeuds_distance(element_en_beton->noeud_fin, element_en_beton->noeud_debut);
                                     else
-                                        l = EF_noeuds_distance(element_en_beton->noeuds_intermediaires[j_d], element_en_beton->noeud_debut);
+                                        l = EF_noeuds_distance(g_list_nth_data(element_en_beton->noeuds_intermediaires, j_d), element_en_beton->noeud_debut);
                                     BUG(!isnan(l), -3);
                                     j_d++;
                                 }
@@ -868,7 +868,7 @@ int EF_calculs_resoud_charge(Projet *projet, unsigned int num_action)
                                     if (j_f==element_en_beton->discretisation_element)
                                         l = EF_noeuds_distance(element_en_beton->noeud_fin, element_en_beton->noeud_debut);
                                     else
-                                        l = EF_noeuds_distance(element_en_beton->noeuds_intermediaires[j_f], element_en_beton->noeud_debut);
+                                        l = EF_noeuds_distance(g_list_nth_data(element_en_beton->noeuds_intermediaires, j_f), element_en_beton->noeud_debut);
                                     BUG(!isnan(l), -3);
                                     j_f++;
                                 }
@@ -893,11 +893,11 @@ int EF_calculs_resoud_charge(Projet *projet, unsigned int num_action)
                                 if (i == 0)
                                     noeud_debut = element_en_beton->noeud_debut;
                                 else
-                                    noeud_debut = element_en_beton->noeuds_intermediaires[i-1];
+                                    noeud_debut = g_list_nth_data(element_en_beton->noeuds_intermediaires, i-1);
                                 if (i == element_en_beton->discretisation_element)
                                     noeud_fin = element_en_beton->noeud_fin;
                                 else
-                                    noeud_fin = element_en_beton->noeuds_intermediaires[i];
+                                    noeud_fin = g_list_nth_data(element_en_beton->noeuds_intermediaires, i);
                                 debut_barre = EF_noeuds_distance(noeud_debut, element_en_beton->noeud_debut);
                                 BUG(!isnan(debut_barre), -3);
                                 if (i == j_d)
@@ -1177,11 +1177,11 @@ int EF_calculs_resoud_charge(Projet *projet, unsigned int num_action)
             if (j == 0)
                 noeud_debut = element_en_beton->noeud_debut;
             else
-                noeud_debut = element_en_beton->noeuds_intermediaires[j-1];
+                noeud_debut = g_list_nth_data(element_en_beton->noeuds_intermediaires, j-1);
             if (j==element_en_beton->discretisation_element)
                 noeud_fin = element_en_beton->noeud_fin;
             else
-                noeud_fin = element_en_beton->noeuds_intermediaires[j];
+                noeud_fin = g_list_nth_data(element_en_beton->noeuds_intermediaires, j);
             
             /* Récupération des caractéristiques de la barre en fonction du matériau */
             switch (element_en_beton->type)

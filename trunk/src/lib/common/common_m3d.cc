@@ -162,6 +162,92 @@ int m3d_camera_axe_x_z(Projet *projet)
 }
 
 
+void m3d_actualise_graphique_deplace_noeud(Projet *projet, EF_Noeud *noeud)
+{
+    GList       *noeuds_todo = NULL, *noeuds_done = NULL;
+    SGlobalData *vue = (SGlobalData*)projet->list_gtk.m3d.data;
+    
+    noeuds_todo = g_list_append(noeuds_todo, noeud);
+    
+    while (noeuds_todo != NULL)
+    {
+        unsigned int    numero;
+        
+        noeud = (EF_Noeud *)noeuds_todo->data;
+        numero = noeud->numero;
+    
+        switch (noeud->type)
+        {
+            case NOEUD_LIBRE :
+            case NOEUD_BARRE :
+            {
+                EF_Point    *position;
+                char        *texte;
+                CM3dObject  *objet;
+                
+                // On déplace le noeud
+                BUG(position = EF_noeuds_renvoie_position(noeud), );
+                texte = g_strdup_printf("noeud %d", noeud->numero);
+                objet = vue->scene->get_object_by_name(texte);
+                if (objet != NULL)
+                    objet->set_position(position->x, position->y, position->z);
+                else
+                    m3d_noeud(texte, position, vue);
+                
+                if (projet->beton.barres != NULL)
+                {
+                    GList   *list_parcours = projet->beton.barres;
+                    
+                    do
+                    {
+                        Beton_Barre *barre = (Beton_Barre *)list_parcours->data;
+                        
+                        if (((barre->noeud_debut) && (barre->noeud_debut->numero == numero)) || ((barre->noeud_fin) && (barre->noeud_fin->numero == numero)))
+                        {
+                            GList   *list_parcours2;
+                            
+                            // On actualise la barre
+                            m3d_barre(projet, barre);
+                            
+                            list_parcours2 = barre->noeuds_intermediaires;
+                            while (list_parcours2 != NULL)
+                            {
+                                if ((g_list_find(noeuds_done, list_parcours2->data) == NULL) && (g_list_find(noeuds_todo, list_parcours2->data) == NULL))
+                                    noeuds_todo = g_list_append(noeuds_todo, list_parcours2->data);
+                                list_parcours2 = g_list_next(list_parcours2);
+                            }
+                            
+                        }
+                        
+                        list_parcours = g_list_next(list_parcours);
+                    } while (list_parcours != NULL);
+                }
+                
+                free(texte);
+                free(position);
+                
+                break;
+            }
+            default :
+            {
+                BUGMSG(NULL, , gettext("Paramètre incorrect\n"));
+                break;
+            }
+        }
+        
+        noeuds_done = g_list_append(noeuds_done, noeud);
+        noeuds_todo = g_list_remove(noeuds_todo, noeud);
+    }
+    
+    // On libère la mémoire
+    g_list_free(noeuds_done);
+    
+    // On force l'actualisation de l'affichage
+    vue->scene->rendering(vue->camera);
+    gtk_widget_queue_draw(projet->list_gtk.m3d.drawing);
+}
+
+
 void* m3d_noeud(const char *nom, EF_Point *point, void *vue)
 {
     CM3dObject *cube;

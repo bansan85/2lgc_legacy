@@ -519,7 +519,7 @@ typedef struct __Beton_Barre
     EF_Noeud            *noeud_fin;
     unsigned int        discretisation_element;     // Nombre de noeuds intermédiaires
     Barre_Info_EF       *info_EF;                   // Une info par élément discrétisé
-    EF_Noeud            **noeuds_intermediaires;
+    GList               *noeuds_intermediaires;
     EF_Relachement      *relachement;
     
     cholmod_sparse      *matrice_rotation;
