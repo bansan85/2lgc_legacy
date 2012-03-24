@@ -160,11 +160,11 @@ int EF_charge_barre_ponctuelle_mx(Beton_Barre *barre, unsigned int discretisatio
     if (discretisation == 0)
         debut = barre->noeud_debut;
     else
-        debut = barre->noeuds_intermediaires[discretisation-1];
+        debut = g_list_nth_data(barre->noeuds_intermediaires, discretisation-1);
     if (discretisation == barre->discretisation_element)
         fin = barre->noeud_fin;
     else
-        fin = barre->noeuds_intermediaires[discretisation];
+        fin = g_list_nth_data(barre->noeuds_intermediaires, discretisation);
     
     l = EF_noeuds_distance(debut, fin);
     BUG(!isnan(l), -3);
@@ -257,11 +257,11 @@ int EF_charge_barre_ponctuelle_def_ang_iso_y(Beton_Barre *barre, unsigned int di
     if (discretisation == 0)
         debut = barre->noeud_debut;
     else
-        debut = barre->noeuds_intermediaires[discretisation-1];
+        debut = g_list_nth_data(barre->noeuds_intermediaires, discretisation-1);
     if (discretisation == barre->discretisation_element)
         fin = barre->noeud_fin;
     else
-        fin = barre->noeuds_intermediaires[discretisation];
+        fin = g_list_nth_data(barre->noeuds_intermediaires, discretisation);
     
     l = EF_noeuds_distance(debut, fin);
     BUG(!isnan(l), -3);
@@ -350,11 +350,11 @@ int EF_charge_barre_ponctuelle_def_ang_iso_z(Beton_Barre *barre, unsigned int di
     if (discretisation == 0)
         debut = barre->noeud_debut;
     else
-        debut = barre->noeuds_intermediaires[discretisation-1];
+        debut = g_list_nth_data(barre->noeuds_intermediaires, discretisation-1);
     if (discretisation == barre->discretisation_element)
         fin = barre->noeud_fin;
     else
-        fin = barre->noeuds_intermediaires[discretisation];
+        fin = g_list_nth_data(barre->noeuds_intermediaires, discretisation);
     
     l = EF_noeuds_distance(debut, fin);
     BUG(!isnan(l), -3);
@@ -446,11 +446,11 @@ int EF_charge_barre_ponctuelle_fonc_rx(Fonction *fonction, Beton_Barre *barre,
     if (discretisation == 0)
         debut = barre->noeud_debut;
     else
-        debut = barre->noeuds_intermediaires[discretisation-1];
+        debut = g_list_nth_data(barre->noeuds_intermediaires, discretisation-1);
     if (discretisation == barre->discretisation_element)
         fin = barre->noeud_fin;
     else
-        fin = barre->noeuds_intermediaires[discretisation];
+        fin = g_list_nth_data(barre->noeuds_intermediaires, discretisation);
     
     debut_barre = EF_noeuds_distance(barre->noeud_debut, debut);
     l = EF_noeuds_distance(debut, fin);
@@ -575,11 +575,11 @@ int EF_charge_barre_ponctuelle_fonc_ry(Fonction *f_rotation, Fonction* f_deform,
     if (discretisation == 0)
         debut = barre->noeud_debut;
     else
-        debut = barre->noeuds_intermediaires[discretisation-1];
+        debut = g_list_nth_data(barre->noeuds_intermediaires, discretisation-1);
     if (discretisation == barre->discretisation_element)
         fin = barre->noeud_fin;
     else
-        fin = barre->noeuds_intermediaires[discretisation];
+        fin = g_list_nth_data(barre->noeuds_intermediaires, discretisation);
     
     debut_barre = EF_noeuds_distance(barre->noeud_debut, debut);
     l = EF_noeuds_distance(debut, fin);
@@ -691,11 +691,11 @@ int EF_charge_barre_ponctuelle_fonc_rz(Fonction *f_rotation, Fonction* f_deform,
     if (discretisation == 0)
         debut = barre->noeud_debut;
     else
-        debut = barre->noeuds_intermediaires[discretisation-1];
+        debut = g_list_nth_data(barre->noeuds_intermediaires, discretisation-1);
     if (discretisation == barre->discretisation_element)
         fin = barre->noeud_fin;
     else
-        fin = barre->noeuds_intermediaires[discretisation];
+        fin = g_list_nth_data(barre->noeuds_intermediaires, discretisation);
     
     debut_barre = EF_noeuds_distance(barre->noeud_debut, debut);
     l = EF_noeuds_distance(debut, fin);
@@ -785,11 +785,11 @@ int EF_charge_barre_ponctuelle_n(Fonction *fonction, Beton_Barre *barre,
     if (discretisation == 0)
         debut = barre->noeud_debut;
     else
-        debut = barre->noeuds_intermediaires[discretisation-1];
+        debut = g_list_nth_data(barre->noeuds_intermediaires, discretisation-1);
     if (discretisation == barre->discretisation_element)
         fin = barre->noeud_fin;
     else
-        fin = barre->noeuds_intermediaires[discretisation];
+        fin = g_list_nth_data(barre->noeuds_intermediaires, discretisation);
     
     debut_barre = EF_noeuds_distance(barre->noeud_debut, debut);
     l = EF_noeuds_distance(debut, fin);
