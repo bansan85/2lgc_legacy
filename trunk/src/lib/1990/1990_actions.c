@@ -448,18 +448,11 @@ int _1990_action_deplace_charge(Projet *projet, unsigned int action_src, unsigne
 {
     Charge_Noeud            *charge_data = NULL;
     GList                   *list_parcours;
-#ifdef ENABLE_GTK
-    List_Gtk_1990_Actions   *list_gtk_1990_actions;
-#endif
     
     BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
     BUGMSG(projet->actions, -1, gettext("Paramètre incorrect\n"));
     BUGMSG(g_list_length(projet->actions)-1 >= action_src, -1, gettext("Paramètre incorrect : %u\n"), action_src);
     BUGMSG(g_list_length(projet->actions)-1 >= action_dest, -1, gettext("Paramètre incorrect : %u\n"), action_dest);
-    
-#ifdef ENABLE_GTK
-    list_gtk_1990_actions = &projet->list_gtk._1990_actions;
-#endif
     
     if (action_src == action_dest)
         return 0;
@@ -488,7 +481,7 @@ int _1990_action_deplace_charge(Projet *projet, unsigned int action_src, unsigne
                     GList   *list_next = g_list_next(list_parcours2);
 #ifdef ENABLE_GTK
     //             On la supprime du tree-view-charge
-                    gtk_tree_store_remove(list_gtk_1990_actions->tree_store_charges, &charge->Iter);
+                    gtk_tree_store_remove(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_tree_store_charge")), &charge->Iter);
 #endif
     //             et de la liste des charges tout en conservant les données
     //               de la charge dans charge_data.
@@ -507,7 +500,7 @@ int _1990_action_deplace_charge(Projet *projet, unsigned int action_src, unsigne
     //             On décrémente son numéro dans le tree-view-charges
                     charge->numero--;
 #ifdef ENABLE_GTK
-                    gtk_tree_store_set(list_gtk_1990_actions->tree_store_charges, &charge->Iter, 0, charge->numero, -1);
+                    gtk_tree_store_set(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_tree_store_charge")), &charge->Iter, 0, charge->numero, -1);
 #endif
                 }
                 
@@ -568,17 +561,10 @@ int _1990_action_supprime_charge(Projet *projet, unsigned int action_num, unsign
 {
     Charge_Noeud            *charge_data = NULL;
     GList                   *list_parcours;
-#ifdef ENABLE_GTK
-    List_Gtk_1990_Actions   *list_gtk_1990_actions;
-#endif
     
     BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
     BUGMSG(projet->actions, -1, gettext("Paramètre incorrect\n"));
     BUGMSG(g_list_length(projet->actions)-1 >= action_num, -1, gettext("Paramètre incorrect : %u\n"), action_num);
-    
-#ifdef ENABLE_GTK
-    list_gtk_1990_actions = &projet->list_gtk._1990_actions;
-#endif
     
     list_parcours = projet->actions;
     // On cherche l'action qui contient la charge
@@ -603,7 +589,7 @@ int _1990_action_supprime_charge(Projet *projet, unsigned int action_num, unsign
                     GList   *list_next = g_list_next(list_parcours2);
 #ifdef ENABLE_GTK
     //             On la supprime du tree-view-charge
-                    gtk_tree_store_remove(list_gtk_1990_actions->tree_store_charges, &charge->Iter);
+                    gtk_tree_store_remove(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_tree_store_charge")), &charge->Iter);
 #endif
     //             et de la liste des charges tout en conservant les données
     //               de la charge dans charge_data
@@ -648,7 +634,7 @@ int _1990_action_supprime_charge(Projet *projet, unsigned int action_num, unsign
     //             On décrémente son numéro dans le tree-view
                     charge->numero--;
 #ifdef ENABLE_GTK
-                    gtk_tree_store_set(list_gtk_1990_actions->tree_store_charges, &charge->Iter, 0, charge->numero, -1);
+                    gtk_tree_store_set(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_tree_store_charge")), &charge->Iter, 0, charge->numero, -1);
 #endif
                 }
     //     FinPour

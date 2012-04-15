@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2012-02-11 00:40+0100\n"
-"PO-Revision-Date: 2012-02-11 01:20+0100\n"
+"POT-Creation-Date: 2012-04-14 10:46+0200\n"
+"PO-Revision-Date: 2012-04-16 01:07+0100\n"
 "Last-Translator: LE GARREC Vincent <vlg@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -48,32 +48,20 @@ msgstr "Sans nom"
 msgid "Type de charge %d inconnu."
 msgstr "Type de charge %d inconnu."
 
-msgid "Actions"
-msgstr "Actions"
-
-msgid "Numéro"
-msgstr "Numéro"
-
-msgid "Description"
-msgstr "Description"
-
-msgid "Type"
-msgstr "Type"
-
-msgid "psi0"
-msgstr "psi0"
-
-msgid "psi1"
-msgstr "psi1"
-
-msgid "psi2"
-msgstr "psi2"
+msgid "Builder Failed\n"
+msgstr "Builder Failed\n"
 
 msgid "Ajouter"
 msgstr "Ajouter"
 
 msgid "Supprimer"
 msgstr "Supprimer"
+
+msgid "Numéro"
+msgstr "Numéro"
+
+msgid "Description"
+msgstr "Description"
 
 msgid "Charge"
 msgstr "Charge"
@@ -609,4 +597,3 @@ msgstr "Appui"
 
 msgid "Position relative"
 msgstr "Position relative"
-
