@@ -76,38 +76,22 @@ typedef struct __List_Gtk_1990_Groupes
 
 typedef struct __List_Gtk_1990_Actions
 {
+    GtkBuilder      *builder;
     GtkWidget       *window;
-    GtkWidget       *table;
     
-    GtkWidget       *paned;
-    GtkWidget       *table_actions;
-    GtkWidget       *scroll_actions;
     GtkTreeStore    *tree_store_actions;
-    GtkTreeView     *tree_view_actions;
     GtkTreeSelection *tree_select_actions;
+    GtkTreeView     *tree_view_actions;
     GtkListStore    *choix_type_action;
-    GtkWidget       *toolbar_actions;
-    GtkWidget       *menu_type_list_action;
-    GList           *menu_list_widget_action;
-    GtkWidget       *img_action_ajout;
-    GtkToolItem     *item_action_ajout;
-    GtkWidget       *img_action_suppr;
-    GtkToolItem     *item_action_suppr;
     
-    GtkWidget       *scroll_charges;
-    GtkWidget       *table_charges;
+    GtkWidget       *menu_type_list_action; // OK
+    GList           *menu_list_widget_action; //OK
+    
     GtkTreeStore    *tree_store_charges;
-    GtkTreeView     *tree_view_charges;
     GtkTreeSelection *tree_select_charges;
-    GtkWidget       *toolbar_charges;
+    GtkTreeView     *tree_view_charges;
     GtkWidget       *menu_type_list_charge;
     GList           *menu_list_widget_charge;
-    GtkWidget       *img_charge_ajout;
-    GtkToolItem     *item_charge_ajout;
-    GtkWidget       *img_charge_edit;
-    GtkToolItem     *item_charge_edit;
-    GtkWidget       *img_charge_suppr;
-    GtkToolItem     *item_charge_suppr;
 } List_Gtk_1990_Actions;
 
 
