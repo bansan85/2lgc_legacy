@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2012-04-14 10:46+0200\n"
-"PO-Revision-Date: 2012-04-16 01:07+0100\n"
+"POT-Creation-Date: 2012-04-16 21:05+0200\n"
+"PO-Revision-Date: 2012-04-16 22:55+0100\n"
 "Last-Translator: LE GARREC Vincent <vlg@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -51,24 +51,6 @@ msgstr "Type de charge %d inconnu."
 msgid "Builder Failed\n"
 msgstr "Builder Failed\n"
 
-msgid "Ajouter"
-msgstr "Ajouter"
-
-msgid "Supprimer"
-msgstr "Supprimer"
-
-msgid "Numéro"
-msgstr "Numéro"
-
-msgid "Description"
-msgstr "Description"
-
-msgid "Charge"
-msgstr "Charge"
-
-msgid "Valeur"
-msgstr "Valeur"
-
 msgid "Charge nodale"
 msgstr "Charge nodale"
 
@@ -77,9 +59,6 @@ msgstr "Charge ponctuelle sur barre"
 
 msgid "Charge répartie uniforme sur barre"
 msgstr "Charge répartie uniforme sur barre"
-
-msgid "Éditer"
-msgstr "Éditer"
 
 msgid ""
 "La génération des pondérations est impossible.\n"
@@ -270,6 +249,18 @@ msgstr "Niveau : "
 
 msgid "Groupes :"
 msgstr "Groupes :"
+
+msgid "Numéro"
+msgstr "Numéro"
+
+msgid "Description"
+msgstr "Description"
+
+msgid "Ajouter"
+msgstr "Ajouter"
+
+msgid "Supprimer"
+msgstr "Supprimer"
 
 msgid "Éléments disponibles :"
 msgstr "Éléments disponibles :"
@@ -597,3 +588,4 @@ msgstr "Appui"
 
 msgid "Position relative"
 msgstr "Position relative"
+
