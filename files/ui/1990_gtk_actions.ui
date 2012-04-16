@@ -52,8 +52,8 @@
         <property name="default-height">600</property>
         <property name="default-width">800</property>
         <property name="window-position">GTK_WIN_POS_CENTER</property>
-        <signal   name="key-press-event" handler="_1990_gtk_window_key_press"/>
-        <signal   name="destroy" handler="_1990_gtk_actions_window_destroy"/>
+        <signal name="key-press-event" handler="_1990_gtk_window_key_press"/>
+        <signal name="destroy" handler="_1990_gtk_actions_window_destroy"/>
         <child>
             <object class="GtkGrid" id="1990_actions_grille_principale">
                 <property name="visible">True</property>
@@ -62,138 +62,161 @@
                     <object class="GtkPaned" id="1990_actions_paned">
                         <property name="visible">True</property>
                         <property name="orientation">vertical</property>
-                        <property name="position">400</property>
+                        <property name="position">200</property>
                         <child>
                             <object class="GtkGrid" id="1990_actions_grille_action">
                                 <property name="visible">True</property>
                                 <child>
-                                    <object class="GtkScrolledWindow" id="1990_actions_scrolled_action">
+                                    <object class="GtkLabel" id="1990_actions_label_action">
+                                        <property name="label">&lt;b&gt;Actions :&lt;/b&gt;</property>
                                         <property name="visible">True</property>
-                                        <property name="expand">True</property>
-                                        <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
-                                        <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                                        <property name="hexpand">True</property>
+                                        <property name="use_markup">True</property>
+                                        <property name="xalign">0</property>
+                                    </object>
+                                    <packing>
+                                        <property name="left-attach">0</property>
+                                        <property name="top-attach">0</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkGrid" id="1990_actions_viewport_action_grid">
+                                        <property name="visible">True</property>
+                                        <property name="border-width">6</property>
                                         <child>
-                                            <object class="GtkViewport" id="1990_actions_viewport_action">
+                                            <object class="GtkScrolledWindow" id="1990_actions_scrolled_action">
                                                 <property name="visible">True</property>
+                                                <property name="expand">True</property>
+                                                <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                                                <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
                                                 <child>
-                                                    <object class="GtkTreeView" id="1990_actions_treeview_action">
+                                                    <object class="GtkViewport" id="1990_actions_viewport_action">
                                                         <property name="visible">True</property>
-                                                        <property name="model">1990_actions_tree_store_action</property>
-                                                        <signal   name="cursor-changed" handler="_1990_gtk_tree_view_actions_cursor_changed"/>
-                                                        <signal   name="key-press-event" handler="_1990_gtk_tree_view_actions_key_press_event"/>
-                                                        <signal   name="drag-drop" handler="_1990_gtk_actions_tree_view_drag"/>
-                                                        <child internal-child="selection">
-                                                            <object class="GtkTreeSelection" id="1990_actions_treeview_select_action">
-                                                                <signal name="changed" handler="_1990_gtk_actions_select_changed"/>
-                                                            </object>
-                                                        </child>
                                                         <child>
-                                                            <object class="GtkTreeViewColumn" id="1990_actions_treeview_column0">
-                                                                <property name="visible">False</property>
-                                                                <property name="resizable">True</property>
-                                                                <property name="title">Numéro</property>
-                                                                <child>
-                                                                    <object class="GtkCellRendererText" id="1990_actions_treeview_cell0"/>
-                                                                    <attributes>
-                                                                        <attribute name="text">0</attribute>
-                                                                    </attributes>
-                                                                </child>
-                                                            </object>
-                                                        </child>
-                                                        <child>
-                                                            <object class="GtkTreeViewColumn" id="1990_actions_treeview_column1">
+                                                            <object class="GtkTreeView" id="1990_actions_treeview_action">
                                                                 <property name="visible">True</property>
-                                                                <property name="resizable">True</property>
-                                                                <property name="title">Description</property>
-                                                                <property name="sizing">GTK_TREE_VIEW_COLUMN_FIXED</property>
-                                                                <property name="fixed-width">180</property>
-                                                                <child>
-                                                                    <object class="GtkCellRendererText" id="1990_actions_treeview_cell1">
-                                                                        <property name="editable">True</property>
-                                                                        <signal name="edited" handler="_1990_gtk_tree_view_actions_cell_edited"/>
+                                                                <property name="model">1990_actions_tree_store_action</property>
+                                                                <signal name="cursor-changed" handler="_1990_gtk_tree_view_actions_cursor_changed"/>
+                                                                <signal name="key-press-event" handler="_1990_gtk_tree_view_actions_key_press_event"/>
+                                                                <signal name="drag-drop" handler="_1990_gtk_actions_tree_view_drag"/>
+                                                                <child internal-child="selection">
+                                                                    <object class="GtkTreeSelection" id="1990_actions_treeview_select_action">
+                                                                        <signal name="changed" handler="_1990_gtk_actions_select_changed"/>
                                                                     </object>
-                                                                    <attributes>
-                                                                        <attribute name="text">1</attribute>
-                                                                    </attributes>
                                                                 </child>
-                                                            </object>
-                                                        </child>
-                                                        <child>
-                                                            <object class="GtkTreeViewColumn" id="1990_actions_treeview_column2">
-                                                                <property name="visible">True</property>
-                                                                <property name="resizable">True</property>
-                                                                <property name="title">Type</property>
-                                                                <property name="sizing">GTK_TREE_VIEW_COLUMN_FIXED</property>
-                                                                <property name="fixed-width">180</property>
                                                                 <child>
-                                                                    <object class="GtkCellRendererCombo" id="1990_actions_treeview_cell2">
-                                                                        <property name="editable">True</property>
-                                                                        <property name="text-column">0</property>
-                                                                        <property name="has-entry">False</property>
-                                                                        <signal name="edited" handler="_1990_gtk_tree_view_actions_cell_edited"/>
+                                                                    <object class="GtkTreeViewColumn" id="1990_actions_treeview_column0">
+                                                                        <property name="visible">False</property>
+                                                                        <property name="resizable">True</property>
+                                                                        <property name="title">Numéro</property>
+                                                                        <child>
+                                                                            <object class="GtkCellRendererText" id="1990_actions_treeview_cell0"/>
+                                                                            <attributes>
+                                                                                <attribute name="text">0</attribute>
+                                                                            </attributes>
+                                                                        </child>
                                                                     </object>
-                                                                    <attributes>
-                                                                        <attribute name="text">2</attribute>
-                                                                    </attributes>
                                                                 </child>
-                                                            </object>
-                                                        </child>
-                                                        <child>
-                                                            <object class="GtkTreeViewColumn" id="1990_actions_treeview_column3">
-                                                                <property name="visible">True</property>
-                                                                <property name="resizable">True</property>
-                                                                <property name="title">psi0</property>
                                                                 <child>
-                                                                    <object class="GtkCellRendererText" id="1990_actions_treeview_cell3">
-                                                                        <property name="editable">True</property>
-                                                                        <signal name="edited" handler="_1990_gtk_tree_view_actions_psi_edited"/>
+                                                                    <object class="GtkTreeViewColumn" id="1990_actions_treeview_column1">
+                                                                        <property name="visible">True</property>
+                                                                        <property name="resizable">True</property>
+                                                                        <property name="title">Description</property>
+                                                                        <property name="sizing">GTK_TREE_VIEW_COLUMN_FIXED</property>
+                                                                        <property name="fixed-width">180</property>
+                                                                        <child>
+                                                                            <object class="GtkCellRendererText" id="1990_actions_treeview_cell1">
+                                                                                <property name="editable">True</property>
+                                                                                <signal name="edited" handler="_1990_gtk_tree_view_actions_cell_edited"/>
+                                                                            </object>
+                                                                            <attributes>
+                                                                                <attribute name="text">1</attribute>
+                                                                            </attributes>
+                                                                        </child>
                                                                     </object>
-                                                                    <attributes>
-                                                                        <attribute name="text">3</attribute>
-                                                                    </attributes>
                                                                 </child>
-                                                            </object>
-                                                        </child>
-                                                        <child>
-                                                            <object class="GtkTreeViewColumn" id="1990_actions_treeview_column4">
-                                                                <property name="visible">True</property>
-                                                                <property name="resizable">True</property>
-                                                                <property name="title">psi1</property>
                                                                 <child>
-                                                                    <object class="GtkCellRendererText" id="1990_actions_treeview_cell4">
-                                                                        <property name="editable">True</property>
-                                                                        <signal name="edited" handler="_1990_gtk_tree_view_actions_psi_edited"/>
+                                                                    <object class="GtkTreeViewColumn" id="1990_actions_treeview_column2">
+                                                                        <property name="visible">True</property>
+                                                                        <property name="resizable">True</property>
+                                                                        <property name="title">Type</property>
+                                                                        <property name="sizing">GTK_TREE_VIEW_COLUMN_FIXED</property>
+                                                                        <property name="fixed-width">180</property>
+                                                                        <child>
+                                                                            <object class="GtkCellRendererCombo" id="1990_actions_treeview_cell2">
+                                                                                <property name="editable">True</property>
+                                                                                <property name="text-column">0</property>
+                                                                                <property name="has-entry">False</property>
+                                                                                <signal name="edited" handler="_1990_gtk_tree_view_actions_cell_edited"/>
+                                                                            </object>
+                                                                            <attributes>
+                                                                                <attribute name="text">2</attribute>
+                                                                            </attributes>
+                                                                        </child>
                                                                     </object>
-                                                                    <attributes>
-                                                                        <attribute name="text">4</attribute>
-                                                                    </attributes>
                                                                 </child>
-                                                            </object>
-                                                        </child>
-                                                        <child>
-                                                            <object class="GtkTreeViewColumn" id="1990_actions_treeview_column5">
-                                                                <property name="visible">True</property>
-                                                                <property name="resizable">True</property>
-                                                                <property name="title">psi2</property>
                                                                 <child>
-                                                                    <object class="GtkCellRendererText" id="1990_actions_treeview_cell5">
-                                                                        <property name="editable">True</property>
-                                                                        <signal name="edited" handler="_1990_gtk_tree_view_actions_psi_edited"/>
+                                                                    <object class="GtkTreeViewColumn" id="1990_actions_treeview_column3">
+                                                                        <property name="visible">True</property>
+                                                                        <property name="resizable">True</property>
+                                                                        <property name="title">psi0</property>
+                                                                        <child>
+                                                                            <object class="GtkCellRendererText" id="1990_actions_treeview_cell3">
+                                                                                <property name="editable">True</property>
+                                                                                <signal name="edited" handler="_1990_gtk_tree_view_actions_psi_edited"/>
+                                                                            </object>
+                                                                            <attributes>
+                                                                                <attribute name="text">3</attribute>
+                                                                            </attributes>
+                                                                        </child>
                                                                     </object>
-                                                                    <attributes>
-                                                                        <attribute name="text">5</attribute>
-                                                                    </attributes>
+                                                                </child>
+                                                                <child>
+                                                                    <object class="GtkTreeViewColumn" id="1990_actions_treeview_column4">
+                                                                        <property name="visible">True</property>
+                                                                        <property name="resizable">True</property>
+                                                                        <property name="title">psi1</property>
+                                                                        <child>
+                                                                            <object class="GtkCellRendererText" id="1990_actions_treeview_cell4">
+                                                                                <property name="editable">True</property>
+                                                                                <signal name="edited" handler="_1990_gtk_tree_view_actions_psi_edited"/>
+                                                                            </object>
+                                                                            <attributes>
+                                                                                <attribute name="text">4</attribute>
+                                                                            </attributes>
+                                                                        </child>
+                                                                    </object>
+                                                                </child>
+                                                                <child>
+                                                                    <object class="GtkTreeViewColumn" id="1990_actions_treeview_column5">
+                                                                        <property name="visible">True</property>
+                                                                        <property name="resizable">True</property>
+                                                                        <property name="title">psi2</property>
+                                                                        <child>
+                                                                            <object class="GtkCellRendererText" id="1990_actions_treeview_cell5">
+                                                                                <property name="editable">True</property>
+                                                                                <signal name="edited" handler="_1990_gtk_tree_view_actions_psi_edited"/>
+                                                                            </object>
+                                                                            <attributes>
+                                                                                <attribute name="text">5</attribute>
+                                                                            </attributes>
+                                                                        </child>
+                                                                    </object>
                                                                 </child>
                                                             </object>
                                                         </child>
                                                     </object>
                                                 </child>
                                             </object>
+                                            <packing>
+                                                <property name="left-attach">0</property>
+                                                <property name="top-attach">0</property>
+                                            </packing>
                                         </child>
                                     </object>
                                     <packing>
                                         <property name="left-attach">0</property>
-                                        <property name="top-attach">0</property>
+                                        <property name="top-attach">1</property>
                                     </packing>
                                 </child>
                                 <child>
@@ -224,7 +247,7 @@
                                     </object>
                                     <packing>
                                         <property name="left-attach">0</property>
-                                        <property name="top-attach">1</property>
+                                        <property name="top-attach">2</property>
                                     </packing>
                                 </child>
                             </object>
@@ -233,91 +256,114 @@
                             <object class="GtkGrid" id="1990_actions_grille_charge">
                                 <property name="visible">True</property>
                                 <child>
-                                    <object class="GtkScrolledWindow" id="1990_actions_scrolled_charge">
+                                    <object class="GtkLabel" id="1990_actions_label_charge">
+                                        <property name="label">&lt;b&gt;Charges :&lt;/b&gt;</property>
                                         <property name="visible">True</property>
-                                        <property name="expand">True</property>
-                                        <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
-                                        <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                                        <property name="hexpand">True</property>
+                                        <property name="use_markup">True</property>
+                                        <property name="xalign">0</property>
+                                    </object>
+                                    <packing>
+                                        <property name="left-attach">0</property>
+                                        <property name="top-attach">0</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkGrid" id="1990_actions_viewport_charge_grid">
+                                        <property name="visible">True</property>
+                                        <property name="border-width">6</property>
                                         <child>
-                                            <object class="GtkViewport" id="1990_actions_viewport_charge">
+                                            <object class="GtkScrolledWindow" id="1990_actions_scrolled_charge">
                                                 <property name="visible">True</property>
+                                                <property name="expand">True</property>
+                                                <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                                                <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
                                                 <child>
-                                                    <object class="GtkTreeView" id="1990_actions_treeview_charge">
+                                                    <object class="GtkViewport" id="1990_actions_viewport_charge">
                                                         <property name="visible">True</property>
-                                                        <property name="model">1990_actions_tree_store_charge</property>
-                                                        <property name="reorderable">True</property>
-                                                        <signal   name="key-press-event" handler="_1990_gtk_actions_charge_key_press_event"/>
-                                                        <signal   name="button-press-event" handler="_1990_gtk_actions_charge_double_clicked"/>
-                                                        <signal   name="drag-begin" handler="_1990_gtk_actions_tree_view_drag_begin"/>
-                                                        <child internal-child="selection">
-                                                            <object class="GtkTreeSelection" id="1990_actions_treeview_select_charge">
-                                                                <property name="mode">GTK_SELECTION_MULTIPLE</property>
-                                                                <signal name="changed" handler="_1990_gtk_actions_select_changed"/>
-                                                            </object>
-                                                        </child>
                                                         <child>
-                                                            <object class="GtkTreeViewColumn" id="1990_actions_treeview_charge_column0">
-                                                                <property name="visible">False</property>
-                                                                <property name="resizable">True</property>
-                                                                <property name="title">Numéro</property>
-                                                                <child>
-                                                                    <object class="GtkCellRendererText" id="1990_actions_treeview_charge_cell0"/>
-                                                                    <attributes>
-                                                                        <attribute name="text">0</attribute>
-                                                                    </attributes>
-                                                                </child>
-                                                            </object>
-                                                        </child>
-                                                        <child>
-                                                            <object class="GtkTreeViewColumn" id="1990_actions_treeview_charge_column1">
+                                                            <object class="GtkTreeView" id="1990_actions_treeview_charge">
                                                                 <property name="visible">True</property>
-                                                                <property name="resizable">True</property>
-                                                                <property name="title">Description</property>
-                                                                <child>
-                                                                    <object class="GtkCellRendererText" id="1990_actions_treeview_charge_cell1">
-                                                                        <property name="editable">True</property>
-                                                                        <signal name="edited" handler="_1990_gtk_tree_view_charges_cell_edited"/>
+                                                                <property name="model">1990_actions_tree_store_charge</property>
+                                                                <property name="reorderable">True</property>
+                                                                <signal   name="key-press-event" handler="_1990_gtk_actions_charge_key_press_event"/>
+                                                                <signal   name="button-press-event" handler="_1990_gtk_actions_charge_double_clicked"/>
+                                                                <signal   name="drag-begin" handler="_1990_gtk_actions_tree_view_drag_begin"/>
+                                                                <child internal-child="selection">
+                                                                    <object class="GtkTreeSelection" id="1990_actions_treeview_select_charge">
+                                                                        <property name="mode">GTK_SELECTION_MULTIPLE</property>
+                                                                        <signal name="changed" handler="_1990_gtk_actions_select_changed"/>
                                                                     </object>
-                                                                    <attributes>
-                                                                        <attribute name="text">1</attribute>
-                                                                    </attributes>
                                                                 </child>
-                                                            </object>
-                                                        </child>
-                                                        <child>
-                                                            <object class="GtkTreeViewColumn" id="1990_actions_treeview_charge_column2">
-                                                                <property name="visible">True</property>
-                                                                <property name="resizable">True</property>
-                                                                <property name="title">Charge</property>
                                                                 <child>
-                                                                    <object class="GtkCellRendererText" id="1990_actions_treeview_charge_cell2"/>
-                                                                    <attributes>
-                                                                        <attribute name="text">2</attribute>
-                                                                    </attributes>
+                                                                    <object class="GtkTreeViewColumn" id="1990_actions_treeview_charge_column0">
+                                                                        <property name="visible">False</property>
+                                                                        <property name="resizable">True</property>
+                                                                        <property name="title">Numéro</property>
+                                                                        <child>
+                                                                            <object class="GtkCellRendererText" id="1990_actions_treeview_charge_cell0"/>
+                                                                            <attributes>
+                                                                                <attribute name="text">0</attribute>
+                                                                            </attributes>
+                                                                        </child>
+                                                                    </object>
                                                                 </child>
-                                                            </object>
-                                                        </child>
-                                                        <child>
-                                                            <object class="GtkTreeViewColumn" id="1990_actions_treeview_charge_column3">
-                                                                <property name="visible">True</property>
-                                                                <property name="resizable">True</property>
-                                                                <property name="title">Valeur</property>
                                                                 <child>
-                                                                    <object class="GtkCellRendererText" id="1990_actions_treeview_charge_cell3"/>
-                                                                    <attributes>
-                                                                        <attribute name="text">3</attribute>
-                                                                    </attributes>
+                                                                    <object class="GtkTreeViewColumn" id="1990_actions_treeview_charge_column1">
+                                                                        <property name="visible">True</property>
+                                                                        <property name="resizable">True</property>
+                                                                        <property name="title">Description</property>
+                                                                        <child>
+                                                                            <object class="GtkCellRendererText" id="1990_actions_treeview_charge_cell1">
+                                                                                <property name="editable">True</property>
+                                                                                <signal name="edited" handler="_1990_gtk_tree_view_charges_cell_edited"/>
+                                                                            </object>
+                                                                            <attributes>
+                                                                                <attribute name="text">1</attribute>
+                                                                            </attributes>
+                                                                        </child>
+                                                                    </object>
+                                                                </child>
+                                                                <child>
+                                                                    <object class="GtkTreeViewColumn" id="1990_actions_treeview_charge_column2">
+                                                                        <property name="visible">True</property>
+                                                                        <property name="resizable">True</property>
+                                                                        <property name="title">Charge</property>
+                                                                        <child>
+                                                                            <object class="GtkCellRendererText" id="1990_actions_treeview_charge_cell2"/>
+                                                                            <attributes>
+                                                                                <attribute name="text">2</attribute>
+                                                                            </attributes>
+                                                                        </child>
+                                                                    </object>
+                                                                </child>
+                                                                <child>
+                                                                    <object class="GtkTreeViewColumn" id="1990_actions_treeview_charge_column3">
+                                                                        <property name="visible">True</property>
+                                                                        <property name="resizable">True</property>
+                                                                        <property name="title">Valeur</property>
+                                                                        <child>
+                                                                            <object class="GtkCellRendererText" id="1990_actions_treeview_charge_cell3"/>
+                                                                            <attributes>
+                                                                                <attribute name="text">3</attribute>
+                                                                            </attributes>
+                                                                        </child>
+                                                                    </object>
                                                                 </child>
                                                             </object>
                                                         </child>
                                                     </object>
                                                 </child>
                                             </object>
+                                            <packing>
+                                                <property name="left-attach">0</property>
+                                                <property name="top-attach">0</property>
+                                            </packing>
                                         </child>
                                     </object>
                                     <packing>
                                         <property name="left-attach">0</property>
-                                        <property name="top-attach">0</property>
+                                        <property name="top-attach">1</property>
                                     </packing>
                                 </child>
                                 <child>
@@ -358,7 +404,7 @@
                                     </object>
                                     <packing>
                                         <property name="left-attach">0</property>
-                                        <property name="top-attach">1</property>
+                                        <property name="top-attach">2</property>
                                     </packing>
                                 </child>
                             </object>
@@ -367,6 +413,29 @@
                     <packing>
                         <property name="left-attach">0</property>
                         <property name="top-attach">0</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkButtonBox" id="1990_actions_buttons">
+                        <property name="visible">True</property>
+                        <property name="orientation">horizontal</property>
+                        <property name="layout_style">end</property>
+                        <child>
+                            <object class="GtkButton" id="1990_actions_button_close">
+                                <property name="visible">True</property>
+                                <property name="label">gtk-close</property>
+                                <property name="use_stock">True</property>
+                                <signal name="clicked" handler="_1990_gtk_window_button_close"/>
+                            </object>
+                            <packing>
+                                <property name="position">0</property>
+                                <property name="pack_type">end</property>
+                            </packing>
+                        </child>
+                    </object>
+                    <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">1</property>
                     </packing>
                 </child>
             </object>

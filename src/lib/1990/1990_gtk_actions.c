@@ -788,6 +788,14 @@ G_MODULE_EXPORT gboolean _1990_gtk_actions_charge_key_press_event(GtkWidget *wid
 }
 
 
+G_MODULE_EXPORT void _1990_gtk_window_button_close(GtkButton *button __attribute__((unused)), Projet *projet)
+{
+    BUGMSG(projet, , gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->list_gtk._1990_actions.builder, , gettext("Paramètre incorrect\n"));
+    
+    gtk_widget_destroy(projet->list_gtk._1990_actions.window);
+}
+
 G_MODULE_EXPORT gboolean _1990_gtk_window_key_press(GtkWidget *widget __attribute__((unused)), GdkEvent *event, Projet *projet)
 {
     BUGMSG(projet, TRUE, gettext("Paramètre incorrect\n"));
