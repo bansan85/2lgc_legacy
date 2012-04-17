@@ -811,7 +811,6 @@ G_MODULE_EXPORT gboolean _1990_gtk_window_key_press(GtkWidget *widget __attribut
 }
 
 
-
 void _1990_gtk_actions(Projet *projet)
 {
     GtkTreeIter     iter;
