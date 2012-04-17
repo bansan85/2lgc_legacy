@@ -873,7 +873,10 @@ void _1990_gtk_tree_view_etat_cursor_changed(__attribute__((unused)) GtkTreeView
     
     BUGMSG(projet, , gettext("Paramètre incorrect\n"));
     BUGMSG(projet->niveaux_groupes, , gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->list_gtk._1990_groupes.window_groupe, , gettext("Paramètre incorrect\n"));
+    
+    // window_groupe peut être NULL lorsque la fenêtre est fermée.
+    if (projet->list_gtk._1990_groupes.window_groupe == NULL)
+        return;
     
     list_gtk_1990_groupes = &projet->list_gtk._1990_groupes;
     
