@@ -872,6 +872,7 @@ void _1990_gtk_actions(Projet *projet)
     }
     gtk_menu_tool_button_set_menu(GTK_MENU_TOOL_BUTTON(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_toolbar_action_ajout")), projet->list_gtk._1990_actions.menu_type_list_action);
 
+    projet->list_gtk._1990_actions.menu_list_widget_charge = NULL;
     projet->list_gtk._1990_actions.menu_type_list_charge = gtk_menu_new();
     w_temp = gtk_menu_item_new_with_label(gettext("Charge nodale"));
     gtk_menu_shell_append(GTK_MENU_SHELL(projet->list_gtk._1990_actions.menu_type_list_charge), w_temp);
