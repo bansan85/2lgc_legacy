@@ -30,47 +30,25 @@
 
 typedef struct __List_Gtk_1990_Groupes
 {
+    GtkBuilder      *builder;
+     
     GtkWidget       *window_groupe;         // La fenêtre
-    GtkWidget       *table;                 // Table contenant les composants graphiques
-    
-    GtkWidget       *table_niveau;
-    GtkWidget       *spin_button_niveau;
-    GtkWidget       *button_niveau_ajout;
-    GtkWidget       *button_niveau_suppr;
-    
-    GtkWidget       *paned_groupe_dispo;
-    GtkWidget       *frame_groupe;
-    GtkWidget       *table_groupes;
     GtkTreeStore    *tree_store_etat;
-    GtkTreeView     *tree_view_etat;
+    GtkTreeStore    *tree_store_dispo;
+    
     GtkTreeSelection *tree_select_etat;
-    GtkWidget       *scroll_etat;
-    GtkWidget       *toolbar_groupe;
-    GtkWidget       *img_groupe_ajout;
-    GtkToolItem     *item_groupe_ajout;
-    GtkWidget       *img_groupe_suppr;
-    GtkToolItem     *item_groupe_suppr;
+    GtkTreeView     *tree_view_etat;
+    GtkTreeSelection *tree_select_dispo;
+    GtkWidget       *spin_button_niveau;
+    GtkTreeView     *tree_view_dispo;
+    
+    GtkWidget       *drag_from;
     GtkToolItem     *item_groupe_and;
     GtkToolItem     *item_groupe_or;
     GtkToolItem     *item_groupe_xor;
-    
-    GtkWidget       *frame_dispo;
-    GtkWidget       *table_dispo;
-    GtkTreeStore    *tree_store_dispo;
-    GtkTreeView     *tree_view_dispo;
-    GtkTreeSelection *tree_select_dispo;
-    GtkWidget       *scroll_dispo;
-    GtkWidget       *toolbar_dispo;
-    GtkWidget       *img_ajout_dispo;
     GtkToolItem     *item_ajout_dispo;
-    GtkWidget       *img_ajout_tout_dispo;
     GtkToolItem     *item_ajout_tout_dispo;
-    
-    GtkWidget       *table_bas;
-    GtkWidget       *button_generer;
-    GtkWidget       *button_options;
-    GtkWidget       *button_quitter;
-    GtkWidget       *drag_from;
+    GtkToolItem     *item_groupe_suppr;
 } List_Gtk_1990_Groupes;
 
 

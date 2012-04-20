@@ -5,7 +5,8 @@ application_DATA	=	formules/1990_6_10.svg \
 						xml/tooltips.xml
 
 applicationuidir	=	$(datadir)/2lgc/ui
-applicationui_DATA	=	ui/1990_gtk_actions.ui
+applicationui_DATA	=	ui/1990_gtk_actions.ui \
+						ui/1990_gtk_groupes.ui
 
 #imagesdir			=	$(datadir)/2lgc/images
 #images_DATA			=	images/fleche_droite.xpm

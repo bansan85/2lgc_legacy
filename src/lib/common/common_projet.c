@@ -73,6 +73,7 @@ Projet* projet_init(Type_Pays pays)
 #ifdef ENABLE_GTK
     BUGMSG(m3d_init(projet) == 0, NULL, gettext("Erreur d'allocation mémoire.\n"));
     projet->list_gtk._1990_actions.builder = NULL;
+    projet->list_gtk._1990_groupes.builder = NULL;
 #endif
     
     projet->ef_donnees.c = &(projet->ef_donnees.Common);
