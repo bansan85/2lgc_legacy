@@ -153,9 +153,7 @@ G_MODULE_EXPORT void _1990_gtk_tree_view_actions_cursor_changed(GtkTreeView *tre
     Action          *action;
     
     BUGMSG(projet, , gettext("Paramètre incorrect\n"));
-    
-    if (projet->list_gtk._1990_actions.builder == NULL)
-        return;
+    BUGMSG(projet->list_gtk._1990_actions.builder, , gettext("Paramètre incorrect\n"));
     
     list_gtk_1990_actions = &projet->list_gtk._1990_actions;
     
@@ -743,6 +741,7 @@ G_MODULE_EXPORT void _1990_gtk_actions_window_destroy(GtkWidget *object __attrib
     BUGMSG(projet, , gettext("Paramètre incorrect\n"));
     BUGMSG(projet->list_gtk._1990_actions.builder, , gettext("Paramètre incorrect\n"));
     
+    g_signal_handler_block(projet->list_gtk._1990_actions.tree_view_actions, g_signal_handler_find(G_OBJECT(projet->list_gtk._1990_actions.tree_view_actions),G_SIGNAL_MATCH_FUNC,0,0,NULL,_1990_gtk_tree_view_actions_cursor_changed,NULL));
     projet->list_gtk._1990_actions.builder = NULL;
     
     return;

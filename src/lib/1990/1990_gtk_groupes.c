@@ -79,9 +79,7 @@ G_MODULE_EXPORT void _1990_gtk_tree_view_etat_cursor_changed(__attribute__((unus
     
     BUGMSG(projet, , gettext("Paramètre incorrect\n"));
     BUGMSG(projet->niveaux_groupes, , gettext("Paramètre incorrect\n"));
-    // La présente fonction peut se déclencher à la fermeture de la fenêtre.
-    if (projet->list_gtk._1990_groupes.builder == NULL)
-        return;
+    BUGMSG(projet->list_gtk._1990_groupes.builder, , gettext("Paramètre incorrect\n"));
     
     // window_groupe peut être NULL lorsque la fenêtre est fermée.
     if (projet->list_gtk._1990_groupes.window_groupe == NULL)
@@ -1465,6 +1463,7 @@ G_MODULE_EXPORT void _1990_gtk_groupes_window_destroy(GtkWidget *object __attrib
     BUGMSG(projet, , gettext("Paramètre incorrect\n"));
     BUGMSG(projet->list_gtk._1990_groupes.builder, , gettext("Paramètre incorrect\n"));
     
+    g_signal_handler_block(projet->list_gtk._1990_groupes.tree_view_etat, g_signal_handler_find(G_OBJECT(projet->list_gtk._1990_groupes.tree_view_etat),G_SIGNAL_MATCH_FUNC,0,0,NULL,_1990_gtk_tree_view_etat_cursor_changed,NULL));
     projet->list_gtk._1990_groupes.builder = NULL;
     return;
 }
