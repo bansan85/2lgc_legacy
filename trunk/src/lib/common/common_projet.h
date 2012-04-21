@@ -31,6 +31,7 @@
 typedef struct __List_Gtk_1990_Groupes
 {
     GtkBuilder      *builder;
+    GtkBuilder      *builder_options;
      
     GtkWidget       *window_groupe;         // La fenêtre
     GtkTreeStore    *tree_store_etat;
@@ -666,13 +667,17 @@ typedef struct __Niveau_Groupe
 
 typedef struct __CombinaisonsEL
 {                           // Spécifie la méthode des combinaisons (E0,A1.3)
-    int     flags;          // bit 1      : ELU_EQU : méthode note 1 si le bit 1 = 0
+    int     flags;          // bit 0      : ELU_EQU : méthode note 1 si le bit 1 = 0
                             //            : ELU_EQU : méthode note 2 si le bit 1 = 1
-                            // bit 2 et 3 : ELU_GEO/STR : 00 méthode approche 1
+                            // bit 1 et 2 : ELU_GEO/STR : 00 méthode approche 1
                             //            : ELU_GEO/STR : 01 méthode approche 2
                             //            : ELU_GEO/STR : 10 méthode approche 3
-                            // bit 4      : ELU_ACC : 0 si utilisation de psi1,1
+                            // bit 3      : ELU_ACC : 0 si utilisation de psi1,1
                             //            : ELU_ACC : 1 si utilisation de psi2,1
+                            // bit 4      : 0 si utilisation des formules 6.10a et b
+                            //            : 1 si utilisation de la formule 6.10
+                            // bit 5      : 0 si valeur fréquence en cas d'accident
+                            //            : 1 si valeur quasi-permanente en cas d'accident
     GList       *elu_equ;   // Liste des combinaisons selon l'ELU EQU
     GList       *elu_str;   // ..
     GList       *elu_geo;   //

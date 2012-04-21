@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2012-04-16 21:05+0200\n"
-"PO-Revision-Date: 2012-04-16 22:55+0100\n"
+"POT-Creation-Date: 2012-04-21 15:25+0200\n"
+"PO-Revision-Date: 2012-04-21 19:54+0100\n"
 "Last-Translator: LE GARREC Vincent <vlg@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -193,90 +193,6 @@ msgstr "Action n° %u, description '%s', type n°%d\n"
 msgid "Élément %d existant.\n"
 msgstr "Élément %d existant.\n"
 
-msgid "Options des combinaisons"
-msgstr "Options des combinaisons"
-
-msgid "A l'État Limite Ultime d'ÉQUilibre, il est possible de générer les combinaisons pour la vérification à l'équilibre statique seulement ou à l'équilibre statique incluant la résistance d'éléments structuraux."
-msgstr "A l'État Limite Ultime d'ÉQUilibre, il est possible de générer les combinaisons pour la vérification à l'équilibre statique seulement ou à l'équilibre statique incluant la résistance d'éléments structuraux."
-
-msgid "Équilibre seulement"
-msgstr "Équilibre seulement"
-
-msgid "Équilibre et résistance"
-msgstr "Équilibre et résistance"
-
-msgid "ELU STR et GEO, formule de combinaison :"
-msgstr "ELU STR et GEO, formule de combinaison :"
-
-msgid "À l'État Limite Ultime STRucture et GÉOtechnique, deux formules de combinaison sont possibles. La première est la formule 6.10 et la deuxième est 6.10a et 6.10b"
-msgstr "À l'État Limite Ultime STRucture et GÉOtechnique, deux formules de combinaison sont possibles. La première est la formule 6.10 et la deuxième est 6.10a et 6.10b"
-
-msgid "6.10a et 6.10b"
-msgstr "6.10a et 6.10b"
-
-msgid "ELU STR et GEO, ensemble de calcul :"
-msgstr "ELU STR et GEO, ensemble de calcul :"
-
-msgid "Lorsqu'il est nécessaire de réaliser un calcul à l'État Limite Ultime STRucture et GÉOtechnique, trois approches sont possibles. Approche 1 : vérification de la structure et du sol via les coefficients de l'ensemble B puis les coefficients de l'ensemble C. Approche 2 : vérification de la structure et du sol via les coefficients de l'ensemble B. Approche 3 : vérification de la structure et du sol via les coefficients de l'ensemble B pour les actions géotechniques et les coefficients de l'ensemble C pour les actions appliquées à la structure."
-msgstr "Lorsqu'il est nécessaire de réaliser un calcul à l'État Limite Ultime STRucture et GÉOtechnique, trois approches sont possibles. Approche 1 : vérification de la structure et du sol via les coefficients de l'ensemble B puis les coefficients de l'ensemble C. Approche 2 : vérification de la structure et du sol via les coefficients de l'ensemble B. Approche 3 : vérification de la structure et du sol via les coefficients de l'ensemble B pour les actions géotechniques et les coefficients de l'ensemble C pour les actions appliquées à la structure."
-
-msgid "Approche 1"
-msgstr "Approche 1"
-
-msgid "Approche 2"
-msgstr "Approche 2"
-
-msgid "Approche 3"
-msgstr "Approche 3"
-
-msgid "ELU ACCidentel :"
-msgstr "ELU ACCidentel :"
-
-msgid "À l'État Limite Ultime ACCidentel, la charge variable dominante utilisée est soit la valeur fréquente, soit la valeur quasi-permanente."
-msgstr "À l'État Limite Ultime ACCidentel, la charge variable dominante utilisée est soit la valeur fréquente, soit la valeur quasi-permanente."
-
-msgid "valeur fréquence"
-msgstr "valeur fréquence"
-
-msgid "valeur quasi-permanente"
-msgstr "valeur quasi-permanente"
-
-msgid "Groupes"
-msgstr "Groupes"
-
-msgid "Niveau : "
-msgstr "Niveau : "
-
-msgid "Groupes :"
-msgstr "Groupes :"
-
-msgid "Numéro"
-msgstr "Numéro"
-
-msgid "Description"
-msgstr "Description"
-
-msgid "Ajouter"
-msgstr "Ajouter"
-
-msgid "Supprimer"
-msgstr "Supprimer"
-
-msgid "Éléments disponibles :"
-msgstr "Éléments disponibles :"
-
-msgid "Ajouter tout"
-msgstr "Ajouter tout"
-
-msgid "Générer"
-msgstr "Générer"
-
-msgid "Options"
-msgstr "Options"
-
-msgid "Quitter"
-msgstr "Quitter"
-
 msgid "Type %d inconnu.\n"
 msgstr "Type %d inconnu.\n"
 
@@ -393,6 +309,9 @@ msgstr "Fonction indéfinie.\n"
 
 msgid "Fichier"
 msgstr "Fichier"
+
+msgid "Quitter"
+msgstr "Quitter"
 
 msgid "Structure"
 msgstr "Structure"
@@ -582,6 +501,9 @@ msgstr "Noeuds libres"
 
 msgid "Noeuds intermédiaires"
 msgstr "Noeuds intermédiaires"
+
+msgid "Numéro"
+msgstr "Numéro"
 
 msgid "Appui"
 msgstr "Appui"
