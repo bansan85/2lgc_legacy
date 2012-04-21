@@ -202,29 +202,14 @@ typedef struct __List_Gtk_EF_Charge_Barre_Repartie_Uniforme
 
 typedef struct __List_Gtk_EF_Noeud
 {
-    GtkWidget       *window;
-    GtkWidget       *table;
-    
-    GtkWidget       *notebook;
-    GtkWidget       *table_noeud_libre;
-    GtkWidget       *label_noeud_libre;
-    GtkWidget       *table_noeud_barre;
-    GtkWidget       *label_noeud_barre;
-    
-    GtkTreeStore    *tree_store_libre;
-    GtkTreeView     *tree_view_libre;
-    GtkTreeSelection *tree_select_libre;
-    GtkWidget       *scroll_libre;
-    
-    GtkTreeStore    *tree_store_barre;
-    GtkTreeView     *tree_view_barre;
-    GtkTreeSelection *tree_select_barre;
-    GtkWidget       *scroll_barre;
+    GtkBuilder      *builder;
     
     GtkListStore    *liste_appuis;
     
-    GtkWidget       *button_ajouter;
-    GtkWidget       *button_fermer;
+    GtkWidget       *window;
+    GtkWidget       *notebook;
+    GtkTreeStore    *tree_store_libre;
+    GtkTreeStore    *tree_store_barre;
 } List_Gtk_EF_Noeud;
 
 
