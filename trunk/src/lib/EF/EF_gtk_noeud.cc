@@ -30,7 +30,6 @@
 #include "common_m3d.hpp"
 
 extern "C" {
-
 #include "common_projet.h"
 #include "common_erreurs.h"
 #include "common_gtk.h"
@@ -41,15 +40,18 @@ extern "C" {
 #include "common_selection.h"
 #include "1992_1_1_barres.h"
 
-void EF_gtk_noeud_fermer(GtkButton *button __attribute__((unused)), GtkWidget *fenetre)
+void EF_gtk_noeud_fermer(GtkButton *button __attribute__((unused)), Projet *projet)
 /* Description : Ferme la fenêtre sans effectuer les modifications
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement
  *            : Projet *projet : la variable projet
  * Valeur renvoyée : Aucune
  */
 {
-    BUGMSG(fenetre, , gettext("Paramètre incorrect\n"));
-    gtk_widget_destroy(fenetre);
+    BUGMSG(projet, , gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->list_gtk.ef_noeud.builder, , gettext("Paramètre incorrect\n"));
+    
+    gtk_widget_destroy(projet->list_gtk.ef_noeud.window);
+    
     return;
 }
 
@@ -519,154 +521,74 @@ void EF_gtk_noeud_edit_noeud_barre_barre(GtkCellRendererText *cell __attribute__
 }
 
 
-void EF_gtk_noeud(Projet *projet)
-/* Description : Affichage de la fenêtre permettant de créer ou modifier la liste des noeuds.
- * Paramètres : Projet *projet : la variable projet
+G_MODULE_EXPORT gboolean EF_gtk_noeuds_window_key_press(GtkWidget *widget __attribute__((unused)), GdkEvent *event, Projet *projet)
+{
+    BUGMSG(projet, TRUE, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->list_gtk.ef_noeud.builder, TRUE, gettext("Paramètre incorrect\n"));
+    
+    if (event->key.keyval == GDK_KEY_Escape)
+    {
+        gtk_widget_destroy(projet->list_gtk.ef_noeud.window);
+        return TRUE;
+    }
+    else
+        return FALSE;
+}
+
+
+G_MODULE_EXPORT void EF_gtk_noeuds_window_destroy(GtkWidget *object __attribute__((unused)), Projet *projet)
+/* Description : met projet->list_gtk._1990_groupes.window à NULL quand la fenêtre se ferme
+ * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
+ *            : Projet *projet : la variable projet
  * Valeur renvoyée : Aucune
  */
 {
+    BUGMSG(projet, , gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->list_gtk.ef_noeud.builder, , gettext("Paramètre incorrect\n"));
+    
+    projet->list_gtk.ef_noeud.builder = NULL;
+    return;
+}
+
+
+G_MODULE_EXPORT void EF_gtk_noeud(Projet *projet)
+{
     List_Gtk_EF_Noeud   *ef_gtk;
-    GtkCellRenderer     *pCellRenderer;
-    GtkTreeViewColumn   *column;
-    GList               *list;
     
     BUGMSG(projet, , gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->ef_donnees.noeuds, , gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->list_gtk.ef_noeud.builder == NULL, , gettext("Paramètre incorrect\n"));
     
     ef_gtk = &projet->list_gtk.ef_noeud;
     
-    GTK_NOUVELLE_FENETRE(ef_gtk->window, gettext("Gestion des noeuds"), 600, 400)
+    projet->list_gtk.ef_noeud.builder = gtk_builder_new();
+    BUGMSG(gtk_builder_add_from_file(projet->list_gtk.ef_noeud.builder, DATADIR"/ui/EF_gtk_noeud.ui", NULL) != 0, , gettext("Builder Failed\n"));
+    gtk_builder_connect_signals(projet->list_gtk.ef_noeud.builder, projet);
     
-    ef_gtk->table = gtk_table_new(2, 2, FALSE);
-    gtk_container_add(GTK_CONTAINER(ef_gtk->window), ef_gtk->table);
+    ef_gtk->window = GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_window"));
+    ef_gtk->notebook = GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_notebook"));
+    ef_gtk->tree_store_libre = GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_treestore_noeuds_libres"));
+    ef_gtk->tree_store_barre = GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_treestore_noeuds_intermediaires"));
     
-    // Le notebook
-    ef_gtk->notebook = gtk_notebook_new();
-    gtk_notebook_set_tab_pos(GTK_NOTEBOOK(ef_gtk->notebook), GTK_POS_TOP);
-    gtk_table_attach(GTK_TABLE(ef_gtk->table), ef_gtk->notebook, 0, 2, 0, 1, (GtkAttachOptions)(GTK_EXPAND|GTK_FILL), (GtkAttachOptions)(GTK_EXPAND|GTK_FILL), 0, 0);
+    g_object_set_data(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_treeview_noeuds_libres_cell1"), "column", GINT_TO_POINTER(1));
+    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_treeview_noeuds_libres_column1")), GTK_CELL_RENDERER(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_treeview_noeuds_libres_cell1")), gtk_common_render_double, GINT_TO_POINTER(GTK_DECIMAL_DISTANCE), NULL);
+    g_object_set_data(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_treeview_noeuds_libres_cell2"), "column", GINT_TO_POINTER(2));
+    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_treeview_noeuds_libres_column2")), GTK_CELL_RENDERER(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_treeview_noeuds_libres_cell2")), gtk_common_render_double, GINT_TO_POINTER(GTK_DECIMAL_DISTANCE), NULL);
+    g_object_set_data(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_treeview_noeuds_libres_cell3"), "column", GINT_TO_POINTER(3));
+    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_treeview_noeuds_libres_column3")), GTK_CELL_RENDERER(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_treeview_noeuds_libres_cell3")), gtk_common_render_double, GINT_TO_POINTER(GTK_DECIMAL_DISTANCE), NULL);
     
-    ef_gtk->table_noeud_libre = gtk_table_new(1, 1, FALSE);
-    ef_gtk->label_noeud_libre = gtk_label_new(gettext("Noeuds libres"));
-    gtk_notebook_insert_page(GTK_NOTEBOOK(ef_gtk->notebook), ef_gtk->table_noeud_libre, ef_gtk->label_noeud_libre, -1);
+    g_object_set(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_treeview_noeuds_libres_cell4"), "model", projet->list_gtk.ef_noeud.liste_appuis, NULL);
     
-    ef_gtk->table_noeud_barre = gtk_table_new(1, 1, FALSE);
-    ef_gtk->label_noeud_barre = gtk_label_new(gettext("Noeuds intermédiaires"));
-    gtk_notebook_insert_page(GTK_NOTEBOOK(ef_gtk->notebook), ef_gtk->table_noeud_barre, ef_gtk->label_noeud_barre, -1);
+    g_object_set_data(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_treeview_noeuds_intermediaires_cell1"), "column", GINT_TO_POINTER(1));
+    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_treeview_noeuds_intermediaires_column1")), GTK_CELL_RENDERER(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_treeview_noeuds_intermediaires_cell1")), EF_gtk_render_actualise_position, projet, NULL);
+    g_object_set_data(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_treeview_noeuds_intermediaires_cell2"), "column", GINT_TO_POINTER(2));
+    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_treeview_noeuds_intermediaires_column2")), GTK_CELL_RENDERER(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_treeview_noeuds_intermediaires_cell2")), EF_gtk_render_actualise_position, projet, NULL);
+    g_object_set_data(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_treeview_noeuds_intermediaires_cell3"), "column", GINT_TO_POINTER(3));
+    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_treeview_noeuds_intermediaires_column3")), GTK_CELL_RENDERER(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_treeview_noeuds_intermediaires_cell3")), EF_gtk_render_actualise_position, projet, NULL);
+    g_object_set_data(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_treeview_noeuds_intermediaires_cell6"), "column", GINT_TO_POINTER(6));
+    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_treeview_noeuds_intermediaires_column6")), GTK_CELL_RENDERER(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_treeview_noeuds_intermediaires_cell6")), gtk_common_render_double, GINT_TO_POINTER(GTK_DECIMAL_DISTANCE), NULL);
     
-    // Le treeview : 0 : numero, 1 : x, 2 : y, 3 : z, 4 : appui/
-    ef_gtk->tree_store_libre = gtk_tree_store_new(5, G_TYPE_UINT, G_TYPE_DOUBLE, G_TYPE_DOUBLE, G_TYPE_DOUBLE, G_TYPE_STRING);
-    ef_gtk->tree_view_libre = (GtkTreeView*)gtk_tree_view_new_with_model(GTK_TREE_MODEL(ef_gtk->tree_store_libre));
-    ef_gtk->tree_select_libre = gtk_tree_view_get_selection(ef_gtk->tree_view_libre);
-    ef_gtk->scroll_libre = gtk_scrolled_window_new(NULL, NULL);
-    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(ef_gtk->scroll_libre), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-    gtk_container_add(GTK_CONTAINER(ef_gtk->scroll_libre), GTK_WIDGET(ef_gtk->tree_view_libre));
-    gtk_table_attach(GTK_TABLE(ef_gtk->table_noeud_libre), GTK_WIDGET(ef_gtk->scroll_libre), 0, 2, 0, 1, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 0, 0);
-    // Colonne numéro
-    pCellRenderer = gtk_cell_renderer_text_new();
-    g_object_set(pCellRenderer, "background", "#EEEEEE", NULL);
-    gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW(ef_gtk->tree_view_libre), -1, gettext("Numéro"), pCellRenderer, "text", 0, NULL);
-    // Colonne x
-    pCellRenderer = gtk_cell_renderer_text_new();
-    g_object_set(pCellRenderer, "editable", TRUE, NULL);
-    column = gtk_tree_view_column_new();
-    g_signal_connect(pCellRenderer, "edited", G_CALLBACK(EF_gtk_noeud_edit_pos_abs), projet);
-    gtk_tree_view_column_set_title(GTK_TREE_VIEW_COLUMN(column), "x");
-    gtk_tree_view_append_column(GTK_TREE_VIEW(ef_gtk->tree_view_libre), column);
-    gtk_tree_view_column_pack_start(column, pCellRenderer, TRUE);
-    g_object_set_data(G_OBJECT(pCellRenderer), "column", GINT_TO_POINTER(1));
-    gtk_tree_view_column_set_cell_data_func(column, pCellRenderer, gtk_common_render_double, GINT_TO_POINTER(GTK_DECIMAL_DISTANCE), NULL);
-    // Colonne y
-    pCellRenderer = gtk_cell_renderer_text_new();
-    g_object_set(pCellRenderer, "editable", TRUE, NULL);
-    column = gtk_tree_view_column_new();
-    g_signal_connect(pCellRenderer, "edited", G_CALLBACK(EF_gtk_noeud_edit_pos_abs), projet);
-    gtk_tree_view_column_set_title(GTK_TREE_VIEW_COLUMN(column), "y");
-    gtk_tree_view_append_column(GTK_TREE_VIEW(ef_gtk->tree_view_libre), column);
-    gtk_tree_view_column_pack_start(column, pCellRenderer, TRUE);
-    g_object_set_data(G_OBJECT(pCellRenderer), "column", GINT_TO_POINTER(2));
-    gtk_tree_view_column_set_cell_data_func(column, pCellRenderer, gtk_common_render_double, GINT_TO_POINTER(GTK_DECIMAL_DISTANCE), NULL);
-    // Colonne z
-    pCellRenderer = gtk_cell_renderer_text_new();
-    g_object_set(pCellRenderer, "editable", TRUE, NULL);
-    column = gtk_tree_view_column_new();
-    g_signal_connect(pCellRenderer, "edited", G_CALLBACK(EF_gtk_noeud_edit_pos_abs), projet);
-    gtk_tree_view_column_set_title(GTK_TREE_VIEW_COLUMN(column), "z");
-    gtk_tree_view_append_column(GTK_TREE_VIEW(ef_gtk->tree_view_libre), column);
-    gtk_tree_view_column_pack_start(column, pCellRenderer, TRUE);
-    g_object_set_data(G_OBJECT(pCellRenderer), "column", GINT_TO_POINTER(3));
-    gtk_tree_view_column_set_cell_data_func(column, pCellRenderer, gtk_common_render_double, GINT_TO_POINTER(GTK_DECIMAL_DISTANCE), NULL);
-    // Colonne Appui
-    pCellRenderer = gtk_cell_renderer_combo_new();
-    g_object_set(pCellRenderer, "editable", TRUE, "model", ef_gtk->liste_appuis, "text-column", 0, "has-entry", FALSE, NULL);
-    g_signal_connect(pCellRenderer, "edited", G_CALLBACK(EF_gtk_noeud_edit_noeud_appui), projet);
-    gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW(ef_gtk->tree_view_libre), -1, gettext("Appui"), pCellRenderer, "text", 4, NULL);
-    list = gtk_tree_view_get_columns(GTK_TREE_VIEW(ef_gtk->tree_view_libre));
-    g_list_first(list);
-    g_list_foreach(list, (GFunc)gtk_tree_view_column_set_resizable, (gpointer)TRUE);
-    g_list_free(list);
+    g_object_set(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_treeview_noeuds_intermediaires_cell4"), "model", projet->list_gtk.ef_noeud.liste_appuis, NULL);
     
-    // Le treeview : 0 : numero, 1 : x, 2 : y, 3 : z, 4 : appui, 5 : barre, 6 : position relative
-    ef_gtk->tree_store_barre = gtk_tree_store_new(7, G_TYPE_UINT, G_TYPE_DOUBLE, G_TYPE_DOUBLE, G_TYPE_DOUBLE, G_TYPE_STRING, G_TYPE_UINT, G_TYPE_DOUBLE);
-    ef_gtk->tree_view_barre = (GtkTreeView*)gtk_tree_view_new_with_model(GTK_TREE_MODEL(ef_gtk->tree_store_barre));
-    ef_gtk->tree_select_barre = gtk_tree_view_get_selection(ef_gtk->tree_view_barre);
-    ef_gtk->scroll_barre = gtk_scrolled_window_new(NULL, NULL);
-    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(ef_gtk->scroll_barre), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-    gtk_container_add(GTK_CONTAINER(ef_gtk->scroll_barre), GTK_WIDGET(ef_gtk->tree_view_barre));
-    gtk_table_attach(GTK_TABLE(ef_gtk->table_noeud_barre), GTK_WIDGET(ef_gtk->scroll_barre), 0, 2, 0, 1, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 0, 0);
-    // Colonne numéro
-    pCellRenderer = gtk_cell_renderer_text_new();
-    g_object_set(pCellRenderer, "background", "#EEEEEE", NULL);
-    gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW(ef_gtk->tree_view_barre), -1, gettext("Numéro"), pCellRenderer, "text", 0, NULL);
-    // Colonne x
-    pCellRenderer = gtk_cell_renderer_text_new();
-    column = gtk_tree_view_column_new();
-    gtk_tree_view_column_set_title(GTK_TREE_VIEW_COLUMN(column), "x");
-    gtk_tree_view_append_column(GTK_TREE_VIEW(ef_gtk->tree_view_barre), column);
-    gtk_tree_view_column_pack_start(column, pCellRenderer, TRUE);
-    g_object_set_data(G_OBJECT(pCellRenderer), "column", GINT_TO_POINTER(1));
-    gtk_tree_view_column_set_cell_data_func(column, pCellRenderer, EF_gtk_render_actualise_position, projet, NULL);
-    // Colonne y
-    pCellRenderer = gtk_cell_renderer_text_new();
-    column = gtk_tree_view_column_new();
-    gtk_tree_view_column_set_title(GTK_TREE_VIEW_COLUMN(column), "y");
-    gtk_tree_view_append_column(GTK_TREE_VIEW(ef_gtk->tree_view_barre), column);
-    gtk_tree_view_column_pack_start(column, pCellRenderer, TRUE);
-    g_object_set_data(G_OBJECT(pCellRenderer), "column", GINT_TO_POINTER(2));
-    gtk_tree_view_column_set_cell_data_func(column, pCellRenderer, EF_gtk_render_actualise_position, projet, NULL);
-    // Colonne z
-    pCellRenderer = gtk_cell_renderer_text_new();
-    column = gtk_tree_view_column_new();
-    gtk_tree_view_column_set_title(GTK_TREE_VIEW_COLUMN(column), "z");
-    gtk_tree_view_append_column(GTK_TREE_VIEW(ef_gtk->tree_view_barre), column);
-    gtk_tree_view_column_pack_start(column, pCellRenderer, TRUE);
-    g_object_set_data(G_OBJECT(pCellRenderer), "column", GINT_TO_POINTER(3));
-    gtk_tree_view_column_set_cell_data_func(column, pCellRenderer, EF_gtk_render_actualise_position, projet, NULL);
-    // Colonne Appui
-    pCellRenderer = gtk_cell_renderer_combo_new();
-    g_object_set(pCellRenderer, "editable", TRUE, "model", ef_gtk->liste_appuis, "text-column", 0, "has-entry", FALSE, NULL);
-    g_signal_connect(pCellRenderer, "edited", G_CALLBACK(EF_gtk_noeud_edit_noeud_appui), projet);
-    gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW(ef_gtk->tree_view_barre), -1, gettext("Appui"), pCellRenderer, "text", 4, NULL);
-    // Colonne Barre
-    pCellRenderer = gtk_cell_renderer_text_new();
-    g_object_set(pCellRenderer, "editable", TRUE, NULL);
-    g_signal_connect(pCellRenderer, "edited", G_CALLBACK(EF_gtk_noeud_edit_noeud_barre_barre), projet);
-    gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW(ef_gtk->tree_view_barre), -1, gettext("Barre"), pCellRenderer, "text", 5, NULL);
-    // Colonne Position relative
-    pCellRenderer = gtk_cell_renderer_text_new();
-    column = gtk_tree_view_column_new();
-    g_object_set(pCellRenderer, "editable", TRUE, NULL);
-    g_signal_connect(pCellRenderer, "edited", G_CALLBACK(EF_gtk_noeud_edit_pos_relat), projet);
-    gtk_tree_view_column_set_title(GTK_TREE_VIEW_COLUMN(column), gettext("Position relative"));
-    gtk_tree_view_append_column(GTK_TREE_VIEW(ef_gtk->tree_view_barre), column);
-    gtk_tree_view_column_pack_start(column, pCellRenderer, TRUE);
-    g_object_set_data(G_OBJECT(pCellRenderer), "column", GINT_TO_POINTER(6));
-    gtk_tree_view_column_set_cell_data_func(column, pCellRenderer, gtk_common_render_double, GINT_TO_POINTER(GTK_DECIMAL_DISTANCE), NULL);
-    list = gtk_tree_view_get_columns(GTK_TREE_VIEW(ef_gtk->tree_view_barre));
-    g_list_first(list);
-    g_list_foreach(list, (GFunc)gtk_tree_view_column_set_resizable, (gpointer)TRUE);
-    g_list_free(list);
-    
-    // On ajoute les noeuds existants.
     if (projet->ef_donnees.noeuds != NULL)
     {
         GList   *list_parcours = projet->ef_donnees.noeuds;
@@ -699,19 +621,7 @@ void EF_gtk_noeud(Projet *projet)
         while (list_parcours != NULL);
     }
     
-    ef_gtk->button_ajouter = gtk_button_new_from_stock(GTK_STOCK_ADD);
-    g_signal_connect(ef_gtk->button_ajouter, "clicked", G_CALLBACK(EF_gtk_noeud_ajouter), projet);
-    gtk_table_attach(GTK_TABLE(ef_gtk->table), ef_gtk->button_ajouter, 0, 1, 1, 2, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_SHRINK | GTK_FILL), 0, 0);
-    
-    ef_gtk->button_fermer = gtk_button_new_from_stock(GTK_STOCK_CLOSE);
-    g_signal_connect(ef_gtk->button_fermer, "clicked", G_CALLBACK(EF_gtk_noeud_fermer), ef_gtk->window);
-    gtk_table_attach(GTK_TABLE(ef_gtk->table), ef_gtk->button_fermer, 1, 2, 1, 2, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_SHRINK | GTK_FILL), 0, 0);
-    
     gtk_window_set_transient_for(GTK_WINDOW(ef_gtk->window), GTK_WINDOW(projet->list_gtk.comp.window));
-    gtk_window_set_modal(GTK_WINDOW(ef_gtk->window), TRUE);
-    gtk_widget_show_all(ef_gtk->window);
-    
-    return;
 }
 
 }
