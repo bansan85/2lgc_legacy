@@ -76,40 +76,12 @@ typedef struct __List_Gtk_1990_Actions
 
 typedef struct __List_Gtk_EF_Charge_Noeud
 {
+    GtkBuilder      *builder;
     GtkWidget       *window;
-    GtkWidget       *table;
+    GtkWidget       *combobox_charge;
     
     unsigned int    action;
     unsigned int    charge;
-    
-    GtkWidget       *label_charge;
-    GtkWidget       *combobox_charge;
-    GtkWidget       *label_description;
-    GtkWidget       *text_view_description;
-    GtkWidget       *label_fx;
-    GtkWidget       *text_view_fx;
-    GtkWidget       *sw_fx;
-    GtkWidget       *label_fy;
-    GtkWidget       *text_view_fy;
-    GtkWidget       *sw_fy;
-    GtkWidget       *label_fz;
-    GtkWidget       *text_view_fz;
-    GtkWidget       *sw_fz;
-    GtkWidget       *label_mx;
-    GtkWidget       *text_view_mx;
-    GtkWidget       *sw_mx;
-    GtkWidget       *label_my;
-    GtkWidget       *text_view_my;
-    GtkWidget       *sw_my;
-    GtkWidget       *label_mz;
-    GtkWidget       *text_view_mz;
-    GtkWidget       *sw_mz;
-    GtkWidget       *label_noeud;
-    GtkWidget       *text_view_noeud;
-    GtkWidget       *sw_noeud;
-    GtkWidget       *table_buttons;
-    GtkWidget       *button_ajouter;
-    GtkWidget       *button_annuler;
 } List_Gtk_EF_Charge_Noeud;
 
 typedef struct __List_Gtk_EF_Charge_Barre_Ponctuelle
