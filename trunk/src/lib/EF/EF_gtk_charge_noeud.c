@@ -72,15 +72,17 @@ int EF_gtk_charge_noeud_ajout_affichage(Charge_Noeud *charge, Projet *projet, gb
 /* DEBUT DE LA FENETRE GRAPHIQUE*/
 
 
-void EF_gtk_charge_noeud_annuler_clicked(GtkButton *button __attribute__((unused)), GtkWidget *fenetre)
+void EF_gtk_charge_noeud_annuler_clicked(GtkButton *button __attribute__((unused)), Projet *projet)
 /* Description : Ferme la fenêtre sans effectuer les modifications
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement
  *            : Projet *projet : la variable projet
  * Valeur renvoyée : Aucune
  */
 {
-    BUGMSG(fenetre, , gettext("Paramètre incorrect\n"));
-    gtk_widget_destroy(fenetre);
+    BUGMSG(projet, , gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->list_gtk.ef_charge_noeud.builder, , gettext("Paramètre incorrect\n"));
+    
+    gtk_widget_destroy(projet->list_gtk.ef_charge_noeud.window);
     return;
 }
 
@@ -105,7 +107,7 @@ gboolean EF_gtk_charge_noeud_recupere_donnees(Projet *projet, unsigned int *num_
     else
         *num_action = (unsigned int)get_active;
     
-    *fx = gtk_common_entry_renvoie_double(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_fx)));
+    *fx = gtk_common_entry_renvoie_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_buffer_fx")));
     if (isnan(*fx))
     {
         dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("La valeur de %s est incorrecte."), "Fx");
@@ -113,7 +115,7 @@ gboolean EF_gtk_charge_noeud_recupere_donnees(Projet *projet, unsigned int *num_
         gtk_widget_destroy(dialog);
         return FALSE;
     }
-    *fy = gtk_common_entry_renvoie_double(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_fy)));
+    *fy = gtk_common_entry_renvoie_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_buffer_fy")));
     if (isnan(*fy))
     {
         dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("La valeur de %s est incorrecte."), "Fy");
@@ -121,7 +123,7 @@ gboolean EF_gtk_charge_noeud_recupere_donnees(Projet *projet, unsigned int *num_
         gtk_widget_destroy(dialog);
         return FALSE;
     }
-    *fz = gtk_common_entry_renvoie_double(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_fz)));
+    *fz = gtk_common_entry_renvoie_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_buffer_fz")));
     if (isnan(*fz))
     {
         dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("La valeur de %s est incorrecte."), "Fz");
@@ -129,7 +131,7 @@ gboolean EF_gtk_charge_noeud_recupere_donnees(Projet *projet, unsigned int *num_
         gtk_widget_destroy(dialog);
         return FALSE;
     }
-    *mx = gtk_common_entry_renvoie_double(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_mx)));
+    *mx = gtk_common_entry_renvoie_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_buffer_mx")));
     if (isnan(*mx))
     {
         dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("La valeur de %s est incorrecte."), "Mx");
@@ -137,7 +139,7 @@ gboolean EF_gtk_charge_noeud_recupere_donnees(Projet *projet, unsigned int *num_
         gtk_widget_destroy(dialog);
         return FALSE;
     }
-    *my = gtk_common_entry_renvoie_double(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_my)));
+    *my = gtk_common_entry_renvoie_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_buffer_my")));
     if (isnan(*my))
     {
         dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("La valeur de %s est incorrecte."), "My");
@@ -145,7 +147,7 @@ gboolean EF_gtk_charge_noeud_recupere_donnees(Projet *projet, unsigned int *num_
         gtk_widget_destroy(dialog);
         return FALSE;
     }
-    *mz = gtk_common_entry_renvoie_double(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_mz)));
+    *mz = gtk_common_entry_renvoie_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_buffer_mz")));
     if (isnan(*mz))
     {
         dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("La valeur de %s est incorrecte."), "Mz");
@@ -153,7 +155,7 @@ gboolean EF_gtk_charge_noeud_recupere_donnees(Projet *projet, unsigned int *num_
         gtk_widget_destroy(dialog);
         return FALSE;
     }
-    textbuffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_noeud));
+    textbuffer = GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_buffer_noeuds"));
     gtk_text_buffer_get_iter_at_offset(textbuffer, &start, 0);
     gtk_text_buffer_get_iter_at_offset(textbuffer, &end, -1);
     texte_tmp = gtk_text_buffer_get_text(textbuffer, &start, &end, FALSE);
@@ -180,7 +182,7 @@ gboolean EF_gtk_charge_noeud_recupere_donnees(Projet *projet, unsigned int *num_
         else
         {
             // Si tous les paramètres sont corrects
-            textbuffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_description));
+            textbuffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_textview_description")));
             
             free(texte_tmp);
             gtk_text_buffer_get_iter_at_offset(textbuffer, &start, 0);
@@ -274,6 +276,37 @@ void EF_gtk_charge_noeud_editer_clicked(GtkButton *button __attribute__((unused)
 }
 
 
+G_MODULE_EXPORT gboolean EF_gtk_charge_noeud_window_key_press(GtkWidget *widget __attribute__((unused)), GdkEvent *event, Projet *projet)
+{
+    BUGMSG(projet, TRUE, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->list_gtk.ef_charge_noeud.builder, TRUE, gettext("Paramètre incorrect\n"));
+    
+    if (event->key.keyval == GDK_KEY_Escape)
+    {
+        gtk_widget_destroy(projet->list_gtk.ef_charge_noeud.window);
+        return TRUE;
+    }
+    else
+        return FALSE;
+}
+
+
+G_MODULE_EXPORT void EF_gtk_charge_noeud_window_destroy(GtkWidget *object __attribute__((unused)), Projet *projet)
+/* Description : met projet->list_gtk._1990_actions.window à NULL quand la fenêtre se ferme
+ * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
+ *            : Projet *projet : la variable projet
+ * Valeur renvoyée : Aucune
+ */
+{
+    BUGMSG(projet, , gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->list_gtk.ef_charge_noeud.builder, , gettext("Paramètre incorrect\n"));
+    
+    projet->list_gtk.ef_charge_noeud.builder = NULL;
+    
+    return;
+}
+
+
 int EF_gtk_charge_noeud(Projet *projet, unsigned int action_defaut, unsigned int charge)
 /* Description : Affichage de la fenêtre permettant de créer ou modifier une action de type
  *               charge ponctuelle au noeud
@@ -289,30 +322,30 @@ int EF_gtk_charge_noeud(Projet *projet, unsigned int action_defaut, unsigned int
     GList                       *list_parcours;
     
     BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->actions, -1, gettext("Paramètre incorrect\n"));
     
     ef_gtk = &projet->list_gtk.ef_charge_noeud;
+    projet->list_gtk.ef_charge_noeud.builder = gtk_builder_new();
+    BUGMSG(gtk_builder_add_from_file(projet->list_gtk.ef_charge_noeud.builder, DATADIR"/ui/EF_gtk_charge_noeud.ui", NULL) != 0, -1, gettext("Builder Failed\n"));
+    gtk_builder_connect_signals(projet->list_gtk.ef_charge_noeud.builder, projet);
+    
+    ef_gtk->window = GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_window"));
+    ef_gtk->combobox_charge = GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_combo_box_charge"));
     
     if (charge == G_MAXUINT)
     {
-        GTK_NOUVELLE_FENETRE(ef_gtk->window, gettext("Ajout d'une charge au noeud"), 400, 1)
+        ef_gtk->action = 0;
+        ef_gtk->charge = 0;
+        gtk_window_set_title(GTK_WINDOW(ef_gtk->window), gettext("Ajout d'une charge au noeud"));
         charge_noeud = NULL;
     }
     else
     {
         ef_gtk->action = action_defaut;
         ef_gtk->charge = charge;
-        GTK_NOUVELLE_FENETRE(ef_gtk->window, gettext("Modification d'une charge au noeud"), 400, 1)
+        gtk_window_set_title(GTK_WINDOW(ef_gtk->window), gettext("Modification d'une charge au noeud"));
         BUG(charge_noeud = _1990_action_cherche_charge(projet, action_defaut, charge), -1);
     }
     
-    ef_gtk->table = gtk_table_new(7, 4, FALSE);
-    gtk_container_add(GTK_CONTAINER(ef_gtk->window), ef_gtk->table);
-    
-    ef_gtk->label_charge = gtk_label_new(gettext("Charge :"));
-    gtk_table_attach(GTK_TABLE(ef_gtk->table), ef_gtk->label_charge, 0, 1, 0, 1, GTK_SHRINK | GTK_FILL, GTK_SHRINK | GTK_FILL, 0, 0);
-    
-    ef_gtk->combobox_charge = gtk_combo_box_text_new();
     list_parcours = projet->actions;
     do
     {
@@ -322,107 +355,43 @@ int EF_gtk_charge_noeud(Projet *projet, unsigned int action_defaut, unsigned int
     }
     while (list_parcours != NULL);
     gtk_combo_box_set_active(GTK_COMBO_BOX(ef_gtk->combobox_charge), (gint)action_defaut);
-    gtk_table_attach(GTK_TABLE(ef_gtk->table), ef_gtk->combobox_charge, 1, 4, 0, 1, GTK_EXPAND | GTK_FILL, GTK_SHRINK | GTK_FILL, 0, 0);
-    
-    ef_gtk->label_description = gtk_label_new(gettext("Description :"));
-    gtk_table_attach(GTK_TABLE(ef_gtk->table), ef_gtk->label_description, 0, 1, 1, 2, GTK_SHRINK | GTK_FILL, GTK_SHRINK | GTK_FILL, 0, 0);
-    ef_gtk->text_view_description = gtk_text_view_new();
-    gtk_text_view_set_wrap_mode(GTK_TEXT_VIEW(ef_gtk->text_view_description), GTK_WRAP_WORD);
-    gtk_text_view_set_accepts_tab(GTK_TEXT_VIEW(ef_gtk->text_view_description), FALSE);
-    gtk_container_set_border_width(GTK_CONTAINER(ef_gtk->text_view_description), 3);
-    gtk_table_attach(GTK_TABLE(ef_gtk->table), ef_gtk->text_view_description, 1, 4, 1, 2, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
-    
-    ef_gtk->label_fx = gtk_label_new(gettext("Fx :"));
-    gtk_table_attach(GTK_TABLE(ef_gtk->table), ef_gtk->label_fx, 0, 1, 2, 3, GTK_SHRINK | GTK_FILL, GTK_SHRINK | GTK_FILL, 0, 0);
-    GTK_NOUVEAU_TEXT_VIEW_AVEC_SCROLLED_WINDOW(ef_gtk->text_view_fx, ef_gtk->sw_fx)
-    GTK_TEXT_VIEW_VERIFIE_DOUBLE(ef_gtk->text_view_fx)
-    gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_fx)), "0", -1);
-    gtk_table_attach(GTK_TABLE(ef_gtk->table), ef_gtk->sw_fx, 1, 2, 2, 3, GTK_EXPAND | GTK_FILL, GTK_SHRINK | GTK_FILL, 0, 0);
-    
-    ef_gtk->label_fy = gtk_label_new(gettext("Fy :"));
-    gtk_table_attach(GTK_TABLE(ef_gtk->table), ef_gtk->label_fy, 0, 1, 3, 4, GTK_SHRINK | GTK_FILL, GTK_SHRINK | GTK_FILL, 0, 0);
-    GTK_NOUVEAU_TEXT_VIEW_AVEC_SCROLLED_WINDOW(ef_gtk->text_view_fy, ef_gtk->sw_fy)
-    GTK_TEXT_VIEW_VERIFIE_DOUBLE(ef_gtk->text_view_fy)
-    gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_fy)), "0", -1);
-    gtk_table_attach(GTK_TABLE(ef_gtk->table), ef_gtk->sw_fy, 1, 2, 3, 4, GTK_EXPAND | GTK_FILL, GTK_SHRINK | GTK_FILL, 0, 0);
-    
-    ef_gtk->label_fz = gtk_label_new(gettext("Fz :"));
-    gtk_table_attach(GTK_TABLE(ef_gtk->table), ef_gtk->label_fz, 0, 1, 4, 5, GTK_SHRINK | GTK_FILL, GTK_SHRINK | GTK_FILL, 0, 0);
-    GTK_NOUVEAU_TEXT_VIEW_AVEC_SCROLLED_WINDOW(ef_gtk->text_view_fz, ef_gtk->sw_fz)
-    GTK_TEXT_VIEW_VERIFIE_DOUBLE(ef_gtk->text_view_fz)
-    gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_fz)), "0", -1);
-    gtk_table_attach(GTK_TABLE(ef_gtk->table), ef_gtk->sw_fz, 1, 2, 4, 5, GTK_EXPAND | GTK_FILL, GTK_SHRINK | GTK_FILL, 0, 0);
-    
-    ef_gtk->label_mx = gtk_label_new(gettext("Mx :"));
-    gtk_table_attach(GTK_TABLE(ef_gtk->table), ef_gtk->label_mx, 2, 3, 2, 3, GTK_SHRINK | GTK_FILL, GTK_SHRINK | GTK_FILL, 10, 0);
-    GTK_NOUVEAU_TEXT_VIEW_AVEC_SCROLLED_WINDOW(ef_gtk->text_view_mx, ef_gtk->sw_mx)
-    GTK_TEXT_VIEW_VERIFIE_DOUBLE(ef_gtk->text_view_mx)
-    gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_mx)), "0", -1);
-    gtk_table_attach(GTK_TABLE(ef_gtk->table), ef_gtk->sw_mx, 3, 4, 2, 3, GTK_EXPAND | GTK_FILL, GTK_SHRINK | GTK_FILL, 0, 0);
-    
-    ef_gtk->label_my = gtk_label_new(gettext("My :"));
-    gtk_table_attach(GTK_TABLE(ef_gtk->table), ef_gtk->label_my, 2, 3, 3, 4, GTK_SHRINK | GTK_FILL, GTK_SHRINK | GTK_FILL, 10, 0);
-    GTK_NOUVEAU_TEXT_VIEW_AVEC_SCROLLED_WINDOW(ef_gtk->text_view_my, ef_gtk->sw_my)
-    GTK_TEXT_VIEW_VERIFIE_DOUBLE(ef_gtk->text_view_my)
-    gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_my)), "0", -1);
-    gtk_table_attach(GTK_TABLE(ef_gtk->table), ef_gtk->sw_my, 3, 4, 3, 4, GTK_EXPAND | GTK_FILL, GTK_SHRINK | GTK_FILL, 0, 0);
-    
-    ef_gtk->label_mz = gtk_label_new(gettext("Mz :"));
-    gtk_table_attach(GTK_TABLE(ef_gtk->table), ef_gtk->label_mz, 2, 3, 4, 5, GTK_SHRINK | GTK_FILL, GTK_SHRINK | GTK_FILL, 10, 0);
-    GTK_NOUVEAU_TEXT_VIEW_AVEC_SCROLLED_WINDOW(ef_gtk->text_view_mz, ef_gtk->sw_mz)
-    GTK_TEXT_VIEW_VERIFIE_DOUBLE(ef_gtk->text_view_mz)
-    gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_mz)), "0", -1);
-    gtk_table_attach(GTK_TABLE(ef_gtk->table), ef_gtk->sw_mz, 3, 4, 4, 5, GTK_EXPAND | GTK_FILL, GTK_SHRINK | GTK_FILL, 0, 0);
-    
-    ef_gtk->label_noeud = gtk_label_new(gettext("Noeud :"));
-    gtk_table_attach(GTK_TABLE(ef_gtk->table), ef_gtk->label_noeud, 0, 1, 5, 6, GTK_SHRINK | GTK_FILL, GTK_SHRINK | GTK_FILL, 0, 0);
-    GTK_NOUVEAU_TEXT_VIEW_AVEC_SCROLLED_WINDOW(ef_gtk->text_view_noeud, ef_gtk->sw_noeud)
-    GTK_TEXT_VIEW_VERIFIE_LISTE(ef_gtk->text_view_noeud)
-    gtk_table_attach(GTK_TABLE(ef_gtk->table), ef_gtk->sw_noeud, 1, 4, 5, 6, GTK_EXPAND | GTK_FILL, GTK_SHRINK | GTK_FILL, 0, 0);
     
     if (charge_noeud != NULL)
     {
         char   tmp[30], *tmp2;
-        gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_description)), charge_noeud->description, -1);
+        gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_textview_description"))), charge_noeud->description, -1);
         common_math_double_to_char(charge_noeud->fx, tmp, GTK_DECIMAL_FORCE);
-        gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_fx)), tmp, -1);
+        gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_buffer_fx")), tmp, -1);
         common_math_double_to_char(charge_noeud->fy, tmp, GTK_DECIMAL_FORCE);
-        gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_fy)), tmp, -1);
+        gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_buffer_fy")), tmp, -1);
         common_math_double_to_char(charge_noeud->fz, tmp, GTK_DECIMAL_FORCE);
-        gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_fz)), tmp, -1);
+        gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_buffer_fz")), tmp, -1);
         common_math_double_to_char(charge_noeud->mx, tmp, GTK_DECIMAL_MOMENT);
-        gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_mx)), tmp, -1);
+        gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_buffer_mx")), tmp, -1);
         common_math_double_to_char(charge_noeud->my, tmp, GTK_DECIMAL_MOMENT);
-        gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_my)), tmp, -1);
+        gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_buffer_my")), tmp, -1);
         common_math_double_to_char(charge_noeud->mz, tmp, GTK_DECIMAL_MOMENT);
-        gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_mz)), tmp, -1);
+        gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_buffer_mz")), tmp, -1);
         BUG(tmp2 = common_selection_converti_noeuds_en_texte(charge_noeud->noeuds), -3);
-        gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(ef_gtk->text_view_noeud)), tmp2, -1);
+        gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_buffer_noeuds")), tmp2, -1);
         free(tmp2);
     }
-    ef_gtk->table_buttons = gtk_table_new(1, 2, FALSE);
-    gtk_table_attach(GTK_TABLE(ef_gtk->table), ef_gtk->table_buttons, 0, 4, 6, 7, GTK_EXPAND | GTK_FILL, GTK_SHRINK | GTK_FILL, 0, 0);
+    
     if (charge == G_MAXUINT)
     {
-        ef_gtk->button_ajouter = gtk_button_new_from_stock(GTK_STOCK_ADD);
-        g_signal_connect(ef_gtk->button_ajouter, "clicked", G_CALLBACK(EF_gtk_charge_noeud_ajouter_clicked), projet);
+        gtk_button_set_label(GTK_BUTTON(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_button_add_edit")), "gtk-add");
+        g_signal_connect(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_button_add_edit"), "clicked", G_CALLBACK(EF_gtk_charge_noeud_ajouter_clicked), projet);
     }
     else
     {
-        ef_gtk->button_ajouter = gtk_button_new_from_stock(GTK_STOCK_EDIT);
-        g_signal_connect(ef_gtk->button_ajouter, "clicked", G_CALLBACK(EF_gtk_charge_noeud_editer_clicked), projet);
+        gtk_button_set_label(GTK_BUTTON(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_button_add_edit")), "gtk-edit");
+        g_signal_connect(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_button_add_edit"), "clicked", G_CALLBACK(EF_gtk_charge_noeud_editer_clicked), projet);
     }
-    gtk_table_attach(GTK_TABLE(ef_gtk->table_buttons), ef_gtk->button_ajouter, 0, 1, 0, 1, GTK_EXPAND | GTK_FILL, GTK_SHRINK | GTK_FILL, 0, 0);
-    ef_gtk->button_annuler = gtk_button_new_from_stock(GTK_STOCK_CANCEL);
-    g_signal_connect(ef_gtk->button_annuler, "clicked", G_CALLBACK(EF_gtk_charge_noeud_annuler_clicked), ef_gtk->window);
-    gtk_table_attach(GTK_TABLE(ef_gtk->table_buttons), ef_gtk->button_annuler, 1, 2, 0, 1, GTK_EXPAND | GTK_FILL, GTK_SHRINK | GTK_FILL, 0, 0);
     
     if (projet->list_gtk._1990_actions.window == NULL)
         gtk_window_set_transient_for(GTK_WINDOW(ef_gtk->window), GTK_WINDOW(projet->list_gtk.comp.window));
     else
         gtk_window_set_transient_for(GTK_WINDOW(ef_gtk->window), GTK_WINDOW(projet->list_gtk._1990_actions.window));
-    gtk_window_set_modal(GTK_WINDOW(ef_gtk->window), TRUE);
-    gtk_widget_show_all(ef_gtk->window);
     
     return 0;
 }

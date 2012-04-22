@@ -9,8 +9,8 @@ AM_CFLAGS = @CFLAGS@ -march=native -O0 -g3 -ggdb3 -pipe -ftracer -fsched2-use-tr
 if ENABLE_GTK
 AM_CFLAGS      +=  @GTK_CFLAGS@
 endif
-AM_CXXFLAGS		= $(AM_CFLAGS)
+AM_CXXFLAGS		= $(AM_CFLAGS) -std=c++0x 
 
 export AM_CFLAGS AM_CXXFLAGS
 
-EXTRA_DIST = config.rpath
+EXTRA_DIST = config.rpath  config.rpath
