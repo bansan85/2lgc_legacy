@@ -71,6 +71,8 @@ typedef struct __List_Gtk_1990_Actions
     GtkTreeView     *tree_view_charges;
     GtkWidget       *menu_type_list_charge;
     GList           *menu_list_widget_charge;
+    
+    GtkListStore    *list_actions_pour_combobox;
 } List_Gtk_1990_Actions;
 
 
@@ -86,14 +88,15 @@ typedef struct __List_Gtk_EF_Charge_Noeud
 
 typedef struct __List_Gtk_EF_Charge_Barre_Ponctuelle
 {
+    GtkBuilder      *builder;
     GtkWidget       *window;
-    GtkWidget       *table;
-    
     unsigned int    action;
     unsigned int    charge;
+    GtkComboBox     *combobox_charge;
+/*    GtkWidget       *table;
+    
     
     GtkWidget       *label_charge;
-    GtkWidget       *combobox_charge;
     GtkWidget       *label_description;
     GtkWidget       *text_view_description;
     GtkWidget       *label_fx;
@@ -123,11 +126,12 @@ typedef struct __List_Gtk_EF_Charge_Barre_Ponctuelle
     GtkWidget       *sw_barre;
     GtkWidget       *table_buttons;
     GtkWidget       *button_ajouter;
-    GtkWidget       *button_annuler;
+    GtkWidget       *button_annuler;*/
 } List_Gtk_EF_Charge_Barre_Ponctuelle;
 
 typedef struct __List_Gtk_EF_Charge_Barre_Repartie_Uniforme
 {
+    GtkBuilder      *builder;
     GtkWidget       *window;
     GtkWidget       *table;
     

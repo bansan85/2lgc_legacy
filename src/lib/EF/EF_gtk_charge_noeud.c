@@ -346,14 +346,22 @@ int EF_gtk_charge_noeud(Projet *projet, unsigned int action_defaut, unsigned int
         BUG(charge_noeud = _1990_action_cherche_charge(projet, action_defaut, charge), -1);
     }
     
-    list_parcours = projet->actions;
-    do
+    if (projet->list_gtk._1990_actions.list_actions_pour_combobox == NULL)
     {
-        Action *action = list_parcours->data;
-        gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(ef_gtk->combobox_charge), action->description);
-        list_parcours = g_list_next(list_parcours);
+        projet->list_gtk._1990_actions.list_actions_pour_combobox = gtk_list_store_new(1, G_TYPE_STRING);
+        list_parcours = projet->actions;
+        do
+        {
+            GtkTreeIter Iter;
+            Action      *action = list_parcours->data;
+            
+            gtk_list_store_append(projet->list_gtk._1990_actions.list_actions_pour_combobox, &Iter);
+            gtk_list_store_set(projet->list_gtk._1990_actions.list_actions_pour_combobox, &Iter, 0, action->description, -1);
+            list_parcours = g_list_next(list_parcours);
+        }
+        while (list_parcours != NULL);
     }
-    while (list_parcours != NULL);
+    gtk_combo_box_set_model(GTK_COMBO_BOX(ef_gtk->combobox_charge), GTK_TREE_MODEL(projet->list_gtk._1990_actions.list_actions_pour_combobox));
     gtk_combo_box_set_active(GTK_COMBO_BOX(ef_gtk->combobox_charge), (gint)action_defaut);
     
     if (charge_noeud != NULL)
