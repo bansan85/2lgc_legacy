@@ -55,7 +55,7 @@
     <object id="EF_charge_noeud_window" class="GtkWindow">
         <property name="visible">True</property>
         <property name="modal">True</property>
-        <property name="default-width">400</property>
+        <property name="default-width">500</property>
         <property name="window-position">GTK_WIN_POS_CENTER</property>
         <signal name="key-press-event" handler="EF_gtk_charge_noeud_window_key_press"/>
         <signal name="destroy" handler="EF_gtk_charge_noeud_window_destroy"/>
@@ -119,7 +119,7 @@
                 </child>
                 <child>
                     <object class="GtkLabel" id="EF_charge_noeud_label_fx">
-                        <property name="label">Fx :</property>
+                        <property name="label">Fx [N] :</property>
                         <property name="visible">True</property>
                     </object>
                     <packing>
@@ -150,7 +150,7 @@
                 </child>
                 <child>
                     <object class="GtkLabel" id="EF_charge_noeud_label_fy">
-                        <property name="label">Fy :</property>
+                        <property name="label">Fy [N] :</property>
                         <property name="visible">True</property>
                     </object>
                     <packing>
@@ -181,7 +181,7 @@
                 </child>
                 <child>
                     <object class="GtkLabel" id="EF_charge_noeud_label_fz">
-                        <property name="label">Fz :</property>
+                        <property name="label">Fz [N] :</property>
                         <property name="visible">True</property>
                     </object>
                     <packing>
@@ -212,7 +212,7 @@
                 </child>
                 <child>
                     <object class="GtkLabel" id="EF_charge_noeud_label_mx">
-                        <property name="label">Mx :</property>
+                        <property name="label">Mx [N.m] :</property>
                         <property name="visible">True</property>
                     </object>
                     <packing>
@@ -243,7 +243,7 @@
                 </child>
                 <child>
                     <object class="GtkLabel" id="EF_charge_noeud_label_my">
-                        <property name="label">My :</property>
+                        <property name="label">My [N.m] :</property>
                         <property name="visible">True</property>
                     </object>
                     <packing>
@@ -274,7 +274,7 @@
                 </child>
                 <child>
                     <object class="GtkLabel" id="EF_charge_noeud_label_mz">
-                        <property name="label">Mz :</property>
+                        <property name="label">Mz [N.m] :</property>
                         <property name="visible">True</property>
                     </object>
                     <packing>
