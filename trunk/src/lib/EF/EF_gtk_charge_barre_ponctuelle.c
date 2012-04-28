@@ -72,7 +72,7 @@ G_MODULE_EXPORT int EF_gtk_charge_barre_ponctuelle_ajout_affichage(Charge_Barre_
 
 /* DEBUT DE LA FENETRE GRAPHIQUE*/
 
-void EF_gtk_charge_barre_ponctuelle_annuler_clicked(GtkButton *button __attribute__((unused)), Projet *projet)
+G_MODULE_EXPORT void EF_gtk_charge_barre_ponctuelle_annuler_clicked(GtkButton *button __attribute__((unused)), Projet *projet)
 /* Description : Ferme la fenêtre sans effectuer les modifications
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement
  *            : Projet *projet : la variable projet

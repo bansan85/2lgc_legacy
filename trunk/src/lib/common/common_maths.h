@@ -24,6 +24,10 @@
 #include <values.h>
 #include <glib.h>
 
+#ifndef M_PI
+#define M_PI        3.1415926535897932384626433
+#endif
+
 #ifndef MAXDOUBLE
 #define MAXDOUBLE   1.7976931348623158e+308
 #endif
