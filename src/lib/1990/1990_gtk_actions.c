@@ -37,6 +37,31 @@
 
 const GtkTargetEntry drag_targets_actions[] = { {(gchar*)PACKAGE"1_SAME_PROC", GTK_TARGET_SAME_APP, 0}}; 
 
+int _1990_gtk_actions_genere_liste(Projet *projet)
+{
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    
+    if (projet->list_gtk._1990_actions.list_actions_pour_combobox == NULL)
+    {
+        GList   *list_parcours = projet->actions;
+        
+        projet->list_gtk._1990_actions.list_actions_pour_combobox = gtk_list_store_new(1, G_TYPE_STRING);
+        do
+        {
+            GtkTreeIter Iter;
+            Action      *action = list_parcours->data;
+            
+            gtk_list_store_append(projet->list_gtk._1990_actions.list_actions_pour_combobox, &Iter);
+            gtk_list_store_set(projet->list_gtk._1990_actions.list_actions_pour_combobox, &Iter, 0, action->description, -1);
+            list_parcours = g_list_next(list_parcours);
+        }
+        while (list_parcours != NULL);
+    }
+    
+    return 0;
+}
+
+
 G_MODULE_EXPORT void _1990_gtk_tree_view_actions_cell_edited(GtkCellRendererText *cell __attribute__((unused)), gchar *path_string, gchar *new_text, Projet *projet)
 /* Description : Pour éditer le nom des actions via la fenêtre d'actions.
  * Paramètres : GtkCellRendererText *cell : la cellule éditée,

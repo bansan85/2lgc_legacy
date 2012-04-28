@@ -34,6 +34,7 @@
 #include "EF_noeud.h"
 #include "EF_charge_noeud.h"
 #include "1990_actions.h"
+#include "1990_gtk_actions.h"
 #include "common_selection.h"
 
 int EF_gtk_charge_noeud_ajout_affichage(Charge_Noeud *charge, Projet *projet, gboolean nouvelle_ligne)
@@ -319,7 +320,6 @@ int EF_gtk_charge_noeud(Projet *projet, unsigned int action_defaut, unsigned int
 {
     List_Gtk_EF_Charge_Noeud    *ef_gtk;
     Charge_Noeud                *charge_noeud;
-    GList                       *list_parcours;
     
     BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
     
@@ -346,21 +346,7 @@ int EF_gtk_charge_noeud(Projet *projet, unsigned int action_defaut, unsigned int
         BUG(charge_noeud = _1990_action_cherche_charge(projet, action_defaut, charge), -1);
     }
     
-    if (projet->list_gtk._1990_actions.list_actions_pour_combobox == NULL)
-    {
-        projet->list_gtk._1990_actions.list_actions_pour_combobox = gtk_list_store_new(1, G_TYPE_STRING);
-        list_parcours = projet->actions;
-        do
-        {
-            GtkTreeIter Iter;
-            Action      *action = list_parcours->data;
-            
-            gtk_list_store_append(projet->list_gtk._1990_actions.list_actions_pour_combobox, &Iter);
-            gtk_list_store_set(projet->list_gtk._1990_actions.list_actions_pour_combobox, &Iter, 0, action->description, -1);
-            list_parcours = g_list_next(list_parcours);
-        }
-        while (list_parcours != NULL);
-    }
+    _1990_gtk_actions_genere_liste(projet);
     gtk_combo_box_set_model(GTK_COMBO_BOX(ef_gtk->combobox_charge), GTK_TREE_MODEL(projet->list_gtk._1990_actions.list_actions_pour_combobox));
     gtk_combo_box_set_active(GTK_COMBO_BOX(ef_gtk->combobox_charge), (gint)action_defaut);
     

@@ -34,6 +34,7 @@
 #include "1992_1_1_barres.h"
 #include "EF_charge_barre_ponctuelle.h"
 #include "1990_actions.h"
+#include "1990_gtk_actions.h"
 #include "common_selection.h"
 
 int EF_gtk_charge_barre_ponctuelle_ajout_affichage(Charge_Barre_Ponctuelle *charge, Projet *projet, gboolean nouvelle_ligne)
@@ -364,22 +365,7 @@ int EF_gtk_charge_barre_ponctuelle(Projet *projet, unsigned int action_defaut, u
         BUG(charge_barre = _1990_action_cherche_charge(projet, action_defaut, charge), -1);
     }
     
-    if (projet->list_gtk._1990_actions.list_actions_pour_combobox == NULL)
-    {
-        GList   *list_parcours = projet->actions;
-        
-        projet->list_gtk._1990_actions.list_actions_pour_combobox = gtk_list_store_new(1, G_TYPE_STRING);
-        do
-        {
-            GtkTreeIter Iter;
-            Action      *action = list_parcours->data;
-            
-            gtk_list_store_append(projet->list_gtk._1990_actions.list_actions_pour_combobox, &Iter);
-            gtk_list_store_set(projet->list_gtk._1990_actions.list_actions_pour_combobox, &Iter, 0, action->description, -1);
-            list_parcours = g_list_next(list_parcours);
-        }
-        while (list_parcours != NULL);
-    }
+    _1990_gtk_actions_genere_liste(projet);
     gtk_combo_box_set_model(GTK_COMBO_BOX(ef_gtk->combobox_charge), GTK_TREE_MODEL(projet->list_gtk._1990_actions.list_actions_pour_combobox));
     gtk_combo_box_set_active(GTK_COMBO_BOX(ef_gtk->combobox_charge), (gint)action_defaut);
     
@@ -421,6 +407,10 @@ int EF_gtk_charge_barre_ponctuelle(Projet *projet, unsigned int action_defaut, u
         g_signal_connect(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_ponct_button_add_edit"), "clicked", G_CALLBACK(EF_gtk_charge_barre_ponctuelle_editer_clicked), projet);
     }
     
+    if (projet->list_gtk._1990_actions.window == NULL)
+        gtk_window_set_transient_for(GTK_WINDOW(ef_gtk->window), GTK_WINDOW(projet->list_gtk.comp.window));
+    else
+        gtk_window_set_transient_for(GTK_WINDOW(ef_gtk->window), GTK_WINDOW(projet->list_gtk._1990_actions.window));
     return 0;
 }
 

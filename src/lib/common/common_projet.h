@@ -93,87 +93,20 @@ typedef struct __List_Gtk_EF_Charge_Barre_Ponctuelle
     unsigned int    action;
     unsigned int    charge;
     GtkComboBox     *combobox_charge;
-/*    GtkWidget       *table;
-    
-    
-    GtkWidget       *label_charge;
-    GtkWidget       *label_description;
-    GtkWidget       *text_view_description;
-    GtkWidget       *label_fx;
-    GtkWidget       *text_view_fx;
-    GtkWidget       *sw_fx;
-    GtkWidget       *label_fy;
-    GtkWidget       *text_view_fy;
-    GtkWidget       *sw_fy;
-    GtkWidget       *label_fz;
-    GtkWidget       *text_view_fz;
-    GtkWidget       *sw_fz;
-    GtkWidget       *label_mx;
-    GtkWidget       *text_view_mx;
-    GtkWidget       *sw_mx;
-    GtkWidget       *label_my;
-    GtkWidget       *text_view_my;
-    GtkWidget       *sw_my;
-    GtkWidget       *label_mz;
-    GtkWidget       *text_view_mz;
-    GtkWidget       *sw_mz;
-    GtkWidget       *check_button_repere_local;
-    GtkWidget       *label_position;
-    GtkWidget       *text_view_position;
-    GtkWidget       *sw_position;
-    GtkWidget       *label_barre;
-    GtkWidget       *text_view_barre;
-    GtkWidget       *sw_barre;
-    GtkWidget       *table_buttons;
-    GtkWidget       *button_ajouter;
-    GtkWidget       *button_annuler;*/
 } List_Gtk_EF_Charge_Barre_Ponctuelle;
 
 typedef struct __List_Gtk_EF_Charge_Barre_Repartie_Uniforme
 {
     GtkBuilder      *builder;
     GtkWidget       *window;
-    GtkWidget       *table;
     
     unsigned int    action;
     unsigned int    charge;
     
-    GtkWidget       *label_charge;
     GtkWidget       *combobox_charge;
-    GtkWidget       *label_description;
-    GtkWidget       *text_view_description;
-    GtkWidget       *label_fx;
-    GtkWidget       *text_view_fx;
-    GtkWidget       *sw_fx;
-    GtkWidget       *label_fy;
-    GtkWidget       *text_view_fy;
-    GtkWidget       *sw_fy;
-    GtkWidget       *label_fz;
-    GtkWidget       *text_view_fz;
-    GtkWidget       *sw_fz;
-    GtkWidget       *label_mx;
-    GtkWidget       *text_view_mx;
-    GtkWidget       *sw_mx;
-    GtkWidget       *label_my;
-    GtkWidget       *text_view_my;
-    GtkWidget       *sw_my;
-    GtkWidget       *label_mz;
-    GtkWidget       *text_view_mz;
-    GtkWidget       *sw_mz;
     GtkWidget       *check_button_repere_local;
+    GtkWidget       *check_button_repere_global;
     GtkWidget       *check_button_projection;
-    GtkWidget       *label_a;
-    GtkWidget       *text_view_a;
-    GtkWidget       *sw_a;
-    GtkWidget       *label_b;
-    GtkWidget       *text_view_b;
-    GtkWidget       *sw_b;
-    GtkWidget       *label_barre;
-    GtkWidget       *text_view_barre;
-    GtkWidget       *sw_barre;
-    GtkWidget       *table_buttons;
-    GtkWidget       *button_ajouter;
-    GtkWidget       *button_annuler;
 } List_Gtk_EF_Charge_Barre_Repartie_Uniforme;
 
 typedef struct __List_Gtk_EF_Noeud

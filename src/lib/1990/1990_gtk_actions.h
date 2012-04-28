@@ -25,6 +25,7 @@
 
 #include "common_projet.h"
 
+int _1990_gtk_actions_genere_liste(Projet *projet);
 void _1990_gtk_actions(Projet *projet);
 
 #endif
