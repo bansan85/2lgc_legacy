@@ -361,6 +361,7 @@ double EF_calculs_resid(long *Ap, long *Ai, double *Ax, double *b, unsigned int 
  */
 {
     UF_long i, j, p ;
+    unsigned int k;
     double norm ;
     double *r = (double*)malloc(sizeof(double)*n);
     
@@ -371,8 +372,8 @@ double EF_calculs_resid(long *Ap, long *Ai, double *Ax, double *b, unsigned int 
     BUGMSG(b, NAN, gettext("Paramètre incorrect\n"));
     BUGMSG(x, NAN, gettext("Paramètre incorrect\n"));
     BUGMSG(r, NAN, gettext("Erreur d'allocation mémoire.\n"));
-    for (i=0;i<n;i++)
-    	r[i] = -b[i] ;
+    for (k=0;k<n;k++)
+    	r[k] = -b[k] ;
     for (j=0;j<n;j++)
     {
         for (p=Ap[j];p<Ap[j+1];p++)
@@ -382,8 +383,8 @@ double EF_calculs_resid(long *Ap, long *Ai, double *Ax, double *b, unsigned int 
         }
     }
     norm = 0.;
-    for (i=0;i<n;i++)
-    	norm = MAX(ABS(r[i]), norm);
+    for (k=0;k<n;k++)
+    	norm = MAX(ABS(r[k]), norm);
     free(r);
     return (norm);
 }
