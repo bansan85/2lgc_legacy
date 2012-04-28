@@ -171,9 +171,9 @@ make -j3 && make GLEW_DEST="c:/MinGW" install.all && cd .. && \
 	sed -i "s/dlsym/GetProcAddress/g" src/CrGlCur.c && \
 	make -j3 && make install && cd ..\
 )) ; && \
-(test -f cairo-1.12.0.tar.gz || wget http://cairographics.org/releases/cairo-1.12.0.tar.gz) && \
-tar xvzf cairo-1.12.0.tar.gz && \
-cd cairo-1.12.0 && \
+(test -f cairo-1.10.2.tar.gz || wget http://cairographics.org/releases/cairo-1.10.2.tar.gz) && \
+tar xvzf cairo-1.10.2.tar.gz && \
+cd cairo-1.10.2 && \
 sed -i "s/test perf//g" Makefile.am Makefile.in && \
 (!(test -f X) || CFLAGS="-O0 -g3 -ggdb3 -pipe" PKG_CONFIG_PATH="c:/MinGW/lib/pkgconfig" ./configure --disable-static --enable-shared --enable-svg --enable-pdf --enable-ps --enable-png --enable-xml --enable-pthread --enable-gobject --enable-xlib --prefix=c:/MinGW) && \
 (test -f X || CFLAGS="-O0 -g3 -ggdb3 -pipe" PKG_CONFIG_PATH="c:/MinGW/lib/pkgconfig" ./configure --disable-static --enable-shared --enable-svg --enable-pdf --enable-ps --enable-png --enable-xml --enable-pthread --enable-gobject --prefix=c:/MinGW) && \
