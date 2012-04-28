@@ -34,7 +34,7 @@
 #include "1990_actions.h"
 #include "1992_1_1_section.h"
 
-int EF_calculs_initialise(Projet *projet)
+G_MODULE_EXPORT int EF_calculs_initialise(Projet *projet)
 /* Description : Initialise les diverses variables nécessaires à l'ajout des matrices de
  *               rigidité élémentaires.
  * Paramètres : Projet *projet : la variable projet
@@ -162,7 +162,7 @@ int EF_calculs_initialise(Projet *projet)
 }
 
 
-int EF_calculs_genere_mat_rig(Projet *projet)
+G_MODULE_EXPORT int EF_calculs_genere_mat_rig(Projet *projet)
 /* Description : Factorisation de la matrice de rigidité.
  * Paramètres : Projet *projet : la variable projet
  * Valeur renvoyée :
@@ -238,7 +238,7 @@ int EF_calculs_genere_mat_rig(Projet *projet)
 }
 
 
-int EF_calculs_moment_hyper_y(Barre_Info_EF *infos, double phia, double phib,
+G_MODULE_EXPORT int EF_calculs_moment_hyper_y(Barre_Info_EF *infos, double phia, double phib,
   double *ma, double *mb)
 /* Description : Calcul le moment hyperstatique correspondant à l'opposé du moment de la
  *               réaction à partir de la rotation au point A et B autour de l'axe Y.
@@ -289,7 +289,7 @@ int EF_calculs_moment_hyper_y(Barre_Info_EF *infos, double phia, double phib,
 }
 
 
-int EF_calculs_moment_hyper_z(Barre_Info_EF *infos, double phia, double phib,
+G_MODULE_EXPORT int EF_calculs_moment_hyper_z(Barre_Info_EF *infos, double phia, double phib,
   double *ma, double *mb)
 /* Description : Calcul le moment hyperstatique correspondant à l'opposé du moment de la
  *               réaction à partir de la rotation au point A et B autour de l'axe Z.
@@ -390,7 +390,7 @@ double EF_calculs_resid(long *Ap, long *Ai, double *Ax, double *b, unsigned int 
 }
 
 
-int EF_calculs_resoud_charge(Projet *projet, unsigned int num_action)
+G_MODULE_EXPORT int EF_calculs_resoud_charge(Projet *projet, unsigned int num_action)
 /* Description : Détermine à partir de la matrice de rigidité partielle factorisée les
  *               déplacements et les efforts dans les noeuds pour l'action demandée ainsi
  *               que la courbe des sollicitations dans les barres.

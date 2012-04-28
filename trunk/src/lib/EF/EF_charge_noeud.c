@@ -29,7 +29,7 @@
 #include "common_erreurs.h"
 
 
-Charge_Noeud*  EF_charge_noeud_ajout(Projet *projet, unsigned int num_action, GList *noeuds,
+G_MODULE_EXPORT Charge_Noeud*  EF_charge_noeud_ajout(Projet *projet, unsigned int num_action, GList *noeuds,
   double fx, double fy, double fz, double mx, double my, double mz, const char* nom)
 /* Description : Ajoute une charge ponctuelle à une action et à un noeud de la structure en
  *               lui attribuant le numéro suivant la dernière charge de l'action.
@@ -79,7 +79,7 @@ Charge_Noeud*  EF_charge_noeud_ajout(Projet *projet, unsigned int num_action, GL
 }
 
 
-int EF_charge_noeud_free(Charge_Noeud *charge)
+G_MODULE_EXPORT int EF_charge_noeud_free(Charge_Noeud *charge)
 {
 /* Description : Libère une charge nodale.
  * Paramètres : Charge_Noeud *charge : la charge à libérer.

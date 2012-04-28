@@ -37,7 +37,7 @@
 
 const GtkTargetEntry drag_targets_actions[] = { {(gchar*)PACKAGE"1_SAME_PROC", GTK_TARGET_SAME_APP, 0}}; 
 
-int _1990_gtk_actions_genere_liste(Projet *projet)
+G_MODULE_EXPORT int _1990_gtk_actions_genere_liste(Projet *projet)
 {
     BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
     
@@ -835,7 +835,7 @@ G_MODULE_EXPORT gboolean _1990_gtk_window_key_press(GtkWidget *widget __attribut
 }
 
 
-void _1990_gtk_actions(Projet *projet)
+G_MODULE_EXPORT void _1990_gtk_actions(Projet *projet)
 {
     GtkTreeIter     iter;
     unsigned int    i;

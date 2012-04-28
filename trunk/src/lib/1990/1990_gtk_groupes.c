@@ -1410,7 +1410,7 @@ G_MODULE_EXPORT void _1990_gtk_groupes_window_destroy(GtkWidget *object __attrib
 }
 
 
-void _1990_gtk_groupes(GtkWidget *button __attribute__((unused)), Projet *projet)
+G_MODULE_EXPORT void _1990_gtk_groupes(GtkWidget *button __attribute__((unused)), Projet *projet)
 {
     BUGMSG(projet, , gettext("Paramètre incorrect\n"));
     BUGMSG(projet->list_gtk._1990_groupes.builder == NULL, , gettext("Paramètre incorrect\n"));

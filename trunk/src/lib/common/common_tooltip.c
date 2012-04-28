@@ -30,7 +30,7 @@
 #include "common_erreurs.h"
 #include "common_projet.h"
 
-void wrapped_label_size_allocate_callback(GtkWidget *label, GtkAllocation *allocation,
+G_MODULE_EXPORT void wrapped_label_size_allocate_callback(GtkWidget *label, GtkAllocation *allocation,
   Projet *projet __attribute__((unused)))
 /* Description : Permet un redimensionnement en temps réel du composant label
  * Paramètres : GtkWidget *label : composant label à redimensionner
@@ -45,7 +45,7 @@ void wrapped_label_size_allocate_callback(GtkWidget *label, GtkAllocation *alloc
 }
 
 
-GtkWidget* common_tooltip_generation(const char *nom)
+G_MODULE_EXPORT GtkWidget* common_tooltip_generation(const char *nom)
 /* Description : Génère une fenêtre de type tooltip contenant les informations spécifiées par
  *                 le nom 'nom'. Les informations sont contenues dans le fichier 
  *                 DATADIR"/tooltips.xml" sous format XML.

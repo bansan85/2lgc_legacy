@@ -26,7 +26,7 @@
 #include <gtk/gtk.h>
 #endif
 
-int EF_relachement_init(Projet *projet)
+G_MODULE_EXPORT int EF_relachement_init(Projet *projet)
 /* Description : Initialise la liste des relachements
  * Paramètres : Projet *projet : la variable projet
  * Valeur renvoyée :
@@ -55,7 +55,7 @@ int EF_relachement_init(Projet *projet)
 }
 
 
-int EF_relachement_ajout(Projet *projet, const char *nom, EF_Relachement_Type rx_debut,
+G_MODULE_EXPORT int EF_relachement_ajout(Projet *projet, const char *nom, EF_Relachement_Type rx_debut,
   void* rx_d_data, EF_Relachement_Type ry_debut, void* ry_d_data, EF_Relachement_Type rz_debut,
   void* rz_d_data, EF_Relachement_Type rx_fin, void* rx_f_data, EF_Relachement_Type ry_fin,
   void* ry_f_data, EF_Relachement_Type rz_fin, void* rz_f_data)
@@ -121,7 +121,7 @@ int EF_relachement_ajout(Projet *projet, const char *nom, EF_Relachement_Type rx
 }
 
 
-EF_Relachement* EF_relachement_cherche_numero(Projet *projet, unsigned int numero)
+G_MODULE_EXPORT EF_Relachement* EF_relachement_cherche_numero(Projet *projet, unsigned int numero)
 /* Description : Renvoie le relachement cherché
  * Paramètres : Projet *projet : la variable projet
  *            : unsigned int numero : le numéro du relachement
@@ -156,7 +156,7 @@ EF_Relachement* EF_relachement_cherche_numero(Projet *projet, unsigned int numer
 }
 
 
-int EF_relachement_free(Projet *projet)
+G_MODULE_EXPORT int EF_relachement_free(Projet *projet)
 /* Description : Libère l'ensemble des relachements et la liste les contenant
  * Paramètres : Projet *projet : la variable projet
  * Valeur renvoyée :

@@ -28,7 +28,7 @@
 #include "common_erreurs.h"
 #include "common_maths.h"
 
-void gtk_common_entry_check_double(GtkTextBuffer *textbuffer, gpointer user_data __attribute__((unused)))
+G_MODULE_EXPORT void gtk_common_entry_check_double(GtkTextBuffer *textbuffer, gpointer user_data __attribute__((unused)))
 /* Description : Vérifie en temps réel si le GtkTextBuffer contient bien un nombre flottant.
  *               S'il ne contient pas de nombre, le texte passe en rouge.
  * Paramètres : GtkTextBuffer *textbuffer : composant à l'origine de l'évènement
@@ -63,7 +63,7 @@ void gtk_common_entry_check_double(GtkTextBuffer *textbuffer, gpointer user_data
 }
 
 
-double gtk_common_entry_renvoie_double(GtkTextBuffer *textbuffer)
+G_MODULE_EXPORT double gtk_common_entry_renvoie_double(GtkTextBuffer *textbuffer)
 /* Description : Renvoie le nombre flottant si le GtkTextBuffer en contient bien un.
  *               Renvoie nan sinon.
  * Paramètres : GtkTextBuffer *textbuffer : composant à vérifier
@@ -94,7 +94,7 @@ double gtk_common_entry_renvoie_double(GtkTextBuffer *textbuffer)
     }
 }
 
-void gtk_common_entry_check_int(GtkTextBuffer *textbuffer, gpointer user_data __attribute__((unused)))
+G_MODULE_EXPORT void gtk_common_entry_check_int(GtkTextBuffer *textbuffer, gpointer user_data __attribute__((unused)))
 /* Description : Vérifie en temps réel si le GtkTextBuffer contient bien un nombre entier.
  *               S'il ne contient pas de nombre, le texte passe en rouge.
  * Paramètres : GtkTextBuffer *textbuffer : composant à l'origine de l'évènement
@@ -129,7 +129,7 @@ void gtk_common_entry_check_int(GtkTextBuffer *textbuffer, gpointer user_data __
 }
 
 
-int gtk_common_entry_renvoie_int(GtkTextBuffer *textbuffer)
+G_MODULE_EXPORT int gtk_common_entry_renvoie_int(GtkTextBuffer *textbuffer)
 /* Description : Renvoie le nombre entier si le GtkTextBuffer en contient bien un.
  *               Renvoie INT_MIN sinon.
  * Paramètres : GtkTextBuffer *textbuffer : composant à vérifier
@@ -161,7 +161,7 @@ int gtk_common_entry_renvoie_int(GtkTextBuffer *textbuffer)
 }
 
 
-void gtk_common_entry_check_liste(GtkTextBuffer *textbuffer, gpointer user_data __attribute__((unused)))
+G_MODULE_EXPORT void gtk_common_entry_check_liste(GtkTextBuffer *textbuffer, gpointer user_data __attribute__((unused)))
 /* Description : Vérifie en temps réel si le GtkTextBuffer contient bien un nombre entier.
  *               S'il ne contient pas de nombre, le texte passe en rouge.
  * Paramètres : GtkTextBuffer *textbuffer : composant à l'origine de l'évènement
@@ -193,7 +193,7 @@ void gtk_common_entry_check_liste(GtkTextBuffer *textbuffer, gpointer user_data 
 }
 
 
-gboolean common_gtk_key_press(GtkWidget *widget __attribute__((unused)), GdkEvent *event __attribute__((unused)), GtkWidget *fenetre)
+G_MODULE_EXPORT gboolean common_gtk_key_press(GtkWidget *widget __attribute__((unused)), GdkEvent *event __attribute__((unused)), GtkWidget *fenetre)
 /* Description : Détruit la fenêtre si la touche d'échappement est appuiée.
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
  *            : GdkEvent *event : description de l'évènement,
@@ -212,7 +212,7 @@ gboolean common_gtk_key_press(GtkWidget *widget __attribute__((unused)), GdkEven
 }
 
 
-void gtk_common_render_double(GtkTreeViewColumn *tree_column __attribute__((unused)), GtkCellRenderer *cell, GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data)
+G_MODULE_EXPORT void gtk_common_render_double(GtkTreeViewColumn *tree_column __attribute__((unused)), GtkCellRenderer *cell, GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data)
 /* Description : personnalise l'affichage des nombres de type double dans un treeview.
  * Paramètres : GtkTreeViewColumn *tree_column : la colonne,
  *            : GtkCellRenderer *cell : la cellule,

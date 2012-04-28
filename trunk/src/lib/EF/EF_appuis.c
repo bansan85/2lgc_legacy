@@ -26,7 +26,7 @@
 #include <gtk/gtk.h>
 #endif
 
-int EF_appuis_init(Projet *projet)
+G_MODULE_EXPORT int EF_appuis_init(Projet *projet)
 /* Description : Initialise la liste des types d'appuis
  * Paramètres : Projet *projet : la variable projet
  * Valeur renvoyée :
@@ -54,7 +54,7 @@ int EF_appuis_init(Projet *projet)
 }
 
 
-int EF_appuis_ajout(Projet *projet, const char *nom, Type_EF_Appui x, Type_EF_Appui y, Type_EF_Appui z,
+G_MODULE_EXPORT int EF_appuis_ajout(Projet *projet, const char *nom, Type_EF_Appui x, Type_EF_Appui y, Type_EF_Appui z,
   Type_EF_Appui rx, Type_EF_Appui ry, Type_EF_Appui rz)
 /* Description : Ajoute un appui à la structure en lui attribuant le numéro suivant le dernier
  *                 appui existant.
@@ -189,7 +189,7 @@ int EF_appuis_ajout(Projet *projet, const char *nom, Type_EF_Appui x, Type_EF_Ap
 }
 
 
-EF_Appui* EF_appuis_cherche_numero(Projet *projet, unsigned int numero)
+G_MODULE_EXPORT EF_Appui* EF_appuis_cherche_numero(Projet *projet, unsigned int numero)
 /* Description : Renvoie l'appui correspondant au numéro souhaité
  * Paramètres : Projet *projet : la variable projet
  *            : int numero : le numéro de l'appui
@@ -223,7 +223,7 @@ EF_Appui* EF_appuis_cherche_numero(Projet *projet, unsigned int numero)
 }
 
 
-int EF_appuis_free(Projet *projet)
+G_MODULE_EXPORT int EF_appuis_free(Projet *projet)
 /* Description : Libère l'ensemble des types d'appuis ainsi que la liste les contenant
  * Paramètres : Projet *projet : la variable projet
  * Valeur renvoyée :

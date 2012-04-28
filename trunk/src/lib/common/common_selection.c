@@ -67,7 +67,7 @@ int common_selection_ajout_nombre(unsigned int nombre, GList **liste)
 // Le format de texte est le suivant : 
 // 1;2;3-4;6-9;10-20/2 donne les numéros :
 // 1 2 3 4 6 7 8 9 10 12 14 16 18 20
-GList *common_selection_renvoie_numeros(const char *texte)
+G_MODULE_EXPORT GList *common_selection_renvoie_numeros(const char *texte)
 /* Description : Renvoie sous forme d'une liste de numéros les numéros sous forme de texte.
  * Paramètres : const char *texte : le texte à convertir en numéros
  * Valeur renvoyée :
@@ -177,7 +177,7 @@ GList *common_selection_renvoie_numeros(const char *texte)
 }
 
 
-GList *common_selection_converti_numeros_en_noeuds(GList *liste_numeros, Projet *projet)
+G_MODULE_EXPORT GList *common_selection_converti_numeros_en_noeuds(GList *liste_numeros, Projet *projet)
 /* Description : Renvoie sous forme d'une liste de noeuds la liste des numéros.
  * Paramètres : GList *liste_numeros : la liste des numéros à convertir en liste de noeuds,
  *              Projet *projet : la variable projet.
@@ -214,7 +214,7 @@ GList *common_selection_converti_numeros_en_noeuds(GList *liste_numeros, Projet 
 }
 
 
-GList *common_selection_converti_numeros_en_barres(GList *liste_numeros, Projet *projet)
+G_MODULE_EXPORT GList *common_selection_converti_numeros_en_barres(GList *liste_numeros, Projet *projet)
 /* Description : Renvoie sous forme d'une liste de barres la liste des numéros.
  * Paramètres : GList *liste_numeros : la liste des numéros à convertir en liste de barres,
  *              Projet *projet : la variable projet.
@@ -250,7 +250,7 @@ GList *common_selection_converti_numeros_en_barres(GList *liste_numeros, Projet 
 }
 
 
-char *common_selection_converti_noeuds_en_texte(GList *liste_noeuds)
+G_MODULE_EXPORT char *common_selection_converti_noeuds_en_texte(GList *liste_noeuds)
 /* Description : Renvoie sous forme de texte une liste de noeuds.
  * Paramètres : GList *liste_noeuds : la liste des noeuds à convertir en texte,
  * Valeur renvoyée :
@@ -289,7 +289,7 @@ char *common_selection_converti_noeuds_en_texte(GList *liste_noeuds)
 }
 
 
-char *common_selection_converti_barres_en_texte(GList *liste_barres)
+G_MODULE_EXPORT char *common_selection_converti_barres_en_texte(GList *liste_barres)
 /* Description : Renvoie sous forme de texte une liste de barres.
  * Paramètres : GList *liste_barres : la liste des barres à convertir en texte,
  * Valeur renvoyée :

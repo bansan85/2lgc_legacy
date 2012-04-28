@@ -25,7 +25,7 @@
 #include "common_erreurs.h"
 
 
-int _1992_1_1_materiaux_init(Projet *projet)
+G_MODULE_EXPORT int _1992_1_1_materiaux_init(Projet *projet)
 /* Description : Initialise la liste des matériaux en béton
  * Paramètres : Projet *projet : la variable projet
  * Valeur renvoyée :
@@ -44,7 +44,7 @@ int _1992_1_1_materiaux_init(Projet *projet)
 }
 
 
-int _1992_1_1_materiaux_ajout(Projet *projet, double fck, double nu)
+G_MODULE_EXPORT int _1992_1_1_materiaux_ajout(Projet *projet, double fck, double nu)
 /* Description : Ajoute un matériau en béton et calcule ses caractéristiques mécaniques.
  *                 Les propriétés du béton sont déterminées conformément au tableau 3.1 de
  *                 l'Eurocode 2-1-1 les valeurs de fckcube est déterminée par interpolation
@@ -141,7 +141,7 @@ int _1992_1_1_materiaux_ajout(Projet *projet, double fck, double nu)
 }
 
 
-Beton_Materiau* _1992_1_1_materiaux_cherche_numero(Projet *projet, unsigned int numero)
+G_MODULE_EXPORT Beton_Materiau* _1992_1_1_materiaux_cherche_numero(Projet *projet, unsigned int numero)
 /* Description : Positionne dans la liste des materiaux en béton l'élément courant au numéro
  *                 souhaité
  * Paramètres : Projet *projet : la variable projet
@@ -175,7 +175,7 @@ Beton_Materiau* _1992_1_1_materiaux_cherche_numero(Projet *projet, unsigned int 
 }
 
 
-int _1992_1_1_materiaux_free(Projet *projet)
+G_MODULE_EXPORT int _1992_1_1_materiaux_free(Projet *projet)
 /* Description : Libère l'ensemble des matériaux en béton
  * Paramètres : Projet *projet : la variable projet
  * Valeur renvoyée :

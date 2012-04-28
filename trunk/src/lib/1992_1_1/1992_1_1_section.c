@@ -25,7 +25,7 @@
 #include "common_maths.h"
 #include "EF_noeud.h"
 
-int _1992_1_1_sections_init(Projet *projet)
+G_MODULE_EXPORT int _1992_1_1_sections_init(Projet *projet)
 /* Description : Initialise la liste des section en béton
  * Paramètres : Projet *projet : la variable projet
  * Valeur renvoyée :
@@ -44,7 +44,7 @@ int _1992_1_1_sections_init(Projet *projet)
 }
 
 
-int _1992_1_1_sections_ajout_rectangulaire(Projet *projet, double l, double h)
+G_MODULE_EXPORT int _1992_1_1_sections_ajout_rectangulaire(Projet *projet, double l, double h)
 /* Description : ajouter une nouvelle section rectangulaire à la liste des sections en béton
  * Paramètres : Projet *projet : la variable projet
  *            : double l : la largeur
@@ -74,7 +74,7 @@ int _1992_1_1_sections_ajout_rectangulaire(Projet *projet, double l, double h)
 }
 
 
-int _1992_1_1_sections_ajout_T(Projet *projet, double lt, double la, double ht, double ha)
+G_MODULE_EXPORT int _1992_1_1_sections_ajout_T(Projet *projet, double lt, double la, double ht, double ha)
 /* Description : ajouter une nouvelle section en T à la liste des sections en béton
  * Paramètres : Projet *projet : la variable projet
  *            : double lt : la largeur de la table
@@ -113,7 +113,7 @@ int _1992_1_1_sections_ajout_T(Projet *projet, double lt, double la, double ht, 
 }
 
 
-int _1992_1_1_sections_ajout_carre(Projet *projet, double cote)
+G_MODULE_EXPORT int _1992_1_1_sections_ajout_carre(Projet *projet, double cote)
 /* Description : ajouter une nouvelle section carrée à la liste des sections en béton
  * Paramètres : Projet *projet : la variable projet
  *            : double cote : le coté
@@ -143,7 +143,7 @@ int _1992_1_1_sections_ajout_carre(Projet *projet, double cote)
 }
 
 
-int _1992_1_1_sections_ajout_circulaire(Projet *projet, double diametre)
+G_MODULE_EXPORT int _1992_1_1_sections_ajout_circulaire(Projet *projet, double diametre)
 /* Description : ajouter une nouvelle section circulaire à la liste des sections en béton
  * Paramètres : Projet *projet : la variable projet
  *            : double diametre : le diamètre
@@ -174,7 +174,7 @@ int _1992_1_1_sections_ajout_circulaire(Projet *projet, double diametre)
 }
 
 
-void* _1992_1_1_sections_cherche_numero(Projet *projet, unsigned int numero)
+G_MODULE_EXPORT void* _1992_1_1_sections_cherche_numero(Projet *projet, unsigned int numero)
 /* Description : Positionne dans la liste des sections en béton l'élément courant au numéro
  *                 souhaité.
  * Paramètres : Projet *projet : la variable projet
@@ -210,7 +210,7 @@ void* _1992_1_1_sections_cherche_numero(Projet *projet, unsigned int numero)
 }
 
 
-double _1992_1_1_sections_j(void* sect)
+G_MODULE_EXPORT double _1992_1_1_sections_j(void* sect)
 /* Description : Renvoie le paramètre J pour la section étudiée
  * Paramètres : void* sect : section à étudier
  * Valeur renvoyée :
@@ -290,7 +290,7 @@ double _1992_1_1_sections_j(void* sect)
 }
 
 
-double _1992_1_1_sections_iy(void* sect)
+G_MODULE_EXPORT double _1992_1_1_sections_iy(void* sect)
 /* Description : Renvoie l'inertie I selon l'axe y lorsque la section est constante
  * Paramètres : void* section : section à étudier
  * Valeur renvoyée :
@@ -355,7 +355,7 @@ double _1992_1_1_sections_iy(void* sect)
 }
 
 
-double _1992_1_1_sections_iz(void* sect)
+G_MODULE_EXPORT double _1992_1_1_sections_iz(void* sect)
 /* Description : Renvoie l'inertie I selon l'axe z lorsque la section est constante
  * Paramètres : void* section : section à étudier
  * Valeur renvoyée :
@@ -415,7 +415,7 @@ double _1992_1_1_sections_iz(void* sect)
 }
 
 
-double _1992_1_1_sections_ay(Beton_Barre *barre, unsigned int discretisation)
+G_MODULE_EXPORT double _1992_1_1_sections_ay(Beton_Barre *barre, unsigned int discretisation)
 /* Description : Renvoie le paramètre de souplesse a de la poutre selon l'axe y
  * Paramètres : Beton_Barre *barre : la barre à étudier
  *              unsigned int discretisation : partie de la barre à étudier
@@ -479,7 +479,7 @@ double _1992_1_1_sections_ay(Beton_Barre *barre, unsigned int discretisation)
 }
 
 
-double _1992_1_1_sections_by(Beton_Barre *barre, unsigned int discretisation)
+G_MODULE_EXPORT double _1992_1_1_sections_by(Beton_Barre *barre, unsigned int discretisation)
 /* Description : Renvoie le paramètre de souplesse b de la poutre selon l'axe y
  * Paramètres : Beton_Barre *barre : la barre à étudier
  *              unsigned int discretisation : partie de la barre à étudier
@@ -543,7 +543,7 @@ double _1992_1_1_sections_by(Beton_Barre *barre, unsigned int discretisation)
 }
 
 
-double _1992_1_1_sections_cy(Beton_Barre *barre, unsigned int discretisation)
+G_MODULE_EXPORT double _1992_1_1_sections_cy(Beton_Barre *barre, unsigned int discretisation)
 /* Description : Renvoie le paramètre de souplesse c de la poutre selon l'axe y
  * Paramètres : Beton_Barre *barre : la barre à étudier
  *              unsigned int discretisation : partie de la barre à étudier
@@ -607,7 +607,7 @@ double _1992_1_1_sections_cy(Beton_Barre *barre, unsigned int discretisation)
 }
 
 
-double _1992_1_1_sections_az(Beton_Barre *barre, unsigned int discretisation)
+G_MODULE_EXPORT double _1992_1_1_sections_az(Beton_Barre *barre, unsigned int discretisation)
 /* Description : Renvoie le paramètre de souplesse a de la poutre selon l'axe z
  * Paramètres : Beton_Barre *barre : la barre à étudier
  *              unsigned int discretisation : partie de la barre à étudier
@@ -671,7 +671,7 @@ double _1992_1_1_sections_az(Beton_Barre *barre, unsigned int discretisation)
 }
 
 
-double _1992_1_1_sections_bz(Beton_Barre *barre, unsigned int discretisation)
+G_MODULE_EXPORT double _1992_1_1_sections_bz(Beton_Barre *barre, unsigned int discretisation)
 /* Description : Renvoie le paramètre de souplesse b de la poutre selon l'axe z
  * Paramètres : Beton_Barre *barre : la barre à étudier
  *              unsigned int discretisation : partie de la barre à étudier
@@ -735,7 +735,7 @@ double _1992_1_1_sections_bz(Beton_Barre *barre, unsigned int discretisation)
 }
 
 
-double _1992_1_1_sections_cz(Beton_Barre *barre, unsigned int discretisation)
+G_MODULE_EXPORT double _1992_1_1_sections_cz(Beton_Barre *barre, unsigned int discretisation)
 /* Description : Renvoie le paramètre de souplesse c de la poutre selon l'axe z
  * Paramètres : Beton_Barre *barre : la barre à étudier
  *              unsigned int discretisation : partie de la barre à étudier
@@ -799,7 +799,7 @@ double _1992_1_1_sections_cz(Beton_Barre *barre, unsigned int discretisation)
 }
 
 
-double _1992_1_1_sections_s(void *sect)
+G_MODULE_EXPORT double _1992_1_1_sections_s(void *sect)
 /* Description : Renvoie la surface de la section étudiée
  * Paramètres : void* section : section à étudier.
  * Valeur renvoyée :
@@ -857,7 +857,7 @@ double _1992_1_1_sections_s(void *sect)
 }
 
 
-double _1992_1_1_sections_es_l(Beton_Barre *barre, unsigned int discretisation,
+G_MODULE_EXPORT double _1992_1_1_sections_es_l(Beton_Barre *barre, unsigned int discretisation,
   double d, double f)
 /* Description : Renvoie l'équivalent du rapport ES/L pour la barre étudiée
  * Paramètres : Beton_Barre *barre : la barre à étudier,
@@ -948,7 +948,7 @@ double _1992_1_1_sections_es_l(Beton_Barre *barre, unsigned int discretisation,
 }
 
 
-double _1992_1_1_sections_gj_l(Beton_Barre *barre, unsigned int discretisation)
+G_MODULE_EXPORT double _1992_1_1_sections_gj_l(Beton_Barre *barre, unsigned int discretisation)
 /* Description : Renvoie l'équivalent du rapport GJ/L pour la barre étudiée
  * Paramètres : Beton_Barre *barre : la barre à étudier
  *              unsigned int discretisation : partie de la barre à étudier
@@ -1068,7 +1068,7 @@ double _1992_1_1_sections_gj_l(Beton_Barre *barre, unsigned int discretisation)
 }
 
 
-int _1992_1_1_sections_free(Projet *projet)
+G_MODULE_EXPORT int _1992_1_1_sections_free(Projet *projet)
 /* Description : Libère l'ensemble des sections en béton
  * Paramètres : Projet *projet : la variable projet
  * Valeur renvoyée :

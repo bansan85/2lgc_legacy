@@ -29,7 +29,7 @@
 #include "1990_groupes.h"
 #include "1990_combinaisons.h"
 
-int _1990_groupe_init(Projet *projet)
+G_MODULE_EXPORT int _1990_groupe_init(Projet *projet)
 /* Description : Initialise la liste des groupes
  * Paramètres : Projet *projet : variable projet
  * Valeur renvoyée :
@@ -48,7 +48,7 @@ int _1990_groupe_init(Projet *projet)
 }
 
 
-int _1990_groupe_ajout_niveau(Projet *projet)
+G_MODULE_EXPORT int _1990_groupe_ajout_niveau(Projet *projet)
 /* Description : Ajoute un niveau au projet en lui attribuant le numéro suivant le dernier
  *                 niveau existant
  * Paramètres : Projet *projet : variable projet
@@ -75,7 +75,7 @@ int _1990_groupe_ajout_niveau(Projet *projet)
 }
 
 
-Element *_1990_groupe_positionne_element(Groupe *groupe, unsigned int numero)
+G_MODULE_EXPORT Element *_1990_groupe_positionne_element(Groupe *groupe, unsigned int numero)
 /* Description : Positionne l'élément courant d'un groupe en fonction de son numéro
  * Paramètres : Groupe *groupe : groupe à analyser
  *            : int numero : numéro de l'élément à trouver
@@ -109,7 +109,7 @@ Element *_1990_groupe_positionne_element(Groupe *groupe, unsigned int numero)
 }
 
 
-Groupe *_1990_groupe_positionne_groupe(Niveau_Groupe *niveau, unsigned int numero)
+G_MODULE_EXPORT Groupe *_1990_groupe_positionne_groupe(Niveau_Groupe *niveau, unsigned int numero)
 /* Description : Renvoie le groupe d'un niveau en fonction de son numéro
  * Paramètres : Niveau_Groupe *niveau : niveau à analyser
  *            : int numero : numéro du groupe à trouver
@@ -142,7 +142,7 @@ Groupe *_1990_groupe_positionne_groupe(Niveau_Groupe *niveau, unsigned int numer
 }
 
 
-Niveau_Groupe *_1990_groupe_positionne_niveau(Projet *projet, unsigned int numero)
+G_MODULE_EXPORT Niveau_Groupe *_1990_groupe_positionne_niveau(Projet *projet, unsigned int numero)
 /* Description : Positionne le niveau courant en fonction de son numéro
  * Paramètres : Projet *projet : la variable projet
  *            : int numero : numéro du groupe à trouver
@@ -176,7 +176,7 @@ Niveau_Groupe *_1990_groupe_positionne_niveau(Projet *projet, unsigned int numer
 }
 
 
-Groupe *_1990_groupe_ajout_groupe(Projet *projet, unsigned int niveau,
+G_MODULE_EXPORT Groupe *_1990_groupe_ajout_groupe(Projet *projet, unsigned int niveau,
   Type_Groupe_Combinaison type_combinaison, const char* nom)
 /* Description : Ajoute un groupe au niveau choisi avec le type de combinaison spécifié.
  * Paramètres : Projet *projet : la variable projet
@@ -219,7 +219,7 @@ Groupe *_1990_groupe_ajout_groupe(Projet *projet, unsigned int niveau,
 }
 
 
-int _1990_groupe_ajout_element(Projet *projet, unsigned int niveau, unsigned int groupe_n,
+G_MODULE_EXPORT int _1990_groupe_ajout_element(Projet *projet, unsigned int niveau, unsigned int groupe_n,
   unsigned int num_element)
 /* Description : Ajoute l'élément 'num_element' au groupe 'groupe_n' du niveau 'niveau'.
  *                 L'élément appartient au niveau directement inférieur à 'niveau' et possède
@@ -309,7 +309,7 @@ int _1990_groupe_ajout_element(Projet *projet, unsigned int niveau, unsigned int
 }
 
 
-int _1990_groupe_affiche_tout(Projet *projet)
+G_MODULE_EXPORT int _1990_groupe_affiche_tout(Projet *projet)
 /* Description : Affiche tous les groupes y compris les combinaisons temporaires de tous les
  *                 niveaux. La valeur entre parenthèses 0 ou 1 représente si l'action est
  *                 prédominante (1) ou pas (0).
@@ -424,7 +424,7 @@ int _1990_groupe_affiche_tout(Projet *projet)
 }
 
 
-int _1990_groupe_free_element(Projet *projet, unsigned int niveau, unsigned int groupe, unsigned int element)
+G_MODULE_EXPORT int _1990_groupe_free_element(Projet *projet, unsigned int niveau, unsigned int groupe, unsigned int element)
 /* Description : Libère l'élément désigné par les paramètres.
  * Paramètres : Projet *projet : variable projet
  *            : int niveau : le numéro du niveau contenant l'élément
@@ -458,7 +458,7 @@ int _1990_groupe_free_element(Projet *projet, unsigned int niveau, unsigned int 
 }
 
 
-int _1990_groupe_free_niveau(Projet *projet, unsigned int niveau)
+G_MODULE_EXPORT int _1990_groupe_free_niveau(Projet *projet, unsigned int niveau)
 /* Description : Libère le niveau en cours ainsi que tous les niveaux supérieurs
  * Paramètres : Projet *projet : la variable projet
  *            : numéro du niveau à libérer
@@ -532,7 +532,7 @@ int _1990_groupe_free_niveau(Projet *projet, unsigned int niveau)
 }
 
 
-int _1990_groupe_free_groupe(Projet *projet, unsigned int niveau, unsigned int groupe)
+G_MODULE_EXPORT int _1990_groupe_free_groupe(Projet *projet, unsigned int niveau, unsigned int groupe)
 /* Description : Libère le groupe demandé. La suppression d'un groupe entraine la modification
  *                 du numéro (moins 1) des groupes supérieurs du même niveau et sa suppression
  *                 dans le nuveau supérieur (si existant) lorsqu'il est présent dans une
@@ -641,7 +641,7 @@ int _1990_groupe_free_groupe(Projet *projet, unsigned int niveau, unsigned int g
 }
 
 
-int _1990_groupe_free(Projet *projet)
+G_MODULE_EXPORT int _1990_groupe_free(Projet *projet)
 /* Description : Libère l'ensemble des groupes et niveaux
  * Paramètres : Projet *projet : la variable projet
  * Valeur renvoyée : Aucune

@@ -26,7 +26,7 @@
 #include "common_erreurs.h"
 #include "common_maths.h"
 
-int common_fonction_init(Projet *projet, Action *action)
+G_MODULE_EXPORT int common_fonction_init(Projet *projet, Action *action)
 /* Description : Initialise les fonctions décrivant les sollicitations, les rotations ou les
  *               déplacements des barres. Cette fonction doit être appelée lorsque toutes les
  *               barres ont été modélisées. En effet, il est nécessaire de connaître leur
@@ -181,7 +181,7 @@ int common_fonction_scinde_troncon(Fonction* fonction, double coupure)
 }
 
 
-int common_fonction_ajout(Fonction* fonction, double debut_troncon, double fin_troncon,
+G_MODULE_EXPORT int common_fonction_ajout(Fonction* fonction, double debut_troncon, double fin_troncon,
   double x0, double x1, double x2, double x3, double x4, double x5, double x6, double t)
 /* Description : Additionne une fonction à une fonction existante dont le domaine de validité
  *               est compris entre debut_troncon et fin_troncon.
@@ -328,7 +328,7 @@ int common_fonction_compacte(Fonction* fonction)
 }
 
 
-int common_fonction_affiche(Fonction* fonction)
+G_MODULE_EXPORT int common_fonction_affiche(Fonction* fonction)
 /* Description : Affiche la fonction (coefficients pour chaque tronçon) ainsi que la valeur
  *                 de la fonction pour chaque extrémité du tronçon.
  * Paramètres : Fonction* fonction : fonction à afficher
@@ -367,7 +367,7 @@ int common_fonction_affiche(Fonction* fonction)
 }
 
 
-int common_fonction_free(Projet *projet, Action *action)
+G_MODULE_EXPORT int common_fonction_free(Projet *projet, Action *action)
 /* Description : Libère les fonctions de toutes les barres de l'action souhaitée.
  * Paramètres : Projet *projet : la variable projet
  *            : Action *action : pointeur vers l'action.

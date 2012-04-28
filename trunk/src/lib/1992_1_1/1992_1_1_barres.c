@@ -32,7 +32,7 @@
 #include "EF_noeud.h"
 #include "EF_relachement.h"
 
-int _1992_1_1_barres_init(Projet *projet)
+G_MODULE_EXPORT int _1992_1_1_barres_init(Projet *projet)
 /* Description : Initialise la liste des éléments en béton
  * Paramètres : Projet *projet : la variable projet
  * Valeur renvoyée :
@@ -50,7 +50,7 @@ int _1992_1_1_barres_init(Projet *projet)
     return 0;
 }
 
-int _1992_1_1_barres_ajout(Projet *projet, Type_Element type, unsigned int section,
+G_MODULE_EXPORT int _1992_1_1_barres_ajout(Projet *projet, Type_Element type, unsigned int section,
   unsigned int materiau, unsigned int noeud_debut, unsigned int noeud_fin,
   EF_Relachement* relachement, unsigned int discretisation_element)
 /* Description : Ajoute un élément à la liste des éléments en béton
@@ -124,7 +124,7 @@ int _1992_1_1_barres_ajout(Projet *projet, Type_Element type, unsigned int secti
 }
 
 
-Beton_Barre* _1992_1_1_barres_cherche_numero(Projet *projet, unsigned int numero)
+G_MODULE_EXPORT Beton_Barre* _1992_1_1_barres_cherche_numero(Projet *projet, unsigned int numero)
 /* Description : Positionne dans la liste des éléments en béton l'élément courant au numéro
  * Paramètres : Projet *projet : la variable projet
  *            : int numero : le numéro de la section
@@ -158,7 +158,7 @@ Beton_Barre* _1992_1_1_barres_cherche_numero(Projet *projet, unsigned int numero
 }
 
 
-int _1992_1_1_barres_angle_rotation(Beton_Barre *barre, double *y, double *z)
+G_MODULE_EXPORT int _1992_1_1_barres_angle_rotation(Beton_Barre *barre, double *y, double *z)
 /* Description : Calcule les deux angles de rotation pour faire tourner une barre horizontale
  *               en une barre parallèle à celle fournie dans l'argument 1.
  * Paramètres : Beton_Barre *barre : barre dont on souhaite connaitre les angles de rotation,
@@ -199,7 +199,7 @@ int _1992_1_1_barres_angle_rotation(Beton_Barre *barre, double *y, double *z)
 }
 
 
-int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
+G_MODULE_EXPORT int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
 /* Description : ajouter un élément à la matrice de rigidité partielle et complete
  * Paramètres : Projet *projet : la variable projet
  *            : Beton_Barre* element : pointeur vers l'élément en béton
@@ -870,7 +870,7 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
 }
 
 
-int _1992_1_1_barres_rigidite_ajout_tout(Projet *projet)
+G_MODULE_EXPORT int _1992_1_1_barres_rigidite_ajout_tout(Projet *projet)
 /* Description : Ajout à la matrice de rigidité tous les éléments en béton
  * Paramètres : Projet *projet : la variable projet
  * Valeur renvoyée :
@@ -902,7 +902,7 @@ int _1992_1_1_barres_rigidite_ajout_tout(Projet *projet)
 }
 
 
-int _1992_1_1_barres_free(Projet *projet)
+G_MODULE_EXPORT int _1992_1_1_barres_free(Projet *projet)
 /* Description : Libère l'ensemble des éléments  en béton
  * Paramètres : Projet *projet : la variable projet
  * Valeur renvoyée :
