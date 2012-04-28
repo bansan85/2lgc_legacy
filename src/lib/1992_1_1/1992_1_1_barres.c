@@ -226,6 +226,7 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
     double              y, z;
     double              ll;
     unsigned int        i, j;
+    int                 k;
     cholmod_triplet     *triplet;
     cholmod_sparse      *sparse_tmp, *matrice_rigidite_globale;
     
@@ -305,16 +306,16 @@ int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
     aj = (long*)triplet->j;
     ax = (double*)triplet->x;
     BUG(_1992_1_1_barres_angle_rotation(element, &y, &z) == 0, -3);
-    for (i=0;i<4;i++)
+    for (k=0;k<4;k++)
     {
-        ai[i*8+0] = i*3+0; aj[i*8+0] = i*3+0; ax[i*8+0] = cos(z)*cos(y);
-        ai[i*8+1] = i*3+0; aj[i*8+1] = i*3+1; ax[i*8+1] = -sin(z);
-        ai[i*8+2] = i*3+0; aj[i*8+2] = i*3+2; ax[i*8+2] = -cos(z)*sin(y);
-        ai[i*8+3] = i*3+1; aj[i*8+3] = i*3+0; ax[i*8+3] = sin(z)*cos(y);
-        ai[i*8+4] = i*3+1; aj[i*8+4] = i*3+1; ax[i*8+4] = cos(z);
-        ai[i*8+5] = i*3+1; aj[i*8+5] = i*3+2; ax[i*8+5] = -sin(z)*sin(y);
-        ai[i*8+6] = i*3+2; aj[i*8+6] = i*3+0; ax[i*8+6] = sin(y);
-        ai[i*8+7] = i*3+2; aj[i*8+7] = i*3+2; ax[i*8+7] = cos(y);
+        ai[k*8+0] = k*3+0; aj[k*8+0] = k*3+0; ax[k*8+0] = cos(z)*cos(y);
+        ai[k*8+1] = k*3+0; aj[k*8+1] = k*3+1; ax[k*8+1] = -sin(z);
+        ai[k*8+2] = k*3+0; aj[k*8+2] = k*3+2; ax[k*8+2] = -cos(z)*sin(y);
+        ai[k*8+3] = k*3+1; aj[k*8+3] = k*3+0; ax[k*8+3] = sin(z)*cos(y);
+        ai[k*8+4] = k*3+1; aj[k*8+4] = k*3+1; ax[k*8+4] = cos(z);
+        ai[k*8+5] = k*3+1; aj[k*8+5] = k*3+2; ax[k*8+5] = -sin(z)*sin(y);
+        ai[k*8+6] = k*3+2; aj[k*8+6] = k*3+0; ax[k*8+6] = sin(y);
+        ai[k*8+7] = k*3+2; aj[k*8+7] = k*3+2; ax[k*8+7] = cos(y);
     }
     triplet->nnz=32;
     element->matrice_rotation = cholmod_l_triplet_to_sparse(triplet, 0, projet->ef_donnees.c);
