@@ -43,7 +43,7 @@
 #include "1992_1_1_section.h"
 #include "1992_1_1_materiaux.h"
 
-Projet* projet_init(Type_Pays pays)
+G_MODULE_EXPORT Projet* projet_init(Type_Pays pays)
 /* Description : Initialise la variable projet
  * Paramètres : Type_Pays pays : pays du calcul
  * Valeur renvoyée :
@@ -133,7 +133,7 @@ void gui_affiche_actions(Projet *projet)
 }
 
 
-int projet_init_graphique(Projet *projet)
+G_MODULE_EXPORT int projet_init_graphique(Projet *projet)
 /* Description : Crée une fenêtre graphique avec toute l'interface (menu, vue 3D, ...)
  * Paramètres : Projet *projet : variable projet
  * Valeur renvoyée :
@@ -206,7 +206,7 @@ int projet_init_graphique(Projet *projet)
 #endif
 
 
-int projet_free(Projet *projet)
+G_MODULE_EXPORT int projet_free(Projet *projet)
 /* Description : Libère les allocations mémoires de l'ensemble de la variable projet
  * Paramètres : Projet *projet : variable projet
  * Valeur renvoyée : void

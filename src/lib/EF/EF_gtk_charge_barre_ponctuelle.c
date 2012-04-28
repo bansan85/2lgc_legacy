@@ -37,7 +37,7 @@
 #include "1990_gtk_actions.h"
 #include "common_selection.h"
 
-int EF_gtk_charge_barre_ponctuelle_ajout_affichage(Charge_Barre_Ponctuelle *charge, Projet *projet, gboolean nouvelle_ligne)
+G_MODULE_EXPORT int EF_gtk_charge_barre_ponctuelle_ajout_affichage(Charge_Barre_Ponctuelle *charge, Projet *projet, gboolean nouvelle_ligne)
 {
     char                    *description, txt_pos[30], txt_fx[30], txt_fy[30], txt_fz[30], txt_mx[30], txt_my[30], txt_mz[30], *txt_liste_barres;
     List_Gtk_1990_Actions   *list_gtk_1990_actions;
@@ -329,7 +329,7 @@ G_MODULE_EXPORT void EF_gtk_charge_barre_ponct_window_destroy(GtkWidget *object 
 }
 
 
-int EF_gtk_charge_barre_ponctuelle(Projet *projet, unsigned int action_defaut, unsigned int charge)
+G_MODULE_EXPORT int EF_gtk_charge_barre_ponctuelle(Projet *projet, unsigned int action_defaut, unsigned int charge)
 /* Description : Affichage de la fenêtre permettant de créer ou modifier une action de type
  *               charge ponctuelle sur barre
  * Paramètres : Projet *projet : la variable projet

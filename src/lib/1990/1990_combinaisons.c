@@ -723,7 +723,7 @@ int _1990_combinaisons_genere_or(Projet *projet, Niveau_Groupe *niveau, Groupe *
 }
 
 
-int _1990_combinaisons_init(Projet *projet)
+G_MODULE_EXPORT int _1990_combinaisons_init(Projet *projet)
 /* Description : Initialise la mémoire pour les combinaisons à l'ELU et l'ELS
  * Paramètres : Projet  *projet : la variable projet
  * Valeur renvoyée :
@@ -813,7 +813,7 @@ int _1990_combinaisons_empty(Projet *projet)
 }
 
 
-int _1990_combinaisons_free(Projet *projet)
+G_MODULE_EXPORT int _1990_combinaisons_free(Projet *projet)
 /* Description : libère la mémoire pour les combinaisons à l'ELU et l'ELS
  * Paramètres : Projet  *projet : la variable projet
  * Valeur renvoyée :
@@ -859,7 +859,7 @@ int _1990_combinaisons_free(Projet *projet)
 }
 
 
-int _1990_combinaisons_genere(Projet *projet)
+G_MODULE_EXPORT int _1990_combinaisons_genere(Projet *projet)
 /* Description : Génère l'ensemble des combinaisons et pondérations du projet
  * Paramètres : Projet  *projet : la variable projet
  * Valeur renvoyée :

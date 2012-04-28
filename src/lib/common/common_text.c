@@ -21,9 +21,10 @@
 #include <stdlib.h>
 #include <libintl.h>
 #include <locale.h>
+#include <gmodule.h>
 
 
-void show_warranty()
+G_MODULE_EXPORT void show_warranty()
 /* Description : Affiche les limites de la garantie (articles 15, 16 et 17 de la licence GPL)
  * Paramètres : Aucun
  * Valeur renvoyée : void
@@ -64,7 +65,7 @@ void show_warranty()
     return;
 }
 
-void show_help()
+G_MODULE_EXPORT void show_help()
 /* Description : Affiche l'aide lorsque l'utilisateur lance le programme avec l'option -h
  * Paramètres : Aucun
  * Valeur renvoyée : void

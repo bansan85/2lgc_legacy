@@ -68,7 +68,7 @@ G_MODULE_EXPORT gboolean EF_gtk_charge_barre_rep_uni_window_key_press(GtkWidget 
 }
 
 
-int EF_gtk_charge_barre_repartie_uniforme_ajout_affichage(Charge_Barre_Repartie_Uniforme *charge, Projet *projet, gboolean nouvelle_ligne)
+G_MODULE_EXPORT int EF_gtk_charge_barre_repartie_uniforme_ajout_affichage(Charge_Barre_Repartie_Uniforme *charge, Projet *projet, gboolean nouvelle_ligne)
 {
     char                    *description, *txt_liste_barres, txt_debut[30], txt_fin[30];
     char                    txt_fx[30], txt_fy[30], txt_fz[30], txt_mx[30], txt_my[30], txt_mz[30];
@@ -364,7 +364,7 @@ void EF_gtk_charge_barre_repartie_uniforme_toggled(GtkToggleButton *togglebutton
 }
 
 
-int EF_gtk_charge_barre_repartie_uniforme(Projet *projet, unsigned int action_defaut, unsigned int charge)
+G_MODULE_EXPORT int EF_gtk_charge_barre_repartie_uniforme(Projet *projet, unsigned int action_defaut, unsigned int charge)
 /* Description : Affichage de la fenêtre permettant de créer ou modifier une action de type
  *               charge repartie uniforme sur barre
  * Paramètres : Projet *projet : la variable projet

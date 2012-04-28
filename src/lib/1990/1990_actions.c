@@ -150,7 +150,7 @@ char* _1990_action_type_bat_txt_fr(unsigned int type)
 }
 
 
-char* _1990_action_type_bat_txt(unsigned int type, Type_Pays pays)
+G_MODULE_EXPORT char* _1990_action_type_bat_txt(unsigned int type, Type_Pays pays)
 /* Description : renvoie la description des types de charge pour les bâtiments en fonction de
  *                 la norme demandée.
  * Paramètres : int type : type de charge
@@ -237,7 +237,7 @@ unsigned int _1990_action_categorie_bat_fr(unsigned int type)
 }
 
 
-unsigned int _1990_action_categorie_bat(unsigned int type, Type_Pays pays)
+G_MODULE_EXPORT unsigned int _1990_action_categorie_bat(unsigned int type, Type_Pays pays)
 /* Description : renvoie la catégorie d'une action pour les combinaisons d'action des bâtiments
  *                 en fonction du pays.
  * Paramètres : int type : type de l'action
@@ -259,7 +259,7 @@ unsigned int _1990_action_categorie_bat(unsigned int type, Type_Pays pays)
 }
 
 
-unsigned int _1990_action_num_bat_txt(Type_Pays pays)
+G_MODULE_EXPORT unsigned int _1990_action_num_bat_txt(Type_Pays pays)
 /* Description : renvoie le nombre de catégorie d'actions des bâtiments en fonction du pays.
  * Paramètres : Type_Pays pays : le numéro du pays
  * Valeur renvoyée :
@@ -278,7 +278,7 @@ unsigned int _1990_action_num_bat_txt(Type_Pays pays)
 }
 
 
-int _1990_action_init(Projet *projet)
+G_MODULE_EXPORT int _1990_action_init(Projet *projet)
 /* Description : Initialise la liste des actions.
  * Paramètres : Projet *projet : la variable projet
  * Valeur renvoyée :
@@ -297,7 +297,7 @@ int _1990_action_init(Projet *projet)
 }
 
 
-Action *_1990_action_ajout(Projet *projet, unsigned int type, const char* description)
+G_MODULE_EXPORT Action *_1990_action_ajout(Projet *projet, unsigned int type, const char* description)
 /* Description : ajoute une nouvelle action à la liste des actions en lui attribuant le numéro
  *                 suivant le dernier relachement existant.
  * Paramètres : Projet *projet : la variable projet
@@ -352,7 +352,7 @@ Action *_1990_action_ajout(Projet *projet, unsigned int type, const char* descri
 }
 
 
-Action* _1990_action_cherche_numero(Projet *projet, unsigned int numero)
+G_MODULE_EXPORT Action* _1990_action_cherche_numero(Projet *projet, unsigned int numero)
 /* Description : Cherche et renvoie l'action désignée par numero.
  * Paramètres : Projet *projet : la variable projet
  *            : unsigned int numero : le numéro de l'action
@@ -386,7 +386,7 @@ Action* _1990_action_cherche_numero(Projet *projet, unsigned int numero)
 }
 
 
-void *_1990_action_cherche_charge(Projet *projet, unsigned int num_action, unsigned int num_charge)
+G_MODULE_EXPORT void *_1990_action_cherche_charge(Projet *projet, unsigned int num_action, unsigned int num_charge)
 /* Description : Renvoie la charge demandée.
  * Paramètres : Projet *projet : la variable projet
  *            : unsigned int num_action : le numéro de l'action
@@ -427,7 +427,7 @@ void *_1990_action_cherche_charge(Projet *projet, unsigned int num_action, unsig
 }
 
 
-int _1990_action_deplace_charge(Projet *projet, unsigned int action_src, unsigned int charge_src,
+G_MODULE_EXPORT int _1990_action_deplace_charge(Projet *projet, unsigned int action_src, unsigned int charge_src,
   unsigned int action_dest)
 /* Description : Déplace une charge d'une action à l'autre. Décrémente également le numéro
  *               des charges afin que la liste des numéros soit toujours continue.
@@ -544,7 +544,7 @@ int _1990_action_deplace_charge(Projet *projet, unsigned int action_src, unsigne
 }
 
 
-int _1990_action_supprime_charge(Projet *projet, unsigned int action_num, unsigned int charge_num)
+G_MODULE_EXPORT int _1990_action_supprime_charge(Projet *projet, unsigned int action_num, unsigned int charge_num)
 /* Description : Supprime une charge. Décrémente également le numéro des charges afin que
  *               la liste des numéros soit toujours continue.
  * Paramètres : Projet *projet : la variable projet,
@@ -655,7 +655,7 @@ int _1990_action_supprime_charge(Projet *projet, unsigned int action_num, unsign
 }
 
 
-int _1990_action_affiche_tout(Projet *projet)
+G_MODULE_EXPORT int _1990_action_affiche_tout(Projet *projet)
 /* Description : Affiche dans l'entrée standard les actions existantes
  * Paramètres : Projet *projet : la variable projet
  * Valeur renvoyée :
@@ -686,7 +686,7 @@ int _1990_action_affiche_tout(Projet *projet)
 }
 
 
-int _1990_action_affiche_resultats(Projet *projet, unsigned int num_action)
+G_MODULE_EXPORT int _1990_action_affiche_resultats(Projet *projet, unsigned int num_action)
 /* Description : Affiche tous les résultats d'une action
  * Paramètres : Projet *projet : la variable projet
  *            : int num_action : numéro de l'action
@@ -764,7 +764,7 @@ int _1990_action_affiche_resultats(Projet *projet, unsigned int num_action)
 }
 
 
-int _1990_action_free_num(Projet *projet, unsigned int num)
+G_MODULE_EXPORT int _1990_action_free_num(Projet *projet, unsigned int num)
 /* Description : Libère l'action souhaitée et décrémente de 1 les actions dons le
  *                 numéro est supérieur.
  * Paramètres : Projet *projet : la variable projet,
@@ -847,7 +847,7 @@ int _1990_action_free_num(Projet *projet, unsigned int num)
 }
 
 
-int _1990_action_free(Projet *projet)
+G_MODULE_EXPORT int _1990_action_free(Projet *projet)
 /* Description : Libère l'ensemble des actions existantes.
  * Paramètres : Projet *projet : la variable projet
  * Valeur renvoyée :

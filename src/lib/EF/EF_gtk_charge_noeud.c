@@ -37,7 +37,7 @@
 #include "1990_gtk_actions.h"
 #include "common_selection.h"
 
-int EF_gtk_charge_noeud_ajout_affichage(Charge_Noeud *charge, Projet *projet, gboolean nouvelle_ligne)
+G_MODULE_EXPORT int EF_gtk_charge_noeud_ajout_affichage(Charge_Noeud *charge, Projet *projet, gboolean nouvelle_ligne)
 {
     char                    *description, txt_fx[30], txt_fy[30], txt_fz[30], txt_mx[30], txt_my[30], txt_mz[30], *txt_liste_noeuds;
     List_Gtk_1990_Actions   *list_gtk_1990_actions;
@@ -308,7 +308,7 @@ G_MODULE_EXPORT void EF_gtk_charge_noeud_window_destroy(GtkWidget *object __attr
 }
 
 
-int EF_gtk_charge_noeud(Projet *projet, unsigned int action_defaut, unsigned int charge)
+G_MODULE_EXPORT int EF_gtk_charge_noeud(Projet *projet, unsigned int action_defaut, unsigned int charge)
 /* Description : Affichage de la fenêtre permettant de créer ou modifier une action de type
  *               charge ponctuelle au noeud
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement

@@ -136,7 +136,7 @@ char* _1990_duree_projet_txt_fr(int type)
 }
 
 
-int _1990_duree_projet(int type, Type_Pays pays)
+G_MODULE_EXPORT int _1990_duree_projet(int type, Type_Pays pays)
 /* Description : Renvoie la durée (en année) indicative de la norme du pays spécifié.
  * Paramètres : int type : categorie de durée d'utilisation de projet
  *            : Type_Pays pays : pays souhaité
@@ -155,7 +155,7 @@ int _1990_duree_projet(int type, Type_Pays pays)
 }
 
 
-char* _1990_duree_projet_txt(int type, Type_Pays pays)
+G_MODULE_EXPORT char* _1990_duree_projet_txt(int type, Type_Pays pays)
 /* Description : Renvoie la description des catérogies des durées indicatives de la norme du
  *                 pays spécifié.
  * Paramètres : int type : categorie de durée d'utilisation de projet

@@ -30,6 +30,10 @@ int _1992_1_1_sections_ajout_circulaire(Projet *projet, double diametre);
 
 void* _1992_1_1_sections_cherche_numero(Projet *projet, unsigned int numero);
 
+double _1992_1_1_sections_j(void* section);
+double _1992_1_1_sections_iy(void* section);
+double _1992_1_1_sections_iz(void* section);
+
 double _1992_1_1_sections_ay(Beton_Barre *barre, unsigned int discretisation);
 double _1992_1_1_sections_by(Beton_Barre *barre, unsigned int discretisation);
 double _1992_1_1_sections_cy(Beton_Barre *barre, unsigned int discretisation);
@@ -41,9 +45,6 @@ double _1992_1_1_sections_s(void *sect);
 double _1992_1_1_sections_es_l(Beton_Barre *barre, unsigned int discretisation,
   double debut, double fin);
 double _1992_1_1_sections_gj_l(Beton_Barre *barre, unsigned int discretisation);
-double _1992_1_1_sections_j(void* section);
-double _1992_1_1_sections_iy(void* section);
-double _1992_1_1_sections_iz(void* section);
 
 int _1992_1_1_sections_free(Projet *projet);
 

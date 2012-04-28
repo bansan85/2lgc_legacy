@@ -169,7 +169,7 @@ int _1990_ponderations_duplique_sans_double(GList **liste_pond_destination, GLis
     return 0;
 }
 
-int _1990_ponderations_genere_un(Projet *projet, GList **ponderations_destination,
+G_MODULE_EXPORT int _1990_ponderations_genere_un(Projet *projet, GList **ponderations_destination,
   double* coef_min, double* coef_max, int dim_coef, int psi_dominante, int psi_accompagnement)
 /* Description : Génère l'ensemble des pondérations en fonction des paramètres d'entrées. Pour
  *                 une génération exaustive conformément à une norme, il est nécessaire
@@ -1093,7 +1093,7 @@ void _1990_ponderations_affiche(GList *ponderations)
     return;
 }
 
-int _1990_ponderations_affiche_tout(Projet *projet)
+G_MODULE_EXPORT int _1990_ponderations_affiche_tout(Projet *projet)
 /* Description : Affiche toutes les pondérations du projet
  * Paramètres : Projet *projet : la variable projet
  * Valeur renvoyée : Aucun
