@@ -40,7 +40,7 @@ extern "C" {
 #include "common_selection.h"
 #include "1992_1_1_barres.h"
 
-void EF_gtk_noeud_fermer(GtkButton *button __attribute__((unused)), Projet *projet)
+G_MODULE_EXPORT void EF_gtk_noeud_fermer(GtkButton *button __attribute__((unused)), Projet *projet)
 /* Description : Ferme la fenêtre sans effectuer les modifications
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement
  *            : Projet *projet : la variable projet
@@ -56,7 +56,7 @@ void EF_gtk_noeud_fermer(GtkButton *button __attribute__((unused)), Projet *proj
 }
 
 
-void EF_gtk_noeud_ajouter(GtkButton *button __attribute__((unused)), Projet *projet)
+G_MODULE_EXPORT void EF_gtk_noeud_ajouter(GtkButton *button __attribute__((unused)), Projet *projet)
 /* Description : Ajoute un nouveau noeud
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement
  *            : Projet *projet : la variable projet
@@ -108,7 +108,7 @@ void EF_gtk_noeud_ajouter(GtkButton *button __attribute__((unused)), Projet *pro
 }
 
 
-void EF_gtk_noeud_edit_pos_abs(GtkCellRendererText *cell, gchar *path_string, gchar *new_text, Projet *projet)
+G_MODULE_EXPORT void EF_gtk_noeud_edit_pos_abs(GtkCellRendererText *cell, gchar *path_string, gchar *new_text, Projet *projet)
 /* Description : Changement de la position d'un noeud
  * Paramètres : GtkCellRendererText *cell : cellule en cours,
  *            : gchar *path_string : path de la ligne en cours,
@@ -266,7 +266,7 @@ void EF_gtk_noeud_edit_pos_abs(GtkCellRendererText *cell, gchar *path_string, gc
 }
 
 
-void EF_gtk_noeud_edit_pos_relat(GtkCellRendererText *cell, gchar *path_string, gchar *new_text, Projet *projet)
+G_MODULE_EXPORT void EF_gtk_noeud_edit_pos_relat(GtkCellRendererText *cell, gchar *path_string, gchar *new_text, Projet *projet)
 /* Description : Changement de la position d'un noeud de type barre.
  * Paramètres : GtkCellRendererText *cell : cellule en cours,
  *            : gchar *path_string : path de la ligne en cours,
@@ -380,7 +380,7 @@ void EF_gtk_render_actualise_position(GtkTreeViewColumn *tree_column __attribute
 }
 
 
-void EF_gtk_noeud_edit_noeud_appui(GtkCellRendererText *cell __attribute__((unused)), const gchar *path_string, const gchar *new_text, Projet *projet)
+G_MODULE_EXPORT void EF_gtk_noeud_edit_noeud_appui(GtkCellRendererText *cell __attribute__((unused)), const gchar *path_string, const gchar *new_text, Projet *projet)
 /* Description : Changement du type d'appui d'un noeud.
  * Paramètres : GtkCellRendererText *cell : cellule en cours,
  *            : gchar *path_string : path de la ligne en cours,
@@ -456,7 +456,7 @@ void EF_gtk_noeud_edit_noeud_appui(GtkCellRendererText *cell __attribute__((unus
 }
 
 
-void EF_gtk_noeud_edit_noeud_barre_barre(GtkCellRendererText *cell __attribute__((unused)), const gchar *path_string, const gchar *new_text, Projet *projet)
+G_MODULE_EXPORT void EF_gtk_noeud_edit_noeud_barre_barre(GtkCellRendererText *cell __attribute__((unused)), const gchar *path_string, const gchar *new_text, Projet *projet)
 /* Description : Changement de barre d'un noeud intermédiaire.
  * Paramètres : GtkCellRendererText *cell : cellule en cours,
  *            : gchar *path_string : path de la ligne en cours,

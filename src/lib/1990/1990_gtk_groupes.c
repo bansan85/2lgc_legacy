@@ -1005,7 +1005,7 @@ G_MODULE_EXPORT void _1990_gtk_groupes_button_generer_clicked(GtkWidget *button 
 }
 
 
-void _1990_gtk_radio_button_eluequ_equ_seul(GtkRadioButton *radiobutton __attribute__((unused)), Projet *projet)
+G_MODULE_EXPORT void _1990_gtk_radio_button_eluequ_equ_seul(GtkRadioButton *radiobutton __attribute__((unused)), Projet *projet)
 /* Description : Modifie les options de combinaison pour que l'ELU EQU calcule à l'équilibre seulement
  * Paramètres : GtkRadioButton *radiobutton : composant radiobutton à l'origine de l'évènement
  *            : Projet *projet : la variable projet
@@ -1022,7 +1022,7 @@ void _1990_gtk_radio_button_eluequ_equ_seul(GtkRadioButton *radiobutton __attrib
 }
 
 
-void _1990_gtk_radio_button_eluequ_equ_resist(GtkRadioButton *radiobutton __attribute__((unused)), Projet *projet)
+G_MODULE_EXPORT void _1990_gtk_radio_button_eluequ_equ_resist(GtkRadioButton *radiobutton __attribute__((unused)), Projet *projet)
 /* Description : Modifie les options de combinaison pour que l'ELU EQU calcule à l'équilibre et à la résistance structurelle
  * Paramètres : GtkRadioButton *radiobutton : composant radiobutton à l'origine de l'évènement
  *            : Projet *projet : la variable projet
@@ -1039,7 +1039,7 @@ void _1990_gtk_radio_button_eluequ_equ_resist(GtkRadioButton *radiobutton __attr
 }
 
 
-void _1990_gtk_radio_button_elustrgeo_1(GtkRadioButton *radiobutton __attribute__((unused)), Projet *projet)
+G_MODULE_EXPORT void _1990_gtk_radio_button_elustrgeo_1(GtkRadioButton *radiobutton __attribute__((unused)), Projet *projet)
 /* Description : Modifie les options de combinaison pour que l'ELU STR/GEO calcule selon l'approche 1
  * Paramètres : GtkRadioButton *radiobutton : composant radiobutton à l'origine de l'évènement
  *            : Projet *projet : la variable projet
@@ -1056,7 +1056,7 @@ void _1990_gtk_radio_button_elustrgeo_1(GtkRadioButton *radiobutton __attribute_
 }
 
 
-void _1990_gtk_radio_button_elustrgeo_2(GtkRadioButton *radiobutton __attribute__((unused)), Projet *projet)
+G_MODULE_EXPORT void _1990_gtk_radio_button_elustrgeo_2(GtkRadioButton *radiobutton __attribute__((unused)), Projet *projet)
 /* Description : Modifie les options de combinaison pour que l'ELU STR/GEO calcule selon l'approche 2
  * Paramètres : GtkRadioButton *radiobutton : composant radiobutton à l'origine de l'évènement
  *            : Projet *projet : la variable projet
@@ -1073,7 +1073,7 @@ void _1990_gtk_radio_button_elustrgeo_2(GtkRadioButton *radiobutton __attribute_
 }
 
 
-void _1990_gtk_radio_button_elustrgeo_3(GtkRadioButton *radiobutton __attribute__((unused)), Projet *projet)
+G_MODULE_EXPORT void _1990_gtk_radio_button_elustrgeo_3(GtkRadioButton *radiobutton __attribute__((unused)), Projet *projet)
 /* Description : Modifie les options de combinaison pour que l'ELU STR/GEO calcule selon l'approche 3
  * Paramètres : GtkRadioButton *radiobutton : composant radiobutton à l'origine de l'évènement
  *            : Projet *projet : la variable projet
@@ -1090,7 +1090,7 @@ void _1990_gtk_radio_button_elustrgeo_3(GtkRadioButton *radiobutton __attribute_
 }
 
 
-void _1990_gtk_radio_button_elustrgeo_6_10(GtkRadioButton *radiobutton __attribute__((unused)), Projet *projet)
+G_MODULE_EXPORT void _1990_gtk_radio_button_elustrgeo_6_10(GtkRadioButton *radiobutton __attribute__((unused)), Projet *projet)
 /* Description : Modifie les options de combinaison pour que l'ELU STR/GEO calcule selon la formule 6.10 de l'EN 1990
  * Paramètres : GtkRadioButton *radiobutton : composant radiobutton à l'origine de l'évènement
  *            : Projet *projet : la variable projet
@@ -1107,7 +1107,7 @@ void _1990_gtk_radio_button_elustrgeo_6_10(GtkRadioButton *radiobutton __attribu
 }
 
 
-void _1990_gtk_radio_button_elustrgeo_6_10ab(GtkRadioButton *radiobutton __attribute__((unused)), Projet *projet)
+G_MODULE_EXPORT void _1990_gtk_radio_button_elustrgeo_6_10ab(GtkRadioButton *radiobutton __attribute__((unused)), Projet *projet)
 /* Description : Modifie les options de combinaison pour que l'ELU STR/GEO calcule selon la formule 6.10 (a) et (b) de l'EN 1990
  * Paramètres : GtkRadioButton *radiobutton : composant radiobutton à l'origine de l'évènement
  *            : Projet *projet : la variable projet
@@ -1124,7 +1124,7 @@ void _1990_gtk_radio_button_elustrgeo_6_10ab(GtkRadioButton *radiobutton __attri
 }
 
 
-void _1990_gtk_radio_button_eluacc_frequente(GtkRadioButton *radiobutton __attribute__((unused)), Projet *projet)
+G_MODULE_EXPORT void _1990_gtk_radio_button_eluacc_frequente(GtkRadioButton *radiobutton __attribute__((unused)), Projet *projet)
 /* Description : Modifie les options de combinaison pour que l'ELU ACC calcule avec les valeurs fréquentes des actions variables
  * Paramètres : GtkRadioButton *radiobutton : composant radiobutton à l'origine de l'évènement
  *            : Projet *projet : la variable projet
@@ -1141,7 +1141,7 @@ void _1990_gtk_radio_button_eluacc_frequente(GtkRadioButton *radiobutton __attri
 }
 
 
-void _1990_gtk_radio_button_eluacc_quasi_permanente(GtkRadioButton *radiobutton __attribute__((unused)), Projet *projet)
+G_MODULE_EXPORT void _1990_gtk_radio_button_eluacc_quasi_permanente(GtkRadioButton *radiobutton __attribute__((unused)), Projet *projet)
 /* Description : Modifie les options de combinaison pour que l'ELU ACC calcule avec les valeurs quasi_permanente des actions variables
  * Paramètres : GtkRadioButton *radiobutton : composant radiobutton à l'origine de l'évènement
  *            : Projet *projet : la variable projet
@@ -1216,7 +1216,7 @@ G_MODULE_EXPORT void _1990_gtk_groupes_option_window_quitter_button(GtkWidget *o
 }
 
 
-void _1990_gtk_groupes_button_options_clicked(GtkWidget *button __attribute__((unused)), Projet *projet)
+G_MODULE_EXPORT void _1990_gtk_groupes_button_options_clicked(GtkWidget *button __attribute__((unused)), Projet *projet)
 {
     GtkSettings *settings;
     

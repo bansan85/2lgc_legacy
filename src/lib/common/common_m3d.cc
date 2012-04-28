@@ -28,11 +28,12 @@ extern "C" {
 #include <string.h>
 #include "common_projet.h"
 #include "common_erreurs.h"
+#include "common_maths.h"
 #include "EF_noeud.h"
 #include "1992_1_1_barres.h"
 #include "common_m3d.hpp"
 
-int m3d_init(Projet *projet)
+G_MODULE_EXPORT int m3d_init(Projet *projet)
 /* Description : Initialise l'affichage graphique de la structure.
  * Paramètres : Projet *projet : la variable projet
  * Valeur renvoyée :
@@ -72,7 +73,7 @@ int m3d_init(Projet *projet)
     return 0;
 }
 
-gboolean m3d_configure_event(GtkWidget *drawing __attribute__((unused)), GdkEventConfigure * ev, gpointer *data2)
+G_MODULE_EXPORT gboolean m3d_configure_event(GtkWidget *drawing __attribute__((unused)), GdkEventConfigure * ev, gpointer *data2)
 {
     SGlobalData *data = (SGlobalData*)data2;
     data->camera->set_size_of_window(ev->width, ev->height);
@@ -85,7 +86,7 @@ gboolean m3d_configure_event(GtkWidget *drawing __attribute__((unused)), GdkEven
     return FALSE;
 }
 
-gboolean m3d_draw(GtkWidget *drawing, GdkEventExpose* ev __attribute__((unused)), gpointer *data)
+G_MODULE_EXPORT gboolean m3d_draw(GtkWidget *drawing, GdkEventExpose* ev __attribute__((unused)), gpointer *data)
 {
     cairo_t *context = NULL;
     SGlobalData *data2 = (SGlobalData*)data;
@@ -99,7 +100,7 @@ gboolean m3d_draw(GtkWidget *drawing, GdkEventExpose* ev __attribute__((unused))
     return FALSE;
 }
               
-int m3d_camera_axe_x_z(Projet *projet)
+G_MODULE_EXPORT int m3d_camera_axe_x_z(Projet *projet)
 /* Description : Positionne la caméra pour voir toute la structure dans le plan xz
  * Paramètres : Projet *projet
  * Valeur renvoyée :
@@ -162,7 +163,7 @@ int m3d_camera_axe_x_z(Projet *projet)
 }
 
 
-void m3d_actualise_graphique_deplace_noeud(Projet *projet, EF_Noeud *noeud)
+G_MODULE_EXPORT void m3d_actualise_graphique_deplace_noeud(Projet *projet, EF_Noeud *noeud)
 {
     GList       *noeuds_todo = NULL, *noeuds_done = NULL;
     SGlobalData *vue = (SGlobalData*)projet->list_gtk.m3d.data;
@@ -248,7 +249,7 @@ void m3d_actualise_graphique_deplace_noeud(Projet *projet, EF_Noeud *noeud)
 }
 
 
-void* m3d_noeud(const char *nom, EF_Point *point, void *vue)
+G_MODULE_EXPORT void* m3d_noeud(const char *nom, EF_Point *point, void *vue)
 {
     CM3dObject *cube;
     
@@ -263,7 +264,7 @@ void* m3d_noeud(const char *nom, EF_Point *point, void *vue)
 }
 
 
-int m3d_barre(Projet *projet, Beton_Barre *barre)
+G_MODULE_EXPORT int m3d_barre(Projet *projet, Beton_Barre *barre)
 {
     List_Gtk_m3d    *m3d;
     SGlobalData     *vue;
@@ -552,7 +553,7 @@ int m3d_barre(Projet *projet, Beton_Barre *barre)
 }
 
 
-int m3d_genere_graphique(Projet *projet)
+G_MODULE_EXPORT int m3d_genere_graphique(Projet *projet)
 /* Description : Génère l'affichage 3D
  * Paramètres : Projet *projet
  * Valeur renvoyée :
@@ -612,7 +613,7 @@ int m3d_genere_graphique(Projet *projet)
     return 0;
 }
 
-int m3d_free(Projet *projet)
+G_MODULE_EXPORT int m3d_free(Projet *projet)
 /* Description : Libère l'espace mémoire alloué pour l'affichage graphique de la structure.
  * Paramètres : Projet *projet : la variable projet
  * Valeur renvoyée :
