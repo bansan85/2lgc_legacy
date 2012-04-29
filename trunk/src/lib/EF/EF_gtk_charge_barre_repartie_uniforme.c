@@ -330,7 +330,7 @@ void EF_gtk_charge_barre_repartie_uniforme_editer_clicked(GtkButton *button __at
 }
 
 
-void EF_gtk_charge_barre_repartie_uniforme_toggled(GtkToggleButton *togglebutton __attribute__((unused)), Projet *projet)
+G_MODULE_EXPORT void EF_gtk_charge_barre_repartie_uniforme_toggled(GtkToggleButton *togglebutton __attribute__((unused)), Projet *projet)
 /* Description : Évènement lors du cochage de projection et repère globale. En effet, il n'est
  *               pas possible de faire à la fois une projection dans le repère local
  * Paramètres : GtkToggleButton *togglebutton : composant à l'origine de l'évènement
