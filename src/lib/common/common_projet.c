@@ -30,6 +30,8 @@
 #include "common_m3d.hpp"
 #include "1990_gtk_groupes.h"
 #include "1990_gtk_actions.h"
+#include "EF_gtk_noeud.hpp"
+#include "EF_gtk_barres.hpp"
 #endif
 #include "1990_actions.h"
 #include "1990_groupes.h"
@@ -37,7 +39,6 @@
 #include "EF_appuis.h"
 #include "EF_noeud.h"
 #include "EF_rigidite.h"
-#include "EF_gtk_noeud.hpp"
 #include "EF_relachement.h"
 #include "1992_1_1_barres.h"
 #include "1992_1_1_section.h"
@@ -176,14 +177,13 @@ G_MODULE_EXPORT int projet_init_graphique(Projet *projet)
     gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu), comps->menu_structure);
     gtk_menu_item_set_submenu(GTK_MENU_ITEM(comps->menu_structure), comps->menu_structure_list);
     
-    comps->menu_structure_noeud_list = gtk_menu_new();
-    comps->menu_structure_noeud = gtk_menu_item_new_with_label(gettext("Noeuds"));
+    comps->menu_structure_noeud = gtk_menu_item_new_with_label(gettext("Noeuds..."));
     gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_structure_list), comps->menu_structure_noeud);
-    gtk_menu_item_set_submenu(GTK_MENU_ITEM(comps->menu_structure_noeud), comps->menu_structure_noeud_list);
+    g_signal_connect_swapped(comps->menu_structure_noeud, "activate", G_CALLBACK(EF_gtk_noeud), projet);
     
-    comps->menu_structure_noeud_gerer = gtk_menu_item_new_with_label(gettext("Gérer..."));
-    gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_structure_noeud_list), comps->menu_structure_noeud_gerer);
-    g_signal_connect_swapped(comps->menu_structure_noeud_gerer, "activate", G_CALLBACK(EF_gtk_noeud), projet);
+    comps->menu_structure_barres = gtk_menu_item_new_with_label(gettext("Barres..."));
+    gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_structure_list), comps->menu_structure_barres);
+    g_signal_connect_swapped(comps->menu_structure_barres, "activate", G_CALLBACK(EF_gtk_barres), projet);
     
     comps->menu_charges_list = gtk_menu_new();
     comps->menu_charges = gtk_menu_item_new_with_label(gettext("Charges"));

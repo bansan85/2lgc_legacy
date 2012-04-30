@@ -46,9 +46,9 @@ G_MODULE_EXPORT int EF_relachement_init(Projet *projet)
     projet->ef_donnees.relachements = NULL;
     
 #ifdef ENABLE_GTK
-    projet->list_gtk.ef_barre.liste_relachements = gtk_list_store_new(1, G_TYPE_STRING);
-    gtk_list_store_append(projet->list_gtk.ef_barre.liste_relachements, &iter);
-    gtk_list_store_set(projet->list_gtk.ef_barre.liste_relachements, &iter, 0, gettext("Aucun"), -1);
+    projet->list_gtk.ef_barres.liste_relachements = gtk_list_store_new(1, G_TYPE_STRING);
+    gtk_list_store_append(projet->list_gtk.ef_barres.liste_relachements, &iter);
+    gtk_list_store_set(projet->list_gtk.ef_barres.liste_relachements, &iter, 0, gettext("Aucun"), -1);
 #endif
     
     return 0;
@@ -113,8 +113,8 @@ G_MODULE_EXPORT int EF_relachement_ajout(Projet *projet, const char *nom, EF_Rel
     projet->ef_donnees.relachements = g_list_append(projet->ef_donnees.relachements, relachement_nouveau);
     
 #ifdef ENABLE_GTK
-    gtk_list_store_append(projet->list_gtk.ef_barre.liste_relachements, &iter);
-    gtk_list_store_set(projet->list_gtk.ef_barre.liste_relachements, &iter, 0, nom, -1);
+    gtk_list_store_append(projet->list_gtk.ef_barres.liste_relachements, &iter);
+    gtk_list_store_set(projet->list_gtk.ef_barres.liste_relachements, &iter, 0, nom, -1);
 #endif
     
     return 0;
@@ -156,6 +156,41 @@ G_MODULE_EXPORT EF_Relachement* EF_relachement_cherche_numero(Projet *projet, un
 }
 
 
+G_MODULE_EXPORT EF_Relachement* EF_relachement_cherche_nom(Projet *projet, const char *nom)
+/* Description : Renvoie le relachement cherché
+ * Paramètres : Projet *projet : la variable projet
+ *            : const char *nom : le nom du relachement
+ * Valeur renvoyée :
+ *   Succès : pointeur vers le relachement recherché
+ *   Échec : NULL en cas de paramètres invalides :
+ *             (projet == NULL) ou
+ *             (projet->ef_donnees.relachements == NULL) ou
+ *             (list_size(projet->ef_donnees.relachements) == 0) ou
+ *             relachement introuvable.
+ */
+{
+    GList   *list_parcours;
+    
+    BUGMSG(projet, NULL, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->ef_donnees.relachements, NULL, gettext("Paramètre incorrect\n"));
+    
+    // Trivial
+    list_parcours = projet->ef_donnees.relachements;
+    do
+    {
+        EF_Relachement *relachement = list_parcours->data;
+        
+        if (strcmp(relachement->nom, nom) == 0)
+            return relachement;
+        
+        list_parcours = g_list_next(list_parcours);
+    }
+    while (list_parcours != NULL);
+    
+    BUGMSG(0, NULL, gettext("Relachement '%s' introuvable.\n"), nom);
+}
+
+
 G_MODULE_EXPORT int EF_relachement_free(Projet *projet)
 /* Description : Libère l'ensemble des relachements et la liste les contenant
  * Paramètres : Projet *projet : la variable projet
@@ -187,7 +222,7 @@ G_MODULE_EXPORT int EF_relachement_free(Projet *projet)
     }
     
 #ifdef ENABLE_GTK
-    g_object_unref(projet->list_gtk.ef_barre.liste_relachements);
+    g_object_unref(projet->list_gtk.ef_barres.liste_relachements);
 #endif
     
     return 0;

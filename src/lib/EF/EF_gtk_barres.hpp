@@ -16,18 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __1992_1_1_MATERIAUX_H
-#define __1992_1_1_MATERIAUX_H
+#ifndef __EF_GTK_BARRES_H
+#define __EF_GTK_BARRES_H
 
 #include "config.h"
+#ifdef ENABLE_GTK
+#include <gtk/gtk.h>
+
 #include "common_projet.h"
 
+void EF_gtk_barres(Projet *projet);
 
-int _1992_1_1_materiaux_init(Projet *projet);
-int _1992_1_1_materiaux_ajout(Projet *projet, const char *nom, double fck, double nu);
-Beton_Materiau* _1992_1_1_materiaux_cherche_numero(Projet *projet, unsigned int numero);
-Beton_Materiau* _1992_1_1_materiaux_cherche_nom(Projet *projet, const char *nom);
-int _1992_1_1_materiaux_free(Projet *projet);
-
+#endif
 
 #endif

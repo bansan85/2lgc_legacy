@@ -23,12 +23,13 @@
 #include "common_projet.h"
 
 int _1992_1_1_sections_init(Projet *projet);
-int _1992_1_1_sections_ajout_rectangulaire(Projet *projet, double l, double h);
-int _1992_1_1_sections_ajout_T(Projet *projet, double lt, double la, double ht, double ha);
-int _1992_1_1_sections_ajout_carre(Projet *projet, double cote);
-int _1992_1_1_sections_ajout_circulaire(Projet *projet, double diametre);
+int _1992_1_1_sections_ajout_rectangulaire(Projet *projet, const char* nom, double l, double h);
+int _1992_1_1_sections_ajout_T(Projet *projet, const char* nom, double lt, double la, double ht, double ha);
+int _1992_1_1_sections_ajout_carre(Projet *projet, const char* nom, double cote);
+int _1992_1_1_sections_ajout_circulaire(Projet *projet, const char* nom, double diametre);
 
 void* _1992_1_1_sections_cherche_numero(Projet *projet, unsigned int numero);
+void* _1992_1_1_sections_cherche_nom(Projet *projet, const char *nom);
 
 double _1992_1_1_sections_j(void* section);
 double _1992_1_1_sections_iy(void* section);

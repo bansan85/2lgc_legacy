@@ -144,7 +144,7 @@
                                                                         <property name="editable">True</property>
                                                                         <property name="text-column">0</property>
                                                                         <property name="has-entry">False</property>
-                                                                        <signal name="edited" handler="_1990_gtk_tree_view_actions_cell_edited"/>
+                                                                        <signal name="edited" handler="_1990_gtk_tree_view_actions_type_edited"/>
                                                                     </object>
                                                                     <attributes>
                                                                         <attribute name="text">2</attribute>

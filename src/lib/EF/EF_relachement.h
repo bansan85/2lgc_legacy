@@ -28,6 +28,7 @@ int EF_relachement_ajout(Projet *projet, const char *nom, EF_Relachement_Type rx
   void* rz_d_data, EF_Relachement_Type rx_fin, void* rx_f_data, EF_Relachement_Type ry_fin,
   void* ry_f_data, EF_Relachement_Type rz_fin, void* rz_f_data);
 EF_Relachement* EF_relachement_cherche_numero(Projet *projet, unsigned int numero);
+EF_Relachement* EF_relachement_cherche_nom(Projet *projet, const char *nom);
 int EF_relachement_free(Projet *projet);
 
 #endif

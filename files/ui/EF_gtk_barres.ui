@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+    <requires lib="gtk+" version="3.2"/>
+    <object class="GtkTreeStore" id="EF_barres_treestore">
+        <columns>
+            <column type="guint"/>
+            <column type="gchararray"/>
+            <column type="gchararray"/>
+            <column type="gchararray"/>
+            <column type="guint"/>
+            <column type="guint"/>
+            <column type="gchararray"/>
+            <column type="guint"/>
+            <column type="gchararray"/>
+        </columns>
+    </object>
+    <object class="GtkWindow" id="EF_barres_window">
+        <property name="visible">True</property>
+        <property name="title">Barres</property>
+        <property name="modal">True</property>
+        <property name="default-height">400</property>
+        <property name="default-width">600</property>
+        <property name="window-position">GTK_WIN_POS_CENTER</property>
+        <signal name="key-press-event" handler="EF_gtk_barres_window_key_press"/>
+        <signal name="destroy" handler="EF_gtk_barres_window_destroy"/>
+        <child>
+            <object class="GtkGrid" id="EF_barres_grille_principale">
+                <property name="visible">True</property>
+                <property name="border-width">12</property>
+                <property name="row-spacing">12</property>
+                <child>
+                    <object class="GtkScrolledWindow" id="EF_barres_scrolled">
+                        <property name="visible">True</property>
+                        <property name="expand">True</property>
+                        <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                        <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                        <child>
+                            <object class="GtkTreeView" id="EF_barres_treeview">
+                                <property name="visible">True</property>
+                                <property name="model">EF_barres_treestore</property>
+                                <child>
+                                    <object class="GtkTreeViewColumn" id="EF_barres_treeview_column0">
+                                        <property name="visible">True</property>
+                                        <property name="resizable">True</property>
+                                        <property name="title">Numéro</property>
+                                        <child>
+                                            <object class="GtkCellRendererText" id="EF_barres_treeview_cell0">
+                                                <property name="background">#EEEEEE</property>
+                                            </object>
+                                            <attributes>
+                                                <attribute name="text">0</attribute>
+                                            </attributes>
+                                        </child>
+                                    </object>
+                                </child>
+                                <child>
+                                    <object class="GtkTreeViewColumn" id="EF_barres_treeview_column1">
+                                        <property name="visible">True</property>
+                                        <property name="resizable">True</property>
+                                        <property name="title">Type</property>
+                                        <child>
+                                            <object class="GtkCellRendererCombo" id="EF_barres_treeview_cell1">
+                                                <property name="editable">True</property>
+                                                <property name="text-column">0</property>
+                                                <property name="has-entry">False</property>
+                                                <signal name="edited" handler="EF_gtk_barres_edit_type"/>
+                                            </object>
+                                            <attributes>
+                                                <attribute name="text">1</attribute>
+                                            </attributes>
+                                        </child>
+                                    </object>
+                                </child>
+                                <child>
+                                    <object class="GtkTreeViewColumn" id="EF_barres_treeview_column2">
+                                        <property name="visible">True</property>
+                                        <property name="resizable">True</property>
+                                        <property name="title">Section</property>
+                                        <child>
+                                            <object class="GtkCellRendererCombo" id="EF_barres_treeview_cell2">
+                                                <property name="editable">True</property>
+                                                <property name="text-column">0</property>
+                                                <property name="has-entry">False</property>
+                                                <signal name="edited" handler="EF_gtk_barres_edit_section"/>
+                                            </object>
+                                            <attributes>
+                                                <attribute name="text">2</attribute>
+                                            </attributes>
+                                        </child>
+                                    </object>
+                                </child>
+                                <child>
+                                    <object class="GtkTreeViewColumn" id="EF_barres_treeview_column3">
+                                        <property name="visible">True</property>
+                                        <property name="resizable">True</property>
+                                        <property name="title">Matériau</property>
+                                        <child>
+                                            <object class="GtkCellRendererCombo" id="EF_barres_treeview_cell3">
+                                                <property name="editable">True</property>
+                                                <property name="text-column">0</property>
+                                                <property name="has-entry">False</property>
+                                                <signal name="edited" handler="EF_gtk_barres_edit_materiau"/>
+                                            </object>
+                                            <attributes>
+                                                <attribute name="text">3</attribute>
+                                            </attributes>
+                                        </child>
+                                    </object>
+                                </child>
+                                <child>
+                                    <object class="GtkTreeViewColumn" id="EF_barres_treeview_column4">
+                                        <property name="visible">True</property>
+                                        <property name="resizable">True</property>
+                                        <property name="title">Noeud 1</property>
+                                        <child>
+                                            <object class="GtkCellRendererText" id="EF_barres_treeview_cell4">
+                                                <property name="editable">True</property>
+                                                <signal name="edited" handler="EF_gtk_barres_edit_noeud"/>
+                                            </object>
+                                            <attributes>
+                                                <attribute name="text">4</attribute>
+                                            </attributes>
+                                        </child>
+                                    </object>
+                                </child>
+                                <child>
+                                    <object class="GtkTreeViewColumn" id="EF_barres_treeview_column5">
+                                        <property name="visible">True</property>
+                                        <property name="resizable">True</property>
+                                        <property name="title">Noeud 2</property>
+                                        <child>
+                                            <object class="GtkCellRendererText" id="EF_barres_treeview_cell5">
+                                                <property name="editable">True</property>
+                                                <signal name="edited" handler="EF_gtk_barres_edit_noeud"/>
+                                            </object>
+                                            <attributes>
+                                                <attribute name="text">5</attribute>
+                                            </attributes>
+                                        </child>
+                                    </object>
+                                </child>
+                                <child>
+                                    <object class="GtkTreeViewColumn" id="EF_barres_treeview_column6">
+                                        <property name="visible">True</property>
+                                        <property name="resizable">True</property>
+                                        <property name="title">Relâchement</property>
+                                        <child>
+                                            <object class="GtkCellRendererCombo" id="EF_barres_treeview_cell6">
+                                                <property name="editable">True</property>
+                                                <property name="text-column">0</property>
+                                                <property name="has-entry">False</property>
+                                                <signal name="edited" handler="EF_gtk_barres_edit_relachement"/>
+                                            </object>
+                                            <attributes>
+                                                <attribute name="text">6</attribute>
+                                            </attributes>
+                                        </child>
+                                    </object>
+                                </child>
+                            </object>
+                        </child>
+                    </object>
+                    <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">0</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkButtonBox" id="EF_barres_bouttons">
+                        <property name="visible">True</property>
+                        <property name="orientation">horizontal</property>
+                        <property name="layout_style">end</property>
+                        <property name="spacing">6</property>
+                        <child>
+                            <object class="GtkButton" id="EF_barres_boutton_ajouter">
+                                <property name="visible">True</property>
+                                <property name="label">gtk-add</property>
+                                <property name="use_stock">True</property>
+                                <signal name="clicked" handler="EF_gtk_barre_ajouter"/>
+                            </object>
+                            <packing>
+                                <property name="position">0</property>
+                                <property name="pack_type">end</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GtkButton" id="EF_barre_boutton_fermer">
+                                <property name="visible">True</property>
+                                <property name="label">gtk-close</property>
+                                <property name="use_stock">True</property>
+                                <signal name="clicked" handler="EF_gtk_barres_fermer"/>
+                            </object>
+                            <packing>
+                                <property name="position">1</property>
+                                <property name="pack_type">end</property>
+                            </packing>
+                        </child>
+                    </object>
+                    <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">1</property>
+                    </packing>
+                </child>
+            </object>
+        </child>
+    </object>
+</interface>

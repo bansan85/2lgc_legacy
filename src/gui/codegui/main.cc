@@ -142,10 +142,21 @@ int main(int argc, char *argv[])
     BUG(EF_noeuds_ajout_noeud_libre(projet, 8.0, 0.0, 0.0, EF_appuis_cherche_numero(projet, 0)), -1);
     
     // Création des sections en béton
-    BUG(_1992_1_1_sections_ajout_rectangulaire(projet, 0.05, 0.05) == 0, -1);
+    BUG(_1992_1_1_sections_ajout_rectangulaire(projet, "Rect_0.05*0.05", 0.05, 0.05) == 0, -1);
+    BUG(_1992_1_1_sections_ajout_T(projet, "T_1.00*0.20*0.10*0.50", 1.00, 0.20, 0.10, 0.50) == 0, -1);
+    BUG(_1992_1_1_sections_ajout_carre(projet, "Carre_0.50", 0.05) == 0, -1);
+    BUG(_1992_1_1_sections_ajout_circulaire(projet, "Circulaire_0.05", 0.05) == 0, -1);
     
     // Création du matériau béton
-    BUG(_1992_1_1_materiaux_ajout(projet, 25., 0.2) == 0, -1);
+    BUG(_1992_1_1_materiaux_ajout(projet, "B20", 20., 0.2) == 0, -1);
+    BUG(_1992_1_1_materiaux_ajout(projet, "B25", 25., 0.2) == 0, -1);
+    BUG(_1992_1_1_materiaux_ajout(projet, "B30", 30., 0.2) == 0, -1);
+    BUG(_1992_1_1_materiaux_ajout(projet, "B35", 35., 0.2) == 0, -1);
+    BUG(_1992_1_1_materiaux_ajout(projet, "B40", 40., 0.2) == 0, -1);
+    BUG(_1992_1_1_materiaux_ajout(projet, "B45", 45., 0.2) == 0, -1);
+    BUG(_1992_1_1_materiaux_ajout(projet, "B50", 50., 0.2) == 0, -1);
+    BUG(_1992_1_1_materiaux_ajout(projet, "B55", 55., 0.2) == 0, -1);
+    BUG(_1992_1_1_materiaux_ajout(projet, "B60", 60., 0.2) == 0, -1);
     
     // Création du relâchment
     ry_d = (EF_Relachement_Donnees_Elastique_Lineaire*)malloc(sizeof(EF_Relachement_Donnees_Elastique_Lineaire));
@@ -161,9 +172,9 @@ int main(int argc, char *argv[])
 //    BUG(EF_relachement_ajout(projet, EF_RELACHEMENT_LIBRE, NULL, EF_RELACHEMENT_LIBRE, NULL, EF_RELACHEMENT_LIBRE, NULL, EF_RELACHEMENT_BLOQUE, NULL, EF_RELACHEMENT_BLOQUE, NULL, EF_RELACHEMENT_BLOQUE, NULL) == 0, -1);
     
     // Création de l'élément en béton
-    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 0, 1, NULL, 9) == 0, -1);
-    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 1, 2, NULL, 9) == 0, -1);
-    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 2, 3, NULL, 9) == 0, -1);
+    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, 0, 1, 0, 1, NULL, 9) == 0, -1);
+    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, 0, 1, 1, 2, NULL, 9) == 0, -1);
+    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, 0, 1, 2, 3, NULL, 9) == 0, -1);
 //    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 1, 2, NULL, 0) == 0, -1);
     
     // Ajout de l'action ponctuelle
