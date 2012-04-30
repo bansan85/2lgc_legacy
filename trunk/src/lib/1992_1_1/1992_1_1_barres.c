@@ -42,10 +42,17 @@ G_MODULE_EXPORT int _1992_1_1_barres_init(Projet *projet)
  *           -2 en cas d'erreur d'allocation mémoire
  */
 {
+    GtkTreeIter iter;
+    
     BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
     
     // Trivial
     projet->beton.barres = NULL;
+    projet->list_gtk.ef_barres.liste_types = gtk_list_store_new(1, G_TYPE_STRING);
+    gtk_list_store_append(projet->list_gtk.ef_barres.liste_types, &iter);
+    gtk_list_store_set(projet->list_gtk.ef_barres.liste_types, &iter, 0, gettext("Poteau en béton"), -1);
+    gtk_list_store_append(projet->list_gtk.ef_barres.liste_types, &iter);
+    gtk_list_store_set(projet->list_gtk.ef_barres.liste_types, &iter, 0, gettext("Poutre en béton"), -1);
     
     return 0;
 }

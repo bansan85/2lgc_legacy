@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include <libintl.h>
 #include <math.h>
+#include <string.h>
 #include "common_projet.h"
 #include "common_erreurs.h"
 #include "common_maths.h"
@@ -40,11 +41,15 @@ G_MODULE_EXPORT int _1992_1_1_sections_init(Projet *projet)
     // Trivial
     projet->beton.sections = NULL;
     
+#ifdef ENABLE_GTK
+    projet->list_gtk.ef_barres.liste_sections = gtk_list_store_new(1, G_TYPE_STRING);
+#endif
+    
     return 0;
 }
 
 
-G_MODULE_EXPORT int _1992_1_1_sections_ajout_rectangulaire(Projet *projet, double l, double h)
+G_MODULE_EXPORT int _1992_1_1_sections_ajout_rectangulaire(Projet *projet, const char* nom, double l, double h)
 /* Description : ajouter une nouvelle section rectangulaire à la liste des sections en béton
  * Paramètres : Projet *projet : la variable projet
  *            : double l : la largeur
@@ -57,24 +62,34 @@ G_MODULE_EXPORT int _1992_1_1_sections_ajout_rectangulaire(Projet *projet, doubl
  *           -2 en cas d'erreur d'allocation mémoire
  */
 {
-    Beton_Section_Rectangulaire     *section_nouvelle = malloc(sizeof(Beton_Section_Rectangulaire));
+    Beton_Section_Rectangulaire *section_nouvelle = malloc(sizeof(Beton_Section_Rectangulaire));
+#ifdef ENABLE_GTK
+    GtkTreeIter     iter;
+#endif
     
     BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
     BUGMSG(section_nouvelle, -2, gettext("Erreur d'allocation mémoire.\n"));
     
     // Trivial
     section_nouvelle->type = BETON_SECTION_RECTANGULAIRE;
+    section_nouvelle->nom = (char*)malloc(sizeof(char)*(strlen(nom)+1));
+    strcpy(section_nouvelle->nom, nom);
     section_nouvelle->largeur = l;
     section_nouvelle->hauteur = h;
     section_nouvelle->numero = g_list_length(projet->beton.sections);
     
     projet->beton.sections = g_list_append(projet->beton.sections, section_nouvelle);
     
+#ifdef ENABLE_GTK
+    gtk_list_store_append(projet->list_gtk.ef_barres.liste_sections, &iter);
+    gtk_list_store_set(projet->list_gtk.ef_barres.liste_sections, &iter, 0, nom, -1);
+#endif
+    
     return 0;
 }
 
 
-G_MODULE_EXPORT int _1992_1_1_sections_ajout_T(Projet *projet, double lt, double la, double ht, double ha)
+G_MODULE_EXPORT int _1992_1_1_sections_ajout_T(Projet *projet, const char* nom, double lt, double la, double ht, double ha)
 /* Description : ajouter une nouvelle section en T à la liste des sections en béton
  * Paramètres : Projet *projet : la variable projet
  *            : double lt : la largeur de la table
@@ -91,6 +106,10 @@ G_MODULE_EXPORT int _1992_1_1_sections_ajout_T(Projet *projet, double lt, double
 {
     Beton_Section_T     *section_nouvelle = malloc(sizeof(Beton_Section_T));
     
+#ifdef ENABLE_GTK
+    GtkTreeIter     iter;
+#endif
+    
     BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
     BUGMSG(section_nouvelle, -2, gettext("Erreur d'allocation mémoire.\n"));
     
@@ -101,6 +120,8 @@ G_MODULE_EXPORT int _1992_1_1_sections_ajout_T(Projet *projet, double lt, double
     //   J = \frac{a \cdot b^3}{16} \cdot \left[\frac{16}{3}-3.364 \cdot \frac{b}{a} \cdot \left(1-\frac{b^4}{12 \cdot a^4}\right)\right]+\frac{aa \cdot bb^3}{16} \cdot \left[\frac{16}{3}-3.364 \cdot \frac{bb}{aa} \cdot \left(1-\frac{bb^4}{12 \cdot aa^4}\right)\right]\texttt{ avec }\substack{a=max(ht,lt)\\b=min(ht,lt)\\aa=max(ha,la)\\bb=min(ha,la)}
     //   \end{displaymath}\begin{verbatim}
     section_nouvelle->type = BETON_SECTION_T;
+    section_nouvelle->nom = (char*)malloc(sizeof(char)*(strlen(nom)+1));
+    strcpy(section_nouvelle->nom, nom);
     section_nouvelle->largeur_table = lt;
     section_nouvelle->largeur_ame = la;
     section_nouvelle->hauteur_table = ht;
@@ -109,11 +130,16 @@ G_MODULE_EXPORT int _1992_1_1_sections_ajout_T(Projet *projet, double lt, double
     
     projet->beton.sections = g_list_append(projet->beton.sections, section_nouvelle);
     
+#ifdef ENABLE_GTK
+    gtk_list_store_append(projet->list_gtk.ef_barres.liste_sections, &iter);
+    gtk_list_store_set(projet->list_gtk.ef_barres.liste_sections, &iter, 0, nom, -1);
+#endif
+    
     return 0;
 }
 
 
-G_MODULE_EXPORT int _1992_1_1_sections_ajout_carre(Projet *projet, double cote)
+G_MODULE_EXPORT int _1992_1_1_sections_ajout_carre(Projet *projet, const char* nom, double cote)
 /* Description : ajouter une nouvelle section carrée à la liste des sections en béton
  * Paramètres : Projet *projet : la variable projet
  *            : double cote : le coté
@@ -127,6 +153,10 @@ G_MODULE_EXPORT int _1992_1_1_sections_ajout_carre(Projet *projet, double cote)
 {
     Beton_Section_Carre     *section_nouvelle = malloc(sizeof(Beton_Section_Carre));
     
+#ifdef ENABLE_GTK
+    GtkTreeIter     iter;
+#endif
+    
     BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
     BUGMSG(section_nouvelle, -2, gettext("Erreur d'allocation mémoire.\n"));
     
@@ -134,16 +164,23 @@ G_MODULE_EXPORT int _1992_1_1_sections_ajout_carre(Projet *projet, double cote)
     //   S = cote^2\texttt{  et  }cdg_{haut} = \frac{cote}{2}\texttt{  et  }cdg_{bas} = \frac{cote}{2}\texttt{  et  }cdg_{droite} = \frac{cote}{2}\texttt{  et  }cdg_{gauche} = \frac{cote}{2}\end{displaymath}\begin{displaymath}
     //   I_y = \frac{cote^4}{12}\texttt{  et  }I_z = I_y\texttt{  et  }J = \frac{cote^4}{16} \cdot \left[\frac{16}{3}-3.364 \cdot \left(1-\frac{1}{12}\right)\right]\end{displaymath}\begin{verbatim}
     section_nouvelle->type = BETON_SECTION_CARRE;
+    section_nouvelle->nom = (char*)malloc(sizeof(char)*(strlen(nom)+1));
+    strcpy(section_nouvelle->nom, nom);
     section_nouvelle->cote = cote;
     section_nouvelle->numero = g_list_length(projet->beton.sections);
     
     projet->beton.sections = g_list_append(projet->beton.sections, section_nouvelle);
     
+#ifdef ENABLE_GTK
+    gtk_list_store_append(projet->list_gtk.ef_barres.liste_sections, &iter);
+    gtk_list_store_set(projet->list_gtk.ef_barres.liste_sections, &iter, 0, nom, -1);
+#endif
+    
     return 0;
 }
 
 
-G_MODULE_EXPORT int _1992_1_1_sections_ajout_circulaire(Projet *projet, double diametre)
+G_MODULE_EXPORT int _1992_1_1_sections_ajout_circulaire(Projet *projet, const char* nom, double diametre)
 /* Description : ajouter une nouvelle section circulaire à la liste des sections en béton
  * Paramètres : Projet *projet : la variable projet
  *            : double diametre : le diamètre
@@ -157,6 +194,10 @@ G_MODULE_EXPORT int _1992_1_1_sections_ajout_circulaire(Projet *projet, double d
 {
     Beton_Section_Circulaire    *section_nouvelle = malloc(sizeof(Beton_Section_Circulaire));
     
+#ifdef ENABLE_GTK
+    GtkTreeIter     iter;
+#endif
+    
     BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
     BUGMSG(section_nouvelle, -2, gettext("Erreur d'allocation mémoire.\n"));
     
@@ -165,10 +206,17 @@ G_MODULE_EXPORT int _1992_1_1_sections_ajout_circulaire(Projet *projet, double d
     //   cdg_{haut} = \frac{diametre}{2}\texttt{  et  }cdg_{bas} = \frac{diametre}{2}\texttt{  et  }cdg_{droite} = \frac{diametre}{2}\texttt{  et  }cdg_{gauche} = \frac{diametre}{2}\end{displaymath}\begin{displaymath}
     //   I_y = \frac{\pi \cdot diametre^4}{64}\texttt{  et  }I_z = I_y\texttt{  et  }J = \frac{\pi \cdot diametre^4}{32}\end{displaymath}\begin{verbatim}
     section_nouvelle->type = BETON_SECTION_CIRCULAIRE;
+    section_nouvelle->nom = (char*)malloc(sizeof(char)*(strlen(nom)+1));
+    strcpy(section_nouvelle->nom, nom);
     section_nouvelle->diametre = diametre;
     section_nouvelle->numero = g_list_length(projet->beton.sections);
     
     projet->beton.sections = g_list_append(projet->beton.sections, section_nouvelle);
+    
+#ifdef ENABLE_GTK
+    gtk_list_store_append(projet->list_gtk.ef_barres.liste_sections, &iter);
+    gtk_list_store_set(projet->list_gtk.ef_barres.liste_sections, &iter, 0, nom, -1);
+#endif
     
     return 0;
 }
@@ -207,6 +255,42 @@ G_MODULE_EXPORT void* _1992_1_1_sections_cherche_numero(Projet *projet, unsigned
     while (list_parcours != NULL);
     
     BUGMSG(0, NULL, gettext("Section en béton n°%d introuvable.\n"), numero);
+}
+
+
+G_MODULE_EXPORT void* _1992_1_1_sections_cherche_nom(Projet *projet, const char *nom)
+/* Description : Positionne dans la liste des sections en béton l'élément courant au numéro
+ *                 souhaité.
+ * Paramètres : Projet *projet : la variable projet
+ *            : const char *nom : le nom de la section
+ * Valeur renvoyée :
+ *   Succès : pointeur vers la section
+ *   Échec : NULL en cas de paramètres invalides :
+ *             (projet == NULL) ou
+ *             (projet->beton.sections == NULL) ou
+ *             (list_size(projet->beton.sections) == 0) ou
+ *             numéro introuvable.
+ */
+{
+    GList   *list_parcours;
+    
+    BUGMSG(projet, NULL, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->beton.sections, NULL, gettext("Paramètre incorrect\n"));
+    
+    // Trivial
+    list_parcours = projet->beton.sections;
+    do
+    {
+        Beton_Section_Circulaire    *section = list_parcours->data;
+        
+        if (strcmp(section->nom, nom) == 0)
+            return section;
+        
+        list_parcours = g_list_next(list_parcours);
+    }
+    while (list_parcours != NULL);
+    
+    BUGMSG(0, NULL, gettext("Section en béton '%s' introuvable.\n"), nom);
 }
 
 
@@ -1065,6 +1149,14 @@ G_MODULE_EXPORT double _1992_1_1_sections_gj_l(Beton_Barre *barre, unsigned int 
             break;
         }
     }
+}
+
+
+void _1992_1_1_sections_free_un(Beton_Section_Rectangulaire *section)
+{
+    free(section->nom);
+    free(section);
+    return;
 }
 
 

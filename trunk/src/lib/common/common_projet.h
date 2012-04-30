@@ -33,7 +33,7 @@ typedef struct __List_Gtk_1990_Groupes
     GtkBuilder      *builder;
     GtkBuilder      *builder_options;
      
-    GtkWidget       *window_groupe;         // La fenêtre
+    GtkWidget       *window_groupe;
     GtkTreeStore    *tree_store_etat;
     GtkTreeStore    *tree_store_dispo;
     
@@ -63,8 +63,8 @@ typedef struct __List_Gtk_1990_Actions
     GtkTreeView     *tree_view_actions;
     GtkListStore    *choix_type_action;
     
-    GtkWidget       *menu_type_list_action; // OK
-    GList           *menu_list_widget_action; //OK
+    GtkWidget       *menu_type_list_action;
+    GList           *menu_list_widget_action;
     
     GtkTreeStore    *tree_store_charges;
     GtkTreeSelection *tree_select_charges;
@@ -122,10 +122,16 @@ typedef struct __List_Gtk_EF_Noeud
 } List_Gtk_EF_Noeud;
 
 
-typedef struct __List_Gtk_EF_Barre
+typedef struct __List_Gtk_EF_Barres
 {
+    GtkBuilder      *builder;
+    GtkWidget       *window;
+    
     GtkListStore    *liste_relachements;
-} List_Gtk_EF_Barre;
+    GtkListStore    *liste_types;
+    GtkListStore    *liste_sections;
+    GtkListStore    *liste_materiaux;
+} List_Gtk_EF_Barres;
 
 #endif
 
@@ -259,6 +265,7 @@ typedef struct __Charge_Noeud
 typedef struct __Beton_Section_Rectangulaire
 {
     Type_Beton_Section  type;
+    char                *nom;
     unsigned int        numero;
     double              largeur;
     double              hauteur;
@@ -268,6 +275,7 @@ typedef struct __Beton_Section_Rectangulaire
 typedef struct __Beton_Section_T
 {
     Type_Beton_Section  type;
+    char                *nom;
     unsigned int        numero;
     double              largeur_table;
     double              largeur_ame;
@@ -279,6 +287,7 @@ typedef struct __Beton_Section_T
 typedef struct __Beton_Section_Carre
 {
     Type_Beton_Section  type;
+    char                *nom;
     unsigned int        numero;
     double              cote;
 } Beton_Section_Carre;
@@ -287,6 +296,7 @@ typedef struct __Beton_Section_Carre
 typedef struct __Beton_Section_Circulaire
 {
     Type_Beton_Section  type;
+    char                *nom;
     unsigned int        numero;
     double              diametre;
 } Beton_Section_Circulaire;
@@ -322,6 +332,7 @@ typedef struct __EF_Relachement
 typedef struct __Beton_Materiau
 {
     unsigned int    numero;
+    char        *nom;
     
     // Caractéristique du matériau béton conformément à EN 1992_1_1, Tableau 3.1
     double      fck;
@@ -374,10 +385,10 @@ typedef struct __Beton_Barre
     
     EF_Noeud            *noeud_debut;
     EF_Noeud            *noeud_fin;
-    unsigned int        discretisation_element;     // Nombre de noeuds intermédiaires
-    Barre_Info_EF       *info_EF;                   // Une info par élément discrétisé
-    GList               *noeuds_intermediaires;
     EF_Relachement      *relachement;
+    unsigned int        discretisation_element;     // Nombre de noeuds intermédiaires
+    GList               *noeuds_intermediaires;
+    Barre_Info_EF       *info_EF;                   // Une info par élément discrétisé
     
     cholmod_sparse      *matrice_rotation;
     cholmod_sparse      *matrice_rotation_transpose;
@@ -599,8 +610,7 @@ typedef struct __Comp_Gtk
     GtkWidget   *menu_structure;
     GtkWidget   *menu_structure_list;
     GtkWidget   *menu_structure_noeud;
-    GtkWidget   *menu_structure_noeud_list;
-    GtkWidget   *menu_structure_noeud_gerer;
+    GtkWidget   *menu_structure_barres;
     GtkWidget   *menu_charges;
     GtkWidget   *menu_charges_list;
     GtkWidget   *menu_charges_actions;
@@ -624,7 +634,7 @@ typedef struct __List_Gtk
     List_Gtk_EF_Charge_Barre_Repartie_Uniforme ef_charge_barre_repartie_uniforme;
     List_Gtk_m3d            m3d;       // pour l'affichage graphique de la structure
     List_Gtk_EF_Noeud       ef_noeud;
-    List_Gtk_EF_Barre       ef_barre;
+    List_Gtk_EF_Barres      ef_barres;
     Comp_Gtk                comp;      // tous les composants grahpiques
 } List_Gtk;
 #endif
