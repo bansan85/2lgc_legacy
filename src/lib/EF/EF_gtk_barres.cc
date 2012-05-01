@@ -90,26 +90,7 @@ G_MODULE_EXPORT void EF_gtk_barres_add_add_clicked(GtkButton *button __attribute
         return;
     
     if ((type != -1) && (section != -1) && (materiau != -1))
-    {
-        GtkTreeIter iter;
-        
         BUG(_1992_1_1_barres_ajout(projet, (Type_Element)type, section, materiau, noeud_debut, noeud_fin, relachement, 0) == 0, );
-        
-        if (ef_gtk->builder != NULL)
-        {
-            char        *tmp;
-            Beton_Barre *barre = (Beton_Barre*)g_list_last(projet->beton.barres)->data;
-            Beton_Section_Rectangulaire *p_section = (Beton_Section_Rectangulaire*)barre->section;
-            
-            tmp = g_strdup_printf("%d", (int)barre->type);
-            gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(projet->list_gtk.ef_barres.liste_types), &iter, tmp);
-            free(tmp);
-            gtk_tree_model_get(GTK_TREE_MODEL(projet->list_gtk.ef_barres.liste_types), &iter, 0, &tmp, -1);
-            
-            gtk_tree_store_append(GTK_TREE_STORE(gtk_builder_get_object(ef_gtk->builder, "EF_barres_treestore")), &iter, NULL);
-            gtk_tree_store_set(GTK_TREE_STORE(gtk_builder_get_object(ef_gtk->builder, "EF_barres_treestore")), &iter, 0, barre->numero, 1, tmp, 2, p_section->nom, 3, barre->materiau->nom, 4, barre->noeud_debut->numero, 5, barre->noeud_fin->numero, 6, (barre->relachement == NULL ? gettext("Aucun") : barre->relachement->nom), -1);
-        }
-    }
     
     return;
 }
