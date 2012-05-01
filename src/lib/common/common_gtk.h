@@ -66,11 +66,11 @@
 
 #define GTK_COMMON_SPINBUTTON_AS_UINT(spinbutton) ((unsigned int)round(gtk_spin_button_get_value(spinbutton)))
 
-void gtk_common_entry_check_double(GtkEntry *entry, gchar *preedit, gpointer user_data);
+void gtk_common_entry_check_double(GtkTextBuffer *entry, gpointer user_data);
 double gtk_common_entry_renvoie_double(GtkTextBuffer *textbuffer);
-void gtk_common_entry_check_int(GtkEntry *entry, gchar *preedit, gpointer user_data);
+void gtk_common_entry_check_int(GtkTextBuffer *entry, gpointer user_data);
 int gtk_common_entry_renvoie_int(GtkTextBuffer *textbuffer);
-void gtk_common_entry_check_liste(GtkEntry *entry, gchar *preedit, gpointer user_data);
+void gtk_common_entry_check_liste(GtkTextBuffer *entry, gpointer user_data);
 gboolean common_gtk_key_press(GtkWidget *widget, GdkEvent *event, GtkWidget *fenetre);
 void gtk_common_render_double(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell, GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data);
 

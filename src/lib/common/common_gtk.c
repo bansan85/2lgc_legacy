@@ -150,7 +150,7 @@ G_MODULE_EXPORT int gtk_common_entry_renvoie_int(GtkTextBuffer *textbuffer)
     {
         free(texte);
         free(fake);
-        return -1;
+        return INT_MIN;
     }
     else
     {
