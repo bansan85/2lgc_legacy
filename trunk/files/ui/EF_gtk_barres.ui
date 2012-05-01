@@ -176,7 +176,7 @@
                                 <property name="visible">True</property>
                                 <property name="label">gtk-add</property>
                                 <property name="use_stock">True</property>
-                                <signal name="clicked" handler="EF_gtk_barre_ajouter"/>
+                                <signal name="clicked" handler="EF_gtk_barres_ajouter"/>
                             </object>
                             <packing>
                                 <property name="position">0</property>

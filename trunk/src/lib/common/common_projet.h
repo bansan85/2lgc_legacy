@@ -127,6 +127,9 @@ typedef struct __List_Gtk_EF_Barres
     GtkBuilder      *builder;
     GtkWidget       *window;
     
+    GtkBuilder      *builder_add;
+    GtkWidget       *window_add;
+    
     GtkListStore    *liste_relachements;
     GtkListStore    *liste_types;
     GtkListStore    *liste_sections;

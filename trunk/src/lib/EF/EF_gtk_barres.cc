@@ -43,6 +43,78 @@ extern "C" {
 #include "1992_1_1_section.h"
 #include "1992_1_1_materiaux.h"
 
+G_MODULE_EXPORT void EF_gtk_barres_add_annuler_clicked(GtkButton *button __attribute__((unused)), Projet *projet)
+/* Description : Ferme la fenêtre sans effectuer les modifications
+ * Paramètres : GtkWidget *button : composant à l'origine de l'évènement
+ *            : Projet *projet : la variable projet
+ * Valeur renvoyée : Aucune
+ */
+{
+    BUGMSG(projet, , gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->list_gtk.ef_barres.builder_add, , gettext("Paramètre incorrect\n"));
+    
+    gtk_widget_destroy(projet->list_gtk.ef_barres.window_add);
+    
+    return;
+}
+
+
+G_MODULE_EXPORT void EF_gtk_barres_add_add_clicked(GtkButton *button __attribute__((unused)), Projet *projet)
+/* Description : Ajoute une nouvelle barre
+ * Paramètres : GtkWidget *button : composant à l'origine de l'évènement
+ *            : Projet *projet : la variable projet
+ * Valeur renvoyée : Aucune
+ */
+{
+    int         type;
+    int         section;
+    int         materiau;
+    int         noeud_debut;
+    int         noeud_fin;
+    EF_Relachement* relachement;
+    
+    List_Gtk_EF_Barres  *ef_gtk;
+    
+    BUGMSG(projet, , gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->list_gtk.ef_barres.builder_add, , gettext("Paramètre incorrect\n"));
+    
+    ef_gtk = &projet->list_gtk.ef_barres;
+    
+    type = gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_type_combobox")));
+    section = gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_section_combobox")));
+    materiau = gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_materiau_combobox")));
+    relachement = EF_relachement_cherche_numero(projet, gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_relachement_combobox")))-1);
+    noeud_debut = gtk_common_entry_renvoie_int(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_noeud1_buffer")));
+    noeud_fin = gtk_common_entry_renvoie_int(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_noeud2_buffer")));
+    if ((EF_noeuds_cherche_numero(projet, noeud_debut) == NULL) || (EF_noeuds_cherche_numero(projet, noeud_fin) == NULL))
+        return;
+    
+    if ((type != -1) && (section != -1) && (materiau != -1))
+    {
+        GtkTreeIter iter;
+        
+        BUG(_1992_1_1_barres_ajout(projet, (Type_Element)type, section, materiau, noeud_debut, noeud_fin, relachement, 0) == 0, );
+        
+        if (ef_gtk->builder != NULL)
+        {
+            char        *tmp;
+            Beton_Barre *barre = (Beton_Barre*)g_list_last(projet->beton.barres)->data;
+            Beton_Section_Rectangulaire *p_section = (Beton_Section_Rectangulaire*)barre->section;
+            
+            tmp = g_strdup_printf("%d", (int)barre->type);
+            gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(projet->list_gtk.ef_barres.liste_types), &iter, tmp);
+            free(tmp);
+            gtk_tree_model_get(GTK_TREE_MODEL(projet->list_gtk.ef_barres.liste_types), &iter, 0, &tmp, -1);
+            
+            gtk_tree_store_append(GTK_TREE_STORE(gtk_builder_get_object(ef_gtk->builder, "EF_barres_treestore")), &iter, NULL);
+            gtk_tree_store_set(GTK_TREE_STORE(gtk_builder_get_object(ef_gtk->builder, "EF_barres_treestore")), &iter, 0, barre->numero, 1, tmp, 2, p_section->nom, 3, barre->materiau->nom, 4, barre->noeud_debut->numero, 5, barre->noeud_fin->numero, 6, (barre->relachement == NULL ? gettext("Aucun") : barre->relachement->nom), -1);
+        }
+    }
+    
+    return;
+}
+
+
 G_MODULE_EXPORT void EF_gtk_barres_fermer(GtkButton *button __attribute__((unused)), Projet *projet)
 /* Description : Ferme la fenêtre sans effectuer les modifications
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement
@@ -59,6 +131,21 @@ G_MODULE_EXPORT void EF_gtk_barres_fermer(GtkButton *button __attribute__((unuse
 }
 
 
+G_MODULE_EXPORT void EF_gtk_barres_add_window_destroy(GtkWidget *object __attribute__((unused)), Projet *projet)
+/* Description : met projet->list_gtk._1990_groupes.window à NULL quand la fenêtre se ferme
+ * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
+ *            : Projet *projet : la variable projet
+ * Valeur renvoyée : Aucune
+ */
+{
+    BUGMSG(projet, , gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->list_gtk.ef_barres.builder_add, , gettext("Paramètre incorrect\n"));
+    
+    projet->list_gtk.ef_barres.builder_add = NULL;
+    return;
+}
+
+
 G_MODULE_EXPORT void EF_gtk_barres_window_destroy(GtkWidget *object __attribute__((unused)), Projet *projet)
 /* Description : met projet->list_gtk._1990_groupes.window à NULL quand la fenêtre se ferme
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
@@ -71,6 +158,21 @@ G_MODULE_EXPORT void EF_gtk_barres_window_destroy(GtkWidget *object __attribute_
     
     projet->list_gtk.ef_barres.builder = NULL;
     return;
+}
+
+
+G_MODULE_EXPORT gboolean EF_gtk_barres_add_window_key_press(GtkWidget *widget __attribute__((unused)), GdkEvent *event, Projet *projet)
+{
+    BUGMSG(projet, TRUE, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->list_gtk.ef_barres.builder_add, TRUE, gettext("Paramètre incorrect\n"));
+    
+    if (event->key.keyval == GDK_KEY_Escape)
+    {
+        gtk_widget_destroy(projet->list_gtk.ef_barres.window_add);
+        return TRUE;
+    }
+    else
+        return FALSE;
 }
 
 
@@ -329,6 +431,74 @@ G_MODULE_EXPORT void EF_gtk_barres_edit_noeud(GtkCellRendererText *cell __attrib
     free(fake);
      
     return;
+}
+
+
+G_MODULE_EXPORT void EF_gtk_barres_add_check_add(GtkWidget *widget, Projet *projet)
+{
+    List_Gtk_EF_Barres  *ef_gtk;
+    gboolean            ok = FALSE;
+    
+    BUGMSG(projet, , gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->list_gtk.ef_barres.builder_add, , gettext("Paramètre incorrect\n"));
+    
+    ef_gtk = &projet->list_gtk.ef_barres;
+    
+    if (
+        (gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_type_combobox"))) != -1) &&
+        (gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_section_combobox"))) != -1) &&
+        (gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_materiau_combobox"))) != -1) &&
+        (gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_relachement_combobox"))) != -1) &&
+        (EF_noeuds_cherche_numero(projet, gtk_common_entry_renvoie_int(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_noeud1_buffer")))) != NULL) &&
+        (EF_noeuds_cherche_numero(projet, gtk_common_entry_renvoie_int(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_noeud2_buffer")))) != NULL)
+    )
+        ok = TRUE;
+    
+    if (GTK_IS_TEXT_BUFFER(widget))
+        gtk_common_entry_check_int(GTK_TEXT_BUFFER(widget), NULL);
+    
+    gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_button_add")), ok);
+    
+    return;
+}
+
+
+G_MODULE_EXPORT void EF_gtk_barres_ajouter(GtkButton *button __attribute__((unused)), Projet *projet)
+{
+    List_Gtk_EF_Barres  *ef_gtk;
+    char                *nb_barres;
+    
+    BUGMSG(projet, , gettext("Paramètre incorrect\n"));
+    BUGMSG(projet->list_gtk.ef_barres.builder_add == NULL, , gettext("Paramètre incorrect\n"));
+    
+    ef_gtk = &projet->list_gtk.ef_barres;
+    
+    ef_gtk->builder_add = gtk_builder_new();
+    BUGMSG(gtk_builder_add_from_file(ef_gtk->builder_add, DATADIR"/ui/EF_gtk_barres_add.ui", NULL) != 0, , gettext("Builder Failed\n"));
+    gtk_builder_connect_signals(ef_gtk->builder_add, projet);
+    
+    ef_gtk->window_add = GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder_add, "EF_barres_add_window"));;
+    
+    g_object_set(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_type_combobox"), "model", projet->list_gtk.ef_barres.liste_types, NULL);
+    g_object_set(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_section_combobox"), "model", projet->list_gtk.ef_barres.liste_sections, NULL);
+    g_object_set(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_materiau_combobox"), "model", projet->list_gtk.ef_barres.liste_materiaux, NULL);
+    g_object_set(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_relachement_combobox"), "model", projet->list_gtk.ef_barres.liste_relachements, NULL);
+    
+    // Pour résoudre un bug dans l'affichage graphique.
+    // En effet, sans ces lignes, la hauteur et largeur des ComboBox est au minimum et lors du passage de la souris au dessus, les composants prennent leur bonne taille.
+    // https://bugzilla.gnome.org/show_bug.cgi?id=675228
+    gtk_combo_box_set_active(GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_type_combobox")), -1);
+    gtk_combo_box_set_active(GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_section_combobox")), -1);
+    gtk_combo_box_set_active(GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_materiau_combobox")), -1);
+    gtk_combo_box_set_active(GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_relachement_combobox")), -1);
+    
+    nb_barres = g_strdup_printf("%d", g_list_length(projet->beton.barres));
+    gtk_label_set_text(GTK_LABEL(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_numero_label2")), nb_barres);
+    free(nb_barres);
+    
+    gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_button_add")), FALSE);
+    
+    gtk_window_set_transient_for(GTK_WINDOW(ef_gtk->window_add), GTK_WINDOW(projet->list_gtk.comp.window));
 }
 
 

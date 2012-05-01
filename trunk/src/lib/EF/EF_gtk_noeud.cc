@@ -302,6 +302,12 @@ G_MODULE_EXPORT void EF_gtk_noeud_edit_pos_relat(GtkCellRendererText *cell, gcha
     {
         EF_Noeud                *noeud;
         
+        if ((0.0 > conversion) || (conversion > 1.0))
+        {
+            free(fake);
+            return;
+        }
+        
         // On modifie l'action
         BUG(noeud = EF_noeuds_cherche_numero(projet, i), );
         
