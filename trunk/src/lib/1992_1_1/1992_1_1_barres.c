@@ -84,7 +84,10 @@ G_MODULE_EXPORT int _1992_1_1_barres_ajout(Projet *projet, Type_Element type, un
  *           -3 en cas d'erreur due à une fonction interne
  */
 {
-    Beton_Barre   *element_nouveau = malloc(sizeof(Beton_Barre));
+#ifdef ENABLE_GTK
+    List_Gtk_EF_Barres  *ef_gtk = &projet->list_gtk.ef_barres;
+#endif
+    Beton_Barre *element_nouveau = malloc(sizeof(Beton_Barre));
     
     // Trivial
     BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
@@ -126,6 +129,30 @@ G_MODULE_EXPORT int _1992_1_1_barres_ajout(Projet *projet, Type_Element type, un
         element_nouveau->noeuds_intermediaires = NULL;
     
     projet->beton.barres = g_list_append(projet->beton.barres, element_nouveau);
+    
+#ifdef ENABLE_GTK
+    if (ef_gtk->builder_add != NULL)
+    {
+        char *nb_barres = g_strdup_printf("%d", element_nouveau->numero+1);
+        gtk_label_set_text(GTK_LABEL(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_numero_label2")), nb_barres);
+        free(nb_barres);
+    }
+    
+    if (ef_gtk->builder != NULL)
+    {
+        char        *tmp;
+        Beton_Section_Rectangulaire *p_section = (Beton_Section_Rectangulaire*)element_nouveau->section;
+        GtkTreeIter iter;
+        
+        tmp = g_strdup_printf("%d", (int)type);
+        gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(projet->list_gtk.ef_barres.liste_types), &iter, tmp);
+        free(tmp);
+        gtk_tree_model_get(GTK_TREE_MODEL(projet->list_gtk.ef_barres.liste_types), &iter, 0, &tmp, -1);
+        
+        gtk_tree_store_append(GTK_TREE_STORE(gtk_builder_get_object(ef_gtk->builder, "EF_barres_treestore")), &iter, NULL);
+        gtk_tree_store_set(GTK_TREE_STORE(gtk_builder_get_object(ef_gtk->builder, "EF_barres_treestore")), &iter, 0, element_nouveau->numero, 1, tmp, 2, p_section->nom, 3, element_nouveau->materiau->nom, 4, element_nouveau->noeud_debut->numero, 5, element_nouveau->noeud_fin->numero, 6, (element_nouveau->relachement == NULL ? gettext("Aucun") : element_nouveau->relachement->nom), -1);
+    }
+#endif
     
     return 0;
 }
