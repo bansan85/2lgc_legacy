@@ -90,7 +90,10 @@ G_MODULE_EXPORT void EF_gtk_barres_add_add_clicked(GtkButton *button __attribute
         return;
     
     if ((type != -1) && (section != -1) && (materiau != -1))
+    {
         BUG(_1992_1_1_barres_ajout(projet, (Type_Element)type, section, materiau, noeud_debut, noeud_fin, relachement, 0) == 0, );
+        m3d_rafraichit(projet);
+    }
     
     return;
 }
@@ -266,6 +269,9 @@ G_MODULE_EXPORT void EF_gtk_barres_edit_section(GtkCellRendererText *cell __attr
     BUG(section = _1992_1_1_sections_cherche_nom(projet, new_text), );
     barre->section = section;
     
+    m3d_barre(projet, barre);
+    m3d_rafraichit(projet);
+    
     gtk_tree_store_set(GTK_TREE_STORE(model), &iter, 2, new_text, -1);
     
     return;
@@ -403,6 +409,9 @@ G_MODULE_EXPORT void EF_gtk_barres_edit_noeud(GtkCellRendererText *cell __attrib
                 barre->noeud_debut = noeud;
             else
                 barre->noeud_fin = noeud;
+            
+            m3d_barre(projet, barre);
+            m3d_rafraichit(projet);
             
             // On modifie le tree-view-barre
             gtk_tree_store_set(GTK_TREE_STORE(model), &iter, column, conversion, -1);

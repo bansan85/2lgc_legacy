@@ -175,7 +175,10 @@ int main(int argc, char *argv[])
     BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, 0, 1, 0, 1, NULL, 9) == 0, -1);
     BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, 0, 1, 1, 2, NULL, 9) == 0, -1);
     BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, 0, 1, 2, 3, NULL, 9) == 0, -1);
-//    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, 0, 0, 1, 2, NULL, 0) == 0, -1);
+    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, 0, 1, 7, 15, NULL, 1) == 0, -1);
+    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, 0, 1, 31, 3, NULL, 1) == 0, -1);
+    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, 0, 1, 32, 2, NULL, 1) == 0, -1);
+    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, 0, 1, 31, 33, NULL, 1) == 0, -1);
     
     // Ajout de l'action ponctuelle
     GList   *tmp1, *tmp2;
@@ -202,14 +205,9 @@ int main(int argc, char *argv[])
     BUG(EF_calculs_resoud_charge(projet, 0) == 0, -1);
     BUG(_1990_action_affiche_resultats(projet, 0) == 0, -1);
     
-    // Création de la fenêtre principale
-    BUG(projet_init_graphique(projet) == 0, -1);
-//    g_signal_connect (pButton, "clicked", G_CALLBACK (_1990_gtk_groupes), projet);
-    
+    // Affichage de l'interface graphique
     BUG(m3d_camera_axe_x_z(projet) == 0, -1);
     BUG(m3d_genere_graphique(projet) == 0, -1);
-    
-    // Affichage de l'interface graphique
     gtk_widget_show_all(projet->list_gtk.comp.window);
     gtk_main();
     

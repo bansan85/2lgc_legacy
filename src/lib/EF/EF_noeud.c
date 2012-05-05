@@ -113,6 +113,7 @@ G_MODULE_EXPORT EF_Noeud* EF_noeuds_ajout_noeud_barre(Projet *projet, Beton_Barr
 {
     EF_Noeud        *noeud_nouveau = malloc(sizeof(EF_Noeud));
     EF_Noeud_Barre  *data;
+    GList           *liste;
     
     BUGMSG(projet, NULL, gettext("Paramètre incorrect\n"));
     BUGMSG(projet->ef_donnees.noeuds, NULL, gettext("Paramètre incorrect\n"));
@@ -142,6 +143,19 @@ G_MODULE_EXPORT EF_Noeud* EF_noeuds_ajout_noeud_barre(Projet *projet, Beton_Barr
         BUGMSG(projet->ef_donnees.noeuds_pos_complete = (unsigned int**)realloc(projet->ef_donnees.noeuds_pos_complete, sizeof(unsigned int*)*(noeud_nouveau->numero+1)), NULL, gettext("Erreur d'allocation mémoire.\n"));
         BUGMSG(projet->ef_donnees.noeuds_pos_complete[noeud_nouveau->numero] = (unsigned int*)malloc(6*sizeof(unsigned int)), NULL, gettext("Erreur d'allocation mémoire.\n"));
     }
+    
+    barre->discretisation_element++;
+    
+    liste = barre->noeuds_intermediaires;
+    while ((liste != NULL) && (((EF_Noeud_Barre*)liste->data)->position_relative_barre < position_relative_barre))
+        liste = g_list_next(liste);
+    
+    if (liste == NULL)
+        barre->noeuds_intermediaires = g_list_append(barre->noeuds_intermediaires, noeud_nouveau);
+    else
+        barre->noeuds_intermediaires = g_list_insert_before(barre->noeuds_intermediaires, liste, noeud_nouveau);
+    
+    BUGMSG(barre->info_EF = realloc(barre->info_EF, sizeof(Barre_Info_EF)*(barre->discretisation_element+1)), NULL, gettext("Erreur d'allocation mémoire.\n"));
     
     return noeud_nouveau;
 }

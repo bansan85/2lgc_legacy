@@ -31,6 +31,7 @@
 #include "EF_calculs.h"
 #include "EF_noeud.h"
 #include "EF_relachement.h"
+#include "common_m3d.hpp"
 
 G_MODULE_EXPORT int _1992_1_1_barres_init(Projet *projet)
 /* Description : Initialise la liste des éléments en béton
@@ -103,30 +104,24 @@ G_MODULE_EXPORT int _1992_1_1_barres_ajout(Projet *projet, Type_Element type, un
     
     element_nouveau->relachement = relachement;
     
-    element_nouveau->discretisation_element = discretisation_element;
+    element_nouveau->discretisation_element = 0;
     
-    BUGMSG(element_nouveau->info_EF = (Barre_Info_EF*)malloc(sizeof(Barre_Info_EF)*(discretisation_element+1)), -2, gettext("Erreur d'allocation mémoire.\n"));
+    element_nouveau->info_EF = NULL;
     
     element_nouveau->matrice_rotation = NULL;
     element_nouveau->matrice_rotation_transpose = NULL;
     
     element_nouveau->numero = g_list_length(projet->beton.barres);
     
+    element_nouveau->noeuds_intermediaires = NULL;
     if (discretisation_element != 0)
     {
         unsigned int    i;
         
-        element_nouveau->noeuds_intermediaires = NULL;
-        
         /* Création des noeuds intermédiaires */
         for (i=0;i<discretisation_element;i++)
-        {
             BUG(EF_noeuds_ajout_noeud_barre(projet, element_nouveau, (i+1.)/(discretisation_element+1.), NULL), -3);
-            element_nouveau->noeuds_intermediaires = g_list_append(element_nouveau->noeuds_intermediaires, g_list_last(projet->ef_donnees.noeuds)->data);
-        }
     }
-    else
-        element_nouveau->noeuds_intermediaires = NULL;
     
     projet->beton.barres = g_list_append(projet->beton.barres, element_nouveau);
     
@@ -152,6 +147,8 @@ G_MODULE_EXPORT int _1992_1_1_barres_ajout(Projet *projet, Type_Element type, un
         gtk_tree_store_append(GTK_TREE_STORE(gtk_builder_get_object(ef_gtk->builder, "EF_barres_treestore")), &iter, NULL);
         gtk_tree_store_set(GTK_TREE_STORE(gtk_builder_get_object(ef_gtk->builder, "EF_barres_treestore")), &iter, 0, element_nouveau->numero, 1, tmp, 2, p_section->nom, 3, element_nouveau->materiau->nom, 4, element_nouveau->noeud_debut->numero, 5, element_nouveau->noeud_fin->numero, 6, (element_nouveau->relachement == NULL ? gettext("Aucun") : element_nouveau->relachement->nom), -1);
     }
+    
+    m3d_barre(projet, element_nouveau);
 #endif
     
     return 0;
