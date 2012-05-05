@@ -124,7 +124,6 @@ G_MODULE_EXPORT void EF_gtk_noeud_edit_pos_abs(GtkCellRendererText *cell, gchar 
     unsigned int        i;
     char                *fake = (char*)malloc(sizeof(char)*(strlen(new_text)+1));
     double              conversion;
-    EF_Noeud            *noeud;
     gint                column = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cell), "column"));
     
     BUGMSG(projet, , gettext("Paramètre incorrect\n"));
@@ -143,120 +142,41 @@ G_MODULE_EXPORT void EF_gtk_noeud_edit_pos_abs(GtkCellRendererText *cell, gchar 
     // On vérifie si le texte contient bien un nombre flottant
     if (sscanf(new_text, "%lf%s", &conversion, fake) == 1)
     {
-        GList       *noeuds_todo = NULL, *noeuds_done = NULL;
-        SGlobalData *vue = (SGlobalData*)projet->list_gtk.m3d.data;
+        EF_Noeud            *noeud;
+        EF_Point    *point;
         
         // On modifie l'action
         BUG(noeud = EF_noeuds_cherche_numero(projet, i), );
+        point = (EF_Point *)noeud->data;
         
-        noeuds_todo = g_list_append(noeuds_todo, noeud);
-        
-        while (noeuds_todo != NULL)
+        switch (column)
         {
-            noeud = (EF_Noeud *)noeuds_todo->data;
-        
-            switch (noeud->type)
+            case 1:
             {
-                case NOEUD_LIBRE :
-                case NOEUD_BARRE :
-                {
-                    EF_Point    *position;
-                    char        *texte;
-                    CM3dObject  *objet;
-                    
-                    // On modifie la position seulement si c'est de type Noeud_libre car pour
-                    // rappel, cette fonction n'est appelé que pour les noeuds de type libre.
-                    if (noeud->type == NOEUD_LIBRE)
-                    {
-                        EF_Point    *point = (EF_Point *)noeud->data;
-                        switch (column)
-                        {
-                            case 1:
-                            {
-                                point->x = conversion;
-                                break;
-                            }
-                            case 2:
-                            {
-                                point->y = conversion;
-                                break;
-                            }
-                            case 3:
-                            {
-                                point->z = conversion;
-                                break;
-                            }
-                            default :
-                            {
-                                BUGMSG(NULL, , gettext("Paramètre incorrect\n"));
-                                break;
-                            }
-                        }
-                    }
-                    
-                    // On déplace le noeud
-                    BUG(position = EF_noeuds_renvoie_position(noeud), );
-                    texte = g_strdup_printf("noeud %d", noeud->numero);
-                    objet = vue->scene->get_object_by_name(texte);
-                    if (objet != NULL)
-                        objet->set_position(position->x, position->y, position->z);
-                    else
-                        m3d_noeud(texte, position, vue);
-                    
-                    if (projet->beton.barres != NULL)
-                    {
-                        GList   *list_parcours = projet->beton.barres;
-                        
-                        do
-                        {
-                            Beton_Barre *barre = (Beton_Barre *)list_parcours->data;
-                            
-                            if (((barre->noeud_debut) && (barre->noeud_debut->numero == i)) || ((barre->noeud_fin) && (barre->noeud_fin->numero == i)))
-                            {
-                                GList   *list_parcours2 = barre->noeuds_intermediaires;
-                                
-                                // On actualise la barre
-                                m3d_barre(projet, barre);
-                                
-                                while (list_parcours2 != NULL)
-                                {
-                                    if ((g_list_find(noeuds_done, list_parcours2->data) == NULL) && (g_list_find(noeuds_todo, list_parcours2->data) == NULL))
-                                        noeuds_todo = g_list_append(noeuds_todo, list_parcours2->data);
-                                    list_parcours2 = g_list_next(list_parcours2);
-                                }
-                                
-                            }
-                            
-                            list_parcours = g_list_next(list_parcours);
-                        } while (list_parcours != NULL);
-                    }
-                    
-                    free(texte);
-                    free(position);
-                    
-                    break;
-                }
-                default :
-                {
-                    BUGMSG(NULL, , gettext("Paramètre incorrect\n"));
-                    break;
-                }
+                point->x = conversion;
+                break;
             }
-            
-            noeuds_done = g_list_append(noeuds_done, noeud);
-            noeuds_todo = g_list_remove(noeuds_todo, noeud);
+            case 2:
+            {
+                point->y = conversion;
+                break;
+            }
+            case 3:
+            {
+                point->z = conversion;
+                break;
+            }
+            default :
+            {
+                BUGMSG(NULL, , gettext("Paramètre incorrect\n"));
+                break;
+            }
         }
+        
+        m3d_actualise_graphique_deplace_noeud(projet, noeud);
         
         // On modifie le tree-view-actions
         gtk_tree_store_set(gtk_noeud->tree_store_libre, &iter, column, conversion, -1);
-        
-        // On force l'actualisation de l'affichage
-        vue->scene->rendering(vue->camera);
-        gtk_widget_queue_draw(projet->list_gtk.m3d.drawing);
-        
-        
-        // On libère la mémoire
-        g_list_free(noeuds_done);
     }
     
     free(fake);

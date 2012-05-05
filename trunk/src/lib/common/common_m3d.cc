@@ -70,6 +70,8 @@ G_MODULE_EXPORT int m3d_init(Projet *projet)
     g_signal_connect(m3d->drawing, "draw", G_CALLBACK(m3d_draw), global_data);
     g_signal_connect(m3d->drawing, "configure-event", G_CALLBACK(m3d_configure_event), global_data);
     
+    BUG(projet_init_graphique(projet) == 0, -1);
+    
     return 0;
 }
 
@@ -246,6 +248,20 @@ G_MODULE_EXPORT void m3d_actualise_graphique_deplace_noeud(Projet *projet, EF_No
     // On force l'actualisation de l'affichage
     vue->scene->rendering(vue->camera);
     gtk_widget_queue_draw(projet->list_gtk.m3d.drawing);
+}
+
+
+G_MODULE_EXPORT int m3d_rafraichit(Projet *projet)
+{
+    SGlobalData *vue;
+    
+    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    vue = (SGlobalData*)projet->list_gtk.m3d.data;
+    // On force l'actualisation de l'affichage
+    vue->scene->rendering(vue->camera);
+    gtk_widget_queue_draw(projet->list_gtk.m3d.drawing);
+    
+    return 0;
 }
 
 
