@@ -24,10 +24,11 @@
 #include "common_erreurs.h"
 #include "common_projet.h"
 
+
 double _1990_coef_psi0_bat_eu(unsigned int type)
-/* Description : renvoie le coefficient psi0 indiqué par la norme européenne pour les batiments
- *                 FONCTION INTERNE. Utiliser _1990_coef_psi0_bat.
- * Paramètres : int type : type de l'action
+/* Description : renvoie le coefficient psi0 indiqué par la norme européenne pour les batiments.
+ *               FONCTION INTERNE. Utiliser _1990_coef_psi0_bat.
+ * Paramètres : unsigned int type : type de l'action
  * Valeur renvoyée :
  *   Succès : valeur en double du coefficient psi0.
  *            0.0 : Permanente
@@ -47,7 +48,7 @@ double _1990_coef_psi0_bat_eu(unsigned int type)
  *            0.6 : Température (hors incendie)
  *            0.0 : Accidentelle
  *            0.0 : Sismique
- *   Échec : valeur en double -1. si le type n'existe pas
+ *   Échec : valeur en double -1. si le type n'existe pas.
  */
 {
     // Trivial
@@ -70,14 +71,15 @@ double _1990_coef_psi0_bat_eu(unsigned int type)
         case 14 : { return 0.6; break; }
         case 15 : { return 0.0; break; }
         case 16 : { return 0.0; break; }
-        default : { BUGMSG(0, -1., gettext("Type %d inconnu.\n"), type); break; }
+        default : { BUGMSG(0, -1., gettext("Type d'action %u inconnu.\n"), type); break; }
     }
 }
 
+
 double _1990_coef_psi1_bat_eu(unsigned int type)
 /* Description : renvoie le coefficient psi1 indiqué par la norme européenne pour les batiments
- *                 FONCTION INTERNE. Utiliser _1990_coef_psi1_bat.
- * Paramètres : int type : type de l'action
+ *               FONCTION INTERNE. Utiliser _1990_coef_psi1_bat.
+ * Paramètres : unsigned int type : type de l'action.
  * Valeur renvoyée :
  *   Succès : valeur en double du coefficient psi1.
  *            0.0 : Permanente
@@ -97,7 +99,7 @@ double _1990_coef_psi1_bat_eu(unsigned int type)
  *            0.5 : Température (hors incendie)
  *            0.0 : Accidentelle
  *            0.0 : Sismique
- *   Échec : valeur en double -1. si le type n'existe pas
+ *   Échec : valeur en double -1. si le type n'existe pas.
  */
 {
     // Trivial
@@ -120,14 +122,15 @@ double _1990_coef_psi1_bat_eu(unsigned int type)
         case 14 : { return 0.5; break; }
         case 15 : { return 0.0; break; }
         case 16 : { return 0.0; break; }
-        default : { BUGMSG(0, -1., gettext("Type %d inconnu.\n"), type); break; }
+        default : { BUGMSG(0, -1., gettext("Type d'action %u inconnu.\n"), type); break; }
     }
 }
 
+
 double _1990_coef_psi2_bat_eu(unsigned int type)
 /* Description : renvoie le coefficient psi2 indiqué par la norme européenne pour les batiments
- *                 FONCTION INTERNE. Utiliser _1990_coef_psi2_bat.
- * Paramètres : int type : type de l'action
+ *               FONCTION INTERNE. Utiliser _1990_coef_psi2_bat.
+ * Paramètres : unsigned int type : type de l'action.
  * Valeur renvoyée :
  *   Succès : valeur en double du coefficient psi2.
  *            0.0 : Permanente
@@ -147,7 +150,7 @@ double _1990_coef_psi2_bat_eu(unsigned int type)
  *            0.0 : Température (hors incendie)
  *            0.0 : Accidentelle
  *            0.0 : Sismique
- *   Échec : valeur en double -1. si le type n'existe pas
+ *   Échec : valeur en double -1. si le type n'existe pas.
  */
 {
     // Trivial
@@ -170,14 +173,15 @@ double _1990_coef_psi2_bat_eu(unsigned int type)
         case 14 : { return 0.0; break; }
         case 15 : { return 0.0; break; }
         case 16 : { return 0.0; break; }
-        default : { BUGMSG(0, -1., gettext("Type %d inconnu.\n"), type); break; }
+        default : { BUGMSG(0, -1., gettext("Type d'action %u inconnu.\n"), type); break; }
     }
 }
 
+
 double _1990_coef_psi0_bat_fr(unsigned int type)
 /* Description : renvoie le coefficient psi0 indiqué par la norme française pour les batiments.
- *                 FONCTION INTERNE. Utiliser _1990_coef_psi0_bat.
- * Paramètres : int type : type de l'action
+ *               FONCTION INTERNE. Utiliser _1990_coef_psi0_bat.
+ * Paramètres : unsigned int type : type de l'action.
  * Valeur renvoyée :
  *   Succès : valeur en double du coefficient psi0.
  *            0.0 : Permanente
@@ -202,7 +206,7 @@ double _1990_coef_psi0_bat_fr(unsigned int type)
  *            0.0 : Accidentelle
  *            0.0 : Sismique
  *            0.0 : Eaux souterraines
- *   Échec : valeur en double -1. si le type n'existe pas
+ *   Échec : valeur en double -1. si le type n'existe pas.
  */
 {
     // Trivial
@@ -230,14 +234,15 @@ double _1990_coef_psi0_bat_fr(unsigned int type)
         case 19 : { return 0.0; break; }
         case 20 : { return 0.0; break; }
         case 21 : { return 0.0; break; }
-        default : { BUGMSG(0, -1., gettext("Type %d inconnu.\n"), type); break; }
+        default : { BUGMSG(0, -1., gettext("Type d'action %u inconnu.\n"), type); break; }
     }
 }
 
+
 double _1990_coef_psi1_bat_fr(unsigned int type)
 /* Description : renvoie le coefficient psi1 indiqué par la norme française pour les batiments.
- *                 FONCTION INTERNE. Utiliser _1990_coef_psi1_bat.
- * Paramètres : int type : type de l'action
+ *               FONCTION INTERNE. Utiliser _1990_coef_psi1_bat.
+ * Paramètres : unsigned int type : type de l'action.
  * Valeur renvoyée :
  *   Succès : valeur en double du coefficient psi1.
  *            0.0 : Permanente
@@ -262,7 +267,7 @@ double _1990_coef_psi1_bat_fr(unsigned int type)
  *            0.0 : Accidentelle
  *            0.0 : Sismique
  *            0.0 : Eaux souterraines
- *   Échec : valeur en double -1. si le type n'existe pas
+ *   Échec : valeur en double -1. si le type n'existe pas.
  */
 {
     // Trivial
@@ -290,14 +295,15 @@ double _1990_coef_psi1_bat_fr(unsigned int type)
         case 19 : { return 0.0; break; }
         case 20 : { return 0.0; break; }
         case 21 : { return 0.0; break; }
-        default : { BUGMSG(0, -1., gettext("Type %d inconnu.\n"), type); break; }
+        default : { BUGMSG(0, -1., gettext("Type d'action %u inconnu.\n"), type); break; }
     }
 }
 
+
 double _1990_coef_psi2_bat_fr(unsigned int type)
 /* Description : renvoie le coefficient psi2 indiqué par la norme française pour les batiments.
- *                 FONCTION INTERNE. Utiliser _1990_coef_psi2_bat.
- * Paramètres : int type : type de l'action
+ *               FONCTION INTERNE. Utiliser _1990_coef_psi2_bat.
+ * Paramètres : unsigned int type : type de l'action.
  * Valeur renvoyée :
  *   Succès : valeur en double du coefficient psi2
  *            0.0 : Permanente
@@ -322,7 +328,7 @@ double _1990_coef_psi2_bat_fr(unsigned int type)
  *            0.0 : Accidentelle
  *            0.0 : Sismique
  *            0.0 : Eaux souterraines
- *   Échec : valeur en double -1. si le type n'existe pas
+ *   Échec : valeur en double -1. si le type n'existe pas.
  */
 {
     // Trivial
@@ -350,18 +356,19 @@ double _1990_coef_psi2_bat_fr(unsigned int type)
         case 19 : { return 0.0; break; }
         case 20 : { return 0.0; break; }
         case 21 : { return 0.0; break; }
-        default : { BUGMSG(0, -1., gettext("Type %d inconnu.\n"), type); break; }
+        default : { BUGMSG(0, -1., gettext("Type d'action %u inconnu.\n"), type); break; }
     }
 }
 
+
 G_MODULE_EXPORT double _1990_coef_psi0_bat(unsigned int type, Type_Pays pays)
 /* Description : renvoie le coefficient psi0 en fonction de la norme du pays spécifié pour les
- *                 batiments.
- * Paramètres : int type : type de l'action
- *            : int pays : référence du pays
+ *               batiments.
+ * Paramètres : unsigned int type : type de l'action,
+ *            : Type_Pays pays : référence du pays.
  * Valeur renvoyée :
- *   Succès : cf les fonctions _1990_coef_psi0_bat_PAYS
- *   Échec : valeur en double -1. si le pays ou le type n'existe pas
+ *   Succès : cf les fonctions _1990_coef_psi0_bat_PAYS.
+ *   Échec : valeur en double -1. si le pays ou le type n'existe pas.
  */
 {
     // Trivial
@@ -373,14 +380,15 @@ G_MODULE_EXPORT double _1990_coef_psi0_bat(unsigned int type, Type_Pays pays)
     }
 }
 
+
 G_MODULE_EXPORT double _1990_coef_psi1_bat(unsigned int type, Type_Pays pays)
 /* Description : renvoie le coefficient psi1 en fonction de la norme du pays spécifié pour les
- *                 batiments.
- * Paramètres : int type : type de l'action
- *            : int pays : référence du pays
+ *               batiments.
+ * Paramètres : unsigned int type : type de l'action,
+ *            : Type_Pays pays : référence du pays.
  * Valeur renvoyée :
- *   Succès : cf les fonctions _1990_coef_psi1_bat_PAYS
- *   Échec : valeur en double -1. si le pays ou le type n'existe pas
+ *   Succès : cf les fonctions _1990_coef_psi1_bat_PAYS.
+ *   Échec : valeur en double -1. si le pays ou le type n'existe pas.
  */
 {
     // Trivial
@@ -392,14 +400,15 @@ G_MODULE_EXPORT double _1990_coef_psi1_bat(unsigned int type, Type_Pays pays)
     }
 }
 
+
 G_MODULE_EXPORT double _1990_coef_psi2_bat(unsigned int type, Type_Pays pays)
 /* Description : renvoie le coefficient psi2 en fonction de la norme du pays spécifié pour les
- *                 batiments.
- * Paramètres : int type : type de l'action
- *            : int pays : référence du pays
+ *               batiments.
+ * Paramètres : unsigned int type : type de l'action,
+ *            : Type_Pays pays : référence du pays.
  * Valeur renvoyée :
- *   Succès : cf les fonctions _1990_coef_psi2_bat_PAYS
- *   Échec : valeur en double -1. si le pays ou le type n'existe pas
+ *   Succès : cf les fonctions _1990_coef_psi2_bat_PAYS.
+ *   Échec : valeur en double -1. si le pays ou le type n'existe pas.
  */
 {
     // Trivial

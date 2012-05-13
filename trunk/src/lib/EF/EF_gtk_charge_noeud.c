@@ -33,6 +33,7 @@
 #include "common_maths.h"
 #include "EF_noeud.h"
 #include "EF_charge_noeud.h"
+#include "EF_charge.h"
 #include "1990_actions.h"
 #include "1990_gtk_actions.h"
 #include "common_selection.h"
@@ -255,7 +256,7 @@ void EF_gtk_charge_noeud_editer_clicked(GtkButton *button __attribute__((unused)
     BUG(EF_gtk_charge_noeud_recupere_donnees(projet, &num_action, &noeuds, &fx, &fy, &fz, &mx, &my, &mz, &texte) == TRUE, );
     
     // Création de la nouvelle charge ponctuelle au noeud
-    BUG(charge_noeud = _1990_action_cherche_charge(projet, ef_gtk->action, ef_gtk->charge), );
+    BUG(charge_noeud = EF_charge_cherche(projet, ef_gtk->action, ef_gtk->charge), );
     free(charge_noeud->description);
     charge_noeud->description = texte;
     charge_noeud->fx = fx;
@@ -267,7 +268,7 @@ void EF_gtk_charge_noeud_editer_clicked(GtkButton *button __attribute__((unused)
     g_list_free(charge_noeud->noeuds);
     charge_noeud->noeuds = noeuds;
     if (num_action != ef_gtk->action)
-        BUG(_1990_action_deplace_charge(projet, ef_gtk->action, ef_gtk->charge, num_action) == 0, );
+        BUG(EF_charge_deplace(projet, ef_gtk->action, ef_gtk->charge, num_action) == 0, );
     else
         BUG(EF_gtk_charge_noeud_ajout_affichage(charge_noeud, projet, FALSE) == 0, );
     
@@ -343,11 +344,10 @@ G_MODULE_EXPORT int EF_gtk_charge_noeud(Projet *projet, unsigned int action_defa
         ef_gtk->action = action_defaut;
         ef_gtk->charge = charge;
         gtk_window_set_title(GTK_WINDOW(ef_gtk->window), gettext("Modification d'une charge au noeud"));
-        BUG(charge_noeud = _1990_action_cherche_charge(projet, action_defaut, charge), -1);
+        BUG(charge_noeud = EF_charge_cherche(projet, action_defaut, charge), -1);
     }
     
-    _1990_gtk_actions_genere_liste(projet);
-    gtk_combo_box_set_model(GTK_COMBO_BOX(ef_gtk->combobox_charge), GTK_TREE_MODEL(projet->list_gtk._1990_actions.list_actions_pour_combobox));
+    gtk_combo_box_set_model(GTK_COMBO_BOX(ef_gtk->combobox_charge), GTK_TREE_MODEL(projet->list_gtk._1990_actions.list_actions));
     gtk_combo_box_set_active(GTK_COMBO_BOX(ef_gtk->combobox_charge), (gint)action_defaut);
     
     if (charge_noeud != NULL)

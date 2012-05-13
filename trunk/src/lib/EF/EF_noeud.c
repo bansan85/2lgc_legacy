@@ -324,7 +324,7 @@ G_MODULE_EXPORT EF_Noeud* EF_noeuds_cherche_numero(Projet *projet, unsigned int 
     }
     while (list_parcours != NULL);
     
-    BUGMSG(0, NULL, gettext("Noeud n°%d introuvable.\n"), numero);
+    BUGMSG(0, NULL, gettext("Noeud n°%u introuvable.\n"), numero);
 }
 
 

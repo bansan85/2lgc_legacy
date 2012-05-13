@@ -30,16 +30,15 @@
 #include "1990_combinaisons.h"
 
 G_MODULE_EXPORT int _1990_groupe_init(Projet *projet)
-/* Description : Initialise la liste des groupes
- * Paramètres : Projet *projet : variable projet
+/* Description : Initialise la liste des groupes.
+ * Paramètres : Projet *projet : variable projet.
  * Valeur renvoyée :
  *   Succès : 0 
- *   Échec : -1 en cas de paramètres invalides :
- *             (projet == NULL)
- *           -2 en cas d'erreur d'allocation mémoire
+ *   Échec : -1 :
+ *             projet == NULL,
  */
 {
-    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, -1, gettext("Paramètre %s incorrect.\n"), "projet");
     
     // Trivial
     projet->niveaux_groupes = NULL;
@@ -50,23 +49,22 @@ G_MODULE_EXPORT int _1990_groupe_init(Projet *projet)
 
 G_MODULE_EXPORT int _1990_groupe_ajout_niveau(Projet *projet)
 /* Description : Ajoute un niveau au projet en lui attribuant le numéro suivant le dernier
- *                 niveau existant
- * Paramètres : Projet *projet : variable projet
+ *                 niveau existant.
+ * Paramètres : Projet *projet : variable projet.
  * Valeur renvoyée :
  *   Succès : 0
  *   Échec : -1 en cas de paramètres invalides :
- *             (projet == NULL) ou
- *             (projet->niveaux_groupes == NULL)
- *           -2 en cas d'erreur d'allocation mémoire
+ *             projet == NULL,
+ *             erreur d'allocation mémoire.
  */
 {
     Niveau_Groupe   *niveau_nouveau = malloc(sizeof(Niveau_Groupe));
     
     // Trivial
-    BUGMSG(niveau_nouveau, -2, gettext("Erreur d'allocation mémoire.\n"));
-    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(niveau_nouveau, -1, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(projet, -1, gettext("Paramètre %s incorrect.\n"), "projet");
     
-    niveau_nouveau->niveau = g_list_length(projet->niveaux_groupes);
+    niveau_nouveau->numero = g_list_length(projet->niveaux_groupes);
     niveau_nouveau->groupes = NULL;
     
     projet->niveaux_groupes = g_list_append(projet->niveaux_groupes, niveau_nouveau);
@@ -76,25 +74,24 @@ G_MODULE_EXPORT int _1990_groupe_ajout_niveau(Projet *projet)
 
 
 G_MODULE_EXPORT Element *_1990_groupe_positionne_element(Groupe *groupe, unsigned int numero)
-/* Description : Positionne l'élément courant d'un groupe en fonction de son numéro
- * Paramètres : Groupe *groupe : groupe à analyser
- *            : int numero : numéro de l'élément à trouver
+/* Description : Positionne l'élément courant d'un groupe en fonction de son numéro.
+ * Paramètres : Groupe *groupe : groupe à analyser,
+ *            : unsigned int numero : numéro de l'élément à trouver.
  * Valeur renvoyée :
  *   Succès : 0
- *   Échec : -1 en cas de paramètres invalides :
- *             (groupe == NULL) ou
- *             (list_size(groupe->elements) == 0) ou
+ *   Échec : NULL :
+ *             groupe == NULL,
+ *             groupe->elements == NULL,
  *             élément introuvable.
  */
 {
     GList   *list_parcours;
     
-    BUGMSG(groupe, NULL, gettext("Paramètre incorrect\n"));
-    BUGMSG(groupe->elements, NULL, gettext("Paramètre incorrect\n"));
+    BUGMSG(groupe, NULL, gettext("Paramètre %s incorrect.\n"), "groupe");
     
     // Trivial
     list_parcours = groupe->elements;
-    do
+    while (list_parcours != NULL)
     {
         Element     *element_en_cours = list_parcours->data;
         
@@ -103,32 +100,29 @@ G_MODULE_EXPORT Element *_1990_groupe_positionne_element(Groupe *groupe, unsigne
         
         list_parcours = g_list_next(list_parcours);
     }
-    while (list_parcours != NULL);
     
-    BUGMSG(0, NULL, gettext("Élément %d introuvable.\n"), numero);
+    BUGMSG(0, NULL, gettext("Élément %u du groupe %u introuvable.\n"), numero, groupe->numero);
 }
 
 
 G_MODULE_EXPORT Groupe *_1990_groupe_positionne_groupe(Niveau_Groupe *niveau, unsigned int numero)
-/* Description : Renvoie le groupe d'un niveau en fonction de son numéro
- * Paramètres : Niveau_Groupe *niveau : niveau à analyser
- *            : int numero : numéro du groupe à trouver
+/* Description : Renvoie le groupe d'un niveau en fonction de son numéro.
+ * Paramètres : Niveau_Groupe *niveau : niveau à analyser,
+ *            : unsigned int numero : numéro du groupe à trouver.
  * Valeur renvoyée :
- *   Succès : pointeur vers le groupe
- *   Échec : NULL en cas de paramètres invalides :
- *             (niveau == NULL) ou
- *             (niveau->groupes == NULL) ou
+ *   Succès : pointeur vers le groupe.
+ *   Échec : NULL :
+ *             niveau == NULL,
  *             groupe introuvable.
  */
 {
     GList   *list_parcours;
     
-    BUGMSG(niveau, NULL, gettext("Paramètre incorrect\n"));
-    BUGMSG(niveau->groupes, NULL, gettext("Paramètre incorrect\n"));
+    BUGMSG(niveau, NULL, gettext("Paramètre %s incorrect.\n"), "niveau");
     
     // Trivial
     list_parcours = niveau->groupes;
-    do
+    while (list_parcours != NULL)
     {
         Groupe *groupe = list_parcours->data;
         if (groupe->numero == numero)
@@ -136,67 +130,61 @@ G_MODULE_EXPORT Groupe *_1990_groupe_positionne_groupe(Niveau_Groupe *niveau, un
          
         list_parcours = g_list_next(list_parcours);
     }
-    while (list_parcours != NULL);
     
-    BUGMSG(0, NULL, gettext("Élément %d introuvable.\n"), numero);
+    BUGMSG(0, NULL, gettext("Groupe %u du niveau %u introuvable.\n"), numero, niveau->numero);
 }
 
 
 G_MODULE_EXPORT Niveau_Groupe *_1990_groupe_positionne_niveau(Projet *projet, unsigned int numero)
-/* Description : Positionne le niveau courant en fonction de son numéro
- * Paramètres : Projet *projet : la variable projet
- *            : int numero : numéro du groupe à trouver
+/* Description : Positionne le niveau courant en fonction de son numéro.
+ * Paramètres : Projet *projet : la variable projet,
+ *            : unsigned int numero : numéro du groupe à trouver.
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : -1 en cas de paramètres invalides :
- *             (projet == NULL) ou
- *             (projet->niveaux_groupes == NULL) ou
+ *   Succès : 0.
+ *   Échec : -1 :
+ *             projet == NULL,
  *             niveau introuvable.
  */
 {
     GList           *list_parcours;
     Niveau_Groupe   *niveau;
     
-    BUGMSG(projet, NULL, gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->niveaux_groupes, NULL, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
     
     // Trivial
     list_parcours = projet->niveaux_groupes;
-    do
+    while (list_parcours != NULL)
     {
         niveau = list_parcours->data;
-        if (niveau->niveau == numero)
+        if (niveau->numero == numero)
             return niveau;
         
         list_parcours = g_list_next(list_parcours);
     }
-    while (list_parcours != NULL);
     
-    BUGMSG(0, NULL, gettext("Niveau %d introuvable.\n"), numero);
+    BUGMSG(0, NULL, gettext("Niveau de groupes %u introuvable.\n"), numero);
 }
 
 
 G_MODULE_EXPORT Groupe *_1990_groupe_ajout_groupe(Projet *projet, unsigned int niveau,
   Type_Groupe_Combinaison type_combinaison, const char* nom)
 /* Description : Ajoute un groupe au niveau choisi avec le type de combinaison spécifié.
- * Paramètres : Projet *projet : la variable projet
- *            : int niveau : le niveau où le groupe doit être inséré
- *            : Type_Groupe_Combinaison type_combinaison : combinaison du nouveau groupe
+ * Paramètres : Projet *projet : la variable projet,
+ *            : unsigned int niveau : le niveau où le groupe doit être inséré,
+ *            : Type_Groupe_Combinaison type_combinaison : combinaison du nouveau groupe.
+ *            : const char* nom : nom du groupe.
  * Valeur renvoyée :
  *   Succès : Pointeur vers le nouveau groupe.
- *   Échec : NULL en cas de paramètres invalides :
- *             (projet == NULL) ou
- *             (projet->niveaux_groupes == NULL) ou
- *             (list_size(projet->niveaux_groupes) == 0)
- *           NULL en cas d'erreur d'allocation mémoire
- *           NULL en cas d'erreur due à une fonction interne
+ *   Échec : NULL :
+ *             projet == NULL,
+ *             erreur d'allocation mémoire,
+ *             _1990_groupe_positionne_niveau.
  */
 {
     Groupe          *groupe_nouveau = malloc(sizeof(Groupe));
     Niveau_Groupe   *niveau_groupe;
     
-    BUGMSG(projet, NULL, gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->niveaux_groupes, NULL, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(groupe_nouveau, NULL, gettext("Erreur d'allocation mémoire.\n"));
     
     // Trivial
@@ -219,28 +207,30 @@ G_MODULE_EXPORT Groupe *_1990_groupe_ajout_groupe(Projet *projet, unsigned int n
 }
 
 
-G_MODULE_EXPORT int _1990_groupe_ajout_element(Projet *projet, unsigned int niveau, unsigned int groupe_n,
-  unsigned int num_element)
+G_MODULE_EXPORT int _1990_groupe_ajout_element(Projet *projet, unsigned int niveau,
+  unsigned int groupe_n, unsigned int num_element)
 /* Description : Ajoute l'élément 'num_element' au groupe 'groupe_n' du niveau 'niveau'.
- *                 L'élément appartient au niveau directement inférieur à 'niveau' et possède
- *                   le numéro 'num_element'.
- *                 Ainsi si 'niveau' est égal à 0, 'num_element' fait référence à une action
- *                   de projet->actions.
- *                 Si 'niveau' est supérieur à 0, 'num_element' fait référence à une groupe du
- *                   niveau 'niveau'-1
- *                 Le dernier niveau ne doit contenir qu'un seul groupe
- * Paramètres : Projet *projet : la variable projet
- *            : unsigned int niveau : le niveau où le groupe doit être inséré.
- *            : int groupe_n : numéro du groupe où ajouter l'élément.
- *            : int num_element : numéro de l'élément à ajouter.
+ *               L'élément appartient au niveau directement inférieur à 'niveau' et possède le
+ *               numéro 'num_element'.
+ *               Ainsi si 'niveau' est égal à 0, 'num_element' fait référence à une action de
+ *               projet->actions.
+ *               Si 'niveau' est supérieur à 0, 'num_element' fait référence à une groupe du
+ *               niveau 'niveau'-1.
+ *               Le dernier niveau ne doit contenir qu'un seul groupe.
+ * Paramètres : Projet *projet : la variable projet,
+ *            : unsigned int niveau : le niveau où le groupe doit être inséré,
+ *            : unsigned int groupe_n : numéro du groupe où ajouter l'élément,
+ *            : unsigned int num_element : numéro de l'élément à ajouter.
  * Valeur renvoyée :
  *   Succès : 0
- *   Échec : -1 en cas de paramètres invalides :
- *             (projet == NULL) ou
- *             (projet->niveaux_groupes == NULL) ou
- *             (list_size(projet->niveaux_groupes)-1 < niveau)
- *           -2 en cas d'erreur d'allocation mémoire
- *           -3 en cas d'erreur due à une fonction interne
+ *   Échec : -1 :
+ *             projet == NULL,
+ *             projet->niveaux_groupes == NULL,
+ *             si l'élément num_element, est déjà présentant dans le groupe groupe_n.
+ *             erreur d'allocation mémoire,
+ *             _1990_action_cherche_numero,
+ *             _1990_groupe_positionne_niveau,
+ *             _1990_groupe_positionne_groupe.
  */
 {
     Niveau_Groupe   *niveau_groupe;
@@ -248,9 +238,8 @@ G_MODULE_EXPORT int _1990_groupe_ajout_element(Projet *projet, unsigned int nive
     Element         *element;
     Element         *element_nouveau = malloc(sizeof(Element));
     
-    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->niveaux_groupes, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(g_list_length(projet->niveaux_groupes)-1 >= niveau, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, -1, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet->niveaux_groupes, -1, gettext("Le projet ne possède pas de niveaux de groupes permettant de regrouper plusieurs groupes d'actions.\n"));
     BUGMSG(element_nouveau, -2, gettext("Erreur d'allocation mémoire.\n"));
     
     // Trivial
@@ -259,18 +248,18 @@ G_MODULE_EXPORT int _1990_groupe_ajout_element(Projet *projet, unsigned int nive
     if (niveau == 0)
     {
         // On vérifie si l'action num_element existe.
-        BUG(_1990_action_cherche_numero(projet, num_element), -3);
+        BUG(_1990_action_cherche_numero(projet, num_element), -1);
         niveau_groupe = projet->niveaux_groupes->data;
     }
     else
     {
         // On vérifie si le groupe du niveau n-1 existe;
-        BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, niveau-1), -3);
-        BUG(_1990_groupe_positionne_groupe(niveau_groupe, num_element), -3);
-        BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, niveau), -3);
+        BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, niveau-1), -1);
+        BUG(_1990_groupe_positionne_groupe(niveau_groupe, num_element), -1);
+        BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, niveau), -1);
     }
     
-    BUG(groupe = _1990_groupe_positionne_groupe(niveau_groupe, groupe_n), -3);
+    BUG(groupe = _1990_groupe_positionne_groupe(niveau_groupe, groupe_n), -1);
     element_nouveau->numero = num_element;
     #ifdef ENABLE_GTK
     element_nouveau->Iter_expand = 1;
@@ -290,7 +279,12 @@ G_MODULE_EXPORT int _1990_groupe_ajout_element(Projet *projet, unsigned int nive
         do
         {
             element = list_parcours->data;
-            BUGMSG(element->numero != num_element, -1, "le numéro %d est déjà présent.\n", num_element);
+            if (element->numero == num_element)
+            {
+                free(element_nouveau);
+                printf(gettext("Le numéro %u est déjà présent dans le groupe %u du niveau %u.\n"), num_element, groupe_n, niveau);
+                return -1;
+            }
             if (element->numero > num_element)
             {
                 groupe->elements = g_list_insert_before(groupe->elements, list_parcours, element_nouveau);
@@ -311,132 +305,120 @@ G_MODULE_EXPORT int _1990_groupe_ajout_element(Projet *projet, unsigned int nive
 
 G_MODULE_EXPORT int _1990_groupe_affiche_tout(Projet *projet)
 /* Description : Affiche tous les groupes y compris les combinaisons temporaires de tous les
- *                 niveaux. La valeur entre parenthèses 0 ou 1 représente si l'action est
- *                 prédominante (1) ou pas (0).
- * Paramètres : Projet *projet : la variable projet
+ *               niveaux. La valeur entre parenthèses 0 ou 1 représente si l'action est
+ *               prédominante (1) ou pas (0).
+ * Paramètres : Projet *projet : la variable projet/
  * Valeur renvoyée :
  *   Succès : 0
- *   Échec : -1 en cas de paramètres invalides :
- *             (projet != NULL) ou
- *             (projet->niveaux_groupes != NULL) ou
- *             (list_size(projet->niveaux_groupes) != 0)
+ *   Échec : -1 :
+ *             projet != NULL.
  */
 {
     GList   *list_parcours;
-    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->niveaux_groupes, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, -1, gettext("Paramètre %s incorrect.\n"), "projet");
     
     // Trivial
     list_parcours = projet->niveaux_groupes;
-    do
+    while (list_parcours != NULL)
     {
         Niveau_Groupe   *niveau = list_parcours->data;
+        GList           *list_parcours2 = niveau->groupes;
         
-        printf(gettext("niveau : %d\n"), niveau->niveau);
-        if (niveau->groupes != NULL)
+        printf(gettext("niveau : %d\n"), niveau->numero);
+        
+        while (list_parcours2 != NULL)
         {
-            GList   *list_parcours2 = niveau->groupes;
+            Groupe  *groupe = list_parcours2->data;
+            GList   *list_parcours3 = groupe->elements;
             
-            do
+            printf(gettext("\tgroupe : %d, combinaison : "), groupe->numero);
+            switch(groupe->type_combinaison)
             {
-                Groupe  *groupe = list_parcours2->data;
-                
-                printf(gettext("\tgroupe : %d, combinaison : "), groupe->numero);
-                switch(groupe->type_combinaison)
+                case GROUPE_COMBINAISON_OR :
                 {
-                    case GROUPE_COMBINAISON_OR :
-                    {
-                        printf("OR\n");
-                        break;
-                    }
-                    case GROUPE_COMBINAISON_XOR :
-                    {
-                        printf("XOR\n");
-                        break;
-                    }
-                    case GROUPE_COMBINAISON_AND :
-                    {
-                        printf("AND\n");
-                        break;
-                    }
-                    default :
-                    {
-                        BUGMSG(0, -1, gettext("Combinaison %d inconnue"), groupe->type_combinaison);
-                        break;
-                    }
+                    printf("OR\n");
+                    break;
                 }
-                if (projet->niveaux_groupes->data == list_parcours->data)
-                    printf(gettext("\t\tActions contenus dans ce groupe : "));
-                else
-                    printf(gettext("\t\tGroupes du niveau %d contenus dans ce groupe : "), niveau->niveau-1);
-                
-                if (groupe->elements != NULL)
+                case GROUPE_COMBINAISON_XOR :
                 {
-                    GList   *list_parcours3 = groupe->elements;
-                    
-                    do
-                    {
-                        Element *element = list_parcours3->data;
-                        printf("%d ", element->numero);
-                        
-                        list_parcours3 = g_list_next(list_parcours3);
-                    }
-                    while (list_parcours3 != NULL);
+                    printf("XOR\n");
+                    break;
                 }
-                printf("\n");
-                printf(gettext("\t\tCombinaisons :\n"));
-                if (groupe->tmp_combinaison.combinaisons != NULL)
+                case GROUPE_COMBINAISON_AND :
                 {
-                    GList   *list_parcours3 = groupe->tmp_combinaison.combinaisons;
-                    
-                    do
-                    {
-                        Combinaison *combinaison = list_parcours3->data;
-                        printf("\t\t\t");
-                        if (combinaison->elements != NULL)
-                        {
-                            GList   *list_parcours4 = combinaison->elements;
-                            do
-                            {
-                                Combinaison_Element *comb_element = list_parcours4->data;
-                                Action          *action = (Action*)comb_element->action;
-                                
-                                printf("%u(%d) ", action->numero, comb_element->flags);
-                                
-                                list_parcours4 = g_list_next(list_parcours4);
-                            }
-                            while (list_parcours4 != NULL);
-                        }
-                        printf("\n");
-                        list_parcours3 = g_list_next(list_parcours3);
-                    }
-                    while (list_parcours3 != NULL);
+                    printf("AND\n");
+                    break;
                 }
-                list_parcours2 = g_list_next(list_parcours2);
+                default :
+                {
+                    BUGMSG(0, -1, gettext("Combinaison %d inconnue"), groupe->type_combinaison);
+                    break;
+                }
             }
-            while (list_parcours2 != NULL);
+            if (projet->niveaux_groupes->data == list_parcours->data)
+                printf(gettext("\t\tActions contenus dans ce groupe : "));
+            else
+                printf(gettext("\t\tGroupes du niveau %d contenus dans ce groupe : "), niveau->numero-1);
+            
+            while (list_parcours3 != NULL)
+            {
+                Element *element = list_parcours3->data;
+                printf("%d ", element->numero);
+                
+                list_parcours3 = g_list_next(list_parcours3);
+            }
+            printf("\n");
+            printf(gettext("\t\tCombinaisons :\n"));
+            if (groupe->tmp_combinaison.combinaisons != NULL)
+            {
+                list_parcours3 = groupe->tmp_combinaison.combinaisons;
+                
+                do
+                {
+                    Combinaison *combinaison = list_parcours3->data;
+                    printf("\t\t\t");
+                    if (combinaison->elements != NULL)
+                    {
+                        GList   *list_parcours4 = combinaison->elements;
+                        do
+                        {
+                            Combinaison_Element *comb_element = list_parcours4->data;
+                            Action          *action = (Action*)comb_element->action;
+                            
+                            printf("%u(%d) ", action->numero, comb_element->flags);
+                            
+                            list_parcours4 = g_list_next(list_parcours4);
+                        }
+                        while (list_parcours4 != NULL);
+                    }
+                    printf("\n");
+                    list_parcours3 = g_list_next(list_parcours3);
+                }
+                while (list_parcours3 != NULL);
+            }
+            list_parcours2 = g_list_next(list_parcours2);
         }
         list_parcours = g_list_next(list_parcours);
     }
-    while (list_parcours != NULL);
     
     return 0;
 }
 
 
-G_MODULE_EXPORT int _1990_groupe_free_element(Projet *projet, unsigned int niveau, unsigned int groupe, unsigned int element)
+G_MODULE_EXPORT int _1990_groupe_free_element(Projet *projet, unsigned int niveau,
+  unsigned int groupe, unsigned int element)
 /* Description : Libère l'élément désigné par les paramètres.
- * Paramètres : Projet *projet : variable projet
- *            : int niveau : le numéro du niveau contenant l'élément
- *            : int groupe : le numéro du groupe contenant l'élément
- *            : int element : le numéro de l'élément
+ * Paramètres : Projet *projet : variable projet,
+ *            : unsigned int niveau : le numéro du niveau contenant l'élément,
+ *            : unsigned int groupe : le numéro du groupe contenant l'élément,
+ *            : unsigned int element : le numéro de l'élément.
  * Valeur renvoyée :
  *   Succès : 0
- *   Échec : -1 en cas de paramètres invalides :
- *             (projet != NULL) ou
- *             (projet->niveaux_groupes != NULL) ou
- *             (list_size(projet->niveaux_groupes) != 0)
- *
+ *   Échec : -1 :
+ *             projet != NULL,
+ *             _1990_groupe_positionne_niveau,
+ *             _1990_groupe_positionne_groupe,
+ *             _1990_groupe_positionne_element.
  */
 {
     Niveau_Groupe   *niveau_groupe;
@@ -445,13 +427,10 @@ G_MODULE_EXPORT int _1990_groupe_free_element(Projet *projet, unsigned int nivea
     
     // Trivial
     
-    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->niveaux_groupes, -1, gettext("Paramètre incorrect\n"));
-    BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, niveau), -3);
-    BUGMSG(niveau_groupe->groupes, -1, gettext("Paramètre incorrect\n"));
-    BUG(groupe_en_cours = _1990_groupe_positionne_groupe(niveau_groupe, groupe), -3);
-    BUGMSG(groupe_en_cours->elements, -1, gettext("Paramètre incorrect\n"));
-    BUG(element_en_cours = _1990_groupe_positionne_element(groupe_en_cours, element), -3);
+    BUGMSG(projet, -1, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, niveau), -1);
+    BUG(groupe_en_cours = _1990_groupe_positionne_groupe(niveau_groupe, groupe), -1);
+    BUG(element_en_cours = _1990_groupe_positionne_element(groupe_en_cours, element), -1);
     groupe_en_cours->elements = g_list_remove(groupe_en_cours->elements, element_en_cours);
     
     return 0;
@@ -459,27 +438,28 @@ G_MODULE_EXPORT int _1990_groupe_free_element(Projet *projet, unsigned int nivea
 
 
 G_MODULE_EXPORT int _1990_groupe_free_niveau(Projet *projet, unsigned int niveau)
-/* Description : Libère le niveau en cours ainsi que tous les niveaux supérieurs
- * Paramètres : Projet *projet : la variable projet
- *            : numéro du niveau à libérer
+/* Description : Libère le niveau en cours ainsi que tous les niveaux supérieurs.
+ * Paramètres : Projet *projet : la variable projet,
+ *            : unsigned int niveau : numéro du niveau à libérer.
  * Valeur renvoyée :
  *   Succès : 0
- *   Échec : -1 en cas de paramètres invalides
+ *   Échec : -1 :
+ *             projet == NULL,
+ *             _1990_groupe_positionne_niveau.
  */
 {
     GList           *list_parcours;
     Niveau_Groupe   *niveau_groupe;
     
     // Trivial
-    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->niveaux_groupes, -1, gettext("Paramètre incorrect\n"));
-    BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, niveau), -3);
+    BUGMSG(projet, -1, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, niveau), -1);
     
     list_parcours = projet->niveaux_groupes;
     do
     {
         niveau_groupe = list_parcours->data;
-        if (niveau_groupe->niveau >= niveau)
+        if (niveau_groupe->numero >= niveau)
         {
             /* Il peut être possible d'utiliser la fonction _1990_groupe_free_groupe
              * mais cette dernier analyse également le niveau supérieur pour supprimer les 
@@ -526,23 +506,27 @@ G_MODULE_EXPORT int _1990_groupe_free_niveau(Projet *projet, unsigned int niveau
         else
             niveau_groupe = NULL;
     }
-    while ((projet->niveaux_groupes != NULL) && (list_parcours != NULL) && (niveau_groupe->niveau >= niveau));
+    while ((projet->niveaux_groupes != NULL) && (list_parcours != NULL) && (niveau_groupe->numero >= niveau));
     
     return 0;
 }
 
 
-G_MODULE_EXPORT int _1990_groupe_free_groupe(Projet *projet, unsigned int niveau, unsigned int groupe)
+G_MODULE_EXPORT int _1990_groupe_free_groupe(Projet *projet, unsigned int niveau,
+  unsigned int groupe)
 /* Description : Libère le groupe demandé. La suppression d'un groupe entraine la modification
- *                 du numéro (moins 1) des groupes supérieurs du même niveau et sa suppression
- *                 dans le nuveau supérieur (si existant) lorsqu'il est présent dans une
- *                 combinaison.
- * Paramètres : Projet *projet : la variable projet
- *            : int niveau : niveau contenant le groupe
- *            : int groupe : numéro du groupe à libérer
+ *               du numéro (moins 1) des groupes supérieurs du même niveau et sa suppression
+ *               dans le nuveau supérieur (si existant) lorsqu'il est présent dans une 
+ *               combinaison.
+ * Paramètres : Projet *projet : la variable projet,
+ *            : unsigned int niveau : niveau contenant le groupe,
+ *            : unsigned int groupe : numéro du groupe à libérer.
  * Valeur renvoyée :
  *   Succès : 0
- *   Échec : -1 en cas de paramètres invalides
+ *   Échec : -1 :
+ *             projet == NULL,
+ *             _1990_groupe_positionne_niveau,
+ *             _1990_groupe_positionne_groupe.
  */
 {
     Niveau_Groupe   *niveau_groupe;
@@ -550,10 +534,8 @@ G_MODULE_EXPORT int _1990_groupe_free_groupe(Projet *projet, unsigned int niveau
     GList           *list_parcours;
     
     // Trivial
-    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->niveaux_groupes, -1, gettext("Paramètre incorrect\n"));
-    BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, niveau), -3);
-    BUGMSG(niveau_groupe->groupes, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, -1, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, niveau), -1);
     BUG(groupe_curr = _1990_groupe_positionne_groupe(niveau_groupe, groupe), -1);
     
     free(groupe_curr->nom);
@@ -642,17 +624,20 @@ G_MODULE_EXPORT int _1990_groupe_free_groupe(Projet *projet, unsigned int niveau
 
 
 G_MODULE_EXPORT int _1990_groupe_free(Projet *projet)
-/* Description : Libère l'ensemble des groupes et niveaux
- * Paramètres : Projet *projet : la variable projet
- * Valeur renvoyée : Aucune
+/* Description : Libère l'ensemble des groupes et niveaux.
+ * Paramètres : Projet *projet : la variable projet.
+ * Valeur renvoyée :
+ *   Succès : 0
+ *   Échec : -1 :
+ *             projet == NULL,
+ *             _1990_groupe_free_niveau.
  */
 {
-    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->niveaux_groupes, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, -1, gettext("Paramètre %s incorrect.\n"), "projet");
     
     // Trivial
     /* On supprime tous les niveaux */
-    BUG(_1990_groupe_free_niveau(projet, 0) == 0, -3);
+    BUG(_1990_groupe_free_niveau(projet, 0) == 0, -1);
     
     /* Et on libère la liste */
     free(projet->niveaux_groupes);

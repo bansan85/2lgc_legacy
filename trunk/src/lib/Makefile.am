@@ -34,6 +34,7 @@ libeurocodes_la_SOURCES =	1990/1990_actions.c \
 							common/common_tooltip.c \
 							EF/EF_appuis.c \
 							EF/EF_calculs.c \
+							EF/EF_charge.c \
 							EF/EF_charge_barre_ponctuelle.c \
 							EF/EF_charge_barre_repartie_uniforme.c \
 							EF/EF_charge_noeud.c \
@@ -72,6 +73,7 @@ libeurocodes_la_HEADERS =	1990/1990_actions.h \
 							common/common_tooltip.h \
 							EF/EF_appuis.h \
 							EF/EF_calculs.h \
+							EF/EF_charge.h \
 							EF/EF_charge_barre_ponctuelle.h \
 							EF/EF_charge_barre_repartie_uniforme.h \
 							EF/EF_charge_noeud.h \

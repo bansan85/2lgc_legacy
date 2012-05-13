@@ -52,7 +52,7 @@
         <property name="default-height">600</property>
         <property name="default-width">800</property>
         <property name="window-position">GTK_WIN_POS_CENTER</property>
-        <signal name="key-press-event" handler="_1990_gtk_window_key_press"/>
+        <signal name="key-press-event" handler="_1990_gtk_actions_window_key_press"/>
         <signal name="destroy" handler="_1990_gtk_actions_window_destroy"/>
         <child>
             <object class="GtkGrid" id="1990_actions_grille_principale">
@@ -93,8 +93,8 @@
                                                     <object class="GtkTreeView" id="1990_actions_treeview_action">
                                                         <property name="visible">True</property>
                                                         <property name="model">1990_actions_tree_store_action</property>
-                                                        <signal name="cursor-changed" handler="_1990_gtk_tree_view_actions_cursor_changed"/>
-                                                        <signal name="key-press-event" handler="_1990_gtk_tree_view_actions_key_press_event"/>
+                                                        <signal name="cursor-changed" handler="_1990_gtk_actions_cursor_changed"/>
+                                                        <signal name="key-press-event" handler="_1990_gtk_actions_tree_view_key_press_event"/>
                                                         <signal name="drag-drop" handler="_1990_gtk_actions_tree_view_drag"/>
                                                         <child internal-child="selection">
                                                             <object class="GtkTreeSelection" id="1990_actions_treeview_select_action">
@@ -124,7 +124,7 @@
                                                                 <child>
                                                                     <object class="GtkCellRendererText" id="1990_actions_treeview_cell1">
                                                                         <property name="editable">True</property>
-                                                                        <signal name="edited" handler="_1990_gtk_tree_view_actions_cell_edited"/>
+                                                                        <signal name="edited" handler="_1990_gtk_actions_description_edited"/>
                                                                     </object>
                                                                     <attributes>
                                                                         <attribute name="text">1</attribute>
@@ -144,7 +144,7 @@
                                                                         <property name="editable">True</property>
                                                                         <property name="text-column">0</property>
                                                                         <property name="has-entry">False</property>
-                                                                        <signal name="edited" handler="_1990_gtk_tree_view_actions_type_edited"/>
+                                                                        <signal name="edited" handler="_1990_gtk_actions_type_edited"/>
                                                                     </object>
                                                                     <attributes>
                                                                         <attribute name="text">2</attribute>
@@ -308,7 +308,7 @@
                                                                 <child>
                                                                     <object class="GtkCellRendererText" id="1990_actions_treeview_charge_cell1">
                                                                         <property name="editable">True</property>
-                                                                        <signal name="edited" handler="_1990_gtk_tree_view_charges_cell_edited"/>
+                                                                        <signal name="edited" handler="_1990_gtk_tree_view_charges_description_edited"/>
                                                                     </object>
                                                                     <attributes>
                                                                         <attribute name="text">1</attribute>
@@ -415,7 +415,7 @@
                                 <property name="visible">True</property>
                                 <property name="label">gtk-close</property>
                                 <property name="use_stock">True</property>
-                                <signal name="clicked" handler="_1990_gtk_window_button_close"/>
+                                <signal name="clicked" handler="_1990_gtk_actions_window_button_close"/>
                             </object>
                             <packing>
                                 <property name="position">0</property>

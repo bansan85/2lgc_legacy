@@ -16,22 +16,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __1990_GTK_ACTIONS_H
-#define __1990_GTK_ACTIONS_H
+#ifndef __EF_CHARGE_H
+#define __EF_CHARGE_H
 
 #include "config.h"
-#ifdef ENABLE_GTK
-#include <gtk/gtk.h>
-
 #include "common_projet.h"
 
-void _1990_gtk_menu_nouvelle_action_activate(GtkMenuItem *menuitem, Projet *projet);
-void _1990_gtk_menu_nouvelle_charge_nodale_activate(GtkMenuItem *menuitem , Projet* projet);
-void _1990_gtk_menu_nouvelle_charge_barre_ponctuelle_activate(GtkMenuItem *menuitem, Projet* projet);
-void _1990_gtk_menu_nouvelle_charge_barre_repartie_uniforme_activate(GtkMenuItem *menuitem, Projet* projet);
-
-void _1990_gtk_actions(Projet *projet);
-
-#endif
+void *EF_charge_cherche(Projet *projet, unsigned int num_action, unsigned int num_charge);
+int EF_charge_renomme(Projet *projet, unsigned int numero_action, unsigned int numero_charge, const char *description);
+int EF_charge_deplace(Projet *projet, unsigned int action_src, unsigned int charge_src, unsigned int action_dest);
+int EF_charge_supprime(Projet *projet, unsigned int action_num, unsigned int charge_num);
 
 #endif

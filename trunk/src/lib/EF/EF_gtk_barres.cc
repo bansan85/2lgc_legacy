@@ -186,7 +186,6 @@ G_MODULE_EXPORT void EF_gtk_barres_edit_type(GtkCellRendererText *cell __attribu
 {
     List_Gtk_EF_Barres  *ef_gtk;
     GtkTreeModel        *model;
-    GtkTreePath         *path;
     GtkTreeIter         iter, iter2;
     guint               numero_barre;
     Beton_Barre         *barre = NULL;
@@ -200,9 +199,8 @@ G_MODULE_EXPORT void EF_gtk_barres_edit_type(GtkCellRendererText *cell __attribu
     ef_gtk = &projet->list_gtk.ef_barres;
     
     model = GTK_TREE_MODEL(gtk_builder_get_object(ef_gtk->builder, "EF_barres_treestore"));
-    path = gtk_tree_path_new_from_string(path_string);
     
-    gtk_tree_model_get_iter(model, &iter, path);
+    gtk_tree_model_get_iter_from_string(model, &iter, path_string);
     gtk_tree_model_get(model, &iter, 0, &numero_barre, -1);
     
     BUG(barre = _1992_1_1_barres_cherche_numero(projet, numero_barre), );
@@ -247,7 +245,6 @@ G_MODULE_EXPORT void EF_gtk_barres_edit_section(GtkCellRendererText *cell __attr
 {
     List_Gtk_EF_Barres  *ef_gtk;
     GtkTreeModel        *model;
-    GtkTreePath         *path;
     GtkTreeIter         iter;
     guint               numero_barre;
     Beton_Barre         *barre = NULL;
@@ -260,9 +257,8 @@ G_MODULE_EXPORT void EF_gtk_barres_edit_section(GtkCellRendererText *cell __attr
     ef_gtk = &projet->list_gtk.ef_barres;
     
     model = GTK_TREE_MODEL(gtk_builder_get_object(ef_gtk->builder, "EF_barres_treestore"));
-    path = gtk_tree_path_new_from_string(path_string);
     
-    gtk_tree_model_get_iter(model, &iter, path);
+    gtk_tree_model_get_iter_from_string(model, &iter, path_string);
     gtk_tree_model_get(model, &iter, 0, &numero_barre, -1);
     
     BUG(barre = _1992_1_1_barres_cherche_numero(projet, numero_barre), );
@@ -289,7 +285,6 @@ G_MODULE_EXPORT void EF_gtk_barres_edit_materiau(GtkCellRendererText *cell __att
 {
     List_Gtk_EF_Barres  *ef_gtk;
     GtkTreeModel        *model;
-    GtkTreePath         *path;
     GtkTreeIter         iter;
     guint               numero_barre;
     Beton_Barre         *barre = NULL;
@@ -302,9 +297,8 @@ G_MODULE_EXPORT void EF_gtk_barres_edit_materiau(GtkCellRendererText *cell __att
     ef_gtk = &projet->list_gtk.ef_barres;
     
     model = GTK_TREE_MODEL(gtk_builder_get_object(ef_gtk->builder, "EF_barres_treestore"));
-    path = gtk_tree_path_new_from_string(path_string);
     
-    gtk_tree_model_get_iter(model, &iter, path);
+    gtk_tree_model_get_iter_from_string(model, &iter, path_string);
     gtk_tree_model_get(model, &iter, 0, &numero_barre, -1);
     
     BUG(barre = _1992_1_1_barres_cherche_numero(projet, numero_barre), );
@@ -328,7 +322,6 @@ G_MODULE_EXPORT void EF_gtk_barres_edit_relachement(GtkCellRendererText *cell __
 {
     List_Gtk_EF_Barres  *ef_gtk;
     GtkTreeModel        *model;
-    GtkTreePath         *path;
     GtkTreeIter         iter;
     guint               numero_barre;
     Beton_Barre         *barre = NULL;
@@ -341,9 +334,8 @@ G_MODULE_EXPORT void EF_gtk_barres_edit_relachement(GtkCellRendererText *cell __
     ef_gtk = &projet->list_gtk.ef_barres;
     
     model = GTK_TREE_MODEL(gtk_builder_get_object(ef_gtk->builder, "EF_barres_treestore"));
-    path = gtk_tree_path_new_from_string(path_string);
     
-    gtk_tree_model_get_iter(model, &iter, path);
+    gtk_tree_model_get_iter_from_string(model, &iter, path_string);
     gtk_tree_model_get(model, &iter, 0, &numero_barre, -1);
     
     BUG(barre = _1992_1_1_barres_cherche_numero(projet, numero_barre), );
@@ -372,7 +364,6 @@ G_MODULE_EXPORT void EF_gtk_barres_edit_noeud(GtkCellRendererText *cell __attrib
 {
     List_Gtk_EF_Barres      *gtk_barre;
     GtkTreeModel            *model;
-    GtkTreePath             *path;
     GtkTreeIter             iter;
     gint                    i;
     char                    *fake = (char*)malloc(sizeof(char)*(strlen(new_text)+1));
@@ -387,10 +378,8 @@ G_MODULE_EXPORT void EF_gtk_barres_edit_noeud(GtkCellRendererText *cell __attrib
     gtk_barre = &projet->list_gtk.ef_barres;
     
     model = GTK_TREE_MODEL(gtk_builder_get_object(gtk_barre->builder, "EF_barres_treestore"));
-    path = gtk_tree_path_new_from_string(path_string);
     
-    gtk_tree_model_get_iter(model, &iter, path);
-    gtk_tree_path_free(path);
+    gtk_tree_model_get_iter_from_string(model, &iter, path_string);
     gtk_tree_model_get(model, &iter, 0, &i, -1);
     
     // On vérifie si le texte contient bien un nombre flottant
