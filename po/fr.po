@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2012-04-30 23:03+0200\n"
-"PO-Revision-Date: 2012-04-30 23:07+0100\n"
+"POT-Creation-Date: 2012-05-14 00:22+0200\n"
+"PO-Revision-Date: 2012-05-14 00:23+0100\n"
 "Last-Translator: LE GARREC Vincent <vlg@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -36,6 +36,9 @@ msgstr "Poteau en béton"
 msgid "Poutre en béton"
 msgstr "Poutre en béton"
 
+msgid "Aucun"
+msgstr "Aucun"
+
 msgid "Barre en béton %u introuvable.\n"
 msgstr "Barre en béton %u introuvable.\n"
 
@@ -54,23 +57,26 @@ msgstr "Matériau en béton n°%d introuvable.\n"
 msgid "Matériau en béton '%s' introuvable.\n"
 msgstr "Matériau en béton '%s' introuvable.\n"
 
-msgid "Sans nom"
-msgstr "Sans nom"
+msgid "Paramètre %s incorrect.\n"
+msgstr "Paramètre %s incorrect.\n"
+
+msgid "La fenêtre graphique %s n'est pas initialisée.\n"
+msgstr "La fenêtre graphique %s n'est pas initialisée.\n"
 
 msgid "Type de charge %d inconnu."
 msgstr "Type de charge %d inconnu."
 
-msgid "Builder Failed\n"
-msgstr "Builder Failed\n"
+msgid "Type d'action '%s' inconnu.\n"
+msgstr "Type d'action '%s' inconnu.\n"
 
-msgid "Charge nodale"
-msgstr "Charge nodale"
+msgid "Sans nom"
+msgstr "Sans nom"
 
-msgid "Charge ponctuelle sur barre"
-msgstr "Charge ponctuelle sur barre"
+msgid "Impossible de trouver le type d'action correspondant à cette action.\n"
+msgstr "Impossible de trouver le type d'action correspondant à cette action.\n"
 
-msgid "Charge répartie uniforme sur barre"
-msgstr "Charge répartie uniforme sur barre"
+msgid "La génération de la fenêtre %s a échouée.\n"
+msgstr "La génération de la fenêtre %s a échouée.\n"
 
 msgid ""
 "La génération des pondérations est impossible.\n"
@@ -82,11 +88,20 @@ msgstr ""
 msgid "Le dernier niveau ne possède aucune combinaison permettant la génération des pondérations.\n"
 msgstr "Le dernier niveau ne possède aucune combinaison permettant la génération des pondérations.\n"
 
-msgid "Élément %d introuvable.\n"
-msgstr "Élément %d introuvable.\n"
+msgid "Élément %u du groupe %u introuvable.\n"
+msgstr "Élément %u du groupe %u introuvable.\n"
 
-msgid "Niveau %d introuvable.\n"
-msgstr "Niveau %d introuvable.\n"
+msgid "Groupe %u du niveau %u introuvable.\n"
+msgstr "Groupe %u du niveau %u introuvable.\n"
+
+msgid "Niveau de groupes %u introuvable.\n"
+msgstr "Niveau de groupes %u introuvable.\n"
+
+msgid "Le projet ne possède pas de niveaux de groupes permettant de regrouper plusieurs groupes d'actions.\n"
+msgstr "Le projet ne possède pas de niveaux de groupes permettant de regrouper plusieurs groupes d'actions.\n"
+
+msgid "Le numéro %u est déjà présent dans le groupe %u du niveau %u.\n"
+msgstr "Le numéro %u est déjà présent dans le groupe %u du niveau %u.\n"
 
 msgid "niveau : %d\n"
 msgstr "niveau : %d\n"
@@ -157,8 +172,8 @@ msgstr "Accidentelle"
 msgid "Sismique"
 msgstr "Sismique"
 
-msgid "Catégorie %d inconnue.\n"
-msgstr "Catégorie %d inconnue.\n"
+msgid "Type d'action %u inconnu.\n"
+msgstr "Type d'action %u inconnu.\n"
 
 msgid "Exploitation : Catégorie H : toits d'un bâtiment de catégorie A ou B"
 msgstr "Exploitation : Catégorie H : toits d'un bâtiment de catégorie A ou B"
@@ -190,23 +205,59 @@ msgstr "Eaux souterraines"
 msgid "Pays %d inconnu.\n"
 msgstr "Pays %d inconnu.\n"
 
+msgid "Charge nodale"
+msgstr "Charge nodale"
+
+msgid "Charge ponctuelle sur barre"
+msgstr "Charge ponctuelle sur barre"
+
+msgid "Charge répartie uniforme sur barre"
+msgstr "Charge répartie uniforme sur barre"
+
 msgid "Action %u introuvable.\n"
 msgstr "Action %u introuvable.\n"
 
-msgid "Charge %u introuvable.\n"
-msgstr "Charge %u introuvable.\n"
+msgid "Le numéro %u du coefficient spi à changer est incorrect.\n"
+msgstr "Le numéro %u du coefficient spi à changer est incorrect.\n"
 
-msgid "Paramètre incorrect : %u\n"
-msgstr "Paramètre incorrect : %u\n"
+msgid "Aucune action existante.\n"
+msgstr "Aucune action existante.\n"
 
 msgid "Action n° %u, description '%s', type n°%d\n"
 msgstr "Action n° %u, description '%s', type n°%d\n"
 
+msgid "Aucune barre existante.\n"
+msgstr "Aucune barre existante.\n"
+
 msgid "Élément %d existant.\n"
 msgstr "Élément %d existant.\n"
 
-msgid "Type %d inconnu.\n"
-msgstr "Type %d inconnu.\n"
+msgid "Builder Failed\n"
+msgstr "Builder Failed\n"
+
+msgid "Le projet ne possède pas de niveaux de groupes.\n"
+msgstr "Le projet ne possède pas de niveaux de groupes.\n"
+
+msgid "Le niveau %u est vide. Veuillez soit le remplir, soit le supprimer.\n"
+msgstr "Le niveau %u est vide. Veuillez soit le remplir, soit le supprimer.\n"
+
+msgid "Seuls les groupes possédant un type de combinaison XOR peuvent appeler _1990_combinaisons_genere_xor.\n"
+msgstr "Seuls les groupes possédant un type de combinaison XOR peuvent appeler _1990_combinaisons_genere_xor.\n"
+
+msgid "Impossible de trouver le niveau %u dans la liste des niveaux de groupes.\n"
+msgstr "Impossible de trouver le niveau %u dans la liste des niveaux de groupes.\n"
+
+msgid "Impossible de trouver le niveau précédent le niveau %u.\n"
+msgstr "Impossible de trouver le niveau précédent le niveau %u.\n"
+
+msgid "Seuls les groupes possédant un type de combinaison AND peuvent appeler _1990_combinaisons_genere_and.\n"
+msgstr "Seuls les groupes possédant un type de combinaison AND peuvent appeler _1990_combinaisons_genere_and.\n"
+
+msgid "Seuls les groupes possédant un type de combinaison OR peuvent appeler _1990_combinaisons_genere_or.\n"
+msgstr "Seuls les groupes possédant un type de combinaison OR peuvent appeler _1990_combinaisons_genere_or.\n"
+
+msgid "Catégorie de durée %u inconnue.\n"
+msgstr "Catégorie de durée %u inconnue.\n"
 
 msgid "Structures provisoires"
 msgstr "Structures provisoires"
@@ -222,6 +273,9 @@ msgstr "Structures de bâtiments et autres structures courantes"
 
 msgid "Structures monumentales de bâtiments, pont et autres ouvrages de génie civil"
 msgstr "Structures monumentales de bâtiments, pont et autres ouvrages de génie civil"
+
+msgid "Catégorie de durée %d inconnue.\n"
+msgstr "Catégorie de durée %d inconnue.\n"
 
 msgid "15. Disclaimer of Warranty.\n"
 msgstr "15. Déclaration d’absence de garantie. (seule la version anglaise fait foi)\n"
@@ -418,14 +472,11 @@ msgstr "Ajout d'une charge au noeud"
 msgid "Modification d'une charge au noeud"
 msgstr "Modification d'une charge au noeud"
 
-msgid "Noeud n°%d introuvable.\n"
-msgstr "Noeud n°%d introuvable.\n"
+msgid "Noeud n°%u introuvable.\n"
+msgstr "Noeud n°%u introuvable.\n"
 
 msgid "Impossible de trouver le type de l'élément.\n"
 msgstr "Impossible de trouver le type de l'élément.\n"
-
-msgid "Aucun"
-msgstr "Aucun"
 
 msgid "début"
 msgstr "début"
@@ -460,11 +511,14 @@ msgstr "Modification d'une charge répartie uniforme sur barre"
 msgid "Il n'est pas possible d'activer à la fois la projection et l'utilisation du repère local."
 msgstr "Il n'est pas possible d'activer à la fois la projection et l'utilisation du repère local."
 
-msgid "Relachement n°%d introuvable.\n"
-msgstr "Relachement n°%d introuvable.\n"
+msgid "Relachement n°%u introuvable.\n"
+msgstr "Relachement n°%u introuvable.\n"
 
 msgid "Relachement '%s' introuvable.\n"
 msgstr "Relachement '%s' introuvable.\n"
+
+msgid "Charge %u de l'action %u introuvable.\n"
+msgstr "Charge %u de l'action %u introuvable.\n"
 
 msgid "Appui %s introuvable.\n"
 msgstr "Appui %s introuvable.\n"

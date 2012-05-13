@@ -152,7 +152,7 @@ G_MODULE_EXPORT EF_Relachement* EF_relachement_cherche_numero(Projet *projet, un
     }
     while (list_parcours != NULL);
     
-    BUGMSG(0, NULL, gettext("Relachement n°%d introuvable.\n"), numero);
+    BUGMSG(0, NULL, gettext("Relachement n°%u introuvable.\n"), numero);
 }
 
 

@@ -50,15 +50,11 @@ unsigned int _1990_gtk_get_groupe(GtkTreeModel *tree_model, GtkTreeIter *iter)
     GtkTreeIter     iter_parent;
     
     if (gtk_tree_model_iter_parent(tree_model, &iter_parent, iter))
-    {
         gtk_tree_model_get(tree_model, &iter_parent, 0, &numero, -1);
-        return numero;
-    }
     else
-    {
         gtk_tree_model_get(tree_model, iter, 0, &numero, -1);
-        return numero;
-    }
+    
+    return numero;
 }
 
 
@@ -410,7 +406,7 @@ G_MODULE_EXPORT void _1990_gtk_button_groupe_ajout_clicked(GtkWidget *button __a
     
     /* On ajoute un niveau */
     BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, GTK_COMMON_SPINBUTTON_AS_UINT(GTK_SPIN_BUTTON(list_gtk_1990_groupes->spin_button_niveau))), );
-    BUG(groupe = _1990_groupe_ajout_groupe(projet, niveau_groupe->niveau, GROUPE_COMBINAISON_AND, gettext("Sans nom")), );
+    BUG(groupe = _1990_groupe_ajout_groupe(projet, niveau_groupe->numero, GROUPE_COMBINAISON_AND, gettext("Sans nom")), );
     
     /* Et on met à jour l'affichage */
     gtk_tree_store_append(list_gtk_1990_groupes->tree_store_etat, &groupe->Iter, NULL);
@@ -488,7 +484,7 @@ int _1990_gtk_insert_dispo(Projet *projet, unsigned int numero, Niveau_Groupe *n
         Niveau_Groupe *groupe_niveau_moins_1;
         Groupe *groupe_moins_1;
         
-        BUG(groupe_niveau_moins_1 = _1990_groupe_positionne_niveau(projet, niveau->niveau-1), -3);
+        BUG(groupe_niveau_moins_1 = _1990_groupe_positionne_niveau(projet, niveau->numero-1), -3);
         BUG(groupe_moins_1 = _1990_groupe_positionne_groupe(groupe_niveau_moins_1, numero), -3);
         gtk_tree_store_set(list_gtk_1990_groupes->tree_store_dispo, &iter, 0, numero, 1, groupe_moins_1->nom, -1);
     }

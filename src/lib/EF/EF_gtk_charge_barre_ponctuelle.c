@@ -32,6 +32,7 @@
 #include "common_gtk.h"
 #include "common_maths.h"
 #include "1992_1_1_barres.h"
+#include "EF_charge.h"
 #include "EF_charge_barre_ponctuelle.h"
 #include "1990_actions.h"
 #include "1990_gtk_actions.h"
@@ -273,7 +274,7 @@ void EF_gtk_charge_barre_ponctuelle_editer_clicked(GtkButton *button __attribute
     BUG(EF_gtk_charge_barre_ponctuelle_recupere_donnees(projet, &num_action, &barres, &fx, &fy, &fz, &mx, &my, &mz, &texte, &repere_local, &position) == TRUE, );
     
     // Création de la nouvelle charge ponctuelle sur barre
-    charge = _1990_action_cherche_charge(projet, ef_gtk->action, ef_gtk->charge);
+    charge = EF_charge_cherche(projet, ef_gtk->action, ef_gtk->charge);
     BUG(charge, );
     free(charge->description);
     charge->description = texte;
@@ -288,7 +289,7 @@ void EF_gtk_charge_barre_ponctuelle_editer_clicked(GtkButton *button __attribute
     charge->position = position;
     charge->repere_local = repere_local;
     if (num_action != ef_gtk->action)
-        BUG(_1990_action_deplace_charge(projet, ef_gtk->action, ef_gtk->charge, num_action) == 0, );
+        BUG(EF_charge_deplace(projet, ef_gtk->action, ef_gtk->charge, num_action) == 0, );
     else
         BUG(EF_gtk_charge_barre_ponctuelle_ajout_affichage(charge, projet, FALSE) == 0, );
     
@@ -362,11 +363,10 @@ G_MODULE_EXPORT int EF_gtk_charge_barre_ponctuelle(Projet *projet, unsigned int 
         ef_gtk->action = action_defaut;
         ef_gtk->charge = charge;
         gtk_window_set_title(GTK_WINDOW(ef_gtk->window), gettext("Modification d'une charge ponctuelle sur barre"));
-        BUG(charge_barre = _1990_action_cherche_charge(projet, action_defaut, charge), -1);
+        BUG(charge_barre = EF_charge_cherche(projet, action_defaut, charge), -1);
     }
     
-    _1990_gtk_actions_genere_liste(projet);
-    gtk_combo_box_set_model(GTK_COMBO_BOX(ef_gtk->combobox_charge), GTK_TREE_MODEL(projet->list_gtk._1990_actions.list_actions_pour_combobox));
+    gtk_combo_box_set_model(GTK_COMBO_BOX(ef_gtk->combobox_charge), GTK_TREE_MODEL(projet->list_gtk._1990_actions.list_actions));
     gtk_combo_box_set_active(GTK_COMBO_BOX(ef_gtk->combobox_charge), (gint)action_defaut);
     
     if (charge_barre != NULL)

@@ -73,8 +73,6 @@ G_MODULE_EXPORT Projet* projet_init(Type_Pays pays)
     BUGMSG(EF_noeuds_init(projet) == 0, NULL, gettext("Erreur d'allocation mémoire.\n"));
 #ifdef ENABLE_GTK
     BUGMSG(m3d_init(projet) == 0, NULL, gettext("Erreur d'allocation mémoire.\n"));
-    projet->list_gtk._1990_actions.builder = NULL;
-    projet->list_gtk._1990_actions.list_actions_pour_combobox = NULL;
     projet->list_gtk._1990_groupes.builder = NULL;
     projet->list_gtk.ef_charge_noeud.builder = NULL;
     projet->list_gtk.ef_charge_barre_ponctuelle.builder = NULL;

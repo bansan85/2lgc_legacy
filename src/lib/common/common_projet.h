@@ -72,7 +72,10 @@ typedef struct __List_Gtk_1990_Actions
     GtkWidget       *menu_type_list_charge;
     GList           *menu_list_widget_charge;
     
-    GtkListStore    *list_actions_pour_combobox;
+    GtkListStore    *list_actions; // Contient la liste des actions sous forme d'un menu
+    // compatible avec les composants GtkComboBox. Cette liste est utilisée dans les fenêtres
+    // permettant de créer ou d'éditer des charges afin de définir dans quelle action elles
+    // s'appliqueront.
 } List_Gtk_1990_Actions;
 
 
@@ -480,18 +483,18 @@ typedef struct __Action
 {
     char            *description;
     unsigned int    numero;
-    unsigned int    type;  // Les catégories sont conformes à _1990_action_type
+    unsigned int    type;                   // Les catégories sont conformes à _1990_action_type
     GList           *charges;
-    int             flags;
-    double          psi0;       // valeur_combinaison
-    double          psi1;       // valeur_frequente
-    double          psi2;       // valeur_quasi_permanente
+    int             flags;                  // bit 0 : Action prédominante.
+    double          psi0;                   // valeur_combinaison
+    double          psi1;                   // valeur_frequente
+    double          psi2;                   // valeur_quasi_permanente
     cholmod_sparse  *deplacement_complet;
     cholmod_sparse  *forces_complet;
     cholmod_sparse  *efforts_noeuds;
-    double          norm;
 #ifdef ENABLE_GTK
-    GtkTreeIter     Iter;
+    GtkTreeIter     Iter_fenetre;           // Pour le treeview
+    GtkTreeIter     Iter_liste;             // pour le composant list_actions
 #endif
     
     Fonction        **fonctions_efforts[6]; // 6 fonctions (N, Ty, Tz, Mx, My, Mz) par barre.
@@ -565,7 +568,7 @@ typedef struct __Groupe
 
 typedef struct __Niveau_Groupe
 {
-    unsigned int    niveau;
+    unsigned int    numero;
     GList           *groupes;
 #ifdef ENABLE_GTK
     GtkTreeIter     Iter;                 // Pour la fenêtre groupes
