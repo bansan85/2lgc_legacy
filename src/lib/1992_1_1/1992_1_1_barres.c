@@ -22,91 +22,105 @@
 #include <cholmod.h>
 #include <string.h>
 #include <math.h>
+#include <gmodule.h>
+
 #include "common_projet.h"
 #include "common_erreurs.h"
 #include "common_maths.h"
+#include "common_m3d.hpp"
+#include "common_selection.h"
 #include "1992_1_1_materiaux.h"
 #include "1992_1_1_section.h"
 #include "EF_charge_barre_ponctuelle.h"
 #include "EF_calculs.h"
 #include "EF_noeud.h"
-#include "EF_relachement.h"
-#include "common_m3d.hpp"
 
-G_MODULE_EXPORT int _1992_1_1_barres_init(Projet *projet)
-/* Description : Initialise la liste des éléments en béton
- * Paramètres : Projet *projet : la variable projet
+G_MODULE_EXPORT gboolean _1992_1_1_barres_init(Projet *projet)
+/* Description : Initialise la liste des éléments en béton.
+ * Paramètres : Projet *projet : la variable projet.
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : -1 en cas de paramètres invalides :
- *             (projet == NULL)
- *           -2 en cas d'erreur d'allocation mémoire
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL.
  */
 {
+#ifdef ENABLE_GTK
     GtkTreeIter iter;
+#endif
     
-    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
     // Trivial
     projet->beton.barres = NULL;
+#ifdef ENABLE_GTK
     projet->list_gtk.ef_barres.liste_types = gtk_list_store_new(1, G_TYPE_STRING);
     gtk_list_store_append(projet->list_gtk.ef_barres.liste_types, &iter);
     gtk_list_store_set(projet->list_gtk.ef_barres.liste_types, &iter, 0, gettext("Poteau en béton"), -1);
     gtk_list_store_append(projet->list_gtk.ef_barres.liste_types, &iter);
     gtk_list_store_set(projet->list_gtk.ef_barres.liste_types, &iter, 0, gettext("Poutre en béton"), -1);
+#endif
     
-    return 0;
+    return TRUE;
 }
 
-G_MODULE_EXPORT int _1992_1_1_barres_ajout(Projet *projet, Type_Element type, unsigned int section,
-  unsigned int materiau, unsigned int noeud_debut, unsigned int noeud_fin,
+
+G_MODULE_EXPORT gboolean _1992_1_1_barres_ajout(Projet *projet, Type_Element type,
+  unsigned int section, unsigned int materiau, unsigned int noeud_debut, unsigned int noeud_fin,
   EF_Relachement* relachement, unsigned int discretisation_element)
-/* Description : Ajoute un élément à la liste des éléments en béton
- * Paramètres : Projet *projet : la variable projet
- *            : Type_Beton_Barre type : type de l'élément en béton
- *            : int section : numéro de la section correspondant à l'élément
- *            : int materiau : numéro du matériau en béton de l'élément
- *            : int noeud_debut : numéro de départ de l'élément
- *            : int noeud_fin : numéro de fin de l'élément
- *            : EF_Relachement* relachement : relachement de la barre (NULL si aucun).
- *            : int discretisation_element : nombre d'élément une fois discrétisé
+/* Description : Ajoute un élément à la liste des éléments en béton.
+ * Paramètres : Projet *projet : la variable projet,
+ *            : Type_Beton_Barre type : type de l'élément en béton,
+ *            : unsigned int section : numéro de la section correspondant à l'élément,
+ *            : unsigned int materiau : numéro du matériau en béton de l'élément,
+ *            : unsigned int noeud_debut : numéro de départ de l'élément,
+ *            : unsigned int noeud_fin : numéro de fin de l'élément,
+ *            : EF_Relachement* relachement : relachement de la barre (NULL si aucun),
+ *            : unsigned int discretisation_element : nombre d'élément une fois discrétisé.
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : -1 en cas de paramètres invalides :
- *             (projet == NULL) ou
- *             (projet->beton.barres == NULL) ou
- *             (noeud_debut == noeud_fin) ou
- *             section introuvable ou
- *             materiau introuvable ou
- *             noeud_debut introuvable ou
- *             noeud_fin introuvable ou
- *             relachement introuvable
- *           -2 en cas d'erreur d'allocation mémoire
- *           -3 en cas d'erreur due à une fonction interne
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL,
+ *             projet->beton.barres == NULL,
+ *             noeud_debut == noeud_fin,
+ *             section introuvable,
+ *             materiau introuvable,
+ *             noeud_debut introuvable,
+ *             noeud_fin introuvable,
+ *             relachement introuvable,
+ *             en cas d'erreur d'allocation mémoire,
+ *             en cas d'erreur due à une fonction interne.
  */
 {
-#ifdef ENABLE_GTK
-    List_Gtk_EF_Barres  *ef_gtk = &projet->list_gtk.ef_barres;
-#endif
     Beton_Barre *element_nouveau = malloc(sizeof(Beton_Barre));
     
     // Trivial
-    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(noeud_debut != noeud_fin, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(element_nouveau, -2, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(noeud_debut != noeud_fin, FALSE, gettext("La création d'une barre nécessite l'utilisation de des noeuds différents.\n"));
+    BUGMSG(element_nouveau, FALSE, gettext("Erreur d'allocation mémoire.\n"));
     
     element_nouveau->type = type;
     
-    BUG(element_nouveau->section = _1992_1_1_sections_cherche_numero(projet, section), -3);
-    BUG(element_nouveau->materiau = _1992_1_1_materiaux_cherche_numero(projet, materiau), -3);
-    BUG(element_nouveau->noeud_debut = EF_noeuds_cherche_numero(projet, noeud_debut), -3);
-    BUG(element_nouveau->noeud_fin = EF_noeuds_cherche_numero(projet, noeud_fin), -3);
+    element_nouveau->section = _1992_1_1_sections_cherche_numero(projet, section);
+    element_nouveau->materiau = _1992_1_1_materiaux_cherche_numero(projet, materiau);
+    element_nouveau->noeud_debut = EF_noeuds_cherche_numero(projet, noeud_debut);
+    element_nouveau->noeud_fin = EF_noeuds_cherche_numero(projet, noeud_fin);
+    if ((element_nouveau->section == NULL) || (element_nouveau->materiau == NULL) || (element_nouveau->noeud_debut == NULL) || (element_nouveau->noeud_fin == NULL))
+    {
+        free(element_nouveau);
+        BUG(NULL, FALSE);
+    }
+    
+    if (ERREUR_RELATIVE_EGALE(0.0, EF_noeuds_distance(element_nouveau->noeud_debut, element_nouveau->noeud_fin)))
+    {
+        free(element_nouveau);
+        BUGMSG(NULL, FALSE, gettext("Impossible de créer la barre, la distance entre les deux noeuds %d et %d est nulle.\n"), noeud_debut, noeud_fin);
+    }
     
     element_nouveau->relachement = relachement;
     
     element_nouveau->discretisation_element = 0;
     
-    element_nouveau->info_EF = NULL;
+    BUGMSG(element_nouveau->info_EF = (Barre_Info_EF*)malloc(sizeof(Barre_Info_EF)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
     
     element_nouveau->matrice_rotation = NULL;
     element_nouveau->matrice_rotation_transpose = NULL;
@@ -120,61 +134,64 @@ G_MODULE_EXPORT int _1992_1_1_barres_ajout(Projet *projet, Type_Element type, un
         
         /* Création des noeuds intermédiaires */
         for (i=0;i<discretisation_element;i++)
-            BUG(EF_noeuds_ajout_noeud_barre(projet, element_nouveau, (i+1.)/(discretisation_element+1.), NULL), -3);
+            BUG(EF_noeuds_ajout_noeud_barre(projet, element_nouveau, (i+1.)/(discretisation_element+1.), NULL), FALSE);
     }
     
     projet->beton.barres = g_list_append(projet->beton.barres, element_nouveau);
     
 #ifdef ENABLE_GTK
-    if (ef_gtk->builder_add != NULL)
+    // On incrémente le numéro de la future barre
+    if (projet->list_gtk.ef_barres.builder_add != NULL)
     {
-        char *nb_barres = g_strdup_printf("%d", element_nouveau->numero+1);
-        gtk_label_set_text(GTK_LABEL(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_numero_label2")), nb_barres);
+        char *nb_barres;
+        
+        BUGMSG(nb_barres = g_strdup_printf("%d", element_nouveau->numero+1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+        gtk_label_set_text(GTK_LABEL(gtk_builder_get_object(projet->list_gtk.ef_barres.builder_add, "EF_gtk_barres_add_numero_label2")), nb_barres);
         free(nb_barres);
     }
     
-    if (ef_gtk->builder != NULL)
+    // On ajoute la ligne dans la liste des barres
+    if (projet->list_gtk.ef_barres.builder != NULL)
     {
         char        *tmp;
         Beton_Section_Rectangulaire *p_section = (Beton_Section_Rectangulaire*)element_nouveau->section;
         GtkTreeIter iter;
         
-        tmp = g_strdup_printf("%d", (int)type);
+        BUGMSG(tmp = g_strdup_printf("%d", (int)type), FALSE, gettext("Erreur d'allocation mémoire.\n"));
         gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(projet->list_gtk.ef_barres.liste_types), &iter, tmp);
         free(tmp);
         gtk_tree_model_get(GTK_TREE_MODEL(projet->list_gtk.ef_barres.liste_types), &iter, 0, &tmp, -1);
         
-        gtk_tree_store_append(GTK_TREE_STORE(gtk_builder_get_object(ef_gtk->builder, "EF_barres_treestore")), &iter, NULL);
-        gtk_tree_store_set(GTK_TREE_STORE(gtk_builder_get_object(ef_gtk->builder, "EF_barres_treestore")), &iter, 0, element_nouveau->numero, 1, tmp, 2, p_section->nom, 3, element_nouveau->materiau->nom, 4, element_nouveau->noeud_debut->numero, 5, element_nouveau->noeud_fin->numero, 6, (element_nouveau->relachement == NULL ? gettext("Aucun") : element_nouveau->relachement->nom), -1);
+        gtk_tree_store_append(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treestore")), &iter, NULL);
+        gtk_tree_store_set(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treestore")), &iter, 0, element_nouveau->numero, 1, tmp, 2, p_section->nom, 3, element_nouveau->materiau->nom, 4, element_nouveau->noeud_debut->numero, 5, element_nouveau->noeud_fin->numero, 6, (element_nouveau->relachement == NULL ? gettext("Aucun") : element_nouveau->relachement->nom), -1);
     }
     
-    m3d_barre(projet, element_nouveau);
+    BUG(m3d_barre(&projet->list_gtk.m3d, element_nouveau), FALSE);
 #endif
     
-    return 0;
+    return TRUE;
 }
 
 
-G_MODULE_EXPORT Beton_Barre* _1992_1_1_barres_cherche_numero(Projet *projet, unsigned int numero)
-/* Description : Positionne dans la liste des éléments en béton l'élément courant au numéro
- * Paramètres : Projet *projet : la variable projet
- *            : int numero : le numéro de la section
+G_MODULE_EXPORT Beton_Barre* _1992_1_1_barres_cherche_numero(Projet *projet,
+  unsigned int numero)
+/* Description : Positionne dans la liste des éléments en béton l'élément courant au numéro.
+ * Paramètres : Projet *projet : la variable projet,
+ *            : unsigned int numero : le numéro de la section.
  * Valeur renvoyée :
  *   Succès : Pointeur vers l'élément en béton
- *   Échec : NULL en cas de paramètres invalides :
- *             (projet == NULL)
- *             (projet->beton.barres == NULL) ou
- *             (list_size(projet->beton.barres) == 0) ou
+ *   Échec : NULL :
+ *             projet == NULL,
+ *             list_size(projet->beton.barres) == 0,
  *             Barre en béton introuvable.
  */
 {
     GList   *list_parcours;
-    BUGMSG(projet, NULL, gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->beton.barres, NULL, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
     
     // Trivial
     list_parcours = projet->beton.barres;
-    do
+    while (list_parcours != NULL)
     {
         Beton_Barre   *element = list_parcours->data;
         
@@ -183,36 +200,155 @@ G_MODULE_EXPORT Beton_Barre* _1992_1_1_barres_cherche_numero(Projet *projet, uns
         
         list_parcours = g_list_next(list_parcours);
     }
-    while (list_parcours != NULL);
     
     BUGMSG(0, NULL, gettext("Barre en béton %u introuvable.\n"), numero);
 }
 
 
-G_MODULE_EXPORT int _1992_1_1_barres_angle_rotation(Beton_Barre *barre, double *y, double *z)
+gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList* noeuds, GList* barres,
+  GList** noeuds_dep, GList** barres_dep)
+/* Description : Renvoie, sous forme d'une liste de noeuds et d'une liste de barres, l'ensemble
+ *               des barres et noeuds intermédiaires dépendants des noeuds et des barres passés
+ *               en paramètres. Le retour contient également la liste d'origine.
+ * Paramètres : Projet *projet : variable projet,
+ *            : GList* noeuds : liste de pointeurs vers les noeuds à analyser,
+ *            : GList* barres : liste de pointeurs vers les barres à analyser,
+ *            : GList** noeuds_dep : liste de pointeurs vers les noeuds dépendants,
+ *            : GList** barres_dep : liste de pointeurs vers les barres dépendantes.
+ * Valeur renvoyée :
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL,
+ *             noeuds_dep == NULL,
+ *             barres_dep == NULL.
+ */
+{
+    GList   *list_parcours;
+    GList   *noeuds_todo = NULL, *noeuds_done = NULL;
+    
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(noeuds_dep, FALSE, gettext("Paramètre %s incorrect.\n"), "noeuds_dep");
+    BUGMSG(barres_dep, FALSE, gettext("Paramètre %s incorrect.\n"), "barres_dep");
+    
+    *noeuds_dep = NULL;
+    *barres_dep = NULL;
+    
+    // On commence par s'occuper des barres.
+    list_parcours = barres;
+    while (list_parcours != NULL)
+    {
+        GList       *list_parcours2;
+        Beton_Barre *barre;
+        
+        // Toutes les barres sélectionnées sont forcément des barres dépendantes.
+        barre = list_parcours->data;
+        BUG(common_selection_ajout_nombre(barre, barres_dep, LISTE_BARRES), FALSE);
+        
+        // Puis, tous les noeuds intermédiaires sont ajoutés à la liste des noeuds à étudier.
+        list_parcours2 = barre->noeuds_intermediaires;
+        while (list_parcours2 != NULL)
+        {
+            EF_Noeud    *noeud;
+            
+            noeud = list_parcours2->data;
+            noeuds_todo = g_list_append(noeuds_todo, noeud);
+            
+            list_parcours2 = g_list_next(list_parcours2);
+        }
+        
+        list_parcours = g_list_next(list_parcours);
+    }
+    
+    // On ajoute tous les noeuds à la liste des noeuds à étudier.
+    list_parcours = noeuds;
+    while (list_parcours != NULL)
+    {
+        EF_Noeud    *noeud;
+        
+        noeud = list_parcours->data;
+        noeuds_todo = g_list_append(noeuds_todo, noeud);
+        
+        list_parcours = g_list_next(list_parcours);
+    }
+    
+    // On étudie enfin tous les noeuds.
+    while (noeuds_todo != NULL)
+    {
+        void    *dataa = noeuds_todo->data;
+        
+        noeuds_todo = g_list_delete_link(noeuds_todo, noeuds_todo);
+        
+        // On commence par ajouter le noeud en cours d'étude dans la liste des noeuds traités.
+        BUG(common_selection_ajout_nombre(dataa, &noeuds_done, LISTE_NOEUDS), FALSE);
+        
+        // On ajoute le noeud à la liste des noeuds dépendants.
+        BUG(common_selection_ajout_nombre(dataa, noeuds_dep, LISTE_NOEUDS), FALSE);
+        
+        // On parcours la liste des barres pour trouver celles qui commencent ou finissent par
+        // le noeud en cours d'étude.
+        list_parcours = projet->beton.barres;
+        while (list_parcours != NULL)
+        {
+            Beton_Barre *barre;
+            
+            barre = list_parcours->data;
+            
+            // Si une barre est dépendante du noeud en cours d'étude
+            if ((barre->noeud_debut == dataa) || (barre->noeud_fin == dataa))
+            {
+                GList   *list_parcours2;
+                // On l'ajoute à la liste des barres dépendantes.
+                BUG(common_selection_ajout_nombre(barre, barres_dep, LISTE_BARRES), FALSE);
+                
+                // Puis on ajoute l'ensemble des noeuds intermédiaires.
+                list_parcours2 = barre->noeuds_intermediaires;
+                while (list_parcours2 != NULL)
+                {
+                    EF_Noeud    *noeud;
+                    
+                    noeud = list_parcours2->data;
+                    if (g_list_find(noeuds_done, noeud) == NULL)
+                        noeuds_todo = g_list_append(noeuds_todo, noeud);
+                    
+                    list_parcours2 = g_list_next(list_parcours2);
+                }
+            }
+            
+            list_parcours = g_list_next(list_parcours);
+        }
+    }
+    
+    g_list_free(noeuds_done);
+    
+    return TRUE;
+}
+
+
+G_MODULE_EXPORT gboolean _1992_1_1_barres_angle_rotation(Beton_Barre *barre, double *y,
+  double *z)
 /* Description : Calcule les deux angles de rotation pour faire tourner une barre horizontale
  *               en une barre parallèle à celle fournie dans l'argument 1.
  * Paramètres : Beton_Barre *barre : barre dont on souhaite connaitre les angles de rotation,
  *            : double *y : angle autour de l'axe y,
- *            : double *z : angle autour de l'axe z,
+ *            : double *z : angle autour de l'axe z.
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : -1 en cas de paramètres invalides :
- *             (barre == NULL) ou
- *             (y == NULL) ou
- *             (z == NULL)
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             barre == NULL,
+ *             y == NULL,
+ *             z == NULL.
  */
 {
     double      xx, yy, zz, ll;
     
-    BUGMSG(barre, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(y, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(z, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre");
+    BUGMSG(y, FALSE, gettext("Paramètre %s incorrect.\n"), "y");
+    BUGMSG(z, FALSE, gettext("Paramètre %s incorrect.\n"), "z");
     
     ll = EF_noeuds_distance_x_y_z(barre->noeud_debut, barre->noeud_fin, &xx, &yy, &zz);
     
-    BUG(!isnan(ll), -3);
-    BUGMSG(!ERREUR_RELATIVE_EGALE(0.0, ll), -1, gettext("La longueur de la barre %u est nulle\n"), barre->numero);
+    BUG(!isnan(ll), FALSE);
+    BUGMSG(!ERREUR_RELATIVE_EGALE(0.0, ll), FALSE, gettext("La longueur de la barre %u est nulle\n"), barre->numero);
     
     // Détermination de l'angle de rotation autour de l'axe Y.
     *y = asin(zz/ll);
@@ -226,33 +362,236 @@ G_MODULE_EXPORT int _1992_1_1_barres_angle_rotation(Beton_Barre *barre, double *
             *z = M_PI - asin(yy / sqrt(ll*ll-zz*zz));
     }
     
-    return 0;
+    return TRUE;
 }
 
 
-G_MODULE_EXPORT int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
-/* Description : ajouter un élément à la matrice de rigidité partielle et complete
- * Paramètres : Projet *projet : la variable projet
- *            : Beton_Barre* element : pointeur vers l'élément en béton
+G_MODULE_EXPORT gboolean _1992_1_1_barres_change_type(Beton_Barre *barre, Type_Element type,
+  Projet *projet)
+/* Description : Change le type d'une barre.
+ * Paramètres : Beton_Barre *barre : barre à modifier,
+ *            : Type_Element type : nouveau type,
+ *            : Projet *projet : variable projet.
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : -1 en cas de paramètres invalides :
- *             (projet == NULL) ou
- *             (projet->ef_donnees.triplet_rigidite_partielle == NULL) ou
- *             (element == NULL) ou
- *             (projet->ef_donnees.triplet_rigidite_complete == NULL) ou
- *             (element->section == NULL) ou
- *             (distance entre le début et l'extrémité de la barre est nulle)
- *           -2 en cas d'erreur d'allocation mémoire
- *           -3 en cas d'erreur due à une fonction interne
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             barre == NULL,
+ *             projet == NULL,
+ *             type inconnu.
+ */
+{
+    BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    
+    switch (type)
+    {
+        case BETON_ELEMENT_POTEAU :
+        {
+#ifdef ENABLE_GTK
+            gtk_tree_store_set(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treestore")), &barre->Iter, 1, gettext("Poteau en béton"), -1);
+#endif
+            barre->type = type;
+            break;
+        }
+        case BETON_ELEMENT_POUTRE :
+        {
+#ifdef ENABLE_GTK
+            gtk_tree_store_set(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treestore")), &barre->Iter, 1, gettext("Poutre en béton"), -1);
+#endif
+            barre->type = type;
+            break;
+        }
+        default :
+        {
+            BUGMSG(NULL, FALSE, "Le type de l'élément %d est inconnu.\n", type);
+            break;
+        }
+    }
+    
+    return TRUE;
+}
+
+
+G_MODULE_EXPORT gboolean _1992_1_1_barres_change_section(Beton_Barre *barre, void *section,
+  Projet *projet)
+/* Description : Change la section d'une barre depuis son nom.
+ * Paramètres : Beton_Barre *barre : barre à modifier,
+ *            : void *section : la nouvelle section,
+ *            : Projet *projet : variable projet.
+ * Valeur renvoyée :
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             barre == NULL,
+ *             projet == NULL.
+ */
+{
+    BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    
+    barre->section = section;
+    
+#ifdef ENABLE_GTK
+    BUG(m3d_barre(&projet->list_gtk.m3d, barre), FALSE);
+    BUG(m3d_rafraichit(projet), FALSE);
+    
+    if (projet->list_gtk.ef_barres.builder != NULL)
+    {
+        GtkTreeModel    *model = GTK_TREE_MODEL(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treestore"));;
+        
+        gtk_tree_store_set(GTK_TREE_STORE(model), &barre->Iter, 2, ((Beton_Section_T *)section)->nom, -1);
+    }
+#endif
+    
+    return TRUE;
+}
+
+
+G_MODULE_EXPORT gboolean _1992_1_1_barres_change_materiau(Beton_Barre *barre,
+  Beton_Materiau *materiau, Projet *projet)
+/* Description : Change le matériau d'une barre depuis son nom.
+ * Paramètres : Beton_Barre *barre : barre à modifier,
+ *            : Beton_Materiaur *materiau : le nouveau materiau,
+ *            : Projet *projet : variable projet.
+ * Valeur renvoyée :
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             barre == NULL,
+ *             projet == NULL.
+ */
+{
+    BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    
+    barre->materiau = materiau;
+    
+#ifdef ENABLE_GTK
+    if (projet->list_gtk.ef_barres.builder != NULL)
+    {
+        GtkTreeModel    *model = GTK_TREE_MODEL(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treestore"));;
+        
+        gtk_tree_store_set(GTK_TREE_STORE(model), &barre->Iter, 3, materiau->nom, -1);
+    }
+#endif
+    
+    return TRUE;
+}
+
+
+G_MODULE_EXPORT gboolean _1992_1_1_barres_change_noeud(Beton_Barre *barre, EF_Noeud *noeud,
+  gboolean noeud_1, Projet *projet)
+/* Description : Change un des deux noeuds d'extrémité d'une barre.
+ * Paramètres : Beton_Barre *barre : barre à modifier,
+ *            : EF_Noeud *noeud : le nouveau noeud,
+ *            : gboolean noeud_1 : TRUE si le noeud_debut est à modifier,
+ *                                 FALSE si le noeud_fin est à modifier.
+ *            : Projet *projet : variable projet.
+ * Valeur renvoyée :
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             barre == NULL,
+ *             noeud == NULL,
+ *             projet == NULL,
+ *             noeud_1 == TRUE && barre->noeud_fin == noeud,
+ *             noeud_1 == FALSE && barre->noeud_debut == noeud.
+ */
+{
+    GList   *liste_barre = NULL;
+    GList   *liste_noeuds_dep, *liste_barres_dep;
+    
+    BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre");
+    BUGMSG(noeud, FALSE, gettext("Paramètre %s incorrect.\n"), "noeud");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(!((noeud_1 == TRUE) && (barre->noeud_fin == noeud)), FALSE, gettext("Impossible d'appliquer le même noeud aux deux extrémités d'une barre.\n"));
+    BUGMSG(!((noeud_1 == FALSE) && (barre->noeud_debut == noeud)), FALSE, gettext("Impossible d'appliquer le même noeud aux deux extrémités d'une barre.\n"));
+    
+    liste_barre = g_list_append(liste_barre, barre);
+    BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, liste_barre, &liste_noeuds_dep, &liste_barres_dep), FALSE);
+    g_list_free(liste_barre);
+    BUGMSG(g_list_find(liste_noeuds_dep, noeud) == NULL, FALSE, gettext("Impossible d'affecter le noeud %d à la barre %d car il est dépendant de la barre à modifier.\n"), noeud->numero, barre->numero);
+    
+    if (noeud_1 == TRUE)
+        barre->noeud_debut = noeud;
+    else
+        barre->noeud_fin = noeud;
+    
+#ifdef ENABLE_GTK
+    BUG(m3d_actualise_graphique(projet, liste_noeuds_dep, liste_barres_dep), FALSE);
+    BUG(m3d_rafraichit(projet), FALSE);
+#endif
+    
+    g_list_free(liste_noeuds_dep);
+    g_list_free(liste_barres_dep);
+    
+#ifdef ENABLE_GTK
+    if (projet->list_gtk.ef_barres.builder != NULL)
+    {
+        GtkTreeModel    *model = GTK_TREE_MODEL(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treestore"));
+        
+        gtk_tree_store_set(GTK_TREE_STORE(model), &barre->Iter, noeud_1 == TRUE ? 4 : 5, noeud->numero, -1);
+    }
+#endif
+    
+    return TRUE;
+}
+
+
+G_MODULE_EXPORT gboolean _1992_1_1_barres_change_relachement(Beton_Barre *barre,
+  EF_Relachement *relachement, Projet *projet)
+/* Description : Change le relâchement d'une barre.
+ * Paramètres : Beton_Barre *barre : barre à modifier,
+ *            : EF_Relachement *relachement : nouveau relâchement,
+ *            : Projet *projet : variable projet.
+ * Valeur renvoyée :
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             barre == NULL,
+ *             projet == NULL.
+ */
+{
+    BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    
+    barre->relachement = relachement;
+    
+#ifdef ENABLE_GTK
+    if (projet->list_gtk.ef_barres.builder != NULL)
+    {
+        GtkTreeModel    *model = GTK_TREE_MODEL(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treestore"));;
+        
+        if (relachement == NULL)
+            gtk_tree_store_set(GTK_TREE_STORE(model), &barre->Iter, 6, gettext("Aucun"), -1);
+        else
+            gtk_tree_store_set(GTK_TREE_STORE(model), &barre->Iter, 6, relachement->nom, -1);
+    }
+#endif
+    
+    return TRUE;
+}
+
+
+G_MODULE_EXPORT gboolean _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
+/* Description : Ajouter un élément à la matrice de rigidité partielle et complète.
+ * Paramètres : Projet *projet : la variable projet,
+ *            : Beton_Barre* element : pointeur vers l'élément en béton.
+ * Valeur renvoyée :
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL,
+ *             projet->ef_donnees.triplet_rigidite_partielle == NULL,
+ *             element == NULL,
+ *             projet->ef_donnees.triplet_rigidite_complete == NULL,
+ *             element->section == NULL,
+ *             distance entre le début et l'extrémité de la barre est nulle),
+ *             en cas d'erreur d'allocation mémoire,
+ *             en cas d'erreur due à une fonction interne.
  */
 {
     EF_Noeud            *noeud1, *noeud2;
-    long                *ai, *aj;
+    int                 *ai, *aj;
     double              *ax;
-    long                *ai2, *aj2;
+    int                 *ai2, *aj2;
     double              *ax2;
-    long                *ai3, *aj3;
+    int                 *ai3, *aj3;
     double              *ax3;
     double              y, z;
     double              ll;
@@ -261,11 +600,11 @@ G_MODULE_EXPORT int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre 
     cholmod_triplet     *triplet;
     cholmod_sparse      *sparse_tmp, *matrice_rigidite_globale;
     
-    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->ef_donnees.triplet_rigidite_partielle, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(element, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->ef_donnees.triplet_rigidite_complete, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(element->section, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet->ef_donnees.triplet_rigidite_partielle, FALSE, gettext("Paramètre %s incorrect.\n"), "triplet_rigidite_partielle");
+    BUGMSG(element, FALSE, gettext("Paramètre %s incorrect.\n"), "element");
+    BUGMSG(projet->ef_donnees.triplet_rigidite_complete, FALSE, gettext("Paramètre %s incorrect.\n"), "triplet_rigidite_complete");
+    BUGMSG(element->section, FALSE, gettext("Paramètre %s incorrect.\n"), "element->section");
     
     // Calcul de la matrice de rotation 3D qui permet de passer du repère local au repère
     //   global. Elle est déterminée par le calcul de deux angles : z faisant une rotation
@@ -331,12 +670,12 @@ G_MODULE_EXPORT int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre 
     //   pour avoir un L_x positif et la deuxième solution doit être utilisée pour avoir un
     //   L_x négatif. Il est donc possible d'obtenir une seule et unique solution :\end{verbatim}\begin{displaymath}
     //   cos(z) = signe\{L_x\} \cdot \sqrt{\frac{L_x^2}{L^2-L_z^2}}\texttt{ et }sin(z) = \frac{yy}{\sqrt{L^2-L_z^2}}\end{displaymath}\begin{verbatim}
-    triplet = cholmod_l_allocate_triplet(12, 12, 32, 0, CHOLMOD_REAL, projet->ef_donnees.c);
-    BUGMSG(triplet, -2, gettext("Erreur d'allocation mémoire.\n"));
-    ai = (long*)triplet->i;
-    aj = (long*)triplet->j;
+    triplet = cholmod_allocate_triplet(12, 12, 32, 0, CHOLMOD_REAL, projet->ef_donnees.c);
+    BUGMSG(triplet, FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    ai = (int*)triplet->i;
+    aj = (int*)triplet->j;
     ax = (double*)triplet->x;
-    BUG(_1992_1_1_barres_angle_rotation(element, &y, &z) == 0, -3);
+    BUG(_1992_1_1_barres_angle_rotation(element, &y, &z), FALSE);
     for (k=0;k<4;k++)
     {
         ai[k*8+0] = k*3+0; aj[k*8+0] = k*3+0; ax[k*8+0] = cos(z)*cos(y);
@@ -349,11 +688,11 @@ G_MODULE_EXPORT int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre 
         ai[k*8+7] = k*3+2; aj[k*8+7] = k*3+2; ax[k*8+7] = cos(y);
     }
     triplet->nnz=32;
-    element->matrice_rotation = cholmod_l_triplet_to_sparse(triplet, 0, projet->ef_donnees.c);
-    BUGMSG(element->matrice_rotation, -2, gettext("Erreur d'allocation mémoire.\n"));
-    element->matrice_rotation_transpose = cholmod_l_transpose(element->matrice_rotation, 1, projet->ef_donnees.c);
-    BUGMSG(element->matrice_rotation_transpose, -2, gettext("Erreur d'allocation mémoire.\n"));
-    cholmod_l_free_triplet(&triplet, projet->ef_donnees.c);
+    element->matrice_rotation = cholmod_triplet_to_sparse(triplet, 0, projet->ef_donnees.c);
+    BUGMSG(element->matrice_rotation, FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    element->matrice_rotation_transpose = cholmod_transpose(element->matrice_rotation, 1, projet->ef_donnees.c);
+    BUGMSG(element->matrice_rotation_transpose, FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    cholmod_free_triplet(&triplet, projet->ef_donnees.c);
     
     // Une fois la matrice de rotation déterminée, il est nécessaire de calculer la matrice de
     //   rigidité élémentaire dans le repère local. La poutre pouvant être discrétisée, une
@@ -386,7 +725,7 @@ G_MODULE_EXPORT int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre 
         }
     //     Calcul des L_x, L_y, L_z et L.
         ll = EF_noeuds_distance(noeud2, noeud1);
-        BUG(!isnan(ll), -3);
+        BUG(!isnan(ll), FALSE);
         
     //     Détermination des paramètres de souplesse de l'élément de barre par l'utilisation
     //       des fonctions _1992_1_1_sections_ay, by, cy, az, bz et cz.
@@ -444,7 +783,7 @@ G_MODULE_EXPORT int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre 
                     }
                     default :
                     {
-                        BUGMSG(0, -1, gettext("Relachement %d inconnu."), element->relachement->rx_debut);
+                        BUGMSG(0, FALSE, gettext("Relachement %d inconnu."), element->relachement->rx_debut);
                         break;
                     }
                 }
@@ -474,7 +813,7 @@ G_MODULE_EXPORT int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre 
                     }
                     default :
                     {
-                        BUGMSG(0, -1, gettext("Relachement %d inconnu."), element->relachement->rx_debut);
+                        BUGMSG(0, FALSE, gettext("Relachement %d inconnu."), element->relachement->rx_debut);
                         break;
                     }
                 }
@@ -504,7 +843,7 @@ G_MODULE_EXPORT int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre 
                     }
                     default :
                     {
-                        BUGMSG(0, -1, gettext("Relachement %d inconnu."), element->relachement->rx_debut);
+                        BUGMSG(0, FALSE, gettext("Relachement %d inconnu."), element->relachement->rx_debut);
                         break;
                     }
                 }
@@ -543,7 +882,7 @@ G_MODULE_EXPORT int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre 
                     }
                     default :
                     {
-                        BUGMSG(0, -1, gettext("Relachement %d inconnu."), element->relachement->rx_debut);
+                        BUGMSG(0, FALSE, gettext("Relachement %d inconnu."), element->relachement->rx_debut);
                         break;
                     }
                 }
@@ -573,7 +912,7 @@ G_MODULE_EXPORT int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre 
                     }
                     default :
                     {
-                        BUGMSG(0, -1, gettext("Relachement %d inconnu."), element->relachement->rx_debut);
+                        BUGMSG(0, FALSE, gettext("Relachement %d inconnu."), element->relachement->rx_debut);
                         break;
                     }
                 }
@@ -603,7 +942,7 @@ G_MODULE_EXPORT int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre 
                     }
                     default :
                     {
-                        BUGMSG(0, -1, gettext("Relachement %d inconnu."), element->relachement->rx_debut);
+                        BUGMSG(0, FALSE, gettext("Relachement %d inconnu."), element->relachement->rx_debut);
                         break;
                     }
                 }
@@ -611,10 +950,10 @@ G_MODULE_EXPORT int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre 
         }
         
     //     Calcul des valeurs de la matrice de rigidité locale :
-        triplet = cholmod_l_allocate_triplet(12, 12, 40, 0, CHOLMOD_REAL, projet->ef_donnees.c);
-        BUGMSG(triplet, -2, gettext("Erreur d'allocation mémoire.\n"));
-        ai = (long*)triplet->i;
-        aj = (long*)triplet->j;
+        triplet = cholmod_allocate_triplet(12, 12, 40, 0, CHOLMOD_REAL, projet->ef_donnees.c);
+        BUGMSG(triplet, FALSE, gettext("Erreur d'allocation mémoire.\n"));
+        ai = (int*)triplet->i;
+        aj = (int*)triplet->j;
         ax = (double*)triplet->x;
         triplet->nnz = 40;
         i=0;
@@ -626,7 +965,7 @@ G_MODULE_EXPORT int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre 
     //                 -\frac{E \cdot S}{L} &  \frac{E \cdot S}{L}
     // \end{bmatrix}\end{displaymath}\begin{verbatim}
         es_l = _1992_1_1_sections_es_l(element, j, 0., ll);
-        BUG(!isnan(es_l), -3);
+        BUG(!isnan(es_l), FALSE);
         ai[i] = 0;  aj[i] = 0;  ax[i] =  es_l; i++;
         ai[i] = 0;  aj[i] = 6;  ax[i] = -es_l; i++;
         ai[i] = 6;  aj[i] = 0;  ax[i] = -es_l; i++;
@@ -655,7 +994,7 @@ G_MODULE_EXPORT int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre 
     //         supposant arctan(v/l) = 1/l (hypothèse des petites déplacements).\end{verbatim}\begin{align*}
     //         a = & \frac{M_A}{L}+\frac{M_B}{L} & b = & M_A\nonumber\\
     //         c = & -\frac{M_A}{L}-\frac{M_B}{L} & d = & M_B\end{align*}\begin{verbatim}
-        BUG(EF_calculs_moment_hyper_z(&(element->info_EF[j]), 1./ll, 1./ll, &MA, &MB) == 0, -3);
+        BUG(EF_calculs_moment_hyper_z(&(element->info_EF[j]), 1./ll, 1./ll, &MA, &MB), FALSE);
         ai[i] = 1;  aj[i] = 1;  ax[i] = MA/ll+MB/ll; i++;
         ai[i] = 5;  aj[i] = 1;  ax[i] = MA;           i++;
         ai[i] = 7;  aj[i] = 1;  ax[i] = -MA/ll-MB/ll; i++;
@@ -667,7 +1006,7 @@ G_MODULE_EXPORT int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre 
     //         M_B = \frac{M_A*\varphi_B}{c+k_B}\end{displaymath}\begin{align*}
     //         e = & \frac{M_A}{L}-\frac{M_B}{L} & f = & M_A\nonumber\\
     //         g = & -\frac{M_A}{L}+\frac{M_B}{L} & h = & -M_B\end{align*}\begin{verbatim}
-        BUG(EF_charge_barre_ponctuelle_def_ang_iso_z(element, j, 0., 0., 1., &phia_iso, &phib_iso) == 0, -3);
+        BUG(EF_charge_barre_ponctuelle_def_ang_iso_z(element, j, 0., 0., 1., &phia_iso, &phib_iso), FALSE);
         if (ERREUR_RELATIVE_EGALE(element->info_EF[j].kAz, MAXDOUBLE))
             MA = 0.;
         else if (ERREUR_RELATIVE_EGALE(element->info_EF[j].kBz, MAXDOUBLE))
@@ -685,7 +1024,7 @@ G_MODULE_EXPORT int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre 
     //         supposant arctan(-1/l) = -1/l (hypothèse des petites déplacements).\end{verbatim}\begin{align*}
     //         i = & \frac{M_A}{L}+\frac{M_B}{L} & j = & M_A\nonumber\\
     //         k = & -\frac{M_A}{L}-\frac{M_B}{L} & l = & M_B\end{align*}\begin{verbatim}
-        BUG(EF_calculs_moment_hyper_z(&(element->info_EF[j]), -1./ll, -1./ll, &MA, &MB) == 0, -3);
+        BUG(EF_calculs_moment_hyper_z(&(element->info_EF[j]), -1./ll, -1./ll, &MA, &MB), FALSE);
         ai[i] = 1;  aj[i] = 7;  ax[i] =  MA/ll+MB/ll; i++;
         ai[i] = 5;  aj[i] = 7;  ax[i] =  MA;          i++;
         ai[i] = 7;  aj[i] = 7;  ax[i] = -MA/ll-MB/ll; i++;
@@ -699,7 +1038,7 @@ G_MODULE_EXPORT int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre 
     //         o = & \frac{M_A}{L}-\frac{M_B}{L} & p = & M_B\end{align*}\begin{verbatim}
     //         L'ensemble des valeurs sont à inséré dans la matrice suivante et permet
     //         d'obtenir la matrice de rigidité élémentaire.\end{verbatim}\begin{displaymath}
-        BUG(EF_charge_barre_ponctuelle_def_ang_iso_z(element, j, ll, 0., 1., &phia_iso, &phib_iso) == 0, -3);
+        BUG(EF_charge_barre_ponctuelle_def_ang_iso_z(element, j, ll, 0., 1., &phia_iso, &phib_iso), FALSE);
         if (ERREUR_RELATIVE_EGALE(element->info_EF[j].kBz, MAXDOUBLE))
             MB = 0.;
         else if (ERREUR_RELATIVE_EGALE(element->info_EF[j].kAz, MAXDOUBLE))
@@ -726,7 +1065,7 @@ G_MODULE_EXPORT int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre 
     //         supposant arctan(v/l) = 1/l (hypothèse des petites déplacements).\end{verbatim}\begin{align*}
     //         a = & -\frac{M_A}{L}-\frac{M_B}{L} & b = & M_A\nonumber\\
     //         c = & \frac{M_A}{L}+\frac{M_B}{L} & d = & M_B\end{align*}\begin{verbatim}
-        BUG(EF_calculs_moment_hyper_y(&(element->info_EF[j]), 1./ll, 1./ll, &MA, &MB) == 0, -3);
+        BUG(EF_calculs_moment_hyper_y(&(element->info_EF[j]), 1./ll, 1./ll, &MA, &MB), FALSE);
         ai[i] = 2;  aj[i] = 2;  ax[i] = MA/ll+MB/ll; i++;
         ai[i] = 4;  aj[i] = 2;  ax[i] = -MA;           i++;
         ai[i] = 8;  aj[i] = 2;  ax[i] = -MA/ll-MB/ll; i++;
@@ -738,7 +1077,7 @@ G_MODULE_EXPORT int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre 
     //         M_B = \frac{M_A*\varphi_B}{c+k_B}\end{displaymath}\begin{align*}
     //         e = & \-frac{M_A}{L}-\frac{M_B}{L} & f = & M_A\nonumber\\
     //         g = & \frac{M_A}{L}+\frac{M_B}{L} & h = & -M_B\end{align*}\begin{verbatim}
-        BUG(EF_charge_barre_ponctuelle_def_ang_iso_y(element, j, 0., 0., 1., &phia_iso, &phib_iso) == 0, -3);
+        BUG(EF_charge_barre_ponctuelle_def_ang_iso_y(element, j, 0., 0., 1., &phia_iso, &phib_iso), FALSE);
         if (ERREUR_RELATIVE_EGALE(element->info_EF[j].kAy, MAXDOUBLE))
             MA = 0.;
         else if (ERREUR_RELATIVE_EGALE(element->info_EF[j].kBy, MAXDOUBLE))
@@ -756,7 +1095,7 @@ G_MODULE_EXPORT int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre 
     //         supposant arctan(-1/l) = -1/l (hypothèse des petites déplacements).\end{verbatim}\begin{align*}
     //         i = & -\frac{M_A}{L}-\frac{M_B}{L} & j = & M_A\nonumber\\
     //         k = & \frac{M_A}{L}\frac{M_B}{L} & l = & M_B\end{align*}\begin{verbatim}
-        BUG(EF_calculs_moment_hyper_y(&(element->info_EF[j]), -1./ll, -1./ll, &MA, &MB) == 0, -3);
+        BUG(EF_calculs_moment_hyper_y(&(element->info_EF[j]), -1./ll, -1./ll, &MA, &MB), FALSE);
         ai[i] = 2;  aj[i] = 8;  ax[i] = +MA/ll+MB/ll; i++;
         ai[i] = 4;  aj[i] = 8;  ax[i] = -MA;          i++;
         ai[i] = 8;  aj[i] = 8;  ax[i] = -MA/ll-MB/ll; i++;
@@ -768,7 +1107,7 @@ G_MODULE_EXPORT int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre 
     //         M_A = \frac{M_B*\varphi_A}{c+k_A}\end{displaymath}\begin{align*}
     //         m = & -\frac{M_A}{L}-\frac{M_B}{L} & n = & M_A\nonumber\\
     //         o = & \frac{M_A}{L}+\frac{M_B}{L} & p = & M_B\end{align*}\begin{verbatim}
-        BUG(EF_charge_barre_ponctuelle_def_ang_iso_y(element, j, ll, 0., 1., &phia_iso, &phib_iso) == 0, -3);
+        BUG(EF_charge_barre_ponctuelle_def_ang_iso_y(element, j, ll, 0., 1., &phia_iso, &phib_iso), FALSE);
         if (ERREUR_RELATIVE_EGALE(element->info_EF[j].kBy, MAXDOUBLE))
             MB = 0.;
         else if (ERREUR_RELATIVE_EGALE(element->info_EF[j].kAy, MAXDOUBLE))
@@ -807,55 +1146,55 @@ G_MODULE_EXPORT int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre 
             ai[i] = 9;  aj[i] = 9;  ax[i] = gj_l;  i++;
         }
         
-        element->info_EF[j].matrice_rigidite_locale = cholmod_l_triplet_to_sparse(triplet, 0, projet->ef_donnees.c);
-        BUGMSG(element->info_EF[j].matrice_rigidite_locale, -2, gettext("Erreur d'allocation mémoire.\n"));
-        cholmod_l_free_triplet(&triplet, projet->ef_donnees.c);
+        element->info_EF[j].matrice_rigidite_locale = cholmod_triplet_to_sparse(triplet, 0, projet->ef_donnees.c);
+        BUGMSG(element->info_EF[j].matrice_rigidite_locale, FALSE, gettext("Erreur d'allocation mémoire.\n"));
+        cholmod_free_triplet(&triplet, projet->ef_donnees.c);
         
     //       Calcul la matrice locale dans le repère globale :\end{verbatim}\begin{displaymath}
     //       [K]_{global} = [R] \cdot [K]_{local} \cdot [R]^{-1} = [R] \cdot [K]_{local} \cdot [R]^T\end{displaymath}\begin{verbatim}
-        sparse_tmp = cholmod_l_ssmult(element->matrice_rotation, element->info_EF[j].matrice_rigidite_locale, 0, 1, 0, projet->ef_donnees.c);
-        BUGMSG(sparse_tmp, -2, gettext("Erreur d'allocation mémoire.\n"));
-        matrice_rigidite_globale = cholmod_l_ssmult(sparse_tmp, element->matrice_rotation_transpose, 0, 1, 0, projet->ef_donnees.c);
-        BUGMSG(matrice_rigidite_globale, -2, gettext("Erreur d'allocation mémoire.\n"));
-        cholmod_l_free_sparse(&(sparse_tmp), projet->ef_donnees.c);
-        triplet = cholmod_l_sparse_to_triplet(matrice_rigidite_globale, projet->ef_donnees.c);
-        BUGMSG(triplet, -2, gettext("Erreur d'allocation mémoire.\n"));
-        ai = (long*)triplet->i;
-        aj = (long*)triplet->j;
+        sparse_tmp = cholmod_ssmult(element->matrice_rotation, element->info_EF[j].matrice_rigidite_locale, 0, 1, 0, projet->ef_donnees.c);
+        BUGMSG(sparse_tmp, FALSE, gettext("Erreur d'allocation mémoire.\n"));
+        matrice_rigidite_globale = cholmod_ssmult(sparse_tmp, element->matrice_rotation_transpose, 0, 1, 0, projet->ef_donnees.c);
+        BUGMSG(matrice_rigidite_globale, FALSE, gettext("Erreur d'allocation mémoire.\n"));
+        cholmod_free_sparse(&(sparse_tmp), projet->ef_donnees.c);
+        triplet = cholmod_sparse_to_triplet(matrice_rigidite_globale, projet->ef_donnees.c);
+        BUGMSG(triplet, FALSE, gettext("Erreur d'allocation mémoire.\n"));
+        ai = (int*)triplet->i;
+        aj = (int*)triplet->j;
         ax = (double*)triplet->x;
-        ai2 = (long*)projet->ef_donnees.triplet_rigidite_partielle->i;
-        aj2 = (long*)projet->ef_donnees.triplet_rigidite_partielle->j;
+        ai2 = (int*)projet->ef_donnees.triplet_rigidite_partielle->i;
+        aj2 = (int*)projet->ef_donnees.triplet_rigidite_partielle->j;
         ax2 = (double*)projet->ef_donnees.triplet_rigidite_partielle->x;
-        ai3 = (long*)projet->ef_donnees.triplet_rigidite_complete->i;
-        aj3 = (long*)projet->ef_donnees.triplet_rigidite_complete->j;
+        ai3 = (int*)projet->ef_donnees.triplet_rigidite_complete->i;
+        aj3 = (int*)projet->ef_donnees.triplet_rigidite_complete->j;
         ax3 = (double*)projet->ef_donnees.triplet_rigidite_complete->x;
         
     //       Insertion de la matrice de rigidité élémentaire dans la matrice de rigidité
     //         globale partielle et complète.
         for (i=0;i<triplet->nnz;i++)
         {
-            if ((ai[i] < 6) && (aj[i] < 6) && (projet->ef_donnees.noeuds_pos_partielle[noeud1->numero][ai[i]] != G_MAXUINT) && (projet->ef_donnees.noeuds_pos_partielle[noeud1->numero][aj[i]] != G_MAXUINT))
+            if ((ai[i] < 6) && (aj[i] < 6) && (projet->ef_donnees.noeuds_pos_partielle[noeud1->numero][ai[i]] != -1) && (projet->ef_donnees.noeuds_pos_partielle[noeud1->numero][aj[i]] != -1))
             {
                 ai2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = projet->ef_donnees.noeuds_pos_partielle[noeud1->numero][ai[i]];
                 aj2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = projet->ef_donnees.noeuds_pos_partielle[noeud1->numero][aj[i]];
                 ax2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = ax[i];
                 projet->ef_donnees.triplet_rigidite_partielle_en_cours++;
             }
-            else if ((ai[i] < 6) && (aj[i] >= 6) && (projet->ef_donnees.noeuds_pos_partielle[noeud1->numero][ai[i]] != G_MAXUINT) && (projet->ef_donnees.noeuds_pos_partielle[noeud2->numero][aj[i]-6] != G_MAXUINT))
+            else if ((ai[i] < 6) && (aj[i] >= 6) && (projet->ef_donnees.noeuds_pos_partielle[noeud1->numero][ai[i]] != -1) && (projet->ef_donnees.noeuds_pos_partielle[noeud2->numero][aj[i]-6] != -1))
             {
                 ai2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = projet->ef_donnees.noeuds_pos_partielle[noeud1->numero][ai[i]];
                 aj2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = projet->ef_donnees.noeuds_pos_partielle[noeud2->numero][aj[i]-6];
                 ax2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = ax[i];
                 projet->ef_donnees.triplet_rigidite_partielle_en_cours++;
             }
-            else if ((ai[i] >= 6) && (aj[i] < 6) && (projet->ef_donnees.noeuds_pos_partielle[noeud2->numero][ai[i]-6] != G_MAXUINT) && (projet->ef_donnees.noeuds_pos_partielle[noeud1->numero][aj[i]] != G_MAXUINT))
+            else if ((ai[i] >= 6) && (aj[i] < 6) && (projet->ef_donnees.noeuds_pos_partielle[noeud2->numero][ai[i]-6] != -1) && (projet->ef_donnees.noeuds_pos_partielle[noeud1->numero][aj[i]] != -1))
             {
                 ai2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = projet->ef_donnees.noeuds_pos_partielle[noeud2->numero][ai[i]-6];
                 aj2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = projet->ef_donnees.noeuds_pos_partielle[noeud1->numero][aj[i]];
                 ax2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = ax[i];
                 projet->ef_donnees.triplet_rigidite_partielle_en_cours++;
             }
-            else if ((ai[i] >= 6) && (aj[i] >= 6) && (projet->ef_donnees.noeuds_pos_partielle[noeud2->numero][ai[i]-6] != G_MAXUINT) && (projet->ef_donnees.noeuds_pos_partielle[noeud2->numero][aj[i]-6] != G_MAXUINT))
+            else if ((ai[i] >= 6) && (aj[i] >= 6) && (projet->ef_donnees.noeuds_pos_partielle[noeud2->numero][ai[i]-6] != -1) && (projet->ef_donnees.noeuds_pos_partielle[noeud2->numero][aj[i]-6] != -1))
             {
                 ai2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = projet->ef_donnees.noeuds_pos_partielle[noeud2->numero][ai[i]-6];
                 aj2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = projet->ef_donnees.noeuds_pos_partielle[noeud2->numero][aj[i]-6];
@@ -892,62 +1231,59 @@ G_MODULE_EXPORT int _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre 
                 projet->ef_donnees.triplet_rigidite_complete_en_cours++;
             }
         }
-        cholmod_l_free_triplet(&triplet, projet->ef_donnees.c);
-        cholmod_l_free_sparse(&(matrice_rigidite_globale), projet->ef_donnees.c);
+        cholmod_free_triplet(&triplet, projet->ef_donnees.c);
+        cholmod_free_sparse(&(matrice_rigidite_globale), projet->ef_donnees.c);
     }
     // FinPour
     
-    return 0;
+    return TRUE;
 }
 
 
-G_MODULE_EXPORT int _1992_1_1_barres_rigidite_ajout_tout(Projet *projet)
-/* Description : Ajout à la matrice de rigidité tous les éléments en béton
- * Paramètres : Projet *projet : la variable projet
+G_MODULE_EXPORT gboolean _1992_1_1_barres_rigidite_ajout_tout(Projet *projet)
+/* Description : Ajout à la matrice de rigidité tous les éléments en béton.
+ * Paramètres : Projet *projet : la variable projet.
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : -1 en cas de paramètres invalides :
- *             (projet == NULL) ou
- *             (projet->beton.barres == NULL)
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL.
  */
 {
     GList   *list_parcours;
-    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
     // Trivial
     if (projet->beton.barres == NULL)
-        return 0;
+        return TRUE;
     
     list_parcours = projet->beton.barres;
     do
     {
         Beton_Barre *element = list_parcours->data;
         
-        BUG(_1992_1_1_barres_rigidite_ajout(projet, element) == 0, -3);
+        BUG(_1992_1_1_barres_rigidite_ajout(projet, element), FALSE);
         
         list_parcours = g_list_next(list_parcours);
     }
     while (list_parcours != NULL);
     
-    return 0;
+    return TRUE;
 }
 
 
-G_MODULE_EXPORT int _1992_1_1_barres_free(Projet *projet)
+G_MODULE_EXPORT gboolean _1992_1_1_barres_free(Projet *projet)
 /* Description : Libère l'ensemble des éléments  en béton
  * Paramètres : Projet *projet : la variable projet
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : -1 en cas de paramètres invalides :
- *             (projet == NULL) ou
- *             (projet->beton.barres == NULL)
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL.
  */
 {
     unsigned int     i;
     
     // Trivial
-    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->beton.barres, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
     while (projet->beton.barres != NULL)
     {
@@ -955,14 +1291,18 @@ G_MODULE_EXPORT int _1992_1_1_barres_free(Projet *projet)
         
         projet->beton.barres = g_list_delete_link(projet->beton.barres, projet->beton.barres);
         g_list_free(element->noeuds_intermediaires);
-        cholmod_l_free_sparse(&(element->matrice_rotation), projet->ef_donnees.c);
-        cholmod_l_free_sparse(&(element->matrice_rotation_transpose), projet->ef_donnees.c);
+        cholmod_free_sparse(&(element->matrice_rotation), projet->ef_donnees.c);
+        cholmod_free_sparse(&(element->matrice_rotation_transpose), projet->ef_donnees.c);
         for (i=0;i<=element->discretisation_element;i++)
-            cholmod_l_free_sparse(&(element->info_EF[i].matrice_rigidite_locale), projet->ef_donnees.c);
+            cholmod_free_sparse(&(element->info_EF[i].matrice_rigidite_locale), projet->ef_donnees.c);
         free(element->info_EF);
         
         free(element);
     }
     
-    return 0;
+#ifdef ENABLE_GTK
+    g_object_unref(projet->list_gtk.ef_barres.liste_types);
+#endif
+    
+    return TRUE;
 }

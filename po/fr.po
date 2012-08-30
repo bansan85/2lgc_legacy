@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2012-05-14 00:22+0200\n"
-"PO-Revision-Date: 2012-05-14 00:23+0100\n"
+"POT-Creation-Date: 2012-08-30 18:36+0200\n"
+"PO-Revision-Date: 2012-08-30 18:39+0100\n"
 "Last-Translator: LE GARREC Vincent <vlg@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -15,8 +15,8 @@ msgstr ""
 msgid "Impossible d'initialiser gtk.\n"
 msgstr "Impossible d'initialiser gtk.\n"
 
-msgid "Paramètre incorrect\n"
-msgstr "Paramètre incorrect\n"
+msgid "Paramètre %s incorrect.\n"
+msgstr "Paramètre %s incorrect.\n"
 
 msgid "Erreur d'allocation mémoire.\n"
 msgstr "Erreur d'allocation mémoire.\n"
@@ -30,11 +30,23 @@ msgstr "Section en béton '%s' introuvable.\n"
 msgid "Type de section %d inconnu."
 msgstr "Type de section %d inconnu."
 
+msgid "La discrétisation %d souhaitée est hors domaine %d.\n"
+msgstr "La discrétisation %d souhaitée est hors domaine %d.\n"
+
+msgid "\n"
+msgstr "\n"
+
 msgid "Poteau en béton"
 msgstr "Poteau en béton"
 
 msgid "Poutre en béton"
 msgstr "Poutre en béton"
+
+msgid "La création d'une barre nécessite l'utilisation de des noeuds différents.\n"
+msgstr "La création d'une barre nécessite l'utilisation de des noeuds différents.\n"
+
+msgid "Impossible de créer la barre, la distance entre les deux noeuds %d et %d est nulle.\n"
+msgstr "Impossible de créer la barre, la distance entre les deux noeuds %d et %d est nulle.\n"
 
 msgid "Aucun"
 msgstr "Aucun"
@@ -44,6 +56,12 @@ msgstr "Barre en béton %u introuvable.\n"
 
 msgid "La longueur de la barre %u est nulle\n"
 msgstr "La longueur de la barre %u est nulle\n"
+
+msgid "Impossible d'appliquer le même noeud aux deux extrémités d'une barre.\n"
+msgstr "Impossible d'appliquer le même noeud aux deux extrémités d'une barre.\n"
+
+msgid "Impossible d'affecter le noeud %d à la barre %d car il est dépendant de la barre à modifier.\n"
+msgstr "Impossible d'affecter le noeud %d à la barre %d car il est dépendant de la barre à modifier.\n"
 
 msgid "Relachement %d inconnu."
 msgstr "Relachement %d inconnu."
@@ -56,9 +74,6 @@ msgstr "Matériau en béton n°%d introuvable.\n"
 
 msgid "Matériau en béton '%s' introuvable.\n"
 msgstr "Matériau en béton '%s' introuvable.\n"
-
-msgid "Paramètre %s incorrect.\n"
-msgstr "Paramètre %s incorrect.\n"
 
 msgid "La fenêtre graphique %s n'est pas initialisée.\n"
 msgstr "La fenêtre graphique %s n'est pas initialisée.\n"
@@ -78,6 +93,9 @@ msgstr "Impossible de trouver le type d'action correspondant à cette action.\n"
 msgid "La génération de la fenêtre %s a échouée.\n"
 msgstr "La génération de la fenêtre %s a échouée.\n"
 
+msgid "Le projet ne possède pas de niveaux de groupes.\n"
+msgstr "Le projet ne possède pas de niveaux de groupes.\n"
+
 msgid ""
 "La génération des pondérations est impossible.\n"
 "Le dernier niveau ne peut possèder qu'un seul groupe.\n"
@@ -87,6 +105,12 @@ msgstr ""
 
 msgid "Le dernier niveau ne possède aucune combinaison permettant la génération des pondérations.\n"
 msgstr "Le dernier niveau ne possède aucune combinaison permettant la génération des pondérations.\n"
+
+msgid "Flag %d inconnu.\n"
+msgstr "Flag %d inconnu.\n"
+
+msgid "Pays %d inconnu.\n"
+msgstr "Pays %d inconnu.\n"
 
 msgid "Élément %u du groupe %u introuvable.\n"
 msgstr "Élément %u du groupe %u introuvable.\n"
@@ -102,6 +126,12 @@ msgstr "Le projet ne possède pas de niveaux de groupes permettant de regrouper 
 
 msgid "Le numéro %u est déjà présent dans le groupe %u du niveau %u.\n"
 msgstr "Le numéro %u est déjà présent dans le groupe %u du niveau %u.\n"
+
+msgid "Le type de combinaison %d est inconnu.\n"
+msgstr "Le type de combinaison %d est inconnu.\n"
+
+msgid "Erreur lors de l'actualisation de la fenêtre graphique.\n"
+msgstr "Erreur lors de l'actualisation de la fenêtre graphique.\n"
 
 msgid "niveau : %d\n"
 msgstr "niveau : %d\n"
@@ -202,9 +232,6 @@ msgstr "Neige : Altitude <= 1000 m"
 msgid "Eaux souterraines"
 msgstr "Eaux souterraines"
 
-msgid "Pays %d inconnu.\n"
-msgstr "Pays %d inconnu.\n"
-
 msgid "Charge nodale"
 msgstr "Charge nodale"
 
@@ -229,14 +256,23 @@ msgstr "Action n° %u, description '%s', type n°%d\n"
 msgid "Aucune barre existante.\n"
 msgstr "Aucune barre existante.\n"
 
+msgid "Le groupe %s (%d) n'est combiné ni de type OR, XOR ou AND.\n"
+msgstr "Le groupe %s (%d) n'est combiné ni de type OR, XOR ou AND.\n"
+
+msgid "Le niveau de groupes %d ne possède pas de groupe.\n"
+msgstr "Le niveau de groupes %d ne possède pas de groupe.\n"
+
 msgid "Élément %d existant.\n"
 msgstr "Élément %d existant.\n"
 
+msgid "Le type de combinaison est inconnu.\n"
+msgstr "Le type de combinaison est inconnu.\n"
+
+msgid "La fenêtre graphique %s est déjà initialisée.\n"
+msgstr "La fenêtre graphique %s est déjà initialisée.\n"
+
 msgid "Builder Failed\n"
 msgstr "Builder Failed\n"
-
-msgid "Le projet ne possède pas de niveaux de groupes.\n"
-msgstr "Le projet ne possède pas de niveaux de groupes.\n"
 
 msgid "Le niveau %u est vide. Veuillez soit le remplir, soit le supprimer.\n"
 msgstr "Le niveau %u est vide. Veuillez soit le remplir, soit le supprimer.\n"
@@ -279,9 +315,6 @@ msgstr "Catégorie de durée %d inconnue.\n"
 
 msgid "15. Disclaimer of Warranty.\n"
 msgstr "15. Déclaration d’absence de garantie. (seule la version anglaise fait foi)\n"
-
-msgid "\n"
-msgstr "\n"
 
 msgid "THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY\n"
 msgstr "IL N’Y A AUCUNE GARANTIE POUR LE PROGRAMME, DANS LES LIMITES PERMISES\n"
@@ -370,6 +403,12 @@ msgstr "\t-h, --help : affiche le présent menu\n"
 msgid "\t-w, --warranty : affiche les limites de garantie du logiciel\n"
 msgstr "\t-w, --warranty : affiche les limites de garantie du logiciel\n"
 
+msgid "Le type %d de la liste est inconnu.\n"
+msgstr "Le type %d de la liste est inconnu.\n"
+
+msgid "Impossible de scinder une fonction vide\n"
+msgstr "Impossible de scinder une fonction vide\n"
+
 msgid "Fonction indéfinie.\n"
 msgstr "Fonction indéfinie.\n"
 
@@ -382,8 +421,14 @@ msgstr "Quitter"
 msgid "Structure"
 msgstr "Structure"
 
-msgid "Noeuds..."
-msgstr "Noeuds..."
+msgid "Noeuds"
+msgstr "Noeuds"
+
+msgid "Appuis..."
+msgstr "Appuis..."
+
+msgid "Ajouter..."
+msgstr "Ajouter..."
 
 msgid "Barres..."
 msgstr "Barres..."
@@ -406,11 +451,65 @@ msgstr "Le fichier '%s' est vide.\n"
 msgid "'%s' n'est pas de la forme 'largeurxhauteur'.\n"
 msgstr "'%s' n'est pas de la forme 'largeurxhauteur'.\n"
 
-msgid "Paramètre invalide\n"
-msgstr "Paramètre invalide\n"
+msgid "Le fichier '%s' est corrompu.\n"
+msgstr "Le fichier '%s' est corrompu.\n"
 
 msgid "Type de section %d inconnu.\n"
 msgstr "Type de section %d inconnu.\n"
+
+msgid "Impossible d'effectuer une projection dans un repère local.\n"
+msgstr "Impossible d'effectuer une projection dans un repère local.\n"
+
+msgid "Le début de la position de la charge répartie uniformément (%f) est incorrect.\n"
+msgstr "Le début de la position de la charge répartie uniformément (%f) est incorrect.\n"
+
+msgid "La fin de la position de la charge répartie uniformément (%f) est incorrecte.\n"
+msgstr "La fin de la position de la charge répartie uniformément (%f) est incorrecte.\n"
+
+msgid "Le début de la charge répartie uniformément (%f) est incorrect. La longueur de la barre %d est de %f m.\n"
+msgstr "Le début de la charge répartie uniformément (%f) est incorrect. La longueur de la barre %d est de %f m.\n"
+
+msgid "La fin de la charge répartie uniformément (%f) est incorrecte. La longueur de la barre %d est de %f m.\n"
+msgstr "La fin de la charge répartie uniformément (%f) est incorrecte. La longueur de la barre %d est de %f m.\n"
+
+msgid "Le début (%f) et la fin (%f) de la charge répartie uniformément sont incompatible avec la longueur de la barre %d qui est de %f m.\n"
+msgstr "Le début (%f) et la fin (%f) de la charge répartie uniformément sont incompatible avec la longueur de la barre %d qui est de %f m.\n"
+
+msgid "Section indéfini.\n"
+msgstr "Section indéfini.\n"
+
+msgid "Matériau indéfini.\n"
+msgstr "Matériau indéfini.\n"
+
+msgid "Noeud 1 indéfini.\n"
+msgstr "Noeud 1 indéfini.\n"
+
+msgid "Noeud 2 indéfini.\n"
+msgstr "Noeud 2 indéfini.\n"
+
+msgid "Impossible de relâcher rx simultanément des deux cotés de la barre.\n"
+msgstr "Impossible de relâcher rx simultanément des deux cotés de la barre.\n"
+
+msgid "Le début de la charge répartie uniformément (%f) est incorrect.\n"
+msgstr "Le début de la charge répartie uniformément (%f) est incorrect.\n"
+
+msgid "La fin de la charge répartie uniformément (%f) est incorrecte.\n"
+msgstr "La fin de la charge répartie uniformément (%f) est incorrecte.\n"
+
+msgid "Le début (%f) et la fin (%f) de la charge répartie uniformément sont incompatibles avec la longueur de la barre %d qui est de %f m.\n"
+msgstr "Le début (%f) et la fin (%f) de la charge répartie uniformément sont incompatibles avec la longueur de la barre %d qui est de %f m.\n"
+
+msgid "Le début (%f) et la fin (%f) de la charge répartie uniformément sont incorrecte avec la longueur de la barre %d qui est de %f m.\n"
+msgstr "Le début (%f) et la fin (%f) de la charge répartie uniformément sont incorrecte avec la longueur de la barre %d qui est de %f m.\n"
+
+msgid "Le début de la charge répartie uniformément (%f) est incorrect. La longueur de la barre est de %f m.\n"
+msgstr "Le début de la charge répartie uniformément (%f) est incorrect. La longueur de la barre est de %f m.\n"
+
+msgid "La fin de la charge répartie uniformément (%f) est incorrecte. La longueur de la barre est de %f m.\n"
+msgstr "La fin de la charge répartie uniformément (%f) est incorrecte. La longueur de la barre est de %f m.\n"
+
+msgid "Le début (%f) et la fin (%f) de la charge répartie uniformément sont incorrecte avec la longueur de la barre qui est de %f m.\n"
+msgstr "Le début (%f) et la fin (%f) de la charge répartie uniformément sont incorrecte avec la longueur de la barre qui est de %f m.\n"
 
 msgid "Barre"
 msgstr "Barre"
@@ -448,14 +547,20 @@ msgstr "Ajout d'une charge ponctuelle sur barre"
 msgid "Modification d'une charge ponctuelle sur barre"
 msgstr "Modification d'une charge ponctuelle sur barre"
 
+msgid "Impossible de réaliser un calcul sans noeud existant.\n"
+msgstr "Impossible de réaliser un calcul sans noeud existant.\n"
+
+msgid "Impossible de réaliser un calcul sans barre existante.\n"
+msgstr "Impossible de réaliser un calcul sans barre existante.\n"
+
 msgid "Erreur lors de la résolution de la matrice.\n"
 msgstr "Erreur lors de la résolution de la matrice.\n"
 
+msgid "Type d'élément inconnu.\n"
+msgstr "Type d'élément inconnu.\n"
+
 msgid "Noeud"
 msgstr "Noeud"
-
-msgid "Noeuds"
-msgstr "Noeuds"
 
 msgid "Ponctuelle sur noeud"
 msgstr "Ponctuelle sur noeud"
@@ -463,8 +568,8 @@ msgstr "Ponctuelle sur noeud"
 msgid "La valeur des noeuds est incorrecte."
 msgstr "La valeur des noeuds est incorrecte."
 
-msgid "La listes de noeuds %s n'existe pas."
-msgstr "La listes de noeuds %s n'existe pas."
+msgid "La liste de noeuds %s n'existe pas."
+msgstr "La liste de noeuds %s n'existe pas."
 
 msgid "Ajout d'une charge au noeud"
 msgstr "Ajout d'une charge au noeud"
@@ -472,11 +577,59 @@ msgstr "Ajout d'une charge au noeud"
 msgid "Modification d'une charge au noeud"
 msgstr "Modification d'une charge au noeud"
 
+msgid "Le type de noeud %d est inconnu.\n"
+msgstr "Le type de noeud %d est inconnu.\n"
+
+msgid "Aucun noeud n'est existant.\n"
+msgstr "Aucun noeud n'est existant.\n"
+
 msgid "Noeud n°%u introuvable.\n"
 msgstr "Noeud n°%u introuvable.\n"
 
+msgid "La position de la charge ponctuelle (%f) est incorrecte.\n"
+msgstr "La position de la charge ponctuelle (%f) est incorrecte.\n"
+
+msgid "La position de la charge ponctuelle (%f) est incorrecte. La longueur de la barre %d est de %f m.\n"
+msgstr "La position de la charge ponctuelle (%f) est incorrecte. La longueur de la barre %d est de %f m.\n"
+
+msgid "La position de la charge ponctuelle (%f) est incorrecte. La longueur de la barre est de %f m.\n"
+msgstr "La position de la charge ponctuelle (%f) est incorrecte. La longueur de la barre est de %f m.\n"
+
+msgid "La liste des types de barre est indéfinie.\n"
+msgstr "La liste des types de barre est indéfinie.\n"
+
+msgid "Aucun type de barre n'est défini.\n"
+msgstr "Aucun type de barre n'est défini.\n"
+
 msgid "Impossible de trouver le type de l'élément.\n"
 msgstr "Impossible de trouver le type de l'élément.\n"
+
+msgid "La liste des sections est indéfinie.\n"
+msgstr "La liste des sections est indéfinie.\n"
+
+msgid "La liste des matériaux est indéfinie.\n"
+msgstr "La liste des matériaux est indéfinie.\n"
+
+msgid "La liste des relâchements de barre est indéfinie.\n"
+msgstr "La liste des relâchements de barre est indéfinie.\n"
+
+msgid "Libre"
+msgstr "Libre"
+
+msgid "Bloqué"
+msgstr "Bloqué"
+
+msgid "Le type d'appui de %s (%s) n'a pas à posséder de données.\n"
+msgstr "Le type d'appui de %s (%s) n'a pas à posséder de données.\n"
+
+msgid "Le type d'appui de %s (%d) est inconnu.\n"
+msgstr "Le type d'appui de %s (%d) est inconnu.\n"
+
+msgid "Impossible d'utiliser comme nom 'Aucun'.\n"
+msgstr "Impossible d'utiliser comme nom 'Aucun'.\n"
+
+msgid "L'appui '%s' existe déjà.\n"
+msgstr "L'appui '%s' existe déjà.\n"
 
 msgid "début"
 msgstr "début"
@@ -520,6 +673,15 @@ msgstr "Relachement '%s' introuvable.\n"
 msgid "Charge %u de l'action %u introuvable.\n"
 msgstr "Charge %u de l'action %u introuvable.\n"
 
+msgid "La colonne d'où provient l'édition est incorrecte.\n"
+msgstr "La colonne d'où provient l'édition est incorrecte.\n"
+
+msgid "Le type du noeud ou la colonne d'édition est incorrect.\n"
+msgstr "Le type du noeud ou la colonne d'édition est incorrect.\n"
+
 msgid "Appui %s introuvable.\n"
 msgstr "Appui %s introuvable.\n"
+
+msgid "Le noeud doit être de type intermédiaire.\n"
+msgstr "Le noeud doit être de type intermédiaire.\n"
 

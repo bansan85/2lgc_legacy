@@ -7,7 +7,7 @@
         <property name="modal">True</property>
         <property name="resizable">False</property>
         <property name="window-position">GTK_WIN_POS_CENTER</property>
-        <signal name="destroy" handler="_1990_gtk_groupes_option_window_quitter_button"/>
+        <signal name="destroy" handler="_1990_gtk_groupes_options_window_destroy"/>
         <signal name="key-press-event" handler="_1990_gtk_groupe_option_window_key_press"/>
         <child>
             <object class="GtkGrid" id="1990_groupes_options_grille_principale">

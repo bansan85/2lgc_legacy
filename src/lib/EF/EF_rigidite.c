@@ -20,19 +20,21 @@
 #include <libintl.h>
 #include <string.h>
 #include <cholmod.h>
+#include <gmodule.h>
+
 #include "common_projet.h"
 #include "common_erreurs.h"
 
-G_MODULE_EXPORT int EF_rigidite_init(Projet *projet)
-/* Description : Initialise à NULL les différentes matrices de rigidité
- * Paramètres : Projet *projet : la variable projet
+G_MODULE_EXPORT gboolean EF_rigidite_init(Projet *projet)
+/* Description : Initialise à NULL les différentes matrices de rigidité.
+ * Paramètres : Projet *projet : la variable projet.
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : -1 en cas de paramètres invalides :
- *             (projet == NULL)
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL.
  */
 {
-    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
     // Trivial
     projet->ef_donnees.rigidite_matrice_partielle = NULL;
@@ -46,57 +48,69 @@ G_MODULE_EXPORT int EF_rigidite_init(Projet *projet)
     projet->ef_donnees.noeuds_pos_complete = NULL;
     projet->ef_donnees.noeuds_pos_partielle = NULL;
     
-    return 0;
+    return TRUE;
 }
 
 
-G_MODULE_EXPORT int EF_rigidite_free(Projet *projet)
-/* Description : Libère la liste contenant la matrice de rigidité
- * Paramètres : Projet *projet : la variable projet
+G_MODULE_EXPORT gboolean EF_rigidite_free(Projet *projet)
+/* Description : Libère la liste contenant la matrice de rigidité.
+ * Paramètres : Projet *projet : la variable projet.
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : -1 en cas de paramètres invalides :
- *             (projet == NULL)
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL.
  */
 {
     unsigned int    i;
     
-    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
     // Trivial
     if (projet->ef_donnees.triplet_rigidite_partielle != NULL)
-        cholmod_l_free_triplet(&projet->ef_donnees.triplet_rigidite_partielle, projet->ef_donnees.c);
+    {
+        cholmod_free_triplet(&projet->ef_donnees.triplet_rigidite_partielle, projet->ef_donnees.c);
+        projet->ef_donnees.triplet_rigidite_partielle = NULL;
+    }
     if (projet->ef_donnees.triplet_rigidite_complete != NULL)
-        cholmod_l_free_triplet(&projet->ef_donnees.triplet_rigidite_complete, projet->ef_donnees.c);
+    {
+        cholmod_free_triplet(&projet->ef_donnees.triplet_rigidite_complete, projet->ef_donnees.c);
+        projet->ef_donnees.triplet_rigidite_complete = NULL;
+    }
     
     if (projet->ef_donnees.rigidite_matrice_complete != NULL)
     {
-        cholmod_l_free_sparse(&(projet->ef_donnees.rigidite_matrice_complete), projet->ef_donnees.c);
+        cholmod_free_sparse(&(projet->ef_donnees.rigidite_matrice_complete), projet->ef_donnees.c);
         projet->ef_donnees.rigidite_matrice_complete = NULL;
     }
     if (projet->ef_donnees.rigidite_matrice_partielle != NULL)
     {
-        cholmod_l_free_sparse(&(projet->ef_donnees.rigidite_matrice_partielle), projet->ef_donnees.c);
+        cholmod_free_sparse(&(projet->ef_donnees.rigidite_matrice_partielle), projet->ef_donnees.c);
         projet->ef_donnees.rigidite_matrice_partielle = NULL;
     }
-    umfpack_dl_free_numeric(&projet->ef_donnees.numeric);
+    umfpack_di_free_numeric(&projet->ef_donnees.numeric);
+    projet->ef_donnees.numeric = NULL;
     free(projet->ef_donnees.ap);
+    projet->ef_donnees.ap = NULL;
     free(projet->ef_donnees.ai);
+    projet->ef_donnees.ai = NULL;
     free(projet->ef_donnees.ax);
+    projet->ef_donnees.ax = NULL;
     
     if (projet->ef_donnees.noeuds_pos_complete != NULL)
     {
         for (i=0;i<g_list_length(projet->ef_donnees.noeuds);i++)
             free(projet->ef_donnees.noeuds_pos_complete[i]);
         free(projet->ef_donnees.noeuds_pos_complete);
+        projet->ef_donnees.noeuds_pos_complete = NULL;
     }
     if (projet->ef_donnees.noeuds_pos_partielle != NULL)
     {
         for (i=0;i<g_list_length(projet->ef_donnees.noeuds);i++)
             free(projet->ef_donnees.noeuds_pos_partielle[i]);
         free(projet->ef_donnees.noeuds_pos_partielle);
+        projet->ef_donnees.noeuds_pos_partielle = NULL;
     }
     
-    return 0;
+    return TRUE;
 }
 

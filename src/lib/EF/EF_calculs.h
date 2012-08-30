@@ -22,12 +22,12 @@
 #include "config.h"
 #include "common_projet.h"
 
-int EF_calculs_initialise(Projet *projet);
-int EF_calculs_genere_mat_rig(Projet *projet);
-int EF_calculs_moment_hyper_y(Barre_Info_EF *infos, double phia, double phib,
-  double *ma, double *mb);
-int EF_calculs_moment_hyper_z(Barre_Info_EF *infos, double phia, double phib,
-  double *ma, double *mb);
-int EF_calculs_resoud_charge(Projet *projet, unsigned int num_action);
+gboolean EF_calculs_initialise(Projet *projet) __attribute__((__warn_unused_result__));
+gboolean EF_calculs_genere_mat_rig(Projet *projet) __attribute__((__warn_unused_result__));
+
+gboolean EF_calculs_moment_hyper_y(Barre_Info_EF *infos, double phia, double phib, double *ma, double *mb) __attribute__((__warn_unused_result__));
+gboolean EF_calculs_moment_hyper_z(Barre_Info_EF *infos, double phia, double phib, double *ma, double *mb) __attribute__((__warn_unused_result__));
+
+gboolean EF_calculs_resoud_charge(Projet *projet, unsigned int num_action) __attribute__((__warn_unused_result__));
 
 #endif

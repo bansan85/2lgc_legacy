@@ -27,7 +27,6 @@
 #include <gtk/gtk.h>
 
 #include "1990_actions.h"
-#include "1990_coef_psi.h"
 #include "common_erreurs.h"
 #include "common_projet.h"
 #include "common_gtk.h"
@@ -51,12 +50,13 @@ const GtkTargetEntry drag_targets_actions[] = { {(gchar*)PACKAGE"1_SAME_PROC", G
 
 G_MODULE_EXPORT gboolean _1990_gtk_actions_window_key_press(GtkWidget *widget __attribute__((unused)), GdkEvent *event, Projet *projet)
 /* Description : Gestion des touches de l'ensemble des composants de la fenêtre.
- * Paramètres : GtkWidget *widget : composant tree_view à l'origine de l'évènement,
+ * Paramètres : GtkWidget *widget : composant à l'origine de l'évènement,
  *            : GdkEvent *event : description de la touche pressée,
  *            : Projet *projet : la variable projet.
- * Valeur renvoyée : Aucune.
- *   Echec : projet == NULL,
- *           interface graphique non initialisée.
+ * Valeur renvoyée : TRUE si la touche ECHAP est pressée, FALSE sinon.
+ *   Echec : FALSE :
+ *             projet == NULL,
+ *             interface graphique non initialisée.
  */
 {
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
@@ -76,7 +76,7 @@ G_MODULE_EXPORT void _1990_gtk_actions_window_destroy(GtkWidget *object __attrib
 /* Description : Initialise les variables permettant de définir que la fenêtre de gestion des
  *               actions est fermée et libère la mémoire.
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
- *            : Projet *projet : la variable projet/
+ *            : Projet *projet : la variable projet.
  * Valeur renvoyée : Aucune.
  *   Echec : projet == NULL,
  *           interface graphique non initialisée.
@@ -137,7 +137,7 @@ G_MODULE_EXPORT void _1990_gtk_actions_cursor_changed(
             {
                 Charge_Noeud *charge = list_parcours->data;
                 
-                BUG(EF_gtk_charge_noeud_ajout_affichage(charge, projet, TRUE) == 0, );
+                BUG(EF_gtk_charge_noeud_ajout_affichage(charge, projet, TRUE), );
                 
                 break;
             }
@@ -145,7 +145,7 @@ G_MODULE_EXPORT void _1990_gtk_actions_cursor_changed(
             {
                 Charge_Barre_Ponctuelle *charge = list_parcours->data;
                 
-                BUG(EF_gtk_charge_barre_ponctuelle_ajout_affichage(charge, projet, TRUE) == 0, );
+                BUG(EF_gtk_charge_barre_ponctuelle_ajout_affichage(charge, projet, TRUE), );
                 
                 break;
             }
@@ -153,7 +153,7 @@ G_MODULE_EXPORT void _1990_gtk_actions_cursor_changed(
             {
                 Charge_Barre_Repartie_Uniforme *charge = list_parcours->data;
                 
-                BUG(EF_gtk_charge_barre_repartie_uniforme_ajout_affichage(charge, projet, TRUE) == 0, );
+                BUG(EF_gtk_charge_barre_repartie_uniforme_ajout_affichage(charge, projet, TRUE), );
                 
                 break;
             }
@@ -175,10 +175,9 @@ G_MODULE_EXPORT gboolean _1990_gtk_actions_tree_view_key_press_event(GtkWidget *
 /* Description : Evènement lorsqu'il y a un changement de sélection dans la liste des actions.
  * Paramètres : GtkTreeView *tree_view : composant tree_view à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
- * Valeur renvoyée : Aucune.
+ * Valeur renvoyée : TRUE si la touche DELETE est pressée, FALSE sinon.
  *   Echec : projet == NULL,
- *           interface graphique non initialisée,
- *           action introuvable.
+ *           interface graphique non initialisée.
  */
 {
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
@@ -204,9 +203,10 @@ G_MODULE_EXPORT gboolean _1990_gtk_actions_tree_view_drag(GtkWidget *widget,
  *            : guint tim : inutile,
  *            : Projet *projet : la variable projet.
  * Valeur renvoyée : FALSE.
- *   Echec : projet == NULL,
- *           interface graphique non initialisée,
- *           _1990_action_deplace_charge.
+ *   Echec : FALSE :
+ *             projet == NULL,
+ *             interface graphique non initialisée,
+ *             _1990_action_deplace_charge.
  */
 {
     gint                    cx, cy;
@@ -263,7 +263,7 @@ G_MODULE_EXPORT gboolean _1990_gtk_actions_tree_view_drag(GtkWidget *widget,
             if (gtk_tree_model_get_iter(model_charge_source, &iter_charge_source, gtk_tree_row_reference_get_path((GtkTreeRowReference*)list_parcours->data)))
             {
                 gtk_tree_model_get(model_charge_source, &iter_charge_source, 0, &num_charge_source, -1);
-                BUG(EF_charge_deplace(projet, num_action_source, num_charge_source, num_action_dest) == 0, FALSE);
+                BUG(EF_charge_deplace(projet, num_action_source, num_charge_source, num_action_dest), FALSE);
             }
         }
         g_list_foreach(list_fixe, (GFunc)gtk_tree_row_reference_free, NULL);
@@ -345,7 +345,7 @@ G_MODULE_EXPORT void _1990_gtk_actions_description_edited(
     gtk_tree_model_get(GTK_TREE_MODEL(projet->list_gtk._1990_actions.tree_store_actions), &iter, 0, &numero, -1);
     
     // On lui modifie son nom
-    BUG(_1990_action_renomme(projet, numero, new_text) == 0, );
+    BUG(_1990_action_renomme(projet, numero, new_text), );
     
     return;
 }
@@ -354,7 +354,7 @@ G_MODULE_EXPORT void _1990_gtk_actions_description_edited(
 G_MODULE_EXPORT void _1990_gtk_actions_type_edited(
   GtkCellRendererText *cell __attribute__((unused)), const gchar *path_string, 
   const gchar *new_text, Projet *projet)
-/* Description : Changement du type (psi0, psi1 et psi2 automatique mis à jour) d'une action.
+/* Description : Change le type (psi0, psi1 et psi2 automatiquement mis à jour) d'une action.
  * Paramètres : GtkCellRendererText *cell : cellule en cours,
  *            : gchar *path_string : path de la ligne en cours,
  *            : gchar *new_text : nouveau coefficient psi0,
@@ -382,7 +382,7 @@ G_MODULE_EXPORT void _1990_gtk_actions_type_edited(
     }
     BUGMSG(type != _1990_action_num_bat_txt(projet->pays), , gettext("Type d'action '%s' inconnu.\n"), new_text);
     
-    BUG(_1990_action_change_type(projet, action_num, type) == 0, );
+    BUG(_1990_action_change_type(projet, action_num, type), );
     
     return;
 }
@@ -419,7 +419,7 @@ G_MODULE_EXPORT void _1990_gtk_tree_view_actions_psi_edited(GtkCellRendererText 
     
     // On vérifie si le texte contient bien un nombre flottant
     if (sscanf(new_text, "%lf%s", &convertion, fake) == 1)
-        BUG(_1990_action_change_psi(projet, num_action, column-3, convertion) == 0, );
+        BUG(_1990_action_change_psi(projet, num_action, column-3, convertion), );
     
     free(fake);
      
@@ -451,12 +451,18 @@ G_MODULE_EXPORT void _1990_gtk_menu_nouvelle_action_activate(GtkMenuItem *menuit
     {
         if ((GTK_IS_MENU_TOOL_BUTTON(menuitem)) || ((GtkMenuItem *)list_parcours->data == menuitem))
         {
-            char    *tmp;
+            char        *tmp;
+            Action      *action;
+            GtkTreePath *path;
             
             BUGMSG(tmp = g_strdup_printf("%s %u", gettext("Sans nom"), g_list_length(projet->actions)), , gettext("Erreur d'allocation mémoire.\n"));
             // On crée l'action en fonction de la catégorie sélectionnée dans le menu déroulant.
-            BUG(_1990_action_ajout(projet, type, tmp), );
+            BUG(action = _1990_action_ajout(projet, type, tmp), );
             free(tmp);
+            
+            path = gtk_tree_model_get_path(GTK_TREE_MODEL(projet->list_gtk._1990_actions.tree_store_actions), &action->Iter_fenetre);
+            gtk_tree_view_set_cursor(GTK_TREE_VIEW(projet->list_gtk._1990_actions.tree_view_actions), path, gtk_tree_view_get_column(GTK_TREE_VIEW(projet->list_gtk._1990_actions.tree_view_actions), 1), TRUE);
+            gtk_tree_path_free(path);
             
             return;
         }
@@ -494,7 +500,7 @@ G_MODULE_EXPORT void _1990_gtk_menu_suppr_action_activate(
     gtk_tree_model_get(model, &iter, 0, &numero_action, -1);
     
     // Et on la supprime ainsi que les charges la contenant
-    BUG(_1990_action_free_num(projet, numero_action) == 0, );
+    BUG(_1990_action_free_num(projet, numero_action), );
     
     return;
 }
@@ -509,9 +515,10 @@ G_MODULE_EXPORT gboolean _1990_gtk_actions_charge_key_press_event(GtkWidget *wid
  * Paramètres : GtkWidget *widget : composant tree_view à l'origine de l'évènement,
  *            : GdkEvent *event : description de la touche pressée,
  *            : Projet *projet : la variable projet.
- * Valeur renvoyée : Aucune.
- *   Echec : projet == NULL,
- *           interface graphique non initialisée.
+ * Valeur renvoyée : TRUE si la touche DELETE est pressée, FALSE sinon.
+ *   Echec : FALSE :
+ *             projet == NULL,
+ *             interface graphique non initialisée.
  */
 {
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
@@ -534,13 +541,14 @@ G_MODULE_EXPORT gboolean _1990_gtk_actions_charge_double_clicked(GtkWidget *widg
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
  *            : GdkEvent *event : Information sur l'évènement,
  *            : Projet *projet : la variable projet.
- * Valeur renvoyée : Aucune.
- *   Echec : projet == NULL,
- *           interface graphique non initialisée.
+ * Valeur renvoyée : TRUE s'il y a édition via un double-clique, FALSE sinon.
+ *   Echec : FALSE :
+ *             projet == NULL,
+ *             interface graphique non initialisée.
  */
 {
-    BUGMSG(projet, FALSE, gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->list_gtk._1990_actions.builder, FALSE, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet->list_gtk._1990_actions.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Actions");
     
     if ((event->type == GDK_2BUTTON_PRESS) && (gtk_widget_get_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_toolbar_charge_edit")))))
     {
@@ -600,7 +608,7 @@ G_MODULE_EXPORT void _1990_gtk_tree_view_charges_description_edited(
     gtk_tree_model_get_iter_from_string(model, &iter, path_string);
     gtk_tree_model_get(model, &iter, 0, &numero_charge, 1, &description, -1);
     
-    BUG(EF_charge_renomme(projet, numero_action, numero_charge, new_text) == 0, );
+    BUG(EF_charge_renomme(projet, numero_action, numero_charge, new_text), );
     
     return;
 }
@@ -646,17 +654,17 @@ G_MODULE_EXPORT void _1990_gtk_menu_edit_charge_clicked(
             {
                 case CHARGE_NOEUD :
                 {
-                    BUG(EF_gtk_charge_noeud(projet, numero_action, numero_charge) == 0, );
+                    BUG(EF_gtk_charge_noeud(projet, numero_action, numero_charge), );
                     break;
                 }
                 case CHARGE_BARRE_PONCTUELLE :
                 {
-                    BUG(EF_gtk_charge_barre_ponctuelle(projet, numero_action, numero_charge) == 0, );
+                    BUG(EF_gtk_charge_barre_ponctuelle(projet, numero_action, numero_charge), );
                     break;
                 }
                 case CHARGE_BARRE_REPARTIE_UNIFORME :
                 {
-                    BUG(EF_gtk_charge_barre_repartie_uniforme(projet, numero_action, numero_charge) == 0, );
+                    BUG(EF_gtk_charge_barre_repartie_uniforme(projet, numero_action, numero_charge), );
                     break;
                 }
                 default :
@@ -715,7 +723,7 @@ G_MODULE_EXPORT void _1990_gtk_menu_suppr_charge_clicked(
         if (gtk_tree_model_get_iter(model, &iter, gtk_tree_row_reference_get_path((GtkTreeRowReference*)list_parcours->data)))
         {
             gtk_tree_model_get(model, &iter, 0, &numero_charge, -1);
-            BUG(EF_charge_supprime(projet, numero_action, numero_charge) == 0, );
+            BUG(EF_charge_supprime(projet, numero_action, numero_charge), );
         }
     }
     g_list_foreach(list_fixe, (GFunc)gtk_tree_row_reference_free, NULL);
@@ -768,7 +776,7 @@ void _1990_gtk_menu_nouvelle_charge_nodale_activate(
         return;
     gtk_tree_model_get(model_action, &iter_action, 0, &numero_action, -1);
     
-    BUG(EF_gtk_charge_noeud(projet, numero_action, G_MAXUINT) == 0, );
+    BUG(EF_gtk_charge_noeud(projet, numero_action, G_MAXUINT), );
 }
 
 
@@ -793,7 +801,7 @@ void _1990_gtk_menu_nouvelle_charge_barre_ponctuelle_activate(
         return;
     gtk_tree_model_get(model_action, &iter_action, 0, &numero_action, -1);
     
-    BUG(EF_gtk_charge_barre_ponctuelle(projet, numero_action, G_MAXUINT) == 0, );
+    BUG(EF_gtk_charge_barre_ponctuelle(projet, numero_action, G_MAXUINT), );
     
     return;
 }
@@ -820,7 +828,7 @@ void _1990_gtk_menu_nouvelle_charge_barre_repartie_uniforme_activate(
         return;
     gtk_tree_model_get(model_action, &iter_action, 0, &numero_action, -1);
     
-    BUG(EF_gtk_charge_barre_repartie_uniforme(projet, numero_action, G_MAXUINT) == 0, );
+    BUG(EF_gtk_charge_barre_repartie_uniforme(projet, numero_action, G_MAXUINT), );
     
     return;
 }
@@ -865,7 +873,7 @@ G_MODULE_EXPORT void _1990_gtk_actions(Projet *projet)
             Action  *action = list_parcours->data;
             
             gtk_tree_store_append(store_actions, &action->Iter_fenetre, NULL);
-            gtk_tree_store_set(store_actions, &action->Iter_fenetre, 0, action->numero, 1, action->description, 2, _1990_action_type_bat_txt(action->type, projet->pays), 3, action->psi0, 4, action->psi1, 5, action->psi2, -1);
+            gtk_tree_store_set(store_actions, &action->Iter_fenetre, 0, action->numero, 1, action->nom, 2, _1990_action_type_bat_txt(action->type, projet->pays), 3, action->psi0, 4, action->psi1, 5, action->psi2, -1);
             
             list_parcours = g_list_next(list_parcours);
         } while (list_parcours != NULL);

@@ -31,8 +31,8 @@ G_MODULE_EXPORT double common_math_arrondi_nombre(double nombre)
 /* Description : Arrondi un nombre en supprimant la partie négligeable (ERREUR_RELATIVE_MIN)
  *   L'algorithme est perfectible puisque lors de l'arrondi, une nouvelle imprécision apparait
  *   et certains nombres peuvent être arrondi en 1.09999999 ou -23.000000001.
- * Paramètres : double nombre : le nombre à arrondir
- * Valeur renvoyée : le nombre arrondi
+ * Paramètres : double nombre : le nombre à arrondir.
+ * Valeur renvoyée : le nombre arrondi.
  */
 {
     double          puissance;
@@ -55,9 +55,9 @@ G_MODULE_EXPORT double common_math_arrondi_nombre(double nombre)
 
 
 G_MODULE_EXPORT void common_math_arrondi_triplet(cholmod_triplet *triplet)
-/* Description : Arrondi un triplet en supprimant la partie négligeable (ERREUR_RELATIVE_MIN)
- * Paramètres : cholmod_triplet *triplet : la variable triplet à arrondir
- * Valeur renvoyée : void
+/* Description : Arrondi un triplet en supprimant la partie négligeable (ERREUR_RELATIVE_MIN).
+ * Paramètres : cholmod_triplet *triplet : la variable triplet à arrondir.
+ * Valeur renvoyée : Aucune.
  */
 {
     double          *ax;
@@ -73,9 +73,9 @@ G_MODULE_EXPORT void common_math_arrondi_triplet(cholmod_triplet *triplet)
 
 
 G_MODULE_EXPORT void common_math_arrondi_sparse(cholmod_sparse *sparse)
-/* Description : Arrondi un sparse en supprimant la partie négligeable (ERREUR_RELATIVE_MIN)
- * Paramètres : cholmod_sparse *sparse : la matrice sparse à arrondir
- * Valeur renvoyée : void
+/* Description : Arrondi un sparse en supprimant la partie négligeable (ERREUR_RELATIVE_MIN).
+ * Paramètres : cholmod_sparse *sparse : la matrice sparse à arrondir.
+ * Valeur renvoyée : Aucune.
  */
 {
     double          *ax;
@@ -96,7 +96,7 @@ G_MODULE_EXPORT void common_math_double_to_char(double nombre, char *dest, int d
  * Paramètres : double nombre : nombre à convertir,
  *              char *dest : nombre converti,
  *              int decimales : nombre de décimales au maximum.
- * Valeur renvoyée : void
+ * Valeur renvoyée : Aucune.
  */
 {
     double  test;
@@ -112,7 +112,7 @@ G_MODULE_EXPORT void common_math_double_to_char(double nombre, char *dest, int d
         {
             sprintf(dest, "%.*le", width, nombre);
             sscanf(dest, "%le", &test);
-            if ((nombre*0.99999999999999999999999999 <= test) && (test <= nombre*1.00000000000000000000000001))
+            if ((fabs(nombre)*0.999999999999999 <= fabs(test)) && (fabs(test) <= fabs(nombre)*1.000000000000001))
                 break;
         }
     }
@@ -123,23 +123,10 @@ G_MODULE_EXPORT void common_math_double_to_char(double nombre, char *dest, int d
         {
             sprintf(dest, "%.*lf", width, nombre);
             sscanf(dest, "%lf", &test);
-            if ((nombre*0.99999999999999999999999999 <= test) && (test <= nombre*1.00000000000000000000000001))
+            if ((fabs(nombre)*0.999999999999999 <= fabs(test)) && (fabs(test) <= fabs(nombre)*1.000000000000001))
                 break;
         }
     }
+    
     return;
 }
-    /*double common_math_arrondi(double nombre)
-    {
-        double      retour;
-        unsigned int    width, x, y
-        
-        // On affiche la précision au maximum, provient de la librairie cholmod
-        for (width = 6 ; width < 50 ; width++)
-        {
-            sprintf (s, "%.*g", width, nombre) ;
-            sscanf (s, "%lg", &y) ;
-            if (x == y) break ;
-        }
-        printf("%s\n", s);
-    }*/

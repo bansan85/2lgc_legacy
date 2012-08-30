@@ -116,8 +116,6 @@ typedef struct __List_Gtk_EF_Noeud
 {
     GtkBuilder      *builder;
     
-    GtkListStore    *liste_appuis;
-    
     GtkWidget       *window;
     GtkWidget       *notebook;
     GtkTreeStore    *tree_store_libre;
@@ -138,6 +136,15 @@ typedef struct __List_Gtk_EF_Barres
     GtkListStore    *liste_sections;
     GtkListStore    *liste_materiaux;
 } List_Gtk_EF_Barres;
+
+typedef struct __List_Gtk_EF_Appuis
+{
+    GtkBuilder      *builder;
+    GtkWidget       *window;
+    
+    GtkListStore    *liste_appuis;
+    GtkListStore    *liste_type_appui;
+} List_Gtk_EF_Appuis;
 
 #endif
 
@@ -175,14 +182,6 @@ typedef enum __Action_Categorie
 } Action_Categorie;
 
 
-typedef struct __EF_Point
-{
-    double      x;
-    double      y;
-    double      z;
-} EF_Point;
-
-
 typedef enum __Type_EF_Appui
 {
     EF_APPUI_LIBRE,                 // Déplacement libre
@@ -215,9 +214,31 @@ typedef enum __Charge_Type
 } Barre_Charge_Type;
 
 
+typedef enum __Type_Noeud
+{
+    NOEUD_LIBRE,
+    NOEUD_BARRE
+} Type_Noeud;
+
+
+typedef enum __Type_Liste
+{
+    LISTE_UINT,
+    LISTE_NOEUDS,
+    LISTE_BARRES
+} Type_Liste;
+
+
+typedef struct __EF_Point
+{
+    double      x;
+    double      y;
+    double      z;
+} EF_Point;
+
+
 typedef struct __EF_Appui
 {
-    unsigned int    numero;         // Numéro de l'appui
     char            *nom;
     Type_EF_Appui   ux;              // Degré de liberté de la direction x
     void            *ux_donnees;     // Données complémentaire si nécessaire.
@@ -231,14 +252,11 @@ typedef struct __EF_Appui
     void            *ry_donnees;
     Type_EF_Appui   rz;
     void            *rz_donnees;
+#ifdef ENABLE_GTK
+    GtkTreeIter     Iter_fenetre;           // Pour le treeview
+    GtkTreeIter     Iter_liste;             // pour le composant list_appuis
+#endif                  
 } EF_Appui;
-
-
-typedef enum __Type_Noeud
-{
-    NOEUD_LIBRE,
-    NOEUD_BARRE
-} Type_Noeud;
 
 
 typedef struct __EF_Noeud
@@ -257,7 +275,7 @@ typedef struct __Charge_Noeud
 #ifdef ENABLE_GTK
     GtkTreeIter         Iter;
 #endif                  
-    char                *description;
+    char                *nom;
     GList               *noeuds;
     double              fx;
     double              fy;
@@ -396,6 +414,9 @@ typedef struct __Beton_Barre
     GList               *noeuds_intermediaires;
     Barre_Info_EF       *info_EF;                   // Une info par élément discrétisé
     
+#ifdef ENABLE_GTK
+    GtkTreeIter         Iter;
+#endif                  
     cholmod_sparse      *matrice_rotation;
     cholmod_sparse      *matrice_rotation_transpose;
 } Beton_Barre;
@@ -415,7 +436,7 @@ typedef struct __Charge_Barre_Ponctuelle
 #ifdef ENABLE_GTK
     GtkTreeIter         Iter;
 #endif
-    char                *description;
+    char                *nom;
     GList               *barres;
     gboolean            repere_local;
     double              position; // Position de la charge ponctuelle en mètre
@@ -437,7 +458,7 @@ typedef struct __Charge_Barre_Repartie_Uniforme
 #ifdef ENABLE_GTK
     GtkTreeIter         Iter;
 #endif    
-    char                *description;
+    char                *nom;
     GList               *barres;
     gboolean            repere_local;
     gboolean            projection;
@@ -481,7 +502,7 @@ typedef struct __Fonction
 
 typedef struct __Action
 {
-    char            *description;
+    char            *nom;
     unsigned int    numero;
     unsigned int    type;                   // Les catégories sont conformes à _1990_action_type
     GList           *charges;
@@ -616,6 +637,9 @@ typedef struct __Comp_Gtk
     GtkWidget   *menu_structure;
     GtkWidget   *menu_structure_list;
     GtkWidget   *menu_structure_noeud;
+    GtkWidget   *menu_structure_noeud_list;
+    GtkWidget   *menu_structure_noeud_appui;
+    GtkWidget   *menu_structure_noeud_ajout;
     GtkWidget   *menu_structure_barres;
     GtkWidget   *menu_charges;
     GtkWidget   *menu_charges_list;
@@ -641,6 +665,7 @@ typedef struct __List_Gtk
     List_Gtk_m3d            m3d;       // pour l'affichage graphique de la structure
     List_Gtk_EF_Noeud       ef_noeud;
     List_Gtk_EF_Barres      ef_barres;
+    List_Gtk_EF_Appuis      ef_appuis;
     Comp_Gtk                comp;      // tous les composants grahpiques
 } List_Gtk;
 #endif
@@ -659,8 +684,8 @@ typedef struct __EF
     GList               *appuis;       // Liste des types d'appuis
     GList               *relachements; // Liste des types de relâchements des barres.
     
-    unsigned int        **noeuds_pos_partielle; // Etabli une corrélation entre le degré de 
-    unsigned int        **noeuds_pos_complete;  // liberté (x, y, z, rx, ry, rz) d'un noeud
+    int                 **noeuds_pos_partielle; // Etabli une corrélation entre le degré de 
+    int                 **noeuds_pos_complete;  // liberté (x, y, z, rx, ry, rz) d'un noeud
                                                 // et sa position dans la matrice de rigidité
     // globale partielle et complète. Par partielle, il faut comprendre la matrice de rigidité
     // globale sans les lignes et les colonnes dont les déplacements sont connus ; cette même
@@ -687,7 +712,7 @@ typedef struct __EF
     cholmod_sparse      *rigidite_matrice_complete;  // Matrice de rigidité complète.
     
     void                *numeric;            // Matrice partielle factorisée, utilisée dans
-    long                *ap, *ai;            // tous les calculs lors de la résolution de
+    int                 *ap, *ai;            // tous les calculs lors de la résolution de
     double              *ax;                 // chaque cas de charges.
     double              residu;              // Erreur non relative des réactions d'appuis.
 } EF;
@@ -715,10 +740,10 @@ typedef struct __Projet
 } Projet;
 
 
-Projet *projet_init(Type_Pays pays);
+Projet *projet_init(Type_Pays pays) __attribute__((__warn_unused_result__));
 #ifdef ENABLE_GTK
-int projet_init_graphique(Projet *projet);
+gboolean projet_init_graphique(Projet *projet) __attribute__((__warn_unused_result__));
 #endif
-int projet_free(Projet *projet);
+gboolean projet_free(Projet *projet) __attribute__((__warn_unused_result__));
 
 #endif

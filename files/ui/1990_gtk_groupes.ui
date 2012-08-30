@@ -148,7 +148,7 @@
                                                         <signal name="drag-drop" handler="_1990_gtk_tree_view_etat_drag"/>
                                                         <signal name="row-expanded" handler="_1990_gtk_tree_view_etat_row_expanded"/>
                                                         <signal name="row-collapsed" handler="_1990_gtk_tree_view_etat_row_collapsed"/>
-                                                        <signal name="cursor-changed" handler="_1990_gtk_tree_view_etat_cursor_changed"/>
+                                                        <signal name="cursor-changed" handler="_1990_gtk_groupes_tree_view_etat_cursor_changed"/>
                                                         <signal name="key-press-event" handler="_1990_gtk_tree_view_etat_key_press_event"/>
                                                         <child internal-child="selection">
                                                             <object class="GtkTreeSelection" id="1990_groupes_treeview_select_etat">
@@ -157,7 +157,7 @@
                                                         </child>
                                                         <child>
                                                             <object class="GtkTreeViewColumn" id="1990_groupes_treeview_etat_column0">
-                                                                <property name="visible">False</property>
+                                                                <property name="visible">True</property>
                                                                 <property name="resizable">True</property>
                                                                 <property name="title">Numéro</property>
                                                                 <child>
@@ -300,7 +300,7 @@
                                                         </child>
                                                         <child>
                                                             <object class="GtkTreeViewColumn" id="1990_groupes_treeview_dispo_column0">
-                                                                <property name="visible">False</property>
+                                                                <property name="visible">True</property>
                                                                 <property name="resizable">True</property>
                                                                 <property name="title">Numéro</property>
                                                                 <child>
@@ -317,7 +317,10 @@
                                                                 <property name="resizable">True</property>
                                                                 <property name="title">Description</property>
                                                                 <child>
-                                                                    <object class="GtkCellRendererText" id="1990_groupes_treeview_dispo_cell1"/>
+                                                                    <object class="GtkCellRendererText" id="1990_groupes_treeview_dispo_cell1">
+                                                                        <property name="editable">True</property>
+                                                                        <signal name="edited" handler="_1990_gtk_tree_view_dispo_cell_edited"/>
+                                                                    </object>
                                                                     <attributes>
                                                                         <attribute name="text">1</attribute>
                                                                     </attributes>

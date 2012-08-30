@@ -38,18 +38,28 @@
 #include "1990_gtk_actions.h"
 #include "common_selection.h"
 
-G_MODULE_EXPORT int EF_gtk_charge_noeud_ajout_affichage(Charge_Noeud *charge, Projet *projet, gboolean nouvelle_ligne)
+G_MODULE_EXPORT gboolean EF_gtk_charge_noeud_ajout_affichage(Charge_Noeud *charge,
+  Projet *projet, gboolean nouvelle_ligne)
+/* Description : Ajoute une ligne contenant les informations sur une charge ponctuelle au
+ *               tableau dans la fenêtre des actions.
+ * Paramètres : Charge_Barre_Ponctuelle *charge : charge à ajouter,
+ *            : Projet *projet : la variable projet,
+ *            : gboolean nouvelle_ligne : Ajoute une ligne ou modifie la ligne existante.
+ * Valeur renvoyée :
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL,
+ *             en cas d'erreur d'allocation mémoire.
+ */
 {
-    char                    *description, txt_fx[30], txt_fy[30], txt_fz[30], txt_mx[30], txt_my[30], txt_mz[30], *txt_liste_noeuds;
-    List_Gtk_1990_Actions   *list_gtk_1990_actions;
+    char    *description, txt_fx[30], txt_fy[30], txt_fz[30], txt_mx[30], txt_my[30], txt_mz[30], *txt_liste_noeuds;
     
-    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
-    list_gtk_1990_actions = &projet->list_gtk._1990_actions;
-    if (list_gtk_1990_actions->window == NULL)
-        return -1;
+    if (projet->list_gtk._1990_actions.builder == NULL)
+        return TRUE;
      
-    BUG(txt_liste_noeuds = common_selection_converti_noeuds_en_texte(charge->noeuds), -3);
+    BUG(txt_liste_noeuds = common_selection_converti_noeuds_en_texte(charge->noeuds), FALSE);
     common_math_double_to_char(charge->fx, txt_fx, GTK_DECIMAL_FORCE);
     common_math_double_to_char(charge->fy, txt_fy, GTK_DECIMAL_FORCE);
     common_math_double_to_char(charge->fz, txt_fz, GTK_DECIMAL_FORCE);
@@ -57,39 +67,62 @@ G_MODULE_EXPORT int EF_gtk_charge_noeud_ajout_affichage(Charge_Noeud *charge, Pr
     common_math_double_to_char(charge->my, txt_my, GTK_DECIMAL_MOMENT);
     common_math_double_to_char(charge->mz, txt_mz, GTK_DECIMAL_MOMENT);
     
-    BUGMSG(description = g_strdup_printf("%s : %s, Fx : %s N, Fy : %s N, Fz : %s N, Mx : %s N.m, My : %s N.m, Mz : %s N.m", strstr(txt_liste_noeuds, ";") == NULL ? gettext("Noeud") : gettext("Noeuds"), txt_liste_noeuds, txt_fx, txt_fy, txt_fz, txt_mx, txt_my, txt_mz), -2, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(description = g_strdup_printf("%s : %s, Fx : %s N, Fy : %s N, Fz : %s N, Mx : %s N.m, My : %s N.m, Mz : %s N.m", strstr(txt_liste_noeuds, ";") == NULL ? gettext("Noeud") : gettext("Noeuds"), txt_liste_noeuds, txt_fx, txt_fy, txt_fz, txt_mx, txt_my, txt_mz), FALSE, gettext("Erreur d'allocation mémoire.\n"));
     
     free(txt_liste_noeuds);
     
     if (nouvelle_ligne == TRUE)
-        gtk_tree_store_append(list_gtk_1990_actions->tree_store_charges, &charge->Iter, NULL);
-    gtk_tree_store_set(list_gtk_1990_actions->tree_store_charges, &charge->Iter, 0, charge->numero, 1, charge->description, 2, gettext("Ponctuelle sur noeud"), 3, description, -1);
+        gtk_tree_store_append(projet->list_gtk._1990_actions.tree_store_charges, &charge->Iter, NULL);
+    gtk_tree_store_set(projet->list_gtk._1990_actions.tree_store_charges, &charge->Iter, 0, charge->numero, 1, charge->nom, 2, gettext("Ponctuelle sur noeud"), 3, description, -1);
     
     free(description);
     
-    return 0;
+    return TRUE;
 }
 
 
 /* DEBUT DE LA FENETRE GRAPHIQUE*/
 
 
-G_MODULE_EXPORT void EF_gtk_charge_noeud_annuler_clicked(GtkButton *button __attribute__((unused)), Projet *projet)
-/* Description : Ferme la fenêtre sans effectuer les modifications
- * Paramètres : GtkWidget *button : composant à l'origine de l'évènement
- *            : Projet *projet : la variable projet
- * Valeur renvoyée : Aucune
+G_MODULE_EXPORT void EF_gtk_charge_noeud_annuler_clicked(
+  GtkButton *button __attribute__((unused)), Projet *projet)
+/* Description : Ferme la fenêtre sans effectuer les modifications.
+ * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : Aucune.
  */
 {
-    BUGMSG(projet, , gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->list_gtk.ef_charge_noeud.builder, , gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet->list_gtk.ef_charge_noeud.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Nodale");
     
     gtk_widget_destroy(projet->list_gtk.ef_charge_noeud.window);
+    
     return;
 }
 
 
-gboolean EF_gtk_charge_noeud_recupere_donnees(Projet *projet, unsigned int *num_action, GList **noeuds, double *fx, double *fy, double *fz, double *mx, double *my, double *mz, gchar **texte)
+gboolean EF_gtk_charge_noeud_recupere_donnees(Projet *projet, unsigned int *num_action,
+  GList **noeuds, double *fx, double *fy, double *fz, double *mx, double *my, double *mz,
+  gchar **nom)
+/* Description : Récupère toutes les données de la fenêtre permettant d'ajouter ou d'éditer une
+ *               charge nodale.
+ * Paramètres : Projet *projet : la variable projet,
+ *            : unsigned int *num_action : numéro de l'action où sera ajoutée la charge,
+ *            : GList **noeuds : liste des noeuds qui supportera la charge,
+ *            : double *fx : force selon x,
+ *            : double *fy : force selon y,
+ *            : double *fz : force selon z,
+ *            : double *mx : moment selon x,
+ *            : double *my : moment selon y,
+ *            : double *mz : moment selon z,
+ *            : gchar **nom : nom de l'action.
+ * Valeur renvoyée :
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL, num_action == NULL, noeuds == NULL, fx == NULL, fy == NULL,
+ *             fz == NULL, mx == NULL, my == NULL, mz == NULL, nom == NULL,
+ *             en cas d'erreur d'allocation mémoire.
+ */
 {
     GtkWidget                   *dialog;
     List_Gtk_EF_Charge_Noeud    *ef_gtk;
@@ -99,7 +132,17 @@ gboolean EF_gtk_charge_noeud_recupere_donnees(Projet *projet, unsigned int *num_
     GtkTextBuffer               *textbuffer;
     gint                        get_active;
     
-    BUGMSG(projet, FALSE, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(num_action, FALSE, gettext("Paramètre %s incorrect.\n"), "num_action");
+    BUGMSG(noeuds, FALSE, gettext("Paramètre %s incorrect.\n"), "noeuds");
+    BUGMSG(fx, FALSE, gettext("Paramètre %s incorrect.\n"), "fx");
+    BUGMSG(fy, FALSE, gettext("Paramètre %s incorrect.\n"), "fy");
+    BUGMSG(fz, FALSE, gettext("Paramètre %s incorrect.\n"), "fz");
+    BUGMSG(mx, FALSE, gettext("Paramètre %s incorrect.\n"), "mx");
+    BUGMSG(my, FALSE, gettext("Paramètre %s incorrect.\n"), "my");
+    BUGMSG(mz, FALSE, gettext("Paramètre %s incorrect.\n"), "mz");
+    BUGMSG(nom, FALSE, gettext("Paramètre %s incorrect.\n"), "nom");
+    BUGMSG(projet->list_gtk.ef_charge_noeud.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Nodale");
     
     ef_gtk = &projet->list_gtk.ef_charge_noeud;
     
@@ -117,6 +160,7 @@ gboolean EF_gtk_charge_noeud_recupere_donnees(Projet *projet, unsigned int *num_
         gtk_widget_destroy(dialog);
         return FALSE;
     }
+    
     *fy = gtk_common_entry_renvoie_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_buffer_fy")));
     if (isnan(*fy))
     {
@@ -125,6 +169,7 @@ gboolean EF_gtk_charge_noeud_recupere_donnees(Projet *projet, unsigned int *num_
         gtk_widget_destroy(dialog);
         return FALSE;
     }
+    
     *fz = gtk_common_entry_renvoie_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_buffer_fz")));
     if (isnan(*fz))
     {
@@ -133,6 +178,7 @@ gboolean EF_gtk_charge_noeud_recupere_donnees(Projet *projet, unsigned int *num_
         gtk_widget_destroy(dialog);
         return FALSE;
     }
+    
     *mx = gtk_common_entry_renvoie_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_buffer_mx")));
     if (isnan(*mx))
     {
@@ -141,6 +187,7 @@ gboolean EF_gtk_charge_noeud_recupere_donnees(Projet *projet, unsigned int *num_
         gtk_widget_destroy(dialog);
         return FALSE;
     }
+    
     *my = gtk_common_entry_renvoie_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_buffer_my")));
     if (isnan(*my))
     {
@@ -149,6 +196,7 @@ gboolean EF_gtk_charge_noeud_recupere_donnees(Projet *projet, unsigned int *num_
         gtk_widget_destroy(dialog);
         return FALSE;
     }
+    
     *mz = gtk_common_entry_renvoie_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_buffer_mz")));
     if (isnan(*mz))
     {
@@ -157,6 +205,7 @@ gboolean EF_gtk_charge_noeud_recupere_donnees(Projet *projet, unsigned int *num_
         gtk_widget_destroy(dialog);
         return FALSE;
     }
+    
     textbuffer = GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_buffer_noeuds"));
     gtk_text_buffer_get_iter_at_offset(textbuffer, &start, 0);
     gtk_text_buffer_get_iter_at_offset(textbuffer, &end, -1);
@@ -175,7 +224,7 @@ gboolean EF_gtk_charge_noeud_recupere_donnees(Projet *projet, unsigned int *num_
         *noeuds = common_selection_converti_numeros_en_noeuds(num_noeuds, projet);
         if (*noeuds == NULL)
         {
-            dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("La listes de noeuds %s n'existe pas."), texte_tmp);
+            dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("La liste de noeuds %s n'existe pas."), texte_tmp);
             gtk_dialog_run(GTK_DIALOG(dialog));
             gtk_widget_destroy(dialog);
             free(texte_tmp);
@@ -189,7 +238,7 @@ gboolean EF_gtk_charge_noeud_recupere_donnees(Projet *projet, unsigned int *num_
             free(texte_tmp);
             gtk_text_buffer_get_iter_at_offset(textbuffer, &start, 0);
             gtk_text_buffer_get_iter_at_offset(textbuffer, &end, -1);
-            *texte = gtk_text_buffer_get_text(textbuffer, &start, &end, FALSE);
+            *nom = gtk_text_buffer_get_text(textbuffer, &start, &end, FALSE);
             
             return TRUE;
         }
@@ -197,23 +246,25 @@ gboolean EF_gtk_charge_noeud_recupere_donnees(Projet *projet, unsigned int *num_
 }
 
 
-void EF_gtk_charge_noeud_ajouter_clicked(GtkButton *button __attribute__((unused)), Projet *projet)
-/* Description : Ferme la fenêtre en ajoutant la charge
- * Paramètres : GtkWidget *button : composant à l'origine de l'évènement
- *            : Projet *projet : la variable projet
- * Valeur renvoyée : Aucune
+void EF_gtk_charge_noeud_ajouter_clicked(GtkButton *button __attribute__((unused)),
+  Projet *projet)
+/* Description : Ferme la fenêtre en ajoutant la charge.
+ * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : Aucune.
  */
 {
-    double                      fx, fy, fz, mx, my, mz;
-    unsigned int                num_action;
-    GList                       *noeuds;
-    gchar                       *texte;
-    Charge_Noeud                *charge_noeud;
-    GtkTreeIter                 iter_action;
-    GtkTreeModel                *model_action;
-    unsigned int                numero_action;
+    double          fx, fy, fz, mx, my, mz;
+    unsigned int    num_action;
+    GList           *noeuds;
+    gchar           *texte;
+    Charge_Noeud    *charge_noeud;
+    GtkTreeIter     iter_action;
+    GtkTreeModel    *model_action;
+    unsigned int    numero_action;
     
-    BUGMSG(projet, , gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet->list_gtk.ef_charge_noeud.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Nodale");
     
     BUG(EF_gtk_charge_noeud_recupere_donnees(projet, &num_action, &noeuds, &fx, &fy, &fz, &mx, &my, &mz, &texte) == TRUE, );
     
@@ -227,7 +278,7 @@ void EF_gtk_charge_noeud_ajouter_clicked(GtkButton *button __attribute__((unused
         return;
     gtk_tree_model_get(model_action, &iter_action, 0, &numero_action, -1);
     if (numero_action == num_action)
-        BUG(EF_gtk_charge_noeud_ajout_affichage(charge_noeud, projet, TRUE) == 0, );
+        BUG(EF_gtk_charge_noeud_ajout_affichage(charge_noeud, projet, TRUE), );
     
     gtk_widget_destroy(projet->list_gtk.ef_charge_noeud.window);
     
@@ -236,10 +287,10 @@ void EF_gtk_charge_noeud_ajouter_clicked(GtkButton *button __attribute__((unused
 
 
 void EF_gtk_charge_noeud_editer_clicked(GtkButton *button __attribute__((unused)), Projet *projet)
-/* Description : Ferme la fenêtre en appliquant les modifications
- * Paramètres : GtkWidget *button : composant à l'origine de l'évènement
- *            : Projet *projet : la variable projet
- * Valeur renvoyée : Aucune
+/* Description : Ferme la fenêtre en appliquant les modifications.
+ * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : Aucune.
  */
 {
     List_Gtk_EF_Charge_Noeud    *ef_gtk;
@@ -249,7 +300,8 @@ void EF_gtk_charge_noeud_editer_clicked(GtkButton *button __attribute__((unused)
     gchar                       *texte;
     Charge_Noeud                *charge_noeud;
     
-    BUGMSG(projet, , gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet->list_gtk.ef_charge_noeud.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Nodale");
     
     ef_gtk = &projet->list_gtk.ef_charge_noeud;
     
@@ -257,8 +309,8 @@ void EF_gtk_charge_noeud_editer_clicked(GtkButton *button __attribute__((unused)
     
     // Création de la nouvelle charge ponctuelle au noeud
     BUG(charge_noeud = EF_charge_cherche(projet, ef_gtk->action, ef_gtk->charge), );
-    free(charge_noeud->description);
-    charge_noeud->description = texte;
+    free(charge_noeud->nom);
+    charge_noeud->nom = texte;
     charge_noeud->fx = fx;
     charge_noeud->fy = fy;
     charge_noeud->fz = fz;
@@ -268,9 +320,9 @@ void EF_gtk_charge_noeud_editer_clicked(GtkButton *button __attribute__((unused)
     g_list_free(charge_noeud->noeuds);
     charge_noeud->noeuds = noeuds;
     if (num_action != ef_gtk->action)
-        BUG(EF_charge_deplace(projet, ef_gtk->action, ef_gtk->charge, num_action) == 0, );
+        BUG(EF_charge_deplace(projet, ef_gtk->action, ef_gtk->charge, num_action), );
     else
-        BUG(EF_gtk_charge_noeud_ajout_affichage(charge_noeud, projet, FALSE) == 0, );
+        BUG(EF_gtk_charge_noeud_ajout_affichage(charge_noeud, projet, FALSE), );
     
     gtk_widget_destroy(projet->list_gtk.ef_charge_noeud.window);
     
@@ -278,10 +330,20 @@ void EF_gtk_charge_noeud_editer_clicked(GtkButton *button __attribute__((unused)
 }
 
 
-G_MODULE_EXPORT gboolean EF_gtk_charge_noeud_window_key_press(GtkWidget *widget __attribute__((unused)), GdkEvent *event, Projet *projet)
+G_MODULE_EXPORT gboolean EF_gtk_charge_noeud_window_key_press(
+  GtkWidget *widget __attribute__((unused)), GdkEvent *event, Projet *projet)
+/* Description : Gestion des touches de l'ensemble des composants de la fenêtre.
+ * Paramètres : GtkWidget *widget : composant à l'origine de l'évènement,
+ *            : GdkEvent *event : description de la touche pressée,
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : TRUE si la touche ECHAP est pressée, FALSE sinon.
+ *   Echec : FALSE :
+ *             projet == NULL,
+ *             interface graphique non initialisée.
+ */
 {
-    BUGMSG(projet, TRUE, gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->list_gtk.ef_charge_noeud.builder, TRUE, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet->list_gtk.ef_charge_noeud.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Nodale");
     
     if (event->key.keyval == GDK_KEY_Escape)
     {
@@ -293,15 +355,16 @@ G_MODULE_EXPORT gboolean EF_gtk_charge_noeud_window_key_press(GtkWidget *widget 
 }
 
 
-G_MODULE_EXPORT void EF_gtk_charge_noeud_window_destroy(GtkWidget *object __attribute__((unused)), Projet *projet)
-/* Description : met projet->list_gtk._1990_actions.window à NULL quand la fenêtre se ferme
+G_MODULE_EXPORT void EF_gtk_charge_noeud_window_destroy(
+  GtkWidget *object __attribute__((unused)), Projet *projet)
+/* Description : met projet->list_gtk.ef_charge_noeud.builder à NULL quand la fenêtre se ferme.
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
- *            : Projet *projet : la variable projet
- * Valeur renvoyée : Aucune
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : Aucune.
  */
 {
-    BUGMSG(projet, , gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->list_gtk.ef_charge_noeud.builder, , gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet->list_gtk.ef_charge_noeud.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Nodale");
     
     projet->list_gtk.ef_charge_noeud.builder = NULL;
     
@@ -309,24 +372,29 @@ G_MODULE_EXPORT void EF_gtk_charge_noeud_window_destroy(GtkWidget *object __attr
 }
 
 
-G_MODULE_EXPORT int EF_gtk_charge_noeud(Projet *projet, unsigned int action_defaut, unsigned int charge)
+G_MODULE_EXPORT gboolean EF_gtk_charge_noeud(Projet *projet, unsigned int action_defaut, unsigned int charge)
 /* Description : Affichage de la fenêtre permettant de créer ou modifier une action de type
- *               charge ponctuelle au noeud
- * Paramètres : GtkWidget *button : composant à l'origine de l'évènement
- *            : Projet *projet : la variable projet
- *            : gboolean nouveau : vaut TRUE si une nouvelle charge doit être ajoutée,
- *                                 vaut FALSE si la charge en cours doit être modifiée
- * Valeur renvoyée : Aucune
+ *               charge ponctuelle au noeud.
+ * Paramètres : Projet *projet : la variable projet
+ *            : unsigned int action_defaut : action par défaut dans la fenêtre,
+ *            : unsigned int charge : vaut G_MAXUINT si une nouvelle charge doit être ajoutée,
+ *                                    vaut le numéro de la charge si elle doit être modifiée.
+ * Valeur renvoyée :
+ *   Succès : TRUE
+ *   Echec : FALSE :
+ *             projet == NULL,
+ *             Fenêtre graphique déjà initialisée.
  */
 {
     List_Gtk_EF_Charge_Noeud    *ef_gtk;
     Charge_Noeud                *charge_noeud;
     
-    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet->list_gtk.ef_charge_noeud.builder == NULL, FALSE, gettext("La fenêtre graphique %s est déjà initialisée.\n"), "Charge Nodale");
     
     ef_gtk = &projet->list_gtk.ef_charge_noeud;
     projet->list_gtk.ef_charge_noeud.builder = gtk_builder_new();
-    BUGMSG(gtk_builder_add_from_file(projet->list_gtk.ef_charge_noeud.builder, DATADIR"/ui/EF_gtk_charge_noeud.ui", NULL) != 0, -1, gettext("Builder Failed\n"));
+    BUGMSG(gtk_builder_add_from_file(projet->list_gtk.ef_charge_noeud.builder, DATADIR"/ui/EF_gtk_charge_noeud.ui", NULL) != 0, FALSE, gettext("Builder Failed\n"));
     gtk_builder_connect_signals(projet->list_gtk.ef_charge_noeud.builder, projet);
     
     ef_gtk->window = GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_window"));
@@ -344,7 +412,7 @@ G_MODULE_EXPORT int EF_gtk_charge_noeud(Projet *projet, unsigned int action_defa
         ef_gtk->action = action_defaut;
         ef_gtk->charge = charge;
         gtk_window_set_title(GTK_WINDOW(ef_gtk->window), gettext("Modification d'une charge au noeud"));
-        BUG(charge_noeud = EF_charge_cherche(projet, action_defaut, charge), -1);
+        BUG(charge_noeud = EF_charge_cherche(projet, action_defaut, charge), FALSE);
     }
     
     gtk_combo_box_set_model(GTK_COMBO_BOX(ef_gtk->combobox_charge), GTK_TREE_MODEL(projet->list_gtk._1990_actions.list_actions));
@@ -353,7 +421,7 @@ G_MODULE_EXPORT int EF_gtk_charge_noeud(Projet *projet, unsigned int action_defa
     if (charge_noeud != NULL)
     {
         char   tmp[30], *tmp2;
-        gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_textview_description"))), charge_noeud->description, -1);
+        gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_textview_description"))), charge_noeud->nom, -1);
         common_math_double_to_char(charge_noeud->fx, tmp, GTK_DECIMAL_FORCE);
         gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_buffer_fx")), tmp, -1);
         common_math_double_to_char(charge_noeud->fy, tmp, GTK_DECIMAL_FORCE);
@@ -366,7 +434,7 @@ G_MODULE_EXPORT int EF_gtk_charge_noeud(Projet *projet, unsigned int action_defa
         gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_buffer_my")), tmp, -1);
         common_math_double_to_char(charge_noeud->mz, tmp, GTK_DECIMAL_MOMENT);
         gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_buffer_mz")), tmp, -1);
-        BUG(tmp2 = common_selection_converti_noeuds_en_texte(charge_noeud->noeuds), -3);
+        BUG(tmp2 = common_selection_converti_noeuds_en_texte(charge_noeud->noeuds), FALSE);
         gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_buffer_noeuds")), tmp2, -1);
         free(tmp2);
     }
@@ -387,7 +455,7 @@ G_MODULE_EXPORT int EF_gtk_charge_noeud(Projet *projet, unsigned int action_defa
     else
         gtk_window_set_transient_for(GTK_WINDOW(ef_gtk->window), GTK_WINDOW(projet->list_gtk._1990_actions.window));
     
-    return 0;
+    return TRUE;
 }
 
 

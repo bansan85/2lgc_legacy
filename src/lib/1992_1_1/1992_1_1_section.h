@@ -22,31 +22,31 @@
 #include "config.h"
 #include "common_projet.h"
 
-int _1992_1_1_sections_init(Projet *projet);
-int _1992_1_1_sections_ajout_rectangulaire(Projet *projet, const char* nom, double l, double h);
-int _1992_1_1_sections_ajout_T(Projet *projet, const char* nom, double lt, double la, double ht, double ha);
-int _1992_1_1_sections_ajout_carre(Projet *projet, const char* nom, double cote);
-int _1992_1_1_sections_ajout_circulaire(Projet *projet, const char* nom, double diametre);
+gboolean _1992_1_1_sections_init(Projet *projet) __attribute__((__warn_unused_result__));
 
-void* _1992_1_1_sections_cherche_numero(Projet *projet, unsigned int numero);
-void* _1992_1_1_sections_cherche_nom(Projet *projet, const char *nom);
+gboolean _1992_1_1_sections_ajout_rectangulaire(Projet *projet, const char* nom, double l, double h) __attribute__((__warn_unused_result__));
+gboolean _1992_1_1_sections_ajout_T(Projet *projet, const char* nom, double lt, double la, double ht, double ha) __attribute__((__warn_unused_result__));
+gboolean _1992_1_1_sections_ajout_carre(Projet *projet, const char* nom, double cote) __attribute__((__warn_unused_result__));
+gboolean _1992_1_1_sections_ajout_circulaire(Projet *projet, const char* nom, double diametre) __attribute__((__warn_unused_result__));
 
-double _1992_1_1_sections_j(void* section);
-double _1992_1_1_sections_iy(void* section);
-double _1992_1_1_sections_iz(void* section);
+void* _1992_1_1_sections_cherche_numero(Projet *projet, unsigned int numero) __attribute__((__warn_unused_result__));
+void* _1992_1_1_sections_cherche_nom(Projet *projet, const char *nom) __attribute__((__warn_unused_result__));
 
-double _1992_1_1_sections_ay(Beton_Barre *barre, unsigned int discretisation);
-double _1992_1_1_sections_by(Beton_Barre *barre, unsigned int discretisation);
-double _1992_1_1_sections_cy(Beton_Barre *barre, unsigned int discretisation);
-double _1992_1_1_sections_az(Beton_Barre *barre, unsigned int discretisation);
-double _1992_1_1_sections_bz(Beton_Barre *barre, unsigned int discretisation);
-double _1992_1_1_sections_cz(Beton_Barre *barre, unsigned int discretisation);
+double _1992_1_1_sections_j(void* section) __attribute__((__warn_unused_result__));
+double _1992_1_1_sections_iy(void* section) __attribute__((__warn_unused_result__));
+double _1992_1_1_sections_iz(void* section) __attribute__((__warn_unused_result__));
 
-double _1992_1_1_sections_s(void *sect);
-double _1992_1_1_sections_es_l(Beton_Barre *barre, unsigned int discretisation,
-  double debut, double fin);
-double _1992_1_1_sections_gj_l(Beton_Barre *barre, unsigned int discretisation);
+double _1992_1_1_sections_ay(Beton_Barre *barre, unsigned int discretisation) __attribute__((__warn_unused_result__));
+double _1992_1_1_sections_by(Beton_Barre *barre, unsigned int discretisation) __attribute__((__warn_unused_result__));
+double _1992_1_1_sections_cy(Beton_Barre *barre, unsigned int discretisation) __attribute__((__warn_unused_result__));
+double _1992_1_1_sections_az(Beton_Barre *barre, unsigned int discretisation) __attribute__((__warn_unused_result__));
+double _1992_1_1_sections_bz(Beton_Barre *barre, unsigned int discretisation) __attribute__((__warn_unused_result__));
+double _1992_1_1_sections_cz(Beton_Barre *barre, unsigned int discretisation) __attribute__((__warn_unused_result__));
 
-int _1992_1_1_sections_free(Projet *projet);
+double _1992_1_1_sections_s(void *sect) __attribute__((__warn_unused_result__));
+double _1992_1_1_sections_es_l(Beton_Barre *barre, unsigned int discretisation, double debut, double fin) __attribute__((__warn_unused_result__));
+double _1992_1_1_sections_gj_l(Beton_Barre *barre, unsigned int discretisation) __attribute__((__warn_unused_result__));
+
+gboolean _1992_1_1_sections_free(Projet *projet) __attribute__((__warn_unused_result__));
 
 #endif

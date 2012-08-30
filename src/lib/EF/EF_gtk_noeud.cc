@@ -40,15 +40,16 @@ extern "C" {
 #include "common_selection.h"
 #include "1992_1_1_barres.h"
 
-G_MODULE_EXPORT void EF_gtk_noeud_fermer(GtkButton *button __attribute__((unused)), Projet *projet)
-/* Description : Ferme la fenêtre sans effectuer les modifications
- * Paramètres : GtkWidget *button : composant à l'origine de l'évènement
- *            : Projet *projet : la variable projet
- * Valeur renvoyée : Aucune
+G_MODULE_EXPORT void EF_gtk_noeud_fermer(GtkButton *button __attribute__((unused)),
+  Projet *projet)
+/* Description : Ferme la fenêtre sans effectuer les modifications.
+ * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : Aucune.
  */
 {
-    BUGMSG(projet, , gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->list_gtk.ef_noeud.builder, , gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet->list_gtk.ef_noeud.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Noeuds");
     
     gtk_widget_destroy(projet->list_gtk.ef_noeud.window);
     
@@ -56,17 +57,19 @@ G_MODULE_EXPORT void EF_gtk_noeud_fermer(GtkButton *button __attribute__((unused
 }
 
 
-G_MODULE_EXPORT void EF_gtk_noeud_ajouter(GtkButton *button __attribute__((unused)), Projet *projet)
-/* Description : Ajoute un nouveau noeud
- * Paramètres : GtkWidget *button : composant à l'origine de l'évènement
- *            : Projet *projet : la variable projet
- * Valeur renvoyée : Aucune
+G_MODULE_EXPORT void EF_gtk_noeud_ajouter(GtkButton *button __attribute__((unused)),
+  Projet *projet)
+/* Description : Ajoute un nouveau noeud libre ou intermédiaire en fonction de l'onglet en cours
+ *               d'affichage.
+ * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : Aucune.
  */
 {
     List_Gtk_EF_Noeud   *ef_gtk;
     
-    BUGMSG(projet, , gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->list_gtk.ef_noeud.window, , gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet->list_gtk.ef_noeud.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Noeuds");
     
     ef_gtk = &projet->list_gtk.ef_noeud;
     
@@ -108,13 +111,14 @@ G_MODULE_EXPORT void EF_gtk_noeud_ajouter(GtkButton *button __attribute__((unuse
 }
 
 
-G_MODULE_EXPORT void EF_gtk_noeud_edit_pos_abs(GtkCellRendererText *cell, gchar *path_string, gchar *new_text, Projet *projet)
-/* Description : Changement de la position d'un noeud
+G_MODULE_EXPORT void EF_gtk_noeud_edit_pos_abs(GtkCellRendererText *cell, gchar *path_string,
+  gchar *new_text, Projet *projet)
+/* Description : Changement de la position d'un noeud.
  * Paramètres : GtkCellRendererText *cell : cellule en cours,
  *            : gchar *path_string : path de la ligne en cours,
  *            : gchar *new_text : nouvelle valeur,
- *            : Projet *projet : la variable projet
- * Valeur renvoyée : Aucune
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : Aucune.
  */
 {
     List_Gtk_EF_Noeud   *gtk_noeud;
@@ -126,11 +130,11 @@ G_MODULE_EXPORT void EF_gtk_noeud_edit_pos_abs(GtkCellRendererText *cell, gchar 
     double              conversion;
     gint                column = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cell), "column"));
     
-    BUGMSG(projet, , gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->ef_donnees.noeuds, , gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->list_gtk.ef_noeud.window, , gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet->list_gtk.ef_noeud.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Noeuds");
+    BUGMSG(projet->ef_donnees.noeuds, , gettext("Aucun noeud n'est existant.\n"));
     BUGMSG(fake, , gettext("Erreur d'allocation mémoire.\n"));
-    BUGMSG(&projet->list_gtk.m3d.data, , gettext("Paramètre incorrect\n"));
+    BUGMSG(new_text, , gettext("Paramètre %s incorrect.\n"), "new_text");
     
     gtk_noeud = &projet->list_gtk.ef_noeud;
     model = GTK_TREE_MODEL(gtk_noeud->tree_store_libre);
@@ -142,8 +146,10 @@ G_MODULE_EXPORT void EF_gtk_noeud_edit_pos_abs(GtkCellRendererText *cell, gchar 
     // On vérifie si le texte contient bien un nombre flottant
     if (sscanf(new_text, "%lf%s", &conversion, fake) == 1)
     {
-        EF_Noeud            *noeud;
+        EF_Noeud    *noeud;
         EF_Point    *point;
+        GList       *liste_noeuds_dep, *liste_barres_dep;
+        GList       *liste_noeuds = NULL;
         
         // On modifie l'action
         BUG(noeud = EF_noeuds_cherche_numero(projet, i), );
@@ -168,12 +174,20 @@ G_MODULE_EXPORT void EF_gtk_noeud_edit_pos_abs(GtkCellRendererText *cell, gchar 
             }
             default :
             {
-                BUGMSG(NULL, , gettext("Paramètre incorrect\n"));
+                BUGMSG(NULL, , gettext("La colonne d'où provient l'édition est incorrecte.\n"));
                 break;
             }
         }
         
-        m3d_actualise_graphique_deplace_noeud(projet, noeud);
+        liste_noeuds = g_list_append(liste_noeuds, noeud);
+        BUG(_1992_1_1_barres_cherche_dependances(projet, liste_noeuds, NULL, &liste_noeuds_dep, &liste_barres_dep), );
+        g_list_free(liste_noeuds);
+        
+        BUG(m3d_actualise_graphique(projet, liste_noeuds_dep, liste_barres_dep), );
+        BUG(m3d_rafraichit(projet), );
+        
+        g_list_free(liste_noeuds_dep);
+        g_list_free(liste_barres_dep);
         
         // On modifie le tree-view-actions
         gtk_tree_store_set(gtk_noeud->tree_store_libre, &iter, column, conversion, -1);
@@ -186,13 +200,14 @@ G_MODULE_EXPORT void EF_gtk_noeud_edit_pos_abs(GtkCellRendererText *cell, gchar 
 }
 
 
-G_MODULE_EXPORT void EF_gtk_noeud_edit_pos_relat(GtkCellRendererText *cell, gchar *path_string, gchar *new_text, Projet *projet)
+G_MODULE_EXPORT void EF_gtk_noeud_edit_pos_relat(GtkCellRendererText *cell, gchar *path_string,
+  gchar *new_text, Projet *projet)
 /* Description : Changement de la position d'un noeud de type barre.
  * Paramètres : GtkCellRendererText *cell : cellule en cours,
  *            : gchar *path_string : path de la ligne en cours,
  *            : gchar *new_text : nouvelle valeur,
- *            : Projet *projet : la variable projet
- * Valeur renvoyée : Aucune
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : Aucune.
  */
 {
     List_Gtk_EF_Noeud       *gtk_noeud;
@@ -204,10 +219,11 @@ G_MODULE_EXPORT void EF_gtk_noeud_edit_pos_relat(GtkCellRendererText *cell, gcha
     double                  conversion;
     gint                    column = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cell), "column"));
     
-    BUGMSG(projet, , gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->ef_donnees.noeuds, , gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->list_gtk.ef_noeud.window, , gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet->list_gtk.ef_noeud.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Noeuds");
+    BUGMSG(projet->ef_donnees.noeuds, , gettext("Aucun noeud n'est existant.\n"));
     BUGMSG(fake, , gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(new_text, , gettext("Paramètre %s incorrect.\n"), "new_text");
     
     gtk_noeud = &projet->list_gtk.ef_noeud;
     model = GTK_TREE_MODEL(gtk_noeud->tree_store_barre);
@@ -220,7 +236,9 @@ G_MODULE_EXPORT void EF_gtk_noeud_edit_pos_relat(GtkCellRendererText *cell, gcha
     // On vérifie si le texte contient bien un nombre flottant
     if (sscanf(new_text, "%lf%s", &conversion, fake) == 1)
     {
-        EF_Noeud                *noeud;
+        EF_Noeud    *noeud;
+        GList       *liste_noeuds_dep, *liste_barres_dep;
+        GList       *liste_noeuds = NULL;
         
         if ((0.0 > conversion) || (conversion > 1.0))
         {
@@ -231,33 +249,24 @@ G_MODULE_EXPORT void EF_gtk_noeud_edit_pos_relat(GtkCellRendererText *cell, gcha
         // On modifie l'action
         BUG(noeud = EF_noeuds_cherche_numero(projet, i), );
         
-        switch (noeud->type)
+        if ((noeud->type == NOEUD_BARRE) && (column == 6))
         {
-            case NOEUD_LIBRE :
-            {
-                BUGMSG(NULL, , gettext("Paramètre incorrect\n"));
-                break;
-            }
-            case NOEUD_BARRE :
-            {
-                if (column == 6)
-                {
-                    EF_Noeud_Barre  *info = (EF_Noeud_Barre *)noeud->data;
-                    
-                    info->position_relative_barre = conversion;
-                }
-                else
-                    BUGMSG(NULL, , gettext("Paramètre incorrect\n"));
-                break;
-            }
-            default :
-            {
-                BUGMSG(NULL, , gettext("Paramètre incorrect\n"));
-                break;
-            }
+            EF_Noeud_Barre  *info = (EF_Noeud_Barre *)noeud->data;
+            
+            info->position_relative_barre = conversion;
         }
+        else
+            BUGMSG(NULL, , gettext("Le type du noeud ou la colonne d'édition est incorrect.\n"));
         
-        m3d_actualise_graphique_deplace_noeud(projet, noeud);
+        liste_noeuds = g_list_append(liste_noeuds, noeud);
+        BUG(_1992_1_1_barres_cherche_dependances(projet, liste_noeuds, NULL, &liste_noeuds_dep, &liste_barres_dep), );
+        g_list_free(liste_noeuds);
+        
+        BUG(m3d_actualise_graphique(projet, liste_noeuds_dep, liste_barres_dep), );
+        BUG(m3d_rafraichit(projet), );
+        
+        g_list_free(liste_noeuds_dep);
+        g_list_free(liste_barres_dep);
         
         // On modifie le tree-view-barre
         gtk_tree_store_set(gtk_noeud->tree_store_barre, &iter, column, conversion, -1);
@@ -269,14 +278,15 @@ G_MODULE_EXPORT void EF_gtk_noeud_edit_pos_relat(GtkCellRendererText *cell, gcha
 }
 
 
-void EF_gtk_render_actualise_position(GtkTreeViewColumn *tree_column __attribute__((unused)), GtkCellRenderer *cell, GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data)
-/* Description : personnalise l'affichage des nombres de type double dans un treeview.
+void EF_gtk_render_actualise_position(GtkTreeViewColumn *tree_column __attribute__((unused)),
+  GtkCellRenderer *cell, GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data)
+/* Description : Personnalise l'affichage des nombres de type double dans un treeview.
  * Paramètres : GtkTreeViewColumn *tree_column : la colonne,
  *            : GtkCellRenderer *cell : la cellule,
  *            : GtkTreeModel *tree_model : le tree_model,
  *            : GtkTreeIter *iter : et le paramètre iter,
  *            : Projet *projet : la variable projet.
- * Valeur renvoyée : void
+ * Valeur renvoyée : void.
  */
 {
     Projet      *projet = (Projet *)data;
@@ -284,6 +294,10 @@ void EF_gtk_render_actualise_position(GtkTreeViewColumn *tree_column __attribute
     gint        colonne;
     int         noeud;
     EF_Point    *point;
+    
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet->list_gtk.ef_noeud.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Noeuds");
+    BUGMSG(projet->ef_donnees.noeuds, , gettext("Aucun noeud n'est existant.\n"));
     
     colonne = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cell), "column"));
     gtk_tree_model_get(tree_model, iter, 0, &noeud, -1);
@@ -296,7 +310,7 @@ void EF_gtk_render_actualise_position(GtkTreeViewColumn *tree_column __attribute
     else if (colonne == 3)
         common_math_double_to_char(point->z, texte, GTK_DECIMAL_DISTANCE);
     else
-        BUGMSG(NULL, , gettext("Paramètre incorrect\n"));
+        BUGMSG(NULL, , gettext("La colonne d'où provient l'édition est incorrecte.\n"));
     
     g_object_set(GTK_CELL_RENDERER_TEXT(cell), "text", texte, NULL);
     
@@ -306,13 +320,15 @@ void EF_gtk_render_actualise_position(GtkTreeViewColumn *tree_column __attribute
 }
 
 
-G_MODULE_EXPORT void EF_gtk_noeud_edit_noeud_appui(GtkCellRendererText *cell __attribute__((unused)), const gchar *path_string, const gchar *new_text, Projet *projet)
+G_MODULE_EXPORT void EF_gtk_noeud_edit_noeud_appui(
+  GtkCellRendererText *cell __attribute__((unused)), const gchar *path_string,
+  const gchar *new_text, Projet *projet)
 /* Description : Changement du type d'appui d'un noeud.
  * Paramètres : GtkCellRendererText *cell : cellule en cours,
  *            : gchar *path_string : path de la ligne en cours,
  *            : gchar *new_text : nom de l'appui,
- *            : Projet *projet : la variable projet
- * Valeur renvoyée : Aucune
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : Aucune.
 */
 {
     List_Gtk_EF_Noeud   *ef_gtk;
@@ -323,8 +339,10 @@ G_MODULE_EXPORT void EF_gtk_noeud_edit_noeud_appui(GtkCellRendererText *cell __a
     EF_Appui            *appui = NULL;
     GList               *list_parcours;
     
-    BUGMSG(projet, , gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->list_gtk.ef_noeud.window, , gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet->list_gtk.ef_noeud.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Noeuds");
+    BUGMSG(projet->ef_donnees.noeuds, , gettext("Aucun noeud n'est existant.\n"));
+    BUGMSG(new_text, , gettext("Paramètre %s incorrect.\n"), "new_text");
     
     if (projet->ef_donnees.appuis == NULL)
         return;
@@ -384,13 +402,15 @@ G_MODULE_EXPORT void EF_gtk_noeud_edit_noeud_appui(GtkCellRendererText *cell __a
 }
 
 
-G_MODULE_EXPORT void EF_gtk_noeud_edit_noeud_barre_barre(GtkCellRendererText *cell __attribute__((unused)), const gchar *path_string, const gchar *new_text, Projet *projet)
+G_MODULE_EXPORT void EF_gtk_noeud_edit_noeud_barre_barre(
+  GtkCellRendererText *cell __attribute__((unused)), const gchar *path_string,
+  const gchar *new_text, Projet *projet)
 /* Description : Changement de barre d'un noeud intermédiaire.
  * Paramètres : GtkCellRendererText *cell : cellule en cours,
  *            : gchar *path_string : path de la ligne en cours,
  *            : gchar *new_text : nom de l'appui,
- *            : Projet *projet : la variable projet
- * Valeur renvoyée : Aucune
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : Aucune.
 */
 {
     List_Gtk_EF_Noeud   *gtk_noeud;
@@ -400,11 +420,11 @@ G_MODULE_EXPORT void EF_gtk_noeud_edit_noeud_barre_barre(GtkCellRendererText *ce
     GtkTreePath         *path;
     GtkTreeIter         iter;
     
-    BUGMSG(projet, , gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->ef_donnees.noeuds, , gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->list_gtk.ef_noeud.window, , gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet->list_gtk.ef_noeud.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Noeuds");
+    BUGMSG(projet->ef_donnees.noeuds, , gettext("Aucun noeud n'est existant.\n"));
     BUGMSG(fake, , gettext("Erreur d'allocation mémoire.\n"));
-    BUGMSG(&projet->list_gtk.m3d.data, , gettext("Paramètre incorrect\n"));
+    BUGMSG(new_text, , gettext("Paramètre %s incorrect.\n"), "new_text");
     
     gtk_noeud = &projet->list_gtk.ef_noeud;
     model = GTK_TREE_MODEL(gtk_noeud->tree_store_barre);
@@ -419,6 +439,8 @@ G_MODULE_EXPORT void EF_gtk_noeud_edit_noeud_barre_barre(GtkCellRendererText *ce
     {
         Beton_Barre *barre;
         EF_Noeud    *noeud;
+        GList       *liste_noeuds_dep, *liste_barres_dep;
+        GList       *liste_noeuds = NULL;
         
         free(fake);
         
@@ -435,9 +457,17 @@ G_MODULE_EXPORT void EF_gtk_noeud_edit_noeud_barre_barre(GtkCellRendererText *ce
             info->barre = barre;
         }
         else
-            BUGMSG(NULL, , gettext("Paramètre incorrect\n"));
+            BUGMSG(NULL, , gettext("Le noeud doit être de type intermédiaire.\n"));
         
-        m3d_actualise_graphique_deplace_noeud(projet, noeud);
+        liste_noeuds = g_list_append(liste_noeuds, noeud);
+        BUG(_1992_1_1_barres_cherche_dependances(projet, liste_noeuds, NULL, &liste_noeuds_dep, &liste_barres_dep), );
+        g_list_free(liste_noeuds);
+        
+        BUG(m3d_actualise_graphique(projet, liste_noeuds_dep, liste_barres_dep), );
+        BUG(m3d_rafraichit(projet), );
+        
+        g_list_free(liste_noeuds_dep);
+        g_list_free(liste_barres_dep);
         
         // On modifie le tree-view-actions
         gtk_tree_store_set(gtk_noeud->tree_store_barre, &iter, 5, conversion, -1);
@@ -449,10 +479,20 @@ G_MODULE_EXPORT void EF_gtk_noeud_edit_noeud_barre_barre(GtkCellRendererText *ce
 }
 
 
-G_MODULE_EXPORT gboolean EF_gtk_noeuds_window_key_press(GtkWidget *widget __attribute__((unused)), GdkEvent *event, Projet *projet)
+G_MODULE_EXPORT gboolean EF_gtk_noeuds_window_key_press(
+  GtkWidget *widget __attribute__((unused)), GdkEvent *event, Projet *projet)
+/* Description : Gestion des touches de l'ensemble des composants de la fenêtre.
+ * Paramètres : GtkWidget *widget : composant à l'origine de l'évènement,
+ *            : GdkEvent *event : description de la touche pressée,
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : TRUE si la touche ECHAP est pressée, FALSE sinon.
+ *   Echec : FALSE :
+ *             projet == NULL,
+ *             interface graphique non initialisée.
+ */
 {
-    BUGMSG(projet, TRUE, gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->list_gtk.ef_noeud.builder, TRUE, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet->list_gtk.ef_noeud.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Noeuds");
     
     if (event->key.keyval == GDK_KEY_Escape)
     {
@@ -464,27 +504,33 @@ G_MODULE_EXPORT gboolean EF_gtk_noeuds_window_key_press(GtkWidget *widget __attr
 }
 
 
-G_MODULE_EXPORT void EF_gtk_noeuds_window_destroy(GtkWidget *object __attribute__((unused)), Projet *projet)
-/* Description : met projet->list_gtk._1990_groupes.window à NULL quand la fenêtre se ferme
+G_MODULE_EXPORT void EF_gtk_noeuds_window_destroy(GtkWidget *object __attribute__((unused)),
+  Projet *projet)
+/* Description : met projet->list_gtk.ef_noeud.builder à NULL quand la fenêtre se ferme
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
- *            : Projet *projet : la variable projet
- * Valeur renvoyée : Aucune
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : Aucune.
  */
 {
-    BUGMSG(projet, , gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->list_gtk.ef_noeud.builder, , gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet->list_gtk.ef_noeud.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Noeuds");
     
     projet->list_gtk.ef_noeud.builder = NULL;
+    
     return;
 }
 
 
 G_MODULE_EXPORT void EF_gtk_noeud(Projet *projet)
+/* Description : Affichage de la fenêtre permettant de créer ou modifier des noeuds.
+ * Paramètres : Projet *projet : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
 {
     List_Gtk_EF_Noeud   *ef_gtk;
     
-    BUGMSG(projet, , gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->list_gtk.ef_noeud.builder == NULL, , gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet->list_gtk.ef_noeud.builder == NULL, , gettext("La fenêtre graphique %s est déjà initialisée.\n"), "Neouds");
     
     ef_gtk = &projet->list_gtk.ef_noeud;
     
@@ -504,7 +550,7 @@ G_MODULE_EXPORT void EF_gtk_noeud(Projet *projet)
     g_object_set_data(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_libres_cell3"), "column", GINT_TO_POINTER(3));
     gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_libres_column3")), GTK_CELL_RENDERER(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_libres_cell3")), gtk_common_render_double, GINT_TO_POINTER(GTK_DECIMAL_DISTANCE), NULL);
     
-    g_object_set(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_libres_cell4"), "model", ef_gtk->liste_appuis, NULL);
+    g_object_set(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_libres_cell4"), "model", projet->list_gtk.ef_appuis.liste_appuis, NULL);
     
     g_object_set_data(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_intermediaires_cell1"), "column", GINT_TO_POINTER(1));
     gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_intermediaires_column1")), GTK_CELL_RENDERER(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_intermediaires_cell1")), EF_gtk_render_actualise_position, projet, NULL);
@@ -515,7 +561,7 @@ G_MODULE_EXPORT void EF_gtk_noeud(Projet *projet)
     g_object_set_data(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_intermediaires_cell6"), "column", GINT_TO_POINTER(6));
     gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_intermediaires_column6")), GTK_CELL_RENDERER(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_intermediaires_cell6")), gtk_common_render_double, GINT_TO_POINTER(GTK_DECIMAL_DISTANCE), NULL);
     
-    g_object_set(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_intermediaires_cell4"), "model", ef_gtk->liste_appuis, NULL);
+    g_object_set(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_intermediaires_cell4"), "model", projet->list_gtk.ef_appuis.liste_appuis, NULL);
     
     if (projet->ef_donnees.noeuds != NULL)
     {

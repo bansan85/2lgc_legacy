@@ -23,7 +23,7 @@
 #include "common_projet.h"
 
 
-int EF_rigidite_init(Projet *projet);
-int EF_rigidite_free(Projet *projet);
+gboolean EF_rigidite_init(Projet *projet) __attribute__((__warn_unused_result__));
+gboolean EF_rigidite_free(Projet *projet) __attribute__((__warn_unused_result__));
 
 #endif

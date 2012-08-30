@@ -22,7 +22,7 @@
 #include "config.h"
 #include "common_projet.h"
 
-int _1990_combinaisons_init(Projet *projet);
-int _1990_combinaisons_genere(Projet *projet);
-int _1990_combinaisons_free(Projet *projet);
+gboolean _1990_combinaisons_init(Projet *projet) __attribute__((__warn_unused_result__));
+gboolean _1990_combinaisons_genere(Projet *projet) __attribute__((__warn_unused_result__));
+gboolean _1990_combinaisons_free(Projet *projet) __attribute__((__warn_unused_result__));
 #endif

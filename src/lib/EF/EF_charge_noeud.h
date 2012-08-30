@@ -22,8 +22,7 @@
 #include "config.h"
 #include "common_projet.h"
 
-Charge_Noeud*  EF_charge_noeud_ajout(Projet *projet, unsigned int num_action, GList *noeud,
-  double fx, double fy, double fz, double mx, double my, double mz, const char* nom);
-int EF_charge_noeud_free(Charge_Noeud *charge);
+Charge_Noeud*  EF_charge_noeud_ajout(Projet *projet, unsigned int num_action, GList *noeud, double fx, double fy, double fz, double mx, double my, double mz, const char* nom) __attribute__((__warn_unused_result__));
+gboolean EF_charge_noeud_free(Charge_Noeud *charge) __attribute__((__warn_unused_result__));
 
 #endif

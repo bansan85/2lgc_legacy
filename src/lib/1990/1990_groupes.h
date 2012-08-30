@@ -24,21 +24,23 @@
 
 #include <glib.h>
 
-int _1990_groupe_init(Projet *projet);
+gboolean _1990_groupe_init(Projet *projet) __attribute__((__warn_unused_result__));
 
-int _1990_groupe_ajout_niveau(Projet *projet);
-Groupe *_1990_groupe_ajout_groupe(Projet *projet, unsigned int niveau, Type_Groupe_Combinaison type_combinaison, const char* nom);
-int _1990_groupe_ajout_element(Projet *projet, unsigned int niveau, unsigned int groupe_n, unsigned int groupe_n_1);
+gboolean _1990_groupe_ajout_niveau(Projet *projet) __attribute__((__warn_unused_result__));
+Groupe *_1990_groupe_ajout_groupe(Projet *projet, unsigned int niveau, Type_Groupe_Combinaison type_combinaison, const char* nom) __attribute__((__warn_unused_result__));
+gboolean _1990_groupe_ajout_element(Projet *projet, unsigned int niveau, unsigned int groupe_n, unsigned int num_element) __attribute__((__warn_unused_result__));
+gboolean _1990_groupe_modifie_combinaison(Groupe *groupe, Type_Groupe_Combinaison type_combinaison) __attribute__((__warn_unused_result__));
+gboolean _1990_groupe_modifie_nom(unsigned int niveau, unsigned int groupe, const char *nom, Projet* projet) __attribute__((__warn_unused_result__));
 
-Niveau_Groupe *_1990_groupe_positionne_niveau(Projet *projet, unsigned int numero);
-Groupe *_1990_groupe_positionne_groupe(Niveau_Groupe *niveau, unsigned int numero);
-Element *_1990_groupe_positionne_element(Groupe *groupe, unsigned int numero);
+Niveau_Groupe *_1990_groupe_positionne_niveau(Projet *projet, unsigned int numero) __attribute__((__warn_unused_result__));
+Groupe *_1990_groupe_positionne_groupe(Niveau_Groupe *niveau, unsigned int numero) __attribute__((__warn_unused_result__));
+Element *_1990_groupe_positionne_element(Groupe *groupe, unsigned int numero) __attribute__((__warn_unused_result__));
 
-int _1990_groupe_free_niveau(Projet *projet, unsigned int niveau);
-int _1990_groupe_free_groupe(Projet *projet, unsigned int niveau, unsigned int groupe);
-int _1990_groupe_free_element(Projet *projet, unsigned int niveau, unsigned int groupe, unsigned int element);
-int _1990_groupe_free(Projet *projet);
+gboolean _1990_groupe_free_niveau(Projet *projet, unsigned int niveau, gboolean accept_vide) __attribute__((__warn_unused_result__));
+gboolean _1990_groupe_free_groupe(Projet *projet, unsigned int niveau, unsigned int groupe) __attribute__((__warn_unused_result__));
+gboolean _1990_groupe_free_element(Projet *projet, unsigned int niveau, unsigned int groupe, unsigned int element) __attribute__((__warn_unused_result__));
+gboolean _1990_groupe_free(Projet *projet) __attribute__((__warn_unused_result__));
 
-int _1990_groupe_affiche_tout(Projet *projet);
+gboolean _1990_groupe_affiche_tout(Projet *projet) __attribute__((__warn_unused_result__));
 
 #endif

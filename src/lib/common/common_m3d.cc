@@ -33,14 +33,14 @@ extern "C" {
 #include "1992_1_1_barres.h"
 #include "common_m3d.hpp"
 
-G_MODULE_EXPORT int m3d_init(Projet *projet)
+G_MODULE_EXPORT gboolean m3d_init(Projet *projet)
 /* Description : Initialise l'affichage graphique de la structure.
- * Paramètres : Projet *projet : la variable projet
+ * Paramètres : Projet *projet : la variable projet.
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : -1 en cas de paramètres invalides :
- *             (projet == NULL)
- *           -2 en cas d'erreur d'allocation mémoire
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL,
+ *             en cas d'erreur d'allocation mémoire.
  */
 {
     // Trivial
@@ -48,12 +48,11 @@ G_MODULE_EXPORT int m3d_init(Projet *projet)
     SGlobalData     *global_data;
     CM3dLight       *light;
     
-    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
-    M3d_init();
     m3d = &projet->list_gtk.m3d;
     m3d->drawing = gtk_drawing_area_new();
-    BUGMSG(m3d->data = malloc(sizeof(SGlobalData)), -2, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(m3d->data = malloc(sizeof(SGlobalData)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
     memset(m3d->data, 0, sizeof(SGlobalData));
     
     global_data = (SGlobalData*)m3d->data;
@@ -70,12 +69,20 @@ G_MODULE_EXPORT int m3d_init(Projet *projet)
     g_signal_connect(m3d->drawing, "draw", G_CALLBACK(m3d_draw), global_data);
     g_signal_connect(m3d->drawing, "configure-event", G_CALLBACK(m3d_configure_event), global_data);
     
-    BUG(projet_init_graphique(projet) == 0, -1);
+    BUG(projet_init_graphique(projet), FALSE);
     
-    return 0;
+    return TRUE;
 }
 
-G_MODULE_EXPORT gboolean m3d_configure_event(GtkWidget *drawing __attribute__((unused)), GdkEventConfigure * ev, gpointer *data2)
+
+G_MODULE_EXPORT gboolean m3d_configure_event(GtkWidget *drawing __attribute__((unused)),
+  GdkEventConfigure *ev, gpointer *data2)
+/* Description : Configuration de la caméra en fonction de la taille du composant graphique.
+ * Paramètres : GtkWidget *drawing : composant graphique,
+ *              GdkEventConfigure *ev : caractéristique de l'évènement,
+ *              gpointer *data2 : données SGlobalData.
+ * Valeur renvoyée : FALSE.
+ */
 {
     SGlobalData *data = (SGlobalData*)data2;
     data->camera->set_size_of_window(ev->width, ev->height);
@@ -88,12 +95,19 @@ G_MODULE_EXPORT gboolean m3d_configure_event(GtkWidget *drawing __attribute__((u
     return FALSE;
 }
 
-G_MODULE_EXPORT gboolean m3d_draw(GtkWidget *drawing, GdkEventExpose* ev __attribute__((unused)), gpointer *data)
+
+G_MODULE_EXPORT gboolean m3d_draw(GtkWidget *drawing,
+  GdkEventExpose* ev __attribute__((unused)), gpointer *data)
+/* Description : Rendu de l'image 3D dans le widget Zone-dessin.
+ * Paramètres : GtkWidget *drawing : composant graphique,
+ *              GdkEventConfigure *ev : caractéristique de l'évènement,
+ *              gpointer *data2 : données SGlobalData.
+ * Valeur renvoyée : FALSE.
+ */
 {
     cairo_t *context = NULL;
     SGlobalData *data2 = (SGlobalData*)data;
 
-    // Rendu de l'image 3D dans le widget Zone-dessin
     data2->scene->show_to_GtkDrawingarea (drawing, data2->camera);
     
     context = gdk_cairo_create (gtk_widget_get_window(drawing));
@@ -101,19 +115,18 @@ G_MODULE_EXPORT gboolean m3d_draw(GtkWidget *drawing, GdkEventExpose* ev __attri
     cairo_set_font_size (context, 18);
     return FALSE;
 }
-              
-G_MODULE_EXPORT int m3d_camera_axe_x_z(Projet *projet)
-/* Description : Positionne la caméra pour voir toute la structure dans le plan xz
- * Paramètres : Projet *projet
+
+
+G_MODULE_EXPORT gboolean m3d_camera_axe_x_z(Projet *projet)
+/* Description : Positionne la caméra pour voir toute la structure dans le plan xz.
+ * Paramètres : Projet *projet : la variable projet.
  * Valeur renvoyée :
- *   Succès : 0. Ne fait rien si (list_size(projet->ef_donnees.noeuds) <= 1)
- *   Échec : -1 en cas de paramètres invalides :
- *             (projet == NULL) ou
- *             (projet->list_gtk.m3d == NULL) ou
- *             (projet->ef_donnees.noeuds == NULL) ou
- *             (list_size(projet->ef_donnees.noeuds) <= 1)
- *             (m3d->data == NULL)
- *           -3 en cas d'erreur due à une fonction interne
+ *   Succès : TRUE. Ne fait rien si (list_size(projet->ef_donnees.noeuds) <= 1)
+ *   Échec : FALSE :
+ *             projet == NULL,
+ *             projet->list_gtk.m3d == NULL,
+ *             m3d->data == NULL,
+ *             en cas d'erreur due à une fonction interne.
  */
 {
     GList           *list_parcours;
@@ -123,18 +136,17 @@ G_MODULE_EXPORT int m3d_camera_axe_x_z(Projet *projet)
     EF_Noeud        *noeud;
     EF_Point        *point;
     
-    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->ef_donnees.noeuds, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     if (g_list_length(projet->ef_donnees.noeuds) <= 1)
-        return 0;
-    BUG(EF_noeuds_min_max(projet, &x_min, &x_max, NULL, NULL, &z_min, &z_max) == 0, -3);
+        return TRUE;
+    BUG(EF_noeuds_min_max(projet, &x_min, &x_max, NULL, NULL, &z_min, &z_max), FALSE);
     
     x = (x_min+x_max)/2.;
     z = (z_min+z_max)/2.;
     
     list_parcours = projet->ef_donnees.noeuds;
     noeud = (EF_Noeud *)list_parcours->data;
-    BUG(point = EF_noeuds_renvoie_position(noeud), -3);
+    BUG(point = EF_noeuds_renvoie_position(noeud), FALSE);
     y = point->y-sqrt((point->x-x)*(point->x-x)+(point->z-z)*(point->z-z));
     free(point);
     
@@ -142,18 +154,17 @@ G_MODULE_EXPORT int m3d_camera_axe_x_z(Projet *projet)
     while (list_parcours != NULL)
     {
         noeud = (EF_Noeud *)list_parcours->data;
-        BUG(point = EF_noeuds_renvoie_position(noeud), -3);
+        BUG(point = EF_noeuds_renvoie_position(noeud), FALSE);
         y = MIN(y, point->y-sqrt((point->x-x)*(point->x-x)+(point->z-z)*(point->z-z)));
         free(point);
         list_parcours = g_list_next(list_parcours);
     }
     
     m3d = &projet->list_gtk.m3d;
-    BUGMSG(m3d->data, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(m3d->data, FALSE, gettext("Paramètre %s incorrect.\n"), "m3d->data");
     vue = (SGlobalData*)m3d->data;
     
     if (vue->camera == NULL)
-        // TODO
         vue->camera = new CM3dCamera (x, y*1.1, z, x, 0., z, 90, (int)(x_max-x_min), (int)(z_max-z_min));
     else
     {
@@ -161,141 +172,149 @@ G_MODULE_EXPORT int m3d_camera_axe_x_z(Projet *projet)
         vue->camera->set_target(x, y+1, z);
     }
     
-    return 0;
+    return TRUE;
 }
 
 
-G_MODULE_EXPORT void m3d_actualise_graphique_deplace_noeud(Projet *projet, EF_Noeud *noeud)
+G_MODULE_EXPORT gboolean m3d_actualise_graphique(Projet *projet, GList *noeuds, GList *barres)
+/* Description : Met à jour l'affichage graphique en actualisant l'affichage des noeuds et barres passés en argument. Les listes contient une série de pointeur.
+ * Paramètres : Projet *projet : la variable projet,
+ *            : GList *noeuds : Liste de pointeurs vers les noeuds à actualiser,
+ *            : GList *barres : Liste de pointeurs vers les barres à actualiser.
+ * Valeur renvoyée :
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL,
+ *             noeud == NULL,
+ *             en cas d'erreur due à une fonction interne.
+ */
 {
-    GList       *noeuds_todo = NULL, *noeuds_done = NULL;
-    SGlobalData *vue = (SGlobalData*)projet->list_gtk.m3d.data;
+    GList *noeuds_dep, *barres_dep;
+    GList *list_parcours;
     
-    noeuds_todo = g_list_append(noeuds_todo, noeud);
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
-    while (noeuds_todo != NULL)
+    BUG(_1992_1_1_barres_cherche_dependances(projet, noeuds, barres, &noeuds_dep, &barres_dep), FALSE);
+    
+    list_parcours = noeuds_dep;
+    while (list_parcours != NULL)
     {
-        unsigned int    numero;
-        
-        noeud = (EF_Noeud *)noeuds_todo->data;
-        numero = noeud->numero;
-    
-        switch (noeud->type)
-        {
-            case NOEUD_LIBRE :
-            case NOEUD_BARRE :
-            {
-                EF_Point    *position;
-                char        *texte;
-                CM3dObject  *objet;
-                
-                // On déplace le noeud
-                BUG(position = EF_noeuds_renvoie_position(noeud), );
-                texte = g_strdup_printf("noeud %d", noeud->numero);
-                objet = vue->scene->get_object_by_name(texte);
-                if (objet != NULL)
-                    objet->set_position(position->x, position->y, position->z);
-                else
-                    m3d_noeud(texte, position, vue);
-                
-                if (projet->beton.barres != NULL)
-                {
-                    GList   *list_parcours = projet->beton.barres;
-                    
-                    do
-                    {
-                        Beton_Barre *barre = (Beton_Barre *)list_parcours->data;
-                        
-                        if (((barre->noeud_debut) && (barre->noeud_debut->numero == numero)) || ((barre->noeud_fin) && (barre->noeud_fin->numero == numero)))
-                        {
-                            GList   *list_parcours2;
-                            
-                            // On actualise la barre
-                            m3d_barre(projet, barre);
-                            
-                            list_parcours2 = barre->noeuds_intermediaires;
-                            while (list_parcours2 != NULL)
-                            {
-                                if ((g_list_find(noeuds_done, list_parcours2->data) == NULL) && (g_list_find(noeuds_todo, list_parcours2->data) == NULL))
-                                    noeuds_todo = g_list_append(noeuds_todo, list_parcours2->data);
-                                list_parcours2 = g_list_next(list_parcours2);
-                            }
-                            
-                        }
-                        
-                        list_parcours = g_list_next(list_parcours);
-                    } while (list_parcours != NULL);
-                }
-                
-                free(texte);
-                free(position);
-                
-                break;
-            }
-            default :
-            {
-                BUGMSG(NULL, , gettext("Paramètre incorrect\n"));
-                break;
-            }
-        }
-        
-        noeuds_done = g_list_append(noeuds_done, noeud);
-        noeuds_todo = g_list_remove(noeuds_todo, noeud);
+        BUG(m3d_noeud(&projet->list_gtk.m3d, (EF_Noeud *)list_parcours->data), FALSE);
+        list_parcours = g_list_next(list_parcours);
     }
     
-    // On libère la mémoire
-    g_list_free(noeuds_done);
+    list_parcours = barres_dep;
+    while (list_parcours != NULL)
+    {
+        BUG(m3d_barre(&projet->list_gtk.m3d, (Beton_Barre *)list_parcours->data), FALSE);
+        list_parcours = g_list_next(list_parcours);
+    }
     
-    // On force l'actualisation de l'affichage
-    vue->scene->rendering(vue->camera);
-    gtk_widget_queue_draw(projet->list_gtk.m3d.drawing);
+    return TRUE;
 }
 
 
-G_MODULE_EXPORT int m3d_rafraichit(Projet *projet)
+G_MODULE_EXPORT gboolean m3d_rafraichit(Projet *projet)
+/* Description : Force le rafraichissement de l'affichage graphique.
+ *               Nécessaire après l'utilisation d'une des fonctions d'actualisation de
+ *                 l'affichage graphique.
+ * Paramètres : Projet *projet : la variable projet.
+ * Valeur renvoyée :
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL.
+ */
 {
     SGlobalData *vue;
     
-    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     vue = (SGlobalData*)projet->list_gtk.m3d.data;
     // On force l'actualisation de l'affichage
     vue->scene->rendering(vue->camera);
     gtk_widget_queue_draw(projet->list_gtk.m3d.drawing);
     
-    return 0;
+    return TRUE;
 }
 
 
-G_MODULE_EXPORT void* m3d_noeud(const char *nom, EF_Point *point, void *vue)
+G_MODULE_EXPORT void* m3d_noeud(void *donnees_m3d, EF_Noeud *noeud)
+/* Description : Crée un noeud dans l'affichage graphique. Si le noeud existe, il est détruit au
+ *               préalable.
+ * Paramètres : const char *nom : nom du noeud,
+ *              EF_Point *point : position du noeud,
+ *              void *vue : données SGlobalData.
+ * Valeur renvoyée :
+ *   Succès : Pointeur vers le nouvel objet noeud.
+ *   Échec : NULL :
+ *             noeud == NULL,
+ *             vue == NULL,
+ *             en cas d'erreur d'allocation mémoire.
+ */
 {
-    CM3dObject *cube;
+    CM3dObject  *cube;
+    char        *nom;
+    EF_Point    *point;
+    SGlobalData *vue;
+    
+    BUGMSG(noeud, NULL, gettext("Paramètre %s incorrect.\n"), "noeud");
+    BUGMSG(donnees_m3d, NULL, gettext("Paramètre %s incorrect.\n"), "donnees_m3d");
+    
+    BUGMSG(nom = g_strdup_printf("noeud %u", noeud->numero), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    BUG(point = EF_noeuds_renvoie_position(noeud), NULL);
+    
+    vue = (SGlobalData*)((List_Gtk_m3d *)donnees_m3d)->data;
+    
+    cube = vue->scene->get_object_by_name(nom);
+    if (cube != NULL)
+        vue->scene->remove_object(cube);
     
     cube = M3d_cube_new(nom, .1);
     cube->set_ambient_reflexion (1.);
     cube->set_smooth(GOURAUD);
-    ((SGlobalData*)vue)->scene->add_object(cube);
+    vue->scene->add_object(cube);
     cube->set_position(point->x, point->y, point->z);
     
-    return cube;
+    free(nom);
+    free(point);
     
+    return cube;
 }
 
 
-G_MODULE_EXPORT int m3d_barre(Projet *projet, Beton_Barre *barre)
+G_MODULE_EXPORT void* m3d_barre(void *donnees_m3d, Beton_Barre *barre)
+/* Description : Crée une barre dans l'affichage graphique. Si la barre existe, elle est
+ *               détruite au préalable.
+ * Paramètres : void *donnees_m3d : données graphiques,
+ *              Beton_Barre *barre : barre devant être représentée.
+ * Valeur renvoyée :
+ *   Succès : Pointeur vers le cube.
+ *   Échec : NULL :
+ *             donnees_m3d == NULL,
+ *             barre == NULL,
+ *             si la longueur de la barre est nulle,
+ *             le type de barre est inconnu,
+ *             en cas d'erreur d'allocation mémoire,
+ *             en cas d'erreur d'une fonction interne.
+ */
 {
     List_Gtk_m3d    *m3d;
     SGlobalData     *vue;
     CM3dObject      *objet;
     char            *tmp;
     Beton_Section_Rectangulaire *section_tmp = (Beton_Section_Rectangulaire*)barre->section;
+    CM3dObject      *tout;
+    double          longueur;
     
-    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
-    m3d = &projet->list_gtk.m3d;
-    BUGMSG(m3d->data, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(donnees_m3d, NULL, gettext("Paramètre %s incorrect.\n"), "donnees_m3d");
+    BUGMSG(barre, NULL, gettext("Paramètre %s incorrect.\n"), "barre");
+    
+    section_tmp = (Beton_Section_Rectangulaire*)barre->section;
+    
+    m3d = (List_Gtk_m3d *)donnees_m3d;
     vue = (SGlobalData*)m3d->data;
-    BUGMSG(barre, -1, gettext("Paramètre incorrect\n"));
     
     // On supprime l'élément s'il existe déjà
-    BUGMSG(tmp = g_strdup_printf("barre %u", barre->numero), -2, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(tmp = g_strdup_printf("barre %u", barre->numero), NULL, gettext("Erreur d'allocation mémoire.\n"));
 
     objet = vue->scene->get_object_by_name(tmp);
     if (objet != NULL)
@@ -303,17 +322,16 @@ G_MODULE_EXPORT int m3d_barre(Projet *projet, Beton_Barre *barre)
     
     // On l'(ré)ajoute
     section_tmp = (Beton_Section_Rectangulaire*)barre->section;
+    longueur = EF_noeuds_distance(barre->noeud_debut, barre->noeud_fin);
+    BUG(!isnan(longueur), NULL);
+            
     switch (section_tmp->type)
     {
         EF_Point *p_d, *p_f;
         case BETON_SECTION_RECTANGULAIRE :
         {
-            double      longueur;
             double      y, z;
-            CM3dObject  *bas, *haut, *gauche, *droite, *tout;
-            
-            longueur = EF_noeuds_distance(barre->noeud_debut, barre->noeud_fin);
-            BUG(!isnan(longueur), -3);
+            CM3dObject  *bas, *haut, *gauche, *droite;
             
             droite = M3d_plan_new("", longueur, section_tmp->hauteur, 1);
             droite->rotations(180., 0., 0.);
@@ -331,6 +349,12 @@ G_MODULE_EXPORT int m3d_barre(Projet *projet, Beton_Barre *barre)
             haut->set_position(0., 0., section_tmp->hauteur/2.);
             
             tout = M3d_object_new_group(tmp, droite, gauche, bas, haut, NULL);
+            
+            delete droite;
+            delete gauche;
+            delete bas;
+            delete haut;
+            
             switch(barre->numero)
             {
                 case 0:
@@ -352,17 +376,17 @@ G_MODULE_EXPORT int m3d_barre(Projet *projet, Beton_Barre *barre)
 
             }
             tout->set_smooth(GOURAUD);
-            BUG(_1992_1_1_barres_angle_rotation(barre, &y, &z) == 0, -3);
-            // TODO
-            tout->rotations(0., (int)(-y/M_PI*180.), (int)(z/M_PI*180.));
-            BUG(p_d = EF_noeuds_renvoie_position(barre->noeud_debut), -3);
-            BUG(p_f = EF_noeuds_renvoie_position(barre->noeud_fin), -3);
+            BUG(_1992_1_1_barres_angle_rotation(barre, &y, &z), NULL);
+            tout->rotations(0., -y/M_PI*180., z/M_PI*180.);
+            BUG(p_d = EF_noeuds_renvoie_position(barre->noeud_debut), NULL);
+            BUG(p_f = EF_noeuds_renvoie_position(barre->noeud_fin), NULL);
             tout->set_position((p_d->x+p_f->x)/2., (p_d->y+p_f->y)/2., (p_d->z+p_f->z)/2.);
             tout->set_ambient_reflexion(0.8);
             free(p_d);
             free(p_f);
             
             vue->scene->add_object(tout);
+            
             break;
             
         }
@@ -370,7 +394,6 @@ G_MODULE_EXPORT int m3d_barre(Projet *projet, Beton_Barre *barre)
         {
             Beton_Section_T *section = (Beton_Section_T*)barre->section;
             
-            double  longueur = EF_noeuds_distance(barre->noeud_debut, barre->noeud_fin);
             double  y, z;
             double  lt = section->largeur_table;
             double  la = section->largeur_ame;
@@ -379,7 +402,7 @@ G_MODULE_EXPORT int m3d_barre(Projet *projet, Beton_Barre *barre)
             double  cdgh = (lt*ht*ht/2.+la*ha*(ht+ha/2.))/(lt*ht+la*ha);
             double  cdgb = (ht+ha)-cdgh;
             
-            CM3dObject  *ame_inf, *ame_droite, *ame_gauche, *dalle_bas_droite, *dalle_bas_gauche, *dalle_droite, *dalle_gauche, *dalle_sup, *tout;
+            CM3dObject  *ame_inf, *ame_droite, *ame_gauche, *dalle_bas_droite, *dalle_bas_gauche, *dalle_droite, *dalle_gauche, *dalle_sup;
             
             ame_inf = M3d_plan_new("", longueur, la, 1);
             ame_inf->rotations(90., 180., 0.);
@@ -412,6 +435,16 @@ G_MODULE_EXPORT int m3d_barre(Projet *projet, Beton_Barre *barre)
             dalle_sup->set_position(0., 0, -cdgb+ha+ht);
             
             tout = M3d_object_new_group(tmp, ame_inf, ame_droite, ame_gauche, dalle_bas_droite, dalle_bas_gauche, dalle_droite, dalle_gauche, dalle_sup, NULL);
+            
+            delete ame_inf;
+            delete ame_droite;
+            delete ame_gauche;
+            delete dalle_bas_droite;
+            delete dalle_bas_gauche;
+            delete dalle_droite;
+            delete dalle_gauche;
+            delete dalle_sup;
+            
             switch(barre->numero)
             {
                 case 0:
@@ -434,30 +467,24 @@ G_MODULE_EXPORT int m3d_barre(Projet *projet, Beton_Barre *barre)
             }
             tout->set_ambient_reflexion(0.8);
             tout->set_smooth(GOURAUD);
-            BUG(_1992_1_1_barres_angle_rotation(barre, &y, &z) == 0, -3);
-            //TODO
-            tout->rotations(0., (int)(-y/M_PI*180.), (int)(z/M_PI*180.));
-            BUG(p_d = EF_noeuds_renvoie_position(barre->noeud_debut), -3);
-            BUG(p_f = EF_noeuds_renvoie_position(barre->noeud_fin), -3);
+            BUG(_1992_1_1_barres_angle_rotation(barre, &y, &z), NULL);
+            tout->rotations(0., -y/M_PI*180., z/M_PI*180.);
+            BUG(p_d = EF_noeuds_renvoie_position(barre->noeud_debut), NULL);
+            BUG(p_f = EF_noeuds_renvoie_position(barre->noeud_fin), NULL);
             tout->set_position((p_d->x+p_f->x)/2., (p_d->y+p_f->y)/2., (p_d->z+p_f->z)/2.);
             free(p_d);
             free(p_f);
             
             vue->scene->add_object(tout);
+            
             break;
             
         }
         case BETON_SECTION_CARRE :
         {
             Beton_Section_Carre *section = (Beton_Section_Carre*)barre->section;
-            
-            double  longueur;
             double  y, z;
-            
-            CM3dObject  *bas, *haut, *gauche, *droite, *tout;
-            
-            longueur = EF_noeuds_distance(barre->noeud_debut, barre->noeud_fin);
-            BUG(!isnan(longueur), -3);
+            CM3dObject  *bas, *haut, *gauche, *droite;
             
             droite = M3d_plan_new("", longueur, section->cote, 1);
             droite->rotations(180., 0., 0.);
@@ -475,6 +502,12 @@ G_MODULE_EXPORT int m3d_barre(Projet *projet, Beton_Barre *barre)
             haut->set_position(0., 0., section->cote/2.);
             
             tout = M3d_object_new_group(tmp, droite, gauche, bas, haut, NULL);
+            
+            delete droite;
+            delete gauche;
+            delete bas;
+            delete haut;
+            
             switch(barre->numero)
             {
                 case 0:
@@ -497,27 +530,23 @@ G_MODULE_EXPORT int m3d_barre(Projet *projet, Beton_Barre *barre)
             }
             tout->set_ambient_reflexion(0.8);
             tout->set_smooth(GOURAUD);
-            BUG(_1992_1_1_barres_angle_rotation(barre, &y, &z) == 0, -3);
-            //TODO
-            tout->rotations(0., (int)(-y/M_PI*180.), (int)(z/M_PI*180.));
-            BUG(p_d = EF_noeuds_renvoie_position(barre->noeud_debut), -3);
-            BUG(p_f = EF_noeuds_renvoie_position(barre->noeud_fin), -3);
+            BUG(_1992_1_1_barres_angle_rotation(barre, &y, &z), NULL);
+            tout->rotations(0., -y/M_PI*180., z/M_PI*180.);
+            BUG(p_d = EF_noeuds_renvoie_position(barre->noeud_debut), NULL);
+            BUG(p_f = EF_noeuds_renvoie_position(barre->noeud_fin), NULL);
             tout->set_position((p_d->x+p_f->x)/2., (p_d->y+p_f->y)/2., (p_d->z+p_f->z)/2.);
             free(p_d);
             free(p_f);
             
             vue->scene->add_object(tout);
+            
             break;
             
         }
         case BETON_SECTION_CIRCULAIRE :
         {
             Beton_Section_Circulaire *section = (Beton_Section_Circulaire*)barre->section;
-            
-            double  longueur = EF_noeuds_distance(barre->noeud_debut, barre->noeud_fin);
             double  y, z;
-            
-            CM3dObject  *tout;
             
             tout = M3d_cylindre_new(tmp, section->diametre/2., longueur, 12);
             tout->rotations(0., 0., 90.);
@@ -543,112 +572,50 @@ G_MODULE_EXPORT int m3d_barre(Projet *projet, Beton_Barre *barre)
             }
             tout->set_ambient_reflexion(0.8);
             tout->set_smooth(GOURAUD);
-            BUG(_1992_1_1_barres_angle_rotation(barre, &y, &z) == 0, -3);
-            //TODO
-            tout->rotations(0., (int)(-y/M_PI*180.), (int)(z/M_PI*180.));
-            BUG(p_d = EF_noeuds_renvoie_position(barre->noeud_debut), -3);
-            BUG(p_f = EF_noeuds_renvoie_position(barre->noeud_fin), -3);
+            BUG(_1992_1_1_barres_angle_rotation(barre, &y, &z), NULL);
+            tout->rotations(0., -y/M_PI*180., z/M_PI*180.);
+            BUG(p_d = EF_noeuds_renvoie_position(barre->noeud_debut), NULL);
+            BUG(p_f = EF_noeuds_renvoie_position(barre->noeud_fin), NULL);
             tout->set_position((p_d->x+p_f->x)/2., (p_d->y+p_f->y)/2., (p_d->z+p_f->z)/2.);
             free(p_d);
             free(p_f);
             
             vue->scene->add_object(tout);
+            
             break;
             
         }
         default :
         {
-            BUGMSG(0, -1, gettext("Paramètre incorrect\n"));
+            BUGMSG(0, NULL, gettext("Type de section %d inconnu.\n"), section_tmp->type);
             break;
         }
     }
     
     free(tmp);
     
-    return 0;
+    return tout;
 }
 
 
-G_MODULE_EXPORT int m3d_genere_graphique(Projet *projet)
-/* Description : Génère l'affichage 3D
- * Paramètres : Projet *projet
- * Valeur renvoyée :
- *   Succès : 0
- *   Échec : -1 en cas de paramètres invalides :
- *             (projet == NULL) ou
- *             (projet->list_gtk.m3d == NULL) ou
- *             (projet->ef_donnees.noeuds == NULL) ou
- *             (m3d->data == NULL)
- *           -3 en cas d'erreur due à une fonction interne
- */
-{
-    GList           *list_parcours;
-    List_Gtk_m3d    *m3d;
-    SGlobalData     *vue;
-    
-    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->ef_donnees.noeuds, -1, gettext("Paramètre incorrect\n"));
-    m3d = &projet->list_gtk.m3d;
-    BUGMSG(m3d->data, -1, gettext("Paramètre incorrect\n"));
-    vue = (SGlobalData*)m3d->data;
-    
-    list_parcours = projet->ef_donnees.noeuds;
-    if (list_parcours != NULL)
-    {
-        do
-        {
-            EF_Noeud    *noeud = (EF_Noeud *)list_parcours->data;
-            EF_Point    *point;
-            char        *tmp;
-            
-            BUG(point = EF_noeuds_renvoie_position(noeud), -3);
-            BUGMSG(tmp = g_strdup_printf("noeud %d", noeud->numero), -2, gettext("Erreur d'allocation mémoire.\n"));
-            if (vue->scene->get_object_by_name(tmp) == NULL)
-                m3d_noeud(tmp, point, vue);
-            
-            free(tmp);
-            free(point);
-            list_parcours = g_list_next(list_parcours);
-        }
-        while (list_parcours != NULL);
-    }
-    
-    list_parcours = projet->beton.barres;
-    if (list_parcours != NULL)
-    {
-        do
-        {
-            Beton_Barre *barre = (Beton_Barre *) list_parcours->data;
-            
-            m3d_barre(projet, barre);
-            
-            list_parcours = g_list_next(list_parcours);
-        }
-        while (list_parcours != NULL);
-    }
-    return 0;
-}
-
-G_MODULE_EXPORT int m3d_free(Projet *projet)
+G_MODULE_EXPORT gboolean m3d_free(Projet *projet)
 /* Description : Libère l'espace mémoire alloué pour l'affichage graphique de la structure.
- * Paramètres : Projet *projet : la variable projet
+ * Paramètres : Projet *projet : la variable projet.
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : -1 en cas de paramètres invalides :
- *             (projet == NULL) ou
- *             (projet->list_gtk.m3d == NULL)
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL.
  */
 {
     // Trivial
-    List_Gtk_m3d        *m3d;
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
-    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    delete ((SGlobalData*)projet->list_gtk.m3d.data)->scene;
+    delete ((SGlobalData*)projet->list_gtk.m3d.data)->camera;
+    free(projet->list_gtk.m3d.data);
+    projet->list_gtk.m3d.data = NULL;
     
-    m3d = &projet->list_gtk.m3d;
-    free(m3d->data);
-    m3d->data = NULL;
-    
-    return 0;
+    return TRUE;
 }
 
 

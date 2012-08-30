@@ -20,27 +20,29 @@
 #include <stdlib.h>
 #include <libintl.h>
 #include <string.h>
+#include <gmodule.h>
+
 #include "common_projet.h"
 #include "common_erreurs.h"
 #ifdef ENABLE_GTK
 #include <gtk/gtk.h>
 #endif
 
-G_MODULE_EXPORT int EF_relachement_init(Projet *projet)
-/* Description : Initialise la liste des relachements
- * Paramètres : Projet *projet : la variable projet
+G_MODULE_EXPORT gboolean EF_relachement_init(Projet *projet)
+/* Description : Initialise la liste des relachements.
+ * Paramètres : Projet *projet : la variable projet.
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : -1 en cas de paramètres invalides :
- *             (projet == NULL)
- *           -2 en cas d'erreur d'allocation mémoire
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL,
+ *             en cas d'erreur d'allocation mémoire.
  */
 {
 #ifdef ENABLE_GTK
     GtkTreeIter     iter;
 #endif
     
-    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
     // Trivial
     projet->ef_donnees.relachements = NULL;
@@ -51,37 +53,37 @@ G_MODULE_EXPORT int EF_relachement_init(Projet *projet)
     gtk_list_store_set(projet->list_gtk.ef_barres.liste_relachements, &iter, 0, gettext("Aucun"), -1);
 #endif
     
-    return 0;
+    return TRUE;
 }
 
 
-G_MODULE_EXPORT int EF_relachement_ajout(Projet *projet, const char *nom, EF_Relachement_Type rx_debut,
-  void* rx_d_data, EF_Relachement_Type ry_debut, void* ry_d_data, EF_Relachement_Type rz_debut,
-  void* rz_d_data, EF_Relachement_Type rx_fin, void* rx_f_data, EF_Relachement_Type ry_fin,
-  void* ry_f_data, EF_Relachement_Type rz_fin, void* rz_f_data)
+G_MODULE_EXPORT gboolean EF_relachement_ajout(Projet *projet, const char *nom,
+  EF_Relachement_Type rx_debut, void* rx_d_data, EF_Relachement_Type ry_debut, void* ry_d_data,
+  EF_Relachement_Type rz_debut, void* rz_d_data, EF_Relachement_Type rx_fin, void* rx_f_data,
+  EF_Relachement_Type ry_fin, void* ry_f_data, EF_Relachement_Type rz_fin, void* rz_f_data)
 /* Description : Ajoute un relachement en lui attribuant le numéro suivant le dernier
- *                 relachement existant. Les données fournis dans les paramètres additionnels
- *                 doivent avoir été stockées en mémoire par l'utilisation de malloc.
- * Paramètres : Projet *projet : la variable projet
- *            : Type_EF_Appui rx_debut : relachement de la rotation autour de l'axe x au début
- *            : void* rx_d_data : paramètre additionnel de la rotation si nécessaire
- *            : Type_EF_Appui ry_debut : relachement de la rotation autour de l'axe y au début
- *            : void* ry_d_data : paramètre additionnel de la rotation si nécessaire
- *            : Type_EF_Appui rz_debut : relachement de la rotation autour de l'axe z au début
- *            : void* rz_d_data : paramètre additionnel de la rotation si nécessaire
- *            : Type_EF_Appui rx_fin : relachement de la rotation autour de l'axe x à la fin
- *            : void* rx_f_data : paramètre additionnel de la rotation si nécessaire
- *            : Type_EF_Appui ry_fin : relachement de la rotation autour de l'axe y à la fin
- *            : void* ry_f_data : paramètre additionnel de la rotation si nécessaire
- *            : Type_EF_Appui rz_fin : relachement de la rotation autour de l'axe z à la fin
- *            : void* rz_f_data : paramètre additionnel de la rotation si nécessaire
- *            : const char *nom : nom du relâchement.
+ *               relachement existant. Les données fournis dans les paramètres additionnels
+ *               doivent avoir été stockées en mémoire par l'utilisation de malloc.
+ * Paramètres : Projet *projet : la variable projet,
+ *            : const char *nom : nom du relâchement,
+ *            : Type_EF_Appui rx_debut : relachement de la rotation autour de l'axe x au début,
+ *            : void* rx_d_data : paramètre additionnel de la rotation si nécessaire,
+ *            : Type_EF_Appui ry_debut : relachement de la rotation autour de l'axe y au début,
+ *            : void* ry_d_data : paramètre additionnel de la rotation si nécessaire,
+ *            : Type_EF_Appui rz_debut : relachement de la rotation autour de l'axe z au début,
+ *            : void* rz_d_data : paramètre additionnel de la rotation si nécessaire,
+ *            : Type_EF_Appui rx_fin : relachement de la rotation autour de l'axe x à la fin,
+ *            : void* rx_f_data : paramètre additionnel de la rotation si nécessaire,
+ *            : Type_EF_Appui ry_fin : relachement de la rotation autour de l'axe y à la fin,
+ *            : void* ry_f_data : paramètre additionnel de la rotation si nécessaire,
+ *            : Type_EF_Appui rz_fin : relachement de la rotation autour de l'axe z à la fin,
+ *            : void* rz_f_data : paramètre additionnel de la rotation si nécessaire.
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : -1 en cas de paramètres invalides :
- *             (projet == NULL)
- *             (projet->ef_donnees.relachements == NULL)
- *             (rx_debut == EF_RELACHEMENT_LIBRE) && (rx_fin == EF_RELACHEMENT_LIBRE)
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL,
+ *             rx_debut == EF_RELACHEMENT_LIBRE && rx_fin == EF_RELACHEMENT_LIBRE,
+ *             en cas d'erreur d'allocation mémoire.
  */
 {
     EF_Relachement  *relachement_nouveau = malloc(sizeof(EF_Relachement));
@@ -91,8 +93,8 @@ G_MODULE_EXPORT int EF_relachement_ajout(Projet *projet, const char *nom, EF_Rel
     
     // Trivial
     
-    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
-    BUG(!((rx_debut == EF_RELACHEMENT_LIBRE) && (rx_fin == EF_RELACHEMENT_LIBRE)), -1);
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(!((rx_debut == EF_RELACHEMENT_LIBRE) && (rx_fin == EF_RELACHEMENT_LIBRE)), FALSE, "Impossible de relâcher rx simultanément des deux cotés de la barre.\n");
     
     relachement_nouveau->rx_debut = rx_debut;
     relachement_nouveau->rx_d_data = rx_d_data;
@@ -106,7 +108,7 @@ G_MODULE_EXPORT int EF_relachement_ajout(Projet *projet, const char *nom, EF_Rel
     relachement_nouveau->ry_f_data = ry_f_data;
     relachement_nouveau->rz_fin = rz_fin;
     relachement_nouveau->rz_f_data = rz_f_data;
-    BUGMSG(relachement_nouveau->nom = g_strdup_printf("%s", nom), -2, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(relachement_nouveau->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
     
     relachement_nouveau->numero = g_list_length(projet->ef_donnees.relachements);
     
@@ -117,31 +119,29 @@ G_MODULE_EXPORT int EF_relachement_ajout(Projet *projet, const char *nom, EF_Rel
     gtk_list_store_set(projet->list_gtk.ef_barres.liste_relachements, &iter, 0, nom, -1);
 #endif
     
-    return 0;
+    return TRUE;
 }
 
 
-G_MODULE_EXPORT EF_Relachement* EF_relachement_cherche_numero(Projet *projet, unsigned int numero)
-/* Description : Renvoie le relachement cherché
- * Paramètres : Projet *projet : la variable projet
- *            : unsigned int numero : le numéro du relachement
+G_MODULE_EXPORT EF_Relachement* EF_relachement_cherche_numero(Projet *projet,
+  unsigned int numero)
+/* Description : Renvoie le relachement cherché.
+ * Paramètres : Projet *projet : la variable projet,
+ *            : unsigned int numero : le numéro du relachement.
  * Valeur renvoyée :
- *   Succès : pointeur vers le relachement recherché
- *   Échec : NULL en cas de paramètres invalides :
- *             (projet == NULL) ou
- *             (projet->ef_donnees.relachements == NULL) ou
- *             (list_size(projet->ef_donnees.relachements) == 0) ou
+ *   Succès : pointeur vers le relachement recherché.
+ *   Échec : NULL :
+ *             projet == NULL,
  *             relachement introuvable.
  */
 {
     GList   *list_parcours;
     
-    BUGMSG(projet, NULL, gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->ef_donnees.relachements, NULL, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
     
     // Trivial
     list_parcours = projet->ef_donnees.relachements;
-    do
+    while (list_parcours != NULL)
     {
         EF_Relachement *relachement = list_parcours->data;
         
@@ -150,33 +150,29 @@ G_MODULE_EXPORT EF_Relachement* EF_relachement_cherche_numero(Projet *projet, un
         
         list_parcours = g_list_next(list_parcours);
     }
-    while (list_parcours != NULL);
     
     BUGMSG(0, NULL, gettext("Relachement n°%u introuvable.\n"), numero);
 }
 
 
 G_MODULE_EXPORT EF_Relachement* EF_relachement_cherche_nom(Projet *projet, const char *nom)
-/* Description : Renvoie le relachement cherché
- * Paramètres : Projet *projet : la variable projet
- *            : const char *nom : le nom du relachement
+/* Description : Renvoie le relachement cherché.
+ * Paramètres : Projet *projet : la variable projet,
+ *            : const char *nom : le nom du relachement.
  * Valeur renvoyée :
  *   Succès : pointeur vers le relachement recherché
- *   Échec : NULL en cas de paramètres invalides :
- *             (projet == NULL) ou
- *             (projet->ef_donnees.relachements == NULL) ou
- *             (list_size(projet->ef_donnees.relachements) == 0) ou
+ *   Échec : NULL :
+ *             projet == NULL,
  *             relachement introuvable.
  */
 {
     GList   *list_parcours;
     
-    BUGMSG(projet, NULL, gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->ef_donnees.relachements, NULL, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
     
     // Trivial
     list_parcours = projet->ef_donnees.relachements;
-    do
+    while (list_parcours != NULL)
     {
         EF_Relachement *relachement = list_parcours->data;
         
@@ -185,24 +181,21 @@ G_MODULE_EXPORT EF_Relachement* EF_relachement_cherche_nom(Projet *projet, const
         
         list_parcours = g_list_next(list_parcours);
     }
-    while (list_parcours != NULL);
     
     BUGMSG(0, NULL, gettext("Relachement '%s' introuvable.\n"), nom);
 }
 
 
-G_MODULE_EXPORT int EF_relachement_free(Projet *projet)
-/* Description : Libère l'ensemble des relachements et la liste les contenant
- * Paramètres : Projet *projet : la variable projet
+G_MODULE_EXPORT gboolean EF_relachement_free(Projet *projet)
+/* Description : Libère l'ensemble des relachements et la liste les contenant.
+ * Paramètres : Projet *projet : la variable projet.
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : -1 en cas de paramètres invalides :
- *             (projet == NULL) ou
- *             (projet->ef_donnees.relachements == NULL)
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL.
  */
 {
-    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->ef_donnees.relachements, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
     // Trivial
     while (projet->ef_donnees.relachements != NULL)
@@ -225,5 +218,5 @@ G_MODULE_EXPORT int EF_relachement_free(Projet *projet)
     g_object_unref(projet->list_gtk.ef_barres.liste_relachements);
 #endif
     
-    return 0;
+    return TRUE;
 }

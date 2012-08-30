@@ -59,8 +59,8 @@
 +if test x"$BLAS_LIBS" = x; then
 +    AC_MSG_ERROR([Cannot find blas libraries])
 +fi
-+AC_CHECK_LIB([cholmod], [cholmod_l_start], [], [AC_MSG_ERROR([cholmod ( http://www.cise.ufl.edu/research/sparse/cholmod ) est necessaire])])
-+AC_CHECK_LIB([colamd], [colamd_l_recommended], [], [AC_MSG_ERROR([colamd ( www.cise.ufl.edu/research/sparse/colamd ) est necessaire])])
-+AC_CHECK_LIB([umfpack], [umfpack_dl_solve], [], [AC_MSG_ERROR([umfpack ( www.cise.ufl.edu/research/sparse/umfpack ) est necessaire])])
++AC_CHECK_LIB([cholmod], [cholmod_start], [], [AC_MSG_ERROR([cholmod ( http://www.cise.ufl.edu/research/sparse/cholmod ) est necessaire])])
++AC_CHECK_LIB([colamd], [colamd_recommended], [], [AC_MSG_ERROR([colamd ( www.cise.ufl.edu/research/sparse/colamd ) est necessaire])])
++AC_CHECK_LIB([umfpack], [umfpack_di_solve], [], [AC_MSG_ERROR([umfpack ( www.cise.ufl.edu/research/sparse/umfpack ) est necessaire])])
  
  # Checks for header files.

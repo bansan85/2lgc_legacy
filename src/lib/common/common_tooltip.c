@@ -30,29 +30,16 @@
 #include "common_erreurs.h"
 #include "common_projet.h"
 
-G_MODULE_EXPORT void wrapped_label_size_allocate_callback(GtkWidget *label, GtkAllocation *allocation,
-  Projet *projet __attribute__((unused)))
-/* Description : Permet un redimensionnement en temps réel du composant label
- * Paramètres : GtkWidget *label : composant label à redimensionner
- *            : GtkAllocation *allocation : nouvelle dimension
- *            : Projet *projet : la variable projet
- * Valeur renvoyée : Aucune
- */
-{
-    // Fonction interne
-    gtk_widget_set_size_request(label, allocation->width, -1);
-    return;
-}
-
-
 G_MODULE_EXPORT GtkWidget* common_tooltip_generation(const char *nom)
 /* Description : Génère une fenêtre de type tooltip contenant les informations spécifiées par
  *                 le nom 'nom'. Les informations sont contenues dans le fichier 
  *                 DATADIR"/tooltips.xml" sous format XML.
  * Paramètres : const char *nom : nom de la fenêtre
  * Valeur renvoyée : 
- *   Succès : Un pointeur vers la fenêtre GTK+3
- *   Échec : NULL
+ *   Succès : Un pointeur vers la fenêtre GTK+3.
+ *   Échec : NULL :
+ *             en cas d'erreur d'allocation mémoire,
+ *             si le fichier n'est pas correct.
  */
 {
     xmlDocPtr   doc;
@@ -135,7 +122,6 @@ G_MODULE_EXPORT GtkWidget* common_tooltip_generation(const char *nom)
                                     
                                     gtk_label_set_line_wrap(GTK_LABEL(element), TRUE);
                                     gtk_label_set_justify(GTK_LABEL(element), GTK_JUSTIFY_FILL);
-                                    g_signal_connect(G_OBJECT(element), "size-allocate", G_CALLBACK(wrapped_label_size_allocate_callback), NULL);
                                     gtk_misc_set_alignment(GTK_MISC(element), 0., 0.5);
                                     if (w_prev == NULL)
                                         gtk_grid_attach(GTK_GRID(pgrid), element, 0, 0, 1, 1);
@@ -175,6 +161,7 @@ G_MODULE_EXPORT GtkWidget* common_tooltip_generation(const char *nom)
     }
     
     xmlFreeDoc(doc);
-    BUGMSG(0, NULL, gettext("Paramètre invalide\n"));
+    BUGMSG(0, NULL, gettext("Le fichier '%s' est corrompu.\n"), DATADIR"/tooltips.xml");
 }
+
 #endif

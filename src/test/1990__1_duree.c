@@ -59,8 +59,8 @@ int main(void)
     for (i=0;i<=4;i++)
         BUG(_1990_duree_projet_txt(i, PAYS_FR), -1);
 
-/*    BUG(_1990_duree_projet_eu(5) == -1, -1);
-    BUG(_1990_duree_projet_fr(5) == -1, -1);
+/*    BUG(_1990_duree_projet_eu(5) == 0, -1);
+    BUG(_1990_duree_projet_fr(5) == 0, -1);
     BUG(_1990_duree_projet_txt_eu(5) == NULL, -1);
     BUG(_1990_duree_projet_txt_fr(5) == NULL, -1);*/
     

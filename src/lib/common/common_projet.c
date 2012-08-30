@@ -22,17 +22,21 @@
 #include <libintl.h>
 #include <locale.h>
 #include <cholmod.h>
+#include <gmodule.h>
 
 #include "common_projet.h"
 #include "common_erreurs.h"
 #include "common_maths.h"
+
 #ifdef ENABLE_GTK
 #include "common_m3d.hpp"
 #include "1990_gtk_groupes.h"
 #include "1990_gtk_actions.h"
 #include "EF_gtk_noeud.hpp"
+#include "EF_gtk_appuis.hpp"
 #include "EF_gtk_barres.hpp"
 #endif
+
 #include "1990_actions.h"
 #include "1990_groupes.h"
 #include "1990_combinaisons.h"
@@ -45,35 +49,39 @@
 #include "1992_1_1_materiaux.h"
 
 G_MODULE_EXPORT Projet* projet_init(Type_Pays pays)
-/* Description : Initialise la variable projet
- * Paramètres : Type_Pays pays : pays du calcul
+/* Description : Initialise la variable projet.
+ * Paramètres : Type_Pays pays : pays du calcul.
  * Valeur renvoyée :
- *   Succès : Un pointeur vers une zone mémoire projet
- *   Échec : NULL en cas d'erreur d'allocation mémoire.
+ *   Succès : Un pointeur vers une zone mémoire projet.
+ *   Échec : NULL :
+ *             en cas d'erreur d'allocation mémoire.
  */
 {
     Projet      *projet;
     
-    g_type_init();
     // Alloue toutes les zones mémoires du projet à savoir (par module) :
     BUGMSG(projet = (Projet*)malloc(sizeof(Projet)), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    
+    projet->pays = pays;
+    
     //     - 1990 : la liste des actions, des groupes et des combinaisons,
-    BUGMSG(_1990_action_init(projet) == 0, NULL, gettext("Erreur d'allocation mémoire.\n"));
-    BUGMSG(_1990_groupe_init(projet) == 0, NULL, gettext("Erreur d'allocation mémoire.\n"));
-    BUGMSG(_1990_combinaisons_init(projet) == 0, NULL, gettext("Erreur d'allocation mémoire.\n"));
+    BUG(_1990_action_init(projet), NULL);
+    BUG(_1990_groupe_init(projet), NULL);
+    BUG(_1990_combinaisons_init(projet), NULL);
     //     - 1992-1-1 : la liste des sections, des barres et des matériaux
-    BUGMSG(_1992_1_1_sections_init(projet) == 0, NULL, gettext("Erreur d'allocation mémoire.\n"));
-    BUGMSG(_1992_1_1_barres_init(projet) == 0, NULL, gettext("Erreur d'allocation mémoire.\n"));
-    BUGMSG(_1992_1_1_materiaux_init(projet) == 0, NULL, gettext("Erreur d'allocation mémoire.\n"));
+    BUG(_1992_1_1_sections_init(projet), NULL);
+    BUG(_1992_1_1_barres_init(projet), NULL);
+    BUG(_1992_1_1_materiaux_init(projet), NULL);
     //     - EF : la liste des appuis, des relâchements et des noeuds ainsi que les éléments
     //              nécessaire pour les calculs aux éléments finis.
-    BUGMSG(EF_appuis_init(projet) == 0, NULL, gettext("Erreur d'allocation mémoire.\n"));
-    BUGMSG(EF_rigidite_init(projet) == 0, NULL, gettext("Erreur d'allocation mémoire.\n"));
-    BUGMSG(EF_relachement_init(projet) == 0, NULL, gettext("Erreur d'allocation mémoire.\n"));
-    BUGMSG(EF_noeuds_init(projet) == 0, NULL, gettext("Erreur d'allocation mémoire.\n"));
+    BUG(EF_appuis_init(projet), NULL);
+    BUG(EF_rigidite_init(projet), NULL);
+    BUG(EF_relachement_init(projet), NULL);
+    BUG(EF_noeuds_init(projet), NULL);
 #ifdef ENABLE_GTK
-    BUGMSG(m3d_init(projet) == 0, NULL, gettext("Erreur d'allocation mémoire.\n"));
+    BUG(m3d_init(projet), NULL);
     projet->list_gtk._1990_groupes.builder = NULL;
+    projet->list_gtk._1990_groupes.builder_options = NULL;
     projet->list_gtk.ef_charge_noeud.builder = NULL;
     projet->list_gtk.ef_charge_barre_ponctuelle.builder = NULL;
     projet->list_gtk.ef_charge_barre_repartie_uniforme.builder = NULL;
@@ -83,74 +91,56 @@ G_MODULE_EXPORT Projet* projet_init(Type_Pays pays)
 #endif
     
     projet->ef_donnees.c = &(projet->ef_donnees.Common);
-    cholmod_l_start(projet->ef_donnees.c);
+    cholmod_start(projet->ef_donnees.c);
     
-    projet->pays = pays;
     return projet;
 }
 
 
 #ifdef ENABLE_GTK
 void gui_window_destroy_event(GtkWidget *pWidget __attribute__((unused)), Projet *projet)
+/* Description : Evènement lors de la fermeture de la fenêtre principale.
+ * Paramètres : GtkWidget *pWidget : composant à l'origine de la demande,
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
 {
-    BUGMSG(projet, , gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     
-    BUG(projet_free(projet) == 0, );
+    BUG(projet_free(projet), );
     gtk_widget_destroy(pWidget);
     gtk_main_quit();
+    
     return;
 }
 
 
 void gui_window_option_destroy_button(GtkWidget *fenetre)
-/* Description : Bouton de fermeture de la fenêtre
- * Paramètres : GtkWidget *object : composant à l'origine de la demande
- *            : GtkWidget *fenetre : la fenêtre d'options
- * Valeur renvoyée : Aucune
+/* Description : Bouton de fermeture de la fenêtre.
+ * Paramètres : GtkWidget *object : composant à l'origine de la demande,
+ *            : GtkWidget *fenetre : la fenêtre d'options.
+ * Valeur renvoyée : Aucune.
  */
 {
     gtk_widget_destroy(fenetre);
+    
     return;
 }
 
 
-void gui_affiche_groupes(Projet *projet)
-/* Description : Affiche la fenêtre des groupes
- * Paramètres : GtkComboBox *widget : composant à l'origine de la demande,
- *            : gpointer *data : donnée.
- * Valeur renvoyée : Aucune
- */
-{
-    _1990_gtk_groupes(NULL, projet);
-    return;
-}
-
-
-void gui_affiche_actions(Projet *projet)
-/* Description : Affiche la fenêtre des actions
- * Paramètres : GtkComboBox *widget : composant à l'origine de la demande,
- *            : gpointer *data : donnée.
- * Valeur renvoyée : Aucune
- */
-{
-    _1990_gtk_actions(projet);
-    return;
-}
-
-
-G_MODULE_EXPORT int projet_init_graphique(Projet *projet)
-/* Description : Crée une fenêtre graphique avec toute l'interface (menu, vue 3D, ...)
- * Paramètres : Projet *projet : variable projet
+G_MODULE_EXPORT gboolean projet_init_graphique(Projet *projet)
+/* Description : Crée une fenêtre graphique avec toute l'interface (menu, vue 3D, ...).
+ * Paramètres : Projet *projet : variable projet.
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : -1 en cas de paramètres invalides :
- *             (projet == NULL)
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL.
  */
 {
     Comp_Gtk        *comps;
     List_Gtk_m3d    *m3d;
     
-    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
     comps = &(projet->list_gtk.comp);
     
@@ -181,9 +171,18 @@ G_MODULE_EXPORT int projet_init_graphique(Projet *projet)
     gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu), comps->menu_structure);
     gtk_menu_item_set_submenu(GTK_MENU_ITEM(comps->menu_structure), comps->menu_structure_list);
     
-    comps->menu_structure_noeud = gtk_menu_item_new_with_label(gettext("Noeuds..."));
+    comps->menu_structure_noeud_list = gtk_menu_new();
+    comps->menu_structure_noeud = gtk_menu_item_new_with_label(gettext("Noeuds"));
     gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_structure_list), comps->menu_structure_noeud);
-    g_signal_connect_swapped(comps->menu_structure_noeud, "activate", G_CALLBACK(EF_gtk_noeud), projet);
+    gtk_menu_item_set_submenu(GTK_MENU_ITEM(comps->menu_structure_noeud), comps->menu_structure_noeud_list);
+    
+    comps->menu_structure_noeud_appui = gtk_menu_item_new_with_label(gettext("Appuis..."));
+    gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_structure_noeud_list), comps->menu_structure_noeud_appui);
+    g_signal_connect_swapped(comps->menu_structure_noeud_appui, "activate", G_CALLBACK(EF_gtk_appuis), projet);
+    
+    comps->menu_structure_noeud_ajout = gtk_menu_item_new_with_label(gettext("Ajouter..."));
+    gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_structure_noeud_list), comps->menu_structure_noeud_ajout);
+    g_signal_connect_swapped(comps->menu_structure_noeud_ajout, "activate", G_CALLBACK(EF_gtk_noeud), projet);
     
     comps->menu_structure_barres = gtk_menu_item_new_with_label(gettext("Barres..."));
     gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_structure_list), comps->menu_structure_barres);
@@ -196,56 +195,63 @@ G_MODULE_EXPORT int projet_init_graphique(Projet *projet)
     
     comps->menu_charges_groupes = gtk_menu_item_new_with_label(gettext("Actions..."));
     gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_charges_list), comps->menu_charges_groupes);
-    g_signal_connect_swapped(comps->menu_charges_groupes, "activate", G_CALLBACK(gui_affiche_actions), projet);
+    g_signal_connect_swapped(comps->menu_charges_groupes, "activate", G_CALLBACK(_1990_gtk_actions), projet);
     
     comps->menu_charges_groupes = gtk_menu_item_new_with_label(gettext("Groupes..."));
     gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_charges_list), comps->menu_charges_groupes);
-    g_signal_connect_swapped(comps->menu_charges_groupes, "activate", G_CALLBACK(gui_affiche_groupes), projet);
+    g_signal_connect_swapped(comps->menu_charges_groupes, "activate", G_CALLBACK(_1990_gtk_groupes), projet);
     
     projet->list_gtk._1990_actions.window = NULL;
     projet->list_gtk._1990_groupes.window_groupe = NULL;
     
-    return 0;
+    return TRUE;
 }
 #endif
 
 
-G_MODULE_EXPORT int projet_free(Projet *projet)
-/* Description : Libère les allocations mémoires de l'ensemble de la variable projet
- * Paramètres : Projet *projet : variable projet
- * Valeur renvoyée : void
+G_MODULE_EXPORT gboolean projet_free(Projet *projet)
+/* Description : Libère les allocations mémoires de l'ensemble de la variable projet.
+ * Paramètres : Projet *projet : la variable projet.
+ * Valeur renvoyée :
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL,
+ *             erreur lors de l'utilisation d'une fonction interne.
  */
 {
     /* Action doit être libéré avant projet->beton.barres */
     // Trivial
+    
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    
     if (projet->actions != NULL)
-        BUG(_1990_action_free(projet) == 0, -3);
+        BUG(_1990_action_free(projet), FALSE);
     if (projet->niveaux_groupes != NULL)
-        BUG(_1990_groupe_free(projet) == 0, -3);
+        BUG(_1990_groupe_free(projet), FALSE);
     if (projet->combinaisons.elu_equ != NULL)
-        BUG(_1990_combinaisons_free(projet) == 0, -3);
+        BUG(_1990_combinaisons_free(projet), FALSE);
     /* Rigidite doit être libéré avant noeud car pour libérer toute la mémoire, il est nécessaire d'avoir accès aux informations contenues dans les noeuds */
-    BUG(EF_rigidite_free(projet) == 0, -3);
+    BUG(EF_rigidite_free(projet), FALSE);
     if (projet->ef_donnees.noeuds != NULL)
-        BUG(EF_noeuds_free(projet) == 0, -3);
+        BUG(EF_noeuds_free(projet), FALSE);
     if (projet->beton.sections != NULL)
-        BUG(_1992_1_1_sections_free(projet) == 0, -3);
+        BUG(_1992_1_1_sections_free(projet), FALSE);
     if (projet->beton.barres != NULL)
-        BUG(_1992_1_1_barres_free(projet) == 0, -3);
+        BUG(_1992_1_1_barres_free(projet), FALSE);
     if (projet->ef_donnees.appuis != NULL)
-        BUG(EF_appuis_free(projet) == 0, -3);
+        BUG(EF_appuis_free(projet), FALSE);
     if (projet->beton.materiaux != NULL)
-        BUG(_1992_1_1_materiaux_free(projet) == 0, -3);
+        BUG(_1992_1_1_materiaux_free(projet), FALSE);
     if (projet->ef_donnees.relachements != NULL)
-        BUG(EF_relachement_free(projet) == 0, -3);
+        BUG(EF_relachement_free(projet), FALSE);
 #ifdef ENABLE_GTK
     if (projet->list_gtk.m3d.data != NULL)
-        BUG(m3d_free(projet) == 0, -3);
+        BUG(m3d_free(projet), FALSE);
 #endif
     
-    cholmod_l_finish(projet->ef_donnees.c);
+    cholmod_finish(projet->ef_donnees.c);
     
     free(projet);
     
-    return 0;
+    return TRUE;
 }

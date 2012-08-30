@@ -22,11 +22,13 @@
 #include <libintl.h>
 #include <locale.h>
 #include <string.h>
+#include <gmodule.h>
+
 #include "common_projet.h"
 #include "common_erreurs.h"
 #include "common_maths.h"
 
-G_MODULE_EXPORT int common_fonction_init(Projet *projet, Action *action)
+G_MODULE_EXPORT gboolean common_fonction_init(Projet *projet, Action *action)
 /* Description : Initialise les fonctions décrivant les sollicitations, les rotations ou les
  *               déplacements des barres. Cette fonction doit être appelée lorsque toutes les
  *               barres ont été modélisées. En effet, il est nécessaire de connaître leur
@@ -36,25 +38,25 @@ G_MODULE_EXPORT int common_fonction_init(Projet *projet, Action *action)
  * Paramètres : Projet *projet : la variable projet,
  *            : Action *action : pointeur vers l'action.
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : -1 en cas de paramètres invalides :
- *             (projet == NULL) ou
- *             (action == NULL)
- *           -2 en cas d'erreur d'allocation mémoire
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL,
+ *             action == NULL,
+ *             en cas d'erreur d'allocation mémoire.
  */
 {
     unsigned int        i, j;
     
-    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(action, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(action, FALSE, gettext("Paramètre %s incorrect.\n"), "action");
     
     // Trivial
     for (i=0;i<6;i++)
     {
-        BUGMSG(action->fonctions_efforts[i] = (Fonction**)malloc(sizeof(Fonction*)*g_list_length(projet->beton.barres)), -2, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(action->fonctions_efforts[i] = (Fonction**)malloc(sizeof(Fonction*)*g_list_length(projet->beton.barres)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
         for (j=0;j<g_list_length(projet->beton.barres);j++)
         {
-            BUGMSG(action->fonctions_efforts[i][j] = (Fonction*)malloc(sizeof(Fonction)), -2, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(action->fonctions_efforts[i][j] = (Fonction*)malloc(sizeof(Fonction)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
             action->fonctions_efforts[i][j]->nb_troncons = 0;
             action->fonctions_efforts[i][j]->troncons = NULL;
         }
@@ -62,28 +64,28 @@ G_MODULE_EXPORT int common_fonction_init(Projet *projet, Action *action)
     
     for (i=0;i<3;i++)
     {
-        BUGMSG(action->fonctions_deformation[i] = (Fonction**)malloc(sizeof(Fonction*)*g_list_length(projet->beton.barres)), -2, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(action->fonctions_deformation[i] = (Fonction**)malloc(sizeof(Fonction*)*g_list_length(projet->beton.barres)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
         for (j=0;j<g_list_length(projet->beton.barres);j++)
         {
-            BUGMSG(action->fonctions_deformation[i][j] = (Fonction*)malloc(sizeof(Fonction)), -2, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(action->fonctions_deformation[i][j] = (Fonction*)malloc(sizeof(Fonction)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
             action->fonctions_deformation[i][j]->nb_troncons = 0;
             action->fonctions_deformation[i][j]->troncons = NULL;
         }
         
-        BUGMSG(action->fonctions_rotation[i] = (Fonction**)malloc(sizeof(Fonction*)*g_list_length(projet->beton.barres)), -2, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(action->fonctions_rotation[i] = (Fonction**)malloc(sizeof(Fonction*)*g_list_length(projet->beton.barres)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
         for (j=0;j<g_list_length(projet->beton.barres);j++)
         {
-            BUGMSG(action->fonctions_rotation[i][j] = (Fonction*)malloc(sizeof(Fonction)), -2, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(action->fonctions_rotation[i][j] = (Fonction*)malloc(sizeof(Fonction)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
             action->fonctions_rotation[i][j]->nb_troncons = 0;
             action->fonctions_rotation[i][j]->troncons = NULL;
         }
     }
     
-    return 0;
+    return TRUE;
 }
 
 
-int common_fonction_scinde_troncon(Fonction* fonction, double coupure)
+gboolean common_fonction_scinde_troncon(Fonction* fonction, double coupure)
 /* Description : Divise un tronçon en deux à la position coupure.
  *               Si la coupure est en dehors de la borne de validité actuelle de la fonction,
  *               les bornes s'en trouvent modifiées.
@@ -92,23 +94,23 @@ int common_fonction_scinde_troncon(Fonction* fonction, double coupure)
  * Paramètres : Fonction* fonction : la variable contenant la fonction,
  *            : double coupure : position de la coupure.
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : -1 en cas de paramètres invalides :
- *             (fonction == NULL) ou
- *             (fonction->nb_troncons == 0)
- *           -2 en cas d'erreur d'allocation mémoire
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             fonction == NULL,
+ *             fonction->nb_troncons == 0,
+ *             en cas d'erreur d'allocation mémoire.
  */
 {
     unsigned int i, j;
     
-    BUGMSG(fonction, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(fonction->nb_troncons, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(fonction, FALSE, gettext("Paramètre %s incorrect.\n"), "fonction");
+    BUGMSG(fonction->nb_troncons, FALSE, gettext("Impossible de scinder une fonction vide\n"));
     
     // Trivial
     /* Si la coupure est égale au début du premier tronçon Alors
      *     Fin. */
     if (ERREUR_RELATIVE_EGALE(fonction->troncons[0].debut_troncon, coupure))
-        return 0;
+        return TRUE;
     /* Sinon Si la coupure est inférieure au début du premier troncon Alors
      *     Insertion d'un tronçon en première position.
      *     Initialisation de tous les coefficients à 0.*/
@@ -116,7 +118,7 @@ int common_fonction_scinde_troncon(Fonction* fonction, double coupure)
     {
         fonction->nb_troncons++;
         fonction->troncons = (Troncon*)realloc(fonction->troncons, fonction->nb_troncons*sizeof(Troncon));
-        BUGMSG(fonction->troncons, -2, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(fonction->troncons, FALSE, gettext("Erreur d'allocation mémoire.\n"));
         for(i=fonction->nb_troncons-1;i>0;i--)
             memcpy(&(fonction->troncons[i]), &(fonction->troncons[i-1]), sizeof(Troncon));
         fonction->troncons[0].debut_troncon = coupure;
@@ -128,7 +130,7 @@ int common_fonction_scinde_troncon(Fonction* fonction, double coupure)
         fonction->troncons[0].x4 = 0.;
         fonction->troncons[0].x5 = 0.;
         fonction->troncons[0].x6 = 0.;
-        return 0;
+        return TRUE;
     }
     else
     {
@@ -146,17 +148,17 @@ int common_fonction_scinde_troncon(Fonction* fonction, double coupure)
         for (i=0;i<fonction->nb_troncons;i++)
         {
             if (ERREUR_RELATIVE_EGALE(fonction->troncons[i].fin_troncon, coupure))
-                return 0;
+                return TRUE;
             else if (fonction->troncons[i].fin_troncon > coupure)
             {
                 fonction->nb_troncons++;
                 fonction->troncons = (Troncon*)realloc(fonction->troncons, fonction->nb_troncons*sizeof(Troncon));
-                BUGMSG(fonction->troncons, -2, gettext("Erreur d'allocation mémoire.\n"));
+                BUGMSG(fonction->troncons, FALSE, gettext("Erreur d'allocation mémoire.\n"));
                 for(j=fonction->nb_troncons-1;j>i;j--)
                     memcpy(&(fonction->troncons[j]), &(fonction->troncons[j-1]), sizeof(Troncon));
                 fonction->troncons[i+1].debut_troncon = coupure;
                 fonction->troncons[i].fin_troncon = coupure;
-                return 0;
+                return TRUE;
             }
         }
     /* Si la position de la coupure est au-delà à la borne supérieure du dernier tronçon
@@ -166,7 +168,7 @@ int common_fonction_scinde_troncon(Fonction* fonction, double coupure)
      * FinSi */
         fonction->nb_troncons++;
         fonction->troncons = (Troncon*)realloc(fonction->troncons, fonction->nb_troncons*sizeof(Troncon));
-        BUGMSG(fonction->troncons, -2, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(fonction->troncons, FALSE, gettext("Erreur d'allocation mémoire.\n"));
         fonction->troncons[fonction->nb_troncons-1].debut_troncon = fonction->troncons[fonction->nb_troncons-2].fin_troncon;
         fonction->troncons[fonction->nb_troncons-1].fin_troncon = coupure;
         fonction->troncons[fonction->nb_troncons-1].x0 = 0.;
@@ -176,13 +178,14 @@ int common_fonction_scinde_troncon(Fonction* fonction, double coupure)
         fonction->troncons[fonction->nb_troncons-1].x4 = 0.;
         fonction->troncons[fonction->nb_troncons-1].x5 = 0.;
         fonction->troncons[fonction->nb_troncons-1].x6 = 0.;
-        return 0;
+        return TRUE;
     }
 }
 
 
-G_MODULE_EXPORT int common_fonction_ajout(Fonction* fonction, double debut_troncon, double fin_troncon,
-  double x0, double x1, double x2, double x3, double x4, double x5, double x6, double t)
+G_MODULE_EXPORT gboolean common_fonction_ajout(Fonction* fonction, double debut_troncon,
+  double fin_troncon, double x0, double x1, double x2, double x3, double x4, double x5,
+  double x6, double t)
 /* Description : Additionne une fonction à une fonction existante dont le domaine de validité
  *               est compris entre debut_troncon et fin_troncon.
  *               Si la fonction ne possède pas un tronçon commençant à debut_troncon ou un
@@ -204,24 +207,24 @@ G_MODULE_EXPORT int common_fonction_ajout(Fonction* fonction, double debut_tronc
  *            : double t : modifie les coefficients ci-dessus afin d'effectuer une
  *                                 translation de la fonction de 0 à t.
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : -1 en cas de paramètres invalides :
- *             (fonction == NULL) ou
- *             (fin_troncon < debut_troncon)
- *           -2 en cas d'erreur d'allocation mémoire
- *           -3 en cas d'erreur due à une fonction interne
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             fonction == NULL,
+ *             fin_troncon < debut_troncon,
+ *             en cas d'erreur d'allocation mémoire,
+ *             en cas d'erreur due à une fonction interne.
  */
 {
     double  x0_t, x1_t, x2_t, x3_t, x4_t, x5_t, x6_t;
     
-    BUGMSG(fonction, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(fonction, FALSE, gettext("Paramètre %s incorrect.\n"), "fonction");
     // Si fin_troncon == debut_troncon Alors
     //     Fin.
     // FinSi
     if (ERREUR_RELATIVE_EGALE(fin_troncon, debut_troncon))
-        return 0;
+        return TRUE;
     
-    BUGMSG(fin_troncon > debut_troncon, -1, "debut_troncon %.20f > fin_troncon %.20f\n", debut_troncon, fin_troncon);
+    BUGMSG(fin_troncon > debut_troncon, FALSE, "Le début du tronçon (%.20f) est supérieur à la fin (%.20f).\n", debut_troncon, fin_troncon);
     
     debut_troncon = debut_troncon + t;
     fin_troncon = fin_troncon + t;
@@ -241,7 +244,7 @@ G_MODULE_EXPORT int common_fonction_ajout(Fonction* fonction, double debut_tronc
     if (fonction->nb_troncons == 0)
     {
         fonction->nb_troncons = 1;
-        BUGMSG(fonction->troncons = (Troncon *)malloc(sizeof(Troncon)), -2, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(fonction->troncons = (Troncon *)malloc(sizeof(Troncon)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
         fonction->troncons[0].debut_troncon = debut_troncon;
         fonction->troncons[0].fin_troncon = fin_troncon;
         fonction->troncons[0].x0 = x0_t;
@@ -251,7 +254,7 @@ G_MODULE_EXPORT int common_fonction_ajout(Fonction* fonction, double debut_tronc
         fonction->troncons[0].x4 = x4_t;
         fonction->troncons[0].x5 = x5_t;
         fonction->troncons[0].x6 = x6_t;
-        return 0;
+        return TRUE;
     }
     // Sinon
     //     Scission de la fonction à debut_troncon. Pour rappel, si la scission existe déjà
@@ -265,12 +268,12 @@ G_MODULE_EXPORT int common_fonction_ajout(Fonction* fonction, double debut_tronc
     {
         unsigned int i = 0;
         
-        BUG(common_fonction_scinde_troncon(fonction, debut_troncon) == 0, -3);
-        BUG(common_fonction_scinde_troncon(fonction, fin_troncon) == 0, -3);
+        BUG(common_fonction_scinde_troncon(fonction, debut_troncon), FALSE);
+        BUG(common_fonction_scinde_troncon(fonction, fin_troncon), FALSE);
         while ((i<fonction->nb_troncons))
         {
             if (ERREUR_RELATIVE_EGALE(fonction->troncons[i].debut_troncon, fin_troncon))
-                return 0;
+                return TRUE;
             else if ((ERREUR_RELATIVE_EGALE(fonction->troncons[i].debut_troncon, debut_troncon)) || (fonction->troncons[i].debut_troncon > debut_troncon))
             {
                 fonction->troncons[i].x0 += x0_t;
@@ -283,19 +286,19 @@ G_MODULE_EXPORT int common_fonction_ajout(Fonction* fonction, double debut_tronc
             }
             i++;
         }
-        return 0;
+        return TRUE;
     }
 }
 
 
-int common_fonction_compacte(Fonction* fonction)
+gboolean common_fonction_compacte(Fonction* fonction)
 /* Description : Fusionne les tronçons voisins ayant une fonction identique.
  * Paramètres : Fonction* fonction : fonction à afficher
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : -1 en cas de paramètres invalides :
- *             (fonction == NULL)
- *           -2 en cas d'erreur d'allocation mémoire
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             fonction == NULL,
+ *             en cas d'erreur d'allocation mémoire.
  */
 {
     unsigned int i; /* Numéro du tronçon en cours */
@@ -303,10 +306,10 @@ int common_fonction_compacte(Fonction* fonction)
     unsigned int k; /* Numéro du précédent tronçon identique */
     
     // Trivial
-    BUGMSG(fonction, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(fonction, FALSE, gettext("Paramètre %s incorrect.\n"), "fonction");
     
     if ((fonction->nb_troncons == 0) || (fonction->nb_troncons == 1))
-        return 0;
+        return TRUE;
     j = 1;
     k = 0;
     for (i=1;i<fonction->nb_troncons;i++)
@@ -322,30 +325,31 @@ int common_fonction_compacte(Fonction* fonction)
         }
     }
     memmove(fonction->troncons, fonction->troncons, sizeof(Troncon)*j);
-    BUGMSG(fonction->troncons, -2, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(fonction->troncons, FALSE, gettext("Erreur d'allocation mémoire.\n"));
     fonction->nb_troncons = j;
-    return 0;
+    
+    return TRUE;
 }
 
 
-G_MODULE_EXPORT int common_fonction_affiche(Fonction* fonction)
+G_MODULE_EXPORT gboolean common_fonction_affiche(Fonction* fonction)
 /* Description : Affiche la fonction (coefficients pour chaque tronçon) ainsi que la valeur
  *                 de la fonction pour chaque extrémité du tronçon.
- * Paramètres : Fonction* fonction : fonction à afficher
+ * Paramètres : Fonction* fonction : fonction à afficher.
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : -1 en cas de paramètres invalides :
- *             (fonction == NULL)
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             fonction == NULL.
  */
 {
     unsigned int i;
     
     // Trivial
-    BUGMSG(fonction, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(fonction, FALSE, gettext("Paramètre %s incorrect.\n"), "fonction");
     
     if (fonction->nb_troncons == 0)
         printf(gettext("Fonction indéfinie.\n"));
-    common_fonction_compacte(fonction);
+    BUG(common_fonction_compacte(fonction), FALSE);
     for (i=0;i<fonction->nb_troncons;i++)
     {
         printf("debut_troncon : %.5f\tfin_troncon : %.5f\t0 : %.20f\tx : %.20f\tx2 : %.20f\tx3 : %.20f\tx4 : %.20f\tx5 : %.20f\tx6 : %.20f\tsoit f(%.5f) = %.20f\tf(%.5f) = %.20f\n",
@@ -363,26 +367,27 @@ G_MODULE_EXPORT int common_fonction_affiche(Fonction* fonction)
           fonction->troncons[i].fin_troncon,
           fonction->troncons[i].x0+fonction->troncons[i].x1*fonction->troncons[i].fin_troncon+fonction->troncons[i].x2*fonction->troncons[i].fin_troncon*fonction->troncons[i].fin_troncon+fonction->troncons[i].x3*fonction->troncons[i].fin_troncon*fonction->troncons[i].fin_troncon*fonction->troncons[i].fin_troncon+fonction->troncons[i].x4*fonction->troncons[i].fin_troncon*fonction->troncons[i].fin_troncon*fonction->troncons[i].fin_troncon*fonction->troncons[i].fin_troncon+fonction->troncons[i].x5*fonction->troncons[i].fin_troncon*fonction->troncons[i].fin_troncon*fonction->troncons[i].fin_troncon*fonction->troncons[i].fin_troncon*fonction->troncons[i].fin_troncon+fonction->troncons[i].x6*fonction->troncons[i].fin_troncon*fonction->troncons[i].fin_troncon*fonction->troncons[i].fin_troncon*fonction->troncons[i].fin_troncon*fonction->troncons[i].fin_troncon*fonction->troncons[i].fin_troncon);
     }
-    return 0;
+    
+    return TRUE;
 }
 
 
-G_MODULE_EXPORT int common_fonction_free(Projet *projet, Action *action)
+G_MODULE_EXPORT gboolean common_fonction_free(Projet *projet, Action *action)
 /* Description : Libère les fonctions de toutes les barres de l'action souhaitée.
- * Paramètres : Projet *projet : la variable projet
+ * Paramètres : Projet *projet : la variable projet,
  *            : Action *action : pointeur vers l'action.
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : -1 en cas de paramètres invalides :
- *             (projet == NULL) ou
- *             (action == NULL) ou
- *             (projet->beton.barres == NULL)
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL,
+ *             action == NULL,
+ *             projet->beton.barres == NULL.
  */
 {
     unsigned int        i, j;
     
-    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(action, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(action, FALSE, gettext("Paramètre %s incorrect.\n"), "action");
     
     // Trivial
     for (i=0;i<6;i++)
@@ -424,5 +429,5 @@ G_MODULE_EXPORT int common_fonction_free(Projet *projet, Action *action)
         }
     }
     
-    return 0;
+    return TRUE;
 }

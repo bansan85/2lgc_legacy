@@ -25,8 +25,8 @@
 
 #include "common_projet.h"
 
-int EF_gtk_charge_barre_repartie_uniforme(Projet *projet, unsigned int action_defaut, unsigned int charge);
-int EF_gtk_charge_barre_repartie_uniforme_ajout_affichage(Charge_Barre_Repartie_Uniforme *charge, Projet *projet, gboolean nouvelle_ligne);
+gboolean EF_gtk_charge_barre_repartie_uniforme(Projet *projet, unsigned int action_defaut, unsigned int charge) __attribute__((__warn_unused_result__));
+gboolean EF_gtk_charge_barre_repartie_uniforme_ajout_affichage(Charge_Barre_Repartie_Uniforme *charge, Projet *projet, gboolean nouvelle_ligne) __attribute__((__warn_unused_result__));
 
 #endif
 

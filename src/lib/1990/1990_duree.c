@@ -19,6 +19,7 @@
 #include "config.h"
 #include <libintl.h>
 #include <locale.h>
+#include <gmodule.h>
 
 #include "common_erreurs.h"
 #include "common_projet.h"
@@ -37,7 +38,8 @@ int _1990_duree_projet_eu(unsigned int type)
  *            type 2 : 30,
  *            type 3 : 50,
  *            type 4 : 100.
- *   Échec : 0 si le type n'existe pas.
+ *   Échec : 0 :
+ *             le type n'existe pas.
  */
 {
     // Trivial
@@ -48,7 +50,7 @@ int _1990_duree_projet_eu(unsigned int type)
         case 2 : { return 30; break; }
         case 3 : { return 50; break; }
         case 4 : { return 100; break; }
-        default : { BUGMSG(0, -1, gettext("Catégorie de durée %u inconnue.\n"), type); break; }
+        default : { BUGMSG(0, 0, gettext("Catégorie de durée %u inconnue.\n"), type); break; }
     }
 }
 
@@ -64,7 +66,8 @@ int _1990_duree_projet_fr(unsigned int type)
  *            type 2 : 25,
  *            type 3 : 50,
  *            type 4 : 100.
- *   Échec : 0 si le type n'existe pas.
+ *   Échec : -1 :
+ *             le type n'existe pas.
  */
 {
     // Trivial
@@ -75,7 +78,7 @@ int _1990_duree_projet_fr(unsigned int type)
         case 2 : { return 25; break; }
         case 3 : { return 50; break; }
         case 4 : { return 100; break; }
-        default : { BUGMSG(0, -1, gettext("Catégorie de durée %u inconnue.\n"), type); break; }
+        default : { BUGMSG(0, 0, gettext("Catégorie de durée %u inconnue.\n"), type); break; }
     }
 }
 
@@ -87,12 +90,13 @@ char* _1990_duree_projet_txt_eu(unsigned int type)
  * Paramètres : unsigned int type : catégorie de durée d'utilisation de projet.
  * Valeur renvoyée :
  *   Succès : Texte contenant la description :
- *            type 0 : "Structures provisoires"
- *            type 1 : "Éléments structuraux remplaçables, par exemple poutres de roulement"
- *            type 2 : "Structures agricoles et similaires"
- *            type 3 : "Structures de bâtiments et autres structures courantes"
- *            type 4 : "Structures monumentales de bâtiments, pont et autres ouvrages de GC"
- *   Échec : NULL si le type n'existe pas.
+ *            type 0 : "Structures provisoires",
+ *            type 1 : "Éléments structuraux remplaçables, par exemple poutres de roulement",
+ *            type 2 : "Structures agricoles et similaires",
+ *            type 3 : "Structures de bâtiments et autres structures courantes",
+ *            type 4 : "Structures monumentales de bâtiments, pont et autres ouvrages de GC".
+ *   Échec : NULL :
+ *             le type n'existe pas.
  */
 {
     // Trivial
@@ -115,12 +119,13 @@ char* _1990_duree_projet_txt_fr(unsigned int type)
  * Paramètres : unsigned int type : catégorie de durée d'utilisation de projet.
  * Valeur renvoyée :
  *   Succès : Texte contenant la description :
- *            type 0 : "Structures provisoires"
- *            type 1 : "Éléments structuraux remplaçables, par exemple poutres de roulement"
- *            type 2 : "Structures agricoles et similaires"
- *            type 3 : "Structures de bâtiments et autres structures courantes"
- *            type 4 : "Structures monumentales de bâtiments, pont et autres ouvrages de GC"
- *   Échec : NULL si le type n'existe pas.
+ *            type 0 : "Structures provisoires",
+ *            type 1 : "Éléments structuraux remplaçables, par exemple poutres de roulement",
+ *            type 2 : "Structures agricoles et similaires",
+ *            type 3 : "Structures de bâtiments et autres structures courantes",
+ *            type 4 : "Structures monumentales de bâtiments, pont et autres ouvrages de GC".
+ *   Échec : NULL :
+ *             le type n'existe pas.
  */
 {
     // Trivial
@@ -142,7 +147,9 @@ G_MODULE_EXPORT int _1990_duree_projet(unsigned int type, Type_Pays pays)
  *            : Type_Pays pays : pays souhaité.
  * Valeur renvoyée :
  *   Succès : cf les fonctions _1990_duree_projet_PAYS.
- *   Échec : 0 en cas d'erreur.
+ *   Échec : -1 :
+ *             Pays inconnu,
+ *             erreur dans l'une des fonctions _1990_duree_projet_PAYS.
  */
 {
     // Trivial
@@ -150,7 +157,7 @@ G_MODULE_EXPORT int _1990_duree_projet(unsigned int type, Type_Pays pays)
     {
         case PAYS_EU : { return _1990_duree_projet_eu(type); break; }
         case PAYS_FR : { return _1990_duree_projet_fr(type); break; }
-        default : { BUGMSG(0, -1, gettext("Pays %d inconnu.\n"), pays); break; }
+        default : { BUGMSG(0, 0, gettext("Pays %d inconnu.\n"), pays); break; }
     }
 }
 
@@ -162,7 +169,9 @@ G_MODULE_EXPORT char* _1990_duree_projet_txt(unsigned int type, Type_Pays pays)
  *            : Type_Pays pays : pays souhaité.
  * Valeur renvoyée :
  *   Succès : cf les fonctions _1990_duree_projet_txt_PAYS.
- *   Échec : NULL en cas d'erreur.
+ *   Échec : NULL :
+ *             Pays inconnu,
+ *             erreur dans l'une des fonctions _1990_duree_projet_txt_PAYS.
  */
 {
     // Trivial

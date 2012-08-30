@@ -25,7 +25,7 @@
 #ifdef ENABLE_GTK
 #include <gtk/gtk.h>
 
-GtkWindow* common_tooltip_generation(const char *nom);
+GtkWindow* common_tooltip_generation(const char *nom) __attribute__((__warn_unused_result__));
 void wrapped_label_size_allocate_callback(GtkWidget *label, GtkAllocation *allocation,
   Projet *projet __attribute__((unused)));
 #endif
