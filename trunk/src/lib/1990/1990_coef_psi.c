@@ -20,6 +20,8 @@
 
 #include <libintl.h>
 #include <locale.h>
+#include <math.h>
+#include <gmodule.h>
 
 #include "common_erreurs.h"
 #include "common_projet.h"
@@ -48,7 +50,8 @@ double _1990_coef_psi0_bat_eu(unsigned int type)
  *            0.6 : Température (hors incendie)
  *            0.0 : Accidentelle
  *            0.0 : Sismique
- *   Échec : valeur en double -1. si le type n'existe pas.
+ *   Échec : NAN :
+ *             le type n'existe pas.
  */
 {
     // Trivial
@@ -71,7 +74,7 @@ double _1990_coef_psi0_bat_eu(unsigned int type)
         case 14 : { return 0.6; break; }
         case 15 : { return 0.0; break; }
         case 16 : { return 0.0; break; }
-        default : { BUGMSG(0, -1., gettext("Type d'action %u inconnu.\n"), type); break; }
+        default : { BUGMSG(0, NAN, gettext("Type d'action %u inconnu.\n"), type); break; }
     }
 }
 
@@ -99,7 +102,8 @@ double _1990_coef_psi1_bat_eu(unsigned int type)
  *            0.5 : Température (hors incendie)
  *            0.0 : Accidentelle
  *            0.0 : Sismique
- *   Échec : valeur en double -1. si le type n'existe pas.
+ *   Échec : NAN :
+ *             le type n'existe pas.
  */
 {
     // Trivial
@@ -122,7 +126,7 @@ double _1990_coef_psi1_bat_eu(unsigned int type)
         case 14 : { return 0.5; break; }
         case 15 : { return 0.0; break; }
         case 16 : { return 0.0; break; }
-        default : { BUGMSG(0, -1., gettext("Type d'action %u inconnu.\n"), type); break; }
+        default : { BUGMSG(0, NAN, gettext("Type d'action %u inconnu.\n"), type); break; }
     }
 }
 
@@ -150,7 +154,8 @@ double _1990_coef_psi2_bat_eu(unsigned int type)
  *            0.0 : Température (hors incendie)
  *            0.0 : Accidentelle
  *            0.0 : Sismique
- *   Échec : valeur en double -1. si le type n'existe pas.
+ *   Échec : NAN :
+ *             le type n'existe pas.
  */
 {
     // Trivial
@@ -173,7 +178,7 @@ double _1990_coef_psi2_bat_eu(unsigned int type)
         case 14 : { return 0.0; break; }
         case 15 : { return 0.0; break; }
         case 16 : { return 0.0; break; }
-        default : { BUGMSG(0, -1., gettext("Type d'action %u inconnu.\n"), type); break; }
+        default : { BUGMSG(0, NAN, gettext("Type d'action %u inconnu.\n"), type); break; }
     }
 }
 
@@ -206,7 +211,8 @@ double _1990_coef_psi0_bat_fr(unsigned int type)
  *            0.0 : Accidentelle
  *            0.0 : Sismique
  *            0.0 : Eaux souterraines
- *   Échec : valeur en double -1. si le type n'existe pas.
+ *   Échec : NAN :
+ *             le type n'existe pas.
  */
 {
     // Trivial
@@ -234,7 +240,7 @@ double _1990_coef_psi0_bat_fr(unsigned int type)
         case 19 : { return 0.0; break; }
         case 20 : { return 0.0; break; }
         case 21 : { return 0.0; break; }
-        default : { BUGMSG(0, -1., gettext("Type d'action %u inconnu.\n"), type); break; }
+        default : { BUGMSG(0, NAN, gettext("Type d'action %u inconnu.\n"), type); break; }
     }
 }
 
@@ -267,7 +273,8 @@ double _1990_coef_psi1_bat_fr(unsigned int type)
  *            0.0 : Accidentelle
  *            0.0 : Sismique
  *            0.0 : Eaux souterraines
- *   Échec : valeur en double -1. si le type n'existe pas.
+ *   Échec : NAN :
+ *             le type n'existe pas.
  */
 {
     // Trivial
@@ -295,7 +302,7 @@ double _1990_coef_psi1_bat_fr(unsigned int type)
         case 19 : { return 0.0; break; }
         case 20 : { return 0.0; break; }
         case 21 : { return 0.0; break; }
-        default : { BUGMSG(0, -1., gettext("Type d'action %u inconnu.\n"), type); break; }
+        default : { BUGMSG(0, NAN, gettext("Type d'action %u inconnu.\n"), type); break; }
     }
 }
 
@@ -328,7 +335,8 @@ double _1990_coef_psi2_bat_fr(unsigned int type)
  *            0.0 : Accidentelle
  *            0.0 : Sismique
  *            0.0 : Eaux souterraines
- *   Échec : valeur en double -1. si le type n'existe pas.
+ *   Échec : NAN :
+ *             le type n'existe pas.
  */
 {
     // Trivial
@@ -356,7 +364,7 @@ double _1990_coef_psi2_bat_fr(unsigned int type)
         case 19 : { return 0.0; break; }
         case 20 : { return 0.0; break; }
         case 21 : { return 0.0; break; }
-        default : { BUGMSG(0, -1., gettext("Type d'action %u inconnu.\n"), type); break; }
+        default : { BUGMSG(0, NAN, gettext("Type d'action %u inconnu.\n"), type); break; }
     }
 }
 
@@ -368,7 +376,8 @@ G_MODULE_EXPORT double _1990_coef_psi0_bat(unsigned int type, Type_Pays pays)
  *            : Type_Pays pays : référence du pays.
  * Valeur renvoyée :
  *   Succès : cf les fonctions _1990_coef_psi0_bat_PAYS.
- *   Échec : valeur en double -1. si le pays ou le type n'existe pas.
+ *   Échec : NAN :
+ *             le pays ou le type n'existe pas.
  */
 {
     // Trivial
@@ -376,7 +385,7 @@ G_MODULE_EXPORT double _1990_coef_psi0_bat(unsigned int type, Type_Pays pays)
     {
         case PAYS_EU : { return _1990_coef_psi0_bat_eu(type); break; }
         case PAYS_FR : { return _1990_coef_psi0_bat_fr(type); break; }
-        default : { BUGMSG(0, -1., gettext("Pays %d inconnu.\n"), pays); break; }
+        default : { BUGMSG(0, NAN, gettext("Pays %d inconnu.\n"), pays); break; }
     }
 }
 
@@ -388,7 +397,8 @@ G_MODULE_EXPORT double _1990_coef_psi1_bat(unsigned int type, Type_Pays pays)
  *            : Type_Pays pays : référence du pays.
  * Valeur renvoyée :
  *   Succès : cf les fonctions _1990_coef_psi1_bat_PAYS.
- *   Échec : valeur en double -1. si le pays ou le type n'existe pas.
+ *   Échec : NAN :
+ *             le pays ou le type n'existe pas.
  */
 {
     // Trivial
@@ -396,7 +406,7 @@ G_MODULE_EXPORT double _1990_coef_psi1_bat(unsigned int type, Type_Pays pays)
     {
         case PAYS_EU : { return _1990_coef_psi1_bat_eu(type); break; }
         case PAYS_FR : { return _1990_coef_psi1_bat_fr(type); break; }
-        default : { BUGMSG(0, -1., gettext("Pays %d inconnu.\n"), pays); break; }
+        default : { BUGMSG(0, NAN, gettext("Pays %d inconnu.\n"), pays); break; }
     }
 }
 
@@ -408,7 +418,8 @@ G_MODULE_EXPORT double _1990_coef_psi2_bat(unsigned int type, Type_Pays pays)
  *            : Type_Pays pays : référence du pays.
  * Valeur renvoyée :
  *   Succès : cf les fonctions _1990_coef_psi2_bat_PAYS.
- *   Échec : valeur en double -1. si le pays ou le type n'existe pas.
+ *   Échec : NAN :
+ *             le pays ou le type n'existe pas.
  */
 {
     // Trivial
@@ -416,6 +427,6 @@ G_MODULE_EXPORT double _1990_coef_psi2_bat(unsigned int type, Type_Pays pays)
     {
         case PAYS_EU : { return _1990_coef_psi2_bat_eu(type); break; }
         case PAYS_FR : { return _1990_coef_psi2_bat_fr(type); break; }
-        default : { BUGMSG(0, -1., gettext("Pays %d inconnu.\n"), pays); break; }
+        default : { BUGMSG(0, NAN, gettext("Pays %d inconnu.\n"), pays); break; }
     }
 }

@@ -23,17 +23,22 @@
 #include <stdlib.h>
 #include <cholmod.h>
 #include <string.h>
+#include <gmodule.h>
+#include <math.h>
 
 #include "1990_coef_psi.h"
 #include "common_projet.h"
 #include "common_maths.h"
 #include "common_erreurs.h"
 #include "common_fonction.h"
-#include "1990_gtk_actions.h"
 #include "EF_charge_noeud.h"
 #include "EF_charge_barre_ponctuelle.h"
 #include "EF_charge_barre_repartie_uniforme.h"
 
+#ifdef ENABLE_GTK
+#include "common_gtk.h"
+#include "1990_gtk_actions.h"
+#endif
 
 char* _1990_action_type_bat_txt_eu(unsigned int type)
 /* Description : renvoie la description des types de charge pour les bâtiments de la norme
@@ -279,22 +284,26 @@ G_MODULE_EXPORT Action_Categorie _1990_action_num_bat_txt(Type_Pays pays)
 }
 
 
-G_MODULE_EXPORT int _1990_action_init(Projet *projet)
+G_MODULE_EXPORT gboolean _1990_action_init(Projet *projet)
 /* Description : Initialise la liste des actions.
  * Paramètres : Projet *projet : la variable projet.
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : -1 :
+ *   Succès : TRUE
+ *   Échec : FALSE :
  *             projet == NULL.
  */
 {
+#ifdef ENABLE_GTK
     unsigned int    i;
     GtkWidget       *w_temp;
+#endif
     
     // Trivial
-    BUGMSG(projet, -1, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
     projet->actions = NULL;
+    
+#ifdef ENABLE_GTK
     projet->list_gtk._1990_actions.list_actions = gtk_list_store_new(1, G_TYPE_STRING);
     projet->list_gtk._1990_actions.builder = NULL;
     
@@ -336,14 +345,15 @@ G_MODULE_EXPORT int _1990_action_init(Projet *projet)
     // Sinon, ils sont libérés à la première fermeture de la fenêtre Actions et ils ne réapparaissent plus lors de la deuxième ouverture.
     g_object_ref(projet->list_gtk._1990_actions.menu_type_list_action);
     g_object_ref(projet->list_gtk._1990_actions.menu_type_list_charge);
+#endif
     
-    return 0;
+    return TRUE;
 }
 
 
 G_MODULE_EXPORT Action *_1990_action_ajout(Projet *projet, unsigned int type,
   const char* description)
-/* Description : ajoute une nouvelle action à la liste des actions en lui attribuant le numéro
+/* Description : Ajoute une nouvelle action à la liste des actions en lui attribuant le numéro
  *               suivant le dernier relachement existant.
  * Paramètres : Projet *projet : la variable projet,
  *            : unsigned int type : le type de l'action,
@@ -365,17 +375,17 @@ G_MODULE_EXPORT Action *_1990_action_ajout(Projet *projet, unsigned int type,
     BUG(_1990_action_categorie_bat(type, projet->pays) != ACTION_INCONNUE, NULL);
     
     BUGMSG(action_nouveau = (Action*)malloc(sizeof(Action)), NULL, gettext("Erreur d'allocation mémoire.\n"));
-    BUGMSG(action_nouveau->description = g_strdup_printf("%s", description), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(action_nouveau->nom = g_strdup_printf("%s", description), NULL, gettext("Erreur d'allocation mémoire.\n"));
     action_nouveau->numero = g_list_length(projet->actions);
     action_nouveau->type = type;
     action_nouveau->charges = NULL;
     action_nouveau->flags = 0;
     action_nouveau->psi0 = _1990_coef_psi0_bat(type, projet->pays);
-    BUG(action_nouveau->psi0 >= 0., NULL);
+    BUG(!isnan(action_nouveau->psi0), NULL);
     action_nouveau->psi1 = _1990_coef_psi1_bat(type, projet->pays);
-    BUG(action_nouveau->psi1 >= 0., NULL);
+    BUG(!isnan(action_nouveau->psi1), NULL);
     action_nouveau->psi2 = _1990_coef_psi2_bat(type, projet->pays);
-    BUG(action_nouveau->psi2 >= 0., NULL);
+    BUG(!isnan(action_nouveau->psi2), NULL);
     action_nouveau->deplacement_complet = NULL;
     action_nouveau->forces_complet = NULL;
     action_nouveau->efforts_noeuds = NULL;
@@ -394,19 +404,16 @@ G_MODULE_EXPORT Action *_1990_action_ajout(Projet *projet, unsigned int type,
     
     projet->actions = g_list_append(projet->actions, action_nouveau);
      
+#ifdef ENABLE_GTK
     gtk_list_store_append(projet->list_gtk._1990_actions.list_actions, &action_nouveau->Iter_liste);
-    gtk_list_store_set(projet->list_gtk._1990_actions.list_actions, &action_nouveau->Iter_liste, 0, action_nouveau->description, -1);
+    gtk_list_store_set(projet->list_gtk._1990_actions.list_actions, &action_nouveau->Iter_liste, 0, action_nouveau->nom, -1);
     
     if (projet->list_gtk._1990_actions.builder)
     {
-        GtkTreePath *path;
-        
         gtk_tree_store_append(projet->list_gtk._1990_actions.tree_store_actions, &action_nouveau->Iter_fenetre, NULL);
-        gtk_tree_store_set(projet->list_gtk._1990_actions.tree_store_actions, &action_nouveau->Iter_fenetre, 0, action_nouveau->numero, 1, action_nouveau->description, 2, _1990_action_type_bat_txt(action_nouveau->type, projet->pays), 3, action_nouveau->psi0, 4, action_nouveau->psi1, 5, action_nouveau->psi2, -1);
-        path = gtk_tree_model_get_path(GTK_TREE_MODEL(projet->list_gtk._1990_actions.tree_store_actions), &action_nouveau->Iter_fenetre);
-        gtk_tree_view_set_cursor(GTK_TREE_VIEW(projet->list_gtk._1990_actions.tree_view_actions), path, gtk_tree_view_get_column(GTK_TREE_VIEW(projet->list_gtk._1990_actions.tree_view_actions), 1), TRUE);
-        gtk_tree_path_free(path);
+        gtk_tree_store_set(projet->list_gtk._1990_actions.tree_store_actions, &action_nouveau->Iter_fenetre, 0, action_nouveau->numero, 1, action_nouveau->nom, 2, _1990_action_type_bat_txt(action_nouveau->type, projet->pays), 3, action_nouveau->psi0, 4, action_nouveau->psi1, 5, action_nouveau->psi2, -1);
     }
+#endif
     
     return action_nouveau;
 }
@@ -443,47 +450,103 @@ G_MODULE_EXPORT Action* _1990_action_cherche_numero(Projet *projet, unsigned int
 }
 
 
-G_MODULE_EXPORT int _1990_action_renomme(Projet *projet, unsigned int action_num,
-  const char* description)
+G_MODULE_EXPORT gboolean _1990_action_renomme(Projet *projet, unsigned int action_num,
+  const char* nom)
 /* Description : Renomme une charge.
  * Paramètres : Projet *projet : la variable projet,
- *              unsigned int action : numéro de l'action à renommer,
- *              const char* description : nouveau nom de l'action.
+ *            : unsigned int action : numéro de l'action à renommer,
+ *            : const char* nom : nouveau nom de l'action.
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : -1 :
+ *   Succès : TRUE
+ *   Échec : FALSE :
  *             projet == NULL,
  *             action introuvable,
  *             erreur d'allocation mémoire.
  */
 {
-    Action      *action;
+    Action  *action;
+#ifdef ENABLE_GTK
+    char    *ancien_nom;
+#endif
     
-    BUGMSG(projet, -1, gettext("Paramètre %s incorrect.\n"), "projet");
     
-    BUG(action = _1990_action_cherche_numero(projet, action_num), -1);
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
-    free(action->description);
-    BUGMSG(action->description = g_strdup_printf("%s", description), -1, gettext("Erreur d'allocation mémoire.\n"));
+    BUG(action = _1990_action_cherche_numero(projet, action_num), FALSE);
     
-    gtk_list_store_set(projet->list_gtk._1990_actions.list_actions, &action->Iter_liste, 0, description, -1);
+#ifdef ENABLE_GTK
+    ancien_nom = action->nom;
+#else
+    free(action->nom);
+#endif
+    BUGMSG(action->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    
+#ifdef ENABLE_GTK
+    gtk_list_store_set(projet->list_gtk._1990_actions.list_actions, &action->Iter_liste, 0, nom, -1);
     
     if (projet->list_gtk._1990_actions.builder != NULL)
-        gtk_tree_store_set(projet->list_gtk._1990_actions.tree_store_actions, &action->Iter_fenetre, 1, description, -1);
+        gtk_tree_store_set(projet->list_gtk._1990_actions.tree_store_actions, &action->Iter_fenetre, 1, nom, -1);
+    if ((projet->list_gtk._1990_groupes.builder != NULL) && (GTK_COMMON_SPINBUTTON_AS_UINT(GTK_SPIN_BUTTON(projet->list_gtk._1990_groupes.spin_button_niveau)) == 0))
+    {
+        GtkTreeModel    *model;
+        GtkTreeIter     Iter1;
+        
+        // On modifie les lignes dans le treeview etat
+        model = gtk_tree_view_get_model(projet->list_gtk._1990_groupes.tree_view_etat);
+        if (gtk_tree_model_get_iter_first(model, &Iter1))
+        {
+            do
+            {
+                GtkTreeIter Iter2;
+                
+                if (gtk_tree_model_iter_children(model, &Iter2, &Iter1))
+                {
+                    do
+                    {
+                        char    *nom_iter;
+                        
+                        gtk_tree_model_get(model, &Iter2, 1, &nom_iter, -1);
+                        if (strcmp(nom_iter, ancien_nom) == 0)
+                            gtk_tree_store_set(projet->list_gtk._1990_groupes.tree_store_etat, &Iter2, 1, nom, -1);
+                        free(nom_iter);
+                    }
+                    while (gtk_tree_model_iter_next(model, &Iter2));
+                }
+            } while (gtk_tree_model_iter_next(model, &Iter1));
+        }
+        
+        // On modifie les lignes dans le treeview dispo
+        model = gtk_tree_view_get_model(projet->list_gtk._1990_groupes.tree_view_dispo);
+        if (gtk_tree_model_get_iter_first(model, &Iter1))
+        {
+            do
+            {
+                char    *nom_iter;
+                
+                gtk_tree_model_get(model, &Iter1, 1, &nom_iter, -1);
+                if (strcmp(nom_iter, ancien_nom) == 0)
+                    gtk_tree_store_set(projet->list_gtk._1990_groupes.tree_store_dispo, &Iter1, 1, nom, -1);
+                free(nom_iter);
+            }
+            while (gtk_tree_model_iter_next(model, &Iter1));
+        }
+    }
+    free(ancien_nom);
+#endif
     
-    return 0;
+    return TRUE;
 }
 
 
-G_MODULE_EXPORT int _1990_action_change_type(Projet *projet, unsigned int action_num,
+G_MODULE_EXPORT gboolean _1990_action_change_type(Projet *projet, unsigned int action_num,
   unsigned int type)
 /* Description : Change le type d'une action, y compris psi0, psi1 et psi2.
  * Paramètres : Projet *projet : la variable projet,
- *              unsigned int action_num : numéro de l'action à renommer,
- *              unsigned int type : nouveau type d'action.
+ *            : unsigned int action_num : numéro de l'action à renommer,
+ *            : unsigned int type : nouveau type d'action.
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : -1 :
+ *   Succès : TRUE
+ *   Échec : FALSE :
  *             projet == NULL,
  *             action introuvable,
  *             erreur d'allocation mémoire.
@@ -491,32 +554,37 @@ G_MODULE_EXPORT int _1990_action_change_type(Projet *projet, unsigned int action
 {
     Action      *action;
     
-    BUGMSG(projet, -1, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
-    BUG(action = _1990_action_cherche_numero(projet, action_num), -1);
+    BUG(action = _1990_action_cherche_numero(projet, action_num), FALSE);
     
     action->type = type;
     action->psi0 = _1990_coef_psi0_bat(type, projet->pays);
+    BUG(!isnan(action->psi0), FALSE);
     action->psi1 = _1990_coef_psi1_bat(type, projet->pays);
+    BUG(!isnan(action->psi1), FALSE);
     action->psi2 = _1990_coef_psi2_bat(type, projet->pays);
+    BUG(!isnan(action->psi2), FALSE);
     
+#ifdef ENABLE_GTK
     if (projet->list_gtk._1990_actions.builder != NULL)
         gtk_tree_store_set(projet->list_gtk._1990_actions.tree_store_actions, &action->Iter_fenetre, 2, _1990_action_type_bat_txt(type, projet->pays), 3, action->psi0, 4, action->psi1, 5, action->psi2, -1);
+#endif
     
-    return 0;
+    return TRUE;
 }
 
 
-G_MODULE_EXPORT int _1990_action_change_psi(Projet *projet, unsigned int action_num,
+G_MODULE_EXPORT gboolean _1990_action_change_psi(Projet *projet, unsigned int action_num,
   unsigned int psi_num, double psi)
 /* Description : Change le coefficient psi d'une action.
  * Paramètres : Projet *projet : la variable projet,
- *              unsigned int action_num : numéro de l'action à changer,
- *              unsigned int psi_num : coefficient psi à changer (0, 1 ou 2),
- *              double psi : nouveau coefficient psi.
+ *            : unsigned int action_num : numéro de l'action à changer,
+ *            : unsigned int psi_num : coefficient psi à changer (0, 1 ou 2),
+ *            : double psi : nouveau coefficient psi.
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : -1 :
+ *   Succès : TRUE
+ *   Échec : FALSE :
  *             projet == NULL,
  *             action introuvable,
  *             coefficient psi_num incorrect,
@@ -525,50 +593,56 @@ G_MODULE_EXPORT int _1990_action_change_psi(Projet *projet, unsigned int action_
 {
     Action      *action;
     
-    BUGMSG(projet, -1, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG((psi_num == 0) || (psi_num == 1) || (psi_num == 2), -1, gettext("Le numéro %u du coefficient spi à changer est incorrect.\n"), psi_num);
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG((psi_num == 0) || (psi_num == 1) || (psi_num == 2), FALSE, gettext("Le numéro %u du coefficient spi à changer est incorrect.\n"), psi_num);
     
-    BUG(action = _1990_action_cherche_numero(projet, action_num), -1);
+    BUG(action = _1990_action_cherche_numero(projet, action_num), FALSE);
     
     if (psi_num == 0)
     {
         action->psi0 = psi;
+#ifdef ENABLE_GTK
         if (projet->list_gtk._1990_actions.builder != NULL)
             gtk_tree_store_set(projet->list_gtk._1990_actions.tree_store_actions, &action->Iter_fenetre, 3, psi, -1);
+#endif
     }
     else if (psi_num == 1)
     {
         action->psi1 = psi;
+#ifdef ENABLE_GTK
         if (projet->list_gtk._1990_actions.builder != NULL)
             gtk_tree_store_set(projet->list_gtk._1990_actions.tree_store_actions, &action->Iter_fenetre, 4, psi, -1);
+#endif
     }
     else
     {
         action->psi2 = psi;
+#ifdef ENABLE_GTK
         if (projet->list_gtk._1990_actions.builder != NULL)
             gtk_tree_store_set(projet->list_gtk._1990_actions.tree_store_actions, &action->Iter_fenetre, 5, psi, -1);
+#endif
     }
     
-    return 0;
+    return TRUE;
 }
 
 
-G_MODULE_EXPORT int _1990_action_affiche_tout(Projet *projet)
+G_MODULE_EXPORT gboolean _1990_action_affiche_tout(Projet *projet)
 /* Description : Affiche dans l'entrée standard les actions existantes.
  * Paramètres : Projet *projet : la variable projet.
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : -1 :
+ *   Succès : TRUE
+ *   Échec : FALSE :
  *             projet == NULL.
  */
 {
     GList   *list_parcours;
     
-    BUGMSG(projet, -1, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     if (projet->actions == NULL)
     {
         printf(gettext("Aucune action existante.\n"));
-        return 0;
+        return TRUE;
     }
     
     // Trivial
@@ -577,23 +651,23 @@ G_MODULE_EXPORT int _1990_action_affiche_tout(Projet *projet)
     {
         Action      *action = list_parcours->data;
         
-        printf(gettext("Action n° %u, description '%s', type n°%d\n"), action->numero, action->description, action->type);
+        printf(gettext("Action n° %u, description '%s', type n°%d\n"), action->numero, action->nom, action->type);
         
         list_parcours = g_list_next(list_parcours);
     }
     while (list_parcours != NULL);
     
-    return 0;
+    return TRUE;
 }
 
 
-G_MODULE_EXPORT int _1990_action_affiche_resultats(Projet *projet, unsigned int num_action)
+G_MODULE_EXPORT gboolean _1990_action_affiche_resultats(Projet *projet, unsigned int num_action)
 /* Description : Affiche tous les résultats d'une action.
  * Paramètres : Projet *projet : la variable projet,
  *            : int num_action : numéro de l'action.
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : -1 :
+ *   Succès : TRUE
+ *   Échec : FALSE :
  *             projet == NULL,
  *             action introuvable,
  *             modèle de calculs vide (absence de barres),
@@ -602,79 +676,79 @@ G_MODULE_EXPORT int _1990_action_affiche_resultats(Projet *projet, unsigned int 
     Action          *action_en_cours;
     unsigned int    i;
     
-    BUGMSG(projet, -1, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUG(action_en_cours = _1990_action_cherche_numero(projet, num_action), -1);
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUG(action_en_cours = _1990_action_cherche_numero(projet, num_action), FALSE);
     if (projet->beton.barres == NULL)
     {
         printf(gettext("Aucune barre existante.\n"));
-        return 0;
+        return TRUE;
     }
     
     // Affichage des efforts aux noeuds et des réactions d'appuis
     printf("Effort aux noeuds & Réactions d'appuis :\n");
     common_math_arrondi_sparse(action_en_cours->efforts_noeuds);
-    cholmod_l_write_sparse(stdout, action_en_cours->efforts_noeuds, NULL, NULL, projet->ef_donnees.c);
+    cholmod_write_sparse(stdout, action_en_cours->efforts_noeuds, NULL, NULL, projet->ef_donnees.c);
     // Affichage des déplacements des noeuds
     printf("\nDéplacements :\n");
     common_math_arrondi_sparse(action_en_cours->deplacement_complet);
-    cholmod_l_write_sparse(stdout, action_en_cours->deplacement_complet, NULL, NULL, projet->ef_donnees.c);
+    cholmod_write_sparse(stdout, action_en_cours->deplacement_complet, NULL, NULL, projet->ef_donnees.c);
     // Pour chaque barre
     for (i=0;i<g_list_length(projet->beton.barres);i++)
     {
     //     Affichage de la courbe des sollicitations vis-à-vis de l'effort normal
         printf("Barre n°%d, Effort normal\n", i);
-        BUG(common_fonction_affiche(action_en_cours->fonctions_efforts[0][i]) == 0, -1);
-    //     Affichage de la courbe des sollicitations vis-à-vis de l'effort tranchant selon Y
+        BUG(common_fonction_affiche(action_en_cours->fonctions_efforts[0][i]), FALSE);
+    //     Affichage de la courbe des sollicitations vis-à-vis de l'effort trnt selon Y
         printf("Barre n°%d, Effort tranchant Y\n", i);
-        BUG(common_fonction_affiche(action_en_cours->fonctions_efforts[1][i]) == 0, -1);
-    //     Affichage de la courbe des sollicitations vis-à-vis de l'effort tranchant selon Z
+        BUG(common_fonction_affiche(action_en_cours->fonctions_efforts[1][i]), FALSE);
+    //     Affichage de la courbe des sollicitations vis-à-vis de l'effort trnt selon Z
         printf("Barre n°%d, Effort tranchant Z\n", i);
-        BUG(common_fonction_affiche(action_en_cours->fonctions_efforts[2][i]) == 0, -1);
-    //     Affichage de la courbe des sollicitations vis-à-vis du moment de torsion
+        BUG(common_fonction_affiche(action_en_cours->fonctions_efforts[2][i]), FALSE);
+    //     Affichage de la courbe des sollicitations vis-à-vis du moment de tn
         printf("Barre n°%d, Moment de torsion\n", i);
-        BUG(common_fonction_affiche(action_en_cours->fonctions_efforts[3][i]) == 0, -1);
-    //     Affichage de la courbe des sollicitations vis-à-vis du moment fléchissant selon Y
+        BUG(common_fonction_affiche(action_en_cours->fonctions_efforts[3][i]), FALSE);
+    //     Affichage de la courbe des sollicitations vis-à-vis du moment flécnt selon Y
         printf("Barre n°%d, Moment de flexion Y\n", i);
-        BUG(common_fonction_affiche(action_en_cours->fonctions_efforts[4][i]) == 0, -1);
-    //     Affichage de la courbe des sollicitations vis-à-vis du moment fléchissant selon Z
+        BUG(common_fonction_affiche(action_en_cours->fonctions_efforts[4][i]), FALSE);
+    //     Affichage de la courbe des sollicitations vis-à-vis du moment flécnt selon Z
         printf("Barre n°%d, Moment de flexion Z\n", i);
-        BUG(common_fonction_affiche(action_en_cours->fonctions_efforts[5][i]) == 0, -1);
+        BUG(common_fonction_affiche(action_en_cours->fonctions_efforts[5][i]), FALSE);
     }
     for (i=0;i<g_list_length(projet->beton.barres);i++)
     {
     //     Affichage de la courbe de déformation selon l'axe X
         printf("Barre n°%d, Déformation en X\n", i);
-        BUG(common_fonction_affiche(action_en_cours->fonctions_deformation[0][i]) == 0, -1);
+        BUG(common_fonction_affiche(action_en_cours->fonctions_deformation[0][i]), FALSE);
     //     Affichage de la courbe de déformation selon l'axe Y
         printf("Barre n°%d, Déformation en Y\n", i);
-        BUG(common_fonction_affiche(action_en_cours->fonctions_deformation[1][i]) == 0, -1);
+        BUG(common_fonction_affiche(action_en_cours->fonctions_deformation[1][i]), FALSE);
     //     Affichage de la courbe de déformation selon l'axe Z
         printf("Barre n°%d, Déformation en Z\n", i);
-        BUG(common_fonction_affiche(action_en_cours->fonctions_deformation[2][i]) == 0, -1);
+        BUG(common_fonction_affiche(action_en_cours->fonctions_deformation[2][i]), FALSE);
     //     Affichage de la courbe de rotation selon l'axe X
         printf("Barre n°%d, Rotation en X\n", i);
-        BUG(common_fonction_affiche(action_en_cours->fonctions_rotation[0][i]) == 0, -1);
+        BUG(common_fonction_affiche(action_en_cours->fonctions_rotation[0][i]), FALSE);
     //     Affichage de la courbe de rotation selon l'axe Y
         printf("Barre n°%d, Rotation en Y\n", i);
-        BUG(common_fonction_affiche(action_en_cours->fonctions_rotation[1][i]) == 0, -1);
+        BUG(common_fonction_affiche(action_en_cours->fonctions_rotation[1][i]), FALSE);
     //     Affichage de la courbe de rotation selon l'axe Z
         printf("Barre n°%d, Rotation en Z\n", i);
-        BUG(common_fonction_affiche(action_en_cours->fonctions_rotation[2][i]) == 0, -1);
+        BUG(common_fonction_affiche(action_en_cours->fonctions_rotation[2][i]), FALSE);
     }
     // FinPour
     
-    return 0;
+    return TRUE;
 }
 
 
-G_MODULE_EXPORT int _1990_action_free_num(Projet *projet, unsigned int num)
+G_MODULE_EXPORT gboolean _1990_action_free_num(Projet *projet, unsigned int num)
 /* Description : Libère l'action souhaitée et décrémente de 1 les actions dons le numéro est
  *               supérieur.
  * Paramètres : Projet *projet : la variable projet,
  *            : unsigned int num : le numéro de l'action à supprimer.
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : -1 :
+ *   Succès : TRUE
+ *   Échec : FALSE :
  *             projet == NULL,
  *             action introuvable,
  *             erreur lors de la libération d'une charge de l'action à supprimer,
@@ -683,8 +757,8 @@ G_MODULE_EXPORT int _1990_action_free_num(Projet *projet, unsigned int num)
 {
     GList   *list_parcours;
     
-    BUGMSG(projet, -1, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUG(_1990_action_cherche_numero(projet, num), -1);
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUG(_1990_action_cherche_numero(projet, num), FALSE);
     
     // Trivial
     list_parcours = g_list_last(projet->actions);
@@ -696,7 +770,7 @@ G_MODULE_EXPORT int _1990_action_free_num(Projet *projet, unsigned int num)
         if (action->numero == num)
         {
             projet->actions = g_list_remove(projet->actions, action);
-            free(action->description);
+            free(action->nom);
             while (action->charges != NULL)
             {
                 Charge_Barre_Ponctuelle *charge;
@@ -708,37 +782,38 @@ G_MODULE_EXPORT int _1990_action_free_num(Projet *projet, unsigned int num)
                     case CHARGE_NOEUD :
                     {
                         Charge_Noeud *charge2 = (Charge_Noeud *)charge;
-                        BUG(EF_charge_noeud_free(charge2) == 0, -1);
+                        BUG(EF_charge_noeud_free(charge2), FALSE);
                         break;
                     }
                     case CHARGE_BARRE_PONCTUELLE :
                     {
-                        BUG(EF_charge_barre_ponctuelle_free(charge) == 0, -1);
+                        BUG(EF_charge_barre_ponctuelle_free(charge), FALSE);
                         break;
                     }
                     case CHARGE_BARRE_REPARTIE_UNIFORME :
                     {
                         Charge_Barre_Repartie_Uniforme *charge2 = (Charge_Barre_Repartie_Uniforme *)charge;
-                        BUG(EF_charge_barre_repartie_uniforme_free(charge2) == 0, -1);
+                        BUG(EF_charge_barre_repartie_uniforme_free(charge2), FALSE);
                         break;
                     }
                     default :
                     {
-                        BUGMSG(0, -1, gettext("Type de charge %d inconnu."), charge->type);
+                        BUGMSG(0, FALSE, gettext("Type de charge %d inconnu."), charge->type);
                         break;
                     }
                 }
             }
             if (action->deplacement_complet != NULL)
-                cholmod_l_free_sparse(&action->deplacement_complet, projet->ef_donnees.c);
+                cholmod_free_sparse(&action->deplacement_complet, projet->ef_donnees.c);
             if (action->forces_complet != NULL)
-                cholmod_l_free_sparse(&action->forces_complet, projet->ef_donnees.c);
+                cholmod_free_sparse(&action->forces_complet, projet->ef_donnees.c);
             if (action->efforts_noeuds != NULL)
-                cholmod_l_free_sparse(&action->efforts_noeuds, projet->ef_donnees.c);
+                cholmod_free_sparse(&action->efforts_noeuds, projet->ef_donnees.c);
             
             if (action->fonctions_efforts[0] != NULL)
-                BUG(common_fonction_free(projet, action) == 0, -1);
+                BUG(common_fonction_free(projet, action), FALSE);
             
+#ifdef ENABLE_GTK
             if (projet->list_gtk._1990_actions.builder != NULL)
             {
                 if (gtk_tree_selection_iter_is_selected(projet->list_gtk._1990_actions.tree_select_actions, &action->Iter_fenetre))
@@ -747,6 +822,7 @@ G_MODULE_EXPORT int _1990_action_free_num(Projet *projet, unsigned int num)
             }
             
             gtk_list_store_remove(projet->list_gtk._1990_actions.list_actions, &action->Iter_liste);
+#endif
             
             free(action);
         }
@@ -754,27 +830,29 @@ G_MODULE_EXPORT int _1990_action_free_num(Projet *projet, unsigned int num)
         {
             action->numero--;
             
+#ifdef ENABLE_GTK
             if (projet->list_gtk._1990_actions.builder != NULL)
                 gtk_tree_store_set(projet->list_gtk._1990_actions.tree_store_actions, &action->Iter_fenetre, 0, action->numero, -1);
+#endif
         }
         
     } while (list_parcours != NULL);
     
-    return 0;
+    return TRUE;
 }
 
 
-G_MODULE_EXPORT int _1990_action_free(Projet *projet)
+G_MODULE_EXPORT gboolean _1990_action_free(Projet *projet)
 /* Description : Libère l'ensemble des actions existantes.
  * Paramètres : Projet *projet : la variable projet.
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : -1 :
+ *   Succès : TRUE
+ *   Échec : FALSE :
  *             projet == NULL,
  *             erreur lors de la libération d'une charge de l'action à supprimer.
  */
 {
-    BUGMSG(projet, -1, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
     // Trivial
     while (projet->actions != NULL)
@@ -783,7 +861,7 @@ G_MODULE_EXPORT int _1990_action_free(Projet *projet)
         
         projet->actions = g_list_delete_link(projet->actions, projet->actions);
         
-        free(action->description);
+        free(action->nom);
         while (action->charges != NULL)
         {
             Charge_Barre_Ponctuelle *charge = action->charges->data;
@@ -794,46 +872,52 @@ G_MODULE_EXPORT int _1990_action_free(Projet *projet)
             {
                 case CHARGE_NOEUD :
                 {
-                    BUG(EF_charge_noeud_free((Charge_Noeud*)charge) == 0, -1);
+                    BUG(EF_charge_noeud_free((Charge_Noeud*)charge), FALSE);
                     break;
                 }
                 case CHARGE_BARRE_PONCTUELLE :
                 {
-                    BUG(EF_charge_barre_ponctuelle_free(charge) == 0, -1);
+                    BUG(EF_charge_barre_ponctuelle_free(charge), FALSE);
                     break;
                 }
                 case CHARGE_BARRE_REPARTIE_UNIFORME :
                 {
-                    BUG(EF_charge_barre_repartie_uniforme_free((Charge_Barre_Repartie_Uniforme*)charge) == 0, -1);
+                    BUG(EF_charge_barre_repartie_uniforme_free((Charge_Barre_Repartie_Uniforme*)charge), FALSE);
                     break;
                 }
                 default :
                 {
-                    BUGMSG(0, -1, gettext("Type de charge %d inconnu."), charge->type);
+                    BUGMSG(0, FALSE, gettext("Type de charge %d inconnu."), charge->type);
                     break;
                 }
             }
         }
         if (action->deplacement_complet != NULL)
-            cholmod_l_free_sparse(&action->deplacement_complet, projet->ef_donnees.c);
+            cholmod_free_sparse(&action->deplacement_complet, projet->ef_donnees.c);
         if (action->forces_complet != NULL)
-            cholmod_l_free_sparse(&action->forces_complet, projet->ef_donnees.c);
+            cholmod_free_sparse(&action->forces_complet, projet->ef_donnees.c);
         if (action->efforts_noeuds != NULL)
-            cholmod_l_free_sparse(&action->efforts_noeuds, projet->ef_donnees.c);
+            cholmod_free_sparse(&action->efforts_noeuds, projet->ef_donnees.c);
         
         if (action->fonctions_efforts[0] != NULL)
-            BUG(common_fonction_free(projet, action) == 0, -1);
+            BUG(common_fonction_free(projet, action), FALSE);
         
         free(action);
     }
     
+#ifdef ENABLE_GTK
     if (projet->list_gtk._1990_actions.builder != NULL)
-    {
-        gtk_list_store_clear(projet->list_gtk._1990_actions.list_actions);
         gtk_tree_store_clear(projet->list_gtk._1990_actions.tree_store_charges);
-    }
     g_object_unref(projet->list_gtk._1990_actions.menu_type_list_action);
     g_object_unref(projet->list_gtk._1990_actions.menu_type_list_charge);
+    g_object_unref(projet->list_gtk._1990_actions.list_actions);
+    gtk_list_store_clear(projet->list_gtk._1990_actions.choix_type_action);
+    g_object_unref(projet->list_gtk._1990_actions.choix_type_action);
+    g_list_free(projet->list_gtk._1990_actions.menu_list_widget_charge);
+    projet->list_gtk._1990_actions.menu_list_widget_charge = NULL;
+    g_list_free(projet->list_gtk._1990_actions.menu_list_widget_action);
+    projet->list_gtk._1990_actions.menu_list_widget_action = NULL;
+#endif
     
-    return 0;
+    return TRUE;
 }

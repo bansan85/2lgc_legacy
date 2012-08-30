@@ -20,42 +20,253 @@
 #include <stdlib.h>
 #include <libintl.h>
 #include <string.h>
+#include <gmodule.h>
+
 #include "common_projet.h"
 #include "common_erreurs.h"
 #ifdef ENABLE_GTK
 #include <gtk/gtk.h>
 #endif
 
-G_MODULE_EXPORT int EF_appuis_init(Projet *projet)
-/* Description : Initialise la liste des types d'appuis
- * Paramètres : Projet *projet : la variable projet
+G_MODULE_EXPORT gboolean EF_appuis_init(Projet *projet)
+/* Description : Initialise la liste des types d'appuis.
+ * Paramètres : Projet *projet : la variable projet.
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : -1 en cas de paramètres invalides :
- *             (projet == NULL)
- *           -2 en cas d'erreur d'allocation mémoire
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL.
  */
 {
 #ifdef ENABLE_GTK
     GtkTreeIter     iter;
 #endif
     
-    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
 
     // Trivial
     projet->ef_donnees.appuis = NULL;
     
 #ifdef ENABLE_GTK
-    projet->list_gtk.ef_noeud.liste_appuis = gtk_list_store_new(1, G_TYPE_STRING);
-    gtk_list_store_append(projet->list_gtk.ef_noeud.liste_appuis, &iter);
-    gtk_list_store_set(projet->list_gtk.ef_noeud.liste_appuis, &iter, 0, gettext("Aucun"), -1);
+    projet->list_gtk.ef_appuis.liste_appuis = gtk_list_store_new(1, G_TYPE_STRING);
+    gtk_list_store_append(projet->list_gtk.ef_appuis.liste_appuis, &iter);
+    gtk_list_store_set(projet->list_gtk.ef_appuis.liste_appuis, &iter, 0, gettext("Aucun"), -1);
+    projet->list_gtk.ef_appuis.liste_type_appui = gtk_list_store_new(1, G_TYPE_STRING);
+    gtk_list_store_append(projet->list_gtk.ef_appuis.liste_type_appui, &iter);
+    gtk_list_store_set(projet->list_gtk.ef_appuis.liste_type_appui, &iter, 0, gettext("Libre"), -1);
+    gtk_list_store_append(projet->list_gtk.ef_appuis.liste_type_appui, &iter);
+    gtk_list_store_set(projet->list_gtk.ef_appuis.liste_type_appui, &iter, 0, gettext("Bloqué"), -1);
 #endif    
-    return 0;
+    return TRUE;
 }
 
 
-G_MODULE_EXPORT int EF_appuis_ajout(Projet *projet, const char *nom, Type_EF_Appui x, Type_EF_Appui y, Type_EF_Appui z,
-  Type_EF_Appui rx, Type_EF_Appui ry, Type_EF_Appui rz)
+G_MODULE_EXPORT EF_Appui* EF_appuis_cherche_nom(Projet *projet, const char *nom,
+  gboolean critique)
+/* Description : Renvoie l'appui correspondant au numéro souhaité.
+ * Paramètres : Projet *projet : la variable projet,
+ *            : unsigned int numero : le numéro de l'appui.
+ * Valeur renvoyée :
+ *   Succès : pointeur vers l'appui.
+ *   Échec : NULL :
+ *             projet == NULL,
+ *             l'appui n'existe pas.
+ */
+{
+    GList   *list_parcours;
+    
+    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
+    
+    // Trivial
+    list_parcours = projet->ef_donnees.appuis;
+    while (list_parcours != NULL)
+    {
+        EF_Appui    *appui = list_parcours->data;
+        
+        if (strcmp(appui->nom, nom) == 0)
+            return appui;
+        
+        list_parcours = g_list_next(list_parcours);
+    }
+    
+    if (critique)
+        BUGMSG(0, NULL, "Appui '%s' est introuvable.\n", nom);
+    else
+        return NULL;
+}
+
+
+G_MODULE_EXPORT gboolean EF_appuis_get_description(EF_Appui* appui, char **txt_uxa,
+  char **txt_uya, char **txt_uza, char **txt_rxa, char **txt_rya, char **txt_rza)
+/* Description : Renvoie la description d'un appui.
+ * Paramètres : EF_Appui* appui : l'appui à décrire,
+ *            : char **txt_uxa : description de ux,
+ *            : char **txt_uya : description de ux,
+ *            : char **txt_uza : description de uz,
+ *            : char **txt_rxa : description de rx,
+ *            : char **txt_rya : description de ry,
+ *            : char **txt_rza : description de rz.
+ * Valeur renvoyée :
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             appui == NULL,
+ *             en cas d'erreur d'allocation mémoire.
+ */
+{
+    const char  *txt_ux, *txt_uy, *txt_uz, *txt_rx, *txt_ry, *txt_rz;
+    char        *txt_uxp, *txt_uyp, *txt_uzp, *txt_rxp, *txt_ryp, *txt_rzp;
+    
+    switch (appui->ux)
+    {
+        case EF_APPUI_LIBRE :
+        {
+            txt_ux = gettext("Libre");
+            BUGMSG(appui->ux_donnees == NULL, FALSE, gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "ux", gettext("Libre"));
+            txt_uxp = NULL;
+            BUGMSG(*txt_uxa = g_strdup_printf("%s", txt_ux), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+            break;
+        }
+        case EF_APPUI_BLOQUE :
+        {
+            txt_ux = gettext("Bloqué");
+            BUGMSG(appui->ux_donnees == NULL, FALSE, gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "ux", gettext("Bloqué"));
+            txt_uxp = NULL;
+            BUGMSG(*txt_uxa = g_strdup_printf("%s", txt_ux), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+            break;
+        }
+        default :
+        {
+            BUGMSG(NULL, FALSE, gettext("Le type d'appui de %s (%d) est inconnu.\n"), "ux", appui->ux);
+        }
+    }
+    switch (appui->uy)
+    {
+        case EF_APPUI_LIBRE :
+        {
+            txt_uy = gettext("Libre");
+            BUGMSG(appui->uy_donnees == NULL, FALSE, gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "uy", gettext("Libre"));
+            txt_uyp = NULL;
+            BUGMSG(*txt_uya = g_strdup_printf("%s", txt_uy), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+            break;
+        }
+        case EF_APPUI_BLOQUE :
+        {
+            txt_uy = gettext("Bloqué");
+            BUGMSG(appui->uy_donnees == NULL, FALSE, gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "uy", gettext("Bloqué"));
+            txt_uyp = NULL;
+            BUGMSG(*txt_uya = g_strdup_printf("%s", txt_uy), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+            break;
+        }
+        default :
+        {
+            BUGMSG(NULL, FALSE, gettext("Le type d'appui de %s (%d) est inconnu.\n"), "uy", appui->ux);
+        }
+    }
+    switch (appui->uz)
+    {
+        case EF_APPUI_LIBRE :
+        {
+            txt_uz = gettext("Libre");
+            BUGMSG(appui->uz_donnees == NULL, FALSE, gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "uz", gettext("Libre"));
+            txt_uzp = NULL;
+            BUGMSG(*txt_uza = g_strdup_printf("%s", txt_uz), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+            break;
+        }
+        case EF_APPUI_BLOQUE :
+        {
+            txt_uz = gettext("Bloqué");
+            BUGMSG(appui->uz_donnees == NULL, FALSE, gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "uz", gettext("Bloqué"));
+            txt_uzp = NULL;
+            BUGMSG(*txt_uza = g_strdup_printf("%s", txt_uz), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+            break;
+        }
+        default :
+        {
+            BUGMSG(NULL, FALSE, gettext("Le type d'appui de %s (%d) est inconnu.\n"), "uz", appui->ux);
+        }
+    }
+    switch (appui->rx)
+    {
+        case EF_APPUI_LIBRE :
+        {
+            txt_rx = gettext("Libre");
+            BUGMSG(appui->rx_donnees == NULL, FALSE, gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "rx", gettext("Libre"));
+            txt_rxp = NULL;
+            BUGMSG(*txt_rxa = g_strdup_printf("%s", txt_rx), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+            break;
+        }
+        case EF_APPUI_BLOQUE :
+        {
+            txt_rx = gettext("Bloqué");
+            BUGMSG(appui->rx_donnees == NULL, FALSE, gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "rx", gettext("Bloqué"));
+            txt_rxp = NULL;
+            BUGMSG(*txt_rxa = g_strdup_printf("%s", txt_rx), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+            break;
+        }
+        default :
+        {
+            BUGMSG(NULL, FALSE, gettext("Le type d'appui de %s (%d) est inconnu.\n"), "rx", appui->ux);
+        }
+    }
+    switch (appui->ry)
+    {
+        case EF_APPUI_LIBRE :
+        {
+            txt_ry = gettext("Libre");
+            BUGMSG(appui->ry_donnees == NULL, FALSE, gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "ry", gettext("Libre"));
+            txt_ryp = NULL;
+            BUGMSG(*txt_rya = g_strdup_printf("%s", txt_ry), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+            break;
+        }
+        case EF_APPUI_BLOQUE :
+        {
+            txt_ry = gettext("Bloqué");
+            BUGMSG(appui->ry_donnees == NULL, FALSE, gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "ry", gettext("Bloqué"));
+            txt_ryp = NULL;
+            BUGMSG(*txt_rya = g_strdup_printf("%s", txt_rx), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+            break;
+        }
+        default :
+        {
+            BUGMSG(NULL, FALSE, gettext("Le type d'appui de %s (%d) est inconnu.\n"), "ry", appui->ux);
+        }
+    }
+    switch (appui->rz)
+    {
+        case EF_APPUI_LIBRE :
+        {
+            txt_rz = gettext("Libre");
+            BUGMSG(appui->rz_donnees == NULL, FALSE, gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "rz", gettext("Libre"));
+            txt_rzp = NULL;
+            BUGMSG(*txt_rza = g_strdup_printf("%s", txt_rz), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+            break;
+        }
+        case EF_APPUI_BLOQUE :
+        {
+            txt_rz = gettext("Bloqué");
+            BUGMSG(appui->rz_donnees == NULL, FALSE, gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "rz", gettext("Bloqué"));
+            txt_rzp = NULL;
+            BUGMSG(*txt_rza = g_strdup_printf("%s", txt_rz), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+            break;
+        }
+        default :
+        {
+            BUGMSG(NULL, FALSE, gettext("Le type d'appui de %s (%d) est inconnu.\n"), "rz", appui->ux);
+        }
+    }
+    
+    free(txt_uxp);
+    free(txt_uyp);
+    free(txt_uzp);
+    free(txt_rxp);
+    free(txt_ryp);
+    free(txt_rzp);
+    
+    return TRUE;
+}
+
+
+G_MODULE_EXPORT EF_Appui* EF_appuis_ajout(Projet *projet, const char *nom, Type_EF_Appui x,
+  Type_EF_Appui y, Type_EF_Appui z, Type_EF_Appui rx, Type_EF_Appui ry, Type_EF_Appui rz)
 /* Description : Ajoute un appui à la structure en lui attribuant le numéro suivant le dernier
  *                 appui existant.
  * Paramètres : Projet *projet : la variable projet
@@ -66,25 +277,27 @@ G_MODULE_EXPORT int EF_appuis_ajout(Projet *projet, const char *nom, Type_EF_App
  *            : Type_EF_Appui ry : définition de la rotation autour de l'axe y,
  *            : Type_EF_Appui rz : définition de la rotation autour de l'axe z.
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : -1 en cas de paramètres invalides :
- *             (projet == NULL) ou
- *             (projet->ef_donnees.appuis == NULL) ou
- *             (x, y, z, rx, ry, rz sont de type inconnu)
- *           -2 en cas d'erreur d'allocation mémoire
+ *   Succès : pointeur vers le nouvel appui.
+ *   Échec : NULL :
+ *             projet == NULL,
+ *             projet->ef_donnees.appuis == NULL,
+ *             x, y, z, rx, ry, rz sont de type inconnu,
+ *             en cas d'erreur d'allocation mémoire.
  */
 {
-    EF_Appui        *appui_nouveau = malloc(sizeof(EF_Appui));
-#ifdef ENABLE_GTK
-    GtkTreeIter     iter;
-#endif
-
+    EF_Appui    *appui_nouveau, *appui_parcours;
+    GList       *list_parcours;
+    int         i = 1; // Le premier est le "Aucun"
+    char        *txt_uxa, *txt_uya, *txt_uza, *txt_rxa, *txt_rya, *txt_rza;
     
-    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(appui_nouveau, -2, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(strcmp(nom, gettext("Aucun")), NULL, gettext("Impossible d'utiliser comme nom 'Aucun'.\n"));
     
+    BUGMSG(EF_appuis_cherche_nom(projet, nom, FALSE) == NULL, NULL, gettext("L'appui '%s' existe déjà.\n"), nom);
+     
+    BUGMSG(appui_nouveau = malloc(sizeof(EF_Appui)), NULL, gettext("Erreur d'allocation mémoire.\n"));
     // Trivial
-    BUGMSG(appui_nouveau->nom =  g_strdup_printf("%s", nom), -2, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(appui_nouveau->nom =  g_strdup_printf("%s", nom), NULL, gettext("Erreur d'allocation mémoire.\n"));
     appui_nouveau->ux = x;
     switch (x)
     {
@@ -96,7 +309,7 @@ G_MODULE_EXPORT int EF_appuis_ajout(Projet *projet, const char *nom, Type_EF_App
         }
         default:
         {
-            BUGMSG(0, -1, "Type d'appui %d inconnu\n", x);
+            BUGMSG(0, NULL, "Type d'appui %d inconnu\n", x);
             break;
         }
     }
@@ -111,7 +324,7 @@ G_MODULE_EXPORT int EF_appuis_ajout(Projet *projet, const char *nom, Type_EF_App
         }
         default:
         {
-            BUGMSG(0, -1, "Type d'appui %d inconnu\n", y);
+            BUGMSG(0, NULL, "Type d'appui %d inconnu\n", y);
             break;
         }
     }
@@ -126,7 +339,7 @@ G_MODULE_EXPORT int EF_appuis_ajout(Projet *projet, const char *nom, Type_EF_App
         }
         default:
         {
-            BUGMSG(0, -1, "Type d'appui %d inconnu\n", z);
+            BUGMSG(0, NULL, "Type d'appui %d inconnu\n", z);
             break;
         }
     }
@@ -141,7 +354,7 @@ G_MODULE_EXPORT int EF_appuis_ajout(Projet *projet, const char *nom, Type_EF_App
         }
         default:
         {
-            BUGMSG(0, -1, "Type d'appui %d inconnu\n", rx);
+            BUGMSG(0, NULL, "Type d'appui %d inconnu\n", rx);
             break;
         }
     }
@@ -156,7 +369,7 @@ G_MODULE_EXPORT int EF_appuis_ajout(Projet *projet, const char *nom, Type_EF_App
         }
         default:
         {
-            BUGMSG(0, -1, "Type d'appui %d inconnu\n", ry);
+            BUGMSG(0, NULL, "Type d'appui %d inconnu\n", ry);
             break;
         }
     }
@@ -171,69 +384,74 @@ G_MODULE_EXPORT int EF_appuis_ajout(Projet *projet, const char *nom, Type_EF_App
         }
         default:
         {
-            BUGMSG(0, -1, "Type d'appui %d inconnu\n", rz);
+            BUGMSG(0, NULL, "Type d'appui %d inconnu\n", rz);
             break;
         }
     }
     
-    appui_nouveau->numero = g_list_length(projet->ef_donnees.appuis);
-    
-    projet->ef_donnees.appuis = g_list_append(projet->ef_donnees.appuis, appui_nouveau);
-    
-#ifdef ENABLE_GTK
-    gtk_list_store_append(projet->list_gtk.ef_noeud.liste_appuis, &iter);
-    gtk_list_store_set(projet->list_gtk.ef_noeud.liste_appuis, &iter, 0, nom, -1);
-#endif
-    
-    return 0;
-}
-
-
-G_MODULE_EXPORT EF_Appui* EF_appuis_cherche_numero(Projet *projet, unsigned int numero)
-/* Description : Renvoie l'appui correspondant au numéro souhaité
- * Paramètres : Projet *projet : la variable projet
- *            : int numero : le numéro de l'appui
- * Valeur renvoyée :
- *   Succès : pointeur vers l'appui
- *   Échec : NULL en cas de paramètres invalides :
- *             (projet == NULL) ou
- *             (projet->ef_donnees.appuis == NULL) ou
- *             (list_size(projet->ef_donnees.appuis) == 0) ou
- *             l'appui n'existe pas.
- */
-{
-    GList   *list_parcours;
-    BUGMSG(projet, NULL, gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->ef_donnees.appuis, NULL, gettext("Paramètre incorrect\n"));
-    
-    // Trivial
     list_parcours = projet->ef_donnees.appuis;
-    do
+    while (list_parcours != NULL)
     {
-        EF_Appui    *appui = list_parcours->data;
-        
-        if (appui->numero == numero)
-            return appui;
-        
+        appui_parcours = list_parcours->data;
+        if (strcmp(nom, appui_parcours->nom) < 0)
+        {
+            projet->ef_donnees.appuis = g_list_insert_before(projet->ef_donnees.appuis, list_parcours, appui_nouveau);
+#ifdef ENABLE_GTK
+            gtk_list_store_insert(projet->list_gtk.ef_appuis.liste_appuis, &appui_nouveau->Iter_liste, i);
+            gtk_list_store_set(projet->list_gtk.ef_appuis.liste_appuis, &appui_nouveau->Iter_liste, 0, nom, -1);
+            if (projet->list_gtk.ef_appuis.builder != NULL)
+            {
+                if (g_list_previous(appui_parcours) == NULL)
+                    gtk_tree_store_prepend(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_treestore")), &appui_nouveau->Iter_fenetre, NULL);
+                else
+                    gtk_tree_store_insert_after(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_treestore")), &appui_nouveau->Iter_fenetre, NULL, &((EF_Appui*)(g_list_previous(appui_parcours)->data))->Iter_fenetre);
+                BUG(EF_appuis_get_description(appui_nouveau, &txt_uxa, &txt_uya, &txt_uza, &txt_rxa, &txt_rya, &txt_rza), NULL);
+                gtk_tree_store_set(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_treestore")), &appui_nouveau->Iter_fenetre, 0, appui_nouveau->nom, 1, txt_uxa, 2, txt_uya, 3, txt_uza, 4, txt_rxa, 5, txt_rya, 6, txt_rza, -1);
+                free(txt_uxa);
+                free(txt_uya);
+                free(txt_uza);
+                free(txt_rxa);
+                free(txt_rya);
+                free(txt_rza);
+            }
+#endif
+            return appui_nouveau;
+        }
+        i++;
         list_parcours = g_list_next(list_parcours);
     }
-    while (list_parcours != NULL);
+    projet->ef_donnees.appuis = g_list_append(projet->ef_donnees.appuis, appui_nouveau);
+#ifdef ENABLE_GTK
+    gtk_list_store_append(projet->list_gtk.ef_appuis.liste_appuis, &appui_nouveau->Iter_liste);
+    gtk_list_store_set(projet->list_gtk.ef_appuis.liste_appuis, &appui_nouveau->Iter_liste, 0, nom, -1);
+    if (projet->list_gtk.ef_appuis.builder != NULL)
+    {
+        gtk_tree_store_append(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_treestore")), &appui_nouveau->Iter_fenetre, NULL);
+        BUG(EF_appuis_get_description(appui_nouveau, &txt_uxa, &txt_uya, &txt_uza, &txt_rxa, &txt_rya, &txt_rza), NULL);
+        gtk_tree_store_set(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_treestore")), &appui_nouveau->Iter_fenetre, 0, appui_nouveau->nom, 1, txt_uxa, 2, txt_uya, 3, txt_uza, 4, txt_rxa, 5, txt_rya, 6, txt_rza, -1);
+        free(txt_uxa);
+        free(txt_uya);
+        free(txt_uza);
+        free(txt_rxa);
+        free(txt_rya);
+        free(txt_rza);
+    }
+#endif
     
-    BUGMSG(0, NULL, "Appui %d est introuvable.\n", numero);
+    return appui_nouveau;
 }
 
 
-G_MODULE_EXPORT int EF_appuis_free(Projet *projet)
-/* Description : Libère l'ensemble des types d'appuis ainsi que la liste les contenant
- * Paramètres : Projet *projet : la variable projet
+G_MODULE_EXPORT gboolean EF_appuis_free(Projet *projet)
+/* Description : Libère l'ensemble des types d'appuis ainsi que la liste les contenant.
+ * Paramètres : Projet *projet : la variable projet.
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : -1 en cas de paramètres invalides :
- *             (projet == NULL) ou
- *             (projet->ef_donnees.appuis == NULL)
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL.
  */
 {
-    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
     // Trivial
     while (projet->ef_donnees.appuis != NULL)
@@ -249,9 +467,9 @@ G_MODULE_EXPORT int EF_appuis_free(Projet *projet)
     projet->ef_donnees.appuis = NULL;
     
 #ifdef ENABLE_GTK
-    g_object_unref(projet->list_gtk.ef_noeud.liste_appuis);
+    gtk_list_store_clear(projet->list_gtk.ef_appuis.liste_appuis);
+    g_object_unref(projet->list_gtk.ef_appuis.liste_appuis);
 #endif
     
-    return 0;
+    return TRUE;
 }
-

@@ -49,10 +49,10 @@ int main(void)
     BUG(_1990_action_ajout(projet, 12, "Neige"), -1); // 3
     BUG(_1990_action_ajout(projet, 13, "Vent"), -1); // 4
     _1990_action_affiche_tout(projet);
-    BUG(_1990_groupe_ajout_niveau(projet) == 0, -1);
-    BUG(_1990_groupe_ajout_niveau(projet) == 0, -1);
-    BUG(_1990_groupe_ajout_niveau(projet) == 0, -1);
-    BUG(_1990_groupe_ajout_niveau(projet) == 0, -1);
+    BUG(_1990_groupe_ajout_niveau(projet), -1);
+    BUG(_1990_groupe_ajout_niveau(projet), -1);
+    BUG(_1990_groupe_ajout_niveau(projet), -1);
+    BUG(_1990_groupe_ajout_niveau(projet), -1);
     BUG(_1990_groupe_ajout_groupe(projet, 0, GROUPE_COMBINAISON_AND, ""), -1); // Charges permanentes
     BUG(_1990_groupe_ajout_groupe(projet, 0, GROUPE_COMBINAISON_AND, ""), -1); // Charges d'exploitation
     BUG(_1990_groupe_ajout_groupe(projet, 0, GROUPE_COMBINAISON_XOR, ""), -1); // Neige
@@ -63,20 +63,20 @@ int main(void)
     BUG(_1990_groupe_ajout_groupe(projet, 2, GROUPE_COMBINAISON_AND, ""), -1); // Tout
     BUG(_1990_groupe_ajout_groupe(projet, 2, GROUPE_COMBINAISON_OR, ""), -1); // Tout
     BUG(_1990_groupe_ajout_groupe(projet, 3, GROUPE_COMBINAISON_AND, ""), -1); // Tout
-    BUG(_1990_groupe_ajout_element(projet, 0, 0, 0) == 0, -1);
-    BUG(_1990_groupe_ajout_element(projet, 0, 1, 1) == 0, -1);
-    BUG(_1990_groupe_ajout_element(projet, 0, 2, 2) == 0, -1);
-    BUG(_1990_groupe_ajout_element(projet, 0, 3, 3) == 0, -1);
-    BUG(_1990_groupe_ajout_element(projet, 1, 0, 0) == 0, -1);
-    BUG(_1990_groupe_ajout_element(projet, 1, 1, 1) == 0, -1);
-    BUG(_1990_groupe_ajout_element(projet, 1, 2, 2) == 0, -1);
-    BUG(_1990_groupe_ajout_element(projet, 1, 2, 3) == 0, -1);
-    BUG(_1990_groupe_ajout_element(projet, 2, 0, 0) == 0, -1);
-    BUG(_1990_groupe_ajout_element(projet, 2, 1, 1) == 0, -1);
-    BUG(_1990_groupe_ajout_element(projet, 2, 1, 2) == 0, -1);
-    BUG(_1990_groupe_ajout_element(projet, 3, 0, 0) == 0, -1);
-    BUG(_1990_groupe_ajout_element(projet, 3, 0, 1) == 0, -1);
-    BUG(_1990_combinaisons_genere(projet) == 0, -1);
+    BUG(_1990_groupe_ajout_element(projet, 0, 0, 0), -1);
+    BUG(_1990_groupe_ajout_element(projet, 0, 1, 1), -1);
+    BUG(_1990_groupe_ajout_element(projet, 0, 2, 2), -1);
+    BUG(_1990_groupe_ajout_element(projet, 0, 3, 3), -1);
+    BUG(_1990_groupe_ajout_element(projet, 1, 0, 0), -1);
+    BUG(_1990_groupe_ajout_element(projet, 1, 1, 1), -1);
+    BUG(_1990_groupe_ajout_element(projet, 1, 2, 2), -1);
+    BUG(_1990_groupe_ajout_element(projet, 1, 2, 3), -1);
+    BUG(_1990_groupe_ajout_element(projet, 2, 0, 0), -1);
+    BUG(_1990_groupe_ajout_element(projet, 2, 1, 1), -1);
+    BUG(_1990_groupe_ajout_element(projet, 2, 1, 2), -1);
+    BUG(_1990_groupe_ajout_element(projet, 3, 0, 0), -1);
+    BUG(_1990_groupe_ajout_element(projet, 3, 0, 1), -1);
+    BUG(_1990_combinaisons_genere(projet), -1);
     _1990_groupe_affiche_tout(projet);
     _1990_ponderations_affiche_tout(projet);
     projet_free(projet);

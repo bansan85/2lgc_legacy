@@ -25,7 +25,9 @@
 
 #include "common_projet.h"
 
-void _1990_gtk_groupes(GtkWidget *button __attribute__((unused)), Projet *projet);
+int _1990_gtk_insert_dispo(Projet *projet, unsigned int numero, Niveau_Groupe *niveau) __attribute__((__warn_unused_result__));
+int _1990_gtk_groupes_affiche_niveau(Projet *projet, unsigned int niveau) __attribute__((__warn_unused_result__));
+void _1990_gtk_groupes(Projet *projet);
 
 #endif
 

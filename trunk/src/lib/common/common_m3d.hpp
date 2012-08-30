@@ -39,21 +39,19 @@ extern "C" {
 
 #include "common_projet.h"
 
-int m3d_init(Projet *projet);
+gboolean m3d_init(Projet *projet) __attribute__((__warn_unused_result__));
 
 gboolean m3d_draw(GtkWidget *drawing, GdkEventExpose* ev, gpointer *data);
 gboolean m3d_configure_event(GtkWidget *drawing, GdkEventConfigure * ev, gpointer *data);
 
-int m3d_camera_axe_x_z(Projet *projet);
-int m3d_genere_graphique(Projet *projet);
+gboolean m3d_camera_axe_x_z(Projet *projet) __attribute__((__warn_unused_result__));
+gboolean m3d_actualise_graphique(Projet *projet, GList *noeuds, GList *barres) __attribute__((__warn_unused_result__));
+gboolean m3d_rafraichit(Projet *projet) __attribute__((__warn_unused_result__));
 
-int m3d_rafraichit(Projet *projet);
-void m3d_actualise_graphique_deplace_noeud(Projet *projet, EF_Noeud *noeud);
+void* m3d_noeud(void *donnees_m3d, EF_Noeud *noeud) __attribute__((__warn_unused_result__));
+void* m3d_barre(void *donnees_m3d, Beton_Barre *barre) __attribute__((__warn_unused_result__));
 
-void* m3d_noeud(const char *nom, EF_Point *point, void *vue);
-int m3d_barre(Projet *projet, Beton_Barre *barre);
-
-int m3d_free(Projet *projet);
+gboolean m3d_free(Projet *projet) __attribute__((__warn_unused_result__));
 
 #ifdef __cplusplus
 }

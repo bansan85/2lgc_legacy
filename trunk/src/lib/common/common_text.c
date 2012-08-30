@@ -25,9 +25,9 @@
 
 
 G_MODULE_EXPORT void show_warranty()
-/* Description : Affiche les limites de la garantie (articles 15, 16 et 17 de la licence GPL)
- * Paramètres : Aucun
- * Valeur renvoyée : void
+/* Description : Affiche les limites de la garantie (articles 15, 16 et 17 de la licence GPL).
+ * Paramètres : Aucun.
+ * Valeur renvoyée : Aucune.
  */
 {
     // Trivial
@@ -66,9 +66,9 @@ G_MODULE_EXPORT void show_warranty()
 }
 
 G_MODULE_EXPORT void show_help()
-/* Description : Affiche l'aide lorsque l'utilisateur lance le programme avec l'option -h
- * Paramètres : Aucun
- * Valeur renvoyée : void
+/* Description : Affiche l'aide lorsque l'utilisateur lance le programme avec l'option -h.
+ * Paramètres : Aucun.
+ * Valeur renvoyée : Aucune.
  */
 {
     // -h, --help : affiche le présent menu

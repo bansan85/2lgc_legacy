@@ -28,12 +28,13 @@
 #include "common_erreurs.h"
 #include "common_maths.h"
 
-G_MODULE_EXPORT void gtk_common_entry_check_double(GtkTextBuffer *textbuffer, gpointer user_data __attribute__((unused)))
+G_MODULE_EXPORT void gtk_common_entry_check_double(GtkTextBuffer *textbuffer,
+  gpointer user_data __attribute__((unused)))
 /* Description : Vérifie en temps réel si le GtkTextBuffer contient bien un nombre flottant.
  *               S'il ne contient pas de nombre, le texte passe en rouge.
- * Paramètres : GtkTextBuffer *textbuffer : composant à l'origine de l'évènement
- *            : gpointer user_data : ne sert à rien
- * Valeur renvoyée : Aucune
+ * Paramètres : GtkTextBuffer *textbuffer : composant à l'origine de l'évènement,
+ *            : gpointer user_data : ne sert à rien.
+ * Valeur renvoyée : Aucune.
  */
 {
     gchar       *texte;
@@ -66,8 +67,13 @@ G_MODULE_EXPORT void gtk_common_entry_check_double(GtkTextBuffer *textbuffer, gp
 G_MODULE_EXPORT double gtk_common_entry_renvoie_double(GtkTextBuffer *textbuffer)
 /* Description : Renvoie le nombre flottant si le GtkTextBuffer en contient bien un.
  *               Renvoie nan sinon.
- * Paramètres : GtkTextBuffer *textbuffer : composant à vérifier
- * Valeur renvoyée : Aucune
+ * Paramètres : GtkTextBuffer *textbuffer : composant à vérifier.
+ * Valeur renvoyée :
+ *   Succès : le nombre flottant contenu dans un composant de type Entry
+ *   Échec : NAN :
+ *             textbuffer == NULL,
+ *             le composant Entry ne contient pas un nombre double,
+ *             en cas d'erreur d'allocation mémoire,
  */
 {
     gchar       *texte;
@@ -75,10 +81,12 @@ G_MODULE_EXPORT double gtk_common_entry_renvoie_double(GtkTextBuffer *textbuffer
     double      nombre;
     char        *fake;
     
+    BUGMSG(textbuffer, -1, gettext("Paramètre %s incorrect.\n"), "textbuffer");
+    
     gtk_text_buffer_get_iter_at_offset(textbuffer, &start, 0);
     gtk_text_buffer_get_iter_at_offset(textbuffer, &end, -1);
     texte = gtk_text_buffer_get_text(textbuffer, &start, &end, FALSE);
-    BUGMSG(fake = (char*)malloc(sizeof(char)*(strlen(texte)+1)), -2, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(fake = (char*)malloc(sizeof(char)*(strlen(texte)+1)), NAN, gettext("Erreur d'allocation mémoire.\n"));
     
     if (sscanf(texte, "%lf%s", &nombre, fake) != 1)
     {
@@ -94,12 +102,14 @@ G_MODULE_EXPORT double gtk_common_entry_renvoie_double(GtkTextBuffer *textbuffer
     }
 }
 
-G_MODULE_EXPORT void gtk_common_entry_check_int(GtkTextBuffer *textbuffer, gpointer user_data __attribute__((unused)))
+
+G_MODULE_EXPORT void gtk_common_entry_check_int(GtkTextBuffer *textbuffer,
+  gpointer user_data __attribute__((unused)))
 /* Description : Vérifie en temps réel si le GtkTextBuffer contient bien un nombre entier.
  *               S'il ne contient pas de nombre, le texte passe en rouge.
- * Paramètres : GtkTextBuffer *textbuffer : composant à l'origine de l'évènement
- *            : gpointer user_data : ne sert à rien
- * Valeur renvoyée : Aucune
+ * Paramètres : GtkTextBuffer *textbuffer : composant à l'origine de l'évènement,
+ *            : gpointer user_data : ne sert à rien.
+ * Valeur renvoyée : Aucune.
  */
 {
     gchar       *texte;
@@ -132,8 +142,13 @@ G_MODULE_EXPORT void gtk_common_entry_check_int(GtkTextBuffer *textbuffer, gpoin
 G_MODULE_EXPORT int gtk_common_entry_renvoie_int(GtkTextBuffer *textbuffer)
 /* Description : Renvoie le nombre entier si le GtkTextBuffer en contient bien un.
  *               Renvoie INT_MIN sinon.
- * Paramètres : GtkTextBuffer *textbuffer : composant à vérifier
- * Valeur renvoyée : Aucune
+ * Paramètres : GtkTextBuffer *textbuffer : composant à vérifier.
+ * Valeur renvoyée :
+ *   Succès : le nombre entier contenu dans un composant de type Entry
+ *   Échec : INT_MIN :
+ *             textbuffer == NULL,
+ *             le composant Entry ne contient pas un nombre double,
+ *             en cas d'erreur d'allocation mémoire,
  */
 {
     gchar       *texte;
@@ -141,10 +156,12 @@ G_MODULE_EXPORT int gtk_common_entry_renvoie_int(GtkTextBuffer *textbuffer)
     int         nombre;
     char        *fake;
     
+    BUGMSG(textbuffer, -1, gettext("Paramètre %s incorrect.\n"), "textbuffer");
+    
     gtk_text_buffer_get_iter_at_offset(textbuffer, &start, 0);
     gtk_text_buffer_get_iter_at_offset(textbuffer, &end, -1);
     texte = gtk_text_buffer_get_text(textbuffer, &start, &end, FALSE);
-    BUGMSG(fake = (char*)malloc(sizeof(char)*(strlen(texte)+1)), -2, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(fake = (char*)malloc(sizeof(char)*(strlen(texte)+1)), INT_MIN, gettext("Erreur d'allocation mémoire.\n"));
     
     if (sscanf(texte, "%d%s", &nombre, fake) != 1)
     {
@@ -161,12 +178,13 @@ G_MODULE_EXPORT int gtk_common_entry_renvoie_int(GtkTextBuffer *textbuffer)
 }
 
 
-G_MODULE_EXPORT void gtk_common_entry_check_liste(GtkTextBuffer *textbuffer, gpointer user_data __attribute__((unused)))
-/* Description : Vérifie en temps réel si le GtkTextBuffer contient bien un nombre entier.
+G_MODULE_EXPORT void gtk_common_entry_check_liste(GtkTextBuffer *textbuffer,
+  gpointer user_data __attribute__((unused)))
+/* Description : Vérifie en temps réel si le GtkTextBuffer contient une liste de nombre entier.
  *               S'il ne contient pas de nombre, le texte passe en rouge.
- * Paramètres : GtkTextBuffer *textbuffer : composant à l'origine de l'évènement
- *            : gpointer user_data : ne sert à rien
- * Valeur renvoyée : Aucune
+ * Paramètres : GtkTextBuffer *textbuffer : composant à l'origine de l'évènement,
+ *            : gpointer user_data : ne sert à rien.
+ * Valeur renvoyée : Aucune.
  */
 {
     gchar       *texte;
@@ -188,13 +206,16 @@ G_MODULE_EXPORT void gtk_common_entry_check_liste(GtkTextBuffer *textbuffer, gpo
         gtk_text_buffer_apply_tag_by_name(textbuffer, "OK", &start, &end);
         g_list_free(retour);
     }
+    
     free(texte);
+    
     return;
 }
 
 
-G_MODULE_EXPORT gboolean common_gtk_key_press(GtkWidget *widget __attribute__((unused)), GdkEvent *event __attribute__((unused)), GtkWidget *fenetre)
-/* Description : Détruit la fenêtre si la touche d'échappement est appuiée.
+G_MODULE_EXPORT gboolean common_gtk_key_press(GtkWidget *widget __attribute__((unused)),
+  GdkEvent *event __attribute__((unused)), GtkWidget *fenetre)
+/* Description : Détruit la fenêtre si la touche d'échappement est appuyée.
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
  *            : GdkEvent *event : description de l'évènement,
  *            : GtkWidget *fenetre : la fenêtre à détruire.
@@ -212,14 +233,16 @@ G_MODULE_EXPORT gboolean common_gtk_key_press(GtkWidget *widget __attribute__((u
 }
 
 
-G_MODULE_EXPORT void gtk_common_render_double(GtkTreeViewColumn *tree_column __attribute__((unused)), GtkCellRenderer *cell, GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data)
-/* Description : personnalise l'affichage des nombres de type double dans un treeview.
+G_MODULE_EXPORT void gtk_common_render_double(
+  GtkTreeViewColumn *tree_column __attribute__((unused)), GtkCellRenderer *cell,
+  GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data)
+/* Description : Personnalise l'affichage des nombres de type double dans un treeview.
  * Paramètres : GtkTreeViewColumn *tree_column : la colonne,
  *            : GtkCellRenderer *cell : la cellule,
  *            : GtkTreeModel *tree_model : le tree_model,
  *            : GtkTreeIter *iter : et le paramètre iter,
  *            : gpointer data : le nombre de décimale.
- * Valeur renvoyée : void
+ * Valeur renvoyée : Aucune.
  */
 {
     gchar   texte[30];

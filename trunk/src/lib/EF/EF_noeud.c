@@ -20,49 +20,51 @@
 #include <stdlib.h>
 #include <math.h>
 #include <libintl.h>
+#include <gmodule.h> 
+
 #include "common_projet.h"
 #include "common_erreurs.h"
 #include "EF_appuis.h"
+#include "common_m3d.hpp"
+#include "EF_rigidite.h"
 
-G_MODULE_EXPORT int EF_noeuds_init(Projet *projet)
-/* Description : Initialise la liste des noeuds
- * Paramètres : Projet *projet : la variable projet
+G_MODULE_EXPORT gboolean EF_noeuds_init(Projet *projet)
+/* Description : Initialise la liste des noeuds.
+ * Paramètres : Projet *projet : la variable projet.
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : -1 en cas de paramètres invalides :
- *             (projet == NULL)
- *           -2 en cas d'erreur d'allocation mémoire
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL.
  */
 {
-    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     // Trivial
     projet->ef_donnees.noeuds = NULL;
     
-    return 0;
+    return TRUE;
 }
 
 
-G_MODULE_EXPORT EF_Noeud *EF_noeuds_ajout_noeud_libre(Projet *projet, double x, double y, double z, EF_Appui *appui)
+G_MODULE_EXPORT EF_Noeud *EF_noeuds_ajout_noeud_libre(Projet *projet, double x, double y,
+  double z, EF_Appui *appui)
 /* Description : Ajouter un noeud à la liste des noeuds en lui attribuant le numéro suivant le
- *                 dernier noeud existant
- * Paramètres : Projet *projet : la variable projet
- *            : double x : position en x
- *            : double y : position en y
- *            : double z : position en z
- *            : int appui : numéro de l'appui. -1 si aucun.
+ *               dernier noeud existant.
+ * Paramètres : Projet *projet : la variable projet,
+ *            : double x : position en x,
+ *            : double y : position en y,
+ *            : double z : position en z,
+ *            : EF_Appui *appui : Pointeur vers l'appui, NULL si aucun.
  * Valeur renvoyée :
  *   Succès : Pointeur vers le nouveau noeud
  *   Échec : NULL en cas de paramètres invalides :
- *             (projet == NULL) ou
- *             (projet->ef_donnees.noeuds == NULL) ou
- *             (EF_appuis_cherche_numero(projet, appui) == NULL)
- *           NULL en cas d'erreur d'allocation mémoire
+ *             projet == NULL,
+ *             en cas d'erreur d'allocation mémoire.
  */
 {
     EF_Noeud        *noeud_nouveau = malloc(sizeof(EF_Noeud));
     EF_Point        *data;
     
-    BUGMSG(projet, NULL, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(noeud_nouveau, NULL, gettext("Erreur d'allocation mémoire.\n"));
     
     BUGMSG(data = malloc(sizeof(EF_Point)), NULL, gettext("Erreur d'allocation mémoire.\n"));
@@ -80,43 +82,38 @@ G_MODULE_EXPORT EF_Noeud *EF_noeuds_ajout_noeud_libre(Projet *projet, double x, 
     
     projet->ef_donnees.noeuds = g_list_append(projet->ef_donnees.noeuds, noeud_nouveau);
     
-    if (projet->ef_donnees.noeuds_pos_partielle != NULL)
-    {
-        BUGMSG(projet->ef_donnees.noeuds_pos_partielle = (unsigned int**)realloc(projet->ef_donnees.noeuds_pos_partielle, sizeof(unsigned int*)*(noeud_nouveau->numero+1)), NULL, gettext("Erreur d'allocation mémoire.\n"));
-        BUGMSG(projet->ef_donnees.noeuds_pos_partielle[noeud_nouveau->numero] = (unsigned int*)malloc(6*sizeof(unsigned int)), NULL, gettext("Erreur d'allocation mémoire.\n"));
-    }
-    if (projet->ef_donnees.noeuds_pos_complete != NULL)
-    {
-        BUGMSG(projet->ef_donnees.noeuds_pos_complete = (unsigned int**)realloc(projet->ef_donnees.noeuds_pos_complete, sizeof(unsigned int*)*(noeud_nouveau->numero+1)), NULL, gettext("Erreur d'allocation mémoire.\n"));
-        BUGMSG(projet->ef_donnees.noeuds_pos_complete[noeud_nouveau->numero] = (unsigned int*)malloc(6*sizeof(unsigned int)), NULL, gettext("Erreur d'allocation mémoire.\n"));
-    }
+    BUG(EF_rigidite_free(projet), NULL);
+    
+#ifdef ENABLE_GTK
+    BUG(m3d_noeud(&projet->list_gtk.m3d, noeud_nouveau), NULL);
+#endif
     
     return noeud_nouveau;
 }
 
 
-G_MODULE_EXPORT EF_Noeud* EF_noeuds_ajout_noeud_barre(Projet *projet, Beton_Barre *barre, double position_relative_barre, EF_Appui *appui)
+G_MODULE_EXPORT EF_Noeud* EF_noeuds_ajout_noeud_barre(Projet *projet, Beton_Barre *barre,
+  double position_relative_barre, EF_Appui *appui)
 /* Description : Ajouter un noeud à la liste des noeuds en lui attribuant le numéro suivant le
- *                 dernier noeud existant. Ce noeud se situe à l'intérieur d'une barre et
- *                 permet la discrétisation.
- * Paramètres : Projet *projet : la variable projet
- *            : double position_relative_barre : position relative à l'intérieur de la barre (compris entre 0.0 et 1.0)
- *            : int appui : numéro de l'appui. -1 si aucun.
+ *               dernier noeud existant. Ce noeud se situe à l'intérieur d'une barre et permet
+ *               la discrétisation.
+ * Paramètres : Projet *projet : la variable projet,
+ *            : Beton_Barre *barre : barre qui contiendra le noeud intermédiaire,
+ *            : double position_relative_barre : position relative à l'intérieur de la barre
+ *              (compris entre 0.0 et 1.0),
+ *            : EF_Appui *appui : Pointeur vers l'appui, NULL si aucun.
  * Valeur renvoyée :
  *   Succès : Pointeur vers le nouveau noeud
- *   Échec : NULL en cas de paramètres invalides :
- *             (projet == NULL) ou
- *             (projet->ef_donnees.noeuds == NULL) ou
- *             (EF_appuis_cherche_numero(projet, appui) == NULL)
- *           NULL en cas d'erreur d'allocation mémoire
+ *   Échec : NULL :
+ *             projet == NULL,
+ *             en cas d'erreur d'allocation mémoire.
  */
 {
     EF_Noeud        *noeud_nouveau = malloc(sizeof(EF_Noeud));
     EF_Noeud_Barre  *data;
     GList           *liste;
     
-    BUGMSG(projet, NULL, gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->ef_donnees.noeuds, NULL, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(noeud_nouveau, NULL, gettext("Erreur d'allocation mémoire.\n"));
     
     BUGMSG(data = malloc(sizeof(EF_Noeud_Barre)), NULL, gettext("Erreur d'allocation mémoire.\n"));
@@ -133,16 +130,7 @@ G_MODULE_EXPORT EF_Noeud* EF_noeuds_ajout_noeud_barre(Projet *projet, Beton_Barr
     
     projet->ef_donnees.noeuds = g_list_append(projet->ef_donnees.noeuds, noeud_nouveau);
     
-    if (projet->ef_donnees.noeuds_pos_partielle != NULL)
-    {
-        BUGMSG(projet->ef_donnees.noeuds_pos_partielle = (unsigned int**)realloc(projet->ef_donnees.noeuds_pos_partielle, sizeof(unsigned int*)*(noeud_nouveau->numero+1)), NULL, gettext("Erreur d'allocation mémoire.\n"));
-        BUGMSG(projet->ef_donnees.noeuds_pos_partielle[noeud_nouveau->numero] = (unsigned int*)malloc(6*sizeof(unsigned int)), NULL, gettext("Erreur d'allocation mémoire.\n"));
-    }
-    if (projet->ef_donnees.noeuds_pos_complete != NULL)
-    {
-        BUGMSG(projet->ef_donnees.noeuds_pos_complete = (unsigned int**)realloc(projet->ef_donnees.noeuds_pos_complete, sizeof(unsigned int*)*(noeud_nouveau->numero+1)), NULL, gettext("Erreur d'allocation mémoire.\n"));
-        BUGMSG(projet->ef_donnees.noeuds_pos_complete[noeud_nouveau->numero] = (unsigned int*)malloc(6*sizeof(unsigned int)), NULL, gettext("Erreur d'allocation mémoire.\n"));
-    }
+    BUG(EF_rigidite_free(projet), NULL);
     
     barre->discretisation_element++;
     
@@ -157,6 +145,10 @@ G_MODULE_EXPORT EF_Noeud* EF_noeuds_ajout_noeud_barre(Projet *projet, Beton_Barr
     
     BUGMSG(barre->info_EF = realloc(barre->info_EF, sizeof(Barre_Info_EF)*(barre->discretisation_element+1)), NULL, gettext("Erreur d'allocation mémoire.\n"));
     
+#ifdef ENABLE_GTK
+    BUG(m3d_noeud(&projet->list_gtk.m3d, noeud_nouveau), NULL);
+#endif
+    
     return noeud_nouveau;
 }
 
@@ -168,12 +160,13 @@ G_MODULE_EXPORT EF_Point *EF_noeuds_renvoie_position(EF_Noeud *noeud)
  * Valeur renvoyée :
  *   Succès : pointeur vers la position du noeud.
  *   Échec : NULL en cas de paramètres invalides
- *             (noeud == NULL)
+ *             noeud == NULL,
+ *             en cas d'erreur d'allocation mémoire.
  */
 {
     EF_Point *retour;
     
-    BUGMSG(noeud, NULL, gettext("Paramètre incorrect\n"));
+    BUGMSG(noeud, NULL, gettext("Paramètre %s incorrect.\n"), "noeud");
     BUGMSG(retour = malloc(sizeof(EF_Point)), NULL, gettext("Erreur d'allocation mémoire.\n"));
     
     switch (noeud->type)
@@ -206,7 +199,7 @@ G_MODULE_EXPORT EF_Point *EF_noeuds_renvoie_position(EF_Noeud *noeud)
         }
         default :
         {
-            BUGMSG(0, NULL, gettext("Paramètre incorrect\n"));
+            BUGMSG(0, NULL, gettext("Le type de noeud %d est inconnu.\n"), noeud->type);
             break;
         }
     }
@@ -215,23 +208,22 @@ G_MODULE_EXPORT EF_Point *EF_noeuds_renvoie_position(EF_Noeud *noeud)
 }
 
 
-G_MODULE_EXPORT int EF_noeuds_min_max(Projet *projet, double *x_min, double *x_max, double *y_min,
-  double *y_max, double *z_min, double *z_max)
+G_MODULE_EXPORT gboolean EF_noeuds_min_max(Projet *projet, double *x_min, double *x_max,
+  double *y_min, double *y_max, double *z_min, double *z_max)
 /* Description : Détermine le cube contenant tous les points de la structure. 
  *               Une ou plusieurs valeurs min ou max peuvent valoir NULL.
- * Paramètres : Projet *projet : la variable projet
- *            : double *x_min : coordonnée du point ayant la valeur x minimale
- *            : double *x_max : coordonnée du point ayant la valeur x maximale
- *            : double *y_max : coordonnée du point ayant la valeur y minimale
- *            : double *y_max : coordonnée du point ayant la valeur y maximale
- *            : double *z_max : coordonnée du point ayant la valeur z minimale
- *            : double *z_max : coordonnée du point ayant la valeur z maximale
+ * Paramètres : Projet *projet : la variable projet,
+ *            : double *x_min : coordonnée du point ayant la valeur x minimale,
+ *            : double *x_max : coordonnée du point ayant la valeur x maximale,
+ *            : double *y_max : coordonnée du point ayant la valeur y minimale,
+ *            : double *y_max : coordonnée du point ayant la valeur y maximale,
+ *            : double *z_max : coordonnée du point ayant la valeur z minimale,
+ *            : double *z_max : coordonnée du point ayant la valeur z maximale.
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : -1 en cas de paramètres invalides :
- *             (projet == NULL) ou
- *             (projet->ef_donnees.noeuds == NULL) ou
- *             (list_size(projet->ef_donnees.noeuds) == 0)
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL,
+ *             list_size(projet->ef_donnees.noeuds) == 0.
  */
 {
     GList       *list_parcours;
@@ -239,12 +231,12 @@ G_MODULE_EXPORT int EF_noeuds_min_max(Projet *projet, double *x_min, double *x_m
     EF_Point    *point;
     double      x_mi, x_ma, y_mi, y_ma, z_mi, z_ma;
     
-    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->ef_donnees.noeuds, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet->ef_donnees.noeuds, FALSE, gettext("Aucun noeud n'est existant.\n"));
     
     list_parcours = projet->ef_donnees.noeuds;
     noeud = list_parcours->data;
-    BUG(point = EF_noeuds_renvoie_position(noeud), -3);
+    BUG(point = EF_noeuds_renvoie_position(noeud), FALSE);
     x_mi = point->x;
     x_ma = point->x;
     y_mi = point->y;
@@ -256,7 +248,7 @@ G_MODULE_EXPORT int EF_noeuds_min_max(Projet *projet, double *x_min, double *x_m
     while (list_parcours != NULL)
     {
         noeud = list_parcours->data;
-        BUG(point = EF_noeuds_renvoie_position(noeud), -3);
+        BUG(point = EF_noeuds_renvoie_position(noeud), FALSE);
         
         if (point->x < x_mi)
             x_mi = point->x;
@@ -289,31 +281,28 @@ G_MODULE_EXPORT int EF_noeuds_min_max(Projet *projet, double *x_min, double *x_m
     if (z_max != NULL)
         *z_max = z_ma;
     
-    return 0;
+    return TRUE;
 }
 
 
 G_MODULE_EXPORT EF_Noeud* EF_noeuds_cherche_numero(Projet *projet, unsigned int numero)
-/* Description : Positionne dans la liste des noeuds le noeud souhaité et le renvoie
- * Paramètres : Projet *projet : la variable projet
- *            : int numero : le numéro du noeud
+/* Description : Positionne dans la liste des noeuds le noeud souhaité et le renvoie.
+ * Paramètres : Projet *projet : la variable projet,
+ *            : unsigned int numero : le numéro du noeud.
  * Valeur renvoyée :
  *   Succès : pointeur vers le noeud recherché
- *   Échec : NULL en cas de paramètres invalides :
- *             (projet == NULL) ou
- *             (projet->ef_donnees.noeuds == NULL) ou
- *             (list_size(projet->ef_donnees.noeuds) == 0) ou
+ *   Échec : NULL :
+ *             projet == NULL,
  *             noeud introuvable
  */
 {
     GList   *list_parcours;
     
-    BUGMSG(projet, NULL, gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->ef_donnees.noeuds, NULL, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
     
     // Trivial
     list_parcours = projet->ef_donnees.noeuds;
-    do
+    while (list_parcours != NULL)
     {
         EF_Noeud    *noeud = list_parcours->data;
         
@@ -322,7 +311,6 @@ G_MODULE_EXPORT EF_Noeud* EF_noeuds_cherche_numero(Projet *projet, unsigned int 
         
         list_parcours = g_list_next(list_parcours);
     }
-    while (list_parcours != NULL);
     
     BUGMSG(0, NULL, gettext("Noeud n°%u introuvable.\n"), numero);
 }
@@ -330,21 +318,21 @@ G_MODULE_EXPORT EF_Noeud* EF_noeuds_cherche_numero(Projet *projet, unsigned int 
 
 G_MODULE_EXPORT double EF_noeuds_distance(EF_Noeud* n1, EF_Noeud* n2)
 /* Description : Renvoie la distance entre deux noeuds.
- * Paramètres : EF_Noeud* n1 : noeud de départ
- *            : EF_Noeud* n2 : noeud de fin
+ * Paramètres : EF_Noeud* n1 : noeud de départ,
+ *            : EF_Noeud* n2 : noeud de fin.
  * Valeur renvoyée :
  *   Succès : distance entre les deux noeuds
- *   Échec : NAN en cas de paramètres invalides :
- *             (projet == NULL) ou
- *             (projet->ef_donnees.noeuds == NULL)
+ *   Échec : NAN :
+ *             n1 == NULL,
+ *             n2 == NULL.
  */
 {
     EF_Point    *p1, *p2;
     double      x, y, z;
     
     // \end{verbatim}\texttt{distance }$= \sqrt{x^2+y^2+z^2}$\begin{verbatim}
-    BUGMSG(n1, NAN, gettext("Paramètre incorrect\n"));
-    BUGMSG(n2, NAN, gettext("Paramètre incorrect\n"));
+    BUGMSG(n1, NAN, gettext("Paramètre %s incorrect.\n"), "n1");
+    BUGMSG(n2, NAN, gettext("Paramètre %s incorrect.\n"), "n2");
     
     BUG(p1 = EF_noeuds_renvoie_position(n1), NAN);
     BUG(p2 = EF_noeuds_renvoie_position(n2), NAN);
@@ -360,26 +348,30 @@ G_MODULE_EXPORT double EF_noeuds_distance(EF_Noeud* n1, EF_Noeud* n2)
 }
 
 
-G_MODULE_EXPORT double EF_noeuds_distance_x_y_z(EF_Noeud* n1, EF_Noeud* n2, double *x, double *y, double *z)
+G_MODULE_EXPORT double EF_noeuds_distance_x_y_z(EF_Noeud* n1, EF_Noeud* n2, double *x,
+  double *y, double *z)
 /* Description : Renvoie la distance entre deux noeuds par retour de fonction et renvoie la
  *               distance entre deux noeuds selon les 3 axes par argument.
- * Paramètres : EF_Noeud* n1 : noeud de départ
- *            : EF_Noeud* n2 : noeud de fin
+ * Paramètres : EF_Noeud* n1 : noeud de départ,
+ *            : EF_Noeud* n2 : noeud de fin,
  *            : double *x : distance selon l'axe x,
  *            : double *y : distance selon l'axe y,
  *            : double *z : distance selon l'axe z.
  * Valeur renvoyée :
  *   Succès : distance entre les deux points.
- *   Échec : NAN en cas de paramètres invalides :
- *             (n1 == NULL) || 
- *             (n2 == NULL)
+ *   Échec : NAN :
+ *             n1 == NULL,
+ *             n2 == NULL,
+ *             x == NULL,
+ *             y == NULL,
+ *             z == NULL.
  */
 {
     EF_Point    *p1, *p2;
     
     // \end{verbatim}\texttt{distance }$= \sqrt{x^2+y^2+z^2}$\begin{verbatim}
-    BUGMSG(n1, NAN, gettext("Paramètre incorrect\n"));
-    BUGMSG(n2, NAN, gettext("Paramètre incorrect\n"));
+    BUGMSG(n1, NAN, gettext("Paramètre %s incorrect.\n"), "n1");
+    BUGMSG(n2, NAN, gettext("Paramètre %s incorrect.\n"), "n2");
     
     BUG(p1 = EF_noeuds_renvoie_position(n1), NAN);
     BUG(p2 = EF_noeuds_renvoie_position(n2), NAN);
@@ -395,18 +387,16 @@ G_MODULE_EXPORT double EF_noeuds_distance_x_y_z(EF_Noeud* n1, EF_Noeud* n2, doub
 }
 
 
-G_MODULE_EXPORT int EF_noeuds_free(Projet *projet)
+G_MODULE_EXPORT gboolean EF_noeuds_free(Projet *projet)
 /* Description : Libère l'ensemble des noeuds et la liste les contenant.
- * Paramètres : Projet *projet : la variable projet
+ * Paramètres : Projet *projet : la variable projet.
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : -1 en cas de paramètres invalides :
- *             (projet == NULL) ou
- *             (projet->ef_donnees.noeuds == NULL)
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL.
  */
 {
-    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->ef_donnees.noeuds, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
     // Trivial
     while (projet->ef_donnees.noeuds != NULL)
@@ -419,5 +409,5 @@ G_MODULE_EXPORT int EF_noeuds_free(Projet *projet)
         projet->ef_donnees.noeuds = g_list_delete_link(projet->ef_donnees.noeuds, projet->ef_donnees.noeuds);
     }
     
-    return 0;
+    return TRUE;
 }

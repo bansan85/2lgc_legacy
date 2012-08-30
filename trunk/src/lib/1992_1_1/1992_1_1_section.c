@@ -21,22 +21,23 @@
 #include <libintl.h>
 #include <math.h>
 #include <string.h>
+#include <gmodule.h>
+
 #include "common_projet.h"
 #include "common_erreurs.h"
 #include "common_maths.h"
 #include "EF_noeud.h"
 
-G_MODULE_EXPORT int _1992_1_1_sections_init(Projet *projet)
-/* Description : Initialise la liste des section en béton
- * Paramètres : Projet *projet : la variable projet
+G_MODULE_EXPORT gboolean _1992_1_1_sections_init(Projet *projet)
+/* Description : Initialise la liste des section en béton.
+ * Paramètres : Projet *projet : la variable projet.
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : -1 en cas de paramètres invalides :
- *             (projet == NULL)
- *           -2 en cas d'erreur d'allocation mémoire
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL.
  */
 {
-    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
     // Trivial
     projet->beton.sections = NULL;
@@ -45,21 +46,21 @@ G_MODULE_EXPORT int _1992_1_1_sections_init(Projet *projet)
     projet->list_gtk.ef_barres.liste_sections = gtk_list_store_new(1, G_TYPE_STRING);
 #endif
     
-    return 0;
+    return TRUE;
 }
 
 
-G_MODULE_EXPORT int _1992_1_1_sections_ajout_rectangulaire(Projet *projet, const char* nom, double l, double h)
-/* Description : ajouter une nouvelle section rectangulaire à la liste des sections en béton
- * Paramètres : Projet *projet : la variable projet
- *            : double l : la largeur
- *            : double h : la hauteur
+G_MODULE_EXPORT gboolean _1992_1_1_sections_ajout_rectangulaire(Projet *projet, const char* nom,
+  double l, double h)
+/* Description : Ajouter une nouvelle section rectangulaire à la liste des sections en béton.
+ * Paramètres : Projet *projet : la variable projet,
+ *            : double l : la largeur,
+ *            : double h : la hauteur.
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : -1 en cas de paramètres invalides :
- *             (projet == NULL) ou
- *             (projet->beton.sections == NULL)
- *           -2 en cas d'erreur d'allocation mémoire
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL,
+ *             en cas d'erreur d'allocation mémoire.
  */
 {
     Beton_Section_Rectangulaire *section_nouvelle = malloc(sizeof(Beton_Section_Rectangulaire));
@@ -67,13 +68,12 @@ G_MODULE_EXPORT int _1992_1_1_sections_ajout_rectangulaire(Projet *projet, const
     GtkTreeIter     iter;
 #endif
     
-    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(section_nouvelle, -2, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(section_nouvelle, FALSE, gettext("Erreur d'allocation mémoire.\n"));
     
     // Trivial
     section_nouvelle->type = BETON_SECTION_RECTANGULAIRE;
-    section_nouvelle->nom = (char*)malloc(sizeof(char)*(strlen(nom)+1));
-    strcpy(section_nouvelle->nom, nom);
+    BUGMSG(section_nouvelle->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
     section_nouvelle->largeur = l;
     section_nouvelle->hauteur = h;
     section_nouvelle->numero = g_list_length(projet->beton.sections);
@@ -85,23 +85,23 @@ G_MODULE_EXPORT int _1992_1_1_sections_ajout_rectangulaire(Projet *projet, const
     gtk_list_store_set(projet->list_gtk.ef_barres.liste_sections, &iter, 0, nom, -1);
 #endif
     
-    return 0;
+    return TRUE;
 }
 
 
-G_MODULE_EXPORT int _1992_1_1_sections_ajout_T(Projet *projet, const char* nom, double lt, double la, double ht, double ha)
-/* Description : ajouter une nouvelle section en T à la liste des sections en béton
- * Paramètres : Projet *projet : la variable projet
- *            : double lt : la largeur de la table
- *            : double la : la largeur de l'âme
- *            : double ht : la hauteur de la table
- *            : double ha : la hauteur de l'âme
+G_MODULE_EXPORT gboolean _1992_1_1_sections_ajout_T(Projet *projet, const char* nom, double lt,
+  double la, double ht, double ha)
+/* Description : Ajouter une nouvelle section en T à la liste des sections en béton.
+ * Paramètres : Projet *projet : la variable projet,
+ *            : double lt : la largeur de la table,
+ *            : double la : la largeur de l'âme,
+ *            : double ht : la hauteur de la table,
+ *            : double ha : la hauteur de l'âme.
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : -1 en cas de paramètres invalides :
- *             (projet == NULL) ou
- *             (projet->beton.sections == NULL)
- *           -2 en cas d'erreur d'allocation mémoire
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL,
+ *             en cas d'erreur d'allocation mémoire.
  */
 {
     Beton_Section_T     *section_nouvelle = malloc(sizeof(Beton_Section_T));
@@ -110,8 +110,8 @@ G_MODULE_EXPORT int _1992_1_1_sections_ajout_T(Projet *projet, const char* nom, 
     GtkTreeIter     iter;
 #endif
     
-    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(section_nouvelle, -2, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(section_nouvelle, FALSE, gettext("Erreur d'allocation mémoire.\n"));
     
     // Les caractéristiques de la section sont les suivantes :\end{verbatim}\begin{displaymath}
     //   S = lt \cdot ht+la \cdot ha\end{displaymath}\begin{displaymath}
@@ -120,8 +120,7 @@ G_MODULE_EXPORT int _1992_1_1_sections_ajout_T(Projet *projet, const char* nom, 
     //   J = \frac{a \cdot b^3}{16} \cdot \left[\frac{16}{3}-3.364 \cdot \frac{b}{a} \cdot \left(1-\frac{b^4}{12 \cdot a^4}\right)\right]+\frac{aa \cdot bb^3}{16} \cdot \left[\frac{16}{3}-3.364 \cdot \frac{bb}{aa} \cdot \left(1-\frac{bb^4}{12 \cdot aa^4}\right)\right]\texttt{ avec }\substack{a=max(ht,lt)\\b=min(ht,lt)\\aa=max(ha,la)\\bb=min(ha,la)}
     //   \end{displaymath}\begin{verbatim}
     section_nouvelle->type = BETON_SECTION_T;
-    section_nouvelle->nom = (char*)malloc(sizeof(char)*(strlen(nom)+1));
-    strcpy(section_nouvelle->nom, nom);
+    BUGMSG(section_nouvelle->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
     section_nouvelle->largeur_table = lt;
     section_nouvelle->largeur_ame = la;
     section_nouvelle->hauteur_table = ht;
@@ -135,20 +134,20 @@ G_MODULE_EXPORT int _1992_1_1_sections_ajout_T(Projet *projet, const char* nom, 
     gtk_list_store_set(projet->list_gtk.ef_barres.liste_sections, &iter, 0, nom, -1);
 #endif
     
-    return 0;
+    return TRUE;
 }
 
 
-G_MODULE_EXPORT int _1992_1_1_sections_ajout_carre(Projet *projet, const char* nom, double cote)
-/* Description : ajouter une nouvelle section carrée à la liste des sections en béton
- * Paramètres : Projet *projet : la variable projet
- *            : double cote : le coté
+G_MODULE_EXPORT gboolean _1992_1_1_sections_ajout_carre(Projet *projet, const char* nom,
+  double cote)
+/* Description : Ajouter une nouvelle section carrée à la liste des sections en béton.
+ * Paramètres : Projet *projet : la variable projet,
+ *            : double cote : le coté.
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : -1 en cas de paramètres invalides :
- *             (projet == NULL) ou
- *             (projet->beton.sections == NULL)
- *           -2 en cas d'erreur d'allocation mémoire
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL,
+ *             en cas d'erreur d'allocation mémoire.
  */
 {
     Beton_Section_Carre     *section_nouvelle = malloc(sizeof(Beton_Section_Carre));
@@ -157,15 +156,14 @@ G_MODULE_EXPORT int _1992_1_1_sections_ajout_carre(Projet *projet, const char* n
     GtkTreeIter     iter;
 #endif
     
-    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(section_nouvelle, -2, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(section_nouvelle, FALSE, gettext("Erreur d'allocation mémoire.\n"));
     
     // Les caractéristiques de la section sont les suivantes :\end{verbatim}\begin{displaymath}
     //   S = cote^2\texttt{  et  }cdg_{haut} = \frac{cote}{2}\texttt{  et  }cdg_{bas} = \frac{cote}{2}\texttt{  et  }cdg_{droite} = \frac{cote}{2}\texttt{  et  }cdg_{gauche} = \frac{cote}{2}\end{displaymath}\begin{displaymath}
     //   I_y = \frac{cote^4}{12}\texttt{  et  }I_z = I_y\texttt{  et  }J = \frac{cote^4}{16} \cdot \left[\frac{16}{3}-3.364 \cdot \left(1-\frac{1}{12}\right)\right]\end{displaymath}\begin{verbatim}
     section_nouvelle->type = BETON_SECTION_CARRE;
-    section_nouvelle->nom = (char*)malloc(sizeof(char)*(strlen(nom)+1));
-    strcpy(section_nouvelle->nom, nom);
+    BUGMSG(section_nouvelle->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
     section_nouvelle->cote = cote;
     section_nouvelle->numero = g_list_length(projet->beton.sections);
     
@@ -176,20 +174,20 @@ G_MODULE_EXPORT int _1992_1_1_sections_ajout_carre(Projet *projet, const char* n
     gtk_list_store_set(projet->list_gtk.ef_barres.liste_sections, &iter, 0, nom, -1);
 #endif
     
-    return 0;
+    return TRUE;
 }
 
 
-G_MODULE_EXPORT int _1992_1_1_sections_ajout_circulaire(Projet *projet, const char* nom, double diametre)
-/* Description : ajouter une nouvelle section circulaire à la liste des sections en béton
- * Paramètres : Projet *projet : la variable projet
- *            : double diametre : le diamètre
+G_MODULE_EXPORT gboolean _1992_1_1_sections_ajout_circulaire(Projet *projet, const char* nom,
+  double diametre)
+/* Description : Ajouter une nouvelle section circulaire à la liste des sections en béton.
+ * Paramètres : Projet *projet : la variable projet,
+ *            : double diametre : le diamètre.
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : -1 en cas de paramètres invalides :
- *             (projet == NULL) ou
- *             (projet->beton.sections == NULL)
- *           -2 en cas d'erreur d'allocation mémoire
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL,
+ *             en cas d'erreur d'allocation mémoire.
  */
 {
     Beton_Section_Circulaire    *section_nouvelle = malloc(sizeof(Beton_Section_Circulaire));
@@ -198,16 +196,15 @@ G_MODULE_EXPORT int _1992_1_1_sections_ajout_circulaire(Projet *projet, const ch
     GtkTreeIter     iter;
 #endif
     
-    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(section_nouvelle, -2, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(section_nouvelle, FALSE, gettext("Erreur d'allocation mémoire.\n"));
     
     // Les caractéristiques de la section sont les suivantes :\end{verbatim}\begin{displaymath}
     //   S = \frac{\pi \cdot diametre^2}{4}\end{displaymath}\begin{displaymath}
     //   cdg_{haut} = \frac{diametre}{2}\texttt{  et  }cdg_{bas} = \frac{diametre}{2}\texttt{  et  }cdg_{droite} = \frac{diametre}{2}\texttt{  et  }cdg_{gauche} = \frac{diametre}{2}\end{displaymath}\begin{displaymath}
     //   I_y = \frac{\pi \cdot diametre^4}{64}\texttt{  et  }I_z = I_y\texttt{  et  }J = \frac{\pi \cdot diametre^4}{32}\end{displaymath}\begin{verbatim}
     section_nouvelle->type = BETON_SECTION_CIRCULAIRE;
-    section_nouvelle->nom = (char*)malloc(sizeof(char)*(strlen(nom)+1));
-    strcpy(section_nouvelle->nom, nom);
+    BUGMSG(section_nouvelle->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
     section_nouvelle->diametre = diametre;
     section_nouvelle->numero = g_list_length(projet->beton.sections);
     
@@ -218,32 +215,29 @@ G_MODULE_EXPORT int _1992_1_1_sections_ajout_circulaire(Projet *projet, const ch
     gtk_list_store_set(projet->list_gtk.ef_barres.liste_sections, &iter, 0, nom, -1);
 #endif
     
-    return 0;
+    return TRUE;
 }
 
 
 G_MODULE_EXPORT void* _1992_1_1_sections_cherche_numero(Projet *projet, unsigned int numero)
 /* Description : Positionne dans la liste des sections en béton l'élément courant au numéro
- *                 souhaité.
- * Paramètres : Projet *projet : la variable projet
- *            : unsigned int numero : le numéro de la section
+ *               souhaité.
+ * Paramètres : Projet *projet : la variable projet,
+ *            : unsigned int numero : le numéro de la section.
  * Valeur renvoyée :
- *   Succès : pointeur vers la section
+ *   Succès : Pointeur vers la section
  *   Échec : NULL en cas de paramètres invalides :
- *             (projet == NULL) ou
- *             (projet->beton.sections == NULL) ou
- *             (list_size(projet->beton.sections) == 0) ou
- *             numéro introuvable.
+ *             projet == NULL,
+ *             section introuvable.
  */
 {
     GList   *list_parcours;
     
-    BUGMSG(projet, NULL, gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->beton.sections, NULL, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
     
     // Trivial
     list_parcours = projet->beton.sections;
-    do
+    while (list_parcours != NULL)
     {
         Beton_Section_Circulaire    *section = list_parcours->data;
         
@@ -252,7 +246,6 @@ G_MODULE_EXPORT void* _1992_1_1_sections_cherche_numero(Projet *projet, unsigned
         
         list_parcours = g_list_next(list_parcours);
     }
-    while (list_parcours != NULL);
     
     BUGMSG(0, NULL, gettext("Section en béton n°%d introuvable.\n"), numero);
 }
@@ -260,26 +253,23 @@ G_MODULE_EXPORT void* _1992_1_1_sections_cherche_numero(Projet *projet, unsigned
 
 G_MODULE_EXPORT void* _1992_1_1_sections_cherche_nom(Projet *projet, const char *nom)
 /* Description : Positionne dans la liste des sections en béton l'élément courant au numéro
- *                 souhaité.
- * Paramètres : Projet *projet : la variable projet
- *            : const char *nom : le nom de la section
+ *               souhaité.
+ * Paramètres : Projet *projet : la variable projet,
+ *            : const char *nom : le nom de la section.
  * Valeur renvoyée :
  *   Succès : pointeur vers la section
- *   Échec : NULL en cas de paramètres invalides :
- *             (projet == NULL) ou
- *             (projet->beton.sections == NULL) ou
- *             (list_size(projet->beton.sections) == 0) ou
- *             numéro introuvable.
+ *   Échec : NULL :
+ *             projet == NULL,
+ *             section introuvable.
  */
 {
     GList   *list_parcours;
     
-    BUGMSG(projet, NULL, gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->beton.sections, NULL, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
     
     // Trivial
     list_parcours = projet->beton.sections;
-    do
+    while (list_parcours != NULL)
     {
         Beton_Section_Circulaire    *section = list_parcours->data;
         
@@ -288,22 +278,22 @@ G_MODULE_EXPORT void* _1992_1_1_sections_cherche_nom(Projet *projet, const char 
         
         list_parcours = g_list_next(list_parcours);
     }
-    while (list_parcours != NULL);
     
     BUGMSG(0, NULL, gettext("Section en béton '%s' introuvable.\n"), nom);
 }
 
 
 G_MODULE_EXPORT double _1992_1_1_sections_j(void* sect)
-/* Description : Renvoie le paramètre J pour la section étudiée
- * Paramètres : void* sect : section à étudier
+/* Description : Renvoie l'inertie de torsion J pour la section étudiée.
+ * Paramètres : void* sect : section à étudier.
  * Valeur renvoyée :
  *   Succès : Résultat
- *   Échec : 0. en cas de paramètres invalides :
- *             (sect == NULL)
+ *   Échec : NAN :
+ *             (sect == NULL),
+ *             type de section inconnu.
  */
 {
-    BUGMSG(sect, NAN, gettext("Paramètre incorrect\n"));
+    BUGMSG(sect, NAN, gettext("Paramètre %s incorrect.\n"), "sect");
     
     switch(((Beton_Section_Rectangulaire*) sect)->type)
     {
@@ -375,15 +365,16 @@ G_MODULE_EXPORT double _1992_1_1_sections_j(void* sect)
 
 
 G_MODULE_EXPORT double _1992_1_1_sections_iy(void* sect)
-/* Description : Renvoie l'inertie I selon l'axe y lorsque la section est constante
- * Paramètres : void* section : section à étudier
+/* Description : Renvoie l'inertie I selon l'axe y lorsque la section est constante.
+ * Paramètres : void* section : section à étudier,
  * Valeur renvoyée :
- *   Succès : Résultat
- *   Échec : 0. en cas de paramètres invalides :
- *             (section == NULL)
+ *   Succès : Résultat.
+ *   Échec : NAN :
+ *             section == NULL,
+ *             type de section inconnu.
  */
 {
-    BUGMSG(sect, NAN, gettext("Paramètre incorrect\n"));
+    BUGMSG(sect, NAN, gettext("Paramètre %s incorrect.\n"), "sect");
     
     switch(((Beton_Section_Rectangulaire*) sect)->type)
     {
@@ -440,15 +431,16 @@ G_MODULE_EXPORT double _1992_1_1_sections_iy(void* sect)
 
 
 G_MODULE_EXPORT double _1992_1_1_sections_iz(void* sect)
-/* Description : Renvoie l'inertie I selon l'axe z lorsque la section est constante
- * Paramètres : void* section : section à étudier
+/* Description : Renvoie l'inertie I selon l'axe z lorsque la section est constante.
+ * Paramètres : void* section : section à étudier.
  * Valeur renvoyée :
- *   Succès : Résultat
- *   Échec : 0. en cas de paramètres invalides :
- *             (section == NULL)
+ *   Succès : Résultat.
+ *   Échec : NAN :
+ *             section == NULL,
+ *             type de section inconnu.
  */
 {
-    BUGMSG(sect, NAN, gettext("Paramètre incorrect\n"));
+    BUGMSG(sect, NAN, gettext("Paramètre %s incorrect.\n"), "sect");
     
     switch(((Beton_Section_Rectangulaire*) sect)->type)
     {
@@ -500,18 +492,15 @@ G_MODULE_EXPORT double _1992_1_1_sections_iz(void* sect)
 
 
 G_MODULE_EXPORT double _1992_1_1_sections_ay(Beton_Barre *barre, unsigned int discretisation)
-/* Description : Renvoie le paramètre de souplesse a de la poutre selon l'axe y
- * Paramètres : Beton_Barre *barre : la barre à étudier
- *              unsigned int discretisation : partie de la barre à étudier
+/* Description : Renvoie le paramètre de souplesse a de la poutre selon l'axe y.
+ * Paramètres : Beton_Barre *barre : la barre à étudier,
+ *              unsigned int discretisation : partie de la barre à étudier.
  * Valeur renvoyée :
  *   Succès : Résultat
- *   Échec : 0. en cas de paramètres invalides :
- *             (barre == NULL) ou
- *             (barre->section == NULL) ou
- *             (barre->materiau) ou
- *             (barre->noeud_debut) ou
- *             (barre->noeud_fin) ou
- *             (discretisation>barre->discretisation_element)
+ *   Échec : NAN :
+ *             barre == NULL,
+ *             discretisation>barre->discretisation_element,
+ *             type de section inconnu.
  */
 {
     Beton_Section_Rectangulaire *section_tmp;
@@ -519,12 +508,8 @@ G_MODULE_EXPORT double _1992_1_1_sections_ay(Beton_Barre *barre, unsigned int di
     double      ll;
     double      E;
     
-    BUGMSG(barre, NAN, gettext("Paramètre incorrect\n"));
-    BUGMSG(barre->section, NAN, gettext("Paramètre incorrect\n"));
-    BUGMSG(barre->materiau, NAN, gettext("Paramètre incorrect\n"));
-    BUGMSG(barre->noeud_debut, NAN, gettext("Paramètre incorrect\n"));
-    BUGMSG(barre->noeud_fin, NAN, gettext("Paramètre incorrect\n"));
-    BUGMSG(discretisation<=barre->discretisation_element, NAN, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre, NAN, gettext("Paramètre %s incorrect.\n"), "barre");
+    BUGMSG(discretisation<=barre->discretisation_element, NAN, gettext("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element);
     
     // Le coefficient a est défini par la formule :\end{verbatim}\begin{displaymath}
     // a_y = \frac{1}{l^2}\int_0^l \frac{(l-x)^2}{E \cdot I_y(x)} dx\end{displaymath}\begin{verbatim}
@@ -564,18 +549,15 @@ G_MODULE_EXPORT double _1992_1_1_sections_ay(Beton_Barre *barre, unsigned int di
 
 
 G_MODULE_EXPORT double _1992_1_1_sections_by(Beton_Barre *barre, unsigned int discretisation)
-/* Description : Renvoie le paramètre de souplesse b de la poutre selon l'axe y
- * Paramètres : Beton_Barre *barre : la barre à étudier
- *              unsigned int discretisation : partie de la barre à étudier
+/* Description : Renvoie le paramètre de souplesse b de la poutre selon l'axe y.
+ * Paramètres : Beton_Barre *barre : la barre à étudier,
+ *              unsigned int discretisation : partie de la barre à étudier.
  * Valeur renvoyée :
  *   Succès : Résultat
- *   Échec : 0. en cas de paramètres invalides :
- *             (barre == NULL) ou
- *             (barre->section == NULL) ou
- *             (barre->materiau) ou
- *             (barre->noeud_debut) ou
- *             (barre->noeud_fin) ou
- *             (discretisation>barre->discretisation_element)
+ *   Échec : NAN :
+ *             barre == NULL,
+ *             discretisation>barre->discretisation_element,
+ *             type de section inconnu.
  */
 {
     Beton_Section_Rectangulaire *section_tmp;
@@ -583,12 +565,8 @@ G_MODULE_EXPORT double _1992_1_1_sections_by(Beton_Barre *barre, unsigned int di
     double      ll;
     double      E;
     
-    BUGMSG(barre, NAN, gettext("Paramètre incorrect\n"));
-    BUGMSG(barre->section, NAN, gettext("Paramètre incorrect\n"));
-    BUGMSG(barre->materiau, NAN, gettext("Paramètre incorrect\n"));
-    BUGMSG(barre->noeud_debut, NAN, gettext("Paramètre incorrect\n"));
-    BUGMSG(barre->noeud_fin, NAN, gettext("Paramètre incorrect\n"));
-    BUGMSG(discretisation<=barre->discretisation_element, NAN, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre, NAN, gettext("Paramètre %s incorrect.\n"), "barre");
+    BUGMSG(discretisation<=barre->discretisation_element, NAN, gettext("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element);
     
     // Le coefficient b est défini par la formule :\end{verbatim}\begin{displaymath}
     // b_y = \frac{1}{l^2}\int_0^l \frac{x \cdot (l-x)^2}{E \cdot I_y(x)} dx\end{displaymath}\begin{verbatim}
@@ -628,18 +606,15 @@ G_MODULE_EXPORT double _1992_1_1_sections_by(Beton_Barre *barre, unsigned int di
 
 
 G_MODULE_EXPORT double _1992_1_1_sections_cy(Beton_Barre *barre, unsigned int discretisation)
-/* Description : Renvoie le paramètre de souplesse c de la poutre selon l'axe y
- * Paramètres : Beton_Barre *barre : la barre à étudier
- *              unsigned int discretisation : partie de la barre à étudier
+/* Description : Renvoie le paramètre de souplesse c de la poutre selon l'axe y.
+ * Paramètres : Beton_Barre *barre : la barre à étudier,
+ *              unsigned int discretisation : partie de la barre à étudier.
  * Valeur renvoyée :
  *   Succès : Résultat
- *   Échec : 0. en cas de paramètres invalides :
- *             (barre == NULL) ou
- *             (barre->section == NULL) ou
- *             (barre->materiau) ou
- *             (barre->noeud_debut) ou
- *             (barre->noeud_fin) ou
- *             (discretisation>barre->discretisation_element)
+ *   Échec : NAN :
+ *             barre == NULL,
+ *             discretisation>barre->discretisation_element,
+ *             type de section inconnu.
  */
 {
     Beton_Section_Rectangulaire *section_tmp;
@@ -647,12 +622,8 @@ G_MODULE_EXPORT double _1992_1_1_sections_cy(Beton_Barre *barre, unsigned int di
     double      ll;
     double      E;
     
-    BUGMSG(barre, NAN, gettext("Paramètre incorrect\n"));
-    BUGMSG(barre->section, NAN, gettext("Paramètre incorrect\n"));
-    BUGMSG(barre->materiau, NAN, gettext("Paramètre incorrect\n"));
-    BUGMSG(barre->noeud_debut, NAN, gettext("Paramètre incorrect\n"));
-    BUGMSG(barre->noeud_fin, NAN, gettext("Paramètre incorrect\n"));
-    BUGMSG(discretisation<=barre->discretisation_element, NAN, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre, NAN, gettext("Paramètre %s incorrect.\n"), "barre");
+    BUGMSG(discretisation<=barre->discretisation_element, NAN, gettext("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element);
     
     // Le coefficient c est défini par la formule :\end{verbatim}\begin{displaymath}
     // c_y = \frac{1}{l^2}\int_0^l \frac{x^2}{E \cdot I_y(x)} dx\end{displaymath}\begin{verbatim}
@@ -692,18 +663,15 @@ G_MODULE_EXPORT double _1992_1_1_sections_cy(Beton_Barre *barre, unsigned int di
 
 
 G_MODULE_EXPORT double _1992_1_1_sections_az(Beton_Barre *barre, unsigned int discretisation)
-/* Description : Renvoie le paramètre de souplesse a de la poutre selon l'axe z
- * Paramètres : Beton_Barre *barre : la barre à étudier
- *              unsigned int discretisation : partie de la barre à étudier
+/* Description : Renvoie le paramètre de souplesse a de la poutre selon l'axe z.
+ * Paramètres : Beton_Barre *barre : la barre à étudier,
+ *              unsigned int discretisation : partie de la barre à étudier.
  * Valeur renvoyée :
  *   Succès : Résultat
- *   Échec : 0. en cas de paramètres invalides :
- *             (barre == NULL) ou
- *             (barre->section == NULL) ou
- *             (barre->materiau) ou
- *             (barre->noeud_debut) ou
- *             (barre->noeud_fin) ou
- *             (discretisation>barre->discretisation_element)
+ *   Échec : NAN :
+ *             barre == NULL,
+ *             discretisation>barre->discretisation_element,
+ *             type de section inconnu.
  */
 {
     Beton_Section_Rectangulaire *section_tmp;
@@ -711,12 +679,8 @@ G_MODULE_EXPORT double _1992_1_1_sections_az(Beton_Barre *barre, unsigned int di
     double      ll;
     double      E;
     
-    BUGMSG(barre, NAN, gettext("Paramètre incorrect\n"));
-    BUGMSG(barre->section, NAN, gettext("Paramètre incorrect\n"));
-    BUGMSG(barre->materiau, NAN, gettext("Paramètre incorrect\n"));
-    BUGMSG(barre->noeud_debut, NAN, gettext("Paramètre incorrect\n"));
-    BUGMSG(barre->noeud_fin, NAN, gettext("Paramètre incorrect\n"));
-    BUGMSG(discretisation<=barre->discretisation_element, NAN, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre, NAN, gettext("Paramètre %s incorrect.\n"), "barre");
+    BUGMSG(discretisation<=barre->discretisation_element, NAN, gettext("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element);
     
     // Le coefficient a est défini par la formule :\end{verbatim}\begin{displaymath}
     // a_z = \frac{1}{l^2}\int_0^l \frac{(l-x)^2}{E \cdot I_z(x)} dx\end{displaymath}\begin{verbatim}
@@ -756,18 +720,15 @@ G_MODULE_EXPORT double _1992_1_1_sections_az(Beton_Barre *barre, unsigned int di
 
 
 G_MODULE_EXPORT double _1992_1_1_sections_bz(Beton_Barre *barre, unsigned int discretisation)
-/* Description : Renvoie le paramètre de souplesse b de la poutre selon l'axe z
- * Paramètres : Beton_Barre *barre : la barre à étudier
- *              unsigned int discretisation : partie de la barre à étudier
+/* Description : Renvoie le paramètre de souplesse b de la poutre selon l'axe z.
+ * Paramètres : Beton_Barre *barre : la barre à étudier,
+ *              unsigned int discretisation : partie de la barre à étudier.
  * Valeur renvoyée :
  *   Succès : Résultat
- *   Échec : 0. en cas de paramètres invalides :
- *             (barre == NULL) ou
- *             (barre->section == NULL) ou
- *             (barre->materiau) ou
- *             (barre->noeud_debut) ou
- *             (barre->noeud_fin) ou
- *             (discretisation>barre->discretisation_element)
+ *   Échec : NAN :
+ *             barre == NULL,
+ *             discretisation>barre->discretisation_element,
+ *             type de section inconnu.
  */
 {
     Beton_Section_Rectangulaire *section_tmp;
@@ -775,12 +736,8 @@ G_MODULE_EXPORT double _1992_1_1_sections_bz(Beton_Barre *barre, unsigned int di
     double      ll;
     double      E;
     
-    BUGMSG(barre, NAN, gettext("Paramètre incorrect\n"));
-    BUGMSG(barre->section, NAN, gettext("Paramètre incorrect\n"));
-    BUGMSG(barre->materiau, NAN, gettext("Paramètre incorrect\n"));
-    BUGMSG(barre->noeud_debut, NAN, gettext("Paramètre incorrect\n"));
-    BUGMSG(barre->noeud_fin, NAN, gettext("Paramètre incorrect\n"));
-    BUGMSG(discretisation<=barre->discretisation_element, NAN, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre, NAN, gettext("Paramètre %s incorrect.\n"), "barre");
+    BUGMSG(discretisation<=barre->discretisation_element, NAN, gettext("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element);
     
     // Le coefficient b est défini par la formule :\end{verbatim}\begin{displaymath}
     // b_z = \frac{1}{l^2}\int_0^l \frac{x \cdot (l-x)^2}{E \cdot I_z(x)} dx\end{displaymath}\begin{verbatim}
@@ -820,18 +777,15 @@ G_MODULE_EXPORT double _1992_1_1_sections_bz(Beton_Barre *barre, unsigned int di
 
 
 G_MODULE_EXPORT double _1992_1_1_sections_cz(Beton_Barre *barre, unsigned int discretisation)
-/* Description : Renvoie le paramètre de souplesse c de la poutre selon l'axe z
- * Paramètres : Beton_Barre *barre : la barre à étudier
- *              unsigned int discretisation : partie de la barre à étudier
+/* Description : Renvoie le paramètre de souplesse c de la poutre selon l'axe z.
+ * Paramètres : Beton_Barre *barre : la barre à étudier,
+ *              unsigned int discretisation : partie de la barre à étudier.
  * Valeur renvoyée :
  *   Succès : Résultat
- *   Échec : 0. en cas de paramètres invalides :
- *             (barre == NULL) ou
- *             (barre->section == NULL) ou
- *             (barre->materiau) ou
- *             (barre->noeud_debut) ou
- *             (barre->noeud_fin) ou
- *             (discretisation>barre->discretisation_element)
+ *   Échec : NAN :
+ *             barre == NULL,
+ *             discretisation>barre->discretisation_element,
+ *             type de section inconnu.
  */
 {
     Beton_Section_Rectangulaire *section_tmp;
@@ -839,12 +793,8 @@ G_MODULE_EXPORT double _1992_1_1_sections_cz(Beton_Barre *barre, unsigned int di
     double      ll;
     double      E;
     
-    BUGMSG(barre, NAN, gettext("Paramètre incorrect\n"));
-    BUGMSG(barre->section, NAN, gettext("Paramètre incorrect\n"));
-    BUGMSG(barre->materiau, NAN, gettext("Paramètre incorrect\n"));
-    BUGMSG(barre->noeud_debut, NAN, gettext("Paramètre incorrect\n"));
-    BUGMSG(barre->noeud_fin, NAN, gettext("Paramètre incorrect\n"));
-    BUGMSG(discretisation<=barre->discretisation_element, NAN, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre, NAN, gettext("Paramètre %s incorrect.\n"), "barre");
+    BUGMSG(discretisation<=barre->discretisation_element, NAN, gettext("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element);
     
     // Le coefficient c est défini par la formule :\end{verbatim}\begin{displaymath}
     // c_z = \frac{1}{l^2}\int_0^l \frac{x^2}{E \cdot I_y(x)} dx\end{displaymath}\begin{verbatim}
@@ -884,15 +834,16 @@ G_MODULE_EXPORT double _1992_1_1_sections_cz(Beton_Barre *barre, unsigned int di
 
 
 G_MODULE_EXPORT double _1992_1_1_sections_s(void *sect)
-/* Description : Renvoie la surface de la section étudiée
+/* Description : Renvoie la surface de la section étudiée.
  * Paramètres : void* section : section à étudier.
  * Valeur renvoyée :
  *   Succès : Résultat
- *   Échec : 0. en cas de paramètres invalides :
- *             (sect == NULL) ou
+ *   Échec : NAN en cas de paramètres invalides :
+ *             sect == NULL,
+ *             type de section inconnue.
  */
 {
-    BUGMSG(sect, NAN, gettext("Paramètre incorrect\n"));
+    BUGMSG(sect, NAN, gettext("Paramètre %s incorrect.\n"), "sect");
     
     switch(((Beton_Section_Rectangulaire*) sect)->type)
     {
@@ -943,33 +894,26 @@ G_MODULE_EXPORT double _1992_1_1_sections_s(void *sect)
 
 G_MODULE_EXPORT double _1992_1_1_sections_es_l(Beton_Barre *barre, unsigned int discretisation,
   double d, double f)
-/* Description : Renvoie l'équivalent du rapport ES/L pour la barre étudiée
+/* Description : Renvoie l'équivalent du rapport ES/L pour la barre étudiée.
  * Paramètres : Beton_Barre *barre : la barre à étudier,
  *              unsigned int discretisation : partie de la barre à étudier,
  *              double d : début de la partie à prendre en compte,
  *              double f : fin de la partie à prendre en compte.
  * Valeur renvoyée :
  *   Succès : Résultat
- *   Échec : 0. en cas de paramètres invalides :
- *             (barre == NULL) ou
- *             (barre->section == NULL) ou
- *             (barre->materiau) ou
- *             (barre->noeud_debut) ou
- *             (barre->noeud_fin) ou
- *             (discretisation>barre->discretisation_element)
- *             (debut>fin)
+ *   Échec : NAN :
+ *             barre == NULL,
+ *             discretisation>barre->discretisation_element,
+ *             debut>fin,
+ *             type de section inconnue.
  */
 {
     Beton_Section_Rectangulaire *section_tmp;
     double      E;
     
-    BUGMSG(barre, NAN, gettext("Paramètre incorrect\n"));
-    BUGMSG(barre->section, NAN, gettext("Paramètre incorrect\n"));
-    BUGMSG(barre->materiau, NAN, gettext("Paramètre incorrect\n"));
-    BUGMSG(barre->noeud_debut, NAN, gettext("Paramètre incorrect\n"));
-    BUGMSG(barre->noeud_fin, NAN, gettext("Paramètre incorrect\n"));
-    BUGMSG(discretisation<=barre->discretisation_element, NAN, gettext("Paramètre incorrect\n"));
-    BUGMSG(!((d>f) && (!(ERREUR_RELATIVE_EGALE(d, f)))), NAN, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre, NAN, gettext("Paramètre %s incorrect.\n"), "barre");
+    BUGMSG(discretisation<=barre->discretisation_element, NAN, gettext("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element);
+    BUGMSG(!((d>f) && (!(ERREUR_RELATIVE_EGALE(d, f)))), NAN, gettext("\n"));
     
     // Le facteur ES/L est défini par la formule :\end{verbatim}\begin{displaymath}
     // \frac{E \cdot S}{L} = \frac{E}{\int_d^f \frac{1}{S(x)} dx}\end{displaymath}\begin{verbatim}
@@ -1033,18 +977,15 @@ G_MODULE_EXPORT double _1992_1_1_sections_es_l(Beton_Barre *barre, unsigned int 
 
 
 G_MODULE_EXPORT double _1992_1_1_sections_gj_l(Beton_Barre *barre, unsigned int discretisation)
-/* Description : Renvoie l'équivalent du rapport GJ/L pour la barre étudiée
- * Paramètres : Beton_Barre *barre : la barre à étudier
- *              unsigned int discretisation : partie de la barre à étudier
+/* Description : Renvoie l'équivalent du rapport GJ/L pour la barre étudiée.
+ * Paramètres : Beton_Barre *barre : la barre à étudier,
+ *              unsigned int discretisation : partie de la barre à étudier.
  * Valeur renvoyée :
  *   Succès : Résultat
- *   Échec : 0. en cas de paramètres invalides :
- *             (barre == NULL) ou
- *             (barre->section == NULL) ou
- *             (barre->materiau) ou
- *             (barre->noeud_debut) ou
- *             (barre->noeud_fin) ou
- *             (discretisation>barre->discretisation_element)
+ *   Échec : NAN :
+ *             barre == NULL,
+ *             discretisation>barre->discretisation_element,
+ *             type de section inconnue.
  */
 {
     Beton_Section_Rectangulaire *section_tmp;
@@ -1052,12 +993,8 @@ G_MODULE_EXPORT double _1992_1_1_sections_gj_l(Beton_Barre *barre, unsigned int 
     double      ll;
     double      G;
     
-    BUGMSG(barre, NAN, gettext("Paramètre incorrect\n"));
-    BUGMSG(barre->section, NAN, gettext("Paramètre incorrect\n"));
-    BUGMSG(barre->materiau, NAN, gettext("Paramètre incorrect\n"));
-    BUGMSG(barre->noeud_debut, NAN, gettext("Paramètre incorrect\n"));
-    BUGMSG(barre->noeud_fin, NAN, gettext("Paramètre incorrect\n"));
-    BUGMSG(discretisation<=barre->discretisation_element, NAN, gettext("Paramètre incorrect\n"));
+    BUGMSG(barre, NAN, gettext("Paramètre %s incorrect.\n"), "barre");
+    BUGMSG(discretisation<=barre->discretisation_element, NAN, gettext("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element);
     
     // Le facteur GJ/L est défini par la formule :\end{verbatim}\begin{displaymath}
     // \frac{G \cdot J}{L} = \frac{G}{\int_0^l \frac{1}{J(x)} dx}\end{displaymath}\begin{verbatim}
@@ -1152,34 +1089,42 @@ G_MODULE_EXPORT double _1992_1_1_sections_gj_l(Beton_Barre *barre, unsigned int 
 }
 
 
-void _1992_1_1_sections_free_un(Beton_Section_Rectangulaire *section)
+void _1992_1_1_sections_free_un(void *data)
+/* Description : Fonction permettant de libérer une section.
+ * Paramètres : Beton_Section_Rectangulaire *section : section à libérer.
+ * Valeur renvoyée : Aucun.
+ */
 {
+    Beton_Section_Rectangulaire *section = data;
+    
     free(section->nom);
     free(section);
+    
     return;
 }
 
 
-G_MODULE_EXPORT int _1992_1_1_sections_free(Projet *projet)
+G_MODULE_EXPORT gboolean _1992_1_1_sections_free(Projet *projet)
 /* Description : Libère l'ensemble des sections en béton
  * Paramètres : Projet *projet : la variable projet
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : -1 en cas de paramètres invalides :
- *             (projet == NULL) ou
- *             (projet->beton.sections == NULL)
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL.
  */
 {
-    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
     // Trivial
     if (projet->beton.sections != NULL)
     {
-        g_list_free_full(projet->beton.sections, free);
+        g_list_free_full(projet->beton.sections, &_1992_1_1_sections_free_un);
         projet->beton.sections = NULL;
     }
     
-    projet->beton.sections = NULL;
+#ifdef ENABLE_GTK
+    g_object_unref(projet->list_gtk.ef_barres.liste_sections);
+#endif
     
-    return 0;
+    return TRUE;
 }

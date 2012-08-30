@@ -16,18 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __COMMON_SELECTION_H
-#define __COMMON_SELECTION_H
+#ifndef __EF_GTK_BARRES_ADD_H
+#define __EF_GTK_BARRES_ADD_H
 
 #include "config.h"
+#ifdef ENABLE_GTK
+#include <gtk/gtk.h>
+
 #include "common_projet.h"
 
+void EF_gtk_barres_ajouter(GtkButton *button __attribute__((unused)), Projet *projet);
 
-int common_selection_ajout_nombre(void *data, GList **liste, Type_Liste type) __attribute__((__warn_unused_result__));
-GList *common_selection_renvoie_numeros(const char *texte);
-GList *common_selection_converti_numeros_en_noeuds(GList *liste_numeros, Projet *projet);
-GList *common_selection_converti_numeros_en_barres(GList *liste_numeros, Projet *projet);
-char *common_selection_converti_noeuds_en_texte(GList *liste_noeuds);
-char *common_selection_converti_barres_en_texte(GList *liste_barres);
+#endif
 
 #endif

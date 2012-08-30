@@ -8,6 +8,7 @@ applicationuidir	=	$(datadir)/2lgc/ui
 applicationui_DATA	=	ui/1990_gtk_actions.ui \
 						ui/1990_gtk_groupes.ui \
 						ui/1990_gtk_groupes_options.ui \
+						ui/EF_gtk_appuis.ui \
 						ui/EF_gtk_barres.ui \
 						ui/EF_gtk_barres_add.ui \
 						ui/EF_gtk_noeud.ui \

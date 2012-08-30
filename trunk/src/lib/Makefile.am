@@ -45,12 +45,15 @@ libeurocodes_la_SOURCES =	1990/1990_actions.c \
 if ENABLE_GTK
 libeurocodes_la_SOURCES +=	common/common_m3d.cc \
 							1990/1990_gtk_groupes.c \
+							1990/1990_gtk_groupes_options.c \
 							1990/1990_gtk_actions.c \
 							EF/EF_gtk_charge_noeud.c \
 							EF/EF_gtk_charge_barre_ponctuelle.c \
 							EF/EF_gtk_charge_barre_repartie_uniforme.c \
 							EF/EF_gtk_noeud.cc \
+							EF/EF_gtk_appuis.cc \
 							EF/EF_gtk_barres.cc \
+							EF/EF_gtk_barres_add.cc \
 							common/common_gtk.c
 endif
 
@@ -84,11 +87,14 @@ libeurocodes_la_HEADERS =	1990/1990_actions.h \
 if ENABLE_GTK
 libeurocodes_la_HEADERS +=	common/common_m3d.hpp \
 							1990/1990_gtk_groupes.h \
+							1990/1990_gtk_groupes_options.h \
 							1990/1990_gtk_actions.h \
 							EF/EF_gtk_charge_noeud.h \
 							EF/EF_gtk_charge_barre_ponctuelle.h \
 							EF/EF_gtk_charge_barre_repartie_uniforme.h \
 							EF/EF_gtk_noeud.hpp \
+							EF/EF_gtk_appuis.hpp \
 							EF/EF_gtk_barres.hpp \
+							EF/EF_gtk_barres_add.hpp \
 							common/common_gtk.h
 endif

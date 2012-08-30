@@ -20,47 +20,125 @@
 #include <libintl.h>
 #include <locale.h>
 #include <string.h>
+#include <gmodule.h>
+
 #include "common_projet.h"
 #include "EF_noeud.h"
 #include "1992_1_1_barres.h"
 #include "common_erreurs.h"
 
-int common_selection_ajout_nombre(unsigned int nombre, GList **liste)
+gboolean common_selection_ajout_nombre(void *data, GList **liste, Type_Liste type)
 /* Description : ajoute un nombre à la liste chainée.
- * Paramètres : unsigned int nombre : nombre à ajouter,
- *              GList **liste : liste où le nombre doit être ajouter.
+ * Paramètres : void *data : donnée à ajouter,
+ *            : GList **liste : liste où le nombre doit être ajouter,
+ *            : Type_Liste type : nature de la donnée data.
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : -1 en cas d'échec.
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             liste == NULL.
  */
 {
     GList           *list_parcours;
-    unsigned int    nombre_liste;
+    
+    BUGMSG(liste, FALSE, gettext("Paramètre %s incorrect.\n"), "liste");
     
     if (*liste == NULL)
     {
-        *liste = g_list_append(*liste, GUINT_TO_POINTER(nombre));
-        return 0;
+        switch (type)
+        {
+            case LISTE_UINT :
+            case LISTE_NOEUDS :
+            case LISTE_BARRES :
+            {
+                *liste = g_list_append(*liste, data);
+                return TRUE;
+            }
+            default :
+            {
+                BUGMSG(NULL, FALSE, gettext("Le type %d de la liste est inconnu.\n"), type);
+            }
+        }
     }
     
     list_parcours = *liste;
     do
     {
-        nombre_liste = GPOINTER_TO_UINT(list_parcours->data);
-        
-        if (nombre_liste == nombre)
-            return 0;
-        else if (nombre_liste > nombre)
+        switch (type)
         {
-            *liste = g_list_insert_before(*liste, list_parcours, GUINT_TO_POINTER(nombre));
-            return 0;
+            case LISTE_UINT :
+            {
+                unsigned int    nombre_liste, nombre;
+                
+                nombre_liste = GPOINTER_TO_UINT(list_parcours->data);
+                nombre = GPOINTER_TO_UINT(data);
+                
+                if (nombre_liste == nombre)
+                    return TRUE;
+                else if (nombre_liste > nombre)
+                {
+                    *liste = g_list_insert_before(*liste, list_parcours, data);
+                    return TRUE;
+                }
+                break;
+            }
+            case LISTE_NOEUDS :
+            {
+                EF_Noeud    *noeud_liste, *noeud;
+                
+                noeud_liste = list_parcours->data;
+                noeud = data;
+                
+                if (noeud_liste->numero == noeud->numero)
+                    return TRUE;
+                else if (noeud_liste->numero > noeud->numero)
+                {
+                    *liste = g_list_insert_before(*liste, list_parcours, data);
+                    return TRUE;
+                }
+                break;
+            }
+            case LISTE_BARRES :
+            {
+                Beton_Barre *barre_liste, *barre;
+                
+                barre_liste = list_parcours->data;
+                barre = data;
+                
+                if (barre_liste->numero == barre->numero)
+                    return TRUE;
+                else if (barre_liste->numero > barre->numero)
+                {
+                    *liste = g_list_insert_before(*liste, list_parcours, data);
+                    return TRUE;
+                }
+                break;
+            }
+            default :
+            {
+                BUGMSG(NULL, FALSE, gettext("Le type %d de la liste est inconnu.\n"), type);
+            }
         }
         list_parcours = g_list_next(list_parcours);
     } while (list_parcours != NULL);
     
-    *liste = g_list_append(*liste, GUINT_TO_POINTER(nombre));
-    
-    return 0;
+    switch (type)
+    {
+        case LISTE_UINT :
+        {
+            *liste = g_list_append(*liste, GUINT_TO_POINTER(data));
+            return TRUE;
+        }
+        case LISTE_NOEUDS :
+        case LISTE_BARRES :
+        {
+            *liste = g_list_append(*liste, data);
+            return TRUE;
+        }
+        default :
+        {
+            BUGMSG(NULL, FALSE, gettext("Le type %d de la liste est inconnu.\n"), type);
+        }
+    }
 }
 
 
@@ -69,19 +147,20 @@ int common_selection_ajout_nombre(unsigned int nombre, GList **liste)
 // 1 2 3 4 6 7 8 9 10 12 14 16 18 20
 G_MODULE_EXPORT GList *common_selection_renvoie_numeros(const char *texte)
 /* Description : Renvoie sous forme d'une liste de numéros les numéros sous forme de texte.
- * Paramètres : const char *texte : le texte à convertir en numéros
+ * Paramètres : const char *texte : le texte à convertir en numéros.
  * Valeur renvoyée :
- *   Succès : Un pointeur vers une liste de numéros triée
- *   Échec : NULL en cas de problème.
+ *   Succès : Un pointeur vers une liste de numéros triée.
+ *   Échec : NULL :
+ *             Erreur d'allocation mémoire,
+ *             format de texte illisible.
  */
 {
     char            *texte_clean;
     GList           *list;
     unsigned int    i, j;
     
-    list = NULL;
     if (texte == NULL)
-        return list;
+        return NULL;
     
     BUGMSG(texte_clean = malloc(sizeof(char)*(strlen(texte)+1)), NULL, gettext("Erreur d'allocation mémoire.\n"));
     
@@ -101,19 +180,22 @@ G_MODULE_EXPORT GList *common_selection_renvoie_numeros(const char *texte)
             texte_clean[i] = ';';
             i++;
         }
+        // En cas de caractères inconnus, on ne fait rien
         else
         {
-            g_list_free(list);
             free(texte_clean);
             return NULL;
         }
     }
+    
     texte_clean[i] = 0;
     if (i == 0)
     {
         free(texte_clean);
-        return list;
+        return NULL;
     }
+    
+    list = NULL;
     
     // On parcours chaque numéro et on les ajoute à la liste.
     i = 0;
@@ -144,17 +226,18 @@ G_MODULE_EXPORT GList *common_selection_renvoie_numeros(const char *texte)
                 if (sscanf(tmp, "%u-%u/%u%s", &debut, &fin, &pas, fake) == 3)
                 {
                     for (i=debut;i<=fin;i=i+pas)
-                        BUG(common_selection_ajout_nombre(i, &list) == 0, NULL);
+                        BUG(common_selection_ajout_nombre(GUINT_TO_POINTER(i), &list, LISTE_UINT), NULL);
                 }
                 // Si c'est du format debut-fin
                 else if (sscanf(tmp, "%u-%u%s", &debut, &fin, fake) == 2)
                 {
                     for (i=debut;i<=fin;i++)
-                        BUG(common_selection_ajout_nombre(i, &list) == 0, NULL);
+                        BUG(common_selection_ajout_nombre(GUINT_TO_POINTER(i), &list, LISTE_UINT), NULL);
                 }
                 // Si c'est du format nombre simple
                 else if (sscanf(tmp, "%u%s", &debut, fake) == 1)
-                    BUG(common_selection_ajout_nombre(debut, &list) == 0, NULL);
+                    BUG(common_selection_ajout_nombre(GUINT_TO_POINTER(debut), &list, LISTE_UINT), NULL);
+                // Le format est inconnu.
                 else
                 {
                     free(tmp);
@@ -177,13 +260,15 @@ G_MODULE_EXPORT GList *common_selection_renvoie_numeros(const char *texte)
 }
 
 
-G_MODULE_EXPORT GList *common_selection_converti_numeros_en_noeuds(GList *liste_numeros, Projet *projet)
+G_MODULE_EXPORT GList *common_selection_converti_numeros_en_noeuds(GList *liste_numeros,
+  Projet *projet)
 /* Description : Renvoie sous forme d'une liste de noeuds la liste des numéros.
  * Paramètres : GList *liste_numeros : la liste des numéros à convertir en liste de noeuds,
  *              Projet *projet : la variable projet.
  * Valeur renvoyée :
- *   Succès : Un pointeur vers une liste des noeuds
- *   Échec : NULL en cas de problème.
+ *   Succès : Un pointeur vers une liste des noeuds.
+ *   Échec : NULL :
+ *             un des noeuds est inexistant.
  */
 {
     GList   *liste_noeuds = NULL;
@@ -214,13 +299,15 @@ G_MODULE_EXPORT GList *common_selection_converti_numeros_en_noeuds(GList *liste_
 }
 
 
-G_MODULE_EXPORT GList *common_selection_converti_numeros_en_barres(GList *liste_numeros, Projet *projet)
+G_MODULE_EXPORT GList *common_selection_converti_numeros_en_barres(GList *liste_numeros,
+  Projet *projet)
 /* Description : Renvoie sous forme d'une liste de barres la liste des numéros.
  * Paramètres : GList *liste_numeros : la liste des numéros à convertir en liste de barres,
  *              Projet *projet : la variable projet.
  * Valeur renvoyée :
- *   Succès : Un pointeur vers une liste des barres
- *   Échec : NULL en cas de problème.
+ *   Succès : Un pointeur vers une liste des barres.
+ *   Échec : NULL :
+ *             une des barres est inexistante.
  */
 {
     GList   *list_parcours;
@@ -255,7 +342,8 @@ G_MODULE_EXPORT char *common_selection_converti_noeuds_en_texte(GList *liste_noe
  * Paramètres : GList *liste_noeuds : la liste des noeuds à convertir en texte,
  * Valeur renvoyée :
  *   Succès : le texte correspondant.
- *   Échec : NULL en cas de problème.
+ *   Échec : NULL :
+ *             Erreur d'allocation mémoire,
  */
 {
     char        *tmp = NULL, *tmp2 = NULL;
@@ -294,7 +382,8 @@ G_MODULE_EXPORT char *common_selection_converti_barres_en_texte(GList *liste_bar
  * Paramètres : GList *liste_barres : la liste des barres à convertir en texte,
  * Valeur renvoyée :
  *   Succès : le texte correspondant.
- *   Échec : NULL en cas de problème.
+ *   Échec : NULL :
+ *             Erreur d'allocation mémoire.
  */
 {
     char        *tmp, *tmp2;

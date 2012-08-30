@@ -43,71 +43,16 @@ extern "C" {
 #include "1992_1_1_section.h"
 #include "1992_1_1_materiaux.h"
 
-G_MODULE_EXPORT void EF_gtk_barres_add_annuler_clicked(GtkButton *button __attribute__((unused)), Projet *projet)
-/* Description : Ferme la fenêtre sans effectuer les modifications
- * Paramètres : GtkWidget *button : composant à l'origine de l'évènement
- *            : Projet *projet : la variable projet
- * Valeur renvoyée : Aucune
+G_MODULE_EXPORT void EF_gtk_barres_fermer(GtkButton *button __attribute__((unused)),
+  Projet *projet)
+/* Description : Ferme la fenêtre.
+ * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : Aucune.
  */
 {
-    BUGMSG(projet, , gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->list_gtk.ef_barres.builder_add, , gettext("Paramètre incorrect\n"));
-    
-    gtk_widget_destroy(projet->list_gtk.ef_barres.window_add);
-    
-    return;
-}
-
-
-G_MODULE_EXPORT void EF_gtk_barres_add_add_clicked(GtkButton *button __attribute__((unused)), Projet *projet)
-/* Description : Ajoute une nouvelle barre
- * Paramètres : GtkWidget *button : composant à l'origine de l'évènement
- *            : Projet *projet : la variable projet
- * Valeur renvoyée : Aucune
- */
-{
-    int         type;
-    int         section;
-    int         materiau;
-    int         noeud_debut;
-    int         noeud_fin;
-    EF_Relachement* relachement;
-    
-    List_Gtk_EF_Barres  *ef_gtk;
-    
-    BUGMSG(projet, , gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->list_gtk.ef_barres.builder_add, , gettext("Paramètre incorrect\n"));
-    
-    ef_gtk = &projet->list_gtk.ef_barres;
-    
-    type = gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_type_combobox")));
-    section = gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_section_combobox")));
-    materiau = gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_materiau_combobox")));
-    relachement = EF_relachement_cherche_numero(projet, gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_relachement_combobox")))-1);
-    noeud_debut = gtk_common_entry_renvoie_int(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_noeud1_buffer")));
-    noeud_fin = gtk_common_entry_renvoie_int(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_noeud2_buffer")));
-    if ((EF_noeuds_cherche_numero(projet, noeud_debut) == NULL) || (EF_noeuds_cherche_numero(projet, noeud_fin) == NULL))
-        return;
-    
-    if ((type != -1) && (section != -1) && (materiau != -1))
-    {
-        BUG(_1992_1_1_barres_ajout(projet, (Type_Element)type, section, materiau, noeud_debut, noeud_fin, relachement, 0) == 0, );
-        m3d_rafraichit(projet);
-    }
-    
-    return;
-}
-
-
-G_MODULE_EXPORT void EF_gtk_barres_fermer(GtkButton *button __attribute__((unused)), Projet *projet)
-/* Description : Ferme la fenêtre sans effectuer les modifications
- * Paramètres : GtkWidget *button : composant à l'origine de l'évènement
- *            : Projet *projet : la variable projet
- * Valeur renvoyée : Aucune
- */
-{
-    BUGMSG(projet, , gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->list_gtk.ef_barres.builder, , gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet->list_gtk.ef_barres.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Barres");
     
     gtk_widget_destroy(projet->list_gtk.ef_barres.window);
     
@@ -115,55 +60,36 @@ G_MODULE_EXPORT void EF_gtk_barres_fermer(GtkButton *button __attribute__((unuse
 }
 
 
-G_MODULE_EXPORT void EF_gtk_barres_add_window_destroy(GtkWidget *object __attribute__((unused)), Projet *projet)
-/* Description : met projet->list_gtk._1990_groupes.window à NULL quand la fenêtre se ferme
+G_MODULE_EXPORT void EF_gtk_barres_window_destroy(GtkWidget *object __attribute__((unused)),
+  Projet *projet)
+/* Description : met projet->list_gtk.ef_barres.builder à NULL quand la fenêtre se ferme,
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
- *            : Projet *projet : la variable projet
- * Valeur renvoyée : Aucune
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : Aucune.
  */
 {
-    BUGMSG(projet, , gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->list_gtk.ef_barres.builder_add, , gettext("Paramètre incorrect\n"));
-    
-    projet->list_gtk.ef_barres.builder_add = NULL;
-    return;
-}
-
-
-G_MODULE_EXPORT void EF_gtk_barres_window_destroy(GtkWidget *object __attribute__((unused)), Projet *projet)
-/* Description : met projet->list_gtk._1990_groupes.window à NULL quand la fenêtre se ferme
- * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
- *            : Projet *projet : la variable projet
- * Valeur renvoyée : Aucune
- */
-{
-    BUGMSG(projet, , gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->list_gtk.ef_barres.builder, , gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet->list_gtk.ef_barres.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Barres");
     
     projet->list_gtk.ef_barres.builder = NULL;
     return;
 }
 
 
-G_MODULE_EXPORT gboolean EF_gtk_barres_add_window_key_press(GtkWidget *widget __attribute__((unused)), GdkEvent *event, Projet *projet)
+G_MODULE_EXPORT gboolean EF_gtk_barres_window_key_press(
+  GtkWidget *widget __attribute__((unused)), GdkEvent *event, Projet *projet)
+/* Description : Ferme la fenêtre si la touche ECHAP est pressée.
+ * Paramètres : GtkWidget *widget : composant à l'origine de l'évènement,
+ *            : GdkEvent *event : Caractéristique de l'évènement,
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : TRUE si la touche DELETE est pressée, FALSE sinon.
+ *   Echec : projet == NULL,
+ *           interface graphique non initialisée.
+ *  
+ */
 {
-    BUGMSG(projet, TRUE, gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->list_gtk.ef_barres.builder_add, TRUE, gettext("Paramètre incorrect\n"));
-    
-    if (event->key.keyval == GDK_KEY_Escape)
-    {
-        gtk_widget_destroy(projet->list_gtk.ef_barres.window_add);
-        return TRUE;
-    }
-    else
-        return FALSE;
-}
-
-
-G_MODULE_EXPORT gboolean EF_gtk_barres_window_key_press(GtkWidget *widget __attribute__((unused)), GdkEvent *event, Projet *projet)
-{
-    BUGMSG(projet, TRUE, gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->list_gtk.ef_barres.builder, TRUE, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, TRUE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet->list_gtk.ef_barres.builder, TRUE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Barres");
     
     if (event->key.keyval == GDK_KEY_Escape)
     {
@@ -175,13 +101,14 @@ G_MODULE_EXPORT gboolean EF_gtk_barres_window_key_press(GtkWidget *widget __attr
 }
 
 
-G_MODULE_EXPORT void EF_gtk_barres_edit_type(GtkCellRendererText *cell __attribute__((unused)), const gchar *path_string, const gchar *new_text, Projet *projet)
+G_MODULE_EXPORT void EF_gtk_barres_edit_type(GtkCellRendererText *cell __attribute__((unused)),
+  const gchar *path_string, const gchar *new_text, Projet *projet)
 /* Description : Changement du type d'une barre.
  * Paramètres : GtkCellRendererText *cell : cellule en cours,
  *            : gchar *path_string : path de la ligne en cours,
  *            : gchar *new_text : nom du type de barre,
- *            : Projet *projet : la variable projet
- * Valeur renvoyée : Aucune
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : Aucune.
 */
 {
     List_Gtk_EF_Barres  *ef_gtk;
@@ -192,9 +119,9 @@ G_MODULE_EXPORT void EF_gtk_barres_edit_type(GtkCellRendererText *cell __attribu
     char                *nom_type;
     gint                parcours;
     
-    BUGMSG(projet, , gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->list_gtk.ef_barres.builder, , gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->list_gtk.ef_barres.liste_types, , gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet->list_gtk.ef_barres.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Barres");
+    BUGMSG(projet->list_gtk.ef_barres.liste_types, , gettext("La liste des types de barre est indéfinie.\n"));
     
     ef_gtk = &projet->list_gtk.ef_barres;
     
@@ -206,13 +133,10 @@ G_MODULE_EXPORT void EF_gtk_barres_edit_type(GtkCellRendererText *cell __attribu
     BUG(barre = _1992_1_1_barres_cherche_numero(projet, numero_barre), );
     
     parcours = 0;
-    BUGMSG(gtk_tree_model_get_iter_first(GTK_TREE_MODEL(projet->list_gtk.ef_barres.liste_types), &iter2) == TRUE, , gettext("Paramètre incorrect\n"));
+    BUGMSG(gtk_tree_model_get_iter_first(GTK_TREE_MODEL(projet->list_gtk.ef_barres.liste_types), &iter2) == TRUE, , gettext("Aucun type de barre n'est défini.\n"));
     gtk_tree_model_get(GTK_TREE_MODEL(projet->list_gtk.ef_barres.liste_types), &iter2, 0, &nom_type, -1);
     if (strcmp(nom_type, new_text) == 0)
-    {
-        barre->type = (Type_Element)0;
-        gtk_tree_store_set(GTK_TREE_STORE(model), &iter, 1, new_text, -1);
-    }
+        BUG(_1992_1_1_barres_change_type(barre, (Type_Element)0, projet), );
     else
     {
         parcours = 1;
@@ -221,12 +145,12 @@ G_MODULE_EXPORT void EF_gtk_barres_edit_type(GtkCellRendererText *cell __attribu
             gtk_tree_model_get(GTK_TREE_MODEL(projet->list_gtk.ef_barres.liste_types), &iter2, 0, &nom_type, -1);
             if (strcmp(nom_type, new_text) == 0)
             {
-                barre->type = (Type_Element)parcours;
-                gtk_tree_store_set(GTK_TREE_STORE(model), &iter, 1, new_text, -1);
+                BUG(_1992_1_1_barres_change_type(barre, (Type_Element)parcours, projet), );
                 return;
             }
             parcours++;
         }
+        // Impossible (normalement)
         BUGMSG(NULL, , gettext("Impossible de trouver le type de l'élément.\n"));
     }
     
@@ -234,53 +158,49 @@ G_MODULE_EXPORT void EF_gtk_barres_edit_type(GtkCellRendererText *cell __attribu
 }
 
 
-G_MODULE_EXPORT void EF_gtk_barres_edit_section(GtkCellRendererText *cell __attribute__((unused)), const gchar *path_string, const gchar *new_text, Projet *projet)
+G_MODULE_EXPORT void EF_gtk_barres_edit_section(
+  GtkCellRendererText *cell __attribute__((unused)), const gchar *path_string,
+  const gchar *new_text, Projet *projet)
 /* Description : Changement la section d'une barre.
  * Paramètres : GtkCellRendererText *cell : cellule en cours,
  *            : gchar *path_string : path de la ligne en cours,
  *            : gchar *new_text : nom du type de barre,
- *            : Projet *projet : la variable projet
- * Valeur renvoyée : Aucune
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : Aucune.
 */
 {
-    List_Gtk_EF_Barres  *ef_gtk;
     GtkTreeModel        *model;
     GtkTreeIter         iter;
     guint               numero_barre;
     Beton_Barre         *barre = NULL;
     void                *section;
     
-    BUGMSG(projet, , gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->list_gtk.ef_barres.builder, , gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->list_gtk.ef_barres.liste_sections, , gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet->list_gtk.ef_barres.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Barres");
+    BUGMSG(projet->list_gtk.ef_barres.liste_sections, , gettext("La liste des sections est indéfinie.\n"));
     
-    ef_gtk = &projet->list_gtk.ef_barres;
-    
-    model = GTK_TREE_MODEL(gtk_builder_get_object(ef_gtk->builder, "EF_barres_treestore"));
+    model = GTK_TREE_MODEL(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treestore"));
     
     gtk_tree_model_get_iter_from_string(model, &iter, path_string);
     gtk_tree_model_get(model, &iter, 0, &numero_barre, -1);
     
     BUG(barre = _1992_1_1_barres_cherche_numero(projet, numero_barre), );
     BUG(section = _1992_1_1_sections_cherche_nom(projet, new_text), );
-    barre->section = section;
-    
-    m3d_barre(projet, barre);
-    m3d_rafraichit(projet);
-    
-    gtk_tree_store_set(GTK_TREE_STORE(model), &iter, 2, new_text, -1);
+    BUG(_1992_1_1_barres_change_section(barre, section, projet), );
     
     return;
 }
 
 
-G_MODULE_EXPORT void EF_gtk_barres_edit_materiau(GtkCellRendererText *cell __attribute__((unused)), const gchar *path_string, const gchar *new_text, Projet *projet)
+G_MODULE_EXPORT void EF_gtk_barres_edit_materiau(
+  GtkCellRendererText *cell __attribute__((unused)), const gchar *path_string,
+  const gchar *new_text, Projet *projet)
 /* Description : Changement la section d'une barre.
  * Paramètres : GtkCellRendererText *cell : cellule en cours,
  *            : gchar *path_string : path de la ligne en cours,
  *            : gchar *new_text : nom du type de barre,
- *            : Projet *projet : la variable projet
- * Valeur renvoyée : Aucune
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : Aucune.
 */
 {
     List_Gtk_EF_Barres  *ef_gtk;
@@ -290,9 +210,9 @@ G_MODULE_EXPORT void EF_gtk_barres_edit_materiau(GtkCellRendererText *cell __att
     Beton_Barre         *barre = NULL;
     Beton_Materiau      *materiau;
     
-    BUGMSG(projet, , gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->list_gtk.ef_barres.builder, , gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->list_gtk.ef_barres.liste_materiaux, , gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet->list_gtk.ef_barres.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Barres");
+    BUGMSG(projet->list_gtk.ef_barres.liste_materiaux, , gettext("La liste des matériaux est indéfinie.\n"));
     
     ef_gtk = &projet->list_gtk.ef_barres;
     
@@ -303,21 +223,21 @@ G_MODULE_EXPORT void EF_gtk_barres_edit_materiau(GtkCellRendererText *cell __att
     
     BUG(barre = _1992_1_1_barres_cherche_numero(projet, numero_barre), );
     BUG(materiau = _1992_1_1_materiaux_cherche_nom(projet, new_text), );
-    barre->materiau = materiau;
-    
-    gtk_tree_store_set(GTK_TREE_STORE(model), &iter, 3, new_text, -1);
+    BUG(_1992_1_1_barres_change_materiau(barre, materiau, projet), );
     
     return;
 }
 
 
-G_MODULE_EXPORT void EF_gtk_barres_edit_relachement(GtkCellRendererText *cell __attribute__((unused)), const gchar *path_string, const gchar *new_text, Projet *projet)
+G_MODULE_EXPORT void EF_gtk_barres_edit_relachement(
+  GtkCellRendererText *cell __attribute__((unused)), const gchar *path_string,
+  const gchar *new_text, Projet *projet)
 /* Description : Changement du relachement d'une barre.
  * Paramètres : GtkCellRendererText *cell : cellule en cours,
  *            : gchar *path_string : path de la ligne en cours,
  *            : gchar *new_text : nom du type de barre,
- *            : Projet *projet : la variable projet
- * Valeur renvoyée : Aucune
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : Aucune.
 */
 {
     List_Gtk_EF_Barres  *ef_gtk;
@@ -327,9 +247,9 @@ G_MODULE_EXPORT void EF_gtk_barres_edit_relachement(GtkCellRendererText *cell __
     Beton_Barre         *barre = NULL;
     EF_Relachement      *relachement;
     
-    BUGMSG(projet, , gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->list_gtk.ef_barres.builder, , gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->list_gtk.ef_barres.liste_relachements, , gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet->list_gtk.ef_barres.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Barres");
+    BUGMSG(projet->list_gtk.ef_barres.liste_relachements, , gettext("La liste des relâchements de barre est indéfinie.\n"));
     
     ef_gtk = &projet->list_gtk.ef_barres;
     
@@ -340,26 +260,25 @@ G_MODULE_EXPORT void EF_gtk_barres_edit_relachement(GtkCellRendererText *cell __
     
     BUG(barre = _1992_1_1_barres_cherche_numero(projet, numero_barre), );
     if (strcmp(gettext("Aucun"), new_text) == 0)
-        barre->relachement = NULL;
+        BUG(_1992_1_1_barres_change_relachement(barre, NULL, projet), );
     else
     {
         BUG(relachement = EF_relachement_cherche_nom(projet, new_text), );
-        barre->relachement = relachement;
+        BUG(_1992_1_1_barres_change_relachement(barre, relachement, projet), );
     }
-    
-    gtk_tree_store_set(GTK_TREE_STORE(model), &iter, 6, new_text, -1);
     
     return;
 }
 
 
-G_MODULE_EXPORT void EF_gtk_barres_edit_noeud(GtkCellRendererText *cell __attribute__((unused)), gchar *path_string, gchar *new_text, Projet *projet)
+G_MODULE_EXPORT void EF_gtk_barres_edit_noeud(GtkCellRendererText *cell __attribute__((unused)),
+  gchar *path_string, gchar *new_text, Projet *projet)
 /* Description : Change le noeud initial de la barre.
  * Paramètres : GtkCellRendererText *cell : cellule en cours,
  *            : gchar *path_string : path de la ligne en cours,
  *            : gchar *new_text : nouvelle valeur,
- *            : Projet *projet : la variable projet
- * Valeur renvoyée : Aucune
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : Aucune.
  */
 {
     List_Gtk_EF_Barres      *gtk_barre;
@@ -370,9 +289,8 @@ G_MODULE_EXPORT void EF_gtk_barres_edit_noeud(GtkCellRendererText *cell __attrib
     unsigned int            conversion;
     gint                    column = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cell), "column"));
     
-    BUGMSG(projet, , gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->ef_donnees.noeuds, , gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->list_gtk.ef_barres.builder, , gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet->list_gtk.ef_barres.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Barres");
     BUGMSG(fake, , gettext("Erreur d'allocation mémoire.\n"));
     
     gtk_barre = &projet->list_gtk.ef_barres;
@@ -382,7 +300,7 @@ G_MODULE_EXPORT void EF_gtk_barres_edit_noeud(GtkCellRendererText *cell __attrib
     gtk_tree_model_get_iter_from_string(model, &iter, path_string);
     gtk_tree_model_get(model, &iter, 0, &i, -1);
     
-    // On vérifie si le texte contient bien un nombre flottant
+    // On vérifie si le texte contient bien un nombre entier
     if (sscanf(new_text, "%d%s", &conversion, fake) == 1)
     {
         EF_Noeud    *noeud;
@@ -390,21 +308,12 @@ G_MODULE_EXPORT void EF_gtk_barres_edit_noeud(GtkCellRendererText *cell __attrib
         
         // On modifie l'action
         BUG(barre = _1992_1_1_barres_cherche_numero(projet, i), );
-        noeud = EF_noeuds_cherche_numero(projet, conversion);
+        BUG(noeud = EF_noeuds_cherche_numero(projet, conversion), );
         
-        if (noeud != NULL)
-        {
-            if (column == 4)
-                barre->noeud_debut = noeud;
-            else
-                barre->noeud_fin = noeud;
-            
-            m3d_barre(projet, barre);
-            m3d_rafraichit(projet);
-            
-            // On modifie le tree-view-barre
-            gtk_tree_store_set(GTK_TREE_STORE(model), &iter, column, conversion, -1);
-        }
+        if (column == 4)
+            BUG(_1992_1_1_barres_change_noeud(barre, noeud, TRUE, projet), );
+        else
+            BUG(_1992_1_1_barres_change_noeud(barre, noeud, FALSE, projet), );
     }
     
     free(fake);
@@ -413,83 +322,20 @@ G_MODULE_EXPORT void EF_gtk_barres_edit_noeud(GtkCellRendererText *cell __attrib
 }
 
 
-G_MODULE_EXPORT void EF_gtk_barres_add_check_add(GtkWidget *widget, Projet *projet)
-{
-    List_Gtk_EF_Barres  *ef_gtk;
-    gboolean            ok = FALSE;
-    EF_Noeud            *noeud1, *noeud2;
-    
-    BUGMSG(projet, , gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->list_gtk.ef_barres.builder_add, , gettext("Paramètre incorrect\n"));
-    
-    ef_gtk = &projet->list_gtk.ef_barres;
-    
-    noeud1 = EF_noeuds_cherche_numero(projet, gtk_common_entry_renvoie_int(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_noeud1_buffer")))); 
-    noeud2 = EF_noeuds_cherche_numero(projet, gtk_common_entry_renvoie_int(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_noeud2_buffer")))); 
-
-    if (
-        (gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_type_combobox"))) != -1) &&
-        (gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_section_combobox"))) != -1) &&
-        (gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_materiau_combobox"))) != -1) &&
-        (gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_relachement_combobox"))) != -1) &&
-        (noeud1 != NULL) && (noeud2 != NULL) && (noeud1 != noeud2)
-    )
-        ok = TRUE;
-    
-    if (GTK_IS_TEXT_BUFFER(widget))
-        gtk_common_entry_check_int(GTK_TEXT_BUFFER(widget), NULL);
-    
-    gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_button_add")), ok);
-    
-    return;
-}
-
-
-G_MODULE_EXPORT void EF_gtk_barres_ajouter(GtkButton *button __attribute__((unused)), Projet *projet)
-{
-    List_Gtk_EF_Barres  *ef_gtk;
-    char                *nb_barres;
-    
-    BUGMSG(projet, , gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->list_gtk.ef_barres.builder_add == NULL, , gettext("Paramètre incorrect\n"));
-    
-    ef_gtk = &projet->list_gtk.ef_barres;
-    
-    ef_gtk->builder_add = gtk_builder_new();
-    BUGMSG(gtk_builder_add_from_file(ef_gtk->builder_add, DATADIR"/ui/EF_gtk_barres_add.ui", NULL) != 0, , gettext("Builder Failed\n"));
-    gtk_builder_connect_signals(ef_gtk->builder_add, projet);
-    
-    ef_gtk->window_add = GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder_add, "EF_barres_add_window"));;
-    
-    g_object_set(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_type_combobox"), "model", projet->list_gtk.ef_barres.liste_types, NULL);
-    g_object_set(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_section_combobox"), "model", projet->list_gtk.ef_barres.liste_sections, NULL);
-    g_object_set(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_materiau_combobox"), "model", projet->list_gtk.ef_barres.liste_materiaux, NULL);
-    g_object_set(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_relachement_combobox"), "model", projet->list_gtk.ef_barres.liste_relachements, NULL);
-    
-    // Pour résoudre un bug dans l'affichage graphique.
-    // En effet, sans ces lignes, la hauteur et largeur des ComboBox est au minimum et lors du passage de la souris au dessus, les composants prennent leur bonne taille.
-    // https://bugzilla.gnome.org/show_bug.cgi?id=675228
-    gtk_combo_box_set_active(GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_type_combobox")), -1);
-    gtk_combo_box_set_active(GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_section_combobox")), -1);
-    gtk_combo_box_set_active(GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_materiau_combobox")), -1);
-    gtk_combo_box_set_active(GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_relachement_combobox")), -1);
-    
-    nb_barres = g_strdup_printf("%d", g_list_length(projet->beton.barres));
-    gtk_label_set_text(GTK_LABEL(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_numero_label2")), nb_barres);
-    free(nb_barres);
-    
-    gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_button_add")), FALSE);
-    
-    gtk_window_set_transient_for(GTK_WINDOW(ef_gtk->window_add), GTK_WINDOW(projet->list_gtk.comp.window));
-}
-
-
 G_MODULE_EXPORT void EF_gtk_barres(Projet *projet)
+/* Description : Création de la fenêtre permettant d'afficher les barres sous forme d'un
+ *               tableau.
+ * Paramètres : Projet *projet : la variable projet.
+ * Valeur renvoyée : Aucune.
+ *   Echec : projet == NULL,
+ *           interface graphique impossible à générer.
+ */
 {
     List_Gtk_EF_Barres  *ef_gtk;
+    GList               *list_parcours;
     
-    BUGMSG(projet, , gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->list_gtk.ef_barres.builder == NULL, , gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet->list_gtk.ef_barres.builder == NULL, , gettext("La fenêtre graphique %s est déjà initialisée.\n"), "Barres");
     
     ef_gtk = &projet->list_gtk.ef_barres;
     
@@ -504,32 +350,27 @@ G_MODULE_EXPORT void EF_gtk_barres(Projet *projet)
     g_object_set(gtk_builder_get_object(ef_gtk->builder, "EF_barres_treeview_cell3"), "model", projet->list_gtk.ef_barres.liste_materiaux, NULL);
     g_object_set(gtk_builder_get_object(ef_gtk->builder, "EF_barres_treeview_cell6"), "model", projet->list_gtk.ef_barres.liste_relachements, NULL);
     
-    if (projet->beton.barres != NULL)
+    list_parcours = projet->beton.barres;
+    while (list_parcours != NULL)
     {
-        GList   *list_parcours = projet->beton.barres;
+        Beton_Barre *barre = (Beton_Barre*)list_parcours->data;
+        GtkTreeIter iter;
+        char        *tmp;
+        Beton_Section_Rectangulaire *section;
         
-        do
-        {
-            Beton_Barre *barre = (Beton_Barre*)list_parcours->data;
-            GtkTreeIter iter;
-            char        *tmp;
-            Beton_Section_Rectangulaire *section;
-            
-            tmp = g_strdup_printf("%d", (int)barre->type);
-            gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(projet->list_gtk.ef_barres.liste_types), &iter, tmp);
-            free(tmp);
-            gtk_tree_model_get(GTK_TREE_MODEL(projet->list_gtk.ef_barres.liste_types), &iter, 0, &tmp, -1);
-            
-            section = (Beton_Section_Rectangulaire*)barre->section;
-            
-            gtk_tree_store_append(GTK_TREE_STORE(gtk_builder_get_object(ef_gtk->builder, "EF_barres_treestore")), &iter, NULL);
-            gtk_tree_store_set(GTK_TREE_STORE(gtk_builder_get_object(ef_gtk->builder, "EF_barres_treestore")), &iter, 0, barre->numero, 1, tmp, 2, section->nom, 3, barre->materiau->nom, 4, barre->noeud_debut->numero, 5, barre->noeud_fin->numero, 6, (barre->relachement == NULL ? gettext("Aucun") : barre->relachement->nom), -1);
-            
-            free(tmp);
-            
-            list_parcours = g_list_next(list_parcours);
-        }
-        while (list_parcours != NULL);
+        BUGMSG(tmp = g_strdup_printf("%d", (int)barre->type), , gettext("Erreur d'allocation mémoire.\n"));
+        gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(projet->list_gtk.ef_barres.liste_types), &iter, tmp);
+        free(tmp);
+        gtk_tree_model_get(GTK_TREE_MODEL(projet->list_gtk.ef_barres.liste_types), &iter, 0, &tmp, -1);
+        
+        section = (Beton_Section_Rectangulaire*)barre->section;
+        
+        gtk_tree_store_append(GTK_TREE_STORE(gtk_builder_get_object(ef_gtk->builder, "EF_barres_treestore")), &barre->Iter, NULL);
+        gtk_tree_store_set(GTK_TREE_STORE(gtk_builder_get_object(ef_gtk->builder, "EF_barres_treestore")), &barre->Iter, 0, barre->numero, 1, tmp, 2, section->nom, 3, barre->materiau->nom, 4, barre->noeud_debut->numero, 5, barre->noeud_fin->numero, 6, (barre->relachement == NULL ? gettext("Aucun") : barre->relachement->nom), -1);
+        
+        free(tmp);
+        
+        list_parcours = g_list_next(list_parcours);
     }
     
     g_object_set_data(gtk_builder_get_object(ef_gtk->builder, "EF_barres_treeview_cell4"), "column", GINT_TO_POINTER(4));

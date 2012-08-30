@@ -22,9 +22,11 @@
 #include "config.h"
 #include "common_projet.h"
 
-void *EF_charge_cherche(Projet *projet, unsigned int num_action, unsigned int num_charge);
-int EF_charge_renomme(Projet *projet, unsigned int numero_action, unsigned int numero_charge, const char *description);
-int EF_charge_deplace(Projet *projet, unsigned int action_src, unsigned int charge_src, unsigned int action_dest);
-int EF_charge_supprime(Projet *projet, unsigned int action_num, unsigned int charge_num);
+void *EF_charge_cherche(Projet *projet, unsigned int num_action, unsigned int num_charge) __attribute__((__warn_unused_result__));
+
+gboolean EF_charge_renomme(Projet *projet, unsigned int numero_action, unsigned int numero_charge, const char *nom) __attribute__((__warn_unused_result__));
+gboolean EF_charge_deplace(Projet *projet, unsigned int action_src, unsigned int charge_src, unsigned int action_dest) __attribute__((__warn_unused_result__));
+
+gboolean EF_charge_supprime(Projet *projet, unsigned int action_num, unsigned int charge_num) __attribute__((__warn_unused_result__));
 
 #endif

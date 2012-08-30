@@ -19,6 +19,7 @@
 #include "config.h"
 #include <libintl.h>
 #include <locale.h>
+#include <gmodule.h>
 
 #include "common_projet.h"
 #include "common_erreurs.h"
@@ -28,7 +29,8 @@
 #include "EF_charge_barre_repartie_uniforme.h"
 
 
-G_MODULE_EXPORT void *EF_charge_cherche(Projet *projet, unsigned int num_action, unsigned int num_charge)
+G_MODULE_EXPORT void *EF_charge_cherche(Projet *projet, unsigned int num_action,
+  unsigned int num_charge)
 /* Description : Cherche et renvoie la charge demandée.
  * Paramètres : Projet *projet : la variable projet,
  *            : unsigned int num_action : le numéro de l'action,
@@ -59,20 +61,20 @@ G_MODULE_EXPORT void *EF_charge_cherche(Projet *projet, unsigned int num_action,
         list_parcours = g_list_next(list_parcours);
     }
     
-    BUGMSG(NULL, NULL, gettext("Charge %u de l'action %u introuvable.\n"), num_charge, num_action);
+    BUGMSG(0, NULL, gettext("Charge %u de l'action %u introuvable.\n"), num_charge, num_action);
 }
 
 
-G_MODULE_EXPORT int EF_charge_renomme(Projet *projet, unsigned int numero_action,
-  unsigned int numero_charge, const char *description)
+G_MODULE_EXPORT gboolean EF_charge_renomme(Projet *projet, unsigned int numero_action,
+  unsigned int numero_charge, const char *nom)
 /* Description : Renomme une charge.
  * Paramètres : Projet *projet : la variable projet,
  *            : unsigned int num_action : le numéro de l'action,
  *            : unsigned int num_charge : le numéro de la charge,
- *            : const char *description : la nouvelle description.
+ *            : const char *nom : le nouveau nom.
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : -1 :
+ *   Succès : TRUE
+ *   Échec : FALSE :
  *             projet == NULL,
  *             action introuvable,
  *             charge introuvable,
@@ -81,21 +83,23 @@ G_MODULE_EXPORT int EF_charge_renomme(Projet *projet, unsigned int numero_action
 {
     Charge_Noeud    *charge;
     
-    BUGMSG(projet, -1, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
     BUG(charge = EF_charge_cherche(projet, numero_action, numero_charge), -1);
     
-    free(charge->description);
-    BUGMSG(charge->description = g_strdup_printf("%s", description), -1, gettext("Erreur d'allocation mémoire.\n"));
+    free(charge->nom);
+    BUGMSG(charge->nom = g_strdup_printf("%s", nom), -1, gettext("Erreur d'allocation mémoire.\n"));
     
+#ifdef ENABLE_GTK
     if (projet->list_gtk._1990_actions.builder != NULL)
-        gtk_tree_store_set(projet->list_gtk._1990_actions.tree_store_charges, &charge->Iter, 1, description, -1);
+        gtk_tree_store_set(projet->list_gtk._1990_actions.tree_store_charges, &charge->Iter, 1, nom, -1);
+#endif
     
-    return 0;
+    return TRUE;
 }
 
 
-G_MODULE_EXPORT int EF_charge_deplace(Projet *projet, unsigned int action_src,
+G_MODULE_EXPORT gboolean EF_charge_deplace(Projet *projet, unsigned int action_src,
   unsigned int charge_src, unsigned int action_dest)
 /* Description : Déplace une charge d'une action à l'autre.
  *               La charge une dois déplacée sera en fin de la liste et les numéros des charges
@@ -106,8 +110,8 @@ G_MODULE_EXPORT int EF_charge_deplace(Projet *projet, unsigned int action_src,
  *              unsigned int charge_src : numéro de la charge à déplacer,
  *              unsigned int action_dest : numéro de l'action où sera déplacer la charge.
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : -1 :
+ *   Succès : TRUE
+ *   Échec : FALSE :
  *             projet == NULL,
  *             action action_src introuvable,
  *             action action_dest introuvable,
@@ -118,13 +122,13 @@ G_MODULE_EXPORT int EF_charge_deplace(Projet *projet, unsigned int action_src,
     GList           *list_parcours;
     Action          *action1, *action2;
     
-    BUGMSG(projet, -1, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     // On cherche l'action qui contient la charge
     BUG(action1 = _1990_action_cherche_numero(projet, action_src), -1);
     BUG(action2 = _1990_action_cherche_numero(projet, action_dest), -1);
     
     if (action_src == action_dest)
-        return 0;
+        return TRUE;
     
     // Lorsqu'elle est trouvée,
     
@@ -170,18 +174,18 @@ G_MODULE_EXPORT int EF_charge_deplace(Projet *projet, unsigned int action_src,
     //     FinPour
     }
     
-    BUGMSG(charge_data, -1, gettext("Charge %u de l'action %u introuvable.\n"), charge_src, action_src);
+    BUGMSG(charge_data, FALSE, gettext("Charge %u de l'action %u introuvable.\n"), charge_src, action_src);
     
     // On insère la charge à la fin de la liste des charges dans l'action de destination
     //   en modifiant son numéro.
     charge_data->numero = g_list_length(action2->charges);
     action2->charges = g_list_append(action2->charges, charge_data);
     
-    return 0;
+    return TRUE;
 }
 
 
-G_MODULE_EXPORT int EF_charge_supprime(Projet *projet, unsigned int action_num,
+G_MODULE_EXPORT gboolean EF_charge_supprime(Projet *projet, unsigned int action_num,
   unsigned int charge_num)
 /* Description : Supprime une charge. Décrémente également le numéro des charges possédant un
  *               numéro supérieur à la charge supprimée afin que la liste des numéros soit
@@ -190,8 +194,8 @@ G_MODULE_EXPORT int EF_charge_supprime(Projet *projet, unsigned int action_num,
  *              unsigned int action_num : numéro de l'action où se situe la charge à supprimer,
  *              unsigned int charge_num : numéro de la charge à supprimer.
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : -1 :
+ *   Succès : TRUE
+ *   Échec : FALSE :
  *             projet == NULL,
  *             action introuvable,
  *             charge introuvable,
@@ -202,8 +206,8 @@ G_MODULE_EXPORT int EF_charge_supprime(Projet *projet, unsigned int action_num,
     GList                   *list_parcours;
     Action                  *action;
     
-    BUGMSG(projet, -1, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUG(action = _1990_action_cherche_numero(projet, action_num), -1);
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUG(action = _1990_action_cherche_numero(projet, action_num), FALSE);
     
     list_parcours = action->charges;
     // Pour chaque charge de l'action en cours Faire
@@ -234,22 +238,22 @@ G_MODULE_EXPORT int EF_charge_supprime(Projet *projet, unsigned int action_num,
             {
                 case CHARGE_NOEUD :
                 {
-                    BUG(EF_charge_noeud_free(charge_data) == 0, -1);
+                    BUG(EF_charge_noeud_free(charge_data), FALSE);
                     break;
                 }
                 case CHARGE_BARRE_PONCTUELLE :
                 {
-                    BUG(EF_charge_barre_ponctuelle_free((Charge_Barre_Ponctuelle*)charge_data) == 0, -1);
+                    BUG(EF_charge_barre_ponctuelle_free((Charge_Barre_Ponctuelle*)charge_data), FALSE);
                     break;
                 }
                 case CHARGE_BARRE_REPARTIE_UNIFORME :
                 {
-                    BUG(EF_charge_barre_repartie_uniforme_free((Charge_Barre_Repartie_Uniforme*)charge_data) == 0, -1);
+                    BUG(EF_charge_barre_repartie_uniforme_free((Charge_Barre_Repartie_Uniforme*)charge_data), FALSE);
                     break;
                 }
                 default :
                 {
-                    BUGMSG(0, -1, gettext("Type de charge %d inconnu."), charge_data->type);
+                    BUGMSG(0, FALSE, gettext("Type de charge %d inconnu."), charge_data->type);
                     break;
                 }
             }
@@ -268,9 +272,7 @@ G_MODULE_EXPORT int EF_charge_supprime(Projet *projet, unsigned int action_num,
         list_parcours = g_list_next(list_parcours);
     }
     
-    BUGMSG(charge_data, -1, gettext("Charge %u de l'action %u introuvable.\n"), charge_num, action_num);
+    BUGMSG(charge_data, FALSE, gettext("Charge %u de l'action %u introuvable.\n"), charge_num, action_num);
     
-    return 0;
+    return TRUE;
 }
-
-

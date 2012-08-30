@@ -21,22 +21,23 @@
 #include <libintl.h>
 #include <math.h>
 #include <string.h>
+#include <gmodule.h>
+
 #include "common_projet.h"
 #include "common_maths.h"
 #include "common_erreurs.h"
 
 
-G_MODULE_EXPORT int _1992_1_1_materiaux_init(Projet *projet)
-/* Description : Initialise la liste des matériaux en béton
- * Paramètres : Projet *projet : la variable projet
+G_MODULE_EXPORT gboolean _1992_1_1_materiaux_init(Projet *projet)
+/* Description : Initialise la liste des matériaux en béton.
+ * Paramètres : Projet *projet : la variable projet.
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : -1 en cas de paramètres invalides :
- *             (projet == NULL)
- *           -2 en cas d'erreur d'allocation mémoire
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL.
  */
 {
-    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
     // Trivial
     projet->beton.materiaux = NULL;
@@ -45,25 +46,26 @@ G_MODULE_EXPORT int _1992_1_1_materiaux_init(Projet *projet)
     projet->list_gtk.ef_barres.liste_materiaux = gtk_list_store_new(1, G_TYPE_STRING);
 #endif
     
-    return 0;
+    return TRUE;
 }
 
 
-G_MODULE_EXPORT int _1992_1_1_materiaux_ajout(Projet *projet, const char *nom, double fck, double nu)
+G_MODULE_EXPORT gboolean _1992_1_1_materiaux_ajout(Projet *projet, const char *nom, double fck,
+  double nu)
 /* Description : Ajoute un matériau en béton et calcule ses caractéristiques mécaniques.
- *                 Les propriétés du béton sont déterminées conformément au tableau 3.1 de
- *                 l'Eurocode 2-1-1 les valeurs de fckcube est déterminée par interpolation
- *                 linéaire si nécessaire.
- * Paramètres : Projet *projet : la variable projet
- *            : double fck : résistance à la compression du béton à 28 jours.
+ *               Les propriétés du béton sont déterminées conformément au tableau 3.1 de
+ *               l'Eurocode 2-1-1 les valeurs de fckcube est déterminée par interpolation
+ *               linéaire si nécessaire.
+ * Paramètres : Projet *projet : la variable projet,
+ *            : double fck : résistance à la compression du béton à 28 jours en MPa,
  *            : double nu : coefficient de poisson pour un béton non fissuré.
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : -1 en cas de paramètres invalides :
- *             (projet == NULL) ou
- *             (projet->beton.materiaux == NULL) ou
- *             (fck > 90.)
- *           -2 en cas d'erreur d'allocation mémoire.
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL,
+ *             projet->beton.materiaux == NULL,
+ *             fck > 90.,
+ *             en cas d'erreur d'allocation mémoire.
  */
 {
     Beton_Materiau  *materiau_nouveau = malloc(sizeof(Beton_Materiau));
@@ -71,15 +73,13 @@ G_MODULE_EXPORT int _1992_1_1_materiaux_ajout(Projet *projet, const char *nom, d
     GtkTreeIter     iter;
 #endif
     
-    
     // Trivial
-    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(fck <= 90.*(1+ERREUR_RELATIVE_MIN), -1, gettext("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"));
-    BUGMSG(materiau_nouveau, -2, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG((fck > ERREUR_RELATIVE_MIN) && (fck <= 90.*(1+ERREUR_RELATIVE_MIN)), FALSE, gettext("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"));
+    BUGMSG(materiau_nouveau, FALSE, gettext("Erreur d'allocation mémoire.\n"));
 
     materiau_nouveau->fck = fck*1000000.;
-    materiau_nouveau->nom = (char*)malloc(sizeof(char)*(strlen(nom)+1));
-    strcpy(materiau_nouveau->nom, nom);
+    BUGMSG(materiau_nouveau->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
     if (fck < 12.)
         materiau_nouveau->fckcube = fck*1.25*1000000.;
     else if (fck < 16.)
@@ -153,30 +153,29 @@ G_MODULE_EXPORT int _1992_1_1_materiaux_ajout(Projet *projet, const char *nom, d
     gtk_list_store_set(projet->list_gtk.ef_barres.liste_materiaux, &iter, 0, nom, -1);
 #endif
     
-    return 0;
+    return TRUE;
 }
 
 
 G_MODULE_EXPORT Beton_Materiau* _1992_1_1_materiaux_cherche_numero(Projet *projet, unsigned int numero)
 /* Description : Positionne dans la liste des materiaux en béton l'élément courant au numéro
- *                 souhaité
- * Paramètres : Projet *projet : la variable projet
- *            : int numero : le numéro du matériau
+ *               souhaité.
+ * Paramètres : Projet *projet : la variable projet,
+ *            : unsigned int numero : le numéro du matériau.
  * Valeur renvoyée :
  *   Succès : pointeur vers le matériau en béton
- *   Échec : NULL en cas de paramètres invalides :
- *             (projet == NULL) ou
- *             (projet->beton.materiaux == NULL) ou
- *             (list_size(projet->beton.materiaux) == 0)
+ *   Échec : NULL :
+ *             projet == NULL,
+ *             materiau introuvable.
  */
 {
     GList   *list_parcours;
-    BUGMSG(projet, NULL, gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->beton.materiaux, NULL, gettext("Paramètre incorrect\n"));
+    
+    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
     
     // Trivial
     list_parcours = projet->beton.materiaux;
-    do
+    while (list_parcours != NULL)
     {
         Beton_Materiau  *materiau = list_parcours->data;
         
@@ -185,7 +184,6 @@ G_MODULE_EXPORT Beton_Materiau* _1992_1_1_materiaux_cherche_numero(Projet *proje
         
         list_parcours = g_list_next(list_parcours);
     }
-    while (list_parcours != NULL);
     
     BUGMSG(0, NULL, gettext("Matériau en béton n°%d introuvable.\n"), numero);
 }
@@ -193,23 +191,22 @@ G_MODULE_EXPORT Beton_Materiau* _1992_1_1_materiaux_cherche_numero(Projet *proje
 
 G_MODULE_EXPORT Beton_Materiau* _1992_1_1_materiaux_cherche_nom(Projet *projet, const char *nom)
 /* Description : Renvoie le matériau en fonction de son nom.
- * Paramètres : Projet *projet : la variable projet
- *            : const char *nom : le nom du matériau
+ * Paramètres : Projet *projet : la variable projet,
+ *            : const char *nom : le nom du matériau.
  * Valeur renvoyée :
  *   Succès : pointeur vers le matériau en béton
- *   Échec : NULL en cas de paramètres invalides :
- *             (projet == NULL) ou
- *             (projet->beton.materiaux == NULL) ou
- *             (list_size(projet->beton.materiaux) == 0)
+ *   Échec : NULL :
+ *             projet == NULL,
+ *             materiau introuvable.
  */
 {
     GList   *list_parcours;
-    BUGMSG(projet, NULL, gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->beton.materiaux, NULL, gettext("Paramètre incorrect\n"));
+    
+    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
     
     // Trivial
     list_parcours = projet->beton.materiaux;
-    do
+    while (list_parcours != NULL)
     {
         Beton_Materiau  *materiau = list_parcours->data;
         
@@ -218,24 +215,21 @@ G_MODULE_EXPORT Beton_Materiau* _1992_1_1_materiaux_cherche_nom(Projet *projet, 
         
         list_parcours = g_list_next(list_parcours);
     }
-    while (list_parcours != NULL);
     
     BUGMSG(0, NULL, gettext("Matériau en béton '%s' introuvable.\n"), nom);
 }
 
 
-G_MODULE_EXPORT int _1992_1_1_materiaux_free(Projet *projet)
-/* Description : Libère l'ensemble des matériaux en béton
- * Paramètres : Projet *projet : la variable projet
+G_MODULE_EXPORT gboolean _1992_1_1_materiaux_free(Projet *projet)
+/* Description : Libère l'ensemble des matériaux en béton.
+ * Paramètres : Projet *projet : la variable projet.
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : -1 en cas de paramètres invalides :
- *             (projet == NULL) ou
- *             (projet->beton.materiaux == NULL)
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL.
  */
 {
-    BUGMSG(projet, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->beton.materiaux, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
     // Trivial
     while (projet->beton.materiaux != NULL)
@@ -247,5 +241,9 @@ G_MODULE_EXPORT int _1992_1_1_materiaux_free(Projet *projet)
         free(materiau);
     }
     
-    return 0;
+#ifdef ENABLE_GTK
+    g_object_unref(projet->list_gtk.ef_barres.liste_materiaux);
+#endif
+    
+    return TRUE;
 }

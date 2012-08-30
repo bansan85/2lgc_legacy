@@ -23,46 +23,45 @@
 #include <stdlib.h>
 #include <cholmod.h>
 #include <string.h>
+#include <gmodule.h>
 
 #include "1990_actions.h"
 #include "common_projet.h"
 #include "common_erreurs.h"
 
 
-G_MODULE_EXPORT Charge_Noeud*  EF_charge_noeud_ajout(Projet *projet, unsigned int num_action, GList *noeuds,
-  double fx, double fy, double fz, double mx, double my, double mz, const char* nom)
+G_MODULE_EXPORT Charge_Noeud*  EF_charge_noeud_ajout(Projet *projet, unsigned int num_action,
+  GList *noeuds, double fx, double fy, double fz, double mx, double my, double mz,
+  const char* nom)
 /* Description : Ajoute une charge ponctuelle à une action et à un noeud de la structure en
  *               lui attribuant le numéro suivant la dernière charge de l'action.
- * Paramètres : Projet *projet : la variable projet
- *            : int num_action : numero de l'action qui contiendra la charge
- *            : GList *noeuds : liste des noeuds qui supportera la charge
- *            : double fx : force suivant l'axe global x
- *            : double fy : force suivant l'axe global y
- *            : double fz : force suivant l'axe global z
- *            : double mx : moment autour de l'axe global x
- *            : double my : moment autour de l'axe global y
- *            : double mz : moment autour de l'axe global z
+ * Paramètres : Projet *projet : la variable projet,
+ *            : int num_action : numero de l'action qui contiendra la charge,
+ *            : GList *noeuds : liste des noeuds qui supportera la charge,
+ *            : double fx : force suivant l'axe global x,
+ *            : double fy : force suivant l'axe global y,
+ *            : double fz : force suivant l'axe global z,
+ *            : double mx : moment autour de l'axe global x,
+ *            : double my : moment autour de l'axe global y,
+ *            : double mz : moment autour de l'axe global z.
  * Valeur renvoyée :
  *   Succès : un pointeur vers la nouvelle charge
- *   Échec : NULL en cas de paramètres invalides :
- *             (projet == NULL) ou
- *             (projet->actions == NULL) ou
- *             (list_size(projet->actions) == 0) ou
- *             (noeud == NULL)
- *           NULL en cas d'erreur d'allocation mémoire
+ *   Échec : NULL :
+ *             projet == NULL,
+ *             action introuvable,
+ *             en cas d'erreur d'allocation mémoire.
  */
 {
     Action          *action_en_cours;
-    Charge_Noeud    *charge_nouveau = malloc(sizeof(Charge_Noeud));
+    Charge_Noeud    *charge_nouveau;
     
     // Trivial
-    BUGMSG(projet, NULL, gettext("Paramètre incorrect\n"));
-    BUGMSG(projet->actions, NULL, gettext("Paramètre incorrect\n"));
+    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
     BUG(action_en_cours = _1990_action_cherche_numero(projet, num_action), NULL);
-    BUGMSG(charge_nouveau, NULL, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(charge_nouveau = malloc(sizeof(Charge_Noeud)), NULL, gettext("Erreur d'allocation mémoire.\n"));
     
     charge_nouveau->type = CHARGE_NOEUD;
-    BUGMSG(charge_nouveau->description = g_strdup_printf("%s", nom), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(charge_nouveau->nom = g_strdup_printf("%s", nom), NULL, gettext("Erreur d'allocation mémoire.\n"));
     charge_nouveau->noeuds = noeuds;
     charge_nouveau->fx = fx;
     charge_nouveau->fy = fy;
@@ -79,24 +78,20 @@ G_MODULE_EXPORT Charge_Noeud*  EF_charge_noeud_ajout(Projet *projet, unsigned in
 }
 
 
-G_MODULE_EXPORT int EF_charge_noeud_free(Charge_Noeud *charge)
+G_MODULE_EXPORT gboolean EF_charge_noeud_free(Charge_Noeud *charge)
 {
 /* Description : Libère une charge nodale.
  * Paramètres : Charge_Noeud *charge : la charge à libérer.
  * Valeur renvoyée :
- *   Succès : 0
- *   Échec : -1 en cas de paraètres invalides :
- *             (charge == NULL) ou
- *             (charge->description == NULL) ou
- *             (charge->noeuds == NULL)
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             charge == NULL.
  */
-    BUGMSG(charge, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(charge->description, -1, gettext("Paramètre incorrect\n"));
-    BUGMSG(charge->noeuds, -1, gettext("Paramètre incorrect\n"));
+    BUGMSG(charge, FALSE, gettext("Paramètre %s incorrect.\n"), "charge");
     
-    free(charge->description);
+    free(charge->nom);
     g_list_free(charge->noeuds);
     free(charge);
     
-    return 0;
+    return TRUE;
 }
