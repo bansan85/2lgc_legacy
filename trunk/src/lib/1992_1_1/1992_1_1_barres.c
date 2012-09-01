@@ -65,7 +65,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_init(Projet *projet)
 
 
 G_MODULE_EXPORT gboolean _1992_1_1_barres_ajout(Projet *projet, Type_Element type,
-  unsigned int section, unsigned int materiau, unsigned int noeud_debut, unsigned int noeud_fin,
+  void *section, unsigned int materiau, unsigned int noeud_debut, unsigned int noeud_fin,
   EF_Relachement* relachement, unsigned int discretisation_element)
 /* Description : Ajoute un élément à la liste des éléments en béton.
  * Paramètres : Projet *projet : la variable projet,
@@ -100,7 +100,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_ajout(Projet *projet, Type_Element typ
     
     element_nouveau->type = type;
     
-    element_nouveau->section = _1992_1_1_sections_cherche_numero(projet, section);
+    element_nouveau->section = section;
     element_nouveau->materiau = _1992_1_1_materiaux_cherche_numero(projet, materiau);
     element_nouveau->noeud_debut = EF_noeuds_cherche_numero(projet, noeud_debut);
     element_nouveau->noeud_fin = EF_noeuds_cherche_numero(projet, noeud_fin);
@@ -162,8 +162,8 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_ajout(Projet *projet, Type_Element typ
         free(tmp);
         gtk_tree_model_get(GTK_TREE_MODEL(projet->list_gtk.ef_barres.liste_types), &iter, 0, &tmp, -1);
         
-        gtk_tree_store_append(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treestore")), &iter, NULL);
-        gtk_tree_store_set(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treestore")), &iter, 0, element_nouveau->numero, 1, tmp, 2, p_section->nom, 3, element_nouveau->materiau->nom, 4, element_nouveau->noeud_debut->numero, 5, element_nouveau->noeud_fin->numero, 6, (element_nouveau->relachement == NULL ? gettext("Aucun") : element_nouveau->relachement->nom), -1);
+        gtk_tree_store_append(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treestore")), &element_nouveau->Iter, NULL);
+        gtk_tree_store_set(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treestore")), &element_nouveau->Iter, 0, element_nouveau->numero, 1, tmp, 2, p_section->nom, 3, element_nouveau->materiau->nom, 4, element_nouveau->noeud_debut->numero, 5, element_nouveau->noeud_fin->numero, 6, (element_nouveau->relachement == NULL ? gettext("Aucun") : element_nouveau->relachement->nom), -1);
     }
     
     BUG(m3d_barre(&projet->list_gtk.m3d, element_nouveau), FALSE);

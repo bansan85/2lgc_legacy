@@ -76,7 +76,6 @@ G_MODULE_EXPORT gboolean _1992_1_1_sections_ajout_rectangulaire(Projet *projet, 
     BUGMSG(section_nouvelle->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
     section_nouvelle->largeur = l;
     section_nouvelle->hauteur = h;
-    section_nouvelle->numero = g_list_length(projet->beton.sections);
     
     projet->beton.sections = g_list_append(projet->beton.sections, section_nouvelle);
     
@@ -125,7 +124,6 @@ G_MODULE_EXPORT gboolean _1992_1_1_sections_ajout_T(Projet *projet, const char* 
     section_nouvelle->largeur_ame = la;
     section_nouvelle->hauteur_table = ht;
     section_nouvelle->hauteur_ame = ha;
-    section_nouvelle->numero = g_list_length(projet->beton.sections);
     
     projet->beton.sections = g_list_append(projet->beton.sections, section_nouvelle);
     
@@ -165,7 +163,6 @@ G_MODULE_EXPORT gboolean _1992_1_1_sections_ajout_carre(Projet *projet, const ch
     section_nouvelle->type = BETON_SECTION_CARRE;
     BUGMSG(section_nouvelle->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
     section_nouvelle->cote = cote;
-    section_nouvelle->numero = g_list_length(projet->beton.sections);
     
     projet->beton.sections = g_list_append(projet->beton.sections, section_nouvelle);
     
@@ -206,7 +203,6 @@ G_MODULE_EXPORT gboolean _1992_1_1_sections_ajout_circulaire(Projet *projet, con
     section_nouvelle->type = BETON_SECTION_CIRCULAIRE;
     BUGMSG(section_nouvelle->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
     section_nouvelle->diametre = diametre;
-    section_nouvelle->numero = g_list_length(projet->beton.sections);
     
     projet->beton.sections = g_list_append(projet->beton.sections, section_nouvelle);
     
@@ -216,38 +212,6 @@ G_MODULE_EXPORT gboolean _1992_1_1_sections_ajout_circulaire(Projet *projet, con
 #endif
     
     return TRUE;
-}
-
-
-G_MODULE_EXPORT void* _1992_1_1_sections_cherche_numero(Projet *projet, unsigned int numero)
-/* Description : Positionne dans la liste des sections en béton l'élément courant au numéro
- *               souhaité.
- * Paramètres : Projet *projet : la variable projet,
- *            : unsigned int numero : le numéro de la section.
- * Valeur renvoyée :
- *   Succès : Pointeur vers la section
- *   Échec : NULL en cas de paramètres invalides :
- *             projet == NULL,
- *             section introuvable.
- */
-{
-    GList   *list_parcours;
-    
-    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
-    
-    // Trivial
-    list_parcours = projet->beton.sections;
-    while (list_parcours != NULL)
-    {
-        Beton_Section_Circulaire    *section = list_parcours->data;
-        
-        if (section->numero == numero)
-            return section;
-        
-        list_parcours = g_list_next(list_parcours);
-    }
-    
-    BUGMSG(0, NULL, gettext("Section en béton n°%d introuvable.\n"), numero);
 }
 
 

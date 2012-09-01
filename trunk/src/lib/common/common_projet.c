@@ -86,6 +86,7 @@ G_MODULE_EXPORT Projet* projet_init(Type_Pays pays)
     projet->list_gtk.ef_charge_barre_ponctuelle.builder = NULL;
     projet->list_gtk.ef_charge_barre_repartie_uniforme.builder = NULL;
     projet->list_gtk.ef_noeud.builder = NULL;
+    projet->list_gtk.ef_appuis.builder = NULL;
     projet->list_gtk.ef_barres.builder = NULL;
     projet->list_gtk.ef_barres.builder_add = NULL;
 #endif
