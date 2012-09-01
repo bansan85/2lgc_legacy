@@ -148,14 +148,17 @@ G_MODULE_EXPORT gboolean projet_init_graphique(Projet *projet)
     gtk_window_resize(GTK_WINDOW(comps->window), 800, 600);
     gtk_window_set_position(GTK_WINDOW(comps->window), GTK_WIN_POS_CENTER);
     g_signal_connect(GTK_WINDOW(comps->window), "destroy", G_CALLBACK(gui_window_destroy_event), projet);
-    comps->main_table = gtk_table_new(3, 1, FALSE);
-    gtk_container_add(GTK_CONTAINER(comps->window), GTK_WIDGET(comps->main_table));
+    comps->main_grid = gtk_grid_new();
+    gtk_container_add(GTK_CONTAINER(comps->window), GTK_WIDGET(comps->main_grid));
     
     m3d = &projet->list_gtk.m3d;
-    gtk_table_attach(GTK_TABLE(comps->main_table), m3d->drawing, 0, 1, 1, 2, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 0, 0);
+    gtk_grid_attach(GTK_GRID(comps->main_grid), m3d->drawing, 0, 1, 1, 1);
+    gtk_widget_set_hexpand(m3d->drawing, TRUE);
+    gtk_widget_set_vexpand(m3d->drawing, TRUE);
     
     comps->menu = gtk_menu_bar_new();
-    gtk_table_attach(GTK_TABLE(comps->main_table), comps->menu, 0, 1, 0, 1, (GtkAttachOptions)(GTK_SHRINK | GTK_FILL), (GtkAttachOptions)(GTK_SHRINK | GTK_FILL), 0, 0);
+    gtk_grid_attach(GTK_GRID(comps->main_grid), comps->menu, 0, 0, 1, 1);
+    gtk_widget_set_hexpand(comps->menu, TRUE);
 
     comps->menu_fichier_list = gtk_menu_new();
     comps->menu_fichier = gtk_menu_item_new_with_label(gettext("Fichier"));
