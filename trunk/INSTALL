@@ -8,12 +8,18 @@ Exécutez le programme : mingw-get-inst-20110530.exe (http://sourceforge.net/pro
 Lors de l'installation cochez "Download latest repository catalogues", laissez c:\MinGW pour le dossier par défaut et cochez dans les options d'installation "MinGW Compiler Suite" et "MinGW Developer ToolKit".
 Une fois l'installation terminée, lancez MinGW en mode administrateur (nécessaire uniquement pour compiler gtk+3) et exécutez les commandes suivantes :
 
+ln -s /c/Python27/python27.dll /usr/bin/python27.dll && \
+ln -s /c/Python27/libs/libpython27.a /usr/lib/libpython27.a && \
+ln -s /c/Python27/python.exe /usr/bin/python.exe && \
+ln -s /c/Python27/include /usr/include/python2.7 && \
+ln -s /c/Python27/Lib /usr/lib/python2.7 && \
 mingw-get install msys-wget && \
+mingw-get install msys-unzip && \
 (test -d comp || mkdir comp) && \
 cd comp && \
-(test -f zlib-1.2.6.tar.bz2 || wget http://zlib.net/zlib-1.2.6.tar.bz2) && \
-tar xvjf zlib-1.2.6.tar.bz2 && \
-cd zlib-1.2.6 && \
+(test -f zlib-1.2.7.tar.bz2 || wget http://zlib.net/zlib-1.2.7.tar.bz2) && \
+tar xvjf zlib-1.2.7.tar.bz2 && \
+cd zlib-1.2.7 && \
 make -j3 -f win32/Makefile.gcc && \
 make -f win32/Makefile.gcc install BINARY_PATH="c:/MinGW/bin" LIBRARY_PATH="c:/MinGW/lib" INCLUDE_PATH="c:/MinGW/include" && \
 cp zlib1.dll c:/MinGW/bin/libz.dll && \
@@ -23,23 +29,23 @@ tar xvzf libffi-3.0.11.tar.gz && \
 cd libffi-3.0.11 && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -pipe" ./configure --disable-static --enable-shared --prefix=c:/MinGW && \
 make -j3 && make install && cd .. && \
-(test -f glib-2.32.1.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/glib/2.32/glib-2.32.1.tar.xz) && \
-tar xvaf glib-2.32.1.tar.xz && \
-cd glib-2.32.1 && \
+(test -f glib-2.33.10.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/glib/2.33/glib-2.33.10.tar.xz) && \
+tar xvaf glib-2.33.10.tar.xz && \
+cd glib-2.33.10 && \
 sed -i 's/tests//g' gio/Makefile.am glib/Makefile.am gobject/Makefile.am && \
-sed -i 's/tests$//g' gio/Makefile.in glib/Makefile.in gobject/Makefile.in && \
-sed -i 's~gdbus-2.0/codegen~~g' gio/Makefile.am gio/Makefile.in && \
+sed -i 's/tests$//g' Makefile.am Makefile.in gio/Makefile.in glib/Makefile.in gobject/Makefile.in && \
+sed -i 's/tests $//g' Makefile.am Makefile.in gio/Makefile.in glib/Makefile.in gobject/Makefile.in && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -pipe" LIBFFI_CFLAGS="-Ic:/MinGW/lib/libffi-3.0.11/include" LIBFFI_LIBS="-lffi" ./configure --disable-static --enable-shared --with-threads=win32 --prefix=c:/MinGW && \
-make -j3 && make install && cd .. && \
-(test -f pkg-config-0.26.tar.gz || wget http://pkgconfig.freedesktop.org/releases/pkg-config-0.26.tar.gz) && \
-tar xvzf pkg-config-0.26.tar.gz &&\
-cd pkg-config-0.26 &&\
-sed -i "s/subdirectory/subdirectory_utf8/g" pkg.h && \
+make -j3 && make install && \
+cp gio/gdesktopappinfo.h c:/MinGW/include/glib-2.0/gio/ && cd .. && \
+(test -f pkg-config-0.27.1.tar.gz || wget http://pkgconfig.freedesktop.org/releases/pkg-config-0.27.1.tar.gz) && \
+tar xvzf pkg-config-0.27.1.tar.gz && \
+cd pkg-config-0.27.1 && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -pipe" GLIB_LIBS="-lglib-2.0" GLIB_CFLAGS="-Ic:/MinGW/include/glib-2.0 -Ic:/MinGW/lib/glib-2.0/include" ./configure --disable-static --enable-shared --prefix=c:/MinGW && \
 make -j3 && make install && cd .. && \
-(test -f libxml2-2.7.8.tar.gz || wget ftp://xmlsoft.org/libxml2/libxml2-2.7.8.tar.gz) && \
-tar xvzf libxml2-2.7.8.tar.gz && \
-cd libxml2-2.7.8 && \
+(test -f libxml2-2.8.0.tar.gz || wget ftp://xmlsoft.org/libxml2/libxml2-2.8.0.tar.gz) && \
+tar xvzf libxml2-2.8.0.tar.gz && \
+cd libxml2-2.8.0 && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -pipe" ./configure --disable-static --enable-shared --without-icu --without-python --disable-ipv6 --without-threads --prefix=c:/MinGW && \
 make -j3 && make install && cd .. && \
 (test -f jpegsrc.v8d.tar.gz || wget http://www.ijg.org/files/jpegsrc.v8d.tar.gz) && \
@@ -47,44 +53,44 @@ tar xvzf jpegsrc.v8d.tar.gz && \
 cd jpeg-8d && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -pipe" ./configure --disable-static --enable-shared --prefix=c:/MinGW && \
 make -j3 && make install && cd .. && \
-(test -f tiff-4.0.1.tar.gz || wget http://download.osgeo.org/libtiff/tiff-4.0.1.tar.gz) && \
-tar xvzf tiff-4.0.1.tar.gz && \
-cd tiff-4.0.1 && \
+(test -f tiff-4.0.2.zip || wget http://download.osgeo.org/libtiff/tiff-4.0.2.zip) && \
+tar xvzf tiff-4.0.2.zip && \
+cd tiff-4.0.2 && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -pipe" ./configure --disable-static --enable-shared --enable-zlib --enable-jpeg --without-x --prefix=c:/MinGW && \
 make -j3 && make install && cd .. && \
-(test -f libpng-1.5.10.tar.xz || wget ftp://ftp.simplesystems.org/pub/png/src/libpng-1.5.10.tar.xz) && \
-tar xvaf libpng-1.5.10.tar.xz && \
-cd libpng-1.5.10 && \
+(test -f libpng-1.5.12.tar.xz || wget ftp://ftp.simplesystems.org/pub/png/src/libpng-1.5.12.tar.xz) && \
+tar xvaf libpng-1.5.12.tar.xz && \
+cd libpng-1.5.12 && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -pipe" ./configure --disable-static --enable-shared --prefix=c:/MinGW && \
 make -j3 && make install && cd .. && \
-(test -f gdk-pixbuf-2.26.1.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/gdk-pixbuf/2.26/gdk-pixbuf-2.26.1.tar.xz) && \
-tar xvaf gdk-pixbuf-2.26.1.tar.xz && \
-cd gdk-pixbuf-2.26.1 && \
+(test -f gdk-pixbuf-2.26.3.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/gdk-pixbuf/2.26/gdk-pixbuf-2.26.3.tar.xz) && \
+tar xvaf gdk-pixbuf-2.26.3.tar.xz && \
+cd gdk-pixbuf-2.26.3 && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -pipe" PKG_CONFIG_PATH="c:/MinGW/lib/pkgconfig" ./configure --disable-static --enable-shared --with-libjpeg --with-libtiff --with-libpng --disable-introspection --prefix=c:/MinGW && \
 sed -i 's/docs tests//g' Makefile && \
 find . -name "Makefile" -exec sed -i "s///g" {} \; && \
 make -j3 && make install && cd .. && \
-(test -f pixman-0.24.4.tar.gz || wget http://cairographics.org/releases/pixman-0.24.4.tar.gz) && \
-tar xvzf pixman-0.24.4.tar.gz && \
-cd pixman-0.24.4 && \
-CFLAGS="-march=i686 -O0 -g3 -ggdb3 -pipe" ./configure --disable-static --enable-shared --enable-mmx --enable-sse2 --prefix=c:/MinGW && \
+(test -f pixman-0.26.2.tar.gz || wget http://cairographics.org/releases/pixman-0.26.2.tar.gz) && \
+tar xvzf pixman-0.26.2.tar.gz && \
+cd pixman-0.26.2 && \
+CFLAGS="-march=i686 -O0 -g3 -ggdb3 -pipe" ./configure --disable-static --enable-shared --enable-sse2 --prefix=c:/MinGW && \
 sed -i "s/demos test//g" Makefile.am Makefile.in && \
 make -j3 && make install && cd .. && \
-(test -f freetype-2.4.9.tar.bz2 || wget http://downloads.sourceforge.net/project/freetype/freetype2/2.4.9/freetype-2.4.9.tar.bz2) && \
-tar xvjf freetype-2.4.9.tar.bz2 && \
-cd freetype-2.4.9 && \
+(test -f freetype-2.4.10.tar.bz2 || wget http://downloads.sourceforge.net/project/freetype/freetype2/2.4.10/freetype-2.4.10.tar.bz2) && \
+tar xvjf freetype-2.4.10.tar.bz2 && \
+cd freetype-2.4.10 && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -pipe" ./configure --disable-static --enable-shared --prefix=c:/MinGW && \
 make -j3 && make install && cd .. && \
-(test -f fontconfig-2.9.0.tar.gz || wget http://freedesktop.org/software/fontconfig/release/fontconfig-2.9.0.tar.gz) && \
-tar xvzf fontconfig-2.9.0.tar.gz && \
-cd fontconfig-2.9.0 && \
-CFLAGS="-march=i686 -O0 -g3 -ggdb3 -pipe" PKG_CONFIG_PATH="c:/MinGW/lib/pkgconfig" ./configure --disable-static --enable-shared --prefix=c:/MinGW && \
+(test -f fontconfig-2.10.1.tar.gz || wget http://freedesktop.org/software/fontconfig/release/fontconfig-2.10.1.tar.gz) && \
+tar xvzf fontconfig-2.10.1.tar.gz && \
+cd fontconfig-2.10.1 && \
+CFLAGS="-march=i686 -O0 -g3 -ggdb3 -pipe" PKG_CONFIG_PATH="c:/MinGW/lib/pkgconfig" ./configure --enable-libxml2 --disable-static --enable-shared --prefix=c:/MinGW && \
 make -j3 && make install && cd .. && \
-(test -f glew-1.7.0.tgz || wget http://downloads.sourceforge.net/project/glew/glew/1.7.0/glew-1.7.0.tgz) && \
-tar xvzf glew-1.7.0.tgz && \
-cd glew-1.7.0 && \
-make -j3 && make GLEW_DEST="c:/MinGW" install.all && cd .. && \
 (!(test -f X) || (
+	(test -f glew-1.7.0.tgz || wget http://downloads.sourceforge.net/project/glew/glew/1.7.0/glew-1.7.0.tgz) && \
+	tar xvzf glew-1.7.0.tgz && \
+	cd glew-1.7.0 && \
+	make -j3 && make GLEW_DEST="c:/MinGW" install.all && cd .. && \
 	(test -f util-macros-1.17.tar.gz || wget http://xorg.freedesktop.org/releases/individual/util/util-macros-1.17.tar.gz) && \
 	tar xvzf util-macros-1.17.tar.gz && \
 	cd util-macros-1.17 && \
@@ -170,18 +176,33 @@ make -j3 && make GLEW_DEST="c:/MinGW" install.all && cd .. && \
 	sed -i "s/dlopen.*)/LoadLibrary(library)/g" src/CrGlCur.c && \
 	sed -i "s/dlsym/GetProcAddress/g" src/CrGlCur.c && \
 	make -j3 && make install && cd ..\
-)) ; && \
+)) && \
 (test -f cairo-1.10.2.tar.gz || wget http://cairographics.org/releases/cairo-1.10.2.tar.gz) && \
-tar xvzf cairo-1.10.2.tar.gz && \
+tar xvzf cairo-1.10.2.tar.xg && \
 cd cairo-1.10.2 && \
 sed -i "s/test perf//g" Makefile.am Makefile.in && \
 (!(test -f X) || CFLAGS="-O0 -g3 -ggdb3 -pipe" PKG_CONFIG_PATH="c:/MinGW/lib/pkgconfig" ./configure --disable-static --enable-shared --enable-svg --enable-pdf --enable-ps --enable-png --enable-xml --enable-pthread --enable-gobject --enable-xlib --prefix=c:/MinGW) && \
 (test -f X || CFLAGS="-O0 -g3 -ggdb3 -pipe" PKG_CONFIG_PATH="c:/MinGW/lib/pkgconfig" ./configure --disable-static --enable-shared --enable-svg --enable-pdf --enable-ps --enable-png --enable-xml --enable-pthread --enable-gobject --prefix=c:/MinGW) && \
-sed -i "s/typedef SSIZE_t.*$//g" util/cairo-missing/cairo-missing.h && \
 make -j3 && make install && cd .. && \
-(test -f pango-1.30.0.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/pango/1.30/pango-1.30.0.tar.xz) && \
-tar xvaf pango-1.30.0.tar.xz && \
-cd pango-1.30.0 && \
+(test -f ragel-6.7.tar.gz || wget http://www.complang.org/ragel/ragel-6.7.tar.gz) && \
+tar xvzf ragel-6.7.tar.gz && \
+cd ragel-6.7 && \
+patch -p1 < ../../ragel.patch && \
+CFLAGS="-march=i686 -O0 -g3 -ggdb3 -pipe" ./configure --prefix=c:/MinGW && \
+make && make install && cd .. && \
+(test -f harfbuzz-0.9.3.tar.gz || wget http://cgit.freedesktop.org/harfbuzz/snapshot/harfbuzz-0.9.3.tar.gz) && \
+tar xvzf harfbuzz-0.9.3.tar.gz && \
+cd harfbuzz-0.9.3 && \
+autoheader && \
+aclocal && \
+libtoolize && \
+automake --add-missing --copy && \
+autoconf && \
+CXXFLAGS="-march=i686 -O0 -g3 -ggdb3 -pipe" CFLAGS="-march=i686 -O0 -g3 -ggdb3 -pipe" ./configure --disable-static --enable-shared --prefix=c:/MinGW && \
+make -j3 && make install && cd .. && \
+(test -f pango-1.31.0.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/pango/1.31/pango-1.31.0.tar.xz) && \
+tar xvaf pango-1.31.0.tar.xz && \
+cd pango-1.31.0 && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -pipe" CFLAGS="-march=i486" PKG_CONFIG_PATH="c:/MinGW/lib/pkgconfig" ./configure --with-included-modules=basic-win32 --disable-static --enable-shared --prefix=c:/MinGW && \
 make -j3 && make install && cd .. && \
 (test -f libcroco-0.6.5.tar.xz || wget http://ftp.gnome.org/pub/gnome/sources/libcroco/0.6/libcroco-0.6.5.tar.xz) && \
@@ -189,14 +210,14 @@ tar xvaf libcroco-0.6.5.tar.xz && \
 cd libcroco-0.6.5 && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -pipe" PKG_CONFIG_PATH="c:/MinGW/lib/pkgconfig" ./configure --disable-static --enable-shared --prefix=c:/MinGW && \
 make -j3 && make install && cd .. && \
-(test -f poppler-0.18.4.tar.gz || wget http://poppler.freedesktop.org/poppler-0.18.4.tar.gz) && \
-tar xvzf poppler-0.18.4.tar.gz && \
-cd poppler-0.18.4 && \
+(test -f poppler-0.20.3.tar.gz || wget http://poppler.freedesktop.org/poppler-0.20.3.tar.gz) && \
+tar xvzf poppler-0.20.3.tar.gz && \
+cd poppler-0.20.3 && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -pipe" PKG_CONFIG_PATH="c:/MinGW/lib/pkgconfig" ./configure --without-x --disable-static --enable-shared --enable-zlib --enable-libjpeg --enable-libpng --enable-cairo-output --disable-introspection --prefix=c:/MinGW && \
 make -j3 && make install && cd .. && \
-(test -f atk-2.4.0.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/atk/2.4/atk-2.4.0.tar.xz) && \
-tar xvaf atk-2.4.0.tar.xz && \
-cd atk-2.4.0 && \
+(test -f atk-2.5.4.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/atk/2.5/atk-2.5.4.tar.xz) && \
+tar xvaf atk-2.5.4.tar.xz && \
+cd atk-2.5.4 && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -pipe" PKG_CONFIG_PATH="c:/MinGW/lib/pkgconfig" ./configure --disable-static --enable-shared --prefix=c:/MinGW && \
 make -j3 && make install && cd .. && \
 (!(test -f X) || (
@@ -225,34 +246,38 @@ make -j3 && make install && cd .. && \
 	cd libXi-1.2.1 && \
 	CFLAGS="-march=i686 -O0 -g3 -ggdb3 -pipe" PKG_CONFIG_PATH="c:/MinGW/lib/pkgconfig" ./configure --disable-static --enable-shared --prefix=c:/MinGW && \
 	make -j3 && make install && cd .. \
-))
-(test -f gtk+-3.4.1.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/gtk+/3.4/gtk+-3.4.1.tar.xz) && \
-tar xvaf gtk+-3.4.1.tar.xz && \
-cd gtk+-3.4.1 && \
+)) && \
+(test -f gtk+-3.5.12.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/gtk+/3.5/gtk+-3.5.12.tar.xz) && \
+tar xvaf gtk+-3.5.12.tar.xz && \
+cd gtk+-3.5.12 && \
 sed -i 's/modules demos tests perf examples//g' Makefile.in Makefile.am && \
 sed -i 's/\. tests/\./g' gtk/Makefile.in gtk/Makefile.am gdk/Makefile.in gdk/Makefile.am && \
 sed -i 's/ tests$//g' gtk/Makefile.in gtk/Makefile.am gdk/Makefile.in gdk/Makefile.am && \
 (!(test -f X) || CFLAGS="-march=i686 -O0 -g3 -ggdb3 -pipe" PKG_CONFIG_PATH="c:/MinGW/lib/pkgconfig" ./configure --disable-modules --disable-packagekit --disable-papi --disable-introspection --enable-x11-backend --enable-broadway-backend --disable-static --enable-shared --prefix=c:/MinGW) && \
 (test -f X || CFLAGS="-march=i686 -O0 -g3 -ggdb3 -pipe" PKG_CONFIG_PATH="c:/MinGW/lib/pkgconfig" ./configure --disable-modules --disable-packagekit --disable-papi --disable-introspection --disable-static --enable-shared --prefix=c:/MinGW) && \
 find . -name "Makefile" -exec sed -i "s///g" {} \; && \
+sed -i 's/am__objects_3)/am__objects_3) $(am__objects_5)/g' gtk/Makefile && \
+sed -i 's/gtk-launch$(EXEEXT) \\/ \\/g' gtk/Makefile && \
 make -j3 && make install && cd .. && \
 (test -f librsvg-2.34.2.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/librsvg/2.34/librsvg-2.34.2.tar.xz) && \
 tar xvaf librsvg-2.34.2.tar.xz && \
 cd librsvg-2.34.2 && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -pipe" PKG_CONFIG_PATH="c:/MinGW/lib/pkgconfig" ./configure --disable-static --enable-shared --enable-introspection=no --prefix=c:/MinGW && \
 make -j3 && make install && cd .. && \
-(test -f UFconfig.tar.gz || wget http://www.cise.ufl.edu/research/sparse/UFconfig/current/UFconfig.tar.gz) && \
-tar xvzf UFconfig.tar.gz && \
-sed -i 's/# CC = gcc/CC = gcc/g' UFconfig/UFconfig.mk && \
-sed -i 's/^# CFLAGS = -O3 -fexceptions$/CFLAGS = -O3 -DNPARTITION -DNSUPERNODAL -fexceptions/g' UFconfig/UFconfig.mk && \
-sed -i 's~INSTALL_LIB = .*$~INSTALL_LIB = "c:/MinGW/lib"~g' UFconfig/UFconfig.mk && \
-sed -i 's~INSTALL_INCLUDE = .*$~INSTALL_INCLUDE = "c:/MinGW/include"~g' UFconfig/UFconfig.mk && \
-cd UFconfig && \
+(test -f SuiteSparse_config.tar.gz || wget http://www.cise.ufl.edu/research/sparse/UFconfig/current/SuiteSparse_config.tar.gz) && \
+tar xvzf SuiteSparse_config.tar.gz && \
+cd SuiteSparse_config && \
+sed -i 's/-lrt//g' SuiteSparse_config.mk && \
+sed -i 's/# CC = gcc/CC = gcc/g' SuiteSparse_config.mk && \
+sed -i 's/# MAKE = make/MAKE = make/g' SuiteSparse_config.mk && \
+sed -i 's/-O3 -fexceptions/-O3 -DNPARTITION -DNSUPERNODAL -fexceptions/g' SuiteSparse_config.mk && \
+sed -i 's~INSTALL_LIB = .*$~INSTALL_LIB = "c:/MinGW/lib"~g' SuiteSparse_config.mk && \
+sed -i 's~INSTALL_INCLUDE = .*$~INSTALL_INCLUDE = "c:/MinGW/include"~g' SuiteSparse_config.mk && \
 make -j3 && \
 make install && \
-gcc -O3 -DNPARTITION -DNSUPERNODAL -fexceptions -c UFconfig.c && \
-gcc -shared -Wl,-soname,libufconfig.dll -o libufconfig.dll UFconfig.o && \
-cp libufconfig.dll c:/MinGW/bin && \
+gcc -O3 -DNPARTITION -DNSUPERNODAL -fexceptions -c SuiteSparse_config.c && \
+gcc -shared -Wl,-soname,libsuitesparseconfig.dll -o libsuitesparseconfig.dll SuiteSparse_config.o && \
+cp libsuitesparseconfig.dll c:/MinGW/bin && \
 cd .. && \
 (test -f AMD.tar.gz || wget http://www.cise.ufl.edu/research/sparse/amd/current/AMD.tar.gz) && \
 tar xvzf AMD.tar.gz && \
@@ -278,37 +303,25 @@ make install && \
 gcc -shared -Wl,-soname,libcholmod.dll -o libcholmod.dll Lib/*.o -lamd -lcolamd && \
 cp libcholmod.dll c:/MinGW/bin && \
 cd .. && \
-(test -f lapack-lite-3.1.1.tgz || wget http://www.netlib.org/lapack/lapack-lite-3.1.1.tgz) && \
-tar xvzf lapack-lite-3.1.1.tgz && \
-cd lapack-lite-3.1.1 && \
-cp INSTALL/dlamch.f INSTALL/slamch.f SRC && \
-cp INSTALL/make.inc.gfortran make.inc && \
-cd BLAS/SRC && \
-make -j3 && \
-cd ../../SRC && \
-make -j3 && \
-cd .. && \
-cp lapack_LINUX.a c:/MinGW/lib/liblapack.a && \
-cp blas_LINUX.a c:/MinGW/lib/libblas.a && \
-export TMP=/c/Temp && \
-gfortran --shared -o libblas.dll BLAS/SRC/*.f -O && \
-gfortran --shared -o liblapack.dll SRC/*.f libblas.dll -O && \
-cp libblas.dll liblapack.dll c:/MinGW/bin && cd .. && \
+(test -f v0.2.3 || wget https://github.com/xianyi/OpenBLAS/tarball/v0.2.3 --no-check-certificate) && \
+tar xvzf v0.2.3 && \
+cd xianyi-OpenBLAS-e552452 && \
+patch < ../../libopenblas.patch && \
+make -j3 && make install && cd .. && \
 (test -f UMFPACK.tar.gz || wget http://www.cise.ufl.edu/research/sparse/umfpack/current/UMFPACK.tar.gz) && \
 tar xvzf UMFPACK.tar.gz && \
 cd UMFPACK && \
 make -j3 library && \
 make install && \
-gcc -shared -Wl,-soname,libumfpack.dll -o libumfpack.dll Lib/*.o -lamd -lcholmod -lcolamd -lblas -lgfortran && \
+gcc -shared -Wl,-soname,libumfpack.dll -o libumfpack.dll Lib/*.o -lamd -lcholmod -lcolamd -lopenblas -lgfortran -lsuitesparseconfig && \
 cp libumfpack.dll c:/MinGW/bin && \
 cd .. && \
 mingw-get install gettext && \
-(test -f libm3d-0.24.tar.bz2 || wget http://download.tuxfamily.org/m3dlib/libs_current/libm3d-0.24.tar.bz2) && \
-tar xvaf libm3d-0.24.tar.bz2 && \
-cd libm3d-0.24 && \
+(test -f libm3d-0.26.tar.bz2 || wget http://download.tuxfamily.org/m3dlib/libs_current/libm3d-0.26.tar.bz2) && \
+tar xvaf libm3d-0.26.tar.bz2 && \
+cd libm3d-0.26 && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -pipe" PKG_CONFIG_PATH="c:/MinGW/lib/pkgconfig" ./configure --disable-static --enable-shared --prefix=c:/MinGW && \
 make -j3 && make install && cd ..
-
 
 Compilation sous Linux
 ======================
