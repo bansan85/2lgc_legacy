@@ -29,7 +29,6 @@ gboolean _1992_1_1_sections_ajout_T(Projet *projet, const char* nom, double lt, 
 gboolean _1992_1_1_sections_ajout_carre(Projet *projet, const char* nom, double cote) __attribute__((__warn_unused_result__));
 gboolean _1992_1_1_sections_ajout_circulaire(Projet *projet, const char* nom, double diametre) __attribute__((__warn_unused_result__));
 
-void* _1992_1_1_sections_cherche_numero(Projet *projet, unsigned int numero) __attribute__((__warn_unused_result__));
 void* _1992_1_1_sections_cherche_nom(Projet *projet, const char *nom) __attribute__((__warn_unused_result__));
 
 double _1992_1_1_sections_j(void* section) __attribute__((__warn_unused_result__));

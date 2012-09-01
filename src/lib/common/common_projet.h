@@ -290,7 +290,6 @@ typedef struct __Beton_Section_Rectangulaire
 {
     Type_Beton_Section  type;
     char                *nom;
-    unsigned int        numero;
     double              largeur;
     double              hauteur;
 } Beton_Section_Rectangulaire;
@@ -300,7 +299,6 @@ typedef struct __Beton_Section_T
 {
     Type_Beton_Section  type;
     char                *nom;
-    unsigned int        numero;
     double              largeur_table;
     double              largeur_ame;
     double              hauteur_table;
@@ -312,7 +310,6 @@ typedef struct __Beton_Section_Carre
 {
     Type_Beton_Section  type;
     char                *nom;
-    unsigned int        numero;
     double              cote;
 } Beton_Section_Carre;
 
@@ -321,7 +318,6 @@ typedef struct __Beton_Section_Circulaire
 {
     Type_Beton_Section  type;
     char                *nom;
-    unsigned int        numero;
     double              diametre;
 } Beton_Section_Circulaire;
 
