@@ -627,7 +627,7 @@ typedef struct __Comp_Gtk
 {
     // Fenêtre
     GtkWidget   *window;
-    GtkWidget   *main_table;
+    GtkWidget   *main_grid;
     
     // Menu
     GtkWidget   *menu;
