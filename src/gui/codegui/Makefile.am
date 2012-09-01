@@ -8,7 +8,7 @@ if ENABLE_GTK
 bin_PROGRAMS		=	codegui
 codegui_SOURCES		=	main.cc
 codegui_CPPFLAGS	=	@GTK_CFLAGS@
-codegui_LDADD		=	-lcholmod @BLAS_LIBS@ -lcolamd -lumfpack -lblas -lgfortran @GTK_LIBS@ \
+codegui_LDADD		=	-lcholmod @BLAS_LIBS@ -lcolamd -lumfpack -lgfortran @GTK_LIBS@ \
 						../../lib/libeurocodes.la
 codegui_LDFLAGS		=   $(AM_LDFLAGS) -no-undefined
 endif

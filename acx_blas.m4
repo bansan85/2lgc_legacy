@@ -108,6 +108,11 @@ if test $acx_blas_ok = no; then
 	LIBS="$save_LIBS"
 fi
 
+# BLAS in openblas library?
+if test $acx_blas_ok = no; then
+	AC_CHECK_LIB(openblas, $sgemm, [acx_blas_ok=yes;BLAS_LIBS="-lopenblas"])
+fi
+
 # BLAS in ATLAS library? (http://math-atlas.sourceforge.net/)
 if test $acx_blas_ok = no; then
 	AC_CHECK_LIB(atlas, ATL_xerbla,
