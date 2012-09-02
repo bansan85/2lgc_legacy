@@ -21,9 +21,11 @@
 #include <math.h>
 #include <libintl.h>
 #include <gmodule.h> 
+#include <string.h>
 
 #include "common_projet.h"
 #include "common_erreurs.h"
+#include "EF_calculs.h"
 #include "EF_appuis.h"
 #include "common_m3d.hpp"
 #include "EF_rigidite.h"
@@ -82,7 +84,7 @@ G_MODULE_EXPORT EF_Noeud *EF_noeuds_ajout_noeud_libre(Projet *projet, double x, 
     
     projet->ef_donnees.noeuds = g_list_append(projet->ef_donnees.noeuds, noeud_nouveau);
     
-    BUG(EF_rigidite_free(projet), NULL);
+    BUG(EF_calculs_free(projet), NULL);
     
 #ifdef ENABLE_GTK
     BUG(m3d_noeud(&projet->list_gtk.m3d, noeud_nouveau), NULL);
@@ -130,7 +132,7 @@ G_MODULE_EXPORT EF_Noeud* EF_noeuds_ajout_noeud_barre(Projet *projet, Beton_Barr
     
     projet->ef_donnees.noeuds = g_list_append(projet->ef_donnees.noeuds, noeud_nouveau);
     
-    BUG(EF_rigidite_free(projet), NULL);
+    BUG(EF_calculs_free(projet), NULL);
     
     barre->discretisation_element++;
     
@@ -144,6 +146,7 @@ G_MODULE_EXPORT EF_Noeud* EF_noeuds_ajout_noeud_barre(Projet *projet, Beton_Barr
         barre->noeuds_intermediaires = g_list_insert_before(barre->noeuds_intermediaires, liste, noeud_nouveau);
     
     BUGMSG(barre->info_EF = realloc(barre->info_EF, sizeof(Barre_Info_EF)*(barre->discretisation_element+1)), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    memset(barre->info_EF, 0, sizeof(Barre_Info_EF)*(barre->discretisation_element+1));
     
 #ifdef ENABLE_GTK
     BUG(m3d_noeud(&projet->list_gtk.m3d, noeud_nouveau), NULL);

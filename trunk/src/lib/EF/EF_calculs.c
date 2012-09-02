@@ -32,6 +32,7 @@
 #include "EF_charge_barre_ponctuelle.h"
 #include "EF_charge_barre_repartie_uniforme.h"
 #include "EF_noeud.h"
+#include "EF_rigidite.h"
 #include "1990_actions.h"
 #include "1992_1_1_section.h"
 
@@ -1371,6 +1372,55 @@ G_MODULE_EXPORT gboolean EF_calculs_resoud_charge(Projet *projet, unsigned int n
     // FinPour
     while (list_parcours != NULL);
     cholmod_free_triplet(&triplet_deplacements_totaux, projet->ef_donnees.c);
+    
+    return TRUE;
+}
+
+
+G_MODULE_EXPORT gboolean EF_calculs_free(Projet *projet)
+/* Description : Libère la mémoire allouée pour les calculs, et pour les résultats.
+ *               Cette fonction doit être appelée à chaque fois qu'une donnée ayant une
+ *               influence sur les résultats des calculs est modifiée (ajout d'un noeud ou d'une
+ *               barre, modification d'une action, ...).
+ * Paramètres : Projet *projet : la variable projet.
+ * Valeur renvoyée :
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL
+ */
+{
+    GList *list_parcours;
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUG(EF_rigidite_free(projet), FALSE);
+    
+    list_parcours = projet->actions;
+    while (list_parcours != NULL)
+    {
+        Action *action = list_parcours->data;
+        
+        if (action->deplacement_complet != NULL)
+        {
+            cholmod_free_sparse(&action->deplacement_complet, projet->ef_donnees.c);
+            action->deplacement_complet = NULL;
+        }
+        
+        if (action->forces_complet != NULL)
+        {
+            cholmod_free_sparse(&action->forces_complet, projet->ef_donnees.c);
+            action->forces_complet = NULL;
+        }
+        
+        if (action->efforts_noeuds != NULL)
+        {
+            cholmod_free_sparse(&action->efforts_noeuds, projet->ef_donnees.c);
+            action->efforts_noeuds = NULL;
+        }
+        
+        if (action->fonctions_efforts[0] != NULL)
+            BUG(common_fonction_free(projet, action), FALSE);
+        
+        list_parcours = g_list_next(list_parcours);
+    }
     
     return TRUE;
 }
