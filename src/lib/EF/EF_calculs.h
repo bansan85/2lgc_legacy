@@ -30,4 +30,6 @@ gboolean EF_calculs_moment_hyper_z(Barre_Info_EF *infos, double phia, double phi
 
 gboolean EF_calculs_resoud_charge(Projet *projet, unsigned int num_action) __attribute__((__warn_unused_result__));
 
+gboolean EF_calculs_free(Projet *projet) __attribute__((__warn_unused_result__));
+
 #endif

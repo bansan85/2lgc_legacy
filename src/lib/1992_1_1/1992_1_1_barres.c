@@ -121,11 +121,14 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_ajout(Projet *projet, Type_Element typ
     element_nouveau->discretisation_element = 0;
     
     BUGMSG(element_nouveau->info_EF = (Barre_Info_EF*)malloc(sizeof(Barre_Info_EF)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    memset(element_nouveau->info_EF, 0, sizeof(Barre_Info_EF));
     
     element_nouveau->matrice_rotation = NULL;
     element_nouveau->matrice_rotation_transpose = NULL;
     
     element_nouveau->numero = g_list_length(projet->beton.barres);
+    
+    BUG(EF_calculs_free(projet), TRUE);
     
     element_nouveau->noeuds_intermediaires = NULL;
     if (discretisation_element != 0)
