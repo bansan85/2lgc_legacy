@@ -142,6 +142,7 @@ typedef struct __List_Gtk_EF_Appuis
     GtkBuilder      *builder;
     GtkWidget       *window;
     
+    GtkTreeStore    *appuis;
     GtkListStore    *liste_appuis;
     GtkListStore    *liste_type_appui;
 } List_Gtk_EF_Appuis;
