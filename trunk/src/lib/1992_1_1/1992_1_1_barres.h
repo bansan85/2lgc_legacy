@@ -25,7 +25,7 @@
 
 gboolean _1992_1_1_barres_init(Projet *projet) __attribute__((__warn_unused_result__));
 
-gboolean _1992_1_1_barres_ajout(Projet *projet, Type_Element type, void *section, unsigned int materiau, unsigned int noeud_debut, unsigned int noeud_fin, EF_Relachement* relachement, unsigned int discretisation_element) __attribute__((__warn_unused_result__));
+gboolean _1992_1_1_barres_ajout(Projet *projet, Type_Element type, void *section, Beton_Materiau *materiau, unsigned int noeud_debut, unsigned int noeud_fin, EF_Relachement* relachement, unsigned int discretisation_element) __attribute__((__warn_unused_result__));
 
 Beton_Barre* _1992_1_1_barres_cherche_numero(Projet *projet, unsigned int numero) __attribute__((__warn_unused_result__));
 gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList* noeuds, GList* barres, GList** noeuds_dep, GList** barres_dep) __attribute__((__warn_unused_result__));

@@ -350,7 +350,6 @@ typedef struct __EF_Relachement
 
 typedef struct __Beton_Materiau
 {
-    unsigned int    numero;
     char        *nom;
     
     // Caractéristique du matériau béton conformément à EN 1992_1_1, Tableau 3.1

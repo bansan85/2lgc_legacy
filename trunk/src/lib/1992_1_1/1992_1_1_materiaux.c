@@ -145,7 +145,6 @@ G_MODULE_EXPORT gboolean _1992_1_1_materiaux_ajout(Projet *projet, const char *n
     materiau_nouveau->nu = nu;
     materiau_nouveau->gnu_0_2 = materiau_nouveau->ecm/(2.*(1.+nu));
     materiau_nouveau->gnu_0_0 = materiau_nouveau->ecm/2.;
-    materiau_nouveau->numero = g_list_length(projet->beton.materiaux);
     
     projet->beton.materiaux = g_list_append(projet->beton.materiaux, materiau_nouveau);
     
@@ -155,38 +154,6 @@ G_MODULE_EXPORT gboolean _1992_1_1_materiaux_ajout(Projet *projet, const char *n
 #endif
     
     return TRUE;
-}
-
-
-G_MODULE_EXPORT Beton_Materiau* _1992_1_1_materiaux_cherche_numero(Projet *projet, unsigned int numero)
-/* Description : Positionne dans la liste des materiaux en béton l'élément courant au numéro
- *               souhaité.
- * Paramètres : Projet *projet : la variable projet,
- *            : unsigned int numero : le numéro du matériau.
- * Valeur renvoyée :
- *   Succès : pointeur vers le matériau en béton
- *   Échec : NULL :
- *             projet == NULL,
- *             materiau introuvable.
- */
-{
-    GList   *list_parcours;
-    
-    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
-    
-    // Trivial
-    list_parcours = projet->beton.materiaux;
-    while (list_parcours != NULL)
-    {
-        Beton_Materiau  *materiau = list_parcours->data;
-        
-        if (materiau->numero == numero)
-            return materiau;
-        
-        list_parcours = g_list_next(list_parcours);
-    }
-    
-    BUGMSG(0, NULL, gettext("Matériau en béton n°%d introuvable.\n"), numero);
 }
 
 
