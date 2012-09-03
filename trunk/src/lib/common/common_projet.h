@@ -330,7 +330,6 @@ typedef struct __EF_Relachement_Donnees_Elastique_Lineaire
 
 typedef struct __EF_Relachement
 {
-    unsigned int        numero;
     char                *nom;
     EF_Relachement_Type rx_debut;   // Type de relachement du moment autour de l'axe x
     void                *rx_d_data; // Paramètres complémentaires au relachement. N'est à 

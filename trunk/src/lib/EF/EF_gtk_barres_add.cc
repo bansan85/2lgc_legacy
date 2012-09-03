@@ -69,7 +69,7 @@ G_MODULE_EXPORT void EF_gtk_barres_add_add_clicked(GtkButton *button __attribute
  */
 {
     int         type;
-    char        *section_nom;
+    char        *nom;
     void        *section;
     int         materiau;
     int         noeud_debut;
@@ -86,13 +86,30 @@ G_MODULE_EXPORT void EF_gtk_barres_add_add_clicked(GtkButton *button __attribute
     ef_gtk = &projet->list_gtk.ef_barres;
     
     type = gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_type_combobox")));
+    
     model = gtk_combo_box_get_model(GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_section_combobox")));
     type = gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_section_combobox")));
     gtk_tree_model_iter_nth_child(model, &Iter, NULL, type);
-    gtk_tree_model_get(model, &Iter, 0, &section_nom, -1);
-    BUG(section = _1992_1_1_sections_cherche_nom(projet, section_nom), );
+    gtk_tree_model_get(model, &Iter, 0, &nom, -1);
+    BUG(section = _1992_1_1_sections_cherche_nom(projet, nom), );
+    free(nom);
+    
     materiau = gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_materiau_combobox")));
-    relachement = EF_relachement_cherche_numero(projet, gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_relachement_combobox")))-1);
+    
+    model = gtk_combo_box_get_model(GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_relachement_combobox")));
+    type = gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_relachement_combobox")));
+    if (type == -1)
+        return;
+    else if (type == 0)
+        relachement = NULL;
+    else
+    {
+        gtk_tree_model_iter_nth_child(model, &Iter, NULL, type);
+        gtk_tree_model_get(model, &Iter, 0, &nom, -1);
+        BUG(relachement = EF_relachement_cherche_nom(projet, nom), );
+        free(nom);
+    }
+    
     noeud_debut = gtk_common_entry_renvoie_int(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_noeud1_buffer")));
     noeud_fin = gtk_common_entry_renvoie_int(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_noeud2_buffer")));
     if ((EF_noeuds_cherche_numero(projet, noeud_debut) == NULL) || (EF_noeuds_cherche_numero(projet, noeud_fin) == NULL))
@@ -103,7 +120,6 @@ G_MODULE_EXPORT void EF_gtk_barres_add_add_clicked(GtkButton *button __attribute
         BUG(_1992_1_1_barres_ajout(projet, (Type_Element)type, section, materiau, noeud_debut, noeud_fin, relachement, 0), );
         BUG(m3d_rafraichit(projet), );
     }
-    free(section_nom);
     
     return;
 }

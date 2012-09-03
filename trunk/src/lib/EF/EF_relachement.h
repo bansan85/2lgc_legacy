@@ -24,7 +24,6 @@
 
 gboolean EF_relachement_init(Projet *projet) __attribute__((__warn_unused_result__));
 gboolean EF_relachement_ajout(Projet *projet, const char *nom, EF_Relachement_Type rx_debut, void* rx_d_data, EF_Relachement_Type ry_debut, void* ry_d_data, EF_Relachement_Type rz_debut, void* rz_d_data, EF_Relachement_Type rx_fin, void* rx_f_data, EF_Relachement_Type ry_fin, void* ry_f_data, EF_Relachement_Type rz_fin, void* rz_f_data) __attribute__((__warn_unused_result__));
-EF_Relachement* EF_relachement_cherche_numero(Projet *projet, unsigned int numero) __attribute__((__warn_unused_result__));
 EF_Relachement* EF_relachement_cherche_nom(Projet *projet, const char *nom) __attribute__((__warn_unused_result__));
 gboolean EF_relachement_free(Projet *projet) __attribute__((__warn_unused_result__));
 
