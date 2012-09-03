@@ -37,7 +37,6 @@ extern "C" {
 #include "EF_noeud.h"
 #include "EF_charge_noeud.h"
 #include "1990_actions.h"
-#include "common_selection.h"
 #include "1992_1_1_barres.h"
 
 G_MODULE_EXPORT void EF_gtk_noeud_fermer(GtkButton *button __attribute__((unused)),
@@ -141,6 +140,7 @@ G_MODULE_EXPORT void EF_gtk_noeud_edit_pos_abs(GtkCellRendererText *cell, gchar 
     path = gtk_tree_path_new_from_string(path_string);
     
     gtk_tree_model_get_iter(model, &iter, path);
+    gtk_tree_path_free(path);
     gtk_tree_model_get(model, &iter, 0, &i, -1);
     
     // On vérifie si le texte contient bien un nombre flottant
@@ -194,7 +194,6 @@ G_MODULE_EXPORT void EF_gtk_noeud_edit_pos_abs(GtkCellRendererText *cell, gchar 
     }
     
     free(fake);
-    gtk_tree_path_free(path);
      
     return;
 }

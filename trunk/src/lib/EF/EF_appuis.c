@@ -309,7 +309,7 @@ G_MODULE_EXPORT EF_Appui* EF_appuis_ajout(Projet *projet, const char *nom, Type_
         }
         default:
         {
-            BUGMSG(0, NULL, "Type d'appui %d inconnu\n", x);
+            BUGMSG(0, NULL, gettext("Type d'appui %d inconnu\n."), x);
             break;
         }
     }
@@ -324,7 +324,7 @@ G_MODULE_EXPORT EF_Appui* EF_appuis_ajout(Projet *projet, const char *nom, Type_
         }
         default:
         {
-            BUGMSG(0, NULL, "Type d'appui %d inconnu\n", y);
+            BUGMSG(0, NULL, gettext("Type d'appui %d inconnu\n."), y);
             break;
         }
     }
@@ -339,7 +339,7 @@ G_MODULE_EXPORT EF_Appui* EF_appuis_ajout(Projet *projet, const char *nom, Type_
         }
         default:
         {
-            BUGMSG(0, NULL, "Type d'appui %d inconnu\n", z);
+            BUGMSG(0, NULL, gettext("Type d'appui %d inconnu.\n"), z);
             break;
         }
     }
@@ -354,7 +354,7 @@ G_MODULE_EXPORT EF_Appui* EF_appuis_ajout(Projet *projet, const char *nom, Type_
         }
         default:
         {
-            BUGMSG(0, NULL, "Type d'appui %d inconnu\n", rx);
+            BUGMSG(0, NULL, gettext("Type d'appui %d inconnu.\n"), rx);
             break;
         }
     }
@@ -369,7 +369,7 @@ G_MODULE_EXPORT EF_Appui* EF_appuis_ajout(Projet *projet, const char *nom, Type_
         }
         default:
         {
-            BUGMSG(0, NULL, "Type d'appui %d inconnu\n", ry);
+            BUGMSG(0, NULL, gettext("Type d'appui %d inconnu.\n"), ry);
             break;
         }
     }
@@ -384,7 +384,7 @@ G_MODULE_EXPORT EF_Appui* EF_appuis_ajout(Projet *projet, const char *nom, Type_
         }
         default:
         {
-            BUGMSG(0, NULL, "Type d'appui %d inconnu\n", rz);
+            BUGMSG(0, NULL, gettext("Type d'appui %d inconnu.\n"), rz);
             break;
         }
     }
@@ -439,6 +439,111 @@ G_MODULE_EXPORT EF_Appui* EF_appuis_ajout(Projet *projet, const char *nom, Type_
 #endif
     
     return appui_nouveau;
+}
+
+
+G_MODULE_EXPORT gboolean EF_appuis_edit(EF_Appui *appui, int x, Type_EF_Appui type_x,
+  Projet *projet)
+/* Description : Modifie un appui.
+ * Paramètres : EF_Appui *appui : appui à modifier,
+ *            : int x : désigne le paramètre à modifier, 0 pour ux et 5 pour rz,
+ *            : Type_EF_Appui type_x : le nouveau type,
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée :
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL,
+ *             appui == NULL,
+ *             type_x inconnu.
+ */
+{
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(appui, FALSE, gettext("Paramètre %s incorrect.\n"), "appui");
+    BUGMSG((type_x == EF_APPUI_LIBRE) || (type_x == EF_APPUI_BLOQUE), FALSE, gettext("Type d'appui %d inconnu.\n"), type_x);
+    
+    switch (x)
+    {
+        case 0 :
+        {
+            appui->ux = type_x;
+            break;
+        }
+        case 1 :
+        {
+            appui->uy = type_x;
+            break;
+        }
+        case 2 :
+        {
+            appui->uz = type_x;
+            break;
+        }
+        case 3 :
+        {
+            appui->rx = type_x;
+            break;
+        }
+        case 4 :
+        {
+            appui->ry = type_x;
+            break;
+        }
+        case 5 :
+        {
+            appui->rz = type_x;
+            break;
+        }
+        default :
+        {
+            BUGMSG(0, FALSE, gettext("Afin de modifier un appui, le paramètre x doit être compris entre 0 et 5 inclu.\n"));
+            return FALSE;
+        }
+    }
+    
+#ifdef ENABLE_GTK
+    if (projet->list_gtk.ef_appuis.builder != NULL)
+    {
+        if (type_x == EF_APPUI_LIBRE)
+            gtk_tree_store_set(projet->list_gtk.ef_appuis.appuis, &appui->Iter_fenetre, x+1, gettext("Libre"), -1);
+        else if (type_x == EF_APPUI_BLOQUE)
+            gtk_tree_store_set(projet->list_gtk.ef_appuis.appuis, &appui->Iter_fenetre, x+1, gettext("Bloqué"), -1);
+        else // Impossible
+            return FALSE;
+    }
+#endif
+    
+    return TRUE;
+}
+
+
+G_MODULE_EXPORT gboolean EF_appuis_renomme(EF_Appui *appui, gchar *nom, Projet *projet)
+/* Description : Renomme un appui.
+ * Paramètres : EF_Appui *appui : appui à renommer,
+ *            : const char *nom : le nouveau nom,
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée :
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL,
+ *             appui == NULL,
+ *             appui possédant le nouveau nom est déjà existant.
+ */
+{
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(appui, FALSE, gettext("Paramètre %s incorrect.\n"), "appui");
+    BUGMSG(EF_appuis_cherche_nom(projet, nom, FALSE) == NULL, FALSE, gettext("L'appui '%s' existe déjà.\n"), nom);
+    
+    free(appui->nom);
+    BUGMSG(appui->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    
+#ifdef ENABLE_GTK
+    if (projet->list_gtk.ef_appuis.builder != NULL)
+    {
+        gtk_tree_store_set(projet->list_gtk.ef_appuis.appuis, &appui->Iter_fenetre, 0, nom, -1);
+    }
+#endif
+    
+    return TRUE;
 }
 
 
