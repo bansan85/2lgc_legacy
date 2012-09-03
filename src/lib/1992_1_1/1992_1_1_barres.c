@@ -65,13 +65,13 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_init(Projet *projet)
 
 
 G_MODULE_EXPORT gboolean _1992_1_1_barres_ajout(Projet *projet, Type_Element type,
-  void *section, unsigned int materiau, unsigned int noeud_debut, unsigned int noeud_fin,
+  void *section, Beton_Materiau *materiau, unsigned int noeud_debut, unsigned int noeud_fin,
   EF_Relachement* relachement, unsigned int discretisation_element)
 /* Description : Ajoute un élément à la liste des éléments en béton.
  * Paramètres : Projet *projet : la variable projet,
  *            : Type_Beton_Barre type : type de l'élément en béton,
- *            : unsigned int section : numéro de la section correspondant à l'élément,
- *            : unsigned int materiau : numéro du matériau en béton de l'élément,
+ *            : void *section : section correspondant à l'élément,
+ *            : Beton_Materiau *materiau : matériau correspondant à l'élément,
  *            : unsigned int noeud_debut : numéro de départ de l'élément,
  *            : unsigned int noeud_fin : numéro de fin de l'élément,
  *            : EF_Relachement* relachement : relachement de la barre (NULL si aucun),
@@ -101,7 +101,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_ajout(Projet *projet, Type_Element typ
     element_nouveau->type = type;
     
     element_nouveau->section = section;
-    element_nouveau->materiau = _1992_1_1_materiaux_cherche_numero(projet, materiau);
+    element_nouveau->materiau = materiau;
     element_nouveau->noeud_debut = EF_noeuds_cherche_numero(projet, noeud_debut);
     element_nouveau->noeud_fin = EF_noeuds_cherche_numero(projet, noeud_fin);
     if ((element_nouveau->section == NULL) || (element_nouveau->materiau == NULL) || (element_nouveau->noeud_debut == NULL) || (element_nouveau->noeud_fin == NULL))

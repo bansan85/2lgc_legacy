@@ -26,7 +26,6 @@
 gboolean _1992_1_1_materiaux_init(Projet *projet) __attribute__((__warn_unused_result__));
 
 gboolean _1992_1_1_materiaux_ajout(Projet *projet, const char *nom, double fck, double nu) __attribute__((__warn_unused_result__));
-Beton_Materiau* _1992_1_1_materiaux_cherche_numero(Projet *projet, unsigned int numero) __attribute__((__warn_unused_result__));
 Beton_Materiau* _1992_1_1_materiaux_cherche_nom(Projet *projet, const char *nom) __attribute__((__warn_unused_result__));
 
 gboolean _1992_1_1_materiaux_free(Projet *projet) __attribute__((__warn_unused_result__));
