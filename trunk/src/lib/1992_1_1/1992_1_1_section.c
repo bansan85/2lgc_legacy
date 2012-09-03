@@ -27,6 +27,7 @@
 #include "common_erreurs.h"
 #include "common_maths.h"
 #include "EF_noeud.h"
+#include "EF_calculs.h"
 
 G_MODULE_EXPORT gboolean _1992_1_1_sections_init(Projet *projet)
 /* Description : Initialise la liste des section en béton.
@@ -1085,6 +1086,8 @@ G_MODULE_EXPORT gboolean _1992_1_1_sections_free(Projet *projet)
         g_list_free_full(projet->beton.sections, &_1992_1_1_sections_free_un);
         projet->beton.sections = NULL;
     }
+    
+    BUG(EF_calculs_free(projet), TRUE);
     
 #ifdef ENABLE_GTK
     g_object_unref(projet->list_gtk.ef_barres.liste_sections);

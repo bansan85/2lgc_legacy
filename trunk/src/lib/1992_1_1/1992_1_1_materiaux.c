@@ -26,6 +26,7 @@
 #include "common_projet.h"
 #include "common_maths.h"
 #include "common_erreurs.h"
+#include "EF_calculs.h"
 
 
 G_MODULE_EXPORT gboolean _1992_1_1_materiaux_init(Projet *projet)
@@ -240,6 +241,8 @@ G_MODULE_EXPORT gboolean _1992_1_1_materiaux_free(Projet *projet)
         
         free(materiau);
     }
+    
+    BUG(EF_calculs_free(projet), TRUE);
     
 #ifdef ENABLE_GTK
     g_object_unref(projet->list_gtk.ef_barres.liste_materiaux);

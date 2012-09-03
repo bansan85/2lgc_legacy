@@ -33,6 +33,7 @@
 #include "common_maths.h"
 #include "common_fonction.h"
 #include "EF_noeud.h"
+#include "EF_calculs.h"
 
 G_MODULE_EXPORT Charge_Barre_Ponctuelle *EF_charge_barre_ponctuelle_ajout(Projet *projet,
   unsigned int num_action, GList *barres, gboolean repere_local, double a, double fx,
@@ -101,6 +102,8 @@ G_MODULE_EXPORT Charge_Barre_Ponctuelle *EF_charge_barre_ponctuelle_ajout(Projet
     charge_nouveau->numero = g_list_length(action_en_cours->charges);
     
     action_en_cours->charges = g_list_append(action_en_cours->charges, charge_nouveau);
+    
+    BUG(EF_calculs_free(projet), FALSE);
     
     return charge_nouveau;
 }

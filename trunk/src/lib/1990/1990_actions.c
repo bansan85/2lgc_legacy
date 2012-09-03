@@ -34,6 +34,7 @@
 #include "EF_charge_noeud.h"
 #include "EF_charge_barre_ponctuelle.h"
 #include "EF_charge_barre_repartie_uniforme.h"
+#include "EF_calculs.h"
 
 #ifdef ENABLE_GTK
 #include "common_gtk.h"
@@ -566,6 +567,8 @@ G_MODULE_EXPORT gboolean _1990_action_change_type(Projet *projet, unsigned int a
     action->psi2 = _1990_coef_psi2_bat(type, projet->pays);
     BUG(!isnan(action->psi2), FALSE);
     
+    BUG(EF_calculs_free(projet), FALSE);
+    
 #ifdef ENABLE_GTK
     if (projet->list_gtk._1990_actions.builder != NULL)
         gtk_tree_store_set(projet->list_gtk._1990_actions.tree_store_actions, &action->Iter_fenetre, 2, _1990_action_type_bat_txt(type, projet->pays), 3, action->psi0, 4, action->psi1, 5, action->psi2, -1);
@@ -614,7 +617,7 @@ G_MODULE_EXPORT gboolean _1990_action_change_psi(Projet *projet, unsigned int ac
             gtk_tree_store_set(projet->list_gtk._1990_actions.tree_store_actions, &action->Iter_fenetre, 4, psi, -1);
 #endif
     }
-    else
+    else if (psi_num == 2)
     {
         action->psi2 = psi;
 #ifdef ENABLE_GTK
@@ -622,6 +625,10 @@ G_MODULE_EXPORT gboolean _1990_action_change_psi(Projet *projet, unsigned int ac
             gtk_tree_store_set(projet->list_gtk._1990_actions.tree_store_actions, &action->Iter_fenetre, 5, psi, -1);
 #endif
     }
+    else
+        BUGMSG(NULL, FALSE, gettext("Le coefficient phi %d n'existe pas.\n"), psi_num);
+    
+    BUG(EF_calculs_free(projet), FALSE);
     
     return TRUE;
 }
@@ -904,6 +911,8 @@ G_MODULE_EXPORT gboolean _1990_action_free(Projet *projet)
         
         free(action);
     }
+    
+    BUG(EF_calculs_free(projet), FALSE);
     
 #ifdef ENABLE_GTK
     if (projet->list_gtk._1990_actions.builder != NULL)

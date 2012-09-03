@@ -412,5 +412,7 @@ G_MODULE_EXPORT gboolean EF_noeuds_free(Projet *projet)
         projet->ef_donnees.noeuds = g_list_delete_link(projet->ef_donnees.noeuds, projet->ef_donnees.noeuds);
     }
     
+    BUG(EF_calculs_free(projet), FALSE);
+    
     return TRUE;
 }

@@ -28,6 +28,7 @@
 #include "1990_actions.h"
 #include "common_projet.h"
 #include "common_erreurs.h"
+#include "EF_calculs.h"
 
 
 G_MODULE_EXPORT Charge_Noeud*  EF_charge_noeud_ajout(Projet *projet, unsigned int num_action,
@@ -73,6 +74,8 @@ G_MODULE_EXPORT Charge_Noeud*  EF_charge_noeud_ajout(Projet *projet, unsigned in
     charge_nouveau->numero = g_list_length(action_en_cours->charges);
     
     action_en_cours->charges = g_list_append(action_en_cours->charges, charge_nouveau);
+    
+    BUG(EF_calculs_free(projet), FALSE);
     
     return charge_nouveau;
 }
