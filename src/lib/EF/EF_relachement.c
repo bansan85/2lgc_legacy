@@ -24,6 +24,7 @@
 
 #include "common_projet.h"
 #include "common_erreurs.h"
+#include "EF_calculs.h"
 #ifdef ENABLE_GTK
 #include <gtk/gtk.h>
 #endif
@@ -213,6 +214,8 @@ G_MODULE_EXPORT gboolean EF_relachement_free(Projet *projet)
         
         free(relachement);
     }
+    
+    BUG(EF_calculs_free(projet), FALSE);
     
 #ifdef ENABLE_GTK
     g_object_unref(projet->list_gtk.ef_barres.liste_relachements);

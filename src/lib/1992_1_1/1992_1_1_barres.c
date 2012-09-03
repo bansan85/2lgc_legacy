@@ -433,6 +433,8 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_change_section(Beton_Barre *barre, voi
     
     barre->section = section;
     
+    BUG(EF_calculs_free(projet), TRUE);
+    
 #ifdef ENABLE_GTK
     BUG(m3d_barre(&projet->list_gtk.m3d, barre), FALSE);
     BUG(m3d_rafraichit(projet), FALSE);
@@ -466,6 +468,8 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_change_materiau(Beton_Barre *barre,
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
     barre->materiau = materiau;
+    
+    BUG(EF_calculs_free(projet), TRUE);
     
 #ifdef ENABLE_GTK
     if (projet->list_gtk.ef_barres.builder != NULL)
@@ -517,6 +521,8 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_change_noeud(Beton_Barre *barre, EF_No
     else
         barre->noeud_fin = noeud;
     
+    BUG(EF_calculs_free(projet), TRUE);
+    
 #ifdef ENABLE_GTK
     BUG(m3d_actualise_graphique(projet, liste_noeuds_dep, liste_barres_dep), FALSE);
     BUG(m3d_rafraichit(projet), FALSE);
@@ -555,6 +561,8 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_change_relachement(Beton_Barre *barre,
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
     barre->relachement = relachement;
+    
+    BUG(EF_calculs_free(projet), TRUE);
     
 #ifdef ENABLE_GTK
     if (projet->list_gtk.ef_barres.builder != NULL)
@@ -1302,6 +1310,8 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_free(Projet *projet)
         
         free(element);
     }
+    
+    BUG(EF_calculs_free(projet), TRUE);
     
 #ifdef ENABLE_GTK
     g_object_unref(projet->list_gtk.ef_barres.liste_types);

@@ -27,6 +27,7 @@
 #include "EF_charge_noeud.h"
 #include "EF_charge_barre_ponctuelle.h"
 #include "EF_charge_barre_repartie_uniforme.h"
+#include "EF_calculs.h"
 
 
 G_MODULE_EXPORT void *EF_charge_cherche(Projet *projet, unsigned int num_action,
@@ -181,6 +182,8 @@ G_MODULE_EXPORT gboolean EF_charge_deplace(Projet *projet, unsigned int action_s
     charge_data->numero = g_list_length(action2->charges);
     action2->charges = g_list_append(action2->charges, charge_data);
     
+    BUG(EF_calculs_free(projet), FALSE);
+    
     return TRUE;
 }
 
@@ -273,6 +276,8 @@ G_MODULE_EXPORT gboolean EF_charge_supprime(Projet *projet, unsigned int action_
     }
     
     BUGMSG(charge_data, FALSE, gettext("Charge %u de l'action %u introuvable.\n"), charge_num, action_num);
+    
+    BUG(EF_calculs_free(projet), FALSE);
     
     return TRUE;
 }
