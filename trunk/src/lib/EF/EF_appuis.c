@@ -309,7 +309,7 @@ G_MODULE_EXPORT EF_Appui* EF_appuis_ajout(Projet *projet, const char *nom, Type_
         }
         default:
         {
-            BUGMSG(0, NULL, gettext("Type d'appui %d inconnu\n."), x);
+            BUGMSG(0, NULL, gettext("Type d'appui %d inconnu.\n"), x);
             break;
         }
     }
@@ -324,7 +324,7 @@ G_MODULE_EXPORT EF_Appui* EF_appuis_ajout(Projet *projet, const char *nom, Type_
         }
         default:
         {
-            BUGMSG(0, NULL, gettext("Type d'appui %d inconnu\n."), y);
+            BUGMSG(0, NULL, gettext("Type d'appui %d inconnu.\n"), y);
             break;
         }
     }

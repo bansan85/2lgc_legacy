@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2012-08-30 18:36+0200\n"
-"PO-Revision-Date: 2012-08-30 18:39+0100\n"
+"POT-Creation-Date: 2012-09-03 23:04+0200\n"
+"PO-Revision-Date: 2012-09-03 23:04+0100\n"
 "Last-Translator: LE GARREC Vincent <vlg@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -20,9 +20,6 @@ msgstr "Paramètre %s incorrect.\n"
 
 msgid "Erreur d'allocation mémoire.\n"
 msgstr "Erreur d'allocation mémoire.\n"
-
-msgid "Section en béton n°%d introuvable.\n"
-msgstr "Section en béton n°%d introuvable.\n"
 
 msgid "Section en béton '%s' introuvable.\n"
 msgstr "Section en béton '%s' introuvable.\n"
@@ -68,9 +65,6 @@ msgstr "Relachement %d inconnu."
 
 msgid "La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"
 msgstr "La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"
-
-msgid "Matériau en béton n°%d introuvable.\n"
-msgstr "Matériau en béton n°%d introuvable.\n"
 
 msgid "Matériau en béton '%s' introuvable.\n"
 msgstr "Matériau en béton '%s' introuvable.\n"
@@ -246,6 +240,9 @@ msgstr "Action %u introuvable.\n"
 
 msgid "Le numéro %u du coefficient spi à changer est incorrect.\n"
 msgstr "Le numéro %u du coefficient spi à changer est incorrect.\n"
+
+msgid "Le coefficient phi %d n'existe pas.\n"
+msgstr "Le coefficient phi %d n'existe pas.\n"
 
 msgid "Aucune action existante.\n"
 msgstr "Aucune action existante.\n"
@@ -595,6 +592,15 @@ msgstr "La position de la charge ponctuelle (%f) est incorrecte. La longueur de 
 msgid "La position de la charge ponctuelle (%f) est incorrecte. La longueur de la barre est de %f m.\n"
 msgstr "La position de la charge ponctuelle (%f) est incorrecte. La longueur de la barre est de %f m.\n"
 
+msgid "Libre"
+msgstr "Libre"
+
+msgid "Bloqué"
+msgstr "Bloqué"
+
+msgid "Type d'appui %s inconnu.\n"
+msgstr "Type d'appui %s inconnu.\n"
+
 msgid "La liste des types de barre est indéfinie.\n"
 msgstr "La liste des types de barre est indéfinie.\n"
 
@@ -613,12 +619,6 @@ msgstr "La liste des matériaux est indéfinie.\n"
 msgid "La liste des relâchements de barre est indéfinie.\n"
 msgstr "La liste des relâchements de barre est indéfinie.\n"
 
-msgid "Libre"
-msgstr "Libre"
-
-msgid "Bloqué"
-msgstr "Bloqué"
-
 msgid "Le type d'appui de %s (%s) n'a pas à posséder de données.\n"
 msgstr "Le type d'appui de %s (%s) n'a pas à posséder de données.\n"
 
@@ -630,6 +630,12 @@ msgstr "Impossible d'utiliser comme nom 'Aucun'.\n"
 
 msgid "L'appui '%s' existe déjà.\n"
 msgstr "L'appui '%s' existe déjà.\n"
+
+msgid "Type d'appui %d inconnu.\n"
+msgstr "Type d'appui %d inconnu.\n"
+
+msgid "Afin de modifier un appui, le paramètre x doit être compris entre 0 et 5 inclu.\n"
+msgstr "Afin de modifier un appui, le paramètre x doit être compris entre 0 et 5 inclu.\n"
 
 msgid "début"
 msgstr "début"
@@ -664,9 +670,6 @@ msgstr "Modification d'une charge répartie uniforme sur barre"
 msgid "Il n'est pas possible d'activer à la fois la projection et l'utilisation du repère local."
 msgstr "Il n'est pas possible d'activer à la fois la projection et l'utilisation du repère local."
 
-msgid "Relachement n°%u introuvable.\n"
-msgstr "Relachement n°%u introuvable.\n"
-
 msgid "Relachement '%s' introuvable.\n"
 msgstr "Relachement '%s' introuvable.\n"
 
@@ -684,4 +687,3 @@ msgstr "Appui %s introuvable.\n"
 
 msgid "Le noeud doit être de type intermédiaire.\n"
 msgstr "Le noeud doit être de type intermédiaire.\n"
-
