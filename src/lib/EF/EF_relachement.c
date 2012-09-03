@@ -95,7 +95,9 @@ G_MODULE_EXPORT gboolean EF_relachement_ajout(Projet *projet, const char *nom,
     // Trivial
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(relachement_nouveau, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(!((rx_debut == EF_RELACHEMENT_LIBRE) && (rx_fin == EF_RELACHEMENT_LIBRE)), FALSE, "Impossible de relâcher rx simultanément des deux cotés de la barre.\n");
+    BUGMSG(strcmp(gettext("Aucun"), nom), FALSE, "Impossible d'utiliser comme nom 'Aucun'.\n");
     
     relachement_nouveau->rx_debut = rx_debut;
     relachement_nouveau->rx_d_data = rx_d_data;
@@ -111,8 +113,6 @@ G_MODULE_EXPORT gboolean EF_relachement_ajout(Projet *projet, const char *nom,
     relachement_nouveau->rz_f_data = rz_f_data;
     BUGMSG(relachement_nouveau->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
     
-    relachement_nouveau->numero = g_list_length(projet->ef_donnees.relachements);
-    
     projet->ef_donnees.relachements = g_list_append(projet->ef_donnees.relachements, relachement_nouveau);
     
 #ifdef ENABLE_GTK
@@ -121,38 +121,6 @@ G_MODULE_EXPORT gboolean EF_relachement_ajout(Projet *projet, const char *nom,
 #endif
     
     return TRUE;
-}
-
-
-G_MODULE_EXPORT EF_Relachement* EF_relachement_cherche_numero(Projet *projet,
-  unsigned int numero)
-/* Description : Renvoie le relachement cherché.
- * Paramètres : Projet *projet : la variable projet,
- *            : unsigned int numero : le numéro du relachement.
- * Valeur renvoyée :
- *   Succès : pointeur vers le relachement recherché.
- *   Échec : NULL :
- *             projet == NULL,
- *             relachement introuvable.
- */
-{
-    GList   *list_parcours;
-    
-    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
-    
-    // Trivial
-    list_parcours = projet->ef_donnees.relachements;
-    while (list_parcours != NULL)
-    {
-        EF_Relachement *relachement = list_parcours->data;
-        
-        if (relachement->numero == numero)
-            return relachement;
-        
-        list_parcours = g_list_next(list_parcours);
-    }
-    
-    BUGMSG(0, NULL, gettext("Relachement n°%u introuvable.\n"), numero);
 }
 
 
