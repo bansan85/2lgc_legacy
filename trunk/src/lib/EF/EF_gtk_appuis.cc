@@ -127,6 +127,34 @@ G_MODULE_EXPORT void EF_gtk_appuis_ajouter(GtkButton *button __attribute__((unus
 }
 
 
+G_MODULE_EXPORT void EF_gtk_appuis_supprimer(GtkButton *button __attribute__((unused)),
+  Projet *projet)
+/* Description : Supprime l'appui sélectionné dans le treeview.
+ * Paramètres : GtkWidget *widget : composant à l'origine de l'évènement,
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    GtkTreeIter     iter;
+    GtkTreeModel    *model;
+    char            *nom;
+    EF_Appui        *appui;
+    
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet->list_gtk.ef_appuis.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Appui");
+    
+    if (!gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_treeview_select")), &model, &iter))
+        return;
+    
+    gtk_tree_model_get(model, &iter, 0, &nom, -1);
+    
+    BUG(appui = EF_appuis_cherche_nom(projet, nom, TRUE), );
+    BUG(EF_appuis_supprime(appui, TRUE, projet), );
+    
+    return;
+}
+
+
 G_MODULE_EXPORT void EF_gtk_appuis_edit_type(GtkCellRendererText *cell, gchar *path_string,
   gchar *new_text, Projet *projet)
 /* Description : Modification d'un appui.
@@ -205,6 +233,29 @@ G_MODULE_EXPORT void EF_gtk_appuis_edit_nom(GtkCellRendererText *cell __attribut
         return;
 
     BUG(EF_appuis_renomme(appui, new_text, projet), );
+    
+    return;
+}
+
+
+G_MODULE_EXPORT void EF_gtk_appuis_select_changed(
+  GtkTreeSelection *treeselection __attribute__((unused)), Projet *projet)
+/* Description : En fonction de la sélection, active ou désactive le bouton supprimer.
+ * Paramètres : GtkTreeSelection *treeselection : composant à l'origine de l'évènement,
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : Aucune.
+ *   Echec : projet == NULL,
+ *           interface graphique non initialisée.
+ */
+{
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet->list_gtk.ef_appuis.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Appui");
+    
+    // Si aucun appui n'est sélectionné, il n'est pas possible d'en supprimer une.
+    if (!gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_treeview_select")), NULL, NULL))
+        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_boutton_supprimer")), FALSE);
+    else
+        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_boutton_supprimer")), TRUE);
     
     return;
 }

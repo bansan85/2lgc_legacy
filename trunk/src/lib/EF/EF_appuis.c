@@ -24,6 +24,8 @@
 
 #include "common_projet.h"
 #include "common_erreurs.h"
+#include "common_selection.h"
+
 #ifdef ENABLE_GTK
 #include <gtk/gtk.h>
 #endif
@@ -540,6 +542,163 @@ G_MODULE_EXPORT gboolean EF_appuis_renomme(EF_Appui *appui, gchar *nom, Projet *
     if (projet->list_gtk.ef_appuis.builder != NULL)
     {
         gtk_tree_store_set(projet->list_gtk.ef_appuis.appuis, &appui->Iter_fenetre, 0, nom, -1);
+    }
+#endif
+    
+    return TRUE;
+}
+
+
+G_MODULE_EXPORT gboolean EF_appuis_cherche_dependances(Projet *projet, EF_Appui* appui,
+  GList** noeuds_dep)
+/* Description : Supprime l'appui spécifié.
+ * Paramètres : Projet *projet : la variable projet,
+ *            : EF_Appui *appui : l'appui à analyser,
+ *            : GList** noeuds_dep : la liste des noeuds dépendants.
+ * Valeur renvoyée :
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL,
+ *             appui == NULL.
+ */
+{
+    GList   *list_parcours;
+    
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(appui, FALSE, gettext("Paramètre %s incorrect.\n"), "appui");
+    
+    *noeuds_dep = NULL;
+    
+    list_parcours = projet->ef_donnees.noeuds;
+    while (list_parcours != NULL)
+    {
+        EF_Noeud    *noeud = list_parcours->data;
+        
+        if (noeud->appui == appui)
+            *noeuds_dep = g_list_append(*noeuds_dep, noeud);
+        
+        list_parcours = g_list_next(list_parcours);
+    }
+    
+    return TRUE;
+}
+
+
+G_MODULE_EXPORT gboolean EF_appuis_supprime(EF_Appui *appui, gboolean annule_si_utilise,
+  Projet *projet)
+/* Description : Supprime l'appui spécifié.
+ * Paramètres : EF_Appui *appui : l'appui à supprimer,
+ *            : gboolean annule_si_utilise : possibilité d'annuler la suppression si l'appui est
+ *              attribué à un noeud. Si l'option est désactivé, les noeuds possédant l'appui
+ *              deviendront sans appui.
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée :
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL,
+ *             appui == NULL.
+ */
+{
+    GList   *list_noeuds, *list_parcours;
+    
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(appui, FALSE, gettext("Paramètre %s incorrect.\n"), "appui");
+    
+    // On vérifie les dépendances.
+    BUG(EF_appuis_cherche_dependances(projet, appui, &list_noeuds), FALSE);
+    
+    if ((annule_si_utilise) && (list_noeuds != NULL))
+    {
+        char *liste;
+        
+        liste = common_selection_converti_noeuds_en_texte(list_noeuds);
+        if (g_list_next(list_noeuds) == NULL)
+            printf("Impossible de supprimer l'appui car il est utilisé par le noeud %s.\n", liste);
+        else
+            printf("Impossible de supprimer l'appui car il est utilisé par les noeuds %s.\n", liste);
+        g_list_free(list_noeuds);
+        free(liste);
+        
+        return TRUE;
+    }
+    
+    // On supprime les appuis pour les noeuds dépendants.
+    list_parcours = list_noeuds;
+    while (list_parcours != NULL)
+    {
+        EF_Noeud    *noeud = list_parcours->data;
+        
+        noeud->appui = NULL;
+    }
+    
+    free(appui->nom);
+    switch (appui->ux)
+    {
+        case EF_APPUI_LIBRE :
+        case EF_APPUI_BLOQUE :
+            break;
+        default :
+        {
+            BUGMSG(NULL, FALSE, gettext("Le type d'appui de %s (%d) est inconnu.\n"), "ux", appui->ux);
+        }
+    }
+    switch (appui->uy)
+    {
+        case EF_APPUI_LIBRE :
+        case EF_APPUI_BLOQUE :
+            break;
+        default :
+        {
+            BUGMSG(NULL, FALSE, gettext("Le type d'appui de %s (%d) est inconnu.\n"), "uy", appui->ux);
+        }
+    }
+    switch (appui->uz)
+    {
+        case EF_APPUI_LIBRE :
+        case EF_APPUI_BLOQUE :
+            break;
+        default :
+        {
+            BUGMSG(NULL, FALSE, gettext("Le type d'appui de %s (%d) est inconnu.\n"), "uz", appui->ux);
+        }
+    }
+    switch (appui->rx)
+    {
+        case EF_APPUI_LIBRE :
+        case EF_APPUI_BLOQUE :
+            break;
+        default :
+        {
+            BUGMSG(NULL, FALSE, gettext("Le type d'appui de %s (%d) est inconnu.\n"), "rx", appui->ux);
+        }
+    }
+    switch (appui->ry)
+    {
+        case EF_APPUI_LIBRE :
+        case EF_APPUI_BLOQUE :
+            break;
+        default :
+        {
+            BUGMSG(NULL, FALSE, gettext("Le type d'appui de %s (%d) est inconnu.\n"), "ry", appui->ux);
+        }
+    }
+    switch (appui->rz)
+    {
+        case EF_APPUI_LIBRE :
+        case EF_APPUI_BLOQUE :
+            break;
+        default :
+        {
+            BUGMSG(NULL, FALSE, gettext("Le type d'appui de %s (%d) est inconnu.\n"), "rz", appui->ux);
+        }
+    }
+    projet->ef_donnees.appuis = g_list_remove(projet->ef_donnees.appuis, appui);
+    
+#ifdef ENABLE_GTK
+    if (projet->list_gtk.ef_appuis.builder != NULL)
+    {
+        gtk_list_store_remove(projet->list_gtk.ef_appuis.liste_appuis, &appui->Iter_liste);
+        gtk_tree_store_remove(projet->list_gtk.ef_appuis.appuis, &appui->Iter_fenetre);
     }
 #endif
     

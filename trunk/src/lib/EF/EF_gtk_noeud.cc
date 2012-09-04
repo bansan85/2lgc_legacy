@@ -35,6 +35,7 @@ extern "C" {
 #include "common_gtk.h"
 #include "common_maths.h"
 #include "EF_noeud.h"
+#include "EF_appuis.h"
 #include "EF_charge_noeud.h"
 #include "1990_actions.h"
 #include "1992_1_1_barres.h"
@@ -335,8 +336,8 @@ G_MODULE_EXPORT void EF_gtk_noeud_edit_noeud_appui(
     GtkTreePath         *path;
     GtkTreeIter         iter;
     gint                numero_noeud;
-    EF_Appui            *appui = NULL;
-    GList               *list_parcours;
+    EF_Appui            *appui;
+    EF_Noeud            *noeud;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_noeud.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Noeuds");
@@ -348,7 +349,7 @@ G_MODULE_EXPORT void EF_gtk_noeud_edit_noeud_appui(
     
     ef_gtk = &projet->list_gtk.ef_noeud;
     
-    // Noeud libre
+    // On récupère le model du treeview en cours d'édition.
     if (gtk_notebook_get_current_page(GTK_NOTEBOOK(ef_gtk->notebook)) == 0)
         model = GTK_TREE_MODEL(ef_gtk->tree_store_libre);
     else
@@ -357,45 +358,25 @@ G_MODULE_EXPORT void EF_gtk_noeud_edit_noeud_appui(
     
     gtk_tree_model_get_iter(model, &iter, path);
     gtk_tree_model_get(model, &iter, 0, &numero_noeud, -1);
+    gtk_tree_path_free (path);
     
+    // Si on souhaite que l'appui ne soit plus appuyé.
     if (strcmp(new_text, gettext("Aucun")) == 0)
     {
-        EF_Noeud    *noeud = EF_noeuds_cherche_numero(projet, numero_noeud);
-        BUG(noeud, );
+        BUG(noeud = EF_noeuds_cherche_numero(projet, numero_noeud), );
         
         noeud->appui = NULL;
-        if (gtk_notebook_get_current_page(GTK_NOTEBOOK(ef_gtk->notebook)) == 0)
-            gtk_tree_store_set(ef_gtk->tree_store_libre, &iter, 4, new_text, -1);
-        else
-            gtk_tree_store_set(ef_gtk->tree_store_barre, &iter, 4, new_text, -1);
+        gtk_tree_store_set(GTK_TREE_STORE(model), &iter, 4, new_text, -1);
         
-        gtk_tree_path_free (path);
         return;
     }
     
-    list_parcours = projet->ef_donnees.appuis;
-    do
-    {
-        appui = (EF_Appui *)list_parcours->data;
-        if (strcmp(new_text, appui->nom) == 0)
-        {
-            EF_Noeud    *noeud = EF_noeuds_cherche_numero(projet, numero_noeud);
-            BUG(noeud, );
-            
-            noeud->appui = appui;
-            if (gtk_notebook_get_current_page(GTK_NOTEBOOK(ef_gtk->notebook)) == 0)
-                gtk_tree_store_set(ef_gtk->tree_store_libre, &iter, 4, new_text, -1);
-            else
-                gtk_tree_store_set(ef_gtk->tree_store_barre, &iter, 4, new_text, -1);
-            
-            gtk_tree_path_free (path);
-            return;
-        }
-        list_parcours = g_list_next(list_parcours);
-    }
-    while (list_parcours != NULL);
+    BUG(appui = EF_appuis_cherche_nom(projet, new_text, TRUE), );
     
-    BUGMSG(NULL, , gettext("Appui %s introuvable.\n"), new_text);
+    BUG(noeud = EF_noeuds_cherche_numero(projet, numero_noeud), );
+    
+    noeud->appui = appui;
+    gtk_tree_store_set(GTK_TREE_STORE(model), &iter, 4, new_text, -1);
     
     return;
 }

@@ -36,6 +36,11 @@
                             <object class="GtkTreeView" id="EF_appuis_treeview">
                                 <property name="visible">True</property>
                                 <property name="model">EF_appuis_treestore</property>
+                                <child internal-child="selection">
+                                    <object class="GtkTreeSelection" id="EF_appuis_treeview_select">
+                                        <signal name="changed" handler="EF_gtk_appuis_select_changed"/>
+                                    </object>
+                                </child>
                                 <child>
                                     <object class="GtkTreeViewColumn" id="EF_appuis_treeview_column0">
                                         <property name="visible">True</property>
@@ -187,6 +192,19 @@
                             </packing>
                         </child>
                         <child>
+                            <object class="GtkButton" id="EF_appuis_boutton_supprimer">
+                                <property name="visible">True</property>
+                                <property name="label">gtk-delete</property>
+                                <property name="use_stock">True</property>
+                                <property name="sensitive">False</property>
+                                <signal name="clicked" handler="EF_gtk_appuis_supprimer"/>
+                            </object>
+                            <packing>
+                                <property name="position">1</property>
+                                <property name="pack_type">end</property>
+                            </packing>
+                        </child>
+                        <child>
                             <object class="GtkButton" id="EF_appui_boutton_fermer">
                                 <property name="visible">True</property>
                                 <property name="label">gtk-close</property>
@@ -194,7 +212,7 @@
                                 <signal name="clicked" handler="EF_gtk_appuis_fermer"/>
                             </object>
                             <packing>
-                                <property name="position">1</property>
+                                <property name="position">2</property>
                                 <property name="pack_type">end</property>
                             </packing>
                         </child>
