@@ -83,9 +83,9 @@ G_MODULE_EXPORT EF_Noeud *EF_noeuds_ajout_noeud_libre(Projet *projet, double x, 
         
     noeud_nouveau->numero = g_list_length(projet->ef_donnees.noeuds);
     
-    projet->ef_donnees.noeuds = g_list_append(projet->ef_donnees.noeuds, noeud_nouveau);
-    
     BUG(EF_calculs_free(projet), NULL);
+    
+    projet->ef_donnees.noeuds = g_list_append(projet->ef_donnees.noeuds, noeud_nouveau);
     
 #ifdef ENABLE_GTK
     BUG(m3d_noeud(&projet->list_gtk.m3d, noeud_nouveau), NULL);
