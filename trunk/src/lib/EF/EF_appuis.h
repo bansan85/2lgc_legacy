@@ -31,11 +31,12 @@ gboolean EF_appuis_get_description(EF_Appui* appui, char **txt_uxa, char **txt_u
 EF_Appui *EF_appuis_ajout(Projet *projet, const char *nom, Type_EF_Appui x, Type_EF_Appui y, Type_EF_Appui z, Type_EF_Appui rx, Type_EF_Appui ry, Type_EF_Appui rz) __attribute__((__warn_unused_result__));
 
 gboolean EF_appuis_cherche_dependances(Projet *projet, EF_Appui* appui, GList** noeuds_dep) __attribute__((__warn_unused_result__));
+gboolean EF_appuis_verifie_dependances(Projet *projet, EF_Appui* appui) __attribute__((__warn_unused_result__));
 
 gboolean EF_appuis_edit(EF_Appui *appui, int x, Type_EF_Appui type_x, Projet *projet) __attribute__((__warn_unused_result__));
 gboolean EF_appuis_renomme(EF_Appui *appui, const char *nom, Projet *projet) __attribute__((__warn_unused_result__));
 
-gboolean EF_appuis_supprime(EF_Appui *appui, gboolean annule_si_utilise, Projet *projet) __attribute__((__warn_unused_result__));
+gboolean EF_appuis_supprime(EF_Appui *appui, gboolean annule_si_utilise, gboolean supprime, Projet *projet) __attribute__((__warn_unused_result__));
 gboolean EF_appuis_free(Projet *projet) __attribute__((__warn_unused_result__));
 
 #endif

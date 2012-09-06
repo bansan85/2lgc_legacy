@@ -29,6 +29,7 @@
 #include "EF_appuis.h"
 #include "common_m3d.hpp"
 #include "EF_rigidite.h"
+#include "1992_1_1_barres.h"
 
 G_MODULE_EXPORT gboolean EF_noeuds_init(Projet *projet)
 /* Description : Initialise la liste des noeuds.
@@ -319,6 +320,148 @@ G_MODULE_EXPORT EF_Noeud* EF_noeuds_cherche_numero(Projet *projet, unsigned int 
 }
 
 
+G_MODULE_EXPORT gboolean EF_noeuds_change_appui(Projet *projet, EF_Noeud *noeud,
+  EF_Appui *appui)
+/* Description : Change l'appui d'un noeud.
+ * Paramètres : Projet *projet : la variable projet,
+ *            : EF_Noeud *noeud : noeud à modifier,
+ *            : EF_Appui *appui : le nouvel appui. NULL signifie aucun appui.
+ * Valeur renvoyée :
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL,
+ *             noeud == NULL.
+ */
+{
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(noeud, FALSE, gettext("Paramètre %s incorrect.\n"), "noeud");
+    
+    noeud->appui = appui;
+    
+#ifdef ENABLE_GTK
+    if (projet->list_gtk.ef_noeud.builder != NULL)
+    {
+        GtkTreeModel    *model;
+        
+        switch(noeud->type)
+        {
+            case NOEUD_LIBRE :
+            {
+                model = GTK_TREE_MODEL(projet->list_gtk.ef_noeud.tree_store_libre);
+                break;
+            }
+            case NOEUD_BARRE :
+            {
+                model = GTK_TREE_MODEL(projet->list_gtk.ef_noeud.tree_store_barre);
+                break;
+            }
+            default :
+            {
+                BUGMSG(NULL, FALSE, gettext("Le type de noeud %d est inconnu.\n"), noeud->type);
+                break;
+            }
+        }
+        
+        if (appui == NULL)
+            gtk_tree_store_set(GTK_TREE_STORE(model), &noeud->Iter, 4, gettext("Aucun"), -1);
+        else
+            gtk_tree_store_set(GTK_TREE_STORE(model), &noeud->Iter, 4, appui->nom, -1);
+    }
+#endif
+    
+    return TRUE;
+}
+
+
+#ifdef ENABLE_GTK
+G_MODULE_EXPORT void EF_noeuds_free_foreach(EF_Noeud *noeud, Projet *projet)
+#else
+G_MODULE_EXPORT void EF_noeuds_free_foreach(EF_Noeud *noeud,
+  Projet *projet __attribute__((unused)))
+#endif
+/* Description : Fonction permettant de libérer un noeud contenu dans une liste.
+ * Paramètres : EF_Noeud *noeud : le noeud à libérer,
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    free(noeud->data);
+    
+#ifdef ENABLE_GTK
+    if (projet->list_gtk.ef_noeud.builder != NULL)
+    {
+        GtkTreeModel    *model;
+        
+        switch(noeud->type)
+        {
+            case NOEUD_LIBRE :
+            {
+                model = GTK_TREE_MODEL(projet->list_gtk.ef_noeud.tree_store_libre);
+                break;
+            }
+            case NOEUD_BARRE :
+            {
+                model = GTK_TREE_MODEL(projet->list_gtk.ef_noeud.tree_store_barre);
+                break;
+            }
+            default :
+            {
+                BUGMSG(NULL, , gettext("Le type de noeud %d est inconnu.\n"), noeud->type);
+                break;
+            }
+        }
+        
+        gtk_tree_store_remove(GTK_TREE_STORE(model), &noeud->Iter);
+    }
+    m3d_noeud_free(&projet->list_gtk.m3d, noeud);
+#endif
+    free(noeud);
+    
+    return;
+}
+
+
+G_MODULE_EXPORT gboolean EF_noeuds_supprime_liste(Projet *projet, GList *liste_noeuds)
+/* Description : Supprime une liste de noeuds.
+ * Paramètres : Projet *projet : la variable projet,
+ *            : GList *liste_noeuds : noeud à supprimer.
+ * Valeur renvoyée :
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL.
+ */
+{
+    GList   *noeuds_suppr, *barres_suppr;
+    GList   *list_parcours;
+    
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    
+    BUG(_1992_1_1_barres_cherche_dependances(projet, liste_noeuds, NULL, &noeuds_suppr, &barres_suppr), FALSE);
+    
+    // On supprime les noeuds
+    g_list_foreach(noeuds_suppr, (GFunc)EF_noeuds_free_foreach, projet);
+    list_parcours = noeuds_suppr;
+    while (list_parcours != NULL)
+    {
+        projet->ef_donnees.noeuds = g_list_remove(projet->ef_donnees.noeuds, list_parcours->data);
+        list_parcours = g_list_next(list_parcours);
+    }
+    g_list_free(noeuds_suppr);
+    
+    // On supprime les barres
+    g_list_foreach(barres_suppr, (GFunc)_1992_1_1_barre_free_foreach, projet);
+    list_parcours = barres_suppr;
+    while (list_parcours != NULL)
+    {
+        projet->beton.barres = g_list_remove(projet->beton.barres, list_parcours->data);
+        list_parcours = g_list_next(list_parcours);
+    }
+    g_list_free(barres_suppr);
+    
+    return TRUE;
+}
+
+
 G_MODULE_EXPORT double EF_noeuds_distance(EF_Noeud* n1, EF_Noeud* n2)
 /* Description : Renvoie la distance entre deux noeuds.
  * Paramètres : EF_Noeud* n1 : noeud de départ,
@@ -402,15 +545,9 @@ G_MODULE_EXPORT gboolean EF_noeuds_free(Projet *projet)
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
     // Trivial
-    while (projet->ef_donnees.noeuds != NULL)
-    {
-        EF_Noeud    *noeud = projet->ef_donnees.noeuds->data;
-        
-        free(noeud->data);
-        free(noeud);
-        
-        projet->ef_donnees.noeuds = g_list_delete_link(projet->ef_donnees.noeuds, projet->ef_donnees.noeuds);
-    }
+    g_list_foreach(projet->ef_donnees.noeuds, (GFunc)EF_noeuds_free_foreach, projet);
+    g_list_free(projet->ef_donnees.noeuds);
+    projet->ef_donnees.noeuds = NULL;
     
     BUG(EF_calculs_free(projet), FALSE);
     

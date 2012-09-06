@@ -32,6 +32,9 @@ gboolean EF_noeuds_min_max(Projet *projet, double *x_min, double *x_max, double 
 
 EF_Noeud* EF_noeuds_cherche_numero(Projet *projet, unsigned int numero) __attribute__((__warn_unused_result__));
 
+gboolean EF_noeuds_change_appui(Projet *projet, EF_Noeud *noeud, EF_Appui *appui) __attribute__((__warn_unused_result__));
+gboolean EF_noeuds_supprime_liste(Projet *projet, GList *liste_noeuds) __attribute__((__warn_unused_result__));
+
 double EF_noeuds_distance(EF_Noeud* n1, EF_Noeud* n2) __attribute__((__warn_unused_result__));
 double EF_noeuds_distance_x_y_z(EF_Noeud* n1, EF_Noeud* n2, double *x, double *y, double *z) __attribute__((__warn_unused_result__));
 

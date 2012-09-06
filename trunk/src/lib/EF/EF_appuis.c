@@ -25,9 +25,11 @@
 #include "common_projet.h"
 #include "common_erreurs.h"
 #include "common_selection.h"
+#include "EF_noeud.h"
 
 #ifdef ENABLE_GTK
 #include <gtk/gtk.h>
+#include "common_m3d.hpp"
 #endif
 
 G_MODULE_EXPORT gboolean EF_appuis_init(Projet *projet)
@@ -290,7 +292,9 @@ G_MODULE_EXPORT EF_Appui* EF_appuis_ajout(Projet *projet, const char *nom, Type_
     EF_Appui    *appui_nouveau, *appui_parcours;
     GList       *list_parcours;
     int         i = 1; // Le premier est le "Aucun"
+#ifdef ENABLE_GTK
     char        *txt_uxa, *txt_uya, *txt_uza, *txt_rxa, *txt_rya, *txt_rza;
+#endif
     
     BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(strcmp(nom, gettext("Aucun")), NULL, gettext("Impossible d'utiliser comme nom 'Aucun'.\n"));
@@ -584,13 +588,48 @@ G_MODULE_EXPORT gboolean EF_appuis_cherche_dependances(Projet *projet, EF_Appui*
 }
 
 
+G_MODULE_EXPORT gboolean EF_appuis_verifie_dependances(Projet *projet, EF_Appui* appui)
+/* Description : Vérifie si l'appui est utilisé.
+ * Paramètres : Projet *projet : la variable projet,
+ *            : EF_Appui *appui : l'appui à analyser.
+ * Valeur renvoyée :
+ *   Succès : TRUE si l'appui est utilisé et FALSE s'il n'est pas utilisé.
+ *   Échec : FALSE :
+ *             projet == NULL,
+ *             appui == NULL.
+ */
+{
+    GList   *list_parcours;
+    
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(appui, FALSE, gettext("Paramètre %s incorrect.\n"), "appui");
+    
+    list_parcours = projet->ef_donnees.noeuds;
+    while (list_parcours != NULL)
+    {
+        EF_Noeud    *noeud = list_parcours->data;
+        
+        if (noeud->appui == appui)
+            return TRUE;
+        
+        list_parcours = g_list_next(list_parcours);
+    }
+    
+    return FALSE;
+}
+
+
 G_MODULE_EXPORT gboolean EF_appuis_supprime(EF_Appui *appui, gboolean annule_si_utilise,
-  Projet *projet)
+  gboolean supprime, Projet *projet)
 /* Description : Supprime l'appui spécifié.
  * Paramètres : EF_Appui *appui : l'appui à supprimer,
  *            : gboolean annule_si_utilise : possibilité d'annuler la suppression si l'appui est
  *              attribué à un noeud. Si l'option est désactivé, les noeuds possédant l'appui
- *              deviendront sans appui.
+ *              seront modifiés en fonction du paramètre .
+ *            : gboolean supprime : Paramètre utilisé uniquement si annule_si_utilise == FALSE.
+ *              Si TRUE alors, les noeuds (et les barres et noeuds intermédaires dépendants)
+ *              utilisant l'appui seront supprimés. Si FALSE alors les noeuds deviendront sans
+ *              appui.
  *            : Projet *projet : la variable projet.
  * Valeur renvoyée :
  *   Succès : TRUE
@@ -622,14 +661,22 @@ G_MODULE_EXPORT gboolean EF_appuis_supprime(EF_Appui *appui, gboolean annule_si_
         return TRUE;
     }
     
-    // On supprime les appuis pour les noeuds dépendants.
-    list_parcours = list_noeuds;
-    while (list_parcours != NULL)
+    // On enlève l'appui pour les noeuds dépendants (si supprime == FALSE).
+    if (supprime == FALSE)
     {
-        EF_Noeud    *noeud = list_parcours->data;
-        
-        noeud->appui = NULL;
+        list_parcours = list_noeuds;
+        while (list_parcours != NULL)
+        {
+            EF_Noeud    *noeud = list_parcours->data;
+            
+            BUG(EF_noeuds_change_appui(projet, noeud, NULL), TRUE);
+            
+            list_parcours = g_list_next(list_parcours);
+        }
     }
+    else
+        BUG(EF_noeuds_supprime_liste(projet, list_noeuds), TRUE);
+    g_list_free(list_noeuds);
     
     free(appui->nom);
     switch (appui->ux)

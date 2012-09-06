@@ -78,12 +78,11 @@ G_MODULE_EXPORT void EF_gtk_noeud_ajouter(GtkButton *button __attribute__((unuse
     {
         EF_Noeud    *noeud;
         EF_Point    *point;
-        GtkTreeIter iter;
         
         BUG(noeud = EF_noeuds_ajout_noeud_libre(projet, 0., 0., 0., NULL), );
         BUG(point = EF_noeuds_renvoie_position(noeud), );
-        gtk_tree_store_append(ef_gtk->tree_store_libre, &iter, NULL);
-        gtk_tree_store_set(ef_gtk->tree_store_libre, &iter, 0, noeud->numero, 1, point->x, 2, point->y, 3, point->z, 4, (noeud->appui == NULL ? gettext("Aucun") : noeud->appui->nom), -1);
+        gtk_tree_store_append(ef_gtk->tree_store_libre, &noeud->Iter, NULL);
+        gtk_tree_store_set(ef_gtk->tree_store_libre, &noeud->Iter, 0, noeud->numero, 1, point->x, 2, point->y, 3, point->z, 4, (noeud->appui == NULL ? gettext("Aucun") : noeud->appui->nom), -1);
         
         free(point);
     }
@@ -92,7 +91,6 @@ G_MODULE_EXPORT void EF_gtk_noeud_ajouter(GtkButton *button __attribute__((unuse
     {
         EF_Noeud    *noeud;
         EF_Point        *point;
-        GtkTreeIter     iter;
         EF_Noeud_Barre  *info;
         
         if (projet->beton.barres == NULL)
@@ -101,8 +99,8 @@ G_MODULE_EXPORT void EF_gtk_noeud_ajouter(GtkButton *button __attribute__((unuse
         BUG(noeud = EF_noeuds_ajout_noeud_barre(projet, (Beton_Barre*)projet->beton.barres->data, 0.5, NULL), );
         BUG(point = EF_noeuds_renvoie_position(noeud), );
         info = (EF_Noeud_Barre *)noeud->data;
-        gtk_tree_store_append(ef_gtk->tree_store_barre, &iter, NULL);
-        gtk_tree_store_set(ef_gtk->tree_store_barre, &iter, 0, noeud->numero, 1, point->x, 2, point->y, 3, point->z, 4, (noeud->appui == NULL ? gettext("Aucun") : noeud->appui->nom), 5, info->barre->numero, 6, info->position_relative_barre, -1);
+        gtk_tree_store_append(ef_gtk->tree_store_barre, &noeud->Iter, NULL);
+        gtk_tree_store_set(ef_gtk->tree_store_barre, &noeud->Iter, 0, noeud->numero, 1, point->x, 2, point->y, 3, point->z, 4, (noeud->appui == NULL ? gettext("Aucun") : noeud->appui->nom), 5, info->barre->numero, 6, info->position_relative_barre, -1);
         
         free(point);
     }
@@ -336,7 +334,6 @@ G_MODULE_EXPORT void EF_gtk_noeud_edit_noeud_appui(
     GtkTreePath         *path;
     GtkTreeIter         iter;
     gint                numero_noeud;
-    EF_Appui            *appui;
     EF_Noeud            *noeud;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
@@ -360,23 +357,18 @@ G_MODULE_EXPORT void EF_gtk_noeud_edit_noeud_appui(
     gtk_tree_model_get(model, &iter, 0, &numero_noeud, -1);
     gtk_tree_path_free (path);
     
-    // Si on souhaite que l'appui ne soit plus appuyé.
-    if (strcmp(new_text, gettext("Aucun")) == 0)
-    {
-        BUG(noeud = EF_noeuds_cherche_numero(projet, numero_noeud), );
-        
-        noeud->appui = NULL;
-        gtk_tree_store_set(GTK_TREE_STORE(model), &iter, 4, new_text, -1);
-        
-        return;
-    }
-    
-    BUG(appui = EF_appuis_cherche_nom(projet, new_text, TRUE), );
-    
     BUG(noeud = EF_noeuds_cherche_numero(projet, numero_noeud), );
     
-    noeud->appui = appui;
-    gtk_tree_store_set(GTK_TREE_STORE(model), &iter, 4, new_text, -1);
+    // Si on souhaite que l'appui ne soit plus appuyé.
+    if (strcmp(new_text, gettext("Aucun")) == 0)
+        BUG(EF_noeuds_change_appui(projet, noeud, NULL), );
+    else
+    {
+        EF_Appui    *appui;
+        
+        BUG(appui = EF_appuis_cherche_nom(projet, new_text, TRUE), );
+        BUG(EF_noeuds_change_appui(projet, noeud, appui), );
+    }
     
     return;
 }
@@ -551,21 +543,20 @@ G_MODULE_EXPORT void EF_gtk_noeud(Projet *projet)
         {
             EF_Noeud    *noeud = (EF_Noeud *)list_parcours->data;
             EF_Point    *point = EF_noeuds_renvoie_position(noeud);
-            GtkTreeIter iter;
             
             BUG(point, );
             
             if (noeud->type == NOEUD_LIBRE)
             {
-                gtk_tree_store_append(ef_gtk->tree_store_libre, &iter, NULL);
-                gtk_tree_store_set(ef_gtk->tree_store_libre, &iter, 0, noeud->numero, 1, point->x, 2, point->y, 3, point->z, 4, (noeud->appui == NULL ? gettext("Aucun") : noeud->appui->nom), -1);
+                gtk_tree_store_append(ef_gtk->tree_store_libre, &noeud->Iter, NULL);
+                gtk_tree_store_set(ef_gtk->tree_store_libre, &noeud->Iter, 0, noeud->numero, 1, point->x, 2, point->y, 3, point->z, 4, (noeud->appui == NULL ? gettext("Aucun") : noeud->appui->nom), -1);
             }
             else if (noeud->type == NOEUD_BARRE)
             {
                 EF_Noeud_Barre  *info = (EF_Noeud_Barre *)noeud->data;
                 
-                gtk_tree_store_append(ef_gtk->tree_store_barre, &iter, NULL);
-                gtk_tree_store_set(ef_gtk->tree_store_barre, &iter, 0, noeud->numero, 1, point->x, 2, point->y, 3, point->z, 4, (noeud->appui == NULL ? gettext("Aucun") : noeud->appui->nom), 5, info->barre->numero, 6, info->position_relative_barre, -1);
+                gtk_tree_store_append(ef_gtk->tree_store_barre, &noeud->Iter, NULL);
+                gtk_tree_store_set(ef_gtk->tree_store_barre, &noeud->Iter, 0, noeud->numero, 1, point->x, 2, point->y, 3, point->z, 4, (noeud->appui == NULL ? gettext("Aucun") : noeud->appui->nom), 5, info->barre->numero, 6, info->position_relative_barre, -1);
             }
             
             free(point);

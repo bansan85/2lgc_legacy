@@ -266,6 +266,9 @@ typedef struct __EF_Noeud
     Type_Noeud      type;
     void            *data; // Contient les données permettant de récupérer les coordonnées en fonction dy type de noeud.
     EF_Appui        *appui;
+#ifdef ENABLE_GTK
+    GtkTreeIter     Iter;
+#endif
 } EF_Noeud;
 
 
@@ -727,11 +730,11 @@ typedef struct __Projet
     GList           *niveaux_groupes;   // Compatibilités entres actions
     CombinaisonsEL  combinaisons;       // Combinaisons conformes aux Eurocodes
     Type_Pays       pays;               // Pays de calculs
+    EF              ef_donnees;         // Données communes à tous les éléments finis
+    Beton_Donnees   beton;              // Données spécifiques au béton
 #ifdef ENABLE_GTK
     List_Gtk        list_gtk;           // Informations nécessaires pour l'interface graphique
 #endif
-    EF              ef_donnees;         // Données communes à tous les éléments finis
-    Beton_Donnees   beton;              // Données spécifiques au béton
 } Projet;
 
 

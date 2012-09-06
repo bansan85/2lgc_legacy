@@ -149,7 +149,73 @@ G_MODULE_EXPORT void EF_gtk_appuis_supprimer(GtkButton *button __attribute__((un
     gtk_tree_model_get(model, &iter, 0, &nom, -1);
     
     BUG(appui = EF_appuis_cherche_nom(projet, nom, TRUE), );
-    BUG(EF_appuis_supprime(appui, TRUE, projet), );
+    BUG(EF_appuis_supprime(appui, TRUE, FALSE, projet), );
+    
+    free(nom);
+    
+    return;
+}
+
+
+G_MODULE_EXPORT void EF_gtk_appuis_supprimer_menu_suppr_noeud(
+  GtkButton *button __attribute__((unused)), Projet *projet)
+/* Description : Supprime l'appui sélectionné dans le treeview et ainsi que les noeuds
+ *               utilisant l'appui.
+ * Paramètres : GtkWidget *widget : composant à l'origine de l'évènement,
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    GtkTreeIter     iter;
+    GtkTreeModel    *model;
+    char            *nom;
+    EF_Appui        *appui;
+    
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet->list_gtk.ef_appuis.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Appui");
+    
+    if (!gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_treeview_select")), &model, &iter))
+        return;
+    
+    gtk_tree_model_get(model, &iter, 0, &nom, -1);
+    
+    BUG(appui = EF_appuis_cherche_nom(projet, nom, TRUE), );
+    BUG(EF_appuis_supprime(appui, FALSE, TRUE, projet), );
+    
+    BUG(m3d_rafraichit(projet), );
+    
+    free(nom);
+    
+    return;
+}
+
+
+G_MODULE_EXPORT void EF_gtk_appuis_supprimer_menu_modif_noeud(
+  GtkButton *button __attribute__((unused)), Projet *projet)
+/* Description : Supprime l'appui sélectionné dans le treeview et les noeuds le possédant
+ *               deviennent sans appui.
+ * Paramètres : GtkWidget *widget : composant à l'origine de l'évènement,
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    GtkTreeIter     iter;
+    GtkTreeModel    *model;
+    char            *nom;
+    EF_Appui        *appui;
+    
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet->list_gtk.ef_appuis.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Appui");
+    
+    if (!gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_treeview_select")), &model, &iter))
+        return;
+    
+    gtk_tree_model_get(model, &iter, 0, &nom, -1);
+    
+    BUG(appui = EF_appuis_cherche_nom(projet, nom, TRUE), );
+    BUG(EF_appuis_supprime(appui, FALSE, FALSE, projet), );
+    
+    free(nom);
     
     return;
 }
@@ -248,14 +314,46 @@ G_MODULE_EXPORT void EF_gtk_appuis_select_changed(
  *           interface graphique non initialisée.
  */
 {
+    GtkTreeModel    *model;
+    GtkTreeIter     Iter;
+    
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_appuis.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Appui");
     
-    // Si aucun appui n'est sélectionné, il n'est pas possible d'en supprimer une.
-    if (!gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_treeview_select")), NULL, NULL))
-        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_boutton_supprimer")), FALSE);
+    // Si aucun appui n'est sélectionné, il n'est pas possible d'en supprimer un.
+    if (!gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_treeview_select")), &model, &Iter))
+    {
+        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_boutton_supprimer_direct")), FALSE);
+        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_boutton_supprimer_menu")), FALSE);
+        gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_boutton_supprimer_direct")), FALSE);
+        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_boutton_supprimer_menu")), TRUE);
+    }
     else
-        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_boutton_supprimer")), TRUE);
+    {
+        char        *nom;
+        EF_Appui    *appui;
+        
+        gtk_tree_model_get(model, &Iter, 0, &nom, -1);
+        
+        BUG(appui = EF_appuis_cherche_nom(projet, nom, TRUE), );
+        
+        if (EF_appuis_verifie_dependances(projet, appui))
+        {
+            gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_boutton_supprimer_direct")), FALSE);
+            gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_boutton_supprimer_menu")), TRUE);
+            gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_boutton_supprimer_direct")), FALSE);
+            gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_boutton_supprimer_menu")), TRUE);
+        }
+        else
+        {
+            gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_boutton_supprimer_direct")), TRUE);
+            gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_boutton_supprimer_menu")), FALSE);
+            gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_boutton_supprimer_direct")), TRUE);
+            gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_boutton_supprimer_menu")), FALSE);
+        }
+        
+        free(nom);
+    }
     
     return;
 }
@@ -316,6 +414,9 @@ G_MODULE_EXPORT void EF_gtk_appuis(Projet *projet)
     g_object_set_data(gtk_builder_get_object(ef_gtk->builder, "EF_appuis_treeview_cell4"), "column", GINT_TO_POINTER(4));
     g_object_set_data(gtk_builder_get_object(ef_gtk->builder, "EF_appuis_treeview_cell5"), "column", GINT_TO_POINTER(5));
     g_object_set_data(gtk_builder_get_object(ef_gtk->builder, "EF_appuis_treeview_cell6"), "column", GINT_TO_POINTER(6));
+    
+    gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_boutton_supprimer_direct")), FALSE);
+    gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_boutton_supprimer_menu")), FALSE);
     
     gtk_window_set_transient_for(GTK_WINDOW(ef_gtk->window), GTK_WINDOW(projet->list_gtk.comp.window));
 }
