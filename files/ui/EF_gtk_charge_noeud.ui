@@ -67,7 +67,7 @@
                 <property name="row-spacing">12</property>
                 <child>
                     <object class="GtkLabel" id="EF_charge_noeud_label_charge">
-                        <property name="label">Charge :</property>
+                        <property name="label" translatable="yes">Charge :</property>
                         <property name="visible">True</property>
                     </object>
                     <packing>
@@ -88,7 +88,7 @@
                 </child>
                 <child>
                     <object class="GtkLabel" id="EF_charge_noeud_label_description">
-                        <property name="label">Description :</property>
+                        <property name="label" translatable="yes">Description :</property>
                         <property name="visible">True</property>
                     </object>
                     <packing>
@@ -305,7 +305,7 @@
                 </child>
                 <child>
                     <object class="GtkLabel" id="EF_charge_noeud_label_noeuds">
-                        <property name="label">Noeuds :</property>
+                        <property name="label" translatable="yes">Noeuds :</property>
                         <property name="visible">True</property>
                     </object>
                     <packing>

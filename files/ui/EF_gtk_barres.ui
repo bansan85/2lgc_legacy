@@ -16,7 +16,7 @@
     </object>
     <object class="GtkWindow" id="EF_barres_window">
         <property name="visible">True</property>
-        <property name="title">Barres</property>
+        <property name="title" translatable="yes">Barres</property>
         <property name="modal">True</property>
         <property name="default-height">400</property>
         <property name="default-width">600</property>
@@ -42,7 +42,7 @@
                                     <object class="GtkTreeViewColumn" id="EF_barres_treeview_column0">
                                         <property name="visible">True</property>
                                         <property name="resizable">True</property>
-                                        <property name="title">Numéro</property>
+                                        <property name="title" translatable="yes">Numéro</property>
                                         <child>
                                             <object class="GtkCellRendererText" id="EF_barres_treeview_cell0">
                                                 <property name="background">#EEEEEE</property>
@@ -57,7 +57,7 @@
                                     <object class="GtkTreeViewColumn" id="EF_barres_treeview_column1">
                                         <property name="visible">True</property>
                                         <property name="resizable">True</property>
-                                        <property name="title">Type</property>
+                                        <property name="title" translatable="yes">Type</property>
                                         <child>
                                             <object class="GtkCellRendererCombo" id="EF_barres_treeview_cell1">
                                                 <property name="editable">True</property>
@@ -75,7 +75,7 @@
                                     <object class="GtkTreeViewColumn" id="EF_barres_treeview_column2">
                                         <property name="visible">True</property>
                                         <property name="resizable">True</property>
-                                        <property name="title">Section</property>
+                                        <property name="title" translatable="yes">Section</property>
                                         <child>
                                             <object class="GtkCellRendererCombo" id="EF_barres_treeview_cell2">
                                                 <property name="editable">True</property>
@@ -93,7 +93,7 @@
                                     <object class="GtkTreeViewColumn" id="EF_barres_treeview_column3">
                                         <property name="visible">True</property>
                                         <property name="resizable">True</property>
-                                        <property name="title">Matériau</property>
+                                        <property name="title" translatable="yes">Matériau</property>
                                         <child>
                                             <object class="GtkCellRendererCombo" id="EF_barres_treeview_cell3">
                                                 <property name="editable">True</property>
@@ -111,7 +111,7 @@
                                     <object class="GtkTreeViewColumn" id="EF_barres_treeview_column4">
                                         <property name="visible">True</property>
                                         <property name="resizable">True</property>
-                                        <property name="title">Noeud 1</property>
+                                        <property name="title" translatable="yes">Noeud 1</property>
                                         <child>
                                             <object class="GtkCellRendererText" id="EF_barres_treeview_cell4">
                                                 <property name="editable">True</property>
@@ -127,7 +127,7 @@
                                     <object class="GtkTreeViewColumn" id="EF_barres_treeview_column5">
                                         <property name="visible">True</property>
                                         <property name="resizable">True</property>
-                                        <property name="title">Noeud 2</property>
+                                        <property name="title" translatable="yes">Noeud 2</property>
                                         <child>
                                             <object class="GtkCellRendererText" id="EF_barres_treeview_cell5">
                                                 <property name="editable">True</property>
@@ -143,7 +143,7 @@
                                     <object class="GtkTreeViewColumn" id="EF_barres_treeview_column6">
                                         <property name="visible">True</property>
                                         <property name="resizable">True</property>
-                                        <property name="title">Relâchement</property>
+                                        <property name="title" translatable="yes">Relâchement</property>
                                         <child>
                                             <object class="GtkCellRendererCombo" id="EF_barres_treeview_cell6">
                                                 <property name="editable">True</property>

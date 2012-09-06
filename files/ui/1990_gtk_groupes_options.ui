@@ -3,7 +3,7 @@
     <requires lib="gtk+" version="3.2"/>
     <object class="GtkWindow" id="1990_groupes_options_window">
         <property name="visible">True</property>
-        <property name="title">Options des combinaisons</property>
+        <property name="title" translatable="yes">Options des combinaisons</property>
         <property name="modal">True</property>
         <property name="resizable">False</property>
         <property name="window-position">GTK_WIN_POS_CENTER</property>
@@ -16,7 +16,7 @@
                 <child>
                     <object class="GtkLabel" id="1990_groupes_options_label_ELU_EQU">
                         <property name="visible">True</property>
-                        <property name="label">&lt;b&gt;ELU Équilibre :&lt;/b&gt;</property>
+                        <property name="label" translatable="yes">&lt;b&gt;ELU Équilibre :&lt;/b&gt;</property>
                         <property name="hexpand">True</property>
                         <property name="use_markup">True</property>
                         <property name="xalign">0</property>
@@ -46,7 +46,7 @@
                         <child>
                             <object class="GtkRadioButton" id="1990_groupes_options_radio_button_EQU">
                                 <property name="visible">True</property>
-                                <property name="label">Équilibre seulement</property>
+                                <property name="label" translatable="yes">Équilibre seulement</property>
                                 <signal name="toggled" handler="_1990_gtk_radio_button_eluequ_equ_seul"/>
                             </object>
                             <packing>
@@ -57,7 +57,7 @@
                         <child>
                             <object class="GtkRadioButton" id="1990_groupes_options_radio_button_EQU_RES">
                                 <property name="visible">True</property>
-                                <property name="label">Équilibre et résistance</property>
+                                <property name="label" translatable="yes">Équilibre et résistance</property>
                                 <property name="group">1990_groupes_options_radio_button_EQU</property>
                                 <signal name="toggled" handler="_1990_gtk_radio_button_eluequ_equ_resist"/>
                             </object>
@@ -75,7 +75,7 @@
                 <child>
                     <object class="GtkLabel" id="1990_groupes_options_label_ELU_STR_comb">
                         <property name="visible">True</property>
-                        <property name="label">&lt;b&gt;ELU STR et GEO, formule de combinaison :&lt;/b&gt;</property>
+                        <property name="label" translatable="yes">&lt;b&gt;ELU STR et GEO, formule de combinaison :&lt;/b&gt;</property>
                         <property name="hexpand">True</property>
                         <property name="use_markup">True</property>
                         <property name="xalign">0</property>
@@ -92,7 +92,7 @@
                         <child>
                             <object class="GtkLabel" id="1990_groupes_options_label_ELU_STR_comb_description">
                                 <property name="visible">True</property>
-                                <property name="label">À l'État Limite Ultime STRucture et GÉOtechnique, deux formules de combinaison sont possibles. La première est la formule 6.10 et la deuxième est 6.10a et 6.10b.</property>
+                                <property name="label" translatable="yes">À l'État Limite Ultime STRucture et GÉOtechnique, deux formules de combinaison sont possibles. La première est la formule 6.10 et la deuxième est 6.10a et 6.10b.</property>
                                 <property name="wrap">True</property>
                                 <property name="xalign">0</property>
                                 <property name="justify">fill</property>
@@ -118,7 +118,7 @@
                         <child>
                             <object class="GtkRadioButton" id="1990_groupes_options_radio_button_6_10a_b">
                                 <property name="visible">True</property>
-                                <property name="label">6.10a et 6.10b</property>
+                                <property name="label" translatable="yes">6.10a et 6.10b</property>
                                 <property name="group">1990_groupes_options_radio_button_6_10</property>
                                 <property name="has-tooltip">True</property>
                                 <signal name="toggled" handler="_1990_gtk_radio_button_elustrgeo_6_10ab"/>
@@ -138,7 +138,7 @@
                 <child>
                     <object class="GtkLabel" id="1990_groupes_options_label_ELU_STR_calc">
                         <property name="visible">True</property>
-                        <property name="label">&lt;b&gt;ELU STR et GEO, ensemble de calcul :&lt;/b&gt;</property>
+                        <property name="label" translatable="yes">&lt;b&gt;ELU STR et GEO, ensemble de calcul :&lt;/b&gt;</property>
                         <property name="hexpand">True</property>
                         <property name="use_markup">True</property>
                         <property name="xalign">0</property>
@@ -155,7 +155,7 @@
                         <child>
                             <object class="GtkLabel" id="1990_groupes_options_label_ELU_STR_calc_description">
                                 <property name="visible">True</property>
-                                <property name="label">Lorsqu'il est nécessaire de réaliser un calcul à l'État Limite Ultime STRucture et GÉOtechnique, trois approches sont possibles. Approche 1 : vérification de la structure et du sol via les coefficients de l'ensemble B puis les coefficients de l'ensemble C. Approche 2 : vérification de la structure et du sol via les coefficients de l'ensemble B. Approche 3 : vérification de la structure et du sol via les coefficients de l'ensemble B pour les actions géotechniques et les coefficients de l'ensemble C pour les actions appliquées à la structure.</property>
+                                <property name="label" translatable="yes">Lorsqu'il est nécessaire de réaliser un calcul à l'État Limite Ultime STRucture et GÉOtechnique, trois approches sont possibles. Approche 1 : vérification de la structure et du sol via les coefficients de l'ensemble B puis les coefficients de l'ensemble C. Approche 2 : vérification de la structure et du sol via les coefficients de l'ensemble B. Approche 3 : vérification de la structure et du sol via les coefficients de l'ensemble B pour les actions géotechniques et les coefficients de l'ensemble C pour les actions appliquées à la structure.</property>
                                 <property name="wrap">True</property>
                                 <property name="xalign">0</property>
                                 <property name="justify">fill</property>
@@ -168,7 +168,7 @@
                         <child>
                             <object class="GtkRadioButton" id="1990_groupes_options_radio_button_appr1">
                                 <property name="visible">True</property>
-                                <property name="label">Approche 1</property>
+                                <property name="label" translatable="yes">Approche 1</property>
                                 <signal name="toggled" handler="_1990_gtk_radio_button_elustrgeo_1"/>
                             </object>
                             <packing>
@@ -179,7 +179,7 @@
                         <child>
                             <object class="GtkRadioButton" id="1990_groupes_options_radio_button_appr2">
                                 <property name="visible">True</property>
-                                <property name="label">Approche 2</property>
+                                <property name="label" translatable="yes">Approche 2</property>
                                 <property name="group">1990_groupes_options_radio_button_appr1</property>
                                 <signal name="toggled" handler="_1990_gtk_radio_button_elustrgeo_2"/>
                             </object>
@@ -191,7 +191,7 @@
                         <child>
                             <object class="GtkRadioButton" id="1990_groupes_options_radio_button_appr3">
                                 <property name="visible">True</property>
-                                <property name="label">Approche 3</property>
+                                <property name="label" translatable="yes">Approche 3</property>
                                 <property name="group">1990_groupes_options_radio_button_appr1</property>
                                 <signal name="toggled" handler="_1990_gtk_radio_button_elustrgeo_3"/>
                             </object>
@@ -209,7 +209,7 @@
                 <child>
                     <object class="GtkLabel" id="1990_groupes_options_label_ELU_ACC">
                         <property name="visible">True</property>
-                        <property name="label">&lt;b&gt;ELU ACCidentel :&lt;/b&gt;</property>
+                        <property name="label" translatable="yes">&lt;b&gt;ELU ACCidentel :&lt;/b&gt;</property>
                         <property name="hexpand">True</property>
                         <property name="use_markup">True</property>
                         <property name="xalign">0</property>
@@ -226,7 +226,7 @@
                         <child>
                             <object class="GtkLabel" id="1990_groupes_options_label_ELU_ACC_description">
                                 <property name="visible">True</property>
-                                <property name="label">À l'État Limite Ultime ACCidentel, la charge variable dominante utilisée est soit la valeur fréquente, soit la valeur quasi-permanente.</property>
+                                <property name="label" translatable="yes">À l'État Limite Ultime ACCidentel, la charge variable dominante utilisée est soit la valeur fréquente, soit la valeur quasi-permanente.</property>
                                 <property name="wrap">True</property>
                                 <property name="xalign">0</property>
                                 <property name="justify">fill</property>
@@ -239,7 +239,7 @@
                         <child>
                             <object class="GtkRadioButton" id="1990_groupes_options_radio_button_freq">
                                 <property name="visible">True</property>
-                                <property name="label">valeur fréquence</property>
+                                <property name="label" translatable="yes">valeur fréquence</property>
                                 <signal name="toggled" handler="_1990_gtk_radio_button_eluacc_frequente"/>
                             </object>
                             <packing>
@@ -250,7 +250,7 @@
                         <child>
                             <object class="GtkRadioButton" id="1990_groupes_options_radio_button_quasi_perm">
                                 <property name="visible">True</property>
-                                <property name="label">valeur quasi-permanente</property>
+                                <property name="label" translatable="yes">valeur quasi-permanente</property>
                                 <property name="group">1990_groupes_options_radio_button_freq</property>
                                 <signal name="toggled" handler="_1990_gtk_radio_button_eluacc_quasi_permanente"/>
                             </object>

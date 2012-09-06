@@ -72,7 +72,7 @@
                 <property name="row-spacing">12</property>
                 <child>
                     <object class="GtkLabel" id="EF_charge_barre_ponct_label_charge">
-                        <property name="label">Charge :</property>
+                        <property name="label" translatable="yes">Charge :</property>
                         <property name="visible">True</property>
                     </object>
                     <packing>
@@ -93,7 +93,7 @@
                 </child>
                 <child>
                     <object class="GtkLabel" id="EF_charge_barre_ponct_label_description">
-                        <property name="label">Description :</property>
+                        <property name="label" translatable="yes">Description :</property>
                         <property name="visible">True</property>
                     </object>
                     <packing>
@@ -310,7 +310,7 @@
                 </child>
                 <child>
                     <object class="GtkLabel" id="EF_charge_barre_ponct_label_repere">
-                        <property name="label">Repere :</property>
+                        <property name="label" translatable="yes">Repere :</property>
                         <property name="visible">True</property>
                     </object>
                     <packing>
@@ -325,7 +325,7 @@
                         <property name="hexpand">True</property>
                         <child>
                             <object class="GtkRadioButton" id="EF_charge_barre_ponct_radio_local">
-                                <property name="label">Local</property>
+                                <property name="label" translatable="yes">Local</property>
                                 <property name="visible">True</property>
                                 <property name="hexpand">True</property>
                             </object>
@@ -336,7 +336,7 @@
                         </child>
                         <child>
                             <object class="GtkRadioButton" id="EF_charge_barre_ponct_radio_global">
-                                <property name="label">Global</property>
+                                <property name="label" translatable="yes">Global</property>
                                 <property name="visible">True</property>
                                 <property name="hexpand">True</property>
                                 <property name="group">EF_charge_barre_ponct_radio_local</property>
@@ -355,7 +355,7 @@
                 </child>
                 <child>
                     <object class="GtkLabel" id="EF_charge_barre_ponct_label_position">
-                        <property name="label">Position :</property>
+                        <property name="label" translatable="yes">Position :</property>
                         <property name="visible">True</property>
                     </object>
                     <packing>
@@ -386,7 +386,7 @@
                 </child>
                 <child>
                     <object class="GtkLabel" id="EF_charge_barre_ponct_barres_label">
-                        <property name="label">Barres :</property>
+                        <property name="label" translatable="yes">Barres :</property>
                         <property name="visible">True</property>
                     </object>
                     <packing>

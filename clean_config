@@ -17,3 +17,4 @@ find . -name "*.gcda" -exec rm {} \;
 find . -name "gmon.out" -exec rm {} \;
 find . -name "*.gcno" -exec rm {} \;
 find src/test -type f -perm /111 -exec rm {} \;
+rm -f files/ui/*.h
