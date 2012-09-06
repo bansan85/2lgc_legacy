@@ -40,7 +40,7 @@
     </object>
     <object class="GtkWindow" id="1990_groupes_window">
         <property name="visible">True</property>
-        <property name="title">Groupes</property>
+        <property name="title" translatable="yes">Groupes</property>
         <property name="modal">True</property>
         <property name="default-height">600</property>
         <property name="default-width">800</property>
@@ -59,7 +59,7 @@
                         <child>
                             <object class="GtkLabel" id="1990_groupes_label_niveaux">
                                 <property name="visible">True</property>
-                                <property name="label">Niveau :</property>
+                                <property name="label" translatable="yes">Niveau :</property>
                             </object>
                             <packing>
                                 <property name="left-attach">0</property>
@@ -117,7 +117,7 @@
                                 <property name="border-width">6</property>
                                 <child>
                                     <object class="GtkLabel" id="1990_groupes_label_etat">
-                                        <property name="label">&lt;b&gt;Groupes :&lt;/b&gt;</property>
+                                        <property name="label" translatable="yes">&lt;b&gt;Groupes :&lt;/b&gt;</property>
                                         <property name="visible">True</property>
                                         <property name="hexpand">True</property>
                                         <property name="use_markup">True</property>
@@ -159,7 +159,7 @@
                                                             <object class="GtkTreeViewColumn" id="1990_groupes_treeview_etat_column0">
                                                                 <property name="visible">True</property>
                                                                 <property name="resizable">True</property>
-                                                                <property name="title">Numéro</property>
+                                                                <property name="title" translatable="yes">Numéro</property>
                                                                 <child>
                                                                     <object class="GtkCellRendererText" id="1990_groupes_treeview_etat_cell0"/>
                                                                     <attributes>
@@ -172,7 +172,7 @@
                                                             <object class="GtkTreeViewColumn" id="1990_groupes_treeview_etat_column1">
                                                                 <property name="visible">True</property>
                                                                 <property name="resizable">True</property>
-                                                                <property name="title">Description</property>
+                                                                <property name="title" translatable="yes">Description</property>
                                                                 <child>
                                                                     <object class="GtkCellRendererText" id="1990_groupes_treeview_etat_cell1">
                                                                         <property name="editable">True</property>
@@ -201,7 +201,7 @@
                                                 <child>
                                                     <object class="GtkToolButton" id="1990_charges_toolbar_etat_ajout">
                                                         <property name="visible">True</property>
-                                                        <property name="label">Ajouter</property>
+                                                        <property name="label" translatable="yes">Ajouter</property>
                                                         <property name="stock_id">GTK_STOCK_ADD</property>
                                                         <property name="icon-widget">1990_charges_icon_etat_ajout</property>
                                                         <signal name="clicked" handler="_1990_gtk_button_groupe_ajout_clicked"/>
@@ -237,7 +237,7 @@
                                                     <object class="GtkToolButton" id="1990_charges_toolbar_etat_suppr">
                                                         <property name="visible">True</property>
                                                         <property name="sensitive">False</property>
-                                                        <property name="label">Supprimer</property>
+                                                        <property name="label" translatable="yes">Supprimer</property>
                                                         <property name="stock_id">GTK_STOCK_GO_FORWARD</property>
                                                         <property name="icon-widget">1990_charges_icon_etat_suppr</property>
                                                         <signal name="clicked" handler="_1990_gtk_button_groupe_suppr_clicked"/>
@@ -263,7 +263,7 @@
                                 <property name="border-width">6</property>
                                 <child>
                                     <object class="GtkLabel" id="1990_groupes_label_dispo">
-                                        <property name="label">&lt;b&gt;Éléments disponibles :&lt;/b&gt;</property>
+                                        <property name="label" translatable="yes">&lt;b&gt;Éléments disponibles :&lt;/b&gt;</property>
                                         <property name="visible">True</property>
                                         <property name="hexpand">True</property>
                                         <property name="use_markup">True</property>
@@ -302,7 +302,7 @@
                                                             <object class="GtkTreeViewColumn" id="1990_groupes_treeview_dispo_column0">
                                                                 <property name="visible">True</property>
                                                                 <property name="resizable">True</property>
-                                                                <property name="title">Numéro</property>
+                                                                <property name="title" translatable="yes">Numéro</property>
                                                                 <child>
                                                                     <object class="GtkCellRendererText" id="1990_groupes_treeview_dispo_cell0"/>
                                                                     <attributes>
@@ -315,7 +315,7 @@
                                                             <object class="GtkTreeViewColumn" id="1990_groupes_treeview_dispo_column1">
                                                                 <property name="visible">True</property>
                                                                 <property name="resizable">True</property>
-                                                                <property name="title">Description</property>
+                                                                <property name="title" translatable="yes">Description</property>
                                                                 <child>
                                                                     <object class="GtkCellRendererText" id="1990_groupes_treeview_dispo_cell1">
                                                                         <property name="editable">True</property>
@@ -345,7 +345,7 @@
                                                     <object class="GtkToolButton" id="1990_charges_toolbar_dispo_ajout">
                                                         <property name="visible">True</property>
                                                         <property name="sensitive">False</property>
-                                                        <property name="label">Ajouter</property>
+                                                        <property name="label" translatable="yes">Ajouter</property>
                                                         <property name="stock_id">GTK_STOCK_GO_BACK</property>
                                                         <property name="icon-widget">1990_charges_icon_dispo_ajout</property>
                                                         <signal name="clicked" handler="_1990_gtk_button_ajout_dispo_clicked"/>
@@ -355,7 +355,7 @@
                                                     <object class="GtkToolButton" id="1990_charges_toolbar_dispo_ajout_tout">
                                                         <property name="visible">True</property>
                                                         <property name="sensitive">False</property>
-                                                        <property name="label">Ajouter tout</property>
+                                                        <property name="label" translatable="yes">Ajouter tout</property>
                                                         <property name="stock_id">GTK_STOCK_GOTO_FIRST</property>
                                                         <property name="icon-widget">1990_charges_icon_dispo_ajout_tout</property>
                                                         <signal name="clicked" handler="_1990_gtk_button_ajout_tout_dispo_clicked"/>
@@ -390,7 +390,7 @@
                         <child>
                             <object class="GtkButton" id="1990_charges_button_options">
                                 <property name="visible">True</property>
-                                <property name="label">Options</property>
+                                <property name="label" translatable="yes">Options</property>
                                 <signal name="clicked" handler="_1990_gtk_groupes_button_options_clicked"/>
                             </object>
                             <packing>
@@ -401,7 +401,7 @@
                         <child>
                             <object class="GtkButton" id="1990_charges_button_generer">
                                 <property name="visible">True</property>
-                                <property name="label">Générer</property>
+                                <property name="label" translatable="yes">Générer</property>
                                 <signal name="clicked" handler="_1990_gtk_groupes_button_generer_clicked"/>
                             </object>
                             <packing>

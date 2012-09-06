@@ -47,7 +47,7 @@
     </object>
     <object id="1990_actions_window" class="GtkWindow">
         <property name="visible">True</property>
-        <property name="title">Actions</property>
+        <property name="title" translatable="yes">Actions</property>
         <property name="modal">True</property>
         <property name="default-height">600</property>
         <property name="default-width">800</property>
@@ -68,7 +68,7 @@
                                 <property name="visible">True</property>
                                 <child>
                                     <object class="GtkLabel" id="1990_actions_label_action">
-                                        <property name="label">&lt;b&gt;Actions :&lt;/b&gt;</property>
+                                        <property name="label" translatable="yes">&lt;b&gt;Actions :&lt;/b&gt;</property>
                                         <property name="visible">True</property>
                                         <property name="hexpand">True</property>
                                         <property name="use_markup">True</property>
@@ -105,7 +105,7 @@
                                                             <object class="GtkTreeViewColumn" id="1990_actions_treeview_column0">
                                                                 <property name="visible">False</property>
                                                                 <property name="resizable">True</property>
-                                                                <property name="title">Numéro</property>
+                                                                <property name="title" translatable="yes">Numéro</property>
                                                                 <child>
                                                                     <object class="GtkCellRendererText" id="1990_actions_treeview_cell0"/>
                                                                     <attributes>
@@ -118,7 +118,7 @@
                                                             <object class="GtkTreeViewColumn" id="1990_actions_treeview_column1">
                                                                 <property name="visible">True</property>
                                                                 <property name="resizable">True</property>
-                                                                <property name="title">Description</property>
+                                                                <property name="title" translatable="yes">Description</property>
                                                                 <property name="sizing">GTK_TREE_VIEW_COLUMN_FIXED</property>
                                                                 <property name="fixed-width">180</property>
                                                                 <child>
@@ -136,7 +136,7 @@
                                                             <object class="GtkTreeViewColumn" id="1990_actions_treeview_column2">
                                                                 <property name="visible">True</property>
                                                                 <property name="resizable">True</property>
-                                                                <property name="title">Type</property>
+                                                                <property name="title" translatable="yes">Type</property>
                                                                 <property name="sizing">GTK_TREE_VIEW_COLUMN_FIXED</property>
                                                                 <property name="fixed-width">180</property>
                                                                 <child>
@@ -223,7 +223,7 @@
                                         <child>
                                             <object class="GtkMenuToolButton" id="1990_actions_toolbar_action_ajout">
                                                 <property name="visible">True</property>
-                                                <property name="label">Ajouter</property>
+                                                <property name="label" translatable="yes">Ajouter</property>
                                                 <property name="stock_id">add</property>
                                                 <property name="icon-widget">1990_actions_icon_action_ajout</property>
                                                 <signal name="clicked" handler="_1990_gtk_menu_nouvelle_action_activate"/>
@@ -233,7 +233,7 @@
                                             <object class="GtkToolButton" id="1990_actions_toolbar_action_suppr">
                                                 <property name="visible">True</property>
                                                 <property name="sensitive">False</property>
-                                                <property name="label">Supprimer</property>
+                                                <property name="label" translatable="yes">Supprimer</property>
                                                 <property name="stock_id">GTK_STOCK_DELETE</property>
                                                 <property name="icon-widget">1990_actions_icon_action_suppr</property>
                                                 <signal name="clicked" handler="_1990_gtk_menu_suppr_action_activate"/>
@@ -252,7 +252,7 @@
                                 <property name="visible">True</property>
                                 <child>
                                     <object class="GtkLabel" id="1990_actions_label_charge">
-                                        <property name="label">&lt;b&gt;Charges :&lt;/b&gt;</property>
+                                        <property name="label" translatable="yes">&lt;b&gt;Charges :&lt;/b&gt;</property>
                                         <property name="visible">True</property>
                                         <property name="hexpand">True</property>
                                         <property name="use_markup">True</property>
@@ -291,7 +291,7 @@
                                                             <object class="GtkTreeViewColumn" id="1990_actions_treeview_charge_column0">
                                                                 <property name="visible">False</property>
                                                                 <property name="resizable">True</property>
-                                                                <property name="title">Numéro</property>
+                                                                <property name="title" translatable="yes">Numéro</property>
                                                                 <child>
                                                                     <object class="GtkCellRendererText" id="1990_actions_treeview_charge_cell0"/>
                                                                     <attributes>
@@ -304,7 +304,7 @@
                                                             <object class="GtkTreeViewColumn" id="1990_actions_treeview_charge_column1">
                                                                 <property name="visible">True</property>
                                                                 <property name="resizable">True</property>
-                                                                <property name="title">Description</property>
+                                                                <property name="title" translatable="yes">Description</property>
                                                                 <child>
                                                                     <object class="GtkCellRendererText" id="1990_actions_treeview_charge_cell1">
                                                                         <property name="editable">True</property>
@@ -320,7 +320,7 @@
                                                             <object class="GtkTreeViewColumn" id="1990_actions_treeview_charge_column2">
                                                                 <property name="visible">True</property>
                                                                 <property name="resizable">True</property>
-                                                                <property name="title">Charge</property>
+                                                                <property name="title" translatable="yes">Charge</property>
                                                                 <child>
                                                                     <object class="GtkCellRendererText" id="1990_actions_treeview_charge_cell2"/>
                                                                     <attributes>
@@ -333,7 +333,7 @@
                                                             <object class="GtkTreeViewColumn" id="1990_actions_treeview_charge_column3">
                                                                 <property name="visible">True</property>
                                                                 <property name="resizable">True</property>
-                                                                <property name="title">Valeur</property>
+                                                                <property name="title" translatable="yes">Valeur</property>
                                                                 <child>
                                                                     <object class="GtkCellRendererText" id="1990_actions_treeview_charge_cell3"/>
                                                                     <attributes>
@@ -366,7 +366,7 @@
                                             <object class="GtkMenuToolButton" id="1990_actions_toolbar_charge_ajout">
                                                 <property name="visible">True</property>
                                                 <property name="sensitive">False</property>
-                                                <property name="label">Ajouter</property>
+                                                <property name="label" translatable="yes">Ajouter</property>
                                                 <property name="stock_id">GTK_STOCK_ADD</property>
                                                 <property name="icon-widget">1990_actions_icon_charge_ajout</property>
                                             </object>
@@ -375,7 +375,7 @@
                                             <object class="GtkToolButton" id="1990_actions_toolbar_charge_edit">
                                                 <property name="visible">True</property>
                                                 <property name="sensitive">False</property>
-                                                <property name="label">Éditer</property>
+                                                <property name="label" translatable="yes">Éditer</property>
                                                 <property name="stock_id">GTK_STOCK_EDIT</property>
                                                 <property name="icon-widget">1990_actions_icon_charge_edit</property>
                                                 <signal name="clicked" handler="_1990_gtk_menu_edit_charge_clicked"/>
@@ -385,7 +385,7 @@
                                             <object class="GtkToolButton" id="1990_actions_toolbar_charge_suppr">
                                                 <property name="visible">True</property>
                                                 <property name="sensitive">False</property>
-                                                <property name="label">Supprimer</property>
+                                                <property name="label" translatable="yes">Supprimer</property>
                                                 <property name="stock_id">GTK_STOCK_DELETE</property>
                                                 <property name="icon-widget">1990_actions_icon_charge_suppr</property>
                                                 <signal name="clicked" handler="_1990_gtk_menu_suppr_charge_clicked"/>

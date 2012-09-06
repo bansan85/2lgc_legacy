@@ -16,14 +16,14 @@
         <property name="visible">True</property>
         <child>
             <object class="GtkMenuItem" id="EF_appuis_supprimer_menu_suppr_noeud">
-                <property name="label">ainsi que les noeuds l'utilisant (y compris les barres et noeuds intermédaires dépendants).</property>
+                <property name="label" translatable="yes">ainsi que les noeuds l'utilisant (y compris les barres et noeuds intermédaires dépendants).</property>
                 <property name="visible">True</property>
                 <signal name="activate" handler="EF_gtk_appuis_supprimer_menu_suppr_noeud"/>
             </object>
         </child>
         <child>
             <object class="GtkMenuItem" id="EF_appuis_supprimer_menu_modif_noeud">
-                <property name="label">et annule les conditions d'appuis sur les noeuds l'utilisant.</property>
+                <property name="label" translatable="yes">et annule les conditions d'appuis sur les noeuds l'utilisant.</property>
                 <property name="visible">True</property>
                 <signal name="activate" handler="EF_gtk_appuis_supprimer_menu_modif_noeud"/>
             </object>
@@ -31,7 +31,7 @@
     </object>
     <object class="GtkWindow" id="EF_appuis_window">
         <property name="visible">True</property>
-        <property name="title">Appuis</property>
+        <property name="title" translatable="yes">Appuis</property>
         <property name="modal">True</property>
         <property name="default-height">400</property>
         <property name="default-width">600</property>
@@ -62,7 +62,7 @@
                                     <object class="GtkTreeViewColumn" id="EF_appuis_treeview_column0">
                                         <property name="visible">True</property>
                                         <property name="resizable">True</property>
-                                        <property name="title">Nom</property>
+                                        <property name="title" translatable="yes">Nom</property>
                                         <child>
                                             <object class="GtkCellRendererText" id="EF_appuis_treeview_cell0">
                                                 <property name="editable">True</property>

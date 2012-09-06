@@ -26,7 +26,7 @@
     </object>
     <object class="GtkWindow" id="EF_barres_add_window">
         <property name="visible">True</property>
-        <property name="title">Ajout d'une barres</property>
+        <property name="title" translatable="yes">Ajout d'une barre</property>
         <property name="modal">True</property>
         <property name="window-position">GTK_WIN_POS_CENTER</property>
         <signal name="key-press-event" handler="EF_gtk_barres_add_window_key_press"/>
@@ -40,7 +40,7 @@
                 <child>
                     <object class="GtkLabel" id="EF_gtk_barres_add_numero_label">
                         <property name="visible">True</property>
-                        <property name="label">Numéro :</property>
+                        <property name="label" translatable="yes">Numéro :</property>
                     </object>
                     <packing>
                         <property name="left-attach">0</property>
@@ -59,7 +59,7 @@
                 <child>
                     <object class="GtkLabel" id="EF_gtk_barres_add_type_label">
                         <property name="visible">True</property>
-                        <property name="label">Type :</property>
+                        <property name="label" translatable="yes">Type :</property>
                     </object>
                     <packing>
                         <property name="left-attach">0</property>
@@ -80,7 +80,7 @@
                 <child>
                     <object class="GtkLabel" id="EF_gtk_barres_add_section_label">
                         <property name="visible">True</property>
-                        <property name="label">Section :</property>
+                        <property name="label" translatable="yes">Section :</property>
                     </object>
                     <packing>
                         <property name="left-attach">0</property>
@@ -101,7 +101,7 @@
                 <child>
                     <object class="GtkLabel" id="EF_gtk_barres_add_materiau_label">
                         <property name="visible">True</property>
-                        <property name="label">Matériau :</property>
+                        <property name="label" translatable="yes">Matériau :</property>
                     </object>
                     <packing>
                         <property name="left-attach">0</property>
@@ -122,7 +122,7 @@
                 <child>
                     <object class="GtkLabel" id="EF_gtk_barres_add_noeud1_label">
                         <property name="visible">True</property>
-                        <property name="label">Noeud 1 :</property>
+                        <property name="label" translatable="yes">Noeud 1 :</property>
                     </object>
                     <packing>
                         <property name="left-attach">0</property>
@@ -143,7 +143,7 @@
                 <child>
                     <object class="GtkLabel" id="EF_gtk_barres_add_noeud2_label">
                         <property name="visible">True</property>
-                        <property name="label">Noeud 2 :</property>
+                        <property name="label" translatable="yes">Noeud 2 :</property>
                     </object>
                     <packing>
                         <property name="left-attach">0</property>
@@ -164,7 +164,7 @@
                 <child>
                     <object class="GtkLabel" id="EF_gtk_barres_add_relachement_label">
                         <property name="visible">True</property>
-                        <property name="label">Relâchement :</property>
+                        <property name="label" translatable="yes">Relâchement :</property>
                     </object>
                     <packing>
                         <property name="left-attach">0</property>
