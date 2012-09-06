@@ -240,14 +240,13 @@ G_MODULE_EXPORT gboolean m3d_rafraichit(Projet *projet)
 G_MODULE_EXPORT void* m3d_noeud(void *donnees_m3d, EF_Noeud *noeud)
 /* Description : Crée un noeud dans l'affichage graphique. Si le noeud existe, il est détruit au
  *               préalable.
- * Paramètres : const char *nom : nom du noeud,
- *              EF_Point *point : position du noeud,
- *              void *vue : données SGlobalData.
+ * Paramètres : void *donnees_m3d : données SGlobalData,
+ *              EF_Noeud *noeud : noeud à ajouter ou à actualiser.
  * Valeur renvoyée :
  *   Succès : Pointeur vers le nouvel objet noeud.
  *   Échec : NULL :
  *             noeud == NULL,
- *             vue == NULL,
+ *             donnees_m3d == NULL,
  *             en cas d'erreur d'allocation mémoire.
  */
 {
@@ -278,6 +277,38 @@ G_MODULE_EXPORT void* m3d_noeud(void *donnees_m3d, EF_Noeud *noeud)
     free(point);
     
     return cube;
+}
+
+
+G_MODULE_EXPORT void m3d_noeud_free(void *donnees_m3d, EF_Noeud *noeud)
+/* Description : Supprimer un noeud dans l'affichage graphique.
+ * Paramètres : void *donnees_m3d : données SGlobalData,
+ *              EF_Noeud *noeud : noeud à ajouter ou à actualiser.
+ * Valeur renvoyée :
+ *   Succès : Pointeur vers le nouvel objet noeud.
+ *   Échec : NULL :
+ *             noeud == NULL,
+ *             donnees_m3d == NULL,
+ *             en cas d'erreur d'allocation mémoire.
+ */
+{
+    CM3dObject  *cube;
+    char        *nom;
+    SGlobalData *vue;
+    
+    BUGMSG(noeud, , gettext("Paramètre %s incorrect.\n"), "noeud");
+    BUGMSG(donnees_m3d, , gettext("Paramètre %s incorrect.\n"), "donnees_m3d");
+    
+    BUGMSG(nom = g_strdup_printf("noeud %u", noeud->numero), , gettext("Erreur d'allocation mémoire.\n"));
+    
+    vue = (SGlobalData*)((List_Gtk_m3d *)donnees_m3d)->data;
+    
+    cube = vue->scene->get_object_by_name(nom);
+    vue->scene->remove_object(cube);
+    
+    free(nom);
+    
+    return;
 }
 
 
@@ -595,6 +626,38 @@ G_MODULE_EXPORT void* m3d_barre(void *donnees_m3d, Beton_Barre *barre)
     free(tmp);
     
     return tout;
+}
+
+
+G_MODULE_EXPORT void m3d_barre_free(void *donnees_m3d, Beton_Barre *barre)
+/* Description : Supprimer une barre dans l'affichage graphique.
+ * Paramètres : void *donnees_m3d : données SGlobalData,
+ *              EF_Noeud *noeud : noeud à ajouter ou à actualiser.
+ * Valeur renvoyée :
+ *   Succès : Pointeur vers le nouvel objet noeud.
+ *   Échec : NULL :
+ *             noeud == NULL,
+ *             donnees_m3d == NULL,
+ *             en cas d'erreur d'allocation mémoire.
+ */
+{
+    CM3dObject  *cube;
+    char        *nom;
+    SGlobalData *vue;
+    
+    BUGMSG(barre, , gettext("Paramètre %s incorrect.\n"), "noeud");
+    BUGMSG(donnees_m3d, , gettext("Paramètre %s incorrect.\n"), "donnees_m3d");
+    
+    BUGMSG(nom = g_strdup_printf("barre %u", barre->numero), , gettext("Erreur d'allocation mémoire.\n"));
+    
+    vue = (SGlobalData*)((List_Gtk_m3d *)donnees_m3d)->data;
+    
+    cube = vue->scene->get_object_by_name(nom);
+    vue->scene->remove_object(cube);
+    
+    free(nom);
+    
+    return;
 }
 
 

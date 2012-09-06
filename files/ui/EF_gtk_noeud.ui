@@ -269,13 +269,14 @@
                     <packing>
                         <property name="left-attach">0</property>
                         <property name="top-attach">0</property>
+                        <property name="width">2</property>
                     </packing>
                 </child>
                 <child>
-                    <object class="GtkButtonBox" id="EF_noeuds_bouttons">
+                    <object class="GtkButtonBox" id="EF_noeuds_bouttons_noeuds">
                         <property name="visible">True</property>
                         <property name="orientation">horizontal</property>
-                        <property name="layout_style">end</property>
+                        <property name="layout_style">start</property>
                         <property name="spacing">6</property>
                         <child>
                             <object class="GtkButton" id="EF_noeuds_boutton_ajouter">
@@ -286,9 +287,21 @@
                             </object>
                             <packing>
                                 <property name="position">0</property>
-                                <property name="pack_type">end</property>
+                                <property name="pack_type">start</property>
                             </packing>
                         </child>
+                    </object>
+                    <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">1</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkButtonBox" id="EF_noeuds_bouttons_fenetre">
+                        <property name="visible">True</property>
+                        <property name="orientation">horizontal</property>
+                        <property name="layout_style">end</property>
+                        <property name="spacing">6</property>
                         <child>
                             <object class="GtkButton" id="EF_noeuds_boutton_fermer">
                                 <property name="visible">True</property>
@@ -297,13 +310,13 @@
                                 <signal name="clicked" handler="EF_gtk_noeud_fermer"/>
                             </object>
                             <packing>
-                                <property name="position">1</property>
+                                <property name="position">0</property>
                                 <property name="pack_type">end</property>
                             </packing>
                         </child>
                     </object>
                     <packing>
-                        <property name="left-attach">0</property>
+                        <property name="left-attach">1</property>
                         <property name="top-attach">1</property>
                     </packing>
                 </child>

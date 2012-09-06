@@ -34,6 +34,7 @@
 #include "EF_charge_barre_ponctuelle.h"
 #include "EF_calculs.h"
 #include "EF_noeud.h"
+#include "EF_noeud.h"
 
 G_MODULE_EXPORT gboolean _1992_1_1_barres_init(Projet *projet)
 /* Description : Initialise la liste des éléments en béton.
@@ -1282,6 +1283,37 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_rigidite_ajout_tout(Projet *projet)
 }
 
 
+G_MODULE_EXPORT void _1992_1_1_barre_free_foreach(Beton_Barre *barre, Projet *projet)
+/* Description : Fonction permettant de libérer iune barre contenue dans une liste.
+ * Paramètres : Beton_Barre *barre : la barre à libérer,
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    unsigned int i;
+    
+    g_list_free(barre->noeuds_intermediaires);
+    cholmod_free_sparse(&barre->matrice_rotation, projet->ef_donnees.c);
+    cholmod_free_sparse(&barre->matrice_rotation_transpose, projet->ef_donnees.c);
+    for (i=0;i<=barre->discretisation_element;i++)
+        cholmod_free_sparse(&barre->info_EF[i].matrice_rigidite_locale, projet->ef_donnees.c);
+    free(barre->info_EF);
+    
+#ifdef ENABLE_GTK
+    if (projet->list_gtk.ef_barres.builder != NULL)
+    {
+        GtkTreeModel    *model = GTK_TREE_MODEL(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treestore"));;
+        
+        gtk_tree_store_remove(GTK_TREE_STORE(model), &barre->Iter);
+    }
+    m3d_barre_free(&projet->list_gtk.m3d, barre);
+#endif
+    free(barre);
+    
+    return;
+}
+
+
 G_MODULE_EXPORT gboolean _1992_1_1_barres_free(Projet *projet)
 /* Description : Libère l'ensemble des éléments  en béton
  * Paramètres : Projet *projet : la variable projet
@@ -1291,25 +1323,12 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_free(Projet *projet)
  *             projet == NULL.
  */
 {
-    unsigned int     i;
-    
     // Trivial
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
-    while (projet->beton.barres != NULL)
-    {
-        Beton_Barre *element = projet->beton.barres->data;
-        
-        projet->beton.barres = g_list_delete_link(projet->beton.barres, projet->beton.barres);
-        g_list_free(element->noeuds_intermediaires);
-        cholmod_free_sparse(&(element->matrice_rotation), projet->ef_donnees.c);
-        cholmod_free_sparse(&(element->matrice_rotation_transpose), projet->ef_donnees.c);
-        for (i=0;i<=element->discretisation_element;i++)
-            cholmod_free_sparse(&(element->info_EF[i].matrice_rigidite_locale), projet->ef_donnees.c);
-        free(element->info_EF);
-        
-        free(element);
-    }
+    g_list_foreach(projet->beton.barres, (GFunc)_1992_1_1_barre_free_foreach, projet);
+    g_list_free(projet->beton.barres);
+    projet->beton.barres = NULL;
     
     BUG(EF_calculs_free(projet), TRUE);
     

@@ -40,6 +40,7 @@ gboolean _1992_1_1_barres_change_relachement(Beton_Barre *barre, EF_Relachement 
 gboolean _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element) __attribute__((__warn_unused_result__));
 gboolean _1992_1_1_barres_rigidite_ajout_tout(Projet *projet) __attribute__((__warn_unused_result__));
 
+void _1992_1_1_barre_free_foreach(Beton_Barre *barre, Projet *projet);
 gboolean _1992_1_1_barres_free(Projet *projet) __attribute__((__warn_unused_result__));
 
 #endif

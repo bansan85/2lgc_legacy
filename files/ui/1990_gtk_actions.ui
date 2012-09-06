@@ -87,8 +87,8 @@
                                             <object class="GtkScrolledWindow" id="1990_actions_scrolled_action">
                                                 <property name="visible">True</property>
                                                 <property name="expand">True</property>
-                                                <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
-                                                <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                                                <property name="hscrollbar-policy">automatic</property>
+                                                <property name="vscrollbar-policy">automatic</property>
                                                 <child>
                                                     <object class="GtkTreeView" id="1990_actions_treeview_action">
                                                         <property name="visible">True</property>
@@ -217,14 +217,14 @@
                                 <child>
                                     <object class="GtkToolbar" id="1990_actions_toolbar_action">
                                         <property name="visible">True</property>
-                                        <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
-                                        <property name="toolbar-style">GTK_TOOLBAR_ICONS</property>
+                                        <property name="orientation">horizontal</property>
+                                        <property name="toolbar-style">both</property>
                                         <property name="border-width">0</property>
                                         <child>
                                             <object class="GtkMenuToolButton" id="1990_actions_toolbar_action_ajout">
                                                 <property name="visible">True</property>
                                                 <property name="label">Ajouter</property>
-                                                <property name="stock_id">GTK_STOCK_ADD</property>
+                                                <property name="stock_id">add</property>
                                                 <property name="icon-widget">1990_actions_icon_action_ajout</property>
                                                 <signal name="clicked" handler="_1990_gtk_menu_nouvelle_action_activate"/>
                                             </object>
@@ -360,7 +360,7 @@
                                     <object class="GtkToolbar" id="1990_actions_toolbar_charge">
                                         <property name="visible">True</property>
                                         <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
-                                        <property name="toolbar-style">GTK_TOOLBAR_ICONS</property>
+                                        <property name="toolbar-style">GTK_TOOLBAR_BOTH</property>
                                         <property name="border-width">0</property>
                                         <child>
                                             <object class="GtkMenuToolButton" id="1990_actions_toolbar_charge_ajout">
