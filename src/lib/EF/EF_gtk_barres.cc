@@ -38,9 +38,9 @@ extern "C" {
 #include "EF_noeud.h"
 #include "EF_relachement.h"
 #include "EF_charge_noeud.h"
+#include "EF_section.h"
 #include "1990_actions.h"
 #include "1992_1_1_barres.h"
-#include "1992_1_1_section.h"
 #include "1992_1_1_materiaux.h"
 
 G_MODULE_EXPORT void EF_gtk_barres_fermer(GtkButton *button __attribute__((unused)),
@@ -169,11 +169,11 @@ G_MODULE_EXPORT void EF_gtk_barres_edit_section(
  * Valeur renvoyée : Aucune.
 */
 {
-    GtkTreeModel        *model;
-    GtkTreeIter         iter;
-    guint               numero_barre;
-    Beton_Barre         *barre = NULL;
-    void                *section;
+    GtkTreeModel    *model;
+    GtkTreeIter     iter;
+    guint           numero_barre;
+    Beton_Barre     *barre = NULL;
+    EF_Section      *section;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_barres.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Barres");
@@ -185,7 +185,7 @@ G_MODULE_EXPORT void EF_gtk_barres_edit_section(
     gtk_tree_model_get(model, &iter, 0, &numero_barre, -1);
     
     BUG(barre = _1992_1_1_barres_cherche_numero(projet, numero_barre), );
-    BUG(section = _1992_1_1_sections_cherche_nom(projet, new_text), );
+    BUG(section = EF_sections_cherche_nom(projet, new_text), );
     BUG(_1992_1_1_barres_change_section(barre, section, projet), );
     
     return;
@@ -356,17 +356,14 @@ G_MODULE_EXPORT void EF_gtk_barres(Projet *projet)
         Beton_Barre *barre = (Beton_Barre*)list_parcours->data;
         GtkTreeIter iter;
         char        *tmp;
-        Beton_Section_Rectangulaire *section;
         
         BUGMSG(tmp = g_strdup_printf("%d", (int)barre->type), , gettext("Erreur d'allocation mémoire.\n"));
         gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(projet->list_gtk.ef_barres.liste_types), &iter, tmp);
         free(tmp);
         gtk_tree_model_get(GTK_TREE_MODEL(projet->list_gtk.ef_barres.liste_types), &iter, 0, &tmp, -1);
         
-        section = (Beton_Section_Rectangulaire*)barre->section;
-        
         gtk_tree_store_append(GTK_TREE_STORE(gtk_builder_get_object(ef_gtk->builder, "EF_barres_treestore")), &barre->Iter, NULL);
-        gtk_tree_store_set(GTK_TREE_STORE(gtk_builder_get_object(ef_gtk->builder, "EF_barres_treestore")), &barre->Iter, 0, barre->numero, 1, tmp, 2, section->nom, 3, barre->materiau->nom, 4, barre->noeud_debut->numero, 5, barre->noeud_fin->numero, 6, (barre->relachement == NULL ? gettext("Aucun") : barre->relachement->nom), -1);
+        gtk_tree_store_set(GTK_TREE_STORE(gtk_builder_get_object(ef_gtk->builder, "EF_barres_treestore")), &barre->Iter, 0, barre->numero, 1, tmp, 2, barre->section->nom, 3, barre->materiau->nom, 4, barre->noeud_debut->numero, 5, barre->noeud_fin->numero, 6, (barre->relachement == NULL ? gettext("Aucun") : barre->relachement->nom), -1);
         
         free(tmp);
         

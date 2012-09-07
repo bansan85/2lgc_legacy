@@ -25,6 +25,7 @@
 #include <math.h>
 #include <gmodule.h>
 
+#include "1990_actions.h"
 #include "common_projet.h"
 #include "common_erreurs.h"
 #include "common_maths.h"
@@ -33,8 +34,7 @@
 #include "EF_charge_barre_repartie_uniforme.h"
 #include "EF_noeud.h"
 #include "EF_rigidite.h"
-#include "1990_actions.h"
-#include "1992_1_1_section.h"
+#include "EF_section.h"
 
 G_MODULE_EXPORT gboolean EF_calculs_initialise(Projet *projet)
 /* Description : Initialise les diverses variables nécessaires à l'ajout des matrices de
@@ -692,7 +692,7 @@ G_MODULE_EXPORT gboolean EF_calculs_resoud_charge(Projet *projet, unsigned int n
                             // F_{Az_h} & = -\frac{M_{By}+M_{Ay}}{l}\nonumber\\
                             // F_{Bz_i}   & = \frac{F_z \cdot a}{l}-\frac{M_y}{l}\nonumber\\
                             // F_{Bz_h} & = \frac{M_{By}+M_{Ay}}{l}\end{align*}\begin{verbatim}
-                            FAx = ax2[0]*_1992_1_1_sections_es_l(element_en_beton, pos, 0, l)/_1992_1_1_sections_es_l(element_en_beton, pos, a, l);
+                            FAx = ax2[0]*EF_sections_es_l(element_en_beton, pos, 0, l)/EF_sections_es_l(element_en_beton, pos, a, l);
                             BUG(!isnan(FAx), FALSE);
                             FBx = ax2[0] - FAx;
                             FAy_i = ax2[1]*b/l-ax2[5]/l;
@@ -990,7 +990,7 @@ G_MODULE_EXPORT gboolean EF_calculs_resoud_charge(Projet *projet, unsigned int n
                   // F_{Az_h} & = -\frac{M_{By}+M_{Ay}}{l}\nonumber\\
                   // F_{Bz_i}   & = \frac{F_z \cdot (L-a-b) \cdot (L+a-b)}{2 \cdot L}-\frac{M_y \cdot (L-a+b)}{l}\nonumber\\
                   // F_{Bz_h} & = \frac{M_{By}+M_{Ay}}{l}\end{align*}\begin{verbatim}
-                                FAx = ax2[0]*(l-a-b)*_1992_1_1_sections_es_l(element_en_beton, i, 0, l)/_1992_1_1_sections_es_l(element_en_beton, i, EF_charge_barre_repartie_uniforme_position_resultante_x(element_en_beton->section, a, b, l), l);
+                                FAx = ax2[0]*(l-a-b)*EF_sections_es_l(element_en_beton, i, 0, l)/EF_sections_es_l(element_en_beton, i, EF_charge_barre_repartie_uniforme_position_resultante_x(element_en_beton->section, a, b, l), l);
                                 BUG(!isnan(FAx), FALSE);
                                 FBx = ax2[0]*(l-a-b) - FAx;
                                 FAy_i = ax2[1]*(l-a-b)*(l-a+b)/(2.*l)-ax2[5]*(l-a-b)/l;
@@ -1207,8 +1207,7 @@ G_MODULE_EXPORT gboolean EF_calculs_resoud_charge(Projet *projet, unsigned int n
     do
     {
         Beton_Barre                 *element_en_beton = list_parcours->data;
-        Beton_Section_Rectangulaire *section_tmp = (Beton_Section_Rectangulaire*)element_en_beton->section;
-        double                      S = _1992_1_1_sections_s(section_tmp);
+        double                      S = EF_sections_s(element_en_beton->section);
         
     //     Pour chaque discrétisation de la barre
         for (j=0;j<=element_en_beton->discretisation_element;j++)
@@ -1317,16 +1316,16 @@ G_MODULE_EXPORT gboolean EF_calculs_resoud_charge(Projet *projet, unsigned int n
     //           rx est obtenue par intégration du moment en x. La constante est déterminée
     //           pour f(0) égal à la rotation au noeud à gauche s'il n'y a pas de relachement
     //           (sinon f(l) égal à la rotation à droite).\end{verbatim}\begin{align*}
-            switch(section_tmp->type)
+            switch(element_en_beton->section->type)
             {
-                case BETON_SECTION_RECTANGULAIRE :
-                case BETON_SECTION_T :
-                case BETON_SECTION_CARRE :
-                case BETON_SECTION_CIRCULAIRE :
+                case SECTION_RECTANGULAIRE :
+                case SECTION_T :
+                case SECTION_CARRE :
+                case SECTION_CIRCULAIRE :
                 {
-                    double J = _1992_1_1_sections_j(section_tmp);
-                    double Iy = _1992_1_1_sections_iy(section_tmp);
-                    double Iz = _1992_1_1_sections_iz(section_tmp);
+                    double J = EF_sections_j(element_en_beton->section);
+                    double Iy = EF_sections_iy(element_en_beton->section);
+                    double Iz = EF_sections_iz(element_en_beton->section);
                     
                     BUG(!isnan(J), FALSE);
                     BUG(!isnan(Iy), FALSE);
@@ -1358,7 +1357,7 @@ G_MODULE_EXPORT gboolean EF_calculs_resoud_charge(Projet *projet, unsigned int n
                 }
                 default :
                 {
-                    BUGMSG(0, FALSE, gettext("Type de section %d inconnu.\n"), section_tmp->type);
+                    BUGMSG(0, FALSE, gettext("Type de section %d inconnu.\n"), element_en_beton->section->type);
                     break;
                 }
             }

@@ -29,7 +29,7 @@ gboolean EF_charge_barre_repartie_uniforme_mx(Beton_Barre *barre, unsigned int d
 gboolean EF_charge_barre_repartie_uniforme_def_ang_iso_y(Beton_Barre *barre, unsigned int discretisation, double a, double b, double fz, double my, double *phia, double *phib) __attribute__((__warn_unused_result__));
 gboolean EF_charge_barre_repartie_uniforme_def_ang_iso_z(Beton_Barre *barre, unsigned int discretisation, double a, double b, double fy, double mz, double *phia, double *phib) __attribute__((__warn_unused_result__));
 
-double EF_charge_barre_repartie_uniforme_position_resultante_x(void *section, double a, double b, double l) __attribute__((__warn_unused_result__));
+double EF_charge_barre_repartie_uniforme_position_resultante_x(EF_Section *section, double a, double b, double l) __attribute__((__warn_unused_result__));
 
 gboolean EF_charge_barre_repartie_uniforme_fonc_rx(Fonction *fonction, Beton_Barre *barre, unsigned int discretisation, double a, double b, double max, double mbx) __attribute__((__warn_unused_result__));
 gboolean EF_charge_barre_repartie_uniforme_fonc_ry(Fonction *f_rotation, Fonction* f_deform, Beton_Barre *barre, unsigned int discretisation, double a, double b, double fz, double my, double may, double mby) __attribute__((__warn_unused_result__));

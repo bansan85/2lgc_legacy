@@ -198,13 +198,13 @@ typedef enum __EF_Relachement_Type
 } EF_Relachement_Type;
 
 
-typedef enum __Type_Beton_Section
+typedef enum __Type_Section
 {
-    BETON_SECTION_RECTANGULAIRE,
-    BETON_SECTION_T,
-    BETON_SECTION_CARRE,
-    BETON_SECTION_CIRCULAIRE
-} Type_Beton_Section;
+    SECTION_RECTANGULAIRE,
+    SECTION_T,
+    SECTION_CARRE,
+    SECTION_CIRCULAIRE
+} Type_Section;
 
 
 typedef enum __Charge_Type
@@ -290,42 +290,6 @@ typedef struct __Charge_Noeud
 } Charge_Noeud;
 
 
-typedef struct __Beton_Section_Rectangulaire
-{
-    Type_Beton_Section  type;
-    char                *nom;
-    double              largeur;
-    double              hauteur;
-} Beton_Section_Rectangulaire;
-
-
-typedef struct __Beton_Section_T
-{
-    Type_Beton_Section  type;
-    char                *nom;
-    double              largeur_table;
-    double              largeur_ame;
-    double              hauteur_table;
-    double              hauteur_ame;
-} Beton_Section_T;
-
-
-typedef struct __Beton_Section_Carre
-{
-    Type_Beton_Section  type;
-    char                *nom;
-    double              cote;
-} Beton_Section_Carre;
-
-
-typedef struct __Beton_Section_Circulaire
-{
-    Type_Beton_Section  type;
-    char                *nom;
-    double              diametre;
-} Beton_Section_Circulaire;
-
-
 typedef struct __EF_Relachement_Donnees_Elastique_Lineaire
 {
     double              raideur;    // La raideur doit être indiquée en N.m/rad
@@ -398,11 +362,47 @@ typedef struct __Barre_Info_EF
 } Barre_Info_EF;
 
 
+typedef struct __Beton_Section_Rectangulaire
+{
+    double              largeur;
+    double              hauteur;
+} Beton_Section_Rectangulaire;
+
+
+typedef struct __Beton_Section_T
+{
+    double              largeur_table;
+    double              largeur_ame;
+    double              hauteur_table;
+    double              hauteur_ame;
+} Beton_Section_T;
+
+
+typedef struct __Beton_Section_Carre
+{
+    double              cote;
+} Beton_Section_Carre;
+
+
+typedef struct __Beton_Section_Circulaire
+{
+    double              diametre;
+} Beton_Section_Circulaire;
+
+
+typedef struct __EF_Section
+{
+    Type_Section    type;
+    char            *nom;
+    void            *data;
+} EF_Section;
+
+
 typedef struct __Beton_Barre
 {
     unsigned int        numero;
     Type_Element        type;
-    void                *section;
+    EF_Section          *section;
     Beton_Materiau      *materiau;
     
     EF_Noeud            *noeud_debut;

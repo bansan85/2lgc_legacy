@@ -30,11 +30,11 @@
 #include "common_m3d.hpp"
 #include "common_selection.h"
 #include "1992_1_1_materiaux.h"
-#include "1992_1_1_section.h"
 #include "EF_charge_barre_ponctuelle.h"
 #include "EF_calculs.h"
 #include "EF_noeud.h"
 #include "EF_noeud.h"
+#include "EF_section.h"
 
 G_MODULE_EXPORT gboolean _1992_1_1_barres_init(Projet *projet)
 /* Description : Initialise la liste des éléments en béton.
@@ -66,12 +66,12 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_init(Projet *projet)
 
 
 G_MODULE_EXPORT gboolean _1992_1_1_barres_ajout(Projet *projet, Type_Element type,
-  void *section, Beton_Materiau *materiau, unsigned int noeud_debut, unsigned int noeud_fin,
-  EF_Relachement* relachement, unsigned int discretisation_element)
+  EF_Section *section, Beton_Materiau *materiau, unsigned int noeud_debut,
+  unsigned int noeud_fin, EF_Relachement* relachement, unsigned int discretisation_element)
 /* Description : Ajoute un élément à la liste des éléments en béton.
  * Paramètres : Projet *projet : la variable projet,
  *            : Type_Beton_Barre type : type de l'élément en béton,
- *            : void *section : section correspondant à l'élément,
+ *            : EF_Section *section : section correspondant à l'élément,
  *            : Beton_Materiau *materiau : matériau correspondant à l'élément,
  *            : unsigned int noeud_debut : numéro de départ de l'élément,
  *            : unsigned int noeud_fin : numéro de fin de l'élément,
@@ -98,6 +98,8 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_ajout(Projet *projet, Type_Element typ
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(noeud_debut != noeud_fin, FALSE, gettext("La création d'une barre nécessite l'utilisation de des noeuds différents.\n"));
     BUGMSG(element_nouveau, FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(materiau, FALSE, gettext("Le matériau n'est pas spécifié.\n"));
+    BUGMSG(section, FALSE, gettext("La section n'est pas spécifiée.\n"));
     
     element_nouveau->type = type;
     
@@ -105,7 +107,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_ajout(Projet *projet, Type_Element typ
     element_nouveau->materiau = materiau;
     element_nouveau->noeud_debut = EF_noeuds_cherche_numero(projet, noeud_debut);
     element_nouveau->noeud_fin = EF_noeuds_cherche_numero(projet, noeud_fin);
-    if ((element_nouveau->section == NULL) || (element_nouveau->materiau == NULL) || (element_nouveau->noeud_debut == NULL) || (element_nouveau->noeud_fin == NULL))
+    if ((element_nouveau->noeud_debut == NULL) || (element_nouveau->noeud_fin == NULL))
     {
         free(element_nouveau);
         BUG(NULL, FALSE);
@@ -158,7 +160,6 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_ajout(Projet *projet, Type_Element typ
     if (projet->list_gtk.ef_barres.builder != NULL)
     {
         char        *tmp;
-        Beton_Section_Rectangulaire *p_section = (Beton_Section_Rectangulaire*)element_nouveau->section;
         GtkTreeIter iter;
         
         BUGMSG(tmp = g_strdup_printf("%d", (int)type), FALSE, gettext("Erreur d'allocation mémoire.\n"));
@@ -167,7 +168,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_ajout(Projet *projet, Type_Element typ
         gtk_tree_model_get(GTK_TREE_MODEL(projet->list_gtk.ef_barres.liste_types), &iter, 0, &tmp, -1);
         
         gtk_tree_store_append(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treestore")), &element_nouveau->Iter, NULL);
-        gtk_tree_store_set(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treestore")), &element_nouveau->Iter, 0, element_nouveau->numero, 1, tmp, 2, p_section->nom, 3, element_nouveau->materiau->nom, 4, element_nouveau->noeud_debut->numero, 5, element_nouveau->noeud_fin->numero, 6, (element_nouveau->relachement == NULL ? gettext("Aucun") : element_nouveau->relachement->nom), -1);
+        gtk_tree_store_set(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treestore")), &element_nouveau->Iter, 0, element_nouveau->numero, 1, tmp, 2, element_nouveau->section->nom, 3, element_nouveau->materiau->nom, 4, element_nouveau->noeud_debut->numero, 5, element_nouveau->noeud_fin->numero, 6, (element_nouveau->relachement == NULL ? gettext("Aucun") : element_nouveau->relachement->nom), -1);
     }
     
     BUG(m3d_barre(&projet->list_gtk.m3d, element_nouveau), FALSE);
@@ -416,11 +417,11 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_change_type(Beton_Barre *barre, Type_E
 }
 
 
-G_MODULE_EXPORT gboolean _1992_1_1_barres_change_section(Beton_Barre *barre, void *section,
-  Projet *projet)
+G_MODULE_EXPORT gboolean _1992_1_1_barres_change_section(Beton_Barre *barre,
+  EF_Section *section, Projet *projet)
 /* Description : Change la section d'une barre depuis son nom.
  * Paramètres : Beton_Barre *barre : barre à modifier,
- *            : void *section : la nouvelle section,
+ *            : EF_Section *section : la nouvelle section,
  *            : Projet *projet : variable projet.
  * Valeur renvoyée :
  *   Succès : TRUE
@@ -431,6 +432,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_change_section(Beton_Barre *barre, voi
 {
     BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre");
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(section, FALSE, gettext("La section n'est pas spécifiée.\n"));
     
     barre->section = section;
     
@@ -444,7 +446,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_change_section(Beton_Barre *barre, voi
     {
         GtkTreeModel    *model = GTK_TREE_MODEL(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treestore"));;
         
-        gtk_tree_store_set(GTK_TREE_STORE(model), &barre->Iter, 2, ((Beton_Section_T *)section)->nom, -1);
+        gtk_tree_store_set(GTK_TREE_STORE(model), &barre->Iter, 2, section->nom, -1);
     }
 #endif
     
@@ -616,7 +618,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_B
     BUGMSG(projet->ef_donnees.triplet_rigidite_partielle, FALSE, gettext("Paramètre %s incorrect.\n"), "triplet_rigidite_partielle");
     BUGMSG(element, FALSE, gettext("Paramètre %s incorrect.\n"), "element");
     BUGMSG(projet->ef_donnees.triplet_rigidite_complete, FALSE, gettext("Paramètre %s incorrect.\n"), "triplet_rigidite_complete");
-    BUGMSG(element->section, FALSE, gettext("Paramètre %s incorrect.\n"), "element->section");
+    BUGMSG(element->section, FALSE, gettext("La section n'est pas spécifiée.\n"));
     
     // Calcul de la matrice de rotation 3D qui permet de passer du repère local au repère
     //   global. Elle est déterminée par le calcul de deux angles : z faisant une rotation
@@ -740,13 +742,13 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_B
         BUG(!isnan(ll), FALSE);
         
     //     Détermination des paramètres de souplesse de l'élément de barre par l'utilisation
-    //       des fonctions _1992_1_1_sections_ay, by, cy, az, bz et cz.
-        element->info_EF[j].ay = _1992_1_1_sections_ay(element, j);
-        element->info_EF[j].by = _1992_1_1_sections_by(element, j);
-        element->info_EF[j].cy = _1992_1_1_sections_cy(element, j);
-        element->info_EF[j].az = _1992_1_1_sections_az(element, j);
-        element->info_EF[j].bz = _1992_1_1_sections_bz(element, j);
-        element->info_EF[j].cz = _1992_1_1_sections_cz(element, j);
+    //       des fonctions EF_sections_ay, by, cy, az, bz et cz.
+        element->info_EF[j].ay = EF_sections_ay(element, j);
+        element->info_EF[j].by = EF_sections_by(element, j);
+        element->info_EF[j].cy = EF_sections_cy(element, j);
+        element->info_EF[j].az = EF_sections_az(element, j);
+        element->info_EF[j].bz = EF_sections_bz(element, j);
+        element->info_EF[j].cz = EF_sections_cz(element, j);
         
     //     Calcul des coefficients kA et kB définissant l'inverse de la raideur aux
     //       noeuds. Ainsi k = 0 en cas d'encastrement et infini en cas d'articulation.
@@ -972,11 +974,11 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_B
         
     //       Pour un élément travaillant en compression simple (aucune variante possible dues
     //       aux relachements). Les valeurs de ES/L sont obtenues par la fonction
-    //       _1992_1_1_sections_es_l :\end{verbatim}\begin{displaymath}
+    //       EF_sections_es_l :\end{verbatim}\begin{displaymath}
     // \begin{bmatrix}  \frac{E \cdot S}{L} & -\frac{E \cdot S}{L} \\
     //                 -\frac{E \cdot S}{L} &  \frac{E \cdot S}{L}
     // \end{bmatrix}\end{displaymath}\begin{verbatim}
-        es_l = _1992_1_1_sections_es_l(element, j, 0., ll);
+        es_l = EF_sections_es_l(element, j, 0., ll);
         BUG(!isnan(es_l), FALSE);
         ai[i] = 0;  aj[i] = 0;  ax[i] =  es_l; i++;
         ai[i] = 0;  aj[i] = 6;  ax[i] = -es_l; i++;
@@ -1151,7 +1153,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_B
     // \end{bmatrix}\end{displaymath}\begin{verbatim}
         else
         {
-            double gj_l = _1992_1_1_sections_gj_l(element, j);
+            double gj_l = EF_sections_gj_l(element, j);
             ai[i] = 3;  aj[i] = 3;  ax[i] = gj_l;  i++;
             ai[i] = 3;  aj[i] = 9;  ax[i] = -gj_l; i++;
             ai[i] = 9;  aj[i] = 3;  ax[i] = -gj_l; i++;

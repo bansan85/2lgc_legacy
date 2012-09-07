@@ -29,7 +29,7 @@
 #include "EF_noeud.h"
 #include "EF_calculs.h"
 
-G_MODULE_EXPORT gboolean _1992_1_1_sections_init(Projet *projet)
+G_MODULE_EXPORT gboolean EF_sections_init(Projet *projet)
 /* Description : Initialise la liste des section en béton.
  * Paramètres : Projet *projet : la variable projet.
  * Valeur renvoyée :
@@ -51,7 +51,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_sections_init(Projet *projet)
 }
 
 
-G_MODULE_EXPORT gboolean _1992_1_1_sections_ajout_rectangulaire(Projet *projet, const char* nom,
+G_MODULE_EXPORT gboolean EF_sections_ajout_rectangulaire(Projet *projet, const char* nom,
   double l, double h)
 /* Description : Ajouter une nouvelle section rectangulaire à la liste des sections en béton.
  * Paramètres : Projet *projet : la variable projet,
@@ -64,19 +64,22 @@ G_MODULE_EXPORT gboolean _1992_1_1_sections_ajout_rectangulaire(Projet *projet, 
  *             en cas d'erreur d'allocation mémoire.
  */
 {
-    Beton_Section_Rectangulaire *section_nouvelle = malloc(sizeof(Beton_Section_Rectangulaire));
+    Beton_Section_Rectangulaire *section_data = malloc(sizeof(Beton_Section_Rectangulaire));
+    EF_Section *section_nouvelle = malloc(sizeof(EF_Section));
 #ifdef ENABLE_GTK
     GtkTreeIter     iter;
 #endif
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(section_nouvelle, FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(section_data, FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    section_nouvelle->data = section_data;
     
     // Trivial
-    section_nouvelle->type = BETON_SECTION_RECTANGULAIRE;
+    section_nouvelle->type = SECTION_RECTANGULAIRE;
     BUGMSG(section_nouvelle->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-    section_nouvelle->largeur = l;
-    section_nouvelle->hauteur = h;
+    section_data->largeur = l;
+    section_data->hauteur = h;
     
     projet->beton.sections = g_list_append(projet->beton.sections, section_nouvelle);
     
@@ -89,7 +92,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_sections_ajout_rectangulaire(Projet *projet, 
 }
 
 
-G_MODULE_EXPORT gboolean _1992_1_1_sections_ajout_T(Projet *projet, const char* nom, double lt,
+G_MODULE_EXPORT gboolean EF_sections_ajout_T(Projet *projet, const char* nom, double lt,
   double la, double ht, double ha)
 /* Description : Ajouter une nouvelle section en T à la liste des sections en béton.
  * Paramètres : Projet *projet : la variable projet,
@@ -104,7 +107,8 @@ G_MODULE_EXPORT gboolean _1992_1_1_sections_ajout_T(Projet *projet, const char* 
  *             en cas d'erreur d'allocation mémoire.
  */
 {
-    Beton_Section_T     *section_nouvelle = malloc(sizeof(Beton_Section_T));
+    Beton_Section_T *section_data = malloc(sizeof(Beton_Section_T));
+    EF_Section      *section_nouvelle = malloc(sizeof(EF_Section));
     
 #ifdef ENABLE_GTK
     GtkTreeIter     iter;
@@ -112,6 +116,8 @@ G_MODULE_EXPORT gboolean _1992_1_1_sections_ajout_T(Projet *projet, const char* 
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(section_nouvelle, FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(section_data, FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    section_nouvelle->data = section_data;
     
     // Les caractéristiques de la section sont les suivantes :\end{verbatim}\begin{displaymath}
     //   S = lt \cdot ht+la \cdot ha\end{displaymath}\begin{displaymath}
@@ -119,12 +125,12 @@ G_MODULE_EXPORT gboolean _1992_1_1_sections_ajout_T(Projet *projet, const char* 
     //   I_y = \frac{lt \cdot ht^3}{12}+\frac{la \cdot ha^3}{12}+lt \cdot ht \cdot \left(\frac{ht}{2}-cdg_{haut} \right)^2+la \cdot ha \cdot \left(\frac{ha}{2}-cdg_{bas} \right)^2\texttt{  et  }I_z = \frac{ht \cdot lt^3}{12}+\frac{ha \cdot la^3}{12}\end{displaymath}\begin{displaymath}
     //   J = \frac{a \cdot b^3}{16} \cdot \left[\frac{16}{3}-3.364 \cdot \frac{b}{a} \cdot \left(1-\frac{b^4}{12 \cdot a^4}\right)\right]+\frac{aa \cdot bb^3}{16} \cdot \left[\frac{16}{3}-3.364 \cdot \frac{bb}{aa} \cdot \left(1-\frac{bb^4}{12 \cdot aa^4}\right)\right]\texttt{ avec }\substack{a=max(ht,lt)\\b=min(ht,lt)\\aa=max(ha,la)\\bb=min(ha,la)}
     //   \end{displaymath}\begin{verbatim}
-    section_nouvelle->type = BETON_SECTION_T;
+    section_nouvelle->type = SECTION_T;
     BUGMSG(section_nouvelle->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-    section_nouvelle->largeur_table = lt;
-    section_nouvelle->largeur_ame = la;
-    section_nouvelle->hauteur_table = ht;
-    section_nouvelle->hauteur_ame = ha;
+    section_data->largeur_table = lt;
+    section_data->largeur_ame = la;
+    section_data->hauteur_table = ht;
+    section_data->hauteur_ame = ha;
     
     projet->beton.sections = g_list_append(projet->beton.sections, section_nouvelle);
     
@@ -137,7 +143,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_sections_ajout_T(Projet *projet, const char* 
 }
 
 
-G_MODULE_EXPORT gboolean _1992_1_1_sections_ajout_carre(Projet *projet, const char* nom,
+G_MODULE_EXPORT gboolean EF_sections_ajout_carre(Projet *projet, const char* nom,
   double cote)
 /* Description : Ajouter une nouvelle section carrée à la liste des sections en béton.
  * Paramètres : Projet *projet : la variable projet,
@@ -149,7 +155,8 @@ G_MODULE_EXPORT gboolean _1992_1_1_sections_ajout_carre(Projet *projet, const ch
  *             en cas d'erreur d'allocation mémoire.
  */
 {
-    Beton_Section_Carre     *section_nouvelle = malloc(sizeof(Beton_Section_Carre));
+    Beton_Section_Carre *section_data = malloc(sizeof(Beton_Section_Carre));
+    EF_Section          *section_nouvelle = malloc(sizeof(EF_Section));
     
 #ifdef ENABLE_GTK
     GtkTreeIter     iter;
@@ -157,13 +164,15 @@ G_MODULE_EXPORT gboolean _1992_1_1_sections_ajout_carre(Projet *projet, const ch
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(section_nouvelle, FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(section_data, FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    section_nouvelle->data = section_data;
     
     // Les caractéristiques de la section sont les suivantes :\end{verbatim}\begin{displaymath}
     //   S = cote^2\texttt{  et  }cdg_{haut} = \frac{cote}{2}\texttt{  et  }cdg_{bas} = \frac{cote}{2}\texttt{  et  }cdg_{droite} = \frac{cote}{2}\texttt{  et  }cdg_{gauche} = \frac{cote}{2}\end{displaymath}\begin{displaymath}
     //   I_y = \frac{cote^4}{12}\texttt{  et  }I_z = I_y\texttt{  et  }J = \frac{cote^4}{16} \cdot \left[\frac{16}{3}-3.364 \cdot \left(1-\frac{1}{12}\right)\right]\end{displaymath}\begin{verbatim}
-    section_nouvelle->type = BETON_SECTION_CARRE;
+    section_nouvelle->type = SECTION_CARRE;
     BUGMSG(section_nouvelle->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-    section_nouvelle->cote = cote;
+    section_data->cote = cote;
     
     projet->beton.sections = g_list_append(projet->beton.sections, section_nouvelle);
     
@@ -176,7 +185,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_sections_ajout_carre(Projet *projet, const ch
 }
 
 
-G_MODULE_EXPORT gboolean _1992_1_1_sections_ajout_circulaire(Projet *projet, const char* nom,
+G_MODULE_EXPORT gboolean EF_sections_ajout_circulaire(Projet *projet, const char* nom,
   double diametre)
 /* Description : Ajouter une nouvelle section circulaire à la liste des sections en béton.
  * Paramètres : Projet *projet : la variable projet,
@@ -188,7 +197,8 @@ G_MODULE_EXPORT gboolean _1992_1_1_sections_ajout_circulaire(Projet *projet, con
  *             en cas d'erreur d'allocation mémoire.
  */
 {
-    Beton_Section_Circulaire    *section_nouvelle = malloc(sizeof(Beton_Section_Circulaire));
+    Beton_Section_Circulaire    *section_data = malloc(sizeof(Beton_Section_Circulaire));
+    EF_Section                  *section_nouvelle = malloc(sizeof(EF_Section));
     
 #ifdef ENABLE_GTK
     GtkTreeIter     iter;
@@ -196,14 +206,16 @@ G_MODULE_EXPORT gboolean _1992_1_1_sections_ajout_circulaire(Projet *projet, con
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(section_nouvelle, FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(section_data, FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    section_nouvelle->data = section_data;
     
     // Les caractéristiques de la section sont les suivantes :\end{verbatim}\begin{displaymath}
     //   S = \frac{\pi \cdot diametre^2}{4}\end{displaymath}\begin{displaymath}
     //   cdg_{haut} = \frac{diametre}{2}\texttt{  et  }cdg_{bas} = \frac{diametre}{2}\texttt{  et  }cdg_{droite} = \frac{diametre}{2}\texttt{  et  }cdg_{gauche} = \frac{diametre}{2}\end{displaymath}\begin{displaymath}
     //   I_y = \frac{\pi \cdot diametre^4}{64}\texttt{  et  }I_z = I_y\texttt{  et  }J = \frac{\pi \cdot diametre^4}{32}\end{displaymath}\begin{verbatim}
-    section_nouvelle->type = BETON_SECTION_CIRCULAIRE;
+    section_nouvelle->type = SECTION_CIRCULAIRE;
     BUGMSG(section_nouvelle->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-    section_nouvelle->diametre = diametre;
+    section_data->diametre = diametre;
     
     projet->beton.sections = g_list_append(projet->beton.sections, section_nouvelle);
     
@@ -216,7 +228,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_sections_ajout_circulaire(Projet *projet, con
 }
 
 
-G_MODULE_EXPORT void* _1992_1_1_sections_cherche_nom(Projet *projet, const char *nom)
+G_MODULE_EXPORT EF_Section* EF_sections_cherche_nom(Projet *projet, const char *nom)
 /* Description : Positionne dans la liste des sections en béton l'élément courant au numéro
  *               souhaité.
  * Paramètres : Projet *projet : la variable projet,
@@ -236,7 +248,7 @@ G_MODULE_EXPORT void* _1992_1_1_sections_cherche_nom(Projet *projet, const char 
     list_parcours = projet->beton.sections;
     while (list_parcours != NULL)
     {
-        Beton_Section_Circulaire    *section = list_parcours->data;
+        EF_Section  *section = list_parcours->data;
         
         if (strcmp(section->nom, nom) == 0)
             return section;
@@ -248,9 +260,9 @@ G_MODULE_EXPORT void* _1992_1_1_sections_cherche_nom(Projet *projet, const char 
 }
 
 
-G_MODULE_EXPORT double _1992_1_1_sections_j(void* sect)
+G_MODULE_EXPORT double EF_sections_j(EF_Section* sect)
 /* Description : Renvoie l'inertie de torsion J pour la section étudiée.
- * Paramètres : void* sect : section à étudier.
+ * Paramètres : EF_Section* sect : section à étudier.
  * Valeur renvoyée :
  *   Succès : Résultat
  *   Échec : NAN :
@@ -260,11 +272,11 @@ G_MODULE_EXPORT double _1992_1_1_sections_j(void* sect)
 {
     BUGMSG(sect, NAN, gettext("Paramètre %s incorrect.\n"), "sect");
     
-    switch(((Beton_Section_Rectangulaire*) sect)->type)
+    switch (sect->type)
     {
-        case BETON_SECTION_RECTANGULAIRE :
+        case SECTION_RECTANGULAIRE :
         {
-            Beton_Section_Rectangulaire *section = (Beton_Section_Rectangulaire*)sect;
+            Beton_Section_Rectangulaire *section = sect->data;
             double      l = section->largeur;
             double      h = section->hauteur;
             double      a, b;
@@ -279,9 +291,9 @@ G_MODULE_EXPORT double _1992_1_1_sections_j(void* sect)
     // J = \frac{a \cdot b^3}{16} \cdot \left[\frac{16}{3}-3.364 \cdot \frac{b}{a} \cdot \left( 1-\frac{b^4}{12 \cdot a^4} \right) \right]\texttt{ avec }\substack{a=max(h,l)\\b=min(h,l)} \end{displaymath}\begin{verbatim}
             break;
         }
-        case BETON_SECTION_T :
+        case SECTION_T :
         {
-            Beton_Section_T *section = (Beton_Section_T*)sect;
+            Beton_Section_T *section = sect->data;
             double      lt = section->largeur_table;
             double      la = section->largeur_ame;
             double      ht = section->hauteur_table;
@@ -303,18 +315,18 @@ G_MODULE_EXPORT double _1992_1_1_sections_j(void* sect)
     // J = \frac{a \cdot b^3}{16} \left[\frac{16}{3}-3.364 \frac{b}{a} \left(1-\frac{b^4}{12 a^4}\right)\right]+\frac{aa \cdot bb^3}{16} \left[\frac{16}{3}-3.364 \frac{bb}{aa} \left(1-\frac{bb^4}{12 aa^4}\right)\right]\texttt{ avec }\substack{a=max(h_t,l_t)\\b=min(h_t,l_t)\\aa=max(h_a,l_a)\\bb=min(h_a,l_a)}\end{displaymath}\begin{verbatim}
             break;
         }
-        case BETON_SECTION_CARRE :
+        case SECTION_CARRE :
         {
-            Beton_Section_Carre *section = (Beton_Section_Carre*)sect;
+            Beton_Section_Carre *section = sect->data;
             return section->cote*section->cote*section->cote*section->cote/16.*(16./3.-3.364*(1.-1./12.));
             
     // Pour une section carrée de section constante, J vaut :\end{verbatim}\begin{displaymath}
     // J = \frac{cote^4}{16} \cdot \left[\frac{16}{3}-3.364 \cdot \left(1-\frac{1}{12}\right)\right]\end{displaymath}\begin{verbatim}
             break;
         }
-        case BETON_SECTION_CIRCULAIRE :
+        case SECTION_CIRCULAIRE :
         {
-            Beton_Section_Circulaire *section = (Beton_Section_Circulaire*)sect;
+            Beton_Section_Circulaire *section = sect->data;
             return M_PI*section->diametre*section->diametre*section->diametre*section->diametre/32.;
     // Pour une section circulaire de section constante, J vaut :\end{verbatim}\begin{displaymath}
     // J = \frac{\pi \cdot \phi^4}{32}\end{displaymath}\begin{verbatim}
@@ -322,16 +334,16 @@ G_MODULE_EXPORT double _1992_1_1_sections_j(void* sect)
         }
         default :
         {
-            BUGMSG(0, NAN, gettext("Type de section %d inconnu."), ((Beton_Section_Rectangulaire*) sect)->type);
+            BUGMSG(0, NAN, gettext("Type de section %d inconnu."), sect->type);
             break;
         }
     }
 }
 
 
-G_MODULE_EXPORT double _1992_1_1_sections_iy(void* sect)
+G_MODULE_EXPORT double EF_sections_iy(EF_Section* sect)
 /* Description : Renvoie l'inertie I selon l'axe y lorsque la section est constante.
- * Paramètres : void* section : section à étudier,
+ * Paramètres : EF_Section* section : section à étudier,
  * Valeur renvoyée :
  *   Succès : Résultat.
  *   Échec : NAN :
@@ -341,19 +353,19 @@ G_MODULE_EXPORT double _1992_1_1_sections_iy(void* sect)
 {
     BUGMSG(sect, NAN, gettext("Paramètre %s incorrect.\n"), "sect");
     
-    switch(((Beton_Section_Rectangulaire*) sect)->type)
+    switch (sect->type)
     {
-        case BETON_SECTION_RECTANGULAIRE :
+        case SECTION_RECTANGULAIRE :
         {
-            Beton_Section_Rectangulaire *section = (Beton_Section_Rectangulaire*)sect;
+            Beton_Section_Rectangulaire *section = sect->data;
             return section->largeur*section->hauteur*section->hauteur*section->hauteur/12.;
     // Pour une section rectantulaire de section constante, Iy vaut :\end{verbatim}\begin{displaymath}
     // I_y = \frac{l \cdot h^3}{12} \end{displaymath}\begin{verbatim}
             break;
         }
-        case BETON_SECTION_T :
+        case SECTION_T :
         {
-            Beton_Section_T *section = (Beton_Section_T*)sect;
+            Beton_Section_T *section = sect->data;
             double      lt = section->largeur_table;
             double      la = section->largeur_ame;
             double      ht = section->hauteur_table;
@@ -369,18 +381,18 @@ G_MODULE_EXPORT double _1992_1_1_sections_iy(void* sect)
             
             break;
         }
-        case BETON_SECTION_CARRE :
+        case SECTION_CARRE :
         {
-            Beton_Section_Carre *section = (Beton_Section_Carre*)sect;
+            Beton_Section_Carre *section = sect->data;
             return section->cote*section->cote*section->cote*section->cote/12.;
             
     // Pour une section carrée de section constante, Iy vaut :\end{verbatim}\begin{displaymath}
     // I_y = \frac{c^4}{12} \end{displaymath}\begin{verbatim}
             break;
         }
-        case BETON_SECTION_CIRCULAIRE :
+        case SECTION_CIRCULAIRE :
         {
-            Beton_Section_Circulaire *section = (Beton_Section_Circulaire*)sect;
+            Beton_Section_Circulaire *section = sect->data;
             return M_PI*section->diametre*section->diametre*section->diametre*section->diametre/64.;
     // Pour une section circulaire de section constante, Iy vaut :\end{verbatim}\begin{displaymath}
     // I_y = \frac{\pi \cdot \phi^4}{64} \end{displaymath}\begin{verbatim}
@@ -388,16 +400,16 @@ G_MODULE_EXPORT double _1992_1_1_sections_iy(void* sect)
         }
         default :
         {
-            BUGMSG(0, NAN, gettext("Type de section %d inconnu."), ((Beton_Section_Rectangulaire*) sect)->type);
+            BUGMSG(0, NAN, gettext("Type de section %d inconnu."), sect->type);
             break;
         }
     }
 }
 
 
-G_MODULE_EXPORT double _1992_1_1_sections_iz(void* sect)
+G_MODULE_EXPORT double EF_sections_iz(EF_Section* sect)
 /* Description : Renvoie l'inertie I selon l'axe z lorsque la section est constante.
- * Paramètres : void* section : section à étudier.
+ * Paramètres : EF_Section* section : section à étudier.
  * Valeur renvoyée :
  *   Succès : Résultat.
  *   Échec : NAN :
@@ -407,20 +419,20 @@ G_MODULE_EXPORT double _1992_1_1_sections_iz(void* sect)
 {
     BUGMSG(sect, NAN, gettext("Paramètre %s incorrect.\n"), "sect");
     
-    switch(((Beton_Section_Rectangulaire*) sect)->type)
+    switch (sect->type)
     {
-        case BETON_SECTION_RECTANGULAIRE :
+        case SECTION_RECTANGULAIRE :
         {
-            Beton_Section_Rectangulaire *section = (Beton_Section_Rectangulaire*)sect;
+            Beton_Section_Rectangulaire *section = sect->data;
             return section->hauteur*section->largeur*section->largeur*section->largeur/12.;
             
     // Pour une section rectantulaire de section constante, I vaut :\end{verbatim}\begin{displaymath}
     // I = \frac{h \cdot l^3}{12} \end{displaymath}\begin{verbatim}
             break;
         }
-        case BETON_SECTION_T :
+        case SECTION_T :
         {
-            Beton_Section_T *section = (Beton_Section_T*)sect;
+            Beton_Section_T *section = sect->data;
             double      lt = section->largeur_table;
             double      la = section->largeur_ame;
             double      ht = section->hauteur_table;
@@ -431,17 +443,17 @@ G_MODULE_EXPORT double _1992_1_1_sections_iz(void* sect)
             return ht*lt*lt*lt/12.+ha*la*la*la/12.;
             break;
         }
-        case BETON_SECTION_CARRE :
+        case SECTION_CARRE :
         {
-            Beton_Section_Carre *section = (Beton_Section_Carre*)sect;
+            Beton_Section_Carre *section = sect->data;
             return section->cote*section->cote*section->cote*section->cote/12.;
     // Pour une section carrée de section constante, I vaut :\end{verbatim}\begin{displaymath}
     // I = \frac{c^4}{12} \end{displaymath}\begin{verbatim}
             break;
         }
-        case BETON_SECTION_CIRCULAIRE :
+        case SECTION_CIRCULAIRE :
         {
-            Beton_Section_Circulaire *section = (Beton_Section_Circulaire*)sect;
+            Beton_Section_Circulaire *section = sect->data;
             return M_PI*section->diametre*section->diametre*section->diametre*section->diametre/64.;
     // Pour une section circulaire de section constante, I vaut :\end{verbatim}\begin{displaymath}
     // I = \frac{\pi \cdot \phi^4}{64} \end{displaymath}\begin{verbatim}
@@ -449,14 +461,14 @@ G_MODULE_EXPORT double _1992_1_1_sections_iz(void* sect)
         }
         default :
         {
-            BUGMSG(0, NAN, gettext("Type de section %d inconnu."), ((Beton_Section_Rectangulaire*) sect)->type);
+            BUGMSG(0, NAN, gettext("Type de section %d inconnu."), sect->type);
             break;
         }
     }
 }
 
 
-G_MODULE_EXPORT double _1992_1_1_sections_ay(Beton_Barre *barre, unsigned int discretisation)
+G_MODULE_EXPORT double EF_sections_ay(Beton_Barre *barre, unsigned int discretisation)
 /* Description : Renvoie le paramètre de souplesse a de la poutre selon l'axe y.
  * Paramètres : Beton_Barre *barre : la barre à étudier,
  *              unsigned int discretisation : partie de la barre à étudier.
@@ -468,7 +480,6 @@ G_MODULE_EXPORT double _1992_1_1_sections_ay(Beton_Barre *barre, unsigned int di
  *             type de section inconnu.
  */
 {
-    Beton_Section_Rectangulaire *section_tmp;
     EF_Noeud    *debut, *fin;
     double      ll;
     double      E;
@@ -478,7 +489,6 @@ G_MODULE_EXPORT double _1992_1_1_sections_ay(Beton_Barre *barre, unsigned int di
     
     // Le coefficient a est défini par la formule :\end{verbatim}\begin{displaymath}
     // a_y = \frac{1}{l^2}\int_0^l \frac{(l-x)^2}{E \cdot I_y(x)} dx\end{displaymath}\begin{verbatim}
-    section_tmp = (Beton_Section_Rectangulaire*)barre->section;
     
     if (discretisation == 0)
         debut = barre->noeud_debut;
@@ -494,26 +504,26 @@ G_MODULE_EXPORT double _1992_1_1_sections_ay(Beton_Barre *barre, unsigned int di
     
     E = barre->materiau->ecm;
     
-    switch(section_tmp->type)
+    switch (barre->section->type)
     {
-        case BETON_SECTION_RECTANGULAIRE :
-        case BETON_SECTION_T :
-        case BETON_SECTION_CARRE :
-        case BETON_SECTION_CIRCULAIRE :
+        case SECTION_RECTANGULAIRE :
+        case SECTION_T :
+        case SECTION_CARRE :
+        case SECTION_CIRCULAIRE :
         {
-            return ll/(3.*E*_1992_1_1_sections_iy(section_tmp));
+            return ll/(3.*E*EF_sections_iy(barre->section));
             break;
         }
         default :
         {
-            BUGMSG(0, NAN, gettext("Type de section %d inconnu."), section_tmp->type);
+            BUGMSG(0, NAN, gettext("Type de section %d inconnu."), barre->section->type);
             break;
         }
     }
 }
 
 
-G_MODULE_EXPORT double _1992_1_1_sections_by(Beton_Barre *barre, unsigned int discretisation)
+G_MODULE_EXPORT double EF_sections_by(Beton_Barre *barre, unsigned int discretisation)
 /* Description : Renvoie le paramètre de souplesse b de la poutre selon l'axe y.
  * Paramètres : Beton_Barre *barre : la barre à étudier,
  *              unsigned int discretisation : partie de la barre à étudier.
@@ -525,7 +535,6 @@ G_MODULE_EXPORT double _1992_1_1_sections_by(Beton_Barre *barre, unsigned int di
  *             type de section inconnu.
  */
 {
-    Beton_Section_Rectangulaire *section_tmp;
     EF_Noeud    *debut, *fin;
     double      ll;
     double      E;
@@ -535,7 +544,6 @@ G_MODULE_EXPORT double _1992_1_1_sections_by(Beton_Barre *barre, unsigned int di
     
     // Le coefficient b est défini par la formule :\end{verbatim}\begin{displaymath}
     // b_y = \frac{1}{l^2}\int_0^l \frac{x \cdot (l-x)^2}{E \cdot I_y(x)} dx\end{displaymath}\begin{verbatim}
-    section_tmp = (Beton_Section_Rectangulaire*)barre->section;
     
     if (discretisation == 0)
         debut = barre->noeud_debut;
@@ -551,26 +559,26 @@ G_MODULE_EXPORT double _1992_1_1_sections_by(Beton_Barre *barre, unsigned int di
     
     E = barre->materiau->ecm;
     
-    switch(section_tmp->type)
+    switch (barre->section->type)
     {
-        case BETON_SECTION_RECTANGULAIRE :
-        case BETON_SECTION_T :
-        case BETON_SECTION_CARRE :
-        case BETON_SECTION_CIRCULAIRE :
+        case SECTION_RECTANGULAIRE :
+        case SECTION_T :
+        case SECTION_CARRE :
+        case SECTION_CIRCULAIRE :
         {
-            return ll/(6.*E*_1992_1_1_sections_iy(section_tmp));
+            return ll/(6.*E*EF_sections_iy(barre->section));
             break;
         }
         default :
         {
-            BUGMSG(0, NAN, gettext("Type de section %d inconnu."), section_tmp->type);
+            BUGMSG(0, NAN, gettext("Type de section %d inconnu."), barre->section->type);
             break;
         }
     }
 }
 
 
-G_MODULE_EXPORT double _1992_1_1_sections_cy(Beton_Barre *barre, unsigned int discretisation)
+G_MODULE_EXPORT double EF_sections_cy(Beton_Barre *barre, unsigned int discretisation)
 /* Description : Renvoie le paramètre de souplesse c de la poutre selon l'axe y.
  * Paramètres : Beton_Barre *barre : la barre à étudier,
  *              unsigned int discretisation : partie de la barre à étudier.
@@ -582,7 +590,6 @@ G_MODULE_EXPORT double _1992_1_1_sections_cy(Beton_Barre *barre, unsigned int di
  *             type de section inconnu.
  */
 {
-    Beton_Section_Rectangulaire *section_tmp;
     EF_Noeud    *debut, *fin;
     double      ll;
     double      E;
@@ -592,7 +599,6 @@ G_MODULE_EXPORT double _1992_1_1_sections_cy(Beton_Barre *barre, unsigned int di
     
     // Le coefficient c est défini par la formule :\end{verbatim}\begin{displaymath}
     // c_y = \frac{1}{l^2}\int_0^l \frac{x^2}{E \cdot I_y(x)} dx\end{displaymath}\begin{verbatim}
-    section_tmp = (Beton_Section_Rectangulaire*)barre->section;
     
     if (discretisation == 0)
         debut = barre->noeud_debut;
@@ -608,26 +614,26 @@ G_MODULE_EXPORT double _1992_1_1_sections_cy(Beton_Barre *barre, unsigned int di
     
     E = barre->materiau->ecm;
     
-    switch(section_tmp->type)
+    switch (barre->section->type)
     {
-        case BETON_SECTION_RECTANGULAIRE :
-        case BETON_SECTION_T :
-        case BETON_SECTION_CARRE :
-        case BETON_SECTION_CIRCULAIRE :
+        case SECTION_RECTANGULAIRE :
+        case SECTION_T :
+        case SECTION_CARRE :
+        case SECTION_CIRCULAIRE :
         {
-            return ll/(3.*E*_1992_1_1_sections_iy(section_tmp));
+            return ll/(3.*E*EF_sections_iy(barre->section));
             break;
         }
         default :
         {
-            BUGMSG(0, NAN, gettext("Type de section %d inconnu."), section_tmp->type);
+            BUGMSG(0, NAN, gettext("Type de section %d inconnu."), barre->section->type);
             break;
         }
     }
 }
 
 
-G_MODULE_EXPORT double _1992_1_1_sections_az(Beton_Barre *barre, unsigned int discretisation)
+G_MODULE_EXPORT double EF_sections_az(Beton_Barre *barre, unsigned int discretisation)
 /* Description : Renvoie le paramètre de souplesse a de la poutre selon l'axe z.
  * Paramètres : Beton_Barre *barre : la barre à étudier,
  *              unsigned int discretisation : partie de la barre à étudier.
@@ -639,7 +645,6 @@ G_MODULE_EXPORT double _1992_1_1_sections_az(Beton_Barre *barre, unsigned int di
  *             type de section inconnu.
  */
 {
-    Beton_Section_Rectangulaire *section_tmp;
     EF_Noeud    *debut, *fin;
     double      ll;
     double      E;
@@ -649,7 +654,6 @@ G_MODULE_EXPORT double _1992_1_1_sections_az(Beton_Barre *barre, unsigned int di
     
     // Le coefficient a est défini par la formule :\end{verbatim}\begin{displaymath}
     // a_z = \frac{1}{l^2}\int_0^l \frac{(l-x)^2}{E \cdot I_z(x)} dx\end{displaymath}\begin{verbatim}
-    section_tmp = (Beton_Section_Rectangulaire*)barre->section;
     
     if (discretisation == 0)
         debut = barre->noeud_debut;
@@ -665,26 +669,26 @@ G_MODULE_EXPORT double _1992_1_1_sections_az(Beton_Barre *barre, unsigned int di
     
     E = barre->materiau->ecm;
     
-    switch(section_tmp->type)
+    switch (barre->section->type)
     {
-        case BETON_SECTION_RECTANGULAIRE :
-        case BETON_SECTION_T :
-        case BETON_SECTION_CARRE :
-        case BETON_SECTION_CIRCULAIRE :
+        case SECTION_RECTANGULAIRE :
+        case SECTION_T :
+        case SECTION_CARRE :
+        case SECTION_CIRCULAIRE :
         {
-            return ll/(3.*E*_1992_1_1_sections_iz(section_tmp));
+            return ll/(3.*E*EF_sections_iz(barre->section));
             break;
         }
         default :
         {
-            BUGMSG(0, NAN, gettext("Type de section %d inconnu."), section_tmp->type);
+            BUGMSG(0, NAN, gettext("Type de section %d inconnu."), barre->section->type);
             break;
         }
     }
 }
 
 
-G_MODULE_EXPORT double _1992_1_1_sections_bz(Beton_Barre *barre, unsigned int discretisation)
+G_MODULE_EXPORT double EF_sections_bz(Beton_Barre *barre, unsigned int discretisation)
 /* Description : Renvoie le paramètre de souplesse b de la poutre selon l'axe z.
  * Paramètres : Beton_Barre *barre : la barre à étudier,
  *              unsigned int discretisation : partie de la barre à étudier.
@@ -696,7 +700,6 @@ G_MODULE_EXPORT double _1992_1_1_sections_bz(Beton_Barre *barre, unsigned int di
  *             type de section inconnu.
  */
 {
-    Beton_Section_Rectangulaire *section_tmp;
     EF_Noeud    *debut, *fin;
     double      ll;
     double      E;
@@ -706,7 +709,6 @@ G_MODULE_EXPORT double _1992_1_1_sections_bz(Beton_Barre *barre, unsigned int di
     
     // Le coefficient b est défini par la formule :\end{verbatim}\begin{displaymath}
     // b_z = \frac{1}{l^2}\int_0^l \frac{x \cdot (l-x)^2}{E \cdot I_z(x)} dx\end{displaymath}\begin{verbatim}
-    section_tmp = (Beton_Section_Rectangulaire*)barre->section;
     
     if (discretisation == 0)
         debut = barre->noeud_debut;
@@ -722,26 +724,26 @@ G_MODULE_EXPORT double _1992_1_1_sections_bz(Beton_Barre *barre, unsigned int di
     
     E = barre->materiau->ecm;
     
-    switch(section_tmp->type)
+    switch (barre->section->type)
     {
-        case BETON_SECTION_RECTANGULAIRE :
-        case BETON_SECTION_T :
-        case BETON_SECTION_CARRE :
-        case BETON_SECTION_CIRCULAIRE :
+        case SECTION_RECTANGULAIRE :
+        case SECTION_T :
+        case SECTION_CARRE :
+        case SECTION_CIRCULAIRE :
         {
-            return ll/(6.*E*_1992_1_1_sections_iz(section_tmp));
+            return ll/(6.*E*EF_sections_iz(barre->section));
             break;
         }
         default :
         {
-            BUGMSG(0, NAN, gettext("Type de section %d inconnu."), section_tmp->type);
+            BUGMSG(0, NAN, gettext("Type de section %d inconnu."), barre->section->type);
             break;
         }
     }
 }
 
 
-G_MODULE_EXPORT double _1992_1_1_sections_cz(Beton_Barre *barre, unsigned int discretisation)
+G_MODULE_EXPORT double EF_sections_cz(Beton_Barre *barre, unsigned int discretisation)
 /* Description : Renvoie le paramètre de souplesse c de la poutre selon l'axe z.
  * Paramètres : Beton_Barre *barre : la barre à étudier,
  *              unsigned int discretisation : partie de la barre à étudier.
@@ -753,7 +755,6 @@ G_MODULE_EXPORT double _1992_1_1_sections_cz(Beton_Barre *barre, unsigned int di
  *             type de section inconnu.
  */
 {
-    Beton_Section_Rectangulaire *section_tmp;
     EF_Noeud    *debut, *fin;
     double      ll;
     double      E;
@@ -763,7 +764,6 @@ G_MODULE_EXPORT double _1992_1_1_sections_cz(Beton_Barre *barre, unsigned int di
     
     // Le coefficient c est défini par la formule :\end{verbatim}\begin{displaymath}
     // c_z = \frac{1}{l^2}\int_0^l \frac{x^2}{E \cdot I_y(x)} dx\end{displaymath}\begin{verbatim}
-    section_tmp = (Beton_Section_Rectangulaire*)barre->section;
     
     if (discretisation == 0)
         debut = barre->noeud_debut;
@@ -779,26 +779,26 @@ G_MODULE_EXPORT double _1992_1_1_sections_cz(Beton_Barre *barre, unsigned int di
     
     E = barre->materiau->ecm;
     
-    switch(section_tmp->type)
+    switch (barre->section->type)
     {
-        case BETON_SECTION_RECTANGULAIRE :
-        case BETON_SECTION_T :
-        case BETON_SECTION_CARRE :
-        case BETON_SECTION_CIRCULAIRE :
+        case SECTION_RECTANGULAIRE :
+        case SECTION_T :
+        case SECTION_CARRE :
+        case SECTION_CIRCULAIRE :
         {
-            return ll/(3.*E*_1992_1_1_sections_iz(section_tmp));
+            return ll/(3.*E*EF_sections_iz(barre->section));
             break;
         }
         default :
         {
-            BUGMSG(0, NAN, gettext("Type de section %d inconnu."), section_tmp->type);
+            BUGMSG(0, NAN, gettext("Type de section %d inconnu."), barre->section->type);
             break;
         }
     }
 }
 
 
-G_MODULE_EXPORT double _1992_1_1_sections_s(void *sect)
+G_MODULE_EXPORT double EF_sections_s(EF_Section *sect)
 /* Description : Renvoie la surface de la section étudiée.
  * Paramètres : void* section : section à étudier.
  * Valeur renvoyée :
@@ -810,20 +810,20 @@ G_MODULE_EXPORT double _1992_1_1_sections_s(void *sect)
 {
     BUGMSG(sect, NAN, gettext("Paramètre %s incorrect.\n"), "sect");
     
-    switch(((Beton_Section_Rectangulaire*) sect)->type)
+    switch (sect->type)
     {
-        case BETON_SECTION_RECTANGULAIRE :
+        case SECTION_RECTANGULAIRE :
         {
-            Beton_Section_Rectangulaire *section = (Beton_Section_Rectangulaire*)sect;
+            Beton_Section_Rectangulaire *section = sect->data;
             return section->hauteur*section->largeur;
             
     // Pour une section rectantulaire de section constante, S vaut :\end{verbatim}\begin{displaymath}
     // S = h \cdot l\end{displaymath}\begin{verbatim}
             break;
         }
-        case BETON_SECTION_T :
+        case SECTION_T :
         {
-            Beton_Section_T *section = (Beton_Section_T*)sect;
+            Beton_Section_T *section = sect->data;
             return section->hauteur_table*section->largeur_table+section->hauteur_ame*section->largeur_ame;
             
     // Pour une section en T de section constante (lt : largeur de la table, la : largeur de
@@ -831,18 +831,18 @@ G_MODULE_EXPORT double _1992_1_1_sections_s(void *sect)
     // S = h_t \cdot l_t+h_a \cdot l_a\end{displaymath}\begin{verbatim}
             break;
         }
-        case BETON_SECTION_CARRE :
+        case SECTION_CARRE :
         {
-            Beton_Section_Carre *section = (Beton_Section_Carre*)sect;
+            Beton_Section_Carre *section = sect->data;
             return section->cote*section->cote;
             
     // Pour une section carrée de section constante, S vaut :\end{verbatim}\begin{displaymath}
     // S = c^2\end{displaymath}\begin{verbatim}
             break;
         }
-        case BETON_SECTION_CIRCULAIRE :
+        case SECTION_CIRCULAIRE :
         {
-            Beton_Section_Circulaire *section = (Beton_Section_Circulaire*)sect;
+            Beton_Section_Circulaire *section = sect->data;
             return M_PI*section->diametre*section->diametre/4.;
     // Pour une section circulaire de section constante, S vaut :\end{verbatim}\begin{displaymath}
     // S = \frac{\pi \cdot \phi^2}{4} \end{displaymath}\begin{verbatim}
@@ -850,14 +850,14 @@ G_MODULE_EXPORT double _1992_1_1_sections_s(void *sect)
         }
         default :
         {
-            BUGMSG(0, NAN, gettext("Type de section %d inconnu."), ((Beton_Section_Rectangulaire*) sect)->type);
+            BUGMSG(0, NAN, gettext("Type de section %d inconnu."), sect->type);
             break;
         }
     }
 }
 
 
-G_MODULE_EXPORT double _1992_1_1_sections_es_l(Beton_Barre *barre, unsigned int discretisation,
+G_MODULE_EXPORT double EF_sections_es_l(Beton_Barre *barre, unsigned int discretisation,
   double d, double f)
 /* Description : Renvoie l'équivalent du rapport ES/L pour la barre étudiée.
  * Paramètres : Beton_Barre *barre : la barre à étudier,
@@ -873,7 +873,6 @@ G_MODULE_EXPORT double _1992_1_1_sections_es_l(Beton_Barre *barre, unsigned int 
  *             type de section inconnue.
  */
 {
-    Beton_Section_Rectangulaire *section_tmp;
     double      E;
     
     BUGMSG(barre, NAN, gettext("Paramètre %s incorrect.\n"), "barre");
@@ -882,15 +881,14 @@ G_MODULE_EXPORT double _1992_1_1_sections_es_l(Beton_Barre *barre, unsigned int 
     
     // Le facteur ES/L est défini par la formule :\end{verbatim}\begin{displaymath}
     // \frac{E \cdot S}{L} = \frac{E}{\int_d^f \frac{1}{S(x)} dx}\end{displaymath}\begin{verbatim}
-    section_tmp = (Beton_Section_Rectangulaire*)barre->section;
     
     E = barre->materiau->ecm;
     
-    switch(section_tmp->type)
+    switch (barre->section->type)
     {
-        case BETON_SECTION_RECTANGULAIRE :
+        case SECTION_RECTANGULAIRE :
         {
-            Beton_Section_Rectangulaire *section = (Beton_Section_Rectangulaire*)barre->section;
+            Beton_Section_Rectangulaire *section = barre->section->data;
             double      S = section->hauteur*section->largeur;
             
     // Pour une section rectantulaire de section constante, ES/L vaut :\end{verbatim}\begin{displaymath}
@@ -898,9 +896,9 @@ G_MODULE_EXPORT double _1992_1_1_sections_es_l(Beton_Barre *barre, unsigned int 
             return E*S/(f-d);
             break;
         }
-        case BETON_SECTION_T :
+        case SECTION_T :
         {
-            Beton_Section_T *section = (Beton_Section_T*)barre->section;
+            Beton_Section_T *section = barre->section->data;
             double      lt = section->largeur_table;
             double      la = section->largeur_ame;
             double      ht = section->hauteur_table;
@@ -913,9 +911,9 @@ G_MODULE_EXPORT double _1992_1_1_sections_es_l(Beton_Barre *barre, unsigned int 
             return E*S/(f-d);
             break;
         }
-        case BETON_SECTION_CARRE :
+        case SECTION_CARRE :
         {
-            Beton_Section_Carre *section = (Beton_Section_Carre*)barre->section;
+            Beton_Section_Carre *section = barre->section->data;
             double      S = section->cote*section->cote;
             
     // Pour une section carrée de section constante, ES/L vaut :\end{verbatim}\begin{displaymath}
@@ -923,9 +921,9 @@ G_MODULE_EXPORT double _1992_1_1_sections_es_l(Beton_Barre *barre, unsigned int 
             return E*S/(f-d);
             break;
         }
-        case BETON_SECTION_CIRCULAIRE :
+        case SECTION_CIRCULAIRE :
         {
-            Beton_Section_Circulaire *section = (Beton_Section_Circulaire*)barre->section;
+            Beton_Section_Circulaire *section = barre->section->data;
             double      S = M_PI*section->diametre*section->diametre/4.;
     // Pour une section circulaire de section constante, ES/L vaut :\end{verbatim}\begin{displaymath}
     // \frac{E \cdot S}{L} = \frac{E \cdot \pi \cdot \phi^2}{4 \cdot L} \end{displaymath}\begin{verbatim}
@@ -934,14 +932,14 @@ G_MODULE_EXPORT double _1992_1_1_sections_es_l(Beton_Barre *barre, unsigned int 
         }
         default :
         {
-            BUGMSG(0, NAN, gettext("Type de section %d inconnu."), section_tmp->type);
+            BUGMSG(0, NAN, gettext("Type de section %d inconnu."), barre->section->type);
             break;
         }
     }
 }
 
 
-G_MODULE_EXPORT double _1992_1_1_sections_gj_l(Beton_Barre *barre, unsigned int discretisation)
+G_MODULE_EXPORT double EF_sections_gj_l(Beton_Barre *barre, unsigned int discretisation)
 /* Description : Renvoie l'équivalent du rapport GJ/L pour la barre étudiée.
  * Paramètres : Beton_Barre *barre : la barre à étudier,
  *              unsigned int discretisation : partie de la barre à étudier.
@@ -953,7 +951,6 @@ G_MODULE_EXPORT double _1992_1_1_sections_gj_l(Beton_Barre *barre, unsigned int 
  *             type de section inconnue.
  */
 {
-    Beton_Section_Rectangulaire *section_tmp;
     EF_Noeud    *debut, *fin;
     double      ll;
     double      G;
@@ -963,7 +960,6 @@ G_MODULE_EXPORT double _1992_1_1_sections_gj_l(Beton_Barre *barre, unsigned int 
     
     // Le facteur GJ/L est défini par la formule :\end{verbatim}\begin{displaymath}
     // \frac{G \cdot J}{L} = \frac{G}{\int_0^l \frac{1}{J(x)} dx}\end{displaymath}\begin{verbatim}
-    section_tmp = (Beton_Section_Rectangulaire*)barre->section;
     
     if (discretisation == 0)
         debut = barre->noeud_debut;
@@ -979,11 +975,11 @@ G_MODULE_EXPORT double _1992_1_1_sections_gj_l(Beton_Barre *barre, unsigned int 
     
     G = barre->materiau->gnu_0_2;
     
-    switch(section_tmp->type)
+    switch (barre->section->type)
     {
-        case BETON_SECTION_RECTANGULAIRE :
+        case SECTION_RECTANGULAIRE :
         {
-            Beton_Section_Rectangulaire *section = (Beton_Section_Rectangulaire*)barre->section;
+            Beton_Section_Rectangulaire *section = barre->section->data;
             double      l = section->largeur;
             double      h = section->hauteur;
             double      J;
@@ -1000,9 +996,9 @@ G_MODULE_EXPORT double _1992_1_1_sections_gj_l(Beton_Barre *barre, unsigned int 
             return G*J/ll;
             break;
         }
-        case BETON_SECTION_T :
+        case SECTION_T :
         {
-            Beton_Section_T *section = (Beton_Section_T*)barre->section;
+            Beton_Section_T *section = barre->section->data;
             double      lt = section->largeur_table;
             double      la = section->largeur_ame;
             double      ht = section->hauteur_table;
@@ -1026,9 +1022,9 @@ G_MODULE_EXPORT double _1992_1_1_sections_gj_l(Beton_Barre *barre, unsigned int 
             return G*J/ll;
             break;
         }
-        case BETON_SECTION_CARRE :
+        case SECTION_CARRE :
         {
-            Beton_Section_Carre *section = (Beton_Section_Carre*)barre->section;
+            Beton_Section_Carre *section = barre->section->data;
             double      J = section->cote*section->cote*section->cote*section->cote/16.*(16./3.-3.364*(1.-1./12.));
             
     // Pour une section carrée de section constante, GJ/L vaut :\end{verbatim}\begin{displaymath}
@@ -1036,9 +1032,9 @@ G_MODULE_EXPORT double _1992_1_1_sections_gj_l(Beton_Barre *barre, unsigned int 
             return G*J/ll;
             break;
         }
-        case BETON_SECTION_CIRCULAIRE :
+        case SECTION_CIRCULAIRE :
         {
-            Beton_Section_Circulaire *section = (Beton_Section_Circulaire*)barre->section;
+            Beton_Section_Circulaire *section = barre->section->data;
             double      J = M_PI*section->diametre*section->diametre*section->diametre*section->diametre/32.;
     // Pour une section circulaire de section constante, GJ/L vaut :\end{verbatim}\begin{displaymath}
     // \frac{G \cdot J}{L} \texttt{ avec } J = \frac{\pi \cdot \phi^4}{32}\end{displaymath}\begin{verbatim}
@@ -1047,29 +1043,28 @@ G_MODULE_EXPORT double _1992_1_1_sections_gj_l(Beton_Barre *barre, unsigned int 
         }
         default :
         {
-            BUGMSG(0, NAN, gettext("Type de section %d inconnu."), section_tmp->type);
+            BUGMSG(0, NAN, gettext("Type de section %d inconnu."), barre->section->type);
             break;
         }
     }
 }
 
 
-void _1992_1_1_sections_free_un(void *data)
+void EF_sections_free_un(EF_Section *section)
 /* Description : Fonction permettant de libérer une section.
- * Paramètres : Beton_Section_Rectangulaire *section : section à libérer.
+ * Paramètres : EF_Section *section : section à libérer.
  * Valeur renvoyée : Aucun.
  */
 {
-    Beton_Section_Rectangulaire *section = data;
-    
     free(section->nom);
+    free(section->data);
     free(section);
     
     return;
 }
 
 
-G_MODULE_EXPORT gboolean _1992_1_1_sections_free(Projet *projet)
+G_MODULE_EXPORT gboolean EF_sections_free(Projet *projet)
 /* Description : Libère l'ensemble des sections en béton
  * Paramètres : Projet *projet : la variable projet
  * Valeur renvoyée :
@@ -1083,7 +1078,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_sections_free(Projet *projet)
     // Trivial
     if (projet->beton.sections != NULL)
     {
-        g_list_free_full(projet->beton.sections, &_1992_1_1_sections_free_un);
+        g_list_free_full(projet->beton.sections, (GDestroyNotify)&EF_sections_free_un);
         projet->beton.sections = NULL;
     }
     

@@ -37,15 +37,15 @@
 #include "EF_gtk_barres.hpp"
 #endif
 
-#include "1990_actions.h"
-#include "1990_groupes.h"
-#include "1990_combinaisons.h"
 #include "EF_appuis.h"
 #include "EF_noeud.h"
 #include "EF_rigidite.h"
 #include "EF_relachement.h"
+#include "EF_section.h"
+#include "1990_actions.h"
+#include "1990_groupes.h"
+#include "1990_combinaisons.h"
 #include "1992_1_1_barres.h"
-#include "1992_1_1_section.h"
 #include "1992_1_1_materiaux.h"
 
 G_MODULE_EXPORT Projet* projet_init(Type_Pays pays)
@@ -69,7 +69,7 @@ G_MODULE_EXPORT Projet* projet_init(Type_Pays pays)
     BUG(_1990_groupe_init(projet), NULL);
     BUG(_1990_combinaisons_init(projet), NULL);
     //     - 1992-1-1 : la liste des sections, des barres et des matériaux
-    BUG(_1992_1_1_sections_init(projet), NULL);
+    BUG(EF_sections_init(projet), NULL);
     BUG(_1992_1_1_barres_init(projet), NULL);
     BUG(_1992_1_1_materiaux_init(projet), NULL);
     //     - EF : la liste des appuis, des relâchements et des noeuds ainsi que les éléments
@@ -239,7 +239,7 @@ G_MODULE_EXPORT gboolean projet_free(Projet *projet)
     if (projet->ef_donnees.noeuds != NULL)
         BUG(EF_noeuds_free(projet), FALSE);
     if (projet->beton.sections != NULL)
-        BUG(_1992_1_1_sections_free(projet), FALSE);
+        BUG(EF_sections_free(projet), FALSE);
     if (projet->beton.barres != NULL)
         BUG(_1992_1_1_barres_free(projet), FALSE);
     if (projet->ef_donnees.appuis != NULL)

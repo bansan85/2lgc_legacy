@@ -25,14 +25,14 @@
 
 gboolean _1992_1_1_barres_init(Projet *projet) __attribute__((__warn_unused_result__));
 
-gboolean _1992_1_1_barres_ajout(Projet *projet, Type_Element type, void *section, Beton_Materiau *materiau, unsigned int noeud_debut, unsigned int noeud_fin, EF_Relachement* relachement, unsigned int discretisation_element) __attribute__((__warn_unused_result__));
+gboolean _1992_1_1_barres_ajout(Projet *projet, Type_Element type, EF_Section *section, Beton_Materiau *materiau, unsigned int noeud_debut, unsigned int noeud_fin, EF_Relachement* relachement, unsigned int discretisation_element) __attribute__((__warn_unused_result__));
 
 Beton_Barre* _1992_1_1_barres_cherche_numero(Projet *projet, unsigned int numero) __attribute__((__warn_unused_result__));
 gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList* noeuds, GList* barres, GList** noeuds_dep, GList** barres_dep) __attribute__((__warn_unused_result__));
 gboolean _1992_1_1_barres_angle_rotation(Beton_Barre *barre, double *y, double *z) __attribute__((__warn_unused_result__));
 
 gboolean _1992_1_1_barres_change_type(Beton_Barre *barre, Type_Element type, Projet *projet) __attribute__((__warn_unused_result__));
-gboolean _1992_1_1_barres_change_section(Beton_Barre *barre, void *section, Projet *projet) __attribute__((__warn_unused_result__));
+gboolean _1992_1_1_barres_change_section(Beton_Barre *barre, EF_Section *section, Projet *projet) __attribute__((__warn_unused_result__));
 gboolean _1992_1_1_barres_change_materiau(Beton_Barre *barre, Beton_Materiau *materiau, Projet *projet) __attribute__((__warn_unused_result__));
 gboolean _1992_1_1_barres_change_noeud(Beton_Barre *barre, EF_Noeud *noeud, gboolean noeud_1, Projet *projet) __attribute__((__warn_unused_result__));
 gboolean _1992_1_1_barres_change_relachement(Beton_Barre *barre, EF_Relachement *relachement, Projet *projet) __attribute__((__warn_unused_result__));

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2012-09-07 19:49+0200\n"
-"PO-Revision-Date: 2012-09-07 19:50+0100\n"
+"POT-Creation-Date: 2012-09-07 23:57+0200\n"
+"PO-Revision-Date: 2012-09-07 23:59+0100\n"
 "Last-Translator: LE GARREC Vincent <vlg@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -18,21 +18,6 @@ msgstr "Impossible d'initialiser gtk.\n"
 msgid "Paramètre %s incorrect.\n"
 msgstr "Paramètre %s incorrect.\n"
 
-msgid "Erreur d'allocation mémoire.\n"
-msgstr "Erreur d'allocation mémoire.\n"
-
-msgid "Section en béton '%s' introuvable.\n"
-msgstr "Section en béton '%s' introuvable.\n"
-
-msgid "Type de section %d inconnu."
-msgstr "Type de section %d inconnu."
-
-msgid "La discrétisation %d souhaitée est hors domaine %d.\n"
-msgstr "La discrétisation %d souhaitée est hors domaine %d.\n"
-
-msgid "\n"
-msgstr "\n"
-
 msgid "Poteau en béton"
 msgstr "Poteau en béton"
 
@@ -41,6 +26,15 @@ msgstr "Poutre en béton"
 
 msgid "La création d'une barre nécessite l'utilisation de des noeuds différents.\n"
 msgstr "La création d'une barre nécessite l'utilisation de des noeuds différents.\n"
+
+msgid "Erreur d'allocation mémoire.\n"
+msgstr "Erreur d'allocation mémoire.\n"
+
+msgid "Le matériau n'est pas spécifié.\n"
+msgstr "Le matériau n'est pas spécifié.\n"
+
+msgid "La section n'est pas spécifiée.\n"
+msgstr "La section n'est pas spécifiée.\n"
 
 msgid "Impossible de créer la barre, la distance entre les deux noeuds %d et %d est nulle.\n"
 msgstr "Impossible de créer la barre, la distance entre les deux noeuds %d et %d est nulle.\n"
@@ -313,6 +307,9 @@ msgstr "Catégorie de durée %d inconnue.\n"
 msgid "15. Disclaimer of Warranty.\n"
 msgstr "15. Déclaration d’absence de garantie. (seule la version anglaise fait foi)\n"
 
+msgid "\n"
+msgstr "\n"
+
 msgid "THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY\n"
 msgstr "IL N’Y A AUCUNE GARANTIE POUR LE PROGRAMME, DANS LES LIMITES PERMISES\n"
 
@@ -459,6 +456,15 @@ msgstr "Le fichier '%s' est corrompu.\n"
 
 msgid "Type de section %d inconnu.\n"
 msgstr "Type de section %d inconnu.\n"
+
+msgid "Section en béton '%s' introuvable.\n"
+msgstr "Section en béton '%s' introuvable.\n"
+
+msgid "Type de section %d inconnu."
+msgstr "Type de section %d inconnu."
+
+msgid "La discrétisation %d souhaitée est hors domaine %d.\n"
+msgstr "La discrétisation %d souhaitée est hors domaine %d.\n"
 
 msgid "Impossible d'effectuer une projection dans un repère local.\n"
 msgstr "Impossible d'effectuer une projection dans un repère local.\n"

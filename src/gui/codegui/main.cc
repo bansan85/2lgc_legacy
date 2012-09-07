@@ -31,7 +31,6 @@ extern "C" {
 #include "1990_groupes.h"
 #include "1990_actions.h"
 #include "1992_1_1_barres.h"
-#include "1992_1_1_section.h"
 #include "1992_1_1_materiaux.h"
 #include "EF_appuis.h"
 #include "EF_relachement.h"
@@ -40,6 +39,7 @@ extern "C" {
 #include "EF_charge_noeud.h"
 #include "EF_charge_barre_ponctuelle.h"
 #include "EF_charge_barre_repartie_uniforme.h"
+#include "EF_section.h"
 #ifdef __cplusplus
 }
 #endif
@@ -143,10 +143,10 @@ int main(int argc, char *argv[])
     BUG(EF_noeuds_ajout_noeud_libre(projet, 4.0, 0.0, 0.0, EF_appuis_cherche_nom(projet, "Rotule", TRUE)), -1);
     
     // Création des sections en béton
-    BUG(_1992_1_1_sections_ajout_rectangulaire(projet, "Rect_0.3*0.5", 0.3, 0.5), -1);
-    BUG(_1992_1_1_sections_ajout_T(projet, "T_1.00*0.20*0.10*0.50", 1.00, 0.20, 0.10, 0.50), -1);
-    BUG(_1992_1_1_sections_ajout_carre(projet, "Carre_0.50", 0.5), -1);
-    BUG(_1992_1_1_sections_ajout_circulaire(projet, "Circulaire_0.05", 0.05), -1);
+    BUG(EF_sections_ajout_rectangulaire(projet, "Rect_0.3*0.5", 0.3, 0.5), -1);
+    BUG(EF_sections_ajout_T(projet, "T_1.00*0.20*0.10*0.50", 1.00, 0.20, 0.10, 0.50), -1);
+    BUG(EF_sections_ajout_carre(projet, "Carre_0.50", 0.5), -1);
+    BUG(EF_sections_ajout_circulaire(projet, "Circulaire_0.05", 0.05), -1);
     
     // Création du matériau béton
     BUG(_1992_1_1_materiaux_ajout(projet, "B20", 20., 0.2), -1);
@@ -172,9 +172,9 @@ int main(int argc, char *argv[])
     BUG(EF_relachement_ajout(projet, "Rotation nulle", EF_RELACHEMENT_LIBRE, NULL, EF_RELACHEMENT_LIBRE, NULL, EF_RELACHEMENT_LIBRE, NULL, EF_RELACHEMENT_BLOQUE, NULL, EF_RELACHEMENT_BLOQUE, NULL, EF_RELACHEMENT_BLOQUE, NULL), -1);
     
     // Création de l'élément en béton
-    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, _1992_1_1_sections_cherche_nom(projet, "Rect_0.3*0.5"), _1992_1_1_materiaux_cherche_nom(projet, "B25"), 0, 1, NULL, 1), -1);
-    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, _1992_1_1_sections_cherche_nom(projet, "Rect_0.3*0.5"), _1992_1_1_materiaux_cherche_nom(projet, "B25"), 1, 2, NULL, 2), -1);
-    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, _1992_1_1_sections_cherche_nom(projet, "Rect_0.3*0.5"), _1992_1_1_materiaux_cherche_nom(projet, "B25"), 2, 3, NULL, 3), -1);
+    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, EF_sections_cherche_nom(projet, "Rect_0.3*0.5"), _1992_1_1_materiaux_cherche_nom(projet, "B25"), 0, 1, NULL, 1), -1);
+    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, EF_sections_cherche_nom(projet, "Rect_0.3*0.5"), _1992_1_1_materiaux_cherche_nom(projet, "B25"), 1, 2, NULL, 2), -1);
+    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, EF_sections_cherche_nom(projet, "Rect_0.3*0.5"), _1992_1_1_materiaux_cherche_nom(projet, "B25"), 2, 3, NULL, 3), -1);
     
     // Ajout de l'action ponctuelle
     GList   *tmp1, *tmp2;

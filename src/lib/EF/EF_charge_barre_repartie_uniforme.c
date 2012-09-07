@@ -27,13 +27,13 @@
 #include <gmodule.h>
 
 #include "1990_actions.h"
-#include "1992_1_1_section.h"
 #include "common_projet.h"
 #include "common_erreurs.h"
 #include "common_maths.h"
 #include "common_fonction.h"
 #include "EF_noeud.h"
 #include "EF_calculs.h"
+#include "EF_section.h"
 
 G_MODULE_EXPORT Charge_Barre_Repartie_Uniforme *EF_charge_barre_repartie_uniforme_ajout(
   Projet *projet, unsigned int num_action, GList *barres, int repere_local, int projection,
@@ -197,14 +197,14 @@ G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_mx(Beton_Barre *barre
     
     G = barre->materiau->gnu_0_2;
     
-    switch (((Beton_Section_Rectangulaire*)(barre->section))->type)
+    switch (barre->section->type)
     {
-        case BETON_SECTION_RECTANGULAIRE :
-        case BETON_SECTION_T :
-        case BETON_SECTION_CARRE :
-        case BETON_SECTION_CIRCULAIRE :
+        case SECTION_RECTANGULAIRE :
+        case SECTION_T :
+        case SECTION_CARRE :
+        case SECTION_CIRCULAIRE :
         {
-            double      J = _1992_1_1_sections_j(barre->section);
+            double      J = EF_sections_j(barre->section);
             
             BUG(!isnan(J), FALSE);
             
@@ -222,7 +222,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_mx(Beton_Barre *barre
         }
         default :
         {
-            BUGMSG(0, FALSE, gettext("Type de section %d inconnu.\n"), ((Beton_Section_Rectangulaire*)(barre->section))->type);
+            BUGMSG(0, FALSE, gettext("Type de section %d inconnu.\n"), barre->section->type);
             break;
         }
     }
@@ -306,14 +306,14 @@ G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_def_ang_iso_y(Beton_B
     
     E = barre->materiau->ecm;
     
-    switch (((Beton_Section_Rectangulaire*)(barre->section))->type)
+    switch (barre->section->type)
     {
-        case BETON_SECTION_RECTANGULAIRE :
-        case BETON_SECTION_T :
-        case BETON_SECTION_CARRE :
-        case BETON_SECTION_CIRCULAIRE :
+        case SECTION_RECTANGULAIRE :
+        case SECTION_T :
+        case SECTION_CARRE :
+        case SECTION_CIRCULAIRE :
         {
-            double      I = _1992_1_1_sections_iy(barre->section);
+            double      I = EF_sections_iy(barre->section);
             
             BUG(!isnan(I), FALSE);
             
@@ -327,7 +327,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_def_ang_iso_y(Beton_B
         }
         default :
         {
-            BUGMSG(0, FALSE, gettext("Type de section %d inconnu.\n"), ((Beton_Section_Rectangulaire*)(barre->section))->type);
+            BUGMSG(0, FALSE, gettext("Type de section %d inconnu.\n"), barre->section->type);
             break;
         }
     }
@@ -410,14 +410,14 @@ G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_def_ang_iso_z(Beton_B
     
     E = barre->materiau->ecm;
     
-    switch (((Beton_Section_Rectangulaire*)(barre->section))->type)
+    switch (barre->section->type)
     {
-        case BETON_SECTION_RECTANGULAIRE :
-        case BETON_SECTION_T :
-        case BETON_SECTION_CARRE :
-        case BETON_SECTION_CIRCULAIRE :
+        case SECTION_RECTANGULAIRE :
+        case SECTION_T :
+        case SECTION_CARRE :
+        case SECTION_CIRCULAIRE :
         {
-            double      I = _1992_1_1_sections_iz(barre->section);
+            double      I = EF_sections_iz(barre->section);
             
             BUG(!isnan(I), FALSE);
             
@@ -431,18 +431,18 @@ G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_def_ang_iso_z(Beton_B
         }
         default :
         {
-            BUGMSG(0, FALSE, gettext("Type de section %d inconnu.\n"), ((Beton_Section_Rectangulaire*)(barre->section))->type);
+            BUGMSG(0, FALSE, gettext("Type de section %d inconnu.\n"), barre->section->type);
             break;
         }
     }
 }
 
 
-G_MODULE_EXPORT double EF_charge_barre_repartie_uniforme_position_resultante_x(void *section,
-  double a, double b, double l)
+G_MODULE_EXPORT double EF_charge_barre_repartie_uniforme_position_resultante_x(
+  EF_Section *section, double a, double b, double l)
 /* Description : Renvoie la position de la résultante pour une charge uniformément répartie
  *               vers l'axe x.
- * Paramètres : section : nature de la section
+ * Paramètres : EF_Section *section : nature de la section,
  *              double a : position du début de la charge par rapport au début de la barre,
  *              double b : position de la fin de la charge par rapport à la fin de la barre,
  *              double l : longueur de la barre.
@@ -466,12 +466,12 @@ G_MODULE_EXPORT double EF_charge_barre_repartie_uniforme_position_resultante_x(v
     // \includegraphics[width=8cm]{images/charge_barre_rep_uni_n.pdf}\end{center}\begin{displaymath}
     // \int_a^{L-b} \frac{x-a}{S(x)} dx + \int_{L-b}^X \frac{L-b-a}{S(x)} dx = 0\end{displaymath}\begin{verbatim}
     
-    switch (((Beton_Section_Rectangulaire*)section)->type)
+    switch (section->type)
     {
-        case BETON_SECTION_RECTANGULAIRE :
-        case BETON_SECTION_T :
-        case BETON_SECTION_CARRE :
-        case BETON_SECTION_CIRCULAIRE :
+        case SECTION_RECTANGULAIRE :
+        case SECTION_T :
+        case SECTION_CARRE :
+        case SECTION_CIRCULAIRE :
         {
             
     // Pour une section rectantulaire de section constante, X vaut :\end{verbatim}\begin{displaymath}
@@ -481,7 +481,7 @@ G_MODULE_EXPORT double EF_charge_barre_repartie_uniforme_position_resultante_x(v
         }
         default :
         {
-            BUGMSG(0, NAN, gettext("Type de section %d inconnu.\n"), ((Beton_Section_Rectangulaire*)section)->type);
+            BUGMSG(0, NAN, gettext("Type de section %d inconnu.\n"), section->type);
             break;
         }
     }
@@ -564,14 +564,14 @@ G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_fonc_rx(Fonction *fon
     
     G = barre->materiau->gnu_0_2;
     
-    switch (((Beton_Section_Rectangulaire*)(barre->section))->type)
+    switch (barre->section->type)
     {
-        case BETON_SECTION_RECTANGULAIRE :
-        case BETON_SECTION_T :
-        case BETON_SECTION_CARRE :
-        case BETON_SECTION_CIRCULAIRE :
+        case SECTION_RECTANGULAIRE :
+        case SECTION_T :
+        case SECTION_CARRE :
+        case SECTION_CIRCULAIRE :
         {
-            double      J = _1992_1_1_sections_j(barre->section);
+            double      J = EF_sections_j(barre->section);
             
             BUG(!isnan(J), FALSE);
             
@@ -603,7 +603,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_fonc_rx(Fonction *fon
         }
         default :
         {
-            BUGMSG(0, FALSE, gettext("Type de section %d inconnu.\n"), ((Beton_Section_Rectangulaire*)(barre->section))->type);
+            BUGMSG(0, FALSE, gettext("Type de section %d inconnu.\n"), barre->section->type);
             break;
         }
     }
@@ -718,14 +718,14 @@ G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_fonc_ry(Fonction *f_r
     
     E = barre->materiau->ecm;
     
-    switch (((Beton_Section_Rectangulaire*)(barre->section))->type)
+    switch (barre->section->type)
     {
-        case BETON_SECTION_RECTANGULAIRE :
-        case BETON_SECTION_T :
-        case BETON_SECTION_CARRE :
-        case BETON_SECTION_CIRCULAIRE :
+        case SECTION_RECTANGULAIRE :
+        case SECTION_T :
+        case SECTION_CARRE :
+        case SECTION_CIRCULAIRE :
         {
-            double      I = _1992_1_1_sections_iy(barre->section);
+            double      I = EF_sections_iy(barre->section);
             
             BUG(!isnan(I), FALSE);
             
@@ -768,7 +768,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_fonc_ry(Fonction *f_r
         }
         default :
         {
-            BUGMSG(0, FALSE, gettext("Type de section %d inconnu.\n"), ((Beton_Section_Rectangulaire*)(barre->section))->type);
+            BUGMSG(0, FALSE, gettext("Type de section %d inconnu.\n"), barre->section->type);
             break;
         }
     }
@@ -849,14 +849,14 @@ G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_fonc_rz(Fonction *f_r
     
     E = barre->materiau->ecm;
     
-    switch (((Beton_Section_Rectangulaire*)(barre->section))->type)
+    switch (barre->section->type)
     {
-        case BETON_SECTION_RECTANGULAIRE :
-        case BETON_SECTION_T :
-        case BETON_SECTION_CARRE :
-        case BETON_SECTION_CIRCULAIRE :
+        case SECTION_RECTANGULAIRE :
+        case SECTION_T :
+        case SECTION_CARRE :
+        case SECTION_CIRCULAIRE :
         {
-            double      I = _1992_1_1_sections_iz(barre->section);
+            double      I = EF_sections_iz(barre->section);
             
             BUG(!isnan(I), FALSE);
             
@@ -880,7 +880,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_fonc_rz(Fonction *f_r
         }
         default :
         {
-            BUGMSG(0, FALSE, gettext("Type de section %d inconnu.\n"), ((Beton_Section_Rectangulaire*)(barre->section))->type);
+            BUGMSG(0, FALSE, gettext("Type de section %d inconnu.\n"), barre->section->type);
             break;
         }
     }
@@ -954,14 +954,14 @@ G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_n(Fonction *fonction,
     
     E = barre->materiau->ecm;
     
-    switch (((Beton_Section_Rectangulaire*)(barre->section))->type)
+    switch (barre->section->type)
     {
-        case BETON_SECTION_RECTANGULAIRE :
-        case BETON_SECTION_T :
-        case BETON_SECTION_CARRE :
-        case BETON_SECTION_CIRCULAIRE :
+        case SECTION_RECTANGULAIRE :
+        case SECTION_T :
+        case SECTION_CARRE :
+        case SECTION_CIRCULAIRE :
         {
-            double      S = _1992_1_1_sections_s(barre->section);
+            double      S = EF_sections_s(barre->section);
             
             BUG(!isnan(S), FALSE);
             
@@ -977,7 +977,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_n(Fonction *fonction,
         }
         default :
         {
-            BUGMSG(0, FALSE, gettext("Type de section %d inconnu.\n"), ((Beton_Section_Rectangulaire*)(barre->section))->type);
+            BUGMSG(0, FALSE, gettext("Type de section %d inconnu.\n"), barre->section->type);
             break;
         }
     }
