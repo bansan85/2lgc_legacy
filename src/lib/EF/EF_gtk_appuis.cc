@@ -118,7 +118,23 @@ G_MODULE_EXPORT void EF_gtk_appuis_ajouter(GtkButton *button __attribute__((unus
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_appuis.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Appui");
     
-    BUG(appui = EF_appuis_ajout(projet, "Sans nom", EF_APPUI_LIBRE, EF_APPUI_LIBRE, EF_APPUI_LIBRE, EF_APPUI_LIBRE, EF_APPUI_LIBRE, EF_APPUI_LIBRE), );
+    if (EF_appuis_cherche_nom(projet, gettext("Sans nom"), FALSE) == NULL)
+        BUG(appui = EF_appuis_ajout(projet, gettext("Sans nom"), EF_APPUI_LIBRE, EF_APPUI_LIBRE, EF_APPUI_LIBRE, EF_APPUI_LIBRE, EF_APPUI_LIBRE, EF_APPUI_LIBRE), );
+    else
+    {
+        char    *nom;
+        int     i = 2;
+        
+        nom = g_strdup_printf("%s (%d)", gettext("Sans nom"), i);
+        while (EF_appuis_cherche_nom(projet, nom, FALSE) != NULL)
+        {
+            i++;
+            free(nom);
+            nom = g_strdup_printf("%s (%d)", gettext("Sans nom"), i);
+        }
+        BUG(appui = EF_appuis_ajout(projet, nom, EF_APPUI_LIBRE, EF_APPUI_LIBRE, EF_APPUI_LIBRE, EF_APPUI_LIBRE, EF_APPUI_LIBRE, EF_APPUI_LIBRE), );
+        free(nom);
+    }
     
     model = GTK_TREE_MODEL(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_treestore"));
     path = gtk_tree_model_get_path(model, &appui->Iter_fenetre);
