@@ -41,7 +41,6 @@ extern "C" {
 #include "EF_charge_noeud.h"
 #include "1990_actions.h"
 #include "1992_1_1_barres.h"
-#include "1992_1_1_section.h"
 #include "1992_1_1_materiaux.h"
 
 G_MODULE_EXPORT void EF_gtk_appuis_fermer(GtkButton *button __attribute__((unused)),

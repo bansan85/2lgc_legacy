@@ -38,9 +38,9 @@ extern "C" {
 #include "EF_noeud.h"
 #include "EF_relachement.h"
 #include "EF_charge_noeud.h"
+#include "EF_section.h"
 #include "1990_actions.h"
 #include "1992_1_1_barres.h"
-#include "1992_1_1_section.h"
 #include "1992_1_1_materiaux.h"
 
 G_MODULE_EXPORT void EF_gtk_barres_add_annuler_clicked(
@@ -68,15 +68,15 @@ G_MODULE_EXPORT void EF_gtk_barres_add_add_clicked(GtkButton *button __attribute
  * Valeur renvoyée : Aucune.
  */
 {
-    int         type;
-    char        *nom;
-    void        *section;
-    Beton_Materiau *materiau;
-    int         noeud_debut;
-    int         noeud_fin;
-    EF_Relachement* relachement;
-    GtkTreeModel   *model;
-    GtkTreeIter Iter;
+    int             type;
+    char            *nom;
+    EF_Section      *section;
+    Beton_Materiau  *materiau;
+    int             noeud_debut;
+    int             noeud_fin;
+    EF_Relachement  *relachement;
+    GtkTreeModel    *model;
+    GtkTreeIter     Iter;
     
     List_Gtk_EF_Barres  *ef_gtk;
     
@@ -93,7 +93,7 @@ G_MODULE_EXPORT void EF_gtk_barres_add_add_clicked(GtkButton *button __attribute
         return;
     gtk_tree_model_iter_nth_child(model, &Iter, NULL, type);
     gtk_tree_model_get(model, &Iter, 0, &nom, -1);
-    BUG(section = _1992_1_1_sections_cherche_nom(projet, nom), );
+    BUG(section = EF_sections_cherche_nom(projet, nom), );
     free(nom);
     
     model = gtk_combo_box_get_model(GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_materiau_combobox")));

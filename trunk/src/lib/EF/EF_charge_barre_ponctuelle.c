@@ -27,13 +27,13 @@
 #include <gmodule.h>
 
 #include "1990_actions.h"
-#include "1992_1_1_section.h"
 #include "common_projet.h"
 #include "common_erreurs.h"
 #include "common_maths.h"
 #include "common_fonction.h"
 #include "EF_noeud.h"
 #include "EF_calculs.h"
+#include "EF_section.h"
 
 G_MODULE_EXPORT Charge_Barre_Ponctuelle *EF_charge_barre_ponctuelle_ajout(Projet *projet,
   unsigned int num_action, GList *barres, gboolean repere_local, double a, double fx,
@@ -176,14 +176,14 @@ G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_mx(Beton_Barre *barre,
     
     G = barre->materiau->gnu_0_2;
     
-    switch (((Beton_Section_Rectangulaire*)(barre->section))->type)
+    switch (barre->section->type)
     {
-        case BETON_SECTION_RECTANGULAIRE :
-        case BETON_SECTION_T :
-        case BETON_SECTION_CARRE :
-        case BETON_SECTION_CIRCULAIRE :
+        case SECTION_RECTANGULAIRE :
+        case SECTION_T :
+        case SECTION_CARRE :
+        case SECTION_CIRCULAIRE :
         {
-            double      J = _1992_1_1_sections_j(barre->section);
+            double      J = EF_sections_j(barre->section);
             
             BUG(!isnan(J), FALSE);
             
@@ -201,7 +201,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_mx(Beton_Barre *barre,
         }
         default :
         {
-            BUGMSG(0, FALSE, gettext("Type de section %d inconnu.\n"), ((Beton_Section_Rectangulaire*)(barre->section))->type);
+            BUGMSG(0, FALSE, gettext("Type de section %d inconnu.\n"), barre->section->type);
             break;
         }
     }
@@ -274,14 +274,14 @@ G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_def_ang_iso_y(Beton_Barre *b
     
     E = barre->materiau->ecm;
     
-    switch (((Beton_Section_Rectangulaire*)(barre->section))->type)
+    switch (barre->section->type)
     {
-        case BETON_SECTION_RECTANGULAIRE :
-        case BETON_SECTION_T :
-        case BETON_SECTION_CARRE :
-        case BETON_SECTION_CIRCULAIRE :
+        case SECTION_RECTANGULAIRE :
+        case SECTION_T :
+        case SECTION_CARRE :
+        case SECTION_CIRCULAIRE :
         {
-            double      I = _1992_1_1_sections_iy(barre->section);
+            double      I = EF_sections_iy(barre->section);
             
             BUG(!isnan(l), FALSE);
     // Pour une section constante, les angles valent :\end{verbatim}\begin{align*}
@@ -294,7 +294,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_def_ang_iso_y(Beton_Barre *b
         }
         default :
         {
-            BUGMSG(0, FALSE, gettext("Type de section %d inconnu.\n"), ((Beton_Section_Rectangulaire*)(barre->section))->type);
+            BUGMSG(0, FALSE, gettext("Type de section %d inconnu.\n"), barre->section->type);
             break;
         }
     }
@@ -367,14 +367,14 @@ G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_def_ang_iso_z(Beton_Barre *b
     
     E = barre->materiau->ecm;
     
-    switch (((Beton_Section_Rectangulaire*)(barre->section))->type)
+    switch (barre->section->type)
     {
-        case BETON_SECTION_RECTANGULAIRE :
-        case BETON_SECTION_T :
-        case BETON_SECTION_CARRE :
-        case BETON_SECTION_CIRCULAIRE :
+        case SECTION_RECTANGULAIRE :
+        case SECTION_T :
+        case SECTION_CARRE :
+        case SECTION_CIRCULAIRE :
         {
-            double      I = _1992_1_1_sections_iz(barre->section);
+            double      I = EF_sections_iz(barre->section);
             
             BUG(!isnan(I), FALSE);
             
@@ -388,7 +388,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_def_ang_iso_z(Beton_Barre *b
         }
         default :
         {
-            BUGMSG(0, FALSE, gettext("Type de section %d inconnu.\n"), ((Beton_Section_Rectangulaire*)(barre->section))->type);
+            BUGMSG(0, FALSE, gettext("Type de section %d inconnu.\n"), barre->section->type);
             break;
         }
     }
@@ -463,14 +463,14 @@ G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_fonc_rx(Fonction *fonction,
     
     G = barre->materiau->gnu_0_2;
     
-    switch (((Beton_Section_Rectangulaire*)(barre->section))->type)
+    switch (barre->section->type)
     {
-        case BETON_SECTION_RECTANGULAIRE :
-        case BETON_SECTION_T :
-        case BETON_SECTION_CARRE :
-        case BETON_SECTION_CIRCULAIRE :
+        case SECTION_RECTANGULAIRE :
+        case SECTION_T :
+        case SECTION_CARRE :
+        case SECTION_CIRCULAIRE :
         {
-            double      J = _1992_1_1_sections_j(barre->section);
+            double      J = EF_sections_j(barre->section);
             
             BUG(!isnan(J), FALSE);
             
@@ -498,7 +498,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_fonc_rx(Fonction *fonction,
         }
         default :
         {
-            BUGMSG(0, FALSE, gettext("Type de section %d inconnu.\n"), ((Beton_Section_Rectangulaire*)(barre->section))->type);
+            BUGMSG(0, FALSE, gettext("Type de section %d inconnu.\n"), barre->section->type);
             break;
         }
     }
@@ -594,14 +594,14 @@ G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_fonc_ry(Fonction *f_rotation
     b = l-a;
     E = barre->materiau->ecm;
     
-    switch (((Beton_Section_Rectangulaire*)(barre->section))->type)
+    switch (barre->section->type)
     {
-        case BETON_SECTION_RECTANGULAIRE :
-        case BETON_SECTION_T :
-        case BETON_SECTION_CARRE :
-        case BETON_SECTION_CIRCULAIRE :
+        case SECTION_RECTANGULAIRE :
+        case SECTION_T :
+        case SECTION_CARRE :
+        case SECTION_CIRCULAIRE :
         {
-            double      I = _1992_1_1_sections_iy(barre->section);
+            double      I = EF_sections_iy(barre->section);
             
             BUG(!isnan(I), FALSE);
             
@@ -634,7 +634,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_fonc_ry(Fonction *f_rotation
         }
         default :
         {
-            BUGMSG(0, FALSE, gettext("Type de section %d inconnu.\n"), ((Beton_Section_Rectangulaire*)(barre->section))->type);
+            BUGMSG(0, FALSE, gettext("Type de section %d inconnu.\n"), barre->section->type);
             break;
         }
     }
@@ -711,14 +711,14 @@ G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_fonc_rz(Fonction *f_rotation
     b = l-a;
     E = barre->materiau->ecm;
     
-    switch (((Beton_Section_Rectangulaire*)(barre->section))->type)
+    switch (barre->section->type)
     {
-        case BETON_SECTION_RECTANGULAIRE :
-        case BETON_SECTION_T :
-        case BETON_SECTION_CARRE :
-        case BETON_SECTION_CIRCULAIRE :
+        case SECTION_RECTANGULAIRE :
+        case SECTION_T :
+        case SECTION_CARRE :
+        case SECTION_CIRCULAIRE :
         {
-            double      I = _1992_1_1_sections_iz(barre->section);
+            double      I = EF_sections_iz(barre->section);
             
             BUG(!isnan(I), FALSE);
             
@@ -738,7 +738,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_fonc_rz(Fonction *f_rotation
         }
         default :
         {
-            BUGMSG(0, FALSE, gettext("Type de section %d inconnu.\n"), ((Beton_Section_Rectangulaire*)(barre->section))->type);
+            BUGMSG(0, FALSE, gettext("Type de section %d inconnu.\n"), barre->section->type);
             break;
         }
     }
@@ -804,14 +804,14 @@ G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_n(Fonction *fonction, Beton_
     
     E = barre->materiau->ecm;
     
-    switch (((Beton_Section_Rectangulaire*)(barre->section))->type)
+    switch (barre->section->type)
     {
-        case BETON_SECTION_RECTANGULAIRE :
-        case BETON_SECTION_T :
-        case BETON_SECTION_CARRE :
-        case BETON_SECTION_CIRCULAIRE :
+        case SECTION_RECTANGULAIRE :
+        case SECTION_T :
+        case SECTION_CARRE :
+        case SECTION_CIRCULAIRE :
         {
-            double      S = _1992_1_1_sections_s(barre->section);
+            double      S = EF_sections_s(barre->section);
             
             BUG(!isnan(S), FALSE);
             
@@ -825,7 +825,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_n(Fonction *fonction, Beton_
         }
         default :
         {
-            BUGMSG(0, FALSE, gettext("Type de section %d inconnu.\n"), ((Beton_Section_Rectangulaire*)(barre->section))->type);
+            BUGMSG(0, FALSE, gettext("Type de section %d inconnu.\n"), barre->section->type);
             break;
         }
     }

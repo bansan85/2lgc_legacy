@@ -25,7 +25,6 @@ libeurocodes_la_SOURCES =	1990/1990_actions.c \
 							1990/1990_ponderations.c \
 							1992_1_1/1992_1_1_barres.c \
 							1992_1_1/1992_1_1_materiaux.c \
-							1992_1_1/1992_1_1_section.c \
 							common/common_fonction.c \
 							common/common_maths.c \
 							common/common_projet.c \
@@ -40,7 +39,8 @@ libeurocodes_la_SOURCES =	1990/1990_actions.c \
 							EF/EF_charge_noeud.c \
 							EF/EF_noeud.c \
 							EF/EF_relachement.c \
-							EF/EF_rigidite.c
+							EF/EF_rigidite.c \
+							EF/EF_section.c
 
 if ENABLE_GTK
 libeurocodes_la_SOURCES +=	common/common_m3d.cc \
@@ -66,7 +66,6 @@ libeurocodes_la_HEADERS =	1990/1990_actions.h \
 							1990/1990_ponderations.h \
 							1992_1_1/1992_1_1_barres.h \
 							1992_1_1/1992_1_1_materiaux.h \
-							1992_1_1/1992_1_1_section.h \
 							common/common_erreurs.h \
 							common/common_fonction.h \
 							common/common_maths.h \
@@ -82,7 +81,8 @@ libeurocodes_la_HEADERS =	1990/1990_actions.h \
 							EF/EF_charge_noeud.h \
 							EF/EF_noeud.h \
 							EF/EF_relachement.h \
-							EF/EF_rigidite.h
+							EF/EF_rigidite.h \
+							EF/EF_section.h
 
 if ENABLE_GTK
 libeurocodes_la_HEADERS +=	common/common_m3d.hpp \

@@ -332,14 +332,11 @@ G_MODULE_EXPORT void* m3d_barre(void *donnees_m3d, Beton_Barre *barre)
     SGlobalData     *vue;
     CM3dObject      *objet;
     char            *tmp;
-    Beton_Section_Rectangulaire *section_tmp = (Beton_Section_Rectangulaire*)barre->section;
     CM3dObject      *tout;
     double          longueur;
     
     BUGMSG(donnees_m3d, NULL, gettext("Paramètre %s incorrect.\n"), "donnees_m3d");
     BUGMSG(barre, NULL, gettext("Paramètre %s incorrect.\n"), "barre");
-    
-    section_tmp = (Beton_Section_Rectangulaire*)barre->section;
     
     m3d = (List_Gtk_m3d *)donnees_m3d;
     vue = (SGlobalData*)m3d->data;
@@ -352,32 +349,32 @@ G_MODULE_EXPORT void* m3d_barre(void *donnees_m3d, Beton_Barre *barre)
         vue->scene->remove_object(objet);
     
     // On l'(ré)ajoute
-    section_tmp = (Beton_Section_Rectangulaire*)barre->section;
     longueur = EF_noeuds_distance(barre->noeud_debut, barre->noeud_fin);
     BUG(!isnan(longueur), NULL);
             
-    switch (section_tmp->type)
+    switch (barre->section->type)
     {
         EF_Point *p_d, *p_f;
-        case BETON_SECTION_RECTANGULAIRE :
+        case SECTION_RECTANGULAIRE :
         {
             double      y, z;
             CM3dObject  *bas, *haut, *gauche, *droite;
+            Beton_Section_Rectangulaire *section = (Beton_Section_Rectangulaire *)barre->section->data;
             
-            droite = M3d_plan_new("", longueur, section_tmp->hauteur, 1);
+            droite = M3d_plan_new("", longueur, section->hauteur, 1);
             droite->rotations(180., 0., 0.);
-            droite->set_position(0., -section_tmp->largeur/2., 0.);
+            droite->set_position(0., -section->largeur/2., 0.);
             
-            gauche = M3d_plan_new("", longueur, section_tmp->hauteur, 1);
-            gauche->set_position(0., section_tmp->largeur/2., 0.);
+            gauche = M3d_plan_new("", longueur, section->hauteur, 1);
+            gauche->set_position(0., section->largeur/2., 0.);
             
-            bas = M3d_plan_new("", longueur, section_tmp->largeur, 1);
+            bas = M3d_plan_new("", longueur, section->largeur, 1);
             bas->rotations(90., 180., 0.);
-            bas->set_position(0., 0., -section_tmp->hauteur/2.);
+            bas->set_position(0., 0., -section->hauteur/2.);
             
-            haut = M3d_plan_new("", longueur, section_tmp->largeur, 1);
+            haut = M3d_plan_new("", longueur, section->largeur, 1);
             haut->rotations(90., 0., 0.);
-            haut->set_position(0., 0., section_tmp->hauteur/2.);
+            haut->set_position(0., 0., section->hauteur/2.);
             
             tout = M3d_object_new_group(tmp, droite, gauche, bas, haut, NULL);
             
@@ -421,9 +418,9 @@ G_MODULE_EXPORT void* m3d_barre(void *donnees_m3d, Beton_Barre *barre)
             break;
             
         }
-        case BETON_SECTION_T :
+        case SECTION_T :
         {
-            Beton_Section_T *section = (Beton_Section_T*)barre->section;
+            Beton_Section_T *section = (Beton_Section_T *)barre->section->data;
             
             double  y, z;
             double  lt = section->largeur_table;
@@ -511,9 +508,9 @@ G_MODULE_EXPORT void* m3d_barre(void *donnees_m3d, Beton_Barre *barre)
             break;
             
         }
-        case BETON_SECTION_CARRE :
+        case SECTION_CARRE :
         {
-            Beton_Section_Carre *section = (Beton_Section_Carre*)barre->section;
+            Beton_Section_Carre *section = (Beton_Section_Carre *)barre->section->data;
             double  y, z;
             CM3dObject  *bas, *haut, *gauche, *droite;
             
@@ -574,9 +571,9 @@ G_MODULE_EXPORT void* m3d_barre(void *donnees_m3d, Beton_Barre *barre)
             break;
             
         }
-        case BETON_SECTION_CIRCULAIRE :
+        case SECTION_CIRCULAIRE :
         {
-            Beton_Section_Circulaire *section = (Beton_Section_Circulaire*)barre->section;
+            Beton_Section_Circulaire *section = (Beton_Section_Circulaire *)barre->section->data;
             double  y, z;
             
             tout = M3d_cylindre_new(tmp, section->diametre/2., longueur, 12);
@@ -618,7 +615,7 @@ G_MODULE_EXPORT void* m3d_barre(void *donnees_m3d, Beton_Barre *barre)
         }
         default :
         {
-            BUGMSG(0, NULL, gettext("Type de section %d inconnu.\n"), section_tmp->type);
+            BUGMSG(0, NULL, gettext("Type de section %d inconnu.\n"), barre->section->type);
             break;
         }
     }
