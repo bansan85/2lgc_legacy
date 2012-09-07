@@ -109,6 +109,119 @@ G_MODULE_EXPORT void EF_gtk_noeud_ajouter(GtkButton *button __attribute__((unuse
 }
 
 
+G_MODULE_EXPORT void EF_gtk_noeud_supprimer(GtkButton *button __attribute__((unused)),
+  Projet *projet)
+/* Description : Supprime le noeud sélectionné en fonction de l'onglet en cours d'affichage.
+ * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    List_Gtk_EF_Noeud   *ef_gtk;
+    GtkTreeModel        *model;
+    GtkTreeIter         Iter;
+    unsigned int        num;
+    EF_Noeud            *noeud;
+    GList               *list = NULL;
+    
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet->list_gtk.ef_noeud.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Noeuds");
+    
+    ef_gtk = &projet->list_gtk.ef_noeud;
+    
+    // On supprimer un noeud libre
+    if (gtk_notebook_get_current_page(GTK_NOTEBOOK(ef_gtk->notebook)) == 0)
+    {
+        if (!gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_libres_select")), &model, &Iter))
+            BUGMSG(NULL, , gettext("Aucun noeud n'est sélectionné.\n"));
+    }
+    // On supprimer un noeud intermédiaire
+    else
+    {
+        if (!gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_intermediaires_select")), &model, &Iter))
+            BUGMSG(NULL, , gettext("Aucun noeud n'est sélectionné.\n"));
+    }
+    
+    gtk_tree_model_get(model, &Iter, 0, &num, -1);
+    
+    BUG(noeud = EF_noeuds_cherche_numero(projet, num), );
+    
+    list = g_list_append(list, noeud);
+    
+    BUG(EF_noeuds_supprime_liste(projet, list), );
+    
+    g_list_free(list);
+    
+    BUG(m3d_rafraichit(projet), );
+    
+    return;
+}
+
+
+G_MODULE_EXPORT void EF_noeuds_treeview_select_changed(
+  GtkTreeSelection *treeselection __attribute__((unused)), Projet *projet)
+/* Description : En fonction de la sélection, active ou désactive le bouton supprimer.
+ * Paramètres : GtkTreeSelection *treeselection : composant à l'origine de l'évènement,
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : Aucune.
+ *   Echec : projet == NULL,
+ *           interface graphique non initialisée.
+ */
+{
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet->list_gtk.ef_noeud.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Noeud");
+    
+    if (gtk_notebook_get_current_page(GTK_NOTEBOOK(projet->list_gtk.ef_noeud.notebook)) == 0)
+    {
+        if (!gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_treeview_noeuds_libres_select")), NULL, NULL))
+            gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_boutton_supprimer")), FALSE);
+        else
+            gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_boutton_supprimer")), TRUE);
+    }
+    // On supprimer un noeud intermédiaire
+    else
+    {
+        if (!gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_treeview_noeuds_intermediaires_select")), NULL, NULL))
+            gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_boutton_supprimer")), FALSE);
+        else
+            gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_boutton_supprimer")), TRUE);
+    }
+    
+    return;
+}
+
+
+G_MODULE_EXPORT void EF_gtk_noeuds_notebook_change(
+  GtkNotebook *notebook __attribute__((unused)), GtkWidget *page __attribute__((unused)),
+  guint page_num, Projet *projet)
+/* Description : Le changement de la page en cours nécessite l'actualisation de la disponibilité
+ *               du bouton supprimer.
+ * Paramètres : GtkNotebook *notebook : le composant notebook,
+ *            : gint arg1 : argument inconnu,
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    if (page_num == 0)
+    {
+        if (!gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_treeview_noeuds_libres_select")), NULL, NULL))
+            gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_boutton_supprimer")), FALSE);
+        else
+            gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_boutton_supprimer")), TRUE);
+    }
+    // On supprimer un noeud intermédiaire
+    else
+    {
+        if (!gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_treeview_noeuds_intermediaires_select")), NULL, NULL))
+            gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_boutton_supprimer")), FALSE);
+        else
+            gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_boutton_supprimer")), TRUE);
+    }
+    
+    return;
+}
+
+
 G_MODULE_EXPORT void EF_gtk_noeud_edit_pos_abs(GtkCellRendererText *cell, gchar *path_string,
   gchar *new_text, Projet *projet)
 /* Description : Changement de la position d'un noeud.

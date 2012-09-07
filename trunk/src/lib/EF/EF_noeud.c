@@ -373,18 +373,26 @@ G_MODULE_EXPORT gboolean EF_noeuds_change_appui(Projet *projet, EF_Noeud *noeud,
 }
 
 
-#ifdef ENABLE_GTK
 G_MODULE_EXPORT void EF_noeuds_free_foreach(EF_Noeud *noeud, Projet *projet)
-#else
-G_MODULE_EXPORT void EF_noeuds_free_foreach(EF_Noeud *noeud,
-  Projet *projet __attribute__((unused)))
-#endif
 /* Description : Fonction permettant de libérer un noeud contenu dans une liste.
  * Paramètres : EF_Noeud *noeud : le noeud à libérer,
  *            : Projet *projet : la variable projet.
  * Valeur renvoyée : Aucune.
  */
 {
+    if (noeud == NULL)
+        return;
+    
+    if (noeud->type == NOEUD_BARRE)
+    {
+        EF_Noeud_Barre  *infos = noeud->data;
+        
+        infos->barre->noeuds_intermediaires = g_list_remove(infos->barre->noeuds_intermediaires, noeud);
+        infos->barre->discretisation_element--;
+        BUGMSG(infos->barre->info_EF = realloc(infos->barre->info_EF, sizeof(Barre_Info_EF)*(infos->barre->discretisation_element+1)), , gettext("Erreur d'allocation mémoire.\n"));
+        memset(infos->barre->info_EF, 0, sizeof(Barre_Info_EF)*(infos->barre->discretisation_element+1));
+    }
+    
     free(noeud->data);
     
 #ifdef ENABLE_GTK
@@ -436,6 +444,9 @@ G_MODULE_EXPORT gboolean EF_noeuds_supprime_liste(Projet *projet, GList *liste_n
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
+    if (liste_noeuds == NULL)
+        return TRUE;
+    
     BUG(_1992_1_1_barres_cherche_dependances(projet, liste_noeuds, NULL, &noeuds_suppr, &barres_suppr), FALSE);
     
     // On supprime les noeuds
@@ -457,6 +468,8 @@ G_MODULE_EXPORT gboolean EF_noeuds_supprime_liste(Projet *projet, GList *liste_n
         list_parcours = g_list_next(list_parcours);
     }
     g_list_free(barres_suppr);
+    
+    BUG(EF_calculs_free(projet), FALSE);
     
     return TRUE;
 }
