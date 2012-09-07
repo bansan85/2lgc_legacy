@@ -40,6 +40,7 @@
                         <property name="visible">True</property>
                         <property name="tab-pos">top</property>
                         <property name="expand">True</property>
+                        <signal name="switch-page" handler="EF_gtk_noeuds_notebook_change"/>
                         <child>
                             <object class="GtkScrolledWindow" id="EF_noeuds_scrolled_noeuds_libres">
                                 <property name="visible">True</property>
@@ -50,6 +51,11 @@
                                     <object class="GtkTreeView" id="EF_noeuds_treeview_noeuds_libres">
                                         <property name="visible">True</property>
                                         <property name="model">EF_noeuds_treestore_noeuds_libres</property>
+                                        <child internal-child="selection">
+                                            <object class="GtkTreeSelection" id="EF_noeuds_treeview_noeuds_libres_select">
+                                                <signal name="changed" handler="EF_noeuds_treeview_select_changed"/>
+                                            </object>
+                                        </child>
                                         <child>
                                             <object class="GtkTreeViewColumn" id="EF_noeuds_treeview_noeuds_libres_column0">
                                                 <property name="visible">True</property>
@@ -151,6 +157,11 @@
                                     <object class="GtkTreeView" id="EF_noeuds_treeview_noeuds_intermediaires">
                                         <property name="visible">True</property>
                                         <property name="model">EF_noeuds_treestore_noeuds_intermediaires</property>
+                                        <child internal-child="selection">
+                                            <object class="GtkTreeSelection" id="EF_noeuds_treeview_noeuds_intermediaires_select">
+                                                <signal name="changed" handler="EF_noeuds_treeview_select_changed"/>
+                                            </object>
+                                        </child>
                                         <child>
                                             <object class="GtkTreeViewColumn" id="EF_noeuds_treeview_noeuds_intermediaires_column0">
                                                 <property name="visible">True</property>
@@ -287,6 +298,19 @@
                             </object>
                             <packing>
                                 <property name="position">0</property>
+                                <property name="pack_type">start</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GtkButton" id="EF_noeuds_boutton_supprimer">
+                                <property name="visible">True</property>
+                                <property name="sensitive">False</property>
+                                <property name="label">gtk-delete</property>
+                                <property name="use_stock">True</property>
+                                <signal name="clicked" handler="EF_gtk_noeud_supprimer"/>
+                            </object>
+                            <packing>
+                                <property name="position">1</property>
                                 <property name="pack_type">start</property>
                             </packing>
                         </child>

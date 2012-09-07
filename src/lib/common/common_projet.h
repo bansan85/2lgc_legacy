@@ -264,7 +264,7 @@ typedef struct __EF_Noeud
 {
     unsigned int    numero;
     Type_Noeud      type;
-    void            *data; // Contient les données permettant de récupérer les coordonnées en fonction dy type de noeud.
+    void            *data; // Contient les données permettant de récupérer les coordonnées en fonction du type de noeud.
     EF_Appui        *appui;
 #ifdef ENABLE_GTK
     GtkTreeIter     Iter;
