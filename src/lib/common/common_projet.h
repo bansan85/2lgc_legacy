@@ -639,6 +639,8 @@ typedef struct __Comp_Gtk
     GtkWidget   *menu_structure_noeud_appui;
     GtkWidget   *menu_structure_noeud_ajout;
     GtkWidget   *menu_structure_barres;
+    GtkWidget   *menu_structure_barres_list;
+    GtkWidget   *menu_structure_barres_ajout;
     GtkWidget   *menu_charges;
     GtkWidget   *menu_charges_list;
     GtkWidget   *menu_charges_actions;
