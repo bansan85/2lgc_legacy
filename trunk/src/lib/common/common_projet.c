@@ -184,13 +184,22 @@ G_MODULE_EXPORT gboolean projet_init_graphique(Projet *projet)
     gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_structure_noeud_list), comps->menu_structure_noeud_appui);
     g_signal_connect_swapped(comps->menu_structure_noeud_appui, "activate", G_CALLBACK(EF_gtk_appuis), projet);
     
-    comps->menu_structure_noeud_ajout = gtk_menu_item_new_with_label(gettext("Ajouter..."));
+    comps->menu_structure_noeud_ajout = gtk_menu_item_new_with_label(gettext("Gestion des noeuds..."));
     gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_structure_noeud_list), comps->menu_structure_noeud_ajout);
     g_signal_connect_swapped(comps->menu_structure_noeud_ajout, "activate", G_CALLBACK(EF_gtk_noeud), projet);
     
-    comps->menu_structure_barres = gtk_menu_item_new_with_label(gettext("Barres..."));
+    comps->menu_structure_barres_list = gtk_menu_new();
+    comps->menu_structure_barres = gtk_menu_item_new_with_label(gettext("Barres"));
     gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_structure_list), comps->menu_structure_barres);
-    g_signal_connect_swapped(comps->menu_structure_barres, "activate", G_CALLBACK(EF_gtk_barres), projet);
+    gtk_menu_item_set_submenu(GTK_MENU_ITEM(comps->menu_structure_barres), comps->menu_structure_barres_list);
+    
+    comps->menu_structure_barres_section = gtk_menu_item_new_with_label(gettext("Sections..."));
+    gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_structure_barres_list), comps->menu_structure_barres_section);
+    g_signal_connect_swapped(comps->menu_structure_barres_section, "activate", G_CALLBACK(EF_gtk_barres), projet);
+    
+    comps->menu_structure_barres_ajout = gtk_menu_item_new_with_label(gettext("Gestion des barres..."));
+    gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_structure_barres_list), comps->menu_structure_barres_ajout);
+    g_signal_connect_swapped(comps->menu_structure_barres_ajout, "activate", G_CALLBACK(EF_gtk_barres), projet);
     
     comps->menu_charges_list = gtk_menu_new();
     comps->menu_charges = gtk_menu_item_new_with_label(gettext("Charges"));
