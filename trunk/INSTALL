@@ -15,6 +15,7 @@ ln -s /c/Python27/include /usr/include/python2.7 && \
 ln -s /c/Python27/Lib /usr/lib/python2.7 && \
 mingw-get install msys-wget && \
 mingw-get install msys-unzip && \
+mingw-get install msys-zip && \
 (test -d comp || mkdir comp) && \
 cd comp && \
 (test -f zlib-1.2.7.tar.bz2 || wget http://zlib.net/zlib-1.2.7.tar.bz2) && \
@@ -54,7 +55,7 @@ cd jpeg-8d && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -pipe" ./configure --disable-static --enable-shared --prefix=c:/MinGW && \
 make -j3 && make install && cd .. && \
 (test -f tiff-4.0.2.zip || wget http://download.osgeo.org/libtiff/tiff-4.0.2.zip) && \
-tar xvzf tiff-4.0.2.zip && \
+unzip tiff-4.0.2.zip && \
 cd tiff-4.0.2 && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -pipe" ./configure --disable-static --enable-shared --enable-zlib --enable-jpeg --without-x --prefix=c:/MinGW && \
 make -j3 && make install && cd .. && \
@@ -178,7 +179,7 @@ make -j3 && make install && cd .. && \
 	make -j3 && make install && cd ..\
 )) && \
 (test -f cairo-1.10.2.tar.gz || wget http://cairographics.org/releases/cairo-1.10.2.tar.gz) && \
-tar xvzf cairo-1.10.2.tar.xg && \
+tar xvzf cairo-1.10.2.tar.gz && \
 cd cairo-1.10.2 && \
 sed -i "s/test perf//g" Makefile.am Makefile.in && \
 (!(test -f X) || CFLAGS="-O0 -g3 -ggdb3 -pipe" PKG_CONFIG_PATH="c:/MinGW/lib/pkgconfig" ./configure --disable-static --enable-shared --enable-svg --enable-pdf --enable-ps --enable-png --enable-xml --enable-pthread --enable-gobject --enable-xlib --prefix=c:/MinGW) && \
@@ -308,6 +309,7 @@ tar xvzf v0.2.3 && \
 cd xianyi-OpenBLAS-e552452 && \
 patch < ../../libopenblas.patch && \
 make -j3 && make install && cd .. && \
+cp /mingw/lib/libopenblas.dll /mingw/bin/ && \
 (test -f UMFPACK.tar.gz || wget http://www.cise.ufl.edu/research/sparse/umfpack/current/UMFPACK.tar.gz) && \
 tar xvzf UMFPACK.tar.gz && \
 cd UMFPACK && \
@@ -321,6 +323,11 @@ mingw-get install gettext && \
 tar xvaf libm3d-0.26.tar.bz2 && \
 cd libm3d-0.26 && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -pipe" PKG_CONFIG_PATH="c:/MinGW/lib/pkgconfig" ./configure --disable-static --enable-shared --prefix=c:/MinGW && \
+make -j3 && make install && cd .. && \
+(test -f intltool-0.50.2.tar.gz || wget https://launchpad.net/intltool/trunk/0.50.2/+download/intltool-0.50.2.tar.gz --no-check-certificate) && \
+tar xvzf intltool-0.50.2.tar.gz && \
+cd intltool-0.50.2 && \
+CFLAGS="-march=i686 -O0 -g3 -ggdb3 -pipe" ./configure --prefix=c:/MinGW && \
 make -j3 && make install && cd ..
 
 Compilation sous Linux
