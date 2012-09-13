@@ -2,7 +2,7 @@ make clean
 rm -Rf install-sh ltmain.sh config.status config.h config.h.in config.log configure configure.ac depcomp config.status Makefile Makefile.in config.guess config.sub missing stamp-h1 libtool autom4te.cache autoscan-?.??.log config.h config.guess config.h.in config.log config.status config.sub aclocal.m4 config.rpath m4 ABOUT-NLS configure.scan.orig  configure.scan.rej compile
 rm -Rf po/boldquot.sed po/en@boldquot.header po/en@quot.header po/insert-header.sin po/Makefile.in.in po/Makevars po/POTFILES po/POTFILES.in po/quot.sed po/remove-potcdate.sed po/remove-potcdate.sin po/Rules-quot po/stamp-po po/Makevars.template po/check-macro-version po/install-data-yes po/install-data
 find . \( -name "Makefile" -o -name "Makefile.in" -o -name ".deps" -o -name ".libs" -o -name "*.o" -o -name "*.lo" -o -name "*.la" -o -name "*.mo" -o -name "*~" -o -name "*.gcov" -o -name "*.gcda" -o -name "gmon.out" -o -name "*.gcno" \) -exec rm -Rf {} \;
-find po -name "*.pot" -o -name "*.gmo" -exec rm {} \;
+find po \( -name "*.pot" -o -name "*.gmo" \) -exec rm {} \;
 find src/test -type f -perm /111 -exec rm {} \;
 rm -f files/ui/*.h
 rm -f codegui.tar.xz codegui.zip codegui_debug.tar.xz codegui_debug.zip

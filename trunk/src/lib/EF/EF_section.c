@@ -26,8 +26,11 @@
 #include "common_projet.h"
 #include "common_erreurs.h"
 #include "common_maths.h"
+#include "common_selection.h"
+#include "common_gtk.h"
 #include "EF_noeud.h"
 #include "EF_calculs.h"
+#include "1992_1_1_barres.h"
 
 G_MODULE_EXPORT gboolean EF_sections_init(Projet *projet)
 /* Description : Initialise la liste des section en béton.
@@ -44,7 +47,7 @@ G_MODULE_EXPORT gboolean EF_sections_init(Projet *projet)
     projet->beton.sections = NULL;
     
 #ifdef ENABLE_GTK
-    projet->list_gtk.ef_barres.liste_sections = gtk_list_store_new(1, G_TYPE_STRING);
+    projet->list_gtk.ef_sections.liste_sections = gtk_list_store_new(1, G_TYPE_STRING);
 #endif
     
     return TRUE;
@@ -66,9 +69,6 @@ G_MODULE_EXPORT gboolean EF_sections_ajout_rectangulaire(Projet *projet, const c
 {
     Beton_Section_Rectangulaire *section_data = malloc(sizeof(Beton_Section_Rectangulaire));
     EF_Section *section_nouvelle = malloc(sizeof(EF_Section));
-#ifdef ENABLE_GTK
-    GtkTreeIter     iter;
-#endif
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(section_nouvelle, FALSE, gettext("Erreur d'allocation mémoire.\n"));
@@ -84,8 +84,8 @@ G_MODULE_EXPORT gboolean EF_sections_ajout_rectangulaire(Projet *projet, const c
     projet->beton.sections = g_list_append(projet->beton.sections, section_nouvelle);
     
 #ifdef ENABLE_GTK
-    gtk_list_store_append(projet->list_gtk.ef_barres.liste_sections, &iter);
-    gtk_list_store_set(projet->list_gtk.ef_barres.liste_sections, &iter, 0, nom, -1);
+    gtk_list_store_append(projet->list_gtk.ef_sections.liste_sections, &section_nouvelle->Iter_liste);
+    gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section_nouvelle->Iter_liste, 0, nom, -1);
 #endif
     
     return TRUE;
@@ -110,10 +110,6 @@ G_MODULE_EXPORT gboolean EF_sections_ajout_T(Projet *projet, const char* nom, do
     Beton_Section_T *section_data = malloc(sizeof(Beton_Section_T));
     EF_Section      *section_nouvelle = malloc(sizeof(EF_Section));
     
-#ifdef ENABLE_GTK
-    GtkTreeIter     iter;
-#endif
-    
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(section_nouvelle, FALSE, gettext("Erreur d'allocation mémoire.\n"));
     BUGMSG(section_data, FALSE, gettext("Erreur d'allocation mémoire.\n"));
@@ -135,8 +131,8 @@ G_MODULE_EXPORT gboolean EF_sections_ajout_T(Projet *projet, const char* nom, do
     projet->beton.sections = g_list_append(projet->beton.sections, section_nouvelle);
     
 #ifdef ENABLE_GTK
-    gtk_list_store_append(projet->list_gtk.ef_barres.liste_sections, &iter);
-    gtk_list_store_set(projet->list_gtk.ef_barres.liste_sections, &iter, 0, nom, -1);
+    gtk_list_store_append(projet->list_gtk.ef_sections.liste_sections, &section_nouvelle->Iter_liste);
+    gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section_nouvelle->Iter_liste, 0, nom, -1);
 #endif
     
     return TRUE;
@@ -158,10 +154,6 @@ G_MODULE_EXPORT gboolean EF_sections_ajout_carre(Projet *projet, const char* nom
     Beton_Section_Carre *section_data = malloc(sizeof(Beton_Section_Carre));
     EF_Section          *section_nouvelle = malloc(sizeof(EF_Section));
     
-#ifdef ENABLE_GTK
-    GtkTreeIter     iter;
-#endif
-    
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(section_nouvelle, FALSE, gettext("Erreur d'allocation mémoire.\n"));
     BUGMSG(section_data, FALSE, gettext("Erreur d'allocation mémoire.\n"));
@@ -177,8 +169,8 @@ G_MODULE_EXPORT gboolean EF_sections_ajout_carre(Projet *projet, const char* nom
     projet->beton.sections = g_list_append(projet->beton.sections, section_nouvelle);
     
 #ifdef ENABLE_GTK
-    gtk_list_store_append(projet->list_gtk.ef_barres.liste_sections, &iter);
-    gtk_list_store_set(projet->list_gtk.ef_barres.liste_sections, &iter, 0, nom, -1);
+    gtk_list_store_append(projet->list_gtk.ef_sections.liste_sections, &section_nouvelle->Iter_liste);
+    gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section_nouvelle->Iter_liste, 0, nom, -1);
 #endif
     
     return TRUE;
@@ -200,10 +192,6 @@ G_MODULE_EXPORT gboolean EF_sections_ajout_circulaire(Projet *projet, const char
     Beton_Section_Circulaire    *section_data = malloc(sizeof(Beton_Section_Circulaire));
     EF_Section                  *section_nouvelle = malloc(sizeof(EF_Section));
     
-#ifdef ENABLE_GTK
-    GtkTreeIter     iter;
-#endif
-    
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(section_nouvelle, FALSE, gettext("Erreur d'allocation mémoire.\n"));
     BUGMSG(section_data, FALSE, gettext("Erreur d'allocation mémoire.\n"));
@@ -220,19 +208,21 @@ G_MODULE_EXPORT gboolean EF_sections_ajout_circulaire(Projet *projet, const char
     projet->beton.sections = g_list_append(projet->beton.sections, section_nouvelle);
     
 #ifdef ENABLE_GTK
-    gtk_list_store_append(projet->list_gtk.ef_barres.liste_sections, &iter);
-    gtk_list_store_set(projet->list_gtk.ef_barres.liste_sections, &iter, 0, nom, -1);
+    gtk_list_store_append(projet->list_gtk.ef_sections.liste_sections, &section_nouvelle->Iter_liste);
+    gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section_nouvelle->Iter_liste, 0, nom, -1);
 #endif
     
     return TRUE;
 }
 
 
-G_MODULE_EXPORT EF_Section* EF_sections_cherche_nom(Projet *projet, const char *nom)
+G_MODULE_EXPORT EF_Section* EF_sections_cherche_nom(Projet *projet, const char *nom,
+  gboolean critique)
 /* Description : Positionne dans la liste des sections en béton l'élément courant au numéro
  *               souhaité.
  * Paramètres : Projet *projet : la variable projet,
  *            : const char *nom : le nom de la section.
+ *            : gboolean critique : TRUE si en cas d'echec, la fonction BUG est utilisée.
  * Valeur renvoyée :
  *   Succès : pointeur vers la section
  *   Échec : NULL :
@@ -256,7 +246,232 @@ G_MODULE_EXPORT EF_Section* EF_sections_cherche_nom(Projet *projet, const char *
         list_parcours = g_list_next(list_parcours);
     }
     
-    BUGMSG(0, NULL, gettext("Section en béton '%s' introuvable.\n"), nom);
+    if (critique)
+        BUGMSG(0, NULL, gettext("Section en béton '%s' introuvable.\n"), nom);
+    else
+        return NULL;
+}
+
+
+G_MODULE_EXPORT char* EF_sections_get_description(EF_Section *sect)
+/* Description : Renvoie la description d'une section sous forme d'un texte.
+ *               Il convient de libérer le texte renvoyée par la fonction free.
+ * Paramètres : EF_Section* sect : section à étudier.
+ * Valeur renvoyée :
+ *   Succès : Résultat
+ *   Échec : NULL :
+ *             (sect == NULL),
+ *             erreur d'allocation mémoire.
+ */
+{
+    char    *description;
+    
+    BUGMSG(sect, NULL, gettext("Paramètre %s incorrect.\n"), "sect");
+    
+    switch (sect->type)
+    {
+        case SECTION_RECTANGULAIRE :
+        {
+            char    larg[30], haut[30];
+            Beton_Section_Rectangulaire *section = sect->data;
+            
+            common_math_double_to_char(section->largeur, larg, GTK_DECIMAL_DISTANCE);
+            common_math_double_to_char(section->hauteur, haut, GTK_DECIMAL_DISTANCE);
+            BUGMSG(description = g_strdup_printf("%s : %s m, %s : %s m", gettext("Largeur"), larg, gettext("Hauteur"), haut), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            
+            return description;
+        }
+        case SECTION_T :
+        {
+            char    larg_t[30], haut_t[30], larg_a[30], haut_a[30];
+            Beton_Section_T *section = sect->data;
+            
+            common_math_double_to_char(section->largeur_table, larg_t, GTK_DECIMAL_DISTANCE);
+            common_math_double_to_char(section->largeur_ame, larg_a, GTK_DECIMAL_DISTANCE);
+            common_math_double_to_char(section->hauteur_table, haut_t, GTK_DECIMAL_DISTANCE);
+            common_math_double_to_char(section->hauteur_ame, haut_a, GTK_DECIMAL_DISTANCE);
+            BUGMSG(description = g_strdup_printf("%s : %s m, %s : %s m, %s : %s m, %s : %s m", gettext("Largeur table"), larg_t, gettext("Hauteur table"), haut_t, gettext("Largeur âme"), larg_a, gettext("Hauteur âme"), haut_a), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            
+            return description;
+        }
+        case SECTION_CARRE :
+        {
+            char    cote[30];
+            Beton_Section_Carre *section = sect->data;
+            
+            common_math_double_to_char(section->cote, cote, GTK_DECIMAL_DISTANCE);
+            BUGMSG(description = g_strdup_printf("%s : %s m", gettext("Coté"), cote), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            
+            return description;
+        }
+        case SECTION_CIRCULAIRE :
+        {
+            char    diam[30];
+            Beton_Section_Circulaire *section = sect->data;
+            
+            common_math_double_to_char(section->diametre, diam, GTK_DECIMAL_DISTANCE);
+            BUGMSG(description = g_strdup_printf("%s : %s m", gettext("Diamètre"), diam), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            
+            return description;
+        }
+        default :
+        {
+            BUGMSG(0, NULL, gettext("Type de section %d inconnu."), sect->type);
+            break;
+        }
+    }
+}
+
+
+G_MODULE_EXPORT gboolean EF_sections_cherche_dependances(Projet *projet, EF_Section* section,
+  GList** barres_dep)
+/* Description : Liste l'ensemble des barres utilisant la section.
+ * Paramètres : Projet *projet : la variable projet,
+ *            : EF_Section *section : la section à analyser,
+ *            : GList** barres_dep : la liste des barres dépendantes.
+ * Valeur renvoyée :
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL,
+ *             section == NULL.
+ */
+{
+    GList   *list_parcours;
+    
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(section, FALSE, gettext("Paramètre %s incorrect.\n"), "section");
+    
+    *barres_dep = NULL;
+    
+    list_parcours = projet->beton.barres;
+    while (list_parcours != NULL)
+    {
+        Beton_Barre *barre = list_parcours->data;
+        
+        if (barre->section == section)
+            *barres_dep = g_list_append(*barres_dep, barre);
+        
+        list_parcours = g_list_next(list_parcours);
+    }
+    
+    return TRUE;
+}
+
+
+G_MODULE_EXPORT gboolean EF_sections_verifie_dependances(Projet *projet, EF_Section* section)
+/* Description : Vérifie si la section est utilisée.
+ * Paramètres : Projet *projet : la variable projet,
+ *            : EF_Section *section : la section à analyser,
+ * Valeur renvoyée :
+ *   Succès : TRUE si la section est utilisée et FALSE s'il ne l'est pas.
+ *   Échec : FALSE :
+ *             projet == NULL,
+ *             section == NULL.
+ */
+{
+    GList   *list_parcours;
+    
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(section, FALSE, gettext("Paramètre %s incorrect.\n"), "section");
+    
+    list_parcours = projet->beton.barres;
+    while (list_parcours != NULL)
+    {
+        Beton_Barre *barre = list_parcours->data;
+        
+        if (barre->section == section)
+            return TRUE;
+        
+        list_parcours = g_list_next(list_parcours);
+    }
+    
+    return FALSE;
+}
+
+
+G_MODULE_EXPORT gboolean EF_sections_renomme(EF_Section *section, gchar *nom, Projet *projet)
+/* Description : Renomme un appui.
+ * Paramètres : EF_Section *section : section à renommer,
+ *            : const char *nom : le nouveau nom,
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée :
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL,
+ *             section == NULL,
+ *             appui possédant le nouveau nom est déjà existant.
+ */
+{
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(section, FALSE, gettext("Paramètre %s incorrect.\n"), "section");
+    BUGMSG(EF_sections_cherche_nom(projet, nom, FALSE) == NULL, FALSE, gettext("La section '%s' existe déjà.\n"), nom);
+    
+    free(section->nom);
+    BUGMSG(section->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    
+#ifdef ENABLE_GTK
+    if (projet->list_gtk.ef_sections.builder != NULL)
+        gtk_tree_store_set(projet->list_gtk.ef_sections.sections, &section->Iter_fenetre, 1, nom, -1);
+    gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section->Iter_liste, 0, nom, -1);
+#endif
+    
+    return TRUE;
+}
+
+
+G_MODULE_EXPORT gboolean EF_sections_supprime(EF_Section *section, gboolean annule_si_utilise,
+  Projet *projet)
+/* Description : Supprime la section spécifiée.
+ * Paramètres : EF_Section *section : la section à supprimer,
+ *            : gboolean annule_si_utilise : possibilité d'annuler la suppression si la section
+ *              est attribuée à une barre. Si l'option est désactivée, les barres (et les
+ *              barres et noeuds intermédiaires dépendants) utilisant la section seront
+ *              supprimées.
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée :
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL,
+ *             section == NULL.
+ */
+{
+    GList   *list_barres;
+    
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(section, FALSE, gettext("Paramètre %s incorrect.\n"), "section");
+    
+    // On vérifie les dépendances.
+    BUG(EF_sections_cherche_dependances(projet, section, &list_barres), FALSE);
+    
+    if ((annule_si_utilise) && (list_barres != NULL))
+    {
+        char *liste;
+        
+        liste = common_selection_converti_barres_en_texte(list_barres);
+        if (g_list_next(list_barres) == NULL)
+            printf("Impossible de supprimer la section car elle est utilisée par la barre %s.\n", liste);
+        else
+            printf("Impossible de supprimer la section car elle est utilisée par les barres %s.\n", liste);
+        g_list_free(list_barres);
+        free(liste);
+        
+        return TRUE;
+    }
+    
+    BUG(_1992_1_1_barres_supprime_liste(projet, NULL, list_barres), TRUE);
+    g_list_free(list_barres);
+    
+    free(section->nom);
+    free(section->data);
+    projet->beton.sections = g_list_remove(projet->beton.sections, section);
+    
+#ifdef ENABLE_GTK
+    gtk_list_store_remove(projet->list_gtk.ef_sections.liste_sections, &section->Iter_liste);
+    if (projet->list_gtk.ef_sections.builder != NULL)
+        gtk_tree_store_remove(projet->list_gtk.ef_sections.sections, &section->Iter_fenetre);
+#endif
+    
+    return TRUE;
 }
 
 
@@ -1085,7 +1300,7 @@ G_MODULE_EXPORT gboolean EF_sections_free(Projet *projet)
     BUG(EF_calculs_free(projet), TRUE);
     
 #ifdef ENABLE_GTK
-    g_object_unref(projet->list_gtk.ef_barres.liste_sections);
+    g_object_unref(projet->list_gtk.ef_sections.liste_sections);
 #endif
     
     return TRUE;

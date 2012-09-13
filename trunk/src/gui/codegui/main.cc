@@ -172,9 +172,9 @@ int main(int argc, char *argv[])
     BUG(EF_relachement_ajout(projet, "Rotation nulle", EF_RELACHEMENT_LIBRE, NULL, EF_RELACHEMENT_LIBRE, NULL, EF_RELACHEMENT_LIBRE, NULL, EF_RELACHEMENT_BLOQUE, NULL, EF_RELACHEMENT_BLOQUE, NULL, EF_RELACHEMENT_BLOQUE, NULL), -1);
     
     // Création de l'élément en béton
-    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, EF_sections_cherche_nom(projet, "Rect_0.3*0.5"), _1992_1_1_materiaux_cherche_nom(projet, "B25"), 0, 1, NULL, 1), -1);
-    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, EF_sections_cherche_nom(projet, "Rect_0.3*0.5"), _1992_1_1_materiaux_cherche_nom(projet, "B25"), 1, 2, NULL, 2), -1);
-    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, EF_sections_cherche_nom(projet, "Rect_0.3*0.5"), _1992_1_1_materiaux_cherche_nom(projet, "B25"), 2, 3, NULL, 3), -1);
+    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, EF_sections_cherche_nom(projet, "Rect_0.3*0.5", TRUE), _1992_1_1_materiaux_cherche_nom(projet, "B25"), 0, 1, NULL, 1), -1);
+    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, EF_sections_cherche_nom(projet, "Rect_0.3*0.5", TRUE), _1992_1_1_materiaux_cherche_nom(projet, "B25"), 1, 2, NULL, 2), -1);
+    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, EF_sections_cherche_nom(projet, "Rect_0.3*0.5", TRUE), _1992_1_1_materiaux_cherche_nom(projet, "B25"), 2, 3, NULL, 3), -1);
     
     // Ajout de l'action ponctuelle
     GList   *tmp1, *tmp2;

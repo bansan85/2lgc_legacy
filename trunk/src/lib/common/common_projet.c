@@ -34,6 +34,7 @@
 #include "1990_gtk_actions.h"
 #include "EF_gtk_noeud.hpp"
 #include "EF_gtk_appuis.hpp"
+#include "EF_gtk_sections.hpp"
 #include "EF_gtk_barres.hpp"
 #endif
 
@@ -89,6 +90,7 @@ G_MODULE_EXPORT Projet* projet_init(Type_Pays pays)
     projet->list_gtk.ef_appuis.builder = NULL;
     projet->list_gtk.ef_barres.builder = NULL;
     projet->list_gtk.ef_barres.builder_add = NULL;
+    projet->list_gtk.ef_sections.builder = NULL;
 #endif
     
     projet->ef_donnees.c = &(projet->ef_donnees.Common);
@@ -195,7 +197,7 @@ G_MODULE_EXPORT gboolean projet_init_graphique(Projet *projet)
     
     comps->menu_structure_barres_section = gtk_menu_item_new_with_label(gettext("Sections..."));
     gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_structure_barres_list), comps->menu_structure_barres_section);
-    g_signal_connect_swapped(comps->menu_structure_barres_section, "activate", G_CALLBACK(EF_gtk_barres), projet);
+    g_signal_connect_swapped(comps->menu_structure_barres_section, "activate", G_CALLBACK(EF_gtk_sections), projet);
     
     comps->menu_structure_barres_ajout = gtk_menu_item_new_with_label(gettext("Gestion des barres..."));
     gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_structure_barres_list), comps->menu_structure_barres_ajout);

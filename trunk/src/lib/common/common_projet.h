@@ -133,7 +133,6 @@ typedef struct __List_Gtk_EF_Barres
     
     GtkListStore    *liste_relachements;
     GtkListStore    *liste_types;
-    GtkListStore    *liste_sections;
     GtkListStore    *liste_materiaux;
 } List_Gtk_EF_Barres;
 
@@ -146,6 +145,16 @@ typedef struct __List_Gtk_EF_Appuis
     GtkListStore    *liste_appuis;
     GtkListStore    *liste_type_appui;
 } List_Gtk_EF_Appuis;
+
+typedef struct __List_Gtk_EF_Sections
+{
+    GtkBuilder      *builder;
+    GtkWidget       *window;
+    
+    GtkTreeStore    *sections;
+    GtkListStore    *liste_sections;
+    GtkListStore    *liste_type_section;
+} List_Gtk_EF_Sections;
 
 #endif
 
@@ -394,6 +403,8 @@ typedef struct __EF_Section
 {
     Type_Section    type;
     char            *nom;
+    GtkTreeIter     Iter_fenetre;
+    GtkTreeIter     Iter_liste;
     void            *data;
 } EF_Section;
 
@@ -667,6 +678,7 @@ typedef struct __List_Gtk
     List_Gtk_EF_Noeud       ef_noeud;
     List_Gtk_EF_Barres      ef_barres;
     List_Gtk_EF_Appuis      ef_appuis;
+    List_Gtk_EF_Sections    ef_sections;
     Comp_Gtk                comp;      // tous les composants grahpiques
 } List_Gtk;
 #endif

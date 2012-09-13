@@ -373,108 +373,6 @@ G_MODULE_EXPORT gboolean EF_noeuds_change_appui(Projet *projet, EF_Noeud *noeud,
 }
 
 
-G_MODULE_EXPORT void EF_noeuds_free_foreach(EF_Noeud *noeud, Projet *projet)
-/* Description : Fonction permettant de libérer un noeud contenu dans une liste.
- * Paramètres : EF_Noeud *noeud : le noeud à libérer,
- *            : Projet *projet : la variable projet.
- * Valeur renvoyée : Aucune.
- */
-{
-    if (noeud == NULL)
-        return;
-    
-    if (noeud->type == NOEUD_BARRE)
-    {
-        EF_Noeud_Barre  *infos = noeud->data;
-        
-        infos->barre->noeuds_intermediaires = g_list_remove(infos->barre->noeuds_intermediaires, noeud);
-        infos->barre->discretisation_element--;
-        BUGMSG(infos->barre->info_EF = realloc(infos->barre->info_EF, sizeof(Barre_Info_EF)*(infos->barre->discretisation_element+1)), , gettext("Erreur d'allocation mémoire.\n"));
-        memset(infos->barre->info_EF, 0, sizeof(Barre_Info_EF)*(infos->barre->discretisation_element+1));
-    }
-    
-    free(noeud->data);
-    
-#ifdef ENABLE_GTK
-    if (projet->list_gtk.ef_noeud.builder != NULL)
-    {
-        GtkTreeModel    *model;
-        
-        switch(noeud->type)
-        {
-            case NOEUD_LIBRE :
-            {
-                model = GTK_TREE_MODEL(projet->list_gtk.ef_noeud.tree_store_libre);
-                break;
-            }
-            case NOEUD_BARRE :
-            {
-                model = GTK_TREE_MODEL(projet->list_gtk.ef_noeud.tree_store_barre);
-                break;
-            }
-            default :
-            {
-                BUGMSG(NULL, , gettext("Le type de noeud %d est inconnu.\n"), noeud->type);
-                break;
-            }
-        }
-        
-        gtk_tree_store_remove(GTK_TREE_STORE(model), &noeud->Iter);
-    }
-    m3d_noeud_free(&projet->list_gtk.m3d, noeud);
-#endif
-    free(noeud);
-    
-    return;
-}
-
-
-G_MODULE_EXPORT gboolean EF_noeuds_supprime_liste(Projet *projet, GList *liste_noeuds)
-/* Description : Supprime une liste de noeuds.
- * Paramètres : Projet *projet : la variable projet,
- *            : GList *liste_noeuds : noeud à supprimer.
- * Valeur renvoyée :
- *   Succès : TRUE
- *   Échec : FALSE :
- *             projet == NULL.
- */
-{
-    GList   *noeuds_suppr, *barres_suppr;
-    GList   *list_parcours;
-    
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    
-    if (liste_noeuds == NULL)
-        return TRUE;
-    
-    BUG(_1992_1_1_barres_cherche_dependances(projet, liste_noeuds, NULL, &noeuds_suppr, &barres_suppr), FALSE);
-    
-    // On supprime les noeuds
-    g_list_foreach(noeuds_suppr, (GFunc)EF_noeuds_free_foreach, projet);
-    list_parcours = noeuds_suppr;
-    while (list_parcours != NULL)
-    {
-        projet->ef_donnees.noeuds = g_list_remove(projet->ef_donnees.noeuds, list_parcours->data);
-        list_parcours = g_list_next(list_parcours);
-    }
-    g_list_free(noeuds_suppr);
-    
-    // On supprime les barres
-    g_list_foreach(barres_suppr, (GFunc)_1992_1_1_barre_free_foreach, projet);
-    list_parcours = barres_suppr;
-    while (list_parcours != NULL)
-    {
-        projet->beton.barres = g_list_remove(projet->beton.barres, list_parcours->data);
-        list_parcours = g_list_next(list_parcours);
-    }
-    g_list_free(barres_suppr);
-    
-    BUG(EF_calculs_free(projet), FALSE);
-    
-    return TRUE;
-}
-
-
 G_MODULE_EXPORT double EF_noeuds_distance(EF_Noeud* n1, EF_Noeud* n2)
 /* Description : Renvoie la distance entre deux noeuds.
  * Paramètres : EF_Noeud* n1 : noeud de départ,
@@ -543,6 +441,62 @@ G_MODULE_EXPORT double EF_noeuds_distance_x_y_z(EF_Noeud* n1, EF_Noeud* n2, doub
     free(p2);
     
     return sqrt((*x)*(*x)+(*y)*(*y)+(*z)*(*z));
+}
+
+
+G_MODULE_EXPORT void EF_noeuds_free_foreach(EF_Noeud *noeud, Projet *projet)
+/* Description : Fonction permettant de libérer un noeud contenu dans une liste.
+ * Paramètres : EF_Noeud *noeud : le noeud à libérer,
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    if (noeud == NULL)
+        return;
+    
+    if (noeud->type == NOEUD_BARRE)
+    {
+        EF_Noeud_Barre  *infos = noeud->data;
+        
+        infos->barre->noeuds_intermediaires = g_list_remove(infos->barre->noeuds_intermediaires, noeud);
+        infos->barre->discretisation_element--;
+        BUGMSG(infos->barre->info_EF = realloc(infos->barre->info_EF, sizeof(Barre_Info_EF)*(infos->barre->discretisation_element+1)), , gettext("Erreur d'allocation mémoire.\n"));
+        memset(infos->barre->info_EF, 0, sizeof(Barre_Info_EF)*(infos->barre->discretisation_element+1));
+    }
+    
+    free(noeud->data);
+    
+#ifdef ENABLE_GTK
+    if (projet->list_gtk.ef_noeud.builder != NULL)
+    {
+        GtkTreeModel    *model;
+        
+        switch(noeud->type)
+        {
+            case NOEUD_LIBRE :
+            {
+                model = GTK_TREE_MODEL(projet->list_gtk.ef_noeud.tree_store_libre);
+                break;
+            }
+            case NOEUD_BARRE :
+            {
+                model = GTK_TREE_MODEL(projet->list_gtk.ef_noeud.tree_store_barre);
+                break;
+            }
+            default :
+            {
+                BUGMSG(NULL, , gettext("Le type de noeud %d est inconnu.\n"), noeud->type);
+                break;
+            }
+        }
+        
+        gtk_tree_store_remove(GTK_TREE_STORE(model), &noeud->Iter);
+    }
+    m3d_noeud_free(&projet->list_gtk.m3d, noeud);
+#endif
+    free(noeud);
+    
+    return;
 }
 
 

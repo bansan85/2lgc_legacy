@@ -10,6 +10,7 @@ applicationui_DATA	=	ui/1990_gtk_actions.ui \
 						ui/1990_gtk_groupes_options.ui \
 						ui/EF_gtk_appuis.ui \
 						ui/EF_gtk_barres.ui \
+						ui/EF_gtk_sections.ui \
 						ui/EF_gtk_barres_add.ui \
 						ui/EF_gtk_noeud.ui \
 						ui/EF_gtk_charge_barre_ponctuelle.ui \
