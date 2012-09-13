@@ -26,6 +26,7 @@
 #include "common_erreurs.h"
 #include "common_selection.h"
 #include "EF_noeud.h"
+#include "1992_1_1_barres.h"
 
 #ifdef ENABLE_GTK
 #include <gtk/gtk.h>
@@ -68,7 +69,8 @@ G_MODULE_EXPORT EF_Appui* EF_appuis_cherche_nom(Projet *projet, const char *nom,
   gboolean critique)
 /* Description : Renvoie l'appui correspondant au numéro souhaité.
  * Paramètres : Projet *projet : la variable projet,
- *            : unsigned int numero : le numéro de l'appui.
+ *            : const char *nom : le nom de l'appui,
+ *            : gboolean critique : TRUE si en cas d'échec, la fonction BUG est utilisée.
  * Valeur renvoyée :
  *   Succès : pointeur vers l'appui.
  *   Échec : NULL :
@@ -624,8 +626,8 @@ G_MODULE_EXPORT gboolean EF_appuis_supprime(EF_Appui *appui, gboolean annule_si_
 /* Description : Supprime l'appui spécifié.
  * Paramètres : EF_Appui *appui : l'appui à supprimer,
  *            : gboolean annule_si_utilise : possibilité d'annuler la suppression si l'appui est
- *              attribué à un noeud. Si l'option est désactivé, les noeuds possédant l'appui
- *              seront modifiés en fonction du paramètre .
+ *              attribué à un noeud. Si l'option est désactivée, les noeuds possédant l'appui
+ *              seront modifiés en fonction du paramètre supprime.
  *            : gboolean supprime : Paramètre utilisé uniquement si annule_si_utilise == FALSE.
  *              Si TRUE alors, les noeuds (et les barres et noeuds intermédaires dépendants)
  *              utilisant l'appui seront supprimés. Si FALSE alors les noeuds deviendront sans
@@ -675,7 +677,8 @@ G_MODULE_EXPORT gboolean EF_appuis_supprime(EF_Appui *appui, gboolean annule_si_
         }
     }
     else
-        BUG(EF_noeuds_supprime_liste(projet, list_noeuds), TRUE);
+        BUG(_1992_1_1_barres_supprime_liste(projet, list_noeuds, NULL), TRUE);
+    
     g_list_free(list_noeuds);
     
     free(appui->nom);
@@ -742,12 +745,12 @@ G_MODULE_EXPORT gboolean EF_appuis_supprime(EF_Appui *appui, gboolean annule_si_
     projet->ef_donnees.appuis = g_list_remove(projet->ef_donnees.appuis, appui);
     
 #ifdef ENABLE_GTK
+    gtk_list_store_remove(projet->list_gtk.ef_appuis.liste_appuis, &appui->Iter_liste);
     if (projet->list_gtk.ef_appuis.builder != NULL)
-    {
-        gtk_list_store_remove(projet->list_gtk.ef_appuis.liste_appuis, &appui->Iter_liste);
         gtk_tree_store_remove(projet->list_gtk.ef_appuis.appuis, &appui->Iter_fenetre);
-    }
 #endif
+    
+    free(appui);
     
     return TRUE;
 }

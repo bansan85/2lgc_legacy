@@ -1316,6 +1316,56 @@ G_MODULE_EXPORT void _1992_1_1_barre_free_foreach(Beton_Barre *barre, Projet *pr
 }
 
 
+G_MODULE_EXPORT gboolean _1992_1_1_barres_supprime_liste(Projet *projet, GList *liste_noeuds, GList *liste_barres)
+/* Description : Supprime une liste de barres.
+ * Paramètres : Projet *projet : la variable projet,
+ *            : GList *liste_noeuds : liste des noeuds à supprimer.
+ *            : GList *liste_barres : liste des barres à supprimer.
+ * Valeur renvoyée :
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL.
+ */
+{
+    GList   *noeuds_suppr, *barres_suppr;
+    GList   *list_parcours;
+    char    *texte;
+    
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    
+    BUG(_1992_1_1_barres_cherche_dependances(projet, liste_noeuds, liste_barres, &noeuds_suppr, &barres_suppr), FALSE);
+    texte = common_selection_converti_noeuds_en_texte(noeuds_suppr);
+    printf("Noeuds %s\n", texte);
+    texte = common_selection_converti_barres_en_texte(barres_suppr);
+    printf("Barres %s\n", texte);
+    
+    
+    // On supprime les noeuds
+    g_list_foreach(noeuds_suppr, (GFunc)EF_noeuds_free_foreach, projet);
+    list_parcours = noeuds_suppr;
+    while (list_parcours != NULL)
+    {
+        projet->ef_donnees.noeuds = g_list_remove(projet->ef_donnees.noeuds, list_parcours->data);
+        list_parcours = g_list_next(list_parcours);
+    }
+    g_list_free(noeuds_suppr);
+    
+    // On supprime les barres
+    g_list_foreach(barres_suppr, (GFunc)_1992_1_1_barre_free_foreach, projet);
+    list_parcours = barres_suppr;
+    while (list_parcours != NULL)
+    {
+        projet->beton.barres = g_list_remove(projet->beton.barres, list_parcours->data);
+        list_parcours = g_list_next(list_parcours);
+    }
+    g_list_free(barres_suppr);
+    
+    BUG(EF_calculs_free(projet), FALSE);
+    
+    return TRUE;
+}
+
+
 G_MODULE_EXPORT gboolean _1992_1_1_barres_free(Projet *projet)
 /* Description : Libère l'ensemble des éléments  en béton
  * Paramètres : Projet *projet : la variable projet

@@ -29,7 +29,13 @@ gboolean EF_sections_ajout_T(Projet *projet, const char* nom, double lt, double 
 gboolean EF_sections_ajout_carre(Projet *projet, const char* nom, double cote) __attribute__((__warn_unused_result__));
 gboolean EF_sections_ajout_circulaire(Projet *projet, const char* nom, double diametre) __attribute__((__warn_unused_result__));
 
-EF_Section* EF_sections_cherche_nom(Projet *projet, const char *nom) __attribute__((__warn_unused_result__));
+EF_Section* EF_sections_cherche_nom(Projet *projet, const char *nom, gboolean critique) __attribute__((__warn_unused_result__));
+char *EF_sections_get_description(EF_Section *sect) __attribute__((__warn_unused_result__));
+gboolean EF_sections_cherche_dependances(Projet *projet, EF_Section* section, GList** barres_dep) __attribute__((__warn_unused_result__));
+gboolean EF_sections_verifie_dependances(Projet *projet, EF_Section* section) __attribute__((__warn_unused_result__));
+
+gboolean EF_sections_renomme(EF_Section *section, gchar *nom, Projet *projet) __attribute__((__warn_unused_result__));
+gboolean EF_sections_supprime(EF_Section *section, gboolean annule_si_utilise, gboolean supprime, Projet *projet) __attribute__((__warn_unused_result__));
 
 double EF_sections_j(EF_Section *section) __attribute__((__warn_unused_result__));
 double EF_sections_iy(EF_Section *section) __attribute__((__warn_unused_result__));

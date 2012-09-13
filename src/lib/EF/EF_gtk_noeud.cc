@@ -148,7 +148,7 @@ G_MODULE_EXPORT void EF_gtk_noeud_supprimer(GtkButton *button __attribute__((unu
     
     list = g_list_append(list, noeud);
     
-    BUG(EF_noeuds_supprime_liste(projet, list), );
+    BUG(_1992_1_1_barres_supprime_liste(projet, list, NULL), );
     
     g_list_free(list);
     

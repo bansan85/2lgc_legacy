@@ -16,6 +16,12 @@ ln -s /c/Python27/Lib /usr/lib/python2.7 && \
 mingw-get install msys-wget && \
 mingw-get install msys-unzip && \
 mingw-get install msys-zip && \
+cat "set expandtab" >> /mingw/msys/1.0/share/vim/vimrc && \
+cat "set tabstop=4" >> /mingw/msys/1.0/share/vim/vimrc && \
+cat "set fileencodings=utf-8" >> /mingw/msys/1.0/share/vim/vimrc && \
+cat "set hlsearch" >> /mingw/msys/1.0/share/vim/vimrc && \
+cat "set ruler" >> /mingw/msys/1.0/share/vim/vimrc && \
+cat "syntax on" >> /mingw/msys/1.0/share/vim/vimrc && \
 (test -d comp || mkdir comp) && \
 cd comp && \
 (test -f zlib-1.2.7.tar.bz2 || wget http://zlib.net/zlib-1.2.7.tar.bz2) && \
@@ -357,7 +363,6 @@ automake --add-missing --copy
 autoconf
 ./configure --with-gtk --prefix=/usr/local CFLAGS="" CXXFLAGS=""
 sed -i 's/-DPIC/-DPIC -Wl,--as-needed/g' libtool
-sed -i 's/-lcolamd -lcholmod/-lcholmod -lcolamd/g' `find . -name "Makefile"`
 make -j3 && sudo make install && /usr/local/bin/codegui
 sudo make install-data && make check -j3
 make -C doc doc

@@ -54,6 +54,7 @@ libeurocodes_la_SOURCES +=	common/common_m3d.cc \
 							EF/EF_gtk_appuis.cc \
 							EF/EF_gtk_barres.cc \
 							EF/EF_gtk_barres_add.cc \
+							EF/EF_gtk_sections.cc \
 							common/common_gtk.c
 endif
 
@@ -96,5 +97,6 @@ libeurocodes_la_HEADERS +=	common/common_m3d.hpp \
 							EF/EF_gtk_appuis.hpp \
 							EF/EF_gtk_barres.hpp \
 							EF/EF_gtk_barres_add.hpp \
+							EF/EF_gtk_sections.hpp \
 							common/common_gtk.h
 endif
