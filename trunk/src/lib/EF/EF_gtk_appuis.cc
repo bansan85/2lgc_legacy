@@ -166,6 +166,7 @@ G_MODULE_EXPORT void EF_gtk_appuis_supprimer(GtkButton *button __attribute__((un
     BUG(appui = EF_appuis_cherche_nom(projet, nom, TRUE), );
     BUG(EF_appuis_supprime(appui, TRUE, FALSE, projet), );
     
+    BUG(m3d_rafraichit(projet), );
     free(nom);
     
     return;

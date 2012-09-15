@@ -27,6 +27,8 @@
 #include <gtk/gtk.h>
 #include <math.h>
 
+#include "common_m3d.hpp"
+
 extern "C" {
 #include "common_projet.h"
 #include "common_erreurs.h"
@@ -193,6 +195,71 @@ G_MODULE_EXPORT void EF_gtk_sections_edit_nom(GtkCellRendererText *cell __attrib
         return;
 
     BUG(EF_sections_renomme(section, new_text, projet), );
+    
+    return;
+}
+
+
+G_MODULE_EXPORT void EF_gtk_sections_supprimer_direct(GtkButton *button __attribute__((unused)),
+  Projet *projet)
+/* Description : Supprime la section sélectionné dans le treeview.
+ * Paramètres : GtkWidget *widget : composant à l'origine de l'évènement,
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    GtkTreeIter     iter;
+    GtkTreeModel    *model;
+    char            *nom;
+    EF_Section      *section;
+    
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet->list_gtk.ef_sections.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Appui");
+    
+    if (!gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_sections.builder, "EF_sections_treeview_select")), &model, &iter))
+        return;
+    
+    gtk_tree_model_get(model, &iter, 1, &nom, -1);
+    
+    BUG(section = EF_sections_cherche_nom(projet, nom, TRUE), );
+    BUG(EF_sections_supprime(section, TRUE, projet), );
+    
+    BUG(m3d_rafraichit(projet), );
+    
+    free(nom);
+    
+    return;
+}
+
+
+G_MODULE_EXPORT void EF_gtk_sections_supprimer_menu_barres(
+  GtkButton *button __attribute__((unused)), Projet *projet)
+/* Description : Supprime la section sélectionné dans le treeview, y compris les barres
+ *               l'utilisant.
+ * Paramètres : GtkWidget *widget : composant à l'origine de l'évènement,
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    GtkTreeIter     iter;
+    GtkTreeModel    *model;
+    char            *nom;
+    EF_Section      *section;
+    
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet->list_gtk.ef_sections.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Appui");
+    
+    if (!gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_sections.builder, "EF_sections_treeview_select")), &model, &iter))
+        return;
+    
+    gtk_tree_model_get(model, &iter, 1, &nom, -1);
+    
+    BUG(section = EF_sections_cherche_nom(projet, nom, TRUE), );
+    BUG(EF_sections_supprime(section, FALSE, projet), );
+    
+    BUG(m3d_rafraichit(projet), );
+    
+    free(nom);
     
     return;
 }
