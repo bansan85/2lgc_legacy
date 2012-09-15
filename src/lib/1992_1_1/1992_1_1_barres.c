@@ -1329,16 +1329,10 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_supprime_liste(Projet *projet, GList *
 {
     GList   *noeuds_suppr, *barres_suppr;
     GList   *list_parcours;
-    char    *texte;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
     BUG(_1992_1_1_barres_cherche_dependances(projet, liste_noeuds, liste_barres, &noeuds_suppr, &barres_suppr), FALSE);
-    texte = common_selection_converti_noeuds_en_texte(noeuds_suppr);
-    printf("Noeuds %s\n", texte);
-    texte = common_selection_converti_barres_en_texte(barres_suppr);
-    printf("Barres %s\n", texte);
-    
     
     // On supprime les noeuds
     g_list_foreach(noeuds_suppr, (GFunc)EF_noeuds_free_foreach, projet);

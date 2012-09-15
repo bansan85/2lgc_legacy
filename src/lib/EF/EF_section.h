@@ -35,7 +35,7 @@ gboolean EF_sections_cherche_dependances(Projet *projet, EF_Section* section, GL
 gboolean EF_sections_verifie_dependances(Projet *projet, EF_Section* section) __attribute__((__warn_unused_result__));
 
 gboolean EF_sections_renomme(EF_Section *section, gchar *nom, Projet *projet) __attribute__((__warn_unused_result__));
-gboolean EF_sections_supprime(EF_Section *section, gboolean annule_si_utilise, gboolean supprime, Projet *projet) __attribute__((__warn_unused_result__));
+gboolean EF_sections_supprime(EF_Section *section, gboolean annule_si_utilise, Projet *projet) __attribute__((__warn_unused_result__));
 
 double EF_sections_j(EF_Section *section) __attribute__((__warn_unused_result__));
 double EF_sections_iy(EF_Section *section) __attribute__((__warn_unused_result__));

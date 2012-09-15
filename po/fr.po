@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2012-09-07 23:57+0200\n"
-"PO-Revision-Date: 2012-09-07 23:59+0100\n"
+"POT-Creation-Date: 2012-09-15 14:36+0200\n"
+"PO-Revision-Date: 2012-09-15 14:43+0100\n"
 "Last-Translator: LE GARREC Vincent <vlg@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -421,11 +421,17 @@ msgstr "Noeuds"
 msgid "Appuis..."
 msgstr "Appuis..."
 
-msgid "Ajouter..."
-msgstr "Ajouter..."
+msgid "Gestion des noeuds..."
+msgstr "Gestion des noeuds..."
 
-msgid "Barres..."
-msgstr "Barres..."
+msgid "Barres"
+msgstr "Barres"
+
+msgid "Sections..."
+msgstr "Sections..."
+
+msgid "Gestion des barres..."
+msgstr "Gestion des barres..."
 
 msgid "Charges"
 msgstr "Charges"
@@ -460,8 +466,35 @@ msgstr "Type de section %d inconnu.\n"
 msgid "Section en béton '%s' introuvable.\n"
 msgstr "Section en béton '%s' introuvable.\n"
 
+msgid "Largeur"
+msgstr "Largeur"
+
+msgid "Hauteur"
+msgstr "Hauteur"
+
+msgid "Largeur table"
+msgstr "Largeur table"
+
+msgid "Hauteur table"
+msgstr "Hauteur table"
+
+msgid "Largeur âme"
+msgstr "Largeur âme"
+
+msgid "Hauteur âme"
+msgstr "Hauteur âme"
+
+msgid "Coté"
+msgstr "Coté"
+
+msgid "Diamètre"
+msgstr "Diamètre"
+
 msgid "Type de section %d inconnu."
 msgstr "Type de section %d inconnu."
+
+msgid "La section '%s' existe déjà.\n"
+msgstr "La section '%s' existe déjà.\n"
 
 msgid "La discrétisation %d souhaitée est hors domaine %d.\n"
 msgstr "La discrétisation %d souhaitée est hors domaine %d.\n"
@@ -522,9 +555,6 @@ msgstr "Le début (%f) et la fin (%f) de la charge répartie uniformément sont 
 
 msgid "Barre"
 msgstr "Barre"
-
-msgid "Barres"
-msgstr "Barres"
 
 msgid "position"
 msgstr "position"
@@ -823,6 +853,15 @@ msgstr "Valeur"
 msgid "Éditer"
 msgstr "Éditer"
 
+msgid "et les barres utilisant la section."
+msgstr "et les barres utilisant la section."
+
+msgid "Sections"
+msgstr "Sections"
+
+msgid "Nom"
+msgstr "Nom"
+
 msgid "ainsi que les noeuds l'utilisant (y compris les barres et noeuds intermédaires dépendants)."
 msgstr "ainsi que les noeuds l'utilisant (y compris les barres et noeuds intermédaires dépendants)."
 
@@ -831,9 +870,6 @@ msgstr "et annule les conditions d'appuis sur les noeuds l'utilisant."
 
 msgid "Appuis"
 msgstr "Appuis"
-
-msgid "Nom"
-msgstr "Nom"
 
 msgid "Ajout d'une barre"
 msgstr "Ajout d'une barre"
@@ -894,3 +930,4 @@ msgstr "Position relative"
 
 msgid "Noeuds intermédiaires"
 msgstr "Noeuds intermédiaires"
+
