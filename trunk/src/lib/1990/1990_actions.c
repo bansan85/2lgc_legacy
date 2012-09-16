@@ -916,6 +916,7 @@ G_MODULE_EXPORT gboolean _1990_action_free(Projet *projet)
 #ifdef ENABLE_GTK
     if (projet->list_gtk._1990_actions.builder != NULL)
         gtk_tree_store_clear(projet->list_gtk._1990_actions.tree_store_charges);
+    g_object_ref_sink(projet->list_gtk._1990_actions.menu_type_list_action);
     g_object_unref(projet->list_gtk._1990_actions.menu_type_list_action);
     g_object_unref(projet->list_gtk._1990_actions.menu_type_list_charge);
     g_object_unref(projet->list_gtk._1990_actions.list_actions);

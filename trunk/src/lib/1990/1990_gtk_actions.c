@@ -88,7 +88,6 @@ G_MODULE_EXPORT void _1990_gtk_actions_window_destroy(GtkWidget *object __attrib
     // Désactivation des évènements pouvant s'activer lors de la fermeture de la fenêtre.
     g_signal_handler_block(projet->list_gtk._1990_actions.tree_view_actions, g_signal_handler_find(G_OBJECT(projet->list_gtk._1990_actions.tree_view_actions),G_SIGNAL_MATCH_FUNC,0,0,NULL,_1990_gtk_actions_cursor_changed,NULL));
     projet->list_gtk._1990_actions.builder = NULL;
-    g_object_unref(projet->list_gtk._1990_actions.menu_type_list_action);
     
     return;
 }
