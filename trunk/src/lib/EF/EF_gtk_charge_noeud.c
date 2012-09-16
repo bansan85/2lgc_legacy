@@ -394,7 +394,7 @@ G_MODULE_EXPORT gboolean EF_gtk_charge_noeud(Projet *projet, unsigned int action
     
     ef_gtk = &projet->list_gtk.ef_charge_noeud;
     projet->list_gtk.ef_charge_noeud.builder = gtk_builder_new();
-    BUGMSG(gtk_builder_add_from_file(projet->list_gtk.ef_charge_noeud.builder, DATADIR"/ui/EF_gtk_charge_noeud.ui", NULL) != 0, FALSE, gettext("Builder Failed\n"));
+    BUGMSG(gtk_builder_add_from_file(projet->list_gtk.ef_charge_noeud.builder, DATADIR"/ui/EF_charge_noeud.ui", NULL) != 0, FALSE, gettext("Builder Failed\n"));
     gtk_builder_connect_signals(projet->list_gtk.ef_charge_noeud.builder, projet);
     
     ef_gtk->window = GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_window"));

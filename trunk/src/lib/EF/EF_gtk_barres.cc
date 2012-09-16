@@ -340,7 +340,7 @@ G_MODULE_EXPORT void EF_gtk_barres(Projet *projet)
     ef_gtk = &projet->list_gtk.ef_barres;
     
     ef_gtk->builder = gtk_builder_new();
-    BUGMSG(gtk_builder_add_from_file(ef_gtk->builder, DATADIR"/ui/EF_gtk_barres.ui", NULL) != 0, , gettext("Builder Failed\n"));
+    BUGMSG(gtk_builder_add_from_file(ef_gtk->builder, DATADIR"/ui/EF_barres.ui", NULL) != 0, , gettext("Builder Failed\n"));
     gtk_builder_connect_signals(ef_gtk->builder, projet);
     
     ef_gtk->window = GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder, "EF_barres_window"));;

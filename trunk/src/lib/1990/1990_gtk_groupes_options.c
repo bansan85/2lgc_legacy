@@ -103,7 +103,7 @@ G_MODULE_EXPORT void _1990_gtk_groupes_button_options_clicked(
     BUGMSG(projet->list_gtk._1990_groupes.builder_options == NULL, , gettext("La fenêtre graphique %s est déjà initialisée.\n"), "Option Groupes");
     
     projet->list_gtk._1990_groupes.builder_options = gtk_builder_new();
-    BUGMSG(gtk_builder_add_from_file(projet->list_gtk._1990_groupes.builder_options, DATADIR"/ui/1990_gtk_groupes_options.ui", NULL) != 0, , gettext("Builder Failed\n"));
+    BUGMSG(gtk_builder_add_from_file(projet->list_gtk._1990_groupes.builder_options, DATADIR"/ui/1990_groupes_options.ui", NULL) != 0, , gettext("Builder Failed\n"));
     gtk_builder_connect_signals(projet->list_gtk._1990_groupes.builder_options, projet);
     
     if ((projet->combinaisons.flags & 1) == 0)
