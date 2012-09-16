@@ -16,12 +16,12 @@ ln -s /c/Python27/Lib /usr/lib/python2.7 && \
 mingw-get install msys-wget && \
 mingw-get install msys-unzip && \
 mingw-get install msys-zip && \
-cat "set expandtab" >> /mingw/msys/1.0/share/vim/vimrc && \
-cat "set tabstop=4" >> /mingw/msys/1.0/share/vim/vimrc && \
-cat "set fileencodings=utf-8" >> /mingw/msys/1.0/share/vim/vimrc && \
-cat "set hlsearch" >> /mingw/msys/1.0/share/vim/vimrc && \
-cat "set ruler" >> /mingw/msys/1.0/share/vim/vimrc && \
-cat "syntax on" >> /mingw/msys/1.0/share/vim/vimrc && \
+echo "set expandtab" >> /mingw/msys/1.0/share/vim/vimrc && \
+echo "set tabstop=4" >> /mingw/msys/1.0/share/vim/vimrc && \
+echo "set fileencodings=utf-8" >> /mingw/msys/1.0/share/vim/vimrc && \
+echo "set hlsearch" >> /mingw/msys/1.0/share/vim/vimrc && \
+echo "set ruler" >> /mingw/msys/1.0/share/vim/vimrc && \
+echo "syntax on" >> /mingw/msys/1.0/share/vim/vimrc && \
 (test -d comp || mkdir comp) && \
 cd comp && \
 (test -f zlib-1.2.7.tar.bz2 || wget http://zlib.net/zlib-1.2.7.tar.bz2) && \
@@ -254,16 +254,15 @@ make -j3 && make install && cd .. && \
 	CFLAGS="-march=i686 -O0 -g3 -ggdb3 -pipe" PKG_CONFIG_PATH="c:/MinGW/lib/pkgconfig" ./configure --disable-static --enable-shared --prefix=c:/MinGW && \
 	make -j3 && make install && cd .. \
 )) && \
-(test -f gtk+-3.5.12.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/gtk+/3.5/gtk+-3.5.12.tar.xz) && \
-tar xvaf gtk+-3.5.12.tar.xz && \
-cd gtk+-3.5.12 && \
+(test -f gtk+-3.5.16.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/gtk+/3.5/gtk+-3.5.16.tar.xz) && \
+tar xvaf gtk+-3.5.16.tar.xz && \
+cd gtk+-3.5.16 && \
 sed -i 's/modules demos tests perf examples//g' Makefile.in Makefile.am && \
 sed -i 's/\. tests/\./g' gtk/Makefile.in gtk/Makefile.am gdk/Makefile.in gdk/Makefile.am && \
 sed -i 's/ tests$//g' gtk/Makefile.in gtk/Makefile.am gdk/Makefile.in gdk/Makefile.am && \
 (!(test -f X) || CFLAGS="-march=i686 -O0 -g3 -ggdb3 -pipe" PKG_CONFIG_PATH="c:/MinGW/lib/pkgconfig" ./configure --disable-modules --disable-packagekit --disable-papi --disable-introspection --enable-x11-backend --enable-broadway-backend --disable-static --enable-shared --prefix=c:/MinGW) && \
 (test -f X || CFLAGS="-march=i686 -O0 -g3 -ggdb3 -pipe" PKG_CONFIG_PATH="c:/MinGW/lib/pkgconfig" ./configure --disable-modules --disable-packagekit --disable-papi --disable-introspection --disable-static --enable-shared --prefix=c:/MinGW) && \
 find . -name "Makefile" -exec sed -i "s///g" {} \; && \
-sed -i 's/am__objects_3)/am__objects_3) $(am__objects_5)/g' gtk/Makefile && \
 sed -i 's/gtk-launch$(EXEEXT) \\/ \\/g' gtk/Makefile && \
 make -j3 && make install && cd .. && \
 (test -f librsvg-2.34.2.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/librsvg/2.34/librsvg-2.34.2.tar.xz) && \

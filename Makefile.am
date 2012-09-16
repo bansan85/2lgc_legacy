@@ -27,6 +27,7 @@ EXTRA_DIST = config.rpath
 
 package_win :
 if PLATFORM_WIN32
+	rm -Rf codegui
 	mkdir -p codegui
 	mkdir -p codegui/files
 	mkdir -p codegui/files/ui
@@ -35,7 +36,7 @@ if PLATFORM_WIN32
 	cp files/ui/*.ui codegui/files/ui
 	zip -r codegui_debug.zip codegui
 	tar cvaf codegui_debug.tar.xz codegui
-	strip codegui/*
+	strip codegui/*.exe codegui/*.dll
 	zip -r codegui.zip codegui
 	tar cvaf codegui.tar.xz codegui
 	rm -Rf codegui
