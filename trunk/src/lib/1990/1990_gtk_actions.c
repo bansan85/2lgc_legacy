@@ -88,6 +88,7 @@ G_MODULE_EXPORT void _1990_gtk_actions_window_destroy(GtkWidget *object __attrib
     // Désactivation des évènements pouvant s'activer lors de la fermeture de la fenêtre.
     g_signal_handler_block(projet->list_gtk._1990_actions.tree_view_actions, g_signal_handler_find(G_OBJECT(projet->list_gtk._1990_actions.tree_view_actions),G_SIGNAL_MATCH_FUNC,0,0,NULL,_1990_gtk_actions_cursor_changed,NULL));
     projet->list_gtk._1990_actions.builder = NULL;
+    g_object_unref(projet->list_gtk._1990_actions.menu_type_list_action);
     
     return;
 }
@@ -885,6 +886,7 @@ G_MODULE_EXPORT void _1990_gtk_actions(Projet *projet)
     
     gtk_menu_tool_button_set_menu(GTK_MENU_TOOL_BUTTON(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_toolbar_action_ajout")), projet->list_gtk._1990_actions.menu_type_list_action);
     // Pour éviter que le menu menu_type_list_action soit libéré en même temps que le bouton 1990_actions_toolbar_action_ajout.
+    g_object_ref(projet->list_gtk._1990_actions.menu_type_list_action);
 
     gtk_menu_tool_button_set_menu(GTK_MENU_TOOL_BUTTON(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_toolbar_charge_ajout")), projet->list_gtk._1990_actions.menu_type_list_charge);
     
