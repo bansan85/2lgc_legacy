@@ -344,7 +344,6 @@ G_MODULE_EXPORT gboolean _1990_action_init(Projet *projet)
     gtk_widget_show_all(projet->list_gtk._1990_actions.menu_type_list_charge);
     
     // Sinon, ils sont libérés à la première fermeture de la fenêtre Actions et ils ne réapparaissent plus lors de la deuxième ouverture.
-    g_object_ref(projet->list_gtk._1990_actions.menu_type_list_action);
     g_object_ref(projet->list_gtk._1990_actions.menu_type_list_charge);
 #endif
     
