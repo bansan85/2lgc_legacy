@@ -265,6 +265,223 @@ G_MODULE_EXPORT void EF_gtk_sections_supprimer_menu_barres(
 }
 
 
+GdkPixbuf *EF_gtk_sections_dessin(EF_Section *section, unsigned int width, unsigned int height)
+/* Description : Renvoie un dessin représentant la section.
+ * Paramètres : EF_Section *section : la section à dessiner,
+ *              unsigned int width : la largeur du dessin,
+ *              unsigned int height : la hauteur du dessin.
+ * Valeur renvoyée : Aucune.
+ *   Echec : section == NULL,
+ *           width == NULL,
+ *           height == 0.
+ */
+{
+    int             rowstride, n_channels;
+    unsigned int    x, y;
+    guchar          *pixels, *p;
+    GdkPixbuf       *pixbuf;
+    double          a;
+    cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
+    cairo_t         *cr = cairo_create(surface);
+    
+    BUGMSG(section, NULL, gettext("Paramètre %s incorrect.\n"), "section");
+    BUGMSG(width, NULL, gettext("La largeur du dessin ne peut être nulle.\n"));
+    BUGMSG(height, NULL, gettext("La hauteur du dessin ne peut être nulle.\n"));
+    BUGMSG(cairo_surface_status(surface) == CAIRO_STATUS_SUCCESS, NULL, gettext("Erreur d'allocation mémoire.\n"));
+    
+    a = (double)width/height;
+    pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, width, height);
+    pixels = gdk_pixbuf_get_pixels(pixbuf);
+    rowstride = gdk_pixbuf_get_rowstride(pixbuf);
+    n_channels = gdk_pixbuf_get_n_channels(pixbuf);
+    
+    cairo_set_antialias(cr, CAIRO_ANTIALIAS_NONE);
+    cairo_set_source_rgba(cr, 1., 1., 1., 0.);
+    cairo_rectangle(cr, 0, 0, width, height);
+    cairo_fill(cr);
+        
+    // On replie tout avec un fond blanc
+    for (y=0;y<height;y++)
+        for (x=0;x<width;x++)
+        {
+            p = pixels + y * rowstride + x * n_channels;
+            p[0] = 255;
+            p[1] = 255;
+            p[2] = 255;
+            if (n_channels == 4)
+                p[3] = 0;
+        }
+    
+    switch (section->type)
+    {
+        case SECTION_RECTANGULAIRE :
+        {
+            Beton_Section_Rectangulaire *data = (Beton_Section_Rectangulaire*)section->data;
+            double aa = data->largeur/data->hauteur;
+            
+            cairo_set_source_rgba(cr, 0.8, 0.8, 0.8, 1.);
+            
+            if (aa > a)
+            {
+                double y_h = (height/2. - data->hauteur/aa/data->largeur*width)+1;
+                double y_b = height/2. + data->hauteur/aa/data->largeur*width;
+                
+                cairo_rectangle(cr, 1, y_h, width-1, y_b-y_h);
+                cairo_fill(cr);
+                cairo_set_source_rgba(cr, 0., 0., 0., 1.);
+                cairo_set_line_width(cr, 1.);
+                cairo_rectangle(cr, 1, y_h, width-1, y_b-y_h);
+            }
+            else
+            {
+                double x_g = (width/2. - data->largeur/aa/data->hauteur*height)+1;
+                double x_d = width/2. + data->largeur/aa/data->hauteur*height;
+                
+                cairo_rectangle(cr, x_g+1, 1, x_d-x_g-1, height-1);
+                cairo_fill(cr);
+                cairo_set_source_rgba(cr, 0., 0., 0., 1.);
+                cairo_set_line_width(cr, 1.);
+                cairo_rectangle(cr, x_g+1, 1, x_d-x_g-1, height-1);
+            }
+            cairo_stroke(cr);
+            
+            cairo_destroy(cr);
+            pixbuf = gdk_pixbuf_get_from_surface(surface, 0, 0, width, height);
+            cairo_surface_destroy(surface);
+            
+            break;
+        }
+        case SECTION_T :
+        {
+            Beton_Section_T *data = (Beton_Section_T *)section->data;
+            
+            double      lt = data->largeur_table;
+            double      la = data->largeur_ame;
+            double      ht = data->hauteur_table;
+            double      ha = data->hauteur_ame;
+            
+            double          aa = MAX(lt, la)/(ht + ha);
+            cairo_path_t    *save_path;
+            double          convert;
+            
+            cairo_set_source_rgba(cr, 0.8, 0.8, 0.8, 1.);
+            cairo_new_path(cr);
+            
+            // Le schéma prend toute la largeur
+            if (aa > a)
+            {
+                convert = width/MAX(lt, la);
+                
+                cairo_move_to(cr, 1., (height/2. - (ht + ha)/2.*convert)+1);
+            }
+            else
+            {
+                convert = height/(ht+ha);
+                
+                cairo_move_to(cr, (width/2. - MAX(lt, la)/2.*convert)+1, 1.);
+            }
+            cairo_rel_line_to(cr, 0., ht*convert);
+            cairo_rel_line_to(cr, (lt-la)/2.*convert, 0.);
+            cairo_rel_line_to(cr, 0., ha*convert-1);
+            cairo_rel_line_to(cr, la*convert, 0.);
+            cairo_rel_line_to(cr, 0., -ha*convert+1);
+            cairo_rel_line_to(cr, (lt-la)/2.*convert-1, 0.);
+            cairo_rel_line_to(cr, 0., -ht*convert);
+            cairo_close_path(cr);
+            save_path = cairo_copy_path(cr);
+            cairo_fill(cr);
+            cairo_set_source_rgba(cr, 0., 0., 0., 1.);
+            cairo_set_line_width(cr, 1.);
+            cairo_new_path(cr);
+            cairo_append_path(cr, save_path);
+            cairo_stroke(cr);
+            
+            cairo_path_destroy(save_path);
+            cairo_destroy(cr);
+            pixbuf = gdk_pixbuf_get_from_surface(surface, 0, 0, width, height);
+            cairo_surface_destroy(surface);
+            
+            break;
+        }
+        case SECTION_CARRE :
+        {
+            cairo_set_source_rgba(cr, 0.8, 0.8, 0.8, 1.);
+            
+            if (a < 1)
+            {
+                double y_h = height/2. - width/2.;
+                double y_b = height/2. + width/2.;
+                
+                cairo_rectangle(cr, 1, y_h, width-1, y_b-y_h);
+                cairo_fill(cr);
+                cairo_set_source_rgba(cr, 0., 0., 0., 1.);
+                cairo_set_line_width(cr, 1.);
+                cairo_rectangle(cr, 1, y_h, width-1, y_b-y_h);
+            }
+            else
+            {
+                double x_g = width/2. - height/2.;
+                double x_d = width/2. + height/2.;
+                
+                cairo_rectangle(cr, x_g+1, 1, x_d-x_g-1, height-1);
+                cairo_fill(cr);
+                cairo_set_source_rgba(cr, 0., 0., 0., 1.);
+                cairo_set_line_width(cr, 1.);
+                cairo_rectangle(cr, x_g+1, 1, x_d-x_g-1, height-1);
+            }
+            cairo_stroke(cr);
+            
+            cairo_destroy(cr);
+            pixbuf = gdk_pixbuf_get_from_surface(surface, 0, 0, width, height);
+            cairo_surface_destroy(surface);
+            
+            break;
+        }
+        case SECTION_CIRCULAIRE :
+        {
+            cairo_set_source_rgba(cr, 0.8, 0.8, 0.8, 1.);
+            
+            if (a < 1)
+            {
+                double y_h = height/2. - width/2.;
+                double y_b = height/2. + width/2.;
+                
+                cairo_arc(cr, width/2., y_h+(y_b-y_h)/2., width/2.-1, 0, 2. * M_PI);
+                cairo_fill(cr);
+                cairo_set_source_rgba(cr, 0., 0., 0., 1.);
+                cairo_set_line_width(cr, 1.);
+                cairo_arc(cr, width/2., y_h+(y_b-y_h)/2., width/2.-1, 0, 2. * M_PI);
+            }
+            else
+            {
+                double x_g = width/2. - height/2.;
+                double x_d = width/2. + height/2.;
+                
+                cairo_arc(cr, x_g+(x_d-x_g)/2., height/2., height/2.-1, 0, 2. * M_PI);
+                cairo_fill(cr);
+                cairo_set_source_rgba(cr, 0., 0., 0., 1.);
+                cairo_set_line_width(cr, 1.);
+                cairo_arc(cr, x_g+(x_d-x_g)/2., height/2., height/2.-1, 0, 2. * M_PI);
+            }
+            cairo_stroke(cr);
+            
+            cairo_destroy(cr);
+            pixbuf = gdk_pixbuf_get_from_surface(surface, 0, 0, width, height);
+            cairo_surface_destroy(surface);
+            
+            break;
+        }
+        default :
+        {
+            BUGMSG(0, NULL, gettext("Type de section %d inconnu."), section->type);
+            break;
+        }
+    }
+    
+    return pixbuf;
+}
+
+
 G_MODULE_EXPORT void EF_gtk_sections(Projet *projet)
 /* Description : Création de la fenêtre permettant d'afficher les sections sous forme d'un
  *               tableau.
@@ -294,11 +511,14 @@ G_MODULE_EXPORT void EF_gtk_sections(Projet *projet)
     {
         EF_Section  *section = (EF_Section *)list_parcours->data;
         char        *description;
+        GdkPixbuf   *pixbuf = EF_gtk_sections_dessin(section, 32, 32);
         
         BUG(description = EF_sections_get_description(section), );
+        
         gtk_tree_store_append(ef_gtk->sections, &section->Iter_fenetre, NULL);
-        gtk_tree_store_set(ef_gtk->sections, &section->Iter_fenetre, 0, NULL, 1, section->nom, 2, description, -1);
+        gtk_tree_store_set(ef_gtk->sections, &section->Iter_fenetre, 0, pixbuf, 1, section->nom, 2, description, -1);
         free(description);
+        g_object_unref(pixbuf);
         
         list_parcours = g_list_next(list_parcours);
     }

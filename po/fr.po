@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2012-09-15 14:36+0200\n"
-"PO-Revision-Date: 2012-09-15 14:43+0100\n"
+"POT-Creation-Date: 2012-09-19 22:13+0200\n"
+"PO-Revision-Date: 2012-09-19 22:26+0100\n"
 "Last-Translator: LE GARREC Vincent <vlg@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -463,6 +463,15 @@ msgstr "Le fichier '%s' est corrompu.\n"
 msgid "Type de section %d inconnu.\n"
 msgstr "Type de section %d inconnu.\n"
 
+msgid "La largeur du dessin ne peut être nulle.\n"
+msgstr "La largeur du dessin ne peut être nulle.\n"
+
+msgid "La hauteur du dessin ne peut être nulle.\n"
+msgstr "La hauteur du dessin ne peut être nulle.\n"
+
+msgid "Type de section %d inconnu."
+msgstr "Type de section %d inconnu."
+
 msgid "Section en béton '%s' introuvable.\n"
 msgstr "Section en béton '%s' introuvable.\n"
 
@@ -489,9 +498,6 @@ msgstr "Coté"
 
 msgid "Diamètre"
 msgstr "Diamètre"
-
-msgid "Type de section %d inconnu."
-msgstr "Type de section %d inconnu."
 
 msgid "La section '%s' existe déjà.\n"
 msgstr "La section '%s' existe déjà.\n"
@@ -730,14 +736,56 @@ msgstr "Le type du noeud ou la colonne d'édition est incorrect.\n"
 msgid "Le noeud doit être de type intermédiaire.\n"
 msgstr "Le noeud doit être de type intermédiaire.\n"
 
+msgid "Numéro"
+msgstr "Numéro"
+
+msgid "Appui"
+msgstr "Appui"
+
+msgid "Noeuds libres"
+msgstr "Noeuds libres"
+
+msgid "Position relative"
+msgstr "Position relative"
+
+msgid "Noeuds intermédiaires"
+msgstr "Noeuds intermédiaires"
+
+msgid "Groupes"
+msgstr "Groupes"
+
+msgid "Niveau :"
+msgstr "Niveau :"
+
+msgid "<b>Groupes :</b>"
+msgstr "<b>Groupes :</b>"
+
+msgid "Description"
+msgstr "Description"
+
+msgid "Ajouter"
+msgstr "Ajouter"
+
+msgid "Supprimer"
+msgstr "Supprimer"
+
+msgid "<b>Éléments disponibles :</b>"
+msgstr "<b>Éléments disponibles :</b>"
+
+msgid "Ajouter tout"
+msgstr "Ajouter tout"
+
+msgid "Options"
+msgstr "Options"
+
+msgid "Générer"
+msgstr "Générer"
+
 msgid "Charge :"
 msgstr "Charge :"
 
 msgid "Description :"
 msgstr "Description :"
-
-msgid "Noeuds :"
-msgstr "Noeuds :"
 
 msgid "Repere :"
 msgstr "Repere :"
@@ -754,26 +802,50 @@ msgstr "Position :"
 msgid "Barres :"
 msgstr "Barres :"
 
-msgid "Numéro"
-msgstr "Numéro"
+msgid "Actions"
+msgstr "Actions"
+
+msgid "<b>Actions :</b>"
+msgstr "<b>Actions :</b>"
 
 msgid "Type"
 msgstr "Type"
 
-msgid "Section"
-msgstr "Section"
+msgid "<b>Charges :</b>"
+msgstr "<b>Charges :</b>"
 
-msgid "Matériau"
-msgstr "Matériau"
+msgid "Charge"
+msgstr "Charge"
 
-msgid "Noeud 1"
-msgstr "Noeud 1"
+msgid "Valeur"
+msgstr "Valeur"
 
-msgid "Noeud 2"
-msgstr "Noeud 2"
+msgid "Éditer"
+msgstr "Éditer"
 
-msgid "Relâchement"
-msgstr "Relâchement"
+msgid "Ajout d'une barre"
+msgstr "Ajout d'une barre"
+
+msgid "Numéro :"
+msgstr "Numéro :"
+
+msgid "Type :"
+msgstr "Type :"
+
+msgid "Section :"
+msgstr "Section :"
+
+msgid "Matériau :"
+msgstr "Matériau :"
+
+msgid "Noeud 1 :"
+msgstr "Noeud 1 :"
+
+msgid "Noeud 2 :"
+msgstr "Noeud 2 :"
+
+msgid "Relâchement :"
+msgstr "Relâchement :"
 
 msgid "Options des combinaisons"
 msgstr "Options des combinaisons"
@@ -826,32 +898,23 @@ msgstr "valeur fréquence"
 msgid "valeur quasi-permanente"
 msgstr "valeur quasi-permanente"
 
-msgid "Actions"
-msgstr "Actions"
+msgid "Noeuds :"
+msgstr "Noeuds :"
 
-msgid "<b>Actions :</b>"
-msgstr "<b>Actions :</b>"
+msgid "Section"
+msgstr "Section"
 
-msgid "Description"
-msgstr "Description"
+msgid "Matériau"
+msgstr "Matériau"
 
-msgid "Ajouter"
-msgstr "Ajouter"
+msgid "Noeud 1"
+msgstr "Noeud 1"
 
-msgid "Supprimer"
-msgstr "Supprimer"
+msgid "Noeud 2"
+msgstr "Noeud 2"
 
-msgid "<b>Charges :</b>"
-msgstr "<b>Charges :</b>"
-
-msgid "Charge"
-msgstr "Charge"
-
-msgid "Valeur"
-msgstr "Valeur"
-
-msgid "Éditer"
-msgstr "Éditer"
+msgid "Relâchement"
+msgstr "Relâchement"
 
 msgid "et les barres utilisant la section."
 msgstr "et les barres utilisant la section."
@@ -862,6 +925,9 @@ msgstr "Sections"
 msgid "Nom"
 msgstr "Nom"
 
+msgid "Charge projetée sur la barre"
+msgstr "Charge projetée sur la barre"
+
 msgid "ainsi que les noeuds l'utilisant (y compris les barres et noeuds intermédaires dépendants)."
 msgstr "ainsi que les noeuds l'utilisant (y compris les barres et noeuds intermédaires dépendants)."
 
@@ -870,64 +936,3 @@ msgstr "et annule les conditions d'appuis sur les noeuds l'utilisant."
 
 msgid "Appuis"
 msgstr "Appuis"
-
-msgid "Ajout d'une barre"
-msgstr "Ajout d'une barre"
-
-msgid "Numéro :"
-msgstr "Numéro :"
-
-msgid "Type :"
-msgstr "Type :"
-
-msgid "Section :"
-msgstr "Section :"
-
-msgid "Matériau :"
-msgstr "Matériau :"
-
-msgid "Noeud 1 :"
-msgstr "Noeud 1 :"
-
-msgid "Noeud 2 :"
-msgstr "Noeud 2 :"
-
-msgid "Relâchement :"
-msgstr "Relâchement :"
-
-msgid "Charge projetée sur la barre"
-msgstr "Charge projetée sur la barre"
-
-msgid "Groupes"
-msgstr "Groupes"
-
-msgid "Niveau :"
-msgstr "Niveau :"
-
-msgid "<b>Groupes :</b>"
-msgstr "<b>Groupes :</b>"
-
-msgid "<b>Éléments disponibles :</b>"
-msgstr "<b>Éléments disponibles :</b>"
-
-msgid "Ajouter tout"
-msgstr "Ajouter tout"
-
-msgid "Options"
-msgstr "Options"
-
-msgid "Générer"
-msgstr "Générer"
-
-msgid "Appui"
-msgstr "Appui"
-
-msgid "Noeuds libres"
-msgstr "Noeuds libres"
-
-msgid "Position relative"
-msgstr "Position relative"
-
-msgid "Noeuds intermédiaires"
-msgstr "Noeuds intermédiaires"
-
