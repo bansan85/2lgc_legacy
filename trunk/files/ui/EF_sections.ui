@@ -50,11 +50,14 @@
                                 <child>
                                     <object class="GtkTreeViewColumn" id="EF_sections_treeview_column0">
                                         <property name="visible">True</property>
-                                        <property name="resizable">True</property>
+                                        <property name="resizable">False</property>
                                         <property name="title"></property>
                                         <child>
-                                            <object class="GtkCellRendererText" id="EF_sections_treeview_cell0">
+                                            <object class="GtkCellRendererPixbuf" id="EF_sections_treeview_cell0">
                                             </object>
+                                            <attributes>
+                                                <attribute name="pixbuf">0</attribute>
+                                            </attributes>
                                         </child>
                                     </object>
                                 </child>

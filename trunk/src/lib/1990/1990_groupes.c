@@ -873,17 +873,14 @@ G_MODULE_EXPORT gboolean _1990_groupe_free_groupe(Projet *projet, unsigned int n
         gtk_tree_store_remove(projet->list_gtk._1990_groupes.tree_store_etat, &groupe_curr->Iter);
         
   /* On ajoute tous les éléments associés au groupe dans la liste des éléments disponibles */
-        if (groupe_curr->elements != NULL)
+        list_parcours = groupe_curr->elements;
+        while (list_parcours != NULL)
         {
-            do
-            {
-                Element     *element = list_parcours->data;
-                
-                BUG(_1990_gtk_insert_dispo(projet, element->numero, niveau_groupe) == 0, FALSE);
-                
-                list_parcours = g_list_next(list_parcours);
-            }
-            while (list_parcours != NULL);
+            Element     *element = list_parcours->data;
+            
+            BUG(_1990_gtk_insert_dispo(projet, element->numero, niveau_groupe) == 0, FALSE);
+            
+            list_parcours = g_list_next(list_parcours);
         }
         
     /* Cette fonction est pour éviter d'avoir à utiliser la fonction
@@ -892,14 +889,14 @@ G_MODULE_EXPORT gboolean _1990_groupe_free_groupe(Projet *projet, unsigned int n
      * numéro supérieur se retrouvent avec leur numéro diminué de 1. */
         if (niveau_groupe->groupes != NULL)
         {
-            do
+            list_parcours = niveau_groupe->groupes;
+            while (list_parcours)
             {
                 groupe_curr = list_parcours->data;
                 if (groupe_curr->numero >= groupe)
                     gtk_tree_store_set(projet->list_gtk._1990_groupes.tree_store_etat, &groupe_curr->Iter, 0, groupe_curr->numero, -1);
                 list_parcours = g_list_next(list_parcours);
             }
-            while (list_parcours);
         }
     }
 #endif
