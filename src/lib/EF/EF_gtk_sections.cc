@@ -283,6 +283,8 @@ GdkPixbuf *EF_gtk_sections_dessin(EF_Section *section, unsigned int width, unsig
     double          a;
     cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
     cairo_t         *cr = cairo_create(surface);
+    double          convert;
+    cairo_path_t    *save_path;
     
     BUGMSG(section, NULL, gettext("Paramètre %s incorrect.\n"), "section");
     BUGMSG(width, NULL, gettext("La largeur du dessin ne peut être nulle.\n"));
@@ -320,29 +322,28 @@ GdkPixbuf *EF_gtk_sections_dessin(EF_Section *section, unsigned int width, unsig
             double aa = data->largeur/data->hauteur;
             
             cairo_set_source_rgba(cr, 0.8, 0.8, 0.8, 1.);
+            cairo_new_path(cr);
             
             if (aa > a)
             {
-                double y_h = (height/2. - data->hauteur/aa/data->largeur*width)+1;
-                double y_b = height/2. + data->hauteur/aa/data->largeur*width;
+                convert = width/data->largeur;
                 
-                cairo_rectangle(cr, 1, y_h, width-1, y_b-y_h);
-                cairo_fill(cr);
-                cairo_set_source_rgba(cr, 0., 0., 0., 1.);
-                cairo_set_line_width(cr, 1.);
-                cairo_rectangle(cr, 1, y_h, width-1, y_b-y_h);
+                cairo_rectangle(cr, 1., (height/2. - data->hauteur/2.*convert)+1, width-1, (data->hauteur*convert)-1);
+                save_path = cairo_copy_path(cr);
             }
             else
             {
-                double x_g = (width/2. - data->largeur/aa/data->hauteur*height)+1;
-                double x_d = width/2. + data->largeur/aa/data->hauteur*height;
+                convert = height/data->hauteur;
                 
-                cairo_rectangle(cr, x_g+1, 1, x_d-x_g-1, height-1);
-                cairo_fill(cr);
-                cairo_set_source_rgba(cr, 0., 0., 0., 1.);
-                cairo_set_line_width(cr, 1.);
-                cairo_rectangle(cr, x_g+1, 1, x_d-x_g-1, height-1);
+                cairo_rectangle(cr, (width/2. - data->largeur/2.*convert)+1, 1., (data->largeur*convert)-1, height-1);
+                save_path = cairo_copy_path(cr);
             }
+            
+            cairo_fill(cr);
+            cairo_set_source_rgba(cr, 0., 0., 0., 1.);
+            cairo_set_line_width(cr, 1.);
+            cairo_new_path(cr);
+            cairo_append_path(cr, save_path);
             cairo_stroke(cr);
             
             cairo_destroy(cr);
@@ -361,8 +362,6 @@ GdkPixbuf *EF_gtk_sections_dessin(EF_Section *section, unsigned int width, unsig
             double      ha = data->hauteur_ame;
             
             double          aa = MAX(lt, la)/(ht + ha);
-            cairo_path_t    *save_path;
-            double          convert;
             
             cairo_set_source_rgba(cr, 0.8, 0.8, 0.8, 1.);
             cairo_new_path(cr);
@@ -412,22 +411,22 @@ GdkPixbuf *EF_gtk_sections_dessin(EF_Section *section, unsigned int width, unsig
                 double y_h = height/2. - width/2.;
                 double y_b = height/2. + width/2.;
                 
-                cairo_rectangle(cr, 1, y_h, width-1, y_b-y_h);
+                cairo_rectangle(cr, 1, y_h+1, width-1, y_b-y_h-1);
                 cairo_fill(cr);
                 cairo_set_source_rgba(cr, 0., 0., 0., 1.);
                 cairo_set_line_width(cr, 1.);
-                cairo_rectangle(cr, 1, y_h, width-1, y_b-y_h);
+                cairo_rectangle(cr, 1, y_h+1, width-1, y_b-y_h-1);
             }
             else
             {
                 double x_g = width/2. - height/2.;
                 double x_d = width/2. + height/2.;
                 
-                cairo_rectangle(cr, x_g+1, 1, x_d-x_g-1, height-1);
+                cairo_rectangle(cr, x_g+1., 1., x_d-x_g-1., height-1.);
                 cairo_fill(cr);
                 cairo_set_source_rgba(cr, 0., 0., 0., 1.);
                 cairo_set_line_width(cr, 1.);
-                cairo_rectangle(cr, x_g+1, 1, x_d-x_g-1, height-1);
+                cairo_rectangle(cr, x_g+1., 1., x_d-x_g-1., height-1.);
             }
             cairo_stroke(cr);
             
