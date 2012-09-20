@@ -318,7 +318,7 @@ GdkPixbuf *EF_gtk_sections_dessin(EF_Section *section, unsigned int width, unsig
     {
         case SECTION_RECTANGULAIRE :
         {
-            Beton_Section_Rectangulaire *data = (Beton_Section_Rectangulaire*)section->data;
+            Section_Rectangulaire *data = (Section_Rectangulaire*)section->data;
             double aa = data->largeur/data->hauteur;
             
             cairo_set_source_rgba(cr, 0.8, 0.8, 0.8, 1.);
@@ -354,7 +354,7 @@ GdkPixbuf *EF_gtk_sections_dessin(EF_Section *section, unsigned int width, unsig
         }
         case SECTION_T :
         {
-            Beton_Section_T *data = (Beton_Section_T *)section->data;
+            Section_T *data = (Section_T *)section->data;
             
             double      lt = data->largeur_table;
             double      la = data->largeur_ame;

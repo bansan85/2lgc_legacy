@@ -359,7 +359,7 @@ G_MODULE_EXPORT void* m3d_barre(void *donnees_m3d, Beton_Barre *barre)
         {
             double      y, z;
             CM3dObject  *bas, *haut, *gauche, *droite;
-            Beton_Section_Rectangulaire *section = (Beton_Section_Rectangulaire *)barre->section->data;
+            Section_Rectangulaire *section = (Section_Rectangulaire *)barre->section->data;
             
             droite = M3d_plan_new("", longueur, section->hauteur, 1);
             droite->rotations(180., 0., 0.);
@@ -420,7 +420,7 @@ G_MODULE_EXPORT void* m3d_barre(void *donnees_m3d, Beton_Barre *barre)
         }
         case SECTION_T :
         {
-            Beton_Section_T *section = (Beton_Section_T *)barre->section->data;
+            Section_T *section = (Section_T *)barre->section->data;
             
             double  y, z;
             double  lt = section->largeur_table;
@@ -510,7 +510,7 @@ G_MODULE_EXPORT void* m3d_barre(void *donnees_m3d, Beton_Barre *barre)
         }
         case SECTION_CARRE :
         {
-            Beton_Section_Carre *section = (Beton_Section_Carre *)barre->section->data;
+            Section_Carre *section = (Section_Carre *)barre->section->data;
             double  y, z;
             CM3dObject  *bas, *haut, *gauche, *droite;
             
@@ -573,7 +573,7 @@ G_MODULE_EXPORT void* m3d_barre(void *donnees_m3d, Beton_Barre *barre)
         }
         case SECTION_CIRCULAIRE :
         {
-            Beton_Section_Circulaire *section = (Beton_Section_Circulaire *)barre->section->data;
+            Section_Circulaire *section = (Section_Circulaire *)barre->section->data;
             double  y, z;
             
             tout = M3d_cylindre_new(tmp, section->diametre/2., longueur, 12);
