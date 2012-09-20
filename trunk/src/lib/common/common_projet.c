@@ -140,8 +140,8 @@ G_MODULE_EXPORT gboolean projet_init_graphique(Projet *projet)
  *             projet == NULL.
  */
 {
-    Comp_Gtk        *comps;
-    List_Gtk_m3d    *m3d;
+    Comp_Gtk    *comps;
+    Gtk_m3d     *m3d;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     

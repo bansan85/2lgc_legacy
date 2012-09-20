@@ -28,7 +28,7 @@
 #ifdef ENABLE_GTK
 #include <gtk/gtk.h>
 
-typedef struct __List_Gtk_1990_Groupes
+typedef struct __Gtk_1990_Groupes
 {
     GtkBuilder      *builder;
     GtkBuilder      *builder_options;
@@ -50,10 +50,10 @@ typedef struct __List_Gtk_1990_Groupes
     GtkToolItem     *item_ajout_dispo;
     GtkToolItem     *item_ajout_tout_dispo;
     GtkToolItem     *item_groupe_suppr;
-} List_Gtk_1990_Groupes;
+} Gtk_1990_Groupes;
 
 
-typedef struct __List_Gtk_1990_Actions
+typedef struct __Gtk_1990_Actions
 {
     GtkBuilder      *builder;
     GtkWidget       *window;
@@ -76,10 +76,10 @@ typedef struct __List_Gtk_1990_Actions
     // compatible avec les composants GtkComboBox. Cette liste est utilisée dans les fenêtres
     // permettant de créer ou d'éditer des charges afin de définir dans quelle action elles
     // s'appliqueront.
-} List_Gtk_1990_Actions;
+} Gtk_1990_Actions;
 
 
-typedef struct __List_Gtk_EF_Charge_Noeud
+typedef struct __Gtk_EF_Charge_Noeud
 {
     GtkBuilder      *builder;
     GtkWidget       *window;
@@ -87,18 +87,18 @@ typedef struct __List_Gtk_EF_Charge_Noeud
     
     unsigned int    action;
     unsigned int    charge;
-} List_Gtk_EF_Charge_Noeud;
+} Gtk_EF_Charge_Noeud;
 
-typedef struct __List_Gtk_EF_Charge_Barre_Ponctuelle
+typedef struct __Gtk_EF_Charge_Barre_Ponctuelle
 {
     GtkBuilder      *builder;
     GtkWidget       *window;
     unsigned int    action;
     unsigned int    charge;
     GtkComboBox     *combobox_charge;
-} List_Gtk_EF_Charge_Barre_Ponctuelle;
+} Gtk_EF_Charge_Barre_Ponctuelle;
 
-typedef struct __List_Gtk_EF_Charge_Barre_Repartie_Uniforme
+typedef struct __Gtk_EF_Charge_Barre_Repartie_Uniforme
 {
     GtkBuilder      *builder;
     GtkWidget       *window;
@@ -110,9 +110,9 @@ typedef struct __List_Gtk_EF_Charge_Barre_Repartie_Uniforme
     GtkWidget       *check_button_repere_local;
     GtkWidget       *check_button_repere_global;
     GtkWidget       *check_button_projection;
-} List_Gtk_EF_Charge_Barre_Repartie_Uniforme;
+} Gtk_EF_Charge_Barre_Repartie_Uniforme;
 
-typedef struct __List_Gtk_EF_Noeud
+typedef struct __Gtk_EF_Noeud
 {
     GtkBuilder      *builder;
     
@@ -120,10 +120,10 @@ typedef struct __List_Gtk_EF_Noeud
     GtkWidget       *notebook;
     GtkTreeStore    *tree_store_libre;
     GtkTreeStore    *tree_store_barre;
-} List_Gtk_EF_Noeud;
+} Gtk_EF_Noeud;
 
 
-typedef struct __List_Gtk_EF_Barres
+typedef struct __Gtk_EF_Barres
 {
     GtkBuilder      *builder;
     GtkWidget       *window;
@@ -134,9 +134,9 @@ typedef struct __List_Gtk_EF_Barres
     GtkListStore    *liste_relachements;
     GtkListStore    *liste_types;
     GtkListStore    *liste_materiaux;
-} List_Gtk_EF_Barres;
+} Gtk_EF_Barres;
 
-typedef struct __List_Gtk_EF_Appuis
+typedef struct __Gtk_EF_Appuis
 {
     GtkBuilder      *builder;
     GtkWidget       *window;
@@ -144,9 +144,9 @@ typedef struct __List_Gtk_EF_Appuis
     GtkTreeStore    *appuis;
     GtkListStore    *liste_appuis;
     GtkListStore    *liste_type_appui;
-} List_Gtk_EF_Appuis;
+} Gtk_EF_Appuis;
 
-typedef struct __List_Gtk_EF_Sections
+typedef struct __Gtk_EF_Sections
 {
     GtkBuilder      *builder;
     GtkWidget       *window;
@@ -154,7 +154,7 @@ typedef struct __List_Gtk_EF_Sections
     GtkTreeStore    *sections;
     GtkListStore    *liste_sections;
     GtkListStore    *liste_type_section;
-} List_Gtk_EF_Sections;
+} Gtk_EF_Sections;
 
 #endif
 
@@ -660,25 +660,25 @@ typedef struct __Comp_Gtk
 } Comp_Gtk;
 
 
-typedef struct __List_Gtk_m3d
+typedef struct __Gtk_m3d
 {
     GtkWidget   *drawing;
     gpointer    data;
-} List_Gtk_m3d;
+} Gtk_m3d;
 
 
 typedef struct __List_Gtk
 {                       // Contient toutes les données pour l'interface graphique GTK+3
-    List_Gtk_1990_Actions   _1990_actions;     // pour l'Eurocode 0
-    List_Gtk_1990_Groupes   _1990_groupes;     // pour l'Eurocode 0
-    List_Gtk_EF_Charge_Noeud ef_charge_noeud;
-    List_Gtk_EF_Charge_Barre_Ponctuelle ef_charge_barre_ponctuelle;
-    List_Gtk_EF_Charge_Barre_Repartie_Uniforme ef_charge_barre_repartie_uniforme;
-    List_Gtk_m3d            m3d;       // pour l'affichage graphique de la structure
-    List_Gtk_EF_Noeud       ef_noeud;
-    List_Gtk_EF_Barres      ef_barres;
-    List_Gtk_EF_Appuis      ef_appuis;
-    List_Gtk_EF_Sections    ef_sections;
+    Gtk_1990_Actions   _1990_actions;     // pour l'Eurocode 0
+    Gtk_1990_Groupes   _1990_groupes;     // pour l'Eurocode 0
+    Gtk_EF_Charge_Noeud ef_charge_noeud;
+    Gtk_EF_Charge_Barre_Ponctuelle ef_charge_barre_ponctuelle;
+    Gtk_EF_Charge_Barre_Repartie_Uniforme ef_charge_barre_repartie_uniforme;
+    Gtk_m3d            m3d;       // pour l'affichage graphique de la structure
+    Gtk_EF_Noeud       ef_noeud;
+    Gtk_EF_Barres      ef_barres;
+    Gtk_EF_Appuis      ef_appuis;
+    Gtk_EF_Sections    ef_sections;
     Comp_Gtk                comp;      // tous les composants grahpiques
 } List_Gtk;
 #endif

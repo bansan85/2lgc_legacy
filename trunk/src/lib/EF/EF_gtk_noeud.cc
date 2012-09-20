@@ -66,7 +66,7 @@ G_MODULE_EXPORT void EF_gtk_noeud_ajouter(GtkButton *button __attribute__((unuse
  * Valeur renvoyée : Aucune.
  */
 {
-    List_Gtk_EF_Noeud   *ef_gtk;
+    Gtk_EF_Noeud    *ef_gtk;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_noeud.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Noeuds");
@@ -117,12 +117,12 @@ G_MODULE_EXPORT void EF_gtk_noeud_supprimer(GtkButton *button __attribute__((unu
  * Valeur renvoyée : Aucune.
  */
 {
-    List_Gtk_EF_Noeud   *ef_gtk;
-    GtkTreeModel        *model;
-    GtkTreeIter         Iter;
-    unsigned int        num;
-    EF_Noeud            *noeud;
-    GList               *list = NULL;
+    Gtk_EF_Noeud    *ef_gtk;
+    GtkTreeModel    *model;
+    GtkTreeIter     Iter;
+    unsigned int    num;
+    EF_Noeud        *noeud;
+    GList           *list = NULL;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_noeud.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Noeuds");
@@ -232,14 +232,14 @@ G_MODULE_EXPORT void EF_gtk_noeud_edit_pos_abs(GtkCellRendererText *cell, gchar 
  * Valeur renvoyée : Aucune.
  */
 {
-    List_Gtk_EF_Noeud   *gtk_noeud;
-    GtkTreeModel        *model;
-    GtkTreePath         *path;
-    GtkTreeIter         iter;
-    unsigned int        i;
-    char                *fake = (char*)malloc(sizeof(char)*(strlen(new_text)+1));
-    double              conversion;
-    gint                column = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cell), "column"));
+    Gtk_EF_Noeud    *gtk_noeud;
+    GtkTreeModel    *model;
+    GtkTreePath     *path;
+    GtkTreeIter     iter;
+    unsigned int    i;
+    char            *fake = (char*)malloc(sizeof(char)*(strlen(new_text)+1));
+    double          conversion;
+    gint            column = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cell), "column"));
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_noeud.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Noeuds");
@@ -321,14 +321,14 @@ G_MODULE_EXPORT void EF_gtk_noeud_edit_pos_relat(GtkCellRendererText *cell, gcha
  * Valeur renvoyée : Aucune.
  */
 {
-    List_Gtk_EF_Noeud       *gtk_noeud;
-    GtkTreeModel            *model;
-    GtkTreePath             *path;
-    GtkTreeIter             iter;
-    gint                    i;
-    char                    *fake = (char*)malloc(sizeof(char)*(strlen(new_text)+1));
-    double                  conversion;
-    gint                    column = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cell), "column"));
+    Gtk_EF_Noeud    *gtk_noeud;
+    GtkTreeModel    *model;
+    GtkTreePath     *path;
+    GtkTreeIter     iter;
+    gint            i;
+    char            *fake = (char*)malloc(sizeof(char)*(strlen(new_text)+1));
+    double          conversion;
+    gint            column = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cell), "column"));
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_noeud.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Noeuds");
@@ -442,12 +442,12 @@ G_MODULE_EXPORT void EF_gtk_noeud_edit_noeud_appui(
  * Valeur renvoyée : Aucune.
 */
 {
-    List_Gtk_EF_Noeud   *ef_gtk;
-    GtkTreeModel        *model;
-    GtkTreePath         *path;
-    GtkTreeIter         iter;
-    gint                numero_noeud;
-    EF_Noeud            *noeud;
+    Gtk_EF_Noeud    *ef_gtk;
+    GtkTreeModel    *model;
+    GtkTreePath     *path;
+    GtkTreeIter     iter;
+    gint            numero_noeud;
+    EF_Noeud        *noeud;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_noeud.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Noeuds");
@@ -498,12 +498,12 @@ G_MODULE_EXPORT void EF_gtk_noeud_edit_noeud_barre_barre(
  * Valeur renvoyée : Aucune.
 */
 {
-    List_Gtk_EF_Noeud   *gtk_noeud;
-    char                *fake = (char*)malloc(sizeof(char)*(strlen(new_text)+1));
-    unsigned int        numero, conversion;
-    GtkTreeModel        *model;
-    GtkTreePath         *path;
-    GtkTreeIter         iter;
+    Gtk_EF_Noeud    *gtk_noeud;
+    char            *fake = (char*)malloc(sizeof(char)*(strlen(new_text)+1));
+    unsigned int    numero, conversion;
+    GtkTreeModel    *model;
+    GtkTreePath     *path;
+    GtkTreeIter     iter;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_noeud.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Noeuds");
@@ -612,7 +612,7 @@ G_MODULE_EXPORT void EF_gtk_noeud(Projet *projet)
  * Valeur renvoyée : Aucune.
  */
 {
-    List_Gtk_EF_Noeud   *ef_gtk;
+    Gtk_EF_Noeud   *ef_gtk;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_noeud.builder == NULL, , gettext("La fenêtre graphique %s est déjà initialisée.\n"), "Neouds");

@@ -209,10 +209,10 @@ G_MODULE_EXPORT gboolean _1990_gtk_actions_tree_view_drag(GtkWidget *widget,
  *             _1990_action_deplace_charge.
  */
 {
-    gint                    cx, cy;
-    List_Gtk_1990_Actions   *list_gtk_1990_actions = &projet->list_gtk._1990_actions;
-    GtkTreePath             *path;
-    GtkTreeModel            *list_store;
+    gint                cx, cy;
+    Gtk_1990_Actions    *list_gtk_1990_actions = &projet->list_gtk._1990_actions;
+    GtkTreePath         *path;
+    GtkTreeModel        *list_store;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk._1990_actions.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Actions");

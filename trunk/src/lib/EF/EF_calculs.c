@@ -190,9 +190,9 @@ G_MODULE_EXPORT gboolean EF_calculs_initialise(Projet *projet)
     
     // Allocation des triplets de la matrice de rigidité partielle (triplet_rigidite_partielle)
     //   et la matrice de rigidité globale (triplet_rigidite_globale).
-    BUGMSG(projet->ef_donnees.triplet_rigidite_partielle = cholmod_allocate_triplet((size_t)nb_col_partielle, (size_t)nb_col_partielle, nnz_max, 0, CHOLMOD_REAL, projet->ef_donnees.c), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(projet->ef_donnees.triplet_rigidite_partielle = cholmod_allocate_triplet(nb_col_partielle, nb_col_partielle, nnz_max, 0, CHOLMOD_REAL, projet->ef_donnees.c), FALSE, gettext("Erreur d'allocation mémoire.\n"));
     projet->ef_donnees.triplet_rigidite_partielle->nnz = nnz_max;
-    BUGMSG(projet->ef_donnees.triplet_rigidite_complete = cholmod_allocate_triplet((size_t)nb_col_complete, (size_t)nb_col_complete, nnz_max, 0, CHOLMOD_REAL, projet->ef_donnees.c), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(projet->ef_donnees.triplet_rigidite_complete = cholmod_allocate_triplet(nb_col_complete, nb_col_complete, nnz_max, 0, CHOLMOD_REAL, projet->ef_donnees.c), FALSE, gettext("Erreur d'allocation mémoire.\n"));
     projet->ef_donnees.triplet_rigidite_complete->nnz = nnz_max;
     
     // Initialisation de l'indice du triplet en cours à 0 pour la matrice de rigidité partielle

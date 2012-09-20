@@ -44,9 +44,9 @@ G_MODULE_EXPORT gboolean m3d_init(Projet *projet)
  */
 {
     // Trivial
-    List_Gtk_m3d    *m3d;
-    SGlobalData     *global_data;
-    CM3dLight       *light;
+    Gtk_m3d     *m3d;
+    SGlobalData *global_data;
+    CM3dLight   *light;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
@@ -129,12 +129,12 @@ G_MODULE_EXPORT gboolean m3d_camera_axe_x_z(Projet *projet)
  *             en cas d'erreur due à une fonction interne.
  */
 {
-    GList           *list_parcours;
-    List_Gtk_m3d    *m3d;
-    SGlobalData     *vue;
-    double          x_min, x_max, z_min, z_max, x, y, z;
-    EF_Noeud        *noeud;
-    EF_Point        *point;
+    GList       *list_parcours;
+    Gtk_m3d     *m3d;
+    SGlobalData *vue;
+    double      x_min, x_max, z_min, z_max, x, y, z;
+    EF_Noeud    *noeud;
+    EF_Point    *point;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     if (g_list_length(projet->ef_donnees.noeuds) <= 1)
@@ -261,7 +261,7 @@ G_MODULE_EXPORT void* m3d_noeud(void *donnees_m3d, EF_Noeud *noeud)
     BUGMSG(nom = g_strdup_printf("noeud %u", noeud->numero), NULL, gettext("Erreur d'allocation mémoire.\n"));
     BUG(point = EF_noeuds_renvoie_position(noeud), NULL);
     
-    vue = (SGlobalData*)((List_Gtk_m3d *)donnees_m3d)->data;
+    vue = (SGlobalData*)((Gtk_m3d *)donnees_m3d)->data;
     
     cube = vue->scene->get_object_by_name(nom);
     if (cube != NULL)
@@ -301,7 +301,7 @@ G_MODULE_EXPORT void m3d_noeud_free(void *donnees_m3d, EF_Noeud *noeud)
     
     BUGMSG(nom = g_strdup_printf("noeud %u", noeud->numero), , gettext("Erreur d'allocation mémoire.\n"));
     
-    vue = (SGlobalData*)((List_Gtk_m3d *)donnees_m3d)->data;
+    vue = (SGlobalData*)((Gtk_m3d *)donnees_m3d)->data;
     
     cube = vue->scene->get_object_by_name(nom);
     vue->scene->remove_object(cube);
@@ -328,17 +328,17 @@ G_MODULE_EXPORT void* m3d_barre(void *donnees_m3d, Beton_Barre *barre)
  *             en cas d'erreur d'une fonction interne.
  */
 {
-    List_Gtk_m3d    *m3d;
-    SGlobalData     *vue;
-    CM3dObject      *objet;
-    char            *tmp;
-    CM3dObject      *tout;
-    double          longueur;
+    Gtk_m3d     *m3d;
+    SGlobalData *vue;
+    CM3dObject  *objet;
+    char        *tmp;
+    CM3dObject  *tout;
+    double      longueur;
     
     BUGMSG(donnees_m3d, NULL, gettext("Paramètre %s incorrect.\n"), "donnees_m3d");
     BUGMSG(barre, NULL, gettext("Paramètre %s incorrect.\n"), "barre");
     
-    m3d = (List_Gtk_m3d *)donnees_m3d;
+    m3d = (Gtk_m3d *)donnees_m3d;
     vue = (SGlobalData*)m3d->data;
     
     // On supprime l'élément s'il existe déjà
@@ -647,7 +647,7 @@ G_MODULE_EXPORT void m3d_barre_free(void *donnees_m3d, Beton_Barre *barre)
     
     BUGMSG(nom = g_strdup_printf("barre %u", barre->numero), , gettext("Erreur d'allocation mémoire.\n"));
     
-    vue = (SGlobalData*)((List_Gtk_m3d *)donnees_m3d)->data;
+    vue = (SGlobalData*)((Gtk_m3d *)donnees_m3d)->data;
     
     cube = vue->scene->get_object_by_name(nom);
     vue->scene->remove_object(cube);
