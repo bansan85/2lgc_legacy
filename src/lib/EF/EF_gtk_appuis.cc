@@ -247,13 +247,13 @@ G_MODULE_EXPORT void EF_gtk_appuis_edit_type(GtkCellRendererText *cell, gchar *p
  * Valeur renvoyée : Aucune.
 */
 {
-    List_Gtk_EF_Appuis  *ef_gtk;
-    GtkTreeModel *model;
-    GtkTreeIter  iter;
-    GtkTreePath  *path;
-    char         *nom;
-    EF_Appui     *appui;
-    int          column = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cell), "column"));
+    Gtk_EF_Appuis   *ef_gtk;
+    GtkTreeModel    *model;
+    GtkTreeIter     iter;
+    GtkTreePath     *path;
+    char            *nom;
+    EF_Appui        *appui;
+    int             column = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cell), "column"));
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_appuis.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Appui");
@@ -288,12 +288,12 @@ G_MODULE_EXPORT void EF_gtk_appuis_edit_nom(GtkCellRendererText *cell __attribut
  * Valeur renvoyée : Aucune.
 */
 {
-    List_Gtk_EF_Appuis  *ef_gtk;
-    GtkTreeModel *model;
-    GtkTreeIter  iter;
-    GtkTreePath  *path;
-    char         *nom;
-    EF_Appui     *appui;
+    Gtk_EF_Appuis   *ef_gtk;
+    GtkTreeModel    *model;
+    GtkTreeIter     iter;
+    GtkTreePath     *path;
+    char            *nom;
+    EF_Appui        *appui;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_appuis.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Appui");
@@ -384,8 +384,8 @@ G_MODULE_EXPORT void EF_gtk_appuis(Projet *projet)
  *           interface graphique impossible à générer.
  */
 {
-    List_Gtk_EF_Appuis  *ef_gtk;
-    GList               *list_parcours;
+    Gtk_EF_Appuis   *ef_gtk;
+    GList           *list_parcours;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_appuis.builder == NULL, , gettext("La fenêtre graphique %s est déjà initialisée.\n"), "Appui");

@@ -111,13 +111,13 @@ G_MODULE_EXPORT void EF_gtk_barres_edit_type(GtkCellRendererText *cell __attribu
  * Valeur renvoyée : Aucune.
 */
 {
-    List_Gtk_EF_Barres  *ef_gtk;
-    GtkTreeModel        *model;
-    GtkTreeIter         iter, iter2;
-    guint               numero_barre;
-    Beton_Barre         *barre = NULL;
-    char                *nom_type;
-    gint                parcours;
+    Gtk_EF_Barres   *ef_gtk;
+    GtkTreeModel    *model;
+    GtkTreeIter     iter, iter2;
+    guint           numero_barre;
+    Beton_Barre     *barre = NULL;
+    char            *nom_type;
+    gint            parcours;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_barres.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Barres");
@@ -203,12 +203,12 @@ G_MODULE_EXPORT void EF_gtk_barres_edit_materiau(
  * Valeur renvoyée : Aucune.
 */
 {
-    List_Gtk_EF_Barres  *ef_gtk;
-    GtkTreeModel        *model;
-    GtkTreeIter         iter;
-    guint               numero_barre;
-    Beton_Barre         *barre = NULL;
-    Beton_Materiau      *materiau;
+    Gtk_EF_Barres   *ef_gtk;
+    GtkTreeModel    *model;
+    GtkTreeIter     iter;
+    guint           numero_barre;
+    Beton_Barre     *barre = NULL;
+    Beton_Materiau  *materiau;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_barres.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Barres");
@@ -240,12 +240,12 @@ G_MODULE_EXPORT void EF_gtk_barres_edit_relachement(
  * Valeur renvoyée : Aucune.
 */
 {
-    List_Gtk_EF_Barres  *ef_gtk;
-    GtkTreeModel        *model;
-    GtkTreeIter         iter;
-    guint               numero_barre;
-    Beton_Barre         *barre = NULL;
-    EF_Relachement      *relachement;
+    Gtk_EF_Barres   *ef_gtk;
+    GtkTreeModel    *model;
+    GtkTreeIter     iter;
+    guint           numero_barre;
+    Beton_Barre     *barre = NULL;
+    EF_Relachement  *relachement;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_barres.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Barres");
@@ -281,13 +281,13 @@ G_MODULE_EXPORT void EF_gtk_barres_edit_noeud(GtkCellRendererText *cell __attrib
  * Valeur renvoyée : Aucune.
  */
 {
-    List_Gtk_EF_Barres      *gtk_barre;
-    GtkTreeModel            *model;
-    GtkTreeIter             iter;
-    gint                    i;
-    char                    *fake = (char*)malloc(sizeof(char)*(strlen(new_text)+1));
-    unsigned int            conversion;
-    gint                    column = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cell), "column"));
+    Gtk_EF_Barres   *gtk_barre;
+    GtkTreeModel    *model;
+    GtkTreeIter     iter;
+    gint            i;
+    char            *fake = (char*)malloc(sizeof(char)*(strlen(new_text)+1));
+    unsigned int    conversion;
+    gint            column = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cell), "column"));
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_barres.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Barres");
@@ -331,8 +331,8 @@ G_MODULE_EXPORT void EF_gtk_barres(Projet *projet)
  *           interface graphique impossible à générer.
  */
 {
-    List_Gtk_EF_Barres  *ef_gtk;
-    GList               *list_parcours;
+    Gtk_EF_Barres   *ef_gtk;
+    GList           *list_parcours;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_barres.builder == NULL, , gettext("La fenêtre graphique %s est déjà initialisée.\n"), "Barres");

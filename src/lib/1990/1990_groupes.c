@@ -338,11 +338,11 @@ G_MODULE_EXPORT gboolean _1990_groupe_ajout_element(Projet *projet, unsigned int
     #ifdef ENABLE_GTK
     if ((projet->list_gtk._1990_groupes.builder != NULL) && (GTK_COMMON_SPINBUTTON_AS_UINT(GTK_SPIN_BUTTON(projet->list_gtk._1990_groupes.spin_button_niveau)) == niveau))
     {
-        GtkTreeIter             iter;
-        unsigned int            numero;
-        List_Gtk_1990_Groupes   *gtk_1990_groupes = &projet->list_gtk._1990_groupes;
-        GtkTreePath             *path; // Pour développer une ligne du TreeView
-        Element        	        *element, *element2;
+        GtkTreeIter         iter;
+        unsigned int        numero;
+        Gtk_1990_Groupes    *gtk_1990_groupes = &projet->list_gtk._1990_groupes;
+        GtkTreePath         *path; // Pour développer une ligne du TreeView
+        Element        	    *element, *element2;
         
         // On supprime l'élément à ajouter dans le groupe de la liste des éléments disponibles.
         if (gtk_tree_model_get_iter_first(GTK_TREE_MODEL(gtk_1990_groupes->tree_store_dispo), &iter) == TRUE)
@@ -887,16 +887,13 @@ G_MODULE_EXPORT gboolean _1990_groupe_free_groupe(Projet *projet, unsigned int n
      * _1990_gtk_groupes_affiche_niveau (optimisation). Une mise à jour du composant graphique
      * est nécessaire car, en supprimant le groupe en cours, tous les groupes avec un
      * numéro supérieur se retrouvent avec leur numéro diminué de 1. */
-        if (niveau_groupe->groupes != NULL)
+        list_parcours = niveau_groupe->groupes;
+        while (list_parcours != NULL)
         {
-            list_parcours = niveau_groupe->groupes;
-            while (list_parcours)
-            {
-                groupe_curr = list_parcours->data;
-                if (groupe_curr->numero >= groupe)
-                    gtk_tree_store_set(projet->list_gtk._1990_groupes.tree_store_etat, &groupe_curr->Iter, 0, groupe_curr->numero, -1);
-                list_parcours = g_list_next(list_parcours);
-            }
+            groupe_curr = list_parcours->data;
+            if (groupe_curr->numero >= groupe)
+                gtk_tree_store_set(projet->list_gtk._1990_groupes.tree_store_etat, &groupe_curr->Iter, 0, groupe_curr->numero, -1);
+            list_parcours = g_list_next(list_parcours);
         }
     }
 #endif

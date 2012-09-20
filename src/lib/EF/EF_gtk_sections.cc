@@ -168,12 +168,12 @@ G_MODULE_EXPORT void EF_gtk_sections_edit_nom(GtkCellRendererText *cell __attrib
  * Valeur renvoyée : Aucune.
 */
 {
-    List_Gtk_EF_Sections  *ef_gtk;
-    GtkTreeModel *model;
-    GtkTreeIter  iter;
-    GtkTreePath  *path;
-    char         *nom;
-    EF_Section   *section;
+    Gtk_EF_Sections *ef_gtk;
+    GtkTreeModel    *model;
+    GtkTreeIter     iter;
+    GtkTreePath     *path;
+    char            *nom;
+    EF_Section      *section;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_sections.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Section");
@@ -490,8 +490,8 @@ G_MODULE_EXPORT void EF_gtk_sections(Projet *projet)
  *           interface graphique impossible à générer.
  */
 {
-    List_Gtk_EF_Sections    *ef_gtk;
-    GList   *list_parcours;
+    Gtk_EF_Sections *ef_gtk;
+    GList           *list_parcours;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_sections.builder == NULL, , gettext("La fenêtre graphique %s est déjà initialisée.\n"), "Section");

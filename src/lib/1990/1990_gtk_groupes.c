@@ -160,13 +160,13 @@ gboolean _1990_gtk_groupes_affiche_niveau(Projet *projet, unsigned int niveau)
  *                _1990_groupe_positionne_groupe.
  */
 {
-    Niveau_Groupe           *niveau_groupe;
-    unsigned int            dispo_max, i;
-    char                    *dispos;
-    gboolean                premier = TRUE;
-    List_Gtk_1990_Groupes   *gtk_1990_groupes;
-    GtkTreePath             *path;
-    GList                   *list_parcours;
+    Niveau_Groupe       *niveau_groupe;
+    unsigned int        dispo_max, i;
+    char                *dispos;
+    gboolean            premier = TRUE;
+    Gtk_1990_Groupes    *gtk_1990_groupes;
+    GtkTreePath         *path;
+    GList               *list_parcours;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->niveaux_groupes, FALSE, gettext("Le projet ne possède pas de niveaux de groupes.\n"));
@@ -406,13 +406,13 @@ int _1990_gtk_insert_dispo(Projet *projet, unsigned int numero, Niveau_Groupe *n
  *             interface graphique non initialisée.
  */
 {
-    List_Gtk_1990_Groupes   *gtk_1990_groupes;
-    gboolean        retour;
-    GtkTreeModel    *model;
-    GtkTreeIter     iter, iter2;
-    unsigned int    nombre;
-    char            *nom;
-    GtkTreePath     *path;
+    Gtk_1990_Groupes    *gtk_1990_groupes;
+    gboolean            retour;
+    GtkTreeModel        *model;
+    GtkTreeIter         iter, iter2;
+    unsigned int        nombre;
+    char                *nom;
+    GtkTreePath         *path;
     
     BUGMSG(projet, -1, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk._1990_groupes.builder, -1, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes");
@@ -572,14 +572,14 @@ int _1990_gtk_button_ajout_dispo_proc(unsigned int ngroupe, Projet *projet)
  *             interface graphique non initialisée.
  */
 {
-    GtkTreeModel   	        *model1;
-    GtkTreeIter    	        iter1;
-    unsigned int            numero, niveau;
-    char           	        *nom;
-    Niveau_Groupe  	        *niveau_groupe;
-    Groupe         	        *groupe;
-    GList                   *list, *list_orig;
-    List_Gtk_1990_Groupes   *gtk_1990_groupes;
+    GtkTreeModel   	    *model1;
+    GtkTreeIter    	    iter1;
+    unsigned int        numero, niveau;
+    char           	    *nom;
+    Niveau_Groupe  	    *niveau_groupe;
+    Groupe         	    *groupe;
+    GList               *list, *list_orig;
+    Gtk_1990_Groupes    *gtk_1990_groupes;
     
     BUGMSG(projet, -1, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->niveaux_groupes, -1, gettext("Le projet ne possède pas de niveaux de groupes.\n"));
@@ -678,10 +678,10 @@ G_MODULE_EXPORT void _1990_gtk_tree_view_etat_drag(GtkWidget *widget __attribute
  * Valeur renvoyée : Aucune.
  */
 {
-    gint                    cx, cy;
-    List_Gtk_1990_Groupes   *gtk_1990_groupes = &projet->list_gtk._1990_groupes;
-    GtkTreePath             *path;
-    GtkTreeIter             iter, iter_tmp;
+    gint                cx, cy;
+    Gtk_1990_Groupes    *gtk_1990_groupes = &projet->list_gtk._1990_groupes;
+    GtkTreePath         *path;
+    GtkTreeIter         iter, iter_tmp;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->niveaux_groupes, , gettext("Le projet ne possède pas de niveaux de groupes.\n"));
@@ -1154,8 +1154,8 @@ G_MODULE_EXPORT void _1990_gtk_tree_select_changed(
  * Valeur renvoyée : Aucune.
  */
 {
-    List_Gtk_1990_Groupes   *gtk_1990_groupes = &projet->list_gtk._1990_groupes;
-    GtkTreeIter             iter;
+    Gtk_1990_Groupes    *gtk_1990_groupes = &projet->list_gtk._1990_groupes;
+    GtkTreeIter         iter;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk._1990_groupes.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes");

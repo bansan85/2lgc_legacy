@@ -78,7 +78,7 @@ G_MODULE_EXPORT void EF_gtk_barres_add_add_clicked(GtkButton *button __attribute
     GtkTreeModel    *model;
     GtkTreeIter     Iter;
     
-    List_Gtk_EF_Barres  *ef_gtk;
+    Gtk_EF_Barres   *ef_gtk;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_barres.builder_add, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Appui");
@@ -180,9 +180,9 @@ G_MODULE_EXPORT void EF_gtk_barres_add_check_add(GtkWidget *widget, Projet *proj
  * Valeur renvoyée : Aucune.
  */
 {
-    List_Gtk_EF_Barres  *ef_gtk;
-    gboolean            ok = FALSE;
-    EF_Noeud            *noeud1, *noeud2;
+    Gtk_EF_Barres   *ef_gtk;
+    gboolean        ok = FALSE;
+    EF_Noeud        *noeud1, *noeud2;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_barres.builder_add, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Appui");
@@ -218,8 +218,8 @@ G_MODULE_EXPORT void EF_gtk_barres_ajouter(GtkButton *button __attribute__((unus
  * Valeur renvoyée : Aucune.
  */
 {
-    List_Gtk_EF_Barres  *ef_gtk;
-    char                *nb_barres;
+    Gtk_EF_Barres   *ef_gtk;
+    char            *nb_barres;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_barres.builder_add == NULL, , gettext("La fenêtre graphique %s est déjà initialisée.\n"), "Ajout Appui");

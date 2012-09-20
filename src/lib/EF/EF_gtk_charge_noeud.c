@@ -124,13 +124,13 @@ gboolean EF_gtk_charge_noeud_recupere_donnees(Projet *projet, unsigned int *num_
  *             en cas d'erreur d'allocation mémoire.
  */
 {
-    GtkWidget                   *dialog;
-    List_Gtk_EF_Charge_Noeud    *ef_gtk;
-    GList                       *num_noeuds;
-    GtkTextIter                 start, end;
-    gchar                       *texte_tmp;
-    GtkTextBuffer               *textbuffer;
-    gint                        get_active;
+    GtkWidget           *dialog;
+    Gtk_EF_Charge_Noeud *ef_gtk;
+    GList               *num_noeuds;
+    GtkTextIter         start, end;
+    gchar               *texte_tmp;
+    GtkTextBuffer       *textbuffer;
+    gint                get_active;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(num_action, FALSE, gettext("Paramètre %s incorrect.\n"), "num_action");
@@ -293,12 +293,12 @@ void EF_gtk_charge_noeud_editer_clicked(GtkButton *button __attribute__((unused)
  * Valeur renvoyée : Aucune.
  */
 {
-    List_Gtk_EF_Charge_Noeud    *ef_gtk;
-    double                      fx, fy, fz, mx, my, mz;
-    unsigned int                num_action;
-    GList                       *noeuds;
-    gchar                       *texte;
-    Charge_Noeud                *charge_noeud;
+    Gtk_EF_Charge_Noeud *ef_gtk;
+    double              fx, fy, fz, mx, my, mz;
+    unsigned int        num_action;
+    GList               *noeuds;
+    gchar               *texte;
+    Charge_Noeud        *charge_noeud;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_charge_noeud.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Nodale");
@@ -386,8 +386,8 @@ G_MODULE_EXPORT gboolean EF_gtk_charge_noeud(Projet *projet, unsigned int action
  *             Fenêtre graphique déjà initialisée.
  */
 {
-    List_Gtk_EF_Charge_Noeud    *ef_gtk;
-    Charge_Noeud                *charge_noeud;
+    Gtk_EF_Charge_Noeud *ef_gtk;
+    Charge_Noeud        *charge_noeud;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_charge_noeud.builder == NULL, FALSE, gettext("La fenêtre graphique %s est déjà initialisée.\n"), "Charge Nodale");

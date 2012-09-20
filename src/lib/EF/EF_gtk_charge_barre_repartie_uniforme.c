@@ -95,9 +95,9 @@ G_MODULE_EXPORT gboolean EF_gtk_charge_barre_repartie_uniforme_ajout_affichage(
  *             en cas d'erreur d'allocation mémoire.
  */
 {
-    char                    *description, *txt_liste_barres, txt_debut[30], txt_fin[30];
-    char                    txt_fx[30], txt_fy[30], txt_fz[30], txt_mx[30], txt_my[30], txt_mz[30];
-    List_Gtk_1990_Actions   *list_gtk_1990_actions;
+    char                *description, *txt_liste_barres, txt_debut[30], txt_fin[30];
+    char                txt_fx[30], txt_fy[30], txt_fz[30], txt_mx[30], txt_my[30], txt_mz[30];
+    Gtk_1990_Actions    *list_gtk_1990_actions;
     
     BUGMSG(projet, TRUE, gettext("Paramètre %s incorrect.\n"), "projet");
     
@@ -175,12 +175,12 @@ gboolean EF_gtk_charge_barre_repartie_uniforme_recupere_donnees(Projet *projet,
  *             en cas d'erreur d'allocation mémoire.
  */
 {
-    GtkWidget                                  *dialog;
-    List_Gtk_EF_Charge_Barre_Repartie_Uniforme *ef_gtk;
-    GList                                      *num_barres;
-    GtkTextIter                                 start, end;
-    gchar                                       *texte_tmp;
-    GtkTextBuffer                               *textbuffer;
+    GtkWidget                               *dialog;
+    Gtk_EF_Charge_Barre_Repartie_Uniforme   *ef_gtk;
+    GList                                   *num_barres;
+    GtkTextIter                             start, end;
+    gchar                                   *texte_tmp;
+    GtkTextBuffer                           *textbuffer;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_charge_barre_repartie_uniforme.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Barre Répartie Uniforme");
@@ -357,13 +357,13 @@ void EF_gtk_charge_barre_repartie_uniforme_editer_clicked(
  * Valeur renvoyée : Aucune.
  */
 {
-    List_Gtk_EF_Charge_Barre_Repartie_Uniforme *ef_gtk;
-    double                          fx, fy, fz, mx, my, mz, a, b;
-    unsigned int                    num_action;
-    gboolean                        repere_local, projection;
-    GList                           *barres;
-    gchar                           *texte;
-    Charge_Barre_Repartie_Uniforme  *charge;
+    Gtk_EF_Charge_Barre_Repartie_Uniforme   *ef_gtk;
+    double                                  fx, fy, fz, mx, my, mz, a, b;
+    unsigned int                            num_action;
+    gboolean                                repere_local, projection;
+    GList                                   *barres;
+    gchar                                   *texte;
+    Charge_Barre_Repartie_Uniforme          *charge;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_charge_barre_repartie_uniforme.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Barre Répartie Uniforme");
@@ -408,7 +408,7 @@ G_MODULE_EXPORT void EF_gtk_charge_barre_repartie_uniforme_toggled(
  * Valeur renvoyée : Aucune.
  */
 {
-    List_Gtk_EF_Charge_Barre_Repartie_Uniforme  *ef_gtk;
+    Gtk_EF_Charge_Barre_Repartie_Uniforme  *ef_gtk;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_charge_barre_repartie_uniforme.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Barre Répartie Uniforme");
@@ -450,8 +450,8 @@ G_MODULE_EXPORT gboolean EF_gtk_charge_barre_repartie_uniforme(Projet *projet,
  *             Fenêtre graphique déjà initialisée.
  */
 {
-    List_Gtk_EF_Charge_Barre_Repartie_Uniforme  *ef_gtk;
-    Charge_Barre_Repartie_Uniforme              *charge_barre;
+    Gtk_EF_Charge_Barre_Repartie_Uniforme   *ef_gtk;
+    Charge_Barre_Repartie_Uniforme          *charge_barre;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_charge_barre_repartie_uniforme.builder == NULL, FALSE, gettext("La fenêtre graphique %s est déjà initialisée.\n"), "Charge Barre Répartie Uniforme");
