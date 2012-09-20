@@ -27,7 +27,7 @@ cd comp && \
 (test -f zlib-1.2.7.tar.bz2 || wget http://zlib.net/zlib-1.2.7.tar.bz2) && \
 tar xvjf zlib-1.2.7.tar.bz2 && \
 cd zlib-1.2.7 && \
-make -j3 -f win32/Makefile.gcc && \
+make -j3 -f win32/Makefile.gcc CFLAGS="-march=i686 -O0 -g3 -ggdb3 -pipe" && \
 make -f win32/Makefile.gcc install BINARY_PATH="c:/MinGW/bin" LIBRARY_PATH="c:/MinGW/lib" INCLUDE_PATH="c:/MinGW/include" && \
 cp zlib1.dll c:/MinGW/bin/libz.dll && \
 cd .. && \
