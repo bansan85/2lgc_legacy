@@ -371,32 +371,32 @@ typedef struct __Barre_Info_EF
 } Barre_Info_EF;
 
 
-typedef struct __Beton_Section_Rectangulaire
+typedef struct __Section_Rectangulaire
 {
     double              largeur;
     double              hauteur;
-} Beton_Section_Rectangulaire;
+} Section_Rectangulaire;
 
 
-typedef struct __Beton_Section_T
+typedef struct __Section_T
 {
     double              largeur_table;
     double              largeur_ame;
     double              hauteur_table;
     double              hauteur_ame;
-} Beton_Section_T;
+} Section_T;
 
 
-typedef struct __Beton_Section_Carre
+typedef struct __Section_Carre
 {
     double              cote;
-} Beton_Section_Carre;
+} Section_Carre;
 
 
-typedef struct __Beton_Section_Circulaire
+typedef struct __Section_Circulaire
 {
     double              diametre;
-} Beton_Section_Circulaire;
+} Section_Circulaire;
 
 
 typedef struct __EF_Section

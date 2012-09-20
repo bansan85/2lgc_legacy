@@ -67,7 +67,7 @@ G_MODULE_EXPORT gboolean EF_sections_ajout_rectangulaire(Projet *projet, const c
  *             en cas d'erreur d'allocation mémoire.
  */
 {
-    Beton_Section_Rectangulaire *section_data = malloc(sizeof(Beton_Section_Rectangulaire));
+    Section_Rectangulaire *section_data = malloc(sizeof(Section_Rectangulaire));
     EF_Section *section_nouvelle = malloc(sizeof(EF_Section));
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
@@ -107,7 +107,7 @@ G_MODULE_EXPORT gboolean EF_sections_ajout_T(Projet *projet, const char* nom, do
  *             en cas d'erreur d'allocation mémoire.
  */
 {
-    Beton_Section_T *section_data = malloc(sizeof(Beton_Section_T));
+    Section_T *section_data = malloc(sizeof(Section_T));
     EF_Section      *section_nouvelle = malloc(sizeof(EF_Section));
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
@@ -151,7 +151,7 @@ G_MODULE_EXPORT gboolean EF_sections_ajout_carre(Projet *projet, const char* nom
  *             en cas d'erreur d'allocation mémoire.
  */
 {
-    Beton_Section_Carre *section_data = malloc(sizeof(Beton_Section_Carre));
+    Section_Carre *section_data = malloc(sizeof(Section_Carre));
     EF_Section          *section_nouvelle = malloc(sizeof(EF_Section));
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
@@ -189,7 +189,7 @@ G_MODULE_EXPORT gboolean EF_sections_ajout_circulaire(Projet *projet, const char
  *             en cas d'erreur d'allocation mémoire.
  */
 {
-    Beton_Section_Circulaire    *section_data = malloc(sizeof(Beton_Section_Circulaire));
+    Section_Circulaire    *section_data = malloc(sizeof(Section_Circulaire));
     EF_Section                  *section_nouvelle = malloc(sizeof(EF_Section));
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
@@ -273,7 +273,7 @@ G_MODULE_EXPORT char* EF_sections_get_description(EF_Section *sect)
         case SECTION_RECTANGULAIRE :
         {
             char    larg[30], haut[30];
-            Beton_Section_Rectangulaire *section = sect->data;
+            Section_Rectangulaire *section = sect->data;
             
             common_math_double_to_char(section->largeur, larg, GTK_DECIMAL_DISTANCE);
             common_math_double_to_char(section->hauteur, haut, GTK_DECIMAL_DISTANCE);
@@ -284,7 +284,7 @@ G_MODULE_EXPORT char* EF_sections_get_description(EF_Section *sect)
         case SECTION_T :
         {
             char    larg_t[30], haut_t[30], larg_a[30], haut_a[30];
-            Beton_Section_T *section = sect->data;
+            Section_T *section = sect->data;
             
             common_math_double_to_char(section->largeur_table, larg_t, GTK_DECIMAL_DISTANCE);
             common_math_double_to_char(section->largeur_ame, larg_a, GTK_DECIMAL_DISTANCE);
@@ -297,7 +297,7 @@ G_MODULE_EXPORT char* EF_sections_get_description(EF_Section *sect)
         case SECTION_CARRE :
         {
             char    cote[30];
-            Beton_Section_Carre *section = sect->data;
+            Section_Carre *section = sect->data;
             
             common_math_double_to_char(section->cote, cote, GTK_DECIMAL_DISTANCE);
             BUGMSG(description = g_strdup_printf("%s : %s m", gettext("Coté"), cote), NULL, gettext("Erreur d'allocation mémoire.\n"));
@@ -307,7 +307,7 @@ G_MODULE_EXPORT char* EF_sections_get_description(EF_Section *sect)
         case SECTION_CIRCULAIRE :
         {
             char    diam[30];
-            Beton_Section_Circulaire *section = sect->data;
+            Section_Circulaire *section = sect->data;
             
             common_math_double_to_char(section->diametre, diam, GTK_DECIMAL_DISTANCE);
             BUGMSG(description = g_strdup_printf("%s : %s m", gettext("Diamètre"), diam), NULL, gettext("Erreur d'allocation mémoire.\n"));
@@ -491,7 +491,7 @@ G_MODULE_EXPORT double EF_sections_j(EF_Section* sect)
     {
         case SECTION_RECTANGULAIRE :
         {
-            Beton_Section_Rectangulaire *section = sect->data;
+            Section_Rectangulaire *section = sect->data;
             double      l = section->largeur;
             double      h = section->hauteur;
             double      a, b;
@@ -508,7 +508,7 @@ G_MODULE_EXPORT double EF_sections_j(EF_Section* sect)
         }
         case SECTION_T :
         {
-            Beton_Section_T *section = sect->data;
+            Section_T *section = sect->data;
             double      lt = section->largeur_table;
             double      la = section->largeur_ame;
             double      ht = section->hauteur_table;
@@ -532,7 +532,7 @@ G_MODULE_EXPORT double EF_sections_j(EF_Section* sect)
         }
         case SECTION_CARRE :
         {
-            Beton_Section_Carre *section = sect->data;
+            Section_Carre *section = sect->data;
             return section->cote*section->cote*section->cote*section->cote/16.*(16./3.-3.364*(1.-1./12.));
             
     // Pour une section carrée de section constante, J vaut :\end{verbatim}\begin{displaymath}
@@ -541,7 +541,7 @@ G_MODULE_EXPORT double EF_sections_j(EF_Section* sect)
         }
         case SECTION_CIRCULAIRE :
         {
-            Beton_Section_Circulaire *section = sect->data;
+            Section_Circulaire *section = sect->data;
             return M_PI*section->diametre*section->diametre*section->diametre*section->diametre/32.;
     // Pour une section circulaire de section constante, J vaut :\end{verbatim}\begin{displaymath}
     // J = \frac{\pi \cdot \phi^4}{32}\end{displaymath}\begin{verbatim}
@@ -572,7 +572,7 @@ G_MODULE_EXPORT double EF_sections_iy(EF_Section* sect)
     {
         case SECTION_RECTANGULAIRE :
         {
-            Beton_Section_Rectangulaire *section = sect->data;
+            Section_Rectangulaire *section = sect->data;
             return section->largeur*section->hauteur*section->hauteur*section->hauteur/12.;
     // Pour une section rectantulaire de section constante, Iy vaut :\end{verbatim}\begin{displaymath}
     // I_y = \frac{l \cdot h^3}{12} \end{displaymath}\begin{verbatim}
@@ -580,7 +580,7 @@ G_MODULE_EXPORT double EF_sections_iy(EF_Section* sect)
         }
         case SECTION_T :
         {
-            Beton_Section_T *section = sect->data;
+            Section_T *section = sect->data;
             double      lt = section->largeur_table;
             double      la = section->largeur_ame;
             double      ht = section->hauteur_table;
@@ -598,7 +598,7 @@ G_MODULE_EXPORT double EF_sections_iy(EF_Section* sect)
         }
         case SECTION_CARRE :
         {
-            Beton_Section_Carre *section = sect->data;
+            Section_Carre *section = sect->data;
             return section->cote*section->cote*section->cote*section->cote/12.;
             
     // Pour une section carrée de section constante, Iy vaut :\end{verbatim}\begin{displaymath}
@@ -607,7 +607,7 @@ G_MODULE_EXPORT double EF_sections_iy(EF_Section* sect)
         }
         case SECTION_CIRCULAIRE :
         {
-            Beton_Section_Circulaire *section = sect->data;
+            Section_Circulaire *section = sect->data;
             return M_PI*section->diametre*section->diametre*section->diametre*section->diametre/64.;
     // Pour une section circulaire de section constante, Iy vaut :\end{verbatim}\begin{displaymath}
     // I_y = \frac{\pi \cdot \phi^4}{64} \end{displaymath}\begin{verbatim}
@@ -638,7 +638,7 @@ G_MODULE_EXPORT double EF_sections_iz(EF_Section* sect)
     {
         case SECTION_RECTANGULAIRE :
         {
-            Beton_Section_Rectangulaire *section = sect->data;
+            Section_Rectangulaire *section = sect->data;
             return section->hauteur*section->largeur*section->largeur*section->largeur/12.;
             
     // Pour une section rectantulaire de section constante, I vaut :\end{verbatim}\begin{displaymath}
@@ -647,7 +647,7 @@ G_MODULE_EXPORT double EF_sections_iz(EF_Section* sect)
         }
         case SECTION_T :
         {
-            Beton_Section_T *section = sect->data;
+            Section_T *section = sect->data;
             double      lt = section->largeur_table;
             double      la = section->largeur_ame;
             double      ht = section->hauteur_table;
@@ -660,7 +660,7 @@ G_MODULE_EXPORT double EF_sections_iz(EF_Section* sect)
         }
         case SECTION_CARRE :
         {
-            Beton_Section_Carre *section = sect->data;
+            Section_Carre *section = sect->data;
             return section->cote*section->cote*section->cote*section->cote/12.;
     // Pour une section carrée de section constante, I vaut :\end{verbatim}\begin{displaymath}
     // I = \frac{c^4}{12} \end{displaymath}\begin{verbatim}
@@ -668,7 +668,7 @@ G_MODULE_EXPORT double EF_sections_iz(EF_Section* sect)
         }
         case SECTION_CIRCULAIRE :
         {
-            Beton_Section_Circulaire *section = sect->data;
+            Section_Circulaire *section = sect->data;
             return M_PI*section->diametre*section->diametre*section->diametre*section->diametre/64.;
     // Pour une section circulaire de section constante, I vaut :\end{verbatim}\begin{displaymath}
     // I = \frac{\pi \cdot \phi^4}{64} \end{displaymath}\begin{verbatim}
@@ -1029,7 +1029,7 @@ G_MODULE_EXPORT double EF_sections_s(EF_Section *sect)
     {
         case SECTION_RECTANGULAIRE :
         {
-            Beton_Section_Rectangulaire *section = sect->data;
+            Section_Rectangulaire *section = sect->data;
             return section->hauteur*section->largeur;
             
     // Pour une section rectantulaire de section constante, S vaut :\end{verbatim}\begin{displaymath}
@@ -1038,7 +1038,7 @@ G_MODULE_EXPORT double EF_sections_s(EF_Section *sect)
         }
         case SECTION_T :
         {
-            Beton_Section_T *section = sect->data;
+            Section_T *section = sect->data;
             return section->hauteur_table*section->largeur_table+section->hauteur_ame*section->largeur_ame;
             
     // Pour une section en T de section constante (lt : largeur de la table, la : largeur de
@@ -1048,7 +1048,7 @@ G_MODULE_EXPORT double EF_sections_s(EF_Section *sect)
         }
         case SECTION_CARRE :
         {
-            Beton_Section_Carre *section = sect->data;
+            Section_Carre *section = sect->data;
             return section->cote*section->cote;
             
     // Pour une section carrée de section constante, S vaut :\end{verbatim}\begin{displaymath}
@@ -1057,7 +1057,7 @@ G_MODULE_EXPORT double EF_sections_s(EF_Section *sect)
         }
         case SECTION_CIRCULAIRE :
         {
-            Beton_Section_Circulaire *section = sect->data;
+            Section_Circulaire *section = sect->data;
             return M_PI*section->diametre*section->diametre/4.;
     // Pour une section circulaire de section constante, S vaut :\end{verbatim}\begin{displaymath}
     // S = \frac{\pi \cdot \phi^2}{4} \end{displaymath}\begin{verbatim}
@@ -1103,7 +1103,7 @@ G_MODULE_EXPORT double EF_sections_es_l(Beton_Barre *barre, unsigned int discret
     {
         case SECTION_RECTANGULAIRE :
         {
-            Beton_Section_Rectangulaire *section = barre->section->data;
+            Section_Rectangulaire *section = barre->section->data;
             double      S = section->hauteur*section->largeur;
             
     // Pour une section rectantulaire de section constante, ES/L vaut :\end{verbatim}\begin{displaymath}
@@ -1113,7 +1113,7 @@ G_MODULE_EXPORT double EF_sections_es_l(Beton_Barre *barre, unsigned int discret
         }
         case SECTION_T :
         {
-            Beton_Section_T *section = barre->section->data;
+            Section_T *section = barre->section->data;
             double      lt = section->largeur_table;
             double      la = section->largeur_ame;
             double      ht = section->hauteur_table;
@@ -1128,7 +1128,7 @@ G_MODULE_EXPORT double EF_sections_es_l(Beton_Barre *barre, unsigned int discret
         }
         case SECTION_CARRE :
         {
-            Beton_Section_Carre *section = barre->section->data;
+            Section_Carre *section = barre->section->data;
             double      S = section->cote*section->cote;
             
     // Pour une section carrée de section constante, ES/L vaut :\end{verbatim}\begin{displaymath}
@@ -1138,7 +1138,7 @@ G_MODULE_EXPORT double EF_sections_es_l(Beton_Barre *barre, unsigned int discret
         }
         case SECTION_CIRCULAIRE :
         {
-            Beton_Section_Circulaire *section = barre->section->data;
+            Section_Circulaire *section = barre->section->data;
             double      S = M_PI*section->diametre*section->diametre/4.;
     // Pour une section circulaire de section constante, ES/L vaut :\end{verbatim}\begin{displaymath}
     // \frac{E \cdot S}{L} = \frac{E \cdot \pi \cdot \phi^2}{4 \cdot L} \end{displaymath}\begin{verbatim}
@@ -1194,7 +1194,7 @@ G_MODULE_EXPORT double EF_sections_gj_l(Beton_Barre *barre, unsigned int discret
     {
         case SECTION_RECTANGULAIRE :
         {
-            Beton_Section_Rectangulaire *section = barre->section->data;
+            Section_Rectangulaire *section = barre->section->data;
             double      l = section->largeur;
             double      h = section->hauteur;
             double      J;
@@ -1213,7 +1213,7 @@ G_MODULE_EXPORT double EF_sections_gj_l(Beton_Barre *barre, unsigned int discret
         }
         case SECTION_T :
         {
-            Beton_Section_T *section = barre->section->data;
+            Section_T *section = barre->section->data;
             double      lt = section->largeur_table;
             double      la = section->largeur_ame;
             double      ht = section->hauteur_table;
@@ -1239,7 +1239,7 @@ G_MODULE_EXPORT double EF_sections_gj_l(Beton_Barre *barre, unsigned int discret
         }
         case SECTION_CARRE :
         {
-            Beton_Section_Carre *section = barre->section->data;
+            Section_Carre *section = barre->section->data;
             double      J = section->cote*section->cote*section->cote*section->cote/16.*(16./3.-3.364*(1.-1./12.));
             
     // Pour une section carrée de section constante, GJ/L vaut :\end{verbatim}\begin{displaymath}
@@ -1249,7 +1249,7 @@ G_MODULE_EXPORT double EF_sections_gj_l(Beton_Barre *barre, unsigned int discret
         }
         case SECTION_CIRCULAIRE :
         {
-            Beton_Section_Circulaire *section = barre->section->data;
+            Section_Circulaire *section = barre->section->data;
             double      J = M_PI*section->diametre*section->diametre*section->diametre*section->diametre/32.;
     // Pour une section circulaire de section constante, GJ/L vaut :\end{verbatim}\begin{displaymath}
     // \frac{G \cdot J}{L} \texttt{ avec } J = \frac{\pi \cdot \phi^4}{32}\end{displaymath}\begin{verbatim}
