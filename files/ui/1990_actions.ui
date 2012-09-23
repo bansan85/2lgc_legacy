@@ -20,31 +20,6 @@
             <column type="gchararray"/>
         </columns>
     </object>
-    <object class="GtkImage" id="1990_actions_icon_action_ajout">
-        <property name="visible">True</property>
-        <property name="stock">gtk-add</property>
-        <property name="icon_size">4</property>
-    </object>
-    <object class="GtkImage" id="1990_actions_icon_action_suppr">
-        <property name="visible">True</property>
-        <property name="stock">gtk-delete</property>
-        <property name="icon_size">4</property>
-    </object>
-    <object class="GtkImage" id="1990_actions_icon_charge_ajout">
-        <property name="visible">True</property>
-        <property name="stock">gtk-add</property>
-        <property name="icon_size">4</property>
-    </object>
-    <object class="GtkImage" id="1990_actions_icon_charge_edit">
-        <property name="visible">True</property>
-        <property name="stock">gtk-edit</property>
-        <property name="icon_size">4</property>
-    </object>
-    <object class="GtkImage" id="1990_actions_icon_charge_suppr">
-        <property name="visible">True</property>
-        <property name="stock">gtk-delete</property>
-        <property name="icon_size">4</property>
-    </object>
     <object id="1990_actions_window" class="GtkWindow">
         <property name="visible">True</property>
         <property name="title" translatable="yes">Actions</property>
@@ -215,29 +190,34 @@
                                     </packing>
                                 </child>
                                 <child>
-                                    <object class="GtkToolbar" id="1990_actions_toolbar_action">
+                                    <object class="GtkButtonBox" id="1990_actions_toolbar_action">
                                         <property name="visible">True</property>
                                         <property name="orientation">horizontal</property>
-                                        <property name="toolbar-style">both</property>
-                                        <property name="border-width">0</property>
+                                        <property name="layout_style">start</property>
+                                        <property name="spacing">6</property>
                                         <child>
-                                            <object class="GtkMenuToolButton" id="1990_actions_toolbar_action_ajout">
+                                            <object class="GtkMenuButton" id="1990_actions_toolbar_action_ajout">
                                                 <property name="visible">True</property>
-                                                <property name="label" translatable="yes">Ajouter</property>
-                                                <property name="stock_id">add</property>
-                                                <property name="icon-widget">1990_actions_icon_action_ajout</property>
-                                                <signal name="clicked" handler="_1990_gtk_menu_nouvelle_action_activate"/>
+                                                <property name="label">gtk-add</property>
+                                                <property name="use_stock">True</property>
                                             </object>
+                                            <packing>
+                                                <property name="position">0</property>
+                                                <property name="pack_type">start</property>
+                                            </packing>
                                         </child>
                                         <child>
-                                            <object class="GtkToolButton" id="1990_actions_toolbar_action_suppr">
+                                            <object class="GtkButton" id="1990_actions_toolbar_action_suppr">
                                                 <property name="visible">True</property>
                                                 <property name="sensitive">False</property>
-                                                <property name="label" translatable="yes">Supprimer</property>
-                                                <property name="stock_id">GTK_STOCK_DELETE</property>
-                                                <property name="icon-widget">1990_actions_icon_action_suppr</property>
+                                                <property name="label">gtk-delete</property>
+                                                <property name="use_stock">True</property>
                                                 <signal name="clicked" handler="_1990_gtk_menu_suppr_action_activate"/>
                                             </object>
+                                            <packing>
+                                                <property name="position">1</property>
+                                                <property name="pack_type">start</property>
+                                            </packing>
                                         </child>
                                     </object>
                                     <packing>
@@ -261,6 +241,7 @@
                                     <packing>
                                         <property name="left-attach">0</property>
                                         <property name="top-attach">0</property>
+                                        <property name="width">2</property>
                                     </packing>
                                 </child>
                                 <child>
@@ -354,46 +335,79 @@
                                     <packing>
                                         <property name="left-attach">0</property>
                                         <property name="top-attach">1</property>
+                                        <property name="width">2</property>
                                     </packing>
                                 </child>
                                 <child>
-                                    <object class="GtkToolbar" id="1990_actions_toolbar_charge">
+                                    <object class="GtkButtonBox" id="1990_actions_toolbar_charge">
                                         <property name="visible">True</property>
-                                        <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
-                                        <property name="toolbar-style">GTK_TOOLBAR_BOTH</property>
-                                        <property name="border-width">0</property>
+                                        <property name="orientation">horizontal</property>
+                                        <property name="layout_style">start</property>
+                                        <property name="spacing">6</property>
                                         <child>
-                                            <object class="GtkMenuToolButton" id="1990_actions_toolbar_charge_ajout">
+                                            <object class="GtkMenuButton" id="1990_actions_toolbar_charge_ajout">
                                                 <property name="visible">True</property>
+                                                <property name="label">gtk-add</property>
+                                                <property name="use_stock">True</property>
                                                 <property name="sensitive">False</property>
-                                                <property name="label" translatable="yes">Ajouter</property>
-                                                <property name="stock_id">GTK_STOCK_ADD</property>
-                                                <property name="icon-widget">1990_actions_icon_charge_ajout</property>
                                             </object>
+                                            <packing>
+                                                <property name="position">0</property>
+                                                <property name="pack_type">start</property>
+                                            </packing>
                                         </child>
                                         <child>
-                                            <object class="GtkToolButton" id="1990_actions_toolbar_charge_edit">
+                                            <object class="GtkButton" id="1990_actions_toolbar_charge_edit">
                                                 <property name="visible">True</property>
                                                 <property name="sensitive">False</property>
-                                                <property name="label" translatable="yes">Éditer</property>
-                                                <property name="stock_id">GTK_STOCK_EDIT</property>
-                                                <property name="icon-widget">1990_actions_icon_charge_edit</property>
+                                                <property name="label">gtk-edit</property>
+                                                <property name="use_stock">True</property>
                                                 <signal name="clicked" handler="_1990_gtk_menu_edit_charge_clicked"/>
                                             </object>
+                                            <packing>
+                                                <property name="position">1</property>
+                                                <property name="pack_type">start</property>
+                                            </packing>
                                         </child>
                                         <child>
-                                            <object class="GtkToolButton" id="1990_actions_toolbar_charge_suppr">
+                                            <object class="GtkButton" id="1990_actions_toolbar_charge_suppr">
                                                 <property name="visible">True</property>
                                                 <property name="sensitive">False</property>
-                                                <property name="label" translatable="yes">Supprimer</property>
-                                                <property name="stock_id">GTK_STOCK_DELETE</property>
-                                                <property name="icon-widget">1990_actions_icon_charge_suppr</property>
+                                                <property name="label">gtk-delete</property>
+                                                <property name="use_stock">True</property>
                                                 <signal name="clicked" handler="_1990_gtk_menu_suppr_charge_clicked"/>
                                             </object>
+                                            <packing>
+                                                <property name="position">2</property>
+                                                <property name="pack_type">start</property>
+                                            </packing>
                                         </child>
                                     </object>
                                     <packing>
                                         <property name="left-attach">0</property>
+                                        <property name="top-attach">2</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkButtonBox" id="1990_actions_buttons">
+                                        <property name="visible">True</property>
+                                        <property name="orientation">horizontal</property>
+                                        <property name="layout_style">end</property>
+                                        <child>
+                                            <object class="GtkButton" id="1990_actions_button_close">
+                                                <property name="visible">True</property>
+                                                <property name="label">gtk-close</property>
+                                                <property name="use_stock">True</property>
+                                                <signal name="clicked" handler="_1990_gtk_actions_window_button_close"/>
+                                            </object>
+                                            <packing>
+                                                <property name="position">0</property>
+                                                <property name="pack_type">end</property>
+                                            </packing>
+                                        </child>
+                                    </object>
+                                    <packing>
+                                        <property name="left-attach">1</property>
                                         <property name="top-attach">2</property>
                                     </packing>
                                 </child>
@@ -403,29 +417,6 @@
                     <packing>
                         <property name="left-attach">0</property>
                         <property name="top-attach">0</property>
-                    </packing>
-                </child>
-                <child>
-                    <object class="GtkButtonBox" id="1990_actions_buttons">
-                        <property name="visible">True</property>
-                        <property name="orientation">horizontal</property>
-                        <property name="layout_style">end</property>
-                        <child>
-                            <object class="GtkButton" id="1990_actions_button_close">
-                                <property name="visible">True</property>
-                                <property name="label">gtk-close</property>
-                                <property name="use_stock">True</property>
-                                <signal name="clicked" handler="_1990_gtk_actions_window_button_close"/>
-                            </object>
-                            <packing>
-                                <property name="position">0</property>
-                                <property name="pack_type">end</property>
-                            </packing>
-                        </child>
-                    </object>
-                    <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">1</property>
                     </packing>
                 </child>
             </object>
