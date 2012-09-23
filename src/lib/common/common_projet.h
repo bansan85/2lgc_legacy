@@ -25,6 +25,10 @@
 
 #include <glib.h>
 
+#define DECIMAL_DISTANCE 3
+#define DECIMAL_FORCE 3
+#define DECIMAL_MOMENT 3
+
 #ifdef ENABLE_GTK
 #include <gtk/gtk.h>
 
@@ -402,8 +406,10 @@ typedef struct __EF_Section
 {
     Type_Section    type;
     char            *nom;
+#ifdef ENABLE_GTK
     GtkTreeIter     Iter_fenetre;
     GtkTreeIter     Iter_liste;
+#endif
     void            *data;
 } EF_Section;
 
