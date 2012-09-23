@@ -211,7 +211,7 @@ typedef enum __Type_Section
 {
     SECTION_RECTANGULAIRE,
     SECTION_T,
-    SECTION_CARRE,
+    SECTION_CARREE,
     SECTION_CIRCULAIRE
 } Type_Section;
 

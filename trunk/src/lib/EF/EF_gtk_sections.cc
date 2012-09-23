@@ -402,7 +402,7 @@ GdkPixbuf *EF_gtk_sections_dessin(EF_Section *section, unsigned int width, unsig
             
             break;
         }
-        case SECTION_CARRE :
+        case SECTION_CARREE :
         {
             cairo_set_source_rgba(cr, 0.8, 0.8, 0.8, 1.);
             

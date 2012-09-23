@@ -201,7 +201,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_mx(Beton_Barre *barre
     {
         case SECTION_RECTANGULAIRE :
         case SECTION_T :
-        case SECTION_CARRE :
+        case SECTION_CARREE :
         case SECTION_CIRCULAIRE :
         {
             double      J = EF_sections_j(barre->section);
@@ -310,7 +310,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_def_ang_iso_y(Beton_B
     {
         case SECTION_RECTANGULAIRE :
         case SECTION_T :
-        case SECTION_CARRE :
+        case SECTION_CARREE :
         case SECTION_CIRCULAIRE :
         {
             double      I = EF_sections_iy(barre->section);
@@ -414,7 +414,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_def_ang_iso_z(Beton_B
     {
         case SECTION_RECTANGULAIRE :
         case SECTION_T :
-        case SECTION_CARRE :
+        case SECTION_CARREE :
         case SECTION_CIRCULAIRE :
         {
             double      I = EF_sections_iz(barre->section);
@@ -470,7 +470,7 @@ G_MODULE_EXPORT double EF_charge_barre_repartie_uniforme_position_resultante_x(
     {
         case SECTION_RECTANGULAIRE :
         case SECTION_T :
-        case SECTION_CARRE :
+        case SECTION_CARREE :
         case SECTION_CIRCULAIRE :
         {
             
@@ -568,7 +568,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_fonc_rx(Fonction *fon
     {
         case SECTION_RECTANGULAIRE :
         case SECTION_T :
-        case SECTION_CARRE :
+        case SECTION_CARREE :
         case SECTION_CIRCULAIRE :
         {
             double      J = EF_sections_j(barre->section);
@@ -722,7 +722,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_fonc_ry(Fonction *f_r
     {
         case SECTION_RECTANGULAIRE :
         case SECTION_T :
-        case SECTION_CARRE :
+        case SECTION_CARREE :
         case SECTION_CIRCULAIRE :
         {
             double      I = EF_sections_iy(barre->section);
@@ -853,7 +853,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_fonc_rz(Fonction *f_r
     {
         case SECTION_RECTANGULAIRE :
         case SECTION_T :
-        case SECTION_CARRE :
+        case SECTION_CARREE :
         case SECTION_CIRCULAIRE :
         {
             double      I = EF_sections_iz(barre->section);
@@ -958,7 +958,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_n(Fonction *fonction,
     {
         case SECTION_RECTANGULAIRE :
         case SECTION_T :
-        case SECTION_CARRE :
+        case SECTION_CARREE :
         case SECTION_CIRCULAIRE :
         {
             double      S = EF_sections_s(barre->section);

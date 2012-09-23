@@ -1320,7 +1320,7 @@ G_MODULE_EXPORT gboolean EF_calculs_resoud_charge(Projet *projet, unsigned int n
             {
                 case SECTION_RECTANGULAIRE :
                 case SECTION_T :
-                case SECTION_CARRE :
+                case SECTION_CARREE :
                 case SECTION_CIRCULAIRE :
                 {
                     double J = EF_sections_j(element_en_beton->section);
