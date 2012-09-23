@@ -60,12 +60,12 @@ G_MODULE_EXPORT gboolean EF_gtk_charge_noeud_ajout_affichage(Charge_Noeud *charg
         return TRUE;
      
     BUG(txt_liste_noeuds = common_selection_converti_noeuds_en_texte(charge->noeuds), FALSE);
-    common_math_double_to_char(charge->fx, txt_fx, GTK_DECIMAL_FORCE);
-    common_math_double_to_char(charge->fy, txt_fy, GTK_DECIMAL_FORCE);
-    common_math_double_to_char(charge->fz, txt_fz, GTK_DECIMAL_FORCE);
-    common_math_double_to_char(charge->mx, txt_mx, GTK_DECIMAL_MOMENT);
-    common_math_double_to_char(charge->my, txt_my, GTK_DECIMAL_MOMENT);
-    common_math_double_to_char(charge->mz, txt_mz, GTK_DECIMAL_MOMENT);
+    common_math_double_to_char(charge->fx, txt_fx, DECIMAL_FORCE);
+    common_math_double_to_char(charge->fy, txt_fy, DECIMAL_FORCE);
+    common_math_double_to_char(charge->fz, txt_fz, DECIMAL_FORCE);
+    common_math_double_to_char(charge->mx, txt_mx, DECIMAL_MOMENT);
+    common_math_double_to_char(charge->my, txt_my, DECIMAL_MOMENT);
+    common_math_double_to_char(charge->mz, txt_mz, DECIMAL_MOMENT);
     
     BUGMSG(description = g_strdup_printf("%s : %s, Fx : %s N, Fy : %s N, Fz : %s N, Mx : %s N.m, My : %s N.m, Mz : %s N.m", strstr(txt_liste_noeuds, ";") == NULL ? gettext("Noeud") : gettext("Noeuds"), txt_liste_noeuds, txt_fx, txt_fy, txt_fz, txt_mx, txt_my, txt_mz), FALSE, gettext("Erreur d'allocation mémoire.\n"));
     
@@ -422,17 +422,17 @@ G_MODULE_EXPORT gboolean EF_gtk_charge_noeud(Projet *projet, unsigned int action
     {
         char   tmp[30], *tmp2;
         gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_textview_description"))), charge_noeud->nom, -1);
-        common_math_double_to_char(charge_noeud->fx, tmp, GTK_DECIMAL_FORCE);
+        common_math_double_to_char(charge_noeud->fx, tmp, DECIMAL_FORCE);
         gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_buffer_fx")), tmp, -1);
-        common_math_double_to_char(charge_noeud->fy, tmp, GTK_DECIMAL_FORCE);
+        common_math_double_to_char(charge_noeud->fy, tmp, DECIMAL_FORCE);
         gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_buffer_fy")), tmp, -1);
-        common_math_double_to_char(charge_noeud->fz, tmp, GTK_DECIMAL_FORCE);
+        common_math_double_to_char(charge_noeud->fz, tmp, DECIMAL_FORCE);
         gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_buffer_fz")), tmp, -1);
-        common_math_double_to_char(charge_noeud->mx, tmp, GTK_DECIMAL_MOMENT);
+        common_math_double_to_char(charge_noeud->mx, tmp, DECIMAL_MOMENT);
         gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_buffer_mx")), tmp, -1);
-        common_math_double_to_char(charge_noeud->my, tmp, GTK_DECIMAL_MOMENT);
+        common_math_double_to_char(charge_noeud->my, tmp, DECIMAL_MOMENT);
         gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_buffer_my")), tmp, -1);
-        common_math_double_to_char(charge_noeud->mz, tmp, GTK_DECIMAL_MOMENT);
+        common_math_double_to_char(charge_noeud->mz, tmp, DECIMAL_MOMENT);
         gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_buffer_mz")), tmp, -1);
         BUG(tmp2 = common_selection_converti_noeuds_en_texte(charge_noeud->noeuds), FALSE);
         gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_buffer_noeuds")), tmp2, -1);

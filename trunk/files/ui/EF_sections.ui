@@ -14,6 +14,7 @@
             <object class="GtkMenuItem" id="EF_sections_ajouter_menu_rectangulaire">
                 <property name="label" translatable="yes">Rectangulaire</property>
                 <property name="visible">True</property>
+                <signal name="activate" handler="EF_gtk_sections_ajout_rectangulaire"/>
             </object>
         </child>
         <child>
@@ -69,6 +70,7 @@
                             <object class="GtkTreeView" id="EF_sections_treeview">
                                 <property name="visible">True</property>
                                 <property name="model">EF_sections_treestore</property>
+                                <signal   name="button-press-event" handler="EF_gtk_sections_double_clicked"/>
                                 <child internal-child="selection">
                                     <object class="GtkTreeSelection" id="EF_sections_treeview_select">
                                         <signal name="changed" handler="EF_gtk_sections_select_changed"/>
@@ -145,6 +147,19 @@
                             </packing>
                         </child>
                         <child>
+                            <object class="GtkButton" id="EF_sections_boutton_modifier">
+                                <property name="visible">True</property>
+                                <property name="label">gtk-edit</property>
+                                <property name="sensitive">False</property>
+                                <property name="use_stock">True</property>
+                                <signal name="clicked" handler="EF_gtk_sections_edit_clicked"/>
+                            </object>
+                            <packing>
+                                <property name="position">1</property>
+                                <property name="pack_type">start</property>
+                            </packing>
+                        </child>
+                        <child>
                             <object class="GtkButton" id="EF_sections_boutton_supprimer_direct">
                                 <property name="visible">True</property>
                                 <property name="label">gtk-delete</property>
@@ -153,7 +168,7 @@
                                 <signal name="clicked" handler="EF_gtk_sections_supprimer_direct"/>
                             </object>
                             <packing>
-                                <property name="position">1</property>
+                                <property name="position">2</property>
                                 <property name="pack_type">start</property>
                             </packing>
                         </child>
@@ -166,7 +181,7 @@
                                 <property name="use_stock">True</property>
                             </object>
                             <packing>
-                                <property name="position">2</property>
+                                <property name="position">3</property>
                                 <property name="pack_type">start</property>
                             </packing>
                         </child>

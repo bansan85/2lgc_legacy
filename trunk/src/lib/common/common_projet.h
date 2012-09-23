@@ -414,6 +414,16 @@ typedef struct __EF_Section
 } EF_Section;
 
 
+#ifdef ENABLE_GTK
+typedef struct __Gtk_EF_Sections_Rectangulaire
+{
+    GtkBuilder      *builder;
+    GtkWidget       *window;
+    
+    EF_Section      *section;
+} Gtk_EF_Sections_Rectangulaire;
+#endif
+
 typedef struct __Beton_Barre
 {
     unsigned int        numero;
@@ -684,6 +694,7 @@ typedef struct __List_Gtk
     Gtk_EF_Barres      ef_barres;
     Gtk_EF_Appuis      ef_appuis;
     Gtk_EF_Sections    ef_sections;
+    Gtk_EF_Sections_Rectangulaire    ef_sections_rectangulaire;
     Comp_Gtk                comp;      // tous les composants grahpiques
 } List_Gtk;
 #endif

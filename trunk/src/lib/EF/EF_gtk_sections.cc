@@ -43,6 +43,7 @@ extern "C" {
 #include "1990_actions.h"
 #include "1992_1_1_barres.h"
 #include "1992_1_1_materiaux.h"
+#include "EF_gtk_section_rectangulaire.h"
 
 G_MODULE_EXPORT void EF_gtk_sections_fermer(GtkButton *button __attribute__((unused)),
   Projet *projet)
@@ -119,11 +120,12 @@ G_MODULE_EXPORT void EF_gtk_sections_select_changed(
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_sections.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Section");
     
-    // Si aucune section n'est sélectionné, il n'est pas possible d'en supprimer un.
+    // Si aucune section n'est sélectionnée, il n'est pas possible d'en supprimer ou d'en éditer une.
     if (!gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_sections.builder, "EF_sections_treeview_select")), &model, &Iter))
     {
         gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections.builder, "EF_sections_boutton_supprimer_direct")), FALSE);
         gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections.builder, "EF_sections_boutton_supprimer_menu")), FALSE);
+        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections.builder, "EF_sections_boutton_modifier")), FALSE);
         gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections.builder, "EF_sections_boutton_supprimer_direct")), TRUE);
         gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections.builder, "EF_sections_boutton_supprimer_menu")), FALSE);
     }
@@ -136,6 +138,7 @@ G_MODULE_EXPORT void EF_gtk_sections_select_changed(
         
         BUG(section = EF_sections_cherche_nom(projet, nom, TRUE), );
         
+        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections.builder, "EF_sections_boutton_modifier")), TRUE);
         if (EF_sections_verifie_dependances(projet, section))
         {
             gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections.builder, "EF_sections_boutton_supprimer_direct")), FALSE);
@@ -214,7 +217,7 @@ G_MODULE_EXPORT void EF_gtk_sections_supprimer_direct(GtkButton *button __attrib
     EF_Section      *section;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_sections.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Appui");
+    BUGMSG(projet->list_gtk.ef_sections.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Section");
     
     if (!gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_sections.builder, "EF_sections_treeview_select")), &model, &iter))
         return;
@@ -247,7 +250,7 @@ G_MODULE_EXPORT void EF_gtk_sections_supprimer_menu_barres(
     EF_Section      *section;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_sections.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Appui");
+    BUGMSG(projet->list_gtk.ef_sections.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Section");
     
     if (!gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_sections.builder, "EF_sections_treeview_select")), &model, &iter))
         return;
@@ -265,7 +268,8 @@ G_MODULE_EXPORT void EF_gtk_sections_supprimer_menu_barres(
 }
 
 
-GdkPixbuf *EF_gtk_sections_dessin(EF_Section *section, unsigned int width, unsigned int height)
+G_MODULE_EXPORT GdkPixbuf *EF_gtk_sections_dessin(EF_Section *section, unsigned int width,
+  unsigned int height)
 /* Description : Renvoie un dessin représentant la section.
  * Paramètres : EF_Section *section : la section à dessiner,
  *              unsigned int width : la largeur du dessin,
@@ -481,6 +485,115 @@ GdkPixbuf *EF_gtk_sections_dessin(EF_Section *section, unsigned int width, unsig
 }
 
 
+G_MODULE_EXPORT void EF_gtk_sections_ajout_rectangulaire(
+  GtkMenuItem *menuitem __attribute__((unused)), Projet *projet)
+/* Description : Lance la fenêtre permettant d'ajouter une section rectangulaire.
+ * Paramètres : GtkMenuItem *menuitem : composant à l'origine de l'évènement,
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : Aucune.
+ *   Echec : projet == NULL,
+ *           interface graphique non initialisée.
+ */
+{
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet->list_gtk.ef_sections.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Section");
+    
+    BUG(EF_gtk_section_rectangulaire(projet, NULL), );
+}
+
+
+G_MODULE_EXPORT void EF_gtk_sections_edit_clicked(GtkWidget *widget  __attribute__((unused)),
+  Projet *projet)
+/* Description : Edite les charges sélectionnées.
+ * Paramètres : GtkToolButton *toolbutton : composant à l'origine de l'évènement,
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : Aucune.
+ *   Echec : projet == NULL,
+ *           interface graphique non initialisée.
+ */
+{
+    GtkTreeIter     iter;
+    GtkTreeModel    *model;
+    char            *nom;
+    GList           *list, *list_parcours;
+    
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet->list_gtk.ef_sections.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Section");
+    
+    // On récupère la liste des charges à éditer.
+    list = gtk_tree_selection_get_selected_rows(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_sections.builder, "EF_sections_treeview_select")), &model);
+    list_parcours = g_list_first(list);
+    for(;list_parcours != NULL; list_parcours = g_list_next(list_parcours))
+    {
+        if (gtk_tree_model_get_iter(model, &iter, (GtkTreePath*)list_parcours->data))
+        {
+    // Et on les édite les unes après les autres.
+            EF_Section  *section;
+            
+            gtk_tree_model_get(model, &iter, 1, &nom, -1);
+            BUG(section = EF_sections_cherche_nom(projet, nom, TRUE), );
+            
+            switch (section->type)
+            {
+                case SECTION_RECTANGULAIRE :
+                {
+                    BUG(EF_gtk_section_rectangulaire(projet, section), );
+                    break;
+                }
+                case SECTION_T :
+                {
+                    break;
+                }
+                case SECTION_CARREE :
+                {
+                    break;
+                }
+                case SECTION_CIRCULAIRE :
+                {
+                    break;
+                }
+                default :
+                {
+                    BUGMSG(0, , gettext("Type de section %d inconnu."), section->type);
+                    break;
+                }
+            }
+        }
+    }
+    g_list_foreach(list, (GFunc)gtk_tree_path_free, NULL);
+    g_list_free(list);
+    
+    return;
+}
+
+
+G_MODULE_EXPORT gboolean EF_gtk_sections_double_clicked(GtkWidget *widget, GdkEvent *event,
+  Projet *projet)
+/* Description : Lance la fenêtre d'édition de la section sélectionnée en cas de double-clique
+ *               dans le tree-view.
+ * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
+ *            : GdkEvent *event : Information sur l'évènement,
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : TRUE s'il y a édition via un double-clique, FALSE sinon.
+ *   Echec : FALSE :
+ *             projet == NULL,
+ *             interface graphique non initialisée.
+ */
+{
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet->list_gtk.ef_sections.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Section");
+    
+    if ((event->type == GDK_2BUTTON_PRESS) && (gtk_widget_get_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections.builder, "EF_sections_boutton_modifier")))))
+    {
+        EF_gtk_sections_edit_clicked(widget, projet);
+        return TRUE;
+    }
+    
+    return FALSE;
+}
+
+
+
 G_MODULE_EXPORT void EF_gtk_sections(Projet *projet)
 /* Description : Création de la fenêtre permettant d'afficher les sections sous forme d'un
  *               tableau.
@@ -502,7 +615,7 @@ G_MODULE_EXPORT void EF_gtk_sections(Projet *projet)
     BUGMSG(gtk_builder_add_from_file(ef_gtk->builder, DATADIR"/ui/EF_sections.ui", NULL) != 0, , gettext("Builder Failed\n"));
     gtk_builder_connect_signals(ef_gtk->builder, projet);
     
-    ef_gtk->window = GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder, "EF_sections_window"));;
+    ef_gtk->window = GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder, "EF_sections_window"));
     ef_gtk->sections = GTK_TREE_STORE(gtk_builder_get_object(ef_gtk->builder, "EF_sections_treestore"));
     
     list_parcours = projet->beton.sections;
