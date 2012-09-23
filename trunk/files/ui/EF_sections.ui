@@ -8,6 +8,33 @@
             <column type="gchararray"/>
         </columns>
     </object>
+    <object class="GtkMenu" id="EF_sections_ajouter_menu">
+        <property name="visible">True</property>
+        <child>
+            <object class="GtkMenuItem" id="EF_sections_ajouter_menu_rectangulaire">
+                <property name="label" translatable="yes">Rectangulaire</property>
+                <property name="visible">True</property>
+            </object>
+        </child>
+        <child>
+            <object class="GtkMenuItem" id="EF_sections_ajouter_menu_T">
+                <property name="label" translatable="yes">T</property>
+                <property name="visible">True</property>
+            </object>
+        </child>
+        <child>
+            <object class="GtkMenuItem" id="EF_sections_ajouter_menu_carree">
+                <property name="label" translatable="yes">Carrée</property>
+                <property name="visible">True</property>
+            </object>
+        </child>
+        <child>
+            <object class="GtkMenuItem" id="EF_sections_ajouter_menu_circulaire">
+                <property name="label" translatable="yes">Circulaire</property>
+                <property name="visible">True</property>
+            </object>
+        </child>
+    </object>
     <object class="GtkMenu" id="EF_sections_supprimer_menu">
         <property name="visible">True</property>
         <child>
@@ -109,6 +136,7 @@
                             <object class="GtkMenuButton" id="EF_sections_boutton_ajouter">
                                 <property name="visible">True</property>
                                 <property name="label">gtk-add</property>
+                                <property name="menu">EF_sections_ajouter_menu</property>
                                 <property name="use_stock">True</property>
                             </object>
                             <packing>

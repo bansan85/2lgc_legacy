@@ -41,9 +41,6 @@ G_MODULE_EXPORT gboolean EF_sections_init(Projet *projet)
  *             projet == NULL.
  */
 {
-#ifdef ENABLE_GTK
-    GtkTreeIter Iter;
-#endif
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
     // Trivial
@@ -51,15 +48,6 @@ G_MODULE_EXPORT gboolean EF_sections_init(Projet *projet)
     
 #ifdef ENABLE_GTK
     projet->list_gtk.ef_sections.liste_sections = gtk_list_store_new(1, G_TYPE_STRING);
-    projet->list_gtk.ef_sections.liste_type_section = gtk_list_store_new(1, G_TYPE_STRING);
-    gtk_list_store_append(projet->list_gtk.ef_sections.liste_type_section, &Iter);
-    gtk_list_store_set(projet->list_gtk.ef_sections.liste_type_section, &Iter, 0, gettext("Rectangulaire"), -1);
-    gtk_list_store_append(projet->list_gtk.ef_sections.liste_type_section, &Iter);
-    gtk_list_store_set(projet->list_gtk.ef_sections.liste_type_section, &Iter, 0, gettext("T"), -1);
-    gtk_list_store_append(projet->list_gtk.ef_sections.liste_type_section, &Iter);
-    gtk_list_store_set(projet->list_gtk.ef_sections.liste_type_section, &Iter, 0, gettext("Carrée"), -1);
-    gtk_list_store_append(projet->list_gtk.ef_sections.liste_type_section, &Iter);
-    gtk_list_store_set(projet->list_gtk.ef_sections.liste_type_section, &Iter, 0, gettext("Circulaire"), -1);
 #endif
     
     return TRUE;
@@ -1313,7 +1301,6 @@ G_MODULE_EXPORT gboolean EF_sections_free(Projet *projet)
     
 #ifdef ENABLE_GTK
     g_object_unref(projet->list_gtk.ef_sections.liste_sections);
-    g_object_unref(projet->list_gtk.ef_sections.liste_type_section);
 #endif
     
     return TRUE;
