@@ -153,7 +153,6 @@ typedef struct __Gtk_EF_Sections
     
     GtkTreeStore    *sections;
     GtkListStore    *liste_sections;
-    GtkListStore    *liste_type_section;
 } Gtk_EF_Sections;
 
 #endif
