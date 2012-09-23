@@ -180,7 +180,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_mx(Beton_Barre *barre,
     {
         case SECTION_RECTANGULAIRE :
         case SECTION_T :
-        case SECTION_CARRE :
+        case SECTION_CARREE :
         case SECTION_CIRCULAIRE :
         {
             double      J = EF_sections_j(barre->section);
@@ -278,7 +278,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_def_ang_iso_y(Beton_Barre *b
     {
         case SECTION_RECTANGULAIRE :
         case SECTION_T :
-        case SECTION_CARRE :
+        case SECTION_CARREE :
         case SECTION_CIRCULAIRE :
         {
             double      I = EF_sections_iy(barre->section);
@@ -371,7 +371,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_def_ang_iso_z(Beton_Barre *b
     {
         case SECTION_RECTANGULAIRE :
         case SECTION_T :
-        case SECTION_CARRE :
+        case SECTION_CARREE :
         case SECTION_CIRCULAIRE :
         {
             double      I = EF_sections_iz(barre->section);
@@ -467,7 +467,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_fonc_rx(Fonction *fonction,
     {
         case SECTION_RECTANGULAIRE :
         case SECTION_T :
-        case SECTION_CARRE :
+        case SECTION_CARREE :
         case SECTION_CIRCULAIRE :
         {
             double      J = EF_sections_j(barre->section);
@@ -598,7 +598,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_fonc_ry(Fonction *f_rotation
     {
         case SECTION_RECTANGULAIRE :
         case SECTION_T :
-        case SECTION_CARRE :
+        case SECTION_CARREE :
         case SECTION_CIRCULAIRE :
         {
             double      I = EF_sections_iy(barre->section);
@@ -715,7 +715,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_fonc_rz(Fonction *f_rotation
     {
         case SECTION_RECTANGULAIRE :
         case SECTION_T :
-        case SECTION_CARRE :
+        case SECTION_CARREE :
         case SECTION_CIRCULAIRE :
         {
             double      I = EF_sections_iz(barre->section);
@@ -808,7 +808,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_n(Fonction *fonction, Beton_
     {
         case SECTION_RECTANGULAIRE :
         case SECTION_T :
-        case SECTION_CARRE :
+        case SECTION_CARREE :
         case SECTION_CIRCULAIRE :
         {
             double      S = EF_sections_s(barre->section);

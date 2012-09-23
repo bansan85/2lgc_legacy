@@ -41,6 +41,9 @@ G_MODULE_EXPORT gboolean EF_sections_init(Projet *projet)
  *             projet == NULL.
  */
 {
+#ifdef ENABLE_GTK
+    GtkTreeIter Iter;
+#endif
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
     // Trivial
@@ -48,6 +51,15 @@ G_MODULE_EXPORT gboolean EF_sections_init(Projet *projet)
     
 #ifdef ENABLE_GTK
     projet->list_gtk.ef_sections.liste_sections = gtk_list_store_new(1, G_TYPE_STRING);
+    projet->list_gtk.ef_sections.liste_type_section = gtk_list_store_new(1, G_TYPE_STRING);
+    gtk_list_store_append(projet->list_gtk.ef_sections.liste_type_section, &Iter);
+    gtk_list_store_set(projet->list_gtk.ef_sections.liste_type_section, &Iter, 0, gettext("Rectangulaire"), -1);
+    gtk_list_store_append(projet->list_gtk.ef_sections.liste_type_section, &Iter);
+    gtk_list_store_set(projet->list_gtk.ef_sections.liste_type_section, &Iter, 0, gettext("T"), -1);
+    gtk_list_store_append(projet->list_gtk.ef_sections.liste_type_section, &Iter);
+    gtk_list_store_set(projet->list_gtk.ef_sections.liste_type_section, &Iter, 0, gettext("Carrée"), -1);
+    gtk_list_store_append(projet->list_gtk.ef_sections.liste_type_section, &Iter);
+    gtk_list_store_set(projet->list_gtk.ef_sections.liste_type_section, &Iter, 0, gettext("Circulaire"), -1);
 #endif
     
     return TRUE;
@@ -162,7 +174,7 @@ G_MODULE_EXPORT gboolean EF_sections_ajout_carre(Projet *projet, const char* nom
     // Les caractéristiques de la section sont les suivantes :\end{verbatim}\begin{displaymath}
     //   S = cote^2\texttt{  et  }cdg_{haut} = \frac{cote}{2}\texttt{  et  }cdg_{bas} = \frac{cote}{2}\texttt{  et  }cdg_{droite} = \frac{cote}{2}\texttt{  et  }cdg_{gauche} = \frac{cote}{2}\end{displaymath}\begin{displaymath}
     //   I_y = \frac{cote^4}{12}\texttt{  et  }I_z = I_y\texttt{  et  }J = \frac{cote^4}{16} \cdot \left[\frac{16}{3}-3.364 \cdot \left(1-\frac{1}{12}\right)\right]\end{displaymath}\begin{verbatim}
-    section_nouvelle->type = SECTION_CARRE;
+    section_nouvelle->type = SECTION_CARREE;
     BUGMSG(section_nouvelle->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
     section_data->cote = cote;
     
@@ -294,7 +306,7 @@ G_MODULE_EXPORT char* EF_sections_get_description(EF_Section *sect)
             
             return description;
         }
-        case SECTION_CARRE :
+        case SECTION_CARREE :
         {
             char    cote[30];
             Section_Carre *section = sect->data;
@@ -530,7 +542,7 @@ G_MODULE_EXPORT double EF_sections_j(EF_Section* sect)
     // J = \frac{a \cdot b^3}{16} \left[\frac{16}{3}-3.364 \frac{b}{a} \left(1-\frac{b^4}{12 a^4}\right)\right]+\frac{aa \cdot bb^3}{16} \left[\frac{16}{3}-3.364 \frac{bb}{aa} \left(1-\frac{bb^4}{12 aa^4}\right)\right]\texttt{ avec }\substack{a=max(h_t,l_t)\\b=min(h_t,l_t)\\aa=max(h_a,l_a)\\bb=min(h_a,l_a)}\end{displaymath}\begin{verbatim}
             break;
         }
-        case SECTION_CARRE :
+        case SECTION_CARREE :
         {
             Section_Carre *section = sect->data;
             return section->cote*section->cote*section->cote*section->cote/16.*(16./3.-3.364*(1.-1./12.));
@@ -596,7 +608,7 @@ G_MODULE_EXPORT double EF_sections_iy(EF_Section* sect)
             
             break;
         }
-        case SECTION_CARRE :
+        case SECTION_CARREE :
         {
             Section_Carre *section = sect->data;
             return section->cote*section->cote*section->cote*section->cote/12.;
@@ -658,7 +670,7 @@ G_MODULE_EXPORT double EF_sections_iz(EF_Section* sect)
             return ht*lt*lt*lt/12.+ha*la*la*la/12.;
             break;
         }
-        case SECTION_CARRE :
+        case SECTION_CARREE :
         {
             Section_Carre *section = sect->data;
             return section->cote*section->cote*section->cote*section->cote/12.;
@@ -723,7 +735,7 @@ G_MODULE_EXPORT double EF_sections_ay(Beton_Barre *barre, unsigned int discretis
     {
         case SECTION_RECTANGULAIRE :
         case SECTION_T :
-        case SECTION_CARRE :
+        case SECTION_CARREE :
         case SECTION_CIRCULAIRE :
         {
             return ll/(3.*E*EF_sections_iy(barre->section));
@@ -778,7 +790,7 @@ G_MODULE_EXPORT double EF_sections_by(Beton_Barre *barre, unsigned int discretis
     {
         case SECTION_RECTANGULAIRE :
         case SECTION_T :
-        case SECTION_CARRE :
+        case SECTION_CARREE :
         case SECTION_CIRCULAIRE :
         {
             return ll/(6.*E*EF_sections_iy(barre->section));
@@ -833,7 +845,7 @@ G_MODULE_EXPORT double EF_sections_cy(Beton_Barre *barre, unsigned int discretis
     {
         case SECTION_RECTANGULAIRE :
         case SECTION_T :
-        case SECTION_CARRE :
+        case SECTION_CARREE :
         case SECTION_CIRCULAIRE :
         {
             return ll/(3.*E*EF_sections_iy(barre->section));
@@ -888,7 +900,7 @@ G_MODULE_EXPORT double EF_sections_az(Beton_Barre *barre, unsigned int discretis
     {
         case SECTION_RECTANGULAIRE :
         case SECTION_T :
-        case SECTION_CARRE :
+        case SECTION_CARREE :
         case SECTION_CIRCULAIRE :
         {
             return ll/(3.*E*EF_sections_iz(barre->section));
@@ -943,7 +955,7 @@ G_MODULE_EXPORT double EF_sections_bz(Beton_Barre *barre, unsigned int discretis
     {
         case SECTION_RECTANGULAIRE :
         case SECTION_T :
-        case SECTION_CARRE :
+        case SECTION_CARREE :
         case SECTION_CIRCULAIRE :
         {
             return ll/(6.*E*EF_sections_iz(barre->section));
@@ -998,7 +1010,7 @@ G_MODULE_EXPORT double EF_sections_cz(Beton_Barre *barre, unsigned int discretis
     {
         case SECTION_RECTANGULAIRE :
         case SECTION_T :
-        case SECTION_CARRE :
+        case SECTION_CARREE :
         case SECTION_CIRCULAIRE :
         {
             return ll/(3.*E*EF_sections_iz(barre->section));
@@ -1046,7 +1058,7 @@ G_MODULE_EXPORT double EF_sections_s(EF_Section *sect)
     // S = h_t \cdot l_t+h_a \cdot l_a\end{displaymath}\begin{verbatim}
             break;
         }
-        case SECTION_CARRE :
+        case SECTION_CARREE :
         {
             Section_Carre *section = sect->data;
             return section->cote*section->cote;
@@ -1126,7 +1138,7 @@ G_MODULE_EXPORT double EF_sections_es_l(Beton_Barre *barre, unsigned int discret
             return E*S/(f-d);
             break;
         }
-        case SECTION_CARRE :
+        case SECTION_CARREE :
         {
             Section_Carre *section = barre->section->data;
             double      S = section->cote*section->cote;
@@ -1237,7 +1249,7 @@ G_MODULE_EXPORT double EF_sections_gj_l(Beton_Barre *barre, unsigned int discret
             return G*J/ll;
             break;
         }
-        case SECTION_CARRE :
+        case SECTION_CARREE :
         {
             Section_Carre *section = barre->section->data;
             double      J = section->cote*section->cote*section->cote*section->cote/16.*(16./3.-3.364*(1.-1./12.));
@@ -1301,6 +1313,7 @@ G_MODULE_EXPORT gboolean EF_sections_free(Projet *projet)
     
 #ifdef ENABLE_GTK
     g_object_unref(projet->list_gtk.ef_sections.liste_sections);
+    g_object_unref(projet->list_gtk.ef_sections.liste_type_section);
 #endif
     
     return TRUE;

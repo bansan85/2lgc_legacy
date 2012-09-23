@@ -508,7 +508,7 @@ G_MODULE_EXPORT void* m3d_barre(void *donnees_m3d, Beton_Barre *barre)
             break;
             
         }
-        case SECTION_CARRE :
+        case SECTION_CARREE :
         {
             Section_Carre *section = (Section_Carre *)barre->section->data;
             double  y, z;

@@ -781,7 +781,6 @@ G_MODULE_EXPORT gboolean EF_appuis_free(Projet *projet)
     projet->ef_donnees.appuis = NULL;
     
 #ifdef ENABLE_GTK
-    gtk_list_store_clear(projet->list_gtk.ef_appuis.liste_appuis);
     g_object_unref(projet->list_gtk.ef_appuis.liste_appuis);
     g_object_unref(projet->list_gtk.ef_appuis.liste_type_appui);
 #endif
