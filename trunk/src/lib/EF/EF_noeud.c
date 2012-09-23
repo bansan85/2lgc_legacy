@@ -444,7 +444,12 @@ G_MODULE_EXPORT double EF_noeuds_distance_x_y_z(EF_Noeud* n1, EF_Noeud* n2, doub
 }
 
 
+#ifdef ENABLE_GTK
 G_MODULE_EXPORT void EF_noeuds_free_foreach(EF_Noeud *noeud, Projet *projet)
+#else
+G_MODULE_EXPORT void EF_noeuds_free_foreach(EF_Noeud *noeud,
+  Projet *projet __attribute__((unused)))
+#endif
 /* Description : Fonction permettant de libérer un noeud contenu dans une liste.
  * Paramètres : EF_Noeud *noeud : le noeud à libérer,
  *            : Projet *projet : la variable projet.

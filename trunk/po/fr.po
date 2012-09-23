@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2012-09-23 09:14+0200\n"
-"PO-Revision-Date: 2012-09-23 09:26+0100\n"
+"POT-Creation-Date: 2012-09-23 09:54+0200\n"
+"PO-Revision-Date: 2012-09-23 10:04+0100\n"
 "Last-Translator: LE GARREC Vincent <vlg@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -472,18 +472,6 @@ msgstr "La hauteur du dessin ne peut être nulle.\n"
 msgid "Type de section %d inconnu."
 msgstr "Type de section %d inconnu."
 
-msgid "Rectangulaire"
-msgstr "Rectangulaire"
-
-msgid "T"
-msgstr "T"
-
-msgid "Carrée"
-msgstr "Carrée"
-
-msgid "Circulaire"
-msgstr "Circulaire"
-
 msgid "Section en béton '%s' introuvable.\n"
 msgstr "Section en béton '%s' introuvable.\n"
 
@@ -924,6 +912,18 @@ msgstr "Noeud 2"
 
 msgid "Relâchement"
 msgstr "Relâchement"
+
+msgid "Rectangulaire"
+msgstr "Rectangulaire"
+
+msgid "T"
+msgstr "T"
+
+msgid "Carrée"
+msgstr "Carrée"
+
+msgid "Circulaire"
+msgstr "Circulaire"
 
 msgid "et les barres utilisant la section."
 msgstr "et les barres utilisant la section."

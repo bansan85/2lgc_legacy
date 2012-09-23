@@ -60,10 +60,6 @@
             g_signal_connect(gtk_text_view_get_buffer(GTK_TEXT_VIEW(textview)), "changed", G_CALLBACK(gtk_common_entry_check_liste), NULL); \
             }
 
-#define GTK_DECIMAL_DISTANCE 3
-#define GTK_DECIMAL_FORCE 3
-#define GTK_DECIMAL_MOMENT 3
-
 #define GTK_COMMON_SPINBUTTON_AS_UINT(spinbutton) ((unsigned int)round(gtk_spin_button_get_value(spinbutton)))
 
 void gtk_common_entry_check_double(GtkTextBuffer *entry, gpointer user_data);

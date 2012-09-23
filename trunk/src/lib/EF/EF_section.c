@@ -27,7 +27,6 @@
 #include "common_erreurs.h"
 #include "common_maths.h"
 #include "common_selection.h"
-#include "common_gtk.h"
 #include "EF_noeud.h"
 #include "EF_calculs.h"
 #include "1992_1_1_barres.h"
@@ -275,8 +274,8 @@ G_MODULE_EXPORT char* EF_sections_get_description(EF_Section *sect)
             char    larg[30], haut[30];
             Section_Rectangulaire *section = sect->data;
             
-            common_math_double_to_char(section->largeur, larg, GTK_DECIMAL_DISTANCE);
-            common_math_double_to_char(section->hauteur, haut, GTK_DECIMAL_DISTANCE);
+            common_math_double_to_char(section->largeur, larg, DECIMAL_DISTANCE);
+            common_math_double_to_char(section->hauteur, haut, DECIMAL_DISTANCE);
             BUGMSG(description = g_strdup_printf("%s : %s m, %s : %s m", gettext("Largeur"), larg, gettext("Hauteur"), haut), NULL, gettext("Erreur d'allocation mémoire.\n"));
             
             return description;
@@ -286,10 +285,10 @@ G_MODULE_EXPORT char* EF_sections_get_description(EF_Section *sect)
             char    larg_t[30], haut_t[30], larg_a[30], haut_a[30];
             Section_T *section = sect->data;
             
-            common_math_double_to_char(section->largeur_table, larg_t, GTK_DECIMAL_DISTANCE);
-            common_math_double_to_char(section->largeur_ame, larg_a, GTK_DECIMAL_DISTANCE);
-            common_math_double_to_char(section->hauteur_table, haut_t, GTK_DECIMAL_DISTANCE);
-            common_math_double_to_char(section->hauteur_ame, haut_a, GTK_DECIMAL_DISTANCE);
+            common_math_double_to_char(section->largeur_table, larg_t, DECIMAL_DISTANCE);
+            common_math_double_to_char(section->largeur_ame, larg_a, DECIMAL_DISTANCE);
+            common_math_double_to_char(section->hauteur_table, haut_t, DECIMAL_DISTANCE);
+            common_math_double_to_char(section->hauteur_ame, haut_a, DECIMAL_DISTANCE);
             BUGMSG(description = g_strdup_printf("%s : %s m, %s : %s m, %s : %s m, %s : %s m", gettext("Largeur table"), larg_t, gettext("Hauteur table"), haut_t, gettext("Largeur âme"), larg_a, gettext("Hauteur âme"), haut_a), NULL, gettext("Erreur d'allocation mémoire.\n"));
             
             return description;
@@ -299,7 +298,7 @@ G_MODULE_EXPORT char* EF_sections_get_description(EF_Section *sect)
             char    cote[30];
             Section_Carre *section = sect->data;
             
-            common_math_double_to_char(section->cote, cote, GTK_DECIMAL_DISTANCE);
+            common_math_double_to_char(section->cote, cote, DECIMAL_DISTANCE);
             BUGMSG(description = g_strdup_printf("%s : %s m", gettext("Coté"), cote), NULL, gettext("Erreur d'allocation mémoire.\n"));
             
             return description;
@@ -309,7 +308,7 @@ G_MODULE_EXPORT char* EF_sections_get_description(EF_Section *sect)
             char    diam[30];
             Section_Circulaire *section = sect->data;
             
-            common_math_double_to_char(section->diametre, diam, GTK_DECIMAL_DISTANCE);
+            common_math_double_to_char(section->diametre, diam, DECIMAL_DISTANCE);
             BUGMSG(description = g_strdup_printf("%s : %s m", gettext("Diamètre"), diam), NULL, gettext("Erreur d'allocation mémoire.\n"));
             
             return description;
