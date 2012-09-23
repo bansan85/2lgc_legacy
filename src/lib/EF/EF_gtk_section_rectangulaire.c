@@ -141,8 +141,8 @@ gboolean EF_gtk_section_rectangulaire_recupere_donnees(Projet *projet, double *l
 }
 
 
-void EF_gtk_section_rectangulaire_ajouter_clicked(GtkButton *button __attribute__((unused)),
-  Projet *projet)
+G_MODULE_EXPORT void EF_gtk_section_rectangulaire_ajouter_clicked(
+  GtkButton *button __attribute__((unused)), Projet *projet)
 /* Description : Ferme la fenêtre en ajoutant la charge.
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -185,7 +185,7 @@ G_MODULE_EXPORT void EF_gtk_section_rectangulaire_annuler_clicked(
 }
 
 
-void EF_gtk_section_rectangulaire_modifier_clicked(
+G_MODULE_EXPORT void EF_gtk_section_rectangulaire_modifier_clicked(
   GtkButton *button __attribute__((unused)), Projet *projet)
 /* Description : Ferme la fenêtre en appliquant les modifications.
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,

@@ -21,6 +21,7 @@
             <object class="GtkMenuItem" id="EF_sections_ajouter_menu_T">
                 <property name="label" translatable="yes">T</property>
                 <property name="visible">True</property>
+                <signal name="activate" handler="EF_gtk_sections_ajout_T"/>
             </object>
         </child>
         <child>

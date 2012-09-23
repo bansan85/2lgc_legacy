@@ -422,6 +422,15 @@ typedef struct __Gtk_EF_Sections_Rectangulaire
     
     EF_Section      *section;
 } Gtk_EF_Sections_Rectangulaire;
+
+
+typedef struct __Gtk_EF_Sections_T
+{
+    GtkBuilder      *builder;
+    GtkWidget       *window;
+    
+    EF_Section      *section;
+} Gtk_EF_Sections_T;
 #endif
 
 typedef struct __Beton_Barre
@@ -684,18 +693,19 @@ typedef struct __Gtk_m3d
 
 typedef struct __List_Gtk
 {                       // Contient toutes les données pour l'interface graphique GTK+3
-    Gtk_1990_Actions   _1990_actions;     // pour l'Eurocode 0
-    Gtk_1990_Groupes   _1990_groupes;     // pour l'Eurocode 0
+    Gtk_1990_Actions    _1990_actions;     // pour l'Eurocode 0
+    Gtk_1990_Groupes    _1990_groupes;     // pour l'Eurocode 0
     Gtk_EF_Charge_Noeud ef_charge_noeud;
     Gtk_EF_Charge_Barre_Ponctuelle ef_charge_barre_ponctuelle;
     Gtk_EF_Charge_Barre_Repartie_Uniforme ef_charge_barre_repartie_uniforme;
-    Gtk_m3d            m3d;       // pour l'affichage graphique de la structure
-    Gtk_EF_Noeud       ef_noeud;
-    Gtk_EF_Barres      ef_barres;
-    Gtk_EF_Appuis      ef_appuis;
-    Gtk_EF_Sections    ef_sections;
+    Gtk_m3d             m3d;       // pour l'affichage graphique de la structure
+    Gtk_EF_Noeud        ef_noeud;
+    Gtk_EF_Barres       ef_barres;
+    Gtk_EF_Appuis       ef_appuis;
+    Gtk_EF_Sections     ef_sections;
     Gtk_EF_Sections_Rectangulaire    ef_sections_rectangulaire;
-    Comp_Gtk                comp;      // tous les composants grahpiques
+    Gtk_EF_Sections_T   ef_sections_T;
+    Comp_Gtk            comp;      // tous les composants grahpiques
 } List_Gtk;
 #endif
 
