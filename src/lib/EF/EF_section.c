@@ -30,6 +30,11 @@
 #include "EF_noeud.h"
 #include "EF_calculs.h"
 #include "1992_1_1_barres.h"
+#include "EF_section.h"
+
+#ifdef ENABLE_GTK
+#include "EF_gtk_sections.hpp"
+#endif
 
 G_MODULE_EXPORT gboolean EF_sections_init(Projet *projet)
 /* Description : Initialise la liste des section en béton.
@@ -85,6 +90,18 @@ G_MODULE_EXPORT gboolean EF_sections_ajout_rectangulaire(Projet *projet, const c
 #ifdef ENABLE_GTK
     gtk_list_store_append(projet->list_gtk.ef_sections.liste_sections, &section_nouvelle->Iter_liste);
     gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section_nouvelle->Iter_liste, 0, nom, -1);
+    if (projet->list_gtk.ef_sections.builder != NULL)
+    {
+        char        *description;
+        GdkPixbuf   *pixbuf = EF_gtk_sections_dessin(section_nouvelle, 32, 32);
+        
+        BUG(description = EF_sections_get_description(section_nouvelle), FALSE);
+        
+        gtk_tree_store_append(projet->list_gtk.ef_sections.sections, &section_nouvelle->Iter_fenetre, NULL);
+        gtk_tree_store_set(projet->list_gtk.ef_sections.sections, &section_nouvelle->Iter_fenetre, 0, pixbuf, 1, section_nouvelle->nom, 2, description, -1);
+        free(description);
+        g_object_unref(pixbuf);
+    }
 #endif
     
     return TRUE;

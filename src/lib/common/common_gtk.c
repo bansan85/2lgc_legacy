@@ -37,7 +37,7 @@ G_MODULE_EXPORT void gtk_common_entry_check_double(GtkTextBuffer *textbuffer,
  * Valeur renvoyée : Aucune.
  */
 {
-    gchar       *texte;
+    char        *texte;
     GtkTextIter start, end;
     double      nombre;
     char        *fake;
@@ -81,7 +81,7 @@ G_MODULE_EXPORT double gtk_common_entry_renvoie_double(GtkTextBuffer *textbuffer
     double      nombre;
     char        *fake;
     
-    BUGMSG(textbuffer, -1, gettext("Paramètre %s incorrect.\n"), "textbuffer");
+    BUGMSG(textbuffer, NAN, gettext("Paramètre %s incorrect.\n"), "textbuffer");
     
     gtk_text_buffer_get_iter_at_offset(textbuffer, &start, 0);
     gtk_text_buffer_get_iter_at_offset(textbuffer, &end, -1);

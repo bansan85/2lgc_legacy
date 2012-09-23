@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __EF_GTK_SECTIONS_H
-#define __EF_GTK_SECTIONS_H
+#ifndef __EF_GTK_SECTION_RECTANGULAIRE_H
+#define __EF_GTK_SECTION_RECTANGULAIRE_H
 
 #include "config.h"
 #ifdef ENABLE_GTK
@@ -25,8 +25,7 @@
 
 #include "common_projet.h"
 
-GdkPixbuf *EF_gtk_sections_dessin(EF_Section *section, unsigned int width, unsigned int height);
-void EF_gtk_sections(Projet *projet);
+G_MODULE_EXPORT gboolean EF_gtk_section_rectangulaire(Projet *projet, EF_Section *section) __attribute__((__warn_unused_result__));
 
 #endif
 

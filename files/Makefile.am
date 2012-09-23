@@ -11,6 +11,7 @@ applicationui_DATA	=	ui/1990_actions.ui \
 						ui/EF_appuis.ui \
 						ui/EF_barres.ui \
 						ui/EF_sections.ui \
+						ui/EF_sections_rectangulaire.ui \
 						ui/EF_barres_add.ui \
 						ui/EF_noeud.ui \
 						ui/EF_charge_barre_ponctuelle.ui \

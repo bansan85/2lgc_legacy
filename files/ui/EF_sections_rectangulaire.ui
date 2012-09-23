@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+    <requires lib="gtk+" version="3.2"/>
+    <object class="GtkTextTagTable" id="EF_section_rectangulaire_tag_table">
+        <child type="tag">
+            <object class="GtkTextTag" id="EF_section_rectangulaire_tag_mauvais">
+                <property name="name">mauvais</property>
+                <property name="foreground">red</property>
+                <property name="weight">800</property>
+            </object>
+        </child>
+        <child type="tag">
+            <object class="GtkTextTag" id="EF_section_rectangulaire_tag2_ok">
+                <property name="name">OK</property>
+                <property name="foreground">black</property>
+                <property name="weight">400</property>
+            </object>
+        </child>
+    </object>
+    <object class="GtkTextBuffer" id="EF_section_rectangulaire_buffer_largeur">
+        <property name="tag-table">EF_section_rectangulaire_tag_table</property>
+        <property name="text">0</property>
+        <signal name="changed" handler="gtk_common_entry_check_double"/>
+    </object>
+    <object class="GtkTextBuffer" id="EF_section_rectangulaire_buffer_hauteur">
+        <property name="tag-table">EF_section_rectangulaire_tag_table</property>
+        <property name="text">0</property>
+        <signal name="changed" handler="gtk_common_entry_check_double"/>
+    </object>
+    <object id="EF_section_rectangulaire_window" class="GtkWindow">
+        <property name="visible">True</property>
+        <property name="modal">True</property>
+        <property name="window-position">GTK_WIN_POS_CENTER</property>
+        <property name="default-width">400</property>
+        <signal name="key-press-event" handler="EF_gtk_section_rectangulaire_window_key_press"/>
+        <signal name="destroy" handler="EF_gtk_section_rectangulaire_window_destroy"/>
+        <child>
+            <object class="GtkGrid" id="EF_section_rectangulaire_grille_principale">
+                <property name="visible">True</property>
+                <property name="border-width">12</property>
+                <property name="column-spacing">12</property>
+                <property name="row-spacing">12</property>
+                <child>
+                    <object class="GtkLabel" id="EF_section_rectangulaire_label_description">
+                        <property name="label" translatable="yes">Description :</property>
+                        <property name="visible">True</property>
+                    </object>
+                    <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">0</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkScrolledWindow" id="EF_section_rectangulaire_scrolledwindow_description">
+                        <property name="visible">True</property>
+                        <property name="expand">True</property>
+                        <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                        <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                        <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
+                        <child>
+                            <object class="GtkTextView" id="EF_section_rectangulaire_textview_description">
+                                <property name="visible">True</property>
+                                <property name="accepts-tab">False</property>
+                                <property name="wrap-mode">GTK_WRAP_WORD</property>
+                            </object>
+                        </child>
+                    </object>
+                    <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">0</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkLabel" id="EF_section_rectangulaire_label_largeur">
+                        <property name="label">Largeur [m] :</property>
+                        <property name="visible">True</property>
+                    </object>
+                    <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">1</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkScrolledWindow" id="EF_section_rectangulaire_scrolledwindow_largeur">
+                        <property name="visible">True</property>
+                        <property name="expand">True</property>
+                        <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                        <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                        <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
+                        <child>
+                            <object class="GtkTextView" id="EF_section_rectangulaire_textview_largeur">
+                                <property name="visible">True</property>
+                                <property name="accepts-tab">False</property>
+                                <property name="wrap-mode">GTK_WRAP_CHAR</property>
+                                <property name="buffer">EF_section_rectangulaire_buffer_largeur</property>
+                            </object>
+                        </child>
+                    </object>
+                    <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">1</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkLabel" id="EF_section_rectangulaire_label_hauteur">
+                        <property name="label">Hauteur [m] :</property>
+                        <property name="visible">True</property>
+                    </object>
+                    <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">2</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkScrolledWindow" id="EF_section_rectangulaire_scrolledwindow_hauteur">
+                        <property name="visible">True</property>
+                        <property name="expand">True</property>
+                        <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                        <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                        <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
+                        <child>
+                            <object class="GtkTextView" id="EF_section_rectangulaire_textview_hauteur">
+                                <property name="visible">True</property>
+                                <property name="accepts-tab">False</property>
+                                <property name="buffer">EF_section_rectangulaire_buffer_hauteur</property>
+                                <property name="wrap-mode">GTK_WRAP_CHAR</property>
+                            </object>
+                        </child>
+                    </object>
+                    <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">2</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkButtonBox" id="EF_section_rectangulaire_buttons">
+                        <property name="visible">True</property>
+                        <property name="orientation">horizontal</property>
+                        <property name="layout_style">end</property>
+                        <property name="spacing">6</property>
+                        <child>
+                            <object class="GtkButton" id="EF_section_rectangulaire_button_annuler">
+                                <property name="visible">True</property>
+                                <property name="use_stock">True</property>
+                                <property name="label">gtk-cancel</property>
+                                <signal name="clicked" handler="EF_gtk_section_rectangulaire_annuler_clicked"/>
+                            </object>
+                            <packing>
+                                <property name="position">0</property>
+                                <property name="pack_type">end</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GtkButton" id="EF_section_rectangulaire_button_add_edit">
+                                <property name="visible">True</property>
+                                <property name="use_stock">True</property>
+                            </object>
+                            <packing>
+                                <property name="position">1</property>
+                                <property name="pack_type">end</property>
+                            </packing>
+                        </child>
+                    </object>
+                    <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">3</property>
+                        <property name="width">2</property>
+                    </packing>
+                </child>
+            </object>
+        </child>
+    </object>
+</interface>

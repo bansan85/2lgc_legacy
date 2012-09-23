@@ -107,14 +107,14 @@ G_MODULE_EXPORT gboolean EF_gtk_charge_barre_repartie_uniforme_ajout_affichage(
         return TRUE;
     
     BUG(txt_liste_barres = common_selection_converti_barres_en_texte(charge->barres), FALSE);
-    common_math_double_to_char(charge->a, txt_debut, GTK_DECIMAL_DISTANCE);
-    common_math_double_to_char(charge->b, txt_fin, GTK_DECIMAL_DISTANCE);
-    common_math_double_to_char(charge->fx, txt_fx, GTK_DECIMAL_FORCE);
-    common_math_double_to_char(charge->fy, txt_fy, GTK_DECIMAL_FORCE);
-    common_math_double_to_char(charge->fz, txt_fz, GTK_DECIMAL_FORCE);
-    common_math_double_to_char(charge->mx, txt_mx, GTK_DECIMAL_MOMENT);
-    common_math_double_to_char(charge->my, txt_my, GTK_DECIMAL_MOMENT);
-    common_math_double_to_char(charge->mz, txt_mz, GTK_DECIMAL_MOMENT);
+    common_math_double_to_char(charge->a, txt_debut, DECIMAL_DISTANCE);
+    common_math_double_to_char(charge->b, txt_fin, DECIMAL_DISTANCE);
+    common_math_double_to_char(charge->fx, txt_fx, DECIMAL_FORCE);
+    common_math_double_to_char(charge->fy, txt_fy, DECIMAL_FORCE);
+    common_math_double_to_char(charge->fz, txt_fz, DECIMAL_FORCE);
+    common_math_double_to_char(charge->mx, txt_mx, DECIMAL_MOMENT);
+    common_math_double_to_char(charge->my, txt_my, DECIMAL_MOMENT);
+    common_math_double_to_char(charge->mz, txt_mz, DECIMAL_MOMENT);
     
     BUGMSG(description = g_strdup_printf("%s : %s, %s : %s m, %s : %s m, %s, %s, Fx : %s N/m, Fy : %s N/m, Fz : %s N/m, Mx : %s N.m/m, My : %s N.m/m, Mz : %s N.m/m", strstr(txt_liste_barres, ";") == NULL ? gettext("Barre") : gettext("Barres"), txt_liste_barres, gettext("début"), txt_debut, gettext("fin (par rapport à la fin)"), txt_fin, charge->projection == TRUE ? gettext("projection : oui") : gettext("projection : non"), charge->repere_local ? gettext("repère : local") : gettext("repère : global"), txt_fx, txt_fy, txt_fz, txt_mx, txt_my, txt_mz), FALSE, gettext("Erreur d'allocation mémoire.\n"));
     
@@ -489,21 +489,21 @@ G_MODULE_EXPORT gboolean EF_gtk_charge_barre_repartie_uniforme(Projet *projet,
     {
         gchar   tmp[30], *tmp2;
         gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_rep_uni_textview_description"))), charge_barre->nom, -1);
-        common_math_double_to_char(charge_barre->fx, tmp, GTK_DECIMAL_FORCE);
+        common_math_double_to_char(charge_barre->fx, tmp, DECIMAL_FORCE);
         gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_rep_uni_buffer_fx")), tmp, -1);
-        common_math_double_to_char(charge_barre->fy, tmp, GTK_DECIMAL_FORCE);
+        common_math_double_to_char(charge_barre->fy, tmp, DECIMAL_FORCE);
         gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_rep_uni_buffer_fy")), tmp, -1);
-        common_math_double_to_char(charge_barre->fz, tmp, GTK_DECIMAL_FORCE);
+        common_math_double_to_char(charge_barre->fz, tmp, DECIMAL_FORCE);
         gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_rep_uni_buffer_fz")), tmp, -1);
-        common_math_double_to_char(charge_barre->mx, tmp, GTK_DECIMAL_MOMENT);
+        common_math_double_to_char(charge_barre->mx, tmp, DECIMAL_MOMENT);
         gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_rep_uni_buffer_mx")), tmp, -1);
-        common_math_double_to_char(charge_barre->my, tmp, GTK_DECIMAL_MOMENT);
+        common_math_double_to_char(charge_barre->my, tmp, DECIMAL_MOMENT);
         gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_rep_uni_buffer_my")), tmp, -1);
-        common_math_double_to_char(charge_barre->mz, tmp, GTK_DECIMAL_MOMENT);
+        common_math_double_to_char(charge_barre->mz, tmp, DECIMAL_MOMENT);
         gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_rep_uni_buffer_mz")), tmp, -1);
-        common_math_double_to_char(charge_barre->a, tmp, GTK_DECIMAL_DISTANCE);
+        common_math_double_to_char(charge_barre->a, tmp, DECIMAL_DISTANCE);
         gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_rep_uni_buffer_a")), tmp, -1);
-        common_math_double_to_char(charge_barre->b, tmp, GTK_DECIMAL_DISTANCE);
+        common_math_double_to_char(charge_barre->b, tmp, DECIMAL_DISTANCE);
         gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_rep_uni_buffer_b")), tmp, -1);
         if ((charge_barre->repere_local) && (charge_barre->projection))
         {
