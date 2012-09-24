@@ -45,6 +45,7 @@ extern "C" {
 #include "1992_1_1_materiaux.h"
 #include "EF_gtk_section_rectangulaire.h"
 #include "EF_gtk_section_T.h"
+#include "EF_gtk_section_carree.h"
 
 G_MODULE_EXPORT void EF_gtk_sections_fermer(GtkButton *button __attribute__((unused)),
   Projet *projet)
@@ -505,7 +506,7 @@ G_MODULE_EXPORT void EF_gtk_sections_ajout_rectangulaire(
 
 G_MODULE_EXPORT void EF_gtk_sections_ajout_T(
   GtkMenuItem *menuitem __attribute__((unused)), Projet *projet)
-/* Description : Lance la fenêtre permettant d'ajouter une section rectangulaire.
+/* Description : Lance la fenêtre permettant d'ajouter une section en T.
  * Paramètres : GtkMenuItem *menuitem : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
  * Valeur renvoyée : Aucune.
@@ -517,6 +518,23 @@ G_MODULE_EXPORT void EF_gtk_sections_ajout_T(
     BUGMSG(projet->list_gtk.ef_sections.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Section");
     
     BUG(EF_gtk_section_T(projet, NULL), );
+}
+
+
+G_MODULE_EXPORT void EF_gtk_sections_ajout_carree(
+  GtkMenuItem *menuitem __attribute__((unused)), Projet *projet)
+/* Description : Lance la fenêtre permettant d'ajouter une section carrée.
+ * Paramètres : GtkMenuItem *menuitem : composant à l'origine de l'évènement,
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : Aucune.
+ *   Echec : projet == NULL,
+ *           interface graphique non initialisée.
+ */
+{
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet->list_gtk.ef_sections.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Section");
+    
+    BUG(EF_gtk_section_carree(projet, NULL), );
 }
 
 
@@ -565,6 +583,7 @@ G_MODULE_EXPORT void EF_gtk_sections_edit_clicked(GtkWidget *widget  __attribute
                 }
                 case SECTION_CARREE :
                 {
+                    BUG(EF_gtk_section_carree(projet, section), );
                     break;
                 }
                 case SECTION_CIRCULAIRE :

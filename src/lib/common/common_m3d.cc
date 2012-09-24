@@ -510,7 +510,7 @@ G_MODULE_EXPORT void* m3d_barre(void *donnees_m3d, Beton_Barre *barre)
         }
         case SECTION_CARREE :
         {
-            Section_Carre *section = (Section_Carre *)barre->section->data;
+            Section_Carree *section = (Section_Carree *)barre->section->data;
             double  y, z;
             CM3dObject  *bas, *haut, *gauche, *droite;
             

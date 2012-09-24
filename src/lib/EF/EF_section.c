@@ -179,8 +179,8 @@ G_MODULE_EXPORT gboolean EF_sections_ajout_carre(Projet *projet, const char* nom
  *             en cas d'erreur d'allocation mémoire.
  */
 {
-    Section_Carre *section_data = malloc(sizeof(Section_Carre));
-    EF_Section          *section_nouvelle = malloc(sizeof(EF_Section));
+    Section_Carree  *section_data = malloc(sizeof(Section_Carree));
+    EF_Section      *section_nouvelle = malloc(sizeof(EF_Section));
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(section_nouvelle, FALSE, gettext("Erreur d'allocation mémoire.\n"));
@@ -199,6 +199,18 @@ G_MODULE_EXPORT gboolean EF_sections_ajout_carre(Projet *projet, const char* nom
 #ifdef ENABLE_GTK
     gtk_list_store_append(projet->list_gtk.ef_sections.liste_sections, &section_nouvelle->Iter_liste);
     gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section_nouvelle->Iter_liste, 0, nom, -1);
+    if (projet->list_gtk.ef_sections.builder != NULL)
+    {
+        char        *description;
+        GdkPixbuf   *pixbuf = EF_gtk_sections_dessin(section_nouvelle, 32, 32);
+        
+        BUG(description = EF_sections_get_description(section_nouvelle), FALSE);
+        
+        gtk_tree_store_append(projet->list_gtk.ef_sections.sections, &section_nouvelle->Iter_fenetre, NULL);
+        gtk_tree_store_set(projet->list_gtk.ef_sections.sections, &section_nouvelle->Iter_fenetre, 0, pixbuf, 1, section_nouvelle->nom, 2, description, -1);
+        free(description);
+        g_object_unref(pixbuf);
+    }
 #endif
     
     return TRUE;
@@ -324,8 +336,8 @@ G_MODULE_EXPORT char* EF_sections_get_description(EF_Section *sect)
         }
         case SECTION_CARREE :
         {
-            char    cote[30];
-            Section_Carre *section = sect->data;
+            char            cote[30];
+            Section_Carree  *section = sect->data;
             
             common_math_double_to_char(section->cote, cote, DECIMAL_DISTANCE);
             BUGMSG(description = g_strdup_printf("%s : %s m", gettext("Coté"), cote), NULL, gettext("Erreur d'allocation mémoire.\n"));
@@ -560,7 +572,7 @@ G_MODULE_EXPORT double EF_sections_j(EF_Section* sect)
         }
         case SECTION_CARREE :
         {
-            Section_Carre *section = sect->data;
+            Section_Carree *section = sect->data;
             return section->cote*section->cote*section->cote*section->cote/16.*(16./3.-3.364*(1.-1./12.));
             
     // Pour une section carrée de section constante, J vaut :\end{verbatim}\begin{displaymath}
@@ -626,7 +638,7 @@ G_MODULE_EXPORT double EF_sections_iy(EF_Section* sect)
         }
         case SECTION_CARREE :
         {
-            Section_Carre *section = sect->data;
+            Section_Carree *section = sect->data;
             return section->cote*section->cote*section->cote*section->cote/12.;
             
     // Pour une section carrée de section constante, Iy vaut :\end{verbatim}\begin{displaymath}
@@ -688,7 +700,7 @@ G_MODULE_EXPORT double EF_sections_iz(EF_Section* sect)
         }
         case SECTION_CARREE :
         {
-            Section_Carre *section = sect->data;
+            Section_Carree *section = sect->data;
             return section->cote*section->cote*section->cote*section->cote/12.;
     // Pour une section carrée de section constante, I vaut :\end{verbatim}\begin{displaymath}
     // I = \frac{c^4}{12} \end{displaymath}\begin{verbatim}
@@ -1076,7 +1088,7 @@ G_MODULE_EXPORT double EF_sections_s(EF_Section *sect)
         }
         case SECTION_CARREE :
         {
-            Section_Carre *section = sect->data;
+            Section_Carree *section = sect->data;
             return section->cote*section->cote;
             
     // Pour une section carrée de section constante, S vaut :\end{verbatim}\begin{displaymath}
@@ -1156,7 +1168,7 @@ G_MODULE_EXPORT double EF_sections_es_l(Beton_Barre *barre, unsigned int discret
         }
         case SECTION_CARREE :
         {
-            Section_Carre *section = barre->section->data;
+            Section_Carree *section = barre->section->data;
             double      S = section->cote*section->cote;
             
     // Pour une section carrée de section constante, ES/L vaut :\end{verbatim}\begin{displaymath}
@@ -1267,7 +1279,7 @@ G_MODULE_EXPORT double EF_sections_gj_l(Beton_Barre *barre, unsigned int discret
         }
         case SECTION_CARREE :
         {
-            Section_Carre *section = barre->section->data;
+            Section_Carree *section = barre->section->data;
             double      J = section->cote*section->cote*section->cote*section->cote/16.*(16./3.-3.364*(1.-1./12.));
             
     // Pour une section carrée de section constante, GJ/L vaut :\end{verbatim}\begin{displaymath}

@@ -28,6 +28,7 @@
             <object class="GtkMenuItem" id="EF_sections_ajouter_menu_carree">
                 <property name="label" translatable="yes">Carrée</property>
                 <property name="visible">True</property>
+                <signal name="activate" handler="EF_gtk_sections_ajout_carree"/>
             </object>
         </child>
         <child>
