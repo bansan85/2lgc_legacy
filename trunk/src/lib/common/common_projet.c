@@ -94,6 +94,7 @@ G_MODULE_EXPORT Projet* projet_init(Type_Pays pays)
     projet->list_gtk.ef_sections_rectangulaire.builder = NULL;
     projet->list_gtk.ef_sections_T.builder = NULL;
     projet->list_gtk.ef_sections_carree.builder = NULL;
+    projet->list_gtk.ef_sections_circulaire.builder = NULL;
 #endif
     
     projet->ef_donnees.c = &(projet->ef_donnees.Common);

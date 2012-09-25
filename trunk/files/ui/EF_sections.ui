@@ -35,6 +35,7 @@
             <object class="GtkMenuItem" id="EF_sections_ajouter_menu_circulaire">
                 <property name="label" translatable="yes">Circulaire</property>
                 <property name="visible">True</property>
+                <signal name="activate" handler="EF_gtk_sections_ajout_circulaire"/>
             </object>
         </child>
     </object>
