@@ -679,15 +679,9 @@ G_MODULE_EXPORT void EF_gtk_sections(Projet *projet)
     while (list_parcours != NULL)
     {
         EF_Section  *section = (EF_Section *)list_parcours->data;
-        char        *description;
-        GdkPixbuf   *pixbuf = EF_gtk_sections_dessin(section, 32, 32);
-        
-        BUG(description = EF_sections_get_description(section), );
         
         gtk_tree_store_append(ef_gtk->sections, &section->Iter_fenetre, NULL);
-        gtk_tree_store_set(ef_gtk->sections, &section->Iter_fenetre, 0, pixbuf, 1, section->nom, 2, description, -1);
-        free(description);
-        g_object_unref(pixbuf);
+        BUG(EF_sections_update_ligne_treeview(projet, section), );
         
         list_parcours = g_list_next(list_parcours);
     }
