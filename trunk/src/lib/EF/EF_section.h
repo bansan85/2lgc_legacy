@@ -24,6 +24,8 @@
 
 gboolean EF_sections_init(Projet *projet) __attribute__((__warn_unused_result__));
 
+gboolean EF_sections_update_ligne_treeview(Projet *projet, EF_Section *section) __attribute__((__warn_unused_result__));
+
 gboolean EF_sections_ajout_rectangulaire(Projet *projet, const char* nom, double l, double h) __attribute__((__warn_unused_result__));
 gboolean EF_sections_ajout_T(Projet *projet, const char* nom, double lt, double la, double ht, double ha) __attribute__((__warn_unused_result__));
 gboolean EF_sections_ajout_carre(Projet *projet, const char* nom, double cote) __attribute__((__warn_unused_result__));
@@ -40,6 +42,10 @@ gboolean EF_sections_supprime(EF_Section *section, gboolean annule_si_utilise, P
 double EF_sections_j(EF_Section *section) __attribute__((__warn_unused_result__));
 double EF_sections_iy(EF_Section *section) __attribute__((__warn_unused_result__));
 double EF_sections_iz(EF_Section *section) __attribute__((__warn_unused_result__));
+double EF_sections_vy(EF_Section *sect) __attribute__((__warn_unused_result__));
+double EF_sections_vyp(EF_Section *sect) __attribute__((__warn_unused_result__));
+double EF_sections_vz(EF_Section *sect) __attribute__((__warn_unused_result__));
+double EF_sections_vzp(EF_Section *sect) __attribute__((__warn_unused_result__));
 
 double EF_sections_ay(Beton_Barre *barre, unsigned int discretisation) __attribute__((__warn_unused_result__));
 double EF_sections_by(Beton_Barre *barre, unsigned int discretisation) __attribute__((__warn_unused_result__));

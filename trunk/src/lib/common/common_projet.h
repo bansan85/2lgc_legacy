@@ -28,6 +28,8 @@
 #define DECIMAL_DISTANCE 3
 #define DECIMAL_FORCE 3
 #define DECIMAL_MOMENT 3
+#define DECIMAL_M4 8
+#define DECIMAL_SURFACE 3
 
 #ifdef ENABLE_GTK
 #include <gtk/gtk.h>

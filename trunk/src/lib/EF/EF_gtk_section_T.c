@@ -236,19 +236,7 @@ G_MODULE_EXPORT void EF_gtk_section_T_modifier_clicked(
     data->hauteur_table = ht;
     data->hauteur_ame = ha;
     
-    gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &ef_gtk->section->Iter_liste, 0, texte, -1);
-    
-    if (projet->list_gtk.ef_sections.builder != NULL)
-    {
-        char        *description;
-        GdkPixbuf   *pixbuf = EF_gtk_sections_dessin(ef_gtk->section, 32, 32);
-        
-        BUG(description = EF_sections_get_description(ef_gtk->section), );
-        
-        gtk_tree_store_set(projet->list_gtk.ef_sections.sections, &ef_gtk->section->Iter_fenetre, 0, pixbuf, 1, ef_gtk->section->nom, 2, description, -1);
-        free(description);
-        g_object_unref(pixbuf);
-    }
+    BUG(EF_sections_update_ligne_treeview(projet, ef_gtk->section), );
     
     gtk_widget_destroy(projet->list_gtk.ef_sections_T.window);
     

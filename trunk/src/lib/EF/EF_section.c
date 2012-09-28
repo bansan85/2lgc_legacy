@@ -58,6 +58,46 @@ G_MODULE_EXPORT gboolean EF_sections_init(Projet *projet)
 }
 
 
+G_MODULE_EXPORT gboolean EF_sections_update_ligne_treeview(Projet *projet, EF_Section *section)
+/* Description : Met à jour les données dans le treeview de la fenêtre section.
+ * Paramètres : Projet *projet : la variable projet,
+ *            : EF_Section *section : la section à mettre à jour.
+ * Valeur renvoyée :
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL,
+ *             section == NULL,
+ *             fenetre section non initialisée.
+ */
+{
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(section, FALSE, gettext("Paramètre %s incorrect.\n"), "section");
+    
+    if (projet->list_gtk.ef_sections.builder != NULL)
+    {
+        char        *description;
+        GdkPixbuf   *pixbuf = EF_gtk_sections_dessin(section, 32, 32);
+        char        j[30], iy[30], iz[30], s[30], vy[30], vyp[30], vz[30], vzp[30];
+        
+        BUG(description = EF_sections_get_description(section), FALSE);
+        common_math_double_to_char(EF_sections_j(section), j, DECIMAL_M4);
+        common_math_double_to_char(EF_sections_iy(section), iy, DECIMAL_M4);
+        common_math_double_to_char(EF_sections_iz(section), iz, DECIMAL_M4);
+        common_math_double_to_char(EF_sections_s(section), s, DECIMAL_SURFACE);
+        common_math_double_to_char(EF_sections_vy(section), vy, DECIMAL_DISTANCE);
+        common_math_double_to_char(EF_sections_vyp(section), vyp, DECIMAL_DISTANCE);
+        common_math_double_to_char(EF_sections_vz(section), vz, DECIMAL_DISTANCE);
+        common_math_double_to_char(EF_sections_vzp(section), vzp, DECIMAL_DISTANCE);
+        
+        gtk_tree_store_set(projet->list_gtk.ef_sections.sections, &section->Iter_fenetre, 0, pixbuf, 1, section->nom, 2, description, 3, j, 4, iy, 5, iz, 6, s, 7, vy, 8, vyp, 9, vz, 10, vzp, -1);
+        free(description);
+        g_object_unref(pixbuf);
+    }
+    
+    return TRUE;
+}
+
+
 G_MODULE_EXPORT gboolean EF_sections_ajout_rectangulaire(Projet *projet, const char* nom,
   double l, double h)
 /* Description : Ajouter une nouvelle section rectangulaire à la liste des sections en béton.
@@ -90,18 +130,7 @@ G_MODULE_EXPORT gboolean EF_sections_ajout_rectangulaire(Projet *projet, const c
 #ifdef ENABLE_GTK
     gtk_list_store_append(projet->list_gtk.ef_sections.liste_sections, &section_nouvelle->Iter_liste);
     gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section_nouvelle->Iter_liste, 0, nom, -1);
-    if (projet->list_gtk.ef_sections.builder != NULL)
-    {
-        char        *description;
-        GdkPixbuf   *pixbuf = EF_gtk_sections_dessin(section_nouvelle, 32, 32);
-        
-        BUG(description = EF_sections_get_description(section_nouvelle), FALSE);
-        
-        gtk_tree_store_append(projet->list_gtk.ef_sections.sections, &section_nouvelle->Iter_fenetre, NULL);
-        gtk_tree_store_set(projet->list_gtk.ef_sections.sections, &section_nouvelle->Iter_fenetre, 0, pixbuf, 1, section_nouvelle->nom, 2, description, -1);
-        free(description);
-        g_object_unref(pixbuf);
-    }
+    BUG(EF_sections_update_ligne_treeview(projet, section_nouvelle), FALSE);
 #endif
     
     return TRUE;
@@ -149,18 +178,7 @@ G_MODULE_EXPORT gboolean EF_sections_ajout_T(Projet *projet, const char* nom, do
 #ifdef ENABLE_GTK
     gtk_list_store_append(projet->list_gtk.ef_sections.liste_sections, &section_nouvelle->Iter_liste);
     gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section_nouvelle->Iter_liste, 0, nom, -1);
-    if (projet->list_gtk.ef_sections.builder != NULL)
-    {
-        char        *description;
-        GdkPixbuf   *pixbuf = EF_gtk_sections_dessin(section_nouvelle, 32, 32);
-        
-        BUG(description = EF_sections_get_description(section_nouvelle), FALSE);
-        
-        gtk_tree_store_append(projet->list_gtk.ef_sections.sections, &section_nouvelle->Iter_fenetre, NULL);
-        gtk_tree_store_set(projet->list_gtk.ef_sections.sections, &section_nouvelle->Iter_fenetre, 0, pixbuf, 1, section_nouvelle->nom, 2, description, -1);
-        free(description);
-        g_object_unref(pixbuf);
-    }
+    BUG(EF_sections_update_ligne_treeview(projet, section_nouvelle), FALSE);
 #endif
     
     return TRUE;
@@ -199,18 +217,7 @@ G_MODULE_EXPORT gboolean EF_sections_ajout_carre(Projet *projet, const char* nom
 #ifdef ENABLE_GTK
     gtk_list_store_append(projet->list_gtk.ef_sections.liste_sections, &section_nouvelle->Iter_liste);
     gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section_nouvelle->Iter_liste, 0, nom, -1);
-    if (projet->list_gtk.ef_sections.builder != NULL)
-    {
-        char        *description;
-        GdkPixbuf   *pixbuf = EF_gtk_sections_dessin(section_nouvelle, 32, 32);
-        
-        BUG(description = EF_sections_get_description(section_nouvelle), FALSE);
-        
-        gtk_tree_store_append(projet->list_gtk.ef_sections.sections, &section_nouvelle->Iter_fenetre, NULL);
-        gtk_tree_store_set(projet->list_gtk.ef_sections.sections, &section_nouvelle->Iter_fenetre, 0, pixbuf, 1, section_nouvelle->nom, 2, description, -1);
-        free(description);
-        g_object_unref(pixbuf);
-    }
+    BUG(EF_sections_update_ligne_treeview(projet, section_nouvelle), FALSE);
 #endif
     
     return TRUE;
@@ -250,18 +257,7 @@ G_MODULE_EXPORT gboolean EF_sections_ajout_circulaire(Projet *projet, const char
 #ifdef ENABLE_GTK
     gtk_list_store_append(projet->list_gtk.ef_sections.liste_sections, &section_nouvelle->Iter_liste);
     gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section_nouvelle->Iter_liste, 0, nom, -1);
-    if (projet->list_gtk.ef_sections.builder != NULL)
-    {
-        char        *description;
-        GdkPixbuf   *pixbuf = EF_gtk_sections_dessin(section_nouvelle, 32, 32);
-        
-        BUG(description = EF_sections_get_description(section_nouvelle), FALSE);
-        
-        gtk_tree_store_append(projet->list_gtk.ef_sections.sections, &section_nouvelle->Iter_fenetre, NULL);
-        gtk_tree_store_set(projet->list_gtk.ef_sections.sections, &section_nouvelle->Iter_fenetre, 0, pixbuf, 1, section_nouvelle->nom, 2, description, -1);
-        free(description);
-        g_object_unref(pixbuf);
-    }
+    BUG(EF_sections_update_ligne_treeview(projet, section_nouvelle), FALSE);
 #endif
     
     return TRUE;
@@ -724,6 +720,230 @@ G_MODULE_EXPORT double EF_sections_iz(EF_Section* sect)
             return M_PI*section->diametre*section->diametre*section->diametre*section->diametre/64.;
     // Pour une section circulaire de section constante, I vaut :\end{verbatim}\begin{displaymath}
     // I = \frac{\pi \cdot \phi^4}{64} \end{displaymath}\begin{verbatim}
+            break;
+        }
+        default :
+        {
+            BUGMSG(0, NAN, gettext("Type de section %d inconnu."), sect->type);
+            break;
+        }
+    }
+}
+
+
+G_MODULE_EXPORT double EF_sections_vy(EF_Section* sect)
+/* Description : Renvoie la distance entre le centre de gravité et la partie la plus à droite
+ *               de la section.
+ * Paramètres : EF_Section* sect : section à étudier.
+ * Valeur renvoyée :
+ *   Succès : Résultat.
+ *   Échec : NAN :
+ *             section == NULL,
+ *             type de section inconnu.
+ */
+{
+    BUGMSG(sect, NAN, gettext("Paramètre %s incorrect.\n"), "sect");
+    
+    switch (sect->type)
+    {
+        case SECTION_RECTANGULAIRE :
+        {
+            Section_Rectangulaire *section = sect->data;
+            
+            return section->largeur/2.;
+            
+            break;
+        }
+        case SECTION_T :
+        {
+            Section_T *section = sect->data;
+            
+            return MAX(section->largeur_table, section->largeur_ame)/2.;
+            
+            break;
+        }
+        case SECTION_CARREE :
+        {
+            Section_Carree *section = sect->data;
+            
+            return section->cote/2.;
+            
+            break;
+        }
+        case SECTION_CIRCULAIRE :
+        {
+            Section_Circulaire *section = sect->data;
+            
+            return section->diametre/2.;
+            
+            break;
+        }
+        default :
+        {
+            BUGMSG(0, NAN, gettext("Type de section %d inconnu."), sect->type);
+            break;
+        }
+    }
+}
+
+
+G_MODULE_EXPORT double EF_sections_vyp(EF_Section* sect)
+/* Description : Renvoie la distance entre le centre de gravité et la partie la plus à gauche
+ *               de la section.
+ * Paramètres : EF_Section* sect : section à étudier.
+ * Valeur renvoyée :
+ *   Succès : Résultat.
+ *   Échec : NAN :
+ *             section == NULL,
+ *             type de section inconnu.
+ */
+{
+    BUGMSG(sect, NAN, gettext("Paramètre %s incorrect.\n"), "sect");
+    
+    switch (sect->type)
+    {
+        case SECTION_RECTANGULAIRE :
+        {
+            Section_Rectangulaire *section = sect->data;
+            
+            return section->largeur/2.;
+            
+            break;
+        }
+        case SECTION_T :
+        {
+            Section_T *section = sect->data;
+            
+            return MAX(section->largeur_table, section->largeur_ame)/2.;
+            
+            break;
+        }
+        case SECTION_CARREE :
+        {
+            Section_Carree *section = sect->data;
+            
+            return section->cote/2.;
+            
+            break;
+        }
+        case SECTION_CIRCULAIRE :
+        {
+            Section_Circulaire *section = sect->data;
+            
+            return section->diametre/2.;
+            
+            break;
+        }
+        default :
+        {
+            BUGMSG(0, NAN, gettext("Type de section %d inconnu."), sect->type);
+            break;
+        }
+    }
+}
+
+
+G_MODULE_EXPORT double EF_sections_vz(EF_Section* sect)
+/* Description : Renvoie la distance entre le centre de gravité et la partie la plus haute de
+ *               la section.
+ * Paramètres : EF_Section* sect : section à étudier.
+ * Valeur renvoyée :
+ *   Succès : Résultat.
+ *   Échec : NAN :
+ *             section == NULL,
+ *             type de section inconnu.
+ */
+{
+    BUGMSG(sect, NAN, gettext("Paramètre %s incorrect.\n"), "sect");
+    
+    switch (sect->type)
+    {
+        case SECTION_RECTANGULAIRE :
+        {
+            Section_Rectangulaire *section = sect->data;
+            
+            return section->hauteur/2.;
+            
+            break;
+        }
+        case SECTION_T :
+        {
+            Section_T *section = sect->data;
+            
+            return (section->largeur_table*section->hauteur_table*section->hauteur_table/2.+section->largeur_ame*section->hauteur_ame*(section->hauteur_ame/2.+section->hauteur_table))/EF_sections_s(sect);
+            
+            break;
+        }
+        case SECTION_CARREE :
+        {
+            Section_Carree *section = sect->data;
+            
+            return section->cote/2.;
+            
+            break;
+        }
+        case SECTION_CIRCULAIRE :
+        {
+            Section_Circulaire *section = sect->data;
+            
+            return section->diametre/2.;
+            
+            break;
+        }
+        default :
+        {
+            BUGMSG(0, NAN, gettext("Type de section %d inconnu."), sect->type);
+            break;
+        }
+    }
+}
+
+
+G_MODULE_EXPORT double EF_sections_vzp(EF_Section* sect)
+/* Description : Renvoie la distance entre le centre de gravité et la partie la plus basse de
+ *               la section.
+ * Paramètres : EF_Section* sect : section à étudier.
+ * Valeur renvoyée :
+ *   Succès : Résultat.
+ *   Échec : NAN :
+ *             section == NULL,
+ *             type de section inconnu.
+ */
+{
+    BUGMSG(sect, NAN, gettext("Paramètre %s incorrect.\n"), "sect");
+    
+    switch (sect->type)
+    {
+        case SECTION_RECTANGULAIRE :
+        {
+            Section_Rectangulaire *section = sect->data;
+            
+            return section->hauteur/2.;
+            
+            break;
+        }
+        case SECTION_T :
+        {
+            Section_T *section = sect->data;
+            
+            return (section->largeur_table*section->hauteur_table*(section->hauteur_ame+section->hauteur_table/2.)+section->largeur_ame*section->hauteur_ame*(section->hauteur_ame/2.))/EF_sections_s(sect);
+            
+            break;
+        }
+        case SECTION_CARREE :
+        {
+            Section_Carree *section = sect->data;
+            
+            return section->cote/2.;
+            
+            break;
+        }
+        case SECTION_CIRCULAIRE :
+        {
+            Section_Circulaire *section = sect->data;
+            
+            return section->diametre/2.;
+            
             break;
         }
         default :

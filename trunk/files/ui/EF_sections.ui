@@ -3,9 +3,17 @@
     <requires lib="gtk+" version="3.2"/>
     <object class="GtkTreeStore" id="EF_sections_treestore">
         <columns>
-            <column type="GdkPixbuf"/>
-            <column type="gchararray"/>
-            <column type="gchararray"/>
+            <column type="GdkPixbuf"/><!-- Schéma de la section -->
+            <column type="gchararray"/><!-- Son nom -->
+            <column type="gchararray"/><!-- Sa description -->
+            <column type="gchararray"/><!-- J -->
+            <column type="gchararray"/><!-- Iy -->
+            <column type="gchararray"/><!-- Iz -->
+            <column type="gchararray"/><!-- S -->
+            <column type="gchararray"/><!-- vy -->
+            <column type="gchararray"/><!-- vyp -->
+            <column type="gchararray"/><!-- vz -->
+            <column type="gchararray"/><!-- vzp -->
         </columns>
     </object>
     <object class="GtkMenu" id="EF_sections_ajouter_menu">
@@ -118,6 +126,110 @@
                                             <object class="GtkCellRendererText" id="EF_sections_treeview_cell2" />
                                             <attributes>
                                                 <attribute name="text">2</attribute>
+                                            </attributes>
+                                        </child>
+                                    </object>
+                                </child>
+                                <child>
+                                    <object class="GtkTreeViewColumn" id="EF_sections_treeview_column3">
+                                        <property name="visible">True</property>
+                                        <property name="resizable">True</property>
+                                        <property name="title" translatable="yes">J [m4]</property>
+                                        <child>
+                                            <object class="GtkCellRendererText" id="EF_sections_treeview_cell3" />
+                                            <attributes>
+                                                <attribute name="text">3</attribute>
+                                            </attributes>
+                                        </child>
+                                    </object>
+                                </child>
+                                <child>
+                                    <object class="GtkTreeViewColumn" id="EF_sections_treeview_column4">
+                                        <property name="visible">True</property>
+                                        <property name="resizable">True</property>
+                                        <property name="title" translatable="yes">Iy [m4]</property>
+                                        <child>
+                                            <object class="GtkCellRendererText" id="EF_sections_treeview_cell4" />
+                                            <attributes>
+                                                <attribute name="text">4</attribute>
+                                            </attributes>
+                                        </child>
+                                    </object>
+                                </child>
+                                <child>
+                                    <object class="GtkTreeViewColumn" id="EF_sections_treeview_column5">
+                                        <property name="visible">True</property>
+                                        <property name="resizable">True</property>
+                                        <property name="title" translatable="yes">Iz [m4]</property>
+                                        <child>
+                                            <object class="GtkCellRendererText" id="EF_sections_treeview_cell5" />
+                                            <attributes>
+                                                <attribute name="text">5</attribute>
+                                            </attributes>
+                                        </child>
+                                    </object>
+                                </child>
+                                <child>
+                                    <object class="GtkTreeViewColumn" id="EF_sections_treeview_column6">
+                                        <property name="visible">True</property>
+                                        <property name="resizable">True</property>
+                                        <property name="title" translatable="yes">S [m2]</property>
+                                        <child>
+                                            <object class="GtkCellRendererText" id="EF_sections_treeview_cell6" />
+                                            <attributes>
+                                                <attribute name="text">6</attribute>
+                                            </attributes>
+                                        </child>
+                                    </object>
+                                </child>
+                                <child>
+                                    <object class="GtkTreeViewColumn" id="EF_sections_treeview_column7">
+                                        <property name="visible">True</property>
+                                        <property name="resizable">True</property>
+                                        <property name="title" translatable="yes">vy [m]</property>
+                                        <child>
+                                            <object class="GtkCellRendererText" id="EF_sections_treeview_cell7" />
+                                            <attributes>
+                                                <attribute name="text">7</attribute>
+                                            </attributes>
+                                        </child>
+                                    </object>
+                                </child>
+                                <child>
+                                    <object class="GtkTreeViewColumn" id="EF_sections_treeview_column8">
+                                        <property name="visible">True</property>
+                                        <property name="resizable">True</property>
+                                        <property name="title" translatable="yes">vy' [m]</property>
+                                        <child>
+                                            <object class="GtkCellRendererText" id="EF_sections_treeview_cell8" />
+                                            <attributes>
+                                                <attribute name="text">8</attribute>
+                                            </attributes>
+                                        </child>
+                                    </object>
+                                </child>
+                                <child>
+                                    <object class="GtkTreeViewColumn" id="EF_sections_treeview_column9">
+                                        <property name="visible">True</property>
+                                        <property name="resizable">True</property>
+                                        <property name="title" translatable="yes">vz [m]</property>
+                                        <child>
+                                            <object class="GtkCellRendererText" id="EF_sections_treeview_cell9" />
+                                            <attributes>
+                                                <attribute name="text">9</attribute>
+                                            </attributes>
+                                        </child>
+                                    </object>
+                                </child>
+                                <child>
+                                    <object class="GtkTreeViewColumn" id="EF_sections_treeview_column10">
+                                        <property name="visible">True</property>
+                                        <property name="resizable">True</property>
+                                        <property name="title" translatable="yes">vz' [m]</property>
+                                        <child>
+                                            <object class="GtkCellRendererText" id="EF_sections_treeview_cell10" />
+                                            <attributes>
+                                                <attribute name="text">10</attribute>
                                             </attributes>
                                         </child>
                                     </object>
