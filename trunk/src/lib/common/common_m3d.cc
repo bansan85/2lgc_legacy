@@ -359,22 +359,22 @@ G_MODULE_EXPORT void* m3d_barre(void *donnees_m3d, Beton_Barre *barre)
         {
             double      y, z;
             CM3dObject  *bas, *haut, *gauche, *droite;
-            Section_Rectangulaire *section = (Section_Rectangulaire *)barre->section->data;
+            Section_T   *section = (Section_T *)barre->section->data;
             
-            droite = M3d_plan_new("", longueur, section->hauteur, 1);
+            droite = M3d_plan_new("", longueur, section->hauteur_ame, 1);
             droite->rotations(180., 0., 0.);
-            droite->set_position(0., -section->largeur/2., 0.);
+            droite->set_position(0., -section->largeur_ame/2., 0.);
             
-            gauche = M3d_plan_new("", longueur, section->hauteur, 1);
-            gauche->set_position(0., section->largeur/2., 0.);
+            gauche = M3d_plan_new("", longueur, section->hauteur_ame, 1);
+            gauche->set_position(0., section->largeur_ame/2., 0.);
             
-            bas = M3d_plan_new("", longueur, section->largeur, 1);
+            bas = M3d_plan_new("", longueur, section->largeur_ame, 1);
             bas->rotations(90., 180., 0.);
-            bas->set_position(0., 0., -section->hauteur/2.);
+            bas->set_position(0., 0., -section->hauteur_ame/2.);
             
-            haut = M3d_plan_new("", longueur, section->largeur, 1);
+            haut = M3d_plan_new("", longueur, section->largeur_ame, 1);
             haut->rotations(90., 0., 0.);
-            haut->set_position(0., 0., section->hauteur/2.);
+            haut->set_position(0., 0., section->hauteur_ame/2.);
             
             tout = M3d_object_new_group(tmp, droite, gauche, bas, haut, NULL);
             
