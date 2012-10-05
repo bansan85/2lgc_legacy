@@ -324,51 +324,16 @@ G_MODULE_EXPORT GdkPixbuf *EF_gtk_sections_dessin(EF_Section *section, unsigned 
     switch (section->type)
     {
         case SECTION_RECTANGULAIRE :
-        {
-            Section_Rectangulaire *data = (Section_Rectangulaire*)section->data;
-            double aa = data->largeur/data->hauteur;
-            
-            cairo_set_source_rgba(cr, 0.8, 0.8, 0.8, 1.);
-            cairo_new_path(cr);
-            
-            if (aa > a)
-            {
-                convert = width/data->largeur;
-                
-                cairo_rectangle(cr, 1., (height/2. - data->hauteur/2.*convert)+1, width-1, (data->hauteur*convert)-1);
-                save_path = cairo_copy_path(cr);
-            }
-            else
-            {
-                convert = height/data->hauteur;
-                
-                cairo_rectangle(cr, (width/2. - data->largeur/2.*convert)+1, 1., (data->largeur*convert)-1, height-1);
-                save_path = cairo_copy_path(cr);
-            }
-            
-            cairo_fill(cr);
-            cairo_set_source_rgba(cr, 0., 0., 0., 1.);
-            cairo_set_line_width(cr, 1.);
-            cairo_new_path(cr);
-            cairo_append_path(cr, save_path);
-            cairo_stroke(cr);
-            
-            cairo_destroy(cr);
-            pixbuf = gdk_pixbuf_get_from_surface(surface, 0, 0, width, height);
-            cairo_surface_destroy(surface);
-            
-            break;
-        }
         case SECTION_T :
         {
-            Section_T *data = (Section_T *)section->data;
+            Section_T   *data = (Section_T *)section->data;
             
             double      lt = data->largeur_table;
             double      la = data->largeur_ame;
             double      ht = data->hauteur_table;
             double      ha = data->hauteur_ame;
             
-            double          aa = MAX(lt, la)/(ht + ha);
+            double      aa = MAX(lt, la)/(ht + ha);
             
             cairo_set_source_rgba(cr, 0.8, 0.8, 0.8, 1.);
             cairo_new_path(cr);
@@ -384,7 +349,7 @@ G_MODULE_EXPORT GdkPixbuf *EF_gtk_sections_dessin(EF_Section *section, unsigned 
             {
                 convert = height/(ht+ha);
                 
-                cairo_move_to(cr, (width/2. - MAX(lt, la)/2.*convert)+1, 1.);
+                cairo_move_to(cr, (width/2. - lt/2.*convert)+1, 1.);
             }
             cairo_rel_line_to(cr, 0., ht*convert);
             cairo_rel_line_to(cr, (lt-la)/2.*convert, 0.);

@@ -111,8 +111,8 @@ G_MODULE_EXPORT gboolean EF_sections_ajout_rectangulaire(Projet *projet, const c
  *             en cas d'erreur d'allocation mémoire.
  */
 {
-    Section_Rectangulaire *section_data = malloc(sizeof(Section_Rectangulaire));
-    EF_Section *section_nouvelle = malloc(sizeof(EF_Section));
+    Section_T   *section_data = malloc(sizeof(Section_T));
+    EF_Section  *section_nouvelle = malloc(sizeof(EF_Section));
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(section_nouvelle, FALSE, gettext("Erreur d'allocation mémoire.\n"));
@@ -122,8 +122,10 @@ G_MODULE_EXPORT gboolean EF_sections_ajout_rectangulaire(Projet *projet, const c
     // Trivial
     section_nouvelle->type = SECTION_RECTANGULAIRE;
     BUGMSG(section_nouvelle->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-    section_data->largeur = l;
-    section_data->hauteur = h;
+    section_data->largeur_ame = l;
+    section_data->hauteur_ame = h;
+    section_data->largeur_table = 0.;
+    section_data->hauteur_table = 0.;
     
     projet->beton.sections = g_list_append(projet->beton.sections, section_nouvelle);
     
@@ -320,11 +322,11 @@ G_MODULE_EXPORT char* EF_sections_get_description(EF_Section *sect)
     {
         case SECTION_RECTANGULAIRE :
         {
-            char    larg[30], haut[30];
-            Section_Rectangulaire *section = sect->data;
+            char        larg[30], haut[30];
+            Section_T   *section = sect->data;
             
-            common_math_double_to_char(section->largeur, larg, DECIMAL_DISTANCE);
-            common_math_double_to_char(section->hauteur, haut, DECIMAL_DISTANCE);
+            common_math_double_to_char(section->largeur_ame, larg, DECIMAL_DISTANCE);
+            common_math_double_to_char(section->hauteur_ame, haut, DECIMAL_DISTANCE);
             BUGMSG(description = g_strdup_printf("%s : %s m, %s : %s m", gettext("Largeur"), larg, gettext("Hauteur"), haut), NULL, gettext("Erreur d'allocation mémoire.\n"));
             
             return description;
@@ -538,22 +540,6 @@ G_MODULE_EXPORT double EF_sections_j(EF_Section* sect)
     switch (sect->type)
     {
         case SECTION_RECTANGULAIRE :
-        {
-            Section_Rectangulaire *section = sect->data;
-            double      l = section->largeur;
-            double      h = section->hauteur;
-            double      a, b;
-            
-            if (l > h)
-                { a = l; b = h; }
-            else
-                { a = h; b = l; }
-            return a*b*b*b/16.*(16./3.-3.364*b/a*(1.-b*b*b*b/(12.*a*a*a*a)));
-            
-    // Pour une section rectantulaire de section constante, J vaut :\end{verbatim}\begin{displaymath}
-    // J = \frac{a \cdot b^3}{16} \cdot \left[\frac{16}{3}-3.364 \cdot \frac{b}{a} \cdot \left( 1-\frac{b^4}{12 \cdot a^4} \right) \right]\texttt{ avec }\substack{a=max(h,l)\\b=min(h,l)} \end{displaymath}\begin{verbatim}
-            break;
-        }
         case SECTION_T :
         {
             Section_T *section = sect->data;
@@ -571,7 +557,10 @@ G_MODULE_EXPORT double EF_sections_j(EF_Section* sect)
                 { aa = la; bb = ha; }
             else
                 { aa = ha; bb = la; }
-            return a*b*b*b/16.*(16./3.-3.364*b/a*(1.-b*b*b*b/(12.*a*a*a*a)))+aa*bb*bb*bb/16.*(16./3.-3.364*bb/aa*(1-bb*bb*bb*bb/(12.*aa*aa*aa*aa)));
+            if (sect->type == SECTION_RECTANGULAIRE)
+                return aa*bb*bb*bb/16.*(16./3.-3.364*bb/aa*(1.-bb*bb*bb*bb/(12.*aa*aa*aa*aa)));
+            else
+                return a*b*b*b/16.*(16./3.-3.364*b/a*(1.-b*b*b*b/(12.*a*a*a*a)))+aa*bb*bb*bb/16.*(16./3.-3.364*bb/aa*(1-bb*bb*bb*bb/(12.*aa*aa*aa*aa)));
             
     // Pour une section en T de section constante (lt : largeur de la table, la : largeur de
     //   l'âme, ht : hauteur de la table, ha : hauteur de l'âme), J vaut :\end{verbatim}\begin{displaymath}
@@ -619,13 +608,6 @@ G_MODULE_EXPORT double EF_sections_iy(EF_Section* sect)
     switch (sect->type)
     {
         case SECTION_RECTANGULAIRE :
-        {
-            Section_Rectangulaire *section = sect->data;
-            return section->largeur*section->hauteur*section->hauteur*section->hauteur/12.;
-    // Pour une section rectantulaire de section constante, Iy vaut :\end{verbatim}\begin{displaymath}
-    // I_y = \frac{l \cdot h^3}{12} \end{displaymath}\begin{verbatim}
-            break;
-        }
         case SECTION_T :
         {
             Section_T *section = sect->data;
@@ -685,14 +667,6 @@ G_MODULE_EXPORT double EF_sections_iz(EF_Section* sect)
     switch (sect->type)
     {
         case SECTION_RECTANGULAIRE :
-        {
-            Section_Rectangulaire *section = sect->data;
-            return section->hauteur*section->largeur*section->largeur*section->largeur/12.;
-            
-    // Pour une section rectantulaire de section constante, I vaut :\end{verbatim}\begin{displaymath}
-    // I = \frac{h \cdot l^3}{12} \end{displaymath}\begin{verbatim}
-            break;
-        }
         case SECTION_T :
         {
             Section_T *section = sect->data;
@@ -747,13 +721,6 @@ G_MODULE_EXPORT double EF_sections_vy(EF_Section* sect)
     switch (sect->type)
     {
         case SECTION_RECTANGULAIRE :
-        {
-            Section_Rectangulaire *section = sect->data;
-            
-            return section->largeur/2.;
-            
-            break;
-        }
         case SECTION_T :
         {
             Section_T *section = sect->data;
@@ -803,13 +770,6 @@ G_MODULE_EXPORT double EF_sections_vyp(EF_Section* sect)
     switch (sect->type)
     {
         case SECTION_RECTANGULAIRE :
-        {
-            Section_Rectangulaire *section = sect->data;
-            
-            return section->largeur/2.;
-            
-            break;
-        }
         case SECTION_T :
         {
             Section_T *section = sect->data;
@@ -859,13 +819,6 @@ G_MODULE_EXPORT double EF_sections_vz(EF_Section* sect)
     switch (sect->type)
     {
         case SECTION_RECTANGULAIRE :
-        {
-            Section_Rectangulaire *section = sect->data;
-            
-            return section->hauteur/2.;
-            
-            break;
-        }
         case SECTION_T :
         {
             Section_T *section = sect->data;
@@ -915,13 +868,6 @@ G_MODULE_EXPORT double EF_sections_vzp(EF_Section* sect)
     switch (sect->type)
     {
         case SECTION_RECTANGULAIRE :
-        {
-            Section_Rectangulaire *section = sect->data;
-            
-            return section->hauteur/2.;
-            
-            break;
-        }
         case SECTION_T :
         {
             Section_T *section = sect->data;
@@ -1300,14 +1246,6 @@ G_MODULE_EXPORT double EF_sections_s(EF_Section *sect)
     switch (sect->type)
     {
         case SECTION_RECTANGULAIRE :
-        {
-            Section_Rectangulaire *section = sect->data;
-            return section->hauteur*section->largeur;
-            
-    // Pour une section rectantulaire de section constante, S vaut :\end{verbatim}\begin{displaymath}
-    // S = h \cdot l\end{displaymath}\begin{verbatim}
-            break;
-        }
         case SECTION_T :
         {
             Section_T *section = sect->data;
@@ -1374,15 +1312,6 @@ G_MODULE_EXPORT double EF_sections_es_l(Beton_Barre *barre, unsigned int discret
     switch (barre->section->type)
     {
         case SECTION_RECTANGULAIRE :
-        {
-            Section_Rectangulaire *section = barre->section->data;
-            double      S = section->hauteur*section->largeur;
-            
-    // Pour une section rectantulaire de section constante, ES/L vaut :\end{verbatim}\begin{displaymath}
-    // \frac{E \cdot S}{L} = \frac{E \cdot h \cdot l}{L} \end{displaymath}\begin{verbatim}
-            return E*S/(f-d);
-            break;
-        }
         case SECTION_T :
         {
             Section_T *section = barre->section->data;
@@ -1465,24 +1394,6 @@ G_MODULE_EXPORT double EF_sections_gj_l(Beton_Barre *barre, unsigned int discret
     switch (barre->section->type)
     {
         case SECTION_RECTANGULAIRE :
-        {
-            Section_Rectangulaire *section = barre->section->data;
-            double      l = section->largeur;
-            double      h = section->hauteur;
-            double      J;
-            double      a, b;
-            
-            if (l > h)
-                { a = l; b = h; }
-            else
-                { a = h; b = l; }
-            J = a*b*b*b/16.*(16./3.-3.364*b/a*(1.-b*b*b*b/(12.*a*a*a*a)));
-            
-    // Pour une section rectantulaire de section constante, GJ/L vaut :\end{verbatim}\begin{displaymath}
-    // \frac{G \cdot J}{L} \texttt{ avec } J = \frac{a \cdot b^3}{16} \cdot \left[\frac{16}{3}-3.364 \cdot \frac{b}{a} \cdot \left( 1-\frac{b^4}{12 \cdot a^4} \right) \right]\texttt{ avec }\substack{a=max(h,l)\\b=min(h,l)} \end{displaymath}\begin{verbatim}
-            return G*J/ll;
-            break;
-        }
         case SECTION_T :
         {
             Section_T *section = barre->section->data;
@@ -1501,7 +1412,10 @@ G_MODULE_EXPORT double EF_sections_gj_l(Beton_Barre *barre, unsigned int discret
                 { aa = la; bb = ha; }
             else
                 { aa = ha; bb = la; }
-            J = a*b*b*b/16.*(16./3.-3.364*b/a*(1.-b*b*b*b/(12.*a*a*a*a)))+aa*bb*bb*bb/16.*(16./3.-3.364*bb/aa*(1-bb*bb*bb*bb/(12.*aa*aa*aa*aa)));
+            if (barre->section->type == SECTION_RECTANGULAIRE)
+                J = aa*bb*bb*bb/16.*(16./3.-3.364*bb/aa*(1-bb*bb*bb*bb/(12.*aa*aa*aa*aa)));
+            else
+                J = a*b*b*b/16.*(16./3.-3.364*b/a*(1.-b*b*b*b/(12.*a*a*a*a)))+aa*bb*bb*bb/16.*(16./3.-3.364*bb/aa*(1-bb*bb*bb*bb/(12.*aa*aa*aa*aa)));
             
     // Pour une section en T de section constante (lt : largeur de la table, la : largeur de
     //   l'âme, ht : hauteur de la table, ha : hauteur de l'âme), GJ/L vaut :\end{verbatim}\begin{displaymath}

@@ -376,15 +376,11 @@ typedef struct __Barre_Info_EF
 } Barre_Info_EF;
 
 
-typedef struct __Section_Rectangulaire
-{
-    double              largeur;
-    double              hauteur;
-} Section_Rectangulaire;
-
-
 typedef struct __Section_T
 {
+    /* La section rectangulaire est intégrée dans la section en T. Il convient simplement de
+       mettre la hauteur dans hauteur_ame et la largeur dans largeur_ame. largeur_table et
+       hauteur_table sont mis à 0.*/
     double              largeur_table;
     double              largeur_ame;
     double              hauteur_table;
