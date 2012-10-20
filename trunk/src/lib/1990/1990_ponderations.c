@@ -28,7 +28,6 @@
 #include "common_maths.h"
 #include "1990_actions.h"
 
-
 int _1990_ponderations_verifie_double(GList *liste_ponderations, Ponderation* pond_a_verifier)
 /* Description : Vérifie dans la liste des ponderations si la ponderation à vérifier est déjà
  *                 présente.
@@ -319,7 +318,7 @@ G_MODULE_EXPORT gboolean _1990_ponderations_genere_un(Projet *projet,
                 *ponderations_destination = g_list_append(*ponderations_destination, ponderation);
             else
             {
-                g_list_free(ponderation->elements);
+                g_list_free_full(ponderation->elements, g_free);
                 free(ponderation);
             }
             list_parcours = g_list_next(list_parcours);
@@ -350,7 +349,7 @@ gboolean _1990_ponderations_genere_eu(Projet *projet)
  *             en cas d'erreur due à une fonction interne.
  */
 {
-    double      coef_min[ACTION_INCONNUE], coef_max[ACTION_INCONNUE];
+    double  coef_min[ACTION_INCONNUE], coef_max[ACTION_INCONNUE];
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
@@ -695,7 +694,7 @@ gboolean _1990_ponderations_genere_fr(Projet *projet)
  *             en cas d'erreur due à une fonction interne.
  */
 {
-    double      coef_min[ACTION_INCONNUE], coef_max[ACTION_INCONNUE];
+    double  coef_min[ACTION_INCONNUE], coef_max[ACTION_INCONNUE];
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
