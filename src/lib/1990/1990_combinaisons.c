@@ -364,7 +364,7 @@ void _1990_groupe_free_groupe_tmp_combinaison(void *data)
     BUGMSG(data, , gettext("Paramètre %s incorrect.\n"), "data");
     
     if (combinaison->elements != NULL)
-        g_list_free(combinaison->elements);
+        g_list_free_full(combinaison->elements, g_free);
     free(data);
     
     return;
@@ -587,7 +587,6 @@ gboolean _1990_combinaisons_genere_or(Projet *projet, Niveau_Groupe *niveau, Gro
     //       Lorsque le bit vaut 1, l'action est prise en compte dans la combinaison.
     if (niveau == projet->niveaux_groupes->data)
     {
-        printf("nbboucle : %d\n", boucle);
         for (i=0;i<boucle;i++)
         {
             unsigned int    parcours_bits = i;
@@ -748,6 +747,21 @@ G_MODULE_EXPORT gboolean _1990_combinaisons_init(Projet *projet)
 }
 
 
+void _1990_combinaisons_free_1(void *data)
+/* Description : Fonction utilisable avec g_list_free_full pour libérer une combinaison.
+ * Paramètres : void *data : une pondération à libérer.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    Ponderation *pond = data;
+    
+    g_list_free_full(pond->elements, free);
+    free(pond);
+    
+    return;
+}
+
+
 G_MODULE_EXPORT gboolean _1990_combinaisons_free(Projet *projet)
 /* Description : libère l'ensemble des combinaisons à l'ELU et l'ELS sans libérer la liste.
  * Paramètres : Projet *projet : la variable projet.
@@ -759,50 +773,50 @@ G_MODULE_EXPORT gboolean _1990_combinaisons_free(Projet *projet)
 {
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
-    while (projet->combinaisons.elu_equ != NULL)
+    if (projet->combinaisons.elu_equ != NULL)
     {
-        g_list_free(((Ponderation*)projet->combinaisons.elu_equ->data)->elements);
-        projet->combinaisons.elu_equ = g_list_delete_link(projet->combinaisons.elu_equ, projet->combinaisons.elu_equ);
+        g_list_free_full(projet->combinaisons.elu_equ, _1990_combinaisons_free_1);
+        projet->combinaisons.elu_equ = NULL;
     }
-    while (projet->combinaisons.elu_str != NULL)
+    if (projet->combinaisons.elu_str != NULL)
     {
-        g_list_free(((Ponderation*)projet->combinaisons.elu_str->data)->elements);
-        projet->combinaisons.elu_str = g_list_delete_link(projet->combinaisons.elu_str, projet->combinaisons.elu_str);
+        g_list_free_full(projet->combinaisons.elu_str, _1990_combinaisons_free_1);
+        projet->combinaisons.elu_str = NULL;
     }
-    while (projet->combinaisons.elu_geo != NULL)
+    if (projet->combinaisons.elu_geo != NULL)
     {
-        g_list_free(((Ponderation*)projet->combinaisons.elu_geo->data)->elements);
-        projet->combinaisons.elu_geo = g_list_delete_link(projet->combinaisons.elu_geo, projet->combinaisons.elu_geo);
+        g_list_free_full(projet->combinaisons.elu_geo, _1990_combinaisons_free_1);
+        projet->combinaisons.elu_geo = NULL;
     }
-    while (projet->combinaisons.elu_fat != NULL)
+    if (projet->combinaisons.elu_fat != NULL)
     {
-        g_list_free(((Ponderation*)projet->combinaisons.elu_fat->data)->elements);
-        projet->combinaisons.elu_fat = g_list_delete_link(projet->combinaisons.elu_fat, projet->combinaisons.elu_fat);
+        g_list_free_full(projet->combinaisons.elu_fat, _1990_combinaisons_free_1);
+        projet->combinaisons.elu_fat = NULL;
     }
-    while (projet->combinaisons.elu_acc != NULL)
+    if (projet->combinaisons.elu_acc != NULL)
     {
-        g_list_free(((Ponderation*)projet->combinaisons.elu_acc->data)->elements);
-        projet->combinaisons.elu_acc = g_list_delete_link(projet->combinaisons.elu_acc, projet->combinaisons.elu_acc);
+        g_list_free_full(projet->combinaisons.elu_acc, _1990_combinaisons_free_1);
+        projet->combinaisons.elu_acc = NULL;
     }
-    while (projet->combinaisons.elu_sis != NULL)
+    if (projet->combinaisons.elu_sis != NULL)
     {
-        g_list_free(((Ponderation*)projet->combinaisons.elu_sis->data)->elements);
-        projet->combinaisons.elu_sis = g_list_delete_link(projet->combinaisons.elu_sis, projet->combinaisons.elu_sis);
+        g_list_free_full(projet->combinaisons.elu_sis, _1990_combinaisons_free_1);
+        projet->combinaisons.elu_sis = NULL;
     }
-    while (projet->combinaisons.els_car != NULL)
+    if (projet->combinaisons.els_car != NULL)
     {
-        g_list_free(((Ponderation*)projet->combinaisons.els_car->data)->elements);
-        projet->combinaisons.els_car = g_list_delete_link(projet->combinaisons.els_car, projet->combinaisons.els_car);
+        g_list_free_full(projet->combinaisons.els_car, _1990_combinaisons_free_1);
+        projet->combinaisons.els_car = NULL;
     }
-    while (projet->combinaisons.els_freq != NULL)
+    if (projet->combinaisons.els_freq != NULL)
     {
-        g_list_free(((Ponderation*)projet->combinaisons.els_freq->data)->elements);
-        projet->combinaisons.els_freq = g_list_delete_link(projet->combinaisons.els_freq, projet->combinaisons.els_freq);
+        g_list_free_full(projet->combinaisons.els_freq, _1990_combinaisons_free_1);
+        projet->combinaisons.els_freq = NULL;
     }
-    while (projet->combinaisons.els_perm != NULL)
+    if (projet->combinaisons.els_perm != NULL)
     {
-        g_list_free(((Ponderation*)projet->combinaisons.els_perm->data)->elements);
-        projet->combinaisons.els_perm = g_list_delete_link(projet->combinaisons.els_perm, projet->combinaisons.els_perm);
+        g_list_free_full(projet->combinaisons.els_perm, _1990_combinaisons_free_1);
+        projet->combinaisons.els_perm = NULL;
     }
     
     return TRUE;
@@ -859,7 +873,8 @@ G_MODULE_EXPORT gboolean _1990_combinaisons_genere(Projet *projet)
                     
                     while (groupe->tmp_combinaison.combinaisons != NULL)
                     {
-                        g_list_free(((Combinaison*)groupe->tmp_combinaison.combinaisons->data)->elements);
+                        g_list_free_full(((Combinaison*)groupe->tmp_combinaison.combinaisons->data)->elements, g_free);
+                        free(groupe->tmp_combinaison.combinaisons->data);
                         groupe->tmp_combinaison.combinaisons = g_list_delete_link(groupe->tmp_combinaison.combinaisons, groupe->tmp_combinaison.combinaisons);
                     }
                     list_parcours2 = g_list_next(list_parcours2);
