@@ -113,6 +113,11 @@ if test $acx_blas_ok = no; then
 	AC_CHECK_LIB(openblas, $sgemm, [acx_blas_ok=yes;BLAS_LIBS="-lopenblas"])
 fi
 
+# BLAS in eigen library?
+if test $acx_blas_ok = no; then
+	AC_CHECK_LIB(eigen_blas, $sgemm, [acx_blas_ok=yes;BLAS_LIBS="-leigen_blas"])
+fi
+
 # BLAS in refblas library?
 if test $acx_blas_ok = no; then
 	AC_CHECK_LIB(refblas, $sgemm, [acx_blas_ok=yes;BLAS_LIBS="-lrefblas"])
