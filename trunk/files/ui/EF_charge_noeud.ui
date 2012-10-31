@@ -20,32 +20,32 @@
     <object class="GtkTextBuffer" id="EF_charge_noeud_buffer_fx">
         <property name="tag-table">EF_charge_noeud_tag_table</property>
         <property name="text">0</property>
-        <signal name="changed" handler="gtk_common_entry_check_double"/>
+        <signal name="changed" handler="gtk_common_text_buffer_double_inf_inf"/>
     </object>
     <object class="GtkTextBuffer" id="EF_charge_noeud_buffer_fy">
         <property name="tag-table">EF_charge_noeud_tag_table</property>
         <property name="text">0</property>
-        <signal name="changed" handler="gtk_common_entry_check_double"/>
+        <signal name="changed" handler="gtk_common_text_buffer_double_inf_inf"/>
     </object>
     <object class="GtkTextBuffer" id="EF_charge_noeud_buffer_fz">
         <property name="tag-table">EF_charge_noeud_tag_table</property>
         <property name="text">0</property>
-        <signal name="changed" handler="gtk_common_entry_check_double"/>
+        <signal name="changed" handler="gtk_common_text_buffer_double_inf_inf"/>
     </object>
     <object class="GtkTextBuffer" id="EF_charge_noeud_buffer_mx">
         <property name="tag-table">EF_charge_noeud_tag_table</property>
         <property name="text">0</property>
-        <signal name="changed" handler="gtk_common_entry_check_double"/>
+        <signal name="changed" handler="gtk_common_text_buffer_double_inf_inf"/>
     </object>
     <object class="GtkTextBuffer" id="EF_charge_noeud_buffer_my">
         <property name="tag-table">EF_charge_noeud_tag_table</property>
         <property name="text">0</property>
-        <signal name="changed" handler="gtk_common_entry_check_double"/>
+        <signal name="changed" handler="gtk_common_text_buffer_double_inf_inf"/>
     </object>
     <object class="GtkTextBuffer" id="EF_charge_noeud_buffer_mz">
         <property name="tag-table">EF_charge_noeud_tag_table</property>
         <property name="text">0</property>
-        <signal name="changed" handler="gtk_common_entry_check_double"/>
+        <signal name="changed" handler="gtk_common_text_buffer_double_inf_inf"/>
     </object>
     <object class="GtkTextBuffer" id="EF_charge_noeud_buffer_noeuds">
         <property name="tag-table">EF_charge_noeud_tag_table</property>

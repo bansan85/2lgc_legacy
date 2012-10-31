@@ -20,12 +20,12 @@
     <object class="GtkTextBuffer" id="EF_section_rectangulaire_buffer_largeur">
         <property name="tag-table">EF_section_rectangulaire_tag_table</property>
         <property name="text">0</property>
-        <signal name="changed" handler="gtk_common_entry_check_double"/>
+        <signal name="changed" handler="gtk_common_text_buffer_double_sup0_inf"/>
     </object>
     <object class="GtkTextBuffer" id="EF_section_rectangulaire_buffer_hauteur">
         <property name="tag-table">EF_section_rectangulaire_tag_table</property>
         <property name="text">0</property>
-        <signal name="changed" handler="gtk_common_entry_check_double"/>
+        <signal name="changed" handler="gtk_common_text_buffer_double_sup0_inf"/>
     </object>
     <object id="EF_section_rectangulaire_window" class="GtkWindow">
         <property name="visible">True</property>

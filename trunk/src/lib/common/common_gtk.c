@@ -28,37 +28,116 @@
 #include "common_erreurs.h"
 #include "common_maths.h"
 
-G_MODULE_EXPORT void gtk_common_entry_check_double(GtkTextBuffer *textbuffer,
-  gpointer user_data __attribute__((unused)))
-/* Description : Vérifie en temps réel si le GtkTextBuffer contient bien un nombre flottant.
- *               S'il ne contient pas de nombre, le texte passe en rouge.
+G_MODULE_EXPORT double gtk_common_text_buffer_double(GtkTextBuffer *textbuffer, double val_min,
+  gboolean min_include, double val_max, gboolean max_include)
+/* Description : Vérifie en temps réel si le GtkTextBuffer contient bien un nombre flottant
+ *               compris entre les valeurs val_min et val_max.
+ *               S'il ne contient pas de nombre ou hors domaine, le texte passe en rouge.
  * Paramètres : GtkTextBuffer *textbuffer : composant à l'origine de l'évènement,
- *            : gpointer user_data : ne sert à rien.
- * Valeur renvoyée : Aucune.
+ *            : double val_min : 
+ *            : gboolean min_include : 
+ *            : double val_max : 
+ *            : gboolean max_include : 
+ * Valeur renvoyée :
+ *   Succès : la valeur du nombre,
+ *   Echec : NAN.
  */
 {
     char        *texte;
     GtkTextIter start, end;
     double      nombre;
     char        *fake;
+    gboolean    min_check;
+    gboolean    max_check;
     
     gtk_text_buffer_get_iter_at_offset(textbuffer, &start, 0);
     gtk_text_buffer_get_iter_at_offset(textbuffer, &end, -1);
     texte = gtk_text_buffer_get_text(textbuffer, &start, &end, FALSE);
-    BUGMSG(fake = (char*)malloc(sizeof(char)*(strlen(texte)+1)), , gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(fake = (char*)malloc(sizeof(char)*(strlen(texte)+1)), NAN, gettext("Erreur d'allocation mémoire.\n"));
     
+    gtk_text_buffer_remove_all_tags(textbuffer, &start, &end);
     if (sscanf(texte, "%lf%s", &nombre, fake) != 1)
     {
-        gtk_text_buffer_remove_all_tags(textbuffer, &start, &end);
-        gtk_text_buffer_apply_tag_by_name(textbuffer, "mauvais", &start, &end);
+        min_check = FALSE;
+        max_check = FALSE;
     }
     else
     {
-        gtk_text_buffer_remove_all_tags(textbuffer, &start, &end);
-        gtk_text_buffer_apply_tag_by_name(textbuffer, "OK", &start, &end);
+        if (isinf(val_min) == -1)
+            min_check = TRUE;
+        else if ((min_include) && (ERREUR_RELATIVE_EGALE(nombre, val_min)))
+            min_check = TRUE;
+        else if (nombre > val_min)
+            min_check = TRUE;
+        else
+            min_check = FALSE;
+            
+        if (isinf(val_max) == 1)
+            max_check = TRUE;
+        else if ((max_include) && (ERREUR_RELATIVE_EGALE(nombre, val_max)))
+            max_check = TRUE;
+        else if (nombre < val_max)
+            max_check = TRUE;
+        else
+            max_check = FALSE;
     }
+    
     free(texte);
     free(fake);
+    
+    if ((min_check) && (max_check))
+    {
+        gtk_text_buffer_apply_tag_by_name(textbuffer, "OK", &start, &end);
+        return nombre;
+    }
+    else
+    {
+        gtk_text_buffer_apply_tag_by_name(textbuffer, "mauvais", &start, &end);
+        return NAN;
+    }
+}
+
+
+G_MODULE_EXPORT void gtk_common_text_buffer_double_sup0_inf(GtkTextBuffer *textbuffer, 
+  gpointer user_data __attribute__((unused)))
+/* Description : Vérifie en temps réel si le GtkTextBuffer contient bien un nombre flottant.
+ *               Les bornes : strictement supérieur à 0 jusqu'à l'infini.
+ * Paramètres : GtkTextBuffer *textbuffer : composant à vérifier.
+ *            : gpointer user_data : ne sert à rien.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    gtk_common_text_buffer_double(textbuffer, 0., FALSE, INFINITY, FALSE);
+    
+    return;
+}
+
+
+G_MODULE_EXPORT void gtk_common_text_buffer_double_0_inf(GtkTextBuffer *textbuffer, 
+  gpointer user_data __attribute__((unused)))
+/* Description : Vérifie en temps réel si le GtkTextBuffer contient bien un nombre flottant.
+ *               Les bornes : de 0 inclus jusqu'à l'infini.
+ * Paramètres : GtkTextBuffer *textbuffer : composant à vérifier.
+ *            : gpointer user_data : ne sert à rien.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    gtk_common_text_buffer_double(textbuffer, 0., TRUE, INFINITY, FALSE);
+    
+    return;
+}
+
+
+G_MODULE_EXPORT void gtk_common_text_buffer_double_inf_inf(GtkTextBuffer *textbuffer, 
+  gpointer user_data __attribute__((unused)))
+/* Description : Vérifie en temps réel si le GtkTextBuffer contient bien un nombre flottant.
+ *               Les bornes : de moint l'infini  jusqu'à l'infini.
+ * Paramètres : GtkTextBuffer *textbuffer : composant à vérifier.
+ *            : gpointer user_data : ne sert à rien.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    gtk_common_text_buffer_double(textbuffer, -INFINITY, FALSE, INFINITY, FALSE);
     
     return;
 }
