@@ -42,12 +42,6 @@
             gtk_container_add(GTK_CONTAINER(scrolled), textview); \
             }
 
-#define GTK_TEXT_VIEW_VERIFIE_DOUBLE(textview) {\
-            gtk_text_buffer_create_tag(gtk_text_view_get_buffer(GTK_TEXT_VIEW(textview)), "mauvais", "foreground", "red", "weight", PANGO_WEIGHT_BOLD, NULL); \
-            gtk_text_buffer_create_tag(gtk_text_view_get_buffer(GTK_TEXT_VIEW(textview)), "OK", "foreground", "black", "weight", PANGO_WEIGHT_NORMAL, NULL); \
-            g_signal_connect(gtk_text_view_get_buffer(GTK_TEXT_VIEW(textview)), "changed", G_CALLBACK(gtk_common_entry_check_double), NULL); \
-            }
-
 #define GTK_TEXT_VIEW_VERIFIE_INT(textview) {\
             gtk_text_buffer_create_tag(gtk_text_view_get_buffer(GTK_TEXT_VIEW(textview)), "mauvais", "foreground", "red", "weight", PANGO_WEIGHT_BOLD, NULL); \
             gtk_text_buffer_create_tag(gtk_text_view_get_buffer(GTK_TEXT_VIEW(textview)), "OK", "foreground", "black", "weight", PANGO_WEIGHT_NORMAL, NULL); \
@@ -62,7 +56,7 @@
 
 #define GTK_COMMON_SPINBUTTON_AS_UINT(spinbutton) ((unsigned int)round(gtk_spin_button_get_value(spinbutton)))
 
-void gtk_common_entry_check_double(GtkTextBuffer *entry, gpointer user_data);
+void gtk_common_text_buffer_double(GtkTextBuffer *textbuffer, double val_min, gboolean min_include, double val_max, gboolean max_include);
 double gtk_common_entry_renvoie_double(GtkTextBuffer *textbuffer);
 void gtk_common_entry_check_int(GtkTextBuffer *entry, gpointer user_data);
 int gtk_common_entry_renvoie_int(GtkTextBuffer *textbuffer);

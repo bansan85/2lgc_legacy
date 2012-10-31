@@ -20,22 +20,22 @@
     <object class="GtkTextBuffer" id="EF_section_T_buffer_la">
         <property name="tag-table">EF_section_T_tag_table</property>
         <property name="text">0</property>
-        <signal name="changed" handler="gtk_common_entry_check_double"/>
+        <signal name="changed" handler="gtk_common_text_buffer_double_sup0_inf"/>
     </object>
     <object class="GtkTextBuffer" id="EF_section_T_buffer_ha">
         <property name="tag-table">EF_section_T_tag_table</property>
         <property name="text">0</property>
-        <signal name="changed" handler="gtk_common_entry_check_double"/>
+        <signal name="changed" handler="gtk_common_text_buffer_double_sup0_inf"/>
     </object>
     <object class="GtkTextBuffer" id="EF_section_T_buffer_lt">
         <property name="tag-table">EF_section_T_tag_table</property>
         <property name="text">0</property>
-        <signal name="changed" handler="gtk_common_entry_check_double"/>
+        <signal name="changed" handler="gtk_common_text_buffer_double_sup0_inf"/>
     </object>
     <object class="GtkTextBuffer" id="EF_section_T_buffer_ht">
         <property name="tag-table">EF_section_T_tag_table</property>
         <property name="text">0</property>
-        <signal name="changed" handler="gtk_common_entry_check_double"/>
+        <signal name="changed" handler="gtk_common_text_buffer_double_sup0_inf"/>
     </object>
     <object id="EF_section_T_window" class="GtkWindow">
         <property name="visible">True</property>
