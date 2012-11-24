@@ -11,6 +11,8 @@ libeurocodes_la_CFLAGS		=	$(AM_CFLAGS)
 if ENABLE_GTK
 libeurocodes_la_LIBADD		+=	@GTK_LIBS@
 libeurocodes_la_CFLAGS		+=	@GTK_CFLAGS@
+else
+libeurocodes_la_CFLAGS      +=  @GLIB_CFLAGS@
 endif
 
 libeurocodes_la_LDFLAGS		= 	$(AM_LDFLAGS) -no-undefined -version-info 0:0:0
@@ -55,6 +57,7 @@ libeurocodes_la_SOURCES +=	common/common_m3d.cc \
 							EF/EF_gtk_barres.cc \
 							EF/EF_gtk_barres_add.cc \
 							EF/EF_gtk_sections.cc \
+							EF/EF_gtk_materiaux.cc \
 							EF/EF_gtk_section_rectangulaire.c \
 							EF/EF_gtk_section_T.c \
 							EF/EF_gtk_section_carree.c \
@@ -102,6 +105,7 @@ libeurocodes_la_HEADERS +=	common/common_m3d.hpp \
 							EF/EF_gtk_barres.hpp \
 							EF/EF_gtk_barres_add.hpp \
 							EF/EF_gtk_sections.hpp \
+							EF/EF_gtk_materiaux.hpp \
 							EF/EF_gtk_section_rectangulaire.h \
 							EF/EF_gtk_section_T.h \
 							EF/EF_gtk_section_carree.h \

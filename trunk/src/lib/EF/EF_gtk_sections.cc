@@ -208,7 +208,7 @@ G_MODULE_EXPORT void EF_gtk_sections_edit_nom(GtkCellRendererText *cell __attrib
 
 G_MODULE_EXPORT void EF_gtk_sections_supprimer_direct(GtkButton *button __attribute__((unused)),
   Projet *projet)
-/* Description : Supprime la section sélectionné dans le treeview.
+/* Description : Supprime la section sélectionnée dans le treeview.
  * Paramètres : GtkWidget *widget : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
  * Valeur renvoyée : Aucune.
