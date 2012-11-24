@@ -551,6 +551,7 @@ G_MODULE_EXPORT void EF_gtk_sections_edit_clicked(GtkWidget *widget  __attribute
             
             gtk_tree_model_get(model, &iter, 1, &nom, -1);
             BUG(section = EF_sections_cherche_nom(projet, nom, TRUE), );
+            free(nom);
             
             switch (section->type)
             {
