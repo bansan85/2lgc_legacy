@@ -30,6 +30,7 @@
 #define DECIMAL_MOMENT 3
 #define DECIMAL_M4 8
 #define DECIMAL_SURFACE 3
+#define DECIMAL_CONTRAINTE 3
 
 #ifdef ENABLE_GTK
 #include <gtk/gtk.h>
@@ -139,7 +140,6 @@ typedef struct __Gtk_EF_Barres
     
     GtkListStore    *liste_relachements;
     GtkListStore    *liste_types;
-    GtkListStore    *liste_materiaux;
 } Gtk_EF_Barres;
 
 typedef struct __Gtk_EF_Appuis
@@ -160,6 +160,15 @@ typedef struct __Gtk_EF_Sections
     GtkTreeStore    *sections;
     GtkListStore    *liste_sections;
 } Gtk_EF_Sections;
+
+typedef struct __Gtk_EF_Materiaux
+{
+    GtkBuilder      *builder;
+    GtkWidget       *window;
+    
+    GtkTreeStore    *materiaux;
+    GtkListStore    *liste_materiaux;
+} Gtk_EF_Materiaux;
 
 #endif
 
@@ -353,6 +362,11 @@ typedef struct __Beton_Materiau
     double      nu;
     double      gnu_0_2;
     double      gnu_0_0;
+    
+#ifdef ENABLE_GTK
+    GtkTreeIter     Iter_fenetre;
+    GtkTreeIter     Iter_liste;
+#endif
 } Beton_Materiau;
 
 
@@ -691,8 +705,9 @@ typedef struct __Comp_Gtk
     GtkWidget   *menu_structure_noeud_ajout;
     GtkWidget   *menu_structure_barres;
     GtkWidget   *menu_structure_barres_list;
-    GtkWidget   *menu_structure_barres_ajout;
     GtkWidget   *menu_structure_barres_section;
+    GtkWidget   *menu_structure_barres_materiau;
+    GtkWidget   *menu_structure_barres_ajout;
     GtkWidget   *menu_charges;
     GtkWidget   *menu_charges_list;
     GtkWidget   *menu_charges_actions;
@@ -723,6 +738,7 @@ typedef struct __List_Gtk
     Gtk_EF_Sections_T   ef_sections_T;
     Gtk_EF_Sections_Carree  ef_sections_carree;
     Gtk_EF_Sections_Circulaire  ef_sections_circulaire;
+    Gtk_EF_Materiaux    ef_materiaux;
     Comp_Gtk            comp;      // tous les composants grahpiques
 } List_Gtk;
 #endif

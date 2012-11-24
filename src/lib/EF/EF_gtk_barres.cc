@@ -212,7 +212,7 @@ G_MODULE_EXPORT void EF_gtk_barres_edit_materiau(
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_barres.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Barres");
-    BUGMSG(projet->list_gtk.ef_barres.liste_materiaux, , gettext("La liste des matériaux est indéfinie.\n"));
+    BUGMSG(projet->list_gtk.ef_materiaux.liste_materiaux, , gettext("La liste des matériaux est indéfinie.\n"));
     
     ef_gtk = &projet->list_gtk.ef_barres;
     
@@ -222,7 +222,7 @@ G_MODULE_EXPORT void EF_gtk_barres_edit_materiau(
     gtk_tree_model_get(model, &iter, 0, &numero_barre, -1);
     
     BUG(barre = _1992_1_1_barres_cherche_numero(projet, numero_barre), );
-    BUG(materiau = _1992_1_1_materiaux_cherche_nom(projet, new_text), );
+    BUG(materiau = _1992_1_1_materiaux_cherche_nom(projet, new_text, TRUE), );
     BUG(_1992_1_1_barres_change_materiau(barre, materiau, projet), );
     
     return;
@@ -347,7 +347,7 @@ G_MODULE_EXPORT void EF_gtk_barres(Projet *projet)
     
     g_object_set(gtk_builder_get_object(ef_gtk->builder, "EF_barres_treeview_cell1"), "model", projet->list_gtk.ef_barres.liste_types, NULL);
     g_object_set(gtk_builder_get_object(ef_gtk->builder, "EF_barres_treeview_cell2"), "model", projet->list_gtk.ef_sections.liste_sections, NULL);
-    g_object_set(gtk_builder_get_object(ef_gtk->builder, "EF_barres_treeview_cell3"), "model", projet->list_gtk.ef_barres.liste_materiaux, NULL);
+    g_object_set(gtk_builder_get_object(ef_gtk->builder, "EF_barres_treeview_cell3"), "model", projet->list_gtk.ef_materiaux.liste_materiaux, NULL);
     g_object_set(gtk_builder_get_object(ef_gtk->builder, "EF_barres_treeview_cell6"), "model", projet->list_gtk.ef_barres.liste_relachements, NULL);
     
     list_parcours = projet->beton.barres;

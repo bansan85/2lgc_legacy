@@ -58,6 +58,7 @@ G_MODULE_EXPORT gboolean EF_sections_init(Projet *projet)
 }
 
 
+#ifdef ENABLE_GTK
 G_MODULE_EXPORT gboolean EF_sections_update_ligne_treeview(Projet *projet, EF_Section *section)
 /* Description : Met à jour les données dans le treeview de la fenêtre section.
  * Paramètres : Projet *projet : la variable projet,
@@ -96,6 +97,7 @@ G_MODULE_EXPORT gboolean EF_sections_update_ligne_treeview(Projet *projet, EF_Se
     
     return TRUE;
 }
+#endif
 
 
 G_MODULE_EXPORT gboolean EF_sections_ajout_rectangulaire(Projet *projet, const char* nom,
@@ -440,7 +442,7 @@ G_MODULE_EXPORT gboolean EF_sections_verifie_dependances(Projet *projet, EF_Sect
 
 
 G_MODULE_EXPORT gboolean EF_sections_renomme(EF_Section *section, gchar *nom, Projet *projet)
-/* Description : Renomme un appui.
+/* Description : Renomme une section.
  * Paramètres : EF_Section *section : section à renommer,
  *            : const char *nom : le nouveau nom,
  *            : Projet *projet : la variable projet.
@@ -449,7 +451,7 @@ G_MODULE_EXPORT gboolean EF_sections_renomme(EF_Section *section, gchar *nom, Pr
  *   Échec : FALSE :
  *             projet == NULL,
  *             section == NULL,
- *             appui possédant le nouveau nom est déjà existant.
+ *             section possédant le nouveau nom est déjà existant.
  */
 {
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
@@ -476,7 +478,7 @@ G_MODULE_EXPORT gboolean EF_sections_supprime(EF_Section *section, gboolean annu
  *            : gboolean annule_si_utilise : possibilité d'annuler la suppression si la section
  *              est attribuée à une barre. Si l'option est désactivée, les barres (et les
  *              barres et noeuds intermédiaires dépendants) utilisant la section seront
- *              supprimées.
+ *              supprimés.
  *            : Projet *projet : la variable projet.
  * Valeur renvoyée :
  *   Succès : TRUE

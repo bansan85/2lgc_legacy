@@ -19,4 +19,5 @@ applicationui_DATA	=	ui/1990_actions.ui \
 						ui/EF_noeud.ui \
 						ui/EF_charge_barre_ponctuelle.ui \
 						ui/EF_charge_barre_repartie_uniforme.ui \
-						ui/EF_charge_noeud.ui
+						ui/EF_charge_noeud.ui \
+						ui/EF_materiaux.ui
