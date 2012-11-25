@@ -95,7 +95,7 @@
                                         <child>
                                             <object class="GtkCellRendererText" id="EF_materiaux_treeview_cell2" />
                                             <attributes>
-                                                <attribute name="text">2</attribute>
+                                                <attribute name="markup">2</attribute>
                                             </attributes>
                                         </child>
                                     </object>
