@@ -29,6 +29,7 @@
 #include "EF_calculs.h"
 #include "common_selection.h"
 #include "1992_1_1_barres.h"
+#include "1992_1_1_materiaux.h"
 
 
 G_MODULE_EXPORT gboolean _1992_1_1_materiaux_init(Projet *projet)
@@ -53,8 +54,301 @@ G_MODULE_EXPORT gboolean _1992_1_1_materiaux_init(Projet *projet)
 }
 
 
-G_MODULE_EXPORT gboolean _1992_1_1_materiaux_ajout(Projet *projet, const char *nom, double fck,
-  double nu)
+G_MODULE_EXPORT double _1992_1_1_materiaux_fckcube(double fck)
+/* Description : Renvoie la résistance caractéristique en compression du béton, mesurée sur
+ *               cube à 28 jours en fonction de fck en unité SI (Pa).
+ * Paramètres : double fck : Résistance caractéristique en compression du béton, mesurée sur
+ *                           cylindre à 28 jours, en MPa.
+ * Valeur renvoyée :
+ *   Succès : le résultat,
+ *   Échec : NAN :
+ *             fck > 90.,
+ *             fck <= 0.
+ */
+{
+    BUGMSG((fck > ERREUR_RELATIVE_MIN) && (fck <= 90.*(1+ERREUR_RELATIVE_MIN)), NAN, gettext("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"));
+    
+    // On effectue une interpolation linéaire entre les valeurs fournies par la norme
+    if (fck < 12.)
+        return fck*1.25*1000000.;
+    else if (fck < 16.)
+        return 5.*fck/4.*1000000.;
+    else if (fck < 20.)
+        return 5.*fck/4.*1000000.;
+    else if (fck < 25.)
+        return (fck+5.)*1000000.;
+    else if (fck < 30.)
+        return (7.*fck/5.-5.)*1000000.;
+    else if (fck < 35.)
+        return (8.*fck/5.-11.)*1000000.;
+    else if (fck < 40.)
+        return (fck+10.)*1000000.;
+    else if (fck < 45.)
+        return (fck+10.)*1000000.;
+    else if (fck < 50.)
+        return (fck+10.)*1000000.;
+    else if (fck < 55.)
+        return (7.*fck/5.-10.)*1000000.;
+    else if (fck < 60.)
+        return (8.*fck/5.-21.)*1000000.;
+    else if (fck < 70.)
+        return (fck+15.)*1000000.;
+    else if (fck < 80.)
+        return (fck+15.)*1000000.;
+    else if (fck <= 90.)
+        return (fck+15.)*1000000.;
+    else
+        return NAN;
+}
+
+
+G_MODULE_EXPORT double _1992_1_1_materiaux_fcm(double fck)
+/* Description : Renvoie la valeur moyenne de la résistance en compression du béton, mesurée sur
+ *               cylindre en unité SI (Pa).
+ * Paramètres : double fck : Résistance caractéristique en compression du béton, mesurée sur
+ *                           cylindre à 28 jours, en MPa.
+ * Valeur renvoyée :
+ *   Succès : le résultat,
+ *   Échec : NAN :
+ *             fck > 90.,
+ *             fck <= 0.
+ */
+{
+    BUGMSG((fck > ERREUR_RELATIVE_MIN) && (fck <= 90.*(1+ERREUR_RELATIVE_MIN)), NAN, gettext("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"));
+    
+    return (fck+8.)*1000000.;
+}
+
+
+G_MODULE_EXPORT double _1992_1_1_materiaux_fctm(double fck)
+/* Description : Renvoie la valeur moyenne de la résistance en traction directe du béton,
+ *               mesurée sur cylindre en unité SI (Pa).
+ * Paramètres : double fck : Résistance caractéristique en compression du béton, mesurée sur
+ *                           cylindre à 28 jours, en MPa.
+ * Valeur renvoyée :
+ *   Succès : le résultat,
+ *   Échec : NAN :
+ *             fck > 90.,
+ *             fck <= 0.
+ */
+{
+    BUGMSG((fck > ERREUR_RELATIVE_MIN) && (fck <= 90.*(1+ERREUR_RELATIVE_MIN)), NAN, gettext("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"));
+    
+    if (fck <= 50.)
+        return 0.3*pow(fck,2./3.)*1000000.;
+    else
+        return 2.12*log(1.+(_1992_1_1_materiaux_fcm(fck)/10./1000000.))*1000000.;
+}
+
+
+G_MODULE_EXPORT double _1992_1_1_materiaux_fctk_0_05(double fck)
+/* Description : Renvoie la valeur moyenne de la résistance en traction directe du béton,
+ *               (fractile 5%) en unité SI (Pa).
+ * Paramètres : double fck : Résistance caractéristique en compression du béton, mesurée sur
+ *                           cylindre à 28 jours, en MPa.
+ * Valeur renvoyée :
+ *   Succès : le résultat,
+ *   Échec : NAN :
+ *             fck > 90.,
+ *             fck <= 0.
+ */
+{
+    BUGMSG((fck > ERREUR_RELATIVE_MIN) && (fck <= 90.*(1+ERREUR_RELATIVE_MIN)), NAN, gettext("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"));
+    
+    return 0.7*_1992_1_1_materiaux_fctm(fck);
+}
+
+
+G_MODULE_EXPORT double _1992_1_1_materiaux_fctk_0_95(double fck)
+/* Description : Renvoie la valeur moyenne de la résistance en traction directe du béton,
+ *               (fractile 95%) en unité SI (Pa).
+ * Paramètres : double fck : Résistance caractéristique en compression du béton, mesurée sur
+ *                           cylindre à 28 jours, en MPa.
+ * Valeur renvoyée :
+ *   Succès : le résultat,
+ *   Échec : NAN :
+ *             fck > 90.,
+ *             fck <= 0.
+ */
+{
+    BUGMSG((fck > ERREUR_RELATIVE_MIN) && (fck <= 90.*(1+ERREUR_RELATIVE_MIN)), NAN, gettext("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"));
+    
+    return 1.3*_1992_1_1_materiaux_fctm(fck);
+}
+
+
+G_MODULE_EXPORT double _1992_1_1_materiaux_ecm(double fck)
+/* Description : Renvoie le module d'élasticité sécant du béton en unité SI (Pa).
+ * Paramètres : double fck : Résistance caractéristique en compression du béton, mesurée sur
+ *                           cylindre à 28 jours, en MPa.
+ * Valeur renvoyée :
+ *   Succès : le résultat,
+ *   Échec : NAN :
+ *             fck > 90.,
+ *             fck <= 0.
+ */
+{
+    BUGMSG((fck > ERREUR_RELATIVE_MIN) && (fck <= 90.*(1+ERREUR_RELATIVE_MIN)), NAN, gettext("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"));
+    
+    return 22.*pow(_1992_1_1_materiaux_fcm(fck)/10./1000000., 0.3)*1000000000.;
+}
+
+
+G_MODULE_EXPORT double _1992_1_1_materiaux_ec1(double fck)
+/* Description : Renvoie la déformation relative en compression du béton au point 1.
+ * Paramètres : double fck : Résistance caractéristique en compression du béton, mesurée sur
+ *                           cylindre à 28 jours, en MPa.
+ * Valeur renvoyée :
+ *   Succès : le résultat,
+ *   Échec : NAN :
+ *             fck > 90.,
+ *             fck <= 0.
+ */
+{
+    BUGMSG((fck > ERREUR_RELATIVE_MIN) && (fck <= 90.*(1+ERREUR_RELATIVE_MIN)), NAN, gettext("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"));
+    
+    return MIN(0.7*pow(_1992_1_1_materiaux_fcm(fck)/1000000., 0.31), 2.8)/1000.;
+}
+
+
+G_MODULE_EXPORT double _1992_1_1_materiaux_ecu1(double fck)
+/* Description : Renvoie la déformation relative ultime en compression du béton au point 1.
+ * Paramètres : double fck : Résistance caractéristique en compression du béton, mesurée sur
+ *                           cylindre à 28 jours, en MPa.
+ * Valeur renvoyée :
+ *   Succès : le résultat,
+ *   Échec : NAN :
+ *             fck > 90.,
+ *             fck <= 0.
+ */
+{
+    BUGMSG((fck > ERREUR_RELATIVE_MIN) && (fck <= 90.*(1+ERREUR_RELATIVE_MIN)), NAN, gettext("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"));
+    
+    if (fck < 50.)
+        return 3.5/1000.;
+    else
+        return (2.8 + 27.*pow((98.-_1992_1_1_materiaux_fcm(fck)/1000000.)/100.,4.))/1000.;
+}
+
+
+G_MODULE_EXPORT double _1992_1_1_materiaux_ec2(double fck)
+/* Description : Renvoie la déformation relative en compression du béton au point 2.
+ * Paramètres : double fck : Résistance caractéristique en compression du béton, mesurée sur
+ *                           cylindre à 28 jours, en MPa.
+ * Valeur renvoyée :
+ *   Succès : le résultat,
+ *   Échec : NAN :
+ *             fck > 90.,
+ *             fck <= 0.
+ */
+{
+    BUGMSG((fck > ERREUR_RELATIVE_MIN) && (fck <= 90.*(1+ERREUR_RELATIVE_MIN)), NAN, gettext("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"));
+    
+    if (fck < 50.)
+        return 2./1000.;
+    else
+        return (2. + 0.085*pow(fck-50., 0.53))/1000.;
+}
+
+
+G_MODULE_EXPORT double _1992_1_1_materiaux_ecu2(double fck)
+/* Description : Renvoie la déformation relative ultime en compression du béton au point 2.
+ * Paramètres : double fck : Résistance caractéristique en compression du béton, mesurée sur
+ *                           cylindre à 28 jours, en MPa.
+ * Valeur renvoyée :
+ *   Succès : le résultat,
+ *   Échec : NAN :
+ *             fck > 90.,
+ *             fck <= 0.
+ */
+{
+    BUGMSG((fck > ERREUR_RELATIVE_MIN) && (fck <= 90.*(1+ERREUR_RELATIVE_MIN)), NAN, gettext("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"));
+    
+    if (fck < 50.)
+        return 3.5/1000.;
+    else
+        return (2.6 + 35.*pow((90.-fck)/100.,4.))/1000.;
+}
+
+
+G_MODULE_EXPORT double _1992_1_1_materiaux_ec3(double fck)
+/* Description : Renvoie la déformation relative en compression du béton au point 3.
+ * Paramètres : double fck : Résistance caractéristique en compression du béton, mesurée sur
+ *                           cylindre à 28 jours, en MPa.
+ * Valeur renvoyée :
+ *   Succès : le résultat,
+ *   Échec : NAN :
+ *             fck > 90.,
+ *             fck <= 0.
+ */
+{
+    BUGMSG((fck > ERREUR_RELATIVE_MIN) && (fck <= 90.*(1+ERREUR_RELATIVE_MIN)), NAN, gettext("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"));
+    
+    if (fck < 50.)
+        return 1.75/1000.;
+    else
+        return (1.75 + 0.55*(fck-50.)/40.)/1000.;
+}
+
+
+G_MODULE_EXPORT double _1992_1_1_materiaux_ecu3(double fck)
+/* Description : Renvoie la déformation relative ultime en compression du béton au point 3.
+ * Paramètres : double fck : Résistance caractéristique en compression du béton, mesurée sur
+ *                           cylindre à 28 jours, en MPa.
+ * Valeur renvoyée :
+ *   Succès : le résultat,
+ *   Échec : NAN :
+ *             fck > 90.,
+ *             fck <= 0.
+ */
+{
+    BUGMSG((fck > ERREUR_RELATIVE_MIN) && (fck <= 90.*(1+ERREUR_RELATIVE_MIN)), NAN, gettext("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"));
+    
+    if (fck < 50.)
+        return 3.5/1000.;
+    else
+        return (2.6 + 35*pow((90.-fck)/100., 4.))/1000.;
+}
+
+
+G_MODULE_EXPORT double _1992_1_1_materiaux_n(double fck)
+/* Description : Renvoie le coefficient n utilisé dans la courbe parabole rectangle.
+ * Paramètres : double fck : Résistance caractéristique en compression du béton, mesurée sur
+ *                           cylindre à 28 jours, en MPa.
+ * Valeur renvoyée :
+ *   Succès : le résultat,
+ *   Échec : NAN :
+ *             fck > 90.,
+ *             fck <= 0.
+ */
+{
+    BUGMSG((fck > ERREUR_RELATIVE_MIN) && (fck <= 90.*(1+ERREUR_RELATIVE_MIN)), NAN, gettext("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"));
+    
+    if (fck < 50.)
+        return 2./1000.;
+    else
+        return (1.4 + 23.4*pow((90.-fck)/100., 4.))/1000.;
+}
+
+
+G_MODULE_EXPORT double _1992_1_1_materiaux_gnu(double fck, double nu)
+/* Description : Renvoie le module de cisallement en unité SI (Pa).
+ * Paramètres : double fck : Résistance caractéristique en compression du béton, mesurée sur
+ *                           cylindre à 28 jours, en MPa.
+ * Valeur renvoyée :
+ *   Succès : le résultat,
+ *   Échec : NAN :
+ *             fck > 90.,
+ *             fck <= 0.
+ */
+{
+    BUGMSG((fck > ERREUR_RELATIVE_MIN) && (fck <= 90.*(1+ERREUR_RELATIVE_MIN)), NAN, gettext("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"));
+    
+    return _1992_1_1_materiaux_ecm(fck)/(2.*(1.+nu));
+}
+
+
+G_MODULE_EXPORT gboolean _1992_1_1_materiaux_ajout(Projet *projet, const char *nom, double fck)
 /* Description : Ajoute un matériau en béton et calcule ses caractéristiques mécaniques.
  *               Les propriétés du béton sont déterminées conformément au tableau 3.1 de
  *               l'Eurocode 2-1-1 les valeurs de fckcube est déterminée par interpolation
@@ -80,70 +374,23 @@ G_MODULE_EXPORT gboolean _1992_1_1_materiaux_ajout(Projet *projet, const char *n
 
     materiau_nouveau->fck = fck*1000000.;
     BUGMSG(materiau_nouveau->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-    if (fck < 12.)
-        materiau_nouveau->fckcube = fck*1.25*1000000.;
-    else if (fck < 16.)
-        materiau_nouveau->fckcube = 5.*fck/4.*1000000.;
-    else if (fck < 20.)
-        materiau_nouveau->fckcube = 5.*fck/4.*1000000.;
-    else if (fck < 25.)
-        materiau_nouveau->fckcube = (fck+5.)*1000000.;
-    else if (fck < 30.)
-        materiau_nouveau->fckcube = (7.*fck/5.-5.)*1000000.;
-    else if (fck < 35.)
-        materiau_nouveau->fckcube = (8.*fck/5.-11.)*1000000.;
-    else if (fck < 40.)
-        materiau_nouveau->fckcube = (fck+10.)*1000000.;
-    else if (fck < 45.)
-        materiau_nouveau->fckcube = (fck+10.)*1000000.;
-    else if (fck < 50.)
-        materiau_nouveau->fckcube = (fck+10.)*1000000.;
-    else if (fck < 55.)
-        materiau_nouveau->fckcube = (7.*fck/5.-10.)*1000000.;
-    else if (fck < 60.)
-        materiau_nouveau->fckcube = (8.*fck/5.-21.)*1000000.;
-    else if (fck < 70.)
-        materiau_nouveau->fckcube = (fck+15.)*1000000.;
-    else if (fck < 80.)
-        materiau_nouveau->fckcube = (fck+15.)*1000000.;
-    else if (fck <= 90.)
-        materiau_nouveau->fckcube = (fck+15.)*1000000.;
-    materiau_nouveau->fcm = (fck+8.)*1000000.;
-    if (fck <= 50.)
-        materiau_nouveau->fctm = 0.3*pow(fck,2./3.)*1000000.;
-    else
-        materiau_nouveau->fctm = 2.12*log(1.+(materiau_nouveau->fcm/10./1000000.))*1000000.;
-    materiau_nouveau->fctk_0_05 = 0.7*materiau_nouveau->fctm;
-    materiau_nouveau->fctk_0_95 = 1.3*materiau_nouveau->fctm;
-    materiau_nouveau->ecm = 22.*pow(materiau_nouveau->fcm/10./1000000., 0.3)*1000000000.;
-    materiau_nouveau->ec1 = MIN(0.7*pow(materiau_nouveau->fcm/1000000., 0.31), 2.8)/1000.;
-    if (fck < 50.)
-        materiau_nouveau->ecu1 = 3.5/1000.;
-    else
-        materiau_nouveau->ecu1 = (2.8 + 27.*pow((98.-materiau_nouveau->fcm/1000000.)/100.,4.))/1000.;
-    if (fck < 50.)
-        materiau_nouveau->ec2 = 2./1000.;
-    else
-        materiau_nouveau->ec2 = (2. + 0.085*pow(fck-50., 0.53))/1000.;
-    if (fck < 50.)
-        materiau_nouveau->ecu2 = 3.5/1000.;
-    else
-        materiau_nouveau->ecu2 = (2.6 + 35.*pow((90.-fck)/100.,4.))/1000.;
-    if (fck < 50.)
-        materiau_nouveau->n = 2./1000.;
-    else
-        materiau_nouveau->n = (1.4 + 23.4*pow((90.-fck)/100., 4.))/1000.;
-    if (fck < 50.)
-        materiau_nouveau->ec3 = 1.75/1000.;
-    else
-        materiau_nouveau->ec3 = (1.75 + 0.55*(fck-50.)/40.)/1000.;
-    if (fck < 50.)
-        materiau_nouveau->ecu3 = 3.5/1000.;
-    else
-        materiau_nouveau->ecu3 = (2.6 + 35*pow((90.-fck)/100., 4.))/1000.;
-    materiau_nouveau->nu = nu;
-    materiau_nouveau->gnu_0_2 = materiau_nouveau->ecm/(2.*(1.+nu));
-    materiau_nouveau->gnu_0_0 = materiau_nouveau->ecm/2.;
+    
+    BUG(!isnan(materiau_nouveau->fckcube = _1992_1_1_materiaux_fckcube(fck)), FALSE);
+    BUG(!isnan(materiau_nouveau->fcm = _1992_1_1_materiaux_fcm(fck)), FALSE);
+    BUG(!isnan(materiau_nouveau->fctm = _1992_1_1_materiaux_fctm(fck)), FALSE);
+    BUG(!isnan(materiau_nouveau->fctk_0_05 = _1992_1_1_materiaux_fctk_0_05(fck)), FALSE);
+    BUG(!isnan(materiau_nouveau->fctk_0_95 = _1992_1_1_materiaux_fctk_0_95(fck)), FALSE);
+    BUG(!isnan(materiau_nouveau->ecm = _1992_1_1_materiaux_ecm(fck)), FALSE);
+    BUG(!isnan(materiau_nouveau->ec1 = _1992_1_1_materiaux_ec1(fck)), FALSE);
+    BUG(!isnan(materiau_nouveau->ecu1 = _1992_1_1_materiaux_ecu1(fck)), FALSE);
+    BUG(!isnan(materiau_nouveau->ec2 = _1992_1_1_materiaux_ec2(fck)), FALSE);
+    BUG(!isnan(materiau_nouveau->ecu2 = _1992_1_1_materiaux_ecu2(fck)), FALSE);
+    BUG(!isnan(materiau_nouveau->ec3 = _1992_1_1_materiaux_ec3(fck)), FALSE);
+    BUG(!isnan(materiau_nouveau->ecu3 = _1992_1_1_materiaux_ecu3(fck)), FALSE);
+    BUG(!isnan(materiau_nouveau->n = _1992_1_1_materiaux_n(fck)), FALSE);
+    materiau_nouveau->nu = COEFFICIENT_NU_BETON;
+    BUG(!isnan(materiau_nouveau->gnu_0_2 = _1992_1_1_materiaux_gnu(fck, COEFFICIENT_NU_BETON)), FALSE);
+    BUG(!isnan(materiau_nouveau->gnu_0_0 = _1992_1_1_materiaux_gnu(fck, 0)), FALSE);
     
     projet->beton.materiaux = g_list_append(projet->beton.materiaux, materiau_nouveau);
     
@@ -307,12 +554,202 @@ G_MODULE_EXPORT char *_1992_1_1_materiaux_get_description(Beton_Materiau* materi
  */
 {
     char    *description;
-    char    fck[30];
+    char    fck[30], tmp1[30];
+    char    *complement = NULL, *tmp2;
     
     BUGMSG(materiau, NULL, gettext("Paramètre %s incorrect.\n"), "sect");
     
     common_math_double_to_char(materiau->fck/1000000., fck, DECIMAL_CONTRAINTE);
-    BUGMSG(description = g_strdup_printf("fck : %s MPa", fck), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    
+    // On affiche les différences si le matériau a été personnalisé
+    if (!ERREUR_RELATIVE_EGALE(materiau->fckcube, _1992_1_1_materiaux_fckcube(materiau->fck/1000000.)))
+    {
+        common_math_double_to_char(materiau->fckcube/1000000., tmp1, DECIMAL_CONTRAINTE);
+        if (complement == NULL)
+            BUGMSG(complement = g_strdup_printf("fckcube : %s MPa", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+        else
+        {
+            tmp2 = complement;
+            BUGMSG(complement = g_strdup_printf("%s, fckcube : %s MPa", tmp2, tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            free(tmp2);
+        }
+    }
+    if (!ERREUR_RELATIVE_EGALE(materiau->fcm, _1992_1_1_materiaux_fcm(materiau->fck/1000000.)))
+    {
+        common_math_double_to_char(materiau->fcm/1000000., tmp1, DECIMAL_CONTRAINTE);
+        if (complement == NULL)
+            BUGMSG(complement = g_strdup_printf("fcm : %s MPa", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+        else
+        {
+            tmp2 = complement;
+            BUGMSG(complement = g_strdup_printf("%s, fcm : %s MPa", tmp2, tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            free(tmp2);
+        }
+    }
+    if (!ERREUR_RELATIVE_EGALE(materiau->fctm, _1992_1_1_materiaux_fctm(materiau->fck/1000000.)))
+    {
+        common_math_double_to_char(materiau->fctm/1000000., tmp1, DECIMAL_CONTRAINTE);
+        if (complement == NULL)
+            BUGMSG(complement = g_strdup_printf("fctm : %s MPa", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+        else
+        {
+            tmp2 = complement;
+            BUGMSG(complement = g_strdup_printf("%s, fctm : %s MPa", tmp2, tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            free(tmp2);
+        }
+    }
+    if (!ERREUR_RELATIVE_EGALE(materiau->fctk_0_05, _1992_1_1_materiaux_fctk_0_05(materiau->fck/1000000.)))
+    {
+        common_math_double_to_char(materiau->fctk_0_05/1000000., tmp1, DECIMAL_CONTRAINTE);
+        if (complement == NULL)
+            BUGMSG(complement = g_strdup_printf("fctk_0_05 : %s MPa", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+        else
+        {
+            tmp2 = complement;
+            BUGMSG(complement = g_strdup_printf("%s, fctk_0_05 : %s MPa", tmp2, tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            free(tmp2);
+        }
+    }
+    if (!ERREUR_RELATIVE_EGALE(materiau->fctk_0_95, _1992_1_1_materiaux_fctk_0_95(materiau->fck/1000000.)))
+    {
+        common_math_double_to_char(materiau->fctk_0_95/1000000., tmp1, DECIMAL_CONTRAINTE);
+        if (complement == NULL)
+            BUGMSG(complement = g_strdup_printf("fctk_0_95 : %s MPa", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+        else
+        {
+            tmp2 = complement;
+            BUGMSG(complement = g_strdup_printf("%s, fctk_0_95 : %s MPa", tmp2, tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            free(tmp2);
+        }
+    }
+    if (!ERREUR_RELATIVE_EGALE(materiau->ecm, _1992_1_1_materiaux_ecm(materiau->fck/1000000.)))
+    {
+        common_math_double_to_char(materiau->ecm/1000000., tmp1, DECIMAL_CONTRAINTE);
+        if (complement == NULL)
+            BUGMSG(complement = g_strdup_printf("Ecm : %s MPa", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+        else
+        {
+            tmp2 = complement;
+            BUGMSG(complement = g_strdup_printf("%s, Ecm : %s MPa", tmp2, tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            free(tmp2);
+        }
+    }
+    if (!ERREUR_RELATIVE_EGALE(materiau->gnu_0_2, _1992_1_1_materiaux_gnu(materiau->fck/1000000., 0.2)))
+    {
+        common_math_double_to_char(materiau->gnu_0_2/1000000., tmp1, DECIMAL_CONTRAINTE);
+        if (complement == NULL)
+            BUGMSG(complement = g_strdup_printf("G (nu=0.2) : %s MPa", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+        else
+        {
+            tmp2 = complement;
+            BUGMSG(complement = g_strdup_printf("%s, G (nu = 0.2) : %s MPa", tmp2, tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            free(tmp2);
+        }
+    }
+    if (!ERREUR_RELATIVE_EGALE(materiau->gnu_0_0, _1992_1_1_materiaux_gnu(materiau->fck/1000000., 0.)))
+    {
+        common_math_double_to_char(materiau->gnu_0_0/1000000., tmp1, DECIMAL_CONTRAINTE);
+        if (complement == NULL)
+            BUGMSG(complement = g_strdup_printf("G (nu=0) : %s MPa", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+        else
+        {
+            tmp2 = complement;
+            BUGMSG(complement = g_strdup_printf("%s, G (nu=0) : %s MPa", tmp2, tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            free(tmp2);
+        }
+    }
+    if (!ERREUR_RELATIVE_EGALE(materiau->ec1, _1992_1_1_materiaux_ec1(materiau->fck/1000000.)))
+    {
+        common_math_double_to_char(materiau->ec1*1000., tmp1, DECIMAL_SANS_UNITE);
+        if (complement == NULL)
+            BUGMSG(complement = g_strdup_printf("ec1 : %s ‰", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+        else
+        {
+            tmp2 = complement;
+            BUGMSG(complement = g_strdup_printf("%s, ec1 : %s ‰", tmp2, tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            free(tmp2);
+        }
+    }
+    if (!ERREUR_RELATIVE_EGALE(materiau->ecu1, _1992_1_1_materiaux_ecu1(materiau->fck/1000000.)))
+    {
+        common_math_double_to_char(materiau->ecu1*1000., tmp1, DECIMAL_SANS_UNITE);
+        if (complement == NULL)
+            BUGMSG(complement = g_strdup_printf("ecu1 : %s ‰", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+        else
+        {
+            tmp2 = complement;
+            BUGMSG(complement = g_strdup_printf("%s, ecu1 : %s ‰", tmp2, tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            free(tmp2);
+        }
+    }
+    if (!ERREUR_RELATIVE_EGALE(materiau->ec2, _1992_1_1_materiaux_ec2(materiau->fck/1000000.)))
+    {
+        common_math_double_to_char(materiau->ec2*1000., tmp1, DECIMAL_SANS_UNITE);
+        if (complement == NULL)
+            BUGMSG(complement = g_strdup_printf("ec2 : %s ‰", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+        else
+        {
+            tmp2 = complement;
+            BUGMSG(complement = g_strdup_printf("%s, ec2 : %s ‰", tmp2, tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            free(tmp2);
+        }
+    }
+    if (!ERREUR_RELATIVE_EGALE(materiau->ecu2, _1992_1_1_materiaux_ecu2(materiau->fck/1000000.)))
+    {
+        common_math_double_to_char(materiau->ecu2*1000., tmp1, DECIMAL_SANS_UNITE);
+        if (complement == NULL)
+            BUGMSG(complement = g_strdup_printf("ecu2 : %s ‰", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+        else
+        {
+            tmp2 = complement;
+            BUGMSG(complement = g_strdup_printf("%s, ecu2 : %s ‰", tmp2, tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            free(tmp2);
+        }
+    }
+    if (!ERREUR_RELATIVE_EGALE(materiau->ec3, _1992_1_1_materiaux_ec3(materiau->fck/1000000.)))
+    {
+        common_math_double_to_char(materiau->ec3*1000., tmp1, DECIMAL_SANS_UNITE);
+        if (complement == NULL)
+            BUGMSG(complement = g_strdup_printf("ec3 : %s ‰", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+        else
+        {
+            tmp2 = complement;
+            BUGMSG(complement = g_strdup_printf("%s, ec3 : %s ‰", tmp2, tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            free(tmp2);
+        }
+    }
+    if (!ERREUR_RELATIVE_EGALE(materiau->ecu3, _1992_1_1_materiaux_ecu3(materiau->fck/1000000.)))
+    {
+        common_math_double_to_char(materiau->ecu3*1000., tmp1, DECIMAL_SANS_UNITE);
+        if (complement == NULL)
+            BUGMSG(complement = g_strdup_printf("ecu3 : %s ‰", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+        else
+        {
+            tmp2 = complement;
+            BUGMSG(complement = g_strdup_printf("%s, ecu3 : %s ‰", tmp2, tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            free(tmp2);
+        }
+    }
+    if (!ERREUR_RELATIVE_EGALE(materiau->n, _1992_1_1_materiaux_n(materiau->fck/1000000.)))
+    {
+        common_math_double_to_char(materiau->n*1000., tmp1, DECIMAL_SANS_UNITE);
+        if (complement == NULL)
+            BUGMSG(complement = g_strdup_printf("n : %s", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+        else
+        {
+            tmp2 = complement;
+            BUGMSG(complement = g_strdup_printf("%s, n : %s", tmp2, tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            free(tmp2);
+        }
+    }
+    
+    if (complement == NULL)
+        BUGMSG(description = g_strdup_printf("fck : %s MPa", fck), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    else
+    {
+        BUGMSG(description = g_strdup_printf("fck : %s MPa avec %s", fck, complement), NULL, gettext("Erreur d'allocation mémoire.\n"));
+        free(complement);
+    }
     
     return description;
 }
