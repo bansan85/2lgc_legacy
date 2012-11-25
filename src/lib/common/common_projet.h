@@ -31,6 +31,7 @@
 #define DECIMAL_M4 8
 #define DECIMAL_SURFACE 3
 #define DECIMAL_CONTRAINTE 3
+#define DECIMAL_SANS_UNITE 3
 
 #ifdef ENABLE_GTK
 #include <gtk/gtk.h>

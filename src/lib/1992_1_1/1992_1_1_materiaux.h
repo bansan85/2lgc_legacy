@@ -22,10 +22,26 @@
 #include "config.h"
 #include "common_projet.h"
 
+#define COEFFICIENT_NU_BETON    0.2
 
 gboolean _1992_1_1_materiaux_init(Projet *projet) __attribute__((__warn_unused_result__));
 
-gboolean _1992_1_1_materiaux_ajout(Projet *projet, const char *nom, double fck, double nu) __attribute__((__warn_unused_result__));
+double _1992_1_1_materiaux_fckcube(double fck) __attribute__((__warn_unused_result__));
+double _1992_1_1_materiaux_fcm(double fck) __attribute__((__warn_unused_result__));
+double _1992_1_1_materiaux_fctm(double fck) __attribute__((__warn_unused_result__));
+double _1992_1_1_materiaux_fctk_0_05(double fck) __attribute__((__warn_unused_result__));
+double _1992_1_1_materiaux_fctk_0_95(double fck) __attribute__((__warn_unused_result__));
+double _1992_1_1_materiaux_ecm(double fck) __attribute__((__warn_unused_result__));
+double _1992_1_1_materiaux_ec1(double fck) __attribute__((__warn_unused_result__));
+double _1992_1_1_materiaux_ecu1(double fck) __attribute__((__warn_unused_result__));
+double _1992_1_1_materiaux_ec2(double fck) __attribute__((__warn_unused_result__));
+double _1992_1_1_materiaux_ecu2(double fck) __attribute__((__warn_unused_result__));
+double _1992_1_1_materiaux_ec3(double fck) __attribute__((__warn_unused_result__));
+double _1992_1_1_materiaux_ecu3(double fck) __attribute__((__warn_unused_result__));
+double _1992_1_1_materiaux_n(double fck) __attribute__((__warn_unused_result__));
+double _1992_1_1_materiaux_gnu(double fck, double nu) __attribute__((__warn_unused_result__));
+
+gboolean _1992_1_1_materiaux_ajout(Projet *projet, const char *nom, double fck) __attribute__((__warn_unused_result__));
 Beton_Materiau* _1992_1_1_materiaux_cherche_nom(Projet *projet, const char *nom, gboolean critique) __attribute__((__warn_unused_result__));
 gboolean _1992_1_1_materiaux_renomme(Beton_Materiau *materiau, gchar *nom, Projet *projet) __attribute__((__warn_unused_result__));
 
