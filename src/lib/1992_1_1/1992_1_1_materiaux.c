@@ -566,11 +566,11 @@ G_MODULE_EXPORT char *_1992_1_1_materiaux_get_description(Beton_Materiau* materi
     {
         common_math_double_to_char(materiau->fckcube/1000000., tmp1, DECIMAL_CONTRAINTE);
         if (complement == NULL)
-            BUGMSG(complement = g_strdup_printf("fckcube : %s MPa", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(complement = g_strdup_printf("f<sub>ck,cube</sub> : %s MPa", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
         else
         {
             tmp2 = complement;
-            BUGMSG(complement = g_strdup_printf("%s, fckcube : %s MPa", tmp2, tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(complement = g_strdup_printf("%s, f<sub>ck,cube</sub> : %s MPa", tmp2, tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
             free(tmp2);
         }
     }
@@ -578,11 +578,11 @@ G_MODULE_EXPORT char *_1992_1_1_materiaux_get_description(Beton_Materiau* materi
     {
         common_math_double_to_char(materiau->fcm/1000000., tmp1, DECIMAL_CONTRAINTE);
         if (complement == NULL)
-            BUGMSG(complement = g_strdup_printf("fcm : %s MPa", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(complement = g_strdup_printf("f<sub>cm</sub> : %s MPa", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
         else
         {
             tmp2 = complement;
-            BUGMSG(complement = g_strdup_printf("%s, fcm : %s MPa", tmp2, tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(complement = g_strdup_printf("%s, f<sub>cm</sub> : %s MPa", tmp2, tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
             free(tmp2);
         }
     }
@@ -590,11 +590,11 @@ G_MODULE_EXPORT char *_1992_1_1_materiaux_get_description(Beton_Materiau* materi
     {
         common_math_double_to_char(materiau->fctm/1000000., tmp1, DECIMAL_CONTRAINTE);
         if (complement == NULL)
-            BUGMSG(complement = g_strdup_printf("fctm : %s MPa", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(complement = g_strdup_printf("f<sub>ctm</sub> : %s MPa", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
         else
         {
             tmp2 = complement;
-            BUGMSG(complement = g_strdup_printf("%s, fctm : %s MPa", tmp2, tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(complement = g_strdup_printf("%s, f<sub>ctm</sub> : %s MPa", tmp2, tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
             free(tmp2);
         }
     }
@@ -602,11 +602,11 @@ G_MODULE_EXPORT char *_1992_1_1_materiaux_get_description(Beton_Materiau* materi
     {
         common_math_double_to_char(materiau->fctk_0_05/1000000., tmp1, DECIMAL_CONTRAINTE);
         if (complement == NULL)
-            BUGMSG(complement = g_strdup_printf("fctk_0_05 : %s MPa", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(complement = g_strdup_printf("f<sub>ctk,0.05</sub> : %s MPa", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
         else
         {
             tmp2 = complement;
-            BUGMSG(complement = g_strdup_printf("%s, fctk_0_05 : %s MPa", tmp2, tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(complement = g_strdup_printf("%s, f<sub>ctk,0.05</sub> : %s MPa", tmp2, tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
             free(tmp2);
         }
     }
@@ -614,11 +614,11 @@ G_MODULE_EXPORT char *_1992_1_1_materiaux_get_description(Beton_Materiau* materi
     {
         common_math_double_to_char(materiau->fctk_0_95/1000000., tmp1, DECIMAL_CONTRAINTE);
         if (complement == NULL)
-            BUGMSG(complement = g_strdup_printf("fctk_0_95 : %s MPa", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(complement = g_strdup_printf("f<sub>ctk,0.95</sub> : %s MPa", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
         else
         {
             tmp2 = complement;
-            BUGMSG(complement = g_strdup_printf("%s, fctk_0_95 : %s MPa", tmp2, tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(complement = g_strdup_printf("%s, f<sub>ctk,0.95</sub> : %s MPa", tmp2, tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
             free(tmp2);
         }
     }
@@ -626,11 +626,11 @@ G_MODULE_EXPORT char *_1992_1_1_materiaux_get_description(Beton_Materiau* materi
     {
         common_math_double_to_char(materiau->ecm/1000000., tmp1, DECIMAL_CONTRAINTE);
         if (complement == NULL)
-            BUGMSG(complement = g_strdup_printf("Ecm : %s MPa", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(complement = g_strdup_printf("E<sub>cm</sub> : %s MPa", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
         else
         {
             tmp2 = complement;
-            BUGMSG(complement = g_strdup_printf("%s, Ecm : %s MPa", tmp2, tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(complement = g_strdup_printf("%s, E<sub>cm</sub> : %s MPa", tmp2, tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
             free(tmp2);
         }
     }
@@ -638,11 +638,11 @@ G_MODULE_EXPORT char *_1992_1_1_materiaux_get_description(Beton_Materiau* materi
     {
         common_math_double_to_char(materiau->gnu_0_2/1000000., tmp1, DECIMAL_CONTRAINTE);
         if (complement == NULL)
-            BUGMSG(complement = g_strdup_printf("G (nu=0.2) : %s MPa", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(complement = g_strdup_printf("G (&#957;=0.2) : %s MPa", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
         else
         {
             tmp2 = complement;
-            BUGMSG(complement = g_strdup_printf("%s, G (nu = 0.2) : %s MPa", tmp2, tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(complement = g_strdup_printf("%s, G (&#957; = 0.2) : %s MPa", tmp2, tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
             free(tmp2);
         }
     }
@@ -650,11 +650,11 @@ G_MODULE_EXPORT char *_1992_1_1_materiaux_get_description(Beton_Materiau* materi
     {
         common_math_double_to_char(materiau->gnu_0_0/1000000., tmp1, DECIMAL_CONTRAINTE);
         if (complement == NULL)
-            BUGMSG(complement = g_strdup_printf("G (nu=0) : %s MPa", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(complement = g_strdup_printf("G (&#957;=0) : %s MPa", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
         else
         {
             tmp2 = complement;
-            BUGMSG(complement = g_strdup_printf("%s, G (nu=0) : %s MPa", tmp2, tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(complement = g_strdup_printf("%s, G (&#957;=0) : %s MPa", tmp2, tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
             free(tmp2);
         }
     }
@@ -662,11 +662,11 @@ G_MODULE_EXPORT char *_1992_1_1_materiaux_get_description(Beton_Materiau* materi
     {
         common_math_double_to_char(materiau->ec1*1000., tmp1, DECIMAL_SANS_UNITE);
         if (complement == NULL)
-            BUGMSG(complement = g_strdup_printf("ec1 : %s ‰", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(complement = g_strdup_printf("&#949;<sub>c1</sub> : %s ‰", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
         else
         {
             tmp2 = complement;
-            BUGMSG(complement = g_strdup_printf("%s, ec1 : %s ‰", tmp2, tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(complement = g_strdup_printf("%s, &#949;<sub>c1</sub> : %s ‰", tmp2, tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
             free(tmp2);
         }
     }
@@ -674,11 +674,11 @@ G_MODULE_EXPORT char *_1992_1_1_materiaux_get_description(Beton_Materiau* materi
     {
         common_math_double_to_char(materiau->ecu1*1000., tmp1, DECIMAL_SANS_UNITE);
         if (complement == NULL)
-            BUGMSG(complement = g_strdup_printf("ecu1 : %s ‰", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(complement = g_strdup_printf("&#949;<sub>cu1</sub> : %s ‰", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
         else
         {
             tmp2 = complement;
-            BUGMSG(complement = g_strdup_printf("%s, ecu1 : %s ‰", tmp2, tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(complement = g_strdup_printf("%s, &#949;<sub>cu1</sub> : %s ‰", tmp2, tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
             free(tmp2);
         }
     }
@@ -686,11 +686,11 @@ G_MODULE_EXPORT char *_1992_1_1_materiaux_get_description(Beton_Materiau* materi
     {
         common_math_double_to_char(materiau->ec2*1000., tmp1, DECIMAL_SANS_UNITE);
         if (complement == NULL)
-            BUGMSG(complement = g_strdup_printf("ec2 : %s ‰", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(complement = g_strdup_printf("&#949;<sub>c2</sub> : %s ‰", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
         else
         {
             tmp2 = complement;
-            BUGMSG(complement = g_strdup_printf("%s, ec2 : %s ‰", tmp2, tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(complement = g_strdup_printf("%s, &#949;<sub>c2</sub> : %s ‰", tmp2, tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
             free(tmp2);
         }
     }
@@ -698,11 +698,11 @@ G_MODULE_EXPORT char *_1992_1_1_materiaux_get_description(Beton_Materiau* materi
     {
         common_math_double_to_char(materiau->ecu2*1000., tmp1, DECIMAL_SANS_UNITE);
         if (complement == NULL)
-            BUGMSG(complement = g_strdup_printf("ecu2 : %s ‰", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(complement = g_strdup_printf("&#949;<sub>cu2</sub> : %s ‰", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
         else
         {
             tmp2 = complement;
-            BUGMSG(complement = g_strdup_printf("%s, ecu2 : %s ‰", tmp2, tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(complement = g_strdup_printf("%s, &#949;<sub>cu2</sub> : %s ‰", tmp2, tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
             free(tmp2);
         }
     }
@@ -710,11 +710,11 @@ G_MODULE_EXPORT char *_1992_1_1_materiaux_get_description(Beton_Materiau* materi
     {
         common_math_double_to_char(materiau->ec3*1000., tmp1, DECIMAL_SANS_UNITE);
         if (complement == NULL)
-            BUGMSG(complement = g_strdup_printf("ec3 : %s ‰", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(complement = g_strdup_printf("&#949;<sub>c3</sub> : %s ‰", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
         else
         {
             tmp2 = complement;
-            BUGMSG(complement = g_strdup_printf("%s, ec3 : %s ‰", tmp2, tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(complement = g_strdup_printf("%s, &#949;<sub>c3</sub> : %s ‰", tmp2, tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
             free(tmp2);
         }
     }
@@ -722,11 +722,11 @@ G_MODULE_EXPORT char *_1992_1_1_materiaux_get_description(Beton_Materiau* materi
     {
         common_math_double_to_char(materiau->ecu3*1000., tmp1, DECIMAL_SANS_UNITE);
         if (complement == NULL)
-            BUGMSG(complement = g_strdup_printf("ecu3 : %s ‰", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(complement = g_strdup_printf("&#949;<sub>cu3</sub> : %s ‰", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
         else
         {
             tmp2 = complement;
-            BUGMSG(complement = g_strdup_printf("%s, ecu3 : %s ‰", tmp2, tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(complement = g_strdup_printf("%s, &#949;<sub>cu3</sub> : %s ‰", tmp2, tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
             free(tmp2);
         }
     }
@@ -744,10 +744,10 @@ G_MODULE_EXPORT char *_1992_1_1_materiaux_get_description(Beton_Materiau* materi
     }
     
     if (complement == NULL)
-        BUGMSG(description = g_strdup_printf("fck : %s MPa", fck), NULL, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(description = g_strdup_printf("f<sub>ck</sub> : %s MPa", fck), NULL, gettext("Erreur d'allocation mémoire.\n"));
     else
     {
-        BUGMSG(description = g_strdup_printf("fck : %s MPa avec %s", fck, complement), NULL, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(description = g_strdup_printf("f<sub>ck</sub> : %s MPa avec %s", fck, complement), NULL, gettext("Erreur d'allocation mémoire.\n"));
         free(complement);
     }
     
