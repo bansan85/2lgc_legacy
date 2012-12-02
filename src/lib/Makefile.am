@@ -49,6 +49,7 @@ libeurocodes_la_SOURCES +=	common/common_m3d.cc \
 							1990/1990_gtk_groupes.c \
 							1990/1990_gtk_groupes_options.c \
 							1990/1990_gtk_actions.c \
+							1992_1_1/1992_1_1_gtk_materiaux.c \
 							EF/EF_gtk_charge_noeud.c \
 							EF/EF_gtk_charge_barre_ponctuelle.c \
 							EF/EF_gtk_charge_barre_repartie_uniforme.c \
@@ -97,6 +98,7 @@ libeurocodes_la_HEADERS +=	common/common_m3d.hpp \
 							1990/1990_gtk_groupes.h \
 							1990/1990_gtk_groupes_options.h \
 							1990/1990_gtk_actions.h \
+							1992_1_1/1992_1_1_gtk_materiaux.h \
 							EF/EF_gtk_charge_noeud.h \
 							EF/EF_gtk_charge_barre_ponctuelle.h \
 							EF/EF_gtk_charge_barre_repartie_uniforme.h \

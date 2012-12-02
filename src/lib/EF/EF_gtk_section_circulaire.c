@@ -120,7 +120,7 @@ gboolean EF_gtk_section_circulaire_recupere_donnees(Projet *projet, double *diam
     }
     
     // Si tous les paramètres sont corrects
-    textbuffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk.ef_sections_circulaire.builder, "EF_section_circulaire_textview_description")));
+    textbuffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk.ef_sections_circulaire.builder, "EF_section_circulaire_textview_nom")));
     
     gtk_text_buffer_get_iter_at_offset(textbuffer, &start, 0);
     gtk_text_buffer_get_iter_at_offset(textbuffer, &end, -1);
@@ -252,7 +252,7 @@ G_MODULE_EXPORT gboolean EF_gtk_section_circulaire(Projet *projet, EF_Section *s
         BUGMSG(ef_gtk->section->type == SECTION_CIRCULAIRE, FALSE, gettext("La section à modifier n'est pas circulaire.\n"));
         data = ef_gtk->section->data;
         
-        gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(ef_gtk->builder, "EF_section_circulaire_textview_description"))), ef_gtk->section->nom, -1);
+        gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(ef_gtk->builder, "EF_section_circulaire_textview_nom"))), ef_gtk->section->nom, -1);
         common_math_double_to_char(data->diametre, tmp, DECIMAL_DISTANCE);
         gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder, "EF_section_circulaire_buffer_diametre")), tmp, -1);
         

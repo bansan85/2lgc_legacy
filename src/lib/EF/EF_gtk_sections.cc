@@ -523,7 +523,7 @@ G_MODULE_EXPORT void EF_gtk_sections_ajout_circulaire(
 
 G_MODULE_EXPORT void EF_gtk_sections_edit_clicked(GtkWidget *widget  __attribute__((unused)),
   Projet *projet)
-/* Description : Edite les charges sélectionnées.
+/* Description : Edite les sections sélectionnées.
  * Paramètres : GtkToolButton *toolbutton : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
  * Valeur renvoyée : Aucune.
@@ -614,7 +614,6 @@ G_MODULE_EXPORT gboolean EF_gtk_sections_double_clicked(GtkWidget *widget, GdkEv
     
     return FALSE;
 }
-
 
 
 G_MODULE_EXPORT void EF_gtk_sections(Projet *projet)

@@ -10,7 +10,7 @@
             </object>
         </child>
         <child type="tag">
-            <object class="GtkTextTag" id="EF_charge_barre_ponct_tag2_ok">
+            <object class="GtkTextTag" id="EF_charge_barre_ponct_tag_ok">
                 <property name="name">OK</property>
                 <property name="foreground">black</property>
                 <property name="weight">400</property>

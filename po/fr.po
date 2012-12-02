@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2012-12-02 10:03+0100\n"
-"PO-Revision-Date: 2012-12-02 10:08+0100\n"
+"POT-Creation-Date: 2012-12-02 12:43+0100\n"
+"PO-Revision-Date: 2012-12-02 12:45+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -36,8 +36,8 @@ msgstr "Charge"
 msgid "Valeur"
 msgstr "Valeur"
 
-msgid "Description :"
-msgstr "Description :"
+msgid "Nom :"
+msgstr "Nom :"
 
 msgid "Rectangulaire"
 msgstr "Rectangulaire"
@@ -116,6 +116,9 @@ msgstr "Relâchement"
 
 msgid "Charge :"
 msgstr "Charge :"
+
+msgid "Description :"
+msgstr "Description :"
 
 msgid "Repere :"
 msgstr "Repere :"
@@ -278,6 +281,24 @@ msgstr "valeur quasi-permanente"
 
 msgid "Paramètre %s incorrect.\n"
 msgstr "Paramètre %s incorrect.\n"
+
+msgid "La fenêtre graphique %s n'est pas initialisée.\n"
+msgstr "La fenêtre graphique %s n'est pas initialisée.\n"
+
+msgid "La valeur de fck est incorrecte."
+msgstr "La valeur de fck est incorrecte."
+
+msgid "La fenêtre graphique %s est déjà initialisée.\n"
+msgstr "La fenêtre graphique %s est déjà initialisée.\n"
+
+msgid "Builder Failed\n"
+msgstr "Builder Failed\n"
+
+msgid "Ajout d'un matériau béton"
+msgstr "Ajout d'un matériau béton"
+
+msgid "Modification d'un matériau béton"
+msgstr "Modification d'un matériau béton"
 
 msgid "Poteau en béton"
 msgstr "Poteau en béton"
@@ -483,9 +504,6 @@ msgstr "'%s' n'est pas de la forme 'largeurxhauteur'.\n"
 msgid "Le fichier '%s' est corrompu.\n"
 msgstr "Le fichier '%s' est corrompu.\n"
 
-msgid "La fenêtre graphique %s n'est pas initialisée.\n"
-msgstr "La fenêtre graphique %s n'est pas initialisée.\n"
-
 msgid "Type de charge %d inconnu."
 msgstr "Type de charge %d inconnu."
 
@@ -632,12 +650,6 @@ msgstr "Action n° %u, description '%s', type n°%d\n"
 
 msgid "Aucune barre existante.\n"
 msgstr "Aucune barre existante.\n"
-
-msgid "La fenêtre graphique %s est déjà initialisée.\n"
-msgstr "La fenêtre graphique %s est déjà initialisée.\n"
-
-msgid "Builder Failed\n"
-msgstr "Builder Failed\n"
 
 msgid "Élément %u du groupe %u introuvable.\n"
 msgstr "Élément %u du groupe %u introuvable.\n"

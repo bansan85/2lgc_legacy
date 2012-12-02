@@ -24,7 +24,7 @@
             <object class="GtkMenuItem" id="EF_materiaux_ajouter_beton">
                 <property name="label" translatable="yes">Béton</property>
                 <property name="visible">True</property>
-                <signal name="activate" handler="EF_gtk_materiaux_ajout_beton"/>
+                <signal name="activate" handler="_1992_1_1_gtk_materiaux_ajout"/>
             </object>
         </child>
     </object>
