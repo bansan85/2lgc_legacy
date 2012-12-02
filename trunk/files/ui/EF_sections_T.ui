@@ -10,7 +10,7 @@
             </object>
         </child>
         <child type="tag">
-            <object class="GtkTextTag" id="EF_section_T_tag2_ok">
+            <object class="GtkTextTag" id="EF_section_T_tag_ok">
                 <property name="name">OK</property>
                 <property name="foreground">black</property>
                 <property name="weight">400</property>
@@ -51,8 +51,8 @@
                 <property name="column-spacing">12</property>
                 <property name="row-spacing">12</property>
                 <child>
-                    <object class="GtkLabel" id="EF_section_T_label_description">
-                        <property name="label" translatable="yes">Description :</property>
+                    <object class="GtkLabel" id="EF_section_T_label_nom">
+                        <property name="label" translatable="yes">Nom :</property>
                         <property name="visible">True</property>
                     </object>
                     <packing>
@@ -61,14 +61,14 @@
                     </packing>
                 </child>
                 <child>
-                    <object class="GtkScrolledWindow" id="EF_section_T_scrolledwindow_description">
+                    <object class="GtkScrolledWindow" id="EF_section_T_scrolledwindow_nom">
                         <property name="visible">True</property>
                         <property name="expand">True</property>
                         <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
                         <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
                         <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
                         <child>
-                            <object class="GtkTextView" id="EF_section_T_textview_description">
+                            <object class="GtkTextView" id="EF_section_T_textview_nom">
                                 <property name="visible">True</property>
                                 <property name="accepts-tab">False</property>
                                 <property name="wrap-mode">GTK_WRAP_WORD</property>

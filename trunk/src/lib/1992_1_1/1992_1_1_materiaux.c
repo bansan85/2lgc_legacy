@@ -348,6 +348,36 @@ G_MODULE_EXPORT double _1992_1_1_materiaux_gnu(double fck, double nu)
 }
 
 
+G_MODULE_EXPORT gboolean _1992_1_1_materiaux_update_ligne_treeview(Projet *projet,
+  Beton_Materiau *materiau)
+/* Description : Met à jour les données dans le treeview de la fenêtre matériau.
+ * Paramètres : Projet *projet : la variable projet,
+ *            : Beton_Materiau *materiau : le matériau à mettre à jour.
+ * Valeur renvoyée :
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL,
+ *             section == NULL,
+ *             fenetre matériau non initialisée.
+ */
+{
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(materiau, FALSE, gettext("Paramètre %s incorrect.\n"), "materiau");
+    
+    if (projet->list_gtk.ef_materiaux.builder != NULL)
+    {
+        char        *description;
+        
+        BUG(description = _1992_1_1_materiaux_get_description(materiau), FALSE);
+        
+        gtk_tree_store_set(projet->list_gtk.ef_materiaux.materiaux, &materiau->Iter_fenetre, 0, materiau->nom, 1, gettext("Béton"), 2, description, -1);
+        free(description);
+    }
+    
+    return TRUE;
+}
+
+
 G_MODULE_EXPORT gboolean _1992_1_1_materiaux_ajout(Projet *projet, const char *nom, double fck)
 /* Description : Ajoute un matériau en béton et calcule ses caractéristiques mécaniques.
  *               Les propriétés du béton sont déterminées conformément au tableau 3.1 de
@@ -399,8 +429,14 @@ G_MODULE_EXPORT gboolean _1992_1_1_materiaux_ajout(Projet *projet, const char *n
     gtk_list_store_set(projet->list_gtk.ef_materiaux.liste_materiaux, &materiau_nouveau->Iter_liste, 0, nom, -1);
     if (projet->list_gtk.ef_materiaux.builder != NULL)
     {
+        char        *description;
+        
+        BUG(description = _1992_1_1_materiaux_get_description(materiau_nouveau), FALSE);
+        
         gtk_tree_store_append(projet->list_gtk.ef_materiaux.materiaux, &materiau_nouveau->Iter_fenetre, NULL);
-        gtk_tree_store_set(projet->list_gtk.ef_materiaux.materiaux, &materiau_nouveau->Iter_fenetre, 0, materiau_nouveau->nom, -1);
+        gtk_tree_store_set(projet->list_gtk.ef_materiaux.materiaux, &materiau_nouveau->Iter_fenetre, 0, materiau_nouveau->nom, 1, gettext("Béton"), 2, description, -1);
+        
+        free(description);
     }
 #endif
     

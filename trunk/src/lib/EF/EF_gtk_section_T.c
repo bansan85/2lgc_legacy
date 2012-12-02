@@ -153,7 +153,7 @@ gboolean EF_gtk_section_T_recupere_donnees(Projet *projet, double *lt, double *h
     }
     
     // Si tous les paramètres sont corrects
-    textbuffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk.ef_sections_T.builder, "EF_section_T_textview_description")));
+    textbuffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk.ef_sections_T.builder, "EF_section_T_textview_nom")));
     
     gtk_text_buffer_get_iter_at_offset(textbuffer, &start, 0);
     gtk_text_buffer_get_iter_at_offset(textbuffer, &end, -1);
@@ -288,7 +288,7 @@ G_MODULE_EXPORT gboolean EF_gtk_section_T(Projet *projet, EF_Section *section)
         BUGMSG(ef_gtk->section->type == SECTION_T, FALSE, gettext("La section à modifier n'est pas en T.\n"));
         data = ef_gtk->section->data;
         
-        gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(ef_gtk->builder, "EF_section_T_textview_description"))), ef_gtk->section->nom, -1);
+        gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(ef_gtk->builder, "EF_section_T_textview_nom"))), ef_gtk->section->nom, -1);
         common_math_double_to_char(data->largeur_table, tmp, DECIMAL_DISTANCE);
         gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder, "EF_section_T_buffer_lt")), tmp, -1);
         common_math_double_to_char(data->hauteur_table, tmp, DECIMAL_DISTANCE);

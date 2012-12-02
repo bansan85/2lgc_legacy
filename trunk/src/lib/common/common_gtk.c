@@ -34,10 +34,10 @@ G_MODULE_EXPORT double gtk_common_text_buffer_double(GtkTextBuffer *textbuffer, 
  *               compris entre les valeurs val_min et val_max.
  *               S'il ne contient pas de nombre ou hors domaine, le texte passe en rouge.
  * Paramètres : GtkTextBuffer *textbuffer : composant à l'origine de l'évènement,
- *            : double val_min : 
- *            : gboolean min_include : 
- *            : double val_max : 
- *            : gboolean max_include : 
+ *            : double val_min : borne inférieure,
+ *            : gboolean min_include : le nombre de la borne inférieure est-il autorisé ?,
+ *            : double val_max : borne supérieure
+ *            : gboolean max_include : le nombre de la borne supérieure est-il autorisé ?.
  * Valeur renvoyée :
  *   Succès : la valeur du nombre,
  *   Echec : NAN.
@@ -108,6 +108,21 @@ G_MODULE_EXPORT void gtk_common_text_buffer_double_sup0_inf(GtkTextBuffer *textb
  */
 {
     gtk_common_text_buffer_double(textbuffer, 0., FALSE, INFINITY, FALSE);
+    
+    return;
+}
+
+
+G_MODULE_EXPORT void gtk_common_text_buffer_double_sup0_90(GtkTextBuffer *textbuffer, 
+  gpointer user_data __attribute__((unused)))
+/* Description : Vérifie en temps réel si le GtkTextBuffer contient bien un nombre flottant.
+ *               Les bornes : strictement supérieur à 0 jusqu'à 90 maximum.
+ * Paramètres : GtkTextBuffer *textbuffer : composant à vérifier.
+ *            : gpointer user_data : ne sert à rien.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    gtk_common_text_buffer_double(textbuffer, 0., FALSE, 90., TRUE);
     
     return;
 }

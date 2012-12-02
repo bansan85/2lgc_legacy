@@ -462,6 +462,15 @@ typedef struct __Gtk_EF_Sections_Circulaire
     
     EF_Section      *section;
 } Gtk_EF_Sections_Circulaire;
+
+
+typedef struct __Gtk_1992_1_1_Materiaux
+{
+    GtkBuilder      *builder;
+    GtkWidget       *window;
+    
+    Beton_Materiau  *materiau;
+} Gtk_1992_1_1_Materiaux;
 #endif
 
 typedef struct __Beton_Barre
@@ -740,6 +749,7 @@ typedef struct __List_Gtk
     Gtk_EF_Sections_Carree  ef_sections_carree;
     Gtk_EF_Sections_Circulaire  ef_sections_circulaire;
     Gtk_EF_Materiaux    ef_materiaux;
+    Gtk_1992_1_1_Materiaux  _1992_1_1_materiaux;
     Comp_Gtk            comp;      // tous les composants grahpiques
 } List_Gtk;
 #endif
