@@ -134,7 +134,7 @@
                                     <object class="GtkTreeViewColumn" id="EF_sections_treeview_column3">
                                         <property name="visible">True</property>
                                         <property name="resizable">True</property>
-                                        <property name="title" translatable="yes">J [m4]</property>
+                                        <property name="title" translatable="yes">J [m⁴]</property>
                                         <child>
                                             <object class="GtkCellRendererText" id="EF_sections_treeview_cell3" />
                                             <attributes>
@@ -147,7 +147,7 @@
                                     <object class="GtkTreeViewColumn" id="EF_sections_treeview_column4">
                                         <property name="visible">True</property>
                                         <property name="resizable">True</property>
-                                        <property name="title" translatable="yes">Iy [m4]</property>
+                                        <property name="title" translatable="yes">Iy [m⁴]</property>
                                         <child>
                                             <object class="GtkCellRendererText" id="EF_sections_treeview_cell4" />
                                             <attributes>
@@ -160,7 +160,7 @@
                                     <object class="GtkTreeViewColumn" id="EF_sections_treeview_column5">
                                         <property name="visible">True</property>
                                         <property name="resizable">True</property>
-                                        <property name="title" translatable="yes">Iz [m4]</property>
+                                        <property name="title" translatable="yes">Iz [m⁴]</property>
                                         <child>
                                             <object class="GtkCellRendererText" id="EF_sections_treeview_cell5" />
                                             <attributes>
@@ -173,7 +173,7 @@
                                     <object class="GtkTreeViewColumn" id="EF_sections_treeview_column6">
                                         <property name="visible">True</property>
                                         <property name="resizable">True</property>
-                                        <property name="title" translatable="yes">S [m2]</property>
+                                        <property name="title" translatable="yes">S [m²]</property>
                                         <child>
                                             <object class="GtkCellRendererText" id="EF_sections_treeview_cell6" />
                                             <attributes>

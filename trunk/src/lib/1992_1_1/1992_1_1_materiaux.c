@@ -348,6 +348,7 @@ G_MODULE_EXPORT double _1992_1_1_materiaux_gnu(double fck, double nu)
 }
 
 
+#ifdef ENABLE_GTK
 G_MODULE_EXPORT gboolean _1992_1_1_materiaux_update_ligne_treeview(Projet *projet,
   Beton_Materiau *materiau)
 /* Description : Met à jour les données dans le treeview de la fenêtre matériau.
@@ -376,6 +377,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_materiaux_update_ligne_treeview(Projet *proje
     
     return TRUE;
 }
+#endif
 
 
 G_MODULE_EXPORT gboolean _1992_1_1_materiaux_ajout(Projet *projet, const char *nom, double fck)
