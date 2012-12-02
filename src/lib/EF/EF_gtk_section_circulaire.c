@@ -111,7 +111,7 @@ gboolean EF_gtk_section_circulaire_recupere_donnees(Projet *projet, double *diam
     ef_gtk = &projet->list_gtk.ef_sections_circulaire;
     
     *diametre = gtk_common_entry_renvoie_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_sections_circulaire.builder, "EF_section_circulaire_buffer_diametre")));
-    if (isnan(*diametre))
+    if ((isnan(*diametre)) || (*diametre < ERREUR_RELATIVE_MIN))
     {
         dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("La valeur du diamètre est incorrecte."));
         gtk_dialog_run(GTK_DIALOG(dialog));
@@ -144,7 +144,8 @@ G_MODULE_EXPORT void EF_gtk_section_circulaire_ajouter_clicked(
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_sections_circulaire.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section Circulaire");
     
-    BUG(EF_gtk_section_circulaire_recupere_donnees(projet, &diametre, &texte), );
+    if (!(EF_gtk_section_circulaire_recupere_donnees(projet, &diametre, &texte)))
+        return;
     
     // Création de la nouvelle charge ponctuelle au noeud
     BUG(EF_sections_ajout_circulaire(projet, texte, diametre), );
@@ -193,7 +194,8 @@ G_MODULE_EXPORT void EF_gtk_section_circulaire_modifier_clicked(
     
     ef_gtk = &projet->list_gtk.ef_sections_circulaire;
     
-    BUG(EF_gtk_section_circulaire_recupere_donnees(projet, &diametre, &texte), );
+    if (!(EF_gtk_section_circulaire_recupere_donnees(projet, &diametre, &texte)))
+        return;
     
     free(ef_gtk->section->nom);
     ef_gtk->section->nom = texte;

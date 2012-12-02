@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2012-11-24 23:18+0100\n"
-"PO-Revision-Date: 2012-11-24 23:20+0100\n"
+"POT-Creation-Date: 2012-12-02 09:34+0100\n"
+"PO-Revision-Date: 2012-12-02 09:35+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -769,11 +769,17 @@ msgstr "Le type du noeud ou la colonne d'édition est incorrect.\n"
 msgid "Le noeud doit être de type intermédiaire.\n"
 msgstr "Le noeud doit être de type intermédiaire.\n"
 
-msgid "La valeur de la largeur est incorrecte."
-msgstr "La valeur de la largeur est incorrecte."
+msgid "La valeur de la largeur de la retombée est incorrecte."
+msgstr "La valeur de la largeur de la retombée est incorrecte."
 
-msgid "La valeur de la hauteur est incorrecte."
-msgstr "La valeur de la hauteur est incorrecte."
+msgid "La valeur de la hauteur de la retombée est incorrecte."
+msgstr "La valeur de la hauteur de la retombée est incorrecte."
+
+msgid "La valeur de la largeur de la table est incorrecte."
+msgstr "La valeur de la largeur de la table est incorrecte."
+
+msgid "La valeur de la hauteur de la table est incorrecte."
+msgstr "La valeur de la hauteur de la table est incorrecte."
 
 msgid "Ajout d'une section en T"
 msgstr "Ajout d'une section en T"
@@ -795,6 +801,12 @@ msgstr "Modification d'une section carrée"
 
 msgid "La section à modifier n'est pas carrée.\n"
 msgstr "La section à modifier n'est pas carrée.\n"
+
+msgid "La valeur de la largeur est incorrecte."
+msgstr "La valeur de la largeur est incorrecte."
+
+msgid "La valeur de la hauteur est incorrecte."
+msgstr "La valeur de la hauteur est incorrecte."
 
 msgid "Ajout d'une section rectangulaire"
 msgstr "Ajout d'une section rectangulaire"
