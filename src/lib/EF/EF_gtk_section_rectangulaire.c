@@ -211,8 +211,8 @@ G_MODULE_EXPORT void EF_gtk_section_rectangulaire_modifier_clicked(
     free(ef_gtk->section->nom);
     ef_gtk->section->nom = texte;
     data = ef_gtk->section->data;
-    data->largeur_ame = largeur;
-    data->hauteur_ame = hauteur;
+    data->largeur_retombee = largeur;
+    data->hauteur_retombee = hauteur;
     
     BUG(EF_sections_update_ligne_treeview(projet, ef_gtk->section), );
     
@@ -265,9 +265,9 @@ G_MODULE_EXPORT gboolean EF_gtk_section_rectangulaire(Projet *projet, EF_Section
         data = ef_gtk->section->data;
         
         gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(ef_gtk->builder, "EF_section_rectangulaire_textview_description"))), ef_gtk->section->nom, -1);
-        common_math_double_to_char(data->largeur_ame, tmp, DECIMAL_DISTANCE);
+        common_math_double_to_char(data->largeur_retombee, tmp, DECIMAL_DISTANCE);
         gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder, "EF_section_rectangulaire_buffer_largeur")), tmp, -1);
-        common_math_double_to_char(data->hauteur_ame, tmp, DECIMAL_DISTANCE);
+        common_math_double_to_char(data->hauteur_retombee, tmp, DECIMAL_DISTANCE);
         gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder, "EF_section_rectangulaire_buffer_hauteur")), tmp, -1);
         
         gtk_button_set_label(GTK_BUTTON(gtk_builder_get_object(ef_gtk->builder, "EF_section_rectangulaire_button_add_edit")), "gtk-edit");

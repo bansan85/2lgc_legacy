@@ -329,11 +329,11 @@ G_MODULE_EXPORT GdkPixbuf *EF_gtk_sections_dessin(EF_Section *section, unsigned 
             Section_T   *data = (Section_T *)section->data;
             
             double      lt = data->largeur_table;
-            double      la = data->largeur_ame;
+            double      lr = data->largeur_retombee;
             double      ht = data->hauteur_table;
-            double      ha = data->hauteur_ame;
+            double      hr = data->hauteur_retombee;
             
-            double      aa = MAX(lt, la)/(ht + ha);
+            double      aa = MAX(lt, lr)/(ht + hr);
             
             cairo_set_source_rgba(cr, 0.8, 0.8, 0.8, 1.);
             cairo_new_path(cr);
@@ -341,22 +341,22 @@ G_MODULE_EXPORT GdkPixbuf *EF_gtk_sections_dessin(EF_Section *section, unsigned 
             // Le schéma prend toute la largeur
             if (aa > a)
             {
-                convert = width/MAX(lt, la);
+                convert = width/MAX(lt, lr);
                 
-                cairo_move_to(cr, 1., (height/2. - (ht + ha)/2.*convert)+1);
+                cairo_move_to(cr, 1., (height/2. - (ht + hr)/2.*convert)+1);
             }
             else
             {
-                convert = height/(ht+ha);
+                convert = height/(ht+hr);
                 
                 cairo_move_to(cr, (width/2. - lt/2.*convert)+1, 1.);
             }
             cairo_rel_line_to(cr, 0., ht*convert);
-            cairo_rel_line_to(cr, (lt-la)/2.*convert, 0.);
-            cairo_rel_line_to(cr, 0., ha*convert-1);
-            cairo_rel_line_to(cr, la*convert, 0.);
-            cairo_rel_line_to(cr, 0., -ha*convert+1);
-            cairo_rel_line_to(cr, (lt-la)/2.*convert-1, 0.);
+            cairo_rel_line_to(cr, (lt-lr)/2.*convert, 0.);
+            cairo_rel_line_to(cr, 0., hr*convert-1);
+            cairo_rel_line_to(cr, lr*convert, 0.);
+            cairo_rel_line_to(cr, 0., -hr*convert+1);
+            cairo_rel_line_to(cr, (lt-lr)/2.*convert-1, 0.);
             cairo_rel_line_to(cr, 0., -ht*convert);
             cairo_close_path(cr);
             save_path = cairo_copy_path(cr);

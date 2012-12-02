@@ -29,7 +29,7 @@ gboolean EF_sections_update_ligne_treeview(Projet *projet, EF_Section *section) 
 #endif
 
 gboolean EF_sections_ajout_rectangulaire(Projet *projet, const char* nom, double l, double h) __attribute__((__warn_unused_result__));
-gboolean EF_sections_ajout_T(Projet *projet, const char* nom, double lt, double la, double ht, double ha) __attribute__((__warn_unused_result__));
+gboolean EF_sections_ajout_T(Projet *projet, const char* nom, double lt, double lr, double ht, double hr) __attribute__((__warn_unused_result__));
 gboolean EF_sections_ajout_carre(Projet *projet, const char* nom, double cote) __attribute__((__warn_unused_result__));
 gboolean EF_sections_ajout_circulaire(Projet *projet, const char* nom, double diametre) __attribute__((__warn_unused_result__));
 

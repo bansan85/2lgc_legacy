@@ -361,20 +361,20 @@ G_MODULE_EXPORT void* m3d_barre(void *donnees_m3d, Beton_Barre *barre)
             CM3dObject  *bas, *haut, *gauche, *droite;
             Section_T   *section = (Section_T *)barre->section->data;
             
-            droite = M3d_plan_new("", longueur, section->hauteur_ame, 1);
+            droite = M3d_plan_new("", longueur, section->hauteur_retombee, 1);
             droite->rotations(180., 0., 0.);
-            droite->set_position(0., -section->largeur_ame/2., 0.);
+            droite->set_position(0., -section->largeur_retombee/2., 0.);
             
-            gauche = M3d_plan_new("", longueur, section->hauteur_ame, 1);
-            gauche->set_position(0., section->largeur_ame/2., 0.);
+            gauche = M3d_plan_new("", longueur, section->hauteur_retombee, 1);
+            gauche->set_position(0., section->largeur_retombee/2., 0.);
             
-            bas = M3d_plan_new("", longueur, section->largeur_ame, 1);
+            bas = M3d_plan_new("", longueur, section->largeur_retombee, 1);
             bas->rotations(90., 180., 0.);
-            bas->set_position(0., 0., -section->hauteur_ame/2.);
+            bas->set_position(0., 0., -section->hauteur_retombee/2.);
             
-            haut = M3d_plan_new("", longueur, section->largeur_ame, 1);
+            haut = M3d_plan_new("", longueur, section->largeur_retombee, 1);
             haut->rotations(90., 0., 0.);
-            haut->set_position(0., 0., section->hauteur_ame/2.);
+            haut->set_position(0., 0., section->hauteur_retombee/2.);
             
             tout = M3d_object_new_group(tmp, droite, gauche, bas, haut, NULL);
             
@@ -424,49 +424,49 @@ G_MODULE_EXPORT void* m3d_barre(void *donnees_m3d, Beton_Barre *barre)
             
             double  y, z;
             double  lt = section->largeur_table;
-            double  la = section->largeur_ame;
+            double  lr = section->largeur_retombee;
             double  ht = section->hauteur_table;
-            double  ha = section->hauteur_ame;
-            double  cdgh = (lt*ht*ht/2.+la*ha*(ht+ha/2.))/(lt*ht+la*ha);
-            double  cdgb = (ht+ha)-cdgh;
+            double  hr = section->hauteur_retombee;
+            double  cdgh = (lt*ht*ht/2.+lr*hr*(ht+hr/2.))/(lt*ht+lr*hr);
+            double  cdgb = (ht+hr)-cdgh;
             
-            CM3dObject  *ame_inf, *ame_droite, *ame_gauche, *dalle_bas_droite, *dalle_bas_gauche, *dalle_droite, *dalle_gauche, *dalle_sup;
+            CM3dObject  *retombee_inf, *retombee_droite, *retombee_gauche, *dalle_bas_droite, *dalle_bas_gauche, *dalle_droite, *dalle_gauche, *dalle_sup;
             
-            ame_inf = M3d_plan_new("", longueur, la, 1);
-            ame_inf->rotations(90., 180., 0.);
-            ame_inf->set_position(0., 0., -cdgb);
+            retombee_inf = M3d_plan_new("", longueur, lr, 1);
+            retombee_inf->rotations(90., 180., 0.);
+            retombee_inf->set_position(0., 0., -cdgb);
             
-            ame_droite = M3d_plan_new("", longueur, ha, 1);
-            ame_droite->rotations(180., 0., 0.);
-            ame_droite->set_position(0., -la/2., -cdgb+ha/2.);
+            retombee_droite = M3d_plan_new("", longueur, hr, 1);
+            retombee_droite->rotations(180., 0., 0.);
+            retombee_droite->set_position(0., -lr/2., -cdgb+hr/2.);
             
-            ame_gauche = M3d_plan_new("", longueur, ha, 1);
-            ame_gauche->set_position(0., la/2., -cdgb+ha/2.);
+            retombee_gauche = M3d_plan_new("", longueur, hr, 1);
+            retombee_gauche->set_position(0., lr/2., -cdgb+hr/2.);
             
-            dalle_bas_gauche = M3d_plan_new("", longueur, (lt-la)/2., 1);
+            dalle_bas_gauche = M3d_plan_new("", longueur, (lt-lr)/2., 1);
             dalle_bas_gauche->rotations(90., 0., 0.);
-            dalle_bas_gauche->set_position(0., la/2.+(lt-la)/4., -cdgb+ha);
+            dalle_bas_gauche->set_position(0., lr/2.+(lt-lr)/4., -cdgb+hr);
             
-            dalle_bas_droite = M3d_plan_new("", longueur, (lt-la)/2., 1);
+            dalle_bas_droite = M3d_plan_new("", longueur, (lt-lr)/2., 1);
             dalle_bas_droite->rotations(90., 180., 0.);
-            dalle_bas_droite->set_position(0., -la/2.-(lt-la)/4., -cdgb+ha);
+            dalle_bas_droite->set_position(0., -lr/2.-(lt-lr)/4., -cdgb+hr);
             
             dalle_droite = M3d_plan_new("", longueur, ht, 1);
             dalle_droite->rotations(180., 0., 0.);
-            dalle_droite->set_position(0., -lt/2., -cdgb+ha+ht/2.);
+            dalle_droite->set_position(0., -lt/2., -cdgb+hr+ht/2.);
             
             dalle_gauche = M3d_plan_new("", longueur, ht, 1);
-            dalle_gauche->set_position(0., lt/2., -cdgb+ha+ht/2.);
+            dalle_gauche->set_position(0., lt/2., -cdgb+hr+ht/2.);
             
             dalle_sup = M3d_plan_new("", longueur, lt, 1);
             dalle_sup->rotations(90., 0., 0.);
-            dalle_sup->set_position(0., 0, -cdgb+ha+ht);
+            dalle_sup->set_position(0., 0, -cdgb+hr+ht);
             
-            tout = M3d_object_new_group(tmp, ame_inf, ame_droite, ame_gauche, dalle_bas_droite, dalle_bas_gauche, dalle_droite, dalle_gauche, dalle_sup, NULL);
+            tout = M3d_object_new_group(tmp, retombee_inf, retombee_droite, retombee_gauche, dalle_bas_droite, dalle_bas_gauche, dalle_droite, dalle_gauche, dalle_sup, NULL);
             
-            delete ame_inf;
-            delete ame_droite;
-            delete ame_gauche;
+            delete retombee_inf;
+            delete retombee_droite;
+            delete retombee_gauche;
             delete dalle_bas_droite;
             delete dalle_bas_gauche;
             delete dalle_droite;

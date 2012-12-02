@@ -124,8 +124,8 @@ G_MODULE_EXPORT gboolean EF_sections_ajout_rectangulaire(Projet *projet, const c
     // Trivial
     section_nouvelle->type = SECTION_RECTANGULAIRE;
     BUGMSG(section_nouvelle->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-    section_data->largeur_ame = l;
-    section_data->hauteur_ame = h;
+    section_data->largeur_retombee = l;
+    section_data->hauteur_retombee = h;
     section_data->largeur_table = 0.;
     section_data->hauteur_table = 0.;
     
@@ -142,13 +142,13 @@ G_MODULE_EXPORT gboolean EF_sections_ajout_rectangulaire(Projet *projet, const c
 
 
 G_MODULE_EXPORT gboolean EF_sections_ajout_T(Projet *projet, const char* nom, double lt,
-  double la, double ht, double ha)
+  double lr, double ht, double hr)
 /* Description : Ajouter une nouvelle section en T à la liste des sections en béton.
  * Paramètres : Projet *projet : la variable projet,
  *            : double lt : la largeur de la table,
- *            : double la : la largeur de l'âme,
+ *            : double lr : la largeur de la retombée,
  *            : double ht : la hauteur de la table,
- *            : double ha : la hauteur de l'âme.
+ *            : double hr : la hauteur de la retombée.
  * Valeur renvoyée :
  *   Succès : TRUE
  *   Échec : FALSE :
@@ -173,9 +173,9 @@ G_MODULE_EXPORT gboolean EF_sections_ajout_T(Projet *projet, const char* nom, do
     section_nouvelle->type = SECTION_T;
     BUGMSG(section_nouvelle->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
     section_data->largeur_table = lt;
-    section_data->largeur_ame = la;
+    section_data->largeur_retombee = lr;
     section_data->hauteur_table = ht;
-    section_data->hauteur_ame = ha;
+    section_data->hauteur_retombee = hr;
     
     projet->beton.sections = g_list_append(projet->beton.sections, section_nouvelle);
     
@@ -327,22 +327,22 @@ G_MODULE_EXPORT char* EF_sections_get_description(EF_Section *sect)
             char        larg[30], haut[30];
             Section_T   *section = sect->data;
             
-            common_math_double_to_char(section->largeur_ame, larg, DECIMAL_DISTANCE);
-            common_math_double_to_char(section->hauteur_ame, haut, DECIMAL_DISTANCE);
+            common_math_double_to_char(section->largeur_retombee, larg, DECIMAL_DISTANCE);
+            common_math_double_to_char(section->hauteur_retombee, haut, DECIMAL_DISTANCE);
             BUGMSG(description = g_strdup_printf("%s : %s m, %s : %s m", gettext("Largeur"), larg, gettext("Hauteur"), haut), NULL, gettext("Erreur d'allocation mémoire.\n"));
             
             return description;
         }
         case SECTION_T :
         {
-            char    larg_t[30], haut_t[30], larg_a[30], haut_a[30];
+            char    larg_t[30], haut_t[30], larg_r[30], haut_r[30];
             Section_T *section = sect->data;
             
             common_math_double_to_char(section->largeur_table, larg_t, DECIMAL_DISTANCE);
-            common_math_double_to_char(section->largeur_ame, larg_a, DECIMAL_DISTANCE);
+            common_math_double_to_char(section->largeur_retombee, larg_r, DECIMAL_DISTANCE);
             common_math_double_to_char(section->hauteur_table, haut_t, DECIMAL_DISTANCE);
-            common_math_double_to_char(section->hauteur_ame, haut_a, DECIMAL_DISTANCE);
-            BUGMSG(description = g_strdup_printf("%s : %s m, %s : %s m, %s : %s m, %s : %s m", gettext("Largeur table"), larg_t, gettext("Hauteur table"), haut_t, gettext("Largeur âme"), larg_a, gettext("Hauteur âme"), haut_a), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            common_math_double_to_char(section->hauteur_retombee, haut_r, DECIMAL_DISTANCE);
+            BUGMSG(description = g_strdup_printf("%s : %s m, %s : %s m, %s : %s m, %s : %s m", gettext("Largeur table"), larg_t, gettext("Hauteur table"), haut_t, gettext("Largeur retombée"), larg_r, gettext("Hauteur retombée"), haut_r), NULL, gettext("Erreur d'allocation mémoire.\n"));
             
             return description;
         }
@@ -546,27 +546,27 @@ G_MODULE_EXPORT double EF_sections_j(EF_Section* sect)
         {
             Section_T *section = sect->data;
             double      lt = section->largeur_table;
-            double      la = section->largeur_ame;
+            double      lr = section->largeur_retombee;
             double      ht = section->hauteur_table;
-            double      ha = section->hauteur_ame;
+            double      hr = section->hauteur_retombee;
             double      a, b, aa, bb;
             
             if (lt > ht)
                 { a = lt; b = ht; }
             else
                 { a = ht; b = lt; }
-            if (la > ha)
-                { aa = la; bb = ha; }
+            if (lr > hr)
+                { aa = lr; bb = hr; }
             else
-                { aa = ha; bb = la; }
+                { aa = hr; bb = lr; }
             if (sect->type == SECTION_RECTANGULAIRE)
                 return aa*bb*bb*bb/16.*(16./3.-3.364*bb/aa*(1.-bb*bb*bb*bb/(12.*aa*aa*aa*aa)));
             else
                 return a*b*b*b/16.*(16./3.-3.364*b/a*(1.-b*b*b*b/(12.*a*a*a*a)))+aa*bb*bb*bb/16.*(16./3.-3.364*bb/aa*(1-bb*bb*bb*bb/(12.*aa*aa*aa*aa)));
             
-    // Pour une section en T de section constante (lt : largeur de la table, la : largeur de
-    //   l'âme, ht : hauteur de la table, ha : hauteur de l'âme), J vaut :\end{verbatim}\begin{displaymath}
-    // J = \frac{a \cdot b^3}{16} \left[\frac{16}{3}-3.364 \frac{b}{a} \left(1-\frac{b^4}{12 a^4}\right)\right]+\frac{aa \cdot bb^3}{16} \left[\frac{16}{3}-3.364 \frac{bb}{aa} \left(1-\frac{bb^4}{12 aa^4}\right)\right]\texttt{ avec }\substack{a=max(h_t,l_t)\\b=min(h_t,l_t)\\aa=max(h_a,l_a)\\bb=min(h_a,l_a)}\end{displaymath}\begin{verbatim}
+    // Pour une section en T de section constante (lt : largeur de la table, lr : largeur de
+    //   la retombée, ht : hauteur de la table, hr : hauteur de la retombée), J vaut :\end{verbatim}\begin{displaymath}
+    // J = \frac{a \cdot b^3}{16} \left[\frac{16}{3}-3.364 \frac{b}{a} \left(1-\frac{b^4}{12 a^4}\right)\right]+\frac{aa \cdot bb^3}{16} \left[\frac{16}{3}-3.364 \frac{bb}{aa} \left(1-\frac{bb^4}{12 aa^4}\right)\right]\texttt{ avec }\substack{a=max(h_t,l_t)\\b=min(h_t,l_t)\\aa=max(h_r,l_r)\\bb=min(h_r,l_r)}\end{displaymath}\begin{verbatim}
             break;
         }
         case SECTION_CARREE :
@@ -614,17 +614,17 @@ G_MODULE_EXPORT double EF_sections_iy(EF_Section* sect)
         {
             Section_T *section = sect->data;
             double      lt = section->largeur_table;
-            double      la = section->largeur_ame;
+            double      lr = section->largeur_retombee;
             double      ht = section->hauteur_table;
-            double      ha = section->hauteur_ame;
-    // Pour une section en T de section constante (lt : largeur de la table, la : largeur de
-    //   l'âme, ht : hauteur de la table, ha : hauteur de l'âme), Iy vaut :\end{verbatim}\begin{displaymath}
-    // I_y = \frac{l_t \cdot h_t^3}{12}+\frac{l_a \cdot h_a^3}{12}+l_t \cdot h_t \cdot \left(\frac{h_t}{2}-cdg_h \right)^2+l_a \cdot h_a \cdot \left(\frac{h_a}{2}-cdg_b \right)^2 \texttt{, }\end{displaymath}\begin{displaymath}
-    // cdg_h = \frac{\frac{l_t \cdot h_t^2}{2}+l_a \cdot h_a \cdot \left(h_t+\frac{h_a}{2} \right)}{S}  \texttt{, } cdg_b = h_t+h_a-cdg_h \texttt{ et } S = l_t \cdot h_t+l_a \cdot h_a \end{displaymath}\begin{verbatim}
-            double      S = lt*ht+la*ha;
-            double      cdgh = (lt*ht*ht/2.+la*ha*(ht+ha/2.))/S;
-            double      cdgb = (ht+ha)-cdgh;
-            return lt*ht*ht*ht/12.+la*ha*ha*ha/12.+lt*ht*(ht/2.-cdgh)*(ht/2.-cdgh)+la*ha*(ha/2.-cdgb)*(ha/2.-cdgb);
+            double      hr = section->hauteur_retombee;
+    // Pour une section en T de section constante (lt : largeur de la table, lr : largeur de
+    //   la retombée, ht : hauteur de la table, hr : hauteur de la retombée), Iy vaut :\end{verbatim}\begin{displaymath}
+    // I_y = \frac{l_t \cdot h_t^3}{12}+\frac{l_r \cdot h_r^3}{12}+l_t \cdot h_t \cdot \left(\frac{h_t}{2}-cdg_h \right)^2+l_r \cdot h_r \cdot \left(\frac{h_r}{2}-cdg_b \right)^2 \texttt{, }\end{displaymath}\begin{displaymath}
+    // cdg_h = \frac{\frac{l_t \cdot h_t^2}{2}+l_r \cdot h_r \cdot \left(h_t+\frac{h_r}{2} \right)}{S}  \texttt{, } cdg_b = h_t+h_r-cdg_h \texttt{ et } S = l_t \cdot h_t+l_r \cdot h_r \end{displaymath}\begin{verbatim}
+            double      S = lt*ht+lr*hr;
+            double      cdgh = (lt*ht*ht/2.+lr*hr*(ht+hr/2.))/S;
+            double      cdgb = (ht+hr)-cdgh;
+            return lt*ht*ht*ht/12.+lr*hr*hr*hr/12.+lt*ht*(ht/2.-cdgh)*(ht/2.-cdgh)+lr*hr*(hr/2.-cdgb)*(hr/2.-cdgb);
             
             break;
         }
@@ -673,13 +673,13 @@ G_MODULE_EXPORT double EF_sections_iz(EF_Section* sect)
         {
             Section_T *section = sect->data;
             double      lt = section->largeur_table;
-            double      la = section->largeur_ame;
+            double      lr = section->largeur_retombee;
             double      ht = section->hauteur_table;
-            double      ha = section->hauteur_ame;
-    // Pour une section en T de section constante (lt : largeur de la table, la : largeur de
-    //   l'âme, ht : hauteur de la table, ha : hauteur de l'âme), I vaut :\end{verbatim}\begin{displaymath}
-    // I = \frac{h_t \cdot l_t^3}{12}+\frac{h_a \cdot l_a^3}{12}\end{displaymath}\begin{verbatim}
-            return ht*lt*lt*lt/12.+ha*la*la*la/12.;
+            double      hr = section->hauteur_retombee;
+    // Pour une section en T de section constante (lt : largeur de la table, lr : largeur de
+    //   la retombée, ht : hauteur de la table, hr : hauteur de la retombée), I vaut :\end{verbatim}\begin{displaymath}
+    // I = \frac{h_t \cdot l_t^3}{12}+\frac{h_r \cdot l_r^3}{12}\end{displaymath}\begin{verbatim}
+            return ht*lt*lt*lt/12.+hr*lr*lr*lr/12.;
             break;
         }
         case SECTION_CARREE :
@@ -727,7 +727,7 @@ G_MODULE_EXPORT double EF_sections_vy(EF_Section* sect)
         {
             Section_T *section = sect->data;
             
-            return MAX(section->largeur_table, section->largeur_ame)/2.;
+            return MAX(section->largeur_table, section->largeur_retombee)/2.;
             
             break;
         }
@@ -776,7 +776,7 @@ G_MODULE_EXPORT double EF_sections_vyp(EF_Section* sect)
         {
             Section_T *section = sect->data;
             
-            return MAX(section->largeur_table, section->largeur_ame)/2.;
+            return MAX(section->largeur_table, section->largeur_retombee)/2.;
             
             break;
         }
@@ -825,7 +825,7 @@ G_MODULE_EXPORT double EF_sections_vz(EF_Section* sect)
         {
             Section_T *section = sect->data;
             
-            return (section->largeur_table*section->hauteur_table*section->hauteur_table/2.+section->largeur_ame*section->hauteur_ame*(section->hauteur_ame/2.+section->hauteur_table))/EF_sections_s(sect);
+            return (section->largeur_table*section->hauteur_table*section->hauteur_table/2.+section->largeur_retombee*section->hauteur_retombee*(section->hauteur_retombee/2.+section->hauteur_table))/EF_sections_s(sect);
             
             break;
         }
@@ -874,7 +874,7 @@ G_MODULE_EXPORT double EF_sections_vzp(EF_Section* sect)
         {
             Section_T *section = sect->data;
             
-            return (section->largeur_table*section->hauteur_table*(section->hauteur_ame+section->hauteur_table/2.)+section->largeur_ame*section->hauteur_ame*(section->hauteur_ame/2.))/EF_sections_s(sect);
+            return (section->largeur_table*section->hauteur_table*(section->hauteur_retombee+section->hauteur_table/2.)+section->largeur_retombee*section->hauteur_retombee*(section->hauteur_retombee/2.))/EF_sections_s(sect);
             
             break;
         }
@@ -1251,11 +1251,11 @@ G_MODULE_EXPORT double EF_sections_s(EF_Section *sect)
         case SECTION_T :
         {
             Section_T *section = sect->data;
-            return section->hauteur_table*section->largeur_table+section->hauteur_ame*section->largeur_ame;
+            return section->hauteur_table*section->largeur_table+section->hauteur_retombee*section->largeur_retombee;
             
-    // Pour une section en T de section constante (lt : largeur de la table, la : largeur de
-    //   l'âme, ht : hauteur de la table, ha : hauteur de l'âme), S vaut :\end{verbatim}\begin{displaymath}
-    // S = h_t \cdot l_t+h_a \cdot l_a\end{displaymath}\begin{verbatim}
+    // Pour une section en T de section constante (lt : largeur de la table, lr : largeur de
+    //   la retombée, ht : hauteur de la table, hr : hauteur de la retombée), S vaut :\end{verbatim}\begin{displaymath}
+    // S = h_t \cdot l_t+h_r \cdot l_r\end{displaymath}\begin{verbatim}
             break;
         }
         case SECTION_CARREE :
@@ -1318,14 +1318,14 @@ G_MODULE_EXPORT double EF_sections_es_l(Beton_Barre *barre, unsigned int discret
         {
             Section_T *section = barre->section->data;
             double      lt = section->largeur_table;
-            double      la = section->largeur_ame;
+            double      lr = section->largeur_retombee;
             double      ht = section->hauteur_table;
-            double      ha = section->hauteur_ame;
-            double      S = ht*lt+ha*la;
+            double      hr = section->hauteur_retombee;
+            double      S = ht*lt+hr*lr;
             
-    // Pour une section en T de section constante (lt : largeur de la table, la : largeur de
-    //   l'âme, ht : hauteur de la table, ha : hauteur de l'âme), ES/L vaut :\end{verbatim}\begin{displaymath}
-    // \frac{E \cdot S}{L} = \frac{E \cdot (h_t \cdot l_t+h_a \cdot l_a)}{L}\end{displaymath}\begin{verbatim}
+    // Pour une section en T de section constante (lt : largeur de la table, lr : largeur de
+    //   la retombée, ht : hauteur de la table, hr : hauteur de la retombée), ES/L vaut :\end{verbatim}\begin{displaymath}
+    // \frac{E \cdot S}{L} = \frac{E \cdot (h_t \cdot l_t+h_r \cdot l_r)}{L}\end{displaymath}\begin{verbatim}
             return E*S/(f-d);
             break;
         }
@@ -1400,9 +1400,9 @@ G_MODULE_EXPORT double EF_sections_gj_l(Beton_Barre *barre, unsigned int discret
         {
             Section_T *section = barre->section->data;
             double      lt = section->largeur_table;
-            double      la = section->largeur_ame;
+            double      lr = section->largeur_retombee;
             double      ht = section->hauteur_table;
-            double      ha = section->hauteur_ame;
+            double      hr = section->hauteur_retombee;
             double      a, b, aa, bb;
             double      J;
             
@@ -1410,18 +1410,18 @@ G_MODULE_EXPORT double EF_sections_gj_l(Beton_Barre *barre, unsigned int discret
                 { a = lt; b = ht; }
             else
                 { a = ht; b = lt; }
-            if (la > ha)
-                { aa = la; bb = ha; }
+            if (lr > hr)
+                { aa = lr; bb = hr; }
             else
-                { aa = ha; bb = la; }
+                { aa = hr; bb = lr; }
             if (barre->section->type == SECTION_RECTANGULAIRE)
                 J = aa*bb*bb*bb/16.*(16./3.-3.364*bb/aa*(1-bb*bb*bb*bb/(12.*aa*aa*aa*aa)));
             else
                 J = a*b*b*b/16.*(16./3.-3.364*b/a*(1.-b*b*b*b/(12.*a*a*a*a)))+aa*bb*bb*bb/16.*(16./3.-3.364*bb/aa*(1-bb*bb*bb*bb/(12.*aa*aa*aa*aa)));
             
-    // Pour une section en T de section constante (lt : largeur de la table, la : largeur de
-    //   l'âme, ht : hauteur de la table, ha : hauteur de l'âme), GJ/L vaut :\end{verbatim}\begin{displaymath}
-    // \frac{G \cdot J}{L} \texttt{ avec } J = \frac{a \cdot b^3}{16} \left[\frac{16}{3}-3.364 \frac{b}{a} \left(1-\frac{b^4}{12 a^4}\right)\right]+\frac{aa \cdot bb^3}{16} \left[\frac{16}{3}-3.364 \frac{bb}{aa} \left(1-\frac{bb^4}{12 aa^4}\right)\right]\texttt{ avec }\substack{a=max(h_t,l_t)\\b=min(h_t,l_t)\\aa=max(h_a,l_a)\\bb=min(h_a,l_a)}\end{displaymath}\begin{verbatim}
+    // Pour une section en T de section constante (lt : largeur de la table, lr : largeur de
+    //   la retombée, ht : hauteur de la table, hr : hauteur de la retombée), GJ/L vaut :\end{verbatim}\begin{displaymath}
+    // \frac{G \cdot J}{L} \texttt{ avec } J = \frac{a \cdot b^3}{16} \left[\frac{16}{3}-3.364 \frac{b}{a} \left(1-\frac{b^4}{12 a^4}\right)\right]+\frac{aa \cdot bb^3}{16} \left[\frac{16}{3}-3.364 \frac{bb}{aa} \left(1-\frac{bb^4}{12 aa^4}\right)\right]\texttt{ avec }\substack{a=max(h_t,l_t)\\b=min(h_t,l_t)\\aa=max(h_r,l_r)\\bb=min(h_r,l_r)}\end{displaymath}\begin{verbatim}
             return G*J/ll;
             break;
         }
