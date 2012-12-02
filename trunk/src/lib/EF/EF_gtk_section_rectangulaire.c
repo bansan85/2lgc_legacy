@@ -113,7 +113,7 @@ gboolean EF_gtk_section_rectangulaire_recupere_donnees(Projet *projet, double *l
     ef_gtk = &projet->list_gtk.ef_sections_rectangulaire;
     
     *largeur = gtk_common_entry_renvoie_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_sections_rectangulaire.builder, "EF_section_rectangulaire_buffer_largeur")));
-    if (isnan(*largeur))
+    if ((isnan(*largeur)) || (*largeur < ERREUR_RELATIVE_MIN))
     {
         dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("La valeur de la largeur est incorrecte."));
         gtk_dialog_run(GTK_DIALOG(dialog));
@@ -122,7 +122,7 @@ gboolean EF_gtk_section_rectangulaire_recupere_donnees(Projet *projet, double *l
     }
     
     *hauteur = gtk_common_entry_renvoie_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_sections_rectangulaire.builder, "EF_section_rectangulaire_buffer_hauteur")));
-    if (isnan(*hauteur))
+    if ((isnan(*hauteur)) || (*hauteur < ERREUR_RELATIVE_MIN))
     {
         dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("La valeur de la hauteur est incorrecte."));
         gtk_dialog_run(GTK_DIALOG(dialog));
@@ -155,7 +155,8 @@ G_MODULE_EXPORT void EF_gtk_section_rectangulaire_ajouter_clicked(
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_sections_rectangulaire.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section Rectangulaire");
     
-    BUG(EF_gtk_section_rectangulaire_recupere_donnees(projet, &largeur, &hauteur, &texte), );
+    if (!(EF_gtk_section_rectangulaire_recupere_donnees(projet, &largeur, &hauteur, &texte)))
+        return;
     
     // Création de la nouvelle charge ponctuelle au noeud
     BUG(EF_sections_ajout_rectangulaire(projet, texte, largeur, hauteur), );
@@ -204,7 +205,8 @@ G_MODULE_EXPORT void EF_gtk_section_rectangulaire_modifier_clicked(
     
     ef_gtk = &projet->list_gtk.ef_sections_rectangulaire;
     
-    BUG(EF_gtk_section_rectangulaire_recupere_donnees(projet, &largeur, &hauteur, &texte), );
+    if (!(EF_gtk_section_rectangulaire_recupere_donnees(projet, &largeur, &hauteur, &texte)))
+        return;
     
     free(ef_gtk->section->nom);
     ef_gtk->section->nom = texte;

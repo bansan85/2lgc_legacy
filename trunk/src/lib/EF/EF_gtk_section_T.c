@@ -117,36 +117,36 @@ gboolean EF_gtk_section_T_recupere_donnees(Projet *projet, double *lt, double *h
     ef_gtk = &projet->list_gtk.ef_sections_T;
     
     *la = gtk_common_entry_renvoie_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_sections_T.builder, "EF_section_T_buffer_la")));
-    if (isnan(*la))
+    if ((isnan(*la)) || (*la < ERREUR_RELATIVE_MIN))
     {
-        dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("La valeur de la largeur est incorrecte."));
+        dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("La valeur de la largeur de la retombée est incorrecte."));
         gtk_dialog_run(GTK_DIALOG(dialog));
         gtk_widget_destroy(dialog);
         return FALSE;
     }
     
     *ha = gtk_common_entry_renvoie_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_sections_T.builder, "EF_section_T_buffer_ha")));
-    if (isnan(*ha))
+    if ((isnan(*ha)) || (*ha < ERREUR_RELATIVE_MIN))
     {
-        dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("La valeur de la hauteur est incorrecte."));
+        dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("La valeur de la hauteur de la retombée est incorrecte."));
         gtk_dialog_run(GTK_DIALOG(dialog));
         gtk_widget_destroy(dialog);
         return FALSE;
     }
     
     *lt = gtk_common_entry_renvoie_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_sections_T.builder, "EF_section_T_buffer_lt")));
-    if (isnan(*lt))
+    if ((isnan(*lt)) || (*lt < ERREUR_RELATIVE_MIN))
     {
-        dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("La valeur de la largeur est incorrecte."));
+        dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("La valeur de la largeur de la table est incorrecte."));
         gtk_dialog_run(GTK_DIALOG(dialog));
         gtk_widget_destroy(dialog);
         return FALSE;
     }
     
     *ht = gtk_common_entry_renvoie_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_sections_T.builder, "EF_section_T_buffer_ht")));
-    if (isnan(*ht))
+    if ((isnan(*ht)) || (*ht < ERREUR_RELATIVE_MIN))
     {
-        dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("La valeur de la hauteur est incorrecte."));
+        dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("La valeur de la hauteur de la table est incorrecte."));
         gtk_dialog_run(GTK_DIALOG(dialog));
         gtk_widget_destroy(dialog);
         return FALSE;
@@ -177,7 +177,8 @@ G_MODULE_EXPORT void EF_gtk_section_T_ajouter_clicked(GtkButton *button __attrib
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_sections_T.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section T");
     
-    BUG(EF_gtk_section_T_recupere_donnees(projet, &lt, &ht, &la, &ha, &texte), );
+    if (!(EF_gtk_section_T_recupere_donnees(projet, &lt, &ht, &la, &ha, &texte)))
+        return;
     
     // Création de la nouvelle charge ponctuelle au noeud
     BUG(EF_sections_ajout_T(projet, texte, lt, la, ht, ha), );
@@ -226,7 +227,8 @@ G_MODULE_EXPORT void EF_gtk_section_T_modifier_clicked(
     
     ef_gtk = &projet->list_gtk.ef_sections_T;
     
-    BUG(EF_gtk_section_T_recupere_donnees(projet, &lt, &ht, &la, &ha, &texte), );
+    if (!(EF_gtk_section_T_recupere_donnees(projet, &lt, &ht, &la, &ha, &texte)))
+        return;
     
     free(ef_gtk->section->nom);
     ef_gtk->section->nom = texte;

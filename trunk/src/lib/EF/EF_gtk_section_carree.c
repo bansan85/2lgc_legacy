@@ -110,7 +110,7 @@ gboolean EF_gtk_section_carree_recupere_donnees(Projet *projet, double *cote, gc
     ef_gtk = &projet->list_gtk.ef_sections_carree;
     
     *cote = gtk_common_entry_renvoie_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_sections_carree.builder, "EF_section_carree_buffer_cote")));
-    if (isnan(*cote))
+    if ((isnan(*cote)) || (*cote < ERREUR_RELATIVE_MIN))
     {
         dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("La valeur du coté est incorrecte."));
         gtk_dialog_run(GTK_DIALOG(dialog));
@@ -143,7 +143,8 @@ G_MODULE_EXPORT void EF_gtk_section_carree_ajouter_clicked(
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_sections_carree.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section Carrée");
     
-    BUG(EF_gtk_section_carree_recupere_donnees(projet, &cote, &texte), );
+    if (!EF_gtk_section_carree_recupere_donnees(projet, &cote, &texte))
+        return;
     
     // Création de la nouvelle charge ponctuelle au noeud
     BUG(EF_sections_ajout_carre(projet, texte, cote), );
@@ -192,7 +193,8 @@ G_MODULE_EXPORT void EF_gtk_section_carree_modifier_clicked(
     
     ef_gtk = &projet->list_gtk.ef_sections_carree;
     
-    BUG(EF_gtk_section_carree_recupere_donnees(projet, &cote, &texte), );
+    if (!EF_gtk_section_carree_recupere_donnees(projet, &cote, &texte))
+        return;
     
     free(ef_gtk->section->nom);
     ef_gtk->section->nom = texte;
