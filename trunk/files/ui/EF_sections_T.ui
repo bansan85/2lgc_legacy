@@ -17,12 +17,12 @@
             </object>
         </child>
     </object>
-    <object class="GtkTextBuffer" id="EF_section_T_buffer_la">
+    <object class="GtkTextBuffer" id="EF_section_T_buffer_lr">
         <property name="tag-table">EF_section_T_tag_table</property>
         <property name="text">0</property>
         <signal name="changed" handler="gtk_common_text_buffer_double_sup0_inf"/>
     </object>
-    <object class="GtkTextBuffer" id="EF_section_T_buffer_ha">
+    <object class="GtkTextBuffer" id="EF_section_T_buffer_hr">
         <property name="tag-table">EF_section_T_tag_table</property>
         <property name="text">0</property>
         <signal name="changed" handler="gtk_common_text_buffer_double_sup0_inf"/>
@@ -143,8 +143,8 @@
                     </packing>
                 </child>
                 <child>
-                    <object class="GtkLabel" id="EF_section_T_label_la">
-                        <property name="label" translatable="yes">Largeur de l'âme [m] :</property>
+                    <object class="GtkLabel" id="EF_section_T_label_lr">
+                        <property name="label" translatable="yes">Largeur de la retombée [m] :</property>
                         <property name="visible">True</property>
                     </object>
                     <packing>
@@ -164,7 +164,7 @@
                                 <property name="visible">True</property>
                                 <property name="accepts-tab">False</property>
                                 <property name="wrap-mode">GTK_WRAP_CHAR</property>
-                                <property name="buffer">EF_section_T_buffer_la</property>
+                                <property name="buffer">EF_section_T_buffer_lr</property>
                             </object>
                         </child>
                     </object>
@@ -174,8 +174,8 @@
                     </packing>
                 </child>
                 <child>
-                    <object class="GtkLabel" id="EF_section_T_label_ha">
-                        <property name="label" translatable="yes">Hauteur de l'âme [m] :</property>
+                    <object class="GtkLabel" id="EF_section_T_label_hr">
+                        <property name="label" translatable="yes">Hauteur de la retombée [m] :</property>
                         <property name="visible">True</property>
                     </object>
                     <packing>
@@ -194,7 +194,7 @@
                             <object class="GtkTextView" id="EF_section_T_textview_ha">
                                 <property name="visible">True</property>
                                 <property name="accepts-tab">False</property>
-                                <property name="buffer">EF_section_T_buffer_ha</property>
+                                <property name="buffer">EF_section_T_buffer_hr</property>
                                 <property name="wrap-mode">GTK_WRAP_CHAR</property>
                             </object>
                         </child>

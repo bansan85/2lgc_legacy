@@ -83,15 +83,15 @@ G_MODULE_EXPORT void EF_gtk_section_T_window_destroy(GtkWidget *object __attribu
 }
 
 
-gboolean EF_gtk_section_T_recupere_donnees(Projet *projet, double *lt, double *ht, double *la,
-  double *ha, gchar **nom)
+gboolean EF_gtk_section_T_recupere_donnees(Projet *projet, double *lt, double *ht, double *lr,
+  double *hr, gchar **nom)
 /* Description : Récupère toutes les données de la fenêtre permettant d'ajouter ou d'éditer une
  *               section.
  * Paramètres : Projet *projet : la variable projet,
  *            : double *lt : la largeur de la table de la section,
  *            : double *ht : la hauteur de la table de la section,
- *            : double *la : la largeur de l'âme de la section,
- *            : double *ha : la hauteur de l'âme de la section,
+ *            : double *lr : la largeur de la retombée de la section,
+ *            : double *hr : la hauteur de la retombée de la section,
  *            : gchar **nom : le nom de la section,
  * Valeur renvoyée :
  *   Succès : TRUE
@@ -109,15 +109,15 @@ gboolean EF_gtk_section_T_recupere_donnees(Projet *projet, double *lt, double *h
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(lt, FALSE, gettext("Paramètre %s incorrect.\n"), "largeur");
     BUGMSG(ht, FALSE, gettext("Paramètre %s incorrect.\n"), "hauteur");
-    BUGMSG(la, FALSE, gettext("Paramètre %s incorrect.\n"), "largeur");
-    BUGMSG(ha, FALSE, gettext("Paramètre %s incorrect.\n"), "hauteur");
+    BUGMSG(lr, FALSE, gettext("Paramètre %s incorrect.\n"), "largeur");
+    BUGMSG(hr, FALSE, gettext("Paramètre %s incorrect.\n"), "hauteur");
     BUGMSG(nom, FALSE, gettext("Paramètre %s incorrect.\n"), "nom");
     BUGMSG(projet->list_gtk.ef_sections_T.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section T");
     
     ef_gtk = &projet->list_gtk.ef_sections_T;
     
-    *la = gtk_common_entry_renvoie_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_sections_T.builder, "EF_section_T_buffer_la")));
-    if ((isnan(*la)) || (*la < ERREUR_RELATIVE_MIN))
+    *lr = gtk_common_entry_renvoie_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_sections_T.builder, "EF_section_T_buffer_lr")));
+    if ((isnan(*lr)) || (*lr < ERREUR_RELATIVE_MIN))
     {
         dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("La valeur de la largeur de la retombée est incorrecte."));
         gtk_dialog_run(GTK_DIALOG(dialog));
@@ -125,8 +125,8 @@ gboolean EF_gtk_section_T_recupere_donnees(Projet *projet, double *lt, double *h
         return FALSE;
     }
     
-    *ha = gtk_common_entry_renvoie_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_sections_T.builder, "EF_section_T_buffer_ha")));
-    if ((isnan(*ha)) || (*ha < ERREUR_RELATIVE_MIN))
+    *hr = gtk_common_entry_renvoie_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_sections_T.builder, "EF_section_T_buffer_hr")));
+    if ((isnan(*hr)) || (*hr < ERREUR_RELATIVE_MIN))
     {
         dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("La valeur de la hauteur de la retombée est incorrecte."));
         gtk_dialog_run(GTK_DIALOG(dialog));
@@ -171,17 +171,17 @@ G_MODULE_EXPORT void EF_gtk_section_T_ajouter_clicked(GtkButton *button __attrib
  * Valeur renvoyée : Aucune.
  */
 {
-    double  la, ha, lt, ht;
+    double  lr, hr, lt, ht;
     gchar   *texte;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_sections_T.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section T");
     
-    if (!(EF_gtk_section_T_recupere_donnees(projet, &lt, &ht, &la, &ha, &texte)))
+    if (!(EF_gtk_section_T_recupere_donnees(projet, &lt, &ht, &lr, &hr, &texte)))
         return;
     
     // Création de la nouvelle charge ponctuelle au noeud
-    BUG(EF_sections_ajout_T(projet, texte, lt, la, ht, ha), );
+    BUG(EF_sections_ajout_T(projet, texte, lt, lr, ht, hr), );
     
     free(texte);
     
@@ -219,7 +219,7 @@ G_MODULE_EXPORT void EF_gtk_section_T_modifier_clicked(
     Gtk_EF_Sections_T   *ef_gtk;
     Section_T           *data;
     
-    double      lt, ht, la, ha;
+    double      lt, ht, lr, hr;
     gchar       *texte;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
@@ -227,16 +227,16 @@ G_MODULE_EXPORT void EF_gtk_section_T_modifier_clicked(
     
     ef_gtk = &projet->list_gtk.ef_sections_T;
     
-    if (!(EF_gtk_section_T_recupere_donnees(projet, &lt, &ht, &la, &ha, &texte)))
+    if (!(EF_gtk_section_T_recupere_donnees(projet, &lt, &ht, &lr, &hr, &texte)))
         return;
     
     free(ef_gtk->section->nom);
     ef_gtk->section->nom = texte;
     data = ef_gtk->section->data;
     data->largeur_table = lt;
-    data->largeur_ame = la;
+    data->largeur_retombee = lr;
     data->hauteur_table = ht;
-    data->hauteur_ame = ha;
+    data->hauteur_retombee = hr;
     
     BUG(EF_sections_update_ligne_treeview(projet, ef_gtk->section), );
     
@@ -293,10 +293,10 @@ G_MODULE_EXPORT gboolean EF_gtk_section_T(Projet *projet, EF_Section *section)
         gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder, "EF_section_T_buffer_lt")), tmp, -1);
         common_math_double_to_char(data->hauteur_table, tmp, DECIMAL_DISTANCE);
         gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder, "EF_section_T_buffer_ht")), tmp, -1);
-        common_math_double_to_char(data->largeur_ame, tmp, DECIMAL_DISTANCE);
-        gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder, "EF_section_T_buffer_la")), tmp, -1);
-        common_math_double_to_char(data->hauteur_ame, tmp, DECIMAL_DISTANCE);
-        gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder, "EF_section_T_buffer_ha")), tmp, -1);
+        common_math_double_to_char(data->largeur_retombee, tmp, DECIMAL_DISTANCE);
+        gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder, "EF_section_T_buffer_lr")), tmp, -1);
+        common_math_double_to_char(data->hauteur_retombee, tmp, DECIMAL_DISTANCE);
+        gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder, "EF_section_T_buffer_hr")), tmp, -1);
         
         gtk_button_set_label(GTK_BUTTON(gtk_builder_get_object(ef_gtk->builder, "EF_section_T_button_add_edit")), "gtk-edit");
         g_signal_connect(gtk_builder_get_object(ef_gtk->builder, "EF_section_T_button_add_edit"), "clicked", G_CALLBACK(EF_gtk_section_T_modifier_clicked), projet);
