@@ -37,6 +37,7 @@
 #include "EF_gtk_sections.hpp"
 #include "EF_gtk_barres.hpp"
 #include "EF_gtk_materiaux.hpp"
+#include "EF_gtk_relachement.h"
 #endif
 
 #include "EF_appuis.h"
@@ -97,6 +98,8 @@ G_MODULE_EXPORT Projet* projet_init(Type_Pays pays)
     projet->list_gtk.ef_sections_carree.builder = NULL;
     projet->list_gtk.ef_sections_circulaire.builder = NULL;
     projet->list_gtk.ef_materiaux.builder = NULL;
+    projet->list_gtk._1992_1_1_materiaux.builder = NULL;
+    projet->list_gtk.ef_relachements.builder = NULL;
 #endif
     
     projet->ef_donnees.c = &(projet->ef_donnees.Common);
@@ -208,6 +211,10 @@ G_MODULE_EXPORT gboolean projet_init_graphique(Projet *projet)
     comps->menu_structure_barres_materiau = gtk_menu_item_new_with_label(gettext("Matériaux..."));
     gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_structure_barres_list), comps->menu_structure_barres_materiau);
     g_signal_connect_swapped(comps->menu_structure_barres_materiau, "activate", G_CALLBACK(EF_gtk_materiaux), projet);
+    
+    comps->menu_structure_barres_relachement = gtk_menu_item_new_with_label(gettext("Relâchement..."));
+    gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_structure_barres_list), comps->menu_structure_barres_relachement);
+    g_signal_connect_swapped(comps->menu_structure_barres_relachement, "activate", G_CALLBACK(EF_gtk_relachement), projet);
     
     comps->menu_structure_barres_ajout = gtk_menu_item_new_with_label(gettext("Gestion des barres..."));
     gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_structure_barres_list), comps->menu_structure_barres_ajout);

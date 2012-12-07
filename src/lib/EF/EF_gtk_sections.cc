@@ -240,7 +240,7 @@ G_MODULE_EXPORT void EF_gtk_sections_supprimer_direct(GtkButton *button __attrib
 
 G_MODULE_EXPORT void EF_gtk_sections_supprimer_menu_barres(
   GtkButton *button __attribute__((unused)), Projet *projet)
-/* Description : Supprime la section sélectionné dans le treeview, y compris les barres
+/* Description : Supprime la section sélectionnée dans le treeview, y compris les barres
  *               l'utilisant.
  * Paramètres : GtkWidget *widget : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.

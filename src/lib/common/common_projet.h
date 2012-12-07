@@ -31,6 +31,7 @@
 #define DECIMAL_M4 8
 #define DECIMAL_SURFACE 3
 #define DECIMAL_CONTRAINTE 3
+#define DECIMAL_NEWTON_PAR_METRE 3
 #define DECIMAL_SANS_UNITE 3
 
 #ifdef ENABLE_GTK
@@ -139,7 +140,6 @@ typedef struct __Gtk_EF_Barres
     GtkBuilder      *builder_add;
     GtkWidget       *window_add;
     
-    GtkListStore    *liste_relachements;
     GtkListStore    *liste_types;
 } Gtk_EF_Barres;
 
@@ -171,6 +171,14 @@ typedef struct __Gtk_EF_Materiaux
     GtkListStore    *liste_materiaux;
 } Gtk_EF_Materiaux;
 
+typedef struct __Gtk_EF_Relachements
+{
+    GtkBuilder      *builder;
+    GtkWidget       *window;
+    
+    GtkTreeStore    *relachements;
+    GtkListStore    *liste_relachements;
+} Gtk_EF_Relachements;
 #endif
 
 typedef enum __Type_Element // La liste des différents éléments de type de barres gérés par le
@@ -337,6 +345,10 @@ typedef struct __EF_Relachement
     void                *ry_f_data;
     EF_Relachement_Type rz_fin;
     void                *rz_f_data;
+#ifdef ENABLE_GTK
+    GtkTreeIter     Iter_fenetre;
+    GtkTreeIter     Iter_liste;
+#endif
 } EF_Relachement;
 
 
@@ -717,6 +729,7 @@ typedef struct __Comp_Gtk
     GtkWidget   *menu_structure_barres_list;
     GtkWidget   *menu_structure_barres_section;
     GtkWidget   *menu_structure_barres_materiau;
+    GtkWidget   *menu_structure_barres_relachement;
     GtkWidget   *menu_structure_barres_ajout;
     GtkWidget   *menu_charges;
     GtkWidget   *menu_charges_list;
@@ -750,6 +763,7 @@ typedef struct __List_Gtk
     Gtk_EF_Sections_Circulaire  ef_sections_circulaire;
     Gtk_EF_Materiaux    ef_materiaux;
     Gtk_1992_1_1_Materiaux  _1992_1_1_materiaux;
+    Gtk_EF_Relachements ef_relachements;
     Comp_Gtk            comp;      // tous les composants grahpiques
 } List_Gtk;
 #endif

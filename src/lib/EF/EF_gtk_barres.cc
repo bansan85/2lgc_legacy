@@ -249,7 +249,7 @@ G_MODULE_EXPORT void EF_gtk_barres_edit_relachement(
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_barres.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Barres");
-    BUGMSG(projet->list_gtk.ef_barres.liste_relachements, , gettext("La liste des relâchements de barre est indéfinie.\n"));
+    BUGMSG(projet->list_gtk.ef_relachements.liste_relachements, , gettext("La liste des relâchements de barre est indéfinie.\n"));
     
     ef_gtk = &projet->list_gtk.ef_barres;
     
@@ -263,7 +263,7 @@ G_MODULE_EXPORT void EF_gtk_barres_edit_relachement(
         BUG(_1992_1_1_barres_change_relachement(barre, NULL, projet), );
     else
     {
-        BUG(relachement = EF_relachement_cherche_nom(projet, new_text), );
+        BUG(relachement = EF_relachement_cherche_nom(projet, new_text, TRUE), );
         BUG(_1992_1_1_barres_change_relachement(barre, relachement, projet), );
     }
     
@@ -348,7 +348,7 @@ G_MODULE_EXPORT void EF_gtk_barres(Projet *projet)
     g_object_set(gtk_builder_get_object(ef_gtk->builder, "EF_barres_treeview_cell1"), "model", projet->list_gtk.ef_barres.liste_types, NULL);
     g_object_set(gtk_builder_get_object(ef_gtk->builder, "EF_barres_treeview_cell2"), "model", projet->list_gtk.ef_sections.liste_sections, NULL);
     g_object_set(gtk_builder_get_object(ef_gtk->builder, "EF_barres_treeview_cell3"), "model", projet->list_gtk.ef_materiaux.liste_materiaux, NULL);
-    g_object_set(gtk_builder_get_object(ef_gtk->builder, "EF_barres_treeview_cell6"), "model", projet->list_gtk.ef_barres.liste_relachements, NULL);
+    g_object_set(gtk_builder_get_object(ef_gtk->builder, "EF_barres_treeview_cell6"), "model", projet->list_gtk.ef_relachements.liste_relachements, NULL);
     
     list_parcours = projet->beton.barres;
     while (list_parcours != NULL)
