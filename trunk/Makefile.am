@@ -6,7 +6,13 @@ SUBDIRS =	po \
 			doc
 
 #-Wconversion
-CUSTOM_CFLAGS 	= @CFLAGS@ -march=native -O0 -g3 -ggdb3 -pipe -ftracer -fsched2-use-traces -Wl,-O0 -fno-inline -Wall -Wextra -Wfloat-equal -Wconversion -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED -DGDK_PIXBUF_DISABLE_DEPRECATED -DG_DISABLE_DEPRECATED -Wno-comment -Wswitch-enum -Wswitch-default -Wshadow -Werror -Wno-error=conversion -Wno-error=sign-conversion -Wformat=1 -Winit-self -fstrict-overflow -Wstrict-overflow=5
+if PLATFORM_WIN32
+CUSTOM_CFLAGS 	= @CFLAGS@ -march=i686
+else
+CUSTOM_CFLAGS 	= @CFLAGS@ -march=native
+endif
+
+CUSTOM_CFLAGS 	+= -O0 -g3 -ggdb3 -pipe -ftracer -fsched2-use-traces -Wl,-O0 -fno-inline -Wall -Wextra -Wfloat-equal -Wconversion -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED -DGDK_PIXBUF_DISABLE_DEPRECATED -DG_DISABLE_DEPRECATED -Wno-comment -Wswitch-enum -Wswitch-default -Wshadow -Werror -Wno-error=conversion -Wno-error=sign-conversion -Wformat=1 -Winit-self -fstrict-overflow -Wstrict-overflow=5
 
 if PLATFORM_WIN32
 CUSTOM_CFLAGS	+= -DLOCALEDIR=\""./locale"\" -DDATADIR=\""./files"\"
@@ -29,6 +35,9 @@ package_win :
 if PLATFORM_WIN32
 	rm -Rf codegui
 	mkdir -p codegui
+	mkdir -p codegui/lib
+	cp -R $(prefix)/lib/gdk-pixbuf-2.0 codegui/lib
+	rm codegui/lib/gdk-pixbuf-2.0/*/loaders/libpixbufloader-*a
 	mkdir -p codegui/files
 	mkdir -p codegui/files/ui
 	cp $(prefix)/bin/{codegui.exe,libeurocodes-0.dll} codegui/
