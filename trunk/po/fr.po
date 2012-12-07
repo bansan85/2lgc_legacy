@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2012-12-02 12:43+0100\n"
-"PO-Revision-Date: 2012-12-02 12:45+0100\n"
+"POT-Creation-Date: 2012-12-05 12:41+0100\n"
+"PO-Revision-Date: 2012-12-07 22:08+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -60,17 +60,17 @@ msgstr "Sections"
 msgid "Nom"
 msgstr "Nom"
 
-msgid "J [m4]"
-msgstr "J [m4]"
+msgid "J [m⁴]"
+msgstr "J [m⁴]"
 
-msgid "Iy [m4]"
-msgstr "Iy [m4]"
+msgid "Iy [m⁴]"
+msgstr "Iy [m⁴]"
 
-msgid "Iz [m4]"
-msgstr "Iz [m4]"
+msgid "Iz [m⁴]"
+msgstr "Iz [m⁴]"
 
-msgid "S [m2]"
-msgstr "S [m2]"
+msgid "S [m²]"
+msgstr "S [m²]"
 
 msgid "vy [m]"
 msgstr "vy [m]"
@@ -173,6 +173,12 @@ msgstr "Béton"
 
 msgid "Matériaux"
 msgstr "Matériaux"
+
+msgid "et les barres utilisant le relachement."
+msgstr "et les barres utilisant le relachement."
+
+msgid "Relâchements"
+msgstr "Relâchements"
 
 msgid "Groupes"
 msgstr "Groupes"
@@ -473,6 +479,9 @@ msgstr "Sections..."
 
 msgid "Matériaux..."
 msgstr "Matériaux..."
+
+msgid "Relâchement..."
+msgstr "Relâchement..."
 
 msgid "Gestion des barres..."
 msgstr "Gestion des barres..."
@@ -781,6 +790,15 @@ msgstr "Le type du noeud ou la colonne d'édition est incorrect.\n"
 msgid "Le noeud doit être de type intermédiaire.\n"
 msgstr "Le noeud doit être de type intermédiaire.\n"
 
+msgid "Bloqué"
+msgstr "Bloqué"
+
+msgid "Libre"
+msgstr "Libre"
+
+msgid "Linéaire"
+msgstr "Linéaire"
+
 msgid "La valeur de la largeur de la retombée est incorrecte."
 msgstr "La valeur de la largeur de la retombée est incorrecte."
 
@@ -880,12 +898,6 @@ msgstr "Modification d'une charge répartie uniforme sur barre"
 msgid "Il n'est pas possible d'activer à la fois la projection et l'utilisation du repère local."
 msgstr "Il n'est pas possible d'activer à la fois la projection et l'utilisation du repère local."
 
-msgid "Libre"
-msgstr "Libre"
-
-msgid "Bloqué"
-msgstr "Bloqué"
-
 msgid "Le type d'appui de %s (%s) n'a pas à posséder de données.\n"
 msgstr "Le type d'appui de %s (%s) n'a pas à posséder de données.\n"
 
@@ -936,6 +948,9 @@ msgstr "La liste des relâchements de barre est indéfinie.\n"
 
 msgid "Relachement '%s' introuvable.\n"
 msgstr "Relachement '%s' introuvable.\n"
+
+msgid "Le relachement '%s' existe déjà.\n"
+msgstr "Le relachement '%s' existe déjà.\n"
 
 msgid "Type d'appui %s inconnu.\n"
 msgstr "Type d'appui %s inconnu.\n"
