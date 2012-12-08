@@ -19,15 +19,12 @@
 #include "config.h"
 #include <libintl.h>
 #include <locale.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
 #include <gmodule.h>
+#include <math.h>
 
 #include "common_projet.h"
 #include "common_erreurs.h"
 #include "1990_actions.h"
-#include "1990_groupes.h"
 
 #ifdef ENABLE_GTK
 #include "1990_gtk_groupes.h"

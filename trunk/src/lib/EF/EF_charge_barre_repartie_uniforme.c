@@ -19,12 +19,8 @@
 #include "config.h"
 #include <libintl.h>
 #include <locale.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <cholmod.h>
-#include <string.h>
-#include <math.h>
 #include <gmodule.h>
+#include <math.h>
 
 #include "1990_actions.h"
 #include "common_projet.h"

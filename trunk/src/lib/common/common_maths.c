@@ -17,12 +17,9 @@
  */
 
 #include "config.h"
-#include <stdio.h>
-#include <stdlib.h>
 #include <libintl.h>
 #include <locale.h>
 #include <math.h>
-#include <string.h>
 #include <gmodule.h>
 #include "common_maths.h"
 

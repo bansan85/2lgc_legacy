@@ -29,10 +29,8 @@
 #include "common_maths.h"
 #include "common_m3d.hpp"
 #include "common_selection.h"
-#include "1992_1_1_materiaux.h"
 #include "EF_charge_barre_ponctuelle.h"
 #include "EF_calculs.h"
-#include "EF_noeud.h"
 #include "EF_noeud.h"
 #include "EF_section.h"
 

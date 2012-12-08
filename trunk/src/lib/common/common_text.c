@@ -17,11 +17,10 @@
  */
 
 #include "config.h"
-#include <stdio.h>
-#include <stdlib.h>
 #include <libintl.h>
 #include <locale.h>
 #include <gmodule.h>
+#include <stdio.h>
 
 
 G_MODULE_EXPORT void show_warranty()

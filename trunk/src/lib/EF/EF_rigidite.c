@@ -16,8 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <stdlib.h>
+#include "config.h"
 #include <libintl.h>
+#include <locale.h>
 #include <string.h>
 #include <cholmod.h>
 #include <gmodule.h>

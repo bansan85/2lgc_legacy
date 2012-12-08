@@ -21,7 +21,6 @@
 
 #include "config.h"
 #include "common_projet.h"
-#include <math.h>
 #include <gtk/gtk.h>
 
 #define GTK_NOUVELLE_FENETRE(window, titre, taillex, tailley) {\

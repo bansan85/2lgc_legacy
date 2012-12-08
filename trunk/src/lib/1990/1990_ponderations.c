@@ -19,8 +19,6 @@
 #include "config.h"
 #include <libintl.h>
 #include <locale.h>
-#include <stdlib.h>
-#include <stdio.h>
 #include <gmodule.h>
 
 #include "common_projet.h"

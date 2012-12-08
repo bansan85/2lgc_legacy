@@ -17,7 +17,7 @@
  */
 
 #include "config.h"
-#include <stdlib.h>
+#include <locale.h>
 #include <libintl.h>
 #include <math.h>
 #include <string.h>
@@ -26,10 +26,10 @@
 #include "common_projet.h"
 #include "common_maths.h"
 #include "common_erreurs.h"
-#include "EF_calculs.h"
 #include "common_selection.h"
 #include "1992_1_1_barres.h"
 #include "1992_1_1_materiaux.h"
+#include "EF_calculs.h"
 
 
 G_MODULE_EXPORT gboolean _1992_1_1_materiaux_init(Projet *projet)

@@ -17,13 +17,11 @@
  */
 
 #include "config.h"
-#include <stdio.h>
-#include <stdlib.h>
 #include <libintl.h>
 #include <locale.h>
-#include <string.h>
 #include <gtk/gtk.h>
 #include <math.h>
+#include <string.h>
 #include "common_selection.h"
 #include "common_erreurs.h"
 #include "common_maths.h"

@@ -21,8 +21,6 @@
 #ifdef ENABLE_GTK
 #include <libintl.h>
 #include <locale.h>
-#include <stdlib.h>
-#include <stdio.h>
 #include <string.h>
 #include <gtk/gtk.h>
 #include <math.h>
@@ -30,13 +28,10 @@
 #include "common_projet.h"
 #include "common_erreurs.h"
 #include "common_gtk.h"
+#include "common_selection.h"
 #include "common_maths.h"
-#include "1992_1_1_barres.h"
 #include "EF_charge.h"
 #include "EF_charge_barre_repartie_uniforme.h"
-#include "1990_actions.h"
-#include "1990_gtk_actions.h"
-#include "common_selection.h"
 
 G_MODULE_EXPORT void EF_gtk_charge_barre_rep_uni_window_destroy(
   GtkWidget *object __attribute__((unused)), Projet *projet)

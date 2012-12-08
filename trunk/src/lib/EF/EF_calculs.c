@@ -17,13 +17,10 @@
  */
 
 #include "config.h"
-#include <stdlib.h>
 #include <libintl.h>
-#include <string.h>
-#include <time.h>
-#include <unistd.h>
-#include <math.h>
+#include <locale.h>
 #include <gmodule.h>
+#include <math.h>
 
 #include "1990_actions.h"
 #include "common_projet.h"

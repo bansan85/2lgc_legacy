@@ -20,7 +20,6 @@
 #define __COMMON_ERREURS_H
 
 #include "config.h"
-#include <stdlib.h>
 #include <stdio.h>
 
 //#ifdef NDEBUG
