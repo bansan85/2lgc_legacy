@@ -22,10 +22,10 @@
 #include <libintl.h>
 #include <locale.h>
 #include <gtk/gtk.h>
+#include <string.h>
 
 #include "common_m3d.hpp"
 
-extern "C" {
 #include "common_projet.h"
 #include "common_erreurs.h"
 #include "common_gtk.h"
@@ -260,12 +260,11 @@ G_MODULE_EXPORT void EF_gtk_sections_supprimer_menu_barres(
 }
 
 
-G_MODULE_EXPORT GdkPixbuf *EF_gtk_sections_dessin(EF_Section *section, unsigned int width,
-  unsigned int height)
+G_MODULE_EXPORT GdkPixbuf *EF_gtk_sections_dessin(EF_Section *section, int width, int height)
 /* Description : Renvoie un dessin représentant la section.
  * Paramètres : EF_Section *section : la section à dessiner,
- *              unsigned int width : la largeur du dessin,
- *              unsigned int height : la hauteur du dessin.
+ *              int width : la largeur du dessin,
+ *              int height : la hauteur du dessin.
  * Valeur renvoyée : Aucune.
  *   Echec : section == NULL,
  *           width == NULL,
@@ -273,7 +272,7 @@ G_MODULE_EXPORT GdkPixbuf *EF_gtk_sections_dessin(EF_Section *section, unsigned 
  */
 {
     int             rowstride, n_channels;
-    unsigned int    x, y;
+    int             x, y;
     guchar          *pixels, *p;
     GdkPixbuf       *pixbuf;
     double          a;
@@ -641,8 +640,6 @@ G_MODULE_EXPORT void EF_gtk_sections(Projet *projet)
     }
     
     gtk_window_set_transient_for(GTK_WINDOW(ef_gtk->window), GTK_WINDOW(projet->list_gtk.comp.window));
-}
-
 }
 
 #endif

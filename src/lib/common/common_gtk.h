@@ -59,6 +59,7 @@ void gtk_common_text_buffer_double(GtkTextBuffer *textbuffer, double val_min, gb
 double gtk_common_entry_renvoie_double(GtkTextBuffer *textbuffer);
 void gtk_common_entry_check_int(GtkTextBuffer *entry, gpointer user_data);
 int gtk_common_entry_renvoie_int(GtkTextBuffer *textbuffer);
+unsigned int gtk_common_entry_renvoie_uint(GtkTextBuffer *textbuffer);
 void gtk_common_entry_check_liste(GtkTextBuffer *entry, gpointer user_data);
 gboolean common_gtk_key_press(GtkWidget *widget, GdkEvent *event, GtkWidget *fenetre);
 void gtk_common_render_double(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell, GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data);

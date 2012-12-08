@@ -22,10 +22,10 @@
 #include <libintl.h>
 #include <locale.h>
 #include <gtk/gtk.h>
+#include <string.h>
 
 #include "common_m3d.hpp"
 
-extern "C" {
 #include "common_projet.h"
 #include "common_erreurs.h"
 #include "common_gtk.h"
@@ -277,7 +277,7 @@ G_MODULE_EXPORT void EF_gtk_barres_edit_noeud(GtkCellRendererText *cell __attrib
     Gtk_EF_Barres   *gtk_barre;
     GtkTreeModel    *model;
     GtkTreeIter     iter;
-    gint            i;
+    unsigned int    i;
     char            *fake = (char*)malloc(sizeof(char)*(strlen(new_text)+1));
     unsigned int    conversion;
     gint            column = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cell), "column"));
@@ -367,8 +367,6 @@ G_MODULE_EXPORT void EF_gtk_barres(Projet *projet)
     g_object_set_data(gtk_builder_get_object(ef_gtk->builder, "EF_barres_treeview_cell5"), "column", GINT_TO_POINTER(5));
     
     gtk_window_set_transient_for(GTK_WINDOW(ef_gtk->window), GTK_WINDOW(projet->list_gtk.comp.window));
-}
-
 }
 
 #endif

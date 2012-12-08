@@ -25,7 +25,6 @@
 
 #include "common_m3d.hpp"
 
-extern "C" {
 #include "common_projet.h"
 #include "common_erreurs.h"
 #include "common_gtk.h"
@@ -65,8 +64,8 @@ G_MODULE_EXPORT void EF_gtk_barres_add_add_clicked(GtkButton *button __attribute
     char            *nom;
     EF_Section      *section;
     Beton_Materiau  *materiau;
-    int             noeud_debut;
-    int             noeud_fin;
+    unsigned int    noeud_debut;
+    unsigned int    noeud_fin;
     EF_Relachement  *relachement;
     GtkTreeModel    *model;
     GtkTreeIter     Iter;
@@ -112,8 +111,8 @@ G_MODULE_EXPORT void EF_gtk_barres_add_add_clicked(GtkButton *button __attribute
         free(nom);
     }
     
-    noeud_debut = gtk_common_entry_renvoie_int(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_noeud1_buffer")));
-    noeud_fin = gtk_common_entry_renvoie_int(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_noeud2_buffer")));
+    noeud_debut = gtk_common_entry_renvoie_uint(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_noeud1_buffer")));
+    noeud_fin = gtk_common_entry_renvoie_uint(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_noeud2_buffer")));
     if ((EF_noeuds_cherche_numero(projet, noeud_debut) == NULL) || (EF_noeuds_cherche_numero(projet, noeud_fin) == NULL))
         return;
     
@@ -182,8 +181,8 @@ G_MODULE_EXPORT void EF_gtk_barres_add_check_add(GtkWidget *widget, Projet *proj
     
     ef_gtk = &projet->list_gtk.ef_barres;
     
-    noeud1 = EF_noeuds_cherche_numero(projet, gtk_common_entry_renvoie_int(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_noeud1_buffer")))); 
-    noeud2 = EF_noeuds_cherche_numero(projet, gtk_common_entry_renvoie_int(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_noeud2_buffer")))); 
+    noeud1 = EF_noeuds_cherche_numero(projet, gtk_common_entry_renvoie_uint(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_noeud1_buffer")))); 
+    noeud2 = EF_noeuds_cherche_numero(projet, gtk_common_entry_renvoie_uint(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_noeud2_buffer")))); 
 
     if (
         (gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_type_combobox"))) != -1) &&
@@ -245,9 +244,6 @@ G_MODULE_EXPORT void EF_gtk_barres_ajouter(GtkButton *button __attribute__((unus
     gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_button_add")), FALSE);
     
     gtk_window_set_transient_for(GTK_WINDOW(ef_gtk->window_add), GTK_WINDOW(projet->list_gtk.comp.window));
-}
-
-
 }
 
 #endif

@@ -53,12 +53,12 @@ libeurocodes_la_SOURCES +=	common/common_m3d.cc \
 							EF/EF_gtk_charge_noeud.c \
 							EF/EF_gtk_charge_barre_ponctuelle.c \
 							EF/EF_gtk_charge_barre_repartie_uniforme.c \
-							EF/EF_gtk_noeud.cc \
-							EF/EF_gtk_appuis.cc \
-							EF/EF_gtk_barres.cc \
-							EF/EF_gtk_barres_add.cc \
-							EF/EF_gtk_sections.cc \
-							EF/EF_gtk_materiaux.cc \
+							EF/EF_gtk_noeud.c \
+							EF/EF_gtk_appuis.c \
+							EF/EF_gtk_barres.c \
+							EF/EF_gtk_barres_add.c \
+							EF/EF_gtk_sections.c \
+							EF/EF_gtk_materiaux.c \
 							EF/EF_gtk_section_rectangulaire.c \
 							EF/EF_gtk_section_T.c \
 							EF/EF_gtk_section_carree.c \
@@ -103,12 +103,12 @@ libeurocodes_la_HEADERS +=	common/common_m3d.hpp \
 							EF/EF_gtk_charge_noeud.h \
 							EF/EF_gtk_charge_barre_ponctuelle.h \
 							EF/EF_gtk_charge_barre_repartie_uniforme.h \
-							EF/EF_gtk_noeud.hpp \
-							EF/EF_gtk_appuis.hpp \
-							EF/EF_gtk_barres.hpp \
-							EF/EF_gtk_barres_add.hpp \
-							EF/EF_gtk_sections.hpp \
-							EF/EF_gtk_materiaux.hpp \
+							EF/EF_gtk_noeud.h \
+							EF/EF_gtk_appuis.h \
+							EF/EF_gtk_barres.h \
+							EF/EF_gtk_barres_add.h \
+							EF/EF_gtk_sections.h \
+							EF/EF_gtk_materiaux.h \
 							EF/EF_gtk_section_rectangulaire.h \
 							EF/EF_gtk_section_T.h \
 							EF/EF_gtk_section_carree.h \
