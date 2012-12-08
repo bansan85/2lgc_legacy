@@ -25,7 +25,7 @@
 
 #include "common_projet.h"
 
-GdkPixbuf *EF_gtk_sections_dessin(EF_Section *section, unsigned int width, unsigned int height);
+GdkPixbuf *EF_gtk_sections_dessin(EF_Section *section, int width, int height);
 void EF_gtk_sections(Projet *projet);
 
 #endif

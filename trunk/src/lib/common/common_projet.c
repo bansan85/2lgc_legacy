@@ -30,11 +30,11 @@
 #include "common_m3d.hpp"
 #include "1990_gtk_groupes.h"
 #include "1990_gtk_actions.h"
-#include "EF_gtk_noeud.hpp"
-#include "EF_gtk_appuis.hpp"
-#include "EF_gtk_sections.hpp"
-#include "EF_gtk_barres.hpp"
-#include "EF_gtk_materiaux.hpp"
+#include "EF_gtk_noeud.h"
+#include "EF_gtk_appuis.h"
+#include "EF_gtk_sections.h"
+#include "EF_gtk_barres.h"
+#include "EF_gtk_materiaux.h"
 #include "EF_gtk_relachement.h"
 #endif
 

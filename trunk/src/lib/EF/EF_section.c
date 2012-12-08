@@ -33,7 +33,7 @@
 #include "EF_section.h"
 
 #ifdef ENABLE_GTK
-#include "EF_gtk_sections.hpp"
+#include "EF_gtk_sections.h"
 #endif
 
 G_MODULE_EXPORT gboolean EF_sections_init(Projet *projet)

@@ -22,10 +22,10 @@
 #include <libintl.h>
 #include <locale.h>
 #include <gtk/gtk.h>
+#include <string.h>
 
 #include "common_m3d.hpp"
 
-extern "C" {
 #include "common_projet.h"
 #include "common_erreurs.h"
 #include "common_gtk.h"
@@ -424,8 +424,6 @@ G_MODULE_EXPORT void EF_gtk_appuis(Projet *projet)
     gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_boutton_supprimer_menu")), FALSE);
     
     gtk_window_set_transient_for(GTK_WINDOW(ef_gtk->window), GTK_WINDOW(projet->list_gtk.comp.window));
-}
-
 }
 
 #endif

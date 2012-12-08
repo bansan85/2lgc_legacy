@@ -22,10 +22,10 @@
 #include <libintl.h>
 #include <locale.h>
 #include <gtk/gtk.h>
+#include <string.h>
 
 #include "common_m3d.hpp"
 
-extern "C" {
 #include "common_projet.h"
 #include "common_erreurs.h"
 #include "common_gtk.h"
@@ -295,8 +295,6 @@ G_MODULE_EXPORT void EF_gtk_materiaux(Projet *projet)
     }
     
     gtk_window_set_transient_for(GTK_WINDOW(ef_gtk->window), GTK_WINDOW(projet->list_gtk.comp.window));
-}
-
 }
 
 #endif

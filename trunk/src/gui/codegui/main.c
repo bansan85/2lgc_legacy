@@ -18,11 +18,16 @@
 
 #include "config.h"
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <libintl.h>
+#include <locale.h>
+#include <string.h>
+#include <gtk/gtk.h>
+#include <time.h>
+
 #include "common_m3d.hpp"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 #include "common_text.h"
 #include "common_erreurs.h"
 #include "common_maths.h"
@@ -40,25 +45,12 @@ extern "C" {
 #include "EF_charge_barre_ponctuelle.h"
 #include "EF_charge_barre_repartie_uniforme.h"
 #include "EF_section.h"
-#ifdef __cplusplus
-}
-#endif
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <libintl.h>
-#include <locale.h>
-#include <string.h>
-#include <gtk/gtk.h>
-#include <time.h>
-#include <M3d++.hpp>
-
 
 int main(int argc, char *argv[])
 {
     /* Variables */
     Projet *projet;
-
+    GList   *tmp1, *tmp2;
     
     EF_Relachement_Donnees_Elastique_Lineaire *ry_d, *rz_d, *ry_f, *rz_f;
     
@@ -178,7 +170,6 @@ int main(int argc, char *argv[])
     BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, EF_sections_cherche_nom(projet, "Rect_0.3*0.5ht", TRUE), _1992_1_1_materiaux_cherche_nom(projet, "B25", TRUE), 2, 3, NULL, 3), -1);
     
     // Ajout de l'action ponctuelle
-    GList   *tmp1, *tmp2;
 /*    BUG(tmp1 = common_selection_renvoie_numeros("1;3-5"), -1);
     BUG(tmp2 = common_selection_converti_numeros_en_noeuds(tmp1, projet), -1);
     BUG(EF_charge_noeud_ajout(projet, 0, tmp2, 1000., 500., 1000., 3000., 5000., 5000., "test1"), -1);

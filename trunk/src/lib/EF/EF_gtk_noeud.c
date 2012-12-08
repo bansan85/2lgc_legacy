@@ -22,10 +22,10 @@
 #include <libintl.h>
 #include <locale.h>
 #include <gtk/gtk.h>
+#include <string.h>
 
 #include "common_m3d.hpp"
 
-extern "C" {
 #include "common_projet.h"
 #include "common_erreurs.h"
 #include "common_gtk.h"
@@ -319,7 +319,7 @@ G_MODULE_EXPORT void EF_gtk_noeud_edit_pos_relat(GtkCellRendererText *cell, gcha
     GtkTreeModel    *model;
     GtkTreePath     *path;
     GtkTreeIter     iter;
-    gint            i;
+    unsigned int    i;
     char            *fake = (char*)malloc(sizeof(char)*(strlen(new_text)+1));
     double          conversion;
     gint            column = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cell), "column"));
@@ -394,11 +394,11 @@ void EF_gtk_render_actualise_position(GtkTreeViewColumn *tree_column __attribute
  * Valeur renvoyée : void.
  */
 {
-    Projet      *projet = (Projet *)data;
-    gchar       texte[30];
-    gint        colonne;
-    int         noeud;
-    EF_Point    *point;
+    Projet          *projet = (Projet *)data;
+    gchar           texte[30];
+    gint            colonne;
+    unsigned int    noeud;
+    EF_Point        *point;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_noeud.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Noeuds");
@@ -440,7 +440,7 @@ G_MODULE_EXPORT void EF_gtk_noeud_edit_noeud_appui(
     GtkTreeModel    *model;
     GtkTreePath     *path;
     GtkTreeIter     iter;
-    gint            numero_noeud;
+    unsigned int    numero_noeud;
     EF_Noeud        *noeud;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
@@ -674,8 +674,6 @@ G_MODULE_EXPORT void EF_gtk_noeud(Projet *projet)
     }
     
     gtk_window_set_transient_for(GTK_WINDOW(ef_gtk->window), GTK_WINDOW(projet->list_gtk.comp.window));
-}
-
 }
 
 #endif

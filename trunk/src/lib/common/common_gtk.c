@@ -248,7 +248,7 @@ G_MODULE_EXPORT int gtk_common_entry_renvoie_int(GtkTextBuffer *textbuffer)
     int         nombre;
     char        *fake;
     
-    BUGMSG(textbuffer, -1, gettext("Paramètre %s incorrect.\n"), "textbuffer");
+    BUGMSG(textbuffer, INT_MIN, gettext("Paramètre %s incorrect.\n"), "textbuffer");
     
     gtk_text_buffer_get_iter_at_offset(textbuffer, &start, 0);
     gtk_text_buffer_get_iter_at_offset(textbuffer, &end, -1);
@@ -260,6 +260,45 @@ G_MODULE_EXPORT int gtk_common_entry_renvoie_int(GtkTextBuffer *textbuffer)
         free(texte);
         free(fake);
         return INT_MIN;
+    }
+    else
+    {
+        free(texte);
+        free(fake);
+        return nombre;
+    }
+}
+
+
+G_MODULE_EXPORT unsigned int gtk_common_entry_renvoie_uint(GtkTextBuffer *textbuffer)
+/* Description : Renvoie le nombre non signé entier si le GtkTextBuffer en contient bien un.
+ *               Renvoie UINT_MAX sinon.
+ * Paramètres : GtkTextBuffer *textbuffer : composant à vérifier.
+ * Valeur renvoyée :
+ *   Succès : le nombre entier contenu dans un composant de type Entry
+ *   Échec : UINT_MAX :
+ *             textbuffer == NULL,
+ *             le composant Entry ne contient pas un nombre double,
+ *             en cas d'erreur d'allocation mémoire,
+ */
+{
+    gchar           *texte;
+    GtkTextIter     start, end;
+    unsigned int    nombre;
+    char            *fake;
+    
+    BUGMSG(textbuffer, UINT_MAX, gettext("Paramètre %s incorrect.\n"), "textbuffer");
+    
+    gtk_text_buffer_get_iter_at_offset(textbuffer, &start, 0);
+    gtk_text_buffer_get_iter_at_offset(textbuffer, &end, -1);
+    texte = gtk_text_buffer_get_text(textbuffer, &start, &end, FALSE);
+    BUGMSG(fake = (char*)malloc(sizeof(char)*(strlen(texte)+1)), UINT_MAX, gettext("Erreur d'allocation mémoire.\n"));
+    
+    if (sscanf(texte, "%u%s", &nombre, fake) != 1)
+    {
+        free(texte);
+        free(fake);
+        return UINT_MAX;
     }
     else
     {
