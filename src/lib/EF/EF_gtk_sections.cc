@@ -21,11 +21,7 @@
 #ifdef ENABLE_GTK
 #include <libintl.h>
 #include <locale.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
 #include <gtk/gtk.h>
-#include <math.h>
 
 #include "common_m3d.hpp"
 
@@ -35,14 +31,7 @@ extern "C" {
 #include "common_gtk.h"
 #include "common_maths.h"
 #include "common_selection.h"
-#include "EF_appuis.h"
-#include "EF_noeud.h"
 #include "EF_section.h"
-#include "EF_relachement.h"
-#include "EF_charge_noeud.h"
-#include "1990_actions.h"
-#include "1992_1_1_barres.h"
-#include "1992_1_1_materiaux.h"
 #include "EF_gtk_section_rectangulaire.h"
 #include "EF_gtk_section_T.h"
 #include "EF_gtk_section_carree.h"

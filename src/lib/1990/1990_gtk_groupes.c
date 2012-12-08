@@ -20,10 +20,8 @@
 #ifdef ENABLE_GTK
 #include <libintl.h>
 #include <locale.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
 #include <gtk/gtk.h>
+#include <math.h>
 
 #include "1990_actions.h"
 #include "1990_groupes.h"

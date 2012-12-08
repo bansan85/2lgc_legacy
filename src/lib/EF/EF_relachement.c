@@ -17,8 +17,8 @@
  */
 
 #include "config.h"
-#include <stdlib.h>
 #include <libintl.h>
+#include <locale.h>
 #include <string.h>
 #include <gmodule.h>
 

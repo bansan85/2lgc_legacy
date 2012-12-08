@@ -21,8 +21,6 @@
 
 #include <libintl.h>
 #include <locale.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 #include <gtk/gtk.h>

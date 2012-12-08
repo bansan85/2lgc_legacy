@@ -17,19 +17,16 @@
  */
 
 #include "config.h"
-#include <stdlib.h>
-#include <math.h>
 #include <libintl.h>
+#include <locale.h>
 #include <gmodule.h> 
 #include <string.h>
+#include <math.h>
 
 #include "common_projet.h"
 #include "common_erreurs.h"
-#include "EF_calculs.h"
-#include "EF_appuis.h"
 #include "common_m3d.hpp"
-#include "EF_rigidite.h"
-#include "1992_1_1_barres.h"
+#include "EF_calculs.h"
 
 G_MODULE_EXPORT gboolean EF_noeuds_init(Projet *projet)
 /* Description : Initialise la liste des noeuds.

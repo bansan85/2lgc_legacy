@@ -21,9 +21,6 @@
 #ifdef ENABLE_GTK
 #include <libintl.h>
 #include <locale.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
 #include <gtk/gtk.h>
 #include <math.h>
 
@@ -31,13 +28,8 @@
 #include "common_erreurs.h"
 #include "common_gtk.h"
 #include "common_maths.h"
-#include "1992_1_1_barres.h"
-#include "1992_1_1_materiaux.h"
-#include "EF_charge.h"
-#include "EF_charge_barre_ponctuelle.h"
-#include "1990_actions.h"
-#include "1990_gtk_actions.h"
 #include "common_selection.h"
+#include "1992_1_1_materiaux.h"
 
 G_MODULE_EXPORT gboolean _1992_1_1_gtk_materiaux_window_key_press(
   GtkWidget *widget __attribute__((unused)), GdkEvent *event, Projet *projet)
