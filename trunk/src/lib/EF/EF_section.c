@@ -126,7 +126,7 @@ G_MODULE_EXPORT gboolean EF_sections_ajout_rectangulaire(Projet *projet, const c
     BUGMSG(section_nouvelle->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
     section_data->largeur_retombee = l;
     section_data->hauteur_retombee = h;
-    section_data->largeur_table = 0.;
+    section_data->largeur_table = l;
     section_data->hauteur_table = 0.;
     
     projet->beton.sections = g_list_append(projet->beton.sections, section_nouvelle);
