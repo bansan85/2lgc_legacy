@@ -4,7 +4,6 @@
     <object class="GtkWindow" id="1990_groupes_options_window">
         <property name="visible">True</property>
         <property name="title" translatable="yes">Options des combinaisons</property>
-        <property name="modal">True</property>
         <property name="resizable">False</property>
         <property name="window-position">GTK_WIN_POS_CENTER</property>
         <signal name="destroy" handler="_1990_gtk_groupes_options_window_destroy"/>

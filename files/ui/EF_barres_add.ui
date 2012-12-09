@@ -27,7 +27,6 @@
     <object class="GtkWindow" id="EF_barres_add_window">
         <property name="visible">True</property>
         <property name="title" translatable="yes">Ajout d'une barre</property>
-        <property name="modal">True</property>
         <property name="window-position">GTK_WIN_POS_CENTER</property>
         <signal name="key-press-event" handler="EF_gtk_barres_add_window_key_press"/>
         <signal name="destroy" handler="EF_gtk_barres_add_window_destroy"/>

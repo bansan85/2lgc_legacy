@@ -24,7 +24,6 @@
     <object class="GtkWindow" id="EF_noeuds_window">
         <property name="visible">True</property>
         <property name="title" translatable="yes">Noeuds</property>
-        <property name="modal">True</property>
         <property name="default-height">400</property>
         <property name="default-width">600</property>
         <property name="window-position">GTK_WIN_POS_CENTER</property>

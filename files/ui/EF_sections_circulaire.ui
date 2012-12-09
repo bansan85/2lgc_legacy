@@ -24,7 +24,6 @@
     </object>
     <object id="EF_section_circulaire_window" class="GtkWindow">
         <property name="visible">True</property>
-        <property name="modal">True</property>
         <property name="window-position">GTK_WIN_POS_CENTER</property>
         <property name="default-width">400</property>
         <signal name="key-press-event" handler="EF_gtk_section_circulaire_window_key_press"/>

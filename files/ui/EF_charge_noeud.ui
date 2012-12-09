@@ -54,7 +54,6 @@
     </object>
     <object id="EF_charge_noeud_window" class="GtkWindow">
         <property name="visible">True</property>
-        <property name="modal">True</property>
         <property name="default-width">500</property>
         <property name="window-position">GTK_WIN_POS_CENTER</property>
         <signal name="key-press-event" handler="EF_gtk_charge_noeud_window_key_press"/>
