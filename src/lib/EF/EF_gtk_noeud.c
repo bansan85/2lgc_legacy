@@ -458,11 +458,11 @@ G_MODULE_EXPORT void EF_gtk_noeud_edit_noeud_appui(
         model = GTK_TREE_MODEL(ef_gtk->tree_store_libre);
     else
         model = GTK_TREE_MODEL(ef_gtk->tree_store_barre);
-    path = gtk_tree_path_new_from_string (path_string);
+    path = gtk_tree_path_new_from_string(path_string);
     
     gtk_tree_model_get_iter(model, &iter, path);
     gtk_tree_model_get(model, &iter, 0, &numero_noeud, -1);
-    gtk_tree_path_free (path);
+    gtk_tree_path_free(path);
     
     BUG(noeud = EF_noeuds_cherche_numero(projet, numero_noeud), );
     

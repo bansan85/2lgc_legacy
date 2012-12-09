@@ -545,9 +545,29 @@ G_MODULE_EXPORT gboolean EF_appuis_renomme(EF_Appui *appui, gchar *nom, Projet *
     BUGMSG(appui->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
     
 #ifdef ENABLE_GTK
+    gtk_list_store_set(projet->list_gtk.ef_appuis.liste_appuis, &appui->Iter_liste, 0, nom, -1);
     if (projet->list_gtk.ef_appuis.builder != NULL)
-    {
         gtk_tree_store_set(projet->list_gtk.ef_appuis.appuis, &appui->Iter_fenetre, 0, nom, -1);
+    if (projet->list_gtk.ef_noeud.builder != NULL)
+    {
+        GtkTreeModel    *model;
+        GList           *parcours;
+        
+        parcours = projet->ef_donnees.noeuds;
+        while (parcours != NULL)
+        {
+            EF_Noeud    *noeud = parcours->data;
+            
+            if (noeud->type == NOEUD_LIBRE)
+                model = GTK_TREE_MODEL(projet->list_gtk.ef_noeud.tree_store_libre);
+            else
+                model = GTK_TREE_MODEL(projet->list_gtk.ef_noeud.tree_store_barre);
+            
+            if (noeud->appui == appui)
+                gtk_tree_store_set(GTK_TREE_STORE(model), &noeud->Iter, 4, appui->nom, -1);
+            
+            parcours = g_list_next(parcours);
+        }
     }
 #endif
     
