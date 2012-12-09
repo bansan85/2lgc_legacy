@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2012-12-05 12:41+0100\n"
-"PO-Revision-Date: 2012-12-07 22:08+0100\n"
+"POT-Creation-Date: 2012-12-09 18:33+0100\n"
+"PO-Revision-Date: 2012-12-09 18:39+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -176,6 +176,15 @@ msgstr "Matériaux"
 
 msgid "et les barres utilisant le relachement."
 msgstr "et les barres utilisant le relachement."
+
+msgid "Libre"
+msgstr "Libre"
+
+msgid "Bloqué"
+msgstr "Bloqué"
+
+msgid "Linéaire"
+msgstr "Linéaire"
 
 msgid "Relâchements"
 msgstr "Relâchements"
@@ -775,29 +784,17 @@ msgstr "Ajout d'une charge ponctuelle sur barre"
 msgid "Modification d'une charge ponctuelle sur barre"
 msgstr "Modification d'une charge ponctuelle sur barre"
 
-msgid "Aucun noeud n'est sélectionné.\n"
-msgstr "Aucun noeud n'est sélectionné.\n"
+msgid "La largeur du dessin ne peut être nulle.\n"
+msgstr "La largeur du dessin ne peut être nulle.\n"
 
-msgid "Aucun noeud n'est existant.\n"
-msgstr "Aucun noeud n'est existant.\n"
+msgid "La hauteur du dessin ne peut être nulle.\n"
+msgstr "La hauteur du dessin ne peut être nulle.\n"
 
-msgid "La colonne d'où provient l'édition est incorrecte.\n"
-msgstr "La colonne d'où provient l'édition est incorrecte.\n"
+msgid "Type de section %d inconnu."
+msgstr "Type de section %d inconnu."
 
-msgid "Le type du noeud ou la colonne d'édition est incorrect.\n"
-msgstr "Le type du noeud ou la colonne d'édition est incorrect.\n"
-
-msgid "Le noeud doit être de type intermédiaire.\n"
-msgstr "Le noeud doit être de type intermédiaire.\n"
-
-msgid "Bloqué"
-msgstr "Bloqué"
-
-msgid "Libre"
-msgstr "Libre"
-
-msgid "Linéaire"
-msgstr "Linéaire"
+msgid "Le type de relâchement est inconnu.\n"
+msgstr "Le type de relâchement est inconnu.\n"
 
 msgid "La valeur de la largeur de la retombée est incorrecte."
 msgstr "La valeur de la largeur de la retombée est incorrecte."
@@ -846,6 +843,21 @@ msgstr "Modification d'une section rectangulaire"
 
 msgid "La section à modifier n'est pas rectangulaire.\n"
 msgstr "La section à modifier n'est pas rectangulaire.\n"
+
+msgid "Aucun noeud n'est sélectionné.\n"
+msgstr "Aucun noeud n'est sélectionné.\n"
+
+msgid "Aucun noeud n'est existant.\n"
+msgstr "Aucun noeud n'est existant.\n"
+
+msgid "La colonne d'où provient l'édition est incorrecte.\n"
+msgstr "La colonne d'où provient l'édition est incorrecte.\n"
+
+msgid "Le type du noeud ou la colonne d'édition est incorrect.\n"
+msgstr "Le type du noeud ou la colonne d'édition est incorrect.\n"
+
+msgid "Le noeud doit être de type intermédiaire.\n"
+msgstr "Le noeud doit être de type intermédiaire.\n"
 
 msgid "Impossible de réaliser un calcul sans noeud existant.\n"
 msgstr "Impossible de réaliser un calcul sans noeud existant.\n"
@@ -898,6 +910,9 @@ msgstr "Modification d'une charge répartie uniforme sur barre"
 msgid "Il n'est pas possible d'activer à la fois la projection et l'utilisation du repère local."
 msgstr "Il n'est pas possible d'activer à la fois la projection et l'utilisation du repère local."
 
+msgid "Type d'appui %s inconnu.\n"
+msgstr "Type d'appui %s inconnu.\n"
+
 msgid "Le type d'appui de %s (%s) n'a pas à posséder de données.\n"
 msgstr "Le type d'appui de %s (%s) n'a pas à posséder de données.\n"
 
@@ -928,6 +943,12 @@ msgstr "Modification d'une section circulaire"
 msgid "La section à modifier n'est pas circulaire.\n"
 msgstr "La section à modifier n'est pas circulaire.\n"
 
+msgid "Relachement '%s' introuvable.\n"
+msgstr "Relachement '%s' introuvable.\n"
+
+msgid "Le relachement '%s' existe déjà.\n"
+msgstr "Le relachement '%s' existe déjà.\n"
+
 msgid "La liste des types de barre est indéfinie.\n"
 msgstr "La liste des types de barre est indéfinie.\n"
 
@@ -945,15 +966,6 @@ msgstr "La liste des matériaux est indéfinie.\n"
 
 msgid "La liste des relâchements de barre est indéfinie.\n"
 msgstr "La liste des relâchements de barre est indéfinie.\n"
-
-msgid "Relachement '%s' introuvable.\n"
-msgstr "Relachement '%s' introuvable.\n"
-
-msgid "Le relachement '%s' existe déjà.\n"
-msgstr "Le relachement '%s' existe déjà.\n"
-
-msgid "Type d'appui %s inconnu.\n"
-msgstr "Type d'appui %s inconnu.\n"
 
 msgid "Impossible d'effectuer une projection dans un repère local.\n"
 msgstr "Impossible d'effectuer une projection dans un repère local.\n"
@@ -1039,9 +1051,6 @@ msgstr "Coté"
 msgid "Diamètre"
 msgstr "Diamètre"
 
-msgid "Type de section %d inconnu."
-msgstr "Type de section %d inconnu."
-
 msgid "La section '%s' existe déjà.\n"
 msgstr "La section '%s' existe déjà.\n"
 
@@ -1071,12 +1080,6 @@ msgstr "Ajout d'une charge au noeud"
 
 msgid "Modification d'une charge au noeud"
 msgstr "Modification d'une charge au noeud"
-
-msgid "La largeur du dessin ne peut être nulle.\n"
-msgstr "La largeur du dessin ne peut être nulle.\n"
-
-msgid "La hauteur du dessin ne peut être nulle.\n"
-msgstr "La hauteur du dessin ne peut être nulle.\n"
 
 msgid "Charge %u de l'action %u introuvable.\n"
 msgstr "Charge %u de l'action %u introuvable.\n"
