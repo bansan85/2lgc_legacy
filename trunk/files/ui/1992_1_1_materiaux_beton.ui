@@ -24,7 +24,6 @@
     </object>
     <object id="_1992_1_1_materiaux_beton_window" class="GtkWindow">
         <property name="visible">True</property>
-        <property name="modal">True</property>
         <property name="window-position">GTK_WIN_POS_CENTER</property>
         <property name="default-width">400</property>
         <signal name="key-press-event" handler="_1992_1_1_gtk_materiaux_window_key_press"/>

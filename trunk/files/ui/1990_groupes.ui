@@ -41,7 +41,6 @@
     <object class="GtkWindow" id="1990_groupes_window">
         <property name="visible">True</property>
         <property name="title" translatable="yes">Groupes</property>
-        <property name="modal">True</property>
         <property name="default-height">600</property>
         <property name="default-width">800</property>
         <property name="window-position">GTK_WIN_POS_CENTER</property>

@@ -23,7 +23,6 @@
     <object id="1990_actions_window" class="GtkWindow">
         <property name="visible">True</property>
         <property name="title" translatable="yes">Actions</property>
-        <property name="modal">True</property>
         <property name="default-height">600</property>
         <property name="default-width">800</property>
         <property name="window-position">GTK_WIN_POS_CENTER</property>
