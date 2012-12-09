@@ -119,8 +119,9 @@ G_MODULE_EXPORT void EF_gtk_relachements_select_changed(
     }
     else
     {
-        char            *nom;
-        EF_Relachement  *relachement;
+        char                *nom;
+        EF_Relachement      *relachement;
+        GtkCellRendererText *cell;
         
         gtk_tree_model_get(model, &Iter, 0, &nom, -1);
         
@@ -139,6 +140,127 @@ G_MODULE_EXPORT void EF_gtk_relachements_select_changed(
             gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_boutton_supprimer_menu")), FALSE);
             gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_boutton_supprimer_direct")), TRUE);
             gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_boutton_supprimer_menu")), FALSE);
+        }
+        
+        cell = GTK_CELL_RENDERER_TEXT(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_treeview_cell2"));
+        switch (relachement->rx_debut)
+        {
+            case EF_RELACHEMENT_BLOQUE :
+            case EF_RELACHEMENT_LIBRE :
+            {
+                g_object_set(cell, "editable", FALSE, NULL);
+                break;
+            }
+            case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
+            {
+                g_object_set(cell, "editable", TRUE, NULL);
+                break;
+            }
+            default :
+            {
+                BUGMSG(NULL, , gettext("Relachement %d inconnu."), relachement->rx_debut);
+                break;
+            }
+        }
+        cell = GTK_CELL_RENDERER_TEXT(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_treeview_cell4"));
+        switch (relachement->ry_debut)
+        {
+            case EF_RELACHEMENT_BLOQUE :
+            case EF_RELACHEMENT_LIBRE :
+            {
+                g_object_set(cell, "editable", FALSE, NULL);
+                break;
+            }
+            case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
+            {
+                g_object_set(cell, "editable", TRUE, NULL);
+                break;
+            }
+            default :
+            {
+                BUGMSG(NULL, , gettext("Relachement %d inconnu."), relachement->ry_debut);
+                break;
+            }
+        }
+        cell = GTK_CELL_RENDERER_TEXT(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_treeview_cell6"));
+        switch (relachement->rz_debut)
+        {
+            case EF_RELACHEMENT_BLOQUE :
+            case EF_RELACHEMENT_LIBRE :
+            {
+                g_object_set(cell, "editable", FALSE, NULL);
+                break;
+            }
+            case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
+            {
+                g_object_set(cell, "editable", TRUE, NULL);
+                break;
+            }
+            default :
+            {
+                BUGMSG(NULL, , gettext("Relachement %d inconnu."), relachement->rz_debut);
+                break;
+            }
+        }
+        cell = GTK_CELL_RENDERER_TEXT(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_treeview_cell8"));
+        switch (relachement->rx_fin)
+        {
+            case EF_RELACHEMENT_BLOQUE :
+            case EF_RELACHEMENT_LIBRE :
+            {
+                g_object_set(cell, "editable", FALSE, NULL);
+                break;
+            }
+            case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
+            {
+                g_object_set(cell, "editable", TRUE, NULL);
+                break;
+            }
+            default :
+            {
+                BUGMSG(NULL, , gettext("Relachement %d inconnu."), relachement->rx_fin);
+                break;
+            }
+        }
+        cell = GTK_CELL_RENDERER_TEXT(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_treeview_cell10"));
+        switch (relachement->ry_fin)
+        {
+            case EF_RELACHEMENT_BLOQUE :
+            case EF_RELACHEMENT_LIBRE :
+            {
+                g_object_set(cell, "editable", FALSE, NULL);
+                break;
+            }
+            case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
+            {
+                g_object_set(cell, "editable", TRUE, NULL);
+                break;
+            }
+            default :
+            {
+                BUGMSG(NULL, , gettext("Relachement %d inconnu."), relachement->ry_fin);
+                break;
+            }
+        }
+        cell = GTK_CELL_RENDERER_TEXT(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_treeview_cell12"));
+        switch (relachement->rz_fin)
+        {
+            case EF_RELACHEMENT_BLOQUE :
+            case EF_RELACHEMENT_LIBRE :
+            {
+                g_object_set(cell, "editable", FALSE, NULL);
+                break;
+            }
+            case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
+            {
+                g_object_set(cell, "editable", TRUE, NULL);
+                break;
+            }
+            default :
+            {
+                BUGMSG(NULL, , gettext("Relachement %d inconnu."), relachement->rz_fin);
+                break;
+            }
         }
         
         free(nom);
@@ -492,73 +614,225 @@ G_MODULE_EXPORT void EF_gtk_relachements_ajouter(GtkButton *button __attribute__
 }
 
 
-/*G_MODULE_EXPORT void EF_gtk_relachements_edit_clicked(GtkWidget *widget __attribute__((unused)),
-  Projet *projet)*/
-/* Description : Edite les sections sélectionnées.
- * Paramètres : GtkToolButton *toolbutton : composant à l'origine de l'évènement,
+G_MODULE_EXPORT void EF_gtk_relachements_edit_clicked(GtkCellRendererText *cell,
+  gchar *path_string, gchar *new_text, Projet *projet)
+/* Description : Edite le relâchement sélectionné.
+ * Paramètres : GtkCellRendererText *cell : cellule en cours,
+ *            : gchar *path_string : path de la ligne en cours,
+ *            : gchar *new_text : nouvelle valeur,
  *            : Projet *projet : la variable projet.
  * Valeur renvoyée : Aucune.
  *   Echec : projet == NULL,
  *           interface graphique non initialisée.
  */
-/*{
-    GtkTreeIter     iter;
-    GtkTreeModel    *model;
-    char            *nom;
-    GList           *list, *list_parcours;
+{
+    Gtk_EF_Relachements *ef_gtk;
+    GtkTreeModel        *model;
+    GtkTreeIter         iter;
+    GtkTreePath         *path;
+    gint                column = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cell), "column"));
+    char                *nom;
+    EF_Relachement      *relachement;
+    double              conversion;
+    char                *fake = (char*)malloc(sizeof(char)*(strlen(new_text)+1));
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_relachements.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Relachement");
     
-    // On récupère la liste des charges à éditer.
-    list = gtk_tree_selection_get_selected_rows(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_treeview_select")), &model);
-    list_parcours = g_list_first(list);
-    for(;list_parcours != NULL; list_parcours = g_list_next(list_parcours))
+    ef_gtk = &projet->list_gtk.ef_relachements;
+    model = GTK_TREE_MODEL(ef_gtk->relachements);
+    path = gtk_tree_path_new_from_string(path_string);
+    gtk_tree_model_get_iter(model, &iter, path);
+    gtk_tree_path_free(path);
+    gtk_tree_model_get(model, &iter, 0, &nom, -1);
+    
+    BUG(relachement = EF_relachement_cherche_nom(projet, nom, TRUE), );
+    free(nom);
+    
+    if (sscanf(new_text, "%lf%s", &conversion, fake) != 1)
     {
-        if (gtk_tree_model_get_iter(model, &iter, (GtkTreePath*)list_parcours->data))
+        printf("Conversion échec\n");
+        free(fake);
+        return;
+    }
+    
+    if (column == 0)
+    {
+        switch (relachement->rx_debut)
         {
-    // Et on les édite les unes après les autres.
-            EF_Relachement  *section;
-            
-            gtk_tree_model_get(model, &iter, 1, &nom, -1);
-            BUG(section = EF_relachement_cherche_nom(projet, nom, TRUE), );
-            free(nom);
-            
-            switch (section->type)
+            case EF_RELACHEMENT_BLOQUE :
+            case EF_RELACHEMENT_LIBRE :
             {
-                case SECTION_RECTANGULAIRE :
-                {
-                    BUG(EF_gtk_section_rectangulaire(projet, section), );
-                    break;
-                }
-                case SECTION_T :
-                {
-                    BUG(EF_gtk_section_T(projet, section), );
-                    break;
-                }
-                case SECTION_CARREE :
-                {
-                    BUG(EF_gtk_section_carree(projet, section), );
-                    break;
-                }
-                case SECTION_CIRCULAIRE :
-                {
-                    BUG(EF_gtk_section_circulaire(projet, section), );
-                    break;
-                }
-                default :
-                {
-                    BUGMSG(0, , gettext("Type de section %d inconnu."), section->type);
-                    break;
-                }
+                BUGMSG(NULL, , "Impossible d'éditer ce type de relâchement.\n");
+                break;
+            }
+            case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
+            {
+                EF_Relachement_Donnees_Elastique_Lineaire *data;
+                char    tmp[30];
+                
+                data = (EF_Relachement_Donnees_Elastique_Lineaire *)relachement->rx_d_data;
+                data->raideur = conversion;
+                common_math_double_to_char(data->raideur, tmp, DECIMAL_NEWTON_PAR_METRE);
+                gtk_tree_store_set(ef_gtk->relachements, &iter, column*2+2, tmp, -1);
+                
+                break;
+            }
+            default :
+            {
+                BUGMSG(NULL, , "Le type de relâchement est inconnu.\n");
+                break;
             }
         }
     }
-    g_list_foreach(list, (GFunc)gtk_tree_path_free, NULL);
-    g_list_free(list);
+    else if (column == 1)
+    {
+        switch (relachement->ry_debut)
+        {
+            case EF_RELACHEMENT_BLOQUE :
+            case EF_RELACHEMENT_LIBRE :
+            {
+                BUGMSG(NULL, , "Impossible d'éditer ce type de relâchement.\n");
+                break;
+            }
+            case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
+            {
+                EF_Relachement_Donnees_Elastique_Lineaire *data;
+                char    tmp[30];
+                
+                data = (EF_Relachement_Donnees_Elastique_Lineaire *)relachement->ry_d_data;
+                data->raideur = conversion;
+                common_math_double_to_char(data->raideur, tmp, DECIMAL_NEWTON_PAR_METRE);
+                gtk_tree_store_set(ef_gtk->relachements, &iter, column*2+2, tmp, -1);
+                
+                break;
+            }
+            default :
+            {
+                BUGMSG(NULL, , "Le type de relâchement est inconnu.\n");
+                break;
+            }
+        }
+    }
+    else if (column == 2)
+    {
+        switch (relachement->rz_debut)
+        {
+            case EF_RELACHEMENT_BLOQUE :
+            case EF_RELACHEMENT_LIBRE :
+            {
+                BUGMSG(NULL, , "Impossible d'éditer ce type de relâchement.\n");
+                break;
+            }
+            case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
+            {
+                EF_Relachement_Donnees_Elastique_Lineaire *data;
+                char    tmp[30];
+                
+                data = (EF_Relachement_Donnees_Elastique_Lineaire *)relachement->rz_d_data;
+                data->raideur = conversion;
+                common_math_double_to_char(data->raideur, tmp, DECIMAL_NEWTON_PAR_METRE);
+                gtk_tree_store_set(ef_gtk->relachements, &iter, column*2+2, tmp, -1);
+                
+                break;
+            }
+            default :
+            {
+                BUGMSG(NULL, , "Le type de relâchement est inconnu.\n");
+                break;
+            }
+        }
+    }
+    else if (column == 3)
+    {
+        switch (relachement->rx_fin)
+        {
+            case EF_RELACHEMENT_BLOQUE :
+            case EF_RELACHEMENT_LIBRE :
+            {
+                BUGMSG(NULL, , "Impossible d'éditer ce type de relâchement.\n");
+                break;
+            }
+            case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
+            {
+                EF_Relachement_Donnees_Elastique_Lineaire *data;
+                char    tmp[30];
+                
+                data = (EF_Relachement_Donnees_Elastique_Lineaire *)relachement->rx_f_data;
+                data->raideur = conversion;
+                common_math_double_to_char(data->raideur, tmp, DECIMAL_NEWTON_PAR_METRE);
+                gtk_tree_store_set(ef_gtk->relachements, &iter, column*2+2, tmp, -1);
+                
+                break;
+            }
+            default :
+            {
+                BUGMSG(NULL, , "Le type de relâchement est inconnu.\n");
+                break;
+            }
+        }
+    }
+    else if (column == 4)
+    {
+        switch (relachement->ry_fin)
+        {
+            case EF_RELACHEMENT_BLOQUE :
+            case EF_RELACHEMENT_LIBRE :
+            {
+                BUGMSG(NULL, , "Impossible d'éditer ce type de relâchement.\n");
+                break;
+            }
+            case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
+            {
+                EF_Relachement_Donnees_Elastique_Lineaire *data;
+                char    tmp[30];
+                
+                data = (EF_Relachement_Donnees_Elastique_Lineaire *)relachement->ry_f_data;
+                data->raideur = conversion;
+                common_math_double_to_char(data->raideur, tmp, DECIMAL_NEWTON_PAR_METRE);
+                gtk_tree_store_set(ef_gtk->relachements, &iter, column*2+2, tmp, -1);
+                
+                break;
+            }
+            default :
+            {
+                BUGMSG(NULL, , "Le type de relâchement est inconnu.\n");
+                break;
+            }
+        }
+    }
+    else if (column == 5)
+    {
+        switch (relachement->rz_fin)
+        {
+            case EF_RELACHEMENT_BLOQUE :
+            case EF_RELACHEMENT_LIBRE :
+            {
+                BUGMSG(NULL, , "Impossible d'éditer ce type de relâchement.\n");
+                break;
+            }
+            case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
+            {
+                EF_Relachement_Donnees_Elastique_Lineaire *data;
+                char    tmp[30];
+                
+                data = (EF_Relachement_Donnees_Elastique_Lineaire *)relachement->rz_f_data;
+                data->raideur = conversion;
+                common_math_double_to_char(data->raideur, tmp, DECIMAL_NEWTON_PAR_METRE);
+                gtk_tree_store_set(ef_gtk->relachements, &iter, column*2+2, tmp, -1);
+                
+                break;
+            }
+            default :
+            {
+                BUGMSG(NULL, , "Le type de relâchement est inconnu.\n");
+                break;
+            }
+        }
+    }
     
     return;
-}*/
+}
 
 
 G_MODULE_EXPORT void EF_gtk_relachement(Projet *projet)
@@ -581,6 +855,13 @@ G_MODULE_EXPORT void EF_gtk_relachement(Projet *projet)
     ef_gtk->builder = gtk_builder_new();
     BUGMSG(gtk_builder_add_from_file(ef_gtk->builder, DATADIR"/ui/EF_relachements.ui", NULL) != 0, , gettext("Builder Failed\n"));
     gtk_builder_connect_signals(ef_gtk->builder, projet);
+    
+    g_object_set_data(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_treeview_cell2"), "column", GINT_TO_POINTER(0));
+    g_object_set_data(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_treeview_cell4"), "column", GINT_TO_POINTER(1));
+    g_object_set_data(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_treeview_cell6"), "column", GINT_TO_POINTER(2));
+    g_object_set_data(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_treeview_cell8"), "column", GINT_TO_POINTER(3));
+    g_object_set_data(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_treeview_cell10"), "column", GINT_TO_POINTER(4));
+    g_object_set_data(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_treeview_cell12"), "column", GINT_TO_POINTER(5));
     
     ef_gtk->window = GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder, "EF_relachements_window"));
     ef_gtk->relachements = GTK_TREE_STORE(gtk_builder_get_object(ef_gtk->builder, "EF_relachements_treestore"));

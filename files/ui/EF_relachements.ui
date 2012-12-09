@@ -92,7 +92,9 @@
                                         <property name="resizable">True</property>
                                         <property name="title">Paramètre</property>
                                         <child>
-                                            <object class="GtkCellRendererText" id="EF_relachements_treeview_cell2" />
+                                            <object class="GtkCellRendererText" id="EF_relachements_treeview_cell2">
+                                                <signal name="edited" handler="EF_gtk_relachements_edit_clicked"/>
+                                            </object>
                                             <attributes>
                                                 <attribute name="text">2</attribute>
                                             </attributes>
@@ -118,7 +120,9 @@
                                         <property name="resizable">True</property>
                                         <property name="title">Paramètre</property>
                                         <child>
-                                            <object class="GtkCellRendererText" id="EF_relachements_treeview_cell4" />
+                                            <object class="GtkCellRendererText" id="EF_relachements_treeview_cell4">
+                                                <signal name="edited" handler="EF_gtk_relachements_edit_clicked"/>
+                                            </object>
                                             <attributes>
                                                 <attribute name="text">4</attribute>
                                             </attributes>
@@ -144,7 +148,9 @@
                                         <property name="resizable">True</property>
                                         <property name="title">Paramètre</property>
                                         <child>
-                                            <object class="GtkCellRendererText" id="EF_relachements_treeview_cell6" />
+                                            <object class="GtkCellRendererText" id="EF_relachements_treeview_cell6">
+                                                <signal name="edited" handler="EF_gtk_relachements_edit_clicked"/>
+                                            </object>
                                             <attributes>
                                                 <attribute name="text">6</attribute>
                                             </attributes>
@@ -170,7 +176,9 @@
                                         <property name="resizable">True</property>
                                         <property name="title">Paramètre</property>
                                         <child>
-                                            <object class="GtkCellRendererText" id="EF_relachements_treeview_cell8" />
+                                            <object class="GtkCellRendererText" id="EF_relachements_treeview_cell8">
+                                                <signal name="edited" handler="EF_gtk_relachements_edit_clicked"/>
+                                            </object>
                                             <attributes>
                                                 <attribute name="text">8</attribute>
                                             </attributes>
@@ -196,7 +204,9 @@
                                         <property name="resizable">True</property>
                                         <property name="title">Paramètre</property>
                                         <child>
-                                            <object class="GtkCellRendererText" id="EF_relachements_treeview_cell10" />
+                                            <object class="GtkCellRendererText" id="EF_relachements_treeview_cell10">
+                                                <signal name="edited" handler="EF_gtk_relachements_edit_clicked"/>
+                                            </object>
                                             <attributes>
                                                 <attribute name="text">10</attribute>
                                             </attributes>
@@ -222,7 +232,9 @@
                                         <property name="resizable">True</property>
                                         <property name="title">Paramètre</property>
                                         <child>
-                                            <object class="GtkCellRendererText" id="EF_relachements_treeview_cell12" />
+                                            <object class="GtkCellRendererText" id="EF_relachements_treeview_cell12">
+                                                <signal name="edited" handler="EF_gtk_relachements_edit_clicked"/>
+                                            </object>
                                             <attributes>
                                                 <attribute name="text">12</attribute>
                                             </attributes>
