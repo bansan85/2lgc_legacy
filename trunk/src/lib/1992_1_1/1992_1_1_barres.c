@@ -1314,7 +1314,8 @@ G_MODULE_EXPORT void _1992_1_1_barre_free_foreach(Beton_Barre *barre, Projet *pr
 }
 
 
-G_MODULE_EXPORT gboolean _1992_1_1_barres_supprime_liste(Projet *projet, GList *liste_noeuds, GList *liste_barres)
+G_MODULE_EXPORT gboolean _1992_1_1_barres_supprime_liste(Projet *projet, GList *liste_noeuds,
+  GList *liste_barres)
 /* Description : Supprime une liste de barres.
  * Paramètres : Projet *projet : la variable projet,
  *            : GList *liste_noeuds : liste des noeuds à supprimer.
@@ -1332,15 +1333,23 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_supprime_liste(Projet *projet, GList *
     
     BUG(_1992_1_1_barres_cherche_dependances(projet, liste_noeuds, liste_barres, &noeuds_suppr, &barres_suppr), FALSE);
     
-    // On supprime les noeuds
-    g_list_foreach(noeuds_suppr, (GFunc)EF_noeuds_free_foreach, projet);
+    // Il faut détecter tous les noeuds intermédiaires des barres qui seront supprimées pour
+    // leur dire qu'ils sont maintenant non dépendant de barres.
     list_parcours = noeuds_suppr;
     while (list_parcours != NULL)
     {
-        projet->ef_donnees.noeuds = g_list_remove(projet->ef_donnees.noeuds, list_parcours->data);
+        EF_Noeud    *noeud = list_parcours->data;
+        
+        if (noeud->type == NOEUD_BARRE)
+        {
+            EF_Noeud_Barre  *infos = noeud->data;
+            
+            if (g_list_find(barres_suppr, infos->barre) != NULL)
+                noeud->data = NULL;
+        }
+        
         list_parcours = g_list_next(list_parcours);
     }
-    g_list_free(noeuds_suppr);
     
     // On supprime les barres
     g_list_foreach(barres_suppr, (GFunc)_1992_1_1_barre_free_foreach, projet);
@@ -1351,6 +1360,16 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_supprime_liste(Projet *projet, GList *
         list_parcours = g_list_next(list_parcours);
     }
     g_list_free(barres_suppr);
+    
+    // On supprime les noeuds
+    g_list_foreach(noeuds_suppr, (GFunc)EF_noeuds_free_foreach, projet);
+    list_parcours = noeuds_suppr;
+    while (list_parcours != NULL)
+    {
+        projet->ef_donnees.noeuds = g_list_remove(projet->ef_donnees.noeuds, list_parcours->data);
+        list_parcours = g_list_next(list_parcours);
+    }
+    g_list_free(noeuds_suppr);
     
     BUG(EF_calculs_free(projet), FALSE);
     

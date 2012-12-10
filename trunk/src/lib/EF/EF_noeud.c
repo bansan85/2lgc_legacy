@@ -317,6 +317,39 @@ G_MODULE_EXPORT EF_Noeud* EF_noeuds_cherche_numero(Projet *projet, unsigned int 
 }
 
 
+G_MODULE_EXPORT gboolean EF_noeuds_verifie_dependances(Projet *projet, EF_Noeud *noeud)
+/* Description : Vérifie si le noeud est utilisé.
+ * Paramètres : Projet *projet : la variable projet,
+ *            : EF_Noeud *noeud : le noeud à analyser,
+ * Valeur renvoyée :
+ *   Succès : TRUE si le noeud est utilisé et FALSE s'il ne l'est pas.
+ *   Échec : FALSE :
+ *             projet == NULL,
+ *             noeud == NULL.
+ */
+{
+    GList   *list_parcours;
+    
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(noeud, FALSE, gettext("Paramètre %s incorrect.\n"), "noeud");
+    
+    list_parcours = projet->beton.barres;
+    while (list_parcours != NULL)
+    {
+        Beton_Barre *barre = list_parcours->data;
+        
+        if (barre->noeud_debut == noeud)
+            return TRUE;
+        if (barre->noeud_fin == noeud)
+            return TRUE;
+        
+        list_parcours = g_list_next(list_parcours);
+    }
+    
+    return FALSE;
+}
+
+
 G_MODULE_EXPORT gboolean EF_noeuds_change_appui(Projet *projet, EF_Noeud *noeud,
   EF_Appui *appui)
 /* Description : Change l'appui d'un noeud.
@@ -456,7 +489,8 @@ G_MODULE_EXPORT void EF_noeuds_free_foreach(EF_Noeud *noeud,
     if (noeud == NULL)
         return;
     
-    if (noeud->type == NOEUD_BARRE)
+    // La vérification noeud->data != NULL est nécessaire pour _1992_1_1_barres_supprime_liste
+    if ((noeud->type == NOEUD_BARRE) && (noeud->data != NULL))
     {
         EF_Noeud_Barre  *infos = noeud->data;
         

@@ -21,6 +21,16 @@
             <column type="gdouble"/>
         </columns>
     </object>
+    <object class="GtkMenu" id="EF_noeuds_supprimer_menu">
+        <property name="visible">True</property>
+        <child>
+            <object class="GtkMenuItem" id="EF_noeuds_supprimer_menu_barres">
+                <property name="label" translatable="yes">et les barres utilisant le noeud.</property>
+                <property name="visible">True</property>
+                <signal name="activate" handler="EF_gtk_noeud_supprimer"/>
+            </object>
+        </child>
+    </object>
     <object class="GtkWindow" id="EF_noeuds_window">
         <property name="visible">True</property>
         <property name="title" translatable="yes">Noeuds</property>
@@ -310,6 +320,19 @@
                             </object>
                             <packing>
                                 <property name="position">1</property>
+                                <property name="pack_type">start</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GtkMenuButton" id="EF_noeuds_boutton_supprimer_menu">
+                                <property name="visible">False</property>
+                                <property name="label">gtk-delete</property>
+                                <property name="sensitive">False</property>
+                                <property name="menu">EF_noeuds_supprimer_menu</property>
+                                <property name="use_stock">True</property>
+                            </object>
+                            <packing>
+                                <property name="position">2</property>
                                 <property name="pack_type">start</property>
                             </packing>
                         </child>
