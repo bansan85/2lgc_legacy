@@ -31,6 +31,7 @@ EF_Point *EF_noeuds_renvoie_position(EF_Noeud *noeud) __attribute__((__warn_unus
 gboolean EF_noeuds_min_max(Projet *projet, double *x_min, double *x_max, double *y_min, double *y_max, double *z_min, double *z_max) __attribute__((__warn_unused_result__));
 
 EF_Noeud* EF_noeuds_cherche_numero(Projet *projet, unsigned int numero) __attribute__((__warn_unused_result__));
+gboolean EF_noeuds_verifie_dependances(Projet *projet, EF_Noeud* noeud) __attribute__((__warn_unused_result__));
 
 gboolean EF_noeuds_change_appui(Projet *projet, EF_Noeud *noeud, EF_Appui *appui) __attribute__((__warn_unused_result__));
 

@@ -165,7 +165,7 @@ G_MODULE_EXPORT gboolean EF_relachement_verifie_dependances(Projet *projet,
  * Paramètres : Projet *projet : la variable projet,
  *            : EF_Relachement* relachement : le relâchement à analyser,
  * Valeur renvoyée :
- *   Succès : TRUE si le relâchement est utilisée et FALSE s'il ne l'est pas.
+ *   Succès : TRUE si le relâchement est utilisé et FALSE s'il ne l'est pas.
  *   Échec : FALSE :
  *             projet == NULL,
  *             relachement == NULL.
