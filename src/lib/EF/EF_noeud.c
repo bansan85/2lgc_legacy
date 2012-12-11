@@ -86,9 +86,69 @@ G_MODULE_EXPORT EF_Noeud *EF_noeuds_ajout_noeud_libre(Projet *projet, double x, 
     
 #ifdef ENABLE_GTK
     BUG(m3d_noeud(&projet->list_gtk.m3d, noeud_nouveau), NULL);
+    if (projet->list_gtk.ef_noeud.builder != NULL)
+    {
+        gtk_tree_store_append(projet->list_gtk.ef_noeud.tree_store_libre, &noeud_nouveau->Iter, NULL);
+        gtk_tree_store_set(projet->list_gtk.ef_noeud.tree_store_libre, &noeud_nouveau->Iter, 0, noeud_nouveau->numero, 1, data->x, 2, data->y, 3, data->z, 4, (noeud_nouveau->appui == NULL ? gettext("Aucun") : noeud_nouveau->appui->nom), -1);
+    }
 #endif
     
     return noeud_nouveau;
+}
+
+
+G_MODULE_EXPORT EF_Point *EF_noeuds_renvoie_position(EF_Noeud *noeud) 
+/* Description : Renvoie un point contenant la position du noeud.
+ *               La valeur de retour doit être libérée par l'appel à la fonction free();
+ * Paramètres : EF_Noeud *noeud : le noeud à étudier.
+ * Valeur renvoyée :
+ *   Succès : pointeur vers la position du noeud.
+ *   Échec : NULL en cas de paramètres invalides
+ *             noeud == NULL,
+ *             en cas d'erreur d'allocation mémoire.
+ */
+{
+    EF_Point *retour;
+    
+    BUGMSG(noeud, NULL, gettext("Paramètre %s incorrect.\n"), "noeud");
+    BUGMSG(retour = malloc(sizeof(EF_Point)), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    
+    switch (noeud->type)
+    {
+        case NOEUD_LIBRE :
+        {
+            EF_Point    *tmp = noeud->data;
+            
+            retour->x = tmp->x;
+            retour->y = tmp->y;
+            retour->z = tmp->z;
+            
+            break;
+        }
+        case NOEUD_BARRE :
+        {
+            EF_Noeud_Barre  *data = noeud->data;
+            EF_Point        *point1, *point2;
+            
+            BUG(point1 = EF_noeuds_renvoie_position(data->barre->noeud_debut), NULL);
+            BUG(point2 = EF_noeuds_renvoie_position(data->barre->noeud_fin), NULL);
+            
+            retour->x = point1->x + (point2->x-point1->x)*data->position_relative_barre;
+            retour->y = point1->y + (point2->y-point1->y)*data->position_relative_barre;
+            retour->z = point1->z + (point2->z-point1->z)*data->position_relative_barre;
+            free(point1);
+            free(point2);
+            
+            break;
+        }
+        default :
+        {
+            BUGMSG(0, NULL, gettext("Le type de noeud %d est inconnu.\n"), noeud->type);
+            break;
+        }
+    }
+    
+    return retour;
 }
 
 
@@ -148,64 +208,19 @@ G_MODULE_EXPORT EF_Noeud* EF_noeuds_ajout_noeud_barre(Projet *projet, Beton_Barr
     
 #ifdef ENABLE_GTK
     BUG(m3d_noeud(&projet->list_gtk.m3d, noeud_nouveau), NULL);
+    if (projet->list_gtk.ef_noeud.builder != NULL)
+    {
+        EF_Point        *point;
+        
+        BUG(point = EF_noeuds_renvoie_position(noeud_nouveau), NULL);
+        gtk_tree_store_append(projet->list_gtk.ef_noeud.tree_store_barre, &noeud_nouveau->Iter, NULL);
+        gtk_tree_store_set(projet->list_gtk.ef_noeud.tree_store_barre, &noeud_nouveau->Iter, 0, noeud_nouveau->numero, 1, point->x, 2, point->y, 3, point->z, 4, (noeud_nouveau->appui == NULL ? gettext("Aucun") : noeud_nouveau->appui->nom), 5, data->barre->numero, 6, data->position_relative_barre, -1);
+        
+        free(point);
+    }
 #endif
     
     return noeud_nouveau;
-}
-
-
-G_MODULE_EXPORT EF_Point *EF_noeuds_renvoie_position(EF_Noeud *noeud) 
-/* Description : Renvoie un point contenant la position du noeud.
- *               La valeur de retour doit être libérée par l'appel à la fonction free();
- * Paramètres : EF_Noeud *noeud : le noeud à étudier.
- * Valeur renvoyée :
- *   Succès : pointeur vers la position du noeud.
- *   Échec : NULL en cas de paramètres invalides
- *             noeud == NULL,
- *             en cas d'erreur d'allocation mémoire.
- */
-{
-    EF_Point *retour;
-    
-    BUGMSG(noeud, NULL, gettext("Paramètre %s incorrect.\n"), "noeud");
-    BUGMSG(retour = malloc(sizeof(EF_Point)), NULL, gettext("Erreur d'allocation mémoire.\n"));
-    
-    switch (noeud->type)
-    {
-        case NOEUD_LIBRE :
-        {
-            EF_Point    *tmp = noeud->data;
-            
-            retour->x = tmp->x;
-            retour->y = tmp->y;
-            retour->z = tmp->z;
-            
-            break;
-        }
-        case NOEUD_BARRE :
-        {
-            EF_Noeud_Barre  *data = noeud->data;
-            EF_Point        *point1, *point2;
-            
-            BUG(point1 = EF_noeuds_renvoie_position(data->barre->noeud_debut), NULL);
-            BUG(point2 = EF_noeuds_renvoie_position(data->barre->noeud_fin), NULL);
-            
-            retour->x = point1->x + (point2->x-point1->x)*data->position_relative_barre;
-            retour->y = point1->y + (point2->y-point1->y)*data->position_relative_barre;
-            retour->z = point1->z + (point2->z-point1->z)*data->position_relative_barre;
-            free(point1);
-            free(point2);
-            
-            break;
-        }
-        default :
-        {
-            BUGMSG(0, NULL, gettext("Le type de noeud %d est inconnu.\n"), noeud->type);
-            break;
-        }
-    }
-    
-    return retour;
 }
 
 
