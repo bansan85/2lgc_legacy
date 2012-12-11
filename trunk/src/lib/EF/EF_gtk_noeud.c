@@ -69,34 +69,14 @@ G_MODULE_EXPORT void EF_gtk_noeud_ajouter(GtkButton *button __attribute__((unuse
     
     // On ajoute un noeud libre
     if (gtk_notebook_get_current_page(GTK_NOTEBOOK(ef_gtk->notebook)) == 0)
-    {
-        EF_Noeud    *noeud;
-        EF_Point    *point;
-        
-        BUG(noeud = EF_noeuds_ajout_noeud_libre(projet, 0., 0., 0., NULL), );
-        BUG(point = EF_noeuds_renvoie_position(noeud), );
-        gtk_tree_store_append(ef_gtk->tree_store_libre, &noeud->Iter, NULL);
-        gtk_tree_store_set(ef_gtk->tree_store_libre, &noeud->Iter, 0, noeud->numero, 1, point->x, 2, point->y, 3, point->z, 4, (noeud->appui == NULL ? gettext("Aucun") : noeud->appui->nom), -1);
-        
-        free(point);
-    }
+        BUG(EF_noeuds_ajout_noeud_libre(projet, 0., 0., 0., NULL), );
     // On ajoute un noeud intermédiaire
     else
     {
-        EF_Noeud    *noeud;
-        EF_Point        *point;
-        EF_Noeud_Barre  *info;
-        
         if (projet->beton.barres == NULL)
             return;
         
-        BUG(noeud = EF_noeuds_ajout_noeud_barre(projet, (Beton_Barre*)projet->beton.barres->data, 0.5, NULL), );
-        BUG(point = EF_noeuds_renvoie_position(noeud), );
-        info = (EF_Noeud_Barre *)noeud->data;
-        gtk_tree_store_append(ef_gtk->tree_store_barre, &noeud->Iter, NULL);
-        gtk_tree_store_set(ef_gtk->tree_store_barre, &noeud->Iter, 0, noeud->numero, 1, point->x, 2, point->y, 3, point->z, 4, (noeud->appui == NULL ? gettext("Aucun") : noeud->appui->nom), 5, info->barre->numero, 6, info->position_relative_barre, -1);
-        
-        free(point);
+        BUG(EF_noeuds_ajout_noeud_barre(projet, (Beton_Barre*)projet->beton.barres->data, 0.5, NULL), );
     }
     
     return;
