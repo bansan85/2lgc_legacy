@@ -188,9 +188,9 @@ G_MODULE_EXPORT EF_Noeud* EF_noeuds_ajout_noeud_barre(Projet *projet, Beton_Barr
         
     noeud_nouveau->numero = g_list_length(projet->ef_donnees.noeuds);
     
-    projet->ef_donnees.noeuds = g_list_append(projet->ef_donnees.noeuds, noeud_nouveau);
-    
     BUG(EF_calculs_free(projet), NULL);
+    
+    projet->ef_donnees.noeuds = g_list_append(projet->ef_donnees.noeuds, noeud_nouveau);
     
     barre->discretisation_element++;
     
