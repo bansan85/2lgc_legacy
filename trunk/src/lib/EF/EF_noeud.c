@@ -504,8 +504,7 @@ G_MODULE_EXPORT void EF_noeuds_free_foreach(EF_Noeud *noeud,
     if (noeud == NULL)
         return;
     
-    // La vérification noeud->data != NULL est nécessaire pour _1992_1_1_barres_supprime_liste
-    if ((noeud->type == NOEUD_BARRE) && (noeud->data != NULL))
+    if (noeud->type == NOEUD_BARRE)
     {
         EF_Noeud_Barre  *infos = noeud->data;
         

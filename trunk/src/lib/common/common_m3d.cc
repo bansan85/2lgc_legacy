@@ -29,6 +29,7 @@ extern "C" {
 #include "common_projet.h"
 #include "common_erreurs.h"
 #include "common_maths.h"
+#include "common_selection.h"
 #include "EF_noeud.h"
 #include "1992_1_1_barres.h"
 #include "common_m3d.hpp"
@@ -194,7 +195,7 @@ G_MODULE_EXPORT gboolean m3d_actualise_graphique(Projet *projet, GList *noeuds, 
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
-    BUG(_1992_1_1_barres_cherche_dependances(projet, noeuds, barres, &noeuds_dep, &barres_dep), FALSE);
+    BUG(_1992_1_1_barres_cherche_dependances(projet, noeuds, barres, &noeuds_dep, &barres_dep, FALSE), FALSE);
     
     list_parcours = noeuds_dep;
     while (list_parcours != NULL)
