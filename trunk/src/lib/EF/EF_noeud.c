@@ -301,10 +301,12 @@ G_MODULE_EXPORT gboolean EF_noeuds_min_max(Projet *projet, double *x_min, double
 }
 
 
-G_MODULE_EXPORT EF_Noeud* EF_noeuds_cherche_numero(Projet *projet, unsigned int numero)
+G_MODULE_EXPORT EF_Noeud* EF_noeuds_cherche_numero(Projet *projet, unsigned int numero,
+  gboolean critique)
 /* Description : Positionne dans la liste des noeuds le noeud souhaité et le renvoie.
  * Paramètres : Projet *projet : la variable projet,
  *            : unsigned int numero : le numéro du noeud.
+ *            : gboolean critique : si TRUE alors BUGMSG, si FALSE alors return.
  * Valeur renvoyée :
  *   Succès : pointeur vers le noeud recherché
  *   Échec : NULL :
@@ -328,12 +330,15 @@ G_MODULE_EXPORT EF_Noeud* EF_noeuds_cherche_numero(Projet *projet, unsigned int 
         list_parcours = g_list_next(list_parcours);
     }
     
-    BUGMSG(0, NULL, gettext("Noeud n°%u introuvable.\n"), numero);
+    if (critique)
+        BUGMSG(0, NULL, gettext("Noeud n°%u introuvable.\n"), numero);
+    else
+        return NULL;
 }
 
 
 G_MODULE_EXPORT gboolean EF_noeuds_verifie_dependances(Projet *projet, EF_Noeud *noeud)
-/* Description : Vérifie si le noeud est utilisé.
+/* Description : Vérifie si le noeud est utilisé, ou par une barre, ou par une charge.
  * Paramètres : Projet *projet : la variable projet,
  *            : EF_Noeud *noeud : le noeud à analyser,
  * Valeur renvoyée :
@@ -357,6 +362,26 @@ G_MODULE_EXPORT gboolean EF_noeuds_verifie_dependances(Projet *projet, EF_Noeud 
             return TRUE;
         if (barre->noeud_fin == noeud)
             return TRUE;
+        
+        list_parcours = g_list_next(list_parcours);
+    }
+    
+    list_parcours = projet->actions;
+    while (list_parcours != NULL)
+    {
+        GList   *list_parcours2;
+        Action  *action = (Action*)list_parcours->data;
+        
+        list_parcours2 = action->charges;
+        while (list_parcours2 != NULL)
+        {
+            Charge_Noeud    *charge = list_parcours2->data;
+            
+            if ((charge->type == CHARGE_NOEUD) && (g_list_find(charge->noeuds, noeud) != NULL))
+                return TRUE;
+            
+            list_parcours2 = g_list_next(list_parcours2);
+        }
         
         list_parcours = g_list_next(list_parcours);
     }
@@ -507,8 +532,14 @@ G_MODULE_EXPORT void EF_noeuds_free_foreach(EF_Noeud *noeud,
     if (noeud->type == NOEUD_BARRE)
     {
         EF_Noeud_Barre  *infos = noeud->data;
+        unsigned int    i;
         
         infos->barre->noeuds_intermediaires = g_list_remove(infos->barre->noeuds_intermediaires, noeud);
+        for (i=0;i<=infos->barre->discretisation_element;i++)
+        {
+            if (infos->barre->info_EF[i].matrice_rigidite_locale != NULL)
+                cholmod_free_sparse(&infos->barre->info_EF[i].matrice_rigidite_locale, projet->ef_donnees.c);
+        }
         infos->barre->discretisation_element--;
         BUGMSG(infos->barre->info_EF = realloc(infos->barre->info_EF, sizeof(Barre_Info_EF)*(infos->barre->discretisation_element+1)), , gettext("Erreur d'allocation mémoire.\n"));
         memset(infos->barre->info_EF, 0, sizeof(Barre_Info_EF)*(infos->barre->discretisation_element+1));
@@ -546,6 +577,8 @@ G_MODULE_EXPORT void EF_noeuds_free_foreach(EF_Noeud *noeud,
 #endif
     free(noeud);
     
+    projet->ef_donnees.noeuds = g_list_remove(projet->ef_donnees.noeuds, noeud);
+    
     return;
 }
 
@@ -563,8 +596,6 @@ G_MODULE_EXPORT gboolean EF_noeuds_free(Projet *projet)
     
     // Trivial
     g_list_foreach(projet->ef_donnees.noeuds, (GFunc)EF_noeuds_free_foreach, projet);
-    g_list_free(projet->ef_donnees.noeuds);
-    projet->ef_donnees.noeuds = NULL;
     
     BUG(EF_calculs_free(projet), FALSE);
     

@@ -123,7 +123,7 @@ G_MODULE_EXPORT void EF_gtk_barres_edit_type(GtkCellRendererText *cell __attribu
     gtk_tree_model_get_iter_from_string(model, &iter, path_string);
     gtk_tree_model_get(model, &iter, 0, &numero_barre, -1);
     
-    BUG(barre = _1992_1_1_barres_cherche_numero(projet, numero_barre), );
+    BUG(barre = _1992_1_1_barres_cherche_numero(projet, numero_barre, TRUE), );
     
     parcours = 0;
     BUGMSG(gtk_tree_model_get_iter_first(GTK_TREE_MODEL(projet->list_gtk.ef_barres.liste_types), &iter2) == TRUE, , gettext("Aucun type de barre n'est défini.\n"));
@@ -177,7 +177,7 @@ G_MODULE_EXPORT void EF_gtk_barres_edit_section(
     gtk_tree_model_get_iter_from_string(model, &iter, path_string);
     gtk_tree_model_get(model, &iter, 0, &numero_barre, -1);
     
-    BUG(barre = _1992_1_1_barres_cherche_numero(projet, numero_barre), );
+    BUG(barre = _1992_1_1_barres_cherche_numero(projet, numero_barre, TRUE), );
     BUG(section = EF_sections_cherche_nom(projet, new_text, TRUE), );
     BUG(_1992_1_1_barres_change_section(barre, section, projet), );
     
@@ -214,7 +214,7 @@ G_MODULE_EXPORT void EF_gtk_barres_edit_materiau(
     gtk_tree_model_get_iter_from_string(model, &iter, path_string);
     gtk_tree_model_get(model, &iter, 0, &numero_barre, -1);
     
-    BUG(barre = _1992_1_1_barres_cherche_numero(projet, numero_barre), );
+    BUG(barre = _1992_1_1_barres_cherche_numero(projet, numero_barre, TRUE), );
     BUG(materiau = _1992_1_1_materiaux_cherche_nom(projet, new_text, TRUE), );
     BUG(_1992_1_1_barres_change_materiau(barre, materiau, projet), );
     
@@ -251,7 +251,7 @@ G_MODULE_EXPORT void EF_gtk_barres_edit_relachement(
     gtk_tree_model_get_iter_from_string(model, &iter, path_string);
     gtk_tree_model_get(model, &iter, 0, &numero_barre, -1);
     
-    BUG(barre = _1992_1_1_barres_cherche_numero(projet, numero_barre), );
+    BUG(barre = _1992_1_1_barres_cherche_numero(projet, numero_barre, TRUE), );
     if (strcmp(gettext("Aucun"), new_text) == 0)
         BUG(_1992_1_1_barres_change_relachement(barre, NULL, projet), );
     else
@@ -300,8 +300,8 @@ G_MODULE_EXPORT void EF_gtk_barres_edit_noeud(GtkCellRendererText *cell __attrib
         Beton_Barre *barre;
         
         // On modifie l'action
-        BUG(barre = _1992_1_1_barres_cherche_numero(projet, i), );
-        BUG(noeud = EF_noeuds_cherche_numero(projet, conversion), );
+        BUG(barre = _1992_1_1_barres_cherche_numero(projet, i, TRUE), );
+        BUG(noeud = EF_noeuds_cherche_numero(projet, conversion, TRUE), );
         
         if (column == 4)
             BUG(_1992_1_1_barres_change_noeud(barre, noeud, TRUE, projet), );

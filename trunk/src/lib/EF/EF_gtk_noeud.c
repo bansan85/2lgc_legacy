@@ -118,7 +118,7 @@ G_MODULE_EXPORT void EF_gtk_noeud_supprimer(GtkButton *button __attribute__((unu
     
     gtk_tree_model_get(model, &Iter, 0, &num, -1);
     
-    BUG(noeud = EF_noeuds_cherche_numero(projet, num), );
+    BUG(noeud = EF_noeuds_cherche_numero(projet, num, TRUE), );
     
     list = g_list_append(list, noeud);
     
@@ -132,7 +132,7 @@ G_MODULE_EXPORT void EF_gtk_noeud_supprimer(GtkButton *button __attribute__((unu
 }
 
 
-void EF_noeuds_set_supprimer_visible(gboolean select, Projet *projet)
+G_MODULE_EXPORT void EF_noeuds_set_supprimer_visible(gboolean select, Projet *projet)
 /* Description : En fonction de la sélection, active ou désactive les boutons supprimer.
  * Paramètres : gboolean select : si le changement survient via un changement de la sélection,
  *                              : sinon, par un changement de page.
@@ -165,7 +165,7 @@ void EF_noeuds_set_supprimer_visible(gboolean select, Projet *projet)
             
             gtk_tree_model_get(model, &Iter, 0, &num, -1);
             
-            BUG(noeud = EF_noeuds_cherche_numero(projet, num), );
+            BUG(noeud = EF_noeuds_cherche_numero(projet, num, TRUE), );
             
             // Noeud utilisé
             if (EF_noeuds_verifie_dependances(projet, noeud))
@@ -202,7 +202,7 @@ void EF_noeuds_set_supprimer_visible(gboolean select, Projet *projet)
             
             gtk_tree_model_get(model, &Iter, 0, &num, -1);
             
-            BUG(noeud = EF_noeuds_cherche_numero(projet, num), );
+            BUG(noeud = EF_noeuds_cherche_numero(projet, num, TRUE), );
             
             // Noeud utilisé
             if (EF_noeuds_verifie_dependances(projet, noeud))
@@ -302,7 +302,7 @@ G_MODULE_EXPORT void EF_gtk_noeud_edit_pos_abs(GtkCellRendererText *cell, gchar 
         GList       *liste_noeuds = NULL;
         
         // On modifie l'action
-        BUG(noeud = EF_noeuds_cherche_numero(projet, i), );
+        BUG(noeud = EF_noeuds_cherche_numero(projet, i, TRUE), );
         point = (EF_Point *)noeud->data;
         
         switch (column)
@@ -396,7 +396,7 @@ G_MODULE_EXPORT void EF_gtk_noeud_edit_pos_relat(GtkCellRendererText *cell, gcha
         }
         
         // On modifie l'action
-        BUG(noeud = EF_noeuds_cherche_numero(projet, i), );
+        BUG(noeud = EF_noeuds_cherche_numero(projet, i, TRUE), );
         
         if ((noeud->type == NOEUD_BARRE) && (column == 6))
         {
@@ -450,7 +450,7 @@ void EF_gtk_render_actualise_position(GtkTreeViewColumn *tree_column __attribute
     
     colonne = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cell), "column"));
     gtk_tree_model_get(tree_model, iter, 0, &noeud, -1);
-    BUG(point = EF_noeuds_renvoie_position(EF_noeuds_cherche_numero(projet, noeud)), );
+    BUG(point = EF_noeuds_renvoie_position(EF_noeuds_cherche_numero(projet, noeud, TRUE)), );
     
     if (colonne == 1)
         common_math_double_to_char(point->x, texte, DECIMAL_DISTANCE);
@@ -508,7 +508,7 @@ G_MODULE_EXPORT void EF_gtk_noeud_edit_noeud_appui(
     gtk_tree_model_get(model, &iter, 0, &numero_noeud, -1);
     gtk_tree_path_free(path);
     
-    BUG(noeud = EF_noeuds_cherche_numero(projet, numero_noeud), );
+    BUG(noeud = EF_noeuds_cherche_numero(projet, numero_noeud, TRUE), );
     
     // Si on souhaite que l'appui ne soit plus appuyé.
     if (strcmp(new_text, gettext("Aucun")) == 0)
@@ -568,10 +568,8 @@ G_MODULE_EXPORT void EF_gtk_noeud_edit_noeud_barre_barre(
         free(fake);
         
         // On modifie l'action
-        BUG(noeud = EF_noeuds_cherche_numero(projet, numero), );
-        barre = _1992_1_1_barres_cherche_numero(projet, conversion);
-        if (barre == NULL)
-            return;
+        BUG(noeud = EF_noeuds_cherche_numero(projet, numero, TRUE), );
+        BUG(barre = _1992_1_1_barres_cherche_numero(projet, conversion, TRUE), );
         
         if (noeud->type == NOEUD_BARRE)
         {
