@@ -280,7 +280,7 @@ G_MODULE_EXPORT GList *common_selection_converti_numeros_en_noeuds(GList *liste_
         do
         {
             unsigned int    numero = GPOINTER_TO_UINT(list_parcours->data);
-            EF_Noeud        *noeud = EF_noeuds_cherche_numero(projet, numero);
+            EF_Noeud        *noeud = EF_noeuds_cherche_numero(projet, numero, FALSE);
             
             if (noeud == NULL)
             {
@@ -319,7 +319,7 @@ G_MODULE_EXPORT GList *common_selection_converti_numeros_en_barres(GList *liste_
         do
         {
             unsigned int    numero = GPOINTER_TO_UINT(list_parcours->data);
-            Beton_Barre     *barre = _1992_1_1_barres_cherche_numero(projet, numero);
+            Beton_Barre     *barre = _1992_1_1_barres_cherche_numero(projet, numero, FALSE);
             
             if (barre == NULL)
             {

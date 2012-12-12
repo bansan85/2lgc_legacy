@@ -103,8 +103,8 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_ajout(Projet *projet, Type_Element typ
     
     element_nouveau->section = section;
     element_nouveau->materiau = materiau;
-    element_nouveau->noeud_debut = EF_noeuds_cherche_numero(projet, noeud_debut);
-    element_nouveau->noeud_fin = EF_noeuds_cherche_numero(projet, noeud_fin);
+    element_nouveau->noeud_debut = EF_noeuds_cherche_numero(projet, noeud_debut, TRUE);
+    element_nouveau->noeud_fin = EF_noeuds_cherche_numero(projet, noeud_fin, TRUE);
     if ((element_nouveau->noeud_debut == NULL) || (element_nouveau->noeud_fin == NULL))
     {
         free(element_nouveau);
@@ -177,10 +177,11 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_ajout(Projet *projet, Type_Element typ
 
 
 G_MODULE_EXPORT Beton_Barre* _1992_1_1_barres_cherche_numero(Projet *projet,
-  unsigned int numero)
+  unsigned int numero, gboolean critique)
 /* Description : Positionne dans la liste des éléments en béton l'élément courant au numéro.
  * Paramètres : Projet *projet : la variable projet,
  *            : unsigned int numero : le numéro de la section.
+ *            : gboolean critique : si TRUE alors BUGMSG, si FALSE alors return.
  * Valeur renvoyée :
  *   Succès : Pointeur vers l'élément en béton
  *   Échec : NULL :
@@ -204,7 +205,10 @@ G_MODULE_EXPORT Beton_Barre* _1992_1_1_barres_cherche_numero(Projet *projet,
         list_parcours = g_list_next(list_parcours);
     }
     
-    BUGMSG(0, NULL, gettext("Barre en béton %u introuvable.\n"), numero);
+    if (critique)
+        BUGMSG(0, NULL, gettext("Barre en béton %u introuvable.\n"), numero);
+    else
+        return NULL;
 }
 
 
@@ -1302,13 +1306,12 @@ G_MODULE_EXPORT void _1992_1_1_barre_free_foreach(Beton_Barre *barre, Projet *pr
  * Valeur renvoyée : Aucune.
  */
 {
-    unsigned int i;
-    
-    g_list_free(barre->noeuds_intermediaires);
+    while (barre->noeuds_intermediaires != NULL)
+    {
+        EF_noeuds_free_foreach((EF_Noeud *)barre->noeuds_intermediaires->data, projet);
+    }
     cholmod_free_sparse(&barre->matrice_rotation, projet->ef_donnees.c);
     cholmod_free_sparse(&barre->matrice_rotation_transpose, projet->ef_donnees.c);
-    for (i=0;i<=barre->discretisation_element;i++)
-        cholmod_free_sparse(&barre->info_EF[i].matrice_rigidite_locale, projet->ef_donnees.c);
     free(barre->info_EF);
     
 #ifdef ENABLE_GTK
@@ -1321,6 +1324,8 @@ G_MODULE_EXPORT void _1992_1_1_barre_free_foreach(Beton_Barre *barre, Projet *pr
     m3d_barre_free(&projet->list_gtk.m3d, barre);
 #endif
     free(barre);
+    
+    projet->beton.barres = g_list_remove(projet->beton.barres, barre);
     
     return;
 }
@@ -1349,13 +1354,10 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_supprime_liste(Projet *projet, GList *
     list_parcours = barres_suppr;
     while (list_parcours != NULL)
     {
-        Beton_Barre *barre = _1992_1_1_barres_cherche_numero(projet, GPOINTER_TO_UINT(list_parcours->data));
+        Beton_Barre *barre = _1992_1_1_barres_cherche_numero(projet, GPOINTER_TO_UINT(list_parcours->data), FALSE);
         
         if (barre != NULL)
-        {
-            _1992_1_1_barre_free_foreach((Beton_Barre *)(list_parcours->data), projet);
-            projet->beton.barres = g_list_remove(projet->beton.barres, list_parcours->data);
-        }
+            _1992_1_1_barre_free_foreach(barre, projet);
         list_parcours = g_list_next(list_parcours);
     }
     g_list_free(barres_suppr);
@@ -1364,13 +1366,9 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_supprime_liste(Projet *projet, GList *
     list_parcours = noeuds_suppr;
     while (list_parcours != NULL)
     {
-        EF_Noeud    *noeud = EF_noeuds_cherche_numero(projet, GPOINTER_TO_UINT(list_parcours->data));
-        
+        EF_Noeud    *noeud = EF_noeuds_cherche_numero(projet, GPOINTER_TO_UINT(list_parcours->data), FALSE);
         if (noeud != NULL)
-        {
             EF_noeuds_free_foreach(noeud, projet);
-            projet->ef_donnees.noeuds = g_list_remove(projet->ef_donnees.noeuds, list_parcours->data);
-        }
         list_parcours = g_list_next(list_parcours);
     }
     g_list_free(noeuds_suppr);
@@ -1394,8 +1392,6 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_free(Projet *projet)
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
     g_list_foreach(projet->beton.barres, (GFunc)_1992_1_1_barre_free_foreach, projet);
-    g_list_free(projet->beton.barres);
-    projet->beton.barres = NULL;
     
     BUG(EF_calculs_free(projet), TRUE);
     
