@@ -1308,8 +1308,9 @@ G_MODULE_EXPORT void _1992_1_1_barre_free_foreach(Beton_Barre *barre, Projet *pr
 {
     while (barre->noeuds_intermediaires != NULL)
     {
+        void    *tmp = barre->noeuds_intermediaires->data;
         EF_noeuds_free_foreach((EF_Noeud *)barre->noeuds_intermediaires->data, projet);
-        projet->ef_donnees.noeuds = g_list_remove(projet->ef_donnees.noeuds, barre->noeuds_intermediaires->data);
+        projet->ef_donnees.noeuds = g_list_remove(projet->ef_donnees.noeuds, tmp);
     }
     cholmod_free_sparse(&barre->matrice_rotation, projet->ef_donnees.c);
     cholmod_free_sparse(&barre->matrice_rotation_transpose, projet->ef_donnees.c);
