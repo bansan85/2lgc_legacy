@@ -1309,6 +1309,7 @@ G_MODULE_EXPORT void _1992_1_1_barre_free_foreach(Beton_Barre *barre, Projet *pr
     while (barre->noeuds_intermediaires != NULL)
     {
         EF_noeuds_free_foreach((EF_Noeud *)barre->noeuds_intermediaires->data, projet);
+        projet->ef_donnees.noeuds = g_list_remove(projet->ef_donnees.noeuds, barre->noeuds_intermediaires->data);
     }
     cholmod_free_sparse(&barre->matrice_rotation, projet->ef_donnees.c);
     cholmod_free_sparse(&barre->matrice_rotation_transpose, projet->ef_donnees.c);
@@ -1324,8 +1325,6 @@ G_MODULE_EXPORT void _1992_1_1_barre_free_foreach(Beton_Barre *barre, Projet *pr
     m3d_barre_free(&projet->list_gtk.m3d, barre);
 #endif
     free(barre);
-    
-    projet->beton.barres = g_list_remove(projet->beton.barres, barre);
     
     return;
 }
@@ -1357,7 +1356,10 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_supprime_liste(Projet *projet, GList *
         Beton_Barre *barre = _1992_1_1_barres_cherche_numero(projet, GPOINTER_TO_UINT(list_parcours->data), FALSE);
         
         if (barre != NULL)
+        {
             _1992_1_1_barre_free_foreach(barre, projet);
+            projet->beton.barres = g_list_remove(projet->beton.barres, barre);
+        }
         list_parcours = g_list_next(list_parcours);
     }
     g_list_free(barres_suppr);
@@ -1368,7 +1370,10 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_supprime_liste(Projet *projet, GList *
     {
         EF_Noeud    *noeud = EF_noeuds_cherche_numero(projet, GPOINTER_TO_UINT(list_parcours->data), FALSE);
         if (noeud != NULL)
+        {
             EF_noeuds_free_foreach(noeud, projet);
+            projet->ef_donnees.noeuds = g_list_remove(projet->ef_donnees.noeuds, noeud);
+        }
         list_parcours = g_list_next(list_parcours);
     }
     g_list_free(noeuds_suppr);
@@ -1392,6 +1397,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_free(Projet *projet)
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
     g_list_foreach(projet->beton.barres, (GFunc)_1992_1_1_barre_free_foreach, projet);
+    g_list_free(projet->beton.barres);
     
     BUG(EF_calculs_free(projet), TRUE);
     

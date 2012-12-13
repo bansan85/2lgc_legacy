@@ -577,8 +577,6 @@ G_MODULE_EXPORT void EF_noeuds_free_foreach(EF_Noeud *noeud,
 #endif
     free(noeud);
     
-    projet->ef_donnees.noeuds = g_list_remove(projet->ef_donnees.noeuds, noeud);
-    
     return;
 }
 
@@ -596,6 +594,7 @@ G_MODULE_EXPORT gboolean EF_noeuds_free(Projet *projet)
     
     // Trivial
     g_list_foreach(projet->ef_donnees.noeuds, (GFunc)EF_noeuds_free_foreach, projet);
+    g_list_free(projet->ef_donnees.noeuds);
     
     BUG(EF_calculs_free(projet), FALSE);
     
