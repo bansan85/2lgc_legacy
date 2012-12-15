@@ -24,4 +24,6 @@
 void show_warranty();
 void show_help();
 
+char *common_text_dependances(GList *liste_noeuds, GList *liste_barres);
+
 #endif

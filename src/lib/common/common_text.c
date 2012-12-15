@@ -17,6 +17,8 @@
  */
 
 #include "config.h"
+#include "common_projet.h"
+#include "common_selection.h"
 #include <libintl.h>
 #include <locale.h>
 #include <gmodule.h>
@@ -77,4 +79,58 @@ G_MODULE_EXPORT void show_help()
     printf(gettext("\t-h, --help : affiche le présent menu\n"));
     printf(gettext("\t-w, --warranty : affiche les limites de garantie du logiciel\n"));
     return;
+}
+
+
+G_MODULE_EXPORT char *common_text_dependances(GList *liste_noeuds, GList *liste_barres)
+/* Description : renvoie la liste des types d'éléments dépendants sous forme de texte.
+ *               liste_noeuds et liste_barres viennent de _1992_1_1_barres_cherche_dependances.
+ * Paramètres : GList *liste_noeuds : liste des noeuds,
+ *              GList *liste_barres : liste des barres.
+ * Valeur renvoyée :
+ *   Succès : pointeur vers le texte.
+ *   Échec : NULL :
+ *             Erreur d'allocation mémoire.
+ */
+{
+    char    *retour = NULL;
+    char    *tmp;
+    
+    if (liste_noeuds != NULL)
+    {
+        tmp = common_selection_converti_noeuds_en_texte(liste_noeuds);
+        if (g_list_length(liste_noeuds) == 1)
+            retour = g_strdup_printf("%s : %s", gettext("noeud"), tmp);
+        else
+            retour = g_strdup_printf("%s : %s", gettext("noeuds"), tmp);
+        free(tmp);
+    }
+    if (liste_barres != NULL)
+    {
+        tmp = common_selection_converti_barres_en_texte(liste_barres);
+        if (retour == NULL)
+        {
+            if (g_list_length(liste_barres) == 1)
+                retour = g_strdup_printf("%s : %s", gettext("barre"), tmp);
+            else
+                retour = g_strdup_printf("%s : %s", gettext("barres"), tmp);
+        }
+        else
+        {
+            char *tmp2;
+            tmp2 = retour;
+            if (g_list_length(liste_barres) == 1)
+                retour = g_strdup_printf("%s, %s : %s", tmp2, gettext("barre"), tmp);
+            else
+                retour = g_strdup_printf("%s, %s : %s", tmp2, gettext("barres"), tmp);
+            free(tmp2);
+        }
+        free(tmp);
+    }
+    
+    tmp = retour;
+    retour = g_strdup_printf(gettext("et ces dépendances (%s)"), tmp);
+    free(tmp);
+    
+    return retour;
 }

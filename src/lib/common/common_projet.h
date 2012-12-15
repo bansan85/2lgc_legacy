@@ -25,6 +25,7 @@
 
 #include <glib.h>
 
+// Nombre de décimal en fonction des unités
 #define DECIMAL_DISTANCE 3
 #define DECIMAL_FORCE 3
 #define DECIMAL_MOMENT 3

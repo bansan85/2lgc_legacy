@@ -337,59 +337,6 @@ G_MODULE_EXPORT EF_Noeud* EF_noeuds_cherche_numero(Projet *projet, unsigned int 
 }
 
 
-G_MODULE_EXPORT gboolean EF_noeuds_verifie_dependances(Projet *projet, EF_Noeud *noeud)
-/* Description : Vérifie si le noeud est utilisé, ou par une barre, ou par une charge.
- * Paramètres : Projet *projet : la variable projet,
- *            : EF_Noeud *noeud : le noeud à analyser,
- * Valeur renvoyée :
- *   Succès : TRUE si le noeud est utilisé et FALSE s'il ne l'est pas.
- *   Échec : FALSE :
- *             projet == NULL,
- *             noeud == NULL.
- */
-{
-    GList   *list_parcours;
-    
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(noeud, FALSE, gettext("Paramètre %s incorrect.\n"), "noeud");
-    
-    list_parcours = projet->beton.barres;
-    while (list_parcours != NULL)
-    {
-        Beton_Barre *barre = list_parcours->data;
-        
-        if (barre->noeud_debut == noeud)
-            return TRUE;
-        if (barre->noeud_fin == noeud)
-            return TRUE;
-        
-        list_parcours = g_list_next(list_parcours);
-    }
-    
-    list_parcours = projet->actions;
-    while (list_parcours != NULL)
-    {
-        GList   *list_parcours2;
-        Action  *action = (Action*)list_parcours->data;
-        
-        list_parcours2 = action->charges;
-        while (list_parcours2 != NULL)
-        {
-            Charge_Noeud    *charge = list_parcours2->data;
-            
-            if ((charge->type == CHARGE_NOEUD) && (g_list_find(charge->noeuds, noeud) != NULL))
-                return TRUE;
-            
-            list_parcours2 = g_list_next(list_parcours2);
-        }
-        
-        list_parcours = g_list_next(list_parcours);
-    }
-    
-    return FALSE;
-}
-
-
 G_MODULE_EXPORT gboolean EF_noeuds_change_appui(Projet *projet, EF_Noeud *noeud,
   EF_Appui *appui)
 /* Description : Change l'appui d'un noeud.

@@ -168,10 +168,15 @@ G_MODULE_EXPORT GList *common_selection_renvoie_numeros(const char *texte)
     i=0;
     for (j=0;j<strlen(texte);j++)
     {
-        // Les caractères autorisées sont ;-/0123456789
+        // Les caractères autorisées sont ,;-/0123456789
         if ((texte[j] == ';') || (texte[j] == '-') || (texte[j] == '/') || (('0' <= texte[j]) && (texte[j] <= '9')))
         {
             texte_clean[i] = texte[j];
+            i++;
+        }
+        else if (texte[j] == ',')
+        {
+            texte_clean[i] = ';';
             i++;
         }
         // On remplace par défaut les espaces par des ;
@@ -362,7 +367,7 @@ G_MODULE_EXPORT char *common_selection_converti_noeuds_en_texte(GList *liste_noe
             do
             {
                 noeud = list_parcours->data;
-                BUGMSG(tmp2 = g_strdup_printf("%s; %d", tmp, noeud->numero), NULL, gettext("Erreur d'allocation mémoire.\n"));
+                BUGMSG(tmp2 = g_strdup_printf("%s;%d", tmp, noeud->numero), NULL, gettext("Erreur d'allocation mémoire.\n"));
                 free(tmp);
                 tmp = tmp2;
                 tmp2 = NULL;

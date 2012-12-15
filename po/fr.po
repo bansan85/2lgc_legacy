@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2012-12-11 20:07+0100\n"
-"PO-Revision-Date: 2012-12-11 21:03+0100\n"
+"POT-Creation-Date: 2012-12-15 18:34+0100\n"
+"PO-Revision-Date: 2012-12-15 18:43+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -146,9 +146,6 @@ msgstr "Appuis"
 
 msgid "Charge projetée sur la barre"
 msgstr "Charge projetée sur la barre"
-
-msgid "et les barres utilisant le noeud."
-msgstr "et les barres utilisant le noeud."
 
 msgid "Noeuds"
 msgstr "Noeuds"
@@ -461,6 +458,21 @@ msgstr "\t-h, --help : affiche le présent menu\n"
 
 msgid "\t-w, --warranty : affiche les limites de garantie du logiciel\n"
 msgstr "\t-w, --warranty : affiche les limites de garantie du logiciel\n"
+
+msgid "noeud"
+msgstr "noeud"
+
+msgid "noeuds"
+msgstr "noeuds"
+
+msgid "barre"
+msgstr "barre"
+
+msgid "barres"
+msgstr "barres"
+
+msgid "et ces dépendances (%s)"
+msgstr "et ces dépendances (%s)"
 
 msgid "fichier %s, fonction %s, ligne %d, test : %s\n"
 msgstr "fichier %s, fonction %s, ligne %d, test : %s\n"
