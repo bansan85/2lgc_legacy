@@ -30,6 +30,7 @@
 #include "common_erreurs.h"
 #include "common_gtk.h"
 #include "common_maths.h"
+#include "common_text.h"
 #include "EF_noeud.h"
 #include "EF_appuis.h"
 #include "1992_1_1_barres.h"
@@ -143,6 +144,7 @@ G_MODULE_EXPORT void EF_noeuds_set_supprimer_visible(gboolean select, Projet *pr
 {
     GtkTreeModel    *model;
     GtkTreeIter     Iter;
+    EF_Noeud        *noeud;
         
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_noeud.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Noeud");
@@ -152,75 +154,70 @@ G_MODULE_EXPORT void EF_noeuds_set_supprimer_visible(gboolean select, Projet *pr
     {
         // Aucune sélection
         if (!gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_treeview_noeuds_libres_select")), &model, &Iter))
-        {
-            gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_boutton_supprimer")), FALSE);
-            gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_boutton_supprimer_menu")), FALSE);
-            gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_boutton_supprimer")), FALSE);
-            gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_boutton_supprimer_menu")), TRUE);
-        }
+            noeud = NULL;
         else
         {
             unsigned int    num;
-            EF_Noeud        *noeud;
             
             gtk_tree_model_get(model, &Iter, 0, &num, -1);
             
             BUG(noeud = EF_noeuds_cherche_numero(projet, num, TRUE), );
-            
-            // Noeud utilisé
-            if (EF_noeuds_verifie_dependances(projet, noeud))
-            {
-                gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_boutton_supprimer")), FALSE);
-                gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_boutton_supprimer_menu")), TRUE);
-                gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_boutton_supprimer")), FALSE);
-                gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_boutton_supprimer_menu")), TRUE);
-            }
-            // Noeud non utilisé
-            else
-            {
-                gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_boutton_supprimer")), TRUE);
-                gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_boutton_supprimer_menu")), FALSE);
-                gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_boutton_supprimer")), TRUE);
-                gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_boutton_supprimer_menu")), FALSE);
-            }
         }
     }
     // Noeud intermédiaire
     else
     {
         if (!gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_treeview_noeuds_intermediaires_select")), &model, &Iter))
-        {
-            gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_boutton_supprimer")), FALSE);
-            gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_boutton_supprimer_menu")), FALSE);
-            gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_boutton_supprimer")), FALSE);
-            gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_boutton_supprimer_menu")), TRUE);
-        }
+            noeud = NULL;
         else
         {
             unsigned int    num;
-            EF_Noeud        *noeud;
             
             gtk_tree_model_get(model, &Iter, 0, &num, -1);
             
             BUG(noeud = EF_noeuds_cherche_numero(projet, num, TRUE), );
-            
-            // Noeud utilisé
-            if (EF_noeuds_verifie_dependances(projet, noeud))
-            {
-                gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_boutton_supprimer")), FALSE);
-                gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_boutton_supprimer_menu")), TRUE);
-                gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_boutton_supprimer")), FALSE);
-                gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_boutton_supprimer_menu")), TRUE);
-            }
-            // Noeud non utilisé
-            else
-            {
-                gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_boutton_supprimer")), TRUE);
-                gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_boutton_supprimer_menu")), FALSE);
-                gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_boutton_supprimer")), TRUE);
-                gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_boutton_supprimer_menu")), FALSE);
-            }
         }
+    }
+    
+    // Aucune sélection
+    if (noeud == NULL)
+    {
+        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_boutton_supprimer")), FALSE);
+        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_boutton_supprimer_menu")), FALSE);
+        gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_boutton_supprimer")), FALSE);
+        gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_boutton_supprimer_menu")), TRUE);
+    }
+    else
+    {
+        GList   *liste_noeuds = NULL, *liste_noeuds_dep, *liste_barres_dep;
+        
+        liste_noeuds = g_list_append(liste_noeuds, noeud);
+        BUG(_1992_1_1_barres_cherche_dependances(projet, liste_noeuds, NULL, &liste_noeuds_dep, &liste_barres_dep, FALSE, FALSE), );
+        g_list_free(liste_noeuds);
+        
+        // Noeud utilisé
+        if ((liste_noeuds_dep != NULL) || (liste_barres_dep != NULL))
+        {
+            char    *desc;
+            
+            gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_boutton_supprimer")), FALSE);
+            gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_boutton_supprimer_menu")), TRUE);
+            gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_boutton_supprimer")), FALSE);
+            gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_boutton_supprimer_menu")), TRUE);
+            desc = common_text_dependances(liste_noeuds_dep, liste_barres_dep);
+            gtk_menu_item_set_label(GTK_MENU_ITEM(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_supprimer_menu_barres")), desc);
+            free(desc);
+        }
+        // Noeud non utilisé
+        else
+        {
+            gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_boutton_supprimer")), TRUE);
+            gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_boutton_supprimer_menu")), FALSE);
+            gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_boutton_supprimer")), TRUE);
+            gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_boutton_supprimer_menu")), FALSE);
+        }
+        g_list_free(liste_noeuds_dep);
+        g_list_free(liste_barres_dep);
     }
     
     return;
@@ -330,7 +327,7 @@ G_MODULE_EXPORT void EF_gtk_noeud_edit_pos_abs(GtkCellRendererText *cell, gchar 
         }
         
         liste_noeuds = g_list_append(liste_noeuds, noeud);
-        BUG(_1992_1_1_barres_cherche_dependances(projet, liste_noeuds, NULL, &liste_noeuds_dep, &liste_barres_dep, FALSE), );
+        BUG(_1992_1_1_barres_cherche_dependances(projet, liste_noeuds, NULL, &liste_noeuds_dep, &liste_barres_dep, FALSE, TRUE), );
         g_list_free(liste_noeuds);
         
         BUG(m3d_actualise_graphique(projet, liste_noeuds_dep, liste_barres_dep), );
@@ -408,7 +405,7 @@ G_MODULE_EXPORT void EF_gtk_noeud_edit_pos_relat(GtkCellRendererText *cell, gcha
             BUGMSG(NULL, , gettext("Le type du noeud ou la colonne d'édition est incorrect.\n"));
         
         liste_noeuds = g_list_append(liste_noeuds, noeud);
-        BUG(_1992_1_1_barres_cherche_dependances(projet, liste_noeuds, NULL, &liste_noeuds_dep, &liste_barres_dep, FALSE), );
+        BUG(_1992_1_1_barres_cherche_dependances(projet, liste_noeuds, NULL, &liste_noeuds_dep, &liste_barres_dep, FALSE, TRUE), );
         g_list_free(liste_noeuds);
         
         BUG(m3d_actualise_graphique(projet, liste_noeuds_dep, liste_barres_dep), );
@@ -581,7 +578,7 @@ G_MODULE_EXPORT void EF_gtk_noeud_edit_noeud_barre_barre(
             BUGMSG(NULL, , gettext("Le noeud doit être de type intermédiaire.\n"));
         
         liste_noeuds = g_list_append(liste_noeuds, noeud);
-        BUG(_1992_1_1_barres_cherche_dependances(projet, liste_noeuds, NULL, &liste_noeuds_dep, &liste_barres_dep, FALSE), );
+        BUG(_1992_1_1_barres_cherche_dependances(projet, liste_noeuds, NULL, &liste_noeuds_dep, &liste_barres_dep, FALSE, TRUE), );
         g_list_free(liste_noeuds);
         
         BUG(m3d_actualise_graphique(projet, liste_noeuds_dep, liste_barres_dep), );

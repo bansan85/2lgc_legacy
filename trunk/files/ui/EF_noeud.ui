@@ -25,7 +25,7 @@
         <property name="visible">True</property>
         <child>
             <object class="GtkMenuItem" id="EF_noeuds_supprimer_menu_barres">
-                <property name="label" translatable="yes">et les barres utilisant le noeud.</property>
+                <property name="label">et ces dépendances.</property>
                 <property name="visible">True</property>
                 <signal name="activate" handler="EF_gtk_noeud_supprimer"/>
             </object>
