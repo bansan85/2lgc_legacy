@@ -259,7 +259,8 @@ typedef enum __Type_Liste
 {
     LISTE_UINT,
     LISTE_NOEUDS,
-    LISTE_BARRES
+    LISTE_BARRES,
+    LISTE_CHARGES
 } Type_Liste;
 
 
@@ -305,15 +306,31 @@ typedef struct __EF_Noeud
 } EF_Noeud;
 
 
+#ifdef ENABLE_GTK
+#define ENTETE_ITER GtkTreeIter Iter;
+#else
+#define ENTETE_ITER
+#endif
+
+#define ENTETE_CHARGES \
+    Barre_Charge_Type   type; \
+    unsigned int        numero;
+
+#define ENTETE_CHARGES_NOEUDS \
+    ENTETE_CHARGES \
+    ENTETE_ITER \
+    char                *nom; \
+    GList               *noeuds;
+
+#define ENTETE_CHARGES_BARRES \
+    ENTETE_CHARGES \
+    ENTETE_ITER \
+    char                *nom; \
+    GList               *barres;
+
 typedef struct __Charge_Noeud
 {
-    Barre_Charge_Type   type;
-    unsigned int        numero;
-#ifdef ENABLE_GTK
-    GtkTreeIter         Iter;
-#endif                  
-    char                *nom;
-    GList               *noeuds;
+    ENTETE_CHARGES_NOEUDS
     double              fx;
     double              fy;
     double              fz;
@@ -517,13 +534,7 @@ typedef struct __EF_Noeud_Barre
 
 typedef struct __Charge_Barre_Ponctuelle
 {
-    Barre_Charge_Type   type;
-    unsigned int        numero;
-#ifdef ENABLE_GTK
-    GtkTreeIter         Iter;
-#endif
-    char                *nom;
-    GList               *barres;
+    ENTETE_CHARGES_BARRES
     gboolean            repere_local;
     double              position; // Position de la charge ponctuelle en mètre
                                   // depuis le début de la barre
@@ -539,13 +550,7 @@ typedef struct __Charge_Barre_Ponctuelle
 
 typedef struct __Charge_Barre_Repartie_Uniforme
 {
-    Barre_Charge_Type   type;
-    unsigned int        numero;
-#ifdef ENABLE_GTK
-    GtkTreeIter         Iter;
-#endif    
-    char                *nom;
-    GList               *barres;
+    ENTETE_CHARGES_BARRES
     gboolean            repere_local;
     gboolean            projection;
     double              a; // Position du début de la charge répartie par rapport au début

@@ -29,5 +29,6 @@ GList *common_selection_converti_numeros_en_noeuds(GList *liste_numeros, Projet 
 GList *common_selection_converti_numeros_en_barres(GList *liste_numeros, Projet *projet);
 char *common_selection_converti_noeuds_en_texte(GList *liste_noeuds);
 char *common_selection_converti_barres_en_texte(GList *liste_barres);
+char *common_selection_converti_charges_en_texte(GList *liste_charges, Projet *projet);
 
 #endif

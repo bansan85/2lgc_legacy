@@ -213,7 +213,8 @@ G_MODULE_EXPORT Beton_Barre* _1992_1_1_barres_cherche_numero(Projet *projet,
 
 
 gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList* noeuds, GList* barres,
-  GList** noeuds_dep, GList** barres_dep, gboolean numero, gboolean origine)
+  GList** noeuds_dep, GList** barres_dep, GList **charges_dep, gboolean numero,
+  gboolean origine)
 /* Description : Renvoie, sous forme d'une liste de noeuds et d'une liste de barres, l'ensemble
  *               des barres et noeuds intermédiaires dépendants des noeuds et des barres passés
  *               en paramètres. Le retour contient également la liste d'origine.
@@ -222,6 +223,8 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList* noeuds, GLi
  *            : GList* barres : liste de pointeurs vers les barres à analyser,
  *            : GList** noeuds_dep : liste de noeuds/numeros vers les noeuds dépendants,
  *            : GList** barres_dep : liste de barres/numeros vers les barres dépendantes.
+ *            : GList** charges_dep : liste de charges (pointeur uniquement) dépendantes.
+ *                                  : peut être NULL;
  *            : gboolean numero : TRUE si les listes renvoient un numéro
  *                              : FALSE si les listes renvoient un pointer vers les barres ou
  *                                noeuds.
@@ -244,6 +247,8 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList* noeuds, GLi
     
     *noeuds_dep = NULL;
     *barres_dep = NULL;
+    if (charges_dep != NULL)
+        *charges_dep = NULL;
     
     // On commence par s'occuper des barres.
     list_parcours = barres;
@@ -254,10 +259,13 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList* noeuds, GLi
         
         // Toutes les barres sélectionnées sont forcément des barres dépendantes.
         barre = list_parcours->data;
-        if (numero)
-            BUG(common_selection_ajout_nombre(GUINT_TO_POINTER(barre->numero), barres_dep, LISTE_UINT), FALSE);
-        else
-            BUG(common_selection_ajout_nombre(barre, barres_dep, LISTE_BARRES), FALSE);
+        if ((origine) || (g_list_find(barres, barre) == NULL))
+        {
+            if (numero)
+                BUG(common_selection_ajout_nombre(GUINT_TO_POINTER(barre->numero), barres_dep, LISTE_UINT), FALSE);
+            else
+                BUG(common_selection_ajout_nombre(barre, barres_dep, LISTE_BARRES), FALSE);
+        }
         
         // Puis, tous les noeuds intermédiaires sont ajoutés à la liste des noeuds à étudier.
         list_parcours2 = barre->noeuds_intermediaires;
@@ -346,6 +354,78 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList* noeuds, GLi
     }
     
     g_list_free(noeuds_done);
+    
+    if (charges_dep == NULL)
+        return TRUE;
+    
+    // Ensuite, on parcours les charges pour déterminer si certaines sont utilisées par les
+    // noeuds ou barres.
+    list_parcours = projet->actions;
+    while (list_parcours != NULL)
+    {
+        Action  *action = list_parcours->data;
+        GList   *liste_parcours2 = action->charges;
+        
+        while (liste_parcours2 != NULL)
+        {
+            Charge_Noeud    *charge_type = liste_parcours2->data;
+            switch (charge_type->type)
+            {
+                case CHARGE_NOEUD :
+                {
+                    Charge_Noeud    *charge = liste_parcours2->data;
+                    GList           *liste_parcours3 = charge->noeuds;
+                    
+                    while (liste_parcours3 != NULL)
+                    {
+                        EF_Noeud *noeud = liste_parcours3->data;
+                        
+                        if (((!numero) && (g_list_find(*noeuds_dep, noeud) != NULL)) ||
+                          ((numero) && (g_list_find(*noeuds_dep, GUINT_TO_POINTER(noeud->numero)) != NULL)) ||
+                          ((!origine) && (g_list_find(noeuds, noeud) != NULL)))
+                        {
+                            BUG(common_selection_ajout_nombre(charge, charges_dep, LISTE_CHARGES), FALSE);
+                            liste_parcours3 = NULL;
+                        }
+                        
+                        liste_parcours3 = g_list_next(liste_parcours3);
+                    }
+                    break;
+                }
+                case CHARGE_BARRE_PONCTUELLE :
+                case CHARGE_BARRE_REPARTIE_UNIFORME :
+                {
+                    Charge_Barre_Ponctuelle *charge = liste_parcours2->data;
+                    GList                   *liste_parcours3 = charge->barres;
+                    
+                    while (liste_parcours3 != NULL)
+                    {
+                        Beton_Barre *barre = liste_parcours3->data;
+                        
+                        if (((!numero) && (g_list_find(*barres_dep, barre) != NULL)) ||
+                          ((numero) && (g_list_find(*barres_dep, GUINT_TO_POINTER(barre->numero)) != NULL)) ||
+                          ((!origine) && (g_list_find(barres, barre) != NULL)))
+                        {
+                            BUG(common_selection_ajout_nombre(charge, charges_dep, LISTE_CHARGES), FALSE);
+                            liste_parcours3 = NULL;
+                        }
+                        
+                        liste_parcours3 = g_list_next(liste_parcours3);
+                    }
+                    break;
+                }
+                default :
+                {
+                    BUGMSG(0, FALSE, gettext("Type de charge %d inconnu."), charge_type->type);
+                    break;
+                }
+            }
+            
+            liste_parcours2 = g_list_next(liste_parcours2);
+        }
+        
+        list_parcours = g_list_next(list_parcours);
+    }
     
     return TRUE;
 }
@@ -537,7 +617,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_change_noeud(Beton_Barre *barre, EF_No
     BUGMSG(!((noeud_1 == FALSE) && (barre->noeud_debut == noeud)), FALSE, gettext("Impossible d'appliquer le même noeud aux deux extrémités d'une barre.\n"));
     
     liste_barre = g_list_append(liste_barre, barre);
-    BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, liste_barre, &liste_noeuds_dep, &liste_barres_dep, FALSE, TRUE), FALSE);
+    BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, liste_barre, &liste_noeuds_dep, &liste_barres_dep, NULL, FALSE, TRUE), FALSE);
     g_list_free(liste_barre);
     BUGMSG(g_list_find(liste_noeuds_dep, noeud) == NULL, FALSE, gettext("Impossible d'affecter le noeud %d à la barre %d car il est dépendant de la barre à modifier.\n"), noeud->numero, barre->numero);
     
@@ -1351,12 +1431,61 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_supprime_liste(Projet *projet, GList *
  *             projet == NULL.
  */
 {
-    GList   *noeuds_suppr, *barres_suppr;
+    GList   *noeuds_suppr, *barres_suppr, *charges_suppr;
     GList   *list_parcours;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
-    BUG(_1992_1_1_barres_cherche_dependances(projet, liste_noeuds, liste_barres, &noeuds_suppr, &barres_suppr, TRUE, TRUE), FALSE);
+    BUG(_1992_1_1_barres_cherche_dependances(projet, liste_noeuds, liste_barres, &noeuds_suppr, &barres_suppr, &charges_suppr, TRUE, TRUE), FALSE);
+    
+    // On enlève dans les charges les noeuds et barres qui seront supprimés
+    list_parcours = charges_suppr;
+    while (list_parcours != NULL)
+    {
+        Charge_Noeud    *charge_type = list_parcours->data;
+        
+        switch (charge_type->type)
+        {
+            case CHARGE_NOEUD :
+            {
+                Charge_Noeud    *charge = list_parcours->data;
+                GList           *liste_parcours2 = noeuds_suppr;
+                
+                while (liste_parcours2 != NULL)
+                {
+                    EF_Noeud *noeud = liste_parcours2->data;
+                    
+                    charge->noeuds = g_list_remove(charge->noeuds, noeud);
+                    
+                    liste_parcours2 = g_list_next(liste_parcours2);
+                }
+                break;
+            }
+            case CHARGE_BARRE_PONCTUELLE :
+            case CHARGE_BARRE_REPARTIE_UNIFORME :
+            {
+                Charge_Barre_Ponctuelle *charge = list_parcours->data;
+                GList                   *liste_parcours2 = charge->barres;
+                
+                while (liste_parcours2 != NULL)
+                {
+                    Beton_Barre *barre = liste_parcours2->data;
+                    
+                    charge->barres = g_list_remove(charge->barres, barre);
+                    
+                    liste_parcours2 = g_list_next(liste_parcours2);
+                }
+                break;
+            }
+            default :
+            {
+                BUGMSG(0, FALSE, gettext("Type de charge %d inconnu."), charge_type->type);
+                break;
+            }
+        }
+        
+        list_parcours = g_list_next(list_parcours);
+    }
     
     // On supprime les barres
     list_parcours = barres_suppr;

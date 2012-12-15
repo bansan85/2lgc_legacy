@@ -20,10 +20,11 @@
 #define __COMMON_TEXT_H
 
 #include "config.h"
+#include "common_projet.h"
 
 void show_warranty();
 void show_help();
 
-char *common_text_dependances(GList *liste_noeuds, GList *liste_barres);
+char *common_text_dependances(GList *liste_noeuds, GList *liste_barres, GList *liste_charges, Projet *projet);
 
 #endif

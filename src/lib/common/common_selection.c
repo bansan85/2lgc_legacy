@@ -49,6 +49,7 @@ gboolean common_selection_ajout_nombre(void *data, GList **liste, Type_Liste typ
             case LISTE_UINT :
             case LISTE_NOEUDS :
             case LISTE_BARRES :
+            case LISTE_CHARGES :
             {
                 *liste = g_list_append(*liste, data);
                 return TRUE;
@@ -113,6 +114,22 @@ gboolean common_selection_ajout_nombre(void *data, GList **liste, Type_Liste typ
                 }
                 break;
             }
+            case LISTE_CHARGES :
+            {
+                Charge_Noeud *charge_liste, *charge;
+                
+                charge_liste = list_parcours->data;
+                charge = data;
+                
+                if (charge_liste->numero == charge->numero)
+                    return TRUE;
+                else if (charge_liste->numero > charge->numero)
+                {
+                    *liste = g_list_insert_before(*liste, list_parcours, data);
+                    return TRUE;
+                }
+                break;
+            }
             default :
             {
                 BUGMSG(NULL, FALSE, gettext("Le type %d de la liste est inconnu.\n"), type);
@@ -130,6 +147,7 @@ gboolean common_selection_ajout_nombre(void *data, GList **liste, Type_Liste typ
         }
         case LISTE_NOEUDS :
         case LISTE_BARRES :
+        case LISTE_CHARGES :
         {
             *liste = g_list_append(*liste, data);
             return TRUE;
@@ -407,7 +425,73 @@ G_MODULE_EXPORT char *common_selection_converti_barres_en_texte(GList *liste_bar
             do
             {
                 barre = list_parcours->data;
-                BUGMSG(tmp2 = g_strdup_printf("%s; %u", tmp, barre->numero), NULL, gettext("Erreur d'allocation mémoire.\n"));
+                BUGMSG(tmp2 = g_strdup_printf("%s;%u", tmp, barre->numero), NULL, gettext("Erreur d'allocation mémoire.\n"));
+                free(tmp);
+                tmp = tmp2;
+                tmp2 = NULL;
+                list_parcours = g_list_next(list_parcours);
+            }
+            while (list_parcours != NULL);
+        }
+    }
+    else
+        BUGMSG(tmp = g_strdup_printf(" "), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    
+    return tmp;
+}
+
+
+G_MODULE_EXPORT char *common_selection_converti_charges_en_texte(GList *liste_charges,
+  Projet *projet)
+/* Description : Renvoie sous forme de texte une liste de charges.
+ * Paramètres : GList *liste_charges : la liste des charges à convertir en texte,
+ * Valeur renvoyée :
+ *   Succès : le texte correspondant.
+ *   Échec : NULL :
+ *             Erreur d'allocation mémoire.
+ */
+{
+    char        *tmp, *tmp2;
+    
+    if (liste_charges != NULL)
+    {
+        GList           *list_parcours, *list_parcours2;
+        Charge_Noeud    *charge;
+        Action          *action = NULL;
+        
+        list_parcours = liste_charges;
+        charge = list_parcours->data;
+        
+        // On cherche dans la liste des actions laquelle possède la charge.
+        list_parcours2 = projet->actions;
+        while (list_parcours2 != NULL)
+        {
+            action = list_parcours2->data;
+            
+            if (g_list_find(action->charges, charge) != NULL)
+                list_parcours2 = NULL;
+             
+            list_parcours2 = g_list_next(list_parcours2);
+        }
+        BUGMSG(tmp = g_strdup_printf("%u:%u", action->numero, charge->numero), NULL, gettext("Erreur d'allocation mémoire.\n"));
+        if (g_list_next(list_parcours) != NULL)
+        {
+            list_parcours = g_list_next(list_parcours);
+            do
+            {
+                charge = list_parcours->data;
+                // On cherche dans la liste des actions laquelle possède la charge.
+                list_parcours2 = projet->actions;
+                while (list_parcours2 != NULL)
+                {
+                    action = list_parcours2->data;
+                    
+                    if (g_list_find(action->charges, charge) != NULL)
+                        list_parcours2 = NULL;
+                     
+                    list_parcours2 = g_list_next(list_parcours2);
+                }
+                BUGMSG(tmp2 = g_strdup_printf("%s;%u:%u", tmp, action->numero, charge->numero), NULL, gettext("Erreur d'allocation mémoire.\n"));
                 free(tmp);
                 tmp = tmp2;
                 tmp2 = NULL;
