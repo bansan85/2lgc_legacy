@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2012-12-15 18:34+0100\n"
-"PO-Revision-Date: 2012-12-15 18:43+0100\n"
+"POT-Creation-Date: 2012-12-15 23:39+0100\n"
+"PO-Revision-Date: 2012-12-15 23:40+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -342,6 +342,9 @@ msgstr "Aucun"
 msgid "Barre en béton %u introuvable.\n"
 msgstr "Barre en béton %u introuvable.\n"
 
+msgid "Type de charge %d inconnu."
+msgstr "Type de charge %d inconnu."
+
 msgid "La longueur de la barre %u est nulle\n"
 msgstr "La longueur de la barre %u est nulle\n"
 
@@ -471,6 +474,12 @@ msgstr "barre"
 msgid "barres"
 msgstr "barres"
 
+msgid "charge"
+msgstr "charge"
+
+msgid "charges"
+msgstr "charges"
+
 msgid "et ces dépendances (%s)"
 msgstr "et ces dépendances (%s)"
 
@@ -536,9 +545,6 @@ msgstr "'%s' n'est pas de la forme 'largeurxhauteur'.\n"
 
 msgid "Le fichier '%s' est corrompu.\n"
 msgstr "Le fichier '%s' est corrompu.\n"
-
-msgid "Type de charge %d inconnu."
-msgstr "Type de charge %d inconnu."
 
 msgid "Type d'action '%s' inconnu.\n"
 msgstr "Type d'action '%s' inconnu.\n"

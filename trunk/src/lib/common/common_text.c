@@ -82,11 +82,13 @@ G_MODULE_EXPORT void show_help()
 }
 
 
-G_MODULE_EXPORT char *common_text_dependances(GList *liste_noeuds, GList *liste_barres)
+G_MODULE_EXPORT char *common_text_dependances(GList *liste_noeuds, GList *liste_barres,
+  GList *liste_charges, Projet *projet)
 /* Description : renvoie la liste des types d'éléments dépendants sous forme de texte.
  *               liste_noeuds et liste_barres viennent de _1992_1_1_barres_cherche_dependances.
  * Paramètres : GList *liste_noeuds : liste des noeuds,
- *              GList *liste_barres : liste des barres.
+ *              GList *liste_barres : liste des barres,
+ *              GList *liste_charges : liste des charges.
  * Valeur renvoyée :
  *   Succès : pointeur vers le texte.
  *   Échec : NULL :
@@ -123,6 +125,28 @@ G_MODULE_EXPORT char *common_text_dependances(GList *liste_noeuds, GList *liste_
                 retour = g_strdup_printf("%s, %s : %s", tmp2, gettext("barre"), tmp);
             else
                 retour = g_strdup_printf("%s, %s : %s", tmp2, gettext("barres"), tmp);
+            free(tmp2);
+        }
+        free(tmp);
+    }
+    if (liste_charges != NULL)
+    {
+        tmp = common_selection_converti_charges_en_texte(liste_charges, projet);
+        if (retour == NULL)
+        {
+            if (g_list_length(liste_charges) == 1)
+                retour = g_strdup_printf("%s : %s", gettext("charge"), tmp);
+            else
+                retour = g_strdup_printf("%s : %s", gettext("charges"), tmp);
+        }
+        else
+        {
+            char *tmp2;
+            tmp2 = retour;
+            if (g_list_length(liste_charges) == 1)
+                retour = g_strdup_printf("%s, %s : %s", tmp2, gettext("charge"), tmp);
+            else
+                retour = g_strdup_printf("%s, %s : %s", tmp2, gettext("charges"), tmp);
             free(tmp2);
         }
         free(tmp);
