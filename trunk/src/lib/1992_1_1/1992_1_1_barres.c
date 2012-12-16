@@ -36,6 +36,7 @@
 #include "EF_charge_barre_ponctuelle.h"
 #include "EF_charge_barre_repartie_uniforme.h"
 #include "EF_charge_noeud.h"
+#include "EF_gtk_appuis.h"
 
 G_MODULE_EXPORT gboolean _1992_1_1_barres_init(Projet *projet)
 /* Description : Initialise la liste des éléments en béton.
@@ -1507,6 +1508,12 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_supprime_liste(Projet *projet, GList *
     }
     g_list_free(noeuds_suppr);
     
+#ifdef ENABLE_GTK
+    if (projet->list_gtk.ef_appuis.builder != NULL)
+    {
+        EF_gtk_appuis_select_changed(NULL, projet);
+    }
+#endif
     BUG(EF_calculs_free(projet), FALSE);
     
     return TRUE;
