@@ -192,7 +192,7 @@ G_MODULE_EXPORT void EF_noeuds_set_supprimer_visible(gboolean select, Projet *pr
         GList   *liste_noeuds = NULL, *liste_noeuds_dep, *liste_barres_dep, *liste_charges_dep;
         
         liste_noeuds = g_list_append(liste_noeuds, noeud);
-        BUG(_1992_1_1_barres_cherche_dependances(projet, liste_noeuds, NULL, &liste_noeuds_dep, &liste_barres_dep, &liste_charges_dep, FALSE, FALSE), );
+        BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, liste_noeuds, NULL, &liste_noeuds_dep, &liste_barres_dep, &liste_charges_dep, FALSE, FALSE), );
         g_list_free(liste_noeuds);
         
         // Noeud utilisé
@@ -328,7 +328,7 @@ G_MODULE_EXPORT void EF_gtk_noeud_edit_pos_abs(GtkCellRendererText *cell, gchar 
         }
         
         liste_noeuds = g_list_append(liste_noeuds, noeud);
-        BUG(_1992_1_1_barres_cherche_dependances(projet, liste_noeuds, NULL, &liste_noeuds_dep, &liste_barres_dep, NULL, FALSE, TRUE), );
+        BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, liste_noeuds, NULL, &liste_noeuds_dep, &liste_barres_dep, NULL, FALSE, TRUE), );
         g_list_free(liste_noeuds);
         
         BUG(m3d_actualise_graphique(projet, liste_noeuds_dep, liste_barres_dep), );
@@ -406,7 +406,7 @@ G_MODULE_EXPORT void EF_gtk_noeud_edit_pos_relat(GtkCellRendererText *cell, gcha
             BUGMSG(NULL, , gettext("Le type du noeud ou la colonne d'édition est incorrect.\n"));
         
         liste_noeuds = g_list_append(liste_noeuds, noeud);
-        BUG(_1992_1_1_barres_cherche_dependances(projet, liste_noeuds, NULL, &liste_noeuds_dep, &liste_barres_dep, NULL, FALSE, TRUE), );
+        BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, liste_noeuds, NULL, &liste_noeuds_dep, &liste_barres_dep, NULL, FALSE, TRUE), );
         g_list_free(liste_noeuds);
         
         BUG(m3d_actualise_graphique(projet, liste_noeuds_dep, liste_barres_dep), );
@@ -579,7 +579,7 @@ G_MODULE_EXPORT void EF_gtk_noeud_edit_noeud_barre_barre(
             BUGMSG(NULL, , gettext("Le noeud doit être de type intermédiaire.\n"));
         
         liste_noeuds = g_list_append(liste_noeuds, noeud);
-        BUG(_1992_1_1_barres_cherche_dependances(projet, liste_noeuds, NULL, &liste_noeuds_dep, &liste_barres_dep, NULL, FALSE, TRUE), );
+        BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, liste_noeuds, NULL, &liste_noeuds_dep, &liste_barres_dep, NULL, FALSE, TRUE), );
         g_list_free(liste_noeuds);
         
         BUG(m3d_actualise_graphique(projet, liste_noeuds_dep, liste_barres_dep), );

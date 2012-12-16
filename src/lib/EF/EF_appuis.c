@@ -575,41 +575,6 @@ G_MODULE_EXPORT gboolean EF_appuis_renomme(EF_Appui *appui, gchar *nom, Projet *
 }
 
 
-G_MODULE_EXPORT gboolean EF_appuis_cherche_dependances(Projet *projet, EF_Appui* appui,
-  GList** noeuds_dep)
-/* Description : Supprime l'appui spécifié.
- * Paramètres : Projet *projet : la variable projet,
- *            : EF_Appui *appui : l'appui à analyser,
- *            : GList** noeuds_dep : la liste des noeuds dépendants.
- * Valeur renvoyée :
- *   Succès : TRUE
- *   Échec : FALSE :
- *             projet == NULL,
- *             appui == NULL.
- */
-{
-    GList   *list_parcours;
-    
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(appui, FALSE, gettext("Paramètre %s incorrect.\n"), "appui");
-    
-    *noeuds_dep = NULL;
-    
-    list_parcours = projet->ef_donnees.noeuds;
-    while (list_parcours != NULL)
-    {
-        EF_Noeud    *noeud = list_parcours->data;
-        
-        if (noeud->appui == appui)
-            *noeuds_dep = g_list_append(*noeuds_dep, noeud);
-        
-        list_parcours = g_list_next(list_parcours);
-    }
-    
-    return TRUE;
-}
-
-
 G_MODULE_EXPORT gboolean EF_appuis_verifie_dependances(Projet *projet, EF_Appui* appui)
 /* Description : Vérifie si l'appui est utilisé.
  * Paramètres : Projet *projet : la variable projet,
@@ -660,24 +625,29 @@ G_MODULE_EXPORT gboolean EF_appuis_supprime(EF_Appui *appui, gboolean annule_si_
  *             appui == NULL.
  */
 {
-    GList   *list_noeuds, *list_parcours;
+    GList   *list_appuis = NULL, *list_parcours;
+    GList   *noeuds_suppr, *barres_suppr, *charges_suppr;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(appui, FALSE, gettext("Paramètre %s incorrect.\n"), "appui");
     
     // On vérifie les dépendances.
-    BUG(EF_appuis_cherche_dependances(projet, appui, &list_noeuds), FALSE);
+    list_appuis = g_list_append(list_appuis, appui);
+    BUG(_1992_1_1_barres_cherche_dependances(projet, list_appuis, NULL, NULL, &noeuds_suppr, &barres_suppr, &charges_suppr, FALSE, FALSE), FALSE);
     
-    if ((annule_si_utilise) && (list_noeuds != NULL))
+    if ((annule_si_utilise) && ((noeuds_suppr != NULL) || (barres_suppr != NULL) || (charges_suppr != NULL)))
     {
         char *liste;
         
-        liste = common_selection_converti_noeuds_en_texte(list_noeuds);
-        if (g_list_next(list_noeuds) == NULL)
+        liste = common_selection_converti_noeuds_en_texte(noeuds_suppr);
+        if (g_list_next(noeuds_suppr) == NULL)
             printf("Impossible de supprimer l'appui car il est utilisé par le noeud %s.\n", liste);
         else
             printf("Impossible de supprimer l'appui car il est utilisé par les noeuds %s.\n", liste);
-        g_list_free(list_noeuds);
+        g_list_free(list_appuis);
+        g_list_free(noeuds_suppr);
+        g_list_free(barres_suppr);
+        g_list_free(charges_suppr);
         free(liste);
         
         return TRUE;
@@ -686,7 +656,7 @@ G_MODULE_EXPORT gboolean EF_appuis_supprime(EF_Appui *appui, gboolean annule_si_
     // On enlève l'appui pour les noeuds dépendants (si supprime == FALSE).
     if (supprime == FALSE)
     {
-        list_parcours = list_noeuds;
+        list_parcours = noeuds_suppr;
         while (list_parcours != NULL)
         {
             EF_Noeud    *noeud = list_parcours->data;
@@ -697,9 +667,12 @@ G_MODULE_EXPORT gboolean EF_appuis_supprime(EF_Appui *appui, gboolean annule_si_
         }
     }
     else
-        BUG(_1992_1_1_barres_supprime_liste(projet, list_noeuds, NULL), TRUE);
+        BUG(_1992_1_1_barres_supprime_liste(projet, noeuds_suppr, barres_suppr), TRUE);
     
-    g_list_free(list_noeuds);
+    g_list_free(list_appuis);
+    g_list_free(noeuds_suppr);
+    g_list_free(barres_suppr);
+    g_list_free(charges_suppr);
     
     free(appui->nom);
     switch (appui->ux)

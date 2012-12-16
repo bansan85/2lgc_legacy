@@ -30,7 +30,9 @@
 #include "common_erreurs.h"
 #include "common_gtk.h"
 #include "common_selection.h"
+#include "common_text.h"
 #include "EF_appuis.h"
+#include "1992_1_1_barres.h"
 
 G_MODULE_EXPORT void EF_gtk_appuis_fermer(GtkButton *button __attribute__((unused)),
   Projet *projet)
@@ -339,16 +341,26 @@ G_MODULE_EXPORT void EF_gtk_appuis_select_changed(
         char        *nom;
         EF_Appui    *appui;
         
+        GList   *liste_appuis = NULL, *liste_noeuds_dep, *liste_barres_dep, *liste_charges_dep;
+        
         gtk_tree_model_get(model, &Iter, 0, &nom, -1);
         
         BUG(appui = EF_appuis_cherche_nom(projet, nom, TRUE), );
         
-        if (EF_appuis_verifie_dependances(projet, appui))
+        liste_appuis = g_list_append(liste_appuis, appui);
+        BUG(_1992_1_1_barres_cherche_dependances(projet, liste_appuis, NULL, NULL, &liste_noeuds_dep, &liste_barres_dep, &liste_charges_dep, FALSE, FALSE), );
+        g_list_free(liste_appuis);
+        
+        if ((liste_noeuds_dep != NULL) || (liste_barres_dep != NULL) || (liste_charges_dep != NULL))
         {
+            char    *desc;
+            
             gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_boutton_supprimer_direct")), FALSE);
             gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_boutton_supprimer_menu")), TRUE);
             gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_boutton_supprimer_direct")), FALSE);
             gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_boutton_supprimer_menu")), TRUE);
+            desc = common_text_dependances(liste_noeuds_dep, liste_barres_dep, liste_charges_dep, projet);
+            gtk_menu_item_set_label(GTK_MENU_ITEM(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_supprimer_menu_suppr_noeud")), desc);
         }
         else
         {
