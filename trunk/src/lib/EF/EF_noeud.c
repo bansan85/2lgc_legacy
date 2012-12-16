@@ -27,6 +27,9 @@
 #include "common_erreurs.h"
 #include "common_m3d.hpp"
 #include "EF_calculs.h"
+#ifdef ENABLE_GTK
+#include "EF_gtk_appuis.h"
+#endif
 
 G_MODULE_EXPORT gboolean EF_noeuds_init(Projet *projet)
 /* Description : Initialise la liste des noeuds.
@@ -350,6 +353,8 @@ G_MODULE_EXPORT gboolean EF_noeuds_change_appui(Projet *projet, EF_Noeud *noeud,
  *             noeud == NULL.
  */
 {
+    EF_Appui    *appui_old = noeud->appui;
+    
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(noeud, FALSE, gettext("Paramètre %s incorrect.\n"), "noeud");
     
@@ -383,6 +388,23 @@ G_MODULE_EXPORT gboolean EF_noeuds_change_appui(Projet *projet, EF_Noeud *noeud,
             gtk_tree_store_set(GTK_TREE_STORE(model), &noeud->Iter, 4, gettext("Aucun"), -1);
         else
             gtk_tree_store_set(GTK_TREE_STORE(model), &noeud->Iter, 4, appui->nom, -1);
+    }
+    if (projet->list_gtk.ef_appuis.builder != NULL)
+    {
+        GtkTreeModel    *model;
+        GtkTreeIter     Iter;
+        
+        if (gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_treeview_select")), &model, &Iter))
+        {
+            char    *nom;
+            
+            gtk_tree_model_get(model, &Iter, 0, &nom, -1);
+            
+            if (((noeud->appui != NULL) && (strcmp(nom, noeud->appui->nom) == 0)) || ((appui_old != NULL) && (strcmp(nom, appui_old->nom) == 0)))
+                EF_gtk_appuis_select_changed(NULL, projet);
+            
+            free(nom);
+        }
     }
 #endif
     
