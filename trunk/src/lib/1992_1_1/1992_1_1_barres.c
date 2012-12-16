@@ -33,6 +33,9 @@
 #include "EF_calculs.h"
 #include "EF_noeud.h"
 #include "EF_section.h"
+#include "EF_charge_barre_ponctuelle.h"
+#include "EF_charge_barre_repartie_uniforme.h"
+#include "EF_charge_noeud.h"
 
 G_MODULE_EXPORT gboolean _1992_1_1_barres_init(Projet *projet)
 /* Description : Initialise la liste des éléments en béton.
@@ -1436,7 +1439,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_supprime_liste(Projet *projet, GList *
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
-    BUG(_1992_1_1_barres_cherche_dependances(projet, liste_noeuds, liste_barres, &noeuds_suppr, &barres_suppr, &charges_suppr, TRUE, TRUE), FALSE);
+    BUG(_1992_1_1_barres_cherche_dependances(projet, liste_noeuds, liste_barres, &noeuds_suppr, &barres_suppr, &charges_suppr, FALSE, TRUE), FALSE);
     
     // On enlève dans les charges les noeuds et barres qui seront supprimés
     list_parcours = charges_suppr;
@@ -1448,33 +1451,17 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_supprime_liste(Projet *projet, GList *
         {
             case CHARGE_NOEUD :
             {
-                Charge_Noeud    *charge = list_parcours->data;
-                GList           *liste_parcours2 = noeuds_suppr;
-                
-                while (liste_parcours2 != NULL)
-                {
-                    EF_Noeud *noeud = liste_parcours2->data;
-                    
-                    charge->noeuds = g_list_remove(charge->noeuds, noeud);
-                    
-                    liste_parcours2 = g_list_next(liste_parcours2);
-                }
+                BUG(EF_charge_noeud_enleve_noeuds(charge_type, noeuds_suppr), FALSE);
                 break;
             }
             case CHARGE_BARRE_PONCTUELLE :
+            {
+                BUG(EF_charge_barre_ponctuelle_enleve_barres((Charge_Barre_Ponctuelle*)charge_type, barres_suppr), FALSE);
+                break;
+            }
             case CHARGE_BARRE_REPARTIE_UNIFORME :
             {
-                Charge_Barre_Ponctuelle *charge = list_parcours->data;
-                GList                   *liste_parcours2 = charge->barres;
-                
-                while (liste_parcours2 != NULL)
-                {
-                    Beton_Barre *barre = liste_parcours2->data;
-                    
-                    charge->barres = g_list_remove(charge->barres, barre);
-                    
-                    liste_parcours2 = g_list_next(liste_parcours2);
-                }
+                BUG(EF_charge_barre_repartie_uniforme_enleve_barres((Charge_Barre_Repartie_Uniforme*)charge_type, barres_suppr), FALSE);
                 break;
             }
             default :
@@ -1486,7 +1473,11 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_supprime_liste(Projet *projet, GList *
         
         list_parcours = g_list_next(list_parcours);
     }
+    g_list_free(noeuds_suppr);
+    g_list_free(barres_suppr);
+    g_list_free(charges_suppr);
     
+    BUG(_1992_1_1_barres_cherche_dependances(projet, liste_noeuds, liste_barres, &noeuds_suppr, &barres_suppr, NULL, TRUE, TRUE), FALSE);
     // On supprime les barres
     list_parcours = barres_suppr;
     while (list_parcours != NULL)

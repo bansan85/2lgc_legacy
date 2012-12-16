@@ -828,6 +828,36 @@ G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_n(Fonction *fonction, Beton_
 }
 
 
+G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_enleve_barres(
+  Charge_Barre_Ponctuelle *charge, GList *barres)
+/* Description : Enlève à la charge une liste de barres pouvant être utilisées. Dans le cas où
+ *               une barre de la liste n'est pas dans la charge, ce point ne sera pas considéré
+ *               comme une erreur mais la barre sera simplement ignorée.
+ * Paramètres : Charge_Barre_Ponctuelle *charge : la charge à modifier,
+ *              GList *barres : la liste de pointers de type Beton_Barre devant être retirés.
+ * Valeur renvoyée :
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             charge == NULL.
+ */
+{
+    GList   *list_parcours = barres;
+    
+    BUGMSG(charge, FALSE, gettext("Paramètre %s incorrect.\n"), "charge");
+    
+    while (list_parcours != NULL)
+    {
+        Beton_Barre *barre = list_parcours->data;
+        
+        charge->barres = g_list_remove(charge->barres, barre);
+        
+        list_parcours = g_list_next(list_parcours);
+    }
+    
+    return TRUE;
+}
+
+
 G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_free(Charge_Barre_Ponctuelle *charge)
 /* Description : Libère une charge ponctuelle sur barre.
  * Paramètres : Charge_Barre_Ponctuelle *charge : la charge à libérer.
