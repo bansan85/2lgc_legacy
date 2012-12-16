@@ -195,7 +195,7 @@ G_MODULE_EXPORT gboolean m3d_actualise_graphique(Projet *projet, GList *noeuds, 
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
-    BUG(_1992_1_1_barres_cherche_dependances(projet, noeuds, barres, &noeuds_dep, &barres_dep, NULL, FALSE, TRUE), FALSE);
+    BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, noeuds, barres, &noeuds_dep, &barres_dep, NULL, FALSE, TRUE), FALSE);
     
     list_parcours = noeuds_dep;
     while (list_parcours != NULL)

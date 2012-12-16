@@ -16,7 +16,7 @@
         <property name="visible">True</property>
         <child>
             <object class="GtkMenuItem" id="EF_appuis_supprimer_menu_suppr_noeud">
-                <property name="label" translatable="yes">ainsi que les noeuds l'utilisant (y compris les barres et noeuds intermédaires dépendants).</property>
+                <property name="label">et ces dépendances.</property>
                 <property name="visible">True</property>
                 <signal name="activate" handler="EF_gtk_appuis_supprimer_menu_suppr_noeud"/>
             </object>
