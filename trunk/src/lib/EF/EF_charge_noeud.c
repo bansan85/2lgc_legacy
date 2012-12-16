@@ -25,6 +25,7 @@
 #include "common_projet.h"
 #include "common_erreurs.h"
 #include "EF_calculs.h"
+#include "EF_gtk_charge_noeud.h"
 
 
 G_MODULE_EXPORT Charge_Noeud*  EF_charge_noeud_ajout(Projet *projet, unsigned int num_action,
@@ -77,12 +78,13 @@ G_MODULE_EXPORT Charge_Noeud*  EF_charge_noeud_ajout(Projet *projet, unsigned in
 }
 
 
-G_MODULE_EXPORT gboolean EF_charge_noeud_enleve_noeuds(Charge_Noeud *charge, GList *noeuds)
+G_MODULE_EXPORT gboolean EF_charge_noeud_enleve_noeuds(Charge_Noeud *charge, GList *noeuds, Projet *projet)
 /* Description : Enlève à la charge une liste de noeuds pouvant être utilisés. Dans le cas où
  *               un noeud de la liste n'est pas dans la charge, ce point ne sera pas considéré
  *               comme une erreur mais le noeud sera simplement ignoré.
  * Paramètres : Charge_Noeud *charge : la charge à modifier,
- *              GList *noeuds : la liste de pointers de type EF_Noeud devant être retirés.
+ *              GList *noeuds : la liste de pointers de type EF_Noeud devant être retirés,
+ *              Projet *projet : la variable projet.
  * Valeur renvoyée :
  *   Succès : TRUE
  *   Échec : FALSE :
@@ -101,6 +103,27 @@ G_MODULE_EXPORT gboolean EF_charge_noeud_enleve_noeuds(Charge_Noeud *charge, GLi
         
         list_parcours = g_list_next(list_parcours);
     }
+    
+#ifdef ENABLE_GTK
+    if (projet->list_gtk._1990_actions.builder != NULL)
+    {
+        GtkTreeModel    *model;
+        GtkTreeIter     Iter;
+        
+        if (gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_treeview_select_action")), &model, &Iter))
+        {
+            unsigned int    num;
+            Action          *action;
+            
+            gtk_tree_model_get(model, &Iter, 0, &num, -1);
+            
+            BUG(action = _1990_action_cherche_numero(projet, num), FALSE);
+            
+            if (g_list_find(action->charges, charge))
+                BUG(EF_gtk_charge_noeud_ajout_affichage(charge, projet, FALSE), FALSE);
+        }
+    }
+#endif
     
     return TRUE;
 }

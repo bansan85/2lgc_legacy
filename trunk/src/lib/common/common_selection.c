@@ -393,10 +393,11 @@ G_MODULE_EXPORT char *common_selection_converti_noeuds_en_texte(GList *liste_noe
             }
             while (list_parcours != NULL);
         }
-        return tmp;
     }
     else
-        return NULL;
+        BUGMSG(tmp = g_strdup_printf(" "), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    
+    return tmp;
 }
 
 

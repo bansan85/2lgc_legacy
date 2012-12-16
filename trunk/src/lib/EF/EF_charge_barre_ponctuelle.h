@@ -36,7 +36,7 @@ gboolean EF_charge_barre_ponctuelle_fonc_rz(Fonction *f_rotation, Fonction* f_de
 
 gboolean EF_charge_barre_ponctuelle_n(Fonction *fonction, Beton_Barre *barre, unsigned int discretisation, double a, double fax, double fbx) __attribute__((__warn_unused_result__));
 
-gboolean EF_charge_barre_ponctuelle_enleve_barres(Charge_Barre_Ponctuelle *charge, GList *barres) __attribute__((__warn_unused_result__));
+gboolean EF_charge_barre_ponctuelle_enleve_barres(Charge_Barre_Ponctuelle *charge, GList *barres, Projet *projet) __attribute__((__warn_unused_result__));
 
 gboolean EF_charge_barre_ponctuelle_free(Charge_Barre_Ponctuelle *charge) __attribute__((__warn_unused_result__));
 

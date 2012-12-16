@@ -1451,17 +1451,17 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_supprime_liste(Projet *projet, GList *
         {
             case CHARGE_NOEUD :
             {
-                BUG(EF_charge_noeud_enleve_noeuds(charge_type, noeuds_suppr), FALSE);
+                BUG(EF_charge_noeud_enleve_noeuds(charge_type, noeuds_suppr, projet), FALSE);
                 break;
             }
             case CHARGE_BARRE_PONCTUELLE :
             {
-                BUG(EF_charge_barre_ponctuelle_enleve_barres((Charge_Barre_Ponctuelle*)charge_type, barres_suppr), FALSE);
+                BUG(EF_charge_barre_ponctuelle_enleve_barres((Charge_Barre_Ponctuelle*)charge_type, barres_suppr, projet), FALSE);
                 break;
             }
             case CHARGE_BARRE_REPARTIE_UNIFORME :
             {
-                BUG(EF_charge_barre_repartie_uniforme_enleve_barres((Charge_Barre_Repartie_Uniforme*)charge_type, barres_suppr), FALSE);
+                BUG(EF_charge_barre_repartie_uniforme_enleve_barres((Charge_Barre_Repartie_Uniforme*)charge_type, barres_suppr, projet), FALSE);
                 break;
             }
             default :
