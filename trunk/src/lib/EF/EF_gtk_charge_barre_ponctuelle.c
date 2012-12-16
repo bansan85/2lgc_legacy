@@ -404,7 +404,11 @@ G_MODULE_EXPORT gboolean EF_gtk_charge_barre_ponctuelle(Projet *projet,
     Charge_Barre_Ponctuelle         *charge_barre;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_charge_barre_ponctuelle.builder == NULL, FALSE, gettext("La fenêtre graphique %s est déjà initialisée.\n"), "Charge Barre Ponctuelle");
+    if (projet->list_gtk.ef_charge_barre_ponctuelle.builder != NULL)
+    {
+        gtk_window_present(GTK_WINDOW(projet->list_gtk.ef_charge_barre_ponctuelle.window));
+        return TRUE;
+    }
     
     ef_gtk = &projet->list_gtk.ef_charge_barre_ponctuelle;
     ef_gtk->builder = gtk_builder_new();

@@ -216,7 +216,11 @@ G_MODULE_EXPORT gboolean EF_gtk_section_circulaire(Projet *projet, EF_Section *s
     Gtk_EF_Sections_Circulaire  *ef_gtk;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_sections_circulaire.builder == NULL, FALSE, gettext("La fenêtre graphique %s est déjà initialisée.\n"), "Ajout Section Circulaire");
+    if (projet->list_gtk.ef_sections_circulaire.builder != NULL)
+    {
+        gtk_window_present(GTK_WINDOW(projet->list_gtk.ef_sections_circulaire.window));
+        return TRUE;
+    }
     
     ef_gtk = &projet->list_gtk.ef_sections_circulaire;
     ef_gtk->builder = gtk_builder_new();

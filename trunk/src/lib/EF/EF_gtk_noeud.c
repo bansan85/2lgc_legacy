@@ -649,7 +649,11 @@ G_MODULE_EXPORT void EF_gtk_noeud(Projet *projet)
     Gtk_EF_Noeud   *ef_gtk;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_noeud.builder == NULL, , gettext("La fenêtre graphique %s est déjà initialisée.\n"), "Neouds");
+    if (projet->list_gtk.ef_noeud.builder != NULL)
+    {
+        gtk_window_present(GTK_WINDOW(projet->list_gtk.ef_noeud.window));
+        return;
+    }
     
     ef_gtk = &projet->list_gtk.ef_noeud;
     

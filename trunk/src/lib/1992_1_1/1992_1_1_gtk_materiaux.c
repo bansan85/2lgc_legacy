@@ -231,7 +231,11 @@ G_MODULE_EXPORT gboolean _1992_1_1_gtk_materiaux(Projet *projet, Beton_Materiau 
     Gtk_1992_1_1_Materiaux  *ef_gtk;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk._1992_1_1_materiaux.builder == NULL, FALSE, gettext("La fenêtre graphique %s est déjà initialisée.\n"), "Ajout Matériau Béton");
+    if (projet->list_gtk._1992_1_1_materiaux.builder != NULL)
+    {
+        gtk_window_present(GTK_WINDOW(projet->list_gtk._1992_1_1_materiaux.window));
+        return TRUE;
+    }
     
     ef_gtk = &projet->list_gtk._1992_1_1_materiaux;
     ef_gtk->builder = gtk_builder_new();

@@ -252,7 +252,11 @@ G_MODULE_EXPORT gboolean EF_gtk_section_T(Projet *projet, EF_Section *section)
     Gtk_EF_Sections_T   *ef_gtk;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_sections_T.builder == NULL, FALSE, gettext("La fenêtre graphique %s est déjà initialisée.\n"), "Ajout Section T");
+    if (projet->list_gtk.ef_sections_T.builder != NULL)
+    {
+        gtk_window_present(GTK_WINDOW(projet->list_gtk.ef_sections_T.window));
+        return TRUE;
+    }
     
     ef_gtk = &projet->list_gtk.ef_sections_T;
     ef_gtk->builder = gtk_builder_new();

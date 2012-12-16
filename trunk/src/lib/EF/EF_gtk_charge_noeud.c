@@ -385,7 +385,11 @@ G_MODULE_EXPORT gboolean EF_gtk_charge_noeud(Projet *projet, unsigned int action
     Charge_Noeud        *charge_noeud;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_charge_noeud.builder == NULL, FALSE, gettext("La fenêtre graphique %s est déjà initialisée.\n"), "Charge Nodale");
+    if (projet->list_gtk.ef_charge_noeud.builder != NULL)
+    {
+        gtk_window_present(GTK_WINDOW(projet->list_gtk.ef_charge_noeud.window));
+        return TRUE;
+    }
     
     ef_gtk = &projet->list_gtk.ef_charge_noeud;
     projet->list_gtk.ef_charge_noeud.builder = gtk_builder_new();

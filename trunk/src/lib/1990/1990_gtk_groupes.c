@@ -1225,7 +1225,11 @@ G_MODULE_EXPORT void _1990_gtk_groupes(Projet *projet)
  */
 {
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk._1990_groupes.builder == NULL, , gettext("La fenêtre graphique %s est déjà initialisée.\n"), "Groupes");
+    if (projet->list_gtk._1990_groupes.builder != NULL)
+    {
+        gtk_window_present(GTK_WINDOW(projet->list_gtk._1990_groupes.window_groupe));
+        return;
+    }
     
     if (projet->niveaux_groupes == NULL)
         BUG(_1990_groupe_ajout_niveau(projet), );
