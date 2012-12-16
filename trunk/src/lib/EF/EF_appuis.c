@@ -575,37 +575,6 @@ G_MODULE_EXPORT gboolean EF_appuis_renomme(EF_Appui *appui, gchar *nom, Projet *
 }
 
 
-G_MODULE_EXPORT gboolean EF_appuis_verifie_dependances(Projet *projet, EF_Appui* appui)
-/* Description : Vérifie si l'appui est utilisé.
- * Paramètres : Projet *projet : la variable projet,
- *            : EF_Appui *appui : l'appui à analyser.
- * Valeur renvoyée :
- *   Succès : TRUE si l'appui est utilisé et FALSE s'il n'est pas utilisé.
- *   Échec : FALSE :
- *             projet == NULL,
- *             appui == NULL.
- */
-{
-    GList   *list_parcours;
-    
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(appui, FALSE, gettext("Paramètre %s incorrect.\n"), "appui");
-    
-    list_parcours = projet->ef_donnees.noeuds;
-    while (list_parcours != NULL)
-    {
-        EF_Noeud    *noeud = list_parcours->data;
-        
-        if (noeud->appui == appui)
-            return TRUE;
-        
-        list_parcours = g_list_next(list_parcours);
-    }
-    
-    return FALSE;
-}
-
-
 G_MODULE_EXPORT gboolean EF_appuis_supprime(EF_Appui *appui, gboolean annule_si_utilise,
   gboolean supprime, Projet *projet)
 /* Description : Supprime l'appui spécifié.
