@@ -1263,7 +1263,11 @@ G_MODULE_EXPORT void EF_gtk_relachement(Projet *projet)
     GList               *list_parcours;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_relachements.builder == NULL, , gettext("La fenêtre graphique %s est déjà initialisée.\n"), "Relachement");
+    if (projet->list_gtk.ef_relachements.builder != NULL)
+    {
+        gtk_window_present(GTK_WINDOW(projet->list_gtk.ef_relachements.window));
+        return;
+    }
     
     ef_gtk = &projet->list_gtk.ef_relachements;
     

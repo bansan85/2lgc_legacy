@@ -215,7 +215,11 @@ G_MODULE_EXPORT gboolean EF_gtk_section_carree(Projet *projet, EF_Section *secti
     Gtk_EF_Sections_Carree  *ef_gtk;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_sections_carree.builder == NULL, FALSE, gettext("La fenêtre graphique %s est déjà initialisée.\n"), "Ajout Section Carrée");
+    if (projet->list_gtk.ef_sections_carree.builder != NULL)
+    {
+        gtk_window_present(GTK_WINDOW(projet->list_gtk.ef_sections_carree.window));
+        return TRUE;
+    }
     
     ef_gtk = &projet->list_gtk.ef_sections_carree;
     ef_gtk->builder = gtk_builder_new();

@@ -610,7 +610,11 @@ G_MODULE_EXPORT void EF_gtk_sections(Projet *projet)
     GList           *list_parcours;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_sections.builder == NULL, , gettext("La fenêtre graphique %s est déjà initialisée.\n"), "Section");
+    if (projet->list_gtk.ef_sections.builder != NULL)
+    {
+        gtk_window_present(GTK_WINDOW(projet->list_gtk.ef_sections.window));
+        return;
+    }
     
     ef_gtk = &projet->list_gtk.ef_sections;
     

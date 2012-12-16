@@ -214,7 +214,11 @@ G_MODULE_EXPORT void EF_gtk_barres_ajouter(GtkButton *button __attribute__((unus
     char            *nb_barres;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_barres.builder_add == NULL, , gettext("La fenêtre graphique %s est déjà initialisée.\n"), "Ajout Appui");
+    if (projet->list_gtk.ef_barres.builder_add != NULL)
+    {
+        gtk_window_present(GTK_WINDOW(projet->list_gtk.ef_barres.window_add));
+        return;
+    }
     
     ef_gtk = &projet->list_gtk.ef_barres;
     

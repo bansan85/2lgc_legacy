@@ -228,7 +228,11 @@ G_MODULE_EXPORT gboolean EF_gtk_section_rectangulaire(Projet *projet, EF_Section
     Gtk_EF_Sections_Rectangulaire   *ef_gtk;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_sections_rectangulaire.builder == NULL, FALSE, gettext("La fenêtre graphique %s est déjà initialisée.\n"), "Ajout Section Rectangulaire");
+    if (projet->list_gtk.ef_sections_rectangulaire.builder != NULL)
+    {
+        gtk_window_present(GTK_WINDOW(projet->list_gtk.ef_sections_rectangulaire.window));
+        return TRUE;
+    }
     
     ef_gtk = &projet->list_gtk.ef_sections_rectangulaire;
     ef_gtk->builder = gtk_builder_new();

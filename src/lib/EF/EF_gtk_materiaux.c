@@ -269,7 +269,11 @@ G_MODULE_EXPORT void EF_gtk_materiaux(Projet *projet)
     GList            *list_parcours;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_materiaux.builder == NULL, , gettext("La fenêtre graphique %s est déjà initialisée.\n"), "Matériau");
+    if (projet->list_gtk.ef_materiaux.builder != NULL)
+    {
+        gtk_window_present(GTK_WINDOW(projet->list_gtk.ef_materiaux.window));
+        return;
+    }
     
     ef_gtk = &projet->list_gtk.ef_materiaux;
     
