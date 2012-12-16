@@ -77,8 +77,36 @@ G_MODULE_EXPORT Charge_Noeud*  EF_charge_noeud_ajout(Projet *projet, unsigned in
 }
 
 
-G_MODULE_EXPORT gboolean EF_charge_noeud_free(Charge_Noeud *charge)
+G_MODULE_EXPORT gboolean EF_charge_noeud_enleve_noeuds(Charge_Noeud *charge, GList *noeuds)
+/* Description : Enlève à la charge une liste de noeuds pouvant être utilisés. Dans le cas où
+ *               un noeud de la liste n'est pas dans la charge, ce point ne sera pas considéré
+ *               comme une erreur mais le noeud sera simplement ignoré.
+ * Paramètres : Charge_Noeud *charge : la charge à modifier,
+ *              GList *noeuds : la liste de pointers de type EF_Noeud devant être retirés.
+ * Valeur renvoyée :
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             charge == NULL.
+ */
 {
+    GList   *list_parcours = noeuds;
+    
+    BUGMSG(charge, FALSE, gettext("Paramètre %s incorrect.\n"), "charge");
+    
+    while (list_parcours != NULL)
+    {
+        EF_Noeud *noeud = list_parcours->data;
+        
+        charge->noeuds = g_list_remove(charge->noeuds, noeud);
+        
+        list_parcours = g_list_next(list_parcours);
+    }
+    
+    return TRUE;
+}
+
+
+G_MODULE_EXPORT gboolean EF_charge_noeud_free(Charge_Noeud *charge)
 /* Description : Libère une charge nodale.
  * Paramètres : Charge_Noeud *charge : la charge à libérer.
  * Valeur renvoyée :
@@ -86,6 +114,7 @@ G_MODULE_EXPORT gboolean EF_charge_noeud_free(Charge_Noeud *charge)
  *   Échec : FALSE :
  *             charge == NULL.
  */
+{
     BUGMSG(charge, FALSE, gettext("Paramètre %s incorrect.\n"), "charge");
     
     free(charge->nom);

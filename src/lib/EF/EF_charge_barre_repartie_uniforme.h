@@ -37,6 +37,7 @@ gboolean EF_charge_barre_repartie_uniforme_fonc_rz(Fonction *f_rotation, Fonctio
 
 gboolean EF_charge_barre_repartie_uniforme_n(Fonction *fonction, Beton_Barre *barre, unsigned int discretisation, double a, double b, double fax, double fbx) __attribute__((__warn_unused_result__));
 
+gboolean EF_charge_barre_repartie_uniforme_enleve_barres(Charge_Barre_Repartie_Uniforme *charge, GList *barres) __attribute__((__warn_unused_result__));
 gboolean EF_charge_barre_repartie_uniforme_free(Charge_Barre_Repartie_Uniforme *charge) __attribute__((__warn_unused_result__));
 
 #endif
