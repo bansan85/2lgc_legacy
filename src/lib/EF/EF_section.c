@@ -134,7 +134,11 @@ G_MODULE_EXPORT gboolean EF_sections_ajout_rectangulaire(Projet *projet, const c
 #ifdef ENABLE_GTK
     gtk_list_store_append(projet->list_gtk.ef_sections.liste_sections, &section_nouvelle->Iter_liste);
     gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section_nouvelle->Iter_liste, 0, nom, -1);
-    BUG(EF_sections_update_ligne_treeview(projet, section_nouvelle), FALSE);
+    if (projet->list_gtk.ef_sections.builder != NULL)
+    {
+        gtk_tree_store_append(projet->list_gtk.ef_sections.sections, &section_nouvelle->Iter_fenetre, NULL);
+        BUG(EF_sections_update_ligne_treeview(projet, section_nouvelle), FALSE);
+    }
 #endif
     
     return TRUE;
@@ -182,7 +186,11 @@ G_MODULE_EXPORT gboolean EF_sections_ajout_T(Projet *projet, const char* nom, do
 #ifdef ENABLE_GTK
     gtk_list_store_append(projet->list_gtk.ef_sections.liste_sections, &section_nouvelle->Iter_liste);
     gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section_nouvelle->Iter_liste, 0, nom, -1);
-    BUG(EF_sections_update_ligne_treeview(projet, section_nouvelle), FALSE);
+    if (projet->list_gtk.ef_sections.builder != NULL)
+    {
+        gtk_tree_store_append(projet->list_gtk.ef_sections.sections, &section_nouvelle->Iter_fenetre, NULL);
+        BUG(EF_sections_update_ligne_treeview(projet, section_nouvelle), FALSE);
+    }
 #endif
     
     return TRUE;
@@ -221,7 +229,11 @@ G_MODULE_EXPORT gboolean EF_sections_ajout_carre(Projet *projet, const char* nom
 #ifdef ENABLE_GTK
     gtk_list_store_append(projet->list_gtk.ef_sections.liste_sections, &section_nouvelle->Iter_liste);
     gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section_nouvelle->Iter_liste, 0, nom, -1);
-    BUG(EF_sections_update_ligne_treeview(projet, section_nouvelle), FALSE);
+    if (projet->list_gtk.ef_sections.builder != NULL)
+    {
+        gtk_tree_store_append(projet->list_gtk.ef_sections.sections, &section_nouvelle->Iter_fenetre, NULL);
+        BUG(EF_sections_update_ligne_treeview(projet, section_nouvelle), FALSE);
+    }
 #endif
     
     return TRUE;
@@ -261,7 +273,11 @@ G_MODULE_EXPORT gboolean EF_sections_ajout_circulaire(Projet *projet, const char
 #ifdef ENABLE_GTK
     gtk_list_store_append(projet->list_gtk.ef_sections.liste_sections, &section_nouvelle->Iter_liste);
     gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section_nouvelle->Iter_liste, 0, nom, -1);
-    BUG(EF_sections_update_ligne_treeview(projet, section_nouvelle), FALSE);
+    if (projet->list_gtk.ef_sections.builder != NULL)
+    {
+        gtk_tree_store_append(projet->list_gtk.ef_sections.sections, &section_nouvelle->Iter_fenetre, NULL);
+        BUG(EF_sections_update_ligne_treeview(projet, section_nouvelle), FALSE);
+    }
 #endif
     
     return TRUE;
