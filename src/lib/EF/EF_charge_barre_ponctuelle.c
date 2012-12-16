@@ -30,6 +30,7 @@
 #include "EF_noeud.h"
 #include "EF_calculs.h"
 #include "EF_section.h"
+#include "EF_gtk_charge_barre_ponctuelle.h"
 
 G_MODULE_EXPORT Charge_Barre_Ponctuelle *EF_charge_barre_ponctuelle_ajout(Projet *projet,
   unsigned int num_action, GList *barres, gboolean repere_local, double a, double fx,
@@ -829,12 +830,13 @@ G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_n(Fonction *fonction, Beton_
 
 
 G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_enleve_barres(
-  Charge_Barre_Ponctuelle *charge, GList *barres)
+  Charge_Barre_Ponctuelle *charge, GList *barres, Projet *projet)
 /* Description : Enlève à la charge une liste de barres pouvant être utilisées. Dans le cas où
  *               une barre de la liste n'est pas dans la charge, ce point ne sera pas considéré
  *               comme une erreur mais la barre sera simplement ignorée.
  * Paramètres : Charge_Barre_Ponctuelle *charge : la charge à modifier,
- *              GList *barres : la liste de pointers de type Beton_Barre devant être retirés.
+ *              GList *barres : la liste de pointers de type Beton_Barre devant être retirés,
+ *              Projet *projet : la variable projet.
  * Valeur renvoyée :
  *   Succès : TRUE
  *   Échec : FALSE :
@@ -853,6 +855,27 @@ G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_enleve_barres(
         
         list_parcours = g_list_next(list_parcours);
     }
+    
+#ifdef ENABLE_GTK
+    if (projet->list_gtk._1990_actions.builder != NULL)
+    {
+        GtkTreeModel    *model;
+        GtkTreeIter     Iter;
+        
+        if (gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_treeview_select_action")), &model, &Iter))
+        {
+            unsigned int    num;
+            Action          *action;
+            
+            gtk_tree_model_get(model, &Iter, 0, &num, -1);
+            
+            BUG(action = _1990_action_cherche_numero(projet, num), FALSE);
+            
+            if (g_list_find(action->charges, charge))
+                BUG(EF_gtk_charge_barre_ponctuelle_ajout_affichage(charge, projet, FALSE), FALSE);
+        }
+    }
+#endif
     
     return TRUE;
 }
