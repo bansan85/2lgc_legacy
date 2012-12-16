@@ -25,6 +25,7 @@
 
 #include "common_projet.h"
 
+void EF_gtk_appuis_select_changed(GtkTreeSelection *treeselection __attribute__((unused)), Projet *projet);
 void EF_gtk_appuis(Projet *projet);
 
 #endif
