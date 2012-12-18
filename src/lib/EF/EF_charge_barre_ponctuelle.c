@@ -22,7 +22,7 @@
 #include <math.h>
 #include <gmodule.h>
 
-#include "1990_actions.h"
+#include "1990_action.h"
 #include "common_projet.h"
 #include "common_erreurs.h"
 #include "common_maths.h"

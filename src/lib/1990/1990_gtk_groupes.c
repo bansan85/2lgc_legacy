@@ -23,7 +23,7 @@
 #include <gtk/gtk.h>
 #include <math.h>
 
-#include "1990_actions.h"
+#include "1990_action.h"
 #include "1990_groupes.h"
 #include "1990_ponderations.h"
 #include "1990_combinaisons.h"
