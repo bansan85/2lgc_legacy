@@ -1407,7 +1407,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_rigidite_ajout_tout(Projet *projet)
 }
 
 
-G_MODULE_EXPORT void _1992_1_1_barre_free_foreach(Beton_Barre *barre, Projet *projet)
+G_MODULE_EXPORT void _1992_1_1_barres_free_foreach(Beton_Barre *barre, Projet *projet)
 /* Description : Fonction permettant de libérer iune barre contenue dans une liste.
  * Paramètres : Beton_Barre *barre : la barre à libérer,
  *            : Projet *projet : la variable projet.
@@ -1503,7 +1503,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_supprime_liste(Projet *projet, GList *
         
         if (barre != NULL)
         {
-            _1992_1_1_barre_free_foreach(barre, projet);
+            _1992_1_1_barres_free_foreach(barre, projet);
             projet->beton.barres = g_list_remove(projet->beton.barres, barre);
         }
         list_parcours = g_list_next(list_parcours);
@@ -1548,7 +1548,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_free(Projet *projet)
     // Trivial
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
-    g_list_foreach(projet->beton.barres, (GFunc)_1992_1_1_barre_free_foreach, projet);
+    g_list_foreach(projet->beton.barres, (GFunc)_1992_1_1_barres_free_foreach, projet);
     g_list_free(projet->beton.barres);
     
     BUG(EF_calculs_free(projet), TRUE);
