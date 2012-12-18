@@ -25,7 +25,7 @@
 
 #include "common_projet.h"
 #include "common_erreurs.h"
-#include "common_maths.h"
+#include "common_math.h"
 #include "common_selection.h"
 #include "EF_noeuds.h"
 #include "EF_calculs.h"

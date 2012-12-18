@@ -24,7 +24,7 @@
 
 #include "common_projet.h"
 #include "common_erreurs.h"
-#include "common_maths.h"
+#include "common_math.h"
 
 G_MODULE_EXPORT gboolean common_fonction_init(Projet *projet, Action *action)
 /* Description : Initialise les fonctions décrivant les sollicitations, les rotations ou les

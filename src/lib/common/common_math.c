@@ -21,7 +21,7 @@
 #include <locale.h>
 #include <math.h>
 #include <gmodule.h>
-#include "common_maths.h"
+#include "common_math.h"
 
 
 G_MODULE_EXPORT double common_math_arrondi_nombre(double nombre)

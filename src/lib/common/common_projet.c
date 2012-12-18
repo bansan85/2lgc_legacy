@@ -24,7 +24,7 @@
 
 #include "common_projet.h"
 #include "common_erreurs.h"
-#include "common_maths.h"
+#include "common_math.h"
 
 #ifdef ENABLE_GTK
 #include "common_m3d.hpp"

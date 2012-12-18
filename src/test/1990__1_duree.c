@@ -26,7 +26,7 @@
 #include "1990_coef_psi.h"
 #include "1990_actions.h"
 #include "1990_groupes.h"
-#include "common_maths.h"
+#include "common_math.h"
 #include "common_erreurs.h"
 #include "common_projet.h"
 

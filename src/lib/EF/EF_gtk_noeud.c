@@ -29,7 +29,7 @@
 #include "common_projet.h"
 #include "common_erreurs.h"
 #include "common_gtk.h"
-#include "common_maths.h"
+#include "common_math.h"
 #include "common_text.h"
 #include "EF_noeuds.h"
 #include "EF_appuis.h"

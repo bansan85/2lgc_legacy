@@ -24,7 +24,7 @@
 
 #include "1990_coef_psi.h"
 #include "common_erreurs.h"
-#include "common_maths.h"
+#include "common_math.h"
 
 
 int main(void)

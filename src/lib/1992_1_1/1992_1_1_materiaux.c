@@ -24,7 +24,7 @@
 #include <gmodule.h>
 
 #include "common_projet.h"
-#include "common_maths.h"
+#include "common_math.h"
 #include "common_erreurs.h"
 #include "common_selection.h"
 #include "1992_1_1_barres.h"

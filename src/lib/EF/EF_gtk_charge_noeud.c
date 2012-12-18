@@ -28,7 +28,7 @@
 #include "common_projet.h"
 #include "common_erreurs.h"
 #include "common_gtk.h"
-#include "common_maths.h"
+#include "common_math.h"
 #include "common_selection.h"
 #include "EF_charge_noeud.h"
 #include "EF_charge.h"
