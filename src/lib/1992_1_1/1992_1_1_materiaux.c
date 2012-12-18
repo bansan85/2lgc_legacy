@@ -806,14 +806,9 @@ void _1992_1_1_materiaux_free_un(Beton_Materiau *materiau)
 }
 
 
-G_MODULE_EXPORT gboolean _1992_1_1_materiaux_supprime(Beton_Materiau* materiau,
-  gboolean annule_si_utilise, Projet *projet)
-/* Description : Supprime le matériau spécifié.
+G_MODULE_EXPORT gboolean _1992_1_1_materiaux_supprime(Beton_Materiau* materiau, Projet *projet)
+/* Description : Supprime le matériau spécifié. Impossible si le matériau est utilisé.
  * Paramètres : Beton_Materiau* materiau : le matériau à supprimer,
- *            : gboolean annule_si_utilise : possibilité d'annuler la suppression si le matériau
- *              est attribué à une barre. Si l'option est désactivée, les barres (et les
- *              barres et noeuds intermédiaires dépendants) utilisant le matériau seront
- *              supprimés.
  *            : Projet *projet : la variable projet.
  * Valeur renvoyée :
  *   Succès : TRUE
@@ -830,7 +825,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_materiaux_supprime(Beton_Materiau* materiau,
     // On vérifie les dépendances.
     BUG(_1992_1_1_materiaux_cherche_dependances(projet, materiau, &list_barres), FALSE);
     
-    if ((annule_si_utilise) && (list_barres != NULL))
+    if (list_barres != NULL)
     {
         char *liste;
         
