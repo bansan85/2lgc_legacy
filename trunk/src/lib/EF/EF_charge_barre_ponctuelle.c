@@ -27,7 +27,7 @@
 #include "common_erreurs.h"
 #include "common_maths.h"
 #include "common_fonction.h"
-#include "EF_noeud.h"
+#include "EF_noeuds.h"
 #include "EF_calculs.h"
 #include "EF_section.h"
 #include "EF_gtk_charge_barre_ponctuelle.h"

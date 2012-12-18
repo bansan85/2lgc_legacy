@@ -25,7 +25,7 @@
 #include "common_projet.h"
 #include "common_erreurs.h"
 #include "common_selection.h"
-#include "EF_noeud.h"
+#include "EF_noeuds.h"
 #include "1992_1_1_barres.h"
 
 #ifdef ENABLE_GTK

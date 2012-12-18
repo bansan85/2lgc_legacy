@@ -39,7 +39,7 @@
 #endif
 
 #include "EF_appuis.h"
-#include "EF_noeud.h"
+#include "EF_noeuds.h"
 #include "EF_rigidite.h"
 #include "EF_relachement.h"
 #include "EF_section.h"

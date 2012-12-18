@@ -29,7 +29,7 @@
 #include "common_fonction.h"
 #include "EF_charge_barre_ponctuelle.h"
 #include "EF_charge_barre_repartie_uniforme.h"
-#include "EF_noeud.h"
+#include "EF_noeuds.h"
 #include "EF_rigidite.h"
 #include "EF_section.h"
 

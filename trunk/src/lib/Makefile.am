@@ -39,7 +39,7 @@ libeurocodes_la_SOURCES =	1990/1990_action.c \
 							EF/EF_charge_barre_ponctuelle.c \
 							EF/EF_charge_barre_repartie_uniforme.c \
 							EF/EF_charge_noeud.c \
-							EF/EF_noeud.c \
+							EF/EF_noeuds.c \
 							EF/EF_relachement.c \
 							EF/EF_rigidite.c \
 							EF/EF_section.c
@@ -89,7 +89,7 @@ libeurocodes_la_HEADERS =	1990/1990_action.h \
 							EF/EF_charge_barre_ponctuelle.h \
 							EF/EF_charge_barre_repartie_uniforme.h \
 							EF/EF_charge_noeud.h \
-							EF/EF_noeud.h \
+							EF/EF_noeuds.h \
 							EF/EF_relachement.h \
 							EF/EF_rigidite.h \
 							EF/EF_section.h
