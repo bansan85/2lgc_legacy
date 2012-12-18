@@ -667,11 +667,11 @@ G_MODULE_EXPORT void EF_gtk_noeud(Projet *projet)
     ef_gtk->tree_store_barre = GTK_TREE_STORE(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treestore_noeuds_intermediaires"));
     
     g_object_set_data(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_libres_cell1"), "column", GINT_TO_POINTER(1));
-    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_libres_column1")), GTK_CELL_RENDERER(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_libres_cell1")), gtk_common_render_double, GINT_TO_POINTER(DECIMAL_DISTANCE), NULL);
+    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_libres_column1")), GTK_CELL_RENDERER(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_libres_cell1")), common_gtk_render_double, GINT_TO_POINTER(DECIMAL_DISTANCE), NULL);
     g_object_set_data(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_libres_cell2"), "column", GINT_TO_POINTER(2));
-    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_libres_column2")), GTK_CELL_RENDERER(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_libres_cell2")), gtk_common_render_double, GINT_TO_POINTER(DECIMAL_DISTANCE), NULL);
+    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_libres_column2")), GTK_CELL_RENDERER(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_libres_cell2")), common_gtk_render_double, GINT_TO_POINTER(DECIMAL_DISTANCE), NULL);
     g_object_set_data(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_libres_cell3"), "column", GINT_TO_POINTER(3));
-    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_libres_column3")), GTK_CELL_RENDERER(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_libres_cell3")), gtk_common_render_double, GINT_TO_POINTER(DECIMAL_DISTANCE), NULL);
+    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_libres_column3")), GTK_CELL_RENDERER(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_libres_cell3")), common_gtk_render_double, GINT_TO_POINTER(DECIMAL_DISTANCE), NULL);
     
     g_object_set(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_libres_cell4"), "model", projet->list_gtk.ef_appuis.liste_appuis, NULL);
     
@@ -682,7 +682,7 @@ G_MODULE_EXPORT void EF_gtk_noeud(Projet *projet)
     g_object_set_data(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_intermediaires_cell3"), "column", GINT_TO_POINTER(3));
     gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_intermediaires_column3")), GTK_CELL_RENDERER(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_intermediaires_cell3")), EF_gtk_render_actualise_position, projet, NULL);
     g_object_set_data(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_intermediaires_cell6"), "column", GINT_TO_POINTER(6));
-    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_intermediaires_column6")), GTK_CELL_RENDERER(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_intermediaires_cell6")), gtk_common_render_double, GINT_TO_POINTER(DECIMAL_DISTANCE), NULL);
+    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_intermediaires_column6")), GTK_CELL_RENDERER(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_intermediaires_cell6")), common_gtk_render_double, GINT_TO_POINTER(DECIMAL_DISTANCE), NULL);
     
     g_object_set(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_intermediaires_cell4"), "model", projet->list_gtk.ef_appuis.liste_appuis, NULL);
     

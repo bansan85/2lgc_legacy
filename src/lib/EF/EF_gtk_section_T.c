@@ -107,7 +107,7 @@ gboolean EF_gtk_section_T_recupere_donnees(Projet *projet, double *lt, double *h
     
     ef_gtk = &projet->list_gtk.ef_sections_T;
     
-    *lr = gtk_common_entry_renvoie_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_sections_T.builder, "EF_section_T_buffer_lr")));
+    *lr = common_gtk_entry_renvoie_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_sections_T.builder, "EF_section_T_buffer_lr")));
     if ((isnan(*lr)) || (*lr < ERREUR_RELATIVE_MIN))
     {
         dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("La valeur de la largeur de la retombée est incorrecte."));
@@ -116,7 +116,7 @@ gboolean EF_gtk_section_T_recupere_donnees(Projet *projet, double *lt, double *h
         return FALSE;
     }
     
-    *hr = gtk_common_entry_renvoie_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_sections_T.builder, "EF_section_T_buffer_hr")));
+    *hr = common_gtk_entry_renvoie_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_sections_T.builder, "EF_section_T_buffer_hr")));
     if ((isnan(*hr)) || (*hr < ERREUR_RELATIVE_MIN))
     {
         dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("La valeur de la hauteur de la retombée est incorrecte."));
@@ -125,7 +125,7 @@ gboolean EF_gtk_section_T_recupere_donnees(Projet *projet, double *lt, double *h
         return FALSE;
     }
     
-    *lt = gtk_common_entry_renvoie_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_sections_T.builder, "EF_section_T_buffer_lt")));
+    *lt = common_gtk_entry_renvoie_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_sections_T.builder, "EF_section_T_buffer_lt")));
     if ((isnan(*lt)) || (*lt < ERREUR_RELATIVE_MIN))
     {
         dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("La valeur de la largeur de la table est incorrecte."));
@@ -134,7 +134,7 @@ gboolean EF_gtk_section_T_recupere_donnees(Projet *projet, double *lt, double *h
         return FALSE;
     }
     
-    *ht = gtk_common_entry_renvoie_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_sections_T.builder, "EF_section_T_buffer_ht")));
+    *ht = common_gtk_entry_renvoie_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_sections_T.builder, "EF_section_T_buffer_ht")));
     if ((isnan(*ht)) || (*ht < ERREUR_RELATIVE_MIN))
     {
         dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("La valeur de la hauteur de la table est incorrecte."));

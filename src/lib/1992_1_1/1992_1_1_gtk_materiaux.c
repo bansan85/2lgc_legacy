@@ -101,7 +101,7 @@ gboolean _1992_1_1_gtk_materiaux_recupere_donnees(Projet *projet, double *fck,
     
     ef_gtk = &projet->list_gtk._1992_1_1_materiaux;
     
-    *fck = gtk_common_entry_renvoie_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk._1992_1_1_materiaux.builder, "_1992_1_1_materiaux_beton_buffer_fck")));
+    *fck = common_gtk_entry_renvoie_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk._1992_1_1_materiaux.builder, "_1992_1_1_materiaux_beton_buffer_fck")));
     if ((isnan(*fck)) || (*fck < ERREUR_RELATIVE_MIN) || (*fck*(1+ERREUR_RELATIVE_MIN) > 90.))
     {
         dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("La valeur de fck est incorrecte."));
