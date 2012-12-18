@@ -348,7 +348,7 @@ gboolean _1990_combinaisons_fusion(Combinaison *destination, Combinaison *source
 }
 
 
-void _1990_groupe_free_groupe_tmp_combinaison(void *data)
+void _1990_combinaisons_free_groupe_tmp_combinaison(void *data)
 /* Description : Permet de supprimer toutes les combinaisons temporaires contenues dans les
  *               groupes. À utiliser avec la fonction list_traverse.
  *               FONCTION INTERNE.
@@ -517,7 +517,7 @@ gboolean _1990_combinaisons_genere_and(Projet *projet, Niveau_Groupe *niveau, Gr
                     list_parcours2 = g_list_next(list_parcours2);
                 }
                 
-                g_list_free_full(transition, &(_1990_groupe_free_groupe_tmp_combinaison));
+                g_list_free_full(transition, &(_1990_combinaisons_free_groupe_tmp_combinaison));
             }
             
             list_parcours = g_list_next(list_parcours);
@@ -526,7 +526,7 @@ gboolean _1990_combinaisons_genere_and(Projet *projet, Niveau_Groupe *niveau, Gr
         
         /* On ajoute définitivement les nouvelles combinaisons */
         BUG(_1990_combinaisons_duplique(&(groupe->tmp_combinaison.combinaisons), nouvelles_combinaisons, TRUE), FALSE);
-        g_list_free_full(nouvelles_combinaisons, &_1990_groupe_free_groupe_tmp_combinaison);
+        g_list_free_full(nouvelles_combinaisons, &_1990_combinaisons_free_groupe_tmp_combinaison);
     }
     // FinSi
     
@@ -699,7 +699,7 @@ gboolean _1990_combinaisons_genere_or(Projet *projet, Niveau_Groupe *niveau, Gro
                                 }
                                 list_parcours2 = g_list_next(list_parcours2);
                             }
-                            g_list_free_full(transition, &_1990_groupe_free_groupe_tmp_combinaison);
+                            g_list_free_full(transition, &_1990_combinaisons_free_groupe_tmp_combinaison);
                         }
                     }
                 }
@@ -709,7 +709,7 @@ gboolean _1990_combinaisons_genere_or(Projet *projet, Niveau_Groupe *niveau, Gro
             while (parcours_bits != 0);
             
             BUG(_1990_combinaisons_duplique(&(groupe->tmp_combinaison.combinaisons), nouvelles_combinaisons, TRUE), FALSE);
-            g_list_free_full(nouvelles_combinaisons, &_1990_groupe_free_groupe_tmp_combinaison);
+            g_list_free_full(nouvelles_combinaisons, &_1990_combinaisons_free_groupe_tmp_combinaison);
         }
     }
     
