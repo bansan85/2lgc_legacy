@@ -26,7 +26,7 @@
 
 #include "common_projet.h"
 #include "common_erreurs.h"
-#include "common_maths.h"
+#include "common_math.h"
 #include "common_m3d.hpp"
 #include "common_selection.h"
 #include "EF_charge_barre_ponctuelle.h"

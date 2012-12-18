@@ -29,7 +29,7 @@
 #include "common_erreurs.h"
 #include "common_gtk.h"
 #include "common_selection.h"
-#include "common_maths.h"
+#include "common_math.h"
 #include "EF_charge.h"
 #include "EF_charge_barre_repartie_uniforme.h"
 

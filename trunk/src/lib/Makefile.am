@@ -28,7 +28,7 @@ libeurocodes_la_SOURCES =	1990/1990_action.c \
 							1992_1_1/1992_1_1_barres.c \
 							1992_1_1/1992_1_1_materiaux.c \
 							common/common_fonction.c \
-							common/common_maths.c \
+							common/common_math.c \
 							common/common_projet.c \
 							common/common_selection.c \
 							common/common_text.c \
@@ -78,7 +78,7 @@ libeurocodes_la_HEADERS =	1990/1990_action.h \
 							1992_1_1/1992_1_1_materiaux.h \
 							common/common_erreurs.h \
 							common/common_fonction.h \
-							common/common_maths.h \
+							common/common_math.h \
 							common/common_projet.h \
 							common/common_selection.h \
 							common/common_text.h \

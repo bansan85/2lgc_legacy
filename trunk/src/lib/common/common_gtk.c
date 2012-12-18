@@ -24,7 +24,7 @@
 #include <string.h>
 #include "common_selection.h"
 #include "common_erreurs.h"
-#include "common_maths.h"
+#include "common_math.h"
 
 G_MODULE_EXPORT double common_gtk_text_buffer_double(GtkTextBuffer *textbuffer, double val_min,
   gboolean min_include, double val_max, gboolean max_include)
