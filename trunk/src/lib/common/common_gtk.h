@@ -44,24 +44,24 @@
 #define GTK_TEXT_VIEW_VERIFIE_INT(textview) {\
             gtk_text_buffer_create_tag(gtk_text_view_get_buffer(GTK_TEXT_VIEW(textview)), "mauvais", "foreground", "red", "weight", PANGO_WEIGHT_BOLD, NULL); \
             gtk_text_buffer_create_tag(gtk_text_view_get_buffer(GTK_TEXT_VIEW(textview)), "OK", "foreground", "black", "weight", PANGO_WEIGHT_NORMAL, NULL); \
-            g_signal_connect(gtk_text_view_get_buffer(GTK_TEXT_VIEW(textview)), "changed", G_CALLBACK(gtk_common_entry_check_int), NULL); \
+            g_signal_connect(gtk_text_view_get_buffer(GTK_TEXT_VIEW(textview)), "changed", G_CALLBACK(common_gtk_entry_check_int), NULL); \
             }
 
 #define GTK_TEXT_VIEW_VERIFIE_LISTE(textview) {\
             gtk_text_buffer_create_tag(gtk_text_view_get_buffer(GTK_TEXT_VIEW(textview)), "mauvais", "foreground", "red", "weight", PANGO_WEIGHT_BOLD, NULL); \
             gtk_text_buffer_create_tag(gtk_text_view_get_buffer(GTK_TEXT_VIEW(textview)), "OK", "foreground", "black", "weight", PANGO_WEIGHT_NORMAL, NULL); \
-            g_signal_connect(gtk_text_view_get_buffer(GTK_TEXT_VIEW(textview)), "changed", G_CALLBACK(gtk_common_entry_check_liste), NULL); \
+            g_signal_connect(gtk_text_view_get_buffer(GTK_TEXT_VIEW(textview)), "changed", G_CALLBACK(common_gtk_entry_check_liste), NULL); \
             }
 
 #define GTK_COMMON_SPINBUTTON_AS_UINT(spinbutton) ((unsigned int)round(gtk_spin_button_get_value(spinbutton)))
 
-void gtk_common_text_buffer_double(GtkTextBuffer *textbuffer, double val_min, gboolean min_include, double val_max, gboolean max_include);
-double gtk_common_entry_renvoie_double(GtkTextBuffer *textbuffer);
-void gtk_common_entry_check_int(GtkTextBuffer *entry, gpointer user_data);
-int gtk_common_entry_renvoie_int(GtkTextBuffer *textbuffer);
-unsigned int gtk_common_entry_renvoie_uint(GtkTextBuffer *textbuffer);
-void gtk_common_entry_check_liste(GtkTextBuffer *entry, gpointer user_data);
+void common_gtk_text_buffer_double(GtkTextBuffer *textbuffer, double val_min, gboolean min_include, double val_max, gboolean max_include);
+double common_gtk_entry_renvoie_double(GtkTextBuffer *textbuffer);
+void common_gtk_entry_check_int(GtkTextBuffer *entry, gpointer user_data);
+int common_gtk_entry_renvoie_int(GtkTextBuffer *textbuffer);
+unsigned int common_gtk_entry_renvoie_uint(GtkTextBuffer *textbuffer);
+void common_gtk_entry_check_liste(GtkTextBuffer *entry, gpointer user_data);
 gboolean common_gtk_key_press(GtkWidget *widget, GdkEvent *event, GtkWidget *fenetre);
-void gtk_common_render_double(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell, GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data);
+void common_gtk_render_double(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell, GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data);
 
 #endif

@@ -103,7 +103,7 @@ gboolean EF_gtk_section_rectangulaire_recupere_donnees(Projet *projet, double *l
     
     ef_gtk = &projet->list_gtk.ef_sections_rectangulaire;
     
-    *largeur = gtk_common_entry_renvoie_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_sections_rectangulaire.builder, "EF_section_rectangulaire_buffer_largeur")));
+    *largeur = common_gtk_entry_renvoie_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_sections_rectangulaire.builder, "EF_section_rectangulaire_buffer_largeur")));
     if ((isnan(*largeur)) || (*largeur < ERREUR_RELATIVE_MIN))
     {
         dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("La valeur de la largeur est incorrecte."));
@@ -112,7 +112,7 @@ gboolean EF_gtk_section_rectangulaire_recupere_donnees(Projet *projet, double *l
         return FALSE;
     }
     
-    *hauteur = gtk_common_entry_renvoie_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_sections_rectangulaire.builder, "EF_section_rectangulaire_buffer_hauteur")));
+    *hauteur = common_gtk_entry_renvoie_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_sections_rectangulaire.builder, "EF_section_rectangulaire_buffer_hauteur")));
     if ((isnan(*hauteur)) || (*hauteur < ERREUR_RELATIVE_MIN))
     {
         dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("La valeur de la hauteur est incorrecte."));

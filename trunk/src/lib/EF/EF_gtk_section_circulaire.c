@@ -101,7 +101,7 @@ gboolean EF_gtk_section_circulaire_recupere_donnees(Projet *projet, double *diam
     
     ef_gtk = &projet->list_gtk.ef_sections_circulaire;
     
-    *diametre = gtk_common_entry_renvoie_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_sections_circulaire.builder, "EF_section_circulaire_buffer_diametre")));
+    *diametre = common_gtk_entry_renvoie_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_sections_circulaire.builder, "EF_section_circulaire_buffer_diametre")));
     if ((isnan(*diametre)) || (*diametre < ERREUR_RELATIVE_MIN))
     {
         dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("La valeur du diamètre est incorrecte."));

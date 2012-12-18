@@ -26,7 +26,7 @@
 #include "common_erreurs.h"
 #include "common_maths.h"
 
-G_MODULE_EXPORT double gtk_common_text_buffer_double(GtkTextBuffer *textbuffer, double val_min,
+G_MODULE_EXPORT double common_gtk_text_buffer_double(GtkTextBuffer *textbuffer, double val_min,
   gboolean min_include, double val_max, gboolean max_include)
 /* Description : Vérifie en temps réel si le GtkTextBuffer contient bien un nombre flottant
  *               compris entre les valeurs val_min et val_max.
@@ -96,7 +96,7 @@ G_MODULE_EXPORT double gtk_common_text_buffer_double(GtkTextBuffer *textbuffer, 
 }
 
 
-G_MODULE_EXPORT void gtk_common_text_buffer_double_sup0_inf(GtkTextBuffer *textbuffer, 
+G_MODULE_EXPORT void common_gtk_text_buffer_double_sup0_inf(GtkTextBuffer *textbuffer, 
   gpointer user_data __attribute__((unused)))
 /* Description : Vérifie en temps réel si le GtkTextBuffer contient bien un nombre flottant.
  *               Les bornes : strictement supérieur à 0 jusqu'à l'infini.
@@ -105,13 +105,13 @@ G_MODULE_EXPORT void gtk_common_text_buffer_double_sup0_inf(GtkTextBuffer *textb
  * Valeur renvoyée : Aucune.
  */
 {
-    gtk_common_text_buffer_double(textbuffer, 0., FALSE, INFINITY, FALSE);
+    common_gtk_text_buffer_double(textbuffer, 0., FALSE, INFINITY, FALSE);
     
     return;
 }
 
 
-G_MODULE_EXPORT void gtk_common_text_buffer_double_sup0_90(GtkTextBuffer *textbuffer, 
+G_MODULE_EXPORT void common_gtk_text_buffer_double_sup0_90(GtkTextBuffer *textbuffer, 
   gpointer user_data __attribute__((unused)))
 /* Description : Vérifie en temps réel si le GtkTextBuffer contient bien un nombre flottant.
  *               Les bornes : strictement supérieur à 0 jusqu'à 90 maximum.
@@ -120,13 +120,13 @@ G_MODULE_EXPORT void gtk_common_text_buffer_double_sup0_90(GtkTextBuffer *textbu
  * Valeur renvoyée : Aucune.
  */
 {
-    gtk_common_text_buffer_double(textbuffer, 0., FALSE, 90., TRUE);
+    common_gtk_text_buffer_double(textbuffer, 0., FALSE, 90., TRUE);
     
     return;
 }
 
 
-G_MODULE_EXPORT void gtk_common_text_buffer_double_0_inf(GtkTextBuffer *textbuffer, 
+G_MODULE_EXPORT void common_gtk_text_buffer_double_0_inf(GtkTextBuffer *textbuffer, 
   gpointer user_data __attribute__((unused)))
 /* Description : Vérifie en temps réel si le GtkTextBuffer contient bien un nombre flottant.
  *               Les bornes : de 0 inclus jusqu'à l'infini.
@@ -135,13 +135,13 @@ G_MODULE_EXPORT void gtk_common_text_buffer_double_0_inf(GtkTextBuffer *textbuff
  * Valeur renvoyée : Aucune.
  */
 {
-    gtk_common_text_buffer_double(textbuffer, 0., TRUE, INFINITY, FALSE);
+    common_gtk_text_buffer_double(textbuffer, 0., TRUE, INFINITY, FALSE);
     
     return;
 }
 
 
-G_MODULE_EXPORT void gtk_common_text_buffer_double_inf_inf(GtkTextBuffer *textbuffer, 
+G_MODULE_EXPORT void common_gtk_text_buffer_double_inf_inf(GtkTextBuffer *textbuffer, 
   gpointer user_data __attribute__((unused)))
 /* Description : Vérifie en temps réel si le GtkTextBuffer contient bien un nombre flottant.
  *               Les bornes : de moint l'infini  jusqu'à l'infini.
@@ -150,13 +150,13 @@ G_MODULE_EXPORT void gtk_common_text_buffer_double_inf_inf(GtkTextBuffer *textbu
  * Valeur renvoyée : Aucune.
  */
 {
-    gtk_common_text_buffer_double(textbuffer, -INFINITY, FALSE, INFINITY, FALSE);
+    common_gtk_text_buffer_double(textbuffer, -INFINITY, FALSE, INFINITY, FALSE);
     
     return;
 }
 
 
-G_MODULE_EXPORT double gtk_common_entry_renvoie_double(GtkTextBuffer *textbuffer)
+G_MODULE_EXPORT double common_gtk_entry_renvoie_double(GtkTextBuffer *textbuffer)
 /* Description : Renvoie le nombre flottant si le GtkTextBuffer en contient bien un.
  *               Renvoie nan sinon.
  * Paramètres : GtkTextBuffer *textbuffer : composant à vérifier.
@@ -195,7 +195,7 @@ G_MODULE_EXPORT double gtk_common_entry_renvoie_double(GtkTextBuffer *textbuffer
 }
 
 
-G_MODULE_EXPORT void gtk_common_entry_check_int(GtkTextBuffer *textbuffer,
+G_MODULE_EXPORT void common_gtk_entry_check_int(GtkTextBuffer *textbuffer,
   gpointer user_data __attribute__((unused)))
 /* Description : Vérifie en temps réel si le GtkTextBuffer contient bien un nombre entier.
  *               S'il ne contient pas de nombre, le texte passe en rouge.
@@ -231,7 +231,7 @@ G_MODULE_EXPORT void gtk_common_entry_check_int(GtkTextBuffer *textbuffer,
 }
 
 
-G_MODULE_EXPORT int gtk_common_entry_renvoie_int(GtkTextBuffer *textbuffer)
+G_MODULE_EXPORT int common_gtk_entry_renvoie_int(GtkTextBuffer *textbuffer)
 /* Description : Renvoie le nombre entier si le GtkTextBuffer en contient bien un.
  *               Renvoie INT_MIN sinon.
  * Paramètres : GtkTextBuffer *textbuffer : composant à vérifier.
@@ -270,7 +270,7 @@ G_MODULE_EXPORT int gtk_common_entry_renvoie_int(GtkTextBuffer *textbuffer)
 }
 
 
-G_MODULE_EXPORT unsigned int gtk_common_entry_renvoie_uint(GtkTextBuffer *textbuffer)
+G_MODULE_EXPORT unsigned int common_gtk_entry_renvoie_uint(GtkTextBuffer *textbuffer)
 /* Description : Renvoie le nombre non signé entier si le GtkTextBuffer en contient bien un.
  *               Renvoie UINT_MAX sinon.
  * Paramètres : GtkTextBuffer *textbuffer : composant à vérifier.
@@ -309,7 +309,7 @@ G_MODULE_EXPORT unsigned int gtk_common_entry_renvoie_uint(GtkTextBuffer *textbu
 }
 
 
-G_MODULE_EXPORT void gtk_common_entry_check_liste(GtkTextBuffer *textbuffer,
+G_MODULE_EXPORT void common_gtk_entry_check_liste(GtkTextBuffer *textbuffer,
   gpointer user_data __attribute__((unused)))
 /* Description : Vérifie en temps réel si le GtkTextBuffer contient une liste de nombre entier.
  *               S'il ne contient pas de nombre, le texte passe en rouge.
@@ -364,7 +364,7 @@ G_MODULE_EXPORT gboolean common_gtk_key_press(GtkWidget *widget __attribute__((u
 }
 
 
-G_MODULE_EXPORT void gtk_common_render_double(
+G_MODULE_EXPORT void common_gtk_render_double(
   GtkTreeViewColumn *tree_column __attribute__((unused)), GtkCellRenderer *cell,
   GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data)
 /* Description : Personnalise l'affichage des nombres de type double dans un treeview.

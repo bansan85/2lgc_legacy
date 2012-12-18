@@ -111,8 +111,8 @@ G_MODULE_EXPORT void EF_gtk_barres_add_add_clicked(GtkButton *button __attribute
         free(nom);
     }
     
-    noeud_debut = gtk_common_entry_renvoie_uint(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_noeud1_buffer")));
-    noeud_fin = gtk_common_entry_renvoie_uint(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_noeud2_buffer")));
+    noeud_debut = common_gtk_entry_renvoie_uint(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_noeud1_buffer")));
+    noeud_fin = common_gtk_entry_renvoie_uint(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_noeud2_buffer")));
     if ((EF_noeuds_cherche_numero(projet, noeud_debut, TRUE) == NULL) || (EF_noeuds_cherche_numero(projet, noeud_fin, TRUE) == NULL))
         return;
     
@@ -181,8 +181,8 @@ G_MODULE_EXPORT void EF_gtk_barres_add_check_add(GtkWidget *widget, Projet *proj
     
     ef_gtk = &projet->list_gtk.ef_barres;
     
-    noeud1 = EF_noeuds_cherche_numero(projet, gtk_common_entry_renvoie_uint(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_noeud1_buffer"))), TRUE);
-    noeud2 = EF_noeuds_cherche_numero(projet, gtk_common_entry_renvoie_uint(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_noeud2_buffer"))), TRUE);
+    noeud1 = EF_noeuds_cherche_numero(projet, common_gtk_entry_renvoie_uint(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_noeud1_buffer"))), TRUE);
+    noeud2 = EF_noeuds_cherche_numero(projet, common_gtk_entry_renvoie_uint(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_noeud2_buffer"))), TRUE);
 
     if (
         (gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_type_combobox"))) != -1) &&
@@ -194,7 +194,7 @@ G_MODULE_EXPORT void EF_gtk_barres_add_check_add(GtkWidget *widget, Projet *proj
         ok = TRUE;
     
     if (GTK_IS_TEXT_BUFFER(widget))
-        gtk_common_entry_check_int(GTK_TEXT_BUFFER(widget), NULL);
+        common_gtk_entry_check_int(GTK_TEXT_BUFFER(widget), NULL);
     
     gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_button_add")), ok);
     
