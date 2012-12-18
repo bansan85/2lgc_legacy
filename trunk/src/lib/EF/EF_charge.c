@@ -23,7 +23,7 @@
 
 #include "common_projet.h"
 #include "common_erreurs.h"
-#include "1990_actions.h"
+#include "1990_action.h"
 #include "EF_charge_noeud.h"
 #include "EF_charge_barre_ponctuelle.h"
 #include "EF_charge_barre_repartie_uniforme.h"
