@@ -23,7 +23,7 @@ libeurocodes_la_SOURCES =	1990/1990_action.c \
 							1990/1990_coef_psi.c \
 							1990/1990_combinaisons.c \
 							1990/1990_duree.c \
-							1990/1990_groupes.c \
+							1990/1990_groupe.c \
 							1990/1990_ponderations.c \
 							1992_1_1/1992_1_1_barres.c \
 							1992_1_1/1992_1_1_materiaux.c \
@@ -72,7 +72,7 @@ libeurocodes_la_HEADERS =	1990/1990_action.h \
 							1990/1990_coef_psi.h \
 							1990/1990_combinaisons.h \
 							1990/1990_duree.h \
-							1990/1990_groupes.h \
+							1990/1990_groupe.h \
 							1990/1990_ponderations.h \
 							1992_1_1/1992_1_1_barres.h \
 							1992_1_1/1992_1_1_materiaux.h \
