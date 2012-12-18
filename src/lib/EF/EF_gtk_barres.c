@@ -32,7 +32,7 @@
 #include "common_selection.h"
 #include "EF_noeuds.h"
 #include "EF_relachement.h"
-#include "EF_section.h"
+#include "EF_sections.h"
 #include "1992_1_1_barres.h"
 #include "1992_1_1_materiaux.h"
 

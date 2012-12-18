@@ -31,7 +31,7 @@
 #include "common_gtk.h"
 #include "common_maths.h"
 #include "common_selection.h"
-#include "EF_section.h"
+#include "EF_sections.h"
 #include "EF_gtk_section_rectangulaire.h"
 #include "EF_gtk_section_T.h"
 #include "EF_gtk_section_carree.h"

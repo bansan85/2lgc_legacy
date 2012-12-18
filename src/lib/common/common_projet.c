@@ -42,7 +42,7 @@
 #include "EF_noeuds.h"
 #include "EF_rigidite.h"
 #include "EF_relachement.h"
-#include "EF_section.h"
+#include "EF_sections.h"
 #include "1990_action.h"
 #include "1990_groupe.h"
 #include "1990_combinaisons.h"

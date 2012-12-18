@@ -29,7 +29,7 @@
 #include "common_gtk.h"
 #include "common_maths.h"
 #include "common_selection.h"
-#include "EF_section.h"
+#include "EF_sections.h"
 
 G_MODULE_EXPORT gboolean EF_gtk_section_rectangulaire_window_key_press(
   GtkWidget *widget __attribute__((unused)), GdkEvent *event, Projet *projet)

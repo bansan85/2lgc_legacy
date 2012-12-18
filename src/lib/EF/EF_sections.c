@@ -30,7 +30,7 @@
 #include "EF_noeuds.h"
 #include "EF_calculs.h"
 #include "1992_1_1_barres.h"
-#include "EF_section.h"
+#include "EF_sections.h"
 
 #ifdef ENABLE_GTK
 #include "EF_gtk_sections.h"
