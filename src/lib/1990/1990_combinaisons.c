@@ -24,7 +24,7 @@
 #include "common_projet.h"
 #include "common_erreurs.h"
 #include "1990_action.h"
-#include "1990_groupes.h"
+#include "1990_groupe.h"
 #include "1990_ponderations.h"
 
 
