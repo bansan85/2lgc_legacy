@@ -29,7 +29,7 @@
 #include "common_fonction.h"
 #include "EF_noeuds.h"
 #include "EF_calculs.h"
-#include "EF_section.h"
+#include "EF_sections.h"
 #include "EF_gtk_charge_barre_ponctuelle.h"
 
 G_MODULE_EXPORT Charge_Barre_Ponctuelle *EF_charge_barre_ponctuelle_ajout(Projet *projet,

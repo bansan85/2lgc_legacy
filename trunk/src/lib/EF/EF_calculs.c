@@ -31,7 +31,7 @@
 #include "EF_charge_barre_repartie_uniforme.h"
 #include "EF_noeuds.h"
 #include "EF_rigidite.h"
-#include "EF_section.h"
+#include "EF_sections.h"
 
 G_MODULE_EXPORT gboolean EF_calculs_initialise(Projet *projet)
 /* Description : Initialise les diverses variables nécessaires à l'ajout des matrices de
