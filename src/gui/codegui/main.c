@@ -39,7 +39,7 @@
 #include "1992_1_1_materiaux.h"
 #include "EF_appuis.h"
 #include "EF_relachement.h"
-#include "EF_noeud.h"
+#include "EF_noeuds.h"
 #include "EF_calculs.h"
 #include "EF_charge_noeud.h"
 #include "EF_charge_barre_ponctuelle.h"

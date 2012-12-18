@@ -30,7 +30,7 @@
 #include "common_erreurs.h"
 #include "common_gtk.h"
 #include "common_selection.h"
-#include "EF_noeud.h"
+#include "EF_noeuds.h"
 #include "EF_relachement.h"
 #include "EF_section.h"
 #include "1992_1_1_barres.h"

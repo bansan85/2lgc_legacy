@@ -30,7 +30,7 @@ extern "C" {
 #include "common_erreurs.h"
 #include "common_maths.h"
 #include "common_selection.h"
-#include "EF_noeud.h"
+#include "EF_noeuds.h"
 #include "1992_1_1_barres.h"
 #include "common_m3d.hpp"
 

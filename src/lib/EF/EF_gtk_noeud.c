@@ -31,7 +31,7 @@
 #include "common_gtk.h"
 #include "common_maths.h"
 #include "common_text.h"
-#include "EF_noeud.h"
+#include "EF_noeuds.h"
 #include "EF_appuis.h"
 #include "1992_1_1_barres.h"
 
