@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2012-12-16 14:16+0100\n"
-"PO-Revision-Date: 2012-12-16 14:16+0100\n"
+"POT-Creation-Date: 2012-12-19 23:36+0100\n"
+"PO-Revision-Date: 2012-12-19 23:41+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -134,9 +134,6 @@ msgstr "Position :"
 
 msgid "Barres :"
 msgstr "Barres :"
-
-msgid "ainsi que les noeuds l'utilisant (y compris les barres et noeuds intermédaires dépendants)."
-msgstr "ainsi que les noeuds l'utilisant (y compris les barres et noeuds intermédaires dépendants)."
 
 msgid "et annule les conditions d'appuis sur les noeuds l'utilisant."
 msgstr "et annule les conditions d'appuis sur les noeuds l'utilisant."
@@ -582,6 +579,45 @@ msgstr "Structures monumentales de bâtiments, pont et autres ouvrages de génie
 msgid "Catégorie de durée %d inconnue.\n"
 msgstr "Catégorie de durée %d inconnue.\n"
 
+msgid "Élément %u du groupe %u introuvable.\n"
+msgstr "Élément %u du groupe %u introuvable.\n"
+
+msgid "Groupe %u du niveau %u introuvable.\n"
+msgstr "Groupe %u du niveau %u introuvable.\n"
+
+msgid "Niveau de groupes %u introuvable.\n"
+msgstr "Niveau de groupes %u introuvable.\n"
+
+msgid "Le projet ne possède pas de niveaux de groupes permettant de regrouper plusieurs groupes d'actions.\n"
+msgstr "Le projet ne possède pas de niveaux de groupes permettant de regrouper plusieurs groupes d'actions.\n"
+
+msgid "Le numéro %u est déjà présent dans le groupe %u du niveau %u.\n"
+msgstr "Le numéro %u est déjà présent dans le groupe %u du niveau %u.\n"
+
+msgid "Le type de combinaison %d est inconnu.\n"
+msgstr "Le type de combinaison %d est inconnu.\n"
+
+msgid "Erreur lors de l'actualisation de la fenêtre graphique.\n"
+msgstr "Erreur lors de l'actualisation de la fenêtre graphique.\n"
+
+msgid "niveau : %d\n"
+msgstr "niveau : %d\n"
+
+msgid "\tgroupe : %d, combinaison : "
+msgstr "\tgroupe : %d, combinaison : "
+
+msgid "Combinaison %d inconnue"
+msgstr "Combinaison %d inconnue"
+
+msgid "\t\tActions contenus dans ce groupe : "
+msgstr "\t\tActions contenus dans ce groupe : "
+
+msgid "\t\tGroupes du niveau %d contenus dans ce groupe : "
+msgstr "\t\tGroupes du niveau %d contenus dans ce groupe : "
+
+msgid "\t\tCombinaisons :\n"
+msgstr "\t\tCombinaisons :\n"
+
 msgid "Permanente"
 msgstr "Permanente"
 
@@ -686,45 +722,6 @@ msgstr "Action n° %u, description '%s', type n°%d\n"
 
 msgid "Aucune barre existante.\n"
 msgstr "Aucune barre existante.\n"
-
-msgid "Élément %u du groupe %u introuvable.\n"
-msgstr "Élément %u du groupe %u introuvable.\n"
-
-msgid "Groupe %u du niveau %u introuvable.\n"
-msgstr "Groupe %u du niveau %u introuvable.\n"
-
-msgid "Niveau de groupes %u introuvable.\n"
-msgstr "Niveau de groupes %u introuvable.\n"
-
-msgid "Le projet ne possède pas de niveaux de groupes permettant de regrouper plusieurs groupes d'actions.\n"
-msgstr "Le projet ne possède pas de niveaux de groupes permettant de regrouper plusieurs groupes d'actions.\n"
-
-msgid "Le numéro %u est déjà présent dans le groupe %u du niveau %u.\n"
-msgstr "Le numéro %u est déjà présent dans le groupe %u du niveau %u.\n"
-
-msgid "Le type de combinaison %d est inconnu.\n"
-msgstr "Le type de combinaison %d est inconnu.\n"
-
-msgid "Erreur lors de l'actualisation de la fenêtre graphique.\n"
-msgstr "Erreur lors de l'actualisation de la fenêtre graphique.\n"
-
-msgid "niveau : %d\n"
-msgstr "niveau : %d\n"
-
-msgid "\tgroupe : %d, combinaison : "
-msgstr "\tgroupe : %d, combinaison : "
-
-msgid "Combinaison %d inconnue"
-msgstr "Combinaison %d inconnue"
-
-msgid "\t\tActions contenus dans ce groupe : "
-msgstr "\t\tActions contenus dans ce groupe : "
-
-msgid "\t\tGroupes du niveau %d contenus dans ce groupe : "
-msgstr "\t\tGroupes du niveau %d contenus dans ce groupe : "
-
-msgid "\t\tCombinaisons :\n"
-msgstr "\t\tCombinaisons :\n"
 
 msgid "Le projet ne possède pas de niveaux de groupes.\n"
 msgstr "Le projet ne possède pas de niveaux de groupes.\n"
@@ -889,12 +886,6 @@ msgstr "Erreur lors de la résolution de la matrice.\n"
 msgid "Type d'élément inconnu.\n"
 msgstr "Type d'élément inconnu.\n"
 
-msgid "Le type de noeud %d est inconnu.\n"
-msgstr "Le type de noeud %d est inconnu.\n"
-
-msgid "Noeud n°%u introuvable.\n"
-msgstr "Noeud n°%u introuvable.\n"
-
 msgid "début"
 msgstr "début"
 
@@ -1042,6 +1033,51 @@ msgstr "La fin de la charge répartie uniformément (%f) est incorrecte. La long
 msgid "Le début (%f) et la fin (%f) de la charge répartie uniformément sont incorrecte avec la longueur de la barre qui est de %f m.\n"
 msgstr "Le début (%f) et la fin (%f) de la charge répartie uniformément sont incorrecte avec la longueur de la barre qui est de %f m.\n"
 
+msgid "Le type de noeud %d est inconnu.\n"
+msgstr "Le type de noeud %d est inconnu.\n"
+
+msgid "Noeud n°%u introuvable.\n"
+msgstr "Noeud n°%u introuvable.\n"
+
+msgid "La position de la charge ponctuelle (%f) est incorrecte.\n"
+msgstr "La position de la charge ponctuelle (%f) est incorrecte.\n"
+
+msgid "La position de la charge ponctuelle (%f) est incorrecte. La longueur de la barre %d est de %f m.\n"
+msgstr "La position de la charge ponctuelle (%f) est incorrecte. La longueur de la barre %d est de %f m.\n"
+
+msgid "La position de la charge ponctuelle (%f) est incorrecte. La longueur de la barre est de %f m.\n"
+msgstr "La position de la charge ponctuelle (%f) est incorrecte. La longueur de la barre est de %f m.\n"
+
+msgid "Noeud"
+msgstr "Noeud"
+
+msgid "Ponctuelle sur noeud"
+msgstr "Ponctuelle sur noeud"
+
+msgid "La valeur des noeuds est incorrecte."
+msgstr "La valeur des noeuds est incorrecte."
+
+msgid "La liste de noeuds %s n'existe pas."
+msgstr "La liste de noeuds %s n'existe pas."
+
+msgid "Ajout d'une charge au noeud"
+msgstr "Ajout d'une charge au noeud"
+
+msgid "Modification d'une charge au noeud"
+msgstr "Modification d'une charge au noeud"
+
+msgid "La section doit être de type rectangulaire.\n"
+msgstr "La section doit être de type rectangulaire.\n"
+
+msgid "La section doit être de type en T.\n"
+msgstr "La section doit être de type en T.\n"
+
+msgid "La section doit être de type carrée.\n"
+msgstr "La section doit être de type carrée.\n"
+
+msgid "La section doit être de type circulaire.\n"
+msgstr "La section doit être de type circulaire.\n"
+
 msgid "Section en béton '%s' introuvable.\n"
 msgstr "Section en béton '%s' introuvable.\n"
 
@@ -1071,33 +1107,6 @@ msgstr "Diamètre"
 
 msgid "La section '%s' existe déjà.\n"
 msgstr "La section '%s' existe déjà.\n"
-
-msgid "La position de la charge ponctuelle (%f) est incorrecte.\n"
-msgstr "La position de la charge ponctuelle (%f) est incorrecte.\n"
-
-msgid "La position de la charge ponctuelle (%f) est incorrecte. La longueur de la barre %d est de %f m.\n"
-msgstr "La position de la charge ponctuelle (%f) est incorrecte. La longueur de la barre %d est de %f m.\n"
-
-msgid "La position de la charge ponctuelle (%f) est incorrecte. La longueur de la barre est de %f m.\n"
-msgstr "La position de la charge ponctuelle (%f) est incorrecte. La longueur de la barre est de %f m.\n"
-
-msgid "Noeud"
-msgstr "Noeud"
-
-msgid "Ponctuelle sur noeud"
-msgstr "Ponctuelle sur noeud"
-
-msgid "La valeur des noeuds est incorrecte."
-msgstr "La valeur des noeuds est incorrecte."
-
-msgid "La liste de noeuds %s n'existe pas."
-msgstr "La liste de noeuds %s n'existe pas."
-
-msgid "Ajout d'une charge au noeud"
-msgstr "Ajout d'une charge au noeud"
-
-msgid "Modification d'une charge au noeud"
-msgstr "Modification d'une charge au noeud"
 
 msgid "Charge %u de l'action %u introuvable.\n"
 msgstr "Charge %u de l'action %u introuvable.\n"

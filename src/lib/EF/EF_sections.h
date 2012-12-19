@@ -29,9 +29,13 @@ gboolean EF_sections_update_ligne_treeview(Projet *projet, EF_Section *section) 
 #endif
 
 gboolean EF_sections_ajout_rectangulaire(Projet *projet, const char* nom, double l, double h) __attribute__((__warn_unused_result__));
+gboolean EF_sections_modif_rectangulaire(Projet *projet, EF_Section *section, const char* nom, double l, double h) __attribute__((__warn_unused_result__));
 gboolean EF_sections_ajout_T(Projet *projet, const char* nom, double lt, double lr, double ht, double hr) __attribute__((__warn_unused_result__));
+gboolean EF_sections_modif_T(Projet *projet, EF_Section *section, const char* nom, double lt, double lr, double ht, double hr) __attribute__((__warn_unused_result__));
 gboolean EF_sections_ajout_carre(Projet *projet, const char* nom, double cote) __attribute__((__warn_unused_result__));
+gboolean EF_sections_modif_carre(Projet *projet, EF_Section *section, const char* nom, double cote)  __attribute__((__warn_unused_result__));
 gboolean EF_sections_ajout_circulaire(Projet *projet, const char* nom, double diametre) __attribute__((__warn_unused_result__));
+gboolean EF_sections_modif_circulaire(Projet *projet, EF_Section *section, const char* nom, double diametre) __attribute__((__warn_unused_result__));
 
 EF_Section* EF_sections_cherche_nom(Projet *projet, const char *nom, gboolean critique) __attribute__((__warn_unused_result__));
 char *EF_sections_get_description(EF_Section *sect) __attribute__((__warn_unused_result__));

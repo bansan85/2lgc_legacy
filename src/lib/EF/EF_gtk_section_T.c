@@ -207,29 +207,16 @@ G_MODULE_EXPORT void EF_gtk_section_T_modifier_clicked(
  * Valeur renvoyée : Aucune.
  */
 {
-    Gtk_EF_Sections_T   *ef_gtk;
-    Section_T           *data;
-    
     double      lt, ht, lr, hr;
     gchar       *texte;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_sections_T.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section T");
     
-    ef_gtk = &projet->list_gtk.ef_sections_T;
-    
     if (!(EF_gtk_section_T_recupere_donnees(projet, &lt, &ht, &lr, &hr, &texte)))
         return;
     
-    free(ef_gtk->section->nom);
-    ef_gtk->section->nom = texte;
-    data = ef_gtk->section->data;
-    data->largeur_table = lt;
-    data->largeur_retombee = lr;
-    data->hauteur_table = ht;
-    data->hauteur_retombee = hr;
-    
-    BUG(EF_sections_update_ligne_treeview(projet, ef_gtk->section), );
+    BUG(EF_sections_modif_T(projet, projet->list_gtk.ef_sections_T.section, texte, lt, lr, ht, hr), );
     
     gtk_widget_destroy(projet->list_gtk.ef_sections_T.window);
     
