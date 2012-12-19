@@ -174,26 +174,16 @@ G_MODULE_EXPORT void EF_gtk_section_circulaire_modifier_clicked(
  * Valeur renvoyée : Aucune.
  */
 {
-    Gtk_EF_Sections_Circulaire  *ef_gtk;
-    Section_Circulaire          *data;
-    
     double      diametre;
     gchar       *texte;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_sections_circulaire.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section Circulaire");
     
-    ef_gtk = &projet->list_gtk.ef_sections_circulaire;
-    
     if (!(EF_gtk_section_circulaire_recupere_donnees(projet, &diametre, &texte)))
         return;
     
-    free(ef_gtk->section->nom);
-    ef_gtk->section->nom = texte;
-    data = ef_gtk->section->data;
-    data->diametre = diametre;
-    
-    BUG(EF_sections_update_ligne_treeview(projet, ef_gtk->section), );
+    BUG(EF_sections_modif_circulaire(projet, projet->list_gtk.ef_sections_circulaire.section, texte, diametre), );
     
     gtk_widget_destroy(projet->list_gtk.ef_sections_circulaire.window);
     

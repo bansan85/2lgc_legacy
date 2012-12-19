@@ -34,6 +34,7 @@
 
 #ifdef ENABLE_GTK
 #include "EF_gtk_sections.h"
+#include "common_m3d.hpp"
 #endif
 
 G_MODULE_EXPORT gboolean EF_sections_init(Projet *projet)
@@ -145,10 +146,72 @@ G_MODULE_EXPORT gboolean EF_sections_ajout_rectangulaire(Projet *projet, const c
 }
 
 
+G_MODULE_EXPORT gboolean EF_sections_modif_rectangulaire(Projet *projet, EF_Section *section,
+  const char* nom, double l, double h)
+/* Description : Modifie une section rectangulaire.
+ * Paramètres : Projet *projet : la variable projet,
+ *            : EF_Section *section : la section à modifier,
+ *            : const char* nom : son nouveau nom, NULL si aucun changement,
+ *            : double l : sa nouvelle largeur, NAN si aucun changement,
+ *            : double h : sa nouvelle hauteur, NAN si aucun changement.
+ * Valeur renvoyée :
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL,
+ *             section == NULL,
+ *             section->type != RECTANGULAIRE.
+ */
+{
+    Section_T   *section_data = section->data;
+    
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(section, FALSE, gettext("Paramètre %s incorrect.\n"), "section");
+    BUGMSG(section->type == SECTION_RECTANGULAIRE, FALSE, gettext("La section doit être de type rectangulaire.\n"));
+    
+    // Trivial
+    if (nom != NULL)
+    {
+        free(section->nom);
+        BUGMSG(section->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+#ifdef ENABLE_GTK
+        gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section->Iter_liste, 0, nom, -1);
+#endif
+    }
+    if (!isnan(l))
+    {
+        section_data->largeur_retombee = l;
+        section_data->largeur_table = l;
+    }
+    if (!isnan(h))
+        section_data->hauteur_retombee = h;
+    section_data->hauteur_table = 0.;
+    
+#ifdef ENABLE_GTK
+    if (projet->list_gtk.ef_sections.builder != NULL)
+        BUG(EF_sections_update_ligne_treeview(projet, section), FALSE);
+    if ((!isnan(l)) || (!isnan(h)))
+    {
+        GList   *liste_sections = NULL, *liste_noeuds_dep, *liste_barres_dep;
+        
+        liste_sections = g_list_append(liste_sections, section);
+        BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, liste_sections, NULL, NULL, &liste_noeuds_dep, &liste_barres_dep, NULL, FALSE, TRUE), FALSE);
+        g_list_free(liste_sections);
+        g_list_free(liste_noeuds_dep);
+        
+        BUG(m3d_actualise_graphique(projet, NULL, liste_barres_dep), FALSE);
+        g_list_free(liste_barres_dep);
+    }
+#endif
+    
+    return TRUE;
+}
+
+
 G_MODULE_EXPORT gboolean EF_sections_ajout_T(Projet *projet, const char* nom, double lt,
   double lr, double ht, double hr)
 /* Description : Ajouter une nouvelle section en T à la liste des sections en béton.
  * Paramètres : Projet *projet : la variable projet,
+ *            : chat *nom : nom de la section,
  *            : double lt : la largeur de la table,
  *            : double lr : la largeur de la retombée,
  *            : double ht : la hauteur de la table,
@@ -197,10 +260,72 @@ G_MODULE_EXPORT gboolean EF_sections_ajout_T(Projet *projet, const char* nom, do
 }
 
 
-G_MODULE_EXPORT gboolean EF_sections_ajout_carre(Projet *projet, const char* nom,
-  double cote)
+G_MODULE_EXPORT gboolean EF_sections_modif_T(Projet *projet, EF_Section *section,
+  const char* nom, double lt, double lr, double ht, double hr)
+/* Description : Modifie une section en T.
+ * Paramètres : Projet *projet : la variable projet,
+ *            : EF_Section *section : la section à modifier,
+ *            : char* nom : le nouveau nom de la section, NULL si aucun changement,
+ *            : double lt : la nouvelle largeur de la table, NAN si aucun changement,
+ *            : double lr : la nouvelle largeur de la retombée, NAN si aucun changement,
+ *            : double ht : la nouvelle hauteur de la table, NAN si aucun changement,
+ *            : double hr : la nouvelle hauteur de la retombée, NAN si aucun changement.
+ * Valeur renvoyée :
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL,
+ *             section == NULL, 
+ *             section->type != T.
+ */
+{
+    Section_T   *section_data = section->data;
+    
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(section, FALSE, gettext("Paramètre %s incorrect.\n"), "section");
+    BUGMSG(section->type == SECTION_T, FALSE, gettext("La section doit être de type en T.\n"));
+    
+    if (nom != NULL)
+    {
+        free(section->nom);
+        BUGMSG(section->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+#ifdef ENABLE_GTK
+        gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section->Iter_liste, 0, nom, -1);
+#endif
+    }
+    if (!isnan(lt))
+        section_data->largeur_table = lt;
+    if (!isnan(lr))
+        section_data->largeur_retombee = lr;
+    if (!isnan(ht))
+        section_data->hauteur_table = ht;
+    if (!isnan(hr))
+        section_data->hauteur_retombee = hr;
+    
+#ifdef ENABLE_GTK
+    if (projet->list_gtk.ef_sections.builder != NULL)
+        BUG(EF_sections_update_ligne_treeview(projet, section), FALSE);
+    if ((!isnan(lt)) || (!isnan(lr)) || (!isnan(ht)) || (!isnan(hr)))
+    {
+        GList   *liste_sections = NULL, *liste_noeuds_dep, *liste_barres_dep;
+        
+        liste_sections = g_list_append(liste_sections, section);
+        BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, liste_sections, NULL, NULL, &liste_noeuds_dep, &liste_barres_dep, NULL, FALSE, TRUE), FALSE);
+        g_list_free(liste_sections);
+        g_list_free(liste_noeuds_dep);
+        
+        BUG(m3d_actualise_graphique(projet, NULL, liste_barres_dep), FALSE);
+        g_list_free(liste_barres_dep);
+    }
+#endif
+    
+    return TRUE;
+}
+
+
+G_MODULE_EXPORT gboolean EF_sections_ajout_carre(Projet *projet, const char* nom, double cote)
 /* Description : Ajouter une nouvelle section carrée à la liste des sections en béton.
  * Paramètres : Projet *projet : la variable projet,
+ *            : char *nom : nom de la section,
  *            : double cote : le coté.
  * Valeur renvoyée :
  *   Succès : TRUE
@@ -240,10 +365,64 @@ G_MODULE_EXPORT gboolean EF_sections_ajout_carre(Projet *projet, const char* nom
 }
 
 
+G_MODULE_EXPORT gboolean EF_sections_modif_carre(Projet *projet, EF_Section *section, 
+  const char* nom, double cote)
+/* Description : Modifie une section carrée.
+ * Paramètres : Projet *projet : la variable projet,
+ *            : EF_Section *section : la section à modifier,
+ *            : char *nom : nouveau nom de la section, NULL si aucun changement,
+ *            : double cote : le nouveau coté, NAN si aucun changement.
+ * Valeur renvoyée :
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL,
+ *             section == NULL,
+ *             section->type != CARREE.
+ */
+{
+    Section_Carree  *section_data = section->data;
+    
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(section, FALSE, gettext("Paramètre %s incorrect.\n"), "section");
+    BUGMSG(section->type == SECTION_CARREE, FALSE, gettext("La section doit être de type carrée.\n"));
+    
+    if (nom != NULL)
+    {
+        free(section->nom);
+        BUGMSG(section->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+#ifdef ENABLE_GTK
+        gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section->Iter_liste, 0, nom, -1);
+#endif
+    }
+    if (!isnan(cote))
+        section_data->cote = cote;
+    
+#ifdef ENABLE_GTK
+    if (projet->list_gtk.ef_sections.builder != NULL)
+        BUG(EF_sections_update_ligne_treeview(projet, section), FALSE);
+    if (!isnan(cote))
+    {
+        GList   *liste_sections = NULL, *liste_noeuds_dep, *liste_barres_dep;
+        
+        liste_sections = g_list_append(liste_sections, section);
+        BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, liste_sections, NULL, NULL, &liste_noeuds_dep, &liste_barres_dep, NULL, FALSE, TRUE), FALSE);
+        g_list_free(liste_sections);
+        g_list_free(liste_noeuds_dep);
+        
+        BUG(m3d_actualise_graphique(projet, NULL, liste_barres_dep), FALSE);
+        g_list_free(liste_barres_dep);
+    }
+#endif
+    
+    return TRUE;
+}
+
+
 G_MODULE_EXPORT gboolean EF_sections_ajout_circulaire(Projet *projet, const char* nom,
   double diametre)
 /* Description : Ajouter une nouvelle section circulaire à la liste des sections en béton.
  * Paramètres : Projet *projet : la variable projet,
+ *            : char *nom : nom de la section,
  *            : double diametre : le diamètre.
  * Valeur renvoyée :
  *   Succès : TRUE
@@ -277,6 +456,59 @@ G_MODULE_EXPORT gboolean EF_sections_ajout_circulaire(Projet *projet, const char
     {
         gtk_tree_store_append(projet->list_gtk.ef_sections.sections, &section_nouvelle->Iter_fenetre, NULL);
         BUG(EF_sections_update_ligne_treeview(projet, section_nouvelle), FALSE);
+    }
+#endif
+    
+    return TRUE;
+}
+
+
+G_MODULE_EXPORT gboolean EF_sections_modif_circulaire(Projet *projet, EF_Section *section,
+  const char* nom, double diametre)
+/* Description : Modifie une section circulaire.
+ * Paramètres : Projet *projet : la variable projet,
+ *            : EF_Section *section : la section à modifier,
+ *            : char *nom : nom de la section, NULL si aucun changement,
+ *            : double diametre : le diamètre, NAN si aucun changement.
+ * Valeur renvoyée :
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL,
+ *             section == NULL,
+ *             section->type != CIRCULAIRE.
+ */
+{
+    Section_Circulaire    *section_data = section->data;
+    
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(section, FALSE, gettext("Paramètre %s incorrect.\n"), "section");
+    BUGMSG(section->type == SECTION_CIRCULAIRE, FALSE, gettext("La section doit être de type circulaire.\n"));
+    
+    if (nom != NULL)
+    {
+        free(section->nom);
+        BUGMSG(section->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+#ifdef ENABLE_GTK
+        gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section->Iter_liste, 0, nom, -1);
+#endif
+    }
+    if (!isnan(diametre))
+        section_data->diametre = diametre;
+    
+#ifdef ENABLE_GTK
+    if (projet->list_gtk.ef_sections.builder != NULL)
+        BUG(EF_sections_update_ligne_treeview(projet, section), FALSE);
+    if (!isnan(diametre))
+    {
+        GList   *liste_sections = NULL, *liste_noeuds_dep, *liste_barres_dep;
+        
+        liste_sections = g_list_append(liste_sections, section);
+        BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, liste_sections, NULL, NULL, &liste_noeuds_dep, &liste_barres_dep, NULL, FALSE, TRUE), FALSE);
+        g_list_free(liste_sections);
+        g_list_free(liste_noeuds_dep);
+        
+        BUG(m3d_actualise_graphique(projet, NULL, liste_barres_dep), FALSE);
+        g_list_free(liste_barres_dep);
     }
 #endif
     

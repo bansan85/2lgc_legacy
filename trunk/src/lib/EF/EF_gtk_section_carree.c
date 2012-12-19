@@ -173,26 +173,16 @@ G_MODULE_EXPORT void EF_gtk_section_carree_modifier_clicked(
  * Valeur renvoyée : Aucune.
  */
 {
-    Gtk_EF_Sections_Carree  *ef_gtk;
-    Section_Carree          *data;
-    
     double      cote;
     gchar       *texte;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_sections_carree.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section Carrée");
     
-    ef_gtk = &projet->list_gtk.ef_sections_carree;
-    
     if (!EF_gtk_section_carree_recupere_donnees(projet, &cote, &texte))
         return;
     
-    free(ef_gtk->section->nom);
-    ef_gtk->section->nom = texte;
-    data = ef_gtk->section->data;
-    data->cote = cote;
-    
-    BUG(EF_sections_update_ligne_treeview(projet, ef_gtk->section), );
+    BUG(EF_sections_modif_carre(projet, projet->list_gtk.ef_sections_carree.section, texte, cote), );
     
     gtk_widget_destroy(projet->list_gtk.ef_sections_carree.window);
     

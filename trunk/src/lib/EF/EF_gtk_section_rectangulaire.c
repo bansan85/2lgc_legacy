@@ -185,27 +185,16 @@ G_MODULE_EXPORT void EF_gtk_section_rectangulaire_modifier_clicked(
  * Valeur renvoyée : Aucune.
  */
 {
-    Gtk_EF_Sections_Rectangulaire   *ef_gtk;
-    Section_T                       *data;
-    
     double      largeur, hauteur;
     gchar       *texte;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_sections_rectangulaire.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section Rectangulaire");
     
-    ef_gtk = &projet->list_gtk.ef_sections_rectangulaire;
-    
     if (!(EF_gtk_section_rectangulaire_recupere_donnees(projet, &largeur, &hauteur, &texte)))
         return;
     
-    free(ef_gtk->section->nom);
-    ef_gtk->section->nom = texte;
-    data = ef_gtk->section->data;
-    data->largeur_retombee = largeur;
-    data->hauteur_retombee = hauteur;
-    
-    BUG(EF_sections_update_ligne_treeview(projet, ef_gtk->section), );
+    BUG(EF_sections_modif_rectangulaire(projet, projet->list_gtk.ef_sections_rectangulaire.section, texte, largeur, hauteur), );
     
     gtk_widget_destroy(projet->list_gtk.ef_sections_rectangulaire.window);
     
