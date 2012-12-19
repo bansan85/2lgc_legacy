@@ -480,6 +480,38 @@ G_MODULE_EXPORT gboolean EF_sections_renomme(EF_Section *section, gchar *nom, Pr
 #ifdef ENABLE_GTK
     if (projet->list_gtk.ef_sections.builder != NULL)
         gtk_tree_store_set(projet->list_gtk.ef_sections.sections, &section->Iter_fenetre, 1, nom, -1);
+    switch (section->type)
+    {
+        case SECTION_RECTANGULAIRE :
+        {
+            if ((projet->list_gtk.ef_sections_rectangulaire.builder != NULL) && (projet->list_gtk.ef_sections_rectangulaire.section == section))
+                gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk.ef_sections_rectangulaire.builder, "EF_section_rectangulaire_textview_nom"))), nom, -1);
+            break;
+        }
+        case SECTION_T :
+        {
+            if ((projet->list_gtk.ef_sections_T.builder != NULL) && (projet->list_gtk.ef_sections_T.section == section))
+                gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk.ef_sections_T.builder, "EF_section_T_textview_nom"))), nom, -1);
+            break;
+        }
+        case SECTION_CARREE :
+        {
+            if ((projet->list_gtk.ef_sections_carree.builder != NULL) && (projet->list_gtk.ef_sections_carree.section == section))
+                gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk.ef_sections_carree.builder, "EF_section_carree_textview_nom"))), nom, -1);
+            break;
+        }
+        case SECTION_CIRCULAIRE :
+        {
+            if ((projet->list_gtk.ef_sections_circulaire.builder != NULL) && (projet->list_gtk.ef_sections_circulaire.section == section))
+                gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk.ef_sections_circulaire.builder, "EF_section_circulaire_textview_nom"))), nom, -1);
+            break;
+        }
+        default :
+        {
+            BUGMSG(0, FALSE, gettext("Type de section %d inconnu."), section->type);
+            break;
+        }
+    }
     gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section->Iter_liste, 0, nom, -1);
 #endif
     
