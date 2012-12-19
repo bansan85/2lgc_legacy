@@ -537,7 +537,41 @@ G_MODULE_EXPORT gboolean EF_sections_supprime(EF_Section *section, gboolean annu
     gtk_list_store_remove(projet->list_gtk.ef_sections.liste_sections, &section->Iter_liste);
     if (projet->list_gtk.ef_sections.builder != NULL)
         gtk_tree_store_remove(projet->list_gtk.ef_sections.sections, &section->Iter_fenetre);
+    switch (section->type)
+    {
+        case SECTION_RECTANGULAIRE :
+        {
+            if ((projet->list_gtk.ef_sections_rectangulaire.builder != NULL) && (projet->list_gtk.ef_sections_rectangulaire.section == section))
+                gtk_widget_destroy(projet->list_gtk.ef_sections_rectangulaire.window);
+            break;
+        }
+        case SECTION_T :
+        {
+            if ((projet->list_gtk.ef_sections_T.builder != NULL) && (projet->list_gtk.ef_sections_T.section == section))
+                gtk_widget_destroy(projet->list_gtk.ef_sections_T.window);
+            break;
+        }
+        case SECTION_CARREE :
+        {
+            if ((projet->list_gtk.ef_sections_carree.builder != NULL) && (projet->list_gtk.ef_sections_carree.section == section))
+                gtk_widget_destroy(projet->list_gtk.ef_sections_carree.window);
+            break;
+        }
+        case SECTION_CIRCULAIRE :
+        {
+            if ((projet->list_gtk.ef_sections_circulaire.builder != NULL) && (projet->list_gtk.ef_sections_circulaire.section == section))
+                gtk_widget_destroy(projet->list_gtk.ef_sections_circulaire.window);
+            break;
+        }
+        default :
+        {
+            BUGMSG(0, FALSE, gettext("Type de section %d inconnu.\n"), section->type);
+            break;
+        }
+    }
 #endif
+    
+    free(section);
     
     return TRUE;
 }
