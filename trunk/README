@@ -1,3 +1,35 @@
 Démarrage :
 La compilation et l'installation du programme s'effectue en suivant la procédure décrite dans le fichier INSTALL.
 L'application se lance en lançant le programme codegui.
+
+Performances :
+Pour tester l'intégralité de l'application, il convient de la compiler avec l'option FLAGS="--coverage". Par exemple :
+  ./configure --with-gtk --prefix=/usr/local CFLAGS="--coverage" CXXFLAGS="--coverage"
+Ensuite compiler et installer l'application normalement :
+  make -j9 && sudo make install && /usr/local/bin/codegui
+Et enfin, répéter exactement ce qui est ci-dessous :
+  Ouvrez toutes les fenêtres, à savoir :
+    Structure|Noeuds|Appuis
+    Structure|Noeuds|Gestion des noeuds
+    Structure|Barres|Sections
+    Structure|Barres|Matériaux
+    Structure|Barres|Relâchement
+    Structure|Barres|Gestion des barres
+    Charges|Actions
+    Charges|Groupes
+  Puis dans la fenêtre Appuis :
+    Cliquer 2 fois sur ajouter.
+    Changer le nom de "Sans nom (2)" en "AAAAA"
+    Changer toutes les propriétés ux, uy, uz, rx, ry, rz de Libre vers Bloqué.
+    Sélectionner l'appui "Sans nom" et le supprimer en cliquant sur le bouton Supprimer
+    Sélectionner l'appui "Appui simple z" et le supprimer en cliquant sur le bouton Supprimer en supprimant ces dépendances
+    Sélectionner l'appui "Appui simple x" et le supprimer en cliquant sur le bouton Supprimer sans supprimer ces dépendances
+    Fermer la fenêtre en cliquant sur le bouton Fermer
+  
+  En finalement :
+    Fichier|Quitter
+
+Une fois cette procédure terminée, lancer la commande dans la racine de la source :
+  - lcov --capture --directory . --output-file coverage.info
+    NB : si gcov (via lcov) plante sur un fichier .gcda, arrêter le programme, supprimez le fichier en question et relancer lcov.
+  - genhtml coverage.info --output-directory out_html
