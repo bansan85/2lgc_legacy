@@ -135,12 +135,12 @@ int main(int argc, char *argv[])
     BUG(EF_noeuds_ajout_noeud_libre(projet, 4.0, 0.0, 0.0, EF_appuis_cherche_nom(projet, "Rotule", TRUE)), -1);
     
     // Création des sections en béton
-    BUG(EF_sections_ajout_rectangulaire(projet, "Rect_0.3*0.5ht", 0.3, 0.5), -1);
-    BUG(EF_sections_ajout_T(projet, "T_1.00*0.20*0.10*0.50", 1.00, 0.20, 0.10, 0.50), -1);
-    BUG(EF_sections_ajout_carre(projet, "Carre_0.50", 0.5), -1);
-    BUG(EF_sections_ajout_circulaire(projet, "Circulaire_0.05", 0.05), -1);
-    BUG(EF_sections_ajout_rectangulaire(projet, "Rect_0.3*0.1ht", 0.3, 0.1), -1);
-    BUG(EF_sections_ajout_T(projet, "T_0.20*0.60*0.30*0.20", 0.20, 0.60, 0.30, 0.20), -1);
+    BUG(EF_sections_rectangulaire_ajout(projet, "Rect_0.3*0.5ht", 0.3, 0.5), -1);
+    BUG(EF_sections_T_ajout(projet, "T_1.00*0.20*0.10*0.50", 1.00, 0.20, 0.10, 0.50), -1);
+    BUG(EF_sections_carree_ajout(projet, "Carre_0.50", 0.5), -1);
+    BUG(EF_sections_circulaire_ajout(projet, "Circulaire_0.05", 0.05), -1);
+    BUG(EF_sections_rectangulaire_ajout(projet, "Rect_0.3*0.1ht", 0.3, 0.1), -1);
+    BUG(EF_sections_T_ajout(projet, "T_0.20*0.60*0.30*0.20", 0.20, 0.60, 0.30, 0.20), -1);
     
     // Création du matériau béton
     BUG(_1992_1_1_materiaux_ajout(projet, "B20", 20.), -1);

@@ -138,7 +138,7 @@ G_MODULE_EXPORT void EF_gtk_section_carree_ajouter_clicked(
         return;
     
     // Création de la nouvelle charge ponctuelle au noeud
-    BUG(EF_sections_ajout_carre(projet, texte, cote), );
+    BUG(EF_sections_carree_ajout(projet, texte, cote), );
     
     free(texte);
     
@@ -182,7 +182,7 @@ G_MODULE_EXPORT void EF_gtk_section_carree_modifier_clicked(
     if (!EF_gtk_section_carree_recupere_donnees(projet, &cote, &texte))
         return;
     
-    BUG(EF_sections_modif_carre(projet, projet->list_gtk.ef_sections_carree.section, texte, cote), );
+    BUG(EF_sections_carree_modif(projet, projet->list_gtk.ef_sections_carree.section, texte, cote), );
     
     gtk_widget_destroy(projet->list_gtk.ef_sections_carree.window);
     
