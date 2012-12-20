@@ -27,10 +27,6 @@ sudo make install-data && make check -j9
 make -C doc doc
 NOTA :
     -pg
-    --coverage est une option de deboguage qui permet à chaque lancement d'un programme de lister les lignes de code qui ont été exécutées et celles obsolètes.
-      Pour utiliser cette fonctionnalité, il convient d'ajouter --coverage dans Makefile.am, de recompiler la source et de lancer codegui (par exemple).
-      Les fichiers de statistiques des libraries sont placés dans lib/.libs/{*.gcno,*.gcda}. Il convient de les redescendre d'un niveau (mv lib/libs/{*.gcno,*.gcda} lib) et ensuite de lancer la commande gcov *.gcda.
-      Pour chaque fichier .gcda est créé un fichier .c.gov qui contient le code source annoté et permet de savoir le nombre de fois que chaque ligne a été exécutée.
 
 
 si le programme ne permet pas une compilation sans erreur par la procédure ci-dessus :
