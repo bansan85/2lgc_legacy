@@ -101,7 +101,7 @@ G_MODULE_EXPORT gboolean EF_sections_update_ligne_treeview(Projet *projet, EF_Se
 #endif
 
 
-G_MODULE_EXPORT gboolean EF_sections_ajout_rectangulaire(Projet *projet, const char* nom,
+G_MODULE_EXPORT gboolean EF_sections_rectangulaire_ajout(Projet *projet, const char* nom,
   double l, double h)
 /* Description : Ajouter une nouvelle section rectangulaire à la liste des sections en béton.
  * Paramètres : Projet *projet : la variable projet,
@@ -146,7 +146,7 @@ G_MODULE_EXPORT gboolean EF_sections_ajout_rectangulaire(Projet *projet, const c
 }
 
 
-G_MODULE_EXPORT gboolean EF_sections_modif_rectangulaire(Projet *projet, EF_Section *section,
+G_MODULE_EXPORT gboolean EF_sections_rectangulaire_modif(Projet *projet, EF_Section *section,
   const char* nom, double l, double h)
 /* Description : Modifie une section rectangulaire.
  * Paramètres : Projet *projet : la variable projet,
@@ -207,7 +207,7 @@ G_MODULE_EXPORT gboolean EF_sections_modif_rectangulaire(Projet *projet, EF_Sect
 }
 
 
-G_MODULE_EXPORT gboolean EF_sections_ajout_T(Projet *projet, const char* nom, double lt,
+G_MODULE_EXPORT gboolean EF_sections_T_ajout(Projet *projet, const char* nom, double lt,
   double lr, double ht, double hr)
 /* Description : Ajouter une nouvelle section en T à la liste des sections en béton.
  * Paramètres : Projet *projet : la variable projet,
@@ -260,7 +260,7 @@ G_MODULE_EXPORT gboolean EF_sections_ajout_T(Projet *projet, const char* nom, do
 }
 
 
-G_MODULE_EXPORT gboolean EF_sections_modif_T(Projet *projet, EF_Section *section,
+G_MODULE_EXPORT gboolean EF_sections_T_modif(Projet *projet, EF_Section *section,
   const char* nom, double lt, double lr, double ht, double hr)
 /* Description : Modifie une section en T.
  * Paramètres : Projet *projet : la variable projet,
@@ -322,7 +322,7 @@ G_MODULE_EXPORT gboolean EF_sections_modif_T(Projet *projet, EF_Section *section
 }
 
 
-G_MODULE_EXPORT gboolean EF_sections_ajout_carre(Projet *projet, const char* nom, double cote)
+G_MODULE_EXPORT gboolean EF_sections_carree_ajout(Projet *projet, const char* nom, double cote)
 /* Description : Ajouter une nouvelle section carrée à la liste des sections en béton.
  * Paramètres : Projet *projet : la variable projet,
  *            : char *nom : nom de la section,
@@ -365,7 +365,7 @@ G_MODULE_EXPORT gboolean EF_sections_ajout_carre(Projet *projet, const char* nom
 }
 
 
-G_MODULE_EXPORT gboolean EF_sections_modif_carre(Projet *projet, EF_Section *section, 
+G_MODULE_EXPORT gboolean EF_sections_carree_modif(Projet *projet, EF_Section *section, 
   const char* nom, double cote)
 /* Description : Modifie une section carrée.
  * Paramètres : Projet *projet : la variable projet,
@@ -418,7 +418,7 @@ G_MODULE_EXPORT gboolean EF_sections_modif_carre(Projet *projet, EF_Section *sec
 }
 
 
-G_MODULE_EXPORT gboolean EF_sections_ajout_circulaire(Projet *projet, const char* nom,
+G_MODULE_EXPORT gboolean EF_sections_circulaire_ajout(Projet *projet, const char* nom,
   double diametre)
 /* Description : Ajouter une nouvelle section circulaire à la liste des sections en béton.
  * Paramètres : Projet *projet : la variable projet,
@@ -463,7 +463,7 @@ G_MODULE_EXPORT gboolean EF_sections_ajout_circulaire(Projet *projet, const char
 }
 
 
-G_MODULE_EXPORT gboolean EF_sections_modif_circulaire(Projet *projet, EF_Section *section,
+G_MODULE_EXPORT gboolean EF_sections_circulaire_modif(Projet *projet, EF_Section *section,
   const char* nom, double diametre)
 /* Description : Modifie une section circulaire.
  * Paramètres : Projet *projet : la variable projet,

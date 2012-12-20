@@ -150,7 +150,7 @@ G_MODULE_EXPORT void EF_gtk_section_rectangulaire_ajouter_clicked(
         return;
     
     // Création de la nouvelle charge ponctuelle au noeud
-    BUG(EF_sections_ajout_rectangulaire(projet, texte, largeur, hauteur), );
+    BUG(EF_sections_rectangulaire_ajout(projet, texte, largeur, hauteur), );
     
     free(texte);
     
@@ -194,7 +194,7 @@ G_MODULE_EXPORT void EF_gtk_section_rectangulaire_modifier_clicked(
     if (!(EF_gtk_section_rectangulaire_recupere_donnees(projet, &largeur, &hauteur, &texte)))
         return;
     
-    BUG(EF_sections_modif_rectangulaire(projet, projet->list_gtk.ef_sections_rectangulaire.section, texte, largeur, hauteur), );
+    BUG(EF_sections_rectangulaire_modif(projet, projet->list_gtk.ef_sections_rectangulaire.section, texte, largeur, hauteur), );
     
     gtk_widget_destroy(projet->list_gtk.ef_sections_rectangulaire.window);
     

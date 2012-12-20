@@ -139,7 +139,7 @@ G_MODULE_EXPORT void EF_gtk_section_circulaire_ajouter_clicked(
         return;
     
     // Création de la nouvelle charge ponctuelle au noeud
-    BUG(EF_sections_ajout_circulaire(projet, texte, diametre), );
+    BUG(EF_sections_circulaire_ajout(projet, texte, diametre), );
     
     free(texte);
     
@@ -183,7 +183,7 @@ G_MODULE_EXPORT void EF_gtk_section_circulaire_modifier_clicked(
     if (!(EF_gtk_section_circulaire_recupere_donnees(projet, &diametre, &texte)))
         return;
     
-    BUG(EF_sections_modif_circulaire(projet, projet->list_gtk.ef_sections_circulaire.section, texte, diametre), );
+    BUG(EF_sections_circulaire_modif(projet, projet->list_gtk.ef_sections_circulaire.section, texte, diametre), );
     
     gtk_widget_destroy(projet->list_gtk.ef_sections_circulaire.window);
     

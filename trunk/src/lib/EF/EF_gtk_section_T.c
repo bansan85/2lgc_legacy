@@ -172,7 +172,7 @@ G_MODULE_EXPORT void EF_gtk_section_T_ajouter_clicked(GtkButton *button __attrib
         return;
     
     // Création de la nouvelle charge ponctuelle au noeud
-    BUG(EF_sections_ajout_T(projet, texte, lt, lr, ht, hr), );
+    BUG(EF_sections_T_ajout(projet, texte, lt, lr, ht, hr), );
     
     free(texte);
     
@@ -216,7 +216,7 @@ G_MODULE_EXPORT void EF_gtk_section_T_modifier_clicked(
     if (!(EF_gtk_section_T_recupere_donnees(projet, &lt, &ht, &lr, &hr, &texte)))
         return;
     
-    BUG(EF_sections_modif_T(projet, projet->list_gtk.ef_sections_T.section, texte, lt, lr, ht, hr), );
+    BUG(EF_sections_T_modif(projet, projet->list_gtk.ef_sections_T.section, texte, lt, lr, ht, hr), );
     
     gtk_widget_destroy(projet->list_gtk.ef_sections_T.window);
     
