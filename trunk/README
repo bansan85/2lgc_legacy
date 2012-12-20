@@ -19,9 +19,10 @@ Et enfin, répéter exactement ce qui est ci-dessous :
     Charges|Groupes
   Puis dans la fenêtre Appuis :
     Cliquer 2 fois sur ajouter.
-    Changer le nom de "Sans nom (2)" en "AAAAA"
+    Changer le nom de "Sans nom" en "ZZZZZZ"
+    Cliquer 1 fois sur ajouter.
     Changer toutes les propriétés ux, uy, uz, rx, ry, rz de Libre vers Bloqué.
-    Sélectionner l'appui "Sans nom" et le supprimer en cliquant sur le bouton Supprimer
+    Sélectionner l'appui "Sans nom (2)" et le supprimer en cliquant sur le bouton Supprimer
     Sélectionner l'appui "Appui simple z" et le supprimer en cliquant sur le bouton Supprimer en supprimant ces dépendances
     Sélectionner l'appui "Appui simple x" et le supprimer en cliquant sur le bouton Supprimer sans supprimer ces dépendances
     Fermer la fenêtre en cliquant sur le bouton Fermer
