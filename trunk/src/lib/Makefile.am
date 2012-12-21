@@ -116,3 +116,5 @@ libeurocodes_la_HEADERS +=	common/common_m3d.hpp \
 							EF/EF_gtk_relachement.h \
 							common/common_gtk.h
 endif
+
+CLEANFILES = *.gcno *.gcda

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2012-12-19 23:36+0100\n"
-"PO-Revision-Date: 2012-12-19 23:41+0100\n"
+"POT-Creation-Date: 2012-12-21 20:47+0100\n"
+"PO-Revision-Date: 2012-12-21 20:47+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -939,6 +939,12 @@ msgstr "Type d'appui %d inconnu.\n"
 
 msgid "Afin de modifier un appui, le paramètre x doit être compris entre 0 et 5 inclu.\n"
 msgstr "Afin de modifier un appui, le paramètre x doit être compris entre 0 et 5 inclu.\n"
+
+msgid "Impossible de supprimer l'appui car il est utilisé par le noeud %s.\n"
+msgstr "Impossible de supprimer l'appui car il est utilisé par le noeud %s.\n"
+
+msgid "Impossible de supprimer l'appui car il est utilisé par les noeuds %s.\n"
+msgstr "Impossible de supprimer l'appui car il est utilisé par les noeuds %s.\n"
 
 msgid "La valeur du diamètre est incorrecte."
 msgstr "La valeur du diamètre est incorrecte."
