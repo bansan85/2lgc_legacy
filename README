@@ -7,25 +7,43 @@ Pour tester l'intégralité de l'application, il convient de la compiler avec l'
   ./configure --with-gtk --prefix=/usr/local CFLAGS="--coverage" CXXFLAGS="--coverage"
 Ensuite compiler et installer l'application normalement :
   make -j9 && sudo make install && /usr/local/bin/codegui
-Et enfin, répéter exactement ce qui est ci-dessous :
-  Ouvrez toutes les fenêtres, à savoir :
-    Structure|Noeuds|Appuis
-    Structure|Noeuds|Gestion des noeuds
-    Structure|Barres|Sections
-    Structure|Barres|Matériaux
-    Structure|Barres|Relâchement
-    Structure|Barres|Gestion des barres
-    Charges|Actions
-    Charges|Groupes
-  Puis dans la fenêtre Appuis :
-    Cliquer 2 fois sur ajouter.
+  
+  Pour la fenêtre Appuis (fichiers EF_appuis et EF_gtk_appuis)
+    Ouvrez toutes les fenêtres, à savoir :
+        Structure|Noeuds|Appuis
+        Structure|Noeuds|Gestion des noeuds
+    Cliquer 3 fois sur ajouter.
+        Test l'insertion normal
+        Test l'insertion dans le cas où l'appui "Sans nom" est existant
+        Test l'insertion dans le cas où l'appui "Sans nom (2)" est existant
     Changer le nom de "Sans nom" en "ZZZZZZ"
     Cliquer 1 fois sur ajouter.
+        Test l'ajout avant les Sans nom existant.
     Changer toutes les propriétés ux, uy, uz, rx, ry, rz de Libre vers Bloqué.
-    Sélectionner l'appui "Sans nom (2)" et le supprimer en cliquant sur le bouton Supprimer
+        Test le changement pour toutes les propriétés
+    En repasser un vers Libre
+        Test ponctuellement le passage Bloqué->Libre
+    Sélectionner l'appui "Sans nom" et le supprimer en cliquant sur le bouton Supprimer
+        Test la supression simple
     Sélectionner l'appui "Appui simple z" et le supprimer en cliquant sur le bouton Supprimer en supprimant ces dépendances
+        Test la suppresson avec dépendances
     Sélectionner l'appui "Appui simple x" et le supprimer en cliquant sur le bouton Supprimer sans supprimer ces dépendances
+        Test la suppression sans dépendances
+    Renommer Encastrement par ZEncastrement
+    Renommer Rotule par ZRotule
+    Cliquer 1 fois sur ajouter.
+        Test l'insertion en tête du treeview
     Fermer la fenêtre en cliquant sur le bouton Fermer
+        Test le bouton fermer
+    La rouvrir via le menu
+    La même chose (réouvrir via le menu) mais sans fermer la fenêtre
+        Pour vérifier que la fenêtre prend bien le focus
+    Supprimer tous les appuis.
+        Pour tester qu'aucun bouton Supprimer n'est activé
+    Cliquer 5 fois sur ajouter.
+        Pour ne pas fermer la fenêtre avec une liste d'appuis vide.
+    Fermer la fenêtre en cliquant sur la touche Echap
+        Test la touche Echap
   
   En finalement :
     Fichier|Quitter

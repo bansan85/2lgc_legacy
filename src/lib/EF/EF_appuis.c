@@ -403,7 +403,6 @@ G_MODULE_EXPORT EF_Appui* EF_appuis_ajout(Projet *projet, const char *nom, Type_
         appui_parcours = list_parcours->data;
         if (strcmp(nom, appui_parcours->nom) < 0)
         {
-            projet->ef_donnees.appuis = g_list_insert_before(projet->ef_donnees.appuis, list_parcours, appui_nouveau);
 #ifdef ENABLE_GTK
             gtk_list_store_insert(projet->list_gtk.ef_appuis.liste_appuis, &appui_nouveau->Iter_liste, i);
             gtk_list_store_set(projet->list_gtk.ef_appuis.liste_appuis, &appui_nouveau->Iter_liste, 0, nom, -1);
@@ -423,6 +422,8 @@ G_MODULE_EXPORT EF_Appui* EF_appuis_ajout(Projet *projet, const char *nom, Type_
                 free(txt_rza);
             }
 #endif
+            projet->ef_donnees.appuis = g_list_insert_before(projet->ef_donnees.appuis, list_parcours, appui_nouveau);
+            
             return appui_nouveau;
         }
         i++;
@@ -654,16 +655,9 @@ G_MODULE_EXPORT gboolean EF_appuis_supprime(EF_Appui *appui, gboolean annule_si_
         
         liste = common_selection_converti_noeuds_en_texte(noeuds_suppr);
         if (g_list_next(noeuds_suppr) == NULL)
-            printf("Impossible de supprimer l'appui car il est utilisé par le noeud %s.\n", liste);
+            BUGMSG(NULL, FALSE, gettext("Impossible de supprimer l'appui car il est utilisé par le noeud %s.\n"), liste);
         else
-            printf("Impossible de supprimer l'appui car il est utilisé par les noeuds %s.\n", liste);
-        g_list_free(list_appuis);
-        g_list_free(noeuds_suppr);
-        g_list_free(barres_suppr);
-        g_list_free(charges_suppr);
-        free(liste);
-        
-        return TRUE;
+            BUGMSG(NULL, FALSE, gettext("Impossible de supprimer l'appui car il est utilisé par les noeuds %s.\n"), liste);
     }
     
     // On enlève l'appui pour les noeuds dépendants (si supprime == FALSE).

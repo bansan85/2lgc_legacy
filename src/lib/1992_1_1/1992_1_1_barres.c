@@ -1308,6 +1308,8 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_B
             ai[i] = 9;  aj[i] = 9;  ax[i] = gj_l;  i++;
         }
         
+        if (element->info_EF[j].matrice_rigidite_locale != NULL)
+            cholmod_free_sparse(&element->info_EF[j].matrice_rigidite_locale, projet->ef_donnees.c);
         element->info_EF[j].matrice_rigidite_locale = cholmod_triplet_to_sparse(triplet, 0, projet->ef_donnees.c);
         BUGMSG(element->info_EF[j].matrice_rigidite_locale, FALSE, gettext("Erreur d'allocation mémoire.\n"));
         cholmod_free_triplet(&triplet, projet->ef_donnees.c);
