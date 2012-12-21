@@ -332,8 +332,8 @@ G_MODULE_EXPORT void EF_gtk_materiaux_edit_clicked(GtkWidget *widget  __attribut
 }
 
 
-G_MODULE_EXPORT gboolean EF_gtk_materiaux_double_clicked(GtkWidget *widget, GdkEvent *event,
-  Projet *projet)
+G_MODULE_EXPORT gboolean _1992_1_1_gtk_materiaux_double_clicked(GtkWidget *widget,
+  GdkEvent *event, Projet *projet)
 /* Description : Lance la fenêtre d'édition du matériau sélectionné en cas de double-clique
  *               dans le tree-view.
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
@@ -353,8 +353,8 @@ G_MODULE_EXPORT gboolean EF_gtk_materiaux_double_clicked(GtkWidget *widget, GdkE
         EF_gtk_materiaux_edit_clicked(widget, projet);
         return TRUE;
     }
-    
-    return FALSE;
+    else
+        return common_gtk_treeview_button_press_unselect(GTK_TREE_VIEW(widget), event, projet);
 }
 
 

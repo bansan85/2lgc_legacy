@@ -37,6 +37,7 @@
                             <object class="GtkTreeView" id="EF_barres_treeview">
                                 <property name="visible">True</property>
                                 <property name="model">EF_barres_treestore</property>
+                                <signal name="button-press-event" handler="common_gtk_treeview_button_press_unselect"/>
                                 <child>
                                     <object class="GtkTreeViewColumn" id="EF_barres_treeview_column0">
                                         <property name="visible">True</property>

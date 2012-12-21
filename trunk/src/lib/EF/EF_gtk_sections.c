@@ -592,8 +592,8 @@ G_MODULE_EXPORT gboolean EF_gtk_sections_double_clicked(GtkWidget *widget, GdkEv
         EF_gtk_sections_edit_clicked(widget, projet);
         return TRUE;
     }
-    
-    return FALSE;
+    else
+        return common_gtk_treeview_button_press_unselect(GTK_TREE_VIEW(widget), event, projet);
 }
 
 

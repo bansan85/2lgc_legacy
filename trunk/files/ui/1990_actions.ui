@@ -70,6 +70,7 @@
                                                         <signal name="cursor-changed" handler="_1990_gtk_actions_cursor_changed"/>
                                                         <signal name="key-press-event" handler="_1990_gtk_actions_tree_view_key_press_event"/>
                                                         <signal name="drag-drop" handler="_1990_gtk_actions_tree_view_drag"/>
+                                                        <signal name="button-press-event" handler="common_gtk_treeview_button_press_unselect"/>
                                                         <child internal-child="selection">
                                                             <object class="GtkTreeSelection" id="1990_actions_treeview_select_action">
                                                                 <signal name="changed" handler="_1990_gtk_actions_select_changed"/>
