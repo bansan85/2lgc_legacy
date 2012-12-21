@@ -409,10 +409,10 @@ G_MODULE_EXPORT EF_Appui* EF_appuis_ajout(Projet *projet, const char *nom, Type_
             gtk_list_store_set(projet->list_gtk.ef_appuis.liste_appuis, &appui_nouveau->Iter_liste, 0, nom, -1);
             if (projet->list_gtk.ef_appuis.builder != NULL)
             {
-                if (g_list_previous(appui_parcours) == NULL)
+                if (g_list_previous(list_parcours) == NULL)
                     gtk_tree_store_prepend(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_treestore")), &appui_nouveau->Iter_fenetre, NULL);
                 else
-                    gtk_tree_store_insert_after(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_treestore")), &appui_nouveau->Iter_fenetre, NULL, &((EF_Appui*)(g_list_previous(appui_parcours)->data))->Iter_fenetre);
+                    gtk_tree_store_insert_before(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_treestore")), &appui_nouveau->Iter_fenetre, NULL, &appui_parcours->Iter_fenetre);
                 BUG(EF_appuis_get_description(appui_nouveau, &txt_uxa, &txt_uya, &txt_uza, &txt_rxa, &txt_rya, &txt_rza), NULL);
                 gtk_tree_store_set(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_treestore")), &appui_nouveau->Iter_fenetre, 0, appui_nouveau->nom, 1, txt_uxa, 2, txt_uya, 3, txt_uza, 4, txt_rxa, 5, txt_rya, 6, txt_rza, -1);
                 free(txt_uxa);
