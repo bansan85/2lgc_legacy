@@ -42,6 +42,7 @@ Ensuite compiler et installer l'application normalement :
         Pour tester qu'aucun bouton Supprimer n'est activé
     Cliquer 5 fois sur ajouter.
         Pour ne pas fermer la fenêtre avec une liste d'appuis vide.
+    Supprimer un des appuis en cliquant dessus et en appuyant sur la touche SUPPR.
     Fermer la fenêtre en cliquant sur la touche Echap
         Test la touche Echap
   

@@ -52,6 +52,7 @@
                             <object class="GtkTreeView" id="EF_appuis_treeview">
                                 <property name="visible">True</property>
                                 <property name="model">EF_appuis_treestore</property>
+                                <signal name="key-press-event" handler="EF_gtk_appuis_treeview_key_press"/>
                                 <child internal-child="selection">
                                     <object class="GtkTreeSelection" id="EF_appuis_treeview_select">
                                         <signal name="changed" handler="EF_gtk_appuis_select_changed"/>
