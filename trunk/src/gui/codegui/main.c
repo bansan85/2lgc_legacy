@@ -144,6 +144,8 @@ int main(int argc, char *argv[])
     BUG(EF_sections_circulaire_ajout(projet, "Circulaire_0.05", 0.05), -1);
     BUG(EF_sections_rectangulaire_ajout(projet, "Rect_0.3*0.1ht", 0.3, 0.1), -1);
     BUG(EF_sections_T_ajout(projet, "T_0.20*0.60*0.30*0.20", 0.20, 0.60, 0.30, 0.20), -1);
+    BUG(EF_sections_carree_ajout(projet, "Carre_0.20", 0.2), -1);
+    BUG(EF_sections_circulaire_ajout(projet, "Circulaire_0.4", 0.4), -1);
     
     // Création du matériau béton
     BUG(_1992_1_1_materiaux_ajout(projet, "B20", 20.), -1);

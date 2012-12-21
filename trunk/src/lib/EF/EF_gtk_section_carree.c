@@ -205,18 +205,21 @@ G_MODULE_EXPORT gboolean EF_gtk_section_carree(Projet *projet, EF_Section *secti
     Gtk_EF_Sections_Carree  *ef_gtk;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    
+    ef_gtk = &projet->list_gtk.ef_sections_carree;
     if (projet->list_gtk.ef_sections_carree.builder != NULL)
     {
         gtk_window_present(GTK_WINDOW(projet->list_gtk.ef_sections_carree.window));
-        return TRUE;
+        if (projet->list_gtk.ef_sections_carree.section == section)
+            return TRUE;
     }
-    
-    ef_gtk = &projet->list_gtk.ef_sections_carree;
-    ef_gtk->builder = gtk_builder_new();
-    BUGMSG(gtk_builder_add_from_file(ef_gtk->builder, DATADIR"/ui/EF_sections_carree.ui", NULL) != 0, FALSE, gettext("Builder Failed\n"));
-    gtk_builder_connect_signals(ef_gtk->builder, projet);
-    
-    ef_gtk->window = GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder, "EF_section_carree_window"));
+    else
+    {
+        ef_gtk->builder = gtk_builder_new();
+        BUGMSG(gtk_builder_add_from_file(ef_gtk->builder, DATADIR"/ui/EF_sections_carree.ui", NULL) != 0, FALSE, gettext("Builder Failed\n"));
+        gtk_builder_connect_signals(ef_gtk->builder, projet);
+        ef_gtk->window = GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder, "EF_section_carree_window"));
+    }
     
     if (section == NULL)
     {
