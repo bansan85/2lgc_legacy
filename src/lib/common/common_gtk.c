@@ -26,6 +26,37 @@
 #include "common_erreurs.h"
 #include "common_math.h"
 
+G_MODULE_EXPORT gboolean common_gtk_treeview_button_press_unselect(GtkTreeView *widget,
+  GdkEvent *event, Projet *projet)
+/* Description : Déselectionne la ligne sélectionnée si on clique sur une zone vide du treeview.
+ * Paramètres : GtkTreeView *widget : composant à l'origine de l'évènement,
+ *            : GdkEvent *event : Caractéristique de l'évènement,
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : FALSE.
+ *   Echec : projet == NULL.
+ *  
+ */
+{
+    BUGMSG(projet, TRUE, gettext("Paramètre %s incorrect.\n"), "projet");
+    
+    if (event->type == GDK_BUTTON_PRESS)
+    {
+        GdkEventButton *event_button = (GdkEventButton *)event;
+        
+        if (!gtk_tree_view_get_path_at_pos(widget, (gint) event_button->x, (gint) event_button->y, NULL, NULL, NULL, NULL))
+        {
+            GtkTreeIter Iter;
+            if (gtk_tree_selection_get_mode(gtk_tree_view_get_selection(widget)) == GTK_SELECTION_MULTIPLE)
+                gtk_tree_selection_unselect_all(gtk_tree_view_get_selection(widget));
+            else if (gtk_tree_selection_get_selected(gtk_tree_view_get_selection(widget), NULL, &Iter))
+                gtk_tree_selection_unselect_iter(gtk_tree_view_get_selection(widget), &Iter);
+        }
+    }
+    
+    return FALSE;
+}
+
+
 G_MODULE_EXPORT double common_gtk_text_buffer_double(GtkTextBuffer *textbuffer, double val_min,
   gboolean min_include, double val_max, gboolean max_include)
 /* Description : Vérifie en temps réel si le GtkTextBuffer contient bien un nombre flottant

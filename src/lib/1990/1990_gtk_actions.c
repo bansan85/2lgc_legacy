@@ -553,8 +553,8 @@ G_MODULE_EXPORT gboolean _1990_gtk_actions_charge_double_clicked(GtkWidget *widg
         _1990_gtk_menu_edit_charge_clicked(widget, projet);
         return TRUE;
     }
-    
-    return FALSE;
+    else
+        return common_gtk_treeview_button_press_unselect(GTK_TREE_VIEW(widget), event, projet);
 }
 
 

@@ -149,6 +149,7 @@
                                                         <signal name="row-collapsed" handler="_1990_gtk_tree_view_etat_row_collapsed"/>
                                                         <signal name="cursor-changed" handler="_1990_gtk_groupes_tree_view_etat_cursor_changed"/>
                                                         <signal name="key-press-event" handler="_1990_gtk_tree_view_etat_key_press_event"/>
+                                                        <signal name="button-press-event" handler="common_gtk_treeview_button_press_unselect"/>
                                                         <child internal-child="selection">
                                                             <object class="GtkTreeSelection" id="1990_groupes_treeview_select_etat">
                                                                 <signal name="changed" handler="_1990_gtk_tree_select_changed"/>
@@ -291,6 +292,7 @@
                                                         <property name="reorderable">True</property>
                                                         <signal name="drag-begin" handler="_1990_gtk_tree_view_drag_begin"/>
                                                         <signal name="drag-drop" handler="_1990_gtk_tree_view_dispo_drag"/>
+                                                        <signal name="button-press-event" handler="common_gtk_treeview_button_press_unselect"/>
                                                         <child internal-child="selection">
                                                             <object class="GtkTreeSelection" id="1990_groupes_treeview_select_dispo">
                                                                 <property name="mode">multiple</property>
