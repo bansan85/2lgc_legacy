@@ -165,6 +165,55 @@ G_MODULE_EXPORT void EF_gtk_appuis_supprimer(GtkButton *button __attribute__((un
 }
 
 
+G_MODULE_EXPORT gboolean EF_gtk_appuis_treeview_key_press(
+  GtkWidget *widget __attribute__((unused)), GdkEvent *event, Projet *projet)
+/* Description : Supprime un appui sans dépendance si la touche SUPPR est appuyée.
+ * Paramètres : GtkWidget *widget : composant à l'origine de l'évènement,
+ *            : GdkEvent *event : Caractéristique de l'évènement,
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : TRUE si la touche SUPPR est pressée, FALSE sinon.
+ *   Echec : projet == NULL,
+ *           interface graphique non initialisée.
+ *  
+ */
+{
+    BUGMSG(projet, TRUE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet->list_gtk.ef_appuis.builder, TRUE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Appui");
+    
+    if (event->key.keyval == GDK_KEY_Delete)
+    {
+        GtkTreeIter     Iter;
+        GtkTreeModel    *model;
+        
+        if (gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_treeview_select")), &model, &Iter))
+        {
+            char        *nom;
+            EF_Appui    *appui;
+            
+            GList   *liste_appuis = NULL, *liste_noeuds_dep, *liste_barres_dep;
+            
+            gtk_tree_model_get(model, &Iter, 0, &nom, -1);
+            
+            BUG(appui = EF_appuis_cherche_nom(projet, nom, TRUE), FALSE);
+            
+            liste_appuis = g_list_append(liste_appuis, appui);
+            BUG(_1992_1_1_barres_cherche_dependances(projet, liste_appuis, NULL, NULL, NULL, NULL, &liste_noeuds_dep, &liste_barres_dep, NULL, FALSE, FALSE), FALSE);
+            g_list_free(liste_appuis);
+            
+            if ((liste_noeuds_dep == NULL) && (liste_barres_dep == NULL))
+                EF_gtk_appuis_supprimer(NULL, projet);
+            
+            free(nom);
+            g_list_free(liste_noeuds_dep);
+            g_list_free(liste_barres_dep);
+        }
+        return TRUE;
+    }
+    else
+        return FALSE;
+}
+
+
 G_MODULE_EXPORT void EF_gtk_appuis_supprimer_menu_suppr_noeud(
   GtkButton *button __attribute__((unused)), Projet *projet)
 /* Description : Supprime l'appui sélectionné dans le treeview et ainsi que les noeuds
