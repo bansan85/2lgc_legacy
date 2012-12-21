@@ -206,18 +206,21 @@ G_MODULE_EXPORT gboolean EF_gtk_section_circulaire(Projet *projet, EF_Section *s
     Gtk_EF_Sections_Circulaire  *ef_gtk;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    
+    ef_gtk = &projet->list_gtk.ef_sections_circulaire;
     if (projet->list_gtk.ef_sections_circulaire.builder != NULL)
     {
         gtk_window_present(GTK_WINDOW(projet->list_gtk.ef_sections_circulaire.window));
-        return TRUE;
+        if (projet->list_gtk.ef_sections_circulaire.section == section)
+            return TRUE;
     }
-    
-    ef_gtk = &projet->list_gtk.ef_sections_circulaire;
-    ef_gtk->builder = gtk_builder_new();
-    BUGMSG(gtk_builder_add_from_file(ef_gtk->builder, DATADIR"/ui/EF_sections_circulaire.ui", NULL) != 0, FALSE, gettext("Builder Failed\n"));
-    gtk_builder_connect_signals(ef_gtk->builder, projet);
-    
-    ef_gtk->window = GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder, "EF_section_circulaire_window"));
+    else
+    {
+        ef_gtk->builder = gtk_builder_new();
+        BUGMSG(gtk_builder_add_from_file(ef_gtk->builder, DATADIR"/ui/EF_sections_circulaire.ui", NULL) != 0, FALSE, gettext("Builder Failed\n"));
+        gtk_builder_connect_signals(ef_gtk->builder, projet);
+        ef_gtk->window = GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder, "EF_section_circulaire_window"));
+    }
     
     if (section == NULL)
     {

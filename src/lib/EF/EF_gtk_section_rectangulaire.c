@@ -217,18 +217,21 @@ G_MODULE_EXPORT gboolean EF_gtk_section_rectangulaire(Projet *projet, EF_Section
     Gtk_EF_Sections_Rectangulaire   *ef_gtk;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    ef_gtk = &projet->list_gtk.ef_sections_rectangulaire;
     if (projet->list_gtk.ef_sections_rectangulaire.builder != NULL)
     {
         gtk_window_present(GTK_WINDOW(projet->list_gtk.ef_sections_rectangulaire.window));
-        return TRUE;
+        if (projet->list_gtk.ef_sections_rectangulaire.section == section)
+            return TRUE;
+    }
+    else
+    {
+        ef_gtk->builder = gtk_builder_new();
+        BUGMSG(gtk_builder_add_from_file(ef_gtk->builder, DATADIR"/ui/EF_sections_rectangulaire.ui", NULL) != 0, FALSE, gettext("Builder Failed\n"));
+        gtk_builder_connect_signals(ef_gtk->builder, projet);
+        ef_gtk->window = GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder, "EF_section_rectangulaire_window"));
     }
     
-    ef_gtk = &projet->list_gtk.ef_sections_rectangulaire;
-    ef_gtk->builder = gtk_builder_new();
-    BUGMSG(gtk_builder_add_from_file(ef_gtk->builder, DATADIR"/ui/EF_sections_rectangulaire.ui", NULL) != 0, FALSE, gettext("Builder Failed\n"));
-    gtk_builder_connect_signals(ef_gtk->builder, projet);
-    
-    ef_gtk->window = GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder, "EF_section_rectangulaire_window"));
     
     if (section == NULL)
     {
