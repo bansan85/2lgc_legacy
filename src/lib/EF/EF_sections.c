@@ -623,41 +623,6 @@ G_MODULE_EXPORT char* EF_sections_get_description(EF_Section *sect)
 }
 
 
-G_MODULE_EXPORT gboolean EF_sections_cherche_dependances(Projet *projet, EF_Section* section,
-  GList** barres_dep)
-/* Description : Liste l'ensemble des barres utilisant la section.
- * Paramètres : Projet *projet : la variable projet,
- *            : EF_Section *section : la section à analyser,
- *            : GList** barres_dep : la liste des barres dépendantes.
- * Valeur renvoyée :
- *   Succès : TRUE
- *   Échec : FALSE :
- *             projet == NULL,
- *             section == NULL.
- */
-{
-    GList   *list_parcours;
-    
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(section, FALSE, gettext("Paramètre %s incorrect.\n"), "section");
-    
-    *barres_dep = NULL;
-    
-    list_parcours = projet->beton.barres;
-    while (list_parcours != NULL)
-    {
-        Beton_Barre *barre = list_parcours->data;
-        
-        if (barre->section == section)
-            *barres_dep = g_list_append(*barres_dep, barre);
-        
-        list_parcours = g_list_next(list_parcours);
-    }
-    
-    return TRUE;
-}
-
-
 G_MODULE_EXPORT gboolean EF_sections_verifie_dependances(Projet *projet, EF_Section* section)
 /* Description : Vérifie si la section est utilisée.
  * Paramètres : Projet *projet : la variable projet,
@@ -767,31 +732,30 @@ G_MODULE_EXPORT gboolean EF_sections_supprime(EF_Section *section, gboolean annu
  *             section == NULL.
  */
 {
-    GList   *list_barres;
+    GList   *liste_sections = NULL, *liste_noeuds_dep, *liste_barres_dep;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(section, FALSE, gettext("Paramètre %s incorrect.\n"), "section");
     
     // On vérifie les dépendances.
-    BUG(EF_sections_cherche_dependances(projet, section, &list_barres), FALSE);
+    liste_sections = g_list_append(liste_sections, section);
+    BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, liste_sections, NULL, NULL, &liste_noeuds_dep, &liste_barres_dep, NULL, FALSE, FALSE), FALSE);
     
-    if ((annule_si_utilise) && (list_barres != NULL))
+    if ((annule_si_utilise) && ((liste_noeuds_dep != NULL) || (liste_barres_dep != NULL)))
     {
         char *liste;
         
-        liste = common_selection_converti_barres_en_texte(list_barres);
-        if (g_list_next(list_barres) == NULL)
-            printf("Impossible de supprimer la section car elle est utilisée par la barre %s.\n", liste);
+        liste = common_selection_converti_barres_en_texte(liste_barres_dep);
+        if (g_list_next(liste_barres_dep) == NULL)
+            BUGMSG(NULL, FALSE, gettext("Impossible de supprimer la section car elle est utilisée par la barre %s.\n"), liste);
         else
-            printf("Impossible de supprimer la section car elle est utilisée par les barres %s.\n", liste);
-        g_list_free(list_barres);
-        free(liste);
-        
-        return TRUE;
+            BUGMSG(NULL, FALSE, gettext("Impossible de supprimer la section car elle est utilisée par les barres %s.\n"), liste);
     }
     
-    BUG(_1992_1_1_barres_supprime_liste(projet, NULL, list_barres), TRUE);
-    g_list_free(list_barres);
+    BUG(_1992_1_1_barres_supprime_liste(projet, liste_noeuds_dep, liste_barres_dep), TRUE);
+    g_list_free(liste_sections);
+    g_list_free(liste_noeuds_dep);
+    g_list_free(liste_barres_dep);
     
     free(section->nom);
     free(section->data);

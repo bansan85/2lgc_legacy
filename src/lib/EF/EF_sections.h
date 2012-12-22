@@ -39,7 +39,6 @@ gboolean EF_sections_circulaire_modif(Projet *projet, EF_Section *section, const
 
 EF_Section* EF_sections_cherche_nom(Projet *projet, const char *nom, gboolean critique) __attribute__((__warn_unused_result__));
 char *EF_sections_get_description(EF_Section *sect) __attribute__((__warn_unused_result__));
-gboolean EF_sections_cherche_dependances(Projet *projet, EF_Section* section, GList** barres_dep) __attribute__((__warn_unused_result__));
 gboolean EF_sections_verifie_dependances(Projet *projet, EF_Section* section) __attribute__((__warn_unused_result__));
 
 gboolean EF_sections_renomme(EF_Section *section, gchar *nom, Projet *projet) __attribute__((__warn_unused_result__));
