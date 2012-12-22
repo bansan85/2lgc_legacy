@@ -513,41 +513,6 @@ G_MODULE_EXPORT gboolean _1992_1_1_materiaux_renomme(Beton_Materiau *materiau, g
 }
 
 
-G_MODULE_EXPORT gboolean _1992_1_1_materiaux_cherche_dependances(Projet *projet,
-  Beton_Materiau* materiau, GList** barres_dep)
-/* Description : Liste l'ensemble des barres utilisant le materiau.
- * Paramètres : Projet *projet : la variable projet,
- *            : Beton_Materiau* materiau : le matériau à analyser,
- *            : GList** barres_dep : la liste des barres dépendantes.
- * Valeur renvoyée :
- *   Succès : TRUE
- *   Échec : FALSE :
- *             projet == NULL,
- *             section == NULL.
- */
-{
-    GList   *list_parcours;
-    
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(materiau, FALSE, gettext("Paramètre %s incorrect.\n"), "materiau");
-    
-    *barres_dep = NULL;
-    
-    list_parcours = projet->beton.barres;
-    while (list_parcours != NULL)
-    {
-        Beton_Barre *barre = list_parcours->data;
-        
-        if (barre->materiau == materiau)
-            *barres_dep = g_list_append(*barres_dep, barre);
-        
-        list_parcours = g_list_next(list_parcours);
-    }
-    
-    return TRUE;
-}
-
-
 G_MODULE_EXPORT gboolean _1992_1_1_materiaux_verifie_dependances(Projet *projet,
   Beton_Materiau* materiau)
 /* Description : Vérifie si le matériau est utilisé.
@@ -817,31 +782,30 @@ G_MODULE_EXPORT gboolean _1992_1_1_materiaux_supprime(Beton_Materiau* materiau, 
  *             materiau == NULL.
  */
 {
-    GList   *list_barres;
+    GList   *liste_materiaux = NULL, *liste_noeuds_dep, *liste_barres_dep;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(materiau, FALSE, gettext("Paramètre %s incorrect.\n"), "materiau");
    
     // On vérifie les dépendances.
-    BUG(_1992_1_1_materiaux_cherche_dependances(projet, materiau, &list_barres), FALSE);
+    liste_materiaux = g_list_append(liste_materiaux, materiau);
+    BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, liste_materiaux, NULL, &liste_noeuds_dep, &liste_barres_dep, NULL, FALSE, FALSE), FALSE);
     
-    if (list_barres != NULL)
+    if ((liste_noeuds_dep != NULL) || (liste_barres_dep != NULL))
     {
         char *liste;
         
-        liste = common_selection_converti_barres_en_texte(list_barres);
-        if (g_list_next(list_barres) == NULL)
-            printf("Impossible de supprimer le matériau car il est utilisé par la barre %s.\n", liste);
+        liste = common_selection_converti_barres_en_texte(liste_barres_dep);
+        if (g_list_next(liste_barres_dep) == NULL)
+            BUGMSG(NULL, FALSE, gettext("Impossible de supprimer le matériau car il est utilisé par la barre %s.\n"), liste);
         else
-            printf("Impossible de supprimer le matériau car il est utilisé par les barres %s.\n", liste);
-        g_list_free(list_barres);
-        free(liste);
-        
-        return TRUE;
+            BUGMSG(NULL, FALSE, gettext("Impossible de supprimer le matériau car il est utilisé par les barres %s.\n"), liste);
     }
     
-    BUG(_1992_1_1_barres_supprime_liste(projet, NULL, list_barres), TRUE);
-    g_list_free(list_barres);
+    BUG(_1992_1_1_barres_supprime_liste(projet, liste_noeuds_dep, liste_barres_dep), TRUE);
+    g_list_free(liste_materiaux);
+    g_list_free(liste_noeuds_dep);
+    g_list_free(liste_barres_dep);
     
     _1992_1_1_materiaux_free_un(materiau);
     projet->beton.materiaux = g_list_remove(projet->beton.materiaux, materiau);
