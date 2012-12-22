@@ -81,6 +81,7 @@
                                 <property name="visible">True</property>
                                 <property name="model">EF_sections_treestore</property>
                                 <signal   name="button-press-event" handler="EF_gtk_sections_double_clicked"/>
+                                <signal name="key-press-event" handler="EF_gtk_sections_treeview_key_press"/>
                                 <child internal-child="selection">
                                     <object class="GtkTreeSelection" id="EF_sections_treeview_select">
                                         <signal name="changed" handler="EF_gtk_sections_select_changed"/>
