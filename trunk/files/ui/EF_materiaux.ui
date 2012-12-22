@@ -52,6 +52,7 @@
                                 <property name="visible">True</property>
                                 <property name="model">EF_materiaux_treestore</property>
                                 <signal   name="button-press-event" handler="_1992_1_1_gtk_materiaux_double_clicked"/>
+                                <signal name="key-press-event" handler="EF_gtk_materiaux_treeview_key_press"/>
                                 <child internal-child="selection">
                                     <object class="GtkTreeSelection" id="EF_materiaux_treeview_select">
                                         <signal name="changed" handler="EF_gtk_materiaux_select_changed"/>
