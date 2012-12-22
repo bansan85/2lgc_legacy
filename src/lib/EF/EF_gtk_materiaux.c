@@ -94,6 +94,54 @@ G_MODULE_EXPORT gboolean EF_gtk_materiaux_window_key_press(
 }
 
 
+G_MODULE_EXPORT gboolean EF_gtk_materiaux_treeview_key_press(GtkTreeView *treeview,
+  GdkEvent *event, Projet *projet)
+/* Description : Supprime un matériau sans dépendance si la touche SUPPR est appuyée.
+ * Paramètres : GtkTreeView *treeview : composant à l'origine de l'évènement,
+ *            : GdkEvent *event : Caractéristique de l'évènement,
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : TRUE si la touche SUPPR est pressée, FALSE sinon.
+ *   Echec : projet == NULL,
+ *           interface graphique non initialisée.
+ *  
+ */
+{
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet->list_gtk.ef_materiaux.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Matériau");
+    
+    if (event->key.keyval == GDK_KEY_Delete)
+    {
+        GtkTreeIter     Iter;
+        GtkTreeModel    *model;
+        char            *nom;
+        Beton_Materiau  *materiau;
+        GList           *liste_materiaux = NULL, *liste_noeuds_dep, *liste_barres_dep;
+        
+        if (!gtk_tree_selection_get_selected(gtk_tree_view_get_selection(treeview), &model, &Iter))
+            return FALSE;
+        
+        gtk_tree_model_get(model, &Iter, 0, &nom, -1);
+        
+        BUG(materiau = _1992_1_1_materiaux_cherche_nom(projet, nom, TRUE), FALSE);
+        
+        liste_materiaux = g_list_append(liste_materiaux, materiau);
+        BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, liste_materiaux, NULL, &liste_noeuds_dep, &liste_barres_dep, NULL, FALSE, FALSE), FALSE);
+        
+        if ((liste_noeuds_dep == NULL) && (liste_barres_dep == NULL))
+            BUG(_1992_1_1_materiaux_supprime(materiau, projet), FALSE);
+        
+        g_list_free(liste_materiaux);
+        g_list_free(liste_noeuds_dep);
+        g_list_free(liste_barres_dep);
+        free(nom);
+        
+        return TRUE;
+    }
+    else
+        return FALSE;
+}
+
+
 G_MODULE_EXPORT void EF_gtk_materiaux_edit_nom(GtkCellRendererText *cell __attribute__((unused)),
   gchar *path_string, gchar *new_text, Projet *projet)
 /* Description : Modification du nom d'un matériau.
@@ -270,8 +318,6 @@ G_MODULE_EXPORT void EF_gtk_materiaux_supprimer_direct(
     
     BUG(materiau = _1992_1_1_materiaux_cherche_nom(projet, nom, TRUE), );
     BUG(_1992_1_1_materiaux_supprime(materiau, projet), );
-    
-    BUG(m3d_rafraichit(projet), );
     
     free(nom);
     
