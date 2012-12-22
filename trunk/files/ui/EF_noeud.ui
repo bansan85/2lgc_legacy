@@ -61,6 +61,7 @@
                                         <property name="visible">True</property>
                                         <property name="model">EF_noeuds_treestore_noeuds_libres</property>
                                         <signal name="button-press-event" handler="common_gtk_treeview_button_press_unselect"/>
+                                        <signal name="key-press-event" handler="EF_gtk_noeud_treeview_key_press"/>
                                         <child internal-child="selection">
                                             <object class="GtkTreeSelection" id="EF_noeuds_treeview_noeuds_libres_select">
                                                 <signal name="changed" handler="EF_noeuds_treeview_select_changed"/>
@@ -167,6 +168,7 @@
                                     <object class="GtkTreeView" id="EF_noeuds_treeview_noeuds_intermediaires">
                                         <property name="visible">True</property>
                                         <property name="model">EF_noeuds_treestore_noeuds_intermediaires</property>
+                                        <signal name="key-press-event" handler="EF_gtk_noeud_treeview_key_press"/>
                                         <signal name="button-press-event" handler="common_gtk_treeview_button_press_unselect"/>
                                         <child internal-child="selection">
                                             <object class="GtkTreeSelection" id="EF_noeuds_treeview_noeuds_intermediaires_select">

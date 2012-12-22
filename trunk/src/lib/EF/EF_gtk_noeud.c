@@ -133,6 +133,57 @@ G_MODULE_EXPORT void EF_gtk_noeud_supprimer(GtkButton *button __attribute__((unu
 }
 
 
+G_MODULE_EXPORT gboolean EF_gtk_noeud_treeview_key_press(GtkTreeView *treeview, GdkEvent *event,
+  Projet *projet)
+/* Description : Supprime un noeud sans dépendance si la touche SUPPR est appuyée.
+ * Paramètres : GtkTreeView *treeview : composant à l'origine de l'évènement,
+ *            : GdkEvent *event : Caractéristique de l'évènement,
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : TRUE si la touche SUPPR est pressée, FALSE sinon.
+ *   Echec : projet == NULL,
+ *           interface graphique non initialisée.
+ *  
+ */
+{
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet->list_gtk.ef_noeud.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Noeuds");
+    
+    if (event->key.keyval == GDK_KEY_Delete)
+    {
+        GtkTreeIter     Iter;
+        GtkTreeModel    *model;
+        unsigned int    numero;
+        EF_Noeud        *noeud;
+        GList           *liste_noeuds = NULL, *liste_noeuds_dep, *liste_barres_dep, *liste_charges_dep;
+        
+        if (!gtk_tree_selection_get_selected(gtk_tree_view_get_selection(treeview), &model, &Iter))
+            return FALSE;
+        
+        gtk_tree_model_get(model, &Iter, 0, &numero, -1);
+        
+        BUG(noeud = EF_noeuds_cherche_numero(projet, numero, TRUE), FALSE);
+        
+        liste_noeuds = g_list_append(liste_noeuds, noeud);
+        BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, liste_noeuds, NULL, NULL, NULL, &liste_noeuds_dep, &liste_barres_dep, &liste_charges_dep, FALSE, FALSE), FALSE);
+        
+        if ((liste_noeuds_dep == NULL) && (liste_barres_dep == NULL) && (liste_charges_dep == NULL))
+        {
+            BUG(_1992_1_1_barres_supprime_liste(projet, liste_noeuds, NULL), FALSE);
+            BUG(m3d_rafraichit(projet), FALSE);
+        }
+        
+        g_list_free(liste_noeuds);
+        g_list_free(liste_noeuds_dep);
+        g_list_free(liste_barres_dep);
+        g_list_free(liste_charges_dep);
+        
+        return TRUE;
+    }
+    else
+        return FALSE;
+}
+
+
 G_MODULE_EXPORT void EF_noeuds_set_supprimer_visible(gboolean select, Projet *projet)
 /* Description : En fonction de la sélection, active ou désactive les boutons supprimer.
  * Paramètres : gboolean select : si le changement survient via un changement de la sélection,
