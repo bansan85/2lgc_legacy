@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2012-12-22 12:13+0100\n"
-"PO-Revision-Date: 2012-12-22 12:15+0100\n"
+"POT-Creation-Date: 2012-12-22 12:56+0100\n"
+"PO-Revision-Date: 2012-12-22 13:11+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -359,6 +359,12 @@ msgstr "Matériau en béton '%s' introuvable.\n"
 
 msgid "Le matériau '%s' existe déjà.\n"
 msgstr "Le matériau '%s' existe déjà.\n"
+
+msgid "Impossible de supprimer le matériau car il est utilisé par la barre %s.\n"
+msgstr "Impossible de supprimer le matériau car il est utilisé par la barre %s.\n"
+
+msgid "Impossible de supprimer le matériau car il est utilisé par les barres %s.\n"
+msgstr "Impossible de supprimer le matériau car il est utilisé par les barres %s.\n"
 
 msgid "Le type %d de la liste est inconnu.\n"
 msgstr "Le type %d de la liste est inconnu.\n"
