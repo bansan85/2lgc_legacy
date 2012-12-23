@@ -145,6 +145,9 @@ G_MODULE_EXPORT void EF_gtk_relachements_select_changed(
             desc = common_text_dependances(liste_noeuds_dep, liste_barres_dep, liste_charges_dep, projet);
             gtk_menu_item_set_label(GTK_MENU_ITEM(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_supprimer_menu_barres")), desc);
             free(desc);
+            g_list_free(liste_noeuds_dep);
+            g_list_free(liste_barres_dep);
+            g_list_free(liste_charges_dep);
         }
         else
         {

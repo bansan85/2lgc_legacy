@@ -27,7 +27,7 @@ Ensuite compiler et installer l'application normalement :
         Test la supression simple
     Supprimer l'appui "Sans nom (3)" en cliquant dessus et en appuyant sur la touche SUPPR.
     Sélectionner l'appui "Appui simple z" et le supprimer en cliquant sur le bouton Supprimer en supprimant ces dépendances
-        Test la suppresson avec dépendances
+        Test la suppression avec dépendances
     Sélectionner l'appui "Appui simple x" et le supprimer en cliquant sur le bouton Supprimer sans supprimer ces dépendances
         Test la suppression sans dépendances
     Renommer Rotule par ZRotule
