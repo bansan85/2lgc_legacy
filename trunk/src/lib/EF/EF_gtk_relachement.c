@@ -63,6 +63,7 @@ G_MODULE_EXPORT void EF_gtk_relachements_window_destroy(GtkWidget *object __attr
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_relachements.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Relachement");
     
+    g_object_unref(G_OBJECT(projet->list_gtk.ef_relachements.builder));
     projet->list_gtk.ef_relachements.builder = NULL;
     
     return;

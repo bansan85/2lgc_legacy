@@ -361,6 +361,7 @@ G_MODULE_EXPORT void EF_gtk_charge_noeud_window_destroy(
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_charge_noeud.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Nodale");
     
+    g_object_unref(G_OBJECT(projet->list_gtk.ef_charge_noeud.builder));
     projet->list_gtk.ef_charge_noeud.builder = NULL;
     
     return;

@@ -68,6 +68,7 @@ G_MODULE_EXPORT void _1992_1_1_gtk_materiaux_window_destroy(
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk._1992_1_1_materiaux.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Matériau Béton");
     
+    g_object_unref(G_OBJECT(projet->list_gtk._1992_1_1_materiaux.builder));
     projet->list_gtk._1992_1_1_materiaux.builder = NULL;
     
     return;

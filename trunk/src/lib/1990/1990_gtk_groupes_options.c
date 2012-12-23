@@ -63,6 +63,7 @@ G_MODULE_EXPORT void _1990_gtk_groupes_options_window_destroy(
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk._1990_groupes.builder_options, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Option Groupes");
     
+    g_object_unref(G_OBJECT(projet->list_gtk._1990_groupes.builder_options));
     projet->list_gtk._1990_groupes.builder_options = NULL;
     
     return;

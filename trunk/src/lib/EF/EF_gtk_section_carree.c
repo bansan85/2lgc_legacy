@@ -68,6 +68,7 @@ G_MODULE_EXPORT void EF_gtk_section_carree_window_destroy(
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_sections_carree.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section Carrée");
     
+    g_object_unref(G_OBJECT(projet->list_gtk.ef_sections_carree.builder));
     projet->list_gtk.ef_sections_carree.builder = NULL;
     
     return;
