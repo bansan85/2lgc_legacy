@@ -513,38 +513,6 @@ G_MODULE_EXPORT gboolean _1992_1_1_materiaux_renomme(Beton_Materiau *materiau, g
 }
 
 
-G_MODULE_EXPORT gboolean _1992_1_1_materiaux_verifie_dependances(Projet *projet,
-  Beton_Materiau* materiau)
-/* Description : Vérifie si le matériau est utilisé.
- * Paramètres : Projet *projet : la variable projet,
- *            : EF_Section *section : la section à analyser,
- * Valeur renvoyée :
- *   Succès : TRUE si la section est utilisée et FALSE s'il ne l'est pas.
- *   Échec : FALSE :
- *             projet == NULL,
- *             section == NULL.
- */
-{
-    GList   *list_parcours;
-    
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(materiau, FALSE, gettext("Paramètre %s incorrect.\n"), "materiau");
-    
-    list_parcours = projet->beton.barres;
-    while (list_parcours != NULL)
-    {
-        Beton_Barre *barre = list_parcours->data;
-        
-        if (barre->materiau == materiau)
-            return TRUE;
-        
-        list_parcours = g_list_next(list_parcours);
-    }
-    
-    return FALSE;
-}
-
-
 G_MODULE_EXPORT char *_1992_1_1_materiaux_get_description(Beton_Materiau* materiau)
 /* Description : Renvoie la description d'un matériau béton sous forme d'un texte.
  *               Il convient de libérer le texte renvoyée par la fonction free.
