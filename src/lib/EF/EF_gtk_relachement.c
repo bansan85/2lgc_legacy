@@ -31,7 +31,9 @@
 #include "common_gtk.h"
 #include "common_math.h"
 #include "common_selection.h"
+#include "common_text.h"
 #include "EF_relachement.h"
+#include "1992_1_1_barres.h"
 
 G_MODULE_EXPORT void EF_gtk_relachements_fermer(GtkButton *button __attribute__((unused)),
   Projet *projet)
@@ -122,17 +124,26 @@ G_MODULE_EXPORT void EF_gtk_relachements_select_changed(
         char                *nom;
         EF_Relachement      *relachement;
         GtkCellRendererText *cell;
+        GList               *liste_relachements = NULL, *liste_noeuds_dep, *liste_barres_dep, *liste_charges_dep;
         
         gtk_tree_model_get(model, &Iter, 0, &nom, -1);
         
         BUG(relachement = EF_relachement_cherche_nom(projet, nom, TRUE), );
         
-        if (EF_relachement_verifie_dependances(projet, relachement))
+        liste_relachements = g_list_append(liste_relachements, relachement);
+        BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, NULL, liste_relachements, NULL, &liste_noeuds_dep, &liste_barres_dep, &liste_charges_dep, FALSE, FALSE), );
+        
+        if ((liste_noeuds_dep != NULL) || (liste_barres_dep != NULL) || (liste_charges_dep != NULL))
         {
+            char    *desc;
+            
             gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_boutton_supprimer_direct")), FALSE);
             gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_boutton_supprimer_menu")), TRUE);
             gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_boutton_supprimer_direct")), FALSE);
             gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_boutton_supprimer_menu")), TRUE);
+            desc = common_text_dependances(liste_noeuds_dep, liste_barres_dep, liste_charges_dep, projet);
+            gtk_menu_item_set_label(GTK_MENU_ITEM(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_supprimer_menu_barres")), desc);
+            free(desc);
         }
         else
         {

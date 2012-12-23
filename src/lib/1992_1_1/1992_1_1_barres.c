@@ -217,8 +217,8 @@ G_MODULE_EXPORT Beton_Barre* _1992_1_1_barres_cherche_numero(Projet *projet,
 
 
 gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GList* noeuds,
-  GList* sections, GList* materiaux, GList* barres, GList** noeuds_dep, GList** barres_dep,
-  GList **charges_dep, gboolean numero, gboolean origine)
+  GList* sections, GList* materiaux, GList *relachements, GList* barres, GList** noeuds_dep,
+  GList** barres_dep, GList **charges_dep, gboolean numero, gboolean origine)
 /* Description : Renvoie, sous forme d'une liste de noeuds et d'une liste de barres, l'ensemble
  *               des barres et noeuds intermédiaires dépendants des noeuds et des barres passés
  *               en paramètres. Le retour contient également la liste d'origine.
@@ -227,6 +227,7 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GLi
  *            : GList* noeuds : liste de pointeurs vers les noeuds à analyser,
  *            : GList* sections : liste de pointeurs vers les sections à analyser,
  *            : GList* materiaux : liste de pointeurs vers les matériaux à analyser,
+ *            : GList* relachements : liste de pointeurs vers les relâchements à analyser,
  *            : GList* barres : liste de pointeurs vers les barres à analyser,
  *            : GList** noeuds_dep : liste de noeuds/numeros vers les noeuds dépendants,
  *            : GList** barres_dep : liste de barres/numeros vers les barres dépendantes.
@@ -272,13 +273,13 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GLi
         }
     }
     
-    // On ajoute les barres utilisant les sections
+    // On ajoute les barres utilisant les sections, matériaux et relâchements.
     list_parcours = projet->beton.barres;
     while (list_parcours != NULL)
     {
         Beton_Barre *barre = list_parcours->data;
         
-        if ((g_list_find(sections, barre->section) != NULL) || (g_list_find(materiaux, barre->materiau) != NULL))
+        if ((g_list_find(sections, barre->section) != NULL) || (g_list_find(materiaux, barre->materiau) != NULL) || (g_list_find(relachements, barre->relachement)))
             barres_todo = g_list_append(barres_todo, barre);
         
         list_parcours = g_list_next(list_parcours);
@@ -663,7 +664,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_change_noeud(Beton_Barre *barre, EF_No
     BUGMSG(!((noeud_1 == FALSE) && (barre->noeud_debut == noeud)), FALSE, gettext("Impossible d'appliquer le même noeud aux deux extrémités d'une barre.\n"));
     
     liste_barre = g_list_append(liste_barre, barre);
-    BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, NULL, liste_barre, &liste_noeuds_dep, &liste_barres_dep, NULL, FALSE, TRUE), FALSE);
+    BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, NULL, NULL, liste_barre, &liste_noeuds_dep, &liste_barres_dep, NULL, FALSE, TRUE), FALSE);
     g_list_free(liste_barre);
     BUGMSG(g_list_find(liste_noeuds_dep, noeud) == NULL, FALSE, gettext("Impossible d'affecter le noeud %d à la barre %d car il est dépendant de la barre à modifier.\n"), noeud->numero, barre->numero);
     
@@ -1484,7 +1485,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_supprime_liste(Projet *projet, GList *
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
-    BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, liste_noeuds, NULL, NULL, liste_barres, &noeuds_suppr, &barres_suppr, &charges_suppr, FALSE, TRUE), FALSE);
+    BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, liste_noeuds, NULL, NULL, NULL, liste_barres, &noeuds_suppr, &barres_suppr, &charges_suppr, FALSE, TRUE), FALSE);
     
     // On enlève dans les charges les noeuds et barres qui seront supprimés
     list_parcours = charges_suppr;
@@ -1522,7 +1523,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_supprime_liste(Projet *projet, GList *
     g_list_free(barres_suppr);
     g_list_free(charges_suppr);
     
-    BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, liste_noeuds, NULL, NULL, liste_barres, &noeuds_suppr, &barres_suppr, NULL, TRUE, TRUE), FALSE);
+    BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, liste_noeuds, NULL, NULL, NULL, liste_barres, &noeuds_suppr, &barres_suppr, NULL, TRUE, TRUE), FALSE);
     // On supprime les barres
     list_parcours = barres_suppr;
     while (list_parcours != NULL)

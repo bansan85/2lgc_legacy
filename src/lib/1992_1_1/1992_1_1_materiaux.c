@@ -757,7 +757,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_materiaux_supprime(Beton_Materiau* materiau, 
    
     // On vérifie les dépendances.
     liste_materiaux = g_list_append(liste_materiaux, materiau);
-    BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, liste_materiaux, NULL, &liste_noeuds_dep, &liste_barres_dep, NULL, FALSE, FALSE), FALSE);
+    BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, liste_materiaux, NULL, NULL, &liste_noeuds_dep, &liste_barres_dep, NULL, FALSE, FALSE), FALSE);
     
     if ((liste_noeuds_dep != NULL) || (liste_barres_dep != NULL))
     {

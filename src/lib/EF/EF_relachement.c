@@ -159,38 +159,6 @@ G_MODULE_EXPORT EF_Relachement* EF_relachement_cherche_nom(Projet *projet, const
 }
 
 
-G_MODULE_EXPORT gboolean EF_relachement_verifie_dependances(Projet *projet,
-  EF_Relachement* relachement)
-/* Description : Vérifie si le relachement est utilisé.
- * Paramètres : Projet *projet : la variable projet,
- *            : EF_Relachement* relachement : le relâchement à analyser,
- * Valeur renvoyée :
- *   Succès : TRUE si le relâchement est utilisé et FALSE s'il ne l'est pas.
- *   Échec : FALSE :
- *             projet == NULL,
- *             relachement == NULL.
- */
-{
-    GList   *list_parcours;
-    
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(relachement, FALSE, gettext("Paramètre %s incorrect.\n"), "relachement");
-    
-    list_parcours = projet->beton.barres;
-    while (list_parcours != NULL)
-    {
-        Beton_Barre *barre = list_parcours->data;
-        
-        if (barre->relachement == relachement)
-            return TRUE;
-        
-        list_parcours = g_list_next(list_parcours);
-    }
-    
-    return FALSE;
-}
-
-
 G_MODULE_EXPORT gboolean EF_relachement_renomme(EF_Relachement *relachement, gchar *nom,
   Projet *projet)
 /* Description : Renomme un relachement.
