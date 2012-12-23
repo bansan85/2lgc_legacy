@@ -48,6 +48,7 @@
                                 <property name="visible">True</property>
                                 <property name="model">EF_barres_treestore</property>
                                 <signal name="button-press-event" handler="common_gtk_treeview_button_press_unselect"/>
+                                <signal name="key-press-event" handler="EF_gtk_barres_treeview_key_press"/>
                                 <child internal-child="selection">
                                     <object class="GtkTreeSelection" id="EF_barres_treeview_select">
                                         <signal name="changed" handler="EF_gtk_barres_select_changed"/>
