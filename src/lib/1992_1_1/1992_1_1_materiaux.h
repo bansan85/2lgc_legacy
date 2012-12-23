@@ -45,8 +45,6 @@ gboolean _1992_1_1_materiaux_ajout(Projet *projet, const char *nom, double fck) 
 Beton_Materiau* _1992_1_1_materiaux_cherche_nom(Projet *projet, const char *nom, gboolean critique) __attribute__((__warn_unused_result__));
 gboolean _1992_1_1_materiaux_renomme(Beton_Materiau *materiau, gchar *nom, Projet *projet) __attribute__((__warn_unused_result__));
 
-gboolean _1992_1_1_materiaux_verifie_dependances(Projet *projet, Beton_Materiau* materiau) __attribute__((__warn_unused_result__));
-
 char *_1992_1_1_materiaux_get_description(Beton_Materiau* materiau) __attribute__((__warn_unused_result__));
 
 gboolean _1992_1_1_materiaux_update_ligne_treeview(Projet *projet, Beton_Materiau *materiau) __attribute__((__warn_unused_result__));
