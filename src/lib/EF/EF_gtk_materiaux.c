@@ -63,6 +63,7 @@ G_MODULE_EXPORT void EF_gtk_materiaux_window_destroy(GtkWidget *object __attribu
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_materiaux.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Matériau");
     
+    g_object_unref(G_OBJECT(projet->list_gtk.ef_materiaux.builder));
     projet->list_gtk.ef_materiaux.builder = NULL;
     
     return;

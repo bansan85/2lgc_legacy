@@ -1211,6 +1211,7 @@ G_MODULE_EXPORT void _1990_gtk_groupes_window_destroy(GtkWidget *object __attrib
     BUGMSG(projet->list_gtk._1990_groupes.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes");
     
     g_signal_handler_block(projet->list_gtk._1990_groupes.tree_view_etat, g_signal_handler_find(G_OBJECT(projet->list_gtk._1990_groupes.tree_view_etat),G_SIGNAL_MATCH_FUNC,0,0,NULL,_1990_gtk_groupes_tree_view_etat_cursor_changed,NULL));
+    g_object_unref(G_OBJECT(projet->list_gtk._1990_groupes.builder));
     projet->list_gtk._1990_groupes.builder = NULL;
     return;
 }

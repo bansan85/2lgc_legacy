@@ -379,6 +379,7 @@ G_MODULE_EXPORT void EF_gtk_charge_barre_ponct_window_destroy(
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_charge_barre_ponctuelle.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Barre Ponctuelle");
     
+    g_object_unref(G_OBJECT(projet->list_gtk.ef_charge_barre_ponctuelle.builder));
     projet->list_gtk.ef_charge_barre_ponctuelle.builder = NULL;
     
     return;

@@ -68,6 +68,7 @@ G_MODULE_EXPORT void EF_gtk_section_rectangulaire_window_destroy(
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_sections_rectangulaire.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section Rectangulaire");
     
+    g_object_unref(G_OBJECT(projet->list_gtk.ef_sections_rectangulaire.builder));
     projet->list_gtk.ef_sections_rectangulaire.builder = NULL;
     
     return;

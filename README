@@ -18,20 +18,20 @@ Ensuite compiler et installer l'application normalement :
         Test l'insertion dans le cas où l'appui "Sans nom (2)" est existant
     Changer le nom de "Sans nom" en "ZZZZZZ"
     Cliquer 1 fois sur ajouter.
-        Test l'ajout avant les Sans nom existant.
+        Test l'ajout d'un appui au milieu de la liste.
     Changer toutes les propriétés ux, uy, uz, rx, ry, rz de Libre vers Bloqué.
         Test le changement pour toutes les propriétés
     En repasser un vers Libre
         Test ponctuellement le passage Bloqué->Libre
-    Sélectionner l'appui "Sans nom (2)" et le supprimer en cliquant sur le bouton Supprimer
+    Sélectionner l'appui "Sans nom" et le supprimer en cliquant sur le bouton Supprimer
         Test la supression simple
     Supprimer l'appui "Sans nom (3)" en cliquant dessus et en appuyant sur la touche SUPPR.
     Sélectionner l'appui "Appui simple z" et le supprimer en cliquant sur le bouton Supprimer en supprimant ces dépendances
         Test la suppresson avec dépendances
     Sélectionner l'appui "Appui simple x" et le supprimer en cliquant sur le bouton Supprimer sans supprimer ces dépendances
         Test la suppression sans dépendances
-    Renommer Encastrement par ZEncastrement
     Renommer Rotule par ZRotule
+    Renommer Encastrement par ZEncastrement
     Cliquer 1 fois sur ajouter.
         Test l'insertion en tête du treeview
     Fermer la fenêtre en cliquant sur le bouton Fermer

@@ -133,6 +133,7 @@ G_MODULE_EXPORT void EF_gtk_barres_add_window_destroy(GtkWidget *object __attrib
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_barres.builder_add, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Appui");
     
+    g_object_unref(G_OBJECT(projet->list_gtk.ef_barres.builder_add));
     projet->list_gtk.ef_barres.builder_add = NULL;
     return;
 }

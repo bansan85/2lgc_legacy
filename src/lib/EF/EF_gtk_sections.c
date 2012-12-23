@@ -67,6 +67,7 @@ G_MODULE_EXPORT void EF_gtk_sections_window_destroy(GtkWidget *object __attribut
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_sections.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Section");
     
+    g_object_unref(G_OBJECT(projet->list_gtk.ef_sections.builder));
     projet->list_gtk.ef_sections.builder = NULL;
     
     return;
