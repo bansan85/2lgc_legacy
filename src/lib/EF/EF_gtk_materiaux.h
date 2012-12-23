@@ -25,6 +25,7 @@
 
 #include "common_projet.h"
 
+void EF_gtk_materiaux_select_changed(GtkTreeSelection *treeselection, Projet *projet);
 void EF_gtk_materiaux(Projet *projet);
 
 #endif

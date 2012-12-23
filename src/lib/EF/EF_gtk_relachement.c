@@ -360,6 +360,55 @@ G_MODULE_EXPORT void EF_gtk_relachements_supprimer_direct(
 }
 
 
+G_MODULE_EXPORT gboolean EF_gtk_relachements_treeview_key_press(
+  GtkWidget *widget __attribute__((unused)), GdkEvent *event, Projet *projet)
+/* Description : Supprime un relâchement sans dépendance si la touche SUPPR est appuyée.
+ * Paramètres : GtkWidget *widget : composant à l'origine de l'évènement,
+ *            : GdkEvent *event : Caractéristique de l'évènement,
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : TRUE si la touche SUPPR est pressée, FALSE sinon.
+ *   Echec : projet == NULL,
+ *           interface graphique non initialisée.
+ *  
+ */
+{
+    BUGMSG(projet, TRUE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet->list_gtk.ef_relachements.builder, TRUE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Relachement");
+    
+    if (event->key.keyval == GDK_KEY_Delete)
+    {
+        GtkTreeIter     Iter;
+        GtkTreeModel    *model;
+        
+        if (gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_treeview_select")), &model, &Iter))
+        {
+            char            *nom;
+            EF_Relachement  *relachement;
+            
+            GList   *liste_relachements = NULL, *liste_noeuds_dep, *liste_barres_dep;
+            
+            gtk_tree_model_get(model, &Iter, 0, &nom, -1);
+            
+            BUG(relachement = EF_relachement_cherche_nom(projet, nom, TRUE), FALSE);
+            
+            liste_relachements = g_list_append(liste_relachements, relachement);
+            BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, NULL, liste_relachements, NULL, &liste_noeuds_dep, &liste_barres_dep, NULL, FALSE, FALSE), FALSE);
+            g_list_free(liste_relachements);
+            
+            if ((liste_noeuds_dep == NULL) && (liste_barres_dep == NULL))
+                EF_gtk_relachements_supprimer_direct(NULL, projet);
+            
+            free(nom);
+            g_list_free(liste_noeuds_dep);
+            g_list_free(liste_barres_dep);
+        }
+        return TRUE;
+    }
+    else
+        return FALSE;
+}
+
+
 G_MODULE_EXPORT void EF_gtk_relachements_supprimer_menu_barres(
   GtkButton *button __attribute__((unused)), Projet *projet)
 /* Description : Supprime le relachement sélectionné dans le treeview, y compris les barres

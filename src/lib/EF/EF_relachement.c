@@ -184,46 +184,23 @@ G_MODULE_EXPORT gboolean EF_relachement_renomme(EF_Relachement *relachement, gch
     if (projet->list_gtk.ef_relachements.builder != NULL)
         gtk_tree_store_set(projet->list_gtk.ef_relachements.relachements, &relachement->Iter_fenetre, 0, nom, -1);
     gtk_list_store_set(projet->list_gtk.ef_relachements.liste_relachements, &relachement->Iter_liste, 0, nom, -1);
+    if (projet->list_gtk.ef_barres.builder != NULL)
+    {
+        GList   *list_parcours = projet->beton.barres;
+        
+        while (list_parcours != NULL)
+        {
+            Beton_Barre *barre = list_parcours->data;
+            
+            if (barre->relachement == relachement)
+                gtk_tree_store_set(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treestore")), &barre->Iter, 6, (barre->relachement == NULL ? gettext("Aucun") : barre->relachement->nom), -1);
+            list_parcours = g_list_next(list_parcours);
+        }
+    }
 #endif
     
     return TRUE;
 }
-
-
-G_MODULE_EXPORT gboolean EF_relachement_cherche_dependances(Projet *projet,
-  EF_Relachement *relachement, GList** barres_dep)
-/* Description : Liste l'ensemble des barres utilisant le relâchement.
- * Paramètres : Projet *projet : la variable projet,
- *            : EF_Relachement *relachement : le relâchement à analyser,
- *            : GList** barres_dep : la liste des barres dépendantes.
- * Valeur renvoyée :
- *   Succès : TRUE
- *   Échec : FALSE :
- *             projet == NULL,
- *             relachement == NULL.
- */
-{
-    GList   *list_parcours;
-    
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(relachement, FALSE, gettext("Paramètre %s incorrect.\n"), "relachement");
-    
-    *barres_dep = NULL;
-    
-    list_parcours = projet->ef_donnees.relachements;
-    while (list_parcours != NULL)
-    {
-        Beton_Barre *barre = list_parcours->data;
-        
-        if (barre->relachement == relachement)
-            *barres_dep = g_list_append(*barres_dep, barre);
-        
-        list_parcours = g_list_next(list_parcours);
-    }
-    
-    return TRUE;
-}
-
 
 G_MODULE_EXPORT gboolean EF_relachement_supprime(EF_Relachement *relachement,
   gboolean annule_si_utilise, Projet *projet)
@@ -241,31 +218,30 @@ G_MODULE_EXPORT gboolean EF_relachement_supprime(EF_Relachement *relachement,
  *             section == NULL.
  */
 {
-    GList   *list_barres;
+    GList   *liste_relachements = NULL, *liste_noeuds_dep, *liste_barres_dep;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(relachement, FALSE, gettext("Paramètre %s incorrect.\n"), "relachement");
     
     // On vérifie les dépendances.
-    BUG(EF_relachement_cherche_dependances(projet, relachement, &list_barres), FALSE);
+    liste_relachements = g_list_append(liste_relachements, relachement);
+    BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, NULL, liste_relachements, NULL, &liste_noeuds_dep, &liste_barres_dep, NULL, FALSE, FALSE), FALSE);
     
-    if ((annule_si_utilise) && (list_barres != NULL))
+    if ((annule_si_utilise) && ((liste_noeuds_dep != NULL) && (liste_barres_dep != NULL)))
     {
         char *liste;
         
-        liste = common_selection_converti_barres_en_texte(list_barres);
-        if (g_list_next(list_barres) == NULL)
-            printf("Impossible de supprimer la section car elle est utilisée par la barre %s.\n", liste);
+        liste = common_selection_converti_barres_en_texte(liste_relachements);
+        if (g_list_next(liste_relachements) == NULL)
+            BUGMSG(NULL, FALSE, gettext("Impossible de supprimer la section car elle est utilisée par la barre %s.\n"), liste);
         else
-            printf("Impossible de supprimer la section car elle est utilisée par les barres %s.\n", liste);
-        g_list_free(list_barres);
-        free(liste);
-        
-        return TRUE;
+            BUGMSG(NULL, FALSE, gettext("Impossible de supprimer la section car elle est utilisée par les barres %s.\n"), liste);
     }
     
-    BUG(_1992_1_1_barres_supprime_liste(projet, NULL, list_barres), TRUE);
-    g_list_free(list_barres);
+    g_list_free(liste_relachements);
+    BUG(_1992_1_1_barres_supprime_liste(projet, liste_noeuds_dep, liste_barres_dep), TRUE);
+    g_list_free(liste_noeuds_dep);
+    g_list_free(liste_barres_dep);
     
     free(relachement->nom);
     free(relachement->rx_d_data);

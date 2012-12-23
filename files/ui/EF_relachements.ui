@@ -68,6 +68,7 @@
                                 <property name="visible">True</property>
                                 <property name="model">EF_relachements_treestore</property>
                                 <signal name="button-press-event" handler="common_gtk_treeview_button_press_unselect"/>
+                                <signal name="key-press-event" handler="EF_gtk_relachements_treeview_key_press"/>
                                 <child internal-child="selection">
                                     <object class="GtkTreeSelection" id="EF_relachements_treeview_select">
                                         <signal name="changed" handler="EF_gtk_relachements_select_changed"/>
