@@ -201,10 +201,7 @@ G_MODULE_EXPORT EF_Noeud* EF_noeuds_ajout_noeud_barre(Projet *projet, Beton_Barr
     while ((liste != NULL) && (((EF_Noeud_Barre*)liste->data)->position_relative_barre < position_relative_barre))
         liste = g_list_next(liste);
     
-    if (liste == NULL)
-        barre->noeuds_intermediaires = g_list_append(barre->noeuds_intermediaires, noeud_nouveau);
-    else
-        barre->noeuds_intermediaires = g_list_insert_before(barre->noeuds_intermediaires, liste, noeud_nouveau);
+    barre->noeuds_intermediaires = g_list_insert_before(barre->noeuds_intermediaires, liste, noeud_nouveau);
     
     BUGMSG(barre->info_EF = realloc(barre->info_EF, sizeof(Barre_Info_EF)*(barre->discretisation_element+1)), NULL, gettext("Erreur d'allocation mémoire.\n"));
     memset(barre->info_EF, 0, sizeof(Barre_Info_EF)*(barre->discretisation_element+1));

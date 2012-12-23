@@ -46,6 +46,35 @@ Ensuite compiler et installer l'application normalement :
     Fermer la fenêtre en cliquant sur la touche Echap
         Test la touche Echap
   
+  Pour la fenêtre Noeuds (fichiers EF_noeuds et EF_gtk_noeud)
+    Ouvrez toutes les fenêtres, à savoir :
+        Structure|Noeuds|Appuis
+        Structure|Noeuds|Gestion des noeuds
+        Structure|Barres|Gestion des barres
+    Cliquer sur le bouton ajouter
+        Test l'ajout d'un noeud libre
+    Lui donner les coordonnées 1 2 3 et l'appui Encastrement et remettre l'appui en Aucun
+    Aller sur l'onglet Noeuds intermédiaires et cliquer sur le bouton ajouter
+        Test l'ajout d'un noeud intermédiaire
+    Lui donner l'appui Encastrement et remettre l'appui en Aucun, la barre n°1 et la position 0,6
+    Sélectionner le noeud 5 et le supprimer en appuyant sur la touche SUPPR.
+    Sélectionner le noeud 6 et le supprimer en cliquant sur le bouton supprimer.
+    Aller sur l'onglet Noeuds libres
+    Sélectionner le noeud 11 et le supprimer en appuyant sur la touche SUPPR.
+    Sélectionner le noeud 4 et le supprimer en cliquant sur le bouton supprimer.
+    Fermer la fenêtre en cliquant sur le bouton Fermer
+        Test le bouton fermer
+    La rouvrir via le menu
+    La même chose (réouvrir via le menu) mais sans fermer la fenêtre
+        Pour vérifier que la fenêtre prend bien le focus
+    Supprimer tous les noeuds.
+        Pour tester qu'aucun bouton Supprimer n'est activé
+    Cliquer 5 fois sur ajouter.
+        Pour ne pas fermer la fenêtre avec une liste d'appuis vide.
+    Fermer la fenêtre en cliquant sur la touche Echap
+        Test la touche Echap
+  
+  
   En finalement :
     Fichier|Quitter
 
