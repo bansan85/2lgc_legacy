@@ -22,7 +22,7 @@
         <property name="visible">True</property>
         <child>
             <object class="GtkMenuItem" id="EF_relachements_supprimer_menu_barres">
-                <property name="label" translatable="yes">et les barres utilisant le relachement.</property>
+                <property name="label">et ces dépendances.</property>
                 <property name="visible">True</property>
                 <signal name="activate" handler="EF_gtk_relachements_supprimer_menu_barres"/>
             </object>

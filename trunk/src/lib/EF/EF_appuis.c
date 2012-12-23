@@ -647,7 +647,7 @@ G_MODULE_EXPORT gboolean EF_appuis_supprime(EF_Appui *appui, gboolean annule_si_
     
     // On vérifie les dépendances.
     list_appuis = g_list_append(list_appuis, appui);
-    BUG(_1992_1_1_barres_cherche_dependances(projet, list_appuis, NULL, NULL, NULL, NULL, &noeuds_suppr, &barres_suppr, &charges_suppr, FALSE, FALSE), FALSE);
+    BUG(_1992_1_1_barres_cherche_dependances(projet, list_appuis, NULL, NULL, NULL, NULL, NULL, &noeuds_suppr, &barres_suppr, &charges_suppr, FALSE, FALSE), FALSE);
     
     if ((annule_si_utilise) && ((noeuds_suppr != NULL) || (barres_suppr != NULL) || (charges_suppr != NULL)))
     {

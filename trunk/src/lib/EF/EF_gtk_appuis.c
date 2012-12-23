@@ -197,7 +197,7 @@ G_MODULE_EXPORT gboolean EF_gtk_appuis_treeview_key_press(
             BUG(appui = EF_appuis_cherche_nom(projet, nom, TRUE), FALSE);
             
             liste_appuis = g_list_append(liste_appuis, appui);
-            BUG(_1992_1_1_barres_cherche_dependances(projet, liste_appuis, NULL, NULL, NULL, NULL, &liste_noeuds_dep, &liste_barres_dep, NULL, FALSE, FALSE), FALSE);
+            BUG(_1992_1_1_barres_cherche_dependances(projet, liste_appuis, NULL, NULL, NULL, NULL, NULL, &liste_noeuds_dep, &liste_barres_dep, NULL, FALSE, FALSE), FALSE);
             g_list_free(liste_appuis);
             
             if ((liste_noeuds_dep == NULL) && (liste_barres_dep == NULL))
@@ -396,7 +396,7 @@ G_MODULE_EXPORT void EF_gtk_appuis_select_changed(
         BUG(appui = EF_appuis_cherche_nom(projet, nom, TRUE), );
         
         liste_appuis = g_list_append(liste_appuis, appui);
-        BUG(_1992_1_1_barres_cherche_dependances(projet, liste_appuis, NULL, NULL, NULL, NULL, &liste_noeuds_dep, &liste_barres_dep, &liste_charges_dep, FALSE, FALSE), );
+        BUG(_1992_1_1_barres_cherche_dependances(projet, liste_appuis, NULL, NULL, NULL, NULL, NULL, &liste_noeuds_dep, &liste_barres_dep, &liste_charges_dep, FALSE, FALSE), );
         g_list_free(liste_appuis);
         
         if ((liste_noeuds_dep != NULL) || (liste_barres_dep != NULL) || (liste_charges_dep != NULL))

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2012-12-23 06:31+0100\n"
-"PO-Revision-Date: 2012-12-23 06:32+0100\n"
+"POT-Creation-Date: 2012-12-23 07:08+0100\n"
+"PO-Revision-Date: 2012-12-23 07:09+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -167,9 +167,6 @@ msgstr "Béton"
 
 msgid "Matériaux"
 msgstr "Matériaux"
-
-msgid "et les barres utilisant le relachement."
-msgstr "et les barres utilisant le relachement."
 
 msgid "Libre"
 msgstr "Libre"
@@ -1128,3 +1125,4 @@ msgstr "Charge %u de l'action %u introuvable.\n"
 
 msgid "Impossible d'initialiser gtk.\n"
 msgstr "Impossible d'initialiser gtk.\n"
+
