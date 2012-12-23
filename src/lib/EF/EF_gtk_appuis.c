@@ -389,8 +389,7 @@ G_MODULE_EXPORT void EF_gtk_appuis_select_changed(
     {
         char        *nom;
         EF_Appui    *appui;
-        
-        GList   *liste_appuis = NULL, *liste_noeuds_dep, *liste_barres_dep, *liste_charges_dep;
+        GList       *liste_appuis = NULL, *liste_noeuds_dep, *liste_barres_dep, *liste_charges_dep;
         
         gtk_tree_model_get(model, &Iter, 0, &nom, -1);
         

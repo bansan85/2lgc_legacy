@@ -51,7 +51,7 @@
         <property name="visible">True</property>
         <child>
             <object class="GtkMenuItem" id="EF_sections_supprimer_menu_barres">
-                <property name="label" translatable="yes">et les barres utilisant la section.</property>
+                <property name="label">et ces dépendances.</property>
                 <property name="visible">True</property>
                 <signal name="activate" handler="EF_gtk_sections_supprimer_menu_barres"/>
             </object>

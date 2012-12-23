@@ -623,37 +623,6 @@ G_MODULE_EXPORT char* EF_sections_get_description(EF_Section *sect)
 }
 
 
-G_MODULE_EXPORT gboolean EF_sections_verifie_dependances(Projet *projet, EF_Section* section)
-/* Description : Vérifie si la section est utilisée.
- * Paramètres : Projet *projet : la variable projet,
- *            : EF_Section *section : la section à analyser,
- * Valeur renvoyée :
- *   Succès : TRUE si la section est utilisée et FALSE s'il ne l'est pas.
- *   Échec : FALSE :
- *             projet == NULL,
- *             section == NULL.
- */
-{
-    GList   *list_parcours;
-    
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(section, FALSE, gettext("Paramètre %s incorrect.\n"), "section");
-    
-    list_parcours = projet->beton.barres;
-    while (list_parcours != NULL)
-    {
-        Beton_Barre *barre = list_parcours->data;
-        
-        if (barre->section == section)
-            return TRUE;
-        
-        list_parcours = g_list_next(list_parcours);
-    }
-    
-    return FALSE;
-}
-
-
 G_MODULE_EXPORT gboolean EF_sections_renomme(EF_Section *section, gchar *nom, Projet *projet)
 /* Description : Renomme une section.
  * Paramètres : EF_Section *section : section à renommer,
