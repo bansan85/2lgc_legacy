@@ -232,18 +232,21 @@ G_MODULE_EXPORT gboolean _1992_1_1_gtk_materiaux(Projet *projet, Beton_Materiau 
     Gtk_1992_1_1_Materiaux  *ef_gtk;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    
+    ef_gtk = &projet->list_gtk._1992_1_1_materiaux;
     if (projet->list_gtk._1992_1_1_materiaux.builder != NULL)
     {
         gtk_window_present(GTK_WINDOW(projet->list_gtk._1992_1_1_materiaux.window));
-        return TRUE;
+        if (projet->list_gtk._1992_1_1_materiaux.materiau == materiau)
+            return TRUE;
     }
-    
-    ef_gtk = &projet->list_gtk._1992_1_1_materiaux;
-    ef_gtk->builder = gtk_builder_new();
-    BUGMSG(gtk_builder_add_from_file(ef_gtk->builder, DATADIR"/ui/1992_1_1_materiaux_beton.ui", NULL) != 0, FALSE, gettext("Builder Failed\n"));
-    gtk_builder_connect_signals(ef_gtk->builder, projet);
-    
-    ef_gtk->window = GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_beton_window"));
+    else
+    {
+        ef_gtk->builder = gtk_builder_new();
+        BUGMSG(gtk_builder_add_from_file(ef_gtk->builder, DATADIR"/ui/1992_1_1_materiaux_beton.ui", NULL) != 0, FALSE, gettext("Builder Failed\n"));
+        gtk_builder_connect_signals(ef_gtk->builder, projet);
+        ef_gtk->window = GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_beton_window"));
+    }
     
     if (materiau == NULL)
     {
@@ -309,7 +312,7 @@ G_MODULE_EXPORT void EF_gtk_materiaux_edit_clicked(GtkWidget *widget  __attribut
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_materiaux.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Matériaux");
     
-    // On récupère la liste des charges à éditer.
+    // On récupère la liste des matériaux à éditer.
     list = gtk_tree_selection_get_selected_rows(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_materiaux.builder, "EF_materiaux_treeview_select")), &model);
     list_parcours = g_list_first(list);
     for(;list_parcours != NULL; list_parcours = g_list_next(list_parcours))
