@@ -37,6 +37,10 @@
 #include "EF_charge_barre_repartie_uniforme.h"
 #include "EF_charge_noeud.h"
 #include "EF_gtk_appuis.h"
+#include "EF_gtk_noeud.h"
+#include "EF_gtk_sections.h"
+#include "EF_gtk_materiaux.h"
+#include "EF_gtk_relachement.h"
 
 G_MODULE_EXPORT gboolean _1992_1_1_barres_init(Projet *projet)
 /* Description : Initialise la liste des éléments en béton.
@@ -1537,7 +1541,6 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_supprime_liste(Projet *projet, GList *
         }
         list_parcours = g_list_next(list_parcours);
     }
-    g_list_free(barres_suppr);
     
     // On supprime les noeuds
     list_parcours = noeuds_suppr;
@@ -1555,10 +1558,19 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_supprime_liste(Projet *projet, GList *
 #ifdef ENABLE_GTK
     if ((projet->list_gtk.ef_appuis.builder != NULL) && (noeuds_suppr != NULL))
         EF_gtk_appuis_select_changed(NULL, projet);
+    if ((projet->list_gtk.ef_noeud.builder != NULL) && (noeuds_suppr != NULL))
+        EF_noeuds_set_supprimer_visible(TRUE, projet);
+    if ((projet->list_gtk.ef_sections.builder != NULL) && (barres_suppr != NULL))
+        EF_gtk_sections_select_changed(NULL, projet);
+    if ((projet->list_gtk.ef_materiaux.builder != NULL) && (barres_suppr != NULL))
+        EF_gtk_materiaux_select_changed(NULL, projet);
+    if ((projet->list_gtk.ef_relachements.builder != NULL) && (barres_suppr != NULL))
+        EF_gtk_relachements_select_changed(NULL, projet);
 #endif
     BUG(EF_calculs_free(projet), FALSE);
     
     g_list_free(noeuds_suppr);
+    g_list_free(barres_suppr);
     
     return TRUE;
 }

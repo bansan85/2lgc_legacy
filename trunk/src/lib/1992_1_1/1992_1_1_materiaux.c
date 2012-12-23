@@ -507,6 +507,19 @@ G_MODULE_EXPORT gboolean _1992_1_1_materiaux_renomme(Beton_Materiau *materiau, g
     if (projet->list_gtk.ef_materiaux.builder != NULL)
         gtk_tree_store_set(projet->list_gtk.ef_materiaux.materiaux, &materiau->Iter_fenetre, 0, nom, -1);
     gtk_list_store_set(projet->list_gtk.ef_materiaux.liste_materiaux, &materiau->Iter_liste, 0, nom, -1);
+    if (projet->list_gtk.ef_barres.builder != NULL)
+    {
+        GList   *list_parcours = projet->beton.barres;
+        
+        while (list_parcours != NULL)
+        {
+            Beton_Barre *barre = list_parcours->data;
+            
+            if (barre->materiau == materiau)
+                gtk_tree_store_set(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treestore")), &barre->Iter, 3, barre->materiau->nom, -1);
+            list_parcours = g_list_next(list_parcours);
+        }
+    }
 #endif
     
     return TRUE;

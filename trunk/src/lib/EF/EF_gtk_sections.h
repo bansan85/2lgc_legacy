@@ -25,6 +25,7 @@
 
 #include "common_projet.h"
 
+void EF_gtk_sections_select_changed(GtkTreeSelection *treeselection, Projet *projet);
 GdkPixbuf *EF_gtk_sections_dessin(EF_Section *section, int width, int height);
 void EF_gtk_sections(Projet *projet);
 
