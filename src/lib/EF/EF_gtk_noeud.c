@@ -33,6 +33,7 @@
 #include "common_text.h"
 #include "EF_noeuds.h"
 #include "EF_appuis.h"
+#include "EF_calculs.h"
 #include "1992_1_1_barres.h"
 
 G_MODULE_EXPORT void EF_gtk_noeud_fermer(GtkButton *button __attribute__((unused)),
@@ -614,8 +615,6 @@ G_MODULE_EXPORT void EF_gtk_noeud_edit_noeud_barre_barre(
         GList       *liste_noeuds_dep, *liste_barres_dep;
         GList       *liste_noeuds = NULL;
         
-        free(fake);
-        
         // On modifie l'action
         BUG(noeud = EF_noeuds_cherche_numero(projet, numero, TRUE), );
         BUG(barre = _1992_1_1_barres_cherche_numero(projet, conversion, TRUE), );
@@ -623,8 +622,23 @@ G_MODULE_EXPORT void EF_gtk_noeud_edit_noeud_barre_barre(
         if (noeud->type == NOEUD_BARRE)
         {
             EF_Noeud_Barre  *info = (EF_Noeud_Barre *)noeud->data;
+            GList           *liste;
             
+            BUG(EF_calculs_free(projet), );
+            
+            info->barre->discretisation_element--;
+            info->barre->noeuds_intermediaires = g_list_remove(info->barre->noeuds_intermediaires, noeud);
+            BUGMSG(info->barre->info_EF = realloc(info->barre->info_EF, sizeof(Barre_Info_EF)*(info->barre->discretisation_element+1)), , gettext("Erreur d'allocation mémoire.\n"));
             info->barre = barre;
+            info->barre->discretisation_element++;
+            BUGMSG(info->barre->info_EF = realloc(info->barre->info_EF, sizeof(Barre_Info_EF)*(info->barre->discretisation_element+1)), , gettext("Erreur d'allocation mémoire.\n"));
+            memset(barre->info_EF, 0, sizeof(Barre_Info_EF)*(info->barre->discretisation_element+1));
+            
+            liste = info->barre->noeuds_intermediaires;
+            while ((liste != NULL) && (((EF_Noeud_Barre*)liste->data)->position_relative_barre < info->position_relative_barre))
+                liste = g_list_next(liste);
+            
+            info->barre->noeuds_intermediaires = g_list_insert_before(info->barre->noeuds_intermediaires, liste, noeud);
         }
         else
             BUGMSG(NULL, , gettext("Le noeud doit être de type intermédiaire.\n"));
@@ -642,8 +656,8 @@ G_MODULE_EXPORT void EF_gtk_noeud_edit_noeud_barre_barre(
         // On modifie le tree-view-actions
         gtk_tree_store_set(gtk_noeud->tree_store_barre, &iter, 5, conversion, -1);
     }
-    else
-        free(fake);
+    
+    free(fake);
     
     return;
 }
