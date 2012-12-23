@@ -356,6 +356,57 @@ G_MODULE_EXPORT void EF_gtk_barres_supprimer(GtkButton *button __attribute__((un
 }
 
 
+G_MODULE_EXPORT gboolean EF_gtk_barres_treeview_key_press(
+  GtkWidget *widget __attribute__((unused)), GdkEvent *event, Projet *projet)
+/* Description : Supprime une barre sans dépendance si la touche SUPPR est appuyée.
+ * Paramètres : GtkWidget *widget : composant à l'origine de l'évènement,
+ *            : GdkEvent *event : Caractéristique de l'évènement,
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : TRUE si la touche SUPPR est pressée, FALSE sinon.
+ *   Echec : projet == NULL,
+ *           interface graphique non initialisée.
+ *  
+ */
+{
+    BUGMSG(projet, TRUE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet->list_gtk.ef_barres.builder, TRUE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Barres");
+    
+    if (event->key.keyval == GDK_KEY_Delete)
+    {
+        GtkTreeIter     Iter;
+        GtkTreeModel    *model;
+        
+        if (gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treeview_select")), &model, &Iter))
+        {
+            unsigned int    num;
+            Beton_Barre     *barre;
+            
+            GList           *liste_barres = NULL, *liste_noeuds_dep, *liste_barres_dep, *liste_charges_dep;
+            
+            gtk_tree_model_get(model, &Iter, 0, &num, -1);
+            
+            BUG(barre = _1992_1_1_barres_cherche_numero(projet, num, TRUE), FALSE);
+            
+            liste_barres = g_list_append(liste_barres, barre);
+            BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, NULL, NULL, liste_barres, &liste_noeuds_dep, &liste_barres_dep, &liste_charges_dep, FALSE, FALSE), FALSE);
+            
+            if ((liste_noeuds_dep == NULL) && (liste_barres_dep == NULL) && (liste_charges_dep == NULL))
+            {
+                BUG(_1992_1_1_barres_supprime_liste(projet, NULL, liste_barres), FALSE);
+                BUG(m3d_rafraichit(projet), FALSE);
+            }
+            
+            g_list_free(liste_barres);
+            g_list_free(liste_noeuds_dep);
+            g_list_free(liste_barres_dep);
+        }
+        return TRUE;
+    }
+    else
+        return FALSE;
+}
+
+
 G_MODULE_EXPORT void EF_gtk_barres_select_changed(
   GtkTreeSelection *treeselection __attribute__((unused)), Projet *projet)
 /* Description : En fonction de la sélection, active ou désactive le bouton supprimer.
