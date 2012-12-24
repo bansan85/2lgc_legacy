@@ -120,7 +120,7 @@ G_MODULE_EXPORT gboolean EF_gtk_sections_treeview_key_press(GtkTreeView *treevie
         GtkTreeModel    *model;
         char            *nom;
         EF_Section      *section;
-        GList           *liste_sections = NULL, *liste_noeuds_dep, *liste_barres_dep;
+        GList           *liste_sections = NULL;
         
         if (!gtk_tree_selection_get_selected(gtk_tree_view_get_selection(treeview), &model, &Iter))
             return FALSE;
@@ -130,14 +130,10 @@ G_MODULE_EXPORT gboolean EF_gtk_sections_treeview_key_press(GtkTreeView *treevie
         BUG(section = EF_sections_cherche_nom(projet, nom, TRUE), FALSE);
         
         liste_sections = g_list_append(liste_sections, section);
-        BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, liste_sections, NULL, NULL, NULL, &liste_noeuds_dep, &liste_barres_dep, NULL, FALSE, FALSE), FALSE);
-        
-        if ((liste_noeuds_dep == NULL) && (liste_barres_dep == NULL))
+        if (_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, liste_sections, NULL, NULL, NULL, NULL, NULL, NULL, FALSE, FALSE) == FALSE)
             BUG(EF_sections_supprime(section, TRUE, projet), FALSE);
         
         g_list_free(liste_sections);
-        g_list_free(liste_noeuds_dep);
-        g_list_free(liste_barres_dep);
         free(nom);
         
         return TRUE;
@@ -176,25 +172,20 @@ G_MODULE_EXPORT void EF_gtk_sections_select_changed(
     {
         char        *nom;
         EF_Section  *section;
-        GList       *liste_sections = NULL, *liste_noeuds_dep, *liste_barres_dep;
+        GList       *liste_sections = NULL;
         
         gtk_tree_model_get(model, &Iter, 1, &nom, -1);
         
         BUG(section = EF_sections_cherche_nom(projet, nom, TRUE), );
         
         liste_sections = g_list_append(liste_sections, section);
-        BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, liste_sections, NULL, NULL, NULL, &liste_noeuds_dep, &liste_barres_dep, NULL, FALSE, FALSE), );
-        g_list_free(liste_sections);
-        
         gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections.builder, "EF_sections_boutton_modifier")), TRUE);
-        if ((liste_noeuds_dep != NULL) || (liste_barres_dep != NULL))
+        if (_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, liste_sections, NULL, NULL, NULL, NULL, NULL, NULL, FALSE, FALSE))
         {
             gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections.builder, "EF_sections_boutton_supprimer_direct")), FALSE);
             gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections.builder, "EF_sections_boutton_supprimer_menu")), TRUE);
             gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections.builder, "EF_sections_boutton_supprimer_direct")), FALSE);
             gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections.builder, "EF_sections_boutton_supprimer_menu")), TRUE);
-            g_list_free(liste_noeuds_dep);
-            g_list_free(liste_barres_dep);
         }
         else
         {
@@ -204,6 +195,7 @@ G_MODULE_EXPORT void EF_gtk_sections_select_changed(
             gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections.builder, "EF_sections_boutton_supprimer_menu")), FALSE);
         }
         
+        g_list_free(liste_sections);
         free(nom);
     }
     

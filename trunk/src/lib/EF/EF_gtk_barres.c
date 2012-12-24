@@ -381,24 +381,20 @@ G_MODULE_EXPORT gboolean EF_gtk_barres_treeview_key_press(
             unsigned int    num;
             Beton_Barre     *barre;
             
-            GList           *liste_barres = NULL, *liste_noeuds_dep, *liste_barres_dep, *liste_charges_dep;
+            GList           *liste_barres = NULL;
             
             gtk_tree_model_get(model, &Iter, 0, &num, -1);
             
             BUG(barre = _1992_1_1_barres_cherche_numero(projet, num, TRUE), FALSE);
             
             liste_barres = g_list_append(liste_barres, barre);
-            BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, NULL, NULL, liste_barres, &liste_noeuds_dep, &liste_barres_dep, &liste_charges_dep, FALSE, FALSE), FALSE);
-            
-            if ((liste_noeuds_dep == NULL) && (liste_barres_dep == NULL) && (liste_charges_dep == NULL))
+            if (_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, NULL, NULL, liste_barres, NULL, NULL, NULL, FALSE, FALSE) == FALSE)
             {
                 BUG(_1992_1_1_barres_supprime_liste(projet, NULL, liste_barres), FALSE);
                 BUG(m3d_rafraichit(projet), FALSE);
             }
             
             g_list_free(liste_barres);
-            g_list_free(liste_noeuds_dep);
-            g_list_free(liste_barres_dep);
         }
         return TRUE;
     }
@@ -435,17 +431,14 @@ G_MODULE_EXPORT void EF_gtk_barres_select_changed(
     {
         unsigned int    num;
         Beton_Barre     *barre;
-        GList           *liste_barres = NULL, *liste_noeuds_dep, *liste_barres_dep, *liste_charges_dep;
+        GList           *liste_barres = NULL;
         
         gtk_tree_model_get(model, &Iter, 0, &num, -1);
         
         BUG(barre = _1992_1_1_barres_cherche_numero(projet, num, TRUE), );
         
         liste_barres = g_list_append(liste_barres, barre);
-        BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, NULL, NULL, liste_barres, &liste_noeuds_dep, &liste_barres_dep, &liste_charges_dep, FALSE, FALSE), );
-        g_list_free(liste_barres);
-        
-        if ((liste_noeuds_dep != NULL) || (liste_barres_dep != NULL) || (liste_charges_dep != NULL))
+        if (_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, NULL, NULL, liste_barres, NULL, NULL, NULL, FALSE, FALSE))
         {
             gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_boutton_supprimer_direct")), FALSE);
             gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_boutton_supprimer_menu")), TRUE);
@@ -460,9 +453,7 @@ G_MODULE_EXPORT void EF_gtk_barres_select_changed(
             gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_boutton_supprimer_menu")), FALSE);
         }
         
-        g_list_free(liste_noeuds_dep);
-        g_list_free(liste_barres_dep);
-        g_list_free(liste_charges_dep);
+        g_list_free(liste_barres);
     }
     
     return;

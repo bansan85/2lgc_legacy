@@ -191,22 +191,18 @@ G_MODULE_EXPORT gboolean EF_gtk_appuis_treeview_key_press(
             char        *nom;
             EF_Appui    *appui;
             
-            GList   *liste_appuis = NULL, *liste_noeuds_dep, *liste_barres_dep;
+            GList   *liste_appuis = NULL;
             
             gtk_tree_model_get(model, &Iter, 0, &nom, -1);
             
             BUG(appui = EF_appuis_cherche_nom(projet, nom, TRUE), FALSE);
             
             liste_appuis = g_list_append(liste_appuis, appui);
-            BUG(_1992_1_1_barres_cherche_dependances(projet, liste_appuis, NULL, NULL, NULL, NULL, NULL, &liste_noeuds_dep, &liste_barres_dep, NULL, FALSE, FALSE), FALSE);
-            g_list_free(liste_appuis);
-            
-            if ((liste_noeuds_dep == NULL) && (liste_barres_dep == NULL))
+            if (_1992_1_1_barres_cherche_dependances(projet, liste_appuis, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, FALSE, FALSE) == FALSE)
                 EF_gtk_appuis_supprimer(NULL, projet);
             
             free(nom);
-            g_list_free(liste_noeuds_dep);
-            g_list_free(liste_barres_dep);
+            g_list_free(liste_appuis);
         }
         return TRUE;
     }
@@ -390,17 +386,14 @@ G_MODULE_EXPORT void EF_gtk_appuis_select_changed(
     {
         char        *nom;
         EF_Appui    *appui;
-        GList       *liste_appuis = NULL, *liste_noeuds_dep, *liste_barres_dep;
+        GList       *liste_appuis = NULL;
         
         gtk_tree_model_get(model, &Iter, 0, &nom, -1);
         
         BUG(appui = EF_appuis_cherche_nom(projet, nom, TRUE), );
         
         liste_appuis = g_list_append(liste_appuis, appui);
-        BUG(_1992_1_1_barres_cherche_dependances(projet, liste_appuis, NULL, NULL, NULL, NULL, NULL, &liste_noeuds_dep, &liste_barres_dep, NULL, FALSE, FALSE), );
-        g_list_free(liste_appuis);
-        
-        if ((liste_noeuds_dep != NULL) || (liste_barres_dep != NULL))
+        if (_1992_1_1_barres_cherche_dependances(projet, liste_appuis, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, FALSE, FALSE))
         {
             gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_boutton_supprimer_direct")), FALSE);
             gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_boutton_supprimer_menu")), TRUE);
@@ -416,8 +409,7 @@ G_MODULE_EXPORT void EF_gtk_appuis_select_changed(
         }
         
         free(nom);
-        g_list_free(liste_noeuds_dep);
-        g_list_free(liste_barres_dep);
+        g_list_free(liste_appuis);
     }
     
     return;
