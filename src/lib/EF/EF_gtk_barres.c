@@ -447,15 +447,10 @@ G_MODULE_EXPORT void EF_gtk_barres_select_changed(
         
         if ((liste_noeuds_dep != NULL) || (liste_barres_dep != NULL) || (liste_charges_dep != NULL))
         {
-            char    *desc;
-            
             gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_boutton_supprimer_direct")), FALSE);
             gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_boutton_supprimer_menu")), TRUE);
             gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_boutton_supprimer_direct")), FALSE);
             gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_boutton_supprimer_menu")), TRUE);
-            desc = common_text_dependances(liste_noeuds_dep, liste_barres_dep, liste_charges_dep, projet);
-            gtk_menu_item_set_label(GTK_MENU_ITEM(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_supprimer_menu_barres")), desc);
-            free(desc);
         }
         else
         {
@@ -469,6 +464,56 @@ G_MODULE_EXPORT void EF_gtk_barres_select_changed(
         g_list_free(liste_barres_dep);
         g_list_free(liste_charges_dep);
     }
+    
+    return;
+}
+
+
+G_MODULE_EXPORT void EF_gtk_barres_boutton_supprimer_menu(
+  GtkButton *widget __attribute__((unused)), Projet *projet)
+/* Description : Affiche la liste des dépendances dans le menu lorsqu'on clique sur le bouton
+ * Paramètres : GtkButton *widget : composant à l'origine de l'évènement,
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : Aucune.
+ *   Echec : projet == NULL,
+ *           interface graphique non initialisée.
+ */
+{
+    GtkTreeModel    *model;
+    GtkTreeIter     Iter;
+    unsigned int    num;
+    Beton_Barre     *barre;
+    GList           *liste_barres = NULL, *liste_noeuds_dep, *liste_barres_dep, *liste_charges_dep;
+    
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet->list_gtk.ef_barres.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Barres");
+    
+    // Si aucune barre n'est sélectionnée, il n'est pas possible d'en supprimer une.
+    if (!gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treeview_select")), &model, &Iter))
+        BUGMSG(NULL, , gettext("Aucun élément n'est sélectionné.\n"));
+    
+    gtk_tree_model_get(model, &Iter, 0, &num, -1);
+    
+    BUG(barre = _1992_1_1_barres_cherche_numero(projet, num, TRUE), );
+    
+    liste_barres = g_list_append(liste_barres, barre);
+    BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, NULL, NULL, liste_barres, &liste_noeuds_dep, &liste_barres_dep, &liste_charges_dep, FALSE, FALSE), );
+    g_list_free(liste_barres);
+    
+    if ((liste_noeuds_dep != NULL) || (liste_barres_dep != NULL) || (liste_charges_dep != NULL))
+    {
+        char    *desc;
+        
+        desc = common_text_dependances(liste_noeuds_dep, liste_barres_dep, liste_charges_dep, projet);
+        gtk_menu_item_set_label(GTK_MENU_ITEM(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_supprimer_menu_barres")), desc);
+        free(desc);
+    }
+    else
+        BUGMSG(NULL, , gettext("L'élément ne possède aucune dépendance.\n"));
+    
+    g_list_free(liste_noeuds_dep);
+    g_list_free(liste_barres_dep);
+    g_list_free(liste_charges_dep);
     
     return;
 }

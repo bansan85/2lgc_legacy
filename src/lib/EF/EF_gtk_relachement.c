@@ -125,29 +125,23 @@ G_MODULE_EXPORT void EF_gtk_relachements_select_changed(
         char                *nom;
         EF_Relachement      *relachement;
         GtkCellRendererText *cell;
-        GList               *liste_relachements = NULL, *liste_noeuds_dep, *liste_barres_dep, *liste_charges_dep;
+        GList               *liste_relachements = NULL, *liste_noeuds_dep, *liste_barres_dep;
         
         gtk_tree_model_get(model, &Iter, 0, &nom, -1);
         
         BUG(relachement = EF_relachement_cherche_nom(projet, nom, TRUE), );
         
         liste_relachements = g_list_append(liste_relachements, relachement);
-        BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, NULL, liste_relachements, NULL, &liste_noeuds_dep, &liste_barres_dep, &liste_charges_dep, FALSE, FALSE), );
+        BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, NULL, liste_relachements, NULL, &liste_noeuds_dep, &liste_barres_dep, NULL, FALSE, FALSE), );
         
-        if ((liste_noeuds_dep != NULL) || (liste_barres_dep != NULL) || (liste_charges_dep != NULL))
+        if ((liste_noeuds_dep != NULL) || (liste_barres_dep != NULL))
         {
-            char    *desc;
-            
             gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_boutton_supprimer_direct")), FALSE);
             gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_boutton_supprimer_menu")), TRUE);
             gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_boutton_supprimer_direct")), FALSE);
             gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_boutton_supprimer_menu")), TRUE);
-            desc = common_text_dependances(liste_noeuds_dep, liste_barres_dep, liste_charges_dep, projet);
-            gtk_menu_item_set_label(GTK_MENU_ITEM(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_supprimer_menu_barres")), desc);
-            free(desc);
             g_list_free(liste_noeuds_dep);
             g_list_free(liste_barres_dep);
-            g_list_free(liste_charges_dep);
         }
         else
         {
@@ -280,6 +274,57 @@ G_MODULE_EXPORT void EF_gtk_relachements_select_changed(
         
         free(nom);
     }
+    
+    return;
+}
+
+
+G_MODULE_EXPORT void EF_gtk_relachements_boutton_supprimer_menu(
+  GtkButton *widget __attribute__((unused)), Projet *projet)
+/* Description : Affiche la liste des dépendances dans le menu lorsqu'on clique sur le bouton
+ * Paramètres : GtkButton *widget : composant à l'origine de l'évènement,
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : Aucune.
+ *   Echec : projet == NULL,
+ *           interface graphique non initialisée.
+ */
+{
+    GtkTreeModel        *model;
+    GtkTreeIter         Iter;
+    char                *nom;
+    EF_Relachement      *relachement;
+    GList               *liste_relachements = NULL, *liste_noeuds_dep, *liste_barres_dep, *liste_charges_dep;
+    
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet->list_gtk.ef_relachements.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Relachement");
+    
+    // Si aucun relâchenement n'est sélectionné, il n'est pas possible d'en supprimer ou d'en
+    // éditer un.
+    if (!gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_treeview_select")), &model, &Iter))
+        BUGMSG(NULL, , gettext("Aucun élément n'est sélectionné.\n"));
+    
+    gtk_tree_model_get(model, &Iter, 0, &nom, -1);
+    
+    BUG(relachement = EF_relachement_cherche_nom(projet, nom, TRUE), );
+    
+    liste_relachements = g_list_append(liste_relachements, relachement);
+    BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, NULL, liste_relachements, NULL, &liste_noeuds_dep, &liste_barres_dep, &liste_charges_dep, FALSE, FALSE), );
+    
+    if ((liste_noeuds_dep != NULL) || (liste_barres_dep != NULL) || (liste_charges_dep != NULL))
+    {
+        char    *desc;
+        
+        desc = common_text_dependances(liste_noeuds_dep, liste_barres_dep, liste_charges_dep, projet);
+        gtk_menu_item_set_label(GTK_MENU_ITEM(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_supprimer_menu_barres")), desc);
+        free(desc);
+    }
+    else
+        BUGMSG(NULL, , gettext("L'élément ne possède aucune dépendance.\n"));
+    
+    free(nom);
+    g_list_free(liste_noeuds_dep);
+    g_list_free(liste_barres_dep);
+    g_list_free(liste_charges_dep);
     
     return;
 }

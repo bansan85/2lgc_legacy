@@ -160,6 +160,7 @@
                                 <property name="sensitive">False</property>
                                 <property name="menu">EF_materiaux_supprimer_menu</property>
                                 <property name="use_stock">True</property>
+                                <signal name="clicked" handler="EF_gtk_materiaux_boutton_supprimer_menu"/>
                             </object>
                             <packing>
                                 <property name="position">3</property>

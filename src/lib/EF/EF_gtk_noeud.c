@@ -250,15 +250,10 @@ G_MODULE_EXPORT void EF_noeuds_set_supprimer_visible(gboolean select, Projet *pr
         // Noeud utilisé
         if ((liste_noeuds_dep != NULL) || (liste_barres_dep != NULL) || (liste_charges_dep != NULL))
         {
-            char    *desc;
-            
             gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_boutton_supprimer")), FALSE);
             gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_boutton_supprimer_menu")), TRUE);
             gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_boutton_supprimer")), FALSE);
             gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_boutton_supprimer_menu")), TRUE);
-            desc = common_text_dependances(liste_noeuds_dep, liste_barres_dep, liste_charges_dep, projet);
-            gtk_menu_item_set_label(GTK_MENU_ITEM(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_supprimer_menu_barres")), desc);
-            free(desc);
         }
         // Noeud non utilisé
         else
@@ -272,6 +267,78 @@ G_MODULE_EXPORT void EF_noeuds_set_supprimer_visible(gboolean select, Projet *pr
         g_list_free(liste_barres_dep);
         g_list_free(liste_charges_dep);
     }
+    
+    return;
+}
+
+
+G_MODULE_EXPORT void EF_gtk_noeuds_boutton_supprimer_menu(
+  GtkButton *widget __attribute__((unused)), Projet *projet)
+/* Description : Affiche la liste des dépendances dans le menu lorsqu'on clique sur le bouton
+ * Paramètres : GtkButton *widget : composant à l'origine de l'évènement,
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : Aucune.
+ *   Echec : projet == NULL,
+ *           interface graphique non initialisée.
+ */
+{
+    GtkTreeModel    *model;
+    GtkTreeIter     Iter;
+    EF_Noeud        *noeud;
+    GList           *liste_noeuds = NULL, *liste_noeuds_dep, *liste_barres_dep, *liste_charges_dep;
+        
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet->list_gtk.ef_noeud.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Noeud");
+    
+    // Noeud libre
+    if (gtk_notebook_get_current_page(GTK_NOTEBOOK(projet->list_gtk.ef_noeud.notebook)) == 0)
+    {
+        // Aucune sélection
+        if (!gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_treeview_noeuds_libres_select")), &model, &Iter))
+            BUGMSG(NULL, , gettext("Aucun élément n'est sélectionné.\n"));
+        else
+        {
+            unsigned int    num;
+            
+            gtk_tree_model_get(model, &Iter, 0, &num, -1);
+            
+            BUG(noeud = EF_noeuds_cherche_numero(projet, num, TRUE), );
+        }
+    }
+    // Noeud intermédiaire
+    else
+    {
+        if (!gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_treeview_noeuds_intermediaires_select")), &model, &Iter))
+            BUGMSG(NULL, , gettext("Aucun élément n'est sélectionné.\n"));
+        else
+        {
+            unsigned int    num;
+            
+            gtk_tree_model_get(model, &Iter, 0, &num, -1);
+            
+            BUG(noeud = EF_noeuds_cherche_numero(projet, num, TRUE), );
+        }
+    }
+    
+    liste_noeuds = g_list_append(liste_noeuds, noeud);
+    BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, liste_noeuds, NULL, NULL, NULL, NULL, &liste_noeuds_dep, &liste_barres_dep, &liste_charges_dep, FALSE, FALSE), );
+    g_list_free(liste_noeuds);
+    
+    // Noeud utilisé
+    if ((liste_noeuds_dep != NULL) || (liste_barres_dep != NULL) || (liste_charges_dep != NULL))
+    {
+        char    *desc;
+        
+        desc = common_text_dependances(liste_noeuds_dep, liste_barres_dep, liste_charges_dep, projet);
+        gtk_menu_item_set_label(GTK_MENU_ITEM(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_supprimer_menu_barres")), desc);
+        free(desc);
+    }
+    else
+        BUGMSG(NULL, , gettext("L'élément ne possède aucune dépendance.\n"));
+    
+    g_list_free(liste_noeuds_dep);
+    g_list_free(liste_barres_dep);
+    g_list_free(liste_charges_dep);
     
     return;
 }
