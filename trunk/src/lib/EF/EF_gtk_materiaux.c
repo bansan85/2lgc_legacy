@@ -215,28 +215,23 @@ G_MODULE_EXPORT void EF_gtk_materiaux_select_changed(
         char            *nom;
         Beton_Materiau  *materiau;
         
-        GList           *liste_materiaux = NULL, *liste_noeuds_dep, *liste_barres_dep, *liste_charges_dep;
+        GList           *liste_materiaux = NULL, *liste_noeuds_dep, *liste_barres_dep;
         
         gtk_tree_model_get(model, &Iter, 0, &nom, -1);
         
         BUG(materiau = _1992_1_1_materiaux_cherche_nom(projet, nom, TRUE), );
         
         liste_materiaux = g_list_append(liste_materiaux, materiau);
-        BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, liste_materiaux, NULL, NULL, &liste_noeuds_dep, &liste_barres_dep, &liste_charges_dep, FALSE, FALSE), );
+        BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, liste_materiaux, NULL, NULL, &liste_noeuds_dep, &liste_barres_dep, NULL, FALSE, FALSE), );
         g_list_free(liste_materiaux);
         
         gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_materiaux.builder, "EF_materiaux_boutton_modifier")), TRUE);
-        if ((liste_noeuds_dep != NULL) || (liste_barres_dep != NULL) || (liste_charges_dep != NULL))
+        if ((liste_noeuds_dep != NULL) || (liste_barres_dep != NULL))
         {
-            char    *desc;
-            
             gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_materiaux.builder, "EF_materiaux_boutton_supprimer_direct")), FALSE);
             gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_materiaux.builder, "EF_materiaux_boutton_supprimer_menu")), TRUE);
             gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_materiaux.builder, "EF_materiaux_boutton_supprimer_direct")), FALSE);
             gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_materiaux.builder, "EF_materiaux_boutton_supprimer_menu")), TRUE);
-            desc = common_text_dependances(liste_noeuds_dep, liste_barres_dep, liste_charges_dep, projet);
-            gtk_menu_item_set_label(GTK_MENU_ITEM(gtk_builder_get_object(projet->list_gtk.ef_materiaux.builder, "EF_materiaux_supprimer_menu_barres")), desc);
-            free(desc);
         }
         else
         {
@@ -248,9 +243,59 @@ G_MODULE_EXPORT void EF_gtk_materiaux_select_changed(
         
         g_list_free(liste_noeuds_dep);
         g_list_free(liste_barres_dep);
-        g_list_free(liste_charges_dep);
         free(nom);
     }
+    
+    return;
+}
+
+
+G_MODULE_EXPORT void EF_gtk_materiaux_boutton_supprimer_menu(
+  GtkButton *widget __attribute__((unused)), Projet *projet)
+/* Description : Affiche la liste des dépendances dans le menu lorsqu'on clique sur le bouton
+ * Paramètres : GtkButton *widget : composant à l'origine de l'évènement,
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : Aucune.
+ *   Echec : projet == NULL,
+ *           interface graphique non initialisée.
+ */
+{
+    GtkTreeModel    *model;
+    GtkTreeIter     Iter;
+    char            *nom;
+    Beton_Materiau  *materiau;
+    GList           *liste_materiaux = NULL, *liste_noeuds_dep, *liste_barres_dep, *liste_charges_dep;
+    
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet->list_gtk.ef_materiaux.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Matériau");
+    
+    // Si aucune section n'est sélectionnée, il n'est pas possible d'en supprimer ou d'en éditer une.
+    if (!gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_materiaux.builder, "EF_materiaux_treeview_select")), &model, &Iter))
+        BUGMSG(NULL, , gettext("Aucun élément n'est sélectionné.\n"));
+    
+    gtk_tree_model_get(model, &Iter, 0, &nom, -1);
+    
+    BUG(materiau = _1992_1_1_materiaux_cherche_nom(projet, nom, TRUE), );
+    
+    liste_materiaux = g_list_append(liste_materiaux, materiau);
+    BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, liste_materiaux, NULL, NULL, &liste_noeuds_dep, &liste_barres_dep, &liste_charges_dep, FALSE, FALSE), );
+    g_list_free(liste_materiaux);
+    
+    if ((liste_noeuds_dep != NULL) || (liste_barres_dep != NULL) || (liste_charges_dep != NULL))
+    {
+        char    *desc;
+        
+        desc = common_text_dependances(liste_noeuds_dep, liste_barres_dep, liste_charges_dep, projet);
+        gtk_menu_item_set_label(GTK_MENU_ITEM(gtk_builder_get_object(projet->list_gtk.ef_materiaux.builder, "EF_materiaux_supprimer_menu_barres")), desc);
+        free(desc);
+    }
+    else
+        BUGMSG(NULL, , gettext("L'élément ne possède aucune dépendance.\n"));
+    
+    g_list_free(liste_noeuds_dep);
+    g_list_free(liste_barres_dep);
+    g_list_free(liste_charges_dep);
+    free(nom);
     
     return;
 }
