@@ -402,7 +402,6 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GLi
                 else if (noeuds_dep == NULL)
                 {
                     g_list_free(noeuds_todo);
-                    g_list_free(barres_todo);
                     return TRUE;
                 }
                 
@@ -461,11 +460,7 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GLi
                         else
                         {
                             if (g_list_find(noeuds, noeud) != NULL)
-                            {
-                                g_list_free(noeuds_todo);
-                                g_list_free(barres_todo);
                                 return TRUE;
-                            }
                         }
                         
                         liste_parcours3 = g_list_next(liste_parcours3);
@@ -495,11 +490,7 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GLi
                         else
                         {
                             if (g_list_find(barres, barre) != NULL)
-                            {
-                                g_list_free(noeuds_todo);
-                                g_list_free(barres_todo);
                                 return TRUE;
-                            }
                         }
                         
                         liste_parcours3 = g_list_next(liste_parcours3);

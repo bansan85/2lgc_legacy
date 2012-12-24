@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2012-12-23 07:08+0100\n"
-"PO-Revision-Date: 2012-12-23 07:09+0100\n"
+"POT-Creation-Date: 2012-12-24 14:38+0100\n"
+"PO-Revision-Date: 2012-12-24 14:54+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -799,6 +799,12 @@ msgstr "Ajout d'une charge ponctuelle sur barre"
 msgid "Modification d'une charge ponctuelle sur barre"
 msgstr "Modification d'une charge ponctuelle sur barre"
 
+msgid "Aucun élément n'est sélectionné.\n"
+msgstr "Aucun élément n'est sélectionné.\n"
+
+msgid "L'élément ne possède aucune dépendance.\n"
+msgstr "L'élément ne possède aucune dépendance.\n"
+
 msgid "La largeur du dessin ne peut être nulle.\n"
 msgstr "La largeur du dessin ne peut être nulle.\n"
 
@@ -964,6 +970,12 @@ msgstr "Relachement '%s' introuvable.\n"
 msgid "Le relachement '%s' existe déjà.\n"
 msgstr "Le relachement '%s' existe déjà.\n"
 
+msgid "Impossible de supprimer la section car elle est utilisée par la barre %s.\n"
+msgstr "Impossible de supprimer la section car elle est utilisée par la barre %s.\n"
+
+msgid "Impossible de supprimer la section car elle est utilisée par les barres %s.\n"
+msgstr "Impossible de supprimer la section car elle est utilisée par les barres %s.\n"
+
 msgid "La liste des types de barre est indéfinie.\n"
 msgstr "La liste des types de barre est indéfinie.\n"
 
@@ -981,6 +993,9 @@ msgstr "La liste des matériaux est indéfinie.\n"
 
 msgid "La liste des relâchements de barre est indéfinie.\n"
 msgstr "La liste des relâchements de barre est indéfinie.\n"
+
+msgid "Aucune barre n'est sélectionnée.\n"
+msgstr "Aucune barre n'est sélectionnée.\n"
 
 msgid "Impossible d'effectuer une projection dans un repère local.\n"
 msgstr "Impossible d'effectuer une projection dans un repère local.\n"
@@ -1114,15 +1129,8 @@ msgstr "Diamètre"
 msgid "La section '%s' existe déjà.\n"
 msgstr "La section '%s' existe déjà.\n"
 
-msgid "Impossible de supprimer la section car elle est utilisée par la barre %s.\n"
-msgstr "Impossible de supprimer la section car elle est utilisée par la barre %s.\n"
-
-msgid "Impossible de supprimer la section car elle est utilisée par les barres %s.\n"
-msgstr "Impossible de supprimer la section car elle est utilisée par les barres %s.\n"
-
 msgid "Charge %u de l'action %u introuvable.\n"
 msgstr "Charge %u de l'action %u introuvable.\n"
 
 msgid "Impossible d'initialiser gtk.\n"
 msgstr "Impossible d'initialiser gtk.\n"
-
