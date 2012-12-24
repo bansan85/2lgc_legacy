@@ -116,7 +116,7 @@ G_MODULE_EXPORT gboolean EF_gtk_materiaux_treeview_key_press(GtkTreeView *treevi
         GtkTreeModel    *model;
         char            *nom;
         Beton_Materiau  *materiau;
-        GList           *liste_materiaux = NULL, *liste_noeuds_dep, *liste_barres_dep;
+        GList           *liste_materiaux = NULL;
         
         if (!gtk_tree_selection_get_selected(gtk_tree_view_get_selection(treeview), &model, &Iter))
             return FALSE;
@@ -126,14 +126,10 @@ G_MODULE_EXPORT gboolean EF_gtk_materiaux_treeview_key_press(GtkTreeView *treevi
         BUG(materiau = _1992_1_1_materiaux_cherche_nom(projet, nom, TRUE), FALSE);
         
         liste_materiaux = g_list_append(liste_materiaux, materiau);
-        BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, liste_materiaux, NULL, NULL, &liste_noeuds_dep, &liste_barres_dep, NULL, FALSE, FALSE), FALSE);
-        
-        if ((liste_noeuds_dep == NULL) && (liste_barres_dep == NULL))
+        if (_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, liste_materiaux, NULL, NULL, NULL, NULL, NULL, FALSE, FALSE) == FALSE)
             BUG(_1992_1_1_materiaux_supprime(materiau, projet), FALSE);
         
         g_list_free(liste_materiaux);
-        g_list_free(liste_noeuds_dep);
-        g_list_free(liste_barres_dep);
         free(nom);
         
         return TRUE;
@@ -215,18 +211,16 @@ G_MODULE_EXPORT void EF_gtk_materiaux_select_changed(
         char            *nom;
         Beton_Materiau  *materiau;
         
-        GList           *liste_materiaux = NULL, *liste_noeuds_dep, *liste_barres_dep;
+        GList           *liste_materiaux = NULL;
         
         gtk_tree_model_get(model, &Iter, 0, &nom, -1);
         
         BUG(materiau = _1992_1_1_materiaux_cherche_nom(projet, nom, TRUE), );
         
-        liste_materiaux = g_list_append(liste_materiaux, materiau);
-        BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, liste_materiaux, NULL, NULL, &liste_noeuds_dep, &liste_barres_dep, NULL, FALSE, FALSE), );
-        g_list_free(liste_materiaux);
-        
         gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_materiaux.builder, "EF_materiaux_boutton_modifier")), TRUE);
-        if ((liste_noeuds_dep != NULL) || (liste_barres_dep != NULL))
+        
+        liste_materiaux = g_list_append(liste_materiaux, materiau);
+        if (_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, liste_materiaux, NULL, NULL, NULL, NULL, NULL, FALSE, FALSE))
         {
             gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_materiaux.builder, "EF_materiaux_boutton_supprimer_direct")), FALSE);
             gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_materiaux.builder, "EF_materiaux_boutton_supprimer_menu")), TRUE);
@@ -241,8 +235,7 @@ G_MODULE_EXPORT void EF_gtk_materiaux_select_changed(
             gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_materiaux.builder, "EF_materiaux_boutton_supprimer_menu")), FALSE);
         }
         
-        g_list_free(liste_noeuds_dep);
-        g_list_free(liste_barres_dep);
+        g_list_free(liste_materiaux);
         free(nom);
     }
     
@@ -314,7 +307,7 @@ G_MODULE_EXPORT void EF_gtk_materiaux_supprimer_menu_barres(
     GtkTreeModel    *model;
     char            *nom;
     Beton_Materiau  *materiau;
-    GList           *liste_materiaux = NULL, *liste_noeuds_dep, *liste_barres_dep;
+    GList           *liste_materiaux = NULL, *liste_noeuds_dep, *liste_barres_dep, *liste_charges_dep;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_materiaux.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Matériau");
@@ -326,8 +319,9 @@ G_MODULE_EXPORT void EF_gtk_materiaux_supprimer_menu_barres(
     
     BUG(materiau = _1992_1_1_materiaux_cherche_nom(projet, nom, TRUE), );
     liste_materiaux = g_list_append(liste_materiaux, materiau);
-    BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, liste_materiaux, NULL, NULL, &liste_noeuds_dep, &liste_barres_dep, NULL, FALSE, FALSE), );
+    BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, liste_materiaux, NULL, NULL, &liste_noeuds_dep, &liste_barres_dep, &liste_charges_dep, FALSE, FALSE), );
     g_list_free(liste_materiaux);
+    g_list_free(liste_charges_dep);
     BUG(_1992_1_1_barres_supprime_liste(projet, liste_noeuds_dep, liste_barres_dep), );
     g_list_free(liste_noeuds_dep);
     g_list_free(liste_barres_dep);

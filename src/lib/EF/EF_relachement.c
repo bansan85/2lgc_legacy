@@ -218,16 +218,16 @@ G_MODULE_EXPORT gboolean EF_relachement_supprime(EF_Relachement *relachement,
  *             section == NULL.
  */
 {
-    GList   *liste_relachements = NULL, *liste_noeuds_dep, *liste_barres_dep;
+    GList   *liste_relachements = NULL, *liste_noeuds_dep, *liste_barres_dep, *liste_charges_dep;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(relachement, FALSE, gettext("Paramètre %s incorrect.\n"), "relachement");
     
     // On vérifie les dépendances.
     liste_relachements = g_list_append(liste_relachements, relachement);
-    BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, NULL, liste_relachements, NULL, &liste_noeuds_dep, &liste_barres_dep, NULL, FALSE, FALSE), FALSE);
+    BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, NULL, liste_relachements, NULL, &liste_noeuds_dep, &liste_barres_dep, &liste_charges_dep, FALSE, FALSE), FALSE);
     
-    if ((annule_si_utilise) && ((liste_noeuds_dep != NULL) && (liste_barres_dep != NULL)))
+    if ((annule_si_utilise) && ((liste_noeuds_dep != NULL) && (liste_barres_dep != NULL) && (liste_charges_dep != NULL)))
     {
         char *liste;
         
@@ -242,6 +242,7 @@ G_MODULE_EXPORT gboolean EF_relachement_supprime(EF_Relachement *relachement,
     BUG(_1992_1_1_barres_supprime_liste(projet, liste_noeuds_dep, liste_barres_dep), TRUE);
     g_list_free(liste_noeuds_dep);
     g_list_free(liste_barres_dep);
+    g_list_free(liste_charges_dep);
     
     free(relachement->nom);
     free(relachement->rx_d_data);
