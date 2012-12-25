@@ -190,12 +190,12 @@ G_MODULE_EXPORT gboolean m3d_actualise_graphique(Projet *projet, GList *noeuds, 
  *             en cas d'erreur due à une fonction interne.
  */
 {
-    GList *noeuds_dep, *barres_dep, *charges_dep;
+    GList *noeuds_dep, *barres_dep;
     GList *list_parcours;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
-    BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, noeuds, NULL, NULL, NULL, barres, &noeuds_dep, &barres_dep, &charges_dep, FALSE, TRUE), FALSE);
+    BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, noeuds, NULL, NULL, NULL, barres, &noeuds_dep, &barres_dep, NULL, FALSE, TRUE), FALSE);
     
     list_parcours = noeuds_dep;
     while (list_parcours != NULL)
@@ -212,7 +212,6 @@ G_MODULE_EXPORT gboolean m3d_actualise_graphique(Projet *projet, GList *noeuds, 
         list_parcours = g_list_next(list_parcours);
     }
     g_list_free(barres_dep);
-    g_list_free(charges_dep);
     
     return TRUE;
 }

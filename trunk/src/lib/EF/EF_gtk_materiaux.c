@@ -307,7 +307,7 @@ G_MODULE_EXPORT void EF_gtk_materiaux_supprimer_menu_barres(
     GtkTreeModel    *model;
     char            *nom;
     Beton_Materiau  *materiau;
-    GList           *liste_materiaux = NULL, *liste_noeuds_dep, *liste_barres_dep, *liste_charges_dep;
+    GList           *liste_materiaux = NULL, *liste_barres_dep;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_materiaux.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Matériau");
@@ -319,11 +319,9 @@ G_MODULE_EXPORT void EF_gtk_materiaux_supprimer_menu_barres(
     
     BUG(materiau = _1992_1_1_materiaux_cherche_nom(projet, nom, TRUE), );
     liste_materiaux = g_list_append(liste_materiaux, materiau);
-    BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, liste_materiaux, NULL, NULL, &liste_noeuds_dep, &liste_barres_dep, &liste_charges_dep, FALSE, FALSE), );
+    BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, liste_materiaux, NULL, NULL, NULL, &liste_barres_dep, NULL, FALSE, FALSE), );
     g_list_free(liste_materiaux);
-    g_list_free(liste_charges_dep);
-    BUG(_1992_1_1_barres_supprime_liste(projet, liste_noeuds_dep, liste_barres_dep), );
-    g_list_free(liste_noeuds_dep);
+    BUG(_1992_1_1_barres_supprime_liste(projet, NULL, liste_barres_dep), );
     g_list_free(liste_barres_dep);
     BUG(_1992_1_1_materiaux_supprime(materiau, projet), );
     

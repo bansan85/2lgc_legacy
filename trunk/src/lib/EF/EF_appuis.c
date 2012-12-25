@@ -640,16 +640,16 @@ G_MODULE_EXPORT gboolean EF_appuis_supprime(EF_Appui *appui, gboolean annule_si_
  */
 {
     GList   *list_appuis = NULL, *list_parcours;
-    GList   *noeuds_suppr, *barres_suppr, *charges_suppr;
+    GList   *noeuds_suppr;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(appui, FALSE, gettext("Paramètre %s incorrect.\n"), "appui");
     
     // On vérifie les dépendances.
     list_appuis = g_list_append(list_appuis, appui);
-    BUG(_1992_1_1_barres_cherche_dependances(projet, list_appuis, NULL, NULL, NULL, NULL, NULL, &noeuds_suppr, &barres_suppr, &charges_suppr, FALSE, FALSE), FALSE);
+    BUG(_1992_1_1_barres_cherche_dependances(projet, list_appuis, NULL, NULL, NULL, NULL, NULL, &noeuds_suppr, NULL, NULL, FALSE, FALSE), FALSE);
     
-    if ((annule_si_utilise) && ((noeuds_suppr != NULL) || (barres_suppr != NULL) || (charges_suppr != NULL)))
+    if ((annule_si_utilise) && (noeuds_suppr != NULL))
     {
         char *liste;
         
@@ -674,12 +674,10 @@ G_MODULE_EXPORT gboolean EF_appuis_supprime(EF_Appui *appui, gboolean annule_si_
         }
     }
     else
-        BUG(_1992_1_1_barres_supprime_liste(projet, noeuds_suppr, barres_suppr), TRUE);
+        BUG(_1992_1_1_barres_supprime_liste(projet, noeuds_suppr, NULL), TRUE);
     
     g_list_free(list_appuis);
     g_list_free(noeuds_suppr);
-    g_list_free(barres_suppr);
-    g_list_free(charges_suppr);
     
     free(appui->nom);
     switch (appui->ux)
