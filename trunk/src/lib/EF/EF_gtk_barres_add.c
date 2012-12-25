@@ -77,8 +77,6 @@ G_MODULE_EXPORT void EF_gtk_barres_add_add_clicked(GtkButton *button __attribute
     
     ef_gtk = &projet->list_gtk.ef_barres;
     
-    type = gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_type_combobox")));
-    
     model = gtk_combo_box_get_model(GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_section_combobox")));
     type = gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_section_combobox")));
     if (type == -1)
@@ -115,6 +113,8 @@ G_MODULE_EXPORT void EF_gtk_barres_add_add_clicked(GtkButton *button __attribute
     noeud_fin = common_gtk_entry_renvoie_uint(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_noeud2_buffer")));
     if ((EF_noeuds_cherche_numero(projet, noeud_debut, TRUE) == NULL) || (EF_noeuds_cherche_numero(projet, noeud_fin, TRUE) == NULL))
         return;
+    
+    type = gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_type_combobox")));
     
     BUG(_1992_1_1_barres_ajout(projet, (Type_Element)type, section, materiau, noeud_debut, noeud_fin, relachement, 0), );
     BUG(m3d_rafraichit(projet), );
@@ -182,20 +182,38 @@ G_MODULE_EXPORT void EF_gtk_barres_add_check_add(GtkWidget *widget, Projet *proj
     
     ef_gtk = &projet->list_gtk.ef_barres;
     
-    noeud1 = EF_noeuds_cherche_numero(projet, common_gtk_entry_renvoie_uint(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_noeud1_buffer"))), TRUE);
-    noeud2 = EF_noeuds_cherche_numero(projet, common_gtk_entry_renvoie_uint(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_noeud2_buffer"))), TRUE);
-
-    if (
-        (gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_type_combobox"))) != -1) &&
-        (gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_section_combobox"))) != -1) &&
-        (gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_materiau_combobox"))) != -1) &&
-        (gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_relachement_combobox"))) != -1) &&
-        (noeud1 != NULL) && (noeud2 != NULL) && (noeud1 != noeud2)
-    )
-        ok = TRUE;
-    
     if (GTK_IS_TEXT_BUFFER(widget))
         common_gtk_entry_check_int(GTK_TEXT_BUFFER(widget), NULL);
+    
+    noeud1 = EF_noeuds_cherche_numero(projet, common_gtk_entry_renvoie_uint(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_noeud1_buffer"))), FALSE);
+    if (noeud1 == NULL)
+    {
+        GtkTextIter     start, end;
+        GtkTextBuffer   *buff = GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_noeud1_buffer"));
+        
+        gtk_text_buffer_get_iter_at_offset(buff, &start, 0);
+        gtk_text_buffer_get_iter_at_offset(buff, &end, -1);
+        gtk_text_buffer_remove_all_tags(buff, &start, &end);
+        gtk_text_buffer_apply_tag_by_name(buff, "mauvais", &start, &end);
+    }
+    noeud2 = EF_noeuds_cherche_numero(projet, common_gtk_entry_renvoie_uint(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_noeud2_buffer"))), FALSE);
+    if (noeud2 == NULL)
+    {
+        GtkTextIter     start, end;
+        GtkTextBuffer   *buff = GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_noeud2_buffer"));
+        
+        gtk_text_buffer_get_iter_at_offset(buff, &start, 0);
+        gtk_text_buffer_get_iter_at_offset(buff, &end, -1);
+        gtk_text_buffer_remove_all_tags(buff, &start, &end);
+        gtk_text_buffer_apply_tag_by_name(buff, "mauvais", &start, &end);
+    }
+
+    if ((gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_type_combobox"))) != -1) &&
+      (gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_section_combobox"))) != -1) &&
+      (gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_materiau_combobox"))) != -1) &&
+      (gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_relachement_combobox"))) != -1) &&
+      (noeud1 != NULL) && (noeud2 != NULL) && (noeud1 != noeud2))
+        ok = TRUE;
     
     gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_button_add")), ok);
     
