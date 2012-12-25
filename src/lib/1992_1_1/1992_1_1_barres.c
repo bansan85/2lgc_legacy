@@ -178,6 +178,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_ajout(Projet *projet, Type_Element typ
         
         gtk_tree_store_append(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treestore")), &element_nouveau->Iter, NULL);
         gtk_tree_store_set(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treestore")), &element_nouveau->Iter, 0, element_nouveau->numero, 1, tmp, 2, element_nouveau->section->nom, 3, element_nouveau->materiau->nom, 4, element_nouveau->noeud_debut->numero, 5, element_nouveau->noeud_fin->numero, 6, (element_nouveau->relachement == NULL ? gettext("Aucun") : element_nouveau->relachement->nom), -1);
+        free(tmp);
     }
     
     BUG(m3d_barre(&projet->list_gtk.m3d, element_nouveau), FALSE);
