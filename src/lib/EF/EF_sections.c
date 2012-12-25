@@ -191,13 +191,11 @@ G_MODULE_EXPORT gboolean EF_sections_rectangulaire_modif(Projet *projet, EF_Sect
         BUG(EF_sections_update_ligne_treeview(projet, section), FALSE);
     if ((!isnan(l)) || (!isnan(h)))
     {
-        GList   *liste_sections = NULL, *liste_noeuds_dep, *liste_barres_dep, *liste_charges_dep;
+        GList   *liste_sections = NULL, *liste_barres_dep;
         
         liste_sections = g_list_append(liste_sections, section);
-        BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, liste_sections, NULL, NULL, NULL, &liste_noeuds_dep, &liste_barres_dep, &liste_charges_dep, FALSE, TRUE), FALSE);
+        BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, liste_sections, NULL, NULL, NULL, NULL, &liste_barres_dep, NULL, FALSE, TRUE), FALSE);
         g_list_free(liste_sections);
-        g_list_free(liste_noeuds_dep);
-        g_list_free(liste_charges_dep);
         
         BUG(m3d_actualise_graphique(projet, NULL, liste_barres_dep), FALSE);
         g_list_free(liste_barres_dep);
@@ -307,13 +305,11 @@ G_MODULE_EXPORT gboolean EF_sections_T_modif(Projet *projet, EF_Section *section
         BUG(EF_sections_update_ligne_treeview(projet, section), FALSE);
     if ((!isnan(lt)) || (!isnan(lr)) || (!isnan(ht)) || (!isnan(hr)))
     {
-        GList   *liste_sections = NULL, *liste_noeuds_dep, *liste_barres_dep, *liste_charges_dep;
+        GList   *liste_sections = NULL, *liste_barres_dep;
         
         liste_sections = g_list_append(liste_sections, section);
-        BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, liste_sections, NULL, NULL, NULL, &liste_noeuds_dep, &liste_barres_dep, &liste_charges_dep, FALSE, TRUE), FALSE);
+        BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, liste_sections, NULL, NULL, NULL, NULL, &liste_barres_dep, NULL, FALSE, TRUE), FALSE);
         g_list_free(liste_sections);
-        g_list_free(liste_noeuds_dep);
-        g_list_free(liste_charges_dep);
         
         BUG(m3d_actualise_graphique(projet, NULL, liste_barres_dep), FALSE);
         
@@ -405,13 +401,11 @@ G_MODULE_EXPORT gboolean EF_sections_carree_modif(Projet *projet, EF_Section *se
         BUG(EF_sections_update_ligne_treeview(projet, section), FALSE);
     if (!isnan(cote))
     {
-        GList   *liste_sections = NULL, *liste_noeuds_dep, *liste_barres_dep, *liste_charges_dep;
+        GList   *liste_sections = NULL, *liste_barres_dep;
         
         liste_sections = g_list_append(liste_sections, section);
-        BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, liste_sections, NULL, NULL, NULL, &liste_noeuds_dep, &liste_barres_dep, &liste_charges_dep, FALSE, TRUE), FALSE);
+        BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, liste_sections, NULL, NULL, NULL, NULL, &liste_barres_dep, NULL, FALSE, TRUE), FALSE);
         g_list_free(liste_sections);
-        g_list_free(liste_noeuds_dep);
-        g_list_free(liste_charges_dep);
         
         BUG(m3d_actualise_graphique(projet, NULL, liste_barres_dep), FALSE);
         
@@ -505,13 +499,11 @@ G_MODULE_EXPORT gboolean EF_sections_circulaire_modif(Projet *projet, EF_Section
         BUG(EF_sections_update_ligne_treeview(projet, section), FALSE);
     if (!isnan(diametre))
     {
-        GList   *liste_sections = NULL, *liste_noeuds_dep, *liste_barres_dep, *liste_charges_dep;
+        GList   *liste_sections = NULL, *liste_barres_dep;
         
         liste_sections = g_list_append(liste_sections, section);
-        BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, liste_sections, NULL, NULL, NULL, &liste_noeuds_dep, &liste_barres_dep, &liste_charges_dep, FALSE, TRUE), FALSE);
+        BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, liste_sections, NULL, NULL, NULL, NULL, &liste_barres_dep, NULL, FALSE, TRUE), FALSE);
         g_list_free(liste_sections);
-        g_list_free(liste_noeuds_dep);
-        g_list_free(liste_charges_dep);
         
         BUG(m3d_actualise_graphique(projet, NULL, liste_barres_dep), FALSE);
         
@@ -721,16 +713,16 @@ G_MODULE_EXPORT gboolean EF_sections_supprime(EF_Section *section, gboolean annu
  *             section == NULL.
  */
 {
-    GList   *liste_sections = NULL, *liste_noeuds_dep, *liste_barres_dep, *liste_charges_dep;
+    GList   *liste_sections = NULL, *liste_barres_dep;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(section, FALSE, gettext("Paramètre %s incorrect.\n"), "section");
     
     // On vérifie les dépendances.
     liste_sections = g_list_append(liste_sections, section);
-    BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, liste_sections, NULL, NULL, NULL, &liste_noeuds_dep, &liste_barres_dep, &liste_charges_dep, FALSE, FALSE), FALSE);
+    BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, liste_sections, NULL, NULL, NULL, NULL, &liste_barres_dep, NULL, FALSE, FALSE), FALSE);
     
-    if ((annule_si_utilise) && ((liste_noeuds_dep != NULL) || (liste_barres_dep != NULL) || (liste_charges_dep != NULL)))
+    if ((annule_si_utilise) && (liste_barres_dep != NULL))
     {
         char *liste;
         
@@ -741,11 +733,9 @@ G_MODULE_EXPORT gboolean EF_sections_supprime(EF_Section *section, gboolean annu
             BUGMSG(NULL, FALSE, gettext("Impossible de supprimer la section car elle est utilisée par les barres %s.\n"), liste);
     }
     
-    BUG(_1992_1_1_barres_supprime_liste(projet, liste_noeuds_dep, liste_barres_dep), TRUE);
+    BUG(_1992_1_1_barres_supprime_liste(projet, NULL, liste_barres_dep), TRUE);
     g_list_free(liste_sections);
-    g_list_free(liste_noeuds_dep);
     g_list_free(liste_barres_dep);
-    g_list_free(liste_charges_dep);
     
     free(section->nom);
     free(section->data);

@@ -226,11 +226,12 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GLi
 /* Description : Renvoie, sous forme d'une liste de noeuds et d'une liste de barres, l'ensemble
  *               des barres et noeuds intermédiaires dépendants des noeuds et des barres passés
  *               en paramètres. Le retour contient également la liste d'origine.
- *               Il est possible de mettre noeuds_dep, barres_dep et charges_dep à NULL (les
- *               trois ensemble). Alors, la fonction s'arrête et renvoie TRUE si un élément
- *               dépendant a été trouvé et FALSE si aucun élément n'a été trouvé.
- *               Si noeuds_dep, barres_dep et charges_dep sont différents de NULL, la fonction
- *               renvoie TRUE si tout s'est bien passé et FALSE via la macro BUG.
+ *               Si noeuds_dep, barres_dep ou charges_dep sont différents de NULL, la fonction
+ *               renvoie TRUE si tout s'est bien passé et FALSE autrement via la macro BUG.
+ *               Si noeuds_dep, barres_dep ET charges_dep sont NULL alors la fonction renvoie
+ *               TRUE si un élément dépendant a été trouvé (les noeuds intermédiaires sans
+ *               dépendance ne sont pas considérés comme une dépendance pour cette fonction) et
+ *               FALSE si aucun élément n'a été trouvé.
  * Paramètres : Projet *projet : variable projet,
  *            : GList* appuis : liste de pointeurs vers les appuis à analyser,
  *            : GList* noeuds : liste de pointeurs vers les noeuds à analyser,
@@ -254,16 +255,21 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GLi
 {
     GList   *list_parcours;
     GList   *noeuds_todo = NULL, *noeuds_done = NULL, *barres_todo = NULL;
+    gboolean    verif;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(((noeuds_dep == NULL) && (barres_dep == NULL) && (charges_dep == NULL)) || ((noeuds_dep != NULL) && (barres_dep != NULL) && (charges_dep != NULL)), FALSE, gettext("Paramètre %s incorrect.\n"), "noeuds_dep, barres_dep et charges_dep");
+    
+    if ((noeuds_dep == NULL) && (barres_dep == NULL) && (charges_dep == NULL))
+        verif = TRUE;
+    else
+        verif = FALSE;
     
     if (noeuds_dep != NULL)
-    {
         *noeuds_dep = NULL;
+    if (barres_dep != NULL)
         *barres_dep = NULL;
+    if (charges_dep != NULL)
         *charges_dep = NULL;
-    }
     
     // On ajoute les noeuds utilisant les appuis
     if (appuis != NULL)
@@ -275,7 +281,7 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GLi
             
             if ((noeud->appui != NULL) && (g_list_find(appuis, noeud->appui) != NULL))
             {
-                if (noeuds_dep != NULL)
+                if (verif == FALSE)
                     noeuds_todo = g_list_append(noeuds_todo, noeud);
                 else
                     return TRUE;
@@ -291,9 +297,11 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GLi
     {
         Beton_Barre *barre = list_parcours->data;
         
-        if ((g_list_find(sections, barre->section) != NULL) || (g_list_find(materiaux, barre->materiau) != NULL) || (g_list_find(relachements, barre->relachement)))
+        if ((g_list_find(sections, barre->section) != NULL)
+          || (g_list_find(materiaux, barre->materiau) != NULL)
+          || ((barre->relachement != NULL) && (g_list_find(relachements, barre->relachement) != NULL)))
         {
-            if (noeuds_dep != NULL)
+            if (verif == FALSE)
                 barres_todo = g_list_append(barres_todo, barre);
             else
                 return TRUE;
@@ -322,16 +330,19 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GLi
         
         // Toutes les barres sélectionnées sont forcément des barres dépendantes.
         barre = list_parcours->data;
-        if (((origine) || (g_list_find(barres, barre) == NULL)) && (noeuds_dep != NULL))
+        if ((barres_dep != NULL) && ((origine) || (g_list_find(barres, barre) == NULL)))
         {
             if (numero)
                 BUG(common_selection_ajout_nombre(GUINT_TO_POINTER(barre->numero), barres_dep, LISTE_UINT), FALSE);
             else
                 BUG(common_selection_ajout_nombre(barre, barres_dep, LISTE_BARRES), FALSE);
         }
+        // Ici, pas besoin de vérifier la variable verif. En effet à ce stade, tout ce qui est
+        // dans barres_todo ne sont que les barres à analyser. barres_todo ne peut contenir une
+        // dépendance vis-à-vis des sections/matériaux/relâchements sinon, la fonction aurait
+        // déjà renvoyée TRUE.
         
         // Puis, tous les noeuds intermédiaires sont ajoutés à la liste des noeuds à étudier.
-        // On suppose que si un noeud intermédiaire n'est pas utilisé, ce n'est pas bloquant.
         list_parcours2 = barre->noeuds_intermediaires;
         while (list_parcours2 != NULL)
         {
@@ -345,7 +356,6 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GLi
         
         list_parcours = g_list_next(list_parcours);
     }
-    g_list_free(barres_todo);
     
     // On ajoute tous les noeuds à la liste des noeuds à étudier.
     list_parcours = noeuds;
@@ -362,7 +372,7 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GLi
     // On étudie enfin tous les noeuds.
     while (noeuds_todo != NULL)
     {
-        void    *dataa = noeuds_todo->data;
+        EF_Noeud    *dataa = noeuds_todo->data;
         
         noeuds_todo = g_list_delete_link(noeuds_todo, noeuds_todo);
         
@@ -376,6 +386,15 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GLi
                 BUG(common_selection_ajout_nombre(GUINT_TO_POINTER(((EF_Noeud*)dataa)->numero), noeuds_dep, LISTE_UINT), FALSE);
             else
                 BUG(common_selection_ajout_nombre(dataa, noeuds_dep, LISTE_NOEUDS), FALSE);
+        }
+        // Rappel : si un noeud est de type intermédiaire, on considère qu'il n'est pas une
+        // dépendance suffisante pour justifier une impossibilité de suppression d'un élément.
+        else if ((verif == TRUE) && (dataa->type == NOEUD_LIBRE) && (g_list_find(noeuds, dataa) == NULL))
+        {
+            g_list_free(noeuds_todo);
+            g_list_free(noeuds_done);
+            g_list_free(barres_todo);
+            return TRUE;
         }
         
         // On parcours la liste des barres pour trouver celles qui commencent ou finissent par
@@ -391,19 +410,24 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GLi
             if ((barre->noeud_debut == dataa) || (barre->noeud_fin == dataa))
             {
                 GList   *list_parcours2;
+                
                 // On l'ajoute à la liste des barres dépendantes.
-                if ((noeuds_dep != NULL) && ((origine) || (g_list_find(barres, barre) == NULL)))
+                if ((barres_dep != NULL) && ((origine) || (g_list_find(barres, barre) == NULL)))
                 {
                     if (numero)
                         BUG(common_selection_ajout_nombre(GUINT_TO_POINTER(barre->numero), barres_dep, LISTE_UINT), FALSE);
                     else
                         BUG(common_selection_ajout_nombre(barre, barres_dep, LISTE_BARRES), FALSE);
                 }
-                else if (noeuds_dep == NULL)
+                else if (verif == TRUE)
                 {
                     g_list_free(noeuds_todo);
+                    g_list_free(noeuds_done);
+                    g_list_free(barres_todo);
                     return TRUE;
                 }
+                if (g_list_find(barres_todo, barre) == NULL)
+                    barres_todo = g_list_append(barres_todo, barre);
                 
                 // Puis on ajoute l'ensemble des noeuds intermédiaires.
                 list_parcours2 = barre->noeuds_intermediaires;
@@ -422,8 +446,6 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GLi
             list_parcours = g_list_next(list_parcours);
         }
     }
-    
-    g_list_free(noeuds_done);
     
     // Ensuite, on parcours les charges pour déterminer si certaines sont utilisées par les
     // noeuds ou barres.
@@ -447,20 +469,19 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GLi
                     {
                         EF_Noeud *noeud = liste_parcours3->data;
                         
-                        if (noeuds_dep != NULL)
+                        if (charges_dep != NULL)
                         {
-                            if (((!numero) && (g_list_find(*noeuds_dep, noeud) != NULL)) ||
-                              ((numero) && (g_list_find(*noeuds_dep, GUINT_TO_POINTER(noeud->numero)) != NULL)) ||
-                              ((!origine) && (g_list_find(noeuds, noeud) != NULL)))
+                            if (g_list_find(noeuds_done, noeud) != NULL)
                             {
                                 BUG(common_selection_ajout_nombre(charge, charges_dep, LISTE_CHARGES), FALSE);
                                 liste_parcours3 = NULL;
                             }
                         }
-                        else
+                        else if ((verif == TRUE) && (g_list_find(noeuds_done, noeud) != NULL))
                         {
-                            if (g_list_find(noeuds, noeud) != NULL)
-                                return TRUE;
+                            g_list_free(noeuds_done);
+                            g_list_free(barres_todo);
+                            return TRUE;
                         }
                         
                         liste_parcours3 = g_list_next(liste_parcours3);
@@ -477,20 +498,19 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GLi
                     {
                         Beton_Barre *barre = liste_parcours3->data;
                         
-                        if (noeuds_dep != NULL)
+                        if (charges_dep != NULL)
                         {
-                            if (((!numero) && (g_list_find(*barres_dep, barre) != NULL)) ||
-                              ((numero) && (g_list_find(*barres_dep, GUINT_TO_POINTER(barre->numero)) != NULL)) ||
-                              ((!origine) && (g_list_find(barres, barre) != NULL)))
+                            if (g_list_find(barres_todo, barre) != NULL)
                             {
                                 BUG(common_selection_ajout_nombre(charge, charges_dep, LISTE_CHARGES), FALSE);
                                 liste_parcours3 = NULL;
                             }
                         }
-                        else
+                        else if ((verif == TRUE) && (g_list_find(barres, barre) != NULL))
                         {
-                            if (g_list_find(barres, barre) != NULL)
-                                return TRUE;
+                            g_list_free(noeuds_done);
+                            g_list_free(barres_todo);
+                            return TRUE;
                         }
                         
                         liste_parcours3 = g_list_next(liste_parcours3);
@@ -510,7 +530,10 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GLi
         list_parcours = g_list_next(list_parcours);
     }
     
-    if (noeuds_dep != NULL)
+    g_list_free(noeuds_done);
+    g_list_free(barres_todo);
+    
+    if (verif == FALSE)
         return TRUE;
     else
         return FALSE;
@@ -694,7 +717,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_change_noeud(Beton_Barre *barre, EF_No
  */
 {
     GList   *liste_barre = NULL;
-    GList   *liste_noeuds_dep, *liste_barres_dep, *liste_charges_dep;
+    GList   *liste_noeuds_dep;
     
     BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre");
     BUGMSG(noeud, FALSE, gettext("Paramètre %s incorrect.\n"), "noeud");
@@ -703,10 +726,9 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_change_noeud(Beton_Barre *barre, EF_No
     BUGMSG(!((noeud_1 == FALSE) && (barre->noeud_debut == noeud)), FALSE, gettext("Impossible d'appliquer le même noeud aux deux extrémités d'une barre.\n"));
     
     liste_barre = g_list_append(liste_barre, barre);
-    BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, NULL, NULL, liste_barre, &liste_noeuds_dep, &liste_barres_dep, &liste_charges_dep, FALSE, TRUE), FALSE);
-    g_list_free(liste_barre);
-    g_list_free(liste_charges_dep);
+    BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, NULL, NULL, liste_barre, &liste_noeuds_dep, NULL, NULL, FALSE, TRUE), FALSE);
     BUGMSG(g_list_find(liste_noeuds_dep, noeud) == NULL, FALSE, gettext("Impossible d'affecter le noeud %d à la barre %d car il est dépendant de la barre à modifier.\n"), noeud->numero, barre->numero);
+    g_list_free(liste_noeuds_dep);
     
     if (noeud_1 == TRUE)
         barre->noeud_debut = noeud;
@@ -716,12 +738,11 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_change_noeud(Beton_Barre *barre, EF_No
     BUG(EF_calculs_free(projet), TRUE);
     
 #ifdef ENABLE_GTK
-    BUG(m3d_actualise_graphique(projet, liste_noeuds_dep, liste_barres_dep), FALSE);
+    BUG(m3d_actualise_graphique(projet, NULL, liste_barre), FALSE);
     BUG(m3d_rafraichit(projet), FALSE);
 #endif
     
-    g_list_free(liste_noeuds_dep);
-    g_list_free(liste_barres_dep);
+    g_list_free(liste_barre);
     
 #ifdef ENABLE_GTK
     if (projet->list_gtk.ef_barres.builder != NULL)
@@ -1563,8 +1584,8 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_supprime_liste(Projet *projet, GList *
     g_list_free(barres_suppr);
     g_list_free(charges_suppr);
     
-    BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, liste_noeuds, NULL, NULL, NULL, liste_barres, &noeuds_suppr, &barres_suppr, &charges_suppr, TRUE, TRUE), FALSE);
-    g_list_free(charges_suppr);
+    BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, liste_noeuds, NULL, NULL, NULL, liste_barres, &noeuds_suppr, &barres_suppr, NULL, TRUE, TRUE), FALSE);
+    
     // On supprime les barres
     list_parcours = barres_suppr;
     while (list_parcours != NULL)

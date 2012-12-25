@@ -763,16 +763,17 @@ G_MODULE_EXPORT gboolean _1992_1_1_materiaux_supprime(Beton_Materiau* materiau, 
  *             materiau == NULL.
  */
 {
-    GList   *liste_materiaux = NULL, *liste_noeuds_dep, *liste_barres_dep, *liste_charges_dep;
+    GList   *liste_materiaux = NULL, *liste_barres_dep;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(materiau, FALSE, gettext("Paramètre %s incorrect.\n"), "materiau");
    
     // On vérifie les dépendances.
     liste_materiaux = g_list_append(liste_materiaux, materiau);
-    BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, liste_materiaux, NULL, NULL, &liste_noeuds_dep, &liste_barres_dep, &liste_charges_dep, FALSE, FALSE), FALSE);
+    BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, liste_materiaux, NULL, NULL, NULL, &liste_barres_dep, NULL, FALSE, FALSE), FALSE);
+    g_list_free(liste_materiaux);
     
-    if ((liste_noeuds_dep != NULL) || (liste_barres_dep != NULL) || (liste_charges_dep))
+    if (liste_barres_dep != NULL)
     {
         char *liste;
         
@@ -783,11 +784,8 @@ G_MODULE_EXPORT gboolean _1992_1_1_materiaux_supprime(Beton_Materiau* materiau, 
             BUGMSG(NULL, FALSE, gettext("Impossible de supprimer le matériau car il est utilisé par les barres %s.\n"), liste);
     }
     
-    BUG(_1992_1_1_barres_supprime_liste(projet, liste_noeuds_dep, liste_barres_dep), TRUE);
-    g_list_free(liste_materiaux);
-    g_list_free(liste_noeuds_dep);
+    BUG(_1992_1_1_barres_supprime_liste(projet, NULL, liste_barres_dep), TRUE);
     g_list_free(liste_barres_dep);
-    g_list_free(liste_charges_dep);
     
     _1992_1_1_materiaux_free_un(materiau);
     projet->beton.materiaux = g_list_remove(projet->beton.materiaux, materiau);
