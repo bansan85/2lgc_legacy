@@ -135,7 +135,10 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_ajout(Projet *projet, Type_Element typ
     element_nouveau->matrice_rotation = NULL;
     element_nouveau->matrice_rotation_transpose = NULL;
     
-    element_nouveau->numero = g_list_length(projet->beton.barres);
+    if (projet->beton.barres == NULL)
+        element_nouveau->numero = 0;
+    else
+        element_nouveau->numero = ((Beton_Barre *)g_list_last(projet->beton.barres)->data)->numero+1;
     
     BUG(EF_calculs_free(projet), TRUE);
     

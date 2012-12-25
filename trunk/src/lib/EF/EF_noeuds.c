@@ -81,7 +81,10 @@ G_MODULE_EXPORT EF_Noeud *EF_noeuds_ajout_noeud_libre(Projet *projet, double x, 
     
     noeud_nouveau->appui = appui;
         
-    noeud_nouveau->numero = g_list_length(projet->ef_donnees.noeuds);
+    if (projet->ef_donnees.noeuds == NULL)
+        noeud_nouveau->numero = 0;
+    else
+        noeud_nouveau->numero = ((EF_Noeud *)g_list_last(projet->ef_donnees.noeuds)->data)->numero+1;
     
     BUG(EF_calculs_free(projet), NULL);
     
@@ -189,7 +192,10 @@ G_MODULE_EXPORT EF_Noeud* EF_noeuds_ajout_noeud_barre(Projet *projet, Beton_Barr
     
     noeud_nouveau->appui = appui;
         
-    noeud_nouveau->numero = g_list_length(projet->ef_donnees.noeuds);
+    if (projet->ef_donnees.noeuds == NULL)
+        noeud_nouveau->numero = 0;
+    else
+        noeud_nouveau->numero = ((EF_Noeud *)g_list_last(projet->ef_donnees.noeuds)->data)->numero+1;
     
     BUG(EF_calculs_free(projet), NULL);
     
