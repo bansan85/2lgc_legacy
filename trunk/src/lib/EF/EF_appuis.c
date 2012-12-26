@@ -402,40 +402,33 @@ G_MODULE_EXPORT EF_Appui* EF_appuis_ajout(Projet *projet, const char *nom, Type_
     {
         appui_parcours = list_parcours->data;
         if (strcmp(nom, appui_parcours->nom) < 0)
-        {
-#ifdef ENABLE_GTK
-            gtk_list_store_insert(projet->list_gtk.ef_appuis.liste_appuis, &appui_nouveau->Iter_liste, i);
-            gtk_list_store_set(projet->list_gtk.ef_appuis.liste_appuis, &appui_nouveau->Iter_liste, 0, nom, -1);
-            if (projet->list_gtk.ef_appuis.builder != NULL)
-            {
-                if (g_list_previous(list_parcours) == NULL)
-                    gtk_tree_store_prepend(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_treestore")), &appui_nouveau->Iter_fenetre, NULL);
-                else
-                    gtk_tree_store_insert_before(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_treestore")), &appui_nouveau->Iter_fenetre, NULL, &appui_parcours->Iter_fenetre);
-                BUG(EF_appuis_get_description(appui_nouveau, &txt_uxa, &txt_uya, &txt_uza, &txt_rxa, &txt_rya, &txt_rza), NULL);
-                gtk_tree_store_set(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_treestore")), &appui_nouveau->Iter_fenetre, 0, appui_nouveau->nom, 1, txt_uxa, 2, txt_uya, 3, txt_uza, 4, txt_rxa, 5, txt_rya, 6, txt_rza, -1);
-                free(txt_uxa);
-                free(txt_uya);
-                free(txt_uza);
-                free(txt_rxa);
-                free(txt_rya);
-                free(txt_rza);
-            }
-#endif
-            projet->ef_donnees.appuis = g_list_insert_before(projet->ef_donnees.appuis, list_parcours, appui_nouveau);
-            
-            return appui_nouveau;
-        }
+            break;
         i++;
         list_parcours = g_list_next(list_parcours);
     }
-    projet->ef_donnees.appuis = g_list_append(projet->ef_donnees.appuis, appui_nouveau);
 #ifdef ENABLE_GTK
-    gtk_list_store_append(projet->list_gtk.ef_appuis.liste_appuis, &appui_nouveau->Iter_liste);
+    if (list_parcours == NULL)
+    {
+        projet->ef_donnees.appuis = g_list_append(projet->ef_donnees.appuis, appui_nouveau);
+        gtk_list_store_append(projet->list_gtk.ef_appuis.liste_appuis, &appui_nouveau->Iter_liste);
+        if (projet->list_gtk.ef_appuis.builder != NULL)
+            gtk_tree_store_append(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_treestore")), &appui_nouveau->Iter_fenetre, NULL);
+    }
+    else
+    {
+        projet->ef_donnees.appuis = g_list_insert_before(projet->ef_donnees.appuis, list_parcours, appui_nouveau);
+        gtk_list_store_insert(projet->list_gtk.ef_appuis.liste_appuis, &appui_nouveau->Iter_liste, i);
+        if (projet->list_gtk.ef_appuis.builder != NULL)
+        {
+            if (g_list_previous(list_parcours) == NULL)
+                gtk_tree_store_prepend(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_treestore")), &appui_nouveau->Iter_fenetre, NULL);
+            else
+                gtk_tree_store_insert_before(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_treestore")), &appui_nouveau->Iter_fenetre, NULL, &appui_parcours->Iter_fenetre);
+        }
+    }
     gtk_list_store_set(projet->list_gtk.ef_appuis.liste_appuis, &appui_nouveau->Iter_liste, 0, nom, -1);
     if (projet->list_gtk.ef_appuis.builder != NULL)
     {
-        gtk_tree_store_append(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_treestore")), &appui_nouveau->Iter_fenetre, NULL);
         BUG(EF_appuis_get_description(appui_nouveau, &txt_uxa, &txt_uya, &txt_uza, &txt_rxa, &txt_rya, &txt_rza), NULL);
         gtk_tree_store_set(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_treestore")), &appui_nouveau->Iter_fenetre, 0, appui_nouveau->nom, 1, txt_uxa, 2, txt_uya, 3, txt_uza, 4, txt_rxa, 5, txt_rya, 6, txt_rza, -1);
         free(txt_uxa);
