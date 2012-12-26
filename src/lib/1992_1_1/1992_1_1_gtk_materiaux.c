@@ -188,28 +188,7 @@ G_MODULE_EXPORT void _1992_1_1_gtk_materiaux_modifier_clicked(
     if (!(_1992_1_1_gtk_materiaux_recupere_donnees(projet, &fck, &texte)))
         return;
     
-    free(ef_gtk->materiau->nom);
-    ef_gtk->materiau->nom = texte;
-
-    ef_gtk->materiau->fck = fck*1000000.;
-    BUG(!isnan(ef_gtk->materiau->fckcube = _1992_1_1_materiaux_fckcube(fck)), );
-    BUG(!isnan(ef_gtk->materiau->fcm = _1992_1_1_materiaux_fcm(fck)), );
-    BUG(!isnan(ef_gtk->materiau->fctm = _1992_1_1_materiaux_fctm(fck)), );
-    BUG(!isnan(ef_gtk->materiau->fctk_0_05 = _1992_1_1_materiaux_fctk_0_05(fck)), );
-    BUG(!isnan(ef_gtk->materiau->fctk_0_95 = _1992_1_1_materiaux_fctk_0_95(fck)), );
-    BUG(!isnan(ef_gtk->materiau->ecm = _1992_1_1_materiaux_ecm(fck)), );
-    BUG(!isnan(ef_gtk->materiau->ec1 = _1992_1_1_materiaux_ec1(fck)), );
-    BUG(!isnan(ef_gtk->materiau->ecu1 = _1992_1_1_materiaux_ecu1(fck)), );
-    BUG(!isnan(ef_gtk->materiau->ec2 = _1992_1_1_materiaux_ec2(fck)), );
-    BUG(!isnan(ef_gtk->materiau->ecu2 = _1992_1_1_materiaux_ecu2(fck)), );
-    BUG(!isnan(ef_gtk->materiau->ec3 = _1992_1_1_materiaux_ec3(fck)), );
-    BUG(!isnan(ef_gtk->materiau->ecu3 = _1992_1_1_materiaux_ecu3(fck)), );
-    BUG(!isnan(ef_gtk->materiau->n = _1992_1_1_materiaux_n(fck)), );
-    ef_gtk->materiau->nu = COEFFICIENT_NU_BETON;
-    BUG(!isnan(ef_gtk->materiau->gnu_0_2 = _1992_1_1_materiaux_gnu(fck, COEFFICIENT_NU_BETON)), );
-    BUG(!isnan(ef_gtk->materiau->gnu_0_0 = _1992_1_1_materiaux_gnu(fck, 0)), );
-    
-    BUG(_1992_1_1_materiaux_update_ligne_treeview(projet, ef_gtk->materiau), );
+    BUG(_1992_1_1_materiaux_modif(projet, ef_gtk->materiau, texte, fck*1000000., _1992_1_1_materiaux_fckcube(fck), _1992_1_1_materiaux_fcm(fck), _1992_1_1_materiaux_fctm(fck), _1992_1_1_materiaux_fctk_0_05(fck), _1992_1_1_materiaux_fctk_0_95(fck), _1992_1_1_materiaux_ecm(fck), _1992_1_1_materiaux_ec1(fck), _1992_1_1_materiaux_ecu1(fck), _1992_1_1_materiaux_ec2(fck), _1992_1_1_materiaux_ecu2(fck), _1992_1_1_materiaux_n(fck), _1992_1_1_materiaux_ec3(fck), _1992_1_1_materiaux_ecu3(fck), COEFFICIENT_NU_BETON, _1992_1_1_materiaux_gnu(fck, COEFFICIENT_NU_BETON), _1992_1_1_materiaux_gnu(fck, 0)), );
     
     gtk_widget_destroy(projet->list_gtk._1992_1_1_materiaux.window);
     

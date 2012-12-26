@@ -149,14 +149,14 @@ int main(int argc, char *argv[])
     
     // Création du matériau béton
     BUG(_1992_1_1_materiaux_ajout(projet, "B20", 20.), -1);
-    BUG(_1992_1_1_materiaux_ajout(projet, "B25", 25.), -1);
     BUG(_1992_1_1_materiaux_ajout(projet, "B30", 30.), -1);
-    BUG(_1992_1_1_materiaux_ajout(projet, "B35", 35.), -1);
     BUG(_1992_1_1_materiaux_ajout(projet, "B40", 40.), -1);
-    BUG(_1992_1_1_materiaux_ajout(projet, "B45", 45.), -1);
     BUG(_1992_1_1_materiaux_ajout(projet, "B50", 50.), -1);
-    BUG(_1992_1_1_materiaux_ajout(projet, "B55", 55.), -1);
     BUG(_1992_1_1_materiaux_ajout(projet, "B60", 60.), -1);
+    BUG(_1992_1_1_materiaux_ajout(projet, "B25", 25.), -1);
+    BUG(_1992_1_1_materiaux_ajout(projet, "B35", 35.), -1);
+    BUG(_1992_1_1_materiaux_ajout(projet, "B45", 45.), -1);
+    BUG(_1992_1_1_materiaux_ajout(projet, "B55", 55.), -1);
     
     // Création du relâchment
     ry_d = (EF_Relachement_Donnees_Elastique_Lineaire*)malloc(sizeof(EF_Relachement_Donnees_Elastique_Lineaire));
