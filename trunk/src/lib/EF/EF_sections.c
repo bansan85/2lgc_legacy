@@ -159,7 +159,7 @@ gboolean EF_sections_repositionne(Projet *projet, EF_Section *section)
 /* Description : Repositionne une section après un renommage. Procédure commune à toutes les
  *               sections.
  * Paramètres : Projet *projet : la variable projet,
- *            : EF_Section *section : la section à insérer.
+ *            : EF_Section *section : la section à repositionner.
  * Valeur renvoyée : Aucune.
  */
 {

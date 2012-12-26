@@ -365,6 +365,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_materiaux_update_ligne_treeview(Projet *proje
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(materiau, FALSE, gettext("Paramètre %s incorrect.\n"), "materiau");
     
+    gtk_list_store_set(projet->list_gtk.ef_materiaux.liste_materiaux, &materiau->Iter_liste, 0, materiau->nom, -1);
     if (projet->list_gtk.ef_materiaux.builder != NULL)
     {
         char        *description;
@@ -378,6 +379,59 @@ G_MODULE_EXPORT gboolean _1992_1_1_materiaux_update_ligne_treeview(Projet *proje
     return TRUE;
 }
 #endif
+
+
+gboolean _1992_1_1_materiaux_insert(Projet *projet, Beton_Materiau *materiau)
+/* Description : Insère un materiau dans projet->beton.materiaux. Procédure commune à tous les
+ *               matériaux.
+ * Paramètres : Projet *projet : la variable projet,
+ *            : Beton_Materiau *materiau : le matériau à insérer.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    GList           *list_parcours;
+    Beton_Materiau  *materiau_tmp;
+    int             i = 1;
+    
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(materiau, FALSE, gettext("Paramètre %s incorrect.\n"), "materiau");
+    
+    list_parcours = projet->beton.materiaux;
+    while (list_parcours != NULL)
+    {
+        materiau_tmp = list_parcours->data;
+        
+        if (strcmp(materiau->nom, materiau_tmp->nom) < 0)
+            break;
+        
+        i++;
+        list_parcours = g_list_next(list_parcours);
+    }
+#ifdef ENABLE_GTK
+    if (list_parcours == NULL)
+    {
+        projet->beton.materiaux = g_list_append(projet->beton.materiaux, materiau);
+        gtk_list_store_append(projet->list_gtk.ef_materiaux.liste_materiaux, &materiau->Iter_liste);
+        if (projet->list_gtk.ef_materiaux.builder != NULL)
+            gtk_tree_store_append(projet->list_gtk.ef_materiaux.materiaux, &materiau->Iter_fenetre, NULL);
+    }
+    else
+    {
+        projet->beton.materiaux = g_list_insert_before(projet->beton.materiaux, list_parcours, materiau);
+        gtk_list_store_insert(projet->list_gtk.ef_materiaux.liste_materiaux, &materiau->Iter_liste, i);
+        if (projet->list_gtk.ef_materiaux.builder != NULL)
+        {
+            if (g_list_previous(list_parcours) == NULL)
+                gtk_tree_store_prepend(projet->list_gtk.ef_materiaux.materiaux, &materiau->Iter_fenetre, NULL);
+            else
+                gtk_tree_store_insert_before(projet->list_gtk.ef_materiaux.materiaux, &materiau->Iter_fenetre, NULL, &materiau_tmp->Iter_fenetre);
+        }
+    }
+    
+#endif
+    
+    return TRUE;
+}
 
 
 G_MODULE_EXPORT gboolean _1992_1_1_materiaux_ajout(Projet *projet, const char *nom, double fck)
@@ -424,23 +478,119 @@ G_MODULE_EXPORT gboolean _1992_1_1_materiaux_ajout(Projet *projet, const char *n
     BUG(!isnan(materiau_nouveau->gnu_0_2 = _1992_1_1_materiaux_gnu(fck, COEFFICIENT_NU_BETON)), FALSE);
     BUG(!isnan(materiau_nouveau->gnu_0_0 = _1992_1_1_materiaux_gnu(fck, 0)), FALSE);
     
-    projet->beton.materiaux = g_list_append(projet->beton.materiaux, materiau_nouveau);
+    BUG(_1992_1_1_materiaux_insert(projet, materiau_nouveau), FALSE);
+    BUG(_1992_1_1_materiaux_update_ligne_treeview(projet, materiau_nouveau), FALSE);
     
-#ifdef ENABLE_GTK
-    gtk_list_store_append(projet->list_gtk.ef_materiaux.liste_materiaux, &materiau_nouveau->Iter_liste);
-    gtk_list_store_set(projet->list_gtk.ef_materiaux.liste_materiaux, &materiau_nouveau->Iter_liste, 0, nom, -1);
-    if (projet->list_gtk.ef_materiaux.builder != NULL)
+    return TRUE;
+}
+
+
+gboolean _1992_1_1_materiaux_repositionne(Projet *projet, Beton_Materiau *materiau)
+/* Description : Repositionne un matériau après un renommage. Procédure commune à toutes les
+ *               matériaux.
+ * Paramètres : Projet *projet : la variable projet,
+ *            : Beton_Materiau *materiau : le matériau à repositionner.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    GList   *list_parcours;
+    
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(materiau, FALSE, gettext("Paramètre %s incorrect.\n"), "materiau");
+    
+    // On réinsère la section au bon endroit
+    projet->beton.materiaux = g_list_remove(projet->beton.materiaux, materiau);
+    list_parcours = projet->beton.materiaux;
+    while (list_parcours != NULL)
     {
-        char        *description;
+        Beton_Materiau  *materiau_parcours = list_parcours->data;
         
-        BUG(description = _1992_1_1_materiaux_get_description(materiau_nouveau), FALSE);
+        if (strcmp(materiau->nom, materiau_parcours->nom) < 0)
+        {
+            projet->beton.materiaux = g_list_insert_before(projet->beton.materiaux, list_parcours, materiau);
+            
+            gtk_list_store_move_before(projet->list_gtk.ef_materiaux.liste_materiaux, &materiau->Iter_liste, &materiau_parcours->Iter_liste);
+            if (projet->list_gtk.ef_materiaux.builder != NULL)
+                gtk_tree_store_move_before(projet->list_gtk.ef_materiaux.materiaux, &materiau->Iter_fenetre, &materiau_parcours->Iter_fenetre);
+            break;
+        }
         
-        gtk_tree_store_append(projet->list_gtk.ef_materiaux.materiaux, &materiau_nouveau->Iter_fenetre, NULL);
-        gtk_tree_store_set(projet->list_gtk.ef_materiaux.materiaux, &materiau_nouveau->Iter_fenetre, 0, materiau_nouveau->nom, 1, gettext("Béton"), 2, description, -1);
-        
-        free(description);
+        list_parcours = g_list_next(list_parcours);
     }
-#endif
+    if (list_parcours == NULL)
+    {
+        projet->beton.materiaux = g_list_append(projet->beton.materiaux, materiau);
+        
+        gtk_list_store_move_before(projet->list_gtk.ef_materiaux.liste_materiaux, &materiau->Iter_liste, NULL);
+        if (projet->list_gtk.ef_materiaux.builder != NULL)
+            gtk_tree_store_move_before(projet->list_gtk.ef_materiaux.materiaux, &materiau->Iter_fenetre, NULL);
+    }
+    
+    return TRUE;
+}
+
+
+G_MODULE_EXPORT gboolean _1992_1_1_materiaux_modif(Projet *projet, Beton_Materiau *materiau,
+  char *nom, double fck, double fckcube, double fcm, double fctm, double fctk_0_05,
+  double fctk_0_95, double ecm, double ec1, double ecu1, double ec2, double ecu2, double n,
+  double ec3, double ecu3, double nu, double gnu_0_2, double gnu_0_0)
+/* Description : Ferme la fenêtre en appliquant les modifications.
+ * Paramètres : Projet *projet : la variable projet,
+ *              Beton_Materiau *materiau : le matériau à modifier,
+ *              Autres : caractéristiques du matériau.
+ * Valeur renvoyée :
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL,
+ *             materiau == NULL.
+ */
+{
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(materiau, FALSE, gettext("Paramètre %s incorrect.\n"), "materiau");
+    
+    if (nom != NULL)
+    {
+        free(materiau->nom);
+        BUGMSG(materiau->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+        BUG(_1992_1_1_materiaux_repositionne(projet, materiau), FALSE);
+    }
+    
+    if (!isnan(fck))
+        materiau->fck = fck;
+    if (!isnan(fckcube))
+        materiau->fckcube = fckcube;
+    if (!isnan(fcm))
+        materiau->fcm = fcm;
+    if (!isnan(fctm))
+        materiau->fctm = fctm;
+    if (!isnan(fctk_0_05))
+        materiau->fctk_0_05 = fctk_0_05;
+    if (!isnan(fctk_0_95))
+        materiau->fctk_0_95 = fctk_0_95;
+    if (!isnan(ecm))
+        materiau->ecm = ecm;
+    if (!isnan(ec1))
+        materiau->ec1 = ec1;
+    if (!isnan(ecu1))
+        materiau->ecu1 = ecu1;
+    if (!isnan(ec2))
+        materiau->ec2 = ec2;
+    if (!isnan(ecu2))
+        materiau->ecu2 = ecu2;
+    if (!isnan(ec3))
+        materiau->ec3 = ec3;
+    if (!isnan(ecu3))
+        materiau->ecu3 = ecu3;
+    if (!isnan(n))
+        materiau->n = n;
+    if (!isnan(nu))
+        materiau->nu = nu;
+    if (!isnan(gnu_0_2))
+        materiau->gnu_0_2 = gnu_0_2;
+    if (!isnan(gnu_0_0))
+        materiau->gnu_0_0 = gnu_0_0;
+    
+    BUG(_1992_1_1_materiaux_update_ligne_treeview(projet, materiau), FALSE);
     
     return TRUE;
 }
@@ -502,6 +652,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_materiaux_renomme(Beton_Materiau *materiau, g
     
     free(materiau->nom);
     BUGMSG(materiau->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUG(_1992_1_1_materiaux_repositionne(projet, materiau), FALSE);
     
 #ifdef ENABLE_GTK
     if (projet->list_gtk.ef_materiaux.builder != NULL)
