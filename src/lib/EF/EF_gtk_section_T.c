@@ -217,11 +217,11 @@ G_MODULE_EXPORT void EF_gtk_section_T_modifier_clicked(
     if (!(EF_gtk_section_T_recupere_donnees(projet, &lt, &ht, &lr, &hr, &texte)))
         return;
     
+    gtk_widget_destroy(projet->list_gtk.ef_sections_T.window);
+    
     BUG(EF_sections_T_modif(projet, projet->list_gtk.ef_sections_T.section, texte, lt, lr, ht, hr), );
     
     free(texte);
-    
-    gtk_widget_destroy(projet->list_gtk.ef_sections_T.window);
     
     return;
 }

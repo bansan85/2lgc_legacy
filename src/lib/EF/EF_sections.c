@@ -265,6 +265,8 @@ G_MODULE_EXPORT gboolean EF_sections_rectangulaire_modif(Projet *projet, EF_Sect
         EF_sections_repositionne(projet, section);
 #ifdef ENABLE_GTK
         gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section->Iter_liste, 0, nom, -1);
+        if ((projet->list_gtk.ef_sections_rectangulaire.builder != NULL) && (projet->list_gtk.ef_sections_rectangulaire.section == section))
+            gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk.ef_sections_rectangulaire.builder, "EF_section_rectangulaire_textview_nom"))), nom, -1);
 #endif
     }
     if (!isnan(l))
@@ -370,6 +372,8 @@ G_MODULE_EXPORT gboolean EF_sections_T_modif(Projet *projet, EF_Section *section
         EF_sections_repositionne(projet, section);
 #ifdef ENABLE_GTK
         gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section->Iter_liste, 0, nom, -1);
+        if ((projet->list_gtk.ef_sections_T.builder != NULL) && (projet->list_gtk.ef_sections_T.section == section))
+            gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk.ef_sections_T.builder, "EF_section_T_textview_nom"))), nom, -1);
 #endif
     }
     if (!isnan(lt))
@@ -463,6 +467,8 @@ G_MODULE_EXPORT gboolean EF_sections_carree_modif(Projet *projet, EF_Section *se
         EF_sections_repositionne(projet, section);
 #ifdef ENABLE_GTK
         gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section->Iter_liste, 0, nom, -1);
+        if ((projet->list_gtk.ef_sections_carree.builder != NULL) && (projet->list_gtk.ef_sections_carree.section == section))
+            gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk.ef_sections_carree.builder, "EF_section_carree_textview_nom"))), nom, -1);
 #endif
     }
     if (!isnan(cote))
@@ -552,6 +558,8 @@ G_MODULE_EXPORT gboolean EF_sections_circulaire_modif(Projet *projet, EF_Section
         EF_sections_repositionne(projet, section);
 #ifdef ENABLE_GTK
         gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section->Iter_liste, 0, nom, -1);
+        if ((projet->list_gtk.ef_sections_circulaire.builder != NULL) && (projet->list_gtk.ef_sections_circulaire.section == section))
+            gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk.ef_sections_circulaire.builder, "EF_section_circulaire_textview_nom"))), nom, -1);
 #endif
     }
     if (!isnan(diametre))
@@ -682,88 +690,6 @@ G_MODULE_EXPORT char* EF_sections_get_description(EF_Section *sect)
             break;
         }
     }
-}
-
-
-G_MODULE_EXPORT gboolean EF_sections_renomme(EF_Section *section, gchar *nom, Projet *projet,
-  gboolean critique)
-/* Description : Renomme une section.
- * Paramètres : EF_Section *section : section à renommer,
- *            : const char *nom : le nouveau nom,
- *            : Projet *projet : la variable projet,
- *            : gboolean critique : si TRUE alors BUGMSG, si FALSE alors return.
- * Valeur renvoyée :
- *   Succès : TRUE
- *   Échec : FALSE :
- *             projet == NULL,
- *             section == NULL,
- *             section possédant le nouveau nom est déjà existant.
- */
-{
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(section, FALSE, gettext("Paramètre %s incorrect.\n"), "section");
-    
-    if (critique)
-        BUGMSG(EF_sections_cherche_nom(projet, nom, FALSE) == NULL, FALSE, gettext("La section '%s' existe déjà.\n"), nom);
-    else if (EF_sections_cherche_nom(projet, nom, FALSE) != NULL)
-        return FALSE;
-    
-    free(section->nom);
-    BUGMSG(section->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-    EF_sections_repositionne(projet, section);
-    
-#ifdef ENABLE_GTK
-    if (projet->list_gtk.ef_sections.builder != NULL)
-        gtk_tree_store_set(projet->list_gtk.ef_sections.sections, &section->Iter_fenetre, 1, nom, -1);
-    switch (section->type)
-    {
-        case SECTION_RECTANGULAIRE :
-        {
-            if ((projet->list_gtk.ef_sections_rectangulaire.builder != NULL) && (projet->list_gtk.ef_sections_rectangulaire.section == section))
-                gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk.ef_sections_rectangulaire.builder, "EF_section_rectangulaire_textview_nom"))), nom, -1);
-            break;
-        }
-        case SECTION_T :
-        {
-            if ((projet->list_gtk.ef_sections_T.builder != NULL) && (projet->list_gtk.ef_sections_T.section == section))
-                gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk.ef_sections_T.builder, "EF_section_T_textview_nom"))), nom, -1);
-            break;
-        }
-        case SECTION_CARREE :
-        {
-            if ((projet->list_gtk.ef_sections_carree.builder != NULL) && (projet->list_gtk.ef_sections_carree.section == section))
-                gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk.ef_sections_carree.builder, "EF_section_carree_textview_nom"))), nom, -1);
-            break;
-        }
-        case SECTION_CIRCULAIRE :
-        {
-            if ((projet->list_gtk.ef_sections_circulaire.builder != NULL) && (projet->list_gtk.ef_sections_circulaire.section == section))
-                gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk.ef_sections_circulaire.builder, "EF_section_circulaire_textview_nom"))), nom, -1);
-            break;
-        }
-        default :
-        {
-            BUGMSG(0, FALSE, gettext("Type de section %d inconnu."), section->type);
-            break;
-        }
-    }
-    gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section->Iter_liste, 0, nom, -1);
-    if (projet->list_gtk.ef_barres.builder != NULL)
-    {
-        GList   *list_parcours = projet->beton.barres;
-        
-        while (list_parcours != NULL)
-        {
-            Beton_Barre *barre = list_parcours->data;
-            
-            if (barre->section == section)
-                gtk_tree_store_set(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treestore")), &barre->Iter, 2, barre->section->nom, -1);
-            list_parcours = g_list_next(list_parcours);
-        }
-    }
-#endif
-    
-    return TRUE;
 }
 
 
