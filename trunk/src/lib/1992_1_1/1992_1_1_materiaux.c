@@ -592,6 +592,22 @@ G_MODULE_EXPORT gboolean _1992_1_1_materiaux_modif(Projet *projet, Beton_Materia
     
     BUG(_1992_1_1_materiaux_update_ligne_treeview(projet, materiau), FALSE);
     
+#ifdef ENABLE_GTK
+    if (projet->list_gtk.ef_barres.builder != NULL)
+    {
+        GList   *list_parcours = projet->beton.barres;
+        
+        while (list_parcours != NULL)
+        {
+            Beton_Barre *barre = list_parcours->data;
+            
+            if (barre->materiau == materiau)
+                gtk_tree_store_set(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treestore")), &barre->Iter, 3, barre->materiau->nom, -1);
+            list_parcours = g_list_next(list_parcours);
+        }
+    }
+#endif
+    
     return TRUE;
 }
 
@@ -629,51 +645,6 @@ G_MODULE_EXPORT Beton_Materiau* _1992_1_1_materiaux_cherche_nom(Projet *projet, 
         BUGMSG(0, NULL, gettext("Matériau en béton '%s' introuvable.\n"), nom);
     else
         return NULL;
-}
-
-
-G_MODULE_EXPORT gboolean _1992_1_1_materiaux_renomme(Beton_Materiau *materiau, gchar *nom,
-  Projet *projet)
-/* Description : Renomme un matériau.
- * Paramètres : Beton_Materiau *materiau : materiau à renommer,
- *            : const char *nom : le nouveau nom,
- *            : Projet *projet : la variable projet.
- * Valeur renvoyée :
- *   Succès : TRUE
- *   Échec : FALSE :
- *             projet == NULL,
- *             section == NULL,
- *             materiau possédant le nouveau nom est déjà existant.
- */
-{
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(materiau, FALSE, gettext("Paramètre %s incorrect.\n"), "materiau");
-    BUGMSG(_1992_1_1_materiaux_cherche_nom(projet, nom, FALSE) == NULL, FALSE, gettext("Le matériau '%s' existe déjà.\n"), nom);
-    
-    free(materiau->nom);
-    BUGMSG(materiau->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-    BUG(_1992_1_1_materiaux_repositionne(projet, materiau), FALSE);
-    
-#ifdef ENABLE_GTK
-    if (projet->list_gtk.ef_materiaux.builder != NULL)
-        gtk_tree_store_set(projet->list_gtk.ef_materiaux.materiaux, &materiau->Iter_fenetre, 0, nom, -1);
-    gtk_list_store_set(projet->list_gtk.ef_materiaux.liste_materiaux, &materiau->Iter_liste, 0, nom, -1);
-    if (projet->list_gtk.ef_barres.builder != NULL)
-    {
-        GList   *list_parcours = projet->beton.barres;
-        
-        while (list_parcours != NULL)
-        {
-            Beton_Barre *barre = list_parcours->data;
-            
-            if (barre->materiau == materiau)
-                gtk_tree_store_set(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treestore")), &barre->Iter, 3, barre->materiau->nom, -1);
-            list_parcours = g_list_next(list_parcours);
-        }
-    }
-#endif
-    
-    return TRUE;
 }
 
 
