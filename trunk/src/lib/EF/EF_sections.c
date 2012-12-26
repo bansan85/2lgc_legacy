@@ -101,6 +101,57 @@ G_MODULE_EXPORT gboolean EF_sections_update_ligne_treeview(Projet *projet, EF_Se
 #endif
 
 
+gboolean EF_sections_insert(Projet *projet, EF_Section *section)
+/* Description : Insère une section dans projet->beton.sections. Procédure commune à toutes les
+ *               sections.
+ * Paramètres : Projet *projet : la variable projet,
+ *            : EF_Section *section : la section à insérer.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    GList       *list_parcours;
+    EF_Section  *section_tmp;
+    int         i = 1;
+    
+    list_parcours = projet->beton.sections;
+    while (list_parcours != NULL)
+    {
+        section_tmp = list_parcours->data;
+        
+        if (strcmp(section->nom, section_tmp->nom) < 0)
+            break;
+        
+        i++;
+        list_parcours = g_list_next(list_parcours);
+    }
+#ifdef ENABLE_GTK
+    if (list_parcours == NULL)
+    {
+        projet->beton.sections = g_list_append(projet->beton.sections, section);
+        gtk_list_store_append(projet->list_gtk.ef_sections.liste_sections, &section->Iter_liste);
+        if (projet->list_gtk.ef_sections.builder != NULL)
+            gtk_tree_store_append(projet->list_gtk.ef_sections.sections, &section->Iter_fenetre, NULL);
+    }
+    else
+    {
+        projet->beton.sections = g_list_insert_before(projet->beton.sections, list_parcours, section);
+        gtk_list_store_insert(projet->list_gtk.ef_sections.liste_sections, &section->Iter_liste, i);
+        if (projet->list_gtk.ef_sections.builder != NULL)
+        {
+            if (g_list_previous(list_parcours) == NULL)
+                gtk_tree_store_prepend(projet->list_gtk.ef_sections.sections, &section->Iter_fenetre, NULL);
+            else
+                gtk_tree_store_insert_before(projet->list_gtk.ef_sections.sections, &section->Iter_fenetre, NULL, &section_tmp->Iter_fenetre);
+        }
+    }
+    
+    BUG(EF_sections_update_ligne_treeview(projet, section), FALSE);
+#endif
+    
+    return TRUE;
+}
+
+
 G_MODULE_EXPORT gboolean EF_sections_rectangulaire_ajout(Projet *projet, const char* nom,
   double l, double h)
 /* Description : Ajouter une nouvelle section rectangulaire à la liste des sections en béton.
@@ -130,17 +181,7 @@ G_MODULE_EXPORT gboolean EF_sections_rectangulaire_ajout(Projet *projet, const c
     section_data->largeur_table = l;
     section_data->hauteur_table = 0.;
     
-    projet->beton.sections = g_list_append(projet->beton.sections, section_nouvelle);
-    
-#ifdef ENABLE_GTK
-    gtk_list_store_append(projet->list_gtk.ef_sections.liste_sections, &section_nouvelle->Iter_liste);
-    gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section_nouvelle->Iter_liste, 0, nom, -1);
-    if (projet->list_gtk.ef_sections.builder != NULL)
-    {
-        gtk_tree_store_append(projet->list_gtk.ef_sections.sections, &section_nouvelle->Iter_fenetre, NULL);
-        BUG(EF_sections_update_ligne_treeview(projet, section_nouvelle), FALSE);
-    }
-#endif
+    BUG(EF_sections_insert(projet, section_nouvelle), FALSE);
     
     return TRUE;
 }
@@ -243,17 +284,7 @@ G_MODULE_EXPORT gboolean EF_sections_T_ajout(Projet *projet, const char* nom, do
     section_data->hauteur_table = ht;
     section_data->hauteur_retombee = hr;
     
-    projet->beton.sections = g_list_append(projet->beton.sections, section_nouvelle);
-    
-#ifdef ENABLE_GTK
-    gtk_list_store_append(projet->list_gtk.ef_sections.liste_sections, &section_nouvelle->Iter_liste);
-    gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section_nouvelle->Iter_liste, 0, nom, -1);
-    if (projet->list_gtk.ef_sections.builder != NULL)
-    {
-        gtk_tree_store_append(projet->list_gtk.ef_sections.sections, &section_nouvelle->Iter_fenetre, NULL);
-        BUG(EF_sections_update_ligne_treeview(projet, section_nouvelle), FALSE);
-    }
-#endif
+    BUG(EF_sections_insert(projet, section_nouvelle), FALSE);
     
     return TRUE;
 }
@@ -348,17 +379,7 @@ G_MODULE_EXPORT gboolean EF_sections_carree_ajout(Projet *projet, const char* no
     BUGMSG(section_nouvelle->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
     section_data->cote = cote;
     
-    projet->beton.sections = g_list_append(projet->beton.sections, section_nouvelle);
-    
-#ifdef ENABLE_GTK
-    gtk_list_store_append(projet->list_gtk.ef_sections.liste_sections, &section_nouvelle->Iter_liste);
-    gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section_nouvelle->Iter_liste, 0, nom, -1);
-    if (projet->list_gtk.ef_sections.builder != NULL)
-    {
-        gtk_tree_store_append(projet->list_gtk.ef_sections.sections, &section_nouvelle->Iter_fenetre, NULL);
-        BUG(EF_sections_update_ligne_treeview(projet, section_nouvelle), FALSE);
-    }
-#endif
+    BUG(EF_sections_insert(projet, section_nouvelle), FALSE);
     
     return TRUE;
 }
@@ -446,17 +467,7 @@ G_MODULE_EXPORT gboolean EF_sections_circulaire_ajout(Projet *projet, const char
     BUGMSG(section_nouvelle->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
     section_data->diametre = diametre;
     
-    projet->beton.sections = g_list_append(projet->beton.sections, section_nouvelle);
-    
-#ifdef ENABLE_GTK
-    gtk_list_store_append(projet->list_gtk.ef_sections.liste_sections, &section_nouvelle->Iter_liste);
-    gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section_nouvelle->Iter_liste, 0, nom, -1);
-    if (projet->list_gtk.ef_sections.builder != NULL)
-    {
-        gtk_tree_store_append(projet->list_gtk.ef_sections.sections, &section_nouvelle->Iter_fenetre, NULL);
-        BUG(EF_sections_update_ligne_treeview(projet, section_nouvelle), FALSE);
-    }
-#endif
+    BUG(EF_sections_insert(projet, section_nouvelle), FALSE);
     
     return TRUE;
 }
