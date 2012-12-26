@@ -622,11 +622,13 @@ G_MODULE_EXPORT char* EF_sections_get_description(EF_Section *sect)
 }
 
 
-G_MODULE_EXPORT gboolean EF_sections_renomme(EF_Section *section, gchar *nom, Projet *projet)
+G_MODULE_EXPORT gboolean EF_sections_renomme(EF_Section *section, gchar *nom, Projet *projet,
+  gboolean critique)
 /* Description : Renomme une section.
  * Paramètres : EF_Section *section : section à renommer,
  *            : const char *nom : le nouveau nom,
- *            : Projet *projet : la variable projet.
+ *            : Projet *projet : la variable projet,
+ *            : gboolean critique : si TRUE alors BUGMSG, si FALSE alors return.
  * Valeur renvoyée :
  *   Succès : TRUE
  *   Échec : FALSE :
@@ -637,7 +639,11 @@ G_MODULE_EXPORT gboolean EF_sections_renomme(EF_Section *section, gchar *nom, Pr
 {
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(section, FALSE, gettext("Paramètre %s incorrect.\n"), "section");
-    BUGMSG(EF_sections_cherche_nom(projet, nom, FALSE) == NULL, FALSE, gettext("La section '%s' existe déjà.\n"), nom);
+    
+    if (critique)
+        BUGMSG(EF_sections_cherche_nom(projet, nom, FALSE) == NULL, FALSE, gettext("La section '%s' existe déjà.\n"), nom);
+    else if (EF_sections_cherche_nom(projet, nom, FALSE) != NULL)
+        return FALSE;
     
     free(section->nom);
     BUGMSG(section->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));

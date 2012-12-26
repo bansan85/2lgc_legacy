@@ -290,7 +290,8 @@ G_MODULE_EXPORT void EF_gtk_sections_edit_nom(GtkCellRendererText *cell __attrib
     if (strcmp(section->nom, new_text) == 0)
         return;
 
-    BUG(EF_sections_renomme(section, new_text, projet), );
+    if (EF_sections_renomme(section, new_text, projet, FALSE))
+        return;
     
     return;
 }
