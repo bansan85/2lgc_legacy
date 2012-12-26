@@ -534,7 +534,6 @@ G_MODULE_EXPORT gboolean EF_appuis_renomme(EF_Appui *appui, gchar *nom, Projet *
  */
 {
     GList       *list_parcours;
-    gboolean    ajoute;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(appui, FALSE, gettext("Paramètre %s incorrect.\n"), "appui");
@@ -546,11 +545,10 @@ G_MODULE_EXPORT gboolean EF_appuis_renomme(EF_Appui *appui, gchar *nom, Projet *
     
     free(appui->nom);
     BUGMSG(appui->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-    projet->ef_donnees.appuis = g_list_remove(projet->ef_donnees.appuis, appui);
     
     // On réinsère l'appui au bon endroit
+    projet->ef_donnees.appuis = g_list_remove(projet->ef_donnees.appuis, appui);
     list_parcours = projet->ef_donnees.appuis;
-    ajoute = FALSE;
     while (list_parcours != NULL)
     {
         EF_Appui    *appui_parcours = list_parcours->data;
@@ -562,13 +560,12 @@ G_MODULE_EXPORT gboolean EF_appuis_renomme(EF_Appui *appui, gchar *nom, Projet *
             gtk_list_store_move_before(projet->list_gtk.ef_appuis.liste_appuis, &appui->Iter_liste, &appui_parcours->Iter_liste);
             if (projet->list_gtk.ef_appuis.builder != NULL)
                 gtk_tree_store_move_before(projet->list_gtk.ef_appuis.appuis, &appui->Iter_fenetre, &appui_parcours->Iter_fenetre);
-            list_parcours = NULL;
-            ajoute = TRUE;
+            break;
         }
         
         list_parcours = g_list_next(list_parcours);
     }
-    if (ajoute == FALSE)
+    if (list_parcours == NULL)
     {
         projet->ef_donnees.appuis = g_list_append(projet->ef_donnees.appuis, appui);
         

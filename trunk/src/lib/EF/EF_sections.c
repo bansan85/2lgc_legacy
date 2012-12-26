@@ -113,6 +113,9 @@ gboolean EF_sections_insert(Projet *projet, EF_Section *section)
     EF_Section  *section_tmp;
     int         i = 1;
     
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(section, FALSE, gettext("Paramètre %s incorrect.\n"), "section");
+    
     list_parcours = projet->beton.sections;
     while (list_parcours != NULL)
     {
@@ -147,6 +150,51 @@ gboolean EF_sections_insert(Projet *projet, EF_Section *section)
     
     BUG(EF_sections_update_ligne_treeview(projet, section), FALSE);
 #endif
+    
+    return TRUE;
+}
+
+
+gboolean EF_sections_repositionne(Projet *projet, EF_Section *section)
+/* Description : Repositionne une section après un renommage. Procédure commune à toutes les
+ *               sections.
+ * Paramètres : Projet *projet : la variable projet,
+ *            : EF_Section *section : la section à insérer.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    GList   *list_parcours;
+    
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(section, FALSE, gettext("Paramètre %s incorrect.\n"), "section");
+    
+    // On réinsère la section au bon endroit
+    projet->beton.sections = g_list_remove(projet->beton.sections, section);
+    list_parcours = projet->beton.sections;
+    while (list_parcours != NULL)
+    {
+        EF_Section    *section_parcours = list_parcours->data;
+        
+        if (strcmp(section->nom, section_parcours->nom) < 0)
+        {
+            projet->beton.sections = g_list_insert_before(projet->beton.sections, list_parcours, section);
+            
+            gtk_list_store_move_before(projet->list_gtk.ef_sections.liste_sections, &section->Iter_liste, &section_parcours->Iter_liste);
+            if (projet->list_gtk.ef_sections.builder != NULL)
+                gtk_tree_store_move_before(projet->list_gtk.ef_sections.sections, &section->Iter_fenetre, &section_parcours->Iter_fenetre);
+            break;
+        }
+        
+        list_parcours = g_list_next(list_parcours);
+    }
+    if (list_parcours == NULL)
+    {
+        projet->beton.sections = g_list_append(projet->beton.sections, section);
+        
+        gtk_list_store_move_before(projet->list_gtk.ef_sections.liste_sections, &section->Iter_liste, NULL);
+        if (projet->list_gtk.ef_sections.builder != NULL)
+            gtk_tree_store_move_before(projet->list_gtk.ef_sections.sections, &section->Iter_fenetre, NULL);
+    }
     
     return TRUE;
 }
@@ -214,6 +262,7 @@ G_MODULE_EXPORT gboolean EF_sections_rectangulaire_modif(Projet *projet, EF_Sect
     {
         free(section->nom);
         BUGMSG(section->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+        EF_sections_repositionne(projet, section);
 #ifdef ENABLE_GTK
         gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section->Iter_liste, 0, nom, -1);
 #endif
@@ -318,6 +367,7 @@ G_MODULE_EXPORT gboolean EF_sections_T_modif(Projet *projet, EF_Section *section
     {
         free(section->nom);
         BUGMSG(section->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+        EF_sections_repositionne(projet, section);
 #ifdef ENABLE_GTK
         gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section->Iter_liste, 0, nom, -1);
 #endif
@@ -410,6 +460,7 @@ G_MODULE_EXPORT gboolean EF_sections_carree_modif(Projet *projet, EF_Section *se
     {
         free(section->nom);
         BUGMSG(section->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+        EF_sections_repositionne(projet, section);
 #ifdef ENABLE_GTK
         gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section->Iter_liste, 0, nom, -1);
 #endif
@@ -498,6 +549,7 @@ G_MODULE_EXPORT gboolean EF_sections_circulaire_modif(Projet *projet, EF_Section
     {
         free(section->nom);
         BUGMSG(section->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+        EF_sections_repositionne(projet, section);
 #ifdef ENABLE_GTK
         gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section->Iter_liste, 0, nom, -1);
 #endif
@@ -658,6 +710,7 @@ G_MODULE_EXPORT gboolean EF_sections_renomme(EF_Section *section, gchar *nom, Pr
     
     free(section->nom);
     BUGMSG(section->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    EF_sections_repositionne(projet, section);
     
 #ifdef ENABLE_GTK
     if (projet->list_gtk.ef_sections.builder != NULL)
