@@ -830,7 +830,11 @@ G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_n(Fonction *fonction, Beton_
 
 
 G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_enleve_barres(
-  Charge_Barre_Ponctuelle *charge, GList *barres, Projet *projet)
+  Charge_Barre_Ponctuelle *charge, GList *barres, Projet *projet
+#ifndef ENABLE_GTK
+  __attribute__((unused))
+#endif
+)
 /* Description : Enlève à la charge une liste de barres pouvant être utilisées. Dans le cas où
  *               une barre de la liste n'est pas dans la charge, ce point ne sera pas considéré
  *               comme une erreur mais la barre sera simplement ignorée.

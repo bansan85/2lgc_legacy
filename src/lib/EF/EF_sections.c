@@ -179,10 +179,12 @@ gboolean EF_sections_repositionne(Projet *projet, EF_Section *section)
         {
             projet->beton.sections = g_list_insert_before(projet->beton.sections, list_parcours, section);
             
+#ifdef ENABLE_GTK
             gtk_list_store_move_before(projet->list_gtk.ef_sections.liste_sections, &section->Iter_liste, &section_parcours->Iter_liste);
             if (projet->list_gtk.ef_sections.builder != NULL)
                 gtk_tree_store_move_before(projet->list_gtk.ef_sections.sections, &section->Iter_fenetre, &section_parcours->Iter_fenetre);
             break;
+#endif
         }
         
         list_parcours = g_list_next(list_parcours);
@@ -191,9 +193,11 @@ gboolean EF_sections_repositionne(Projet *projet, EF_Section *section)
     {
         projet->beton.sections = g_list_append(projet->beton.sections, section);
         
+#ifdef ENABLE_GTK
         gtk_list_store_move_before(projet->list_gtk.ef_sections.liste_sections, &section->Iter_liste, NULL);
         if (projet->list_gtk.ef_sections.builder != NULL)
             gtk_tree_store_move_before(projet->list_gtk.ef_sections.sections, &section->Iter_fenetre, NULL);
+#endif
     }
     
     return TRUE;

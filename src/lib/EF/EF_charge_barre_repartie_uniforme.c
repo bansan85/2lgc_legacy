@@ -982,7 +982,11 @@ G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_n(Fonction *fonction,
 
 
 G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_enleve_barres(
-  Charge_Barre_Repartie_Uniforme *charge, GList *barres, Projet *projet)
+  Charge_Barre_Repartie_Uniforme *charge, GList *barres, Projet *projet
+#ifndef ENABLE_GTK
+  __attribute__((unused))
+#endif
+)
 /* Description : Enlève à la charge une liste de barres pouvant être utilisées. Dans le cas où
  *               une barre de la liste n'est pas dans la charge, ce point ne sera pas considéré
  *               comme une erreur mais la barre sera simplement ignorée.

@@ -557,9 +557,11 @@ G_MODULE_EXPORT gboolean EF_appuis_renomme(EF_Appui *appui, gchar *nom, Projet *
         {
             projet->ef_donnees.appuis = g_list_insert_before(projet->ef_donnees.appuis, list_parcours, appui);
             
+#ifdef ENABLE_GTK
             gtk_list_store_move_before(projet->list_gtk.ef_appuis.liste_appuis, &appui->Iter_liste, &appui_parcours->Iter_liste);
             if (projet->list_gtk.ef_appuis.builder != NULL)
                 gtk_tree_store_move_before(projet->list_gtk.ef_appuis.appuis, &appui->Iter_fenetre, &appui_parcours->Iter_fenetre);
+#endif
             break;
         }
         
@@ -569,9 +571,11 @@ G_MODULE_EXPORT gboolean EF_appuis_renomme(EF_Appui *appui, gchar *nom, Projet *
     {
         projet->ef_donnees.appuis = g_list_append(projet->ef_donnees.appuis, appui);
         
+#ifdef ENABLE_GTK
         gtk_list_store_move_before(projet->list_gtk.ef_appuis.liste_appuis, &appui->Iter_liste, NULL);
         if (projet->list_gtk.ef_appuis.builder != NULL)
             gtk_tree_store_move_before(projet->list_gtk.ef_appuis.appuis, &appui->Iter_fenetre, NULL);
+#endif
     }
     
 #ifdef ENABLE_GTK
