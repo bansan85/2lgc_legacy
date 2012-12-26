@@ -185,6 +185,8 @@ G_MODULE_EXPORT void EF_gtk_section_carree_modifier_clicked(
     
     BUG(EF_sections_carree_modif(projet, projet->list_gtk.ef_sections_carree.section, texte, cote), );
     
+    free(texte);
+    
     gtk_widget_destroy(projet->list_gtk.ef_sections_carree.window);
     
     return;

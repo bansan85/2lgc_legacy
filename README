@@ -76,7 +76,28 @@ Ensuite compiler et installer l'application normalement :
     Fermer la fenêtre en cliquant sur la touche Echap
         Test la touche Echap
   
-  
+  Pour la fenêtre Sections (fichiers EF_sections, EF_gtk_sections, EF_gtk_section_rectangulaire, EF_gtk_section_T, EF_gtk_section_carree et EF_gtk_section_circulaire)
+    Ouvrez toutes les fenêtres, à savoir :
+        Structure|Barres|Sections
+        Structure|Barres|Gestion des barres
+    Sélectionner et supprimer avec la touche SUPPR les 4 sections inutilisées.
+    Ajouter une section rectangulaire, circulaire, rectangulaire et en T.
+    Editer les 4 nouvelles sections via le bouton Modifier (Pas forcément obligé de modifier les valeurs).
+    Renommer les 4 anciennes sections via la colonne correspondante du treeview. Le faire après avoir ouvert (et réouverte sans l'avoir refermée) la fenêtre d'édition en double-cliquant sur la ligne. Fermer la fenêtre d'édition via le bouton annuler.
+    Sélectionner et supprimer avec le bouton supprimer les 4 sections inutilisées. La fenêtre d'édition doit être ouverte.
+    Ouvrir la fenêtre d'édition pour les 4 sections restantes et la fermer via la touche Echap.
+    Supprimer les 4 sections restantes (en supprimant les dépendances).
+        Vérifier si la fenêtre Gestion des barres est mis à jour et que la fenêtre d'édition se ferme automatiquement.
+    Fermer la fenêtre en cliquant sur le bouton Fermer
+        Test le bouton fermer
+    La rouvrir via le menu
+    La même chose (réouvrir via le menu) mais sans fermer la fenêtre
+    Cliquer 2 fois sur ajouter.
+        Pour ne pas fermer la fenêtre avec une liste de sections vide.
+    Fermer la fenêtre en cliquant sur la touche Echap
+        Test la touche Echap
+    
+    
   En finalement :
     Fichier|Quitter
 
