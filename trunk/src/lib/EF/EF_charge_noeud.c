@@ -78,7 +78,12 @@ G_MODULE_EXPORT Charge_Noeud*  EF_charge_noeud_ajout(Projet *projet, unsigned in
 }
 
 
-G_MODULE_EXPORT gboolean EF_charge_noeud_enleve_noeuds(Charge_Noeud *charge, GList *noeuds, Projet *projet)
+G_MODULE_EXPORT gboolean EF_charge_noeud_enleve_noeuds(Charge_Noeud *charge, GList *noeuds,
+  Projet *projet
+#ifndef ENABLE_GTK
+  __attribute__((unused))
+#endif
+)
 /* Description : Enlève à la charge une liste de noeuds pouvant être utilisés. Dans le cas où
  *               un noeud de la liste n'est pas dans la charge, ce point ne sera pas considéré
  *               comme une erreur mais le noeud sera simplement ignoré.

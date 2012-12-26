@@ -356,7 +356,9 @@ G_MODULE_EXPORT gboolean EF_noeuds_change_appui(Projet *projet, EF_Noeud *noeud,
  *             noeud == NULL.
  */
 {
+#ifdef ENABLE_GTK
     EF_Appui    *appui_old = noeud->appui;
+#endif
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(noeud, FALSE, gettext("Paramètre %s incorrect.\n"), "noeud");

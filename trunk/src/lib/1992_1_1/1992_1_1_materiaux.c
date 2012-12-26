@@ -509,9 +509,11 @@ gboolean _1992_1_1_materiaux_repositionne(Projet *projet, Beton_Materiau *materi
         {
             projet->beton.materiaux = g_list_insert_before(projet->beton.materiaux, list_parcours, materiau);
             
+#ifdef ENABLE_GTK
             gtk_list_store_move_before(projet->list_gtk.ef_materiaux.liste_materiaux, &materiau->Iter_liste, &materiau_parcours->Iter_liste);
             if (projet->list_gtk.ef_materiaux.builder != NULL)
                 gtk_tree_store_move_before(projet->list_gtk.ef_materiaux.materiaux, &materiau->Iter_fenetre, &materiau_parcours->Iter_fenetre);
+#endif
             break;
         }
         
@@ -521,9 +523,11 @@ gboolean _1992_1_1_materiaux_repositionne(Projet *projet, Beton_Materiau *materi
     {
         projet->beton.materiaux = g_list_append(projet->beton.materiaux, materiau);
         
+#ifdef ENABLE_GTK
         gtk_list_store_move_before(projet->list_gtk.ef_materiaux.liste_materiaux, &materiau->Iter_liste, NULL);
         if (projet->list_gtk.ef_materiaux.builder != NULL)
             gtk_tree_store_move_before(projet->list_gtk.ef_materiaux.materiaux, &materiau->Iter_fenetre, NULL);
+#endif
     }
     
     return TRUE;
