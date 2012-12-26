@@ -195,11 +195,11 @@ G_MODULE_EXPORT void EF_gtk_section_rectangulaire_modifier_clicked(
     if (!(EF_gtk_section_rectangulaire_recupere_donnees(projet, &largeur, &hauteur, &texte)))
         return;
     
+    gtk_widget_destroy(projet->list_gtk.ef_sections_rectangulaire.window);
+    
     BUG(EF_sections_rectangulaire_modif(projet, projet->list_gtk.ef_sections_rectangulaire.section, texte, largeur, hauteur), );
     
     free(texte);
-    
-    gtk_widget_destroy(projet->list_gtk.ef_sections_rectangulaire.window);
     
     return;
 }

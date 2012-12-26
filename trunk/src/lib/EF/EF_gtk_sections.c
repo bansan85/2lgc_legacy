@@ -23,6 +23,7 @@
 #include <locale.h>
 #include <gtk/gtk.h>
 #include <string.h>
+#include <math.h>
 
 #include "common_m3d.hpp"
 
@@ -290,8 +291,33 @@ G_MODULE_EXPORT void EF_gtk_sections_edit_nom(GtkCellRendererText *cell __attrib
     if (strcmp(section->nom, new_text) == 0)
         return;
 
-    if (EF_sections_renomme(section, new_text, projet, FALSE))
-        return;
+    switch (section->type)
+    {
+        case SECTION_RECTANGULAIRE :
+        {
+            BUG(EF_sections_rectangulaire_modif(projet, section, new_text, NAN, NAN), );
+            break;
+        }
+        case SECTION_T :
+        {
+            BUG(EF_sections_T_modif(projet, section, new_text, NAN, NAN, NAN, NAN), );
+            break;
+        }
+        case SECTION_CARREE :
+        {
+            BUG(EF_sections_carree_modif(projet, section, new_text, NAN), );
+            break;
+        }
+        case SECTION_CIRCULAIRE :
+        {
+            BUG(EF_sections_circulaire_modif(projet, section, new_text, NAN), );
+            break;
+        }
+        default :
+        {
+            BUGMSG(0, , gettext("Type de section %d inconnu."), section->type);
+        }
+    }
     
     return;
 }
