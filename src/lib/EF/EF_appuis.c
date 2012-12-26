@@ -525,11 +525,13 @@ G_MODULE_EXPORT gboolean EF_appuis_edit(EF_Appui *appui, int x, Type_EF_Appui ty
 }
 
 
-G_MODULE_EXPORT gboolean EF_appuis_renomme(EF_Appui *appui, gchar *nom, Projet *projet)
+G_MODULE_EXPORT gboolean EF_appuis_renomme(EF_Appui *appui, gchar *nom, Projet *projet,
+  gboolean critique)
 /* Description : Renomme un appui.
  * Paramètres : EF_Appui *appui : appui à renommer,
  *            : const char *nom : le nouveau nom,
- *            : Projet *projet : la variable projet.
+ *            : Projet *projet : la variable projet,
+ *            : gboolean critique : si TRUE alors BUGMSG, si FALSE alors return.
  * Valeur renvoyée :
  *   Succès : TRUE
  *   Échec : FALSE :
@@ -543,7 +545,11 @@ G_MODULE_EXPORT gboolean EF_appuis_renomme(EF_Appui *appui, gchar *nom, Projet *
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(appui, FALSE, gettext("Paramètre %s incorrect.\n"), "appui");
-    BUGMSG(EF_appuis_cherche_nom(projet, nom, FALSE) == NULL, FALSE, gettext("L'appui '%s' existe déjà.\n"), nom);
+    
+    if (critique)
+        BUGMSG(EF_appuis_cherche_nom(projet, nom, FALSE) == NULL, FALSE, gettext("L'appui '%s' existe déjà.\n"), nom);
+    else if (EF_appuis_cherche_nom(projet, nom, FALSE) != NULL)
+        return FALSE;
     
     free(appui->nom);
     BUGMSG(appui->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));

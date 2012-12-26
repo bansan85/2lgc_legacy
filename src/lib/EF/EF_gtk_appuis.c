@@ -352,7 +352,8 @@ G_MODULE_EXPORT void EF_gtk_appuis_edit_nom(GtkCellRendererText *cell __attribut
     if (strcmp(appui->nom, new_text) == 0)
         return;
 
-    BUG(EF_appuis_renomme(appui, new_text, projet), );
+    if (EF_appuis_renomme(appui, new_text, projet, FALSE))
+        return;
     
     return;
 }
