@@ -44,7 +44,6 @@ double _1992_1_1_materiaux_gnu(double fck, double nu) __attribute__((__warn_unus
 gboolean _1992_1_1_materiaux_ajout(Projet *projet, const char *nom, double fck) __attribute__((__warn_unused_result__));
 gboolean _1992_1_1_materiaux_modif(Projet *projet, Beton_Materiau *materiau, char *nom, double fck, double fckcube, double fcm, double fctm, double fctk_0_05, double fctk_0_95, double ecm, double ec1, double ecu1, double ec2, double ecu2, double n, double ec3, double ecu3, double nu, double gnu_0_2, double gnu_0_0) __attribute__((__warn_unused_result__));
 Beton_Materiau* _1992_1_1_materiaux_cherche_nom(Projet *projet, const char *nom, gboolean critique) __attribute__((__warn_unused_result__));
-gboolean _1992_1_1_materiaux_renomme(Beton_Materiau *materiau, gchar *nom, Projet *projet) __attribute__((__warn_unused_result__));
 
 char *_1992_1_1_materiaux_get_description(Beton_Materiau* materiau) __attribute__((__warn_unused_result__));
 

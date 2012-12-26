@@ -23,6 +23,7 @@
 #include <locale.h>
 #include <gtk/gtk.h>
 #include <string.h>
+#include <math.h>
 
 #include "common_m3d.hpp"
 
@@ -175,7 +176,7 @@ G_MODULE_EXPORT void EF_gtk_materiaux_edit_nom(GtkCellRendererText *cell __attri
     if (strcmp(materiau->nom, new_text) == 0)
         return;
     
-    BUG(_1992_1_1_materiaux_renomme(materiau, new_text, projet), );
+    BUG(_1992_1_1_materiaux_modif(projet, materiau, new_text, NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN), );
     
     return;
 }
