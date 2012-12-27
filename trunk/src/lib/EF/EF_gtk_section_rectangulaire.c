@@ -90,9 +90,6 @@ gboolean EF_gtk_section_rectangulaire_recupere_donnees(Projet *projet, double *l
  *             en cas d'erreur d'allocation mémoire.
  */
 {
-    Gtk_EF_Sections_Rectangulaire *ef_gtk;
-    
-    GtkWidget       *dialog;
     GtkTextIter     start, end;
     GtkTextBuffer   *textbuffer;
     
@@ -102,25 +99,13 @@ gboolean EF_gtk_section_rectangulaire_recupere_donnees(Projet *projet, double *l
     BUGMSG(nom, FALSE, gettext("Paramètre %s incorrect.\n"), "nom");
     BUGMSG(projet->list_gtk.ef_sections_rectangulaire.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section Rectangulaire");
     
-    ef_gtk = &projet->list_gtk.ef_sections_rectangulaire;
-    
-    *largeur = common_gtk_entry_renvoie_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_sections_rectangulaire.builder, "EF_section_rectangulaire_buffer_largeur")));
-    if ((isnan(*largeur)) || (*largeur < ERREUR_RELATIVE_MIN))
-    {
-        dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("La valeur de la largeur est incorrecte."));
-        gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
+    *largeur = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_sections_rectangulaire.builder, "EF_section_rectangulaire_buffer_largeur")), 0, FALSE, INFINITY, FALSE);
+    if (isnan(*largeur))
         return FALSE;
-    }
     
-    *hauteur = common_gtk_entry_renvoie_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_sections_rectangulaire.builder, "EF_section_rectangulaire_buffer_hauteur")));
-    if ((isnan(*hauteur)) || (*hauteur < ERREUR_RELATIVE_MIN))
-    {
-        dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("La valeur de la hauteur est incorrecte."));
-        gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
+    *hauteur = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_sections_rectangulaire.builder, "EF_section_rectangulaire_buffer_hauteur")), 0, FALSE, INFINITY, FALSE);
+    if (isnan(*hauteur))
         return FALSE;
-    }
     
     // Si tous les paramètres sont corrects
     textbuffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk.ef_sections_rectangulaire.builder, "EF_section_rectangulaire_textview_nom")));

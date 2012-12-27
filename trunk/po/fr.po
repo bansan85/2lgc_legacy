@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2012-12-27 17:12+0100\n"
-"PO-Revision-Date: 2012-12-27 17:13+0100\n"
+"POT-Creation-Date: 2012-12-27 21:48+0100\n"
+"PO-Revision-Date: 2012-12-27 21:48+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -290,9 +290,6 @@ msgstr "Paramètre %s incorrect.\n"
 
 msgid "La fenêtre graphique %s n'est pas initialisée.\n"
 msgstr "La fenêtre graphique %s n'est pas initialisée.\n"
-
-msgid "La valeur de fck est incorrecte."
-msgstr "La valeur de fck est incorrecte."
 
 msgid "Builder Failed\n"
 msgstr "Builder Failed\n"
@@ -778,18 +775,6 @@ msgstr "repère : global"
 msgid "Ponctuelle sur barre"
 msgstr "Ponctuelle sur barre"
 
-msgid "La valeur de %s est incorrecte."
-msgstr "La valeur de %s est incorrecte."
-
-msgid "La valeur de la position est incorrecte."
-msgstr "La valeur de la position est incorrecte."
-
-msgid "La valeur des barres est incorrecte."
-msgstr "La valeur des barres est incorrecte."
-
-msgid "La liste des barres %s n'existe pas."
-msgstr "La liste des barres %s n'existe pas."
-
 msgid "Ajout d'une charge ponctuelle sur barre"
 msgstr "Ajout d'une charge ponctuelle sur barre"
 
@@ -814,18 +799,6 @@ msgstr "La hauteur du dessin ne peut être nulle.\n"
 msgid "Le type de relâchement est inconnu.\n"
 msgstr "Le type de relâchement est inconnu.\n"
 
-msgid "La valeur de la largeur de la retombée est incorrecte."
-msgstr "La valeur de la largeur de la retombée est incorrecte."
-
-msgid "La valeur de la hauteur de la retombée est incorrecte."
-msgstr "La valeur de la hauteur de la retombée est incorrecte."
-
-msgid "La valeur de la largeur de la table est incorrecte."
-msgstr "La valeur de la largeur de la table est incorrecte."
-
-msgid "La valeur de la hauteur de la table est incorrecte."
-msgstr "La valeur de la hauteur de la table est incorrecte."
-
 msgid "Ajout d'une section en T"
 msgstr "Ajout d'une section en T"
 
@@ -835,9 +808,6 @@ msgstr "Modification d'une section en T"
 msgid "La section à modifier n'est pas en T.\n"
 msgstr "La section à modifier n'est pas en T.\n"
 
-msgid "La valeur du coté est incorrecte."
-msgstr "La valeur du coté est incorrecte."
-
 msgid "Ajout d'une section carrée"
 msgstr "Ajout d'une section carrée"
 
@@ -846,12 +816,6 @@ msgstr "Modification d'une section carrée"
 
 msgid "La section à modifier n'est pas carrée.\n"
 msgstr "La section à modifier n'est pas carrée.\n"
-
-msgid "La valeur de la largeur est incorrecte."
-msgstr "La valeur de la largeur est incorrecte."
-
-msgid "La valeur de la hauteur est incorrecte."
-msgstr "La valeur de la hauteur est incorrecte."
 
 msgid "Ajout d'une section rectangulaire"
 msgstr "Ajout d'une section rectangulaire"
@@ -904,15 +868,6 @@ msgstr "projection : non"
 msgid "Répartie uniforme sur barre"
 msgstr "Répartie uniforme sur barre"
 
-msgid "La valeur de a est incorrecte."
-msgstr "La valeur de a est incorrecte."
-
-msgid "La valeur de b est incorrecte."
-msgstr "La valeur de b est incorrecte."
-
-msgid "La barre %s n'existe pas."
-msgstr "La barre %s n'existe pas."
-
 msgid "Ajout d'une charge répartie uniforme sur barre"
 msgstr "Ajout d'une charge répartie uniforme sur barre"
 
@@ -948,9 +903,6 @@ msgstr "Impossible de supprimer l'appui car il est utilisé par le noeud %s.\n"
 
 msgid "Impossible de supprimer l'appui car il est utilisé par les noeuds %s.\n"
 msgstr "Impossible de supprimer l'appui car il est utilisé par les noeuds %s.\n"
-
-msgid "La valeur du diamètre est incorrecte."
-msgstr "La valeur du diamètre est incorrecte."
 
 msgid "Ajout d'une section circulaire"
 msgstr "Ajout d'une section circulaire"
@@ -1068,12 +1020,6 @@ msgstr "Noeud"
 
 msgid "Ponctuelle sur noeud"
 msgstr "Ponctuelle sur noeud"
-
-msgid "La valeur des noeuds est incorrecte."
-msgstr "La valeur des noeuds est incorrecte."
-
-msgid "La liste de noeuds %s n'existe pas."
-msgstr "La liste de noeuds %s n'existe pas."
 
 msgid "Ajout d'une charge au noeud"
 msgstr "Ajout d'une charge au noeud"

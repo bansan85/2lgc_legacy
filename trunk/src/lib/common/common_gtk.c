@@ -25,6 +25,7 @@
 #include "common_selection.h"
 #include "common_erreurs.h"
 #include "common_math.h"
+#include "common_gtk.h"
 
 G_MODULE_EXPORT gboolean common_gtk_treeview_button_press_unselect(GtkTreeView *widget,
   GdkEvent *event, Projet *projet)
@@ -184,45 +185,6 @@ G_MODULE_EXPORT void common_gtk_text_buffer_double_inf_inf(GtkTextBuffer *textbu
     common_gtk_text_buffer_double(textbuffer, -INFINITY, FALSE, INFINITY, FALSE);
     
     return;
-}
-
-
-G_MODULE_EXPORT double common_gtk_entry_renvoie_double(GtkTextBuffer *textbuffer)
-/* Description : Renvoie le nombre flottant si le GtkTextBuffer en contient bien un.
- *               Renvoie nan sinon.
- * Paramètres : GtkTextBuffer *textbuffer : composant à vérifier.
- * Valeur renvoyée :
- *   Succès : le nombre flottant contenu dans un composant de type Entry
- *   Échec : NAN :
- *             textbuffer == NULL,
- *             le composant Entry ne contient pas un nombre double,
- *             en cas d'erreur d'allocation mémoire,
- */
-{
-    gchar       *texte;
-    GtkTextIter start, end;
-    double      nombre;
-    char        *fake;
-    
-    BUGMSG(textbuffer, NAN, gettext("Paramètre %s incorrect.\n"), "textbuffer");
-    
-    gtk_text_buffer_get_iter_at_offset(textbuffer, &start, 0);
-    gtk_text_buffer_get_iter_at_offset(textbuffer, &end, -1);
-    texte = gtk_text_buffer_get_text(textbuffer, &start, &end, FALSE);
-    BUGMSG(fake = (char*)malloc(sizeof(char)*(strlen(texte)+1)), NAN, gettext("Erreur d'allocation mémoire.\n"));
-    
-    if (sscanf(texte, "%lf%s", &nombre, fake) != 1)
-    {
-        free(texte);
-        free(fake);
-        return NAN;
-    }
-    else
-    {
-        free(texte);
-        free(fake);
-        return nombre;
-    }
 }
 
 

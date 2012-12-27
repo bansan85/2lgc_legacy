@@ -56,8 +56,8 @@
 #define GTK_COMMON_SPINBUTTON_AS_UINT(spinbutton) ((unsigned int)round(gtk_spin_button_get_value(spinbutton)))
 
 gboolean common_gtk_treeview_button_press_unselect(GtkTreeView *widget, GdkEvent *event, Projet *projet);
-void common_gtk_text_buffer_double(GtkTextBuffer *textbuffer, double val_min, gboolean min_include, double val_max, gboolean max_include);
-double common_gtk_entry_renvoie_double(GtkTextBuffer *textbuffer);
+double common_gtk_text_buffer_double(GtkTextBuffer *textbuffer, double val_min,
+  gboolean min_include, double val_max, gboolean max_include);
 void common_gtk_entry_check_int(GtkTextBuffer *entry, gpointer user_data);
 int common_gtk_entry_renvoie_int(GtkTextBuffer *textbuffer);
 unsigned int common_gtk_entry_renvoie_uint(GtkTextBuffer *textbuffer);
