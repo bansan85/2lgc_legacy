@@ -406,17 +406,19 @@ G_MODULE_EXPORT EF_Appui* EF_appuis_ajout(Projet *projet, const char *nom, Type_
         i++;
         list_parcours = g_list_next(list_parcours);
     }
-#ifdef ENABLE_GTK
     if (list_parcours == NULL)
     {
         projet->ef_donnees.appuis = g_list_append(projet->ef_donnees.appuis, appui_nouveau);
+#ifdef ENABLE_GTK
         gtk_list_store_append(projet->list_gtk.ef_appuis.liste_appuis, &appui_nouveau->Iter_liste);
         if (projet->list_gtk.ef_appuis.builder != NULL)
             gtk_tree_store_append(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_treestore")), &appui_nouveau->Iter_fenetre, NULL);
+#endif
     }
     else
     {
         projet->ef_donnees.appuis = g_list_insert_before(projet->ef_donnees.appuis, list_parcours, appui_nouveau);
+#ifdef ENABLE_GTK
         gtk_list_store_insert(projet->list_gtk.ef_appuis.liste_appuis, &appui_nouveau->Iter_liste, i);
         if (projet->list_gtk.ef_appuis.builder != NULL)
         {
@@ -425,7 +427,9 @@ G_MODULE_EXPORT EF_Appui* EF_appuis_ajout(Projet *projet, const char *nom, Type_
             else
                 gtk_tree_store_insert_before(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_treestore")), &appui_nouveau->Iter_fenetre, NULL, &appui_parcours->Iter_fenetre);
         }
+#endif
     }
+#ifdef ENABLE_GTK
     gtk_list_store_set(projet->list_gtk.ef_appuis.liste_appuis, &appui_nouveau->Iter_liste, 0, nom, -1);
     if (projet->list_gtk.ef_appuis.builder != NULL)
     {
