@@ -127,17 +127,19 @@ gboolean EF_sections_insert(Projet *projet, EF_Section *section)
         i++;
         list_parcours = g_list_next(list_parcours);
     }
-#ifdef ENABLE_GTK
     if (list_parcours == NULL)
     {
         projet->beton.sections = g_list_append(projet->beton.sections, section);
+#ifdef ENABLE_GTK
         gtk_list_store_append(projet->list_gtk.ef_sections.liste_sections, &section->Iter_liste);
         if (projet->list_gtk.ef_sections.builder != NULL)
             gtk_tree_store_append(projet->list_gtk.ef_sections.sections, &section->Iter_fenetre, NULL);
+#endif
     }
     else
     {
         projet->beton.sections = g_list_insert_before(projet->beton.sections, list_parcours, section);
+#ifdef ENABLE_GTK
         gtk_list_store_insert(projet->list_gtk.ef_sections.liste_sections, &section->Iter_liste, i);
         if (projet->list_gtk.ef_sections.builder != NULL)
         {
@@ -146,8 +148,10 @@ gboolean EF_sections_insert(Projet *projet, EF_Section *section)
             else
                 gtk_tree_store_insert_before(projet->list_gtk.ef_sections.sections, &section->Iter_fenetre, NULL, &section_tmp->Iter_fenetre);
         }
+#endif
     }
     
+#ifdef ENABLE_GTK
     BUG(EF_sections_update_ligne_treeview(projet, section), FALSE);
 #endif
     
