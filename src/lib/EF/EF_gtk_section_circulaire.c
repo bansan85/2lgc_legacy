@@ -89,9 +89,6 @@ gboolean EF_gtk_section_circulaire_recupere_donnees(Projet *projet, double *diam
  *             en cas d'erreur d'allocation mémoire.
  */
 {
-    Gtk_EF_Sections_Circulaire *ef_gtk;
-    
-    GtkWidget       *dialog;
     GtkTextIter     start, end;
     GtkTextBuffer   *textbuffer;
     
@@ -100,16 +97,9 @@ gboolean EF_gtk_section_circulaire_recupere_donnees(Projet *projet, double *diam
     BUGMSG(nom, FALSE, gettext("Paramètre %s incorrect.\n"), "nom");
     BUGMSG(projet->list_gtk.ef_sections_circulaire.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section Circulaire");
     
-    ef_gtk = &projet->list_gtk.ef_sections_circulaire;
-    
-    *diametre = common_gtk_entry_renvoie_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_sections_circulaire.builder, "EF_section_circulaire_buffer_diametre")));
-    if ((isnan(*diametre)) || (*diametre < ERREUR_RELATIVE_MIN))
-    {
-        dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("La valeur du diamètre est incorrecte."));
-        gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
+    *diametre = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_sections_circulaire.builder, "EF_section_circulaire_buffer_diametre")), 0, FALSE, INFINITY, FALSE);
+    if (isnan(*diametre))
         return FALSE;
-    }
     
     // Si tous les paramètres sont corrects
     textbuffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk.ef_sections_circulaire.builder, "EF_section_circulaire_textview_nom")));

@@ -89,9 +89,6 @@ gboolean _1992_1_1_gtk_materiaux_recupere_donnees(Projet *projet, double *fck,
  *             en cas d'erreur d'allocation mémoire.
  */
 {
-    Gtk_1992_1_1_Materiaux *ef_gtk;
-    
-    GtkWidget       *dialog;
     GtkTextIter     start, end;
     GtkTextBuffer   *textbuffer;
     
@@ -100,16 +97,9 @@ gboolean _1992_1_1_gtk_materiaux_recupere_donnees(Projet *projet, double *fck,
     BUGMSG(nom, FALSE, gettext("Paramètre %s incorrect.\n"), "nom");
     BUGMSG(projet->list_gtk._1992_1_1_materiaux.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Matériau Béton");
     
-    ef_gtk = &projet->list_gtk._1992_1_1_materiaux;
-    
-    *fck = common_gtk_entry_renvoie_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk._1992_1_1_materiaux.builder, "_1992_1_1_materiaux_beton_buffer_fck")));
-    if ((isnan(*fck)) || (*fck < ERREUR_RELATIVE_MIN) || (*fck*(1+ERREUR_RELATIVE_MIN) > 90.))
-    {
-        dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("La valeur de fck est incorrecte."));
-        gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
+    *fck = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk._1992_1_1_materiaux.builder, "_1992_1_1_materiaux_beton_buffer_fck")), 0., FALSE, 90., TRUE);
+    if (isnan(*fck))
         return FALSE;
-    }
     
     // Si tous les paramètres sont corrects
     textbuffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk._1992_1_1_materiaux.builder, "_1992_1_1_materiaux_beton_textview_nom")));

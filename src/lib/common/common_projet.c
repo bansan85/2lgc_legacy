@@ -149,6 +149,7 @@ G_MODULE_EXPORT gboolean projet_init_graphique(Projet *projet)
 {
     Comp_Gtk    *comps;
     Gtk_m3d     *m3d;
+    GtkWidget   *menu_separator;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
@@ -217,6 +218,9 @@ G_MODULE_EXPORT gboolean projet_init_graphique(Projet *projet)
     comps->menu_modelisation_barres_ajout = gtk_menu_item_new_with_label(gettext("Gestion des barres..."));
     gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_modelisation_barres_list), comps->menu_modelisation_barres_ajout);
     g_signal_connect_swapped(comps->menu_modelisation_barres_ajout, "activate", G_CALLBACK(EF_gtk_barres), projet);
+    
+    menu_separator = gtk_separator_menu_item_new();
+    gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_modelisation_list), menu_separator);
     
     comps->menu_modelisation_charges_list = gtk_menu_new();
     comps->menu_modelisation_charges = gtk_menu_item_new_with_label(gettext("Charges"));

@@ -121,7 +121,6 @@ gboolean EF_gtk_charge_barre_ponctuelle_recupere_donnees(Projet *projet,
  *             en cas d'erreur d'allocation mémoire.
  */
 {
-    GtkWidget                       *dialog;
     Gtk_EF_Charge_Barre_Ponctuelle  *ef_gtk;
     GList                           *num_barres;
     GtkTextIter                     start, end;
@@ -149,68 +148,33 @@ gboolean EF_gtk_charge_barre_ponctuelle_recupere_donnees(Projet *projet,
     else
         *num_action = (unsigned int)gtk_combo_box_get_active(ef_gtk->combobox_charge);
     
-    *fx = common_gtk_entry_renvoie_double(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_ponct_buffer_fx")));
+    *fx = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_barre_ponctuelle.builder, "EF_charge_barre_ponct_buffer_fx")), -INFINITY, FALSE, INFINITY, FALSE);
     if (isnan(*fx))
-    {
-        dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("La valeur de %s est incorrecte."), "Fx");
-        gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
         return FALSE;
-    }
     
-    *fy = common_gtk_entry_renvoie_double(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_ponct_buffer_fy")));
+    *fy = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_barre_ponctuelle.builder, "EF_charge_barre_ponct_buffer_fy")), -INFINITY, FALSE, INFINITY, FALSE);
     if (isnan(*fy))
-    {
-        dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("La valeur de %s est incorrecte."), "Fy");
-        gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
         return FALSE;
-    }
     
-    *fz = common_gtk_entry_renvoie_double(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_ponct_buffer_fz")));
+    *fz = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_barre_ponctuelle.builder, "EF_charge_barre_ponct_buffer_fz")), -INFINITY, FALSE, INFINITY, FALSE);
     if (isnan(*fz))
-    {
-        dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("La valeur de %s est incorrecte."), "Fz");
-        gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
         return FALSE;
-    }
     
-    *mx = common_gtk_entry_renvoie_double(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_ponct_buffer_mx")));
+    *mx = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_barre_ponctuelle.builder, "EF_charge_barre_ponct_buffer_mx")), -INFINITY, FALSE, INFINITY, FALSE);
     if (isnan(*mx))
-    {
-        dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("La valeur de %s est incorrecte."), "Mx");
-        gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
         return FALSE;
-    }
     
-    *my = common_gtk_entry_renvoie_double(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_ponct_buffer_my")));
+    *my = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_barre_ponctuelle.builder, "EF_charge_barre_ponct_buffer_my")), -INFINITY, FALSE, INFINITY, FALSE);
     if (isnan(*my))
-    {
-        dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("La valeur de %s est incorrecte."), "My");
-        gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
         return FALSE;
-    }
     
-    *mz = common_gtk_entry_renvoie_double(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_ponct_buffer_mz")));
+    *mz = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_barre_ponctuelle.builder, "EF_charge_barre_ponct_buffer_mz")), -INFINITY, FALSE, INFINITY, FALSE);
     if (isnan(*mz))
-    {
-        dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("La valeur de %s est incorrecte."), "Mz");
-        gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
         return FALSE;
-    }
     
-    *position = common_gtk_entry_renvoie_double(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_ponct_buffer_pos")));
+    *position = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_barre_ponctuelle.builder, "EF_charge_barre_ponct_buffer_pos")), 0, TRUE, INFINITY, FALSE);
     if (isnan(*position))
-    {
-        dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("La valeur de la position est incorrecte."));
-        gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
         return FALSE;
-    }
     
     *repere_local = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_ponct_radio_local")));
     
@@ -221,9 +185,6 @@ gboolean EF_gtk_charge_barre_ponctuelle_recupere_donnees(Projet *projet,
     num_barres = common_selection_renvoie_numeros(texte_tmp);
     if (num_barres == NULL)
     {
-        dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("La valeur des barres est incorrecte."));
-        gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
         free(texte_tmp);
         return FALSE;
     }
@@ -232,9 +193,6 @@ gboolean EF_gtk_charge_barre_ponctuelle_recupere_donnees(Projet *projet,
         *barres = common_selection_converti_numeros_en_barres(num_barres, projet);
         if (*barres == NULL)
         {
-            dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("La liste des barres %s n'existe pas."), texte_tmp);
-            gtk_dialog_run(GTK_DIALOG(dialog));
-            gtk_widget_destroy(dialog);
             free(texte_tmp);
             return FALSE;
         }

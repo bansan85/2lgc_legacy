@@ -78,7 +78,7 @@ G_MODULE_EXPORT void EF_gtk_section_T_window_destroy(GtkWidget *object __attribu
 gboolean EF_gtk_section_T_recupere_donnees(Projet *projet, double *lt, double *ht, double *lr,
   double *hr, gchar **nom)
 /* Description : Récupère toutes les données de la fenêtre permettant d'ajouter ou d'éditer une
- *               section.
+ *               section. Ici, la fonction utilise return et non pas la macro BUG.
  * Paramètres : Projet *projet : la variable projet,
  *            : double *lt : la largeur de la table de la section,
  *            : double *ht : la hauteur de la table de la section,
@@ -92,9 +92,6 @@ gboolean EF_gtk_section_T_recupere_donnees(Projet *projet, double *lt, double *h
  *             en cas d'erreur d'allocation mémoire.
  */
 {
-    Gtk_EF_Sections_T   *ef_gtk;
-    
-    GtkWidget       *dialog;
     GtkTextIter     start, end;
     GtkTextBuffer   *textbuffer;
     
@@ -106,43 +103,22 @@ gboolean EF_gtk_section_T_recupere_donnees(Projet *projet, double *lt, double *h
     BUGMSG(nom, FALSE, gettext("Paramètre %s incorrect.\n"), "nom");
     BUGMSG(projet->list_gtk.ef_sections_T.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section T");
     
-    ef_gtk = &projet->list_gtk.ef_sections_T;
-    
-    *lr = common_gtk_entry_renvoie_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_sections_T.builder, "EF_section_T_buffer_lr")));
-    if ((isnan(*lr)) || (*lr < ERREUR_RELATIVE_MIN))
-    {
-        dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("La valeur de la largeur de la retombée est incorrecte."));
-        gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
+    *lr = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_sections_T.builder, "EF_section_T_buffer_lr")), 0., FALSE, INFINITY, FALSE);
+    if (isnan(*lr))
         return FALSE;
-    }
     
-    *hr = common_gtk_entry_renvoie_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_sections_T.builder, "EF_section_T_buffer_hr")));
-    if ((isnan(*hr)) || (*hr < ERREUR_RELATIVE_MIN))
-    {
-        dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("La valeur de la hauteur de la retombée est incorrecte."));
-        gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
+    *hr = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_sections_T.builder, "EF_section_T_buffer_hr")), 0., FALSE, INFINITY, FALSE);
+    if (isnan(*hr))
         return FALSE;
-    }
     
-    *lt = common_gtk_entry_renvoie_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_sections_T.builder, "EF_section_T_buffer_lt")));
-    if ((isnan(*lt)) || (*lt < ERREUR_RELATIVE_MIN))
-    {
-        dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("La valeur de la largeur de la table est incorrecte."));
-        gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
+    *lt = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_sections_T.builder, "EF_section_T_buffer_lt")), 0., FALSE, INFINITY, FALSE);
+    if (isnan(*lt))
         return FALSE;
-    }
     
-    *ht = common_gtk_entry_renvoie_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_sections_T.builder, "EF_section_T_buffer_ht")));
-    if ((isnan(*ht)) || (*ht < ERREUR_RELATIVE_MIN))
-    {
-        dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("La valeur de la hauteur de la table est incorrecte."));
-        gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
+    *ht = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_sections_T.builder, "EF_section_T_buffer_ht")), 0., FALSE, INFINITY, FALSE);
+    if (isnan(*ht))
         return FALSE;
-    }
+    
     
     // Si tous les paramètres sont corrects
     textbuffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk.ef_sections_T.builder, "EF_section_T_textview_nom")));

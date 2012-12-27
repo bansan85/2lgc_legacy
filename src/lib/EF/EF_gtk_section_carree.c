@@ -88,9 +88,6 @@ gboolean EF_gtk_section_carree_recupere_donnees(Projet *projet, double *cote, gc
  *             en cas d'erreur d'allocation mémoire.
  */
 {
-    Gtk_EF_Sections_Carree *ef_gtk;
-    
-    GtkWidget       *dialog;
     GtkTextIter     start, end;
     GtkTextBuffer   *textbuffer;
     
@@ -99,16 +96,9 @@ gboolean EF_gtk_section_carree_recupere_donnees(Projet *projet, double *cote, gc
     BUGMSG(nom, FALSE, gettext("Paramètre %s incorrect.\n"), "nom");
     BUGMSG(projet->list_gtk.ef_sections_carree.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section Carrée");
     
-    ef_gtk = &projet->list_gtk.ef_sections_carree;
-    
-    *cote = common_gtk_entry_renvoie_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_sections_carree.builder, "EF_section_carree_buffer_cote")));
-    if ((isnan(*cote)) || (*cote < ERREUR_RELATIVE_MIN))
-    {
-        dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("La valeur du coté est incorrecte."));
-        gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
+    *cote = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_sections_carree.builder, "EF_section_carree_buffer_cote")), 0, FALSE, INFINITY, FALSE);
+    if (isnan(*cote))
         return FALSE;
-    }
     
     // Si tous les paramètres sont corrects
     textbuffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk.ef_sections_carree.builder, "EF_section_carree_textview_nom")));
