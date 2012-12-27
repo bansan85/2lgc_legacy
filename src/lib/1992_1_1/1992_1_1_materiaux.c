@@ -498,7 +498,7 @@ gboolean _1992_1_1_materiaux_repositionne(Projet *projet, Beton_Materiau *materi
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(materiau, FALSE, gettext("Paramètre %s incorrect.\n"), "materiau");
     
-    // On réinsère la section au bon endroit
+    // On réinsère le matériau au bon endroit
     projet->beton.materiaux = g_list_remove(projet->beton.materiaux, materiau);
     list_parcours = projet->beton.materiaux;
     while (list_parcours != NULL)
@@ -538,10 +538,11 @@ G_MODULE_EXPORT gboolean _1992_1_1_materiaux_modif(Projet *projet, Beton_Materia
   char *nom, double fck, double fckcube, double fcm, double fctm, double fctk_0_05,
   double fctk_0_95, double ecm, double ec1, double ecu1, double ec2, double ecu2, double n,
   double ec3, double ecu3, double nu, double gnu_0_2, double gnu_0_0)
-/* Description : Ferme la fenêtre en appliquant les modifications.
+/* Description : Modifie un matériau béton.
  * Paramètres : Projet *projet : la variable projet,
- *              Beton_Materiau *materiau : le matériau à modifier,
- *              Autres : caractéristiques du matériau.
+ *            : Beton_Materiau *materiau : le matériau à modifier,
+ *            : Autres : caractéristiques du matériau. Pour ne pas modifier un paramètre,
+ *                il suffit de luirde mettre NULL pour le nom et NAN pour les nombres.
  * Valeur renvoyée :
  *   Succès : TRUE
  *   Échec : FALSE :
