@@ -179,57 +179,57 @@ G_MODULE_EXPORT gboolean projet_init_graphique(Projet *projet)
     gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_fichier_list), comps->menu_fichier_quitter);
     g_signal_connect_swapped(comps->menu_fichier_quitter, "activate", G_CALLBACK(gui_window_option_destroy_button), comps->window);
     
-    comps->menu_structure_list = gtk_menu_new();
-    comps->menu_structure = gtk_menu_item_new_with_label(gettext("Structure"));
-    gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu), comps->menu_structure);
-    gtk_menu_item_set_submenu(GTK_MENU_ITEM(comps->menu_structure), comps->menu_structure_list);
+    comps->menu_modelisation_list = gtk_menu_new();
+    comps->menu_modelisation = gtk_menu_item_new_with_label(gettext("Modélisation"));
+    gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu), comps->menu_modelisation);
+    gtk_menu_item_set_submenu(GTK_MENU_ITEM(comps->menu_modelisation), comps->menu_modelisation_list);
     
-    comps->menu_structure_noeud_list = gtk_menu_new();
-    comps->menu_structure_noeud = gtk_menu_item_new_with_label(gettext("Noeuds"));
-    gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_structure_list), comps->menu_structure_noeud);
-    gtk_menu_item_set_submenu(GTK_MENU_ITEM(comps->menu_structure_noeud), comps->menu_structure_noeud_list);
+    comps->menu_modelisation_noeud_list = gtk_menu_new();
+    comps->menu_modelisation_noeud = gtk_menu_item_new_with_label(gettext("Noeuds"));
+    gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_modelisation_list), comps->menu_modelisation_noeud);
+    gtk_menu_item_set_submenu(GTK_MENU_ITEM(comps->menu_modelisation_noeud), comps->menu_modelisation_noeud_list);
     
-    comps->menu_structure_noeud_appui = gtk_menu_item_new_with_label(gettext("Appuis..."));
-    gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_structure_noeud_list), comps->menu_structure_noeud_appui);
-    g_signal_connect_swapped(comps->menu_structure_noeud_appui, "activate", G_CALLBACK(EF_gtk_appuis), projet);
+    comps->menu_modelisation_noeud_appui = gtk_menu_item_new_with_label(gettext("Appuis..."));
+    gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_modelisation_noeud_list), comps->menu_modelisation_noeud_appui);
+    g_signal_connect_swapped(comps->menu_modelisation_noeud_appui, "activate", G_CALLBACK(EF_gtk_appuis), projet);
     
-    comps->menu_structure_noeud_ajout = gtk_menu_item_new_with_label(gettext("Gestion des noeuds..."));
-    gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_structure_noeud_list), comps->menu_structure_noeud_ajout);
-    g_signal_connect_swapped(comps->menu_structure_noeud_ajout, "activate", G_CALLBACK(EF_gtk_noeud), projet);
+    comps->menu_modelisation_noeud_ajout = gtk_menu_item_new_with_label(gettext("Gestion des noeuds..."));
+    gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_modelisation_noeud_list), comps->menu_modelisation_noeud_ajout);
+    g_signal_connect_swapped(comps->menu_modelisation_noeud_ajout, "activate", G_CALLBACK(EF_gtk_noeud), projet);
     
-    comps->menu_structure_barres_list = gtk_menu_new();
-    comps->menu_structure_barres = gtk_menu_item_new_with_label(gettext("Barres"));
-    gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_structure_list), comps->menu_structure_barres);
-    gtk_menu_item_set_submenu(GTK_MENU_ITEM(comps->menu_structure_barres), comps->menu_structure_barres_list);
+    comps->menu_modelisation_barres_list = gtk_menu_new();
+    comps->menu_modelisation_barres = gtk_menu_item_new_with_label(gettext("Barres"));
+    gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_modelisation_list), comps->menu_modelisation_barres);
+    gtk_menu_item_set_submenu(GTK_MENU_ITEM(comps->menu_modelisation_barres), comps->menu_modelisation_barres_list);
     
-    comps->menu_structure_barres_section = gtk_menu_item_new_with_label(gettext("Sections..."));
-    gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_structure_barres_list), comps->menu_structure_barres_section);
-    g_signal_connect_swapped(comps->menu_structure_barres_section, "activate", G_CALLBACK(EF_gtk_sections), projet);
+    comps->menu_modelisation_barres_section = gtk_menu_item_new_with_label(gettext("Sections..."));
+    gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_modelisation_barres_list), comps->menu_modelisation_barres_section);
+    g_signal_connect_swapped(comps->menu_modelisation_barres_section, "activate", G_CALLBACK(EF_gtk_sections), projet);
     
-    comps->menu_structure_barres_materiau = gtk_menu_item_new_with_label(gettext("Matériaux..."));
-    gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_structure_barres_list), comps->menu_structure_barres_materiau);
-    g_signal_connect_swapped(comps->menu_structure_barres_materiau, "activate", G_CALLBACK(EF_gtk_materiaux), projet);
+    comps->menu_modelisation_barres_materiau = gtk_menu_item_new_with_label(gettext("Matériaux..."));
+    gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_modelisation_barres_list), comps->menu_modelisation_barres_materiau);
+    g_signal_connect_swapped(comps->menu_modelisation_barres_materiau, "activate", G_CALLBACK(EF_gtk_materiaux), projet);
     
-    comps->menu_structure_barres_relachement = gtk_menu_item_new_with_label(gettext("Relâchement..."));
-    gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_structure_barres_list), comps->menu_structure_barres_relachement);
-    g_signal_connect_swapped(comps->menu_structure_barres_relachement, "activate", G_CALLBACK(EF_gtk_relachement), projet);
+    comps->menu_modelisation_barres_relachement = gtk_menu_item_new_with_label(gettext("Relâchement..."));
+    gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_modelisation_barres_list), comps->menu_modelisation_barres_relachement);
+    g_signal_connect_swapped(comps->menu_modelisation_barres_relachement, "activate", G_CALLBACK(EF_gtk_relachement), projet);
     
-    comps->menu_structure_barres_ajout = gtk_menu_item_new_with_label(gettext("Gestion des barres..."));
-    gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_structure_barres_list), comps->menu_structure_barres_ajout);
-    g_signal_connect_swapped(comps->menu_structure_barres_ajout, "activate", G_CALLBACK(EF_gtk_barres), projet);
+    comps->menu_modelisation_barres_ajout = gtk_menu_item_new_with_label(gettext("Gestion des barres..."));
+    gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_modelisation_barres_list), comps->menu_modelisation_barres_ajout);
+    g_signal_connect_swapped(comps->menu_modelisation_barres_ajout, "activate", G_CALLBACK(EF_gtk_barres), projet);
     
-    comps->menu_charges_list = gtk_menu_new();
-    comps->menu_charges = gtk_menu_item_new_with_label(gettext("Charges"));
-    gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu), comps->menu_charges);
-    gtk_menu_item_set_submenu(GTK_MENU_ITEM(comps->menu_charges), comps->menu_charges_list);
+    comps->menu_modelisation_charges_list = gtk_menu_new();
+    comps->menu_modelisation_charges = gtk_menu_item_new_with_label(gettext("Charges"));
+    gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_modelisation_list), comps->menu_modelisation_charges);
+    gtk_menu_item_set_submenu(GTK_MENU_ITEM(comps->menu_modelisation_charges), comps->menu_modelisation_charges_list);
     
-    comps->menu_charges_groupes = gtk_menu_item_new_with_label(gettext("Actions..."));
-    gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_charges_list), comps->menu_charges_groupes);
-    g_signal_connect_swapped(comps->menu_charges_groupes, "activate", G_CALLBACK(_1990_gtk_actions), projet);
+    comps->menu_modelisation_charges_groupes = gtk_menu_item_new_with_label(gettext("Actions..."));
+    gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_modelisation_charges_list), comps->menu_modelisation_charges_groupes);
+    g_signal_connect_swapped(comps->menu_modelisation_charges_groupes, "activate", G_CALLBACK(_1990_gtk_actions), projet);
     
-    comps->menu_charges_groupes = gtk_menu_item_new_with_label(gettext("Groupes..."));
-    gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_charges_list), comps->menu_charges_groupes);
-    g_signal_connect_swapped(comps->menu_charges_groupes, "activate", G_CALLBACK(_1990_gtk_groupes), projet);
+    comps->menu_modelisation_charges_groupes = gtk_menu_item_new_with_label(gettext("Groupes..."));
+    gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_modelisation_charges_list), comps->menu_modelisation_charges_groupes);
+    g_signal_connect_swapped(comps->menu_modelisation_charges_groupes, "activate", G_CALLBACK(_1990_gtk_groupes), projet);
     
     projet->list_gtk._1990_actions.window = NULL;
     projet->list_gtk._1990_groupes.window_groupe = NULL;

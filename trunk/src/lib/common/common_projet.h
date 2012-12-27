@@ -725,22 +725,22 @@ typedef struct __Comp_Gtk
     GtkWidget   *menu_fichier;
     GtkWidget   *menu_fichier_list;
     GtkWidget   *menu_fichier_quitter;
-    GtkWidget   *menu_structure;
-    GtkWidget   *menu_structure_list;
-    GtkWidget   *menu_structure_noeud;
-    GtkWidget   *menu_structure_noeud_list;
-    GtkWidget   *menu_structure_noeud_appui;
-    GtkWidget   *menu_structure_noeud_ajout;
-    GtkWidget   *menu_structure_barres;
-    GtkWidget   *menu_structure_barres_list;
-    GtkWidget   *menu_structure_barres_section;
-    GtkWidget   *menu_structure_barres_materiau;
-    GtkWidget   *menu_structure_barres_relachement;
-    GtkWidget   *menu_structure_barres_ajout;
-    GtkWidget   *menu_charges;
-    GtkWidget   *menu_charges_list;
-    GtkWidget   *menu_charges_actions;
-    GtkWidget   *menu_charges_groupes;
+    GtkWidget   *menu_modelisation;
+    GtkWidget   *menu_modelisation_list;
+    GtkWidget   *menu_modelisation_noeud;
+    GtkWidget   *menu_modelisation_noeud_list;
+    GtkWidget   *menu_modelisation_noeud_appui;
+    GtkWidget   *menu_modelisation_noeud_ajout;
+    GtkWidget   *menu_modelisation_barres;
+    GtkWidget   *menu_modelisation_barres_list;
+    GtkWidget   *menu_modelisation_barres_section;
+    GtkWidget   *menu_modelisation_barres_materiau;
+    GtkWidget   *menu_modelisation_barres_relachement;
+    GtkWidget   *menu_modelisation_barres_ajout;
+    GtkWidget   *menu_modelisation_charges;
+    GtkWidget   *menu_modelisation_charges_list;
+    GtkWidget   *menu_modelisation_charges_actions;
+    GtkWidget   *menu_modelisation_charges_groupes;
 } Comp_Gtk;
 
 
