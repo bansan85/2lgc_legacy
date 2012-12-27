@@ -26,9 +26,11 @@
 #include "common_projet.h"
 #include "common_erreurs.h"
 #include "common_selection.h"
+#include "common_math.h"
 #include "EF_calculs.h"
 #ifdef ENABLE_GTK
 #include <gtk/gtk.h>
+#include "EF_gtk_relachement.h"
 #endif
 
 G_MODULE_EXPORT gboolean EF_relachement_init(Projet *projet)
@@ -55,6 +57,200 @@ G_MODULE_EXPORT gboolean EF_relachement_init(Projet *projet)
     gtk_list_store_append(projet->list_gtk.ef_relachements.liste_relachements, &iter);
     gtk_list_store_set(projet->list_gtk.ef_relachements.liste_relachements, &iter, 0, gettext("Aucun"), -1);
 #endif
+    
+    return TRUE;
+}
+
+
+G_MODULE_EXPORT gboolean EF_relachements_update_ligne_treeview(Projet *projet,
+  EF_Relachement *relachement)
+/* Description : Actualise la ligne du treeview affichant le relâchement.
+ * Paramètres : Projet *projet : la variable projet,
+ *            : EF_Relachement *relachement : le relâchement à actualiser.
+ * Valeur renvoyée :
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL,
+ *             relachement == NULL,
+ *             Interface graphique non initialisée.
+ */
+{
+    Gtk_EF_Relachements  *ef_gtk;
+    
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(relachement, FALSE, gettext("Paramètre %s incorrect.\n"), "relachement");
+    BUGMSG(projet->list_gtk.ef_relachements.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Relâchement");
+    
+    ef_gtk = &projet->list_gtk.ef_relachements;
+    gtk_tree_store_set(ef_gtk->relachements, &relachement->Iter_fenetre, 0, relachement->nom, -1);
+    switch (relachement->rx_debut)
+    {
+        case EF_RELACHEMENT_BLOQUE :
+        {
+            gtk_tree_store_set(ef_gtk->relachements, &relachement->Iter_fenetre, 1, gettext("Bloqué"), 2, "-", -1);
+            break;
+        }
+        case EF_RELACHEMENT_LIBRE :
+        {
+            gtk_tree_store_set(ef_gtk->relachements, &relachement->Iter_fenetre, 1, gettext("Libre"), 2, "-", -1);
+            break;
+        }
+        case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
+        {
+            EF_Relachement_Donnees_Elastique_Lineaire *data;
+            char    tmp[30];
+            
+            data = (EF_Relachement_Donnees_Elastique_Lineaire *)relachement->rx_d_data;
+            common_math_double_to_char(data->raideur, tmp, DECIMAL_NEWTON_PAR_METRE);
+            gtk_tree_store_set(ef_gtk->relachements, &relachement->Iter_fenetre, 1, gettext("Linéaire"), 2, tmp, -1);
+            break;
+        }
+        default :
+        {
+            BUGMSG(NULL, FALSE, "Le type de relâchement est inconnu.\n");
+            break;
+        }
+    }
+    switch (relachement->ry_debut)
+    {
+        case EF_RELACHEMENT_BLOQUE :
+        {
+            gtk_tree_store_set(ef_gtk->relachements, &relachement->Iter_fenetre, 3, gettext("Bloqué"), 4, "-", -1);
+            break;
+        }
+        case EF_RELACHEMENT_LIBRE :
+        {
+            gtk_tree_store_set(ef_gtk->relachements, &relachement->Iter_fenetre, 3, gettext("Libre"), 4, "-", -1);
+            break;
+        }
+        case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
+        {
+            EF_Relachement_Donnees_Elastique_Lineaire *data;
+            char    tmp[30];
+            
+            data = (EF_Relachement_Donnees_Elastique_Lineaire *)relachement->ry_d_data;
+            common_math_double_to_char(data->raideur, tmp, DECIMAL_NEWTON_PAR_METRE);
+            gtk_tree_store_set(ef_gtk->relachements, &relachement->Iter_fenetre, 3, gettext("Linéaire"), 4, tmp, -1);
+            break;
+        }
+        default :
+        {
+            BUGMSG(NULL, FALSE, "Le type de relâchement est inconnu.\n");
+            break;
+        }
+    }
+    switch (relachement->rz_debut)
+    {
+        case EF_RELACHEMENT_BLOQUE :
+        {
+            gtk_tree_store_set(ef_gtk->relachements, &relachement->Iter_fenetre, 5, gettext("Bloqué"), 6, "-", -1);
+            break;
+        }
+        case EF_RELACHEMENT_LIBRE :
+        {
+            gtk_tree_store_set(ef_gtk->relachements, &relachement->Iter_fenetre, 5, gettext("Libre"), 6, "-", -1);
+            break;
+        }
+        case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
+        {
+            EF_Relachement_Donnees_Elastique_Lineaire *data;
+            char    tmp[30];
+            
+            data = (EF_Relachement_Donnees_Elastique_Lineaire *)relachement->rz_d_data;
+            common_math_double_to_char(data->raideur, tmp, DECIMAL_NEWTON_PAR_METRE);
+            gtk_tree_store_set(ef_gtk->relachements, &relachement->Iter_fenetre, 5, gettext("Linéaire"), 6, tmp, -1);
+            break;
+        }
+        default :
+        {
+            BUGMSG(NULL, FALSE, "Le type de relâchement est inconnu.\n");
+            break;
+        }
+    }
+    switch (relachement->rx_fin)
+    {
+        case EF_RELACHEMENT_BLOQUE :
+        {
+            gtk_tree_store_set(ef_gtk->relachements, &relachement->Iter_fenetre, 7, gettext("Bloqué"), 8, "-", -1);
+            break;
+        }
+        case EF_RELACHEMENT_LIBRE :
+        {
+            gtk_tree_store_set(ef_gtk->relachements, &relachement->Iter_fenetre, 7, gettext("Libre"), 8, "-", -1);
+            break;
+        }
+        case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
+        {
+            EF_Relachement_Donnees_Elastique_Lineaire *data;
+            char    tmp[30];
+            
+            data = (EF_Relachement_Donnees_Elastique_Lineaire *)relachement->rx_f_data;
+            common_math_double_to_char(data->raideur, tmp, DECIMAL_NEWTON_PAR_METRE);
+            gtk_tree_store_set(ef_gtk->relachements, &relachement->Iter_fenetre, 7, gettext("Linéaire"), 8, tmp, -1);
+            break;
+        }
+        default :
+        {
+            BUGMSG(NULL, FALSE, "Le type de relâchement est inconnu.\n");
+            break;
+        }
+    }
+    switch (relachement->ry_fin)
+    {
+        case EF_RELACHEMENT_BLOQUE :
+        {
+            gtk_tree_store_set(ef_gtk->relachements, &relachement->Iter_fenetre, 9, gettext("Bloqué"), 10, "-", -1);
+            break;
+        }
+        case EF_RELACHEMENT_LIBRE :
+        {
+            gtk_tree_store_set(ef_gtk->relachements, &relachement->Iter_fenetre, 9, gettext("Libre"), 10, "-", -1);
+            break;
+        }
+        case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
+        {
+            EF_Relachement_Donnees_Elastique_Lineaire *data;
+            char    tmp[30];
+            
+            data = (EF_Relachement_Donnees_Elastique_Lineaire *)relachement->ry_f_data;
+            common_math_double_to_char(data->raideur, tmp, DECIMAL_NEWTON_PAR_METRE);
+            gtk_tree_store_set(ef_gtk->relachements, &relachement->Iter_fenetre, 9, gettext("Linéaire"), 10, tmp, -1);
+            break;
+        }
+        default :
+        {
+            BUGMSG(NULL, FALSE, "Le type de relâchement est inconnu.\n");
+            break;
+        }
+    }
+    switch (relachement->rz_fin)
+    {
+        case EF_RELACHEMENT_BLOQUE :
+        {
+            gtk_tree_store_set(ef_gtk->relachements, &relachement->Iter_fenetre, 11, gettext("Bloqué"), 12, "-", -1);
+            break;
+        }
+        case EF_RELACHEMENT_LIBRE :
+        {
+            gtk_tree_store_set(ef_gtk->relachements, &relachement->Iter_fenetre, 11, gettext("Libre"), 12, "-", -1);
+            break;
+        }
+        case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
+        {
+            EF_Relachement_Donnees_Elastique_Lineaire *data;
+            char    tmp[30];
+            
+            data = (EF_Relachement_Donnees_Elastique_Lineaire *)relachement->rz_f_data;
+            common_math_double_to_char(data->raideur, tmp, DECIMAL_NEWTON_PAR_METRE);
+            gtk_tree_store_set(ef_gtk->relachements, &relachement->Iter_fenetre, 11, gettext("Linéaire"), 12, tmp, -1);
+            break;
+        }
+        default :
+        {
+            BUGMSG(NULL, FALSE, "Le type de relâchement est inconnu.\n");
+            break;
+        }
+    }
     
     return TRUE;
 }
@@ -90,6 +286,9 @@ G_MODULE_EXPORT EF_Relachement *EF_relachement_ajout(Projet *projet, const char 
  */
 {
     EF_Relachement  *relachement_nouveau = malloc(sizeof(EF_Relachement));
+    EF_Relachement  *relachement_tmp;
+    GList           *list_parcours;
+    int             i;
     
     // Trivial
     
@@ -112,11 +311,44 @@ G_MODULE_EXPORT EF_Relachement *EF_relachement_ajout(Projet *projet, const char 
     relachement_nouveau->rz_f_data = rz_f_data;
     BUGMSG(relachement_nouveau->nom = g_strdup_printf("%s", nom), NULL, gettext("Erreur d'allocation mémoire.\n"));
     
-    projet->ef_donnees.relachements = g_list_append(projet->ef_donnees.relachements, relachement_nouveau);
+    list_parcours = projet->ef_donnees.relachements;
+    while (list_parcours != NULL)
+    {
+        relachement_tmp = list_parcours->data;
+        
+        if (strcmp(relachement_nouveau->nom, relachement_tmp->nom) < 0)
+            break;
+        
+        i++;
+        list_parcours = g_list_next(list_parcours);
+    }
+    if (list_parcours == NULL)
+    {
+        projet->ef_donnees.relachements = g_list_append(projet->ef_donnees.relachements, relachement_nouveau);
+#ifdef ENABLE_GTK
+        gtk_list_store_append(projet->list_gtk.ef_relachements.liste_relachements, &relachement_nouveau->Iter_liste);
+        if (projet->list_gtk.ef_relachements.builder != NULL)
+            gtk_tree_store_append(projet->list_gtk.ef_relachements.relachements, &relachement_nouveau->Iter_fenetre, NULL);
+#endif
+    }
+    else
+    {
+        projet->ef_donnees.relachements = g_list_insert_before(projet->ef_donnees.relachements, list_parcours, relachement_nouveau);
+#ifdef ENABLE_GTK
+        gtk_list_store_insert(projet->list_gtk.ef_relachements.liste_relachements, &relachement_nouveau->Iter_liste, i);
+        if (projet->list_gtk.ef_relachements.builder != NULL)
+        {
+            if (g_list_previous(list_parcours) == NULL)
+                gtk_tree_store_prepend(projet->list_gtk.ef_relachements.relachements, &relachement_nouveau->Iter_fenetre, NULL);
+            else
+                gtk_tree_store_insert_before(projet->list_gtk.ef_relachements.relachements, &relachement_nouveau->Iter_fenetre, NULL, &relachement_tmp->Iter_fenetre);
+        }
+#endif
+    }
     
 #ifdef ENABLE_GTK
-    gtk_list_store_append(projet->list_gtk.ef_relachements.liste_relachements, &relachement_nouveau->Iter_liste);
     gtk_list_store_set(projet->list_gtk.ef_relachements.liste_relachements, &relachement_nouveau->Iter_liste, 0, nom, -1);
+    EF_relachements_update_ligne_treeview(projet, relachement_nouveau);
 #endif
     
     return relachement_nouveau;
@@ -159,48 +391,377 @@ G_MODULE_EXPORT EF_Relachement* EF_relachement_cherche_nom(Projet *projet, const
 }
 
 
-G_MODULE_EXPORT gboolean EF_relachement_renomme(EF_Relachement *relachement, gchar *nom,
-  Projet *projet)
-/* Description : Renomme un relachement.
- * Paramètres : EF_Relachement *relachement : relâchement à renommer,
- *            : const char *nom : le nouveau nom,
- *            : Projet *projet : la variable projet.
+G_MODULE_EXPORT gboolean EF_relachement_modif(Projet *projet, EF_Relachement *relachement,
+  const char *nom, EF_Relachement_Type rx_debut, void* rx_d_data, EF_Relachement_Type ry_debut,
+  void* ry_d_data, EF_Relachement_Type rz_debut, void* rz_d_data, EF_Relachement_Type rx_fin,
+  void* rx_f_data, EF_Relachement_Type ry_fin, void* ry_f_data, EF_Relachement_Type rz_fin,
+  void* rz_f_data)
+/* Description : Modifie un relâchement.
+ * Paramètres : Projet *projet : la variable projet,
+ *            : EF_Relachement *relachement : le relâchement à modifier,
+ *            : Autres : caractéristiques du relachement. Pour ne pas modifier un paramètre,
+ *            :   il suffit de lui de mettre NULL pour le nom, UINT_MAX pour les
+ *                EF_Relachement_Type et NULL pour les arguments. Attention, aucune vérification
+ *                n'est effectuée entre la compatibilité de EF_Relachement_Type et son
+ *                paramètre.
  * Valeur renvoyée :
  *   Succès : TRUE
  *   Échec : FALSE :
  *             projet == NULL,
- *             relâchement == NULL,
- *             relâchement possédant le nouveau nom est déjà existant.
+ *             materiau == NULL.
  */
 {
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(relachement, FALSE, gettext("Paramètre %s incorrect.\n"), "relachement");
-    BUGMSG(EF_relachement_cherche_nom(projet, nom, FALSE) == NULL, FALSE, gettext("Le relachement '%s' existe déjà.\n"), nom);
     
-    free(relachement->nom);
-    BUGMSG(relachement->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-    
-#ifdef ENABLE_GTK
-    if (projet->list_gtk.ef_relachements.builder != NULL)
-        gtk_tree_store_set(projet->list_gtk.ef_relachements.relachements, &relachement->Iter_fenetre, 0, nom, -1);
-    gtk_list_store_set(projet->list_gtk.ef_relachements.liste_relachements, &relachement->Iter_liste, 0, nom, -1);
-    if (projet->list_gtk.ef_barres.builder != NULL)
+    if (nom != NULL)
     {
-        GList   *list_parcours = projet->beton.barres;
+        GList   *list_parcours;
         
+        free(relachement->nom);
+        BUGMSG(relachement->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+        
+        // On réinsère le relâchement au bon endroit
+        projet->ef_donnees.relachements = g_list_remove(projet->ef_donnees.relachements, relachement);
+        list_parcours = projet->ef_donnees.relachements;
         while (list_parcours != NULL)
         {
-            Beton_Barre *barre = list_parcours->data;
+            EF_Relachement  *relachement_parcours = list_parcours->data;
             
-            if (barre->relachement == relachement)
-                gtk_tree_store_set(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treestore")), &barre->Iter, 6, (barre->relachement == NULL ? gettext("Aucun") : barre->relachement->nom), -1);
+            if (strcmp(relachement->nom, relachement_parcours->nom) < 0)
+            {
+                projet->ef_donnees.relachements = g_list_insert_before(projet->ef_donnees.relachements, list_parcours, relachement);
+                
+#ifdef ENABLE_GTK
+                gtk_list_store_move_before(projet->list_gtk.ef_relachements.liste_relachements, &relachement->Iter_liste, &relachement_parcours->Iter_liste);
+                if (projet->list_gtk.ef_relachements.builder != NULL)
+                    gtk_tree_store_move_before(projet->list_gtk.ef_relachements.relachements, &relachement->Iter_fenetre, &relachement_parcours->Iter_fenetre);
+#endif
+                break;
+            }
+            
             list_parcours = g_list_next(list_parcours);
         }
+        if (list_parcours == NULL)
+        {
+            projet->ef_donnees.relachements = g_list_append(projet->ef_donnees.relachements, relachement);
+            
+#ifdef ENABLE_GTK
+            gtk_list_store_move_before(projet->list_gtk.ef_relachements.liste_relachements, &relachement->Iter_liste, NULL);
+            if (projet->list_gtk.ef_relachements.builder != NULL)
+                gtk_tree_store_move_before(projet->list_gtk.ef_relachements.relachements, &relachement->Iter_fenetre, NULL);
+#endif
+        }
+    
+#ifdef ENABLE_GTK
+        if (projet->list_gtk.ef_barres.builder != NULL)
+        {
+            GList   *list_parcours2 = projet->beton.barres;
+            
+            while (list_parcours2 != NULL)
+            {
+                Beton_Barre *barre = list_parcours2->data;
+                
+                if (barre->relachement == relachement)
+                    gtk_tree_store_set(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treestore")), &barre->Iter, 6, barre->relachement->nom, -1);
+                list_parcours2 = g_list_next(list_parcours2);
+            }
+        }
+#endif
     }
+    
+    if ((rx_debut != UINT_MAX) && (relachement->rx_debut != rx_debut))
+    {
+        switch (rx_debut)
+        {
+            free(relachement->rx_d_data);
+            case EF_RELACHEMENT_BLOQUE :
+            case EF_RELACHEMENT_LIBRE :
+            {
+                relachement->rx_d_data = NULL;
+                break;
+            }
+            case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
+            {
+                BUGMSG(relachement->rx_d_data = malloc(sizeof(EF_Relachement_Donnees_Elastique_Lineaire)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                memset(relachement->rx_d_data, 0, sizeof(EF_Relachement_Donnees_Elastique_Lineaire));
+                break;
+            }
+            default :
+            {
+                BUGMSG(NULL, FALSE, "Le type de relâchement est inconnu.\n");
+                break;
+            }
+        }
+        relachement->rx_debut = rx_debut;
+    }
+    if (rx_d_data != NULL)
+    {
+        switch (relachement->rx_debut)
+        {
+            case EF_RELACHEMENT_BLOQUE :
+            case EF_RELACHEMENT_LIBRE :
+            {
+                BUGMSG(NULL, FALSE, "Impossible d'éditer ce type de relâchement.\n");
+                break;
+            }
+            case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
+            {
+                memcpy(relachement->rx_d_data, rx_d_data, sizeof(EF_Relachement_Donnees_Elastique_Lineaire));
+                break;
+            }
+            default :
+            {
+                BUGMSG(NULL, FALSE, "Le type de relâchement est inconnu.\n");
+                break;
+            }
+        }
+    }
+    if ((ry_debut != UINT_MAX) && (relachement->ry_debut != ry_debut))
+    {
+        switch (ry_debut)
+        {
+            free(relachement->ry_d_data);
+            case EF_RELACHEMENT_BLOQUE :
+            case EF_RELACHEMENT_LIBRE :
+            {
+                relachement->ry_d_data = NULL;
+                break;
+            }
+            case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
+            {
+                BUGMSG(relachement->ry_d_data = malloc(sizeof(EF_Relachement_Donnees_Elastique_Lineaire)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                memset(relachement->ry_d_data, 0, sizeof(EF_Relachement_Donnees_Elastique_Lineaire));
+                break;
+            }
+            default :
+            {
+                BUGMSG(NULL, FALSE, "Le type de relâchement est inconnu.\n");
+                break;
+            }
+        }
+        relachement->ry_debut = ry_debut;
+    }
+    if (ry_d_data != NULL)
+    {
+        switch (relachement->ry_debut)
+        {
+            case EF_RELACHEMENT_BLOQUE :
+            case EF_RELACHEMENT_LIBRE :
+            {
+                BUGMSG(NULL, FALSE, "Impossible d'éditer ce type de relâchement.\n");
+                break;
+            }
+            case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
+            {
+                memcpy(relachement->ry_d_data, ry_d_data, sizeof(EF_Relachement_Donnees_Elastique_Lineaire));
+                break;
+            }
+            default :
+            {
+                BUGMSG(NULL, FALSE, "Le type de relâchement est inconnu.\n");
+                break;
+            }
+        }
+    }
+    if ((rz_debut != UINT_MAX) && (relachement->rz_debut != rz_debut))
+    {
+        switch (rz_debut)
+        {
+            free(relachement->rz_d_data);
+            case EF_RELACHEMENT_BLOQUE :
+            case EF_RELACHEMENT_LIBRE :
+            {
+                relachement->rz_d_data = NULL;
+                break;
+            }
+            case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
+            {
+                BUGMSG(relachement->rz_d_data = malloc(sizeof(EF_Relachement_Donnees_Elastique_Lineaire)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                memset(relachement->rz_d_data, 0, sizeof(EF_Relachement_Donnees_Elastique_Lineaire));
+                break;
+            }
+            default :
+            {
+                BUGMSG(NULL, FALSE, "Le type de relâchement est inconnu.\n");
+                break;
+            }
+        }
+        relachement->rz_debut = rz_debut;
+    }
+    if (rz_d_data != NULL)
+    {
+        switch (relachement->rz_debut)
+        {
+            case EF_RELACHEMENT_BLOQUE :
+            case EF_RELACHEMENT_LIBRE :
+            {
+                BUGMSG(NULL, FALSE, "Impossible d'éditer ce type de relâchement.\n");
+                break;
+            }
+            case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
+            {
+                memcpy(relachement->rz_d_data, rz_d_data, sizeof(EF_Relachement_Donnees_Elastique_Lineaire));
+                break;
+            }
+            default :
+            {
+                BUGMSG(NULL, FALSE, "Le type de relâchement est inconnu.\n");
+                break;
+            }
+        }
+    }
+    if ((rx_fin != UINT_MAX) && (relachement->rx_fin != rx_fin))
+    {
+        switch (rx_fin)
+        {
+            free(relachement->rx_f_data);
+            case EF_RELACHEMENT_BLOQUE :
+            case EF_RELACHEMENT_LIBRE :
+            {
+                relachement->rx_f_data = NULL;
+                break;
+            }
+            case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
+            {
+                BUGMSG(relachement->rx_f_data = malloc(sizeof(EF_Relachement_Donnees_Elastique_Lineaire)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                memset(relachement->rx_f_data, 0, sizeof(EF_Relachement_Donnees_Elastique_Lineaire));
+                break;
+            }
+            default :
+            {
+                BUGMSG(NULL, FALSE, "Le type de relâchement est inconnu.\n");
+                break;
+            }
+        }
+        relachement->rx_fin = rx_fin;
+    }
+    if (rx_f_data != NULL)
+    {
+        switch (relachement->rx_fin)
+        {
+            case EF_RELACHEMENT_BLOQUE :
+            case EF_RELACHEMENT_LIBRE :
+            {
+                BUGMSG(NULL, FALSE, "Impossible d'éditer ce type de relâchement.\n");
+                break;
+            }
+            case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
+            {
+                memcpy(relachement->rx_f_data, rx_f_data, sizeof(EF_Relachement_Donnees_Elastique_Lineaire));
+                break;
+            }
+            default :
+            {
+                BUGMSG(NULL, FALSE, "Le type de relâchement est inconnu.\n");
+                break;
+            }
+        }
+    }
+    if ((ry_fin != UINT_MAX) && (relachement->ry_fin != ry_fin))
+    {
+        switch (ry_fin)
+        {
+            free(relachement->ry_f_data);
+            case EF_RELACHEMENT_BLOQUE :
+            case EF_RELACHEMENT_LIBRE :
+            {
+                relachement->ry_f_data = NULL;
+                break;
+            }
+            case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
+            {
+                BUGMSG(relachement->ry_f_data = malloc(sizeof(EF_Relachement_Donnees_Elastique_Lineaire)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                memset(relachement->ry_f_data, 0, sizeof(EF_Relachement_Donnees_Elastique_Lineaire));
+                break;
+            }
+            default :
+            {
+                BUGMSG(NULL, FALSE, "Le type de relâchement est inconnu.\n");
+                break;
+            }
+        }
+        relachement->ry_fin = ry_fin;
+    }
+    if (ry_f_data != NULL)
+    {
+        switch (relachement->ry_fin)
+        {
+            case EF_RELACHEMENT_BLOQUE :
+            case EF_RELACHEMENT_LIBRE :
+            {
+                BUGMSG(NULL, FALSE, "Impossible d'éditer ce type de relâchement.\n");
+                break;
+            }
+            case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
+            {
+                memcpy(relachement->ry_f_data, ry_f_data, sizeof(EF_Relachement_Donnees_Elastique_Lineaire));
+                break;
+            }
+            default :
+            {
+                BUGMSG(NULL, FALSE, "Le type de relâchement est inconnu.\n");
+                break;
+            }
+        }
+    }
+    if ((rz_fin != UINT_MAX) && (relachement->rz_fin != rz_fin))
+    {
+        switch (rz_fin)
+        {
+            free(relachement->rz_f_data);
+            case EF_RELACHEMENT_BLOQUE :
+            case EF_RELACHEMENT_LIBRE :
+            {
+                relachement->rz_f_data = NULL;
+                break;
+            }
+            case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
+            {
+                BUGMSG(relachement->rz_f_data = malloc(sizeof(EF_Relachement_Donnees_Elastique_Lineaire)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                memset(relachement->rz_f_data, 0, sizeof(EF_Relachement_Donnees_Elastique_Lineaire));
+                break;
+            }
+            default :
+            {
+                BUGMSG(NULL, FALSE, "Le type de relâchement est inconnu.\n");
+                break;
+            }
+        }
+        relachement->rz_fin = rz_fin;
+    }
+    if (rz_f_data != NULL)
+    {
+        switch (relachement->rz_fin)
+        {
+            case EF_RELACHEMENT_BLOQUE :
+            case EF_RELACHEMENT_LIBRE :
+            {
+                BUGMSG(NULL, FALSE, "Impossible d'éditer ce type de relâchement.\n");
+                break;
+            }
+            case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
+            {
+                memcpy(relachement->rz_f_data, rz_f_data, sizeof(EF_Relachement_Donnees_Elastique_Lineaire));
+                break;
+            }
+            default :
+            {
+                BUGMSG(NULL, FALSE, "Le type de relâchement est inconnu.\n");
+                break;
+            }
+        }
+    }
+            
+#ifdef ENABLE_GTK
+    BUG(EF_relachements_update_ligne_treeview(projet, relachement), FALSE);
+    if (projet->list_gtk.ef_relachements.builder != NULL)
+        EF_gtk_relachements_select_changed(NULL, projet);
 #endif
     
     return TRUE;
 }
+
 
 G_MODULE_EXPORT gboolean EF_relachement_supprime(EF_Relachement *relachement,
   gboolean annule_si_utilise, Projet *projet)
