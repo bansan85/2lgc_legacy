@@ -150,6 +150,7 @@ gboolean EF_sections_insert(Projet *projet, EF_Section *section)
         }
 #endif
     }
+    gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section->Iter_liste, 0, section->nom, -1);
     
 #ifdef ENABLE_GTK
     BUG(EF_sections_update_ligne_treeview(projet, section), FALSE);
