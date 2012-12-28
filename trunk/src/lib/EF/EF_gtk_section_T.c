@@ -23,6 +23,7 @@
 #include <locale.h>
 #include <gtk/gtk.h>
 #include <math.h>
+#include <string.h>
 
 #include "common_projet.h"
 #include "common_erreurs.h"
@@ -127,7 +128,60 @@ gboolean EF_gtk_section_T_recupere_donnees(Projet *projet, double *lt, double *h
     gtk_text_buffer_get_iter_at_offset(textbuffer, &end, -1);
     *nom = gtk_text_buffer_get_text(textbuffer, &start, &end, FALSE);
     
+    gtk_text_buffer_remove_all_tags(textbuffer, &start, &end);
+    
+    if (projet->list_gtk.ef_sections_T.section == NULL)
+    {
+        if (EF_sections_cherche_nom(projet, *nom, FALSE))
+        {
+            gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections_T.builder, "EF_section_T_button_add_edit")), FALSE);
+            free(*nom);
+            gtk_text_buffer_apply_tag_by_name(textbuffer, "mauvais", &start, &end);
+            return FALSE;
+        }
+        else
+            gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections_T.builder, "EF_section_T_button_add_edit")), TRUE);
+    }
+    else if (strcmp(projet->list_gtk.ef_sections_T.section->nom, *nom) == 0)
+        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections_T.builder, "EF_section_T_button_add_edit")), TRUE);
+    else if ((strcmp(*nom, "") == 0) || (EF_sections_cherche_nom(projet, *nom, FALSE)))
+    {
+        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections_T.builder, "EF_section_T_button_add_edit")), FALSE);
+        free(*nom);
+        gtk_text_buffer_apply_tag_by_name(textbuffer, "mauvais", &start, &end);
+        return FALSE;
+    }
+    else
+        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections_T.builder, "EF_section_T_button_add_edit")), TRUE);
+    
+    gtk_text_buffer_apply_tag_by_name(textbuffer, "OK", &start, &end);
+    
     return TRUE;
+}
+
+
+G_MODULE_EXPORT void EF_gtk_section_T_check(GtkWidget *object __attribute__((unused)),
+  Projet *projet)
+/* Description : Vérifie si l'ensemble des éléments est correct pour activer le bouton add/edit.
+ * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    double  lt, ht, lr, hr;
+    char    *nom;
+    
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet->list_gtk.ef_sections_T.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section T");
+    
+    if (!EF_gtk_section_T_recupere_donnees(projet, &lt, &ht, &lr, &hr, &nom))
+        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections_T.builder, "EF_section_T_button_add_edit")), FALSE);
+    else
+    {
+        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections_T.builder, "EF_section_T_button_add_edit")), TRUE);
+        free(nom);
+    }
+    return;
 }
 
 

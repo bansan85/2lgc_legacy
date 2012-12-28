@@ -257,6 +257,36 @@ gboolean EF_gtk_charge_barre_repartie_uniforme_recupere_donnees(Projet *projet,
 }
 
 
+G_MODULE_EXPORT void EF_gtk_charge_barre_rep_uni_check(
+  GtkWidget *object __attribute__((unused)), Projet *projet)
+/* Description : Vérifie si l'ensemble des éléments est correct pour activer le bouton add/edit.
+ * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    unsigned int    num_action;
+    GList           *barres;
+    double          fx, fy, fz, mx, my, mz;
+    gchar           *nom;
+    gboolean        repere_local, projection;
+    double          a, b;
+    
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet->list_gtk.ef_charge_barre_repartie_uniforme.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Barre Répartie Uniforme");
+    
+    if (!EF_gtk_charge_barre_repartie_uniforme_recupere_donnees(projet, &num_action, &barres, &fx, &fy, &fz, &mx, &my, &mz, &nom, &repere_local, &projection, &a, &b))
+        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_charge_barre_repartie_uniforme.builder, "EF_charge_barre_rep_uni_button_add_edit")), FALSE);
+    else
+    {
+        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_charge_barre_repartie_uniforme.builder, "EF_charge_barre_rep_uni_button_add_edit")), TRUE);
+        free(nom);
+        g_list_free(barres);
+    }
+    return;
+}
+
+
 void EF_gtk_charge_barre_repartie_uniforme_ajouter_clicked(
   GtkButton *button __attribute__((unused)), Projet *projet)
 /* Description : Ferme la fenêtre en ajoutant la charge.
