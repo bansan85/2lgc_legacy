@@ -414,10 +414,11 @@ G_MODULE_EXPORT gboolean EF_relachement_modif(Projet *projet, EF_Relachement *re
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(relachement, FALSE, gettext("Paramètre %s incorrect.\n"), "relachement");
     
-    if (nom != NULL)
+    if ((nom != NULL) && (strcmp(relachement->nom, nom) != 0))
     {
         GList   *list_parcours;
         
+        BUGMSG(!EF_relachement_cherche_nom(projet, nom, FALSE), FALSE, gettext("Le relâchement %s existe déjà.\n"), nom);
         free(relachement->nom);
         BUGMSG(relachement->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
         

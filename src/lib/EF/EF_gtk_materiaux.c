@@ -166,14 +166,14 @@ G_MODULE_EXPORT void EF_gtk_materiaux_edit_nom(GtkCellRendererText *cell __attri
     gtk_tree_model_get_iter(model, &iter, path);
     gtk_tree_path_free(path);
     gtk_tree_model_get(model, &iter, 0, &nom, -1);
-    if (strcmp(nom, new_text) == 0)
+    if ((strcmp(nom, new_text) == 0) || (strcmp(new_text, "") == 0))
     {
         free(nom);
         return;
     }
     BUG(materiau = _1992_1_1_materiaux_cherche_nom(projet, nom, TRUE), );
     free(nom);
-    if (strcmp(materiau->nom, new_text) == 0)
+    if (_1992_1_1_materiaux_cherche_nom(projet, new_text, FALSE))
         return;
     
     BUG(_1992_1_1_materiaux_modif(projet, materiau, new_text, NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN), );

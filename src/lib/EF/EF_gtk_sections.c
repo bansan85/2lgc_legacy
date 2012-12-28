@@ -281,14 +281,14 @@ G_MODULE_EXPORT void EF_gtk_sections_edit_nom(GtkCellRendererText *cell __attrib
     gtk_tree_model_get_iter(model, &iter, path);
     gtk_tree_path_free(path);
     gtk_tree_model_get(model, &iter, 1, &nom, -1);
-    if (strcmp(nom, new_text) == 0)
+    if ((strcmp(nom, new_text) == 0) || (strcmp(new_text, "") == 0))
     {
         free(nom);
         return;
     }
     BUG(section = EF_sections_cherche_nom(projet, nom, TRUE), );
     free(nom);
-    if (strcmp(section->nom, new_text) == 0)
+    if (EF_sections_cherche_nom(projet, new_text, FALSE))
         return;
 
     switch (section->type)

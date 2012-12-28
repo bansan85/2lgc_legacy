@@ -353,14 +353,14 @@ G_MODULE_EXPORT void EF_gtk_relachements_edit_nom(
     gtk_tree_model_get_iter(model, &iter, path);
     gtk_tree_path_free(path);
     gtk_tree_model_get(model, &iter, 0, &nom, -1);
-    if (strcmp(nom, new_text) == 0)
+    if ((strcmp(nom, new_text) == 0) || (strcmp(new_text, "") == 0))
     {
         free(nom);
         return;
     }
     BUG(relachement = EF_relachement_cherche_nom(projet, nom, TRUE), );
     free(nom);
-    if (strcmp(relachement->nom, new_text) == 0)
+    if (EF_relachement_cherche_nom(projet, new_text, FALSE))
         return;
 
     BUG(EF_relachement_modif(projet, relachement, new_text, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL), );

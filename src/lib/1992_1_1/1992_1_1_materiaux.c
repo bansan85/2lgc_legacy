@@ -553,8 +553,9 @@ G_MODULE_EXPORT gboolean _1992_1_1_materiaux_modif(Projet *projet, Beton_Materia
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(materiau, FALSE, gettext("Paramètre %s incorrect.\n"), "materiau");
     
-    if (nom != NULL)
+    if ((nom != NULL) && (strcmp(materiau->nom, nom) != 0))
     {
+        BUGMSG(!_1992_1_1_materiaux_cherche_nom(projet, nom, FALSE), FALSE, gettext("Le matériau %s existe déjà.\n"), nom);
         free(materiau->nom);
         BUGMSG(materiau->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
         BUG(_1992_1_1_materiaux_repositionne(projet, materiau), FALSE);
