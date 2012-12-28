@@ -23,6 +23,7 @@
 #include <locale.h>
 #include <gtk/gtk.h>
 #include <math.h>
+#include <string.h>
 
 #include "common_projet.h"
 #include "common_erreurs.h"
@@ -108,7 +109,60 @@ gboolean EF_gtk_section_circulaire_recupere_donnees(Projet *projet, double *diam
     gtk_text_buffer_get_iter_at_offset(textbuffer, &end, -1);
     *nom = gtk_text_buffer_get_text(textbuffer, &start, &end, FALSE);
     
+    gtk_text_buffer_remove_all_tags(textbuffer, &start, &end);
+    
+    if (projet->list_gtk.ef_sections_circulaire.section == NULL)
+    {
+        if (EF_sections_cherche_nom(projet, *nom, FALSE))
+        {
+            gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections_circulaire.builder, "EF_section_circulaire_button_add_edit")), FALSE);
+            free(*nom);
+            gtk_text_buffer_apply_tag_by_name(textbuffer, "mauvais", &start, &end);
+            return FALSE;
+        }
+        else
+            gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections_circulaire.builder, "EF_section_circulaire_button_add_edit")), TRUE);
+    }
+    else if (strcmp(projet->list_gtk.ef_sections_circulaire.section->nom, *nom) == 0)
+        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections_circulaire.builder, "EF_section_circulaire_button_add_edit")), TRUE);
+    else if ((strcmp(*nom, "") == 0) || (EF_sections_cherche_nom(projet, *nom, FALSE)))
+    {
+        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections_circulaire.builder, "EF_section_circulaire_button_add_edit")), FALSE);
+        free(*nom);
+        gtk_text_buffer_apply_tag_by_name(textbuffer, "mauvais", &start, &end);
+        return FALSE;
+    }
+    else
+        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections_circulaire.builder, "EF_section_circulaire_button_add_edit")), TRUE);
+    
+    gtk_text_buffer_apply_tag_by_name(textbuffer, "OK", &start, &end);
+    
     return TRUE;
+}
+
+
+G_MODULE_EXPORT void EF_gtk_section_circulaire_check(
+  GtkWidget *object __attribute__((unused)), Projet *projet)
+/* Description : Vérifie si l'ensemble des éléments est correct pour activer le bouton add/edit.
+ * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    double  diametre;
+    char    *nom;
+    
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet->list_gtk.ef_sections_circulaire.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section Circulaire");
+    
+    if (!EF_gtk_section_circulaire_recupere_donnees(projet, &diametre, &nom))
+        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections_circulaire.builder, "EF_section_circulaire_button_add_edit")), FALSE);
+    else
+    {
+        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections_circulaire.builder, "EF_section_circulaire_button_add_edit")), TRUE);
+        free(nom);
+    }
+    return;
 }
 
 
@@ -185,7 +239,7 @@ G_MODULE_EXPORT void EF_gtk_section_circulaire_modifier_clicked(
 
 G_MODULE_EXPORT gboolean EF_gtk_section_circulaire(Projet *projet, EF_Section *section)
 /* Description : Affichage de la fenêtre permettant de créer ou modifier une section de type
- *               rectangulaire.
+ *               circulaire.
  * Paramètres : Projet *projet : la variable projet,
  *            : EF_Section *section : section à modifier. NULL si nouvelle section,
  * Valeur renvoyée :

@@ -23,6 +23,7 @@
 #include <locale.h>
 #include <gtk/gtk.h>
 #include <math.h>
+#include <string.h>
 
 #include "common_projet.h"
 #include "common_erreurs.h"
@@ -107,7 +108,60 @@ gboolean EF_gtk_section_carree_recupere_donnees(Projet *projet, double *cote, gc
     gtk_text_buffer_get_iter_at_offset(textbuffer, &end, -1);
     *nom = gtk_text_buffer_get_text(textbuffer, &start, &end, FALSE);
     
+    gtk_text_buffer_remove_all_tags(textbuffer, &start, &end);
+    
+    if (projet->list_gtk.ef_sections_carree.section == NULL)
+    {
+        if (EF_sections_cherche_nom(projet, *nom, FALSE))
+        {
+            gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections_carree.builder, "EF_section_carree_button_add_edit")), FALSE);
+            free(*nom);
+            gtk_text_buffer_apply_tag_by_name(textbuffer, "mauvais", &start, &end);
+            return FALSE;
+        }
+        else
+            gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections_carree.builder, "EF_section_carree_button_add_edit")), TRUE);
+    }
+    else if (strcmp(projet->list_gtk.ef_sections_carree.section->nom, *nom) == 0)
+        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections_carree.builder, "EF_section_carree_button_add_edit")), TRUE);
+    else if ((strcmp(*nom, "") == 0) || (EF_sections_cherche_nom(projet, *nom, FALSE)))
+    {
+        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections_carree.builder, "EF_section_carree_button_add_edit")), FALSE);
+        free(*nom);
+        gtk_text_buffer_apply_tag_by_name(textbuffer, "mauvais", &start, &end);
+        return FALSE;
+    }
+    else
+        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections_carree.builder, "EF_section_carree_button_add_edit")), TRUE);
+    
+    gtk_text_buffer_apply_tag_by_name(textbuffer, "OK", &start, &end);
+    
     return TRUE;
+}
+
+
+G_MODULE_EXPORT void EF_gtk_section_carree_check(
+  GtkWidget *object __attribute__((unused)), Projet *projet)
+/* Description : Vérifie si l'ensemble des éléments est correct pour activer le bouton add/edit.
+ * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    double  cote;
+    char    *nom;
+    
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet->list_gtk.ef_sections_carree.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section Carrée");
+    
+    if (!EF_gtk_section_carree_recupere_donnees(projet, &cote, &nom))
+        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections_carree.builder, "EF_section_carree_button_add_edit")), FALSE);
+    else
+    {
+        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections_carree.builder, "EF_section_carree_button_add_edit")), TRUE);
+        free(nom);
+    }
+    return;
 }
 
 

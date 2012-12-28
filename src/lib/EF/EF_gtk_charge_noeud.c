@@ -183,6 +183,7 @@ gboolean EF_gtk_charge_noeud_recupere_donnees(Projet *projet, unsigned int *num_
     else
     {
         *noeuds = common_selection_converti_numeros_en_noeuds(num_noeuds, projet);
+        g_list_free(num_noeuds);
         if (*noeuds == NULL)
         {
             free(texte_tmp);
@@ -201,6 +202,34 @@ gboolean EF_gtk_charge_noeud_recupere_donnees(Projet *projet, unsigned int *num_
             return TRUE;
         }
     }
+}
+
+
+G_MODULE_EXPORT void EF_gtk_charge_noeud_check(GtkWidget *object __attribute__((unused)),
+  Projet *projet)
+/* Description : Vérifie si l'ensemble des éléments est correct pour activer le bouton add/edit.
+ * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    unsigned int    num_action;
+    GList           *noeuds;
+    double          fx, fy, fz, mx, my, mz;
+    gchar           *nom;
+    
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet->list_gtk.ef_charge_noeud.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Nodale");
+    
+    if (!EF_gtk_charge_noeud_recupere_donnees(projet, &num_action, &noeuds, &fx, &fy, &fz, &mx, &my, &mz, &nom))
+        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_button_add_edit")), FALSE);
+    else
+    {
+        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_button_add_edit")), TRUE);
+        free(nom);
+        g_list_free(noeuds);
+    }
+    return;
 }
 
 

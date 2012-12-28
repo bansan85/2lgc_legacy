@@ -17,10 +17,14 @@
             </object>
         </child>
     </object>
+    <object class="GtkTextBuffer" id="_1992_1_1_materiaux_beton_buffer_nom">
+        <property name="tag-table">_1992_1_1_materiaux_beton_tag_table</property>
+        <signal name="changed" handler="_1992_1_1_gtk_materiaux_check"/>
+    </object>
     <object class="GtkTextBuffer" id="_1992_1_1_materiaux_beton_buffer_fck">
         <property name="tag-table">_1992_1_1_materiaux_beton_tag_table</property>
         <property name="text">0</property>
-        <signal name="changed" handler="common_gtk_text_buffer_double_sup0_90"/>
+        <signal name="changed" handler="_1992_1_1_gtk_materiaux_check"/>
     </object>
     <object id="_1992_1_1_materiaux_beton_window" class="GtkWindow">
         <property name="visible">True</property>
@@ -56,6 +60,7 @@
                                 <property name="visible">True</property>
                                 <property name="accepts-tab">False</property>
                                 <property name="wrap-mode">GTK_WRAP_WORD</property>
+                                <property name="buffer">_1992_1_1_materiaux_beton_buffer_nom</property>
                             </object>
                         </child>
                     </object>

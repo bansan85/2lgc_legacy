@@ -23,36 +23,6 @@
 #include "common_projet.h"
 #include <gtk/gtk.h>
 
-#define GTK_NOUVELLE_FENETRE(window, titre, taillex, tailley) {\
-            window = gtk_window_new(GTK_WINDOW_TOPLEVEL); \
-            gtk_window_set_title(GTK_WINDOW(window), titre); \
-            gtk_window_resize(GTK_WINDOW(window), taillex, tailley); \
-            gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER); \
-            g_signal_connect(GTK_WINDOW(window), "key-press-event", G_CALLBACK(common_gtk_key_press), GTK_WINDOW(window)); \
-            }
-
-#define GTK_NOUVEAU_TEXT_VIEW_AVEC_SCROLLED_WINDOW(textview, scrolled) {\
-            textview = gtk_text_view_new(); \
-            gtk_text_view_set_wrap_mode(GTK_TEXT_VIEW(textview), GTK_WRAP_WORD); \
-            gtk_text_view_set_accepts_tab(GTK_TEXT_VIEW(textview), FALSE); \
-            gtk_container_set_border_width(GTK_CONTAINER(textview), 2); \
-            scrolled = gtk_scrolled_window_new (NULL, NULL); \
-            gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolled), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC); \
-            gtk_container_add(GTK_CONTAINER(scrolled), textview); \
-            }
-
-#define GTK_TEXT_VIEW_VERIFIE_INT(textview) {\
-            gtk_text_buffer_create_tag(gtk_text_view_get_buffer(GTK_TEXT_VIEW(textview)), "mauvais", "foreground", "red", "weight", PANGO_WEIGHT_BOLD, NULL); \
-            gtk_text_buffer_create_tag(gtk_text_view_get_buffer(GTK_TEXT_VIEW(textview)), "OK", "foreground", "black", "weight", PANGO_WEIGHT_NORMAL, NULL); \
-            g_signal_connect(gtk_text_view_get_buffer(GTK_TEXT_VIEW(textview)), "changed", G_CALLBACK(common_gtk_entry_check_int), NULL); \
-            }
-
-#define GTK_TEXT_VIEW_VERIFIE_LISTE(textview) {\
-            gtk_text_buffer_create_tag(gtk_text_view_get_buffer(GTK_TEXT_VIEW(textview)), "mauvais", "foreground", "red", "weight", PANGO_WEIGHT_BOLD, NULL); \
-            gtk_text_buffer_create_tag(gtk_text_view_get_buffer(GTK_TEXT_VIEW(textview)), "OK", "foreground", "black", "weight", PANGO_WEIGHT_NORMAL, NULL); \
-            g_signal_connect(gtk_text_view_get_buffer(GTK_TEXT_VIEW(textview)), "changed", G_CALLBACK(common_gtk_entry_check_liste), NULL); \
-            }
-
 #define GTK_COMMON_SPINBUTTON_AS_UINT(spinbutton) ((unsigned int)round(gtk_spin_button_get_value(spinbutton)))
 
 gboolean common_gtk_treeview_button_press_unselect(GtkTreeView *widget, GdkEvent *event, Projet *projet);

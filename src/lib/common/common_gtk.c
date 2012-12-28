@@ -128,66 +128,6 @@ G_MODULE_EXPORT double common_gtk_text_buffer_double(GtkTextBuffer *textbuffer, 
 }
 
 
-G_MODULE_EXPORT void common_gtk_text_buffer_double_sup0_inf(GtkTextBuffer *textbuffer, 
-  gpointer user_data __attribute__((unused)))
-/* Description : Vérifie en temps réel si le GtkTextBuffer contient bien un nombre flottant.
- *               Les bornes : strictement supérieur à 0 jusqu'à l'infini.
- * Paramètres : GtkTextBuffer *textbuffer : composant à vérifier.
- *            : gpointer user_data : ne sert à rien.
- * Valeur renvoyée : Aucune.
- */
-{
-    common_gtk_text_buffer_double(textbuffer, 0., FALSE, INFINITY, FALSE);
-    
-    return;
-}
-
-
-G_MODULE_EXPORT void common_gtk_text_buffer_double_sup0_90(GtkTextBuffer *textbuffer, 
-  gpointer user_data __attribute__((unused)))
-/* Description : Vérifie en temps réel si le GtkTextBuffer contient bien un nombre flottant.
- *               Les bornes : strictement supérieur à 0 jusqu'à 90 maximum.
- * Paramètres : GtkTextBuffer *textbuffer : composant à vérifier.
- *            : gpointer user_data : ne sert à rien.
- * Valeur renvoyée : Aucune.
- */
-{
-    common_gtk_text_buffer_double(textbuffer, 0., FALSE, 90., TRUE);
-    
-    return;
-}
-
-
-G_MODULE_EXPORT void common_gtk_text_buffer_double_0_inf(GtkTextBuffer *textbuffer, 
-  gpointer user_data __attribute__((unused)))
-/* Description : Vérifie en temps réel si le GtkTextBuffer contient bien un nombre flottant.
- *               Les bornes : de 0 inclus jusqu'à l'infini.
- * Paramètres : GtkTextBuffer *textbuffer : composant à vérifier.
- *            : gpointer user_data : ne sert à rien.
- * Valeur renvoyée : Aucune.
- */
-{
-    common_gtk_text_buffer_double(textbuffer, 0., TRUE, INFINITY, FALSE);
-    
-    return;
-}
-
-
-G_MODULE_EXPORT void common_gtk_text_buffer_double_inf_inf(GtkTextBuffer *textbuffer, 
-  gpointer user_data __attribute__((unused)))
-/* Description : Vérifie en temps réel si le GtkTextBuffer contient bien un nombre flottant.
- *               Les bornes : de moint l'infini  jusqu'à l'infini.
- * Paramètres : GtkTextBuffer *textbuffer : composant à vérifier.
- *            : gpointer user_data : ne sert à rien.
- * Valeur renvoyée : Aucune.
- */
-{
-    common_gtk_text_buffer_double(textbuffer, -INFINITY, FALSE, INFINITY, FALSE);
-    
-    return;
-}
-
-
 G_MODULE_EXPORT void common_gtk_entry_check_int(GtkTextBuffer *textbuffer,
   gpointer user_data __attribute__((unused)))
 /* Description : Vérifie en temps réel si le GtkTextBuffer contient bien un nombre entier.
