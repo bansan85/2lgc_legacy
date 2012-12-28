@@ -222,12 +222,13 @@ G_MODULE_EXPORT gboolean EF_sections_rectangulaire_ajout(Projet *projet, const c
  *             en cas d'erreur d'allocation mémoire.
  */
 {
-    Section_T   *section_data = malloc(sizeof(Section_T));
-    EF_Section  *section_nouvelle = malloc(sizeof(EF_Section));
+    Section_T   *section_data;
+    EF_Section  *section_nouvelle;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(section_nouvelle, FALSE, gettext("Erreur d'allocation mémoire.\n"));
-    BUGMSG(section_data, FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(!EF_sections_cherche_nom(projet, nom, FALSE), FALSE, gettext("La section %s existe déjà.\n"), nom);
+    BUGMSG(section_nouvelle = malloc(sizeof(EF_Section)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(section_data = malloc(sizeof(Section_T)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
     section_nouvelle->data = section_data;
     
     // Trivial
@@ -267,11 +268,12 @@ G_MODULE_EXPORT gboolean EF_sections_rectangulaire_modif(Projet *projet, EF_Sect
     BUGMSG(section->type == SECTION_RECTANGULAIRE, FALSE, gettext("La section doit être de type rectangulaire.\n"));
     
     // Trivial
-    if (nom != NULL)
+    if ((nom != NULL) && (strcmp(section->nom, nom) != 0))
     {
+        BUGMSG(!EF_sections_cherche_nom(projet, nom, FALSE), FALSE, gettext("La section %s existe déjà.\n"), nom);
         free(section->nom);
         BUGMSG(section->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-        EF_sections_repositionne(projet, section);
+        BUG(EF_sections_repositionne(projet, section), FALSE);
 #ifdef ENABLE_GTK
         gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section->Iter_liste, 0, nom, -1);
         if ((projet->list_gtk.ef_sections_rectangulaire.builder != NULL) && (projet->list_gtk.ef_sections_rectangulaire.section == section))
@@ -323,12 +325,13 @@ G_MODULE_EXPORT gboolean EF_sections_T_ajout(Projet *projet, const char* nom, do
  *             en cas d'erreur d'allocation mémoire.
  */
 {
-    Section_T *section_data = malloc(sizeof(Section_T));
-    EF_Section      *section_nouvelle = malloc(sizeof(EF_Section));
+    Section_T   *section_data;
+    EF_Section  *section_nouvelle;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(section_nouvelle, FALSE, gettext("Erreur d'allocation mémoire.\n"));
-    BUGMSG(section_data, FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(!EF_sections_cherche_nom(projet, nom, FALSE), FALSE, gettext("La section %s existe déjà.\n"), nom);
+    BUGMSG(section_nouvelle = malloc(sizeof(EF_Section)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(section_data = malloc(sizeof(Section_T)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
     section_nouvelle->data = section_data;
     
     // Les caractéristiques de la section sont les suivantes :\end{verbatim}\begin{displaymath}
@@ -374,11 +377,12 @@ G_MODULE_EXPORT gboolean EF_sections_T_modif(Projet *projet, EF_Section *section
     BUGMSG(section, FALSE, gettext("Paramètre %s incorrect.\n"), "section");
     BUGMSG(section->type == SECTION_T, FALSE, gettext("La section doit être de type en T.\n"));
     
-    if (nom != NULL)
+    if ((nom != NULL) && (strcmp(section->nom, nom) != 0))
     {
+        BUGMSG(!EF_sections_cherche_nom(projet, nom, FALSE), FALSE, gettext("La section %s existe déjà.\n"), nom);
         free(section->nom);
         BUGMSG(section->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-        EF_sections_repositionne(projet, section);
+        BUG(EF_sections_repositionne(projet, section), FALSE);
 #ifdef ENABLE_GTK
         gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section->Iter_liste, 0, nom, -1);
         if ((projet->list_gtk.ef_sections_T.builder != NULL) && (projet->list_gtk.ef_sections_T.section == section))
@@ -427,12 +431,13 @@ G_MODULE_EXPORT gboolean EF_sections_carree_ajout(Projet *projet, const char* no
  *             en cas d'erreur d'allocation mémoire.
  */
 {
-    Section_Carree  *section_data = malloc(sizeof(Section_Carree));
-    EF_Section      *section_nouvelle = malloc(sizeof(EF_Section));
+    Section_Carree  *section_data;
+    EF_Section      *section_nouvelle;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(section_nouvelle, FALSE, gettext("Erreur d'allocation mémoire.\n"));
-    BUGMSG(section_data, FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(!EF_sections_cherche_nom(projet, nom, FALSE), FALSE, gettext("La section %s existe déjà.\n"), nom);
+    BUGMSG(section_nouvelle = malloc(sizeof(EF_Section)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(section_data = malloc(sizeof(Section_Carree)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
     section_nouvelle->data = section_data;
     
     // Les caractéristiques de la section sont les suivantes :\end{verbatim}\begin{displaymath}
@@ -469,11 +474,12 @@ G_MODULE_EXPORT gboolean EF_sections_carree_modif(Projet *projet, EF_Section *se
     BUGMSG(section, FALSE, gettext("Paramètre %s incorrect.\n"), "section");
     BUGMSG(section->type == SECTION_CARREE, FALSE, gettext("La section doit être de type carrée.\n"));
     
-    if (nom != NULL)
+    if ((nom != NULL) && (strcmp(section->nom, nom) != 0))
     {
+        BUGMSG(!EF_sections_cherche_nom(projet, nom, FALSE), FALSE, gettext("La section %s existe déjà.\n"), nom);
         free(section->nom);
         BUGMSG(section->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-        EF_sections_repositionne(projet, section);
+        BUG(EF_sections_repositionne(projet, section), FALSE);
 #ifdef ENABLE_GTK
         gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section->Iter_liste, 0, nom, -1);
         if ((projet->list_gtk.ef_sections_carree.builder != NULL) && (projet->list_gtk.ef_sections_carree.section == section))
@@ -517,12 +523,13 @@ G_MODULE_EXPORT gboolean EF_sections_circulaire_ajout(Projet *projet, const char
  *             en cas d'erreur d'allocation mémoire.
  */
 {
-    Section_Circulaire    *section_data = malloc(sizeof(Section_Circulaire));
-    EF_Section                  *section_nouvelle = malloc(sizeof(EF_Section));
+    Section_Circulaire  *section_data;
+    EF_Section          *section_nouvelle;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(section_nouvelle, FALSE, gettext("Erreur d'allocation mémoire.\n"));
-    BUGMSG(section_data, FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(!EF_sections_cherche_nom(projet, nom, FALSE), FALSE, gettext("La section %s existe déjà.\n"), nom);
+    BUGMSG(section_nouvelle = malloc(sizeof(EF_Section)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(section_data = malloc(sizeof(Section_Circulaire)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
     section_nouvelle->data = section_data;
     
     // Les caractéristiques de la section sont les suivantes :\end{verbatim}\begin{displaymath}
@@ -560,11 +567,12 @@ G_MODULE_EXPORT gboolean EF_sections_circulaire_modif(Projet *projet, EF_Section
     BUGMSG(section, FALSE, gettext("Paramètre %s incorrect.\n"), "section");
     BUGMSG(section->type == SECTION_CIRCULAIRE, FALSE, gettext("La section doit être de type circulaire.\n"));
     
-    if (nom != NULL)
+    if ((nom != NULL) && (strcmp(section->nom, nom) != 0))
     {
+        BUGMSG(!EF_sections_cherche_nom(projet, nom, FALSE), FALSE, gettext("La section %s existe déjà.\n"), nom);
         free(section->nom);
         BUGMSG(section->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-        EF_sections_repositionne(projet, section);
+        BUG(EF_sections_repositionne(projet, section), FALSE);
 #ifdef ENABLE_GTK
         gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section->Iter_liste, 0, nom, -1);
         if ((projet->list_gtk.ef_sections_circulaire.builder != NULL) && (projet->list_gtk.ef_sections_circulaire.section == section))
