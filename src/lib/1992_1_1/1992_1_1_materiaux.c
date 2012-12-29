@@ -609,6 +609,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_materiaux_modif(Projet *projet, Beton_Materia
             
             if (barre->materiau == materiau)
                 gtk_tree_store_set(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treestore")), &barre->Iter, 3, barre->materiau->nom, -1);
+            
             list_parcours = g_list_next(list_parcours);
         }
     }

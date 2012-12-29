@@ -205,6 +205,23 @@ gboolean EF_sections_repositionne(Projet *projet, EF_Section *section)
 #endif
     }
     
+#ifdef ENABLE_GTK
+    if (projet->list_gtk.ef_barres.builder != NULL)
+    {
+        list_parcours = projet->beton.barres;
+        
+        while (list_parcours != NULL)
+        {
+            Beton_Barre *barre = list_parcours->data;
+            
+            if (barre->section == section)
+                gtk_tree_store_set(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treestore")), &barre->Iter, 2, barre->section->nom, -1);
+            
+            list_parcours = g_list_next(list_parcours);
+        }
+    }
+#endif
+    
     return TRUE;
 }
 
