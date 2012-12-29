@@ -111,7 +111,6 @@ gboolean EF_sections_insert(Projet *projet, EF_Section *section)
 {
     GList       *list_parcours;
     EF_Section  *section_tmp;
-    int         i = 1;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(section, FALSE, gettext("Paramètre %s incorrect.\n"), "section");
@@ -124,7 +123,6 @@ gboolean EF_sections_insert(Projet *projet, EF_Section *section)
         if (strcmp(section->nom, section_tmp->nom) < 0)
             break;
         
-        i++;
         list_parcours = g_list_next(list_parcours);
     }
     if (list_parcours == NULL)
@@ -140,14 +138,9 @@ gboolean EF_sections_insert(Projet *projet, EF_Section *section)
     {
         projet->beton.sections = g_list_insert_before(projet->beton.sections, list_parcours, section);
 #ifdef ENABLE_GTK
-        gtk_list_store_insert(projet->list_gtk.ef_sections.liste_sections, &section->Iter_liste, i);
+        gtk_list_store_insert_before(projet->list_gtk.ef_sections.liste_sections, &section->Iter_liste, &section_tmp->Iter_liste);
         if (projet->list_gtk.ef_sections.builder != NULL)
-        {
-            if (g_list_previous(list_parcours) == NULL)
-                gtk_tree_store_prepend(projet->list_gtk.ef_sections.sections, &section->Iter_fenetre, NULL);
-            else
-                gtk_tree_store_insert_before(projet->list_gtk.ef_sections.sections, &section->Iter_fenetre, NULL, &section_tmp->Iter_fenetre);
-        }
+            gtk_tree_store_insert_before(projet->list_gtk.ef_sections.sections, &section->Iter_fenetre, NULL, &section_tmp->Iter_fenetre);
 #endif
     }
     gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section->Iter_liste, 0, section->nom, -1);

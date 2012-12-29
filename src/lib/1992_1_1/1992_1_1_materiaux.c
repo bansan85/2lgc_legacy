@@ -391,7 +391,6 @@ gboolean _1992_1_1_materiaux_insert(Projet *projet, Beton_Materiau *materiau)
 {
     GList           *list_parcours;
     Beton_Materiau  *materiau_tmp;
-    int             i = 1;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(materiau, FALSE, gettext("Paramètre %s incorrect.\n"), "materiau");
@@ -404,26 +403,27 @@ gboolean _1992_1_1_materiaux_insert(Projet *projet, Beton_Materiau *materiau)
         if (strcmp(materiau->nom, materiau_tmp->nom) < 0)
             break;
         
-        i++;
         list_parcours = g_list_next(list_parcours);
     }
-#ifdef ENABLE_GTK
     if (list_parcours == NULL)
     {
         projet->beton.materiaux = g_list_append(projet->beton.materiaux, materiau);
+#ifdef ENABLE_GTK
         gtk_list_store_append(projet->list_gtk.ef_materiaux.liste_materiaux, &materiau->Iter_liste);
         if (projet->list_gtk.ef_materiaux.builder != NULL)
             gtk_tree_store_append(projet->list_gtk.ef_materiaux.materiaux, &materiau->Iter_fenetre, NULL);
+#endif
     }
     else
     {
         projet->beton.materiaux = g_list_insert_before(projet->beton.materiaux, list_parcours, materiau);
-        gtk_list_store_insert(projet->list_gtk.ef_materiaux.liste_materiaux, &materiau->Iter_liste, i);
+#ifdef ENABLE_GTK
+        gtk_list_store_insert_before(projet->list_gtk.ef_materiaux.liste_materiaux, &materiau->Iter_liste, &materiau_tmp->Iter_liste);
         if (projet->list_gtk.ef_materiaux.builder != NULL)
             gtk_tree_store_insert_before(projet->list_gtk.ef_materiaux.materiaux, &materiau->Iter_fenetre, NULL, &materiau_tmp->Iter_fenetre);
+#endif
     }
     
-#endif
     
     return TRUE;
 }

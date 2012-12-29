@@ -293,7 +293,6 @@ G_MODULE_EXPORT EF_Appui* EF_appuis_ajout(Projet *projet, const char *nom, Type_
 {
     EF_Appui    *appui_nouveau, *appui_parcours;
     GList       *list_parcours;
-    int         i = 1; // Le premier est le "Aucun"
 #ifdef ENABLE_GTK
     char        *txt_uxa, *txt_uya, *txt_uza, *txt_rxa, *txt_rya, *txt_rza;
 #endif
@@ -403,7 +402,7 @@ G_MODULE_EXPORT EF_Appui* EF_appuis_ajout(Projet *projet, const char *nom, Type_
         appui_parcours = list_parcours->data;
         if (strcmp(nom, appui_parcours->nom) < 0)
             break;
-        i++;
+        
         list_parcours = g_list_next(list_parcours);
     }
     if (list_parcours == NULL)
@@ -419,7 +418,7 @@ G_MODULE_EXPORT EF_Appui* EF_appuis_ajout(Projet *projet, const char *nom, Type_
     {
         projet->ef_donnees.appuis = g_list_insert_before(projet->ef_donnees.appuis, list_parcours, appui_nouveau);
 #ifdef ENABLE_GTK
-        gtk_list_store_insert(projet->list_gtk.ef_appuis.liste_appuis, &appui_nouveau->Iter_liste, i);
+        gtk_list_store_insert_before(projet->list_gtk.ef_appuis.liste_appuis, &appui_nouveau->Iter_liste, &appui_parcours->Iter_liste);
         if (projet->list_gtk.ef_appuis.builder != NULL)
             gtk_tree_store_insert_before(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_treestore")), &appui_nouveau->Iter_fenetre, NULL, &appui_parcours->Iter_fenetre);
 #endif
