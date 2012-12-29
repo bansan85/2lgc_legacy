@@ -92,6 +92,7 @@ gboolean _1992_1_1_gtk_materiaux_recupere_donnees(Projet *projet, double *fck,
 {
     GtkTextIter     start, end;
     GtkTextBuffer   *textbuffer;
+    gboolean        ok = TRUE;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(fck, FALSE, gettext("Paramètre %s incorrect.\n"), "fck");
@@ -100,7 +101,7 @@ gboolean _1992_1_1_gtk_materiaux_recupere_donnees(Projet *projet, double *fck,
     
     *fck = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk._1992_1_1_materiaux.builder, "_1992_1_1_materiaux_beton_buffer_fck")), 0., FALSE, 90., TRUE);
     if (isnan(*fck))
-        return FALSE;
+        ok = FALSE;
     
     // Si tous les paramètres sont corrects
     textbuffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk._1992_1_1_materiaux.builder, "_1992_1_1_materiaux_beton_textview_nom")));
@@ -113,31 +114,27 @@ gboolean _1992_1_1_gtk_materiaux_recupere_donnees(Projet *projet, double *fck,
     
     if (projet->list_gtk._1992_1_1_materiaux.materiau == NULL)
     {
-        if (_1992_1_1_materiaux_cherche_nom(projet, *nom, FALSE))
+        if ((strcmp(*nom, "") == 0) || (_1992_1_1_materiaux_cherche_nom(projet, *nom, FALSE)))
         {
-            gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk._1992_1_1_materiaux.builder, "_1992_1_1_materiaux_beton_button_add_edit")), FALSE);
-            free(*nom);
             gtk_text_buffer_apply_tag_by_name(textbuffer, "mauvais", &start, &end);
-            return FALSE;
+            ok = FALSE;
         }
         else
-            gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk._1992_1_1_materiaux.builder, "_1992_1_1_materiaux_beton_button_add_edit")), TRUE);
+            gtk_text_buffer_apply_tag_by_name(textbuffer, "OK", &start, &end);
     }
-    else if (strcmp(projet->list_gtk._1992_1_1_materiaux.materiau->nom, *nom) == 0)
-        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk._1992_1_1_materiaux.builder, "_1992_1_1_materiaux_beton_button_add_edit")), TRUE);
-    else if ((strcmp(*nom, "") == 0) || (_1992_1_1_materiaux_cherche_nom(projet, *nom, FALSE)))
+    else if ((strcmp(*nom, "") == 0) || 
+      ((strcmp(projet->list_gtk._1992_1_1_materiaux.materiau->nom, *nom) != 0) && (_1992_1_1_materiaux_cherche_nom(projet, *nom, FALSE))))
     {
-        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk._1992_1_1_materiaux.builder, "_1992_1_1_materiaux_beton_button_add_edit")), FALSE);
-        free(*nom);
         gtk_text_buffer_apply_tag_by_name(textbuffer, "mauvais", &start, &end);
-        return FALSE;
+        ok = FALSE;
     }
     else
-        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk._1992_1_1_materiaux.builder, "_1992_1_1_materiaux_beton_button_add_edit")), TRUE);
+        gtk_text_buffer_apply_tag_by_name(textbuffer, "OK", &start, &end);
     
-    gtk_text_buffer_apply_tag_by_name(textbuffer, "OK", &start, &end);
+    if (ok == FALSE)
+        free(*nom);
     
-    return TRUE;
+    return ok;
 }
 
 
@@ -162,6 +159,7 @@ G_MODULE_EXPORT void _1992_1_1_gtk_materiaux_check(
         gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk._1992_1_1_materiaux.builder, "_1992_1_1_materiaux_beton_button_add_edit")), TRUE);
         free(nom);
     }
+    
     return;
 }
 
@@ -269,6 +267,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_gtk_materiaux(Projet *projet, Beton_Materiau 
         BUGMSG(gtk_builder_add_from_file(ef_gtk->builder, DATADIR"/ui/1992_1_1_materiaux_beton.ui", NULL) != 0, FALSE, gettext("Builder Failed\n"));
         gtk_builder_connect_signals(ef_gtk->builder, projet);
         ef_gtk->window = GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_beton_window"));
+        _1992_1_1_gtk_materiaux_check(NULL, projet);
     }
     
     if (materiau == NULL)

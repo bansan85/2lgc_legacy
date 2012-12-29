@@ -121,6 +121,7 @@
                         <child>
                             <object class="GtkButton" id="EF_section_circulaire_button_add_edit">
                                 <property name="visible">True</property>
+                                <property name="sensitive">False</property>
                                 <property name="use_stock">True</property>
                             </object>
                             <packing>
