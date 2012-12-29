@@ -288,7 +288,6 @@ G_MODULE_EXPORT EF_Relachement *EF_relachement_ajout(Projet *projet, const char 
     EF_Relachement  *relachement_nouveau = malloc(sizeof(EF_Relachement));
     EF_Relachement  *relachement_tmp;
     GList           *list_parcours;
-    int             i = 0;
     
     // Trivial
     
@@ -319,7 +318,6 @@ G_MODULE_EXPORT EF_Relachement *EF_relachement_ajout(Projet *projet, const char 
         if (strcmp(relachement_nouveau->nom, relachement_tmp->nom) < 0)
             break;
         
-        i++;
         list_parcours = g_list_next(list_parcours);
     }
     if (list_parcours == NULL)
@@ -335,14 +333,9 @@ G_MODULE_EXPORT EF_Relachement *EF_relachement_ajout(Projet *projet, const char 
     {
         projet->ef_donnees.relachements = g_list_insert_before(projet->ef_donnees.relachements, list_parcours, relachement_nouveau);
 #ifdef ENABLE_GTK
-        gtk_list_store_insert(projet->list_gtk.ef_relachements.liste_relachements, &relachement_nouveau->Iter_liste, i);
+        gtk_list_store_insert_before(projet->list_gtk.ef_relachements.liste_relachements, &relachement_nouveau->Iter_liste, &relachement_tmp->Iter_liste);
         if (projet->list_gtk.ef_relachements.builder != NULL)
-        {
-            if (g_list_previous(list_parcours) == NULL)
-                gtk_tree_store_prepend(projet->list_gtk.ef_relachements.relachements, &relachement_nouveau->Iter_fenetre, NULL);
-            else
-                gtk_tree_store_insert_before(projet->list_gtk.ef_relachements.relachements, &relachement_nouveau->Iter_fenetre, NULL, &relachement_tmp->Iter_fenetre);
-        }
+            gtk_tree_store_insert_before(projet->list_gtk.ef_relachements.relachements, &relachement_nouveau->Iter_fenetre, NULL, &relachement_tmp->Iter_fenetre);
 #endif
     }
     
