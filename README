@@ -113,6 +113,23 @@ Ensuite compiler et installer l'application normalement :
         Pour ne pas fermer la fenêtre avec une liste de matériaux vide.
     Fermer la fenêtre en cliquant sur la touche Echap
     
+  Pour la fenêtre Barres (fichiers EF_gtk_barres, EF_gtk_barres_add et *1992_1_1_barres*)
+    Ouvrez toutes les fenêtres, à savoir :
+        Modélisation|Barres|Gestion des barres
+    Sélectionner et supprimer avec la touche SUPPR la barre 3.
+    Sélectionner et supprimer avec le bouton Supprimer la barre 0.
+    Changer la barre 1 en "Poteau en béton", "Carre_0.50", B30, 0, 4, "Articulation"
+    Remettre en "Poutre en béton" la barre 1 et sans relachement.
+    Ajouter une barre "Poutre en béton", "Carre_0.50", B50, 2, 8, "Aucun". Faire l'ouverture quand la fenêtre est déjà ouverture.
+    Fermer la fenêtre en cliquant sur le bouton Annuler
+    Fermer la fenêtre en cliquant sur le bouton Fermer
+    La rouvrir via le menu
+    La même chose (réouvrir via le menu) mais sans fermer la fenêtre
+    Supprimer tous les barres
+    Cliquer 2 fois sur ajouter et fermer la fenêtre d'ajout par la touche Echap.
+        Pour ne pas fermer la fenêtre avec une liste de barres vide.
+    Fermer la fenêtre en cliquant sur la touche Echap
+    
     
     
     

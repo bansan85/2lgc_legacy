@@ -131,18 +131,24 @@ G_MODULE_EXPORT void EF_gtk_barres_edit_type(GtkCellRendererText *cell __attribu
     BUGMSG(gtk_tree_model_get_iter_first(GTK_TREE_MODEL(projet->list_gtk.ef_barres.liste_types), &iter2) == TRUE, , gettext("Aucun type de barre n'est défini.\n"));
     gtk_tree_model_get(GTK_TREE_MODEL(projet->list_gtk.ef_barres.liste_types), &iter2, 0, &nom_type, -1);
     if (strcmp(nom_type, new_text) == 0)
+    {
+        free(nom_type);
         BUG(_1992_1_1_barres_change_type(barre, (Type_Element)0, projet), );
+    }
     else
     {
+        free(nom_type);
         parcours = 1;
         while (gtk_tree_model_iter_next(GTK_TREE_MODEL(projet->list_gtk.ef_barres.liste_types), &iter2) == TRUE)
         {
             gtk_tree_model_get(GTK_TREE_MODEL(projet->list_gtk.ef_barres.liste_types), &iter2, 0, &nom_type, -1);
             if (strcmp(nom_type, new_text) == 0)
             {
+                free(nom_type);
                 BUG(_1992_1_1_barres_change_type(barre, (Type_Element)parcours, projet), );
                 return;
             }
+            free(nom_type);
             parcours++;
         }
         // Impossible (normalement)
