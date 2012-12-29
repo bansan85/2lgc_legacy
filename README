@@ -89,13 +89,31 @@ Ensuite compiler et installer l'application normalement :
     Supprimer les 4 sections restantes (en supprimant les dépendances).
         Vérifier si la fenêtre Gestion des barres est mis à jour et que la fenêtre d'édition se ferme automatiquement.
     Fermer la fenêtre en cliquant sur le bouton Fermer
-        Test le bouton fermer
     La rouvrir via le menu
     La même chose (réouvrir via le menu) mais sans fermer la fenêtre
     Cliquer 2 fois sur ajouter.
         Pour ne pas fermer la fenêtre avec une liste de sections vide.
     Fermer la fenêtre en cliquant sur la touche Echap
-        Test la touche Echap
+    
+  Pour la fenêtre Matériaux (fichiers EF_gtk_materiaux, 1992_1_1_materiaux et 1992_1_1_gtk_materiaux)
+    Ouvrez toutes les fenêtres, à savoir :
+        Modélisation|Barres|Matériaux
+        Modélisation|Barres|Gestion des barres
+    Sélectionner et supprimer avec la touche SUPPR le matériau B55.
+    Sélectionner et supprimer avec le bouton Supprimer le matériau B45.
+    Ouvrir la fenêtre d'édition du matériau B35 (2 fois sans la fermer) et renommer le matériau B35 (via le treeview) en B10 puis de B10 vers B65 puis de B65 à B35. Fermer la fenêtre d'édition via la touche Echap.
+    Réouvrir la fenêtre d'édition et la fermer via la touche Annuler.
+    Ajouter un matériau B90.
+    Ouvrir le matériau B25 et le modifier, nom y compris.
+    Fermer la fenêtre en cliquant sur le bouton Fermer
+    La rouvrir via le menu
+    La même chose (réouvrir via le menu) mais sans fermer la fenêtre
+    Supprimer tous les matériaux
+    Cliquer 2 fois sur ajouter.
+        Pour ne pas fermer la fenêtre avec une liste de matériaux vide.
+    Fermer la fenêtre en cliquant sur la touche Echap
+    
+    
     
     
   En finalement :

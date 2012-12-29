@@ -267,7 +267,6 @@ G_MODULE_EXPORT gboolean _1992_1_1_gtk_materiaux(Projet *projet, Beton_Materiau 
         BUGMSG(gtk_builder_add_from_file(ef_gtk->builder, DATADIR"/ui/1992_1_1_materiaux_beton.ui", NULL) != 0, FALSE, gettext("Builder Failed\n"));
         gtk_builder_connect_signals(ef_gtk->builder, projet);
         ef_gtk->window = GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_beton_window"));
-        _1992_1_1_gtk_materiaux_check(NULL, projet);
     }
     
     if (materiau == NULL)
@@ -277,6 +276,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_gtk_materiaux(Projet *projet, Beton_Materiau 
         
         gtk_button_set_label(GTK_BUTTON(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_beton_button_add_edit")), "gtk-add");
         g_signal_connect(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_beton_button_add_edit"), "clicked", G_CALLBACK(_1992_1_1_gtk_materiaux_ajouter_clicked), projet);
+        _1992_1_1_gtk_materiaux_check(NULL, projet);
     }
     else
     {

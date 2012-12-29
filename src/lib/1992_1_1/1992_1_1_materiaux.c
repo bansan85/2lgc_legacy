@@ -420,12 +420,7 @@ gboolean _1992_1_1_materiaux_insert(Projet *projet, Beton_Materiau *materiau)
         projet->beton.materiaux = g_list_insert_before(projet->beton.materiaux, list_parcours, materiau);
         gtk_list_store_insert(projet->list_gtk.ef_materiaux.liste_materiaux, &materiau->Iter_liste, i);
         if (projet->list_gtk.ef_materiaux.builder != NULL)
-        {
-            if (g_list_previous(list_parcours) == NULL)
-                gtk_tree_store_prepend(projet->list_gtk.ef_materiaux.materiaux, &materiau->Iter_fenetre, NULL);
-            else
-                gtk_tree_store_insert_before(projet->list_gtk.ef_materiaux.materiaux, &materiau->Iter_fenetre, NULL, &materiau_tmp->Iter_fenetre);
-        }
+            gtk_tree_store_insert_before(projet->list_gtk.ef_materiaux.materiaux, &materiau->Iter_fenetre, NULL, &materiau_tmp->Iter_fenetre);
     }
     
 #endif
@@ -529,6 +524,11 @@ gboolean _1992_1_1_materiaux_repositionne(Projet *projet, Beton_Materiau *materi
             gtk_tree_store_move_before(projet->list_gtk.ef_materiaux.materiaux, &materiau->Iter_fenetre, NULL);
 #endif
     }
+    
+#ifdef ENABLE_GTK
+    if ((projet->list_gtk._1992_1_1_materiaux.builder != NULL) && (projet->list_gtk._1992_1_1_materiaux.materiau == materiau))
+        gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk._1992_1_1_materiaux.builder, "_1992_1_1_materiaux_beton_textview_nom"))), materiau->nom, -1);
+#endif
     
     return TRUE;
 }
