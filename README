@@ -10,8 +10,8 @@ Ensuite compiler et installer l'application normalement :
   
   Pour la fenêtre Appuis (fichiers EF_appuis et EF_gtk_appuis)
     Ouvrez toutes les fenêtres, à savoir :
-        Structure|Noeuds|Appuis
-        Structure|Noeuds|Gestion des noeuds
+        Modélisation|Noeuds|Appuis
+        Modélisation|Noeuds|Gestion des noeuds
     Cliquer 3 fois sur ajouter.
         Test l'insertion normal
         Test l'insertion dans le cas où l'appui "Sans nom" est existant
@@ -48,9 +48,9 @@ Ensuite compiler et installer l'application normalement :
   
   Pour la fenêtre Noeuds (fichiers EF_noeuds et EF_gtk_noeud)
     Ouvrez toutes les fenêtres, à savoir :
-        Structure|Noeuds|Appuis
-        Structure|Noeuds|Gestion des noeuds
-        Structure|Barres|Gestion des barres
+        Modélisation|Noeuds|Appuis
+        Modélisation|Noeuds|Gestion des noeuds
+        Modélisation|Barres|Gestion des barres
     Dans la fenêtre appuis, sélectionner l'appui Encastrement
     Retourner dans la fenêtre noeuds.
     Cliquer sur le bouton ajouter
@@ -58,7 +58,7 @@ Ensuite compiler et installer l'application normalement :
     Lui donner les coordonnées 1 2 3 et l'appui Encastrement et remettre l'appui en Aucun
     Aller sur l'onglet Noeuds intermédiaires et cliquer sur le bouton ajouter
         Test l'ajout d'un noeud intermédiaire
-    Lui donner l'appui Encastrement et remettre l'appui en Aucun, la barre n°1 et la position 0,6
+    Lui donner l'appui Encastrement et remettre l'appui en Aucun, la barre n°1 et la position 1,2 puis 0,6
     Sélectionner le noeud 5 et le supprimer en appuyant sur la touche SUPPR.
     Sélectionner le noeud 6 et le supprimer en cliquant sur le bouton supprimer.
     Aller sur l'onglet Noeuds libres
@@ -78,13 +78,13 @@ Ensuite compiler et installer l'application normalement :
   
   Pour la fenêtre Sections (fichiers EF_sections, EF_gtk_sections, EF_gtk_section_rectangulaire, EF_gtk_section_T, EF_gtk_section_carree et EF_gtk_section_circulaire)
     Ouvrez toutes les fenêtres, à savoir :
-        Structure|Barres|Sections
-        Structure|Barres|Gestion des barres
+        Modélisation|Barres|Sections
+        Modélisation|Barres|Gestion des barres
     Sélectionner et supprimer avec la touche SUPPR les 4 sections inutilisées.
-    Ajouter une section rectangulaire, circulaire, rectangulaire et en T.
+    Ajouter une section rectangulaire, circulaire, carrée et en T.
     Editer les 4 nouvelles sections via le bouton Modifier (Pas forcément obligé de modifier les valeurs).
-    Renommer les 4 anciennes sections via la colonne correspondante du treeview. Le faire après avoir ouvert (et réouverte sans l'avoir refermée) la fenêtre d'édition en double-cliquant sur la ligne. Fermer la fenêtre d'édition via le bouton annuler.
     Sélectionner et supprimer avec le bouton supprimer les 4 sections inutilisées. La fenêtre d'édition doit être ouverte.
+    Renommer les 4 anciennes sections (dont l'un de tel sorte qu'il se retrouve en dernière position) via la colonne correspondante du treeview. Le faire après avoir ouvert (et réouverte sans l'avoir refermée) la fenêtre d'édition en double-cliquant sur la ligne. Fermer la fenêtre d'édition via le bouton annuler.
     Ouvrir la fenêtre d'édition pour les 4 sections restantes et la fermer via la touche Echap.
     Supprimer les 4 sections restantes (en supprimant les dépendances).
         Vérifier si la fenêtre Gestion des barres est mis à jour et que la fenêtre d'édition se ferme automatiquement.
@@ -103,5 +103,4 @@ Ensuite compiler et installer l'application normalement :
 
 Une fois cette procédure terminée, lancer la commande dans la racine de la source :
   - lcov --capture --directory . --output-file coverage.info
-    NB : si gcov (via lcov) plante sur un fichier .gcda, arrêter le programme, supprimez le fichier en question et relancer lcov.
   - genhtml coverage.info --output-directory out_html
