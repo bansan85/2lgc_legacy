@@ -128,172 +128,65 @@ G_MODULE_EXPORT double common_gtk_text_buffer_double(GtkTextBuffer *textbuffer, 
 }
 
 
-G_MODULE_EXPORT void common_gtk_entry_check_int(GtkTextBuffer *textbuffer,
-  gpointer user_data __attribute__((unused)))
-/* Description : Vérifie en temps réel si le GtkTextBuffer contient bien un nombre entier.
- *               S'il ne contient pas de nombre, le texte passe en rouge.
+G_MODULE_EXPORT uint common_gtk_text_buffer_uint(GtkTextBuffer *textbuffer, uint val_min,
+  gboolean min_include, uint val_max, gboolean max_include)
+/* Description : Vérifie en temps réel si le GtkTextBuffer contient bien un nombre entier non
+ *               signé compris entre les valeurs val_min et val_max.
+ *               S'il ne contient pas de nombre ou hors domaine, le texte passe en rouge.
  * Paramètres : GtkTextBuffer *textbuffer : composant à l'origine de l'évènement,
- *            : gpointer user_data : ne sert à rien.
- * Valeur renvoyée : Aucune.
- */
-{
-    gchar       *texte;
-    GtkTextIter start, end;
-    int         nombre;
-    char        *fake;
-    
-    gtk_text_buffer_get_iter_at_offset(textbuffer, &start, 0);
-    gtk_text_buffer_get_iter_at_offset(textbuffer, &end, -1);
-    texte = gtk_text_buffer_get_text(textbuffer, &start, &end, FALSE);
-    BUGMSG(fake = (char*)malloc(sizeof(char)*(strlen(texte)+1)), , gettext("Erreur d'allocation mémoire.\n"));
-    
-    if (sscanf(texte, "%d%s", &nombre, fake) != 1)
-    {
-        gtk_text_buffer_remove_all_tags(textbuffer, &start, &end);
-        gtk_text_buffer_apply_tag_by_name(textbuffer, "mauvais", &start, &end);
-    }
-    else
-    {
-        gtk_text_buffer_remove_all_tags(textbuffer, &start, &end);
-        gtk_text_buffer_apply_tag_by_name(textbuffer, "OK", &start, &end);
-    }
-    free(texte);
-    free(fake);
-    
-    return;
-}
-
-
-G_MODULE_EXPORT int common_gtk_entry_renvoie_int(GtkTextBuffer *textbuffer)
-/* Description : Renvoie le nombre entier si le GtkTextBuffer en contient bien un.
- *               Renvoie INT_MIN sinon.
- * Paramètres : GtkTextBuffer *textbuffer : composant à vérifier.
+ *            : uint val_min : borne inférieure,
+ *            : gboolean min_include : borne inférieure autorisée ? (min 0),
+ *            : uinte val_max : borne supérieure
+ *            : gboolean max_include : borne supérieure autorisée ? (max UINT_MAX).
  * Valeur renvoyée :
- *   Succès : le nombre entier contenu dans un composant de type Entry
- *   Échec : INT_MIN :
- *             textbuffer == NULL,
- *             le composant Entry ne contient pas un nombre double,
- *             en cas d'erreur d'allocation mémoire,
+ *   Succès : la valeur du nombre,
+ *   Echec : UINT_MAX.
  */
 {
-    gchar       *texte;
+    char        *texte;
     GtkTextIter start, end;
-    int         nombre;
+    uint        nombre;
     char        *fake;
-    
-    BUGMSG(textbuffer, INT_MIN, gettext("Paramètre %s incorrect.\n"), "textbuffer");
-    
-    gtk_text_buffer_get_iter_at_offset(textbuffer, &start, 0);
-    gtk_text_buffer_get_iter_at_offset(textbuffer, &end, -1);
-    texte = gtk_text_buffer_get_text(textbuffer, &start, &end, FALSE);
-    BUGMSG(fake = (char*)malloc(sizeof(char)*(strlen(texte)+1)), INT_MIN, gettext("Erreur d'allocation mémoire.\n"));
-    
-    if (sscanf(texte, "%d%s", &nombre, fake) != 1)
-    {
-        free(texte);
-        free(fake);
-        return INT_MIN;
-    }
-    else
-    {
-        free(texte);
-        free(fake);
-        return nombre;
-    }
-}
-
-
-G_MODULE_EXPORT unsigned int common_gtk_entry_renvoie_uint(GtkTextBuffer *textbuffer)
-/* Description : Renvoie le nombre non signé entier si le GtkTextBuffer en contient bien un.
- *               Renvoie UINT_MAX sinon.
- * Paramètres : GtkTextBuffer *textbuffer : composant à vérifier.
- * Valeur renvoyée :
- *   Succès : le nombre entier contenu dans un composant de type Entry
- *   Échec : UINT_MAX :
- *             textbuffer == NULL,
- *             le composant Entry ne contient pas un nombre double,
- *             en cas d'erreur d'allocation mémoire,
- */
-{
-    gchar           *texte;
-    GtkTextIter     start, end;
-    unsigned int    nombre;
-    char            *fake;
-    
-    BUGMSG(textbuffer, UINT_MAX, gettext("Paramètre %s incorrect.\n"), "textbuffer");
+    gboolean    min_check;
+    gboolean    max_check;
     
     gtk_text_buffer_get_iter_at_offset(textbuffer, &start, 0);
     gtk_text_buffer_get_iter_at_offset(textbuffer, &end, -1);
     texte = gtk_text_buffer_get_text(textbuffer, &start, &end, FALSE);
     BUGMSG(fake = (char*)malloc(sizeof(char)*(strlen(texte)+1)), UINT_MAX, gettext("Erreur d'allocation mémoire.\n"));
     
+    gtk_text_buffer_remove_all_tags(textbuffer, &start, &end);
     if (sscanf(texte, "%u%s", &nombre, fake) != 1)
     {
-        free(texte);
-        free(fake);
-        return UINT_MAX;
+        min_check = FALSE;
+        max_check = FALSE;
     }
     else
     {
-        free(texte);
-        free(fake);
-        return nombre;
-    }
-}
-
-
-G_MODULE_EXPORT void common_gtk_entry_check_liste(GtkTextBuffer *textbuffer,
-  gpointer user_data __attribute__((unused)))
-/* Description : Vérifie en temps réel si le GtkTextBuffer contient une liste de nombre entier.
- *               S'il ne contient pas de nombre, le texte passe en rouge.
- * Paramètres : GtkTextBuffer *textbuffer : composant à l'origine de l'évènement,
- *            : gpointer user_data : ne sert à rien.
- * Valeur renvoyée : Aucune.
- */
-{
-    gchar       *texte;
-    GtkTextIter start, end;
-    GList       *retour;
-    
-    gtk_text_buffer_get_iter_at_offset(textbuffer, &start, 0);
-    gtk_text_buffer_get_iter_at_offset(textbuffer, &end, -1);
-    texte = gtk_text_buffer_get_text(textbuffer, &start, &end, FALSE);
-    retour = common_selection_renvoie_numeros(texte);
-    if (retour == NULL)
-    {
-        gtk_text_buffer_remove_all_tags(textbuffer, &start, &end);
-        gtk_text_buffer_apply_tag_by_name(textbuffer, "mauvais", &start, &end);
-    }
-    else
-    {
-        gtk_text_buffer_remove_all_tags(textbuffer, &start, &end);
-        gtk_text_buffer_apply_tag_by_name(textbuffer, "OK", &start, &end);
-        g_list_free(retour);
+        if (min_include)
+            min_check = nombre >= val_min;
+        else
+            min_check = nombre > val_min;
+            
+        if (max_include)
+            max_check = nombre <= val_max;
+        else
+            max_check = nombre < val_max;
     }
     
     free(texte);
+    free(fake);
     
-    return;
-}
-
-
-G_MODULE_EXPORT gboolean common_gtk_key_press(GtkWidget *widget __attribute__((unused)),
-  GdkEvent *event __attribute__((unused)), GtkWidget *fenetre)
-/* Description : Détruit la fenêtre si la touche d'échappement est appuyée.
- * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
- *            : GdkEvent *event : description de l'évènement,
- *            : GtkWidget *fenetre : la fenêtre à détruire.
- * Valeur renvoyée : TRUE pour arrêter le traitement des touches,
- *                 : FALSE si ce n'est pas la touche Escape.
- */
-{
-    if (event->key.keyval == GDK_KEY_Escape)
+    if ((min_check) && (max_check))
     {
-        gtk_widget_destroy(fenetre);
-        return TRUE;
+        gtk_text_buffer_apply_tag_by_name(textbuffer, "OK", &start, &end);
+        return nombre;
     }
     else
-        return FALSE;
+    {
+        gtk_text_buffer_apply_tag_by_name(textbuffer, "mauvais", &start, &end);
+        return UINT_MAX;
+    }
 }
 
 

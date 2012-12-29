@@ -121,7 +121,6 @@ gboolean EF_gtk_section_T_recupere_donnees(Projet *projet, double *lt, double *h
     if (isnan(*ht))
         ok = FALSE;
     
-    
     // Si tous les paramètres sont corrects
     textbuffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk.ef_sections_T.builder, "EF_section_T_textview_nom")));
     

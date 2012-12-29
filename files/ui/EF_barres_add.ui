@@ -24,6 +24,10 @@
         <property name="tag-table">EF_gtk_barres_add_tag_table</property>
         <signal name="changed" handler="EF_gtk_barres_add_check_add"/>
     </object>
+    <object class="GtkTextBuffer" id="EF_gtk_barres_add_nb_noeuds_intermediaire_buffer">
+        <property name="tag-table">EF_gtk_barres_add_tag_table</property>
+        <signal name="changed" handler="EF_gtk_barres_add_check_add"/>
+    </object>
     <object class="GtkWindow" id="EF_barres_add_window">
         <property name="visible">True</property>
         <property name="title" translatable="yes">Ajout d'une barre</property>
@@ -182,6 +186,27 @@
                     </packing>
                 </child>
                 <child>
+                    <object class="GtkLabel" id="EF_gtk_barres_add_nb_noeuds_intermediaire_label">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Nombre de divisions :</property>
+                    </object>
+                    <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">7</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkTextView" id="EF_gtk_barres_add_nb_noeuds_intermediaire_textview">
+                        <property name="visible">True</property>
+                        <property name="accepts-tab">False</property>
+                        <property name="buffer">EF_gtk_barres_add_nb_noeuds_intermediaire_buffer</property>
+                    </object>
+                    <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">7</property>
+                    </packing>
+                </child>
+                <child>
                     <object class="GtkButtonBox" id="EF_gtk_barres_add_buttons">
                         <property name="visible">True</property>
                         <property name="orientation">horizontal</property>
@@ -214,7 +239,7 @@
                     </object>
                     <packing>
                         <property name="left-attach">0</property>
-                        <property name="top-attach">7</property>
+                        <property name="top-attach">8</property>
                         <property name="width">2</property>
                     </packing>
                 </child>
