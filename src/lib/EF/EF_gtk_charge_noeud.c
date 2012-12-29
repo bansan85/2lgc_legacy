@@ -125,6 +125,7 @@ gboolean EF_gtk_charge_noeud_recupere_donnees(Projet *projet, unsigned int *num_
     gchar               *texte_tmp;
     GtkTextBuffer       *textbuffer;
     gint                get_active;
+    gboolean            ok = TRUE;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(num_action, FALSE, gettext("Paramètre %s incorrect.\n"), "num_action");
@@ -142,33 +143,33 @@ gboolean EF_gtk_charge_noeud_recupere_donnees(Projet *projet, unsigned int *num_
     
     get_active = gtk_combo_box_get_active(GTK_COMBO_BOX(ef_gtk->combobox_charge));
     if (get_active < 0)
-        return FALSE;
+        ok = FALSE;
     else
         *num_action = (unsigned int)get_active;
     
     *fx = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_buffer_fx")), -INFINITY, FALSE, INFINITY, FALSE);
     if (isnan(*fx))
-        return FALSE;
+        ok = FALSE;
     
     *fy = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_buffer_fy")), -INFINITY, FALSE, INFINITY, FALSE);
     if (isnan(*fy))
-        return FALSE;
+        ok = FALSE;
     
     *fz = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_buffer_fz")), -INFINITY, FALSE, INFINITY, FALSE);
     if (isnan(*fz))
-        return FALSE;
+        ok = FALSE;
     
     *mx = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_buffer_mx")), -INFINITY, FALSE, INFINITY, FALSE);
     if (isnan(*mx))
-        return FALSE;
+        ok = FALSE;
     
     *my = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_buffer_my")), -INFINITY, FALSE, INFINITY, FALSE);
     if (isnan(*my))
-        return FALSE;
+        ok = FALSE;
     
     *mz = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_buffer_mz")), -INFINITY, FALSE, INFINITY, FALSE);
     if (isnan(*mz))
-        return FALSE;
+        ok = FALSE;
     
     textbuffer = GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_buffer_noeuds"));
     gtk_text_buffer_get_iter_at_offset(textbuffer, &start, 0);
@@ -176,32 +177,33 @@ gboolean EF_gtk_charge_noeud_recupere_donnees(Projet *projet, unsigned int *num_
     texte_tmp = gtk_text_buffer_get_text(textbuffer, &start, &end, FALSE);
     num_noeuds = common_selection_renvoie_numeros(texte_tmp);
     if (num_noeuds == NULL)
-    {
-        free(texte_tmp);
-        return FALSE;
-    }
+        ok = FALSE;
     else
     {
         *noeuds = common_selection_converti_numeros_en_noeuds(num_noeuds, projet);
         g_list_free(num_noeuds);
         if (*noeuds == NULL)
-        {
-            free(texte_tmp);
-            return FALSE;
-        }
+            ok = FALSE;
         else
         {
             // Si tous les paramètres sont corrects
             textbuffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_textview_description")));
             
-            free(texte_tmp);
             gtk_text_buffer_get_iter_at_offset(textbuffer, &start, 0);
             gtk_text_buffer_get_iter_at_offset(textbuffer, &end, -1);
             *nom = gtk_text_buffer_get_text(textbuffer, &start, &end, FALSE);
-            
-            return TRUE;
+         
+            if (strcmp(*nom, "") == 0)
+            {
+                free(*nom);
+                ok = FALSE;
+            }
         }
     }
+    
+    free(texte_tmp);
+    
+    return ok;
 }
 
 
@@ -441,6 +443,8 @@ G_MODULE_EXPORT gboolean EF_gtk_charge_noeud(Projet *projet, unsigned int action
         gtk_button_set_label(GTK_BUTTON(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_button_add_edit")), "gtk-edit");
         g_signal_connect(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_button_add_edit"), "clicked", G_CALLBACK(EF_gtk_charge_noeud_editer_clicked), projet);
     }
+    
+    EF_gtk_charge_noeud_check(NULL, projet);
     
     if (projet->list_gtk._1990_actions.window == NULL)
         gtk_window_set_transient_for(GTK_WINDOW(ef_gtk->window), GTK_WINDOW(projet->list_gtk.comp.window));

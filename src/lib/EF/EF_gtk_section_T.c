@@ -95,6 +95,7 @@ gboolean EF_gtk_section_T_recupere_donnees(Projet *projet, double *lt, double *h
 {
     GtkTextIter     start, end;
     GtkTextBuffer   *textbuffer;
+    gboolean        ok = TRUE;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(lt, FALSE, gettext("Paramètre %s incorrect.\n"), "largeur");
@@ -106,19 +107,19 @@ gboolean EF_gtk_section_T_recupere_donnees(Projet *projet, double *lt, double *h
     
     *lr = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_sections_T.builder, "EF_section_T_buffer_lr")), 0., FALSE, INFINITY, FALSE);
     if (isnan(*lr))
-        return FALSE;
+        ok = FALSE;
     
     *hr = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_sections_T.builder, "EF_section_T_buffer_hr")), 0., FALSE, INFINITY, FALSE);
     if (isnan(*hr))
-        return FALSE;
+        ok = FALSE;
     
     *lt = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_sections_T.builder, "EF_section_T_buffer_lt")), 0., FALSE, INFINITY, FALSE);
     if (isnan(*lt))
-        return FALSE;
+        ok = FALSE;
     
     *ht = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_sections_T.builder, "EF_section_T_buffer_ht")), 0., FALSE, INFINITY, FALSE);
     if (isnan(*ht))
-        return FALSE;
+        ok = FALSE;
     
     
     // Si tous les paramètres sont corrects
@@ -132,31 +133,27 @@ gboolean EF_gtk_section_T_recupere_donnees(Projet *projet, double *lt, double *h
     
     if (projet->list_gtk.ef_sections_T.section == NULL)
     {
-        if (EF_sections_cherche_nom(projet, *nom, FALSE))
+        if ((strcmp(*nom, "") == 0) || (EF_sections_cherche_nom(projet, *nom, FALSE)))
         {
-            gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections_T.builder, "EF_section_T_button_add_edit")), FALSE);
-            free(*nom);
             gtk_text_buffer_apply_tag_by_name(textbuffer, "mauvais", &start, &end);
-            return FALSE;
+            ok = FALSE;
         }
         else
-            gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections_T.builder, "EF_section_T_button_add_edit")), TRUE);
+            gtk_text_buffer_apply_tag_by_name(textbuffer, "OK", &start, &end);
     }
-    else if (strcmp(projet->list_gtk.ef_sections_T.section->nom, *nom) == 0)
-        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections_T.builder, "EF_section_T_button_add_edit")), TRUE);
-    else if ((strcmp(*nom, "") == 0) || (EF_sections_cherche_nom(projet, *nom, FALSE)))
+    else if ((strcmp(*nom, "") == 0) ||
+      ((strcmp(projet->list_gtk.ef_sections_T.section->nom, *nom) != 0) && (EF_sections_cherche_nom(projet, *nom, FALSE))))
     {
-        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections_T.builder, "EF_section_T_button_add_edit")), FALSE);
-        free(*nom);
         gtk_text_buffer_apply_tag_by_name(textbuffer, "mauvais", &start, &end);
-        return FALSE;
+        ok = FALSE;
     }
     else
-        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections_T.builder, "EF_section_T_button_add_edit")), TRUE);
+        gtk_text_buffer_apply_tag_by_name(textbuffer, "OK", &start, &end);
     
-    gtk_text_buffer_apply_tag_by_name(textbuffer, "OK", &start, &end);
+    if (ok == FALSE)
+        free(*nom);
     
-    return TRUE;
+    return ok;
 }
 
 
@@ -181,6 +178,7 @@ G_MODULE_EXPORT void EF_gtk_section_T_check(GtkWidget *object __attribute__((unu
         gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections_T.builder, "EF_section_T_button_add_edit")), TRUE);
         free(nom);
     }
+    
     return;
 }
 
@@ -295,10 +293,11 @@ G_MODULE_EXPORT gboolean EF_gtk_section_T(Projet *projet, EF_Section *section)
         
         gtk_button_set_label(GTK_BUTTON(gtk_builder_get_object(ef_gtk->builder, "EF_section_T_button_add_edit")), "gtk-add");
         g_signal_connect(gtk_builder_get_object(ef_gtk->builder, "EF_section_T_button_add_edit"), "clicked", G_CALLBACK(EF_gtk_section_T_ajouter_clicked), projet);
+        EF_gtk_section_T_check(NULL, projet);
     }
     else
     {
-        gchar                   tmp[30];
+        gchar       tmp[30];
         Section_T   *data;
         
         gtk_window_set_title(GTK_WINDOW(ef_gtk->window), gettext("Modification d'une section en T"));

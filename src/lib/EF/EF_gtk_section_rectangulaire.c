@@ -93,6 +93,7 @@ gboolean EF_gtk_section_rectangulaire_recupere_donnees(Projet *projet, double *l
 {
     GtkTextIter     start, end;
     GtkTextBuffer   *textbuffer;
+    gboolean        ok = TRUE;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(largeur, FALSE, gettext("Paramètre %s incorrect.\n"), "largeur");
@@ -102,11 +103,11 @@ gboolean EF_gtk_section_rectangulaire_recupere_donnees(Projet *projet, double *l
     
     *largeur = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_sections_rectangulaire.builder, "EF_section_rectangulaire_buffer_largeur")), 0, FALSE, INFINITY, FALSE);
     if (isnan(*largeur))
-        return FALSE;
+        ok = FALSE;
     
     *hauteur = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_sections_rectangulaire.builder, "EF_section_rectangulaire_buffer_hauteur")), 0, FALSE, INFINITY, FALSE);
     if (isnan(*hauteur))
-        return FALSE;
+        ok = FALSE;
     
     // Si tous les paramètres sont corrects
     textbuffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk.ef_sections_rectangulaire.builder, "EF_section_rectangulaire_textview_nom")));
@@ -119,31 +120,27 @@ gboolean EF_gtk_section_rectangulaire_recupere_donnees(Projet *projet, double *l
     
     if (projet->list_gtk.ef_sections_rectangulaire.section == NULL)
     {
-        if (EF_sections_cherche_nom(projet, *nom, FALSE))
+        if ((strcmp(*nom, "") == 0) || (EF_sections_cherche_nom(projet, *nom, FALSE)))
         {
-            gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections_rectangulaire.builder, "EF_section_rectangulaire_button_add_edit")), FALSE);
-            free(*nom);
             gtk_text_buffer_apply_tag_by_name(textbuffer, "mauvais", &start, &end);
-            return FALSE;
+            ok = FALSE;
         }
         else
-            gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections_rectangulaire.builder, "EF_section_rectangulaire_button_add_edit")), TRUE);
+            gtk_text_buffer_apply_tag_by_name(textbuffer, "OK", &start, &end);
     }
-    else if (strcmp(projet->list_gtk.ef_sections_rectangulaire.section->nom, *nom) == 0)
-        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections_rectangulaire.builder, "EF_section_rectangulaire_button_add_edit")), TRUE);
-    else if ((strcmp(*nom, "") == 0) || (EF_sections_cherche_nom(projet, *nom, FALSE)))
+    else if ((strcmp(*nom, "") == 0) ||
+      ((strcmp(projet->list_gtk.ef_sections_rectangulaire.section->nom, *nom) != 0) && (EF_sections_cherche_nom(projet, *nom, FALSE))))
     {
-        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections_rectangulaire.builder, "EF_section_rectangulaire_button_add_edit")), FALSE);
-        free(*nom);
         gtk_text_buffer_apply_tag_by_name(textbuffer, "mauvais", &start, &end);
-        return FALSE;
+        ok = FALSE;
     }
     else
-        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections_rectangulaire.builder, "EF_section_rectangulaire_button_add_edit")), TRUE);
+        gtk_text_buffer_apply_tag_by_name(textbuffer, "OK", &start, &end);
     
-    gtk_text_buffer_apply_tag_by_name(textbuffer, "OK", &start, &end);
+    if (ok == FALSE)
+        free(*nom);
     
-    return TRUE;
+    return ok;
 }
 
 
@@ -168,6 +165,7 @@ G_MODULE_EXPORT void EF_gtk_section_rectangulaire_check(
         gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections_rectangulaire.builder, "EF_section_rectangulaire_button_add_edit")), TRUE);
         free(nom);
     }
+    
     return;
 }
 
@@ -282,6 +280,7 @@ G_MODULE_EXPORT gboolean EF_gtk_section_rectangulaire(Projet *projet, EF_Section
         
         gtk_button_set_label(GTK_BUTTON(gtk_builder_get_object(ef_gtk->builder, "EF_section_rectangulaire_button_add_edit")), "gtk-add");
         g_signal_connect(gtk_builder_get_object(ef_gtk->builder, "EF_section_rectangulaire_button_add_edit"), "clicked", G_CALLBACK(EF_gtk_section_rectangulaire_ajouter_clicked), projet);
+        EF_gtk_section_rectangulaire_check(NULL, projet);
     }
     else
     {
