@@ -421,12 +421,7 @@ G_MODULE_EXPORT EF_Appui* EF_appuis_ajout(Projet *projet, const char *nom, Type_
 #ifdef ENABLE_GTK
         gtk_list_store_insert(projet->list_gtk.ef_appuis.liste_appuis, &appui_nouveau->Iter_liste, i);
         if (projet->list_gtk.ef_appuis.builder != NULL)
-        {
-            if (g_list_previous(list_parcours) == NULL)
-                gtk_tree_store_prepend(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_treestore")), &appui_nouveau->Iter_fenetre, NULL);
-            else
-                gtk_tree_store_insert_before(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_treestore")), &appui_nouveau->Iter_fenetre, NULL, &appui_parcours->Iter_fenetre);
-        }
+            gtk_tree_store_insert_before(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_treestore")), &appui_nouveau->Iter_fenetre, NULL, &appui_parcours->Iter_fenetre);
 #endif
     }
 #ifdef ENABLE_GTK

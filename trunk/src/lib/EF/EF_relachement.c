@@ -288,7 +288,7 @@ G_MODULE_EXPORT EF_Relachement *EF_relachement_ajout(Projet *projet, const char 
     EF_Relachement  *relachement_nouveau = malloc(sizeof(EF_Relachement));
     EF_Relachement  *relachement_tmp;
     GList           *list_parcours;
-    int             i;
+    int             i = 0;
     
     // Trivial
     
