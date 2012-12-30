@@ -741,6 +741,10 @@ typedef struct __Comp_Gtk
     GtkWidget   *menu_modelisation_charges_list;
     GtkWidget   *menu_modelisation_charges_actions;
     GtkWidget   *menu_modelisation_charges_groupes;
+    GtkWidget   *menu_resultats;
+    GtkWidget   *menu_resultats_list;
+    GtkWidget   *menu_resultats_calculer;
+    GtkWidget   *menu_resultats_afficher;
 } Comp_Gtk;
 
 

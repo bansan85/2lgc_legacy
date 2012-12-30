@@ -36,6 +36,7 @@
 #include "EF_gtk_barres.h"
 #include "EF_gtk_materiaux.h"
 #include "EF_gtk_relachement.h"
+#include "EF_gtk_calculs.h"
 #endif
 
 #include "EF_appuis.h"
@@ -43,6 +44,7 @@
 #include "EF_rigidite.h"
 #include "EF_relachement.h"
 #include "EF_sections.h"
+#include "EF_calculs.h"
 #include "1990_action.h"
 #include "1990_groupe.h"
 #include "1990_combinaisons.h"
@@ -235,6 +237,19 @@ G_MODULE_EXPORT gboolean projet_init_graphique(Projet *projet)
     gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_modelisation_charges_list), comps->menu_modelisation_charges_groupes);
     g_signal_connect_swapped(comps->menu_modelisation_charges_groupes, "activate", G_CALLBACK(_1990_gtk_groupes), projet);
     
+    comps->menu_resultats_list = gtk_menu_new();
+    comps->menu_resultats = gtk_menu_item_new_with_label(gettext("Résultats"));
+    gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu), comps->menu_resultats);
+    gtk_menu_item_set_submenu(GTK_MENU_ITEM(comps->menu_resultats), comps->menu_resultats_list);
+    
+    comps->menu_resultats_calculer = gtk_menu_item_new_with_label(gettext("Calculer"));
+    gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_resultats_list), comps->menu_resultats_calculer);
+    g_signal_connect(comps->menu_resultats_calculer, "activate", G_CALLBACK(EF_gtk_calculs_calculer), projet);
+    
+    comps->menu_resultats_afficher = gtk_menu_item_new_with_label(gettext("Afficher"));
+    gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_resultats_list), comps->menu_resultats_afficher);
+    g_signal_connect(comps->menu_resultats_afficher, "activate", G_CALLBACK(EF_gtk_calculs_afficher), projet);
+    
     projet->list_gtk._1990_actions.window = NULL;
     projet->list_gtk._1990_groupes.window_groupe = NULL;
     
@@ -265,7 +280,7 @@ G_MODULE_EXPORT gboolean projet_free(Projet *projet)
     if (projet->combinaisons.elu_equ != NULL)
         BUG(_1990_combinaisons_free(projet), FALSE);
     /* Rigidite doit être libéré avant noeud car pour libérer toute la mémoire, il est nécessaire d'avoir accès aux informations contenues dans les noeuds */
-    BUG(EF_rigidite_free(projet), FALSE);
+    BUG(EF_calculs_free(projet), FALSE);
     if (projet->ef_donnees.noeuds != NULL)
         BUG(EF_noeuds_free(projet), FALSE);
     if (projet->beton.sections != NULL)

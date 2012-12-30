@@ -1386,7 +1386,9 @@ G_MODULE_EXPORT gboolean EF_calculs_free(Projet *projet)
  */
 {
     GList *list_parcours;
+    
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    
     BUG(EF_rigidite_free(projet), FALSE);
     
     list_parcours = projet->actions;
@@ -1414,6 +1416,32 @@ G_MODULE_EXPORT gboolean EF_calculs_free(Projet *projet)
         
         if (action->fonctions_efforts[0] != NULL)
             BUG(common_fonction_free(projet, action), FALSE);
+        
+        list_parcours = g_list_next(list_parcours);
+    }
+    
+    list_parcours = projet->beton.barres;
+    while (list_parcours != NULL)
+    {
+        Beton_Barre     *barre = list_parcours->data;
+        unsigned int    i;
+        
+        for (i=0;i<=barre->discretisation_element;i++)
+        {
+            if (barre->info_EF[i].matrice_rigidite_locale != NULL)
+                cholmod_free_sparse(&barre->info_EF[i].matrice_rigidite_locale, projet->ef_donnees.c);
+        }
+        
+        if (barre->matrice_rotation != NULL)
+        {
+            cholmod_free_sparse(&barre->matrice_rotation, projet->ef_donnees.c);
+            barre->matrice_rotation = NULL;
+        }
+        if (barre->matrice_rotation_transpose != NULL)
+        {
+            cholmod_free_sparse(&barre->matrice_rotation_transpose, projet->ef_donnees.c);
+            barre->matrice_rotation_transpose = NULL;
+        }
         
         list_parcours = g_list_next(list_parcours);
     }

@@ -1766,7 +1766,7 @@ G_MODULE_EXPORT gboolean EF_sections_free(Projet *projet)
         projet->beton.sections = NULL;
     }
     
-    BUG(EF_calculs_free(projet), TRUE);
+    BUG(EF_calculs_free(projet), FALSE);
     
 #ifdef ENABLE_GTK
     g_object_unref(projet->list_gtk.ef_sections.liste_sections);

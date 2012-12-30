@@ -57,6 +57,7 @@ libeurocodes_la_SOURCES +=	common/common_m3d.cc \
 							EF/EF_gtk_appuis.c \
 							EF/EF_gtk_barres.c \
 							EF/EF_gtk_barres_add.c \
+							EF/EF_gtk_calculs.c \
 							EF/EF_gtk_sections.c \
 							EF/EF_gtk_materiaux.c \
 							EF/EF_gtk_section_rectangulaire.c \
@@ -107,6 +108,7 @@ libeurocodes_la_HEADERS +=	common/common_m3d.hpp \
 							EF/EF_gtk_appuis.h \
 							EF/EF_gtk_barres.h \
 							EF/EF_gtk_barres_add.h \
+							EF/EF_gtk_calculs.h \
 							EF/EF_gtk_sections.h \
 							EF/EF_gtk_materiaux.h \
 							EF/EF_gtk_section_rectangulaire.h \
