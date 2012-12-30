@@ -160,7 +160,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_mx(Beton_Barre *barre
     
     BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre");
     BUGMSG(infos, FALSE, gettext("Paramètre %s incorrect.\n"), "infos");
-    BUGMSG(barre->section, FALSE, gettext("Section indéfini.\n"));
+    BUGMSG(barre->section, FALSE, gettext("Section indéfinie.\n"));
     BUGMSG(barre->materiau, FALSE, gettext("Matériau indéfini.\n"));
     BUGMSG(barre->noeud_debut, FALSE, gettext("Noeud 1 indéfini.\n"));
     BUGMSG(barre->noeud_fin, FALSE, gettext("Noeud 2 indéfini.\n"));
@@ -262,7 +262,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_def_ang_iso_y(Beton_B
     double      E;
     
     BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre");
-    BUGMSG(barre->section, FALSE, gettext("Section indéfini.\n"));
+    BUGMSG(barre->section, FALSE, gettext("Section indéfinie.\n"));
     BUGMSG(barre->materiau, FALSE, gettext("Matériau indéfini.\n"));
     BUGMSG(barre->noeud_debut, FALSE, gettext("Noeud 1 indéfini.\n"));
     BUGMSG(barre->noeud_fin, FALSE, gettext("Noeud 2 indéfini.\n"));
@@ -366,7 +366,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_def_ang_iso_z(Beton_B
     double      E;
     
     BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre");
-    BUGMSG(barre->section, FALSE, gettext("Section indéfini.\n"));
+    BUGMSG(barre->section, FALSE, gettext("Section indéfinie.\n"));
     BUGMSG(barre->materiau, FALSE, gettext("Matériau indéfini.\n"));
     BUGMSG(barre->noeud_debut, FALSE, gettext("Noeud 1 indéfini.\n"));
     BUGMSG(barre->noeud_fin, FALSE, gettext("Noeud 2 indéfini.\n"));
@@ -519,7 +519,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_fonc_rx(Fonction *fon
     
     BUGMSG(fonction, FALSE, gettext("Paramètre %s incorrect.\n"), "fonction");
     BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre");
-    BUGMSG(barre->section, FALSE, gettext("Section indéfini.\n"));
+    BUGMSG(barre->section, FALSE, gettext("Section indéfinie.\n"));
     BUGMSG(barre->materiau, FALSE, gettext("Matériau indéfini.\n"));
     BUGMSG(barre->noeud_debut, FALSE, gettext("Noeud 1 indéfini.\n"));
     BUGMSG(barre->noeud_fin, FALSE, gettext("Noeud 2 indéfini.\n"));
@@ -646,7 +646,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_fonc_ry(Fonction *f_r
     BUGMSG(f_rotation, FALSE, gettext("Paramètre %s incorrect.\n"), "f_rotation");
     BUGMSG(f_deform, FALSE, gettext("Paramètre %s incorrect.\n"), "f_deform");
     BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre");
-    BUGMSG(barre->section, FALSE, gettext("Section indéfini.\n"));
+    BUGMSG(barre->section, FALSE, gettext("Section indéfinie.\n"));
     BUGMSG(barre->materiau, FALSE, gettext("Matériau indéfini.\n"));
     BUGMSG(barre->noeud_debut, FALSE, gettext("Noeud 1 indéfini.\n"));
     BUGMSG(barre->noeud_fin, FALSE, gettext("Noeud 2 indéfini.\n"));
@@ -811,7 +811,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_fonc_rz(Fonction *f_r
     BUGMSG(f_rotation, FALSE, gettext("Paramètre %s incorrect.\n"), "f_rotation");
     BUGMSG(f_deform, FALSE, gettext("Paramètre %s incorrect.\n"), "f_deform");
     BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre");
-    BUGMSG(barre->section, FALSE, gettext("Section indéfini.\n"));
+    BUGMSG(barre->section, FALSE, gettext("Section indéfinie.\n"));
     BUGMSG(barre->materiau, FALSE, gettext("Matériau indéfini.\n"));
     BUGMSG(barre->noeud_debut, FALSE, gettext("Noeud 1 indéfini.\n"));
     BUGMSG(barre->noeud_fin, FALSE, gettext("Noeud 2 indéfini.\n"));
@@ -914,7 +914,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_n(Fonction *fonction,
     
     BUGMSG(fonction, FALSE, gettext("Paramètre %s incorrect.\n"), "fonction");
     BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre");
-    BUGMSG(barre->section, FALSE, gettext("Section indéfini.\n"));
+    BUGMSG(barre->section, FALSE, gettext("Section indéfinie.\n"));
     BUGMSG(barre->materiau, FALSE, gettext("Matériau indéfini.\n"));
     BUGMSG(barre->noeud_debut, FALSE, gettext("Noeud 1 indéfini.\n"));
     BUGMSG(barre->noeud_fin, FALSE, gettext("Noeud 2 indéfini.\n"));

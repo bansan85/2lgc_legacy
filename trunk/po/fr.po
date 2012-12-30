@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2012-12-30 12:01+0100\n"
-"PO-Revision-Date: 2012-12-30 12:03+0100\n"
+"POT-Creation-Date: 2012-12-30 20:14+0100\n"
+"PO-Revision-Date: 2012-12-30 20:16+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -802,9 +802,6 @@ msgstr "Aucun élément n'est sélectionné.\n"
 msgid "L'élément ne possède aucune dépendance.\n"
 msgstr "L'élément ne possède aucune dépendance.\n"
 
-msgid "Type de section %d inconnu."
-msgstr "Type de section %d inconnu."
-
 msgid "La largeur du dessin ne peut être nulle.\n"
 msgstr "La largeur du dessin ne peut être nulle.\n"
 
@@ -979,8 +976,8 @@ msgstr "La fin de la charge répartie uniformément (%f) est incorrecte. La long
 msgid "Le début (%f) et la fin (%f) de la charge répartie uniformément sont incompatible avec la longueur de la barre %d qui est de %f m.\n"
 msgstr "Le début (%f) et la fin (%f) de la charge répartie uniformément sont incompatible avec la longueur de la barre %d qui est de %f m.\n"
 
-msgid "Section indéfini.\n"
-msgstr "Section indéfini.\n"
+msgid "Section indéfinie.\n"
+msgstr "Section indéfinie.\n"
 
 msgid "Matériau indéfini.\n"
 msgstr "Matériau indéfini.\n"
