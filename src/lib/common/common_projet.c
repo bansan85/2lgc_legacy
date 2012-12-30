@@ -32,11 +32,12 @@
 #include "1990_gtk_actions.h"
 #include "EF_gtk_noeud.h"
 #include "EF_gtk_appuis.h"
+#include "EF_gtk_calculs.h"
 #include "EF_gtk_sections.h"
 #include "EF_gtk_barres.h"
 #include "EF_gtk_materiaux.h"
 #include "EF_gtk_relachement.h"
-#include "EF_gtk_calculs.h"
+#include "EF_gtk_resultats.h"
 #endif
 
 #include "EF_appuis.h"
@@ -100,6 +101,7 @@ G_MODULE_EXPORT Projet* projet_init(Type_Pays pays)
     projet->list_gtk.ef_materiaux.builder = NULL;
     projet->list_gtk._1992_1_1_materiaux.builder = NULL;
     projet->list_gtk.ef_relachements.builder = NULL;
+    projet->list_gtk.ef_resultats.builder = NULL;
 #endif
     
     projet->ef_donnees.c = &(projet->ef_donnees.Common);
@@ -248,7 +250,7 @@ G_MODULE_EXPORT gboolean projet_init_graphique(Projet *projet)
     
     comps->menu_resultats_afficher = gtk_menu_item_new_with_label(gettext("Afficher"));
     gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_resultats_list), comps->menu_resultats_afficher);
-    g_signal_connect(comps->menu_resultats_afficher, "activate", G_CALLBACK(EF_gtk_calculs_afficher), projet);
+    g_signal_connect_swapped(comps->menu_resultats_afficher, "activate", G_CALLBACK(EF_gtk_resultats), projet);
     
     projet->list_gtk._1990_actions.window = NULL;
     projet->list_gtk._1990_groupes.window_groupe = NULL;

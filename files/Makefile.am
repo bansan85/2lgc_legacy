@@ -21,5 +21,6 @@ applicationui_DATA	=	ui/1990_actions.ui \
 						ui/EF_charge_barre_repartie_uniforme.ui \
 						ui/EF_charge_noeud.ui \
 						ui/EF_materiaux.ui \
+						ui/EF_resultats.ui \
 						ui/1992_1_1_materiaux_beton.ui \
 						ui/EF_relachements.ui

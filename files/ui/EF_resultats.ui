@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+    <requires lib="gtk+" version="3.2"/>
+    <object class="GtkMenu" id="EF_resultats_menu">
+        <property name="visible">True</property>
+        <child>
+            <object class="GtkMenuItem" id="EF_resultats_menu_reaction_appui">
+                <property name="label" translatable="yes">Réactions d'appuis</property>
+                <property name="visible">True</property>
+            </object>
+        </child>
+    </object>
+    <object class="GtkWindow" id="EF_resultats_window">
+        <property name="visible">True</property>
+        <property name="title" translatable="yes">Résultats</property>
+        <property name="default-height">400</property>
+        <property name="default-width">600</property>
+        <property name="window-position">GTK_WIN_POS_CENTER</property>
+        <signal name="key-press-event" handler="EF_gtk_resultats_window_key_press"/>
+        <signal name="destroy" handler="EF_gtk_resultats_window_destroy"/>
+        <child>
+            <object class="GtkGrid" id="EF_resultats_grille_principale">
+                <property name="visible">True</property>
+                <property name="border-width">12</property>
+                <property name="row-spacing">12</property>
+                <child>
+                    <object class="GtkNotebook" id="EF_resultats_notebook">
+                        <property name="visible">True</property>
+                        <property name="tab-pos">top</property>
+                        <property name="expand">True</property>
+                        <signal name="switch-page" handler="EF_gtk_resultats_notebook_switch"/>
+                        <child>
+                            <object class="GtkScrolledWindow" id="EF_resultats_scrolled_add">
+                                <property name="visible">True</property>
+                                <property name="expand">True</property>
+                                <property name="sensitive">False</property>
+                            </object>
+                        </child>
+                        <child type="tab">
+                            <object class="GtkMenuButton" id="EF_noeuds_notebook_button_add">
+                                <property name="visible">True</property>
+                                <property name="menu">EF_resultats_menu</property>
+                            </object>
+                        </child>
+                    </object>
+                    <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">1</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkButtonBox" id="EF_resultats_bouttons_fenetre">
+                        <property name="visible">True</property>
+                        <property name="orientation">horizontal</property>
+                        <property name="layout_style">end</property>
+                        <property name="spacing">6</property>
+                        <child>
+                            <object class="GtkButton" id="EF_resultats_boutton_fermer">
+                                <property name="visible">True</property>
+                                <property name="label">gtk-close</property>
+                                <property name="use_stock">True</property>
+                                <signal name="clicked" handler="EF_gtk_resultats_fermer"/>
+                            </object>
+                            <packing>
+                                <property name="position">0</property>
+                                <property name="pack_type">end</property>
+                            </packing>
+                        </child>
+                    </object>
+                    <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">1</property>
+                    </packing>
+                </child>
+            </object>
+        </child>
+    </object>
+</interface>
