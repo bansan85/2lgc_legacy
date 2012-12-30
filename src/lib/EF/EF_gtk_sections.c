@@ -315,7 +315,7 @@ G_MODULE_EXPORT void EF_gtk_sections_edit_nom(GtkCellRendererText *cell __attrib
         }
         default :
         {
-            BUGMSG(0, , gettext("Type de section %d inconnu."), section->type);
+            BUGMSG(0, , gettext("Type de section %d inconnu.\n"), section->type);
         }
     }
     
@@ -551,7 +551,7 @@ G_MODULE_EXPORT GdkPixbuf *EF_gtk_sections_dessin(EF_Section *section, int width
         }
         default :
         {
-            BUGMSG(0, NULL, gettext("Type de section %d inconnu."), section->type);
+            BUGMSG(0, NULL, gettext("Type de section %d inconnu.\n"), section->type);
             break;
         }
     }
@@ -684,7 +684,7 @@ G_MODULE_EXPORT void EF_gtk_sections_edit_clicked(GtkWidget *widget  __attribute
                 }
                 default :
                 {
-                    BUGMSG(0, , gettext("Type de section %d inconnu."), section->type);
+                    BUGMSG(0, , gettext("Type de section %d inconnu.\n"), section->type);
                     break;
                 }
             }
