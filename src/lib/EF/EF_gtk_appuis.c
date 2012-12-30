@@ -492,7 +492,7 @@ G_MODULE_EXPORT void EF_gtk_appuis(Projet *projet)
     BUGMSG(gtk_builder_add_from_file(ef_gtk->builder, DATADIR"/ui/EF_appuis.ui", NULL) != 0, , gettext("Builder Failed\n"));
     gtk_builder_connect_signals(ef_gtk->builder, projet);
     
-    ef_gtk->window = GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder, "EF_appuis_window"));;
+    ef_gtk->window = GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder, "EF_appuis_window"));
     ef_gtk->appuis = GTK_TREE_STORE(gtk_builder_get_object(ef_gtk->builder, "EF_appuis_treestore"));
     
     g_object_set(gtk_builder_get_object(ef_gtk->builder, "EF_appuis_treeview_cell1"), "model", projet->list_gtk.ef_appuis.liste_type_appui, NULL);

@@ -131,7 +131,7 @@ G_MODULE_EXPORT gboolean _1990_gtk_groupe_window_key_press(
  */
 {
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk._1990_groupes.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes");;
+    BUGMSG(projet->list_gtk._1990_groupes.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes");
     
     if (event->key.keyval == GDK_KEY_Escape)
     {
@@ -168,7 +168,7 @@ gboolean _1990_gtk_groupes_affiche_niveau(Projet *projet, unsigned int niveau)
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->niveaux_groupes, FALSE, gettext("Le projet ne possède pas de niveaux de groupes.\n"));
-    BUGMSG(projet->list_gtk._1990_groupes.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes");;
+    BUGMSG(projet->list_gtk._1990_groupes.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes");
     
     gtk_1990_groupes = &projet->list_gtk._1990_groupes;
     
@@ -319,7 +319,7 @@ G_MODULE_EXPORT void _1990_gtk_spin_button_niveau_change(
  */
 {
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk._1990_groupes.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes");;
+    BUGMSG(projet->list_gtk._1990_groupes.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes");
     
     BUG(_1990_gtk_groupes_affiche_niveau(projet, GTK_COMMON_SPINBUTTON_AS_UINT(GTK_SPIN_BUTTON(projet->list_gtk._1990_groupes.spin_button_niveau))), );
     return;
@@ -338,7 +338,7 @@ G_MODULE_EXPORT void _1990_gtk_button_niveau_suppr_clicked(
  */
 {
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk._1990_groupes.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes");;
+    BUGMSG(projet->list_gtk._1990_groupes.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes");
     
     BUG(_1990_groupe_free_niveau(projet, GTK_COMMON_SPINBUTTON_AS_UINT(GTK_SPIN_BUTTON(projet->list_gtk._1990_groupes.spin_button_niveau)), FALSE), );
     
@@ -358,7 +358,7 @@ G_MODULE_EXPORT void _1990_gtk_button_niveau_ajout_clicked(
  */
 {
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk._1990_groupes.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes");;
+    BUGMSG(projet->list_gtk._1990_groupes.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes");
     
     BUG(_1990_groupe_ajout_niveau(projet), );
     
@@ -382,7 +382,7 @@ G_MODULE_EXPORT void _1990_gtk_button_groupe_ajout_clicked(
     Groupe          *groupe;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk._1990_groupes.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes");;
+    BUGMSG(projet->list_gtk._1990_groupes.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes");
     
     /* On ajoute un niveau */
     BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, GTK_COMMON_SPINBUTTON_AS_UINT(GTK_SPIN_BUTTON(projet->list_gtk._1990_groupes.spin_button_niveau))), );

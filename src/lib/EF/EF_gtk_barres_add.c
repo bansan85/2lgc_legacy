@@ -248,7 +248,7 @@ G_MODULE_EXPORT void EF_gtk_barres_ajouter(GtkButton *button __attribute__((unus
     BUGMSG(gtk_builder_add_from_file(ef_gtk->builder_add, DATADIR"/ui/EF_barres_add.ui", NULL) != 0, , gettext("Builder Failed\n"));
     gtk_builder_connect_signals(ef_gtk->builder_add, projet);
     
-    ef_gtk->window_add = GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder_add, "EF_barres_add_window"));;
+    ef_gtk->window_add = GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder_add, "EF_barres_add_window"));
     
     g_object_set(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_type_combobox"), "model", projet->list_gtk.ef_barres.liste_types, NULL);
     g_object_set(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_section_combobox"), "model", projet->list_gtk.ef_sections.liste_sections, NULL);

@@ -659,7 +659,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_change_section(Beton_Barre *barre,
     
     if (projet->list_gtk.ef_barres.builder != NULL)
     {
-        GtkTreeModel    *model = GTK_TREE_MODEL(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treestore"));;
+        GtkTreeModel    *model = GTK_TREE_MODEL(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treestore"));
         
         gtk_tree_store_set(GTK_TREE_STORE(model), &barre->Iter, 2, section->nom, -1);
     }
@@ -692,7 +692,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_change_materiau(Beton_Barre *barre,
 #ifdef ENABLE_GTK
     if (projet->list_gtk.ef_barres.builder != NULL)
     {
-        GtkTreeModel    *model = GTK_TREE_MODEL(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treestore"));;
+        GtkTreeModel    *model = GTK_TREE_MODEL(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treestore"));
         
         gtk_tree_store_set(GTK_TREE_STORE(model), &barre->Iter, 3, materiau->nom, -1);
     }
@@ -784,7 +784,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_change_relachement(Beton_Barre *barre,
 #ifdef ENABLE_GTK
     if (projet->list_gtk.ef_barres.builder != NULL)
     {
-        GtkTreeModel    *model = GTK_TREE_MODEL(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treestore"));;
+        GtkTreeModel    *model = GTK_TREE_MODEL(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treestore"));
         
         if (relachement == NULL)
             gtk_tree_store_set(GTK_TREE_STORE(model), &barre->Iter, 6, gettext("Aucun"), -1);
@@ -928,9 +928,10 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_B
     // Pour chaque discrétisation
     for (j=0;j<element->discretisation_element+1;j++)
     {
-        double          MA, MB;
-        double          phia_iso, phib_iso;
-        double          es_l;
+        double  MA, MB;
+        double  phia_iso, phib_iso;
+        double  es_l;
+        int     num1, num2;
         
     //     Détermination du noeud de départ et de fin
         if (j==0)
@@ -951,6 +952,10 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_B
             noeud1 = g_list_nth_data(element->noeuds_intermediaires, j-1);
             noeud2 = g_list_nth_data(element->noeuds_intermediaires, j);
         }
+        
+        num1 = g_list_index(projet->ef_donnees.noeuds, noeud1);
+        num2 = g_list_index(projet->ef_donnees.noeuds, noeud2);
+        
     //     Calcul des L_x, L_y, L_z et L.
         ll = EF_noeuds_distance(noeud2, noeud1);
         BUG(!isnan(ll), FALSE);
@@ -1403,60 +1408,60 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_B
     //         globale partielle et complète.
         for (i=0;i<triplet->nnz;i++)
         {
-            if ((ai[i] < 6) && (aj[i] < 6) && (projet->ef_donnees.noeuds_pos_partielle[noeud1->numero][ai[i]] != -1) && (projet->ef_donnees.noeuds_pos_partielle[noeud1->numero][aj[i]] != -1))
+            if ((ai[i] < 6) && (aj[i] < 6) && (projet->ef_donnees.noeuds_pos_partielle[num1][ai[i]] != -1) && (projet->ef_donnees.noeuds_pos_partielle[num1][aj[i]] != -1))
             {
-                ai2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = projet->ef_donnees.noeuds_pos_partielle[noeud1->numero][ai[i]];
-                aj2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = projet->ef_donnees.noeuds_pos_partielle[noeud1->numero][aj[i]];
+                ai2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = projet->ef_donnees.noeuds_pos_partielle[num1][ai[i]];
+                aj2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = projet->ef_donnees.noeuds_pos_partielle[num1][aj[i]];
                 ax2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = ax[i];
                 projet->ef_donnees.triplet_rigidite_partielle_en_cours++;
             }
-            else if ((ai[i] < 6) && (aj[i] >= 6) && (projet->ef_donnees.noeuds_pos_partielle[noeud1->numero][ai[i]] != -1) && (projet->ef_donnees.noeuds_pos_partielle[noeud2->numero][aj[i]-6] != -1))
+            else if ((ai[i] < 6) && (aj[i] >= 6) && (projet->ef_donnees.noeuds_pos_partielle[num1][ai[i]] != -1) && (projet->ef_donnees.noeuds_pos_partielle[num2][aj[i]-6] != -1))
             {
-                ai2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = projet->ef_donnees.noeuds_pos_partielle[noeud1->numero][ai[i]];
-                aj2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = projet->ef_donnees.noeuds_pos_partielle[noeud2->numero][aj[i]-6];
+                ai2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = projet->ef_donnees.noeuds_pos_partielle[num1][ai[i]];
+                aj2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = projet->ef_donnees.noeuds_pos_partielle[num2][aj[i]-6];
                 ax2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = ax[i];
                 projet->ef_donnees.triplet_rigidite_partielle_en_cours++;
             }
-            else if ((ai[i] >= 6) && (aj[i] < 6) && (projet->ef_donnees.noeuds_pos_partielle[noeud2->numero][ai[i]-6] != -1) && (projet->ef_donnees.noeuds_pos_partielle[noeud1->numero][aj[i]] != -1))
+            else if ((ai[i] >= 6) && (aj[i] < 6) && (projet->ef_donnees.noeuds_pos_partielle[num2][ai[i]-6] != -1) && (projet->ef_donnees.noeuds_pos_partielle[num1][aj[i]] != -1))
             {
-                ai2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = projet->ef_donnees.noeuds_pos_partielle[noeud2->numero][ai[i]-6];
-                aj2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = projet->ef_donnees.noeuds_pos_partielle[noeud1->numero][aj[i]];
+                ai2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = projet->ef_donnees.noeuds_pos_partielle[num2][ai[i]-6];
+                aj2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = projet->ef_donnees.noeuds_pos_partielle[num1][aj[i]];
                 ax2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = ax[i];
                 projet->ef_donnees.triplet_rigidite_partielle_en_cours++;
             }
-            else if ((ai[i] >= 6) && (aj[i] >= 6) && (projet->ef_donnees.noeuds_pos_partielle[noeud2->numero][ai[i]-6] != -1) && (projet->ef_donnees.noeuds_pos_partielle[noeud2->numero][aj[i]-6] != -1))
+            else if ((ai[i] >= 6) && (aj[i] >= 6) && (projet->ef_donnees.noeuds_pos_partielle[num2][ai[i]-6] != -1) && (projet->ef_donnees.noeuds_pos_partielle[num2][aj[i]-6] != -1))
             {
-                ai2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = projet->ef_donnees.noeuds_pos_partielle[noeud2->numero][ai[i]-6];
-                aj2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = projet->ef_donnees.noeuds_pos_partielle[noeud2->numero][aj[i]-6];
+                ai2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = projet->ef_donnees.noeuds_pos_partielle[num2][ai[i]-6];
+                aj2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = projet->ef_donnees.noeuds_pos_partielle[num2][aj[i]-6];
                 ax2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = ax[i];
                 projet->ef_donnees.triplet_rigidite_partielle_en_cours++;
             }
             
             if ((ai[i] < 6) && (aj[i] < 6))
             {
-                ai3[projet->ef_donnees.triplet_rigidite_complete_en_cours] = projet->ef_donnees.noeuds_pos_complete[noeud1->numero][ai[i]];
-                aj3[projet->ef_donnees.triplet_rigidite_complete_en_cours] = projet->ef_donnees.noeuds_pos_complete[noeud1->numero][aj[i]];
+                ai3[projet->ef_donnees.triplet_rigidite_complete_en_cours] = projet->ef_donnees.noeuds_pos_complete[num1][ai[i]];
+                aj3[projet->ef_donnees.triplet_rigidite_complete_en_cours] = projet->ef_donnees.noeuds_pos_complete[num1][aj[i]];
                 ax3[projet->ef_donnees.triplet_rigidite_complete_en_cours] = ax[i];
                 projet->ef_donnees.triplet_rigidite_complete_en_cours++;
             }
             else if ((ai[i] < 6) && (aj[i] >= 6))
             {
-                ai3[projet->ef_donnees.triplet_rigidite_complete_en_cours] = projet->ef_donnees.noeuds_pos_complete[noeud1->numero][ai[i]];
-                aj3[projet->ef_donnees.triplet_rigidite_complete_en_cours] = projet->ef_donnees.noeuds_pos_complete[noeud2->numero][aj[i]-6];
+                ai3[projet->ef_donnees.triplet_rigidite_complete_en_cours] = projet->ef_donnees.noeuds_pos_complete[num1][ai[i]];
+                aj3[projet->ef_donnees.triplet_rigidite_complete_en_cours] = projet->ef_donnees.noeuds_pos_complete[num2][aj[i]-6];
                 ax3[projet->ef_donnees.triplet_rigidite_complete_en_cours] = ax[i];
                 projet->ef_donnees.triplet_rigidite_complete_en_cours++;
             }
             else if ((ai[i] >= 6) && (aj[i] < 6))
             {
-                ai3[projet->ef_donnees.triplet_rigidite_complete_en_cours] = projet->ef_donnees.noeuds_pos_complete[noeud2->numero][ai[i]-6];
-                aj3[projet->ef_donnees.triplet_rigidite_complete_en_cours] = projet->ef_donnees.noeuds_pos_complete[noeud1->numero][aj[i]];
+                ai3[projet->ef_donnees.triplet_rigidite_complete_en_cours] = projet->ef_donnees.noeuds_pos_complete[num2][ai[i]-6];
+                aj3[projet->ef_donnees.triplet_rigidite_complete_en_cours] = projet->ef_donnees.noeuds_pos_complete[num1][aj[i]];
                 ax3[projet->ef_donnees.triplet_rigidite_complete_en_cours] = ax[i];
                 projet->ef_donnees.triplet_rigidite_complete_en_cours++;
             }
             else if ((ai[i] >= 6) && (aj[i] >= 6))
             {
-                ai3[projet->ef_donnees.triplet_rigidite_complete_en_cours] = projet->ef_donnees.noeuds_pos_complete[noeud2->numero][ai[i]-6];
-                aj3[projet->ef_donnees.triplet_rigidite_complete_en_cours] = projet->ef_donnees.noeuds_pos_complete[noeud2->numero][aj[i]-6];
+                ai3[projet->ef_donnees.triplet_rigidite_complete_en_cours] = projet->ef_donnees.noeuds_pos_complete[num2][ai[i]-6];
+                aj3[projet->ef_donnees.triplet_rigidite_complete_en_cours] = projet->ef_donnees.noeuds_pos_complete[num2][aj[i]-6];
                 ax3[projet->ef_donnees.triplet_rigidite_complete_en_cours] = ax[i];
                 projet->ef_donnees.triplet_rigidite_complete_en_cours++;
             }
@@ -1523,7 +1528,7 @@ G_MODULE_EXPORT void _1992_1_1_barres_free_foreach(Beton_Barre *barre, Projet *p
 #ifdef ENABLE_GTK
     if (projet->list_gtk.ef_barres.builder != NULL)
     {
-        GtkTreeModel    *model = GTK_TREE_MODEL(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treestore"));;
+        GtkTreeModel    *model = GTK_TREE_MODEL(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treestore"));
         
         gtk_tree_store_remove(GTK_TREE_STORE(model), &barre->Iter);
     }
@@ -1553,6 +1558,8 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_supprime_liste(Projet *projet, GList *
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
     BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, liste_noeuds, NULL, NULL, NULL, liste_barres, &noeuds_suppr, &barres_suppr, &charges_suppr, FALSE, TRUE), FALSE);
+    
+    BUG(EF_calculs_free(projet), FALSE);
     
     // On enlève dans les charges les noeuds et barres qui seront supprimés
     list_parcours = charges_suppr;
@@ -1631,8 +1638,6 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_supprime_liste(Projet *projet, GList *
     if ((projet->list_gtk.ef_relachements.builder != NULL) && (barres_suppr != NULL))
         EF_gtk_relachements_select_changed(NULL, projet);
 #endif
-    BUG(EF_calculs_free(projet), FALSE);
-    
     g_list_free(noeuds_suppr);
     g_list_free(barres_suppr);
     

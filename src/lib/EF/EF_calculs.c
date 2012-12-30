@@ -82,36 +82,37 @@ G_MODULE_EXPORT gboolean EF_calculs_initialise(Projet *projet)
     nb_col_partielle = 0;
     nb_col_complete = 0;
     list_parcours = projet->ef_donnees.noeuds;
+    i = 0;
     do
     {
         EF_Noeud    *noeud = list_parcours->data;
         
-        projet->ef_donnees.noeuds_pos_complete[noeud->numero][0] = nb_col_complete;
+        projet->ef_donnees.noeuds_pos_complete[i][0] = nb_col_complete;
         nb_col_complete++;
-        projet->ef_donnees.noeuds_pos_complete[noeud->numero][1] = nb_col_complete;
+        projet->ef_donnees.noeuds_pos_complete[i][1] = nb_col_complete;
         nb_col_complete++;
-        projet->ef_donnees.noeuds_pos_complete[noeud->numero][2] = nb_col_complete;
+        projet->ef_donnees.noeuds_pos_complete[i][2] = nb_col_complete;
         nb_col_complete++;
-        projet->ef_donnees.noeuds_pos_complete[noeud->numero][3] = nb_col_complete;
+        projet->ef_donnees.noeuds_pos_complete[i][3] = nb_col_complete;
         nb_col_complete++;
-        projet->ef_donnees.noeuds_pos_complete[noeud->numero][4] = nb_col_complete;
+        projet->ef_donnees.noeuds_pos_complete[i][4] = nb_col_complete;
         nb_col_complete++;
-        projet->ef_donnees.noeuds_pos_complete[noeud->numero][5] = nb_col_complete;
+        projet->ef_donnees.noeuds_pos_complete[i][5] = nb_col_complete;
         nb_col_complete++;
         
         if (noeud->appui == NULL)
         {
-            projet->ef_donnees.noeuds_pos_partielle[noeud->numero][0] = nb_col_partielle;
+            projet->ef_donnees.noeuds_pos_partielle[i][0] = nb_col_partielle;
             nb_col_partielle++;
-            projet->ef_donnees.noeuds_pos_partielle[noeud->numero][1] = nb_col_partielle;
+            projet->ef_donnees.noeuds_pos_partielle[i][1] = nb_col_partielle;
             nb_col_partielle++;
-            projet->ef_donnees.noeuds_pos_partielle[noeud->numero][2] = nb_col_partielle;
+            projet->ef_donnees.noeuds_pos_partielle[i][2] = nb_col_partielle;
             nb_col_partielle++;
-            projet->ef_donnees.noeuds_pos_partielle[noeud->numero][3] = nb_col_partielle;
+            projet->ef_donnees.noeuds_pos_partielle[i][3] = nb_col_partielle;
             nb_col_partielle++;
-            projet->ef_donnees.noeuds_pos_partielle[noeud->numero][4] = nb_col_partielle;
+            projet->ef_donnees.noeuds_pos_partielle[i][4] = nb_col_partielle;
             nb_col_partielle++;
-            projet->ef_donnees.noeuds_pos_partielle[noeud->numero][5] = nb_col_partielle;
+            projet->ef_donnees.noeuds_pos_partielle[i][5] = nb_col_partielle;
             nb_col_partielle++;
         }
         else
@@ -120,52 +121,55 @@ G_MODULE_EXPORT gboolean EF_calculs_initialise(Projet *projet)
             
             if (appui->ux == EF_APPUI_LIBRE)
             {
-                projet->ef_donnees.noeuds_pos_partielle[noeud->numero][0] = nb_col_partielle;
+                projet->ef_donnees.noeuds_pos_partielle[i][0] = nb_col_partielle;
                 nb_col_partielle++;
             }
             else
-                projet->ef_donnees.noeuds_pos_partielle[noeud->numero][0] = -1;
+                projet->ef_donnees.noeuds_pos_partielle[i][0] = -1;
             
             if (appui->uy == EF_APPUI_LIBRE)
             {
-                projet->ef_donnees.noeuds_pos_partielle[noeud->numero][1] = nb_col_partielle;
+                projet->ef_donnees.noeuds_pos_partielle[i][1] = nb_col_partielle;
                 nb_col_partielle++;
             }
             else
-                projet->ef_donnees.noeuds_pos_partielle[noeud->numero][1] = -1;
+                projet->ef_donnees.noeuds_pos_partielle[i][1] = -1;
             
             if (appui->uz == EF_APPUI_LIBRE)
             {
-                projet->ef_donnees.noeuds_pos_partielle[noeud->numero][2] = nb_col_partielle;
+                projet->ef_donnees.noeuds_pos_partielle[i][2] = nb_col_partielle;
                 nb_col_partielle++;
             }
             else
-                projet->ef_donnees.noeuds_pos_partielle[noeud->numero][2] = -1;
+                projet->ef_donnees.noeuds_pos_partielle[i][2] = -1;
             
             if (appui->rx == EF_APPUI_LIBRE)
             {
-                projet->ef_donnees.noeuds_pos_partielle[noeud->numero][3] = nb_col_partielle;
+                projet->ef_donnees.noeuds_pos_partielle[i][3] = nb_col_partielle;
                 nb_col_partielle++;
             }
             else
-                projet->ef_donnees.noeuds_pos_partielle[noeud->numero][3] = -1;
+                projet->ef_donnees.noeuds_pos_partielle[i][3] = -1;
             
             if (appui->ry == EF_APPUI_LIBRE)
             {
-                projet->ef_donnees.noeuds_pos_partielle[noeud->numero][4] = nb_col_partielle;
+                projet->ef_donnees.noeuds_pos_partielle[i][4] = nb_col_partielle;
                 nb_col_partielle++;
             }
             else
-                projet->ef_donnees.noeuds_pos_partielle[noeud->numero][4] = -1;
+                projet->ef_donnees.noeuds_pos_partielle[i][4] = -1;
             
             if (appui->rz == EF_APPUI_LIBRE)
             {
-                projet->ef_donnees.noeuds_pos_partielle[noeud->numero][5] = nb_col_partielle;
+                projet->ef_donnees.noeuds_pos_partielle[i][5] = nb_col_partielle;
                 nb_col_partielle++;
             }
             else
-                projet->ef_donnees.noeuds_pos_partielle[noeud->numero][5] = -1;
+                projet->ef_donnees.noeuds_pos_partielle[i][5] = -1;
         }
+        
+        i++;
+        
         list_parcours = g_list_next(list_parcours);
     }
     while (list_parcours != NULL);
@@ -520,26 +524,27 @@ G_MODULE_EXPORT gboolean EF_calculs_resoud_charge(Projet *projet, unsigned int n
                         GList   *list_parcours2 = charge_noeud->noeuds;
                         do
                         {
-                            EF_Noeud     *noeud = list_parcours2->data;
+                            EF_Noeud    *noeud = list_parcours2->data;
+                            int         num = g_list_index(projet->ef_donnees.noeuds, noeud);
                             
-                            if (projet->ef_donnees.noeuds_pos_partielle[noeud->numero][0] != -1)
-                                ax[projet->ef_donnees.noeuds_pos_partielle[noeud->numero][0]] += charge_noeud->fx;
-                            if (projet->ef_donnees.noeuds_pos_partielle[noeud->numero][1] != -1)
-                                ax[projet->ef_donnees.noeuds_pos_partielle[noeud->numero][1]] += charge_noeud->fy;
-                            if (projet->ef_donnees.noeuds_pos_partielle[noeud->numero][2] != -1)
-                                ax[projet->ef_donnees.noeuds_pos_partielle[noeud->numero][2]] += charge_noeud->fz;
-                            if (projet->ef_donnees.noeuds_pos_partielle[noeud->numero][3] != -1)
-                                ax[projet->ef_donnees.noeuds_pos_partielle[noeud->numero][3]] += charge_noeud->mx;
-                            if (projet->ef_donnees.noeuds_pos_partielle[noeud->numero][4] != -1)
-                                ax[projet->ef_donnees.noeuds_pos_partielle[noeud->numero][4]] += charge_noeud->my;
-                            if (projet->ef_donnees.noeuds_pos_partielle[noeud->numero][5] != -1)
-                                ax[projet->ef_donnees.noeuds_pos_partielle[noeud->numero][5]] += charge_noeud->mz;
-                            ax3[projet->ef_donnees.noeuds_pos_complete[noeud->numero][0]] += charge_noeud->fx;
-                            ax3[projet->ef_donnees.noeuds_pos_complete[noeud->numero][1]] += charge_noeud->fy;
-                            ax3[projet->ef_donnees.noeuds_pos_complete[noeud->numero][2]] += charge_noeud->fz;
-                            ax3[projet->ef_donnees.noeuds_pos_complete[noeud->numero][3]] += charge_noeud->mx;
-                            ax3[projet->ef_donnees.noeuds_pos_complete[noeud->numero][4]] += charge_noeud->my;
-                            ax3[projet->ef_donnees.noeuds_pos_complete[noeud->numero][5]] += charge_noeud->mz;
+                            if (projet->ef_donnees.noeuds_pos_partielle[num][0] != -1)
+                                ax[projet->ef_donnees.noeuds_pos_partielle[num][0]] += charge_noeud->fx;
+                            if (projet->ef_donnees.noeuds_pos_partielle[num][1] != -1)
+                                ax[projet->ef_donnees.noeuds_pos_partielle[num][1]] += charge_noeud->fy;
+                            if (projet->ef_donnees.noeuds_pos_partielle[num][2] != -1)
+                                ax[projet->ef_donnees.noeuds_pos_partielle[num][2]] += charge_noeud->fz;
+                            if (projet->ef_donnees.noeuds_pos_partielle[num][3] != -1)
+                                ax[projet->ef_donnees.noeuds_pos_partielle[num][3]] += charge_noeud->mx;
+                            if (projet->ef_donnees.noeuds_pos_partielle[num][4] != -1)
+                                ax[projet->ef_donnees.noeuds_pos_partielle[num][4]] += charge_noeud->my;
+                            if (projet->ef_donnees.noeuds_pos_partielle[num][5] != -1)
+                                ax[projet->ef_donnees.noeuds_pos_partielle[num][5]] += charge_noeud->mz;
+                            ax3[projet->ef_donnees.noeuds_pos_complete[num][0]] += charge_noeud->fx;
+                            ax3[projet->ef_donnees.noeuds_pos_complete[num][1]] += charge_noeud->fy;
+                            ax3[projet->ef_donnees.noeuds_pos_complete[num][2]] += charge_noeud->fz;
+                            ax3[projet->ef_donnees.noeuds_pos_complete[num][3]] += charge_noeud->mx;
+                            ax3[projet->ef_donnees.noeuds_pos_complete[num][4]] += charge_noeud->my;
+                            ax3[projet->ef_donnees.noeuds_pos_complete[num][5]] += charge_noeud->mz;
                             
                             list_parcours2 = g_list_next(list_parcours2);
                         }
@@ -568,7 +573,8 @@ G_MODULE_EXPORT gboolean EF_calculs_resoud_charge(Projet *projet, unsigned int n
                         do
                         {
                             Beton_Barre *element_en_beton = list_parcours2->data;
-                            unsigned int num = element_en_beton->numero;
+                            unsigned int num = g_list_index(projet->beton.barres, element_en_beton);
+                            unsigned int num_d, num_f;
                     
             //         Convertion des efforts globaux en efforts locaux si nécessaire :\end{verbatim}\begin{center}
             //         $\{ F \}_{local} = [R]^T \cdot \{ F \}_{global}$\end{center}\begin{verbatim}
@@ -658,6 +664,8 @@ G_MODULE_EXPORT gboolean EF_calculs_resoud_charge(Projet *projet, unsigned int n
                                     noeud_fin = g_list_nth_data(element_en_beton->noeuds_intermediaires, pos);
                                 }
                             }
+                            num_d = g_list_index(projet->ef_donnees.noeuds, noeud_debut);
+                            num_f = g_list_index(projet->ef_donnees.noeuds, noeud_fin);
                             debut_barre = EF_noeuds_distance(noeud_debut, element_en_beton->noeud_debut);
                             BUG(!isnan(debut_barre), FALSE);
                             a = charge_barre->position-debut_barre;
@@ -790,15 +798,15 @@ G_MODULE_EXPORT gboolean EF_calculs_resoud_charge(Projet *projet, unsigned int n
                             {
                                 if (ai2[i] < 6)
                                 {
-                                    if (projet->ef_donnees.noeuds_pos_partielle[noeud_debut->numero][ai2[i]] != -1)
-                                        ax[projet->ef_donnees.noeuds_pos_partielle[noeud_debut->numero][ai2[i]]] += ax2[i];
-                                    ax3[projet->ef_donnees.noeuds_pos_complete[noeud_debut->numero][ai2[i]]] += ax2[i];
+                                    if (projet->ef_donnees.noeuds_pos_partielle[num_d][ai2[i]] != -1)
+                                        ax[projet->ef_donnees.noeuds_pos_partielle[num_d][ai2[i]]] += ax2[i];
+                                    ax3[projet->ef_donnees.noeuds_pos_complete[num_d][ai2[i]]] += ax2[i];
                                 }
                                 else
                                 {
-                                    if (projet->ef_donnees.noeuds_pos_partielle[noeud_fin->numero][ai2[i]-6] != -1)
-                                        ax[projet->ef_donnees.noeuds_pos_partielle[noeud_fin->numero][ai2[i]-6]] += ax2[i];
-                                    ax3[projet->ef_donnees.noeuds_pos_complete[noeud_fin->numero][ai2[i]-6]] += ax2[i];
+                                    if (projet->ef_donnees.noeuds_pos_partielle[num_f][ai2[i]-6] != -1)
+                                        ax[projet->ef_donnees.noeuds_pos_partielle[num_f][ai2[i]-6]] += ax2[i];
+                                    ax3[projet->ef_donnees.noeuds_pos_complete[num_f][ai2[i]-6]] += ax2[i];
                                 }
                             }
                             cholmod_free_triplet(&triplet_efforts_globaux_finaux, projet->ef_donnees.c);
@@ -822,6 +830,7 @@ G_MODULE_EXPORT gboolean EF_calculs_resoud_charge(Projet *projet, unsigned int n
                         do
                         {
                             Beton_Barre  *element_en_beton = list_parcours2->data;
+                            unsigned int num = g_list_index(projet->beton.barres, element_en_beton);
                             
             //         Convertion des efforts globaux en efforts locaux si nécessaire :\end{verbatim}\begin{center}
             //           $\{ F \}_{local} = [R_e]^T \cdot \{ F \}_{global}$\end{center}\begin{verbatim}
@@ -930,10 +939,10 @@ G_MODULE_EXPORT gboolean EF_calculs_resoud_charge(Projet *projet, unsigned int n
                                 double       FAx, FBx;
                                 double       FAy_i, FAy_h, FBy_i, FBy_h; /* Réactions d'appui */
                                 double       FAz_i, FAz_h, FBz_i, FBz_h;
-                                int         *ai4, *aj4;
+                                int          *ai4, *aj4;
                                 double       *ax4;
                                 EF_Noeud     *noeud_debut, *noeud_fin;
-                                unsigned int num = element_en_beton->numero;
+                                unsigned int num_d, num_f;
                                 
                                 if (i == 0)
                                     noeud_debut = element_en_beton->noeud_debut;
@@ -959,6 +968,9 @@ G_MODULE_EXPORT gboolean EF_calculs_resoud_charge(Projet *projet, unsigned int n
                                 }
                                 else
                                     b = 0.;
+                                
+                                num_d = g_list_index(projet->ef_donnees.noeuds, noeud_debut);
+                                num_f = g_list_index(projet->ef_donnees.noeuds, noeud_fin);
                                 
             //             Détermination des moments mx de rotation
             //               (EF_charge_barre_repartie_uniforme_mx):
@@ -1098,15 +1110,15 @@ G_MODULE_EXPORT gboolean EF_calculs_resoud_charge(Projet *projet, unsigned int n
                                 {
                                     if (ai4[j] < 6)
                                     {
-                                        if (projet->ef_donnees.noeuds_pos_partielle[noeud_debut->numero][ai4[j]] != -1)
-                                            ax[projet->ef_donnees.noeuds_pos_partielle[noeud_debut->numero][ai4[j]]] += ax4[j];
-                                        ax3[projet->ef_donnees.noeuds_pos_complete[noeud_debut->numero][ai4[j]]] += ax4[j];
+                                        if (projet->ef_donnees.noeuds_pos_partielle[num_d][ai4[j]] != -1)
+                                            ax[projet->ef_donnees.noeuds_pos_partielle[num_d][ai4[j]]] += ax4[j];
+                                        ax3[projet->ef_donnees.noeuds_pos_complete[num_d][ai4[j]]] += ax4[j];
                                     }
                                     else
                                     {
-                                        if (projet->ef_donnees.noeuds_pos_partielle[noeud_fin->numero][ai4[j]-6] != -1)
-                                            ax[projet->ef_donnees.noeuds_pos_partielle[noeud_fin->numero][ai4[j]-6]] += ax4[j];
-                                        ax3[projet->ef_donnees.noeuds_pos_complete[noeud_fin->numero][ai4[j]-6]] += ax4[j];
+                                        if (projet->ef_donnees.noeuds_pos_partielle[num_f][ai4[j]-6] != -1)
+                                            ax[projet->ef_donnees.noeuds_pos_partielle[num_f][ai4[j]-6]] += ax4[j];
+                                        ax3[projet->ef_donnees.noeuds_pos_complete[num_f][ai4[j]-6]] += ax4[j];
                                     }
                                 }
                                 cholmod_free_triplet(&triplet_efforts_globaux_finaux, projet->ef_donnees.c);
@@ -1203,8 +1215,9 @@ G_MODULE_EXPORT gboolean EF_calculs_resoud_charge(Projet *projet, unsigned int n
     list_parcours = projet->beton.barres;
     do
     {
-        Beton_Barre                 *element_en_beton = list_parcours->data;
-        double                      S = EF_sections_s(element_en_beton->section);
+        Beton_Barre *element_en_beton = list_parcours->data;
+        double      S = EF_sections_s(element_en_beton->section);
+        int         num = g_list_index(projet->beton.barres, element_en_beton);
         
     //     Pour chaque discrétisation de la barre
         for (j=0;j<=element_en_beton->discretisation_element;j++)
@@ -1216,6 +1229,7 @@ G_MODULE_EXPORT gboolean EF_calculs_resoud_charge(Projet *projet, unsigned int n
             cholmod_triplet     *triplet_deplacement_globaux;
             cholmod_sparse      *sparse_deplacement_globaux, *sparse_deplacement_locaux;
             double              l;
+            int                 num_d, num_f;
             
             /* Récupération du noeud de départ et de fin de la partie discrétisée */
             if (j == 0)
@@ -1226,6 +1240,9 @@ G_MODULE_EXPORT gboolean EF_calculs_resoud_charge(Projet *projet, unsigned int n
                 noeud_fin = element_en_beton->noeud_fin;
             else
                 noeud_fin = g_list_nth_data(element_en_beton->noeuds_intermediaires, j);
+            
+            num_d = g_list_index(projet->ef_donnees.noeuds, noeud_debut);
+            num_f = g_list_index(projet->ef_donnees.noeuds, noeud_fin);
             
             /* Récupération des caractéristiques de la barre en fonction du matériau */
             switch (element_en_beton->type)
@@ -1254,13 +1271,13 @@ G_MODULE_EXPORT gboolean EF_calculs_resoud_charge(Projet *projet, unsigned int n
             {
                 ai[i] = i;
                 aj[i] = 0;
-                ax[i] = ax2[projet->ef_donnees.noeuds_pos_complete[noeud_debut->numero][i]];
+                ax[i] = ax2[projet->ef_donnees.noeuds_pos_complete[num_d][i]];
             }
             for (i=0;i<6;i++)
             {
                 ai[i+6] = i+6;
                 aj[i+6] = 0;
-                ax[i+6] = ax2[projet->ef_donnees.noeuds_pos_complete[noeud_fin->numero][i]];
+                ax[i+6] = ax2[projet->ef_donnees.noeuds_pos_complete[num_f][i]];
             }
             
     //         Conversion des déplacements globaux en déplacement locaux (u_A, v_A, w_A,
@@ -1295,12 +1312,12 @@ G_MODULE_EXPORT gboolean EF_calculs_resoud_charge(Projet *projet, unsigned int n
             // M_y(x) & = M_y(x) + M_{Ay} - (M_{Ay}+M_{By}) \cdot x/L\nonumber\\
             // M_z(x) & = M_z(x) + M_{Az} - (M_{Az}+M_{Bz}) \cdot x/L
             // \end{align*}\begin{verbatim}
-            BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[0][element_en_beton->numero], 0., l, ax2[0], -(ax2[0]+ax2[6])/l,  0., 0., 0., 0., 0., l_debut), FALSE);
-            BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[1][element_en_beton->numero], 0., l, ax2[1], -(ax2[1]+ax2[7])/l,  0., 0., 0., 0., 0., l_debut), FALSE);
-            BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[2][element_en_beton->numero], 0., l, ax2[2], -(ax2[2]+ax2[8])/l,  0., 0., 0., 0., 0., l_debut), FALSE);
-            BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[3][element_en_beton->numero], 0., l, ax2[3], -(ax2[3]+ax2[9])/l,  0., 0., 0., 0., 0., l_debut), FALSE);
-            BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[4][element_en_beton->numero], 0., l, ax2[4], -(ax2[4]+ax2[10])/l, 0., 0., 0., 0., 0., l_debut), FALSE);
-            BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[5][element_en_beton->numero], 0., l, ax2[5], -(ax2[5]+ax2[11])/l, 0., 0., 0., 0., 0., l_debut), FALSE);
+            BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[0][num], 0., l, ax2[0], -(ax2[0]+ax2[6])/l,  0., 0., 0., 0., 0., l_debut), FALSE);
+            BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[1][num], 0., l, ax2[1], -(ax2[1]+ax2[7])/l,  0., 0., 0., 0., 0., l_debut), FALSE);
+            BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[2][num], 0., l, ax2[2], -(ax2[2]+ax2[8])/l,  0., 0., 0., 0., 0., l_debut), FALSE);
+            BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[3][num], 0., l, ax2[3], -(ax2[3]+ax2[9])/l,  0., 0., 0., 0., 0., l_debut), FALSE);
+            BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[4][num], 0., l, ax2[4], -(ax2[4]+ax2[10])/l, 0., 0., 0., 0., 0., l_debut), FALSE);
+            BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[5][num], 0., l, ax2[5], -(ax2[5]+ax2[11])/l, 0., 0., 0., 0., 0., l_debut), FALSE);
             
     //         Ajout des déplacements & rotations entre deux noeuds dus à leur déplacement
     //           relatif, la courbe vient s'ajouter à la courbe (si existante) déja définie
@@ -1340,15 +1357,15 @@ G_MODULE_EXPORT gboolean EF_calculs_resoud_charge(Projet *projet, unsigned int n
     //              r_y(x) = & -B - \frac{M_{Ay}}{E \cdot I_y} \cdot x + \frac{M_{Ay}+M_{By}}{2 \cdot L \cdot E \cdot I_y} \cdot x^2 \nonumber\\
     //              r_z(x) = & A - \frac{M_{Az}}{E \cdot I_z} \cdot x + \frac{M_{Az}+M_{Bz}}{2 \cdot L \cdot E \cdot I_z} \cdot x^2
 
-                    BUG(common_fonction_ajout(action_en_cours->fonctions_deformation[0][element_en_beton->numero], 0., l, ax[0], -ax2[0]/(E*S), (ax2[0]+ax2[6])/(2*E*S*l), 0., 0., 0., 0., l_debut), FALSE);
-                    BUG(common_fonction_ajout(action_en_cours->fonctions_deformation[1][element_en_beton->numero], 0., l, ax[1], (ax2[5]/(2*E*Iz)*l*l-(ax2[5]+ax2[11])/(6*E*Iz)*l*l-ax[1]+ax[7])/l, -ax2[5]/(2*E*Iz),  (ax2[5]+ax2[11])/(6*l*E*Iz), 0., 0., 0., l_debut), FALSE);
-                    BUG(common_fonction_ajout(action_en_cours->fonctions_deformation[2][element_en_beton->numero], 0., l, ax[2], (-ax2[4]/(2*E*Iy)*l*l+(ax2[4]+ax2[10])/(6*E*Iy)*l*l-ax[2]+ax[8])/l,  ax2[4]/(2*E*Iy), -(ax2[4]+ax2[10])/(6*l*E*Iy), 0., 0., 0., l_debut), FALSE);
+                    BUG(common_fonction_ajout(action_en_cours->fonctions_deformation[0][num], 0., l, ax[0], -ax2[0]/(E*S), (ax2[0]+ax2[6])/(2*E*S*l), 0., 0., 0., 0., l_debut), FALSE);
+                    BUG(common_fonction_ajout(action_en_cours->fonctions_deformation[1][num], 0., l, ax[1], (ax2[5]/(2*E*Iz)*l*l-(ax2[5]+ax2[11])/(6*E*Iz)*l*l-ax[1]+ax[7])/l, -ax2[5]/(2*E*Iz),  (ax2[5]+ax2[11])/(6*l*E*Iz), 0., 0., 0., l_debut), FALSE);
+                    BUG(common_fonction_ajout(action_en_cours->fonctions_deformation[2][num], 0., l, ax[2], (-ax2[4]/(2*E*Iy)*l*l+(ax2[4]+ax2[10])/(6*E*Iy)*l*l-ax[2]+ax[8])/l,  ax2[4]/(2*E*Iy), -(ax2[4]+ax2[10])/(6*l*E*Iy), 0., 0., 0., l_debut), FALSE);
                     if ((j == 0) && (element_en_beton->relachement != NULL) && (element_en_beton->relachement->rx_debut != EF_RELACHEMENT_BLOQUE))
-                        BUG(common_fonction_ajout(action_en_cours->fonctions_rotation[0][element_en_beton->numero], 0., l, ax2[3]/(G*J)*l-(ax2[3]+ax2[9])/(2*G*J*l)*l*l+ax[9], -ax2[3]/(G*J), (ax2[3]+ax2[9])/(2*G*J*l), 0., 0., 0., 0., l_debut), FALSE);
+                        BUG(common_fonction_ajout(action_en_cours->fonctions_rotation[0][num], 0., l, ax2[3]/(G*J)*l-(ax2[3]+ax2[9])/(2*G*J*l)*l*l+ax[9], -ax2[3]/(G*J), (ax2[3]+ax2[9])/(2*G*J*l), 0., 0., 0., 0., l_debut), FALSE);
                     else
-                        BUG(common_fonction_ajout(action_en_cours->fonctions_rotation[0][element_en_beton->numero], 0., l, ax[3], -ax2[3]/(G*J), (ax2[3]+ax2[9])/(2*G*J*l), 0., 0., 0., 0., l_debut), FALSE);
-                    BUG(common_fonction_ajout(action_en_cours->fonctions_rotation[1][element_en_beton->numero], 0., l, -(-ax2[4]/(2*E*Iy)*l*l+(ax2[4]+ax2[10])/(6*E*Iy)*l*l-ax[2]+ax[8])/l, -ax2[4]/(E*Iy), (ax2[4]+ax2[10])/(2*l*E*Iy), 0., 0., 0., 0., l_debut), FALSE);
-                    BUG(common_fonction_ajout(action_en_cours->fonctions_rotation[2][element_en_beton->numero], 0., l,  (ax2[5]/(2*E*Iz)*l*l+(-ax2[5]-ax2[11])/(6*E*Iz)*l*l-ax[1]+ax[7])/l, -ax2[5]/(E*Iz), (ax2[5]+ax2[11])/(2*l*E*Iz), 0., 0., 0., 0., l_debut), FALSE);
+                        BUG(common_fonction_ajout(action_en_cours->fonctions_rotation[0][num], 0., l, ax[3], -ax2[3]/(G*J), (ax2[3]+ax2[9])/(2*G*J*l), 0., 0., 0., 0., l_debut), FALSE);
+                    BUG(common_fonction_ajout(action_en_cours->fonctions_rotation[1][num], 0., l, -(-ax2[4]/(2*E*Iy)*l*l+(ax2[4]+ax2[10])/(6*E*Iy)*l*l-ax[2]+ax[8])/l, -ax2[4]/(E*Iy), (ax2[4]+ax2[10])/(2*l*E*Iy), 0., 0., 0., 0., l_debut), FALSE);
+                    BUG(common_fonction_ajout(action_en_cours->fonctions_rotation[2][num], 0., l,  (ax2[5]/(2*E*Iz)*l*l+(-ax2[5]-ax2[11])/(6*E*Iz)*l*l-ax[1]+ax[7])/l, -ax2[5]/(E*Iz), (ax2[5]+ax2[11])/(2*l*E*Iz), 0., 0., 0., 0., l_debut), FALSE);
     //              \end{align*}\begin{verbatim}
                     break;
                 }
