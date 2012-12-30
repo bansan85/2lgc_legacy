@@ -180,6 +180,12 @@ typedef struct __Gtk_EF_Relachements
     GtkTreeStore    *relachements;
     GtkListStore    *liste_relachements;
 } Gtk_EF_Relachements;
+
+typedef struct __Gtk_EF_Resultats
+{
+    GtkBuilder      *builder;
+    GtkWidget       *window;
+} Gtk_EF_Resultats;
 #endif
 
 typedef enum __Type_Element // La liste des différents éléments de type de barres gérés par le
@@ -774,6 +780,7 @@ typedef struct __List_Gtk
     Gtk_EF_Materiaux    ef_materiaux;
     Gtk_1992_1_1_Materiaux  _1992_1_1_materiaux;
     Gtk_EF_Relachements ef_relachements;
+    Gtk_EF_Resultats    ef_resultats;
     Comp_Gtk            comp;      // tous les composants grahpiques
 } List_Gtk;
 #endif
