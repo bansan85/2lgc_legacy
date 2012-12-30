@@ -566,11 +566,11 @@ G_MODULE_EXPORT gboolean EF_noeuds_free(Projet *projet)
 {
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
+    BUG(EF_calculs_free(projet), FALSE);
+    
     // Trivial
     g_list_foreach(projet->ef_donnees.noeuds, (GFunc)EF_noeuds_free_foreach, projet);
     g_list_free(projet->ef_donnees.noeuds);
-    
-    BUG(EF_calculs_free(projet), FALSE);
     
     return TRUE;
 }
