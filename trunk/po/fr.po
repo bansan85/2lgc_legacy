@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2012-12-29 21:15+0100\n"
-"PO-Revision-Date: 2012-12-29 21:16+0100\n"
+"POT-Creation-Date: 2012-12-30 12:01+0100\n"
+"PO-Revision-Date: 2012-12-30 12:03+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -521,6 +521,15 @@ msgstr "Actions..."
 
 msgid "Groupes..."
 msgstr "Groupes..."
+
+msgid "Résultats"
+msgstr "Résultats"
+
+msgid "Calculer"
+msgstr "Calculer"
+
+msgid "Afficher"
+msgstr "Afficher"
 
 msgid "Impossible de scinder une fonction vide\n"
 msgstr "Impossible de scinder une fonction vide\n"
