@@ -190,6 +190,13 @@ typedef struct __Gtk_EF_Relachements
 #endif
 
 
+typedef enum __Filtres
+{
+    FILTRE_AUCUN,
+    FILTRE_NOEUD_APPUI
+} Filtres;
+
+
 typedef enum __Colonne_Resultats
 {
     COLRES_NUM_NOEUDS,          // Numéro des noeuds
@@ -209,6 +216,7 @@ typedef struct __Gtk_EF_Resultats_Tableau
     GtkListStore        *list_store;
     
     Colonne_Resultats   *col_tab;
+    Filtres             filtre;
 } Gtk_EF_Resultats_Tableau;
 
 
