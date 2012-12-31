@@ -7,6 +7,7 @@
             <object class="GtkMenuItem" id="EF_resultats_menu_reaction_appui">
                 <property name="label" translatable="yes">Réactions d'appuis</property>
                 <property name="visible">True</property>
+                <signal name="activate" handler="EF_gtk_resultats_add_page"/>
             </object>
         </child>
     </object>

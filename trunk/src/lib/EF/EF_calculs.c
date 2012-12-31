@@ -1463,5 +1463,8 @@ G_MODULE_EXPORT gboolean EF_calculs_free(Projet *projet)
         list_parcours = g_list_next(list_parcours);
     }
     
+#ifdef ENABLE_GTK
+    gtk_widget_set_sensitive(projet->list_gtk.comp.menu_resultats_afficher, FALSE);
+#endif
     return TRUE;
 }

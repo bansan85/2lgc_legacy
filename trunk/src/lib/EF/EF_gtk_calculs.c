@@ -46,6 +46,8 @@ G_MODULE_EXPORT void EF_gtk_calculs_calculer(GtkMenuItem *menuitem __attribute__
     BUG(EF_calculs_genere_mat_rig(projet), );
     BUG(EF_calculs_resoud_charge(projet, 0), );
     
+    gtk_widget_set_sensitive(projet->list_gtk.comp.menu_resultats_afficher, TRUE);
+    
     return;
 }
 

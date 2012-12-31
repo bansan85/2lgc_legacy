@@ -102,6 +102,7 @@ G_MODULE_EXPORT Projet* projet_init(Type_Pays pays)
     projet->list_gtk._1992_1_1_materiaux.builder = NULL;
     projet->list_gtk.ef_relachements.builder = NULL;
     projet->list_gtk.ef_resultats.builder = NULL;
+    projet->list_gtk.ef_resultats.tableaux = NULL;
 #endif
     
     projet->ef_donnees.c = &(projet->ef_donnees.Common);
@@ -298,6 +299,7 @@ G_MODULE_EXPORT gboolean projet_free(Projet *projet)
 #ifdef ENABLE_GTK
     if (projet->list_gtk.m3d.data != NULL)
         BUG(m3d_free(projet), FALSE);
+    EF_gtk_resultats_free(projet);
 #endif
     
     cholmod_finish(projet->ef_donnees.c);
