@@ -99,6 +99,7 @@ typedef struct __Gtk_EF_Charge_Noeud
     unsigned int    charge;
 } Gtk_EF_Charge_Noeud;
 
+
 typedef struct __Gtk_EF_Charge_Barre_Ponctuelle
 {
     GtkBuilder      *builder;
@@ -107,6 +108,7 @@ typedef struct __Gtk_EF_Charge_Barre_Ponctuelle
     unsigned int    charge;
     GtkComboBox     *combobox_charge;
 } Gtk_EF_Charge_Barre_Ponctuelle;
+
 
 typedef struct __Gtk_EF_Charge_Barre_Repartie_Uniforme
 {
@@ -121,6 +123,7 @@ typedef struct __Gtk_EF_Charge_Barre_Repartie_Uniforme
     GtkWidget       *check_button_repere_global;
     GtkWidget       *check_button_projection;
 } Gtk_EF_Charge_Barre_Repartie_Uniforme;
+
 
 typedef struct __Gtk_EF_Noeud
 {
@@ -144,6 +147,7 @@ typedef struct __Gtk_EF_Barres
     GtkListStore    *liste_types;
 } Gtk_EF_Barres;
 
+
 typedef struct __Gtk_EF_Appuis
 {
     GtkBuilder      *builder;
@@ -154,6 +158,7 @@ typedef struct __Gtk_EF_Appuis
     GtkListStore    *liste_type_appui;
 } Gtk_EF_Appuis;
 
+
 typedef struct __Gtk_EF_Sections
 {
     GtkBuilder      *builder;
@@ -162,6 +167,7 @@ typedef struct __Gtk_EF_Sections
     GtkTreeStore    *sections;
     GtkListStore    *liste_sections;
 } Gtk_EF_Sections;
+
 
 typedef struct __Gtk_EF_Materiaux
 {
@@ -172,6 +178,7 @@ typedef struct __Gtk_EF_Materiaux
     GtkListStore    *liste_materiaux;
 } Gtk_EF_Materiaux;
 
+
 typedef struct __Gtk_EF_Relachements
 {
     GtkBuilder      *builder;
@@ -180,13 +187,41 @@ typedef struct __Gtk_EF_Relachements
     GtkTreeStore    *relachements;
     GtkListStore    *liste_relachements;
 } Gtk_EF_Relachements;
+#endif
+
+
+typedef enum __Colonne_Resultats
+{
+    COLRES_NUM_NOEUDS,          // Numéro des noeuds
+    COLRES_REACTION_APPUI_FX,   // Réaction d'appui, Fx
+    COLRES_REACTION_APPUI_FY,   // Réaction d'appui, Fy
+    COLRES_REACTION_APPUI_FZ,   // Réaction d'appui, Fz
+    COLRES_REACTION_APPUI_MX,   // Réaction d'appui, Mx
+    COLRES_REACTION_APPUI_MY,   // Réaction d'appui, My
+    COLRES_REACTION_APPUI_MZ    // Réaction d'appui, Mz
+} Colonne_Resultats;
+
+
+#ifdef ENABLE_GTK
+typedef struct __Gtk_EF_Resultats_Tableau
+{
+    GtkTreeView         *treeview;
+    GtkListStore        *list_store;
+    
+    Colonne_Resultats   *col_tab;
+} Gtk_EF_Resultats_Tableau;
+
 
 typedef struct __Gtk_EF_Resultats
 {
     GtkBuilder      *builder;
     GtkWidget       *window;
+    
+    GtkNotebook     *notebook;
+    GList           *tableaux;
 } Gtk_EF_Resultats;
 #endif
+
 
 typedef enum __Type_Element // La liste des différents éléments de type de barres gérés par le
 {                           // module élément fini.
@@ -318,9 +353,11 @@ typedef struct __EF_Noeud
 #define ENTETE_ITER
 #endif
 
+
 #define ENTETE_CHARGES \
     Barre_Charge_Type   type; \
     unsigned int        numero;
+
 
 #define ENTETE_CHARGES_NOEUDS \
     ENTETE_CHARGES \
@@ -328,11 +365,13 @@ typedef struct __EF_Noeud
     char                *nom; \
     GList               *noeuds;
 
+
 #define ENTETE_CHARGES_BARRES \
     ENTETE_CHARGES \
     ENTETE_ITER \
     char                *nom; \
     GList               *barres;
+
 
 typedef struct __Charge_Noeud
 {
@@ -508,6 +547,7 @@ typedef struct __Gtk_1992_1_1_Materiaux
     Beton_Materiau  *materiau;
 } Gtk_1992_1_1_Materiaux;
 #endif
+
 
 typedef struct __Beton_Barre
 {

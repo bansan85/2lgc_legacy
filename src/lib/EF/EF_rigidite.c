@@ -67,29 +67,19 @@ G_MODULE_EXPORT gboolean EF_rigidite_free(Projet *projet)
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
     // Trivial
-    if (projet->ef_donnees.triplet_rigidite_partielle != NULL)
-    {
-        cholmod_free_triplet(&projet->ef_donnees.triplet_rigidite_partielle, projet->ef_donnees.c);
-        projet->ef_donnees.triplet_rigidite_partielle = NULL;
-    }
-    if (projet->ef_donnees.triplet_rigidite_complete != NULL)
-    {
-        cholmod_free_triplet(&projet->ef_donnees.triplet_rigidite_complete, projet->ef_donnees.c);
-        projet->ef_donnees.triplet_rigidite_complete = NULL;
-    }
+    cholmod_free_triplet(&projet->ef_donnees.triplet_rigidite_partielle, projet->ef_donnees.c);
+    projet->ef_donnees.triplet_rigidite_partielle = NULL;
+    cholmod_free_triplet(&projet->ef_donnees.triplet_rigidite_complete, projet->ef_donnees.c);
+    projet->ef_donnees.triplet_rigidite_complete = NULL;
     
-    if (projet->ef_donnees.rigidite_matrice_complete != NULL)
-    {
-        cholmod_free_sparse(&(projet->ef_donnees.rigidite_matrice_complete), projet->ef_donnees.c);
-        projet->ef_donnees.rigidite_matrice_complete = NULL;
-    }
-    if (projet->ef_donnees.rigidite_matrice_partielle != NULL)
-    {
-        cholmod_free_sparse(&(projet->ef_donnees.rigidite_matrice_partielle), projet->ef_donnees.c);
-        projet->ef_donnees.rigidite_matrice_partielle = NULL;
-    }
+    cholmod_free_sparse(&(projet->ef_donnees.rigidite_matrice_complete), projet->ef_donnees.c);
+    projet->ef_donnees.rigidite_matrice_complete = NULL;
+    cholmod_free_sparse(&(projet->ef_donnees.rigidite_matrice_partielle), projet->ef_donnees.c);
+    projet->ef_donnees.rigidite_matrice_partielle = NULL;
+    
     umfpack_di_free_numeric(&projet->ef_donnees.numeric);
     projet->ef_donnees.numeric = NULL;
+    
     free(projet->ef_donnees.ap);
     projet->ef_donnees.ap = NULL;
     free(projet->ef_donnees.ai);

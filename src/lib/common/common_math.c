@@ -96,13 +96,13 @@ G_MODULE_EXPORT void common_math_double_to_char(double nombre, char *dest, int d
  * Valeur renvoyée : Aucune.
  */
 {
-    double  test;
-    int     width;
+/*    double  test;
+    int     width;*/
     
-    if (decimales > 20)
-        decimales = 20;
+    if (decimales > 15)
+        decimales = 15;
     
-    // Si le nombre est supérieur à 1e15, on affiche sous forme scientifique
+/*    // Si le nombre est supérieur à 1e15, on affiche sous forme scientifique
     if (ABS(nombre) > 1e15)
     {
         for (width = 0; width<=decimales; width++)
@@ -123,7 +123,8 @@ G_MODULE_EXPORT void common_math_double_to_char(double nombre, char *dest, int d
             if ((fabs(nombre)*0.999999999999999 <= fabs(test)) && (fabs(test) <= fabs(nombre)*1.000000000000001))
                 break;
         }
-    }
+    }*/
+    sprintf(dest, "%.*lf", decimales, nombre);
     
     return;
 }
