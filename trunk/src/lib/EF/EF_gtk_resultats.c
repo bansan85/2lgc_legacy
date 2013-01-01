@@ -596,7 +596,9 @@ G_MODULE_EXPORT void EF_gtk_resultats_add_page_type(GtkMenuItem *menuitem, Proje
         
         res->filtre = FILTRE_AUCUN;
         
-        BUG(EF_gtk_resultats_add_page(res, gtk_menu_item_get_label(menuitem), projet), );
+        BUGMSG(res->nom = g_strdup_printf("%s", gtk_menu_item_get_label(menuitem)), , gettext("Erreur d'allocation mémoire.\n"));
+        
+        BUG(EF_gtk_resultats_add_page(res, res->nom, projet), );
     }
     else if (strcmp(gtk_menu_item_get_label(menuitem), gettext("Réactions d'appuis")) == 0)
     {
@@ -612,7 +614,9 @@ G_MODULE_EXPORT void EF_gtk_resultats_add_page_type(GtkMenuItem *menuitem, Proje
         
         res->filtre = FILTRE_NOEUD_APPUI;
         
-        BUG(EF_gtk_resultats_add_page(res, gtk_menu_item_get_label(menuitem), projet), );
+        BUGMSG(res->nom = g_strdup_printf("%s", gtk_menu_item_get_label(menuitem)), , gettext("Erreur d'allocation mémoire.\n"));
+        
+        BUG(EF_gtk_resultats_add_page(res, res->nom, projet), );
     }
     else if (strcmp(gtk_menu_item_get_label(menuitem), gettext("Déplacements")) == 0)
     {
@@ -628,7 +632,9 @@ G_MODULE_EXPORT void EF_gtk_resultats_add_page_type(GtkMenuItem *menuitem, Proje
         
         res->filtre = FILTRE_AUCUN;
         
-        BUG(EF_gtk_resultats_add_page(res, gtk_menu_item_get_label(menuitem), projet), );
+        BUGMSG(res->nom = g_strdup_printf("%s", gtk_menu_item_get_label(menuitem)), , gettext("Erreur d'allocation mémoire.\n"));
+        
+        BUG(EF_gtk_resultats_add_page(res, res->nom, projet), );
     }
     
     return;
@@ -683,6 +689,7 @@ G_MODULE_EXPORT void EF_gtk_resultats_free(Projet *projet)
         Gtk_EF_Resultats_Tableau    *res = projet->list_gtk.ef_resultats.tableaux->data;
         
         free(res->col_tab);
+        free(res->nom);
         free(res);
         
         projet->list_gtk.ef_resultats.tableaux = g_list_delete_link(projet->list_gtk.ef_resultats.tableaux, projet->list_gtk.ef_resultats.tableaux);

@@ -228,6 +228,7 @@ typedef struct __Gtk_EF_Resultats_Tableau
     
     Colonne_Resultats   *col_tab;
     Filtres             filtre;
+    char                *nom;
 } Gtk_EF_Resultats_Tableau;
 
 
