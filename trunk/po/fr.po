@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2013-01-01 19:25+0100\n"
-"PO-Revision-Date: 2013-01-01 20:02+0100\n"
+"POT-Creation-Date: 2013-01-01 22:29+0100\n"
+"PO-Revision-Date: 2013-01-01 22:30+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -294,6 +294,9 @@ msgstr "Réactions d'appuis"
 msgid "Déplacements"
 msgstr "Déplacements"
 
+msgid "Efforts dans les barres"
+msgstr "Efforts dans les barres"
+
 msgid "Résultats"
 msgstr "Résultats"
 
@@ -542,6 +545,9 @@ msgstr "Impossible de scinder une fonction vide\n"
 
 msgid "Fonction indéfinie.\n"
 msgstr "Fonction indéfinie.\n"
+
+msgid "%sde %.*lfm à %.*lfm : "
+msgstr "%sde %.*lfm à %.*lfm : "
 
 msgid "Le fichier '%s' est introuvable ou corrompu.\n"
 msgstr "Le fichier '%s' est introuvable ou corrompu.\n"
@@ -946,11 +952,23 @@ msgstr "Impossible de supprimer la section car elle est utilisée par les barres
 msgid "Le filtre %d est inconnu.\n"
 msgstr "Le filtre %d est inconnu.\n"
 
+msgid "La colonne des résultats %d ne peut être appliquée aux noeuds."
+msgstr "La colonne des résultats %d ne peut être appliquée aux noeuds."
+
 msgid "La colonne des résultats %d est inconnue.\n"
 msgstr "La colonne des résultats %d est inconnue.\n"
 
+msgid "Le filtre %d ne peut être appliqué aux barres.\n"
+msgstr "Le filtre %d ne peut être appliqué aux barres.\n"
+
+msgid "La colonne des résultats %d ne peut être appliquée aux barres."
+msgstr "La colonne des résultats %d ne peut être appliquée aux barres."
+
 msgid "La liste des noeuds doit être spécifiée en tant que première colonne.\n"
 msgstr "La liste des noeuds doit être spécifiée en tant que première colonne.\n"
+
+msgid "La liste des barres doit être spécifiée en tant que première colonne.\n"
+msgstr "La liste des barres doit être spécifiée en tant que première colonne.\n"
 
 msgid "La première colonne est réservée à la liste des noeuds et des barres.\n"
 msgstr "La première colonne est réservée à la liste des noeuds et des barres.\n"
@@ -1008,6 +1026,24 @@ msgstr "Ry [rad]"
 
 msgid "Rz [rad]"
 msgstr "Rz [rad]"
+
+msgid "La longueur des barres ne peut être affichée que si la première colonne affiche les numéros des barres.\n"
+msgstr "La longueur des barres ne peut être affichée que si la première colonne affiche les numéros des barres.\n"
+
+msgid "L [m]"
+msgstr "L [m]"
+
+msgid "Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"
+msgstr "Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"
+
+msgid "N [N]"
+msgstr "N [N]"
+
+msgid "Ty [N]"
+msgstr "Ty [N]"
+
+msgid "Tz [N]"
+msgstr "Tz [N]"
 
 msgid "La liste des types de barre est indéfinie.\n"
 msgstr "La liste des types de barre est indéfinie.\n"
