@@ -28,6 +28,7 @@
 #include "common_projet.h"
 #include "common_erreurs.h"
 #include "common_gtk.h"
+#include "EF_noeuds.h"
 
 G_MODULE_EXPORT void EF_gtk_resultats_fermer(GtkButton *button __attribute__((unused)),
   Projet *projet)
@@ -155,6 +156,48 @@ gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, const char *no
                 col_type[i-1] = G_TYPE_INT;
                 break;
             }
+            case COLRES_NOEUDS_X :
+            {
+                BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                BUGMSG(res->col_tab[1] == COLRES_NUM_NOEUDS, FALSE, gettext("La position en %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"), "x");
+                cell = gtk_cell_renderer_text_new();
+                gtk_cell_renderer_set_alignment(cell, 1.0, 0.5);
+                column = gtk_tree_view_column_new_with_attributes(gettext("x [m]"), cell, "text", i-1, NULL);
+                gtk_tree_view_column_set_alignment(column, 0.5);
+                gtk_tree_view_append_column(res->treeview, column);
+                g_object_set_data(G_OBJECT(cell), "column", GINT_TO_POINTER(i-1));
+                gtk_tree_view_column_set_cell_data_func(column, cell, common_gtk_render_double, GINT_TO_POINTER(DECIMAL_DISTANCE), NULL);
+                col_type[i-1] = G_TYPE_DOUBLE;
+                break;
+            }
+            case COLRES_NOEUDS_Y :
+            {
+                BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                BUGMSG(res->col_tab[1] == COLRES_NUM_NOEUDS, FALSE, gettext("La position en %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"), "y");
+                cell = gtk_cell_renderer_text_new();
+                gtk_cell_renderer_set_alignment(cell, 1.0, 0.5);
+                column = gtk_tree_view_column_new_with_attributes(gettext("y [m]"), cell, "text", i-1, NULL);
+                gtk_tree_view_column_set_alignment(column, 0.5);
+                gtk_tree_view_append_column(res->treeview, column);
+                g_object_set_data(G_OBJECT(cell), "column", GINT_TO_POINTER(i-1));
+                gtk_tree_view_column_set_cell_data_func(column, cell, common_gtk_render_double, GINT_TO_POINTER(DECIMAL_DISTANCE), NULL);
+                col_type[i-1] = G_TYPE_DOUBLE;
+                break;
+            }
+            case COLRES_NOEUDS_Z :
+            {
+                BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                BUGMSG(res->col_tab[1] == COLRES_NUM_NOEUDS, FALSE, gettext("La position en %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"), "z");
+                cell = gtk_cell_renderer_text_new();
+                gtk_cell_renderer_set_alignment(cell, 1.0, 0.5);
+                column = gtk_tree_view_column_new_with_attributes(gettext("z [m]"), cell, "text", i-1, NULL);
+                gtk_tree_view_column_set_alignment(column, 0.5);
+                gtk_tree_view_append_column(res->treeview, column);
+                g_object_set_data(G_OBJECT(cell), "column", GINT_TO_POINTER(i-1));
+                gtk_tree_view_column_set_cell_data_func(column, cell, common_gtk_render_double, GINT_TO_POINTER(DECIMAL_DISTANCE), NULL);
+                col_type[i-1] = G_TYPE_DOUBLE;
+                break;
+            }
             case COLRES_REACTION_APPUI_FX :
             {
                 BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
@@ -254,7 +297,7 @@ gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, const char *no
     gtk_tree_view_append_column(res->treeview, column);
     col_type[res->col_tab[0]] = G_TYPE_STRING;
     
-    res->list_store = gtk_list_store_newv(res->col_tab[0]+1, col_type);
+    res->list_store = gtk_list_store_newv((gint)res->col_tab[0]+1, col_type);
     free(col_type);
     gtk_tree_view_set_model(res->treeview, GTK_TREE_MODEL(res->list_store));
     g_object_unref(res->list_store);
@@ -306,6 +349,33 @@ gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, const char *no
                         case COLRES_NUM_NOEUDS :
                         {
                             gtk_list_store_set(res->list_store, &Iter, j-1, noeud->numero, -1);
+                            break;
+                        }
+                        case COLRES_NOEUDS_X :
+                        {
+                            EF_Point    *point = EF_noeuds_renvoie_position(noeud);
+                            
+                            gtk_list_store_set(res->list_store, &Iter, j-1, point->x, -1);
+                            
+                            free(point);
+                            break;
+                        }
+                        case COLRES_NOEUDS_Y :
+                        {
+                            EF_Point    *point = EF_noeuds_renvoie_position(noeud);
+                            
+                            gtk_list_store_set(res->list_store, &Iter, j-1, point->y, -1);
+                            
+                            free(point);
+                            break;
+                        }
+                        case COLRES_NOEUDS_Z :
+                        {
+                            EF_Point    *point = EF_noeuds_renvoie_position(noeud);
+                            
+                            gtk_list_store_set(res->list_store, &Iter, j-1, point->z, -1);
+                            
+                            free(point);
                             break;
                         }
                         case COLRES_REACTION_APPUI_FX :
@@ -378,7 +448,20 @@ G_MODULE_EXPORT void EF_gtk_resultats_add_page_type(GtkMenuItem *menuitem, Proje
     BUGMSG(projet->list_gtk.ef_resultats.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Résultats");
     BUGMSG(res = malloc(sizeof(Gtk_EF_Resultats_Tableau)), , gettext("Erreur d'allocation mémoire.\n"));
     
-    if (strcmp(gtk_menu_item_get_label(menuitem), gettext("Réactions d'appuis")) == 0)
+    if (strcmp(gtk_menu_item_get_label(menuitem), gettext("Noeuds")) == 0)
+    {
+        res->col_tab = malloc(sizeof(Colonne_Resultats)*5);
+        res->col_tab[0] = 4;
+        res->col_tab[1] = COLRES_NUM_NOEUDS;
+        res->col_tab[2] = COLRES_NOEUDS_X;
+        res->col_tab[3] = COLRES_NOEUDS_Y;
+        res->col_tab[4] = COLRES_NOEUDS_Z;
+        
+        res->filtre = FILTRE_AUCUN;
+        
+        BUG(EF_gtk_resultats_add_page(res, gtk_menu_item_get_label(menuitem), projet), );
+    }
+    else if (strcmp(gtk_menu_item_get_label(menuitem), gettext("Réactions d'appuis")) == 0)
     {
         res->col_tab = malloc(sizeof(Colonne_Resultats)*8);
         res->col_tab[0] = 7;

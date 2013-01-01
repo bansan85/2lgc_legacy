@@ -200,6 +200,9 @@ typedef enum __Filtres
 typedef enum __Colonne_Resultats
 {
     COLRES_NUM_NOEUDS,          // Numéro des noeuds
+    COLRES_NOEUDS_X,            // Coordonnées des noeuds, x
+    COLRES_NOEUDS_Y,            // Coordonnées des noeuds, y
+    COLRES_NOEUDS_Z,            // Coordonnées des noeuds, z
     COLRES_REACTION_APPUI_FX,   // Réaction d'appui, Fx
     COLRES_REACTION_APPUI_FY,   // Réaction d'appui, Fy
     COLRES_REACTION_APPUI_FZ,   // Réaction d'appui, Fz
