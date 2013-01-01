@@ -428,42 +428,42 @@ G_MODULE_EXPORT char* common_fonction_renvoie(Fonction* fonction, int decimales)
         if (ABS(fonction->troncons[i].x1) > minimum)
         {
             tmp = ajout;
-            BUGMSG(ajout = g_strdup_printf("%s%s%.*lf*x", ajout, fonction->troncons[i].x1>0 ? "+" : "", decimales, fonction->troncons[i].x1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(ajout = g_strdup_printf("%s%s%.*lf*x", ajout, fonction->troncons[i].x1>0 ? (strcmp(ajout, "") == 0 ? "" : "+") : "", decimales, fonction->troncons[i].x1), NULL, gettext("Erreur d'allocation mémoire.\n"));
             free(tmp);
         }
         
         if (ABS(fonction->troncons[i].x2) > minimum)
         {
             tmp = ajout;
-            BUGMSG(ajout = g_strdup_printf("%s%s%.*lf*x²", ajout, fonction->troncons[i].x2>0 ? "+" : "", decimales, fonction->troncons[i].x2), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(ajout = g_strdup_printf("%s%s%.*lf*x²", ajout, fonction->troncons[i].x2>0 ? (strcmp(ajout, "") == 0 ? "" : "+") : "", decimales, fonction->troncons[i].x2), NULL, gettext("Erreur d'allocation mémoire.\n"));
             free(tmp);
         }
         
         if (ABS(fonction->troncons[i].x3) > minimum)
         {
             tmp = ajout;
-            BUGMSG(ajout = g_strdup_printf("%s%s%.*lf*x³", ajout, fonction->troncons[i].x3>0 ? "+" : "", decimales, fonction->troncons[i].x3), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(ajout = g_strdup_printf("%s%s%.*lf*x³", ajout, fonction->troncons[i].x3>0 ? (strcmp(ajout, "") == 0 ? "" : "+") : "", decimales, fonction->troncons[i].x3), NULL, gettext("Erreur d'allocation mémoire.\n"));
             free(tmp);
         }
         
         if (ABS(fonction->troncons[i].x4) > minimum)
         {
             tmp = ajout;
-            BUGMSG(ajout = g_strdup_printf("%s%s%.*lf*x⁴", ajout, fonction->troncons[i].x4>0 ? "+" : "", decimales, fonction->troncons[i].x4), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(ajout = g_strdup_printf("%s%s%.*lf*x⁴", ajout, fonction->troncons[i].x4>0 ? (strcmp(ajout, "") == 0 ? "" : "+") : "", decimales, fonction->troncons[i].x4), NULL, gettext("Erreur d'allocation mémoire.\n"));
             free(tmp);
         }
         
         if (ABS(fonction->troncons[i].x5) > minimum)
         {
             tmp = ajout;
-            BUGMSG(ajout = g_strdup_printf("%s%s%.*lf*x⁵", ajout, fonction->troncons[i].x5>0 ? "+" : "", decimales, fonction->troncons[i].x5), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(ajout = g_strdup_printf("%s%s%.*lf*x⁵", ajout, fonction->troncons[i].x5>0 ? (strcmp(ajout, "") == 0 ? "" : "+") : "", decimales, fonction->troncons[i].x5), NULL, gettext("Erreur d'allocation mémoire.\n"));
             free(tmp);
         }
         
         if (ABS(fonction->troncons[i].x6) > minimum)
         {
             tmp = ajout;
-            BUGMSG(ajout = g_strdup_printf("%s%s%.*lf*x⁶", ajout, fonction->troncons[i].x6>0 ? "+" : "", decimales, fonction->troncons[i].x6), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(ajout = g_strdup_printf("%s%s%.*lf*x⁶", ajout, fonction->troncons[i].x6>0 ? (strcmp(ajout, "") == 0 ? "" : "+") : "", decimales, fonction->troncons[i].x6), NULL, gettext("Erreur d'allocation mémoire.\n"));
             free(tmp);
         }
         

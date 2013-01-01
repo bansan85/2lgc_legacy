@@ -224,7 +224,13 @@ typedef enum __Colonne_Resultats
     COLRES_BARRES_EQ_TZ,        // Equation de l'effort tranchant en z
     COLRES_BARRES_EQ_MX,        // Equation du moment de torsion
     COLRES_BARRES_EQ_MY,        // Equation du moment fléchissant en y
-    COLRES_BARRES_EQ_MZ         // Equation du moment fléchissant en z
+    COLRES_BARRES_EQ_MZ,        // Equation du moment fléchissant en z
+    COLRES_DEFORMATION_UX,      // Déformation des barres, Ux
+    COLRES_DEFORMATION_UY,      // Déformation des barres, Uy
+    COLRES_DEFORMATION_UZ,      // Déformation des barres, Uz
+    COLRES_DEFORMATION_RX,      // Déformation des barres, Rx
+    COLRES_DEFORMATION_RY,      // Déformation des barres, Ry
+    COLRES_DEFORMATION_RZ       // Déformation des barres, Rz
 } Colonne_Resultats;
 
 
