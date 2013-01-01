@@ -272,6 +272,12 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                         case COLRES_BARRES_EQ_MX :
                         case COLRES_BARRES_EQ_MY :
                         case COLRES_BARRES_EQ_MZ :
+                        case COLRES_DEFORMATION_UX :
+                        case COLRES_DEFORMATION_UY :
+                        case COLRES_DEFORMATION_UZ :
+                        case COLRES_DEFORMATION_RX :
+                        case COLRES_DEFORMATION_RY :
+                        case COLRES_DEFORMATION_RZ :
                         {
                             BUGMSG(NULL, FALSE, gettext("La colonne des résultats %d ne peut être appliquée aux noeuds."), res->col_tab[j]);
                             break;
@@ -399,6 +405,48 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                         case COLRES_BARRES_EQ_MZ :
                         {
                             char *tmp = common_fonction_renvoie(action_en_cours->fonctions_efforts[5][i], DECIMAL_MOMENT);
+                            gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
+                            free(tmp);
+                            break;
+                        }
+                        case COLRES_DEFORMATION_UX :
+                        {
+                            char *tmp = common_fonction_renvoie(action_en_cours->fonctions_deformation[0][i], DECIMAL_DEPLACEMENT);
+                            gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
+                            free(tmp);
+                            break;
+                        }
+                        case COLRES_DEFORMATION_UY :
+                        {
+                            char *tmp = common_fonction_renvoie(action_en_cours->fonctions_deformation[1][i], DECIMAL_DEPLACEMENT);
+                            gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
+                            free(tmp);
+                            break;
+                        }
+                        case COLRES_DEFORMATION_UZ :
+                        {
+                            char *tmp = common_fonction_renvoie(action_en_cours->fonctions_deformation[2][i], DECIMAL_DEPLACEMENT);
+                            gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
+                            free(tmp);
+                            break;
+                        }
+                        case COLRES_DEFORMATION_RX :
+                        {
+                            char *tmp = common_fonction_renvoie(action_en_cours->fonctions_rotation[0][i], DECIMAL_ROTATION);
+                            gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
+                            free(tmp);
+                            break;
+                        }
+                        case COLRES_DEFORMATION_RY :
+                        {
+                            char *tmp = common_fonction_renvoie(action_en_cours->fonctions_rotation[1][i], DECIMAL_ROTATION);
+                            gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
+                            free(tmp);
+                            break;
+                        }
+                        case COLRES_DEFORMATION_RZ :
+                        {
+                            char *tmp = common_fonction_renvoie(action_en_cours->fonctions_rotation[2][i], DECIMAL_ROTATION);
                             gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
                             free(tmp);
                             break;
@@ -767,6 +815,72 @@ gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, Projet *projet
                 col_type[i-1] = G_TYPE_STRING;
                 break;
             }
+            case COLRES_DEFORMATION_UX :
+            {
+                BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                BUGMSG(res->col_tab[1] == COLRES_NUM_BARRES, FALSE, gettext("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"));
+                cell = gtk_cell_renderer_text_new();
+                column = gtk_tree_view_column_new_with_attributes(gettext("Ux [m]"), cell, "text", i-1, NULL);
+                gtk_tree_view_column_set_alignment(column, 0.5);
+                gtk_tree_view_append_column(res->treeview, column);
+                col_type[i-1] = G_TYPE_STRING;
+                break;
+            }
+            case COLRES_DEFORMATION_UY :
+            {
+                BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                BUGMSG(res->col_tab[1] == COLRES_NUM_BARRES, FALSE, gettext("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"));
+                cell = gtk_cell_renderer_text_new();
+                column = gtk_tree_view_column_new_with_attributes(gettext("Uy [m]"), cell, "text", i-1, NULL);
+                gtk_tree_view_column_set_alignment(column, 0.5);
+                gtk_tree_view_append_column(res->treeview, column);
+                col_type[i-1] = G_TYPE_STRING;
+                break;
+            }
+            case COLRES_DEFORMATION_UZ :
+            {
+                BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                BUGMSG(res->col_tab[1] == COLRES_NUM_BARRES, FALSE, gettext("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"));
+                cell = gtk_cell_renderer_text_new();
+                column = gtk_tree_view_column_new_with_attributes(gettext("Uz [m]"), cell, "text", i-1, NULL);
+                gtk_tree_view_column_set_alignment(column, 0.5);
+                gtk_tree_view_append_column(res->treeview, column);
+                col_type[i-1] = G_TYPE_STRING;
+                break;
+            }
+            case COLRES_DEFORMATION_RX :
+            {
+                BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                BUGMSG(res->col_tab[1] == COLRES_NUM_BARRES, FALSE, gettext("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"));
+                cell = gtk_cell_renderer_text_new();
+                column = gtk_tree_view_column_new_with_attributes(gettext("Rx [m]"), cell, "text", i-1, NULL);
+                gtk_tree_view_column_set_alignment(column, 0.5);
+                gtk_tree_view_append_column(res->treeview, column);
+                col_type[i-1] = G_TYPE_STRING;
+                break;
+            }
+            case COLRES_DEFORMATION_RY :
+            {
+                BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                BUGMSG(res->col_tab[1] == COLRES_NUM_BARRES, FALSE, gettext("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"));
+                cell = gtk_cell_renderer_text_new();
+                column = gtk_tree_view_column_new_with_attributes(gettext("Ry [m]"), cell, "text", i-1, NULL);
+                gtk_tree_view_column_set_alignment(column, 0.5);
+                gtk_tree_view_append_column(res->treeview, column);
+                col_type[i-1] = G_TYPE_STRING;
+                break;
+            }
+            case COLRES_DEFORMATION_RZ :
+            {
+                BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                BUGMSG(res->col_tab[1] == COLRES_NUM_BARRES, FALSE, gettext("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"));
+                cell = gtk_cell_renderer_text_new();
+                column = gtk_tree_view_column_new_with_attributes(gettext("Rz [m]"), cell, "text", i-1, NULL);
+                gtk_tree_view_column_set_alignment(column, 0.5);
+                gtk_tree_view_append_column(res->treeview, column);
+                col_type[i-1] = G_TYPE_STRING;
+                break;
+            }
             default :
             {
                 BUGMSG(NULL, FALSE, gettext("La colonne des résultats %d est inconnue.\n"), res->col_tab[i]);
@@ -895,6 +1009,27 @@ G_MODULE_EXPORT void EF_gtk_resultats_add_page_type(GtkMenuItem *menuitem, Proje
         res->col_tab[6] = COLRES_BARRES_EQ_MX;
         res->col_tab[7] = COLRES_BARRES_EQ_MY;
         res->col_tab[8] = COLRES_BARRES_EQ_MZ;
+        
+        res->filtre = FILTRE_AUCUN;
+        
+        BUGMSG(res->nom = g_strdup_printf("%s", gtk_menu_item_get_label(menuitem)), , gettext("Erreur d'allocation mémoire.\n"));
+        
+        BUG(EF_gtk_resultats_add_page(res, projet), );
+        
+        projet->list_gtk.ef_resultats.tableaux = g_list_append(projet->list_gtk.ef_resultats.tableaux, res);
+    }
+    else if (strcmp(gtk_menu_item_get_label(menuitem), gettext("Déformations des barres")) == 0)
+    {
+        BUGMSG(res->col_tab = malloc(sizeof(Colonne_Resultats)*9), , gettext("Erreur d'allocation mémoire.\n"));
+        res->col_tab[0] = 8;
+        res->col_tab[1] = COLRES_NUM_BARRES;
+        res->col_tab[2] = COLRES_BARRES_LONGUEUR;
+        res->col_tab[3] = COLRES_DEFORMATION_UX;
+        res->col_tab[4] = COLRES_DEFORMATION_UY;
+        res->col_tab[5] = COLRES_DEFORMATION_UZ;
+        res->col_tab[6] = COLRES_DEFORMATION_RX;
+        res->col_tab[7] = COLRES_DEFORMATION_RY;
+        res->col_tab[8] = COLRES_DEFORMATION_RZ;
         
         res->filtre = FILTRE_AUCUN;
         
