@@ -202,6 +202,7 @@ typedef enum __Filtres
 typedef enum __Colonne_Resultats
 {
     COLRES_NUM_NOEUDS,          // Numéro des noeuds
+    COLRES_NUM_BARRES,          // Numéro des barres
     COLRES_NOEUDS_X,            // Coordonnées des noeuds, x
     COLRES_NOEUDS_Y,            // Coordonnées des noeuds, y
     COLRES_NOEUDS_Z,            // Coordonnées des noeuds, z
@@ -216,7 +217,8 @@ typedef enum __Colonne_Resultats
     COLRES_DEPLACEMENT_UZ,      // Déplacement, Uz
     COLRES_DEPLACEMENT_RX,      // Déplacement, Rx
     COLRES_DEPLACEMENT_RY,      // Déplacement, Ry
-    COLRES_DEPLACEMENT_RZ       // Déplacement, Rz
+    COLRES_DEPLACEMENT_RZ,      // Déplacement, Rz
+    COLRES_BARRES_LONGUEUR
 } Colonne_Resultats;
 
 

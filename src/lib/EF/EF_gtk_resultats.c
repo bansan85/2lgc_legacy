@@ -263,6 +263,97 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             gtk_list_store_set(res->list_store, &Iter, j-1, y[i*6+5], -1);
                             break;
                         }
+                        case COLRES_NUM_BARRES :
+                        case COLRES_BARRES_LONGUEUR :
+                        {
+                            BUGMSG(NULL, FALSE, gettext("La colonne des résultats %d ne peut être appliquée aux noeuds."), res->col_tab[j]);
+                            break;
+                        }
+                        default :
+                        {
+                            BUGMSG(NULL, FALSE, gettext("La colonne des résultats %d est inconnue.\n"), res->col_tab[j]);
+                            break;
+                        }
+                    }
+                }
+                gtk_list_store_set(res->list_store, &Iter, res->col_tab[0], "", -1);
+            }
+            
+            i++;
+            list_parcours = g_list_next(list_parcours);
+        }
+    }
+    
+    if (res->col_tab[1] == COLRES_NUM_BARRES)
+    {
+        GList   *list_parcours = projet->beton.barres;
+        
+        i = 0;
+        
+        while (list_parcours != NULL)
+        {
+            Beton_Barre *barre = list_parcours->data;
+            gboolean    ok;
+            
+            switch (res->filtre)
+            {
+                case FILTRE_AUCUN :
+                {
+                    ok = TRUE;
+                    break;
+                }
+                case FILTRE_NOEUD_APPUI :
+                {
+                    BUGMSG(NULL, FALSE, gettext("Le filtre %d ne peut être appliqué aux barres.\n"), res->filtre);
+                    break;
+                }
+                default :
+                {
+                    BUGMSG(NULL, FALSE, gettext("Le filtre %d est inconnu.\n"), res->filtre);
+                    break;
+                }
+            }
+            
+            if (ok)
+            {
+                GtkTreeIter     Iter;
+                unsigned int    j;
+                
+                gtk_list_store_append(res->list_store, &Iter);
+                for (j=1;j<=res->col_tab[0];j++)
+                {
+                    switch (res->col_tab[j])
+                    {
+                        case COLRES_NUM_NOEUDS :
+                        case COLRES_NOEUDS_X :
+                        case COLRES_NOEUDS_Y :
+                        case COLRES_NOEUDS_Z :
+                        case COLRES_REACTION_APPUI_FX :
+                        case COLRES_REACTION_APPUI_FY:
+                        case COLRES_REACTION_APPUI_FZ :
+                        case COLRES_REACTION_APPUI_MX :
+                        case COLRES_REACTION_APPUI_MY :
+                        case COLRES_REACTION_APPUI_MZ :
+                        case COLRES_DEPLACEMENT_UX :
+                        case COLRES_DEPLACEMENT_UY :
+                        case COLRES_DEPLACEMENT_UZ :
+                        case COLRES_DEPLACEMENT_RX :
+                        case COLRES_DEPLACEMENT_RY :
+                        case COLRES_DEPLACEMENT_RZ :
+                        {
+                            BUGMSG(NULL, FALSE, gettext("La colonne des résultats %d ne peut être appliquée aux barres."), res->col_tab[j]);
+                            break;
+                        }
+                        case COLRES_NUM_BARRES :
+                        {
+                            gtk_list_store_set(res->list_store, &Iter, j-1, barre->numero, -1);
+                            break;
+                        }
+                        case COLRES_BARRES_LONGUEUR :
+                        {
+                            gtk_list_store_set(res->list_store, &Iter, j-1, EF_noeuds_distance(barre->noeud_debut, barre->noeud_fin), -1);
+                            break;
+                        }
                         default :
                         {
                             BUGMSG(NULL, FALSE, gettext("La colonne des résultats %d est inconnue.\n"), res->col_tab[j]);
@@ -321,6 +412,17 @@ gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, Projet *projet
                 cell = gtk_cell_renderer_text_new();
                 gtk_cell_renderer_set_alignment(cell, 0.5, 0.5);
                 column = gtk_tree_view_column_new_with_attributes(gettext("Noeuds"), cell, "text", i-1, NULL);
+                gtk_tree_view_column_set_alignment(column, 0.5);
+                gtk_tree_view_append_column(res->treeview, column);
+                col_type[i-1] = G_TYPE_INT;
+                break;
+            }
+            case COLRES_NUM_BARRES :
+            {
+                BUGMSG(i==1, FALSE, gettext("La liste des barres doit être spécifiée en tant que première colonne.\n"));
+                cell = gtk_cell_renderer_text_new();
+                gtk_cell_renderer_set_alignment(cell, 0.5, 0.5);
+                column = gtk_tree_view_column_new_with_attributes(gettext("Barres"), cell, "text", i-1, NULL);
                 gtk_tree_view_column_set_alignment(column, 0.5);
                 gtk_tree_view_append_column(res->treeview, column);
                 col_type[i-1] = G_TYPE_INT;
@@ -536,6 +638,20 @@ gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, Projet *projet
                 col_type[i-1] = G_TYPE_DOUBLE;
                 break;
             }
+            case COLRES_BARRES_LONGUEUR :
+            {
+                BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                BUGMSG(res->col_tab[1] == COLRES_NUM_BARRES, FALSE, gettext("La longueur des barres ne peut être affichée que si la première colonne affiche les numéros des barres.\n"));
+                cell = gtk_cell_renderer_text_new();
+                gtk_cell_renderer_set_alignment(cell, 1.0, 0.5);
+                column = gtk_tree_view_column_new_with_attributes(gettext("L [m]"), cell, "text", i-1, NULL);
+                gtk_tree_view_column_set_alignment(column, 0.5);
+                gtk_tree_view_append_column(res->treeview, column);
+                g_object_set_data(G_OBJECT(cell), "column", GINT_TO_POINTER(i-1));
+                gtk_tree_view_column_set_cell_data_func(column, cell, common_gtk_render_double, GINT_TO_POINTER(DECIMAL_DISTANCE), NULL);
+                col_type[i-1] = G_TYPE_DOUBLE;
+                break;
+            }
             default :
             {
                 BUGMSG(NULL, FALSE, gettext("La colonne des résultats %d est inconnue.\n"), res->col_tab[i]);
@@ -628,6 +744,21 @@ G_MODULE_EXPORT void EF_gtk_resultats_add_page_type(GtkMenuItem *menuitem, Proje
         res->col_tab[5] = COLRES_DEPLACEMENT_RX;
         res->col_tab[6] = COLRES_DEPLACEMENT_RY;
         res->col_tab[7] = COLRES_DEPLACEMENT_RZ;
+        
+        res->filtre = FILTRE_AUCUN;
+        
+        BUGMSG(res->nom = g_strdup_printf("%s", gtk_menu_item_get_label(menuitem)), , gettext("Erreur d'allocation mémoire.\n"));
+        
+        BUG(EF_gtk_resultats_add_page(res, projet), );
+        
+        projet->list_gtk.ef_resultats.tableaux = g_list_append(projet->list_gtk.ef_resultats.tableaux, res);
+    }
+    else if (strcmp(gtk_menu_item_get_label(menuitem), gettext("Barres")) == 0)
+    {
+        BUGMSG(res->col_tab = malloc(sizeof(Colonne_Resultats)*3), , gettext("Erreur d'allocation mémoire.\n"));
+        res->col_tab[0] = 2;
+        res->col_tab[1] = COLRES_NUM_BARRES;
+        res->col_tab[2] = COLRES_BARRES_LONGUEUR;
         
         res->filtre = FILTRE_AUCUN;
         
