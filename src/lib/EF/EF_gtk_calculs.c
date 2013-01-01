@@ -52,19 +52,4 @@ G_MODULE_EXPORT void EF_gtk_calculs_calculer(GtkMenuItem *menuitem __attribute__
 }
 
 
-G_MODULE_EXPORT void EF_gtk_calculs_afficher(GtkButton *button __attribute__((unused)),
-  Projet *projet)
-/* Description : Affiche les résultats des calculs dans la sortie standard.
- * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
- *            : Projet *projet : la variable projet.
- * Valeur renvoyée : Aucune.
- */
-{
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    
-    BUG(_1990_action_affiche_resultats(projet, 0), );
-    
-    return;
-}
-
 #endif

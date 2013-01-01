@@ -25,6 +25,5 @@
 #include <gtk/gtk.h>
 
 void EF_gtk_calculs_calculer(GtkButton *button, Projet *projet);
-void EF_gtk_calculs_afficher(GtkButton *button, Projet *projet);
 
 #endif

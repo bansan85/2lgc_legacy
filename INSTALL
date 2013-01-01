@@ -16,7 +16,7 @@ sed -i 's/N_(/gettext(/g' files/ui/*.ui.h
 find . -name "*.c" -o -name "*.cc" -o -name "*.h" > po/POTFILES.in
 
 autoheader
-aclocal
+aclocal -I m4
 libtoolize
 automake --add-missing --copy
 autoconf

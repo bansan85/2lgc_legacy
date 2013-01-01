@@ -1058,8 +1058,6 @@ G_MODULE_EXPORT void EF_gtk_resultats(Projet *projet)
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     
-    BUG(_1990_action_affiche_resultats(projet, 0), );
-    
     if (projet->list_gtk.ef_resultats.builder != NULL)
     {
         gtk_window_present(GTK_WINDOW(projet->list_gtk.ef_resultats.window));
