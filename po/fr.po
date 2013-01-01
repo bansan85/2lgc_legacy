@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2013-01-01 17:03+0100\n"
-"PO-Revision-Date: 2013-01-01 17:09+0100\n"
+"POT-Creation-Date: 2013-01-01 19:25+0100\n"
+"PO-Revision-Date: 2013-01-01 20:02+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -290,6 +290,9 @@ msgstr "valeur quasi-permanente"
 
 msgid "Réactions d'appuis"
 msgstr "Réactions d'appuis"
+
+msgid "Déplacements"
+msgstr "Déplacements"
 
 msgid "Résultats"
 msgstr "Résultats"
@@ -940,6 +943,12 @@ msgstr "Impossible de supprimer la section car elle est utilisée par la barre %
 msgid "Impossible de supprimer la section car elle est utilisée par les barres %s.\n"
 msgstr "Impossible de supprimer la section car elle est utilisée par les barres %s.\n"
 
+msgid "Le filtre %d est inconnu.\n"
+msgstr "Le filtre %d est inconnu.\n"
+
+msgid "La colonne des résultats %d est inconnue.\n"
+msgstr "La colonne des résultats %d est inconnue.\n"
+
 msgid "La liste des noeuds doit être spécifiée en tant que première colonne.\n"
 msgstr "La liste des noeuds doit être spécifiée en tant que première colonne.\n"
 
@@ -979,11 +988,26 @@ msgstr "My [N.m]"
 msgid "Mz [N.m]"
 msgstr "Mz [N.m]"
 
-msgid "La colonne des résultats %d est inconnue.\n"
-msgstr "La colonne des résultats %d est inconnue.\n"
+msgid "Le déplacement des noeuds %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"
+msgstr "Le déplacement des noeuds %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"
 
-msgid "Le filtre %d est inconnu.\n"
-msgstr "Le filtre %d est inconnu.\n"
+msgid "Ux [m]"
+msgstr "Ux [m]"
+
+msgid "Uy [m]"
+msgstr "Uy [m]"
+
+msgid "Uz [m]"
+msgstr "Uz [m]"
+
+msgid "Rx [rad]"
+msgstr "Rx [rad]"
+
+msgid "Ry [rad]"
+msgstr "Ry [rad]"
+
+msgid "Rz [rad]"
+msgstr "Rz [rad]"
 
 msgid "La liste des types de barre est indéfinie.\n"
 msgstr "La liste des types de barre est indéfinie.\n"
