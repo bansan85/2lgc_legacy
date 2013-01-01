@@ -109,7 +109,150 @@ G_MODULE_EXPORT void EF_gtk_resultats_notebook_switch(GtkNotebook *notebook,
 }
 
 
-gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, const char *nom, Projet *projet)
+gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *projet)
+/* Description : Remplit/actualise la page du treeview via la variable res.
+ * Paramètres : Gtk_EF_Resultats_Tableau *res : caractéristiques de la page à remplir,
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : TRUE si pas de problème, FALSE sinon.
+ *   Echec : projet == NULL,
+ */
+{
+    unsigned int        i;
+    Action              *action_en_cours = _1990_action_cherche_numero(projet, 0);
+    
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(res, FALSE, gettext("Paramètre %s incorrect.\n"), "res");
+    BUGMSG(projet->list_gtk.ef_resultats.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Résultats");
+    
+    gtk_list_store_clear(res->list_store);
+    
+    if (res->col_tab[1] == COLRES_NUM_NOEUDS)
+    {
+        GList   *list_parcours = projet->ef_donnees.noeuds;
+        
+        i = 0;
+        
+        while (list_parcours != NULL)
+        {
+            EF_Noeud    *noeud = list_parcours->data;
+            gboolean    ok;
+            
+            switch (res->filtre)
+            {
+                case FILTRE_AUCUN :
+                {
+                    ok = TRUE;
+                    break;
+                }
+                case FILTRE_NOEUD_APPUI :
+                {
+                    if (noeud->appui == NULL)
+                        ok = FALSE;
+                    else
+                        ok = TRUE;
+                    break;
+                }
+                default :
+                {
+                    BUGMSG(NULL, FALSE, gettext("Le filtre %d est inconnu.\n"), res->filtre);
+                    break;
+                }
+            }
+            
+            if (ok)
+            {
+                GtkTreeIter     Iter;
+                double          *x = action_en_cours->efforts_noeuds->x;
+                unsigned int    j;
+                
+                gtk_list_store_append(res->list_store, &Iter);
+                for (j=1;j<=res->col_tab[0];j++)
+                {
+                    switch (res->col_tab[j])
+                    {
+                        case COLRES_NUM_NOEUDS :
+                        {
+                            gtk_list_store_set(res->list_store, &Iter, j-1, noeud->numero, -1);
+                            break;
+                        }
+                        case COLRES_NOEUDS_X :
+                        {
+                            EF_Point    *point = EF_noeuds_renvoie_position(noeud);
+                            
+                            gtk_list_store_set(res->list_store, &Iter, j-1, point->x, -1);
+                            
+                            free(point);
+                            break;
+                        }
+                        case COLRES_NOEUDS_Y :
+                        {
+                            EF_Point    *point = EF_noeuds_renvoie_position(noeud);
+                            
+                            gtk_list_store_set(res->list_store, &Iter, j-1, point->y, -1);
+                            
+                            free(point);
+                            break;
+                        }
+                        case COLRES_NOEUDS_Z :
+                        {
+                            EF_Point    *point = EF_noeuds_renvoie_position(noeud);
+                            
+                            gtk_list_store_set(res->list_store, &Iter, j-1, point->z, -1);
+                            
+                            free(point);
+                            break;
+                        }
+                        case COLRES_REACTION_APPUI_FX :
+                        {
+                            gtk_list_store_set(res->list_store, &Iter, j-1, x[i*6+0], -1);
+                            break;
+                        }
+                        case COLRES_REACTION_APPUI_FY:
+                        {
+                            gtk_list_store_set(res->list_store, &Iter, j-1, x[i*6+1], -1);
+                            break;
+                        }
+                        case COLRES_REACTION_APPUI_FZ :
+                        {
+                            gtk_list_store_set(res->list_store, &Iter, j-1, x[i*6+2], -1);
+                            break;
+                        }
+                        case COLRES_REACTION_APPUI_MX :
+                        {
+                            gtk_list_store_set(res->list_store, &Iter, j-1, x[i*6+3], -1);
+                            break;
+                        }
+                        case COLRES_REACTION_APPUI_MY :
+                        {
+                            gtk_list_store_set(res->list_store, &Iter, j-1, x[i*6+4], -1);
+                            break;
+                        }
+                        case COLRES_REACTION_APPUI_MZ :
+                        {
+                            gtk_list_store_set(res->list_store, &Iter, j-1, x[i*6+5], -1);
+                            break;
+                        }
+                        default :
+                        {
+                            BUGMSG(NULL, FALSE, gettext("La colonne des résultats %d est inconnue.\n"), res->col_tab[j]);
+                            break;
+                        }
+                    }
+                }
+                gtk_list_store_set(res->list_store, &Iter, res->col_tab[0], "", -1);
+            }
+            
+            i++;
+            list_parcours = g_list_next(list_parcours);
+        }
+    }
+    
+    return TRUE;
+}
+
+
+gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, const char *nom,
+  Projet *projet)
 /* Description : Ajoute une page au treeview de la fenêtre affichant les résultats en fonction
  *               de la description fournie via la variable res.
  * Paramètres : Gtk_EF_Resultats_Tableau *res : caractéristiques de la page à ajouter,
@@ -124,7 +267,6 @@ gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, const char *no
     GType               *col_type;
     GtkCellRenderer     *cell;
     GtkTreeViewColumn   *column;
-    Action              *action_en_cours = _1990_action_cherche_numero(projet, 0);
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(res, FALSE, gettext("Paramètre %s incorrect.\n"), "res");
@@ -301,127 +443,8 @@ gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, const char *no
     free(col_type);
     gtk_tree_view_set_model(res->treeview, GTK_TREE_MODEL(res->list_store));
     g_object_unref(res->list_store);
-    
-    if (res->col_tab[1] == COLRES_NUM_NOEUDS)
-    {
-        GList   *list_parcours = projet->ef_donnees.noeuds;
-        
-        i = 0;
-        
-        while (list_parcours != NULL)
-        {
-            EF_Noeud    *noeud = list_parcours->data;
-            gboolean    ok;
-            
-            switch (res->filtre)
-            {
-                case FILTRE_AUCUN :
-                {
-                    ok = TRUE;
-                    break;
-                }
-                case FILTRE_NOEUD_APPUI :
-                {
-                    if (noeud->appui == NULL)
-                        ok = FALSE;
-                    else
-                        ok = TRUE;
-                    break;
-                }
-                default :
-                {
-                    BUGMSG(NULL, FALSE, gettext("Le filtre %d est inconnu.\n"), res->filtre);
-                    break;
-                }
-            }
-            
-            if (ok)
-            {
-                GtkTreeIter     Iter;
-                double          *x = action_en_cours->efforts_noeuds->x;
-                unsigned int    j;
-                
-                gtk_list_store_append(res->list_store, &Iter);
-                for (j=1;j<=res->col_tab[0];j++)
-                {
-                    switch (res->col_tab[j])
-                    {
-                        case COLRES_NUM_NOEUDS :
-                        {
-                            gtk_list_store_set(res->list_store, &Iter, j-1, noeud->numero, -1);
-                            break;
-                        }
-                        case COLRES_NOEUDS_X :
-                        {
-                            EF_Point    *point = EF_noeuds_renvoie_position(noeud);
-                            
-                            gtk_list_store_set(res->list_store, &Iter, j-1, point->x, -1);
-                            
-                            free(point);
-                            break;
-                        }
-                        case COLRES_NOEUDS_Y :
-                        {
-                            EF_Point    *point = EF_noeuds_renvoie_position(noeud);
-                            
-                            gtk_list_store_set(res->list_store, &Iter, j-1, point->y, -1);
-                            
-                            free(point);
-                            break;
-                        }
-                        case COLRES_NOEUDS_Z :
-                        {
-                            EF_Point    *point = EF_noeuds_renvoie_position(noeud);
-                            
-                            gtk_list_store_set(res->list_store, &Iter, j-1, point->z, -1);
-                            
-                            free(point);
-                            break;
-                        }
-                        case COLRES_REACTION_APPUI_FX :
-                        {
-                            gtk_list_store_set(res->list_store, &Iter, j-1, x[i*6+0], -1);
-                            break;
-                        }
-                        case COLRES_REACTION_APPUI_FY:
-                        {
-                            gtk_list_store_set(res->list_store, &Iter, j-1, x[i*6+1], -1);
-                            break;
-                        }
-                        case COLRES_REACTION_APPUI_FZ :
-                        {
-                            gtk_list_store_set(res->list_store, &Iter, j-1, x[i*6+2], -1);
-                            break;
-                        }
-                        case COLRES_REACTION_APPUI_MX :
-                        {
-                            gtk_list_store_set(res->list_store, &Iter, j-1, x[i*6+3], -1);
-                            break;
-                        }
-                        case COLRES_REACTION_APPUI_MY :
-                        {
-                            gtk_list_store_set(res->list_store, &Iter, j-1, x[i*6+4], -1);
-                            break;
-                        }
-                        case COLRES_REACTION_APPUI_MZ :
-                        {
-                            gtk_list_store_set(res->list_store, &Iter, j-1, x[i*6+5], -1);
-                            break;
-                        }
-                        default :
-                        {
-                            BUGMSG(NULL, FALSE, gettext("La colonne des résultats %d est inconnue.\n"), res->col_tab[j]);
-                            break;
-                        }
-                    }
-                }
-                gtk_list_store_set(res->list_store, &Iter, res->col_tab[0], "", -1);
-            }
-            
-            i++;
-            list_parcours = g_list_next(list_parcours);
-        }
-    }
+
+    EF_gtk_resultats_remplit_page(res, projet);
     
     projet->list_gtk.ef_resultats.tableaux = g_list_append(projet->list_gtk.ef_resultats.tableaux, res);
     
@@ -431,7 +454,6 @@ gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, const char *no
     
     return TRUE;
 }
-
 
 
 G_MODULE_EXPORT void EF_gtk_resultats_add_page_type(GtkMenuItem *menuitem, Projet *projet)
