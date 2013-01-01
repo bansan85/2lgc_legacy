@@ -218,7 +218,13 @@ typedef enum __Colonne_Resultats
     COLRES_DEPLACEMENT_RX,      // Déplacement, Rx
     COLRES_DEPLACEMENT_RY,      // Déplacement, Ry
     COLRES_DEPLACEMENT_RZ,      // Déplacement, Rz
-    COLRES_BARRES_LONGUEUR
+    COLRES_BARRES_LONGUEUR,     // Longueur des barres
+    COLRES_BARRES_EQ_N,         // Equation de l'effort normal N
+    COLRES_BARRES_EQ_TY,        // Equation de l'effort tranchant en y
+    COLRES_BARRES_EQ_TZ,        // Equation de l'effort tranchant en z
+    COLRES_BARRES_EQ_MX,        // Equation du moment de torsion
+    COLRES_BARRES_EQ_MY,        // Equation du moment fléchissant en y
+    COLRES_BARRES_EQ_MZ         // Equation du moment fléchissant en z
 } Colonne_Resultats;
 
 

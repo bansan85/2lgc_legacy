@@ -27,6 +27,7 @@
 #include "1990_action.h"
 #include "common_projet.h"
 #include "common_erreurs.h"
+#include "common_fonction.h"
 #include "common_gtk.h"
 #include "EF_noeuds.h"
 
@@ -265,6 +266,12 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                         }
                         case COLRES_NUM_BARRES :
                         case COLRES_BARRES_LONGUEUR :
+                        case COLRES_BARRES_EQ_N :
+                        case COLRES_BARRES_EQ_TY :
+                        case COLRES_BARRES_EQ_TZ :
+                        case COLRES_BARRES_EQ_MX :
+                        case COLRES_BARRES_EQ_MY :
+                        case COLRES_BARRES_EQ_MZ :
                         {
                             BUGMSG(NULL, FALSE, gettext("La colonne des résultats %d ne peut être appliquée aux noeuds."), res->col_tab[j]);
                             break;
@@ -352,6 +359,48 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                         case COLRES_BARRES_LONGUEUR :
                         {
                             gtk_list_store_set(res->list_store, &Iter, j-1, EF_noeuds_distance(barre->noeud_debut, barre->noeud_fin), -1);
+                            break;
+                        }
+                        case COLRES_BARRES_EQ_N :
+                        {
+                            char *tmp = common_fonction_renvoie(action_en_cours->fonctions_efforts[0][i], DECIMAL_FORCE);
+                            gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
+                            free(tmp);
+                            break;
+                        }
+                        case COLRES_BARRES_EQ_TY :
+                        {
+                            char *tmp = common_fonction_renvoie(action_en_cours->fonctions_efforts[1][i], DECIMAL_FORCE);
+                            gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
+                            free(tmp);
+                            break;
+                        }
+                        case COLRES_BARRES_EQ_TZ :
+                        {
+                            char *tmp = common_fonction_renvoie(action_en_cours->fonctions_efforts[2][i], DECIMAL_FORCE);
+                            gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
+                            free(tmp);
+                            break;
+                        }
+                        case COLRES_BARRES_EQ_MX :
+                        {
+                            char *tmp = common_fonction_renvoie(action_en_cours->fonctions_efforts[3][i], DECIMAL_MOMENT);
+                            gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
+                            free(tmp);
+                            break;
+                        }
+                        case COLRES_BARRES_EQ_MY :
+                        {
+                            char *tmp = common_fonction_renvoie(action_en_cours->fonctions_efforts[4][i], DECIMAL_MOMENT);
+                            gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
+                            free(tmp);
+                            break;
+                        }
+                        case COLRES_BARRES_EQ_MZ :
+                        {
+                            char *tmp = common_fonction_renvoie(action_en_cours->fonctions_efforts[5][i], DECIMAL_MOMENT);
+                            gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
+                            free(tmp);
                             break;
                         }
                         default :
@@ -652,6 +701,72 @@ gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, Projet *projet
                 col_type[i-1] = G_TYPE_DOUBLE;
                 break;
             }
+            case COLRES_BARRES_EQ_N :
+            {
+                BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                BUGMSG(res->col_tab[1] == COLRES_NUM_BARRES, FALSE, gettext("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
+                cell = gtk_cell_renderer_text_new();
+                column = gtk_tree_view_column_new_with_attributes(gettext("N [N]"), cell, "text", i-1, NULL);
+                gtk_tree_view_column_set_alignment(column, 0.5);
+                gtk_tree_view_append_column(res->treeview, column);
+                col_type[i-1] = G_TYPE_STRING;
+                break;
+            }
+            case COLRES_BARRES_EQ_TY :
+            {
+                BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                BUGMSG(res->col_tab[1] == COLRES_NUM_BARRES, FALSE, gettext("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
+                cell = gtk_cell_renderer_text_new();
+                column = gtk_tree_view_column_new_with_attributes(gettext("Ty [N]"), cell, "text", i-1, NULL);
+                gtk_tree_view_column_set_alignment(column, 0.5);
+                gtk_tree_view_append_column(res->treeview, column);
+                col_type[i-1] = G_TYPE_STRING;
+                break;
+            }
+            case COLRES_BARRES_EQ_TZ :
+            {
+                BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                BUGMSG(res->col_tab[1] == COLRES_NUM_BARRES, FALSE, gettext("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
+                cell = gtk_cell_renderer_text_new();
+                column = gtk_tree_view_column_new_with_attributes(gettext("Tz [N]"), cell, "text", i-1, NULL);
+                gtk_tree_view_column_set_alignment(column, 0.5);
+                gtk_tree_view_append_column(res->treeview, column);
+                col_type[i-1] = G_TYPE_STRING;
+                break;
+            }
+            case COLRES_BARRES_EQ_MX :
+            {
+                BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                BUGMSG(res->col_tab[1] == COLRES_NUM_BARRES, FALSE, gettext("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
+                cell = gtk_cell_renderer_text_new();
+                column = gtk_tree_view_column_new_with_attributes(gettext("Mx [N.m]"), cell, "text", i-1, NULL);
+                gtk_tree_view_column_set_alignment(column, 0.5);
+                gtk_tree_view_append_column(res->treeview, column);
+                col_type[i-1] = G_TYPE_STRING;
+                break;
+            }
+            case COLRES_BARRES_EQ_MY :
+            {
+                BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                BUGMSG(res->col_tab[1] == COLRES_NUM_BARRES, FALSE, gettext("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
+                cell = gtk_cell_renderer_text_new();
+                column = gtk_tree_view_column_new_with_attributes(gettext("My [N.m]"), cell, "text", i-1, NULL);
+                gtk_tree_view_column_set_alignment(column, 0.5);
+                gtk_tree_view_append_column(res->treeview, column);
+                col_type[i-1] = G_TYPE_STRING;
+                break;
+            }
+            case COLRES_BARRES_EQ_MZ :
+            {
+                BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                BUGMSG(res->col_tab[1] == COLRES_NUM_BARRES, FALSE, gettext("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
+                cell = gtk_cell_renderer_text_new();
+                column = gtk_tree_view_column_new_with_attributes(gettext("Mz [N.m]"), cell, "text", i-1, NULL);
+                gtk_tree_view_column_set_alignment(column, 0.5);
+                gtk_tree_view_append_column(res->treeview, column);
+                col_type[i-1] = G_TYPE_STRING;
+                break;
+            }
             default :
             {
                 BUGMSG(NULL, FALSE, gettext("La colonne des résultats %d est inconnue.\n"), res->col_tab[i]);
@@ -759,6 +874,27 @@ G_MODULE_EXPORT void EF_gtk_resultats_add_page_type(GtkMenuItem *menuitem, Proje
         res->col_tab[0] = 2;
         res->col_tab[1] = COLRES_NUM_BARRES;
         res->col_tab[2] = COLRES_BARRES_LONGUEUR;
+        
+        res->filtre = FILTRE_AUCUN;
+        
+        BUGMSG(res->nom = g_strdup_printf("%s", gtk_menu_item_get_label(menuitem)), , gettext("Erreur d'allocation mémoire.\n"));
+        
+        BUG(EF_gtk_resultats_add_page(res, projet), );
+        
+        projet->list_gtk.ef_resultats.tableaux = g_list_append(projet->list_gtk.ef_resultats.tableaux, res);
+    }
+    else if (strcmp(gtk_menu_item_get_label(menuitem), gettext("Efforts dans les barres")) == 0)
+    {
+        BUGMSG(res->col_tab = malloc(sizeof(Colonne_Resultats)*9), , gettext("Erreur d'allocation mémoire.\n"));
+        res->col_tab[0] = 8;
+        res->col_tab[1] = COLRES_NUM_BARRES;
+        res->col_tab[2] = COLRES_BARRES_LONGUEUR;
+        res->col_tab[3] = COLRES_BARRES_EQ_N;
+        res->col_tab[4] = COLRES_BARRES_EQ_TY;
+        res->col_tab[5] = COLRES_BARRES_EQ_TZ;
+        res->col_tab[6] = COLRES_BARRES_EQ_MX;
+        res->col_tab[7] = COLRES_BARRES_EQ_MY;
+        res->col_tab[8] = COLRES_BARRES_EQ_MZ;
         
         res->filtre = FILTRE_AUCUN;
         

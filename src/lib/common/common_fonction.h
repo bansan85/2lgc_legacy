@@ -28,6 +28,8 @@ gboolean common_fonction_init(Projet *projet, Action *action) __attribute__((__w
 gboolean common_fonction_ajout(Fonction* fonction, double debut_troncon, double fin_troncon, double coef_0, double coef_x, double coef_x2, double coef_x3, double coef_x4, double coef_x5, double coef_x6, double translate) __attribute__((__warn_unused_result__));
 gboolean common_fonction_affiche(Fonction* fonction) __attribute__((__warn_unused_result__));
 
+char* common_fonction_renvoie(Fonction* fonction, int decimales);
+
 gboolean common_fonction_free(Projet *projet, Action *action) __attribute__((__warn_unused_result__));
 
 #endif
