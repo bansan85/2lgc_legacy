@@ -496,7 +496,9 @@ G_MODULE_EXPORT void EF_gtk_noeud_edit_pos_relat(GtkCellRendererText *cell, gcha
             return;
         }
         
-        // On modifie l'action
+        // On modifie la position du noeud
+        BUG(EF_calculs_free(projet), );
+        
         BUG(noeud = EF_noeuds_cherche_numero(projet, i, TRUE), );
         
         if ((noeud->type == NOEUD_BARRE) && (column == 6))

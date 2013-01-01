@@ -1465,6 +1465,20 @@ G_MODULE_EXPORT gboolean EF_calculs_free(Projet *projet)
     
 #ifdef ENABLE_GTK
     gtk_widget_set_sensitive(projet->list_gtk.comp.menu_resultats_afficher, FALSE);
+    
+    if (projet->list_gtk.ef_resultats.builder != NULL)
+    {
+        list_parcours = projet->list_gtk.ef_resultats.tableaux;
+        
+        while (list_parcours != NULL)
+        {
+            Gtk_EF_Resultats_Tableau    *res = list_parcours->data;
+            
+            gtk_list_store_clear(res->list_store);
+            
+            list_parcours = g_list_next(list_parcours);
+        }
+    }
 #endif
     return TRUE;
 }
