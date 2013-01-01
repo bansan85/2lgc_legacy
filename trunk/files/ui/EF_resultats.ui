@@ -24,6 +24,13 @@
                 <signal name="activate" handler="EF_gtk_resultats_add_page_type"/>
             </object>
         </child>
+        <child>
+            <object class="GtkMenuItem" id="EF_resultats_menu_barres">
+                <property name="label" translatable="yes">Barres</property>
+                <property name="visible">True</property>
+                <signal name="activate" handler="EF_gtk_resultats_add_page_type"/>
+            </object>
+        </child>
     </object>
     <object class="GtkWindow" id="EF_resultats_window">
         <property name="visible">True</property>
