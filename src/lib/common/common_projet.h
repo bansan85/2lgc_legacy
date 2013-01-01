@@ -27,6 +27,8 @@
 
 // Nombre de décimal en fonction des unités
 #define DECIMAL_DISTANCE 3
+#define DECIMAL_DEPLACEMENT 6
+#define DECIMAL_ROTATION 6
 #define DECIMAL_FORCE 3
 #define DECIMAL_MOMENT 3
 #define DECIMAL_M4 8
@@ -208,7 +210,13 @@ typedef enum __Colonne_Resultats
     COLRES_REACTION_APPUI_FZ,   // Réaction d'appui, Fz
     COLRES_REACTION_APPUI_MX,   // Réaction d'appui, Mx
     COLRES_REACTION_APPUI_MY,   // Réaction d'appui, My
-    COLRES_REACTION_APPUI_MZ    // Réaction d'appui, Mz
+    COLRES_REACTION_APPUI_MZ,   // Réaction d'appui, Mz
+    COLRES_DEPLACEMENT_UX,      // Déplacement, Ux
+    COLRES_DEPLACEMENT_UY,      // Déplacement, Uy
+    COLRES_DEPLACEMENT_UZ,      // Déplacement, Uz
+    COLRES_DEPLACEMENT_RX,      // Déplacement, Rx
+    COLRES_DEPLACEMENT_RY,      // Déplacement, Ry
+    COLRES_DEPLACEMENT_RZ       // Déplacement, Rz
 } Colonne_Resultats;
 
 
