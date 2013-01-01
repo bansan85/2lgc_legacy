@@ -25,28 +25,42 @@
                 <property name="border-width">12</property>
                 <property name="row-spacing">12</property>
                 <child>
-                    <object class="GtkNotebook" id="EF_resultats_notebook">
+                    <object class="GtkScrolledWindow" id="EF_noeuds_scrolled_noeuds_libres">
                         <property name="visible">True</property>
-                        <property name="tab-pos">top</property>
                         <property name="expand">True</property>
-                        <signal name="switch-page" handler="EF_gtk_resultats_notebook_switch"/>
+                        <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                        <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
                         <child>
-                            <object class="GtkScrolledWindow" id="EF_resultats_scrolled_add">
+                            <object class="GtkViewport" id="EF_resultats_viewport">
                                 <property name="visible">True</property>
                                 <property name="expand">True</property>
-                                <property name="sensitive">False</property>
-                            </object>
-                        </child>
-                        <child type="tab">
-                            <object class="GtkMenuButton" id="EF_noeuds_notebook_button_add">
-                                <property name="visible">True</property>
-                                <property name="menu">EF_resultats_menu</property>
+                                <child>
+                                    <object class="GtkNotebook" id="EF_resultats_notebook">
+                                        <property name="visible">True</property>
+                                        <property name="tab-pos">top</property>
+                                        <property name="expand">True</property>
+                                        <signal name="switch-page" handler="EF_gtk_resultats_notebook_switch"/>
+                                        <child>
+                                            <object class="GtkScrolledWindow" id="EF_resultats_scrolled_add">
+                                                <property name="visible">True</property>
+                                                <property name="expand">True</property>
+                                                <property name="sensitive">False</property>
+                                            </object>
+                                        </child>
+                                        <child type="tab">
+                                            <object class="GtkMenuButton" id="EF_noeuds_notebook_button_add">
+                                                <property name="visible">True</property>
+                                                <property name="menu">EF_resultats_menu</property>
+                                            </object>
+                                        </child>
+                                    </object>
+                                </child>
                             </object>
                         </child>
                     </object>
                     <packing>
                         <property name="left-attach">0</property>
-                        <property name="top-attach">1</property>
+                        <property name="top-attach">0</property>
                     </packing>
                 </child>
                 <child>

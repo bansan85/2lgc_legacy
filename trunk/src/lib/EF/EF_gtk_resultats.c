@@ -138,7 +138,7 @@ gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, const char *no
     res->treeview = GTK_TREE_VIEW(gtk_tree_view_new());
     gtk_container_add(GTK_CONTAINER(p_scrolled_window), GTK_WIDGET(res->treeview));
     
-    col_type = malloc(res->col_tab[0]*sizeof(GType));
+    col_type = malloc((res->col_tab[0]+1)*sizeof(GType));
     
     for (i=1;i<=res->col_tab[0];i++)
     {
@@ -247,7 +247,14 @@ gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, const char *no
         }
     }
     
-    res->list_store = gtk_list_store_newv(res->col_tab[0], col_type);
+    // On insère une colonne vide à la fin pour éviter le redimensionnement automatique de la
+    // dernière colonne.
+    cell = gtk_cell_renderer_text_new();
+    column = gtk_tree_view_column_new_with_attributes("", cell, "text", res->col_tab[0], NULL);
+    gtk_tree_view_append_column(res->treeview, column);
+    col_type[res->col_tab[0]] = G_TYPE_STRING;
+    
+    res->list_store = gtk_list_store_newv(res->col_tab[0]+1, col_type);
     free(col_type);
     gtk_tree_view_set_model(res->treeview, GTK_TREE_MODEL(res->list_store));
     g_object_unref(res->list_store);
@@ -338,6 +345,7 @@ gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, const char *no
                         }
                     }
                 }
+                gtk_list_store_set(res->list_store, &Iter, res->col_tab[0], "", -1);
             }
             
             i++;
