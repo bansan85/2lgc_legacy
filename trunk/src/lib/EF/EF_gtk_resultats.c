@@ -282,12 +282,10 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
 }
 
 
-gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, const char *nom,
-  Projet *projet)
+gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, Projet *projet)
 /* Description : Ajoute une page au treeview de la fenêtre affichant les résultats en fonction
  *               de la description fournie via la variable res.
  * Paramètres : Gtk_EF_Resultats_Tableau *res : caractéristiques de la page à ajouter,
- *            : char *nom : nom de la nouvelle page,
  *            : Projet *projet : la variable projet.
  * Valeur renvoyée : TRUE si pas de problème, FALSE sinon.
  *   Echec : projet == NULL,
@@ -301,13 +299,12 @@ gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, const char *no
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(res, FALSE, gettext("Paramètre %s incorrect.\n"), "res");
-    BUGMSG(nom, FALSE, gettext("Paramètre %s incorrect.\n"), "nom");
     BUGMSG(projet->list_gtk.ef_resultats.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Résultats");
     
     p_scrolled_window = gtk_scrolled_window_new(NULL, NULL);
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(p_scrolled_window), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
     
-    gtk_notebook_insert_page(projet->list_gtk.ef_resultats.notebook, p_scrolled_window, GTK_WIDGET(gtk_label_new(nom)), gtk_notebook_get_n_pages(projet->list_gtk.ef_resultats.notebook)-1);
+    gtk_notebook_insert_page(projet->list_gtk.ef_resultats.notebook, p_scrolled_window, GTK_WIDGET(gtk_label_new(res->nom)), gtk_notebook_get_n_pages(projet->list_gtk.ef_resultats.notebook)-1);
     
     res->treeview = GTK_TREE_VIEW(gtk_tree_view_new());
     gtk_container_add(GTK_CONTAINER(p_scrolled_window), GTK_WIDGET(res->treeview));
@@ -559,9 +556,7 @@ gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, const char *no
     gtk_tree_view_set_model(res->treeview, GTK_TREE_MODEL(res->list_store));
     g_object_unref(res->list_store);
 
-    EF_gtk_resultats_remplit_page(res, projet);
-    
-    projet->list_gtk.ef_resultats.tableaux = g_list_append(projet->list_gtk.ef_resultats.tableaux, res);
+    BUG(EF_gtk_resultats_remplit_page(res, projet), FALSE);
     
     gtk_widget_show_all(p_scrolled_window);
     
@@ -598,7 +593,9 @@ G_MODULE_EXPORT void EF_gtk_resultats_add_page_type(GtkMenuItem *menuitem, Proje
         
         BUGMSG(res->nom = g_strdup_printf("%s", gtk_menu_item_get_label(menuitem)), , gettext("Erreur d'allocation mémoire.\n"));
         
-        BUG(EF_gtk_resultats_add_page(res, res->nom, projet), );
+        BUG(EF_gtk_resultats_add_page(res, projet), );
+        
+        projet->list_gtk.ef_resultats.tableaux = g_list_append(projet->list_gtk.ef_resultats.tableaux, res);
     }
     else if (strcmp(gtk_menu_item_get_label(menuitem), gettext("Réactions d'appuis")) == 0)
     {
@@ -616,7 +613,9 @@ G_MODULE_EXPORT void EF_gtk_resultats_add_page_type(GtkMenuItem *menuitem, Proje
         
         BUGMSG(res->nom = g_strdup_printf("%s", gtk_menu_item_get_label(menuitem)), , gettext("Erreur d'allocation mémoire.\n"));
         
-        BUG(EF_gtk_resultats_add_page(res, res->nom, projet), );
+        BUG(EF_gtk_resultats_add_page(res, projet), );
+        
+        projet->list_gtk.ef_resultats.tableaux = g_list_append(projet->list_gtk.ef_resultats.tableaux, res);
     }
     else if (strcmp(gtk_menu_item_get_label(menuitem), gettext("Déplacements")) == 0)
     {
@@ -634,7 +633,9 @@ G_MODULE_EXPORT void EF_gtk_resultats_add_page_type(GtkMenuItem *menuitem, Proje
         
         BUGMSG(res->nom = g_strdup_printf("%s", gtk_menu_item_get_label(menuitem)), , gettext("Erreur d'allocation mémoire.\n"));
         
-        BUG(EF_gtk_resultats_add_page(res, res->nom, projet), );
+        BUG(EF_gtk_resultats_add_page(res, projet), );
+        
+        projet->list_gtk.ef_resultats.tableaux = g_list_append(projet->list_gtk.ef_resultats.tableaux, res);
     }
     
     return;
@@ -651,6 +652,7 @@ G_MODULE_EXPORT void EF_gtk_resultats(Projet *projet)
  */
 {
     Gtk_EF_Resultats    *ef_gtk;
+    GList               *list_parcours;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     
@@ -670,6 +672,14 @@ G_MODULE_EXPORT void EF_gtk_resultats(Projet *projet)
     
     ef_gtk->window = GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder, "EF_resultats_window"));
     ef_gtk->notebook = GTK_NOTEBOOK(gtk_builder_get_object(ef_gtk->builder, "EF_resultats_notebook"));
+    
+    list_parcours = ef_gtk->tableaux;
+    while (list_parcours != NULL)
+    {
+        EF_gtk_resultats_add_page(list_parcours->data, projet);
+        
+        list_parcours = g_list_next(list_parcours);
+    }
     
     gtk_window_set_transient_for(GTK_WINDOW(ef_gtk->window), GTK_WINDOW(projet->list_gtk.comp.window));
 }
