@@ -201,36 +201,48 @@ typedef enum __Filtres
 
 typedef enum __Colonne_Resultats
 {
-    COLRES_NUM_NOEUDS,          // Numéro des noeuds
-    COLRES_NUM_BARRES,          // Numéro des barres
-    COLRES_NOEUDS_X,            // Coordonnées des noeuds, x
-    COLRES_NOEUDS_Y,            // Coordonnées des noeuds, y
-    COLRES_NOEUDS_Z,            // Coordonnées des noeuds, z
-    COLRES_REACTION_APPUI_FX,   // Réaction d'appui, Fx
-    COLRES_REACTION_APPUI_FY,   // Réaction d'appui, Fy
-    COLRES_REACTION_APPUI_FZ,   // Réaction d'appui, Fz
-    COLRES_REACTION_APPUI_MX,   // Réaction d'appui, Mx
-    COLRES_REACTION_APPUI_MY,   // Réaction d'appui, My
-    COLRES_REACTION_APPUI_MZ,   // Réaction d'appui, Mz
-    COLRES_DEPLACEMENT_UX,      // Déplacement, Ux
-    COLRES_DEPLACEMENT_UY,      // Déplacement, Uy
-    COLRES_DEPLACEMENT_UZ,      // Déplacement, Uz
-    COLRES_DEPLACEMENT_RX,      // Déplacement, Rx
-    COLRES_DEPLACEMENT_RY,      // Déplacement, Ry
-    COLRES_DEPLACEMENT_RZ,      // Déplacement, Rz
-    COLRES_BARRES_LONGUEUR,     // Longueur des barres
-    COLRES_BARRES_EQ_N,         // Equation de l'effort normal N
-    COLRES_BARRES_EQ_TY,        // Equation de l'effort tranchant en y
-    COLRES_BARRES_EQ_TZ,        // Equation de l'effort tranchant en z
-    COLRES_BARRES_EQ_MX,        // Equation du moment de torsion
-    COLRES_BARRES_EQ_MY,        // Equation du moment fléchissant en y
-    COLRES_BARRES_EQ_MZ,        // Equation du moment fléchissant en z
-    COLRES_DEFORMATION_UX,      // Déformation des barres, Ux
-    COLRES_DEFORMATION_UY,      // Déformation des barres, Uy
-    COLRES_DEFORMATION_UZ,      // Déformation des barres, Uz
-    COLRES_DEFORMATION_RX,      // Déformation des barres, Rx
-    COLRES_DEFORMATION_RY,      // Déformation des barres, Ry
-    COLRES_DEFORMATION_RZ       // Déformation des barres, Rz
+    COLRES_NUM_NOEUDS,              // Numéro des noeuds
+    COLRES_NUM_BARRES,              // Numéro des barres
+    COLRES_NOEUDS_X,                // Coordonnées des noeuds, x
+    COLRES_NOEUDS_Y,                // Coordonnées des noeuds, y
+    COLRES_NOEUDS_Z,                // Coordonnées des noeuds, z
+    COLRES_REACTION_APPUI_FX,       // Réaction d'appui, Fx
+    COLRES_REACTION_APPUI_FY,       // Réaction d'appui, Fy
+    COLRES_REACTION_APPUI_FZ,       // Réaction d'appui, Fz
+    COLRES_REACTION_APPUI_MX,       // Réaction d'appui, Mx
+    COLRES_REACTION_APPUI_MY,       // Réaction d'appui, My
+    COLRES_REACTION_APPUI_MZ,       // Réaction d'appui, Mz
+    COLRES_DEPLACEMENT_UX,          // Déplacement, Ux
+    COLRES_DEPLACEMENT_UY,          // Déplacement, Uy
+    COLRES_DEPLACEMENT_UZ,          // Déplacement, Uz
+    COLRES_DEPLACEMENT_RX,          // Déplacement, Rx
+    COLRES_DEPLACEMENT_RY,          // Déplacement, Ry
+    COLRES_DEPLACEMENT_RZ,          // Déplacement, Rz
+    COLRES_BARRES_LONGUEUR,         // Longueur des barres
+    COLRES_BARRES_PIXBUF_N,         // Dessin de l'effort normal N
+    COLRES_BARRES_PIXBUF_TY,        // Dessin de l'effort tranchant en y
+    COLRES_BARRES_PIXBUF_TZ,        // Dessin de l'effort tranchant en z
+    COLRES_BARRES_PIXBUF_MX,        // Dessin du moment de torsion
+    COLRES_BARRES_PIXBUF_MY,        // Dessin du moment fléchissant en y
+    COLRES_BARRES_PIXBUF_MZ,        // Dessin du moment fléchissant en z
+    COLRES_BARRES_EQ_N,             // Equation de l'effort normal N
+    COLRES_BARRES_EQ_TY,            // Equation de l'effort tranchant en y
+    COLRES_BARRES_EQ_TZ,            // Equation de l'effort tranchant en z
+    COLRES_BARRES_EQ_MX,            // Equation du moment de torsion
+    COLRES_BARRES_EQ_MY,            // Equation du moment fléchissant en y
+    COLRES_BARRES_EQ_MZ,            // Equation du moment fléchissant en z
+    COLRES_DEFORMATION_PIXBUF_UX,   // Dessin de la déformation des barres, Ux
+    COLRES_DEFORMATION_PIXBUF_UY,   // Dessin de la déformation des barres, Uy
+    COLRES_DEFORMATION_PIXBUF_UZ,   // Dessin de la déformation des barres, Uz
+    COLRES_DEFORMATION_PIXBUF_RX,   // Dessin de la déformation des barres, Rx
+    COLRES_DEFORMATION_PIXBUF_RY,   // Dessin de la déformation des barres, Rx
+    COLRES_DEFORMATION_PIXBUF_RZ,   // Dessin de la déformation des barres, Rx
+    COLRES_DEFORMATION_UX,          // Déformation des barres, Ux
+    COLRES_DEFORMATION_UY,          // Déformation des barres, Uy
+    COLRES_DEFORMATION_UZ,          // Déformation des barres, Uz
+    COLRES_DEFORMATION_RX,          // Déformation des barres, Rx
+    COLRES_DEFORMATION_RY,          // Déformation des barres, Ry
+    COLRES_DEFORMATION_RZ           // Déformation des barres, Rz
 } Colonne_Resultats;
 
 

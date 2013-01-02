@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2013-01-01 23:23+0100\n"
-"PO-Revision-Date: 2013-01-01 23:24+0100\n"
+"POT-Creation-Date: 2013-01-02 23:43+0100\n"
+"PO-Revision-Date: 2013-01-02 23:44+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -549,6 +549,12 @@ msgstr "Impossible de scinder une fonction vide\n"
 msgid "Fonction indéfinie.\n"
 msgstr "Fonction indéfinie.\n"
 
+msgid "La largeur du dessin ne peut être nulle.\n"
+msgstr "La largeur du dessin ne peut être nulle.\n"
+
+msgid "La hauteur du dessin ne peut être nulle.\n"
+msgstr "La hauteur du dessin ne peut être nulle.\n"
+
 msgid "%sde %.*lfm à %.*lfm : "
 msgstr "%sde %.*lfm à %.*lfm : "
 
@@ -817,12 +823,6 @@ msgstr "Aucun élément n'est sélectionné.\n"
 msgid "L'élément ne possède aucune dépendance.\n"
 msgstr "L'élément ne possède aucune dépendance.\n"
 
-msgid "La largeur du dessin ne peut être nulle.\n"
-msgstr "La largeur du dessin ne peut être nulle.\n"
-
-msgid "La hauteur du dessin ne peut être nulle.\n"
-msgstr "La hauteur du dessin ne peut être nulle.\n"
-
 msgid "Le type de relâchement est inconnu.\n"
 msgstr "Le type de relâchement est inconnu.\n"
 
@@ -1039,6 +1039,24 @@ msgstr "L [m]"
 msgid "Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"
 msgstr "Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"
 
+msgid "Effort normal"
+msgstr "Effort normal"
+
+msgid "Effort tranchant selon Y"
+msgstr "Effort tranchant selon Y"
+
+msgid "Effort tranchant selon Z"
+msgstr "Effort tranchant selon Z"
+
+msgid "Moment de torsion"
+msgstr "Moment de torsion"
+
+msgid "Moment fléchissant selon y"
+msgstr "Moment fléchissant selon y"
+
+msgid "Moment fléchissant selon z"
+msgstr "Moment fléchissant selon z"
+
 msgid "N [N]"
 msgstr "N [N]"
 
@@ -1047,6 +1065,24 @@ msgstr "Ty [N]"
 
 msgid "Tz [N]"
 msgstr "Tz [N]"
+
+msgid "Déformation de la barre selon x"
+msgstr "Déformation de la barre selon x"
+
+msgid "Déformation de la barre selon y"
+msgstr "Déformation de la barre selon y"
+
+msgid "Déformation de la barre selon z"
+msgstr "Déformation de la barre selon z"
+
+msgid "Rotation de la barre selon x"
+msgstr "Rotation de la barre selon x"
+
+msgid "Rotation de la barre selon y"
+msgstr "Rotation de la barre selon y"
+
+msgid "Rotation de la barre selon z"
+msgstr "Rotation de la barre selon z"
 
 msgid "Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"
 msgstr "Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"

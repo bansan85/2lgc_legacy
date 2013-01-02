@@ -393,7 +393,7 @@ G_MODULE_EXPORT GdkPixbuf *EF_gtk_sections_dessin(EF_Section *section, int width
  *              int height : la hauteur du dessin.
  * Valeur renvoyée : Aucune.
  *   Echec : section == NULL,
- *           width == NULL,
+ *           width == 0,
  *           height == 0.
  */
 {
