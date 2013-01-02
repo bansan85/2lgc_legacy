@@ -331,6 +331,41 @@ gboolean common_fonction_compacte(Fonction* fonction)
 }
 
 
+G_MODULE_EXPORT double common_fonction_y(Fonction* fonction, double x)
+/* Description : Renvoie la valeur f(x).
+ * Paramètres : Fonction* fonction : fonction à afficher.
+ * Valeur renvoyée :
+ *   Succès : La valeur souhaitée,
+ *   Échec : NAN :
+ *             fonction == NULL,
+ *             x hors domaine.
+ */
+{
+    unsigned int i;
+    
+    BUGMSG(fonction, FALSE, gettext("Paramètre %s incorrect.\n"), "fonction");
+    
+    for (i=0;i<fonction->nb_troncons;i++)
+    {
+        if (x <= fonction->troncons[i].fin_troncon)
+        {
+            if (x < fonction->troncons[i].debut_troncon)
+                return NAN;
+            else
+                return fonction->troncons[i].x0+
+                       fonction->troncons[i].x1*x+
+                       fonction->troncons[i].x2*x*x+
+                       fonction->troncons[i].x3*x*x*x+
+                       fonction->troncons[i].x4*x*x*x*x+
+                       fonction->troncons[i].x5*x*x*x*x*x+
+                       fonction->troncons[i].x6*x*x*x*x*x*x;
+        }
+    }
+    
+    return NAN;
+}
+
+
 G_MODULE_EXPORT gboolean common_fonction_affiche(Fonction* fonction)
 /* Description : Affiche la fonction (coefficients pour chaque tronçon) ainsi que la valeur
  *                 de la fonction pour chaque extrémité du tronçon.
@@ -368,6 +403,101 @@ G_MODULE_EXPORT gboolean common_fonction_affiche(Fonction* fonction)
     }
     
     return TRUE;
+}
+
+
+GdkPixbuf* common_fonction_dessin(Fonction* fonction, int width, int height, int decimales)
+/* Description : Renvoie un dessin représentant la fonction dans .
+ * Paramètres : EF_Section *section : la section à dessiner,
+ *              int width : la largeur du dessin,
+ *              int height : la hauteur du dessin.
+ * Valeur renvoyée : Aucune.
+ *   Echec : fonction == NULL,
+ *           width == 0,
+ *           height == 0.
+ */
+{
+    int             rowstride, n_channels;
+    int             x, y;
+    guchar          *pixels, *p;
+    GdkPixbuf       *pixbuf;
+    cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
+    cairo_t         *cr = cairo_create(surface);
+    double          fy_min = 0., fy_max = 0., echelle;
+//    double          convert;
+    cairo_path_t    *save_path;
+    
+    BUGMSG(fonction, NULL, gettext("Paramètre %s incorrect.\n"), "fonction");
+    BUGMSG(width, NULL, gettext("La largeur du dessin ne peut être nulle.\n"));
+    BUGMSG(height, NULL, gettext("La hauteur du dessin ne peut être nulle.\n"));
+    BUGMSG(cairo_surface_status(surface) == CAIRO_STATUS_SUCCESS, NULL, gettext("Erreur d'allocation mémoire.\n"));
+    
+    pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, width, height);
+    pixels = gdk_pixbuf_get_pixels(pixbuf);
+    rowstride = gdk_pixbuf_get_rowstride(pixbuf);
+    n_channels = gdk_pixbuf_get_n_channels(pixbuf);
+    
+    cairo_set_antialias(cr, CAIRO_ANTIALIAS_NONE);
+    cairo_set_source_rgba(cr, 1., 1., 1., 0.);
+    cairo_rectangle(cr, 0, 0, width, height);
+    cairo_fill(cr);
+        
+    // On replie tout avec un fond blanc
+    for (y=0;y<height;y++)
+        for (x=0;x<width;x++)
+        {
+            p = pixels + y * rowstride + x * n_channels;
+            p[0] = 255;
+            p[1] = 255;
+            p[2] = 255;
+            if (n_channels == 4)
+                p[3] = 0;
+        }
+    
+    for (x=0;x<width;x++)
+    {
+        double fy = common_fonction_y(fonction, fonction->troncons[0].debut_troncon+x*(fonction->troncons[fonction->nb_troncons-1].fin_troncon-fonction->troncons[0].debut_troncon)/(width-1));
+        
+        if (fy_max < fy)
+            fy_max = fy;
+        if (fy_min > fy)
+            fy_min = fy;
+    }
+
+    if (ABS(fy_max) < pow(10, -decimales))
+        fy_max = 0.;
+    if (ABS(fy_min) < pow(10, -decimales))
+        fy_min = 0.;
+    
+    echelle = ((height-1.)/2.)/MAX(ABS(fy_max), ABS(fy_min));
+    
+    cairo_set_source_rgba(cr, 0.8, 0.8, 0.8, 1.);
+    cairo_new_path(cr);
+    // On inverse le signe car au milieu, le fait d'ajouter fait descendre la position.
+    cairo_move_to(cr, width, height/2.);
+    cairo_rel_line_to(cr, -(width-1), 0.);
+    cairo_rel_line_to(cr, 0., -common_fonction_y(fonction, fonction->troncons[0].debut_troncon/(width-1))*echelle);
+    
+    for (x=1;x<width;x++)
+    {
+        cairo_rel_line_to(cr, 1., -(common_fonction_y(fonction, fonction->troncons[0].debut_troncon+x*(fonction->troncons[fonction->nb_troncons-1].fin_troncon-fonction->troncons[0].debut_troncon)/(width-1))-common_fonction_y(fonction, fonction->troncons[0].debut_troncon+(x-1)*(fonction->troncons[fonction->nb_troncons-1].fin_troncon-fonction->troncons[0].debut_troncon)/(width-1)))*echelle);
+    }
+    cairo_close_path(cr);
+    save_path = cairo_copy_path(cr);
+    cairo_fill(cr);
+    cairo_set_source_rgba(cr, 0., 0., 0., 1.);
+    cairo_set_line_width(cr, 1.);
+    cairo_new_path(cr);
+    cairo_append_path(cr, save_path);
+    cairo_stroke(cr);
+    
+    cairo_path_destroy(save_path);
+    cairo_destroy(cr);
+    
+    pixbuf = gdk_pixbuf_get_from_surface(surface, 0, 0, width, height);
+    cairo_surface_destroy(surface);
+    
+    return pixbuf;
 }
 
 
