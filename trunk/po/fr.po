@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2013-01-02 23:43+0100\n"
-"PO-Revision-Date: 2013-01-02 23:44+0100\n"
+"POT-Creation-Date: 2013-01-03 20:28+0100\n"
+"PO-Revision-Date: 2013-01-03 20:30+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -1086,15 +1086,6 @@ msgstr "Rotation de la barre selon z"
 
 msgid "Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"
 msgstr "Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"
-
-msgid "Rx [m]"
-msgstr "Rx [m]"
-
-msgid "Ry [m]"
-msgstr "Ry [m]"
-
-msgid "Rz [m]"
-msgstr "Rz [m]"
 
 msgid "La liste des types de barre est indéfinie.\n"
 msgstr "La liste des types de barre est indéfinie.\n"
