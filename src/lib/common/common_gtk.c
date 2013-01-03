@@ -215,3 +215,44 @@ G_MODULE_EXPORT void common_gtk_render_double(
     
     return;
 }
+
+
+GtkTreeViewColumn* common_gtk_cree_colonne(char* nom, GType type, int num_colonne,
+  int num_decimales)
+/* Description : Permet de créer une colonne pour un treeview.
+ * Paramètres : char* nom : nom de la colonne,
+ *            : GType type : type d'information que recevra la colonne,
+ *            : int num_colonne : numéro de la colonne.
+ *            : int num_decimales : si le type est G_TYPE_DOUBLE, défini le nombre de décimales
+ *                                  devant être affiché.
+ * Valeur renvoyée : un pointeur vers la nouvelle colonne.
+ */
+{
+    GtkCellRenderer     *cell;
+    GtkTreeViewColumn   *column;
+    
+    if (type == G_TYPE_OBJECT)
+        cell = gtk_cell_renderer_pixbuf_new();
+    else
+        cell = gtk_cell_renderer_text_new();
+    
+    if (type == G_TYPE_DOUBLE)
+        gtk_cell_renderer_set_alignment(cell, 1.0, 0.5);
+    else
+        gtk_cell_renderer_set_alignment(cell, 0.5, 0.5);
+
+    if (type == G_TYPE_OBJECT)
+        column = gtk_tree_view_column_new_with_attributes(nom, cell, "pixbuf", num_colonne, NULL);
+    else
+        column = gtk_tree_view_column_new_with_attributes(nom, cell, "text", num_colonne, NULL);
+    
+    gtk_tree_view_column_set_alignment(column, 0.5);
+    
+    if (type == G_TYPE_DOUBLE)
+    {
+        g_object_set_data(G_OBJECT(cell), "column", GINT_TO_POINTER(num_colonne));
+        gtk_tree_view_column_set_cell_data_func(column, cell, common_gtk_render_double, GINT_TO_POINTER(num_decimales), NULL);
+    }
+    
+    return column;
+}
