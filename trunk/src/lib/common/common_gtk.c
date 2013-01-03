@@ -128,27 +128,27 @@ G_MODULE_EXPORT double common_gtk_text_buffer_double(GtkTextBuffer *textbuffer, 
 }
 
 
-G_MODULE_EXPORT uint common_gtk_text_buffer_uint(GtkTextBuffer *textbuffer, uint val_min,
-  gboolean min_include, uint val_max, gboolean max_include)
+G_MODULE_EXPORT unsigned int common_gtk_text_buffer_uint(GtkTextBuffer *textbuffer,
+  unsigned int val_min, gboolean min_include, unsigned int val_max, gboolean max_include)
 /* Description : Vérifie en temps réel si le GtkTextBuffer contient bien un nombre entier non
  *               signé compris entre les valeurs val_min et val_max.
  *               S'il ne contient pas de nombre ou hors domaine, le texte passe en rouge.
  * Paramètres : GtkTextBuffer *textbuffer : composant à l'origine de l'évènement,
- *            : uint val_min : borne inférieure,
+ *            : unsigned int val_min : borne inférieure,
  *            : gboolean min_include : borne inférieure autorisée ? (min 0),
- *            : uinte val_max : borne supérieure
+ *            : unsigned int val_max : borne supérieure
  *            : gboolean max_include : borne supérieure autorisée ? (max UINT_MAX).
  * Valeur renvoyée :
  *   Succès : la valeur du nombre,
  *   Echec : UINT_MAX.
  */
 {
-    char        *texte;
-    GtkTextIter start, end;
-    uint        nombre;
-    char        *fake;
-    gboolean    min_check;
-    gboolean    max_check;
+    char            *texte;
+    GtkTextIter     start, end;
+    unsigned int    nombre;
+    char            *fake;
+    gboolean        min_check;
+    gboolean        max_check;
     
     gtk_text_buffer_get_iter_at_offset(textbuffer, &start, 0);
     gtk_text_buffer_get_iter_at_offset(textbuffer, &end, -1);
