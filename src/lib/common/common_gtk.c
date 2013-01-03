@@ -236,6 +236,7 @@ GtkTreeViewColumn* common_gtk_cree_colonne(char* nom, GType type, int num_colonn
     else
         cell = gtk_cell_renderer_text_new();
     
+    // Pour les nombres flottants, l'alignement à droite permet aux virgules d'être alignées.
     if (type == G_TYPE_DOUBLE)
         gtk_cell_renderer_set_alignment(cell, 1.0, 0.5);
     else
