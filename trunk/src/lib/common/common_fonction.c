@@ -424,7 +424,7 @@ GdkPixbuf* common_fonction_dessin(Fonction* fonction, int width, int height, int
     cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
     cairo_t         *cr = cairo_create(surface);
     double          fy_min = 0., fy_max = 0., echelle;
-//    double          convert;
+    double          *val;
     cairo_path_t    *save_path;
     
     BUGMSG(fonction, NULL, gettext("Paramètre %s incorrect.\n"), "fonction");
@@ -454,14 +454,16 @@ GdkPixbuf* common_fonction_dessin(Fonction* fonction, int width, int height, int
                 p[3] = 0;
         }
     
+    BUGMSG(val = malloc(sizeof(double)*width), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    
     for (x=0;x<width;x++)
     {
-        double fy = common_fonction_y(fonction, fonction->troncons[0].debut_troncon+x*(fonction->troncons[fonction->nb_troncons-1].fin_troncon-fonction->troncons[0].debut_troncon)/(width-1));
+        val[x] = common_fonction_y(fonction, fonction->troncons[0].debut_troncon+x*(fonction->troncons[fonction->nb_troncons-1].fin_troncon-fonction->troncons[0].debut_troncon)/(width-1));
         
-        if (fy_max < fy)
-            fy_max = fy;
-        if (fy_min > fy)
-            fy_min = fy;
+        if (fy_max < val[x])
+            fy_max = val[x];
+        if (fy_min > val[x])
+            fy_min = val[x];
     }
 
     if (ABS(fy_max) < pow(10, -decimales))
@@ -479,9 +481,8 @@ GdkPixbuf* common_fonction_dessin(Fonction* fonction, int width, int height, int
     cairo_rel_line_to(cr, 0., -common_fonction_y(fonction, fonction->troncons[0].debut_troncon/(width-1))*echelle);
     
     for (x=1;x<width;x++)
-    {
-        cairo_rel_line_to(cr, 1., -(common_fonction_y(fonction, fonction->troncons[0].debut_troncon+x*(fonction->troncons[fonction->nb_troncons-1].fin_troncon-fonction->troncons[0].debut_troncon)/(width-1))-common_fonction_y(fonction, fonction->troncons[0].debut_troncon+(x-1)*(fonction->troncons[fonction->nb_troncons-1].fin_troncon-fonction->troncons[0].debut_troncon)/(width-1)))*echelle);
-    }
+        cairo_rel_line_to(cr, 1., -(val[x]-val[x-1])*echelle);
+    
     cairo_close_path(cr);
     save_path = cairo_copy_path(cr);
     cairo_fill(cr);
@@ -496,6 +497,7 @@ GdkPixbuf* common_fonction_dessin(Fonction* fonction, int width, int height, int
     
     pixbuf = gdk_pixbuf_get_from_surface(surface, 0, 0, width, height);
     cairo_surface_destroy(surface);
+    free(val);
     
     return pixbuf;
 }
