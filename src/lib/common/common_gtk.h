@@ -28,8 +28,7 @@
 gboolean common_gtk_treeview_button_press_unselect(GtkTreeView *widget, GdkEvent *event, Projet *projet);
 double common_gtk_text_buffer_double(GtkTextBuffer *textbuffer, double val_min,
   gboolean min_include, double val_max, gboolean max_include);
-uint common_gtk_text_buffer_uint(GtkTextBuffer *textbuffer, uint val_min, gboolean min_include,
-  uint val_max, gboolean max_include);
+unsigned int common_gtk_text_buffer_uint(GtkTextBuffer *textbuffer, unsigned int val_min, gboolean min_include, unsigned int val_max, gboolean max_include);
 void common_gtk_render_double(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell, GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data);
 
 #endif
