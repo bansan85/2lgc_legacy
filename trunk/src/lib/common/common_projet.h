@@ -225,6 +225,12 @@ typedef enum __Colonne_Resultats
     COLRES_BARRES_PIXBUF_MX,        // Dessin du moment de torsion
     COLRES_BARRES_PIXBUF_MY,        // Dessin du moment fléchissant en y
     COLRES_BARRES_PIXBUF_MZ,        // Dessin du moment fléchissant en z
+    COLRES_BARRES_DESC_N,           // Points caractéristiques de l'effort normal N
+    COLRES_BARRES_DESC_TY,          // Points caractéristiques de l'effort tranchant en y
+    COLRES_BARRES_DESC_TZ,          // Points caractéristiques de l'effort tranchant en z
+    COLRES_BARRES_DESC_MX,          // Points caractéristiques du moment de torsion
+    COLRES_BARRES_DESC_MY,          // Points caractéristiques du moment fléchissant en y
+    COLRES_BARRES_DESC_MZ,          // Points caractéristiques du moment fléchissant en z
     COLRES_BARRES_EQ_N,             // Equation de l'effort normal N
     COLRES_BARRES_EQ_TY,            // Equation de l'effort tranchant en y
     COLRES_BARRES_EQ_TZ,            // Equation de l'effort tranchant en z
@@ -237,6 +243,12 @@ typedef enum __Colonne_Resultats
     COLRES_DEFORMATION_PIXBUF_RX,   // Dessin de la déformation des barres, Rx
     COLRES_DEFORMATION_PIXBUF_RY,   // Dessin de la déformation des barres, Rx
     COLRES_DEFORMATION_PIXBUF_RZ,   // Dessin de la déformation des barres, Rx
+    COLRES_DEFORMATION_DESC_UX,     // Points caractéristiques de la déformation des barres, Ux
+    COLRES_DEFORMATION_DESC_UY,     // Points caractéristiques de la déformation des barres, Uy
+    COLRES_DEFORMATION_DESC_UZ,     // Points caractéristiques de la déformation des barres, Uz
+    COLRES_DEFORMATION_DESC_RX,     // Points caractéristiques de la déformation des barres, Rx
+    COLRES_DEFORMATION_DESC_RY,     // Points caractéristiques de la déformation des barres, Rx
+    COLRES_DEFORMATION_DESC_RZ,     // Points caractéristiques de la déformation des barres, Rx
     COLRES_DEFORMATION_UX,          // Déformation des barres, Ux
     COLRES_DEFORMATION_UY,          // Déformation des barres, Uy
     COLRES_DEFORMATION_UZ,          // Déformation des barres, Uz

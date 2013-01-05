@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2013-01-03 20:28+0100\n"
-"PO-Revision-Date: 2013-01-03 20:30+0100\n"
+"POT-Creation-Date: 2013-01-05 16:44+0100\n"
+"PO-Revision-Date: 2013-01-05 17:01+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -1057,6 +1057,24 @@ msgstr "Moment fléchissant selon y"
 msgid "Moment fléchissant selon z"
 msgstr "Moment fléchissant selon z"
 
+msgid "Points caractéristiques de N [N]"
+msgstr "Points caractéristiques de N [N]"
+
+msgid "Points caractéristiques de TY [N]"
+msgstr "Points caractéristiques de TY [N]"
+
+msgid "Points caractéristiques de TZ [N]"
+msgstr "Points caractéristiques de TZ [N]"
+
+msgid "Points caractéristiques de Mx [N.m]"
+msgstr "Points caractéristiques de Mx [N.m]"
+
+msgid "Points caractéristiques de My [N.m]"
+msgstr "Points caractéristiques de My [N.m]"
+
+msgid "Points caractéristiques de Mz [N.m]"
+msgstr "Points caractéristiques de Mz [N.m]"
+
 msgid "N [N]"
 msgstr "N [N]"
 
@@ -1086,6 +1104,24 @@ msgstr "Rotation de la barre selon z"
 
 msgid "Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"
 msgstr "Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"
+
+msgid "Points caractéristiques de Ux [m]"
+msgstr "Points caractéristiques de Ux [m]"
+
+msgid "Points caractéristiques de Uy [m]"
+msgstr "Points caractéristiques de Uy [m]"
+
+msgid "Points caractéristiques de Uz [m]"
+msgstr "Points caractéristiques de Uz [m]"
+
+msgid "Points caractéristiques de Rx [rad]"
+msgstr "Points caractéristiques de Rx [rad]"
+
+msgid "Points caractéristiques de Ry [rad]"
+msgstr "Points caractéristiques de Ry [rad]"
+
+msgid "Points caractéristiques de Rz [rad]"
+msgstr "Points caractéristiques de Rz [rad]"
 
 msgid "La liste des types de barre est indéfinie.\n"
 msgstr "La liste des types de barre est indéfinie.\n"
