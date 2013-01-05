@@ -331,27 +331,52 @@ gboolean common_fonction_compacte(Fonction* fonction)
 }
 
 
-G_MODULE_EXPORT double common_fonction_y(Fonction* fonction, double x)
+G_MODULE_EXPORT double common_fonction_y(Fonction* fonction, double x, int position)
 /* Description : Renvoie la valeur f(x).
- * Paramètres : Fonction* fonction : fonction à afficher.
+ * Paramètres : Fonction* fonction : fonction à afficher,
+ *            : double x : abscisse de la fonction à renvoyer,
+ *            : int position : cette variable est utilisé dans un cas particulier. Une
+ *              abscisse peut posséder renvoyer à deux valeurs différentes. Dans le cas où
+ *              l'abscisse demandée est exactement celle séparant deux tronçons, une
+ *              discontinuité peut apparaître. Ainsi, si position vaut -1 la valeur du tronçon
+ *              inférieure sera renvoyée (et NAN si position vaut l'abscisse inférieure de la
+ *              fonction). Si position vaut 1, la valeur du tronçon supérieure est renvoyée ( et
+ *              NAN si la position vaut l'abscisse supérieure de la fonction). Si position vaut
+ *              0, l'abscisse inférieure sera renvoyée mais sans NAN en cas d'erreur.
  * Valeur renvoyée :
  *   Succès : La valeur souhaitée,
  *   Échec : NAN :
  *             fonction == NULL,
- *             x hors domaine.
+ *             x hors domaine,
+ *             position < -1 ou position > 1
  */
 {
     unsigned int i;
     
     BUGMSG(fonction, FALSE, gettext("Paramètre %s incorrect.\n"), "fonction");
+    BUGMSG((-1 <= position) && (position <= 1), FALSE, gettext("Paramètre %s incorrect.\n"), "position");
+    
+    if (fonction->nb_troncons == 0)
+        return NAN;
+    
+    if ((ERREUR_RELATIVE_EGALE(fonction->troncons[0].debut_troncon, x)) && (position == -1))
+        return NAN;
     
     for (i=0;i<fonction->nb_troncons;i++)
     {
-        if (x <= fonction->troncons[i].fin_troncon)
+        if (x <= fonction->troncons[i].fin_troncon*(1+ERREUR_RELATIVE_MIN))
         {
             if (x < fonction->troncons[i].debut_troncon)
                 return NAN;
             else
+            {
+                if ((ERREUR_RELATIVE_EGALE(fonction->troncons[i].fin_troncon, x)) && (position == 1))
+                {
+                    if (i == fonction->nb_troncons-1)
+                        return NAN;
+                    else
+                        i++;
+                }
                 return fonction->troncons[i].x0+
                        fonction->troncons[i].x1*x+
                        fonction->troncons[i].x2*x*x+
@@ -359,10 +384,150 @@ G_MODULE_EXPORT double common_fonction_y(Fonction* fonction, double x)
                        fonction->troncons[i].x4*x*x*x*x+
                        fonction->troncons[i].x5*x*x*x*x*x+
                        fonction->troncons[i].x6*x*x*x*x*x*x;
+            }
         }
     }
     
     return NAN;
+}
+
+
+G_MODULE_EXPORT uint common_fonction_caracteristiques(Fonction* fonction, double **pos,
+  double **val)
+/* Description : Affiche les points caractéristiques de la fonction.
+ * Paramètres : Fonction* fonction : fonction à afficher,
+ *            : double *pos : position des points caractéristiques,
+ *            : double *val : valeur des points caractéristiques.
+ * Valeur renvoyée :
+ *   le nombre de points caractéristiques.
+ *   Échec : 0 :
+ *             fonction == NULL,
+ *             erreur d'allocation mémoire.
+ */
+{
+    unsigned int    i, nb = 0;
+    double          *pos_tmp = NULL, *val_tmp = NULL;
+    
+    BUGMSG(fonction, 0, gettext("Paramètre %s incorrect.\n"), "fonction");
+    
+    BUG(common_fonction_compacte(fonction), 0);
+    
+    if (fonction->nb_troncons == 0)
+    {
+        *pos = NULL;
+        *val = NULL;
+        return 0;
+    }
+    
+    for (i=0;i<fonction->nb_troncons;i++)
+    {
+        // On commence par s'occuper du début du tronçon. 
+        
+        // On ajoute si c'est le début de la fonction
+        if (i==0)
+        {
+            BUGMSG(pos_tmp = malloc(sizeof(double)), 0, gettext("Erreur d'allocation mémoire.\n"));;
+            pos_tmp[0] = fonction->troncons[0].debut_troncon;
+            BUGMSG(val_tmp = malloc(sizeof(double)), 0, gettext("Erreur d'allocation mémoire.\n"));
+            val_tmp[0] = common_fonction_y(fonction, fonction->troncons[0].debut_troncon, 1);
+            nb = 1;
+        }
+        else
+        {
+            // On vérifie si la fonction est discontinue en x
+            if ((!ERREUR_RELATIVE_EGALE(fonction->troncons[i].debut_troncon, fonction->troncons[i-1].fin_troncon)) ||
+            // ou si elle est discontinue en y
+              (!ERREUR_RELATIVE_EGALE(common_fonction_y(fonction, fonction->troncons[i].debut_troncon, -1), common_fonction_y(fonction, fonction->troncons[i].debut_troncon, 1))))
+            {
+                nb++;
+                BUGMSG(pos_tmp = realloc(pos_tmp, sizeof(double)*nb), 0, gettext("Erreur d'allocation mémoire.\n"));
+                pos_tmp[nb-1] = fonction->troncons[i].debut_troncon;
+                BUGMSG(val_tmp = realloc(val_tmp, sizeof(double)*nb), 0, gettext("Erreur d'allocation mémoire.\n"));
+                val_tmp[nb-1] = common_fonction_y(fonction, fonction->troncons[i].debut_troncon, -1);
+                nb++;
+                BUGMSG(pos_tmp = realloc(pos_tmp, sizeof(double)*nb), 0, gettext("Erreur d'allocation mémoire.\n"));
+                pos_tmp[nb-1] = fonction->troncons[i].debut_troncon;
+                BUGMSG(val_tmp = realloc(val_tmp, sizeof(double)*nb), 0, gettext("Erreur d'allocation mémoire.\n"));
+                val_tmp[nb-1] = common_fonction_y(fonction, fonction->troncons[i].debut_troncon, 1);
+            }
+            // Si elle est continue, elle est un point caractéristique si sa dérivée change de
+            // signe. Rappel : f'(x)=(f(x+Dx)-f(x))/Dx. Dans notre cas, on prendra Dx = 1/1000
+            // du troncon.
+            else
+            {
+                double dx;
+                double fprim1, fprim2;
+                
+                dx = (fonction->troncons[i-1].fin_troncon-fonction->troncons[i-1].debut_troncon)/1000.;
+                fprim1 = (common_fonction_y(fonction, fonction->troncons[i].debut_troncon, -1)-common_fonction_y(fonction, fonction->troncons[i].debut_troncon-dx, 0))/dx;
+                
+                dx = (fonction->troncons[i].fin_troncon-fonction->troncons[i].debut_troncon)/1000.;
+                fprim2 = (common_fonction_y(fonction, fonction->troncons[i].debut_troncon+dx, 0)-common_fonction_y(fonction, fonction->troncons[i].debut_troncon, 1))/dx;
+                
+                if (signbit(fprim1) != signbit(fprim2))
+                {
+                    nb++;
+                    BUGMSG(pos_tmp = realloc(pos_tmp, sizeof(double)*nb), 0, gettext("Erreur d'allocation mémoire.\n"));
+                    pos_tmp[nb-1] = fonction->troncons[i].debut_troncon;
+                    BUGMSG(val_tmp = realloc(val_tmp, sizeof(double)*nb), 0, gettext("Erreur d'allocation mémoire.\n"));
+                    val_tmp[nb-1] = common_fonction_y(fonction, fonction->troncons[i].debut_troncon, -1);
+                }
+            }
+        }
+
+        // TODO : il reste à faire l'intérieur du tronçon.
+    }
+    
+    nb++;
+    BUGMSG(pos_tmp = realloc(pos_tmp, sizeof(double)*nb), 0, gettext("Erreur d'allocation mémoire.\n"));
+    pos_tmp[nb-1] = fonction->troncons[fonction->nb_troncons-1].fin_troncon;
+    BUGMSG(val_tmp = realloc(val_tmp, sizeof(double)*nb), 0, gettext("Erreur d'allocation mémoire.\n"));
+    val_tmp[nb-1] = common_fonction_y(fonction, fonction->troncons[fonction->nb_troncons-1].fin_troncon, -1);
+    
+    *pos = pos_tmp;
+    *val = val_tmp;
+    
+    return nb;
+}
+
+
+G_MODULE_EXPORT char* common_fonction_affiche_caract(Fonction* fonction, int decimales_x,
+  int decimales_y)
+/* Description : Affiche les points caractéristiques d'une fonction
+ * Paramètres : Fonction* fonction : fonction à afficher,
+ *            : int decimales_x : nombre de décimales à afficher pour l'abscisse.
+ *            : int decimales_y : nombre de décimales à afficher pour l'ordonnée.
+ * Valeur renvoyée :
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             fonction == NULL,
+ *             Echec de la fonction common_fonction_caracteristiques
+ */
+{
+    double          *pos, *val;
+    unsigned int    nb_val, i;
+    char            *retour, *tmp;
+    
+    BUGMSG(fonction, FALSE, gettext("Paramètre %s incorrect.\n"), "fonction");
+    
+    nb_val = common_fonction_caracteristiques(fonction, &pos, &val);
+    
+    if (nb_val == 0)
+        return NULL;
+    
+    BUGMSG(retour = g_strdup_printf("%.*lf : %.*lf", decimales_x, pos[0], decimales_y, val[0]), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    
+    for (i=1;i<nb_val;i++)
+    {
+        tmp = retour;
+        BUGMSG(retour = g_strdup_printf("%s\n%.*lf : %.*lf", retour, decimales_x, pos[i], decimales_y, val[i]), NULL, gettext("Erreur d'allocation mémoire.\n"));
+        free(tmp);
+    }
+    
+    free(pos);
+    free(val);
+    
+    return retour;
 }
 
 
@@ -458,7 +623,7 @@ GdkPixbuf* common_fonction_dessin(Fonction* fonction, int width, int height, int
     
     for (x=0;x<width;x++)
     {
-        val[x] = common_fonction_y(fonction, fonction->troncons[0].debut_troncon+x*(fonction->troncons[fonction->nb_troncons-1].fin_troncon-fonction->troncons[0].debut_troncon)/(width-1));
+        val[x] = common_fonction_y(fonction, fonction->troncons[0].debut_troncon+x*(fonction->troncons[fonction->nb_troncons-1].fin_troncon-fonction->troncons[0].debut_troncon)/(width-1), 0);
         
         if (fy_max < val[x])
             fy_max = val[x];
@@ -478,7 +643,7 @@ GdkPixbuf* common_fonction_dessin(Fonction* fonction, int width, int height, int
     // On inverse le signe car au milieu, le fait d'ajouter fait descendre la position.
     cairo_move_to(cr, width, height/2.);
     cairo_rel_line_to(cr, -(width-1), 0.);
-    cairo_rel_line_to(cr, 0., -common_fonction_y(fonction, fonction->troncons[0].debut_troncon/(width-1))*echelle);
+    cairo_rel_line_to(cr, 0., -common_fonction_y(fonction, fonction->troncons[0].debut_troncon/(width-1), 0)*echelle);
     
     for (x=1;x<width;x++)
         cairo_rel_line_to(cr, 1., -(val[x]-val[x-1])*echelle);

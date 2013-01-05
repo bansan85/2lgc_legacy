@@ -273,6 +273,12 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                         case COLRES_BARRES_PIXBUF_MX :
                         case COLRES_BARRES_PIXBUF_MY :
                         case COLRES_BARRES_PIXBUF_MZ :
+                        case COLRES_BARRES_DESC_N :
+                        case COLRES_BARRES_DESC_TY :
+                        case COLRES_BARRES_DESC_TZ :
+                        case COLRES_BARRES_DESC_MX :
+                        case COLRES_BARRES_DESC_MY :
+                        case COLRES_BARRES_DESC_MZ :
                         case COLRES_BARRES_EQ_N :
                         case COLRES_BARRES_EQ_TY :
                         case COLRES_BARRES_EQ_TZ :
@@ -285,6 +291,12 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                         case COLRES_DEFORMATION_PIXBUF_RX :
                         case COLRES_DEFORMATION_PIXBUF_RY :
                         case COLRES_DEFORMATION_PIXBUF_RZ :
+                        case COLRES_DEFORMATION_DESC_UX :
+                        case COLRES_DEFORMATION_DESC_UY :
+                        case COLRES_DEFORMATION_DESC_UZ :
+                        case COLRES_DEFORMATION_DESC_RX :
+                        case COLRES_DEFORMATION_DESC_RY :
+                        case COLRES_DEFORMATION_DESC_RZ :
                         case COLRES_DEFORMATION_UX :
                         case COLRES_DEFORMATION_UY :
                         case COLRES_DEFORMATION_UZ :
@@ -440,6 +452,48 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             g_object_unref(pixbuf);
                             break;
                         }
+                        case COLRES_BARRES_DESC_N :
+                        {
+                            char *tmp = common_fonction_affiche_caract(action_en_cours->fonctions_efforts[0][i], DECIMAL_DISTANCE, DECIMAL_FORCE);
+                            gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
+                            free(tmp);
+                            break;
+                        }
+                        case COLRES_BARRES_DESC_TY :
+                        {
+                            char *tmp = common_fonction_affiche_caract(action_en_cours->fonctions_efforts[1][i], DECIMAL_DISTANCE, DECIMAL_FORCE);
+                            gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
+                            free(tmp);
+                            break;
+                        }
+                        case COLRES_BARRES_DESC_TZ :
+                        {
+                            char *tmp = common_fonction_affiche_caract(action_en_cours->fonctions_efforts[2][i], DECIMAL_DISTANCE, DECIMAL_FORCE);
+                            gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
+                            free(tmp);
+                            break;
+                        }
+                        case COLRES_BARRES_DESC_MX :
+                        {
+                            char *tmp = common_fonction_affiche_caract(action_en_cours->fonctions_efforts[3][i], DECIMAL_DISTANCE, DECIMAL_MOMENT);
+                            gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
+                            free(tmp);
+                            break;
+                        }
+                        case COLRES_BARRES_DESC_MY :
+                        {
+                            char *tmp = common_fonction_affiche_caract(action_en_cours->fonctions_efforts[4][i], DECIMAL_DISTANCE, DECIMAL_MOMENT);
+                            gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
+                            free(tmp);
+                            break;
+                        }
+                        case COLRES_BARRES_DESC_MZ :
+                        {
+                            char *tmp = common_fonction_affiche_caract(action_en_cours->fonctions_efforts[5][i], DECIMAL_DISTANCE, DECIMAL_MOMENT);
+                            gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
+                            free(tmp);
+                            break;
+                        }
                         case COLRES_BARRES_EQ_N :
                         {
                             char *tmp = common_fonction_renvoie(action_en_cours->fonctions_efforts[0][i], DECIMAL_FORCE);
@@ -540,6 +594,48 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             gtk_list_store_set(res->list_store, &Iter, j-1, pixbuf, -1);
                             
                             g_object_unref(pixbuf);
+                            break;
+                        }
+                        case COLRES_DEFORMATION_DESC_UX :
+                        {
+                            char *tmp = common_fonction_affiche_caract(action_en_cours->fonctions_deformation[0][i], DECIMAL_DISTANCE, DECIMAL_DEPLACEMENT);
+                            gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
+                            free(tmp);
+                            break;
+                        }
+                        case COLRES_DEFORMATION_DESC_UY :
+                        {
+                            char *tmp = common_fonction_affiche_caract(action_en_cours->fonctions_deformation[1][i], DECIMAL_DISTANCE, DECIMAL_DEPLACEMENT);
+                            gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
+                            free(tmp);
+                            break;
+                        }
+                        case COLRES_DEFORMATION_DESC_UZ :
+                        {
+                            char *tmp = common_fonction_affiche_caract(action_en_cours->fonctions_deformation[2][i], DECIMAL_DISTANCE, DECIMAL_DEPLACEMENT);
+                            gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
+                            free(tmp);
+                            break;
+                        }
+                        case COLRES_DEFORMATION_DESC_RX :
+                        {
+                            char *tmp = common_fonction_affiche_caract(action_en_cours->fonctions_rotation[0][i], DECIMAL_DISTANCE, DECIMAL_ROTATION);
+                            gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
+                            free(tmp);
+                            break;
+                        }
+                        case COLRES_DEFORMATION_DESC_RY :
+                        {
+                            char *tmp = common_fonction_affiche_caract(action_en_cours->fonctions_rotation[1][i], DECIMAL_DISTANCE, DECIMAL_ROTATION);
+                            gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
+                            free(tmp);
+                            break;
+                        }
+                        case COLRES_DEFORMATION_DESC_RZ :
+                        {
+                            char *tmp = common_fonction_affiche_caract(action_en_cours->fonctions_rotation[2][i], DECIMAL_DISTANCE, DECIMAL_ROTATION);
+                            gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
+                            free(tmp);
                             break;
                         }
                         case COLRES_DEFORMATION_UX :
@@ -826,6 +922,54 @@ gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, Projet *projet
                 gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("Moment fléchissant selon z"), col_type[i-1], i-1, 0));
                 break;
             }
+            case COLRES_BARRES_DESC_N :
+            {
+                BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                BUGMSG(res->col_tab[1] == COLRES_NUM_BARRES, FALSE, gettext("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
+                col_type[i-1] = G_TYPE_STRING;
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("Points caractéristiques de N [N]"), col_type[i-1], i-1, 0));
+                break;
+            }
+            case COLRES_BARRES_DESC_TY :
+            {
+                BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                BUGMSG(res->col_tab[1] == COLRES_NUM_BARRES, FALSE, gettext("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
+                col_type[i-1] = G_TYPE_STRING;
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("Points caractéristiques de TY [N]"), col_type[i-1], i-1, 0));
+                break;
+            }
+            case COLRES_BARRES_DESC_TZ :
+            {
+                BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                BUGMSG(res->col_tab[1] == COLRES_NUM_BARRES, FALSE, gettext("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
+                col_type[i-1] = G_TYPE_STRING;
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("Points caractéristiques de TZ [N]"), col_type[i-1], i-1, 0));
+                break;
+            }
+            case COLRES_BARRES_DESC_MX :
+            {
+                BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                BUGMSG(res->col_tab[1] == COLRES_NUM_BARRES, FALSE, gettext("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
+                col_type[i-1] = G_TYPE_STRING;
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("Points caractéristiques de Mx [N.m]"), col_type[i-1], i-1, 0));
+                break;
+            }
+            case COLRES_BARRES_DESC_MY :
+            {
+                BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                BUGMSG(res->col_tab[1] == COLRES_NUM_BARRES, FALSE, gettext("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
+                col_type[i-1] = G_TYPE_STRING;
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("Points caractéristiques de My [N.m]"), col_type[i-1], i-1, 0));
+                break;
+            }
+            case COLRES_BARRES_DESC_MZ :
+            {
+                BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                BUGMSG(res->col_tab[1] == COLRES_NUM_BARRES, FALSE, gettext("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
+                col_type[i-1] = G_TYPE_STRING;
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("Points caractéristiques de Mz [N.m]"), col_type[i-1], i-1, 0));
+                break;
+            }
             case COLRES_BARRES_EQ_N :
             {
                 BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
@@ -920,6 +1064,54 @@ gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, Projet *projet
                 BUGMSG(res->col_tab[1] == COLRES_NUM_BARRES, FALSE, gettext("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
                 col_type[i-1] = G_TYPE_OBJECT;
                 gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("Rotation de la barre selon z"), col_type[i-1], i-1, 0));
+                break;
+            }
+            case COLRES_DEFORMATION_DESC_UX :
+            {
+                BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                BUGMSG(res->col_tab[1] == COLRES_NUM_BARRES, FALSE, gettext("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"));
+                col_type[i-1] = G_TYPE_STRING;
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("Points caractéristiques de Ux [m]"), col_type[i-1], i-1, 0));
+                break;
+            }
+            case COLRES_DEFORMATION_DESC_UY :
+            {
+                BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                BUGMSG(res->col_tab[1] == COLRES_NUM_BARRES, FALSE, gettext("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"));
+                col_type[i-1] = G_TYPE_STRING;
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("Points caractéristiques de Uy [m]"), col_type[i-1], i-1, 0));
+                break;
+            }
+            case COLRES_DEFORMATION_DESC_UZ :
+            {
+                BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                BUGMSG(res->col_tab[1] == COLRES_NUM_BARRES, FALSE, gettext("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"));
+                col_type[i-1] = G_TYPE_STRING;
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("Points caractéristiques de Uz [m]"), col_type[i-1], i-1, 0));
+                break;
+            }
+            case COLRES_DEFORMATION_DESC_RX :
+            {
+                BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                BUGMSG(res->col_tab[1] == COLRES_NUM_BARRES, FALSE, gettext("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"));
+                col_type[i-1] = G_TYPE_STRING;
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("Points caractéristiques de Rx [rad]"), col_type[i-1], i-1, 0));
+                break;
+            }
+            case COLRES_DEFORMATION_DESC_RY :
+            {
+                BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                BUGMSG(res->col_tab[1] == COLRES_NUM_BARRES, FALSE, gettext("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"));
+                col_type[i-1] = G_TYPE_STRING;
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("Points caractéristiques de Ry [rad]"), col_type[i-1], i-1, 0));
+                break;
+            }
+            case COLRES_DEFORMATION_DESC_RZ :
+            {
+                BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
+                BUGMSG(res->col_tab[1] == COLRES_NUM_BARRES, FALSE, gettext("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"));
+                col_type[i-1] = G_TYPE_STRING;
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("Points caractéristiques de Rz [rad]"), col_type[i-1], i-1, 0));
                 break;
             }
             case COLRES_DEFORMATION_UX :
@@ -1088,22 +1280,28 @@ G_MODULE_EXPORT void EF_gtk_resultats_add_page_type(GtkMenuItem *menuitem, Proje
     }
     else if (strcmp(gtk_menu_item_get_label(menuitem), gettext("Efforts dans les barres")) == 0)
     {
-        BUGMSG(res->col_tab = malloc(sizeof(Colonne_Resultats)*15), , gettext("Erreur d'allocation mémoire.\n"));
-        res->col_tab[0] = 14;
+        BUGMSG(res->col_tab = malloc(sizeof(Colonne_Resultats)*21), , gettext("Erreur d'allocation mémoire.\n"));
+        res->col_tab[0] = 20;
         res->col_tab[1] = COLRES_NUM_BARRES;
         res->col_tab[2] = COLRES_BARRES_LONGUEUR;
         res->col_tab[3] = COLRES_BARRES_PIXBUF_N;
         res->col_tab[4] = COLRES_BARRES_EQ_N;
-        res->col_tab[5] = COLRES_BARRES_PIXBUF_TY;
-        res->col_tab[6] = COLRES_BARRES_EQ_TY;
-        res->col_tab[7] = COLRES_BARRES_PIXBUF_TZ;
-        res->col_tab[8] = COLRES_BARRES_EQ_TZ;
-        res->col_tab[9] = COLRES_BARRES_PIXBUF_MX;
-        res->col_tab[10] = COLRES_BARRES_EQ_MX;
-        res->col_tab[11] = COLRES_BARRES_PIXBUF_MY;
-        res->col_tab[12] = COLRES_BARRES_EQ_MY;
-        res->col_tab[13] = COLRES_BARRES_PIXBUF_MZ;
-        res->col_tab[14] = COLRES_BARRES_EQ_MZ;
+        res->col_tab[5] = COLRES_BARRES_DESC_N;
+        res->col_tab[6] = COLRES_BARRES_PIXBUF_TY;
+        res->col_tab[7] = COLRES_BARRES_EQ_TY;
+        res->col_tab[8] = COLRES_BARRES_DESC_TY;
+        res->col_tab[9] = COLRES_BARRES_PIXBUF_TZ;
+        res->col_tab[10] = COLRES_BARRES_EQ_TZ;
+        res->col_tab[11] = COLRES_BARRES_DESC_TZ;
+        res->col_tab[12] = COLRES_BARRES_PIXBUF_MX;
+        res->col_tab[13] = COLRES_BARRES_EQ_MX;
+        res->col_tab[14] = COLRES_BARRES_DESC_MX;
+        res->col_tab[15] = COLRES_BARRES_PIXBUF_MY;
+        res->col_tab[16] = COLRES_BARRES_EQ_MY;
+        res->col_tab[17] = COLRES_BARRES_DESC_MY;
+        res->col_tab[18] = COLRES_BARRES_PIXBUF_MZ;
+        res->col_tab[19] = COLRES_BARRES_EQ_MZ;
+        res->col_tab[20] = COLRES_BARRES_DESC_MZ;
         
         res->filtre = FILTRE_AUCUN;
         
@@ -1115,22 +1313,28 @@ G_MODULE_EXPORT void EF_gtk_resultats_add_page_type(GtkMenuItem *menuitem, Proje
     }
     else if (strcmp(gtk_menu_item_get_label(menuitem), gettext("Déformations des barres")) == 0)
     {
-        BUGMSG(res->col_tab = malloc(sizeof(Colonne_Resultats)*15), , gettext("Erreur d'allocation mémoire.\n"));
-        res->col_tab[0] = 14;
+        BUGMSG(res->col_tab = malloc(sizeof(Colonne_Resultats)*21), , gettext("Erreur d'allocation mémoire.\n"));
+        res->col_tab[0] = 20;
         res->col_tab[1] = COLRES_NUM_BARRES;
         res->col_tab[2] = COLRES_BARRES_LONGUEUR;
         res->col_tab[3] = COLRES_DEFORMATION_PIXBUF_UX;
         res->col_tab[4] = COLRES_DEFORMATION_UX;
-        res->col_tab[5] = COLRES_DEFORMATION_PIXBUF_UY;
-        res->col_tab[6] = COLRES_DEFORMATION_UY;
-        res->col_tab[7] = COLRES_DEFORMATION_PIXBUF_UZ;
-        res->col_tab[8] = COLRES_DEFORMATION_UZ;
-        res->col_tab[9] = COLRES_DEFORMATION_PIXBUF_RX;
-        res->col_tab[10] = COLRES_DEFORMATION_RX;
-        res->col_tab[11] = COLRES_DEFORMATION_PIXBUF_RY;
-        res->col_tab[12] = COLRES_DEFORMATION_RY;
-        res->col_tab[13] = COLRES_DEFORMATION_PIXBUF_RZ;
-        res->col_tab[14] = COLRES_DEFORMATION_RZ;
+        res->col_tab[5] = COLRES_DEFORMATION_DESC_UX;
+        res->col_tab[6] = COLRES_DEFORMATION_PIXBUF_UY;
+        res->col_tab[7] = COLRES_DEFORMATION_UY;
+        res->col_tab[8] = COLRES_DEFORMATION_DESC_UY;
+        res->col_tab[9] = COLRES_DEFORMATION_PIXBUF_UZ;
+        res->col_tab[10] = COLRES_DEFORMATION_UZ;
+        res->col_tab[11] = COLRES_DEFORMATION_DESC_UZ;
+        res->col_tab[12] = COLRES_DEFORMATION_PIXBUF_RX;
+        res->col_tab[13] = COLRES_DEFORMATION_RX;
+        res->col_tab[14] = COLRES_DEFORMATION_DESC_RX;
+        res->col_tab[15] = COLRES_DEFORMATION_PIXBUF_RY;
+        res->col_tab[16] = COLRES_DEFORMATION_RY;
+        res->col_tab[17] = COLRES_DEFORMATION_DESC_RY;
+        res->col_tab[18] = COLRES_DEFORMATION_PIXBUF_RZ;
+        res->col_tab[19] = COLRES_DEFORMATION_RZ;
+        res->col_tab[20] = COLRES_DEFORMATION_DESC_RZ;
         
         res->filtre = FILTRE_AUCUN;
         
