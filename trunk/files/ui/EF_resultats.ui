@@ -65,9 +65,9 @@
                 <property name="border-width">12</property>
                 <property name="row-spacing">12</property>
                 <child>
-                    <object class="GtkLabel" id="EF_resultats_cas">
+                    <object class="GtkLabel" id="EF_resultats_afficher_label">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Cas :</property>
+                        <property name="label" translatable="yes">Afficher : </property>
                     </object>
                     <packing>
                         <property name="left-attach">0</property>
@@ -75,14 +75,28 @@
                     </packing>
                 </child>
                 <child>
-                    <object class="GtkSpinButton" id="EF_resultats_spin_button_cas">
-                        <property name="adjustment">adjustment_cas</property>
+                    <object class="GtkComboBoxText" id="EF_resultats_combobox">
                         <property name="visible">True</property>
-                        <property name="hexpand">True</property>
-                        <signal name="value-changed" handler="EF_gtk_resultats_cas_change"/>
+                        <property name="hexpand">False</property>
+                        <signal name="changed" handler="EF_gtk_resultats_combobox_changed"/>
+                        <items>
+                            <item translatable="yes">Cas élémentaires</item>
+                            <item translatable="yes">Combinaisons</item>
+                        </items>
                     </object>
                     <packing>
                         <property name="left-attach">1</property>
+                        <property name="top-attach">0</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkComboBoxText" id="EF_resultats_combo_box_cas">
+                        <property name="visible">True</property>
+                        <property name="hexpand">True</property>
+                        <signal name="changed" handler="EF_gtk_resultats_cas_change"/>
+                    </object>
+                    <packing>
+                        <property name="left-attach">2</property>
                         <property name="top-attach">0</property>
                     </packing>
                 </child>
@@ -123,7 +137,7 @@
                     <packing>
                         <property name="left-attach">0</property>
                         <property name="top-attach">1</property>
-                        <property name="width">2</property>
+                        <property name="width">3</property>
                     </packing>
                 </child>
                 <child>
@@ -148,7 +162,7 @@
                     <packing>
                         <property name="left-attach">0</property>
                         <property name="top-attach">2</property>
-                        <property name="width">2</property>
+                        <property name="width">3</property>
                     </packing>
                 </child>
             </object>

@@ -126,7 +126,12 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
     BUGMSG(res, FALSE, gettext("Paramètre %s incorrect.\n"), "res");
     BUGMSG(projet->list_gtk.ef_resultats.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Résultats");
     
-    action_en_cours = _1990_action_cherche_numero(projet, GTK_COMMON_SPINBUTTON_AS_UINT(GTK_SPIN_BUTTON(gtk_builder_get_object(projet->list_gtk.ef_resultats.builder, "EF_resultats_spin_button_cas"))));
+    if (gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(projet->list_gtk.ef_resultats.builder, "EF_resultats_combobox"))) == 0)
+    {
+        BUG(action_en_cours = _1990_action_cherche_numero(projet, gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(projet->list_gtk.ef_resultats.builder, "EF_resultats_combo_box_cas")))), FALSE);
+    }
+    else
+        action_en_cours = NULL;
     
     gtk_list_store_clear(res->list_store);
     
@@ -1194,6 +1199,25 @@ gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, Projet *projet
 }
 
 
+G_MODULE_EXPORT void EF_gtk_resultats_combobox_changed(GtkComboBox *combobox, Projet *projet)
+/* Description : Met à jour l'affichage des résultats en cas de changement de cas / combinaison.
+ * Paramètres : GtkComboBox *combobox : le composant à l'origine de l'évènement,
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    
+    if (gtk_combo_box_get_active(combobox) == 0)
+    {
+        gtk_combo_box_set_model(GTK_COMBO_BOX(gtk_builder_get_object(projet->list_gtk.ef_resultats.builder, "EF_resultats_combo_box_cas")), GTK_TREE_MODEL(projet->list_gtk._1990_actions.list_actions));
+        gtk_combo_box_set_active(GTK_COMBO_BOX(gtk_builder_get_object(projet->list_gtk.ef_resultats.builder, "EF_resultats_combo_box_cas")), 0);
+    }
+    
+    return;
+}
+
+
 G_MODULE_EXPORT void EF_gtk_resultats_cas_change(GtkWidget *widget __attribute__((unused)),
   Projet *projet)
 /* Description : Met à jour l'affichage des résultats en cas de changement de cas.
@@ -1406,16 +1430,19 @@ G_MODULE_EXPORT void EF_gtk_resultats(Projet *projet)
     ef_gtk->notebook = GTK_NOTEBOOK(gtk_builder_get_object(ef_gtk->builder, "EF_resultats_notebook"));
     
     gtk_adjustment_set_upper(GTK_ADJUSTMENT(gtk_builder_get_object(ef_gtk->builder, "adjustment_cas")), g_list_length(projet->actions)-1);
+    gtk_combo_box_set_active(GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder, "EF_resultats_combobox")), 0);
     
     list_parcours = ef_gtk->tableaux;
     while (list_parcours != NULL)
     {
-        EF_gtk_resultats_add_page(list_parcours->data, projet);
+        BUG(EF_gtk_resultats_add_page(list_parcours->data, projet), );
         
         list_parcours = g_list_next(list_parcours);
     }
     
     gtk_window_set_transient_for(GTK_WINDOW(ef_gtk->window), GTK_WINDOW(projet->list_gtk.comp.window));
+    
+    return;
 }
 
 
