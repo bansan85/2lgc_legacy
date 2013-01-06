@@ -331,6 +331,24 @@ gboolean common_fonction_compacte(Fonction* fonction)
 }
 
 
+void common_fonction_ax2_bx_c(double xx1, double yy1, double xx2, double yy2, double xx3, double yy3, double *a, double *b, double *c)
+/* Description : renvoie a, b, et c en fonction de f(xx1)=yy1, ....
+ * Paramètres : double xx1, double yy1 : coordonnée du permier point,
+ *            : double xx2, double yy2 : coordonnée du deuxième point,
+ *            : double xx3, double yy3 : coordonnée du troisième point,
+ *            : double *a, double *b, double *c : retour de la fonction a*x²+b*x+c
+ * Valeur renvoyée : Aucun.
+ */
+{
+    // maxima : solve([a*xx1^2+b*xx1+c=yy1,a*xx2^2+b*xx2+c=yy2,a*xx3^2+b*xx3+c=yy3],[a,b,c]);
+    *a=(xx1*(yy3-yy2)-xx2*yy3+xx3*yy2+(xx2-xx3)*yy1)/(xx1*(xx3*xx3-xx2*xx2)-xx2*xx3*xx3+xx2*xx2*xx3+xx1*xx1*(xx2-xx3));
+    *b=-(xx1*xx1*(yy3-yy2)-xx2*xx2*yy3+xx3*xx3*yy2+(xx2*xx2-xx3*xx3)*yy1)/(xx1*(xx3*xx3-xx2*xx2)-xx2*xx3*xx3+xx2*xx2*xx3+xx1*xx1*(xx2-xx3));
+    *c=(xx1*(xx3*xx3*yy2-xx2*xx2*yy3)+xx1*xx1*(xx2*yy3-xx3*yy2)+(xx2*xx2*xx3-xx2*xx3*xx3)*yy1)/(xx1*(xx3*xx3-xx2*xx2)-xx2*xx3*xx3+xx2*xx2*xx3+xx1*xx1*(xx2-xx3));
+    
+    return;
+}
+
+
 G_MODULE_EXPORT double common_fonction_y(Fonction* fonction, double x, int position)
 /* Description : Renvoie la valeur f(x).
  * Paramètres : Fonction* fonction : fonction à afficher,
@@ -398,6 +416,7 @@ G_MODULE_EXPORT uint common_fonction_caracteristiques(Fonction* fonction, double
  * Paramètres : Fonction* fonction : fonction à afficher,
  *            : double *pos : position des points caractéristiques,
  *            : double *val : valeur des points caractéristiques.
+ *            : int decimales : précision que doit avoir la variables pos.
  * Valeur renvoyée :
  *   le nombre de points caractéristiques.
  *   Échec : 0 :
@@ -405,7 +424,7 @@ G_MODULE_EXPORT uint common_fonction_caracteristiques(Fonction* fonction, double
  *             erreur d'allocation mémoire.
  */
 {
-    unsigned int    i, nb = 0;
+    unsigned int    i, nb = 0, j;
     double          *pos_tmp = NULL, *val_tmp = NULL;
     
     BUGMSG(fonction, 0, gettext("Paramètre %s incorrect.\n"), "fonction");
@@ -474,15 +493,236 @@ G_MODULE_EXPORT uint common_fonction_caracteristiques(Fonction* fonction, double
                 }
             }
         }
-
-        // TODO : il reste à faire l'intérieur du tronçon.
+        
+        // On étudie l'intérieur du tronçon
+        for (j=0;j<9;j++)
+        {
+            double  xx1, xx2, xx3;
+            double  xx1_2, xx2_2, xx3_2;
+            double  a, b, c; // forme de l'interpolation : a*x²+b*x+c
+            double  zero1, zero2, deriv_zero;
+            double  zero1_old = NAN, zero2_old = NAN, deriv_zero_old = NAN;
+            double  ecart_x;
+            
+            // On commence par calculer une interpolation hyperbolique
+            // On s'arrange pour que la deuxième moitié du tronçon à analyser soit la première
+            // moitié du tronçon suivant. C'est une sécurité. En effet, on ne connait pas 
+            // l'erreur de l'approximation faite. Il se pourrait qu'avec l'approximation de base
+            // x soit dans l'intervalle mais que, suite à l'affinement x en sorte.
+            xx1 = fonction->troncons[i].debut_troncon+(fonction->troncons[i].fin_troncon-fonction->troncons[i].debut_troncon)/10.*j;
+            xx2 = fonction->troncons[i].debut_troncon+(fonction->troncons[i].fin_troncon-fonction->troncons[i].debut_troncon)/10.*(j+1);
+            xx3 = fonction->troncons[i].debut_troncon+(fonction->troncons[i].fin_troncon-fonction->troncons[i].debut_troncon)/10.*(j+2.);
+            
+            common_fonction_ax2_bx_c(xx1, common_fonction_y(fonction, xx1, 1), xx2, common_fonction_y(fonction, xx2, 0), xx3, common_fonction_y(fonction, xx3, -1), &a, &b, &c);
+            
+            if (ERREUR_RELATIVE_EGALE(a, 0.))
+            {
+                if (ERREUR_RELATIVE_EGALE(b, 0.))
+                {
+                    zero1 = NAN;
+                    zero2 = NAN;
+                }
+                else
+                {
+                    zero1 = -c/b;
+                    zero2 = NAN;
+                }
+                deriv_zero = NAN;
+            }
+            else
+            {
+                if (b*b-4*a*c < 0.)
+                {
+                    zero1 = NAN;
+                    zero2 = NAN;
+                }
+                else
+                {
+                    // maxima : solve(a*x^2+b*x+c=0,x);
+                    zero1=-(sqrt(b*b-4*a*c)+b)/(2*a);
+                    zero2=(sqrt(b*b-4*a*c)-b)/(2*a);
+                }
+                deriv_zero = -b/(2*a);
+            }
+            
+            if ((deriv_zero < xx1) || (deriv_zero > xx3))
+                deriv_zero = NAN;
+            if ((zero1 < xx1) || (zero1 > xx3))
+                zero1 = NAN;
+            if ((zero2 < xx1) || (zero2 > xx3))
+                zero2 = NAN;
+            
+            zero1_old = zero1+(xx3-xx1);
+            zero2_old = zero2+(xx3-xx1);
+            deriv_zero_old = deriv_zero+(xx3-xx1);
+            
+            ecart_x = (xx3-xx1)/2.;
+            while ((!isnan(zero1)) && (!ERREUR_RELATIVE_EGALE(zero1_old,zero1)))
+            {
+                zero1_old = zero1;
+                if (zero1-ecart_x < xx1)
+                    xx1_2 = xx1;
+                else
+                    xx1_2 = zero1-ecart_x;
+                if (zero1+ecart_x > xx3)
+                    xx3_2 = xx3;
+                else
+                    xx3_2 = zero1+ecart_x;
+                xx2_2 = (xx1_2+xx3_2)/2.;
+                ecart_x = (xx3_2-xx1_2)/4.;
+                
+                common_fonction_ax2_bx_c(xx1_2, common_fonction_y(fonction, xx1_2, 1), xx2_2, common_fonction_y(fonction, xx2_2, 0), xx3_2, common_fonction_y(fonction, xx3_2, -1), &a, &b, &c);
+                
+                if (ERREUR_RELATIVE_EGALE(a, 0.))
+                {
+                    if (ERREUR_RELATIVE_EGALE(b, 0.))
+                        zero1 = NAN;
+                    else
+                    {
+                        zero1 = -c/b;
+                        if ((zero1 < xx1) || (zero1 > xx3))
+                            zero1 = NAN;
+                    }
+                }
+                else
+                {
+                    if (b*b-4*a*c < 0.)
+                        zero1 = NAN;
+                    else
+                    {
+                        zero1=-(sqrt(b*b-4*a*c)+b)/(2*a);
+                        if ((zero1 < xx1) || (zero1 > xx3))
+                            zero1 = NAN;
+                    }
+                }
+            }
+            
+            ecart_x = (xx3-xx1)/2.;
+            while ((!isnan(zero2)) && (!ERREUR_RELATIVE_EGALE(zero2_old,zero2)))
+            {
+                zero2_old = zero2;
+                if (zero2-ecart_x < xx1)
+                    xx1_2 = xx1;
+                else
+                    xx1_2 = zero2-ecart_x;
+                if (zero2+ecart_x > xx3)
+                    xx3_2 = xx3;
+                else
+                    xx3_2 = zero2+ecart_x;
+                xx2_2 = (xx1_2+xx3_2)/2.;
+                ecart_x = (xx3_2-xx1_2)/4.;
+                
+                common_fonction_ax2_bx_c(xx1_2, common_fonction_y(fonction, xx1_2, 1), xx2_2, common_fonction_y(fonction, xx2_2, 0), xx3_2, common_fonction_y(fonction, xx3_2, -1), &a, &b, &c);
+                
+                if (ERREUR_RELATIVE_EGALE(a, 0.))
+                {
+                    if (ERREUR_RELATIVE_EGALE(b, 0.))
+                        zero2 = NAN;
+                    else
+                    {
+                        zero2 = -c/b;
+                        if ((zero2 < xx1) || (zero2 > xx3))
+                            zero2 = NAN;
+                    }
+                }
+                else
+                {
+                    if (b*b-4*a*c < 0.)
+                        zero2 = NAN;
+                    else
+                    {
+                        zero2=(sqrt(b*b-4*a*c)+b)/(2*a);
+                        if ((zero2 < xx1) || (zero2 > xx3))
+                            zero2 = NAN;
+                    }
+                }
+            }
+            
+            ecart_x = (xx3-xx1)/2.;
+            while ((!isnan(deriv_zero)) && (!ERREUR_RELATIVE_EGALE(deriv_zero_old, deriv_zero)))
+            {
+                deriv_zero_old = deriv_zero;
+                if (deriv_zero-ecart_x < xx1)
+                    xx1_2 = xx1;
+                else
+                    xx1_2 = deriv_zero-ecart_x;
+                if (deriv_zero+ecart_x > xx3)
+                    xx3_2 = xx3;
+                else
+                    xx3_2 = deriv_zero+ecart_x;
+                xx2_2 = (xx1_2+xx3_2)/2.;
+                ecart_x = (xx3_2-xx1_2)/4.;
+                
+                common_fonction_ax2_bx_c(xx1_2, common_fonction_y(fonction, xx1_2, 1), xx2_2, common_fonction_y(fonction, xx2_2, 0), xx3_2, common_fonction_y(fonction, xx3_2, -1), &a, &b, &c);
+                
+                if (ERREUR_RELATIVE_EGALE(a, 0.))
+                    deriv_zero = NAN;
+                else
+                {
+                    deriv_zero = -b/(2*a);
+                    if ((deriv_zero < xx1) || (deriv_zero > xx3))
+                        deriv_zero = NAN;
+                }
+            }
+            
+            // On tri les résultats.
+            a = zero1;
+            b = zero2;
+            c = deriv_zero;
+            
+            if (a>b)
+            {
+                a = zero2;
+                b = zero1;
+            }
+            if (b>c)
+            {
+                ecart_x = b;
+                b = c;
+                c = ecart_x;
+            }
+            if (a>c)
+            {
+                ecart_x = a;
+                a = c;
+                c = ecart_x;
+            }
+            
+            if ((!isnan(a)) && (!ERREUR_RELATIVE_EGALE(pos_tmp[nb-1], a)))
+            {
+                nb++;
+                BUGMSG(pos_tmp = realloc(pos_tmp, sizeof(double)*nb), 0, gettext("Erreur d'allocation mémoire.\n"));
+                pos_tmp[nb-1] = a;
+                BUGMSG(val_tmp = realloc(val_tmp, sizeof(double)*nb), 0, gettext("Erreur d'allocation mémoire.\n"));
+                val_tmp[nb-1] = common_fonction_y(fonction, a, 0);
+            }
+            if ((!isnan(b)) && (!ERREUR_RELATIVE_EGALE(pos_tmp[nb-1], b)))
+            {
+                nb++;
+                BUGMSG(pos_tmp = realloc(pos_tmp, sizeof(double)*nb), 0, gettext("Erreur d'allocation mémoire.\n"));
+                pos_tmp[nb-1] = b;
+                BUGMSG(val_tmp = realloc(val_tmp, sizeof(double)*nb), 0, gettext("Erreur d'allocation mémoire.\n"));
+                val_tmp[nb-1] = common_fonction_y(fonction, b, 0);
+            }
+            if ((!isnan(c)) && (!ERREUR_RELATIVE_EGALE(pos_tmp[nb-1], c)))
+            {
+                nb++;
+                BUGMSG(pos_tmp = realloc(pos_tmp, sizeof(double)*nb), 0, gettext("Erreur d'allocation mémoire.\n"));
+                pos_tmp[nb-1] = c;
+                BUGMSG(val_tmp = realloc(val_tmp, sizeof(double)*nb), 0, gettext("Erreur d'allocation mémoire.\n"));
+                val_tmp[nb-1] = common_fonction_y(fonction, c, 0);
+            }
+        }
     }
     
-    nb++;
-    BUGMSG(pos_tmp = realloc(pos_tmp, sizeof(double)*nb), 0, gettext("Erreur d'allocation mémoire.\n"));
-    pos_tmp[nb-1] = fonction->troncons[fonction->nb_troncons-1].fin_troncon;
-    BUGMSG(val_tmp = realloc(val_tmp, sizeof(double)*nb), 0, gettext("Erreur d'allocation mémoire.\n"));
-    val_tmp[nb-1] = common_fonction_y(fonction, fonction->troncons[fonction->nb_troncons-1].fin_troncon, -1);
+    if (!ERREUR_RELATIVE_EGALE(pos_tmp[nb-1], fonction->troncons[fonction->nb_troncons-1].fin_troncon))
+    {
+        nb++;
+        BUGMSG(pos_tmp = realloc(pos_tmp, sizeof(double)*nb), 0, gettext("Erreur d'allocation mémoire.\n"));
+        pos_tmp[nb-1] = fonction->troncons[fonction->nb_troncons-1].fin_troncon;
+        BUGMSG(val_tmp = realloc(val_tmp, sizeof(double)*nb), 0, gettext("Erreur d'allocation mémoire.\n"));
+        val_tmp[nb-1] = common_fonction_y(fonction, fonction->troncons[fonction->nb_troncons-1].fin_troncon, -1);
+    }
     
     *pos = pos_tmp;
     *val = val_tmp;
