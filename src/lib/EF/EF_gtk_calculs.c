@@ -38,13 +38,16 @@ G_MODULE_EXPORT void EF_gtk_calculs_calculer(GtkMenuItem *menuitem __attribute__
  * Valeur renvoyée : Aucune.
  */
 {
+    unsigned int i;
+    
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     
     BUG(EF_calculs_free(projet), );
     BUG(EF_calculs_initialise(projet), );
     BUG(_1992_1_1_barres_rigidite_ajout_tout(projet), );
     BUG(EF_calculs_genere_mat_rig(projet), );
-    BUG(EF_calculs_resoud_charge(projet, 0), );
+    for (i=0;i<g_list_length(projet->actions);i++)
+        BUG(EF_calculs_resoud_charge(projet, i), );
     
     gtk_widget_set_sensitive(projet->list_gtk.comp.menu_resultats_afficher, TRUE);
     

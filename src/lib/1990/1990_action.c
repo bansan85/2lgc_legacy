@@ -406,11 +406,13 @@ G_MODULE_EXPORT Action *_1990_action_ajout(Projet *projet, unsigned int type,
     gtk_list_store_append(projet->list_gtk._1990_actions.list_actions, &action_nouveau->Iter_liste);
     gtk_list_store_set(projet->list_gtk._1990_actions.list_actions, &action_nouveau->Iter_liste, 0, action_nouveau->nom, -1);
     
-    if (projet->list_gtk._1990_actions.builder)
+    if (projet->list_gtk._1990_actions.builder != NULL)
     {
         gtk_tree_store_append(projet->list_gtk._1990_actions.tree_store_actions, &action_nouveau->Iter_fenetre, NULL);
         gtk_tree_store_set(projet->list_gtk._1990_actions.tree_store_actions, &action_nouveau->Iter_fenetre, 0, action_nouveau->numero, 1, action_nouveau->nom, 2, _1990_action_type_bat_txt(action_nouveau->type, projet->pays), 3, action_nouveau->psi0, 4, action_nouveau->psi1, 5, action_nouveau->psi2, -1);
     }
+    if (projet->list_gtk.ef_resultats.builder != NULL)
+        gtk_adjustment_set_upper(GTK_ADJUSTMENT(gtk_builder_get_object(projet->list_gtk.ef_resultats.builder, "adjustment_cas")), g_list_length(projet->actions)-1);
 #endif
     
     return action_nouveau;
@@ -841,6 +843,11 @@ G_MODULE_EXPORT gboolean _1990_action_free_num(Projet *projet, unsigned int num)
         }
         
     } while (list_parcours != NULL);
+    
+#ifdef ENABLE_GTK
+    if (projet->list_gtk.ef_resultats.builder != NULL)
+        gtk_adjustment_set_upper(GTK_ADJUSTMENT(gtk_builder_get_object(projet->list_gtk.ef_resultats.builder, "adjustment_cas")), g_list_length(projet->actions)-1);
+#endif
     
     return TRUE;
 }
