@@ -46,6 +46,11 @@
             </object>
         </child>
     </object>
+    <object class="GtkAdjustment" id="adjustment_cas">
+        <property name="lower">0</property>
+        <property name="upper">0</property>
+        <property name="step-increment">1</property>
+    </object>
     <object class="GtkWindow" id="EF_resultats_window">
         <property name="visible">True</property>
         <property name="title" translatable="yes">Résultats</property>
@@ -60,7 +65,29 @@
                 <property name="border-width">12</property>
                 <property name="row-spacing">12</property>
                 <child>
-                    <object class="GtkScrolledWindow" id="EF_noeuds_scrolled_noeuds_libres">
+                    <object class="GtkLabel" id="EF_resultats_cas">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Cas :</property>
+                    </object>
+                    <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">0</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkSpinButton" id="EF_resultats_spin_button_cas">
+                        <property name="adjustment">adjustment_cas</property>
+                        <property name="visible">True</property>
+                        <property name="hexpand">True</property>
+                        <signal name="value-changed" handler="EF_gtk_resultats_cas_change"/>
+                    </object>
+                    <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">0</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkScrolledWindow" id="EF_resultats_scrolled">
                         <property name="visible">True</property>
                         <property name="expand">True</property>
                         <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
@@ -95,7 +122,8 @@
                     </object>
                     <packing>
                         <property name="left-attach">0</property>
-                        <property name="top-attach">0</property>
+                        <property name="top-attach">1</property>
+                        <property name="width">2</property>
                     </packing>
                 </child>
                 <child>
@@ -119,7 +147,8 @@
                     </object>
                     <packing>
                         <property name="left-attach">0</property>
-                        <property name="top-attach">1</property>
+                        <property name="top-attach">2</property>
+                        <property name="width">2</property>
                     </packing>
                 </child>
             </object>

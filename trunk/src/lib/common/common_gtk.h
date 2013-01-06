@@ -21,6 +21,7 @@
 
 #include "config.h"
 #include "common_projet.h"
+#include <math.h>
 #include <gtk/gtk.h>
 
 #define GTK_COMMON_SPINBUTTON_AS_UINT(spinbutton) ((unsigned int)round(gtk_spin_button_get_value(spinbutton)))
