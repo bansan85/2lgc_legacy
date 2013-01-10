@@ -341,7 +341,8 @@ G_MODULE_EXPORT EF_Relachement *EF_relachement_ajout(Projet *projet, const char 
     
 #ifdef ENABLE_GTK
     gtk_list_store_set(projet->list_gtk.ef_relachements.liste_relachements, &relachement_nouveau->Iter_liste, 0, nom, -1);
-    EF_relachements_update_ligne_treeview(projet, relachement_nouveau);
+    if (projet->list_gtk.ef_relachements.builder != NULL)
+        BUG(EF_relachements_update_ligne_treeview(projet, relachement_nouveau), NULL);
 #endif
     
     return relachement_nouveau;
@@ -748,9 +749,11 @@ G_MODULE_EXPORT gboolean EF_relachement_modif(Projet *projet, EF_Relachement *re
     }
             
 #ifdef ENABLE_GTK
-    BUG(EF_relachements_update_ligne_treeview(projet, relachement), FALSE);
     if (projet->list_gtk.ef_relachements.builder != NULL)
+    {
+        BUG(EF_relachements_update_ligne_treeview(projet, relachement), FALSE);
         EF_gtk_relachements_select_changed(NULL, projet);
+    }
 #endif
     
     return TRUE;
