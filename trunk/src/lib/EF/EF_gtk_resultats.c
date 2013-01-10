@@ -782,7 +782,7 @@ gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, Projet *projet
                 BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
                 BUGMSG(res->col_tab[1] == COLRES_NUM_NOEUDS, FALSE, gettext("La réaction d'appui %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"), "Fx");
                 col_type[i-1] = G_TYPE_DOUBLE;
-                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("Fx [N]"), col_type[i-1], i-1, DECIMAL_FORCE));
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("F<sub>x</sub> [N]"), col_type[i-1], i-1, DECIMAL_FORCE));
                 break;
             }
             case COLRES_REACTION_APPUI_FY:
@@ -790,7 +790,7 @@ gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, Projet *projet
                 BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
                 BUGMSG(res->col_tab[1] == COLRES_NUM_NOEUDS, FALSE, gettext("La réaction d'appui %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"), "Fy");
                 col_type[i-1] = G_TYPE_DOUBLE;
-                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("Fy [N]"), col_type[i-1], i-1, DECIMAL_FORCE));
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("F<sub>y</sub> [N]"), col_type[i-1], i-1, DECIMAL_FORCE));
                 break;
             }
             case COLRES_REACTION_APPUI_FZ :
@@ -798,7 +798,7 @@ gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, Projet *projet
                 BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
                 BUGMSG(res->col_tab[1] == COLRES_NUM_NOEUDS, FALSE, gettext("La réaction d'appui %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"), "Fz");
                 col_type[i-1] = G_TYPE_DOUBLE;
-                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("Fz [N]"), col_type[i-1], i-1, DECIMAL_FORCE));
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("F<sub>z</sub> [N]"), col_type[i-1], i-1, DECIMAL_FORCE));
                 break;
             }
             case COLRES_REACTION_APPUI_MX :
@@ -806,7 +806,7 @@ gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, Projet *projet
                 BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
                 BUGMSG(res->col_tab[1] == COLRES_NUM_NOEUDS, FALSE, gettext("La réaction d'appui %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"), "Mx");
                 col_type[i-1] = G_TYPE_DOUBLE;
-                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("Mx [N.m]"), col_type[i-1], i-1, DECIMAL_MOMENT));
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("M<sub>x</sub> [N.m]"), col_type[i-1], i-1, DECIMAL_MOMENT));
                 break;
             }
             case COLRES_REACTION_APPUI_MY :
@@ -814,7 +814,7 @@ gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, Projet *projet
                 BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
                 BUGMSG(res->col_tab[1] == COLRES_NUM_NOEUDS, FALSE, gettext("La réaction d'appui %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"), "My");
                 col_type[i-1] = G_TYPE_DOUBLE;
-                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("My [N.m]"), col_type[i-1], i-1, DECIMAL_MOMENT));
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("M<sub>y</sub> [N.m]"), col_type[i-1], i-1, DECIMAL_MOMENT));
                 break;
             }
             case COLRES_REACTION_APPUI_MZ :
@@ -822,7 +822,7 @@ gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, Projet *projet
                 BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
                 BUGMSG(res->col_tab[1] == COLRES_NUM_NOEUDS, FALSE, gettext("La réaction d'appui %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"), "Mz");
                 col_type[i-1] = G_TYPE_DOUBLE;
-                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("Mz [N.m]"), col_type[i-1], i-1, DECIMAL_MOMENT));
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("M<sub>z</sub> [N.m]"), col_type[i-1], i-1, DECIMAL_MOMENT));
                 break;
             }
             case COLRES_DEPLACEMENT_UX :
@@ -830,7 +830,7 @@ gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, Projet *projet
                 BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
                 BUGMSG(res->col_tab[1] == COLRES_NUM_NOEUDS, FALSE, gettext("Le déplacement des noeuds %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"), "Ux");
                 col_type[i-1] = G_TYPE_DOUBLE;
-                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("Ux [m]"), col_type[i-1], i-1, DECIMAL_DEPLACEMENT));
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("u<sub>x</sub> [m]"), col_type[i-1], i-1, DECIMAL_DEPLACEMENT));
                 break;
             }
             case COLRES_DEPLACEMENT_UY :
@@ -838,7 +838,7 @@ gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, Projet *projet
                 BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
                 BUGMSG(res->col_tab[1] == COLRES_NUM_NOEUDS, FALSE, gettext("Le déplacement des noeuds %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"), "Uy");
                 col_type[i-1] = G_TYPE_DOUBLE;
-                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("Uy [m]"), col_type[i-1], i-1, DECIMAL_DEPLACEMENT));
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("u<sub>y</sub> [m]"), col_type[i-1], i-1, DECIMAL_DEPLACEMENT));
                 break;
             }
             case COLRES_DEPLACEMENT_UZ :
@@ -846,7 +846,7 @@ gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, Projet *projet
                 BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
                 BUGMSG(res->col_tab[1] == COLRES_NUM_NOEUDS, FALSE, gettext("Le déplacement des noeuds %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"), "Uz");
                 col_type[i-1] = G_TYPE_DOUBLE;
-                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("Uz [m]"), col_type[i-1], i-1, DECIMAL_DEPLACEMENT));
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("u<sub>z</sub> [m]"), col_type[i-1], i-1, DECIMAL_DEPLACEMENT));
                 break;
             }
             case COLRES_DEPLACEMENT_RX :
@@ -854,7 +854,7 @@ gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, Projet *projet
                 BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
                 BUGMSG(res->col_tab[1] == COLRES_NUM_NOEUDS, FALSE, gettext("Le déplacement des noeuds %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"), "Rx");
                 col_type[i-1] = G_TYPE_DOUBLE;
-                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("Rx [rad]"), col_type[i-1], i-1, DECIMAL_ROTATION));
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("r<sub>x</sub> [rad]"), col_type[i-1], i-1, DECIMAL_ROTATION));
                 break;
             }
             case COLRES_DEPLACEMENT_RY :
@@ -862,7 +862,7 @@ gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, Projet *projet
                 BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
                 BUGMSG(res->col_tab[1] == COLRES_NUM_NOEUDS, FALSE, gettext("Le déplacement des noeuds %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"), "Ry");
                 col_type[i-1] = G_TYPE_DOUBLE;
-                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("Ry [rad]"), col_type[i-1], i-1, DECIMAL_ROTATION));
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("r<sub>y</sub> [rad]"), col_type[i-1], i-1, DECIMAL_ROTATION));
                 break;
             }
             case COLRES_DEPLACEMENT_RZ :
@@ -870,7 +870,7 @@ gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, Projet *projet
                 BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
                 BUGMSG(res->col_tab[1] == COLRES_NUM_NOEUDS, FALSE, gettext("Le déplacement des noeuds %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"), "Rx");
                 col_type[i-1] = G_TYPE_DOUBLE;
-                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("Rz [rad]"), col_type[i-1], i-1, DECIMAL_ROTATION));
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("r<sub>z</sub> [rad]"), col_type[i-1], i-1, DECIMAL_ROTATION));
                 break;
             }
             case COLRES_BARRES_LONGUEUR :
@@ -942,7 +942,7 @@ gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, Projet *projet
                 BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
                 BUGMSG(res->col_tab[1] == COLRES_NUM_BARRES, FALSE, gettext("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
                 col_type[i-1] = G_TYPE_STRING;
-                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("Points caractéristiques de TY [N]"), col_type[i-1], i-1, 0));
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("Points caractéristiques de T<sub>y</sub> [N]"), col_type[i-1], i-1, 0));
                 break;
             }
             case COLRES_BARRES_DESC_TZ :
@@ -950,7 +950,7 @@ gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, Projet *projet
                 BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
                 BUGMSG(res->col_tab[1] == COLRES_NUM_BARRES, FALSE, gettext("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
                 col_type[i-1] = G_TYPE_STRING;
-                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("Points caractéristiques de TZ [N]"), col_type[i-1], i-1, 0));
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("Points caractéristiques de T<sub>z</sub> [N]"), col_type[i-1], i-1, 0));
                 break;
             }
             case COLRES_BARRES_DESC_MX :
@@ -958,7 +958,7 @@ gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, Projet *projet
                 BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
                 BUGMSG(res->col_tab[1] == COLRES_NUM_BARRES, FALSE, gettext("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
                 col_type[i-1] = G_TYPE_STRING;
-                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("Points caractéristiques de Mx [N.m]"), col_type[i-1], i-1, 0));
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("Points caractéristiques de M<sub>x</sub> [N.m]"), col_type[i-1], i-1, 0));
                 break;
             }
             case COLRES_BARRES_DESC_MY :
@@ -966,7 +966,7 @@ gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, Projet *projet
                 BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
                 BUGMSG(res->col_tab[1] == COLRES_NUM_BARRES, FALSE, gettext("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
                 col_type[i-1] = G_TYPE_STRING;
-                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("Points caractéristiques de My [N.m]"), col_type[i-1], i-1, 0));
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("Points caractéristiques de M<sub>y</sub> [N.m]"), col_type[i-1], i-1, 0));
                 break;
             }
             case COLRES_BARRES_DESC_MZ :
@@ -974,7 +974,7 @@ gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, Projet *projet
                 BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
                 BUGMSG(res->col_tab[1] == COLRES_NUM_BARRES, FALSE, gettext("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
                 col_type[i-1] = G_TYPE_STRING;
-                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("Points caractéristiques de Mz [N.m]"), col_type[i-1], i-1, 0));
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("Points caractéristiques de M<sub>z</sub> [N.m]"), col_type[i-1], i-1, 0));
                 break;
             }
             case COLRES_BARRES_EQ_N :
@@ -990,7 +990,7 @@ gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, Projet *projet
                 BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
                 BUGMSG(res->col_tab[1] == COLRES_NUM_BARRES, FALSE, gettext("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
                 col_type[i-1] = G_TYPE_STRING;
-                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("Ty [N]"), col_type[i-1], i-1, 0));
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("T<sub>y</sub> [N]"), col_type[i-1], i-1, 0));
                 break;
             }
             case COLRES_BARRES_EQ_TZ :
@@ -998,7 +998,7 @@ gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, Projet *projet
                 BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
                 BUGMSG(res->col_tab[1] == COLRES_NUM_BARRES, FALSE, gettext("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
                 col_type[i-1] = G_TYPE_STRING;
-                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("Tz [N]"), col_type[i-1], i-1, 0));
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("T<sub>z</sub> [N]"), col_type[i-1], i-1, 0));
                 break;
             }
             case COLRES_BARRES_EQ_MX :
@@ -1006,7 +1006,7 @@ gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, Projet *projet
                 BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
                 BUGMSG(res->col_tab[1] == COLRES_NUM_BARRES, FALSE, gettext("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
                 col_type[i-1] = G_TYPE_STRING;
-                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("Mx [N.m]"), col_type[i-1], i-1, 0));
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("M<sub>x</sub> [N.m]"), col_type[i-1], i-1, 0));
                 break;
             }
             case COLRES_BARRES_EQ_MY :
@@ -1014,7 +1014,7 @@ gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, Projet *projet
                 BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
                 BUGMSG(res->col_tab[1] == COLRES_NUM_BARRES, FALSE, gettext("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
                 col_type[i-1] = G_TYPE_STRING;
-                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("My [N.m]"), col_type[i-1], i-1, 0));
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("M<sub>y</sub> [N.m]"), col_type[i-1], i-1, 0));
                 break;
             }
             case COLRES_BARRES_EQ_MZ :
@@ -1022,7 +1022,7 @@ gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, Projet *projet
                 BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
                 BUGMSG(res->col_tab[1] == COLRES_NUM_BARRES, FALSE, gettext("Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"));
                 col_type[i-1] = G_TYPE_STRING;
-                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("Mz [N.m]"), col_type[i-1], i-1, 0));
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("M<sub>z</sub> [N.m]"), col_type[i-1], i-1, 0));
                 break;
             }
             case COLRES_DEFORMATION_PIXBUF_UX :
@@ -1078,7 +1078,7 @@ gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, Projet *projet
                 BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
                 BUGMSG(res->col_tab[1] == COLRES_NUM_BARRES, FALSE, gettext("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"));
                 col_type[i-1] = G_TYPE_STRING;
-                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("Points caractéristiques de Ux [m]"), col_type[i-1], i-1, 0));
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("Points caractéristiques de u<sub>x</sub> [m]"), col_type[i-1], i-1, 0));
                 break;
             }
             case COLRES_DEFORMATION_DESC_UY :
@@ -1086,7 +1086,7 @@ gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, Projet *projet
                 BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
                 BUGMSG(res->col_tab[1] == COLRES_NUM_BARRES, FALSE, gettext("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"));
                 col_type[i-1] = G_TYPE_STRING;
-                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("Points caractéristiques de Uy [m]"), col_type[i-1], i-1, 0));
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("Points caractéristiques de u<sub>y</sub> [m]"), col_type[i-1], i-1, 0));
                 break;
             }
             case COLRES_DEFORMATION_DESC_UZ :
@@ -1094,7 +1094,7 @@ gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, Projet *projet
                 BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
                 BUGMSG(res->col_tab[1] == COLRES_NUM_BARRES, FALSE, gettext("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"));
                 col_type[i-1] = G_TYPE_STRING;
-                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("Points caractéristiques de Uz [m]"), col_type[i-1], i-1, 0));
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("Points caractéristiques de u<sub>z</sub> [m]"), col_type[i-1], i-1, 0));
                 break;
             }
             case COLRES_DEFORMATION_DESC_RX :
@@ -1102,7 +1102,7 @@ gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, Projet *projet
                 BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
                 BUGMSG(res->col_tab[1] == COLRES_NUM_BARRES, FALSE, gettext("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"));
                 col_type[i-1] = G_TYPE_STRING;
-                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("Points caractéristiques de Rx [rad]"), col_type[i-1], i-1, 0));
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("Points caractéristiques de r<sub>x</sub> [rad]"), col_type[i-1], i-1, 0));
                 break;
             }
             case COLRES_DEFORMATION_DESC_RY :
@@ -1110,7 +1110,7 @@ gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, Projet *projet
                 BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
                 BUGMSG(res->col_tab[1] == COLRES_NUM_BARRES, FALSE, gettext("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"));
                 col_type[i-1] = G_TYPE_STRING;
-                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("Points caractéristiques de Ry [rad]"), col_type[i-1], i-1, 0));
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("Points caractéristiques de r<sub>y</sub> [rad]"), col_type[i-1], i-1, 0));
                 break;
             }
             case COLRES_DEFORMATION_DESC_RZ :
@@ -1118,7 +1118,7 @@ gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, Projet *projet
                 BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
                 BUGMSG(res->col_tab[1] == COLRES_NUM_BARRES, FALSE, gettext("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"));
                 col_type[i-1] = G_TYPE_STRING;
-                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("Points caractéristiques de Rz [rad]"), col_type[i-1], i-1, 0));
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("Points caractéristiques de r<sub>z</sub> [rad]"), col_type[i-1], i-1, 0));
                 break;
             }
             case COLRES_DEFORMATION_UX :
@@ -1126,7 +1126,7 @@ gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, Projet *projet
                 BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
                 BUGMSG(res->col_tab[1] == COLRES_NUM_BARRES, FALSE, gettext("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"));
                 col_type[i-1] = G_TYPE_STRING;
-                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("Ux [m]"), col_type[i-1], i-1, 0));
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("u<sub>x</sub> [m]"), col_type[i-1], i-1, 0));
                 break;
             }
             case COLRES_DEFORMATION_UY :
@@ -1134,7 +1134,7 @@ gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, Projet *projet
                 BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
                 BUGMSG(res->col_tab[1] == COLRES_NUM_BARRES, FALSE, gettext("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"));
                 col_type[i-1] = G_TYPE_STRING;
-                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("Uy [m]"), col_type[i-1], i-1, 0));
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("u<sub>y</sub> [m]"), col_type[i-1], i-1, 0));
                 break;
             }
             case COLRES_DEFORMATION_UZ :
@@ -1142,7 +1142,7 @@ gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, Projet *projet
                 BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
                 BUGMSG(res->col_tab[1] == COLRES_NUM_BARRES, FALSE, gettext("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"));
                 col_type[i-1] = G_TYPE_STRING;
-                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("Uz [m]"), col_type[i-1], i-1, 0));
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("u<sub>z</sub> [m]"), col_type[i-1], i-1, 0));
                 break;
             }
             case COLRES_DEFORMATION_RX :
@@ -1150,7 +1150,7 @@ gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, Projet *projet
                 BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
                 BUGMSG(res->col_tab[1] == COLRES_NUM_BARRES, FALSE, gettext("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"));
                 col_type[i-1] = G_TYPE_STRING;
-                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("Rx [rad]"), col_type[i-1], i-1, 0));
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("r<sub>x</sub> [rad]"), col_type[i-1], i-1, 0));
                 break;
             }
             case COLRES_DEFORMATION_RY :
@@ -1158,7 +1158,7 @@ gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, Projet *projet
                 BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
                 BUGMSG(res->col_tab[1] == COLRES_NUM_BARRES, FALSE, gettext("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"));
                 col_type[i-1] = G_TYPE_STRING;
-                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("Ry [rad]"), col_type[i-1], i-1, 0));
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("r<sub>y</sub> [rad]"), col_type[i-1], i-1, 0));
                 break;
             }
             case COLRES_DEFORMATION_RZ :
@@ -1166,7 +1166,7 @@ gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, Projet *projet
                 BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
                 BUGMSG(res->col_tab[1] == COLRES_NUM_BARRES, FALSE, gettext("Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"));
                 col_type[i-1] = G_TYPE_STRING;
-                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("Rz [rad]"), col_type[i-1], i-1, 0));
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("r<sub>z</sub> [rad]"), col_type[i-1], i-1, 0));
                 break;
             }
             default :
@@ -1187,7 +1187,6 @@ gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, Projet *projet
     res->list_store = gtk_list_store_newv((gint)res->col_tab[0]+1, col_type);
     free(col_type);
     gtk_tree_view_set_model(res->treeview, GTK_TREE_MODEL(res->list_store));
-    g_object_unref(res->list_store);
 
     BUG(EF_gtk_resultats_remplit_page(res, projet), FALSE);
     
@@ -1459,6 +1458,7 @@ G_MODULE_EXPORT void EF_gtk_resultats_free(Projet *projet)
     {
         Gtk_EF_Resultats_Tableau    *res = projet->list_gtk.ef_resultats.tableaux->data;
         
+        g_object_unref(res->list_store);
         free(res->col_tab);
         free(res->nom);
         free(res);
