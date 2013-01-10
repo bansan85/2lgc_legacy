@@ -10,6 +10,7 @@
             <column type="gchararray"/>
             <column type="gchararray"/>
             <column type="gchararray"/>
+            <column type="gchararray"/>
         </columns>
     </object>
     <object class="GtkMenu" id="EF_appuis_supprimer_menu">
@@ -28,6 +29,42 @@
                 <signal name="activate" handler="EF_gtk_appuis_supprimer_menu_modif_noeud"/>
             </object>
         </child>
+    </object>
+    <object class="GtkLabel" id="EF_appuis_treeview_column1_widget">
+        <property name="visible">True</property>
+        <property name="label" translatable="yes">u&lt;sub&gt;x&lt;/sub&gt;</property>
+        <property name="hexpand">True</property>
+        <property name="use_markup">True</property>
+    </object>
+    <object class="GtkLabel" id="EF_appuis_treeview_column2_widget">
+        <property name="visible">True</property>
+        <property name="label" translatable="yes">u&lt;sub&gt;y&lt;/sub&gt;</property>
+        <property name="hexpand">True</property>
+        <property name="use_markup">True</property>
+    </object>
+    <object class="GtkLabel" id="EF_appuis_treeview_column3_widget">
+        <property name="visible">True</property>
+        <property name="label" translatable="yes">u&lt;sub&gt;z&lt;/sub&gt;</property>
+        <property name="hexpand">True</property>
+        <property name="use_markup">True</property>
+    </object>
+    <object class="GtkLabel" id="EF_appuis_treeview_column4_widget">
+        <property name="visible">True</property>
+        <property name="label" translatable="yes">r&lt;sub&gt;x&lt;/sub&gt;</property>
+        <property name="hexpand">True</property>
+        <property name="use_markup">True</property>
+    </object>
+    <object class="GtkLabel" id="EF_appuis_treeview_column5_widget">
+        <property name="visible">True</property>
+        <property name="label" translatable="yes">r&lt;sub&gt;y&lt;/sub&gt;</property>
+        <property name="hexpand">True</property>
+        <property name="use_markup">True</property>
+    </object>
+    <object class="GtkLabel" id="EF_appuis_treeview_column6_widget">
+        <property name="visible">True</property>
+        <property name="label" translatable="yes">r&lt;sub&gt;z&lt;/sub&gt;</property>
+        <property name="hexpand">True</property>
+        <property name="use_markup">True</property>
     </object>
     <object class="GtkWindow" id="EF_appuis_window">
         <property name="visible">True</property>
@@ -63,6 +100,7 @@
                                     <object class="GtkTreeViewColumn" id="EF_appuis_treeview_column0">
                                         <property name="visible">True</property>
                                         <property name="resizable">True</property>
+                                        <property name="alignment">0.5</property>
                                         <property name="title" translatable="yes">Nom</property>
                                         <child>
                                             <object class="GtkCellRendererText" id="EF_appuis_treeview_cell0">
@@ -79,7 +117,8 @@
                                     <object class="GtkTreeViewColumn" id="EF_appuis_treeview_column1">
                                         <property name="visible">True</property>
                                         <property name="resizable">True</property>
-                                        <property name="title">ux</property>
+                                        <property name="alignment">0.5</property>
+                                        <property name="widget">EF_appuis_treeview_column1_widget</property>
                                         <child>
                                             <object class="GtkCellRendererCombo" id="EF_appuis_treeview_cell1">
                                                 <property name="editable">True</property>
@@ -97,7 +136,8 @@
                                     <object class="GtkTreeViewColumn" id="EF_appuis_treeview_column2">
                                         <property name="visible">True</property>
                                         <property name="resizable">True</property>
-                                        <property name="title">uy</property>
+                                        <property name="alignment">0.5</property>
+                                        <property name="widget">EF_appuis_treeview_column2_widget</property>
                                         <child>
                                             <object class="GtkCellRendererCombo" id="EF_appuis_treeview_cell2">
                                                 <property name="editable">True</property>
@@ -115,7 +155,8 @@
                                     <object class="GtkTreeViewColumn" id="EF_appuis_treeview_column3">
                                         <property name="visible">True</property>
                                         <property name="resizable">True</property>
-                                        <property name="title">uz</property>
+                                        <property name="alignment">0.5</property>
+                                        <property name="widget">EF_appuis_treeview_column3_widget</property>
                                         <child>
                                             <object class="GtkCellRendererCombo" id="EF_appuis_treeview_cell3">
                                                 <property name="editable">True</property>
@@ -133,7 +174,8 @@
                                     <object class="GtkTreeViewColumn" id="EF_appuis_treeview_column4">
                                         <property name="visible">True</property>
                                         <property name="resizable">True</property>
-                                        <property name="title">rx</property>
+                                        <property name="alignment">0.5</property>
+                                        <property name="widget">EF_appuis_treeview_column4_widget</property>
                                         <child>
                                             <object class="GtkCellRendererCombo" id="EF_appuis_treeview_cell4">
                                                 <property name="editable">True</property>
@@ -151,7 +193,8 @@
                                     <object class="GtkTreeViewColumn" id="EF_appuis_treeview_column5">
                                         <property name="visible">True</property>
                                         <property name="resizable">True</property>
-                                        <property name="title">ry</property>
+                                        <property name="alignment">0.5</property>
+                                        <property name="widget">EF_appuis_treeview_column5_widget</property>
                                         <child>
                                             <object class="GtkCellRendererCombo" id="EF_appuis_treeview_cell5">
                                                 <property name="editable">True</property>
@@ -169,7 +212,8 @@
                                     <object class="GtkTreeViewColumn" id="EF_appuis_treeview_column6">
                                         <property name="visible">True</property>
                                         <property name="resizable">True</property>
-                                        <property name="title">rz</property>
+                                        <property name="alignment">0.5</property>
+                                        <property name="widget">EF_appuis_treeview_column6_widget</property>
                                         <child>
                                             <object class="GtkCellRendererCombo" id="EF_appuis_treeview_cell6">
                                                 <property name="editable">True</property>
@@ -181,6 +225,11 @@
                                                 <attribute name="text">6</attribute>
                                             </attributes>
                                         </child>
+                                    </object>
+                                </child>
+                                <child>
+                                    <object class="GtkTreeViewColumn" id="EF_appuis_treeview_column7">
+                                        <property name="visible">True</property>
                                     </object>
                                 </child>
                             </object>

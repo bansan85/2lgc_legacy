@@ -78,9 +78,12 @@
                                     <object class="GtkTreeViewColumn" id="EF_materiaux_treeview_column1">
                                         <property name="visible">True</property>
                                         <property name="resizable">True</property>
+                                        <property name="alignment">0.5</property>
                                         <property name="title" translatable="yes">Matériau</property>
                                         <child>
-                                            <object class="GtkCellRendererText" id="EF_materiaux_treeview_cell1" />
+                                            <object class="GtkCellRendererText" id="EF_materiaux_treeview_cell1">
+                                                <property name="xalign">0.5</property>
+                                            </object>
                                             <attributes>
                                                 <attribute name="text">1</attribute>
                                             </attributes>
@@ -90,7 +93,7 @@
                                 <child>
                                     <object class="GtkTreeViewColumn" id="EF_materiaux_treeview_column2">
                                         <property name="visible">True</property>
-                                        <property name="resizable">True</property>
+                                        <property name="resizable">False</property>
                                         <property name="title" translatable="yes">Description</property>
                                         <child>
                                             <object class="GtkCellRendererText" id="EF_materiaux_treeview_cell2" />

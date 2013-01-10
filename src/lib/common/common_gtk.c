@@ -230,6 +230,7 @@ GtkTreeViewColumn* common_gtk_cree_colonne(char* nom, GType type, int num_colonn
 {
     GtkCellRenderer     *cell;
     GtkTreeViewColumn   *column;
+    GtkWidget           *label;
     
     if (type == G_TYPE_OBJECT)
         cell = gtk_cell_renderer_pixbuf_new();
@@ -241,12 +242,18 @@ GtkTreeViewColumn* common_gtk_cree_colonne(char* nom, GType type, int num_colonn
         gtk_cell_renderer_set_alignment(cell, 1.0, 0.5);
     else
         gtk_cell_renderer_set_alignment(cell, 0.5, 0.5);
-
-    if (type == G_TYPE_OBJECT)
-        column = gtk_tree_view_column_new_with_attributes(nom, cell, "pixbuf", num_colonne, NULL);
-    else
-        column = gtk_tree_view_column_new_with_attributes(nom, cell, "text", num_colonne, NULL);
     
+    label = gtk_label_new("");
+    gtk_label_set_markup(GTK_LABEL(label), nom);
+    gtk_widget_set_visible(label, TRUE);
+    
+    column = gtk_tree_view_column_new();
+    gtk_tree_view_column_pack_start(column, cell, TRUE);
+    if (type == G_TYPE_OBJECT)
+        gtk_tree_view_column_set_attributes(column, cell, "pixbuf", num_colonne, NULL);
+    else
+        gtk_tree_view_column_set_attributes(column, cell, "text", num_colonne, NULL);
+    gtk_tree_view_column_set_widget(column, label);
     gtk_tree_view_column_set_alignment(column, 0.5);
     
     if (type == G_TYPE_DOUBLE)
