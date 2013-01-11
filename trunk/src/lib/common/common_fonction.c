@@ -26,6 +26,7 @@
 #include "common_projet.h"
 #include "common_erreurs.h"
 #include "common_math.h"
+#include "common_fonction.h"
 
 G_MODULE_EXPORT gboolean common_fonction_init(Projet *projet, Action *action)
 /* Description : Initialise les fonctions décrivant les sollicitations, les rotations ou les
@@ -331,7 +332,7 @@ gboolean common_fonction_compacte(Fonction* fonction)
 }
 
 
-void common_fonction_ax2_bx_c(double xx1, double yy1, double xx2, double yy2, double xx3, double yy3, double *a, double *b, double *c)
+void common_fonction_ax2_bx_c(double xx1, long double yy1, double xx2, long double yy2, double xx3, long double yy3, double *a, double *b, double *c)
 /* Description : renvoie a, b, et c en fonction de f(xx1)=yy1, ....
  * Paramètres : double xx1, double yy1 : coordonnée du permier point,
  *            : double xx2, double yy2 : coordonnée du deuxième point,
@@ -349,8 +350,11 @@ void common_fonction_ax2_bx_c(double xx1, double yy1, double xx2, double yy2, do
 }
 
 
-G_MODULE_EXPORT double common_fonction_y(Fonction* fonction, double x, int position)
-/* Description : Renvoie la valeur f(x).
+G_MODULE_EXPORT long double common_fonction_y(Fonction* fonction, long double x, int position)
+/* Description : Renvoie la valeur f(x). Un ordinateur étant ce qu'il est, lorsqu'on recherche
+ *               par approximation successive un zéro, il est nécessaire d'avoir accès au 
+ *               maximum de décimales disponible. Le type double ne permet pas toujours
+ *               d'atteindre une précision de 1e-8. Le type long double permet environ 1e-10.
  * Paramètres : Fonction* fonction : fonction à afficher,
  *            : double x : abscisse de la fonction à renvoyer,
  *            : int position : cette variable est utilisé dans un cas particulier. Une
@@ -395,13 +399,14 @@ G_MODULE_EXPORT double common_fonction_y(Fonction* fonction, double x, int posit
                     else
                         i++;
                 }
-                return fonction->troncons[i].x0+
-                       fonction->troncons[i].x1*x+
-                       fonction->troncons[i].x2*x*x+
-                       fonction->troncons[i].x3*x*x*x+
-                       fonction->troncons[i].x4*x*x*x*x+
-                       fonction->troncons[i].x5*x*x*x*x*x+
-                       fonction->troncons[i].x6*x*x*x*x*x*x;
+                return (long double)
+                      fonction->troncons[i].x0+
+                      fonction->troncons[i].x1*x+
+                      fonction->troncons[i].x2*x*x+
+                      fonction->troncons[i].x3*x*x*x+
+                      fonction->troncons[i].x4*x*x*x*x+
+                      fonction->troncons[i].x5*x*x*x*x*x+
+                      fonction->troncons[i].x6*x*x*x*x*x*x;
             }
         }
     }
@@ -430,6 +435,7 @@ G_MODULE_EXPORT uint common_fonction_caracteristiques(Fonction* fonction, double
     BUGMSG(fonction, 0, gettext("Paramètre %s incorrect.\n"), "fonction");
     
     BUG(common_fonction_compacte(fonction), 0);
+    BUG(common_fonction_affiche(fonction), 0);
     
     if (fonction->nb_troncons == 0)
     {
@@ -501,8 +507,8 @@ G_MODULE_EXPORT uint common_fonction_caracteristiques(Fonction* fonction, double
             double  xx1_2, xx2_2, xx3_2;
             double  a, b, c; // forme de l'interpolation : a*x²+b*x+c
             double  zero1, zero2, deriv_zero;
-            double  zero1_old = NAN, zero2_old = NAN, deriv_zero_old = NAN;
-            double  ecart_x;
+            double  zero1_old, zero2_old = NAN, deriv_zero_old = NAN;
+            double  ecart_x, ecart_old;
             
             // On commence par calculer une interpolation hyperbolique
             // On s'arrange pour que la deuxième moitié du tronçon à analyser soit la première
@@ -539,8 +545,8 @@ G_MODULE_EXPORT uint common_fonction_caracteristiques(Fonction* fonction, double
                 else
                 {
                     // maxima : solve(a*x^2+b*x+c=0,x);
-                    zero1=-(sqrt(b*b-4*a*c)+b)/(2*a);
-                    zero2=(sqrt(b*b-4*a*c)-b)/(2*a);
+                    zero1=(sqrt(b*b-4*a*c)-b)/(2*a);
+                    zero2=(-sqrt(b*b-4*a*c)-b)/(2*a);
                 }
                 deriv_zero = -b/(2*a);
             }
@@ -552,12 +558,11 @@ G_MODULE_EXPORT uint common_fonction_caracteristiques(Fonction* fonction, double
             if ((zero2 < xx1) || (zero2 > xx3))
                 zero2 = NAN;
             
-            zero1_old = zero1+(xx3-xx1);
             zero2_old = zero2+(xx3-xx1);
-            deriv_zero_old = deriv_zero+(xx3-xx1);
             
-            ecart_x = (xx3-xx1)/2.;
-            while ((!isnan(zero1)) && (!ERREUR_RELATIVE_EGALE(zero1_old,zero1)))
+            ecart_old = xx3-xx1;
+            ecart_x = (xx3-xx1)/4.;
+            while ((!isnan(zero1)) && (ABS(ecart_x) > ERREUR_RELATIVE_MIN/1000.))
             {
                 zero1_old = zero1;
                 if (zero1-ecart_x < xx1)
@@ -569,7 +574,6 @@ G_MODULE_EXPORT uint common_fonction_caracteristiques(Fonction* fonction, double
                 else
                     xx3_2 = zero1+ecart_x;
                 xx2_2 = (xx1_2+xx3_2)/2.;
-                ecart_x = (xx3_2-xx1_2)/4.;
                 
                 common_fonction_ax2_bx_c(xx1_2, common_fonction_y(fonction, xx1_2, 1), xx2_2, common_fonction_y(fonction, xx2_2, 0), xx3_2, common_fonction_y(fonction, xx3_2, -1), &a, &b, &c);
                 
@@ -590,15 +594,48 @@ G_MODULE_EXPORT uint common_fonction_caracteristiques(Fonction* fonction, double
                         zero1 = NAN;
                     else
                     {
-                        zero1=-(sqrt(b*b-4*a*c)+b)/(2*a);
+                        zero1=(sqrt(b*b-4*a*c)-b)/(2*a);
                         if ((zero1 < xx1) || (zero1 > xx3))
                             zero1 = NAN;
                     }
                 }
+                ecart_x = ABS(zero1_old-zero1)/4.;
+                if (ecart_x > ecart_old)
+                {
+                    // Si on arrive ici, c'est que la méthode ci-dessus ne marche plus à cause
+                    // des imprécisions dûes aux virgules flottantes.
+                    // On passe donc en mode recherche dicotomique en calculant le signe
+                    // auix points xx1_2, xx2_2 et xx3_2.
+                    // Si le signe de xx1_2 est le même que xx2_2, xx1_2 devient égal à xx2_2.
+                    // Si le signe de xx3_2 est le même que xx2_2, xx3_2 devient égal à xx2_2.
+                    // La méthode est un peu plus longue mais est moins problématique.
+                    while (TRUE)
+                    {
+                        ecart_old = xx3_2-xx1_2;
+                        if (signbit(common_fonction_y(fonction, xx1_2, 1)) == signbit(common_fonction_y(fonction, xx2_2, 0)))
+                            xx1_2 = xx2_2;
+                        else xx3_2 = xx2_2;
+                        if (ABS(xx3_2-xx1_2) < ERREUR_RELATIVE_MIN/1000.)
+                        {
+                            zero1 = (xx3_2+xx1_2)/2.;
+                            break;
+                        }
+                        xx2_2 = (xx3_2+xx1_2)/2.;
+                    }
+                    
+                    break;
+                }
+                else
+                {
+                    if ((zero1 < xx1) || (zero1 > xx3))
+                        zero1 = NAN;
+                }
+                ecart_old = ecart_x;
             }
             
-            ecart_x = (xx3-xx1)/2.;
-            while ((!isnan(zero2)) && (!ERREUR_RELATIVE_EGALE(zero2_old,zero2)))
+            ecart_old = xx3-xx1;
+            ecart_x = (xx3-xx1)/4.;
+            while ((!isnan(zero2)) && (ABS(ecart_x) > ERREUR_RELATIVE_MIN/1000.))
             {
                 zero2_old = zero2;
                 if (zero2-ecart_x < xx1)
@@ -610,7 +647,6 @@ G_MODULE_EXPORT uint common_fonction_caracteristiques(Fonction* fonction, double
                 else
                     xx3_2 = zero2+ecart_x;
                 xx2_2 = (xx1_2+xx3_2)/2.;
-                ecart_x = (xx3_2-xx1_2)/4.;
                 
                 common_fonction_ax2_bx_c(xx1_2, common_fonction_y(fonction, xx1_2, 1), xx2_2, common_fonction_y(fonction, xx2_2, 0), xx3_2, common_fonction_y(fonction, xx3_2, -1), &a, &b, &c);
                 
@@ -631,15 +667,47 @@ G_MODULE_EXPORT uint common_fonction_caracteristiques(Fonction* fonction, double
                         zero2 = NAN;
                     else
                     {
-                        zero2=(sqrt(b*b-4*a*c)+b)/(2*a);
+                        zero2=(-sqrt(b*b-4*a*c)-b)/(2*a);
                         if ((zero2 < xx1) || (zero2 > xx3))
                             zero2 = NAN;
                     }
                 }
+                ecart_x = ABS(zero2_old-zero2)/4.;
+                if (ecart_x > ecart_old)
+                {
+                    // Si on arrive ici, c'est que la méthode ci-dessus ne marche plus à cause
+                    // des imprécisions dûes aux virgules flottantes.
+                    // On passe donc en mode recherche dicotomique en calculant le signe
+                    // auix points xx1_2, xx2_2 et xx3_2.
+                    // Si le signe de xx1_2 est le même que xx2_2, xx1_2 devient égal à xx2_2.
+                    // Si le signe de xx3_2 est le même que xx2_2, xx3_2 devient égal à xx2_2.
+                    // La méthode est un peu plus longue mais est moins problématique.
+                    while (TRUE)
+                    {
+                        ecart_old = xx3_2-xx1_2;
+                        if (signbit(common_fonction_y(fonction, xx1_2, 1)) == signbit(common_fonction_y(fonction, xx2_2, 0)))
+                            xx1_2 = xx2_2;
+                        else xx3_2 = xx2_2;
+                        if (ABS(xx3_2-xx1_2) < ERREUR_RELATIVE_MIN/1000.)
+                        {
+                            zero2 = (xx3_2+xx1_2)/2.;
+                            break;
+                        }
+                        xx2_2 = (xx3_2+xx1_2)/2.;
+                    }
+                    
+                    break;
+                }
+                else
+                {
+                    if ((zero2 < xx1) || (zero2 > xx3))
+                        zero2 = NAN;
+                }
             }
             
-            ecart_x = (xx3-xx1)/2.;
-            while ((!isnan(deriv_zero)) && (!ERREUR_RELATIVE_EGALE(deriv_zero_old, deriv_zero)))
+            ecart_old = xx3-xx1;
+            ecart_x = (xx3-xx1)/4.;
+            while ((!isnan(deriv_zero)) && (ABS(ecart_x) > ERREUR_RELATIVE_MIN/1000.))
             {
                 deriv_zero_old = deriv_zero;
                 if (deriv_zero-ecart_x < xx1)
@@ -651,18 +719,48 @@ G_MODULE_EXPORT uint common_fonction_caracteristiques(Fonction* fonction, double
                 else
                     xx3_2 = deriv_zero+ecart_x;
                 xx2_2 = (xx1_2+xx3_2)/2.;
-                ecart_x = (xx3_2-xx1_2)/4.;
                 
                 common_fonction_ax2_bx_c(xx1_2, common_fonction_y(fonction, xx1_2, 1), xx2_2, common_fonction_y(fonction, xx2_2, 0), xx3_2, common_fonction_y(fonction, xx3_2, -1), &a, &b, &c);
                 
                 if (ERREUR_RELATIVE_EGALE(a, 0.))
                     deriv_zero = NAN;
                 else
-                {
                     deriv_zero = -b/(2*a);
+                ecart_x = ABS(deriv_zero_old-deriv_zero)/4.;
+                if (ecart_x > ecart_old)
+                {
+                    // Si on arrive ici, c'est que la méthode ci-dessus ne marche plus à cause
+                    // des imprécisions dûes aux virgules flottantes.
+                    // On passe donc en mode recherche dicotomique en calculant le signe
+                    // de la dérivée aux points xx1_2, xx2_2 et xx3_2.
+                    // Si le signe de xx1_2 est le même que xx2_2, xx1_2 devient égal à xx2_2.
+                    // Si le signe de xx3_2 est le même que xx2_2, xx3_2 devient égal à xx2_2.
+                    // La méthode est un peu plus longue mais est moins problématique.
+                    while (TRUE)
+                    {
+                        ecart_old = xx3_2-xx1_2;
+                        a = common_fonction_y(fonction, xx1_2+ecart_old/10., 1)-common_fonction_y(fonction, xx1_2, 1);
+                        b = common_fonction_y(fonction, xx2_2+ecart_old/10., 0)-common_fonction_y(fonction, xx2_2, 0);
+                        c = common_fonction_y(fonction, xx3_2, -1)-common_fonction_y(fonction, xx3_2-ecart_old/10., -1);
+                        if (signbit(a) == signbit(b))
+                            xx1_2 = xx2_2;
+                        else xx3_2 = xx2_2;
+                        if (ABS(xx3_2-xx1_2) < ERREUR_RELATIVE_MIN/1000.)
+                        {
+                            deriv_zero = (xx3_2+xx1_2)/2.;
+                            break;
+                        }
+                        xx2_2 = (xx3_2+xx1_2)/2.;
+                    }
+                    
+                    break;
+                }
+                else
+                {
                     if ((deriv_zero < xx1) || (deriv_zero > xx3))
                         deriv_zero = NAN;
                 }
+                ecart_old = ecart_x;
             }
             
             // On tri les résultats.
@@ -688,7 +786,7 @@ G_MODULE_EXPORT uint common_fonction_caracteristiques(Fonction* fonction, double
                 c = ecart_x;
             }
             
-            if ((!isnan(a)) && (!ERREUR_RELATIVE_EGALE(pos_tmp[nb-1], a)))
+            if ((!isnan(a)) && (!ERREUR_RELATIVE_EGALE(pos_tmp[nb-1]-a, 0.)))
             {
                 nb++;
                 BUGMSG(pos_tmp = realloc(pos_tmp, sizeof(double)*nb), 0, gettext("Erreur d'allocation mémoire.\n"));
@@ -696,7 +794,7 @@ G_MODULE_EXPORT uint common_fonction_caracteristiques(Fonction* fonction, double
                 BUGMSG(val_tmp = realloc(val_tmp, sizeof(double)*nb), 0, gettext("Erreur d'allocation mémoire.\n"));
                 val_tmp[nb-1] = common_fonction_y(fonction, a, 0);
             }
-            if ((!isnan(b)) && (!ERREUR_RELATIVE_EGALE(pos_tmp[nb-1], b)))
+            if ((!isnan(b)) && (!ERREUR_RELATIVE_EGALE(pos_tmp[nb-1]-b, 0.)))
             {
                 nb++;
                 BUGMSG(pos_tmp = realloc(pos_tmp, sizeof(double)*nb), 0, gettext("Erreur d'allocation mémoire.\n"));
@@ -704,7 +802,7 @@ G_MODULE_EXPORT uint common_fonction_caracteristiques(Fonction* fonction, double
                 BUGMSG(val_tmp = realloc(val_tmp, sizeof(double)*nb), 0, gettext("Erreur d'allocation mémoire.\n"));
                 val_tmp[nb-1] = common_fonction_y(fonction, b, 0);
             }
-            if ((!isnan(c)) && (!ERREUR_RELATIVE_EGALE(pos_tmp[nb-1], c)))
+            if ((!isnan(c)) && (!ERREUR_RELATIVE_EGALE(pos_tmp[nb-1]-c, 0.)))
             {
                 nb++;
                 BUGMSG(pos_tmp = realloc(pos_tmp, sizeof(double)*nb), 0, gettext("Erreur d'allocation mémoire.\n"));
@@ -755,12 +853,12 @@ G_MODULE_EXPORT char* common_fonction_affiche_caract(Fonction* fonction, int dec
     if (nb_val == 0)
         return NULL;
     
-    BUGMSG(retour = g_strdup_printf("%.*lf : %.*lf", decimales_x, pos[0], decimales_y, val[0]), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(retour = g_strdup_printf("%.*lf : %.*lf", decimales_x+6, pos[0], decimales_y, val[0]), NULL, gettext("Erreur d'allocation mémoire.\n"));
     
     for (i=1;i<nb_val;i++)
     {
         tmp = retour;
-        BUGMSG(retour = g_strdup_printf("%s\n%.*lf : %.*lf", retour, decimales_x, pos[i], decimales_y, val[i]), NULL, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(retour = g_strdup_printf("%s\n%.*lf : %.*lf", retour, decimales_x+6, pos[i], decimales_y, val[i]), NULL, gettext("Erreur d'allocation mémoire.\n"));
         free(tmp);
     }
     
