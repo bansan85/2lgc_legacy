@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2013-01-06 22:16+0100\n"
-"PO-Revision-Date: 2013-01-06 22:17+0100\n"
+"POT-Creation-Date: 2013-01-12 00:23+0100\n"
+"PO-Revision-Date: 2013-01-12 00:26+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -11,6 +11,15 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+msgid "&#968;<sub>0</sub>"
+msgstr "&#968;<sub>0</sub>"
+
+msgid "&#968;<sub>1</sub>"
+msgstr "&#968;<sub>1</sub>"
+
+msgid "&#968;<sub>2</sub>"
+msgstr "&#968;<sub>2</sub>"
 
 msgid "Actions"
 msgstr "Actions"
@@ -51,35 +60,35 @@ msgstr "Carrée"
 msgid "Circulaire"
 msgstr "Circulaire"
 
+msgid "J [m<sup>4</sup>]"
+msgstr "J [m<sup>4</sup>]"
+
+msgid "I<sub>y</sub> [m<sup>4</sup>]"
+msgstr "I<sub>y</sub> [m<sup>4</sup>]"
+
+msgid "I<sub>z</sub> [m<sup>4</sup>]"
+msgstr "I<sub>z</sub> [m<sup>4</sup>]"
+
+msgid "S [m<sup>2</sup>]"
+msgstr "S [m<sup>2</sup>]"
+
+msgid "v<sub>y</sub> [m]"
+msgstr "v<sub>y</sub> [m]"
+
+msgid "v'<sub>y</sub> [m]"
+msgstr "v'<sub>y</sub> [m]"
+
+msgid "v<sub>z</sub> [m]"
+msgstr "v<sub>z</sub> [m]"
+
+msgid "v'<sub>z</sub> [m]"
+msgstr "v'<sub>z</sub> [m]"
+
 msgid "Sections"
 msgstr "Sections"
 
 msgid "Nom"
 msgstr "Nom"
-
-msgid "J [m⁴]"
-msgstr "J [m⁴]"
-
-msgid "Iy [m⁴]"
-msgstr "Iy [m⁴]"
-
-msgid "Iz [m⁴]"
-msgstr "Iz [m⁴]"
-
-msgid "S [m²]"
-msgstr "S [m²]"
-
-msgid "vy [m]"
-msgstr "vy [m]"
-
-msgid "vy' [m]"
-msgstr "vy' [m]"
-
-msgid "vz [m]"
-msgstr "vz [m]"
-
-msgid "vz' [m]"
-msgstr "vz' [m]"
 
 msgid "Largeur de la table [m] :"
 msgstr "Largeur de la table [m] :"
@@ -135,6 +144,24 @@ msgstr "Barres :"
 msgid "et annule les conditions d'appuis sur les noeuds l'utilisant."
 msgstr "et annule les conditions d'appuis sur les noeuds l'utilisant."
 
+msgid "u<sub>x</sub>"
+msgstr "u<sub>x</sub>"
+
+msgid "u<sub>y</sub>"
+msgstr "u<sub>y</sub>"
+
+msgid "u<sub>z</sub>"
+msgstr "u<sub>z</sub>"
+
+msgid "r<sub>x</sub>"
+msgstr "r<sub>x</sub>"
+
+msgid "r<sub>y</sub>"
+msgstr "r<sub>y</sub>"
+
+msgid "r<sub>z</sub>"
+msgstr "r<sub>z</sub>"
+
 msgid "Appuis"
 msgstr "Appuis"
 
@@ -176,6 +203,24 @@ msgstr "Bloqué"
 
 msgid "Linéaire"
 msgstr "Linéaire"
+
+msgid "r<sub>x</sub> début"
+msgstr "r<sub>x</sub> début"
+
+msgid "r<sub>y</sub> début"
+msgstr "r<sub>y</sub> début"
+
+msgid "r<sub>z</sub> début"
+msgstr "r<sub>z</sub> début"
+
+msgid "r<sub>x</sub> fin"
+msgstr "r<sub>x</sub> fin"
+
+msgid "r<sub>y</sub> fin"
+msgstr "r<sub>y</sub> fin"
+
+msgid "r<sub>z</sub> fin"
+msgstr "r<sub>z</sub> fin"
 
 msgid "Relâchements"
 msgstr "Relâchements"
@@ -1000,44 +1045,44 @@ msgstr "z [m]"
 msgid "La réaction d'appui %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"
 msgstr "La réaction d'appui %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"
 
-msgid "Fx [N]"
-msgstr "Fx [N]"
+msgid "F<sub>x</sub> [N]"
+msgstr "F<sub>x</sub> [N]"
 
-msgid "Fy [N]"
-msgstr "Fy [N]"
+msgid "F<sub>y</sub> [N]"
+msgstr "F<sub>y</sub> [N]"
 
-msgid "Fz [N]"
-msgstr "Fz [N]"
+msgid "F<sub>z</sub> [N]"
+msgstr "F<sub>z</sub> [N]"
 
-msgid "Mx [N.m]"
-msgstr "Mx [N.m]"
+msgid "M<sub>x</sub> [N.m]"
+msgstr "M<sub>x</sub> [N.m]"
 
-msgid "My [N.m]"
-msgstr "My [N.m]"
+msgid "M<sub>y</sub> [N.m]"
+msgstr "M<sub>y</sub> [N.m]"
 
-msgid "Mz [N.m]"
-msgstr "Mz [N.m]"
+msgid "M<sub>z</sub> [N.m]"
+msgstr "M<sub>z</sub> [N.m]"
 
 msgid "Le déplacement des noeuds %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"
 msgstr "Le déplacement des noeuds %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"
 
-msgid "Ux [m]"
-msgstr "Ux [m]"
+msgid "u<sub>x</sub> [m]"
+msgstr "u<sub>x</sub> [m]"
 
-msgid "Uy [m]"
-msgstr "Uy [m]"
+msgid "u<sub>y</sub> [m]"
+msgstr "u<sub>y</sub> [m]"
 
-msgid "Uz [m]"
-msgstr "Uz [m]"
+msgid "u<sub>z</sub> [m]"
+msgstr "u<sub>z</sub> [m]"
 
-msgid "Rx [rad]"
-msgstr "Rx [rad]"
+msgid "r<sub>x</sub> [rad]"
+msgstr "r<sub>x</sub> [rad]"
 
-msgid "Ry [rad]"
-msgstr "Ry [rad]"
+msgid "r<sub>y</sub> [rad]"
+msgstr "r<sub>y</sub> [rad]"
 
-msgid "Rz [rad]"
-msgstr "Rz [rad]"
+msgid "r<sub>z</sub> [rad]"
+msgstr "r<sub>z</sub> [rad]"
 
 msgid "La longueur des barres ne peut être affichée que si la première colonne affiche les numéros des barres.\n"
 msgstr "La longueur des barres ne peut être affichée que si la première colonne affiche les numéros des barres.\n"
@@ -1069,29 +1114,29 @@ msgstr "Moment fléchissant selon z"
 msgid "Points caractéristiques de N [N]"
 msgstr "Points caractéristiques de N [N]"
 
-msgid "Points caractéristiques de TY [N]"
-msgstr "Points caractéristiques de TY [N]"
+msgid "Points caractéristiques de T<sub>y</sub> [N]"
+msgstr "Points caractéristiques de T<sub>y</sub> [N]"
 
-msgid "Points caractéristiques de TZ [N]"
-msgstr "Points caractéristiques de TZ [N]"
+msgid "Points caractéristiques de T<sub>z</sub> [N]"
+msgstr "Points caractéristiques de T<sub>z</sub> [N]"
 
-msgid "Points caractéristiques de Mx [N.m]"
-msgstr "Points caractéristiques de Mx [N.m]"
+msgid "Points caractéristiques de M<sub>x</sub> [N.m]"
+msgstr "Points caractéristiques de M<sub>x</sub> [N.m]"
 
-msgid "Points caractéristiques de My [N.m]"
-msgstr "Points caractéristiques de My [N.m]"
+msgid "Points caractéristiques de M<sub>y</sub> [N.m]"
+msgstr "Points caractéristiques de M<sub>y</sub> [N.m]"
 
-msgid "Points caractéristiques de Mz [N.m]"
-msgstr "Points caractéristiques de Mz [N.m]"
+msgid "Points caractéristiques de M<sub>z</sub> [N.m]"
+msgstr "Points caractéristiques de M<sub>z</sub> [N.m]"
 
 msgid "N [N]"
 msgstr "N [N]"
 
-msgid "Ty [N]"
-msgstr "Ty [N]"
+msgid "T<sub>y</sub> [N]"
+msgstr "T<sub>y</sub> [N]"
 
-msgid "Tz [N]"
-msgstr "Tz [N]"
+msgid "T<sub>z</sub> [N]"
+msgstr "T<sub>z</sub> [N]"
 
 msgid "Déformation de la barre selon x"
 msgstr "Déformation de la barre selon x"
@@ -1114,23 +1159,23 @@ msgstr "Rotation de la barre selon z"
 msgid "Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"
 msgstr "Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"
 
-msgid "Points caractéristiques de Ux [m]"
-msgstr "Points caractéristiques de Ux [m]"
+msgid "Points caractéristiques de u<sub>x</sub> [m]"
+msgstr "Points caractéristiques de u<sub>x</sub> [m]"
 
-msgid "Points caractéristiques de Uy [m]"
-msgstr "Points caractéristiques de Uy [m]"
+msgid "Points caractéristiques de u<sub>y</sub> [m]"
+msgstr "Points caractéristiques de u<sub>y</sub> [m]"
 
-msgid "Points caractéristiques de Uz [m]"
-msgstr "Points caractéristiques de Uz [m]"
+msgid "Points caractéristiques de u<sub>z</sub> [m]"
+msgstr "Points caractéristiques de u<sub>z</sub> [m]"
 
-msgid "Points caractéristiques de Rx [rad]"
-msgstr "Points caractéristiques de Rx [rad]"
+msgid "Points caractéristiques de r<sub>x</sub> [rad]"
+msgstr "Points caractéristiques de r<sub>x</sub> [rad]"
 
-msgid "Points caractéristiques de Ry [rad]"
-msgstr "Points caractéristiques de Ry [rad]"
+msgid "Points caractéristiques de r<sub>y</sub> [rad]"
+msgstr "Points caractéristiques de r<sub>y</sub> [rad]"
 
-msgid "Points caractéristiques de Rz [rad]"
-msgstr "Points caractéristiques de Rz [rad]"
+msgid "Points caractéristiques de r<sub>z</sub> [rad]"
+msgstr "Points caractéristiques de r<sub>z</sub> [rad]"
 
 msgid "La liste des types de barre est indéfinie.\n"
 msgstr "La liste des types de barre est indéfinie.\n"
