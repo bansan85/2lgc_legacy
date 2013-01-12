@@ -232,9 +232,9 @@ G_MODULE_EXPORT gboolean projet_init_graphique(Projet *projet)
     gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_modelisation_list), comps->menu_modelisation_charges);
     gtk_menu_item_set_submenu(GTK_MENU_ITEM(comps->menu_modelisation_charges), comps->menu_modelisation_charges_list);
     
-    comps->menu_modelisation_charges_groupes = gtk_menu_item_new_with_label(gettext("Actions..."));
-    gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_modelisation_charges_list), comps->menu_modelisation_charges_groupes);
-    g_signal_connect_swapped(comps->menu_modelisation_charges_groupes, "activate", G_CALLBACK(_1990_gtk_actions), projet);
+    comps->menu_modelisation_charges_actions = gtk_menu_item_new_with_label(gettext("Actions..."));
+    gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_modelisation_charges_list), comps->menu_modelisation_charges_actions);
+    g_signal_connect_swapped(comps->menu_modelisation_charges_actions, "activate", G_CALLBACK(_1990_gtk_actions), projet);
     
     comps->menu_modelisation_charges_groupes = gtk_menu_item_new_with_label(gettext("Groupes..."));
     gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_modelisation_charges_list), comps->menu_modelisation_charges_groupes);
