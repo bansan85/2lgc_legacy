@@ -26,6 +26,7 @@
 #include "common_projet.h"
 #include "common_erreurs.h"
 #include "1990_action.h"
+#include "1990_combinaisons.h"
 #include "1992_1_1_barres.h"
 #include "EF_rigidite.h"
 #include "EF_calculs.h"
@@ -48,6 +49,8 @@ G_MODULE_EXPORT void EF_gtk_calculs_calculer(GtkMenuItem *menuitem __attribute__
     BUG(EF_calculs_genere_mat_rig(projet), );
     for (i=0;i<g_list_length(projet->actions);i++)
         BUG(EF_calculs_resoud_charge(projet, i), );
+    
+    BUG(_1990_combinaisons_genere(projet), );
     
     gtk_widget_set_sensitive(projet->list_gtk.comp.menu_resultats_afficher, TRUE);
     

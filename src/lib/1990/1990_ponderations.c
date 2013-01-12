@@ -20,6 +20,7 @@
 #include <libintl.h>
 #include <locale.h>
 #include <gmodule.h>
+#include <math.h>
 
 #include "common_projet.h"
 #include "common_erreurs.h"
@@ -1063,6 +1064,43 @@ gboolean _1990_ponderations_genere(Projet *projet)
         default : { BUGMSG(0, FALSE, gettext("Pays %d inconnu.\n"), projet->pays); break; }
     }
 }
+
+
+char* _1990_ponderations_description(Ponderation *ponderation)
+/* Description : Renvoie sous forme de texte une pondérationAffiche les pondérations de la liste fournie en argument.
+ * Paramètres : GList *ponderations : la liste des pondérations.
+ * Valeur renvoyée : Aucun.
+ */
+{
+    char    *retour = NULL, *tmp;
+    
+    BUGMSG(ponderation, NULL, gettext("Paramètre %s incorrect.\n"), "ponderation");
+    BUGMSG(retour = malloc(sizeof(char)), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    retour[0] = 0;
+    // Trivial
+    if (ponderation->elements != NULL)
+    {
+        GList   *list_parcours = ponderation->elements;
+        do
+        {
+            Ponderation_Element *ponderation_element = list_parcours->data;
+            
+            tmp = retour;
+            if (ponderation_element->psi != -1)
+                BUGMSG(retour = g_strdup_printf("%s%s%.*lf*%.*lf*%s", tmp, tmp[0] != 0 ? "+" : "", DECIMAL_SANS_UNITE, ponderation_element->ponderation, DECIMAL_SANS_UNITE, ponderation_element->psi == 0 ? ponderation_element->action->psi0 : ponderation_element->psi == 1 ? ponderation_element->action->psi1 : ponderation_element->psi == 2 ? ponderation_element->action->psi2 : NAN, ponderation_element->action->nom), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            else
+                BUGMSG(retour = g_strdup_printf("%s%s%.*lf*%s", tmp, tmp[0] != 0 ? "+" : "", DECIMAL_SANS_UNITE, ponderation_element->ponderation, ponderation_element->action->nom), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            
+            free(tmp);
+            
+            list_parcours = g_list_next(list_parcours);
+        }
+        while (list_parcours != NULL);
+    }
+    
+    return retour;
+}
+
 
 void _1990_ponderations_affiche(GList *ponderations)
 /* Description : Affiche les pondérations de la liste fournie en argument.

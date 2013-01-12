@@ -24,6 +24,7 @@
 
 
 gboolean _1990_ponderations_genere(Projet *projet) __attribute__((__warn_unused_result__));
+char* _1990_ponderations_description(Ponderation *ponderation) __attribute__((__warn_unused_result__));
 gboolean _1990_ponderations_affiche_tout(Projet *projet) __attribute__((__warn_unused_result__));
 
 #endif
