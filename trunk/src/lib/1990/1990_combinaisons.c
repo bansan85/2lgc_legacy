@@ -726,6 +726,7 @@ G_MODULE_EXPORT gboolean _1990_combinaisons_init(Projet *projet)
  *             projet == NULL.
  */
 {
+    GtkTreeIter Iter;
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     // Trivial
     
@@ -739,6 +740,26 @@ G_MODULE_EXPORT gboolean _1990_combinaisons_init(Projet *projet)
     projet->combinaisons.els_car = NULL;
     projet->combinaisons.els_freq = NULL;
     projet->combinaisons.els_perm = NULL;
+    
+    projet->combinaisons.list_el_desc = gtk_list_store_new(1, G_TYPE_STRING);
+    gtk_list_store_append(projet->combinaisons.list_el_desc, &Iter);
+    gtk_list_store_set(projet->combinaisons.list_el_desc, &Iter, 0, gettext("ELU équilibre"), -1);
+    gtk_list_store_append(projet->combinaisons.list_el_desc, &Iter);
+    gtk_list_store_set(projet->combinaisons.list_el_desc, &Iter, 0, gettext("ELU structure"), -1);
+    gtk_list_store_append(projet->combinaisons.list_el_desc, &Iter);
+    gtk_list_store_set(projet->combinaisons.list_el_desc, &Iter, 0, gettext("ELU géotechnique"), -1);
+    gtk_list_store_append(projet->combinaisons.list_el_desc, &Iter);
+    gtk_list_store_set(projet->combinaisons.list_el_desc, &Iter, 0, gettext("ELU fatigue"), -1);
+    gtk_list_store_append(projet->combinaisons.list_el_desc, &Iter);
+    gtk_list_store_set(projet->combinaisons.list_el_desc, &Iter, 0, gettext("ELU accidentel"), -1);
+    gtk_list_store_append(projet->combinaisons.list_el_desc, &Iter);
+    gtk_list_store_set(projet->combinaisons.list_el_desc, &Iter, 0, gettext("ELU sismique"), -1);
+    gtk_list_store_append(projet->combinaisons.list_el_desc, &Iter);
+    gtk_list_store_set(projet->combinaisons.list_el_desc, &Iter, 0, gettext("ELS caractéristique"), -1);
+    gtk_list_store_append(projet->combinaisons.list_el_desc, &Iter);
+    gtk_list_store_set(projet->combinaisons.list_el_desc, &Iter, 0, gettext("ELS fréquent"), -1);
+    gtk_list_store_append(projet->combinaisons.list_el_desc, &Iter);
+    gtk_list_store_set(projet->combinaisons.list_el_desc, &Iter, 0, gettext("ELS permanent"), -1);
     
     return TRUE;
 }
@@ -815,6 +836,7 @@ G_MODULE_EXPORT gboolean _1990_combinaisons_free(Projet *projet)
         g_list_free_full(projet->combinaisons.els_perm, _1990_combinaisons_free_1);
         projet->combinaisons.els_perm = NULL;
     }
+    g_object_unref(projet->combinaisons.list_el_desc);
     
     return TRUE;
 }
@@ -841,6 +863,7 @@ G_MODULE_EXPORT gboolean _1990_combinaisons_genere(Projet *projet)
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->niveaux_groupes, FALSE, gettext("Le projet ne possède pas de niveaux de groupes.\n"));
     
+    g_object_ref(projet->combinaisons.list_el_desc);
     BUG(_1990_combinaisons_free(projet), FALSE);
     
     // Pour chaque action

@@ -101,6 +101,17 @@
                     </packing>
                 </child>
                 <child>
+                    <object class="GtkComboBoxText" id="EF_resultats_combo_box_ponderations">
+                        <property name="visible">False</property>
+                        <property name="hexpand">True</property>
+                        <signal name="changed" handler="EF_gtk_resultats_ponderations_change"/>
+                    </object>
+                    <packing>
+                        <property name="left-attach">3</property>
+                        <property name="top-attach">0</property>
+                    </packing>
+                </child>
+                <child>
                     <object class="GtkScrolledWindow" id="EF_resultats_scrolled">
                         <property name="visible">True</property>
                         <property name="expand">True</property>
@@ -137,7 +148,7 @@
                     <packing>
                         <property name="left-attach">0</property>
                         <property name="top-attach">1</property>
-                        <property name="width">3</property>
+                        <property name="width">4</property>
                     </packing>
                 </child>
                 <child>
@@ -162,7 +173,7 @@
                     <packing>
                         <property name="left-attach">0</property>
                         <property name="top-attach">2</property>
-                        <property name="width">3</property>
+                        <property name="width">4</property>
                     </packing>
                 </child>
             </object>
