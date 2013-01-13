@@ -145,11 +145,11 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
         // On alloue la mémoire nécessaire pour créer une action fictive.
         BUGMSG(action_en_cours = malloc(sizeof(Action)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
         BUGMSG(action_en_cours->efforts_noeuds = malloc(sizeof(cholmod_sparse)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-        BUGMSG(action_en_cours->efforts_noeuds->x = malloc(sizeof(double)*g_list_length(projet->ef_donnees.noeuds)*6), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-        memset(action_en_cours->efforts_noeuds->x, 0, sizeof(double)*g_list_length(projet->ef_donnees.noeuds)*6);
+        BUGMSG(action_en_cours->efforts_noeuds->x = malloc(sizeof(double)*g_list_length(projet->modele.noeuds)*6), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+        memset(action_en_cours->efforts_noeuds->x, 0, sizeof(double)*g_list_length(projet->modele.noeuds)*6);
         BUGMSG(action_en_cours->deplacement_complet = malloc(sizeof(cholmod_sparse)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-        BUGMSG(action_en_cours->deplacement_complet->x = malloc(sizeof(double)*g_list_length(projet->ef_donnees.noeuds)*6), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-        memset(action_en_cours->deplacement_complet->x, 0, sizeof(double)*g_list_length(projet->ef_donnees.noeuds)*6);
+        BUGMSG(action_en_cours->deplacement_complet->x = malloc(sizeof(double)*g_list_length(projet->modele.noeuds)*6), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+        memset(action_en_cours->deplacement_complet->x, 0, sizeof(double)*g_list_length(projet->modele.noeuds)*6);
         BUG(common_fonction_init(projet, action_en_cours), FALSE);
         
         x = action_en_cours->efforts_noeuds->x;
@@ -221,13 +221,13 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
             double              *y2 = ponderation->action->deplacement_complet->x;
             double              mult = ponderation->ponderation*(ponderation->psi == 0 ? ponderation->action->psi0 : ponderation->psi == 1 ? ponderation->action->psi1 : ponderation->psi == 2 ? ponderation->action->psi2 : 1.);
             
-            for (i=0;i<g_list_length(projet->ef_donnees.noeuds)*6;i++)
+            for (i=0;i<g_list_length(projet->modele.noeuds)*6;i++)
             {
                 x[i] = x[i] + mult*x2[i];
                 y[i] = y[i] + mult*y2[i];
             }
             
-            for (i=0;i<g_list_length(projet->beton.barres);i++)
+            for (i=0;i<g_list_length(projet->modele.barres);i++)
             {
                 unsigned int j;
                 
@@ -265,7 +265,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
     
     if (res->col_tab[1] == COLRES_NUM_NOEUDS)
     {
-        GList   *list_parcours = projet->ef_donnees.noeuds;
+        GList   *list_parcours = projet->modele.noeuds;
         
         i = 0;
         
@@ -459,7 +459,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
     
     if (res->col_tab[1] == COLRES_NUM_BARRES)
     {
-        GList   *list_parcours = projet->beton.barres;
+        GList   *list_parcours = projet->modele.barres;
         
         i = 0;
         

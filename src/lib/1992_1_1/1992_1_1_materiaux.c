@@ -44,7 +44,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_materiaux_init(Projet *projet)
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
     // Trivial
-    projet->beton.materiaux = NULL;
+    projet->modele.materiaux = NULL;
     
 #ifdef ENABLE_GTK
     projet->list_gtk.ef_materiaux.liste_materiaux = gtk_list_store_new(1, G_TYPE_STRING);
@@ -382,7 +382,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_materiaux_update_ligne_treeview(Projet *proje
 
 
 gboolean _1992_1_1_materiaux_insert(Projet *projet, Beton_Materiau *materiau)
-/* Description : Insère un materiau dans projet->beton.materiaux. Procédure commune à tous les
+/* Description : Insère un materiau dans projet->modele.materiaux. Procédure commune à tous les
  *               matériaux.
  * Paramètres : Projet *projet : la variable projet,
  *            : Beton_Materiau *materiau : le matériau à insérer.
@@ -395,7 +395,7 @@ gboolean _1992_1_1_materiaux_insert(Projet *projet, Beton_Materiau *materiau)
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(materiau, FALSE, gettext("Paramètre %s incorrect.\n"), "materiau");
     
-    list_parcours = projet->beton.materiaux;
+    list_parcours = projet->modele.materiaux;
     while (list_parcours != NULL)
     {
         materiau_tmp = list_parcours->data;
@@ -407,7 +407,7 @@ gboolean _1992_1_1_materiaux_insert(Projet *projet, Beton_Materiau *materiau)
     }
     if (list_parcours == NULL)
     {
-        projet->beton.materiaux = g_list_append(projet->beton.materiaux, materiau);
+        projet->modele.materiaux = g_list_append(projet->modele.materiaux, materiau);
 #ifdef ENABLE_GTK
         gtk_list_store_append(projet->list_gtk.ef_materiaux.liste_materiaux, &materiau->Iter_liste);
         if (projet->list_gtk.ef_materiaux.builder != NULL)
@@ -416,7 +416,7 @@ gboolean _1992_1_1_materiaux_insert(Projet *projet, Beton_Materiau *materiau)
     }
     else
     {
-        projet->beton.materiaux = g_list_insert_before(projet->beton.materiaux, list_parcours, materiau);
+        projet->modele.materiaux = g_list_insert_before(projet->modele.materiaux, list_parcours, materiau);
 #ifdef ENABLE_GTK
         gtk_list_store_insert_before(projet->list_gtk.ef_materiaux.liste_materiaux, &materiau->Iter_liste, &materiau_tmp->Iter_liste);
         if (projet->list_gtk.ef_materiaux.builder != NULL)
@@ -441,7 +441,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_materiaux_ajout(Projet *projet, const char *n
  *   Succès : TRUE
  *   Échec : FALSE :
  *             projet == NULL,
- *             projet->beton.materiaux == NULL,
+ *             projet->modele.materiaux == NULL,
  *             fck > 90.,
  *             en cas d'erreur d'allocation mémoire.
  */
@@ -494,15 +494,15 @@ gboolean _1992_1_1_materiaux_repositionne(Projet *projet, Beton_Materiau *materi
     BUGMSG(materiau, FALSE, gettext("Paramètre %s incorrect.\n"), "materiau");
     
     // On réinsère le matériau au bon endroit
-    projet->beton.materiaux = g_list_remove(projet->beton.materiaux, materiau);
-    list_parcours = projet->beton.materiaux;
+    projet->modele.materiaux = g_list_remove(projet->modele.materiaux, materiau);
+    list_parcours = projet->modele.materiaux;
     while (list_parcours != NULL)
     {
         Beton_Materiau  *materiau_parcours = list_parcours->data;
         
         if (strcmp(materiau->nom, materiau_parcours->nom) < 0)
         {
-            projet->beton.materiaux = g_list_insert_before(projet->beton.materiaux, list_parcours, materiau);
+            projet->modele.materiaux = g_list_insert_before(projet->modele.materiaux, list_parcours, materiau);
             
 #ifdef ENABLE_GTK
             gtk_list_store_move_before(projet->list_gtk.ef_materiaux.liste_materiaux, &materiau->Iter_liste, &materiau_parcours->Iter_liste);
@@ -516,7 +516,7 @@ gboolean _1992_1_1_materiaux_repositionne(Projet *projet, Beton_Materiau *materi
     }
     if (list_parcours == NULL)
     {
-        projet->beton.materiaux = g_list_append(projet->beton.materiaux, materiau);
+        projet->modele.materiaux = g_list_append(projet->modele.materiaux, materiau);
         
 #ifdef ENABLE_GTK
         gtk_list_store_move_before(projet->list_gtk.ef_materiaux.liste_materiaux, &materiau->Iter_liste, NULL);
@@ -601,7 +601,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_materiaux_modif(Projet *projet, Beton_Materia
 #ifdef ENABLE_GTK
     if (projet->list_gtk.ef_barres.builder != NULL)
     {
-        GList   *list_parcours = projet->beton.barres;
+        GList   *list_parcours = projet->modele.barres;
         
         while (list_parcours != NULL)
         {
@@ -637,7 +637,7 @@ G_MODULE_EXPORT Beton_Materiau* _1992_1_1_materiaux_cherche_nom(Projet *projet, 
     BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
     
     // Trivial
-    list_parcours = projet->beton.materiaux;
+    list_parcours = projet->modele.materiaux;
     while (list_parcours != NULL)
     {
         Beton_Materiau  *materiau = list_parcours->data;
@@ -917,7 +917,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_materiaux_supprime(Beton_Materiau* materiau, 
     g_list_free(liste_barres_dep);
     
     _1992_1_1_materiaux_free_un(materiau);
-    projet->beton.materiaux = g_list_remove(projet->beton.materiaux, materiau);
+    projet->modele.materiaux = g_list_remove(projet->modele.materiaux, materiau);
     
 #ifdef ENABLE_GTK
     gtk_list_store_remove(projet->list_gtk.ef_materiaux.liste_materiaux, &materiau->Iter_liste);
@@ -941,10 +941,10 @@ G_MODULE_EXPORT gboolean _1992_1_1_materiaux_free(Projet *projet)
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
     // Trivial
-    while (projet->beton.materiaux != NULL)
+    while (projet->modele.materiaux != NULL)
     {
-        g_list_free_full(projet->beton.materiaux, (GDestroyNotify)&_1992_1_1_materiaux_free_un);
-        projet->beton.materiaux = NULL;
+        g_list_free_full(projet->modele.materiaux, (GDestroyNotify)&_1992_1_1_materiaux_free_un);
+        projet->modele.materiaux = NULL;
     }
     
     BUG(EF_calculs_free(projet), TRUE);

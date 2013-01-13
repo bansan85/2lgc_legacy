@@ -751,7 +751,7 @@ G_MODULE_EXPORT void EF_gtk_sections(Projet *projet)
     ef_gtk->window = GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder, "EF_sections_window"));
     ef_gtk->sections = GTK_TREE_STORE(gtk_builder_get_object(ef_gtk->builder, "EF_sections_treestore"));
     
-    list_parcours = projet->beton.sections;
+    list_parcours = projet->modele.sections;
     while (list_parcours != NULL)
     {
         EF_Section  *section = (EF_Section *)list_parcours->data;

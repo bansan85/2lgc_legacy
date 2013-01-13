@@ -53,8 +53,8 @@ G_MODULE_EXPORT gboolean common_fonction_init(Projet *projet, Action *action)
     // Trivial
     for (i=0;i<6;i++)
     {
-        BUGMSG(action->fonctions_efforts[i] = (Fonction**)malloc(sizeof(Fonction*)*g_list_length(projet->beton.barres)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-        for (j=0;j<g_list_length(projet->beton.barres);j++)
+        BUGMSG(action->fonctions_efforts[i] = (Fonction**)malloc(sizeof(Fonction*)*g_list_length(projet->modele.barres)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+        for (j=0;j<g_list_length(projet->modele.barres);j++)
         {
             BUGMSG(action->fonctions_efforts[i][j] = (Fonction*)malloc(sizeof(Fonction)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
             action->fonctions_efforts[i][j]->nb_troncons = 0;
@@ -64,16 +64,16 @@ G_MODULE_EXPORT gboolean common_fonction_init(Projet *projet, Action *action)
     
     for (i=0;i<3;i++)
     {
-        BUGMSG(action->fonctions_deformation[i] = (Fonction**)malloc(sizeof(Fonction*)*g_list_length(projet->beton.barres)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-        for (j=0;j<g_list_length(projet->beton.barres);j++)
+        BUGMSG(action->fonctions_deformation[i] = (Fonction**)malloc(sizeof(Fonction*)*g_list_length(projet->modele.barres)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+        for (j=0;j<g_list_length(projet->modele.barres);j++)
         {
             BUGMSG(action->fonctions_deformation[i][j] = (Fonction*)malloc(sizeof(Fonction)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
             action->fonctions_deformation[i][j]->nb_troncons = 0;
             action->fonctions_deformation[i][j]->troncons = NULL;
         }
         
-        BUGMSG(action->fonctions_rotation[i] = (Fonction**)malloc(sizeof(Fonction*)*g_list_length(projet->beton.barres)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-        for (j=0;j<g_list_length(projet->beton.barres);j++)
+        BUGMSG(action->fonctions_rotation[i] = (Fonction**)malloc(sizeof(Fonction*)*g_list_length(projet->modele.barres)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+        for (j=0;j<g_list_length(projet->modele.barres);j++)
         {
             BUGMSG(action->fonctions_rotation[i][j] = (Fonction*)malloc(sizeof(Fonction)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
             action->fonctions_rotation[i][j]->nb_troncons = 0;
@@ -435,7 +435,6 @@ G_MODULE_EXPORT uint common_fonction_caracteristiques(Fonction* fonction, double
     BUGMSG(fonction, 0, gettext("Paramètre %s incorrect.\n"), "fonction");
     
     BUG(common_fonction_compacte(fonction), 0);
-    BUG(common_fonction_affiche(fonction), 0);
     
     if (fonction->nb_troncons == 0)
     {
@@ -1131,7 +1130,7 @@ G_MODULE_EXPORT gboolean common_fonction_free(Projet *projet, Action *action)
  *   Échec : FALSE :
  *             projet == NULL,
  *             action == NULL,
- *             projet->beton.barres == NULL.
+ *             projet->modele.barres == NULL.
  */
 {
     unsigned int        i, j;
@@ -1144,7 +1143,7 @@ G_MODULE_EXPORT gboolean common_fonction_free(Projet *projet, Action *action)
     {
         if (action->fonctions_efforts[i] != NULL)
         {
-            for (j=0;j<g_list_length(projet->beton.barres);j++)
+            for (j=0;j<g_list_length(projet->modele.barres);j++)
             {
                 free(action->fonctions_efforts[i][j]->troncons);
                 free(action->fonctions_efforts[i][j]);
@@ -1158,7 +1157,7 @@ G_MODULE_EXPORT gboolean common_fonction_free(Projet *projet, Action *action)
     {
         if (action->fonctions_deformation[i] != NULL)
         {
-            for (j=0;j<g_list_length(projet->beton.barres);j++)
+            for (j=0;j<g_list_length(projet->modele.barres);j++)
             {
                 free(action->fonctions_deformation[i][j]->troncons);
                 free(action->fonctions_deformation[i][j]);
@@ -1169,7 +1168,7 @@ G_MODULE_EXPORT gboolean common_fonction_free(Projet *projet, Action *action)
         
         if (action->fonctions_rotation[i] != NULL)
         {
-            for (j=0;j<g_list_length(projet->beton.barres);j++)
+            for (j=0;j<g_list_length(projet->modele.barres);j++)
             {
                 free(action->fonctions_rotation[i][j]->troncons);
                 free(action->fonctions_rotation[i][j]);

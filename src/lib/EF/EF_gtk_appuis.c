@@ -502,7 +502,7 @@ G_MODULE_EXPORT void EF_gtk_appuis(Projet *projet)
     g_object_set(gtk_builder_get_object(ef_gtk->builder, "EF_appuis_treeview_cell5"), "model", projet->list_gtk.ef_appuis.liste_type_appui, NULL);
     g_object_set(gtk_builder_get_object(ef_gtk->builder, "EF_appuis_treeview_cell6"), "model", projet->list_gtk.ef_appuis.liste_type_appui, NULL);
     
-    list_parcours = projet->ef_donnees.appuis;
+    list_parcours = projet->modele.appuis;
     while (list_parcours != NULL)
     {
         EF_Appui    *appui = (EF_Appui*)list_parcours->data;

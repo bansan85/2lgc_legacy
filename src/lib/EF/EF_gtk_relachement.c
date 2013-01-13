@@ -844,7 +844,7 @@ G_MODULE_EXPORT void EF_gtk_relachement(Projet *projet)
     ef_gtk->window = GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder, "EF_relachements_window"));
     ef_gtk->relachements = GTK_TREE_STORE(gtk_builder_get_object(ef_gtk->builder, "EF_relachements_treestore"));
     
-    list_parcours = projet->ef_donnees.relachements;
+    list_parcours = projet->modele.relachements;
     while (list_parcours != NULL)
     {
         EF_Relachement  *relachement = (EF_Relachement *)list_parcours->data;

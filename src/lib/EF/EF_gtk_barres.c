@@ -548,7 +548,7 @@ G_MODULE_EXPORT void EF_gtk_barres(Projet *projet)
     g_object_set(gtk_builder_get_object(ef_gtk->builder, "EF_barres_treeview_cell3"), "model", projet->list_gtk.ef_materiaux.liste_materiaux, NULL);
     g_object_set(gtk_builder_get_object(ef_gtk->builder, "EF_barres_treeview_cell6"), "model", projet->list_gtk.ef_relachements.liste_relachements, NULL);
     
-    list_parcours = projet->beton.barres;
+    list_parcours = projet->modele.barres;
     while (list_parcours != NULL)
     {
         Beton_Barre *barre = (Beton_Barre*)list_parcours->data;
