@@ -82,6 +82,7 @@
                         <items>
                             <item translatable="yes">Cas élémentaires</item>
                             <item translatable="yes">Combinaisons</item>
+                            <item translatable="yes">Enveloppe</item>
                         </items>
                     </object>
                     <packing>

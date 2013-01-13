@@ -415,7 +415,7 @@ G_MODULE_EXPORT long double common_fonction_y(Fonction* fonction, long double x,
 }
 
 
-G_MODULE_EXPORT uint common_fonction_caracteristiques(Fonction* fonction, double **pos,
+G_MODULE_EXPORT unsigned int common_fonction_caracteristiques(Fonction* fonction, double **pos,
   double **val)
 /* Description : Affiche les points caractéristiques de la fonction.
  * Paramètres : Fonction* fonction : fonction à afficher,
