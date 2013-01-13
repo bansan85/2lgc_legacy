@@ -302,6 +302,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                 double          *x = action_en_cours->efforts_noeuds->x;
                 double          *y = action_en_cours->deplacement_complet->x;
                 unsigned int    j;
+                char            *tmp_double;
                 
                 gtk_list_store_append(res->list_store, &Iter);
                 for (j=1;j<=res->col_tab[0];j++)
@@ -342,62 +343,86 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                         }
                         case COLRES_REACTION_APPUI_FX :
                         {
-                            gtk_list_store_set(res->list_store, &Iter, j-1, x[i*6+0], -1);
+                            BUGMSG(tmp_double = g_strdup_printf("%.*lf", DECIMAL_FORCE, x[i*6+0]), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                            gtk_list_store_set(res->list_store, &Iter, j-1, tmp_double, -1);
+                            free(tmp_double);
                             break;
                         }
                         case COLRES_REACTION_APPUI_FY:
                         {
-                            gtk_list_store_set(res->list_store, &Iter, j-1, x[i*6+1], -1);
+                            BUGMSG(tmp_double = g_strdup_printf("%.*lf", DECIMAL_FORCE, x[i*6+1]), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                            gtk_list_store_set(res->list_store, &Iter, j-1, tmp_double, -1);
+                            free(tmp_double);
                             break;
                         }
                         case COLRES_REACTION_APPUI_FZ :
                         {
-                            gtk_list_store_set(res->list_store, &Iter, j-1, x[i*6+2], -1);
+                            BUGMSG(tmp_double = g_strdup_printf("%.*lf", DECIMAL_FORCE, x[i*6+2]), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                            gtk_list_store_set(res->list_store, &Iter, j-1, tmp_double, -1);
+                            free(tmp_double);
                             break;
                         }
                         case COLRES_REACTION_APPUI_MX :
                         {
-                            gtk_list_store_set(res->list_store, &Iter, j-1, x[i*6+3], -1);
+                            BUGMSG(tmp_double = g_strdup_printf("%.*lf", DECIMAL_MOMENT, x[i*6+3]), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                            gtk_list_store_set(res->list_store, &Iter, j-1, tmp_double, -1);
+                            free(tmp_double);
                             break;
                         }
                         case COLRES_REACTION_APPUI_MY :
                         {
-                            gtk_list_store_set(res->list_store, &Iter, j-1, x[i*6+4], -1);
+                            BUGMSG(tmp_double = g_strdup_printf("%.*lf", DECIMAL_MOMENT, x[i*6+4]), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                            gtk_list_store_set(res->list_store, &Iter, j-1, tmp_double, -1);
+                            free(tmp_double);
                             break;
                         }
                         case COLRES_REACTION_APPUI_MZ :
                         {
-                            gtk_list_store_set(res->list_store, &Iter, j-1, x[i*6+5], -1);
+                            BUGMSG(tmp_double = g_strdup_printf("%.*lf", DECIMAL_MOMENT, x[i*6+5]), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                            gtk_list_store_set(res->list_store, &Iter, j-1, tmp_double, -1);
+                            free(tmp_double);
                             break;
                         }
                         case COLRES_DEPLACEMENT_UX :
                         {
-                            gtk_list_store_set(res->list_store, &Iter, j-1, y[i*6+0], -1);
+                            BUGMSG(tmp_double = g_strdup_printf("%.*lf", DECIMAL_DEPLACEMENT, y[i*6+0]), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                            gtk_list_store_set(res->list_store, &Iter, j-1, tmp_double, -1);
+                            free(tmp_double);
                             break;
                         }
                         case COLRES_DEPLACEMENT_UY :
                         {
-                            gtk_list_store_set(res->list_store, &Iter, j-1, y[i*6+1], -1);
+                            BUGMSG(tmp_double = g_strdup_printf("%.*lf", DECIMAL_DEPLACEMENT, y[i*6+1]), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                            gtk_list_store_set(res->list_store, &Iter, j-1, tmp_double, -1);
+                            free(tmp_double);
                             break;
                         }
                         case COLRES_DEPLACEMENT_UZ :
                         {
-                            gtk_list_store_set(res->list_store, &Iter, j-1, y[i*6+2], -1);
+                            BUGMSG(tmp_double = g_strdup_printf("%.*lf", DECIMAL_DEPLACEMENT, y[i*6+2]), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                            gtk_list_store_set(res->list_store, &Iter, j-1, tmp_double, -1);
+                            free(tmp_double);
                             break;
                         }
                         case COLRES_DEPLACEMENT_RX :
                         {
-                            gtk_list_store_set(res->list_store, &Iter, j-1, y[i*6+3], -1);
+                            BUGMSG(tmp_double = g_strdup_printf("%.*lf", DECIMAL_ROTATION, y[i*6+3]), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                            gtk_list_store_set(res->list_store, &Iter, j-1, tmp_double, -1);
+                            free(tmp_double);
                             break;
                         }
                         case COLRES_DEPLACEMENT_RY :
                         {
-                            gtk_list_store_set(res->list_store, &Iter, j-1, y[i*6+4], -1);
+                            BUGMSG(tmp_double = g_strdup_printf("%.*lf", DECIMAL_ROTATION, y[i*6+4]), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                            gtk_list_store_set(res->list_store, &Iter, j-1, tmp_double, -1);
+                            free(tmp_double);
                             break;
                         }
                         case COLRES_DEPLACEMENT_RZ :
                         {
-                            gtk_list_store_set(res->list_store, &Iter, j-1, y[i*6+5], -1);
+                            BUGMSG(tmp_double = g_strdup_printf("%.*lf", DECIMAL_ROTATION, y[i*6+5]), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                            gtk_list_store_set(res->list_store, &Iter, j-1, tmp_double, -1);
+                            free(tmp_double);
                             break;
                         }
                         case COLRES_NUM_BARRES :
@@ -920,96 +945,96 @@ gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, Projet *projet
             {
                 BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
                 BUGMSG(res->col_tab[1] == COLRES_NUM_NOEUDS, FALSE, gettext("La réaction d'appui %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"), "Fx");
-                col_type[i-1] = G_TYPE_DOUBLE;
-                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("F<sub>x</sub> [N]"), col_type[i-1], i-1, DECIMAL_FORCE));
+                col_type[i-1] = G_TYPE_STRING;
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("F<sub>x</sub> [N]"), col_type[i-1], i-1, 0));
                 break;
             }
             case COLRES_REACTION_APPUI_FY:
             {
                 BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
                 BUGMSG(res->col_tab[1] == COLRES_NUM_NOEUDS, FALSE, gettext("La réaction d'appui %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"), "Fy");
-                col_type[i-1] = G_TYPE_DOUBLE;
-                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("F<sub>y</sub> [N]"), col_type[i-1], i-1, DECIMAL_FORCE));
+                col_type[i-1] = G_TYPE_STRING;
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("F<sub>y</sub> [N]"), col_type[i-1], i-1, 0));
                 break;
             }
             case COLRES_REACTION_APPUI_FZ :
             {
                 BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
                 BUGMSG(res->col_tab[1] == COLRES_NUM_NOEUDS, FALSE, gettext("La réaction d'appui %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"), "Fz");
-                col_type[i-1] = G_TYPE_DOUBLE;
-                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("F<sub>z</sub> [N]"), col_type[i-1], i-1, DECIMAL_FORCE));
+                col_type[i-1] = G_TYPE_STRING;
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("F<sub>z</sub> [N]"), col_type[i-1], i-1, 0));
                 break;
             }
             case COLRES_REACTION_APPUI_MX :
             {
                 BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
                 BUGMSG(res->col_tab[1] == COLRES_NUM_NOEUDS, FALSE, gettext("La réaction d'appui %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"), "Mx");
-                col_type[i-1] = G_TYPE_DOUBLE;
-                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("M<sub>x</sub> [N.m]"), col_type[i-1], i-1, DECIMAL_MOMENT));
+                col_type[i-1] = G_TYPE_STRING;
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("M<sub>x</sub> [N.m]"), col_type[i-1], i-1, 0));
                 break;
             }
             case COLRES_REACTION_APPUI_MY :
             {
                 BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
                 BUGMSG(res->col_tab[1] == COLRES_NUM_NOEUDS, FALSE, gettext("La réaction d'appui %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"), "My");
-                col_type[i-1] = G_TYPE_DOUBLE;
-                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("M<sub>y</sub> [N.m]"), col_type[i-1], i-1, DECIMAL_MOMENT));
+                col_type[i-1] = G_TYPE_STRING;
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("M<sub>y</sub> [N.m]"), col_type[i-1], i-1, 0));
                 break;
             }
             case COLRES_REACTION_APPUI_MZ :
             {
                 BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
                 BUGMSG(res->col_tab[1] == COLRES_NUM_NOEUDS, FALSE, gettext("La réaction d'appui %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"), "Mz");
-                col_type[i-1] = G_TYPE_DOUBLE;
-                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("M<sub>z</sub> [N.m]"), col_type[i-1], i-1, DECIMAL_MOMENT));
+                col_type[i-1] = G_TYPE_STRING;
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("M<sub>z</sub> [N.m]"), col_type[i-1], i-1, 0));
                 break;
             }
             case COLRES_DEPLACEMENT_UX :
             {
                 BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
                 BUGMSG(res->col_tab[1] == COLRES_NUM_NOEUDS, FALSE, gettext("Le déplacement des noeuds %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"), "Ux");
-                col_type[i-1] = G_TYPE_DOUBLE;
-                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("u<sub>x</sub> [m]"), col_type[i-1], i-1, DECIMAL_DEPLACEMENT));
+                col_type[i-1] = G_TYPE_STRING;
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("u<sub>x</sub> [m]"), col_type[i-1], i-1, 0));
                 break;
             }
             case COLRES_DEPLACEMENT_UY :
             {
                 BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
                 BUGMSG(res->col_tab[1] == COLRES_NUM_NOEUDS, FALSE, gettext("Le déplacement des noeuds %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"), "Uy");
-                col_type[i-1] = G_TYPE_DOUBLE;
-                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("u<sub>y</sub> [m]"), col_type[i-1], i-1, DECIMAL_DEPLACEMENT));
+                col_type[i-1] = G_TYPE_STRING;
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("u<sub>y</sub> [m]"), col_type[i-1], i-1, 0));
                 break;
             }
             case COLRES_DEPLACEMENT_UZ :
             {
                 BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
                 BUGMSG(res->col_tab[1] == COLRES_NUM_NOEUDS, FALSE, gettext("Le déplacement des noeuds %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"), "Uz");
-                col_type[i-1] = G_TYPE_DOUBLE;
-                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("u<sub>z</sub> [m]"), col_type[i-1], i-1, DECIMAL_DEPLACEMENT));
+                col_type[i-1] = G_TYPE_STRING;
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("u<sub>z</sub> [m]"), col_type[i-1], i-1, 0));
                 break;
             }
             case COLRES_DEPLACEMENT_RX :
             {
                 BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
                 BUGMSG(res->col_tab[1] == COLRES_NUM_NOEUDS, FALSE, gettext("Le déplacement des noeuds %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"), "Rx");
-                col_type[i-1] = G_TYPE_DOUBLE;
-                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("r<sub>x</sub> [rad]"), col_type[i-1], i-1, DECIMAL_ROTATION));
+                col_type[i-1] = G_TYPE_STRING;
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("r<sub>x</sub> [rad]"), col_type[i-1], i-1, 0));
                 break;
             }
             case COLRES_DEPLACEMENT_RY :
             {
                 BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
                 BUGMSG(res->col_tab[1] == COLRES_NUM_NOEUDS, FALSE, gettext("Le déplacement des noeuds %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"), "Ry");
-                col_type[i-1] = G_TYPE_DOUBLE;
-                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("r<sub>y</sub> [rad]"), col_type[i-1], i-1, DECIMAL_ROTATION));
+                col_type[i-1] = G_TYPE_STRING;
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("r<sub>y</sub> [rad]"), col_type[i-1], i-1, 0));
                 break;
             }
             case COLRES_DEPLACEMENT_RZ :
             {
                 BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
                 BUGMSG(res->col_tab[1] == COLRES_NUM_NOEUDS, FALSE, gettext("Le déplacement des noeuds %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"), "Rx");
-                col_type[i-1] = G_TYPE_DOUBLE;
-                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("r<sub>z</sub> [rad]"), col_type[i-1], i-1, DECIMAL_ROTATION));
+                col_type[i-1] = G_TYPE_STRING;
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("r<sub>z</sub> [rad]"), col_type[i-1], i-1, 0));
                 break;
             }
             case COLRES_BARRES_LONGUEUR :
