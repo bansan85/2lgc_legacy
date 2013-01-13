@@ -49,7 +49,7 @@ G_MODULE_EXPORT gboolean EF_sections_init(Projet *projet)
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
     // Trivial
-    projet->beton.sections = NULL;
+    projet->modele.sections = NULL;
     
 #ifdef ENABLE_GTK
     projet->list_gtk.ef_sections.liste_sections = gtk_list_store_new(1, G_TYPE_STRING);
@@ -102,7 +102,7 @@ G_MODULE_EXPORT gboolean EF_sections_update_ligne_treeview(Projet *projet, EF_Se
 
 
 gboolean EF_sections_insert(Projet *projet, EF_Section *section)
-/* Description : Insère une section dans projet->beton.sections. Procédure commune à toutes les
+/* Description : Insère une section dans projet->modele.sections. Procédure commune à toutes les
  *               sections.
  * Paramètres : Projet *projet : la variable projet,
  *            : EF_Section *section : la section à insérer.
@@ -115,7 +115,7 @@ gboolean EF_sections_insert(Projet *projet, EF_Section *section)
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(section, FALSE, gettext("Paramètre %s incorrect.\n"), "section");
     
-    list_parcours = projet->beton.sections;
+    list_parcours = projet->modele.sections;
     while (list_parcours != NULL)
     {
         section_tmp = list_parcours->data;
@@ -127,7 +127,7 @@ gboolean EF_sections_insert(Projet *projet, EF_Section *section)
     }
     if (list_parcours == NULL)
     {
-        projet->beton.sections = g_list_append(projet->beton.sections, section);
+        projet->modele.sections = g_list_append(projet->modele.sections, section);
 #ifdef ENABLE_GTK
         gtk_list_store_append(projet->list_gtk.ef_sections.liste_sections, &section->Iter_liste);
         if (projet->list_gtk.ef_sections.builder != NULL)
@@ -136,7 +136,7 @@ gboolean EF_sections_insert(Projet *projet, EF_Section *section)
     }
     else
     {
-        projet->beton.sections = g_list_insert_before(projet->beton.sections, list_parcours, section);
+        projet->modele.sections = g_list_insert_before(projet->modele.sections, list_parcours, section);
 #ifdef ENABLE_GTK
         gtk_list_store_insert_before(projet->list_gtk.ef_sections.liste_sections, &section->Iter_liste, &section_tmp->Iter_liste);
         if (projet->list_gtk.ef_sections.builder != NULL)
@@ -167,15 +167,15 @@ gboolean EF_sections_repositionne(Projet *projet, EF_Section *section)
     BUGMSG(section, FALSE, gettext("Paramètre %s incorrect.\n"), "section");
     
     // On réinsère la section au bon endroit
-    projet->beton.sections = g_list_remove(projet->beton.sections, section);
-    list_parcours = projet->beton.sections;
+    projet->modele.sections = g_list_remove(projet->modele.sections, section);
+    list_parcours = projet->modele.sections;
     while (list_parcours != NULL)
     {
         EF_Section    *section_parcours = list_parcours->data;
         
         if (strcmp(section->nom, section_parcours->nom) < 0)
         {
-            projet->beton.sections = g_list_insert_before(projet->beton.sections, list_parcours, section);
+            projet->modele.sections = g_list_insert_before(projet->modele.sections, list_parcours, section);
             
 #ifdef ENABLE_GTK
             gtk_list_store_move_before(projet->list_gtk.ef_sections.liste_sections, &section->Iter_liste, &section_parcours->Iter_liste);
@@ -189,7 +189,7 @@ gboolean EF_sections_repositionne(Projet *projet, EF_Section *section)
     }
     if (list_parcours == NULL)
     {
-        projet->beton.sections = g_list_append(projet->beton.sections, section);
+        projet->modele.sections = g_list_append(projet->modele.sections, section);
         
 #ifdef ENABLE_GTK
         gtk_list_store_move_before(projet->list_gtk.ef_sections.liste_sections, &section->Iter_liste, NULL);
@@ -201,7 +201,7 @@ gboolean EF_sections_repositionne(Projet *projet, EF_Section *section)
 #ifdef ENABLE_GTK
     if (projet->list_gtk.ef_barres.builder != NULL)
     {
-        list_parcours = projet->beton.barres;
+        list_parcours = projet->modele.barres;
         
         while (list_parcours != NULL)
         {
@@ -632,7 +632,7 @@ G_MODULE_EXPORT EF_Section* EF_sections_cherche_nom(Projet *projet, const char *
     BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
     
     // Trivial
-    list_parcours = projet->beton.sections;
+    list_parcours = projet->modele.sections;
     while (list_parcours != NULL)
     {
         EF_Section  *section = list_parcours->data;
@@ -762,7 +762,7 @@ G_MODULE_EXPORT gboolean EF_sections_supprime(EF_Section *section, gboolean annu
     
     free(section->nom);
     free(section->data);
-    projet->beton.sections = g_list_remove(projet->beton.sections, section);
+    projet->modele.sections = g_list_remove(projet->modele.sections, section);
     
 #ifdef ENABLE_GTK
     gtk_list_store_remove(projet->list_gtk.ef_sections.liste_sections, &section->Iter_liste);
@@ -1760,10 +1760,10 @@ G_MODULE_EXPORT gboolean EF_sections_free(Projet *projet)
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
     // Trivial
-    if (projet->beton.sections != NULL)
+    if (projet->modele.sections != NULL)
     {
-        g_list_free_full(projet->beton.sections, (GDestroyNotify)&EF_sections_free_un);
-        projet->beton.sections = NULL;
+        g_list_free_full(projet->modele.sections, (GDestroyNotify)&EF_sections_free_un);
+        projet->modele.sections = NULL;
     }
     
     BUG(EF_calculs_free(projet), FALSE);

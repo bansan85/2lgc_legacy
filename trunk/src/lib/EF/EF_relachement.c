@@ -50,7 +50,7 @@ G_MODULE_EXPORT gboolean EF_relachement_init(Projet *projet)
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
     // Trivial
-    projet->ef_donnees.relachements = NULL;
+    projet->modele.relachements = NULL;
     
 #ifdef ENABLE_GTK
     projet->list_gtk.ef_relachements.liste_relachements = gtk_list_store_new(1, G_TYPE_STRING);
@@ -310,7 +310,7 @@ G_MODULE_EXPORT EF_Relachement *EF_relachement_ajout(Projet *projet, const char 
     relachement_nouveau->rz_f_data = rz_f_data;
     BUGMSG(relachement_nouveau->nom = g_strdup_printf("%s", nom), NULL, gettext("Erreur d'allocation mémoire.\n"));
     
-    list_parcours = projet->ef_donnees.relachements;
+    list_parcours = projet->modele.relachements;
     while (list_parcours != NULL)
     {
         relachement_tmp = list_parcours->data;
@@ -322,7 +322,7 @@ G_MODULE_EXPORT EF_Relachement *EF_relachement_ajout(Projet *projet, const char 
     }
     if (list_parcours == NULL)
     {
-        projet->ef_donnees.relachements = g_list_append(projet->ef_donnees.relachements, relachement_nouveau);
+        projet->modele.relachements = g_list_append(projet->modele.relachements, relachement_nouveau);
 #ifdef ENABLE_GTK
         gtk_list_store_append(projet->list_gtk.ef_relachements.liste_relachements, &relachement_nouveau->Iter_liste);
         if (projet->list_gtk.ef_relachements.builder != NULL)
@@ -331,7 +331,7 @@ G_MODULE_EXPORT EF_Relachement *EF_relachement_ajout(Projet *projet, const char 
     }
     else
     {
-        projet->ef_donnees.relachements = g_list_insert_before(projet->ef_donnees.relachements, list_parcours, relachement_nouveau);
+        projet->modele.relachements = g_list_insert_before(projet->modele.relachements, list_parcours, relachement_nouveau);
 #ifdef ENABLE_GTK
         gtk_list_store_insert_before(projet->list_gtk.ef_relachements.liste_relachements, &relachement_nouveau->Iter_liste, &relachement_tmp->Iter_liste);
         if (projet->list_gtk.ef_relachements.builder != NULL)
@@ -367,7 +367,7 @@ G_MODULE_EXPORT EF_Relachement* EF_relachement_cherche_nom(Projet *projet, const
     BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
     
     // Trivial
-    list_parcours = projet->ef_donnees.relachements;
+    list_parcours = projet->modele.relachements;
     while (list_parcours != NULL)
     {
         EF_Relachement *relachement = list_parcours->data;
@@ -417,15 +417,15 @@ G_MODULE_EXPORT gboolean EF_relachement_modif(Projet *projet, EF_Relachement *re
         BUGMSG(relachement->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
         
         // On réinsère le relâchement au bon endroit
-        projet->ef_donnees.relachements = g_list_remove(projet->ef_donnees.relachements, relachement);
-        list_parcours = projet->ef_donnees.relachements;
+        projet->modele.relachements = g_list_remove(projet->modele.relachements, relachement);
+        list_parcours = projet->modele.relachements;
         while (list_parcours != NULL)
         {
             EF_Relachement  *relachement_parcours = list_parcours->data;
             
             if (strcmp(relachement->nom, relachement_parcours->nom) < 0)
             {
-                projet->ef_donnees.relachements = g_list_insert_before(projet->ef_donnees.relachements, list_parcours, relachement);
+                projet->modele.relachements = g_list_insert_before(projet->modele.relachements, list_parcours, relachement);
                 
 #ifdef ENABLE_GTK
                 gtk_list_store_move_before(projet->list_gtk.ef_relachements.liste_relachements, &relachement->Iter_liste, &relachement_parcours->Iter_liste);
@@ -439,7 +439,7 @@ G_MODULE_EXPORT gboolean EF_relachement_modif(Projet *projet, EF_Relachement *re
         }
         if (list_parcours == NULL)
         {
-            projet->ef_donnees.relachements = g_list_append(projet->ef_donnees.relachements, relachement);
+            projet->modele.relachements = g_list_append(projet->modele.relachements, relachement);
             
 #ifdef ENABLE_GTK
             gtk_list_store_move_before(projet->list_gtk.ef_relachements.liste_relachements, &relachement->Iter_liste, NULL);
@@ -451,7 +451,7 @@ G_MODULE_EXPORT gboolean EF_relachement_modif(Projet *projet, EF_Relachement *re
 #ifdef ENABLE_GTK
         if (projet->list_gtk.ef_barres.builder != NULL)
         {
-            GList   *list_parcours2 = projet->beton.barres;
+            GList   *list_parcours2 = projet->modele.barres;
             
             while (list_parcours2 != NULL)
             {
@@ -807,7 +807,7 @@ G_MODULE_EXPORT gboolean EF_relachement_supprime(EF_Relachement *relachement,
     free(relachement->rx_f_data);
     free(relachement->ry_f_data);
     free(relachement->rz_f_data);
-    projet->ef_donnees.relachements = g_list_remove(projet->ef_donnees.relachements, relachement);
+    projet->modele.relachements = g_list_remove(projet->modele.relachements, relachement);
     
 #ifdef ENABLE_GTK
     gtk_list_store_remove(projet->list_gtk.ef_relachements.liste_relachements, &relachement->Iter_liste);
@@ -831,11 +831,11 @@ G_MODULE_EXPORT gboolean EF_relachement_free(Projet *projet)
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
     // Trivial
-    while (projet->ef_donnees.relachements != NULL)
+    while (projet->modele.relachements != NULL)
     {
-        EF_Relachement *relachement = projet->ef_donnees.relachements->data;
+        EF_Relachement *relachement = projet->modele.relachements->data;
         
-        projet->ef_donnees.relachements = g_list_delete_link(projet->ef_donnees.relachements, projet->ef_donnees.relachements);
+        projet->modele.relachements = g_list_delete_link(projet->modele.relachements, projet->modele.relachements);
         free(relachement->rx_d_data);
         free(relachement->ry_d_data);
         free(relachement->rz_d_data);

@@ -58,7 +58,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_init(Projet *projet)
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
     // Trivial
-    projet->beton.barres = NULL;
+    projet->modele.barres = NULL;
 #ifdef ENABLE_GTK
     projet->list_gtk.ef_barres.liste_types = gtk_list_store_new(1, G_TYPE_STRING);
     gtk_list_store_append(projet->list_gtk.ef_barres.liste_types, &iter);
@@ -87,7 +87,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_ajout(Projet *projet, Type_Element typ
  *   Succès : TRUE
  *   Échec : FALSE :
  *             projet == NULL,
- *             projet->beton.barres == NULL,
+ *             projet->modele.barres == NULL,
  *             noeud_debut == noeud_fin,
  *             section introuvable,
  *             materiau introuvable,
@@ -135,10 +135,10 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_ajout(Projet *projet, Type_Element typ
     element_nouveau->matrice_rotation = NULL;
     element_nouveau->matrice_rotation_transpose = NULL;
     
-    if (projet->beton.barres == NULL)
+    if (projet->modele.barres == NULL)
         element_nouveau->numero = 0;
     else
-        element_nouveau->numero = ((Beton_Barre *)g_list_last(projet->beton.barres)->data)->numero+1;
+        element_nouveau->numero = ((Beton_Barre *)g_list_last(projet->modele.barres)->data)->numero+1;
     
     BUG(EF_calculs_free(projet), FALSE);
     
@@ -152,7 +152,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_ajout(Projet *projet, Type_Element typ
             BUG(EF_noeuds_ajout_noeud_barre(projet, element_nouveau, (i+1.)/(discretisation_element+1.), NULL), FALSE);
     }
     
-    projet->beton.barres = g_list_append(projet->beton.barres, element_nouveau);
+    projet->modele.barres = g_list_append(projet->modele.barres, element_nouveau);
     
 #ifdef ENABLE_GTK
     // On incrémente le numéro de la future barre
@@ -198,7 +198,7 @@ G_MODULE_EXPORT Beton_Barre* _1992_1_1_barres_cherche_numero(Projet *projet,
  *   Succès : Pointeur vers l'élément en béton
  *   Échec : NULL :
  *             projet == NULL,
- *             list_size(projet->beton.barres) == 0,
+ *             list_size(projet->modele.barres) == 0,
  *             Barre en béton introuvable.
  */
 {
@@ -206,7 +206,7 @@ G_MODULE_EXPORT Beton_Barre* _1992_1_1_barres_cherche_numero(Projet *projet,
     BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
     
     // Trivial
-    list_parcours = projet->beton.barres;
+    list_parcours = projet->modele.barres;
     while (list_parcours != NULL)
     {
         Beton_Barre   *element = list_parcours->data;
@@ -278,7 +278,7 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GLi
     // On ajoute les noeuds utilisant les appuis
     if (appuis != NULL)
     {
-        list_parcours = projet->ef_donnees.noeuds;
+        list_parcours = projet->modele.noeuds;
         while (list_parcours != NULL)
         {
             EF_Noeud    *noeud = list_parcours->data;
@@ -296,7 +296,7 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GLi
     }
     
     // On ajoute les barres utilisant les sections, matériaux et relâchements.
-    list_parcours = projet->beton.barres;
+    list_parcours = projet->modele.barres;
     while (list_parcours != NULL)
     {
         Beton_Barre *barre = list_parcours->data;
@@ -403,7 +403,7 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GLi
         
         // On parcours la liste des barres pour trouver celles qui commencent ou finissent par
         // le noeud en cours d'étude.
-        list_parcours = projet->beton.barres;
+        list_parcours = projet->modele.barres;
         while (list_parcours != NULL)
         {
             Beton_Barre *barre;
@@ -805,9 +805,9 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_B
  *   Succès : TRUE
  *   Échec : FALSE :
  *             projet == NULL,
- *             projet->ef_donnees.triplet_rigidite_partielle == NULL,
+ *             projet->calculs.triplet_rigidite_partielle == NULL,
  *             element == NULL,
- *             projet->ef_donnees.triplet_rigidite_complete == NULL,
+ *             projet->calculs.triplet_rigidite_complete == NULL,
  *             element->section == NULL,
  *             distance entre le début et l'extrémité de la barre est nulle),
  *             en cas d'erreur d'allocation mémoire,
@@ -829,9 +829,9 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_B
     cholmod_sparse      *sparse_tmp, *matrice_rigidite_globale;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->ef_donnees.triplet_rigidite_partielle, FALSE, gettext("Paramètre %s incorrect.\n"), "triplet_rigidite_partielle");
+    BUGMSG(projet->calculs.triplet_rigidite_partielle, FALSE, gettext("Paramètre %s incorrect.\n"), "triplet_rigidite_partielle");
     BUGMSG(element, FALSE, gettext("Paramètre %s incorrect.\n"), "element");
-    BUGMSG(projet->ef_donnees.triplet_rigidite_complete, FALSE, gettext("Paramètre %s incorrect.\n"), "triplet_rigidite_complete");
+    BUGMSG(projet->calculs.triplet_rigidite_complete, FALSE, gettext("Paramètre %s incorrect.\n"), "triplet_rigidite_complete");
     BUGMSG(element->section, FALSE, gettext("La section n'est pas spécifiée.\n"));
     
     // Calcul de la matrice de rotation 3D qui permet de passer du repère local au repère
@@ -898,7 +898,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_B
     //   pour avoir un L_x positif et la deuxième solution doit être utilisée pour avoir un
     //   L_x négatif. Il est donc possible d'obtenir une seule et unique solution :\end{verbatim}\begin{displaymath}
     //   cos(z) = signe\{L_x\} \cdot \sqrt{\frac{L_x^2}{L^2-L_z^2}}\texttt{ et }sin(z) = \frac{yy}{\sqrt{L^2-L_z^2}}\end{displaymath}\begin{verbatim}
-    triplet = cholmod_allocate_triplet(12, 12, 32, 0, CHOLMOD_REAL, projet->ef_donnees.c);
+    triplet = cholmod_allocate_triplet(12, 12, 32, 0, CHOLMOD_REAL, projet->calculs.c);
     BUGMSG(triplet, FALSE, gettext("Erreur d'allocation mémoire.\n"));
     ai = (int*)triplet->i;
     aj = (int*)triplet->j;
@@ -916,11 +916,11 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_B
         ai[k*8+7] = k*3+2; aj[k*8+7] = k*3+2; ax[k*8+7] = cos(y);
     }
     triplet->nnz=32;
-    element->matrice_rotation = cholmod_triplet_to_sparse(triplet, 0, projet->ef_donnees.c);
+    element->matrice_rotation = cholmod_triplet_to_sparse(triplet, 0, projet->calculs.c);
     BUGMSG(element->matrice_rotation, FALSE, gettext("Erreur d'allocation mémoire.\n"));
-    element->matrice_rotation_transpose = cholmod_transpose(element->matrice_rotation, 1, projet->ef_donnees.c);
+    element->matrice_rotation_transpose = cholmod_transpose(element->matrice_rotation, 1, projet->calculs.c);
     BUGMSG(element->matrice_rotation_transpose, FALSE, gettext("Erreur d'allocation mémoire.\n"));
-    cholmod_free_triplet(&triplet, projet->ef_donnees.c);
+    cholmod_free_triplet(&triplet, projet->calculs.c);
     
     // Une fois la matrice de rotation déterminée, il est nécessaire de calculer la matrice de
     //   rigidité élémentaire dans le repère local. La poutre pouvant être discrétisée, une
@@ -953,8 +953,8 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_B
             noeud2 = g_list_nth_data(element->noeuds_intermediaires, j);
         }
         
-        num1 = g_list_index(projet->ef_donnees.noeuds, noeud1);
-        num2 = g_list_index(projet->ef_donnees.noeuds, noeud2);
+        num1 = g_list_index(projet->modele.noeuds, noeud1);
+        num2 = g_list_index(projet->modele.noeuds, noeud2);
         
     //     Calcul des L_x, L_y, L_z et L.
         ll = EF_noeuds_distance(noeud2, noeud1);
@@ -1183,7 +1183,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_B
         }
         
     //     Calcul des valeurs de la matrice de rigidité locale :
-        triplet = cholmod_allocate_triplet(12, 12, 40, 0, CHOLMOD_REAL, projet->ef_donnees.c);
+        triplet = cholmod_allocate_triplet(12, 12, 40, 0, CHOLMOD_REAL, projet->calculs.c);
         BUGMSG(triplet, FALSE, gettext("Erreur d'allocation mémoire.\n"));
         ai = (int*)triplet->i;
         aj = (int*)triplet->j;
@@ -1380,94 +1380,94 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_B
         }
         
         if (element->info_EF[j].matrice_rigidite_locale != NULL)
-            cholmod_free_sparse(&element->info_EF[j].matrice_rigidite_locale, projet->ef_donnees.c);
-        element->info_EF[j].matrice_rigidite_locale = cholmod_triplet_to_sparse(triplet, 0, projet->ef_donnees.c);
+            cholmod_free_sparse(&element->info_EF[j].matrice_rigidite_locale, projet->calculs.c);
+        element->info_EF[j].matrice_rigidite_locale = cholmod_triplet_to_sparse(triplet, 0, projet->calculs.c);
         BUGMSG(element->info_EF[j].matrice_rigidite_locale, FALSE, gettext("Erreur d'allocation mémoire.\n"));
-        cholmod_free_triplet(&triplet, projet->ef_donnees.c);
+        cholmod_free_triplet(&triplet, projet->calculs.c);
         
     //       Calcul la matrice locale dans le repère globale :\end{verbatim}\begin{displaymath}
     //       [K]_{global} = [R] \cdot [K]_{local} \cdot [R]^{-1} = [R] \cdot [K]_{local} \cdot [R]^T\end{displaymath}\begin{verbatim}
-        sparse_tmp = cholmod_ssmult(element->matrice_rotation, element->info_EF[j].matrice_rigidite_locale, 0, 1, 0, projet->ef_donnees.c);
+        sparse_tmp = cholmod_ssmult(element->matrice_rotation, element->info_EF[j].matrice_rigidite_locale, 0, 1, 0, projet->calculs.c);
         BUGMSG(sparse_tmp, FALSE, gettext("Erreur d'allocation mémoire.\n"));
-        matrice_rigidite_globale = cholmod_ssmult(sparse_tmp, element->matrice_rotation_transpose, 0, 1, 0, projet->ef_donnees.c);
+        matrice_rigidite_globale = cholmod_ssmult(sparse_tmp, element->matrice_rotation_transpose, 0, 1, 0, projet->calculs.c);
         BUGMSG(matrice_rigidite_globale, FALSE, gettext("Erreur d'allocation mémoire.\n"));
-        cholmod_free_sparse(&(sparse_tmp), projet->ef_donnees.c);
-        triplet = cholmod_sparse_to_triplet(matrice_rigidite_globale, projet->ef_donnees.c);
+        cholmod_free_sparse(&(sparse_tmp), projet->calculs.c);
+        triplet = cholmod_sparse_to_triplet(matrice_rigidite_globale, projet->calculs.c);
         BUGMSG(triplet, FALSE, gettext("Erreur d'allocation mémoire.\n"));
         ai = (int*)triplet->i;
         aj = (int*)triplet->j;
         ax = (double*)triplet->x;
-        ai2 = (int*)projet->ef_donnees.triplet_rigidite_partielle->i;
-        aj2 = (int*)projet->ef_donnees.triplet_rigidite_partielle->j;
-        ax2 = (double*)projet->ef_donnees.triplet_rigidite_partielle->x;
-        ai3 = (int*)projet->ef_donnees.triplet_rigidite_complete->i;
-        aj3 = (int*)projet->ef_donnees.triplet_rigidite_complete->j;
-        ax3 = (double*)projet->ef_donnees.triplet_rigidite_complete->x;
+        ai2 = (int*)projet->calculs.triplet_rigidite_partielle->i;
+        aj2 = (int*)projet->calculs.triplet_rigidite_partielle->j;
+        ax2 = (double*)projet->calculs.triplet_rigidite_partielle->x;
+        ai3 = (int*)projet->calculs.triplet_rigidite_complete->i;
+        aj3 = (int*)projet->calculs.triplet_rigidite_complete->j;
+        ax3 = (double*)projet->calculs.triplet_rigidite_complete->x;
         
     //       Insertion de la matrice de rigidité élémentaire dans la matrice de rigidité
     //         globale partielle et complète.
         for (i=0;i<triplet->nnz;i++)
         {
-            if ((ai[i] < 6) && (aj[i] < 6) && (projet->ef_donnees.noeuds_pos_partielle[num1][ai[i]] != -1) && (projet->ef_donnees.noeuds_pos_partielle[num1][aj[i]] != -1))
+            if ((ai[i] < 6) && (aj[i] < 6) && (projet->calculs.noeuds_pos_partielle[num1][ai[i]] != -1) && (projet->calculs.noeuds_pos_partielle[num1][aj[i]] != -1))
             {
-                ai2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = projet->ef_donnees.noeuds_pos_partielle[num1][ai[i]];
-                aj2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = projet->ef_donnees.noeuds_pos_partielle[num1][aj[i]];
-                ax2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = ax[i];
-                projet->ef_donnees.triplet_rigidite_partielle_en_cours++;
+                ai2[projet->calculs.triplet_rigidite_partielle_en_cours] = projet->calculs.noeuds_pos_partielle[num1][ai[i]];
+                aj2[projet->calculs.triplet_rigidite_partielle_en_cours] = projet->calculs.noeuds_pos_partielle[num1][aj[i]];
+                ax2[projet->calculs.triplet_rigidite_partielle_en_cours] = ax[i];
+                projet->calculs.triplet_rigidite_partielle_en_cours++;
             }
-            else if ((ai[i] < 6) && (aj[i] >= 6) && (projet->ef_donnees.noeuds_pos_partielle[num1][ai[i]] != -1) && (projet->ef_donnees.noeuds_pos_partielle[num2][aj[i]-6] != -1))
+            else if ((ai[i] < 6) && (aj[i] >= 6) && (projet->calculs.noeuds_pos_partielle[num1][ai[i]] != -1) && (projet->calculs.noeuds_pos_partielle[num2][aj[i]-6] != -1))
             {
-                ai2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = projet->ef_donnees.noeuds_pos_partielle[num1][ai[i]];
-                aj2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = projet->ef_donnees.noeuds_pos_partielle[num2][aj[i]-6];
-                ax2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = ax[i];
-                projet->ef_donnees.triplet_rigidite_partielle_en_cours++;
+                ai2[projet->calculs.triplet_rigidite_partielle_en_cours] = projet->calculs.noeuds_pos_partielle[num1][ai[i]];
+                aj2[projet->calculs.triplet_rigidite_partielle_en_cours] = projet->calculs.noeuds_pos_partielle[num2][aj[i]-6];
+                ax2[projet->calculs.triplet_rigidite_partielle_en_cours] = ax[i];
+                projet->calculs.triplet_rigidite_partielle_en_cours++;
             }
-            else if ((ai[i] >= 6) && (aj[i] < 6) && (projet->ef_donnees.noeuds_pos_partielle[num2][ai[i]-6] != -1) && (projet->ef_donnees.noeuds_pos_partielle[num1][aj[i]] != -1))
+            else if ((ai[i] >= 6) && (aj[i] < 6) && (projet->calculs.noeuds_pos_partielle[num2][ai[i]-6] != -1) && (projet->calculs.noeuds_pos_partielle[num1][aj[i]] != -1))
             {
-                ai2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = projet->ef_donnees.noeuds_pos_partielle[num2][ai[i]-6];
-                aj2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = projet->ef_donnees.noeuds_pos_partielle[num1][aj[i]];
-                ax2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = ax[i];
-                projet->ef_donnees.triplet_rigidite_partielle_en_cours++;
+                ai2[projet->calculs.triplet_rigidite_partielle_en_cours] = projet->calculs.noeuds_pos_partielle[num2][ai[i]-6];
+                aj2[projet->calculs.triplet_rigidite_partielle_en_cours] = projet->calculs.noeuds_pos_partielle[num1][aj[i]];
+                ax2[projet->calculs.triplet_rigidite_partielle_en_cours] = ax[i];
+                projet->calculs.triplet_rigidite_partielle_en_cours++;
             }
-            else if ((ai[i] >= 6) && (aj[i] >= 6) && (projet->ef_donnees.noeuds_pos_partielle[num2][ai[i]-6] != -1) && (projet->ef_donnees.noeuds_pos_partielle[num2][aj[i]-6] != -1))
+            else if ((ai[i] >= 6) && (aj[i] >= 6) && (projet->calculs.noeuds_pos_partielle[num2][ai[i]-6] != -1) && (projet->calculs.noeuds_pos_partielle[num2][aj[i]-6] != -1))
             {
-                ai2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = projet->ef_donnees.noeuds_pos_partielle[num2][ai[i]-6];
-                aj2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = projet->ef_donnees.noeuds_pos_partielle[num2][aj[i]-6];
-                ax2[projet->ef_donnees.triplet_rigidite_partielle_en_cours] = ax[i];
-                projet->ef_donnees.triplet_rigidite_partielle_en_cours++;
+                ai2[projet->calculs.triplet_rigidite_partielle_en_cours] = projet->calculs.noeuds_pos_partielle[num2][ai[i]-6];
+                aj2[projet->calculs.triplet_rigidite_partielle_en_cours] = projet->calculs.noeuds_pos_partielle[num2][aj[i]-6];
+                ax2[projet->calculs.triplet_rigidite_partielle_en_cours] = ax[i];
+                projet->calculs.triplet_rigidite_partielle_en_cours++;
             }
             
             if ((ai[i] < 6) && (aj[i] < 6))
             {
-                ai3[projet->ef_donnees.triplet_rigidite_complete_en_cours] = projet->ef_donnees.noeuds_pos_complete[num1][ai[i]];
-                aj3[projet->ef_donnees.triplet_rigidite_complete_en_cours] = projet->ef_donnees.noeuds_pos_complete[num1][aj[i]];
-                ax3[projet->ef_donnees.triplet_rigidite_complete_en_cours] = ax[i];
-                projet->ef_donnees.triplet_rigidite_complete_en_cours++;
+                ai3[projet->calculs.triplet_rigidite_complete_en_cours] = projet->calculs.noeuds_pos_complete[num1][ai[i]];
+                aj3[projet->calculs.triplet_rigidite_complete_en_cours] = projet->calculs.noeuds_pos_complete[num1][aj[i]];
+                ax3[projet->calculs.triplet_rigidite_complete_en_cours] = ax[i];
+                projet->calculs.triplet_rigidite_complete_en_cours++;
             }
             else if ((ai[i] < 6) && (aj[i] >= 6))
             {
-                ai3[projet->ef_donnees.triplet_rigidite_complete_en_cours] = projet->ef_donnees.noeuds_pos_complete[num1][ai[i]];
-                aj3[projet->ef_donnees.triplet_rigidite_complete_en_cours] = projet->ef_donnees.noeuds_pos_complete[num2][aj[i]-6];
-                ax3[projet->ef_donnees.triplet_rigidite_complete_en_cours] = ax[i];
-                projet->ef_donnees.triplet_rigidite_complete_en_cours++;
+                ai3[projet->calculs.triplet_rigidite_complete_en_cours] = projet->calculs.noeuds_pos_complete[num1][ai[i]];
+                aj3[projet->calculs.triplet_rigidite_complete_en_cours] = projet->calculs.noeuds_pos_complete[num2][aj[i]-6];
+                ax3[projet->calculs.triplet_rigidite_complete_en_cours] = ax[i];
+                projet->calculs.triplet_rigidite_complete_en_cours++;
             }
             else if ((ai[i] >= 6) && (aj[i] < 6))
             {
-                ai3[projet->ef_donnees.triplet_rigidite_complete_en_cours] = projet->ef_donnees.noeuds_pos_complete[num2][ai[i]-6];
-                aj3[projet->ef_donnees.triplet_rigidite_complete_en_cours] = projet->ef_donnees.noeuds_pos_complete[num1][aj[i]];
-                ax3[projet->ef_donnees.triplet_rigidite_complete_en_cours] = ax[i];
-                projet->ef_donnees.triplet_rigidite_complete_en_cours++;
+                ai3[projet->calculs.triplet_rigidite_complete_en_cours] = projet->calculs.noeuds_pos_complete[num2][ai[i]-6];
+                aj3[projet->calculs.triplet_rigidite_complete_en_cours] = projet->calculs.noeuds_pos_complete[num1][aj[i]];
+                ax3[projet->calculs.triplet_rigidite_complete_en_cours] = ax[i];
+                projet->calculs.triplet_rigidite_complete_en_cours++;
             }
             else if ((ai[i] >= 6) && (aj[i] >= 6))
             {
-                ai3[projet->ef_donnees.triplet_rigidite_complete_en_cours] = projet->ef_donnees.noeuds_pos_complete[num2][ai[i]-6];
-                aj3[projet->ef_donnees.triplet_rigidite_complete_en_cours] = projet->ef_donnees.noeuds_pos_complete[num2][aj[i]-6];
-                ax3[projet->ef_donnees.triplet_rigidite_complete_en_cours] = ax[i];
-                projet->ef_donnees.triplet_rigidite_complete_en_cours++;
+                ai3[projet->calculs.triplet_rigidite_complete_en_cours] = projet->calculs.noeuds_pos_complete[num2][ai[i]-6];
+                aj3[projet->calculs.triplet_rigidite_complete_en_cours] = projet->calculs.noeuds_pos_complete[num2][aj[i]-6];
+                ax3[projet->calculs.triplet_rigidite_complete_en_cours] = ax[i];
+                projet->calculs.triplet_rigidite_complete_en_cours++;
             }
         }
-        cholmod_free_triplet(&triplet, projet->ef_donnees.c);
-        cholmod_free_sparse(&(matrice_rigidite_globale), projet->ef_donnees.c);
+        cholmod_free_triplet(&triplet, projet->calculs.c);
+        cholmod_free_sparse(&(matrice_rigidite_globale), projet->calculs.c);
     }
     // FinPour
     
@@ -1488,10 +1488,10 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_rigidite_ajout_tout(Projet *projet)
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
     // Trivial
-    if (projet->beton.barres == NULL)
+    if (projet->modele.barres == NULL)
         return TRUE;
     
-    list_parcours = projet->beton.barres;
+    list_parcours = projet->modele.barres;
     do
     {
         Beton_Barre *element = list_parcours->data;
@@ -1517,12 +1517,12 @@ G_MODULE_EXPORT void _1992_1_1_barres_free_foreach(Beton_Barre *barre, Projet *p
     {
         void    *tmp = barre->noeuds_intermediaires->data;
         EF_noeuds_free_foreach((EF_Noeud *)barre->noeuds_intermediaires->data, projet);
-        projet->ef_donnees.noeuds = g_list_remove(projet->ef_donnees.noeuds, tmp);
+        projet->modele.noeuds = g_list_remove(projet->modele.noeuds, tmp);
     }
     if (barre->matrice_rotation != NULL)
-        cholmod_free_sparse(&barre->matrice_rotation, projet->ef_donnees.c);
+        cholmod_free_sparse(&barre->matrice_rotation, projet->calculs.c);
     if (barre->matrice_rotation_transpose != NULL)
-        cholmod_free_sparse(&barre->matrice_rotation_transpose, projet->ef_donnees.c);
+        cholmod_free_sparse(&barre->matrice_rotation_transpose, projet->calculs.c);
     free(barre->info_EF);
     
 #ifdef ENABLE_GTK
@@ -1608,7 +1608,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_supprime_liste(Projet *projet, GList *
         if (barre != NULL)
         {
             _1992_1_1_barres_free_foreach(barre, projet);
-            projet->beton.barres = g_list_remove(projet->beton.barres, barre);
+            projet->modele.barres = g_list_remove(projet->modele.barres, barre);
         }
         list_parcours = g_list_next(list_parcours);
     }
@@ -1621,7 +1621,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_supprime_liste(Projet *projet, GList *
         if (noeud != NULL)
         {
             EF_noeuds_free_foreach(noeud, projet);
-            projet->ef_donnees.noeuds = g_list_remove(projet->ef_donnees.noeuds, noeud);
+            projet->modele.noeuds = g_list_remove(projet->modele.noeuds, noeud);
         }
         list_parcours = g_list_next(list_parcours);
     }
@@ -1657,9 +1657,9 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_free(Projet *projet)
     // Trivial
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
-    g_list_foreach(projet->beton.barres, (GFunc)_1992_1_1_barres_free_foreach, projet);
-    g_list_free(projet->beton.barres);
-    projet->beton.barres = NULL;
+    g_list_foreach(projet->modele.barres, (GFunc)_1992_1_1_barres_free_foreach, projet);
+    g_list_free(projet->modele.barres);
+    projet->modele.barres = NULL;
     
     BUG(EF_calculs_free(projet), FALSE);
     

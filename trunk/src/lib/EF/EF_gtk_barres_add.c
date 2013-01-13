@@ -255,9 +255,9 @@ G_MODULE_EXPORT void EF_gtk_barres_ajouter(GtkButton *button __attribute__((unus
     g_object_set(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_materiau_combobox"), "model", projet->list_gtk.ef_materiaux.liste_materiaux, NULL);
     g_object_set(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_relachement_combobox"), "model", projet->list_gtk.ef_relachements.liste_relachements, NULL);
     
-    if (projet->beton.barres != NULL)
+    if (projet->modele.barres != NULL)
     {
-        BUGMSG(nb_barres = g_strdup_printf("%d", ((Beton_Barre *)g_list_last(projet->beton.barres)->data)->numero+1), , gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(nb_barres = g_strdup_printf("%d", ((Beton_Barre *)g_list_last(projet->modele.barres)->data)->numero+1), , gettext("Erreur d'allocation mémoire.\n"));
         gtk_label_set_text(GTK_LABEL(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_numero_label2")), nb_barres);
         free(nb_barres);
     }

@@ -122,7 +122,7 @@ G_MODULE_EXPORT gboolean m3d_camera_axe_x_z(Projet *projet)
 /* Description : Positionne la caméra pour voir toute la structure dans le plan xz.
  * Paramètres : Projet *projet : la variable projet.
  * Valeur renvoyée :
- *   Succès : TRUE. Ne fait rien si (list_size(projet->ef_donnees.noeuds) <= 1)
+ *   Succès : TRUE. Ne fait rien si (list_size(projet->modele.noeuds) <= 1)
  *   Échec : FALSE :
  *             projet == NULL,
  *             projet->list_gtk.m3d == NULL,
@@ -138,14 +138,14 @@ G_MODULE_EXPORT gboolean m3d_camera_axe_x_z(Projet *projet)
     EF_Point    *point;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    if (g_list_length(projet->ef_donnees.noeuds) <= 1)
+    if (g_list_length(projet->modele.noeuds) <= 1)
         return TRUE;
     BUG(EF_noeuds_min_max(projet, &x_min, &x_max, NULL, NULL, &z_min, &z_max), FALSE);
     
     x = (x_min+x_max)/2.;
     z = (z_min+z_max)/2.;
     
-    list_parcours = projet->ef_donnees.noeuds;
+    list_parcours = projet->modele.noeuds;
     noeud = (EF_Noeud *)list_parcours->data;
     BUG(point = EF_noeuds_renvoie_position(noeud), FALSE);
     y = point->y-sqrt((point->x-x)*(point->x-x)+(point->z-z)*(point->z-z));

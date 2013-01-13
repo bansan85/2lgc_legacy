@@ -684,7 +684,7 @@ G_MODULE_EXPORT gboolean _1990_action_affiche_resultats(Projet *projet, unsigned
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUG(action_en_cours = _1990_action_cherche_numero(projet, num_action), FALSE);
-    if (projet->beton.barres == NULL)
+    if (projet->modele.barres == NULL)
     {
         printf(gettext("Aucune barre existante.\n"));
         return TRUE;
@@ -693,13 +693,13 @@ G_MODULE_EXPORT gboolean _1990_action_affiche_resultats(Projet *projet, unsigned
     // Affichage des efforts aux noeuds et des réactions d'appuis
     printf("Effort aux noeuds & Réactions d'appuis :\n");
     common_math_arrondi_sparse(action_en_cours->efforts_noeuds);
-    cholmod_write_sparse(stdout, action_en_cours->efforts_noeuds, NULL, NULL, projet->ef_donnees.c);
+    cholmod_write_sparse(stdout, action_en_cours->efforts_noeuds, NULL, NULL, projet->calculs.c);
     // Affichage des déplacements des noeuds
     printf("\nDéplacements :\n");
     common_math_arrondi_sparse(action_en_cours->deplacement_complet);
-    cholmod_write_sparse(stdout, action_en_cours->deplacement_complet, NULL, NULL, projet->ef_donnees.c);
+    cholmod_write_sparse(stdout, action_en_cours->deplacement_complet, NULL, NULL, projet->calculs.c);
     // Pour chaque barre
-    for (i=0;i<g_list_length(projet->beton.barres);i++)
+    for (i=0;i<g_list_length(projet->modele.barres);i++)
     {
     //     Affichage de la courbe des sollicitations vis-à-vis de l'effort normal
         printf("Barre n°%d, Effort normal\n", i);
@@ -720,7 +720,7 @@ G_MODULE_EXPORT gboolean _1990_action_affiche_resultats(Projet *projet, unsigned
         printf("Barre n°%d, Moment de flexion Z\n", i);
         BUG(common_fonction_affiche(action_en_cours->fonctions_efforts[5][i]), FALSE);
     }
-    for (i=0;i<g_list_length(projet->beton.barres);i++)
+    for (i=0;i<g_list_length(projet->modele.barres);i++)
     {
     //     Affichage de la courbe de déformation selon l'axe X
         printf("Barre n°%d, Déformation en X\n", i);
@@ -810,11 +810,11 @@ G_MODULE_EXPORT gboolean _1990_action_free_num(Projet *projet, unsigned int num)
                 }
             }
             if (action->deplacement_complet != NULL)
-                cholmod_free_sparse(&action->deplacement_complet, projet->ef_donnees.c);
+                cholmod_free_sparse(&action->deplacement_complet, projet->calculs.c);
             if (action->forces_complet != NULL)
-                cholmod_free_sparse(&action->forces_complet, projet->ef_donnees.c);
+                cholmod_free_sparse(&action->forces_complet, projet->calculs.c);
             if (action->efforts_noeuds != NULL)
-                cholmod_free_sparse(&action->efforts_noeuds, projet->ef_donnees.c);
+                cholmod_free_sparse(&action->efforts_noeuds, projet->calculs.c);
             
             if (action->fonctions_efforts[0] != NULL)
                 BUG(common_fonction_free(projet, action), FALSE);
@@ -904,11 +904,11 @@ G_MODULE_EXPORT gboolean _1990_action_free(Projet *projet)
             }
         }
         if (action->deplacement_complet != NULL)
-            cholmod_free_sparse(&action->deplacement_complet, projet->ef_donnees.c);
+            cholmod_free_sparse(&action->deplacement_complet, projet->calculs.c);
         if (action->forces_complet != NULL)
-            cholmod_free_sparse(&action->forces_complet, projet->ef_donnees.c);
+            cholmod_free_sparse(&action->forces_complet, projet->calculs.c);
         if (action->efforts_noeuds != NULL)
-            cholmod_free_sparse(&action->efforts_noeuds, projet->ef_donnees.c);
+            cholmod_free_sparse(&action->efforts_noeuds, projet->calculs.c);
         
         if (action->fonctions_efforts[0] != NULL)
             BUG(common_fonction_free(projet, action), FALSE);

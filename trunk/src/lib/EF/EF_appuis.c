@@ -49,7 +49,7 @@ G_MODULE_EXPORT gboolean EF_appuis_init(Projet *projet)
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
 
     // Trivial
-    projet->ef_donnees.appuis = NULL;
+    projet->modele.appuis = NULL;
     
 #ifdef ENABLE_GTK
     projet->list_gtk.ef_appuis.liste_appuis = gtk_list_store_new(1, G_TYPE_STRING);
@@ -83,7 +83,7 @@ G_MODULE_EXPORT EF_Appui* EF_appuis_cherche_nom(Projet *projet, const char *nom,
     BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
     
     // Trivial
-    list_parcours = projet->ef_donnees.appuis;
+    list_parcours = projet->modele.appuis;
     while (list_parcours != NULL)
     {
         EF_Appui    *appui = list_parcours->data;
@@ -286,7 +286,7 @@ G_MODULE_EXPORT EF_Appui* EF_appuis_ajout(Projet *projet, const char *nom, Type_
  *   Succès : pointeur vers le nouvel appui.
  *   Échec : NULL :
  *             projet == NULL,
- *             projet->ef_donnees.appuis == NULL,
+ *             projet->modele.appuis == NULL,
  *             x, y, z, rx, ry, rz sont de type inconnu,
  *             en cas d'erreur d'allocation mémoire.
  */
@@ -396,7 +396,7 @@ G_MODULE_EXPORT EF_Appui* EF_appuis_ajout(Projet *projet, const char *nom, Type_
         }
     }
     
-    list_parcours = projet->ef_donnees.appuis;
+    list_parcours = projet->modele.appuis;
     while (list_parcours != NULL)
     {
         appui_parcours = list_parcours->data;
@@ -407,7 +407,7 @@ G_MODULE_EXPORT EF_Appui* EF_appuis_ajout(Projet *projet, const char *nom, Type_
     }
     if (list_parcours == NULL)
     {
-        projet->ef_donnees.appuis = g_list_append(projet->ef_donnees.appuis, appui_nouveau);
+        projet->modele.appuis = g_list_append(projet->modele.appuis, appui_nouveau);
 #ifdef ENABLE_GTK
         gtk_list_store_append(projet->list_gtk.ef_appuis.liste_appuis, &appui_nouveau->Iter_liste);
         if (projet->list_gtk.ef_appuis.builder != NULL)
@@ -416,7 +416,7 @@ G_MODULE_EXPORT EF_Appui* EF_appuis_ajout(Projet *projet, const char *nom, Type_
     }
     else
     {
-        projet->ef_donnees.appuis = g_list_insert_before(projet->ef_donnees.appuis, list_parcours, appui_nouveau);
+        projet->modele.appuis = g_list_insert_before(projet->modele.appuis, list_parcours, appui_nouveau);
 #ifdef ENABLE_GTK
         gtk_list_store_insert_before(projet->list_gtk.ef_appuis.liste_appuis, &appui_nouveau->Iter_liste, &appui_parcours->Iter_liste);
         if (projet->list_gtk.ef_appuis.builder != NULL)
@@ -545,15 +545,15 @@ G_MODULE_EXPORT gboolean EF_appuis_renomme(EF_Appui *appui, gchar *nom, Projet *
     BUGMSG(appui->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
     
     // On réinsère l'appui au bon endroit
-    projet->ef_donnees.appuis = g_list_remove(projet->ef_donnees.appuis, appui);
-    list_parcours = projet->ef_donnees.appuis;
+    projet->modele.appuis = g_list_remove(projet->modele.appuis, appui);
+    list_parcours = projet->modele.appuis;
     while (list_parcours != NULL)
     {
         EF_Appui    *appui_parcours = list_parcours->data;
         
         if (strcmp(nom, appui_parcours->nom) < 0)
         {
-            projet->ef_donnees.appuis = g_list_insert_before(projet->ef_donnees.appuis, list_parcours, appui);
+            projet->modele.appuis = g_list_insert_before(projet->modele.appuis, list_parcours, appui);
             
 #ifdef ENABLE_GTK
             gtk_list_store_move_before(projet->list_gtk.ef_appuis.liste_appuis, &appui->Iter_liste, &appui_parcours->Iter_liste);
@@ -567,7 +567,7 @@ G_MODULE_EXPORT gboolean EF_appuis_renomme(EF_Appui *appui, gchar *nom, Projet *
     }
     if (list_parcours == NULL)
     {
-        projet->ef_donnees.appuis = g_list_append(projet->ef_donnees.appuis, appui);
+        projet->modele.appuis = g_list_append(projet->modele.appuis, appui);
         
 #ifdef ENABLE_GTK
         gtk_list_store_move_before(projet->list_gtk.ef_appuis.liste_appuis, &appui->Iter_liste, NULL);
@@ -596,7 +596,7 @@ G_MODULE_EXPORT gboolean EF_appuis_renomme(EF_Appui *appui, gchar *nom, Projet *
         GtkTreeModel    *model;
         GList           *parcours;
         
-        parcours = projet->ef_donnees.noeuds;
+        parcours = projet->modele.noeuds;
         while (parcours != NULL)
         {
             EF_Noeud    *noeud = parcours->data;
@@ -738,7 +738,7 @@ G_MODULE_EXPORT gboolean EF_appuis_supprime(EF_Appui *appui, gboolean annule_si_
             BUGMSG(NULL, FALSE, gettext("Le type d'appui de %s (%d) est inconnu.\n"), "rz", appui->ux);
         }
     }
-    projet->ef_donnees.appuis = g_list_remove(projet->ef_donnees.appuis, appui);
+    projet->modele.appuis = g_list_remove(projet->modele.appuis, appui);
     
 #ifdef ENABLE_GTK
     gtk_list_store_remove(projet->list_gtk.ef_appuis.liste_appuis, &appui->Iter_liste);
@@ -764,17 +764,17 @@ G_MODULE_EXPORT gboolean EF_appuis_free(Projet *projet)
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
     // Trivial
-    while (projet->ef_donnees.appuis != NULL)
+    while (projet->modele.appuis != NULL)
     {
-        EF_Appui    *appui = projet->ef_donnees.appuis->data;
+        EF_Appui    *appui = projet->modele.appuis->data;
         
-        projet->ef_donnees.appuis = g_list_delete_link(projet->ef_donnees.appuis, projet->ef_donnees.appuis);
+        projet->modele.appuis = g_list_delete_link(projet->modele.appuis, projet->modele.appuis);
         free(appui->nom);
         free(appui);
     }
     
-    free(projet->ef_donnees.appuis);
-    projet->ef_donnees.appuis = NULL;
+    free(projet->modele.appuis);
+    projet->modele.appuis = NULL;
     
 #ifdef ENABLE_GTK
     g_object_unref(projet->list_gtk.ef_appuis.liste_appuis);

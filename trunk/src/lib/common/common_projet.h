@@ -794,7 +794,7 @@ typedef struct __Niveau_Groupe
 
 typedef struct __CombinaisonsEL
 {                           // Spécifie la méthode des combinaisons (E0,A1.3)
-    int     flags;          // bit 0      : ELU_EQU : méthode note 1 si le bit 1 = 0
+    int         flags;      // bit 0      : ELU_EQU : méthode note 1 si le bit 1 = 0
                             //            : ELU_EQU : méthode note 2 si le bit 1 = 1
                             // bit 1 et 2 : ELU_GEO/STR : 00 méthode approche 1
                             //            : ELU_GEO/STR : 01 méthode approche 2
@@ -885,19 +885,27 @@ typedef struct __List_Gtk
 #endif
 
 
-typedef struct __EF
-{                               // Contient toutes les données nécessaires pour la réalisation
-                                // des calculs aux éléments finis et notamment les variables
-                                // utilisées par les librairies cholmod et umfpack :
-    cholmod_common      Common; // Paramètres des calculs de la librairie cholmod.
-    cholmod_common      *c;     // Pointeur vers Common
-                                
+typedef struct __Modele
+{
     GList               *noeuds;       // Liste de tous les noeuds de la structure, que ce soit
                                        // les noeuds définis par l'utilisateur ou les noeuds
                                        // créés par la discrétisation des éléments.
     GList               *appuis;       // Liste des types d'appuis
     GList               *relachements; // Liste des types de relâchements des barres.
     
+    GList               *sections;
+    GList               *materiaux;
+    GList               *barres;
+} Modele;
+
+
+typedef struct __Calculs
+{                               // Contient toutes les données nécessaires pour la réalisation
+                                // des calculs aux éléments finis et notamment les variables
+                                // utilisées par les librairies cholmod et umfpack :
+    cholmod_common      Common; // Paramètres des calculs de la librairie cholmod.
+    cholmod_common      *c;     // Pointeur vers Common
+                                
     int                 **noeuds_pos_partielle; // Etabli une corrélation entre le degré de 
     int                 **noeuds_pos_complete;  // liberté (x, y, z, rx, ry, rz) d'un noeud
                                                 // et sa position dans la matrice de rigidité
@@ -929,15 +937,7 @@ typedef struct __EF
     int                 *ap, *ai;            // tous les calculs lors de la résolution de
     double              *ax;                 // chaque cas de charges.
     double              residu;              // Erreur non relative des réactions d'appuis.
-} EF;
-
-
-typedef struct __Beton_Donnees
-{                               // Liste des sections, matériaux et barres en béton.
-    GList           *sections;
-    GList           *materiaux;
-    GList           *barres;
-} Beton_Donnees;
+} Calculs;
 
 
 typedef struct __Projet
@@ -946,8 +946,8 @@ typedef struct __Projet
     GList           *niveaux_groupes;   // Compatibilités entres actions
     CombinaisonsEL  combinaisons;       // Combinaisons conformes aux Eurocodes
     Type_Pays       pays;               // Pays de calculs
-    EF              ef_donnees;         // Données communes à tous les éléments finis
-    Beton_Donnees   beton;              // Données spécifiques au béton
+    Modele          modele;             // Données du modèle de calcul
+    Calculs         calculs;            // Données nécessaires aux calculs
 #ifdef ENABLE_GTK
     List_Gtk        list_gtk;           // Informations nécessaires pour l'interface graphique
 #endif

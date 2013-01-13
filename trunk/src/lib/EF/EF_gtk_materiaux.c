@@ -392,7 +392,7 @@ G_MODULE_EXPORT void EF_gtk_materiaux(Projet *projet)
     ef_gtk->window = GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder, "EF_materiaux_window"));
     ef_gtk->materiaux = GTK_TREE_STORE(gtk_builder_get_object(ef_gtk->builder, "EF_materiaux_treestore"));
     
-    list_parcours = projet->beton.materiaux;
+    list_parcours = projet->modele.materiaux;
     while (list_parcours != NULL)
     {
         Beton_Materiau  *materiau = (Beton_Materiau *)list_parcours->data;

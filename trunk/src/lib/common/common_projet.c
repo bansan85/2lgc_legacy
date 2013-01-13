@@ -105,8 +105,8 @@ G_MODULE_EXPORT Projet* projet_init(Type_Pays pays)
     projet->list_gtk.ef_resultats.tableaux = NULL;
 #endif
     
-    projet->ef_donnees.c = &(projet->ef_donnees.Common);
-    cholmod_start(projet->ef_donnees.c);
+    projet->calculs.c = &(projet->calculs.Common);
+    cholmod_start(projet->calculs.c);
     
     return projet;
 }
@@ -271,7 +271,7 @@ G_MODULE_EXPORT gboolean projet_free(Projet *projet)
  *             erreur lors de l'utilisation d'une fonction interne.
  */
 {
-    /* Action doit être libéré avant projet->beton.barres */
+    /* Action doit être libéré avant projet->modele.barres */
     // Trivial
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
@@ -284,17 +284,17 @@ G_MODULE_EXPORT gboolean projet_free(Projet *projet)
         BUG(_1990_combinaisons_free(projet), FALSE);
     /* Rigidite doit être libéré avant noeud car pour libérer toute la mémoire, il est nécessaire d'avoir accès aux informations contenues dans les noeuds */
     BUG(EF_calculs_free(projet), FALSE);
-    if (projet->ef_donnees.noeuds != NULL)
+    if (projet->modele.noeuds != NULL)
         BUG(EF_noeuds_free(projet), FALSE);
-    if (projet->beton.sections != NULL)
+    if (projet->modele.sections != NULL)
         BUG(EF_sections_free(projet), FALSE);
-    if (projet->beton.barres != NULL)
+    if (projet->modele.barres != NULL)
         BUG(_1992_1_1_barres_free(projet), FALSE);
-    if (projet->ef_donnees.appuis != NULL)
+    if (projet->modele.appuis != NULL)
         BUG(EF_appuis_free(projet), FALSE);
-    if (projet->beton.materiaux != NULL)
+    if (projet->modele.materiaux != NULL)
         BUG(_1992_1_1_materiaux_free(projet), FALSE);
-    if (projet->ef_donnees.relachements != NULL)
+    if (projet->modele.relachements != NULL)
         BUG(EF_relachement_free(projet), FALSE);
 #ifdef ENABLE_GTK
     if (projet->list_gtk.m3d.data != NULL)
@@ -302,7 +302,7 @@ G_MODULE_EXPORT gboolean projet_free(Projet *projet)
     EF_gtk_resultats_free(projet);
 #endif
     
-    cholmod_finish(projet->ef_donnees.c);
+    cholmod_finish(projet->calculs.c);
     
     free(projet);
     

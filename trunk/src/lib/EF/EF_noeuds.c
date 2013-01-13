@@ -42,7 +42,7 @@ G_MODULE_EXPORT gboolean EF_noeuds_init(Projet *projet)
 {
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     // Trivial
-    projet->ef_donnees.noeuds = NULL;
+    projet->modele.noeuds = NULL;
     
     return TRUE;
 }
@@ -81,14 +81,14 @@ G_MODULE_EXPORT EF_Noeud *EF_noeuds_ajout_noeud_libre(Projet *projet, double x, 
     
     noeud_nouveau->appui = appui;
         
-    if (projet->ef_donnees.noeuds == NULL)
+    if (projet->modele.noeuds == NULL)
         noeud_nouveau->numero = 0;
     else
-        noeud_nouveau->numero = ((EF_Noeud *)g_list_last(projet->ef_donnees.noeuds)->data)->numero+1;
+        noeud_nouveau->numero = ((EF_Noeud *)g_list_last(projet->modele.noeuds)->data)->numero+1;
     
     BUG(EF_calculs_free(projet), NULL);
     
-    projet->ef_donnees.noeuds = g_list_append(projet->ef_donnees.noeuds, noeud_nouveau);
+    projet->modele.noeuds = g_list_append(projet->modele.noeuds, noeud_nouveau);
     
 #ifdef ENABLE_GTK
     BUG(m3d_noeud(&projet->list_gtk.m3d, noeud_nouveau), NULL);
@@ -192,14 +192,14 @@ G_MODULE_EXPORT EF_Noeud* EF_noeuds_ajout_noeud_barre(Projet *projet, Beton_Barr
     
     noeud_nouveau->appui = appui;
         
-    if (projet->ef_donnees.noeuds == NULL)
+    if (projet->modele.noeuds == NULL)
         noeud_nouveau->numero = 0;
     else
-        noeud_nouveau->numero = ((EF_Noeud *)g_list_last(projet->ef_donnees.noeuds)->data)->numero+1;
+        noeud_nouveau->numero = ((EF_Noeud *)g_list_last(projet->modele.noeuds)->data)->numero+1;
     
     BUG(EF_calculs_free(projet), NULL);
     
-    projet->ef_donnees.noeuds = g_list_append(projet->ef_donnees.noeuds, noeud_nouveau);
+    projet->modele.noeuds = g_list_append(projet->modele.noeuds, noeud_nouveau);
     
     barre->discretisation_element++;
     
@@ -245,7 +245,7 @@ G_MODULE_EXPORT gboolean EF_noeuds_min_max(Projet *projet, double *x_min, double
  *   Succès : TRUE
  *   Échec : FALSE :
  *             projet == NULL,
- *             list_size(projet->ef_donnees.noeuds) == 0.
+ *             list_size(projet->modele.noeuds) == 0.
  */
 {
     GList       *list_parcours;
@@ -254,9 +254,9 @@ G_MODULE_EXPORT gboolean EF_noeuds_min_max(Projet *projet, double *x_min, double
     double      x_mi, x_ma, y_mi, y_ma, z_mi, z_ma;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->ef_donnees.noeuds, FALSE, gettext("Aucun noeud n'est existant.\n"));
+    BUGMSG(projet->modele.noeuds, FALSE, gettext("Aucun noeud n'est existant.\n"));
     
-    list_parcours = projet->ef_donnees.noeuds;
+    list_parcours = projet->modele.noeuds;
     noeud = list_parcours->data;
     BUG(point = EF_noeuds_renvoie_position(noeud), FALSE);
     x_mi = point->x;
@@ -325,7 +325,7 @@ G_MODULE_EXPORT EF_Noeud* EF_noeuds_cherche_numero(Projet *projet, unsigned int 
     BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
     
     // Trivial
-    list_parcours = projet->ef_donnees.noeuds;
+    list_parcours = projet->modele.noeuds;
     while (list_parcours != NULL)
     {
         EF_Noeud    *noeud = list_parcours->data;
@@ -512,7 +512,7 @@ G_MODULE_EXPORT void EF_noeuds_free_foreach(EF_Noeud *noeud,
         for (i=0;i<=infos->barre->discretisation_element;i++)
         {
             if (infos->barre->info_EF[i].matrice_rigidite_locale != NULL)
-                cholmod_free_sparse(&infos->barre->info_EF[i].matrice_rigidite_locale, projet->ef_donnees.c);
+                cholmod_free_sparse(&infos->barre->info_EF[i].matrice_rigidite_locale, projet->calculs.c);
         }
         infos->barre->discretisation_element--;
         BUGMSG(infos->barre->info_EF = realloc(infos->barre->info_EF, sizeof(Barre_Info_EF)*(infos->barre->discretisation_element+1)), , gettext("Erreur d'allocation mémoire.\n"));
@@ -569,8 +569,8 @@ G_MODULE_EXPORT gboolean EF_noeuds_free(Projet *projet)
     BUG(EF_calculs_free(projet), FALSE);
     
     // Trivial
-    g_list_foreach(projet->ef_donnees.noeuds, (GFunc)EF_noeuds_free_foreach, projet);
-    g_list_free(projet->ef_donnees.noeuds);
+    g_list_foreach(projet->modele.noeuds, (GFunc)EF_noeuds_free_foreach, projet);
+    g_list_free(projet->modele.noeuds);
     
     return TRUE;
 }
