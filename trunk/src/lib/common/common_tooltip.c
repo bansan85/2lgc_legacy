@@ -96,10 +96,14 @@ G_MODULE_EXPORT GtkWidget* common_tooltip_generation(const char *nom)
                                 if (strcmp((char *) n2->name, "image") == 0)
                                 {
                                     char        *nom_fichier;
+                                    GdkPixbuf   *image;
+                                    GError      *error = NULL;
                                     GtkWidget   *element;
                                     
                                     BUGMSG(nom_fichier = g_strdup_printf("%s/%s", DATADIR, contenu), NULL, gettext("Erreur d'allocation mémoire.\n"));
-                                    element = gtk_image_new_from_file(nom_fichier);
+                                    BUGMSG(image = gdk_pixbuf_new_from_file(nom_fichier, &error), NULL, gettext("Impossible d'ouvrir l'image %s : %s.\n"), nom_fichier, error->message);
+                                    element = gtk_image_new_from_pixbuf(image);
+                                    g_object_unref(image);
                                     free(nom_fichier);
                                     gtk_misc_set_alignment(GTK_MISC(element), 0., 0.5);
                                     if (w_prev == NULL)
