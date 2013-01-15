@@ -25,6 +25,7 @@
 #include <math.h>
 
 #include "1990_coef_psi.h"
+#include "1990_groupe.h"
 #include "common_projet.h"
 #include "common_math.h"
 #include "common_erreurs.h"
@@ -761,12 +762,13 @@ G_MODULE_EXPORT gboolean _1990_action_free_num(Projet *projet, unsigned int num)
  *             erreur d'allocation métmoire.
  */
 {
-    GList   *list_parcours;
+    GList       *list_parcours;
+    GtkTreeIter Iter;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUG(_1990_action_cherche_numero(projet, num), FALSE);
     
-    // Trivial
+    // On enlève l'action de la liste des actions
     list_parcours = g_list_last(projet->actions);
     do
     {
@@ -848,6 +850,69 @@ G_MODULE_EXPORT gboolean _1990_action_free_num(Projet *projet, unsigned int num)
     if (projet->list_gtk.ef_resultats.builder != NULL)
         gtk_adjustment_set_upper(GTK_ADJUSTMENT(gtk_builder_get_object(projet->list_gtk.ef_resultats.builder, "adjustment_cas")), g_list_length(projet->actions)-1);
 #endif
+    
+    // On enlève l'action dans la liste des groupes de niveau 0 tout en modifiant le numéro
+    // des éléments dans le treeview.
+    list_parcours = projet->niveaux_groupes;
+    if (list_parcours != NULL)
+    {
+        Niveau_Groupe   *niveau_groupe = list_parcours->data;
+        GList           *list_groupes = niveau_groupe->groupes;
+        
+        while (list_groupes != NULL)
+        {
+            Groupe      *groupe = list_groupes->data;
+            GList       *list_elements = groupe->elements;
+            gboolean    delete = FALSE;
+            
+            while (list_elements != NULL)
+            {
+                Element     *element_en_cours = list_elements->data;
+                
+                if (element_en_cours->numero == num)
+                    delete = TRUE;
+                else if (element_en_cours->numero > num)
+                {
+                    element_en_cours->numero--;
+#ifdef ENABLE_GTK
+                    gtk_tree_store_set(GTK_TREE_STORE(projet->list_gtk._1990_groupes.tree_store_etat), &element_en_cours->Iter, 0, element_en_cours->numero, -1);
+#endif
+                }
+                
+                list_elements = g_list_next(list_elements);
+            }
+            
+            if (delete)
+                BUG(_1990_groupe_free_element(projet, 0, groupe->numero, num), FALSE);
+            
+            list_groupes = g_list_next(list_groupes);
+        }
+    }
+    
+    // Il faut aussi parcourir le treeview des éléments inutilisés pour l'enlever au cas où et
+    // aussi pour mettre à jour les numéros.
+    if (gtk_tree_model_get_iter_first(GTK_TREE_MODEL(projet->list_gtk._1990_groupes.tree_store_dispo), &Iter))
+    {
+        gboolean encore = TRUE;
+        do
+        {
+            unsigned int    numero;
+            GtkTreeIter     Iter_en_cours;
+            
+            Iter_en_cours = Iter;
+            
+            // On récupère tout de suite le suivant car en cas de suppression, on perd le fil
+            // conducteur.
+            encore = gtk_tree_model_iter_next(GTK_TREE_MODEL(projet->list_gtk._1990_groupes.tree_store_dispo), &Iter);
+            
+            gtk_tree_model_get(GTK_TREE_MODEL(projet->list_gtk._1990_groupes.tree_store_dispo), &Iter_en_cours, 0, &numero, -1);
+            if (numero == num)
+                gtk_tree_store_remove(GTK_TREE_STORE(projet->list_gtk._1990_groupes.tree_store_dispo), &Iter_en_cours);
+            else if (numero > num)
+                gtk_tree_store_set(GTK_TREE_STORE(projet->list_gtk._1990_groupes.tree_store_dispo), &Iter_en_cours, 0, numero-1, -1);
+            
+        } while (encore);
+    }
     
     return TRUE;
 }

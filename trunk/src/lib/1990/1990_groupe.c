@@ -683,19 +683,23 @@ G_MODULE_EXPORT gboolean _1990_groupe_free_element(Projet *projet, unsigned int 
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
+    BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, niveau), FALSE);
+    BUG(groupe_en_cours = _1990_groupe_positionne_groupe(niveau_groupe, groupe), FALSE);
+    BUG(element_en_cours = _1990_groupe_positionne_element(groupe_en_cours, element), FALSE);
+    
     // On sélectionne dans la liste des groupes la ligne suivante. Et si elle n'existe pas,
     // on sélectionne la ligne précédente.
 #ifdef ENABLE_GTK
+    // Si c'est le bon niveau qui est affiché
     if ((projet->list_gtk._1990_groupes.builder != NULL) && (GTK_COMMON_SPINBUTTON_AS_UINT(GTK_SPIN_BUTTON(projet->list_gtk._1990_groupes.spin_button_niveau)) == niveau))
     {
         GtkTreePath     *path;
-        GtkTreeIter     iter;
-        GtkTreeModel    *model;
         
-        if (gtk_tree_selection_get_selected(projet->list_gtk._1990_groupes.tree_select_etat, &model, &iter))
+        // Si il y a une sélection
+        if (gtk_tree_selection_iter_is_selected(projet->list_gtk._1990_groupes.tree_select_etat, &element_en_cours->Iter))
         {
-            gtk_tree_model_get(model, &iter, -1);
-            path = gtk_tree_model_get_path(GTK_TREE_MODEL(projet->list_gtk._1990_groupes.tree_store_etat), &iter);
+            // On décale la sélection
+            path = gtk_tree_model_get_path(GTK_TREE_MODEL(projet->list_gtk._1990_groupes.tree_store_etat), &element_en_cours->Iter);
             gtk_tree_path_next(path);
             gtk_tree_selection_select_path(projet->list_gtk._1990_groupes.tree_select_etat, path);
             if (!gtk_tree_selection_path_is_selected(projet->list_gtk._1990_groupes.tree_select_etat, path))
@@ -706,16 +710,10 @@ G_MODULE_EXPORT gboolean _1990_groupe_free_element(Projet *projet, unsigned int 
             }
             gtk_tree_path_free(path);
         }
-        
-        gtk_tree_selection_unselect_all(projet->list_gtk._1990_groupes.tree_select_dispo);
-        
-        gtk_tree_store_remove(projet->list_gtk._1990_groupes.tree_store_etat, &iter);
+        gtk_tree_store_remove(projet->list_gtk._1990_groupes.tree_store_etat, &element_en_cours->Iter);
     }
 #endif
     
-    BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, niveau), FALSE);
-    BUG(groupe_en_cours = _1990_groupe_positionne_groupe(niveau_groupe, groupe), FALSE);
-    BUG(element_en_cours = _1990_groupe_positionne_element(groupe_en_cours, element), FALSE);
     groupe_en_cours->elements = g_list_remove(groupe_en_cours->elements, element_en_cours);
     
     return TRUE;
