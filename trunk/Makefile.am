@@ -40,6 +40,7 @@ if PLATFORM_WIN32
 	rm codegui/lib/gdk-pixbuf-2.0/*/loaders/libpixbufloader-*a
 	sed -i "s/\/usr\/lib64/lib/g" codegui/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache
 	sed -i "s/\.so/.dll/g" codegui/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache
+	rename er-gdip- er- codegui/lib/gdk-pixbuf-2.0/2.10.0/loaders/*.dll
 	mkdir -p codegui/files
 	mkdir -p codegui/files/ui
 	cp $(prefix)/bin/{codegui.exe,libeurocodes-0.dll} codegui/
