@@ -875,7 +875,8 @@ G_MODULE_EXPORT gboolean _1990_action_free_num(Projet *projet, unsigned int num)
                 {
                     element_en_cours->numero--;
 #ifdef ENABLE_GTK
-                    gtk_tree_store_set(GTK_TREE_STORE(projet->list_gtk._1990_groupes.tree_store_etat), &element_en_cours->Iter, 0, element_en_cours->numero, -1);
+                    if (projet->list_gtk._1990_groupes.builder != NULL)
+                        gtk_tree_store_set(GTK_TREE_STORE(projet->list_gtk._1990_groupes.tree_store_etat), &element_en_cours->Iter, 0, element_en_cours->numero, -1);
 #endif
                 }
                 
@@ -891,7 +892,7 @@ G_MODULE_EXPORT gboolean _1990_action_free_num(Projet *projet, unsigned int num)
     
     // Il faut aussi parcourir le treeview des éléments inutilisés pour l'enlever au cas où et
     // aussi pour mettre à jour les numéros.
-    if (gtk_tree_model_get_iter_first(GTK_TREE_MODEL(projet->list_gtk._1990_groupes.tree_store_dispo), &Iter))
+    if ((projet->list_gtk._1990_groupes.builder != NULL) && (gtk_tree_model_get_iter_first(GTK_TREE_MODEL(projet->list_gtk._1990_groupes.tree_store_dispo), &Iter)))
     {
         gboolean encore = TRUE;
         do
