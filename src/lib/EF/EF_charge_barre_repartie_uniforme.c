@@ -574,15 +574,15 @@ G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_fonc_rx(Fonction *fon
             
             if (ERREUR_RELATIVE_EGALE(infos->kBx, MAXDOUBLE))
             {
-                BUG(common_fonction_ajout(fonction, 0., a, max*infos->kAx, max/(G*J), 0., 0., 0., 0., 0., debut_barre), FALSE);
-                BUG(common_fonction_ajout(fonction, a, l-b, max*infos->kAx+(a*a*(max+mbx))/(2.*(a+b-l)*G*J), (-2*a*mbx+2*b*max-2*l*max)/(2.*(a+b-l)*G*J), (max+mbx)/(2.*(a+b-l)*G*J), 0., 0., 0., 0., debut_barre), FALSE);
-                BUG(common_fonction_ajout(fonction, l-b, l, max*infos->kAx+(l+a-b)*(max+mbx)/(2.*G*J), (-2*mbx)/(2.*G*J), 0., 0., 0., 0., 0., debut_barre), FALSE);
+                BUG(common_fonction_ajout_poly(fonction, 0., a, max*infos->kAx, max/(G*J), 0., 0., 0., 0., 0., debut_barre), FALSE);
+                BUG(common_fonction_ajout_poly(fonction, a, l-b, max*infos->kAx+(a*a*(max+mbx))/(2.*(a+b-l)*G*J), (-2*a*mbx+2*b*max-2*l*max)/(2.*(a+b-l)*G*J), (max+mbx)/(2.*(a+b-l)*G*J), 0., 0., 0., 0., debut_barre), FALSE);
+                BUG(common_fonction_ajout_poly(fonction, l-b, l, max*infos->kAx+(l+a-b)*(max+mbx)/(2.*G*J), (-2*mbx)/(2.*G*J), 0., 0., 0., 0., 0., debut_barre), FALSE);
             }
             else
             {
-                BUG(common_fonction_ajout(fonction, 0., a, mbx*infos->kBx+((max+mbx)*(-a+b)-l*(max-mbx))/(2.*G*J), (2.*max)/(2.*G*J), 0., 0., 0., 0., 0., debut_barre), FALSE);
-                BUG(common_fonction_ajout(fonction, a, l-b, mbx*infos->kBx+(2.*a*l*mbx+b*b*max+b*b*mbx-2.*b*l*max+l*l*max-l*l*mbx)/(2.*(a+b-l)*G*J), (-2.*a*mbx+2.*b*max-2.*l*max)/(2.*(a+b-l)*G*J), (max+mbx)/(2.*(a+b-l)*G*J), 0., 0., 0., 0., debut_barre), FALSE);
-                BUG(common_fonction_ajout(fonction, l-b, l, mbx*(infos->kBx + l/(G*J)), -mbx/(G*J), 0., 0., 0., 0., 0., debut_barre), FALSE);
+                BUG(common_fonction_ajout_poly(fonction, 0., a, mbx*infos->kBx+((max+mbx)*(-a+b)-l*(max-mbx))/(2.*G*J), (2.*max)/(2.*G*J), 0., 0., 0., 0., 0., debut_barre), FALSE);
+                BUG(common_fonction_ajout_poly(fonction, a, l-b, mbx*infos->kBx+(2.*a*l*mbx+b*b*max+b*b*mbx-2.*b*l*max+l*l*max-l*l*mbx)/(2.*(a+b-l)*G*J), (-2.*a*mbx+2.*b*max-2.*l*max)/(2.*(a+b-l)*G*J), (max+mbx)/(2.*(a+b-l)*G*J), 0., 0., 0., 0., debut_barre), FALSE);
+                BUG(common_fonction_ajout_poly(fonction, l-b, l, mbx*(infos->kBx + l/(G*J)), -mbx/(G*J), 0., 0., 0., 0., 0., debut_barre), FALSE);
             }
             
     // Pour une section section constante, les moments valent :
@@ -726,21 +726,21 @@ G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_fonc_ry(Fonction *f_r
             
             BUG(!isnan(I), FALSE);
             
-            BUG(common_fonction_ajout(f_rotation, 0., a, -fz*(l-a-b)*(l-a+b)*(l*l-a*a-b*b+2*a*l)/(24.*l*E*I), 0., fz*(l-a-b)*(l-a+b)*(6.)/(24.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout(f_rotation, a, l-b, fz*(a*a*a*a+4.*a*a*l*l-b*b*b*b+2.*b*b*l*l-l*l*l*l)/(24.*l*E*I), fz*(-12.*a*a*l)/(24.*l*E*I), fz*(6.*a*a-6.*b*b+6.*l*l)/(24.*l*E*I), fz*(-4.*l)/(24.*l*E*I), 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout(f_rotation, l-b, l, fz*(a*a*a*a+4.*a*a*l*l-b*b*b*b+4.*b*b*b*l-10.*b*b*l*l+12.*b*l*l*l-5.*l*l*l*l)/(24.*l*E*I), fz*(-12.*a*a*l+12.*b*b*l-24.*b*l*l+12.*l*l*l)/(24.*l*E*I), fz*(6.*a*a-6.*b*b+12.*b*l-6.*l*l)/(24.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout(f_rotation, 0., a, my*(-a*a*a+3.*a*a*l-2.*a*l*l-b*b*b+b*l*l)/(6.*l*E*I), 0., my*(-3.*a-3.*b+3.*l)/(6.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout(f_rotation, a, l-b, my*(-a*a*a-2.*a*l*l-b*b*b+b*l*l)/(6.*l*E*I), my*(6.*a*l)/(6.*l*E*I), my*(-3.*a-3.*b)/(6.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout(f_rotation, l-b, l, my*(-a*a*a-2.*a*l*l-b*b*b+3.*b*b*l-5.*b*l*l+3.*l*l*l)/(6.*l*E*I), my*(6.*a*l+6*b*l-6*l*l)/(6.*l*E*I), my*(-3.*a-3.*b+3.*l)/(6.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout(f_rotation, 0., l, -l/(6.*E*I)*(2.*may-mby), may/(E*I), -(may+mby)/(2.*E*I*l), 0., 0., 0., 0., debut_barre), FALSE);
+            BUG(common_fonction_ajout_poly(f_rotation, 0., a, -fz*(l-a-b)*(l-a+b)*(l*l-a*a-b*b+2*a*l)/(24.*l*E*I), 0., fz*(l-a-b)*(l-a+b)*(6.)/(24.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE);
+            BUG(common_fonction_ajout_poly(f_rotation, a, l-b, fz*(a*a*a*a+4.*a*a*l*l-b*b*b*b+2.*b*b*l*l-l*l*l*l)/(24.*l*E*I), fz*(-12.*a*a*l)/(24.*l*E*I), fz*(6.*a*a-6.*b*b+6.*l*l)/(24.*l*E*I), fz*(-4.*l)/(24.*l*E*I), 0., 0., 0., debut_barre), FALSE);
+            BUG(common_fonction_ajout_poly(f_rotation, l-b, l, fz*(a*a*a*a+4.*a*a*l*l-b*b*b*b+4.*b*b*b*l-10.*b*b*l*l+12.*b*l*l*l-5.*l*l*l*l)/(24.*l*E*I), fz*(-12.*a*a*l+12.*b*b*l-24.*b*l*l+12.*l*l*l)/(24.*l*E*I), fz*(6.*a*a-6.*b*b+12.*b*l-6.*l*l)/(24.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE);
+            BUG(common_fonction_ajout_poly(f_rotation, 0., a, my*(-a*a*a+3.*a*a*l-2.*a*l*l-b*b*b+b*l*l)/(6.*l*E*I), 0., my*(-3.*a-3.*b+3.*l)/(6.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE);
+            BUG(common_fonction_ajout_poly(f_rotation, a, l-b, my*(-a*a*a-2.*a*l*l-b*b*b+b*l*l)/(6.*l*E*I), my*(6.*a*l)/(6.*l*E*I), my*(-3.*a-3.*b)/(6.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE);
+            BUG(common_fonction_ajout_poly(f_rotation, l-b, l, my*(-a*a*a-2.*a*l*l-b*b*b+3.*b*b*l-5.*b*l*l+3.*l*l*l)/(6.*l*E*I), my*(6.*a*l+6*b*l-6*l*l)/(6.*l*E*I), my*(-3.*a-3.*b+3.*l)/(6.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE);
+            BUG(common_fonction_ajout_poly(f_rotation, 0., l, -l/(6.*E*I)*(2.*may-mby), may/(E*I), -(may+mby)/(2.*E*I*l), 0., 0., 0., 0., debut_barre), FALSE);
             
-            BUG(common_fonction_ajout(f_deform, 0., a, 0., fz/(24.*E*I*l)*(l-a-b)*(l-a+b)*(l*l-a*a+2.*a*l-b*b), 0., fz/(24.*E*I*l)*(l-a-b)*(l-a+b)*(-2.), 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout(f_deform, a, l-b, fz/(24.*E*I*l)*(a*a*a*a*l), fz/(24.*E*I*l)*(-a*a*a*a-4.*a*a*l*l+b*b*b*b-2.*b*b*l*l+l*l*l*l), fz/(24.*E*I*l)*(6.*a*a*l), fz/(24.*E*I*l)*(-2.*a*a+2.*b*b-2.*l*l), fz/(24.*E*I*l)*(l), 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout(f_deform, l-b, l, fz/(24.*E*I*l)*(l-a-b)*(l+a-b)*(-a*a*l-b*b*l+2*b*l*l-l*l*l), fz/(24.*E*I*l)*(l-a-b)*(l+a-b)*(a*a+b*b-2*b*l+5*l*l), fz/(24.*E*I*l)*(l-a-b)*(l+a-b)*(-6.*l), fz/(24.*E*I*l)*(l-a-b)*(l+a-b)*(2.), 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout(f_deform, 0., a, 0., my/(6.*E*I*l)*(l-a-b)*(-a*a+a*b+2.*a*l-b*b-b*l), 0., -my/(6.*E*I*l)*(l-a-b), 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout(f_deform, a, l-b, my/(6.*E*I*l)*(-a*a*a*l), my/(6.*E*I*l)*(a*a*a+2.*a*l*l+b*b*b-b*l*l), my/(6.*E*I*l)*(-3.*a*l), my/(6.*E*I*l)*(a+b), 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout(f_deform, l-b, l, my/(6.*E*I*l)*(l-a-b)*(a*a*l-a*b*l+a*l*l+b*b*l-2.*b*l*l+l*l*l), my/(6.*E*I*l)*(l-a-b)*(-a*a+a*b-a*l-b*b+2.*b*l-3.*l*l), my/(6.*E*I*l)*(l-a-b)*(3.*l), -my/(6.*E*I*l)*(l-a-b), 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout(f_deform, 0., l, 0., l/(6*E*I)*(2*may-mby), -may/(2*E*I), (mby+may)/(6*E*I*l), 0., 0., 0., debut_barre), FALSE);
+            BUG(common_fonction_ajout_poly(f_deform, 0., a, 0., fz/(24.*E*I*l)*(l-a-b)*(l-a+b)*(l*l-a*a+2.*a*l-b*b), 0., fz/(24.*E*I*l)*(l-a-b)*(l-a+b)*(-2.), 0., 0., 0., debut_barre), FALSE);
+            BUG(common_fonction_ajout_poly(f_deform, a, l-b, fz/(24.*E*I*l)*(a*a*a*a*l), fz/(24.*E*I*l)*(-a*a*a*a-4.*a*a*l*l+b*b*b*b-2.*b*b*l*l+l*l*l*l), fz/(24.*E*I*l)*(6.*a*a*l), fz/(24.*E*I*l)*(-2.*a*a+2.*b*b-2.*l*l), fz/(24.*E*I*l)*(l), 0., 0., debut_barre), FALSE);
+            BUG(common_fonction_ajout_poly(f_deform, l-b, l, fz/(24.*E*I*l)*(l-a-b)*(l+a-b)*(-a*a*l-b*b*l+2*b*l*l-l*l*l), fz/(24.*E*I*l)*(l-a-b)*(l+a-b)*(a*a+b*b-2*b*l+5*l*l), fz/(24.*E*I*l)*(l-a-b)*(l+a-b)*(-6.*l), fz/(24.*E*I*l)*(l-a-b)*(l+a-b)*(2.), 0., 0., 0., debut_barre), FALSE);
+            BUG(common_fonction_ajout_poly(f_deform, 0., a, 0., my/(6.*E*I*l)*(l-a-b)*(-a*a+a*b+2.*a*l-b*b-b*l), 0., -my/(6.*E*I*l)*(l-a-b), 0., 0., 0., debut_barre), FALSE);
+            BUG(common_fonction_ajout_poly(f_deform, a, l-b, my/(6.*E*I*l)*(-a*a*a*l), my/(6.*E*I*l)*(a*a*a+2.*a*l*l+b*b*b-b*l*l), my/(6.*E*I*l)*(-3.*a*l), my/(6.*E*I*l)*(a+b), 0., 0., 0., debut_barre), FALSE);
+            BUG(common_fonction_ajout_poly(f_deform, l-b, l, my/(6.*E*I*l)*(l-a-b)*(a*a*l-a*b*l+a*l*l+b*b*l-2.*b*l*l+l*l*l), my/(6.*E*I*l)*(l-a-b)*(-a*a+a*b-a*l-b*b+2.*b*l-3.*l*l), my/(6.*E*I*l)*(l-a-b)*(3.*l), -my/(6.*E*I*l)*(l-a-b), 0., 0., 0., debut_barre), FALSE);
+            BUG(common_fonction_ajout_poly(f_deform, 0., l, 0., l/(6*E*I)*(2*may-mby), -may/(2*E*I), (mby+may)/(6*E*I*l), 0., 0., 0., debut_barre), FALSE);
     // Pour une section constante, les formules valent :\end{verbatim}\begin{align*}
     // r_y(x) = & \frac{f_z \cdot (L-a-b) \cdot (L-a+b) \cdot (-L^2 + a^2 + b^2 - 2 \cdot a \cdot L + 6 \cdot x^2)}{24 \cdot E \cdot I_y \cdot L}\nonumber\\
     //          & + \frac{m_y \cdot (L-a-b) \cdot (a^2-a \cdot (b + 2 \cdot L) + b^2 + b \cdot L + 3 \cdot x^2)}{6 \cdot E \cdot I_y \cdot L}\nonumber\\
@@ -857,21 +857,21 @@ G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_fonc_rz(Fonction *f_r
             
             BUG(!isnan(I), FALSE);
             
-            BUG(common_fonction_ajout(f_rotation, 0., a, fy*(l-a-b)*(l-a+b)*(l*l-a*a-b*b+2*a*l)/(24.*l*E*I), 0., -fy*(l-a-b)*(l-a+b)*(6.)/(24.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout(f_rotation, a, l-b, -fy*(a*a*a*a+4.*a*a*l*l-b*b*b*b+2.*b*b*l*l-l*l*l*l)/(24.*l*E*I), -fy*(-12.*a*a*l)/(24.*l*E*I), -fy*(6.*a*a-6.*b*b+6.*l*l)/(24.*l*E*I), -fy*(-4.*l)/(24.*l*E*I), 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout(f_rotation, l-b, l, -fy*(a*a*a*a+4.*a*a*l*l-b*b*b*b+4.*b*b*b*l-10.*b*b*l*l+12.*b*l*l*l-5.*l*l*l*l)/(24.*l*E*I), -fy*(-12.*a*a*l+12.*b*b*l-24.*b*l*l+12.*l*l*l)/(24.*l*E*I), -fy*(6.*a*a-6.*b*b+12.*b*l-6.*l*l)/(24.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout(f_rotation, 0., a, mz*(-a*a*a+3.*a*a*l-2.*a*l*l-b*b*b+b*l*l)/(6.*l*E*I), 0., mz*(-3.*a-3.*b+3.*l)/(6.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout(f_rotation, a, l-b, mz*(-a*a*a-2.*a*l*l-b*b*b+b*l*l)/(6.*l*E*I), mz*(6.*a*l)/(6.*l*E*I), mz*(-3.*a-3.*b)/(6.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout(f_rotation, l-b, l, mz*(-a*a*a-2.*a*l*l-b*b*b+3.*b*b*l-5.*b*l*l+3.*l*l*l)/(6.*l*E*I), mz*(6.*a*l+6*b*l-6*l*l)/(6.*l*E*I), mz*(-3.*a-3.*b+3.*l)/(6.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout(f_rotation, 0., l, -l/(6.*E*I)*(2.*maz-mbz), maz/(E*I), -(maz+mbz)/(2.*E*I*l), 0., 0., 0., 0., debut_barre), FALSE);
+            BUG(common_fonction_ajout_poly(f_rotation, 0., a, fy*(l-a-b)*(l-a+b)*(l*l-a*a-b*b+2*a*l)/(24.*l*E*I), 0., -fy*(l-a-b)*(l-a+b)*(6.)/(24.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE);
+            BUG(common_fonction_ajout_poly(f_rotation, a, l-b, -fy*(a*a*a*a+4.*a*a*l*l-b*b*b*b+2.*b*b*l*l-l*l*l*l)/(24.*l*E*I), -fy*(-12.*a*a*l)/(24.*l*E*I), -fy*(6.*a*a-6.*b*b+6.*l*l)/(24.*l*E*I), -fy*(-4.*l)/(24.*l*E*I), 0., 0., 0., debut_barre), FALSE);
+            BUG(common_fonction_ajout_poly(f_rotation, l-b, l, -fy*(a*a*a*a+4.*a*a*l*l-b*b*b*b+4.*b*b*b*l-10.*b*b*l*l+12.*b*l*l*l-5.*l*l*l*l)/(24.*l*E*I), -fy*(-12.*a*a*l+12.*b*b*l-24.*b*l*l+12.*l*l*l)/(24.*l*E*I), -fy*(6.*a*a-6.*b*b+12.*b*l-6.*l*l)/(24.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE);
+            BUG(common_fonction_ajout_poly(f_rotation, 0., a, mz*(-a*a*a+3.*a*a*l-2.*a*l*l-b*b*b+b*l*l)/(6.*l*E*I), 0., mz*(-3.*a-3.*b+3.*l)/(6.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE);
+            BUG(common_fonction_ajout_poly(f_rotation, a, l-b, mz*(-a*a*a-2.*a*l*l-b*b*b+b*l*l)/(6.*l*E*I), mz*(6.*a*l)/(6.*l*E*I), mz*(-3.*a-3.*b)/(6.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE);
+            BUG(common_fonction_ajout_poly(f_rotation, l-b, l, mz*(-a*a*a-2.*a*l*l-b*b*b+3.*b*b*l-5.*b*l*l+3.*l*l*l)/(6.*l*E*I), mz*(6.*a*l+6*b*l-6*l*l)/(6.*l*E*I), mz*(-3.*a-3.*b+3.*l)/(6.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE);
+            BUG(common_fonction_ajout_poly(f_rotation, 0., l, -l/(6.*E*I)*(2.*maz-mbz), maz/(E*I), -(maz+mbz)/(2.*E*I*l), 0., 0., 0., 0., debut_barre), FALSE);
             
-            BUG(common_fonction_ajout(f_deform, 0., a, 0., fy/(24.*E*I*l)*(l-a-b)*(l-a+b)*(l*l-a*a+2.*a*l-b*b), 0., fy/(24.*E*I*l)*(l-a-b)*(l-a+b)*(-2.), 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout(f_deform, a, l-b, fy/(24.*E*I*l)*(a*a*a*a*l), fy/(24.*E*I*l)*(-a*a*a*a-4.*a*a*l*l+b*b*b*b-2.*b*b*l*l+l*l*l*l), fy/(24.*E*I*l)*(6.*a*a*l), fy/(24.*E*I*l)*(-2.*a*a+2.*b*b-2.*l*l), fy/(24.*E*I*l)*(l), 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout(f_deform, l-b, l, fy/(24.*E*I*l)*(l-a-b)*(l+a-b)*(-a*a*l-b*b*l+2*b*l*l-l*l*l), fy/(24.*E*I*l)*(l-a-b)*(l+a-b)*(a*a+b*b-2*b*l+5*l*l), fy/(24.*E*I*l)*(l-a-b)*(l+a-b)*(-6.*l), fy/(24.*E*I*l)*(l-a-b)*(l+a-b)*(2.), 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout(f_deform, 0., a, 0., -mz/(6.*E*I*l)*(l-a-b)*(-a*a+a*b+2.*a*l-b*b-b*l), 0., mz/(6.*E*I*l)*(l-a-b), 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout(f_deform, a, l-b, -mz/(6.*E*I*l)*(-a*a*a*l), -mz/(6.*E*I*l)*(a*a*a+2.*a*l*l+b*b*b-b*l*l), -mz/(6.*E*I*l)*(-3.*a*l), -mz/(6.*E*I*l)*(a+b), 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout(f_deform, l-b, l, -mz/(6.*E*I*l)*(l-a-b)*(a*a*l-a*b*l+a*l*l+b*b*l-2.*b*l*l+l*l*l), -mz/(6.*E*I*l)*(l-a-b)*(-a*a+a*b-a*l-b*b+2.*b*l-3.*l*l), -mz/(6.*E*I*l)*(l-a-b)*(3.*l), mz/(6.*E*I*l)*(l-a-b), 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout(f_deform, 0., l, 0., -l/(6*E*I)*(2*maz-mbz), maz/(2*E*I), -(mbz+maz)/(6*E*I*l), 0., 0., 0., debut_barre), FALSE);
+            BUG(common_fonction_ajout_poly(f_deform, 0., a, 0., fy/(24.*E*I*l)*(l-a-b)*(l-a+b)*(l*l-a*a+2.*a*l-b*b), 0., fy/(24.*E*I*l)*(l-a-b)*(l-a+b)*(-2.), 0., 0., 0., debut_barre), FALSE);
+            BUG(common_fonction_ajout_poly(f_deform, a, l-b, fy/(24.*E*I*l)*(a*a*a*a*l), fy/(24.*E*I*l)*(-a*a*a*a-4.*a*a*l*l+b*b*b*b-2.*b*b*l*l+l*l*l*l), fy/(24.*E*I*l)*(6.*a*a*l), fy/(24.*E*I*l)*(-2.*a*a+2.*b*b-2.*l*l), fy/(24.*E*I*l)*(l), 0., 0., debut_barre), FALSE);
+            BUG(common_fonction_ajout_poly(f_deform, l-b, l, fy/(24.*E*I*l)*(l-a-b)*(l+a-b)*(-a*a*l-b*b*l+2*b*l*l-l*l*l), fy/(24.*E*I*l)*(l-a-b)*(l+a-b)*(a*a+b*b-2*b*l+5*l*l), fy/(24.*E*I*l)*(l-a-b)*(l+a-b)*(-6.*l), fy/(24.*E*I*l)*(l-a-b)*(l+a-b)*(2.), 0., 0., 0., debut_barre), FALSE);
+            BUG(common_fonction_ajout_poly(f_deform, 0., a, 0., -mz/(6.*E*I*l)*(l-a-b)*(-a*a+a*b+2.*a*l-b*b-b*l), 0., mz/(6.*E*I*l)*(l-a-b), 0., 0., 0., debut_barre), FALSE);
+            BUG(common_fonction_ajout_poly(f_deform, a, l-b, -mz/(6.*E*I*l)*(-a*a*a*l), -mz/(6.*E*I*l)*(a*a*a+2.*a*l*l+b*b*b-b*l*l), -mz/(6.*E*I*l)*(-3.*a*l), -mz/(6.*E*I*l)*(a+b), 0., 0., 0., debut_barre), FALSE);
+            BUG(common_fonction_ajout_poly(f_deform, l-b, l, -mz/(6.*E*I*l)*(l-a-b)*(a*a*l-a*b*l+a*l*l+b*b*l-2.*b*l*l+l*l*l), -mz/(6.*E*I*l)*(l-a-b)*(-a*a+a*b-a*l-b*b+2.*b*l-3.*l*l), -mz/(6.*E*I*l)*(l-a-b)*(3.*l), mz/(6.*E*I*l)*(l-a-b), 0., 0., 0., debut_barre), FALSE);
+            BUG(common_fonction_ajout_poly(f_deform, 0., l, 0., -l/(6*E*I)*(2*maz-mbz), maz/(2*E*I), -(mbz+maz)/(6*E*I*l), 0., 0., 0., debut_barre), FALSE);
             return TRUE;
             break;
         }
@@ -966,9 +966,9 @@ G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_n(Fonction *fonction,
     // f_x(x) = &\frac{F_{Ax} \cdot (L-a+b) \cdot (F_{Ax} + F_{Bx}) x}{2 \cdot L \cdot E \cdot S} & & \textrm{ pour x variant de 0 à a}\nonumber\\
     // f_x(x) = &\frac{(fbx+fax) \cdot (L \cdot x^2-L^2 \cdot x+b^2 \cdot x-a^2 \cdot x+a^2 \cdot L)}{2 \cdot L \cdot (L-b-a) \cdot E \cdot S}) & & \textrm{ pour x variant de a à L-b}\nonumber\\
     // f_x(x) = &\frac{(fbx+fax) \cdot (L-b+a) \cdot (L-x)}{2 \cdot L \cdot E \cdot S} & & \textrm{ pour x variant de L-b à L}\end{align*}\begin{verbatim}
-            BUG(common_fonction_ajout(fonction, 0., a, 0., (l-a+b)*(fax+fbx)/(2*l*E*S), 0., 0., 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout(fonction, a, l-b, (fax+fbx)/(2*l*E*S)/(a+b-l)*(a*a*l), (fax+fbx)/(2*l*E*S)/(a+b-l)*(-a*a+b*b-l*l), (fax+fbx)/(2*l*E*S)/(a+b-l)*(l), 0., 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout(fonction, l-b, l, (fax+fbx)/(2*l*E*S)*l*(a-b+l), -(fax+fbx)/(2*l*E*S)*(a-b+l), 0., 0., 0., 0., 0., debut_barre), FALSE);
+            BUG(common_fonction_ajout_poly(fonction, 0., a, 0., (l-a+b)*(fax+fbx)/(2*l*E*S), 0., 0., 0., 0., 0., debut_barre), FALSE);
+            BUG(common_fonction_ajout_poly(fonction, a, l-b, (fax+fbx)/(2*l*E*S)/(a+b-l)*(a*a*l), (fax+fbx)/(2*l*E*S)/(a+b-l)*(-a*a+b*b-l*l), (fax+fbx)/(2*l*E*S)/(a+b-l)*(l), 0., 0., 0., 0., debut_barre), FALSE);
+            BUG(common_fonction_ajout_poly(fonction, l-b, l, (fax+fbx)/(2*l*E*S)*l*(a-b+l), -(fax+fbx)/(2*l*E*S)*(a-b+l), 0., 0., 0., 0., 0., debut_barre), FALSE);
             return TRUE;
             break;
         }

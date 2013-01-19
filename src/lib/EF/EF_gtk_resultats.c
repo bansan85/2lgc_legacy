@@ -229,32 +229,18 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
             
             for (i=0;i<g_list_length(projet->modele.barres);i++)
             {
-                unsigned int j;
-                
-                for (j=0;j<ponderation->action->fonctions_efforts[0][i]->nb_troncons;j++)
-                    BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[0][i], ponderation->action->fonctions_efforts[0][i]->troncons[j].debut_troncon, ponderation->action->fonctions_efforts[0][i]->troncons[j].fin_troncon, mult*ponderation->action->fonctions_efforts[0][i]->troncons[j].x0, mult*ponderation->action->fonctions_efforts[0][i]->troncons[j].x1, mult*ponderation->action->fonctions_efforts[0][i]->troncons[j].x2, mult*ponderation->action->fonctions_efforts[0][i]->troncons[j].x3, mult*ponderation->action->fonctions_efforts[0][i]->troncons[j].x4, mult*ponderation->action->fonctions_efforts[0][i]->troncons[j].x5, mult*ponderation->action->fonctions_efforts[0][i]->troncons[j].x6, 0.), FALSE);
-                for (j=0;j<ponderation->action->fonctions_efforts[1][i]->nb_troncons;j++)
-                    BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[1][i], ponderation->action->fonctions_efforts[1][i]->troncons[j].debut_troncon, ponderation->action->fonctions_efforts[1][i]->troncons[j].fin_troncon, mult*ponderation->action->fonctions_efforts[1][i]->troncons[j].x0, mult*ponderation->action->fonctions_efforts[1][i]->troncons[j].x1, mult*ponderation->action->fonctions_efforts[1][i]->troncons[j].x2, mult*ponderation->action->fonctions_efforts[1][i]->troncons[j].x3, mult*ponderation->action->fonctions_efforts[1][i]->troncons[j].x4, mult*ponderation->action->fonctions_efforts[1][i]->troncons[j].x5, mult*ponderation->action->fonctions_efforts[1][i]->troncons[j].x6, 0.), FALSE);
-                for (j=0;j<ponderation->action->fonctions_efforts[2][i]->nb_troncons;j++)
-                    BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[2][i], ponderation->action->fonctions_efforts[2][i]->troncons[j].debut_troncon, ponderation->action->fonctions_efforts[2][i]->troncons[j].fin_troncon, mult*ponderation->action->fonctions_efforts[2][i]->troncons[j].x0, mult*ponderation->action->fonctions_efforts[2][i]->troncons[j].x1, mult*ponderation->action->fonctions_efforts[2][i]->troncons[j].x2, mult*ponderation->action->fonctions_efforts[2][i]->troncons[j].x3, mult*ponderation->action->fonctions_efforts[2][i]->troncons[j].x4, mult*ponderation->action->fonctions_efforts[2][i]->troncons[j].x5, mult*ponderation->action->fonctions_efforts[2][i]->troncons[j].x6, 0.), FALSE);
-                for (j=0;j<ponderation->action->fonctions_efforts[3][i]->nb_troncons;j++)
-                    BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[3][i], ponderation->action->fonctions_efforts[3][i]->troncons[j].debut_troncon, ponderation->action->fonctions_efforts[3][i]->troncons[j].fin_troncon, mult*ponderation->action->fonctions_efforts[3][i]->troncons[j].x0, mult*ponderation->action->fonctions_efforts[3][i]->troncons[j].x1, mult*ponderation->action->fonctions_efforts[3][i]->troncons[j].x2, mult*ponderation->action->fonctions_efforts[3][i]->troncons[j].x3, mult*ponderation->action->fonctions_efforts[3][i]->troncons[j].x4, mult*ponderation->action->fonctions_efforts[3][i]->troncons[j].x5, mult*ponderation->action->fonctions_efforts[3][i]->troncons[j].x6, 0.), FALSE);
-                for (j=0;j<ponderation->action->fonctions_efforts[4][i]->nb_troncons;j++)
-                    BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[4][i], ponderation->action->fonctions_efforts[4][i]->troncons[j].debut_troncon, ponderation->action->fonctions_efforts[4][i]->troncons[j].fin_troncon, mult*ponderation->action->fonctions_efforts[4][i]->troncons[j].x0, mult*ponderation->action->fonctions_efforts[4][i]->troncons[j].x1, mult*ponderation->action->fonctions_efforts[4][i]->troncons[j].x2, mult*ponderation->action->fonctions_efforts[4][i]->troncons[j].x3, mult*ponderation->action->fonctions_efforts[4][i]->troncons[j].x4, mult*ponderation->action->fonctions_efforts[4][i]->troncons[j].x5, mult*ponderation->action->fonctions_efforts[4][i]->troncons[j].x6, 0.), FALSE);
-                for (j=0;j<ponderation->action->fonctions_efforts[5][i]->nb_troncons;j++)
-                    BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[5][i], ponderation->action->fonctions_efforts[5][i]->troncons[j].debut_troncon, ponderation->action->fonctions_efforts[5][i]->troncons[j].fin_troncon, mult*ponderation->action->fonctions_efforts[5][i]->troncons[j].x0, mult*ponderation->action->fonctions_efforts[5][i]->troncons[j].x1, mult*ponderation->action->fonctions_efforts[5][i]->troncons[j].x2, mult*ponderation->action->fonctions_efforts[5][i]->troncons[j].x3, mult*ponderation->action->fonctions_efforts[5][i]->troncons[j].x4, mult*ponderation->action->fonctions_efforts[5][i]->troncons[j].x5, mult*ponderation->action->fonctions_efforts[5][i]->troncons[j].x6, 0.), FALSE);
-                for (j=0;j<ponderation->action->fonctions_deformation[0][i]->nb_troncons;j++)
-                    BUG(common_fonction_ajout(action_en_cours->fonctions_deformation[0][i], ponderation->action->fonctions_deformation[0][i]->troncons[j].debut_troncon, ponderation->action->fonctions_deformation[0][i]->troncons[j].fin_troncon, mult*ponderation->action->fonctions_deformation[0][i]->troncons[j].x0, mult*ponderation->action->fonctions_deformation[0][i]->troncons[j].x1, mult*ponderation->action->fonctions_deformation[0][i]->troncons[j].x2, mult*ponderation->action->fonctions_deformation[0][i]->troncons[j].x3, mult*ponderation->action->fonctions_deformation[0][i]->troncons[j].x4, mult*ponderation->action->fonctions_deformation[0][i]->troncons[j].x5, mult*ponderation->action->fonctions_deformation[0][i]->troncons[j].x6, 0.), FALSE);
-                for (j=0;j<ponderation->action->fonctions_deformation[1][i]->nb_troncons;j++)
-                    BUG(common_fonction_ajout(action_en_cours->fonctions_deformation[1][i], ponderation->action->fonctions_deformation[1][i]->troncons[j].debut_troncon, ponderation->action->fonctions_deformation[1][i]->troncons[j].fin_troncon, mult*ponderation->action->fonctions_deformation[1][i]->troncons[j].x0, mult*ponderation->action->fonctions_deformation[1][i]->troncons[j].x1, mult*ponderation->action->fonctions_deformation[1][i]->troncons[j].x2, mult*ponderation->action->fonctions_deformation[1][i]->troncons[j].x3, mult*ponderation->action->fonctions_deformation[1][i]->troncons[j].x4, mult*ponderation->action->fonctions_deformation[1][i]->troncons[j].x5, mult*ponderation->action->fonctions_deformation[1][i]->troncons[j].x6, 0.), FALSE);
-                for (j=0;j<ponderation->action->fonctions_deformation[2][i]->nb_troncons;j++)
-                    BUG(common_fonction_ajout(action_en_cours->fonctions_deformation[2][i], ponderation->action->fonctions_deformation[2][i]->troncons[j].debut_troncon, ponderation->action->fonctions_deformation[2][i]->troncons[j].fin_troncon, mult*ponderation->action->fonctions_deformation[2][i]->troncons[j].x0, mult*ponderation->action->fonctions_deformation[2][i]->troncons[j].x1, mult*ponderation->action->fonctions_deformation[2][i]->troncons[j].x2, mult*ponderation->action->fonctions_deformation[2][i]->troncons[j].x3, mult*ponderation->action->fonctions_deformation[2][i]->troncons[j].x4, mult*ponderation->action->fonctions_deformation[2][i]->troncons[j].x5, mult*ponderation->action->fonctions_deformation[2][i]->troncons[j].x6, 0.), FALSE);
-                for (j=0;j<ponderation->action->fonctions_rotation[0][i]->nb_troncons;j++)
-                    BUG(common_fonction_ajout(action_en_cours->fonctions_rotation[0][i], ponderation->action->fonctions_rotation[0][i]->troncons[j].debut_troncon, ponderation->action->fonctions_rotation[0][i]->troncons[j].fin_troncon, mult*ponderation->action->fonctions_rotation[0][i]->troncons[j].x0, mult*ponderation->action->fonctions_rotation[0][i]->troncons[j].x1, mult*ponderation->action->fonctions_rotation[0][i]->troncons[j].x2, mult*ponderation->action->fonctions_rotation[0][i]->troncons[j].x3, mult*ponderation->action->fonctions_rotation[0][i]->troncons[j].x4, mult*ponderation->action->fonctions_rotation[0][i]->troncons[j].x5, mult*ponderation->action->fonctions_rotation[0][i]->troncons[j].x6, 0.), FALSE);
-                for (j=0;j<ponderation->action->fonctions_rotation[1][i]->nb_troncons;j++)
-                    BUG(common_fonction_ajout(action_en_cours->fonctions_rotation[1][i], ponderation->action->fonctions_rotation[1][i]->troncons[j].debut_troncon, ponderation->action->fonctions_rotation[1][i]->troncons[j].fin_troncon, mult*ponderation->action->fonctions_rotation[1][i]->troncons[j].x0, mult*ponderation->action->fonctions_rotation[1][i]->troncons[j].x1, mult*ponderation->action->fonctions_rotation[1][i]->troncons[j].x2, mult*ponderation->action->fonctions_rotation[1][i]->troncons[j].x3, mult*ponderation->action->fonctions_rotation[1][i]->troncons[j].x4, mult*ponderation->action->fonctions_rotation[1][i]->troncons[j].x5, mult*ponderation->action->fonctions_rotation[1][i]->troncons[j].x6, 0.), FALSE);
-                for (j=0;j<ponderation->action->fonctions_rotation[2][i]->nb_troncons;j++)
-                    BUG(common_fonction_ajout(action_en_cours->fonctions_rotation[2][i], ponderation->action->fonctions_rotation[2][i]->troncons[j].debut_troncon, ponderation->action->fonctions_rotation[2][i]->troncons[j].fin_troncon, mult*ponderation->action->fonctions_rotation[2][i]->troncons[j].x0, mult*ponderation->action->fonctions_rotation[2][i]->troncons[j].x1, mult*ponderation->action->fonctions_rotation[2][i]->troncons[j].x2, mult*ponderation->action->fonctions_rotation[2][i]->troncons[j].x3, mult*ponderation->action->fonctions_rotation[2][i]->troncons[j].x4, mult*ponderation->action->fonctions_rotation[2][i]->troncons[j].x5, mult*ponderation->action->fonctions_rotation[2][i]->troncons[j].x6, 0.), FALSE);
+                BUG(common_fonction_ajout_fonction(action_en_cours->fonctions_efforts[0][i], ponderation->action->fonctions_efforts[0][i], mult), FALSE);
+                BUG(common_fonction_ajout_fonction(action_en_cours->fonctions_efforts[1][i], ponderation->action->fonctions_efforts[1][i], mult), FALSE);
+                BUG(common_fonction_ajout_fonction(action_en_cours->fonctions_efforts[2][i], ponderation->action->fonctions_efforts[2][i], mult), FALSE);
+                BUG(common_fonction_ajout_fonction(action_en_cours->fonctions_efforts[3][i], ponderation->action->fonctions_efforts[3][i], mult), FALSE);
+                BUG(common_fonction_ajout_fonction(action_en_cours->fonctions_efforts[4][i], ponderation->action->fonctions_efforts[4][i], mult), FALSE);
+                BUG(common_fonction_ajout_fonction(action_en_cours->fonctions_efforts[5][i], ponderation->action->fonctions_efforts[5][i], mult), FALSE);
+                BUG(common_fonction_ajout_fonction(action_en_cours->fonctions_deformation[0][i], ponderation->action->fonctions_deformation[0][i], mult), FALSE);
+                BUG(common_fonction_ajout_fonction(action_en_cours->fonctions_deformation[1][i], ponderation->action->fonctions_deformation[1][i], mult), FALSE);
+                BUG(common_fonction_ajout_fonction(action_en_cours->fonctions_deformation[2][i], ponderation->action->fonctions_deformation[2][i], mult), FALSE);
+                BUG(common_fonction_ajout_fonction(action_en_cours->fonctions_rotation[0][i], ponderation->action->fonctions_rotation[0][i], mult), FALSE);
+                BUG(common_fonction_ajout_fonction(action_en_cours->fonctions_rotation[1][i], ponderation->action->fonctions_rotation[1][i], mult), FALSE);
+                BUG(common_fonction_ajout_fonction(action_en_cours->fonctions_rotation[2][i], ponderation->action->fonctions_rotation[2][i], mult), FALSE);
             }
             
             comb = g_list_next(comb);
@@ -1370,7 +1356,8 @@ G_MODULE_EXPORT void EF_gtk_resultats_cas_change(GtkWidget *widget __attribute__
  * Valeur renvoyée : Aucune.
  */
 {
-    GList *list_parcours;
+    GList   *list_parcours;
+    int     indice_combo;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     
@@ -1383,7 +1370,8 @@ G_MODULE_EXPORT void EF_gtk_resultats_cas_change(GtkWidget *widget __attribute__
         list_parcours = g_list_next(list_parcours);
     }
     
-    if (gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(projet->list_gtk.ef_resultats.builder, "EF_resultats_combobox"))) == 1)
+    indice_combo = gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(projet->list_gtk.ef_resultats.builder, "EF_resultats_combobox")));
+    if (indice_combo == 1)
     {
         GtkListStore    *list_pond;
         GtkTreeIter     Iter;
@@ -1466,6 +1454,19 @@ G_MODULE_EXPORT void EF_gtk_resultats_cas_change(GtkWidget *widget __attribute__
         gtk_combo_box_set_model(GTK_COMBO_BOX(gtk_builder_get_object(projet->list_gtk.ef_resultats.builder, "EF_resultats_combo_box_ponderations")), GTK_TREE_MODEL(list_pond));
         g_object_unref(list_pond);
     }
+    else if (indice_combo == 2)
+    {
+        GtkListStore    *list_pond;
+        GtkTreeIter     Iter;
+        
+        list_pond = gtk_list_store_new(1, G_TYPE_STRING);
+        
+        gtk_list_store_append(list_pond, &Iter);
+        gtk_list_store_set(list_pond, &Iter, 0, gettext("Tout"), -1);
+        
+        gtk_combo_box_set_model(GTK_COMBO_BOX(gtk_builder_get_object(projet->list_gtk.ef_resultats.builder, "EF_resultats_combo_box_ponderations")), GTK_TREE_MODEL(list_pond));
+        g_object_unref(list_pond);
+    }
     
     return;
 }
@@ -1505,6 +1506,7 @@ G_MODULE_EXPORT void EF_gtk_resultats_combobox_changed(GtkComboBox *combobox, Pr
 {
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     
+    // Actions élémentaires
     if (gtk_combo_box_get_active(combobox) == 0)
     {
         gtk_combo_box_set_model(GTK_COMBO_BOX(gtk_builder_get_object(projet->list_gtk.ef_resultats.builder, "EF_resultats_combo_box_cas")), GTK_TREE_MODEL(projet->list_gtk._1990_actions.list_actions));
@@ -1512,6 +1514,7 @@ G_MODULE_EXPORT void EF_gtk_resultats_combobox_changed(GtkComboBox *combobox, Pr
         gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_resultats.builder, "EF_resultats_combo_box_ponderations")), FALSE);
         gtk_widget_set_hexpand(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_resultats.builder, "EF_resultats_combo_box_cas")), TRUE);
     }
+    // Combinaisons ou enveloppes
     else
     {
         g_object_ref(projet->combinaisons.list_el_desc);
