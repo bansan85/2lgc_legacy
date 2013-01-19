@@ -716,38 +716,38 @@ G_MODULE_EXPORT gboolean EF_calculs_resoud_charge(Projet *projet, unsigned int n
                             // N(x) & = -F_{Ax} & &\textrm{ pour x de 0 à a}\nonumber\\
                             // N(x) & = F_{Bx} & &\textrm{ pour x de a à l}\nonumber\\
                             
-                            BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[0][num], 0., a, -FAx, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
-                            BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[0][num], a,  l,  FBx, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
+                            BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[0][num], 0., a, -FAx, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
+                            BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[0][num], a,  l,  FBx, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
                             
                             // T_y(x) & = -F_{Ay_i} - F_{Ay_h} & &\textrm{ pour x de 0 à a}\nonumber\\
                             // T_y(x) & =  F_{By_i} + F_{By_h} & &\textrm{ pour x de a à l}\nonumber\\
                             
-                            BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[1][num], 0., a, -FAy_i-FAy_h, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
-                            BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[1][num], a,  l,  FBy_i+FBy_h, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
+                            BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[1][num], 0., a, -FAy_i-FAy_h, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
+                            BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[1][num], a,  l,  FBy_i+FBy_h, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
                             
                             // T_z(x) & = -F_{Az_i} - F_{Az_h} & &\textrm{ pour x de 0 à a}\nonumber\\
                             // T_z(x) & =  F_{Bz_i} + F_{Bz_h} & &\textrm{ pour x de a à l}\nonumber\\
                             
-                            BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[2][num], 0., a, -FAz_i-FAz_h, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
-                            BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[2][num], a,  l,  FBz_i+FBz_h, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
+                            BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[2][num], 0., a, -FAz_i-FAz_h, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
+                            BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[2][num], a,  l,  FBz_i+FBz_h, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
                             
                             // M_x(x) & = -M_{Ax} & &\textrm{ pour x de 0 à a}\nonumber\\
                             // M_x(x) & = M_{Bx} & &\textrm{ pour x de a à l}\nonumber\\
                             
-                            BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[3][num], 0., a, -MAx, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
-                            BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[3][num], a,  l,  MBx, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
+                            BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[3][num], 0., a, -MAx, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
+                            BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[3][num], a,  l,  MBx, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
                             
                             // M_y(x) & = -M_{Ay} - (F_{Az_i}+F_{Az_h}) \cdot x & &\textrm{ pour x de 0 à a}\nonumber\\
                             // M_y(x) & = F_{Bz_i} \cdot L - M_{Ay} + (F_{Bz_i}+F_{Bz_h}) \cdot x & &\textrm{ pour x de a à l}\nonumber\\
                             
-                            BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[4][num], 0., a, -MAy,         -FAz_i-FAz_h, 0., 0., 0., 0., 0., debut_barre), FALSE);
-                            BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[4][num], a,  l, -FBz_i*l-MAy,  FBz_i+FBz_h, 0., 0., 0., 0., 0., debut_barre), FALSE);
+                            BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[4][num], 0., a, -MAy,         -FAz_i-FAz_h, 0., 0., 0., 0., 0., debut_barre), FALSE);
+                            BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[4][num], a,  l, -FBz_i*l-MAy,  FBz_i+FBz_h, 0., 0., 0., 0., 0., debut_barre), FALSE);
                             
                             // M_z(x) & = -M_{Az} + (F_{Ay_i}+F_{Ay_h}) \cdot x & &\textrm{ pour x de 0 à a}\nonumber\\
                             // M_z(x) & = F_{By_i} \cdot L - M_{Az} - (F_{By_i}+F_{By_h}) \cdot x & &\textrm{ pour x de a à l}
                             
-                            BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[5][num], 0., a, -MAz,         FAy_i+FAy_h, 0., 0., 0., 0., 0., debut_barre), FALSE);
-                            BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[5][num], a,  l, FBy_i*l-MAz, -FBy_i-FBy_h, 0., 0., 0., 0., 0., debut_barre), FALSE);
+                            BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[5][num], 0., a, -MAz,         FAy_i+FAy_h, 0., 0., 0., 0., 0., debut_barre), FALSE);
+                            BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[5][num], a,  l, FBy_i*l-MAz, -FBy_i-FBy_h, 0., 0., 0., 0., 0., debut_barre), FALSE);
                             // \end{align*}\begin{verbatim}
                             
                             
@@ -1020,49 +1020,49 @@ G_MODULE_EXPORT gboolean EF_calculs_resoud_charge(Projet *projet, unsigned int n
             //               N(x) & = \frac{(F_{Ax}+F_{Bx}) \cdot x - a \cdot F_{Bx} - (L-b) \cdot F_{Ax}}{L-a-b} & &\textrm{ pour x de a à L-b}\nonumber\\
             //               N(x) & = F_{Bx} & &\textrm{ pour x de L-b à L}\nonumber\\
                                 
-                                BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[0][num], 0., a, -FAx, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
-                                BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[0][num], a, l-b, (-a*FBx-(l-b)*FAx)/(l-a-b), (FAx+FBx)/(l-a-b), 0., 0., 0., 0., 0., debut_barre), FALSE);
-                                BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[0][num], l-b, l, FBx,  0., 0., 0., 0., 0., 0., debut_barre), FALSE);
+                                BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[0][num], 0., a, -FAx, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
+                                BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[0][num], a, l-b, (-a*FBx-(l-b)*FAx)/(l-a-b), (FAx+FBx)/(l-a-b), 0., 0., 0., 0., 0., debut_barre), FALSE);
+                                BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[0][num], l-b, l, FBx,  0., 0., 0., 0., 0., 0., debut_barre), FALSE);
                                 
                             // T_y(x) & = -F_{Ay_i} - F_{Ay_h} & &\textrm{ pour x de 0 à a}\nonumber\\
                             // T_y(x) & = \frac{-a (F_{By_i}+F_{By_h})-(L-b)(F_{Ay_i}+F_{Ay_h})}{L-a-b} + \frac{F_{Ay_i}+F_{Ay_h}+F_{By_i}+F_{By_h}}{L-a-b} x & &\textrm{ pour x de a à L-b}\nonumber\\
                             // T_y(x) & =  F_{By_i} + F_{By_h} & &\textrm{ pour x de L-b à L}\nonumber\\
                                 
-                                BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[1][num], 0., a,  -FAy_i-FAy_h, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
-                                BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[1][num], a, l-b, (-a*(FBy_i+FBy_h)-(l-b)*(FAy_i+FAy_h))/(l-a-b), (FAy_i+FAy_h+FBy_i+FBy_h)/(l-a-b), 0., 0., 0., 0., 0., debut_barre), FALSE);
-                                BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[1][num], l-b, l, FBy_i+FBy_h, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
+                                BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[1][num], 0., a,  -FAy_i-FAy_h, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
+                                BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[1][num], a, l-b, (-a*(FBy_i+FBy_h)-(l-b)*(FAy_i+FAy_h))/(l-a-b), (FAy_i+FAy_h+FBy_i+FBy_h)/(l-a-b), 0., 0., 0., 0., 0., debut_barre), FALSE);
+                                BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[1][num], l-b, l, FBy_i+FBy_h, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
                                 
                             // T_z(x) & = -F_{Az_i} - F_{Az_h} & &\textrm{ pour x de 0 à a}\nonumber\\
                             // T_z(x) & = \frac{-a (F_{Bz_i}+F_{Bz_h})-(L-b) (F_{Az_i}+F_{Az_h})}{L-a-b} + \frac{F_{Az_i}+F_{Az_h}+F_{Bz_i}+F_{Bz_h}}{L-a-b} x & &\textrm{ pour x de a à L-b}\nonumber\\
                             // T_z(x) & =  F_{Bz_i} + F_{Bz_h} & &\textrm{ pour x de L-b à L}\nonumber\\
                                 
-                                BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[2][num], 0., a, -FAz_i-FAz_h, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
-                                BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[2][num], a, l-b, (-a*(FBz_i+FBz_h)-(l-b)*(FAz_i+FAz_h))/(l-a-b), (FAz_i+FAz_h+FBz_i+FBz_h)/(l-a-b), 0., 0., 0., 0., 0., debut_barre), FALSE);
-                                BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[2][num], l-b,  l,  FBz_i+FBz_h, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
+                                BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[2][num], 0., a, -FAz_i-FAz_h, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
+                                BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[2][num], a, l-b, (-a*(FBz_i+FBz_h)-(l-b)*(FAz_i+FAz_h))/(l-a-b), (FAz_i+FAz_h+FBz_i+FBz_h)/(l-a-b), 0., 0., 0., 0., 0., debut_barre), FALSE);
+                                BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[2][num], l-b,  l,  FBz_i+FBz_h, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
                                 
                             // M_x(x) & = -M_{Ax} & &\textrm{ pour x de 0 à a}\nonumber\\
                             // M_x(x) & = \frac{-a \cdot M_{Bx}-(L-b) \cdot M_{Ax}}{L-a-b} + \frac{M_{Ax}+M_{Bx}}{L-a-b} \cdot x & &\textrm{ pour x de a à L-b}\nonumber\\
                             // M_x(x) & = M_{Bx} & &\textrm{ pour x de L-b à L}\nonumber\\
                                 
-                                BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[3][num], 0., a,  -MAx, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
-                                BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[3][num], a, l-b, (-a*MBx-(l-b)*MAx)/(l-a-b), (MAx+MBx)/(l-a-b), 0., 0., 0., 0., 0., debut_barre), FALSE);
-                                BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[3][num], l-b,  l, MBx, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
+                                BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[3][num], 0., a,  -MAx, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
+                                BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[3][num], a, l-b, (-a*MBx-(l-b)*MAx)/(l-a-b), (MAx+MBx)/(l-a-b), 0., 0., 0., 0., 0., debut_barre), FALSE);
+                                BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[3][num], l-b,  l, MBx, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
                                 
                             // M_y(x) & = -M_{Ay} - (F_{Az_i}+F_{Az_h}) \cdot x & &\textrm{ pour x de 0 à a}\nonumber\\
                             // M_y(x) & = -(F_{Bz_i}+F_{Bz_h}) \cdot (L-x) + M_{By} - M_y \cdot (L-b-x) + F_z \cdot \frac{(L-b-x)^2}{2} & &\textrm{ pour x de a à L-b}\nonumber\\
                             // M_y(x) & =  M_{By} - L \cdot (F_{Bz_i}+F_{Bz_h}) + (F_{Bz_i}+F_{Bz_h}) \cdot x & &\textrm{ pour x de L-b à L}\nonumber\\
                                 
-                                BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[4][num], 0., a, -MAy, -FAz_i-FAz_h, 0., 0., 0., 0., 0., debut_barre), FALSE);
-                                BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[4][num], a, l-b, b*b*ax2[2]/2.+b*(ax2[4]-ax2[2]*l)+ax2[2]*l*l/2.-l*(ax2[4]+FBz_i+FBz_h)+MBy, -ax2[2]*(l-b)+ax2[4]+FBz_i+FBz_h, ax2[2]/2., 0., 0., 0., 0., debut_barre), FALSE);
-                                BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[4][num], l-b,  l, MBy-l*(FBz_i+FBz_h), FBz_i+FBz_h, 0., 0., 0., 0., 0., debut_barre), FALSE);
+                                BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[4][num], 0., a, -MAy, -FAz_i-FAz_h, 0., 0., 0., 0., 0., debut_barre), FALSE);
+                                BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[4][num], a, l-b, b*b*ax2[2]/2.+b*(ax2[4]-ax2[2]*l)+ax2[2]*l*l/2.-l*(ax2[4]+FBz_i+FBz_h)+MBy, -ax2[2]*(l-b)+ax2[4]+FBz_i+FBz_h, ax2[2]/2., 0., 0., 0., 0., debut_barre), FALSE);
+                                BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[4][num], l-b,  l, MBy-l*(FBz_i+FBz_h), FBz_i+FBz_h, 0., 0., 0., 0., 0., debut_barre), FALSE);
                                 
                             // M_z(x) & = -M_{Az} + (F_{Ay_i}+F_{Ay_h}) \cdot x & &\textrm{ pour x de 0 à a}\nonumber\\
                             // M_z(x) & = (F_{By_i}+F_{By_h}) \cdot (L-x) - M_{Bz} - M_z \cdot (L-b-x) - F_y \cdot \frac{(L-b-x)^2}{2} & &\textrm{ pour x de a à L-b}\nonumber\\
                             // M_z(x) & =  M_{Bz} + L \cdot (F_{By_i}+F_{By_h}) - (F_{By_i}+F_{By_h}) \cdot x & &\textrm{ pour x de L-b à L}
                                 
-                                BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[5][num], 0., a, -MAz, +FAy_i+FAy_h, 0., 0., 0., 0., 0., debut_barre), FALSE);
-                                BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[5][num], a, l-b, -b*b*ax2[1]/2.+b*(ax2[1]*l+ax2[5])-ax2[1]*l*l/2.+l*(FBy_i+FBy_h-ax2[5])+MBz, ax2[1]*(l-b)+ax2[5]-FBy_i-FBy_h, -ax2[1]/2., 0., 0., 0., 0., debut_barre), FALSE);
-                                BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[5][num], l-b,  l, MBz+l*(FBy_i+FBy_h), -FBy_i-FBy_h, 0., 0., 0., 0., 0., debut_barre), FALSE);
+                                BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[5][num], 0., a, -MAz, +FAy_i+FAy_h, 0., 0., 0., 0., 0., debut_barre), FALSE);
+                                BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[5][num], a, l-b, -b*b*ax2[1]/2.+b*(ax2[1]*l+ax2[5])-ax2[1]*l*l/2.+l*(FBy_i+FBy_h-ax2[5])+MBz, ax2[1]*(l-b)+ax2[5]-FBy_i-FBy_h, -ax2[1]/2., 0., 0., 0., 0., debut_barre), FALSE);
+                                BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[5][num], l-b,  l, MBz+l*(FBy_i+FBy_h), -FBy_i-FBy_h, 0., 0., 0., 0., 0., debut_barre), FALSE);
                             // \end{align*}\begin{verbatim}
                                 
             //             Détermination des fonctions de déformation et rotation de la même façon que
@@ -1312,12 +1312,12 @@ G_MODULE_EXPORT gboolean EF_calculs_resoud_charge(Projet *projet, unsigned int n
             // M_y(x) & = M_y(x) + M_{Ay} - (M_{Ay}+M_{By}) \cdot x/L\nonumber\\
             // M_z(x) & = M_z(x) + M_{Az} - (M_{Az}+M_{Bz}) \cdot x/L
             // \end{align*}\begin{verbatim}
-            BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[0][num], 0., l, ax2[0], -(ax2[0]+ax2[6])/l,  0., 0., 0., 0., 0., l_debut), FALSE);
-            BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[1][num], 0., l, ax2[1], -(ax2[1]+ax2[7])/l,  0., 0., 0., 0., 0., l_debut), FALSE);
-            BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[2][num], 0., l, ax2[2], -(ax2[2]+ax2[8])/l,  0., 0., 0., 0., 0., l_debut), FALSE);
-            BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[3][num], 0., l, ax2[3], -(ax2[3]+ax2[9])/l,  0., 0., 0., 0., 0., l_debut), FALSE);
-            BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[4][num], 0., l, ax2[4], -(ax2[4]+ax2[10])/l, 0., 0., 0., 0., 0., l_debut), FALSE);
-            BUG(common_fonction_ajout(action_en_cours->fonctions_efforts[5][num], 0., l, ax2[5], -(ax2[5]+ax2[11])/l, 0., 0., 0., 0., 0., l_debut), FALSE);
+            BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[0][num], 0., l, ax2[0], -(ax2[0]+ax2[6])/l,  0., 0., 0., 0., 0., l_debut), FALSE);
+            BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[1][num], 0., l, ax2[1], -(ax2[1]+ax2[7])/l,  0., 0., 0., 0., 0., l_debut), FALSE);
+            BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[2][num], 0., l, ax2[2], -(ax2[2]+ax2[8])/l,  0., 0., 0., 0., 0., l_debut), FALSE);
+            BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[3][num], 0., l, ax2[3], -(ax2[3]+ax2[9])/l,  0., 0., 0., 0., 0., l_debut), FALSE);
+            BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[4][num], 0., l, ax2[4], -(ax2[4]+ax2[10])/l, 0., 0., 0., 0., 0., l_debut), FALSE);
+            BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[5][num], 0., l, ax2[5], -(ax2[5]+ax2[11])/l, 0., 0., 0., 0., 0., l_debut), FALSE);
             
     //         Ajout des déplacements & rotations entre deux noeuds dus à leur déplacement
     //           relatif, la courbe vient s'ajouter à la courbe (si existante) déja définie
@@ -1357,15 +1357,15 @@ G_MODULE_EXPORT gboolean EF_calculs_resoud_charge(Projet *projet, unsigned int n
     //              r_y(x) = & -B - \frac{M_{Ay}}{E \cdot I_y} \cdot x + \frac{M_{Ay}+M_{By}}{2 \cdot L \cdot E \cdot I_y} \cdot x^2 \nonumber\\
     //              r_z(x) = & A - \frac{M_{Az}}{E \cdot I_z} \cdot x + \frac{M_{Az}+M_{Bz}}{2 \cdot L \cdot E \cdot I_z} \cdot x^2
 
-                    BUG(common_fonction_ajout(action_en_cours->fonctions_deformation[0][num], 0., l, ax[0], -ax2[0]/(E*S), (ax2[0]+ax2[6])/(2*E*S*l), 0., 0., 0., 0., l_debut), FALSE);
-                    BUG(common_fonction_ajout(action_en_cours->fonctions_deformation[1][num], 0., l, ax[1], (ax2[5]/(2*E*Iz)*l*l-(ax2[5]+ax2[11])/(6*E*Iz)*l*l-ax[1]+ax[7])/l, -ax2[5]/(2*E*Iz),  (ax2[5]+ax2[11])/(6*l*E*Iz), 0., 0., 0., l_debut), FALSE);
-                    BUG(common_fonction_ajout(action_en_cours->fonctions_deformation[2][num], 0., l, ax[2], (-ax2[4]/(2*E*Iy)*l*l+(ax2[4]+ax2[10])/(6*E*Iy)*l*l-ax[2]+ax[8])/l,  ax2[4]/(2*E*Iy), -(ax2[4]+ax2[10])/(6*l*E*Iy), 0., 0., 0., l_debut), FALSE);
+                    BUG(common_fonction_ajout_poly(action_en_cours->fonctions_deformation[0][num], 0., l, ax[0], -ax2[0]/(E*S), (ax2[0]+ax2[6])/(2*E*S*l), 0., 0., 0., 0., l_debut), FALSE);
+                    BUG(common_fonction_ajout_poly(action_en_cours->fonctions_deformation[1][num], 0., l, ax[1], (ax2[5]/(2*E*Iz)*l*l-(ax2[5]+ax2[11])/(6*E*Iz)*l*l-ax[1]+ax[7])/l, -ax2[5]/(2*E*Iz),  (ax2[5]+ax2[11])/(6*l*E*Iz), 0., 0., 0., l_debut), FALSE);
+                    BUG(common_fonction_ajout_poly(action_en_cours->fonctions_deformation[2][num], 0., l, ax[2], (-ax2[4]/(2*E*Iy)*l*l+(ax2[4]+ax2[10])/(6*E*Iy)*l*l-ax[2]+ax[8])/l,  ax2[4]/(2*E*Iy), -(ax2[4]+ax2[10])/(6*l*E*Iy), 0., 0., 0., l_debut), FALSE);
                     if ((j == 0) && (element_en_beton->relachement != NULL) && (element_en_beton->relachement->rx_debut != EF_RELACHEMENT_BLOQUE))
-                        BUG(common_fonction_ajout(action_en_cours->fonctions_rotation[0][num], 0., l, ax2[3]/(G*J)*l-(ax2[3]+ax2[9])/(2*G*J*l)*l*l+ax[9], -ax2[3]/(G*J), (ax2[3]+ax2[9])/(2*G*J*l), 0., 0., 0., 0., l_debut), FALSE);
+                        BUG(common_fonction_ajout_poly(action_en_cours->fonctions_rotation[0][num], 0., l, ax2[3]/(G*J)*l-(ax2[3]+ax2[9])/(2*G*J*l)*l*l+ax[9], -ax2[3]/(G*J), (ax2[3]+ax2[9])/(2*G*J*l), 0., 0., 0., 0., l_debut), FALSE);
                     else
-                        BUG(common_fonction_ajout(action_en_cours->fonctions_rotation[0][num], 0., l, ax[3], -ax2[3]/(G*J), (ax2[3]+ax2[9])/(2*G*J*l), 0., 0., 0., 0., l_debut), FALSE);
-                    BUG(common_fonction_ajout(action_en_cours->fonctions_rotation[1][num], 0., l, -(-ax2[4]/(2*E*Iy)*l*l+(ax2[4]+ax2[10])/(6*E*Iy)*l*l-ax[2]+ax[8])/l, -ax2[4]/(E*Iy), (ax2[4]+ax2[10])/(2*l*E*Iy), 0., 0., 0., 0., l_debut), FALSE);
-                    BUG(common_fonction_ajout(action_en_cours->fonctions_rotation[2][num], 0., l,  (ax2[5]/(2*E*Iz)*l*l+(-ax2[5]-ax2[11])/(6*E*Iz)*l*l-ax[1]+ax[7])/l, -ax2[5]/(E*Iz), (ax2[5]+ax2[11])/(2*l*E*Iz), 0., 0., 0., 0., l_debut), FALSE);
+                        BUG(common_fonction_ajout_poly(action_en_cours->fonctions_rotation[0][num], 0., l, ax[3], -ax2[3]/(G*J), (ax2[3]+ax2[9])/(2*G*J*l), 0., 0., 0., 0., l_debut), FALSE);
+                    BUG(common_fonction_ajout_poly(action_en_cours->fonctions_rotation[1][num], 0., l, -(-ax2[4]/(2*E*Iy)*l*l+(ax2[4]+ax2[10])/(6*E*Iy)*l*l-ax[2]+ax[8])/l, -ax2[4]/(E*Iy), (ax2[4]+ax2[10])/(2*l*E*Iy), 0., 0., 0., 0., l_debut), FALSE);
+                    BUG(common_fonction_ajout_poly(action_en_cours->fonctions_rotation[2][num], 0., l,  (ax2[5]/(2*E*Iz)*l*l+(-ax2[5]-ax2[11])/(6*E*Iz)*l*l-ax[1]+ax[7])/l, -ax2[5]/(E*Iz), (ax2[5]+ax2[11])/(2*l*E*Iz), 0., 0., 0., 0., l_debut), FALSE);
     //              \end{align*}\begin{verbatim}
                     break;
                 }

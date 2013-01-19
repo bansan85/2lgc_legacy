@@ -473,13 +473,13 @@ G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_fonc_rx(Fonction *fonction,
             
             if (ERREUR_RELATIVE_EGALE(infos->kBx, MAXDOUBLE))
             {
-                BUG(common_fonction_ajout(fonction, 0., a, max*infos->kAx, max/(G*J), 0., 0., 0., 0., 0., debut_barre), FALSE);
-                BUG(common_fonction_ajout(fonction, a, l, max*infos->kAx+a*(max+mbx)/(G*J), -mbx/(G*J), 0., 0., 0., 0., 0., debut_barre), FALSE);
+                BUG(common_fonction_ajout_poly(fonction, 0., a, max*infos->kAx, max/(G*J), 0., 0., 0., 0., 0., debut_barre), FALSE);
+                BUG(common_fonction_ajout_poly(fonction, a, l, max*infos->kAx+a*(max+mbx)/(G*J), -mbx/(G*J), 0., 0., 0., 0., 0., debut_barre), FALSE);
             }
             else
             {
-                BUG(common_fonction_ajout(fonction, 0., a, mbx*infos->kBx - (a*(max+mbx)-l*mbx)/(G*J), +max/(G*J), 0., 0., 0., 0., 0., debut_barre), FALSE);
-                BUG(common_fonction_ajout(fonction, a, l, mbx*(infos->kBx + l/(G*J)), -mbx/(G*J), 0., 0., 0., 0., 0., debut_barre), FALSE);
+                BUG(common_fonction_ajout_poly(fonction, 0., a, mbx*infos->kBx - (a*(max+mbx)-l*mbx)/(G*J), +max/(G*J), 0., 0., 0., 0., 0., debut_barre), FALSE);
+                BUG(common_fonction_ajout_poly(fonction, a, l, mbx*(infos->kBx + l/(G*J)), -mbx/(G*J), 0., 0., 0., 0., 0., debut_barre), FALSE);
             }
             
     // Pour une section section constante, les moments valent :
@@ -602,17 +602,17 @@ G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_fonc_ry(Fonction *f_rotation
             
             BUG(!isnan(I), FALSE);
             
-            BUG(common_fonction_ajout(f_rotation, 0., a,  fz*b/(6*E*I*l)*(-l*l+b*b),  0.,          fz*b/(2*E*I*l),      0., 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout(f_rotation, a,  l, -fz*a/(6*E*I*l)*(2*l*l+a*a), fz*a/(E*I), -fz*a/(2*E*I*l),      0., 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout(f_rotation, 0., a,  my/(6*E*I*l)*(-l*l+3*b*b),  0.,          my/(2*E*I*l),        0., 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout(f_rotation, a,  l, my/(6*E*I*l)*(2*l*l+3*a*a),  -my/(E*I),   my/(2*E*I*l),        0., 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout(f_rotation, 0., l, l/(6*E*I)*(2*may-mby),       -may/(E*I),  (may+mby)/(2*E*I*l), 0., 0., 0., 0., debut_barre), FALSE);
+            BUG(common_fonction_ajout_poly(f_rotation, 0., a,  fz*b/(6*E*I*l)*(-l*l+b*b),  0.,          fz*b/(2*E*I*l),      0., 0., 0., 0., debut_barre), FALSE);
+            BUG(common_fonction_ajout_poly(f_rotation, a,  l, -fz*a/(6*E*I*l)*(2*l*l+a*a), fz*a/(E*I), -fz*a/(2*E*I*l),      0., 0., 0., 0., debut_barre), FALSE);
+            BUG(common_fonction_ajout_poly(f_rotation, 0., a,  my/(6*E*I*l)*(-l*l+3*b*b),  0.,          my/(2*E*I*l),        0., 0., 0., 0., debut_barre), FALSE);
+            BUG(common_fonction_ajout_poly(f_rotation, a,  l, my/(6*E*I*l)*(2*l*l+3*a*a),  -my/(E*I),   my/(2*E*I*l),        0., 0., 0., 0., debut_barre), FALSE);
+            BUG(common_fonction_ajout_poly(f_rotation, 0., l, l/(6*E*I)*(2*may-mby),       -may/(E*I),  (may+mby)/(2*E*I*l), 0., 0., 0., 0., debut_barre), FALSE);
             
-            BUG(common_fonction_ajout(f_deform, 0., a,  0.,                fz*b/(6*E*I*l)*(l*l-b*b),    0.,                 -fz*b/(6*E*I*l),      0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout(f_deform, a,  l, -fz*a*a*a/(6*E*I),  fz*a/(6*E*I*l)*(a*a+2*l*l),  -fz*a/(2*E*I),      fz*a/(6*E*I*l),       0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout(f_deform, 0., a,  0.,                my/(6*E*I*l)*(l*l-3*b*b),    0.,                 -my/(6*E*I*l),        0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout(f_deform, a,  l, my/(6*E*I)*(3*a*a), -my/(6*E*I*l)*(2*l*l+3*a*a), my/(6*E*I*l)*(3*l), -my/(6*E*I*l),        0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout(f_deform, 0., l, 0.,                 l/(6*E*I)*(-2*may+mby),      may/(2*E*I),        -(mby+may)/(6*E*I*l), 0., 0., 0., debut_barre), FALSE);
+            BUG(common_fonction_ajout_poly(f_deform, 0., a,  0.,                fz*b/(6*E*I*l)*(l*l-b*b),    0.,                 -fz*b/(6*E*I*l),      0., 0., 0., debut_barre), FALSE);
+            BUG(common_fonction_ajout_poly(f_deform, a,  l, -fz*a*a*a/(6*E*I),  fz*a/(6*E*I*l)*(a*a+2*l*l),  -fz*a/(2*E*I),      fz*a/(6*E*I*l),       0., 0., 0., debut_barre), FALSE);
+            BUG(common_fonction_ajout_poly(f_deform, 0., a,  0.,                my/(6*E*I*l)*(l*l-3*b*b),    0.,                 -my/(6*E*I*l),        0., 0., 0., debut_barre), FALSE);
+            BUG(common_fonction_ajout_poly(f_deform, a,  l, my/(6*E*I)*(3*a*a), -my/(6*E*I*l)*(2*l*l+3*a*a), my/(6*E*I*l)*(3*l), -my/(6*E*I*l),        0., 0., 0., debut_barre), FALSE);
+            BUG(common_fonction_ajout_poly(f_deform, 0., l, 0.,                 l/(6*E*I)*(-2*may+mby),      may/(2*E*I),        -(mby+may)/(6*E*I*l), 0., 0., 0., debut_barre), FALSE);
     // Pour une section constante, les rotations valent :\end{verbatim}\begin{align*}
     // r_y(x) = & \frac{F_z \cdot b}{6 \cdot E \cdot I_y \cdot L} [-L^2+b^2 + 3 \cdot x^2] & &\\
     //          & +\frac{M_y}{6 \cdot E \cdot I_y \cdot L} (-L^2+3 \cdot b^2 + 3 \cdot x^2) & &\\
@@ -719,17 +719,17 @@ G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_fonc_rz(Fonction *f_rotation
             
             BUG(!isnan(I), FALSE);
             
-            BUG(common_fonction_ajout(f_rotation, 0., a, fy*b/(6*E*I*l)*a*(l+b),     0.,          -fy*b/(2*E*I*l),     0., 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout(f_rotation, a,  l, fy*a/(6*E*I*l)*(2*l*l+a*a), -fy*a/(E*I), fy*a/(2*E*I*l),      0., 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout(f_rotation, 0., a, mz/(6*E*I*l)*(-l*l+3*b*b),  0.,          mz/(2*E*I*l),        0., 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout(f_rotation, a,  l, mz/(6*E*I*l)*(2*l*l+3*a*a), -mz/(E*I),   mz/(2*E*I*l),        0., 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout(f_rotation, 0., l, l/(6*E*I)*(2*maz-mbz),      -maz/(E*I),  (maz+mbz)/(2*E*I*l), 0., 0., 0., 0., debut_barre), FALSE);
+            BUG(common_fonction_ajout_poly(f_rotation, 0., a, fy*b/(6*E*I*l)*a*(l+b),     0.,          -fy*b/(2*E*I*l),     0., 0., 0., 0., debut_barre), FALSE);
+            BUG(common_fonction_ajout_poly(f_rotation, a,  l, fy*a/(6*E*I*l)*(2*l*l+a*a), -fy*a/(E*I), fy*a/(2*E*I*l),      0., 0., 0., 0., debut_barre), FALSE);
+            BUG(common_fonction_ajout_poly(f_rotation, 0., a, mz/(6*E*I*l)*(-l*l+3*b*b),  0.,          mz/(2*E*I*l),        0., 0., 0., 0., debut_barre), FALSE);
+            BUG(common_fonction_ajout_poly(f_rotation, a,  l, mz/(6*E*I*l)*(2*l*l+3*a*a), -mz/(E*I),   mz/(2*E*I*l),        0., 0., 0., 0., debut_barre), FALSE);
+            BUG(common_fonction_ajout_poly(f_rotation, 0., l, l/(6*E*I)*(2*maz-mbz),      -maz/(E*I),  (maz+mbz)/(2*E*I*l), 0., 0., 0., 0., debut_barre), FALSE);
             
-            BUG(common_fonction_ajout(f_deform, 0., a, 0.,                  fy*b/(6*E*I*l)*(l*l-b*b),   0.,                  -fy*b/(6*E*I*l),     0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout(f_deform, a,  l, -fy*a*a*a/(6*E*I),   fy*a/(6*E*I*l)*(a*a+2*l*l), -fy*a/(2*E*I),       fy*a/(6*E*I*l),      0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout(f_deform, 0., a, 0.,                  mz/(6*E*I*l)*(-l*l+3*b*b),  0.,                  mz/(6*E*I*l),        0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout(f_deform, a,  l, -mz/(6*E*I)*(3*a*a), mz/(6*E*I*l)*(2*l*l+3*a*a), -mz/(6*E*I*l)*(3*l), mz/(6*E*I*l),        0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout(f_deform, 0., l, 0.,                  l/(6*E*I)*(2*maz-mbz),      -maz/(2*E*I),        (mbz+maz)/(6*E*I*l), 0., 0., 0., debut_barre), FALSE);
+            BUG(common_fonction_ajout_poly(f_deform, 0., a, 0.,                  fy*b/(6*E*I*l)*(l*l-b*b),   0.,                  -fy*b/(6*E*I*l),     0., 0., 0., debut_barre), FALSE);
+            BUG(common_fonction_ajout_poly(f_deform, a,  l, -fy*a*a*a/(6*E*I),   fy*a/(6*E*I*l)*(a*a+2*l*l), -fy*a/(2*E*I),       fy*a/(6*E*I*l),      0., 0., 0., debut_barre), FALSE);
+            BUG(common_fonction_ajout_poly(f_deform, 0., a, 0.,                  mz/(6*E*I*l)*(-l*l+3*b*b),  0.,                  mz/(6*E*I*l),        0., 0., 0., debut_barre), FALSE);
+            BUG(common_fonction_ajout_poly(f_deform, a,  l, -mz/(6*E*I)*(3*a*a), mz/(6*E*I*l)*(2*l*l+3*a*a), -mz/(6*E*I*l)*(3*l), mz/(6*E*I*l),        0., 0., 0., debut_barre), FALSE);
+            BUG(common_fonction_ajout_poly(f_deform, 0., l, 0.,                  l/(6*E*I)*(2*maz-mbz),      -maz/(2*E*I),        (mbz+maz)/(6*E*I*l), 0., 0., 0., debut_barre), FALSE);
             return TRUE;
             break;
         }
@@ -815,8 +815,8 @@ G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_n(Fonction *fonction, Beton_
     // Pour une section constante, les déformations valent :\end{verbatim}\begin{align*}
     // f_x(x) = & \frac{F_{Ax} \cdot x}{E \cdot S} & &\textrm{ pour x variant de 0 à a}\nonumber\\
     // f_x(x) = & \frac{a \cdot (F_{Ax} + F_{Bx}) - F_{Bx} \cdot x}{E \cdot S} & & \textrm{ pour x variant de a à l}\end{align*}\begin{verbatim}
-            BUG(common_fonction_ajout(fonction, 0., a, 0.,                 fax/(E*S), 0., 0., 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout(fonction, a,  l, a*(fax+fbx)/(E*S), -fbx/(E*S), 0., 0., 0., 0., 0., debut_barre), FALSE);
+            BUG(common_fonction_ajout_poly(fonction, 0., a, 0.,                 fax/(E*S), 0., 0., 0., 0., 0., debut_barre), FALSE);
+            BUG(common_fonction_ajout_poly(fonction, a,  l, a*(fax+fbx)/(E*S), -fbx/(E*S), 0., 0., 0., 0., 0., debut_barre), FALSE);
             return TRUE;
             break;
         }

@@ -183,7 +183,7 @@ gboolean common_fonction_scinde_troncon(Fonction* fonction, double coupure)
 }
 
 
-G_MODULE_EXPORT gboolean common_fonction_ajout(Fonction* fonction, double debut_troncon,
+G_MODULE_EXPORT gboolean common_fonction_ajout_poly(Fonction* fonction, double debut_troncon,
   double fin_troncon, double x0, double x1, double x2, double x3, double x4, double x5,
   double x6, double t)
 /* Description : Additionne une fonction à une fonction existante dont le domaine de validité
@@ -288,6 +288,42 @@ G_MODULE_EXPORT gboolean common_fonction_ajout(Fonction* fonction, double debut_
         }
         return TRUE;
     }
+}
+
+
+gboolean common_fonction_ajout_fonction(Fonction* fonction, Fonction *fonction_a_ajouter,
+  double multi)
+/* Description : Additionne une fonction à une fonction existante.
+ * Paramètres : Fonction* fonction : fonction à modifier,
+ *              Fonction *fonction_a_ajouter : fonction à ajouter,
+ *              double multi : coefficient multiplicateur de la fonction à ajouter.
+ * Valeur renvoyée :
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             fonction == NULL,
+ *             fonction_a_ajouter == NULL,
+ *             en cas d'erreur d'allocation mémoire.
+ */
+{
+    unsigned int    i;
+    BUGMSG(fonction, FALSE, gettext("Paramètre %s incorrect.\n"), "fonction");
+    BUGMSG(fonction_a_ajouter, FALSE, gettext("Paramètre %s incorrect.\n"), "fonction_a_ajouter");
+    
+    for (i=0;i<fonction_a_ajouter->nb_troncons;i++)
+        BUG(common_fonction_ajout_poly(
+          fonction,
+          fonction_a_ajouter->troncons[i].debut_troncon,
+          fonction_a_ajouter->troncons[i].fin_troncon,
+          multi*fonction_a_ajouter->troncons[i].x0,
+          multi*fonction_a_ajouter->troncons[i].x1,
+          multi*fonction_a_ajouter->troncons[i].x2,
+          multi*fonction_a_ajouter->troncons[i].x3,
+          multi*fonction_a_ajouter->troncons[i].x4,
+          multi*fonction_a_ajouter->troncons[i].x5,
+          multi*fonction_a_ajouter->troncons[i].x6,
+          0.), FALSE);
+    
+    return TRUE;
 }
 
 
