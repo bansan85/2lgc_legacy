@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2013-01-14 07:09+0100\n"
-"PO-Revision-Date: 2013-01-14 07:27+0100\n"
+"POT-Creation-Date: 2013-01-22 00:10+0100\n"
+"PO-Revision-Date: 2013-01-22 00:11+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -603,6 +603,9 @@ msgstr "Afficher"
 msgid "Impossible de scinder une fonction vide\n"
 msgstr "Impossible de scinder une fonction vide\n"
 
+msgid "Borne incorrecte.\n"
+msgstr "Borne incorrecte.\n"
+
 msgid "Fonction indéfinie.\n"
 msgstr "Fonction indéfinie.\n"
 
@@ -614,6 +617,9 @@ msgstr "La hauteur du dessin ne peut être nulle.\n"
 
 msgid "%sde %.*lfm à %.*lfm : "
 msgstr "%sde %.*lfm à %.*lfm : "
+
+msgid "Zéro impossible à trouver.\n"
+msgstr "Zéro impossible à trouver.\n"
 
 msgid "Le fichier '%s' est introuvable ou corrompu.\n"
 msgstr "Le fichier '%s' est introuvable ou corrompu.\n"
@@ -1054,6 +1060,20 @@ msgstr "Le filtre %d ne peut être appliqué aux barres.\n"
 msgid "La colonne des résultats %d ne peut être appliquée aux barres."
 msgstr "La colonne des résultats %d ne peut être appliquée aux barres."
 
+msgid "Erreur"
+msgstr "Erreur"
+
+msgid ""
+"Enveloppe supérieure :\n"
+"%s\n"
+"Enveloppe inférieure :\n"
+"%s"
+msgstr ""
+"Enveloppe supérieure :\n"
+"%s\n"
+"Enveloppe inférieure :\n"
+"%s"
+
 msgid "La liste des noeuds doit être spécifiée en tant que première colonne.\n"
 msgstr "La liste des noeuds doit être spécifiée en tant que première colonne.\n"
 
@@ -1210,6 +1230,9 @@ msgstr "Points caractéristiques de r<sub>y</sub> [rad]"
 msgid "Points caractéristiques de r<sub>z</sub> [rad]"
 msgstr "Points caractéristiques de r<sub>z</sub> [rad]"
 
+msgid "Tout"
+msgstr "Tout"
+
 msgid "La liste des types de barre est indéfinie.\n"
 msgstr "La liste des types de barre est indéfinie.\n"
 
@@ -1359,6 +1382,9 @@ msgstr "Diamètre"
 
 msgid "Charge %u de l'action %u introuvable.\n"
 msgstr "Charge %u de l'action %u introuvable.\n"
+
+msgid "Indice hors limite.\n"
+msgstr "Indice hors limite.\n"
 
 msgid "Impossible d'initialiser gtk.\n"
 msgstr "Impossible d'initialiser gtk.\n"

@@ -199,7 +199,6 @@ int main(int argc, char *argv[])
     
     BUG(EF_calculs_genere_mat_rig(projet), -1);
     BUG(EF_calculs_resoud_charge(projet, 0), -1);
-    BUG(_1990_action_affiche_resultats(projet, 0), -1);
     
     // Affichage de l'interface graphique
     BUG(m3d_camera_axe_x_z(projet), -1);
