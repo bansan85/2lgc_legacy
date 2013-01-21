@@ -451,13 +451,226 @@ G_MODULE_EXPORT long double common_fonction_y(Fonction* fonction, long double x,
 }
 
 
-G_MODULE_EXPORT unsigned int common_fonction_caracteristiques(Fonction* fonction, double **pos,
+gboolean common_fonction_cherche_zero(Fonction* fonction, double mini, double maxi,
+  double *zero_1, double *zero_2)
+/* Description : Cherche l'abscisse dont l'ordonnée vaut 0.
+ * Paramètres : Fonction* fonction : fonction à analyser,
+ *            : double mini : valeur basse du domaine de recherche,
+ *            : double maxi : valeur haute du domaine de recherche,
+ *            : double zero1 : première abscisse ou l'ordonnée vaut 0,
+ *            : double zero2 : deuxième abscisse ou l'ordonnée vaut 0.
+ *              Si un seul zéro est trouvé, il sera toujours dans zero1 et zero2 vaudra NAN.
+ * Valeur renvoyée :
+ *   le nombre de points caractéristiques.
+ *   Échec : NAN :
+ *             fonction == NULL.
+ */
+{
+    double xx1_2, xx2_2, xx3_2;
+    double yy1, yy2, yy3;
+    double a, b, c;
+    double zero1, zero2;
+    double zero1_old, zero2_old;
+    double ecart_x;
+    
+    BUGMSG(fonction, FALSE, gettext("Paramètre %s incorrect.\n"), "fonction");
+    BUGMSG(maxi > mini, FALSE, gettext("Paramètre %s incorrect.\n"), gettext("Borne incorrecte.\n"));
+    
+    xx1_2 = mini;
+    xx3_2 = maxi;
+    xx2_2 = (xx1_2+xx3_2)/2.;
+    yy1 = common_fonction_y(fonction, xx1_2, 1);
+    yy2 = common_fonction_y(fonction, xx2_2, 0);
+    yy3 = common_fonction_y(fonction, xx3_2, -1);
+    
+    common_fonction_ax2_bx_c(xx1_2, yy1, xx2_2, yy2, xx3_2, yy3, &a, &b, &c);
+    
+    ecart_x = (xx3_2-xx1_2)/4.;
+    
+    if (ERREUR_RELATIVE_EGALE(a, 0.))
+    {
+        if (ERREUR_RELATIVE_EGALE(b, 0.))
+        {
+            zero1 = NAN;
+            zero2 = NAN;
+        }
+        else
+        {
+            zero1 = -c/b;
+            if ((zero1 < mini*(1-ERREUR_RELATIVE_MIN)) || (zero1 > maxi*(1+ERREUR_RELATIVE_MIN)))
+                zero1 = NAN;
+            zero2 = NAN;
+        }
+    }
+    else
+    {
+        if (b*b-4*a*c < 0.)
+        {
+            zero1 = NAN;
+            zero2 = NAN;
+        }
+        else
+        {
+            zero1=(sqrt(b*b-4*a*c)-b)/(2*a);
+            zero2=(-sqrt(b*b-4*a*c)-b)/(2*a);
+        }
+    }
+    
+    if ((zero1 < mini*(1-ERREUR_RELATIVE_MIN)) || (zero1 > maxi*(1+ERREUR_RELATIVE_MIN)))
+        zero1 = NAN;
+    if ((zero2 < mini*(1-ERREUR_RELATIVE_MIN)) || (zero2 > maxi*(1+ERREUR_RELATIVE_MIN)))
+        zero2 = NAN;
+    // Idéalement, il faudrait faire une boucle ci-dessous mais les limitations de la précision
+    // de la virgule flottante va attendre ces limites en quelques itérations.
+    // On utilise cette méthode 2 fois pour déterminer une première estimation précise des
+    // zéro avec l'écart. Pour la suite, on le fait par le biais d'une recherche dicotomique.
+    ecart_x = (maxi-mini)/4.;
+    if (!isnan(zero1))
+    {
+        zero1_old = zero1;
+        if (zero1-ecart_x < mini)
+            xx1_2 = mini;
+        else
+            xx1_2 = zero1-ecart_x;
+        if (zero1+ecart_x > maxi)
+            xx3_2 = maxi;
+        else
+            xx3_2 = zero1+ecart_x;
+        xx2_2 = (xx1_2+xx3_2)/2.;
+        
+        common_fonction_ax2_bx_c(xx1_2, common_fonction_y(fonction, xx1_2, 1), xx2_2, common_fonction_y(fonction, xx2_2, 0), xx3_2, common_fonction_y(fonction, xx3_2, -1), &a, &b, &c);
+        
+        if (ERREUR_RELATIVE_EGALE(a, 0.))
+        {
+            if (ERREUR_RELATIVE_EGALE(b, 0.))
+                zero1 = NAN;
+            else
+                zero1 = -c/b;
+        }
+        else
+        {
+            if (b*b-4*a*c < 0.)
+                zero1 = NAN;
+            else
+                zero1 = (sqrt(b*b-4*a*c)-b)/(2*a);
+        }
+        
+        ecart_x = ABS(zero1_old-zero1)/2.;
+    }
+    if ((zero1 < mini*(1-ERREUR_RELATIVE_MIN)) || (zero1 > maxi*(1+ERREUR_RELATIVE_MIN)))
+        zero1 = NAN;
+    
+    // Recherche dicotomique du zero1
+    // Première vérification d'usage.
+    if ((!isnan(zero1)) && (ecart_x > ERREUR_RELATIVE_MIN))
+    {
+        xx1_2 = MAX(zero1-ecart_x, mini);
+        xx3_2 = MIN(zero1+ecart_x, maxi);
+        xx2_2 = (xx1_2+xx3_2)/2.;
+        while (xx3_2-xx1_2 > ERREUR_RELATIVE_MIN/10)
+        {
+            ecart_x = xx3_2-xx1_2;
+            if (signbit(common_fonction_y(fonction, xx1_2, 1)) == signbit(common_fonction_y(fonction, xx2_2, 0)))
+                xx1_2 = xx2_2;
+            else
+                xx3_2 = xx2_2;
+            xx2_2 = (xx1_2+xx3_2)/2.;
+        }
+        zero1 = (xx3_2+xx1_2)/2.;
+    }
+    
+    // On passe à la recherche du zero2 par la même méthode de travail
+    ecart_x = (maxi-mini)/4.;
+    if (!isnan(zero2))
+    {
+        zero2_old = zero2;
+        if (zero2-ecart_x < mini)
+            xx1_2 = mini;
+        else
+            xx1_2 = zero2-ecart_x;
+        if (zero2+ecart_x > maxi)
+            xx3_2 = maxi;
+        else
+            xx3_2 = zero2+ecart_x;
+        xx2_2 = (xx1_2+xx3_2)/2.;
+        
+        common_fonction_ax2_bx_c(xx1_2, common_fonction_y(fonction, xx1_2, 1), xx2_2, common_fonction_y(fonction, xx2_2, 0), xx3_2, common_fonction_y(fonction, xx3_2, -1), &a, &b, &c);
+        
+        if (ERREUR_RELATIVE_EGALE(a, 0.))
+        {
+            if (ERREUR_RELATIVE_EGALE(b, 0.))
+                zero2 = NAN;
+            else
+                zero2 = -c/b;
+        }
+        else
+        {
+            if (b*b-4*a*c < 0.)
+                zero2 = NAN;
+            else
+                zero2=(-sqrt(b*b-4*a*c)-b)/(2*a);
+        }
+        
+        ecart_x = ABS(zero2_old-zero2)/2.;
+    }
+    // Dicotomie
+    if ((!isnan(zero2)) && (ecart_x > ERREUR_RELATIVE_MIN))
+    {
+        xx1_2 = MAX(zero2-ecart_x, mini);
+        xx3_2 = MIN(zero2+ecart_x, maxi);
+        xx2_2 = (xx1_2+xx3_2)/2.;
+        while (xx3_2-xx1_2 > ERREUR_RELATIVE_MIN/10)
+        {
+            ecart_x = xx3_2-xx1_2;
+            if (signbit(common_fonction_y(fonction, xx1_2, 1)) == signbit(common_fonction_y(fonction, xx2_2, 0)))
+                xx1_2 = xx2_2;
+            else
+                xx3_2 = xx2_2;
+            xx2_2 = (xx1_2+xx3_2)/2.;
+        }
+        zero2 = (xx3_2+xx1_2)/2.;
+    }
+    
+    if ((zero2 < mini*(1-ERREUR_RELATIVE_MIN)) || (zero2 > maxi*(1+ERREUR_RELATIVE_MIN)))
+        zero2 = NAN;
+    
+    if ((isnan(zero1)) && (isnan(zero2)))
+    {
+        *zero_1 = NAN;
+        *zero_2 = NAN;
+    }
+    else if ((isnan(zero1)) && (!isnan(zero2)))
+    {
+        *zero_1 = zero2;
+        *zero_2 = NAN;
+    }
+    else if ((!isnan(zero1)) && (isnan(zero2)))
+    {
+        *zero_1 = zero1;
+        *zero_2 = NAN;
+    }
+    else if (ERREUR_RELATIVE_EGALE(zero1, zero2))
+    {
+        *zero_1 = zero1;
+        *zero_2 = NAN;
+    }
+    else
+    {
+        *zero_1 = zero1;
+        *zero_2 = zero2;
+    }
+    
+    return TRUE;
+}
+
+
+unsigned int common_fonction_caracteristiques(Fonction* fonction, double **pos,
   double **val)
 /* Description : Affiche les points caractéristiques de la fonction.
  * Paramètres : Fonction* fonction : fonction à afficher,
  *            : double *pos : position des points caractéristiques,
  *            : double *val : valeur des points caractéristiques.
- *            : int decimales : précision que doit avoir la variables pos.
+ *            : int decimales : précision que doit avoir la variable pos.
  * Valeur renvoyée :
  *   le nombre de points caractéristiques.
  *   Échec : 0 :
@@ -592,8 +805,6 @@ G_MODULE_EXPORT unsigned int common_fonction_caracteristiques(Fonction* fonction
                 zero1 = NAN;
             if ((zero2 < xx1) || (zero2 > xx3))
                 zero2 = NAN;
-            
-            zero2_old = zero2+(xx3-xx1);
             
             ecart_old = xx3-xx1;
             ecart_x = (xx3-xx1)/4.;
@@ -888,12 +1099,12 @@ G_MODULE_EXPORT char* common_fonction_affiche_caract(Fonction* fonction, int dec
     if (nb_val == 0)
         return NULL;
     
-    BUGMSG(retour = g_strdup_printf("%.*lf : %.*lf", decimales_x+6, pos[0], decimales_y, val[0]), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(retour = g_strdup_printf("%.*lf : %.*lf", decimales_x, pos[0], decimales_y, val[0]), NULL, gettext("Erreur d'allocation mémoire.\n"));
     
     for (i=1;i<nb_val;i++)
     {
         tmp = retour;
-        BUGMSG(retour = g_strdup_printf("%s\n%.*lf : %.*lf", retour, decimales_x+6, pos[i], decimales_y, val[i]), NULL, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(retour = g_strdup_printf("%s\n%.*lf : %.*lf", retour, decimales_x, pos[i], decimales_y, val[i]), NULL, gettext("Erreur d'allocation mémoire.\n"));
         free(tmp);
     }
     
@@ -944,15 +1155,16 @@ G_MODULE_EXPORT gboolean common_fonction_affiche(Fonction* fonction)
 }
 
 
-GdkPixbuf* common_fonction_dessin(Fonction* fonction, int width, int height, int decimales)
-/* Description : Renvoie un dessin représentant la fonction dans .
- * Paramètres : EF_Section *section : la section à dessiner,
+GdkPixbuf* common_fonction_dessin(GList *fonctions, int width, int height, int decimales)
+/* Description : Renvoie un dessin représentant la courbe enveloppe.
+ * Paramètres : GList *fonctions : la liste contenant les fonctions à dessiner,
  *              int width : la largeur du dessin,
  *              int height : la hauteur du dessin.
  * Valeur renvoyée : Aucune.
  *   Echec : fonction == NULL,
  *           width == 0,
- *           height == 0.
+ *           height == 0,
+ *           si toutes les fonctions ne commencent et ne finissent pas à la même longueur.
  */
 {
     int             rowstride, n_channels;
@@ -962,13 +1174,17 @@ GdkPixbuf* common_fonction_dessin(Fonction* fonction, int width, int height, int
     cairo_surface_t *surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
     cairo_t         *cr = cairo_create(surface);
     double          fy_min = 0., fy_max = 0., echelle;
-    double          *val;
     cairo_path_t    *save_path;
+    double          *mi, *ma;
+    GList           *list_parcours;
+    Fonction        *fonction;
     
-    BUGMSG(fonction, NULL, gettext("Paramètre %s incorrect.\n"), "fonction");
+    BUGMSG(fonctions, NULL, gettext("Paramètre %s incorrect.\n"), "fonctions");
     BUGMSG(width, NULL, gettext("La largeur du dessin ne peut être nulle.\n"));
     BUGMSG(height, NULL, gettext("La hauteur du dessin ne peut être nulle.\n"));
     BUGMSG(cairo_surface_status(surface) == CAIRO_STATUS_SUCCESS, NULL, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(mi = malloc(sizeof(double)*width), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(ma = malloc(sizeof(double)*width), NULL, gettext("Erreur d'allocation mémoire.\n"));
     
     pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, width, height);
     pixels = gdk_pixbuf_get_pixels(pixbuf);
@@ -980,7 +1196,7 @@ GdkPixbuf* common_fonction_dessin(Fonction* fonction, int width, int height, int
     cairo_rectangle(cr, 0, 0, width, height);
     cairo_fill(cr);
         
-    // On replie tout avec un fond blanc
+    // On remplie tout avec un fond blanc
     for (y=0;y<height;y++)
         for (x=0;x<width;x++)
         {
@@ -992,16 +1208,36 @@ GdkPixbuf* common_fonction_dessin(Fonction* fonction, int width, int height, int
                 p[3] = 0;
         }
     
-    BUGMSG(val = malloc(sizeof(double)*width), NULL, gettext("Erreur d'allocation mémoire.\n"));
-    
+    list_parcours = fonctions;
+    fonction = list_parcours->data;
     for (x=0;x<width;x++)
     {
-        val[x] = common_fonction_y(fonction, fonction->troncons[0].debut_troncon+x*(fonction->troncons[fonction->nb_troncons-1].fin_troncon-fonction->troncons[0].debut_troncon)/(width-1), 0);
+        mi[x] = common_fonction_y(fonction, fonction->troncons[0].debut_troncon+x*(fonction->troncons[fonction->nb_troncons-1].fin_troncon-fonction->troncons[0].debut_troncon)/(width-1), 0);
+        ma[x] = mi[x];
         
-        if (fy_max < val[x])
-            fy_max = val[x];
-        if (fy_min > val[x])
-            fy_min = val[x];
+        if (fy_max < mi[x])
+            fy_max = mi[x];
+        if (fy_min > mi[x])
+            fy_min = mi[x];
+    }
+    list_parcours = g_list_next(list_parcours);
+    while (list_parcours != NULL)
+    {
+        fonction = list_parcours->data;
+        for (x=0;x<width;x++)
+        {
+            echelle = common_fonction_y(fonction, fonction->troncons[0].debut_troncon+x*(fonction->troncons[fonction->nb_troncons-1].fin_troncon-fonction->troncons[0].debut_troncon)/(width-1), 0);
+            if (echelle > ma[x])
+                ma[x] = echelle;
+            if (echelle < mi[x])
+                mi[x] = echelle;
+            
+            if (fy_max < echelle)
+                fy_max = echelle;
+            if (fy_min > echelle)
+                fy_min = echelle;
+        }
+        list_parcours = g_list_next(list_parcours);
     }
 
     if (ABS(fy_max) < pow(10, -decimales))
@@ -1009,44 +1245,69 @@ GdkPixbuf* common_fonction_dessin(Fonction* fonction, int width, int height, int
     if (ABS(fy_min) < pow(10, -decimales))
         fy_min = 0.;
     
-    echelle = ((height-1.)/2.)/MAX(ABS(fy_max), ABS(fy_min));
-    
-    cairo_set_source_rgba(cr, 0.8, 0.8, 0.8, 1.);
     cairo_new_path(cr);
-    // On inverse le signe car au milieu, le fait d'ajouter fait descendre la position.
-    cairo_move_to(cr, width, height/2.);
-    cairo_rel_line_to(cr, -(width-1), 0.);
-    cairo_rel_line_to(cr, 0., -common_fonction_y(fonction, fonction->troncons[0].debut_troncon/(width-1), 0)*echelle);
-    
-    for (x=1;x<width;x++)
-        cairo_rel_line_to(cr, 1., -(val[x]-val[x-1])*echelle);
-    
-    cairo_close_path(cr);
-    save_path = cairo_copy_path(cr);
-    cairo_fill(cr);
-    cairo_set_source_rgba(cr, 0., 0., 0., 1.);
     cairo_set_line_width(cr, 1.);
-    cairo_new_path(cr);
-    cairo_append_path(cr, save_path);
+    if ((ABS(fy_max) > pow(10, -decimales)) || (ABS(fy_min) > pow(10, -decimales)))
+    {
+        echelle = ((height-1.)/2.)/MAX(ABS(fy_max), ABS(fy_min));
+        
+        cairo_set_source_rgba(cr, 0.8, 0.8, 0.8, 1.);
+        // On inverse le signe en y car au milieu, le fait d'ajouter fait descendre la position.
+        cairo_move_to(cr, 1., height/2.-mi[0]*echelle);
+        
+        for (x=1;x<width;x++)
+            cairo_rel_line_to(cr, 1., -(mi[x]-mi[x-1])*echelle);
+        
+        if (g_list_next(fonctions) != NULL)
+        {
+            cairo_rel_line_to(cr, 0., -(ma[width-1]-mi[width-1])*echelle);
+            for (x=width-2;x>=0;x--)
+                cairo_rel_line_to(cr, -1., -(ma[x]-ma[x+1])*echelle);
+        }
+        else
+        {
+            cairo_line_to(cr, width, height/2.);
+            cairo_line_to(cr, 1., height/2.);
+        }
+        
+        cairo_close_path(cr);
+        save_path = cairo_copy_path(cr);
+        cairo_fill(cr);
+        cairo_set_source_rgba(cr, 0., 0., 0., 1.);
+        cairo_new_path(cr);
+        cairo_append_path(cr, save_path);
+        cairo_stroke(cr);
+        cairo_path_destroy(save_path);
+    }
+    
+    cairo_set_source_rgba(cr, 1., 1., 1., 1.);
+    cairo_move_to(cr, 1., height/2.);
+    cairo_line_to(cr, width, height/2.);
+    cairo_stroke(cr);
+    cairo_set_source_rgba(cr, 0., 0., 0., 1.);
+    echelle = 5.;
+    cairo_set_dash(cr, &echelle, 1, 0);
+    cairo_move_to(cr, 1., height/2.);
+    cairo_line_to(cr, width, height/2.);
     cairo_stroke(cr);
     
-    cairo_path_destroy(save_path);
     cairo_destroy(cr);
     
     pixbuf = gdk_pixbuf_get_from_surface(surface, 0, 0, width, height);
     cairo_surface_destroy(surface);
-    free(val);
+    free(mi);
+    free(ma);
     
     return pixbuf;
 }
 
 
 G_MODULE_EXPORT char* common_fonction_renvoie(Fonction* fonction, int decimales)
-/* Description : Renvoie la fonction (coefficients pour chaque tronçon).
+/* Description : Renvoie la fonction sous forme de texte (coefficients pour chaque tronçon).
  * Paramètres : Fonction* fonction : fonction à afficher.
  * Valeur renvoyée :
- *   Succès : TRUE
- *   Échec : FALSE :
+ *   Succès : pointeur contenant la fonction sous forme de texte.
+ *   Échec : NULL :
  *             fonction == NULL.
  */
 {
@@ -1154,6 +1415,225 @@ G_MODULE_EXPORT char* common_fonction_renvoie(Fonction* fonction, int decimales)
     }
     
     return retour;
+}
+
+
+gboolean common_fonction_renvoie_enveloppe(GList* fonctions, Fonction *fonction_min,
+  Fonction *fonction_max)
+/* Description : Renvoie deux fonctions qui enveloppent la liste des fonctions. 
+ * Paramètres : GList* fonctions : liste des fonctions à envelopper,
+ *              Fonction* fonction_min : courbe enveloppe inférieure (en valeur algébrique),
+ *              Fonction* fonction_max : courbe enveloppe supérieure (en valeur algébrique).
+ * Valeur renvoyée :
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             fonctions == NULL.
+ *             fonction_min == NULL.
+ *             fonction_max == NULL.
+ */
+{
+    Fonction    *fonction;
+    GList       *list_parcours;
+    
+    BUGMSG(fonctions, FALSE, gettext("Paramètre %s incorrect.\n"), "fonctions");
+    BUGMSG(fonction_min, FALSE, gettext("Paramètre %s incorrect.\n"), "fonction_min");
+    BUGMSG(fonction_max, FALSE, gettext("Paramètre %s incorrect.\n"), "fonction_max");
+    
+    fonction_min->nb_troncons = 0;
+    fonction_min->troncons = NULL;
+    fonction_max->nb_troncons = 0;
+    fonction_max->troncons = NULL;
+    
+    list_parcours = fonctions;
+    fonction = list_parcours->data;
+    
+    BUG(common_fonction_ajout_fonction(fonction_min, fonction, 1.), FALSE);
+    BUG(common_fonction_ajout_fonction(fonction_max, fonction, 1.), FALSE);
+    
+    list_parcours = g_list_next(list_parcours);
+    while (list_parcours != NULL)
+    {
+        unsigned int    i, j, k;
+        double          val[10], val_min[10], val_max[10], x[10];
+        
+        fonction = list_parcours->data;
+        for (i=0;i<fonction->nb_troncons;i++)
+        {
+            int         modif;
+            double      x_base = fonction->troncons[i].debut_troncon;
+            double      zero1, zero2;
+            Fonction    fonction_moins;
+            
+            x[0] = fonction->troncons[i].debut_troncon;
+            val[0] = common_fonction_y(fonction, x[0], 1);
+            val_min[0] = common_fonction_y(fonction_min, x[0], 1);
+            val_max[0] = common_fonction_y(fonction_max, x[0], 1);
+            for (j=1;j<9;j++)
+            {
+                x[j] = fonction->troncons[i].debut_troncon + j*(fonction->troncons[i].fin_troncon-fonction->troncons[i].debut_troncon)/9.;
+                val[j] = common_fonction_y(fonction, x[j], 0);
+                val_min[j] = common_fonction_y(fonction_min, x[j], 0);
+                val_max[j] = common_fonction_y(fonction_max, x[j], 0);
+            }
+            x[9] = fonction->troncons[i].fin_troncon;
+            val[9] = common_fonction_y(fonction, x[9], -1);
+            val_min[9] = common_fonction_y(fonction_min, x[9], -1);
+            val_max[9] = common_fonction_y(fonction_max, x[9], -1);
+            
+            // On vérifie en 10 points si la fonction est toujours inférieure à fonction_max
+            // modif = 0 si la fonction en cours d'étude est inférieure à fonction_max.
+            // Elle vaut 1 si elle est supérieure.
+            if (ERREUR_RELATIVE_EGALE(val[0], val_max[0]))
+                modif = -1;
+            if (val[0] <= val_max[0])
+                modif = 0;
+            else
+                modif = 1;
+            for (j=1;j<10;j++)
+            {
+                if ((val[j] > val_max[j]) && (ABS(val[j]-val_max[j]) > ERREUR_RELATIVE_MIN/10000.) && ((modif == 0) || (modif == -1)))
+                {
+                    memset(&fonction_moins, 0, sizeof(fonction_moins));
+                    BUG(common_fonction_ajout_fonction(&fonction_moins, fonction, 1.), FALSE);
+                    BUG(common_fonction_ajout_fonction(&fonction_moins, fonction_max, -1), FALSE);
+                    BUG(common_fonction_cherche_zero(&fonction_moins, x[j-1], x[j], &zero1, &zero2), FALSE);
+                    BUGMSG((!isnan(zero1)) && (isnan(zero2)), FALSE, gettext("Zéro impossible à trouver.\n"));
+                    free(fonction_moins.troncons);
+                    x_base = zero1;
+                    modif = 1;
+                }   
+                else if ((val[j] < val_max[j]) && (ABS(val[j]-val_max[j]) > ERREUR_RELATIVE_MIN/10000.) && ((modif == 1) || (modif == -1)))
+                {
+                    memset(&fonction_moins, 0, sizeof(fonction_moins));
+                    BUG(common_fonction_ajout_fonction(&fonction_moins, fonction, 1.), FALSE);
+                    BUG(common_fonction_ajout_fonction(&fonction_moins, fonction_max, -1), FALSE);
+                    BUG(common_fonction_cherche_zero(&fonction_moins, x[j-1], x[j], &zero1, &zero2), FALSE);
+                    BUGMSG((!isnan(zero1)) && (isnan(zero2)), FALSE, gettext("Zéro impossible à trouver.\n"));
+                    free(fonction_moins.troncons);
+                    
+                    BUG(common_fonction_scinde_troncon(fonction_max, x_base), FALSE);
+                    BUG(common_fonction_scinde_troncon(fonction_max, zero1), FALSE);
+                    
+                    for (k=0;k<fonction_max->nb_troncons;k++)
+                    {
+                        if (fonction_max->troncons[k].fin_troncon > zero1)
+                            break;
+                        if (fonction_max->troncons[k].fin_troncon > x_base)
+                        {
+                            fonction_max->troncons[k].x0 = fonction->troncons[i].x0;
+                            fonction_max->troncons[k].x1 = fonction->troncons[i].x1;
+                            fonction_max->troncons[k].x2 = fonction->troncons[i].x2;
+                            fonction_max->troncons[k].x3 = fonction->troncons[i].x3;
+                            fonction_max->troncons[k].x4 = fonction->troncons[i].x4;
+                            fonction_max->troncons[k].x5 = fonction->troncons[i].x5;
+                            fonction_max->troncons[k].x6 = fonction->troncons[i].x6;
+                        }
+                    }
+                    x_base = zero1;
+                    modif = 0;
+                }
+            }
+            if (modif == 1)
+            {
+                BUG(common_fonction_scinde_troncon(fonction_max, x_base), FALSE);
+                
+                for (j=0;j<fonction_max->nb_troncons;j++)
+                {
+                    if (fonction_max->troncons[j].fin_troncon > fonction->troncons[i].fin_troncon)
+                        break;
+                    if (fonction_max->troncons[j].fin_troncon > x_base)
+                    {
+                        fonction_max->troncons[j].x0 = fonction->troncons[i].x0;
+                        fonction_max->troncons[j].x1 = fonction->troncons[i].x1;
+                        fonction_max->troncons[j].x2 = fonction->troncons[i].x2;
+                        fonction_max->troncons[j].x3 = fonction->troncons[i].x3;
+                        fonction_max->troncons[j].x4 = fonction->troncons[i].x4;
+                        fonction_max->troncons[j].x5 = fonction->troncons[i].x5;
+                        fonction_max->troncons[j].x6 = fonction->troncons[i].x6;
+                    }
+                }
+            }
+            
+            // On vérifie en 10 points si la fonction est toujours supérieure à fonction_min
+            // modif = 0 si la fonction en cours d'étude est supérieure à fonction_min.
+            // Elle vaut 1 si elle est inférieure.
+            // Elle vaut -1 quand on ne sait pas.
+            if (ERREUR_RELATIVE_EGALE(val[0], val_min[0]))
+                modif = -1;
+            else if (val[0] > val_min[0])
+                modif = 0;
+            else
+                modif = 1;
+            for (j=1;j<10;j++)
+            {
+                if ((val[j] < val_min[j]) && (ABS(val[j]-val_min[j]) > ERREUR_RELATIVE_MIN/10000.) && ((modif == 0) || (modif == -1)))
+                {
+                    memset(&fonction_moins, 0, sizeof(fonction_moins));
+                    BUG(common_fonction_ajout_fonction(&fonction_moins, fonction, 1.), FALSE);
+                    BUG(common_fonction_ajout_fonction(&fonction_moins, fonction_min, -1), FALSE);
+                    BUG(common_fonction_cherche_zero(&fonction_moins, x[j-1], x[j], &zero1, &zero2), FALSE);
+                    free(fonction_moins.troncons);
+                    BUGMSG((!isnan(zero1)) && (isnan(zero2)), FALSE, gettext("Zéro impossible à trouver.\n"));
+                    x_base = zero1;
+                    modif = 1;
+                }   
+                else if ((val[j] > val_min[j]) && (ABS(val[j]-val_min[j]) > ERREUR_RELATIVE_MIN/10000.) && ((modif == 1) || (modif == -1)))
+                {
+                    memset(&fonction_moins, 0, sizeof(fonction_moins));
+                    BUG(common_fonction_ajout_fonction(&fonction_moins, fonction, 1.), FALSE);
+                    BUG(common_fonction_ajout_fonction(&fonction_moins, fonction_min, -1), FALSE);
+                    BUG(common_fonction_cherche_zero(&fonction_moins, x[j-1], x[j], &zero1, &zero2), FALSE);
+                    free(fonction_moins.troncons);
+                    BUGMSG((!isnan(zero1)) && (isnan(zero2)), FALSE, gettext("Zéro impossible à trouver.\n"));
+                    
+                    BUG(common_fonction_scinde_troncon(fonction_min, x_base), FALSE);
+                    BUG(common_fonction_scinde_troncon(fonction_min, zero1), FALSE);
+                    
+                    for (k=0;k<fonction_min->nb_troncons;k++)
+                    {
+                        if (fonction_min->troncons[k].fin_troncon > zero1)
+                            break;
+                        if (fonction_min->troncons[k].fin_troncon > x_base)
+                        {
+                            fonction_min->troncons[k].x0 = fonction->troncons[i].x0;
+                            fonction_min->troncons[k].x1 = fonction->troncons[i].x1;
+                            fonction_min->troncons[k].x2 = fonction->troncons[i].x2;
+                            fonction_min->troncons[k].x3 = fonction->troncons[i].x3;
+                            fonction_min->troncons[k].x4 = fonction->troncons[i].x4;
+                            fonction_min->troncons[k].x5 = fonction->troncons[i].x5;
+                            fonction_min->troncons[k].x6 = fonction->troncons[i].x6;
+                        }
+                    }
+                    x_base = zero1;
+                    modif = 0;
+                }
+            }
+            if (modif == 1)
+            {
+                BUG(common_fonction_scinde_troncon(fonction_min, x_base), FALSE);
+                
+                for (j=0;j<fonction_min->nb_troncons;j++)
+                {
+                    if (fonction_min->troncons[j].fin_troncon > fonction->troncons[i].fin_troncon)
+                        break;
+                    if (fonction_min->troncons[j].fin_troncon > x_base)
+                    {
+                        fonction_min->troncons[j].x0 = fonction->troncons[i].x0;
+                        fonction_min->troncons[j].x1 = fonction->troncons[i].x1;
+                        fonction_min->troncons[j].x2 = fonction->troncons[i].x2;
+                        fonction_min->troncons[j].x3 = fonction->troncons[i].x3;
+                        fonction_min->troncons[j].x4 = fonction->troncons[i].x4;
+                        fonction_min->troncons[j].x5 = fonction->troncons[i].x5;
+                        fonction_min->troncons[j].x6 = fonction->troncons[i].x6;
+                    }
+                }
+            }
+        }
+        
+        list_parcours = g_list_next(list_parcours);
+    }
+    
+    return TRUE;
 }
 
 

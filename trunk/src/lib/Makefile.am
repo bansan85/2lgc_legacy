@@ -42,6 +42,7 @@ libeurocodes_la_SOURCES =	1990/1990_action.c \
 							EF/EF_noeuds.c \
 							EF/EF_relachement.c \
 							EF/EF_rigidite.c \
+							EF/EF_resultat.c \
 							EF/EF_sections.c
 
 if ENABLE_GTK
@@ -94,6 +95,7 @@ libeurocodes_la_HEADERS =	1990/1990_action.h \
 							EF/EF_noeuds.h \
 							EF/EF_relachement.h \
 							EF/EF_rigidite.h \
+							EF/EF_resultat.h \
 							EF/EF_sections.h
 
 if ENABLE_GTK
