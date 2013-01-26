@@ -184,7 +184,13 @@ int main(int argc, char *argv[])
     g_list_free(tmp1);*/
     BUG(tmp1 = common_selection_renvoie_numeros("2"), -1);
     BUG(tmp2 = common_selection_converti_numeros_en_barres(tmp1, projet), -1);
-    BUG(EF_charge_barre_ponctuelle_ajout(projet, 0, tmp2, FALSE, 2.5, -50000., 0., 0., 0., 0., 0., "test2"), -1);
+    BUG(EF_charge_barre_ponctuelle_ajout(projet, 0, tmp2, FALSE, 2.5, 0., 0., 0., 0., 0., 0., "test2"), -1);
+    g_list_free(tmp1);
+    BUG(tmp1 = common_selection_renvoie_numeros("1"), -1);
+    BUG(tmp2 = common_selection_converti_numeros_en_barres(tmp1, projet), -1);
+    BUG(EF_charge_barre_ponctuelle_ajout(projet, 2, tmp2, FALSE, 1.0, 0., 0., -10000., 0., 0., 0., "test2"), -1);
+    BUG(tmp2 = common_selection_converti_numeros_en_barres(tmp1, projet), -1);
+    BUG(EF_charge_barre_ponctuelle_ajout(projet, 3, tmp2, FALSE, 3.0, 0., 0., -10000., 0., 0., 0., "test2"), -1);
     g_list_free(tmp1);
 /*    BUG(tmp1 = common_selection_renvoie_numeros("0-2/2"), -1);
     BUG(tmp2 = common_selection_converti_numeros_en_barres(tmp1, projet), -1);

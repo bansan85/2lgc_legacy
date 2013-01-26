@@ -152,9 +152,8 @@ gboolean common_fonction_scinde_troncon(Fonction* fonction, double coupure)
             else if (fonction->troncons[i].fin_troncon > coupure)
             {
                 fonction->nb_troncons++;
-                fonction->troncons = (Troncon*)realloc(fonction->troncons, fonction->nb_troncons*sizeof(Troncon));
-                BUGMSG(fonction->troncons, FALSE, gettext("Erreur d'allocation mémoire.\n"));
-                for(j=fonction->nb_troncons-1;j>i;j--)
+                BUGMSG(fonction->troncons = (Troncon*)realloc(fonction->troncons, fonction->nb_troncons*sizeof(Troncon)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                for (j=fonction->nb_troncons-1;j>i;j--)
                     memcpy(&(fonction->troncons[j]), &(fonction->troncons[j-1]), sizeof(Troncon));
                 fonction->troncons[i+1].debut_troncon = coupure;
                 fonction->troncons[i].fin_troncon = coupure;
@@ -660,6 +659,8 @@ gboolean common_fonction_cherche_zero(Fonction* fonction, double mini, double ma
         *zero_2 = zero2;
     }
     
+    if ((isnan(*zero_1)) || (!isnan(*zero_2)))
+        return FALSE;
     return TRUE;
 }
 
@@ -1132,7 +1133,7 @@ G_MODULE_EXPORT gboolean common_fonction_affiche(Fonction* fonction)
     
     if (fonction->nb_troncons == 0)
         printf(gettext("Fonction indéfinie.\n"));
-    BUG(common_fonction_compacte(fonction), FALSE);
+    
     for (i=0;i<fonction->nb_troncons;i++)
     {
         printf("debut_troncon : %.5f\tfin_troncon : %.5f\t0 : %.20f\tx : %.20f\tx2 : %.20f\tx3 : %.20f\tx4 : %.20f\tx5 : %.20f\tx6 : %.20f\tsoit f(%.5f) = %.20f\tf(%.5f) = %.20f\n",
@@ -1454,181 +1455,229 @@ gboolean common_fonction_renvoie_enveloppe(GList* fonctions, Fonction *fonction_
     while (list_parcours != NULL)
     {
         unsigned int    i, j, k;
-        double          val[10], val_min[10], val_max[10], x[10];
+        double          val[10], x[10];
+        Fonction        fonction_moins, fonction_bis;
+        double          x_base, tmp;
         
         fonction = list_parcours->data;
-        for (i=0;i<fonction->nb_troncons;i++)
+        
+        memset(&fonction_moins, 0, sizeof(fonction_moins));
+        BUG(common_fonction_ajout_fonction(&fonction_moins, fonction, 1.), FALSE);
+        BUG(common_fonction_ajout_fonction(&fonction_moins, fonction_max, -1.), FALSE);
+        memset(&fonction_bis, 0, sizeof(fonction_bis));
+        BUG(common_fonction_ajout_fonction(&fonction_bis, fonction, 1.), FALSE);
+        for (i=0;i<fonction_moins.nb_troncons;i++)
         {
             int         modif;
-            double      x_base = fonction->troncons[i].debut_troncon;
             double      zero1, zero2;
-            Fonction    fonction_moins;
             
-            x[0] = fonction->troncons[i].debut_troncon;
-            val[0] = common_fonction_y(fonction, x[0], 1);
-            val_min[0] = common_fonction_y(fonction_min, x[0], 1);
-            val_max[0] = common_fonction_y(fonction_max, x[0], 1);
+            x_base = fonction_moins.troncons[i].debut_troncon;
+            BUG(common_fonction_scinde_troncon(&fonction_bis, x_base), FALSE);
+            BUG(common_fonction_scinde_troncon(fonction_max, x_base), FALSE);
+            BUG(common_fonction_scinde_troncon(&fonction_moins, x_base), FALSE);
+            
+            x[0] = x_base;
+            val[0] = common_fonction_y(&fonction_moins, x[0], 1);
             for (j=1;j<9;j++)
             {
-                x[j] = fonction->troncons[i].debut_troncon + j*(fonction->troncons[i].fin_troncon-fonction->troncons[i].debut_troncon)/9.;
-                val[j] = common_fonction_y(fonction, x[j], 0);
-                val_min[j] = common_fonction_y(fonction_min, x[j], 0);
-                val_max[j] = common_fonction_y(fonction_max, x[j], 0);
+                x[j] = fonction_moins.troncons[i].debut_troncon + j*(fonction_moins.troncons[i].fin_troncon-fonction_moins.troncons[i].debut_troncon)/9.;
+                val[j] = common_fonction_y(&fonction_moins, x[j], 0);
             }
-            x[9] = fonction->troncons[i].fin_troncon;
-            val[9] = common_fonction_y(fonction, x[9], -1);
-            val_min[9] = common_fonction_y(fonction_min, x[9], -1);
-            val_max[9] = common_fonction_y(fonction_max, x[9], -1);
+            x[9] = fonction_moins.troncons[i].fin_troncon;
+            val[9] = common_fonction_y(&fonction_moins, x[9], -1);
             
             // On vérifie en 10 points si la fonction est toujours inférieure à fonction_max
             // modif = 0 si la fonction en cours d'étude est inférieure à fonction_max.
             // Elle vaut 1 si elle est supérieure.
-            if (ERREUR_RELATIVE_EGALE(val[0], val_max[0]))
+            if (ERREUR_RELATIVE_EGALE(val[0], 0.))
                 modif = -1;
-            if (val[0] <= val_max[0])
+            else if (val[0] < 0.)
                 modif = 0;
             else
                 modif = 1;
             for (j=1;j<10;j++)
             {
-                if ((val[j] > val_max[j]) && (ABS(val[j]-val_max[j]) > ERREUR_RELATIVE_MIN/10000.) && ((modif == 0) || (modif == -1)))
+                if ((val[j] > 0.) && (!ERREUR_RELATIVE_EGALE(val[j], 0.)) && (modif == -1))
+                    modif = 1;
+                else if ((val[j] > 0.) && (!ERREUR_RELATIVE_EGALE(val[j], 0.)) && (modif == 0))
                 {
-                    memset(&fonction_moins, 0, sizeof(fonction_moins));
-                    BUG(common_fonction_ajout_fonction(&fonction_moins, fonction, 1.), FALSE);
-                    BUG(common_fonction_ajout_fonction(&fonction_moins, fonction_max, -1), FALSE);
                     BUG(common_fonction_cherche_zero(&fonction_moins, x[j-1], x[j], &zero1, &zero2), FALSE);
                     BUGMSG((!isnan(zero1)) && (isnan(zero2)), FALSE, gettext("Zéro impossible à trouver.\n"));
-                    free(fonction_moins.troncons);
+                    BUG(common_fonction_scinde_troncon(fonction_max, zero1), FALSE);
+                    BUG(common_fonction_scinde_troncon(&fonction_bis, zero1), FALSE);
+                    BUG(common_fonction_scinde_troncon(&fonction_moins, zero1), FALSE);
                     x_base = zero1;
                     modif = 1;
-                }   
-                else if ((val[j] < val_max[j]) && (ABS(val[j]-val_max[j]) > ERREUR_RELATIVE_MIN/10000.) && ((modif == 1) || (modif == -1)))
+                }
+                else if ((val[j] < 0.) && (!ERREUR_RELATIVE_EGALE(val[j], 0.)) && (modif == -1))
+                    modif = 0;
+                else if ((val[j] < 0.) && (!ERREUR_RELATIVE_EGALE(val[j], 0.)) && (modif == 1))
                 {
-                    memset(&fonction_moins, 0, sizeof(fonction_moins));
-                    BUG(common_fonction_ajout_fonction(&fonction_moins, fonction, 1.), FALSE);
-                    BUG(common_fonction_ajout_fonction(&fonction_moins, fonction_max, -1), FALSE);
                     BUG(common_fonction_cherche_zero(&fonction_moins, x[j-1], x[j], &zero1, &zero2), FALSE);
                     BUGMSG((!isnan(zero1)) && (isnan(zero2)), FALSE, gettext("Zéro impossible à trouver.\n"));
-                    free(fonction_moins.troncons);
-                    
-                    BUG(common_fonction_scinde_troncon(fonction_max, x_base), FALSE);
+                    tmp = fonction_moins.troncons[i].fin_troncon;
                     BUG(common_fonction_scinde_troncon(fonction_max, zero1), FALSE);
+                    BUG(common_fonction_scinde_troncon(&fonction_bis, zero1), FALSE);
+                    BUG(common_fonction_scinde_troncon(&fonction_moins, zero1), FALSE);
                     
                     for (k=0;k<fonction_max->nb_troncons;k++)
                     {
                         if (fonction_max->troncons[k].fin_troncon > zero1)
                             break;
-                        if (fonction_max->troncons[k].fin_troncon > x_base)
+                        if (fonction_max->troncons[k].fin_troncon*(1-ERREUR_RELATIVE_MIN) > x_base)
                         {
-                            fonction_max->troncons[k].x0 = fonction->troncons[i].x0;
-                            fonction_max->troncons[k].x1 = fonction->troncons[i].x1;
-                            fonction_max->troncons[k].x2 = fonction->troncons[i].x2;
-                            fonction_max->troncons[k].x3 = fonction->troncons[i].x3;
-                            fonction_max->troncons[k].x4 = fonction->troncons[i].x4;
-                            fonction_max->troncons[k].x5 = fonction->troncons[i].x5;
-                            fonction_max->troncons[k].x6 = fonction->troncons[i].x6;
+                            fonction_max->troncons[k].x0 = fonction_bis.troncons[i].x0;
+                            fonction_max->troncons[k].x1 = fonction_bis.troncons[i].x1;
+                            fonction_max->troncons[k].x2 = fonction_bis.troncons[i].x2;
+                            fonction_max->troncons[k].x3 = fonction_bis.troncons[i].x3;
+                            fonction_max->troncons[k].x4 = fonction_bis.troncons[i].x4;
+                            fonction_max->troncons[k].x5 = fonction_bis.troncons[i].x5;
+                            fonction_max->troncons[k].x6 = fonction_bis.troncons[i].x6;
                         }
                     }
                     x_base = zero1;
                     modif = 0;
+                    break;
                 }
             }
             if (modif == 1)
             {
-                BUG(common_fonction_scinde_troncon(fonction_max, x_base), FALSE);
+                tmp = fonction_moins.troncons[i].fin_troncon;
+                BUG(common_fonction_scinde_troncon(fonction_max, tmp), FALSE);
+                BUG(common_fonction_scinde_troncon(&fonction_bis, tmp), FALSE);
+                BUG(common_fonction_scinde_troncon(&fonction_moins, tmp), FALSE);
                 
                 for (j=0;j<fonction_max->nb_troncons;j++)
                 {
-                    if (fonction_max->troncons[j].fin_troncon > fonction->troncons[i].fin_troncon)
+                    if (fonction_max->troncons[j].fin_troncon > tmp)
                         break;
-                    if (fonction_max->troncons[j].fin_troncon > x_base)
+                    if (fonction_max->troncons[j].fin_troncon*(1-ERREUR_RELATIVE_MIN) > x_base)
                     {
-                        fonction_max->troncons[j].x0 = fonction->troncons[i].x0;
-                        fonction_max->troncons[j].x1 = fonction->troncons[i].x1;
-                        fonction_max->troncons[j].x2 = fonction->troncons[i].x2;
-                        fonction_max->troncons[j].x3 = fonction->troncons[i].x3;
-                        fonction_max->troncons[j].x4 = fonction->troncons[i].x4;
-                        fonction_max->troncons[j].x5 = fonction->troncons[i].x5;
-                        fonction_max->troncons[j].x6 = fonction->troncons[i].x6;
+                        fonction_max->troncons[j].x0 = fonction_bis.troncons[i].x0;
+                        fonction_max->troncons[j].x1 = fonction_bis.troncons[i].x1;
+                        fonction_max->troncons[j].x2 = fonction_bis.troncons[i].x2;
+                        fonction_max->troncons[j].x3 = fonction_bis.troncons[i].x3;
+                        fonction_max->troncons[j].x4 = fonction_bis.troncons[i].x4;
+                        fonction_max->troncons[j].x5 = fonction_bis.troncons[i].x5;
+                        fonction_max->troncons[j].x6 = fonction_bis.troncons[i].x6;
                     }
                 }
             }
+        }
+        free(fonction_moins.troncons);
+        free(fonction_bis.troncons);
+        BUG(common_fonction_compacte(fonction_max), FALSE);
+        
+        // On passe à la courbe enveloppe inférieure. On utilise exactement le même code que ci-
+        // dessus sauf qu'on fait -fonction+fonction_min à la place de fonction-fonction_max.
+        // On remplace les fonction_max par fonction_min. C'est tout !
+        memset(&fonction_moins, 0, sizeof(fonction_moins));
+        BUG(common_fonction_ajout_fonction(&fonction_moins, fonction, -1.), FALSE);
+        BUG(common_fonction_ajout_fonction(&fonction_moins, fonction_min, 1.), FALSE);
+        memset(&fonction_bis, 0, sizeof(fonction_bis));
+        BUG(common_fonction_ajout_fonction(&fonction_bis, fonction, 1.), FALSE);
+        for (i=0;i<fonction_moins.nb_troncons;i++)
+        {
+            int         modif;
+            double      zero1, zero2;
             
-            // On vérifie en 10 points si la fonction est toujours supérieure à fonction_min
-            // modif = 0 si la fonction en cours d'étude est supérieure à fonction_min.
-            // Elle vaut 1 si elle est inférieure.
-            // Elle vaut -1 quand on ne sait pas.
-            if (ERREUR_RELATIVE_EGALE(val[0], val_min[0]))
+            x_base = fonction_moins.troncons[i].debut_troncon;
+            BUG(common_fonction_scinde_troncon(&fonction_bis, x_base), FALSE);
+            BUG(common_fonction_scinde_troncon(fonction_min, x_base), FALSE);
+            BUG(common_fonction_scinde_troncon(&fonction_moins, x_base), FALSE);
+            
+            x[0] = x_base;
+            val[0] = common_fonction_y(&fonction_moins, x[0], 1);
+            for (j=1;j<9;j++)
+            {
+                x[j] = fonction_moins.troncons[i].debut_troncon + j*(fonction_moins.troncons[i].fin_troncon-fonction_moins.troncons[i].debut_troncon)/9.;
+                val[j] = common_fonction_y(&fonction_moins, x[j], 0);
+            }
+            x[9] = fonction_moins.troncons[i].fin_troncon;
+            val[9] = common_fonction_y(&fonction_moins, x[9], -1);
+            
+            // On vérifie en 10 points si la fonction est toujours inférieure à fonction_min
+            // modif = 0 si la fonction en cours d'étude est inférieure à fonction_min.
+            // Elle vaut 1 si elle est supérieure.
+            if (ERREUR_RELATIVE_EGALE(val[0], 0.))
                 modif = -1;
-            else if (val[0] > val_min[0])
+            else if (val[0] < 0.)
                 modif = 0;
             else
                 modif = 1;
             for (j=1;j<10;j++)
             {
-                if ((val[j] < val_min[j]) && (ABS(val[j]-val_min[j]) > ERREUR_RELATIVE_MIN/10000.) && ((modif == 0) || (modif == -1)))
+                if ((val[j] > 0.) && (!ERREUR_RELATIVE_EGALE(val[j], 0.)) && (modif == -1))
+                    modif = 1;
+                else if ((val[j] > 0.) && (!ERREUR_RELATIVE_EGALE(val[j], 0.)) && (modif == 0))
                 {
-                    memset(&fonction_moins, 0, sizeof(fonction_moins));
-                    BUG(common_fonction_ajout_fonction(&fonction_moins, fonction, 1.), FALSE);
-                    BUG(common_fonction_ajout_fonction(&fonction_moins, fonction_min, -1), FALSE);
                     BUG(common_fonction_cherche_zero(&fonction_moins, x[j-1], x[j], &zero1, &zero2), FALSE);
-                    free(fonction_moins.troncons);
                     BUGMSG((!isnan(zero1)) && (isnan(zero2)), FALSE, gettext("Zéro impossible à trouver.\n"));
+                    BUG(common_fonction_scinde_troncon(fonction_min, zero1), FALSE);
+                    BUG(common_fonction_scinde_troncon(&fonction_bis, zero1), FALSE);
+                    BUG(common_fonction_scinde_troncon(&fonction_moins, zero1), FALSE);
                     x_base = zero1;
                     modif = 1;
-                }   
-                else if ((val[j] > val_min[j]) && (ABS(val[j]-val_min[j]) > ERREUR_RELATIVE_MIN/10000.) && ((modif == 1) || (modif == -1)))
+                }
+                else if ((val[j] < 0.) && (!ERREUR_RELATIVE_EGALE(val[j], 0.)) && (modif == -1))
+                    modif = 0;
+                else if ((val[j] < 0.) && (!ERREUR_RELATIVE_EGALE(val[j], 0.)) && (modif == 1))
                 {
-                    memset(&fonction_moins, 0, sizeof(fonction_moins));
-                    BUG(common_fonction_ajout_fonction(&fonction_moins, fonction, 1.), FALSE);
-                    BUG(common_fonction_ajout_fonction(&fonction_moins, fonction_min, -1), FALSE);
                     BUG(common_fonction_cherche_zero(&fonction_moins, x[j-1], x[j], &zero1, &zero2), FALSE);
-                    free(fonction_moins.troncons);
                     BUGMSG((!isnan(zero1)) && (isnan(zero2)), FALSE, gettext("Zéro impossible à trouver.\n"));
-                    
-                    BUG(common_fonction_scinde_troncon(fonction_min, x_base), FALSE);
+                    tmp = fonction_moins.troncons[i].fin_troncon;
                     BUG(common_fonction_scinde_troncon(fonction_min, zero1), FALSE);
+                    BUG(common_fonction_scinde_troncon(&fonction_bis, zero1), FALSE);
+                    BUG(common_fonction_scinde_troncon(&fonction_moins, zero1), FALSE);
                     
                     for (k=0;k<fonction_min->nb_troncons;k++)
                     {
                         if (fonction_min->troncons[k].fin_troncon > zero1)
                             break;
-                        if (fonction_min->troncons[k].fin_troncon > x_base)
+                        if (fonction_min->troncons[k].fin_troncon*(1-ERREUR_RELATIVE_MIN) > x_base)
                         {
-                            fonction_min->troncons[k].x0 = fonction->troncons[i].x0;
-                            fonction_min->troncons[k].x1 = fonction->troncons[i].x1;
-                            fonction_min->troncons[k].x2 = fonction->troncons[i].x2;
-                            fonction_min->troncons[k].x3 = fonction->troncons[i].x3;
-                            fonction_min->troncons[k].x4 = fonction->troncons[i].x4;
-                            fonction_min->troncons[k].x5 = fonction->troncons[i].x5;
-                            fonction_min->troncons[k].x6 = fonction->troncons[i].x6;
+                            fonction_min->troncons[k].x0 = fonction_bis.troncons[i].x0;
+                            fonction_min->troncons[k].x1 = fonction_bis.troncons[i].x1;
+                            fonction_min->troncons[k].x2 = fonction_bis.troncons[i].x2;
+                            fonction_min->troncons[k].x3 = fonction_bis.troncons[i].x3;
+                            fonction_min->troncons[k].x4 = fonction_bis.troncons[i].x4;
+                            fonction_min->troncons[k].x5 = fonction_bis.troncons[i].x5;
+                            fonction_min->troncons[k].x6 = fonction_bis.troncons[i].x6;
                         }
                     }
                     x_base = zero1;
                     modif = 0;
+                    break;
                 }
             }
             if (modif == 1)
             {
-                BUG(common_fonction_scinde_troncon(fonction_min, x_base), FALSE);
+                tmp = fonction_moins.troncons[i].fin_troncon;
+                BUG(common_fonction_scinde_troncon(fonction_min, tmp), FALSE);
+                BUG(common_fonction_scinde_troncon(&fonction_bis, tmp), FALSE);
+                BUG(common_fonction_scinde_troncon(&fonction_moins, tmp), FALSE);
                 
                 for (j=0;j<fonction_min->nb_troncons;j++)
                 {
-                    if (fonction_min->troncons[j].fin_troncon > fonction->troncons[i].fin_troncon)
+                    if (fonction_min->troncons[j].fin_troncon > tmp)
                         break;
-                    if (fonction_min->troncons[j].fin_troncon > x_base)
+                    if (fonction_min->troncons[j].fin_troncon*(1-ERREUR_RELATIVE_MIN) > x_base)
                     {
-                        fonction_min->troncons[j].x0 = fonction->troncons[i].x0;
-                        fonction_min->troncons[j].x1 = fonction->troncons[i].x1;
-                        fonction_min->troncons[j].x2 = fonction->troncons[i].x2;
-                        fonction_min->troncons[j].x3 = fonction->troncons[i].x3;
-                        fonction_min->troncons[j].x4 = fonction->troncons[i].x4;
-                        fonction_min->troncons[j].x5 = fonction->troncons[i].x5;
-                        fonction_min->troncons[j].x6 = fonction->troncons[i].x6;
+                        fonction_min->troncons[j].x0 = fonction_bis.troncons[i].x0;
+                        fonction_min->troncons[j].x1 = fonction_bis.troncons[i].x1;
+                        fonction_min->troncons[j].x2 = fonction_bis.troncons[i].x2;
+                        fonction_min->troncons[j].x3 = fonction_bis.troncons[i].x3;
+                        fonction_min->troncons[j].x4 = fonction_bis.troncons[i].x4;
+                        fonction_min->troncons[j].x5 = fonction_bis.troncons[i].x5;
+                        fonction_min->troncons[j].x6 = fonction_bis.troncons[i].x6;
                     }
                 }
             }
         }
+        free(fonction_moins.troncons);
+        free(fonction_bis.troncons);
+        BUG(common_fonction_compacte(fonction_min), FALSE);
+        
         
         list_parcours = g_list_next(list_parcours);
     }
