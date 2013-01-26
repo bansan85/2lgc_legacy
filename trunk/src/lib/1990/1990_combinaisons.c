@@ -757,7 +757,7 @@ G_MODULE_EXPORT gboolean _1990_combinaisons_init(Projet *projet)
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     // Trivial
     
-    projet->combinaisons.flags = 0;
+    projet->combinaisons.flags = 1 | 4;
     projet->combinaisons.elu_equ = NULL;
     projet->combinaisons.elu_str = NULL;
     projet->combinaisons.elu_geo = NULL;

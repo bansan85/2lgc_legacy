@@ -734,6 +734,8 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                     free(tmp1);
                                     free(tmp2);
+                                    free(f_min.troncons);
+                                    free(f_max.troncons);
                                 }
                             }
                             else
@@ -776,6 +778,8 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                     free(tmp1);
                                     free(tmp2);
+                                    free(f_min.troncons);
+                                    free(f_max.troncons);
                                 }
                             }
                             else
@@ -818,6 +822,8 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                     free(tmp1);
                                     free(tmp2);
+                                    free(f_min.troncons);
+                                    free(f_max.troncons);
                                 }
                             }
                             else
@@ -859,6 +865,8 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                     free(tmp1);
                                     free(tmp2);
+                                    free(f_min.troncons);
+                                    free(f_max.troncons);
                                 }
                             }
                             else
@@ -901,6 +909,8 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                     free(tmp1);
                                     free(tmp2);
+                                    free(f_min.troncons);
+                                    free(f_max.troncons);
                                 }
                             }
                             else
@@ -943,6 +953,8 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                     free(tmp1);
                                     free(tmp2);
+                                    free(f_min.troncons);
+                                    free(f_max.troncons);
                                 }
                             }
                             else
@@ -985,6 +997,8 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                     free(tmp1);
                                     free(tmp2);
+                                    free(f_min.troncons);
+                                    free(f_max.troncons);
                                 }
                             }
                             else
@@ -1027,6 +1041,8 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                     free(tmp1);
                                     free(tmp2);
+                                    free(f_min.troncons);
+                                    free(f_max.troncons);
                                 }
                             }
                             else
@@ -1069,6 +1085,8 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                     free(tmp1);
                                     free(tmp2);
+                                    free(f_min.troncons);
+                                    free(f_max.troncons);
                                 }
                             }
                             else
@@ -1110,6 +1128,8 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                     free(tmp1);
                                     free(tmp2);
+                                    free(f_min.troncons);
+                                    free(f_max.troncons);
                                 }
                             }
                             else
@@ -1152,6 +1172,8 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                     free(tmp1);
                                     free(tmp2);
+                                    free(f_min.troncons);
+                                    free(f_max.troncons);
                                 }
                             }
                             else
@@ -1194,6 +1216,8 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                     free(tmp1);
                                     free(tmp2);
+                                    free(f_min.troncons);
+                                    free(f_max.troncons);
                                 }
                             }
                             else
@@ -1368,6 +1392,8 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                     free(tmp1);
                                     free(tmp2);
+                                    free(f_min.troncons);
+                                    free(f_max.troncons);
                                 }
                             }
                             else
@@ -1410,6 +1436,8 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                     free(tmp1);
                                     free(tmp2);
+                                    free(f_min.troncons);
+                                    free(f_max.troncons);
                                 }
                             }
                             else
@@ -1452,6 +1480,8 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                     free(tmp1);
                                     free(tmp2);
+                                    free(f_min.troncons);
+                                    free(f_max.troncons);
                                 }
                             }
                             else
@@ -1493,6 +1523,8 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                     free(tmp1);
                                     free(tmp2);
+                                    free(f_min.troncons);
+                                    free(f_max.troncons);
                                 }
                             }
                             else
@@ -1535,6 +1567,8 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                     free(tmp1);
                                     free(tmp2);
+                                    free(f_min.troncons);
+                                    free(f_max.troncons);
                                 }
                             }
                             else
@@ -1577,6 +1611,8 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                     free(tmp1);
                                     free(tmp2);
+                                    free(f_min.troncons);
+                                    free(f_max.troncons);
                                 }
                             }
                             else
@@ -1619,6 +1655,8 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                     free(tmp1);
                                     free(tmp2);
+                                    free(f_min.troncons);
+                                    free(f_max.troncons);
                                 }
                             }
                             else
@@ -1661,6 +1699,8 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                     free(tmp1);
                                     free(tmp2);
+                                    free(f_min.troncons);
+                                    free(f_max.troncons);
                                 }
                             }
                             else
@@ -1703,6 +1743,8 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                     free(tmp1);
                                     free(tmp2);
+                                    free(f_min.troncons);
+                                    free(f_max.troncons);
                                 }
                             }
                             else
@@ -1745,6 +1787,8 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                     free(tmp1);
                                     free(tmp2);
+                                    free(f_min.troncons);
+                                    free(f_max.troncons);
                                 }
                             }
                             else
@@ -1787,6 +1831,8 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                     free(tmp1);
                                     free(tmp2);
+                                    free(f_min.troncons);
+                                    free(f_max.troncons);
                                 }
                             }
                             else
@@ -1829,6 +1875,8 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                     free(tmp1);
                                     free(tmp2);
+                                    free(f_min.troncons);
+                                    free(f_max.troncons);
                                 }
                             }
                             else
@@ -1857,15 +1905,25 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
         }
     }
     
+    if (gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(projet->list_gtk.ef_resultats.builder, "EF_resultats_combobox"))) == 0)
+        g_list_free(actions);
     // On libère l'action générée pour la combinaison
-    if (gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(projet->list_gtk.ef_resultats.builder, "EF_resultats_combobox"))) == 1)
+    else
     {
-/*        BUG(common_fonction_free(projet, action_en_cours), FALSE);
-        free(action_en_cours->deplacement_complet->x);
-        free(action_en_cours->deplacement_complet);
-        free(action_en_cours->efforts_noeuds->x);
-        free(action_en_cours->efforts_noeuds);
-        free(action_en_cours);*/
+        GList   *list_parcours = actions;
+        
+        while (list_parcours != NULL)
+        {
+            action = list_parcours->data;
+            BUG(common_fonction_free(projet, action), FALSE);
+            free(action->deplacement_complet->x);
+            free(action->deplacement_complet);
+            free(action->efforts_noeuds->x);
+            free(action->efforts_noeuds);
+            free(action);
+            
+            list_parcours = g_list_next(list_parcours);
+        }
     }
 
     return TRUE;
