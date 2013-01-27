@@ -33,8 +33,8 @@ gboolean common_fonction_affiche(Fonction* fonction) __attribute__((__warn_unuse
 GdkPixbuf* common_fonction_dessin(GList *fonctions, int width, int height, int decimales) __attribute__((__warn_unused_result__));
 char* common_fonction_affiche_caract(Fonction* fonction, int decimales_x, int decimales_y) __attribute__((__warn_unused_result__));
 
-char* common_fonction_renvoie(Fonction* fonction, int decimales) __attribute__((__warn_unused_result__));
-gboolean common_fonction_renvoie_enveloppe(GList* fonctions, Fonction *fonction_min, Fonction *fonction_max) __attribute__((__warn_unused_result__));
+char* common_fonction_renvoie(Fonction* fonction, Fonction *index, int decimales) __attribute__((__warn_unused_result__));
+gboolean common_fonction_renvoie_enveloppe(GList* fonctions, Fonction *fonction_min, Fonction *fonction_max, Fonction *comb_min, Fonction *comb_max) __attribute__((__warn_unused_result__));
 
 gboolean common_fonction_free(Projet *projet, Action *action) __attribute__((__warn_unused_result__));
 

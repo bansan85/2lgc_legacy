@@ -326,9 +326,10 @@ gboolean common_fonction_ajout_fonction(Fonction* fonction, Fonction *fonction_a
 }
 
 
-gboolean common_fonction_compacte(Fonction* fonction)
+gboolean common_fonction_compacte(Fonction* fonction, Fonction *index)
 /* Description : Fusionne les tronçons voisins ayant une fonction identique.
- * Paramètres : Fonction* fonction : fonction à afficher
+ * Paramètres : Fonction* fonction : fonction à afficher,
+ *              Fonction *index : index de la fonction fonction. Peut être NULL.
  * Valeur renvoyée :
  *   Succès : TRUE
  *   Échec : FALSE :
@@ -349,19 +350,31 @@ gboolean common_fonction_compacte(Fonction* fonction)
     k = 0;
     for (i=1;i<fonction->nb_troncons;i++)
     {
-        if ((ERREUR_RELATIVE_EGALE(fonction->troncons[i].x0, fonction->troncons[k].x0)) && (ERREUR_RELATIVE_EGALE(fonction->troncons[i].x1, fonction->troncons[k].x1)) && (ERREUR_RELATIVE_EGALE(fonction->troncons[i].x2, fonction->troncons[k].x2)) && (ERREUR_RELATIVE_EGALE(fonction->troncons[i].x3, fonction->troncons[k].x3)) && (ERREUR_RELATIVE_EGALE(fonction->troncons[i].x4, fonction->troncons[k].x4)) && (ERREUR_RELATIVE_EGALE(fonction->troncons[i].x5, fonction->troncons[k].x5)) && (ERREUR_RELATIVE_EGALE(fonction->troncons[i].x6, fonction->troncons[k].x6)))
+        if ((ERREUR_RELATIVE_EGALE(fonction->troncons[i].x0, fonction->troncons[k].x0)) && (ERREUR_RELATIVE_EGALE(fonction->troncons[i].x1, fonction->troncons[k].x1)) && (ERREUR_RELATIVE_EGALE(fonction->troncons[i].x2, fonction->troncons[k].x2)) && (ERREUR_RELATIVE_EGALE(fonction->troncons[i].x3, fonction->troncons[k].x3)) && (ERREUR_RELATIVE_EGALE(fonction->troncons[i].x4, fonction->troncons[k].x4)) && (ERREUR_RELATIVE_EGALE(fonction->troncons[i].x5, fonction->troncons[k].x5)) && (ERREUR_RELATIVE_EGALE(fonction->troncons[i].x6, fonction->troncons[k].x6)) && ((index == NULL) || ((index != NULL) && (ERREUR_RELATIVE_EGALE(index->troncons[i].x0, index->troncons[k].x0)))))
+        {
             fonction->troncons[j-1].fin_troncon = fonction->troncons[i].fin_troncon;
+            if (index != NULL)
+                index->troncons[j-1].fin_troncon = index->troncons[i].fin_troncon;
+        }
         else
         {
             j++;
             if (j-1 != i)
+            {
                 memcpy(&(fonction->troncons[j-1]), &(fonction->troncons[i]), sizeof(Troncon));
+                if (index != NULL)
+                    memcpy(&(index->troncons[j-1]), &(index->troncons[i]), sizeof(Troncon));
+            }
             k = i;
         }
     }
-    memmove(fonction->troncons, fonction->troncons, sizeof(Troncon)*j);
-    BUGMSG(fonction->troncons, FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(fonction->troncons = realloc(fonction->troncons, sizeof(Troncon)*j), FALSE, gettext("Erreur d'allocation mémoire.\n"));
     fonction->nb_troncons = j;
+    if (index != NULL)
+    {
+        BUGMSG(index->troncons = realloc(index->troncons, sizeof(Troncon)*j), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+        index->nb_troncons = j;
+    }
     
     return TRUE;
 }
@@ -683,8 +696,6 @@ unsigned int common_fonction_caracteristiques(Fonction* fonction, double **pos,
     double          *pos_tmp = NULL, *val_tmp = NULL;
     
     BUGMSG(fonction, 0, gettext("Paramètre %s incorrect.\n"), "fonction");
-    
-    BUG(common_fonction_compacte(fonction), 0);
     
     if (fonction->nb_troncons == 0)
     {
@@ -1303,9 +1314,13 @@ GdkPixbuf* common_fonction_dessin(GList *fonctions, int width, int height, int d
 }
 
 
-G_MODULE_EXPORT char* common_fonction_renvoie(Fonction* fonction, int decimales)
+G_MODULE_EXPORT char* common_fonction_renvoie(Fonction* fonction, Fonction *index, 
+  int decimales)
 /* Description : Renvoie la fonction sous forme de texte (coefficients pour chaque tronçon).
  * Paramètres : Fonction* fonction : fonction à afficher.
+ *              Fonction *index : nombre (x0) à ajouter avant les équations entre parenthèse.
+ *                                peut être NULL,
+ *              int decimales : nombre de décimales à afficher.
  * Valeur renvoyée :
  *   Succès : pointeur contenant la fonction sous forme de texte.
  *   Échec : NULL :
@@ -1319,6 +1334,8 @@ G_MODULE_EXPORT char* common_fonction_renvoie(Fonction* fonction, int decimales)
     // Trivial
     BUGMSG(fonction, NULL, gettext("Paramètre %s incorrect.\n"), "fonction");
     
+    BUG(common_fonction_compacte(fonction, index), NULL);
+    
     if (fonction->nb_troncons == 0)
         BUGMSG(retour = g_strdup_printf("%.*lf", decimales, 0.), NULL, gettext("Erreur d'allocation mémoire.\n"));
     else
@@ -1326,8 +1343,6 @@ G_MODULE_EXPORT char* common_fonction_renvoie(Fonction* fonction, int decimales)
         BUGMSG(retour = malloc(sizeof(char)), NULL, gettext("Erreur d'allocation mémoire.\n"));
         retour[0] = 0;
     }
-    
-    BUG(common_fonction_compacte(fonction), NULL);
     
     for (i=0;i<fonction->nb_troncons;i++)
     {
@@ -1340,6 +1355,13 @@ G_MODULE_EXPORT char* common_fonction_renvoie(Fonction* fonction, int decimales)
         {
             tmp = retour;
             BUGMSG(retour = g_strdup_printf("%s\n", retour), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            free(tmp);
+        }
+        
+        if (index != NULL)
+        {
+            tmp = retour;
+            BUGMSG(retour = g_strdup_printf("%s(%.0lf) : ", retour, index->troncons[i].x0), NULL, gettext("Erreur d'allocation mémoire.\n"));
             free(tmp);
         }
         
@@ -1420,11 +1442,13 @@ G_MODULE_EXPORT char* common_fonction_renvoie(Fonction* fonction, int decimales)
 
 
 gboolean common_fonction_renvoie_enveloppe(GList* fonctions, Fonction *fonction_min,
-  Fonction *fonction_max)
+  Fonction *fonction_max, Fonction *comb_min, Fonction *comb_max)
 /* Description : Renvoie deux fonctions qui enveloppent la liste des fonctions. 
  * Paramètres : GList* fonctions : liste des fonctions à envelopper,
  *              Fonction* fonction_min : courbe enveloppe inférieure (en valeur algébrique),
- *              Fonction* fonction_max : courbe enveloppe supérieure (en valeur algébrique).
+ *              Fonction* fonction_max : courbe enveloppe supérieure (en valeur algébrique),
+ *              Fonction *comb_min : le numéro de la combinaison (dans x0) prépondérante,
+ *              Fonction *comb_max : le numéro de la combinaison (dans x0) prépondérante.
  * Valeur renvoyée :
  *   Succès : TRUE
  *   Échec : FALSE :
@@ -1435,23 +1459,33 @@ gboolean common_fonction_renvoie_enveloppe(GList* fonctions, Fonction *fonction_
 {
     Fonction    *fonction;
     GList       *list_parcours;
+    int         num;
     
     BUGMSG(fonctions, FALSE, gettext("Paramètre %s incorrect.\n"), "fonctions");
     BUGMSG(fonction_min, FALSE, gettext("Paramètre %s incorrect.\n"), "fonction_min");
     BUGMSG(fonction_max, FALSE, gettext("Paramètre %s incorrect.\n"), "fonction_max");
+    BUGMSG(comb_min, FALSE, gettext("Paramètre %s incorrect.\n"), "comb_min");
+    BUGMSG(comb_max, FALSE, gettext("Paramètre %s incorrect.\n"), "comb_max");
     
     fonction_min->nb_troncons = 0;
     fonction_min->troncons = NULL;
     fonction_max->nb_troncons = 0;
     fonction_max->troncons = NULL;
+    comb_min->nb_troncons = 0;
+    comb_min->troncons = NULL;
+    comb_max->nb_troncons = 0;
+    comb_max->troncons = NULL;
     
     list_parcours = fonctions;
     fonction = list_parcours->data;
     
     BUG(common_fonction_ajout_fonction(fonction_min, fonction, 1.), FALSE);
     BUG(common_fonction_ajout_fonction(fonction_max, fonction, 1.), FALSE);
+    BUG(common_fonction_ajout_fonction(comb_min, fonction, 0.), FALSE);
+    BUG(common_fonction_ajout_fonction(comb_max, fonction, 0.), FALSE);
     
     list_parcours = g_list_next(list_parcours);
+    num = 1;
     while (list_parcours != NULL)
     {
         unsigned int    i, j, k;
@@ -1474,6 +1508,7 @@ gboolean common_fonction_renvoie_enveloppe(GList* fonctions, Fonction *fonction_
             x_base = fonction_moins.troncons[i].debut_troncon;
             BUG(common_fonction_scinde_troncon(&fonction_bis, x_base), FALSE);
             BUG(common_fonction_scinde_troncon(fonction_max, x_base), FALSE);
+            BUG(common_fonction_scinde_troncon(comb_max, x_base), FALSE);
             BUG(common_fonction_scinde_troncon(&fonction_moins, x_base), FALSE);
             
             x[0] = x_base;
@@ -1504,6 +1539,7 @@ gboolean common_fonction_renvoie_enveloppe(GList* fonctions, Fonction *fonction_
                     BUG(common_fonction_cherche_zero(&fonction_moins, x[j-1], x[j], &zero1, &zero2), FALSE);
                     BUGMSG((!isnan(zero1)) && (isnan(zero2)), FALSE, gettext("Zéro impossible à trouver.\n"));
                     BUG(common_fonction_scinde_troncon(fonction_max, zero1), FALSE);
+                    BUG(common_fonction_scinde_troncon(comb_max, zero1), FALSE);
                     BUG(common_fonction_scinde_troncon(&fonction_bis, zero1), FALSE);
                     BUG(common_fonction_scinde_troncon(&fonction_moins, zero1), FALSE);
                     x_base = zero1;
@@ -1517,6 +1553,7 @@ gboolean common_fonction_renvoie_enveloppe(GList* fonctions, Fonction *fonction_
                     BUGMSG((!isnan(zero1)) && (isnan(zero2)), FALSE, gettext("Zéro impossible à trouver.\n"));
                     tmp = fonction_moins.troncons[i].fin_troncon;
                     BUG(common_fonction_scinde_troncon(fonction_max, zero1), FALSE);
+                    BUG(common_fonction_scinde_troncon(comb_max, zero1), FALSE);
                     BUG(common_fonction_scinde_troncon(&fonction_bis, zero1), FALSE);
                     BUG(common_fonction_scinde_troncon(&fonction_moins, zero1), FALSE);
                     
@@ -1533,6 +1570,7 @@ gboolean common_fonction_renvoie_enveloppe(GList* fonctions, Fonction *fonction_
                             fonction_max->troncons[k].x4 = fonction_bis.troncons[i].x4;
                             fonction_max->troncons[k].x5 = fonction_bis.troncons[i].x5;
                             fonction_max->troncons[k].x6 = fonction_bis.troncons[i].x6;
+                            comb_max->troncons[k].x0 = num;
                         }
                     }
                     x_base = zero1;
@@ -1544,6 +1582,7 @@ gboolean common_fonction_renvoie_enveloppe(GList* fonctions, Fonction *fonction_
             {
                 tmp = fonction_moins.troncons[i].fin_troncon;
                 BUG(common_fonction_scinde_troncon(fonction_max, tmp), FALSE);
+                BUG(common_fonction_scinde_troncon(comb_max, tmp), FALSE);
                 BUG(common_fonction_scinde_troncon(&fonction_bis, tmp), FALSE);
                 BUG(common_fonction_scinde_troncon(&fonction_moins, tmp), FALSE);
                 
@@ -1560,13 +1599,14 @@ gboolean common_fonction_renvoie_enveloppe(GList* fonctions, Fonction *fonction_
                         fonction_max->troncons[j].x4 = fonction_bis.troncons[i].x4;
                         fonction_max->troncons[j].x5 = fonction_bis.troncons[i].x5;
                         fonction_max->troncons[j].x6 = fonction_bis.troncons[i].x6;
+                        comb_max->troncons[j].x0 = num;
                     }
                 }
             }
         }
         free(fonction_moins.troncons);
         free(fonction_bis.troncons);
-        BUG(common_fonction_compacte(fonction_max), FALSE);
+        BUG(common_fonction_compacte(fonction_max, comb_max), FALSE);
         
         // On passe à la courbe enveloppe inférieure. On utilise exactement le même code que ci-
         // dessus sauf qu'on fait -fonction+fonction_min à la place de fonction-fonction_max.
@@ -1584,6 +1624,7 @@ gboolean common_fonction_renvoie_enveloppe(GList* fonctions, Fonction *fonction_
             x_base = fonction_moins.troncons[i].debut_troncon;
             BUG(common_fonction_scinde_troncon(&fonction_bis, x_base), FALSE);
             BUG(common_fonction_scinde_troncon(fonction_min, x_base), FALSE);
+            BUG(common_fonction_scinde_troncon(comb_min, x_base), FALSE);
             BUG(common_fonction_scinde_troncon(&fonction_moins, x_base), FALSE);
             
             x[0] = x_base;
@@ -1614,6 +1655,7 @@ gboolean common_fonction_renvoie_enveloppe(GList* fonctions, Fonction *fonction_
                     BUG(common_fonction_cherche_zero(&fonction_moins, x[j-1], x[j], &zero1, &zero2), FALSE);
                     BUGMSG((!isnan(zero1)) && (isnan(zero2)), FALSE, gettext("Zéro impossible à trouver.\n"));
                     BUG(common_fonction_scinde_troncon(fonction_min, zero1), FALSE);
+                    BUG(common_fonction_scinde_troncon(comb_min, zero1), FALSE);
                     BUG(common_fonction_scinde_troncon(&fonction_bis, zero1), FALSE);
                     BUG(common_fonction_scinde_troncon(&fonction_moins, zero1), FALSE);
                     x_base = zero1;
@@ -1627,6 +1669,7 @@ gboolean common_fonction_renvoie_enveloppe(GList* fonctions, Fonction *fonction_
                     BUGMSG((!isnan(zero1)) && (isnan(zero2)), FALSE, gettext("Zéro impossible à trouver.\n"));
                     tmp = fonction_moins.troncons[i].fin_troncon;
                     BUG(common_fonction_scinde_troncon(fonction_min, zero1), FALSE);
+                    BUG(common_fonction_scinde_troncon(comb_min, zero1), FALSE);
                     BUG(common_fonction_scinde_troncon(&fonction_bis, zero1), FALSE);
                     BUG(common_fonction_scinde_troncon(&fonction_moins, zero1), FALSE);
                     
@@ -1643,6 +1686,7 @@ gboolean common_fonction_renvoie_enveloppe(GList* fonctions, Fonction *fonction_
                             fonction_min->troncons[k].x4 = fonction_bis.troncons[i].x4;
                             fonction_min->troncons[k].x5 = fonction_bis.troncons[i].x5;
                             fonction_min->troncons[k].x6 = fonction_bis.troncons[i].x6;
+                            comb_min->troncons[k].x0 = num;
                         }
                     }
                     x_base = zero1;
@@ -1654,6 +1698,7 @@ gboolean common_fonction_renvoie_enveloppe(GList* fonctions, Fonction *fonction_
             {
                 tmp = fonction_moins.troncons[i].fin_troncon;
                 BUG(common_fonction_scinde_troncon(fonction_min, tmp), FALSE);
+                BUG(common_fonction_scinde_troncon(comb_min, tmp), FALSE);
                 BUG(common_fonction_scinde_troncon(&fonction_bis, tmp), FALSE);
                 BUG(common_fonction_scinde_troncon(&fonction_moins, tmp), FALSE);
                 
@@ -1670,16 +1715,17 @@ gboolean common_fonction_renvoie_enveloppe(GList* fonctions, Fonction *fonction_
                         fonction_min->troncons[j].x4 = fonction_bis.troncons[i].x4;
                         fonction_min->troncons[j].x5 = fonction_bis.troncons[i].x5;
                         fonction_min->troncons[j].x6 = fonction_bis.troncons[i].x6;
+                        comb_min->troncons[j].x0 = num;
                     }
                 }
             }
         }
         free(fonction_moins.troncons);
         free(fonction_bis.troncons);
-        BUG(common_fonction_compacte(fonction_min), FALSE);
-        
+        BUG(common_fonction_compacte(fonction_min, comb_min), FALSE);
         
         list_parcours = g_list_next(list_parcours);
+        num++;
     }
     
     return TRUE;
