@@ -130,24 +130,29 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
     BUGMSG(projet->list_gtk.ef_resultats.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Résultats");
     
     // Actions élémentaires
-    if (gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(projet->list_gtk.ef_resultats.builder, "EF_resultats_combobox"))) == 0)
+    if (gtk_combo_box_get_active(projet->list_gtk.ef_resultats.combobox) == 0)
     {
-        BUG(action = _1990_action_cherche_numero(projet, gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(projet->list_gtk.ef_resultats.builder, "EF_resultats_combo_box_cas")))), FALSE);
+        if (gtk_combo_box_get_active(projet->list_gtk.ef_resultats.combobox_cas) == -1)
+        {
+            gtk_list_store_clear(res->list_store);
+            return TRUE;
+        }
+        BUG(action = _1990_action_cherche_numero(projet, gtk_combo_box_get_active(projet->list_gtk.ef_resultats.combobox_cas)), FALSE);
         actions = g_list_append(actions, action);
     }
     // Combinaisons
-    else if (gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(projet->list_gtk.ef_resultats.builder, "EF_resultats_combobox"))) == 1)
+    else if (gtk_combo_box_get_active(projet->list_gtk.ef_resultats.combobox) == 1)
     {
         GList   *comb;
         
-        if ((gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(projet->list_gtk.ef_resultats.builder, "EF_resultats_combo_box_cas"))) == -1) || (gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(projet->list_gtk.ef_resultats.builder, "EF_resultats_combo_box_ponderations"))) == -1))
+        if ((gtk_combo_box_get_active(projet->list_gtk.ef_resultats.combobox_cas) == -1) || (gtk_combo_box_get_active(projet->list_gtk.ef_resultats.combobox_ponderations) == -1))
         {
             gtk_list_store_clear(res->list_store);
             return TRUE;
         }
         
         // On cherche la combinaison à afficher.
-        switch (gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(projet->list_gtk.ef_resultats.builder, "EF_resultats_combo_box_cas"))))
+        switch (gtk_combo_box_get_active(projet->list_gtk.ef_resultats.combobox_cas))
         {
             case 0 :
             {
@@ -196,27 +201,27 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
             }
             default :
             {
-                BUGMSG(NULL, FALSE, gettext("Paramètre %s incorrect.\n"), "gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(projet->list_gtk.ef_resultats.builder, \"EF_resultats_combo_box_cas\")))");
+                BUGMSG(NULL, FALSE, gettext("Paramètre %s incorrect.\n"), "gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(projet->list_gtk.ef_resultats.builder, \"combobox_cas\")))");
                 break;
             }
         }
-        comb = g_list_nth(comb, gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(projet->list_gtk.ef_resultats.builder, "EF_resultats_combo_box_ponderations"))));
+        comb = g_list_nth(comb, gtk_combo_box_get_active(projet->list_gtk.ef_resultats.combobox_ponderations));
         
         BUG(action = EF_resultat_action_ponderation(comb->data, projet), FALSE);
         actions = g_list_append(actions, action);
     }
-    else if (gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(projet->list_gtk.ef_resultats.builder, "EF_resultats_combobox"))) == 2)
+    else if (gtk_combo_box_get_active(projet->list_gtk.ef_resultats.combobox) == 2)
     {
         GList   *comb;
         
-        if ((gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(projet->list_gtk.ef_resultats.builder, "EF_resultats_combo_box_cas"))) == -1) || (gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(projet->list_gtk.ef_resultats.builder, "EF_resultats_combo_box_ponderations"))) == -1))
+        if ((gtk_combo_box_get_active(projet->list_gtk.ef_resultats.combobox_cas) == -1) || (gtk_combo_box_get_active(projet->list_gtk.ef_resultats.combobox_ponderations) == -1))
         {
             gtk_list_store_clear(res->list_store);
             return TRUE;
         }
         
         // On cherche la combinaison à afficher.
-        switch (gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(projet->list_gtk.ef_resultats.builder, "EF_resultats_combo_box_cas"))))
+        switch (gtk_combo_box_get_active(projet->list_gtk.ef_resultats.combobox_cas))
         {
             case 0 :
             {
@@ -265,12 +270,12 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
             }
             default :
             {
-                BUGMSG(NULL, FALSE, gettext("Paramètre %s incorrect.\n"), "gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(projet->list_gtk.ef_resultats.builder, \"EF_resultats_combo_box_cas\")))");
+                BUGMSG(NULL, FALSE, gettext("Paramètre %s incorrect.\n"), "gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(projet->list_gtk.ef_resultats.builder, \"combobox_cas\")))");
                 break;
             }
         }
         
-        if (gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(projet->list_gtk.ef_resultats.builder, "EF_resultats_combo_box_ponderations"))) == 0)
+        if (gtk_combo_box_get_active(projet->list_gtk.ef_resultats.combobox_ponderations) == 0)
         {
             GList   *list_parcours;
             
@@ -1905,7 +1910,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
         }
     }
     
-    if (gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(projet->list_gtk.ef_resultats.builder, "EF_resultats_combobox"))) == 0)
+    if (gtk_combo_box_get_active(projet->list_gtk.ef_resultats.combobox) == 0)
         g_list_free(actions);
     // On libère l'action générée pour la combinaison
     else
@@ -1958,7 +1963,7 @@ gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, Projet *projet
     // Cet xalign n'est utilisé que pour les résultats à virgule flottante. Elle centre le texte
     // si on affiche une enveloppe de résultats (affichage sous forme ***/***) ou aligne à
     // droite si elle affiche un nombre à virgule flottante (pour aligner les virgules)
-    if (gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(projet->list_gtk.ef_resultats.builder, "EF_resultats_combobox"))) == 2)
+    if (gtk_combo_box_get_active(projet->list_gtk.ef_resultats.combobox) == 2)
         xalign = 0.5;
     else
         xalign = 1.;
@@ -2444,6 +2449,15 @@ G_MODULE_EXPORT void EF_gtk_resultats_cas_change(GtkWidget *widget __attribute__
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     
+    indice_combo = gtk_combo_box_get_active(projet->list_gtk.ef_resultats.combobox);
+    
+    // Pour forcer le combobox ponderation à être vierge.
+    if (gtk_combo_box_get_model(projet->list_gtk.ef_resultats.combobox_ponderations) != NULL)
+    {
+        gtk_combo_box_set_active(projet->list_gtk.ef_resultats.combobox_ponderations, -1);
+        gtk_combo_box_set_model(projet->list_gtk.ef_resultats.combobox_ponderations, NULL);
+    }
+    
     list_parcours = projet->list_gtk.ef_resultats.tableaux;
     
     while (list_parcours != NULL)
@@ -2453,14 +2467,13 @@ G_MODULE_EXPORT void EF_gtk_resultats_cas_change(GtkWidget *widget __attribute__
         list_parcours = g_list_next(list_parcours);
     }
     
-    indice_combo = gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(projet->list_gtk.ef_resultats.builder, "EF_resultats_combobox")));
     if (indice_combo == 1)
     {
         GtkListStore    *list_pond;
         GtkTreeIter     Iter;
         GList           *comb;
         
-        switch (gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(projet->list_gtk.ef_resultats.builder, "EF_resultats_combo_box_cas"))))
+        switch (gtk_combo_box_get_active(projet->list_gtk.ef_resultats.combobox_cas))
         {
             case -1 :
             {
@@ -2514,7 +2527,7 @@ G_MODULE_EXPORT void EF_gtk_resultats_cas_change(GtkWidget *widget __attribute__
             }
             default :
             {
-                BUGMSG(NULL, , gettext("Paramètre %s incorrect.\n"), "gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(projet->list_gtk.ef_resultats.builder, \"EF_resultats_combo_box_cas\")))");
+                BUGMSG(NULL, , gettext("Paramètre %s incorrect.\n"), "gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(projet->list_gtk.ef_resultats.builder, \"combobox_cas\")))");
                 break;
             }
         }
@@ -2534,7 +2547,7 @@ G_MODULE_EXPORT void EF_gtk_resultats_cas_change(GtkWidget *widget __attribute__
             list_parcours = g_list_next(list_parcours);
         }
         
-        gtk_combo_box_set_model(GTK_COMBO_BOX(gtk_builder_get_object(projet->list_gtk.ef_resultats.builder, "EF_resultats_combo_box_ponderations")), GTK_TREE_MODEL(list_pond));
+        gtk_combo_box_set_model(projet->list_gtk.ef_resultats.combobox_ponderations, GTK_TREE_MODEL(list_pond));
         g_object_unref(list_pond);
     }
     else if (indice_combo == 2)
@@ -2547,7 +2560,7 @@ G_MODULE_EXPORT void EF_gtk_resultats_cas_change(GtkWidget *widget __attribute__
         gtk_list_store_append(list_pond, &Iter);
         gtk_list_store_set(list_pond, &Iter, 0, gettext("Tout"), -1);
         
-        gtk_combo_box_set_model(GTK_COMBO_BOX(gtk_builder_get_object(projet->list_gtk.ef_resultats.builder, "EF_resultats_combo_box_ponderations")), GTK_TREE_MODEL(list_pond));
+        gtk_combo_box_set_model(projet->list_gtk.ef_resultats.combobox_ponderations, GTK_TREE_MODEL(list_pond));
         g_object_unref(list_pond);
     }
     
@@ -2589,23 +2602,32 @@ G_MODULE_EXPORT void EF_gtk_resultats_combobox_changed(GtkComboBox *combobox, Pr
 {
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     
+    // Pour forcer le combobox cas à être vierge.
+    if (gtk_combo_box_get_model(projet->list_gtk.ef_resultats.combobox_ponderations) != NULL)
+    {
+        gtk_combo_box_set_active(projet->list_gtk.ef_resultats.combobox_ponderations, -1);
+        gtk_combo_box_set_model(projet->list_gtk.ef_resultats.combobox_ponderations, NULL);
+    }
+    if (gtk_combo_box_get_model(projet->list_gtk.ef_resultats.combobox_cas) != NULL)
+    {
+        gtk_combo_box_set_active(projet->list_gtk.ef_resultats.combobox_cas, -1);
+        gtk_combo_box_set_model(projet->list_gtk.ef_resultats.combobox_cas, NULL);
+    }
+    
     // Actions élémentaires
     if (gtk_combo_box_get_active(combobox) == 0)
     {
-        gtk_combo_box_set_model(GTK_COMBO_BOX(gtk_builder_get_object(projet->list_gtk.ef_resultats.builder, "EF_resultats_combo_box_cas")), GTK_TREE_MODEL(projet->list_gtk._1990_actions.list_actions));
-        gtk_combo_box_set_active(GTK_COMBO_BOX(gtk_builder_get_object(projet->list_gtk.ef_resultats.builder, "EF_resultats_combo_box_cas")), 0);
-        gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_resultats.builder, "EF_resultats_combo_box_ponderations")), FALSE);
-        gtk_widget_set_hexpand(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_resultats.builder, "EF_resultats_combo_box_cas")), TRUE);
+        gtk_combo_box_set_model(projet->list_gtk.ef_resultats.combobox_cas, GTK_TREE_MODEL(projet->list_gtk._1990_actions.list_actions));
+        gtk_widget_set_visible(GTK_WIDGET(projet->list_gtk.ef_resultats.combobox_ponderations), FALSE);
+        gtk_widget_set_hexpand(GTK_WIDGET(projet->list_gtk.ef_resultats.combobox_cas), TRUE);
     }
     // Combinaisons ou enveloppes
     else
     {
         g_object_ref(projet->combinaisons.list_el_desc);
-        gtk_combo_box_set_model(GTK_COMBO_BOX(gtk_builder_get_object(projet->list_gtk.ef_resultats.builder, "EF_resultats_combo_box_cas")), GTK_TREE_MODEL(projet->combinaisons.list_el_desc));
-        gtk_combo_box_set_active(GTK_COMBO_BOX(gtk_builder_get_object(projet->list_gtk.ef_resultats.builder, "EF_resultats_combo_box_cas")), -1);
-        gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_resultats.builder, "EF_resultats_combo_box_ponderations")), TRUE);
-        gtk_combo_box_set_model(GTK_COMBO_BOX(gtk_builder_get_object(projet->list_gtk.ef_resultats.builder, "EF_resultats_combo_box_ponderations")), NULL);
-        gtk_widget_set_hexpand(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_resultats.builder, "EF_resultats_combo_box_cas")), FALSE);
+        gtk_combo_box_set_model(projet->list_gtk.ef_resultats.combobox_cas, GTK_TREE_MODEL(projet->combinaisons.list_el_desc));
+        gtk_widget_set_visible(GTK_WIDGET(projet->list_gtk.ef_resultats.combobox_ponderations), TRUE);
+        gtk_widget_set_hexpand(GTK_WIDGET(projet->list_gtk.ef_resultats.combobox_cas), FALSE);
         EF_gtk_resultats_cas_change(NULL, projet);
     }
     
@@ -2799,8 +2821,12 @@ G_MODULE_EXPORT void EF_gtk_resultats(Projet *projet)
     ef_gtk->window = GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder, "EF_resultats_window"));
     ef_gtk->notebook = GTK_NOTEBOOK(gtk_builder_get_object(ef_gtk->builder, "EF_resultats_notebook"));
     
+    ef_gtk->combobox = GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder, "EF_resultats_combobox"));
+    ef_gtk->combobox_cas = GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder, "EF_resultats_combo_box_cas"));
+    ef_gtk->combobox_ponderations = GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder, "EF_resultats_combo_box_ponderations"));
+    
     gtk_adjustment_set_upper(GTK_ADJUSTMENT(gtk_builder_get_object(ef_gtk->builder, "adjustment_cas")), g_list_length(projet->actions)-1);
-    gtk_combo_box_set_active(GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder, "EF_resultats_combobox")), 0);
+    gtk_combo_box_set_active(ef_gtk->combobox, 0);
     
     list_parcours = ef_gtk->tableaux;
     while (list_parcours != NULL)
