@@ -263,7 +263,8 @@ G_MODULE_EXPORT void EF_gtk_materiaux_boutton_supprimer_menu(
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_materiaux.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Matériau");
     
-    // Si aucune section n'est sélectionnée, il n'est pas possible d'en supprimer ou d'en éditer une.
+    // Si aucune section n'est sélectionnée, il n'est pas possible d'en supprimer ou d'en
+    // éditer une.
     if (!gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_materiaux.builder, "EF_materiaux_treeview_select")), &model, &Iter))
         BUGMSG(NULL, , gettext("Aucun élément n'est sélectionné.\n"));
     

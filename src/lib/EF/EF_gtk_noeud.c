@@ -443,6 +443,8 @@ G_MODULE_EXPORT void EF_gtk_noeud_edit_pos_abs(GtkCellRendererText *cell, gchar 
         
         // On modifie le tree-view-actions
         gtk_tree_store_set(gtk_noeud->tree_store_libre, &iter, column, conversion, -1);
+        
+        BUG(EF_calculs_free(projet), );
     }
     
     free(fake);
@@ -519,6 +521,8 @@ G_MODULE_EXPORT void EF_gtk_noeud_edit_pos_relat(GtkCellRendererText *cell, gcha
         
         // On modifie le tree-view-barre
         gtk_tree_store_set(gtk_noeud->tree_store_barre, &iter, column, conversion, -1);
+        
+        BUG(EF_calculs_free(projet), );
     }
     
     free(fake);
@@ -620,6 +624,8 @@ G_MODULE_EXPORT void EF_gtk_noeud_edit_noeud_appui(
         BUG(appui = EF_appuis_cherche_nom(projet, new_text, TRUE), );
         BUG(EF_noeuds_change_appui(projet, noeud, appui), );
     }
+    
+    BUG(EF_calculs_free(projet), );
     
     return;
 }

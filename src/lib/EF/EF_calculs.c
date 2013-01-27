@@ -1446,7 +1446,10 @@ G_MODULE_EXPORT gboolean EF_calculs_free(Projet *projet)
         for (i=0;i<=barre->discretisation_element;i++)
         {
             if (barre->info_EF[i].matrice_rigidite_locale != NULL)
+            {
                 cholmod_free_sparse(&barre->info_EF[i].matrice_rigidite_locale, projet->calculs.c);
+                barre->info_EF[i].matrice_rigidite_locale = NULL;
+            }
         }
         
         if (barre->matrice_rotation != NULL)

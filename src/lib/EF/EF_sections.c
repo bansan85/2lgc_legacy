@@ -290,29 +290,40 @@ G_MODULE_EXPORT gboolean EF_sections_rectangulaire_modif(Projet *projet, EF_Sect
             gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk.ef_sections_rectangulaire.builder, "EF_section_rectangulaire_textview_nom"))), nom, -1);
 #endif
     }
-    if (!isnan(l))
+    if ((!isnan(l)) && (!ERREUR_RELATIVE_EGALE(section_data->largeur_retombee, l)))
     {
         section_data->largeur_retombee = l;
         section_data->largeur_table = l;
     }
-    if (!isnan(h))
+    else
+        l = NAN;
+    if ((!isnan(h)) && (!ERREUR_RELATIVE_EGALE(section_data->hauteur_retombee, h)))
         section_data->hauteur_retombee = h;
+    else
+        h = NAN;
     section_data->hauteur_table = 0.;
     
-#ifdef ENABLE_GTK
-    if (projet->list_gtk.ef_sections.builder != NULL)
-        BUG(EF_sections_update_ligne_treeview(projet, section), FALSE);
     if ((!isnan(l)) || (!isnan(h)))
     {
         GList   *liste_sections = NULL, *liste_barres_dep;
         
         liste_sections = g_list_append(liste_sections, section);
-        BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, liste_sections, NULL, NULL, NULL, NULL, &liste_barres_dep, NULL, FALSE, TRUE), FALSE);
+        BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, liste_sections, NULL, NULL, NULL, NULL, &liste_barres_dep, NULL, FALSE, FALSE), FALSE);
         g_list_free(liste_sections);
         
+#ifdef ENABLE_GTK
         BUG(m3d_actualise_graphique(projet, NULL, liste_barres_dep), FALSE);
+#endif
+        
+        if (liste_barres_dep != NULL)
+            BUG(EF_calculs_free(projet), FALSE);
+        
         g_list_free(liste_barres_dep);
     }
+    
+#ifdef ENABLE_GTK
+    if (projet->list_gtk.ef_sections.builder != NULL)
+        BUG(EF_sections_update_ligne_treeview(projet, section), FALSE);
 #endif
     
     return TRUE;
@@ -399,30 +410,44 @@ G_MODULE_EXPORT gboolean EF_sections_T_modif(Projet *projet, EF_Section *section
             gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk.ef_sections_T.builder, "EF_section_T_textview_nom"))), nom, -1);
 #endif
     }
-    if (!isnan(lt))
+    if ((!isnan(lt)) && (!ERREUR_RELATIVE_EGALE(section_data->largeur_table, lt)))
         section_data->largeur_table = lt;
-    if (!isnan(lr))
+    else
+        lt = NAN;
+    if ((!isnan(lr)) && (!ERREUR_RELATIVE_EGALE(section_data->largeur_retombee, lr)))
         section_data->largeur_retombee = lr;
-    if (!isnan(ht))
+    else
+        lr = NAN;
+    if ((!isnan(ht)) && (!ERREUR_RELATIVE_EGALE(section_data->hauteur_table, ht)))
         section_data->hauteur_table = ht;
-    if (!isnan(hr))
+    else
+        ht = NAN;
+    if ((!isnan(hr)) && (!ERREUR_RELATIVE_EGALE(section_data->hauteur_retombee, hr)))
         section_data->hauteur_retombee = hr;
+    else
+        hr = NAN;
     
-#ifdef ENABLE_GTK
-    if (projet->list_gtk.ef_sections.builder != NULL)
-        BUG(EF_sections_update_ligne_treeview(projet, section), FALSE);
     if ((!isnan(lt)) || (!isnan(lr)) || (!isnan(ht)) || (!isnan(hr)))
     {
         GList   *liste_sections = NULL, *liste_barres_dep;
         
         liste_sections = g_list_append(liste_sections, section);
-        BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, liste_sections, NULL, NULL, NULL, NULL, &liste_barres_dep, NULL, FALSE, TRUE), FALSE);
+        BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, liste_sections, NULL, NULL, NULL, NULL, &liste_barres_dep, NULL, FALSE, FALSE), FALSE);
         g_list_free(liste_sections);
         
+#ifdef ENABLE_GTK
         BUG(m3d_actualise_graphique(projet, NULL, liste_barres_dep), FALSE);
+#endif
+        
+        if (liste_barres_dep != NULL)
+            BUG(EF_calculs_free(projet), FALSE);
         
         g_list_free(liste_barres_dep);
     }
+    
+#ifdef ENABLE_GTK
+    if (projet->list_gtk.ef_sections.builder != NULL)
+        BUG(EF_sections_update_ligne_treeview(projet, section), FALSE);
 #endif
     
     return TRUE;
@@ -496,24 +521,30 @@ G_MODULE_EXPORT gboolean EF_sections_carree_modif(Projet *projet, EF_Section *se
             gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk.ef_sections_carree.builder, "EF_section_carree_textview_nom"))), nom, -1);
 #endif
     }
-    if (!isnan(cote))
+    if ((!isnan(cote)) && (!ERREUR_RELATIVE_EGALE(section_data->cote, cote)))
+    {
+        GList   *liste_sections = NULL, *liste_barres_dep;
+        
         section_data->cote = cote;
+        
+        liste_sections = g_list_append(liste_sections, section);
+        BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, liste_sections, NULL, NULL, NULL, NULL, &liste_barres_dep, NULL, FALSE, FALSE), FALSE);
+        g_list_free(liste_sections);
+        
+#ifdef ENABLE_GTK
+        BUG(m3d_actualise_graphique(projet, NULL, liste_barres_dep), FALSE);
+#endif
+        
+        if (liste_barres_dep != NULL)
+            BUG(EF_calculs_free(projet), FALSE);
+        
+        g_list_free(liste_barres_dep);
+        
+    }
     
 #ifdef ENABLE_GTK
     if (projet->list_gtk.ef_sections.builder != NULL)
         BUG(EF_sections_update_ligne_treeview(projet, section), FALSE);
-    if (!isnan(cote))
-    {
-        GList   *liste_sections = NULL, *liste_barres_dep;
-        
-        liste_sections = g_list_append(liste_sections, section);
-        BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, liste_sections, NULL, NULL, NULL, NULL, &liste_barres_dep, NULL, FALSE, TRUE), FALSE);
-        g_list_free(liste_sections);
-        
-        BUG(m3d_actualise_graphique(projet, NULL, liste_barres_dep), FALSE);
-        
-        g_list_free(liste_barres_dep);
-    }
 #endif
     
     return TRUE;
@@ -589,24 +620,29 @@ G_MODULE_EXPORT gboolean EF_sections_circulaire_modif(Projet *projet, EF_Section
             gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk.ef_sections_circulaire.builder, "EF_section_circulaire_textview_nom"))), nom, -1);
 #endif
     }
-    if (!isnan(diametre))
+    if ((!isnan(diametre)) && (!ERREUR_RELATIVE_EGALE(section_data->diametre, diametre)))
+    {
+        GList   *liste_sections = NULL, *liste_barres_dep;
+        
         section_data->diametre = diametre;
+        
+        liste_sections = g_list_append(liste_sections, section);
+        BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, liste_sections, NULL, NULL, NULL, NULL, &liste_barres_dep, NULL, FALSE, FALSE), FALSE);
+        g_list_free(liste_sections);
+        
+#ifdef ENABLE_GTK
+        BUG(m3d_actualise_graphique(projet, NULL, liste_barres_dep), FALSE);
+#endif
+        
+        if (liste_barres_dep != NULL)
+            BUG(EF_calculs_free(projet), FALSE);
+        
+        g_list_free(liste_barres_dep);
+    }
     
 #ifdef ENABLE_GTK
     if (projet->list_gtk.ef_sections.builder != NULL)
         BUG(EF_sections_update_ligne_treeview(projet, section), FALSE);
-    if (!isnan(diametre))
-    {
-        GList   *liste_sections = NULL, *liste_barres_dep;
-        
-        liste_sections = g_list_append(liste_sections, section);
-        BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, liste_sections, NULL, NULL, NULL, NULL, &liste_barres_dep, NULL, FALSE, TRUE), FALSE);
-        g_list_free(liste_sections);
-        
-        BUG(m3d_actualise_graphique(projet, NULL, liste_barres_dep), FALSE);
-        
-        g_list_free(liste_barres_dep);
-    }
 #endif
     
     return TRUE;

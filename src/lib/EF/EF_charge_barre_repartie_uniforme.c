@@ -1033,6 +1033,8 @@ G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_enleve_barres(
     }
 #endif
     
+    BUG(EF_calculs_free(projet), FALSE);
+    
     return TRUE;
 }
 

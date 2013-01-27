@@ -405,8 +405,17 @@ G_MODULE_EXPORT gboolean EF_relachement_modif(Projet *projet, EF_Relachement *re
  *             materiau == NULL.
  */
 {
+    GList   *liste_relachement = NULL, *liste_barres_dep;
+    
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(relachement, FALSE, gettext("Paramètre %s incorrect.\n"), "relachement");
+    
+    liste_relachement = g_list_append(liste_relachement, relachement);
+    BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, NULL, liste_relachement, NULL, NULL, &liste_barres_dep, NULL, FALSE, FALSE), FALSE);
+    g_list_free(liste_relachement);
+    if (liste_barres_dep != NULL)
+        BUG(EF_calculs_free(projet), FALSE);
+    g_list_free(liste_barres_dep);
     
     if ((nom != NULL) && (strcmp(relachement->nom, nom) != 0))
     {
@@ -814,6 +823,8 @@ G_MODULE_EXPORT gboolean EF_relachement_supprime(EF_Relachement *relachement,
     if (projet->list_gtk.ef_relachements.builder != NULL)
         gtk_tree_store_remove(projet->list_gtk.ef_relachements.relachements, &relachement->Iter_fenetre);
 #endif
+    
+    free(relachement);
     
     return TRUE;
 }
