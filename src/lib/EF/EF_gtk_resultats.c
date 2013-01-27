@@ -2472,6 +2472,7 @@ G_MODULE_EXPORT void EF_gtk_resultats_cas_change(GtkWidget *widget __attribute__
         GtkListStore    *list_pond;
         GtkTreeIter     Iter;
         GList           *comb;
+        int             i;
         
         switch (gtk_combo_box_get_active(projet->list_gtk.ef_resultats.combobox_cas))
         {
@@ -2535,16 +2536,20 @@ G_MODULE_EXPORT void EF_gtk_resultats_cas_change(GtkWidget *widget __attribute__
         list_pond = gtk_list_store_new(1, G_TYPE_STRING);
         
         list_parcours = comb;
+        i = 0;
         while (list_parcours != NULL)
         {
-            char    *tmp;
+            char    *tmp, *tmp2;
             
             gtk_list_store_append(list_pond, &Iter);
             tmp = _1990_ponderations_description(list_parcours->data);
-            gtk_list_store_set(list_pond, &Iter, 0, tmp, -1);
+            BUGMSG(tmp2 = g_strdup_printf("%d : %s", i, tmp), , gettext("Erreur d'allocation mémoire.\n"));
             free(tmp);
+            gtk_list_store_set(list_pond, &Iter, 0, tmp2, -1);
+            free(tmp2);
             
             list_parcours = g_list_next(list_parcours);
+            i++;
         }
         
         gtk_combo_box_set_model(projet->list_gtk.ef_resultats.combobox_ponderations, GTK_TREE_MODEL(list_pond));
