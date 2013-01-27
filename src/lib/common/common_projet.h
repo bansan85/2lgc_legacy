@@ -275,6 +275,10 @@ typedef struct __Gtk_EF_Resultats
     GtkBuilder      *builder;
     GtkWidget       *window;
     
+    GtkComboBox     *combobox;
+    GtkComboBox     *combobox_cas;
+    GtkComboBox     *combobox_ponderations;
+    
     GtkNotebook     *notebook;
     GList           *tableaux;
 } Gtk_EF_Resultats;
