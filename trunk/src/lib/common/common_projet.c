@@ -284,10 +284,10 @@ G_MODULE_EXPORT gboolean projet_free(Projet *projet)
         BUG(_1990_combinaisons_free(projet), FALSE);
     /* Rigidite doit être libéré avant noeud car pour libérer toute la mémoire, il est nécessaire d'avoir accès aux informations contenues dans les noeuds */
     BUG(EF_calculs_free(projet), FALSE);
-    if (projet->modele.noeuds != NULL)
-        BUG(EF_noeuds_free(projet), FALSE);
     if (projet->modele.sections != NULL)
         BUG(EF_sections_free(projet), FALSE);
+    if (projet->modele.noeuds != NULL)
+        BUG(EF_noeuds_free(projet), FALSE);
     if (projet->modele.barres != NULL)
         BUG(_1992_1_1_barres_free(projet), FALSE);
     if (projet->modele.appuis != NULL)

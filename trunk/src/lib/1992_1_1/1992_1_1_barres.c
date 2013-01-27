@@ -1379,8 +1379,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_B
             ai[i] = 9;  aj[i] = 9;  ax[i] = gj_l;  i++;
         }
         
-        if (element->info_EF[j].matrice_rigidite_locale != NULL)
-            cholmod_free_sparse(&element->info_EF[j].matrice_rigidite_locale, projet->calculs.c);
+        cholmod_free_sparse(&element->info_EF[j].matrice_rigidite_locale, projet->calculs.c);
         element->info_EF[j].matrice_rigidite_locale = cholmod_triplet_to_sparse(triplet, 0, projet->calculs.c);
         BUGMSG(element->info_EF[j].matrice_rigidite_locale, FALSE, gettext("Erreur d'allocation mémoire.\n"));
         cholmod_free_triplet(&triplet, projet->calculs.c);
@@ -1513,6 +1512,8 @@ G_MODULE_EXPORT void _1992_1_1_barres_free_foreach(Beton_Barre *barre, Projet *p
  * Valeur renvoyée : Aucune.
  */
 {
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    
     while (barre->noeuds_intermediaires != NULL)
     {
         void    *tmp = barre->noeuds_intermediaires->data;
@@ -1559,8 +1560,6 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_supprime_liste(Projet *projet, GList *
     
     BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, liste_noeuds, NULL, NULL, NULL, liste_barres, &noeuds_suppr, &barres_suppr, &charges_suppr, FALSE, TRUE), FALSE);
     
-    BUG(EF_calculs_free(projet), FALSE);
-    
     // On enlève dans les charges les noeuds et barres qui seront supprimés
     list_parcours = charges_suppr;
     while (list_parcours != NULL)
@@ -1599,19 +1598,8 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_supprime_liste(Projet *projet, GList *
     
     BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, liste_noeuds, NULL, NULL, NULL, liste_barres, &noeuds_suppr, &barres_suppr, NULL, TRUE, TRUE), FALSE);
     
-    // On supprime les barres
-    list_parcours = barres_suppr;
-    while (list_parcours != NULL)
-    {
-        Beton_Barre *barre = _1992_1_1_barres_cherche_numero(projet, GPOINTER_TO_UINT(list_parcours->data), FALSE);
-        
-        if (barre != NULL)
-        {
-            _1992_1_1_barres_free_foreach(barre, projet);
-            projet->modele.barres = g_list_remove(projet->modele.barres, barre);
-        }
-        list_parcours = g_list_next(list_parcours);
-    }
+    if ((noeuds_suppr != NULL) || (barres_suppr != NULL))
+        BUG(EF_calculs_free(projet), FALSE);
     
     // On supprime les noeuds
     list_parcours = noeuds_suppr;
@@ -1622,6 +1610,20 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_supprime_liste(Projet *projet, GList *
         {
             EF_noeuds_free_foreach(noeud, projet);
             projet->modele.noeuds = g_list_remove(projet->modele.noeuds, noeud);
+        }
+        list_parcours = g_list_next(list_parcours);
+    }
+    
+    // On supprime les barres
+    list_parcours = barres_suppr;
+    while (list_parcours != NULL)
+    {
+        Beton_Barre *barre = _1992_1_1_barres_cherche_numero(projet, GPOINTER_TO_UINT(list_parcours->data), FALSE);
+        
+        if (barre != NULL)
+        {
+            _1992_1_1_barres_free_foreach(barre, projet);
+            projet->modele.barres = g_list_remove(projet->modele.barres, barre);
         }
         list_parcours = g_list_next(list_parcours);
     }
@@ -1657,11 +1659,11 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_free(Projet *projet)
     // Trivial
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
+    BUG(EF_calculs_free(projet), FALSE);
+    
     g_list_foreach(projet->modele.barres, (GFunc)_1992_1_1_barres_free_foreach, projet);
     g_list_free(projet->modele.barres);
     projet->modele.barres = NULL;
-    
-    BUG(EF_calculs_free(projet), FALSE);
     
 #ifdef ENABLE_GTK
     g_object_unref(projet->list_gtk.ef_barres.liste_types);

@@ -130,6 +130,8 @@ G_MODULE_EXPORT gboolean EF_charge_noeud_enleve_noeuds(Charge_Noeud *charge, GLi
     }
 #endif
     
+    BUG(EF_calculs_free(projet), FALSE);
+    
     return TRUE;
 }
 

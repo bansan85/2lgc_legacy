@@ -881,6 +881,8 @@ G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_enleve_barres(
     }
 #endif
     
+    BUG(EF_calculs_free(projet), FALSE);
+    
     return TRUE;
 }
 

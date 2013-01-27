@@ -26,6 +26,7 @@
 #include "common_erreurs.h"
 #include "common_selection.h"
 #include "EF_noeuds.h"
+#include "EF_calculs.h"
 #include "1992_1_1_barres.h"
 
 #ifdef ENABLE_GTK
@@ -457,6 +458,8 @@ G_MODULE_EXPORT gboolean EF_appuis_edit(EF_Appui *appui, int x, Type_EF_Appui ty
  *             type_x inconnu.
  */
 {
+    GList   *list_appuis = NULL, *list_noeuds;
+    
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(appui, FALSE, gettext("Paramètre %s incorrect.\n"), "appui");
     BUGMSG((type_x == EF_APPUI_LIBRE) || (type_x == EF_APPUI_BLOQUE), FALSE, gettext("Type d'appui %d inconnu.\n"), type_x);
@@ -503,14 +506,35 @@ G_MODULE_EXPORT gboolean EF_appuis_edit(EF_Appui *appui, int x, Type_EF_Appui ty
 #ifdef ENABLE_GTK
     if (projet->list_gtk.ef_appuis.builder != NULL)
     {
-        if (type_x == EF_APPUI_LIBRE)
-            gtk_tree_store_set(projet->list_gtk.ef_appuis.appuis, &appui->Iter_fenetre, x+1, gettext("Libre"), -1);
-        else if (type_x == EF_APPUI_BLOQUE)
-            gtk_tree_store_set(projet->list_gtk.ef_appuis.appuis, &appui->Iter_fenetre, x+1, gettext("Bloqué"), -1);
-        else // Impossible
-            return FALSE;
+        switch (type_x)
+        {
+            case EF_APPUI_LIBRE :
+            {
+                gtk_tree_store_set(projet->list_gtk.ef_appuis.appuis, &appui->Iter_fenetre, x+1, gettext("Libre"), -1);
+                break;
+            }
+            case EF_APPUI_BLOQUE :
+            {
+                gtk_tree_store_set(projet->list_gtk.ef_appuis.appuis, &appui->Iter_fenetre, x+1, gettext("Bloqué"), -1);
+                break;
+            }
+            default :
+            {
+                BUGMSG(FALSE, FALSE, gettext("Le type d'appui (%d) est inconnu.\n"), type_x);
+                break;
+            }
+        }
     }
 #endif
+    
+    list_appuis = g_list_append(list_appuis, appui);
+    BUG(_1992_1_1_barres_cherche_dependances(projet, list_appuis, NULL, NULL, NULL, NULL, NULL, &list_noeuds, NULL, NULL, FALSE, FALSE), FALSE);
+    if (list_noeuds != NULL)
+    {
+        BUG(EF_calculs_free(projet), FALSE);
+        g_list_free(list_noeuds);
+    }
+    g_list_free(list_appuis);
     
     return TRUE;
 }

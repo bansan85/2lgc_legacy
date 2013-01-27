@@ -561,42 +561,89 @@ G_MODULE_EXPORT gboolean _1992_1_1_materiaux_modif(Projet *projet, Beton_Materia
         BUG(_1992_1_1_materiaux_repositionne(projet, materiau), FALSE);
     }
     
-    if (!isnan(fck))
+    if ((!isnan(fck)) && (!ERREUR_RELATIVE_EGALE(materiau->fck, fck)))
         materiau->fck = fck;
-    if (!isnan(fckcube))
+    else
+        fck = NAN;
+    if ((!isnan(fckcube)) && (!ERREUR_RELATIVE_EGALE(materiau->fckcube, fckcube)))
         materiau->fckcube = fckcube;
-    if (!isnan(fcm))
+    else
+        fckcube = NAN;
+    if ((!isnan(fcm)) && (!ERREUR_RELATIVE_EGALE(materiau->fcm, fcm)))
         materiau->fcm = fcm;
-    if (!isnan(fctm))
+    else
+        fcm = NAN;
+    if ((!isnan(fctm)) && (!ERREUR_RELATIVE_EGALE(materiau->fctm, fctm)))
         materiau->fctm = fctm;
-    if (!isnan(fctk_0_05))
+    else
+        fctm = NAN;
+    if ((!isnan(fctk_0_05)) && (!ERREUR_RELATIVE_EGALE(materiau->fctk_0_05, fctk_0_05)))
         materiau->fctk_0_05 = fctk_0_05;
-    if (!isnan(fctk_0_95))
+    else
+        fctk_0_05 = NAN;
+    if ((!isnan(fctk_0_95)) && (!ERREUR_RELATIVE_EGALE(materiau->fctk_0_95, fctk_0_95)))
         materiau->fctk_0_95 = fctk_0_95;
-    if (!isnan(ecm))
+    else
+        fctk_0_95 = NAN;
+    if ((!isnan(ecm)) && (!ERREUR_RELATIVE_EGALE(materiau->ecm, ecm)))
         materiau->ecm = ecm;
-    if (!isnan(ec1))
+    else
+        ecm = NAN;
+    if ((!isnan(ec1)) && (!ERREUR_RELATIVE_EGALE(materiau->ec1, ec1)))
         materiau->ec1 = ec1;
-    if (!isnan(ecu1))
+    else
+        ec1 = NAN;
+    if ((!isnan(ecu1)) && (!ERREUR_RELATIVE_EGALE(materiau->ecu1, ecu1)))
         materiau->ecu1 = ecu1;
-    if (!isnan(ec2))
+    else
+        ecu1 = NAN;
+    if ((!isnan(ec2)) && (!ERREUR_RELATIVE_EGALE(materiau->ec2, ec2)))
         materiau->ec2 = ec2;
-    if (!isnan(ecu2))
+    else
+        ec2 = NAN;
+    if ((!isnan(ecu2)) && (!ERREUR_RELATIVE_EGALE(materiau->ecu2, ecu2)))
         materiau->ecu2 = ecu2;
-    if (!isnan(ec3))
+    else
+        ecu2 = NAN;
+    if ((!isnan(ec3)) && (!ERREUR_RELATIVE_EGALE(materiau->ec3, ec3)))
         materiau->ec3 = ec3;
-    if (!isnan(ecu3))
+    else
+        ec3 = NAN;
+    if ((!isnan(ecu3)) && (!ERREUR_RELATIVE_EGALE(materiau->ecu3, ecu3)))
         materiau->ecu3 = ecu3;
-    if (!isnan(n))
+    else
+        ecu3 = NAN;
+    if ((!isnan(n)) && (!ERREUR_RELATIVE_EGALE(materiau->n, n)))
         materiau->n = n;
-    if (!isnan(nu))
+    else
+        n = NAN;
+    if ((!isnan(nu)) && (!ERREUR_RELATIVE_EGALE(materiau->nu, nu)))
         materiau->nu = nu;
-    if (!isnan(gnu_0_2))
+    else
+        nu = NAN;
+    if ((!isnan(gnu_0_2)) && (!ERREUR_RELATIVE_EGALE(materiau->gnu_0_2, gnu_0_2)))
         materiau->gnu_0_2 = gnu_0_2;
-    if (!isnan(gnu_0_0))
+    else
+        gnu_0_2 = NAN;
+    if ((!isnan(gnu_0_0)) && (!ERREUR_RELATIVE_EGALE(materiau->gnu_0_0, gnu_0_0)))
         materiau->gnu_0_0 = gnu_0_0;
+    else
+        gnu_0_0 = NAN;
     
     BUG(_1992_1_1_materiaux_update_ligne_treeview(projet, materiau), FALSE);
+    
+    if ((!isnan(fck)) || (!isnan(fckcube)) || (!isnan(fcm)) || (!isnan(fctm)) || (!isnan(fctk_0_05)) || (!isnan(fctk_0_95)) || (!isnan(ecm)) || (!isnan(ec1)) || (!isnan(ecu1)) || (!isnan(ec2)) || (!isnan(ecu2)) || (!isnan(ec3)) || (!isnan(ecu3)) || (!isnan(n)) || (!isnan(nu)) || (!isnan(gnu_0_2)) || (!isnan(gnu_0_0)))
+    {
+        GList   *liste_materiaux = NULL;
+        GList   *liste_barres_dep;
+        
+        liste_materiaux = g_list_append(liste_materiaux, materiau);
+        BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, liste_materiaux, NULL, NULL, NULL, &liste_barres_dep, NULL, FALSE, FALSE), FALSE);
+        g_list_free(liste_materiaux);
+        
+        if (liste_barres_dep != NULL)
+            BUG(EF_calculs_free(projet), FALSE);
+    }
     
 #ifdef ENABLE_GTK
     if (projet->list_gtk.ef_barres.builder != NULL)
@@ -747,15 +794,15 @@ G_MODULE_EXPORT char *_1992_1_1_materiaux_get_description(Beton_Materiau* materi
             free(tmp2);
         }
     }
-    if (!ERREUR_RELATIVE_EGALE(materiau->gnu_0_2, _1992_1_1_materiaux_gnu(materiau->fck/1000000., 0.2)))
+    if (!ERREUR_RELATIVE_EGALE(materiau->gnu_0_2, _1992_1_1_materiaux_gnu(materiau->fck/1000000., materiau->nu)))
     {
         common_math_double_to_char(materiau->gnu_0_2/1000000., tmp1, DECIMAL_CONTRAINTE);
         if (complement == NULL)
-            BUGMSG(complement = g_strdup_printf("G (&#957;=0.2) : %s MPa", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(complement = g_strdup_printf("G (&#957;=%.2lf) : %s MPa", materiau->nu, tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
         else
         {
             tmp2 = complement;
-            BUGMSG(complement = g_strdup_printf("%s, G (&#957; = 0.2) : %s MPa", tmp2, tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(complement = g_strdup_printf("%s, G (&#957;=%.2lf) : %s MPa", tmp2, materiau->nu, tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
             free(tmp2);
         }
     }
@@ -916,14 +963,14 @@ G_MODULE_EXPORT gboolean _1992_1_1_materiaux_supprime(Beton_Materiau* materiau, 
     BUG(_1992_1_1_barres_supprime_liste(projet, NULL, liste_barres_dep), TRUE);
     g_list_free(liste_barres_dep);
     
-    _1992_1_1_materiaux_free_un(materiau);
-    projet->modele.materiaux = g_list_remove(projet->modele.materiaux, materiau);
-    
 #ifdef ENABLE_GTK
     gtk_list_store_remove(projet->list_gtk.ef_materiaux.liste_materiaux, &materiau->Iter_liste);
     if (projet->list_gtk.ef_materiaux.builder != NULL)
         gtk_tree_store_remove(projet->list_gtk.ef_materiaux.materiaux, &materiau->Iter_fenetre);
 #endif
+    
+    _1992_1_1_materiaux_free_un(materiau);
+    projet->modele.materiaux = g_list_remove(projet->modele.materiaux, materiau);
     
     return TRUE;
 }
