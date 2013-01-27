@@ -546,6 +546,17 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                 gtk_list_store_append(res->list_store, &Iter);
                 for (j=1;j<=res->col_tab[0];j++)
                 {
+                    Fonction        comb_min, comb_max;
+                    Fonction        f_min, f_max;
+                    char            *tmp1 = NULL, *tmp2 = NULL;
+                    char            *tmp = NULL;
+                    GList           *liste = NULL, *list_parcours2;
+                    
+                    comb_min.troncons = NULL;
+                    comb_max.troncons = NULL;
+                    f_min.troncons = NULL;
+                    f_max.troncons = NULL;
+                    
                     switch (res->col_tab[j])
                     {
                         case COLRES_NUM_NOEUDS :
@@ -581,7 +592,6 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                         case COLRES_BARRES_PIXBUF_N :
                         {
                             GdkPixbuf   *pixbuf;
-                            GList       *liste = NULL, *list_parcours2;
                             
                             list_parcours2 = actions;
                             while (list_parcours2 != NULL)
@@ -597,13 +607,11 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             gtk_list_store_set(res->list_store, &Iter, j-1, pixbuf, -1);
                             
                             g_object_unref(pixbuf);
-                            g_list_free(liste);
                             break;
                         }
                         case COLRES_BARRES_PIXBUF_TY :
                         {
                             GdkPixbuf   *pixbuf;
-                            GList       *liste = NULL, *list_parcours2;
                             
                             list_parcours2 = actions;
                             while (list_parcours2 != NULL)
@@ -619,13 +627,11 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             gtk_list_store_set(res->list_store, &Iter, j-1, pixbuf, -1);
                             
                             g_object_unref(pixbuf);
-                            g_list_free(liste);
                             break;
                         }
                         case COLRES_BARRES_PIXBUF_TZ :
                         {
                             GdkPixbuf   *pixbuf;
-                            GList       *liste = NULL, *list_parcours2;
                             
                             list_parcours2 = actions;
                             while (list_parcours2 != NULL)
@@ -641,13 +647,11 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             gtk_list_store_set(res->list_store, &Iter, j-1, pixbuf, -1);
                             
                             g_object_unref(pixbuf);
-                            g_list_free(liste);
                             break;
                         }
                         case COLRES_BARRES_PIXBUF_MX :
                         {
                             GdkPixbuf   *pixbuf;
-                            GList       *liste = NULL, *list_parcours2;
                             
                             list_parcours2 = actions;
                             while (list_parcours2 != NULL)
@@ -663,13 +667,11 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             gtk_list_store_set(res->list_store, &Iter, j-1, pixbuf, -1);
                             
                             g_object_unref(pixbuf);
-                            g_list_free(liste);
                             break;
                         }
                         case COLRES_BARRES_PIXBUF_MY :
                         {
                             GdkPixbuf   *pixbuf;
-                            GList       *liste = NULL, *list_parcours2;
                             
                             list_parcours2 = actions;
                             while (list_parcours2 != NULL)
@@ -685,13 +687,11 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             gtk_list_store_set(res->list_store, &Iter, j-1, pixbuf, -1);
                             
                             g_object_unref(pixbuf);
-                            g_list_free(liste);
                             break;
                         }
                         case COLRES_BARRES_PIXBUF_MZ :
                         {
                             GdkPixbuf   *pixbuf;
-                            GList       *liste = NULL, *list_parcours2;
                             
                             list_parcours2 = actions;
                             while (list_parcours2 != NULL)
@@ -707,19 +707,14 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             gtk_list_store_set(res->list_store, &Iter, j-1, pixbuf, -1);
                             
                             g_object_unref(pixbuf);
-                            g_list_free(liste);
                             break;
                         }
                         case COLRES_BARRES_DESC_N :
                         {
-                            char        *tmp;
-                            GList       *liste = NULL, *list_parcours2;
-                            Fonction    f_min, f_max;
                             
                             list_parcours2 = actions;
                             if (g_list_next(actions) != NULL)
                             {
-                                char    *tmp1, *tmp2;
                                 while (list_parcours2 != NULL)
                                 {
                                     Action  *action2 = list_parcours2->data;
@@ -729,7 +724,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     list_parcours2 = g_list_next(list_parcours2);
                                 }
                                 
-                                if (common_fonction_renvoie_enveloppe(liste, &f_min, &f_max) == FALSE)
+                                if (common_fonction_renvoie_enveloppe(liste, &f_min, &f_max, &comb_min, &comb_max) == FALSE)
                                     BUGMSG(tmp = g_strdup_printf(gettext("Erreur")), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                 else
                                 {
@@ -737,10 +732,6 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     tmp2 = common_fonction_affiche_caract(&f_max, DECIMAL_DISTANCE, DECIMAL_FORCE);
                                     
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-                                    free(tmp1);
-                                    free(tmp2);
-                                    free(f_min.troncons);
-                                    free(f_max.troncons);
                                 }
                             }
                             else
@@ -750,20 +741,14 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             }
                             gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
                             
-                            free(tmp);
-                            g_list_free(liste);
                             break;
                         }
                         case COLRES_BARRES_DESC_TY :
                         {
-                            char        *tmp;
-                            GList       *liste = NULL, *list_parcours2;
-                            Fonction    f_min, f_max;
                             
                             list_parcours2 = actions;
                             if (g_list_next(actions) != NULL)
                             {
-                                char    *tmp1, *tmp2;
                                 while (list_parcours2 != NULL)
                                 {
                                     Action  *action2 = list_parcours2->data;
@@ -773,7 +758,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     list_parcours2 = g_list_next(list_parcours2);
                                 }
                                 
-                                if (common_fonction_renvoie_enveloppe(liste, &f_min, &f_max) == FALSE)
+                                if (common_fonction_renvoie_enveloppe(liste, &f_min, &f_max, &comb_min, &comb_max) == FALSE)
                                     BUGMSG(tmp = g_strdup_printf(gettext("Erreur")), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                 else
                                 {
@@ -781,10 +766,6 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     tmp2 = common_fonction_affiche_caract(&f_max, DECIMAL_DISTANCE, DECIMAL_FORCE);
                                     
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-                                    free(tmp1);
-                                    free(tmp2);
-                                    free(f_min.troncons);
-                                    free(f_max.troncons);
                                 }
                             }
                             else
@@ -794,20 +775,14 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             }
                             gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
                             
-                            free(tmp);
-                            g_list_free(liste);
                             break;
                         }
                         case COLRES_BARRES_DESC_TZ :
                         {
-                            char        *tmp;
-                            GList       *liste = NULL, *list_parcours2;
-                            Fonction    f_min, f_max;
                             
                             list_parcours2 = actions;
                             if (g_list_next(actions) != NULL)
                             {
-                                char    *tmp1, *tmp2;
                                 while (list_parcours2 != NULL)
                                 {
                                     Action  *action2 = list_parcours2->data;
@@ -817,7 +792,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     list_parcours2 = g_list_next(list_parcours2);
                                 }
                                 
-                                if (common_fonction_renvoie_enveloppe(liste, &f_min, &f_max) == FALSE)
+                                if (common_fonction_renvoie_enveloppe(liste, &f_min, &f_max, &comb_min, &comb_max) == FALSE)
                                     BUGMSG(tmp = g_strdup_printf(gettext("Erreur")), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                 else
                                 {
@@ -825,10 +800,6 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     tmp2 = common_fonction_affiche_caract(&f_max, DECIMAL_DISTANCE, DECIMAL_FORCE);
                                     
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-                                    free(tmp1);
-                                    free(tmp2);
-                                    free(f_min.troncons);
-                                    free(f_max.troncons);
                                 }
                             }
                             else
@@ -838,20 +809,14 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             }
                             gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
                             
-                            free(tmp);
-                            g_list_free(liste);
                             break;
                         }
                         case COLRES_BARRES_DESC_MX :
                         {
-                            char        *tmp;
-                            GList       *liste = NULL, *list_parcours2;
-                            Fonction    f_min, f_max;
                             
                             list_parcours2 = actions;
                             if (g_list_next(actions) != NULL)
                             {
-                                char    *tmp1, *tmp2;
                                 while (list_parcours2 != NULL)
                                 {
                                     Action  *action2 = list_parcours2->data;
@@ -861,17 +826,13 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     list_parcours2 = g_list_next(list_parcours2);
                                 }
                                 
-                                if (common_fonction_renvoie_enveloppe(liste, &f_min, &f_max) == FALSE)
+                                if (common_fonction_renvoie_enveloppe(liste, &f_min, &f_max, &comb_min, &comb_max) == FALSE)
                                     BUGMSG(tmp = g_strdup_printf(gettext("Erreur")), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                 {
                                     tmp1 = common_fonction_affiche_caract(&f_min, DECIMAL_DISTANCE, DECIMAL_MOMENT);
                                     tmp2 = common_fonction_affiche_caract(&f_max, DECIMAL_DISTANCE, DECIMAL_MOMENT);
                                     
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-                                    free(tmp1);
-                                    free(tmp2);
-                                    free(f_min.troncons);
-                                    free(f_max.troncons);
                                 }
                             }
                             else
@@ -881,20 +842,14 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             }
                             gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
                             
-                            free(tmp);
-                            g_list_free(liste);
                             break;
                         }
                         case COLRES_BARRES_DESC_MY :
                         {
-                            char        *tmp;
-                            GList       *liste = NULL, *list_parcours2;
-                            Fonction    f_min, f_max;
                             
                             list_parcours2 = actions;
                             if (g_list_next(actions) != NULL)
                             {
-                                char    *tmp1, *tmp2;
                                 while (list_parcours2 != NULL)
                                 {
                                     Action  *action2 = list_parcours2->data;
@@ -904,7 +859,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     list_parcours2 = g_list_next(list_parcours2);
                                 }
                                 
-                                if (common_fonction_renvoie_enveloppe(liste, &f_min, &f_max) == FALSE)
+                                if (common_fonction_renvoie_enveloppe(liste, &f_min, &f_max, &comb_min, &comb_max) == FALSE)
                                     BUGMSG(tmp = g_strdup_printf(gettext("Erreur")), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                 else
                                 {
@@ -912,10 +867,6 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     tmp2 = common_fonction_affiche_caract(&f_max, DECIMAL_DISTANCE, DECIMAL_MOMENT);
                                     
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-                                    free(tmp1);
-                                    free(tmp2);
-                                    free(f_min.troncons);
-                                    free(f_max.troncons);
                                 }
                             }
                             else
@@ -925,20 +876,14 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             }
                             gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
                             
-                            free(tmp);
-                            g_list_free(liste);
                             break;
                         }
                         case COLRES_BARRES_DESC_MZ :
                         {
-                            char        *tmp;
-                            GList       *liste = NULL, *list_parcours2;
-                            Fonction    f_min, f_max;
                             
                             list_parcours2 = actions;
                             if (g_list_next(actions) != NULL)
                             {
-                                char    *tmp1, *tmp2;
                                 while (list_parcours2 != NULL)
                                 {
                                     Action  *action2 = list_parcours2->data;
@@ -948,7 +893,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     list_parcours2 = g_list_next(list_parcours2);
                                 }
                                 
-                                if (common_fonction_renvoie_enveloppe(liste, &f_min, &f_max) == FALSE)
+                                if (common_fonction_renvoie_enveloppe(liste, &f_min, &f_max, &comb_min, &comb_max) == FALSE)
                                     BUGMSG(tmp = g_strdup_printf(gettext("Erreur")), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                 else
                                 {
@@ -956,10 +901,6 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     tmp2 = common_fonction_affiche_caract(&f_max, DECIMAL_DISTANCE, DECIMAL_MOMENT);
                                     
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-                                    free(tmp1);
-                                    free(tmp2);
-                                    free(f_min.troncons);
-                                    free(f_max.troncons);
                                 }
                             }
                             else
@@ -969,20 +910,14 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             }
                             gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
                             
-                            free(tmp);
-                            g_list_free(liste);
                             break;
                         }
                         case COLRES_BARRES_EQ_N :
                         {
-                            char        *tmp;
-                            GList       *liste = NULL, *list_parcours2;
-                            Fonction    f_min, f_max;
                             
                             list_parcours2 = actions;
                             if (g_list_next(actions) != NULL)
                             {
-                                char    *tmp1, *tmp2;
                                 while (list_parcours2 != NULL)
                                 {
                                     Action  *action2 = list_parcours2->data;
@@ -992,41 +927,31 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     list_parcours2 = g_list_next(list_parcours2);
                                 }
                                 
-                                if (common_fonction_renvoie_enveloppe(liste, &f_min, &f_max) == FALSE)
+                                if (common_fonction_renvoie_enveloppe(liste, &f_min, &f_max, &comb_min, &comb_max) == FALSE)
                                     BUGMSG(tmp = g_strdup_printf(gettext("Erreur")), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                 else
                                 {
-                                    tmp1 = common_fonction_renvoie(&f_min, DECIMAL_FORCE);
-                                    tmp2 = common_fonction_renvoie(&f_max, DECIMAL_FORCE);
+                                    tmp1 = common_fonction_renvoie(&f_min, &comb_min, DECIMAL_FORCE);
+                                    tmp2 = common_fonction_renvoie(&f_max, &comb_max, DECIMAL_FORCE);
                                     
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-                                    free(tmp1);
-                                    free(tmp2);
-                                    free(f_min.troncons);
-                                    free(f_max.troncons);
                                 }
                             }
                             else
                             {
                                 Action  *action2 = list_parcours2->data;
-                                tmp = common_fonction_renvoie(action2->fonctions_efforts[0][i], DECIMAL_FORCE);
+                                tmp = common_fonction_renvoie(action2->fonctions_efforts[0][i], NULL, DECIMAL_FORCE);
                             }
                             gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
                             
-                            free(tmp);
-                            g_list_free(liste);
                             break;
                         }
                         case COLRES_BARRES_EQ_TY :
                         {
-                            char        *tmp;
-                            GList       *liste = NULL, *list_parcours2;
-                            Fonction    f_min, f_max;
                             
                             list_parcours2 = actions;
                             if (g_list_next(actions) != NULL)
                             {
-                                char    *tmp1, *tmp2;
                                 while (list_parcours2 != NULL)
                                 {
                                     Action  *action2 = list_parcours2->data;
@@ -1036,41 +961,31 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     list_parcours2 = g_list_next(list_parcours2);
                                 }
                                 
-                                if (common_fonction_renvoie_enveloppe(liste, &f_min, &f_max) == FALSE)
+                                if (common_fonction_renvoie_enveloppe(liste, &f_min, &f_max, &comb_min, &comb_max) == FALSE)
                                     BUGMSG(tmp = g_strdup_printf(gettext("Erreur")), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                 else
                                 {
-                                    tmp1 = common_fonction_renvoie(&f_min, DECIMAL_FORCE);
-                                    tmp2 = common_fonction_renvoie(&f_max, DECIMAL_FORCE);
+                                    tmp1 = common_fonction_renvoie(&f_min, &comb_min, DECIMAL_FORCE);
+                                    tmp2 = common_fonction_renvoie(&f_max, &comb_max, DECIMAL_FORCE);
                                     
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-                                    free(tmp1);
-                                    free(tmp2);
-                                    free(f_min.troncons);
-                                    free(f_max.troncons);
                                 }
                             }
                             else
                             {
                                 Action  *action2 = list_parcours2->data;
-                                tmp = common_fonction_renvoie(action2->fonctions_efforts[1][i], DECIMAL_FORCE);
+                                tmp = common_fonction_renvoie(action2->fonctions_efforts[1][i], NULL, DECIMAL_FORCE);
                             }
                             gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
                             
-                            free(tmp);
-                            g_list_free(liste);
                             break;
                         }
                         case COLRES_BARRES_EQ_TZ :
                         {
-                            char        *tmp;
-                            GList       *liste = NULL, *list_parcours2;
-                            Fonction    f_min, f_max;
                             
                             list_parcours2 = actions;
                             if (g_list_next(actions) != NULL)
                             {
-                                char    *tmp1, *tmp2;
                                 while (list_parcours2 != NULL)
                                 {
                                     Action  *action2 = list_parcours2->data;
@@ -1080,41 +995,31 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     list_parcours2 = g_list_next(list_parcours2);
                                 }
                                 
-                                if (common_fonction_renvoie_enveloppe(liste, &f_min, &f_max) == FALSE)
+                                if (common_fonction_renvoie_enveloppe(liste, &f_min, &f_max, &comb_min, &comb_max) == FALSE)
                                     BUGMSG(tmp = g_strdup_printf(gettext("Erreur")), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                 else
                                 {
-                                    tmp1 = common_fonction_renvoie(&f_min, DECIMAL_FORCE);
-                                    tmp2 = common_fonction_renvoie(&f_max, DECIMAL_FORCE);
+                                    tmp1 = common_fonction_renvoie(&f_min, &comb_min, DECIMAL_FORCE);
+                                    tmp2 = common_fonction_renvoie(&f_max, &comb_max, DECIMAL_FORCE);
                                     
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-                                    free(tmp1);
-                                    free(tmp2);
-                                    free(f_min.troncons);
-                                    free(f_max.troncons);
                                 }
                             }
                             else
                             {
                                 Action  *action2 = list_parcours2->data;
-                                tmp = common_fonction_renvoie(action2->fonctions_efforts[2][i], DECIMAL_FORCE);
+                                tmp = common_fonction_renvoie(action2->fonctions_efforts[2][i], NULL, DECIMAL_FORCE);
                             }
                             gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
                             
-                            free(tmp);
-                            g_list_free(liste);
                             break;
                         }
                         case COLRES_BARRES_EQ_MX :
                         {
-                            char        *tmp;
-                            GList       *liste = NULL, *list_parcours2;
-                            Fonction    f_min, f_max;
                             
                             list_parcours2 = actions;
                             if (g_list_next(actions) != NULL)
                             {
-                                char    *tmp1, *tmp2;
                                 while (list_parcours2 != NULL)
                                 {
                                     Action  *action2 = list_parcours2->data;
@@ -1124,40 +1029,30 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     list_parcours2 = g_list_next(list_parcours2);
                                 }
                                 
-                                if (common_fonction_renvoie_enveloppe(liste, &f_min, &f_max) == FALSE)
+                                if (common_fonction_renvoie_enveloppe(liste, &f_min, &f_max, &comb_min, &comb_max) == FALSE)
                                     BUGMSG(tmp = g_strdup_printf(gettext("Erreur")), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                 {
-                                    tmp1 = common_fonction_renvoie(&f_min, DECIMAL_MOMENT);
-                                    tmp2 = common_fonction_renvoie(&f_max, DECIMAL_MOMENT);
+                                    tmp1 = common_fonction_renvoie(&f_min, &comb_min, DECIMAL_MOMENT);
+                                    tmp2 = common_fonction_renvoie(&f_max, &comb_max, DECIMAL_MOMENT);
                                     
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-                                    free(tmp1);
-                                    free(tmp2);
-                                    free(f_min.troncons);
-                                    free(f_max.troncons);
                                 }
                             }
                             else
                             {
                                 Action  *action2 = list_parcours2->data;
-                                tmp = common_fonction_renvoie(action2->fonctions_efforts[3][i], DECIMAL_MOMENT);
+                                tmp = common_fonction_renvoie(action2->fonctions_efforts[3][i], NULL, DECIMAL_MOMENT);
                             }
                             gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
                             
-                            free(tmp);
-                            g_list_free(liste);
                             break;
                         }
                         case COLRES_BARRES_EQ_MY :
                         {
-                            char        *tmp;
-                            GList       *liste = NULL, *list_parcours2;
-                            Fonction    f_min, f_max;
                             
                             list_parcours2 = actions;
                             if (g_list_next(actions) != NULL)
                             {
-                                char    *tmp1, *tmp2;
                                 while (list_parcours2 != NULL)
                                 {
                                     Action  *action2 = list_parcours2->data;
@@ -1167,41 +1062,31 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     list_parcours2 = g_list_next(list_parcours2);
                                 }
                                 
-                                if (common_fonction_renvoie_enveloppe(liste, &f_min, &f_max) == FALSE)
+                                if (common_fonction_renvoie_enveloppe(liste, &f_min, &f_max, &comb_min, &comb_max) == FALSE)
                                     BUGMSG(tmp = g_strdup_printf(gettext("Erreur")), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                 else
                                 {
-                                    tmp1 = common_fonction_renvoie(&f_min, DECIMAL_MOMENT);
-                                    tmp2 = common_fonction_renvoie(&f_max, DECIMAL_MOMENT);
+                                    tmp1 = common_fonction_renvoie(&f_min, &comb_min, DECIMAL_MOMENT);
+                                    tmp2 = common_fonction_renvoie(&f_max, &comb_max, DECIMAL_MOMENT);
                                     
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-                                    free(tmp1);
-                                    free(tmp2);
-                                    free(f_min.troncons);
-                                    free(f_max.troncons);
                                 }
                             }
                             else
                             {
                                 Action  *action2 = list_parcours2->data;
-                                tmp = common_fonction_renvoie(action2->fonctions_efforts[4][i], DECIMAL_MOMENT);
+                                tmp = common_fonction_renvoie(action2->fonctions_efforts[4][i], NULL, DECIMAL_MOMENT);
                             }
                             gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
                             
-                            free(tmp);
-                            g_list_free(liste);
                             break;
                         }
                         case COLRES_BARRES_EQ_MZ :
                         {
-                            char        *tmp;
-                            GList       *liste = NULL, *list_parcours2;
-                            Fonction    f_min, f_max;
                             
                             list_parcours2 = actions;
                             if (g_list_next(actions) != NULL)
                             {
-                                char    *tmp1, *tmp2;
                                 while (list_parcours2 != NULL)
                                 {
                                     Action  *action2 = list_parcours2->data;
@@ -1211,35 +1096,28 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     list_parcours2 = g_list_next(list_parcours2);
                                 }
                                 
-                                if (common_fonction_renvoie_enveloppe(liste, &f_min, &f_max) == FALSE)
+                                if (common_fonction_renvoie_enveloppe(liste, &f_min, &f_max, &comb_min, &comb_max) == FALSE)
                                     BUGMSG(tmp = g_strdup_printf(gettext("Erreur")), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                 else
                                 {
-                                    tmp1 = common_fonction_renvoie(&f_min, DECIMAL_MOMENT);
-                                    tmp2 = common_fonction_renvoie(&f_max, DECIMAL_MOMENT);
+                                    tmp1 = common_fonction_renvoie(&f_min, &comb_min, DECIMAL_MOMENT);
+                                    tmp2 = common_fonction_renvoie(&f_max, &comb_max, DECIMAL_MOMENT);
                                     
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-                                    free(tmp1);
-                                    free(tmp2);
-                                    free(f_min.troncons);
-                                    free(f_max.troncons);
                                 }
                             }
                             else
                             {
                                 Action  *action2 = list_parcours2->data;
-                                tmp = common_fonction_renvoie(action2->fonctions_efforts[5][i], DECIMAL_MOMENT);
+                                tmp = common_fonction_renvoie(action2->fonctions_efforts[5][i], NULL, DECIMAL_MOMENT);
                             }
                             gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
                             
-                            free(tmp);
-                            g_list_free(liste);
                             break;
                         }
                         case COLRES_DEFORMATION_PIXBUF_UX :
                         {
                             GdkPixbuf   *pixbuf;
-                            GList       *liste = NULL, *list_parcours2;
                             
                             list_parcours2 = actions;
                             while (list_parcours2 != NULL)
@@ -1255,13 +1133,11 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             gtk_list_store_set(res->list_store, &Iter, j-1, pixbuf, -1);
                             
                             g_object_unref(pixbuf);
-                            g_list_free(liste);
                             break;
                         }
                         case COLRES_DEFORMATION_PIXBUF_UY :
                         {
                             GdkPixbuf   *pixbuf;
-                            GList       *liste = NULL, *list_parcours2;
                             
                             list_parcours2 = actions;
                             while (list_parcours2 != NULL)
@@ -1277,13 +1153,11 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             gtk_list_store_set(res->list_store, &Iter, j-1, pixbuf, -1);
                             
                             g_object_unref(pixbuf);
-                            g_list_free(liste);
                             break;
                         }
                         case COLRES_DEFORMATION_PIXBUF_UZ :
                         {
                             GdkPixbuf   *pixbuf;
-                            GList       *liste = NULL, *list_parcours2;
                             
                             list_parcours2 = actions;
                             while (list_parcours2 != NULL)
@@ -1299,13 +1173,11 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             gtk_list_store_set(res->list_store, &Iter, j-1, pixbuf, -1);
                             
                             g_object_unref(pixbuf);
-                            g_list_free(liste);
                             break;
                         }
                         case COLRES_DEFORMATION_PIXBUF_RX :
                         {
                             GdkPixbuf   *pixbuf;
-                            GList       *liste = NULL, *list_parcours2;
                             
                             list_parcours2 = actions;
                             while (list_parcours2 != NULL)
@@ -1321,13 +1193,11 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             gtk_list_store_set(res->list_store, &Iter, j-1, pixbuf, -1);
                             
                             g_object_unref(pixbuf);
-                            g_list_free(liste);
                             break;
                         }
                         case COLRES_DEFORMATION_PIXBUF_RY :
                         {
                             GdkPixbuf   *pixbuf;
-                            GList       *liste = NULL, *list_parcours2;
                             
                             list_parcours2 = actions;
                             while (list_parcours2 != NULL)
@@ -1343,13 +1213,11 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             gtk_list_store_set(res->list_store, &Iter, j-1, pixbuf, -1);
                             
                             g_object_unref(pixbuf);
-                            g_list_free(liste);
                             break;
                         }
                         case COLRES_DEFORMATION_PIXBUF_RZ :
                         {
                             GdkPixbuf   *pixbuf;
-                            GList       *liste = NULL, *list_parcours2;
                             
                             list_parcours2 = actions;
                             while (list_parcours2 != NULL)
@@ -1365,19 +1233,14 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             gtk_list_store_set(res->list_store, &Iter, j-1, pixbuf, -1);
                             
                             g_object_unref(pixbuf);
-                            g_list_free(liste);
                             break;
                         }
                         case COLRES_DEFORMATION_DESC_UX :
                         {
-                            char        *tmp;
-                            GList       *liste = NULL, *list_parcours2;
-                            Fonction    f_min, f_max;
                             
                             list_parcours2 = actions;
                             if (g_list_next(actions) != NULL)
                             {
-                                char    *tmp1, *tmp2;
                                 while (list_parcours2 != NULL)
                                 {
                                     Action  *action2 = list_parcours2->data;
@@ -1387,7 +1250,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     list_parcours2 = g_list_next(list_parcours2);
                                 }
                                 
-                                if (common_fonction_renvoie_enveloppe(liste, &f_min, &f_max) == FALSE)
+                                if (common_fonction_renvoie_enveloppe(liste, &f_min, &f_max, &comb_min, &comb_max) == FALSE)
                                     BUGMSG(tmp = g_strdup_printf(gettext("Erreur")), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                 else
                                 {
@@ -1395,10 +1258,6 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     tmp2 = common_fonction_affiche_caract(&f_max, DECIMAL_DISTANCE, DECIMAL_DEPLACEMENT);
                                     
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-                                    free(tmp1);
-                                    free(tmp2);
-                                    free(f_min.troncons);
-                                    free(f_max.troncons);
                                 }
                             }
                             else
@@ -1408,20 +1267,14 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             }
                             gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
                             
-                            free(tmp);
-                            g_list_free(liste);
                             break;
                         }
                         case COLRES_DEFORMATION_DESC_UY :
                         {
-                            char        *tmp;
-                            GList       *liste = NULL, *list_parcours2;
-                            Fonction    f_min, f_max;
                             
                             list_parcours2 = actions;
                             if (g_list_next(actions) != NULL)
                             {
-                                char    *tmp1, *tmp2;
                                 while (list_parcours2 != NULL)
                                 {
                                     Action  *action2 = list_parcours2->data;
@@ -1431,7 +1284,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     list_parcours2 = g_list_next(list_parcours2);
                                 }
                                 
-                                if (common_fonction_renvoie_enveloppe(liste, &f_min, &f_max) == FALSE)
+                                if (common_fonction_renvoie_enveloppe(liste, &f_min, &f_max, &comb_min, &comb_max) == FALSE)
                                     BUGMSG(tmp = g_strdup_printf(gettext("Erreur")), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                 else
                                 {
@@ -1439,10 +1292,6 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     tmp2 = common_fonction_affiche_caract(&f_max, DECIMAL_DISTANCE, DECIMAL_DEPLACEMENT);
                                     
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-                                    free(tmp1);
-                                    free(tmp2);
-                                    free(f_min.troncons);
-                                    free(f_max.troncons);
                                 }
                             }
                             else
@@ -1452,20 +1301,14 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             }
                             gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
                             
-                            free(tmp);
-                            g_list_free(liste);
                             break;
                         }
                         case COLRES_DEFORMATION_DESC_UZ :
                         {
-                            char        *tmp;
-                            GList       *liste = NULL, *list_parcours2;
-                            Fonction    f_min, f_max;
                             
                             list_parcours2 = actions;
                             if (g_list_next(actions) != NULL)
                             {
-                                char    *tmp1, *tmp2;
                                 while (list_parcours2 != NULL)
                                 {
                                     Action  *action2 = list_parcours2->data;
@@ -1475,7 +1318,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     list_parcours2 = g_list_next(list_parcours2);
                                 }
                                 
-                                if (common_fonction_renvoie_enveloppe(liste, &f_min, &f_max) == FALSE)
+                                if (common_fonction_renvoie_enveloppe(liste, &f_min, &f_max, &comb_min, &comb_max) == FALSE)
                                     BUGMSG(tmp = g_strdup_printf(gettext("Erreur")), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                 else
                                 {
@@ -1483,10 +1326,6 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     tmp2 = common_fonction_affiche_caract(&f_max, DECIMAL_DISTANCE, DECIMAL_DEPLACEMENT);
                                     
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-                                    free(tmp1);
-                                    free(tmp2);
-                                    free(f_min.troncons);
-                                    free(f_max.troncons);
                                 }
                             }
                             else
@@ -1496,20 +1335,14 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             }
                             gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
                             
-                            free(tmp);
-                            g_list_free(liste);
                             break;
                         }
                         case COLRES_DEFORMATION_DESC_RX :
                         {
-                            char        *tmp;
-                            GList       *liste = NULL, *list_parcours2;
-                            Fonction    f_min, f_max;
                             
                             list_parcours2 = actions;
                             if (g_list_next(actions) != NULL)
                             {
-                                char    *tmp1, *tmp2;
                                 while (list_parcours2 != NULL)
                                 {
                                     Action  *action2 = list_parcours2->data;
@@ -1519,17 +1352,13 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     list_parcours2 = g_list_next(list_parcours2);
                                 }
                                 
-                                if (common_fonction_renvoie_enveloppe(liste, &f_min, &f_max) == FALSE)
+                                if (common_fonction_renvoie_enveloppe(liste, &f_min, &f_max, &comb_min, &comb_max) == FALSE)
                                     BUGMSG(tmp = g_strdup_printf(gettext("Erreur")), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                 {
                                     tmp1 = common_fonction_affiche_caract(&f_min, DECIMAL_DISTANCE, DECIMAL_ROTATION);
                                     tmp2 = common_fonction_affiche_caract(&f_max, DECIMAL_DISTANCE, DECIMAL_ROTATION);
                                     
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-                                    free(tmp1);
-                                    free(tmp2);
-                                    free(f_min.troncons);
-                                    free(f_max.troncons);
                                 }
                             }
                             else
@@ -1539,20 +1368,14 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             }
                             gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
                             
-                            free(tmp);
-                            g_list_free(liste);
                             break;
                         }
                         case COLRES_DEFORMATION_DESC_RY :
                         {
-                            char        *tmp;
-                            GList       *liste = NULL, *list_parcours2;
-                            Fonction    f_min, f_max;
                             
                             list_parcours2 = actions;
                             if (g_list_next(actions) != NULL)
                             {
-                                char    *tmp1, *tmp2;
                                 while (list_parcours2 != NULL)
                                 {
                                     Action  *action2 = list_parcours2->data;
@@ -1562,7 +1385,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     list_parcours2 = g_list_next(list_parcours2);
                                 }
                                 
-                                if (common_fonction_renvoie_enveloppe(liste, &f_min, &f_max) == FALSE)
+                                if (common_fonction_renvoie_enveloppe(liste, &f_min, &f_max, &comb_min, &comb_max) == FALSE)
                                     BUGMSG(tmp = g_strdup_printf(gettext("Erreur")), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                 else
                                 {
@@ -1570,10 +1393,6 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     tmp2 = common_fonction_affiche_caract(&f_max, DECIMAL_DISTANCE, DECIMAL_ROTATION);
                                     
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-                                    free(tmp1);
-                                    free(tmp2);
-                                    free(f_min.troncons);
-                                    free(f_max.troncons);
                                 }
                             }
                             else
@@ -1583,20 +1402,14 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             }
                             gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
                             
-                            free(tmp);
-                            g_list_free(liste);
                             break;
                         }
                         case COLRES_DEFORMATION_DESC_RZ :
                         {
-                            char        *tmp;
-                            GList       *liste = NULL, *list_parcours2;
-                            Fonction    f_min, f_max;
                             
                             list_parcours2 = actions;
                             if (g_list_next(actions) != NULL)
                             {
-                                char    *tmp1, *tmp2;
                                 while (list_parcours2 != NULL)
                                 {
                                     Action  *action2 = list_parcours2->data;
@@ -1606,7 +1419,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     list_parcours2 = g_list_next(list_parcours2);
                                 }
                                 
-                                if (common_fonction_renvoie_enveloppe(liste, &f_min, &f_max) == FALSE)
+                                if (common_fonction_renvoie_enveloppe(liste, &f_min, &f_max, &comb_min, &comb_max) == FALSE)
                                     BUGMSG(tmp = g_strdup_printf(gettext("Erreur")), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                 else
                                 {
@@ -1614,10 +1427,6 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     tmp2 = common_fonction_affiche_caract(&f_max, DECIMAL_DISTANCE, DECIMAL_ROTATION);
                                     
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-                                    free(tmp1);
-                                    free(tmp2);
-                                    free(f_min.troncons);
-                                    free(f_max.troncons);
                                 }
                             }
                             else
@@ -1627,20 +1436,14 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             }
                             gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
                             
-                            free(tmp);
-                            g_list_free(liste);
                             break;
                         }
                         case COLRES_DEFORMATION_UX :
                         {
-                            char        *tmp;
-                            GList       *liste = NULL, *list_parcours2;
-                            Fonction    f_min, f_max;
                             
                             list_parcours2 = actions;
                             if (g_list_next(actions) != NULL)
                             {
-                                char    *tmp1, *tmp2;
                                 while (list_parcours2 != NULL)
                                 {
                                     Action  *action2 = list_parcours2->data;
@@ -1650,41 +1453,31 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     list_parcours2 = g_list_next(list_parcours2);
                                 }
                                 
-                                if (common_fonction_renvoie_enveloppe(liste, &f_min, &f_max) == FALSE)
+                                if (common_fonction_renvoie_enveloppe(liste, &f_min, &f_max, &comb_min, &comb_max) == FALSE)
                                     BUGMSG(tmp = g_strdup_printf(gettext("Erreur")), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                 else
                                 {
-                                    tmp1 = common_fonction_renvoie(&f_min, DECIMAL_DEPLACEMENT);
-                                    tmp2 = common_fonction_renvoie(&f_max, DECIMAL_DEPLACEMENT);
+                                    tmp1 = common_fonction_renvoie(&f_min, &comb_min, DECIMAL_DEPLACEMENT);
+                                    tmp2 = common_fonction_renvoie(&f_max, &comb_max, DECIMAL_DEPLACEMENT);
                                     
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-                                    free(tmp1);
-                                    free(tmp2);
-                                    free(f_min.troncons);
-                                    free(f_max.troncons);
                                 }
                             }
                             else
                             {
                                 Action  *action2 = list_parcours2->data;
-                                tmp = common_fonction_renvoie(action2->fonctions_deformation[0][i], DECIMAL_DEPLACEMENT);
+                                tmp = common_fonction_renvoie(action2->fonctions_deformation[0][i], NULL, DECIMAL_DEPLACEMENT);
                             }
                             gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
                             
-                            free(tmp);
-                            g_list_free(liste);
                             break;
                         }
                         case COLRES_DEFORMATION_UY :
                         {
-                            char        *tmp;
-                            GList       *liste = NULL, *list_parcours2;
-                            Fonction    f_min, f_max;
                             
                             list_parcours2 = actions;
                             if (g_list_next(actions) != NULL)
                             {
-                                char    *tmp1, *tmp2;
                                 while (list_parcours2 != NULL)
                                 {
                                     Action  *action2 = list_parcours2->data;
@@ -1694,41 +1487,31 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     list_parcours2 = g_list_next(list_parcours2);
                                 }
                                 
-                                if (common_fonction_renvoie_enveloppe(liste, &f_min, &f_max) == FALSE)
+                                if (common_fonction_renvoie_enveloppe(liste, &f_min, &f_max, &comb_min, &comb_max) == FALSE)
                                     BUGMSG(tmp = g_strdup_printf(gettext("Erreur")), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                 else
                                 {
-                                    tmp1 = common_fonction_renvoie(&f_min, DECIMAL_DEPLACEMENT);
-                                    tmp2 = common_fonction_renvoie(&f_max, DECIMAL_DEPLACEMENT);
+                                    tmp1 = common_fonction_renvoie(&f_min, &comb_min, DECIMAL_DEPLACEMENT);
+                                    tmp2 = common_fonction_renvoie(&f_max, &comb_max, DECIMAL_DEPLACEMENT);
                                     
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-                                    free(tmp1);
-                                    free(tmp2);
-                                    free(f_min.troncons);
-                                    free(f_max.troncons);
                                 }
                             }
                             else
                             {
                                 Action  *action2 = list_parcours2->data;
-                                tmp = common_fonction_renvoie(action2->fonctions_deformation[1][i], DECIMAL_DEPLACEMENT);
+                                tmp = common_fonction_renvoie(action2->fonctions_deformation[1][i], NULL, DECIMAL_DEPLACEMENT);
                             }
                             gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
                             
-                            free(tmp);
-                            g_list_free(liste);
                             break;
                         }
                         case COLRES_DEFORMATION_UZ :
                         {
-                            char        *tmp;
-                            GList       *liste = NULL, *list_parcours2;
-                            Fonction    f_min, f_max;
                             
                             list_parcours2 = actions;
                             if (g_list_next(actions) != NULL)
                             {
-                                char    *tmp1, *tmp2;
                                 while (list_parcours2 != NULL)
                                 {
                                     Action  *action2 = list_parcours2->data;
@@ -1738,41 +1521,31 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     list_parcours2 = g_list_next(list_parcours2);
                                 }
                                 
-                                if (common_fonction_renvoie_enveloppe(liste, &f_min, &f_max) == FALSE)
+                                if (common_fonction_renvoie_enveloppe(liste, &f_min, &f_max, &comb_min, &comb_max) == FALSE)
                                     BUGMSG(tmp = g_strdup_printf(gettext("Erreur")), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                 else
                                 {
-                                    tmp1 = common_fonction_renvoie(&f_min, DECIMAL_DEPLACEMENT);
-                                    tmp2 = common_fonction_renvoie(&f_max, DECIMAL_DEPLACEMENT);
+                                    tmp1 = common_fonction_renvoie(&f_min, &comb_min, DECIMAL_DEPLACEMENT);
+                                    tmp2 = common_fonction_renvoie(&f_max, &comb_max, DECIMAL_DEPLACEMENT);
                                     
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-                                    free(tmp1);
-                                    free(tmp2);
-                                    free(f_min.troncons);
-                                    free(f_max.troncons);
                                 }
                             }
                             else
                             {
                                 Action  *action2 = list_parcours2->data;
-                                tmp = common_fonction_renvoie(action2->fonctions_deformation[2][i], DECIMAL_DEPLACEMENT);
+                                tmp = common_fonction_renvoie(action2->fonctions_deformation[2][i], NULL, DECIMAL_DEPLACEMENT);
                             }
                             gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
                             
-                            free(tmp);
-                            g_list_free(liste);
                             break;
                         }
                         case COLRES_DEFORMATION_RX :
                         {
-                            char        *tmp;
-                            GList       *liste = NULL, *list_parcours2;
-                            Fonction    f_min, f_max;
                             
                             list_parcours2 = actions;
                             if (g_list_next(actions) != NULL)
                             {
-                                char    *tmp1, *tmp2;
                                 while (list_parcours2 != NULL)
                                 {
                                     Action  *action2 = list_parcours2->data;
@@ -1782,41 +1555,31 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     list_parcours2 = g_list_next(list_parcours2);
                                 }
                                 
-                                if (common_fonction_renvoie_enveloppe(liste, &f_min, &f_max) == FALSE)
+                                if (common_fonction_renvoie_enveloppe(liste, &f_min, &f_max, &comb_min, &comb_max) == FALSE)
                                     BUGMSG(tmp = g_strdup_printf(gettext("Erreur")), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                 else
                                 {
-                                    tmp1 = common_fonction_renvoie(&f_min, DECIMAL_ROTATION);
-                                    tmp2 = common_fonction_renvoie(&f_max, DECIMAL_ROTATION);
+                                    tmp1 = common_fonction_renvoie(&f_min, &comb_min, DECIMAL_ROTATION);
+                                    tmp2 = common_fonction_renvoie(&f_max, &comb_max, DECIMAL_ROTATION);
                                     
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-                                    free(tmp1);
-                                    free(tmp2);
-                                    free(f_min.troncons);
-                                    free(f_max.troncons);
                                 }
                             }
                             else
                             {
                                 Action  *action2 = list_parcours2->data;
-                                tmp = common_fonction_renvoie(action2->fonctions_rotation[0][i], DECIMAL_ROTATION);
+                                tmp = common_fonction_renvoie(action2->fonctions_rotation[0][i], NULL, DECIMAL_ROTATION);
                             }
                             gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
                             
-                            free(tmp);
-                            g_list_free(liste);
                             break;
                         }
                         case COLRES_DEFORMATION_RY :
                         {
-                            char        *tmp;
-                            GList       *liste = NULL, *list_parcours2;
-                            Fonction    f_min, f_max;
                             
                             list_parcours2 = actions;
                             if (g_list_next(actions) != NULL)
                             {
-                                char    *tmp1, *tmp2;
                                 while (list_parcours2 != NULL)
                                 {
                                     Action  *action2 = list_parcours2->data;
@@ -1826,41 +1589,31 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     list_parcours2 = g_list_next(list_parcours2);
                                 }
                                 
-                                if (common_fonction_renvoie_enveloppe(liste, &f_min, &f_max) == FALSE)
+                                if (common_fonction_renvoie_enveloppe(liste, &f_min, &f_max, &comb_min, &comb_max) == FALSE)
                                     BUGMSG(tmp = g_strdup_printf(gettext("Erreur")), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                 else
                                 {
-                                    tmp1 = common_fonction_renvoie(&f_min, DECIMAL_ROTATION);
-                                    tmp2 = common_fonction_renvoie(&f_max, DECIMAL_ROTATION);
+                                    tmp1 = common_fonction_renvoie(&f_min, &comb_min, DECIMAL_ROTATION);
+                                    tmp2 = common_fonction_renvoie(&f_max, &comb_max, DECIMAL_ROTATION);
                                     
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-                                    free(tmp1);
-                                    free(tmp2);
-                                    free(f_min.troncons);
-                                    free(f_max.troncons);
                                 }
                             }
                             else
                             {
                                 Action  *action2 = list_parcours2->data;
-                                tmp = common_fonction_renvoie(action2->fonctions_rotation[1][i], DECIMAL_ROTATION);
+                                tmp = common_fonction_renvoie(action2->fonctions_rotation[1][i], NULL, DECIMAL_ROTATION);
                             }
                             gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
                             
-                            free(tmp);
-                            g_list_free(liste);
                             break;
                         }
                         case COLRES_DEFORMATION_RZ :
                         {
-                            char        *tmp;
-                            GList       *liste = NULL, *list_parcours2;
-                            Fonction    f_min, f_max;
                             
                             list_parcours2 = actions;
                             if (g_list_next(actions) != NULL)
                             {
-                                char    *tmp1, *tmp2;
                                 while (list_parcours2 != NULL)
                                 {
                                     Action  *action2 = list_parcours2->data;
@@ -1870,29 +1623,23 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     list_parcours2 = g_list_next(list_parcours2);
                                 }
                                 
-                                if (common_fonction_renvoie_enveloppe(liste, &f_min, &f_max) == FALSE)
+                                if (common_fonction_renvoie_enveloppe(liste, &f_min, &f_max, &comb_min, &comb_max) == FALSE)
                                     BUGMSG(tmp = g_strdup_printf(gettext("Erreur")), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                 else
                                 {
-                                    tmp1 = common_fonction_renvoie(&f_min, DECIMAL_ROTATION);
-                                    tmp2 = common_fonction_renvoie(&f_max, DECIMAL_ROTATION);
+                                    tmp1 = common_fonction_renvoie(&f_min, &comb_min, DECIMAL_ROTATION);
+                                    tmp2 = common_fonction_renvoie(&f_max, &comb_max, DECIMAL_ROTATION);
                                     
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-                                    free(tmp1);
-                                    free(tmp2);
-                                    free(f_min.troncons);
-                                    free(f_max.troncons);
                                 }
                             }
                             else
                             {
                                 Action  *action2 = list_parcours2->data;
-                                tmp = common_fonction_renvoie(action2->fonctions_rotation[2][i], DECIMAL_ROTATION);
+                                tmp = common_fonction_renvoie(action2->fonctions_rotation[2][i], NULL, DECIMAL_ROTATION);
                             }
                             gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
                             
-                            free(tmp);
-                            g_list_free(liste);
                             break;
                         }
                         default :
@@ -1901,6 +1648,15 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             break;
                         }
                     }
+                    
+                    free(comb_min.troncons);
+                    free(comb_max.troncons);
+                    free(f_min.troncons);
+                    free(f_max.troncons);
+                    free(tmp);
+                    free(tmp1);
+                    free(tmp2);
+                    g_list_free(liste);
                 }
                 gtk_list_store_set(res->list_store, &Iter, res->col_tab[0], "", -1);
             }
