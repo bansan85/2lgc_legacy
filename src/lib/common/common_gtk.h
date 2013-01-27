@@ -31,6 +31,6 @@ double common_gtk_text_buffer_double(GtkTextBuffer *textbuffer, double val_min,
   gboolean min_include, double val_max, gboolean max_include);
 unsigned int common_gtk_text_buffer_uint(GtkTextBuffer *textbuffer, unsigned int val_min, gboolean min_include, unsigned int val_max, gboolean max_include);
 void common_gtk_render_double(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell, GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data);
-GtkTreeViewColumn* common_gtk_cree_colonne(char* nom, GType type, int num_colonne, int num_decimales);
+GtkTreeViewColumn* common_gtk_cree_colonne(char* nom, GType type, int num_colonne, double xalign, int num_decimales);
 
 #endif

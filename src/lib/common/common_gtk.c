@@ -218,11 +218,12 @@ G_MODULE_EXPORT void common_gtk_render_double(
 
 
 GtkTreeViewColumn* common_gtk_cree_colonne(char* nom, GType type, int num_colonne,
-  int num_decimales)
+  double xalign, int num_decimales)
 /* Description : Permet de créer une colonne pour un treeview.
  * Paramètres : char* nom : nom de la colonne,
  *            : GType type : type d'information que recevra la colonne,
  *            : int num_colonne : numéro de la colonne.
+ *            : double xalign : alignement horizontal du contenu de la cellule dans la colonne,
  *            : int num_decimales : si le type est G_TYPE_DOUBLE, défini le nombre de décimales
  *                                  devant être affiché.
  * Valeur renvoyée : un pointeur vers la nouvelle colonne.
@@ -238,10 +239,7 @@ GtkTreeViewColumn* common_gtk_cree_colonne(char* nom, GType type, int num_colonn
         cell = gtk_cell_renderer_text_new();
     
     // Pour les nombres flottants, l'alignement à droite permet aux virgules d'être alignées.
-    if (type == G_TYPE_DOUBLE)
-        gtk_cell_renderer_set_alignment(cell, 1.0, 0.5);
-    else
-        gtk_cell_renderer_set_alignment(cell, 0.5, 0.5);
+    gtk_cell_renderer_set_alignment(cell, xalign, 0.5);
     
     label = gtk_label_new("");
     gtk_label_set_markup(GTK_LABEL(label), nom);
