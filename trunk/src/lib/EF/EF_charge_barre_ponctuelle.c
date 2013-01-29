@@ -63,6 +63,9 @@ G_MODULE_EXPORT Charge_Barre_Ponctuelle *EF_charge_barre_ponctuelle_ajout(Projet
 {
     Action                  *action_en_cours;
     Charge_Barre_Ponctuelle *charge_nouveau;
+    GtkTreeIter             iter_action;
+    unsigned int            numero_action;
+    GtkTreeModel            *model_action;
     
     // Trivial
     BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
@@ -101,6 +104,15 @@ G_MODULE_EXPORT Charge_Barre_Ponctuelle *EF_charge_barre_ponctuelle_ajout(Projet
     action_en_cours->charges = g_list_append(action_en_cours->charges, charge_nouveau);
     
     BUG(EF_calculs_free(projet), FALSE);
+    
+#ifdef ENABLE_GTK
+    if ((projet->list_gtk._1990_actions.builder != NULL) && (gtk_tree_selection_get_selected(projet->list_gtk._1990_actions.tree_select_actions, &model_action, &iter_action)))
+    {
+        gtk_tree_model_get(model_action, &iter_action, 0, &numero_action, -1);
+        if (numero_action == num_action)
+            BUG(EF_gtk_charge_barre_ponctuelle_ajout_affichage(charge_nouveau, projet, TRUE), NULL);
+    }
+#endif
     
     return charge_nouveau;
 }

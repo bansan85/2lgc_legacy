@@ -248,9 +248,6 @@ void EF_gtk_charge_noeud_ajouter_clicked(GtkButton *button __attribute__((unused
     GList           *noeuds;
     gchar           *texte;
     Charge_Noeud    *charge_noeud;
-    GtkTreeIter     iter_action;
-    GtkTreeModel    *model_action;
-    unsigned int    numero_action;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_charge_noeud.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Nodale");
@@ -261,13 +258,6 @@ void EF_gtk_charge_noeud_ajouter_clicked(GtkButton *button __attribute__((unused
     BUG(charge_noeud = EF_charge_noeud_ajout(projet, num_action, noeuds, fx, fy, fz, mx, my, mz, texte), );
     
     free(texte);
-    
-    // Actualisation de l'affichage graphique
-    if (!gtk_tree_selection_get_selected(projet->list_gtk._1990_actions.tree_select_actions, &model_action, &iter_action))
-        return;
-    gtk_tree_model_get(model_action, &iter_action, 0, &numero_action, -1);
-    if (numero_action == num_action)
-        BUG(EF_gtk_charge_noeud_ajout_affichage(charge_noeud, projet, TRUE), );
     
     gtk_widget_destroy(projet->list_gtk.ef_charge_noeud.window);
     
