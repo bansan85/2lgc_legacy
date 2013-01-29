@@ -259,9 +259,6 @@ void EF_gtk_charge_barre_ponctuelle_ajouter_clicked(GtkButton *button __attribut
     GList                       *barres;
     gchar                       *texte;
     Charge_Barre_Ponctuelle     *charge;
-    GtkTreeModel                *model_action;
-    GtkTreeIter                 iter_action;
-    unsigned int                numero_action;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_charge_barre_ponctuelle.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Barre Ponctuelle");
@@ -272,13 +269,6 @@ void EF_gtk_charge_barre_ponctuelle_ajouter_clicked(GtkButton *button __attribut
     BUG(charge = EF_charge_barre_ponctuelle_ajout(projet, num_action, barres, repere_local, position, fx, fy, fz, mx, my, mz, texte), );
     
     free(texte);
-    
-    // Actualisation de l'affichage graphique
-    if (!gtk_tree_selection_get_selected(projet->list_gtk._1990_actions.tree_select_actions, &model_action, &iter_action))
-        return;
-    gtk_tree_model_get(model_action, &iter_action, 0, &numero_action, -1);
-    if (numero_action == num_action)
-        BUG(EF_gtk_charge_barre_ponctuelle_ajout_affichage(charge, projet, TRUE), );
     
     gtk_widget_destroy(projet->list_gtk.ef_charge_barre_ponctuelle.window);
     
