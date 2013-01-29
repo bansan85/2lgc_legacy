@@ -1167,6 +1167,7 @@ G_MODULE_EXPORT gboolean common_fonction_affiche(Fonction* fonction)
 }
 
 
+#ifdef ENABLE_GTK
 GdkPixbuf* common_fonction_dessin(GList *fonctions, int width, int height, int decimales)
 /* Description : Renvoie un dessin représentant la courbe enveloppe.
  * Paramètres : GList *fonctions : la liste contenant les fonctions à dessiner,
@@ -1312,6 +1313,7 @@ GdkPixbuf* common_fonction_dessin(GList *fonctions, int width, int height, int d
     
     return pixbuf;
 }
+#endif
 
 
 G_MODULE_EXPORT char* common_fonction_renvoie(Fonction* fonction, Fonction *index, 

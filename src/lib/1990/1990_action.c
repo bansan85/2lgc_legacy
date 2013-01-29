@@ -763,7 +763,9 @@ G_MODULE_EXPORT gboolean _1990_action_free_num(Projet *projet, unsigned int num)
  */
 {
     GList       *list_parcours;
+#ifdef ENABLE_GTK
     GtkTreeIter Iter;
+#endif
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUG(_1990_action_cherche_numero(projet, num), FALSE);
@@ -892,6 +894,7 @@ G_MODULE_EXPORT gboolean _1990_action_free_num(Projet *projet, unsigned int num)
     
     // Il faut aussi parcourir le treeview des éléments inutilisés pour l'enlever au cas où et
     // aussi pour mettre à jour les numéros.
+#ifdef ENABLE_GTK
     if ((projet->list_gtk._1990_groupes.builder != NULL) && (gtk_tree_model_get_iter_first(GTK_TREE_MODEL(projet->list_gtk._1990_groupes.tree_store_dispo), &Iter)))
     {
         gboolean encore = TRUE;
@@ -914,6 +917,7 @@ G_MODULE_EXPORT gboolean _1990_action_free_num(Projet *projet, unsigned int num)
             
         } while (encore);
     }
+#endif
     
     return TRUE;
 }

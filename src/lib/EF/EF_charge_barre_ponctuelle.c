@@ -63,9 +63,11 @@ G_MODULE_EXPORT Charge_Barre_Ponctuelle *EF_charge_barre_ponctuelle_ajout(Projet
 {
     Action                  *action_en_cours;
     Charge_Barre_Ponctuelle *charge_nouveau;
+#ifdef ENABLE_GTK
     GtkTreeIter             iter_action;
     unsigned int            numero_action;
     GtkTreeModel            *model_action;
+#endif
     
     // Trivial
     BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");

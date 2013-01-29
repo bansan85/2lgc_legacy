@@ -836,7 +836,10 @@ G_MODULE_EXPORT gboolean _1990_groupe_free_groupe(Projet *projet, unsigned int n
  */
 {
     Niveau_Groupe   *niveau_groupe;
-    Groupe          *groupe_curr, *groupe_parcours;
+    Groupe          *groupe_curr;
+#ifdef ENABLE_GTK
+    Groupe          *groupe_parcours;
+#endif
     GList           *list_parcours;
     
     // Trivial

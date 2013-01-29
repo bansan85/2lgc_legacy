@@ -818,7 +818,9 @@ typedef struct __CombinaisonsEL
     GList       *els_car;   //
     GList       *els_freq;  //
     GList       *els_perm;  //
+#ifdef ENABLE_GTK
     GtkListStore    *list_el_desc;
+#endif
 } CombinaisonsEL;
 
 
