@@ -753,7 +753,10 @@ G_MODULE_EXPORT gboolean _1990_combinaisons_init(Projet *projet)
  *             projet == NULL.
  */
 {
+#ifdef ENABLE_GTK
     GtkTreeIter Iter;
+#endif
+    
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     // Trivial
     
@@ -768,6 +771,7 @@ G_MODULE_EXPORT gboolean _1990_combinaisons_init(Projet *projet)
     projet->combinaisons.els_freq = NULL;
     projet->combinaisons.els_perm = NULL;
     
+#ifdef ENABLE_GTK
     projet->combinaisons.list_el_desc = gtk_list_store_new(1, G_TYPE_STRING);
     gtk_list_store_append(projet->combinaisons.list_el_desc, &Iter);
     gtk_list_store_set(projet->combinaisons.list_el_desc, &Iter, 0, gettext("ELU équilibre"), -1);
@@ -787,6 +791,7 @@ G_MODULE_EXPORT gboolean _1990_combinaisons_init(Projet *projet)
     gtk_list_store_set(projet->combinaisons.list_el_desc, &Iter, 0, gettext("ELS fréquent"), -1);
     gtk_list_store_append(projet->combinaisons.list_el_desc, &Iter);
     gtk_list_store_set(projet->combinaisons.list_el_desc, &Iter, 0, gettext("ELS permanent"), -1);
+#endif
     
     return TRUE;
 }
@@ -863,7 +868,10 @@ G_MODULE_EXPORT gboolean _1990_combinaisons_free(Projet *projet)
         g_list_free_full(projet->combinaisons.els_perm, _1990_combinaisons_free_1);
         projet->combinaisons.els_perm = NULL;
     }
+    
+#ifdef ENABLE_GTK
     g_object_unref(projet->combinaisons.list_el_desc);
+#endif
     
     return TRUE;
 }
@@ -890,7 +898,9 @@ G_MODULE_EXPORT gboolean _1990_combinaisons_genere(Projet *projet)
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->niveaux_groupes, FALSE, gettext("Le projet ne possède pas de niveaux de groupes.\n"));
     
+#ifdef ENABLE_GTK
     g_object_ref(projet->combinaisons.list_el_desc);
+#endif
     BUG(_1990_combinaisons_free(projet), FALSE);
     
     // Pour chaque action

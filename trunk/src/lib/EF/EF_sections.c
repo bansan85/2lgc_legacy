@@ -143,9 +143,9 @@ gboolean EF_sections_insert(Projet *projet, EF_Section *section)
             gtk_tree_store_insert_before(projet->list_gtk.ef_sections.sections, &section->Iter_fenetre, NULL, &section_tmp->Iter_fenetre);
 #endif
     }
-    gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section->Iter_liste, 0, section->nom, -1);
     
 #ifdef ENABLE_GTK
+    gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section->Iter_liste, 0, section->nom, -1);
     BUG(EF_sections_update_ligne_treeview(projet, section), FALSE);
 #endif
     

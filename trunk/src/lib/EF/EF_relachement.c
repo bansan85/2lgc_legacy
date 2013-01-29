@@ -62,6 +62,7 @@ G_MODULE_EXPORT gboolean EF_relachement_init(Projet *projet)
 }
 
 
+#ifdef ENABLE_GTK
 G_MODULE_EXPORT gboolean EF_relachements_update_ligne_treeview(Projet *projet,
   EF_Relachement *relachement)
 /* Description : Actualise la ligne du treeview affichant le relâchement.
@@ -254,6 +255,7 @@ G_MODULE_EXPORT gboolean EF_relachements_update_ligne_treeview(Projet *projet,
     
     return TRUE;
 }
+#endif
 
 
 G_MODULE_EXPORT EF_Relachement *EF_relachement_ajout(Projet *projet, const char *nom,

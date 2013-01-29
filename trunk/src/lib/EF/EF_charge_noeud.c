@@ -52,9 +52,11 @@ G_MODULE_EXPORT Charge_Noeud*  EF_charge_noeud_ajout(Projet *projet, unsigned in
 {
     Action          *action_en_cours;
     Charge_Noeud    *charge_nouveau;
+#ifdef ENABLE_GTK
     GtkTreeIter     iter_action;
     unsigned int    numero_action;
     GtkTreeModel    *model_action;
+#endif
     
     // Trivial
     BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");

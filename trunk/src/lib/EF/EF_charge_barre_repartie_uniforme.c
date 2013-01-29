@@ -70,9 +70,11 @@ G_MODULE_EXPORT Charge_Barre_Repartie_Uniforme *EF_charge_barre_repartie_uniform
 {
     Action                          *action_en_cours;
     Charge_Barre_Repartie_Uniforme  *charge_nouveau = malloc(sizeof(Charge_Barre_Repartie_Uniforme));
+#ifdef ENABLE_GTK
     GtkTreeModel                    *model_action;
     GtkTreeIter                     iter_action;
     unsigned int                    numero_action;
+#endif
     
     // Trivial
     BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");

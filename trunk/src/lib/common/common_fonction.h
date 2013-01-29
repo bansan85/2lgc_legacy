@@ -30,7 +30,9 @@ gboolean common_fonction_ajout_poly(Fonction* fonction, double debut_troncon, do
 gboolean common_fonction_ajout_fonction(Fonction* fonction, Fonction *fonction_a_ajouter, double multi) __attribute__((__warn_unused_result__));
 long double common_fonction_y(Fonction* fonction, long double x, int position) __attribute__((__warn_unused_result__));
 gboolean common_fonction_affiche(Fonction* fonction) __attribute__((__warn_unused_result__));
+#ifdef ENABLE_GTK
 GdkPixbuf* common_fonction_dessin(GList *fonctions, int width, int height, int decimales) __attribute__((__warn_unused_result__));
+#endif
 char* common_fonction_affiche_caract(Fonction* fonction, int decimales_x, int decimales_y) __attribute__((__warn_unused_result__));
 
 char* common_fonction_renvoie(Fonction* fonction, Fonction *index, int decimales) __attribute__((__warn_unused_result__));
