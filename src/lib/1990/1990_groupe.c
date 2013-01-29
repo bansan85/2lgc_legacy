@@ -886,7 +886,7 @@ G_MODULE_EXPORT gboolean _1990_groupe_free_groupe(Projet *projet, unsigned int n
         while (list_parcours != NULL)
         {
             groupe_parcours = list_parcours->data;
-            if (groupe_parcours->numero >= groupe)
+            if (groupe_parcours->numero > groupe)
                 gtk_tree_store_set(projet->list_gtk._1990_groupes.tree_store_etat, &groupe_parcours->Iter, 0, groupe_parcours->numero-1, -1);
             list_parcours = g_list_next(list_parcours);
         }
