@@ -540,12 +540,6 @@ typedef struct __Section_T
 } Section_T;
 
 
-typedef struct __Section_Carree
-{
-    double              cote;
-} Section_Carree;
-
-
 typedef struct __Section_Circulaire
 {
     double              diametre;

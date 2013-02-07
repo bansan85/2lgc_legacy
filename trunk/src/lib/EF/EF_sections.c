@@ -466,21 +466,21 @@ G_MODULE_EXPORT gboolean EF_sections_carree_ajout(Projet *projet, const char* no
  *             en cas d'erreur d'allocation mémoire.
  */
 {
-    Section_Carree  *section_data;
-    EF_Section      *section_nouvelle;
+    Section_T   *section_data;
+    EF_Section  *section_nouvelle;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(!EF_sections_cherche_nom(projet, nom, FALSE), FALSE, gettext("La section %s existe déjà.\n"), nom);
     BUGMSG(section_nouvelle = malloc(sizeof(EF_Section)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-    BUGMSG(section_data = malloc(sizeof(Section_Carree)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(section_data = malloc(sizeof(Section_T)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
     section_nouvelle->data = section_data;
     
-    // Les caractéristiques de la section sont les suivantes :\end{verbatim}\begin{displaymath}
-    //   S = cote^2\texttt{  et  }cdg_{haut} = \frac{cote}{2}\texttt{  et  }cdg_{bas} = \frac{cote}{2}\texttt{  et  }cdg_{droite} = \frac{cote}{2}\texttt{  et  }cdg_{gauche} = \frac{cote}{2}\end{displaymath}\begin{displaymath}
-    //   I_y = \frac{cote^4}{12}\texttt{  et  }I_z = I_y\texttt{  et  }J = \frac{cote^4}{16} \cdot \left[\frac{16}{3}-3.364 \cdot \left(1-\frac{1}{12}\right)\right]\end{displaymath}\begin{verbatim}
     section_nouvelle->type = SECTION_CARREE;
     BUGMSG(section_nouvelle->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-    section_data->cote = cote;
+    section_data->largeur_retombee = cote;
+    section_data->hauteur_retombee = cote;
+    section_data->largeur_table = cote;
+    section_data->hauteur_table = 0.;
     
     BUG(EF_sections_insert(projet, section_nouvelle), FALSE);
     
@@ -503,7 +503,7 @@ G_MODULE_EXPORT gboolean EF_sections_carree_modif(Projet *projet, EF_Section *se
  *             section->type != CARREE.
  */
 {
-    Section_Carree  *section_data = section->data;
+    Section_T   *section_data = section->data;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(section, FALSE, gettext("Paramètre %s incorrect.\n"), "section");
@@ -521,11 +521,13 @@ G_MODULE_EXPORT gboolean EF_sections_carree_modif(Projet *projet, EF_Section *se
             gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk.ef_sections_carree.builder, "EF_section_carree_textview_nom"))), nom, -1);
 #endif
     }
-    if ((!isnan(cote)) && (!ERREUR_RELATIVE_EGALE(section_data->cote, cote)))
+    if ((!isnan(cote)) && (!ERREUR_RELATIVE_EGALE(section_data->largeur_retombee, cote)))
     {
         GList   *liste_sections = NULL, *liste_barres_dep;
         
-        section_data->cote = cote;
+        section_data->largeur_retombee = cote;
+        section_data->hauteur_retombee = cote;
+        section_data->largeur_table = cote;
         
         liste_sections = g_list_append(liste_sections, section);
         BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, liste_sections, NULL, NULL, NULL, NULL, &liste_barres_dep, NULL, FALSE, FALSE), FALSE);
@@ -729,10 +731,10 @@ G_MODULE_EXPORT char* EF_sections_get_description(EF_Section *sect)
         }
         case SECTION_CARREE :
         {
-            char            cote[30];
-            Section_Carree  *section = sect->data;
+            char         cote[30];
+            Section_T   *section = sect->data;
             
-            common_math_double_to_char(section->cote, cote, DECIMAL_DISTANCE);
+            common_math_double_to_char(section->largeur_table, cote, DECIMAL_DISTANCE);
             BUGMSG(description = g_strdup_printf("%s : %s m", gettext("Coté"), cote), NULL, gettext("Erreur d'allocation mémoire.\n"));
             
             return description;
@@ -860,6 +862,7 @@ G_MODULE_EXPORT double EF_sections_j(EF_Section* sect)
     {
         case SECTION_RECTANGULAIRE :
         case SECTION_T :
+        case SECTION_CARREE :
         {
             Section_T *section = sect->data;
             double      lt = section->largeur_table;
@@ -884,15 +887,6 @@ G_MODULE_EXPORT double EF_sections_j(EF_Section* sect)
     // Pour une section en T de section constante (lt : largeur de la table, lr : largeur de
     //   la retombée, ht : hauteur de la table, hr : hauteur de la retombée), J vaut :\end{verbatim}\begin{displaymath}
     // J = \frac{a \cdot b^3}{16} \left[\frac{16}{3}-3.364 \frac{b}{a} \left(1-\frac{b^4}{12 a^4}\right)\right]+\frac{aa \cdot bb^3}{16} \left[\frac{16}{3}-3.364 \frac{bb}{aa} \left(1-\frac{bb^4}{12 aa^4}\right)\right]\texttt{ avec }\substack{a=max(h_t,l_t)\\b=min(h_t,l_t)\\aa=max(h_r,l_r)\\bb=min(h_r,l_r)}\end{displaymath}\begin{verbatim}
-            break;
-        }
-        case SECTION_CARREE :
-        {
-            Section_Carree *section = sect->data;
-            return section->cote*section->cote*section->cote*section->cote/16.*(16./3.-3.364*(1.-1./12.));
-            
-    // Pour une section carrée de section constante, J vaut :\end{verbatim}\begin{displaymath}
-    // J = \frac{cote^4}{16} \cdot \left[\frac{16}{3}-3.364 \cdot \left(1-\frac{1}{12}\right)\right]\end{displaymath}\begin{verbatim}
             break;
         }
         case SECTION_CIRCULAIRE :
@@ -928,6 +922,7 @@ G_MODULE_EXPORT double EF_sections_iy(EF_Section* sect)
     {
         case SECTION_RECTANGULAIRE :
         case SECTION_T :
+        case SECTION_CARREE :
         {
             Section_T *section = sect->data;
             double      lt = section->largeur_table;
@@ -943,15 +938,6 @@ G_MODULE_EXPORT double EF_sections_iy(EF_Section* sect)
             double      cdgb = (ht+hr)-cdgh;
             return lt*ht*ht*ht/12.+lr*hr*hr*hr/12.+lt*ht*(ht/2.-cdgh)*(ht/2.-cdgh)+lr*hr*(hr/2.-cdgb)*(hr/2.-cdgb);
             
-            break;
-        }
-        case SECTION_CARREE :
-        {
-            Section_Carree *section = sect->data;
-            return section->cote*section->cote*section->cote*section->cote/12.;
-            
-    // Pour une section carrée de section constante, Iy vaut :\end{verbatim}\begin{displaymath}
-    // I_y = \frac{c^4}{12} \end{displaymath}\begin{verbatim}
             break;
         }
         case SECTION_CIRCULAIRE :
@@ -987,6 +973,7 @@ G_MODULE_EXPORT double EF_sections_iz(EF_Section* sect)
     {
         case SECTION_RECTANGULAIRE :
         case SECTION_T :
+        case SECTION_CARREE :
         {
             Section_T *section = sect->data;
             double      lt = section->largeur_table;
@@ -997,14 +984,6 @@ G_MODULE_EXPORT double EF_sections_iz(EF_Section* sect)
     //   la retombée, ht : hauteur de la table, hr : hauteur de la retombée), I vaut :\end{verbatim}\begin{displaymath}
     // I = \frac{h_t \cdot l_t^3}{12}+\frac{h_r \cdot l_r^3}{12}\end{displaymath}\begin{verbatim}
             return ht*lt*lt*lt/12.+hr*lr*lr*lr/12.;
-            break;
-        }
-        case SECTION_CARREE :
-        {
-            Section_Carree *section = sect->data;
-            return section->cote*section->cote*section->cote*section->cote/12.;
-    // Pour une section carrée de section constante, I vaut :\end{verbatim}\begin{displaymath}
-    // I = \frac{c^4}{12} \end{displaymath}\begin{verbatim}
             break;
         }
         case SECTION_CIRCULAIRE :
@@ -1041,18 +1020,11 @@ G_MODULE_EXPORT double EF_sections_vy(EF_Section* sect)
     {
         case SECTION_RECTANGULAIRE :
         case SECTION_T :
+        case SECTION_CARREE :
         {
             Section_T *section = sect->data;
             
             return MAX(section->largeur_table, section->largeur_retombee)/2.;
-            
-            break;
-        }
-        case SECTION_CARREE :
-        {
-            Section_Carree *section = sect->data;
-            
-            return section->cote/2.;
             
             break;
         }
@@ -1090,18 +1062,11 @@ G_MODULE_EXPORT double EF_sections_vyp(EF_Section* sect)
     {
         case SECTION_RECTANGULAIRE :
         case SECTION_T :
+        case SECTION_CARREE :
         {
             Section_T *section = sect->data;
             
             return MAX(section->largeur_table, section->largeur_retombee)/2.;
-            
-            break;
-        }
-        case SECTION_CARREE :
-        {
-            Section_Carree *section = sect->data;
-            
-            return section->cote/2.;
             
             break;
         }
@@ -1139,18 +1104,11 @@ G_MODULE_EXPORT double EF_sections_vz(EF_Section* sect)
     {
         case SECTION_RECTANGULAIRE :
         case SECTION_T :
+        case SECTION_CARREE :
         {
             Section_T *section = sect->data;
             
             return (section->largeur_table*section->hauteur_table*section->hauteur_table/2.+section->largeur_retombee*section->hauteur_retombee*(section->hauteur_retombee/2.+section->hauteur_table))/EF_sections_s(sect);
-            
-            break;
-        }
-        case SECTION_CARREE :
-        {
-            Section_Carree *section = sect->data;
-            
-            return section->cote/2.;
             
             break;
         }
@@ -1188,18 +1146,11 @@ G_MODULE_EXPORT double EF_sections_vzp(EF_Section* sect)
     {
         case SECTION_RECTANGULAIRE :
         case SECTION_T :
+        case SECTION_CARREE :
         {
             Section_T *section = sect->data;
             
             return (section->largeur_table*section->hauteur_table*(section->hauteur_retombee+section->hauteur_table/2.)+section->largeur_retombee*section->hauteur_retombee*(section->hauteur_retombee/2.))/EF_sections_s(sect);
-            
-            break;
-        }
-        case SECTION_CARREE :
-        {
-            Section_Carree *section = sect->data;
-            
-            return section->cote/2.;
             
             break;
         }
@@ -1566,6 +1517,7 @@ G_MODULE_EXPORT double EF_sections_s(EF_Section *sect)
     {
         case SECTION_RECTANGULAIRE :
         case SECTION_T :
+        case SECTION_CARREE :
         {
             Section_T *section = sect->data;
             return section->hauteur_table*section->largeur_table+section->hauteur_retombee*section->largeur_retombee;
@@ -1573,15 +1525,6 @@ G_MODULE_EXPORT double EF_sections_s(EF_Section *sect)
     // Pour une section en T de section constante (lt : largeur de la table, lr : largeur de
     //   la retombée, ht : hauteur de la table, hr : hauteur de la retombée), S vaut :\end{verbatim}\begin{displaymath}
     // S = h_t \cdot l_t+h_r \cdot l_r\end{displaymath}\begin{verbatim}
-            break;
-        }
-        case SECTION_CARREE :
-        {
-            Section_Carree *section = sect->data;
-            return section->cote*section->cote;
-            
-    // Pour une section carrée de section constante, S vaut :\end{verbatim}\begin{displaymath}
-    // S = c^2\end{displaymath}\begin{verbatim}
             break;
         }
         case SECTION_CIRCULAIRE :
@@ -1632,6 +1575,7 @@ G_MODULE_EXPORT double EF_sections_es_l(Beton_Barre *barre, unsigned int discret
     {
         case SECTION_RECTANGULAIRE :
         case SECTION_T :
+        case SECTION_CARREE :
         {
             Section_T *section = barre->section->data;
             double      lt = section->largeur_table;
@@ -1643,16 +1587,6 @@ G_MODULE_EXPORT double EF_sections_es_l(Beton_Barre *barre, unsigned int discret
     // Pour une section en T de section constante (lt : largeur de la table, lr : largeur de
     //   la retombée, ht : hauteur de la table, hr : hauteur de la retombée), ES/L vaut :\end{verbatim}\begin{displaymath}
     // \frac{E \cdot S}{L} = \frac{E \cdot (h_t \cdot l_t+h_r \cdot l_r)}{L}\end{displaymath}\begin{verbatim}
-            return E*S/(f-d);
-            break;
-        }
-        case SECTION_CARREE :
-        {
-            Section_Carree *section = barre->section->data;
-            double      S = section->cote*section->cote;
-            
-    // Pour une section carrée de section constante, ES/L vaut :\end{verbatim}\begin{displaymath}
-    // \frac{E \cdot S}{L} = \frac{E \cdot c^2}{L}\end{displaymath}\begin{verbatim}
             return E*S/(f-d);
             break;
         }
@@ -1714,6 +1648,7 @@ G_MODULE_EXPORT double EF_sections_gj_l(Beton_Barre *barre, unsigned int discret
     {
         case SECTION_RECTANGULAIRE :
         case SECTION_T :
+        case SECTION_CARREE :
         {
             Section_T *section = barre->section->data;
             double      lt = section->largeur_table;
@@ -1739,16 +1674,6 @@ G_MODULE_EXPORT double EF_sections_gj_l(Beton_Barre *barre, unsigned int discret
     // Pour une section en T de section constante (lt : largeur de la table, lr : largeur de
     //   la retombée, ht : hauteur de la table, hr : hauteur de la retombée), GJ/L vaut :\end{verbatim}\begin{displaymath}
     // \frac{G \cdot J}{L} \texttt{ avec } J = \frac{a \cdot b^3}{16} \left[\frac{16}{3}-3.364 \frac{b}{a} \left(1-\frac{b^4}{12 a^4}\right)\right]+\frac{aa \cdot bb^3}{16} \left[\frac{16}{3}-3.364 \frac{bb}{aa} \left(1-\frac{bb^4}{12 aa^4}\right)\right]\texttt{ avec }\substack{a=max(h_t,l_t)\\b=min(h_t,l_t)\\aa=max(h_r,l_r)\\bb=min(h_r,l_r)}\end{displaymath}\begin{verbatim}
-            return G*J/ll;
-            break;
-        }
-        case SECTION_CARREE :
-        {
-            Section_Carree *section = barre->section->data;
-            double      J = section->cote*section->cote*section->cote*section->cote/16.*(16./3.-3.364*(1.-1./12.));
-            
-    // Pour une section carrée de section constante, GJ/L vaut :\end{verbatim}\begin{displaymath}
-    // \frac{G \cdot J}{L} \texttt{ avec } J = \frac{cote^4}{16} \cdot \left[\frac{16}{3}-3.364 \cdot \left(1-\frac{1}{12}\right)\right]\end{displaymath}\begin{verbatim}
             return G*J/ll;
             break;
         }

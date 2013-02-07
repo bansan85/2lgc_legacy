@@ -276,8 +276,8 @@ G_MODULE_EXPORT gboolean EF_gtk_section_carree(Projet *projet, EF_Section *secti
     }
     else
     {
-        gchar           tmp[30];
-        Section_Carree  *data;
+        gchar       tmp[30];
+        Section_T   *data;
         
         gtk_window_set_title(GTK_WINDOW(ef_gtk->window), gettext("Modification d'une section carrée"));
         ef_gtk->section = section;
@@ -285,7 +285,7 @@ G_MODULE_EXPORT gboolean EF_gtk_section_carree(Projet *projet, EF_Section *secti
         data = ef_gtk->section->data;
         
         gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(ef_gtk->builder, "EF_section_carree_textview_nom"))), ef_gtk->section->nom, -1);
-        common_math_double_to_char(data->cote, tmp, DECIMAL_DISTANCE);
+        common_math_double_to_char(data->largeur_table, tmp, DECIMAL_DISTANCE);
         gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder, "EF_section_carree_buffer_cote")), tmp, -1);
         
         gtk_button_set_label(GTK_BUTTON(gtk_builder_get_object(ef_gtk->builder, "EF_section_carree_button_add_edit")), "gtk-edit");

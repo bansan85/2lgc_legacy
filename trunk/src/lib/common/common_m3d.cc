@@ -513,24 +513,24 @@ G_MODULE_EXPORT void* m3d_barre(void *donnees_m3d, Beton_Barre *barre)
         }
         case SECTION_CARREE :
         {
-            Section_Carree *section = (Section_Carree *)barre->section->data;
-            double  y, z;
+            Section_T   *section = (Section_T *)barre->section->data;
+            double      y, z;
             CM3dObject  *bas, *haut, *gauche, *droite;
             
-            droite = M3d_plan_new("", longueur, section->cote, 1);
+            droite = M3d_plan_new("", longueur, section->largeur_table, 1);
             droite->rotations(180., 0., 0.);
-            droite->set_position(0., -section->cote/2., 0.);
+            droite->set_position(0., -section->largeur_table/2., 0.);
             
-            gauche = M3d_plan_new("", longueur, section->cote, 1);
-            gauche->set_position(0., section->cote/2., 0.);
+            gauche = M3d_plan_new("", longueur, section->largeur_table, 1);
+            gauche->set_position(0., section->largeur_table/2., 0.);
             
-            bas = M3d_plan_new("", longueur, section->cote, 1);
+            bas = M3d_plan_new("", longueur, section->largeur_table, 1);
             bas->rotations(90., 180., 0.);
-            bas->set_position(0., 0., -section->cote/2.);
+            bas->set_position(0., 0., -section->largeur_table/2.);
             
-            haut = M3d_plan_new("", longueur, section->cote, 1);
+            haut = M3d_plan_new("", longueur, section->largeur_table, 1);
             haut->rotations(90., 0., 0.);
-            haut->set_position(0., 0., section->cote/2.);
+            haut->set_position(0., 0., section->largeur_table/2.);
             
             tout = M3d_object_new_group(tmp, droite, gauche, bas, haut, NULL);
             
