@@ -23,6 +23,7 @@
 #include <gmodule.h>
 #include <math.h>
 
+#include "1990_ponderations.h"
 #include "common_projet.h"
 #include "common_erreurs.h"
 #include "common_math.h"
@@ -1316,8 +1317,43 @@ GdkPixbuf* common_fonction_dessin(GList *fonctions, int width, int height, int d
 #endif
 
 
-G_MODULE_EXPORT char* common_fonction_renvoie(Fonction* fonction, Fonction *index, 
-  int decimales)
+gboolean common_fonction_conversion_combinaisons(Fonction* fonction, GList *ponderations,
+  GList **liste)
+/* Description : Renvoie une liste de ponderations (liste) sur la base des x0 des tronçons de la
+ *               variable fonction en cherchant dans la variable ponderations.
+ * Paramètres : Fonction* fonction : fonction à convertir.
+ *              GList *combinaisons : liste des ponderations possibles,
+ *              GList **liste : liste des ponderations sur la base de la variable fonction.
+ * Valeur renvoyée :
+ *   Succès : TRUE.
+ *   Échec : NULL :
+ *             fonction == NULL,
+ *             ponderations == NULL,
+ *             liste == NULL.
+ */
+{
+    GList           *list_tmp = NULL;
+    unsigned int    numero;
+    unsigned int    i;
+    
+    BUGMSG(fonction, FALSE, gettext("Paramètre %s incorrect.\n"), "fonction");
+    BUGMSG(ponderations, FALSE, gettext("Paramètre %s incorrect.\n"), "ponderations");
+    BUGMSG(liste, FALSE, gettext("Paramètre %s incorrect.\n"), "liste");
+    
+    for (i=0;i<fonction->nb_troncons;i++)
+    {
+        
+        numero = (unsigned int)fonction->troncons[i].x0;
+        list_tmp = g_list_append(list_tmp, g_list_nth(ponderations, numero)->data);
+    }
+    
+    *liste = list_tmp;
+    
+    return TRUE;
+}
+
+
+char* common_fonction_renvoie(Fonction* fonction, GList *index, int decimales)
 /* Description : Renvoie la fonction sous forme de texte (coefficients pour chaque tronçon).
  * Paramètres : Fonction* fonction : fonction à afficher.
  *              Fonction *index : nombre (x0) à ajouter avant les équations entre parenthèse.
@@ -1332,11 +1368,10 @@ G_MODULE_EXPORT char* common_fonction_renvoie(Fonction* fonction, Fonction *inde
     unsigned int    i;
     char            *retour, *ajout;
     double          minimum = pow(10, -decimales);
+    GList           *list_parcours;
     
     // Trivial
     BUGMSG(fonction, NULL, gettext("Paramètre %s incorrect.\n"), "fonction");
-    
-    BUG(common_fonction_compacte(fonction, index), NULL);
     
     if (fonction->nb_troncons == 0)
         BUGMSG(retour = g_strdup_printf("%.*lf", decimales, 0.), NULL, gettext("Erreur d'allocation mémoire.\n"));
@@ -1346,6 +1381,7 @@ G_MODULE_EXPORT char* common_fonction_renvoie(Fonction* fonction, Fonction *inde
         retour[0] = 0;
     }
     
+    list_parcours = index;
     for (i=0;i<fonction->nb_troncons;i++)
     {
         char    *tmp;
@@ -1357,13 +1393,6 @@ G_MODULE_EXPORT char* common_fonction_renvoie(Fonction* fonction, Fonction *inde
         {
             tmp = retour;
             BUGMSG(retour = g_strdup_printf("%s\n", retour), NULL, gettext("Erreur d'allocation mémoire.\n"));
-            free(tmp);
-        }
-        
-        if (index != NULL)
-        {
-            tmp = retour;
-            BUGMSG(retour = g_strdup_printf("%s(%.0lf) : ", retour, index->troncons[i].x0), NULL, gettext("Erreur d'allocation mémoire.\n"));
             free(tmp);
         }
         
@@ -1426,17 +1455,29 @@ G_MODULE_EXPORT char* common_fonction_renvoie(Fonction* fonction, Fonction *inde
         if (strcmp(ajout, "") != 0)
         {
             tmp = retour;
-            BUGMSG(retour = g_strdup_printf("%s %s", retour, ajout), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(retour = g_strdup_printf("%s%s", retour, ajout), NULL, gettext("Erreur d'allocation mémoire.\n"));
             free(tmp);
             free(ajout);
         }
         else
         {
             tmp = retour;
-            BUGMSG(retour = g_strdup_printf("%s %.*lf", retour, decimales, 0.), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(retour = g_strdup_printf("%s%.*lf", retour, decimales, 0.), NULL, gettext("Erreur d'allocation mémoire.\n"));
             free(tmp);
             free(ajout);
         }
+        
+        if (index != NULL)
+        {
+            char    *tmp2 = _1990_ponderations_description(list_parcours->data);
+            
+            tmp = retour;
+            BUGMSG(retour = g_strdup_printf("%s (%s)", retour, tmp2), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            free(tmp2);
+            free(tmp);
+        }
+        
+        list_parcours = g_list_next(list_parcours);
     }
     
     return retour;

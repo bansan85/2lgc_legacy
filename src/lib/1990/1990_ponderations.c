@@ -1067,8 +1067,8 @@ gboolean _1990_ponderations_genere(Projet *projet)
 
 
 char* _1990_ponderations_description(Ponderation *ponderation)
-/* Description : Renvoie sous forme de texte une pondérationAffiche les pondérations de la liste fournie en argument.
- * Paramètres : GList *ponderations : la liste des pondérations.
+/* Description : Renvoie sous forme de texte une pondération.
+ * Paramètres : GList *ponderation : la pondération.
  * Valeur renvoyée : Aucun.
  */
 {

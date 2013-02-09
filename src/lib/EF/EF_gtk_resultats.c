@@ -124,6 +124,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
     unsigned int    i;
     GList           *actions = NULL;
     Action          *action;
+    GList           *comb;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(res, FALSE, gettext("Paramètre %s incorrect.\n"), "res");
@@ -143,8 +144,6 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
     // Combinaisons
     else if (gtk_combo_box_get_active(projet->list_gtk.ef_resultats.combobox) == 1)
     {
-        GList   *comb;
-        
         if ((gtk_combo_box_get_active(projet->list_gtk.ef_resultats.combobox_cas) == -1) || (gtk_combo_box_get_active(projet->list_gtk.ef_resultats.combobox_ponderations) == -1))
         {
             gtk_list_store_clear(res->list_store);
@@ -212,8 +211,6 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
     }
     else if (gtk_combo_box_get_active(projet->list_gtk.ef_resultats.combobox) == 2)
     {
-        GList   *comb;
-        
         if ((gtk_combo_box_get_active(projet->list_gtk.ef_resultats.combobox_cas) == -1) || (gtk_combo_box_get_active(projet->list_gtk.ef_resultats.combobox_ponderations) == -1))
         {
             gtk_list_store_clear(res->list_store);
@@ -551,6 +548,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                     char            *tmp1 = NULL, *tmp2 = NULL;
                     char            *tmp = NULL;
                     GList           *liste = NULL, *list_parcours2;
+                    GList           *converti = NULL;
                     
                     comb_min.troncons = NULL;
                     comb_max.troncons = NULL;
@@ -931,8 +929,11 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     BUGMSG(tmp = g_strdup_printf(gettext("Erreur")), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                 else
                                 {
-                                    tmp1 = common_fonction_renvoie(&f_min, &comb_min, DECIMAL_FORCE);
-                                    tmp2 = common_fonction_renvoie(&f_max, &comb_max, DECIMAL_FORCE);
+                                    BUG(common_fonction_conversion_combinaisons(&comb_min, comb, &converti), FALSE);
+                                    tmp1 = common_fonction_renvoie(&f_min, converti, DECIMAL_FORCE);
+                                    g_list_free(converti);
+                                    BUG(common_fonction_conversion_combinaisons(&comb_max, comb, &converti), FALSE);
+                                    tmp2 = common_fonction_renvoie(&f_max, converti, DECIMAL_FORCE);
                                     
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                 }
@@ -965,8 +966,11 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     BUGMSG(tmp = g_strdup_printf(gettext("Erreur")), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                 else
                                 {
-                                    tmp1 = common_fonction_renvoie(&f_min, &comb_min, DECIMAL_FORCE);
-                                    tmp2 = common_fonction_renvoie(&f_max, &comb_max, DECIMAL_FORCE);
+                                    BUG(common_fonction_conversion_combinaisons(&comb_min, comb, &converti), FALSE);
+                                    tmp1 = common_fonction_renvoie(&f_min, converti, DECIMAL_FORCE);
+                                    g_list_free(converti);
+                                    BUG(common_fonction_conversion_combinaisons(&comb_max, comb, &converti), FALSE);
+                                    tmp2 = common_fonction_renvoie(&f_max, converti, DECIMAL_FORCE);
                                     
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                 }
@@ -999,8 +1003,11 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     BUGMSG(tmp = g_strdup_printf(gettext("Erreur")), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                 else
                                 {
-                                    tmp1 = common_fonction_renvoie(&f_min, &comb_min, DECIMAL_FORCE);
-                                    tmp2 = common_fonction_renvoie(&f_max, &comb_max, DECIMAL_FORCE);
+                                    BUG(common_fonction_conversion_combinaisons(&comb_min, comb, &converti), FALSE);
+                                    tmp1 = common_fonction_renvoie(&f_min, converti, DECIMAL_FORCE);
+                                    g_list_free(converti);
+                                    BUG(common_fonction_conversion_combinaisons(&comb_max, comb, &converti), FALSE);
+                                    tmp2 = common_fonction_renvoie(&f_max, converti, DECIMAL_FORCE);
                                     
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                 }
@@ -1032,8 +1039,11 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                 if (common_fonction_renvoie_enveloppe(liste, &f_min, &f_max, &comb_min, &comb_max) == FALSE)
                                     BUGMSG(tmp = g_strdup_printf(gettext("Erreur")), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                 {
-                                    tmp1 = common_fonction_renvoie(&f_min, &comb_min, DECIMAL_MOMENT);
-                                    tmp2 = common_fonction_renvoie(&f_max, &comb_max, DECIMAL_MOMENT);
+                                    BUG(common_fonction_conversion_combinaisons(&comb_min, comb, &converti), FALSE);
+                                    tmp1 = common_fonction_renvoie(&f_min, converti, DECIMAL_MOMENT);
+                                    g_list_free(converti);
+                                    BUG(common_fonction_conversion_combinaisons(&comb_max, comb, &converti), FALSE);
+                                    tmp2 = common_fonction_renvoie(&f_max, converti, DECIMAL_MOMENT);
                                     
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                 }
@@ -1066,8 +1076,11 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     BUGMSG(tmp = g_strdup_printf(gettext("Erreur")), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                 else
                                 {
-                                    tmp1 = common_fonction_renvoie(&f_min, &comb_min, DECIMAL_MOMENT);
-                                    tmp2 = common_fonction_renvoie(&f_max, &comb_max, DECIMAL_MOMENT);
+                                    BUG(common_fonction_conversion_combinaisons(&comb_min, comb, &converti), FALSE);
+                                    tmp1 = common_fonction_renvoie(&f_min, converti, DECIMAL_MOMENT);
+                                    g_list_free(converti);
+                                    BUG(common_fonction_conversion_combinaisons(&comb_max, comb, &converti), FALSE);
+                                    tmp2 = common_fonction_renvoie(&f_max, converti, DECIMAL_MOMENT);
                                     
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                 }
@@ -1100,8 +1113,11 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     BUGMSG(tmp = g_strdup_printf(gettext("Erreur")), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                 else
                                 {
-                                    tmp1 = common_fonction_renvoie(&f_min, &comb_min, DECIMAL_MOMENT);
-                                    tmp2 = common_fonction_renvoie(&f_max, &comb_max, DECIMAL_MOMENT);
+                                    BUG(common_fonction_conversion_combinaisons(&comb_min, comb, &converti), FALSE);
+                                    tmp1 = common_fonction_renvoie(&f_min, converti, DECIMAL_MOMENT);
+                                    g_list_free(converti);
+                                    BUG(common_fonction_conversion_combinaisons(&comb_max, comb, &converti), FALSE);
+                                    tmp2 = common_fonction_renvoie(&f_max, converti, DECIMAL_MOMENT);
                                     
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                 }
@@ -1457,8 +1473,11 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     BUGMSG(tmp = g_strdup_printf(gettext("Erreur")), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                 else
                                 {
-                                    tmp1 = common_fonction_renvoie(&f_min, &comb_min, DECIMAL_DEPLACEMENT);
-                                    tmp2 = common_fonction_renvoie(&f_max, &comb_max, DECIMAL_DEPLACEMENT);
+                                    BUG(common_fonction_conversion_combinaisons(&comb_min, comb, &converti), FALSE);
+                                    tmp1 = common_fonction_renvoie(&f_min, converti, DECIMAL_DEPLACEMENT);
+                                    g_list_free(converti);
+                                    BUG(common_fonction_conversion_combinaisons(&comb_max, comb, &converti), FALSE);
+                                    tmp2 = common_fonction_renvoie(&f_max, converti, DECIMAL_DEPLACEMENT);
                                     
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                 }
@@ -1491,8 +1510,11 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     BUGMSG(tmp = g_strdup_printf(gettext("Erreur")), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                 else
                                 {
-                                    tmp1 = common_fonction_renvoie(&f_min, &comb_min, DECIMAL_DEPLACEMENT);
-                                    tmp2 = common_fonction_renvoie(&f_max, &comb_max, DECIMAL_DEPLACEMENT);
+                                    BUG(common_fonction_conversion_combinaisons(&comb_min, comb, &converti), FALSE);
+                                    tmp1 = common_fonction_renvoie(&f_min, converti, DECIMAL_DEPLACEMENT);
+                                    g_list_free(converti);
+                                    BUG(common_fonction_conversion_combinaisons(&comb_max, comb, &converti), FALSE);
+                                    tmp2 = common_fonction_renvoie(&f_max, converti, DECIMAL_DEPLACEMENT);
                                     
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                 }
@@ -1525,8 +1547,11 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     BUGMSG(tmp = g_strdup_printf(gettext("Erreur")), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                 else
                                 {
-                                    tmp1 = common_fonction_renvoie(&f_min, &comb_min, DECIMAL_DEPLACEMENT);
-                                    tmp2 = common_fonction_renvoie(&f_max, &comb_max, DECIMAL_DEPLACEMENT);
+                                    BUG(common_fonction_conversion_combinaisons(&comb_min, comb, &converti), FALSE);
+                                    tmp1 = common_fonction_renvoie(&f_min, converti, DECIMAL_DEPLACEMENT);
+                                    g_list_free(converti);
+                                    BUG(common_fonction_conversion_combinaisons(&comb_max, comb, &converti), FALSE);
+                                    tmp2 = common_fonction_renvoie(&f_max, converti, DECIMAL_DEPLACEMENT);
                                     
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                 }
@@ -1559,8 +1584,11 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     BUGMSG(tmp = g_strdup_printf(gettext("Erreur")), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                 else
                                 {
-                                    tmp1 = common_fonction_renvoie(&f_min, &comb_min, DECIMAL_ROTATION);
-                                    tmp2 = common_fonction_renvoie(&f_max, &comb_max, DECIMAL_ROTATION);
+                                    BUG(common_fonction_conversion_combinaisons(&comb_min, comb, &converti), FALSE);
+                                    tmp1 = common_fonction_renvoie(&f_min, converti, DECIMAL_ROTATION);
+                                    g_list_free(converti);
+                                    BUG(common_fonction_conversion_combinaisons(&comb_max, comb, &converti), FALSE);
+                                    tmp2 = common_fonction_renvoie(&f_max, converti, DECIMAL_ROTATION);
                                     
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                 }
@@ -1593,8 +1621,11 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     BUGMSG(tmp = g_strdup_printf(gettext("Erreur")), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                 else
                                 {
-                                    tmp1 = common_fonction_renvoie(&f_min, &comb_min, DECIMAL_ROTATION);
-                                    tmp2 = common_fonction_renvoie(&f_max, &comb_max, DECIMAL_ROTATION);
+                                    BUG(common_fonction_conversion_combinaisons(&comb_min, comb, &converti), FALSE);
+                                    tmp1 = common_fonction_renvoie(&f_min, converti, DECIMAL_ROTATION);
+                                    g_list_free(converti);
+                                    BUG(common_fonction_conversion_combinaisons(&comb_max, comb, &converti), FALSE);
+                                    tmp2 = common_fonction_renvoie(&f_max, converti, DECIMAL_ROTATION);
                                     
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                 }
@@ -1627,8 +1658,12 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                     BUGMSG(tmp = g_strdup_printf(gettext("Erreur")), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                 else
                                 {
-                                    tmp1 = common_fonction_renvoie(&f_min, &comb_min, DECIMAL_ROTATION);
-                                    tmp2 = common_fonction_renvoie(&f_max, &comb_max, DECIMAL_ROTATION);
+                                    g_list_free(converti);
+                                    BUG(common_fonction_conversion_combinaisons(&comb_min, comb, &converti), FALSE);
+                                    tmp1 = common_fonction_renvoie(&f_min, converti, DECIMAL_ROTATION);
+                                    g_list_free(converti);
+                                    BUG(common_fonction_conversion_combinaisons(&comb_max, comb, &converti), FALSE);
+                                    tmp2 = common_fonction_renvoie(&f_max, converti, DECIMAL_ROTATION);
                                     
                                     BUGMSG(tmp = g_strdup_printf(gettext("Enveloppe supérieure :\n%s\nEnveloppe inférieure :\n%s"), tmp2, tmp1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                                 }
@@ -1657,6 +1692,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                     free(tmp1);
                     free(tmp2);
                     g_list_free(liste);
+                    g_list_free(converti);
                 }
                 gtk_list_store_set(res->list_store, &Iter, res->col_tab[0], "", -1);
             }
