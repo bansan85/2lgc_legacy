@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2013-01-27 22:30+0100\n"
-"PO-Revision-Date: 2013-01-27 22:33+0100\n"
+"POT-Creation-Date: 2013-02-09 01:08+0100\n"
+"PO-Revision-Date: 2013-02-09 01:08+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -11,874 +11,2209 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.5.5\n"
 
+#: files/ui/1990_actions.ui.h:1
 msgid "&#968;<sub>0</sub>"
 msgstr "&#968;<sub>0</sub>"
 
+#: files/ui/1990_actions.ui.h:2
 msgid "&#968;<sub>1</sub>"
 msgstr "&#968;<sub>1</sub>"
 
+#: files/ui/1990_actions.ui.h:3
 msgid "&#968;<sub>2</sub>"
 msgstr "&#968;<sub>2</sub>"
 
+#: files/ui/1990_actions.ui.h:4
 msgid "Actions"
 msgstr "Actions"
 
+#: files/ui/1990_actions.ui.h:5
 msgid "<b>Actions :</b>"
 msgstr "<b>Actions :</b>"
 
+#: files/ui/1990_actions.ui.h:6 files/ui/EF_barres.ui.h:2
+#: files/ui/EF_noeud.ui.h:2 files/ui/1990_groupes.ui.h:4
 msgid "Numéro"
 msgstr "Numéro"
 
+#: files/ui/1990_actions.ui.h:7 files/ui/EF_sections.ui.h:15
+#: files/ui/EF_materiaux.ui.h:6 files/ui/1990_groupes.ui.h:5
 msgid "Description"
 msgstr "Description"
 
+#: files/ui/1990_actions.ui.h:8 files/ui/EF_barres.ui.h:3
 msgid "Type"
 msgstr "Type"
 
+#: files/ui/1990_actions.ui.h:9
 msgid "<b>Charges :</b>"
 msgstr "<b>Charges :</b>"
 
+#: files/ui/1990_actions.ui.h:10
 msgid "Charge"
 msgstr "Charge"
 
+#: files/ui/1990_actions.ui.h:11
 msgid "Valeur"
 msgstr "Valeur"
 
+#: files/ui/EF_sections_circulaire.ui.h:1 files/ui/EF_sections_carree.ui.h:1
+#: files/ui/EF_sections_rectangulaire.ui.h:1 files/ui/EF_sections_T.ui.h:1
+#: files/ui/1992_1_1_materiaux_beton.ui.h:1
 msgid "Nom :"
 msgstr "Nom :"
 
+#: files/ui/EF_sections.ui.h:1
 msgid "Rectangulaire"
 msgstr "Rectangulaire"
 
+#: files/ui/EF_sections.ui.h:2
 msgid "T"
 msgstr "T"
 
+#: files/ui/EF_sections.ui.h:3
 msgid "Carrée"
 msgstr "Carrée"
 
+#: files/ui/EF_sections.ui.h:4
 msgid "Circulaire"
 msgstr "Circulaire"
 
+#: files/ui/EF_sections.ui.h:5
 msgid "J [m<sup>4</sup>]"
 msgstr "J [m<sup>4</sup>]"
 
+#: files/ui/EF_sections.ui.h:6
 msgid "I<sub>y</sub> [m<sup>4</sup>]"
 msgstr "I<sub>y</sub> [m<sup>4</sup>]"
 
+#: files/ui/EF_sections.ui.h:7
 msgid "I<sub>z</sub> [m<sup>4</sup>]"
 msgstr "I<sub>z</sub> [m<sup>4</sup>]"
 
+#: files/ui/EF_sections.ui.h:8
 msgid "S [m<sup>2</sup>]"
 msgstr "S [m<sup>2</sup>]"
 
+#: files/ui/EF_sections.ui.h:9
 msgid "v<sub>y</sub> [m]"
 msgstr "v<sub>y</sub> [m]"
 
+#: files/ui/EF_sections.ui.h:10
 msgid "v'<sub>y</sub> [m]"
 msgstr "v'<sub>y</sub> [m]"
 
+#: files/ui/EF_sections.ui.h:11
 msgid "v<sub>z</sub> [m]"
 msgstr "v<sub>z</sub> [m]"
 
+#: files/ui/EF_sections.ui.h:12
 msgid "v'<sub>z</sub> [m]"
 msgstr "v'<sub>z</sub> [m]"
 
+#: files/ui/EF_sections.ui.h:13
 msgid "Sections"
 msgstr "Sections"
 
+#: files/ui/EF_sections.ui.h:14 files/ui/EF_appuis.ui.h:9
+#: files/ui/EF_materiaux.ui.h:4 files/ui/EF_relachements.ui.h:11
 msgid "Nom"
 msgstr "Nom"
 
+#: files/ui/EF_sections_T.ui.h:2
 msgid "Largeur de la table [m] :"
 msgstr "Largeur de la table [m] :"
 
+#: files/ui/EF_sections_T.ui.h:3
 msgid "Hauteur de la table [m] :"
 msgstr "Hauteur de la table [m] :"
 
+#: files/ui/EF_sections_T.ui.h:4
 msgid "Largeur de la retombée [m] :"
 msgstr "Largeur de la retombée [m] :"
 
+#: files/ui/EF_sections_T.ui.h:5
 msgid "Hauteur de la retombée [m] :"
 msgstr "Hauteur de la retombée [m] :"
 
+#: files/ui/EF_barres.ui.h:1 files/ui/EF_resultats.ui.h:4
+#: src/lib/common/common_projet.c:207
+#: src/lib/EF/EF_gtk_charge_barre_ponctuelle.c:66
+#: src/lib/EF/EF_gtk_charge_barre_repartie_uniforme.c:115
+#: src/lib/EF/EF_gtk_resultats.c:1783 src/lib/EF/EF_gtk_resultats.c:2506
 msgid "Barres"
 msgstr "Barres"
 
+#: files/ui/EF_barres.ui.h:4
 msgid "Section"
 msgstr "Section"
 
+#: files/ui/EF_barres.ui.h:5 files/ui/EF_materiaux.ui.h:5
 msgid "Matériau"
 msgstr "Matériau"
 
+#: files/ui/EF_barres.ui.h:6
 msgid "Noeud 1"
 msgstr "Noeud 1"
 
+#: files/ui/EF_barres.ui.h:7
 msgid "Noeud 2"
 msgstr "Noeud 2"
 
+#: files/ui/EF_barres.ui.h:8
 msgid "Relâchement"
 msgstr "Relâchement"
 
+#: files/ui/EF_charge_barre_ponctuelle.ui.h:1
+#: files/ui/EF_charge_barre_repartie_uniforme.ui.h:1
+#: files/ui/EF_charge_noeud.ui.h:1
 msgid "Charge :"
 msgstr "Charge :"
 
+#: files/ui/EF_charge_barre_ponctuelle.ui.h:2
+#: files/ui/EF_charge_barre_repartie_uniforme.ui.h:2
+#: files/ui/EF_charge_noeud.ui.h:2
 msgid "Description :"
 msgstr "Description :"
 
+#: files/ui/EF_charge_barre_ponctuelle.ui.h:3
+#: files/ui/EF_charge_barre_repartie_uniforme.ui.h:4
 msgid "Repere :"
 msgstr "Repere :"
 
+#: files/ui/EF_charge_barre_ponctuelle.ui.h:4
+#: files/ui/EF_charge_barre_repartie_uniforme.ui.h:5
 msgid "Local"
 msgstr "Local"
 
+#: files/ui/EF_charge_barre_ponctuelle.ui.h:5
+#: files/ui/EF_charge_barre_repartie_uniforme.ui.h:6
 msgid "Global"
 msgstr "Global"
 
+#: files/ui/EF_charge_barre_ponctuelle.ui.h:6
 msgid "Position :"
 msgstr "Position :"
 
+#: files/ui/EF_charge_barre_ponctuelle.ui.h:7
+#: files/ui/EF_charge_barre_repartie_uniforme.ui.h:7
 msgid "Barres :"
 msgstr "Barres :"
 
+#: files/ui/EF_appuis.ui.h:1
 msgid "et annule les conditions d'appuis sur les noeuds l'utilisant."
 msgstr "et annule les conditions d'appuis sur les noeuds l'utilisant."
 
+#: files/ui/EF_appuis.ui.h:2
 msgid "u<sub>x</sub>"
 msgstr "u<sub>x</sub>"
 
+#: files/ui/EF_appuis.ui.h:3
 msgid "u<sub>y</sub>"
 msgstr "u<sub>y</sub>"
 
+#: files/ui/EF_appuis.ui.h:4
 msgid "u<sub>z</sub>"
 msgstr "u<sub>z</sub>"
 
+#: files/ui/EF_appuis.ui.h:5
 msgid "r<sub>x</sub>"
 msgstr "r<sub>x</sub>"
 
+#: files/ui/EF_appuis.ui.h:6
 msgid "r<sub>y</sub>"
 msgstr "r<sub>y</sub>"
 
+#: files/ui/EF_appuis.ui.h:7
 msgid "r<sub>z</sub>"
 msgstr "r<sub>z</sub>"
 
+#: files/ui/EF_appuis.ui.h:8
 msgid "Appuis"
 msgstr "Appuis"
 
+#: files/ui/EF_charge_barre_repartie_uniforme.ui.h:3
 msgid "Charge projetée sur la barre"
 msgstr "Charge projetée sur la barre"
 
+#: files/ui/EF_noeud.ui.h:1 files/ui/EF_resultats.ui.h:1
+#: src/lib/common/common_projet.c:194 src/lib/EF/EF_gtk_resultats.c:1776
+#: src/lib/EF/EF_gtk_resultats.c:2449 src/lib/EF/EF_gtk_charge_noeud.c:65
 msgid "Noeuds"
 msgstr "Noeuds"
 
+#: files/ui/EF_noeud.ui.h:3
 msgid "Appui"
 msgstr "Appui"
 
+#: files/ui/EF_noeud.ui.h:4
 msgid "Noeuds libres"
 msgstr "Noeuds libres"
 
+#: files/ui/EF_noeud.ui.h:5 src/lib/EF/EF_gtk_charge_barre_ponctuelle.c:66
+#: src/lib/EF/EF_gtk_charge_barre_repartie_uniforme.c:115
 msgid "Barre"
 msgstr "Barre"
 
+#: files/ui/EF_noeud.ui.h:6
 msgid "Position relative"
 msgstr "Position relative"
 
+#: files/ui/EF_noeud.ui.h:7
 msgid "Noeuds intermédiaires"
 msgstr "Noeuds intermédiaires"
 
+#: files/ui/EF_materiaux.ui.h:1
 msgid "et les barres utilisant le matériau."
 msgstr "et les barres utilisant le matériau."
 
+#: files/ui/EF_materiaux.ui.h:2 src/lib/1992_1_1/1992_1_1_materiaux.c:375
+#: src/lib/EF/EF_gtk_materiaux.c:404
 msgid "Béton"
 msgstr "Béton"
 
+#: files/ui/EF_materiaux.ui.h:3
 msgid "Matériaux"
 msgstr "Matériaux"
 
+#: files/ui/EF_relachements.ui.h:1 src/lib/EF/EF_gtk_relachement.c:756
+#: src/lib/EF/EF_gtk_appuis.c:308 src/lib/EF/EF_appuis.c:61
+#: src/lib/EF/EF_appuis.c:129 src/lib/EF/EF_appuis.c:130
+#: src/lib/EF/EF_appuis.c:152 src/lib/EF/EF_appuis.c:153
+#: src/lib/EF/EF_appuis.c:175 src/lib/EF/EF_appuis.c:176
+#: src/lib/EF/EF_appuis.c:198 src/lib/EF/EF_appuis.c:199
+#: src/lib/EF/EF_appuis.c:221 src/lib/EF/EF_appuis.c:222
+#: src/lib/EF/EF_appuis.c:244 src/lib/EF/EF_appuis.c:245
+#: src/lib/EF/EF_appuis.c:513 src/lib/EF/EF_relachement.c:96
+#: src/lib/EF/EF_relachement.c:124 src/lib/EF/EF_relachement.c:152
+#: src/lib/EF/EF_relachement.c:180 src/lib/EF/EF_relachement.c:208
+#: src/lib/EF/EF_relachement.c:236
 msgid "Libre"
 msgstr "Libre"
 
+#: files/ui/EF_relachements.ui.h:2 src/lib/EF/EF_gtk_relachement.c:754
+#: src/lib/EF/EF_gtk_appuis.c:310 src/lib/EF/EF_appuis.c:63
+#: src/lib/EF/EF_appuis.c:137 src/lib/EF/EF_appuis.c:138
+#: src/lib/EF/EF_appuis.c:160 src/lib/EF/EF_appuis.c:161
+#: src/lib/EF/EF_appuis.c:183 src/lib/EF/EF_appuis.c:184
+#: src/lib/EF/EF_appuis.c:206 src/lib/EF/EF_appuis.c:207
+#: src/lib/EF/EF_appuis.c:229 src/lib/EF/EF_appuis.c:230
+#: src/lib/EF/EF_appuis.c:252 src/lib/EF/EF_appuis.c:253
+#: src/lib/EF/EF_appuis.c:518 src/lib/EF/EF_relachement.c:91
+#: src/lib/EF/EF_relachement.c:119 src/lib/EF/EF_relachement.c:147
+#: src/lib/EF/EF_relachement.c:175 src/lib/EF/EF_relachement.c:203
+#: src/lib/EF/EF_relachement.c:231
 msgid "Bloqué"
 msgstr "Bloqué"
 
+#: files/ui/EF_relachements.ui.h:3 src/lib/EF/EF_gtk_relachement.c:758
+#: src/lib/EF/EF_relachement.c:106 src/lib/EF/EF_relachement.c:134
+#: src/lib/EF/EF_relachement.c:162 src/lib/EF/EF_relachement.c:190
+#: src/lib/EF/EF_relachement.c:218 src/lib/EF/EF_relachement.c:246
 msgid "Linéaire"
 msgstr "Linéaire"
 
+#: files/ui/EF_relachements.ui.h:4
 msgid "r<sub>x</sub> début"
 msgstr "r<sub>x</sub> début"
 
+#: files/ui/EF_relachements.ui.h:5
 msgid "r<sub>y</sub> début"
 msgstr "r<sub>y</sub> début"
 
+#: files/ui/EF_relachements.ui.h:6
 msgid "r<sub>z</sub> début"
 msgstr "r<sub>z</sub> début"
 
+#: files/ui/EF_relachements.ui.h:7
 msgid "r<sub>x</sub> fin"
 msgstr "r<sub>x</sub> fin"
 
+#: files/ui/EF_relachements.ui.h:8
 msgid "r<sub>y</sub> fin"
 msgstr "r<sub>y</sub> fin"
 
+#: files/ui/EF_relachements.ui.h:9
 msgid "r<sub>z</sub> fin"
 msgstr "r<sub>z</sub> fin"
 
+#: files/ui/EF_relachements.ui.h:10
 msgid "Relâchements"
 msgstr "Relâchements"
 
+#: files/ui/1990_groupes.ui.h:1
 msgid "Groupes"
 msgstr "Groupes"
 
+#: files/ui/1990_groupes.ui.h:2
 msgid "Niveau :"
 msgstr "Niveau :"
 
+#: files/ui/1990_groupes.ui.h:3
 msgid "<b>Groupes :</b>"
 msgstr "<b>Groupes :</b>"
 
+#: files/ui/1990_groupes.ui.h:6
 msgid "Ajouter"
 msgstr "Ajouter"
 
+#: files/ui/1990_groupes.ui.h:7
 msgid "Supprimer"
 msgstr "Supprimer"
 
+#: files/ui/1990_groupes.ui.h:8
 msgid "<b>Éléments disponibles :</b>"
 msgstr "<b>Éléments disponibles :</b>"
 
+#: files/ui/1990_groupes.ui.h:9
 msgid "Ajouter tout"
 msgstr "Ajouter tout"
 
+#: files/ui/1990_groupes.ui.h:10
 msgid "Options"
 msgstr "Options"
 
+#: files/ui/1990_groupes.ui.h:11
 msgid "Générer"
 msgstr "Générer"
 
+#: files/ui/EF_charge_noeud.ui.h:3
 msgid "Noeuds :"
 msgstr "Noeuds :"
 
+#: files/ui/EF_barres_add.ui.h:1
 msgid "Ajout d'une barre"
 msgstr "Ajout d'une barre"
 
+#: files/ui/EF_barres_add.ui.h:2
 msgid "Numéro :"
 msgstr "Numéro :"
 
+#: files/ui/EF_barres_add.ui.h:3
 msgid "Type :"
 msgstr "Type :"
 
+#: files/ui/EF_barres_add.ui.h:4
 msgid "Section :"
 msgstr "Section :"
 
+#: files/ui/EF_barres_add.ui.h:5
 msgid "Matériau :"
 msgstr "Matériau :"
 
+#: files/ui/EF_barres_add.ui.h:6
 msgid "Noeud 1 :"
 msgstr "Noeud 1 :"
 
+#: files/ui/EF_barres_add.ui.h:7
 msgid "Noeud 2 :"
 msgstr "Noeud 2 :"
 
+#: files/ui/EF_barres_add.ui.h:8
 msgid "Relâchement :"
 msgstr "Relâchement :"
 
+#: files/ui/EF_barres_add.ui.h:9
 msgid "Nombre de divisions :"
 msgstr "Nombre de divisions :"
 
+#: files/ui/1990_groupes_options.ui.h:1
 msgid "Options des combinaisons"
 msgstr "Options des combinaisons"
 
+#: files/ui/1990_groupes_options.ui.h:2
 msgid "<b>ELU Équilibre :</b>"
 msgstr "<b>ELU Équilibre :</b>"
 
-msgid "À l'État Limite Ultime d'ÉQUilibre, il est possible de générer les combinaisons pour la vérification à l'équilibre statique seulement ou à l'équilibre statique incluant la résistance d'éléments structuraux."
-msgstr "À l'État Limite Ultime d'ÉQUilibre, il est possible de générer les combinaisons pour la vérification à l'équilibre statique seulement ou à l'équilibre statique incluant la résistance d'éléments structuraux."
+#: files/ui/1990_groupes_options.ui.h:3
+msgid ""
+"À l'État Limite Ultime d'ÉQUilibre, il est possible de générer les "
+"combinaisons pour la vérification à l'équilibre statique seulement ou à "
+"l'équilibre statique incluant la résistance d'éléments structuraux."
+msgstr ""
+"À l'État Limite Ultime d'ÉQUilibre, il est possible de générer les "
+"combinaisons pour la vérification à l'équilibre statique seulement ou à "
+"l'équilibre statique incluant la résistance d'éléments structuraux."
 
+#: files/ui/1990_groupes_options.ui.h:4
 msgid "Équilibre seulement"
 msgstr "Équilibre seulement"
 
+#: files/ui/1990_groupes_options.ui.h:5
 msgid "Équilibre et résistance"
 msgstr "Équilibre et résistance"
 
+#: files/ui/1990_groupes_options.ui.h:6
 msgid "<b>ELU STR et GEO, formule de combinaison :</b>"
 msgstr "<b>ELU STR et GEO, formule de combinaison :</b>"
 
-msgid "À l'État Limite Ultime STRucture et GÉOtechnique, deux formules de combinaison sont possibles. La première est la formule 6.10 et la deuxième est 6.10a et 6.10b."
-msgstr "À l'État Limite Ultime STRucture et GÉOtechnique, deux formules de combinaison sont possibles. La première est la formule 6.10 et la deuxième est 6.10a et 6.10b."
+#: files/ui/1990_groupes_options.ui.h:7
+msgid ""
+"À l'État Limite Ultime STRucture et GÉOtechnique, deux formules de "
+"combinaison sont possibles. La première est la formule 6.10 et la deuxième "
+"est 6.10a et 6.10b."
+msgstr ""
+"À l'État Limite Ultime STRucture et GÉOtechnique, deux formules de "
+"combinaison sont possibles. La première est la formule 6.10 et la deuxième "
+"est 6.10a et 6.10b."
 
+#: files/ui/1990_groupes_options.ui.h:8
 msgid "6.10a et 6.10b"
 msgstr "6.10a et 6.10b"
 
+#: files/ui/1990_groupes_options.ui.h:9
 msgid "<b>ELU STR et GEO, ensemble de calcul :</b>"
 msgstr "<b>ELU STR et GEO, ensemble de calcul :</b>"
 
-msgid "Lorsqu'il est nécessaire de réaliser un calcul à l'État Limite Ultime STRucture et GÉOtechnique, trois approches sont possibles. Approche 1 : vérification de la structure et du sol via les coefficients de l'ensemble B puis les coefficients de l'ensemble C. Approche 2 : vérification de la structure et du sol via les coefficients de l'ensemble B. Approche 3 : vérification de la structure et du sol via les coefficients de l'ensemble B pour les actions géotechniques et les coefficients de l'ensemble C pour les actions appliquées à la structure."
-msgstr "Lorsqu'il est nécessaire de réaliser un calcul à l'État Limite Ultime STRucture et GÉOtechnique, trois approches sont possibles. Approche 1 : vérification de la structure et du sol via les coefficients de l'ensemble B puis les coefficients de l'ensemble C. Approche 2 : vérification de la structure et du sol via les coefficients de l'ensemble B. Approche 3 : vérification de la structure et du sol via les coefficients de l'ensemble B pour les actions géotechniques et les coefficients de l'ensemble C pour les actions appliquées à la structure."
+#: files/ui/1990_groupes_options.ui.h:10
+msgid ""
+"Lorsqu'il est nécessaire de réaliser un calcul à l'État Limite Ultime "
+"STRucture et GÉOtechnique, trois approches sont possibles. Approche 1 : "
+"vérification de la structure et du sol via les coefficients de l'ensemble B "
+"puis les coefficients de l'ensemble C. Approche 2 : vérification de la "
+"structure et du sol via les coefficients de l'ensemble B. Approche 3 : "
+"vérification de la structure et du sol via les coefficients de l'ensemble B "
+"pour les actions géotechniques et les coefficients de l'ensemble C pour les "
+"actions appliquées à la structure."
+msgstr ""
+"Lorsqu'il est nécessaire de réaliser un calcul à l'État Limite Ultime "
+"STRucture et GÉOtechnique, trois approches sont possibles. Approche 1 : "
+"vérification de la structure et du sol via les coefficients de l'ensemble B "
+"puis les coefficients de l'ensemble C. Approche 2 : vérification de la "
+"structure et du sol via les coefficients de l'ensemble B. Approche 3 : "
+"vérification de la structure et du sol via les coefficients de l'ensemble B "
+"pour les actions géotechniques et les coefficients de l'ensemble C pour les "
+"actions appliquées à la structure."
 
+#: files/ui/1990_groupes_options.ui.h:11
 msgid "Approche 1"
 msgstr "Approche 1"
 
+#: files/ui/1990_groupes_options.ui.h:12
 msgid "Approche 2"
 msgstr "Approche 2"
 
+#: files/ui/1990_groupes_options.ui.h:13
 msgid "Approche 3"
 msgstr "Approche 3"
 
+#: files/ui/1990_groupes_options.ui.h:14
 msgid "<b>ELU ACCidentel :</b>"
 msgstr "<b>ELU ACCidentel :</b>"
 
-msgid "À l'État Limite Ultime ACCidentel, la charge variable dominante utilisée est soit la valeur fréquente, soit la valeur quasi-permanente."
-msgstr "À l'État Limite Ultime ACCidentel, la charge variable dominante utilisée est soit la valeur fréquente, soit la valeur quasi-permanente."
+#: files/ui/1990_groupes_options.ui.h:15
+msgid ""
+"À l'État Limite Ultime ACCidentel, la charge variable dominante utilisée est "
+"soit la valeur fréquente, soit la valeur quasi-permanente."
+msgstr ""
+"À l'État Limite Ultime ACCidentel, la charge variable dominante utilisée est "
+"soit la valeur fréquente, soit la valeur quasi-permanente."
 
+#: files/ui/1990_groupes_options.ui.h:16
 msgid "valeur fréquence"
 msgstr "valeur fréquence"
 
+#: files/ui/1990_groupes_options.ui.h:17
 msgid "valeur quasi-permanente"
 msgstr "valeur quasi-permanente"
 
+#: files/ui/EF_resultats.ui.h:2 src/lib/EF/EF_gtk_resultats.c:2466
 msgid "Réactions d'appuis"
 msgstr "Réactions d'appuis"
 
+#: files/ui/EF_resultats.ui.h:3 src/lib/EF/EF_gtk_resultats.c:2486
 msgid "Déplacements"
 msgstr "Déplacements"
 
+#: files/ui/EF_resultats.ui.h:5 src/lib/EF/EF_gtk_resultats.c:2521
 msgid "Efforts dans les barres"
 msgstr "Efforts dans les barres"
 
+#: files/ui/EF_resultats.ui.h:6 src/lib/EF/EF_gtk_resultats.c:2554
 msgid "Déformations des barres"
 msgstr "Déformations des barres"
 
+#: files/ui/EF_resultats.ui.h:7 src/lib/common/common_projet.c:244
 msgid "Résultats"
 msgstr "Résultats"
 
+#: files/ui/EF_resultats.ui.h:8
 msgid "Afficher : "
 msgstr "Afficher : "
 
+#: files/ui/EF_resultats.ui.h:9
 msgid "Cas élémentaires"
 msgstr "Cas élémentaires"
 
+#: files/ui/EF_resultats.ui.h:10
 msgid "Combinaisons"
 msgstr "Combinaisons"
 
+#: files/ui/EF_resultats.ui.h:11
 msgid "Enveloppe"
 msgstr "Enveloppe"
 
+#: src/lib/1992_1_1/1992_1_1_gtk_materiaux.c:47
+#: src/lib/1992_1_1/1992_1_1_gtk_materiaux.c:69
+#: src/lib/1992_1_1/1992_1_1_gtk_materiaux.c:97
+#: src/lib/1992_1_1/1992_1_1_gtk_materiaux.c:98
+#: src/lib/1992_1_1/1992_1_1_gtk_materiaux.c:99
+#: src/lib/1992_1_1/1992_1_1_gtk_materiaux.c:152
+#: src/lib/1992_1_1/1992_1_1_gtk_materiaux.c:178
+#: src/lib/1992_1_1/1992_1_1_gtk_materiaux.c:203
+#: src/lib/1992_1_1/1992_1_1_gtk_materiaux.c:225
+#: src/lib/1992_1_1/1992_1_1_gtk_materiaux.c:255
+#: src/lib/1992_1_1/1992_1_1_gtk_materiaux.c:312
+#: src/lib/1992_1_1/1992_1_1_gtk_materiaux.c:334
+#: src/lib/1992_1_1/1992_1_1_gtk_materiaux.c:374
+#: src/lib/1992_1_1/1992_1_1_barres.c:58
+#: src/lib/1992_1_1/1992_1_1_barres.c:104
+#: src/lib/1992_1_1/1992_1_1_barres.c:206
+#: src/lib/1992_1_1/1992_1_1_barres.c:264
+#: src/lib/1992_1_1/1992_1_1_barres.c:564
+#: src/lib/1992_1_1/1992_1_1_barres.c:565
+#: src/lib/1992_1_1/1992_1_1_barres.c:566
+#: src/lib/1992_1_1/1992_1_1_barres.c:603
+#: src/lib/1992_1_1/1992_1_1_barres.c:604
+#: src/lib/1992_1_1/1992_1_1_barres.c:648
+#: src/lib/1992_1_1/1992_1_1_barres.c:649
+#: src/lib/1992_1_1/1992_1_1_barres.c:685
+#: src/lib/1992_1_1/1992_1_1_barres.c:686
+#: src/lib/1992_1_1/1992_1_1_barres.c:726
+#: src/lib/1992_1_1/1992_1_1_barres.c:727
+#: src/lib/1992_1_1/1992_1_1_barres.c:728
+#: src/lib/1992_1_1/1992_1_1_barres.c:777
+#: src/lib/1992_1_1/1992_1_1_barres.c:778
+#: src/lib/1992_1_1/1992_1_1_barres.c:831
+#: src/lib/1992_1_1/1992_1_1_barres.c:832
+#: src/lib/1992_1_1/1992_1_1_barres.c:833
+#: src/lib/1992_1_1/1992_1_1_barres.c:834
+#: src/lib/1992_1_1/1992_1_1_barres.c:1487
+#: src/lib/1992_1_1/1992_1_1_barres.c:1515
+#: src/lib/1992_1_1/1992_1_1_barres.c:1559
+#: src/lib/1992_1_1/1992_1_1_barres.c:1660
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:44
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:365
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:366
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:395
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:396
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:452
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:493
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:494
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:553
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:554
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:684
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:720
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:944
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:945
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:988
+#: src/lib/common/common_selection.c:43 src/lib/common/common_m3d.cc:52
+#: src/lib/common/common_m3d.cc:140 src/lib/common/common_m3d.cc:165
+#: src/lib/common/common_m3d.cc:196 src/lib/common/common_m3d.cc:233
+#: src/lib/common/common_m3d.cc:261 src/lib/common/common_m3d.cc:262
+#: src/lib/common/common_m3d.cc:302 src/lib/common/common_m3d.cc:303
+#: src/lib/common/common_m3d.cc:341 src/lib/common/common_m3d.cc:342
+#: src/lib/common/common_m3d.cc:648 src/lib/common/common_m3d.cc:649
+#: src/lib/common/common_m3d.cc:674 src/lib/common/common_projet.c:123
+#: src/lib/common/common_projet.c:159 src/lib/common/common_projet.c:277
+#: src/lib/common/common_fonction.c:51 src/lib/common/common_fonction.c:52
+#: src/lib/common/common_fonction.c:107 src/lib/common/common_fonction.c:220
+#: src/lib/common/common_fonction.c:309 src/lib/common/common_fonction.c:310
+#: src/lib/common/common_fonction.c:346 src/lib/common/common_fonction.c:427
+#: src/lib/common/common_fonction.c:428 src/lib/common/common_fonction.c:489
+#: src/lib/common/common_fonction.c:490 src/lib/common/common_fonction.c:699
+#: src/lib/common/common_fonction.c:1108 src/lib/common/common_fonction.c:1144
+#: src/lib/common/common_fonction.c:1196 src/lib/common/common_fonction.c:1339
+#: src/lib/common/common_fonction.c:1340 src/lib/common/common_fonction.c:1341
+#: src/lib/common/common_fonction.c:1374 src/lib/common/common_fonction.c:1507
+#: src/lib/common/common_fonction.c:1508 src/lib/common/common_fonction.c:1509
+#: src/lib/common/common_fonction.c:1510 src/lib/common/common_fonction.c:1511
+#: src/lib/common/common_fonction.c:1792 src/lib/common/common_fonction.c:1793
+#: src/lib/common/common_gtk.c:41 src/lib/1990/1990_gtk_actions.c:60
+#: src/lib/1990/1990_gtk_actions.c:83 src/lib/1990/1990_gtk_actions.c:116
+#: src/lib/1990/1990_gtk_actions.c:182 src/lib/1990/1990_gtk_actions.c:216
+#: src/lib/1990/1990_gtk_actions.c:289 src/lib/1990/1990_gtk_actions.c:339
+#: src/lib/1990/1990_gtk_actions.c:371 src/lib/1990/1990_gtk_actions.c:410
+#: src/lib/1990/1990_gtk_actions.c:445 src/lib/1990/1990_gtk_actions.c:492
+#: src/lib/1990/1990_gtk_actions.c:523 src/lib/1990/1990_gtk_actions.c:549
+#: src/lib/1990/1990_gtk_actions.c:597 src/lib/1990/1990_gtk_actions.c:631
+#: src/lib/1990/1990_gtk_actions.c:699 src/lib/1990/1990_gtk_actions.c:747
+#: src/lib/1990/1990_gtk_actions.c:771 src/lib/1990/1990_gtk_actions.c:796
+#: src/lib/1990/1990_gtk_actions.c:823 src/lib/1990/1990_gtk_actions.c:847
+#: src/lib/1990/1990_groupe.c:43 src/lib/1990/1990_groupe.c:67
+#: src/lib/1990/1990_groupe.c:105 src/lib/1990/1990_groupe.c:137
+#: src/lib/1990/1990_groupe.c:169 src/lib/1990/1990_groupe.c:204
+#: src/lib/1990/1990_groupe.c:272 src/lib/1990/1990_groupe.c:412
+#: src/lib/1990/1990_groupe.c:572 src/lib/1990/1990_groupe.c:684
+#: src/lib/1990/1990_groupe.c:739 src/lib/1990/1990_groupe.c:846
+#: src/lib/1990/1990_groupe.c:994 src/lib/1990/1990_gtk_groupes_options.c:41
+#: src/lib/1990/1990_gtk_groupes_options.c:63
+#: src/lib/1990/1990_gtk_groupes_options.c:81
+#: src/lib/1990/1990_gtk_groupes_options.c:102 src/lib/1990/1990_action.c:302
+#: src/lib/1990/1990_action.c:373 src/lib/1990/1990_action.c:436
+#: src/lib/1990/1990_action.c:474 src/lib/1990/1990_action.c:558
+#: src/lib/1990/1990_action.c:599 src/lib/1990/1990_action.c:648
+#: src/lib/1990/1990_action.c:686 src/lib/1990/1990_action.c:770
+#: src/lib/1990/1990_action.c:936 src/lib/1990/1990_combinaisons.c:46
+#: src/lib/1990/1990_combinaisons.c:110 src/lib/1990/1990_combinaisons.c:196
+#: src/lib/1990/1990_combinaisons.c:242 src/lib/1990/1990_combinaisons.c:244
+#: src/lib/1990/1990_combinaisons.c:335 src/lib/1990/1990_combinaisons.c:336
+#: src/lib/1990/1990_combinaisons.c:366 src/lib/1990/1990_combinaisons.c:402
+#: src/lib/1990/1990_combinaisons.c:404 src/lib/1990/1990_combinaisons.c:578
+#: src/lib/1990/1990_combinaisons.c:580 src/lib/1990/1990_combinaisons.c:760
+#: src/lib/1990/1990_combinaisons.c:824 src/lib/1990/1990_combinaisons.c:898
+#: src/lib/1990/1990_gtk_groupes.c:79 src/lib/1990/1990_gtk_groupes.c:133
+#: src/lib/1990/1990_gtk_groupes.c:169 src/lib/1990/1990_gtk_groupes.c:321
+#: src/lib/1990/1990_gtk_groupes.c:340 src/lib/1990/1990_gtk_groupes.c:360
+#: src/lib/1990/1990_gtk_groupes.c:384 src/lib/1990/1990_gtk_groupes.c:415
+#: src/lib/1990/1990_gtk_groupes.c:484 src/lib/1990/1990_gtk_groupes.c:529
+#: src/lib/1990/1990_gtk_groupes.c:551 src/lib/1990/1990_gtk_groupes.c:582
+#: src/lib/1990/1990_gtk_groupes.c:621 src/lib/1990/1990_gtk_groupes.c:649
+#: src/lib/1990/1990_gtk_groupes.c:684 src/lib/1990/1990_gtk_groupes.c:745
+#: src/lib/1990/1990_gtk_groupes.c:778 src/lib/1990/1990_gtk_groupes.c:809
+#: src/lib/1990/1990_gtk_groupes.c:842 src/lib/1990/1990_gtk_groupes.c:862
+#: src/lib/1990/1990_gtk_groupes.c:880 src/lib/1990/1990_gtk_groupes.c:898
+#: src/lib/1990/1990_gtk_groupes.c:916 src/lib/1990/1990_gtk_groupes.c:934
+#: src/lib/1990/1990_gtk_groupes.c:952 src/lib/1990/1990_gtk_groupes.c:970
+#: src/lib/1990/1990_gtk_groupes.c:988 src/lib/1990/1990_gtk_groupes.c:1006
+#: src/lib/1990/1990_gtk_groupes.c:1040 src/lib/1990/1990_gtk_groupes.c:1067
+#: src/lib/1990/1990_gtk_groupes.c:1109 src/lib/1990/1990_gtk_groupes.c:1137
+#: src/lib/1990/1990_gtk_groupes.c:1158 src/lib/1990/1990_gtk_groupes.c:1210
+#: src/lib/1990/1990_gtk_groupes.c:1228 src/lib/1990/1990_ponderations.c:45
+#: src/lib/1990/1990_ponderations.c:113 src/lib/1990/1990_ponderations.c:207
+#: src/lib/1990/1990_ponderations.c:353 src/lib/1990/1990_ponderations.c:698
+#: src/lib/1990/1990_ponderations.c:1057 src/lib/1990/1990_ponderations.c:1077
+#: src/lib/1990/1990_ponderations.c:1152
+#: src/lib/EF/EF_gtk_charge_barre_ponctuelle.c:52
+#: src/lib/EF/EF_gtk_charge_barre_ponctuelle.c:89
+#: src/lib/EF/EF_gtk_charge_barre_ponctuelle.c:131
+#: src/lib/EF/EF_gtk_charge_barre_ponctuelle.c:132
+#: src/lib/EF/EF_gtk_charge_barre_ponctuelle.c:133
+#: src/lib/EF/EF_gtk_charge_barre_ponctuelle.c:134
+#: src/lib/EF/EF_gtk_charge_barre_ponctuelle.c:135
+#: src/lib/EF/EF_gtk_charge_barre_ponctuelle.c:136
+#: src/lib/EF/EF_gtk_charge_barre_ponctuelle.c:137
+#: src/lib/EF/EF_gtk_charge_barre_ponctuelle.c:138
+#: src/lib/EF/EF_gtk_charge_barre_ponctuelle.c:139
+#: src/lib/EF/EF_gtk_charge_barre_ponctuelle.c:140
+#: src/lib/EF/EF_gtk_charge_barre_ponctuelle.c:141
+#: src/lib/EF/EF_gtk_charge_barre_ponctuelle.c:142
+#: src/lib/EF/EF_gtk_charge_barre_ponctuelle.c:233
+#: src/lib/EF/EF_gtk_charge_barre_ponctuelle.c:263
+#: src/lib/EF/EF_gtk_charge_barre_ponctuelle.c:295
+#: src/lib/EF/EF_gtk_charge_barre_ponctuelle.c:339
+#: src/lib/EF/EF_gtk_charge_barre_ponctuelle.c:361
+#: src/lib/EF/EF_gtk_charge_barre_ponctuelle.c:389
+#: src/lib/EF/EF_gtk_sections.c:51 src/lib/EF/EF_gtk_sections.c:68
+#: src/lib/EF/EF_gtk_sections.c:90 src/lib/EF/EF_gtk_sections.c:115
+#: src/lib/EF/EF_gtk_sections.c:160 src/lib/EF/EF_gtk_sections.c:223
+#: src/lib/EF/EF_gtk_sections.c:275 src/lib/EF/EF_gtk_sections.c:339
+#: src/lib/EF/EF_gtk_sections.c:370 src/lib/EF/EF_gtk_sections.c:410
+#: src/lib/EF/EF_gtk_sections.c:573 src/lib/EF/EF_gtk_sections.c:590
+#: src/lib/EF/EF_gtk_sections.c:607 src/lib/EF/EF_gtk_sections.c:624
+#: src/lib/EF/EF_gtk_sections.c:646 src/lib/EF/EF_gtk_sections.c:713
+#: src/lib/EF/EF_gtk_sections.c:738 src/lib/EF/EF_gtk_relachement.c:46
+#: src/lib/EF/EF_gtk_relachement.c:63 src/lib/EF/EF_gtk_relachement.c:85
+#: src/lib/EF/EF_gtk_relachement.c:111 src/lib/EF/EF_gtk_relachement.c:294
+#: src/lib/EF/EF_gtk_relachement.c:347 src/lib/EF/EF_gtk_relachement.c:385
+#: src/lib/EF/EF_gtk_relachement.c:416 src/lib/EF/EF_gtk_relachement.c:463
+#: src/lib/EF/EF_gtk_relachement.c:493 src/lib/EF/EF_gtk_relachement.c:540
+#: src/lib/EF/EF_gtk_relachement.c:741 src/lib/EF/EF_gtk_relachement.c:818
+#: src/lib/EF/EF_gtk_section_T.c:47 src/lib/EF/EF_gtk_section_T.c:69
+#: src/lib/EF/EF_gtk_section_T.c:100 src/lib/EF/EF_gtk_section_T.c:101
+#: src/lib/EF/EF_gtk_section_T.c:102 src/lib/EF/EF_gtk_section_T.c:103
+#: src/lib/EF/EF_gtk_section_T.c:104 src/lib/EF/EF_gtk_section_T.c:105
+#: src/lib/EF/EF_gtk_section_T.c:170 src/lib/EF/EF_gtk_section_T.c:196
+#: src/lib/EF/EF_gtk_section_T.c:221 src/lib/EF/EF_gtk_section_T.c:241
+#: src/lib/EF/EF_gtk_section_T.c:271 src/lib/EF/EF_gtk_section_carree.c:47
+#: src/lib/EF/EF_gtk_section_carree.c:69 src/lib/EF/EF_gtk_section_carree.c:96
+#: src/lib/EF/EF_gtk_section_carree.c:97 src/lib/EF/EF_gtk_section_carree.c:98
+#: src/lib/EF/EF_gtk_section_carree.c:151
+#: src/lib/EF/EF_gtk_section_carree.c:177
+#: src/lib/EF/EF_gtk_section_carree.c:201
+#: src/lib/EF/EF_gtk_section_carree.c:221
+#: src/lib/EF/EF_gtk_section_carree.c:251
+#: src/lib/EF/EF_gtk_section_rectangulaire.c:47
+#: src/lib/EF/EF_gtk_section_rectangulaire.c:69
+#: src/lib/EF/EF_gtk_section_rectangulaire.c:98
+#: src/lib/EF/EF_gtk_section_rectangulaire.c:99
+#: src/lib/EF/EF_gtk_section_rectangulaire.c:100
+#: src/lib/EF/EF_gtk_section_rectangulaire.c:101
+#: src/lib/EF/EF_gtk_section_rectangulaire.c:158
+#: src/lib/EF/EF_gtk_section_rectangulaire.c:184
+#: src/lib/EF/EF_gtk_section_rectangulaire.c:209
+#: src/lib/EF/EF_gtk_section_rectangulaire.c:229
+#: src/lib/EF/EF_gtk_section_rectangulaire.c:259 src/lib/EF/EF_gtk_noeud.c:47
+#: src/lib/EF/EF_gtk_noeud.c:67 src/lib/EF/EF_gtk_noeud.c:103
+#: src/lib/EF/EF_gtk_noeud.c:149 src/lib/EF/EF_gtk_noeud.c:196
+#: src/lib/EF/EF_gtk_noeud.c:279 src/lib/EF/EF_gtk_noeud.c:388
+#: src/lib/EF/EF_gtk_noeud.c:392 src/lib/EF/EF_gtk_noeud.c:475
+#: src/lib/EF/EF_gtk_noeud.c:479 src/lib/EF/EF_gtk_noeud.c:551
+#: src/lib/EF/EF_gtk_noeud.c:594 src/lib/EF/EF_gtk_noeud.c:597
+#: src/lib/EF/EF_gtk_noeud.c:652 src/lib/EF/EF_gtk_noeud.c:656
+#: src/lib/EF/EF_gtk_noeud.c:730 src/lib/EF/EF_gtk_noeud.c:751
+#: src/lib/EF/EF_gtk_noeud.c:769 src/lib/EF/EF_calculs.c:53
+#: src/lib/EF/EF_calculs.c:225 src/lib/EF/EF_calculs.c:226
+#: src/lib/EF/EF_calculs.c:227 src/lib/EF/EF_calculs.c:299
+#: src/lib/EF/EF_calculs.c:351 src/lib/EF/EF_calculs.c:414
+#: src/lib/EF/EF_calculs.c:415 src/lib/EF/EF_calculs.c:416
+#: src/lib/EF/EF_calculs.c:417 src/lib/EF/EF_calculs.c:418
+#: src/lib/EF/EF_calculs.c:475 src/lib/EF/EF_calculs.c:477
+#: src/lib/EF/EF_calculs.c:478 src/lib/EF/EF_calculs.c:1407
+#: src/lib/EF/EF_gtk_barres_add.c:46 src/lib/EF/EF_gtk_barres_add.c:76
+#: src/lib/EF/EF_gtk_barres_add.c:137 src/lib/EF/EF_gtk_barres_add.c:158
+#: src/lib/EF/EF_gtk_barres_add.c:187 src/lib/EF/EF_gtk_barres_add.c:238
+#: src/lib/EF/EF_gtk_charge_barre_repartie_uniforme.c:45
+#: src/lib/EF/EF_gtk_charge_barre_repartie_uniforme.c:67
+#: src/lib/EF/EF_gtk_charge_barre_repartie_uniforme.c:98
+#: src/lib/EF/EF_gtk_charge_barre_repartie_uniforme.c:136
+#: src/lib/EF/EF_gtk_charge_barre_repartie_uniforme.c:181
+#: src/lib/EF/EF_gtk_charge_barre_repartie_uniforme.c:277
+#: src/lib/EF/EF_gtk_charge_barre_repartie_uniforme.c:307
+#: src/lib/EF/EF_gtk_charge_barre_repartie_uniforme.c:339
+#: src/lib/EF/EF_gtk_charge_barre_repartie_uniforme.c:384
+#: src/lib/EF/EF_gtk_charge_barre_repartie_uniforme.c:427
+#: src/lib/EF/EF_gtk_appuis.c:45 src/lib/EF/EF_gtk_appuis.c:62
+#: src/lib/EF/EF_gtk_appuis.c:84 src/lib/EF/EF_gtk_appuis.c:109
+#: src/lib/EF/EF_gtk_appuis.c:150 src/lib/EF/EF_gtk_appuis.c:181
+#: src/lib/EF/EF_gtk_appuis.c:228 src/lib/EF/EF_gtk_appuis.c:261
+#: src/lib/EF/EF_gtk_appuis.c:296 src/lib/EF/EF_gtk_appuis.c:336
+#: src/lib/EF/EF_gtk_appuis.c:375 src/lib/EF/EF_gtk_appuis.c:436
+#: src/lib/EF/EF_gtk_appuis.c:482 src/lib/EF/EF_appuis.c:50
+#: src/lib/EF/EF_appuis.c:84 src/lib/EF/EF_appuis.c:301
+#: src/lib/EF/EF_appuis.c:463 src/lib/EF/EF_appuis.c:464
+#: src/lib/EF/EF_appuis.c:560 src/lib/EF/EF_appuis.c:561
+#: src/lib/EF/EF_appuis.c:667 src/lib/EF/EF_appuis.c:668
+#: src/lib/EF/EF_appuis.c:788 src/lib/EF/EF_gtk_section_circulaire.c:47
+#: src/lib/EF/EF_gtk_section_circulaire.c:69
+#: src/lib/EF/EF_gtk_section_circulaire.c:97
+#: src/lib/EF/EF_gtk_section_circulaire.c:98
+#: src/lib/EF/EF_gtk_section_circulaire.c:99
+#: src/lib/EF/EF_gtk_section_circulaire.c:152
+#: src/lib/EF/EF_gtk_section_circulaire.c:178
+#: src/lib/EF/EF_gtk_section_circulaire.c:202
+#: src/lib/EF/EF_gtk_section_circulaire.c:222
+#: src/lib/EF/EF_gtk_section_circulaire.c:252 src/lib/EF/EF_gtk_calculs.c:44
+#: src/lib/EF/EF_relachement.c:50 src/lib/EF/EF_relachement.c:81
+#: src/lib/EF/EF_relachement.c:82 src/lib/EF/EF_relachement.c:296
+#: src/lib/EF/EF_relachement.c:297 src/lib/EF/EF_relachement.c:369
+#: src/lib/EF/EF_relachement.c:412 src/lib/EF/EF_relachement.c:413
+#: src/lib/EF/EF_relachement.c:792 src/lib/EF/EF_relachement.c:793
+#: src/lib/EF/EF_relachement.c:844 src/lib/EF/EF_gtk_resultats.c:45
+#: src/lib/EF/EF_gtk_resultats.c:62 src/lib/EF/EF_gtk_resultats.c:84
+#: src/lib/EF/EF_gtk_resultats.c:129 src/lib/EF/EF_gtk_resultats.c:130
+#: src/lib/EF/EF_gtk_resultats.c:203 src/lib/EF/EF_gtk_resultats.c:270
+#: src/lib/EF/EF_gtk_resultats.c:1746 src/lib/EF/EF_gtk_resultats.c:1747
+#: src/lib/EF/EF_gtk_resultats.c:2242 src/lib/EF/EF_gtk_resultats.c:2323
+#: src/lib/EF/EF_gtk_resultats.c:2378 src/lib/EF/EF_gtk_resultats.c:2400
+#: src/lib/EF/EF_gtk_resultats.c:2444 src/lib/EF/EF_gtk_resultats.c:2445
+#: src/lib/EF/EF_gtk_resultats.c:2604 src/lib/EF/EF_gtk_resultats.c:2649
+#: src/lib/EF/EF_gtk_barres.c:48 src/lib/EF/EF_gtk_barres.c:65
+#: src/lib/EF/EF_gtk_barres.c:86 src/lib/EF/EF_gtk_barres.c:117
+#: src/lib/EF/EF_gtk_barres.c:179 src/lib/EF/EF_gtk_barres.c:214
+#: src/lib/EF/EF_gtk_barres.c:251 src/lib/EF/EF_gtk_barres.c:293
+#: src/lib/EF/EF_gtk_barres.c:341 src/lib/EF/EF_gtk_barres.c:377
+#: src/lib/EF/EF_gtk_barres.c:425 src/lib/EF/EF_gtk_barres.c:485
+#: src/lib/EF/EF_gtk_barres.c:531
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:80
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:175
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:176
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:182
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:183
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:278
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:284
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:285
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:382
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:388
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:389
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:469
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:534
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:535
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:660
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:661
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:662
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:825
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:826
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:827
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:929
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:930
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:1018
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:1066
+#: src/lib/EF/EF_gtk_materiaux.c:47 src/lib/EF/EF_gtk_materiaux.c:64
+#: src/lib/EF/EF_gtk_materiaux.c:86 src/lib/EF/EF_gtk_materiaux.c:111
+#: src/lib/EF/EF_gtk_materiaux.c:160 src/lib/EF/EF_gtk_materiaux.c:198
+#: src/lib/EF/EF_gtk_materiaux.c:263 src/lib/EF/EF_gtk_materiaux.c:314
+#: src/lib/EF/EF_gtk_materiaux.c:351 src/lib/EF/EF_gtk_materiaux.c:380
+#: src/lib/EF/EF_noeuds.c:43 src/lib/EF/EF_noeuds.c:70
+#: src/lib/EF/EF_noeuds.c:119 src/lib/EF/EF_noeuds.c:182
+#: src/lib/EF/EF_noeuds.c:256 src/lib/EF/EF_noeuds.c:325
+#: src/lib/EF/EF_noeuds.c:363 src/lib/EF/EF_noeuds.c:364
+#: src/lib/EF/EF_noeuds.c:435 src/lib/EF/EF_noeuds.c:436
+#: src/lib/EF/EF_noeuds.c:474 src/lib/EF/EF_noeuds.c:475
+#: src/lib/EF/EF_noeuds.c:567 src/lib/EF/EF_charge_barre_ponctuelle.c:73
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:156
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:157
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:163
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:164
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:252
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:258
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:259
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:345
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:351
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:352
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:440
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:441
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:554
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:555
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:556
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:690
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:691
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:692
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:788
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:789
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:866
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:913
+#: src/lib/EF/EF_gtk_charge_noeud.c:52 src/lib/EF/EF_gtk_charge_noeud.c:90
+#: src/lib/EF/EF_gtk_charge_noeud.c:130 src/lib/EF/EF_gtk_charge_noeud.c:131
+#: src/lib/EF/EF_gtk_charge_noeud.c:132 src/lib/EF/EF_gtk_charge_noeud.c:133
+#: src/lib/EF/EF_gtk_charge_noeud.c:134 src/lib/EF/EF_gtk_charge_noeud.c:135
+#: src/lib/EF/EF_gtk_charge_noeud.c:136 src/lib/EF/EF_gtk_charge_noeud.c:137
+#: src/lib/EF/EF_gtk_charge_noeud.c:138 src/lib/EF/EF_gtk_charge_noeud.c:139
+#: src/lib/EF/EF_gtk_charge_noeud.c:223 src/lib/EF/EF_gtk_charge_noeud.c:252
+#: src/lib/EF/EF_gtk_charge_noeud.c:282 src/lib/EF/EF_gtk_charge_noeud.c:324
+#: src/lib/EF/EF_gtk_charge_noeud.c:345 src/lib/EF/EF_gtk_charge_noeud.c:372
+#: src/lib/EF/EF_rigidite.c:38 src/lib/EF/EF_rigidite.c:67
+#: src/lib/EF/EF_sections.c:49 src/lib/EF/EF_sections.c:75
+#: src/lib/EF/EF_sections.c:76 src/lib/EF/EF_sections.c:115
+#: src/lib/EF/EF_sections.c:116 src/lib/EF/EF_sections.c:166
+#: src/lib/EF/EF_sections.c:167 src/lib/EF/EF_sections.c:238
+#: src/lib/EF/EF_sections.c:276 src/lib/EF/EF_sections.c:277
+#: src/lib/EF/EF_sections.c:352 src/lib/EF/EF_sections.c:397
+#: src/lib/EF/EF_sections.c:398 src/lib/EF/EF_sections.c:472
+#: src/lib/EF/EF_sections.c:508 src/lib/EF/EF_sections.c:509
+#: src/lib/EF/EF_sections.c:572 src/lib/EF/EF_sections.c:609
+#: src/lib/EF/EF_sections.c:610 src/lib/EF/EF_sections.c:670
+#: src/lib/EF/EF_sections.c:704 src/lib/EF/EF_sections.c:779
+#: src/lib/EF/EF_sections.c:780 src/lib/EF/EF_sections.c:859
+#: src/lib/EF/EF_sections.c:919 src/lib/EF/EF_sections.c:970
+#: src/lib/EF/EF_sections.c:1017 src/lib/EF/EF_sections.c:1059
+#: src/lib/EF/EF_sections.c:1101 src/lib/EF/EF_sections.c:1143
+#: src/lib/EF/EF_sections.c:1190 src/lib/EF/EF_sections.c:1245
+#: src/lib/EF/EF_sections.c:1300 src/lib/EF/EF_sections.c:1355
+#: src/lib/EF/EF_sections.c:1410 src/lib/EF/EF_sections.c:1465
+#: src/lib/EF/EF_sections.c:1514 src/lib/EF/EF_sections.c:1565
+#: src/lib/EF/EF_sections.c:1627 src/lib/EF/EF_sections.c:1721
+#: src/lib/EF/EF_charge.c:50 src/lib/EF/EF_charge.c:87
+#: src/lib/EF/EF_charge.c:126 src/lib/EF/EF_charge.c:212
+#: src/lib/EF/EF_resultat.c:49 src/lib/EF/EF_resultat.c:50
+#: src/lib/EF/EF_resultat.c:130 src/lib/EF/EF_resultat.c:131
+#: src/lib/EF/EF_resultat.c:132 src/lib/EF/EF_resultat.c:210
+#: src/lib/EF/EF_resultat.c:211 src/lib/EF/EF_resultat.c:212
+#: src/lib/EF/EF_charge_noeud.c:62 src/lib/EF/EF_charge_noeud.c:115
+#: src/lib/EF/EF_charge_noeud.c:162
+#, c-format
 msgid "Paramètre %s incorrect.\n"
 msgstr "Paramètre %s incorrect.\n"
 
+#: src/lib/1992_1_1/1992_1_1_gtk_materiaux.c:48
+#: src/lib/1992_1_1/1992_1_1_gtk_materiaux.c:70
+#: src/lib/1992_1_1/1992_1_1_gtk_materiaux.c:100
+#: src/lib/1992_1_1/1992_1_1_gtk_materiaux.c:153
+#: src/lib/1992_1_1/1992_1_1_gtk_materiaux.c:179
+#: src/lib/1992_1_1/1992_1_1_gtk_materiaux.c:204
+#: src/lib/1992_1_1/1992_1_1_gtk_materiaux.c:226
+#: src/lib/1992_1_1/1992_1_1_gtk_materiaux.c:313
+#: src/lib/1992_1_1/1992_1_1_gtk_materiaux.c:335
+#: src/lib/1992_1_1/1992_1_1_gtk_materiaux.c:375
+#: src/lib/1990/1990_gtk_actions.c:61 src/lib/1990/1990_gtk_actions.c:84
+#: src/lib/1990/1990_gtk_actions.c:117 src/lib/1990/1990_gtk_actions.c:183
+#: src/lib/1990/1990_gtk_actions.c:217 src/lib/1990/1990_gtk_actions.c:290
+#: src/lib/1990/1990_gtk_actions.c:340 src/lib/1990/1990_gtk_actions.c:372
+#: src/lib/1990/1990_gtk_actions.c:411 src/lib/1990/1990_gtk_actions.c:446
+#: src/lib/1990/1990_gtk_actions.c:493 src/lib/1990/1990_gtk_actions.c:524
+#: src/lib/1990/1990_gtk_actions.c:550 src/lib/1990/1990_gtk_actions.c:598
+#: src/lib/1990/1990_gtk_actions.c:632 src/lib/1990/1990_gtk_actions.c:700
+#: src/lib/1990/1990_gtk_actions.c:748 src/lib/1990/1990_gtk_actions.c:772
+#: src/lib/1990/1990_gtk_actions.c:797 src/lib/1990/1990_gtk_actions.c:824
+#: src/lib/1990/1990_gtk_groupes_options.c:42
+#: src/lib/1990/1990_gtk_groupes_options.c:64
+#: src/lib/1990/1990_gtk_groupes_options.c:82
+#: src/lib/1990/1990_gtk_groupes_options.c:103
+#: src/lib/1990/1990_gtk_groupes.c:81 src/lib/1990/1990_gtk_groupes.c:134
+#: src/lib/1990/1990_gtk_groupes.c:171 src/lib/1990/1990_gtk_groupes.c:322
+#: src/lib/1990/1990_gtk_groupes.c:341 src/lib/1990/1990_gtk_groupes.c:361
+#: src/lib/1990/1990_gtk_groupes.c:385 src/lib/1990/1990_gtk_groupes.c:416
+#: src/lib/1990/1990_gtk_groupes.c:485 src/lib/1990/1990_gtk_groupes.c:584
+#: src/lib/1990/1990_gtk_groupes.c:623 src/lib/1990/1990_gtk_groupes.c:651
+#: src/lib/1990/1990_gtk_groupes.c:686 src/lib/1990/1990_gtk_groupes.c:747
+#: src/lib/1990/1990_gtk_groupes.c:780 src/lib/1990/1990_gtk_groupes.c:811
+#: src/lib/1990/1990_gtk_groupes.c:844 src/lib/1990/1990_gtk_groupes.c:1041
+#: src/lib/1990/1990_gtk_groupes.c:1068 src/lib/1990/1990_gtk_groupes.c:1110
+#: src/lib/1990/1990_gtk_groupes.c:1138 src/lib/1990/1990_gtk_groupes.c:1159
+#: src/lib/1990/1990_gtk_groupes.c:1211
+#: src/lib/EF/EF_gtk_charge_barre_ponctuelle.c:90
+#: src/lib/EF/EF_gtk_charge_barre_ponctuelle.c:143
+#: src/lib/EF/EF_gtk_charge_barre_ponctuelle.c:234
+#: src/lib/EF/EF_gtk_charge_barre_ponctuelle.c:264
+#: src/lib/EF/EF_gtk_charge_barre_ponctuelle.c:296
+#: src/lib/EF/EF_gtk_charge_barre_ponctuelle.c:340
+#: src/lib/EF/EF_gtk_charge_barre_ponctuelle.c:362
+#: src/lib/EF/EF_gtk_sections.c:52 src/lib/EF/EF_gtk_sections.c:69
+#: src/lib/EF/EF_gtk_sections.c:91 src/lib/EF/EF_gtk_sections.c:116
+#: src/lib/EF/EF_gtk_sections.c:161 src/lib/EF/EF_gtk_sections.c:224
+#: src/lib/EF/EF_gtk_sections.c:276 src/lib/EF/EF_gtk_sections.c:340
+#: src/lib/EF/EF_gtk_sections.c:371 src/lib/EF/EF_gtk_sections.c:574
+#: src/lib/EF/EF_gtk_sections.c:591 src/lib/EF/EF_gtk_sections.c:608
+#: src/lib/EF/EF_gtk_sections.c:625 src/lib/EF/EF_gtk_sections.c:647
+#: src/lib/EF/EF_gtk_sections.c:714 src/lib/EF/EF_gtk_relachement.c:47
+#: src/lib/EF/EF_gtk_relachement.c:64 src/lib/EF/EF_gtk_relachement.c:86
+#: src/lib/EF/EF_gtk_relachement.c:112 src/lib/EF/EF_gtk_relachement.c:295
+#: src/lib/EF/EF_gtk_relachement.c:348 src/lib/EF/EF_gtk_relachement.c:386
+#: src/lib/EF/EF_gtk_relachement.c:417 src/lib/EF/EF_gtk_relachement.c:464
+#: src/lib/EF/EF_gtk_relachement.c:494 src/lib/EF/EF_gtk_relachement.c:541
+#: src/lib/EF/EF_gtk_relachement.c:742 src/lib/EF/EF_gtk_section_T.c:48
+#: src/lib/EF/EF_gtk_section_T.c:70 src/lib/EF/EF_gtk_section_T.c:106
+#: src/lib/EF/EF_gtk_section_T.c:171 src/lib/EF/EF_gtk_section_T.c:197
+#: src/lib/EF/EF_gtk_section_T.c:222 src/lib/EF/EF_gtk_section_T.c:242
+#: src/lib/EF/EF_gtk_section_carree.c:48 src/lib/EF/EF_gtk_section_carree.c:70
+#: src/lib/EF/EF_gtk_section_carree.c:99
+#: src/lib/EF/EF_gtk_section_carree.c:152
+#: src/lib/EF/EF_gtk_section_carree.c:178
+#: src/lib/EF/EF_gtk_section_carree.c:202
+#: src/lib/EF/EF_gtk_section_carree.c:222
+#: src/lib/EF/EF_gtk_section_rectangulaire.c:48
+#: src/lib/EF/EF_gtk_section_rectangulaire.c:70
+#: src/lib/EF/EF_gtk_section_rectangulaire.c:102
+#: src/lib/EF/EF_gtk_section_rectangulaire.c:159
+#: src/lib/EF/EF_gtk_section_rectangulaire.c:185
+#: src/lib/EF/EF_gtk_section_rectangulaire.c:210
+#: src/lib/EF/EF_gtk_section_rectangulaire.c:230 src/lib/EF/EF_gtk_noeud.c:48
+#: src/lib/EF/EF_gtk_noeud.c:68 src/lib/EF/EF_gtk_noeud.c:104
+#: src/lib/EF/EF_gtk_noeud.c:150 src/lib/EF/EF_gtk_noeud.c:197
+#: src/lib/EF/EF_gtk_noeud.c:280 src/lib/EF/EF_gtk_noeud.c:389
+#: src/lib/EF/EF_gtk_noeud.c:476 src/lib/EF/EF_gtk_noeud.c:552
+#: src/lib/EF/EF_gtk_noeud.c:595 src/lib/EF/EF_gtk_noeud.c:653
+#: src/lib/EF/EF_gtk_noeud.c:731 src/lib/EF/EF_gtk_noeud.c:752
+#: src/lib/EF/EF_gtk_barres_add.c:47 src/lib/EF/EF_gtk_barres_add.c:77
+#: src/lib/EF/EF_gtk_barres_add.c:138 src/lib/EF/EF_gtk_barres_add.c:159
+#: src/lib/EF/EF_gtk_barres_add.c:188
+#: src/lib/EF/EF_gtk_charge_barre_repartie_uniforme.c:46
+#: src/lib/EF/EF_gtk_charge_barre_repartie_uniforme.c:68
+#: src/lib/EF/EF_gtk_charge_barre_repartie_uniforme.c:137
+#: src/lib/EF/EF_gtk_charge_barre_repartie_uniforme.c:182
+#: src/lib/EF/EF_gtk_charge_barre_repartie_uniforme.c:278
+#: src/lib/EF/EF_gtk_charge_barre_repartie_uniforme.c:308
+#: src/lib/EF/EF_gtk_charge_barre_repartie_uniforme.c:340
+#: src/lib/EF/EF_gtk_charge_barre_repartie_uniforme.c:385
+#: src/lib/EF/EF_gtk_appuis.c:46 src/lib/EF/EF_gtk_appuis.c:63
+#: src/lib/EF/EF_gtk_appuis.c:85 src/lib/EF/EF_gtk_appuis.c:110
+#: src/lib/EF/EF_gtk_appuis.c:151 src/lib/EF/EF_gtk_appuis.c:182
+#: src/lib/EF/EF_gtk_appuis.c:229 src/lib/EF/EF_gtk_appuis.c:262
+#: src/lib/EF/EF_gtk_appuis.c:297 src/lib/EF/EF_gtk_appuis.c:337
+#: src/lib/EF/EF_gtk_appuis.c:376 src/lib/EF/EF_gtk_appuis.c:437
+#: src/lib/EF/EF_gtk_section_circulaire.c:48
+#: src/lib/EF/EF_gtk_section_circulaire.c:70
+#: src/lib/EF/EF_gtk_section_circulaire.c:100
+#: src/lib/EF/EF_gtk_section_circulaire.c:153
+#: src/lib/EF/EF_gtk_section_circulaire.c:179
+#: src/lib/EF/EF_gtk_section_circulaire.c:203
+#: src/lib/EF/EF_gtk_section_circulaire.c:223 src/lib/EF/EF_relachement.c:83
+#: src/lib/EF/EF_gtk_resultats.c:46 src/lib/EF/EF_gtk_resultats.c:63
+#: src/lib/EF/EF_gtk_resultats.c:85 src/lib/EF/EF_gtk_resultats.c:131
+#: src/lib/EF/EF_gtk_resultats.c:1748 src/lib/EF/EF_gtk_resultats.c:2446
+#: src/lib/EF/EF_gtk_barres.c:49 src/lib/EF/EF_gtk_barres.c:66
+#: src/lib/EF/EF_gtk_barres.c:87 src/lib/EF/EF_gtk_barres.c:118
+#: src/lib/EF/EF_gtk_barres.c:180 src/lib/EF/EF_gtk_barres.c:215
+#: src/lib/EF/EF_gtk_barres.c:252 src/lib/EF/EF_gtk_barres.c:294
+#: src/lib/EF/EF_gtk_barres.c:342 src/lib/EF/EF_gtk_barres.c:378
+#: src/lib/EF/EF_gtk_barres.c:426 src/lib/EF/EF_gtk_barres.c:486
+#: src/lib/EF/EF_gtk_materiaux.c:48 src/lib/EF/EF_gtk_materiaux.c:65
+#: src/lib/EF/EF_gtk_materiaux.c:87 src/lib/EF/EF_gtk_materiaux.c:112
+#: src/lib/EF/EF_gtk_materiaux.c:161 src/lib/EF/EF_gtk_materiaux.c:199
+#: src/lib/EF/EF_gtk_materiaux.c:264 src/lib/EF/EF_gtk_materiaux.c:315
+#: src/lib/EF/EF_gtk_materiaux.c:352 src/lib/EF/EF_gtk_charge_noeud.c:91
+#: src/lib/EF/EF_gtk_charge_noeud.c:140 src/lib/EF/EF_gtk_charge_noeud.c:224
+#: src/lib/EF/EF_gtk_charge_noeud.c:253 src/lib/EF/EF_gtk_charge_noeud.c:283
+#: src/lib/EF/EF_gtk_charge_noeud.c:325 src/lib/EF/EF_gtk_charge_noeud.c:346
+#, c-format
 msgid "La fenêtre graphique %s n'est pas initialisée.\n"
 msgstr "La fenêtre graphique %s n'est pas initialisée.\n"
 
+#: src/lib/1992_1_1/1992_1_1_gtk_materiaux.c:267
+#: src/lib/1990/1990_gtk_groupes_options.c:111
+#: src/lib/1990/1990_gtk_groupes.c:1239
+#: src/lib/EF/EF_gtk_charge_barre_ponctuelle.c:398
+#: src/lib/EF/EF_gtk_sections.c:748 src/lib/EF/EF_gtk_relachement.c:828
+#: src/lib/EF/EF_gtk_section_T.c:283 src/lib/EF/EF_gtk_section_carree.c:263
+#: src/lib/EF/EF_gtk_section_rectangulaire.c:270 src/lib/EF/EF_gtk_noeud.c:779
+#: src/lib/EF/EF_gtk_barres_add.c:248
+#: src/lib/EF/EF_gtk_charge_barre_repartie_uniforme.c:436
+#: src/lib/EF/EF_gtk_appuis.c:492 src/lib/EF/EF_gtk_section_circulaire.c:264
+#: src/lib/EF/EF_gtk_resultats.c:2615 src/lib/EF/EF_gtk_barres.c:541
+#: src/lib/EF/EF_gtk_materiaux.c:390 src/lib/EF/EF_gtk_charge_noeud.c:381
 msgid "Builder Failed\n"
 msgstr "Builder Failed\n"
 
+#: src/lib/1992_1_1/1992_1_1_gtk_materiaux.c:274
 msgid "Ajout d'un matériau béton"
 msgstr "Ajout d'un matériau béton"
 
+#: src/lib/1992_1_1/1992_1_1_gtk_materiaux.c:285
 msgid "Modification d'un matériau béton"
 msgstr "Modification d'un matériau béton"
 
+#: src/lib/1992_1_1/1992_1_1_barres.c:65
+#: src/lib/1992_1_1/1992_1_1_barres.c:611
 msgid "Poteau en béton"
 msgstr "Poteau en béton"
 
+#: src/lib/1992_1_1/1992_1_1_barres.c:67
+#: src/lib/1992_1_1/1992_1_1_barres.c:619
 msgid "Poutre en béton"
 msgstr "Poutre en béton"
 
-msgid "La création d'une barre nécessite l'utilisation de des noeuds différents.\n"
-msgstr "La création d'une barre nécessite l'utilisation de des noeuds différents.\n"
+#: src/lib/1992_1_1/1992_1_1_barres.c:105
+msgid ""
+"La création d'une barre nécessite l'utilisation de des noeuds différents.\n"
+msgstr ""
+"La création d'une barre nécessite l'utilisation de des noeuds différents.\n"
 
+#: src/lib/1992_1_1/1992_1_1_barres.c:106
+#: src/lib/1992_1_1/1992_1_1_barres.c:132
+#: src/lib/1992_1_1/1992_1_1_barres.c:163
+#: src/lib/1992_1_1/1992_1_1_barres.c:174
+#: src/lib/1992_1_1/1992_1_1_barres.c:902
+#: src/lib/1992_1_1/1992_1_1_barres.c:920
+#: src/lib/1992_1_1/1992_1_1_barres.c:922
+#: src/lib/1992_1_1/1992_1_1_barres.c:1187
+#: src/lib/1992_1_1/1992_1_1_barres.c:1384
+#: src/lib/1992_1_1/1992_1_1_barres.c:1390
+#: src/lib/1992_1_1/1992_1_1_barres.c:1392
+#: src/lib/1992_1_1/1992_1_1_barres.c:1395
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:454
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:457
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:560
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:729
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:733
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:741
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:745
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:753
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:757
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:765
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:769
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:777
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:781
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:789
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:793
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:801
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:805
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:813
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:817
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:825
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:829
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:837
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:841
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:849
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:853
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:861
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:865
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:873
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:877
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:885
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:889
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:897
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:901
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:907
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:910
+#: src/lib/common/common_selection.c:183 src/lib/common/common_selection.c:242
+#: src/lib/common/common_selection.c:243 src/lib/common/common_selection.c:381
+#: src/lib/common/common_selection.c:388 src/lib/common/common_selection.c:398
+#: src/lib/common/common_selection.c:422 src/lib/common/common_selection.c:429
+#: src/lib/common/common_selection.c:439 src/lib/common/common_selection.c:477
+#: src/lib/common/common_selection.c:495 src/lib/common/common_m3d.cc:56
+#: src/lib/common/common_m3d.cc:264 src/lib/common/common_m3d.cc:305
+#: src/lib/common/common_m3d.cc:348 src/lib/common/common_m3d.cc:651
+#: src/lib/common/common_projet.c:67 src/lib/common/common_fonction.c:57
+#: src/lib/common/common_fonction.c:60 src/lib/common/common_fonction.c:68
+#: src/lib/common/common_fonction.c:71 src/lib/common/common_fonction.c:76
+#: src/lib/common/common_fonction.c:79 src/lib/common/common_fonction.c:122
+#: src/lib/common/common_fonction.c:156 src/lib/common/common_fonction.c:171
+#: src/lib/common/common_fonction.c:247 src/lib/common/common_fonction.c:372
+#: src/lib/common/common_fonction.c:376 src/lib/common/common_fonction.c:715
+#: src/lib/common/common_fonction.c:717 src/lib/common/common_fonction.c:729
+#: src/lib/common/common_fonction.c:731 src/lib/common/common_fonction.c:734
+#: src/lib/common/common_fonction.c:736 src/lib/common/common_fonction.c:756
+#: src/lib/common/common_fonction.c:758 src/lib/common/common_fonction.c:1051
+#: src/lib/common/common_fonction.c:1053 src/lib/common/common_fonction.c:1059
+#: src/lib/common/common_fonction.c:1061 src/lib/common/common_fonction.c:1067
+#: src/lib/common/common_fonction.c:1069 src/lib/common/common_fonction.c:1078
+#: src/lib/common/common_fonction.c:1080 src/lib/common/common_fonction.c:1115
+#: src/lib/common/common_fonction.c:1120 src/lib/common/common_fonction.c:1199
+#: src/lib/common/common_fonction.c:1200 src/lib/common/common_fonction.c:1201
+#: src/lib/common/common_fonction.c:1377 src/lib/common/common_fonction.c:1380
+#: src/lib/common/common_fonction.c:1389 src/lib/common/common_fonction.c:1395
+#: src/lib/common/common_fonction.c:1402 src/lib/common/common_fonction.c:1409
+#: src/lib/common/common_fonction.c:1416 src/lib/common/common_fonction.c:1423
+#: src/lib/common/common_fonction.c:1430 src/lib/common/common_fonction.c:1437
+#: src/lib/common/common_fonction.c:1444 src/lib/common/common_fonction.c:1451
+#: src/lib/common/common_fonction.c:1458 src/lib/common/common_fonction.c:1465
+#: src/lib/common/common_fonction.c:1475 src/lib/common/common_tooltip.c:103
+#: src/lib/common/common_tooltip.c:144 src/lib/common/common_gtk.c:86
+#: src/lib/common/common_gtk.c:156 src/lib/1990/1990_gtk_actions.c:414
+#: src/lib/1990/1990_gtk_actions.c:457 src/lib/1990/1990_groupe.c:66
+#: src/lib/1990/1990_groupe.c:205 src/lib/1990/1990_groupe.c:212
+#: src/lib/1990/1990_groupe.c:274 src/lib/1990/1990_groupe.c:455
+#: src/lib/1990/1990_action.c:376 src/lib/1990/1990_action.c:377
+#: src/lib/1990/1990_action.c:483 src/lib/1990/1990_combinaisons.c:133
+#: src/lib/1990/1990_combinaisons.c:146 src/lib/1990/1990_combinaisons.c:275
+#: src/lib/1990/1990_combinaisons.c:276 src/lib/1990/1990_combinaisons.c:344
+#: src/lib/1990/1990_combinaisons.c:423 src/lib/1990/1990_combinaisons.c:436
+#: src/lib/1990/1990_combinaisons.c:609 src/lib/1990/1990_combinaisons.c:626
+#: src/lib/1990/1990_gtk_groupes.c:198 src/lib/1990/1990_ponderations.c:133
+#: src/lib/1990/1990_ponderations.c:141 src/lib/1990/1990_ponderations.c:248
+#: src/lib/1990/1990_ponderations.c:280 src/lib/1990/1990_ponderations.c:1078
+#: src/lib/1990/1990_ponderations.c:1090 src/lib/1990/1990_ponderations.c:1092
+#: src/lib/EF/EF_gtk_charge_barre_ponctuelle.c:66
+#: src/lib/EF/EF_gtk_sections.c:413 src/lib/EF/EF_gtk_noeud.c:391
+#: src/lib/EF/EF_gtk_noeud.c:478 src/lib/EF/EF_gtk_noeud.c:655
+#: src/lib/EF/EF_gtk_noeud.c:686 src/lib/EF/EF_gtk_noeud.c:689
+#: src/lib/EF/EF_calculs.c:60 src/lib/EF/EF_calculs.c:62
+#: src/lib/EF/EF_calculs.c:63 src/lib/EF/EF_calculs.c:65
+#: src/lib/EF/EF_calculs.c:194 src/lib/EF/EF_calculs.c:196
+#: src/lib/EF/EF_calculs.c:252 src/lib/EF/EF_calculs.c:253
+#: src/lib/EF/EF_calculs.c:255 src/lib/EF/EF_calculs.c:263
+#: src/lib/EF/EF_calculs.c:264 src/lib/EF/EF_calculs.c:267
+#: src/lib/EF/EF_calculs.c:268 src/lib/EF/EF_calculs.c:269
+#: src/lib/EF/EF_calculs.c:275 src/lib/EF/EF_calculs.c:277
+#: src/lib/EF/EF_calculs.c:419 src/lib/EF/EF_calculs.c:484
+#: src/lib/EF/EF_calculs.c:495 src/lib/EF/EF_calculs.c:583
+#: src/lib/EF/EF_calculs.c:591 src/lib/EF/EF_calculs.c:611
+#: src/lib/EF/EF_calculs.c:613 src/lib/EF/EF_calculs.c:615
+#: src/lib/EF/EF_calculs.c:769 src/lib/EF/EF_calculs.c:786
+#: src/lib/EF/EF_calculs.c:788 src/lib/EF/EF_calculs.c:790
+#: src/lib/EF/EF_calculs.c:839 src/lib/EF/EF_calculs.c:847
+#: src/lib/EF/EF_calculs.c:881 src/lib/EF/EF_calculs.c:883
+#: src/lib/EF/EF_calculs.c:885 src/lib/EF/EF_calculs.c:1081
+#: src/lib/EF/EF_calculs.c:1098 src/lib/EF/EF_calculs.c:1100
+#: src/lib/EF/EF_calculs.c:1102 src/lib/EF/EF_calculs.c:1150
+#: src/lib/EF/EF_calculs.c:1156 src/lib/EF/EF_calculs.c:1179
+#: src/lib/EF/EF_calculs.c:1205 src/lib/EF/EF_calculs.c:1209
+#: src/lib/EF/EF_calculs.c:1210 src/lib/EF/EF_calculs.c:1264
+#: src/lib/EF/EF_calculs.c:1287 src/lib/EF/EF_calculs.c:1289
+#: src/lib/EF/EF_calculs.c:1294 src/lib/EF/EF_gtk_barres_add.c:260
+#: src/lib/EF/EF_gtk_charge_barre_repartie_uniforme.c:115
+#: src/lib/EF/EF_appuis.c:132 src/lib/EF/EF_appuis.c:140
+#: src/lib/EF/EF_appuis.c:155 src/lib/EF/EF_appuis.c:163
+#: src/lib/EF/EF_appuis.c:178 src/lib/EF/EF_appuis.c:186
+#: src/lib/EF/EF_appuis.c:201 src/lib/EF/EF_appuis.c:209
+#: src/lib/EF/EF_appuis.c:224 src/lib/EF/EF_appuis.c:232
+#: src/lib/EF/EF_appuis.c:247 src/lib/EF/EF_appuis.c:255
+#: src/lib/EF/EF_appuis.c:306 src/lib/EF/EF_appuis.c:308
+#: src/lib/EF/EF_appuis.c:569 src/lib/EF/EF_relachement.c:313
+#: src/lib/EF/EF_relachement.c:428 src/lib/EF/EF_relachement.c:492
+#: src/lib/EF/EF_relachement.c:539 src/lib/EF/EF_relachement.c:586
+#: src/lib/EF/EF_relachement.c:633 src/lib/EF/EF_relachement.c:680
+#: src/lib/EF/EF_relachement.c:727 src/lib/EF/EF_gtk_resultats.c:726
+#: src/lib/EF/EF_gtk_resultats.c:732 src/lib/EF/EF_gtk_resultats.c:760
+#: src/lib/EF/EF_gtk_resultats.c:766 src/lib/EF/EF_gtk_resultats.c:794
+#: src/lib/EF/EF_gtk_resultats.c:800 src/lib/EF/EF_gtk_resultats.c:828
+#: src/lib/EF/EF_gtk_resultats.c:833 src/lib/EF/EF_gtk_resultats.c:861
+#: src/lib/EF/EF_gtk_resultats.c:867 src/lib/EF/EF_gtk_resultats.c:895
+#: src/lib/EF/EF_gtk_resultats.c:901 src/lib/EF/EF_gtk_resultats.c:929
+#: src/lib/EF/EF_gtk_resultats.c:938 src/lib/EF/EF_gtk_resultats.c:966
+#: src/lib/EF/EF_gtk_resultats.c:975 src/lib/EF/EF_gtk_resultats.c:1003
+#: src/lib/EF/EF_gtk_resultats.c:1012 src/lib/EF/EF_gtk_resultats.c:1040
+#: src/lib/EF/EF_gtk_resultats.c:1048 src/lib/EF/EF_gtk_resultats.c:1076
+#: src/lib/EF/EF_gtk_resultats.c:1085 src/lib/EF/EF_gtk_resultats.c:1113
+#: src/lib/EF/EF_gtk_resultats.c:1122 src/lib/EF/EF_gtk_resultats.c:1270
+#: src/lib/EF/EF_gtk_resultats.c:1276 src/lib/EF/EF_gtk_resultats.c:1304
+#: src/lib/EF/EF_gtk_resultats.c:1310 src/lib/EF/EF_gtk_resultats.c:1338
+#: src/lib/EF/EF_gtk_resultats.c:1344 src/lib/EF/EF_gtk_resultats.c:1372
+#: src/lib/EF/EF_gtk_resultats.c:1377 src/lib/EF/EF_gtk_resultats.c:1405
+#: src/lib/EF/EF_gtk_resultats.c:1411 src/lib/EF/EF_gtk_resultats.c:1439
+#: src/lib/EF/EF_gtk_resultats.c:1445 src/lib/EF/EF_gtk_resultats.c:1473
+#: src/lib/EF/EF_gtk_resultats.c:1482 src/lib/EF/EF_gtk_resultats.c:1510
+#: src/lib/EF/EF_gtk_resultats.c:1519 src/lib/EF/EF_gtk_resultats.c:1547
+#: src/lib/EF/EF_gtk_resultats.c:1556 src/lib/EF/EF_gtk_resultats.c:1584
+#: src/lib/EF/EF_gtk_resultats.c:1593 src/lib/EF/EF_gtk_resultats.c:1621
+#: src/lib/EF/EF_gtk_resultats.c:1630 src/lib/EF/EF_gtk_resultats.c:1658
+#: src/lib/EF/EF_gtk_resultats.c:1668 src/lib/EF/EF_gtk_resultats.c:1766
+#: src/lib/EF/EF_gtk_resultats.c:2338 src/lib/EF/EF_gtk_resultats.c:2447
+#: src/lib/EF/EF_gtk_resultats.c:2451 src/lib/EF/EF_gtk_resultats.c:2460
+#: src/lib/EF/EF_gtk_resultats.c:2468 src/lib/EF/EF_gtk_resultats.c:2480
+#: src/lib/EF/EF_gtk_resultats.c:2488 src/lib/EF/EF_gtk_resultats.c:2500
+#: src/lib/EF/EF_gtk_resultats.c:2508 src/lib/EF/EF_gtk_resultats.c:2515
+#: src/lib/EF/EF_gtk_resultats.c:2523 src/lib/EF/EF_gtk_resultats.c:2548
+#: src/lib/EF/EF_gtk_resultats.c:2556 src/lib/EF/EF_gtk_resultats.c:2581
+#: src/lib/EF/EF_gtk_barres.c:295 src/lib/EF/EF_gtk_barres.c:558
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:85
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:107
+#: src/lib/EF/EF_noeuds.c:71 src/lib/EF/EF_noeuds.c:73
+#: src/lib/EF/EF_noeuds.c:120 src/lib/EF/EF_noeuds.c:183
+#: src/lib/EF/EF_noeuds.c:185 src/lib/EF/EF_noeuds.c:212
+#: src/lib/EF/EF_noeuds.c:518 src/lib/EF/EF_charge_barre_ponctuelle.c:76
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:93
+#: src/lib/EF/EF_gtk_charge_noeud.c:65 src/lib/EF/EF_sections.c:240
+#: src/lib/EF/EF_sections.c:241 src/lib/EF/EF_sections.c:246
+#: src/lib/EF/EF_sections.c:285 src/lib/EF/EF_sections.c:354
+#: src/lib/EF/EF_sections.c:355 src/lib/EF/EF_sections.c:365
+#: src/lib/EF/EF_sections.c:405 src/lib/EF/EF_sections.c:474
+#: src/lib/EF/EF_sections.c:475 src/lib/EF/EF_sections.c:479
+#: src/lib/EF/EF_sections.c:516 src/lib/EF/EF_sections.c:574
+#: src/lib/EF/EF_sections.c:575 src/lib/EF/EF_sections.c:583
+#: src/lib/EF/EF_sections.c:617 src/lib/EF/EF_sections.c:715
+#: src/lib/EF/EF_sections.c:728 src/lib/EF/EF_sections.c:738
+#: src/lib/EF/EF_sections.c:748 src/lib/EF/EF_charge.c:92
+#: src/lib/EF/EF_resultat.c:53 src/lib/EF/EF_resultat.c:54
+#: src/lib/EF/EF_resultat.c:55 src/lib/EF/EF_resultat.c:57
+#: src/lib/EF/EF_resultat.c:58 src/lib/EF/EF_resultat.c:137
+#: src/lib/EF/EF_resultat.c:174 src/lib/EF/EF_resultat.c:176
+#: src/lib/EF/EF_resultat.c:217 src/lib/EF/EF_resultat.c:254
+#: src/lib/EF/EF_resultat.c:256 src/lib/EF/EF_charge_noeud.c:64
+#: src/lib/EF/EF_charge_noeud.c:67
 msgid "Erreur d'allocation mémoire.\n"
 msgstr "Erreur d'allocation mémoire.\n"
 
+#: src/lib/1992_1_1/1992_1_1_barres.c:107
 msgid "Le matériau n'est pas spécifié.\n"
 msgstr "Le matériau n'est pas spécifié.\n"
 
+#: src/lib/1992_1_1/1992_1_1_barres.c:108
+#: src/lib/1992_1_1/1992_1_1_barres.c:650
+#: src/lib/1992_1_1/1992_1_1_barres.c:835
 msgid "La section n'est pas spécifiée.\n"
 msgstr "La section n'est pas spécifiée.\n"
 
-msgid "Impossible de créer la barre, la distance entre les deux noeuds %d et %d est nulle.\n"
-msgstr "Impossible de créer la barre, la distance entre les deux noeuds %d et %d est nulle.\n"
+#: src/lib/1992_1_1/1992_1_1_barres.c:125
+#, c-format
+msgid ""
+"Impossible de créer la barre, la distance entre les deux noeuds %d et %d est "
+"nulle.\n"
+msgstr ""
+"Impossible de créer la barre, la distance entre les deux noeuds %d et %d est "
+"nulle.\n"
 
+#: src/lib/1992_1_1/1992_1_1_barres.c:180
+#: src/lib/1992_1_1/1992_1_1_barres.c:790 src/lib/EF/EF_gtk_noeud.c:618
+#: src/lib/EF/EF_gtk_noeud.c:821 src/lib/EF/EF_gtk_noeud.c:828
+#: src/lib/EF/EF_appuis.c:58 src/lib/EF/EF_appuis.c:302
+#: src/lib/EF/EF_relachement.c:58 src/lib/EF/EF_relachement.c:299
+#: src/lib/EF/EF_gtk_barres.c:263 src/lib/EF/EF_gtk_barres.c:564
+#: src/lib/EF/EF_noeuds.c:98 src/lib/EF/EF_noeuds.c:223
+#: src/lib/EF/EF_noeuds.c:393
 msgid "Aucun"
 msgstr "Aucun"
 
+#: src/lib/1992_1_1/1992_1_1_barres.c:221
+#, c-format
 msgid "Barre en béton %u introuvable.\n"
 msgstr "Barre en béton %u introuvable.\n"
 
+#: src/lib/1992_1_1/1992_1_1_barres.c:526
+#: src/lib/1992_1_1/1992_1_1_barres.c:1588 src/lib/1990/1990_gtk_actions.c:161
+#: src/lib/1990/1990_gtk_actions.c:671 src/lib/1990/1990_action.c:811
+#: src/lib/1990/1990_action.c:971 src/lib/EF/EF_calculs.c:1139
+#: src/lib/EF/EF_charge.c:259
+#, c-format
 msgid "Type de charge %d inconnu."
 msgstr "Type de charge %d inconnu."
 
+#: src/lib/1992_1_1/1992_1_1_barres.c:571
+#, c-format
 msgid "La longueur de la barre %u est nulle\n"
 msgstr "La longueur de la barre %u est nulle\n"
 
+#: src/lib/1992_1_1/1992_1_1_barres.c:729
+#: src/lib/1992_1_1/1992_1_1_barres.c:730
 msgid "Impossible d'appliquer le même noeud aux deux extrémités d'une barre.\n"
-msgstr "Impossible d'appliquer le même noeud aux deux extrémités d'une barre.\n"
+msgstr ""
+"Impossible d'appliquer le même noeud aux deux extrémités d'une barre.\n"
 
-msgid "Impossible d'affecter le noeud %d à la barre %d car il est dépendant de la barre à modifier.\n"
-msgstr "Impossible d'affecter le noeud %d à la barre %d car il est dépendant de la barre à modifier.\n"
+#: src/lib/1992_1_1/1992_1_1_barres.c:734
+#, c-format
+msgid ""
+"Impossible d'affecter le noeud %d à la barre %d car il est dépendant de la "
+"barre à modifier.\n"
+msgstr ""
+"Impossible d'affecter le noeud %d à la barre %d car il est dépendant de la "
+"barre à modifier.\n"
 
+#: src/lib/1992_1_1/1992_1_1_barres.c:1019
+#: src/lib/1992_1_1/1992_1_1_barres.c:1049
+#: src/lib/1992_1_1/1992_1_1_barres.c:1079
+#: src/lib/1992_1_1/1992_1_1_barres.c:1118
+#: src/lib/1992_1_1/1992_1_1_barres.c:1148
+#: src/lib/1992_1_1/1992_1_1_barres.c:1178 src/lib/EF/EF_gtk_relachement.c:166
+#: src/lib/EF/EF_gtk_relachement.c:186 src/lib/EF/EF_gtk_relachement.c:206
+#: src/lib/EF/EF_gtk_relachement.c:226 src/lib/EF/EF_gtk_relachement.c:246
+#: src/lib/EF/EF_gtk_relachement.c:266
+#, c-format
 msgid "Relachement %d inconnu."
 msgstr "Relachement %d inconnu."
 
-msgid "La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"
-msgstr "La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:69
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:117
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:135
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:156
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:174
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:191
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:208
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:225
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:245
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:265
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:285
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:305
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:325
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:345
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:453
+msgid ""
+"La résistance caractéristique à la compression du béton doit être inférieure "
+"ou égale à 90 MPa.\n"
+msgstr ""
+"La résistance caractéristique à la compression du béton doit être inférieure "
+"ou égale à 90 MPa.\n"
 
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:558
+#, c-format
 msgid "Le matériau %s existe déjà.\n"
 msgstr "Le matériau %s existe déjà.\n"
 
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:699
+#, c-format
 msgid "Matériau en béton '%s' introuvable.\n"
 msgstr "Matériau en béton '%s' introuvable.\n"
 
-msgid "Impossible de supprimer le matériau car il est utilisé par la barre %s.\n"
-msgstr "Impossible de supprimer le matériau car il est utilisé par la barre %s.\n"
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:958
+#, c-format
+msgid ""
+"Impossible de supprimer le matériau car il est utilisé par la barre %s.\n"
+msgstr ""
+"Impossible de supprimer le matériau car il est utilisé par la barre %s.\n"
 
-msgid "Impossible de supprimer le matériau car il est utilisé par les barres %s.\n"
-msgstr "Impossible de supprimer le matériau car il est utilisé par les barres %s.\n"
+#: src/lib/1992_1_1/1992_1_1_materiaux.c:960
+#, c-format
+msgid ""
+"Impossible de supprimer le matériau car il est utilisé par les barres %s.\n"
+msgstr ""
+"Impossible de supprimer le matériau car il est utilisé par les barres %s.\n"
 
+#: src/lib/common/common_selection.c:59 src/lib/common/common_selection.c:135
+#: src/lib/common/common_selection.c:157
+#, c-format
 msgid "Le type %d de la liste est inconnu.\n"
 msgstr "Le type %d de la liste est inconnu.\n"
 
+#: src/lib/common/common_text.c:35
+#, c-format
 msgid "15. Disclaimer of Warranty.\n"
-msgstr "15. Déclaration d’absence de garantie. (seule la version anglaise fait foi)\n"
+msgstr ""
+"15. Déclaration d’absence de garantie. (seule la version anglaise fait foi)\n"
 
+#: src/lib/common/common_text.c:36 src/lib/common/common_text.c:45
+#: src/lib/common/common_text.c:47 src/lib/common/common_text.c:57
+#: src/lib/common/common_text.c:59 src/lib/EF/EF_sections.c:1567
+#, c-format
 msgid "\n"
 msgstr "\n"
 
+#: src/lib/common/common_text.c:37
+#, c-format
 msgid "THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY\n"
-msgstr "IL N’Y A AUCUNE GARANTIE POUR LE PROGRAMME, DANS LES LIMITES PERMISES\n"
+msgstr ""
+"IL N’Y A AUCUNE GARANTIE POUR LE PROGRAMME, DANS LES LIMITES PERMISES\n"
 
-msgid "APPLICABLE LAW.  EXCEPT WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT\n"
-msgstr "PAR LA LOI APPLICABLE. À MOINS QUE CELA NE SOIT ÉTABLI DIFFÉREMMENT PAR ÉCRIT,\n"
+#: src/lib/common/common_text.c:38
+#, c-format
+msgid ""
+"APPLICABLE LAW.  EXCEPT WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT\n"
+msgstr ""
+"PAR LA LOI APPLICABLE. À MOINS QUE CELA NE SOIT ÉTABLI DIFFÉREMMENT PAR "
+"ÉCRIT,\n"
 
-msgid "HOLDERS AND/OR OTHER PARTIES PROVIDE THE PROGRAM \"AS IS\" WITHOUT WARRANTY\n"
-msgstr "LES PROPRIÉTAIRES DE DROITS ET/OU LES AUTRES PARTIES FOURNISSENT LE PROGRAMME \" EN L’ÉTAT \" SANS GARANTIE\n"
+#: src/lib/common/common_text.c:39
+#, c-format
+msgid ""
+"HOLDERS AND/OR OTHER PARTIES PROVIDE THE PROGRAM \"AS IS\" WITHOUT WARRANTY\n"
+msgstr ""
+"LES PROPRIÉTAIRES DE DROITS ET/OU LES AUTRES PARTIES FOURNISSENT LE "
+"PROGRAMME \" EN L’ÉTAT \" SANS GARANTIE\n"
 
-msgid "OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO,\n"
-msgstr "D’AUCUNE SORTE, QU’ELLE SOIT EXPRIMÉE OU IMPLICITE, CECI COMPRENANT, SANS SE LIMITER À CELLES-CI,\n"
+#: src/lib/common/common_text.c:40
+#, c-format
+msgid ""
+"OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO,\n"
+msgstr ""
+"D’AUCUNE SORTE, QU’ELLE SOIT EXPRIMÉE OU IMPLICITE, CECI COMPRENANT, SANS SE "
+"LIMITER À CELLES-CI,\n"
 
-msgid "THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR\n"
-msgstr "LES GARANTIES IMPLICITES DE COMMERCIALISABILITÉ ET D’ADÉQUATION À UN OBJECTIF\n"
+#: src/lib/common/common_text.c:41
+#, c-format
+msgid ""
+"THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR\n"
+msgstr ""
+"LES GARANTIES IMPLICITES DE COMMERCIALISABILITÉ ET D’ADÉQUATION À UN "
+"OBJECTIF\n"
 
-msgid "PURPOSE.  THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM\n"
-msgstr "PARTICULIER. VOUS ASSUMEZ LE RISQUE ENTIER CONCERNANT LA QUALITÉ ET LES PERFORMANCES\n"
+#: src/lib/common/common_text.c:42
+#, c-format
+msgid ""
+"PURPOSE.  THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM\n"
+msgstr ""
+"PARTICULIER. VOUS ASSUMEZ LE RISQUE ENTIER CONCERNANT LA QUALITÉ ET LES "
+"PERFORMANCES\n"
 
-msgid "IS WITH YOU.  SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF\n"
-msgstr "DU PROGRAMME. DANS L’ÉVENTUALITÉ OÙ LE PROGRAMME S’AVÉRERAIT DÉFECTUEUX, VOUS ASSUMEZ LES COÛTS DE\n"
+#: src/lib/common/common_text.c:43
+#, c-format
+msgid ""
+"IS WITH YOU.  SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF\n"
+msgstr ""
+"DU PROGRAMME. DANS L’ÉVENTUALITÉ OÙ LE PROGRAMME S’AVÉRERAIT DÉFECTUEUX, "
+"VOUS ASSUMEZ LES COÛTS DE\n"
 
+#: src/lib/common/common_text.c:44
+#, c-format
 msgid "ALL NECESSARY SERVICING, REPAIR OR CORRECTION.\n"
 msgstr "TOUS LES SERVICES, RÉPARATIONS OU CORRECTIONS NÉCESSAIRES.\n"
 
+#: src/lib/common/common_text.c:46
+#, c-format
 msgid "16. Limitation of Liability.\n"
 msgstr "16. Limitation de responsabilité.\n"
 
+#: src/lib/common/common_text.c:48
+#, c-format
 msgid "IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING\n"
-msgstr "EN AUCUNE AUTRE CIRCONSTANCE QUE CELLES REQUISES PAR LA LOI APPLICABLE OU ACCORDÉES PAR ÉCRIT,\n"
+msgstr ""
+"EN AUCUNE AUTRE CIRCONSTANCE QUE CELLES REQUISES PAR LA LOI APPLICABLE OU "
+"ACCORDÉES PAR ÉCRIT,\n"
 
-msgid "WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MODIFIES AND/OR CONVEYS\n"
-msgstr "UN TITULAIRE DE DROITS SUR LE PROGRAMME, OU TOUT AUTRE PARTIE QUI MODIFIE OU ACHEMINE\n"
+#: src/lib/common/common_text.c:49
+#, c-format
+msgid ""
+"WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MODIFIES AND/OR CONVEYS\n"
+msgstr ""
+"UN TITULAIRE DE DROITS SUR LE PROGRAMME, OU TOUT AUTRE PARTIE QUI MODIFIE OU "
+"ACHEMINE\n"
 
-msgid "THE PROGRAM AS PERMITTED ABOVE, BE LIABLE TO YOU FOR DAMAGES, INCLUDING ANY\n"
-msgstr "LE PROGRAMME COMME PERMIS CI-DESSUS, NE PEUT ÊTRE TENU POUR RESPONSABLE ENVERS VOUS POUR LES DOMMAGES,\n"
+#: src/lib/common/common_text.c:50
+#, c-format
+msgid ""
+"THE PROGRAM AS PERMITTED ABOVE, BE LIABLE TO YOU FOR DAMAGES, INCLUDING ANY\n"
+msgstr ""
+"LE PROGRAMME COMME PERMIS CI-DESSUS, NE PEUT ÊTRE TENU POUR RESPONSABLE "
+"ENVERS VOUS POUR LES DOMMAGES,\n"
 
-msgid "GENERAL, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THE\n"
-msgstr "INCLUANT TOUT DOMMAGE GÉNÉRAL, SPÉCIAL, ACCIDENTEL OU INDUIT SURVENANT PAR SUITE DE\n"
+#: src/lib/common/common_text.c:51
+#, c-format
+msgid ""
+"GENERAL, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THE\n"
+msgstr ""
+"INCLUANT TOUT DOMMAGE GÉNÉRAL, SPÉCIAL, ACCIDENTEL OU INDUIT SURVENANT PAR "
+"SUITE DE\n"
 
-msgid "USE OR INABILITY TO USE THE PROGRAM (INCLUDING BUT NOT LIMITED TO LOSS OF\n"
-msgstr "L’UTILISATION OU DE L’INCAPACITÉ D’UTILISER LE PROGRAMME (Y COMPRIS, SANS SE LIMITER À CELLES-CI, LA PERTE\n"
+#: src/lib/common/common_text.c:52
+#, c-format
+msgid ""
+"USE OR INABILITY TO USE THE PROGRAM (INCLUDING BUT NOT LIMITED TO LOSS OF\n"
+msgstr ""
+"L’UTILISATION OU DE L’INCAPACITÉ D’UTILISER LE PROGRAMME (Y COMPRIS, SANS SE "
+"LIMITER À CELLES-CI, LA PERTE\n"
 
-msgid "DATA OR DATA BEING RENDERED INACCURATE OR LOSSES SUSTAINED BY YOU OR THIRD\n"
-msgstr "DE DONNÉES OU L’INEXACTITUDE DES DONNÉES RETOURNÉES OU LES PERTES SUBIES PAR VOUS OU DES PARTIES\n"
+#: src/lib/common/common_text.c:53
+#, c-format
+msgid ""
+"DATA OR DATA BEING RENDERED INACCURATE OR LOSSES SUSTAINED BY YOU OR THIRD\n"
+msgstr ""
+"DE DONNÉES OU L’INEXACTITUDE DES DONNÉES RETOURNÉES OU LES PERTES SUBIES PAR "
+"VOUS OU DES PARTIES\n"
 
-msgid "PARTIES OR A FAILURE OF THE PROGRAM TO OPERATE WITH ANY OTHER PROGRAMS),\n"
-msgstr "TIERCES OU L’INCAPACITÉ DU PROGRAMME À FONCTIONNER AVEC TOUT AUTRE PROGRAMME),\n"
+#: src/lib/common/common_text.c:54
+#, c-format
+msgid ""
+"PARTIES OR A FAILURE OF THE PROGRAM TO OPERATE WITH ANY OTHER PROGRAMS),\n"
+msgstr ""
+"TIERCES OU L’INCAPACITÉ DU PROGRAMME À FONCTIONNER AVEC TOUT AUTRE "
+"PROGRAMME),\n"
 
-msgid "EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF\n"
-msgstr "MÊME SI UN TEL TITULAIRE OU TOUTE AUTRE PARTIE A ÉTÉ AVISÉ DE LA POSSIBILITÉ.\n"
+#: src/lib/common/common_text.c:55
+#, c-format
+msgid ""
+"EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF\n"
+msgstr ""
+"MÊME SI UN TEL TITULAIRE OU TOUTE AUTRE PARTIE A ÉTÉ AVISÉ DE LA "
+"POSSIBILITÉ.\n"
 
+#: src/lib/common/common_text.c:56
+#, c-format
 msgid "SUCH DAMAGES.\n"
 msgstr "DE TELS DOMMAGES\n"
 
+#: src/lib/common/common_text.c:58
+#, c-format
 msgid "17. Interpretation of Sections 15 and 16.\n"
 msgstr "17. Interprétation des sections 15 et 16.\n"
 
+#: src/lib/common/common_text.c:60
+#, c-format
 msgid "If the disclaimer of warranty and limitation of liability provided\n"
-msgstr "Si la déclaration d’absence de garantie et la limitation de responsabilité fournies\n"
+msgstr ""
+"Si la déclaration d’absence de garantie et la limitation de responsabilité "
+"fournies\n"
 
+#: src/lib/common/common_text.c:61
+#, c-format
 msgid "above cannot be given local legal effect according to their terms,\n"
 msgstr "ci-dessus ne peuvent prendre effet localement selon leurs termes,\n"
 
+#: src/lib/common/common_text.c:62
+#, c-format
 msgid "reviewing courts shall apply local law that most closely approximates\n"
-msgstr "les cours de justice qui les examinent doivent appliquer la législation locale qui approche au\n"
+msgstr ""
+"les cours de justice qui les examinent doivent appliquer la législation "
+"locale qui approche au\n"
 
+#: src/lib/common/common_text.c:63
+#, c-format
 msgid "an absolute waiver of all civil liability in connection with the\n"
-msgstr "plus près possible une levée absolue de toute responsabilité civile liée au\n"
+msgstr ""
+"plus près possible une levée absolue de toute responsabilité civile liée au\n"
 
+#: src/lib/common/common_text.c:64
+#, c-format
 msgid "Program, unless a warranty or assumption of liability accompanies a\n"
-msgstr "Programme, à moins qu’une garantie ou assumation de responsabilité accompagne\n"
+msgstr ""
+"Programme, à moins qu’une garantie ou assumation de responsabilité "
+"accompagne\n"
 
+#: src/lib/common/common_text.c:65
+#, c-format
 msgid "copy of the Program in return for a fee.\n"
 msgstr "une copie du Programme en échange d’un paiement.\n"
 
+#: src/lib/common/common_text.c:77
+#, c-format
 msgid "Utilisation : codegui [OPTION]... [FILE]...\n"
 msgstr "Utilisation : codegui [OPTION]... [FILE]...\n"
 
+#: src/lib/common/common_text.c:78
+#, c-format
 msgid "Options :\n"
 msgstr "Options :\n"
 
+#: src/lib/common/common_text.c:79
+#, c-format
 msgid "\t-h, --help : affiche le présent menu\n"
 msgstr "\t-h, --help : affiche le présent menu\n"
 
+#: src/lib/common/common_text.c:80
+#, c-format
 msgid "\t-w, --warranty : affiche les limites de garantie du logiciel\n"
 msgstr "\t-w, --warranty : affiche les limites de garantie du logiciel\n"
 
+#: src/lib/common/common_text.c:105
 msgid "noeud"
 msgstr "noeud"
 
+#: src/lib/common/common_text.c:107
 msgid "noeuds"
 msgstr "noeuds"
 
+#: src/lib/common/common_text.c:116 src/lib/common/common_text.c:125
 msgid "barre"
 msgstr "barre"
 
+#: src/lib/common/common_text.c:118 src/lib/common/common_text.c:127
 msgid "barres"
 msgstr "barres"
 
+#: src/lib/common/common_text.c:138 src/lib/common/common_text.c:147
 msgid "charge"
 msgstr "charge"
 
+#: src/lib/common/common_text.c:140 src/lib/common/common_text.c:149
 msgid "charges"
 msgstr "charges"
 
+#: src/lib/common/common_text.c:156
+#, c-format
 msgid "et ces dépendances (%s)"
 msgstr "et ces dépendances (%s)"
 
+#: src/lib/common/common_erreurs.h:28
+#, c-format
 msgid "fichier %s, fonction %s, ligne %d, test : %s\n"
 msgstr "fichier %s, fonction %s, ligne %d, test : %s\n"
 
+#: src/lib/common/common_erreurs.h:43
+#, c-format
 msgid "fichier %s, fonction %s, ligne %d, test : %s, texte : "
 msgstr "fichier %s, fonction %s, ligne %d, test : %s, texte : "
 
+#: src/lib/common/common_m3d.cc:621 src/lib/EF/EF_gtk_sections.c:318
+#: src/lib/EF/EF_gtk_sections.c:554 src/lib/EF/EF_gtk_sections.c:687
+#: src/lib/EF/EF_calculs.c:1374
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:236
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:341
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:445
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:495
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:617
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:782
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:894
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:991
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:215
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:308
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:402
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:512
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:648
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:752
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:839 src/lib/EF/EF_sections.c:754
+#: src/lib/EF/EF_sections.c:837 src/lib/EF/EF_sections.c:902
+#: src/lib/EF/EF_sections.c:953 src/lib/EF/EF_sections.c:999
+#: src/lib/EF/EF_sections.c:1041 src/lib/EF/EF_sections.c:1083
+#: src/lib/EF/EF_sections.c:1125 src/lib/EF/EF_sections.c:1167
+#: src/lib/EF/EF_sections.c:1222 src/lib/EF/EF_sections.c:1277
+#: src/lib/EF/EF_sections.c:1332 src/lib/EF/EF_sections.c:1387
+#: src/lib/EF/EF_sections.c:1442 src/lib/EF/EF_sections.c:1497
+#: src/lib/EF/EF_sections.c:1540 src/lib/EF/EF_sections.c:1604
+#: src/lib/EF/EF_sections.c:1691
+#, c-format
 msgid "Type de section %d inconnu.\n"
 msgstr "Type de section %d inconnu.\n"
 
+#: src/lib/common/common_projet.c:180
 msgid "Fichier"
 msgstr "Fichier"
 
+#: src/lib/common/common_projet.c:184
 msgid "Quitter"
 msgstr "Quitter"
 
+#: src/lib/common/common_projet.c:189
 msgid "Modélisation"
 msgstr "Modélisation"
 
+#: src/lib/common/common_projet.c:198
 msgid "Appuis..."
 msgstr "Appuis..."
 
+#: src/lib/common/common_projet.c:202
 msgid "Gestion des noeuds..."
 msgstr "Gestion des noeuds..."
 
+#: src/lib/common/common_projet.c:211
 msgid "Sections..."
 msgstr "Sections..."
 
+#: src/lib/common/common_projet.c:215
 msgid "Matériaux..."
 msgstr "Matériaux..."
 
+#: src/lib/common/common_projet.c:219
 msgid "Relâchement..."
 msgstr "Relâchement..."
 
+#: src/lib/common/common_projet.c:223
 msgid "Gestion des barres..."
 msgstr "Gestion des barres..."
 
+#: src/lib/common/common_projet.c:231
 msgid "Charges"
 msgstr "Charges"
 
+#: src/lib/common/common_projet.c:235
 msgid "Actions..."
 msgstr "Actions..."
 
+#: src/lib/common/common_projet.c:239
 msgid "Groupes..."
 msgstr "Groupes..."
 
+#: src/lib/common/common_projet.c:248
 msgid "Calculer"
 msgstr "Calculer"
 
+#: src/lib/common/common_projet.c:252
 msgid "Afficher"
 msgstr "Afficher"
 
+#: src/lib/common/common_fonction.c:108
 msgid "Impossible de scinder une fonction vide\n"
 msgstr "Impossible de scinder une fonction vide\n"
 
+#: src/lib/common/common_fonction.c:490
 msgid "Borne incorrecte.\n"
 msgstr "Borne incorrecte.\n"
 
+#: src/lib/common/common_fonction.c:1147
+#, c-format
 msgid "Fonction indéfinie.\n"
 msgstr "Fonction indéfinie.\n"
 
+#: src/lib/common/common_fonction.c:1197 src/lib/EF/EF_gtk_sections.c:411
 msgid "La largeur du dessin ne peut être nulle.\n"
 msgstr "La largeur du dessin ne peut être nulle.\n"
 
+#: src/lib/common/common_fonction.c:1198 src/lib/EF/EF_gtk_sections.c:412
 msgid "La hauteur du dessin ne peut être nulle.\n"
 msgstr "La hauteur du dessin ne peut être nulle.\n"
 
+#: src/lib/common/common_fonction.c:1402
+#, c-format
 msgid "%sde %.*lfm à %.*lfm : "
 msgstr "%sde %.*lfm à %.*lfm : "
 
+#: src/lib/common/common_fonction.c:1583 src/lib/common/common_fonction.c:1596
+#: src/lib/common/common_fonction.c:1699 src/lib/common/common_fonction.c:1712
 msgid "Zéro impossible à trouver.\n"
 msgstr "Zéro impossible à trouver.\n"
 
+#: src/lib/common/common_tooltip.c:51
+#, c-format
 msgid "Le fichier '%s' est introuvable ou corrompu.\n"
 msgstr "Le fichier '%s' est introuvable ou corrompu.\n"
 
+#: src/lib/common/common_tooltip.c:55
+#, c-format
 msgid "Le fichier '%s' est vide.\n"
 msgstr "Le fichier '%s' est vide.\n"
 
+#: src/lib/common/common_tooltip.c:104
+#, c-format
 msgid "Impossible d'ouvrir l'image %s : %s.\n"
 msgstr "Impossible d'ouvrir l'image %s : %s.\n"
 
+#: src/lib/common/common_tooltip.c:147
+#, c-format
 msgid "'%s' n'est pas de la forme 'largeurxhauteur'.\n"
 msgstr "'%s' n'est pas de la forme 'largeurxhauteur'.\n"
 
+#: src/lib/common/common_tooltip.c:166
+#, c-format
 msgid "Le fichier '%s' est corrompu.\n"
 msgstr "Le fichier '%s' est corrompu.\n"
 
+#: src/lib/1990/1990_gtk_actions.c:382
+#, c-format
 msgid "Type d'action '%s' inconnu.\n"
 msgstr "Type d'action '%s' inconnu.\n"
 
+#: src/lib/1990/1990_gtk_actions.c:457 src/lib/1990/1990_gtk_groupes.c:389
+#: src/lib/EF/EF_gtk_relachement.c:496 src/lib/EF/EF_gtk_relachement.c:497
+#: src/lib/EF/EF_gtk_relachement.c:503 src/lib/EF/EF_gtk_relachement.c:508
+#: src/lib/EF/EF_gtk_appuis.c:112 src/lib/EF/EF_gtk_appuis.c:113
+#: src/lib/EF/EF_gtk_appuis.c:119 src/lib/EF/EF_gtk_appuis.c:124
 msgid "Sans nom"
 msgstr "Sans nom"
 
+#: src/lib/1990/1990_gtk_actions.c:472
 msgid "Impossible de trouver le type d'action correspondant à cette action.\n"
 msgstr "Impossible de trouver le type d'action correspondant à cette action.\n"
 
+#: src/lib/1990/1990_gtk_actions.c:856
+#, c-format
 msgid "La génération de la fenêtre %s a échouée.\n"
 msgstr "La génération de la fenêtre %s a échouée.\n"
 
+#: src/lib/1990/1990_coef_psi.c:77 src/lib/1990/1990_coef_psi.c:129
+#: src/lib/1990/1990_coef_psi.c:181 src/lib/1990/1990_coef_psi.c:243
+#: src/lib/1990/1990_coef_psi.c:305 src/lib/1990/1990_coef_psi.c:367
+#: src/lib/1990/1990_action.c:91 src/lib/1990/1990_action.c:154
+#: src/lib/1990/1990_action.c:208 src/lib/1990/1990_action.c:242
+#, c-format
 msgid "Type d'action %u inconnu.\n"
 msgstr "Type d'action %u inconnu.\n"
 
+#: src/lib/1990/1990_coef_psi.c:388 src/lib/1990/1990_coef_psi.c:409
+#: src/lib/1990/1990_coef_psi.c:430 src/lib/1990/1990_duree.c:160
+#: src/lib/1990/1990_duree.c:182 src/lib/1990/1990_action.c:176
+#: src/lib/1990/1990_action.c:263 src/lib/1990/1990_action.c:282
+#: src/lib/1990/1990_ponderations.c:1064
+#, c-format
 msgid "Pays %d inconnu.\n"
 msgstr "Pays %d inconnu.\n"
 
+#: src/lib/1990/1990_duree.c:53 src/lib/1990/1990_duree.c:81
+#, c-format
 msgid "Catégorie de durée %u inconnue.\n"
 msgstr "Catégorie de durée %u inconnue.\n"
 
+#: src/lib/1990/1990_duree.c:105 src/lib/1990/1990_duree.c:134
 msgid "Structures provisoires"
 msgstr "Structures provisoires"
 
-msgid "Éléments structuraux remplaçables, par exemple poutres de roulement, appareils d'appui"
-msgstr "Éléments structuraux remplaçables, par exemple poutres de roulement, appareils d'appui"
+#: src/lib/1990/1990_duree.c:106 src/lib/1990/1990_duree.c:135
+msgid ""
+"Éléments structuraux remplaçables, par exemple poutres de roulement, "
+"appareils d'appui"
+msgstr ""
+"Éléments structuraux remplaçables, par exemple poutres de roulement, "
+"appareils d'appui"
 
+#: src/lib/1990/1990_duree.c:107 src/lib/1990/1990_duree.c:136
 msgid "Structures agricoles et similaires"
 msgstr "Structures agricoles et similaires"
 
+#: src/lib/1990/1990_duree.c:108 src/lib/1990/1990_duree.c:137
 msgid "Structures de bâtiments et autres structures courantes"
 msgstr "Structures de bâtiments et autres structures courantes"
 
-msgid "Structures monumentales de bâtiments, pont et autres ouvrages de génie civil"
-msgstr "Structures monumentales de bâtiments, pont et autres ouvrages de génie civil"
+#: src/lib/1990/1990_duree.c:109 src/lib/1990/1990_duree.c:138
+msgid ""
+"Structures monumentales de bâtiments, pont et autres ouvrages de génie civil"
+msgstr ""
+"Structures monumentales de bâtiments, pont et autres ouvrages de génie civil"
 
+#: src/lib/1990/1990_duree.c:110 src/lib/1990/1990_duree.c:139
+#, c-format
 msgid "Catégorie de durée %d inconnue.\n"
 msgstr "Catégorie de durée %d inconnue.\n"
 
+#: src/lib/1990/1990_groupe.c:119
+#, c-format
 msgid "Élément %u du groupe %u introuvable.\n"
 msgstr "Élément %u du groupe %u introuvable.\n"
 
+#: src/lib/1990/1990_groupe.c:150
+#, c-format
 msgid "Groupe %u du niveau %u introuvable.\n"
 msgstr "Groupe %u du niveau %u introuvable.\n"
 
+#: src/lib/1990/1990_groupe.c:182
+#, c-format
 msgid "Niveau de groupes %u introuvable.\n"
 msgstr "Niveau de groupes %u introuvable.\n"
 
-msgid "Le projet ne possède pas de niveaux de groupes permettant de regrouper plusieurs groupes d'actions.\n"
-msgstr "Le projet ne possède pas de niveaux de groupes permettant de regrouper plusieurs groupes d'actions.\n"
+#: src/lib/1990/1990_groupe.c:273
+msgid ""
+"Le projet ne possède pas de niveaux de groupes permettant de regrouper "
+"plusieurs groupes d'actions.\n"
+msgstr ""
+"Le projet ne possède pas de niveaux de groupes permettant de regrouper "
+"plusieurs groupes d'actions.\n"
 
+#: src/lib/1990/1990_groupe.c:318
+#, c-format
 msgid "Le numéro %u est déjà présent dans le groupe %u du niveau %u.\n"
 msgstr "Le numéro %u est déjà présent dans le groupe %u du niveau %u.\n"
 
+#: src/lib/1990/1990_groupe.c:425
+#, c-format
 msgid "Le type de combinaison %d est inconnu.\n"
 msgstr "Le type de combinaison %d est inconnu.\n"
 
+#: src/lib/1990/1990_groupe.c:551
 msgid "Erreur lors de l'actualisation de la fenêtre graphique.\n"
 msgstr "Erreur lors de l'actualisation de la fenêtre graphique.\n"
 
+#: src/lib/1990/1990_groupe.c:581
+#, c-format
 msgid "niveau : %d\n"
 msgstr "niveau : %d\n"
 
+#: src/lib/1990/1990_groupe.c:588
+#, c-format
 msgid "\tgroupe : %d, combinaison : "
 msgstr "\tgroupe : %d, combinaison : "
 
+#: src/lib/1990/1990_groupe.c:608
+#, c-format
 msgid "Combinaison %d inconnue"
 msgstr "Combinaison %d inconnue"
 
+#: src/lib/1990/1990_groupe.c:613
+#, c-format
 msgid "\t\tActions contenus dans ce groupe : "
 msgstr "\t\tActions contenus dans ce groupe : "
 
+#: src/lib/1990/1990_groupe.c:615
+#, c-format
 msgid "\t\tGroupes du niveau %d contenus dans ce groupe : "
 msgstr "\t\tGroupes du niveau %d contenus dans ce groupe : "
 
+#: src/lib/1990/1990_groupe.c:625
+#, c-format
 msgid "\t\tCombinaisons :\n"
 msgstr "\t\tCombinaisons :\n"
 
+#: src/lib/1990/1990_action.c:74 src/lib/1990/1990_action.c:132
 msgid "Permanente"
 msgstr "Permanente"
 
+#: src/lib/1990/1990_action.c:75 src/lib/1990/1990_action.c:133
 msgid "Précontrainte"
 msgstr "Précontrainte"
 
+#: src/lib/1990/1990_action.c:76 src/lib/1990/1990_action.c:134
 msgid "Exploitation : Catégorie A : habitation, zones résidentielles"
 msgstr "Exploitation : Catégorie A : habitation, zones résidentielles"
 
+#: src/lib/1990/1990_action.c:77 src/lib/1990/1990_action.c:135
 msgid "Exploitation : Catégorie B : bureaux"
 msgstr "Exploitation : Catégorie B : bureaux"
 
+#: src/lib/1990/1990_action.c:78 src/lib/1990/1990_action.c:136
 msgid "Exploitation : Catégorie C : lieux de réunion"
 msgstr "Exploitation : Catégorie C : lieux de réunion"
 
+#: src/lib/1990/1990_action.c:79 src/lib/1990/1990_action.c:137
 msgid "Exploitation : Catégorie D : commerces"
 msgstr "Exploitation : Catégorie D : commerces"
 
+#: src/lib/1990/1990_action.c:80 src/lib/1990/1990_action.c:138
 msgid "Exploitation : Catégorie E : stockage"
 msgstr "Exploitation : Catégorie E : stockage"
 
-msgid "Exploitation : Catégorie F : zone de trafic, véhicules de poids inférieur à 30 kN"
-msgstr "Exploitation : Catégorie F : zone de trafic, véhicules de poids inférieur à 30 kN"
+#: src/lib/1990/1990_action.c:81 src/lib/1990/1990_action.c:139
+msgid ""
+"Exploitation : Catégorie F : zone de trafic, véhicules de poids inférieur à "
+"30 kN"
+msgstr ""
+"Exploitation : Catégorie F : zone de trafic, véhicules de poids inférieur à "
+"30 kN"
 
-msgid "Exploitation : Catégorie G : zone de trafic, véhicules de poids entre 30 kN et 160 kN"
-msgstr "Exploitation : Catégorie G : zone de trafic, véhicules de poids entre 30 kN et 160 kN"
+#: src/lib/1990/1990_action.c:82 src/lib/1990/1990_action.c:140
+msgid ""
+"Exploitation : Catégorie G : zone de trafic, véhicules de poids entre 30 kN "
+"et 160 kN"
+msgstr ""
+"Exploitation : Catégorie G : zone de trafic, véhicules de poids entre 30 kN "
+"et 160 kN"
 
+#: src/lib/1990/1990_action.c:83
 msgid "Exploitation : Catégorie H : toits"
 msgstr "Exploitation : Catégorie H : toits"
 
+#: src/lib/1990/1990_action.c:84
 msgid "Neige : Finlande, Islande, Norvège, Suède"
 msgstr "Neige : Finlande, Islande, Norvège, Suède"
 
+#: src/lib/1990/1990_action.c:85
 msgid "Neige : Autres états membres CEN, altitude > 1000 m"
 msgstr "Neige : Autres états membres CEN, altitude > 1000 m"
 
+#: src/lib/1990/1990_action.c:86
 msgid "Neige : Autres états membres CEN, altitude <= 1000 m"
 msgstr "Neige : Autres états membres CEN, altitude <= 1000 m"
 
+#: src/lib/1990/1990_action.c:87 src/lib/1990/1990_action.c:149
 msgid "Vent"
 msgstr "Vent"
 
+#: src/lib/1990/1990_action.c:88 src/lib/1990/1990_action.c:150
 msgid "Température (hors incendie)"
 msgstr "Température (hors incendie)"
 
+#: src/lib/1990/1990_action.c:89 src/lib/1990/1990_action.c:151
 msgid "Accidentelle"
 msgstr "Accidentelle"
 
+#: src/lib/1990/1990_action.c:90 src/lib/1990/1990_action.c:152
 msgid "Sismique"
 msgstr "Sismique"
 
+#: src/lib/1990/1990_action.c:141
 msgid "Exploitation : Catégorie H : toits d'un bâtiment de catégorie A ou B"
 msgstr "Exploitation : Catégorie H : toits d'un bâtiment de catégorie A ou B"
 
-msgid "Exploitation : Catégorie I : toitures accessibles avec locaux des catégories A ou B"
-msgstr "Exploitation : Catégorie I : toitures accessibles avec locaux des catégories A ou B"
+#: src/lib/1990/1990_action.c:142
+msgid ""
+"Exploitation : Catégorie I : toitures accessibles avec locaux des catégories "
+"A ou B"
+msgstr ""
+"Exploitation : Catégorie I : toitures accessibles avec locaux des catégories "
+"A ou B"
 
-msgid "Exploitation : Catégorie I : toitures accessibles avec locaux des catégories C ou D"
-msgstr "Exploitation : Catégorie I : toitures accessibles avec locaux des catégories C ou D"
+#: src/lib/1990/1990_action.c:143
+msgid ""
+"Exploitation : Catégorie I : toitures accessibles avec locaux des catégories "
+"C ou D"
+msgstr ""
+"Exploitation : Catégorie I : toitures accessibles avec locaux des catégories "
+"C ou D"
 
+#: src/lib/1990/1990_action.c:144
 msgid "Exploitation : Catégorie K : Hélicoptère sur la toiture"
 msgstr "Exploitation : Catégorie K : Hélicoptère sur la toiture"
 
-msgid "Exploitation : Catégorie K : Hélicoptère sur la toiture, autres charges (fret, personnel, accessoires ou équipements divers)"
-msgstr "Exploitation : Catégorie K : Hélicoptère sur la toiture, autres charges (fret, personnel, accessoires ou équipements divers)"
+#: src/lib/1990/1990_action.c:145
+msgid ""
+"Exploitation : Catégorie K : Hélicoptère sur la toiture, autres charges "
+"(fret, personnel, accessoires ou équipements divers)"
+msgstr ""
+"Exploitation : Catégorie K : Hélicoptère sur la toiture, autres charges "
+"(fret, personnel, accessoires ou équipements divers)"
 
+#: src/lib/1990/1990_action.c:146
 msgid "Neige : Saint-Pierre-et-Miquelon"
 msgstr "Neige : Saint-Pierre-et-Miquelon"
 
+#: src/lib/1990/1990_action.c:147
 msgid "Neige : Altitude > 1000 m"
 msgstr "Neige : Altitude > 1000 m"
 
+#: src/lib/1990/1990_action.c:148
 msgid "Neige : Altitude <= 1000 m"
 msgstr "Neige : Altitude <= 1000 m"
 
+#: src/lib/1990/1990_action.c:153
 msgid "Eaux souterraines"
 msgstr "Eaux souterraines"
 
+#: src/lib/1990/1990_action.c:331
 msgid "Charge nodale"
 msgstr "Charge nodale"
 
+#: src/lib/1990/1990_action.c:335
 msgid "Charge ponctuelle sur barre"
 msgstr "Charge ponctuelle sur barre"
 
+#: src/lib/1990/1990_action.c:339
 msgid "Charge répartie uniforme sur barre"
 msgstr "Charge répartie uniforme sur barre"
 
+#: src/lib/1990/1990_action.c:450
+#, c-format
 msgid "Action %u introuvable.\n"
 msgstr "Action %u introuvable.\n"
 
+#: src/lib/1990/1990_action.c:600
+#, c-format
 msgid "Le numéro %u du coefficient spi à changer est incorrect.\n"
 msgstr "Le numéro %u du coefficient spi à changer est incorrect.\n"
 
+#: src/lib/1990/1990_action.c:629
+#, c-format
 msgid "Le coefficient phi %d n'existe pas.\n"
 msgstr "Le coefficient phi %d n'existe pas.\n"
 
+#: src/lib/1990/1990_action.c:651
+#, c-format
 msgid "Aucune action existante.\n"
 msgstr "Aucune action existante.\n"
 
+#: src/lib/1990/1990_action.c:661
+#, c-format
 msgid "Action n° %u, description '%s', type n°%d\n"
 msgstr "Action n° %u, description '%s', type n°%d\n"
 
+#: src/lib/1990/1990_action.c:690
+#, c-format
 msgid "Aucune barre existante.\n"
 msgstr "Aucune barre existante.\n"
 
+#: src/lib/1990/1990_combinaisons.c:243 src/lib/1990/1990_combinaisons.c:403
+#: src/lib/1990/1990_combinaisons.c:579 src/lib/1990/1990_combinaisons.c:899
+#: src/lib/1990/1990_gtk_groupes.c:80 src/lib/1990/1990_gtk_groupes.c:170
+#: src/lib/1990/1990_gtk_groupes.c:583 src/lib/1990/1990_gtk_groupes.c:622
+#: src/lib/1990/1990_gtk_groupes.c:650 src/lib/1990/1990_gtk_groupes.c:685
+#: src/lib/1990/1990_gtk_groupes.c:746 src/lib/1990/1990_gtk_groupes.c:779
+#: src/lib/1990/1990_gtk_groupes.c:810 src/lib/1990/1990_gtk_groupes.c:843
+#: src/lib/1990/1990_ponderations.c:208
 msgid "Le projet ne possède pas de niveaux de groupes.\n"
 msgstr "Le projet ne possède pas de niveaux de groupes.\n"
 
+#: src/lib/1990/1990_combinaisons.c:245 src/lib/1990/1990_combinaisons.c:405
+#: src/lib/1990/1990_combinaisons.c:581
+#, c-format
 msgid "Le niveau %u est vide. Veuillez soit le remplir, soit le supprimer.\n"
 msgstr "Le niveau %u est vide. Veuillez soit le remplir, soit le supprimer.\n"
 
-msgid "Seuls les groupes possédant un type de combinaison XOR peuvent appeler _1990_combinaisons_genere_xor.\n"
-msgstr "Seuls les groupes possédant un type de combinaison XOR peuvent appeler _1990_combinaisons_genere_xor.\n"
+#: src/lib/1990/1990_combinaisons.c:246
+msgid ""
+"Seuls les groupes possédant un type de combinaison XOR peuvent appeler "
+"_1990_combinaisons_genere_xor.\n"
+msgstr ""
+"Seuls les groupes possédant un type de combinaison XOR peuvent appeler "
+"_1990_combinaisons_genere_xor.\n"
 
-msgid "Impossible de trouver le niveau %u dans la liste des niveaux de groupes.\n"
-msgstr "Impossible de trouver le niveau %u dans la liste des niveaux de groupes.\n"
+#: src/lib/1990/1990_combinaisons.c:296 src/lib/1990/1990_combinaisons.c:485
+#: src/lib/1990/1990_combinaisons.c:671
+#, c-format
+msgid ""
+"Impossible de trouver le niveau %u dans la liste des niveaux de groupes.\n"
+msgstr ""
+"Impossible de trouver le niveau %u dans la liste des niveaux de groupes.\n"
 
+#: src/lib/1990/1990_combinaisons.c:298 src/lib/1990/1990_combinaisons.c:487
+#: src/lib/1990/1990_combinaisons.c:673
+#, c-format
 msgid "Impossible de trouver le niveau précédent le niveau %u.\n"
 msgstr "Impossible de trouver le niveau précédent le niveau %u.\n"
 
-msgid "Seuls les groupes possédant un type de combinaison AND peuvent appeler _1990_combinaisons_genere_and.\n"
-msgstr "Seuls les groupes possédant un type de combinaison AND peuvent appeler _1990_combinaisons_genere_and.\n"
+#: src/lib/1990/1990_combinaisons.c:406
+msgid ""
+"Seuls les groupes possédant un type de combinaison AND peuvent appeler "
+"_1990_combinaisons_genere_and.\n"
+msgstr ""
+"Seuls les groupes possédant un type de combinaison AND peuvent appeler "
+"_1990_combinaisons_genere_and.\n"
 
-msgid "Seuls les groupes possédant un type de combinaison OR peuvent appeler _1990_combinaisons_genere_or.\n"
-msgstr "Seuls les groupes possédant un type de combinaison OR peuvent appeler _1990_combinaisons_genere_or.\n"
+#: src/lib/1990/1990_combinaisons.c:582
+msgid ""
+"Seuls les groupes possédant un type de combinaison OR peuvent appeler "
+"_1990_combinaisons_genere_or.\n"
+msgstr ""
+"Seuls les groupes possédant un type de combinaison OR peuvent appeler "
+"_1990_combinaisons_genere_or.\n"
 
+#: src/lib/1990/1990_combinaisons.c:777
 msgid "ELU équilibre"
 msgstr "ELU équilibre"
 
+#: src/lib/1990/1990_combinaisons.c:779
 msgid "ELU structure"
 msgstr "ELU structure"
 
+#: src/lib/1990/1990_combinaisons.c:781
 msgid "ELU géotechnique"
 msgstr "ELU géotechnique"
 
+#: src/lib/1990/1990_combinaisons.c:783
 msgid "ELU fatigue"
 msgstr "ELU fatigue"
 
+#: src/lib/1990/1990_combinaisons.c:785
 msgid "ELU accidentel"
 msgstr "ELU accidentel"
 
+#: src/lib/1990/1990_combinaisons.c:787
 msgid "ELU sismique"
 msgstr "ELU sismique"
 
+#: src/lib/1990/1990_combinaisons.c:789
 msgid "ELS caractéristique"
 msgstr "ELS caractéristique"
 
+#: src/lib/1990/1990_combinaisons.c:791
 msgid "ELS fréquent"
 msgstr "ELS fréquent"
 
+#: src/lib/1990/1990_combinaisons.c:793
 msgid "ELS permanent"
 msgstr "ELS permanent"
 
+#: src/lib/1990/1990_gtk_groupes.c:112
+#, c-format
 msgid "Le groupe %s (%d) n'est combiné ni de type OR, XOR ou AND.\n"
 msgstr "Le groupe %s (%d) n'est combiné ni de type OR, XOR ou AND.\n"
 
+#: src/lib/1990/1990_gtk_groupes.c:189
+#, c-format
 msgid "Le niveau de groupes %d ne possède pas de groupe.\n"
 msgstr "Le niveau de groupes %d ne possède pas de groupe.\n"
 
+#: src/lib/1990/1990_gtk_groupes.c:426 src/lib/1990/1990_gtk_groupes.c:434
+#, c-format
 msgid "Élément %d existant.\n"
 msgstr "Élément %d existant.\n"
 
+#: src/lib/1990/1990_gtk_groupes.c:828
 msgid "Le type de combinaison est inconnu.\n"
 msgstr "Le type de combinaison est inconnu.\n"
 
+#: src/lib/1990/1990_ponderations.c:214
 msgid ""
 "La génération des pondérations est impossible.\n"
 "Le dernier niveau ne peut possèder qu'un seul groupe.\n"
@@ -886,186 +2221,329 @@ msgstr ""
 "La génération des pondérations est impossible.\n"
 "Le dernier niveau ne peut possèder qu'un seul groupe.\n"
 
-msgid "Le dernier niveau ne possède aucune combinaison permettant la génération des pondérations.\n"
-msgstr "Le dernier niveau ne possède aucune combinaison permettant la génération des pondérations.\n"
+#: src/lib/1990/1990_ponderations.c:220
+msgid ""
+"Le dernier niveau ne possède aucune combinaison permettant la génération des "
+"pondérations.\n"
+msgstr ""
+"Le dernier niveau ne possède aucune combinaison permettant la génération des "
+"pondérations.\n"
 
+#: src/lib/1990/1990_ponderations.c:510 src/lib/1990/1990_ponderations.c:595
+#: src/lib/1990/1990_ponderations.c:866 src/lib/1990/1990_ponderations.c:957
+#, c-format
 msgid "Flag %d inconnu.\n"
 msgstr "Flag %d inconnu.\n"
 
+#: src/lib/EF/EF_gtk_charge_barre_ponctuelle.c:66
 msgid "position"
 msgstr "position"
 
+#: src/lib/EF/EF_gtk_charge_barre_ponctuelle.c:66
+#: src/lib/EF/EF_gtk_charge_barre_repartie_uniforme.c:115
 msgid "repère : local"
 msgstr "repère : local"
 
+#: src/lib/EF/EF_gtk_charge_barre_ponctuelle.c:66
+#: src/lib/EF/EF_gtk_charge_barre_repartie_uniforme.c:115
 msgid "repère : global"
 msgstr "repère : global"
 
+#: src/lib/EF/EF_gtk_charge_barre_ponctuelle.c:72
 msgid "Ponctuelle sur barre"
 msgstr "Ponctuelle sur barre"
 
+#: src/lib/EF/EF_gtk_charge_barre_ponctuelle.c:408
 msgid "Ajout d'une charge ponctuelle sur barre"
 msgstr "Ajout d'une charge ponctuelle sur barre"
 
+#: src/lib/EF/EF_gtk_charge_barre_ponctuelle.c:415
 msgid "Modification d'une charge ponctuelle sur barre"
 msgstr "Modification d'une charge ponctuelle sur barre"
 
+#: src/lib/EF/EF_gtk_sections.c:228 src/lib/EF/EF_gtk_relachement.c:300
+#: src/lib/EF/EF_gtk_noeud.c:287 src/lib/EF/EF_gtk_noeud.c:301
+#: src/lib/EF/EF_gtk_appuis.c:440 src/lib/EF/EF_gtk_barres.c:490
+#: src/lib/EF/EF_gtk_materiaux.c:269
 msgid "Aucun élément n'est sélectionné.\n"
 msgstr "Aucun élément n'est sélectionné.\n"
 
+#: src/lib/EF/EF_gtk_sections.c:247 src/lib/EF/EF_gtk_relachement.c:318
+#: src/lib/EF/EF_gtk_noeud.c:326 src/lib/EF/EF_gtk_appuis.c:459
+#: src/lib/EF/EF_gtk_barres.c:509 src/lib/EF/EF_gtk_materiaux.c:288
 msgid "L'élément ne possède aucune dépendance.\n"
 msgstr "L'élément ne possède aucune dépendance.\n"
 
+#: src/lib/EF/EF_gtk_relachement.c:761
 msgid "Le type de relâchement est inconnu.\n"
 msgstr "Le type de relâchement est inconnu.\n"
 
+#: src/lib/EF/EF_gtk_section_T.c:290
 msgid "Ajout d'une section en T"
 msgstr "Ajout d'une section en T"
 
+#: src/lib/EF/EF_gtk_section_T.c:302
 msgid "Modification d'une section en T"
 msgstr "Modification d'une section en T"
 
+#: src/lib/EF/EF_gtk_section_T.c:304
 msgid "La section à modifier n'est pas en T.\n"
 msgstr "La section à modifier n'est pas en T.\n"
 
+#: src/lib/EF/EF_gtk_section_carree.c:270
 msgid "Ajout d'une section carrée"
 msgstr "Ajout d'une section carrée"
 
+#: src/lib/EF/EF_gtk_section_carree.c:282
 msgid "Modification d'une section carrée"
 msgstr "Modification d'une section carrée"
 
+#: src/lib/EF/EF_gtk_section_carree.c:284
 msgid "La section à modifier n'est pas carrée.\n"
 msgstr "La section à modifier n'est pas carrée.\n"
 
+#: src/lib/EF/EF_gtk_section_rectangulaire.c:278
 msgid "Ajout d'une section rectangulaire"
 msgstr "Ajout d'une section rectangulaire"
 
+#: src/lib/EF/EF_gtk_section_rectangulaire.c:290
 msgid "Modification d'une section rectangulaire"
 msgstr "Modification d'une section rectangulaire"
 
+#: src/lib/EF/EF_gtk_section_rectangulaire.c:292
 msgid "La section à modifier n'est pas rectangulaire.\n"
 msgstr "La section à modifier n'est pas rectangulaire.\n"
 
+#: src/lib/EF/EF_gtk_noeud.c:112 src/lib/EF/EF_gtk_noeud.c:118
 msgid "Aucun noeud n'est sélectionné.\n"
 msgstr "Aucun noeud n'est sélectionné.\n"
 
+#: src/lib/EF/EF_gtk_noeud.c:390 src/lib/EF/EF_gtk_noeud.c:477
+#: src/lib/EF/EF_gtk_noeud.c:553 src/lib/EF/EF_gtk_noeud.c:596
+#: src/lib/EF/EF_gtk_noeud.c:654 src/lib/EF/EF_noeuds.c:257
 msgid "Aucun noeud n'est existant.\n"
 msgstr "Aucun noeud n'est existant.\n"
 
+#: src/lib/EF/EF_gtk_noeud.c:432 src/lib/EF/EF_gtk_noeud.c:566
 msgid "La colonne d'où provient l'édition est incorrecte.\n"
 msgstr "La colonne d'où provient l'édition est incorrecte.\n"
 
+#: src/lib/EF/EF_gtk_noeud.c:513
 msgid "Le type du noeud ou la colonne d'édition est incorrect.\n"
 msgstr "Le type du noeud ou la colonne d'édition est incorrect.\n"
 
+#: src/lib/EF/EF_gtk_noeud.c:699
 msgid "Le noeud doit être de type intermédiaire.\n"
 msgstr "Le noeud doit être de type intermédiaire.\n"
 
+#: src/lib/EF/EF_calculs.c:54
 msgid "Impossible de réaliser un calcul sans noeud existant.\n"
 msgstr "Impossible de réaliser un calcul sans noeud existant.\n"
 
+#: src/lib/EF/EF_calculs.c:55
 msgid "Impossible de réaliser un calcul sans barre existante.\n"
 msgstr "Impossible de réaliser un calcul sans barre existante.\n"
 
+#: src/lib/EF/EF_calculs.c:1164
 msgid "Erreur lors de la résolution de la matrice.\n"
 msgstr "Erreur lors de la résolution de la matrice.\n"
 
+#: src/lib/EF/EF_calculs.c:1259
 msgid "Type d'élément inconnu.\n"
 msgstr "Type d'élément inconnu.\n"
 
+#: src/lib/EF/EF_gtk_charge_barre_repartie_uniforme.c:115
 msgid "début"
 msgstr "début"
 
+#: src/lib/EF/EF_gtk_charge_barre_repartie_uniforme.c:115
 msgid "fin (par rapport à la fin)"
 msgstr "fin (par rapport à la fin)"
 
+#: src/lib/EF/EF_gtk_charge_barre_repartie_uniforme.c:115
 msgid "projection : oui"
 msgstr "projection : oui"
 
+#: src/lib/EF/EF_gtk_charge_barre_repartie_uniforme.c:115
 msgid "projection : non"
 msgstr "projection : non"
 
+#: src/lib/EF/EF_gtk_charge_barre_repartie_uniforme.c:120
 msgid "Répartie uniforme sur barre"
 msgstr "Répartie uniforme sur barre"
 
+#: src/lib/EF/EF_gtk_charge_barre_repartie_uniforme.c:449
 msgid "Ajout d'une charge répartie uniforme sur barre"
 msgstr "Ajout d'une charge répartie uniforme sur barre"
 
+#: src/lib/EF/EF_gtk_charge_barre_repartie_uniforme.c:456
 msgid "Modification d'une charge répartie uniforme sur barre"
 msgstr "Modification d'une charge répartie uniforme sur barre"
 
-msgid "Il n'est pas possible d'activer à la fois la projection et l'utilisation du repère local."
-msgstr "Il n'est pas possible d'activer à la fois la projection et l'utilisation du repère local."
+#: src/lib/EF/EF_gtk_charge_barre_repartie_uniforme.c:485
+msgid ""
+"Il n'est pas possible d'activer à la fois la projection et l'utilisation du "
+"repère local."
+msgstr ""
+"Il n'est pas possible d'activer à la fois la projection et l'utilisation du "
+"repère local."
 
+#: src/lib/EF/EF_gtk_appuis.c:313
+#, c-format
 msgid "Type d'appui %s inconnu.\n"
 msgstr "Type d'appui %s inconnu.\n"
 
+#: src/lib/EF/EF_appuis.c:130 src/lib/EF/EF_appuis.c:138
+#: src/lib/EF/EF_appuis.c:153 src/lib/EF/EF_appuis.c:161
+#: src/lib/EF/EF_appuis.c:176 src/lib/EF/EF_appuis.c:184
+#: src/lib/EF/EF_appuis.c:199 src/lib/EF/EF_appuis.c:207
+#: src/lib/EF/EF_appuis.c:222 src/lib/EF/EF_appuis.c:230
+#: src/lib/EF/EF_appuis.c:245 src/lib/EF/EF_appuis.c:253
+#, c-format
 msgid "Le type d'appui de %s (%s) n'a pas à posséder de données.\n"
 msgstr "Le type d'appui de %s (%s) n'a pas à posséder de données.\n"
 
+#: src/lib/EF/EF_appuis.c:145 src/lib/EF/EF_appuis.c:168
+#: src/lib/EF/EF_appuis.c:191 src/lib/EF/EF_appuis.c:214
+#: src/lib/EF/EF_appuis.c:237 src/lib/EF/EF_appuis.c:260
+#: src/lib/EF/EF_appuis.c:712 src/lib/EF/EF_appuis.c:722
+#: src/lib/EF/EF_appuis.c:732 src/lib/EF/EF_appuis.c:742
+#: src/lib/EF/EF_appuis.c:752 src/lib/EF/EF_appuis.c:762
+#, c-format
 msgid "Le type d'appui de %s (%d) est inconnu.\n"
 msgstr "Le type d'appui de %s (%d) est inconnu.\n"
 
+#: src/lib/EF/EF_appuis.c:302
 msgid "Impossible d'utiliser comme nom 'Aucun'.\n"
 msgstr "Impossible d'utiliser comme nom 'Aucun'.\n"
 
+#: src/lib/EF/EF_appuis.c:304 src/lib/EF/EF_appuis.c:564
+#, c-format
 msgid "L'appui '%s' existe déjà.\n"
 msgstr "L'appui '%s' existe déjà.\n"
 
+#: src/lib/EF/EF_appuis.c:320 src/lib/EF/EF_appuis.c:335
+#: src/lib/EF/EF_appuis.c:350 src/lib/EF/EF_appuis.c:365
+#: src/lib/EF/EF_appuis.c:380 src/lib/EF/EF_appuis.c:395
+#: src/lib/EF/EF_appuis.c:465
+#, c-format
 msgid "Type d'appui %d inconnu.\n"
 msgstr "Type d'appui %d inconnu.\n"
 
-msgid "Afin de modifier un appui, le paramètre x doit être compris entre 0 et 5 inclu.\n"
-msgstr "Afin de modifier un appui, le paramètre x doit être compris entre 0 et 5 inclu.\n"
+#: src/lib/EF/EF_appuis.c:501
+msgid ""
+"Afin de modifier un appui, le paramètre x doit être compris entre 0 et 5 "
+"inclu.\n"
+msgstr ""
+"Afin de modifier un appui, le paramètre x doit être compris entre 0 et 5 "
+"inclu.\n"
 
+#: src/lib/EF/EF_appuis.c:523
+#, c-format
 msgid "Le type d'appui (%d) est inconnu.\n"
 msgstr "Le type d'appui (%d) est inconnu.\n"
 
+#: src/lib/EF/EF_appuis.c:680
+#, c-format
 msgid "Impossible de supprimer l'appui car il est utilisé par le noeud %s.\n"
 msgstr "Impossible de supprimer l'appui car il est utilisé par le noeud %s.\n"
 
+#: src/lib/EF/EF_appuis.c:682
+#, c-format
 msgid "Impossible de supprimer l'appui car il est utilisé par les noeuds %s.\n"
-msgstr "Impossible de supprimer l'appui car il est utilisé par les noeuds %s.\n"
+msgstr ""
+"Impossible de supprimer l'appui car il est utilisé par les noeuds %s.\n"
 
+#: src/lib/EF/EF_gtk_section_circulaire.c:271
 msgid "Ajout d'une section circulaire"
 msgstr "Ajout d'une section circulaire"
 
+#: src/lib/EF/EF_gtk_section_circulaire.c:283
 msgid "Modification d'une section circulaire"
 msgstr "Modification d'une section circulaire"
 
+#: src/lib/EF/EF_gtk_section_circulaire.c:285
 msgid "La section à modifier n'est pas circulaire.\n"
 msgstr "La section à modifier n'est pas circulaire.\n"
 
+#: src/lib/EF/EF_relachement.c:384
+#, c-format
 msgid "Relachement '%s' introuvable.\n"
 msgstr "Relachement '%s' introuvable.\n"
 
+#: src/lib/EF/EF_relachement.c:426
+#, c-format
 msgid "Le relâchement %s existe déjà.\n"
 msgstr "Le relâchement %s existe déjà.\n"
 
-msgid "Impossible de supprimer la section car elle est utilisée par la barre %s.\n"
-msgstr "Impossible de supprimer la section car elle est utilisée par la barre %s.\n"
+#: src/lib/EF/EF_relachement.c:805 src/lib/EF/EF_sections.c:792
+#, c-format
+msgid ""
+"Impossible de supprimer la section car elle est utilisée par la barre %s.\n"
+msgstr ""
+"Impossible de supprimer la section car elle est utilisée par la barre %s.\n"
 
-msgid "Impossible de supprimer la section car elle est utilisée par les barres %s.\n"
-msgstr "Impossible de supprimer la section car elle est utilisée par les barres %s.\n"
+#: src/lib/EF/EF_relachement.c:807 src/lib/EF/EF_sections.c:794
+#, c-format
+msgid ""
+"Impossible de supprimer la section car elle est utilisée par les barres %s.\n"
+msgstr ""
+"Impossible de supprimer la section car elle est utilisée par les barres %s.\n"
 
+#: src/lib/EF/EF_gtk_resultats.c:319 src/lib/EF/EF_gtk_resultats.c:533
+#, c-format
 msgid "Le filtre %d est inconnu.\n"
 msgstr "Le filtre %d est inconnu.\n"
 
+#: src/lib/EF/EF_gtk_resultats.c:490
+#, c-format
 msgid "La colonne des résultats %d ne peut être appliquée aux noeuds."
 msgstr "La colonne des résultats %d ne peut être appliquée aux noeuds."
 
+#: src/lib/EF/EF_gtk_resultats.c:495 src/lib/EF/EF_gtk_resultats.c:1682
+#: src/lib/EF/EF_gtk_resultats.c:2204
+#, c-format
 msgid "La colonne des résultats %d est inconnue.\n"
 msgstr "La colonne des résultats %d est inconnue.\n"
 
+#: src/lib/EF/EF_gtk_resultats.c:528
+#, c-format
 msgid "Le filtre %d ne peut être appliqué aux barres.\n"
 msgstr "Le filtre %d ne peut être appliqué aux barres.\n"
 
+#: src/lib/EF/EF_gtk_resultats.c:577
+#, c-format
 msgid "La colonne des résultats %d ne peut être appliquée aux barres."
 msgstr "La colonne des résultats %d ne peut être appliquée aux barres."
 
+#: src/lib/EF/EF_gtk_resultats.c:726 src/lib/EF/EF_gtk_resultats.c:760
+#: src/lib/EF/EF_gtk_resultats.c:794 src/lib/EF/EF_gtk_resultats.c:828
+#: src/lib/EF/EF_gtk_resultats.c:861 src/lib/EF/EF_gtk_resultats.c:895
+#: src/lib/EF/EF_gtk_resultats.c:929 src/lib/EF/EF_gtk_resultats.c:966
+#: src/lib/EF/EF_gtk_resultats.c:1003 src/lib/EF/EF_gtk_resultats.c:1040
+#: src/lib/EF/EF_gtk_resultats.c:1076 src/lib/EF/EF_gtk_resultats.c:1113
+#: src/lib/EF/EF_gtk_resultats.c:1270 src/lib/EF/EF_gtk_resultats.c:1304
+#: src/lib/EF/EF_gtk_resultats.c:1338 src/lib/EF/EF_gtk_resultats.c:1372
+#: src/lib/EF/EF_gtk_resultats.c:1405 src/lib/EF/EF_gtk_resultats.c:1439
+#: src/lib/EF/EF_gtk_resultats.c:1473 src/lib/EF/EF_gtk_resultats.c:1510
+#: src/lib/EF/EF_gtk_resultats.c:1547 src/lib/EF/EF_gtk_resultats.c:1584
+#: src/lib/EF/EF_gtk_resultats.c:1621 src/lib/EF/EF_gtk_resultats.c:1658
 msgid "Erreur"
 msgstr "Erreur"
 
+#: src/lib/EF/EF_gtk_resultats.c:732 src/lib/EF/EF_gtk_resultats.c:766
+#: src/lib/EF/EF_gtk_resultats.c:800 src/lib/EF/EF_gtk_resultats.c:833
+#: src/lib/EF/EF_gtk_resultats.c:867 src/lib/EF/EF_gtk_resultats.c:901
+#: src/lib/EF/EF_gtk_resultats.c:938 src/lib/EF/EF_gtk_resultats.c:975
+#: src/lib/EF/EF_gtk_resultats.c:1012 src/lib/EF/EF_gtk_resultats.c:1048
+#: src/lib/EF/EF_gtk_resultats.c:1085 src/lib/EF/EF_gtk_resultats.c:1122
+#: src/lib/EF/EF_gtk_resultats.c:1276 src/lib/EF/EF_gtk_resultats.c:1310
+#: src/lib/EF/EF_gtk_resultats.c:1344 src/lib/EF/EF_gtk_resultats.c:1377
+#: src/lib/EF/EF_gtk_resultats.c:1411 src/lib/EF/EF_gtk_resultats.c:1445
+#: src/lib/EF/EF_gtk_resultats.c:1482 src/lib/EF/EF_gtk_resultats.c:1519
+#: src/lib/EF/EF_gtk_resultats.c:1556 src/lib/EF/EF_gtk_resultats.c:1593
+#: src/lib/EF/EF_gtk_resultats.c:1630 src/lib/EF/EF_gtk_resultats.c:1668
+#, c-format
 msgid ""
 "Enveloppe supérieure :\n"
 "%s\n"
@@ -1077,317 +2555,690 @@ msgstr ""
 "Enveloppe inférieure :\n"
 "%s"
 
+#: src/lib/EF/EF_gtk_resultats.c:1774
 msgid "La liste des noeuds doit être spécifiée en tant que première colonne.\n"
-msgstr "La liste des noeuds doit être spécifiée en tant que première colonne.\n"
+msgstr ""
+"La liste des noeuds doit être spécifiée en tant que première colonne.\n"
 
+#: src/lib/EF/EF_gtk_resultats.c:1781
 msgid "La liste des barres doit être spécifiée en tant que première colonne.\n"
-msgstr "La liste des barres doit être spécifiée en tant que première colonne.\n"
+msgstr ""
+"La liste des barres doit être spécifiée en tant que première colonne.\n"
 
+#: src/lib/EF/EF_gtk_resultats.c:1788 src/lib/EF/EF_gtk_resultats.c:1796
+#: src/lib/EF/EF_gtk_resultats.c:1804 src/lib/EF/EF_gtk_resultats.c:1812
+#: src/lib/EF/EF_gtk_resultats.c:1820 src/lib/EF/EF_gtk_resultats.c:1828
+#: src/lib/EF/EF_gtk_resultats.c:1836 src/lib/EF/EF_gtk_resultats.c:1844
+#: src/lib/EF/EF_gtk_resultats.c:1852 src/lib/EF/EF_gtk_resultats.c:1860
+#: src/lib/EF/EF_gtk_resultats.c:1868 src/lib/EF/EF_gtk_resultats.c:1876
+#: src/lib/EF/EF_gtk_resultats.c:1884 src/lib/EF/EF_gtk_resultats.c:1892
+#: src/lib/EF/EF_gtk_resultats.c:1900 src/lib/EF/EF_gtk_resultats.c:1908
+#: src/lib/EF/EF_gtk_resultats.c:1916 src/lib/EF/EF_gtk_resultats.c:1924
+#: src/lib/EF/EF_gtk_resultats.c:1932 src/lib/EF/EF_gtk_resultats.c:1940
+#: src/lib/EF/EF_gtk_resultats.c:1948 src/lib/EF/EF_gtk_resultats.c:1956
+#: src/lib/EF/EF_gtk_resultats.c:1964 src/lib/EF/EF_gtk_resultats.c:1972
+#: src/lib/EF/EF_gtk_resultats.c:1980 src/lib/EF/EF_gtk_resultats.c:1988
+#: src/lib/EF/EF_gtk_resultats.c:1996 src/lib/EF/EF_gtk_resultats.c:2004
+#: src/lib/EF/EF_gtk_resultats.c:2012 src/lib/EF/EF_gtk_resultats.c:2020
+#: src/lib/EF/EF_gtk_resultats.c:2028 src/lib/EF/EF_gtk_resultats.c:2036
+#: src/lib/EF/EF_gtk_resultats.c:2044 src/lib/EF/EF_gtk_resultats.c:2052
+#: src/lib/EF/EF_gtk_resultats.c:2060 src/lib/EF/EF_gtk_resultats.c:2068
+#: src/lib/EF/EF_gtk_resultats.c:2076 src/lib/EF/EF_gtk_resultats.c:2084
+#: src/lib/EF/EF_gtk_resultats.c:2092 src/lib/EF/EF_gtk_resultats.c:2100
+#: src/lib/EF/EF_gtk_resultats.c:2108 src/lib/EF/EF_gtk_resultats.c:2116
+#: src/lib/EF/EF_gtk_resultats.c:2124 src/lib/EF/EF_gtk_resultats.c:2132
+#: src/lib/EF/EF_gtk_resultats.c:2140 src/lib/EF/EF_gtk_resultats.c:2148
+#: src/lib/EF/EF_gtk_resultats.c:2156 src/lib/EF/EF_gtk_resultats.c:2164
+#: src/lib/EF/EF_gtk_resultats.c:2172 src/lib/EF/EF_gtk_resultats.c:2180
+#: src/lib/EF/EF_gtk_resultats.c:2188 src/lib/EF/EF_gtk_resultats.c:2196
 msgid "La première colonne est réservée à la liste des noeuds et des barres.\n"
-msgstr "La première colonne est réservée à la liste des noeuds et des barres.\n"
+msgstr ""
+"La première colonne est réservée à la liste des noeuds et des barres.\n"
 
-msgid "La position en %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"
-msgstr "La position en %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"
+#: src/lib/EF/EF_gtk_resultats.c:1789 src/lib/EF/EF_gtk_resultats.c:1797
+#: src/lib/EF/EF_gtk_resultats.c:1805
+#, c-format
+msgid ""
+"La position en %s ne peut être affichée que si la première colonne affiche "
+"les numéros des noeuds.\n"
+msgstr ""
+"La position en %s ne peut être affichée que si la première colonne affiche "
+"les numéros des noeuds.\n"
 
+#: src/lib/EF/EF_gtk_resultats.c:1791
 msgid "x [m]"
 msgstr "x [m]"
 
+#: src/lib/EF/EF_gtk_resultats.c:1799
 msgid "y [m]"
 msgstr "y [m]"
 
+#: src/lib/EF/EF_gtk_resultats.c:1807
 msgid "z [m]"
 msgstr "z [m]"
 
-msgid "La réaction d'appui %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"
-msgstr "La réaction d'appui %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"
+#: src/lib/EF/EF_gtk_resultats.c:1813 src/lib/EF/EF_gtk_resultats.c:1821
+#: src/lib/EF/EF_gtk_resultats.c:1829 src/lib/EF/EF_gtk_resultats.c:1837
+#: src/lib/EF/EF_gtk_resultats.c:1845 src/lib/EF/EF_gtk_resultats.c:1853
+#, c-format
+msgid ""
+"La réaction d'appui %s ne peut être affichée que si la première colonne "
+"affiche les numéros des noeuds.\n"
+msgstr ""
+"La réaction d'appui %s ne peut être affichée que si la première colonne "
+"affiche les numéros des noeuds.\n"
 
+#: src/lib/EF/EF_gtk_resultats.c:1815
 msgid "F<sub>x</sub> [N]"
 msgstr "F<sub>x</sub> [N]"
 
+#: src/lib/EF/EF_gtk_resultats.c:1823
 msgid "F<sub>y</sub> [N]"
 msgstr "F<sub>y</sub> [N]"
 
+#: src/lib/EF/EF_gtk_resultats.c:1831
 msgid "F<sub>z</sub> [N]"
 msgstr "F<sub>z</sub> [N]"
 
+#: src/lib/EF/EF_gtk_resultats.c:1839 src/lib/EF/EF_gtk_resultats.c:2039
 msgid "M<sub>x</sub> [N.m]"
 msgstr "M<sub>x</sub> [N.m]"
 
+#: src/lib/EF/EF_gtk_resultats.c:1847 src/lib/EF/EF_gtk_resultats.c:2047
 msgid "M<sub>y</sub> [N.m]"
 msgstr "M<sub>y</sub> [N.m]"
 
+#: src/lib/EF/EF_gtk_resultats.c:1855 src/lib/EF/EF_gtk_resultats.c:2055
 msgid "M<sub>z</sub> [N.m]"
 msgstr "M<sub>z</sub> [N.m]"
 
-msgid "Le déplacement des noeuds %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"
-msgstr "Le déplacement des noeuds %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"
+#: src/lib/EF/EF_gtk_resultats.c:1861 src/lib/EF/EF_gtk_resultats.c:1869
+#: src/lib/EF/EF_gtk_resultats.c:1877 src/lib/EF/EF_gtk_resultats.c:1885
+#: src/lib/EF/EF_gtk_resultats.c:1893 src/lib/EF/EF_gtk_resultats.c:1901
+#, c-format
+msgid ""
+"Le déplacement des noeuds %s ne peut être affichée que si la première "
+"colonne affiche les numéros des noeuds.\n"
+msgstr ""
+"Le déplacement des noeuds %s ne peut être affichée que si la première "
+"colonne affiche les numéros des noeuds.\n"
 
+#: src/lib/EF/EF_gtk_resultats.c:1863 src/lib/EF/EF_gtk_resultats.c:2159
 msgid "u<sub>x</sub> [m]"
 msgstr "u<sub>x</sub> [m]"
 
+#: src/lib/EF/EF_gtk_resultats.c:1871 src/lib/EF/EF_gtk_resultats.c:2167
 msgid "u<sub>y</sub> [m]"
 msgstr "u<sub>y</sub> [m]"
 
+#: src/lib/EF/EF_gtk_resultats.c:1879 src/lib/EF/EF_gtk_resultats.c:2175
 msgid "u<sub>z</sub> [m]"
 msgstr "u<sub>z</sub> [m]"
 
+#: src/lib/EF/EF_gtk_resultats.c:1887 src/lib/EF/EF_gtk_resultats.c:2183
 msgid "r<sub>x</sub> [rad]"
 msgstr "r<sub>x</sub> [rad]"
 
+#: src/lib/EF/EF_gtk_resultats.c:1895 src/lib/EF/EF_gtk_resultats.c:2191
 msgid "r<sub>y</sub> [rad]"
 msgstr "r<sub>y</sub> [rad]"
 
+#: src/lib/EF/EF_gtk_resultats.c:1903 src/lib/EF/EF_gtk_resultats.c:2199
 msgid "r<sub>z</sub> [rad]"
 msgstr "r<sub>z</sub> [rad]"
 
-msgid "La longueur des barres ne peut être affichée que si la première colonne affiche les numéros des barres.\n"
-msgstr "La longueur des barres ne peut être affichée que si la première colonne affiche les numéros des barres.\n"
+#: src/lib/EF/EF_gtk_resultats.c:1909
+msgid ""
+"La longueur des barres ne peut être affichée que si la première colonne "
+"affiche les numéros des barres.\n"
+msgstr ""
+"La longueur des barres ne peut être affichée que si la première colonne "
+"affiche les numéros des barres.\n"
 
+#: src/lib/EF/EF_gtk_resultats.c:1911
 msgid "L [m]"
 msgstr "L [m]"
 
-msgid "Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"
-msgstr "Les efforts dans les barres ne peuvent être affichés que si la première colonne affiche les numéros des barres.\n"
+#: src/lib/EF/EF_gtk_resultats.c:1917 src/lib/EF/EF_gtk_resultats.c:1925
+#: src/lib/EF/EF_gtk_resultats.c:1933 src/lib/EF/EF_gtk_resultats.c:1941
+#: src/lib/EF/EF_gtk_resultats.c:1949 src/lib/EF/EF_gtk_resultats.c:1957
+#: src/lib/EF/EF_gtk_resultats.c:1965 src/lib/EF/EF_gtk_resultats.c:1973
+#: src/lib/EF/EF_gtk_resultats.c:1981 src/lib/EF/EF_gtk_resultats.c:1989
+#: src/lib/EF/EF_gtk_resultats.c:1997 src/lib/EF/EF_gtk_resultats.c:2005
+#: src/lib/EF/EF_gtk_resultats.c:2013 src/lib/EF/EF_gtk_resultats.c:2021
+#: src/lib/EF/EF_gtk_resultats.c:2029 src/lib/EF/EF_gtk_resultats.c:2037
+#: src/lib/EF/EF_gtk_resultats.c:2045 src/lib/EF/EF_gtk_resultats.c:2053
+#: src/lib/EF/EF_gtk_resultats.c:2061 src/lib/EF/EF_gtk_resultats.c:2069
+#: src/lib/EF/EF_gtk_resultats.c:2077 src/lib/EF/EF_gtk_resultats.c:2085
+#: src/lib/EF/EF_gtk_resultats.c:2093 src/lib/EF/EF_gtk_resultats.c:2101
+msgid ""
+"Les efforts dans les barres ne peuvent être affichés que si la première "
+"colonne affiche les numéros des barres.\n"
+msgstr ""
+"Les efforts dans les barres ne peuvent être affichés que si la première "
+"colonne affiche les numéros des barres.\n"
 
+#: src/lib/EF/EF_gtk_resultats.c:1919
 msgid "Effort normal"
 msgstr "Effort normal"
 
+#: src/lib/EF/EF_gtk_resultats.c:1927
 msgid "Effort tranchant selon Y"
 msgstr "Effort tranchant selon Y"
 
+#: src/lib/EF/EF_gtk_resultats.c:1935
 msgid "Effort tranchant selon Z"
 msgstr "Effort tranchant selon Z"
 
+#: src/lib/EF/EF_gtk_resultats.c:1943
 msgid "Moment de torsion"
 msgstr "Moment de torsion"
 
+#: src/lib/EF/EF_gtk_resultats.c:1951
 msgid "Moment fléchissant selon y"
 msgstr "Moment fléchissant selon y"
 
+#: src/lib/EF/EF_gtk_resultats.c:1959
 msgid "Moment fléchissant selon z"
 msgstr "Moment fléchissant selon z"
 
+#: src/lib/EF/EF_gtk_resultats.c:1967
 msgid "Points caractéristiques de N [N]"
 msgstr "Points caractéristiques de N [N]"
 
+#: src/lib/EF/EF_gtk_resultats.c:1975
 msgid "Points caractéristiques de T<sub>y</sub> [N]"
 msgstr "Points caractéristiques de T<sub>y</sub> [N]"
 
+#: src/lib/EF/EF_gtk_resultats.c:1983
 msgid "Points caractéristiques de T<sub>z</sub> [N]"
 msgstr "Points caractéristiques de T<sub>z</sub> [N]"
 
+#: src/lib/EF/EF_gtk_resultats.c:1991
 msgid "Points caractéristiques de M<sub>x</sub> [N.m]"
 msgstr "Points caractéristiques de M<sub>x</sub> [N.m]"
 
+#: src/lib/EF/EF_gtk_resultats.c:1999
 msgid "Points caractéristiques de M<sub>y</sub> [N.m]"
 msgstr "Points caractéristiques de M<sub>y</sub> [N.m]"
 
+#: src/lib/EF/EF_gtk_resultats.c:2007
 msgid "Points caractéristiques de M<sub>z</sub> [N.m]"
 msgstr "Points caractéristiques de M<sub>z</sub> [N.m]"
 
+#: src/lib/EF/EF_gtk_resultats.c:2015
 msgid "N [N]"
 msgstr "N [N]"
 
+#: src/lib/EF/EF_gtk_resultats.c:2023
 msgid "T<sub>y</sub> [N]"
 msgstr "T<sub>y</sub> [N]"
 
+#: src/lib/EF/EF_gtk_resultats.c:2031
 msgid "T<sub>z</sub> [N]"
 msgstr "T<sub>z</sub> [N]"
 
+#: src/lib/EF/EF_gtk_resultats.c:2063
 msgid "Déformation de la barre selon x"
 msgstr "Déformation de la barre selon x"
 
+#: src/lib/EF/EF_gtk_resultats.c:2071
 msgid "Déformation de la barre selon y"
 msgstr "Déformation de la barre selon y"
 
+#: src/lib/EF/EF_gtk_resultats.c:2079
 msgid "Déformation de la barre selon z"
 msgstr "Déformation de la barre selon z"
 
+#: src/lib/EF/EF_gtk_resultats.c:2087
 msgid "Rotation de la barre selon x"
 msgstr "Rotation de la barre selon x"
 
+#: src/lib/EF/EF_gtk_resultats.c:2095
 msgid "Rotation de la barre selon y"
 msgstr "Rotation de la barre selon y"
 
+#: src/lib/EF/EF_gtk_resultats.c:2103
 msgid "Rotation de la barre selon z"
 msgstr "Rotation de la barre selon z"
 
-msgid "Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"
-msgstr "Les déformations dans les barres ne peuvent être affichées que si la première colonne affiche les numéros des barres.\n"
+#: src/lib/EF/EF_gtk_resultats.c:2109 src/lib/EF/EF_gtk_resultats.c:2117
+#: src/lib/EF/EF_gtk_resultats.c:2125 src/lib/EF/EF_gtk_resultats.c:2133
+#: src/lib/EF/EF_gtk_resultats.c:2141 src/lib/EF/EF_gtk_resultats.c:2149
+#: src/lib/EF/EF_gtk_resultats.c:2157 src/lib/EF/EF_gtk_resultats.c:2165
+#: src/lib/EF/EF_gtk_resultats.c:2173 src/lib/EF/EF_gtk_resultats.c:2181
+#: src/lib/EF/EF_gtk_resultats.c:2189 src/lib/EF/EF_gtk_resultats.c:2197
+msgid ""
+"Les déformations dans les barres ne peuvent être affichées que si la "
+"première colonne affiche les numéros des barres.\n"
+msgstr ""
+"Les déformations dans les barres ne peuvent être affichées que si la "
+"première colonne affiche les numéros des barres.\n"
 
+#: src/lib/EF/EF_gtk_resultats.c:2111
 msgid "Points caractéristiques de u<sub>x</sub> [m]"
 msgstr "Points caractéristiques de u<sub>x</sub> [m]"
 
+#: src/lib/EF/EF_gtk_resultats.c:2119
 msgid "Points caractéristiques de u<sub>y</sub> [m]"
 msgstr "Points caractéristiques de u<sub>y</sub> [m]"
 
+#: src/lib/EF/EF_gtk_resultats.c:2127
 msgid "Points caractéristiques de u<sub>z</sub> [m]"
 msgstr "Points caractéristiques de u<sub>z</sub> [m]"
 
+#: src/lib/EF/EF_gtk_resultats.c:2135
 msgid "Points caractéristiques de r<sub>x</sub> [rad]"
 msgstr "Points caractéristiques de r<sub>x</sub> [rad]"
 
+#: src/lib/EF/EF_gtk_resultats.c:2143
 msgid "Points caractéristiques de r<sub>y</sub> [rad]"
 msgstr "Points caractéristiques de r<sub>y</sub> [rad]"
 
+#: src/lib/EF/EF_gtk_resultats.c:2151
 msgid "Points caractéristiques de r<sub>z</sub> [rad]"
 msgstr "Points caractéristiques de r<sub>z</sub> [rad]"
 
+#: src/lib/EF/EF_gtk_resultats.c:2358
 msgid "Tout"
 msgstr "Tout"
 
+#: src/lib/EF/EF_gtk_barres.c:119
 msgid "La liste des types de barre est indéfinie.\n"
 msgstr "La liste des types de barre est indéfinie.\n"
 
+#: src/lib/EF/EF_gtk_barres.c:131
 msgid "Aucun type de barre n'est défini.\n"
 msgstr "Aucun type de barre n'est défini.\n"
 
+#: src/lib/EF/EF_gtk_barres.c:155
 msgid "Impossible de trouver le type de l'élément.\n"
 msgstr "Impossible de trouver le type de l'élément.\n"
 
+#: src/lib/EF/EF_gtk_barres.c:181
 msgid "La liste des sections est indéfinie.\n"
 msgstr "La liste des sections est indéfinie.\n"
 
+#: src/lib/EF/EF_gtk_barres.c:216
 msgid "La liste des matériaux est indéfinie.\n"
 msgstr "La liste des matériaux est indéfinie.\n"
 
+#: src/lib/EF/EF_gtk_barres.c:253
 msgid "La liste des relâchements de barre est indéfinie.\n"
 msgstr "La liste des relâchements de barre est indéfinie.\n"
 
+#: src/lib/EF/EF_gtk_barres.c:347
 msgid "Aucune barre n'est sélectionnée.\n"
 msgstr "Aucune barre n'est sélectionnée.\n"
 
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:82
 msgid "Impossible d'effectuer une projection dans un repère local.\n"
 msgstr "Impossible d'effectuer une projection dans un repère local.\n"
 
-msgid "Le début de la position de la charge répartie uniformément (%f) est incorrect.\n"
-msgstr "Le début de la position de la charge répartie uniformément (%f) est incorrect.\n"
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:83
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:312
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:416
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:470
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:960
+#, c-format
+msgid ""
+"Le début de la position de la charge répartie uniformément (%f) est "
+"incorrect.\n"
+msgstr ""
+"Le début de la position de la charge répartie uniformément (%f) est "
+"incorrect.\n"
 
-msgid "La fin de la position de la charge répartie uniformément (%f) est incorrecte.\n"
-msgstr "La fin de la position de la charge répartie uniformément (%f) est incorrecte.\n"
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:84
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:313
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:417
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:471
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:961
+#, c-format
+msgid ""
+"La fin de la position de la charge répartie uniformément (%f) est "
+"incorrecte.\n"
+msgstr ""
+"La fin de la position de la charge répartie uniformément (%f) est "
+"incorrecte.\n"
 
-msgid "Le début de la charge répartie uniformément (%f) est incorrect. La longueur de la barre %d est de %f m.\n"
-msgstr "Le début de la charge répartie uniformément (%f) est incorrect. La longueur de la barre %d est de %f m.\n"
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:95
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:205
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:314
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:418
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:572
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:726
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:857
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:962
+#, c-format
+msgid ""
+"Le début de la charge répartie uniformément (%f) est incorrect. La longueur "
+"de la barre %d est de %f m.\n"
+msgstr ""
+"Le début de la charge répartie uniformément (%f) est incorrect. La longueur "
+"de la barre %d est de %f m.\n"
 
-msgid "La fin de la charge répartie uniformément (%f) est incorrecte. La longueur de la barre %d est de %f m.\n"
-msgstr "La fin de la charge répartie uniformément (%f) est incorrecte. La longueur de la barre %d est de %f m.\n"
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:96
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:206
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:315
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:419
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:573
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:727
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:858
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:963
+#, c-format
+msgid ""
+"La fin de la charge répartie uniformément (%f) est incorrecte. La longueur "
+"de la barre %d est de %f m.\n"
+msgstr ""
+"La fin de la charge répartie uniformément (%f) est incorrecte. La longueur "
+"de la barre %d est de %f m.\n"
 
-msgid "Le début (%f) et la fin (%f) de la charge répartie uniformément sont incompatible avec la longueur de la barre %d qui est de %f m.\n"
-msgstr "Le début (%f) et la fin (%f) de la charge répartie uniformément sont incompatible avec la longueur de la barre %d qui est de %f m.\n"
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:97
+#, c-format
+msgid ""
+"Le début (%f) et la fin (%f) de la charge répartie uniformément sont "
+"incompatible avec la longueur de la barre %d qui est de %f m.\n"
+msgstr ""
+"Le début (%f) et la fin (%f) de la charge répartie uniformément sont "
+"incompatible avec la longueur de la barre %d qui est de %f m.\n"
 
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:177
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:279
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:383
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:536
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:663
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:828
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:931
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:158
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:253
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:346
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:442
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:557
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:693
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:790
 msgid "Section indéfinie.\n"
 msgstr "Section indéfinie.\n"
 
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:178
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:280
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:384
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:537
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:664
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:829
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:932
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:159
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:254
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:347
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:443
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:558
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:694
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:791
 msgid "Matériau indéfini.\n"
 msgstr "Matériau indéfini.\n"
 
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:179
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:281
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:385
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:538
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:665
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:830
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:933
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:160
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:255
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:348
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:444
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:559
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:695
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:792
 msgid "Noeud 1 indéfini.\n"
 msgstr "Noeud 1 indéfini.\n"
 
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:180
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:282
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:386
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:539
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:666
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:831
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:934
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:161
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:256
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:349
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:445
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:560
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:696
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:793
 msgid "Noeud 2 indéfini.\n"
 msgstr "Noeud 2 indéfini.\n"
 
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:181
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:283
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:387
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:540
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:667
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:832
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:935
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:162
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:257
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:350
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:446
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:561
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:697
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:794 src/lib/EF/EF_sections.c:1191
+#: src/lib/EF/EF_sections.c:1246 src/lib/EF/EF_sections.c:1301
+#: src/lib/EF/EF_sections.c:1356 src/lib/EF/EF_sections.c:1411
+#: src/lib/EF/EF_sections.c:1466 src/lib/EF/EF_sections.c:1566
+#: src/lib/EF/EF_sections.c:1628
+#, c-format
 msgid "La discrétisation %d souhaitée est hors domaine %d.\n"
 msgstr "La discrétisation %d souhaitée est hors domaine %d.\n"
 
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:184
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:542
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:165
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:448
 msgid "Impossible de relâcher rx simultanément des deux cotés de la barre.\n"
 msgstr "Impossible de relâcher rx simultanément des deux cotés de la barre.\n"
 
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:185
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:570
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:724
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:855
+#, c-format
 msgid "Le début de la charge répartie uniformément (%f) est incorrect.\n"
 msgstr "Le début de la charge répartie uniformément (%f) est incorrect.\n"
 
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:186
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:571
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:725
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:856
+#, c-format
 msgid "La fin de la charge répartie uniformément (%f) est incorrecte.\n"
 msgstr "La fin de la charge répartie uniformément (%f) est incorrecte.\n"
 
-msgid "Le début (%f) et la fin (%f) de la charge répartie uniformément sont incompatibles avec la longueur de la barre %d qui est de %f m.\n"
-msgstr "Le début (%f) et la fin (%f) de la charge répartie uniformément sont incompatibles avec la longueur de la barre %d qui est de %f m.\n"
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:207
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:574
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:728
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:859
+#, c-format
+msgid ""
+"Le début (%f) et la fin (%f) de la charge répartie uniformément sont "
+"incompatibles avec la longueur de la barre %d qui est de %f m.\n"
+msgstr ""
+"Le début (%f) et la fin (%f) de la charge répartie uniformément sont "
+"incompatibles avec la longueur de la barre %d qui est de %f m.\n"
 
-msgid "Le début (%f) et la fin (%f) de la charge répartie uniformément sont incorrecte avec la longueur de la barre %d qui est de %f m.\n"
-msgstr "Le début (%f) et la fin (%f) de la charge répartie uniformément sont incorrecte avec la longueur de la barre %d qui est de %f m.\n"
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:316
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:420
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:964
+#, c-format
+msgid ""
+"Le début (%f) et la fin (%f) de la charge répartie uniformément sont "
+"incorrecte avec la longueur de la barre %d qui est de %f m.\n"
+msgstr ""
+"Le début (%f) et la fin (%f) de la charge répartie uniformément sont "
+"incorrecte avec la longueur de la barre %d qui est de %f m.\n"
 
-msgid "Le début de la charge répartie uniformément (%f) est incorrect. La longueur de la barre est de %f m.\n"
-msgstr "Le début de la charge répartie uniformément (%f) est incorrect. La longueur de la barre est de %f m.\n"
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:472
+#, c-format
+msgid ""
+"Le début de la charge répartie uniformément (%f) est incorrect. La longueur "
+"de la barre est de %f m.\n"
+msgstr ""
+"Le début de la charge répartie uniformément (%f) est incorrect. La longueur "
+"de la barre est de %f m.\n"
 
-msgid "La fin de la charge répartie uniformément (%f) est incorrecte. La longueur de la barre est de %f m.\n"
-msgstr "La fin de la charge répartie uniformément (%f) est incorrecte. La longueur de la barre est de %f m.\n"
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:473
+#, c-format
+msgid ""
+"La fin de la charge répartie uniformément (%f) est incorrecte. La longueur "
+"de la barre est de %f m.\n"
+msgstr ""
+"La fin de la charge répartie uniformément (%f) est incorrecte. La longueur "
+"de la barre est de %f m.\n"
 
-msgid "Le début (%f) et la fin (%f) de la charge répartie uniformément sont incorrecte avec la longueur de la barre qui est de %f m.\n"
-msgstr "Le début (%f) et la fin (%f) de la charge répartie uniformément sont incorrecte avec la longueur de la barre qui est de %f m.\n"
+#: src/lib/EF/EF_charge_barre_repartie_uniforme.c:474
+#, c-format
+msgid ""
+"Le début (%f) et la fin (%f) de la charge répartie uniformément sont "
+"incorrecte avec la longueur de la barre qui est de %f m.\n"
+msgstr ""
+"Le début (%f) et la fin (%f) de la charge répartie uniformément sont "
+"incorrecte avec la longueur de la barre qui est de %f m.\n"
 
+#: src/lib/EF/EF_noeuds.c:152 src/lib/EF/EF_noeuds.c:387
+#: src/lib/EF/EF_noeuds.c:543
+#, c-format
 msgid "Le type de noeud %d est inconnu.\n"
 msgstr "Le type de noeud %d est inconnu.\n"
 
+#: src/lib/EF/EF_noeuds.c:340
+#, c-format
 msgid "Noeud n°%u introuvable.\n"
 msgstr "Noeud n°%u introuvable.\n"
 
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:75
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:166
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:260
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:353
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:449
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:562
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:698
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:795
+#, c-format
 msgid "La position de la charge ponctuelle (%f) est incorrecte.\n"
 msgstr "La position de la charge ponctuelle (%f) est incorrecte.\n"
 
-msgid "La position de la charge ponctuelle (%f) est incorrecte. La longueur de la barre %d est de %f m.\n"
-msgstr "La position de la charge ponctuelle (%f) est incorrecte. La longueur de la barre %d est de %f m.\n"
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:85
+#, c-format
+msgid ""
+"La position de la charge ponctuelle (%f) est incorrecte. La longueur de la "
+"barre %d est de %f m.\n"
+msgstr ""
+"La position de la charge ponctuelle (%f) est incorrecte. La longueur de la "
+"barre %d est de %f m.\n"
 
-msgid "La position de la charge ponctuelle (%f) est incorrecte. La longueur de la barre est de %f m.\n"
-msgstr "La position de la charge ponctuelle (%f) est incorrecte. La longueur de la barre est de %f m.\n"
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:186
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:283
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:376
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:473
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:603
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:720
+#: src/lib/EF/EF_charge_barre_ponctuelle.c:814
+#, c-format
+msgid ""
+"La position de la charge ponctuelle (%f) est incorrecte. La longueur de la "
+"barre est de %f m.\n"
+msgstr ""
+"La position de la charge ponctuelle (%f) est incorrecte. La longueur de la "
+"barre est de %f m.\n"
 
+#: src/lib/EF/EF_gtk_charge_noeud.c:65
 msgid "Noeud"
 msgstr "Noeud"
 
+#: src/lib/EF/EF_gtk_charge_noeud.c:71
 msgid "Ponctuelle sur noeud"
 msgstr "Ponctuelle sur noeud"
 
+#: src/lib/EF/EF_gtk_charge_noeud.c:391
 msgid "Ajout d'une charge au noeud"
 msgstr "Ajout d'une charge au noeud"
 
+#: src/lib/EF/EF_gtk_charge_noeud.c:398
 msgid "Modification d'une charge au noeud"
 msgstr "Modification d'une charge au noeud"
 
+#: src/lib/EF/EF_sections.c:239 src/lib/EF/EF_sections.c:283
+#: src/lib/EF/EF_sections.c:353 src/lib/EF/EF_sections.c:403
+#: src/lib/EF/EF_sections.c:473 src/lib/EF/EF_sections.c:514
+#: src/lib/EF/EF_sections.c:573 src/lib/EF/EF_sections.c:615
+#, c-format
 msgid "La section %s existe déjà.\n"
 msgstr "La section %s existe déjà.\n"
 
+#: src/lib/EF/EF_sections.c:278
 msgid "La section doit être de type rectangulaire.\n"
 msgstr "La section doit être de type rectangulaire.\n"
 
+#: src/lib/EF/EF_sections.c:399
 msgid "La section doit être de type en T.\n"
 msgstr "La section doit être de type en T.\n"
 
+#: src/lib/EF/EF_sections.c:510
 msgid "La section doit être de type carrée.\n"
 msgstr "La section doit être de type carrée.\n"
 
+#: src/lib/EF/EF_sections.c:611
 msgid "La section doit être de type circulaire.\n"
 msgstr "La section doit être de type circulaire.\n"
 
+#: src/lib/EF/EF_sections.c:685
+#, c-format
 msgid "Section en béton '%s' introuvable.\n"
 msgstr "Section en béton '%s' introuvable.\n"
 
+#: src/lib/EF/EF_sections.c:715
 msgid "Largeur"
 msgstr "Largeur"
 
+#: src/lib/EF/EF_sections.c:715
 msgid "Hauteur"
 msgstr "Hauteur"
 
+#: src/lib/EF/EF_sections.c:728
 msgid "Largeur table"
 msgstr "Largeur table"
 
+#: src/lib/EF/EF_sections.c:728
 msgid "Hauteur table"
 msgstr "Hauteur table"
 
+#: src/lib/EF/EF_sections.c:728
 msgid "Largeur retombée"
 msgstr "Largeur retombée"
 
+#: src/lib/EF/EF_sections.c:728
 msgid "Hauteur retombée"
 msgstr "Hauteur retombée"
 
+#: src/lib/EF/EF_sections.c:738
 msgid "Coté"
 msgstr "Coté"
 
+#: src/lib/EF/EF_sections.c:748
 msgid "Diamètre"
 msgstr "Diamètre"
 
+#: src/lib/EF/EF_charge.c:65 src/lib/EF/EF_charge.c:178
+#: src/lib/EF/EF_charge.c:278
+#, c-format
 msgid "Charge %u de l'action %u introuvable.\n"
 msgstr "Charge %u de l'action %u introuvable.\n"
 
+#: src/lib/EF/EF_resultat.c:132 src/lib/EF/EF_resultat.c:212
 msgid "Indice hors limite.\n"
 msgstr "Indice hors limite.\n"
 
+#: src/gui/codegui/main.c:87
 msgid "Impossible d'initialiser gtk.\n"
 msgstr "Impossible d'initialiser gtk.\n"
