@@ -24,6 +24,8 @@
 
 void *EF_charge_cherche(Projet *projet, unsigned int num_action, unsigned int num_charge) __attribute__((__warn_unused_result__));
 
+Action *EF_charge_action(Projet *projet, void *charge) __attribute__((__warn_unused_result__));
+
 gboolean EF_charge_renomme(Projet *projet, unsigned int numero_action, unsigned int numero_charge, const char *nom) __attribute__((__warn_unused_result__));
 gboolean EF_charge_deplace(Projet *projet, unsigned int action_src, unsigned int charge_src, unsigned int action_dest) __attribute__((__warn_unused_result__));
 

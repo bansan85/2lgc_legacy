@@ -24,23 +24,32 @@
 
 #include "common_projet.h"
 #include "EF_noeuds.h"
+#include "EF_charge.h"
 #include "1992_1_1_barres.h"
 #include "common_erreurs.h"
 
-gboolean common_selection_ajout_nombre(void *data, GList **liste, Type_Liste type)
+gboolean common_selection_ajout_nombre(void *data, GList **liste, Type_Liste type,
+  Projet *projet)
 /* Description : ajoute un nombre à la liste chainée.
  * Paramètres : void *data : donnée à ajouter,
  *            : GList **liste : liste où le nombre doit être ajouter,
- *            : Type_Liste type : nature de la donnée data.
+ *            : Type_Liste type : nature de la donnée data,
+ *            : Projet *projet : la variable projet,
+ *                doit être différent de NULL uniquement si type vaut LISTE_CHARGES.
  * Valeur renvoyée :
  *   Succès : TRUE
  *   Échec : FALSE :
  *             liste == NULL.
  */
 {
-    GList           *list_parcours;
+    GList   *list_parcours;
+    Action  *action;
     
     BUGMSG(liste, FALSE, gettext("Paramètre %s incorrect.\n"), "liste");
+    BUGMSG((projet) || (type != LISTE_CHARGES), FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    
+    if (type == LISTE_CHARGES)
+        BUG(action = EF_charge_action(projet, data), FALSE);
     
     if (*liste == NULL)
     {
@@ -116,14 +125,16 @@ gboolean common_selection_ajout_nombre(void *data, GList **liste, Type_Liste typ
             }
             case LISTE_CHARGES :
             {
-                Charge_Noeud *charge_liste, *charge;
+                Charge_Noeud    *charge_liste, *charge;
+                Action          *action_en_cours;
                 
                 charge_liste = list_parcours->data;
+                BUG(action_en_cours = EF_charge_action(projet, charge_liste), FALSE);
                 charge = data;
                 
-                if (charge_liste->numero == charge->numero)
+                if ((action_en_cours->numero == action->numero) && (charge_liste->numero == charge->numero))
                     return TRUE;
-                else if (charge_liste->numero > charge->numero)
+                else if ((action_en_cours->numero > action->numero) || ((action_en_cours->numero == action->numero) && (charge_liste->numero >= charge->numero)))
                 {
                     *liste = g_list_insert_before(*liste, list_parcours, data);
                     return TRUE;
@@ -249,17 +260,17 @@ G_MODULE_EXPORT GList *common_selection_renvoie_numeros(const char *texte)
                 if (sscanf(tmp, "%u-%u/%u%s", &debut, &fin, &pas, fake) == 3)
                 {
                     for (i=debut;i<=fin;i=i+pas)
-                        BUG(common_selection_ajout_nombre(GUINT_TO_POINTER(i), &list, LISTE_UINT), NULL);
+                        BUG(common_selection_ajout_nombre(GUINT_TO_POINTER(i), &list, LISTE_UINT, NULL), NULL);
                 }
                 // Si c'est du format debut-fin
                 else if (sscanf(tmp, "%u-%u%s", &debut, &fin, fake) == 2)
                 {
                     for (i=debut;i<=fin;i++)
-                        BUG(common_selection_ajout_nombre(GUINT_TO_POINTER(i), &list, LISTE_UINT), NULL);
+                        BUG(common_selection_ajout_nombre(GUINT_TO_POINTER(i), &list, LISTE_UINT, NULL), NULL);
                 }
                 // Si c'est du format nombre simple
                 else if (sscanf(tmp, "%u%s", &debut, fake) == 1)
-                    BUG(common_selection_ajout_nombre(GUINT_TO_POINTER(debut), &list, LISTE_UINT), NULL);
+                    BUG(common_selection_ajout_nombre(GUINT_TO_POINTER(debut), &list, LISTE_UINT, NULL), NULL);
                 // Le format est inconnu.
                 else
                 {
@@ -463,17 +474,8 @@ G_MODULE_EXPORT char *common_selection_converti_charges_en_texte(GList *liste_ch
         list_parcours = liste_charges;
         charge = list_parcours->data;
         
-        // On cherche dans la liste des actions laquelle possède la charge.
-        list_parcours2 = projet->actions;
-        while (list_parcours2 != NULL)
-        {
-            action = list_parcours2->data;
-            
-            if (g_list_find(action->charges, charge) != NULL)
-                list_parcours2 = NULL;
-             
-            list_parcours2 = g_list_next(list_parcours2);
-        }
+        BUG(action = EF_charge_action(projet, charge), NULL);
+        
         BUGMSG(tmp = g_strdup_printf("%u:%u", action->numero, charge->numero), NULL, gettext("Erreur d'allocation mémoire.\n"));
         if (g_list_next(list_parcours) != NULL)
         {

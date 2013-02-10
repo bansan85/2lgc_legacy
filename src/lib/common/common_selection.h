@@ -23,7 +23,7 @@
 #include "common_projet.h"
 
 
-int common_selection_ajout_nombre(void *data, GList **liste, Type_Liste type) __attribute__((__warn_unused_result__));
+int common_selection_ajout_nombre(void *data, GList **liste, Type_Liste type, Projet *projet) __attribute__((__warn_unused_result__));
 GList *common_selection_renvoie_numeros(const char *texte);
 GList *common_selection_converti_numeros_en_noeuds(GList *liste_numeros, Projet *projet);
 GList *common_selection_converti_numeros_en_barres(GList *liste_numeros, Projet *projet);
