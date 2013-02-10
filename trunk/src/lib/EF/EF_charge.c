@@ -66,7 +66,39 @@ G_MODULE_EXPORT void *EF_charge_cherche(Projet *projet, unsigned int num_action,
 }
 
 
-G_MODULE_EXPORT gboolean EF_charge_renomme(Projet *projet, unsigned int numero_action,
+Action *EF_charge_action(Projet *projet, void *charge)
+/* Description : Envoie l'action possédant la charge.
+ * Paramètres : Projet *projet : la variable projet,
+ *            : void *charge : la charge dont on souhaite connaitre l'action.
+ * Valeur renvoyée :
+ *   Succès : pointeur vers l'action
+ *   Échec : NULL :
+ *             projet == NULL,
+ *             charge == NULL,
+ *             la charge n'est pas dans une action.
+ */
+{
+    GList   *list_parcours;
+    
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(charge, FALSE, gettext("Paramètre %s incorrect.\n"), "charge");
+    
+    list_parcours = projet->actions;
+    while (list_parcours != NULL)
+    {
+        Action  *action = list_parcours->data;
+        
+        if (g_list_find(action->charges, charge) != NULL)
+            return action;
+        
+        list_parcours = g_list_next(list_parcours);
+    }
+    
+    BUGMSG(0, NULL, gettext("La charge n'est dans aucune action.\n"));
+}
+
+
+gboolean EF_charge_renomme(Projet *projet, unsigned int numero_action,
   unsigned int numero_charge, const char *nom)
 /* Description : Renomme une charge.
  * Paramètres : Projet *projet : la variable projet,

@@ -337,9 +337,9 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GLi
         if ((barres_dep != NULL) && ((origine) || (g_list_find(barres, barre) == NULL)))
         {
             if (numero)
-                BUG(common_selection_ajout_nombre(GUINT_TO_POINTER(barre->numero), barres_dep, LISTE_UINT), FALSE);
+                BUG(common_selection_ajout_nombre(GUINT_TO_POINTER(barre->numero), barres_dep, LISTE_UINT, NULL), FALSE);
             else
-                BUG(common_selection_ajout_nombre(barre, barres_dep, LISTE_BARRES), FALSE);
+                BUG(common_selection_ajout_nombre(barre, barres_dep, LISTE_BARRES, NULL), FALSE);
         }
         // Ici, pas besoin de vérifier la variable verif. En effet à ce stade, tout ce qui est
         // dans barres_todo ne sont que les barres à analyser. barres_todo ne peut contenir une
@@ -381,15 +381,15 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GLi
         noeuds_todo = g_list_delete_link(noeuds_todo, noeuds_todo);
         
         // On commence par ajouter le noeud en cours d'étude dans la liste des noeuds traités.
-        BUG(common_selection_ajout_nombre(dataa, &noeuds_done, LISTE_NOEUDS), FALSE);
+        BUG(common_selection_ajout_nombre(dataa, &noeuds_done, LISTE_NOEUDS, NULL), FALSE);
         
         // On ajoute le noeud à la liste des noeuds dépendants.
         if ((noeuds_dep != NULL) && ((origine) || (g_list_find(noeuds, dataa) == NULL)))
         {
             if (numero)
-                BUG(common_selection_ajout_nombre(GUINT_TO_POINTER(((EF_Noeud*)dataa)->numero), noeuds_dep, LISTE_UINT), FALSE);
+                BUG(common_selection_ajout_nombre(GUINT_TO_POINTER(((EF_Noeud*)dataa)->numero), noeuds_dep, LISTE_UINT, NULL), FALSE);
             else
-                BUG(common_selection_ajout_nombre(dataa, noeuds_dep, LISTE_NOEUDS), FALSE);
+                BUG(common_selection_ajout_nombre(dataa, noeuds_dep, LISTE_NOEUDS, NULL), FALSE);
         }
         // Rappel : si un noeud est de type intermédiaire, on considère qu'il n'est pas une
         // dépendance suffisante pour justifier une impossibilité de suppression d'un élément.
@@ -419,9 +419,9 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GLi
                 if ((barres_dep != NULL) && ((origine) || (g_list_find(barres, barre) == NULL)))
                 {
                     if (numero)
-                        BUG(common_selection_ajout_nombre(GUINT_TO_POINTER(barre->numero), barres_dep, LISTE_UINT), FALSE);
+                        BUG(common_selection_ajout_nombre(GUINT_TO_POINTER(barre->numero), barres_dep, LISTE_UINT, NULL), FALSE);
                     else
-                        BUG(common_selection_ajout_nombre(barre, barres_dep, LISTE_BARRES), FALSE);
+                        BUG(common_selection_ajout_nombre(barre, barres_dep, LISTE_BARRES, NULL), FALSE);
                 }
                 else if (verif == TRUE)
                 {
@@ -477,7 +477,7 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GLi
                         {
                             if (g_list_find(noeuds_done, noeud) != NULL)
                             {
-                                BUG(common_selection_ajout_nombre(charge, charges_dep, LISTE_CHARGES), FALSE);
+                                BUG(common_selection_ajout_nombre(charge, charges_dep, LISTE_CHARGES, projet), FALSE);
                                 liste_parcours3 = NULL;
                             }
                         }
@@ -506,11 +506,11 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GLi
                         {
                             if (g_list_find(barres_todo, barre) != NULL)
                             {
-                                BUG(common_selection_ajout_nombre(charge, charges_dep, LISTE_CHARGES), FALSE);
+                                BUG(common_selection_ajout_nombre(charge, charges_dep, LISTE_CHARGES, projet), FALSE);
                                 liste_parcours3 = NULL;
                             }
                         }
-                        else if ((verif == TRUE) && (g_list_find(barres, barre) != NULL))
+                        else if ((verif == TRUE) && (g_list_find(barres_todo, barre) != NULL))
                         {
                             g_list_free(noeuds_done);
                             g_list_free(barres_todo);
