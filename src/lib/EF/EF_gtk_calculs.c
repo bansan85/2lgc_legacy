@@ -30,6 +30,7 @@
 #include "1992_1_1_barres.h"
 #include "EF_rigidite.h"
 #include "EF_calculs.h"
+#include "EF_verif.h"
 
 G_MODULE_EXPORT void EF_gtk_calculs_calculer(GtkMenuItem *menuitem __attribute__((unused)),
   Projet *projet)
@@ -39,11 +40,19 @@ G_MODULE_EXPORT void EF_gtk_calculs_calculer(GtkMenuItem *menuitem __attribute__
  * Valeur renvoyée : Aucune.
  */
 {
-    unsigned int i;
+    unsigned int    i;
+    GList           *rapport;
+    int             erreur;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     
     BUG(EF_calculs_free(projet), );
+    BUG(EF_verif_EF(projet, &rapport, &erreur), );
+    printf("Rapport\n");
+    BUG(EF_verif_rapport_affiche(rapport), );
+    EF_verif_rapport_free(rapport);
+    if (erreur != 0)
+        return;
     BUG(EF_calculs_initialise(projet), );
     BUG(_1992_1_1_barres_rigidite_ajout_tout(projet), );
     BUG(EF_calculs_genere_mat_rig(projet), );

@@ -885,6 +885,16 @@ typedef struct __List_Gtk
 #endif
 
 
+typedef struct __Analyse_Comm
+{
+    char    *analyse;       // Contient le critère de l'analyse
+    char    *commentaire;   // Contient le commentaire de l'anlayse
+    int     resultat;       // 0 : tout va bien,
+                            // 1 : attention mais problème non critique,
+                            // 2 : erreur critique.
+} Analyse_Comm;
+
+
 typedef struct __Modele
 {
     GList               *noeuds;       // Liste de tous les noeuds de la structure, que ce soit
