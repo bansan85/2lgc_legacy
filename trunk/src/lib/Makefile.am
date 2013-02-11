@@ -43,7 +43,8 @@ libeurocodes_la_SOURCES =	1990/1990_action.c \
 							EF/EF_relachement.c \
 							EF/EF_rigidite.c \
 							EF/EF_resultat.c \
-							EF/EF_sections.c
+							EF/EF_sections.c \
+							EF/EF_verif.c
 
 if ENABLE_GTK
 libeurocodes_la_SOURCES +=	common/common_m3d.cc \
@@ -96,7 +97,8 @@ libeurocodes_la_HEADERS =	1990/1990_action.h \
 							EF/EF_relachement.h \
 							EF/EF_rigidite.h \
 							EF/EF_resultat.h \
-							EF/EF_sections.h
+							EF/EF_sections.h \
+							EF/EF_verif.h
 
 if ENABLE_GTK
 libeurocodes_la_HEADERS +=	common/common_m3d.hpp \

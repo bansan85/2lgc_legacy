@@ -380,7 +380,7 @@ G_MODULE_EXPORT char *common_selection_converti_noeuds_en_texte(GList *liste_noe
  *             Erreur d'allocation mémoire,
  */
 {
-    char        *tmp = NULL, *tmp2 = NULL;
+    char    *tmp = NULL, *tmp2 = NULL;
     
     if (liste_noeuds != NULL)
     {
