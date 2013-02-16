@@ -1482,6 +1482,8 @@ G_MODULE_EXPORT gboolean EF_calculs_free(Projet *projet)
             list_parcours = g_list_next(list_parcours);
         }
     }
+    if (projet->list_gtk.ef_rapport.builder != NULL)
+        gtk_list_store_clear(projet->list_gtk.ef_rapport.liste);
 #endif
     return TRUE;
 }

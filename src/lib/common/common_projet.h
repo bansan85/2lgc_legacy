@@ -259,6 +259,16 @@ typedef enum __Colonne_Resultats
 
 
 #ifdef ENABLE_GTK
+typedef struct __Gtk_EF_Rapport
+{
+    GtkBuilder      *builder;
+    GtkWidget       *window;
+    
+    GtkListStore    *liste;
+    GList           *rapport;
+} Gtk_EF_Rapport;
+
+
 typedef struct __Gtk_EF_Resultats_Tableau
 {
     GtkTreeView         *treeview;
@@ -879,6 +889,7 @@ typedef struct __List_Gtk
     Gtk_EF_Materiaux    ef_materiaux;
     Gtk_1992_1_1_Materiaux  _1992_1_1_materiaux;
     Gtk_EF_Relachements ef_relachements;
+    Gtk_EF_Rapport      ef_rapport;
     Gtk_EF_Resultats    ef_resultats;
     Comp_Gtk            comp;      // tous les composants grahpiques
 } List_Gtk;

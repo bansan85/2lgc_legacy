@@ -227,8 +227,6 @@ gboolean EF_verif_EF(Projet *projet, GList **rapport, int *erreur)
                 {
                     if (g_list_find(noeuds_tout, list_parcours->data) == NULL)
                     {
-                        EF_Noeud *n = list_parcours->data;
-                        printf("Noeud %d\n", n->numero);
                         tmp = NULL;
                         tmp = g_list_append(tmp, list_parcours->data);
                         BUG(EF_verif_bloc(tmp, NULL, &noeuds, &barres, projet), FALSE);
@@ -245,6 +243,13 @@ gboolean EF_verif_EF(Projet *projet, GList **rapport, int *erreur)
         
         g_list_free(noeuds_tout);
         g_list_free(barres_tout);
+        
+        // Un seul bloc
+        if (i == 2)
+        {
+            free(ligne->commentaire);
+            ligne->commentaire = NULL;
+        }
     }
     *rapport = g_list_append(*rapport, ligne);
     

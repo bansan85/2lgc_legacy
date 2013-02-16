@@ -101,6 +101,7 @@ G_MODULE_EXPORT Projet* projet_init(Type_Pays pays)
     projet->list_gtk.ef_materiaux.builder = NULL;
     projet->list_gtk._1992_1_1_materiaux.builder = NULL;
     projet->list_gtk.ef_relachements.builder = NULL;
+    projet->list_gtk.ef_rapport.builder = NULL;
     projet->list_gtk.ef_resultats.builder = NULL;
     projet->list_gtk.ef_resultats.tableaux = NULL;
 #endif
