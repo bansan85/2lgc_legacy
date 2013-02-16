@@ -3,7 +3,8 @@ application_DATA	=	formules/1990_6_10.svg \
 						formules/1990_6_10a.svg \
 						formules/1990_6_10b.svg \
 						xml/tooltips.xml \
-						cvs/villes_france.cvs
+						csv/france_cantons.csv \
+						csv/france_villes.csv
 
 applicationuidir	=	$(datadir)/2lgc/ui
 applicationui_DATA	=	ui/1990_actions.ui \
@@ -22,6 +23,7 @@ applicationui_DATA	=	ui/1990_actions.ui \
 						ui/EF_charge_barre_repartie_uniforme.ui \
 						ui/EF_charge_noeud.ui \
 						ui/EF_materiaux.ui \
+						ui/EF_rapport.ui \
 						ui/EF_resultats.ui \
 						ui/1992_1_1_materiaux_beton.ui \
 						ui/EF_relachements.ui
