@@ -409,9 +409,8 @@ gboolean EF_noeuds_change_pos_relat(Projet *projet, EF_Noeud *noeud, double pos)
  */
 {
     EF_Noeud_Barre  *info;
-#ifdef ENABLE_GTK
-    GList           *liste_noeuds = NULL;
-#endif
+    GList           *liste;
+    double          avant, apres;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(noeud, FALSE, gettext("Paramètre %s incorrect.\n"), "noeud");
@@ -420,15 +419,55 @@ gboolean EF_noeuds_change_pos_relat(Projet *projet, EF_Noeud *noeud, double pos)
     
     info = noeud->data;
     
+    // On vérifie si il y a besoin de réorganiser l'ordre des noeuds intermédiaires.
+    // On commence par récupérer les bornes qui ne nécessite pas de réorganisation.
+    liste = g_list_find(info->barre->noeuds_intermediaires, noeud);
+    if (g_list_previous(liste) == NULL)
+        avant = 0.;
+    else
+    {
+        EF_Noeud        *noeud2 = g_list_previous(liste)->data;
+        EF_Noeud_Barre  *info2 = noeud2->data;
+        
+        avant = info2->position_relative_barre;
+    }
+    if (g_list_next(liste) == NULL)
+        apres = 1.;
+    else
+    {
+        EF_Noeud        *noeud2 = g_list_next(liste)->data;
+        EF_Noeud_Barre  *info2 = noeud2->data;
+        
+        apres = info2->position_relative_barre;
+    }
+    if ((avant <= pos) && (pos <= apres))
+        info->position_relative_barre = pos;
+    // Il est nécessaire de réorganiser
+    else
+    {
+        GList   *list_parcours;
+        // On enlève l'élément de la liste
+        info->barre->noeuds_intermediaires = g_list_remove_link(info->barre->noeuds_intermediaires, liste);
+        
+        // On parcours la liste pour l'insérer au bon endroit
+        list_parcours = info->barre->noeuds_intermediaires;
+        while ((list_parcours != NULL) && (((EF_Noeud_Barre*)list_parcours->data)->position_relative_barre < pos))
+            list_parcours = g_list_next(list_parcours);
+        
+        info->barre->noeuds_intermediaires = g_list_insert_before(info->barre->noeuds_intermediaires, list_parcours, liste->data);
+        
+        g_list_free(liste);
+    }
+    
     info->position_relative_barre = pos;
     
 #ifdef ENABLE_GTK
-    liste_noeuds = g_list_append(liste_noeuds, noeud);
+    liste = g_list_append(NULL, noeud);
     
-    BUG(m3d_actualise_graphique(projet, liste_noeuds, NULL), FALSE);
+    BUG(m3d_actualise_graphique(projet, liste, NULL), FALSE);
     BUG(m3d_rafraichit(projet), FALSE);
     
-    g_list_free(liste_noeuds);
+    g_list_free(liste);
     
     if (projet->list_gtk.ef_noeud.builder != NULL)
         gtk_tree_store_set(projet->list_gtk.ef_noeud.tree_store_barre, &noeud->Iter, 6, info->position_relative_barre, -1);
