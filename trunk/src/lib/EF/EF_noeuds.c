@@ -48,61 +48,6 @@ G_MODULE_EXPORT gboolean EF_noeuds_init(Projet *projet)
 }
 
 
-G_MODULE_EXPORT EF_Noeud *EF_noeuds_ajout_noeud_libre(Projet *projet, double x, double y,
-  double z, EF_Appui *appui)
-/* Description : Ajouter un noeud à la liste des noeuds en lui attribuant le numéro suivant le
- *               dernier noeud existant.
- * Paramètres : Projet *projet : la variable projet,
- *            : double x : position en x,
- *            : double y : position en y,
- *            : double z : position en z,
- *            : EF_Appui *appui : Pointeur vers l'appui, NULL si aucun.
- * Valeur renvoyée :
- *   Succès : Pointeur vers le nouveau noeud
- *   Échec : NULL en cas de paramètres invalides :
- *             projet == NULL,
- *             en cas d'erreur d'allocation mémoire.
- */
-{
-    EF_Noeud        *noeud_nouveau = malloc(sizeof(EF_Noeud));
-    EF_Point        *data;
-    
-    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(noeud_nouveau, NULL, gettext("Erreur d'allocation mémoire.\n"));
-    
-    BUGMSG(data = malloc(sizeof(EF_Point)), NULL, gettext("Erreur d'allocation mémoire.\n"));
-    
-    // Trivial
-    noeud_nouveau->type = NOEUD_LIBRE;
-    noeud_nouveau->data = data;
-    data->x = x;
-    data->y = y;
-    data->z = z;
-    
-    noeud_nouveau->appui = appui;
-        
-    if (projet->modele.noeuds == NULL)
-        noeud_nouveau->numero = 0;
-    else
-        noeud_nouveau->numero = ((EF_Noeud *)g_list_last(projet->modele.noeuds)->data)->numero+1;
-    
-    BUG(EF_calculs_free(projet), NULL);
-    
-    projet->modele.noeuds = g_list_append(projet->modele.noeuds, noeud_nouveau);
-    
-#ifdef ENABLE_GTK
-    BUG(m3d_noeud(&projet->list_gtk.m3d, noeud_nouveau), NULL);
-    if (projet->list_gtk.ef_noeud.builder != NULL)
-    {
-        gtk_tree_store_append(projet->list_gtk.ef_noeud.tree_store_libre, &noeud_nouveau->Iter, NULL);
-        gtk_tree_store_set(projet->list_gtk.ef_noeud.tree_store_libre, &noeud_nouveau->Iter, 0, noeud_nouveau->numero, 1, data->x, 2, data->y, 3, data->z, 4, (noeud_nouveau->appui == NULL ? gettext("Aucun") : noeud_nouveau->appui->nom), -1);
-    }
-#endif
-    
-    return noeud_nouveau;
-}
-
-
 G_MODULE_EXPORT EF_Point *EF_noeuds_renvoie_position(EF_Noeud *noeud) 
 /* Description : Renvoie un point contenant la position du noeud.
  *               La valeur de retour doit être libérée par l'appel à la fonction free();
@@ -123,11 +68,26 @@ G_MODULE_EXPORT EF_Point *EF_noeuds_renvoie_position(EF_Noeud *noeud)
     {
         case NOEUD_LIBRE :
         {
-            EF_Point    *tmp = noeud->data;
+            EF_Noeud_Libre  *tmp = noeud->data;
             
-            retour->x = tmp->x;
-            retour->y = tmp->y;
-            retour->z = tmp->z;
+            if (tmp->relatif != NULL)
+            {
+                EF_Point        *p;
+                
+                BUG(p = EF_noeuds_renvoie_position(tmp->relatif), NULL);
+                
+                retour->x = p->x + tmp->x;
+                retour->y = p->y + tmp->y;
+                retour->z = p->z + tmp->z;
+                
+                free(p);
+            }
+            else
+            {
+                retour->x = tmp->x;
+                retour->y = tmp->y;
+                retour->z = tmp->z;
+            }
             
             break;
         }
@@ -155,6 +115,70 @@ G_MODULE_EXPORT EF_Point *EF_noeuds_renvoie_position(EF_Noeud *noeud)
     }
     
     return retour;
+}
+
+
+G_MODULE_EXPORT EF_Noeud *EF_noeuds_ajout_noeud_libre(Projet *projet, double x, double y,
+  double z, EF_Appui *appui, EF_Noeud *relatif)
+/* Description : Ajouter un noeud à la liste des noeuds en lui attribuant le numéro suivant le
+ *               dernier noeud existant.
+ * Paramètres : Projet *projet : la variable projet,
+ *            : double x : position en x,
+ *            : double y : position en y,
+ *            : double z : position en z,
+ *            : EF_Appui *appui : Pointeur vers l'appui, NULL si aucun,
+ *            : EF_Noeud *relatif : Pointeur vers le noeud relatif, NULL si aucun.
+ * Valeur renvoyée :
+ *   Succès : Pointeur vers le nouveau noeud
+ *   Échec : NULL en cas de paramètres invalides :
+ *             projet == NULL,
+ *             en cas d'erreur d'allocation mémoire.
+ */
+{
+    EF_Noeud        *noeud_nouveau = malloc(sizeof(EF_Noeud));
+    EF_Noeud_Libre  *data;
+    
+    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(noeud_nouveau, NULL, gettext("Erreur d'allocation mémoire.\n"));
+    
+    BUGMSG(data = malloc(sizeof(EF_Noeud_Libre)), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    
+    // Trivial
+    noeud_nouveau->type = NOEUD_LIBRE;
+    noeud_nouveau->data = data;
+    data->x = x;
+    data->y = y;
+    data->z = z;
+    data->relatif = relatif;
+    
+    noeud_nouveau->appui = appui;
+        
+    if (projet->modele.noeuds == NULL)
+        noeud_nouveau->numero = 0;
+    else
+        noeud_nouveau->numero = ((EF_Noeud *)g_list_last(projet->modele.noeuds)->data)->numero+1;
+    
+    BUG(EF_calculs_free(projet), NULL);
+    
+    projet->modele.noeuds = g_list_append(projet->modele.noeuds, noeud_nouveau);
+    
+#ifdef ENABLE_GTK
+    BUG(m3d_noeud(&projet->list_gtk.m3d, noeud_nouveau), NULL);
+    if (projet->list_gtk.ef_noeud.builder != NULL)
+    {
+        char    *tmp = NULL;
+        
+        if (data->relatif != NULL)
+            BUGMSG(tmp = g_strdup_printf("%d", data->relatif->numero), NULL, gettext("Erreur d'allocation mémoire.\n"));
+        
+        gtk_tree_store_append(projet->list_gtk.ef_noeud.tree_store_libre, &noeud_nouveau->Iter, NULL);
+        gtk_tree_store_set(projet->list_gtk.ef_noeud.tree_store_libre, &noeud_nouveau->Iter, 0, noeud_nouveau->numero, 1, data->x, 2, data->y, 3, data->z, 4, (data->relatif == NULL ? gettext("Aucun") : tmp), 5, (noeud_nouveau->appui == NULL ? gettext("Aucun") : noeud_nouveau->appui->nom), -1);
+        
+        free(tmp);
+    }
+#endif
+    
+    return noeud_nouveau;
 }
 
 
@@ -344,7 +368,7 @@ G_MODULE_EXPORT EF_Noeud* EF_noeuds_cherche_numero(Projet *projet, unsigned int 
 
 
 gboolean EF_noeuds_change_pos_abs(Projet *projet, EF_Noeud *noeud, double x, double y, double z)
-/* Description : Change la coordonnée d'un noeud.
+/* Description : Change les coordonnées d'un noeud.
  * Paramètres : Projet *projet : la variable projet,
  *            : EF_Noeud *noeud : noeud à modifier,
  *            : double x : la nouvelle coordonnée en x, peut être NAN si pas de modification,
@@ -358,16 +382,16 @@ gboolean EF_noeuds_change_pos_abs(Projet *projet, EF_Noeud *noeud, double x, dou
  *             noeud->type != NOEUD_LIBRE.
  */
 {
-    EF_Point    *point;
+    EF_Noeud_Libre  *point;
 #ifdef ENABLE_GTK
-    GList       *liste_noeuds = NULL;
+    GList           *liste_noeuds = NULL;
 #endif
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(noeud, FALSE, gettext("Paramètre %s incorrect.\n"), "noeud");
     BUGMSG(noeud->type == NOEUD_LIBRE, FALSE, gettext("Le type du noeud est incorrect.\n"));
     
-    point = (EF_Point *)noeud->data;
+    point = noeud->data;
     
     if (!isnan(x))
         point->x = x;

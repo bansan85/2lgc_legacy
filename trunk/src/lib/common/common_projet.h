@@ -411,7 +411,8 @@ typedef struct __EF_Noeud
 {
     unsigned int    numero;
     Type_Noeud      type;
-    void            *data; // Contient les données permettant de récupérer les coordonnées en fonction du type de noeud.
+    void            *data; // Contient les données permettant de récupérer les coordonnées en
+                           // fonction du type de noeud.
     EF_Appui        *appui;
 #ifdef ENABLE_GTK
     GtkTreeIter     Iter;
@@ -635,6 +636,15 @@ typedef struct __Beton_Barre
     cholmod_sparse      *matrice_rotation;
     cholmod_sparse      *matrice_rotation_transpose;
 } Beton_Barre;
+
+
+typedef struct __EF_Noeud_Libre
+{
+    double      x;
+    double      y;
+    double      z;
+    EF_Noeud    *relatif;
+} EF_Noeud_Libre;
 
 
 typedef struct __EF_Noeud_Barre

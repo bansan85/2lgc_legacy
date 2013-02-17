@@ -24,7 +24,7 @@
 
 gboolean EF_noeuds_init(Projet *projet) __attribute__((__warn_unused_result__));
 
-EF_Noeud* EF_noeuds_ajout_noeud_libre(Projet *projet, double x, double y, double z, EF_Appui *appui) __attribute__((__warn_unused_result__));
+EF_Noeud* EF_noeuds_ajout_noeud_libre(Projet *projet, double x, double y, double z, EF_Appui *appui, EF_Noeud* relatif) __attribute__((__warn_unused_result__));
 EF_Noeud* EF_noeuds_ajout_noeud_barre(Projet *projet, Beton_Barre *barre, double position_relative_barre, EF_Appui *appui) __attribute__((__warn_unused_result__));
 
 EF_Point *EF_noeuds_renvoie_position(EF_Noeud *noeud) __attribute__((__warn_unused_result__));
