@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2013-02-16 23:59+0100\n"
-"PO-Revision-Date: 2013-02-12 00:54+0100\n"
+"POT-Creation-Date: 2013-02-17 11:41+0100\n"
+"PO-Revision-Date: 2013-02-17 11:42+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -257,10 +257,10 @@ msgid "Noeuds :"
 msgstr "Noeuds :"
 
 msgid "Rapport"
-msgstr "Rapport vide.\n"
+msgstr "Rapport"
 
 msgid "Point analysé"
-msgstr ""
+msgstr "Point analysé"
 
 msgid "Ajout d'une barre"
 msgstr "Ajout d'une barre"
@@ -1619,6 +1619,9 @@ msgstr "Le type de noeud %d est inconnu.\n"
 
 msgid "Noeud n°%u introuvable.\n"
 msgstr "Noeud n°%u introuvable.\n"
+
+msgid "Le type du noeud est incorrect.\n"
+msgstr "Le type du noeud est incorrect.\n"
 
 msgid "La position de la charge ponctuelle (%f) est incorrecte.\n"
 msgstr "La position de la charge ponctuelle (%f) est incorrecte.\n"
