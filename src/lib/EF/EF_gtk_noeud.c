@@ -71,7 +71,7 @@ G_MODULE_EXPORT void EF_gtk_noeud_ajouter(GtkButton *button __attribute__((unuse
     
     // On ajoute un noeud libre
     if (gtk_notebook_get_current_page(GTK_NOTEBOOK(ef_gtk->notebook)) == 0)
-        BUG(EF_noeuds_ajout_noeud_libre(projet, 0., 0., 0., NULL), );
+        BUG(EF_noeuds_ajout_noeud_libre(projet, 0., 0., 0., NULL, NULL), );
     // On ajoute un noeud intermédiaire
     else
     {
@@ -756,7 +756,7 @@ G_MODULE_EXPORT void EF_gtk_noeud(Projet *projet)
     g_object_set_data(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_libres_cell3"), "column", GINT_TO_POINTER(3));
     gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_libres_column3")), GTK_CELL_RENDERER(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_libres_cell3")), common_gtk_render_double, GINT_TO_POINTER(DECIMAL_DISTANCE), NULL);
     
-    g_object_set(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_libres_cell4"), "model", projet->list_gtk.ef_appuis.liste_appuis, NULL);
+    g_object_set(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_libres_cell5"), "model", projet->list_gtk.ef_appuis.liste_appuis, NULL);
     
     g_object_set_data(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_intermediaires_cell1"), "column", GINT_TO_POINTER(1));
     gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_intermediaires_column1")), GTK_CELL_RENDERER(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_intermediaires_cell1")), EF_gtk_render_actualise_position, projet, NULL);
@@ -776,24 +776,32 @@ G_MODULE_EXPORT void EF_gtk_noeud(Projet *projet)
         do
         {
             EF_Noeud    *noeud = (EF_Noeud *)list_parcours->data;
-            EF_Point    *point = EF_noeuds_renvoie_position(noeud);
-            
-            BUG(point, );
             
             if (noeud->type == NOEUD_LIBRE)
             {
+                char            *tmp = NULL;
+                EF_Noeud_Libre  *data = noeud->data;
+                
+                if (data->relatif != NULL)
+                    BUGMSG(tmp = g_strdup_printf("%d", data->relatif->numero), , gettext("Erreur d'allocation mémoire.\n"));
+                
                 gtk_tree_store_append(ef_gtk->tree_store_libre, &noeud->Iter, NULL);
-                gtk_tree_store_set(ef_gtk->tree_store_libre, &noeud->Iter, 0, noeud->numero, 1, point->x, 2, point->y, 3, point->z, 4, (noeud->appui == NULL ? gettext("Aucun") : noeud->appui->nom), -1);
+                gtk_tree_store_set(ef_gtk->tree_store_libre, &noeud->Iter, 0, noeud->numero, 1, data->x, 2, data->y, 3, data->z, 4, data->relatif == NULL ? gettext("Aucun") : tmp, 5, noeud->appui == NULL ? gettext("Aucun") : noeud->appui->nom, -1);
+                
+                free(tmp);
             }
             else if (noeud->type == NOEUD_BARRE)
             {
                 EF_Noeud_Barre  *info = (EF_Noeud_Barre *)noeud->data;
+                EF_Point        *point = EF_noeuds_renvoie_position(noeud);
+                
+                BUG(point, );
                 
                 gtk_tree_store_append(ef_gtk->tree_store_barre, &noeud->Iter, NULL);
                 gtk_tree_store_set(ef_gtk->tree_store_barre, &noeud->Iter, 0, noeud->numero, 1, point->x, 2, point->y, 3, point->z, 4, (noeud->appui == NULL ? gettext("Aucun") : noeud->appui->nom), 5, info->barre->numero, 6, info->position_relative_barre, -1);
+                
+                free(point);
             }
-            
-            free(point);
             
             list_parcours = g_list_next(list_parcours);
         }

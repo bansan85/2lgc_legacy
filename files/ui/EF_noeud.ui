@@ -8,6 +8,7 @@
             <column type="gdouble"/>
             <column type="gdouble"/>
             <column type="gchararray"/>
+            <column type="gchararray"/>
         </columns>
     </object>
     <object class="GtkTreeStore" id="EF_noeuds_treestore_noeuds_intermediaires">
@@ -143,16 +144,33 @@
                                                 <property name="visible">True</property>
                                                 <property name="resizable">True</property>
                                                 <property name="alignment">0.5</property>
+                                                <property name="title" translatable="yes">Noeud relatif</property>
+                                                <child>
+                                                    <object class="GtkCellRendererText" id="EF_noeuds_treeview_noeuds_libres_cell4">
+                                                        <property name="editable">True</property>
+                                                        <property name="xalign">0.5</property>
+                                                    </object>
+                                                    <attributes>
+                                                        <attribute name="text">4</attribute>
+                                                    </attributes>
+                                                </child>
+                                            </object>
+                                        </child>
+                                        <child>
+                                            <object class="GtkTreeViewColumn" id="EF_noeuds_treeview_noeuds_libres_column5">
+                                                <property name="visible">True</property>
+                                                <property name="resizable">True</property>
+                                                <property name="alignment">0.5</property>
                                                 <property name="title" translatable="yes">Appui</property>
                                                 <child>
-                                                    <object class="GtkCellRendererCombo" id="EF_noeuds_treeview_noeuds_libres_cell4">
+                                                    <object class="GtkCellRendererCombo" id="EF_noeuds_treeview_noeuds_libres_cell5">
                                                         <property name="editable">True</property>
                                                         <property name="text-column">0</property>
                                                         <property name="has-entry">False</property>
                                                         <signal name="edited" handler="EF_gtk_noeud_edit_noeud_appui"/>
                                                     </object>
                                                     <attributes>
-                                                        <attribute name="text">4</attribute>
+                                                        <attribute name="text">5</attribute>
                                                     </attributes>
                                                 </child>
                                             </object>

@@ -631,7 +631,7 @@ G_MODULE_EXPORT gboolean EF_appuis_renomme(EF_Appui *appui, gchar *nom, Projet *
                 model = GTK_TREE_MODEL(projet->list_gtk.ef_noeud.tree_store_barre);
             
             if (noeud->appui == appui)
-                gtk_tree_store_set(GTK_TREE_STORE(model), &noeud->Iter, 4, appui->nom, -1);
+                gtk_tree_store_set(GTK_TREE_STORE(model), &noeud->Iter, 5, appui->nom, -1);
             
             parcours = g_list_next(parcours);
         }
