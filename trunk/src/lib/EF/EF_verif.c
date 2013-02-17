@@ -27,6 +27,7 @@
 #include "common_math.h"
 #include "common_selection.h"
 #include "1992_1_1_barres.h"
+#include "EF_noeuds.h"
 
 
 gboolean EF_verif_bloc(GList *noeuds, GList *barres, GList **noeuds_dep, GList **barres_dep,
@@ -137,7 +138,6 @@ gboolean EF_verif_EF(Projet *projet, GList **rapport, int *erreur)
     BUGMSG(rapport, FALSE, gettext("Paramètre %s incorrect.\n"), "rapport");
     BUGMSG(erreur, FALSE, gettext("Paramètre %s incorrect.\n"), "erreur");
     
-    *rapport = NULL;
     *erreur = 0;
     
     // On vérifie si la structure possède au moins une barre (et donc deux noeuds).
@@ -383,6 +383,88 @@ gboolean EF_verif_EF(Projet *projet, GList **rapport, int *erreur)
             if (*erreur < ligne->resultat)
                 *erreur = ligne->resultat;
         }
+    }
+    *rapport = g_list_append(*rapport, ligne);
+    
+    // Vérification si deux noeuds ont les mêmes coordonnées
+    BUGMSG(ligne = malloc(sizeof(Analyse_Comm)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(ligne->analyse = g_strdup_printf("%s", gettext("Vérification des noeuds :\n\t- Noeuds ayant les mêmes coordonnées.")), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    ligne->resultat = 0;
+    ligne->commentaire = NULL;
+    list_parcours = projet->modele.noeuds;
+    while (g_list_next(list_parcours) != NULL)
+    {
+        EF_Noeud    *noeud1 = list_parcours->data;
+        GList       *list_parcours2 = g_list_next(list_parcours);
+        EF_Point    *point1;
+        
+        BUG(point1 = EF_noeuds_renvoie_position(noeud1), FALSE);
+        
+        while (list_parcours2 != NULL)
+        {
+            EF_Noeud    *noeud2 = list_parcours2->data;
+            EF_Point    *point2;
+            
+            BUG(point2 = EF_noeuds_renvoie_position(noeud2), FALSE);
+            
+            if ((ERREUR_RELATIVE_EGALE(point1->x, point2->x)) && (ERREUR_RELATIVE_EGALE(point1->y, point2->y)) && (ERREUR_RELATIVE_EGALE(point1->z, point2->z)))
+            {
+                ligne->resultat = 1;
+                if (*erreur < ligne->resultat)
+                    *erreur = ligne->resultat;
+                
+                if (ligne->commentaire == NULL)
+                    BUGMSG(ligne->commentaire = g_strdup_printf(gettext("Les noeuds %d et %d ont les mêmes coordonnées."), noeud1->numero, noeud2->numero), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                else
+                {
+                    char *tmp = ligne->commentaire;
+                    
+                    BUGMSG(ligne->commentaire = g_strdup_printf(gettext("%s\nLes noeuds %d et %d ont les mêmes coordonnées."), ligne->commentaire, noeud1->numero, noeud2->numero), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                    free(tmp);
+                }
+                
+                // On affiche les mêmes noeuds par singleton
+                list_parcours2 = NULL;
+            }
+            
+            free(point2);
+            list_parcours2 = g_list_next(list_parcours2);
+        }
+        
+        free(point1);
+        list_parcours = g_list_next(list_parcours);
+    }
+    *rapport = g_list_append(*rapport, ligne);
+    
+    // Vérification des barres
+    BUGMSG(ligne = malloc(sizeof(Analyse_Comm)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(ligne->analyse = g_strdup_printf("%s", gettext("Vérification des barres :\n\t- Longueur nulle.")), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    ligne->resultat = 0;
+    ligne->commentaire = NULL;
+    // Détection des barres de longueur nulle.
+    list_parcours = projet->modele.barres;
+    while (g_list_next(list_parcours) != NULL)
+    {
+        Beton_Barre *barre = list_parcours->data;
+        
+        if (ERREUR_RELATIVE_EGALE(EF_noeuds_distance(barre->noeud_debut, barre->noeud_fin), 0.))
+        {
+            ligne->resultat = 2;
+            if (*erreur < ligne->resultat)
+                *erreur = ligne->resultat;
+            
+            if (ligne->commentaire == NULL)
+                BUGMSG(ligne->commentaire = g_strdup_printf(gettext("La longueur de la barre %d est nulle."), barre->numero), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+            else
+            {
+                char *tmp = ligne->commentaire;
+                
+                BUGMSG(ligne->commentaire = g_strdup_printf(gettext("%s\nLa longueur de la barre %d est nulle."), ligne->commentaire, barre->numero), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                free(tmp);
+            }
+        }
+        
+        list_parcours = g_list_next(list_parcours);
     }
     *rapport = g_list_append(*rapport, ligne);
     

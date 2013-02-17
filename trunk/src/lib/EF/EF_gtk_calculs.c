@@ -42,7 +42,7 @@ G_MODULE_EXPORT void EF_gtk_calculs_calculer(GtkMenuItem *menuitem __attribute__
  */
 {
     unsigned int    i;
-    GList           *rapport;
+    GList           *rapport = NULL;
     int             erreur;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");

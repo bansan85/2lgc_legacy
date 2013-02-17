@@ -62,7 +62,7 @@
                                     <object class="GtkTreeViewColumn" id="EF_rapport_treeview_column2">
                                         <property name="visible">True</property>
                                         <property name="resizable">True</property>
-                                        <property name="title" translatable="yes">Point analysé</property>
+                                        <property name="title" translatable="yes">Commentaires</property>
                                         <child>
                                             <object class="GtkCellRendererText" id="EF_rapport_treeview_cell2" />
                                             <attributes>
