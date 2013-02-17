@@ -343,6 +343,103 @@ G_MODULE_EXPORT EF_Noeud* EF_noeuds_cherche_numero(Projet *projet, unsigned int 
 }
 
 
+gboolean EF_noeuds_change_pos_abs(Projet *projet, EF_Noeud *noeud, double x, double y, double z)
+/* Description : Change la coordonnée d'un noeud.
+ * Paramètres : Projet *projet : la variable projet,
+ *            : EF_Noeud *noeud : noeud à modifier,
+ *            : double x : la nouvelle coordonnée en x, peut être NAN si pas de modification,
+ *            : double y : la nouvelle coordonnée en y, peut être NAN si pas de modification,
+ *            : double z : la nouvelle coordonnée en z, peut être NAN si pas de modification.
+ * Valeur renvoyée :
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL,
+ *             noeud == NULL,
+ *             noeud->type != NOEUD_LIBRE.
+ */
+{
+    EF_Point    *point;
+#ifdef ENABLE_GTK
+    GList       *liste_noeuds = NULL;
+#endif
+    
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(noeud, FALSE, gettext("Paramètre %s incorrect.\n"), "noeud");
+    BUGMSG(noeud->type == NOEUD_LIBRE, FALSE, gettext("Le type du noeud est incorrect.\n"));
+    
+    point = (EF_Point *)noeud->data;
+    
+    if (!isnan(x))
+        point->x = x;
+    if (!isnan(y))
+        point->y = y;
+    if (!isnan(z))
+        point->z = z;
+    
+#ifdef ENABLE_GTK
+    liste_noeuds = g_list_append(liste_noeuds, noeud);
+    
+    BUG(m3d_actualise_graphique(projet, liste_noeuds, NULL), FALSE);
+    BUG(m3d_rafraichit(projet), FALSE);
+    
+    g_list_free(liste_noeuds);
+    
+    if (projet->list_gtk.ef_noeud.builder != NULL)
+        gtk_tree_store_set(projet->list_gtk.ef_noeud.tree_store_libre, &noeud->Iter, 1, point->x, 2, point->y, 3, point->z, -1);
+#endif
+    
+    BUG(EF_calculs_free(projet), FALSE);
+    
+    return TRUE;
+}
+
+
+gboolean EF_noeuds_change_pos_relat(Projet *projet, EF_Noeud *noeud, double pos)
+/* Description : Change la coordonnée d'un noeud.
+ * Paramètres : Projet *projet : la variable projet,
+ *            : EF_Noeud *noeud : noeud à modifier,
+ *            : double pos : la nouvelle position relative,
+ * Valeur renvoyée :
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL,
+ *             noeud == NULL,
+ *             noeud->type != NOEUD_BARRE,
+ *             pos > 1.0 ou pos < 0.
+ */
+{
+    EF_Noeud_Barre  *info;
+#ifdef ENABLE_GTK
+    GList           *liste_noeuds = NULL;
+#endif
+    
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(noeud, FALSE, gettext("Paramètre %s incorrect.\n"), "noeud");
+    BUGMSG(noeud->type == NOEUD_BARRE, FALSE, gettext("Le type du noeud est incorrect.\n"));
+    BUGMSG((0. <= pos) && (pos <= 1.), FALSE, gettext("Paramètre %s incorrect.\n"), "pos");
+    
+    info = noeud->data;
+    
+    info->position_relative_barre = pos;
+    
+#ifdef ENABLE_GTK
+    liste_noeuds = g_list_append(liste_noeuds, noeud);
+    
+    BUG(m3d_actualise_graphique(projet, liste_noeuds, NULL), FALSE);
+    BUG(m3d_rafraichit(projet), FALSE);
+    
+    g_list_free(liste_noeuds);
+    
+    if (projet->list_gtk.ef_noeud.builder != NULL)
+        gtk_tree_store_set(projet->list_gtk.ef_noeud.tree_store_barre, &noeud->Iter, 6, info->position_relative_barre, -1);
+#endif
+    
+    BUG(EF_calculs_free(projet), FALSE);
+    
+    return TRUE;
+}
+
+
 G_MODULE_EXPORT gboolean EF_noeuds_change_appui(Projet *projet, EF_Noeud *noeud,
   EF_Appui *appui)
 /* Description : Change l'appui d'un noeud.

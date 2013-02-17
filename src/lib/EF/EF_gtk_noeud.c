@@ -403,28 +403,25 @@ G_MODULE_EXPORT void EF_gtk_noeud_edit_pos_abs(GtkCellRendererText *cell, gchar 
     if (sscanf(new_text, "%lf%s", &conversion, fake) == 1)
     {
         EF_Noeud    *noeud;
-        EF_Point    *point;
-        GList       *liste_noeuds = NULL;
         
         // On modifie l'action
         BUG(noeud = EF_noeuds_cherche_numero(projet, i, TRUE), );
-        point = (EF_Point *)noeud->data;
         
         switch (column)
         {
             case 1:
             {
-                point->x = conversion;
+                BUG(EF_noeuds_change_pos_abs(projet, noeud, conversion, NAN, NAN), );
                 break;
             }
             case 2:
             {
-                point->y = conversion;
+                BUG(EF_noeuds_change_pos_abs(projet, noeud, NAN, conversion, NAN), );
                 break;
             }
             case 3:
             {
-                point->z = conversion;
+                BUG(EF_noeuds_change_pos_abs(projet, noeud, NAN, NAN, conversion), );
                 break;
             }
             default :
@@ -433,18 +430,6 @@ G_MODULE_EXPORT void EF_gtk_noeud_edit_pos_abs(GtkCellRendererText *cell, gchar 
                 break;
             }
         }
-        
-        liste_noeuds = g_list_append(liste_noeuds, noeud);
-        
-        BUG(m3d_actualise_graphique(projet, liste_noeuds, NULL), );
-        BUG(m3d_rafraichit(projet), );
-        
-        g_list_free(liste_noeuds);
-        
-        // On modifie le tree-view-actions
-        gtk_tree_store_set(gtk_noeud->tree_store_libre, &iter, column, conversion, -1);
-        
-        BUG(EF_calculs_free(projet), );
     }
     
     free(fake);
@@ -490,7 +475,6 @@ G_MODULE_EXPORT void EF_gtk_noeud_edit_pos_relat(GtkCellRendererText *cell, gcha
     if (sscanf(new_text, "%lf%s", &conversion, fake) == 1)
     {
         EF_Noeud    *noeud;
-        GList       *liste_noeuds = NULL;
         
         if ((0.0 > conversion) || (conversion > 1.0))
         {
@@ -498,31 +482,12 @@ G_MODULE_EXPORT void EF_gtk_noeud_edit_pos_relat(GtkCellRendererText *cell, gcha
             return;
         }
         
-        // On modifie la position du noeud
-        BUG(EF_calculs_free(projet), );
-        
         BUG(noeud = EF_noeuds_cherche_numero(projet, i, TRUE), );
         
         if ((noeud->type == NOEUD_BARRE) && (column == 6))
-        {
-            EF_Noeud_Barre  *info = (EF_Noeud_Barre *)noeud->data;
-            
-            info->position_relative_barre = conversion;
-        }
+            BUG(EF_noeuds_change_pos_relat(projet, noeud, conversion), );
         else
             BUGMSG(NULL, , gettext("Le type du noeud ou la colonne d'édition est incorrect.\n"));
-        
-        liste_noeuds = g_list_append(liste_noeuds, noeud);
-        
-        BUG(m3d_actualise_graphique(projet, liste_noeuds, NULL), );
-        BUG(m3d_rafraichit(projet), );
-        
-        g_list_free(liste_noeuds);
-        
-        // On modifie le tree-view-barre
-        gtk_tree_store_set(gtk_noeud->tree_store_barre, &iter, column, conversion, -1);
-        
-        BUG(EF_calculs_free(projet), );
     }
     
     free(fake);
