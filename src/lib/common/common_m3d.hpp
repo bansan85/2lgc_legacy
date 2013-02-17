@@ -50,7 +50,7 @@ gboolean m3d_rafraichit(Projet *projet) __attribute__((__warn_unused_result__));
 
 void* m3d_noeud(void *donnees_m3d, EF_Noeud *noeud) __attribute__((__warn_unused_result__));
 void m3d_noeud_free(void *donnees_m3d, EF_Noeud *noeud);
-void* m3d_barre(void *donnees_m3d, Beton_Barre *barre) __attribute__((__warn_unused_result__));
+gboolean m3d_barre(void *donnees_m3d, Beton_Barre *barre);
 void m3d_barre_free(void *donnees_m3d, Beton_Barre *barre);
 
 gboolean m3d_free(Projet *projet) __attribute__((__warn_unused_result__));

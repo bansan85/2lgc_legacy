@@ -315,14 +315,14 @@ G_MODULE_EXPORT void m3d_noeud_free(void *donnees_m3d, EF_Noeud *noeud)
 }
 
 
-G_MODULE_EXPORT void* m3d_barre(void *donnees_m3d, Beton_Barre *barre)
+G_MODULE_EXPORT gboolean m3d_barre(void *donnees_m3d, Beton_Barre *barre)
 /* Description : Crée une barre dans l'affichage graphique. Si la barre existe, elle est
  *               détruite au préalable.
  * Paramètres : void *donnees_m3d : données graphiques,
  *              Beton_Barre *barre : barre devant être représentée.
  * Valeur renvoyée :
- *   Succès : Pointeur vers le cube.
- *   Échec : NULL :
+ *   Succès : TRUE
+ *   Échec : FALSE :
  *             donnees_m3d == NULL,
  *             barre == NULL,
  *             si la longueur de la barre est nulle,
@@ -338,23 +338,24 @@ G_MODULE_EXPORT void* m3d_barre(void *donnees_m3d, Beton_Barre *barre)
     CM3dObject  *tout;
     double      longueur;
     
-    BUGMSG(donnees_m3d, NULL, gettext("Paramètre %s incorrect.\n"), "donnees_m3d");
-    BUGMSG(barre, NULL, gettext("Paramètre %s incorrect.\n"), "barre");
+    BUGMSG(donnees_m3d, FALSE, gettext("Paramètre %s incorrect.\n"), "donnees_m3d");
+    BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre");
     
     m3d = (Gtk_m3d *)donnees_m3d;
     vue = (SGlobalData*)m3d->data;
     
     // On supprime l'élément s'il existe déjà
-    BUGMSG(tmp = g_strdup_printf("barre %u", barre->numero), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(tmp = g_strdup_printf("barre %u", barre->numero), FALSE, gettext("Erreur d'allocation mémoire.\n"));
 
+    longueur = EF_noeuds_distance(barre->noeud_debut, barre->noeud_fin);
+    BUG(!isnan(longueur), FALSE);
+    
     objet = vue->scene->get_object_by_name(tmp);
     if (objet != NULL)
         vue->scene->remove_object(objet);
+    if (ERREUR_RELATIVE_EGALE(longueur, 0.))
+        return TRUE;
     
-    // On l'(ré)ajoute
-    longueur = EF_noeuds_distance(barre->noeud_debut, barre->noeud_fin);
-    BUG(!isnan(longueur), NULL);
-            
     switch (barre->section->type)
     {
         EF_Point *p_d, *p_f;
@@ -407,10 +408,10 @@ G_MODULE_EXPORT void* m3d_barre(void *donnees_m3d, Beton_Barre *barre)
 
             }
             tout->set_smooth(GOURAUD);
-            BUG(_1992_1_1_barres_angle_rotation(barre, &y, &z), NULL);
+            BUG(_1992_1_1_barres_angle_rotation(barre, &y, &z), FALSE);
             tout->rotations(0., -y/M_PI*180., z/M_PI*180.);
-            BUG(p_d = EF_noeuds_renvoie_position(barre->noeud_debut), NULL);
-            BUG(p_f = EF_noeuds_renvoie_position(barre->noeud_fin), NULL);
+            BUG(p_d = EF_noeuds_renvoie_position(barre->noeud_debut), FALSE);
+            BUG(p_f = EF_noeuds_renvoie_position(barre->noeud_fin), FALSE);
             tout->set_position((p_d->x+p_f->x)/2., (p_d->y+p_f->y)/2., (p_d->z+p_f->z)/2.);
             tout->set_ambient_reflexion(0.8);
             free(p_d);
@@ -498,10 +499,10 @@ G_MODULE_EXPORT void* m3d_barre(void *donnees_m3d, Beton_Barre *barre)
             }
             tout->set_ambient_reflexion(0.8);
             tout->set_smooth(GOURAUD);
-            BUG(_1992_1_1_barres_angle_rotation(barre, &y, &z), NULL);
+            BUG(_1992_1_1_barres_angle_rotation(barre, &y, &z), FALSE);
             tout->rotations(0., -y/M_PI*180., z/M_PI*180.);
-            BUG(p_d = EF_noeuds_renvoie_position(barre->noeud_debut), NULL);
-            BUG(p_f = EF_noeuds_renvoie_position(barre->noeud_fin), NULL);
+            BUG(p_d = EF_noeuds_renvoie_position(barre->noeud_debut), FALSE);
+            BUG(p_f = EF_noeuds_renvoie_position(barre->noeud_fin), FALSE);
             tout->set_position((p_d->x+p_f->x)/2., (p_d->y+p_f->y)/2., (p_d->z+p_f->z)/2.);
             free(p_d);
             free(p_f);
@@ -561,10 +562,10 @@ G_MODULE_EXPORT void* m3d_barre(void *donnees_m3d, Beton_Barre *barre)
             }
             tout->set_ambient_reflexion(0.8);
             tout->set_smooth(GOURAUD);
-            BUG(_1992_1_1_barres_angle_rotation(barre, &y, &z), NULL);
+            BUG(_1992_1_1_barres_angle_rotation(barre, &y, &z), FALSE);
             tout->rotations(0., -y/M_PI*180., z/M_PI*180.);
-            BUG(p_d = EF_noeuds_renvoie_position(barre->noeud_debut), NULL);
-            BUG(p_f = EF_noeuds_renvoie_position(barre->noeud_fin), NULL);
+            BUG(p_d = EF_noeuds_renvoie_position(barre->noeud_debut), FALSE);
+            BUG(p_f = EF_noeuds_renvoie_position(barre->noeud_fin), FALSE);
             tout->set_position((p_d->x+p_f->x)/2., (p_d->y+p_f->y)/2., (p_d->z+p_f->z)/2.);
             free(p_d);
             free(p_f);
@@ -603,10 +604,10 @@ G_MODULE_EXPORT void* m3d_barre(void *donnees_m3d, Beton_Barre *barre)
             }
             tout->set_ambient_reflexion(0.8);
             tout->set_smooth(GOURAUD);
-            BUG(_1992_1_1_barres_angle_rotation(barre, &y, &z), NULL);
+            BUG(_1992_1_1_barres_angle_rotation(barre, &y, &z), FALSE);
             tout->rotations(0., -y/M_PI*180., z/M_PI*180.);
-            BUG(p_d = EF_noeuds_renvoie_position(barre->noeud_debut), NULL);
-            BUG(p_f = EF_noeuds_renvoie_position(barre->noeud_fin), NULL);
+            BUG(p_d = EF_noeuds_renvoie_position(barre->noeud_debut), FALSE);
+            BUG(p_f = EF_noeuds_renvoie_position(barre->noeud_fin), FALSE);
             tout->set_position((p_d->x+p_f->x)/2., (p_d->y+p_f->y)/2., (p_d->z+p_f->z)/2.);
             free(p_d);
             free(p_f);
@@ -618,14 +619,14 @@ G_MODULE_EXPORT void* m3d_barre(void *donnees_m3d, Beton_Barre *barre)
         }
         default :
         {
-            BUGMSG(0, NULL, gettext("Type de section %d inconnu.\n"), barre->section->type);
+            BUGMSG(0, FALSE, gettext("Type de section %d inconnu.\n"), barre->section->type);
             break;
         }
     }
     
     free(tmp);
     
-    return tout;
+    return TRUE;
 }
 
 
