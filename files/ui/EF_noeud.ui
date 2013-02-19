@@ -149,6 +149,7 @@
                                                     <object class="GtkCellRendererText" id="EF_noeuds_treeview_noeuds_libres_cell4">
                                                         <property name="editable">True</property>
                                                         <property name="xalign">0.5</property>
+                                                        <signal name="edited" handler="EF_gtk_noeud_edit_noeud_relatif"/>
                                                     </object>
                                                     <attributes>
                                                         <attribute name="text">4</attribute>

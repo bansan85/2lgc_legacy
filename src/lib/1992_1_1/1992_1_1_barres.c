@@ -466,29 +466,6 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GLi
             
             list_parcours = g_list_next(list_parcours);
         }
-        
-        // Une fois que tous les noeuds ont été traités, on parcours tous les noeuds du modèle
-        // afin de trouver lesquels ont une position relative ayant une dépendance avec
-        // les noeuds dépendants.
-        if (noeuds_todo == NULL)
-        {
-            GList   *list_parcours2 = projet->modele.noeuds;
-            
-            while (list_parcours2 != NULL)
-            {
-                EF_Noeud    *noeud = list_parcours2->data;
-                
-                if ((noeud->type == NOEUD_LIBRE) && (g_list_find(noeuds_done, noeud) == NULL))
-                {
-                    EF_Noeud_Libre  *data = noeud->data;
-                    
-                    if ((data->relatif != NULL) && (g_list_find(noeuds_done, data->relatif) == NULL))
-                        noeuds_todo = g_list_append(noeuds_todo, noeud);
-                }
-                
-                list_parcours2 = g_list_next(list_parcours2);
-            }
-        }
     }
     
     // Ensuite, on parcours les charges pour déterminer si certaines sont utilisées par les

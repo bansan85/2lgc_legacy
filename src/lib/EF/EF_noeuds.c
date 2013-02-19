@@ -27,6 +27,7 @@
 #include "common_erreurs.h"
 #include "common_m3d.hpp"
 #include "EF_calculs.h"
+#include "1992_1_1_barres.h"
 #ifdef ENABLE_GTK
 #include "EF_gtk_appuis.h"
 #endif
@@ -572,6 +573,91 @@ G_MODULE_EXPORT gboolean EF_noeuds_change_appui(Projet *projet, EF_Noeud *noeud,
         }
     }
 #endif
+    
+    return TRUE;
+}
+
+
+gboolean EF_noeuds_change_noeud_relatif(Projet *projet, EF_Noeud *noeud, EF_Noeud *relatif)
+/* Description : Change le noeud relatif d'un noeud.
+ * Paramètres : Projet *projet : la variable projet,
+ *            : EF_Noeud *noeud : noeud à modifier,
+ *            : EF_Noeud *relatif : le nouveau noeud relatif, NULL si aucun.
+ * Valeur renvoyée :
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL,
+ *             noeud == NULL,
+ *             noeud->type != NOEUD_LIBRE.
+ */
+{
+    EF_Noeud_Libre  *point;
+    GList           *liste_noeuds = NULL, *noeuds_dep = NULL;
+    
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(noeud, FALSE, gettext("Paramètre %s incorrect.\n"), "noeud");
+    BUGMSG(noeud->type == NOEUD_LIBRE, FALSE, gettext("Le type du noeud est incorrect.\n"));
+    
+    point = noeud->data;
+    
+    if (point->relatif == relatif)
+        return TRUE;
+    
+    if (relatif != NULL)
+    {
+        liste_noeuds = g_list_append(NULL, relatif);
+        BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, liste_noeuds, NULL, NULL, NULL, NULL, &noeuds_dep, NULL, NULL, FALSE, TRUE), FALSE);
+        
+        if (g_list_find(noeuds_dep, noeud) != NULL)
+        {
+            g_list_free(noeuds_dep);
+            g_list_free(liste_noeuds);
+            BUGMSG(NULL, FALSE, gettext("Le noeud %d est déjà dépendant du noeud %d.\n"), relatif->numero, noeud->numero);
+        }
+        
+        g_list_free(noeuds_dep);
+        g_list_free(liste_noeuds);
+        
+        liste_noeuds = g_list_append(NULL, noeud);
+        BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, liste_noeuds, NULL, NULL, NULL, NULL, &noeuds_dep, NULL, NULL, FALSE, TRUE), FALSE);
+        
+        if (g_list_find(noeuds_dep, relatif) != NULL)
+        {
+            g_list_free(noeuds_dep);
+            g_list_free(liste_noeuds);
+            BUGMSG(NULL, FALSE, gettext("Le noeud %d est déjà dépendant du noeud %d.\n"), noeud->numero, relatif->numero);
+        }
+        
+        g_list_free(noeuds_dep);
+        g_list_free(liste_noeuds);
+    }
+    
+    point->relatif = relatif;
+    
+    liste_noeuds = g_list_append(NULL, noeud);
+#ifdef ENABLE_GTK
+    BUG(m3d_actualise_graphique(projet, liste_noeuds, NULL), FALSE);
+    BUG(m3d_rafraichit(projet), FALSE);
+    
+    if (projet->list_gtk.ef_noeud.builder != NULL)
+    {
+        if (relatif == NULL)
+            gtk_tree_store_set(projet->list_gtk.ef_noeud.tree_store_libre, &noeud->Iter, 4, gettext("Aucun"), -1);
+        else
+        {
+            char    *tmp;
+            
+            BUGMSG(tmp = g_strdup_printf("%d", relatif->numero), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+            
+            gtk_tree_store_set(projet->list_gtk.ef_noeud.tree_store_libre, &noeud->Iter, 4, tmp, -1);
+            free(tmp);
+        }
+    }
+#endif
+    
+    g_list_free(liste_noeuds);
+    
+    BUG(EF_calculs_free(projet), FALSE);
     
     return TRUE;
 }

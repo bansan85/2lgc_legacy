@@ -496,6 +496,60 @@ G_MODULE_EXPORT void EF_gtk_noeud_edit_pos_relat(GtkCellRendererText *cell, gcha
 }
 
 
+G_MODULE_EXPORT void EF_gtk_noeud_edit_noeud_relatif(
+  GtkCellRendererText *cell __attribute__((unused)), gchar *path_string, gchar *new_text,
+  Projet *projet)
+/* Description : Changement du noeud relatif.
+ * Paramètres : GtkCellRendererText *cell : cellule en cours,
+ *            : gchar *path_string : path de la ligne en cours,
+ *            : gchar *new_text : numero du noeud,
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    Gtk_EF_Noeud    *gtk_noeud;
+    GtkTreeModel    *model;
+    GtkTreePath     *path;
+    GtkTreeIter     iter;
+    unsigned int    i;
+    char            *fake = (char*)malloc(sizeof(char)*(strlen(new_text)+1));
+    unsigned int    conversion;
+    EF_Noeud        *noeud;
+    
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet->list_gtk.ef_noeud.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Noeuds");
+    BUGMSG(projet->modele.noeuds, , gettext("Aucun noeud n'est existant.\n"));
+    BUGMSG(fake, , gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(new_text, , gettext("Paramètre %s incorrect.\n"), "new_text");
+    
+    gtk_noeud = &projet->list_gtk.ef_noeud;
+    model = GTK_TREE_MODEL(gtk_noeud->tree_store_libre);
+    path = gtk_tree_path_new_from_string(path_string);
+    
+    gtk_tree_model_get_iter(model, &iter, path);
+    gtk_tree_path_free(path);
+    gtk_tree_model_get(model, &iter, 0, &i, -1);
+    
+    BUG(noeud = EF_noeuds_cherche_numero(projet, i, TRUE), );
+    
+    // On vérifie si le texte contient bien un nombre flottant
+    if (strcmp(new_text, "") == 0)
+        BUG(EF_noeuds_change_noeud_relatif(projet, noeud, NULL), );
+    else if (sscanf(new_text, "%d%s", &conversion, fake) == 1)
+    {
+        EF_Noeud        *noeud2;
+        
+        BUG(noeud2 = EF_noeuds_cherche_numero(projet, conversion, TRUE), );
+        
+        BUG(EF_noeuds_change_noeud_relatif(projet, noeud, noeud2), );
+    }
+    
+    free(fake);
+     
+    return;
+}
+
+
 void EF_gtk_render_actualise_position(GtkTreeViewColumn *tree_column __attribute__((unused)),
   GtkCellRenderer *cell, GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data)
 /* Description : Personnalise l'affichage des nombres de type double dans un treeview.
