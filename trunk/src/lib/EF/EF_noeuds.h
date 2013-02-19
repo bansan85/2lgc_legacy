@@ -35,6 +35,7 @@ EF_Noeud* EF_noeuds_cherche_numero(Projet *projet, unsigned int numero, gboolean
 gboolean EF_noeuds_change_pos_abs(Projet *projet, EF_Noeud *noeud, double x, double y, double z) __attribute__((__warn_unused_result__));
 gboolean EF_noeuds_change_pos_relat(Projet *projet, EF_Noeud *noeud, double pos) __attribute__((__warn_unused_result__));
 gboolean EF_noeuds_change_appui(Projet *projet, EF_Noeud *noeud, EF_Appui *appui) __attribute__((__warn_unused_result__));
+gboolean EF_noeuds_change_noeud_relatif(Projet *projet, EF_Noeud *noeud, EF_Noeud *relatif) __attribute__((__warn_unused_result__));
 
 double EF_noeuds_distance(EF_Noeud* n1, EF_Noeud* n2) __attribute__((__warn_unused_result__));
 double EF_noeuds_distance_x_y_z(EF_Noeud* n1, EF_Noeud* n2, double *x, double *y, double *z) __attribute__((__warn_unused_result__));
