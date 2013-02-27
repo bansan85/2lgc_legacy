@@ -551,9 +551,9 @@ G_MODULE_EXPORT gboolean EF_noeuds_change_appui(Projet *projet, EF_Noeud *noeud,
         }
         
         if (appui == NULL)
-            gtk_tree_store_set(GTK_TREE_STORE(model), &noeud->Iter, 4, gettext("Aucun"), -1);
+            gtk_tree_store_set(GTK_TREE_STORE(model), &noeud->Iter, 5, gettext("Aucun"), -1);
         else
-            gtk_tree_store_set(GTK_TREE_STORE(model), &noeud->Iter, 4, appui->nom, -1);
+            gtk_tree_store_set(GTK_TREE_STORE(model), &noeud->Iter, 5, appui->nom, -1);
     }
     if (projet->list_gtk.ef_appuis.builder != NULL)
     {
