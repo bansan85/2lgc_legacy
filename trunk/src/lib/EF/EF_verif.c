@@ -443,7 +443,7 @@ gboolean EF_verif_EF(Projet *projet, GList **rapport, int *erreur)
     ligne->commentaire = NULL;
     // Détection des barres de longueur nulle.
     list_parcours = projet->modele.barres;
-    while (g_list_next(list_parcours) != NULL)
+    while (list_parcours != NULL)
     {
         Beton_Barre *barre = list_parcours->data;
         
