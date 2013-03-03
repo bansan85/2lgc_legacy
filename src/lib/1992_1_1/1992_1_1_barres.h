@@ -29,7 +29,7 @@ gboolean _1992_1_1_barres_ajout(Projet *projet, Type_Element type, EF_Section *s
 
 Beton_Barre* _1992_1_1_barres_cherche_numero(Projet *projet, unsigned int numero, gboolean critique) __attribute__((__warn_unused_result__));
 gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GList* noeuds, GList* sections, GList* materiaux, GList *relachements, GList* barres, GList** noeuds_dep, GList** barres_dep, GList **charges_dep, gboolean numero, gboolean origine) __attribute__((__warn_unused_result__));
-gboolean _1992_1_1_barres_angle_rotation(Beton_Barre *barre, double *y, double *z) __attribute__((__warn_unused_result__));
+gboolean _1992_1_1_barres_angle_rotation(EF_Noeud *debut, EF_Noeud *fin, double *y, double *z) __attribute__((__warn_unused_result__));
 
 gboolean _1992_1_1_barres_change_type(Beton_Barre *barre, Type_Element type, Projet *projet) __attribute__((__warn_unused_result__));
 gboolean _1992_1_1_barres_change_section(Beton_Barre *barre, EF_Section *section, Projet *projet) __attribute__((__warn_unused_result__));

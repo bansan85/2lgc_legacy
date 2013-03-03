@@ -582,8 +582,8 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GLi
 }
 
 
-G_MODULE_EXPORT gboolean _1992_1_1_barres_angle_rotation(Beton_Barre *barre, double *y,
-  double *z)
+G_MODULE_EXPORT gboolean _1992_1_1_barres_angle_rotation(EF_Noeud *debut, EF_Noeud *fin,
+  double *y, double *z)
 /* Description : Calcule les deux angles de rotation pour faire tourner une barre horizontale
  *               en une barre parallèle à celle fournie dans l'argument 1.
  * Paramètres : Beton_Barre *barre : barre dont on souhaite connaitre les angles de rotation,
@@ -599,14 +599,15 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_angle_rotation(Beton_Barre *barre, dou
 {
     double      xx, yy, zz, ll;
     
-    BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre");
+    BUGMSG(debut, FALSE, gettext("Paramètre %s incorrect.\n"), "debut");
+    BUGMSG(fin, FALSE, gettext("Paramètre %s incorrect.\n"), "fin");
     BUGMSG(y, FALSE, gettext("Paramètre %s incorrect.\n"), "y");
     BUGMSG(z, FALSE, gettext("Paramètre %s incorrect.\n"), "z");
     
-    ll = EF_noeuds_distance_x_y_z(barre->noeud_debut, barre->noeud_fin, &xx, &yy, &zz);
+    ll = EF_noeuds_distance_x_y_z(debut, fin, &xx, &yy, &zz);
     
     BUG(!isnan(ll), FALSE);
-    BUGMSG(!ERREUR_RELATIVE_EGALE(0.0, ll), FALSE, gettext("La longueur de la barre %u est nulle\n"), barre->numero);
+    BUGMSG(!ERREUR_RELATIVE_EGALE(0.0, ll), FALSE, gettext("La distance entre les noeuds %d et %d est nulle\n"), debut->numero, fin->numero);
     
     // Détermination de l'angle de rotation autour de l'axe Y.
     *y = asin(zz/ll);
@@ -941,7 +942,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_B
     ai = (int*)triplet->i;
     aj = (int*)triplet->j;
     ax = (double*)triplet->x;
-    BUG(_1992_1_1_barres_angle_rotation(element, &y, &z), FALSE);
+    BUG(_1992_1_1_barres_angle_rotation(element->noeud_debut, element->noeud_fin, &y, &z), FALSE);
     for (k=0;k<4;k++)
     {
         ai[k*8+0] = k*3+0; aj[k*8+0] = k*3+0; ax[k*8+0] = cos(z)*cos(y);
