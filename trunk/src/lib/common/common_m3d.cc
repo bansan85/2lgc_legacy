@@ -133,8 +133,6 @@ gboolean m3d_key_press(GtkWidget *widget __attribute__((unused)), GdkEventKey *e
         {
             case GDK_KEY_KP_Add :
             case GDK_KEY_plus :
-            case GDK_KEY_z :
-            case GDK_KEY_Z :
             {
                 vect = vue->camera->get_position();
                 vect->get_coordinates(&x1, &y1, &z1);
@@ -152,12 +150,98 @@ gboolean m3d_key_press(GtkWidget *widget __attribute__((unused)), GdkEventKey *e
             }
             case GDK_KEY_KP_Subtract :
             case GDK_KEY_minus :
+            {
+                vect = vue->camera->get_position();
+                vect->get_coordinates(&x1, &y1, &z1);
+                vect = vue->camera->get_target_vector();
+                vect->get_coordinates(&x2, &y2, &z2);
+                
+                vue->camera->set_position(x1-x2, y1-y2, z1-z2);
+                vect = vue->camera->get_target();
+                vect->get_coordinates(&x1, &y1, &z1);
+                vue->camera->set_target(x1-x2, y1-y2, z1-z2);
+                
+                BUG(m3d_rafraichit(projet), FALSE);
+                
+                break;
+            }
+            case GDK_KEY_KP_Right :
+            case GDK_KEY_Right :
+            case GDK_KEY_d :
+            case GDK_KEY_D :
+            {
+                vect = vue->camera->get_position();
+                vect->get_coordinates(&x1, &y1, &z1);
+                vect = vue->camera->get_target_vector();
+                // Rotation à 90° pour avoir le vecteur de translation
+                vect->z_rotate(vect, vue->camera->get_cosz(), vue->camera->get_sinz());
+                vect->z_rotate(vect, 0, 1);
+                vect->get_coordinates(&x2, &y2, &z2);
+                
+                vue->camera->set_position(x1-x2, y1-y2, z1-z2);
+                vect = vue->camera->get_target();
+                vect->get_coordinates(&x1, &y1, &z1);
+                vue->camera->set_target(x1-x2, y1-y2, z1-z2);
+                
+                BUG(m3d_rafraichit(projet), FALSE);
+                
+                break;
+            }
+            case GDK_KEY_KP_Left :
+            case GDK_KEY_Left :
+            case GDK_KEY_q :
+            case GDK_KEY_Q :
+            {
+                vect = vue->camera->get_position();
+                vect->get_coordinates(&x1, &y1, &z1);
+                vect = vue->camera->get_target_vector();
+                // Rotation à 90° pour avoir le vecteur de translation
+                vect->z_rotate(vect, vue->camera->get_cosz(), vue->camera->get_sinz());
+                vect->z_rotate(vect, 0, 1);
+                vect->get_coordinates(&x2, &y2, &z2);
+                
+                vue->camera->set_position(x1+x2, y1+y2, z1+z2);
+                vect = vue->camera->get_target();
+                vect->get_coordinates(&x1, &y1, &z1);
+                vue->camera->set_target(x1+x2, y1+y2, z1+z2);
+                
+                BUG(m3d_rafraichit(projet), FALSE);
+                
+                break;
+            }
+            case GDK_KEY_KP_Up :
+            case GDK_KEY_Up :
+            case GDK_KEY_z :
+            case GDK_KEY_Z :
+            {
+                vect = vue->camera->get_position();
+                vect->get_coordinates(&x1, &y1, &z1);
+                vect = vue->camera->get_target_vector();
+                // Rotation à 90° pour avoir le vecteur de translation
+                vect->z_rotate(vect, vue->camera->get_cosz(), vue->camera->get_sinz());
+                vect->x_rotate(vect, 0, 1);
+                vect->get_coordinates(&x2, &y2, &z2);
+                
+                vue->camera->set_position(x1+x2, y1+y2, z1+z2);
+                vect = vue->camera->get_target();
+                vect->get_coordinates(&x1, &y1, &z1);
+                vue->camera->set_target(x1+x2, y1+y2, z1+z2);
+                
+                BUG(m3d_rafraichit(projet), FALSE);
+                
+                break;
+            }
+            case GDK_KEY_KP_Down :
+            case GDK_KEY_Down :
             case GDK_KEY_s :
             case GDK_KEY_S :
             {
                 vect = vue->camera->get_position();
                 vect->get_coordinates(&x1, &y1, &z1);
                 vect = vue->camera->get_target_vector();
+                // Rotation à 90° pour avoir le vecteur de translation
+                vect->z_rotate(vect, vue->camera->get_cosz(), vue->camera->get_sinz());
+                vect->x_rotate(vect, 0, 1);
                 vect->get_coordinates(&x2, &y2, &z2);
                 
                 vue->camera->set_position(x1-x2, y1-y2, z1-z2);
@@ -230,7 +314,10 @@ G_MODULE_EXPORT gboolean m3d_camera_axe_x_z(Projet *projet)
     vue = (SGlobalData*)m3d->data;
     
     if (vue->camera == NULL)
+    {
         vue->camera = new CM3dCamera (x, y*1.1, z, x, 0., z, 90, (int)(x_max-x_min), (int)(z_max-z_min));
+        vue->camera->rotation_on_axe_of_view(0);
+    }
     else
     {
         vue->camera->set_position(x, y, z);
