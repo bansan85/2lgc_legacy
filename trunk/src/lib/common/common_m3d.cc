@@ -472,7 +472,7 @@ G_MODULE_EXPORT gboolean m3d_barre(void *donnees_m3d, Beton_Barre *barre)
 
             }
             tout->set_smooth(GOURAUD);
-            BUG(_1992_1_1_barres_angle_rotation(barre, &y, &z), FALSE);
+            BUG(_1992_1_1_barres_angle_rotation(barre->noeud_debut, barre->noeud_fin, &y, &z), FALSE);
             tout->rotations(0., -y/M_PI*180., z/M_PI*180.);
             BUG(p_d = EF_noeuds_renvoie_position(barre->noeud_debut), FALSE);
             BUG(p_f = EF_noeuds_renvoie_position(barre->noeud_fin), FALSE);
@@ -563,7 +563,7 @@ G_MODULE_EXPORT gboolean m3d_barre(void *donnees_m3d, Beton_Barre *barre)
             }
             tout->set_ambient_reflexion(0.8);
             tout->set_smooth(GOURAUD);
-            BUG(_1992_1_1_barres_angle_rotation(barre, &y, &z), FALSE);
+            BUG(_1992_1_1_barres_angle_rotation(barre->noeud_debut, barre->noeud_fin, &y, &z), FALSE);
             tout->rotations(0., -y/M_PI*180., z/M_PI*180.);
             BUG(p_d = EF_noeuds_renvoie_position(barre->noeud_debut), FALSE);
             BUG(p_f = EF_noeuds_renvoie_position(barre->noeud_fin), FALSE);
@@ -626,7 +626,7 @@ G_MODULE_EXPORT gboolean m3d_barre(void *donnees_m3d, Beton_Barre *barre)
             }
             tout->set_ambient_reflexion(0.8);
             tout->set_smooth(GOURAUD);
-            BUG(_1992_1_1_barres_angle_rotation(barre, &y, &z), FALSE);
+            BUG(_1992_1_1_barres_angle_rotation(barre->noeud_debut, barre->noeud_fin, &y, &z), FALSE);
             tout->rotations(0., -y/M_PI*180., z/M_PI*180.);
             BUG(p_d = EF_noeuds_renvoie_position(barre->noeud_debut), FALSE);
             BUG(p_f = EF_noeuds_renvoie_position(barre->noeud_fin), FALSE);
@@ -668,7 +668,7 @@ G_MODULE_EXPORT gboolean m3d_barre(void *donnees_m3d, Beton_Barre *barre)
             }
             tout->set_ambient_reflexion(0.8);
             tout->set_smooth(GOURAUD);
-            BUG(_1992_1_1_barres_angle_rotation(barre, &y, &z), FALSE);
+            BUG(_1992_1_1_barres_angle_rotation(barre->noeud_debut, barre->noeud_fin, &y, &z), FALSE);
             tout->rotations(0., -y/M_PI*180., z/M_PI*180.);
             BUG(p_d = EF_noeuds_renvoie_position(barre->noeud_debut), FALSE);
             BUG(p_f = EF_noeuds_renvoie_position(barre->noeud_fin), FALSE);
