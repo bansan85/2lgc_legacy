@@ -172,6 +172,7 @@ G_MODULE_EXPORT gboolean projet_init_graphique(Projet *projet)
     gtk_grid_attach(GTK_GRID(comps->main_grid), m3d->drawing, 0, 1, 1, 1);
     gtk_widget_set_hexpand(m3d->drawing, TRUE);
     gtk_widget_set_vexpand(m3d->drawing, TRUE);
+    g_signal_connect(GTK_WINDOW(comps->window), "key-press-event", G_CALLBACK(m3d_key_press), projet);
     
     comps->menu = gtk_menu_bar_new();
     gtk_grid_attach(GTK_GRID(comps->main_grid), comps->menu, 0, 0, 1, 1);
