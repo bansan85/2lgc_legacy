@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2013-03-03 14:04+0100\n"
-"PO-Revision-Date: 2013-03-03 14:04+0100\n"
+"POT-Creation-Date: 2013-03-03 14:12+0100\n"
+"PO-Revision-Date: 2013-03-03 14:15+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -405,9 +405,11 @@ msgstr "Combinaisons"
 msgid "Enveloppe"
 msgstr "Enveloppe"
 
+#, c-format
 msgid "Paramètre %s incorrect.\n"
 msgstr "Paramètre %s incorrect.\n"
 
+#, c-format
 msgid "La fenêtre graphique %s n'est pas initialisée.\n"
 msgstr "La fenêtre graphique %s n'est pas initialisée.\n"
 
@@ -440,6 +442,7 @@ msgstr "Le matériau n'est pas spécifié.\n"
 msgid "La section n'est pas spécifiée.\n"
 msgstr "La section n'est pas spécifiée.\n"
 
+#, c-format
 msgid ""
 "Impossible de créer la barre, la distance entre les deux noeuds %d et %d est "
 "nulle.\n"
@@ -450,12 +453,15 @@ msgstr ""
 msgid "Aucun"
 msgstr "Aucun"
 
+#, c-format
 msgid "Barre en béton %u introuvable.\n"
 msgstr "Barre en béton %u introuvable.\n"
 
+#, c-format
 msgid "Type de charge %d inconnu."
 msgstr "Type de charge %d inconnu."
 
+#, c-format
 msgid "La distance entre les noeuds %d et %d est nulle\n"
 msgstr "La distance entre les noeuds %d et %d est nulle\n"
 
@@ -463,6 +469,7 @@ msgid "Impossible d'appliquer le même noeud aux deux extrémités d'une barre.\
 msgstr ""
 "Impossible d'appliquer le même noeud aux deux extrémités d'une barre.\n"
 
+#, c-format
 msgid ""
 "Impossible d'affecter le noeud %d à la barre %d car il est dépendant de la "
 "barre à modifier.\n"
@@ -470,6 +477,7 @@ msgstr ""
 "Impossible d'affecter le noeud %d à la barre %d car il est dépendant de la "
 "barre à modifier.\n"
 
+#, c-format
 msgid "Relachement %d inconnu."
 msgstr "Relachement %d inconnu."
 
@@ -480,165 +488,201 @@ msgstr ""
 "La résistance caractéristique à la compression du béton doit être inférieure "
 "ou égale à 90 MPa.\n"
 
+#, c-format
 msgid "Le matériau %s existe déjà.\n"
 msgstr "Le matériau %s existe déjà.\n"
 
+#, c-format
 msgid "Matériau en béton '%s' introuvable.\n"
 msgstr "Matériau en béton '%s' introuvable.\n"
 
+#, c-format
 msgid ""
 "Impossible de supprimer le matériau car il est utilisé par la barre %s.\n"
 msgstr ""
 "Impossible de supprimer le matériau car il est utilisé par la barre %s.\n"
 
+#, c-format
 msgid ""
 "Impossible de supprimer le matériau car il est utilisé par les barres %s.\n"
 msgstr ""
 "Impossible de supprimer le matériau car il est utilisé par les barres %s.\n"
 
+#, c-format
 msgid "Le type %d de la liste est inconnu.\n"
 msgstr "Le type %d de la liste est inconnu.\n"
 
+#, c-format
 msgid "15. Disclaimer of Warranty.\n"
 msgstr ""
 "15. Déclaration d’absence de garantie. (seule la version anglaise fait foi)\n"
 
+#, c-format
 msgid "\n"
 msgstr "\n"
 
+#, c-format
 msgid "THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY\n"
 msgstr ""
 "IL N’Y A AUCUNE GARANTIE POUR LE PROGRAMME, DANS LES LIMITES PERMISES\n"
 
+#, c-format
 msgid ""
 "APPLICABLE LAW.  EXCEPT WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT\n"
 msgstr ""
 "PAR LA LOI APPLICABLE. À MOINS QUE CELA NE SOIT ÉTABLI DIFFÉREMMENT PAR "
 "ÉCRIT,\n"
 
+#, c-format
 msgid ""
 "HOLDERS AND/OR OTHER PARTIES PROVIDE THE PROGRAM \"AS IS\" WITHOUT WARRANTY\n"
 msgstr ""
 "LES PROPRIÉTAIRES DE DROITS ET/OU LES AUTRES PARTIES FOURNISSENT LE "
 "PROGRAMME \" EN L’ÉTAT \" SANS GARANTIE\n"
 
+#, c-format
 msgid ""
 "OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO,\n"
 msgstr ""
 "D’AUCUNE SORTE, QU’ELLE SOIT EXPRIMÉE OU IMPLICITE, CECI COMPRENANT, SANS SE "
 "LIMITER À CELLES-CI,\n"
 
+#, c-format
 msgid ""
 "THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR\n"
 msgstr ""
 "LES GARANTIES IMPLICITES DE COMMERCIALISABILITÉ ET D’ADÉQUATION À UN "
 "OBJECTIF\n"
 
+#, c-format
 msgid ""
 "PURPOSE.  THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM\n"
 msgstr ""
 "PARTICULIER. VOUS ASSUMEZ LE RISQUE ENTIER CONCERNANT LA QUALITÉ ET LES "
 "PERFORMANCES\n"
 
+#, c-format
 msgid ""
 "IS WITH YOU.  SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF\n"
 msgstr ""
 "DU PROGRAMME. DANS L’ÉVENTUALITÉ OÙ LE PROGRAMME S’AVÉRERAIT DÉFECTUEUX, "
 "VOUS ASSUMEZ LES COÛTS DE\n"
 
+#, c-format
 msgid "ALL NECESSARY SERVICING, REPAIR OR CORRECTION.\n"
 msgstr "TOUS LES SERVICES, RÉPARATIONS OU CORRECTIONS NÉCESSAIRES.\n"
 
+#, c-format
 msgid "16. Limitation of Liability.\n"
 msgstr "16. Limitation de responsabilité.\n"
 
+#, c-format
 msgid "IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING\n"
 msgstr ""
 "EN AUCUNE AUTRE CIRCONSTANCE QUE CELLES REQUISES PAR LA LOI APPLICABLE OU "
 "ACCORDÉES PAR ÉCRIT,\n"
 
+#, c-format
 msgid ""
 "WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MODIFIES AND/OR CONVEYS\n"
 msgstr ""
 "UN TITULAIRE DE DROITS SUR LE PROGRAMME, OU TOUT AUTRE PARTIE QUI MODIFIE OU "
 "ACHEMINE\n"
 
+#, c-format
 msgid ""
 "THE PROGRAM AS PERMITTED ABOVE, BE LIABLE TO YOU FOR DAMAGES, INCLUDING ANY\n"
 msgstr ""
 "LE PROGRAMME COMME PERMIS CI-DESSUS, NE PEUT ÊTRE TENU POUR RESPONSABLE "
 "ENVERS VOUS POUR LES DOMMAGES,\n"
 
+#, c-format
 msgid ""
 "GENERAL, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THE\n"
 msgstr ""
 "INCLUANT TOUT DOMMAGE GÉNÉRAL, SPÉCIAL, ACCIDENTEL OU INDUIT SURVENANT PAR "
 "SUITE DE\n"
 
+#, c-format
 msgid ""
 "USE OR INABILITY TO USE THE PROGRAM (INCLUDING BUT NOT LIMITED TO LOSS OF\n"
 msgstr ""
 "L’UTILISATION OU DE L’INCAPACITÉ D’UTILISER LE PROGRAMME (Y COMPRIS, SANS SE "
 "LIMITER À CELLES-CI, LA PERTE\n"
 
+#, c-format
 msgid ""
 "DATA OR DATA BEING RENDERED INACCURATE OR LOSSES SUSTAINED BY YOU OR THIRD\n"
 msgstr ""
 "DE DONNÉES OU L’INEXACTITUDE DES DONNÉES RETOURNÉES OU LES PERTES SUBIES PAR "
 "VOUS OU DES PARTIES\n"
 
+#, c-format
 msgid ""
 "PARTIES OR A FAILURE OF THE PROGRAM TO OPERATE WITH ANY OTHER PROGRAMS),\n"
 msgstr ""
 "TIERCES OU L’INCAPACITÉ DU PROGRAMME À FONCTIONNER AVEC TOUT AUTRE "
 "PROGRAMME),\n"
 
+#, c-format
 msgid ""
 "EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF\n"
 msgstr ""
 "MÊME SI UN TEL TITULAIRE OU TOUTE AUTRE PARTIE A ÉTÉ AVISÉ DE LA "
 "POSSIBILITÉ.\n"
 
+#, c-format
 msgid "SUCH DAMAGES.\n"
 msgstr "DE TELS DOMMAGES\n"
 
+#, c-format
 msgid "17. Interpretation of Sections 15 and 16.\n"
 msgstr "17. Interprétation des sections 15 et 16.\n"
 
+#, c-format
 msgid "If the disclaimer of warranty and limitation of liability provided\n"
 msgstr ""
 "Si la déclaration d’absence de garantie et la limitation de responsabilité "
 "fournies\n"
 
+#, c-format
 msgid "above cannot be given local legal effect according to their terms,\n"
 msgstr "ci-dessus ne peuvent prendre effet localement selon leurs termes,\n"
 
+#, c-format
 msgid "reviewing courts shall apply local law that most closely approximates\n"
 msgstr ""
 "les cours de justice qui les examinent doivent appliquer la législation "
 "locale qui approche au\n"
 
+#, c-format
 msgid "an absolute waiver of all civil liability in connection with the\n"
 msgstr ""
 "plus près possible une levée absolue de toute responsabilité civile liée au\n"
 
+#, c-format
 msgid "Program, unless a warranty or assumption of liability accompanies a\n"
 msgstr ""
 "Programme, à moins qu’une garantie ou assumation de responsabilité "
 "accompagne\n"
 
+#, c-format
 msgid "copy of the Program in return for a fee.\n"
 msgstr "une copie du Programme en échange d’un paiement.\n"
 
+#, c-format
 msgid "Utilisation : codegui [OPTION]... [FILE]...\n"
 msgstr "Utilisation : codegui [OPTION]... [FILE]...\n"
 
+#, c-format
 msgid "Options :\n"
 msgstr "Options :\n"
 
+#, c-format
 msgid "\t-h, --help : affiche le présent menu\n"
 msgstr "\t-h, --help : affiche le présent menu\n"
 
+#, c-format
 msgid "\t-w, --warranty : affiche les limites de garantie du logiciel\n"
 msgstr "\t-w, --warranty : affiche les limites de garantie du logiciel\n"
 
@@ -660,15 +704,19 @@ msgstr "charge"
 msgid "charges"
 msgstr "charges"
 
+#, c-format
 msgid "et ces dépendances (%s)"
 msgstr "et ces dépendances (%s)"
 
+#, c-format
 msgid "fichier %s, fonction %s, ligne %d, test : %s\n"
 msgstr "fichier %s, fonction %s, ligne %d, test : %s\n"
 
+#, c-format
 msgid "fichier %s, fonction %s, ligne %d, test : %s, texte : "
 msgstr "fichier %s, fonction %s, ligne %d, test : %s, texte : "
 
+#, c-format
 msgid "Type de section %d inconnu.\n"
 msgstr "Type de section %d inconnu.\n"
 
@@ -720,6 +768,7 @@ msgstr "Impossible de scinder une fonction vide\n"
 msgid "Borne incorrecte.\n"
 msgstr "Borne incorrecte.\n"
 
+#, c-format
 msgid "Fonction indéfinie.\n"
 msgstr "Fonction indéfinie.\n"
 
@@ -729,27 +778,34 @@ msgstr "La largeur du dessin ne peut être nulle.\n"
 msgid "La hauteur du dessin ne peut être nulle.\n"
 msgstr "La hauteur du dessin ne peut être nulle.\n"
 
+#, c-format
 msgid "%sde %.*lfm à %.*lfm : "
 msgstr "%sde %.*lfm à %.*lfm : "
 
 msgid "Zéro impossible à trouver.\n"
 msgstr "Zéro impossible à trouver.\n"
 
+#, c-format
 msgid "Le fichier '%s' est introuvable ou corrompu.\n"
 msgstr "Le fichier '%s' est introuvable ou corrompu.\n"
 
+#, c-format
 msgid "Le fichier '%s' est vide.\n"
 msgstr "Le fichier '%s' est vide.\n"
 
+#, c-format
 msgid "Impossible d'ouvrir l'image %s : %s.\n"
 msgstr "Impossible d'ouvrir l'image %s : %s.\n"
 
+#, c-format
 msgid "'%s' n'est pas de la forme 'largeurxhauteur'.\n"
 msgstr "'%s' n'est pas de la forme 'largeurxhauteur'.\n"
 
+#, c-format
 msgid "Le fichier '%s' est corrompu.\n"
 msgstr "Le fichier '%s' est corrompu.\n"
 
+#, c-format
 msgid "Type d'action '%s' inconnu.\n"
 msgstr "Type d'action '%s' inconnu.\n"
 
@@ -759,15 +815,19 @@ msgstr "Sans nom"
 msgid "Impossible de trouver le type d'action correspondant à cette action.\n"
 msgstr "Impossible de trouver le type d'action correspondant à cette action.\n"
 
+#, c-format
 msgid "La génération de la fenêtre %s a échouée.\n"
 msgstr "La génération de la fenêtre %s a échouée.\n"
 
+#, c-format
 msgid "Type d'action %u inconnu.\n"
 msgstr "Type d'action %u inconnu.\n"
 
+#, c-format
 msgid "Pays %d inconnu.\n"
 msgstr "Pays %d inconnu.\n"
 
+#, c-format
 msgid "Catégorie de durée %u inconnue.\n"
 msgstr "Catégorie de durée %u inconnue.\n"
 
@@ -792,15 +852,19 @@ msgid ""
 msgstr ""
 "Structures monumentales de bâtiments, pont et autres ouvrages de génie civil"
 
+#, c-format
 msgid "Catégorie de durée %d inconnue.\n"
 msgstr "Catégorie de durée %d inconnue.\n"
 
+#, c-format
 msgid "Élément %u du groupe %u introuvable.\n"
 msgstr "Élément %u du groupe %u introuvable.\n"
 
+#, c-format
 msgid "Groupe %u du niveau %u introuvable.\n"
 msgstr "Groupe %u du niveau %u introuvable.\n"
 
+#, c-format
 msgid "Niveau de groupes %u introuvable.\n"
 msgstr "Niveau de groupes %u introuvable.\n"
 
@@ -811,30 +875,38 @@ msgstr ""
 "Le projet ne possède pas de niveaux de groupes permettant de regrouper "
 "plusieurs groupes d'actions.\n"
 
+#, c-format
 msgid "Le numéro %u est déjà présent dans le groupe %u du niveau %u.\n"
 msgstr "Le numéro %u est déjà présent dans le groupe %u du niveau %u.\n"
 
+#, c-format
 msgid "Le type de combinaison %d est inconnu.\n"
 msgstr "Le type de combinaison %d est inconnu.\n"
 
 msgid "Erreur lors de l'actualisation de la fenêtre graphique.\n"
 msgstr "Erreur lors de l'actualisation de la fenêtre graphique.\n"
 
+#, c-format
 msgid "niveau : %d\n"
 msgstr "niveau : %d\n"
 
+#, c-format
 msgid "\tgroupe : %d, combinaison : "
 msgstr "\tgroupe : %d, combinaison : "
 
+#, c-format
 msgid "Combinaison %d inconnue"
 msgstr "Combinaison %d inconnue"
 
+#, c-format
 msgid "\t\tActions contenus dans ce groupe : "
 msgstr "\t\tActions contenus dans ce groupe : "
 
+#, c-format
 msgid "\t\tGroupes du niveau %d contenus dans ce groupe : "
 msgstr "\t\tGroupes du niveau %d contenus dans ce groupe : "
 
+#, c-format
 msgid "\t\tCombinaisons :\n"
 msgstr "\t\tCombinaisons :\n"
 
@@ -945,27 +1017,34 @@ msgstr "Charge ponctuelle sur barre"
 msgid "Charge répartie uniforme sur barre"
 msgstr "Charge répartie uniforme sur barre"
 
+#, c-format
 msgid "Action %u introuvable.\n"
 msgstr "Action %u introuvable.\n"
 
+#, c-format
 msgid "Le numéro %u du coefficient spi à changer est incorrect.\n"
 msgstr "Le numéro %u du coefficient spi à changer est incorrect.\n"
 
+#, c-format
 msgid "Le coefficient phi %d n'existe pas.\n"
 msgstr "Le coefficient phi %d n'existe pas.\n"
 
+#, c-format
 msgid "Aucune action existante.\n"
 msgstr "Aucune action existante.\n"
 
+#, c-format
 msgid "Action n° %u, description '%s', type n°%d\n"
 msgstr "Action n° %u, description '%s', type n°%d\n"
 
+#, c-format
 msgid "Aucune barre existante.\n"
 msgstr "Aucune barre existante.\n"
 
 msgid "Le projet ne possède pas de niveaux de groupes.\n"
 msgstr "Le projet ne possède pas de niveaux de groupes.\n"
 
+#, c-format
 msgid "Le niveau %u est vide. Veuillez soit le remplir, soit le supprimer.\n"
 msgstr "Le niveau %u est vide. Veuillez soit le remplir, soit le supprimer.\n"
 
@@ -976,11 +1055,13 @@ msgstr ""
 "Seuls les groupes possédant un type de combinaison XOR peuvent appeler "
 "_1990_combinaisons_genere_xor.\n"
 
+#, c-format
 msgid ""
 "Impossible de trouver le niveau %u dans la liste des niveaux de groupes.\n"
 msgstr ""
 "Impossible de trouver le niveau %u dans la liste des niveaux de groupes.\n"
 
+#, c-format
 msgid "Impossible de trouver le niveau précédent le niveau %u.\n"
 msgstr "Impossible de trouver le niveau précédent le niveau %u.\n"
 
@@ -1025,12 +1106,15 @@ msgstr "ELS fréquent"
 msgid "ELS permanent"
 msgstr "ELS permanent"
 
+#, c-format
 msgid "Le groupe %s (%d) n'est combiné ni de type OR, XOR ou AND.\n"
 msgstr "Le groupe %s (%d) n'est combiné ni de type OR, XOR ou AND.\n"
 
+#, c-format
 msgid "Le niveau de groupes %d ne possède pas de groupe.\n"
 msgstr "Le niveau de groupes %d ne possède pas de groupe.\n"
 
+#, c-format
 msgid "Élément %d existant.\n"
 msgstr "Élément %d existant.\n"
 
@@ -1051,6 +1135,7 @@ msgstr ""
 "Le dernier niveau ne possède aucune combinaison permettant la génération des "
 "pondérations.\n"
 
+#, c-format
 msgid "Flag %d inconnu.\n"
 msgstr "Flag %d inconnu.\n"
 
@@ -1090,6 +1175,7 @@ msgstr "Aucune barre n'est existante."
 msgid "Structure en un seul bloc"
 msgstr "Structure en un seul bloc"
 
+#, c-format
 msgid "%s%sBloc %d :"
 msgstr "%s%sBloc %d :"
 
@@ -1121,9 +1207,11 @@ msgstr ""
 "Vérification des noeuds :\n"
 "\t- Noeuds ayant les mêmes coordonnées."
 
+#, c-format
 msgid "Les noeuds %d et %d ont les mêmes coordonnées."
 msgstr "Les noeuds %d et %d ont les mêmes coordonnées."
 
+#, c-format
 msgid ""
 "%s\n"
 "Les noeuds %d et %d ont les mêmes coordonnées."
@@ -1138,9 +1226,11 @@ msgstr ""
 "Vérification des barres :\n"
 "\t- Longueur nulle."
 
+#, c-format
 msgid "La longueur de la barre %d est nulle."
 msgstr "La longueur de la barre %d est nulle."
 
+#, c-format
 msgid ""
 "%s\n"
 "La longueur de la barre %d est nulle."
@@ -1148,9 +1238,11 @@ msgstr ""
 "%s\n"
 "La longueur de la barre %d est nulle."
 
+#, c-format
 msgid "Rapport vide.\n"
 msgstr "Rapport vide.\n"
 
+#, c-format
 msgid ""
 "Point : %s\n"
 "Commentaire : %s\n"
@@ -1256,21 +1348,26 @@ msgstr ""
 "Il n'est pas possible d'activer à la fois la projection et l'utilisation du "
 "repère local."
 
+#, c-format
 msgid "Type d'appui %s inconnu.\n"
 msgstr "Type d'appui %s inconnu.\n"
 
+#, c-format
 msgid "Le type d'appui de %s (%s) n'a pas à posséder de données.\n"
 msgstr "Le type d'appui de %s (%s) n'a pas à posséder de données.\n"
 
+#, c-format
 msgid "Le type d'appui de %s (%d) est inconnu.\n"
 msgstr "Le type d'appui de %s (%d) est inconnu.\n"
 
 msgid "Impossible d'utiliser comme nom 'Aucun'.\n"
 msgstr "Impossible d'utiliser comme nom 'Aucun'.\n"
 
+#, c-format
 msgid "L'appui '%s' existe déjà.\n"
 msgstr "L'appui '%s' existe déjà.\n"
 
+#, c-format
 msgid "Type d'appui %d inconnu.\n"
 msgstr "Type d'appui %d inconnu.\n"
 
@@ -1281,12 +1378,15 @@ msgstr ""
 "Afin de modifier un appui, le paramètre x doit être compris entre 0 et 5 "
 "inclu.\n"
 
+#, c-format
 msgid "Le type d'appui (%d) est inconnu.\n"
 msgstr "Le type d'appui (%d) est inconnu.\n"
 
+#, c-format
 msgid "Impossible de supprimer l'appui car il est utilisé par le noeud %s.\n"
 msgstr "Impossible de supprimer l'appui car il est utilisé par le noeud %s.\n"
 
+#, c-format
 msgid "Impossible de supprimer l'appui car il est utilisé par les noeuds %s.\n"
 msgstr ""
 "Impossible de supprimer l'appui car il est utilisé par les noeuds %s.\n"
@@ -1300,17 +1400,21 @@ msgstr "Modification d'une section circulaire"
 msgid "La section à modifier n'est pas circulaire.\n"
 msgstr "La section à modifier n'est pas circulaire.\n"
 
+#, c-format
 msgid "Relachement '%s' introuvable.\n"
 msgstr "Relachement '%s' introuvable.\n"
 
+#, c-format
 msgid "Le relâchement %s existe déjà.\n"
 msgstr "Le relâchement %s existe déjà.\n"
 
+#, c-format
 msgid ""
 "Impossible de supprimer la section car elle est utilisée par la barre %s.\n"
 msgstr ""
 "Impossible de supprimer la section car elle est utilisée par la barre %s.\n"
 
+#, c-format
 msgid ""
 "Impossible de supprimer la section car elle est utilisée par les barres %s.\n"
 msgstr ""
@@ -1321,24 +1425,30 @@ msgstr ""
 "Afin de modifier un appui, le paramètre x doit être compris entre 0 et 5 "
 "inclu.\n"
 
+#, c-format
 msgid "Le filtre %d est inconnu.\n"
 msgstr "Le filtre %d est inconnu.\n"
 
+#, c-format
 msgid "La colonne des résultats %d ne peut être appliquée aux noeuds."
 msgstr "La colonne des résultats %d ne peut être appliquée aux noeuds."
 
+#, c-format
 msgid "La colonne des résultats %d est inconnue.\n"
 msgstr "La colonne des résultats %d est inconnue.\n"
 
+#, c-format
 msgid "Le filtre %d ne peut être appliqué aux barres.\n"
 msgstr "Le filtre %d ne peut être appliqué aux barres.\n"
 
+#, c-format
 msgid "La colonne des résultats %d ne peut être appliquée aux barres."
 msgstr "La colonne des résultats %d ne peut être appliquée aux barres."
 
 msgid "Erreur"
 msgstr "Erreur"
 
+#, c-format
 msgid ""
 "Enveloppe supérieure :\n"
 "%s\n"
@@ -1362,6 +1472,7 @@ msgid "La première colonne est réservée à la liste des noeuds et des barres.
 msgstr ""
 "La première colonne est réservée à la liste des noeuds et des barres.\n"
 
+#, c-format
 msgid ""
 "La position en %s ne peut être affichée que si la première colonne affiche "
 "les numéros des noeuds.\n"
@@ -1378,6 +1489,7 @@ msgstr "y [m]"
 msgid "z [m]"
 msgstr "z [m]"
 
+#, c-format
 msgid ""
 "La réaction d'appui %s ne peut être affichée que si la première colonne "
 "affiche les numéros des noeuds.\n"
@@ -1403,6 +1515,7 @@ msgstr "M<sub>y</sub> [N.m]"
 msgid "M<sub>z</sub> [N.m]"
 msgstr "M<sub>z</sub> [N.m]"
 
+#, c-format
 msgid ""
 "Le déplacement des noeuds %s ne peut être affichée que si la première "
 "colonne affiche les numéros des noeuds.\n"
@@ -1560,6 +1673,7 @@ msgstr "Aucune barre n'est sélectionnée.\n"
 msgid "Impossible d'effectuer une projection dans un repère local.\n"
 msgstr "Impossible d'effectuer une projection dans un repère local.\n"
 
+#, c-format
 msgid ""
 "Le début de la position de la charge répartie uniformément (%f) est "
 "incorrect.\n"
@@ -1567,6 +1681,7 @@ msgstr ""
 "Le début de la position de la charge répartie uniformément (%f) est "
 "incorrect.\n"
 
+#, c-format
 msgid ""
 "La fin de la position de la charge répartie uniformément (%f) est "
 "incorrecte.\n"
@@ -1574,6 +1689,7 @@ msgstr ""
 "La fin de la position de la charge répartie uniformément (%f) est "
 "incorrecte.\n"
 
+#, c-format
 msgid ""
 "Le début de la charge répartie uniformément (%f) est incorrect. La longueur "
 "de la barre %d est de %f m.\n"
@@ -1581,6 +1697,7 @@ msgstr ""
 "Le début de la charge répartie uniformément (%f) est incorrect. La longueur "
 "de la barre %d est de %f m.\n"
 
+#, c-format
 msgid ""
 "La fin de la charge répartie uniformément (%f) est incorrecte. La longueur "
 "de la barre %d est de %f m.\n"
@@ -1588,6 +1705,7 @@ msgstr ""
 "La fin de la charge répartie uniformément (%f) est incorrecte. La longueur "
 "de la barre %d est de %f m.\n"
 
+#, c-format
 msgid ""
 "Le début (%f) et la fin (%f) de la charge répartie uniformément sont "
 "incompatible avec la longueur de la barre %d qui est de %f m.\n"
@@ -1607,18 +1725,22 @@ msgstr "Noeud 1 indéfini.\n"
 msgid "Noeud 2 indéfini.\n"
 msgstr "Noeud 2 indéfini.\n"
 
+#, c-format
 msgid "La discrétisation %d souhaitée est hors domaine %d.\n"
 msgstr "La discrétisation %d souhaitée est hors domaine %d.\n"
 
 msgid "Impossible de relâcher rx simultanément des deux cotés de la barre.\n"
 msgstr "Impossible de relâcher rx simultanément des deux cotés de la barre.\n"
 
+#, c-format
 msgid "Le début de la charge répartie uniformément (%f) est incorrect.\n"
 msgstr "Le début de la charge répartie uniformément (%f) est incorrect.\n"
 
+#, c-format
 msgid "La fin de la charge répartie uniformément (%f) est incorrecte.\n"
 msgstr "La fin de la charge répartie uniformément (%f) est incorrecte.\n"
 
+#, c-format
 msgid ""
 "Le début (%f) et la fin (%f) de la charge répartie uniformément sont "
 "incompatibles avec la longueur de la barre %d qui est de %f m.\n"
@@ -1626,6 +1748,7 @@ msgstr ""
 "Le début (%f) et la fin (%f) de la charge répartie uniformément sont "
 "incompatibles avec la longueur de la barre %d qui est de %f m.\n"
 
+#, c-format
 msgid ""
 "Le début (%f) et la fin (%f) de la charge répartie uniformément sont "
 "incorrecte avec la longueur de la barre %d qui est de %f m.\n"
@@ -1633,6 +1756,7 @@ msgstr ""
 "Le début (%f) et la fin (%f) de la charge répartie uniformément sont "
 "incorrecte avec la longueur de la barre %d qui est de %f m.\n"
 
+#, c-format
 msgid ""
 "Le début de la charge répartie uniformément (%f) est incorrect. La longueur "
 "de la barre est de %f m.\n"
@@ -1640,6 +1764,7 @@ msgstr ""
 "Le début de la charge répartie uniformément (%f) est incorrect. La longueur "
 "de la barre est de %f m.\n"
 
+#, c-format
 msgid ""
 "La fin de la charge répartie uniformément (%f) est incorrecte. La longueur "
 "de la barre est de %f m.\n"
@@ -1647,6 +1772,7 @@ msgstr ""
 "La fin de la charge répartie uniformément (%f) est incorrecte. La longueur "
 "de la barre est de %f m.\n"
 
+#, c-format
 msgid ""
 "Le début (%f) et la fin (%f) de la charge répartie uniformément sont "
 "incorrecte avec la longueur de la barre qui est de %f m.\n"
@@ -1654,21 +1780,26 @@ msgstr ""
 "Le début (%f) et la fin (%f) de la charge répartie uniformément sont "
 "incorrecte avec la longueur de la barre qui est de %f m.\n"
 
+#, c-format
 msgid "Le type de noeud %d est inconnu.\n"
 msgstr "Le type de noeud %d est inconnu.\n"
 
+#, c-format
 msgid "Noeud n°%u introuvable.\n"
 msgstr "Noeud n°%u introuvable.\n"
 
 msgid "Le type du noeud est incorrect.\n"
 msgstr "Le type du noeud est incorrect.\n"
 
+#, c-format
 msgid "Le noeud %d est déjà dépendant du noeud %d.\n"
 msgstr "Le noeud %d est déjà dépendant du noeud %d.\n"
 
+#, c-format
 msgid "La position de la charge ponctuelle (%f) est incorrecte.\n"
 msgstr "La position de la charge ponctuelle (%f) est incorrecte.\n"
 
+#, c-format
 msgid ""
 "La position de la charge ponctuelle (%f) est incorrecte. La longueur de la "
 "barre %d est de %f m.\n"
@@ -1676,6 +1807,7 @@ msgstr ""
 "La position de la charge ponctuelle (%f) est incorrecte. La longueur de la "
 "barre %d est de %f m.\n"
 
+#, c-format
 msgid ""
 "La position de la charge ponctuelle (%f) est incorrecte. La longueur de la "
 "barre est de %f m.\n"
@@ -1695,6 +1827,7 @@ msgstr "Ajout d'une charge au noeud"
 msgid "Modification d'une charge au noeud"
 msgstr "Modification d'une charge au noeud"
 
+#, c-format
 msgid "La section %s existe déjà.\n"
 msgstr "La section %s existe déjà.\n"
 
@@ -1710,6 +1843,7 @@ msgstr "La section doit être de type carrée.\n"
 msgid "La section doit être de type circulaire.\n"
 msgstr "La section doit être de type circulaire.\n"
 
+#, c-format
 msgid "Section en béton '%s' introuvable.\n"
 msgstr "Section en béton '%s' introuvable.\n"
 
@@ -1737,6 +1871,7 @@ msgstr "Coté"
 msgid "Diamètre"
 msgstr "Diamètre"
 
+#, c-format
 msgid "Charge %u de l'action %u introuvable.\n"
 msgstr "Charge %u de l'action %u introuvable.\n"
 
