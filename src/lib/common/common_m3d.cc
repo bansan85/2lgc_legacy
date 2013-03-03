@@ -118,6 +118,70 @@ G_MODULE_EXPORT gboolean m3d_draw(GtkWidget *drawing,
 }
 
 
+gboolean m3d_key_press(GtkWidget *widget __attribute__((unused)), GdkEventKey *event,
+  Projet *projet)
+{
+    SGlobalData *vue  = (SGlobalData*)projet->list_gtk.m3d.data;
+    
+    if (event->type == GDK_KEY_PRESS)
+    {
+        double  x1, y1, z1;
+        double  x2, y2, z2;
+        CM3dVertex  *vect;
+        
+        switch (event->keyval)
+        {
+            case GDK_KEY_KP_Add :
+            case GDK_KEY_plus :
+            case GDK_KEY_z :
+            case GDK_KEY_Z :
+            {
+                vect = vue->camera->get_position();
+                vect->get_coordinates(&x1, &y1, &z1);
+                vect = vue->camera->get_target_vector();
+                vect->get_coordinates(&x2, &y2, &z2);
+                
+                vue->camera->set_position(x1+x2, y1+y2, z1+z2);
+                vect = vue->camera->get_target();
+                vect->get_coordinates(&x1, &y1, &z1);
+                vue->camera->set_target(x1+x2, y1+y2, z1+z2);
+                
+                BUG(m3d_rafraichit(projet), FALSE);
+                
+                break;
+            }
+            case GDK_KEY_KP_Subtract :
+            case GDK_KEY_minus :
+            case GDK_KEY_s :
+            case GDK_KEY_S :
+            {
+                vect = vue->camera->get_position();
+                vect->get_coordinates(&x1, &y1, &z1);
+                vect = vue->camera->get_target_vector();
+                vect->get_coordinates(&x2, &y2, &z2);
+                
+                vue->camera->set_position(x1-x2, y1-y2, z1-z2);
+                vect = vue->camera->get_target();
+                vect->get_coordinates(&x1, &y1, &z1);
+                vue->camera->set_target(x1-x2, y1-y2, z1-z2);
+                
+                BUG(m3d_rafraichit(projet), FALSE);
+                
+                break;
+            }
+            default :
+            {
+                break;
+            }
+        }
+    }
+   
+    
+    return FALSE;
+}
+
+
+
 G_MODULE_EXPORT gboolean m3d_camera_axe_x_z(Projet *projet)
 /* Description : Positionne la caméra pour voir toute la structure dans le plan xz.
  * Paramètres : Projet *projet : la variable projet.
