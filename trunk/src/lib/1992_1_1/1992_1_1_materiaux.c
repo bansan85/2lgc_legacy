@@ -542,7 +542,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_materiaux_modif(Projet *projet, Beton_Materia
  * Paramètres : Projet *projet : la variable projet,
  *            : Beton_Materiau *materiau : le matériau à modifier,
  *            : Autres : caractéristiques du matériau. Pour ne pas modifier un paramètre,
- *                il suffit de luirde mettre NULL pour le nom et NAN pour les nombres.
+ *                il suffit de mettre NULL pour le nom et NAN pour les nombres.
  * Valeur renvoyée :
  *   Succès : TRUE
  *   Échec : FALSE :
@@ -643,6 +643,8 @@ G_MODULE_EXPORT gboolean _1992_1_1_materiaux_modif(Projet *projet, Beton_Materia
         
         if (liste_barres_dep != NULL)
             BUG(EF_calculs_free(projet), FALSE);
+        
+        g_list_free(liste_barres_dep);
     }
     
 #ifdef ENABLE_GTK
