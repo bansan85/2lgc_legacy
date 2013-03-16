@@ -6,6 +6,7 @@
         <child>
             <object class="GtkCheckMenuItem" id="_1992_1_1_materiaux_personnaliser_menu_fck_cube">
                 <property name="visible">True</property>
+                <signal name="toggled" handler="_1992_1_1_gtk_materiaux_toggled"/>
                 <child>
                     <object class="GtkLabel" id="_1992_1_1_materiaux_personnaliser_label_fck_cube">
                         <property name="label">f&lt;sub&gt;ck,cube&lt;/sub&gt;</property>
@@ -19,6 +20,7 @@
         <child>
             <object class="GtkCheckMenuItem" id="_1992_1_1_materiaux_personnaliser_menu_fcm">
                 <property name="visible">True</property>
+                <signal name="toggled" handler="_1992_1_1_gtk_materiaux_toggled"/>
                 <child>
                     <object class="GtkLabel" id="_1992_1_1_materiaux_personnaliser_label_fcm">
                         <property name="label">f&lt;sub&gt;cm&lt;/sub&gt;</property>
@@ -32,6 +34,7 @@
         <child>
             <object class="GtkCheckMenuItem" id="_1992_1_1_materiaux_personnaliser_menu_fctm">
                 <property name="visible">True</property>
+                <signal name="toggled" handler="_1992_1_1_gtk_materiaux_toggled"/>
                 <child>
                     <object class="GtkLabel" id="_1992_1_1_materiaux_personnaliser_label_fctm">
                         <property name="label">f&lt;sub&gt;ctm&lt;/sub&gt;</property>
@@ -45,6 +48,7 @@
         <child>
             <object class="GtkCheckMenuItem" id="_1992_1_1_materiaux_personnaliser_menu_fctk_0_05">
                 <property name="visible">True</property>
+                <signal name="toggled" handler="_1992_1_1_gtk_materiaux_toggled"/>
                 <child>
                     <object class="GtkLabel" id="_1992_1_1_materiaux_personnaliser_label_fctk_0_05">
                         <property name="label">f&lt;sub&gt;ctk,0.05&lt;/sub&gt;</property>
@@ -58,6 +62,7 @@
         <child>
             <object class="GtkCheckMenuItem" id="_1992_1_1_materiaux_personnaliser_menu_fctk_0_95">
                 <property name="visible">True</property>
+                <signal name="toggled" handler="_1992_1_1_gtk_materiaux_toggled"/>
                 <child>
                     <object class="GtkLabel" id="_1992_1_1_materiaux_personnaliser_label_fctk_0_95">
                         <property name="label">f&lt;sub&gt;ctk,0.95&lt;/sub&gt;</property>
@@ -71,6 +76,7 @@
         <child>
             <object class="GtkCheckMenuItem" id="_1992_1_1_materiaux_personnaliser_menu_Ecm">
                 <property name="visible">True</property>
+                <signal name="toggled" handler="_1992_1_1_gtk_materiaux_toggled"/>
                 <child>
                     <object class="GtkLabel" id="_1992_1_1_materiaux_personnaliser_label_Ecm">
                         <property name="label">E&lt;sub&gt;cm&lt;/sub&gt;</property>
@@ -84,6 +90,7 @@
         <child>
             <object class="GtkCheckMenuItem" id="_1992_1_1_materiaux_personnaliser_menu_ec1">
                 <property name="visible">True</property>
+                <signal name="toggled" handler="_1992_1_1_gtk_materiaux_toggled"/>
                 <child>
                     <object class="GtkLabel" id="_1992_1_1_materiaux_personnaliser_label_ec1">
                         <property name="label">&#949;&lt;sub&gt;c1&lt;/sub&gt;</property>
@@ -97,6 +104,7 @@
         <child>
             <object class="GtkCheckMenuItem" id="_1992_1_1_materiaux_personnaliser_menu_ecu1">
                 <property name="visible">True</property>
+                <signal name="toggled" handler="_1992_1_1_gtk_materiaux_toggled"/>
                 <child>
                     <object class="GtkLabel" id="_1992_1_1_materiaux_personnaliser_label_ecu1">
                         <property name="label">&#949;&lt;sub&gt;cu1&lt;/sub&gt;</property>
@@ -110,6 +118,7 @@
         <child>
             <object class="GtkCheckMenuItem" id="_1992_1_1_materiaux_personnaliser_menu_ec2">
                 <property name="visible">True</property>
+                <signal name="toggled" handler="_1992_1_1_gtk_materiaux_toggled"/>
                 <child>
                     <object class="GtkLabel" id="_1992_1_1_materiaux_personnaliser_label_ec2">
                         <property name="label">&#949;&lt;sub&gt;c2&lt;/sub&gt;</property>
@@ -123,6 +132,7 @@
         <child>
             <object class="GtkCheckMenuItem" id="_1992_1_1_materiaux_personnaliser_menu_ecu2">
                 <property name="visible">True</property>
+                <signal name="toggled" handler="_1992_1_1_gtk_materiaux_toggled"/>
                 <child>
                     <object class="GtkLabel" id="_1992_1_1_materiaux_personnaliser_label_ecu2">
                         <property name="label">&#949;&lt;sub&gt;cu2&lt;/sub&gt;</property>
@@ -136,6 +146,7 @@
         <child>
             <object class="GtkCheckMenuItem" id="_1992_1_1_materiaux_personnaliser_menu_n">
                 <property name="visible">True</property>
+                <signal name="toggled" handler="_1992_1_1_gtk_materiaux_toggled"/>
                 <child>
                     <object class="GtkLabel" id="_1992_1_1_materiaux_personnaliser_label_n">
                         <property name="label">n</property>
@@ -149,6 +160,7 @@
         <child>
             <object class="GtkCheckMenuItem" id="_1992_1_1_materiaux_personnaliser_menu_ec3">
                 <property name="visible">True</property>
+                <signal name="toggled" handler="_1992_1_1_gtk_materiaux_toggled"/>
                 <child>
                     <object class="GtkLabel" id="_1992_1_1_materiaux_personnaliser_label_ec3">
                         <property name="label">&#949;&lt;sub&gt;c3&lt;/sub&gt;</property>
@@ -162,6 +174,7 @@
         <child>
             <object class="GtkCheckMenuItem" id="_1992_1_1_materiaux_personnaliser_menu_ecu3">
                 <property name="visible">True</property>
+                <signal name="toggled" handler="_1992_1_1_gtk_materiaux_toggled"/>
                 <child>
                     <object class="GtkLabel" id="_1992_1_1_materiaux_personnaliser_label_ecu3">
                         <property name="label">&#949;&lt;sub&gt;cu3&lt;/sub&gt;</property>
@@ -175,6 +188,7 @@
         <child>
             <object class="GtkCheckMenuItem" id="_1992_1_1_materiaux_personnaliser_menu_nu">
                 <property name="visible">True</property>
+                <signal name="toggled" handler="_1992_1_1_gtk_materiaux_toggled"/>
                 <child>
                     <object class="GtkLabel" id="_1992_1_1_materiaux_personnaliser_label_nu">
                         <property name="label">&#957;</property>
@@ -377,7 +391,7 @@
                                             <object class="GtkLabel" id="_1992_1_1_materiaux_beton_label_fck_cube">
                                                 <property name="label">f&lt;sub&gt;ck,cube&lt;/sub&gt; [MPa] :</property>
                                                 <property name="use-markup">True</property>
-                                                <property name="visible">True</property>
+                                                <property name="visible">False</property>
                                             </object>
                                             <packing>
                                                 <property name="left-attach">0</property>
@@ -386,7 +400,7 @@
                                         </child>
                                         <child>
                                             <object class="GtkScrolledWindow" id="_1992_1_1_materiaux_beton_scrolledwindow_fck_cube">
-                                                <property name="visible">True</property>
+                                                <property name="visible">False</property>
                                                 <property name="expand">True</property>
                                                 <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
                                                 <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
@@ -409,7 +423,7 @@
                                             <object class="GtkLabel" id="_1992_1_1_materiaux_beton_label_fcm">
                                                 <property name="label">f&lt;sub&gt;cm&lt;/sub&gt; [MPa] :</property>
                                                 <property name="use-markup">True</property>
-                                                <property name="visible">True</property>
+                                                <property name="visible">False</property>
                                             </object>
                                             <packing>
                                                 <property name="left-attach">0</property>
@@ -418,7 +432,7 @@
                                         </child>
                                         <child>
                                             <object class="GtkScrolledWindow" id="_1992_1_1_materiaux_beton_scrolledwindow_fcm">
-                                                <property name="visible">True</property>
+                                                <property name="visible">False</property>
                                                 <property name="expand">True</property>
                                                 <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
                                                 <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
@@ -441,7 +455,7 @@
                                             <object class="GtkLabel" id="_1992_1_1_materiaux_beton_label_fctm">
                                                 <property name="label">f&lt;sub&gt;ctm&lt;/sub&gt; [MPa] :</property>
                                                 <property name="use-markup">True</property>
-                                                <property name="visible">True</property>
+                                                <property name="visible">False</property>
                                             </object>
                                             <packing>
                                                 <property name="left-attach">0</property>
@@ -450,7 +464,7 @@
                                         </child>
                                         <child>
                                             <object class="GtkScrolledWindow" id="_1992_1_1_materiaux_beton_scrolledwindow_fctm">
-                                                <property name="visible">True</property>
+                                                <property name="visible">False</property>
                                                 <property name="expand">True</property>
                                                 <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
                                                 <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
@@ -473,7 +487,7 @@
                                             <object class="GtkLabel" id="_1992_1_1_materiaux_beton_label_fctk_0_05">
                                                 <property name="label">f&lt;sub&gt;ctk,0.05&lt;/sub&gt; [MPa] :</property>
                                                 <property name="use-markup">True</property>
-                                                <property name="visible">True</property>
+                                                <property name="visible">False</property>
                                             </object>
                                             <packing>
                                                 <property name="left-attach">0</property>
@@ -482,7 +496,7 @@
                                         </child>
                                         <child>
                                             <object class="GtkScrolledWindow" id="_1992_1_1_materiaux_beton_scrolledwindow_fctk_0_05">
-                                                <property name="visible">True</property>
+                                                <property name="visible">False</property>
                                                 <property name="expand">True</property>
                                                 <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
                                                 <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
@@ -505,7 +519,7 @@
                                             <object class="GtkLabel" id="_1992_1_1_materiaux_beton_label_fctk_0_95">
                                                 <property name="label">f&lt;sub&gt;ctk,0.95&lt;/sub&gt; [MPa] :</property>
                                                 <property name="use-markup">True</property>
-                                                <property name="visible">True</property>
+                                                <property name="visible">False</property>
                                             </object>
                                             <packing>
                                                 <property name="left-attach">0</property>
@@ -514,7 +528,7 @@
                                         </child>
                                         <child>
                                             <object class="GtkScrolledWindow" id="_1992_1_1_materiaux_beton_scrolledwindow_fctk_0_95">
-                                                <property name="visible">True</property>
+                                                <property name="visible">False</property>
                                                 <property name="expand">True</property>
                                                 <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
                                                 <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
@@ -537,7 +551,7 @@
                                             <object class="GtkLabel" id="_1992_1_1_materiaux_beton_label_Ecm">
                                                 <property name="label">E&lt;sub&gt;cm&lt;/sub&gt; [GPa] :</property>
                                                 <property name="use-markup">True</property>
-                                                <property name="visible">True</property>
+                                                <property name="visible">False</property>
                                             </object>
                                             <packing>
                                                 <property name="left-attach">0</property>
@@ -546,7 +560,7 @@
                                         </child>
                                         <child>
                                             <object class="GtkScrolledWindow" id="_1992_1_1_materiaux_beton_scrolledwindow_Ecm">
-                                                <property name="visible">True</property>
+                                                <property name="visible">False</property>
                                                 <property name="expand">True</property>
                                                 <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
                                                 <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
@@ -569,7 +583,7 @@
                                             <object class="GtkLabel" id="_1992_1_1_materiaux_beton_label_ec1">
                                                 <property name="label">&#949;&lt;sub&gt;c1&lt;/sub&gt; [&#8240;] :</property>
                                                 <property name="use-markup">True</property>
-                                                <property name="visible">True</property>
+                                                <property name="visible">False</property>
                                             </object>
                                             <packing>
                                                 <property name="left-attach">0</property>
@@ -578,7 +592,7 @@
                                         </child>
                                         <child>
                                             <object class="GtkScrolledWindow" id="_1992_1_1_materiaux_beton_scrolledwindow_ec1">
-                                                <property name="visible">True</property>
+                                                <property name="visible">False</property>
                                                 <property name="expand">True</property>
                                                 <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
                                                 <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
@@ -601,7 +615,7 @@
                                             <object class="GtkLabel" id="_1992_1_1_materiaux_beton_label_ecu1">
                                                 <property name="label">&#949;&lt;sub&gt;cu1&lt;/sub&gt; [&#8240;] :</property>
                                                 <property name="use-markup">True</property>
-                                                <property name="visible">True</property>
+                                                <property name="visible">False</property>
                                             </object>
                                             <packing>
                                                 <property name="left-attach">0</property>
@@ -610,7 +624,7 @@
                                         </child>
                                         <child>
                                             <object class="GtkScrolledWindow" id="_1992_1_1_materiaux_beton_scrolledwindow_ecu1">
-                                                <property name="visible">True</property>
+                                                <property name="visible">False</property>
                                                 <property name="expand">True</property>
                                                 <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
                                                 <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
@@ -633,7 +647,7 @@
                                             <object class="GtkLabel" id="_1992_1_1_materiaux_beton_label_ec2">
                                                 <property name="label">&#949;&lt;sub&gt;c2&lt;/sub&gt; [&#8240;] :</property>
                                                 <property name="use-markup">True</property>
-                                                <property name="visible">True</property>
+                                                <property name="visible">False</property>
                                             </object>
                                             <packing>
                                                 <property name="left-attach">0</property>
@@ -642,7 +656,7 @@
                                         </child>
                                         <child>
                                             <object class="GtkScrolledWindow" id="_1992_1_1_materiaux_beton_scrolledwindow_ec2">
-                                                <property name="visible">True</property>
+                                                <property name="visible">False</property>
                                                 <property name="expand">True</property>
                                                 <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
                                                 <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
@@ -665,7 +679,7 @@
                                             <object class="GtkLabel" id="_1992_1_1_materiaux_beton_label_ecu2">
                                                 <property name="label">&#949;&lt;sub&gt;cu2&lt;/sub&gt; [&#8240;] :</property>
                                                 <property name="use-markup">True</property>
-                                                <property name="visible">True</property>
+                                                <property name="visible">False</property>
                                             </object>
                                             <packing>
                                                 <property name="left-attach">0</property>
@@ -674,7 +688,7 @@
                                         </child>
                                         <child>
                                             <object class="GtkScrolledWindow" id="_1992_1_1_materiaux_beton_scrolledwindow_ecu2">
-                                                <property name="visible">True</property>
+                                                <property name="visible">False</property>
                                                 <property name="expand">True</property>
                                                 <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
                                                 <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
@@ -697,7 +711,7 @@
                                             <object class="GtkLabel" id="_1992_1_1_materiaux_beton_label_n">
                                                 <property name="label">n [] :</property>
                                                 <property name="use-markup">True</property>
-                                                <property name="visible">True</property>
+                                                <property name="visible">False</property>
                                             </object>
                                             <packing>
                                                 <property name="left-attach">0</property>
@@ -706,7 +720,7 @@
                                         </child>
                                         <child>
                                             <object class="GtkScrolledWindow" id="_1992_1_1_materiaux_beton_scrolledwindow_n">
-                                                <property name="visible">True</property>
+                                                <property name="visible">False</property>
                                                 <property name="expand">True</property>
                                                 <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
                                                 <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
@@ -729,7 +743,7 @@
                                             <object class="GtkLabel" id="_1992_1_1_materiaux_beton_label_ec3">
                                                 <property name="label">&#949;&lt;sub&gt;c3&lt;/sub&gt; [&#8240;] :</property>
                                                 <property name="use-markup">True</property>
-                                                <property name="visible">True</property>
+                                                <property name="visible">False</property>
                                             </object>
                                             <packing>
                                                 <property name="left-attach">0</property>
@@ -738,7 +752,7 @@
                                         </child>
                                         <child>
                                             <object class="GtkScrolledWindow" id="_1992_1_1_materiaux_beton_scrolledwindow_ec3">
-                                                <property name="visible">True</property>
+                                                <property name="visible">False</property>
                                                 <property name="expand">True</property>
                                                 <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
                                                 <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
@@ -761,7 +775,7 @@
                                             <object class="GtkLabel" id="_1992_1_1_materiaux_beton_label_ecu3">
                                                 <property name="label">&#949;&lt;sub&gt;cu3&lt;/sub&gt; [&#8240;] :</property>
                                                 <property name="use-markup">True</property>
-                                                <property name="visible">True</property>
+                                                <property name="visible">False</property>
                                             </object>
                                             <packing>
                                                 <property name="left-attach">0</property>
@@ -770,7 +784,7 @@
                                         </child>
                                         <child>
                                             <object class="GtkScrolledWindow" id="_1992_1_1_materiaux_beton_scrolledwindow_ecu3">
-                                                <property name="visible">True</property>
+                                                <property name="visible">False</property>
                                                 <property name="expand">True</property>
                                                 <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
                                                 <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
@@ -793,7 +807,7 @@
                                             <object class="GtkLabel" id="_1992_1_1_materiaux_beton_label_nu">
                                                 <property name="label">&#957; [] :</property>
                                                 <property name="use-markup">True</property>
-                                                <property name="visible">True</property>
+                                                <property name="visible">False</property>
                                             </object>
                                             <packing>
                                                 <property name="left-attach">0</property>
@@ -802,7 +816,7 @@
                                         </child>
                                         <child>
                                             <object class="GtkScrolledWindow" id="_1992_1_1_materiaux_beton_scrolledwindow_nu">
-                                                <property name="visible">True</property>
+                                                <property name="visible">False</property>
                                                 <property name="expand">True</property>
                                                 <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
                                                 <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
