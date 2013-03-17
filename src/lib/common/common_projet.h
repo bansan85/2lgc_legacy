@@ -377,6 +377,12 @@ typedef enum __Type_Liste
 } Type_Liste;
 
 
+typedef enum __Type_Materiau
+{
+    MATERIAU_BETON
+} Type_Materiau;
+
+
 typedef struct __EF_Point
 {
     double      x;
@@ -488,37 +494,6 @@ typedef struct __EF_Relachement
 } EF_Relachement;
 
 
-typedef struct __Beton_Materiau
-{
-    char        *nom;
-    
-    // Caractéristique du matériau béton conformément à EN 1992_1_1, Tableau 3.1
-    double      fck;
-    double      fckcube;
-    double      fcm;
-    double      fctm;
-    double      fctk_0_05;
-    double      fctk_0_95;
-    double      ecm;
-    double      ec1;
-    double      ecu1;
-    double      ec2;
-    double      ecu2;
-    double      n;
-    double      ec3;
-    double      ecu3;
-    
-    double      nu;
-    double      gnu_0_2;
-    double      gnu_0_0;
-    
-#ifdef ENABLE_GTK
-    GtkTreeIter     Iter_fenetre;
-    GtkTreeIter     Iter_liste;
-#endif
-} Beton_Materiau;
-
-
 typedef struct __Barre_Info_EF
 {
     cholmod_sparse      *matrice_rigidite_locale;
@@ -569,6 +544,42 @@ typedef struct __EF_Section
 } EF_Section;
 
 
+typedef struct __Materiau_Beton
+{
+    // Caractéristique du matériau béton conformément à EN 1992_1_1, Tableau 3.1
+    double      fck;
+    double      fckcube;
+    double      fcm;
+    double      fctm;
+    double      fctk_0_05;
+    double      fctk_0_95;
+    
+    double      ec1;
+    double      ecu1;
+    double      ec2;
+    double      ecu2;
+    double      n;
+    double      ec3;
+    double      ecu3;
+    
+    double      ecm;
+    double      nu;
+} Materiau_Beton;
+
+
+typedef struct __EF_Materiau
+{
+    Type_Materiau   type;
+    char            *nom;
+    void            *data;
+    
+#ifdef ENABLE_GTK
+    GtkTreeIter     Iter_fenetre;
+    GtkTreeIter     Iter_liste;
+#endif
+} EF_Materiau;
+
+
 #ifdef ENABLE_GTK
 typedef struct __Gtk_EF_Sections_Rectangulaire
 {
@@ -608,10 +619,10 @@ typedef struct __Gtk_EF_Sections_Circulaire
 
 typedef struct __Gtk_1992_1_1_Materiaux
 {
-    GtkBuilder      *builder;
-    GtkWidget       *window;
+    GtkBuilder  *builder;
+    GtkWidget   *window;
     
-    Beton_Materiau  *materiau;
+    EF_Materiau *materiau;
 } Gtk_1992_1_1_Materiaux;
 #endif
 
@@ -621,7 +632,7 @@ typedef struct __Beton_Barre
     unsigned int        numero;
     Type_Element        type;
     EF_Section          *section;
-    Beton_Materiau      *materiau;
+    EF_Materiau         *materiau;
     
     EF_Noeud            *noeud_debut;
     EF_Noeud            *noeud_fin;

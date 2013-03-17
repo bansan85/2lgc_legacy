@@ -116,7 +116,7 @@ G_MODULE_EXPORT gboolean EF_gtk_materiaux_treeview_key_press(GtkTreeView *treevi
         GtkTreeIter     Iter;
         GtkTreeModel    *model;
         char            *nom;
-        Beton_Materiau  *materiau;
+        EF_Materiau     *materiau;
         GList           *liste_materiaux = NULL;
         
         if (!gtk_tree_selection_get_selected(gtk_tree_view_get_selection(treeview), &model, &Iter))
@@ -155,7 +155,7 @@ G_MODULE_EXPORT void EF_gtk_materiaux_edit_nom(GtkCellRendererText *cell __attri
     GtkTreeIter      iter;
     GtkTreePath      *path;
     char             *nom;
-    Beton_Materiau      *materiau;
+    EF_Materiau      *materiau;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_materiaux.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Matériau");
@@ -176,7 +176,7 @@ G_MODULE_EXPORT void EF_gtk_materiaux_edit_nom(GtkCellRendererText *cell __attri
     if (_1992_1_1_materiaux_cherche_nom(projet, new_text, FALSE))
         return;
     
-    BUG(_1992_1_1_materiaux_modif(projet, materiau, new_text, NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN), );
+    BUG(_1992_1_1_materiaux_modif(projet, materiau, new_text, NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN), );
     
     return;
 }
@@ -209,10 +209,10 @@ G_MODULE_EXPORT void EF_gtk_materiaux_select_changed(
     }
     else
     {
-        char            *nom;
-        Beton_Materiau  *materiau;
+        char        *nom;
+        EF_Materiau *materiau;
         
-        GList           *liste_materiaux = NULL;
+        GList       *liste_materiaux = NULL;
         
         gtk_tree_model_get(model, &Iter, 0, &nom, -1);
         
@@ -257,7 +257,7 @@ G_MODULE_EXPORT void EF_gtk_materiaux_boutton_supprimer_menu(
     GtkTreeModel    *model;
     GtkTreeIter     Iter;
     char            *nom;
-    Beton_Materiau  *materiau;
+    EF_Materiau     *materiau;
     GList           *liste_materiaux = NULL, *liste_noeuds_dep, *liste_barres_dep, *liste_charges_dep;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
@@ -308,7 +308,7 @@ G_MODULE_EXPORT void EF_gtk_materiaux_supprimer_menu_barres(
     GtkTreeIter     iter;
     GtkTreeModel    *model;
     char            *nom;
-    Beton_Materiau  *materiau;
+    EF_Materiau     *materiau;
     GList           *liste_materiaux = NULL, *liste_barres_dep;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
@@ -346,7 +346,7 @@ G_MODULE_EXPORT void EF_gtk_materiaux_supprimer_direct(
     GtkTreeIter     iter;
     GtkTreeModel    *model;
     char            *nom;
-    Beton_Materiau  *materiau;
+    EF_Materiau     *materiau;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_materiaux.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Matériau");
@@ -396,8 +396,8 @@ G_MODULE_EXPORT void EF_gtk_materiaux(Projet *projet)
     list_parcours = projet->modele.materiaux;
     while (list_parcours != NULL)
     {
-        Beton_Materiau  *materiau = (Beton_Materiau *)list_parcours->data;
-        char            *tmp;
+        EF_Materiau *materiau = list_parcours->data;
+        char        *tmp;
         
         gtk_tree_store_append(ef_gtk->materiaux, &materiau->Iter_fenetre, NULL);
         BUG(tmp = _1992_1_1_materiaux_get_description(materiau), );

@@ -325,10 +325,10 @@ G_MODULE_EXPORT double _1992_1_1_materiaux_gnu(double ecm, double nu)
 
 #ifdef ENABLE_GTK
 G_MODULE_EXPORT gboolean _1992_1_1_materiaux_update_ligne_treeview(Projet *projet,
-  Beton_Materiau *materiau)
+  EF_Materiau *materiau)
 /* Description : Met à jour les données dans le treeview de la fenêtre matériau.
  * Paramètres : Projet *projet : la variable projet,
- *            : Beton_Materiau *materiau : le matériau à mettre à jour.
+ *            : EF_Materiau *materiau : le matériau à mettre à jour.
  * Valeur renvoyée :
  *   Succès : TRUE
  *   Échec : FALSE :
@@ -339,6 +339,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_materiaux_update_ligne_treeview(Projet *proje
 {
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(materiau, FALSE, gettext("Paramètre %s incorrect.\n"), "materiau");
+    BUGMSG(materiau->type == MATERIAU_BETON, FALSE, gettext("Le matériau n'est pas en béton.\n"));
     
     gtk_list_store_set(projet->list_gtk.ef_materiaux.liste_materiaux, &materiau->Iter_liste, 0, materiau->nom, -1);
     if (projet->list_gtk.ef_materiaux.builder != NULL)
@@ -356,16 +357,16 @@ G_MODULE_EXPORT gboolean _1992_1_1_materiaux_update_ligne_treeview(Projet *proje
 #endif
 
 
-gboolean _1992_1_1_materiaux_insert(Projet *projet, Beton_Materiau *materiau)
+gboolean _1992_1_1_materiaux_insert(Projet *projet, EF_Materiau *materiau)
 /* Description : Insère un materiau dans projet->modele.materiaux. Procédure commune à tous les
  *               matériaux.
  * Paramètres : Projet *projet : la variable projet,
- *            : Beton_Materiau *materiau : le matériau à insérer.
+ *            : EF_Materiau *materiau : le matériau à insérer.
  * Valeur renvoyée : Aucune.
  */
 {
-    GList           *list_parcours;
-    Beton_Materiau  *materiau_tmp;
+    GList       *list_parcours;
+    EF_Materiau *materiau_tmp;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(materiau, FALSE, gettext("Paramètre %s incorrect.\n"), "materiau");
@@ -404,7 +405,7 @@ gboolean _1992_1_1_materiaux_insert(Projet *projet, Beton_Materiau *materiau)
 }
 
 
-G_MODULE_EXPORT Beton_Materiau* _1992_1_1_materiaux_ajout(Projet *projet, const char *nom,
+G_MODULE_EXPORT EF_Materiau* _1992_1_1_materiaux_ajout(Projet *projet, const char *nom,
   double fck)
 /* Description : Ajoute un matériau en béton et calcule ses caractéristiques mécaniques.
  *               Les propriétés du béton sont déterminées conformément au tableau 3.1 de
@@ -422,32 +423,35 @@ G_MODULE_EXPORT Beton_Materiau* _1992_1_1_materiaux_ajout(Projet *projet, const 
  *             en cas d'erreur d'allocation mémoire.
  */
 {
-    Beton_Materiau  *materiau_nouveau = malloc(sizeof(Beton_Materiau));
+    EF_Materiau     *materiau_nouveau;
+    Materiau_Beton  *data_beton;
     
     // Trivial
     BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG((fck > ERREUR_RELATIVE_MIN) && (fck <= 90.*(1+ERREUR_RELATIVE_MIN)), NULL, gettext("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"));
-    BUGMSG(materiau_nouveau, NULL, gettext("Erreur d'allocation mémoire.\n"));
-
-    materiau_nouveau->fck = fck*1000000.;
+    BUGMSG(materiau_nouveau = malloc(sizeof(EF_Materiau)), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(data_beton = malloc(sizeof(Materiau_Beton)), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    
+    materiau_nouveau->type = MATERIAU_BETON;
+    materiau_nouveau->data = data_beton;
+    
     BUGMSG(materiau_nouveau->nom = g_strdup_printf("%s", nom), NULL, gettext("Erreur d'allocation mémoire.\n"));
     
-    BUG(!isnan(materiau_nouveau->fckcube = _1992_1_1_materiaux_fckcube(fck)), NULL);
-    BUG(!isnan(materiau_nouveau->fcm = _1992_1_1_materiaux_fcm(fck)), NULL);
-    BUG(!isnan(materiau_nouveau->fctm = _1992_1_1_materiaux_fctm(fck, materiau_nouveau->fcm/1000000.)), NULL);
-    BUG(!isnan(materiau_nouveau->fctk_0_05 = _1992_1_1_materiaux_fctk_0_05(materiau_nouveau->fctm/1000000.)), NULL);
-    BUG(!isnan(materiau_nouveau->fctk_0_95 = _1992_1_1_materiaux_fctk_0_95(materiau_nouveau->fctm/1000000.)), NULL);
-    BUG(!isnan(materiau_nouveau->ecm = _1992_1_1_materiaux_ecm(materiau_nouveau->fcm/1000000.)), NULL);
-    BUG(!isnan(materiau_nouveau->ec1 = _1992_1_1_materiaux_ec1(materiau_nouveau->fcm/1000000.)), NULL);
-    BUG(!isnan(materiau_nouveau->ecu1 = _1992_1_1_materiaux_ecu1(materiau_nouveau->fcm/1000000., fck)), NULL);
-    BUG(!isnan(materiau_nouveau->ec2 = _1992_1_1_materiaux_ec2(fck)), NULL);
-    BUG(!isnan(materiau_nouveau->ecu2 = _1992_1_1_materiaux_ecu2(fck)), NULL);
-    BUG(!isnan(materiau_nouveau->ec3 = _1992_1_1_materiaux_ec3(fck)), NULL);
-    BUG(!isnan(materiau_nouveau->ecu3 = _1992_1_1_materiaux_ecu3(fck)), NULL);
-    BUG(!isnan(materiau_nouveau->n = _1992_1_1_materiaux_n(fck)), NULL);
-    materiau_nouveau->nu = COEFFICIENT_NU_BETON;
-    BUG(!isnan(materiau_nouveau->gnu_0_2 = _1992_1_1_materiaux_gnu(materiau_nouveau->ecm/1000000000., COEFFICIENT_NU_BETON)), NULL);
-    BUG(!isnan(materiau_nouveau->gnu_0_0 = _1992_1_1_materiaux_gnu(materiau_nouveau->ecm/1000000000., 0)), NULL);
+    data_beton->fck = fck*1000000.;
+    BUG(!isnan(data_beton->fckcube = _1992_1_1_materiaux_fckcube(fck)), NULL);
+    BUG(!isnan(data_beton->fcm = _1992_1_1_materiaux_fcm(fck)), NULL);
+    BUG(!isnan(data_beton->fctm = _1992_1_1_materiaux_fctm(fck, data_beton->fcm/1000000.)), NULL);
+    BUG(!isnan(data_beton->fctk_0_05 = _1992_1_1_materiaux_fctk_0_05(data_beton->fctm/1000000.)), NULL);
+    BUG(!isnan(data_beton->fctk_0_95 = _1992_1_1_materiaux_fctk_0_95(data_beton->fctm/1000000.)), NULL);
+    BUG(!isnan(data_beton->ecm = _1992_1_1_materiaux_ecm(data_beton->fcm/1000000.)), NULL);
+    BUG(!isnan(data_beton->ec1 = _1992_1_1_materiaux_ec1(data_beton->fcm/1000000.)), NULL);
+    BUG(!isnan(data_beton->ecu1 = _1992_1_1_materiaux_ecu1(data_beton->fcm/1000000., fck)), NULL);
+    BUG(!isnan(data_beton->ec2 = _1992_1_1_materiaux_ec2(fck)), NULL);
+    BUG(!isnan(data_beton->ecu2 = _1992_1_1_materiaux_ecu2(fck)), NULL);
+    BUG(!isnan(data_beton->ec3 = _1992_1_1_materiaux_ec3(fck)), NULL);
+    BUG(!isnan(data_beton->ecu3 = _1992_1_1_materiaux_ecu3(fck)), NULL);
+    BUG(!isnan(data_beton->n = _1992_1_1_materiaux_n(fck)), NULL);
+    data_beton->nu = COEFFICIENT_NU_BETON;
     
     BUG(_1992_1_1_materiaux_insert(projet, materiau_nouveau), NULL);
     BUG(_1992_1_1_materiaux_update_ligne_treeview(projet, materiau_nouveau), NULL);
@@ -456,11 +460,11 @@ G_MODULE_EXPORT Beton_Materiau* _1992_1_1_materiaux_ajout(Projet *projet, const 
 }
 
 
-gboolean _1992_1_1_materiaux_repositionne(Projet *projet, Beton_Materiau *materiau)
+gboolean _1992_1_1_materiaux_repositionne(Projet *projet, EF_Materiau *materiau)
 /* Description : Repositionne un matériau après un renommage. Procédure commune à toutes les
  *               matériaux.
  * Paramètres : Projet *projet : la variable projet,
- *            : Beton_Materiau *materiau : le matériau à repositionner.
+ *            : EF_Materiau *materiau : le matériau à repositionner.
  * Valeur renvoyée : Aucune.
  */
 {
@@ -474,7 +478,7 @@ gboolean _1992_1_1_materiaux_repositionne(Projet *projet, Beton_Materiau *materi
     list_parcours = projet->modele.materiaux;
     while (list_parcours != NULL)
     {
-        Beton_Materiau  *materiau_parcours = list_parcours->data;
+        EF_Materiau  *materiau_parcours = list_parcours->data;
         
         if (strcmp(materiau->nom, materiau_parcours->nom) < 0)
         {
@@ -510,13 +514,13 @@ gboolean _1992_1_1_materiaux_repositionne(Projet *projet, Beton_Materiau *materi
 }
 
 
-G_MODULE_EXPORT gboolean _1992_1_1_materiaux_modif(Projet *projet, Beton_Materiau *materiau,
+G_MODULE_EXPORT gboolean _1992_1_1_materiaux_modif(Projet *projet, EF_Materiau *materiau,
   char *nom, double fck, double fckcube, double fcm, double fctm, double fctk_0_05,
   double fctk_0_95, double ecm, double ec1, double ecu1, double ec2, double ecu2, double n,
-  double ec3, double ecu3, double nu, double gnu_0_2, double gnu_0_0)
+  double ec3, double ecu3, double nu)
 /* Description : Modifie un matériau béton.
  * Paramètres : Projet *projet : la variable projet,
- *            : Beton_Materiau *materiau : le matériau à modifier,
+ *            : EF_Materiau *materiau : le matériau à modifier,
  *            : Autres : caractéristiques du matériau. Pour ne pas modifier un paramètre,
  *                il suffit de mettre NULL pour le nom et NAN pour les nombres.
  * Valeur renvoyée :
@@ -526,8 +530,13 @@ G_MODULE_EXPORT gboolean _1992_1_1_materiaux_modif(Projet *projet, Beton_Materia
  *             materiau == NULL.
  */
 {
+    Materiau_Beton  *data_beton;
+    
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(materiau, FALSE, gettext("Paramètre %s incorrect.\n"), "materiau");
+    BUGMSG(materiau->type == MATERIAU_BETON, FALSE, gettext("Le matériau n'est pas en béton.\n"));
+    
+    data_beton = materiau->data;
     
     if ((nom != NULL) && (strcmp(materiau->nom, nom) != 0))
     {
@@ -537,78 +546,70 @@ G_MODULE_EXPORT gboolean _1992_1_1_materiaux_modif(Projet *projet, Beton_Materia
         BUG(_1992_1_1_materiaux_repositionne(projet, materiau), FALSE);
     }
     
-    if ((!isnan(fck)) && (!ERREUR_RELATIVE_EGALE(materiau->fck, fck)))
-        materiau->fck = fck;
+    if (!isnan(fck))
+        data_beton->fck = fck;
     else
         fck = NAN;
-    if ((!isnan(fckcube)) && (!ERREUR_RELATIVE_EGALE(materiau->fckcube, fckcube)))
-        materiau->fckcube = fckcube;
+    if (!isnan(fckcube))
+        data_beton->fckcube = fckcube;
     else
         fckcube = NAN;
-    if ((!isnan(fcm)) && (!ERREUR_RELATIVE_EGALE(materiau->fcm, fcm)))
-        materiau->fcm = fcm;
+    if (!isnan(fcm))
+        data_beton->fcm = fcm;
     else
         fcm = NAN;
-    if ((!isnan(fctm)) && (!ERREUR_RELATIVE_EGALE(materiau->fctm, fctm)))
-        materiau->fctm = fctm;
+    if (!isnan(fctm))
+        data_beton->fctm = fctm;
     else
         fctm = NAN;
-    if ((!isnan(fctk_0_05)) && (!ERREUR_RELATIVE_EGALE(materiau->fctk_0_05, fctk_0_05)))
-        materiau->fctk_0_05 = fctk_0_05;
+    if (!isnan(fctk_0_05))
+        data_beton->fctk_0_05 = fctk_0_05;
     else
         fctk_0_05 = NAN;
-    if ((!isnan(fctk_0_95)) && (!ERREUR_RELATIVE_EGALE(materiau->fctk_0_95, fctk_0_95)))
-        materiau->fctk_0_95 = fctk_0_95;
+    if (!isnan(fctk_0_95))
+        data_beton->fctk_0_95 = fctk_0_95;
     else
         fctk_0_95 = NAN;
-    if ((!isnan(ecm)) && (!ERREUR_RELATIVE_EGALE(materiau->ecm, ecm)))
-        materiau->ecm = ecm;
+    if (!isnan(ecm))
+        data_beton->ecm = ecm;
     else
         ecm = NAN;
-    if ((!isnan(ec1)) && (!ERREUR_RELATIVE_EGALE(materiau->ec1, ec1)))
-        materiau->ec1 = ec1;
+    if (!isnan(ec1))
+        data_beton->ec1 = ec1;
     else
         ec1 = NAN;
-    if ((!isnan(ecu1)) && (!ERREUR_RELATIVE_EGALE(materiau->ecu1, ecu1)))
-        materiau->ecu1 = ecu1;
+    if (!isnan(ecu1))
+        data_beton->ecu1 = ecu1;
     else
         ecu1 = NAN;
-    if ((!isnan(ec2)) && (!ERREUR_RELATIVE_EGALE(materiau->ec2, ec2)))
-        materiau->ec2 = ec2;
+    if (!isnan(ec2))
+        data_beton->ec2 = ec2;
     else
         ec2 = NAN;
-    if ((!isnan(ecu2)) && (!ERREUR_RELATIVE_EGALE(materiau->ecu2, ecu2)))
-        materiau->ecu2 = ecu2;
+    if (!isnan(ecu2))
+        data_beton->ecu2 = ecu2;
     else
         ecu2 = NAN;
-    if ((!isnan(ec3)) && (!ERREUR_RELATIVE_EGALE(materiau->ec3, ec3)))
-        materiau->ec3 = ec3;
+    if (!isnan(ec3))
+        data_beton->ec3 = ec3;
     else
         ec3 = NAN;
-    if ((!isnan(ecu3)) && (!ERREUR_RELATIVE_EGALE(materiau->ecu3, ecu3)))
-        materiau->ecu3 = ecu3;
+    if (!isnan(ecu3))
+        data_beton->ecu3 = ecu3;
     else
         ecu3 = NAN;
-    if ((!isnan(n)) && (!ERREUR_RELATIVE_EGALE(materiau->n, n)))
-        materiau->n = n;
+    if (!isnan(n))
+        data_beton->n = n;
     else
         n = NAN;
-    if ((!isnan(nu)) && (!ERREUR_RELATIVE_EGALE(materiau->nu, nu)))
-        materiau->nu = nu;
+    if (!isnan(nu))
+        data_beton->nu = nu;
     else
         nu = NAN;
-    if ((!isnan(gnu_0_2)) && (!ERREUR_RELATIVE_EGALE(materiau->gnu_0_2, gnu_0_2)))
-        materiau->gnu_0_2 = gnu_0_2;
-    else
-        gnu_0_2 = NAN;
-    if ((!isnan(gnu_0_0)) && (!ERREUR_RELATIVE_EGALE(materiau->gnu_0_0, gnu_0_0)))
-        materiau->gnu_0_0 = gnu_0_0;
-    else
-        gnu_0_0 = NAN;
     
     BUG(_1992_1_1_materiaux_update_ligne_treeview(projet, materiau), FALSE);
     
-    if ((!isnan(fck)) || (!isnan(fckcube)) || (!isnan(fcm)) || (!isnan(fctm)) || (!isnan(fctk_0_05)) || (!isnan(fctk_0_95)) || (!isnan(ecm)) || (!isnan(ec1)) || (!isnan(ecu1)) || (!isnan(ec2)) || (!isnan(ecu2)) || (!isnan(ec3)) || (!isnan(ecu3)) || (!isnan(n)) || (!isnan(nu)) || (!isnan(gnu_0_2)) || (!isnan(gnu_0_0)))
+    if ((!isnan(fck)) || (!isnan(fckcube)) || (!isnan(fcm)) || (!isnan(fctm)) || (!isnan(fctk_0_05)) || (!isnan(fctk_0_95)) || (!isnan(ecm)) || (!isnan(ec1)) || (!isnan(ecu1)) || (!isnan(ec2)) || (!isnan(ecu2)) || (!isnan(ec3)) || (!isnan(ecu3)) || (!isnan(n)) || (!isnan(nu)))
     {
         GList   *liste_materiaux = NULL;
         GList   *liste_barres_dep;
@@ -644,7 +645,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_materiaux_modif(Projet *projet, Beton_Materia
 }
 
 
-G_MODULE_EXPORT Beton_Materiau* _1992_1_1_materiaux_cherche_nom(Projet *projet, const char *nom,
+G_MODULE_EXPORT EF_Materiau* _1992_1_1_materiaux_cherche_nom(Projet *projet, const char *nom,
   gboolean critique)
 /* Description : Renvoie le matériau en fonction de son nom.
  * Paramètres : Projet *projet : la variable projet,
@@ -665,7 +666,7 @@ G_MODULE_EXPORT Beton_Materiau* _1992_1_1_materiaux_cherche_nom(Projet *projet, 
     list_parcours = projet->modele.materiaux;
     while (list_parcours != NULL)
     {
-        Beton_Materiau  *materiau = list_parcours->data;
+        EF_Materiau  *materiau = list_parcours->data;
         
         if (strcmp(materiau->nom, nom) == 0)
             return materiau;
@@ -680,10 +681,10 @@ G_MODULE_EXPORT Beton_Materiau* _1992_1_1_materiaux_cherche_nom(Projet *projet, 
 }
 
 
-G_MODULE_EXPORT char *_1992_1_1_materiaux_get_description(Beton_Materiau* materiau)
+G_MODULE_EXPORT char *_1992_1_1_materiaux_get_description(EF_Materiau* materiau)
 /* Description : Renvoie la description d'un matériau béton sous forme d'un texte.
  *               Il convient de libérer le texte renvoyée par la fonction free.
- * Paramètres : Beton_Materiau* materiau : section à étudier.
+ * Paramètres : EF_Materiau* materiau : section à étudier.
  * Valeur renvoyée :
  *   Succès : Résultat
  *   Échec : NULL :
@@ -691,18 +692,22 @@ G_MODULE_EXPORT char *_1992_1_1_materiaux_get_description(Beton_Materiau* materi
  *             erreur d'allocation mémoire.
  */
 {
-    char    *description;
-    char    fck[30], tmp1[30];
-    char    *complement = NULL, *tmp2;
+    char            *description;
+    char            fck[30], tmp1[30];
+    char            *complement = NULL, *tmp2;
+    Materiau_Beton  *data_beton;
     
     BUGMSG(materiau, NULL, gettext("Paramètre %s incorrect.\n"), "sect");
+    BUGMSG(materiau->type == MATERIAU_BETON, FALSE, gettext("Le matériau n'est pas en béton.\n"));
     
-    common_math_double_to_char(materiau->fck/1000000., fck, DECIMAL_CONTRAINTE);
+    data_beton = materiau->data;
+    
+    common_math_double_to_char(data_beton->fck/1000000., fck, DECIMAL_CONTRAINTE);
     
     // On affiche les différences si le matériau a été personnalisé
-    if (!ERREUR_RELATIVE_EGALE(materiau->fckcube, _1992_1_1_materiaux_fckcube(materiau->fck/1000000.)))
+    if (!ERREUR_RELATIVE_EGALE(data_beton->fckcube, _1992_1_1_materiaux_fckcube(data_beton->fck/1000000.)))
     {
-        common_math_double_to_char(materiau->fckcube/1000000., tmp1, DECIMAL_CONTRAINTE);
+        common_math_double_to_char(data_beton->fckcube/1000000., tmp1, DECIMAL_CONTRAINTE);
         if (complement == NULL)
             BUGMSG(complement = g_strdup_printf("f<sub>ck,cube</sub> : %s MPa", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
         else
@@ -712,9 +717,9 @@ G_MODULE_EXPORT char *_1992_1_1_materiaux_get_description(Beton_Materiau* materi
             free(tmp2);
         }
     }
-    if (!ERREUR_RELATIVE_EGALE(materiau->fcm, _1992_1_1_materiaux_fcm(materiau->fck/1000000.)))
+    if (!ERREUR_RELATIVE_EGALE(data_beton->fcm, _1992_1_1_materiaux_fcm(data_beton->fck/1000000.)))
     {
-        common_math_double_to_char(materiau->fcm/1000000., tmp1, DECIMAL_CONTRAINTE);
+        common_math_double_to_char(data_beton->fcm/1000000., tmp1, DECIMAL_CONTRAINTE);
         if (complement == NULL)
             BUGMSG(complement = g_strdup_printf("f<sub>cm</sub> : %s MPa", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
         else
@@ -724,9 +729,9 @@ G_MODULE_EXPORT char *_1992_1_1_materiaux_get_description(Beton_Materiau* materi
             free(tmp2);
         }
     }
-    if (!ERREUR_RELATIVE_EGALE(materiau->fctm, _1992_1_1_materiaux_fctm(materiau->fck/1000000., materiau->fcm/1000000.)))
+    if (!ERREUR_RELATIVE_EGALE(data_beton->fctm, _1992_1_1_materiaux_fctm(data_beton->fck/1000000., data_beton->fcm/1000000.)))
     {
-        common_math_double_to_char(materiau->fctm/1000000., tmp1, DECIMAL_CONTRAINTE);
+        common_math_double_to_char(data_beton->fctm/1000000., tmp1, DECIMAL_CONTRAINTE);
         if (complement == NULL)
             BUGMSG(complement = g_strdup_printf("f<sub>ctm</sub> : %s MPa", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
         else
@@ -736,9 +741,9 @@ G_MODULE_EXPORT char *_1992_1_1_materiaux_get_description(Beton_Materiau* materi
             free(tmp2);
         }
     }
-    if (!ERREUR_RELATIVE_EGALE(materiau->fctk_0_05, _1992_1_1_materiaux_fctk_0_05(materiau->fctm/1000000.)))
+    if (!ERREUR_RELATIVE_EGALE(data_beton->fctk_0_05, _1992_1_1_materiaux_fctk_0_05(data_beton->fctm/1000000.)))
     {
-        common_math_double_to_char(materiau->fctk_0_05/1000000., tmp1, DECIMAL_CONTRAINTE);
+        common_math_double_to_char(data_beton->fctk_0_05/1000000., tmp1, DECIMAL_CONTRAINTE);
         if (complement == NULL)
             BUGMSG(complement = g_strdup_printf("f<sub>ctk,0.05</sub> : %s MPa", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
         else
@@ -748,9 +753,9 @@ G_MODULE_EXPORT char *_1992_1_1_materiaux_get_description(Beton_Materiau* materi
             free(tmp2);
         }
     }
-    if (!ERREUR_RELATIVE_EGALE(materiau->fctk_0_95, _1992_1_1_materiaux_fctk_0_95(materiau->fctm/1000000.)))
+    if (!ERREUR_RELATIVE_EGALE(data_beton->fctk_0_95, _1992_1_1_materiaux_fctk_0_95(data_beton->fctm/1000000.)))
     {
-        common_math_double_to_char(materiau->fctk_0_95/1000000., tmp1, DECIMAL_CONTRAINTE);
+        common_math_double_to_char(data_beton->fctk_0_95/1000000., tmp1, DECIMAL_CONTRAINTE);
         if (complement == NULL)
             BUGMSG(complement = g_strdup_printf("f<sub>ctk,0.95</sub> : %s MPa", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
         else
@@ -760,9 +765,9 @@ G_MODULE_EXPORT char *_1992_1_1_materiaux_get_description(Beton_Materiau* materi
             free(tmp2);
         }
     }
-    if (!ERREUR_RELATIVE_EGALE(materiau->ecm, _1992_1_1_materiaux_ecm(materiau->fcm/1000000.)))
+    if (!ERREUR_RELATIVE_EGALE(data_beton->ecm, _1992_1_1_materiaux_ecm(data_beton->fcm/1000000.)))
     {
-        common_math_double_to_char(materiau->ecm/1000000., tmp1, DECIMAL_CONTRAINTE);
+        common_math_double_to_char(data_beton->ecm/1000000., tmp1, DECIMAL_CONTRAINTE);
         if (complement == NULL)
             BUGMSG(complement = g_strdup_printf("E<sub>cm</sub> : %s MPa", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
         else
@@ -772,33 +777,9 @@ G_MODULE_EXPORT char *_1992_1_1_materiaux_get_description(Beton_Materiau* materi
             free(tmp2);
         }
     }
-    if (!ERREUR_RELATIVE_EGALE(materiau->gnu_0_2, _1992_1_1_materiaux_gnu(materiau->ecm/1000000000., materiau->nu)))
+    if (!ERREUR_RELATIVE_EGALE(data_beton->ec1, _1992_1_1_materiaux_ec1(data_beton->fcm/1000000.)))
     {
-        common_math_double_to_char(materiau->gnu_0_2/1000000., tmp1, DECIMAL_CONTRAINTE);
-        if (complement == NULL)
-            BUGMSG(complement = g_strdup_printf("G (&#957;=%.2lf) : %s MPa", materiau->nu, tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
-        else
-        {
-            tmp2 = complement;
-            BUGMSG(complement = g_strdup_printf("%s, G (&#957;=%.2lf) : %s MPa", tmp2, materiau->nu, tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
-            free(tmp2);
-        }
-    }
-    if (!ERREUR_RELATIVE_EGALE(materiau->gnu_0_0, _1992_1_1_materiaux_gnu(materiau->ecm/1000000000., 0.)))
-    {
-        common_math_double_to_char(materiau->gnu_0_0/1000000., tmp1, DECIMAL_CONTRAINTE);
-        if (complement == NULL)
-            BUGMSG(complement = g_strdup_printf("G (&#957;=0) : %s MPa", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
-        else
-        {
-            tmp2 = complement;
-            BUGMSG(complement = g_strdup_printf("%s, G (&#957;=0) : %s MPa", tmp2, tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
-            free(tmp2);
-        }
-    }
-    if (!ERREUR_RELATIVE_EGALE(materiau->ec1, _1992_1_1_materiaux_ec1(materiau->fcm/1000000.)))
-    {
-        common_math_double_to_char(materiau->ec1*1000., tmp1, DECIMAL_SANS_UNITE);
+        common_math_double_to_char(data_beton->ec1*1000., tmp1, DECIMAL_SANS_UNITE);
         if (complement == NULL)
             BUGMSG(complement = g_strdup_printf("&#949;<sub>c1</sub> : %s ‰", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
         else
@@ -808,9 +789,9 @@ G_MODULE_EXPORT char *_1992_1_1_materiaux_get_description(Beton_Materiau* materi
             free(tmp2);
         }
     }
-    if (!ERREUR_RELATIVE_EGALE(materiau->ecu1, _1992_1_1_materiaux_ecu1(materiau->fcm/1000000., materiau->fck/1000000.)))
+    if (!ERREUR_RELATIVE_EGALE(data_beton->ecu1, _1992_1_1_materiaux_ecu1(data_beton->fcm/1000000., data_beton->fck/1000000.)))
     {
-        common_math_double_to_char(materiau->ecu1*1000., tmp1, DECIMAL_SANS_UNITE);
+        common_math_double_to_char(data_beton->ecu1*1000., tmp1, DECIMAL_SANS_UNITE);
         if (complement == NULL)
             BUGMSG(complement = g_strdup_printf("&#949;<sub>cu1</sub> : %s ‰", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
         else
@@ -820,9 +801,9 @@ G_MODULE_EXPORT char *_1992_1_1_materiaux_get_description(Beton_Materiau* materi
             free(tmp2);
         }
     }
-    if (!ERREUR_RELATIVE_EGALE(materiau->ec2, _1992_1_1_materiaux_ec2(materiau->fck/1000000.)))
+    if (!ERREUR_RELATIVE_EGALE(data_beton->ec2, _1992_1_1_materiaux_ec2(data_beton->fck/1000000.)))
     {
-        common_math_double_to_char(materiau->ec2*1000., tmp1, DECIMAL_SANS_UNITE);
+        common_math_double_to_char(data_beton->ec2*1000., tmp1, DECIMAL_SANS_UNITE);
         if (complement == NULL)
             BUGMSG(complement = g_strdup_printf("&#949;<sub>c2</sub> : %s ‰", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
         else
@@ -832,9 +813,9 @@ G_MODULE_EXPORT char *_1992_1_1_materiaux_get_description(Beton_Materiau* materi
             free(tmp2);
         }
     }
-    if (!ERREUR_RELATIVE_EGALE(materiau->ecu2, _1992_1_1_materiaux_ecu2(materiau->fck/1000000.)))
+    if (!ERREUR_RELATIVE_EGALE(data_beton->ecu2, _1992_1_1_materiaux_ecu2(data_beton->fck/1000000.)))
     {
-        common_math_double_to_char(materiau->ecu2*1000., tmp1, DECIMAL_SANS_UNITE);
+        common_math_double_to_char(data_beton->ecu2*1000., tmp1, DECIMAL_SANS_UNITE);
         if (complement == NULL)
             BUGMSG(complement = g_strdup_printf("&#949;<sub>cu2</sub> : %s ‰", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
         else
@@ -844,9 +825,9 @@ G_MODULE_EXPORT char *_1992_1_1_materiaux_get_description(Beton_Materiau* materi
             free(tmp2);
         }
     }
-    if (!ERREUR_RELATIVE_EGALE(materiau->ec3, _1992_1_1_materiaux_ec3(materiau->fck/1000000.)))
+    if (!ERREUR_RELATIVE_EGALE(data_beton->ec3, _1992_1_1_materiaux_ec3(data_beton->fck/1000000.)))
     {
-        common_math_double_to_char(materiau->ec3*1000., tmp1, DECIMAL_SANS_UNITE);
+        common_math_double_to_char(data_beton->ec3*1000., tmp1, DECIMAL_SANS_UNITE);
         if (complement == NULL)
             BUGMSG(complement = g_strdup_printf("&#949;<sub>c3</sub> : %s ‰", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
         else
@@ -856,9 +837,9 @@ G_MODULE_EXPORT char *_1992_1_1_materiaux_get_description(Beton_Materiau* materi
             free(tmp2);
         }
     }
-    if (!ERREUR_RELATIVE_EGALE(materiau->ecu3, _1992_1_1_materiaux_ecu3(materiau->fck/1000000.)))
+    if (!ERREUR_RELATIVE_EGALE(data_beton->ecu3, _1992_1_1_materiaux_ecu3(data_beton->fck/1000000.)))
     {
-        common_math_double_to_char(materiau->ecu3*1000., tmp1, DECIMAL_SANS_UNITE);
+        common_math_double_to_char(data_beton->ecu3*1000., tmp1, DECIMAL_SANS_UNITE);
         if (complement == NULL)
             BUGMSG(complement = g_strdup_printf("&#949;<sub>cu3</sub> : %s ‰", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
         else
@@ -868,9 +849,9 @@ G_MODULE_EXPORT char *_1992_1_1_materiaux_get_description(Beton_Materiau* materi
             free(tmp2);
         }
     }
-    if (!ERREUR_RELATIVE_EGALE(materiau->n, _1992_1_1_materiaux_n(materiau->fck/1000000.)))
+    if (!ERREUR_RELATIVE_EGALE(data_beton->n, _1992_1_1_materiaux_n(data_beton->fck/1000000.)))
     {
-        common_math_double_to_char(materiau->n*1000., tmp1, DECIMAL_SANS_UNITE);
+        common_math_double_to_char(data_beton->n*1000., tmp1, DECIMAL_SANS_UNITE);
         if (complement == NULL)
             BUGMSG(complement = g_strdup_printf("n : %s", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
         else
@@ -893,22 +874,23 @@ G_MODULE_EXPORT char *_1992_1_1_materiaux_get_description(Beton_Materiau* materi
 }
 
 
-void _1992_1_1_materiaux_free_un(Beton_Materiau *materiau)
+void _1992_1_1_materiaux_free_un(EF_Materiau *materiau)
 /* Description : Fonction permettant de libérer un matériau.
- * Paramètres : Beton_Materiau *materiau : matériau à libérer.
+ * Paramètres : EF_Materiau *materiau : matériau à libérer.
  * Valeur renvoyée : Aucun.
  */
 {
     free(materiau->nom);
+    free(materiau->data);
     free(materiau);
     
     return;
 }
 
 
-G_MODULE_EXPORT gboolean _1992_1_1_materiaux_supprime(Beton_Materiau* materiau, Projet *projet)
+G_MODULE_EXPORT gboolean _1992_1_1_materiaux_supprime(EF_Materiau* materiau, Projet *projet)
 /* Description : Supprime le matériau spécifié. Impossible si le matériau est utilisé.
- * Paramètres : Beton_Materiau* materiau : le matériau à supprimer,
+ * Paramètres : EF_Materiau* materiau : le matériau à supprimer,
  *            : Projet *projet : la variable projet.
  * Valeur renvoyée :
  *   Succès : TRUE

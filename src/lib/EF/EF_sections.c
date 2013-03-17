@@ -1205,7 +1205,7 @@ G_MODULE_EXPORT double EF_sections_ay(Beton_Barre *barre, unsigned int discretis
     ll = EF_noeuds_distance(fin, debut);
     BUG(!isnan(ll), NAN);
     
-    E = barre->materiau->ecm;
+    E = EF_calculs_E(barre->materiau);
     
     switch (barre->section->type)
     {
@@ -1260,7 +1260,7 @@ G_MODULE_EXPORT double EF_sections_by(Beton_Barre *barre, unsigned int discretis
     ll = EF_noeuds_distance(fin, debut);
     BUG(!isnan(ll), NAN);
     
-    E = barre->materiau->ecm;
+    E = EF_calculs_E(barre->materiau);
     
     switch (barre->section->type)
     {
@@ -1315,7 +1315,7 @@ G_MODULE_EXPORT double EF_sections_cy(Beton_Barre *barre, unsigned int discretis
     ll = EF_noeuds_distance(fin, debut);
     BUG(!isnan(ll), NAN);
     
-    E = barre->materiau->ecm;
+    E = EF_calculs_E(barre->materiau);
     
     switch (barre->section->type)
     {
@@ -1370,7 +1370,7 @@ G_MODULE_EXPORT double EF_sections_az(Beton_Barre *barre, unsigned int discretis
     ll = EF_noeuds_distance(fin, debut);
     BUG(!isnan(ll), NAN);
     
-    E = barre->materiau->ecm;
+    E = EF_calculs_E(barre->materiau);
     
     switch (barre->section->type)
     {
@@ -1425,7 +1425,7 @@ G_MODULE_EXPORT double EF_sections_bz(Beton_Barre *barre, unsigned int discretis
     ll = EF_noeuds_distance(fin, debut);
     BUG(!isnan(ll), NAN);
     
-    E = barre->materiau->ecm;
+    E = EF_calculs_E(barre->materiau);
     
     switch (barre->section->type)
     {
@@ -1480,7 +1480,7 @@ G_MODULE_EXPORT double EF_sections_cz(Beton_Barre *barre, unsigned int discretis
     ll = EF_noeuds_distance(fin, debut);
     BUG(!isnan(ll), NAN);
     
-    E = barre->materiau->ecm;
+    E = EF_calculs_E(barre->materiau);
     
     switch (barre->section->type)
     {
@@ -1569,7 +1569,7 @@ G_MODULE_EXPORT double EF_sections_es_l(Beton_Barre *barre, unsigned int discret
     // Le facteur ES/L est défini par la formule :\end{verbatim}\begin{displaymath}
     // \frac{E \cdot S}{L} = \frac{E}{\int_d^f \frac{1}{S(x)} dx}\end{displaymath}\begin{verbatim}
     
-    E = barre->materiau->ecm;
+    E = EF_calculs_E(barre->materiau);
     
     switch (barre->section->type)
     {
@@ -1642,7 +1642,7 @@ G_MODULE_EXPORT double EF_sections_gj_l(Beton_Barre *barre, unsigned int discret
     ll = EF_noeuds_distance(fin, debut);
     BUG(!isnan(ll), NAN);
     
-    G = barre->materiau->gnu_0_2;
+    G = EF_calculs_G(barre->materiau, FALSE);
     
     switch (barre->section->type)
     {
@@ -1650,7 +1650,7 @@ G_MODULE_EXPORT double EF_sections_gj_l(Beton_Barre *barre, unsigned int discret
         case SECTION_T :
         case SECTION_CARREE :
         {
-            Section_T *section = barre->section->data;
+            Section_T   *section = barre->section->data;
             double      lt = section->largeur_table;
             double      lr = section->largeur_retombee;
             double      ht = section->hauteur_table;

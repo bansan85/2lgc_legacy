@@ -361,11 +361,11 @@ G_MODULE_EXPORT void _1992_1_1_gtk_materiaux_ajouter_clicked(
  * Valeur renvoyée : Aucune.
  */
 {
-    char *nom;
-    double fck, fckcube, fcm, fctm, fctk_0_05, fctk_0_95;
-    double ecm;
-    double ec1, ecu1, ec2, ecu2, n, ec3, ecu3, nu;
-    Beton_Materiau  *materiau;
+    char            *nom;
+    double          fck, fckcube, fcm, fctm, fctk_0_05, fctk_0_95;
+    double          ecm;
+    double          ec1, ecu1, ec2, ecu2, n, ec3, ecu3, nu;
+    EF_Materiau     *materiau;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk._1992_1_1_materiaux.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Matériau Béton");
@@ -375,7 +375,7 @@ G_MODULE_EXPORT void _1992_1_1_gtk_materiaux_ajouter_clicked(
     
     // Création de la nouvelle charge ponctuelle au noeud
     BUG(materiau = _1992_1_1_materiaux_ajout(projet, nom, fck), );
-    BUG(_1992_1_1_materiaux_modif(projet, materiau, NULL, NAN, fckcube, fcm, fctm, fctk_0_05, fctk_0_95, ecm, ec1, ecu1, ec2, ecu2, n, ec3, ecu3, nu, _1992_1_1_materiaux_gnu(ecm/1000000000., materiau->nu), _1992_1_1_materiaux_gnu(ecm/1000000000., 0)), );
+    BUG(_1992_1_1_materiaux_modif(projet, materiau, NULL, NAN, fckcube, fcm, fctm, fctk_0_05, fctk_0_95, ecm, ec1, ecu1, ec2, ecu2, n, ec3, ecu3, nu), );
     
     free(nom);
     
@@ -425,7 +425,7 @@ G_MODULE_EXPORT void _1992_1_1_gtk_materiaux_modifier_clicked(
     if (!_1992_1_1_gtk_materiaux_recupere_donnees(projet, &nom, &fck, &fckcube, &fcm, &fctm, &fctk_0_05, &fctk_0_95, &ecm, &ec1, &ecu1, &ec2, &ecu2, &n, &ec3, &ecu3, &nu))
         return;
     
-    BUG(_1992_1_1_materiaux_modif(projet, ef_gtk->materiau, nom, fck*1000000., fckcube, fcm, fctm, fctk_0_05, fctk_0_95, ecm, ec1, ecu1, ec2, ecu2, n, ec3, ecu3, nu, _1992_1_1_materiaux_gnu(ecm/1000000000., nu), _1992_1_1_materiaux_gnu(ecm/1000000000., 0)), );
+    BUG(_1992_1_1_materiaux_modif(projet, ef_gtk->materiau, nom, fck*1000000., fckcube, fcm, fctm, fctk_0_05, fctk_0_95, ecm, ec1, ecu1, ec2, ecu2, n, ec3, ecu3, nu), );
     
     gtk_widget_destroy(projet->list_gtk._1992_1_1_materiaux.window);
     
@@ -443,19 +443,24 @@ G_MODULE_EXPORT void _1992_1_1_gtk_materiaux_toggled(GtkCheckMenuItem *checkmenu
 {
     GtkBuilder      *builder;
     gboolean        check = gtk_check_menu_item_get_active(checkmenuitem);
-    Beton_Materiau  *mat;
+    EF_Materiau     *mat;
+    Materiau_Beton  *beton_data;
     char            tmp[30];
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     
     builder = projet->list_gtk._1992_1_1_materiaux.builder;
     mat = projet->list_gtk._1992_1_1_materiaux.materiau;
+    if (mat != NULL)
+        beton_data = projet->list_gtk._1992_1_1_materiaux.materiau->data;
+    else
+        beton_data = NULL;
     
     if (checkmenuitem == GTK_CHECK_MENU_ITEM(gtk_builder_get_object(builder, "_1992_1_1_materiaux_personnaliser_menu_fck_cube")))
     {
         if (check && mat)
         {
-            common_math_double_to_char(mat->fckcube/1000000., tmp, DECIMAL_CONTRAINTE);
+            common_math_double_to_char(beton_data->fckcube/1000000., tmp, DECIMAL_CONTRAINTE);
             gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(builder, "_1992_1_1_materiaux_beton_buffer_fck_cube")), tmp, -1);
         }
         
@@ -466,7 +471,7 @@ G_MODULE_EXPORT void _1992_1_1_gtk_materiaux_toggled(GtkCheckMenuItem *checkmenu
     {
         if (check && mat)
         {
-            common_math_double_to_char(mat->fcm/1000000., tmp, DECIMAL_CONTRAINTE);
+            common_math_double_to_char(beton_data->fcm/1000000., tmp, DECIMAL_CONTRAINTE);
             gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(builder, "_1992_1_1_materiaux_beton_buffer_fcm")), tmp, -1);
         }
         gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(builder, "_1992_1_1_materiaux_beton_label_fcm")), check);
@@ -476,7 +481,7 @@ G_MODULE_EXPORT void _1992_1_1_gtk_materiaux_toggled(GtkCheckMenuItem *checkmenu
     {
         if (check && mat)
         {
-            common_math_double_to_char(mat->fctm/1000000., tmp, DECIMAL_CONTRAINTE);
+            common_math_double_to_char(beton_data->fctm/1000000., tmp, DECIMAL_CONTRAINTE);
             gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(builder, "_1992_1_1_materiaux_beton_buffer_fctm")), tmp, -1);
         }
         gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(builder, "_1992_1_1_materiaux_beton_label_fctm")), check);
@@ -486,7 +491,7 @@ G_MODULE_EXPORT void _1992_1_1_gtk_materiaux_toggled(GtkCheckMenuItem *checkmenu
     {
         if (check && mat)
         {
-            common_math_double_to_char(mat->fctk_0_05/1000000., tmp, DECIMAL_CONTRAINTE);
+            common_math_double_to_char(beton_data->fctk_0_05/1000000., tmp, DECIMAL_CONTRAINTE);
             gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(builder, "_1992_1_1_materiaux_beton_buffer_fctk_0_05")), tmp, -1);
         }
         gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(builder, "_1992_1_1_materiaux_beton_label_fctk_0_05")), check);
@@ -496,7 +501,7 @@ G_MODULE_EXPORT void _1992_1_1_gtk_materiaux_toggled(GtkCheckMenuItem *checkmenu
     {
         if (check && mat)
         {
-            common_math_double_to_char(mat->fctk_0_95/1000000., tmp, DECIMAL_CONTRAINTE);
+            common_math_double_to_char(beton_data->fctk_0_95/1000000., tmp, DECIMAL_CONTRAINTE);
             gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(builder, "_1992_1_1_materiaux_beton_buffer_fctk_0_95")), tmp, -1);
         }
         gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(builder, "_1992_1_1_materiaux_beton_label_fctk_0_95")), check);
@@ -506,7 +511,7 @@ G_MODULE_EXPORT void _1992_1_1_gtk_materiaux_toggled(GtkCheckMenuItem *checkmenu
     {
         if (check && mat)
         {
-            common_math_double_to_char(mat->ecm/1000000000., tmp, DECIMAL_CONTRAINTE);
+            common_math_double_to_char(beton_data->ecm/1000000000., tmp, DECIMAL_CONTRAINTE);
             gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(builder, "_1992_1_1_materiaux_beton_buffer_Ecm")), tmp, -1);
         }
         gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(builder, "_1992_1_1_materiaux_beton_label_Ecm")), check);
@@ -516,7 +521,7 @@ G_MODULE_EXPORT void _1992_1_1_gtk_materiaux_toggled(GtkCheckMenuItem *checkmenu
     {
         if (check && mat)
         {
-            common_math_double_to_char(mat->ec1*1000, tmp, DECIMAL_SANS_UNITE);
+            common_math_double_to_char(beton_data->ec1*1000, tmp, DECIMAL_SANS_UNITE);
             gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(builder, "_1992_1_1_materiaux_beton_buffer_ec1")), tmp, -1);
         }
         gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(builder, "_1992_1_1_materiaux_beton_label_ec1")), check);
@@ -526,7 +531,7 @@ G_MODULE_EXPORT void _1992_1_1_gtk_materiaux_toggled(GtkCheckMenuItem *checkmenu
     {
         if (check && mat)
         {
-            common_math_double_to_char(mat->ecu1*1000, tmp, DECIMAL_SANS_UNITE);
+            common_math_double_to_char(beton_data->ecu1*1000, tmp, DECIMAL_SANS_UNITE);
             gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(builder, "_1992_1_1_materiaux_beton_buffer_ecu1")), tmp, -1);
         }
         gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(builder, "_1992_1_1_materiaux_beton_label_ecu1")), check);
@@ -536,7 +541,7 @@ G_MODULE_EXPORT void _1992_1_1_gtk_materiaux_toggled(GtkCheckMenuItem *checkmenu
     {
         if (check && mat)
         {
-            common_math_double_to_char(mat->ec2*1000, tmp, DECIMAL_SANS_UNITE);
+            common_math_double_to_char(beton_data->ec2*1000, tmp, DECIMAL_SANS_UNITE);
             gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(builder, "_1992_1_1_materiaux_beton_buffer_ec2")), tmp, -1);
         }
         gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(builder, "_1992_1_1_materiaux_beton_label_ec2")), check);
@@ -546,7 +551,7 @@ G_MODULE_EXPORT void _1992_1_1_gtk_materiaux_toggled(GtkCheckMenuItem *checkmenu
     {
         if (check && mat)
         {
-            common_math_double_to_char(mat->ecu2*1000, tmp, DECIMAL_SANS_UNITE);
+            common_math_double_to_char(beton_data->ecu2*1000, tmp, DECIMAL_SANS_UNITE);
             gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(builder, "_1992_1_1_materiaux_beton_buffer_ecu2")), tmp, -1);
         }
         gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(builder, "_1992_1_1_materiaux_beton_label_ecu2")), check);
@@ -556,7 +561,7 @@ G_MODULE_EXPORT void _1992_1_1_gtk_materiaux_toggled(GtkCheckMenuItem *checkmenu
     {
         if (check && mat)
         {
-            common_math_double_to_char(mat->n, tmp, DECIMAL_SANS_UNITE);
+            common_math_double_to_char(beton_data->n, tmp, DECIMAL_SANS_UNITE);
             gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(builder, "_1992_1_1_materiaux_beton_buffer_n")), tmp, -1);
         }
         gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(builder, "_1992_1_1_materiaux_beton_label_n")), check);
@@ -566,7 +571,7 @@ G_MODULE_EXPORT void _1992_1_1_gtk_materiaux_toggled(GtkCheckMenuItem *checkmenu
     {
         if (check && mat)
         {
-            common_math_double_to_char(mat->ec3*1000, tmp, DECIMAL_SANS_UNITE);
+            common_math_double_to_char(beton_data->ec3*1000, tmp, DECIMAL_SANS_UNITE);
             gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(builder, "_1992_1_1_materiaux_beton_buffer_ec3")), tmp, -1);
         }
         gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(builder, "_1992_1_1_materiaux_beton_label_ec3")), check);
@@ -576,7 +581,7 @@ G_MODULE_EXPORT void _1992_1_1_gtk_materiaux_toggled(GtkCheckMenuItem *checkmenu
     {
         if (check && mat)
         {
-            common_math_double_to_char(mat->ecu3*1000, tmp, DECIMAL_SANS_UNITE);
+            common_math_double_to_char(beton_data->ecu3*1000, tmp, DECIMAL_SANS_UNITE);
             gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(builder, "_1992_1_1_materiaux_beton_buffer_ecu3")), tmp, -1);
         }
         gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(builder, "_1992_1_1_materiaux_beton_label_ecu3")), check);
@@ -586,7 +591,7 @@ G_MODULE_EXPORT void _1992_1_1_gtk_materiaux_toggled(GtkCheckMenuItem *checkmenu
     {
         if (check && mat)
         {
-            common_math_double_to_char(mat->nu, tmp, DECIMAL_SANS_UNITE);
+            common_math_double_to_char(beton_data->nu, tmp, DECIMAL_SANS_UNITE);
             gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(builder, "_1992_1_1_materiaux_beton_buffer_nu")), tmp, -1);
         }
         gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(builder, "_1992_1_1_materiaux_beton_label_nu")), check);
@@ -601,7 +606,7 @@ G_MODULE_EXPORT void _1992_1_1_gtk_materiaux_toggled(GtkCheckMenuItem *checkmenu
 }
 
 
-G_MODULE_EXPORT gboolean _1992_1_1_gtk_materiaux(Projet *projet, Beton_Materiau *materiau)
+G_MODULE_EXPORT gboolean _1992_1_1_gtk_materiaux(Projet *projet, EF_Materiau *materiau)
 /* Description : Affichage de la fenêtre permettant de créer ou modifier un matériau de type
  *               béton.
  * Paramètres : Projet *projet : la variable projet,
@@ -614,8 +619,10 @@ G_MODULE_EXPORT gboolean _1992_1_1_gtk_materiaux(Projet *projet, Beton_Materiau 
  */
 {
     Gtk_1992_1_1_Materiaux  *ef_gtk;
+    Materiau_Beton          *beton_data;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(materiau->type == MATERIAU_BETON, FALSE, gettext("Le matériau n'est pas en béton.\n"));
     
     ef_gtk = &projet->list_gtk._1992_1_1_materiaux;
     if (ef_gtk->builder != NULL)
@@ -636,6 +643,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_gtk_materiaux(Projet *projet, Beton_Materiau 
     {
         gtk_window_set_title(GTK_WINDOW(ef_gtk->window), gettext("Ajout d'un matériau béton"));
         ef_gtk->materiau = NULL;
+        beton_data = NULL;
         gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_beton_textview_nom"))), "", -1);
         gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_beton_textview_fck"))), "", -1);
         
@@ -649,9 +657,10 @@ G_MODULE_EXPORT gboolean _1992_1_1_gtk_materiaux(Projet *projet, Beton_Materiau 
         
         gtk_window_set_title(GTK_WINDOW(ef_gtk->window), gettext("Modification d'un matériau béton"));
         ef_gtk->materiau = materiau;
+        beton_data = materiau->data;
         
-        gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_beton_textview_nom"))), ef_gtk->materiau->nom, -1);
-        common_math_double_to_char(ef_gtk->materiau->fck/1000000., tmp, DECIMAL_DISTANCE);
+        gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_beton_textview_nom"))), materiau->nom, -1);
+        common_math_double_to_char(beton_data->fck/1000000., tmp, DECIMAL_DISTANCE);
         gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_beton_buffer_fck")), tmp, -1);
         
         gtk_button_set_label(GTK_BUTTON(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_beton_button_add_edit")), "gtk-edit");
@@ -659,20 +668,20 @@ G_MODULE_EXPORT gboolean _1992_1_1_gtk_materiaux(Projet *projet, Beton_Materiau 
     }
     
     // On affiche les propriétés qui ne sont pas égale à celle par défaut.
-    gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_personnaliser_menu_fck_cube")), materiau && !ERREUR_RELATIVE_EGALE(materiau->fckcube, _1992_1_1_materiaux_fckcube(materiau->fck/1000000.)));
-    gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_personnaliser_menu_fcm")), materiau && !ERREUR_RELATIVE_EGALE(materiau->fcm, _1992_1_1_materiaux_fcm(materiau->fck/1000000.)));
-    gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_personnaliser_menu_fctm")), materiau && !ERREUR_RELATIVE_EGALE(materiau->fctm, _1992_1_1_materiaux_fctm(materiau->fck/1000000., materiau->fcm/1000000.)));
-    gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_personnaliser_menu_fctk_0_05")), materiau && !ERREUR_RELATIVE_EGALE(materiau->fctk_0_05, _1992_1_1_materiaux_fctk_0_05(materiau->fctm/1000000.)));
-    gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_personnaliser_menu_fctk_0_95")), materiau && !ERREUR_RELATIVE_EGALE(materiau->fctk_0_95, _1992_1_1_materiaux_fctk_0_95(materiau->fctm/1000000.)));
-    gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_personnaliser_menu_Ecm")), materiau && !ERREUR_RELATIVE_EGALE(materiau->ecm, _1992_1_1_materiaux_ecm(materiau->fcm/1000000.)));
-    gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_personnaliser_menu_ec1")), materiau && !ERREUR_RELATIVE_EGALE(materiau->ec1, _1992_1_1_materiaux_ec1(materiau->fcm/1000000.)));
-    gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_personnaliser_menu_ecu1")), materiau && !ERREUR_RELATIVE_EGALE(materiau->ecu1, _1992_1_1_materiaux_ecu1(materiau->fcm/1000000., materiau->fck/1000000.)));
-    gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_personnaliser_menu_ec2")), materiau && !ERREUR_RELATIVE_EGALE(materiau->ec2, _1992_1_1_materiaux_ec2(materiau->fck/1000000.)));
-    gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_personnaliser_menu_ecu2")), materiau && !ERREUR_RELATIVE_EGALE(materiau->ecu2, _1992_1_1_materiaux_ecu2(materiau->fck/1000000.)));
-    gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_personnaliser_menu_n")), materiau && !ERREUR_RELATIVE_EGALE(materiau->n, _1992_1_1_materiaux_n(materiau->fck/1000000.)));
-    gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_personnaliser_menu_ec3")), materiau && !ERREUR_RELATIVE_EGALE(materiau->ec3, _1992_1_1_materiaux_ec3(materiau->fck/1000000.)));
-    gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_personnaliser_menu_ecu3")), materiau && !ERREUR_RELATIVE_EGALE(materiau->ecu3, _1992_1_1_materiaux_ecu3(materiau->fck/1000000.)));
-    gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_personnaliser_menu_nu")), materiau && !ERREUR_RELATIVE_EGALE(materiau->nu, COEFFICIENT_NU_BETON));
+    gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_personnaliser_menu_fck_cube")), beton_data && !ERREUR_RELATIVE_EGALE(beton_data->fckcube, _1992_1_1_materiaux_fckcube(beton_data->fck/1000000.)));
+    gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_personnaliser_menu_fcm")), beton_data && !ERREUR_RELATIVE_EGALE(beton_data->fcm, _1992_1_1_materiaux_fcm(beton_data->fck/1000000.)));
+    gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_personnaliser_menu_fctm")), beton_data && !ERREUR_RELATIVE_EGALE(beton_data->fctm, _1992_1_1_materiaux_fctm(beton_data->fck/1000000., beton_data->fcm/1000000.)));
+    gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_personnaliser_menu_fctk_0_05")), beton_data && !ERREUR_RELATIVE_EGALE(beton_data->fctk_0_05, _1992_1_1_materiaux_fctk_0_05(beton_data->fctm/1000000.)));
+    gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_personnaliser_menu_fctk_0_95")), beton_data && !ERREUR_RELATIVE_EGALE(beton_data->fctk_0_95, _1992_1_1_materiaux_fctk_0_95(beton_data->fctm/1000000.)));
+    gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_personnaliser_menu_Ecm")), beton_data && !ERREUR_RELATIVE_EGALE(beton_data->ecm, _1992_1_1_materiaux_ecm(beton_data->fcm/1000000.)));
+    gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_personnaliser_menu_ec1")), beton_data && !ERREUR_RELATIVE_EGALE(beton_data->ec1, _1992_1_1_materiaux_ec1(beton_data->fcm/1000000.)));
+    gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_personnaliser_menu_ecu1")), beton_data && !ERREUR_RELATIVE_EGALE(beton_data->ecu1, _1992_1_1_materiaux_ecu1(beton_data->fcm/1000000., beton_data->fck/1000000.)));
+    gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_personnaliser_menu_ec2")), beton_data && !ERREUR_RELATIVE_EGALE(beton_data->ec2, _1992_1_1_materiaux_ec2(beton_data->fck/1000000.)));
+    gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_personnaliser_menu_ecu2")), beton_data && !ERREUR_RELATIVE_EGALE(beton_data->ecu2, _1992_1_1_materiaux_ecu2(beton_data->fck/1000000.)));
+    gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_personnaliser_menu_n")), beton_data && !ERREUR_RELATIVE_EGALE(beton_data->n, _1992_1_1_materiaux_n(beton_data->fck/1000000.)));
+    gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_personnaliser_menu_ec3")), beton_data && !ERREUR_RELATIVE_EGALE(beton_data->ec3, _1992_1_1_materiaux_ec3(beton_data->fck/1000000.)));
+    gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_personnaliser_menu_ecu3")), beton_data && !ERREUR_RELATIVE_EGALE(beton_data->ecu3, _1992_1_1_materiaux_ecu3(beton_data->fck/1000000.)));
+    gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_personnaliser_menu_nu")), beton_data && !ERREUR_RELATIVE_EGALE(beton_data->nu, COEFFICIENT_NU_BETON));
     
     gtk_window_set_transient_for(GTK_WINDOW(ef_gtk->window), GTK_WINDOW(projet->list_gtk.comp.window));
     
@@ -723,7 +732,7 @@ G_MODULE_EXPORT void EF_gtk_materiaux_edit_clicked(GtkWidget *widget  __attribut
         if (gtk_tree_model_get_iter(model, &iter, (GtkTreePath*)list_parcours->data))
         {
     // Et on les édite les unes après les autres.
-            Beton_Materiau *materiau;
+            EF_Materiau *materiau;
             
             gtk_tree_model_get(model, &iter, 0, &nom, -1);
             BUG(materiau = _1992_1_1_materiaux_cherche_nom(projet, nom, TRUE), );

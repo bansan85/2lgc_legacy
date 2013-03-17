@@ -72,13 +72,13 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_init(Projet *projet)
 
 
 G_MODULE_EXPORT gboolean _1992_1_1_barres_ajout(Projet *projet, Type_Element type,
-  EF_Section *section, Beton_Materiau *materiau, unsigned int noeud_debut,
-  unsigned int noeud_fin, EF_Relachement* relachement, unsigned int discretisation_element)
+  EF_Section *section, EF_Materiau *materiau, unsigned int noeud_debut, unsigned int noeud_fin,
+  EF_Relachement* relachement, unsigned int discretisation_element)
 /* Description : Ajoute un élément à la liste des éléments en béton.
  * Paramètres : Projet *projet : la variable projet,
  *            : Type_Beton_Barre type : type de l'élément en béton,
  *            : EF_Section *section : section correspondant à l'élément,
- *            : Beton_Materiau *materiau : matériau correspondant à l'élément,
+ *            : EF_Materiau *materiau : matériau correspondant à l'élément,
  *            : unsigned int noeud_debut : numéro de départ de l'élément,
  *            : unsigned int noeud_fin : numéro de fin de l'élément,
  *            : EF_Relachement* relachement : relachement de la barre (NULL si aucun),
@@ -709,10 +709,10 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_change_section(Beton_Barre *barre,
 
 
 G_MODULE_EXPORT gboolean _1992_1_1_barres_change_materiau(Beton_Barre *barre,
-  Beton_Materiau *materiau, Projet *projet)
+  EF_Materiau *materiau, Projet *projet)
 /* Description : Change le matériau d'une barre depuis son nom.
  * Paramètres : Beton_Barre *barre : barre à modifier,
- *            : Beton_Materiaur *materiau : le nouveau materiau,
+ *            : EF_Materiau *materiau : le nouveau materiau,
  *            : Projet *projet : variable projet.
  * Valeur renvoyée :
  *   Succès : TRUE

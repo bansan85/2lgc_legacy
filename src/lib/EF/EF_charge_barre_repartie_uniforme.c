@@ -157,7 +157,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_mx(Beton_Barre *barre
  *             barre == NULL,
  *             infos == NULL,
  *             barre->section == NULL,
- *             barre->materiau == NULL,
+ *             barre->materiaux == NULL,
  *             barre->noeud_debut == NULL,
  *             barre->noeud_fin == NULL,
  *             discretisation>barre->discretisation_element,
@@ -206,7 +206,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_mx(Beton_Barre *barre
     BUGMSG(!((b > l) && (!(ERREUR_RELATIVE_EGALE(b, l)))), FALSE, gettext("La fin de la charge répartie uniformément (%f) est incorrecte. La longueur de la barre %d est de %f m.\n"), a, barre->numero, l);
     BUGMSG(!((a+b > l) && (!(ERREUR_RELATIVE_EGALE(a+b, l)))), FALSE, gettext("Le début (%f) et la fin (%f) de la charge répartie uniformément sont incompatibles avec la longueur de la barre %d qui est de %f m.\n"), a, b, barre->numero, l);
     
-    G = barre->materiau->gnu_0_2;
+    G = EF_calculs_G(barre->materiau, FALSE);
     
     switch (barre->section->type)
     {
@@ -260,7 +260,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_def_ang_iso_y(Beton_B
  *   Échec : FALSE :
  *             barre == NULL,
  *             barre->section == NULL,
- *             barre->materiau == NULL,
+ *             barre->materiaux == NULL,
  *             barre->noeud_debut == NULL,
  *             barre->noeud_fin == NULL,
  *             discretisation>barre->discretisation_element,
@@ -315,7 +315,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_def_ang_iso_y(Beton_B
     BUGMSG(!((b > l) && (!(ERREUR_RELATIVE_EGALE(b, l)))), FALSE, gettext("La fin de la charge répartie uniformément (%f) est incorrecte. La longueur de la barre %d est de %f m.\n"), b, barre->numero, l);
     BUGMSG(!((a+b > l) && (!(ERREUR_RELATIVE_EGALE(a+b, l)))), FALSE, gettext("Le début (%f) et la fin (%f) de la charge répartie uniformément sont incorrecte avec la longueur de la barre %d qui est de %f m.\n"), a, b, barre->numero, l);
     
-    E = barre->materiau->ecm;
+    E = EF_calculs_E(barre->materiau);
     
     switch (barre->section->type)
     {
@@ -364,7 +364,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_def_ang_iso_z(Beton_B
  *   Échec : FALSE :
  *             barre == NULL,
  *             barre->section == NULL,
- *             barre->materiau == NULL,
+ *             barre->materiaux == NULL,
  *             barre->noeud_debut == NULL,
  *             barre->noeud_fin == NULL,
  *             discretisation>barre->discretisation_element,
@@ -419,7 +419,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_def_ang_iso_z(Beton_B
     BUGMSG(!((b > l) && (!(ERREUR_RELATIVE_EGALE(b, l)))), FALSE, gettext("La fin de la charge répartie uniformément (%f) est incorrecte. La longueur de la barre %d est de %f m.\n"), b, barre->numero, l);
     BUGMSG(!((a+b > l) && (!(ERREUR_RELATIVE_EGALE(a+b, l)))), FALSE, gettext("Le début (%f) et la fin (%f) de la charge répartie uniformément sont incorrecte avec la longueur de la barre %d qui est de %f m.\n"), a, b, barre->numero, l);
     
-    E = barre->materiau->ecm;
+    E = EF_calculs_E(barre->materiau);
     
     switch (barre->section->type)
     {
@@ -516,7 +516,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_fonc_rx(Fonction *fon
  *             fonction == NULL,
  *             barre == NULL,
  *             barre->section == NULL,
- *             barre->materiau == NULL,
+ *             barre->materiaux == NULL,
  *             barre->noeud_debut == NULL,
  *             barre->noeud_fin == NULL,
  *             discretisation>barre->discretisation_element,
@@ -573,7 +573,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_fonc_rx(Fonction *fon
     BUGMSG(!((b > l) && (!(ERREUR_RELATIVE_EGALE(b, l)))), FALSE, gettext("La fin de la charge répartie uniformément (%f) est incorrecte. La longueur de la barre %d est de %f m.\n"), a, barre->numero, l);
     BUGMSG(!((a+b > l) && (!(ERREUR_RELATIVE_EGALE(a+b, l)))), FALSE, gettext("Le début (%f) et la fin (%f) de la charge répartie uniformément sont incompatibles avec la longueur de la barre %d qui est de %f m.\n"), a, b, barre->numero, l);
     
-    G = barre->materiau->gnu_0_2;
+    G = EF_calculs_G(barre->materiau, FALSE);
     
     switch (barre->section->type)
     {
@@ -644,7 +644,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_fonc_ry(Fonction *f_r
  *             f_deform == NULL,
  *             barre == NULL,
  *             barre->section == NULL,
- *             barre->materiau == NULL,
+ *             barre->materiaux == NULL,
  *             barre->noeud_debut == NULL,
  *             barre->noeud_fin == NULL,
  *             discretisation>barre->discretisation_element,
@@ -727,7 +727,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_fonc_ry(Fonction *f_r
     BUGMSG(!((b > l) && (!(ERREUR_RELATIVE_EGALE(b, l)))), FALSE, gettext("La fin de la charge répartie uniformément (%f) est incorrecte. La longueur de la barre %d est de %f m.\n"), a, barre->numero, l);
     BUGMSG(!((a+b > l) && (!(ERREUR_RELATIVE_EGALE(a+b, l)))), FALSE, gettext("Le début (%f) et la fin (%f) de la charge répartie uniformément sont incompatibles avec la longueur de la barre %d qui est de %f m.\n"), a, b, barre->numero, l);
     
-    E = barre->materiau->ecm;
+    E = EF_calculs_E(barre->materiau);
     
     switch (barre->section->type)
     {
@@ -809,7 +809,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_fonc_rz(Fonction *f_r
  *             f_deform == NULL,
  *             barre == NULL,
  *             barre->section == NULL,
- *             barre->materiau == NULL,
+ *             barre->materiaux == NULL,
  *             barre->noeud_debut == NULL,
  *             barre->noeud_fin == NULL,
  *             discretisation>barre->discretisation_element,
@@ -858,7 +858,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_fonc_rz(Fonction *f_r
     BUGMSG(!((b > l) && (!(ERREUR_RELATIVE_EGALE(b, l)))), FALSE, gettext("La fin de la charge répartie uniformément (%f) est incorrecte. La longueur de la barre %d est de %f m.\n"), a, barre->numero, l);
     BUGMSG(!((a+b > l) && (!(ERREUR_RELATIVE_EGALE(a+b, l)))), FALSE, gettext("Le début (%f) et la fin (%f) de la charge répartie uniformément sont incompatibles avec la longueur de la barre %d qui est de %f m.\n"), a, b, barre->numero, l);
     
-    E = barre->materiau->ecm;
+    E = EF_calculs_E(barre->materiau);
     
     switch (barre->section->type)
     {
@@ -916,7 +916,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_n(Fonction *fonction,
  *             barre == NULL,
  *             fonction == NULL,
  *             barre->section == NULL,
- *             barre->materiau == NULL,
+ *             barre->materiaux == NULL,
  *             barre->noeud_debut == NULL,
  *             barre->noeud_fin == NULL,
  *             discretisation>barre->discretisation_element.
@@ -963,7 +963,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_n(Fonction *fonction,
     BUGMSG(!((b > l) && (!(ERREUR_RELATIVE_EGALE(b, l)))), FALSE, gettext("La fin de la charge répartie uniformément (%f) est incorrecte. La longueur de la barre %d est de %f m.\n"), b, barre->numero, l);
     BUGMSG(!((a+b > l) && (!(ERREUR_RELATIVE_EGALE(a+b, l)))), FALSE, gettext("Le début (%f) et la fin (%f) de la charge répartie uniformément sont incorrecte avec la longueur de la barre %d qui est de %f m.\n"), a, b, barre->numero, l);
     
-    E = barre->materiau->ecm;
+    E = EF_calculs_E(barre->materiau);
     
     switch (barre->section->type)
     {

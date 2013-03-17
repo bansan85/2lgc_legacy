@@ -140,7 +140,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_mx(Beton_Barre *barre,
  *             barre == NULL,
  *             infos == NULL,
  *             barre->section == NULL,
- *             barre->materiau == NULL,
+ *             barre->materiaux == NULL,
  *             barre->noeud_debut == NULL,
  *             barre->noeud_fin == NULL,
  *             discretisation>barre->discretisation_element,
@@ -185,7 +185,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_mx(Beton_Barre *barre,
     BUG(!isnan(l), FALSE);
     BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), FALSE, gettext("La position de la charge ponctuelle (%f) est incorrecte. La longueur de la barre est de %f m.\n"), a, l);
     
-    G = barre->materiau->gnu_0_2;
+    G = EF_calculs_G(barre->materiau, FALSE);
     
     switch (barre->section->type)
     {
@@ -237,7 +237,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_def_ang_iso_y(Beton_Barre *b
  *   Échec : FALSE :
  *             barre == NULL,
  *             barre->section == NULL,
- *             barre->materiau == NULL,
+ *             barre->materiaux == NULL,
  *             barre->noeud_debut == NULL,
  *             barre->noeud_fin == NULL,
  *             discretisation>barre->discretisation_element,
@@ -283,7 +283,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_def_ang_iso_y(Beton_Barre *b
     BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), FALSE, gettext("La position de la charge ponctuelle (%f) est incorrecte. La longueur de la barre est de %f m.\n"), a, l);
     b = l-a;
     
-    E = barre->materiau->ecm;
+    E = EF_calculs_E(barre->materiau);
     
     switch (barre->section->type)
     {
@@ -330,7 +330,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_def_ang_iso_z(Beton_Barre *b
  *   Échec : FALSE :
  *             barre == NULL,
  *             barre->section == NULL,
- *             barre->materiau == NULL,
+ *             barre->materiaux == NULL,
  *             barre->noeud_debut == NULL,
  *             barre->noeud_fin == NULL,
  *             discretisation>barre->discretisation_element,
@@ -376,7 +376,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_def_ang_iso_z(Beton_Barre *b
     BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), FALSE, gettext("La position de la charge ponctuelle (%f) est incorrecte. La longueur de la barre est de %f m.\n"), a, l);
     b = l-a;
     
-    E = barre->materiau->ecm;
+    E = EF_calculs_E(barre->materiau);
     
     switch (barre->section->type)
     {
@@ -424,7 +424,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_fonc_rx(Fonction *fonction,
  *             fonction == NULL,
  *             barre == NULL,
  *             barre->section == NULL,
- *             barre->materiau == NULL,
+ *             barre->materiaux == NULL,
  *             barre->noeud_debut == NULL,
  *             barre->noeud_fin == NULL,
  *             discretisation>barre->discretisation_element,
@@ -472,7 +472,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_fonc_rx(Fonction *fonction,
     BUG(!isnan(l), FALSE);
     BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), FALSE, gettext("La position de la charge ponctuelle (%f) est incorrecte. La longueur de la barre est de %f m.\n"), a, l);
     
-    G = barre->materiau->gnu_0_2;
+    G = EF_calculs_G(barre->materiau, FALSE);
     
     switch (barre->section->type)
     {
@@ -539,7 +539,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_fonc_ry(Fonction *f_rotation
  *             f_deform == NULL,
  *             barre == NULL,
  *             barre->section == NULL,
- *             barre->materiau == NULL,
+ *             barre->materiaux == NULL,
  *             barre->noeud_debut == NULL,
  *             barre->noeud_fin == NULL,
  *             discretisation>barre->discretisation_element,
@@ -603,7 +603,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_fonc_ry(Fonction *f_rotation
     BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), FALSE, gettext("La position de la charge ponctuelle (%f) est incorrecte. La longueur de la barre est de %f m.\n"), a, l);
     
     b = l-a;
-    E = barre->materiau->ecm;
+    E = EF_calculs_E(barre->materiau);
     
     switch (barre->section->type)
     {
@@ -675,7 +675,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_fonc_rz(Fonction *f_rotation
  *             f_deform == NULL,
  *             barre == NULL,
  *             barre->section == NULL,
- *             barre->materiau == NULL,
+ *             barre->materiaux == NULL,
  *             barre->noeud_debut == NULL,
  *             barre->noeud_fin == NULL,
  *             discretisation>barre->discretisation_element,
@@ -720,7 +720,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_fonc_rz(Fonction *f_rotation
     BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), FALSE, gettext("La position de la charge ponctuelle (%f) est incorrecte. La longueur de la barre est de %f m.\n"), a, l);
     
     b = l-a;
-    E = barre->materiau->ecm;
+    E = EF_calculs_E(barre->materiau);
     
     switch (barre->section->type)
     {
@@ -773,7 +773,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_n(Fonction *fonction, Beton_
  *             barre == NULL,
  *             fonction == NULL,
  *             barre->section == NULL,
- *             barre->materiau == NULL,
+ *             barre->materiaux == NULL,
  *             barre->noeud_debut == NULL,
  *             barre->noeud_fin == NULL,
  *             discretisation>barre->discretisation_element,
@@ -813,7 +813,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_n(Fonction *fonction, Beton_
     BUG(!isnan(l), FALSE);
     BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), FALSE, gettext("La position de la charge ponctuelle (%f) est incorrecte. La longueur de la barre est de %f m.\n"), a, l);
     
-    E = barre->materiau->ecm;
+    E = EF_calculs_E(barre->materiau);
     
     switch (barre->section->type)
     {

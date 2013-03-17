@@ -196,7 +196,7 @@ G_MODULE_EXPORT void EF_gtk_barres_edit_section(
 G_MODULE_EXPORT void EF_gtk_barres_edit_materiau(
   GtkCellRendererText *cell __attribute__((unused)), const gchar *path_string,
   const gchar *new_text, Projet *projet)
-/* Description : Changement la section d'une barre.
+/* Description : Changement le matériau d'une barre.
  * Paramètres : GtkCellRendererText *cell : cellule en cours,
  *            : gchar *path_string : path de la ligne en cours,
  *            : gchar *new_text : nom du type de barre,
@@ -209,7 +209,7 @@ G_MODULE_EXPORT void EF_gtk_barres_edit_materiau(
     GtkTreeIter     iter;
     guint           numero_barre;
     Beton_Barre     *barre = NULL;
-    Beton_Materiau  *materiau;
+    EF_Materiau     *materiau;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_barres.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Barres");
