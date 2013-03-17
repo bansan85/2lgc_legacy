@@ -612,7 +612,7 @@ G_MODULE_EXPORT gboolean m3d_barre(void *donnees_m3d, Beton_Barre *barre)
             retombee_gauche->set_position(0., lr/2., -cdgb+hr/2.);
             
             dalle_bas_gauche = M3d_plan_new("", longueur, (lt-lr)/2., 1);
-            dalle_bas_gauche->rotations(90., 0., 0.);
+            dalle_bas_gauche->rotations(90., 180., 0.);
             dalle_bas_gauche->set_position(0., lr/2.+(lt-lr)/4., -cdgb+hr);
             
             dalle_bas_droite = M3d_plan_new("", longueur, (lt-lr)/2., 1);
