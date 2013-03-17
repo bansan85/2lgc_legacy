@@ -25,6 +25,9 @@
 gboolean EF_calculs_initialise(Projet *projet) __attribute__((__warn_unused_result__));
 gboolean EF_calculs_genere_mat_rig(Projet *projet) __attribute__((__warn_unused_result__));
 
+double EF_calculs_E(EF_Materiau *materiau) __attribute__((__warn_unused_result__));
+double EF_calculs_G(EF_Materiau *materiau, gboolean nu_null) __attribute__((__warn_unused_result__));
+
 gboolean EF_calculs_moment_hyper_y(Barre_Info_EF *infos, double phia, double phib, double *ma, double *mb) __attribute__((__warn_unused_result__));
 gboolean EF_calculs_moment_hyper_z(Barre_Info_EF *infos, double phia, double phib, double *ma, double *mb) __attribute__((__warn_unused_result__));
 

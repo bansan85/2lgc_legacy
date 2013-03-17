@@ -281,6 +281,73 @@ G_MODULE_EXPORT gboolean EF_calculs_genere_mat_rig(Projet *projet)
 }
 
 
+double EF_calculs_E(EF_Materiau *materiau)
+/* Description : Renvoie le module d'Young du matériau.
+ * Paramètres : EF_Materiau *materiau : le matériau à analyser.
+ * Valeur renvoyée :
+ *   Succès : le module d'Young
+ *   Échec : NAN :
+ *             materiau == NULL,
+ *             materiau inconnu.
+ */
+{
+    BUGMSG(materiau, NAN, gettext("Paramètre %s incorrect.\n"), "materiau");
+    
+    switch (materiau->type)
+    {
+        case MATERIAU_BETON :
+        {
+            Materiau_Beton  *data_beton = materiau->data;
+            
+            return data_beton->ecm;
+            
+            break;
+        }
+        default :
+        {
+            BUGMSG(0, NAN, gettext("Matériau %d inconnu.\n"), materiau->type);
+            break;
+        }
+    }
+}
+
+
+double EF_calculs_G(EF_Materiau *materiau, gboolean nu_null)
+/* Description : Renvoie le module de cisaillement du matériau.
+ * Paramètres : EF_Materiau *materiau : le matériau à analyser,
+ *              boolean nu_null : TRUE si on force le coefficient de poisson à 0,
+ *                                FALSE si on prend la valeur définie dans le matériau.
+ * Valeur renvoyée :
+ *   Succès : le module de cisaillement.
+ *   Échec : NAN :
+ *             materiau == NULL,
+ *             materiau inconnu.
+ */
+{
+    BUGMSG(materiau, NAN, gettext("Paramètre %s incorrect.\n"), "materiau");
+    
+    switch (materiau->type)
+    {
+        case MATERIAU_BETON :
+        {
+            Materiau_Beton  *data_beton = materiau->data;
+            
+            if (nu_null)
+                return data_beton->ecm/2.;
+            else
+                return data_beton->ecm/(2.*(1+data_beton->nu));
+            
+            break;
+        }
+        default :
+        {
+            BUGMSG(0, NAN, gettext("Matériau %d inconnu.\n"), materiau->type);
+            break;
+        }
+    }
+}
+
+
 G_MODULE_EXPORT gboolean EF_calculs_moment_hyper_y(Barre_Info_EF *infos, double phia,
   double phib, double *ma, double *mb)
 /* Description : Calcul le moment hyperstatique correspondant à l'opposé du moment de la
@@ -1250,13 +1317,14 @@ G_MODULE_EXPORT gboolean EF_calculs_resoud_charge(Projet *projet, unsigned int n
                 case BETON_ELEMENT_POTEAU :
                 case BETON_ELEMENT_POUTRE :
                 {
-                    E = element_en_beton->materiau->ecm;
-                    G = element_en_beton->materiau->gnu_0_2;
+                    E = EF_calculs_E(element_en_beton->materiau);
+                    G = EF_calculs_G(element_en_beton->materiau, FALSE);
                     break;
                 }
                 default :
                 {
-                    BUGMSG(0, FALSE, gettext("Type d'élément inconnu.\n"));
+                    BUGMSG(0, FALSE, gettext("Type d'élément %d inconnu.\n"), element_en_beton->type);
+                    break;
                 }
             }
             

@@ -63,7 +63,7 @@ G_MODULE_EXPORT void EF_gtk_barres_add_add_clicked(GtkButton *button __attribute
     int             type;
     char            *nom;
     EF_Section      *section;
-    Beton_Materiau  *materiau;
+    EF_Materiau     *materiau;
     unsigned int    noeud_debut;
     unsigned int    noeud_fin;
     EF_Relachement  *relachement;
