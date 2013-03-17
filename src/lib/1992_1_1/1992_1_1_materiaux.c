@@ -120,11 +120,12 @@ G_MODULE_EXPORT double _1992_1_1_materiaux_fcm(double fck)
 }
 
 
-G_MODULE_EXPORT double _1992_1_1_materiaux_fctm(double fck)
+G_MODULE_EXPORT double _1992_1_1_materiaux_fctm(double fck, double fcm)
 /* Description : Renvoie la valeur moyenne de la résistance en traction directe du béton,
  *               mesurée sur cylindre en unité SI (Pa).
  * Paramètres : double fck : Résistance caractéristique en compression du béton, mesurée sur
  *                           cylindre à 28 jours, en MPa.
+ *            : double fcm : Valeur moyenne de la résistance en compression du béton, en MPa.
  * Valeur renvoyée :
  *   Succès : le résultat,
  *   Échec : NAN :
@@ -137,83 +138,62 @@ G_MODULE_EXPORT double _1992_1_1_materiaux_fctm(double fck)
     if (fck <= 50.)
         return 0.3*pow(fck,2./3.)*1000000.;
     else
-        return 2.12*log(1.+(_1992_1_1_materiaux_fcm(fck)/10./1000000.))*1000000.;
+        return 2.12*log(1.+(fcm/10.))*1000000.;
 }
 
 
-G_MODULE_EXPORT double _1992_1_1_materiaux_fctk_0_05(double fck)
+G_MODULE_EXPORT double _1992_1_1_materiaux_fctk_0_05(double fctm)
 /* Description : Renvoie la valeur moyenne de la résistance en traction directe du béton,
  *               (fractile 5%) en unité SI (Pa).
- * Paramètres : double fck : Résistance caractéristique en compression du béton, mesurée sur
- *                           cylindre à 28 jours, en MPa.
+ * Paramètres : double fctm : Valeur moyenne de la résistance en traction directe du béton,
+ *                            en MPa.
  * Valeur renvoyée :
- *   Succès : le résultat,
- *   Échec : NAN :
- *             fck > 90.,
- *             fck <= 0.
+ *   Succès : le résultat.
  */
 {
-    BUGMSG((fck > ERREUR_RELATIVE_MIN) && (fck <= 90.*(1+ERREUR_RELATIVE_MIN)), NAN, gettext("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"));
-    
-    return 0.7*_1992_1_1_materiaux_fctm(fck);
+    return 0.7*fctm*1000000.;
 }
 
 
-G_MODULE_EXPORT double _1992_1_1_materiaux_fctk_0_95(double fck)
+G_MODULE_EXPORT double _1992_1_1_materiaux_fctk_0_95(double fctm)
 /* Description : Renvoie la valeur moyenne de la résistance en traction directe du béton,
  *               (fractile 95%) en unité SI (Pa).
- * Paramètres : double fck : Résistance caractéristique en compression du béton, mesurée sur
- *                           cylindre à 28 jours, en MPa.
+ * Paramètres : double fctm : Valeur moyenne de la résistance en traction directe du béton,
+ *                            en MPa.
  * Valeur renvoyée :
- *   Succès : le résultat,
- *   Échec : NAN :
- *             fck > 90.,
- *             fck <= 0.
+ *   Succès : le résultat.
  */
 {
-    BUGMSG((fck > ERREUR_RELATIVE_MIN) && (fck <= 90.*(1+ERREUR_RELATIVE_MIN)), NAN, gettext("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"));
-    
-    return 1.3*_1992_1_1_materiaux_fctm(fck);
+    return 1.3*fctm*1000000.;
 }
 
 
-G_MODULE_EXPORT double _1992_1_1_materiaux_ecm(double fck)
+G_MODULE_EXPORT double _1992_1_1_materiaux_ecm(double fcm)
 /* Description : Renvoie le module d'élasticité sécant du béton en unité SI (Pa).
- * Paramètres : double fck : Résistance caractéristique en compression du béton, mesurée sur
- *                           cylindre à 28 jours, en MPa.
+ * Paramètres : double fcm : valeur moyenne de la résistance en compression du béton, en MPa.
  * Valeur renvoyée :
- *   Succès : le résultat,
- *   Échec : NAN :
- *             fck > 90.,
- *             fck <= 0.
+ *   Succès : le résultat.
  */
 {
-    BUGMSG((fck > ERREUR_RELATIVE_MIN) && (fck <= 90.*(1+ERREUR_RELATIVE_MIN)), NAN, gettext("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"));
-    
-    return 22.*pow(_1992_1_1_materiaux_fcm(fck)/10./1000000., 0.3)*1000000000.;
+    return 22.*pow(fcm/10., 0.3)*1000000000.;
 }
 
 
-G_MODULE_EXPORT double _1992_1_1_materiaux_ec1(double fck)
+G_MODULE_EXPORT double _1992_1_1_materiaux_ec1(double fcm)
 /* Description : Renvoie la déformation relative en compression du béton au point 1.
- * Paramètres : double fck : Résistance caractéristique en compression du béton, mesurée sur
- *                           cylindre à 28 jours, en MPa.
+ * Paramètres : double fcm : valeur moyenne de la résistance en compression du béton, en MPa.
  * Valeur renvoyée :
- *   Succès : le résultat,
- *   Échec : NAN :
- *             fck > 90.,
- *             fck <= 0.
+ *   Succès : le résultat.
  */
 {
-    BUGMSG((fck > ERREUR_RELATIVE_MIN) && (fck <= 90.*(1+ERREUR_RELATIVE_MIN)), NAN, gettext("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"));
-    
-    return MIN(0.7*pow(_1992_1_1_materiaux_fcm(fck)/1000000., 0.31), 2.8)/1000.;
+    return MIN(0.7*pow(fcm, 0.31), 2.8)/1000.;
 }
 
 
-G_MODULE_EXPORT double _1992_1_1_materiaux_ecu1(double fck)
+G_MODULE_EXPORT double _1992_1_1_materiaux_ecu1(double fcm, double fck)
 /* Description : Renvoie la déformation relative ultime en compression du béton au point 1.
- * Paramètres : double fck : Résistance caractéristique en compression du béton, mesurée sur
+ * Paramètres : double fcm : valeur moyenne de la résistance en compression du béton, en MPa.
+ *            : double fck : Résistance caractéristique en compression du béton, mesurée sur
  *                           cylindre à 28 jours, en MPa.
  * Valeur renvoyée :
  *   Succès : le résultat,
@@ -227,7 +207,7 @@ G_MODULE_EXPORT double _1992_1_1_materiaux_ecu1(double fck)
     if (fck < 50.)
         return 3.5/1000.;
     else
-        return (2.8 + 27.*pow((98.-_1992_1_1_materiaux_fcm(fck)/1000000.)/100.,4.))/1000.;
+        return (2.8 + 27.*pow((98.-fcm)/100.,4.))/1000.;
 }
 
 
@@ -325,26 +305,21 @@ G_MODULE_EXPORT double _1992_1_1_materiaux_n(double fck)
     BUGMSG((fck > ERREUR_RELATIVE_MIN) && (fck <= 90.*(1+ERREUR_RELATIVE_MIN)), NAN, gettext("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"));
     
     if (fck < 50.)
-        return 2./1000.;
+        return 2.;
     else
-        return (1.4 + 23.4*pow((90.-fck)/100., 4.))/1000.;
+        return (1.4 + 23.4*pow((90.-fck)/100., 4.));
 }
 
 
-G_MODULE_EXPORT double _1992_1_1_materiaux_gnu(double fck, double nu)
+G_MODULE_EXPORT double _1992_1_1_materiaux_gnu(double ecm, double nu)
 /* Description : Renvoie le module de cisallement en unité SI (Pa).
- * Paramètres : double fck : Résistance caractéristique en compression du béton, mesurée sur
- *                           cylindre à 28 jours, en MPa.
+ * Paramètres : double fck : module d'élasticité sécant du béton en GPa,
+ *              double nu : coefficient de poisson.
  * Valeur renvoyée :
- *   Succès : le résultat,
- *   Échec : NAN :
- *             fck > 90.,
- *             fck <= 0.
+ *   Succès : le résultat.
  */
 {
-    BUGMSG((fck > ERREUR_RELATIVE_MIN) && (fck <= 90.*(1+ERREUR_RELATIVE_MIN)), NAN, gettext("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"));
-    
-    return _1992_1_1_materiaux_ecm(fck)/(2.*(1.+nu));
+    return ecm/(2.*(1.+nu))*1000000000.;
 }
 
 
@@ -429,7 +404,8 @@ gboolean _1992_1_1_materiaux_insert(Projet *projet, Beton_Materiau *materiau)
 }
 
 
-G_MODULE_EXPORT gboolean _1992_1_1_materiaux_ajout(Projet *projet, const char *nom, double fck)
+G_MODULE_EXPORT Beton_Materiau* _1992_1_1_materiaux_ajout(Projet *projet, const char *nom,
+  double fck)
 /* Description : Ajoute un matériau en béton et calcule ses caractéristiques mécaniques.
  *               Les propriétés du béton sont déterminées conformément au tableau 3.1 de
  *               l'Eurocode 2-1-1 les valeurs de fckcube est déterminée par interpolation
@@ -438,8 +414,8 @@ G_MODULE_EXPORT gboolean _1992_1_1_materiaux_ajout(Projet *projet, const char *n
  *            : double fck : résistance à la compression du béton à 28 jours en MPa,
  *            : double nu : coefficient de poisson pour un béton non fissuré.
  * Valeur renvoyée :
- *   Succès : TRUE
- *   Échec : FALSE :
+ *   Succès : pointeur vers le nouveau matériau.
+ *   Échec : NULL :
  *             projet == NULL,
  *             projet->modele.materiaux == NULL,
  *             fck > 90.,
@@ -449,34 +425,34 @@ G_MODULE_EXPORT gboolean _1992_1_1_materiaux_ajout(Projet *projet, const char *n
     Beton_Materiau  *materiau_nouveau = malloc(sizeof(Beton_Materiau));
     
     // Trivial
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG((fck > ERREUR_RELATIVE_MIN) && (fck <= 90.*(1+ERREUR_RELATIVE_MIN)), FALSE, gettext("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"));
-    BUGMSG(materiau_nouveau, FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG((fck > ERREUR_RELATIVE_MIN) && (fck <= 90.*(1+ERREUR_RELATIVE_MIN)), NULL, gettext("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"));
+    BUGMSG(materiau_nouveau, NULL, gettext("Erreur d'allocation mémoire.\n"));
 
     materiau_nouveau->fck = fck*1000000.;
-    BUGMSG(materiau_nouveau->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(materiau_nouveau->nom = g_strdup_printf("%s", nom), NULL, gettext("Erreur d'allocation mémoire.\n"));
     
-    BUG(!isnan(materiau_nouveau->fckcube = _1992_1_1_materiaux_fckcube(fck)), FALSE);
-    BUG(!isnan(materiau_nouveau->fcm = _1992_1_1_materiaux_fcm(fck)), FALSE);
-    BUG(!isnan(materiau_nouveau->fctm = _1992_1_1_materiaux_fctm(fck)), FALSE);
-    BUG(!isnan(materiau_nouveau->fctk_0_05 = _1992_1_1_materiaux_fctk_0_05(fck)), FALSE);
-    BUG(!isnan(materiau_nouveau->fctk_0_95 = _1992_1_1_materiaux_fctk_0_95(fck)), FALSE);
-    BUG(!isnan(materiau_nouveau->ecm = _1992_1_1_materiaux_ecm(fck)), FALSE);
-    BUG(!isnan(materiau_nouveau->ec1 = _1992_1_1_materiaux_ec1(fck)), FALSE);
-    BUG(!isnan(materiau_nouveau->ecu1 = _1992_1_1_materiaux_ecu1(fck)), FALSE);
-    BUG(!isnan(materiau_nouveau->ec2 = _1992_1_1_materiaux_ec2(fck)), FALSE);
-    BUG(!isnan(materiau_nouveau->ecu2 = _1992_1_1_materiaux_ecu2(fck)), FALSE);
-    BUG(!isnan(materiau_nouveau->ec3 = _1992_1_1_materiaux_ec3(fck)), FALSE);
-    BUG(!isnan(materiau_nouveau->ecu3 = _1992_1_1_materiaux_ecu3(fck)), FALSE);
-    BUG(!isnan(materiau_nouveau->n = _1992_1_1_materiaux_n(fck)), FALSE);
+    BUG(!isnan(materiau_nouveau->fckcube = _1992_1_1_materiaux_fckcube(fck)), NULL);
+    BUG(!isnan(materiau_nouveau->fcm = _1992_1_1_materiaux_fcm(fck)), NULL);
+    BUG(!isnan(materiau_nouveau->fctm = _1992_1_1_materiaux_fctm(fck, materiau_nouveau->fcm/1000000.)), NULL);
+    BUG(!isnan(materiau_nouveau->fctk_0_05 = _1992_1_1_materiaux_fctk_0_05(materiau_nouveau->fctm/1000000.)), NULL);
+    BUG(!isnan(materiau_nouveau->fctk_0_95 = _1992_1_1_materiaux_fctk_0_95(materiau_nouveau->fctm/1000000.)), NULL);
+    BUG(!isnan(materiau_nouveau->ecm = _1992_1_1_materiaux_ecm(materiau_nouveau->fcm/1000000.)), NULL);
+    BUG(!isnan(materiau_nouveau->ec1 = _1992_1_1_materiaux_ec1(materiau_nouveau->fcm/1000000.)), NULL);
+    BUG(!isnan(materiau_nouveau->ecu1 = _1992_1_1_materiaux_ecu1(materiau_nouveau->fcm/1000000., fck)), NULL);
+    BUG(!isnan(materiau_nouveau->ec2 = _1992_1_1_materiaux_ec2(fck)), NULL);
+    BUG(!isnan(materiau_nouveau->ecu2 = _1992_1_1_materiaux_ecu2(fck)), NULL);
+    BUG(!isnan(materiau_nouveau->ec3 = _1992_1_1_materiaux_ec3(fck)), NULL);
+    BUG(!isnan(materiau_nouveau->ecu3 = _1992_1_1_materiaux_ecu3(fck)), NULL);
+    BUG(!isnan(materiau_nouveau->n = _1992_1_1_materiaux_n(fck)), NULL);
     materiau_nouveau->nu = COEFFICIENT_NU_BETON;
-    BUG(!isnan(materiau_nouveau->gnu_0_2 = _1992_1_1_materiaux_gnu(fck, COEFFICIENT_NU_BETON)), FALSE);
-    BUG(!isnan(materiau_nouveau->gnu_0_0 = _1992_1_1_materiaux_gnu(fck, 0)), FALSE);
+    BUG(!isnan(materiau_nouveau->gnu_0_2 = _1992_1_1_materiaux_gnu(materiau_nouveau->ecm/1000000000., COEFFICIENT_NU_BETON)), NULL);
+    BUG(!isnan(materiau_nouveau->gnu_0_0 = _1992_1_1_materiaux_gnu(materiau_nouveau->ecm/1000000000., 0)), NULL);
     
-    BUG(_1992_1_1_materiaux_insert(projet, materiau_nouveau), FALSE);
-    BUG(_1992_1_1_materiaux_update_ligne_treeview(projet, materiau_nouveau), FALSE);
+    BUG(_1992_1_1_materiaux_insert(projet, materiau_nouveau), NULL);
+    BUG(_1992_1_1_materiaux_update_ligne_treeview(projet, materiau_nouveau), NULL);
     
-    return TRUE;
+    return materiau_nouveau;
 }
 
 
@@ -748,7 +724,7 @@ G_MODULE_EXPORT char *_1992_1_1_materiaux_get_description(Beton_Materiau* materi
             free(tmp2);
         }
     }
-    if (!ERREUR_RELATIVE_EGALE(materiau->fctm, _1992_1_1_materiaux_fctm(materiau->fck/1000000.)))
+    if (!ERREUR_RELATIVE_EGALE(materiau->fctm, _1992_1_1_materiaux_fctm(materiau->fck/1000000., materiau->fcm/1000000.)))
     {
         common_math_double_to_char(materiau->fctm/1000000., tmp1, DECIMAL_CONTRAINTE);
         if (complement == NULL)
@@ -760,7 +736,7 @@ G_MODULE_EXPORT char *_1992_1_1_materiaux_get_description(Beton_Materiau* materi
             free(tmp2);
         }
     }
-    if (!ERREUR_RELATIVE_EGALE(materiau->fctk_0_05, _1992_1_1_materiaux_fctk_0_05(materiau->fck/1000000.)))
+    if (!ERREUR_RELATIVE_EGALE(materiau->fctk_0_05, _1992_1_1_materiaux_fctk_0_05(materiau->fctm/1000000.)))
     {
         common_math_double_to_char(materiau->fctk_0_05/1000000., tmp1, DECIMAL_CONTRAINTE);
         if (complement == NULL)
@@ -772,7 +748,7 @@ G_MODULE_EXPORT char *_1992_1_1_materiaux_get_description(Beton_Materiau* materi
             free(tmp2);
         }
     }
-    if (!ERREUR_RELATIVE_EGALE(materiau->fctk_0_95, _1992_1_1_materiaux_fctk_0_95(materiau->fck/1000000.)))
+    if (!ERREUR_RELATIVE_EGALE(materiau->fctk_0_95, _1992_1_1_materiaux_fctk_0_95(materiau->fctm/1000000.)))
     {
         common_math_double_to_char(materiau->fctk_0_95/1000000., tmp1, DECIMAL_CONTRAINTE);
         if (complement == NULL)
@@ -784,7 +760,7 @@ G_MODULE_EXPORT char *_1992_1_1_materiaux_get_description(Beton_Materiau* materi
             free(tmp2);
         }
     }
-    if (!ERREUR_RELATIVE_EGALE(materiau->ecm, _1992_1_1_materiaux_ecm(materiau->fck/1000000.)))
+    if (!ERREUR_RELATIVE_EGALE(materiau->ecm, _1992_1_1_materiaux_ecm(materiau->fcm/1000000.)))
     {
         common_math_double_to_char(materiau->ecm/1000000., tmp1, DECIMAL_CONTRAINTE);
         if (complement == NULL)
@@ -796,7 +772,7 @@ G_MODULE_EXPORT char *_1992_1_1_materiaux_get_description(Beton_Materiau* materi
             free(tmp2);
         }
     }
-    if (!ERREUR_RELATIVE_EGALE(materiau->gnu_0_2, _1992_1_1_materiaux_gnu(materiau->fck/1000000., materiau->nu)))
+    if (!ERREUR_RELATIVE_EGALE(materiau->gnu_0_2, _1992_1_1_materiaux_gnu(materiau->ecm/1000000000., materiau->nu)))
     {
         common_math_double_to_char(materiau->gnu_0_2/1000000., tmp1, DECIMAL_CONTRAINTE);
         if (complement == NULL)
@@ -808,7 +784,7 @@ G_MODULE_EXPORT char *_1992_1_1_materiaux_get_description(Beton_Materiau* materi
             free(tmp2);
         }
     }
-    if (!ERREUR_RELATIVE_EGALE(materiau->gnu_0_0, _1992_1_1_materiaux_gnu(materiau->fck/1000000., 0.)))
+    if (!ERREUR_RELATIVE_EGALE(materiau->gnu_0_0, _1992_1_1_materiaux_gnu(materiau->ecm/1000000000., 0.)))
     {
         common_math_double_to_char(materiau->gnu_0_0/1000000., tmp1, DECIMAL_CONTRAINTE);
         if (complement == NULL)
@@ -820,7 +796,7 @@ G_MODULE_EXPORT char *_1992_1_1_materiaux_get_description(Beton_Materiau* materi
             free(tmp2);
         }
     }
-    if (!ERREUR_RELATIVE_EGALE(materiau->ec1, _1992_1_1_materiaux_ec1(materiau->fck/1000000.)))
+    if (!ERREUR_RELATIVE_EGALE(materiau->ec1, _1992_1_1_materiaux_ec1(materiau->fcm/1000000.)))
     {
         common_math_double_to_char(materiau->ec1*1000., tmp1, DECIMAL_SANS_UNITE);
         if (complement == NULL)
@@ -832,7 +808,7 @@ G_MODULE_EXPORT char *_1992_1_1_materiaux_get_description(Beton_Materiau* materi
             free(tmp2);
         }
     }
-    if (!ERREUR_RELATIVE_EGALE(materiau->ecu1, _1992_1_1_materiaux_ecu1(materiau->fck/1000000.)))
+    if (!ERREUR_RELATIVE_EGALE(materiau->ecu1, _1992_1_1_materiaux_ecu1(materiau->fcm/1000000., materiau->fck/1000000.)))
     {
         common_math_double_to_char(materiau->ecu1*1000., tmp1, DECIMAL_SANS_UNITE);
         if (complement == NULL)
