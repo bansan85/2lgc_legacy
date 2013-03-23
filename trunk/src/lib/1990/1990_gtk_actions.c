@@ -374,12 +374,12 @@ G_MODULE_EXPORT void _1990_gtk_actions_type_edited(
     gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(projet->list_gtk._1990_actions.tree_store_actions), &iter, path_string);
     gtk_tree_model_get(GTK_TREE_MODEL(projet->list_gtk._1990_actions.tree_store_actions), &iter, 0, &action_num, -1);
     
-    for (type=0;type<_1990_action_num_bat_txt(projet->pays);type++)
+    for (type=0;type<_1990_action_num_bat_txt(projet->parametres.pays);type++)
     {
-        if (strcmp(new_text, _1990_action_type_bat_txt(type, projet->pays)) == 0)
+        if (strcmp(new_text, _1990_action_type_bat_txt(type, projet->parametres.pays)) == 0)
             break;
     }
-    BUGMSG(type != _1990_action_num_bat_txt(projet->pays), , gettext("Type d'action '%s' inconnu.\n"), new_text);
+    BUGMSG(type != _1990_action_num_bat_txt(projet->parametres.pays), , gettext("Type d'action '%s' inconnu.\n"), new_text);
     
     BUG(_1990_action_change_type(projet, action_num, type), );
     
@@ -878,7 +878,7 @@ G_MODULE_EXPORT void _1990_gtk_actions(Projet *projet)
             Action  *action = list_parcours->data;
             
             gtk_tree_store_append(store_actions, &action->Iter_fenetre, NULL);
-            gtk_tree_store_set(store_actions, &action->Iter_fenetre, 0, action->numero, 1, action->nom, 2, _1990_action_type_bat_txt(action->type, projet->pays), 3, action->psi0, 4, action->psi1, 5, action->psi2, -1);
+            gtk_tree_store_set(store_actions, &action->Iter_fenetre, 0, action->numero, 1, action->nom, 2, _1990_action_type_bat_txt(action->type, projet->parametres.pays), 3, action->psi0, 4, action->psi1, 5, action->psi2, -1);
             
             list_parcours = g_list_next(list_parcours);
         } while (list_parcours != NULL);

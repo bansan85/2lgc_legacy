@@ -982,12 +982,18 @@ typedef struct __Calculs
 } Calculs;
 
 
+typedef struct __Parametres
+{
+    Type_Pays       pays;               // Pays de calculs
+} Parametres;
+
+
 typedef struct __Projet
 {
+    Parametres      parametres;
     GList           *actions;           // Liste des actions contenant chacune des charges
     GList           *niveaux_groupes;   // Compatibilités entres actions
     CombinaisonsEL  combinaisons;       // Combinaisons conformes aux Eurocodes
-    Type_Pays       pays;               // Pays de calculs
     Modele          modele;             // Données du modèle de calcul
     Calculs         calculs;            // Données nécessaires aux calculs
 #ifdef ENABLE_GTK

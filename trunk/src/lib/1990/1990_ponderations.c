@@ -259,7 +259,7 @@ G_MODULE_EXPORT gboolean _1990_ponderations_genere_un(Projet *projet,
                     double              pond;
                     
                     combinaison_element = list_parcours2->data;
-                    categorie = _1990_action_categorie_bat(combinaison_element->action->type, projet->pays);
+                    categorie = _1990_action_categorie_bat(combinaison_element->action->type, projet->parametres.pays);
                     BUG(categorie != ACTION_INCONNUE, FALSE);
     //             Vérification si le coefficient min et max de la catégorie vaut 0.
     //               Si oui, pondération ignorée.
@@ -1057,11 +1057,11 @@ gboolean _1990_ponderations_genere(Projet *projet)
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
     // Trivial
-    switch (projet->pays)
+    switch (projet->parametres.pays)
     {
         case PAYS_EU : { return _1990_ponderations_genere_eu(projet); break; }
         case PAYS_FR : { return _1990_ponderations_genere_fr(projet); break; }
-        default : { BUGMSG(0, FALSE, gettext("Pays %d inconnu.\n"), projet->pays); break; }
+        default : { BUGMSG(0, FALSE, gettext("Pays %d inconnu.\n"), projet->parametres.pays); break; }
     }
 }
 
