@@ -310,12 +310,12 @@ G_MODULE_EXPORT gboolean _1990_action_init(Projet *projet)
     projet->list_gtk._1990_actions.menu_list_widget_action = NULL;
     projet->list_gtk._1990_actions.menu_type_list_action = gtk_menu_new();
     projet->list_gtk._1990_actions.choix_type_action = gtk_list_store_new(1, G_TYPE_STRING);
-    for (i=0;i<_1990_action_num_bat_txt(projet->pays);i++)
+    for (i=0;i<_1990_action_num_bat_txt(projet->parametres.pays);i++)
     {
         GtkTreeIter iter;
         
         // Génération du menu contenant la liste des types d'action pour la création d'une nouvelle action.
-        w_temp = gtk_menu_item_new_with_label(_1990_action_type_bat_txt(i, projet->pays));
+        w_temp = gtk_menu_item_new_with_label(_1990_action_type_bat_txt(i, projet->parametres.pays));
         gtk_menu_shell_append(GTK_MENU_SHELL(projet->list_gtk._1990_actions.menu_type_list_action), w_temp);
         projet->list_gtk._1990_actions.menu_list_widget_action = g_list_append(projet->list_gtk._1990_actions.menu_list_widget_action, w_temp);
         gtk_widget_show(w_temp);
@@ -323,7 +323,7 @@ G_MODULE_EXPORT gboolean _1990_action_init(Projet *projet)
         
         // Génération de la liste des types d'action pour la modification via le treeview Action.
         gtk_list_store_append(projet->list_gtk._1990_actions.choix_type_action, &iter);
-        gtk_list_store_set(projet->list_gtk._1990_actions.choix_type_action, &iter, 0, _1990_action_type_bat_txt(i, projet->pays), -1);
+        gtk_list_store_set(projet->list_gtk._1990_actions.choix_type_action, &iter, 0, _1990_action_type_bat_txt(i, projet->parametres.pays), -1);
     }
     
     projet->list_gtk._1990_actions.menu_list_widget_charge = NULL;
@@ -371,7 +371,7 @@ G_MODULE_EXPORT Action *_1990_action_ajout(Projet *projet, unsigned int type,
     Action      *action_nouveau;
     
     BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUG(_1990_action_categorie_bat(type, projet->pays) != ACTION_INCONNUE, NULL);
+    BUG(_1990_action_categorie_bat(type, projet->parametres.pays) != ACTION_INCONNUE, NULL);
     
     BUGMSG(action_nouveau = (Action*)malloc(sizeof(Action)), NULL, gettext("Erreur d'allocation mémoire.\n"));
     BUGMSG(action_nouveau->nom = g_strdup_printf("%s", description), NULL, gettext("Erreur d'allocation mémoire.\n"));
@@ -379,11 +379,11 @@ G_MODULE_EXPORT Action *_1990_action_ajout(Projet *projet, unsigned int type,
     action_nouveau->type = type;
     action_nouveau->charges = NULL;
     action_nouveau->flags = 0;
-    action_nouveau->psi0 = _1990_coef_psi0_bat(type, projet->pays);
+    action_nouveau->psi0 = _1990_coef_psi0_bat(type, projet->parametres.pays);
     BUG(!isnan(action_nouveau->psi0), NULL);
-    action_nouveau->psi1 = _1990_coef_psi1_bat(type, projet->pays);
+    action_nouveau->psi1 = _1990_coef_psi1_bat(type, projet->parametres.pays);
     BUG(!isnan(action_nouveau->psi1), NULL);
-    action_nouveau->psi2 = _1990_coef_psi2_bat(type, projet->pays);
+    action_nouveau->psi2 = _1990_coef_psi2_bat(type, projet->parametres.pays);
     BUG(!isnan(action_nouveau->psi2), NULL);
     action_nouveau->deplacement_complet = NULL;
     action_nouveau->forces_complet = NULL;
@@ -410,7 +410,7 @@ G_MODULE_EXPORT Action *_1990_action_ajout(Projet *projet, unsigned int type,
     if (projet->list_gtk._1990_actions.builder != NULL)
     {
         gtk_tree_store_append(projet->list_gtk._1990_actions.tree_store_actions, &action_nouveau->Iter_fenetre, NULL);
-        gtk_tree_store_set(projet->list_gtk._1990_actions.tree_store_actions, &action_nouveau->Iter_fenetre, 0, action_nouveau->numero, 1, action_nouveau->nom, 2, _1990_action_type_bat_txt(action_nouveau->type, projet->pays), 3, action_nouveau->psi0, 4, action_nouveau->psi1, 5, action_nouveau->psi2, -1);
+        gtk_tree_store_set(projet->list_gtk._1990_actions.tree_store_actions, &action_nouveau->Iter_fenetre, 0, action_nouveau->numero, 1, action_nouveau->nom, 2, _1990_action_type_bat_txt(action_nouveau->type, projet->parametres.pays), 3, action_nouveau->psi0, 4, action_nouveau->psi1, 5, action_nouveau->psi2, -1);
     }
     if (projet->list_gtk.ef_resultats.builder != NULL)
         gtk_adjustment_set_upper(GTK_ADJUSTMENT(gtk_builder_get_object(projet->list_gtk.ef_resultats.builder, "adjustment_cas")), g_list_length(projet->actions)-1);
@@ -560,18 +560,18 @@ G_MODULE_EXPORT gboolean _1990_action_change_type(Projet *projet, unsigned int a
     BUG(action = _1990_action_cherche_numero(projet, action_num), FALSE);
     
     action->type = type;
-    action->psi0 = _1990_coef_psi0_bat(type, projet->pays);
+    action->psi0 = _1990_coef_psi0_bat(type, projet->parametres.pays);
     BUG(!isnan(action->psi0), FALSE);
-    action->psi1 = _1990_coef_psi1_bat(type, projet->pays);
+    action->psi1 = _1990_coef_psi1_bat(type, projet->parametres.pays);
     BUG(!isnan(action->psi1), FALSE);
-    action->psi2 = _1990_coef_psi2_bat(type, projet->pays);
+    action->psi2 = _1990_coef_psi2_bat(type, projet->parametres.pays);
     BUG(!isnan(action->psi2), FALSE);
     
     BUG(EF_calculs_free(projet), FALSE);
     
 #ifdef ENABLE_GTK
     if (projet->list_gtk._1990_actions.builder != NULL)
-        gtk_tree_store_set(projet->list_gtk._1990_actions.tree_store_actions, &action->Iter_fenetre, 2, _1990_action_type_bat_txt(type, projet->pays), 3, action->psi0, 4, action->psi1, 5, action->psi2, -1);
+        gtk_tree_store_set(projet->list_gtk._1990_actions.tree_store_actions, &action->Iter_fenetre, 2, _1990_action_type_bat_txt(type, projet->parametres.pays), 3, action->psi0, 4, action->psi1, 5, action->psi2, -1);
 #endif
     
     return TRUE;

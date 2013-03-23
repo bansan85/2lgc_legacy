@@ -448,7 +448,7 @@ gboolean _1990_combinaisons_genere_and(Projet *projet, Niveau_Groupe *niveau, Gr
         if (comb->elements != NULL)
         {
             if (action_predominante == 1)
-                BUG(_1990_combinaisons_action_predominante(comb, projet->pays), FALSE);
+                BUG(_1990_combinaisons_action_predominante(comb, projet->parametres.pays), FALSE);
             groupe->tmp_combinaison.combinaisons = g_list_append(groupe->tmp_combinaison.combinaisons, comb);
         }
         else
@@ -639,7 +639,7 @@ gboolean _1990_combinaisons_genere_or(Projet *projet, Niveau_Groupe *niveau, Gro
             if (nouvelle_combinaison->elements != NULL)
             {
                 if (action_predominante == 1)
-                    BUG(_1990_combinaisons_action_predominante(nouvelle_combinaison, projet->pays), FALSE);
+                    BUG(_1990_combinaisons_action_predominante(nouvelle_combinaison, projet->parametres.pays), FALSE);
                 groupe->tmp_combinaison.combinaisons = g_list_append(groupe->tmp_combinaison.combinaisons, nouvelle_combinaison);
             }
             else
@@ -952,7 +952,7 @@ G_MODULE_EXPORT gboolean _1990_combinaisons_genere(Projet *projet)
             list_parcours = g_list_next(list_parcours);
         }
         action = list_parcours->data;
-        categorie = _1990_action_categorie_bat(action->type, projet->pays);
+        categorie = _1990_action_categorie_bat(action->type, projet->parametres.pays);
         BUG(categorie != ACTION_INCONNUE, FALSE);
         if (categorie == ACTION_VARIABLE)
             action->flags = 1;
