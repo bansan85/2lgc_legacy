@@ -19,10 +19,12 @@
 #include "config.h"
 #include "common_projet.h"
 #include "common_selection.h"
+#include "common_erreurs.h"
 #include <libintl.h>
 #include <locale.h>
 #include <gmodule.h>
 #include <stdio.h>
+#include <string.h>
 
 
 G_MODULE_EXPORT void show_warranty()
@@ -157,4 +159,43 @@ G_MODULE_EXPORT char *common_text_dependances(GList *liste_noeuds, GList *liste_
     free(tmp);
     
     return retour;
+}
+
+
+char *common_text_get_line(FILE *fichier)
+/* Description : renvoie la ligne en cours de la variable fichier.
+ * Paramètres : FILE *fichier : la variable fichier.
+ * Valeur renvoyée :
+ *   Succès : pointeur vers la ligne de texte.
+ *   Échec : NULL :
+ *             fichier == NULL,
+ *             Erreur d'allocation mémoire.
+ */
+{
+    long unsigned int   CUR_MAX = 256;
+    char                *buffer, *ligne_tmp, *retour = NULL;
+    
+    BUGMSG(buffer = malloc(sizeof(char)*CUR_MAX), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    
+    do
+    {
+        if ((fgets(buffer, CUR_MAX, fichier) == NULL) && (retour == NULL))
+        {
+            free(buffer);
+            return NULL;
+        }
+        ligne_tmp = retour;
+        if (ligne_tmp == NULL)
+            retour = g_strconcat(buffer, NULL);
+        else
+        {
+            retour = g_strconcat(ligne_tmp, buffer, NULL);
+            free(ligne_tmp);
+        }
+        if (buffer[strlen(buffer)-1] == '\n')
+        {
+            free(buffer);
+            return retour;
+        }
+    } while (TRUE);
 }
