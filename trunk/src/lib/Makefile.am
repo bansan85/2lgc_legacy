@@ -33,6 +33,7 @@ libeurocodes_la_SOURCES =	1990/1990_action.c \
 							common/common_selection.c \
 							common/common_text.c \
 							common/common_tooltip.c \
+							common/common_ville.c \
 							EF/EF_appuis.c \
 							EF/EF_calculs.c \
 							EF/EF_charge.c \
@@ -88,6 +89,7 @@ libeurocodes_la_HEADERS =	1990/1990_action.h \
 							common/common_selection.h \
 							common/common_text.h \
 							common/common_tooltip.h \
+							common/common_ville.h \
 							EF/EF_appuis.h \
 							EF/EF_calculs.h \
 							EF/EF_charge.h \

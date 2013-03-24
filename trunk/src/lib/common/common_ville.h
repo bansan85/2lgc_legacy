@@ -16,16 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __COMMON_TEXT_H
-#define __COMMON_TEXT_H
+#ifndef __COMMON_VILLE_H
+#define __COMMON_VILLE_H
 
 #include "config.h"
 #include "common_projet.h"
 
-void show_warranty();
-void show_help();
-
-char *common_text_dependances(GList *liste_noeuds, GList *liste_barres, GList *liste_charges, Projet *projet);
-char *common_text_get_line(FILE *fichier);
+gboolean common_ville_init(Projet *projet, int departement, int ville) __attribute__((__warn_unused_result__));
+gboolean common_ville_free(Projet *projet) __attribute__((__warn_unused_result__));
 
 #endif

@@ -40,6 +40,7 @@
 #include "EF_gtk_resultats.h"
 #endif
 
+#include "common_ville.h"
 #include "EF_appuis.h"
 #include "EF_noeuds.h"
 #include "EF_rigidite.h"
@@ -67,6 +68,8 @@ G_MODULE_EXPORT Projet* projet_init(Type_Pays pays)
     BUGMSG(projet = (Projet*)malloc(sizeof(Projet)), NULL, gettext("Erreur d'allocation mémoire.\n"));
     
     projet->parametres.pays = pays;
+    
+    BUG(common_ville_init(projet, 30, 59), NULL);
     
     //     - 1990 : la liste des actions, des groupes et des combinaisons,
     BUG(_1990_action_init(projet), NULL);
@@ -278,6 +281,7 @@ G_MODULE_EXPORT gboolean projet_free(Projet *projet)
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
+    BUG(common_ville_free(projet), FALSE);
     if (projet->actions != NULL)
         BUG(_1990_action_free(projet), FALSE);
     if (projet->niveaux_groupes != NULL)

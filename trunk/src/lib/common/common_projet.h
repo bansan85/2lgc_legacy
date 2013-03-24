@@ -383,6 +383,38 @@ typedef enum __Type_Materiau
 } Type_Materiau;
 
 
+typedef enum __Type_Neige
+{
+    NEIGE_A1,
+    NEIGE_A2,
+    NEIGE_B1,
+    NEIGE_B2,
+    NEIGE_C1,
+    NEIGE_C2,
+    NEIGE_D,
+    NEIGE_E
+} Type_Neige;
+
+
+typedef enum __Type_Vent
+{
+    VENT_1,
+    VENT_2,
+    VENT_3,
+    VENT_4
+} Type_Vent;
+
+
+typedef enum __Type_Seisme
+{
+    SEISME_1,
+    SEISME_2,
+    SEISME_3,
+    SEISME_4,
+    SEISME_5
+} Type_Seisme;
+
+
 typedef struct __EF_Point
 {
     double      x;
@@ -982,9 +1014,27 @@ typedef struct __Calculs
 } Calculs;
 
 
+typedef struct __Adresse
+{
+    int     departement;
+    int     num_ville;
+    char    *dest1;
+    char    *dest2;
+    char    *adresse1;
+    char    *adresse2;
+    char    *adresse3;
+    int     code_postal;
+    char    *ville;
+} Adresse;
+
+
 typedef struct __Parametres
 {
-    Type_Pays       pays;               // Pays de calculs
+    Type_Pays   pays;               // Pays de calculs
+    Adresse     adresse;
+    Type_Neige  neige;
+    Type_Vent   vent;
+    Type_Seisme seisme;
 } Parametres;
 
 
