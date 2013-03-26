@@ -190,6 +190,56 @@ G_MODULE_EXPORT unsigned int common_gtk_text_buffer_uint(GtkTextBuffer *textbuff
 }
 
 
+G_MODULE_EXPORT unsigned int common_gtk_entry_uint(GtkEntry *entry, unsigned int val_min,
+  gboolean min_include, unsigned int val_max, gboolean max_include)
+/* Description : Renvoie le nombre entier non signé de l'entry, valeur comprise entre les
+ *               valeurs val_min et val_max.
+ * Paramètres : GtkEntry *entry : composant à l'origine de l'évènement,
+ *            : unsigned int val_min : borne inférieure,
+ *            : gboolean min_include : borne inférieure autorisée ? (min 0),
+ *            : unsigned int val_max : borne supérieure
+ *            : gboolean max_include : borne supérieure autorisée ? (max UINT_MAX).
+ * Valeur renvoyée :
+ *   Succès : la valeur du nombre,
+ *   Echec : UINT_MAX.
+ */
+{
+    const char      *texte;
+    unsigned int    nombre;
+    char            *fake;
+    gboolean        min_check;
+    gboolean        max_check;
+    
+    texte = gtk_entry_get_text(entry);
+    BUGMSG(fake = (char*)malloc(sizeof(char)*(strlen(texte)+1)), UINT_MAX, gettext("Erreur d'allocation mémoire.\n"));
+    
+    if (sscanf(texte, "%u%s", &nombre, fake) != 1)
+    {
+        min_check = FALSE;
+        max_check = FALSE;
+    }
+    else
+    {
+        if (min_include)
+            min_check = nombre >= val_min;
+        else
+            min_check = nombre > val_min;
+            
+        if (max_include)
+            max_check = nombre <= val_max;
+        else
+            max_check = nombre < val_max;
+    }
+    
+    free(fake);
+    
+    if ((min_check) && (max_check))
+        return nombre;
+    else
+        return UINT_MAX;
+}
+
+
 G_MODULE_EXPORT void common_gtk_render_double(
   GtkTreeViewColumn *tree_column __attribute__((unused)), GtkCellRenderer *cell,
   GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data)

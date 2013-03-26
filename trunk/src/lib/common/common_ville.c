@@ -27,7 +27,34 @@
 #include "common_math.h"
 #include "common_text.h"
 
-gboolean common_ville_init(Projet *projet, int departement, int ville)
+gboolean common_ville_init(Projet *projet)
+/* Description : Initialise à NULL l'adresse du projet. Met également à défaut 
+ * Paramètres : Projet *projet : la variable projet.
+ * Valeur renvoyée :
+ *   Succès : TRUE
+ *   Échec : NULL :
+ *             projet == NULL.
+ */
+{
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    
+    projet->parametres.adresse.destinataire = NULL;
+    projet->parametres.adresse.adresse = NULL;
+    projet->parametres.adresse.ville = NULL;
+    projet->parametres.adresse.departement = 0;
+    projet->parametres.adresse.num_ville = 0;
+    projet->parametres.adresse.code_postal = 0;
+    
+    // On initialise au moins à une valeur par défaut
+    projet->parametres.neige = 0;
+    projet->parametres.vent = 0;
+    projet->parametres.seisme = 0;
+    
+    return TRUE;
+}
+
+
+gboolean common_ville_set(Projet *projet, int departement, int ville)
 /* Description : Initialise la ville (mais pas l'adresse exacte) du projet avec les paramètres
  *               régionaux (vent, neige, séisme).
  *               Departement DEP et ville COM doivent correspondre au fichier france_villes.csv
@@ -357,11 +384,8 @@ gboolean common_ville_free(Projet *projet)
 {
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
-    free(projet->parametres.adresse.dest1);
-    free(projet->parametres.adresse.dest2);
-    free(projet->parametres.adresse.adresse1);
-    free(projet->parametres.adresse.adresse2);
-    free(projet->parametres.adresse.adresse3);
+    free(projet->parametres.adresse.destinataire);
+    free(projet->parametres.adresse.adresse);
     free(projet->parametres.adresse.ville);
     
     return TRUE;

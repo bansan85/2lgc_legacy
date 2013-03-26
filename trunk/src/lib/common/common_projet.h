@@ -656,6 +656,15 @@ typedef struct __Gtk_1992_1_1_Materiaux
     
     EF_Materiau *materiau;
 } Gtk_1992_1_1_Materiaux;
+
+
+typedef struct __Gtk_Common_Informations
+{
+    GtkBuilder      *builder;
+    GtkWidget       *window;
+    
+    GtkListStore    *model_completion;
+} Gtk_Common_Informations;
 #endif
 
 
@@ -892,6 +901,7 @@ typedef struct __Comp_Gtk
     GtkWidget   *menu;
     GtkWidget   *menu_fichier;
     GtkWidget   *menu_fichier_list;
+    GtkWidget   *menu_fichier_informations;
     GtkWidget   *menu_fichier_quitter;
     GtkWidget   *menu_modelisation;
     GtkWidget   *menu_modelisation_list;
@@ -931,6 +941,7 @@ typedef struct __List_Gtk
     Gtk_EF_Charge_Barre_Ponctuelle ef_charge_barre_ponctuelle;
     Gtk_EF_Charge_Barre_Repartie_Uniforme ef_charge_barre_repartie_uniforme;
     Gtk_m3d             m3d;       // pour l'affichage graphique de la structure
+    Gtk_Common_Informations common_informations;
     Gtk_EF_Noeud        ef_noeud;
     Gtk_EF_Barres       ef_barres;
     Gtk_EF_Appuis       ef_appuis;
@@ -1018,11 +1029,8 @@ typedef struct __Adresse
 {
     int     departement;
     int     num_ville;
-    char    *dest1;
-    char    *dest2;
-    char    *adresse1;
-    char    *adresse2;
-    char    *adresse3;
+    char    *destinataire;
+    char    *adresse;
     int     code_postal;
     char    *ville;
 } Adresse;

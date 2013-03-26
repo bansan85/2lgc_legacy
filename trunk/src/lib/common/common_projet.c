@@ -41,6 +41,7 @@
 #endif
 
 #include "common_ville.h"
+#include "common_gtk_informations.h"
 #include "EF_appuis.h"
 #include "EF_noeuds.h"
 #include "EF_rigidite.h"
@@ -69,7 +70,8 @@ G_MODULE_EXPORT Projet* projet_init(Type_Pays pays)
     
     projet->parametres.pays = pays;
     
-    BUG(common_ville_init(projet, 30, 59), NULL);
+    BUG(common_ville_init(projet), NULL);
+    BUG(common_ville_set(projet, 30, 59), NULL);
     
     //     - 1990 : la liste des actions, des groupes et des combinaisons,
     BUG(_1990_action_init(projet), NULL);
@@ -92,6 +94,7 @@ G_MODULE_EXPORT Projet* projet_init(Type_Pays pays)
     projet->list_gtk.ef_charge_noeud.builder = NULL;
     projet->list_gtk.ef_charge_barre_ponctuelle.builder = NULL;
     projet->list_gtk.ef_charge_barre_repartie_uniforme.builder = NULL;
+    projet->list_gtk.common_informations.builder = NULL;
     projet->list_gtk.ef_noeud.builder = NULL;
     projet->list_gtk.ef_barres.builder = NULL;
     projet->list_gtk.ef_barres.builder_add = NULL;
@@ -185,6 +188,10 @@ G_MODULE_EXPORT gboolean projet_init_graphique(Projet *projet)
     comps->menu_fichier = gtk_menu_item_new_with_label(gettext("Fichier"));
     gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu), comps->menu_fichier);
     gtk_menu_item_set_submenu(GTK_MENU_ITEM(comps->menu_fichier), comps->menu_fichier_list);
+    
+    comps->menu_fichier_informations = gtk_menu_item_new_with_label(gettext("Informations"));
+    gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_fichier_list), comps->menu_fichier_informations);
+    g_signal_connect_swapped(comps->menu_fichier_informations, "activate", G_CALLBACK(common_gtk_informations), projet);
     
     comps->menu_fichier_quitter = gtk_menu_item_new_with_label(gettext("Quitter"));
     gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_fichier_list), comps->menu_fichier_quitter);
