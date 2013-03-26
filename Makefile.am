@@ -49,8 +49,9 @@ if PLATFORM_WIN32
 	cp $(prefix)/bin/libz.dll codegui/zlib1.dll
 	cp /usr/lib64/gcc/i686-pc-mingw32/*/lib{stdc++-6,gfortran-3,quadmath-0,gcc_s_sjlj-1}.dll codegui/
 	cp files/ui/*.ui codegui/files/ui
-	cp files/xml/tooltips.xml codegui/files
+	cp files/xml/*.xml codegui/files
 	cp files/formules/*.svg codegui/files
+	cp files/csv/*.csv codegui/files
 	zip -r codegui_debug.zip codegui
 	tar cvaf codegui_debug.tar.xz codegui
 	strip codegui/*.exe codegui/*.dll
