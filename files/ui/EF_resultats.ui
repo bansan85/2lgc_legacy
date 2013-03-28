@@ -138,7 +138,7 @@
                                         <child type="tab">
                                             <object class="GtkMenuButton" id="EF_noeuds_notebook_button_add">
                                                 <property name="visible">True</property>
-                                                <property name="menu">EF_resultats_menu</property>
+                                                <property name="popup">EF_resultats_menu</property>
                                             </object>
                                         </child>
                                     </object>

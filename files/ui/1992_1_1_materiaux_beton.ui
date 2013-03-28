@@ -856,7 +856,7 @@
                             <object class="GtkMenuButton" id="_1992_1_1_materiaux_beton_personnalise_fck_cube">
                                 <property name="visible">True</property>
                                 <property name="label" translatable="yes">Personnaliser</property>
-                                <property name="menu">_1992_1_1_materiaux_personnaliser_menu</property>
+                                <property name="popup">_1992_1_1_materiaux_personnaliser_menu</property>
                             </object>
                             <packing>
                                 <property name="position">0</property>

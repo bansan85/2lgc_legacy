@@ -237,7 +237,7 @@
                                 <property name="visible">False</property>
                                 <property name="label">gtk-delete</property>
                                 <property name="sensitive">False</property>
-                                <property name="menu">EF_barres_supprimer_menu</property>
+                                <property name="popup">EF_barres_supprimer_menu</property>
                                 <property name="use_stock">True</property>
                                 <signal name="clicked" handler="EF_gtk_barres_boutton_supprimer_menu"/>
                             </object>
