@@ -28,7 +28,7 @@
 #include "common_erreurs.h"
 #include "common_projet.h"
 
-G_MODULE_EXPORT GtkWidget* common_tooltip_generation(const char *nom)
+GtkWidget* common_tooltip_generation(const char *nom)
 /* Description : Génère une fenêtre de type tooltip contenant les informations spécifiées par
  *                 le nom 'nom'. Les informations sont contenues dans le fichier 
  *                 DATADIR"/tooltips.xml" sous format XML.

@@ -29,7 +29,7 @@
 #include "common_math.h"
 #include "common_fonction.h"
 
-G_MODULE_EXPORT gboolean common_fonction_init(Projet *projet, Action *action)
+gboolean common_fonction_init(Projet *projet, Action *action)
 /* Description : Initialise les fonctions décrivant les sollicitations, les rotations ou les
  *               déplacements des barres. Cette fonction doit être appelée lorsque toutes les
  *               barres ont été modélisées. En effet, il est nécessaire de connaître leur
@@ -183,7 +183,7 @@ gboolean common_fonction_scinde_troncon(Fonction* fonction, double coupure)
 }
 
 
-G_MODULE_EXPORT gboolean common_fonction_ajout_poly(Fonction* fonction, double debut_troncon,
+gboolean common_fonction_ajout_poly(Fonction* fonction, double debut_troncon,
   double fin_troncon, double x0, double x1, double x2, double x3, double x4, double x5,
   double x6, double t)
 /* Description : Additionne une fonction à une fonction existante dont le domaine de validité
@@ -381,7 +381,8 @@ gboolean common_fonction_compacte(Fonction* fonction, Fonction *index)
 }
 
 
-void common_fonction_ax2_bx_c(double xx1, long double yy1, double xx2, long double yy2, double xx3, long double yy3, double *a, double *b, double *c)
+void common_fonction_ax2_bx_c(double xx1, long double yy1, double xx2, long double yy2,
+  double xx3, long double yy3, double *a, double *b, double *c)
 /* Description : renvoie a, b, et c en fonction de f(xx1)=yy1, ....
  * Paramètres : double xx1, double yy1 : coordonnée du permier point,
  *            : double xx2, double yy2 : coordonnée du deuxième point,
@@ -399,7 +400,7 @@ void common_fonction_ax2_bx_c(double xx1, long double yy1, double xx2, long doub
 }
 
 
-G_MODULE_EXPORT long double common_fonction_y(Fonction* fonction, long double x, int position)
+long double common_fonction_y(Fonction* fonction, long double x, int position)
 /* Description : Renvoie la valeur f(x). Un ordinateur étant ce qu'il est, lorsqu'on recherche
  *               par approximation successive un zéro, il est nécessaire d'avoir accès au 
  *               maximum de décimales disponible. Le type double ne permet pas toujours
@@ -679,8 +680,7 @@ gboolean common_fonction_cherche_zero(Fonction* fonction, double mini, double ma
 }
 
 
-unsigned int common_fonction_caracteristiques(Fonction* fonction, double **pos,
-  double **val)
+unsigned int common_fonction_caracteristiques(Fonction* fonction, double **pos, double **val)
 /* Description : Affiche les points caractéristiques de la fonction.
  * Paramètres : Fonction* fonction : fonction à afficher,
  *            : double *pos : position des points caractéristiques,
@@ -1088,8 +1088,7 @@ unsigned int common_fonction_caracteristiques(Fonction* fonction, double **pos,
 }
 
 
-G_MODULE_EXPORT char* common_fonction_affiche_caract(Fonction* fonction, int decimales_x,
-  int decimales_y)
+char* common_fonction_affiche_caract(Fonction* fonction, int decimales_x, int decimales_y)
 /* Description : Affiche les points caractéristiques d'une fonction
  * Paramètres : Fonction* fonction : fonction à afficher,
  *            : int decimales_x : nombre de décimales à afficher pour l'abscisse.
@@ -1128,7 +1127,7 @@ G_MODULE_EXPORT char* common_fonction_affiche_caract(Fonction* fonction, int dec
 }
 
 
-G_MODULE_EXPORT gboolean common_fonction_affiche(Fonction* fonction)
+gboolean common_fonction_affiche(Fonction* fonction)
 /* Description : Affiche la fonction (coefficients pour chaque tronçon) ainsi que la valeur
  *                 de la fonction pour chaque extrémité du tronçon.
  * Paramètres : Fonction* fonction : fonction à afficher.
@@ -1775,7 +1774,7 @@ gboolean common_fonction_renvoie_enveloppe(GList* fonctions, Fonction *fonction_
 }
 
 
-G_MODULE_EXPORT gboolean common_fonction_free(Projet *projet, Action *action)
+gboolean common_fonction_free(Projet *projet, Action *action)
 /* Description : Libère les fonctions de toutes les barres de l'action souhaitée.
  * Paramètres : Projet *projet : la variable projet,
  *            : Action *action : pointeur vers l'action.

@@ -42,7 +42,7 @@
 #include "EF_gtk_materiaux.h"
 #include "EF_gtk_relachement.h"
 
-G_MODULE_EXPORT gboolean _1992_1_1_barres_init(Projet *projet)
+gboolean _1992_1_1_barres_init(Projet *projet)
 /* Description : Initialise la liste des éléments en béton.
  * Paramètres : Projet *projet : la variable projet.
  * Valeur renvoyée :
@@ -71,8 +71,8 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_init(Projet *projet)
 }
 
 
-G_MODULE_EXPORT gboolean _1992_1_1_barres_ajout(Projet *projet, Type_Element type,
-  EF_Section *section, EF_Materiau *materiau, unsigned int noeud_debut, unsigned int noeud_fin,
+gboolean _1992_1_1_barres_ajout(Projet *projet, Type_Element type, EF_Section *section,
+  EF_Materiau *materiau, unsigned int noeud_debut, unsigned int noeud_fin,
   EF_Relachement* relachement, unsigned int discretisation_element)
 /* Description : Ajoute un élément à la liste des éléments en béton.
  * Paramètres : Projet *projet : la variable projet,
@@ -188,8 +188,8 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_ajout(Projet *projet, Type_Element typ
 }
 
 
-G_MODULE_EXPORT Beton_Barre* _1992_1_1_barres_cherche_numero(Projet *projet,
-  unsigned int numero, gboolean critique)
+Beton_Barre* _1992_1_1_barres_cherche_numero(Projet *projet, unsigned int numero,
+  gboolean critique)
 /* Description : Positionne dans la liste des éléments en béton l'élément courant au numéro.
  * Paramètres : Projet *projet : la variable projet,
  *            : unsigned int numero : le numéro de la section.
@@ -582,8 +582,7 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GLi
 }
 
 
-G_MODULE_EXPORT gboolean _1992_1_1_barres_angle_rotation(EF_Noeud *debut, EF_Noeud *fin,
-  double *y, double *z)
+gboolean _1992_1_1_barres_angle_rotation(EF_Noeud *debut, EF_Noeud *fin, double *y, double *z)
 /* Description : Calcule les deux angles de rotation pour faire tourner une barre horizontale
  *               en une barre parallèle à celle fournie dans l'argument 1.
  * Paramètres : Beton_Barre *barre : barre dont on souhaite connaitre les angles de rotation,
@@ -625,8 +624,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_angle_rotation(EF_Noeud *debut, EF_Noe
 }
 
 
-G_MODULE_EXPORT gboolean _1992_1_1_barres_change_type(Beton_Barre *barre, Type_Element type,
-  Projet *projet)
+gboolean _1992_1_1_barres_change_type(Beton_Barre *barre, Type_Element type, Projet *projet)
 /* Description : Change le type d'une barre.
  * Paramètres : Beton_Barre *barre : barre à modifier,
  *            : Type_Element type : nouveau type,
@@ -671,8 +669,8 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_change_type(Beton_Barre *barre, Type_E
 }
 
 
-G_MODULE_EXPORT gboolean _1992_1_1_barres_change_section(Beton_Barre *barre,
-  EF_Section *section, Projet *projet)
+gboolean _1992_1_1_barres_change_section(Beton_Barre *barre, EF_Section *section,
+  Projet *projet)
 /* Description : Change la section d'une barre depuis son nom.
  * Paramètres : Beton_Barre *barre : barre à modifier,
  *            : EF_Section *section : la nouvelle section,
@@ -708,8 +706,8 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_change_section(Beton_Barre *barre,
 }
 
 
-G_MODULE_EXPORT gboolean _1992_1_1_barres_change_materiau(Beton_Barre *barre,
-  EF_Materiau *materiau, Projet *projet)
+gboolean _1992_1_1_barres_change_materiau(Beton_Barre *barre, EF_Materiau *materiau,
+  Projet *projet)
 /* Description : Change le matériau d'une barre depuis son nom.
  * Paramètres : Beton_Barre *barre : barre à modifier,
  *            : EF_Materiau *materiau : le nouveau materiau,
@@ -741,8 +739,8 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_change_materiau(Beton_Barre *barre,
 }
 
 
-G_MODULE_EXPORT gboolean _1992_1_1_barres_change_noeud(Beton_Barre *barre, EF_Noeud *noeud,
-  gboolean noeud_1, Projet *projet)
+gboolean _1992_1_1_barres_change_noeud(Beton_Barre *barre, EF_Noeud *noeud, gboolean noeud_1,
+  Projet *projet)
 /* Description : Change un des deux noeuds d'extrémité d'une barre.
  * Paramètres : Beton_Barre *barre : barre à modifier,
  *            : EF_Noeud *noeud : le nouveau noeud,
@@ -800,8 +798,8 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_change_noeud(Beton_Barre *barre, EF_No
 }
 
 
-G_MODULE_EXPORT gboolean _1992_1_1_barres_change_relachement(Beton_Barre *barre,
-  EF_Relachement *relachement, Projet *projet)
+gboolean _1992_1_1_barres_change_relachement(Beton_Barre *barre, EF_Relachement *relachement,
+  Projet *projet)
 /* Description : Change le relâchement d'une barre.
  * Paramètres : Beton_Barre *barre : barre à modifier,
  *            : EF_Relachement *relachement : nouveau relâchement,
@@ -836,7 +834,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_change_relachement(Beton_Barre *barre,
 }
 
 
-G_MODULE_EXPORT gboolean _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
+gboolean _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
 /* Description : Ajouter un élément à la matrice de rigidité partielle et complète.
  * Paramètres : Projet *projet : la variable projet,
  *            : Beton_Barre* element : pointeur vers l'élément en béton.
@@ -1513,7 +1511,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_B
 }
 
 
-G_MODULE_EXPORT gboolean _1992_1_1_barres_rigidite_ajout_tout(Projet *projet)
+gboolean _1992_1_1_barres_rigidite_ajout_tout(Projet *projet)
 /* Description : Ajout à la matrice de rigidité tous les éléments en béton.
  * Paramètres : Projet *projet : la variable projet.
  * Valeur renvoyée :
@@ -1544,7 +1542,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_rigidite_ajout_tout(Projet *projet)
 }
 
 
-G_MODULE_EXPORT void _1992_1_1_barres_free_foreach(Beton_Barre *barre, Projet *projet)
+void _1992_1_1_barres_free_foreach(Beton_Barre *barre, Projet *projet)
 /* Description : Fonction permettant de libérer iune barre contenue dans une liste.
  * Paramètres : Beton_Barre *barre : la barre à libérer,
  *            : Projet *projet : la variable projet.
@@ -1580,7 +1578,7 @@ G_MODULE_EXPORT void _1992_1_1_barres_free_foreach(Beton_Barre *barre, Projet *p
 }
 
 
-G_MODULE_EXPORT gboolean _1992_1_1_barres_supprime_liste(Projet *projet, GList *liste_noeuds,
+gboolean _1992_1_1_barres_supprime_liste(Projet *projet, GList *liste_noeuds,
   GList *liste_barres)
 /* Description : Supprime une liste de barres.
  * Paramètres : Projet *projet : la variable projet,
@@ -1686,7 +1684,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_barres_supprime_liste(Projet *projet, GList *
 }
 
 
-G_MODULE_EXPORT gboolean _1992_1_1_barres_free(Projet *projet)
+gboolean _1992_1_1_barres_free(Projet *projet)
 /* Description : Libère l'ensemble des éléments  en béton
  * Paramètres : Projet *projet : la variable projet
  * Valeur renvoyée :

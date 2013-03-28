@@ -32,10 +32,9 @@
 #include "EF_sections.h"
 #include "EF_gtk_charge_barre_repartie_uniforme.h"
 
-G_MODULE_EXPORT Charge_Barre_Repartie_Uniforme *EF_charge_barre_repartie_uniforme_ajout(
-  Projet *projet, unsigned int num_action, GList *barres, int repere_local, int projection,
-  double a, double b, double fx, double fy, double fz, double mx, double my, double mz,
-  const char* nom)
+Charge_Barre_Repartie_Uniforme *EF_charge_barre_repartie_uniforme_ajout(Projet *projet,
+  unsigned int num_action, GList *barres, int repere_local, int projection, double a, double b,
+  double fx, double fy, double fz, double mx, double my, double mz, const char* nom)
 /* Description : Ajoute une charge répartie uniforme à une action et le long d'une barre en
  *               lui attribuant le numéro suivant la dernière charge de l'action.
  * Paramètres : Projet *projet : la variable projet,
@@ -136,9 +135,8 @@ G_MODULE_EXPORT Charge_Barre_Repartie_Uniforme *EF_charge_barre_repartie_uniform
 }
 
 
-G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_mx(Beton_Barre *barre,
-  unsigned int discretisation, double a, double b, Barre_Info_EF *infos, double mx, double *ma,
-  double *mb)
+gboolean EF_charge_barre_repartie_uniforme_mx(Beton_Barre *barre, unsigned int discretisation,
+  double a, double b, Barre_Info_EF *infos, double mx, double *ma, double *mb)
 /* Description : Calcule l'opposé aux moments d'encastrements pour l'élément spécifié soumis
  *               au moment de torsion uniformément répartie mx dans le repère local. Les
  *               résultats sont renvoyés par l'intermédiaire des pointeurs ma et mb qui ne
@@ -240,7 +238,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_mx(Beton_Barre *barre
 }
 
 
-G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_def_ang_iso_y(Beton_Barre *barre,
+gboolean EF_charge_barre_repartie_uniforme_def_ang_iso_y(Beton_Barre *barre,
   unsigned int discretisation, double a, double b, double fz, double my,
   double *phia, double *phib)
 /* Description : Calcule les angles de rotation pour un élément bi-articulé soumis à une
@@ -345,7 +343,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_def_ang_iso_y(Beton_B
 }
 
 
-G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_def_ang_iso_z(Beton_Barre *barre,
+gboolean EF_charge_barre_repartie_uniforme_def_ang_iso_z(Beton_Barre *barre,
   unsigned int discretisation, double a, double b, double fy, double mz,
   double *phia, double *phib)
 /* Description : Calcule les angles de rotation pour un élément bi-articulé soumis au
@@ -449,8 +447,8 @@ G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_def_ang_iso_z(Beton_B
 }
 
 
-G_MODULE_EXPORT double EF_charge_barre_repartie_uniforme_position_resultante_x(
-  EF_Section *section, double a, double b, double l)
+double EF_charge_barre_repartie_uniforme_position_resultante_x(EF_Section *section, double a,
+  double b, double l)
 /* Description : Renvoie la position de la résultante pour une charge uniformément répartie
  *               vers l'axe x.
  * Paramètres : EF_Section *section : nature de la section,
@@ -499,8 +497,8 @@ G_MODULE_EXPORT double EF_charge_barre_repartie_uniforme_position_resultante_x(
 }
 
 
-G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_fonc_rx(Fonction *fonction,
-  Beton_Barre *barre, unsigned int discretisation, double a, double b, double max, double mbx)
+gboolean EF_charge_barre_repartie_uniforme_fonc_rx(Fonction *fonction, Beton_Barre *barre,
+  unsigned int discretisation, double a, double b, double max, double mbx)
 /* Description : Calcule les déplacements d'une barre en rotation autour de l'axe x en fonction
  *                  des efforts aux extrémités de la poutre.
  * Paramètres : Fonction *fonction : fonction où sera ajoutée la déformée,
@@ -621,9 +619,9 @@ G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_fonc_rx(Fonction *fon
 }
 
 
-G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_fonc_ry(Fonction *f_rotation,
-  Fonction* f_deform, Beton_Barre *barre, unsigned int discretisation, double a, double b,
-  double fz, double my, double may, double mby)
+gboolean EF_charge_barre_repartie_uniforme_fonc_ry(Fonction *f_rotation, Fonction* f_deform,
+  Beton_Barre *barre, unsigned int discretisation, double a, double b, double fz, double my,
+  double may, double mby)
 /* Description : Calcule les déplacements d'une barre en rotation autour de l'axe y et en
  *                 déformation selon l'axe z en fonction de la charge linéaire (fz et my) et
  *                 des efforts aux extrémités de la poutre.
@@ -786,9 +784,9 @@ G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_fonc_ry(Fonction *f_r
 }
 
 
-G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_fonc_rz(Fonction *f_rotation,
-  Fonction* f_deform, Beton_Barre *barre, unsigned int discretisation, double a, double b,
-  double fy, double mz, double maz, double mbz)
+gboolean EF_charge_barre_repartie_uniforme_fonc_rz(Fonction *f_rotation, Fonction* f_deform,
+  Beton_Barre *barre, unsigned int discretisation, double a, double b, double fy, double mz,
+  double maz, double mbz)
 /* Description : Calcule les déplacements d'une barre en rotation autour de l'axe z et en
  *                 déformation selon l'axe y en fonction de la charge linéaire (fy et mz) et
  *                 des efforts aux extrémités de la poutre.
@@ -898,8 +896,8 @@ G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_fonc_rz(Fonction *f_r
 }
 
 
-G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_n(Fonction *fonction,
-  Beton_Barre *barre, unsigned int discretisation, double a, double b, double fax, double fbx)
+gboolean EF_charge_barre_repartie_uniforme_n(Fonction *fonction, Beton_Barre *barre,
+  unsigned int discretisation, double a, double b, double fax, double fbx)
 /* Description : Calcule les déplacements d'une barre selon l'axe x en fonction de l'effort
  *                 normal ponctuel n et des réactions d'appuis fax et fbx.
  * Paramètres : Fonction *fonction : fonction où sera ajoutée la déformée,
@@ -995,12 +993,8 @@ G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_n(Fonction *fonction,
 }
 
 
-G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_enleve_barres(
-  Charge_Barre_Repartie_Uniforme *charge, GList *barres, Projet *projet
-#ifndef ENABLE_GTK
-  __attribute__((unused))
-#endif
-)
+gboolean EF_charge_barre_repartie_uniforme_enleve_barres(Charge_Barre_Repartie_Uniforme *charge,
+  GList *barres, Projet *projet)
 /* Description : Enlève à la charge une liste de barres pouvant être utilisées. Dans le cas où
  *               une barre de la liste n'est pas dans la charge, ce point ne sera pas considéré
  *               comme une erreur mais la barre sera simplement ignorée.
@@ -1053,8 +1047,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_enleve_barres(
 }
 
 
-G_MODULE_EXPORT gboolean EF_charge_barre_repartie_uniforme_free(
-  Charge_Barre_Repartie_Uniforme *charge)
+gboolean EF_charge_barre_repartie_uniforme_free(Charge_Barre_Repartie_Uniforme *charge)
 /* Description : Libère le contenu alloué dans une charge répartie uniforme sur barre.
  * Paramètres : Charge_Barre_Repartie_Uniforme *charge : la charge à libérer.
  * Valeur renvoyée :

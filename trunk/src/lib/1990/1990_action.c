@@ -156,7 +156,7 @@ char* _1990_action_type_bat_txt_fr(unsigned int type)
 }
 
 
-G_MODULE_EXPORT char* _1990_action_type_bat_txt(unsigned int type, Type_Pays pays)
+char* _1990_action_type_bat_txt(unsigned int type, Type_Pays pays)
 /* Description : renvoie la description des types de charge pour les bâtiments en fonction de
  *               la norme demandée.
  * Paramètres : unsigned int type : type de charge,
@@ -243,7 +243,7 @@ Action_Categorie _1990_action_categorie_bat_fr(unsigned int type)
 }
 
 
-G_MODULE_EXPORT Action_Categorie _1990_action_categorie_bat(unsigned int type, Type_Pays pays)
+Action_Categorie _1990_action_categorie_bat(unsigned int type, Type_Pays pays)
 /* Description : renvoie la catégorie d'une action pour les combinaisons d'action des bâtiments
  *               en fonction du pays.
  * Paramètres : unsigned int type : type de l'action,
@@ -265,7 +265,7 @@ G_MODULE_EXPORT Action_Categorie _1990_action_categorie_bat(unsigned int type, T
 }
 
 
-G_MODULE_EXPORT Action_Categorie _1990_action_num_bat_txt(Type_Pays pays)
+Action_Categorie _1990_action_num_bat_txt(Type_Pays pays)
 /* Description : renvoie le nombre de catégories d'actions des bâtiments en fonction du pays.
  * Paramètres : Type_Pays pays : le numéro du pays.
  * Valeur renvoyée :
@@ -284,7 +284,7 @@ G_MODULE_EXPORT Action_Categorie _1990_action_num_bat_txt(Type_Pays pays)
 }
 
 
-G_MODULE_EXPORT gboolean _1990_action_init(Projet *projet)
+gboolean _1990_action_init(Projet *projet)
 /* Description : Initialise la liste des actions.
  * Paramètres : Projet *projet : la variable projet.
  * Valeur renvoyée :
@@ -350,8 +350,7 @@ G_MODULE_EXPORT gboolean _1990_action_init(Projet *projet)
 }
 
 
-G_MODULE_EXPORT Action *_1990_action_ajout(Projet *projet, unsigned int type,
-  const char* description)
+Action *_1990_action_ajout(Projet *projet, unsigned int type, const char* description)
 /* Description : Ajoute une nouvelle action à la liste des actions en lui attribuant le numéro
  *               suivant le dernier relachement existant.
  * Paramètres : Projet *projet : la variable projet,
@@ -420,7 +419,7 @@ G_MODULE_EXPORT Action *_1990_action_ajout(Projet *projet, unsigned int type,
 }
 
 
-G_MODULE_EXPORT Action* _1990_action_cherche_numero(Projet *projet, unsigned int numero)
+Action* _1990_action_cherche_numero(Projet *projet, unsigned int numero)
 /* Description : Cherche et renvoie l'action désignée par numero.
  * Paramètres : Projet *projet : la variable projet,
  *            : unsigned int numero : le numéro de l'action.
@@ -451,8 +450,7 @@ G_MODULE_EXPORT Action* _1990_action_cherche_numero(Projet *projet, unsigned int
 }
 
 
-G_MODULE_EXPORT gboolean _1990_action_renomme(Projet *projet, unsigned int action_num,
-  const char* nom)
+gboolean _1990_action_renomme(Projet *projet, unsigned int action_num, const char* nom)
 /* Description : Renomme une charge.
  * Paramètres : Projet *projet : la variable projet,
  *            : unsigned int action : numéro de l'action à renommer,
@@ -539,8 +537,7 @@ G_MODULE_EXPORT gboolean _1990_action_renomme(Projet *projet, unsigned int actio
 }
 
 
-G_MODULE_EXPORT gboolean _1990_action_change_type(Projet *projet, unsigned int action_num,
-  unsigned int type)
+gboolean _1990_action_change_type(Projet *projet, unsigned int action_num, unsigned int type)
 /* Description : Change le type d'une action, y compris psi0, psi1 et psi2.
  * Paramètres : Projet *projet : la variable projet,
  *            : unsigned int action_num : numéro de l'action à renommer,
@@ -578,8 +575,8 @@ G_MODULE_EXPORT gboolean _1990_action_change_type(Projet *projet, unsigned int a
 }
 
 
-G_MODULE_EXPORT gboolean _1990_action_change_psi(Projet *projet, unsigned int action_num,
-  unsigned int psi_num, double psi)
+gboolean _1990_action_change_psi(Projet *projet, unsigned int action_num, unsigned int psi_num,
+  double psi)
 /* Description : Change le coefficient psi d'une action.
  * Paramètres : Projet *projet : la variable projet,
  *            : unsigned int action_num : numéro de l'action à changer,
@@ -634,7 +631,7 @@ G_MODULE_EXPORT gboolean _1990_action_change_psi(Projet *projet, unsigned int ac
 }
 
 
-G_MODULE_EXPORT gboolean _1990_action_affiche_tout(Projet *projet)
+gboolean _1990_action_affiche_tout(Projet *projet)
 /* Description : Affiche dans l'entrée standard les actions existantes.
  * Paramètres : Projet *projet : la variable projet.
  * Valeur renvoyée :
@@ -668,7 +665,7 @@ G_MODULE_EXPORT gboolean _1990_action_affiche_tout(Projet *projet)
 }
 
 
-G_MODULE_EXPORT gboolean _1990_action_affiche_resultats(Projet *projet, unsigned int num_action)
+gboolean _1990_action_affiche_resultats(Projet *projet, unsigned int num_action)
 /* Description : Affiche tous les résultats d'une action.
  * Paramètres : Projet *projet : la variable projet,
  *            : int num_action : numéro de l'action.
@@ -748,7 +745,7 @@ G_MODULE_EXPORT gboolean _1990_action_affiche_resultats(Projet *projet, unsigned
 }
 
 
-G_MODULE_EXPORT gboolean _1990_action_free_num(Projet *projet, unsigned int num)
+gboolean _1990_action_free_num(Projet *projet, unsigned int num)
 /* Description : Libère l'action souhaitée et décrémente de 1 les actions dons le numéro est
  *               supérieur.
  * Paramètres : Projet *projet : la variable projet,
@@ -923,7 +920,7 @@ G_MODULE_EXPORT gboolean _1990_action_free_num(Projet *projet, unsigned int num)
 }
 
 
-G_MODULE_EXPORT gboolean _1990_action_free(Projet *projet)
+gboolean _1990_action_free(Projet *projet)
 /* Description : Libère l'ensemble des actions existantes.
  * Paramètres : Projet *projet : la variable projet.
  * Valeur renvoyée :

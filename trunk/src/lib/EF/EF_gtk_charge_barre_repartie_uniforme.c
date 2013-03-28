@@ -33,8 +33,7 @@
 #include "EF_charge.h"
 #include "EF_charge_barre_repartie_uniforme.h"
 
-G_MODULE_EXPORT void EF_gtk_charge_barre_rep_uni_window_destroy(
-  GtkWidget *object __attribute__((unused)), Projet *projet)
+void EF_gtk_charge_barre_rep_uni_window_destroy(GtkWidget *object, Projet *projet)
 /* Description : Met projet->list_gtk.ef_charge_barre_repartie_uniforme.builder à NULL quand la
  *               fenêtre se ferme.
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
@@ -52,8 +51,8 @@ G_MODULE_EXPORT void EF_gtk_charge_barre_rep_uni_window_destroy(
 }
 
 
-G_MODULE_EXPORT gboolean EF_gtk_charge_barre_rep_uni_window_key_press(
-  GtkWidget *widget __attribute__((unused)), GdkEvent *event, Projet *projet)
+gboolean EF_gtk_charge_barre_rep_uni_window_key_press(GtkWidget *widget, GdkEvent *event,
+  Projet *projet)
 /* Description : Gestion des touches de l'ensemble des composants de la fenêtre.
  * Paramètres : GtkWidget *widget : composant à l'origine de l'évènement,
  *            : GdkEvent *event : description de la touche pressée,
@@ -77,7 +76,7 @@ G_MODULE_EXPORT gboolean EF_gtk_charge_barre_rep_uni_window_key_press(
 }
 
 
-G_MODULE_EXPORT gboolean EF_gtk_charge_barre_repartie_uniforme_ajout_affichage(
+gboolean EF_gtk_charge_barre_repartie_uniforme_ajout_affichage(
   Charge_Barre_Repartie_Uniforme *charge, Projet *projet, gboolean nouvelle_ligne)
 /* Description : Ajoute une ligne contenant les informations sur une charge répartie
  *               uniformément au tableau dans la fenêtre des actions.
@@ -126,7 +125,7 @@ G_MODULE_EXPORT gboolean EF_gtk_charge_barre_repartie_uniforme_ajout_affichage(
 
 /* DEBUT DE LA FENETRE GRAPHIQUE*/
 
-G_MODULE_EXPORT void EF_gtk_charge_barre_repartie_uniforme_annuler_clicked(GtkButton *button __attribute__((unused)), Projet *projet)
+void EF_gtk_charge_barre_repartie_uniforme_annuler_clicked(GtkButton *button, Projet *projet)
 /* Description : Ferme la fenêtre sans effectuer les modifications.
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -259,8 +258,7 @@ gboolean EF_gtk_charge_barre_repartie_uniforme_recupere_donnees(Projet *projet,
 }
 
 
-G_MODULE_EXPORT void EF_gtk_charge_barre_rep_uni_check(
-  GtkWidget *object __attribute__((unused)), Projet *projet)
+void EF_gtk_charge_barre_rep_uni_check(GtkWidget *object, Projet *projet)
 /* Description : Vérifie si l'ensemble des éléments est correct pour activer le bouton add/edit.
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -289,8 +287,7 @@ G_MODULE_EXPORT void EF_gtk_charge_barre_rep_uni_check(
 }
 
 
-void EF_gtk_charge_barre_repartie_uniforme_ajouter_clicked(
-  GtkButton *button __attribute__((unused)), Projet *projet)
+void EF_gtk_charge_barre_repartie_uniforme_ajouter_clicked(GtkButton *button, Projet *projet)
 /* Description : Ferme la fenêtre en ajoutant la charge.
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -320,8 +317,7 @@ void EF_gtk_charge_barre_repartie_uniforme_ajouter_clicked(
 }
 
 
-void EF_gtk_charge_barre_repartie_uniforme_editer_clicked(
-  GtkButton *button __attribute__((unused)), Projet *projet)
+void EF_gtk_charge_barre_repartie_uniforme_editer_clicked(GtkButton *button, Projet *projet)
 /* Description : Ferme la fenêtre en appliquant les modifications.
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -370,8 +366,8 @@ void EF_gtk_charge_barre_repartie_uniforme_editer_clicked(
 }
 
 
-G_MODULE_EXPORT void EF_gtk_charge_barre_repartie_uniforme_toggled(
-  GtkToggleButton *togglebutton __attribute__((unused)), Projet *projet)
+void EF_gtk_charge_barre_repartie_uniforme_toggled( GtkToggleButton *togglebutton,
+  Projet *projet)
 /* Description : Évènement lors du cochage de projection et repère globale. En effet, il n'est
  *               pas possible de faire à la fois une projection dans le repère local.
  * Paramètres : GtkToggleButton *togglebutton : composant à l'origine de l'évènement,
@@ -406,8 +402,8 @@ G_MODULE_EXPORT void EF_gtk_charge_barre_repartie_uniforme_toggled(
 }
 
 
-G_MODULE_EXPORT gboolean EF_gtk_charge_barre_repartie_uniforme(Projet *projet,
-  unsigned int action_defaut, unsigned int charge)
+gboolean EF_gtk_charge_barre_repartie_uniforme(Projet *projet, unsigned int action_defaut,
+  unsigned int charge)
 /* Description : Affichage de la fenêtre permettant de créer ou modifier une action de type
  *               charge repartie uniforme sur barre.
  * Paramètres : Projet *projet : la variable projet,

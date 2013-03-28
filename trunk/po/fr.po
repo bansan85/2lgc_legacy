@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2013-03-26 05:49+0100\n"
-"PO-Revision-Date: 2013-03-26 05:49+0100\n"
+"POT-Creation-Date: 2013-03-27 07:35+0100\n"
+"PO-Revision-Date: 2013-03-27 07:48+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -52,8 +52,17 @@ msgstr "Nom :"
 msgid "Informations sur le projet"
 msgstr "Informations sur le projet"
 
-msgid "Client ligne 1 :"
-msgstr "Client ligne 1 :"
+msgid "Client :"
+msgstr "Client :"
+
+msgid "Adresse :"
+msgstr "Adresse :"
+
+msgid "Code postal :"
+msgstr "Code postal :"
+
+msgid "Ville :"
+msgstr "Ville :"
 
 msgid "Rectangulaire"
 msgstr "Rectangulaire"
@@ -750,6 +759,9 @@ msgstr "Le fichier '%s' est corrumpu. Le champ2 '%s' est inconnu.\n"
 
 msgid "Fichier"
 msgstr "Fichier"
+
+msgid "Informations"
+msgstr "Informations"
 
 msgid "Quitter"
 msgstr "Quitter"

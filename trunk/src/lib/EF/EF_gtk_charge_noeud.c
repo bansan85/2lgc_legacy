@@ -33,8 +33,8 @@
 #include "EF_charge_noeud.h"
 #include "EF_charge.h"
 
-G_MODULE_EXPORT gboolean EF_gtk_charge_noeud_ajout_affichage(Charge_Noeud *charge,
-  Projet *projet, gboolean nouvelle_ligne)
+gboolean EF_gtk_charge_noeud_ajout_affichage(Charge_Noeud *charge, Projet *projet,
+  gboolean nouvelle_ligne)
 /* Description : Ajoute une ligne contenant les informations sur une charge ponctuelle au
  *               tableau dans la fenêtre des actions.
  * Paramètres : Charge_Barre_Ponctuelle *charge : charge à ajouter,
@@ -79,8 +79,7 @@ G_MODULE_EXPORT gboolean EF_gtk_charge_noeud_ajout_affichage(Charge_Noeud *charg
 /* DEBUT DE LA FENETRE GRAPHIQUE*/
 
 
-G_MODULE_EXPORT void EF_gtk_charge_noeud_annuler_clicked(
-  GtkButton *button __attribute__((unused)), Projet *projet)
+void EF_gtk_charge_noeud_annuler_clicked(GtkButton *button, Projet *projet)
 /* Description : Ferme la fenêtre sans effectuer les modifications.
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -207,8 +206,7 @@ gboolean EF_gtk_charge_noeud_recupere_donnees(Projet *projet, unsigned int *num_
 }
 
 
-G_MODULE_EXPORT void EF_gtk_charge_noeud_check(GtkWidget *object __attribute__((unused)),
-  Projet *projet)
+void EF_gtk_charge_noeud_check(GtkWidget *object, Projet *projet)
 /* Description : Vérifie si l'ensemble des éléments est correct pour activer le bouton add/edit.
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -235,8 +233,7 @@ G_MODULE_EXPORT void EF_gtk_charge_noeud_check(GtkWidget *object __attribute__((
 }
 
 
-void EF_gtk_charge_noeud_ajouter_clicked(GtkButton *button __attribute__((unused)),
-  Projet *projet)
+void EF_gtk_charge_noeud_ajouter_clicked(GtkButton *button, Projet *projet)
 /* Description : Ferme la fenêtre en ajoutant la charge.
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -265,7 +262,7 @@ void EF_gtk_charge_noeud_ajouter_clicked(GtkButton *button __attribute__((unused
 }
 
 
-void EF_gtk_charge_noeud_editer_clicked(GtkButton *button __attribute__((unused)), Projet *projet)
+void EF_gtk_charge_noeud_editer_clicked(GtkButton *button, Projet *projet)
 /* Description : Ferme la fenêtre en appliquant les modifications.
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -309,8 +306,8 @@ void EF_gtk_charge_noeud_editer_clicked(GtkButton *button __attribute__((unused)
 }
 
 
-G_MODULE_EXPORT gboolean EF_gtk_charge_noeud_window_key_press(
-  GtkWidget *widget __attribute__((unused)), GdkEvent *event, Projet *projet)
+gboolean EF_gtk_charge_noeud_window_key_press(GtkWidget *widget, GdkEvent *event,
+  Projet *projet)
 /* Description : Gestion des touches de l'ensemble des composants de la fenêtre.
  * Paramètres : GtkWidget *widget : composant à l'origine de l'évènement,
  *            : GdkEvent *event : description de la touche pressée,
@@ -334,8 +331,7 @@ G_MODULE_EXPORT gboolean EF_gtk_charge_noeud_window_key_press(
 }
 
 
-G_MODULE_EXPORT void EF_gtk_charge_noeud_window_destroy(
-  GtkWidget *object __attribute__((unused)), Projet *projet)
+void EF_gtk_charge_noeud_window_destroy(GtkWidget *object, Projet *projet)
 /* Description : met projet->list_gtk.ef_charge_noeud.builder à NULL quand la fenêtre se ferme.
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -352,7 +348,7 @@ G_MODULE_EXPORT void EF_gtk_charge_noeud_window_destroy(
 }
 
 
-G_MODULE_EXPORT gboolean EF_gtk_charge_noeud(Projet *projet, unsigned int action_defaut, unsigned int charge)
+gboolean EF_gtk_charge_noeud(Projet *projet, unsigned int action_defaut, unsigned int charge)
 /* Description : Affichage de la fenêtre permettant de créer ou modifier une action de type
  *               charge ponctuelle au noeud.
  * Paramètres : Projet *projet : la variable projet

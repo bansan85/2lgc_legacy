@@ -36,8 +36,7 @@
 #include "1992_1_1_materiaux.h"
 #include "1992_1_1_barres.h"
 
-G_MODULE_EXPORT void EF_gtk_materiaux_fermer(GtkButton *button __attribute__((unused)),
-  Projet *projet)
+void EF_gtk_materiaux_fermer(GtkButton *button, Projet *projet)
 /* Description : Ferme la fenêtre.
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -53,8 +52,7 @@ G_MODULE_EXPORT void EF_gtk_materiaux_fermer(GtkButton *button __attribute__((un
 }
 
 
-G_MODULE_EXPORT void EF_gtk_materiaux_window_destroy(GtkWidget *object __attribute__((unused)),
-  Projet *projet)
+void EF_gtk_materiaux_window_destroy(GtkWidget *object, Projet *projet)
 /* Description : met projet->list_gtk.ef_materiaux.builder à NULL quand la fenêtre se ferme,
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -71,8 +69,7 @@ G_MODULE_EXPORT void EF_gtk_materiaux_window_destroy(GtkWidget *object __attribu
 }
 
 
-G_MODULE_EXPORT gboolean EF_gtk_materiaux_window_key_press(
-  GtkWidget *widget __attribute__((unused)), GdkEvent *event, Projet *projet)
+gboolean EF_gtk_materiaux_window_key_press(GtkWidget *widget, GdkEvent *event, Projet *projet)
 /* Description : Ferme la fenêtre si la touche ECHAP est pressée.
  * Paramètres : GtkWidget *widget : composant à l'origine de l'évènement,
  *            : GdkEvent *event : Caractéristique de l'évènement,
@@ -96,8 +93,8 @@ G_MODULE_EXPORT gboolean EF_gtk_materiaux_window_key_press(
 }
 
 
-G_MODULE_EXPORT gboolean EF_gtk_materiaux_treeview_key_press(GtkTreeView *treeview,
-  GdkEvent *event, Projet *projet)
+gboolean EF_gtk_materiaux_treeview_key_press(GtkTreeView *treeview, GdkEvent *event,
+  Projet *projet)
 /* Description : Supprime un matériau sans dépendance si la touche SUPPR est appuyée.
  * Paramètres : GtkTreeView *treeview : composant à l'origine de l'évènement,
  *            : GdkEvent *event : Caractéristique de l'évènement,
@@ -140,8 +137,8 @@ G_MODULE_EXPORT gboolean EF_gtk_materiaux_treeview_key_press(GtkTreeView *treevi
 }
 
 
-G_MODULE_EXPORT void EF_gtk_materiaux_edit_nom(GtkCellRendererText *cell __attribute__((unused)),
-  gchar *path_string, gchar *new_text, Projet *projet)
+void EF_gtk_materiaux_edit_nom(GtkCellRendererText *cell, gchar *path_string, gchar *new_text,
+  Projet *projet)
 /* Description : Modification du nom d'un matériau.
  * Paramètres : GtkCellRendererText *cell : cellule en cours,
  *            : gchar *path_string : path de la ligne en cours,
@@ -182,8 +179,7 @@ G_MODULE_EXPORT void EF_gtk_materiaux_edit_nom(GtkCellRendererText *cell __attri
 }
 
 
-G_MODULE_EXPORT void EF_gtk_materiaux_select_changed(
-  GtkTreeSelection *treeselection __attribute__((unused)), Projet *projet)
+void EF_gtk_materiaux_select_changed(GtkTreeSelection *treeselection, Projet *projet)
 /* Description : En fonction de la sélection, active ou désactive le bouton supprimer.
  * Paramètres : GtkTreeSelection *treeselection : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -244,8 +240,7 @@ G_MODULE_EXPORT void EF_gtk_materiaux_select_changed(
 }
 
 
-G_MODULE_EXPORT void EF_gtk_materiaux_boutton_supprimer_menu(
-  GtkButton *widget __attribute__((unused)), Projet *projet)
+void EF_gtk_materiaux_boutton_supprimer_menu(GtkButton *widget, Projet *projet)
 /* Description : Affiche la liste des dépendances dans le menu lorsqu'on clique sur le bouton
  * Paramètres : GtkButton *widget : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -296,8 +291,7 @@ G_MODULE_EXPORT void EF_gtk_materiaux_boutton_supprimer_menu(
 }
 
 
-G_MODULE_EXPORT void EF_gtk_materiaux_supprimer_menu_barres(
-  GtkButton *button __attribute__((unused)), Projet *projet)
+void EF_gtk_materiaux_supprimer_menu_barres(GtkButton *button, Projet *projet)
 /* Description : Supprime le matériau sélectionné dans le treeview, y compris les barres
  *               l'utilisant.
  * Paramètres : GtkWidget *widget : composant à l'origine de l'évènement,
@@ -335,8 +329,7 @@ G_MODULE_EXPORT void EF_gtk_materiaux_supprimer_menu_barres(
 }
 
 
-G_MODULE_EXPORT void EF_gtk_materiaux_supprimer_direct(
-  GtkButton *button __attribute__((unused)), Projet *projet)
+void EF_gtk_materiaux_supprimer_direct(GtkButton *button, Projet *projet)
 /* Description : Supprime le matériau sélectionné dans le treeview.
  * Paramètres : GtkWidget *widget : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -365,7 +358,7 @@ G_MODULE_EXPORT void EF_gtk_materiaux_supprimer_direct(
 }
 
 
-G_MODULE_EXPORT void EF_gtk_materiaux(Projet *projet)
+void EF_gtk_materiaux(Projet *projet)
 /* Description : Création de la fenêtre permettant d'afficher les matériaux sous forme d'un
  *               tableau.
  * Paramètres : Projet *projet : la variable projet.

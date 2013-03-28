@@ -30,8 +30,7 @@
 #include "EF_calculs.h"
 
 
-G_MODULE_EXPORT void *EF_charge_cherche(Projet *projet, unsigned int num_action,
-  unsigned int num_charge)
+void *EF_charge_cherche(Projet *projet, unsigned int num_action, unsigned int num_charge)
 /* Description : Cherche et renvoie la charge demandée.
  * Paramètres : Projet *projet : la variable projet,
  *            : unsigned int num_action : le numéro de l'action,
@@ -132,8 +131,8 @@ gboolean EF_charge_renomme(Projet *projet, unsigned int numero_action,
 }
 
 
-G_MODULE_EXPORT gboolean EF_charge_deplace(Projet *projet, unsigned int action_src,
-  unsigned int charge_src, unsigned int action_dest)
+gboolean EF_charge_deplace(Projet *projet, unsigned int action_src, unsigned int charge_src,
+  unsigned int action_dest)
 /* Description : Déplace une charge d'une action à l'autre.
  *               La charge une dois déplacée sera en fin de la liste et les numéros des charges
  *               dans l'action d'origine seront décrémentés afin que les numéros soit toujours
@@ -220,8 +219,7 @@ G_MODULE_EXPORT gboolean EF_charge_deplace(Projet *projet, unsigned int action_s
 }
 
 
-G_MODULE_EXPORT gboolean EF_charge_supprime(Projet *projet, unsigned int action_num,
-  unsigned int charge_num)
+gboolean EF_charge_supprime(Projet *projet, unsigned int action_num, unsigned int charge_num)
 /* Description : Supprime une charge. Décrémente également le numéro des charges possédant un
  *               numéro supérieur à la charge supprimée afin que la liste des numéros soit
  *               toujours continue.

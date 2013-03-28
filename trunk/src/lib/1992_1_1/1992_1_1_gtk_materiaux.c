@@ -32,8 +32,8 @@
 #include "common_selection.h"
 #include "1992_1_1_materiaux.h"
 
-G_MODULE_EXPORT gboolean _1992_1_1_gtk_materiaux_window_key_press(
-  GtkWidget *widget __attribute__((unused)), GdkEvent *event, Projet *projet)
+gboolean _1992_1_1_gtk_materiaux_window_key_press(GtkWidget *widget, GdkEvent *event,
+  Projet *projet)
 /* Description : Gestion des touches de l'ensemble des composants de la fenêtre.
  * Paramètres : GtkWidget *widget : composant à l'origine de l'évènement,
  *            : GdkEvent *event : description de la touche pressée,
@@ -57,8 +57,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_gtk_materiaux_window_key_press(
 }
 
 
-G_MODULE_EXPORT void _1992_1_1_gtk_materiaux_window_destroy(
-  GtkWidget *object __attribute__((unused)), Projet *projet)
+void _1992_1_1_gtk_materiaux_window_destroy(GtkWidget *object, Projet *projet)
 /* Description : Met projet->list_gtk._1992_1_1_materiaux.builder à NULL quand la
  *               fenêtre se ferme.
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
@@ -325,8 +324,7 @@ gboolean _1992_1_1_gtk_materiaux_recupere_donnees(Projet *projet, char **nom, do
 }
 
 
-G_MODULE_EXPORT void _1992_1_1_gtk_materiaux_check(
-  GtkWidget *object __attribute__((unused)), Projet *projet)
+void _1992_1_1_gtk_materiaux_check(GtkWidget *object, Projet *projet)
 /* Description : Vérifie si l'ensemble des éléments est correct pour activer le bouton add/edit.
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -353,8 +351,7 @@ G_MODULE_EXPORT void _1992_1_1_gtk_materiaux_check(
 }
 
 
-G_MODULE_EXPORT void _1992_1_1_gtk_materiaux_ajouter_clicked(
-  GtkButton *button __attribute__((unused)), Projet *projet)
+void _1992_1_1_gtk_materiaux_ajouter_clicked(GtkButton *button, Projet *projet)
 /* Description : Ferme la fenêtre en ajoutant la charge.
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -385,8 +382,7 @@ G_MODULE_EXPORT void _1992_1_1_gtk_materiaux_ajouter_clicked(
 }
 
 
-G_MODULE_EXPORT void _1992_1_1_gtk_materiaux_annuler_clicked(
-  GtkButton *button __attribute__((unused)), Projet *projet)
+void _1992_1_1_gtk_materiaux_annuler_clicked(GtkButton *button, Projet *projet)
 /* Description : Ferme la fenêtre sans effectuer les modifications.
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -402,8 +398,7 @@ G_MODULE_EXPORT void _1992_1_1_gtk_materiaux_annuler_clicked(
 }
 
 
-G_MODULE_EXPORT void _1992_1_1_gtk_materiaux_modifier_clicked(
-  GtkButton *button __attribute__((unused)), Projet *projet)
+void _1992_1_1_gtk_materiaux_modifier_clicked(GtkButton *button, Projet *projet)
 /* Description : Ferme la fenêtre en appliquant les modifications.
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -433,8 +428,7 @@ G_MODULE_EXPORT void _1992_1_1_gtk_materiaux_modifier_clicked(
 }
 
 
-G_MODULE_EXPORT void _1992_1_1_gtk_materiaux_toggled(GtkCheckMenuItem *checkmenuitem,
-  Projet *projet)
+void _1992_1_1_gtk_materiaux_toggled(GtkCheckMenuItem *checkmenuitem, Projet *projet)
 /* Description : Evènement pour (dés)activer la personnalisation d'une propriété du béton.
  * Paramètres : GtkCheckMenuItem *checkmenuitem : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -606,7 +600,7 @@ G_MODULE_EXPORT void _1992_1_1_gtk_materiaux_toggled(GtkCheckMenuItem *checkmenu
 }
 
 
-G_MODULE_EXPORT gboolean _1992_1_1_gtk_materiaux(Projet *projet, EF_Materiau *materiau)
+gboolean _1992_1_1_gtk_materiaux(Projet *projet, EF_Materiau *materiau)
 /* Description : Affichage de la fenêtre permettant de créer ou modifier un matériau de type
  *               béton.
  * Paramètres : Projet *projet : la variable projet,
@@ -689,8 +683,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_gtk_materiaux(Projet *projet, EF_Materiau *ma
 }
 
 
-G_MODULE_EXPORT void _1992_1_1_gtk_materiaux_ajout(
-  GtkMenuItem *menuitem __attribute__((unused)), Projet *projet)
+void _1992_1_1_gtk_materiaux_ajout(GtkMenuItem *menuitem, Projet *projet)
 /* Description : Lance la fenêtre permettant d'ajouter un matériau béton.
  * Paramètres : GtkMenuItem *menuitem : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -706,8 +699,7 @@ G_MODULE_EXPORT void _1992_1_1_gtk_materiaux_ajout(
 }
 
 
-G_MODULE_EXPORT void EF_gtk_materiaux_edit_clicked(GtkWidget *widget  __attribute__((unused)),
-  Projet *projet)
+void EF_gtk_materiaux_edit_clicked(GtkWidget *widget, Projet *projet)
 /* Description : Edite les matériaux sélectionnés.
  * Paramètres : GtkToolButton *toolbutton : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -748,8 +740,8 @@ G_MODULE_EXPORT void EF_gtk_materiaux_edit_clicked(GtkWidget *widget  __attribut
 }
 
 
-G_MODULE_EXPORT gboolean _1992_1_1_gtk_materiaux_double_clicked(GtkWidget *widget,
-  GdkEvent *event, Projet *projet)
+gboolean _1992_1_1_gtk_materiaux_double_clicked(GtkWidget *widget, GdkEvent *event,
+  Projet *projet)
 /* Description : Lance la fenêtre d'édition du matériau sélectionné en cas de double-clique
  *               dans le tree-view.
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
@@ -772,6 +764,5 @@ G_MODULE_EXPORT gboolean _1992_1_1_gtk_materiaux_double_clicked(GtkWidget *widge
     else
         return common_gtk_treeview_button_press_unselect(GTK_TREE_VIEW(widget), event, projet);
 }
-
 
 #endif

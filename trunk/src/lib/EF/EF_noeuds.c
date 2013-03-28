@@ -32,7 +32,7 @@
 #include "EF_gtk_appuis.h"
 #endif
 
-G_MODULE_EXPORT gboolean EF_noeuds_init(Projet *projet)
+gboolean EF_noeuds_init(Projet *projet)
 /* Description : Initialise la liste des noeuds.
  * Paramètres : Projet *projet : la variable projet.
  * Valeur renvoyée :
@@ -49,7 +49,7 @@ G_MODULE_EXPORT gboolean EF_noeuds_init(Projet *projet)
 }
 
 
-G_MODULE_EXPORT EF_Point *EF_noeuds_renvoie_position(EF_Noeud *noeud) 
+EF_Point *EF_noeuds_renvoie_position(EF_Noeud *noeud) 
 /* Description : Renvoie un point contenant la position du noeud.
  *               La valeur de retour doit être libérée par l'appel à la fonction free();
  * Paramètres : EF_Noeud *noeud : le noeud à étudier.
@@ -119,8 +119,8 @@ G_MODULE_EXPORT EF_Point *EF_noeuds_renvoie_position(EF_Noeud *noeud)
 }
 
 
-G_MODULE_EXPORT EF_Noeud *EF_noeuds_ajout_noeud_libre(Projet *projet, double x, double y,
-  double z, EF_Appui *appui, EF_Noeud *relatif)
+EF_Noeud *EF_noeuds_ajout_noeud_libre(Projet *projet, double x, double y, double z,
+  EF_Appui *appui, EF_Noeud *relatif)
 /* Description : Ajouter un noeud à la liste des noeuds en lui attribuant le numéro suivant le
  *               dernier noeud existant.
  * Paramètres : Projet *projet : la variable projet,
@@ -183,7 +183,7 @@ G_MODULE_EXPORT EF_Noeud *EF_noeuds_ajout_noeud_libre(Projet *projet, double x, 
 }
 
 
-G_MODULE_EXPORT EF_Noeud* EF_noeuds_ajout_noeud_barre(Projet *projet, Beton_Barre *barre,
+EF_Noeud* EF_noeuds_ajout_noeud_barre(Projet *projet, Beton_Barre *barre,
   double position_relative_barre, EF_Appui *appui)
 /* Description : Ajouter un noeud à la liste des noeuds en lui attribuant le numéro suivant le
  *               dernier noeud existant. Ce noeud se situe à l'intérieur d'une barre et permet
@@ -255,8 +255,8 @@ G_MODULE_EXPORT EF_Noeud* EF_noeuds_ajout_noeud_barre(Projet *projet, Beton_Barr
 }
 
 
-G_MODULE_EXPORT gboolean EF_noeuds_min_max(Projet *projet, double *x_min, double *x_max,
-  double *y_min, double *y_max, double *z_min, double *z_max)
+gboolean EF_noeuds_min_max(Projet *projet, double *x_min, double *x_max, double *y_min,
+  double *y_max, double *z_min, double *z_max)
 /* Description : Détermine le cube contenant tous les points de la structure. 
  *               Une ou plusieurs valeurs min ou max peuvent valoir NULL.
  * Paramètres : Projet *projet : la variable projet,
@@ -332,8 +332,7 @@ G_MODULE_EXPORT gboolean EF_noeuds_min_max(Projet *projet, double *x_min, double
 }
 
 
-G_MODULE_EXPORT EF_Noeud* EF_noeuds_cherche_numero(Projet *projet, unsigned int numero,
-  gboolean critique)
+EF_Noeud* EF_noeuds_cherche_numero(Projet *projet, unsigned int numero, gboolean critique)
 /* Description : Positionne dans la liste des noeuds le noeud souhaité et le renvoie.
  * Paramètres : Projet *projet : la variable projet,
  *            : unsigned int numero : le numéro du noeud.
@@ -504,8 +503,7 @@ gboolean EF_noeuds_change_pos_relat(Projet *projet, EF_Noeud *noeud, double pos)
 }
 
 
-G_MODULE_EXPORT gboolean EF_noeuds_change_appui(Projet *projet, EF_Noeud *noeud,
-  EF_Appui *appui)
+gboolean EF_noeuds_change_appui(Projet *projet, EF_Noeud *noeud, EF_Appui *appui)
 /* Description : Change l'appui d'un noeud.
  * Paramètres : Projet *projet : la variable projet,
  *            : EF_Noeud *noeud : noeud à modifier,
@@ -663,7 +661,7 @@ gboolean EF_noeuds_change_noeud_relatif(Projet *projet, EF_Noeud *noeud, EF_Noeu
 }
 
 
-G_MODULE_EXPORT double EF_noeuds_distance(EF_Noeud* n1, EF_Noeud* n2)
+double EF_noeuds_distance(EF_Noeud* n1, EF_Noeud* n2)
 /* Description : Renvoie la distance entre deux noeuds.
  * Paramètres : EF_Noeud* n1 : noeud de départ,
  *            : EF_Noeud* n2 : noeud de fin.
@@ -695,8 +693,7 @@ G_MODULE_EXPORT double EF_noeuds_distance(EF_Noeud* n1, EF_Noeud* n2)
 }
 
 
-G_MODULE_EXPORT double EF_noeuds_distance_x_y_z(EF_Noeud* n1, EF_Noeud* n2, double *x,
-  double *y, double *z)
+double EF_noeuds_distance_x_y_z(EF_Noeud* n1, EF_Noeud* n2, double *x, double *y, double *z)
 /* Description : Renvoie la distance entre deux noeuds par retour de fonction et renvoie la
  *               distance entre deux noeuds selon les 3 axes par argument.
  * Paramètres : EF_Noeud* n1 : noeud de départ,
@@ -734,12 +731,7 @@ G_MODULE_EXPORT double EF_noeuds_distance_x_y_z(EF_Noeud* n1, EF_Noeud* n2, doub
 }
 
 
-#ifdef ENABLE_GTK
-G_MODULE_EXPORT void EF_noeuds_free_foreach(EF_Noeud *noeud, Projet *projet)
-#else
-G_MODULE_EXPORT void EF_noeuds_free_foreach(EF_Noeud *noeud,
-  Projet *projet __attribute__((unused)))
-#endif
+void EF_noeuds_free_foreach(EF_Noeud *noeud, Projet *projet)
 /* Description : Fonction permettant de libérer un noeud contenu dans une liste.
  * Paramètres : EF_Noeud *noeud : le noeud à libérer,
  *            : Projet *projet : la variable projet.
@@ -801,7 +793,7 @@ G_MODULE_EXPORT void EF_noeuds_free_foreach(EF_Noeud *noeud,
 }
 
 
-G_MODULE_EXPORT gboolean EF_noeuds_free(Projet *projet)
+gboolean EF_noeuds_free(Projet *projet)
 /* Description : Libère l'ensemble des noeuds et la liste les contenant.
  * Paramètres : Projet *projet : la variable projet.
  * Valeur renvoyée :

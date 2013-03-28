@@ -369,7 +369,7 @@ double _1990_coef_psi2_bat_fr(unsigned int type)
 }
 
 
-G_MODULE_EXPORT double _1990_coef_psi0_bat(unsigned int type, Type_Pays pays)
+double _1990_coef_psi0_bat(unsigned int type, Type_Pays pays)
 /* Description : renvoie le coefficient psi0 en fonction de la norme du pays spécifié pour les
  *               batiments.
  * Paramètres : unsigned int type : type de l'action,
@@ -390,7 +390,7 @@ G_MODULE_EXPORT double _1990_coef_psi0_bat(unsigned int type, Type_Pays pays)
 }
 
 
-G_MODULE_EXPORT double _1990_coef_psi1_bat(unsigned int type, Type_Pays pays)
+double _1990_coef_psi1_bat(unsigned int type, Type_Pays pays)
 /* Description : renvoie le coefficient psi1 en fonction de la norme du pays spécifié pour les
  *               batiments.
  * Paramètres : unsigned int type : type de l'action,
@@ -411,7 +411,7 @@ G_MODULE_EXPORT double _1990_coef_psi1_bat(unsigned int type, Type_Pays pays)
 }
 
 
-G_MODULE_EXPORT double _1990_coef_psi2_bat(unsigned int type, Type_Pays pays)
+double _1990_coef_psi2_bat(unsigned int type, Type_Pays pays)
 /* Description : renvoie le coefficient psi2 en fonction de la norme du pays spécifié pour les
  *               batiments.
  * Paramètres : unsigned int type : type de l'action,

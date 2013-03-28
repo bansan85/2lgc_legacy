@@ -34,8 +34,7 @@
 #include "EF_appuis.h"
 #include "1992_1_1_barres.h"
 
-G_MODULE_EXPORT void EF_gtk_appuis_fermer(GtkButton *button __attribute__((unused)),
-  Projet *projet)
+void EF_gtk_appuis_fermer(GtkButton *button, Projet *projet)
 /* Description : Ferme la fenêtre.
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -51,8 +50,7 @@ G_MODULE_EXPORT void EF_gtk_appuis_fermer(GtkButton *button __attribute__((unuse
 }
 
 
-G_MODULE_EXPORT void EF_gtk_appuis_window_destroy(GtkWidget *object __attribute__((unused)),
-  Projet *projet)
+void EF_gtk_appuis_window_destroy(GtkWidget *object, Projet *projet)
 /* Description : met projet->list_gtk.ef_appuis.builder à NULL quand la fenêtre se ferme,
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -69,8 +67,7 @@ G_MODULE_EXPORT void EF_gtk_appuis_window_destroy(GtkWidget *object __attribute_
 }
 
 
-G_MODULE_EXPORT gboolean EF_gtk_appuis_window_key_press(
-  GtkWidget *widget __attribute__((unused)), GdkEvent *event, Projet *projet)
+gboolean EF_gtk_appuis_window_key_press(GtkWidget *widget, GdkEvent *event, Projet *projet)
 /* Description : Ferme la fenêtre si la touche ECHAP est pressée.
  * Paramètres : GtkWidget *widget : composant à l'origine de l'évènement,
  *            : GdkEvent *event : Caractéristique de l'évènement,
@@ -94,8 +91,7 @@ G_MODULE_EXPORT gboolean EF_gtk_appuis_window_key_press(
 }
 
 
-G_MODULE_EXPORT void EF_gtk_appuis_ajouter(GtkButton *button __attribute__((unused)),
-  Projet *projet)
+void EF_gtk_appuis_ajouter(GtkButton *button, Projet *projet)
 /* Description : Ajout un nouvel appui.
  * Paramètres : GtkWidget *widget : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -134,8 +130,7 @@ G_MODULE_EXPORT void EF_gtk_appuis_ajouter(GtkButton *button __attribute__((unus
 }
 
 
-G_MODULE_EXPORT void EF_gtk_appuis_supprimer(GtkButton *button __attribute__((unused)),
-  Projet *projet)
+void EF_gtk_appuis_supprimer(GtkButton *button, Projet *projet)
 /* Description : Supprime l'appui sélectionné dans le treeview.
  * Paramètres : GtkWidget *widget : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -166,8 +161,7 @@ G_MODULE_EXPORT void EF_gtk_appuis_supprimer(GtkButton *button __attribute__((un
 }
 
 
-G_MODULE_EXPORT gboolean EF_gtk_appuis_treeview_key_press(
-  GtkWidget *widget __attribute__((unused)), GdkEvent *event, Projet *projet)
+gboolean EF_gtk_appuis_treeview_key_press(GtkWidget *widget, GdkEvent *event, Projet *projet)
 /* Description : Supprime un appui sans dépendance si la touche SUPPR est appuyée.
  * Paramètres : GtkWidget *widget : composant à l'origine de l'évènement,
  *            : GdkEvent *event : Caractéristique de l'évènement,
@@ -211,8 +205,7 @@ G_MODULE_EXPORT gboolean EF_gtk_appuis_treeview_key_press(
 }
 
 
-G_MODULE_EXPORT void EF_gtk_appuis_supprimer_menu_suppr_noeud(
-  GtkButton *button __attribute__((unused)), Projet *projet)
+void EF_gtk_appuis_supprimer_menu_suppr_noeud(GtkButton *button, Projet *projet)
 /* Description : Supprime l'appui sélectionné dans le treeview et ainsi que les noeuds
  *               utilisant l'appui.
  * Paramètres : GtkWidget *widget : composant à l'origine de l'évènement,
@@ -244,8 +237,7 @@ G_MODULE_EXPORT void EF_gtk_appuis_supprimer_menu_suppr_noeud(
 }
 
 
-G_MODULE_EXPORT void EF_gtk_appuis_supprimer_menu_modif_noeud(
-  GtkButton *button __attribute__((unused)), Projet *projet)
+void EF_gtk_appuis_supprimer_menu_modif_noeud(GtkButton *button, Projet *projet)
 /* Description : Supprime l'appui sélectionné dans le treeview et les noeuds le possédant
  *               deviennent sans appui.
  * Paramètres : GtkWidget *widget : composant à l'origine de l'évènement,
@@ -275,8 +267,8 @@ G_MODULE_EXPORT void EF_gtk_appuis_supprimer_menu_modif_noeud(
 }
 
 
-G_MODULE_EXPORT void EF_gtk_appuis_edit_type(GtkCellRendererText *cell, gchar *path_string,
-  gchar *new_text, Projet *projet)
+void EF_gtk_appuis_edit_type(GtkCellRendererText *cell, gchar *path_string, gchar *new_text,
+  Projet *projet)
 /* Description : Modification d'un appui.
  * Paramètres : GtkCellRendererText *cell : cellule en cours,
  *            : gchar *path_string : path de la ligne en cours,
@@ -316,8 +308,8 @@ G_MODULE_EXPORT void EF_gtk_appuis_edit_type(GtkCellRendererText *cell, gchar *p
 }
 
 
-G_MODULE_EXPORT void EF_gtk_appuis_edit_nom(GtkCellRendererText *cell __attribute__((unused)),
-  gchar *path_string, gchar *new_text, Projet *projet)
+void EF_gtk_appuis_edit_nom(GtkCellRendererText *cell, gchar *path_string, gchar *new_text,
+  Projet *projet)
 /* Description : Modification du nom d'un appui.
  * Paramètres : GtkCellRendererText *cell : cellule en cours,
  *            : gchar *path_string : path de la ligne en cours,
@@ -359,8 +351,7 @@ G_MODULE_EXPORT void EF_gtk_appuis_edit_nom(GtkCellRendererText *cell __attribut
 }
 
 
-G_MODULE_EXPORT void EF_gtk_appuis_select_changed(
-  GtkTreeSelection *treeselection __attribute__((unused)), Projet *projet)
+void EF_gtk_appuis_select_changed(GtkTreeSelection *treeselection, Projet *projet)
 /* Description : En fonction de la sélection, active ou désactive le bouton supprimer.
  * Paramètres : GtkTreeSelection *treeselection : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -417,8 +408,7 @@ G_MODULE_EXPORT void EF_gtk_appuis_select_changed(
 }
 
 
-G_MODULE_EXPORT void EF_gtk_appuis_boutton_supprimer_menu(
-  GtkButton *widget __attribute__((unused)), Projet *projet)
+void EF_gtk_appuis_boutton_supprimer_menu(GtkButton *widget, Projet *projet)
 /* Description : Affiche la liste des dépendances dans le menu lorsqu'on clique sur le bouton
  * Paramètres : GtkButton *widget : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -467,7 +457,7 @@ G_MODULE_EXPORT void EF_gtk_appuis_boutton_supprimer_menu(
 }
 
 
-G_MODULE_EXPORT void EF_gtk_appuis(Projet *projet)
+void EF_gtk_appuis(Projet *projet)
 /* Description : Création de la fenêtre permettant d'afficher les appuis sous forme d'un
  *               tableau.
  * Paramètres : Projet *projet : la variable projet.

@@ -32,8 +32,8 @@
 #include "common_selection.h"
 #include "EF_sections.h"
 
-G_MODULE_EXPORT gboolean EF_gtk_section_circulaire_window_key_press(
-  GtkWidget *widget __attribute__((unused)), GdkEvent *event, Projet *projet)
+gboolean EF_gtk_section_circulaire_window_key_press(GtkWidget *widget, GdkEvent *event,
+  Projet *projet)
 /* Description : Gestion des touches de l'ensemble des composants de la fenêtre.
  * Paramètres : GtkWidget *widget : composant à l'origine de l'évènement,
  *            : GdkEvent *event : description de la touche pressée,
@@ -57,8 +57,7 @@ G_MODULE_EXPORT gboolean EF_gtk_section_circulaire_window_key_press(
 }
 
 
-G_MODULE_EXPORT void EF_gtk_section_circulaire_window_destroy(
-  GtkWidget *object __attribute__((unused)), Projet *projet)
+void EF_gtk_section_circulaire_window_destroy(GtkWidget *object, Projet *projet)
 /* Description : Met projet->list_gtk.ef_sections_circulaire.builder à NULL quand la
  *               fenêtre se ferme.
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
@@ -138,8 +137,7 @@ gboolean EF_gtk_section_circulaire_recupere_donnees(Projet *projet, double *diam
 }
 
 
-G_MODULE_EXPORT void EF_gtk_section_circulaire_check(
-  GtkWidget *object __attribute__((unused)), Projet *projet)
+void EF_gtk_section_circulaire_check(GtkWidget *object, Projet *projet)
 /* Description : Vérifie si l'ensemble des éléments est correct pour activer le bouton add/edit.
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -164,8 +162,7 @@ G_MODULE_EXPORT void EF_gtk_section_circulaire_check(
 }
 
 
-G_MODULE_EXPORT void EF_gtk_section_circulaire_ajouter_clicked(
-  GtkButton *button __attribute__((unused)), Projet *projet)
+void EF_gtk_section_circulaire_ajouter_clicked(GtkButton *button, Projet *projet)
 /* Description : Ferme la fenêtre en ajoutant la charge.
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -191,8 +188,7 @@ G_MODULE_EXPORT void EF_gtk_section_circulaire_ajouter_clicked(
 }
 
 
-G_MODULE_EXPORT void EF_gtk_section_circulaire_annuler_clicked(
-  GtkButton *button __attribute__((unused)), Projet *projet)
+void EF_gtk_section_circulaire_annuler_clicked(GtkButton *button, Projet *projet)
 /* Description : Ferme la fenêtre sans effectuer les modifications.
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -208,8 +204,7 @@ G_MODULE_EXPORT void EF_gtk_section_circulaire_annuler_clicked(
 }
 
 
-G_MODULE_EXPORT void EF_gtk_section_circulaire_modifier_clicked(
-  GtkButton *button __attribute__((unused)), Projet *projet)
+void EF_gtk_section_circulaire_modifier_clicked(GtkButton *button, Projet *projet)
 /* Description : Ferme la fenêtre en appliquant les modifications.
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -235,7 +230,7 @@ G_MODULE_EXPORT void EF_gtk_section_circulaire_modifier_clicked(
 }
 
 
-G_MODULE_EXPORT gboolean EF_gtk_section_circulaire(Projet *projet, EF_Section *section)
+gboolean EF_gtk_section_circulaire(Projet *projet, EF_Section *section)
 /* Description : Affichage de la fenêtre permettant de créer ou modifier une section de type
  *               circulaire.
  * Paramètres : Projet *projet : la variable projet,

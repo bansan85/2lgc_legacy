@@ -32,7 +32,7 @@
 #include "EF_calculs.h"
 
 
-G_MODULE_EXPORT gboolean _1992_1_1_materiaux_init(Projet *projet)
+gboolean _1992_1_1_materiaux_init(Projet *projet)
 /* Description : Initialise la liste des matériaux en béton.
  * Paramètres : Projet *projet : la variable projet.
  * Valeur renvoyée :
@@ -54,7 +54,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_materiaux_init(Projet *projet)
 }
 
 
-G_MODULE_EXPORT double _1992_1_1_materiaux_fckcube(double fck)
+double _1992_1_1_materiaux_fckcube(double fck)
 /* Description : Renvoie la résistance caractéristique en compression du béton, mesurée sur
  *               cube à 28 jours en fonction de fck en unité SI (Pa).
  * Paramètres : double fck : Résistance caractéristique en compression du béton, mesurée sur
@@ -102,7 +102,7 @@ G_MODULE_EXPORT double _1992_1_1_materiaux_fckcube(double fck)
 }
 
 
-G_MODULE_EXPORT double _1992_1_1_materiaux_fcm(double fck)
+double _1992_1_1_materiaux_fcm(double fck)
 /* Description : Renvoie la valeur moyenne de la résistance en compression du béton, mesurée sur
  *               cylindre en unité SI (Pa).
  * Paramètres : double fck : Résistance caractéristique en compression du béton, mesurée sur
@@ -120,7 +120,7 @@ G_MODULE_EXPORT double _1992_1_1_materiaux_fcm(double fck)
 }
 
 
-G_MODULE_EXPORT double _1992_1_1_materiaux_fctm(double fck, double fcm)
+double _1992_1_1_materiaux_fctm(double fck, double fcm)
 /* Description : Renvoie la valeur moyenne de la résistance en traction directe du béton,
  *               mesurée sur cylindre en unité SI (Pa).
  * Paramètres : double fck : Résistance caractéristique en compression du béton, mesurée sur
@@ -142,7 +142,7 @@ G_MODULE_EXPORT double _1992_1_1_materiaux_fctm(double fck, double fcm)
 }
 
 
-G_MODULE_EXPORT double _1992_1_1_materiaux_fctk_0_05(double fctm)
+double _1992_1_1_materiaux_fctk_0_05(double fctm)
 /* Description : Renvoie la valeur moyenne de la résistance en traction directe du béton,
  *               (fractile 5%) en unité SI (Pa).
  * Paramètres : double fctm : Valeur moyenne de la résistance en traction directe du béton,
@@ -155,7 +155,7 @@ G_MODULE_EXPORT double _1992_1_1_materiaux_fctk_0_05(double fctm)
 }
 
 
-G_MODULE_EXPORT double _1992_1_1_materiaux_fctk_0_95(double fctm)
+double _1992_1_1_materiaux_fctk_0_95(double fctm)
 /* Description : Renvoie la valeur moyenne de la résistance en traction directe du béton,
  *               (fractile 95%) en unité SI (Pa).
  * Paramètres : double fctm : Valeur moyenne de la résistance en traction directe du béton,
@@ -168,7 +168,7 @@ G_MODULE_EXPORT double _1992_1_1_materiaux_fctk_0_95(double fctm)
 }
 
 
-G_MODULE_EXPORT double _1992_1_1_materiaux_ecm(double fcm)
+double _1992_1_1_materiaux_ecm(double fcm)
 /* Description : Renvoie le module d'élasticité sécant du béton en unité SI (Pa).
  * Paramètres : double fcm : valeur moyenne de la résistance en compression du béton, en MPa.
  * Valeur renvoyée :
@@ -179,7 +179,7 @@ G_MODULE_EXPORT double _1992_1_1_materiaux_ecm(double fcm)
 }
 
 
-G_MODULE_EXPORT double _1992_1_1_materiaux_ec1(double fcm)
+double _1992_1_1_materiaux_ec1(double fcm)
 /* Description : Renvoie la déformation relative en compression du béton au point 1.
  * Paramètres : double fcm : valeur moyenne de la résistance en compression du béton, en MPa.
  * Valeur renvoyée :
@@ -190,7 +190,7 @@ G_MODULE_EXPORT double _1992_1_1_materiaux_ec1(double fcm)
 }
 
 
-G_MODULE_EXPORT double _1992_1_1_materiaux_ecu1(double fcm, double fck)
+double _1992_1_1_materiaux_ecu1(double fcm, double fck)
 /* Description : Renvoie la déformation relative ultime en compression du béton au point 1.
  * Paramètres : double fcm : valeur moyenne de la résistance en compression du béton, en MPa.
  *            : double fck : Résistance caractéristique en compression du béton, mesurée sur
@@ -211,7 +211,7 @@ G_MODULE_EXPORT double _1992_1_1_materiaux_ecu1(double fcm, double fck)
 }
 
 
-G_MODULE_EXPORT double _1992_1_1_materiaux_ec2(double fck)
+double _1992_1_1_materiaux_ec2(double fck)
 /* Description : Renvoie la déformation relative en compression du béton au point 2.
  * Paramètres : double fck : Résistance caractéristique en compression du béton, mesurée sur
  *                           cylindre à 28 jours, en MPa.
@@ -231,7 +231,7 @@ G_MODULE_EXPORT double _1992_1_1_materiaux_ec2(double fck)
 }
 
 
-G_MODULE_EXPORT double _1992_1_1_materiaux_ecu2(double fck)
+double _1992_1_1_materiaux_ecu2(double fck)
 /* Description : Renvoie la déformation relative ultime en compression du béton au point 2.
  * Paramètres : double fck : Résistance caractéristique en compression du béton, mesurée sur
  *                           cylindre à 28 jours, en MPa.
@@ -251,7 +251,7 @@ G_MODULE_EXPORT double _1992_1_1_materiaux_ecu2(double fck)
 }
 
 
-G_MODULE_EXPORT double _1992_1_1_materiaux_ec3(double fck)
+double _1992_1_1_materiaux_ec3(double fck)
 /* Description : Renvoie la déformation relative en compression du béton au point 3.
  * Paramètres : double fck : Résistance caractéristique en compression du béton, mesurée sur
  *                           cylindre à 28 jours, en MPa.
@@ -271,7 +271,7 @@ G_MODULE_EXPORT double _1992_1_1_materiaux_ec3(double fck)
 }
 
 
-G_MODULE_EXPORT double _1992_1_1_materiaux_ecu3(double fck)
+double _1992_1_1_materiaux_ecu3(double fck)
 /* Description : Renvoie la déformation relative ultime en compression du béton au point 3.
  * Paramètres : double fck : Résistance caractéristique en compression du béton, mesurée sur
  *                           cylindre à 28 jours, en MPa.
@@ -291,7 +291,7 @@ G_MODULE_EXPORT double _1992_1_1_materiaux_ecu3(double fck)
 }
 
 
-G_MODULE_EXPORT double _1992_1_1_materiaux_n(double fck)
+double _1992_1_1_materiaux_n(double fck)
 /* Description : Renvoie le coefficient n utilisé dans la courbe parabole rectangle.
  * Paramètres : double fck : Résistance caractéristique en compression du béton, mesurée sur
  *                           cylindre à 28 jours, en MPa.
@@ -311,7 +311,7 @@ G_MODULE_EXPORT double _1992_1_1_materiaux_n(double fck)
 }
 
 
-G_MODULE_EXPORT double _1992_1_1_materiaux_gnu(double ecm, double nu)
+double _1992_1_1_materiaux_gnu(double ecm, double nu)
 /* Description : Renvoie le module de cisallement en unité SI (Pa).
  * Paramètres : double fck : module d'élasticité sécant du béton en GPa,
  *              double nu : coefficient de poisson.
@@ -324,8 +324,7 @@ G_MODULE_EXPORT double _1992_1_1_materiaux_gnu(double ecm, double nu)
 
 
 #ifdef ENABLE_GTK
-G_MODULE_EXPORT gboolean _1992_1_1_materiaux_update_ligne_treeview(Projet *projet,
-  EF_Materiau *materiau)
+gboolean _1992_1_1_materiaux_update_ligne_treeview(Projet *projet, EF_Materiau *materiau)
 /* Description : Met à jour les données dans le treeview de la fenêtre matériau.
  * Paramètres : Projet *projet : la variable projet,
  *            : EF_Materiau *materiau : le matériau à mettre à jour.
@@ -405,8 +404,7 @@ gboolean _1992_1_1_materiaux_insert(Projet *projet, EF_Materiau *materiau)
 }
 
 
-G_MODULE_EXPORT EF_Materiau* _1992_1_1_materiaux_ajout(Projet *projet, const char *nom,
-  double fck)
+EF_Materiau* _1992_1_1_materiaux_ajout(Projet *projet, const char *nom, double fck)
 /* Description : Ajoute un matériau en béton et calcule ses caractéristiques mécaniques.
  *               Les propriétés du béton sont déterminées conformément au tableau 3.1 de
  *               l'Eurocode 2-1-1 les valeurs de fckcube est déterminée par interpolation
@@ -514,10 +512,10 @@ gboolean _1992_1_1_materiaux_repositionne(Projet *projet, EF_Materiau *materiau)
 }
 
 
-G_MODULE_EXPORT gboolean _1992_1_1_materiaux_modif(Projet *projet, EF_Materiau *materiau,
-  char *nom, double fck, double fckcube, double fcm, double fctm, double fctk_0_05,
-  double fctk_0_95, double ecm, double ec1, double ecu1, double ec2, double ecu2, double n,
-  double ec3, double ecu3, double nu)
+gboolean _1992_1_1_materiaux_modif(Projet *projet, EF_Materiau *materiau, char *nom, double fck,
+  double fckcube, double fcm, double fctm, double fctk_0_05, double fctk_0_95, double ecm,
+  double ec1, double ecu1, double ec2, double ecu2, double n, double ec3, double ecu3,
+  double nu)
 /* Description : Modifie un matériau béton.
  * Paramètres : Projet *projet : la variable projet,
  *            : EF_Materiau *materiau : le matériau à modifier,
@@ -645,8 +643,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_materiaux_modif(Projet *projet, EF_Materiau *
 }
 
 
-G_MODULE_EXPORT EF_Materiau* _1992_1_1_materiaux_cherche_nom(Projet *projet, const char *nom,
-  gboolean critique)
+EF_Materiau* _1992_1_1_materiaux_cherche_nom(Projet *projet, const char *nom, gboolean critique)
 /* Description : Renvoie le matériau en fonction de son nom.
  * Paramètres : Projet *projet : la variable projet,
  *            : const char *nom : le nom du matériau.
@@ -681,7 +678,7 @@ G_MODULE_EXPORT EF_Materiau* _1992_1_1_materiaux_cherche_nom(Projet *projet, con
 }
 
 
-G_MODULE_EXPORT char *_1992_1_1_materiaux_get_description(EF_Materiau* materiau)
+char *_1992_1_1_materiaux_get_description(EF_Materiau* materiau)
 /* Description : Renvoie la description d'un matériau béton sous forme d'un texte.
  *               Il convient de libérer le texte renvoyée par la fonction free.
  * Paramètres : EF_Materiau* materiau : section à étudier.
@@ -888,7 +885,7 @@ void _1992_1_1_materiaux_free_un(EF_Materiau *materiau)
 }
 
 
-G_MODULE_EXPORT gboolean _1992_1_1_materiaux_supprime(EF_Materiau* materiau, Projet *projet)
+gboolean _1992_1_1_materiaux_supprime(EF_Materiau* materiau, Projet *projet)
 /* Description : Supprime le matériau spécifié. Impossible si le matériau est utilisé.
  * Paramètres : EF_Materiau* materiau : le matériau à supprimer,
  *            : Projet *projet : la variable projet.
@@ -936,7 +933,7 @@ G_MODULE_EXPORT gboolean _1992_1_1_materiaux_supprime(EF_Materiau* materiau, Pro
 }
 
 
-G_MODULE_EXPORT gboolean _1992_1_1_materiaux_free(Projet *projet)
+gboolean _1992_1_1_materiaux_free(Projet *projet)
 /* Description : Libère l'ensemble des matériaux en béton.
  * Paramètres : Projet *projet : la variable projet.
  * Valeur renvoyée :

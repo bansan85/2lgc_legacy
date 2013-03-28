@@ -34,7 +34,7 @@ extern "C" {
 #include "1992_1_1_barres.h"
 #include "common_m3d.hpp"
 
-G_MODULE_EXPORT gboolean m3d_init(Projet *projet)
+gboolean m3d_init(Projet *projet)
 /* Description : Initialise l'affichage graphique de la structure.
  * Paramètres : Projet *projet : la variable projet.
  * Valeur renvoyée :
@@ -76,8 +76,7 @@ G_MODULE_EXPORT gboolean m3d_init(Projet *projet)
 }
 
 
-G_MODULE_EXPORT gboolean m3d_configure_event(GtkWidget *drawing __attribute__((unused)),
-  GdkEventConfigure *ev, gpointer *data2)
+gboolean m3d_configure_event(GtkWidget *drawing, GdkEventConfigure *ev, gpointer *data2)
 /* Description : Configuration de la caméra en fonction de la taille du composant graphique.
  * Paramètres : GtkWidget *drawing : composant graphique,
  *              GdkEventConfigure *ev : caractéristique de l'évènement,
@@ -97,8 +96,7 @@ G_MODULE_EXPORT gboolean m3d_configure_event(GtkWidget *drawing __attribute__((u
 }
 
 
-G_MODULE_EXPORT gboolean m3d_draw(GtkWidget *drawing,
-  GdkEventExpose* ev __attribute__((unused)), gpointer *data)
+gboolean m3d_draw(GtkWidget *drawing, GdkEventExpose* ev, gpointer *data)
 /* Description : Rendu de l'image 3D dans le widget Zone-dessin.
  * Paramètres : GtkWidget *drawing : composant graphique,
  *              GdkEventConfigure *ev : caractéristique de l'évènement,
@@ -118,8 +116,7 @@ G_MODULE_EXPORT gboolean m3d_draw(GtkWidget *drawing,
 }
 
 
-gboolean m3d_key_press(GtkWidget *widget __attribute__((unused)), GdkEventKey *event,
-  Projet *projet)
+gboolean m3d_key_press(GtkWidget *widget, GdkEventKey *event, Projet *projet)
 {
     SGlobalData *vue  = (SGlobalData*)projet->list_gtk.m3d.data;
     
@@ -279,7 +276,7 @@ gboolean m3d_key_press(GtkWidget *widget __attribute__((unused)), GdkEventKey *e
 
 
 
-G_MODULE_EXPORT gboolean m3d_camera_axe_x_z(Projet *projet)
+gboolean m3d_camera_axe_x_z(Projet *projet)
 /* Description : Positionne la caméra pour voir toute la structure dans le plan xz.
  * Paramètres : Projet *projet : la variable projet.
  * Valeur renvoyée :
@@ -341,7 +338,7 @@ G_MODULE_EXPORT gboolean m3d_camera_axe_x_z(Projet *projet)
 }
 
 
-G_MODULE_EXPORT gboolean m3d_actualise_graphique(Projet *projet, GList *noeuds, GList *barres)
+gboolean m3d_actualise_graphique(Projet *projet, GList *noeuds, GList *barres)
 /* Description : Met à jour l'affichage graphique en actualisant l'affichage des noeuds et barres passés en argument. Les listes contient une série de pointeur.
  * Paramètres : Projet *projet : la variable projet,
  *            : GList *noeuds : Liste de pointeurs vers les noeuds à actualiser,
@@ -381,7 +378,7 @@ G_MODULE_EXPORT gboolean m3d_actualise_graphique(Projet *projet, GList *noeuds, 
 }
 
 
-G_MODULE_EXPORT gboolean m3d_rafraichit(Projet *projet)
+gboolean m3d_rafraichit(Projet *projet)
 /* Description : Force le rafraichissement de l'affichage graphique.
  *               Nécessaire après l'utilisation d'une des fonctions d'actualisation de
  *                 l'affichage graphique.
@@ -404,7 +401,7 @@ G_MODULE_EXPORT gboolean m3d_rafraichit(Projet *projet)
 }
 
 
-G_MODULE_EXPORT void* m3d_noeud(void *donnees_m3d, EF_Noeud *noeud)
+void* m3d_noeud(void *donnees_m3d, EF_Noeud *noeud)
 /* Description : Crée un noeud dans l'affichage graphique. Si le noeud existe, il est détruit au
  *               préalable.
  * Paramètres : void *donnees_m3d : données SGlobalData,
@@ -447,7 +444,7 @@ G_MODULE_EXPORT void* m3d_noeud(void *donnees_m3d, EF_Noeud *noeud)
 }
 
 
-G_MODULE_EXPORT void m3d_noeud_free(void *donnees_m3d, EF_Noeud *noeud)
+void m3d_noeud_free(void *donnees_m3d, EF_Noeud *noeud)
 /* Description : Supprimer un noeud dans l'affichage graphique.
  * Paramètres : void *donnees_m3d : données SGlobalData,
  *              EF_Noeud *noeud : noeud à ajouter ou à actualiser.
@@ -479,7 +476,7 @@ G_MODULE_EXPORT void m3d_noeud_free(void *donnees_m3d, EF_Noeud *noeud)
 }
 
 
-G_MODULE_EXPORT gboolean m3d_barre(void *donnees_m3d, Beton_Barre *barre)
+gboolean m3d_barre(void *donnees_m3d, Beton_Barre *barre)
 /* Description : Crée une barre dans l'affichage graphique. Si la barre existe, elle est
  *               détruite au préalable.
  * Paramètres : void *donnees_m3d : données graphiques,
@@ -794,7 +791,7 @@ G_MODULE_EXPORT gboolean m3d_barre(void *donnees_m3d, Beton_Barre *barre)
 }
 
 
-G_MODULE_EXPORT void m3d_barre_free(void *donnees_m3d, Beton_Barre *barre)
+void m3d_barre_free(void *donnees_m3d, Beton_Barre *barre)
 /* Description : Supprimer une barre dans l'affichage graphique.
  * Paramètres : void *donnees_m3d : données SGlobalData,
  *              EF_Noeud *noeud : noeud à ajouter ou à actualiser.
@@ -826,7 +823,7 @@ G_MODULE_EXPORT void m3d_barre_free(void *donnees_m3d, Beton_Barre *barre)
 }
 
 
-G_MODULE_EXPORT gboolean m3d_free(Projet *projet)
+gboolean m3d_free(Projet *projet)
 /* Description : Libère l'espace mémoire alloué pour l'affichage graphique de la structure.
  * Paramètres : Projet *projet : la variable projet.
  * Valeur renvoyée :

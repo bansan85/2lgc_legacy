@@ -27,7 +27,7 @@
 #include "common_math.h"
 #include "common_gtk.h"
 
-G_MODULE_EXPORT gboolean common_gtk_treeview_button_press_unselect(GtkTreeView *widget,
+gboolean common_gtk_treeview_button_press_unselect(GtkTreeView *widget,
   GdkEvent *event, Projet *projet)
 /* Description : Déselectionne la ligne sélectionnée si on clique sur une zone vide du treeview.
  * Paramètres : GtkTreeView *widget : composant à l'origine de l'évènement,
@@ -58,7 +58,7 @@ G_MODULE_EXPORT gboolean common_gtk_treeview_button_press_unselect(GtkTreeView *
 }
 
 
-G_MODULE_EXPORT double common_gtk_text_buffer_double(GtkTextBuffer *textbuffer, double val_min,
+double common_gtk_text_buffer_double(GtkTextBuffer *textbuffer, double val_min,
   gboolean min_include, double val_max, gboolean max_include)
 /* Description : Vérifie en temps réel si le GtkTextBuffer contient bien un nombre flottant
  *               compris entre les valeurs val_min et val_max.
@@ -128,8 +128,8 @@ G_MODULE_EXPORT double common_gtk_text_buffer_double(GtkTextBuffer *textbuffer, 
 }
 
 
-G_MODULE_EXPORT unsigned int common_gtk_text_buffer_uint(GtkTextBuffer *textbuffer,
-  unsigned int val_min, gboolean min_include, unsigned int val_max, gboolean max_include)
+unsigned int common_gtk_text_buffer_uint(GtkTextBuffer *textbuffer, unsigned int val_min,
+  gboolean min_include, unsigned int val_max, gboolean max_include)
 /* Description : Vérifie en temps réel si le GtkTextBuffer contient bien un nombre entier non
  *               signé compris entre les valeurs val_min et val_max.
  *               S'il ne contient pas de nombre ou hors domaine, le texte passe en rouge.
@@ -190,8 +190,8 @@ G_MODULE_EXPORT unsigned int common_gtk_text_buffer_uint(GtkTextBuffer *textbuff
 }
 
 
-G_MODULE_EXPORT unsigned int common_gtk_entry_uint(GtkEntry *entry, unsigned int val_min,
-  gboolean min_include, unsigned int val_max, gboolean max_include)
+unsigned int common_gtk_entry_uint(GtkEntry *entry, unsigned int val_min, gboolean min_include,
+  unsigned int val_max, gboolean max_include)
 /* Description : Renvoie le nombre entier non signé de l'entry, valeur comprise entre les
  *               valeurs val_min et val_max.
  * Paramètres : GtkEntry *entry : composant à l'origine de l'évènement,
@@ -240,8 +240,7 @@ G_MODULE_EXPORT unsigned int common_gtk_entry_uint(GtkEntry *entry, unsigned int
 }
 
 
-G_MODULE_EXPORT void common_gtk_render_double(
-  GtkTreeViewColumn *tree_column __attribute__((unused)), GtkCellRenderer *cell,
+void common_gtk_render_double(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
   GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data)
 /* Description : Personnalise l'affichage des nombres de type double dans un treeview.
  * Paramètres : GtkTreeViewColumn *tree_column : la colonne,

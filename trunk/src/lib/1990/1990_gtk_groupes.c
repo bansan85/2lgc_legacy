@@ -56,8 +56,7 @@ unsigned int _1990_gtk_get_groupe(GtkTreeModel *tree_model, GtkTreeIter *iter)
 }
 
 
-G_MODULE_EXPORT void _1990_gtk_groupes_tree_view_etat_cursor_changed(
-  __attribute__((unused)) GtkTreeView *tree_view, Projet *projet)
+void _1990_gtk_groupes_tree_view_etat_cursor_changed(GtkTreeView *tree_view, Projet *projet)
 /* Description : Evènement lorsqu'il y a un changement de ligne sélectionnée.
  *             : Permet de mettre à jour si le groupe sélectionné est de type OR, XOR ou AND.
  * Paramètres : GtkTreeView *tree_view : composant tree_view à l'origine de l'évènement,
@@ -118,8 +117,7 @@ G_MODULE_EXPORT void _1990_gtk_groupes_tree_view_etat_cursor_changed(
 }
 
 
-G_MODULE_EXPORT gboolean _1990_gtk_groupe_window_key_press(
-  GtkWidget *widget __attribute__((unused)), GdkEvent *event, Projet *projet)
+gboolean _1990_gtk_groupe_window_key_press(GtkWidget *widget, GdkEvent *event, Projet *projet)
 /* Description : Gestion des touches de l'ensemble des composants de la fenêtre.
  * Paramètres : GtkWidget *widget : composant à l'origine de l'évènement,
  *            : GdkEvent *event : description de la touche pressée,
@@ -307,8 +305,7 @@ gboolean _1990_gtk_groupes_affiche_niveau(Projet *projet, unsigned int niveau)
 }
 
 
-G_MODULE_EXPORT void _1990_gtk_spin_button_niveau_change(
-  GtkWidget *button __attribute__((unused)), Projet *projet)
+void _1990_gtk_spin_button_niveau_change(GtkWidget *button, Projet *projet)
 /* Description : Met à jour l'affichage graphique en fonction de la valeur du spin_button
  * Paramètres : GtkWidget *button : composant spin_button ayant réalisé l'évènement,
  *            : Projet *projet : la variable projet.
@@ -326,8 +323,7 @@ G_MODULE_EXPORT void _1990_gtk_spin_button_niveau_change(
 }
 
 
-G_MODULE_EXPORT void _1990_gtk_button_niveau_suppr_clicked(
-  GtkWidget *button __attribute__((unused)), Projet *projet)
+void _1990_gtk_button_niveau_suppr_clicked(GtkWidget *button, Projet *projet)
 /* Description : Supprime le niveau en cours.
  * Paramètres : GtkWidget *button : composant spin_button ayant réalisé l'évènement,
  *            : Projet *projet : la variable projet.
@@ -346,8 +342,7 @@ G_MODULE_EXPORT void _1990_gtk_button_niveau_suppr_clicked(
 }
 
 
-G_MODULE_EXPORT void _1990_gtk_button_niveau_ajout_clicked(
-  GtkWidget *button __attribute__((unused)), Projet *projet)
+void _1990_gtk_button_niveau_ajout_clicked(GtkWidget *button, Projet *projet)
 /* Description : Ajoute un niveau de groupe.
  * Paramètres : GtkWidget *button : composant spin_button ayant réalisé l'évènement,
  *            : Projet *projet : la variable projet.
@@ -366,8 +361,7 @@ G_MODULE_EXPORT void _1990_gtk_button_niveau_ajout_clicked(
 }
 
 
-G_MODULE_EXPORT void _1990_gtk_button_groupe_ajout_clicked(
-  GtkWidget *button __attribute__((unused)), Projet *projet)
+void _1990_gtk_button_groupe_ajout_clicked(GtkWidget *button, Projet *projet)
 /* Description : Ajoute un groupe dans le niveau en cours.
  * Paramètres : GtkWidget *button : composant spin_button ayant réalisé l'évènement,
  *            : Projet *projet : la variable projet.
@@ -467,8 +461,7 @@ int _1990_gtk_insert_dispo(Projet *projet, unsigned int numero, Niveau_Groupe *n
 }
 
 
-G_MODULE_EXPORT void _1990_gtk_button_groupe_suppr_clicked(
-  GtkWidget *button __attribute__((unused)), Projet *projet)
+void _1990_gtk_button_groupe_suppr_clicked(GtkWidget *button, Projet *projet)
 /* Description : Supprime le groupe dans le niveau en cours.
  * Paramètres : GtkWidget *button : composant spin_button ayant réalisé l'évènement,
  *            : Projet *projet : la variable projet.
@@ -517,8 +510,8 @@ G_MODULE_EXPORT void _1990_gtk_button_groupe_suppr_clicked(
 }
 
 
-G_MODULE_EXPORT void _1990_gtk_tree_view_drag_begin (GtkWidget *widget, 
-  GdkDragContext *drag_context __attribute__((unused)), Projet *projet)
+void _1990_gtk_tree_view_drag_begin(GtkWidget *widget, GdkDragContext *drag_context,
+  Projet *projet)
 /* Description : Défini le composant à l'origine de DnD
  * Paramètres : GtkWidget *button : composant widget à l'origine de l'évènement,
  *            : GdkDragContext *drag_context : description du DnD,
@@ -534,10 +527,8 @@ G_MODULE_EXPORT void _1990_gtk_tree_view_drag_begin (GtkWidget *widget,
 }
 
 
-G_MODULE_EXPORT gboolean _1990_gtk_tree_view_dispo_drag(
-  GtkWidget *widget __attribute__((unused)),
-  GdkDragContext *drag_context __attribute__((unused)), gint x __attribute__((unused)),
-  gint y __attribute__((unused)), guint tim __attribute__((unused)), Projet *projet)
+gboolean _1990_gtk_tree_view_dispo_drag(GtkWidget *widget, GdkDragContext *drag_context, gint x,
+  gint y, guint tim, Projet *projet)
 /* Description : Supprimer les éléments sélectionnées du tree_view_etat.
  * Paramètres : GtkWidget *button : composant spin_button ayant réalisé l'évènement,
  *            : GdkDragContext *drag_context : inutile,
@@ -606,8 +597,7 @@ int _1990_gtk_button_ajout_dispo_proc(unsigned int ngroupe, Projet *projet)
 }
 
 
-G_MODULE_EXPORT void _1990_gtk_button_ajout_dispo_clicked(
-  GtkWidget *button __attribute__((unused)), Projet *projet)
+void _1990_gtk_button_ajout_dispo_clicked(GtkWidget *button, Projet *projet)
 /* Description : Ajoute les éléments disponibles sélectionnés dans le groupe sélectionné.
  * Paramètres : GtkWidget *button : composant spin_button ayant réalisé l'évènement,
  *            : Projet *projet : la variable projet.
@@ -633,8 +623,7 @@ G_MODULE_EXPORT void _1990_gtk_button_ajout_dispo_clicked(
 }
 
 
-G_MODULE_EXPORT void _1990_gtk_button_ajout_tout_dispo_clicked(
-  GtkWidget *button __attribute__((unused)), Projet *projet)
+void _1990_gtk_button_ajout_tout_dispo_clicked(GtkWidget *button, Projet *projet)
 /* Description : Ajoute tous les éléments disponibles dans le groupe sélectionné.
  * Paramètres : GtkWidget *button : composant spin_button ayant réalisé l'évènement,
  *            : Projet *projet : la variable projet.
@@ -663,9 +652,8 @@ G_MODULE_EXPORT void _1990_gtk_button_ajout_tout_dispo_clicked(
 }
 
 
-G_MODULE_EXPORT void _1990_gtk_tree_view_etat_drag(GtkWidget *widget __attribute__((unused)),
-  GdkDragContext *drag_context __attribute__((unused)), gint x, gint y,
-  guint tim __attribute__((unused)), Projet *projet)
+void _1990_gtk_tree_view_etat_drag(GtkWidget *widget, GdkDragContext *drag_context, gint x,
+  gint y, guint tim, Projet *projet)
 /* Description : Modifie le groupe d'un élément via le DnD.
  * Paramètres : GtkWidget *button : composant spin_button ayant réalisé l'évènement,
  *            : GdkDragContext *drag_context : inutile,
@@ -725,8 +713,8 @@ G_MODULE_EXPORT void _1990_gtk_tree_view_etat_drag(GtkWidget *widget __attribute
 }
 
 
-G_MODULE_EXPORT void _1990_gtk_tree_view_etat_row_expanded(GtkTreeView *tree_view,
-  GtkTreeIter *iter, __attribute__((unused)) GtkTreePath *path, Projet *projet)
+void _1990_gtk_tree_view_etat_row_expanded(GtkTreeView *tree_view, GtkTreeIter *iter,
+  GtkTreePath *path, Projet *projet)
 /* Description : Evènement lorsqu'on ouvre une ligne contenant un enfant.
  *             : Est utilisé pour se souvenir des lignes qui sont ouvertes et fermées et les
  *               restitué lorsqu'on change de niveau.
@@ -759,7 +747,8 @@ G_MODULE_EXPORT void _1990_gtk_tree_view_etat_row_expanded(GtkTreeView *tree_vie
 }
 
 
-G_MODULE_EXPORT void _1990_gtk_tree_view_etat_row_collapsed(GtkTreeView *tree_view, GtkTreeIter *iter, __attribute__((unused)) GtkTreePath *path, Projet *projet)
+void _1990_gtk_tree_view_etat_row_collapsed(GtkTreeView *tree_view, GtkTreeIter *iter,
+  GtkTreePath *path, Projet *projet)
 /* Description : Evènement lorsqu'on ferme une ligne contenant un enfant.
  *             : Est utilisé pour se souvenir des lignes qui sont ouvertes et fermées et les
  *               restitué lorsqu'on change de niveau.
@@ -792,8 +781,7 @@ G_MODULE_EXPORT void _1990_gtk_tree_view_etat_row_collapsed(GtkTreeView *tree_vi
 }
 
 
-G_MODULE_EXPORT void _1990_gtk_button_groupe_toggled(GtkRadioToolButton *radiobutton,
-  Projet *projet)
+void _1990_gtk_button_groupe_toggled(GtkRadioToolButton *radiobutton, Projet *projet)
 /* Description : Evènement lorsqu'il y a un changement de type de combinaison (OR, XOR ou AND).
  * Paramètres : GtkRadioButton *radiobutton : composant radiobutton à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -831,8 +819,7 @@ G_MODULE_EXPORT void _1990_gtk_button_groupe_toggled(GtkRadioToolButton *radiobu
 }
 
 
-G_MODULE_EXPORT void _1990_gtk_groupes_button_generer_clicked(
-  GtkWidget *button __attribute__((unused)), Projet *projet)
+void _1990_gtk_groupes_button_generer_clicked(GtkWidget *button, Projet *projet)
 /* Description : Génère les combinaisons.
  * Paramètres : GtkWidget *button : composant bouton à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -850,8 +837,7 @@ G_MODULE_EXPORT void _1990_gtk_groupes_button_generer_clicked(
 }
 
 
-G_MODULE_EXPORT void _1990_gtk_radio_button_eluequ_equ_seul(
-  GtkRadioButton *radiobutton __attribute__((unused)), Projet *projet)
+void _1990_gtk_radio_button_eluequ_equ_seul(GtkRadioButton *radiobutton, Projet *projet)
 /* Description : Modifie les options de combinaison pour que l'ELU EQU calcule à l'équilibre
  *               seulement.
  * Paramètres : GtkRadioButton *radiobutton : composant radiobutton à l'origine de l'évènement,
@@ -868,8 +854,7 @@ G_MODULE_EXPORT void _1990_gtk_radio_button_eluequ_equ_seul(
 }
 
 
-G_MODULE_EXPORT void _1990_gtk_radio_button_eluequ_equ_resist(
-  GtkRadioButton *radiobutton __attribute__((unused)), Projet *projet)
+void _1990_gtk_radio_button_eluequ_equ_resist(GtkRadioButton *radiobutton, Projet *projet)
 /* Description : Modifie les options de combinaison pour que l'ELU EQU calcule à l'équilibre et
  *               à la résistance structurelle.
  * Paramètres : GtkRadioButton *radiobutton : composant radiobutton à l'origine de l'évènement,
@@ -886,8 +871,7 @@ G_MODULE_EXPORT void _1990_gtk_radio_button_eluequ_equ_resist(
 }
 
 
-G_MODULE_EXPORT void _1990_gtk_radio_button_elustrgeo_1(
-  GtkRadioButton *radiobutton __attribute__((unused)), Projet *projet)
+void _1990_gtk_radio_button_elustrgeo_1(GtkRadioButton *radiobutton, Projet *projet)
 /* Description : Modifie les options de combinaison pour que l'ELU STR/GEO calcule selon
  *               l'approche 1.
  * Paramètres : GtkRadioButton *radiobutton : composant radiobutton à l'origine de l'évènement,
@@ -904,8 +888,7 @@ G_MODULE_EXPORT void _1990_gtk_radio_button_elustrgeo_1(
 }
 
 
-G_MODULE_EXPORT void _1990_gtk_radio_button_elustrgeo_2(
-  GtkRadioButton *radiobutton __attribute__((unused)), Projet *projet)
+void _1990_gtk_radio_button_elustrgeo_2(GtkRadioButton *radiobutton, Projet *projet)
 /* Description : Modifie les options de combinaison pour que l'ELU STR/GEO calcule selon
  *               l'approche 2.
  * Paramètres : GtkRadioButton *radiobutton : composant radiobutton à l'origine de l'évènement,
@@ -922,8 +905,7 @@ G_MODULE_EXPORT void _1990_gtk_radio_button_elustrgeo_2(
 }
 
 
-G_MODULE_EXPORT void _1990_gtk_radio_button_elustrgeo_3(
-  GtkRadioButton *radiobutton __attribute__((unused)), Projet *projet)
+void _1990_gtk_radio_button_elustrgeo_3(GtkRadioButton *radiobutton, Projet *projet)
 /* Description : Modifie les options de combinaison pour que l'ELU STR/GEO calcule selon
  *               l'approche 3.
  * Paramètres : GtkRadioButton *radiobutton : composant radiobutton à l'origine de l'évènement,
@@ -940,8 +922,7 @@ G_MODULE_EXPORT void _1990_gtk_radio_button_elustrgeo_3(
 }
 
 
-G_MODULE_EXPORT void _1990_gtk_radio_button_elustrgeo_6_10(
-  GtkRadioButton *radiobutton __attribute__((unused)), Projet *projet)
+void _1990_gtk_radio_button_elustrgeo_6_10(GtkRadioButton *radiobutton, Projet *projet)
 /* Description : Modifie les options de combinaison pour que l'ELU STR/GEO calcule selon la
  *               formule 6.10 de l'EN 1990.
  * Paramètres : GtkRadioButton *radiobutton : composant radiobutton à l'origine de l'évènement,
@@ -958,8 +939,7 @@ G_MODULE_EXPORT void _1990_gtk_radio_button_elustrgeo_6_10(
 }
 
 
-G_MODULE_EXPORT void _1990_gtk_radio_button_elustrgeo_6_10ab(
-  GtkRadioButton *radiobutton __attribute__((unused)), Projet *projet)
+void _1990_gtk_radio_button_elustrgeo_6_10ab(GtkRadioButton *radiobutton, Projet *projet)
 /* Description : Modifie les options de combinaison pour que l'ELU STR/GEO calcule selon la
  *               formule 6.10 (a) et (b) de l'EN 1990.
  * Paramètres : GtkRadioButton *radiobutton : composant radiobutton à l'origine de l'évènement,
@@ -976,8 +956,7 @@ G_MODULE_EXPORT void _1990_gtk_radio_button_elustrgeo_6_10ab(
 }
 
 
-G_MODULE_EXPORT void _1990_gtk_radio_button_eluacc_frequente(
-  GtkRadioButton *radiobutton __attribute__((unused)), Projet *projet)
+void _1990_gtk_radio_button_eluacc_frequente(GtkRadioButton *radiobutton, Projet *projet)
 /* Description : Modifie les options de combinaison pour que l'ELU ACC calcule avec les valeurs
  *               fréquentes des actions variables.
  * Paramètres : GtkRadioButton *radiobutton : composant radiobutton à l'origine de l'évènement,
@@ -994,8 +973,7 @@ G_MODULE_EXPORT void _1990_gtk_radio_button_eluacc_frequente(
 }
 
 
-G_MODULE_EXPORT void _1990_gtk_radio_button_eluacc_quasi_permanente(
-  GtkRadioButton *radiobutton __attribute__((unused)), Projet *projet)
+void _1990_gtk_radio_button_eluacc_quasi_permanente(GtkRadioButton *radiobutton, Projet *projet)
 /* Description : Modifie les options de combinaison pour que l'ELU ACC calcule avec les valeurs
  *               quasi_permanente des actions variables.
  * Paramètres : GtkRadioButton *radiobutton : composant radiobutton à l'origine de l'évènement,
@@ -1012,10 +990,8 @@ G_MODULE_EXPORT void _1990_gtk_radio_button_eluacc_quasi_permanente(
 }
 
 
-G_MODULE_EXPORT void _1990_gtk_tooltip(GtkWidget *widget __attribute__((unused)),
-  gint x __attribute__((unused)), gint y __attribute__((unused)),
-  gboolean keyboard_mode __attribute__((unused)), GtkTooltip *tooltip __attribute__((unused)),
-  gpointer user_data __attribute__((unused)))
+void _1990_gtk_tooltip(GtkWidget *widget, gint x, gint y, gboolean keyboard_mode,
+  GtkTooltip *tooltip, gpointer user_data)
 /* Description : Cette fonction doit obligatoirement être relié à l'évènement "query-tooltip"
  *               pour qu'apparaisse la fenêtre tooltip.
  * Paramètres : GtkWidget *widget : composant à l'origine de l'évènement,
@@ -1029,8 +1005,7 @@ G_MODULE_EXPORT void _1990_gtk_tooltip(GtkWidget *widget __attribute__((unused))
 }
 
 
-G_MODULE_EXPORT void _1990_gtk_groupes_window_quitter_button(
-  GtkWidget *object __attribute__((unused)), Projet *projet)
+void _1990_gtk_groupes_window_quitter_button(GtkWidget *object, Projet *projet)
 /* Description : Bouton de fermeture de la fenêtre.
  * Paramètres : GtkComboBox *widget : composant à l'origine de la demande,
  *            : GtkWidget *fenêtre : la fenêtre d'options.
@@ -1046,9 +1021,8 @@ G_MODULE_EXPORT void _1990_gtk_groupes_window_quitter_button(
 }
 
 
-G_MODULE_EXPORT void _1990_gtk_tree_view_etat_cell_edited(
-  GtkCellRendererText *cell __attribute__((unused)), gchar *path_string, gchar *new_text,
-  Projet *projet)
+void _1990_gtk_tree_view_etat_cell_edited(GtkCellRendererText *cell, gchar *path_string,
+  gchar *new_text, Projet *projet)
 /* Description : Edition du nom dans le tree-view-etat. On édite donc soit le nom d'un niveau,
  *               soit le nom d'une action.
  * Paramètres : GtkCellRendererText *cell : composant à l'origine de l'évènement,
@@ -1089,9 +1063,8 @@ G_MODULE_EXPORT void _1990_gtk_tree_view_etat_cell_edited(
 }
 
 
-G_MODULE_EXPORT void _1990_gtk_tree_view_dispo_cell_edited(
-  GtkCellRendererText *cell __attribute__((unused)), gchar *path_string, gchar *new_text,
-  Projet *projet)
+void _1990_gtk_tree_view_dispo_cell_edited(GtkCellRendererText *cell, gchar *path_string,
+  gchar *new_text, Projet *projet)
 /* Description : Edition du nom dans le tree-view-dispo. On édite donc soit le nom d'un niveau,
  *               soit le nom d'une action.
  * Paramètres : GtkCellRendererText *cell : composant à l'origine de l'évènement,
@@ -1125,8 +1098,8 @@ G_MODULE_EXPORT void _1990_gtk_tree_view_dispo_cell_edited(
 }
 
 
-G_MODULE_EXPORT gboolean _1990_gtk_tree_view_etat_key_press_event(
-  GtkWidget *widget __attribute__((unused)), GdkEvent *event, Projet *projet)
+gboolean _1990_gtk_tree_view_etat_key_press_event(GtkWidget *widget, GdkEvent *event,
+  Projet *projet)
 /* Description : Gère les touches appuyées du treeview etat.
  * Paramètres : GtkWidget *widget : composant à l'origine de l'évènement,
  *            : GdkEvent *event : caractéristiques de l'évènement,
@@ -1144,8 +1117,7 @@ G_MODULE_EXPORT gboolean _1990_gtk_tree_view_etat_key_press_event(
 }
 
 
-G_MODULE_EXPORT void _1990_gtk_tree_select_changed(
-  GtkTreeSelection *treeselection __attribute__((unused)), Projet *projet)
+void _1990_gtk_tree_select_changed(GtkTreeSelection *treeselection, Projet *projet)
 /* Description : Permet de activer/désactiver les boutons ajout en fonction de la selection.
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -1199,8 +1171,7 @@ G_MODULE_EXPORT void _1990_gtk_tree_select_changed(
 }
 
 
-G_MODULE_EXPORT void _1990_gtk_groupes_window_destroy(GtkWidget *object __attribute__((unused)),
-  Projet *projet)
+void _1990_gtk_groupes_window_destroy(GtkWidget *object, Projet *projet)
 /* Description : met projet->list_gtk._1990_groupes.window à NULL quand la fenêtre se ferme.
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
               : Projet *projet : la variable projet.
@@ -1217,7 +1188,7 @@ G_MODULE_EXPORT void _1990_gtk_groupes_window_destroy(GtkWidget *object __attrib
 }
 
 
-G_MODULE_EXPORT void _1990_gtk_groupes(Projet *projet)
+void _1990_gtk_groupes(Projet *projet)
 /* Description : Création de la fenêtre Groupes.
  * Paramètres : Projet *projet : la variable projet.
  * Valeur renvoyée : Aucune.

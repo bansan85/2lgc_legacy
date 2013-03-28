@@ -26,8 +26,8 @@
 #include "common_projet.h"
 #include "common_tooltip.h"
 
-G_MODULE_EXPORT gboolean _1990_gtk_groupe_option_window_key_press(
-  GtkWidget *widget __attribute__((unused)), GdkEvent *event, Projet *projet)
+gboolean _1990_gtk_groupe_option_window_key_press(GtkWidget *widget, GdkEvent *event,
+  Projet *projet)
 /* Description : Ferme la fenêtre si la touche Escape est pressée.
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
  *            : GdkEvent *event : paramètres de l'évènement,
@@ -51,8 +51,7 @@ G_MODULE_EXPORT gboolean _1990_gtk_groupe_option_window_key_press(
 }
 
 
-G_MODULE_EXPORT void _1990_gtk_groupes_options_window_destroy(
-  GtkWidget *object __attribute__((unused)), Projet *projet)
+void _1990_gtk_groupes_options_window_destroy(GtkWidget *object, Projet *projet)
 /* Description : met projet->list_gtk._1990_groupes.builder_options à NULL quand la fenêtre se
  *               ferme.
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
@@ -70,8 +69,7 @@ G_MODULE_EXPORT void _1990_gtk_groupes_options_window_destroy(
 }
 
 
-G_MODULE_EXPORT void _1990_gtk_groupes_option_window_quitter_button(
-  GtkWidget *object __attribute__((unused)), Projet *projet)
+void _1990_gtk_groupes_option_window_quitter_button(GtkWidget *object, Projet *projet)
 /* Description : Bouton de fermeture de la fenêtre.
  * Paramètres : GtkComboBox *widget : composant à l'origine de la demande,
  *            : GtkWidget *fenêtre : la fenêtre d'options.
@@ -87,8 +85,7 @@ G_MODULE_EXPORT void _1990_gtk_groupes_option_window_quitter_button(
 }
 
 
-G_MODULE_EXPORT void _1990_gtk_groupes_button_options_clicked(
-  GtkWidget *button __attribute__((unused)), Projet *projet)
+void _1990_gtk_groupes_button_options_clicked(GtkWidget *button, Projet *projet)
 /* Description : Création de la fenêtre des options des Groupes.
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
  *              Projet *projet : la variable projet.

@@ -33,7 +33,7 @@
 #include "EF_gtk_relachement.h"
 #endif
 
-G_MODULE_EXPORT gboolean EF_relachement_init(Projet *projet)
+gboolean EF_relachement_init(Projet *projet)
 /* Description : Initialise la liste des relachements.
  * Paramètres : Projet *projet : la variable projet.
  * Valeur renvoyée :
@@ -63,8 +63,7 @@ G_MODULE_EXPORT gboolean EF_relachement_init(Projet *projet)
 
 
 #ifdef ENABLE_GTK
-G_MODULE_EXPORT gboolean EF_relachements_update_ligne_treeview(Projet *projet,
-  EF_Relachement *relachement)
+gboolean EF_relachements_update_ligne_treeview(Projet *projet, EF_Relachement *relachement)
 /* Description : Actualise la ligne du treeview affichant le relâchement.
  * Paramètres : Projet *projet : la variable projet,
  *            : EF_Relachement *relachement : le relâchement à actualiser.
@@ -258,7 +257,7 @@ G_MODULE_EXPORT gboolean EF_relachements_update_ligne_treeview(Projet *projet,
 #endif
 
 
-G_MODULE_EXPORT EF_Relachement *EF_relachement_ajout(Projet *projet, const char *nom,
+EF_Relachement *EF_relachement_ajout(Projet *projet, const char *nom,
   EF_Relachement_Type rx_debut, void* rx_d_data, EF_Relachement_Type ry_debut, void* ry_d_data,
   EF_Relachement_Type rz_debut, void* rz_d_data, EF_Relachement_Type rx_fin, void* rx_f_data,
   EF_Relachement_Type ry_fin, void* ry_f_data, EF_Relachement_Type rz_fin, void* rz_f_data)
@@ -351,8 +350,7 @@ G_MODULE_EXPORT EF_Relachement *EF_relachement_ajout(Projet *projet, const char 
 }
 
 
-G_MODULE_EXPORT EF_Relachement* EF_relachement_cherche_nom(Projet *projet, const char *nom,
-  gboolean critique)
+EF_Relachement* EF_relachement_cherche_nom(Projet *projet, const char *nom, gboolean critique)
 /* Description : Renvoie le relachement cherché.
  * Paramètres : Projet *projet : la variable projet,
  *            : const char *nom : le nom du relachement.
@@ -387,11 +385,10 @@ G_MODULE_EXPORT EF_Relachement* EF_relachement_cherche_nom(Projet *projet, const
 }
 
 
-G_MODULE_EXPORT gboolean EF_relachement_modif(Projet *projet, EF_Relachement *relachement,
-  const char *nom, EF_Relachement_Type rx_debut, void* rx_d_data, EF_Relachement_Type ry_debut,
-  void* ry_d_data, EF_Relachement_Type rz_debut, void* rz_d_data, EF_Relachement_Type rx_fin,
-  void* rx_f_data, EF_Relachement_Type ry_fin, void* ry_f_data, EF_Relachement_Type rz_fin,
-  void* rz_f_data)
+gboolean EF_relachement_modif(Projet *projet, EF_Relachement *relachement, const char *nom,
+  EF_Relachement_Type rx_debut, void* rx_d_data, EF_Relachement_Type ry_debut, void* ry_d_data,
+  EF_Relachement_Type rz_debut, void* rz_d_data, EF_Relachement_Type rx_fin, void* rx_f_data,
+  EF_Relachement_Type ry_fin, void* ry_f_data, EF_Relachement_Type rz_fin, void* rz_f_data)
 /* Description : Modifie un relâchement.
  * Paramètres : Projet *projet : la variable projet,
  *            : EF_Relachement *relachement : le relâchement à modifier,
@@ -771,8 +768,8 @@ G_MODULE_EXPORT gboolean EF_relachement_modif(Projet *projet, EF_Relachement *re
 }
 
 
-G_MODULE_EXPORT gboolean EF_relachement_supprime(EF_Relachement *relachement,
-  gboolean annule_si_utilise, Projet *projet)
+gboolean EF_relachement_supprime(EF_Relachement *relachement, gboolean annule_si_utilise,
+  Projet *projet)
 /* Description : Supprime le relâchement spécifié.
  * Paramètres : EF_Relachement *relachement : le relâchement à supprimer,
  *            : gboolean annule_si_utilise : possibilité d'annuler la suppression si le
@@ -832,7 +829,7 @@ G_MODULE_EXPORT gboolean EF_relachement_supprime(EF_Relachement *relachement,
 }
 
 
-G_MODULE_EXPORT gboolean EF_relachement_free(Projet *projet)
+gboolean EF_relachement_free(Projet *projet)
 /* Description : Libère l'ensemble des relachements et la liste les contenant.
  * Paramètres : Projet *projet : la variable projet.
  * Valeur renvoyée :

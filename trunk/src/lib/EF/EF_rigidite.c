@@ -26,7 +26,7 @@
 #include "common_projet.h"
 #include "common_erreurs.h"
 
-G_MODULE_EXPORT gboolean EF_rigidite_init(Projet *projet)
+gboolean EF_rigidite_init(Projet *projet)
 /* Description : Initialise à NULL les différentes matrices de rigidité.
  * Paramètres : Projet *projet : la variable projet.
  * Valeur renvoyée :
@@ -53,7 +53,7 @@ G_MODULE_EXPORT gboolean EF_rigidite_init(Projet *projet)
 }
 
 
-G_MODULE_EXPORT gboolean EF_rigidite_free(Projet *projet)
+gboolean EF_rigidite_free(Projet *projet)
 /* Description : Libère la liste contenant la matrice de rigidité.
  * Paramètres : Projet *projet : la variable projet.
  * Valeur renvoyée :

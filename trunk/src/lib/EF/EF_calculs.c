@@ -33,7 +33,7 @@
 #include "EF_rigidite.h"
 #include "EF_sections.h"
 
-G_MODULE_EXPORT gboolean EF_calculs_initialise(Projet *projet)
+gboolean EF_calculs_initialise(Projet *projet)
 /* Description : Initialise les diverses variables nécessaires à l'ajout des matrices de
  *               rigidité élémentaires.
  * Paramètres : Projet *projet : la variable projet.
@@ -205,7 +205,7 @@ G_MODULE_EXPORT gboolean EF_calculs_initialise(Projet *projet)
 }
 
 
-G_MODULE_EXPORT gboolean EF_calculs_genere_mat_rig(Projet *projet)
+gboolean EF_calculs_genere_mat_rig(Projet *projet)
 /* Description : Factorisation de la matrice de rigidité.
  * Paramètres : Projet *projet : la variable projet.
  * Valeur renvoyée :
@@ -348,8 +348,8 @@ double EF_calculs_G(EF_Materiau *materiau, gboolean nu_null)
 }
 
 
-G_MODULE_EXPORT gboolean EF_calculs_moment_hyper_y(Barre_Info_EF *infos, double phia,
-  double phib, double *ma, double *mb)
+gboolean EF_calculs_moment_hyper_y(Barre_Info_EF *infos, double phia, double phib, double *ma,
+  double *mb)
 /* Description : Calcul le moment hyperstatique correspondant à l'opposé du moment de la
  *               réaction à partir de la rotation au point A et B autour de l'axe Y.
  * Paramètres : Barre_Info_EF *infos : contient les paramètres ay, by, cy et kAy et kBy,
@@ -400,8 +400,8 @@ G_MODULE_EXPORT gboolean EF_calculs_moment_hyper_y(Barre_Info_EF *infos, double 
 }
 
 
-G_MODULE_EXPORT gboolean EF_calculs_moment_hyper_z(Barre_Info_EF *infos, double phia,
-  double phib, double *ma, double *mb)
+gboolean EF_calculs_moment_hyper_z(Barre_Info_EF *infos, double phia, double phib, double *ma,
+  double *mb)
 /* Description : Calcul le moment hyperstatique correspondant à l'opposé du moment de la
  *               réaction à partir de la rotation au point A et B autour de l'axe Z.
  * Paramètres : Barre_Info_EF *infos : contient les paramètres az, bz, cz et kAz et kBz,
@@ -504,7 +504,7 @@ double EF_calculs_resid(int *Ap, int *Ai, double *Ax, double *b, unsigned int n,
 }
 
 
-G_MODULE_EXPORT gboolean EF_calculs_resoud_charge(Projet *projet, unsigned int num_action)
+gboolean EF_calculs_resoud_charge(Projet *projet, unsigned int num_action)
 /* Description : Détermine à partir de la matrice de rigidité partielle factorisée les
  *               déplacements et les efforts dans les noeuds pour l'action demandée ainsi
  *               que la courbe des sollicitations dans les barres.
@@ -1458,7 +1458,7 @@ G_MODULE_EXPORT gboolean EF_calculs_resoud_charge(Projet *projet, unsigned int n
 }
 
 
-G_MODULE_EXPORT gboolean EF_calculs_free(Projet *projet)
+gboolean EF_calculs_free(Projet *projet)
 /* Description : Libère la mémoire allouée pour les calculs, et pour les résultats.
  *               Cette fonction doit être appelée à chaque fois qu'une donnée ayant une
  *               influence sur les résultats des calculs est modifiée (ajout d'un noeud ou d'une

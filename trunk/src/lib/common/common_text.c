@@ -27,7 +27,7 @@
 #include <string.h>
 
 
-G_MODULE_EXPORT void show_warranty()
+void show_warranty()
 /* Description : Affiche les limites de la garantie (articles 15, 16 et 17 de la licence GPL).
  * Paramètres : Aucun.
  * Valeur renvoyée : Aucune.
@@ -68,7 +68,7 @@ G_MODULE_EXPORT void show_warranty()
     return;
 }
 
-G_MODULE_EXPORT void show_help()
+void show_help()
 /* Description : Affiche l'aide lorsque l'utilisateur lance le programme avec l'option -h.
  * Paramètres : Aucun.
  * Valeur renvoyée : Aucune.
@@ -84,8 +84,8 @@ G_MODULE_EXPORT void show_help()
 }
 
 
-G_MODULE_EXPORT char *common_text_dependances(GList *liste_noeuds, GList *liste_barres,
-  GList *liste_charges, Projet *projet)
+char *common_text_dependances(GList *liste_noeuds, GList *liste_barres, GList *liste_charges,
+  Projet *projet)
 /* Description : renvoie la liste des types d'éléments dépendants sous forme de texte.
  *               liste_noeuds et liste_barres viennent de _1992_1_1_barres_cherche_dependances.
  * Paramètres : GList *liste_noeuds : liste des noeuds,

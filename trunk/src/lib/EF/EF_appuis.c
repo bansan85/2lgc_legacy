@@ -34,7 +34,7 @@
 #include "common_m3d.hpp"
 #endif
 
-G_MODULE_EXPORT gboolean EF_appuis_init(Projet *projet)
+gboolean EF_appuis_init(Projet *projet)
 /* Description : Initialise la liste des types d'appuis.
  * Paramètres : Projet *projet : la variable projet.
  * Valeur renvoyée :
@@ -66,8 +66,7 @@ G_MODULE_EXPORT gboolean EF_appuis_init(Projet *projet)
 }
 
 
-G_MODULE_EXPORT EF_Appui* EF_appuis_cherche_nom(Projet *projet, const char *nom,
-  gboolean critique)
+EF_Appui* EF_appuis_cherche_nom(Projet *projet, const char *nom, gboolean critique)
 /* Description : Renvoie l'appui correspondant au numéro souhaité.
  * Paramètres : Projet *projet : la variable projet,
  *            : const char *nom : le nom de l'appui,
@@ -102,8 +101,8 @@ G_MODULE_EXPORT EF_Appui* EF_appuis_cherche_nom(Projet *projet, const char *nom,
 }
 
 
-G_MODULE_EXPORT gboolean EF_appuis_get_description(EF_Appui* appui, char **txt_uxa,
-  char **txt_uya, char **txt_uza, char **txt_rxa, char **txt_rya, char **txt_rza)
+gboolean EF_appuis_get_description(EF_Appui* appui, char **txt_uxa, char **txt_uya,
+  char **txt_uza, char **txt_rxa, char **txt_rya, char **txt_rza)
 /* Description : Renvoie la description d'un appui.
  * Paramètres : EF_Appui* appui : l'appui à décrire,
  *            : char **txt_uxa : description de ux,
@@ -272,8 +271,8 @@ G_MODULE_EXPORT gboolean EF_appuis_get_description(EF_Appui* appui, char **txt_u
 }
 
 
-G_MODULE_EXPORT EF_Appui* EF_appuis_ajout(Projet *projet, const char *nom, Type_EF_Appui x,
-  Type_EF_Appui y, Type_EF_Appui z, Type_EF_Appui rx, Type_EF_Appui ry, Type_EF_Appui rz)
+EF_Appui* EF_appuis_ajout(Projet *projet, const char *nom, Type_EF_Appui x, Type_EF_Appui y,
+  Type_EF_Appui z, Type_EF_Appui rx, Type_EF_Appui ry, Type_EF_Appui rz)
 /* Description : Ajoute un appui à la structure en lui attribuant le numéro suivant le dernier
  *                 appui existant.
  * Paramètres : Projet *projet : la variable projet
@@ -443,8 +442,7 @@ G_MODULE_EXPORT EF_Appui* EF_appuis_ajout(Projet *projet, const char *nom, Type_
 }
 
 
-G_MODULE_EXPORT gboolean EF_appuis_edit(EF_Appui *appui, int x, Type_EF_Appui type_x,
-  Projet *projet)
+gboolean EF_appuis_edit(EF_Appui *appui, int x, Type_EF_Appui type_x, Projet *projet)
 /* Description : Modifie un appui.
  * Paramètres : EF_Appui *appui : appui à modifier,
  *            : int x : désigne le paramètre à modifier, 0 pour ux et 5 pour rz,
@@ -540,8 +538,7 @@ G_MODULE_EXPORT gboolean EF_appuis_edit(EF_Appui *appui, int x, Type_EF_Appui ty
 }
 
 
-G_MODULE_EXPORT gboolean EF_appuis_renomme(EF_Appui *appui, gchar *nom, Projet *projet,
-  gboolean critique)
+gboolean EF_appuis_renomme(EF_Appui *appui, gchar *nom, Projet *projet, gboolean critique)
 /* Description : Renomme un appui.
  * Paramètres : EF_Appui *appui : appui à renommer,
  *            : const char *nom : le nouveau nom,
@@ -642,8 +639,8 @@ G_MODULE_EXPORT gboolean EF_appuis_renomme(EF_Appui *appui, gchar *nom, Projet *
 }
 
 
-G_MODULE_EXPORT gboolean EF_appuis_supprime(EF_Appui *appui, gboolean annule_si_utilise,
-  gboolean supprime, Projet *projet)
+gboolean EF_appuis_supprime(EF_Appui *appui, gboolean annule_si_utilise, gboolean supprime,
+  Projet *projet)
 /* Description : Supprime l'appui spécifié.
  * Paramètres : EF_Appui *appui : l'appui à supprimer,
  *            : gboolean annule_si_utilise : possibilité d'annuler la suppression si l'appui est
@@ -776,7 +773,7 @@ G_MODULE_EXPORT gboolean EF_appuis_supprime(EF_Appui *appui, gboolean annule_si_
 }
 
 
-G_MODULE_EXPORT gboolean EF_appuis_free(Projet *projet)
+gboolean EF_appuis_free(Projet *projet)
 /* Description : Libère l'ensemble des types d'appuis ainsi que la liste les contenant.
  * Paramètres : Projet *projet : la variable projet.
  * Valeur renvoyée :

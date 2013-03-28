@@ -25,7 +25,7 @@
 
 #include "common_projet.h"
 
-G_MODULE_EXPORT gboolean EF_gtk_section_circulaire(Projet *projet, EF_Section *section) __attribute__((__warn_unused_result__));
+gboolean EF_gtk_section_circulaire(Projet *projet, EF_Section *section) __attribute__((__warn_unused_result__));
 
 #endif
 

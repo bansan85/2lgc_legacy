@@ -28,9 +28,8 @@
 #include "EF_gtk_charge_noeud.h"
 
 
-G_MODULE_EXPORT Charge_Noeud*  EF_charge_noeud_ajout(Projet *projet, unsigned int num_action,
-  GList *noeuds, double fx, double fy, double fz, double mx, double my, double mz,
-  const char* nom)
+Charge_Noeud*  EF_charge_noeud_ajout(Projet *projet, unsigned int num_action, GList *noeuds,
+  double fx, double fy, double fz, double mx, double my, double mz, const char* nom)
 /* Description : Ajoute une charge ponctuelle à une action et à un noeud de la structure en
  *               lui attribuant le numéro suivant la dernière charge de l'action.
  * Paramètres : Projet *projet : la variable projet,
@@ -92,12 +91,7 @@ G_MODULE_EXPORT Charge_Noeud*  EF_charge_noeud_ajout(Projet *projet, unsigned in
 }
 
 
-G_MODULE_EXPORT gboolean EF_charge_noeud_enleve_noeuds(Charge_Noeud *charge, GList *noeuds,
-  Projet *projet
-#ifndef ENABLE_GTK
-  __attribute__((unused))
-#endif
-)
+gboolean EF_charge_noeud_enleve_noeuds(Charge_Noeud *charge, GList *noeuds, Projet *projet)
 /* Description : Enlève à la charge une liste de noeuds pouvant être utilisés. Dans le cas où
  *               un noeud de la liste n'est pas dans la charge, ce point ne sera pas considéré
  *               comme une erreur mais le noeud sera simplement ignoré.
@@ -150,7 +144,7 @@ G_MODULE_EXPORT gboolean EF_charge_noeud_enleve_noeuds(Charge_Noeud *charge, GLi
 }
 
 
-G_MODULE_EXPORT gboolean EF_charge_noeud_free(Charge_Noeud *charge)
+gboolean EF_charge_noeud_free(Charge_Noeud *charge)
 /* Description : Libère une charge nodale.
  * Paramètres : Charge_Noeud *charge : la charge à libérer.
  * Valeur renvoyée :

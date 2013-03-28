@@ -54,7 +54,7 @@
 #include "1992_1_1_barres.h"
 #include "1992_1_1_materiaux.h"
 
-G_MODULE_EXPORT Projet* projet_init(Type_Pays pays)
+Projet* projet_init(Type_Pays pays)
 /* Description : Initialise la variable projet.
  * Paramètres : Type_Pays pays : pays du calcul.
  * Valeur renvoyée :
@@ -120,7 +120,7 @@ G_MODULE_EXPORT Projet* projet_init(Type_Pays pays)
 
 
 #ifdef ENABLE_GTK
-void gui_window_destroy_event(GtkWidget *pWidget __attribute__((unused)), Projet *projet)
+void gui_window_destroy_event(GtkWidget *pWidget, Projet *projet)
 /* Description : Evènement lors de la fermeture de la fenêtre principale.
  * Paramètres : GtkWidget *pWidget : composant à l'origine de la demande,
  *            : Projet *projet : la variable projet.
@@ -150,7 +150,7 @@ void gui_window_option_destroy_button(GtkWidget *fenetre)
 }
 
 
-G_MODULE_EXPORT gboolean projet_init_graphique(Projet *projet)
+gboolean projet_init_graphique(Projet *projet)
 /* Description : Crée une fenêtre graphique avec toute l'interface (menu, vue 3D, ...).
  * Paramètres : Projet *projet : variable projet.
  * Valeur renvoyée :
@@ -273,7 +273,7 @@ G_MODULE_EXPORT gboolean projet_init_graphique(Projet *projet)
 #endif
 
 
-G_MODULE_EXPORT gboolean projet_free(Projet *projet)
+gboolean projet_free(Projet *projet)
 /* Description : Libère les allocations mémoires de l'ensemble de la variable projet.
  * Paramètres : Projet *projet : la variable projet.
  * Valeur renvoyée :

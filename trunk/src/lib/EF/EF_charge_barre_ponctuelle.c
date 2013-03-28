@@ -32,7 +32,7 @@
 #include "EF_sections.h"
 #include "EF_gtk_charge_barre_ponctuelle.h"
 
-G_MODULE_EXPORT Charge_Barre_Ponctuelle *EF_charge_barre_ponctuelle_ajout(Projet *projet,
+Charge_Barre_Ponctuelle *EF_charge_barre_ponctuelle_ajout(Projet *projet,
   unsigned int num_action, GList *barres, gboolean repere_local, double a, double fx,
   double fy, double fz, double mx, double my, double mz, const char* nom)
 /* Description : Ajoute une charge ponctuelle à une action et à l'intérieur d'une barre en lui
@@ -120,9 +120,8 @@ G_MODULE_EXPORT Charge_Barre_Ponctuelle *EF_charge_barre_ponctuelle_ajout(Projet
 }
 
 
-G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_mx(Beton_Barre *barre,
-  unsigned int discretisation, double a, Barre_Info_EF *infos, double mx, double *ma,
-  double *mb)
+gboolean EF_charge_barre_ponctuelle_mx(Beton_Barre *barre, unsigned int discretisation,
+  double a, Barre_Info_EF *infos, double mx, double *ma, double *mb)
 /* Description : Calcule l'opposé aux moments d'encastrement pour l'élément spécifié soumis
  *               au moment de torsion mx dans le repère local. Les résultats sont renvoyés
  *               par l'intermédiaire des pointeurs ma et mb qui ne peuvent être NULL.
@@ -219,7 +218,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_mx(Beton_Barre *barre,
 }
 
 
-G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_def_ang_iso_y(Beton_Barre *barre,
+gboolean EF_charge_barre_ponctuelle_def_ang_iso_y(Beton_Barre *barre,
   unsigned int discretisation, double a, double fz, double my, double *phia, double *phib)
 /* Description : Calcule les angles de rotation autour de l'axe y pour un élément bi-articulé
  *               soumis au chargement fz, my dans le repère local. Les résultats sont renvoyés
@@ -312,7 +311,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_def_ang_iso_y(Beton_Barre *b
 }
 
 
-G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_def_ang_iso_z(Beton_Barre *barre,
+gboolean EF_charge_barre_ponctuelle_def_ang_iso_z(Beton_Barre *barre,
   unsigned int discretisation, double a, double fy, double mz, double *phia, double *phib)
 /* Description : Calcule les angles de rotation autour de l'axe z pour un élément bi-articulé
  *               soumis au chargement fy, mz dans le repère local. Les résultats sont renvoyés
@@ -406,8 +405,8 @@ G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_def_ang_iso_z(Beton_Barre *b
 }
 
 
-G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_fonc_rx(Fonction *fonction,
-  Beton_Barre *barre, unsigned int discretisation, double a, double max, double mbx)
+gboolean EF_charge_barre_ponctuelle_fonc_rx(Fonction *fonction, Beton_Barre *barre,
+  unsigned int discretisation, double a, double max, double mbx)
 /* Description : Calcule les déplacements d'une barre en rotation autour de l'axe x en fonction
  *                  des efforts aux extrémités de la poutre soumise à un moment de torsion
  *                  ponctuel à la position a.
@@ -516,9 +515,9 @@ G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_fonc_rx(Fonction *fonction,
 }
 
 
-G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_fonc_ry(Fonction *f_rotation,
-  Fonction* f_deform, Beton_Barre *barre, unsigned int discretisation, double a, double fz,
-  double my, double may, double mby)
+gboolean EF_charge_barre_ponctuelle_fonc_ry(Fonction *f_rotation, Fonction* f_deform,
+  Beton_Barre *barre, unsigned int discretisation, double a, double fz, double my, double may,
+  double mby)
 /* Description : Calcule les déplacements d'une barre en rotation autour de l'axe y et en
  *                 déformation selon l'axe z en fonction de la charge ponctuelle (fz et my) et
  *                 des efforts aux extrémités de la poutre.
@@ -652,9 +651,9 @@ G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_fonc_ry(Fonction *f_rotation
 }
 
 
-G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_fonc_rz(Fonction *f_rotation,
-  Fonction* f_deform, Beton_Barre *barre, unsigned int discretisation, double a, double fy,
-  double mz, double maz, double mbz)
+gboolean EF_charge_barre_ponctuelle_fonc_rz(Fonction *f_rotation, Fonction* f_deform,
+  Beton_Barre *barre, unsigned int discretisation, double a, double fy, double mz, double maz,
+  double mbz)
 /* Description : Calcule les déplacements d'une barre en rotation autour de l'axe z et en
  *                 déformation selon l'axe y en fonction de la charge ponctuelle (fy et mz) et
  *                 des efforts aux extrémités de la poutre.
@@ -756,7 +755,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_fonc_rz(Fonction *f_rotation
 }
 
 
-G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_n(Fonction *fonction, Beton_Barre *barre,
+gboolean EF_charge_barre_ponctuelle_n(Fonction *fonction, Beton_Barre *barre,
   unsigned int discretisation, double a, double fax, double fbx)
 /* Description : Calcule les déplacements d'une barre selon l'axe x en fonction de l'effort
  *               normal ponctuel n et des réactions d'appuis fax et fbx.
@@ -843,12 +842,8 @@ G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_n(Fonction *fonction, Beton_
 }
 
 
-G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_enleve_barres(
-  Charge_Barre_Ponctuelle *charge, GList *barres, Projet *projet
-#ifndef ENABLE_GTK
-  __attribute__((unused))
-#endif
-)
+gboolean EF_charge_barre_ponctuelle_enleve_barres(Charge_Barre_Ponctuelle *charge,
+  GList *barres, Projet *projet)
 /* Description : Enlève à la charge une liste de barres pouvant être utilisées. Dans le cas où
  *               une barre de la liste n'est pas dans la charge, ce point ne sera pas considéré
  *               comme une erreur mais la barre sera simplement ignorée.
@@ -901,7 +896,7 @@ G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_enleve_barres(
 }
 
 
-G_MODULE_EXPORT gboolean EF_charge_barre_ponctuelle_free(Charge_Barre_Ponctuelle *charge)
+gboolean EF_charge_barre_ponctuelle_free(Charge_Barre_Ponctuelle *charge)
 /* Description : Libère une charge ponctuelle sur barre.
  * Paramètres : Charge_Barre_Ponctuelle *charge : la charge à libérer.
  * Valeur renvoyée :

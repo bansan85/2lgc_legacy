@@ -37,7 +37,7 @@
 #include "common_m3d.hpp"
 #endif
 
-G_MODULE_EXPORT gboolean EF_sections_init(Projet *projet)
+gboolean EF_sections_init(Projet *projet)
 /* Description : Initialise la liste des section en béton.
  * Paramètres : Projet *projet : la variable projet.
  * Valeur renvoyée :
@@ -60,7 +60,7 @@ G_MODULE_EXPORT gboolean EF_sections_init(Projet *projet)
 
 
 #ifdef ENABLE_GTK
-G_MODULE_EXPORT gboolean EF_sections_update_ligne_treeview(Projet *projet, EF_Section *section)
+gboolean EF_sections_update_ligne_treeview(Projet *projet, EF_Section *section)
 /* Description : Met à jour les données dans le treeview de la fenêtre section.
  * Paramètres : Projet *projet : la variable projet,
  *            : EF_Section *section : la section à mettre à jour.
@@ -219,8 +219,7 @@ gboolean EF_sections_repositionne(Projet *projet, EF_Section *section)
 }
 
 
-G_MODULE_EXPORT gboolean EF_sections_rectangulaire_ajout(Projet *projet, const char* nom,
-  double l, double h)
+gboolean EF_sections_rectangulaire_ajout(Projet *projet, const char* nom, double l, double h)
 /* Description : Ajouter une nouvelle section rectangulaire à la liste des sections en béton.
  * Paramètres : Projet *projet : la variable projet,
  *            : double l : la largeur,
@@ -255,8 +254,8 @@ G_MODULE_EXPORT gboolean EF_sections_rectangulaire_ajout(Projet *projet, const c
 }
 
 
-G_MODULE_EXPORT gboolean EF_sections_rectangulaire_modif(Projet *projet, EF_Section *section,
-  const char* nom, double l, double h)
+gboolean EF_sections_rectangulaire_modif(Projet *projet, EF_Section *section, const char* nom,
+  double l, double h)
 /* Description : Modifie une section rectangulaire.
  * Paramètres : Projet *projet : la variable projet,
  *            : EF_Section *section : la section à modifier,
@@ -330,8 +329,8 @@ G_MODULE_EXPORT gboolean EF_sections_rectangulaire_modif(Projet *projet, EF_Sect
 }
 
 
-G_MODULE_EXPORT gboolean EF_sections_T_ajout(Projet *projet, const char* nom, double lt,
-  double lr, double ht, double hr)
+gboolean EF_sections_T_ajout(Projet *projet, const char* nom, double lt, double lr, double ht,
+  double hr)
 /* Description : Ajouter une nouvelle section en T à la liste des sections en béton.
  * Paramètres : Projet *projet : la variable projet,
  *            : chat *nom : nom de la section,
@@ -374,8 +373,8 @@ G_MODULE_EXPORT gboolean EF_sections_T_ajout(Projet *projet, const char* nom, do
 }
 
 
-G_MODULE_EXPORT gboolean EF_sections_T_modif(Projet *projet, EF_Section *section,
-  const char* nom, double lt, double lr, double ht, double hr)
+gboolean EF_sections_T_modif(Projet *projet, EF_Section *section, const char* nom, double lt,
+  double lr, double ht, double hr)
 /* Description : Modifie une section en T.
  * Paramètres : Projet *projet : la variable projet,
  *            : EF_Section *section : la section à modifier,
@@ -454,7 +453,7 @@ G_MODULE_EXPORT gboolean EF_sections_T_modif(Projet *projet, EF_Section *section
 }
 
 
-G_MODULE_EXPORT gboolean EF_sections_carree_ajout(Projet *projet, const char* nom, double cote)
+gboolean EF_sections_carree_ajout(Projet *projet, const char* nom, double cote)
 /* Description : Ajouter une nouvelle section carrée à la liste des sections en béton.
  * Paramètres : Projet *projet : la variable projet,
  *            : char *nom : nom de la section,
@@ -488,8 +487,8 @@ G_MODULE_EXPORT gboolean EF_sections_carree_ajout(Projet *projet, const char* no
 }
 
 
-G_MODULE_EXPORT gboolean EF_sections_carree_modif(Projet *projet, EF_Section *section, 
-  const char* nom, double cote)
+gboolean EF_sections_carree_modif(Projet *projet, EF_Section *section, const char* nom,
+  double cote)
 /* Description : Modifie une section carrée.
  * Paramètres : Projet *projet : la variable projet,
  *            : EF_Section *section : la section à modifier,
@@ -553,8 +552,7 @@ G_MODULE_EXPORT gboolean EF_sections_carree_modif(Projet *projet, EF_Section *se
 }
 
 
-G_MODULE_EXPORT gboolean EF_sections_circulaire_ajout(Projet *projet, const char* nom,
-  double diametre)
+gboolean EF_sections_circulaire_ajout(Projet *projet, const char* nom, double diametre)
 /* Description : Ajouter une nouvelle section circulaire à la liste des sections en béton.
  * Paramètres : Projet *projet : la variable projet,
  *            : char *nom : nom de la section,
@@ -589,8 +587,8 @@ G_MODULE_EXPORT gboolean EF_sections_circulaire_ajout(Projet *projet, const char
 }
 
 
-G_MODULE_EXPORT gboolean EF_sections_circulaire_modif(Projet *projet, EF_Section *section,
-  const char* nom, double diametre)
+gboolean EF_sections_circulaire_modif(Projet *projet, EF_Section *section, const char* nom,
+  double diametre)
 /* Description : Modifie une section circulaire.
  * Paramètres : Projet *projet : la variable projet,
  *            : EF_Section *section : la section à modifier,
@@ -651,8 +649,7 @@ G_MODULE_EXPORT gboolean EF_sections_circulaire_modif(Projet *projet, EF_Section
 }
 
 
-G_MODULE_EXPORT EF_Section* EF_sections_cherche_nom(Projet *projet, const char *nom,
-  gboolean critique)
+EF_Section* EF_sections_cherche_nom(Projet *projet, const char *nom, gboolean critique)
 /* Description : Positionne dans la liste des sections en béton l'élément courant au numéro
  *               souhaité.
  * Paramètres : Projet *projet : la variable projet,
@@ -688,7 +685,7 @@ G_MODULE_EXPORT EF_Section* EF_sections_cherche_nom(Projet *projet, const char *
 }
 
 
-G_MODULE_EXPORT char* EF_sections_get_description(EF_Section *sect)
+char* EF_sections_get_description(EF_Section *sect)
 /* Description : Renvoie la description d'une section sous forme d'un texte.
  *               Il convient de libérer le texte renvoyée par la fonction free.
  * Paramètres : EF_Section* sect : section à étudier.
@@ -758,8 +755,7 @@ G_MODULE_EXPORT char* EF_sections_get_description(EF_Section *sect)
 }
 
 
-G_MODULE_EXPORT gboolean EF_sections_supprime(EF_Section *section, gboolean annule_si_utilise,
-  Projet *projet)
+gboolean EF_sections_supprime(EF_Section *section, gboolean annule_si_utilise, Projet *projet)
 /* Description : Supprime la section spécifiée.
  * Paramètres : EF_Section *section : la section à supprimer,
  *            : gboolean annule_si_utilise : possibilité d'annuler la suppression si la section
@@ -846,7 +842,7 @@ G_MODULE_EXPORT gboolean EF_sections_supprime(EF_Section *section, gboolean annu
 }
 
 
-G_MODULE_EXPORT double EF_sections_j(EF_Section* sect)
+double EF_sections_j(EF_Section* sect)
 /* Description : Renvoie l'inertie de torsion J pour la section étudiée.
  * Paramètres : EF_Section* sect : section à étudier.
  * Valeur renvoyée :
@@ -906,7 +902,7 @@ G_MODULE_EXPORT double EF_sections_j(EF_Section* sect)
 }
 
 
-G_MODULE_EXPORT double EF_sections_iy(EF_Section* sect)
+double EF_sections_iy(EF_Section* sect)
 /* Description : Renvoie l'inertie I selon l'axe y lorsque la section est constante.
  * Paramètres : EF_Section* section : section à étudier,
  * Valeur renvoyée :
@@ -957,7 +953,7 @@ G_MODULE_EXPORT double EF_sections_iy(EF_Section* sect)
 }
 
 
-G_MODULE_EXPORT double EF_sections_iz(EF_Section* sect)
+double EF_sections_iz(EF_Section* sect)
 /* Description : Renvoie l'inertie I selon l'axe z lorsque la section est constante.
  * Paramètres : EF_Section* section : section à étudier.
  * Valeur renvoyée :
@@ -1003,7 +999,7 @@ G_MODULE_EXPORT double EF_sections_iz(EF_Section* sect)
 }
 
 
-G_MODULE_EXPORT double EF_sections_vy(EF_Section* sect)
+double EF_sections_vy(EF_Section* sect)
 /* Description : Renvoie la distance entre le centre de gravité et la partie la plus à droite
  *               de la section.
  * Paramètres : EF_Section* sect : section à étudier.
@@ -1045,7 +1041,7 @@ G_MODULE_EXPORT double EF_sections_vy(EF_Section* sect)
 }
 
 
-G_MODULE_EXPORT double EF_sections_vyp(EF_Section* sect)
+double EF_sections_vyp(EF_Section* sect)
 /* Description : Renvoie la distance entre le centre de gravité et la partie la plus à gauche
  *               de la section.
  * Paramètres : EF_Section* sect : section à étudier.
@@ -1087,7 +1083,7 @@ G_MODULE_EXPORT double EF_sections_vyp(EF_Section* sect)
 }
 
 
-G_MODULE_EXPORT double EF_sections_vz(EF_Section* sect)
+double EF_sections_vz(EF_Section* sect)
 /* Description : Renvoie la distance entre le centre de gravité et la partie la plus haute de
  *               la section.
  * Paramètres : EF_Section* sect : section à étudier.
@@ -1129,7 +1125,7 @@ G_MODULE_EXPORT double EF_sections_vz(EF_Section* sect)
 }
 
 
-G_MODULE_EXPORT double EF_sections_vzp(EF_Section* sect)
+double EF_sections_vzp(EF_Section* sect)
 /* Description : Renvoie la distance entre le centre de gravité et la partie la plus basse de
  *               la section.
  * Paramètres : EF_Section* sect : section à étudier.
@@ -1171,7 +1167,7 @@ G_MODULE_EXPORT double EF_sections_vzp(EF_Section* sect)
 }
 
 
-G_MODULE_EXPORT double EF_sections_ay(Beton_Barre *barre, unsigned int discretisation)
+double EF_sections_ay(Beton_Barre *barre, unsigned int discretisation)
 /* Description : Renvoie le paramètre de souplesse a de la poutre selon l'axe y.
  * Paramètres : Beton_Barre *barre : la barre à étudier,
  *              unsigned int discretisation : partie de la barre à étudier.
@@ -1226,7 +1222,7 @@ G_MODULE_EXPORT double EF_sections_ay(Beton_Barre *barre, unsigned int discretis
 }
 
 
-G_MODULE_EXPORT double EF_sections_by(Beton_Barre *barre, unsigned int discretisation)
+double EF_sections_by(Beton_Barre *barre, unsigned int discretisation)
 /* Description : Renvoie le paramètre de souplesse b de la poutre selon l'axe y.
  * Paramètres : Beton_Barre *barre : la barre à étudier,
  *              unsigned int discretisation : partie de la barre à étudier.
@@ -1281,7 +1277,7 @@ G_MODULE_EXPORT double EF_sections_by(Beton_Barre *barre, unsigned int discretis
 }
 
 
-G_MODULE_EXPORT double EF_sections_cy(Beton_Barre *barre, unsigned int discretisation)
+double EF_sections_cy(Beton_Barre *barre, unsigned int discretisation)
 /* Description : Renvoie le paramètre de souplesse c de la poutre selon l'axe y.
  * Paramètres : Beton_Barre *barre : la barre à étudier,
  *              unsigned int discretisation : partie de la barre à étudier.
@@ -1336,7 +1332,7 @@ G_MODULE_EXPORT double EF_sections_cy(Beton_Barre *barre, unsigned int discretis
 }
 
 
-G_MODULE_EXPORT double EF_sections_az(Beton_Barre *barre, unsigned int discretisation)
+double EF_sections_az(Beton_Barre *barre, unsigned int discretisation)
 /* Description : Renvoie le paramètre de souplesse a de la poutre selon l'axe z.
  * Paramètres : Beton_Barre *barre : la barre à étudier,
  *              unsigned int discretisation : partie de la barre à étudier.
@@ -1391,7 +1387,7 @@ G_MODULE_EXPORT double EF_sections_az(Beton_Barre *barre, unsigned int discretis
 }
 
 
-G_MODULE_EXPORT double EF_sections_bz(Beton_Barre *barre, unsigned int discretisation)
+double EF_sections_bz(Beton_Barre *barre, unsigned int discretisation)
 /* Description : Renvoie le paramètre de souplesse b de la poutre selon l'axe z.
  * Paramètres : Beton_Barre *barre : la barre à étudier,
  *              unsigned int discretisation : partie de la barre à étudier.
@@ -1446,7 +1442,7 @@ G_MODULE_EXPORT double EF_sections_bz(Beton_Barre *barre, unsigned int discretis
 }
 
 
-G_MODULE_EXPORT double EF_sections_cz(Beton_Barre *barre, unsigned int discretisation)
+double EF_sections_cz(Beton_Barre *barre, unsigned int discretisation)
 /* Description : Renvoie le paramètre de souplesse c de la poutre selon l'axe z.
  * Paramètres : Beton_Barre *barre : la barre à étudier,
  *              unsigned int discretisation : partie de la barre à étudier.
@@ -1501,7 +1497,7 @@ G_MODULE_EXPORT double EF_sections_cz(Beton_Barre *barre, unsigned int discretis
 }
 
 
-G_MODULE_EXPORT double EF_sections_s(EF_Section *sect)
+double EF_sections_s(EF_Section *sect)
 /* Description : Renvoie la surface de la section étudiée.
  * Paramètres : void* section : section à étudier.
  * Valeur renvoyée :
@@ -1544,8 +1540,7 @@ G_MODULE_EXPORT double EF_sections_s(EF_Section *sect)
 }
 
 
-G_MODULE_EXPORT double EF_sections_es_l(Beton_Barre *barre, unsigned int discretisation,
-  double d, double f)
+double EF_sections_es_l(Beton_Barre *barre, unsigned int discretisation, double d, double f)
 /* Description : Renvoie l'équivalent du rapport ES/L pour la barre étudiée.
  * Paramètres : Beton_Barre *barre : la barre à étudier,
  *              unsigned int discretisation : partie de la barre à étudier,
@@ -1608,7 +1603,7 @@ G_MODULE_EXPORT double EF_sections_es_l(Beton_Barre *barre, unsigned int discret
 }
 
 
-G_MODULE_EXPORT double EF_sections_gj_l(Beton_Barre *barre, unsigned int discretisation)
+double EF_sections_gj_l(Beton_Barre *barre, unsigned int discretisation)
 /* Description : Renvoie l'équivalent du rapport GJ/L pour la barre étudiée.
  * Paramètres : Beton_Barre *barre : la barre à étudier,
  *              unsigned int discretisation : partie de la barre à étudier.
@@ -1709,7 +1704,7 @@ void EF_sections_free_un(EF_Section *section)
 }
 
 
-G_MODULE_EXPORT gboolean EF_sections_free(Projet *projet)
+gboolean EF_sections_free(Projet *projet)
 /* Description : Libère l'ensemble des sections en béton
  * Paramètres : Projet *projet : la variable projet
  * Valeur renvoyée :

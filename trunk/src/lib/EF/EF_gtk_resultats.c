@@ -34,8 +34,7 @@
 #include "EF_resultat.h"
 #include "EF_gtk_sections.h"
 
-G_MODULE_EXPORT void EF_gtk_resultats_fermer(GtkButton *button __attribute__((unused)),
-  Projet *projet)
+void EF_gtk_resultats_fermer(GtkButton *button, Projet *projet)
 /* Description : Ferme la fenêtre.
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -51,8 +50,7 @@ G_MODULE_EXPORT void EF_gtk_resultats_fermer(GtkButton *button __attribute__((un
 }
 
 
-G_MODULE_EXPORT void EF_gtk_resultats_window_destroy(GtkWidget *object __attribute__((unused)),
-  Projet *projet)
+void EF_gtk_resultats_window_destroy(GtkWidget *object, Projet *projet)
 /* Description : met projet->list_gtk.ef_resultats.builder à NULL quand la fenêtre se ferme,
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -69,8 +67,7 @@ G_MODULE_EXPORT void EF_gtk_resultats_window_destroy(GtkWidget *object __attribu
 }
 
 
-G_MODULE_EXPORT gboolean EF_gtk_resultats_window_key_press(
-  GtkWidget *widget __attribute__((unused)), GdkEvent *event, Projet *projet)
+gboolean EF_gtk_resultats_window_key_press(GtkWidget *widget, GdkEvent *event, Projet *projet)
 /* Description : Ferme la fenêtre si la touche ECHAP est pressée.
  * Paramètres : GtkWidget *widget : composant à l'origine de l'évènement,
  *            : GdkEvent *event : Caractéristique de l'évènement,
@@ -94,9 +91,8 @@ G_MODULE_EXPORT gboolean EF_gtk_resultats_window_key_press(
 }
 
 
-G_MODULE_EXPORT void EF_gtk_resultats_notebook_switch(GtkNotebook *notebook,
-  GtkWidget *page __attribute__((unused)), gint page_num,
-  Projet *projet __attribute__((unused)))
+void EF_gtk_resultats_notebook_switch(GtkNotebook *notebook, GtkWidget *page, gint page_num,
+  Projet *projet)
 /* Description : Le changement de la page en cours nécessite l'actualisation de la disponibilité
  *               du bouton supprimer.
  * Paramètres : GtkNotebook *notebook : le composant notebook,
@@ -2228,8 +2224,7 @@ gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, Projet *projet
 }
 
 
-G_MODULE_EXPORT void EF_gtk_resultats_cas_change(GtkWidget *widget __attribute__((unused)),
-  Projet *projet)
+void EF_gtk_resultats_cas_change(GtkWidget *widget, Projet *projet)
 /* Description : Met à jour l'affichage des résultats en cas de changement de cas.
  * Paramètres : GtkWidget *widget : le composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -2365,8 +2360,7 @@ G_MODULE_EXPORT void EF_gtk_resultats_cas_change(GtkWidget *widget __attribute__
 }
 
 
-G_MODULE_EXPORT void EF_gtk_resultats_ponderations_change(
-  GtkWidget *widget __attribute__((unused)), Projet *projet)
+void EF_gtk_resultats_ponderations_change(GtkWidget *widget, Projet *projet)
 /* Description : Met à jour l'affichage des résultats en cas de changement de combinaisons.
  * Paramètres : GtkWidget *widget : le composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -2390,7 +2384,7 @@ G_MODULE_EXPORT void EF_gtk_resultats_ponderations_change(
 }
 
 
-G_MODULE_EXPORT void EF_gtk_resultats_combobox_changed(GtkComboBox *combobox, Projet *projet)
+void EF_gtk_resultats_combobox_changed(GtkComboBox *combobox, Projet *projet)
 /* Description : Met à jour l'affichage des résultats en cas de changement de cas / combinaison.
  * Paramètres : GtkComboBox *combobox : le composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -2432,7 +2426,7 @@ G_MODULE_EXPORT void EF_gtk_resultats_combobox_changed(GtkComboBox *combobox, Pr
 }
 
 
-G_MODULE_EXPORT void EF_gtk_resultats_add_page_type(GtkMenuItem *menuitem, Projet *projet)
+void EF_gtk_resultats_add_page_type(GtkMenuItem *menuitem, Projet *projet)
 /* Description : Ajoute une page au Notebook sur la base de divers tableaux "de base".
  * Paramètres : GtkMenuItem *menuitem : le composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -2589,7 +2583,7 @@ G_MODULE_EXPORT void EF_gtk_resultats_add_page_type(GtkMenuItem *menuitem, Proje
 }
 
 
-G_MODULE_EXPORT void EF_gtk_resultats(Projet *projet)
+void EF_gtk_resultats(Projet *projet)
 /* Description : Création de la fenêtre permettant d'afficher les résultats sous forme d'un
  *               tableau.
  * Paramètres : Projet *projet : la variable projet.
@@ -2639,7 +2633,7 @@ G_MODULE_EXPORT void EF_gtk_resultats(Projet *projet)
 }
 
 
-G_MODULE_EXPORT void EF_gtk_resultats_free(Projet *projet)
+void EF_gtk_resultats_free(Projet *projet)
 /* Description : Libère l'ensemble des éléments utilisés pour l'affichage des résultats.
  * Paramètres : Projet *projet : la variable projet.
  * Valeur renvoyée : Aucune.
