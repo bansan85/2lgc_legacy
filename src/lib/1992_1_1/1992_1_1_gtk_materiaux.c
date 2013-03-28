@@ -616,7 +616,6 @@ gboolean _1992_1_1_gtk_materiaux(Projet *projet, EF_Materiau *materiau)
     Materiau_Beton          *beton_data;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(materiau->type == MATERIAU_BETON, FALSE, gettext("Le matériau n'est pas en béton.\n"));
     
     ef_gtk = &projet->list_gtk._1992_1_1_materiaux;
     if (ef_gtk->builder != NULL)
@@ -649,6 +648,7 @@ gboolean _1992_1_1_gtk_materiaux(Projet *projet, EF_Materiau *materiau)
     {
         gchar           tmp[30];
         
+        BUGMSG(materiau->type == MATERIAU_BETON, FALSE, gettext("Le matériau n'est pas en béton.\n"));
         gtk_window_set_title(GTK_WINDOW(ef_gtk->window), gettext("Modification d'un matériau béton"));
         ef_gtk->materiau = materiau;
         beton_data = materiau->data;
