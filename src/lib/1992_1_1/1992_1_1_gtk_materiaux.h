@@ -25,7 +25,7 @@
 
 #include "common_projet.h"
 
-G_MODULE_EXPORT gboolean __1992_1_1_gtk_materiaux(Projet *projet, Beton_Materiau *materiau) __attribute__((__warn_unused_result__));
+gboolean __1992_1_1_gtk_materiaux(Projet *projet, Beton_Materiau *materiau) __attribute__((__warn_unused_result__));
 
 #endif
 

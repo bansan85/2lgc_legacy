@@ -24,7 +24,7 @@
 #include "common_math.h"
 
 
-G_MODULE_EXPORT double common_math_arrondi_nombre(double nombre)
+double common_math_arrondi_nombre(double nombre)
 /* Description : Arrondi un nombre en supprimant la partie négligeable (ERREUR_RELATIVE_MIN)
  *   L'algorithme est perfectible puisque lors de l'arrondi, une nouvelle imprécision apparait
  *   et certains nombres peuvent être arrondi en 1.09999999 ou -23.000000001.
@@ -51,7 +51,7 @@ G_MODULE_EXPORT double common_math_arrondi_nombre(double nombre)
 }
 
 
-G_MODULE_EXPORT void common_math_arrondi_triplet(cholmod_triplet *triplet)
+void common_math_arrondi_triplet(cholmod_triplet *triplet)
 /* Description : Arrondi un triplet en supprimant la partie négligeable (ERREUR_RELATIVE_MIN).
  * Paramètres : cholmod_triplet *triplet : la variable triplet à arrondir.
  * Valeur renvoyée : Aucune.
@@ -69,7 +69,7 @@ G_MODULE_EXPORT void common_math_arrondi_triplet(cholmod_triplet *triplet)
 }
 
 
-G_MODULE_EXPORT void common_math_arrondi_sparse(cholmod_sparse *sparse)
+void common_math_arrondi_sparse(cholmod_sparse *sparse)
 /* Description : Arrondi un sparse en supprimant la partie négligeable (ERREUR_RELATIVE_MIN).
  * Paramètres : cholmod_sparse *sparse : la matrice sparse à arrondir.
  * Valeur renvoyée : Aucune.
@@ -87,7 +87,7 @@ G_MODULE_EXPORT void common_math_arrondi_sparse(cholmod_sparse *sparse)
 }
 
 
-G_MODULE_EXPORT void common_math_double_to_char(double nombre, char *dest, int decimales)
+void common_math_double_to_char(double nombre, char *dest, int decimales)
 /* Description : Converti un nombre double en char *.
                  Dest doit déjà être alloué. 30 caractères devrait être suffisant.
  * Paramètres : double nombre : nombre à convertir,

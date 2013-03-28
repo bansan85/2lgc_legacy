@@ -40,8 +40,7 @@
 #include "EF_gtk_section_circulaire.h"
 #include "1992_1_1_barres.h"
 
-G_MODULE_EXPORT void EF_gtk_sections_fermer(GtkButton *button __attribute__((unused)),
-  Projet *projet)
+void EF_gtk_sections_fermer(GtkButton *button, Projet *projet)
 /* Description : Ferme la fenêtre.
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -57,8 +56,7 @@ G_MODULE_EXPORT void EF_gtk_sections_fermer(GtkButton *button __attribute__((unu
 }
 
 
-G_MODULE_EXPORT void EF_gtk_sections_window_destroy(GtkWidget *object __attribute__((unused)),
-  Projet *projet)
+void EF_gtk_sections_window_destroy(GtkWidget *object, Projet *projet)
 /* Description : met projet->list_gtk.ef_sections.builder à NULL quand la fenêtre se ferme,
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -75,8 +73,7 @@ G_MODULE_EXPORT void EF_gtk_sections_window_destroy(GtkWidget *object __attribut
 }
 
 
-G_MODULE_EXPORT gboolean EF_gtk_sections_window_key_press(
-  GtkWidget *widget __attribute__((unused)), GdkEvent *event, Projet *projet)
+gboolean EF_gtk_sections_window_key_press(GtkWidget *widget, GdkEvent *event, Projet *projet)
 /* Description : Ferme la fenêtre si la touche ECHAP est pressée.
  * Paramètres : GtkWidget *widget : composant à l'origine de l'évènement,
  *            : GdkEvent *event : Caractéristique de l'évènement,
@@ -100,8 +97,8 @@ G_MODULE_EXPORT gboolean EF_gtk_sections_window_key_press(
 }
 
 
-G_MODULE_EXPORT gboolean EF_gtk_sections_treeview_key_press(GtkTreeView *treeview,
-  GdkEvent *event, Projet *projet)
+gboolean EF_gtk_sections_treeview_key_press(GtkTreeView *treeview, GdkEvent *event,
+  Projet *projet)
 /* Description : Supprime une section sans dépendance si la touche SUPPR est appuyée.
  * Paramètres : GtkTreeView *treeview : composant à l'origine de l'évènement,
  *            : GdkEvent *event : Caractéristique de l'évènement,
@@ -144,8 +141,7 @@ G_MODULE_EXPORT gboolean EF_gtk_sections_treeview_key_press(GtkTreeView *treevie
 }
 
 
-G_MODULE_EXPORT void EF_gtk_sections_select_changed(
-  GtkTreeSelection *treeselection __attribute__((unused)), Projet *projet)
+void EF_gtk_sections_select_changed(GtkTreeSelection *treeselection, Projet *projet)
 /* Description : En fonction de la sélection, active ou désactive le bouton supprimer.
  * Paramètres : GtkTreeSelection *treeselection : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -204,8 +200,7 @@ G_MODULE_EXPORT void EF_gtk_sections_select_changed(
 }
 
 
-G_MODULE_EXPORT void EF_gtk_sections_boutton_supprimer_menu(
-  GtkButton *widget __attribute__((unused)), Projet *projet)
+void EF_gtk_sections_boutton_supprimer_menu(GtkButton *widget, Projet *projet)
 /* Description : Affiche la liste des dépendances dans le menu lorsqu'on clique sur le bouton
  * Paramètres : GtkButton *widget : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -255,8 +250,8 @@ G_MODULE_EXPORT void EF_gtk_sections_boutton_supprimer_menu(
 }
 
 
-G_MODULE_EXPORT void EF_gtk_sections_edit_nom(GtkCellRendererText *cell __attribute__((unused)),
-  gchar *path_string, gchar *new_text, Projet *projet)
+void EF_gtk_sections_edit_nom(GtkCellRendererText *cell, gchar *path_string, gchar *new_text,
+  Projet *projet)
 /* Description : Modification du nom d'une section.
  * Paramètres : GtkCellRendererText *cell : cellule en cours,
  *            : gchar *path_string : path de la ligne en cours,
@@ -323,8 +318,7 @@ G_MODULE_EXPORT void EF_gtk_sections_edit_nom(GtkCellRendererText *cell __attrib
 }
 
 
-G_MODULE_EXPORT void EF_gtk_sections_supprimer_direct(GtkButton *button __attribute__((unused)),
-  Projet *projet)
+void EF_gtk_sections_supprimer_direct(GtkButton *button, Projet *projet)
 /* Description : Supprime la section sélectionnée dans le treeview.
  * Paramètres : GtkWidget *widget : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -353,8 +347,7 @@ G_MODULE_EXPORT void EF_gtk_sections_supprimer_direct(GtkButton *button __attrib
 }
 
 
-G_MODULE_EXPORT void EF_gtk_sections_supprimer_menu_barres(
-  GtkButton *button __attribute__((unused)), Projet *projet)
+void EF_gtk_sections_supprimer_menu_barres(GtkButton *button, Projet *projet)
 /* Description : Supprime la section sélectionnée dans le treeview, y compris les barres
  *               l'utilisant.
  * Paramètres : GtkWidget *widget : composant à l'origine de l'évènement,
@@ -386,7 +379,7 @@ G_MODULE_EXPORT void EF_gtk_sections_supprimer_menu_barres(
 }
 
 
-G_MODULE_EXPORT GdkPixbuf *EF_gtk_sections_dessin(EF_Section *section, int width, int height)
+GdkPixbuf *EF_gtk_sections_dessin(EF_Section *section, int width, int height)
 /* Description : Renvoie un dessin représentant la section.
  * Paramètres : EF_Section *section : la section à dessiner,
  *              int width : la largeur du dessin,
@@ -560,8 +553,7 @@ G_MODULE_EXPORT GdkPixbuf *EF_gtk_sections_dessin(EF_Section *section, int width
 }
 
 
-G_MODULE_EXPORT void EF_gtk_sections_ajout_rectangulaire(
-  GtkMenuItem *menuitem __attribute__((unused)), Projet *projet)
+void EF_gtk_sections_ajout_rectangulaire(GtkMenuItem *menuitem, Projet *projet)
 /* Description : Lance la fenêtre permettant d'ajouter une section rectangulaire.
  * Paramètres : GtkMenuItem *menuitem : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -577,8 +569,7 @@ G_MODULE_EXPORT void EF_gtk_sections_ajout_rectangulaire(
 }
 
 
-G_MODULE_EXPORT void EF_gtk_sections_ajout_T(
-  GtkMenuItem *menuitem __attribute__((unused)), Projet *projet)
+void EF_gtk_sections_ajout_T(GtkMenuItem *menuitem, Projet *projet)
 /* Description : Lance la fenêtre permettant d'ajouter une section en T.
  * Paramètres : GtkMenuItem *menuitem : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -594,8 +585,7 @@ G_MODULE_EXPORT void EF_gtk_sections_ajout_T(
 }
 
 
-G_MODULE_EXPORT void EF_gtk_sections_ajout_carree(
-  GtkMenuItem *menuitem __attribute__((unused)), Projet *projet)
+void EF_gtk_sections_ajout_carree(GtkMenuItem *menuitem, Projet *projet)
 /* Description : Lance la fenêtre permettant d'ajouter une section carrée.
  * Paramètres : GtkMenuItem *menuitem : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -611,8 +601,7 @@ G_MODULE_EXPORT void EF_gtk_sections_ajout_carree(
 }
 
 
-G_MODULE_EXPORT void EF_gtk_sections_ajout_circulaire(
-  GtkMenuItem *menuitem __attribute__((unused)), Projet *projet)
+void EF_gtk_sections_ajout_circulaire(GtkMenuItem *menuitem, Projet *projet)
 /* Description : Lance la fenêtre permettant d'ajouter une section circulaire.
  * Paramètres : GtkMenuItem *menuitem : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -628,8 +617,7 @@ G_MODULE_EXPORT void EF_gtk_sections_ajout_circulaire(
 }
 
 
-G_MODULE_EXPORT void EF_gtk_sections_edit_clicked(GtkWidget *widget  __attribute__((unused)),
-  Projet *projet)
+void EF_gtk_sections_edit_clicked(GtkWidget *widget, Projet *projet)
 /* Description : Edite les sections sélectionnées.
  * Paramètres : GtkToolButton *toolbutton : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -697,8 +685,7 @@ G_MODULE_EXPORT void EF_gtk_sections_edit_clicked(GtkWidget *widget  __attribute
 }
 
 
-G_MODULE_EXPORT gboolean EF_gtk_sections_double_clicked(GtkWidget *widget, GdkEvent *event,
-  Projet *projet)
+gboolean EF_gtk_sections_double_clicked(GtkWidget *widget, GdkEvent *event, Projet *projet)
 /* Description : Lance la fenêtre d'édition de la section sélectionnée en cas de double-clique
  *               dans le tree-view.
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
@@ -723,7 +710,7 @@ G_MODULE_EXPORT gboolean EF_gtk_sections_double_clicked(GtkWidget *widget, GdkEv
 }
 
 
-G_MODULE_EXPORT void EF_gtk_sections(Projet *projet)
+void EF_gtk_sections(Projet *projet)
 /* Description : Création de la fenêtre permettant d'afficher les sections sous forme d'un
  *               tableau.
  * Paramètres : Projet *projet : la variable projet.

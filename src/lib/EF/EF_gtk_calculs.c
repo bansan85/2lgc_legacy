@@ -33,8 +33,7 @@
 #include "EF_calculs.h"
 #include "EF_verif.h"
 
-G_MODULE_EXPORT void EF_gtk_calculs_calculer(GtkMenuItem *menuitem __attribute__((unused)),
-  Projet *projet)
+void EF_gtk_calculs_calculer(GtkMenuItem *menuitem, Projet *projet)
 /* Description : Exécute le calcul de la structure.
  * Paramètres : GtkMenuItem *menuitem : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.

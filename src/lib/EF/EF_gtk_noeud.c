@@ -36,8 +36,7 @@
 #include "EF_calculs.h"
 #include "1992_1_1_barres.h"
 
-G_MODULE_EXPORT void EF_gtk_noeud_fermer(GtkButton *button __attribute__((unused)),
-  Projet *projet)
+void EF_gtk_noeud_fermer(GtkButton *button, Projet *projet)
 /* Description : Ferme la fenêtre sans effectuer les modifications.
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -53,8 +52,7 @@ G_MODULE_EXPORT void EF_gtk_noeud_fermer(GtkButton *button __attribute__((unused
 }
 
 
-G_MODULE_EXPORT void EF_gtk_noeud_ajouter(GtkButton *button __attribute__((unused)),
-  Projet *projet)
+void EF_gtk_noeud_ajouter(GtkButton *button, Projet *projet)
 /* Description : Ajoute un nouveau noeud libre ou intermédiaire en fonction de l'onglet en cours
  *               d'affichage.
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
@@ -85,8 +83,7 @@ G_MODULE_EXPORT void EF_gtk_noeud_ajouter(GtkButton *button __attribute__((unuse
 }
 
 
-G_MODULE_EXPORT void EF_gtk_noeud_supprimer(GtkButton *button __attribute__((unused)),
-  Projet *projet)
+void EF_gtk_noeud_supprimer(GtkButton *button, Projet *projet)
 /* Description : Supprime le noeud sélectionné en fonction de l'onglet en cours d'affichage.
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -134,8 +131,7 @@ G_MODULE_EXPORT void EF_gtk_noeud_supprimer(GtkButton *button __attribute__((unu
 }
 
 
-G_MODULE_EXPORT gboolean EF_gtk_noeud_treeview_key_press(GtkTreeView *treeview, GdkEvent *event,
-  Projet *projet)
+gboolean EF_gtk_noeud_treeview_key_press(GtkTreeView *treeview, GdkEvent *event, Projet *projet)
 /* Description : Supprime un noeud sans dépendance si la touche SUPPR est appuyée.
  * Paramètres : GtkTreeView *treeview : composant à l'origine de l'évènement,
  *            : GdkEvent *event : Caractéristique de l'évènement,
@@ -180,7 +176,7 @@ G_MODULE_EXPORT gboolean EF_gtk_noeud_treeview_key_press(GtkTreeView *treeview, 
 }
 
 
-G_MODULE_EXPORT void EF_noeuds_set_supprimer_visible(gboolean select, Projet *projet)
+void EF_noeuds_set_supprimer_visible(gboolean select, Projet *projet)
 /* Description : En fonction de la sélection, active ou désactive les boutons supprimer.
  * Paramètres : gboolean select : si le changement survient via un changement de la sélection,
  *                              : sinon, par un changement de page.
@@ -261,8 +257,7 @@ G_MODULE_EXPORT void EF_noeuds_set_supprimer_visible(gboolean select, Projet *pr
 }
 
 
-G_MODULE_EXPORT void EF_gtk_noeuds_boutton_supprimer_menu(
-  GtkButton *widget __attribute__((unused)), Projet *projet)
+void EF_gtk_noeuds_boutton_supprimer_menu(GtkButton *widget, Projet *projet)
 /* Description : Affiche la liste des dépendances dans le menu lorsqu'on clique sur le bouton
  * Paramètres : GtkButton *widget : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -333,8 +328,7 @@ G_MODULE_EXPORT void EF_gtk_noeuds_boutton_supprimer_menu(
 }
 
 
-G_MODULE_EXPORT void EF_noeuds_treeview_select_changed(
-  GtkTreeSelection *treeselection __attribute__((unused)), Projet *projet)
+void EF_noeuds_treeview_select_changed( GtkTreeSelection *treeselection, Projet *projet)
 /* Description : En fonction de la sélection, active ou désactive le bouton supprimer.
  * Paramètres : GtkTreeSelection *treeselection : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -349,9 +343,8 @@ G_MODULE_EXPORT void EF_noeuds_treeview_select_changed(
 }
 
 
-G_MODULE_EXPORT void EF_gtk_noeuds_notebook_change(
-  GtkNotebook *notebook __attribute__((unused)), GtkWidget *page __attribute__((unused)),
-  guint page_num __attribute__((unused)), Projet *projet)
+void EF_gtk_noeuds_notebook_change(GtkNotebook *notebook, GtkWidget *page, guint page_num,
+  Projet *projet)
 /* Description : Le changement de la page en cours nécessite l'actualisation de la disponibilité
  *               du bouton supprimer.
  * Paramètres : GtkNotebook *notebook : le composant notebook,
@@ -366,8 +359,8 @@ G_MODULE_EXPORT void EF_gtk_noeuds_notebook_change(
 }
 
 
-G_MODULE_EXPORT void EF_gtk_noeud_edit_pos_abs(GtkCellRendererText *cell, gchar *path_string,
-  gchar *new_text, Projet *projet)
+void EF_gtk_noeud_edit_pos_abs(GtkCellRendererText *cell, gchar *path_string, gchar *new_text,
+  Projet *projet)
 /* Description : Changement de la position d'un noeud.
  * Paramètres : GtkCellRendererText *cell : cellule en cours,
  *            : gchar *path_string : path de la ligne en cours,
@@ -438,8 +431,8 @@ G_MODULE_EXPORT void EF_gtk_noeud_edit_pos_abs(GtkCellRendererText *cell, gchar 
 }
 
 
-G_MODULE_EXPORT void EF_gtk_noeud_edit_pos_relat(GtkCellRendererText *cell, gchar *path_string,
-  gchar *new_text, Projet *projet)
+void EF_gtk_noeud_edit_pos_relat(GtkCellRendererText *cell, gchar *path_string, gchar *new_text,
+  Projet *projet)
 /* Description : Changement de la position d'un noeud de type barre.
  * Paramètres : GtkCellRendererText *cell : cellule en cours,
  *            : gchar *path_string : path de la ligne en cours,
@@ -496,9 +489,8 @@ G_MODULE_EXPORT void EF_gtk_noeud_edit_pos_relat(GtkCellRendererText *cell, gcha
 }
 
 
-G_MODULE_EXPORT void EF_gtk_noeud_edit_noeud_relatif(
-  GtkCellRendererText *cell __attribute__((unused)), gchar *path_string, gchar *new_text,
-  Projet *projet)
+void EF_gtk_noeud_edit_noeud_relatif(GtkCellRendererText *cell, gchar *path_string,
+  gchar *new_text, Projet *projet)
 /* Description : Changement du noeud relatif.
  * Paramètres : GtkCellRendererText *cell : cellule en cours,
  *            : gchar *path_string : path de la ligne en cours,
@@ -550,8 +542,8 @@ G_MODULE_EXPORT void EF_gtk_noeud_edit_noeud_relatif(
 }
 
 
-void EF_gtk_render_actualise_position(GtkTreeViewColumn *tree_column __attribute__((unused)),
-  GtkCellRenderer *cell, GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data)
+void EF_gtk_render_actualise_position(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
+  GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data)
 /* Description : Personnalise l'affichage des nombres de type double dans un treeview.
  * Paramètres : GtkTreeViewColumn *tree_column : la colonne,
  *            : GtkCellRenderer *cell : la cellule,
@@ -592,8 +584,7 @@ void EF_gtk_render_actualise_position(GtkTreeViewColumn *tree_column __attribute
 }
 
 
-G_MODULE_EXPORT void EF_gtk_noeud_edit_noeud_appui(
-  GtkCellRendererText *cell __attribute__((unused)), const gchar *path_string,
+void EF_gtk_noeud_edit_noeud_appui(GtkCellRendererText *cell, const gchar *path_string,
   const gchar *new_text, Projet *projet)
 /* Description : Changement du type d'appui d'un noeud.
  * Paramètres : GtkCellRendererText *cell : cellule en cours,
@@ -650,8 +641,7 @@ G_MODULE_EXPORT void EF_gtk_noeud_edit_noeud_appui(
 }
 
 
-G_MODULE_EXPORT void EF_gtk_noeud_edit_noeud_barre_barre(
-  GtkCellRendererText *cell __attribute__((unused)), const gchar *path_string,
+void EF_gtk_noeud_edit_noeud_barre_barre(GtkCellRendererText *cell, const gchar *path_string,
   const gchar *new_text, Projet *projet)
 /* Description : Changement de barre d'un noeud intermédiaire.
  * Paramètres : GtkCellRendererText *cell : cellule en cours,
@@ -734,8 +724,7 @@ G_MODULE_EXPORT void EF_gtk_noeud_edit_noeud_barre_barre(
 }
 
 
-G_MODULE_EXPORT gboolean EF_gtk_noeuds_window_key_press(
-  GtkWidget *widget __attribute__((unused)), GdkEvent *event, Projet *projet)
+gboolean EF_gtk_noeuds_window_key_press(GtkWidget *widget, GdkEvent *event, Projet *projet)
 /* Description : Gestion des touches de l'ensemble des composants de la fenêtre.
  * Paramètres : GtkWidget *widget : composant à l'origine de l'évènement,
  *            : GdkEvent *event : description de la touche pressée,
@@ -759,8 +748,7 @@ G_MODULE_EXPORT gboolean EF_gtk_noeuds_window_key_press(
 }
 
 
-G_MODULE_EXPORT void EF_gtk_noeuds_window_destroy(GtkWidget *object __attribute__((unused)),
-  Projet *projet)
+void EF_gtk_noeuds_window_destroy(GtkWidget *object, Projet *projet)
 /* Description : met projet->list_gtk.ef_noeud.builder à NULL quand la fenêtre se ferme
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -777,7 +765,7 @@ G_MODULE_EXPORT void EF_gtk_noeuds_window_destroy(GtkWidget *object __attribute_
 }
 
 
-G_MODULE_EXPORT void EF_gtk_noeud(Projet *projet)
+void EF_gtk_noeud(Projet *projet)
 /* Description : Affichage de la fenêtre permettant de créer ou modifier des noeuds.
  * Paramètres : Projet *projet : la variable projet.
  * Valeur renvoyée : Aucune.

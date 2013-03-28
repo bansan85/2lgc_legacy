@@ -30,8 +30,7 @@
 #include "common_erreurs.h"
 #include "common_gtk.h"
 
-G_MODULE_EXPORT void EF_gtk_rapport_fermer(GtkButton *button __attribute__((unused)),
-  Projet *projet)
+void EF_gtk_rapport_fermer(GtkButton *button, Projet *projet)
 /* Description : Ferme la fenêtre.
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -47,8 +46,7 @@ G_MODULE_EXPORT void EF_gtk_rapport_fermer(GtkButton *button __attribute__((unus
 }
 
 
-G_MODULE_EXPORT void EF_gtk_rapport_window_destroy(GtkWidget *object __attribute__((unused)),
-  Projet *projet)
+void EF_gtk_rapport_window_destroy(GtkWidget *object, Projet *projet)
 /* Description : met projet->list_gtk.ef_rapport.builder à NULL quand la fenêtre se ferme,
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -64,8 +62,8 @@ G_MODULE_EXPORT void EF_gtk_rapport_window_destroy(GtkWidget *object __attribute
     return;
 }
 
-G_MODULE_EXPORT gboolean EF_gtk_rapport_window_key_press(
-  GtkWidget *widget __attribute__((unused)), GdkEvent *event, Projet *projet)
+
+gboolean EF_gtk_rapport_window_key_press(GtkWidget *widget, GdkEvent *event, Projet *projet)
 /* Description : Ferme la fenêtre si la touche ECHAP est pressée.
  * Paramètres : GtkWidget *widget : composant à l'origine de l'évènement,
  *            : GdkEvent *event : Caractéristique de l'évènement,

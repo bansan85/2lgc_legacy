@@ -35,8 +35,7 @@
 #include "1992_1_1_barres.h"
 #include "1992_1_1_materiaux.h"
 
-G_MODULE_EXPORT void EF_gtk_barres_add_annuler_clicked(
-  GtkButton *button __attribute__((unused)), Projet *projet)
+void EF_gtk_barres_add_annuler_clicked(GtkButton *button, Projet *projet)
 /* Description : Ferme la fenêtre sans effectuer les modifications.
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -52,8 +51,7 @@ G_MODULE_EXPORT void EF_gtk_barres_add_annuler_clicked(
 }
 
 
-G_MODULE_EXPORT void EF_gtk_barres_add_add_clicked(GtkButton *button __attribute__((unused)),
-  Projet *projet)
+void EF_gtk_barres_add_add_clicked(GtkButton *button, Projet *projet)
 /* Description : Ajoute une nouvelle barre.
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -127,7 +125,7 @@ G_MODULE_EXPORT void EF_gtk_barres_add_add_clicked(GtkButton *button __attribute
 }
 
 
-G_MODULE_EXPORT void EF_gtk_barres_add_window_destroy(GtkWidget *object __attribute__((unused)), Projet *projet)
+void EF_gtk_barres_add_window_destroy(GtkWidget *object, Projet *projet)
 /* Description : met projet->list_gtk.ef_barres.builder_add à NULL quand la fenêtre se ferme.
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -143,8 +141,7 @@ G_MODULE_EXPORT void EF_gtk_barres_add_window_destroy(GtkWidget *object __attrib
 }
 
 
-G_MODULE_EXPORT gboolean EF_gtk_barres_add_window_key_press(
-  GtkWidget *widget __attribute__((unused)), GdkEvent *event, Projet *projet)
+gboolean EF_gtk_barres_add_window_key_press(GtkWidget *widget, GdkEvent *event, Projet *projet)
 /* Description : Ferme la fenêtre si la touche ECHAP est pressée.
  * Paramètres : GtkWidget *widget : composant à l'origine de l'évènement,
  *            : GdkEvent *event : Caractéristique de l'évènement,
@@ -168,8 +165,7 @@ G_MODULE_EXPORT gboolean EF_gtk_barres_add_window_key_press(
 }
 
 
-G_MODULE_EXPORT void EF_gtk_barres_add_check_add(GtkWidget *widget __attribute__((unused)),
-  Projet *projet)
+void EF_gtk_barres_add_check_add(GtkWidget *widget, Projet *projet)
 /* Description : Vérifie à chaque modification d'un champ si la fenêtre possède toutes les
  *               informations correctes pour créer une barre et active / désactive en fonction
  *               le bouton ajouter.
@@ -224,8 +220,7 @@ G_MODULE_EXPORT void EF_gtk_barres_add_check_add(GtkWidget *widget __attribute__
 }
 
 
-G_MODULE_EXPORT void EF_gtk_barres_ajouter(GtkButton *button __attribute__((unused)),
-  Projet *projet)
+void EF_gtk_barres_ajouter(GtkButton *button, Projet *projet)
 /* Description : Création de la fenêtre permettant d'ajouter des barres.
  * Paramètres : GtkWidget *widget : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.

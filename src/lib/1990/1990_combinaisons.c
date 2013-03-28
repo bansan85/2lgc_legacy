@@ -744,7 +744,7 @@ gboolean _1990_combinaisons_genere_or(Projet *projet, Niveau_Groupe *niveau, Gro
 }
 
 
-G_MODULE_EXPORT gboolean _1990_combinaisons_init(Projet *projet)
+gboolean _1990_combinaisons_init(Projet *projet)
 /* Description : Initialise la mémoire pour les combinaisons à l'ELU et l'ELS.
  * Paramètres : Projet *projet : la variable projet.
  * Valeur renvoyée :
@@ -812,7 +812,7 @@ void _1990_combinaisons_free_1(void *data)
 }
 
 
-G_MODULE_EXPORT gboolean _1990_combinaisons_free(Projet *projet)
+gboolean _1990_combinaisons_free(Projet *projet)
 /* Description : libère l'ensemble des combinaisons à l'ELU et l'ELS sans libérer la liste.
  * Paramètres : Projet *projet : la variable projet.
  * Valeur renvoyée :
@@ -877,7 +877,7 @@ G_MODULE_EXPORT gboolean _1990_combinaisons_free(Projet *projet)
 }
 
 
-G_MODULE_EXPORT gboolean _1990_combinaisons_genere(Projet *projet)
+gboolean _1990_combinaisons_genere(Projet *projet)
 /* Description : Génère l'ensemble des combinaisons et pondérations du projet.
  * Paramètres : Projet *projet : la variable projet.
  * Valeur renvoyée :

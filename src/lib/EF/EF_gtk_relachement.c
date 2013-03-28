@@ -35,8 +35,7 @@
 #include "EF_relachement.h"
 #include "1992_1_1_barres.h"
 
-G_MODULE_EXPORT void EF_gtk_relachements_fermer(GtkButton *button __attribute__((unused)),
-  Projet *projet)
+void EF_gtk_relachements_fermer(GtkButton *button, Projet *projet)
 /* Description : Ferme la fenêtre.
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -52,8 +51,7 @@ G_MODULE_EXPORT void EF_gtk_relachements_fermer(GtkButton *button __attribute__(
 }
 
 
-G_MODULE_EXPORT void EF_gtk_relachements_window_destroy(GtkWidget *object __attribute__((unused)),
-  Projet *projet)
+void EF_gtk_relachements_window_destroy(GtkWidget *object, Projet *projet)
 /* Description : met projet->list_gtk.ef_relachements.builder à NULL quand la fenêtre se ferme,
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -70,8 +68,8 @@ G_MODULE_EXPORT void EF_gtk_relachements_window_destroy(GtkWidget *object __attr
 }
 
 
-G_MODULE_EXPORT gboolean EF_gtk_relachements_window_key_press(
-  GtkWidget *widget __attribute__((unused)), GdkEvent *event, Projet *projet)
+gboolean EF_gtk_relachements_window_key_press(GtkWidget *widget, GdkEvent *event,
+  Projet *projet)
 /* Description : Ferme la fenêtre si la touche ECHAP est pressée.
  * Paramètres : GtkWidget *widget : composant à l'origine de l'évènement,
  *            : GdkEvent *event : Caractéristique de l'évènement,
@@ -95,8 +93,7 @@ G_MODULE_EXPORT gboolean EF_gtk_relachements_window_key_press(
 }
 
 
-G_MODULE_EXPORT void EF_gtk_relachements_select_changed(
-  GtkTreeSelection *treeselection __attribute__((unused)), Projet *projet)
+void EF_gtk_relachements_select_changed(GtkTreeSelection *treeselection, Projet *projet)
 /* Description : En fonction de la sélection, active ou désactive le bouton supprimer.
  * Paramètres : GtkTreeSelection *treeselection : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -275,8 +272,7 @@ G_MODULE_EXPORT void EF_gtk_relachements_select_changed(
 }
 
 
-G_MODULE_EXPORT void EF_gtk_relachements_boutton_supprimer_menu(
-  GtkButton *widget __attribute__((unused)), Projet *projet)
+void EF_gtk_relachements_boutton_supprimer_menu(GtkButton *widget, Projet *projet)
 /* Description : Affiche la liste des dépendances dans le menu lorsqu'on clique sur le bouton
  * Paramètres : GtkButton *widget : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -326,9 +322,8 @@ G_MODULE_EXPORT void EF_gtk_relachements_boutton_supprimer_menu(
 }
 
 
-G_MODULE_EXPORT void EF_gtk_relachements_edit_nom(
-  GtkCellRendererText *cell __attribute__((unused)), gchar *path_string, gchar *new_text,
-  Projet *projet)
+void EF_gtk_relachements_edit_nom(GtkCellRendererText *cell, gchar *path_string,
+  gchar *new_text, Projet *projet)
 /* Description : Modification du nom d'un relâchement.
  * Paramètres : GtkCellRendererText *cell : cellule en cours,
  *            : gchar *path_string : path de la ligne en cours,
@@ -369,8 +364,7 @@ G_MODULE_EXPORT void EF_gtk_relachements_edit_nom(
 }
 
 
-G_MODULE_EXPORT void EF_gtk_relachements_supprimer_direct(
-  GtkButton *button __attribute__((unused)), Projet *projet)
+void EF_gtk_relachements_supprimer_direct(GtkButton *button, Projet *projet)
 /* Description : Supprime le relâchement sélectionné dans le treeview.
  * Paramètres : GtkWidget *widget : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -401,8 +395,8 @@ G_MODULE_EXPORT void EF_gtk_relachements_supprimer_direct(
 }
 
 
-G_MODULE_EXPORT gboolean EF_gtk_relachements_treeview_key_press(
-  GtkWidget *widget __attribute__((unused)), GdkEvent *event, Projet *projet)
+gboolean EF_gtk_relachements_treeview_key_press(GtkWidget *widget, GdkEvent *event,
+  Projet *projet)
 /* Description : Supprime un relâchement sans dépendance si la touche SUPPR est appuyée.
  * Paramètres : GtkWidget *widget : composant à l'origine de l'évènement,
  *            : GdkEvent *event : Caractéristique de l'évènement,
@@ -446,8 +440,7 @@ G_MODULE_EXPORT gboolean EF_gtk_relachements_treeview_key_press(
 }
 
 
-G_MODULE_EXPORT void EF_gtk_relachements_supprimer_menu_barres(
-  GtkButton *button __attribute__((unused)), Projet *projet)
+void EF_gtk_relachements_supprimer_menu_barres(GtkButton *button, Projet *projet)
 /* Description : Supprime le relachement sélectionné dans le treeview, y compris les barres
  *               l'utilisant.
  * Paramètres : GtkWidget *widget : composant à l'origine de l'évènement,
@@ -479,8 +472,7 @@ G_MODULE_EXPORT void EF_gtk_relachements_supprimer_menu_barres(
 }
 
 
-G_MODULE_EXPORT void EF_gtk_relachements_ajouter(GtkButton *button __attribute__((unused)),
-  Projet *projet)
+void EF_gtk_relachements_ajouter(GtkButton *button, Projet *projet)
 /* Description : Ajoute un nouveau relâchement vierge au treeview
  *               d'affichage.
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
@@ -515,8 +507,8 @@ G_MODULE_EXPORT void EF_gtk_relachements_ajouter(GtkButton *button __attribute__
 }
 
 
-G_MODULE_EXPORT void EF_gtk_relachements_edit_clicked(GtkCellRendererText *cell,
-  gchar *path_string, gchar *new_text, Projet *projet)
+void EF_gtk_relachements_edit_clicked(GtkCellRendererText *cell, gchar *path_string,
+  gchar *new_text, Projet *projet)
 /* Description : Edite le relâchement sélectionné.
  * Paramètres : GtkCellRendererText *cell : cellule en cours,
  *            : gchar *path_string : path de la ligne en cours,
@@ -717,8 +709,8 @@ G_MODULE_EXPORT void EF_gtk_relachements_edit_clicked(GtkCellRendererText *cell,
 }
 
 
-G_MODULE_EXPORT void EF_gtk_relachements_edit_type(GtkCellRendererText *cell,
-  gchar *path_string, gchar *new_text, Projet *projet)
+void EF_gtk_relachements_edit_type(GtkCellRendererText *cell, gchar *path_string,
+  gchar *new_text, Projet *projet)
 /* Description : Edite le type du relâchement sélectionné.
  * Paramètres : GtkCellRendererText *cell : cellule en cours,
  *            : gchar *path_string : path de la ligne en cours,
@@ -803,7 +795,7 @@ G_MODULE_EXPORT void EF_gtk_relachements_edit_type(GtkCellRendererText *cell,
 }
 
 
-G_MODULE_EXPORT void EF_gtk_relachement(Projet *projet)
+void EF_gtk_relachement(Projet *projet)
 /* Description : Création de la fenêtre permettant d'afficher et d'éditer les relâchements sous
  *               forme d'un tableau.
  * Paramètres : Projet *projet : la variable projet.

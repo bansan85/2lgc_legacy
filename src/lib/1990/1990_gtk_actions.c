@@ -46,7 +46,7 @@ void _1990_gtk_menu_edit_charge_clicked(GtkWidget *toolbutton, Projet *projet);
 const GtkTargetEntry drag_targets_actions[] = { {(gchar*)PACKAGE"1_SAME_PROC", GTK_TARGET_SAME_APP, 0}}; 
 
 
-G_MODULE_EXPORT gboolean _1990_gtk_actions_window_key_press(GtkWidget *widget __attribute__((unused)), GdkEvent *event, Projet *projet)
+gboolean _1990_gtk_actions_window_key_press(GtkWidget *widget, GdkEvent *event, Projet *projet)
 /* Description : Gestion des touches de l'ensemble des composants de la fenêtre.
  * Paramètres : GtkWidget *widget : composant à l'origine de l'évènement,
  *            : GdkEvent *event : description de la touche pressée,
@@ -70,7 +70,7 @@ G_MODULE_EXPORT gboolean _1990_gtk_actions_window_key_press(GtkWidget *widget __
 }
 
 
-G_MODULE_EXPORT void _1990_gtk_actions_window_destroy(GtkWidget *object __attribute__((unused)), Projet *projet)
+void _1990_gtk_actions_window_destroy(GtkWidget *object, Projet *projet)
 /* Description : Initialise les variables permettant de définir que la fenêtre de gestion des
  *               actions est fermée et libère la mémoire.
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
@@ -95,8 +95,7 @@ G_MODULE_EXPORT void _1990_gtk_actions_window_destroy(GtkWidget *object __attrib
 /*********************** Tout ce qui concerne les actions **********************/
 
 
-G_MODULE_EXPORT void _1990_gtk_actions_cursor_changed(
-  GtkTreeView *tree_view __attribute__((unused)), Projet *projet)
+void _1990_gtk_actions_cursor_changed(GtkTreeView *tree_view, Projet *projet)
 /* Description : Evènement lorsqu'il y a un changement de ligne sélectionnée dans la liste
  *               des actions.
  * Paramètres : GtkTreeView *tree_view : composant tree_view à l'origine de l'évènement,
@@ -169,8 +168,8 @@ G_MODULE_EXPORT void _1990_gtk_actions_cursor_changed(
 }
 
 
-G_MODULE_EXPORT gboolean _1990_gtk_actions_tree_view_key_press_event(GtkWidget *widget,
-  GdkEvent *event, Projet *projet)
+gboolean _1990_gtk_actions_tree_view_key_press_event(GtkWidget *widget, GdkEvent *event,
+  Projet *projet)
 /* Description : Evènement lorsqu'il y a un changement de sélection dans la liste des actions.
  * Paramètres : GtkTreeView *tree_view : composant tree_view à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -192,9 +191,8 @@ G_MODULE_EXPORT gboolean _1990_gtk_actions_tree_view_key_press_event(GtkWidget *
 }
 
 
-G_MODULE_EXPORT gboolean _1990_gtk_actions_tree_view_drag(GtkWidget *widget,
-  GdkDragContext *drag_context __attribute__((unused)), gint x, gint y,
-  guint tim __attribute__((unused)), Projet *projet)
+gboolean _1990_gtk_actions_tree_view_drag(GtkWidget *widget, GdkDragContext *drag_context,
+  gint x, gint y, guint tim, Projet *projet)
 /* Description : Change d'action la charge sélectionnée.
  * Paramètres : GtkWidget *button : composant ayant réalisé l'évènement,
  *            : GdkDragContext *drag_context : inutile,
@@ -275,8 +273,7 @@ G_MODULE_EXPORT gboolean _1990_gtk_actions_tree_view_drag(GtkWidget *widget,
 }
 
 
-G_MODULE_EXPORT void _1990_gtk_actions_select_changed(
-  GtkTreeSelection *treeselection __attribute__((unused)), Projet *projet)
+void _1990_gtk_actions_select_changed(GtkTreeSelection *treeselection, Projet *projet)
 /* Description : Réajuste automatiquement la propriété sensitive des composants d'édition en
  *               fonction de la sélection dans les tree-views.
  * Paramètres : GtkTreeSelection *treeselection : composant à l'origine de l'évènement,
@@ -319,9 +316,8 @@ G_MODULE_EXPORT void _1990_gtk_actions_select_changed(
 }
 
 
-G_MODULE_EXPORT void _1990_gtk_actions_description_edited(
-  GtkCellRendererText *cell __attribute__((unused)), gchar *path_string, gchar *new_text,
-  Projet *projet)
+void _1990_gtk_actions_description_edited(GtkCellRendererText *cell, gchar *path_string,
+  gchar *new_text, Projet *projet)
 /* Description : Pour éditer le nom des actions via la fenêtre d'actions.
  * Paramètres : GtkCellRendererText *cell : la cellule éditée,
  *            : gchar *path_string : chemin vers la cellule,
@@ -350,8 +346,7 @@ G_MODULE_EXPORT void _1990_gtk_actions_description_edited(
 }
 
 
-G_MODULE_EXPORT void _1990_gtk_actions_type_edited(
-  GtkCellRendererText *cell __attribute__((unused)), const gchar *path_string, 
+void _1990_gtk_actions_type_edited(GtkCellRendererText *cell, const gchar *path_string,
   const gchar *new_text, Projet *projet)
 /* Description : Change le type (psi0, psi1 et psi2 automatiquement mis à jour) d'une action.
  * Paramètres : GtkCellRendererText *cell : cellule en cours,
@@ -387,8 +382,8 @@ G_MODULE_EXPORT void _1990_gtk_actions_type_edited(
 }
 
 
-G_MODULE_EXPORT void _1990_gtk_tree_view_actions_psi_edited(GtkCellRendererText *cell,
-  gchar *path_string, gchar *new_text, Projet *projet)
+void _1990_gtk_tree_view_actions_psi_edited(GtkCellRendererText *cell, gchar *path_string,
+  gchar *new_text, Projet *projet)
 /* Description : Changement d'un coefficient psi d'une action.
  * Paramètres : GtkCellRendererText *cell : cellule en cours,
  *            : gchar *path_string : path de la ligne en cours,
@@ -426,8 +421,7 @@ G_MODULE_EXPORT void _1990_gtk_tree_view_actions_psi_edited(GtkCellRendererText 
 }
 
 
-G_MODULE_EXPORT void _1990_gtk_menu_nouvelle_action_activate(GtkMenuItem *menuitem,
-  Projet *projet)
+void _1990_gtk_menu_nouvelle_action_activate(GtkMenuItem *menuitem, Projet *projet)
 /* Description : Ajout d'une nouvelle action depuis le menu de la barre d'outils.
  * Paramètres : GtkMenuItem *menuitem : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -473,8 +467,7 @@ G_MODULE_EXPORT void _1990_gtk_menu_nouvelle_action_activate(GtkMenuItem *menuit
 }
 
 
-G_MODULE_EXPORT void _1990_gtk_menu_suppr_action_activate(
-  GtkWidget *toolbutton __attribute__((unused)), Projet *projet)
+void _1990_gtk_menu_suppr_action_activate(GtkWidget *toolbutton, Projet *projet)
 /* Description : Supprimer l'action sélectionnée.
  * Paramètres : GtkToolButton *toolbutton : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -508,8 +501,8 @@ G_MODULE_EXPORT void _1990_gtk_menu_suppr_action_activate(
 /*********************** Tout ce qui concerne les charges **********************/
 
 
-G_MODULE_EXPORT gboolean _1990_gtk_actions_charge_key_press_event(GtkWidget *widget,
-  GdkEvent *event, Projet *projet)
+gboolean _1990_gtk_actions_charge_key_press_event(GtkWidget *widget, GdkEvent *event,
+  Projet *projet)
 /* Description : Gestion des touches du composant treeview charge.
  * Paramètres : GtkWidget *widget : composant tree_view à l'origine de l'évènement,
  *            : GdkEvent *event : description de la touche pressée,
@@ -533,8 +526,8 @@ G_MODULE_EXPORT gboolean _1990_gtk_actions_charge_key_press_event(GtkWidget *wid
 }
 
 
-G_MODULE_EXPORT gboolean _1990_gtk_actions_charge_double_clicked(GtkWidget *widget,
-  GdkEvent *event, Projet *projet)
+gboolean _1990_gtk_actions_charge_double_clicked(GtkWidget *widget, GdkEvent *event,
+  Projet *projet)
 /* Description : Lance la fenêtre d'édition de la charge sélectionnée en cas de double-clique
  *               dans le tree-view charge.
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
@@ -559,9 +552,8 @@ G_MODULE_EXPORT gboolean _1990_gtk_actions_charge_double_clicked(GtkWidget *widg
 }
 
 
-G_MODULE_EXPORT void _1990_gtk_actions_tree_view_drag_begin(
-  GtkWidget *widget __attribute__((unused)), 
-  GdkDragContext *drag_context __attribute__((unused)), void *data __attribute__((unused)))
+void _1990_gtk_actions_tree_view_drag_begin(GtkWidget *widget, GdkDragContext *drag_context,
+  void *data)
 /* Description : Évènement "drag-begin" nécessaire au treeview charge pour que la fonction DnD
  *               marche.
  * Paramètres : GtkWidget *widget : le composant à l'origine de l'évènement,
@@ -574,9 +566,8 @@ G_MODULE_EXPORT void _1990_gtk_actions_tree_view_drag_begin(
 }
 
 
-G_MODULE_EXPORT void _1990_gtk_tree_view_charges_description_edited(
-  GtkCellRendererText *cell __attribute__((unused)), gchar *path_string, gchar *new_text,
-  Projet *projet)
+void _1990_gtk_tree_view_charges_description_edited(GtkCellRendererText *cell,
+  gchar *path_string, gchar *new_text, Projet *projet)
 /* Description : Pour éditer le nom des charges via la fenêtre d'actions.
  * Paramètres : GtkCellRendererText *cell : la cellule éditée,
  *            : gchar *path_string : chemin vers la cellule,
@@ -613,8 +604,7 @@ G_MODULE_EXPORT void _1990_gtk_tree_view_charges_description_edited(
 }
 
 
-G_MODULE_EXPORT void _1990_gtk_menu_edit_charge_clicked(
-  GtkWidget *toolbutton __attribute__((unused)), Projet *projet)
+void _1990_gtk_menu_edit_charge_clicked(GtkWidget *toolbutton, Projet *projet)
 /* Description : Edite les charges sélectionnées.
  * Paramètres : GtkToolButton *toolbutton : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -681,8 +671,7 @@ G_MODULE_EXPORT void _1990_gtk_menu_edit_charge_clicked(
 }
 
 
-G_MODULE_EXPORT void _1990_gtk_menu_suppr_charge_clicked(
-  GtkWidget *toolbutton __attribute__((unused)), Projet *projet)
+void _1990_gtk_menu_suppr_charge_clicked(GtkWidget *toolbutton, Projet *projet)
 /* Description : Supprimer les actions sélectionnées.
  * Paramètres : GtkToolButton *toolbutton : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -735,7 +724,7 @@ G_MODULE_EXPORT void _1990_gtk_menu_suppr_charge_clicked(
 /*********************** Bouton de fermeture de la fenêtre **********************/
 
 
-G_MODULE_EXPORT void _1990_gtk_actions_window_button_close(GtkButton *button __attribute__((unused)), Projet *projet)
+void _1990_gtk_actions_window_button_close(GtkButton *button, Projet *projet)
 /* Description : Supprimer les actions sélectionnées.
  * Paramètres : GtkToolButton *toolbutton : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -754,8 +743,7 @@ G_MODULE_EXPORT void _1990_gtk_actions_window_button_close(GtkButton *button __a
 /*********************** Fonction permettant de créer les charges **********************/
 
 
-void _1990_gtk_menu_nouvelle_charge_nodale_activate(
-  GtkMenuItem *menuitem __attribute__((unused)), Projet* projet)
+void _1990_gtk_menu_nouvelle_charge_nodale_activate(GtkMenuItem *menuitem, Projet* projet)
 /* Description : Ouvre la fenêtre permettant d'ajouter une charge nodale.
  * Paramètres : GtkMenuItem *menuitem : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -779,8 +767,8 @@ void _1990_gtk_menu_nouvelle_charge_nodale_activate(
 }
 
 
-void _1990_gtk_menu_nouvelle_charge_barre_ponctuelle_activate(
-  GtkMenuItem *menuitem __attribute__((unused)), Projet* projet)
+void _1990_gtk_menu_nouvelle_charge_barre_ponctuelle_activate(GtkMenuItem *menuitem,
+  Projet* projet)
 /* Description : Ouvre la fenêtre permettant d'ajouter une charge ponctuelle sur barre.
  * Paramètres : GtkMenuItem *menuitem : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -806,8 +794,8 @@ void _1990_gtk_menu_nouvelle_charge_barre_ponctuelle_activate(
 }
 
 
-void _1990_gtk_menu_nouvelle_charge_barre_repartie_uniforme_activate(
-  GtkMenuItem *menuitem __attribute__((unused)), Projet* projet)
+void _1990_gtk_menu_nouvelle_charge_barre_repartie_uniforme_activate(GtkMenuItem *menuitem,
+  Projet* projet)
 /* Description : Ouvre la fenêtre permettant d'ajouter une charge répartie uniforme.
  * Paramètres : GtkMenuItem *menuitem : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
@@ -836,7 +824,7 @@ void _1990_gtk_menu_nouvelle_charge_barre_repartie_uniforme_activate(
 /**************** Fonction créant la fenêtre de gestion des actions **********************/
 
 
-G_MODULE_EXPORT void _1990_gtk_actions(Projet *projet)
+void _1990_gtk_actions(Projet *projet)
 /* Description : Création de la fenêtre Actions.
  * Paramètres : Projet *projet : la variable projet.
  * Valeur renvoyée : Aucune.

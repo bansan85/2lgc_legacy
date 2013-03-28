@@ -25,7 +25,7 @@
 
 #include "common_projet.h"
 
-void EF_gtk_barres_ajouter(GtkButton *button __attribute__((unused)), Projet *projet);
+void EF_gtk_barres_ajouter(GtkButton *button, Projet *projet);
 
 #endif
 
