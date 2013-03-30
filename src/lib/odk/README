@@ -1,0 +1,20 @@
+Mémo pour la compilation de l'exemple "odk/example/cpp/DocumentLoader" :
+(Toutes les manipulations s'effectuent dans la source de libreoffice)
+Copier le fichier config.guess dans odk/
+Copier odk/pack/copying/dk.mk dans odk/settings
+Copier solenv/inc/udkversion.mk dans odk/include
+
+En tête du Makefile ajouter :
+OO_SDK_HOME=/usr/lib64/libreoffice/sdk
+OFFICE_PROGRAM_PATH=/usr/lib64/libreoffice/program
+OO_SDK_URE_HOME=/usr/lib64/libreoffice/ure
+OO_SDK_URE_LIB_DIR=/usr/lib64/libreoffice/ure/lib
+
+En dessous de include $(SETTINGS)/dk.mk ajouter :
+CC_INCLUDES+=-I/usr/include/libreoffice
+
+Remplacer $(basename $@) par ./$(basename $@)
+
+Ensuite lancer le serveur : soffice "--accept=socket,host=localhost,port=2083;urp;StarOffice.ServiceManager"
+
+Et enfin exécuter le programme : LD_LIBRARY_PATH=/usr/lib64/libreoffice/ure/lib make DocumentLoader.run
