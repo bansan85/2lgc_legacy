@@ -120,9 +120,9 @@ gboolean common_gtk_informations_recupere_donnees(Projet *projet, char **destina
 }
 
 
-void common_gtk_informations_check(GtkWidget *object, Projet *projet)
+void common_gtk_informations_check(GtkEntryBuffer *entrybuffer, Projet *projet)
 /* Description : Vérifie si l'ensemble des éléments est correct pour activer le bouton add/edit.
- * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
+ * Paramètres : GtkEntryBuffer *entrybuffer : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
  * Valeur renvoyée : Aucune.
  */
@@ -133,6 +133,15 @@ void common_gtk_informations_check(GtkWidget *object, Projet *projet)
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.common_informations.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Informations");
+    
+    if ((GTK_IS_ENTRY_BUFFER(entrybuffer)) && ((entrybuffer == GTK_ENTRY_BUFFER(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_buffer_ville"))) || (entrybuffer == GTK_ENTRY_BUFFER(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_buffer_code_postal")))))
+    {
+/*        FILE    *villes;
+        
+        BUGMSG(villes = fopen(DATADIR"/france_villes.csv", "r"), FALSE, gettext("Le fichier '%s' est introuvable.\n"), DATADIR"/france_villes.csv");
+       huipo */
+        printf("OK\n");
+    }
     
     if (!common_gtk_informations_recupere_donnees(projet, &destinataire, &adresse, &code_postal, &ville))
         gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_button_edit")), FALSE);
@@ -150,7 +159,7 @@ void common_gtk_informations_check(GtkWidget *object, Projet *projet)
 void common_gtk_informations_entry_add_char(GtkEntryBuffer *buffer, guint position,
   gchar *chars, guint n_chars, Projet *projet)
 {
-    common_gtk_informations_check(NULL, projet);
+    common_gtk_informations_check(buffer, projet);
     return;
 }
 
@@ -158,7 +167,7 @@ void common_gtk_informations_entry_add_char(GtkEntryBuffer *buffer, guint positi
 void common_gtk_informations_entry_del_char(GtkEntryBuffer *buffer, guint position,
   guint n_chars, Projet *projet)
 {
-    common_gtk_informations_check(NULL, projet);
+    common_gtk_informations_check(buffer, projet);
     return;
 }
 
