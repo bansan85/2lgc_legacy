@@ -71,7 +71,7 @@ Projet* projet_init(Type_Pays pays)
     projet->parametres.pays = pays;
     
     BUG(common_ville_init(projet), NULL);
-    BUG(common_ville_set(projet, 30, 59), NULL);
+    BUG(common_ville_set(projet, "30", 59), NULL);
     
     //     - 1990 : la liste des actions, des groupes et des combinaisons,
     BUG(_1990_action_init(projet), NULL);

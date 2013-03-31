@@ -23,7 +23,7 @@
 #include "common_projet.h"
 
 gboolean common_ville_init(Projet *projet) __attribute__((__warn_unused_result__));
-gboolean common_ville_set(Projet *projet, int departement, int ville) __attribute__((__warn_unused_result__));
+gboolean common_ville_set(Projet *projet, char *departement, int ville) __attribute__((__warn_unused_result__));
 gboolean common_ville_free(Projet *projet) __attribute__((__warn_unused_result__));
 
 #endif
