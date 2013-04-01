@@ -664,6 +664,9 @@ typedef struct __Gtk_Common_Informations
     GtkWidget       *window;
     
     GtkListStore    *model_completion;
+    
+    char            *departement;
+    int             commune;
 } Gtk_Common_Informations;
 #endif
 
@@ -1027,12 +1030,12 @@ typedef struct __Calculs
 
 typedef struct __Adresse
 {
-    int     departement;
-    int     num_ville;
-    char    *destinataire;
-    char    *adresse;
-    int     code_postal;
-    char    *ville;
+    char            *departement;
+    int             commune;
+    char            *destinataire;
+    char            *adresse;
+    unsigned int    code_postal;
+    char            *ville;
 } Adresse;
 
 

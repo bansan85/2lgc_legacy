@@ -25,6 +25,8 @@
 
 #include "common_projet.h"
 
+void common_gtk_informations_entry_add_char(GtkEntryBuffer *buffer, guint position, gchar *chars, guint n_chars, Projet *projet);
+void common_gtk_informations_entry_del_char(GtkEntryBuffer *buffer, guint position, guint n_chars, Projet *projet);
 gboolean common_gtk_informations(Projet *projet) __attribute__((__warn_unused_result__));
 
 #endif
