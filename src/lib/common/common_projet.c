@@ -71,7 +71,6 @@ Projet* projet_init(Type_Pays pays)
     projet->parametres.pays = pays;
     
     BUG(common_ville_init(projet), NULL);
-    BUG(common_ville_set(projet, "30", 59), NULL);
     
     //     - 1990 : la liste des actions, des groupes et des combinaisons,
     BUG(_1990_action_init(projet), NULL);
@@ -111,6 +110,8 @@ Projet* projet_init(Type_Pays pays)
     projet->list_gtk.ef_resultats.builder = NULL;
     projet->list_gtk.ef_resultats.tableaux = NULL;
 #endif
+    
+    BUG(common_ville_set(projet, "30", 59), NULL);
     
     projet->calculs.c = &(projet->calculs.Common);
     cholmod_start(projet->calculs.c);

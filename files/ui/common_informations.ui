@@ -33,6 +33,25 @@
         <signal name="inserted-text" handler="common_gtk_informations_entry_add_char"/>
         <signal name="deleted-text" handler="common_gtk_informations_entry_del_char"/>
     </object>
+    <object class="GtkListStore" id="common_informations_completion_model">
+        <columns>
+            <column type="gchararray"/><!-- le code postal et la ville de façon présentable pour la liste des propositions -->
+            <column type="gchararray"/><!-- le code postal -->
+            <column type="gchararray"/><!-- la ville -->
+            <column type="gchararray"/><!-- le département -->
+            <column type="gint"/><!-- le numéro de la commune selon l'INSEE -->
+        </columns>
+    </object>
+    <object class="GtkEntryCompletion" id="common_informations_completion_code_postal">
+        <property name="model">common_informations_completion_model</property>
+        <property name="text-column">0</property>
+        <signal name="match-selected" handler="common_gtk_informations_match_selected"/>
+    </object>
+    <object class="GtkEntryCompletion" id="common_informations_completion_ville">
+        <property name="model">common_informations_completion_model</property>
+        <property name="text-column">0</property>
+        <signal name="match-selected" handler="common_gtk_informations_match_selected"/>
+    </object>
     <object id="common_informations_window" class="GtkWindow">
         <property name="visible">True</property>
         <property name="title" translatable="yes">Informations sur le projet</property>
@@ -126,6 +145,7 @@
                         <property name="visible">True</property>
                         <property name="hexpand">False</property>
                         <property name="buffer">common_informations_buffer_code_postal</property>
+                        <property name="completion">common_informations_completion_code_postal</property>
                     </object>
                     <packing>
                         <property name="left-attach">1</property>
@@ -148,6 +168,7 @@
                         <property name="visible">True</property>
                         <property name="hexpand">True</property>
                         <property name="buffer">common_informations_buffer_ville</property>
+                        <property name="completion">common_informations_completion_ville</property>
                     </object>
                     <packing>
                         <property name="left-attach">3</property>
@@ -177,6 +198,7 @@
                                 <property name="visible">True</property>
                                 <property name="use_stock">True</property>
                                 <property name="label">gtk-edit</property>
+                                <signal name="clicked" handler="common_gtk_informations_modifier_clicked"/>
                             </object>
                             <packing>
                                 <property name="position">1</property>

@@ -26,6 +26,7 @@
 #include "common_erreurs.h"
 #include "common_math.h"
 #include "common_text.h"
+#include "common_gtk_informations.h"
 
 gboolean common_ville_init(Projet *projet)
 /* Description : Initialise à NULL l'adresse du projet. Met également à défaut 
@@ -38,12 +39,12 @@ gboolean common_ville_init(Projet *projet)
 {
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
+    projet->parametres.adresse.departement = NULL;
+    projet->parametres.adresse.commune = 0;
     projet->parametres.adresse.destinataire = NULL;
     projet->parametres.adresse.adresse = NULL;
-    projet->parametres.adresse.ville = NULL;
-    projet->parametres.adresse.departement = 0;
-    projet->parametres.adresse.num_ville = 0;
     projet->parametres.adresse.code_postal = 0;
+    projet->parametres.adresse.ville = NULL;
     
     // On initialise au moins à une valeur par défaut
     projet->parametres.neige = 0;
@@ -193,7 +194,7 @@ gboolean common_ville_set(Projet *projet, char *departement, int ville)
 {
     FILE    *villes;
     char    *ligne = NULL;
-    int     com, ct, code_postal, population;
+    int     com, ct, code_postal, population, article;
     char    *artmin, *nccenr;
     char    dep[4];
     
@@ -208,7 +209,7 @@ gboolean common_ville_set(Projet *projet, char *departement, int ville)
     ligne = common_text_get_line(villes);
     do
     {
-        BUG(common_ville_get_ville(ligne, NULL, NULL, NULL, dep, &com, NULL, &ct, NULL, NULL, NULL, &artmin, &nccenr, &code_postal, NULL, &population), FALSE);
+        BUG(common_ville_get_ville(ligne, NULL, NULL, NULL, dep, &com, NULL, &ct, &article, NULL, NULL, &artmin, &nccenr, &code_postal, NULL, &population), FALSE);
         // On récupère les numéros caractéristant la ville en cours.
         if ((strcmp(dep, departement) == 0) && (ville == com))
         {
@@ -219,11 +220,36 @@ gboolean common_ville_set(Projet *projet, char *departement, int ville)
             // Maintenant que tout est récupéré, on enregistre dans le projet ce qu'il faut.
             // Ville et code postal.
             projet->parametres.adresse.code_postal = code_postal;
-            BUGMSG(projet->parametres.adresse.ville = g_strdup_printf("%s %s", artmin, nccenr), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+            free(projet->parametres.adresse.ville);
+            BUGMSG(projet->parametres.adresse.ville = g_strdup_printf("%s%s%s", artmin, ((article == 5) || (article == 1) || (article == 0)) ? "" : " ", nccenr), FALSE, gettext("Erreur d'allocation mémoire.\n"));
             projet->parametres.adresse.code_postal = code_postal;
             
             free(ligne);
             
+            // On actualise la fenêtre graphique
+#ifdef ENABLE_GTK
+            if (projet->list_gtk.common_informations.builder != NULL)
+            {
+                char    *code_postal2;
+                
+                BUGMSG(code_postal2 = g_strdup_printf("%d", code_postal), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                
+                g_signal_handler_block(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_buffer_code_postal"), g_signal_handler_find(G_OBJECT(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_buffer_code_postal")), G_SIGNAL_MATCH_FUNC, 0, 0, NULL, common_gtk_informations_entry_add_char, NULL));
+                g_signal_handler_block(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_buffer_code_postal"), g_signal_handler_find(G_OBJECT(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_buffer_code_postal")), G_SIGNAL_MATCH_FUNC, 0, 0, NULL, common_gtk_informations_entry_del_char, NULL));
+                g_signal_handler_block(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_buffer_ville"), g_signal_handler_find(G_OBJECT(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_buffer_ville")), G_SIGNAL_MATCH_FUNC, 0, 0, NULL, common_gtk_informations_entry_add_char, NULL));
+                g_signal_handler_block(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_buffer_ville"), g_signal_handler_find(G_OBJECT(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_buffer_ville")), G_SIGNAL_MATCH_FUNC, 0, 0, NULL, common_gtk_informations_entry_del_char, NULL));
+                
+                gtk_entry_set_text(GTK_ENTRY(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_entry_code_postal")), code_postal2);
+                gtk_entry_set_text(GTK_ENTRY(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_entry_ville")), projet->parametres.adresse.ville);
+                
+                g_signal_handler_unblock(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_buffer_code_postal"), g_signal_handler_find(G_OBJECT(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_buffer_code_postal")), G_SIGNAL_MATCH_FUNC, 0, 0, NULL, common_gtk_informations_entry_add_char, NULL));
+                g_signal_handler_unblock(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_buffer_code_postal"), g_signal_handler_find(G_OBJECT(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_buffer_code_postal")), G_SIGNAL_MATCH_FUNC, 0, 0, NULL, common_gtk_informations_entry_del_char, NULL));
+                g_signal_handler_unblock(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_buffer_ville"), g_signal_handler_find(G_OBJECT(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_buffer_ville")), G_SIGNAL_MATCH_FUNC, 0, 0, NULL, common_gtk_informations_entry_add_char, NULL));
+                g_signal_handler_unblock(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_buffer_ville"), g_signal_handler_find(G_OBJECT(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_buffer_ville")), G_SIGNAL_MATCH_FUNC, 0, 0, NULL, common_gtk_informations_entry_del_char, NULL));
+                
+                free(code_postal2);
+            }
+#endif
             // Le zonage neige.
             BUGMSG(villes = fopen(DATADIR"/france_neige.csv", "r"), FALSE, gettext("Le fichier '%s' est introuvable.\n"), DATADIR"/france_neige.csv");
             // On commande par chercher le département
@@ -519,6 +545,7 @@ gboolean common_ville_free(Projet *projet)
 {
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
+    free(projet->parametres.adresse.departement);
     free(projet->parametres.adresse.destinataire);
     free(projet->parametres.adresse.adresse);
     free(projet->parametres.adresse.ville);

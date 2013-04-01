@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2013-03-27 07:35+0100\n"
-"PO-Revision-Date: 2013-03-27 07:48+0100\n"
+"POT-Creation-Date: 2013-03-31 17:05+0200\n"
+"PO-Revision-Date: 2013-04-01 17:54+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -431,14 +431,14 @@ msgstr "Paramètre %s incorrect.\n"
 msgid "La fenêtre graphique %s n'est pas initialisée.\n"
 msgstr "La fenêtre graphique %s n'est pas initialisée.\n"
 
-msgid "Le matériau n'est pas en béton.\n"
-msgstr "Le matériau n'est pas en béton.\n"
-
 msgid "Builder Failed\n"
 msgstr "Builder Failed\n"
 
 msgid "Ajout d'un matériau béton"
 msgstr "Ajout d'un matériau béton"
+
+msgid "Le matériau n'est pas en béton.\n"
+msgstr "Le matériau n'est pas en béton.\n"
 
 msgid "Modification d'un matériau béton"
 msgstr "Modification d'un matériau béton"
@@ -740,6 +740,12 @@ msgstr "fichier %s, fonction %s, ligne %d, test : %s, texte : "
 #, c-format
 msgid "Type de section %d inconnu.\n"
 msgstr "Type de section %d inconnu.\n"
+
+#, c-format
+msgid ""
+"La ligne en cours '%s' n'est pas dans un format correct pour une ville.\n"
+msgstr ""
+"La ligne en cours '%s' n'est pas dans un format correct pour une ville.\n"
 
 #, c-format
 msgid "Le fichier '%s' est introuvable.\n"
