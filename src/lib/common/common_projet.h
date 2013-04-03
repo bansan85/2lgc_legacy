@@ -192,6 +192,18 @@ typedef struct __Gtk_EF_Relachements
 #endif
 
 
+#ifdef ENABLE_GTK
+typedef struct __Gtk_EF_Rapport
+{
+    GtkBuilder      *builder;
+    GtkWidget       *window;
+    
+    GtkListStore    *liste;
+    GList           *rapport;
+} Gtk_EF_Rapport;
+#endif
+
+
 typedef enum __Filtres
 {
     FILTRE_AUCUN,
@@ -259,16 +271,6 @@ typedef enum __Colonne_Resultats
 
 
 #ifdef ENABLE_GTK
-typedef struct __Gtk_EF_Rapport
-{
-    GtkBuilder      *builder;
-    GtkWidget       *window;
-    
-    GtkListStore    *liste;
-    GList           *rapport;
-} Gtk_EF_Rapport;
-
-
 typedef struct __Gtk_EF_Resultats_Tableau
 {
     GtkTreeView         *treeview;
@@ -415,11 +417,25 @@ typedef enum __Type_Seisme
 } Type_Seisme;
 
 
+typedef enum __Type_Flottant
+{
+    FLOTTANT_ORDINATEUR,
+    FLOTTANT_UTILISATEUR
+} Type_Flottant;
+
+
+typedef struct __Flottant
+{
+    double          d;
+    Type_Flottant   type;
+} Flottant;
+
+
 typedef struct __EF_Point
 {
-    double      x;
-    double      y;
-    double      z;
+    double  x;
+    double  y;
+    double  z;
 } EF_Point;
 
 

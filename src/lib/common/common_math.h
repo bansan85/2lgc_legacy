@@ -23,6 +23,7 @@
 #include <cholmod.h>
 #include <values.h>
 #include <glib.h>
+#include "common_projet.h"
 
 #ifndef M_PI
 #define M_PI        3.1415926535897932384626433
@@ -42,6 +43,7 @@
 /* Vérifie si x == y avec une erreur relative maximale D,
  * y étant la valeur recherchée et x la valeur à vérifier */
 
+double common_math_flottant(Flottant *flottant);
 double common_math_arrondi_nombre(double nombre);
 void common_math_arrondi_triplet(cholmod_triplet *triplet);
 void common_math_arrondi_sparse(cholmod_sparse *sparse);
