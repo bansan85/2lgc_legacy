@@ -28,6 +28,7 @@
 #include "common_erreurs.h"
 #include "common_projet.h"
 #include "common_gtk.h"
+#include "common_text.h"
 #include "EF_charge.h"
 #include "EF_gtk_charge_noeud.h"
 #include "EF_gtk_charge_barre_ponctuelle.h"
@@ -398,25 +399,20 @@ void _1990_gtk_tree_view_actions_psi_edited(GtkCellRendererText *cell, gchar *pa
 {
     GtkTreeIter     iter;
     unsigned int    num_action;
-    char            *fake;
     double          convertion;
     guint           column = GPOINTER_TO_UINT(g_object_get_data(G_OBJECT(cell), "column"));
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk._1990_actions.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Actions");
     
-    fake = (char*)malloc(sizeof(char)*(strlen(new_text)+1));
-    BUGMSG(fake, , gettext("Erreur d'allocation mémoire.\n"));
-    
     gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(projet->list_gtk._1990_actions.tree_store_actions), &iter, path_string);
     gtk_tree_model_get(GTK_TREE_MODEL(projet->list_gtk._1990_actions.tree_store_actions), &iter, 0, &num_action, -1);
     
     // On vérifie si le texte contient bien un nombre flottant
-    if (sscanf(new_text, "%lf%s", &convertion, fake) == 1)
+    convertion = common_text_str_to_double(new_text, 0, TRUE, 1., TRUE);
+    if (!isnan(convertion))
         BUG(_1990_action_change_psi(projet, num_action, column-3, convertion), );
     
-    free(fake);
-     
     return;
 }
 

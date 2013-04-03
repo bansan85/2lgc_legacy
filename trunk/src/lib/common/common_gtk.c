@@ -26,6 +26,7 @@
 #include "common_erreurs.h"
 #include "common_math.h"
 #include "common_gtk.h"
+#include "common_text.h"
 
 gboolean common_gtk_treeview_button_press_unselect(GtkTreeView *widget,
   GdkEvent *event, Projet *projet)
@@ -76,55 +77,23 @@ double common_gtk_text_buffer_double(GtkTextBuffer *textbuffer, double val_min,
     char        *texte;
     GtkTextIter start, end;
     double      nombre;
-    char        *fake;
-    gboolean    min_check;
-    gboolean    max_check;
     
     gtk_text_buffer_get_iter_at_offset(textbuffer, &start, 0);
     gtk_text_buffer_get_iter_at_offset(textbuffer, &end, -1);
     texte = gtk_text_buffer_get_text(textbuffer, &start, &end, FALSE);
-    BUGMSG(fake = (char*)malloc(sizeof(char)*(strlen(texte)+1)), NAN, gettext("Erreur d'allocation mémoire.\n"));
     
     gtk_text_buffer_remove_all_tags(textbuffer, &start, &end);
-    if (sscanf(texte, "%lf%s", &nombre, fake) != 1)
-    {
-        min_check = FALSE;
-        max_check = FALSE;
-    }
-    else
-    {
-        if (isinf(val_min) == -1)
-            min_check = TRUE;
-        else if ((min_include) && (ERREUR_RELATIVE_EGALE(nombre, val_min)))
-            min_check = TRUE;
-        else if (nombre > val_min)
-            min_check = TRUE;
-        else
-            min_check = FALSE;
-            
-        if (isinf(val_max) == 1)
-            max_check = TRUE;
-        else if ((max_include) && (ERREUR_RELATIVE_EGALE(nombre, val_max)))
-            max_check = TRUE;
-        else if (nombre < val_max)
-            max_check = TRUE;
-        else
-            max_check = FALSE;
-    }
+    
+    nombre = common_text_str_to_double(texte, val_min, min_include, val_max, max_include);
     
     free(texte);
-    free(fake);
     
-    if ((min_check) && (max_check))
-    {
+    if (!isnan(nombre))
         gtk_text_buffer_apply_tag_by_name(textbuffer, "OK", &start, &end);
-        return nombre;
-    }
     else
-    {
         gtk_text_buffer_apply_tag_by_name(textbuffer, "mauvais", &start, &end);
-        return NAN;
-    }
+    
+    return nombre;
 }
 
 
