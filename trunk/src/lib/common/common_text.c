@@ -25,6 +25,7 @@
 #include <gmodule.h>
 #include <stdio.h>
 #include <string.h>
+#include <ctype.h>
 
 
 void show_warranty()
@@ -81,6 +82,64 @@ void show_help()
     printf(gettext("\t-h, --help : affiche le présent menu\n"));
     printf(gettext("\t-w, --warranty : affiche les limites de garantie du logiciel\n"));
     return;
+}
+
+
+char *strcasestr_internal(const char *haystack, const char *needle)
+/* Description : Est un équivalent de strcasestr ave gestion des accents.
+ * Paramètres : const char *haystack : moule de foin,
+ *              const char *needle : aiguille.
+ * Valeur renvoyée :
+ *   Succès : pointeur vers le texte.
+ *   Échec : NULL
+ */
+{
+    #define CAR_UP   "ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÑÐÒÓÔÕÖØÙÚÛÜÝàáâãäåèçéêëìíîïðñòóôõöøùúûüýÿ"
+    #define CAR_DOWN "aaaaaaæceeeeiiiindoooooouuuuyaaaaaaeceeeiiiionoooooouuuuyy"
+    
+    unsigned int    i;
+    char            *meule, *aiguille;
+    char            *tmp;
+    
+    BUGMSG(haystack, NULL, gettext("Paramètre %s incorrect.\n"), "haystack");
+    BUGMSG(needle, NULL, gettext("Paramètre %s incorrect.\n"), "needle");
+    
+    BUGMSG(meule = g_strdup(haystack), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(aiguille = g_strdup(needle), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    
+    for (i=0;meule[i];i++)
+        meule[i] = tolower(meule[i]);
+    for (i=0;aiguille[i];i++)
+        aiguille[i] = tolower(aiguille[i]);
+    
+    for (i=0;i<strlen(CAR_UP);i++)
+    {
+        char    *retour;
+        
+        retour = strchr(meule, CAR_UP[i]);
+        
+        while (retour != NULL)
+        {
+            *retour = CAR_DOWN[i];
+            retour = strchr(meule, CAR_UP[i]);
+        }
+        
+        retour = strchr(aiguille, CAR_UP[i]);
+        
+        while (retour != NULL)
+        {
+            *retour = CAR_DOWN[i];
+            retour = strchr(meule, CAR_UP[i]);
+        }
+    }
+    
+    tmp = strstr(meule, aiguille);
+    
+    free(meule);
+    free(aiguille);
+    
+    return tmp;
+    
 }
 
 
@@ -172,8 +231,8 @@ char *common_text_get_line(FILE *fichier)
  *             Erreur d'allocation mémoire.
  */
 {
-    long unsigned int   CUR_MAX = 256;
-    char                *buffer, *ligne_tmp, *retour = NULL;
+    int   CUR_MAX = 256;
+    char  *buffer, *ligne_tmp, *retour = NULL;
     
     BUGMSG(buffer = malloc(sizeof(char)*CUR_MAX), FALSE, gettext("Erreur d'allocation mémoire.\n"));
     
