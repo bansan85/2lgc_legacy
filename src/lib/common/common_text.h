@@ -25,6 +25,7 @@
 void show_warranty();
 void show_help();
 
+double common_text_str_to_double(char *texte, double val_min, gboolean min_include, double val_max, gboolean max_include);
 char *strcasestr_internal(const char *haystack, const char *needle);
 char *common_text_dependances(GList *liste_noeuds, GList *liste_barres, GList *liste_charges, Projet *projet);
 char *common_text_get_line(FILE *fichier);

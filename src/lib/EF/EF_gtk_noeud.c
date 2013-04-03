@@ -374,14 +374,12 @@ void EF_gtk_noeud_edit_pos_abs(GtkCellRendererText *cell, gchar *path_string, gc
     GtkTreePath     *path;
     GtkTreeIter     iter;
     unsigned int    i;
-    char            *fake = (char*)malloc(sizeof(char)*(strlen(new_text)+1));
     double          conversion;
     gint            column = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cell), "column"));
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_noeud.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Noeuds");
     BUGMSG(projet->modele.noeuds, , gettext("Aucun noeud n'est existant.\n"));
-    BUGMSG(fake, , gettext("Erreur d'allocation mémoire.\n"));
     BUGMSG(new_text, , gettext("Paramètre %s incorrect.\n"), "new_text");
     
     gtk_noeud = &projet->list_gtk.ef_noeud;
@@ -393,7 +391,9 @@ void EF_gtk_noeud_edit_pos_abs(GtkCellRendererText *cell, gchar *path_string, gc
     gtk_tree_model_get(model, &iter, 0, &i, -1);
     
     // On vérifie si le texte contient bien un nombre flottant
-    if (sscanf(new_text, "%lf%s", &conversion, fake) == 1)
+    conversion = common_text_str_to_double(new_text, -INFINITY, FALSE, INFINITY, FALSE);
+    
+    if (!isnan(conversion))
     {
         EF_Noeud    *noeud;
         
@@ -425,8 +425,6 @@ void EF_gtk_noeud_edit_pos_abs(GtkCellRendererText *cell, gchar *path_string, gc
         }
     }
     
-    free(fake);
-     
     return;
 }
 
@@ -446,14 +444,12 @@ void EF_gtk_noeud_edit_pos_relat(GtkCellRendererText *cell, gchar *path_string, 
     GtkTreePath     *path;
     GtkTreeIter     iter;
     unsigned int    i;
-    char            *fake = (char*)malloc(sizeof(char)*(strlen(new_text)+1));
     double          conversion;
     gint            column = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cell), "column"));
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_noeud.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Noeuds");
     BUGMSG(projet->modele.noeuds, , gettext("Aucun noeud n'est existant.\n"));
-    BUGMSG(fake, , gettext("Erreur d'allocation mémoire.\n"));
     BUGMSG(new_text, , gettext("Paramètre %s incorrect.\n"), "new_text");
     
     gtk_noeud = &projet->list_gtk.ef_noeud;
@@ -465,15 +461,10 @@ void EF_gtk_noeud_edit_pos_relat(GtkCellRendererText *cell, gchar *path_string, 
     gtk_tree_model_get(model, &iter, 0, &i, -1);
     
     // On vérifie si le texte contient bien un nombre flottant
-    if (sscanf(new_text, "%lf%s", &conversion, fake) == 1)
+    conversion = common_text_str_to_double(new_text, 0, TRUE, 1., TRUE);
+    if (!isnan(conversion))
     {
         EF_Noeud    *noeud;
-        
-        if ((0.0 > conversion) || (conversion > 1.0))
-        {
-            free(fake);
-            return;
-        }
         
         BUG(noeud = EF_noeuds_cherche_numero(projet, i, TRUE), );
         
@@ -483,8 +474,6 @@ void EF_gtk_noeud_edit_pos_relat(GtkCellRendererText *cell, gchar *path_string, 
             BUGMSG(NULL, , gettext("Le type du noeud ou la colonne d'édition est incorrect.\n"));
     }
     
-    free(fake);
-     
     return;
 }
 

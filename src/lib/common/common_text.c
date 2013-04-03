@@ -20,12 +20,14 @@
 #include "common_projet.h"
 #include "common_selection.h"
 #include "common_erreurs.h"
+#include "common_math.h"
 #include <libintl.h>
 #include <locale.h>
 #include <gmodule.h>
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
+#include <math.h>
 
 
 void show_warranty()
@@ -82,6 +84,88 @@ void show_help()
     printf(gettext("\t-h, --help : affiche le présent menu\n"));
     printf(gettext("\t-w, --warranty : affiche les limites de garantie du logiciel\n"));
     return;
+}
+
+
+double common_text_str_to_double(char *texte, double val_min, gboolean min_include,
+  double val_max, gboolean max_include)
+/* Description : Sur la base d'une chaîne de caractères, renvoie un nombre flottant compris
+ *               entre les valeurs val_min et val_max.
+ *               S'il ne contient pas de nombre ou hors domaine, la valeur renvoyée est NAN.
+ * Paramètres : char *texte : le texte à étudier,
+ *            : double val_min : borne inférieure,
+ *            : gboolean min_include : le nombre de la borne inférieure est-il autorisé ?,
+ *            : double val_max : borne supérieure
+ *            : gboolean max_include : le nombre de la borne supérieure est-il autorisé ?.
+ * Valeur renvoyée :
+ *   Succès : la valeur du nombre,
+ *   Echec : NAN.
+ */
+{
+    gboolean        min_check, max_check;
+    char            *fake, *textebis;
+    double          nombre;
+    struct lconv    *locale_conv;
+    char            *retour;
+    
+    BUGMSG(fake = (char*)malloc(sizeof(char)*(strlen(texte)+1)), NAN, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(textebis = g_strdup(texte), NAN, gettext("Erreur d'allocation mémoire.\n"));
+    
+    // On remplace par la bonne décimale.
+    locale_conv = localeconv();
+    if (strcmp(locale_conv->decimal_point, ".") == 0)
+    {
+        retour = strchr(textebis, ',');
+        while (retour != NULL)
+        {
+            *retour = '.';
+            retour = strchr(textebis, ',');
+        }
+    }
+    else if (strcmp(locale_conv->decimal_point, ",") == 0)
+    {
+        retour = strchr(textebis, '.');
+        while (retour != NULL)
+        {
+            *retour = ',';
+            retour = strchr(textebis, '.');
+        }
+    }
+    else
+        BUGMSG(NULL, NAN, gettext("Impossible de déterminer le caractère décimal.\n"));
+    
+    if (sscanf(textebis, "%lf%s", &nombre, fake) != 1)
+    {
+        min_check = FALSE;
+        max_check = FALSE;
+    }
+    else
+    {
+        if (isinf(val_min) == -1)
+            min_check = TRUE;
+        else if ((min_include) && (ERREUR_RELATIVE_EGALE(nombre, val_min)))
+            min_check = TRUE;
+        else if (nombre > val_min)
+            min_check = TRUE;
+        else
+            min_check = FALSE;
+            
+        if (isinf(val_max) == 1)
+            max_check = TRUE;
+        else if ((max_include) && (ERREUR_RELATIVE_EGALE(nombre, val_max)))
+            max_check = TRUE;
+        else if (nombre < val_max)
+            max_check = TRUE;
+        else
+            max_check = FALSE;
+    }
+    free(fake);
+    free(textebis);
+    
+    if ((min_check) && (max_check))
+        return nombre;
+    else
+        return NAN;
 }
 
 

@@ -527,7 +527,6 @@ void EF_gtk_relachements_edit_clicked(GtkCellRendererText *cell, gchar *path_str
     char                *nom;
     EF_Relachement      *relachement;
     double              conversion;
-    char                *fake = (char*)malloc(sizeof(char)*(strlen(new_text)+1));
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_relachements.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Relachement");
@@ -542,11 +541,10 @@ void EF_gtk_relachements_edit_clicked(GtkCellRendererText *cell, gchar *path_str
     BUG(relachement = EF_relachement_cherche_nom(projet, nom, TRUE), );
     free(nom);
     
-    if (sscanf(new_text, "%lf%s", &conversion, fake) != 1)
-    {
-        free(fake);
+    conversion = common_text_str_to_double(new_text, 0., TRUE, INFINITY, FALSE);
+    
+    if (isnan(conversion))
         return;
-    }
     
     if (column == 0)
     {
