@@ -310,14 +310,15 @@ gboolean EF_sections_rectangulaire_modif(Projet *projet, EF_Section *section, co
         BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, liste_sections, NULL, NULL, NULL, NULL, &liste_barres_dep, NULL, FALSE, FALSE), FALSE);
         g_list_free(liste_sections);
         
-#ifdef ENABLE_GTK
-        BUG(m3d_actualise_graphique(projet, NULL, liste_barres_dep), FALSE);
-#endif
-        
         if (liste_barres_dep != NULL)
+        {
+#ifdef ENABLE_GTK
+            BUG(m3d_actualise_graphique(projet, NULL, liste_barres_dep), FALSE);
+            BUG(m3d_rafraichit(projet), FALSE);
+#endif
             BUG(EF_calculs_free(projet), FALSE);
-        
-        g_list_free(liste_barres_dep);
+            g_list_free(liste_barres_dep);
+        }
     }
     
 #ifdef ENABLE_GTK
@@ -434,14 +435,15 @@ gboolean EF_sections_T_modif(Projet *projet, EF_Section *section, const char* no
         BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, liste_sections, NULL, NULL, NULL, NULL, &liste_barres_dep, NULL, FALSE, FALSE), FALSE);
         g_list_free(liste_sections);
         
-#ifdef ENABLE_GTK
-        BUG(m3d_actualise_graphique(projet, NULL, liste_barres_dep), FALSE);
-#endif
-        
         if (liste_barres_dep != NULL)
+        {
+#ifdef ENABLE_GTK
+            BUG(m3d_actualise_graphique(projet, NULL, liste_barres_dep), FALSE);
+            BUG(m3d_rafraichit(projet), FALSE);
+#endif
             BUG(EF_calculs_free(projet), FALSE);
-        
-        g_list_free(liste_barres_dep);
+            g_list_free(liste_barres_dep);
+        }
     }
     
 #ifdef ENABLE_GTK
@@ -532,14 +534,15 @@ gboolean EF_sections_carree_modif(Projet *projet, EF_Section *section, const cha
         BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, liste_sections, NULL, NULL, NULL, NULL, &liste_barres_dep, NULL, FALSE, FALSE), FALSE);
         g_list_free(liste_sections);
         
-#ifdef ENABLE_GTK
-        BUG(m3d_actualise_graphique(projet, NULL, liste_barres_dep), FALSE);
-#endif
-        
         if (liste_barres_dep != NULL)
+        {
+#ifdef ENABLE_GTK
+            BUG(m3d_actualise_graphique(projet, NULL, liste_barres_dep), FALSE);
+            BUG(m3d_rafraichit(projet), FALSE);
+#endif
             BUG(EF_calculs_free(projet), FALSE);
-        
-        g_list_free(liste_barres_dep);
+            g_list_free(liste_barres_dep);
+        }
         
     }
     
@@ -630,14 +633,15 @@ gboolean EF_sections_circulaire_modif(Projet *projet, EF_Section *section, const
         BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, liste_sections, NULL, NULL, NULL, NULL, &liste_barres_dep, NULL, FALSE, FALSE), FALSE);
         g_list_free(liste_sections);
         
-#ifdef ENABLE_GTK
-        BUG(m3d_actualise_graphique(projet, NULL, liste_barres_dep), FALSE);
-#endif
-        
         if (liste_barres_dep != NULL)
+        {
+#ifdef ENABLE_GTK
+            BUG(m3d_actualise_graphique(projet, NULL, liste_barres_dep), FALSE);
+            BUG(m3d_rafraichit(projet), FALSE);
+#endif
             BUG(EF_calculs_free(projet), FALSE);
-        
-        g_list_free(liste_barres_dep);
+            g_list_free(liste_barres_dep);
+        }
     }
     
 #ifdef ENABLE_GTK
