@@ -69,14 +69,14 @@ void EF_gtk_noeud_ajouter(GtkButton *button, Projet *projet)
     
     // On ajoute un noeud libre
     if (gtk_notebook_get_current_page(GTK_NOTEBOOK(ef_gtk->notebook)) == 0)
-        BUG(EF_noeuds_ajout_noeud_libre(projet, 0., 0., 0., NULL, NULL), );
+        BUG(EF_noeuds_ajout_noeud_libre(projet, common_math_f(0., FLOTTANT_UTILISATEUR), common_math_f(0., FLOTTANT_UTILISATEUR), common_math_f(0., FLOTTANT_UTILISATEUR), NULL, NULL), );
     // On ajoute un noeud intermédiaire
     else
     {
         if (projet->modele.barres == NULL)
             return;
         
-        BUG(EF_noeuds_ajout_noeud_barre(projet, (Beton_Barre*)projet->modele.barres->data, 0.5, NULL), );
+        BUG(EF_noeuds_ajout_noeud_barre(projet, (Beton_Barre*)projet->modele.barres->data, common_math_f(0.5, FLOTTANT_UTILISATEUR), NULL), );
     }
     
     return;
@@ -404,17 +404,17 @@ void EF_gtk_noeud_edit_pos_abs(GtkCellRendererText *cell, gchar *path_string, gc
         {
             case 1:
             {
-                BUG(EF_noeuds_change_pos_abs(projet, noeud, conversion, NAN, NAN), );
+                BUG(EF_noeuds_change_pos_abs(projet, noeud, common_math_f(conversion, FLOTTANT_UTILISATEUR), common_math_f(NAN, FLOTTANT_UTILISATEUR), common_math_f(NAN, FLOTTANT_UTILISATEUR)), );
                 break;
             }
             case 2:
             {
-                BUG(EF_noeuds_change_pos_abs(projet, noeud, NAN, conversion, NAN), );
+                BUG(EF_noeuds_change_pos_abs(projet, noeud, common_math_f(NAN, FLOTTANT_UTILISATEUR), common_math_f(conversion, FLOTTANT_UTILISATEUR), common_math_f(NAN, FLOTTANT_UTILISATEUR)), );
                 break;
             }
             case 3:
             {
-                BUG(EF_noeuds_change_pos_abs(projet, noeud, NAN, NAN, conversion), );
+                BUG(EF_noeuds_change_pos_abs(projet, noeud, common_math_f(NAN, FLOTTANT_UTILISATEUR), common_math_f(NAN, FLOTTANT_UTILISATEUR), common_math_f(conversion, FLOTTANT_UTILISATEUR)), );
                 break;
             }
             default :
@@ -469,7 +469,7 @@ void EF_gtk_noeud_edit_pos_relat(GtkCellRendererText *cell, gchar *path_string, 
         BUG(noeud = EF_noeuds_cherche_numero(projet, i, TRUE), );
         
         if ((noeud->type == NOEUD_BARRE) && (column == 6))
-            BUG(EF_noeuds_change_pos_relat(projet, noeud, conversion), );
+            BUG(EF_noeuds_change_pos_relat(projet, noeud, common_math_f(conversion, FLOTTANT_UTILISATEUR)), );
         else
             BUGMSG(NULL, , gettext("Le type du noeud ou la colonne d'édition est incorrect.\n"));
     }
@@ -557,11 +557,11 @@ void EF_gtk_render_actualise_position(GtkTreeViewColumn *tree_column, GtkCellRen
     BUG(point = EF_noeuds_renvoie_position(EF_noeuds_cherche_numero(projet, noeud, TRUE)), );
     
     if (colonne == 1)
-        common_math_double_to_char(point->x, texte, DECIMAL_DISTANCE);
+        common_math_double_to_char2(point->x, texte, DECIMAL_DISTANCE);
     else if (colonne == 2)
-        common_math_double_to_char(point->y, texte, DECIMAL_DISTANCE);
+        common_math_double_to_char2(point->y, texte, DECIMAL_DISTANCE);
     else if (colonne == 3)
-        common_math_double_to_char(point->z, texte, DECIMAL_DISTANCE);
+        common_math_double_to_char2(point->z, texte, DECIMAL_DISTANCE);
     else
         BUGMSG(NULL, , gettext("La colonne d'où provient l'édition est incorrecte.\n"));
     
@@ -688,7 +688,7 @@ void EF_gtk_noeud_edit_noeud_barre_barre(GtkCellRendererText *cell, const gchar 
             memset(barre->info_EF, 0, sizeof(Barre_Info_EF)*(info->barre->discretisation_element+1));
             
             liste = info->barre->noeuds_intermediaires;
-            while ((liste != NULL) && (((EF_Noeud_Barre*)liste->data)->position_relative_barre < info->position_relative_barre))
+            while ((liste != NULL) && (common_math_get(((EF_Noeud_Barre*)liste->data)->position_relative_barre) < common_math_get(info->position_relative_barre)))
                 liste = g_list_next(liste);
             
             info->barre->noeuds_intermediaires = g_list_insert_before(info->barre->noeuds_intermediaires, liste, noeud);
@@ -780,12 +780,10 @@ void EF_gtk_noeud(Projet *projet)
     ef_gtk->tree_store_libre = GTK_TREE_STORE(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treestore_noeuds_libres"));
     ef_gtk->tree_store_barre = GTK_TREE_STORE(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treestore_noeuds_intermediaires"));
     
+    
     g_object_set_data(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_libres_cell1"), "column", GINT_TO_POINTER(1));
-    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_libres_column1")), GTK_CELL_RENDERER(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_libres_cell1")), common_gtk_render_double, GINT_TO_POINTER(DECIMAL_DISTANCE), NULL);
     g_object_set_data(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_libres_cell2"), "column", GINT_TO_POINTER(2));
-    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_libres_column2")), GTK_CELL_RENDERER(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_libres_cell2")), common_gtk_render_double, GINT_TO_POINTER(DECIMAL_DISTANCE), NULL);
     g_object_set_data(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_libres_cell3"), "column", GINT_TO_POINTER(3));
-    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_libres_column3")), GTK_CELL_RENDERER(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_libres_cell3")), common_gtk_render_double, GINT_TO_POINTER(DECIMAL_DISTANCE), NULL);
     
     g_object_set(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_libres_cell5"), "model", projet->list_gtk.ef_appuis.liste_appuis, NULL);
     
@@ -796,7 +794,6 @@ void EF_gtk_noeud(Projet *projet)
     g_object_set_data(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_intermediaires_cell3"), "column", GINT_TO_POINTER(3));
     gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_intermediaires_column3")), GTK_CELL_RENDERER(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_intermediaires_cell3")), EF_gtk_render_actualise_position, projet, NULL);
     g_object_set_data(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_intermediaires_cell6"), "column", GINT_TO_POINTER(6));
-    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_intermediaires_column6")), GTK_CELL_RENDERER(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_intermediaires_cell6")), common_gtk_render_double, GINT_TO_POINTER(DECIMAL_DISTANCE), NULL);
     
     g_object_set(gtk_builder_get_object(ef_gtk->builder, "EF_noeuds_treeview_noeuds_intermediaires_cell4"), "model", projet->list_gtk.ef_appuis.liste_appuis, NULL);
     
@@ -812,12 +809,16 @@ void EF_gtk_noeud(Projet *projet)
             {
                 char            *tmp = NULL;
                 EF_Noeud_Libre  *data = noeud->data;
+                gchar           xx[30], yy[30], zz[30];
                 
                 if (data->relatif != NULL)
                     BUGMSG(tmp = g_strdup_printf("%d", data->relatif->numero), , gettext("Erreur d'allocation mémoire.\n"));
                 
                 gtk_tree_store_append(ef_gtk->tree_store_libre, &noeud->Iter, NULL);
-                gtk_tree_store_set(ef_gtk->tree_store_libre, &noeud->Iter, 0, noeud->numero, 1, data->x, 2, data->y, 3, data->z, 4, data->relatif == NULL ? gettext("Aucun") : tmp, 5, noeud->appui == NULL ? gettext("Aucun") : noeud->appui->nom, -1);
+                common_math_double_to_char2(data->x, xx, DECIMAL_DISTANCE);
+                common_math_double_to_char2(data->y, yy, DECIMAL_DISTANCE);
+                common_math_double_to_char2(data->z, zz, DECIMAL_DISTANCE);
+                gtk_tree_store_set(ef_gtk->tree_store_libre, &noeud->Iter, 0, noeud->numero, 1, xx, 2, yy, 3, zz, 4, data->relatif == NULL ? gettext("Aucun") : tmp, 5, noeud->appui == NULL ? gettext("Aucun") : noeud->appui->nom, -1);
                 
                 free(tmp);
             }
@@ -825,11 +826,13 @@ void EF_gtk_noeud(Projet *projet)
             {
                 EF_Noeud_Barre  *info = (EF_Noeud_Barre *)noeud->data;
                 EF_Point        *point = EF_noeuds_renvoie_position(noeud);
+                gchar           tmp[30];
                 
                 BUG(point, );
                 
                 gtk_tree_store_append(ef_gtk->tree_store_barre, &noeud->Iter, NULL);
-                gtk_tree_store_set(ef_gtk->tree_store_barre, &noeud->Iter, 0, noeud->numero, 1, point->x, 2, point->y, 3, point->z, 4, (noeud->appui == NULL ? gettext("Aucun") : noeud->appui->nom), 5, info->barre->numero, 6, info->position_relative_barre, -1);
+                common_math_double_to_char2(info->position_relative_barre, tmp, DECIMAL_DISTANCE);
+                gtk_tree_store_set(ef_gtk->tree_store_barre, &noeud->Iter, 0, noeud->numero, 1, common_math_get(point->x), 2, common_math_get(point->y), 3, common_math_get(point->z), 4, (noeud->appui == NULL ? gettext("Aucun") : noeud->appui->nom), 5, info->barre->numero, 6, tmp, -1);
                 
                 free(point);
             }

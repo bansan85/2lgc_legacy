@@ -4,9 +4,9 @@
     <object class="GtkTreeStore" id="EF_noeuds_treestore_noeuds_libres">
         <columns>
             <column type="guint"/>
-            <column type="gdouble"/>
-            <column type="gdouble"/>
-            <column type="gdouble"/>
+            <column type="gchararray"/>
+            <column type="gchararray"/>
+            <column type="gchararray"/>
             <column type="gchararray"/>
             <column type="gchararray"/>
         </columns>
@@ -19,7 +19,7 @@
             <column type="gdouble"/>
             <column type="gchararray"/>
             <column type="guint"/>
-            <column type="gdouble"/>
+            <column type="gchararray"/>
         </columns>
     </object>
     <object class="GtkMenu" id="EF_noeuds_supprimer_menu">

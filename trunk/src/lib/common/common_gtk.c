@@ -235,6 +235,32 @@ void common_gtk_render_double(GtkTreeViewColumn *tree_column, GtkCellRenderer *c
 }
 
 
+void common_gtk_render_flottant(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
+  GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data)
+/* Description : Personnalise l'affichage des nombres de type double dans un treeview.
+ * Paramètres : GtkTreeViewColumn *tree_column : la colonne,
+ *            : GtkCellRenderer *cell : la cellule,
+ *            : GtkTreeModel *tree_model : le tree_model,
+ *            : GtkTreeIter *iter : et le paramètre iter,
+ *            : gpointer data : le nombre de décimale.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    gchar       texte[30];
+    gint        colonne;
+    Flottant    *nombre;
+    gint        decimales = GPOINTER_TO_INT(data);
+    
+    colonne = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cell), "column"));
+    gtk_tree_model_get(tree_model, iter, colonne, &nombre, -1);
+    
+    common_math_double_to_char2(*nombre, texte, decimales);
+    g_object_set(GTK_CELL_RENDERER_TEXT(cell), "text", texte, NULL);
+    
+    return;
+}
+
+
 GtkTreeViewColumn* common_gtk_cree_colonne(char* nom, GType type, int num_colonne,
   double xalign, int num_decimales)
 /* Description : Permet de créer une colonne pour un treeview.

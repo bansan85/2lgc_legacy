@@ -48,5 +48,13 @@ double common_math_arrondi_nombre(double nombre);
 void common_math_arrondi_triplet(cholmod_triplet *triplet);
 void common_math_arrondi_sparse(cholmod_sparse *sparse);
 void common_math_double_to_char(double nombre, char *dest, int decimales);
+void common_math_double_to_char2(Flottant nombre, char *dest, int decimales);
+
+double common_math_get(Flottant f);
+Flottant common_math_f(double f, Type_Flottant type);
+Flottant common_math_add(Flottant f1, Flottant f2);
+Flottant common_math_sub(Flottant f1, Flottant f2);
+Flottant common_math_dot_d(Flottant f, double d);
+Flottant common_math_dot_f(Flottant f1, Flottant f2);
 
 #endif

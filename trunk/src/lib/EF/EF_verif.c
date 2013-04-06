@@ -407,7 +407,7 @@ gboolean EF_verif_EF(Projet *projet, GList **rapport, int *erreur)
             
             BUG(point2 = EF_noeuds_renvoie_position(noeud2), FALSE);
             
-            if ((ERREUR_RELATIVE_EGALE(point1->x, point2->x)) && (ERREUR_RELATIVE_EGALE(point1->y, point2->y)) && (ERREUR_RELATIVE_EGALE(point1->z, point2->z)))
+            if ((ERREUR_RELATIVE_EGALE(common_math_get(point1->x), common_math_get(point2->x))) && (ERREUR_RELATIVE_EGALE(common_math_get(point1->y), common_math_get(point2->y))) && (ERREUR_RELATIVE_EGALE(common_math_get(point1->z), common_math_get(point2->z))))
             {
                 ligne->resultat = 1;
                 if (*erreur < ligne->resultat)

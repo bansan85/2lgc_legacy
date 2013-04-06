@@ -131,11 +131,11 @@ int main(int argc, char *argv[])
     BUG(EF_appuis_ajout(projet, "Appui simple z", EF_APPUI_LIBRE, EF_APPUI_LIBRE, EF_APPUI_BLOQUE, EF_APPUI_LIBRE, EF_APPUI_LIBRE, EF_APPUI_LIBRE), -1);
     
     // Création des noeuds
-    BUG(EF_noeuds_ajout_noeud_libre(projet, 0.0, 0.0, 0.0, EF_appuis_cherche_nom(projet, "Encastrement", TRUE), NULL), -1);
-    BUG(EF_noeuds_ajout_noeud_libre(projet, 0.0, 0.0, 5.0, EF_appuis_cherche_nom(projet, "Appui simple x", TRUE), NULL), -1);
-    BUG(EF_noeuds_ajout_noeud_libre(projet, 4.0, 0.0, 5.0, NULL, NULL), -1);
-    BUG(EF_noeuds_ajout_noeud_libre(projet, 4.0, 0.0, 0.0, EF_appuis_cherche_nom(projet, "Rotule", TRUE), NULL), -1);
-    BUG(EF_noeuds_ajout_noeud_libre(projet, -2.0, 0.0, 2.0, EF_appuis_cherche_nom(projet, "Appui simple z", TRUE), EF_noeuds_cherche_numero(projet, 3, TRUE)), -1);
+    BUG(EF_noeuds_ajout_noeud_libre(projet, common_math_f(0.0, FLOTTANT_UTILISATEUR), common_math_f(0.0, FLOTTANT_UTILISATEUR), common_math_f(0.0, FLOTTANT_UTILISATEUR), EF_appuis_cherche_nom(projet, "Encastrement", TRUE), NULL), -1);
+    BUG(EF_noeuds_ajout_noeud_libre(projet, common_math_f(0.0, FLOTTANT_UTILISATEUR), common_math_f(0.0, FLOTTANT_UTILISATEUR), common_math_f(5.0, FLOTTANT_UTILISATEUR), EF_appuis_cherche_nom(projet, "Appui simple x", TRUE), NULL), -1);
+    BUG(EF_noeuds_ajout_noeud_libre(projet, common_math_f(4.0, FLOTTANT_UTILISATEUR), common_math_f(0.0, FLOTTANT_UTILISATEUR), common_math_f(5.0, FLOTTANT_UTILISATEUR), NULL, NULL), -1);
+    BUG(EF_noeuds_ajout_noeud_libre(projet, common_math_f(4.0, FLOTTANT_UTILISATEUR), common_math_f(0.0, FLOTTANT_UTILISATEUR), common_math_f(0.0, FLOTTANT_UTILISATEUR), EF_appuis_cherche_nom(projet, "Rotule", TRUE), NULL), -1);
+    BUG(EF_noeuds_ajout_noeud_libre(projet, common_math_f(-2.0, FLOTTANT_UTILISATEUR), common_math_f(0.0, FLOTTANT_UTILISATEUR), common_math_f(2.0, FLOTTANT_UTILISATEUR), EF_appuis_cherche_nom(projet, "Appui simple z", TRUE), EF_noeuds_cherche_numero(projet, 3, TRUE)), -1);
     
     // Création des sections en béton
     BUG(EF_sections_rectangulaire_ajout(projet, "Rect_0.3*0.5ht", 0.3, 0.5), -1);
