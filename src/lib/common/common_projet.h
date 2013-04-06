@@ -433,9 +433,9 @@ typedef struct __Flottant
 
 typedef struct __EF_Point
 {
-    double  x;
-    double  y;
-    double  z;
+    Flottant    x;
+    Flottant    y;
+    Flottant    z;
 } EF_Point;
 
 
@@ -711,9 +711,9 @@ typedef struct __Beton_Barre
 
 typedef struct __EF_Noeud_Libre
 {
-    double      x;
-    double      y;
-    double      z;
+    Flottant    x;
+    Flottant    y;
+    Flottant    z;
     EF_Noeud    *relatif;
 } EF_Noeud_Libre;
 
@@ -721,7 +721,7 @@ typedef struct __EF_Noeud_Libre
 typedef struct __EF_Noeud_Barre
 {
     Beton_Barre *barre;
-    double      position_relative_barre;
+    Flottant    position_relative_barre;
 } EF_Noeud_Barre;
 
 

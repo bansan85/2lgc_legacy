@@ -149,7 +149,7 @@ gboolean _1992_1_1_barres_ajout(Projet *projet, Type_Element type, EF_Section *s
         
         /* Création des noeuds intermédiaires */
         for (i=0;i<discretisation_element;i++)
-            BUG(EF_noeuds_ajout_noeud_barre(projet, element_nouveau, (i+1.)/(discretisation_element+1.), NULL), FALSE);
+            BUG(EF_noeuds_ajout_noeud_barre(projet, element_nouveau, common_math_f((i+1.)/(discretisation_element+1.), FLOTTANT_ORDINATEUR), NULL), FALSE);
     }
     
     projet->modele.barres = g_list_append(projet->modele.barres, element_nouveau);

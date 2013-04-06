@@ -25,6 +25,7 @@
 
 #include "common_projet.h"
 #include "common_erreurs.h"
+#include "common_math.h"
 #include "common_m3d.hpp"
 #include "EF_calculs.h"
 #include "1992_1_1_barres.h"
@@ -77,9 +78,9 @@ EF_Point *EF_noeuds_renvoie_position(EF_Noeud *noeud)
                 
                 BUG(p = EF_noeuds_renvoie_position(tmp->relatif), NULL);
                 
-                retour->x = p->x + tmp->x;
-                retour->y = p->y + tmp->y;
-                retour->z = p->z + tmp->z;
+                retour->x = common_math_add(p->x, tmp->x);
+                retour->y = common_math_add(p->y, tmp->y);
+                retour->z = common_math_add(p->z, tmp->z);
                 
                 free(p);
             }
@@ -100,9 +101,10 @@ EF_Point *EF_noeuds_renvoie_position(EF_Noeud *noeud)
             BUG(point1 = EF_noeuds_renvoie_position(data->barre->noeud_debut), NULL);
             BUG(point2 = EF_noeuds_renvoie_position(data->barre->noeud_fin), NULL);
             
-            retour->x = point1->x + (point2->x-point1->x)*data->position_relative_barre;
-            retour->y = point1->y + (point2->y-point1->y)*data->position_relative_barre;
-            retour->z = point1->z + (point2->z-point1->z)*data->position_relative_barre;
+            retour->x = common_math_add(point1->x, common_math_dot_f(common_math_sub(point2->x, point1->x), data->position_relative_barre));
+            retour->y = common_math_add(point1->y, common_math_dot_f(common_math_sub(point2->y, point1->y), data->position_relative_barre));
+            retour->z = common_math_add(point1->z, common_math_dot_f(common_math_sub(point2->z, point1->z), data->position_relative_barre));
+            
             free(point1);
             free(point2);
             
@@ -119,14 +121,14 @@ EF_Point *EF_noeuds_renvoie_position(EF_Noeud *noeud)
 }
 
 
-EF_Noeud *EF_noeuds_ajout_noeud_libre(Projet *projet, double x, double y, double z,
+EF_Noeud *EF_noeuds_ajout_noeud_libre(Projet *projet, Flottant x, Flottant y, Flottant z,
   EF_Appui *appui, EF_Noeud *relatif)
 /* Description : Ajouter un noeud à la liste des noeuds en lui attribuant le numéro suivant le
  *               dernier noeud existant.
  * Paramètres : Projet *projet : la variable projet,
- *            : double x : position en x,
- *            : double y : position en y,
- *            : double z : position en z,
+ *            : Flottant x : position en x,
+ *            : Flottant y : position en y,
+ *            : Flottant z : position en z,
  *            : EF_Appui *appui : Pointeur vers l'appui, NULL si aucun,
  *            : EF_Noeud *relatif : Pointeur vers le noeud relatif, NULL si aucun.
  * Valeur renvoyée :
@@ -168,12 +170,16 @@ EF_Noeud *EF_noeuds_ajout_noeud_libre(Projet *projet, double x, double y, double
     if (projet->list_gtk.ef_noeud.builder != NULL)
     {
         char    *tmp = NULL;
+        gchar   xx[30], yy[30], zz[30];
         
         if (data->relatif != NULL)
             BUGMSG(tmp = g_strdup_printf("%d", data->relatif->numero), NULL, gettext("Erreur d'allocation mémoire.\n"));
         
         gtk_tree_store_append(projet->list_gtk.ef_noeud.tree_store_libre, &noeud_nouveau->Iter, NULL);
-        gtk_tree_store_set(projet->list_gtk.ef_noeud.tree_store_libre, &noeud_nouveau->Iter, 0, noeud_nouveau->numero, 1, data->x, 2, data->y, 3, data->z, 4, (data->relatif == NULL ? gettext("Aucun") : tmp), 5, (noeud_nouveau->appui == NULL ? gettext("Aucun") : noeud_nouveau->appui->nom), -1);
+        common_math_double_to_char2(data->x, xx, DECIMAL_DISTANCE);
+        common_math_double_to_char2(data->y, yy, DECIMAL_DISTANCE);
+        common_math_double_to_char2(data->z, zz, DECIMAL_DISTANCE);
+        gtk_tree_store_set(projet->list_gtk.ef_noeud.tree_store_libre, &noeud_nouveau->Iter, 0, noeud_nouveau->numero, 1, xx, 2, yy, 3, zz, 4, (data->relatif == NULL ? gettext("Aucun") : tmp), 5, (noeud_nouveau->appui == NULL ? gettext("Aucun") : noeud_nouveau->appui->nom), -1);
         
         free(tmp);
     }
@@ -184,13 +190,13 @@ EF_Noeud *EF_noeuds_ajout_noeud_libre(Projet *projet, double x, double y, double
 
 
 EF_Noeud* EF_noeuds_ajout_noeud_barre(Projet *projet, Beton_Barre *barre,
-  double position_relative_barre, EF_Appui *appui)
+  Flottant position_relative_barre, EF_Appui *appui)
 /* Description : Ajouter un noeud à la liste des noeuds en lui attribuant le numéro suivant le
  *               dernier noeud existant. Ce noeud se situe à l'intérieur d'une barre et permet
  *               la discrétisation.
  * Paramètres : Projet *projet : la variable projet,
  *            : Beton_Barre *barre : barre qui contiendra le noeud intermédiaire,
- *            : double position_relative_barre : position relative à l'intérieur de la barre
+ *            : Flottant position_relative_barre : position relative à l'intérieur de la barre
  *              (compris entre 0.0 et 1.0),
  *            : EF_Appui *appui : Pointeur vers l'appui, NULL si aucun.
  * Valeur renvoyée :
@@ -229,7 +235,7 @@ EF_Noeud* EF_noeuds_ajout_noeud_barre(Projet *projet, Beton_Barre *barre,
     barre->discretisation_element++;
     
     liste = barre->noeuds_intermediaires;
-    while ((liste != NULL) && (((EF_Noeud_Barre*)liste->data)->position_relative_barre < position_relative_barre))
+    while ((liste != NULL) && (common_math_get(((EF_Noeud_Barre*)liste->data)->position_relative_barre) < common_math_get(position_relative_barre)))
         liste = g_list_next(liste);
     
     barre->noeuds_intermediaires = g_list_insert_before(barre->noeuds_intermediaires, liste, noeud_nouveau);
@@ -241,11 +247,13 @@ EF_Noeud* EF_noeuds_ajout_noeud_barre(Projet *projet, Beton_Barre *barre,
     BUG(m3d_noeud(&projet->list_gtk.m3d, noeud_nouveau), NULL);
     if (projet->list_gtk.ef_noeud.builder != NULL)
     {
-        EF_Point        *point;
+        EF_Point    *point;
+        gchar       tmp[30];
         
         BUG(point = EF_noeuds_renvoie_position(noeud_nouveau), NULL);
         gtk_tree_store_append(projet->list_gtk.ef_noeud.tree_store_barre, &noeud_nouveau->Iter, NULL);
-        gtk_tree_store_set(projet->list_gtk.ef_noeud.tree_store_barre, &noeud_nouveau->Iter, 0, noeud_nouveau->numero, 1, point->x, 2, point->y, 3, point->z, 4, (noeud_nouveau->appui == NULL ? gettext("Aucun") : noeud_nouveau->appui->nom), 5, data->barre->numero, 6, data->position_relative_barre, -1);
+        common_math_double_to_char2(data->position_relative_barre, tmp, DECIMAL_DISTANCE);
+        gtk_tree_store_set(projet->list_gtk.ef_noeud.tree_store_barre, &noeud_nouveau->Iter, 0, noeud_nouveau->numero, 1, common_math_get(point->x), 2, common_math_get(point->y), 3, common_math_get(point->z), 4, (noeud_nouveau->appui == NULL ? gettext("Aucun") : noeud_nouveau->appui->nom), 5, data->barre->numero, 6, tmp, -1);
         
         free(point);
     }
@@ -284,12 +292,12 @@ gboolean EF_noeuds_min_max(Projet *projet, double *x_min, double *x_max, double 
     list_parcours = projet->modele.noeuds;
     noeud = list_parcours->data;
     BUG(point = EF_noeuds_renvoie_position(noeud), FALSE);
-    x_mi = point->x;
-    x_ma = point->x;
-    y_mi = point->y;
-    y_ma = point->y;
-    z_mi = point->z;
-    z_ma = point->z;
+    x_mi = common_math_get(point->x);
+    x_ma = common_math_get(point->x);
+    y_mi = common_math_get(point->y);
+    y_ma = common_math_get(point->y);
+    z_mi = common_math_get(point->z);
+    z_ma = common_math_get(point->z);
     free(point);
     list_parcours = g_list_next(list_parcours);
     while (list_parcours != NULL)
@@ -297,18 +305,18 @@ gboolean EF_noeuds_min_max(Projet *projet, double *x_min, double *x_max, double 
         noeud = list_parcours->data;
         BUG(point = EF_noeuds_renvoie_position(noeud), FALSE);
         
-        if (point->x < x_mi)
-            x_mi = point->x;
-        if (point->x > x_ma)
-            x_ma = point->x;
-        if (point->y < y_mi)
-            y_mi = point->y;
-        if (point->y > y_ma)
-            y_ma = point->y;
-        if (point->z < z_mi)
-            z_mi = point->z;
-        if (point->z > z_ma)
-            z_ma = point->z;
+        if (common_math_get(point->x) < x_mi)
+            x_mi = common_math_get(point->x);
+        if (common_math_get(point->x) > x_ma)
+            x_ma = common_math_get(point->x);
+        if (common_math_get(point->y) < y_mi)
+            y_mi = common_math_get(point->y);
+        if (common_math_get(point->y) > y_ma)
+            y_ma = common_math_get(point->y);
+        if (common_math_get(point->z) < z_mi)
+            z_mi = common_math_get(point->z);
+        if (common_math_get(point->z) > z_ma)
+            z_ma = common_math_get(point->z);
         
         free(point);
         
@@ -367,13 +375,14 @@ EF_Noeud* EF_noeuds_cherche_numero(Projet *projet, unsigned int numero, gboolean
 }
 
 
-gboolean EF_noeuds_change_pos_abs(Projet *projet, EF_Noeud *noeud, double x, double y, double z)
+gboolean EF_noeuds_change_pos_abs(Projet *projet, EF_Noeud *noeud, Flottant x, Flottant y,
+  Flottant z)
 /* Description : Change les coordonnées d'un noeud.
  * Paramètres : Projet *projet : la variable projet,
  *            : EF_Noeud *noeud : noeud à modifier,
- *            : double x : la nouvelle coordonnée en x, peut être NAN si pas de modification,
- *            : double y : la nouvelle coordonnée en y, peut être NAN si pas de modification,
- *            : double z : la nouvelle coordonnée en z, peut être NAN si pas de modification.
+ *            : Flottant x : la nouvelle coordonnée en x, peut être NAN si pas de modification,
+ *            : Flottant y : la nouvelle coordonnée en y, peut être NAN si pas de modification,
+ *            : Flottant z : la nouvelle coordonnée en z, peut être NAN si pas de modification.
  * Valeur renvoyée :
  *   Succès : TRUE
  *   Échec : FALSE :
@@ -393,11 +402,11 @@ gboolean EF_noeuds_change_pos_abs(Projet *projet, EF_Noeud *noeud, double x, dou
     
     point = noeud->data;
     
-    if (!isnan(x))
+    if (!isnan(common_math_get(x)))
         point->x = x;
-    if (!isnan(y))
+    if (!isnan(common_math_get(y)))
         point->y = y;
-    if (!isnan(z))
+    if (!isnan(common_math_get(z)))
         point->z = z;
     
 #ifdef ENABLE_GTK
@@ -409,7 +418,14 @@ gboolean EF_noeuds_change_pos_abs(Projet *projet, EF_Noeud *noeud, double x, dou
     g_list_free(liste_noeuds);
     
     if (projet->list_gtk.ef_noeud.builder != NULL)
-        gtk_tree_store_set(projet->list_gtk.ef_noeud.tree_store_libre, &noeud->Iter, 1, point->x, 2, point->y, 3, point->z, -1);
+    {
+        gchar   xx[30], yy[30], zz[30];
+        
+        common_math_double_to_char2(point->x, xx, DECIMAL_DISTANCE);
+        common_math_double_to_char2(point->y, yy, DECIMAL_DISTANCE);
+        common_math_double_to_char2(point->z, zz, DECIMAL_DISTANCE);
+        gtk_tree_store_set(projet->list_gtk.ef_noeud.tree_store_libre, &noeud->Iter, 1, xx, 2, yy, 3, zz, -1);
+    }
 #endif
     
     BUG(EF_calculs_free(projet), FALSE);
@@ -418,7 +434,7 @@ gboolean EF_noeuds_change_pos_abs(Projet *projet, EF_Noeud *noeud, double x, dou
 }
 
 
-gboolean EF_noeuds_change_pos_relat(Projet *projet, EF_Noeud *noeud, double pos)
+gboolean EF_noeuds_change_pos_relat(Projet *projet, EF_Noeud *noeud, Flottant pos)
 /* Description : Change la coordonnée d'un noeud.
  * Paramètres : Projet *projet : la variable projet,
  *            : EF_Noeud *noeud : noeud à modifier,
@@ -439,7 +455,7 @@ gboolean EF_noeuds_change_pos_relat(Projet *projet, EF_Noeud *noeud, double pos)
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(noeud, FALSE, gettext("Paramètre %s incorrect.\n"), "noeud");
     BUGMSG(noeud->type == NOEUD_BARRE, FALSE, gettext("Le type du noeud est incorrect.\n"));
-    BUGMSG((0. <= pos) && (pos <= 1.), FALSE, gettext("Paramètre %s incorrect.\n"), "pos");
+    BUGMSG((0. <= common_math_get(pos)) && (common_math_get(pos) <= 1.), FALSE, gettext("Paramètre %s incorrect.\n"), "pos");
     
     info = noeud->data;
     
@@ -453,7 +469,7 @@ gboolean EF_noeuds_change_pos_relat(Projet *projet, EF_Noeud *noeud, double pos)
         EF_Noeud        *noeud2 = g_list_previous(liste)->data;
         EF_Noeud_Barre  *info2 = noeud2->data;
         
-        avant = info2->position_relative_barre;
+        avant = common_math_get(info2->position_relative_barre);
     }
     if (g_list_next(liste) == NULL)
         apres = 1.;
@@ -462,9 +478,9 @@ gboolean EF_noeuds_change_pos_relat(Projet *projet, EF_Noeud *noeud, double pos)
         EF_Noeud        *noeud2 = g_list_next(liste)->data;
         EF_Noeud_Barre  *info2 = noeud2->data;
         
-        apres = info2->position_relative_barre;
+        apres = common_math_get(info2->position_relative_barre);
     }
-    if ((avant <= pos) && (pos <= apres))
+    if ((avant <= common_math_get(pos)) && (common_math_get(pos) <= apres))
         info->position_relative_barre = pos;
     // Il est nécessaire de réorganiser
     else
@@ -475,7 +491,7 @@ gboolean EF_noeuds_change_pos_relat(Projet *projet, EF_Noeud *noeud, double pos)
         
         // On parcours la liste pour l'insérer au bon endroit
         list_parcours = info->barre->noeuds_intermediaires;
-        while ((list_parcours != NULL) && (((EF_Noeud_Barre*)list_parcours->data)->position_relative_barre < pos))
+        while ((list_parcours != NULL) && (common_math_get(((EF_Noeud_Barre*)list_parcours->data)->position_relative_barre) < common_math_get(pos)))
             list_parcours = g_list_next(list_parcours);
         
         info->barre->noeuds_intermediaires = g_list_insert_before(info->barre->noeuds_intermediaires, list_parcours, liste->data);
@@ -494,7 +510,12 @@ gboolean EF_noeuds_change_pos_relat(Projet *projet, EF_Noeud *noeud, double pos)
     g_list_free(liste);
     
     if (projet->list_gtk.ef_noeud.builder != NULL)
-        gtk_tree_store_set(projet->list_gtk.ef_noeud.tree_store_barre, &noeud->Iter, 6, info->position_relative_barre, -1);
+    {
+        gchar   tmp[30];
+        
+        common_math_double_to_char2(info->position_relative_barre, tmp, DECIMAL_DISTANCE);
+        gtk_tree_store_set(projet->list_gtk.ef_noeud.tree_store_barre, &noeud->Iter, 6, tmp, -1);
+    }
 #endif
     
     BUG(EF_calculs_free(projet), FALSE);
@@ -682,9 +703,9 @@ double EF_noeuds_distance(EF_Noeud* n1, EF_Noeud* n2)
     BUG(p1 = EF_noeuds_renvoie_position(n1), NAN);
     BUG(p2 = EF_noeuds_renvoie_position(n2), NAN);
     
-    x = p2->x - p1->x;
-    y = p2->y - p1->y;
-    z = p2->z - p1->z;
+    x = common_math_get(p2->x) - common_math_get(p1->x);
+    y = common_math_get(p2->y) - common_math_get(p1->y);
+    z = common_math_get(p2->z) - common_math_get(p1->z);
     
     free(p1);
     free(p2);
@@ -720,9 +741,9 @@ double EF_noeuds_distance_x_y_z(EF_Noeud* n1, EF_Noeud* n2, double *x, double *y
     BUG(p1 = EF_noeuds_renvoie_position(n1), NAN);
     BUG(p2 = EF_noeuds_renvoie_position(n2), NAN);
 
-    *x = p2->x - p1->x;
-    *y = p2->y - p1->y;
-    *z = p2->z - p1->z;
+    *x = common_math_get(p2->x) - common_math_get(p1->x);
+    *y = common_math_get(p2->y) - common_math_get(p1->y);
+    *z = common_math_get(p2->z) - common_math_get(p1->z);
     
     free(p1);
     free(p2);

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2013-04-04 07:34+0200\n"
-"PO-Revision-Date: 2013-04-04 07:52+0100\n"
+"POT-Creation-Date: 2013-04-06 15:34+0200\n"
+"PO-Revision-Date: 2013-04-06 15:40+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -852,6 +852,9 @@ msgstr "'%s' n'est pas de la forme 'largeurxhauteur'.\n"
 
 msgid "Type de donnée du nombre flottant inconnu.\n"
 msgstr "Type de donnée du nombre flottant inconnu.\n"
+
+msgid "Type de nombre est inconnu.\n"
+msgstr "Type de nombre est inconnu.\n"
 
 #, c-format
 msgid "Type d'action '%s' inconnu.\n"

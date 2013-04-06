@@ -306,7 +306,7 @@ gboolean m3d_camera_axe_x_z(Projet *projet)
     list_parcours = projet->modele.noeuds;
     noeud = (EF_Noeud *)list_parcours->data;
     BUG(point = EF_noeuds_renvoie_position(noeud), FALSE);
-    y = point->y-sqrt((point->x-x)*(point->x-x)+(point->z-z)*(point->z-z));
+    y = common_math_get(point->y)-sqrt((common_math_get(point->x)-x)*(common_math_get(point->x)-x)+(common_math_get(point->z)-z)*(common_math_get(point->z)-z));
     free(point);
     
     list_parcours = g_list_next(list_parcours);
@@ -314,7 +314,7 @@ gboolean m3d_camera_axe_x_z(Projet *projet)
     {
         noeud = (EF_Noeud *)list_parcours->data;
         BUG(point = EF_noeuds_renvoie_position(noeud), FALSE);
-        y = MIN(y, point->y-sqrt((point->x-x)*(point->x-x)+(point->z-z)*(point->z-z)));
+        y = MIN(y, common_math_get(point->y)-sqrt((common_math_get(point->x)-x)*(common_math_get(point->x)-x)+(common_math_get(point->z)-z)*(common_math_get(point->z)-z)));
         free(point);
         list_parcours = g_list_next(list_parcours);
     }
@@ -435,7 +435,7 @@ void* m3d_noeud(void *donnees_m3d, EF_Noeud *noeud)
     cube->set_ambient_reflexion (1.);
     cube->set_smooth(GOURAUD);
     vue->scene->add_object(cube);
-    cube->set_position(point->x, point->y, point->z);
+    cube->set_position(common_math_get(point->x), common_math_get(point->y), common_math_get(point->z));
     
     free(nom);
     free(point);
@@ -573,7 +573,7 @@ gboolean m3d_barre(void *donnees_m3d, Beton_Barre *barre)
             tout->rotations(0., -y/M_PI*180., z/M_PI*180.);
             BUG(p_d = EF_noeuds_renvoie_position(barre->noeud_debut), FALSE);
             BUG(p_f = EF_noeuds_renvoie_position(barre->noeud_fin), FALSE);
-            tout->set_position((p_d->x+p_f->x)/2., (p_d->y+p_f->y)/2., (p_d->z+p_f->z)/2.);
+            tout->set_position((common_math_get(p_d->x)+common_math_get(p_f->x))/2., (common_math_get(p_d->y)+common_math_get(p_f->y))/2., (common_math_get(p_d->z)+common_math_get(p_f->z))/2.);
             tout->set_ambient_reflexion(0.8);
             free(p_d);
             free(p_f);
@@ -664,7 +664,7 @@ gboolean m3d_barre(void *donnees_m3d, Beton_Barre *barre)
             tout->rotations(0., -y/M_PI*180., z/M_PI*180.);
             BUG(p_d = EF_noeuds_renvoie_position(barre->noeud_debut), FALSE);
             BUG(p_f = EF_noeuds_renvoie_position(barre->noeud_fin), FALSE);
-            tout->set_position((p_d->x+p_f->x)/2., (p_d->y+p_f->y)/2., (p_d->z+p_f->z)/2.);
+            tout->set_position((common_math_get(p_d->x)+common_math_get(p_f->x))/2., (common_math_get(p_d->y)+common_math_get(p_f->y))/2., (common_math_get(p_d->z)+common_math_get(p_f->z))/2.);
             free(p_d);
             free(p_f);
             
@@ -727,7 +727,7 @@ gboolean m3d_barre(void *donnees_m3d, Beton_Barre *barre)
             tout->rotations(0., -y/M_PI*180., z/M_PI*180.);
             BUG(p_d = EF_noeuds_renvoie_position(barre->noeud_debut), FALSE);
             BUG(p_f = EF_noeuds_renvoie_position(barre->noeud_fin), FALSE);
-            tout->set_position((p_d->x+p_f->x)/2., (p_d->y+p_f->y)/2., (p_d->z+p_f->z)/2.);
+            tout->set_position((common_math_get(p_d->x)+common_math_get(p_f->x))/2., (common_math_get(p_d->y)+common_math_get(p_f->y))/2., (common_math_get(p_d->z)+common_math_get(p_f->z))/2.);
             free(p_d);
             free(p_f);
             
@@ -769,7 +769,7 @@ gboolean m3d_barre(void *donnees_m3d, Beton_Barre *barre)
             tout->rotations(0., -y/M_PI*180., z/M_PI*180.);
             BUG(p_d = EF_noeuds_renvoie_position(barre->noeud_debut), FALSE);
             BUG(p_f = EF_noeuds_renvoie_position(barre->noeud_fin), FALSE);
-            tout->set_position((p_d->x+p_f->x)/2., (p_d->y+p_f->y)/2., (p_d->z+p_f->z)/2.);
+            tout->set_position((common_math_get(p_d->x)+common_math_get(p_f->x))/2., (common_math_get(p_d->y)+common_math_get(p_f->y))/2., (common_math_get(p_d->z)+common_math_get(p_f->z))/2.);
             free(p_d);
             free(p_f);
             

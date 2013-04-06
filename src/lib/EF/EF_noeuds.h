@@ -24,16 +24,16 @@
 
 gboolean EF_noeuds_init(Projet *projet) __attribute__((__warn_unused_result__));
 
-EF_Noeud* EF_noeuds_ajout_noeud_libre(Projet *projet, double x, double y, double z, EF_Appui *appui, EF_Noeud* relatif) __attribute__((__warn_unused_result__));
-EF_Noeud* EF_noeuds_ajout_noeud_barre(Projet *projet, Beton_Barre *barre, double position_relative_barre, EF_Appui *appui) __attribute__((__warn_unused_result__));
+EF_Noeud* EF_noeuds_ajout_noeud_libre(Projet *projet, Flottant x, Flottant y, Flottant z, EF_Appui *appui, EF_Noeud* relatif) __attribute__((__warn_unused_result__));
+EF_Noeud* EF_noeuds_ajout_noeud_barre(Projet *projet, Beton_Barre *barre, Flottant position_relative_barre, EF_Appui *appui) __attribute__((__warn_unused_result__));
 
 EF_Point *EF_noeuds_renvoie_position(EF_Noeud *noeud) __attribute__((__warn_unused_result__));
 gboolean EF_noeuds_min_max(Projet *projet, double *x_min, double *x_max, double *y_min, double *y_max, double *z_min, double *z_max) __attribute__((__warn_unused_result__));
 
 EF_Noeud* EF_noeuds_cherche_numero(Projet *projet, unsigned int numero, gboolean critique) __attribute__((__warn_unused_result__));
 
-gboolean EF_noeuds_change_pos_abs(Projet *projet, EF_Noeud *noeud, double x, double y, double z) __attribute__((__warn_unused_result__));
-gboolean EF_noeuds_change_pos_relat(Projet *projet, EF_Noeud *noeud, double pos) __attribute__((__warn_unused_result__));
+gboolean EF_noeuds_change_pos_abs(Projet *projet, EF_Noeud *noeud, Flottant x, Flottant y, Flottant z) __attribute__((__warn_unused_result__));
+gboolean EF_noeuds_change_pos_relat(Projet *projet, EF_Noeud *noeud, Flottant pos) __attribute__((__warn_unused_result__));
 gboolean EF_noeuds_change_appui(Projet *projet, EF_Noeud *noeud, EF_Appui *appui) __attribute__((__warn_unused_result__));
 gboolean EF_noeuds_change_noeud_relatif(Projet *projet, EF_Noeud *noeud, EF_Noeud *relatif) __attribute__((__warn_unused_result__));
 
