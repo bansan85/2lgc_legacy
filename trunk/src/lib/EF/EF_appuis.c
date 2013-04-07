@@ -614,24 +614,8 @@ gboolean EF_appuis_renomme(EF_Appui *appui, gchar *nom, Projet *projet, gboolean
     
     if (projet->list_gtk.ef_noeud.builder != NULL)
     {
-        GtkTreeModel    *model;
-        GList           *parcours;
-        
-        parcours = projet->modele.noeuds;
-        while (parcours != NULL)
-        {
-            EF_Noeud    *noeud = parcours->data;
-            
-            if (noeud->type == NOEUD_LIBRE)
-                model = GTK_TREE_MODEL(projet->list_gtk.ef_noeud.tree_store_libre);
-            else
-                model = GTK_TREE_MODEL(projet->list_gtk.ef_noeud.tree_store_barre);
-            
-            if (noeud->appui == appui)
-                gtk_tree_store_set(GTK_TREE_STORE(model), &noeud->Iter, 5, appui->nom, -1);
-            
-            parcours = g_list_next(parcours);
-        }
+        gtk_widget_queue_draw(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_treeview_noeuds_libres")));
+        gtk_widget_queue_draw(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_treeview_noeuds_intermediaires")));
     }
 #endif
     
