@@ -139,7 +139,6 @@ void EF_gtk_appuis_supprimer(GtkButton *button, Projet *projet)
 {
     GtkTreeIter     iter;
     GtkTreeModel    *model;
-    char            *nom;
     EF_Appui        *appui;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
@@ -148,14 +147,11 @@ void EF_gtk_appuis_supprimer(GtkButton *button, Projet *projet)
     if (!gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_treeview_select")), &model, &iter))
         return;
     
-    gtk_tree_model_get(model, &iter, 0, &nom, -1);
+    gtk_tree_model_get(model, &iter, 0, &appui, -1);
     
-    BUG(appui = EF_appuis_cherche_nom(projet, nom, TRUE), );
     BUG(EF_appuis_supprime(appui, TRUE, FALSE, projet), );
     
     BUG(m3d_rafraichit(projet), );
-    
-    free(nom);
     
     return;
 }
@@ -182,20 +178,16 @@ gboolean EF_gtk_appuis_treeview_key_press(GtkWidget *widget, GdkEvent *event, Pr
         
         if (gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_treeview_select")), &model, &Iter))
         {
-            char        *nom;
             EF_Appui    *appui;
             
             GList   *liste_appuis = NULL;
             
-            gtk_tree_model_get(model, &Iter, 0, &nom, -1);
-            
-            BUG(appui = EF_appuis_cherche_nom(projet, nom, TRUE), FALSE);
+            gtk_tree_model_get(model, &Iter, 0, &appui, -1);
             
             liste_appuis = g_list_append(liste_appuis, appui);
             if (_1992_1_1_barres_cherche_dependances(projet, liste_appuis, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, FALSE, FALSE) == FALSE)
                 EF_gtk_appuis_supprimer(NULL, projet);
             
-            free(nom);
             g_list_free(liste_appuis);
         }
         return TRUE;
@@ -215,7 +207,6 @@ void EF_gtk_appuis_supprimer_menu_suppr_noeud(GtkButton *button, Projet *projet)
 {
     GtkTreeIter     iter;
     GtkTreeModel    *model;
-    char            *nom;
     EF_Appui        *appui;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
@@ -224,14 +215,11 @@ void EF_gtk_appuis_supprimer_menu_suppr_noeud(GtkButton *button, Projet *projet)
     if (!gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_treeview_select")), &model, &iter))
         return;
     
-    gtk_tree_model_get(model, &iter, 0, &nom, -1);
+    gtk_tree_model_get(model, &iter, 0, &appui, -1);
     
-    BUG(appui = EF_appuis_cherche_nom(projet, nom, TRUE), );
     BUG(EF_appuis_supprime(appui, FALSE, TRUE, projet), );
     
     BUG(m3d_rafraichit(projet), );
-    
-    free(nom);
     
     return;
 }
@@ -247,7 +235,6 @@ void EF_gtk_appuis_supprimer_menu_modif_noeud(GtkButton *button, Projet *projet)
 {
     GtkTreeIter     iter;
     GtkTreeModel    *model;
-    char            *nom;
     EF_Appui        *appui;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
@@ -256,12 +243,9 @@ void EF_gtk_appuis_supprimer_menu_modif_noeud(GtkButton *button, Projet *projet)
     if (!gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_treeview_select")), &model, &iter))
         return;
     
-    gtk_tree_model_get(model, &iter, 0, &nom, -1);
+    gtk_tree_model_get(model, &iter, 0, &appui, -1);
     
-    BUG(appui = EF_appuis_cherche_nom(projet, nom, TRUE), );
     BUG(EF_appuis_supprime(appui, FALSE, FALSE, projet), );
-    
-    free(nom);
     
     return;
 }
@@ -281,7 +265,6 @@ void EF_gtk_appuis_edit_type(GtkCellRendererText *cell, gchar *path_string, gcha
     GtkTreeModel    *model;
     GtkTreeIter     iter;
     GtkTreePath     *path;
-    char            *nom;
     EF_Appui        *appui;
     int             column = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cell), "column"));
     
@@ -293,9 +276,7 @@ void EF_gtk_appuis_edit_type(GtkCellRendererText *cell, gchar *path_string, gcha
     path = gtk_tree_path_new_from_string(path_string);
     gtk_tree_model_get_iter(model, &iter, path);
     gtk_tree_path_free(path);
-    gtk_tree_model_get(model, &iter, 0, &nom, -1);
-    BUG(appui = EF_appuis_cherche_nom(projet, nom, TRUE), );
-    free(nom);
+    gtk_tree_model_get(model, &iter, 0, &appui, -1);
 
     if (strcmp(new_text, gettext("Libre")) == 0)
         BUG(EF_appuis_edit(appui, column-1, EF_APPUI_LIBRE, projet), );
@@ -322,7 +303,6 @@ void EF_gtk_appuis_edit_nom(GtkCellRendererText *cell, gchar *path_string, gchar
     GtkTreeModel    *model;
     GtkTreeIter     iter;
     GtkTreePath     *path;
-    char            *nom;
     EF_Appui        *appui;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
@@ -333,14 +313,7 @@ void EF_gtk_appuis_edit_nom(GtkCellRendererText *cell, gchar *path_string, gchar
     path = gtk_tree_path_new_from_string(path_string);
     gtk_tree_model_get_iter(model, &iter, path);
     gtk_tree_path_free(path);
-    gtk_tree_model_get(model, &iter, 0, &nom, -1);
-    if (strcmp(nom, new_text) == 0)
-    {
-        free(nom);
-        return;
-    }
-    BUG(appui = EF_appuis_cherche_nom(projet, nom, TRUE), );
-    free(nom);
+    gtk_tree_model_get(model, &iter, 0, &appui, -1);
     if (strcmp(appui->nom, new_text) == 0)
         return;
 
@@ -376,13 +349,10 @@ void EF_gtk_appuis_select_changed(GtkTreeSelection *treeselection, Projet *proje
     }
     else
     {
-        char        *nom;
         EF_Appui    *appui;
         GList       *liste_appuis = NULL;
         
-        gtk_tree_model_get(model, &Iter, 0, &nom, -1);
-        
-        BUG(appui = EF_appuis_cherche_nom(projet, nom, TRUE), );
+        gtk_tree_model_get(model, &Iter, 0, &appui, -1);
         
         liste_appuis = g_list_append(liste_appuis, appui);
         if (_1992_1_1_barres_cherche_dependances(projet, liste_appuis, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, FALSE, FALSE))
@@ -400,7 +370,6 @@ void EF_gtk_appuis_select_changed(GtkTreeSelection *treeselection, Projet *proje
             gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_boutton_supprimer_menu")), FALSE);
         }
         
-        free(nom);
         g_list_free(liste_appuis);
     }
     
@@ -419,7 +388,6 @@ void EF_gtk_appuis_boutton_supprimer_menu(GtkButton *widget, Projet *projet)
 {
     GtkTreeModel    *model;
     GtkTreeIter     Iter;
-    char            *nom;
     EF_Appui        *appui;
     GList           *liste_appuis = NULL, *liste_noeuds_dep, *liste_barres_dep, *liste_charges_dep;
     
@@ -429,9 +397,7 @@ void EF_gtk_appuis_boutton_supprimer_menu(GtkButton *widget, Projet *projet)
     if (!gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_treeview_select")), &model, &Iter))
         BUGMSG(NULL, , gettext("Aucun élément n'est sélectionné.\n"));
     
-    gtk_tree_model_get(model, &Iter, 0, &nom, -1);
-    
-    BUG(appui = EF_appuis_cherche_nom(projet, nom, TRUE), );
+    gtk_tree_model_get(model, &Iter, 0, &appui, -1);
     
     liste_appuis = g_list_append(liste_appuis, appui);
     BUG(_1992_1_1_barres_cherche_dependances(projet, liste_appuis, NULL, NULL, NULL, NULL, NULL, &liste_noeuds_dep, &liste_barres_dep, &liste_charges_dep, FALSE, FALSE), );
@@ -448,12 +414,270 @@ void EF_gtk_appuis_boutton_supprimer_menu(GtkButton *widget, Projet *projet)
     else
         BUGMSG(NULL, , gettext("L'élément ne possède aucune dépendance.\n"));
     
-    free(nom);
     g_list_free(liste_noeuds_dep);
     g_list_free(liste_barres_dep);
     g_list_free(liste_charges_dep);
     
     return;
+}
+
+
+void EF_gtk_appuis_render_0(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
+  GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data2)
+/* Description : Affiche le nom de l'appui.
+ * Paramètres : GtkTreeViewColumn *tree_column : composant à l'origine de l'évènement,
+ *            : GtkCellRenderer *cell : la cellule en cours d'édition,
+ *            : GtkTreeModel *tree_model : le mode en cours d'édition,
+ *            : GtkTreeIter *iter : la ligne en cours d'édition,
+ *            : gpointer data2 : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    EF_Appui    *appui;
+    
+    gtk_tree_model_get(tree_model, iter, 0, &appui, -1);
+    
+    g_object_set(cell, "text", appui->nom, NULL);
+}
+
+
+void EF_gtk_appuis_render_1(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
+  GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data2)
+/* Description : Affiche le type d'appui en ux.
+ * Paramètres : GtkTreeViewColumn *tree_column : composant à l'origine de l'évènement,
+ *            : GtkCellRenderer *cell : la cellule en cours d'édition,
+ *            : GtkTreeModel *tree_model : le mode en cours d'édition,
+ *            : GtkTreeIter *iter : la ligne en cours d'édition,
+ *            : gpointer data2 : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    EF_Appui    *appui;
+    char        *txt;
+    
+    gtk_tree_model_get(tree_model, iter, 0, &appui, -1);
+    
+    switch (appui->ux)
+    {
+        case EF_APPUI_LIBRE :
+        {
+            txt = gettext("Libre");
+            BUGMSG(appui->ux_donnees == NULL, , gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "ux", gettext("Libre"));
+            break;
+        }
+        case EF_APPUI_BLOQUE :
+        {
+            txt = gettext("Bloqué");
+            BUGMSG(appui->ux_donnees == NULL, , gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "ux", gettext("Bloqué"));
+            break;
+        }
+        default :
+        {
+            BUGMSG(NULL, , gettext("Le type d'appui de %s (%d) est inconnu.\n"), "ux", appui->ux);
+        }
+    }
+    
+    g_object_set(cell, "text", txt, NULL);
+}
+
+
+void EF_gtk_appuis_render_2(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
+  GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data2)
+/* Description : Affiche le type d'appui en uy.
+ * Paramètres : GtkTreeViewColumn *tree_column : composant à l'origine de l'évènement,
+ *            : GtkCellRenderer *cell : la cellule en cours d'édition,
+ *            : GtkTreeModel *tree_model : le mode en cours d'édition,
+ *            : GtkTreeIter *iter : la ligne en cours d'édition,
+ *            : gpointer data2 : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    EF_Appui    *appui;
+    char        *txt;
+    
+    gtk_tree_model_get(tree_model, iter, 0, &appui, -1);
+    
+    switch (appui->uy)
+    {
+        case EF_APPUI_LIBRE :
+        {
+            txt = gettext("Libre");
+            BUGMSG(appui->uy_donnees == NULL, , gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "uy", gettext("Libre"));
+            break;
+        }
+        case EF_APPUI_BLOQUE :
+        {
+            txt = gettext("Bloqué");
+            BUGMSG(appui->uy_donnees == NULL, , gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "uy", gettext("Bloqué"));
+            break;
+        }
+        default :
+        {
+            BUGMSG(NULL, , gettext("Le type d'appui de %s (%d) est inconnu.\n"), "ux", appui->uy);
+        }
+    }
+    
+    g_object_set(cell, "text", txt, NULL);
+}
+
+
+void EF_gtk_appuis_render_3(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
+  GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data2)
+/* Description : Affiche le type d'appui en uz.
+ * Paramètres : GtkTreeViewColumn *tree_column : composant à l'origine de l'évènement,
+ *            : GtkCellRenderer *cell : la cellule en cours d'édition,
+ *            : GtkTreeModel *tree_model : le mode en cours d'édition,
+ *            : GtkTreeIter *iter : la ligne en cours d'édition,
+ *            : gpointer data2 : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    EF_Appui    *appui;
+    char        *txt;
+    
+    gtk_tree_model_get(tree_model, iter, 0, &appui, -1);
+    
+    switch (appui->uz)
+    {
+        case EF_APPUI_LIBRE :
+        {
+            txt = gettext("Libre");
+            BUGMSG(appui->uz_donnees == NULL, , gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "uz", gettext("Libre"));
+            break;
+        }
+        case EF_APPUI_BLOQUE :
+        {
+            txt = gettext("Bloqué");
+            BUGMSG(appui->uz_donnees == NULL, , gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "uz", gettext("Bloqué"));
+            break;
+        }
+        default :
+        {
+            BUGMSG(NULL, , gettext("Le type d'appui de %s (%d) est inconnu.\n"), "ux", appui->uz);
+        }
+    }
+    
+    g_object_set(cell, "text", txt, NULL);
+}
+
+
+void EF_gtk_appuis_render_4(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
+  GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data2)
+/* Description : Affiche le type d'appui en rx.
+ * Paramètres : GtkTreeViewColumn *tree_column : composant à l'origine de l'évènement,
+ *            : GtkCellRenderer *cell : la cellule en cours d'édition,
+ *            : GtkTreeModel *tree_model : le mode en cours d'édition,
+ *            : GtkTreeIter *iter : la ligne en cours d'édition,
+ *            : gpointer data2 : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    EF_Appui    *appui;
+    char        *txt;
+    
+    gtk_tree_model_get(tree_model, iter, 0, &appui, -1);
+    
+    switch (appui->rx)
+    {
+        case EF_APPUI_LIBRE :
+        {
+            txt = gettext("Libre");
+            BUGMSG(appui->rx_donnees == NULL, , gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "rx", gettext("Libre"));
+            break;
+        }
+        case EF_APPUI_BLOQUE :
+        {
+            txt = gettext("Bloqué");
+            BUGMSG(appui->rx_donnees == NULL, , gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "rx", gettext("Bloqué"));
+            break;
+        }
+        default :
+        {
+            BUGMSG(NULL, , gettext("Le type d'appui de %s (%d) est inconnu.\n"), "rx", appui->rx);
+        }
+    }
+    
+    g_object_set(cell, "text", txt, NULL);
+}
+
+
+void EF_gtk_appuis_render_5(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
+  GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data2)
+/* Description : Affiche le type d'appui en ry.
+ * Paramètres : GtkTreeViewColumn *tree_column : composant à l'origine de l'évènement,
+ *            : GtkCellRenderer *cell : la cellule en cours d'édition,
+ *            : GtkTreeModel *tree_model : le mode en cours d'édition,
+ *            : GtkTreeIter *iter : la ligne en cours d'édition,
+ *            : gpointer data2 : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    EF_Appui    *appui;
+    char        *txt;
+    
+    gtk_tree_model_get(tree_model, iter, 0, &appui, -1);
+    
+    switch (appui->ry)
+    {
+        case EF_APPUI_LIBRE :
+        {
+            txt = gettext("Libre");
+            BUGMSG(appui->ry_donnees == NULL, , gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "ry", gettext("Libre"));
+            break;
+        }
+        case EF_APPUI_BLOQUE :
+        {
+            txt = gettext("Bloqué");
+            BUGMSG(appui->ry_donnees == NULL, , gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "ry", gettext("Bloqué"));
+            break;
+        }
+        default :
+        {
+            BUGMSG(NULL, , gettext("Le type d'appui de %s (%d) est inconnu.\n"), "ry", appui->ry);
+        }
+    }
+    
+    g_object_set(cell, "text", txt, NULL);
+}
+
+
+void EF_gtk_appuis_render_6(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
+  GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data2)
+/* Description : Affiche le type d'appui en rz.
+ * Paramètres : GtkTreeViewColumn *tree_column : composant à l'origine de l'évènement,
+ *            : GtkCellRenderer *cell : la cellule en cours d'édition,
+ *            : GtkTreeModel *tree_model : le mode en cours d'édition,
+ *            : GtkTreeIter *iter : la ligne en cours d'édition,
+ *            : gpointer data2 : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    EF_Appui    *appui;
+    char        *txt;
+    
+    gtk_tree_model_get(tree_model, iter, 0, &appui, -1);
+    
+    switch (appui->rz)
+    {
+        case EF_APPUI_LIBRE :
+        {
+            txt = gettext("Libre");
+            BUGMSG(appui->rz_donnees == NULL, , gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "rz", gettext("Libre"));
+            break;
+        }
+        case EF_APPUI_BLOQUE :
+        {
+            txt = gettext("Bloqué");
+            BUGMSG(appui->rz_donnees == NULL, , gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "rz", gettext("Bloqué"));
+            break;
+        }
+        default :
+        {
+            BUGMSG(NULL, , gettext("Le type d'appui de %s (%d) est inconnu.\n"), "rz", appui->rz);
+        }
+    }
+    
+    g_object_set(cell, "text", txt, NULL);
 }
 
 
@@ -492,21 +716,22 @@ void EF_gtk_appuis(Projet *projet)
     g_object_set(gtk_builder_get_object(ef_gtk->builder, "EF_appuis_treeview_cell5"), "model", projet->list_gtk.ef_appuis.liste_type_appui, NULL);
     g_object_set(gtk_builder_get_object(ef_gtk->builder, "EF_appuis_treeview_cell6"), "model", projet->list_gtk.ef_appuis.liste_type_appui, NULL);
     
+    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(ef_gtk->builder, "EF_appuis_treeview_column0")), GTK_CELL_RENDERER(gtk_builder_get_object(ef_gtk->builder, "EF_appuis_treeview_cell0")), EF_gtk_appuis_render_0, projet, NULL);
+    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(ef_gtk->builder, "EF_appuis_treeview_column1")), GTK_CELL_RENDERER(gtk_builder_get_object(ef_gtk->builder, "EF_appuis_treeview_cell1")), EF_gtk_appuis_render_1, projet, NULL);
+    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(ef_gtk->builder, "EF_appuis_treeview_column2")), GTK_CELL_RENDERER(gtk_builder_get_object(ef_gtk->builder, "EF_appuis_treeview_cell2")), EF_gtk_appuis_render_2, projet, NULL);
+    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(ef_gtk->builder, "EF_appuis_treeview_column3")), GTK_CELL_RENDERER(gtk_builder_get_object(ef_gtk->builder, "EF_appuis_treeview_cell3")), EF_gtk_appuis_render_3, projet, NULL);
+    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(ef_gtk->builder, "EF_appuis_treeview_column4")), GTK_CELL_RENDERER(gtk_builder_get_object(ef_gtk->builder, "EF_appuis_treeview_cell4")), EF_gtk_appuis_render_4, projet, NULL);
+    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(ef_gtk->builder, "EF_appuis_treeview_column5")), GTK_CELL_RENDERER(gtk_builder_get_object(ef_gtk->builder, "EF_appuis_treeview_cell5")), EF_gtk_appuis_render_5, projet, NULL);
+    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(ef_gtk->builder, "EF_appuis_treeview_column6")), GTK_CELL_RENDERER(gtk_builder_get_object(ef_gtk->builder, "EF_appuis_treeview_cell6")), EF_gtk_appuis_render_6, projet, NULL);
+    
     list_parcours = projet->modele.appuis;
     while (list_parcours != NULL)
     {
         EF_Appui    *appui = (EF_Appui*)list_parcours->data;
-        char        *txt_uxa, *txt_uya, *txt_uza, *txt_rxa, *txt_rya, *txt_rza;
         
-        BUG(EF_appuis_get_description(appui, &txt_uxa, &txt_uya, &txt_uza, &txt_rxa, &txt_rya, &txt_rza), );
         gtk_tree_store_append(ef_gtk->appuis, &appui->Iter_fenetre, NULL);
-        gtk_tree_store_set(ef_gtk->appuis, &appui->Iter_fenetre, 0, appui->nom, 1, txt_uxa, 2, txt_uya, 3, txt_uza, 4, txt_rxa, 5, txt_rya, 6, txt_rza, -1);
-        free(txt_uxa);
-        free(txt_uya);
-        free(txt_uza);
-        free(txt_rxa);
-        free(txt_rya);
-        free(txt_rza);
+        gtk_tree_store_set(ef_gtk->appuis, &appui->Iter_fenetre, 0, appui, -1);
+        
         list_parcours = g_list_next(list_parcours);
     }
     

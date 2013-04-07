@@ -3,14 +3,7 @@
     <requires lib="gtk+" version="3.2"/>
     <object class="GtkTreeStore" id="EF_appuis_treestore">
         <columns>
-            <column type="gchararray"/>
-            <column type="gchararray"/>
-            <column type="gchararray"/>
-            <column type="gchararray"/>
-            <column type="gchararray"/>
-            <column type="gchararray"/>
-            <column type="gchararray"/>
-            <column type="gchararray"/>
+            <column type="gpointer"/>
         </columns>
     </object>
     <object class="GtkMenu" id="EF_appuis_supprimer_menu">
@@ -107,9 +100,6 @@
                                                 <property name="editable">True</property>
                                                 <signal name="edited" handler="EF_gtk_appuis_edit_nom"/>
                                             </object>
-                                            <attributes>
-                                                <attribute name="text">0</attribute>
-                                            </attributes>
                                         </child>
                                     </object>
                                 </child>
@@ -126,9 +116,6 @@
                                                 <property name="has-entry">False</property>
                                                 <signal name="edited" handler="EF_gtk_appuis_edit_type"/>
                                             </object>
-                                            <attributes>
-                                                <attribute name="text">1</attribute>
-                                            </attributes>
                                         </child>
                                     </object>
                                 </child>
@@ -145,9 +132,6 @@
                                                 <property name="has-entry">False</property>
                                                 <signal name="edited" handler="EF_gtk_appuis_edit_type"/>
                                             </object>
-                                            <attributes>
-                                                <attribute name="text">2</attribute>
-                                            </attributes>
                                         </child>
                                     </object>
                                 </child>
@@ -164,9 +148,6 @@
                                                 <property name="has-entry">False</property>
                                                 <signal name="edited" handler="EF_gtk_appuis_edit_type"/>
                                             </object>
-                                            <attributes>
-                                                <attribute name="text">3</attribute>
-                                            </attributes>
                                         </child>
                                     </object>
                                 </child>
@@ -183,9 +164,6 @@
                                                 <property name="has-entry">False</property>
                                                 <signal name="edited" handler="EF_gtk_appuis_edit_type"/>
                                             </object>
-                                            <attributes>
-                                                <attribute name="text">4</attribute>
-                                            </attributes>
                                         </child>
                                     </object>
                                 </child>
@@ -202,9 +180,6 @@
                                                 <property name="has-entry">False</property>
                                                 <signal name="edited" handler="EF_gtk_appuis_edit_type"/>
                                             </object>
-                                            <attributes>
-                                                <attribute name="text">5</attribute>
-                                            </attributes>
                                         </child>
                                     </object>
                                 </child>
@@ -221,9 +196,6 @@
                                                 <property name="has-entry">False</property>
                                                 <signal name="edited" handler="EF_gtk_appuis_edit_type"/>
                                             </object>
-                                            <attributes>
-                                                <attribute name="text">6</attribute>
-                                            </attributes>
                                         </child>
                                     </object>
                                 </child>
