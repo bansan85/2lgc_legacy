@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2013-04-06 15:34+0200\n"
+"POT-Creation-Date: 2013-04-07 09:00+0200\n"
 "PO-Revision-Date: 2013-04-06 15:40+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
@@ -190,11 +190,11 @@ msgstr "Charge projetée sur la barre"
 msgid "Noeuds"
 msgstr "Noeuds"
 
-msgid "Noeud relatif"
-msgstr "Noeud relatif"
-
 msgid "Appui"
 msgstr "Appui"
+
+msgid "Noeud relatif"
+msgstr "Noeud relatif"
 
 msgid "Noeuds libres"
 msgstr "Noeuds libres"

@@ -170,16 +170,12 @@ EF_Noeud *EF_noeuds_ajout_noeud_libre(Projet *projet, Flottant x, Flottant y, Fl
     if (projet->list_gtk.ef_noeud.builder != NULL)
     {
         char    *tmp = NULL;
-        gchar   xx[30], yy[30], zz[30];
         
         if (data->relatif != NULL)
             BUGMSG(tmp = g_strdup_printf("%d", data->relatif->numero), NULL, gettext("Erreur d'allocation mémoire.\n"));
         
         gtk_tree_store_append(projet->list_gtk.ef_noeud.tree_store_libre, &noeud_nouveau->Iter, NULL);
-        common_math_double_to_char2(data->x, xx, DECIMAL_DISTANCE);
-        common_math_double_to_char2(data->y, yy, DECIMAL_DISTANCE);
-        common_math_double_to_char2(data->z, zz, DECIMAL_DISTANCE);
-        gtk_tree_store_set(projet->list_gtk.ef_noeud.tree_store_libre, &noeud_nouveau->Iter, 0, noeud_nouveau->numero, 1, xx, 2, yy, 3, zz, 4, (data->relatif == NULL ? gettext("Aucun") : tmp), 5, (noeud_nouveau->appui == NULL ? gettext("Aucun") : noeud_nouveau->appui->nom), -1);
+        gtk_tree_store_set(projet->list_gtk.ef_noeud.tree_store_libre, &noeud_nouveau->Iter, 0, noeud_nouveau, -1);
         
         free(tmp);
     }
@@ -253,7 +249,7 @@ EF_Noeud* EF_noeuds_ajout_noeud_barre(Projet *projet, Beton_Barre *barre,
         BUG(point = EF_noeuds_renvoie_position(noeud_nouveau), NULL);
         gtk_tree_store_append(projet->list_gtk.ef_noeud.tree_store_barre, &noeud_nouveau->Iter, NULL);
         common_math_double_to_char2(data->position_relative_barre, tmp, DECIMAL_DISTANCE);
-        gtk_tree_store_set(projet->list_gtk.ef_noeud.tree_store_barre, &noeud_nouveau->Iter, 0, noeud_nouveau->numero, 1, common_math_get(point->x), 2, common_math_get(point->y), 3, common_math_get(point->z), 4, (noeud_nouveau->appui == NULL ? gettext("Aucun") : noeud_nouveau->appui->nom), 5, data->barre->numero, 6, tmp, -1);
+        gtk_tree_store_set(projet->list_gtk.ef_noeud.tree_store_barre, &noeud_nouveau->Iter, 0, noeud_nouveau, -1);
         
         free(point);
     }
@@ -418,14 +414,7 @@ gboolean EF_noeuds_change_pos_abs(Projet *projet, EF_Noeud *noeud, Flottant x, F
     g_list_free(liste_noeuds);
     
     if (projet->list_gtk.ef_noeud.builder != NULL)
-    {
-        gchar   xx[30], yy[30], zz[30];
-        
-        common_math_double_to_char2(point->x, xx, DECIMAL_DISTANCE);
-        common_math_double_to_char2(point->y, yy, DECIMAL_DISTANCE);
-        common_math_double_to_char2(point->z, zz, DECIMAL_DISTANCE);
-        gtk_tree_store_set(projet->list_gtk.ef_noeud.tree_store_libre, &noeud->Iter, 1, xx, 2, yy, 3, zz, -1);
-    }
+        gtk_widget_queue_draw(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_treeview_noeuds_libres")));
 #endif
     
     BUG(EF_calculs_free(projet), FALSE);
@@ -510,12 +499,7 @@ gboolean EF_noeuds_change_pos_relat(Projet *projet, EF_Noeud *noeud, Flottant po
     g_list_free(liste);
     
     if (projet->list_gtk.ef_noeud.builder != NULL)
-    {
-        gchar   tmp[30];
-        
-        common_math_double_to_char2(info->position_relative_barre, tmp, DECIMAL_DISTANCE);
-        gtk_tree_store_set(projet->list_gtk.ef_noeud.tree_store_barre, &noeud->Iter, 6, tmp, -1);
-    }
+        gtk_widget_queue_draw(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_treeview_noeuds_intermediaires")));
 #endif
     
     BUG(EF_calculs_free(projet), FALSE);
@@ -548,18 +532,16 @@ gboolean EF_noeuds_change_appui(Projet *projet, EF_Noeud *noeud, EF_Appui *appui
 #ifdef ENABLE_GTK
     if (projet->list_gtk.ef_noeud.builder != NULL)
     {
-        GtkTreeModel    *model;
-        
-        switch(noeud->type)
+        switch (noeud->type)
         {
             case NOEUD_LIBRE :
             {
-                model = GTK_TREE_MODEL(projet->list_gtk.ef_noeud.tree_store_libre);
+                gtk_widget_queue_draw(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_treeview_noeuds_libres")));
                 break;
             }
             case NOEUD_BARRE :
             {
-                model = GTK_TREE_MODEL(projet->list_gtk.ef_noeud.tree_store_barre);
+                gtk_widget_queue_draw(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_treeview_noeuds_intermediaires")));
                 break;
             }
             default :
@@ -568,11 +550,6 @@ gboolean EF_noeuds_change_appui(Projet *projet, EF_Noeud *noeud, EF_Appui *appui
                 break;
             }
         }
-        
-        if (appui == NULL)
-            gtk_tree_store_set(GTK_TREE_STORE(model), &noeud->Iter, 5, gettext("Aucun"), -1);
-        else
-            gtk_tree_store_set(GTK_TREE_STORE(model), &noeud->Iter, 5, appui->nom, -1);
     }
     if (projet->list_gtk.ef_appuis.builder != NULL)
     {
@@ -659,19 +636,7 @@ gboolean EF_noeuds_change_noeud_relatif(Projet *projet, EF_Noeud *noeud, EF_Noeu
     BUG(m3d_rafraichit(projet), FALSE);
     
     if (projet->list_gtk.ef_noeud.builder != NULL)
-    {
-        if (relatif == NULL)
-            gtk_tree_store_set(projet->list_gtk.ef_noeud.tree_store_libre, &noeud->Iter, 4, gettext("Aucun"), -1);
-        else
-        {
-            char    *tmp;
-            
-            BUGMSG(tmp = g_strdup_printf("%d", relatif->numero), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-            
-            gtk_tree_store_set(projet->list_gtk.ef_noeud.tree_store_libre, &noeud->Iter, 4, tmp, -1);
-            free(tmp);
-        }
-    }
+        gtk_widget_queue_draw(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_treeview_noeuds_libres")));
 #endif
     
     g_list_free(liste_noeuds);

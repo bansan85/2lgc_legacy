@@ -3,23 +3,12 @@
     <requires lib="gtk+" version="3.2"/>
     <object class="GtkTreeStore" id="EF_noeuds_treestore_noeuds_libres">
         <columns>
-            <column type="guint"/>
-            <column type="gchararray"/>
-            <column type="gchararray"/>
-            <column type="gchararray"/>
-            <column type="gchararray"/>
-            <column type="gchararray"/>
+            <column type="gpointer"/>
         </columns>
     </object>
     <object class="GtkTreeStore" id="EF_noeuds_treestore_noeuds_intermediaires">
         <columns>
-            <column type="guint"/>
-            <column type="gdouble"/>
-            <column type="gdouble"/>
-            <column type="gdouble"/>
-            <column type="gchararray"/>
-            <column type="guint"/>
-            <column type="gchararray"/>
+            <column type="gpointer"/>
         </columns>
     </object>
     <object class="GtkMenu" id="EF_noeuds_supprimer_menu">
@@ -79,9 +68,6 @@
                                                         <property name="xalign">0.5</property>
                                                         <property name="background">#EEEEEE</property>
                                                     </object>
-                                                    <attributes>
-                                                        <attribute name="text">0</attribute>
-                                                    </attributes>
                                                 </child>
                                             </object>
                                         </child>
@@ -97,9 +83,6 @@
                                                         <property name="xalign">1.</property>
                                                         <signal name="edited" handler="EF_gtk_noeud_edit_pos_abs"/>
                                                     </object>
-                                                    <attributes>
-                                                        <attribute name="text">1</attribute>
-                                                    </attributes>
                                                 </child>
                                             </object>
                                         </child>
@@ -115,9 +98,6 @@
                                                         <property name="xalign">1.</property>
                                                         <signal name="edited" handler="EF_gtk_noeud_edit_pos_abs"/>
                                                     </object>
-                                                    <attributes>
-                                                        <attribute name="text">2</attribute>
-                                                    </attributes>
                                                 </child>
                                             </object>
                                         </child>
@@ -133,9 +113,6 @@
                                                         <property name="xalign">1.</property>
                                                         <signal name="edited" handler="EF_gtk_noeud_edit_pos_abs"/>
                                                     </object>
-                                                    <attributes>
-                                                        <attribute name="text">3</attribute>
-                                                    </attributes>
                                                 </child>
                                             </object>
                                         </child>
@@ -144,16 +121,14 @@
                                                 <property name="visible">True</property>
                                                 <property name="resizable">True</property>
                                                 <property name="alignment">0.5</property>
-                                                <property name="title" translatable="yes">Noeud relatif</property>
+                                                <property name="title" translatable="yes">Appui</property>
                                                 <child>
-                                                    <object class="GtkCellRendererText" id="EF_noeuds_treeview_noeuds_libres_cell4">
+                                                    <object class="GtkCellRendererCombo" id="EF_noeuds_treeview_noeuds_libres_cell4">
                                                         <property name="editable">True</property>
-                                                        <property name="xalign">0.5</property>
-                                                        <signal name="edited" handler="EF_gtk_noeud_edit_noeud_relatif"/>
+                                                        <property name="text-column">0</property>
+                                                        <property name="has-entry">False</property>
+                                                        <signal name="edited" handler="EF_gtk_noeud_edit_noeud_appui"/>
                                                     </object>
-                                                    <attributes>
-                                                        <attribute name="text">4</attribute>
-                                                    </attributes>
                                                 </child>
                                             </object>
                                         </child>
@@ -162,17 +137,13 @@
                                                 <property name="visible">True</property>
                                                 <property name="resizable">True</property>
                                                 <property name="alignment">0.5</property>
-                                                <property name="title" translatable="yes">Appui</property>
+                                                <property name="title" translatable="yes">Noeud relatif</property>
                                                 <child>
-                                                    <object class="GtkCellRendererCombo" id="EF_noeuds_treeview_noeuds_libres_cell5">
+                                                    <object class="GtkCellRendererText" id="EF_noeuds_treeview_noeuds_libres_cell5">
                                                         <property name="editable">True</property>
-                                                        <property name="text-column">0</property>
-                                                        <property name="has-entry">False</property>
-                                                        <signal name="edited" handler="EF_gtk_noeud_edit_noeud_appui"/>
+                                                        <property name="xalign">0.5</property>
+                                                        <signal name="edited" handler="EF_gtk_noeud_edit_noeud_relatif"/>
                                                     </object>
-                                                    <attributes>
-                                                        <attribute name="text">5</attribute>
-                                                    </attributes>
                                                 </child>
                                             </object>
                                         </child>
@@ -219,9 +190,6 @@
                                                         <property name="xalign">0.5</property>
                                                         <property name="background">#EEEEEE</property>
                                                     </object>
-                                                    <attributes>
-                                                        <attribute name="text">0</attribute>
-                                                    </attributes>
                                                 </child>
                                             </object>
                                         </child>
@@ -235,9 +203,6 @@
                                                     <object class="GtkCellRendererText" id="EF_noeuds_treeview_noeuds_intermediaires_cell1">
                                                         <property name="xalign">1.</property>
                                                     </object>
-                                                    <attributes>
-                                                        <attribute name="text">1</attribute>
-                                                    </attributes>
                                                 </child>
                                             </object>
                                         </child>
@@ -251,9 +216,6 @@
                                                     <object class="GtkCellRendererText" id="EF_noeuds_treeview_noeuds_intermediaires_cell2">
                                                         <property name="xalign">1.</property>
                                                     </object>
-                                                    <attributes>
-                                                        <attribute name="text">2</attribute>
-                                                    </attributes>
                                                 </child>
                                             </object>
                                         </child>
@@ -267,9 +229,6 @@
                                                     <object class="GtkCellRendererText" id="EF_noeuds_treeview_noeuds_intermediaires_cell3">
                                                         <property name="xalign">1.</property>
                                                     </object>
-                                                    <attributes>
-                                                        <attribute name="text">3</attribute>
-                                                    </attributes>
                                                 </child>
                                             </object>
                                         </child>
@@ -286,9 +245,6 @@
                                                         <property name="has-entry">False</property>
                                                         <signal name="edited" handler="EF_gtk_noeud_edit_noeud_appui"/>
                                                     </object>
-                                                    <attributes>
-                                                        <attribute name="text">4</attribute>
-                                                    </attributes>
                                                 </child>
                                             </object>
                                         </child>
@@ -304,9 +260,6 @@
                                                         <property name="xalign">0.5</property>
                                                         <signal name="edited" handler="EF_gtk_noeud_edit_noeud_barre_barre"/>
                                                     </object>
-                                                    <attributes>
-                                                        <attribute name="text">5</attribute>
-                                                    </attributes>
                                                 </child>
                                             </object>
                                         </child>
@@ -322,9 +275,6 @@
                                                         <property name="xalign">1.</property>
                                                         <signal name="edited" handler="EF_gtk_noeud_edit_pos_relat"/>
                                                     </object>
-                                                    <attributes>
-                                                        <attribute name="text">6</attribute>
-                                                    </attributes>
                                                 </child>
                                             </object>
                                         </child>
