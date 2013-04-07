@@ -101,176 +101,6 @@ EF_Appui* EF_appuis_cherche_nom(Projet *projet, const char *nom, gboolean critiq
 }
 
 
-gboolean EF_appuis_get_description(EF_Appui* appui, char **txt_uxa, char **txt_uya,
-  char **txt_uza, char **txt_rxa, char **txt_rya, char **txt_rza)
-/* Description : Renvoie la description d'un appui.
- * Paramètres : EF_Appui* appui : l'appui à décrire,
- *            : char **txt_uxa : description de ux,
- *            : char **txt_uya : description de ux,
- *            : char **txt_uza : description de uz,
- *            : char **txt_rxa : description de rx,
- *            : char **txt_rya : description de ry,
- *            : char **txt_rza : description de rz.
- * Valeur renvoyée :
- *   Succès : TRUE
- *   Échec : FALSE :
- *             appui == NULL,
- *             en cas d'erreur d'allocation mémoire.
- */
-{
-    const char  *txt_ux, *txt_uy, *txt_uz, *txt_rx, *txt_ry, *txt_rz;
-    char        *txt_uxp, *txt_uyp, *txt_uzp, *txt_rxp, *txt_ryp, *txt_rzp;
-    
-    switch (appui->ux)
-    {
-        case EF_APPUI_LIBRE :
-        {
-            txt_ux = gettext("Libre");
-            BUGMSG(appui->ux_donnees == NULL, FALSE, gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "ux", gettext("Libre"));
-            txt_uxp = NULL;
-            BUGMSG(*txt_uxa = g_strdup_printf("%s", txt_ux), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-            break;
-        }
-        case EF_APPUI_BLOQUE :
-        {
-            txt_ux = gettext("Bloqué");
-            BUGMSG(appui->ux_donnees == NULL, FALSE, gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "ux", gettext("Bloqué"));
-            txt_uxp = NULL;
-            BUGMSG(*txt_uxa = g_strdup_printf("%s", txt_ux), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-            break;
-        }
-        default :
-        {
-            BUGMSG(NULL, FALSE, gettext("Le type d'appui de %s (%d) est inconnu.\n"), "ux", appui->ux);
-        }
-    }
-    switch (appui->uy)
-    {
-        case EF_APPUI_LIBRE :
-        {
-            txt_uy = gettext("Libre");
-            BUGMSG(appui->uy_donnees == NULL, FALSE, gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "uy", gettext("Libre"));
-            txt_uyp = NULL;
-            BUGMSG(*txt_uya = g_strdup_printf("%s", txt_uy), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-            break;
-        }
-        case EF_APPUI_BLOQUE :
-        {
-            txt_uy = gettext("Bloqué");
-            BUGMSG(appui->uy_donnees == NULL, FALSE, gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "uy", gettext("Bloqué"));
-            txt_uyp = NULL;
-            BUGMSG(*txt_uya = g_strdup_printf("%s", txt_uy), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-            break;
-        }
-        default :
-        {
-            BUGMSG(NULL, FALSE, gettext("Le type d'appui de %s (%d) est inconnu.\n"), "uy", appui->ux);
-        }
-    }
-    switch (appui->uz)
-    {
-        case EF_APPUI_LIBRE :
-        {
-            txt_uz = gettext("Libre");
-            BUGMSG(appui->uz_donnees == NULL, FALSE, gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "uz", gettext("Libre"));
-            txt_uzp = NULL;
-            BUGMSG(*txt_uza = g_strdup_printf("%s", txt_uz), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-            break;
-        }
-        case EF_APPUI_BLOQUE :
-        {
-            txt_uz = gettext("Bloqué");
-            BUGMSG(appui->uz_donnees == NULL, FALSE, gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "uz", gettext("Bloqué"));
-            txt_uzp = NULL;
-            BUGMSG(*txt_uza = g_strdup_printf("%s", txt_uz), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-            break;
-        }
-        default :
-        {
-            BUGMSG(NULL, FALSE, gettext("Le type d'appui de %s (%d) est inconnu.\n"), "uz", appui->ux);
-        }
-    }
-    switch (appui->rx)
-    {
-        case EF_APPUI_LIBRE :
-        {
-            txt_rx = gettext("Libre");
-            BUGMSG(appui->rx_donnees == NULL, FALSE, gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "rx", gettext("Libre"));
-            txt_rxp = NULL;
-            BUGMSG(*txt_rxa = g_strdup_printf("%s", txt_rx), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-            break;
-        }
-        case EF_APPUI_BLOQUE :
-        {
-            txt_rx = gettext("Bloqué");
-            BUGMSG(appui->rx_donnees == NULL, FALSE, gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "rx", gettext("Bloqué"));
-            txt_rxp = NULL;
-            BUGMSG(*txt_rxa = g_strdup_printf("%s", txt_rx), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-            break;
-        }
-        default :
-        {
-            BUGMSG(NULL, FALSE, gettext("Le type d'appui de %s (%d) est inconnu.\n"), "rx", appui->ux);
-        }
-    }
-    switch (appui->ry)
-    {
-        case EF_APPUI_LIBRE :
-        {
-            txt_ry = gettext("Libre");
-            BUGMSG(appui->ry_donnees == NULL, FALSE, gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "ry", gettext("Libre"));
-            txt_ryp = NULL;
-            BUGMSG(*txt_rya = g_strdup_printf("%s", txt_ry), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-            break;
-        }
-        case EF_APPUI_BLOQUE :
-        {
-            txt_ry = gettext("Bloqué");
-            BUGMSG(appui->ry_donnees == NULL, FALSE, gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "ry", gettext("Bloqué"));
-            txt_ryp = NULL;
-            BUGMSG(*txt_rya = g_strdup_printf("%s", txt_rx), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-            break;
-        }
-        default :
-        {
-            BUGMSG(NULL, FALSE, gettext("Le type d'appui de %s (%d) est inconnu.\n"), "ry", appui->ux);
-        }
-    }
-    switch (appui->rz)
-    {
-        case EF_APPUI_LIBRE :
-        {
-            txt_rz = gettext("Libre");
-            BUGMSG(appui->rz_donnees == NULL, FALSE, gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "rz", gettext("Libre"));
-            txt_rzp = NULL;
-            BUGMSG(*txt_rza = g_strdup_printf("%s", txt_rz), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-            break;
-        }
-        case EF_APPUI_BLOQUE :
-        {
-            txt_rz = gettext("Bloqué");
-            BUGMSG(appui->rz_donnees == NULL, FALSE, gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "rz", gettext("Bloqué"));
-            txt_rzp = NULL;
-            BUGMSG(*txt_rza = g_strdup_printf("%s", txt_rz), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-            break;
-        }
-        default :
-        {
-            BUGMSG(NULL, FALSE, gettext("Le type d'appui de %s (%d) est inconnu.\n"), "rz", appui->ux);
-        }
-    }
-    
-    free(txt_uxp);
-    free(txt_uyp);
-    free(txt_uzp);
-    free(txt_rxp);
-    free(txt_ryp);
-    free(txt_rzp);
-    
-    return TRUE;
-}
-
-
 EF_Appui* EF_appuis_ajout(Projet *projet, const char *nom, Type_EF_Appui x, Type_EF_Appui y,
   Type_EF_Appui z, Type_EF_Appui rx, Type_EF_Appui ry, Type_EF_Appui rz)
 /* Description : Ajoute un appui à la structure en lui attribuant le numéro suivant le dernier
@@ -293,9 +123,6 @@ EF_Appui* EF_appuis_ajout(Projet *projet, const char *nom, Type_EF_Appui x, Type
 {
     EF_Appui    *appui_nouveau, *appui_parcours;
     GList       *list_parcours;
-#ifdef ENABLE_GTK
-    char        *txt_uxa, *txt_uya, *txt_uza, *txt_rxa, *txt_rya, *txt_rza;
-#endif
     
     BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(strcmp(nom, gettext("Aucun")), NULL, gettext("Impossible d'utiliser comme nom 'Aucun'.\n"));
@@ -426,16 +253,7 @@ EF_Appui* EF_appuis_ajout(Projet *projet, const char *nom, Type_EF_Appui x, Type
 #ifdef ENABLE_GTK
     gtk_list_store_set(projet->list_gtk.ef_appuis.liste_appuis, &appui_nouveau->Iter_liste, 0, nom, -1);
     if (projet->list_gtk.ef_appuis.builder != NULL)
-    {
-        BUG(EF_appuis_get_description(appui_nouveau, &txt_uxa, &txt_uya, &txt_uza, &txt_rxa, &txt_rya, &txt_rza), NULL);
-        gtk_tree_store_set(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_treestore")), &appui_nouveau->Iter_fenetre, 0, appui_nouveau->nom, 1, txt_uxa, 2, txt_uya, 3, txt_uza, 4, txt_rxa, 5, txt_rya, 6, txt_rza, -1);
-        free(txt_uxa);
-        free(txt_uya);
-        free(txt_uza);
-        free(txt_rxa);
-        free(txt_rya);
-        free(txt_rza);
-    }
+        gtk_tree_store_set(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_treestore")), &appui_nouveau->Iter_fenetre, 0, appui_nouveau, -1);
 #endif
     
     return appui_nouveau;
@@ -503,26 +321,7 @@ gboolean EF_appuis_edit(EF_Appui *appui, int x, Type_EF_Appui type_x, Projet *pr
     
 #ifdef ENABLE_GTK
     if (projet->list_gtk.ef_appuis.builder != NULL)
-    {
-        switch (type_x)
-        {
-            case EF_APPUI_LIBRE :
-            {
-                gtk_tree_store_set(projet->list_gtk.ef_appuis.appuis, &appui->Iter_fenetre, x+1, gettext("Libre"), -1);
-                break;
-            }
-            case EF_APPUI_BLOQUE :
-            {
-                gtk_tree_store_set(projet->list_gtk.ef_appuis.appuis, &appui->Iter_fenetre, x+1, gettext("Bloqué"), -1);
-                break;
-            }
-            default :
-            {
-                BUGMSG(FALSE, FALSE, gettext("Le type d'appui (%d) est inconnu.\n"), type_x);
-                break;
-            }
-        }
-    }
+        gtk_widget_queue_draw(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_treeview")));
 #endif
     
     list_appuis = g_list_append(list_appuis, appui);
@@ -603,7 +402,7 @@ gboolean EF_appuis_renomme(EF_Appui *appui, gchar *nom, Projet *projet, gboolean
     {
         GtkTreePath *path;
         
-        gtk_tree_store_set(projet->list_gtk.ef_appuis.appuis, &appui->Iter_fenetre, 0, nom, -1);
+        gtk_widget_queue_draw(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_treeview")));
         
         // On modifie la position de l'ascenseur la ligne reste visible même si elle sort de la
         // fenêtre.

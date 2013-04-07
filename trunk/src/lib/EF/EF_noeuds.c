@@ -558,14 +558,12 @@ gboolean EF_noeuds_change_appui(Projet *projet, EF_Noeud *noeud, EF_Appui *appui
         
         if (gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_treeview_select")), &model, &Iter))
         {
-            char    *nom;
+            EF_Appui    *appui2;
             
-            gtk_tree_model_get(model, &Iter, 0, &nom, -1);
+            gtk_tree_model_get(model, &Iter, 0, &appui2, -1);
             
-            if (((noeud->appui != NULL) && (strcmp(nom, noeud->appui->nom) == 0)) || ((appui_old != NULL) && (strcmp(nom, appui_old->nom) == 0)))
+            if (((noeud->appui != NULL) && (strcmp(appui2->nom, noeud->appui->nom) == 0)) || ((appui_old != NULL) && (strcmp(appui2->nom, appui_old->nom) == 0)))
                 EF_gtk_appuis_select_changed(NULL, projet);
-            
-            free(nom);
         }
     }
 #endif

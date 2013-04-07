@@ -27,7 +27,6 @@ gboolean EF_appuis_init(Projet *projet) __attribute__((__warn_unused_result__));
 
 EF_Appui* EF_appuis_cherche_nom(Projet *projet, const char *nom, gboolean critique) __attribute__((__warn_unused_result__));
 
-gboolean EF_appuis_get_description(EF_Appui* appui, char **txt_uxa, char **txt_uya, char **txt_uza, char **txt_rxa, char **txt_rya, char **txt_rza) __attribute__((__warn_unused_result__));
 EF_Appui *EF_appuis_ajout(Projet *projet, const char *nom, Type_EF_Appui x, Type_EF_Appui y, Type_EF_Appui z, Type_EF_Appui rx, Type_EF_Appui ry, Type_EF_Appui rz) __attribute__((__warn_unused_result__));
 
 gboolean EF_appuis_edit(EF_Appui *appui, int x, Type_EF_Appui type_x, Projet *projet) __attribute__((__warn_unused_result__));
