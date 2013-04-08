@@ -544,21 +544,21 @@ typedef struct __EF_Relachement
 
 typedef struct __Barre_Info_EF
 {
-    cholmod_sparse      *matrice_rigidite_locale;
+    cholmod_sparse  *matrice_rigidite_locale;
     
-    double              ay; // Paramètres de souplesse de la poutre
-    double              by;
-    double              cy;
-    double              az;
-    double              bz;
-    double              cz;
+    double          ay; // Paramètres de souplesse de la poutre
+    double          by;
+    double          cy;
+    double          az;
+    double          bz;
+    double          cz;
     
-    double              kAx;
-    double              kAy; // coefficient défissant l'inverse de la raideur aux noeuds
-    double              kAz;
-    double              kBx;
-    double              kBy;
-    double              kBz;
+    double          kAx;
+    double          kAy; // coefficient défissant l'inverse de la raideur aux noeuds
+    double          kAz;
+    double          kBx;
+    double          kBy;
+    double          kBz;
 } Barre_Info_EF;
 
 
@@ -567,16 +567,16 @@ typedef struct __Section_T
     /* La section rectangulaire est intégrée dans la section en T. Il convient simplement de
        mettre la hauteur dans hauteur_retombee et la largeur dans largeur_retombee.
        largeur_table et hauteur_table sont mis à 0.*/
-    double              largeur_table;
-    double              largeur_retombee;
-    double              hauteur_table;
-    double              hauteur_retombee;
+    Flottant    largeur_table;
+    Flottant    largeur_retombee;
+    Flottant    hauteur_table;
+    Flottant    hauteur_retombee;
 } Section_T;
 
 
 typedef struct __Section_Circulaire
 {
-    double              diametre;
+    Flottant    diametre;
 } Section_Circulaire;
 
 

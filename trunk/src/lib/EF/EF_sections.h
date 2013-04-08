@@ -28,14 +28,14 @@ gboolean EF_sections_init(Projet *projet) __attribute__((__warn_unused_result__)
 gboolean EF_sections_update_ligne_treeview(Projet *projet, EF_Section *section) __attribute__((__warn_unused_result__));
 #endif
 
-gboolean EF_sections_rectangulaire_ajout(Projet *projet, const char* nom, double l, double h) __attribute__((__warn_unused_result__));
-gboolean EF_sections_rectangulaire_modif(Projet *projet, EF_Section *section, const char* nom, double l, double h) __attribute__((__warn_unused_result__));
-gboolean EF_sections_T_ajout(Projet *projet, const char* nom, double lt, double lr, double ht, double hr) __attribute__((__warn_unused_result__));
-gboolean EF_sections_T_modif(Projet *projet, EF_Section *section, const char* nom, double lt, double lr, double ht, double hr) __attribute__((__warn_unused_result__));
-gboolean EF_sections_carree_ajout(Projet *projet, const char* nom, double cote) __attribute__((__warn_unused_result__));
-gboolean EF_sections_carree_modif(Projet *projet, EF_Section *section, const char* nom, double cote)  __attribute__((__warn_unused_result__));
-gboolean EF_sections_circulaire_ajout(Projet *projet, const char* nom, double diametre) __attribute__((__warn_unused_result__));
-gboolean EF_sections_circulaire_modif(Projet *projet, EF_Section *section, const char* nom, double diametre) __attribute__((__warn_unused_result__));
+gboolean EF_sections_rectangulaire_ajout(Projet *projet, const char* nom, Flottant l, Flottant h) __attribute__((__warn_unused_result__));
+gboolean EF_sections_rectangulaire_modif(Projet *projet, EF_Section *section, const char* nom, Flottant l, Flottant h) __attribute__((__warn_unused_result__));
+gboolean EF_sections_T_ajout(Projet *projet, const char* nom, Flottant lt, Flottant lr, Flottant ht, Flottant hr) __attribute__((__warn_unused_result__));
+gboolean EF_sections_T_modif(Projet *projet, EF_Section *section, const char* nom, Flottant lt, Flottant lr, Flottant ht, Flottant hr) __attribute__((__warn_unused_result__));
+gboolean EF_sections_carree_ajout(Projet *projet, const char* nom, Flottant cote) __attribute__((__warn_unused_result__));
+gboolean EF_sections_carree_modif(Projet *projet, EF_Section *section, const char* nom, Flottant cote)  __attribute__((__warn_unused_result__));
+gboolean EF_sections_circulaire_ajout(Projet *projet, const char* nom, Flottant diametre) __attribute__((__warn_unused_result__));
+gboolean EF_sections_circulaire_modif(Projet *projet, EF_Section *section, const char* nom, Flottant diametre) __attribute__((__warn_unused_result__));
 
 EF_Section* EF_sections_cherche_nom(Projet *projet, const char *nom, gboolean critique) __attribute__((__warn_unused_result__));
 char *EF_sections_get_description(EF_Section *sect) __attribute__((__warn_unused_result__));

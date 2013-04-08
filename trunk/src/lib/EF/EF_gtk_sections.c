@@ -290,22 +290,22 @@ void EF_gtk_sections_edit_nom(GtkCellRendererText *cell, gchar *path_string, gch
     {
         case SECTION_RECTANGULAIRE :
         {
-            BUG(EF_sections_rectangulaire_modif(projet, section, new_text, NAN, NAN), );
+            BUG(EF_sections_rectangulaire_modif(projet, section, new_text, common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR)), );
             break;
         }
         case SECTION_T :
         {
-            BUG(EF_sections_T_modif(projet, section, new_text, NAN, NAN, NAN, NAN), );
+            BUG(EF_sections_T_modif(projet, section, new_text, common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR)), );
             break;
         }
         case SECTION_CARREE :
         {
-            BUG(EF_sections_carree_modif(projet, section, new_text, NAN), );
+            BUG(EF_sections_carree_modif(projet, section, new_text, common_math_f(NAN, FLOTTANT_ORDINATEUR)), );
             break;
         }
         case SECTION_CIRCULAIRE :
         {
-            BUG(EF_sections_circulaire_modif(projet, section, new_text, NAN), );
+            BUG(EF_sections_circulaire_modif(projet, section, new_text, common_math_f(NAN, FLOTTANT_ORDINATEUR)), );
             break;
         }
         default :
@@ -435,10 +435,10 @@ GdkPixbuf *EF_gtk_sections_dessin(EF_Section *section, int width, int height)
         {
             Section_T   *data = (Section_T *)section->data;
             
-            double      lt = data->largeur_table;
-            double      lr = data->largeur_retombee;
-            double      ht = data->hauteur_table;
-            double      hr = data->hauteur_retombee;
+            double      lt = common_math_get(data->largeur_table);
+            double      lr = common_math_get(data->largeur_retombee);
+            double      ht = common_math_get(data->hauteur_table);
+            double      hr = common_math_get(data->hauteur_retombee);
             
             double      aa = MAX(lt, lr)/(ht + hr);
             

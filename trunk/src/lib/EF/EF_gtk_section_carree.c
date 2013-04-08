@@ -179,7 +179,7 @@ void EF_gtk_section_carree_ajouter_clicked(GtkButton *button, Projet *projet)
     
     gtk_widget_destroy(projet->list_gtk.ef_sections_carree.window);
     
-    BUG(EF_sections_carree_ajout(projet, texte, cote), );
+    BUG(EF_sections_carree_ajout(projet, texte, common_math_f(cote, FLOTTANT_UTILISATEUR)), );
     
     free(texte);
     
@@ -219,7 +219,7 @@ void EF_gtk_section_carree_modifier_clicked(GtkButton *button, Projet *projet)
     if (!EF_gtk_section_carree_recupere_donnees(projet, &cote, &texte))
         return;
     
-    BUG(EF_sections_carree_modif(projet, projet->list_gtk.ef_sections_carree.section, texte, cote), );
+    BUG(EF_sections_carree_modif(projet, projet->list_gtk.ef_sections_carree.section, texte, common_math_f(cote, FLOTTANT_UTILISATEUR)), );
     
     free(texte);
     
@@ -280,7 +280,7 @@ gboolean EF_gtk_section_carree(Projet *projet, EF_Section *section)
         data = ef_gtk->section->data;
         
         gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(ef_gtk->builder, "EF_section_carree_textview_nom"))), ef_gtk->section->nom, -1);
-        common_math_double_to_char(data->largeur_table, tmp, DECIMAL_DISTANCE);
+        common_math_double_to_char2(data->largeur_table, tmp, DECIMAL_DISTANCE);
         gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder, "EF_section_carree_buffer_cote")), tmp, -1);
         
         gtk_button_set_label(GTK_BUTTON(gtk_builder_get_object(ef_gtk->builder, "EF_section_carree_button_add_edit")), "gtk-edit");
