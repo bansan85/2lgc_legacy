@@ -219,11 +219,12 @@ gboolean EF_sections_repositionne(Projet *projet, EF_Section *section)
 }
 
 
-gboolean EF_sections_rectangulaire_ajout(Projet *projet, const char* nom, double l, double h)
+gboolean EF_sections_rectangulaire_ajout(Projet *projet, const char* nom, Flottant l,
+  Flottant h)
 /* Description : Ajouter une nouvelle section rectangulaire à la liste des sections en béton.
  * Paramètres : Projet *projet : la variable projet,
- *            : double l : la largeur,
- *            : double h : la hauteur.
+ *            : Flottant l : la largeur,
+ *            : Flottant h : la hauteur.
  * Valeur renvoyée :
  *   Succès : TRUE
  *   Échec : FALSE :
@@ -246,7 +247,7 @@ gboolean EF_sections_rectangulaire_ajout(Projet *projet, const char* nom, double
     section_data->largeur_retombee = l;
     section_data->hauteur_retombee = h;
     section_data->largeur_table = l;
-    section_data->hauteur_table = 0.;
+    section_data->hauteur_table = common_math_f(0., FLOTTANT_ORDINATEUR);
     
     BUG(EF_sections_insert(projet, section_nouvelle), FALSE);
     
@@ -255,13 +256,13 @@ gboolean EF_sections_rectangulaire_ajout(Projet *projet, const char* nom, double
 
 
 gboolean EF_sections_rectangulaire_modif(Projet *projet, EF_Section *section, const char* nom,
-  double l, double h)
+  Flottant l, Flottant h)
 /* Description : Modifie une section rectangulaire.
  * Paramètres : Projet *projet : la variable projet,
  *            : EF_Section *section : la section à modifier,
  *            : const char* nom : son nouveau nom, NULL si aucun changement,
- *            : double l : sa nouvelle largeur, NAN si aucun changement,
- *            : double h : sa nouvelle hauteur, NAN si aucun changement.
+ *            : Flottant l : sa nouvelle largeur, NAN si aucun changement,
+ *            : Flottant h : sa nouvelle hauteur, NAN si aucun changement.
  * Valeur renvoyée :
  *   Succès : TRUE
  *   Échec : FALSE :
@@ -289,20 +290,20 @@ gboolean EF_sections_rectangulaire_modif(Projet *projet, EF_Section *section, co
             gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk.ef_sections_rectangulaire.builder, "EF_section_rectangulaire_textview_nom"))), nom, -1);
 #endif
     }
-    if ((!isnan(l)) && (!ERREUR_RELATIVE_EGALE(section_data->largeur_retombee, l)))
+    if ((!isnan(common_math_get(l))) && (!ERREUR_RELATIVE_EGALE(common_math_get(section_data->largeur_retombee), common_math_get(l))))
     {
         section_data->largeur_retombee = l;
         section_data->largeur_table = l;
     }
     else
-        l = NAN;
-    if ((!isnan(h)) && (!ERREUR_RELATIVE_EGALE(section_data->hauteur_retombee, h)))
+        l = common_math_f(NAN, FLOTTANT_ORDINATEUR);
+    if ((!isnan(common_math_get(h))) && (!ERREUR_RELATIVE_EGALE(common_math_get(section_data->hauteur_retombee), common_math_get(h))))
         section_data->hauteur_retombee = h;
     else
-        h = NAN;
-    section_data->hauteur_table = 0.;
+        h = common_math_f(NAN, FLOTTANT_ORDINATEUR);
+    section_data->hauteur_table = common_math_f(0., FLOTTANT_ORDINATEUR);
     
-    if ((!isnan(l)) || (!isnan(h)))
+    if ((!isnan(common_math_get(l))) || (!isnan(common_math_get(h))))
     {
         GList   *liste_sections = NULL, *liste_barres_dep;
         
@@ -330,15 +331,15 @@ gboolean EF_sections_rectangulaire_modif(Projet *projet, EF_Section *section, co
 }
 
 
-gboolean EF_sections_T_ajout(Projet *projet, const char* nom, double lt, double lr, double ht,
-  double hr)
+gboolean EF_sections_T_ajout(Projet *projet, const char* nom, Flottant lt, Flottant lr,
+  Flottant ht, Flottant hr)
 /* Description : Ajouter une nouvelle section en T à la liste des sections en béton.
  * Paramètres : Projet *projet : la variable projet,
  *            : chat *nom : nom de la section,
- *            : double lt : la largeur de la table,
- *            : double lr : la largeur de la retombée,
- *            : double ht : la hauteur de la table,
- *            : double hr : la hauteur de la retombée.
+ *            : Flottant lt : la largeur de la table,
+ *            : Flottant lr : la largeur de la retombée,
+ *            : Flottant ht : la hauteur de la table,
+ *            : Flottant hr : la hauteur de la retombée.
  * Valeur renvoyée :
  *   Succès : TRUE
  *   Échec : FALSE :
@@ -374,16 +375,16 @@ gboolean EF_sections_T_ajout(Projet *projet, const char* nom, double lt, double 
 }
 
 
-gboolean EF_sections_T_modif(Projet *projet, EF_Section *section, const char* nom, double lt,
-  double lr, double ht, double hr)
+gboolean EF_sections_T_modif(Projet *projet, EF_Section *section, const char* nom, Flottant lt,
+  Flottant lr, Flottant ht, Flottant hr)
 /* Description : Modifie une section en T.
  * Paramètres : Projet *projet : la variable projet,
  *            : EF_Section *section : la section à modifier,
  *            : char* nom : le nouveau nom de la section, NULL si aucun changement,
- *            : double lt : la nouvelle largeur de la table, NAN si aucun changement,
- *            : double lr : la nouvelle largeur de la retombée, NAN si aucun changement,
- *            : double ht : la nouvelle hauteur de la table, NAN si aucun changement,
- *            : double hr : la nouvelle hauteur de la retombée, NAN si aucun changement.
+ *            : Flottant lt : la nouvelle largeur de la table, NAN si aucun changement,
+ *            : Flottant lr : la nouvelle largeur de la retombée, NAN si aucun changement,
+ *            : Flottant ht : la nouvelle hauteur de la table, NAN si aucun changement,
+ *            : Flottant hr : la nouvelle hauteur de la retombée, NAN si aucun changement.
  * Valeur renvoyée :
  *   Succès : TRUE
  *   Échec : FALSE :
@@ -410,24 +411,24 @@ gboolean EF_sections_T_modif(Projet *projet, EF_Section *section, const char* no
             gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk.ef_sections_T.builder, "EF_section_T_textview_nom"))), nom, -1);
 #endif
     }
-    if ((!isnan(lt)) && (!ERREUR_RELATIVE_EGALE(section_data->largeur_table, lt)))
+    if ((!isnan(common_math_get(lt))) && (!ERREUR_RELATIVE_EGALE(common_math_get(section_data->largeur_table), common_math_get(lt))))
         section_data->largeur_table = lt;
     else
-        lt = NAN;
-    if ((!isnan(lr)) && (!ERREUR_RELATIVE_EGALE(section_data->largeur_retombee, lr)))
+        lt = common_math_f(NAN, FLOTTANT_ORDINATEUR);
+    if ((!isnan(common_math_get(lr))) && (!ERREUR_RELATIVE_EGALE(common_math_get(section_data->largeur_retombee), common_math_get(lr))))
         section_data->largeur_retombee = lr;
     else
-        lr = NAN;
-    if ((!isnan(ht)) && (!ERREUR_RELATIVE_EGALE(section_data->hauteur_table, ht)))
+        lr = common_math_f(NAN, FLOTTANT_ORDINATEUR);
+    if ((!isnan(common_math_get(ht))) && (!ERREUR_RELATIVE_EGALE(common_math_get(section_data->hauteur_table), common_math_get(ht))))
         section_data->hauteur_table = ht;
     else
-        ht = NAN;
-    if ((!isnan(hr)) && (!ERREUR_RELATIVE_EGALE(section_data->hauteur_retombee, hr)))
+        ht = common_math_f(NAN, FLOTTANT_ORDINATEUR);
+    if ((!isnan(common_math_get(hr))) && (!ERREUR_RELATIVE_EGALE(common_math_get(section_data->hauteur_retombee), common_math_get(hr))))
         section_data->hauteur_retombee = hr;
     else
-        hr = NAN;
+        hr = common_math_f(NAN, FLOTTANT_ORDINATEUR);
     
-    if ((!isnan(lt)) || (!isnan(lr)) || (!isnan(ht)) || (!isnan(hr)))
+    if ((!isnan(common_math_get(lt))) || (!isnan(common_math_get(lr))) || (!isnan(common_math_get(ht))) || (!isnan(common_math_get(hr))))
     {
         GList   *liste_sections = NULL, *liste_barres_dep;
         
@@ -455,11 +456,11 @@ gboolean EF_sections_T_modif(Projet *projet, EF_Section *section, const char* no
 }
 
 
-gboolean EF_sections_carree_ajout(Projet *projet, const char* nom, double cote)
+gboolean EF_sections_carree_ajout(Projet *projet, const char* nom, Flottant cote)
 /* Description : Ajouter une nouvelle section carrée à la liste des sections en béton.
  * Paramètres : Projet *projet : la variable projet,
  *            : char *nom : nom de la section,
- *            : double cote : le coté.
+ *            : Flottant cote : le coté.
  * Valeur renvoyée :
  *   Succès : TRUE
  *   Échec : FALSE :
@@ -481,7 +482,7 @@ gboolean EF_sections_carree_ajout(Projet *projet, const char* nom, double cote)
     section_data->largeur_retombee = cote;
     section_data->hauteur_retombee = cote;
     section_data->largeur_table = cote;
-    section_data->hauteur_table = 0.;
+    section_data->hauteur_table = common_math_f(0., FLOTTANT_ORDINATEUR);
     
     BUG(EF_sections_insert(projet, section_nouvelle), FALSE);
     
@@ -490,12 +491,12 @@ gboolean EF_sections_carree_ajout(Projet *projet, const char* nom, double cote)
 
 
 gboolean EF_sections_carree_modif(Projet *projet, EF_Section *section, const char* nom,
-  double cote)
+  Flottant cote)
 /* Description : Modifie une section carrée.
  * Paramètres : Projet *projet : la variable projet,
  *            : EF_Section *section : la section à modifier,
  *            : char *nom : nouveau nom de la section, NULL si aucun changement,
- *            : double cote : le nouveau coté, NAN si aucun changement.
+ *            : Flottant cote : le nouveau coté, NAN si aucun changement.
  * Valeur renvoyée :
  *   Succès : TRUE
  *   Échec : FALSE :
@@ -522,13 +523,14 @@ gboolean EF_sections_carree_modif(Projet *projet, EF_Section *section, const cha
             gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk.ef_sections_carree.builder, "EF_section_carree_textview_nom"))), nom, -1);
 #endif
     }
-    if ((!isnan(cote)) && (!ERREUR_RELATIVE_EGALE(section_data->largeur_retombee, cote)))
+    if ((!isnan(common_math_get(cote))) && (!ERREUR_RELATIVE_EGALE(common_math_get(section_data->largeur_retombee), common_math_get(cote))))
     {
         GList   *liste_sections = NULL, *liste_barres_dep;
         
         section_data->largeur_retombee = cote;
         section_data->hauteur_retombee = cote;
         section_data->largeur_table = cote;
+        section_data->hauteur_table = common_math_f(0., FLOTTANT_ORDINATEUR);
         
         liste_sections = g_list_append(liste_sections, section);
         BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, liste_sections, NULL, NULL, NULL, NULL, &liste_barres_dep, NULL, FALSE, FALSE), FALSE);
@@ -555,11 +557,11 @@ gboolean EF_sections_carree_modif(Projet *projet, EF_Section *section, const cha
 }
 
 
-gboolean EF_sections_circulaire_ajout(Projet *projet, const char* nom, double diametre)
+gboolean EF_sections_circulaire_ajout(Projet *projet, const char* nom, Flottant diametre)
 /* Description : Ajouter une nouvelle section circulaire à la liste des sections en béton.
  * Paramètres : Projet *projet : la variable projet,
  *            : char *nom : nom de la section,
- *            : double diametre : le diamètre.
+ *            : Flottant diametre : le diamètre.
  * Valeur renvoyée :
  *   Succès : TRUE
  *   Échec : FALSE :
@@ -591,12 +593,12 @@ gboolean EF_sections_circulaire_ajout(Projet *projet, const char* nom, double di
 
 
 gboolean EF_sections_circulaire_modif(Projet *projet, EF_Section *section, const char* nom,
-  double diametre)
+  Flottant diametre)
 /* Description : Modifie une section circulaire.
  * Paramètres : Projet *projet : la variable projet,
  *            : EF_Section *section : la section à modifier,
  *            : char *nom : nom de la section, NULL si aucun changement,
- *            : double diametre : le diamètre, NAN si aucun changement.
+ *            : Flottant diametre : le diamètre, NAN si aucun changement.
  * Valeur renvoyée :
  *   Succès : TRUE
  *   Échec : FALSE :
@@ -623,7 +625,7 @@ gboolean EF_sections_circulaire_modif(Projet *projet, EF_Section *section, const
             gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk.ef_sections_circulaire.builder, "EF_section_circulaire_textview_nom"))), nom, -1);
 #endif
     }
-    if ((!isnan(diametre)) && (!ERREUR_RELATIVE_EGALE(section_data->diametre, diametre)))
+    if ((!isnan(common_math_get(diametre))) && (!ERREUR_RELATIVE_EGALE(common_math_get(section_data->diametre), common_math_get(diametre))))
     {
         GList   *liste_sections = NULL, *liste_barres_dep;
         
@@ -711,8 +713,8 @@ char* EF_sections_get_description(EF_Section *sect)
             char        larg[30], haut[30];
             Section_T   *section = sect->data;
             
-            common_math_double_to_char(section->largeur_retombee, larg, DECIMAL_DISTANCE);
-            common_math_double_to_char(section->hauteur_retombee, haut, DECIMAL_DISTANCE);
+            common_math_double_to_char2(section->largeur_retombee, larg, DECIMAL_DISTANCE);
+            common_math_double_to_char2(section->hauteur_retombee, haut, DECIMAL_DISTANCE);
             BUGMSG(description = g_strdup_printf("%s : %s m, %s : %s m", gettext("Largeur"), larg, gettext("Hauteur"), haut), NULL, gettext("Erreur d'allocation mémoire.\n"));
             
             return description;
@@ -722,10 +724,10 @@ char* EF_sections_get_description(EF_Section *sect)
             char    larg_t[30], haut_t[30], larg_r[30], haut_r[30];
             Section_T *section = sect->data;
             
-            common_math_double_to_char(section->largeur_table, larg_t, DECIMAL_DISTANCE);
-            common_math_double_to_char(section->largeur_retombee, larg_r, DECIMAL_DISTANCE);
-            common_math_double_to_char(section->hauteur_table, haut_t, DECIMAL_DISTANCE);
-            common_math_double_to_char(section->hauteur_retombee, haut_r, DECIMAL_DISTANCE);
+            common_math_double_to_char2(section->largeur_table, larg_t, DECIMAL_DISTANCE);
+            common_math_double_to_char2(section->largeur_retombee, larg_r, DECIMAL_DISTANCE);
+            common_math_double_to_char2(section->hauteur_table, haut_t, DECIMAL_DISTANCE);
+            common_math_double_to_char2(section->hauteur_retombee, haut_r, DECIMAL_DISTANCE);
             BUGMSG(description = g_strdup_printf("%s : %s m, %s : %s m, %s : %s m, %s : %s m", gettext("Largeur table"), larg_t, gettext("Hauteur table"), haut_t, gettext("Largeur retombée"), larg_r, gettext("Hauteur retombée"), haut_r), NULL, gettext("Erreur d'allocation mémoire.\n"));
             
             return description;
@@ -735,7 +737,7 @@ char* EF_sections_get_description(EF_Section *sect)
             char         cote[30];
             Section_T   *section = sect->data;
             
-            common_math_double_to_char(section->largeur_table, cote, DECIMAL_DISTANCE);
+            common_math_double_to_char2(section->largeur_table, cote, DECIMAL_DISTANCE);
             BUGMSG(description = g_strdup_printf("%s : %s m", gettext("Coté"), cote), NULL, gettext("Erreur d'allocation mémoire.\n"));
             
             return description;
@@ -745,7 +747,7 @@ char* EF_sections_get_description(EF_Section *sect)
             char    diam[30];
             Section_Circulaire *section = sect->data;
             
-            common_math_double_to_char(section->diametre, diam, DECIMAL_DISTANCE);
+            common_math_double_to_char2(section->diametre, diam, DECIMAL_DISTANCE);
             BUGMSG(description = g_strdup_printf("%s : %s m", gettext("Diamètre"), diam), NULL, gettext("Erreur d'allocation mémoire.\n"));
             
             return description;
@@ -865,10 +867,10 @@ double EF_sections_j(EF_Section* sect)
         case SECTION_CARREE :
         {
             Section_T *section = sect->data;
-            double      lt = section->largeur_table;
-            double      lr = section->largeur_retombee;
-            double      ht = section->hauteur_table;
-            double      hr = section->hauteur_retombee;
+            double      lt = common_math_get(section->largeur_table);
+            double      lr = common_math_get(section->largeur_retombee);
+            double      ht = common_math_get(section->hauteur_table);
+            double      hr = common_math_get(section->hauteur_retombee);
             double      a, b, aa, bb;
             
             if (lt > ht)
@@ -891,8 +893,10 @@ double EF_sections_j(EF_Section* sect)
         }
         case SECTION_CIRCULAIRE :
         {
-            Section_Circulaire *section = sect->data;
-            return M_PI*section->diametre*section->diametre*section->diametre*section->diametre/32.;
+            Section_Circulaire  *section = sect->data;
+            double              diametre = common_math_get(section->diametre);
+            
+            return M_PI*diametre*diametre*diametre*diametre/32.;
     // Pour une section circulaire de section constante, J vaut :\end{verbatim}\begin{displaymath}
     // J = \frac{\pi \cdot \phi^4}{32}\end{displaymath}\begin{verbatim}
             break;
@@ -925,10 +929,10 @@ double EF_sections_iy(EF_Section* sect)
         case SECTION_CARREE :
         {
             Section_T *section = sect->data;
-            double      lt = section->largeur_table;
-            double      lr = section->largeur_retombee;
-            double      ht = section->hauteur_table;
-            double      hr = section->hauteur_retombee;
+            double      lt = common_math_get(section->largeur_table);
+            double      lr = common_math_get(section->largeur_retombee);
+            double      ht = common_math_get(section->hauteur_table);
+            double      hr = common_math_get(section->hauteur_retombee);
     // Pour une section en T de section constante (lt : largeur de la table, lr : largeur de
     //   la retombée, ht : hauteur de la table, hr : hauteur de la retombée), Iy vaut :\end{verbatim}\begin{displaymath}
     // I_y = \frac{l_t \cdot h_t^3}{12}+\frac{l_r \cdot h_r^3}{12}+l_t \cdot h_t \cdot \left(\frac{h_t}{2}-cdg_h \right)^2+l_r \cdot h_r \cdot \left(\frac{h_r}{2}-cdg_b \right)^2 \texttt{, }\end{displaymath}\begin{displaymath}
@@ -943,7 +947,9 @@ double EF_sections_iy(EF_Section* sect)
         case SECTION_CIRCULAIRE :
         {
             Section_Circulaire *section = sect->data;
-            return M_PI*section->diametre*section->diametre*section->diametre*section->diametre/64.;
+            double              diametre = common_math_get(section->diametre);
+            
+            return M_PI*diametre*diametre*diametre*diametre/64.;
     // Pour une section circulaire de section constante, Iy vaut :\end{verbatim}\begin{displaymath}
     // I_y = \frac{\pi \cdot \phi^4}{64} \end{displaymath}\begin{verbatim}
             break;
@@ -976,10 +982,10 @@ double EF_sections_iz(EF_Section* sect)
         case SECTION_CARREE :
         {
             Section_T *section = sect->data;
-            double      lt = section->largeur_table;
-            double      lr = section->largeur_retombee;
-            double      ht = section->hauteur_table;
-            double      hr = section->hauteur_retombee;
+            double      lt = common_math_get(section->largeur_table);
+            double      lr = common_math_get(section->largeur_retombee);
+            double      ht = common_math_get(section->hauteur_table);
+            double      hr = common_math_get(section->hauteur_retombee);
     // Pour une section en T de section constante (lt : largeur de la table, lr : largeur de
     //   la retombée, ht : hauteur de la table, hr : hauteur de la retombée), I vaut :\end{verbatim}\begin{displaymath}
     // I = \frac{h_t \cdot l_t^3}{12}+\frac{h_r \cdot l_r^3}{12}\end{displaymath}\begin{verbatim}
@@ -988,8 +994,9 @@ double EF_sections_iz(EF_Section* sect)
         }
         case SECTION_CIRCULAIRE :
         {
-            Section_Circulaire *section = sect->data;
-            return M_PI*section->diametre*section->diametre*section->diametre*section->diametre/64.;
+            Section_Circulaire  *section = sect->data;
+            double              diametre = common_math_get(section->diametre);
+            return M_PI*diametre*diametre*diametre*diametre/64.;
     // Pour une section circulaire de section constante, I vaut :\end{verbatim}\begin{displaymath}
     // I = \frac{\pi \cdot \phi^4}{64} \end{displaymath}\begin{verbatim}
             break;
@@ -1024,7 +1031,7 @@ double EF_sections_vy(EF_Section* sect)
         {
             Section_T *section = sect->data;
             
-            return MAX(section->largeur_table, section->largeur_retombee)/2.;
+            return MAX(common_math_get(section->largeur_table), common_math_get(section->largeur_retombee))/2.;
             
             break;
         }
@@ -1032,7 +1039,7 @@ double EF_sections_vy(EF_Section* sect)
         {
             Section_Circulaire *section = sect->data;
             
-            return section->diametre/2.;
+            return common_math_get(section->diametre)/2.;
             
             break;
         }
@@ -1066,7 +1073,7 @@ double EF_sections_vyp(EF_Section* sect)
         {
             Section_T *section = sect->data;
             
-            return MAX(section->largeur_table, section->largeur_retombee)/2.;
+            return MAX(common_math_get(section->largeur_table), common_math_get(section->largeur_retombee))/2.;
             
             break;
         }
@@ -1074,7 +1081,7 @@ double EF_sections_vyp(EF_Section* sect)
         {
             Section_Circulaire *section = sect->data;
             
-            return section->diametre/2.;
+            return common_math_get(section->diametre)/2.;
             
             break;
         }
@@ -1108,7 +1115,7 @@ double EF_sections_vz(EF_Section* sect)
         {
             Section_T *section = sect->data;
             
-            return (section->largeur_table*section->hauteur_table*section->hauteur_table/2.+section->largeur_retombee*section->hauteur_retombee*(section->hauteur_retombee/2.+section->hauteur_table))/EF_sections_s(sect);
+            return (common_math_get(section->largeur_table)*common_math_get(section->hauteur_table)*common_math_get(section->hauteur_table)/2.+common_math_get(section->largeur_retombee)*common_math_get(section->hauteur_retombee)*(common_math_get(section->hauteur_retombee)/2.+common_math_get(section->hauteur_table)))/EF_sections_s(sect);
             
             break;
         }
@@ -1116,7 +1123,7 @@ double EF_sections_vz(EF_Section* sect)
         {
             Section_Circulaire *section = sect->data;
             
-            return section->diametre/2.;
+            return common_math_get(section->diametre)/2.;
             
             break;
         }
@@ -1150,7 +1157,7 @@ double EF_sections_vzp(EF_Section* sect)
         {
             Section_T *section = sect->data;
             
-            return (section->largeur_table*section->hauteur_table*(section->hauteur_retombee+section->hauteur_table/2.)+section->largeur_retombee*section->hauteur_retombee*(section->hauteur_retombee/2.))/EF_sections_s(sect);
+            return (common_math_get(section->largeur_table)*common_math_get(section->hauteur_table)*(common_math_get(section->hauteur_retombee)+common_math_get(section->hauteur_table)/2.)+common_math_get(section->largeur_retombee)*common_math_get(section->hauteur_retombee)*(common_math_get(section->hauteur_retombee)/2.))/EF_sections_s(sect);
             
             break;
         }
@@ -1158,7 +1165,7 @@ double EF_sections_vzp(EF_Section* sect)
         {
             Section_Circulaire *section = sect->data;
             
-            return section->diametre/2.;
+            return common_math_get(section->diametre)/2.;
             
             break;
         }
@@ -1520,7 +1527,7 @@ double EF_sections_s(EF_Section *sect)
         case SECTION_CARREE :
         {
             Section_T *section = sect->data;
-            return section->hauteur_table*section->largeur_table+section->hauteur_retombee*section->largeur_retombee;
+            return common_math_get(section->hauteur_table)*common_math_get(section->largeur_table)+common_math_get(section->hauteur_retombee)*common_math_get(section->largeur_retombee);
             
     // Pour une section en T de section constante (lt : largeur de la table, lr : largeur de
     //   la retombée, ht : hauteur de la table, hr : hauteur de la retombée), S vaut :\end{verbatim}\begin{displaymath}
@@ -1530,7 +1537,7 @@ double EF_sections_s(EF_Section *sect)
         case SECTION_CIRCULAIRE :
         {
             Section_Circulaire *section = sect->data;
-            return M_PI*section->diametre*section->diametre/4.;
+            return M_PI*common_math_get(section->diametre)*common_math_get(section->diametre)/4.;
     // Pour une section circulaire de section constante, S vaut :\end{verbatim}\begin{displaymath}
     // S = \frac{\pi \cdot \phi^2}{4} \end{displaymath}\begin{verbatim}
             break;
@@ -1559,8 +1566,6 @@ double EF_sections_es_l(Beton_Barre *barre, unsigned int discretisation, double 
  *             type de section inconnue.
  */
 {
-    double      E;
-    
     BUGMSG(barre, NAN, gettext("Paramètre %s incorrect.\n"), "barre");
     BUGMSG(discretisation<=barre->discretisation_element, NAN, gettext("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element);
     BUGMSG(!((d>f) && (!(ERREUR_RELATIVE_EGALE(d, f)))), NAN, gettext("\n"));
@@ -1568,42 +1573,7 @@ double EF_sections_es_l(Beton_Barre *barre, unsigned int discretisation, double 
     // Le facteur ES/L est défini par la formule :\end{verbatim}\begin{displaymath}
     // \frac{E \cdot S}{L} = \frac{E}{\int_d^f \frac{1}{S(x)} dx}\end{displaymath}\begin{verbatim}
     
-    E = EF_calculs_E(barre->materiau);
-    
-    switch (barre->section->type)
-    {
-        case SECTION_RECTANGULAIRE :
-        case SECTION_T :
-        case SECTION_CARREE :
-        {
-            Section_T *section = barre->section->data;
-            double      lt = section->largeur_table;
-            double      lr = section->largeur_retombee;
-            double      ht = section->hauteur_table;
-            double      hr = section->hauteur_retombee;
-            double      S = ht*lt+hr*lr;
-            
-    // Pour une section en T de section constante (lt : largeur de la table, lr : largeur de
-    //   la retombée, ht : hauteur de la table, hr : hauteur de la retombée), ES/L vaut :\end{verbatim}\begin{displaymath}
-    // \frac{E \cdot S}{L} = \frac{E \cdot (h_t \cdot l_t+h_r \cdot l_r)}{L}\end{displaymath}\begin{verbatim}
-            return E*S/(f-d);
-            break;
-        }
-        case SECTION_CIRCULAIRE :
-        {
-            Section_Circulaire *section = barre->section->data;
-            double      S = M_PI*section->diametre*section->diametre/4.;
-    // Pour une section circulaire de section constante, ES/L vaut :\end{verbatim}\begin{displaymath}
-    // \frac{E \cdot S}{L} = \frac{E \cdot \pi \cdot \phi^2}{4 \cdot L} \end{displaymath}\begin{verbatim}
-            return E*S/(f-d);
-            break;
-        }
-        default :
-        {
-            BUGMSG(0, NAN, gettext("Type de section %d inconnu.\n"), barre->section->type);
-            break;
-        }
-    }
+    return EF_calculs_E(barre->materiau)*EF_sections_s(barre->section)/(f-d);
 }
 
 
@@ -1621,7 +1591,6 @@ double EF_sections_gj_l(Beton_Barre *barre, unsigned int discretisation)
 {
     EF_Noeud    *debut, *fin;
     double      ll;
-    double      G;
     
     BUGMSG(barre, NAN, gettext("Paramètre %s incorrect.\n"), "barre");
     BUGMSG(discretisation<=barre->discretisation_element, NAN, gettext("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element);
@@ -1641,56 +1610,7 @@ double EF_sections_gj_l(Beton_Barre *barre, unsigned int discretisation)
     ll = EF_noeuds_distance(fin, debut);
     BUG(!isnan(ll), NAN);
     
-    G = EF_calculs_G(barre->materiau, FALSE);
-    
-    switch (barre->section->type)
-    {
-        case SECTION_RECTANGULAIRE :
-        case SECTION_T :
-        case SECTION_CARREE :
-        {
-            Section_T   *section = barre->section->data;
-            double      lt = section->largeur_table;
-            double      lr = section->largeur_retombee;
-            double      ht = section->hauteur_table;
-            double      hr = section->hauteur_retombee;
-            double      a, b, aa, bb;
-            double      J;
-            
-            if (lt > ht)
-                { a = lt; b = ht; }
-            else
-                { a = ht; b = lt; }
-            if (lr > hr)
-                { aa = lr; bb = hr; }
-            else
-                { aa = hr; bb = lr; }
-            if (barre->section->type == SECTION_RECTANGULAIRE)
-                J = aa*bb*bb*bb/16.*(16./3.-3.364*bb/aa*(1-bb*bb*bb*bb/(12.*aa*aa*aa*aa)));
-            else
-                J = a*b*b*b/16.*(16./3.-3.364*b/a*(1.-b*b*b*b/(12.*a*a*a*a)))+aa*bb*bb*bb/16.*(16./3.-3.364*bb/aa*(1-bb*bb*bb*bb/(12.*aa*aa*aa*aa)));
-            
-    // Pour une section en T de section constante (lt : largeur de la table, lr : largeur de
-    //   la retombée, ht : hauteur de la table, hr : hauteur de la retombée), GJ/L vaut :\end{verbatim}\begin{displaymath}
-    // \frac{G \cdot J}{L} \texttt{ avec } J = \frac{a \cdot b^3}{16} \left[\frac{16}{3}-3.364 \frac{b}{a} \left(1-\frac{b^4}{12 a^4}\right)\right]+\frac{aa \cdot bb^3}{16} \left[\frac{16}{3}-3.364 \frac{bb}{aa} \left(1-\frac{bb^4}{12 aa^4}\right)\right]\texttt{ avec }\substack{a=max(h_t,l_t)\\b=min(h_t,l_t)\\aa=max(h_r,l_r)\\bb=min(h_r,l_r)}\end{displaymath}\begin{verbatim}
-            return G*J/ll;
-            break;
-        }
-        case SECTION_CIRCULAIRE :
-        {
-            Section_Circulaire *section = barre->section->data;
-            double      J = M_PI*section->diametre*section->diametre*section->diametre*section->diametre/32.;
-    // Pour une section circulaire de section constante, GJ/L vaut :\end{verbatim}\begin{displaymath}
-    // \frac{G \cdot J}{L} \texttt{ avec } J = \frac{\pi \cdot \phi^4}{32}\end{displaymath}\begin{verbatim}
-            return G*J/ll;
-            break;
-        }
-        default :
-        {
-            BUGMSG(0, NAN, gettext("Type de section %d inconnu.\n"), barre->section->type);
-            break;
-        }
-    }
+    return EF_calculs_G(barre->materiau, FALSE)*EF_sections_j(barre->section)/ll;
 }
 
 

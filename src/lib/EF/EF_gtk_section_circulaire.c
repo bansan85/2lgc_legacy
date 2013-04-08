@@ -180,7 +180,7 @@ void EF_gtk_section_circulaire_ajouter_clicked(GtkButton *button, Projet *projet
     
     gtk_widget_destroy(projet->list_gtk.ef_sections_circulaire.window);
     
-    BUG(EF_sections_circulaire_ajout(projet, texte, diametre), );
+    BUG(EF_sections_circulaire_ajout(projet, texte, common_math_f(diametre, FLOTTANT_UTILISATEUR)), );
     
     free(texte);
     
@@ -220,7 +220,7 @@ void EF_gtk_section_circulaire_modifier_clicked(GtkButton *button, Projet *proje
     if (!(EF_gtk_section_circulaire_recupere_donnees(projet, &diametre, &texte)))
         return;
     
-    BUG(EF_sections_circulaire_modif(projet, projet->list_gtk.ef_sections_circulaire.section, texte, diametre), );
+    BUG(EF_sections_circulaire_modif(projet, projet->list_gtk.ef_sections_circulaire.section, texte, common_math_f(diametre, FLOTTANT_UTILISATEUR)), );
     
     free(texte);
     
@@ -281,7 +281,7 @@ gboolean EF_gtk_section_circulaire(Projet *projet, EF_Section *section)
         data = ef_gtk->section->data;
         
         gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(ef_gtk->builder, "EF_section_circulaire_textview_nom"))), ef_gtk->section->nom, -1);
-        common_math_double_to_char(data->diametre, tmp, DECIMAL_DISTANCE);
+        common_math_double_to_char2(data->diametre, tmp, DECIMAL_DISTANCE);
         gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder, "EF_section_circulaire_buffer_diametre")), tmp, -1);
         
         gtk_button_set_label(GTK_BUTTON(gtk_builder_get_object(ef_gtk->builder, "EF_section_circulaire_button_add_edit")), "gtk-edit");

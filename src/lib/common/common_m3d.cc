@@ -526,20 +526,20 @@ gboolean m3d_barre(void *donnees_m3d, Beton_Barre *barre)
             CM3dObject  *bas, *haut, *gauche, *droite;
             Section_T   *section = (Section_T *)barre->section->data;
             
-            droite = M3d_plan_new("", longueur, section->hauteur_retombee, 1);
+            droite = M3d_plan_new("", longueur, common_math_get(section->hauteur_retombee), 1);
             droite->rotations(180., 0., 0.);
-            droite->set_position(0., -section->largeur_retombee/2., 0.);
+            droite->set_position(0., -common_math_get(section->largeur_retombee)/2., 0.);
             
-            gauche = M3d_plan_new("", longueur, section->hauteur_retombee, 1);
-            gauche->set_position(0., section->largeur_retombee/2., 0.);
+            gauche = M3d_plan_new("", longueur, common_math_get(section->hauteur_retombee), 1);
+            gauche->set_position(0., common_math_get(section->largeur_retombee)/2., 0.);
             
-            bas = M3d_plan_new("", longueur, section->largeur_retombee, 1);
+            bas = M3d_plan_new("", longueur, common_math_get(section->largeur_retombee), 1);
             bas->rotations(90., 180., 0.);
-            bas->set_position(0., 0., -section->hauteur_retombee/2.);
+            bas->set_position(0., 0., -common_math_get(section->hauteur_retombee)/2.);
             
-            haut = M3d_plan_new("", longueur, section->largeur_retombee, 1);
+            haut = M3d_plan_new("", longueur, common_math_get(section->largeur_retombee), 1);
             haut->rotations(90., 0., 0.);
-            haut->set_position(0., 0., section->hauteur_retombee/2.);
+            haut->set_position(0., 0., common_math_get(section->hauteur_retombee)/2.);
             
             tout = M3d_object_new_group(tmp, droite, gauche, bas, haut, NULL);
             
@@ -588,10 +588,10 @@ gboolean m3d_barre(void *donnees_m3d, Beton_Barre *barre)
             Section_T *section = (Section_T *)barre->section->data;
             
             double  y, z;
-            double  lt = section->largeur_table;
-            double  lr = section->largeur_retombee;
-            double  ht = section->hauteur_table;
-            double  hr = section->hauteur_retombee;
+            double  lt = common_math_get(section->largeur_table);
+            double  lr = common_math_get(section->largeur_retombee);
+            double  ht = common_math_get(section->hauteur_table);
+            double  hr = common_math_get(section->hauteur_retombee);
             double  cdgh = (lt*ht*ht/2.+lr*hr*(ht+hr/2.))/(lt*ht+lr*hr);
             double  cdgb = (ht+hr)-cdgh;
             
@@ -679,20 +679,20 @@ gboolean m3d_barre(void *donnees_m3d, Beton_Barre *barre)
             double      y, z;
             CM3dObject  *bas, *haut, *gauche, *droite;
             
-            droite = M3d_plan_new("", longueur, section->largeur_table, 1);
+            droite = M3d_plan_new("", longueur, common_math_get(section->largeur_table), 1);
             droite->rotations(180., 0., 0.);
-            droite->set_position(0., -section->largeur_table/2., 0.);
+            droite->set_position(0., -common_math_get(section->largeur_table)/2., 0.);
             
-            gauche = M3d_plan_new("", longueur, section->largeur_table, 1);
-            gauche->set_position(0., section->largeur_table/2., 0.);
+            gauche = M3d_plan_new("", longueur, common_math_get(section->largeur_table), 1);
+            gauche->set_position(0., common_math_get(section->largeur_table)/2., 0.);
             
-            bas = M3d_plan_new("", longueur, section->largeur_table, 1);
+            bas = M3d_plan_new("", longueur, common_math_get(section->largeur_table), 1);
             bas->rotations(90., 180., 0.);
-            bas->set_position(0., 0., -section->largeur_table/2.);
+            bas->set_position(0., 0., -common_math_get(section->largeur_table)/2.);
             
-            haut = M3d_plan_new("", longueur, section->largeur_table, 1);
+            haut = M3d_plan_new("", longueur, common_math_get(section->largeur_table), 1);
             haut->rotations(90., 0., 0.);
-            haut->set_position(0., 0., section->largeur_table/2.);
+            haut->set_position(0., 0., common_math_get(section->largeur_table)/2.);
             
             tout = M3d_object_new_group(tmp, droite, gauche, bas, haut, NULL);
             
@@ -741,7 +741,7 @@ gboolean m3d_barre(void *donnees_m3d, Beton_Barre *barre)
             Section_Circulaire *section = (Section_Circulaire *)barre->section->data;
             double  y, z;
             
-            tout = M3d_cylindre_new(tmp, section->diametre/2., longueur, 12);
+            tout = M3d_cylindre_new(tmp, common_math_get(section->diametre)/2., longueur, 12);
             tout->rotations(0., 0., 90.);
             switch(barre->numero)
             {

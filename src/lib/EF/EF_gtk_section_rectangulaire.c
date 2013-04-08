@@ -185,7 +185,7 @@ void EF_gtk_section_rectangulaire_ajouter_clicked(GtkButton *button, Projet *pro
         return;
     
     // Création de la nouvelle charge ponctuelle au noeud
-    BUG(EF_sections_rectangulaire_ajout(projet, texte, largeur, hauteur), );
+    BUG(EF_sections_rectangulaire_ajout(projet, texte, common_math_f(largeur, FLOTTANT_UTILISATEUR), common_math_f(hauteur, FLOTTANT_UTILISATEUR)), );
     
     free(texte);
     
@@ -229,7 +229,7 @@ void EF_gtk_section_rectangulaire_modifier_clicked(GtkButton *button, Projet *pr
     
     gtk_widget_destroy(projet->list_gtk.ef_sections_rectangulaire.window);
     
-    BUG(EF_sections_rectangulaire_modif(projet, projet->list_gtk.ef_sections_rectangulaire.section, texte, largeur, hauteur), );
+    BUG(EF_sections_rectangulaire_modif(projet, projet->list_gtk.ef_sections_rectangulaire.section, texte, common_math_f(largeur, FLOTTANT_UTILISATEUR), common_math_f(hauteur, FLOTTANT_UTILISATEUR)), );
     
     free(texte);
     
@@ -288,9 +288,9 @@ gboolean EF_gtk_section_rectangulaire(Projet *projet, EF_Section *section)
         data = ef_gtk->section->data;
         
         gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(ef_gtk->builder, "EF_section_rectangulaire_textview_nom"))), ef_gtk->section->nom, -1);
-        common_math_double_to_char(data->largeur_retombee, tmp, DECIMAL_DISTANCE);
+        common_math_double_to_char2(data->largeur_retombee, tmp, DECIMAL_DISTANCE);
         gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder, "EF_section_rectangulaire_buffer_largeur")), tmp, -1);
-        common_math_double_to_char(data->hauteur_retombee, tmp, DECIMAL_DISTANCE);
+        common_math_double_to_char2(data->hauteur_retombee, tmp, DECIMAL_DISTANCE);
         gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder, "EF_section_rectangulaire_buffer_hauteur")), tmp, -1);
         
         gtk_button_set_label(GTK_BUTTON(gtk_builder_get_object(ef_gtk->builder, "EF_section_rectangulaire_button_add_edit")), "gtk-edit");
