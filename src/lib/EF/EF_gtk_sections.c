@@ -116,23 +116,19 @@ gboolean EF_gtk_sections_treeview_key_press(GtkTreeView *treeview, GdkEvent *eve
     {
         GtkTreeIter     Iter;
         GtkTreeModel    *model;
-        char            *nom;
         EF_Section      *section;
         GList           *liste_sections = NULL;
         
         if (!gtk_tree_selection_get_selected(gtk_tree_view_get_selection(treeview), &model, &Iter))
             return FALSE;
         
-        gtk_tree_model_get(model, &Iter, 1, &nom, -1);
-        
-        BUG(section = EF_sections_cherche_nom(projet, nom, TRUE), FALSE);
+        gtk_tree_model_get(model, &Iter, 0, &section, -1);
         
         liste_sections = g_list_append(liste_sections, section);
         if (_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, liste_sections, NULL, NULL, NULL, NULL, NULL, NULL, FALSE, FALSE) == FALSE)
             BUG(EF_sections_supprime(section, TRUE, projet), FALSE);
         
         g_list_free(liste_sections);
-        free(nom);
         
         return TRUE;
     }
@@ -167,13 +163,10 @@ void EF_gtk_sections_select_changed(GtkTreeSelection *treeselection, Projet *pro
     }
     else
     {
-        char        *nom;
         EF_Section  *section;
         GList       *liste_sections = NULL;
         
-        gtk_tree_model_get(model, &Iter, 1, &nom, -1);
-        
-        BUG(section = EF_sections_cherche_nom(projet, nom, TRUE), );
+        gtk_tree_model_get(model, &Iter, 0, &section, -1);
         
         liste_sections = g_list_append(liste_sections, section);
         gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections.builder, "EF_sections_boutton_modifier")), TRUE);
@@ -193,7 +186,6 @@ void EF_gtk_sections_select_changed(GtkTreeSelection *treeselection, Projet *pro
         }
         
         g_list_free(liste_sections);
-        free(nom);
     }
     
     return;
@@ -211,7 +203,6 @@ void EF_gtk_sections_boutton_supprimer_menu(GtkButton *widget, Projet *projet)
 {
     GtkTreeModel    *model;
     GtkTreeIter     Iter;
-    char            *nom;
     EF_Section      *section;
     GList           *liste_sections = NULL, *liste_noeuds_dep, *liste_barres_dep, *liste_charges_dep;
     
@@ -222,9 +213,7 @@ void EF_gtk_sections_boutton_supprimer_menu(GtkButton *widget, Projet *projet)
     if (!gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_sections.builder, "EF_sections_treeview_select")), &model, &Iter))
         BUGMSG(NULL, , gettext("Aucun élément n'est sélectionné.\n"));
     
-    gtk_tree_model_get(model, &Iter, 1, &nom, -1);
-    
-    BUG(section = EF_sections_cherche_nom(projet, nom, TRUE), );
+    gtk_tree_model_get(model, &Iter, 0, &section, -1);
     
     liste_sections = g_list_append(liste_sections, section);
     BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, liste_sections, NULL, NULL, NULL, &liste_noeuds_dep, &liste_barres_dep, &liste_charges_dep, FALSE, FALSE), );
@@ -241,7 +230,6 @@ void EF_gtk_sections_boutton_supprimer_menu(GtkButton *widget, Projet *projet)
     else
         BUGMSG(NULL, , gettext("L'élément ne possède aucune dépendance.\n"));
     
-    free(nom);
     g_list_free(liste_noeuds_dep);
     g_list_free(liste_barres_dep);
     g_list_free(liste_charges_dep);
@@ -264,7 +252,6 @@ void EF_gtk_sections_edit_nom(GtkCellRendererText *cell, gchar *path_string, gch
     GtkTreeModel    *model;
     GtkTreeIter     iter;
     GtkTreePath     *path;
-    char            *nom;
     EF_Section      *section;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
@@ -275,14 +262,9 @@ void EF_gtk_sections_edit_nom(GtkCellRendererText *cell, gchar *path_string, gch
     path = gtk_tree_path_new_from_string(path_string);
     gtk_tree_model_get_iter(model, &iter, path);
     gtk_tree_path_free(path);
-    gtk_tree_model_get(model, &iter, 1, &nom, -1);
-    if ((strcmp(nom, new_text) == 0) || (strcmp(new_text, "") == 0))
-    {
-        free(nom);
+    gtk_tree_model_get(model, &iter, 0, &section, -1);
+    if ((strcmp(section->nom, new_text) == 0) || (strcmp(new_text, "") == 0))
         return;
-    }
-    BUG(section = EF_sections_cherche_nom(projet, nom, TRUE), );
-    free(nom);
     if (EF_sections_cherche_nom(projet, new_text, FALSE))
         return;
 
@@ -327,7 +309,6 @@ void EF_gtk_sections_supprimer_direct(GtkButton *button, Projet *projet)
 {
     GtkTreeIter     iter;
     GtkTreeModel    *model;
-    char            *nom;
     EF_Section      *section;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
@@ -336,12 +317,9 @@ void EF_gtk_sections_supprimer_direct(GtkButton *button, Projet *projet)
     if (!gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_sections.builder, "EF_sections_treeview_select")), &model, &iter))
         return;
     
-    gtk_tree_model_get(model, &iter, 1, &nom, -1);
+    gtk_tree_model_get(model, &iter, 0, &section, -1);
     
-    BUG(section = EF_sections_cherche_nom(projet, nom, TRUE), );
     BUG(EF_sections_supprime(section, TRUE, projet), );
-    
-    free(nom);
     
     return;
 }
@@ -357,7 +335,6 @@ void EF_gtk_sections_supprimer_menu_barres(GtkButton *button, Projet *projet)
 {
     GtkTreeIter     iter;
     GtkTreeModel    *model;
-    char            *nom;
     EF_Section      *section;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
@@ -366,14 +343,11 @@ void EF_gtk_sections_supprimer_menu_barres(GtkButton *button, Projet *projet)
     if (!gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_sections.builder, "EF_sections_treeview_select")), &model, &iter))
         return;
     
-    gtk_tree_model_get(model, &iter, 1, &nom, -1);
+    gtk_tree_model_get(model, &iter, 0, &section, -1);
     
-    BUG(section = EF_sections_cherche_nom(projet, nom, TRUE), );
     BUG(EF_sections_supprime(section, FALSE, projet), );
     
     BUG(m3d_rafraichit(projet), );
-    
-    free(nom);
     
     return;
 }
@@ -628,7 +602,6 @@ void EF_gtk_sections_edit_clicked(GtkWidget *widget, Projet *projet)
 {
     GtkTreeIter     iter;
     GtkTreeModel    *model;
-    char            *nom;
     GList           *list, *list_parcours;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
@@ -644,9 +617,7 @@ void EF_gtk_sections_edit_clicked(GtkWidget *widget, Projet *projet)
     // Et on les édite les unes après les autres.
             EF_Section  *section;
             
-            gtk_tree_model_get(model, &iter, 1, &nom, -1);
-            BUG(section = EF_sections_cherche_nom(projet, nom, TRUE), );
-            free(nom);
+            gtk_tree_model_get(model, &iter, 0, &section, -1);
             
             switch (section->type)
             {
@@ -710,6 +681,271 @@ gboolean EF_gtk_sections_double_clicked(GtkWidget *widget, GdkEvent *event, Proj
 }
 
 
+void EF_gtk_sections_render_0(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
+  GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data2)
+/* Description : Affiche la section dans le graphique.
+ * Paramètres : GtkTreeViewColumn *tree_column : composant à l'origine de l'évènement,
+ *            : GtkCellRenderer *cell : la cellule en cours d'édition,
+ *            : GtkTreeModel *tree_model : le mode en cours d'édition,
+ *            : GtkTreeIter *iter : la ligne en cours d'édition,
+ *            : gpointer data2 : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    EF_Section  *section;
+    GdkPixbuf   *pixbuf;
+    
+    gtk_tree_model_get(tree_model, iter, 0, &section, -1);
+    
+    BUG(pixbuf = EF_gtk_sections_dessin(section, 32, 32), );
+    
+    g_object_set(cell, "pixbuf", pixbuf, NULL);
+    
+    g_object_unref(pixbuf);
+    
+    return;
+}
+
+
+void EF_gtk_sections_render_1(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
+  GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data2)
+/* Description : Affiche le nom de la section.
+ * Paramètres : GtkTreeViewColumn *tree_column : composant à l'origine de l'évènement,
+ *            : GtkCellRenderer *cell : la cellule en cours d'édition,
+ *            : GtkTreeModel *tree_model : le mode en cours d'édition,
+ *            : GtkTreeIter *iter : la ligne en cours d'édition,
+ *            : gpointer data2 : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    EF_Section  *section;
+    
+    gtk_tree_model_get(tree_model, iter, 0, &section, -1);
+    
+    g_object_set(cell, "text", section->nom, NULL);
+    
+    return;
+}
+
+
+void EF_gtk_sections_render_2(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
+  GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data2)
+/* Description : Affiche la description de la section.
+ * Paramètres : GtkTreeViewColumn *tree_column : composant à l'origine de l'évènement,
+ *            : GtkCellRenderer *cell : la cellule en cours d'édition,
+ *            : GtkTreeModel *tree_model : le mode en cours d'édition,
+ *            : GtkTreeIter *iter : la ligne en cours d'édition,
+ *            : gpointer data2 : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    EF_Section  *section;
+    char        *description;
+    
+    gtk_tree_model_get(tree_model, iter, 0, &section, -1);
+    
+    BUG(description = EF_sections_get_description(section), );
+    
+    g_object_set(cell, "text", description, NULL);
+    
+    free(description);
+    
+    return;
+}
+
+
+void EF_gtk_sections_render_3(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
+  GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data2)
+/* Description : Affiche le module de torsion de la section.
+ * Paramètres : GtkTreeViewColumn *tree_column : composant à l'origine de l'évènement,
+ *            : GtkCellRenderer *cell : la cellule en cours d'édition,
+ *            : GtkTreeModel *tree_model : le mode en cours d'édition,
+ *            : GtkTreeIter *iter : la ligne en cours d'édition,
+ *            : gpointer data2 : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    EF_Section  *section;
+    char        c[30];
+    
+    gtk_tree_model_get(tree_model, iter, 0, &section, -1);
+    
+    common_math_double_to_char(EF_sections_j(section), c, DECIMAL_M4);
+    
+    g_object_set(cell, "text", c, NULL);
+    
+    return;
+}
+
+
+void EF_gtk_sections_render_4(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
+  GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data2)
+/* Description : Affiche le module de flexion selon l'axe y de la section.
+ * Paramètres : GtkTreeViewColumn *tree_column : composant à l'origine de l'évènement,
+ *            : GtkCellRenderer *cell : la cellule en cours d'édition,
+ *            : GtkTreeModel *tree_model : le mode en cours d'édition,
+ *            : GtkTreeIter *iter : la ligne en cours d'édition,
+ *            : gpointer data2 : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    EF_Section  *section;
+    char        c[30];
+    
+    gtk_tree_model_get(tree_model, iter, 0, &section, -1);
+    
+    common_math_double_to_char(EF_sections_iy(section), c, DECIMAL_M4);
+    
+    g_object_set(cell, "text", c, NULL);
+    
+    return;
+}
+
+
+void EF_gtk_sections_render_5(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
+  GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data2)
+/* Description : Affiche le module de flexion selon l'axe z de la section.
+ * Paramètres : GtkTreeViewColumn *tree_column : composant à l'origine de l'évènement,
+ *            : GtkCellRenderer *cell : la cellule en cours d'édition,
+ *            : GtkTreeModel *tree_model : le mode en cours d'édition,
+ *            : GtkTreeIter *iter : la ligne en cours d'édition,
+ *            : gpointer data2 : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    EF_Section  *section;
+    char        c[30];
+    
+    gtk_tree_model_get(tree_model, iter, 0, &section, -1);
+    
+    common_math_double_to_char(EF_sections_iz(section), c, DECIMAL_M4);
+    
+    g_object_set(cell, "text", c, NULL);
+    
+    return;
+}
+
+
+void EF_gtk_sections_render_6(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
+  GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data2)
+/* Description : Affiche la surface de la section.
+ * Paramètres : GtkTreeViewColumn *tree_column : composant à l'origine de l'évènement,
+ *            : GtkCellRenderer *cell : la cellule en cours d'édition,
+ *            : GtkTreeModel *tree_model : le mode en cours d'édition,
+ *            : GtkTreeIter *iter : la ligne en cours d'édition,
+ *            : gpointer data2 : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    EF_Section  *section;
+    char        c[30];
+    
+    gtk_tree_model_get(tree_model, iter, 0, &section, -1);
+    
+    common_math_double_to_char(EF_sections_s(section), c, DECIMAL_SURFACE);
+    
+    g_object_set(cell, "text", c, NULL);
+    
+    return;
+}
+
+
+void EF_gtk_sections_render_7(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
+  GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data2)
+/* Description : Affiche la distance vy de la section.
+ * Paramètres : GtkTreeViewColumn *tree_column : composant à l'origine de l'évènement,
+ *            : GtkCellRenderer *cell : la cellule en cours d'édition,
+ *            : GtkTreeModel *tree_model : le mode en cours d'édition,
+ *            : GtkTreeIter *iter : la ligne en cours d'édition,
+ *            : gpointer data2 : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    EF_Section  *section;
+    char        c[30];
+    
+    gtk_tree_model_get(tree_model, iter, 0, &section, -1);
+    
+    common_math_double_to_char(EF_sections_vy(section), c, DECIMAL_DISTANCE);
+    
+    g_object_set(cell, "text", c, NULL);
+    
+    return;
+}
+
+
+void EF_gtk_sections_render_8(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
+  GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data2)
+/* Description : Affiche la distance vyp de la section.
+ * Paramètres : GtkTreeViewColumn *tree_column : composant à l'origine de l'évènement,
+ *            : GtkCellRenderer *cell : la cellule en cours d'édition,
+ *            : GtkTreeModel *tree_model : le mode en cours d'édition,
+ *            : GtkTreeIter *iter : la ligne en cours d'édition,
+ *            : gpointer data2 : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    EF_Section  *section;
+    char        c[30];
+    
+    gtk_tree_model_get(tree_model, iter, 0, &section, -1);
+    
+    common_math_double_to_char(EF_sections_vyp(section), c, DECIMAL_DISTANCE);
+    
+    g_object_set(cell, "text", c, NULL);
+    
+    return;
+}
+
+
+void EF_gtk_sections_render_9(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
+  GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data2)
+/* Description : Affiche la distance vz de la section.
+ * Paramètres : GtkTreeViewColumn *tree_column : composant à l'origine de l'évènement,
+ *            : GtkCellRenderer *cell : la cellule en cours d'édition,
+ *            : GtkTreeModel *tree_model : le mode en cours d'édition,
+ *            : GtkTreeIter *iter : la ligne en cours d'édition,
+ *            : gpointer data2 : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    EF_Section  *section;
+    char        c[30];
+    
+    gtk_tree_model_get(tree_model, iter, 0, &section, -1);
+    
+    common_math_double_to_char(EF_sections_vz(section), c, DECIMAL_DISTANCE);
+    
+    g_object_set(cell, "text", c, NULL);
+    
+    return;
+}
+
+
+void EF_gtk_sections_render_10(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
+  GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data2)
+/* Description : Affiche la distance vy de la section.
+ * Paramètres : GtkTreeViewColumn *tree_column : composant à l'origine de l'évènement,
+ *            : GtkCellRenderer *cell : la cellule en cours d'édition,
+ *            : GtkTreeModel *tree_model : le mode en cours d'édition,
+ *            : GtkTreeIter *iter : la ligne en cours d'édition,
+ *            : gpointer data2 : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    EF_Section  *section;
+    char        c[30];
+    
+    gtk_tree_model_get(tree_model, iter, 0, &section, -1);
+    
+    common_math_double_to_char(EF_sections_vzp(section), c, DECIMAL_DISTANCE);
+    
+    g_object_set(cell, "text", c, NULL);
+    
+    return;
+}
+
+
 void EF_gtk_sections(Projet *projet)
 /* Description : Création de la fenêtre permettant d'afficher les sections sous forme d'un
  *               tableau.
@@ -738,13 +974,25 @@ void EF_gtk_sections(Projet *projet)
     ef_gtk->window = GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder, "EF_sections_window"));
     ef_gtk->sections = GTK_TREE_STORE(gtk_builder_get_object(ef_gtk->builder, "EF_sections_treestore"));
     
+    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(ef_gtk->builder, "EF_sections_treeview_column0")), GTK_CELL_RENDERER(gtk_builder_get_object(ef_gtk->builder, "EF_sections_treeview_cell0")), EF_gtk_sections_render_0, projet, NULL);
+    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(ef_gtk->builder, "EF_sections_treeview_column1")), GTK_CELL_RENDERER(gtk_builder_get_object(ef_gtk->builder, "EF_sections_treeview_cell1")), EF_gtk_sections_render_1, projet, NULL);
+    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(ef_gtk->builder, "EF_sections_treeview_column2")), GTK_CELL_RENDERER(gtk_builder_get_object(ef_gtk->builder, "EF_sections_treeview_cell2")), EF_gtk_sections_render_2, projet, NULL);
+    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(ef_gtk->builder, "EF_sections_treeview_column3")), GTK_CELL_RENDERER(gtk_builder_get_object(ef_gtk->builder, "EF_sections_treeview_cell3")), EF_gtk_sections_render_3, projet, NULL);
+    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(ef_gtk->builder, "EF_sections_treeview_column4")), GTK_CELL_RENDERER(gtk_builder_get_object(ef_gtk->builder, "EF_sections_treeview_cell4")), EF_gtk_sections_render_4, projet, NULL);
+    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(ef_gtk->builder, "EF_sections_treeview_column5")), GTK_CELL_RENDERER(gtk_builder_get_object(ef_gtk->builder, "EF_sections_treeview_cell5")), EF_gtk_sections_render_5, projet, NULL);
+    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(ef_gtk->builder, "EF_sections_treeview_column6")), GTK_CELL_RENDERER(gtk_builder_get_object(ef_gtk->builder, "EF_sections_treeview_cell6")), EF_gtk_sections_render_6, projet, NULL);
+    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(ef_gtk->builder, "EF_sections_treeview_column7")), GTK_CELL_RENDERER(gtk_builder_get_object(ef_gtk->builder, "EF_sections_treeview_cell7")), EF_gtk_sections_render_7, projet, NULL);
+    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(ef_gtk->builder, "EF_sections_treeview_column8")), GTK_CELL_RENDERER(gtk_builder_get_object(ef_gtk->builder, "EF_sections_treeview_cell8")), EF_gtk_sections_render_8, projet, NULL);
+    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(ef_gtk->builder, "EF_sections_treeview_column9")), GTK_CELL_RENDERER(gtk_builder_get_object(ef_gtk->builder, "EF_sections_treeview_cell9")), EF_gtk_sections_render_9, projet, NULL);
+    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(ef_gtk->builder, "EF_sections_treeview_column10")), GTK_CELL_RENDERER(gtk_builder_get_object(ef_gtk->builder, "EF_sections_treeview_cell10")), EF_gtk_sections_render_10, projet, NULL);
+    
     list_parcours = projet->modele.sections;
     while (list_parcours != NULL)
     {
         EF_Section  *section = (EF_Section *)list_parcours->data;
         
         gtk_tree_store_append(ef_gtk->sections, &section->Iter_fenetre, NULL);
-        BUG(EF_sections_update_ligne_treeview(projet, section), );
+        gtk_tree_store_set(ef_gtk->sections, &section->Iter_fenetre, 0, section, -1);
         
         list_parcours = g_list_next(list_parcours);
     }
