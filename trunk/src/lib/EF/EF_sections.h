@@ -24,10 +24,6 @@
 
 gboolean EF_sections_init(Projet *projet) __attribute__((__warn_unused_result__));
 
-#ifdef ENABLE_GTK
-gboolean EF_sections_update_ligne_treeview(Projet *projet, EF_Section *section) __attribute__((__warn_unused_result__));
-#endif
-
 gboolean EF_sections_rectangulaire_ajout(Projet *projet, const char* nom, Flottant l, Flottant h) __attribute__((__warn_unused_result__));
 gboolean EF_sections_rectangulaire_modif(Projet *projet, EF_Section *section, const char* nom, Flottant l, Flottant h) __attribute__((__warn_unused_result__));
 gboolean EF_sections_T_ajout(Projet *projet, const char* nom, Flottant lt, Flottant lr, Flottant ht, Flottant hr) __attribute__((__warn_unused_result__));

@@ -59,48 +59,6 @@ gboolean EF_sections_init(Projet *projet)
 }
 
 
-#ifdef ENABLE_GTK
-gboolean EF_sections_update_ligne_treeview(Projet *projet, EF_Section *section)
-/* Description : Met à jour les données dans le treeview de la fenêtre section.
- * Paramètres : Projet *projet : la variable projet,
- *            : EF_Section *section : la section à mettre à jour.
- * Valeur renvoyée :
- *   Succès : TRUE
- *   Échec : FALSE :
- *             projet == NULL,
- *             section == NULL,
- *             fenetre section non initialisée.
- */
-{
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(section, FALSE, gettext("Paramètre %s incorrect.\n"), "section");
-    
-    if (projet->list_gtk.ef_sections.builder != NULL)
-    {
-        char        *description;
-        GdkPixbuf   *pixbuf = EF_gtk_sections_dessin(section, 32, 32);
-        char        j[30], iy[30], iz[30], s[30], vy[30], vyp[30], vz[30], vzp[30];
-        
-        BUG(description = EF_sections_get_description(section), FALSE);
-        common_math_double_to_char(EF_sections_j(section), j, DECIMAL_M4);
-        common_math_double_to_char(EF_sections_iy(section), iy, DECIMAL_M4);
-        common_math_double_to_char(EF_sections_iz(section), iz, DECIMAL_M4);
-        common_math_double_to_char(EF_sections_s(section), s, DECIMAL_SURFACE);
-        common_math_double_to_char(EF_sections_vy(section), vy, DECIMAL_DISTANCE);
-        common_math_double_to_char(EF_sections_vyp(section), vyp, DECIMAL_DISTANCE);
-        common_math_double_to_char(EF_sections_vz(section), vz, DECIMAL_DISTANCE);
-        common_math_double_to_char(EF_sections_vzp(section), vzp, DECIMAL_DISTANCE);
-        
-        gtk_tree_store_set(projet->list_gtk.ef_sections.sections, &section->Iter_fenetre, 0, pixbuf, 1, section->nom, 2, description, 3, j, 4, iy, 5, iz, 6, s, 7, vy, 8, vyp, 9, vz, 10, vzp, -1);
-        free(description);
-        g_object_unref(pixbuf);
-    }
-    
-    return TRUE;
-}
-#endif
-
-
 gboolean EF_sections_insert(Projet *projet, EF_Section *section)
 /* Description : Insère une section dans projet->modele.sections. Procédure commune à toutes les
  *               sections.
@@ -145,8 +103,9 @@ gboolean EF_sections_insert(Projet *projet, EF_Section *section)
     }
     
 #ifdef ENABLE_GTK
-    gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section->Iter_liste, 0, section->nom, -1);
-    BUG(EF_sections_update_ligne_treeview(projet, section), FALSE);
+    gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section->Iter_liste, 0, section, -1);
+    if (projet->list_gtk.ef_sections.builder != NULL)
+        gtk_tree_store_set(projet->list_gtk.ef_sections.sections, &section->Iter_fenetre, 0, section, -1);
 #endif
     
     return TRUE;
@@ -285,7 +244,6 @@ gboolean EF_sections_rectangulaire_modif(Projet *projet, EF_Section *section, co
         BUGMSG(section->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
         BUG(EF_sections_repositionne(projet, section), FALSE);
 #ifdef ENABLE_GTK
-        gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section->Iter_liste, 0, nom, -1);
         if ((projet->list_gtk.ef_sections_rectangulaire.builder != NULL) && (projet->list_gtk.ef_sections_rectangulaire.section == section))
             gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk.ef_sections_rectangulaire.builder, "EF_section_rectangulaire_textview_nom"))), nom, -1);
 #endif
@@ -324,7 +282,7 @@ gboolean EF_sections_rectangulaire_modif(Projet *projet, EF_Section *section, co
     
 #ifdef ENABLE_GTK
     if (projet->list_gtk.ef_sections.builder != NULL)
-        BUG(EF_sections_update_ligne_treeview(projet, section), FALSE);
+        gtk_widget_queue_draw(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections.builder, "EF_sections_treeview")));
 #endif
     
     return TRUE;
@@ -406,7 +364,6 @@ gboolean EF_sections_T_modif(Projet *projet, EF_Section *section, const char* no
         BUGMSG(section->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
         BUG(EF_sections_repositionne(projet, section), FALSE);
 #ifdef ENABLE_GTK
-        gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section->Iter_liste, 0, nom, -1);
         if ((projet->list_gtk.ef_sections_T.builder != NULL) && (projet->list_gtk.ef_sections_T.section == section))
             gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk.ef_sections_T.builder, "EF_section_T_textview_nom"))), nom, -1);
 #endif
@@ -449,7 +406,7 @@ gboolean EF_sections_T_modif(Projet *projet, EF_Section *section, const char* no
     
 #ifdef ENABLE_GTK
     if (projet->list_gtk.ef_sections.builder != NULL)
-        BUG(EF_sections_update_ligne_treeview(projet, section), FALSE);
+        gtk_widget_queue_draw(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections.builder, "EF_sections_treeview")));
 #endif
     
     return TRUE;
@@ -518,7 +475,6 @@ gboolean EF_sections_carree_modif(Projet *projet, EF_Section *section, const cha
         BUGMSG(section->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
         BUG(EF_sections_repositionne(projet, section), FALSE);
 #ifdef ENABLE_GTK
-        gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section->Iter_liste, 0, nom, -1);
         if ((projet->list_gtk.ef_sections_carree.builder != NULL) && (projet->list_gtk.ef_sections_carree.section == section))
             gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk.ef_sections_carree.builder, "EF_section_carree_textview_nom"))), nom, -1);
 #endif
@@ -550,7 +506,7 @@ gboolean EF_sections_carree_modif(Projet *projet, EF_Section *section, const cha
     
 #ifdef ENABLE_GTK
     if (projet->list_gtk.ef_sections.builder != NULL)
-        BUG(EF_sections_update_ligne_treeview(projet, section), FALSE);
+        gtk_widget_queue_draw(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections.builder, "EF_sections_treeview")));
 #endif
     
     return TRUE;
@@ -620,7 +576,6 @@ gboolean EF_sections_circulaire_modif(Projet *projet, EF_Section *section, const
         BUGMSG(section->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
         BUG(EF_sections_repositionne(projet, section), FALSE);
 #ifdef ENABLE_GTK
-        gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section->Iter_liste, 0, nom, -1);
         if ((projet->list_gtk.ef_sections_circulaire.builder != NULL) && (projet->list_gtk.ef_sections_circulaire.section == section))
             gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk.ef_sections_circulaire.builder, "EF_section_circulaire_textview_nom"))), nom, -1);
 #endif
@@ -648,7 +603,7 @@ gboolean EF_sections_circulaire_modif(Projet *projet, EF_Section *section, const
     
 #ifdef ENABLE_GTK
     if (projet->list_gtk.ef_sections.builder != NULL)
-        BUG(EF_sections_update_ligne_treeview(projet, section), FALSE);
+        gtk_widget_queue_draw(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections.builder, "EF_sections_treeview")));
 #endif
     
     return TRUE;
