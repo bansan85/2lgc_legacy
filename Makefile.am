@@ -52,10 +52,10 @@ if PLATFORM_WIN32
 	cp files/xml/*.xml codegui/files
 	cp files/formules/*.svg codegui/files
 	cp files/csv/*.csv codegui/files
-	zip -r codegui_debug.zip codegui
-	tar cvaf codegui_debug.tar.xz codegui
+	zip -r codegui_debug_win32.zip codegui
+	tar cvaf codegui_debug_win32.tar.xz codegui
 	strip codegui/*.exe codegui/*.dll
-	zip -r codegui.zip codegui
-	tar cvaf codegui.tar.xz codegui
+	zip -r codegui_win32.zip codegui
+	tar cvaf codegui_win32.tar.xz codegui
 	rm -Rf codegui
 endif
