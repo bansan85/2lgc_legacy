@@ -82,7 +82,7 @@ Ensuite compiler et installer l'application normalement :
         Modélisation|Barres|Gestion des barres
     Sélectionner et supprimer avec la touche SUPPR les 4 sections inutilisées.
     Ajouter une section rectangulaire, circulaire, carrée et en T.
-    Editer les 4 nouvelles sections via le bouton Modifier (Pas forcément obligé de modifier les valeurs).
+    Editer les 4 nouvelles sections via le bouton Modifier (modifier les valeurs).
     Sélectionner et supprimer avec le bouton supprimer les 4 sections inutilisées. La fenêtre d'édition doit être ouverte.
     Renommer les 4 anciennes sections (dont l'un de tel sorte qu'il se retrouve en dernière position) via la colonne correspondante du treeview. Le faire après avoir ouvert (et réouverte sans l'avoir refermée) la fenêtre d'édition en double-cliquant sur la ligne. Fermer la fenêtre d'édition via le bouton annuler.
     Ouvrir la fenêtre d'édition pour les 4 sections restantes et la fermer via la touche Echap.
