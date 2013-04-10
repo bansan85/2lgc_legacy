@@ -103,7 +103,7 @@ gboolean EF_sections_insert(Projet *projet, EF_Section *section)
     }
     
 #ifdef ENABLE_GTK
-    gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section->Iter_liste, 0, section, -1);
+    gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section->Iter_liste, 0, section->nom, -1);
     if (projet->list_gtk.ef_sections.builder != NULL)
         gtk_tree_store_set(projet->list_gtk.ef_sections.sections, &section->Iter_fenetre, 0, section, -1);
 #endif
