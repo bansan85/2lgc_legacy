@@ -5,4 +5,4 @@ find . \( -name "Makefile" -o -name "Makefile.in" -o -name ".deps" -o -name ".li
 find po \( -name "*.pot" -o -name "*.gmo" \) -exec rm {} \;
 find src/test -type f -perm /111 -exec rm {} \;
 rm -f files/ui/*.h
-rm -f codegui.tar.xz codegui.zip codegui_debug.tar.xz codegui_debug.zip
+rm -f *.tar.xz *.zip

@@ -204,7 +204,7 @@ gboolean EF_charge_barre_repartie_uniforme_mx(Beton_Barre *barre, unsigned int d
     BUGMSG(!((b > l) && (!(ERREUR_RELATIVE_EGALE(b, l)))), FALSE, gettext("La fin de la charge répartie uniformément (%f) est incorrecte. La longueur de la barre %d est de %f m.\n"), a, barre->numero, l);
     BUGMSG(!((a+b > l) && (!(ERREUR_RELATIVE_EGALE(a+b, l)))), FALSE, gettext("Le début (%f) et la fin (%f) de la charge répartie uniformément sont incompatibles avec la longueur de la barre %d qui est de %f m.\n"), a, b, barre->numero, l);
     
-    G = EF_calculs_G(barre->materiau, FALSE);
+    G = common_math_get(EF_calculs_G(barre->materiau, FALSE));
     
     switch (barre->section->type)
     {
@@ -213,7 +213,7 @@ gboolean EF_charge_barre_repartie_uniforme_mx(Beton_Barre *barre, unsigned int d
         case SECTION_CARREE :
         case SECTION_CIRCULAIRE :
         {
-            double      J = EF_sections_j(barre->section);
+            double      J = common_math_get(EF_sections_j(barre->section));
             
             BUG(!isnan(J), FALSE);
             
@@ -313,7 +313,7 @@ gboolean EF_charge_barre_repartie_uniforme_def_ang_iso_y(Beton_Barre *barre,
     BUGMSG(!((b > l) && (!(ERREUR_RELATIVE_EGALE(b, l)))), FALSE, gettext("La fin de la charge répartie uniformément (%f) est incorrecte. La longueur de la barre %d est de %f m.\n"), b, barre->numero, l);
     BUGMSG(!((a+b > l) && (!(ERREUR_RELATIVE_EGALE(a+b, l)))), FALSE, gettext("Le début (%f) et la fin (%f) de la charge répartie uniformément sont incorrecte avec la longueur de la barre %d qui est de %f m.\n"), a, b, barre->numero, l);
     
-    E = EF_calculs_E(barre->materiau);
+    E = common_math_get(EF_calculs_E(barre->materiau));
     
     switch (barre->section->type)
     {
@@ -322,7 +322,7 @@ gboolean EF_charge_barre_repartie_uniforme_def_ang_iso_y(Beton_Barre *barre,
         case SECTION_CARREE :
         case SECTION_CIRCULAIRE :
         {
-            double      I = EF_sections_iy(barre->section);
+            double      I = common_math_get(EF_sections_iy(barre->section));
             
             BUG(!isnan(I), FALSE);
             
@@ -417,7 +417,7 @@ gboolean EF_charge_barre_repartie_uniforme_def_ang_iso_z(Beton_Barre *barre,
     BUGMSG(!((b > l) && (!(ERREUR_RELATIVE_EGALE(b, l)))), FALSE, gettext("La fin de la charge répartie uniformément (%f) est incorrecte. La longueur de la barre %d est de %f m.\n"), b, barre->numero, l);
     BUGMSG(!((a+b > l) && (!(ERREUR_RELATIVE_EGALE(a+b, l)))), FALSE, gettext("Le début (%f) et la fin (%f) de la charge répartie uniformément sont incorrecte avec la longueur de la barre %d qui est de %f m.\n"), a, b, barre->numero, l);
     
-    E = EF_calculs_E(barre->materiau);
+    E = common_math_get(EF_calculs_E(barre->materiau));
     
     switch (barre->section->type)
     {
@@ -426,7 +426,7 @@ gboolean EF_charge_barre_repartie_uniforme_def_ang_iso_z(Beton_Barre *barre,
         case SECTION_CARREE :
         case SECTION_CIRCULAIRE :
         {
-            double      I = EF_sections_iz(barre->section);
+            double      I = common_math_get(EF_sections_iz(barre->section));
             
             BUG(!isnan(I), FALSE);
             
@@ -571,7 +571,7 @@ gboolean EF_charge_barre_repartie_uniforme_fonc_rx(Fonction *fonction, Beton_Bar
     BUGMSG(!((b > l) && (!(ERREUR_RELATIVE_EGALE(b, l)))), FALSE, gettext("La fin de la charge répartie uniformément (%f) est incorrecte. La longueur de la barre %d est de %f m.\n"), a, barre->numero, l);
     BUGMSG(!((a+b > l) && (!(ERREUR_RELATIVE_EGALE(a+b, l)))), FALSE, gettext("Le début (%f) et la fin (%f) de la charge répartie uniformément sont incompatibles avec la longueur de la barre %d qui est de %f m.\n"), a, b, barre->numero, l);
     
-    G = EF_calculs_G(barre->materiau, FALSE);
+    G = common_math_get(EF_calculs_G(barre->materiau, FALSE));
     
     switch (barre->section->type)
     {
@@ -580,7 +580,7 @@ gboolean EF_charge_barre_repartie_uniforme_fonc_rx(Fonction *fonction, Beton_Bar
         case SECTION_CARREE :
         case SECTION_CIRCULAIRE :
         {
-            double      J = EF_sections_j(barre->section);
+            double      J = common_math_get(EF_sections_j(barre->section));
             
             BUG(!isnan(J), FALSE);
             
@@ -725,7 +725,7 @@ gboolean EF_charge_barre_repartie_uniforme_fonc_ry(Fonction *f_rotation, Fonctio
     BUGMSG(!((b > l) && (!(ERREUR_RELATIVE_EGALE(b, l)))), FALSE, gettext("La fin de la charge répartie uniformément (%f) est incorrecte. La longueur de la barre %d est de %f m.\n"), a, barre->numero, l);
     BUGMSG(!((a+b > l) && (!(ERREUR_RELATIVE_EGALE(a+b, l)))), FALSE, gettext("Le début (%f) et la fin (%f) de la charge répartie uniformément sont incompatibles avec la longueur de la barre %d qui est de %f m.\n"), a, b, barre->numero, l);
     
-    E = EF_calculs_E(barre->materiau);
+    E = common_math_get(EF_calculs_E(barre->materiau));
     
     switch (barre->section->type)
     {
@@ -734,7 +734,7 @@ gboolean EF_charge_barre_repartie_uniforme_fonc_ry(Fonction *f_rotation, Fonctio
         case SECTION_CARREE :
         case SECTION_CIRCULAIRE :
         {
-            double      I = EF_sections_iy(barre->section);
+            double      I = common_math_get(EF_sections_iy(barre->section));
             
             BUG(!isnan(I), FALSE);
             
@@ -856,7 +856,7 @@ gboolean EF_charge_barre_repartie_uniforme_fonc_rz(Fonction *f_rotation, Fonctio
     BUGMSG(!((b > l) && (!(ERREUR_RELATIVE_EGALE(b, l)))), FALSE, gettext("La fin de la charge répartie uniformément (%f) est incorrecte. La longueur de la barre %d est de %f m.\n"), a, barre->numero, l);
     BUGMSG(!((a+b > l) && (!(ERREUR_RELATIVE_EGALE(a+b, l)))), FALSE, gettext("Le début (%f) et la fin (%f) de la charge répartie uniformément sont incompatibles avec la longueur de la barre %d qui est de %f m.\n"), a, b, barre->numero, l);
     
-    E = EF_calculs_E(barre->materiau);
+    E = common_math_get(EF_calculs_E(barre->materiau));
     
     switch (barre->section->type)
     {
@@ -865,7 +865,7 @@ gboolean EF_charge_barre_repartie_uniforme_fonc_rz(Fonction *f_rotation, Fonctio
         case SECTION_CARREE :
         case SECTION_CIRCULAIRE :
         {
-            double      I = EF_sections_iz(barre->section);
+            double      I = common_math_get(EF_sections_iz(barre->section));
             
             BUG(!isnan(I), FALSE);
             
@@ -961,7 +961,7 @@ gboolean EF_charge_barre_repartie_uniforme_n(Fonction *fonction, Beton_Barre *ba
     BUGMSG(!((b > l) && (!(ERREUR_RELATIVE_EGALE(b, l)))), FALSE, gettext("La fin de la charge répartie uniformément (%f) est incorrecte. La longueur de la barre %d est de %f m.\n"), b, barre->numero, l);
     BUGMSG(!((a+b > l) && (!(ERREUR_RELATIVE_EGALE(a+b, l)))), FALSE, gettext("Le début (%f) et la fin (%f) de la charge répartie uniformément sont incorrecte avec la longueur de la barre %d qui est de %f m.\n"), a, b, barre->numero, l);
     
-    E = EF_calculs_E(barre->materiau);
+    E = common_math_get(EF_calculs_E(barre->materiau));
     
     switch (barre->section->type)
     {
@@ -970,7 +970,7 @@ gboolean EF_charge_barre_repartie_uniforme_n(Fonction *fonction, Beton_Barre *ba
         case SECTION_CARREE :
         case SECTION_CIRCULAIRE :
         {
-            double      S = EF_sections_s(barre->section);
+            double      S = common_math_get(EF_sections_s(barre->section));
             
             BUG(!isnan(S), FALSE);
             

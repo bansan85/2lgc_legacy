@@ -173,7 +173,7 @@ void EF_gtk_materiaux_edit_nom(GtkCellRendererText *cell, gchar *path_string, gc
     if (_1992_1_1_materiaux_cherche_nom(projet, new_text, FALSE))
         return;
     
-    BUG(_1992_1_1_materiaux_modif(projet, materiau, new_text, NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN), );
+    BUG(_1992_1_1_materiaux_modif(projet, materiau, new_text, common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR)), );
     
     return;
 }

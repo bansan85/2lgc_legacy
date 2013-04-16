@@ -54,6 +54,7 @@ double common_math_get(Flottant f);
 Flottant common_math_f(double f, Type_Flottant type);
 Flottant common_math_add(Flottant f1, Flottant f2);
 Flottant common_math_sub(Flottant f1, Flottant f2);
+Flottant common_math_div_d(Flottant f, double d);
 Flottant common_math_dot_d(Flottant f, double d);
 Flottant common_math_dot_f(Flottant f1, Flottant f2);
 

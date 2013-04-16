@@ -770,7 +770,7 @@ void EF_gtk_sections_render_3(GtkTreeViewColumn *tree_column, GtkCellRenderer *c
     
     gtk_tree_model_get(tree_model, iter, 0, &section, -1);
     
-    common_math_double_to_char(EF_sections_j(section), c, DECIMAL_M4);
+    common_math_double_to_char2(EF_sections_j(section), c, DECIMAL_M4);
     
     g_object_set(cell, "text", c, NULL);
     
@@ -794,7 +794,7 @@ void EF_gtk_sections_render_4(GtkTreeViewColumn *tree_column, GtkCellRenderer *c
     
     gtk_tree_model_get(tree_model, iter, 0, &section, -1);
     
-    common_math_double_to_char(EF_sections_iy(section), c, DECIMAL_M4);
+    common_math_double_to_char2(EF_sections_iy(section), c, DECIMAL_M4);
     
     g_object_set(cell, "text", c, NULL);
     
@@ -818,7 +818,7 @@ void EF_gtk_sections_render_5(GtkTreeViewColumn *tree_column, GtkCellRenderer *c
     
     gtk_tree_model_get(tree_model, iter, 0, &section, -1);
     
-    common_math_double_to_char(EF_sections_iz(section), c, DECIMAL_M4);
+    common_math_double_to_char2(EF_sections_iz(section), c, DECIMAL_M4);
     
     g_object_set(cell, "text", c, NULL);
     
@@ -842,7 +842,7 @@ void EF_gtk_sections_render_6(GtkTreeViewColumn *tree_column, GtkCellRenderer *c
     
     gtk_tree_model_get(tree_model, iter, 0, &section, -1);
     
-    common_math_double_to_char(EF_sections_s(section), c, DECIMAL_SURFACE);
+    common_math_double_to_char2(EF_sections_s(section), c, DECIMAL_SURFACE);
     
     g_object_set(cell, "text", c, NULL);
     
@@ -866,7 +866,7 @@ void EF_gtk_sections_render_7(GtkTreeViewColumn *tree_column, GtkCellRenderer *c
     
     gtk_tree_model_get(tree_model, iter, 0, &section, -1);
     
-    common_math_double_to_char(EF_sections_vy(section), c, DECIMAL_DISTANCE);
+    common_math_double_to_char2(EF_sections_vy(section), c, DECIMAL_DISTANCE);
     
     g_object_set(cell, "text", c, NULL);
     
@@ -890,7 +890,7 @@ void EF_gtk_sections_render_8(GtkTreeViewColumn *tree_column, GtkCellRenderer *c
     
     gtk_tree_model_get(tree_model, iter, 0, &section, -1);
     
-    common_math_double_to_char(EF_sections_vyp(section), c, DECIMAL_DISTANCE);
+    common_math_double_to_char2(EF_sections_vyp(section), c, DECIMAL_DISTANCE);
     
     g_object_set(cell, "text", c, NULL);
     
@@ -914,7 +914,7 @@ void EF_gtk_sections_render_9(GtkTreeViewColumn *tree_column, GtkCellRenderer *c
     
     gtk_tree_model_get(tree_model, iter, 0, &section, -1);
     
-    common_math_double_to_char(EF_sections_vz(section), c, DECIMAL_DISTANCE);
+    common_math_double_to_char2(EF_sections_vz(section), c, DECIMAL_DISTANCE);
     
     g_object_set(cell, "text", c, NULL);
     
@@ -938,7 +938,7 @@ void EF_gtk_sections_render_10(GtkTreeViewColumn *tree_column, GtkCellRenderer *
     
     gtk_tree_model_get(tree_model, iter, 0, &section, -1);
     
-    common_math_double_to_char(EF_sections_vzp(section), c, DECIMAL_DISTANCE);
+    common_math_double_to_char2(EF_sections_vzp(section), c, DECIMAL_DISTANCE);
     
     g_object_set(cell, "text", c, NULL);
     

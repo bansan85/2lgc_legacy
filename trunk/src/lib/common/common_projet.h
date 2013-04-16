@@ -595,23 +595,23 @@ typedef struct __EF_Section
 typedef struct __Materiau_Beton
 {
     // Caractéristique du matériau béton conformément à EN 1992_1_1, Tableau 3.1
-    double      fck;
-    double      fckcube;
-    double      fcm;
-    double      fctm;
-    double      fctk_0_05;
-    double      fctk_0_95;
+    Flottant    fck;
+    Flottant    fckcube;
+    Flottant    fcm;
+    Flottant    fctm;
+    Flottant    fctk_0_05;
+    Flottant    fctk_0_95;
     
-    double      ec1;
-    double      ecu1;
-    double      ec2;
-    double      ecu2;
-    double      n;
-    double      ec3;
-    double      ecu3;
+    Flottant    ec1;
+    Flottant    ecu1;
+    Flottant    ec2;
+    Flottant    ecu2;
+    Flottant    n;
+    Flottant    ec3;
+    Flottant    ecu3;
     
-    double      ecm;
-    double      nu;
+    Flottant    ecm;
+    Flottant    nu;
 } Materiau_Beton;
 
 
