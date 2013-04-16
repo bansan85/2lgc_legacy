@@ -112,23 +112,19 @@ gboolean EF_gtk_materiaux_treeview_key_press(GtkTreeView *treeview, GdkEvent *ev
     {
         GtkTreeIter     Iter;
         GtkTreeModel    *model;
-        char            *nom;
         EF_Materiau     *materiau;
         GList           *liste_materiaux = NULL;
         
         if (!gtk_tree_selection_get_selected(gtk_tree_view_get_selection(treeview), &model, &Iter))
             return FALSE;
         
-        gtk_tree_model_get(model, &Iter, 0, &nom, -1);
-        
-        BUG(materiau = _1992_1_1_materiaux_cherche_nom(projet, nom, TRUE), FALSE);
+        gtk_tree_model_get(model, &Iter, 0, &materiau, -1);
         
         liste_materiaux = g_list_append(liste_materiaux, materiau);
         if (_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, liste_materiaux, NULL, NULL, NULL, NULL, NULL, FALSE, FALSE) == FALSE)
             BUG(_1992_1_1_materiaux_supprime(materiau, projet), FALSE);
         
         g_list_free(liste_materiaux);
-        free(nom);
         
         return TRUE;
     }
@@ -147,12 +143,11 @@ void EF_gtk_materiaux_edit_nom(GtkCellRendererText *cell, gchar *path_string, gc
  * Valeur renvoyée : Aucune.
 */
 {
-    Gtk_EF_Materiaux *ef_gtk;
-    GtkTreeModel     *model;
-    GtkTreeIter      iter;
-    GtkTreePath      *path;
-    char             *nom;
-    EF_Materiau      *materiau;
+    Gtk_EF_Materiaux    *ef_gtk;
+    GtkTreeModel        *model;
+    GtkTreeIter         iter;
+    GtkTreePath         *path;
+    EF_Materiau         *materiau;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_materiaux.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Matériau");
@@ -162,14 +157,10 @@ void EF_gtk_materiaux_edit_nom(GtkCellRendererText *cell, gchar *path_string, gc
     path = gtk_tree_path_new_from_string(path_string);
     gtk_tree_model_get_iter(model, &iter, path);
     gtk_tree_path_free(path);
-    gtk_tree_model_get(model, &iter, 0, &nom, -1);
-    if ((strcmp(nom, new_text) == 0) || (strcmp(new_text, "") == 0))
-    {
-        free(nom);
+    gtk_tree_model_get(model, &iter, 0, &materiau, -1);
+    if ((strcmp(materiau->nom, new_text) == 0) || (strcmp(new_text, "") == 0))
         return;
-    }
-    BUG(materiau = _1992_1_1_materiaux_cherche_nom(projet, nom, TRUE), );
-    free(nom);
+    
     if (_1992_1_1_materiaux_cherche_nom(projet, new_text, FALSE))
         return;
     
@@ -205,14 +196,11 @@ void EF_gtk_materiaux_select_changed(GtkTreeSelection *treeselection, Projet *pr
     }
     else
     {
-        char        *nom;
         EF_Materiau *materiau;
         
         GList       *liste_materiaux = NULL;
         
-        gtk_tree_model_get(model, &Iter, 0, &nom, -1);
-        
-        BUG(materiau = _1992_1_1_materiaux_cherche_nom(projet, nom, TRUE), );
+        gtk_tree_model_get(model, &Iter, 0, &materiau, -1);
         
         gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_materiaux.builder, "EF_materiaux_boutton_modifier")), TRUE);
         
@@ -233,7 +221,6 @@ void EF_gtk_materiaux_select_changed(GtkTreeSelection *treeselection, Projet *pr
         }
         
         g_list_free(liste_materiaux);
-        free(nom);
     }
     
     return;
@@ -251,7 +238,6 @@ void EF_gtk_materiaux_boutton_supprimer_menu(GtkButton *widget, Projet *projet)
 {
     GtkTreeModel    *model;
     GtkTreeIter     Iter;
-    char            *nom;
     EF_Materiau     *materiau;
     GList           *liste_materiaux = NULL, *liste_noeuds_dep, *liste_barres_dep, *liste_charges_dep;
     
@@ -263,9 +249,7 @@ void EF_gtk_materiaux_boutton_supprimer_menu(GtkButton *widget, Projet *projet)
     if (!gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_materiaux.builder, "EF_materiaux_treeview_select")), &model, &Iter))
         BUGMSG(NULL, , gettext("Aucun élément n'est sélectionné.\n"));
     
-    gtk_tree_model_get(model, &Iter, 0, &nom, -1);
-    
-    BUG(materiau = _1992_1_1_materiaux_cherche_nom(projet, nom, TRUE), );
+    gtk_tree_model_get(model, &Iter, 0, &materiau, -1);
     
     liste_materiaux = g_list_append(liste_materiaux, materiau);
     BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, liste_materiaux, NULL, NULL, &liste_noeuds_dep, &liste_barres_dep, &liste_charges_dep, FALSE, FALSE), );
@@ -285,7 +269,6 @@ void EF_gtk_materiaux_boutton_supprimer_menu(GtkButton *widget, Projet *projet)
     g_list_free(liste_noeuds_dep);
     g_list_free(liste_barres_dep);
     g_list_free(liste_charges_dep);
-    free(nom);
     
     return;
 }
@@ -301,7 +284,6 @@ void EF_gtk_materiaux_supprimer_menu_barres(GtkButton *button, Projet *projet)
 {
     GtkTreeIter     iter;
     GtkTreeModel    *model;
-    char            *nom;
     EF_Materiau     *materiau;
     GList           *liste_materiaux = NULL, *liste_barres_dep;
     
@@ -311,9 +293,8 @@ void EF_gtk_materiaux_supprimer_menu_barres(GtkButton *button, Projet *projet)
     if (!gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_materiaux.builder, "EF_materiaux_treeview_select")), &model, &iter))
         return;
     
-    gtk_tree_model_get(model, &iter, 0, &nom, -1);
+    gtk_tree_model_get(model, &iter, 0, &materiau, -1);
     
-    BUG(materiau = _1992_1_1_materiaux_cherche_nom(projet, nom, TRUE), );
     liste_materiaux = g_list_append(liste_materiaux, materiau);
     BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, liste_materiaux, NULL, NULL, NULL, &liste_barres_dep, NULL, FALSE, FALSE), );
     g_list_free(liste_materiaux);
@@ -322,8 +303,6 @@ void EF_gtk_materiaux_supprimer_menu_barres(GtkButton *button, Projet *projet)
     BUG(_1992_1_1_materiaux_supprime(materiau, projet), );
     
     BUG(m3d_rafraichit(projet), );
-    
-    free(nom);
     
     return;
 }
@@ -338,7 +317,6 @@ void EF_gtk_materiaux_supprimer_direct(GtkButton *button, Projet *projet)
 {
     GtkTreeIter     iter;
     GtkTreeModel    *model;
-    char            *nom;
     EF_Materiau     *materiau;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
@@ -347,12 +325,99 @@ void EF_gtk_materiaux_supprimer_direct(GtkButton *button, Projet *projet)
     if (!gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_materiaux.builder, "EF_materiaux_treeview_select")), &model, &iter))
         return;
     
-    gtk_tree_model_get(model, &iter, 0, &nom, -1);
+    gtk_tree_model_get(model, &iter, 0, &materiau, -1);
     
-    BUG(materiau = _1992_1_1_materiaux_cherche_nom(projet, nom, TRUE), );
     BUG(_1992_1_1_materiaux_supprime(materiau, projet), );
     
-    free(nom);
+    return;
+}
+
+
+void EF_gtk_materiaux_render_0(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
+  GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data2)
+/* Description : Affiche la distance vy de la section.
+ * Paramètres : GtkTreeViewColumn *tree_column : composant à l'origine de l'évènement,
+ *            : GtkCellRenderer *cell : la cellule en cours d'édition,
+ *            : GtkTreeModel *tree_model : le mode en cours d'édition,
+ *            : GtkTreeIter *iter : la ligne en cours d'édition,
+ *            : gpointer data2 : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    EF_Materiau *materiau;
+    
+    gtk_tree_model_get(tree_model, iter, 0, &materiau, -1);
+    
+    g_object_set(cell, "text", materiau->nom, NULL);
+    
+    return;
+}
+
+
+void EF_gtk_materiaux_render_1(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
+  GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data2)
+/* Description : Affiche la distance vy de la section.
+ * Paramètres : GtkTreeViewColumn *tree_column : composant à l'origine de l'évènement,
+ *            : GtkCellRenderer *cell : la cellule en cours d'édition,
+ *            : GtkTreeModel *tree_model : le mode en cours d'édition,
+ *            : GtkTreeIter *iter : la ligne en cours d'édition,
+ *            : gpointer data2 : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    EF_Materiau *materiau;
+    
+    gtk_tree_model_get(tree_model, iter, 0, &materiau, -1);
+    
+    switch (materiau->type)
+    {
+        case MATERIAU_BETON :
+        {
+            g_object_set(cell, "text", gettext("Béton"), NULL);
+            break;
+        }
+        default :
+        {
+            g_object_set(cell, "text", gettext("Inconnu"), NULL);
+            break;
+        }
+    }
+    
+    return;
+}
+
+
+void EF_gtk_materiaux_render_2(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
+  GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data2)
+/* Description : Affiche la distance vy de la section.
+ * Paramètres : GtkTreeViewColumn *tree_column : composant à l'origine de l'évènement,
+ *            : GtkCellRenderer *cell : la cellule en cours d'édition,
+ *            : GtkTreeModel *tree_model : le mode en cours d'édition,
+ *            : GtkTreeIter *iter : la ligne en cours d'édition,
+ *            : gpointer data2 : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    EF_Materiau *materiau;
+    char        *c;
+    
+    gtk_tree_model_get(tree_model, iter, 0, &materiau, -1);
+    
+    switch (materiau->type)
+    {
+        case MATERIAU_BETON :
+        {
+            c = _1992_1_1_materiaux_get_description(materiau);
+            g_object_set(cell, "markup", c, NULL);
+            free(c);
+            break;
+        }
+        default :
+        {
+            g_object_set(cell, "markup", gettext("Inconnu"), NULL);
+            break;
+        }
+    }
     
     return;
 }
@@ -386,16 +451,17 @@ void EF_gtk_materiaux(Projet *projet)
     ef_gtk->window = GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder, "EF_materiaux_window"));
     ef_gtk->materiaux = GTK_TREE_STORE(gtk_builder_get_object(ef_gtk->builder, "EF_materiaux_treestore"));
     
+    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(ef_gtk->builder, "EF_materiaux_treeview_column0")), GTK_CELL_RENDERER(gtk_builder_get_object(ef_gtk->builder, "EF_materiaux_treeview_cell0")), EF_gtk_materiaux_render_0, projet, NULL);
+    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(ef_gtk->builder, "EF_materiaux_treeview_column1")), GTK_CELL_RENDERER(gtk_builder_get_object(ef_gtk->builder, "EF_materiaux_treeview_cell1")), EF_gtk_materiaux_render_1, projet, NULL);
+    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(ef_gtk->builder, "EF_materiaux_treeview_column2")), GTK_CELL_RENDERER(gtk_builder_get_object(ef_gtk->builder, "EF_materiaux_treeview_cell2")), EF_gtk_materiaux_render_2, projet, NULL);
+    
     list_parcours = projet->modele.materiaux;
     while (list_parcours != NULL)
     {
         EF_Materiau *materiau = list_parcours->data;
-        char        *tmp;
         
         gtk_tree_store_append(ef_gtk->materiaux, &materiau->Iter_fenetre, NULL);
-        BUG(tmp = _1992_1_1_materiaux_get_description(materiau), );
-        gtk_tree_store_set(ef_gtk->materiaux, &materiau->Iter_fenetre, 0, materiau->nom, 1, gettext("Béton"), 2, tmp, -1);
-        free(tmp);
+        gtk_tree_store_set(ef_gtk->materiaux, &materiau->Iter_fenetre, 0, materiau, -1);
         
         list_parcours = g_list_next(list_parcours);
     }

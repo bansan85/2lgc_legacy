@@ -422,6 +422,8 @@ void _1992_1_1_gtk_materiaux_modifier_clicked(GtkButton *button, Projet *projet)
     
     BUG(_1992_1_1_materiaux_modif(projet, ef_gtk->materiau, nom, common_math_f(fck*1000000., FLOTTANT_UTILISATEUR), common_math_f(fckcube, FLOTTANT_UTILISATEUR), common_math_f(fcm, FLOTTANT_UTILISATEUR), common_math_f(fctm, FLOTTANT_UTILISATEUR), common_math_f(fctk_0_05, FLOTTANT_UTILISATEUR), common_math_f(fctk_0_95, FLOTTANT_UTILISATEUR), common_math_f(ecm, FLOTTANT_UTILISATEUR), common_math_f(ec1, FLOTTANT_UTILISATEUR), common_math_f(ecu1, FLOTTANT_UTILISATEUR), common_math_f(ec2, FLOTTANT_UTILISATEUR), common_math_f(ecu2, FLOTTANT_UTILISATEUR), common_math_f(n, FLOTTANT_UTILISATEUR), common_math_f(ec3, FLOTTANT_UTILISATEUR), common_math_f(ecu3, FLOTTANT_UTILISATEUR), common_math_f(nu, FLOTTANT_UTILISATEUR)), );
     
+    free(nom);
+    
     gtk_widget_destroy(projet->list_gtk._1992_1_1_materiaux.window);
     
     return;
@@ -710,7 +712,6 @@ void EF_gtk_materiaux_edit_clicked(GtkWidget *widget, Projet *projet)
 {
     GtkTreeIter     iter;
     GtkTreeModel    *model;
-    char            *nom;
     GList           *list, *list_parcours;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
@@ -726,9 +727,7 @@ void EF_gtk_materiaux_edit_clicked(GtkWidget *widget, Projet *projet)
     // Et on les édite les unes après les autres.
             EF_Materiau *materiau;
             
-            gtk_tree_model_get(model, &iter, 0, &nom, -1);
-            BUG(materiau = _1992_1_1_materiaux_cherche_nom(projet, nom, TRUE), );
-            free(nom);
+            gtk_tree_model_get(model, &iter, 0, &materiau, -1);
             
             BUG(_1992_1_1_gtk_materiaux(projet, materiau), );
         }

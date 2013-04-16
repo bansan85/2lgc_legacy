@@ -323,39 +323,6 @@ double _1992_1_1_materiaux_gnu(double ecm, double nu)
 }
 
 
-#ifdef ENABLE_GTK
-gboolean _1992_1_1_materiaux_update_ligne_treeview(Projet *projet, EF_Materiau *materiau)
-/* Description : Met à jour les données dans le treeview de la fenêtre matériau.
- * Paramètres : Projet *projet : la variable projet,
- *            : EF_Materiau *materiau : le matériau à mettre à jour.
- * Valeur renvoyée :
- *   Succès : TRUE
- *   Échec : FALSE :
- *             projet == NULL,
- *             section == NULL,
- *             fenetre matériau non initialisée.
- */
-{
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(materiau, FALSE, gettext("Paramètre %s incorrect.\n"), "materiau");
-    BUGMSG(materiau->type == MATERIAU_BETON, FALSE, gettext("Le matériau n'est pas en béton.\n"));
-    
-    gtk_list_store_set(projet->list_gtk.ef_materiaux.liste_materiaux, &materiau->Iter_liste, 0, materiau->nom, -1);
-    if (projet->list_gtk.ef_materiaux.builder != NULL)
-    {
-        char        *description;
-        
-        BUG(description = _1992_1_1_materiaux_get_description(materiau), FALSE);
-        
-        gtk_tree_store_set(projet->list_gtk.ef_materiaux.materiaux, &materiau->Iter_fenetre, 0, materiau->nom, 1, gettext("Béton"), 2, description, -1);
-        free(description);
-    }
-    
-    return TRUE;
-}
-#endif
-
-
 gboolean _1992_1_1_materiaux_insert(Projet *projet, EF_Materiau *materiau)
 /* Description : Insère un materiau dans projet->modele.materiaux. Procédure commune à tous les
  *               matériaux.
@@ -399,6 +366,10 @@ gboolean _1992_1_1_materiaux_insert(Projet *projet, EF_Materiau *materiau)
 #endif
     }
     
+#ifdef ENABLE_GTK
+    if (projet->list_gtk.ef_materiaux.builder != NULL)
+        gtk_tree_store_set(projet->list_gtk.ef_materiaux.materiaux, &materiau->Iter_fenetre, 0, materiau, -1);
+#endif
     
     return TRUE;
 }
@@ -465,7 +436,6 @@ EF_Materiau* _1992_1_1_materiaux_ajout(Projet *projet, const char *nom, double f
     data_beton->nu = common_math_f(COEFFICIENT_NU_BETON, FLOTTANT_ORDINATEUR);
     
     BUG(_1992_1_1_materiaux_insert(projet, materiau_nouveau), NULL);
-    BUG(_1992_1_1_materiaux_update_ligne_treeview(projet, materiau_nouveau), NULL);
     
     return materiau_nouveau;
 }
@@ -588,8 +558,6 @@ gboolean _1992_1_1_materiaux_modif(Projet *projet, EF_Materiau *materiau, char *
     if (!isnan(common_math_get(nu)))
         data_beton->nu = nu;
     
-    BUG(_1992_1_1_materiaux_update_ligne_treeview(projet, materiau), FALSE);
-    
     if ((!isnan(common_math_get(fck))) || (!isnan(common_math_get(fckcube))) || (!isnan(common_math_get(fcm))) || (!isnan(common_math_get(fctm))) || (!isnan(common_math_get(fctk_0_05))) || (!isnan(common_math_get(fctk_0_95))) || (!isnan(common_math_get(ecm))) || (!isnan(common_math_get(ec1))) || (!isnan(common_math_get(ecu1))) || (!isnan(common_math_get(ec2))) || (!isnan(common_math_get(ecu2))) || (!isnan(common_math_get(ec3))) || (!isnan(common_math_get(ecu3))) || (!isnan(common_math_get(n))) || (!isnan(common_math_get(nu))))
     {
         GList   *liste_materiaux = NULL;
@@ -620,6 +588,8 @@ gboolean _1992_1_1_materiaux_modif(Projet *projet, EF_Materiau *materiau, char *
             list_parcours = g_list_next(list_parcours);
         }
     }
+    if (projet->list_gtk.ef_materiaux.builder != NULL)
+        gtk_widget_queue_draw(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_materiaux.builder, "EF_materiaux_treeview")));
 #endif
     
     return TRUE;
