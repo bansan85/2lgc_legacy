@@ -47,8 +47,6 @@ EF_Materiau* _1992_1_1_materiaux_cherche_nom(Projet *projet, const char *nom, gb
 
 char *_1992_1_1_materiaux_get_description(EF_Materiau* materiau) __attribute__((__warn_unused_result__));
 
-gboolean _1992_1_1_materiaux_update_ligne_treeview(Projet *projet, EF_Materiau *materiau) __attribute__((__warn_unused_result__));
-
 gboolean _1992_1_1_materiaux_supprime(EF_Materiau* materiau, Projet *projet) __attribute__((__warn_unused_result__));
 gboolean _1992_1_1_materiaux_free(Projet *projet) __attribute__((__warn_unused_result__));
 

@@ -104,7 +104,8 @@ Ensuite compiler et installer l'application normalement :
     Ouvrir la fenêtre d'édition du matériau B35 (2 fois sans la fermer) et renommer le matériau B35 (via le treeview) en B10 puis de B10 vers B65 puis de B65 à B35. Fermer la fenêtre d'édition via la touche Echap.
     Réouvrir la fenêtre d'édition et la fermer via la touche Annuler.
     Ajouter un matériau B90.
-    Ouvrir le matériau B25 et le modifier, nom y compris.
+    Ouvrir le matériau B25 et modifier toutes les propriétés, nom y compris.
+    Remodifier le matériau B25 en dépersonnalisant toutes les propriétés personnalisées.
     Fermer la fenêtre en cliquant sur le bouton Fermer
     La rouvrir via le menu
     La même chose (réouvrir via le menu) mais sans fermer la fenêtre
