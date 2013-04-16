@@ -312,6 +312,22 @@ Flottant common_math_sub(Flottant f1, Flottant f2)
 }
 
 
+Flottant common_math_div_d(Flottant f, double d)
+/* Description : Divise un Flottant par un double.
+ * Paramètres : Flottant f : nombre 1,
+ *              double d : nombre 2.
+ * Valeur renvoyée : Le résultat.
+ */
+{
+    Flottant   retour;
+    
+    retour.type = FLOTTANT_ORDINATEUR;
+    retour.d = common_math_get(f) / d;
+    
+    return retour;
+}
+
+
 Flottant common_math_dot_f(Flottant f1, Flottant f2)
 /* Description : Multiplie deux flottants.
  * Paramètres : Flottant f1 : nombre 1,

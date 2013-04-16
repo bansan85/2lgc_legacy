@@ -435,21 +435,34 @@ EF_Materiau* _1992_1_1_materiaux_ajout(Projet *projet, const char *nom, double f
     
     BUGMSG(materiau_nouveau->nom = g_strdup_printf("%s", nom), NULL, gettext("Erreur d'allocation mémoire.\n"));
     
-    data_beton->fck = fck*1000000.;
-    BUG(!isnan(data_beton->fckcube = _1992_1_1_materiaux_fckcube(fck)), NULL);
-    BUG(!isnan(data_beton->fcm = _1992_1_1_materiaux_fcm(fck)), NULL);
-    BUG(!isnan(data_beton->fctm = _1992_1_1_materiaux_fctm(fck, data_beton->fcm/1000000.)), NULL);
-    BUG(!isnan(data_beton->fctk_0_05 = _1992_1_1_materiaux_fctk_0_05(data_beton->fctm/1000000.)), NULL);
-    BUG(!isnan(data_beton->fctk_0_95 = _1992_1_1_materiaux_fctk_0_95(data_beton->fctm/1000000.)), NULL);
-    BUG(!isnan(data_beton->ecm = _1992_1_1_materiaux_ecm(data_beton->fcm/1000000.)), NULL);
-    BUG(!isnan(data_beton->ec1 = _1992_1_1_materiaux_ec1(data_beton->fcm/1000000.)), NULL);
-    BUG(!isnan(data_beton->ecu1 = _1992_1_1_materiaux_ecu1(data_beton->fcm/1000000., fck)), NULL);
-    BUG(!isnan(data_beton->ec2 = _1992_1_1_materiaux_ec2(fck)), NULL);
-    BUG(!isnan(data_beton->ecu2 = _1992_1_1_materiaux_ecu2(fck)), NULL);
-    BUG(!isnan(data_beton->ec3 = _1992_1_1_materiaux_ec3(fck)), NULL);
-    BUG(!isnan(data_beton->ecu3 = _1992_1_1_materiaux_ecu3(fck)), NULL);
-    BUG(!isnan(data_beton->n = _1992_1_1_materiaux_n(fck)), NULL);
-    data_beton->nu = COEFFICIENT_NU_BETON;
+    data_beton->fck = common_math_f(fck*1000000., FLOTTANT_UTILISATEUR);
+    data_beton->fckcube = common_math_f(_1992_1_1_materiaux_fckcube(fck), FLOTTANT_ORDINATEUR);
+    BUG(!isnan(common_math_get(data_beton->fckcube)), NULL);
+    data_beton->fcm = common_math_f(_1992_1_1_materiaux_fcm(fck), FLOTTANT_ORDINATEUR);
+    BUG(!isnan(common_math_get(data_beton->fcm)), NULL);
+    data_beton->fctm = common_math_f(_1992_1_1_materiaux_fctm(fck, common_math_get(data_beton->fcm)/1000000.), FLOTTANT_ORDINATEUR);
+    BUG(!isnan(common_math_get(data_beton->fctm)), NULL);
+    data_beton->fctk_0_05 = common_math_f(_1992_1_1_materiaux_fctk_0_05(common_math_get(data_beton->fctm)/1000000.), FLOTTANT_ORDINATEUR);
+    BUG(!isnan(common_math_get(data_beton->fctk_0_05)), NULL);
+    data_beton->fctk_0_95 = common_math_f(_1992_1_1_materiaux_fctk_0_95(common_math_get(data_beton->fctm)/1000000.), FLOTTANT_ORDINATEUR);
+    BUG(!isnan(common_math_get(data_beton->fctk_0_95)), NULL);
+    data_beton->ecm = common_math_f(_1992_1_1_materiaux_ecm(common_math_get(data_beton->fcm)/1000000.), FLOTTANT_ORDINATEUR);
+    BUG(!isnan(common_math_get(data_beton->ecm)), NULL);
+    data_beton->ec1 = common_math_f(_1992_1_1_materiaux_ec1(common_math_get(data_beton->fcm)/1000000.), FLOTTANT_ORDINATEUR);
+    BUG(!isnan(common_math_get(data_beton->ec1)), NULL);
+    data_beton->ecu1 = common_math_f(_1992_1_1_materiaux_ecu1(common_math_get(data_beton->fcm)/1000000., fck), FLOTTANT_ORDINATEUR);
+    BUG(!isnan(common_math_get(data_beton->ecu1)), NULL);
+    data_beton->ec2 = common_math_f(_1992_1_1_materiaux_ec2(fck), FLOTTANT_ORDINATEUR);
+    BUG(!isnan(common_math_get(data_beton->ec2)), NULL);
+    data_beton->ecu2 = common_math_f(_1992_1_1_materiaux_ecu2(fck), FLOTTANT_ORDINATEUR);
+    BUG(!isnan(common_math_get(data_beton->ecu2)), NULL);
+    data_beton->ec3 = common_math_f(_1992_1_1_materiaux_ec3(fck), FLOTTANT_ORDINATEUR);
+    BUG(!isnan(common_math_get(data_beton->ec3)), NULL);
+    data_beton->ecu3 = common_math_f(_1992_1_1_materiaux_ecu3(fck), FLOTTANT_ORDINATEUR);
+    BUG(!isnan(common_math_get(data_beton->ecu3)), NULL);
+    data_beton->n = common_math_f(_1992_1_1_materiaux_n(fck), FLOTTANT_ORDINATEUR);
+    BUG(!isnan(common_math_get(data_beton->n)), NULL);
+    data_beton->nu = common_math_f(COEFFICIENT_NU_BETON, FLOTTANT_ORDINATEUR);
     
     BUG(_1992_1_1_materiaux_insert(projet, materiau_nouveau), NULL);
     BUG(_1992_1_1_materiaux_update_ligne_treeview(projet, materiau_nouveau), NULL);
@@ -512,10 +525,10 @@ gboolean _1992_1_1_materiaux_repositionne(Projet *projet, EF_Materiau *materiau)
 }
 
 
-gboolean _1992_1_1_materiaux_modif(Projet *projet, EF_Materiau *materiau, char *nom, double fck,
-  double fckcube, double fcm, double fctm, double fctk_0_05, double fctk_0_95, double ecm,
-  double ec1, double ecu1, double ec2, double ecu2, double n, double ec3, double ecu3,
-  double nu)
+gboolean _1992_1_1_materiaux_modif(Projet *projet, EF_Materiau *materiau, char *nom,
+  Flottant fck, Flottant fckcube, Flottant fcm, Flottant fctm, Flottant fctk_0_05,
+  Flottant fctk_0_95, Flottant ecm, Flottant ec1, Flottant ecu1, Flottant ec2, Flottant ecu2,
+  Flottant n, Flottant ec3, Flottant ecu3, Flottant nu)
 /* Description : Modifie un matériau béton.
  * Paramètres : Projet *projet : la variable projet,
  *            : EF_Materiau *materiau : le matériau à modifier,
@@ -544,70 +557,40 @@ gboolean _1992_1_1_materiaux_modif(Projet *projet, EF_Materiau *materiau, char *
         BUG(_1992_1_1_materiaux_repositionne(projet, materiau), FALSE);
     }
     
-    if (!isnan(fck))
+    if (!isnan(common_math_get(fck)))
         data_beton->fck = fck;
-    else
-        fck = NAN;
-    if (!isnan(fckcube))
+    if (!isnan(common_math_get(fckcube)))
         data_beton->fckcube = fckcube;
-    else
-        fckcube = NAN;
-    if (!isnan(fcm))
+    if (!isnan(common_math_get(fcm)))
         data_beton->fcm = fcm;
-    else
-        fcm = NAN;
-    if (!isnan(fctm))
+    if (!isnan(common_math_get(fctm)))
         data_beton->fctm = fctm;
-    else
-        fctm = NAN;
-    if (!isnan(fctk_0_05))
+    if (!isnan(common_math_get(fctk_0_05)))
         data_beton->fctk_0_05 = fctk_0_05;
-    else
-        fctk_0_05 = NAN;
-    if (!isnan(fctk_0_95))
+    if (!isnan(common_math_get(fctk_0_95)))
         data_beton->fctk_0_95 = fctk_0_95;
-    else
-        fctk_0_95 = NAN;
-    if (!isnan(ecm))
+    if (!isnan(common_math_get(ecm)))
         data_beton->ecm = ecm;
-    else
-        ecm = NAN;
-    if (!isnan(ec1))
+    if (!isnan(common_math_get(ec1)))
         data_beton->ec1 = ec1;
-    else
-        ec1 = NAN;
-    if (!isnan(ecu1))
+    if (!isnan(common_math_get(ecu1)))
         data_beton->ecu1 = ecu1;
-    else
-        ecu1 = NAN;
-    if (!isnan(ec2))
+    if (!isnan(common_math_get(ec2)))
         data_beton->ec2 = ec2;
-    else
-        ec2 = NAN;
-    if (!isnan(ecu2))
+    if (!isnan(common_math_get(ecu2)))
         data_beton->ecu2 = ecu2;
-    else
-        ecu2 = NAN;
-    if (!isnan(ec3))
+    if (!isnan(common_math_get(ec3)))
         data_beton->ec3 = ec3;
-    else
-        ec3 = NAN;
-    if (!isnan(ecu3))
+    if (!isnan(common_math_get(ecu3)))
         data_beton->ecu3 = ecu3;
-    else
-        ecu3 = NAN;
-    if (!isnan(n))
+    if (!isnan(common_math_get(n)))
         data_beton->n = n;
-    else
-        n = NAN;
-    if (!isnan(nu))
+    if (!isnan(common_math_get(nu)))
         data_beton->nu = nu;
-    else
-        nu = NAN;
     
     BUG(_1992_1_1_materiaux_update_ligne_treeview(projet, materiau), FALSE);
     
-    if ((!isnan(fck)) || (!isnan(fckcube)) || (!isnan(fcm)) || (!isnan(fctm)) || (!isnan(fctk_0_05)) || (!isnan(fctk_0_95)) || (!isnan(ecm)) || (!isnan(ec1)) || (!isnan(ecu1)) || (!isnan(ec2)) || (!isnan(ecu2)) || (!isnan(ec3)) || (!isnan(ecu3)) || (!isnan(n)) || (!isnan(nu)))
+    if ((!isnan(common_math_get(fck))) || (!isnan(common_math_get(fckcube))) || (!isnan(common_math_get(fcm))) || (!isnan(common_math_get(fctm))) || (!isnan(common_math_get(fctk_0_05))) || (!isnan(common_math_get(fctk_0_95))) || (!isnan(common_math_get(ecm))) || (!isnan(common_math_get(ec1))) || (!isnan(common_math_get(ecu1))) || (!isnan(common_math_get(ec2))) || (!isnan(common_math_get(ecu2))) || (!isnan(common_math_get(ec3))) || (!isnan(common_math_get(ecu3))) || (!isnan(common_math_get(n))) || (!isnan(common_math_get(nu))))
     {
         GList   *liste_materiaux = NULL;
         GList   *liste_barres_dep;
@@ -699,12 +682,12 @@ char *_1992_1_1_materiaux_get_description(EF_Materiau* materiau)
     
     data_beton = materiau->data;
     
-    common_math_double_to_char(data_beton->fck/1000000., fck, DECIMAL_CONTRAINTE);
+    common_math_double_to_char2(common_math_f(common_math_get(data_beton->fck)/1000000., data_beton->fck.type), fck, DECIMAL_CONTRAINTE);
     
     // On affiche les différences si le matériau a été personnalisé
-    if (!ERREUR_RELATIVE_EGALE(data_beton->fckcube, _1992_1_1_materiaux_fckcube(data_beton->fck/1000000.)))
+    if (!ERREUR_RELATIVE_EGALE(common_math_get(data_beton->fckcube), _1992_1_1_materiaux_fckcube(common_math_get(data_beton->fck)/1000000.)))
     {
-        common_math_double_to_char(data_beton->fckcube/1000000., tmp1, DECIMAL_CONTRAINTE);
+        common_math_double_to_char2(common_math_f(common_math_get(data_beton->fckcube)/1000000., data_beton->fckcube.type), tmp1, DECIMAL_CONTRAINTE);
         if (complement == NULL)
             BUGMSG(complement = g_strdup_printf("f<sub>ck,cube</sub> : %s MPa", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
         else
@@ -714,9 +697,9 @@ char *_1992_1_1_materiaux_get_description(EF_Materiau* materiau)
             free(tmp2);
         }
     }
-    if (!ERREUR_RELATIVE_EGALE(data_beton->fcm, _1992_1_1_materiaux_fcm(data_beton->fck/1000000.)))
+    if (!ERREUR_RELATIVE_EGALE(common_math_get(data_beton->fcm), _1992_1_1_materiaux_fcm(common_math_get(data_beton->fck)/1000000.)))
     {
-        common_math_double_to_char(data_beton->fcm/1000000., tmp1, DECIMAL_CONTRAINTE);
+        common_math_double_to_char2(common_math_f(common_math_get(data_beton->fcm)/1000000., data_beton->fcm.type), tmp1, DECIMAL_CONTRAINTE);
         if (complement == NULL)
             BUGMSG(complement = g_strdup_printf("f<sub>cm</sub> : %s MPa", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
         else
@@ -726,9 +709,9 @@ char *_1992_1_1_materiaux_get_description(EF_Materiau* materiau)
             free(tmp2);
         }
     }
-    if (!ERREUR_RELATIVE_EGALE(data_beton->fctm, _1992_1_1_materiaux_fctm(data_beton->fck/1000000., data_beton->fcm/1000000.)))
+    if (!ERREUR_RELATIVE_EGALE(common_math_get(data_beton->fctm), _1992_1_1_materiaux_fctm(common_math_get(data_beton->fck)/1000000., common_math_get(data_beton->fcm)/1000000.)))
     {
-        common_math_double_to_char(data_beton->fctm/1000000., tmp1, DECIMAL_CONTRAINTE);
+        common_math_double_to_char2(common_math_f(common_math_get(data_beton->fctm)/1000000., data_beton->fctm.type), tmp1, DECIMAL_CONTRAINTE);
         if (complement == NULL)
             BUGMSG(complement = g_strdup_printf("f<sub>ctm</sub> : %s MPa", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
         else
@@ -738,9 +721,9 @@ char *_1992_1_1_materiaux_get_description(EF_Materiau* materiau)
             free(tmp2);
         }
     }
-    if (!ERREUR_RELATIVE_EGALE(data_beton->fctk_0_05, _1992_1_1_materiaux_fctk_0_05(data_beton->fctm/1000000.)))
+    if (!ERREUR_RELATIVE_EGALE(common_math_get(data_beton->fctk_0_05), _1992_1_1_materiaux_fctk_0_05(common_math_get(data_beton->fctm)/1000000.)))
     {
-        common_math_double_to_char(data_beton->fctk_0_05/1000000., tmp1, DECIMAL_CONTRAINTE);
+        common_math_double_to_char2(common_math_f(common_math_get(data_beton->fctk_0_05)/1000000., data_beton->fctk_0_05.type), tmp1, DECIMAL_CONTRAINTE);
         if (complement == NULL)
             BUGMSG(complement = g_strdup_printf("f<sub>ctk,0.05</sub> : %s MPa", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
         else
@@ -750,9 +733,9 @@ char *_1992_1_1_materiaux_get_description(EF_Materiau* materiau)
             free(tmp2);
         }
     }
-    if (!ERREUR_RELATIVE_EGALE(data_beton->fctk_0_95, _1992_1_1_materiaux_fctk_0_95(data_beton->fctm/1000000.)))
+    if (!ERREUR_RELATIVE_EGALE(common_math_get(data_beton->fctk_0_95), _1992_1_1_materiaux_fctk_0_95(common_math_get(data_beton->fctm)/1000000.)))
     {
-        common_math_double_to_char(data_beton->fctk_0_95/1000000., tmp1, DECIMAL_CONTRAINTE);
+        common_math_double_to_char2(common_math_f(common_math_get(data_beton->fctk_0_95)/1000000., data_beton->fctk_0_95.type), tmp1, DECIMAL_CONTRAINTE);
         if (complement == NULL)
             BUGMSG(complement = g_strdup_printf("f<sub>ctk,0.95</sub> : %s MPa", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
         else
@@ -762,9 +745,9 @@ char *_1992_1_1_materiaux_get_description(EF_Materiau* materiau)
             free(tmp2);
         }
     }
-    if (!ERREUR_RELATIVE_EGALE(data_beton->ecm, _1992_1_1_materiaux_ecm(data_beton->fcm/1000000.)))
+    if (!ERREUR_RELATIVE_EGALE(common_math_get(data_beton->ecm), _1992_1_1_materiaux_ecm(common_math_get(data_beton->fcm)/1000000.)))
     {
-        common_math_double_to_char(data_beton->ecm/1000000., tmp1, DECIMAL_CONTRAINTE);
+        common_math_double_to_char2(common_math_f(common_math_get(data_beton->ecm)/1000000., data_beton->ecm.type), tmp1, DECIMAL_CONTRAINTE);
         if (complement == NULL)
             BUGMSG(complement = g_strdup_printf("E<sub>cm</sub> : %s MPa", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
         else
@@ -774,9 +757,9 @@ char *_1992_1_1_materiaux_get_description(EF_Materiau* materiau)
             free(tmp2);
         }
     }
-    if (!ERREUR_RELATIVE_EGALE(data_beton->ec1, _1992_1_1_materiaux_ec1(data_beton->fcm/1000000.)))
+    if (!ERREUR_RELATIVE_EGALE(common_math_get(data_beton->ec1), _1992_1_1_materiaux_ec1(common_math_get(data_beton->fcm)/1000000.)))
     {
-        common_math_double_to_char(data_beton->ec1*1000., tmp1, DECIMAL_SANS_UNITE);
+        common_math_double_to_char2(common_math_f(common_math_get(data_beton->ec1)*1000., data_beton->ec1.type), tmp1, DECIMAL_SANS_UNITE);
         if (complement == NULL)
             BUGMSG(complement = g_strdup_printf("&#949;<sub>c1</sub> : %s ‰", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
         else
@@ -786,9 +769,9 @@ char *_1992_1_1_materiaux_get_description(EF_Materiau* materiau)
             free(tmp2);
         }
     }
-    if (!ERREUR_RELATIVE_EGALE(data_beton->ecu1, _1992_1_1_materiaux_ecu1(data_beton->fcm/1000000., data_beton->fck/1000000.)))
+    if (!ERREUR_RELATIVE_EGALE(common_math_get(data_beton->ecu1), _1992_1_1_materiaux_ecu1(common_math_get(data_beton->fcm)/1000000., common_math_get(data_beton->fck)/1000000.)))
     {
-        common_math_double_to_char(data_beton->ecu1*1000., tmp1, DECIMAL_SANS_UNITE);
+        common_math_double_to_char2(common_math_f(common_math_get(data_beton->ecu1)*1000., data_beton->ecu1.type), tmp1, DECIMAL_SANS_UNITE);
         if (complement == NULL)
             BUGMSG(complement = g_strdup_printf("&#949;<sub>cu1</sub> : %s ‰", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
         else
@@ -798,9 +781,9 @@ char *_1992_1_1_materiaux_get_description(EF_Materiau* materiau)
             free(tmp2);
         }
     }
-    if (!ERREUR_RELATIVE_EGALE(data_beton->ec2, _1992_1_1_materiaux_ec2(data_beton->fck/1000000.)))
+    if (!ERREUR_RELATIVE_EGALE(common_math_get(data_beton->ec2), _1992_1_1_materiaux_ec2(common_math_get(data_beton->fck)/1000000.)))
     {
-        common_math_double_to_char(data_beton->ec2*1000., tmp1, DECIMAL_SANS_UNITE);
+        common_math_double_to_char2(common_math_f(common_math_get(data_beton->ec2)*1000., data_beton->ec2.type), tmp1, DECIMAL_SANS_UNITE);
         if (complement == NULL)
             BUGMSG(complement = g_strdup_printf("&#949;<sub>c2</sub> : %s ‰", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
         else
@@ -810,9 +793,9 @@ char *_1992_1_1_materiaux_get_description(EF_Materiau* materiau)
             free(tmp2);
         }
     }
-    if (!ERREUR_RELATIVE_EGALE(data_beton->ecu2, _1992_1_1_materiaux_ecu2(data_beton->fck/1000000.)))
+    if (!ERREUR_RELATIVE_EGALE(common_math_get(data_beton->ecu2), _1992_1_1_materiaux_ecu2(common_math_get(data_beton->fck)/1000000.)))
     {
-        common_math_double_to_char(data_beton->ecu2*1000., tmp1, DECIMAL_SANS_UNITE);
+        common_math_double_to_char2(common_math_f(common_math_get(data_beton->ecu2)*1000., data_beton->ecu2.type), tmp1, DECIMAL_SANS_UNITE);
         if (complement == NULL)
             BUGMSG(complement = g_strdup_printf("&#949;<sub>cu2</sub> : %s ‰", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
         else
@@ -822,9 +805,9 @@ char *_1992_1_1_materiaux_get_description(EF_Materiau* materiau)
             free(tmp2);
         }
     }
-    if (!ERREUR_RELATIVE_EGALE(data_beton->ec3, _1992_1_1_materiaux_ec3(data_beton->fck/1000000.)))
+    if (!ERREUR_RELATIVE_EGALE(common_math_get(data_beton->ec3), _1992_1_1_materiaux_ec3(common_math_get(data_beton->fck)/1000000.)))
     {
-        common_math_double_to_char(data_beton->ec3*1000., tmp1, DECIMAL_SANS_UNITE);
+        common_math_double_to_char2(common_math_f(common_math_get(data_beton->ec3)*1000., data_beton->ec3.type), tmp1, DECIMAL_SANS_UNITE);
         if (complement == NULL)
             BUGMSG(complement = g_strdup_printf("&#949;<sub>c3</sub> : %s ‰", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
         else
@@ -834,9 +817,9 @@ char *_1992_1_1_materiaux_get_description(EF_Materiau* materiau)
             free(tmp2);
         }
     }
-    if (!ERREUR_RELATIVE_EGALE(data_beton->ecu3, _1992_1_1_materiaux_ecu3(data_beton->fck/1000000.)))
+    if (!ERREUR_RELATIVE_EGALE(common_math_get(data_beton->ecu3), _1992_1_1_materiaux_ecu3(common_math_get(data_beton->fck)/1000000.)))
     {
-        common_math_double_to_char(data_beton->ecu3*1000., tmp1, DECIMAL_SANS_UNITE);
+        common_math_double_to_char2(common_math_f(common_math_get(data_beton->ecu3)*1000., data_beton->ecu3.type), tmp1, DECIMAL_SANS_UNITE);
         if (complement == NULL)
             BUGMSG(complement = g_strdup_printf("&#949;<sub>cu3</sub> : %s ‰", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
         else
@@ -846,15 +829,27 @@ char *_1992_1_1_materiaux_get_description(EF_Materiau* materiau)
             free(tmp2);
         }
     }
-    if (!ERREUR_RELATIVE_EGALE(data_beton->n, _1992_1_1_materiaux_n(data_beton->fck/1000000.)))
+    if (!ERREUR_RELATIVE_EGALE(common_math_get(data_beton->n), _1992_1_1_materiaux_n(common_math_get(data_beton->fck)/1000000.)))
     {
-        common_math_double_to_char(data_beton->n*1000., tmp1, DECIMAL_SANS_UNITE);
+        common_math_double_to_char2(data_beton->n, tmp1, DECIMAL_SANS_UNITE);
         if (complement == NULL)
             BUGMSG(complement = g_strdup_printf("n : %s", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
         else
         {
             tmp2 = complement;
             BUGMSG(complement = g_strdup_printf("%s, n : %s", tmp2, tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            free(tmp2);
+        }
+    }
+    if (!ERREUR_RELATIVE_EGALE(common_math_get(data_beton->nu), COEFFICIENT_NU_BETON))
+    {
+        common_math_double_to_char2(data_beton->nu, tmp1, DECIMAL_SANS_UNITE);
+        if (complement == NULL)
+            BUGMSG(complement = g_strdup_printf("&#957; : %s", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
+        else
+        {
+            tmp2 = complement;
+            BUGMSG(complement = g_strdup_printf("%s, &#957; : %s", tmp2, tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"));
             free(tmp2);
         }
     }

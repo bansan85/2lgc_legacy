@@ -803,7 +803,7 @@ gboolean EF_sections_supprime(EF_Section *section, gboolean annule_si_utilise, P
 }
 
 
-double EF_sections_j(EF_Section* sect)
+Flottant EF_sections_j(EF_Section* sect)
 /* Description : Renvoie l'inertie de torsion J pour la section étudiée.
  * Paramètres : EF_Section* sect : section à étudier.
  * Valeur renvoyée :
@@ -813,7 +813,7 @@ double EF_sections_j(EF_Section* sect)
  *             type de section inconnu.
  */
 {
-    BUGMSG(sect, NAN, gettext("Paramètre %s incorrect.\n"), "sect");
+    BUGMSG(sect, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Paramètre %s incorrect.\n"), "sect");
     
     switch (sect->type)
     {
@@ -837,9 +837,9 @@ double EF_sections_j(EF_Section* sect)
             else
                 { aa = hr; bb = lr; }
             if (sect->type == SECTION_RECTANGULAIRE)
-                return aa*bb*bb*bb/16.*(16./3.-3.364*bb/aa*(1.-bb*bb*bb*bb/(12.*aa*aa*aa*aa)));
+                return common_math_f(aa*bb*bb*bb/16.*(16./3.-3.364*bb/aa*(1.-bb*bb*bb*bb/(12.*aa*aa*aa*aa))), FLOTTANT_ORDINATEUR);
             else
-                return a*b*b*b/16.*(16./3.-3.364*b/a*(1.-b*b*b*b/(12.*a*a*a*a)))+aa*bb*bb*bb/16.*(16./3.-3.364*bb/aa*(1-bb*bb*bb*bb/(12.*aa*aa*aa*aa)));
+                return common_math_f(a*b*b*b/16.*(16./3.-3.364*b/a*(1.-b*b*b*b/(12.*a*a*a*a)))+aa*bb*bb*bb/16.*(16./3.-3.364*bb/aa*(1-bb*bb*bb*bb/(12.*aa*aa*aa*aa))), FLOTTANT_ORDINATEUR);
             
     // Pour une section en T de section constante (lt : largeur de la table, lr : largeur de
     //   la retombée, ht : hauteur de la table, hr : hauteur de la retombée), J vaut :\end{verbatim}\begin{displaymath}
@@ -851,21 +851,21 @@ double EF_sections_j(EF_Section* sect)
             Section_Circulaire  *section = sect->data;
             double              diametre = common_math_get(section->diametre);
             
-            return M_PI*diametre*diametre*diametre*diametre/32.;
+            return common_math_f(M_PI*diametre*diametre*diametre*diametre/32., FLOTTANT_ORDINATEUR);
     // Pour une section circulaire de section constante, J vaut :\end{verbatim}\begin{displaymath}
     // J = \frac{\pi \cdot \phi^4}{32}\end{displaymath}\begin{verbatim}
             break;
         }
         default :
         {
-            BUGMSG(0, NAN, gettext("Type de section %d inconnu.\n"), sect->type);
+            BUGMSG(NULL, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Type de section %d inconnu.\n"), sect->type);
             break;
         }
     }
 }
 
 
-double EF_sections_iy(EF_Section* sect)
+Flottant EF_sections_iy(EF_Section* sect)
 /* Description : Renvoie l'inertie I selon l'axe y lorsque la section est constante.
  * Paramètres : EF_Section* section : section à étudier,
  * Valeur renvoyée :
@@ -875,7 +875,7 @@ double EF_sections_iy(EF_Section* sect)
  *             type de section inconnu.
  */
 {
-    BUGMSG(sect, NAN, gettext("Paramètre %s incorrect.\n"), "sect");
+    BUGMSG(sect, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Paramètre %s incorrect.\n"), "sect");
     
     switch (sect->type)
     {
@@ -895,7 +895,7 @@ double EF_sections_iy(EF_Section* sect)
             double      S = lt*ht+lr*hr;
             double      cdgh = (lt*ht*ht/2.+lr*hr*(ht+hr/2.))/S;
             double      cdgb = (ht+hr)-cdgh;
-            return lt*ht*ht*ht/12.+lr*hr*hr*hr/12.+lt*ht*(ht/2.-cdgh)*(ht/2.-cdgh)+lr*hr*(hr/2.-cdgb)*(hr/2.-cdgb);
+            return common_math_f(lt*ht*ht*ht/12.+lr*hr*hr*hr/12.+lt*ht*(ht/2.-cdgh)*(ht/2.-cdgh)+lr*hr*(hr/2.-cdgb)*(hr/2.-cdgb), FLOTTANT_ORDINATEUR);
             
             break;
         }
@@ -904,21 +904,21 @@ double EF_sections_iy(EF_Section* sect)
             Section_Circulaire *section = sect->data;
             double              diametre = common_math_get(section->diametre);
             
-            return M_PI*diametre*diametre*diametre*diametre/64.;
+            return common_math_f(M_PI*diametre*diametre*diametre*diametre/64., FLOTTANT_ORDINATEUR);
     // Pour une section circulaire de section constante, Iy vaut :\end{verbatim}\begin{displaymath}
     // I_y = \frac{\pi \cdot \phi^4}{64} \end{displaymath}\begin{verbatim}
             break;
         }
         default :
         {
-            BUGMSG(0, NAN, gettext("Type de section %d inconnu.\n"), sect->type);
+            BUGMSG(NULL, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Type de section %d inconnu.\n"), sect->type);
             break;
         }
     }
 }
 
 
-double EF_sections_iz(EF_Section* sect)
+Flottant EF_sections_iz(EF_Section* sect)
 /* Description : Renvoie l'inertie I selon l'axe z lorsque la section est constante.
  * Paramètres : EF_Section* section : section à étudier.
  * Valeur renvoyée :
@@ -928,7 +928,7 @@ double EF_sections_iz(EF_Section* sect)
  *             type de section inconnu.
  */
 {
-    BUGMSG(sect, NAN, gettext("Paramètre %s incorrect.\n"), "sect");
+    BUGMSG(sect, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Paramètre %s incorrect.\n"), "sect");
     
     switch (sect->type)
     {
@@ -944,28 +944,28 @@ double EF_sections_iz(EF_Section* sect)
     // Pour une section en T de section constante (lt : largeur de la table, lr : largeur de
     //   la retombée, ht : hauteur de la table, hr : hauteur de la retombée), I vaut :\end{verbatim}\begin{displaymath}
     // I = \frac{h_t \cdot l_t^3}{12}+\frac{h_r \cdot l_r^3}{12}\end{displaymath}\begin{verbatim}
-            return ht*lt*lt*lt/12.+hr*lr*lr*lr/12.;
+            return common_math_f(ht*lt*lt*lt/12.+hr*lr*lr*lr/12., FLOTTANT_ORDINATEUR);
             break;
         }
         case SECTION_CIRCULAIRE :
         {
             Section_Circulaire  *section = sect->data;
             double              diametre = common_math_get(section->diametre);
-            return M_PI*diametre*diametre*diametre*diametre/64.;
+            return common_math_f(M_PI*diametre*diametre*diametre*diametre/64., FLOTTANT_ORDINATEUR);
     // Pour une section circulaire de section constante, I vaut :\end{verbatim}\begin{displaymath}
     // I = \frac{\pi \cdot \phi^4}{64} \end{displaymath}\begin{verbatim}
             break;
         }
         default :
         {
-            BUGMSG(0, NAN, gettext("Type de section %d inconnu.\n"), sect->type);
+            BUGMSG(0, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Type de section %d inconnu.\n"), sect->type);
             break;
         }
     }
 }
 
 
-double EF_sections_vy(EF_Section* sect)
+Flottant EF_sections_vy(EF_Section* sect)
 /* Description : Renvoie la distance entre le centre de gravité et la partie la plus à droite
  *               de la section.
  * Paramètres : EF_Section* sect : section à étudier.
@@ -976,7 +976,7 @@ double EF_sections_vy(EF_Section* sect)
  *             type de section inconnu.
  */
 {
-    BUGMSG(sect, NAN, gettext("Paramètre %s incorrect.\n"), "sect");
+    BUGMSG(sect, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Paramètre %s incorrect.\n"), "sect");
     
     switch (sect->type)
     {
@@ -986,7 +986,7 @@ double EF_sections_vy(EF_Section* sect)
         {
             Section_T *section = sect->data;
             
-            return MAX(common_math_get(section->largeur_table), common_math_get(section->largeur_retombee))/2.;
+            return common_math_f(MAX(common_math_get(section->largeur_table), common_math_get(section->largeur_retombee))/2., FLOTTANT_ORDINATEUR);
             
             break;
         }
@@ -994,20 +994,20 @@ double EF_sections_vy(EF_Section* sect)
         {
             Section_Circulaire *section = sect->data;
             
-            return common_math_get(section->diametre)/2.;
+            return common_math_f(common_math_get(section->diametre)/2., FLOTTANT_ORDINATEUR);
             
             break;
         }
         default :
         {
-            BUGMSG(0, NAN, gettext("Type de section %d inconnu.\n"), sect->type);
+            BUGMSG(0, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Type de section %d inconnu.\n"), sect->type);
             break;
         }
     }
 }
 
 
-double EF_sections_vyp(EF_Section* sect)
+Flottant EF_sections_vyp(EF_Section* sect)
 /* Description : Renvoie la distance entre le centre de gravité et la partie la plus à gauche
  *               de la section.
  * Paramètres : EF_Section* sect : section à étudier.
@@ -1018,7 +1018,7 @@ double EF_sections_vyp(EF_Section* sect)
  *             type de section inconnu.
  */
 {
-    BUGMSG(sect, NAN, gettext("Paramètre %s incorrect.\n"), "sect");
+    BUGMSG(sect, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Paramètre %s incorrect.\n"), "sect");
     
     switch (sect->type)
     {
@@ -1028,7 +1028,7 @@ double EF_sections_vyp(EF_Section* sect)
         {
             Section_T *section = sect->data;
             
-            return MAX(common_math_get(section->largeur_table), common_math_get(section->largeur_retombee))/2.;
+            return common_math_f(MAX(common_math_get(section->largeur_table), common_math_get(section->largeur_retombee))/2., FLOTTANT_ORDINATEUR);
             
             break;
         }
@@ -1036,20 +1036,20 @@ double EF_sections_vyp(EF_Section* sect)
         {
             Section_Circulaire *section = sect->data;
             
-            return common_math_get(section->diametre)/2.;
+            return common_math_f(common_math_get(section->diametre)/2., FLOTTANT_ORDINATEUR);
             
             break;
         }
         default :
         {
-            BUGMSG(0, NAN, gettext("Type de section %d inconnu.\n"), sect->type);
+            BUGMSG(0, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Type de section %d inconnu.\n"), sect->type);
             break;
         }
     }
 }
 
 
-double EF_sections_vz(EF_Section* sect)
+Flottant EF_sections_vz(EF_Section* sect)
 /* Description : Renvoie la distance entre le centre de gravité et la partie la plus haute de
  *               la section.
  * Paramètres : EF_Section* sect : section à étudier.
@@ -1060,7 +1060,7 @@ double EF_sections_vz(EF_Section* sect)
  *             type de section inconnu.
  */
 {
-    BUGMSG(sect, NAN, gettext("Paramètre %s incorrect.\n"), "sect");
+    BUGMSG(sect, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Paramètre %s incorrect.\n"), "sect");
     
     switch (sect->type)
     {
@@ -1070,7 +1070,7 @@ double EF_sections_vz(EF_Section* sect)
         {
             Section_T *section = sect->data;
             
-            return (common_math_get(section->largeur_table)*common_math_get(section->hauteur_table)*common_math_get(section->hauteur_table)/2.+common_math_get(section->largeur_retombee)*common_math_get(section->hauteur_retombee)*(common_math_get(section->hauteur_retombee)/2.+common_math_get(section->hauteur_table)))/EF_sections_s(sect);
+            return common_math_f((common_math_get(section->largeur_table)*common_math_get(section->hauteur_table)*common_math_get(section->hauteur_table)/2.+common_math_get(section->largeur_retombee)*common_math_get(section->hauteur_retombee)*(common_math_get(section->hauteur_retombee)/2.+common_math_get(section->hauteur_table)))/common_math_get(EF_sections_s(sect)), FLOTTANT_ORDINATEUR);
             
             break;
         }
@@ -1078,20 +1078,20 @@ double EF_sections_vz(EF_Section* sect)
         {
             Section_Circulaire *section = sect->data;
             
-            return common_math_get(section->diametre)/2.;
+            return common_math_f(common_math_get(section->diametre)/2., FLOTTANT_ORDINATEUR);
             
             break;
         }
         default :
         {
-            BUGMSG(0, NAN, gettext("Type de section %d inconnu.\n"), sect->type);
+            BUGMSG(0, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Type de section %d inconnu.\n"), sect->type);
             break;
         }
     }
 }
 
 
-double EF_sections_vzp(EF_Section* sect)
+Flottant EF_sections_vzp(EF_Section* sect)
 /* Description : Renvoie la distance entre le centre de gravité et la partie la plus basse de
  *               la section.
  * Paramètres : EF_Section* sect : section à étudier.
@@ -1102,7 +1102,7 @@ double EF_sections_vzp(EF_Section* sect)
  *             type de section inconnu.
  */
 {
-    BUGMSG(sect, NAN, gettext("Paramètre %s incorrect.\n"), "sect");
+    BUGMSG(sect, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Paramètre %s incorrect.\n"), "sect");
     
     switch (sect->type)
     {
@@ -1112,7 +1112,7 @@ double EF_sections_vzp(EF_Section* sect)
         {
             Section_T *section = sect->data;
             
-            return (common_math_get(section->largeur_table)*common_math_get(section->hauteur_table)*(common_math_get(section->hauteur_retombee)+common_math_get(section->hauteur_table)/2.)+common_math_get(section->largeur_retombee)*common_math_get(section->hauteur_retombee)*(common_math_get(section->hauteur_retombee)/2.))/EF_sections_s(sect);
+            return common_math_f((common_math_get(section->largeur_table)*common_math_get(section->hauteur_table)*(common_math_get(section->hauteur_retombee)+common_math_get(section->hauteur_table)/2.)+common_math_get(section->largeur_retombee)*common_math_get(section->hauteur_retombee)*(common_math_get(section->hauteur_retombee)/2.))/common_math_get(EF_sections_s(sect)), FLOTTANT_ORDINATEUR);
             
             break;
         }
@@ -1120,13 +1120,13 @@ double EF_sections_vzp(EF_Section* sect)
         {
             Section_Circulaire *section = sect->data;
             
-            return common_math_get(section->diametre)/2.;
+            return common_math_f(common_math_get(section->diametre)/2., FLOTTANT_ORDINATEUR);
             
             break;
         }
         default :
         {
-            BUGMSG(0, NAN, gettext("Type de section %d inconnu.\n"), sect->type);
+            BUGMSG(0, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Type de section %d inconnu.\n"), sect->type);
             break;
         }
     }
@@ -1167,7 +1167,7 @@ double EF_sections_ay(Beton_Barre *barre, unsigned int discretisation)
     ll = EF_noeuds_distance(fin, debut);
     BUG(!isnan(ll), NAN);
     
-    E = EF_calculs_E(barre->materiau);
+    E = common_math_get(EF_calculs_E(barre->materiau));
     
     switch (barre->section->type)
     {
@@ -1176,7 +1176,7 @@ double EF_sections_ay(Beton_Barre *barre, unsigned int discretisation)
         case SECTION_CARREE :
         case SECTION_CIRCULAIRE :
         {
-            return ll/(3.*E*EF_sections_iy(barre->section));
+            return ll/(3.*E*common_math_get(EF_sections_iy(barre->section)));
             break;
         }
         default :
@@ -1222,7 +1222,7 @@ double EF_sections_by(Beton_Barre *barre, unsigned int discretisation)
     ll = EF_noeuds_distance(fin, debut);
     BUG(!isnan(ll), NAN);
     
-    E = EF_calculs_E(barre->materiau);
+    E = common_math_get(EF_calculs_E(barre->materiau));
     
     switch (barre->section->type)
     {
@@ -1231,7 +1231,7 @@ double EF_sections_by(Beton_Barre *barre, unsigned int discretisation)
         case SECTION_CARREE :
         case SECTION_CIRCULAIRE :
         {
-            return ll/(6.*E*EF_sections_iy(barre->section));
+            return ll/(6.*E*common_math_get(EF_sections_iy(barre->section)));
             break;
         }
         default :
@@ -1277,7 +1277,7 @@ double EF_sections_cy(Beton_Barre *barre, unsigned int discretisation)
     ll = EF_noeuds_distance(fin, debut);
     BUG(!isnan(ll), NAN);
     
-    E = EF_calculs_E(barre->materiau);
+    E = common_math_get(EF_calculs_E(barre->materiau));
     
     switch (barre->section->type)
     {
@@ -1286,7 +1286,7 @@ double EF_sections_cy(Beton_Barre *barre, unsigned int discretisation)
         case SECTION_CARREE :
         case SECTION_CIRCULAIRE :
         {
-            return ll/(3.*E*EF_sections_iy(barre->section));
+            return ll/(3.*E*common_math_get(EF_sections_iy(barre->section)));
             break;
         }
         default :
@@ -1332,7 +1332,7 @@ double EF_sections_az(Beton_Barre *barre, unsigned int discretisation)
     ll = EF_noeuds_distance(fin, debut);
     BUG(!isnan(ll), NAN);
     
-    E = EF_calculs_E(barre->materiau);
+    E = common_math_get(EF_calculs_E(barre->materiau));
     
     switch (barre->section->type)
     {
@@ -1341,7 +1341,7 @@ double EF_sections_az(Beton_Barre *barre, unsigned int discretisation)
         case SECTION_CARREE :
         case SECTION_CIRCULAIRE :
         {
-            return ll/(3.*E*EF_sections_iz(barre->section));
+            return ll/(3.*E*common_math_get(EF_sections_iz(barre->section)));
             break;
         }
         default :
@@ -1387,7 +1387,7 @@ double EF_sections_bz(Beton_Barre *barre, unsigned int discretisation)
     ll = EF_noeuds_distance(fin, debut);
     BUG(!isnan(ll), NAN);
     
-    E = EF_calculs_E(barre->materiau);
+    E = common_math_get(EF_calculs_E(barre->materiau));
     
     switch (barre->section->type)
     {
@@ -1396,7 +1396,7 @@ double EF_sections_bz(Beton_Barre *barre, unsigned int discretisation)
         case SECTION_CARREE :
         case SECTION_CIRCULAIRE :
         {
-            return ll/(6.*E*EF_sections_iz(barre->section));
+            return ll/(6.*E*common_math_get(EF_sections_iz(barre->section)));
             break;
         }
         default :
@@ -1442,7 +1442,7 @@ double EF_sections_cz(Beton_Barre *barre, unsigned int discretisation)
     ll = EF_noeuds_distance(fin, debut);
     BUG(!isnan(ll), NAN);
     
-    E = EF_calculs_E(barre->materiau);
+    E = common_math_get(EF_calculs_E(barre->materiau));
     
     switch (barre->section->type)
     {
@@ -1451,7 +1451,7 @@ double EF_sections_cz(Beton_Barre *barre, unsigned int discretisation)
         case SECTION_CARREE :
         case SECTION_CIRCULAIRE :
         {
-            return ll/(3.*E*EF_sections_iz(barre->section));
+            return ll/(3.*E*common_math_get(EF_sections_iz(barre->section)));
             break;
         }
         default :
@@ -1463,7 +1463,7 @@ double EF_sections_cz(Beton_Barre *barre, unsigned int discretisation)
 }
 
 
-double EF_sections_s(EF_Section *sect)
+Flottant EF_sections_s(EF_Section *sect)
 /* Description : Renvoie la surface de la section étudiée.
  * Paramètres : void* section : section à étudier.
  * Valeur renvoyée :
@@ -1473,7 +1473,7 @@ double EF_sections_s(EF_Section *sect)
  *             type de section inconnue.
  */
 {
-    BUGMSG(sect, NAN, gettext("Paramètre %s incorrect.\n"), "sect");
+    BUGMSG(sect, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Paramètre %s incorrect.\n"), "sect");
     
     switch (sect->type)
     {
@@ -1482,7 +1482,7 @@ double EF_sections_s(EF_Section *sect)
         case SECTION_CARREE :
         {
             Section_T *section = sect->data;
-            return common_math_get(section->hauteur_table)*common_math_get(section->largeur_table)+common_math_get(section->hauteur_retombee)*common_math_get(section->largeur_retombee);
+            return common_math_f(common_math_get(section->hauteur_table)*common_math_get(section->largeur_table)+common_math_get(section->hauteur_retombee)*common_math_get(section->largeur_retombee), FLOTTANT_ORDINATEUR);
             
     // Pour une section en T de section constante (lt : largeur de la table, lr : largeur de
     //   la retombée, ht : hauteur de la table, hr : hauteur de la retombée), S vaut :\end{verbatim}\begin{displaymath}
@@ -1492,14 +1492,14 @@ double EF_sections_s(EF_Section *sect)
         case SECTION_CIRCULAIRE :
         {
             Section_Circulaire *section = sect->data;
-            return M_PI*common_math_get(section->diametre)*common_math_get(section->diametre)/4.;
+            return common_math_f(M_PI*common_math_get(section->diametre)*common_math_get(section->diametre)/4., FLOTTANT_ORDINATEUR);
     // Pour une section circulaire de section constante, S vaut :\end{verbatim}\begin{displaymath}
     // S = \frac{\pi \cdot \phi^2}{4} \end{displaymath}\begin{verbatim}
             break;
         }
         default :
         {
-            BUGMSG(0, NAN, gettext("Type de section %d inconnu.\n"), sect->type);
+            BUGMSG(0, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Type de section %d inconnu.\n"), sect->type);
             break;
         }
     }
@@ -1528,7 +1528,7 @@ double EF_sections_es_l(Beton_Barre *barre, unsigned int discretisation, double 
     // Le facteur ES/L est défini par la formule :\end{verbatim}\begin{displaymath}
     // \frac{E \cdot S}{L} = \frac{E}{\int_d^f \frac{1}{S(x)} dx}\end{displaymath}\begin{verbatim}
     
-    return EF_calculs_E(barre->materiau)*EF_sections_s(barre->section)/(f-d);
+    return common_math_get(EF_calculs_E(barre->materiau))*common_math_get(EF_sections_s(barre->section))/(f-d);
 }
 
 
@@ -1565,7 +1565,7 @@ double EF_sections_gj_l(Beton_Barre *barre, unsigned int discretisation)
     ll = EF_noeuds_distance(fin, debut);
     BUG(!isnan(ll), NAN);
     
-    return EF_calculs_G(barre->materiau, FALSE)*EF_sections_j(barre->section)/ll;
+    return common_math_get(EF_calculs_G(barre->materiau, FALSE))*common_math_get(EF_sections_j(barre->section))/ll;
 }
 
 

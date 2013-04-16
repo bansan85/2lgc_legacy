@@ -281,7 +281,7 @@ gboolean EF_calculs_genere_mat_rig(Projet *projet)
 }
 
 
-double EF_calculs_E(EF_Materiau *materiau)
+Flottant EF_calculs_E(EF_Materiau *materiau)
 /* Description : Renvoie le module d'Young du matériau.
  * Paramètres : EF_Materiau *materiau : le matériau à analyser.
  * Valeur renvoyée :
@@ -291,7 +291,7 @@ double EF_calculs_E(EF_Materiau *materiau)
  *             materiau inconnu.
  */
 {
-    BUGMSG(materiau, NAN, gettext("Paramètre %s incorrect.\n"), "materiau");
+    BUGMSG(materiau, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Paramètre %s incorrect.\n"), "materiau");
     
     switch (materiau->type)
     {
@@ -305,14 +305,16 @@ double EF_calculs_E(EF_Materiau *materiau)
         }
         default :
         {
-            BUGMSG(0, NAN, gettext("Matériau %d inconnu.\n"), materiau->type);
+            BUGMSG(NULL, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Matériau %d inconnu.\n"), materiau->type);
             break;
         }
     }
+    
+    return common_math_f(NAN, FLOTTANT_ORDINATEUR);
 }
 
 
-double EF_calculs_G(EF_Materiau *materiau, gboolean nu_null)
+Flottant EF_calculs_G(EF_Materiau *materiau, gboolean nu_null)
 /* Description : Renvoie le module de cisaillement du matériau.
  * Paramètres : EF_Materiau *materiau : le matériau à analyser,
  *              boolean nu_null : TRUE si on force le coefficient de poisson à 0,
@@ -324,7 +326,7 @@ double EF_calculs_G(EF_Materiau *materiau, gboolean nu_null)
  *             materiau inconnu.
  */
 {
-    BUGMSG(materiau, NAN, gettext("Paramètre %s incorrect.\n"), "materiau");
+    BUGMSG(materiau, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Paramètre %s incorrect.\n"), "materiau");
     
     switch (materiau->type)
     {
@@ -333,18 +335,20 @@ double EF_calculs_G(EF_Materiau *materiau, gboolean nu_null)
             Materiau_Beton  *data_beton = materiau->data;
             
             if (nu_null)
-                return data_beton->ecm/2.;
+                return common_math_f(common_math_get(data_beton->ecm)/2., FLOTTANT_ORDINATEUR);
             else
-                return data_beton->ecm/(2.*(1+data_beton->nu));
+                return common_math_f(common_math_get(data_beton->ecm)/(2.*(1.+common_math_get(data_beton->nu))), FLOTTANT_ORDINATEUR);
             
             break;
         }
         default :
         {
-            BUGMSG(0, NAN, gettext("Matériau %d inconnu.\n"), materiau->type);
+            BUGMSG(NULL, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Matériau %d inconnu.\n"), materiau->type);
             break;
         }
     }
+    
+    return common_math_f(NAN, FLOTTANT_ORDINATEUR);
 }
 
 
@@ -1283,7 +1287,7 @@ gboolean EF_calculs_resoud_charge(Projet *projet, unsigned int num_action)
     do
     {
         Beton_Barre *element_en_beton = list_parcours->data;
-        double      S = EF_sections_s(element_en_beton->section);
+        double      S = common_math_get(EF_sections_s(element_en_beton->section));
         int         num = g_list_index(projet->modele.barres, element_en_beton);
         
     //     Pour chaque discrétisation de la barre
@@ -1317,8 +1321,8 @@ gboolean EF_calculs_resoud_charge(Projet *projet, unsigned int num_action)
                 case BETON_ELEMENT_POTEAU :
                 case BETON_ELEMENT_POUTRE :
                 {
-                    E = EF_calculs_E(element_en_beton->materiau);
-                    G = EF_calculs_G(element_en_beton->materiau, FALSE);
+                    E = common_math_get(EF_calculs_E(element_en_beton->materiau));
+                    G = common_math_get(EF_calculs_G(element_en_beton->materiau, FALSE));
                     break;
                 }
                 default :
@@ -1405,9 +1409,9 @@ gboolean EF_calculs_resoud_charge(Projet *projet, unsigned int num_action)
                 case SECTION_CARREE :
                 case SECTION_CIRCULAIRE :
                 {
-                    double J = EF_sections_j(element_en_beton->section);
-                    double Iy = EF_sections_iy(element_en_beton->section);
-                    double Iz = EF_sections_iz(element_en_beton->section);
+                    double J = common_math_get(EF_sections_j(element_en_beton->section));
+                    double Iy = common_math_get(EF_sections_iy(element_en_beton->section));
+                    double Iz = common_math_get(EF_sections_iz(element_en_beton->section));
                     
                     BUG(!isnan(J), FALSE);
                     BUG(!isnan(Iy), FALSE);

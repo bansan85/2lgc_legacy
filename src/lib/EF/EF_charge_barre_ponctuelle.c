@@ -184,7 +184,7 @@ gboolean EF_charge_barre_ponctuelle_mx(Beton_Barre *barre, unsigned int discreti
     BUG(!isnan(l), FALSE);
     BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), FALSE, gettext("La position de la charge ponctuelle (%f) est incorrecte. La longueur de la barre est de %f m.\n"), a, l);
     
-    G = EF_calculs_G(barre->materiau, FALSE);
+    G = common_math_get(EF_calculs_G(barre->materiau, FALSE));
     
     switch (barre->section->type)
     {
@@ -193,7 +193,7 @@ gboolean EF_charge_barre_ponctuelle_mx(Beton_Barre *barre, unsigned int discreti
         case SECTION_CARREE :
         case SECTION_CIRCULAIRE :
         {
-            double      J = EF_sections_j(barre->section);
+            double      J = common_math_get(EF_sections_j(barre->section));
             
             BUG(!isnan(J), FALSE);
             
@@ -282,7 +282,7 @@ gboolean EF_charge_barre_ponctuelle_def_ang_iso_y(Beton_Barre *barre,
     BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), FALSE, gettext("La position de la charge ponctuelle (%f) est incorrecte. La longueur de la barre est de %f m.\n"), a, l);
     b = l-a;
     
-    E = EF_calculs_E(barre->materiau);
+    E = common_math_get(EF_calculs_E(barre->materiau));
     
     switch (barre->section->type)
     {
@@ -291,7 +291,7 @@ gboolean EF_charge_barre_ponctuelle_def_ang_iso_y(Beton_Barre *barre,
         case SECTION_CARREE :
         case SECTION_CIRCULAIRE :
         {
-            double      I = EF_sections_iy(barre->section);
+            double      I = common_math_get(EF_sections_iy(barre->section));
             
             BUG(!isnan(l), FALSE);
     // Pour une section constante, les angles valent :\end{verbatim}\begin{align*}
@@ -375,7 +375,7 @@ gboolean EF_charge_barre_ponctuelle_def_ang_iso_z(Beton_Barre *barre,
     BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), FALSE, gettext("La position de la charge ponctuelle (%f) est incorrecte. La longueur de la barre est de %f m.\n"), a, l);
     b = l-a;
     
-    E = EF_calculs_E(barre->materiau);
+    E = common_math_get(EF_calculs_E(barre->materiau));
     
     switch (barre->section->type)
     {
@@ -384,7 +384,7 @@ gboolean EF_charge_barre_ponctuelle_def_ang_iso_z(Beton_Barre *barre,
         case SECTION_CARREE :
         case SECTION_CIRCULAIRE :
         {
-            double      I = EF_sections_iz(barre->section);
+            double      I = common_math_get(EF_sections_iz(barre->section));
             
             BUG(!isnan(I), FALSE);
             
@@ -471,7 +471,7 @@ gboolean EF_charge_barre_ponctuelle_fonc_rx(Fonction *fonction, Beton_Barre *bar
     BUG(!isnan(l), FALSE);
     BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), FALSE, gettext("La position de la charge ponctuelle (%f) est incorrecte. La longueur de la barre est de %f m.\n"), a, l);
     
-    G = EF_calculs_G(barre->materiau, FALSE);
+    G = common_math_get(EF_calculs_G(barre->materiau, FALSE));
     
     switch (barre->section->type)
     {
@@ -480,7 +480,7 @@ gboolean EF_charge_barre_ponctuelle_fonc_rx(Fonction *fonction, Beton_Barre *bar
         case SECTION_CARREE :
         case SECTION_CIRCULAIRE :
         {
-            double      J = EF_sections_j(barre->section);
+            double      J = common_math_get(EF_sections_j(barre->section));
             
             BUG(!isnan(J), FALSE);
             
@@ -602,7 +602,7 @@ gboolean EF_charge_barre_ponctuelle_fonc_ry(Fonction *f_rotation, Fonction* f_de
     BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), FALSE, gettext("La position de la charge ponctuelle (%f) est incorrecte. La longueur de la barre est de %f m.\n"), a, l);
     
     b = l-a;
-    E = EF_calculs_E(barre->materiau);
+    E = common_math_get(EF_calculs_E(barre->materiau));
     
     switch (barre->section->type)
     {
@@ -611,7 +611,7 @@ gboolean EF_charge_barre_ponctuelle_fonc_ry(Fonction *f_rotation, Fonction* f_de
         case SECTION_CARREE :
         case SECTION_CIRCULAIRE :
         {
-            double      I = EF_sections_iy(barre->section);
+            double      I = common_math_get(EF_sections_iy(barre->section));
             
             BUG(!isnan(I), FALSE);
             
@@ -719,7 +719,7 @@ gboolean EF_charge_barre_ponctuelle_fonc_rz(Fonction *f_rotation, Fonction* f_de
     BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), FALSE, gettext("La position de la charge ponctuelle (%f) est incorrecte. La longueur de la barre est de %f m.\n"), a, l);
     
     b = l-a;
-    E = EF_calculs_E(barre->materiau);
+    E = common_math_get(EF_calculs_E(barre->materiau));
     
     switch (barre->section->type)
     {
@@ -728,7 +728,7 @@ gboolean EF_charge_barre_ponctuelle_fonc_rz(Fonction *f_rotation, Fonction* f_de
         case SECTION_CARREE :
         case SECTION_CIRCULAIRE :
         {
-            double      I = EF_sections_iz(barre->section);
+            double      I = common_math_get(EF_sections_iz(barre->section));
             
             BUG(!isnan(I), FALSE);
             
@@ -812,7 +812,7 @@ gboolean EF_charge_barre_ponctuelle_n(Fonction *fonction, Beton_Barre *barre,
     BUG(!isnan(l), FALSE);
     BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), FALSE, gettext("La position de la charge ponctuelle (%f) est incorrecte. La longueur de la barre est de %f m.\n"), a, l);
     
-    E = EF_calculs_E(barre->materiau);
+    E = common_math_get(EF_calculs_E(barre->materiau));
     
     switch (barre->section->type)
     {
@@ -821,7 +821,7 @@ gboolean EF_charge_barre_ponctuelle_n(Fonction *fonction, Beton_Barre *barre,
         case SECTION_CARREE :
         case SECTION_CIRCULAIRE :
         {
-            double      S = EF_sections_s(barre->section);
+            double      S = common_math_get(EF_sections_s(barre->section));
             
             BUG(!isnan(S), FALSE);
             
