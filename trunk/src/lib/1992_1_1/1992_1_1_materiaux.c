@@ -367,6 +367,7 @@ gboolean _1992_1_1_materiaux_insert(Projet *projet, EF_Materiau *materiau)
     }
     
 #ifdef ENABLE_GTK
+    gtk_list_store_set(projet->list_gtk.ef_materiaux.liste_materiaux, &materiau->Iter_liste, 0, materiau->nom, -1);
     if (projet->list_gtk.ef_materiaux.builder != NULL)
         gtk_tree_store_set(projet->list_gtk.ef_materiaux.materiaux, &materiau->Iter_fenetre, 0, materiau, -1);
 #endif
