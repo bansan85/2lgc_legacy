@@ -526,6 +526,7 @@ gboolean _1992_1_1_materiaux_modif(Projet *projet, EF_Materiau *materiau, char *
         free(materiau->nom);
         BUGMSG(materiau->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
         BUG(_1992_1_1_materiaux_repositionne(projet, materiau), FALSE);
+        gtk_list_store_set(projet->list_gtk.ef_materiaux.liste_materiaux, &materiau->Iter_liste, 0, materiau->nom, -1);
     }
     
     if (!isnan(common_math_get(fck)))
