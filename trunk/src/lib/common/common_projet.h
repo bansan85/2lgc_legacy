@@ -514,7 +514,7 @@ typedef struct __Charge_Noeud
 
 typedef struct __EF_Relachement_Donnees_Elastique_Lineaire
 {
-    double              raideur;    // La raideur doit être indiquée en N.m/rad
+    Flottant    raideur;    // La raideur doit être indiquée en N.m/rad
 } EF_Relachement_Donnees_Elastique_Lineaire;
 
 

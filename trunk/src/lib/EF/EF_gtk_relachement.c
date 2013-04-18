@@ -527,6 +527,7 @@ void EF_gtk_relachements_edit_clicked(GtkCellRendererText *cell, gchar *path_str
     char                *nom;
     EF_Relachement      *relachement;
     double              conversion;
+    Flottant            conversion2;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_relachements.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Relachement");
@@ -546,6 +547,8 @@ void EF_gtk_relachements_edit_clicked(GtkCellRendererText *cell, gchar *path_str
     if (isnan(conversion))
         return;
     
+    conversion2 = common_math_f(conversion, FLOTTANT_UTILISATEUR);
+    
     if (column == 0)
     {
         switch (relachement->rx_debut)
@@ -560,7 +563,7 @@ void EF_gtk_relachements_edit_clicked(GtkCellRendererText *cell, gchar *path_str
             {
                 EF_Relachement_Donnees_Elastique_Lineaire data;
                 
-                data.raideur = conversion;
+                data.raideur = conversion2;
                 BUG(EF_relachement_modif(projet, relachement, NULL, UINT_MAX, &data, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL), );
                 
                 break;
@@ -586,7 +589,7 @@ void EF_gtk_relachements_edit_clicked(GtkCellRendererText *cell, gchar *path_str
             {
                 EF_Relachement_Donnees_Elastique_Lineaire data;
                 
-                data.raideur = conversion;
+                data.raideur = conversion2;
                 BUG(EF_relachement_modif(projet, relachement, NULL, UINT_MAX, NULL, UINT_MAX, &data, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL), );
                 
                 break;
@@ -612,7 +615,7 @@ void EF_gtk_relachements_edit_clicked(GtkCellRendererText *cell, gchar *path_str
             {
                 EF_Relachement_Donnees_Elastique_Lineaire data;
                 
-                data.raideur = conversion;
+                data.raideur = conversion2;
                 BUG(EF_relachement_modif(projet, relachement, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, &data, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL), );
                 
                 break;
@@ -638,7 +641,7 @@ void EF_gtk_relachements_edit_clicked(GtkCellRendererText *cell, gchar *path_str
             {
                 EF_Relachement_Donnees_Elastique_Lineaire data;
                 
-                data.raideur = conversion;
+                data.raideur = conversion2;
                 BUG(EF_relachement_modif(projet, relachement, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, &data, UINT_MAX, NULL, UINT_MAX, NULL), );
                 
                 break;
@@ -664,7 +667,7 @@ void EF_gtk_relachements_edit_clicked(GtkCellRendererText *cell, gchar *path_str
             {
                 EF_Relachement_Donnees_Elastique_Lineaire data;
                 
-                data.raideur = conversion;
+                data.raideur = conversion2;
                 BUG(EF_relachement_modif(projet, relachement, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, &data, UINT_MAX, NULL), );
                 
                 break;
@@ -690,7 +693,7 @@ void EF_gtk_relachements_edit_clicked(GtkCellRendererText *cell, gchar *path_str
             {
                 EF_Relachement_Donnees_Elastique_Lineaire data;
                 
-                data.raideur = conversion;
+                data.raideur = conversion2;
                 BUG(EF_relachement_modif(projet, relachement, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, &data), );
                 
                 break;
