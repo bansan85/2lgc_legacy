@@ -119,14 +119,11 @@ void EF_gtk_relachements_select_changed(GtkTreeSelection *treeselection, Projet 
     }
     else
     {
-        char                *nom;
         EF_Relachement      *relachement;
         GtkCellRendererText *cell;
         GList               *liste_relachements = NULL;
         
-        gtk_tree_model_get(model, &Iter, 0, &nom, -1);
-        
-        BUG(relachement = EF_relachement_cherche_nom(projet, nom, TRUE), );
+        gtk_tree_model_get(model, &Iter, 0, &relachement, -1);
         
         liste_relachements = g_list_append(liste_relachements, relachement);
         if (_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, NULL, liste_relachements, NULL, NULL, NULL, NULL, FALSE, FALSE))
@@ -264,8 +261,6 @@ void EF_gtk_relachements_select_changed(GtkTreeSelection *treeselection, Projet 
                 break;
             }
         }
-        
-        free(nom);
     }
     
     return;
@@ -283,7 +278,6 @@ void EF_gtk_relachements_boutton_supprimer_menu(GtkButton *widget, Projet *proje
 {
     GtkTreeModel        *model;
     GtkTreeIter         Iter;
-    char                *nom;
     EF_Relachement      *relachement;
     GList               *liste_relachements = NULL, *liste_noeuds_dep, *liste_barres_dep, *liste_charges_dep;
     
@@ -295,9 +289,7 @@ void EF_gtk_relachements_boutton_supprimer_menu(GtkButton *widget, Projet *proje
     if (!gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_treeview_select")), &model, &Iter))
         BUGMSG(NULL, , gettext("Aucun élément n'est sélectionné.\n"));
     
-    gtk_tree_model_get(model, &Iter, 0, &nom, -1);
-    
-    BUG(relachement = EF_relachement_cherche_nom(projet, nom, TRUE), );
+    gtk_tree_model_get(model, &Iter, 0, &relachement, -1);
     
     liste_relachements = g_list_append(liste_relachements, relachement);
     BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, NULL, liste_relachements, NULL, &liste_noeuds_dep, &liste_barres_dep, &liste_charges_dep, FALSE, FALSE), );
@@ -313,7 +305,6 @@ void EF_gtk_relachements_boutton_supprimer_menu(GtkButton *widget, Projet *proje
     else
         BUGMSG(NULL, , gettext("L'élément ne possède aucune dépendance.\n"));
     
-    free(nom);
     g_list_free(liste_noeuds_dep);
     g_list_free(liste_barres_dep);
     g_list_free(liste_charges_dep);
@@ -336,7 +327,6 @@ void EF_gtk_relachements_edit_nom(GtkCellRendererText *cell, gchar *path_string,
     GtkTreeModel        *model;
     GtkTreeIter         iter;
     GtkTreePath         *path;
-    char                *nom;
     EF_Relachement      *relachement;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
@@ -347,14 +337,9 @@ void EF_gtk_relachements_edit_nom(GtkCellRendererText *cell, gchar *path_string,
     path = gtk_tree_path_new_from_string(path_string);
     gtk_tree_model_get_iter(model, &iter, path);
     gtk_tree_path_free(path);
-    gtk_tree_model_get(model, &iter, 0, &nom, -1);
-    if ((strcmp(nom, new_text) == 0) || (strcmp(new_text, "") == 0))
-    {
-        free(nom);
+    gtk_tree_model_get(model, &iter, 0, &relachement, -1);
+    if ((strcmp(relachement->nom, new_text) == 0) || (strcmp(new_text, "") == 0))
         return;
-    }
-    BUG(relachement = EF_relachement_cherche_nom(projet, nom, TRUE), );
-    free(nom);
     if (EF_relachement_cherche_nom(projet, new_text, FALSE))
         return;
 
@@ -373,7 +358,6 @@ void EF_gtk_relachements_supprimer_direct(GtkButton *button, Projet *projet)
 {
     GtkTreeIter     iter;
     GtkTreeModel    *model;
-    char            *nom;
     EF_Relachement  *relachement;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
@@ -382,14 +366,11 @@ void EF_gtk_relachements_supprimer_direct(GtkButton *button, Projet *projet)
     if (!gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_treeview_select")), &model, &iter))
         return;
     
-    gtk_tree_model_get(model, &iter, 0, &nom, -1);
+    gtk_tree_model_get(model, &iter, 0, &relachement, -1);
     
-    BUG(relachement = EF_relachement_cherche_nom(projet, nom, TRUE), );
     BUG(EF_relachement_supprime(relachement, TRUE, projet), );
     
     BUG(m3d_rafraichit(projet), );
-    
-    free(nom);
     
     return;
 }
@@ -417,20 +398,16 @@ gboolean EF_gtk_relachements_treeview_key_press(GtkWidget *widget, GdkEvent *eve
         
         if (gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_treeview_select")), &model, &Iter))
         {
-            char            *nom;
             EF_Relachement  *relachement;
             
             GList   *liste_relachements = NULL;
             
-            gtk_tree_model_get(model, &Iter, 0, &nom, -1);
-            
-            BUG(relachement = EF_relachement_cherche_nom(projet, nom, TRUE), FALSE);
+            gtk_tree_model_get(model, &Iter, 0, &relachement, -1);
             
             liste_relachements = g_list_append(liste_relachements, relachement);
             if (_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, NULL, liste_relachements, NULL, NULL, NULL, NULL, FALSE, FALSE) == FALSE)
                 EF_gtk_relachements_supprimer_direct(NULL, projet);
             
-            free(nom);
             g_list_free(liste_relachements);
         }
         return TRUE;
@@ -450,7 +427,6 @@ void EF_gtk_relachements_supprimer_menu_barres(GtkButton *button, Projet *projet
 {
     GtkTreeIter     iter;
     GtkTreeModel    *model;
-    char            *nom;
     EF_Relachement  *relachement;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
@@ -459,14 +435,11 @@ void EF_gtk_relachements_supprimer_menu_barres(GtkButton *button, Projet *projet
     if (!gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_treeview_select")), &model, &iter))
         return;
     
-    gtk_tree_model_get(model, &iter, 0, &nom, -1);
+    gtk_tree_model_get(model, &iter, 0, &relachement, -1);
     
-    BUG(relachement = EF_relachement_cherche_nom(projet, nom, TRUE), );
     BUG(EF_relachement_supprime(relachement, FALSE, projet), );
     
     BUG(m3d_rafraichit(projet), );
-    
-    free(nom);
     
     return;
 }
@@ -524,7 +497,6 @@ void EF_gtk_relachements_edit_clicked(GtkCellRendererText *cell, gchar *path_str
     GtkTreeIter         iter;
     GtkTreePath         *path;
     gint                column = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cell), "column"));
-    char                *nom;
     EF_Relachement      *relachement;
     double              conversion;
     Flottant            conversion2;
@@ -537,10 +509,7 @@ void EF_gtk_relachements_edit_clicked(GtkCellRendererText *cell, gchar *path_str
     path = gtk_tree_path_new_from_string(path_string);
     gtk_tree_model_get_iter(model, &iter, path);
     gtk_tree_path_free(path);
-    gtk_tree_model_get(model, &iter, 0, &nom, -1);
-    
-    BUG(relachement = EF_relachement_cherche_nom(projet, nom, TRUE), );
-    free(nom);
+    gtk_tree_model_get(model, &iter, 0, &relachement, -1);
     
     conversion = common_text_str_to_double(new_text, 0., TRUE, INFINITY, FALSE);
     
@@ -727,7 +696,6 @@ void EF_gtk_relachements_edit_type(GtkCellRendererText *cell, gchar *path_string
     GtkTreeIter         iter;
     GtkTreePath         *path;
     gint                column = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cell), "column"));
-    char                *nom;
     EF_Relachement      *relachement;
     EF_Relachement_Type type;
     
@@ -739,10 +707,7 @@ void EF_gtk_relachements_edit_type(GtkCellRendererText *cell, gchar *path_string
     path = gtk_tree_path_new_from_string(path_string);
     gtk_tree_model_get_iter(model, &iter, path);
     gtk_tree_path_free(path);
-    gtk_tree_model_get(model, &iter, 0, &nom, -1);
-    
-    BUG(relachement = EF_relachement_cherche_nom(projet, nom, TRUE), );
-    free(nom);
+    gtk_tree_model_get(model, &iter, 0, &relachement, -1);
     
     if (strcmp(gettext("Bloqué"), new_text) == 0)
         type = EF_RELACHEMENT_BLOQUE;
@@ -796,6 +761,555 @@ void EF_gtk_relachements_edit_type(GtkCellRendererText *cell, gchar *path_string
 }
 
 
+void EF_gtk_relachements_render_0(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
+  GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data2)
+/* Description : Affiche la distance vz de la section.
+ * Paramètres : GtkTreeViewColumn *tree_column : composant à l'origine de l'évènement,
+ *            : GtkCellRenderer *cell : la cellule en cours d'édition,
+ *            : GtkTreeModel *tree_model : le mode en cours d'édition,
+ *            : GtkTreeIter *iter : la ligne en cours d'édition,
+ *            : gpointer data2 : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    EF_Relachement  *relachement;
+    
+    gtk_tree_model_get(tree_model, iter, 0, &relachement, -1);
+    
+    g_object_set(cell, "text", relachement->nom, NULL);
+    
+    return;
+}
+
+
+void EF_gtk_relachements_render_1(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
+  GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data2)
+/* Description : Affiche la distance vz de la section.
+ * Paramètres : GtkTreeViewColumn *tree_column : composant à l'origine de l'évènement,
+ *            : GtkCellRenderer *cell : la cellule en cours d'édition,
+ *            : GtkTreeModel *tree_model : le mode en cours d'édition,
+ *            : GtkTreeIter *iter : la ligne en cours d'édition,
+ *            : gpointer data2 : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    EF_Relachement  *relachement;
+    
+    gtk_tree_model_get(tree_model, iter, 0, &relachement, -1);
+    
+    switch (relachement->rx_debut)
+    {
+        case EF_RELACHEMENT_BLOQUE :
+        {
+            g_object_set(cell, "text", gettext("Bloqué"), NULL);
+            break;
+        }
+        case EF_RELACHEMENT_LIBRE :
+        {
+            g_object_set(cell, "text", gettext("Libre"), NULL);
+            break;
+        }
+        case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
+        {
+            g_object_set(cell, "text", gettext("Linéaire"), NULL);
+            break;
+        }
+        default :
+        {
+            BUGMSG(NULL, , "Le type de relâchement est inconnu.\n");
+            break;
+        }
+    }
+    
+    return;
+}
+
+
+void EF_gtk_relachements_render_2(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
+  GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data2)
+/* Description : Affiche la distance vz de la section.
+ * Paramètres : GtkTreeViewColumn *tree_column : composant à l'origine de l'évènement,
+ *            : GtkCellRenderer *cell : la cellule en cours d'édition,
+ *            : GtkTreeModel *tree_model : le mode en cours d'édition,
+ *            : GtkTreeIter *iter : la ligne en cours d'édition,
+ *            : gpointer data2 : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    EF_Relachement  *relachement;
+    
+    gtk_tree_model_get(tree_model, iter, 0, &relachement, -1);
+    
+    switch (relachement->rx_debut)
+    {
+        case EF_RELACHEMENT_LIBRE :
+        case EF_RELACHEMENT_BLOQUE :
+        {
+            g_object_set(cell, "text", "-", NULL);
+            break;
+        }
+        case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
+        {
+            EF_Relachement_Donnees_Elastique_Lineaire *data;
+            char    tmp[30];
+            
+            data = (EF_Relachement_Donnees_Elastique_Lineaire *)relachement->rx_d_data;
+            common_math_double_to_char2(data->raideur, tmp, DECIMAL_NEWTON_PAR_METRE);
+            g_object_set(cell, "text", tmp, NULL);
+            
+            break;
+        }
+        default :
+        {
+            BUGMSG(NULL, , "Le type de relâchement est inconnu.\n");
+            break;
+        }
+    }
+    
+    return;
+}
+
+
+void EF_gtk_relachements_render_3(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
+  GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data2)
+/* Description : Affiche la distance vz de la section.
+ * Paramètres : GtkTreeViewColumn *tree_column : composant à l'origine de l'évènement,
+ *            : GtkCellRenderer *cell : la cellule en cours d'édition,
+ *            : GtkTreeModel *tree_model : le mode en cours d'édition,
+ *            : GtkTreeIter *iter : la ligne en cours d'édition,
+ *            : gpointer data2 : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    EF_Relachement  *relachement;
+    
+    gtk_tree_model_get(tree_model, iter, 0, &relachement, -1);
+    
+    switch (relachement->ry_debut)
+    {
+        case EF_RELACHEMENT_BLOQUE :
+        {
+            g_object_set(cell, "text", gettext("Bloqué"), NULL);
+            break;
+        }
+        case EF_RELACHEMENT_LIBRE :
+        {
+            g_object_set(cell, "text", gettext("Libre"), NULL);
+            break;
+        }
+        case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
+        {
+            g_object_set(cell, "text", gettext("Linéaire"), NULL);
+            break;
+        }
+        default :
+        {
+            BUGMSG(NULL, , "Le type de relâchement est inconnu.\n");
+            break;
+        }
+    }
+    
+    return;
+}
+
+
+void EF_gtk_relachements_render_4(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
+  GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data2)
+/* Description : Affiche la distance vz de la section.
+ * Paramètres : GtkTreeViewColumn *tree_column : composant à l'origine de l'évènement,
+ *            : GtkCellRenderer *cell : la cellule en cours d'édition,
+ *            : GtkTreeModel *tree_model : le mode en cours d'édition,
+ *            : GtkTreeIter *iter : la ligne en cours d'édition,
+ *            : gpointer data2 : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    EF_Relachement  *relachement;
+    
+    gtk_tree_model_get(tree_model, iter, 0, &relachement, -1);
+    
+    switch (relachement->ry_debut)
+    {
+        case EF_RELACHEMENT_LIBRE :
+        case EF_RELACHEMENT_BLOQUE :
+        {
+            g_object_set(cell, "text", "-", NULL);
+            break;
+        }
+        case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
+        {
+            EF_Relachement_Donnees_Elastique_Lineaire *data;
+            char    tmp[30];
+            
+            data = (EF_Relachement_Donnees_Elastique_Lineaire *)relachement->ry_d_data;
+            common_math_double_to_char2(data->raideur, tmp, DECIMAL_NEWTON_PAR_METRE);
+            g_object_set(cell, "text", tmp, NULL);
+            
+            break;
+        }
+        default :
+        {
+            BUGMSG(NULL, , "Le type de relâchement est inconnu.\n");
+            break;
+        }
+    }
+    
+    return;
+}
+
+
+void EF_gtk_relachements_render_5(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
+  GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data2)
+/* Description : Affiche la distance vz de la section.
+ * Paramètres : GtkTreeViewColumn *tree_column : composant à l'origine de l'évènement,
+ *            : GtkCellRenderer *cell : la cellule en cours d'édition,
+ *            : GtkTreeModel *tree_model : le mode en cours d'édition,
+ *            : GtkTreeIter *iter : la ligne en cours d'édition,
+ *            : gpointer data2 : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    EF_Relachement  *relachement;
+    
+    gtk_tree_model_get(tree_model, iter, 0, &relachement, -1);
+    
+    switch (relachement->rz_debut)
+    {
+        case EF_RELACHEMENT_BLOQUE :
+        {
+            g_object_set(cell, "text", gettext("Bloqué"), NULL);
+            break;
+        }
+        case EF_RELACHEMENT_LIBRE :
+        {
+            g_object_set(cell, "text", gettext("Libre"), NULL);
+            break;
+        }
+        case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
+        {
+            g_object_set(cell, "text", gettext("Linéaire"), NULL);
+            break;
+        }
+        default :
+        {
+            BUGMSG(NULL, , "Le type de relâchement est inconnu.\n");
+            break;
+        }
+    }
+    
+    return;
+}
+
+
+void EF_gtk_relachements_render_6(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
+  GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data2)
+/* Description : Affiche la distance vz de la section.
+ * Paramètres : GtkTreeViewColumn *tree_column : composant à l'origine de l'évènement,
+ *            : GtkCellRenderer *cell : la cellule en cours d'édition,
+ *            : GtkTreeModel *tree_model : le mode en cours d'édition,
+ *            : GtkTreeIter *iter : la ligne en cours d'édition,
+ *            : gpointer data2 : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    EF_Relachement  *relachement;
+    
+    gtk_tree_model_get(tree_model, iter, 0, &relachement, -1);
+    
+    switch (relachement->rz_debut)
+    {
+        case EF_RELACHEMENT_LIBRE :
+        case EF_RELACHEMENT_BLOQUE :
+        {
+            g_object_set(cell, "text", "-", NULL);
+            break;
+        }
+        case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
+        {
+            EF_Relachement_Donnees_Elastique_Lineaire *data;
+            char    tmp[30];
+            
+            data = (EF_Relachement_Donnees_Elastique_Lineaire *)relachement->rz_d_data;
+            common_math_double_to_char2(data->raideur, tmp, DECIMAL_NEWTON_PAR_METRE);
+            g_object_set(cell, "text", tmp, NULL);
+            
+            break;
+        }
+        default :
+        {
+            BUGMSG(NULL, , "Le type de relâchement est inconnu.\n");
+            break;
+        }
+    }
+    
+    return;
+}
+
+
+void EF_gtk_relachements_render_7(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
+  GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data2)
+/* Description : Affiche la distance vz de la section.
+ * Paramètres : GtkTreeViewColumn *tree_column : composant à l'origine de l'évènement,
+ *            : GtkCellRenderer *cell : la cellule en cours d'édition,
+ *            : GtkTreeModel *tree_model : le mode en cours d'édition,
+ *            : GtkTreeIter *iter : la ligne en cours d'édition,
+ *            : gpointer data2 : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    EF_Relachement  *relachement;
+    
+    gtk_tree_model_get(tree_model, iter, 0, &relachement, -1);
+    
+    switch (relachement->rx_fin)
+    {
+        case EF_RELACHEMENT_BLOQUE :
+        {
+            g_object_set(cell, "text", gettext("Bloqué"), NULL);
+            break;
+        }
+        case EF_RELACHEMENT_LIBRE :
+        {
+            g_object_set(cell, "text", gettext("Libre"), NULL);
+            break;
+        }
+        case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
+        {
+            g_object_set(cell, "text", gettext("Linéaire"), NULL);
+            break;
+        }
+        default :
+        {
+            BUGMSG(NULL, , "Le type de relâchement est inconnu.\n");
+            break;
+        }
+    }
+    
+    return;
+}
+
+
+void EF_gtk_relachements_render_8(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
+  GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data2)
+/* Description : Affiche la distance vz de la section.
+ * Paramètres : GtkTreeViewColumn *tree_column : composant à l'origine de l'évènement,
+ *            : GtkCellRenderer *cell : la cellule en cours d'édition,
+ *            : GtkTreeModel *tree_model : le mode en cours d'édition,
+ *            : GtkTreeIter *iter : la ligne en cours d'édition,
+ *            : gpointer data2 : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    EF_Relachement  *relachement;
+    
+    gtk_tree_model_get(tree_model, iter, 0, &relachement, -1);
+    
+    switch (relachement->rx_fin)
+    {
+        case EF_RELACHEMENT_LIBRE :
+        case EF_RELACHEMENT_BLOQUE :
+        {
+            g_object_set(cell, "text", "-", NULL);
+            break;
+        }
+        case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
+        {
+            EF_Relachement_Donnees_Elastique_Lineaire *data;
+            char    tmp[30];
+            
+            data = (EF_Relachement_Donnees_Elastique_Lineaire *)relachement->rx_f_data;
+            common_math_double_to_char2(data->raideur, tmp, DECIMAL_NEWTON_PAR_METRE);
+            g_object_set(cell, "text", tmp, NULL);
+            
+            break;
+        }
+        default :
+        {
+            BUGMSG(NULL, , "Le type de relâchement est inconnu.\n");
+            break;
+        }
+    }
+    
+    return;
+}
+
+
+void EF_gtk_relachements_render_9(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
+  GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data2)
+/* Description : Affiche la distance vz de la section.
+ * Paramètres : GtkTreeViewColumn *tree_column : composant à l'origine de l'évènement,
+ *            : GtkCellRenderer *cell : la cellule en cours d'édition,
+ *            : GtkTreeModel *tree_model : le mode en cours d'édition,
+ *            : GtkTreeIter *iter : la ligne en cours d'édition,
+ *            : gpointer data2 : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    EF_Relachement  *relachement;
+    
+    gtk_tree_model_get(tree_model, iter, 0, &relachement, -1);
+    
+    switch (relachement->ry_fin)
+    {
+        case EF_RELACHEMENT_BLOQUE :
+        {
+            g_object_set(cell, "text", gettext("Bloqué"), NULL);
+            break;
+        }
+        case EF_RELACHEMENT_LIBRE :
+        {
+            g_object_set(cell, "text", gettext("Libre"), NULL);
+            break;
+        }
+        case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
+        {
+            g_object_set(cell, "text", gettext("Linéaire"), NULL);
+            break;
+        }
+        default :
+        {
+            BUGMSG(NULL, , "Le type de relâchement est inconnu.\n");
+            break;
+        }
+    }
+    
+    return;
+}
+
+
+void EF_gtk_relachements_render_10(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
+  GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data2)
+/* Description : Affiche la distance vz de la section.
+ * Paramètres : GtkTreeViewColumn *tree_column : composant à l'origine de l'évènement,
+ *            : GtkCellRenderer *cell : la cellule en cours d'édition,
+ *            : GtkTreeModel *tree_model : le mode en cours d'édition,
+ *            : GtkTreeIter *iter : la ligne en cours d'édition,
+ *            : gpointer data2 : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    EF_Relachement  *relachement;
+    
+    gtk_tree_model_get(tree_model, iter, 0, &relachement, -1);
+    
+    switch (relachement->ry_fin)
+    {
+        case EF_RELACHEMENT_LIBRE :
+        case EF_RELACHEMENT_BLOQUE :
+        {
+            g_object_set(cell, "text", "-", NULL);
+            break;
+        }
+        case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
+        {
+            EF_Relachement_Donnees_Elastique_Lineaire *data;
+            char    tmp[30];
+            
+            data = (EF_Relachement_Donnees_Elastique_Lineaire *)relachement->ry_f_data;
+            common_math_double_to_char2(data->raideur, tmp, DECIMAL_NEWTON_PAR_METRE);
+            g_object_set(cell, "text", tmp, NULL);
+            
+            break;
+        }
+        default :
+        {
+            BUGMSG(NULL, , "Le type de relâchement est inconnu.\n");
+            break;
+        }
+    }
+    
+    return;
+}
+
+
+void EF_gtk_relachements_render_11(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
+  GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data2)
+/* Description : Affiche la distance vz de la section.
+ * Paramètres : GtkTreeViewColumn *tree_column : composant à l'origine de l'évènement,
+ *            : GtkCellRenderer *cell : la cellule en cours d'édition,
+ *            : GtkTreeModel *tree_model : le mode en cours d'édition,
+ *            : GtkTreeIter *iter : la ligne en cours d'édition,
+ *            : gpointer data2 : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    EF_Relachement  *relachement;
+    
+    gtk_tree_model_get(tree_model, iter, 0, &relachement, -1);
+    
+    switch (relachement->rz_fin)
+    {
+        case EF_RELACHEMENT_BLOQUE :
+        {
+            g_object_set(cell, "text", gettext("Bloqué"), NULL);
+            break;
+        }
+        case EF_RELACHEMENT_LIBRE :
+        {
+            g_object_set(cell, "text", gettext("Libre"), NULL);
+            break;
+        }
+        case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
+        {
+            g_object_set(cell, "text", gettext("Linéaire"), NULL);
+            break;
+        }
+        default :
+        {
+            BUGMSG(NULL, , "Le type de relâchement est inconnu.\n");
+            break;
+        }
+    }
+    
+    return;
+}
+
+
+void EF_gtk_relachements_render_12(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
+  GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data2)
+/* Description : Affiche la distance vz de la section.
+ * Paramètres : GtkTreeViewColumn *tree_column : composant à l'origine de l'évènement,
+ *            : GtkCellRenderer *cell : la cellule en cours d'édition,
+ *            : GtkTreeModel *tree_model : le mode en cours d'édition,
+ *            : GtkTreeIter *iter : la ligne en cours d'édition,
+ *            : gpointer data2 : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    EF_Relachement  *relachement;
+    
+    gtk_tree_model_get(tree_model, iter, 0, &relachement, -1);
+    
+    switch (relachement->rz_fin)
+    {
+        case EF_RELACHEMENT_LIBRE :
+        case EF_RELACHEMENT_BLOQUE :
+        {
+            g_object_set(cell, "text", "-", NULL);
+            break;
+        }
+        case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
+        {
+            EF_Relachement_Donnees_Elastique_Lineaire *data;
+            char    tmp[30];
+            
+            data = (EF_Relachement_Donnees_Elastique_Lineaire *)relachement->rz_f_data;
+            common_math_double_to_char2(data->raideur, tmp, DECIMAL_NEWTON_PAR_METRE);
+            g_object_set(cell, "text", tmp, NULL);
+            
+            break;
+        }
+        default :
+        {
+            BUGMSG(NULL, , "Le type de relâchement est inconnu.\n");
+            break;
+        }
+    }
+    
+    return;
+}
+
+
 void EF_gtk_relachement(Projet *projet)
 /* Description : Création de la fenêtre permettant d'afficher et d'éditer les relâchements sous
  *               forme d'un tableau.
@@ -834,6 +1348,20 @@ void EF_gtk_relachement(Projet *projet)
     g_object_set_data(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_treeview_cell11"), "column", GINT_TO_POINTER(5));
     g_object_set_data(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_treeview_cell12"), "column", GINT_TO_POINTER(5));
     
+    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(ef_gtk->builder, "EF_relachements_treeview_column0")), GTK_CELL_RENDERER(gtk_builder_get_object(ef_gtk->builder, "EF_relachements_treeview_cell0")), EF_gtk_relachements_render_0, projet, NULL);
+    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(ef_gtk->builder, "EF_relachements_treeview_column1")), GTK_CELL_RENDERER(gtk_builder_get_object(ef_gtk->builder, "EF_relachements_treeview_cell1")), EF_gtk_relachements_render_1, projet, NULL);
+    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(ef_gtk->builder, "EF_relachements_treeview_column2")), GTK_CELL_RENDERER(gtk_builder_get_object(ef_gtk->builder, "EF_relachements_treeview_cell2")), EF_gtk_relachements_render_2, projet, NULL);
+    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(ef_gtk->builder, "EF_relachements_treeview_column3")), GTK_CELL_RENDERER(gtk_builder_get_object(ef_gtk->builder, "EF_relachements_treeview_cell3")), EF_gtk_relachements_render_3, projet, NULL);
+    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(ef_gtk->builder, "EF_relachements_treeview_column4")), GTK_CELL_RENDERER(gtk_builder_get_object(ef_gtk->builder, "EF_relachements_treeview_cell4")), EF_gtk_relachements_render_4, projet, NULL);
+    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(ef_gtk->builder, "EF_relachements_treeview_column5")), GTK_CELL_RENDERER(gtk_builder_get_object(ef_gtk->builder, "EF_relachements_treeview_cell5")), EF_gtk_relachements_render_5, projet, NULL);
+    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(ef_gtk->builder, "EF_relachements_treeview_column6")), GTK_CELL_RENDERER(gtk_builder_get_object(ef_gtk->builder, "EF_relachements_treeview_cell6")), EF_gtk_relachements_render_6, projet, NULL);
+    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(ef_gtk->builder, "EF_relachements_treeview_column7")), GTK_CELL_RENDERER(gtk_builder_get_object(ef_gtk->builder, "EF_relachements_treeview_cell7")), EF_gtk_relachements_render_7, projet, NULL);
+    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(ef_gtk->builder, "EF_relachements_treeview_column8")), GTK_CELL_RENDERER(gtk_builder_get_object(ef_gtk->builder, "EF_relachements_treeview_cell8")), EF_gtk_relachements_render_8, projet, NULL);
+    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(ef_gtk->builder, "EF_relachements_treeview_column9")), GTK_CELL_RENDERER(gtk_builder_get_object(ef_gtk->builder, "EF_relachements_treeview_cell9")), EF_gtk_relachements_render_9, projet, NULL);
+    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(ef_gtk->builder, "EF_relachements_treeview_column10")), GTK_CELL_RENDERER(gtk_builder_get_object(ef_gtk->builder, "EF_relachements_treeview_cell10")), EF_gtk_relachements_render_10, projet, NULL);
+    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(ef_gtk->builder, "EF_relachements_treeview_column11")), GTK_CELL_RENDERER(gtk_builder_get_object(ef_gtk->builder, "EF_relachements_treeview_cell11")), EF_gtk_relachements_render_11, projet, NULL);
+    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(ef_gtk->builder, "EF_relachements_treeview_column12")), GTK_CELL_RENDERER(gtk_builder_get_object(ef_gtk->builder, "EF_relachements_treeview_cell12")), EF_gtk_relachements_render_12, projet, NULL);
+    
     ef_gtk->window = GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder, "EF_relachements_window"));
     ef_gtk->relachements = GTK_TREE_STORE(gtk_builder_get_object(ef_gtk->builder, "EF_relachements_treestore"));
     
@@ -843,7 +1371,7 @@ void EF_gtk_relachement(Projet *projet)
         EF_Relachement  *relachement = (EF_Relachement *)list_parcours->data;
         
         gtk_tree_store_append(ef_gtk->relachements, &relachement->Iter_fenetre, NULL);
-        BUG(EF_relachements_update_ligne_treeview(projet, relachement), );
+        gtk_tree_store_set(ef_gtk->relachements, &relachement->Iter_fenetre, 0, relachement, -1);
         
         list_parcours = g_list_next(list_parcours);
     }

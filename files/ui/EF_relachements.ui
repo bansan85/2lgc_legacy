@@ -3,19 +3,7 @@
     <requires lib="gtk+" version="3.2"/>
     <object class="GtkTreeStore" id="EF_relachements_treestore">
         <columns>
-            <column type="gchararray"/><!-- Son nom -->
-            <column type="gchararray"/><!-- rx_debut -->
-            <column type="gchararray"/><!-- rx_d_data -->
-            <column type="gchararray"/><!-- ry_debut -->
-            <column type="gchararray"/><!-- ry_d_data -->
-            <column type="gchararray"/><!-- rz_debut -->
-            <column type="gchararray"/><!-- rz_d_data -->
-            <column type="gchararray"/><!-- rx_fin -->
-            <column type="gchararray"/><!-- rx_f_data -->
-            <column type="gchararray"/><!-- ry_fin -->
-            <column type="gchararray"/><!-- ry_f_data -->
-            <column type="gchararray"/><!-- rz_fin -->
-            <column type="gchararray"/><!-- rz_f_data -->
+            <column type="gpointer"/>
         </columns>
     </object>
     <object class="GtkMenu" id="EF_relachements_supprimer_menu">
@@ -120,9 +108,6 @@
                                                 <property name="editable">True</property>
                                                 <signal name="edited" handler="EF_gtk_relachements_edit_nom"/>
                                             </object>
-                                            <attributes>
-                                                <attribute name="text">0</attribute>
-                                            </attributes>
                                         </child>
                                     </object>
                                 </child>
@@ -141,9 +126,6 @@
                                                 <property name="model">EF_relachements_liste_type</property>
                                                 <signal name="edited" handler="EF_gtk_relachements_edit_type"/>
                                             </object>
-                                            <attributes>
-                                                <attribute name="text">1</attribute>
-                                            </attributes>
                                         </child>
                                     </object>
                                 </child>
@@ -158,9 +140,6 @@
                                                 <property name="xalign">0.5</property>
                                                 <signal name="edited" handler="EF_gtk_relachements_edit_clicked"/>
                                             </object>
-                                            <attributes>
-                                                <attribute name="text">2</attribute>
-                                            </attributes>
                                         </child>
                                     </object>
                                 </child>
@@ -179,9 +158,6 @@
                                                 <property name="model">EF_relachements_liste_type</property>
                                                 <signal name="edited" handler="EF_gtk_relachements_edit_type"/>
                                             </object>
-                                            <attributes>
-                                                <attribute name="text">3</attribute>
-                                            </attributes>
                                         </child>
                                     </object>
                                 </child>
@@ -196,9 +172,6 @@
                                                 <property name="xalign">0.5</property>
                                                 <signal name="edited" handler="EF_gtk_relachements_edit_clicked"/>
                                             </object>
-                                            <attributes>
-                                                <attribute name="text">4</attribute>
-                                            </attributes>
                                         </child>
                                     </object>
                                 </child>
@@ -217,9 +190,6 @@
                                                 <property name="model">EF_relachements_liste_type</property>
                                                 <signal name="edited" handler="EF_gtk_relachements_edit_type"/>
                                             </object>
-                                            <attributes>
-                                                <attribute name="text">5</attribute>
-                                            </attributes>
                                         </child>
                                     </object>
                                 </child>
@@ -234,9 +204,6 @@
                                                 <property name="xalign">0.5</property>
                                                 <signal name="edited" handler="EF_gtk_relachements_edit_clicked"/>
                                             </object>
-                                            <attributes>
-                                                <attribute name="text">6</attribute>
-                                            </attributes>
                                         </child>
                                     </object>
                                 </child>
@@ -255,9 +222,6 @@
                                                 <property name="model">EF_relachements_liste_type</property>
                                                 <signal name="edited" handler="EF_gtk_relachements_edit_type"/>
                                             </object>
-                                            <attributes>
-                                                <attribute name="text">7</attribute>
-                                            </attributes>
                                         </child>
                                     </object>
                                 </child>
@@ -272,9 +236,6 @@
                                                 <property name="xalign">0.5</property>
                                                 <signal name="edited" handler="EF_gtk_relachements_edit_clicked"/>
                                             </object>
-                                            <attributes>
-                                                <attribute name="text">8</attribute>
-                                            </attributes>
                                         </child>
                                     </object>
                                 </child>
@@ -293,9 +254,6 @@
                                                 <property name="model">EF_relachements_liste_type</property>
                                                 <signal name="edited" handler="EF_gtk_relachements_edit_type"/>
                                             </object>
-                                            <attributes>
-                                                <attribute name="text">9</attribute>
-                                            </attributes>
                                         </child>
                                     </object>
                                 </child>
@@ -310,9 +268,6 @@
                                                 <property name="xalign">0.5</property>
                                                 <signal name="edited" handler="EF_gtk_relachements_edit_clicked"/>
                                             </object>
-                                            <attributes>
-                                                <attribute name="text">10</attribute>
-                                            </attributes>
                                         </child>
                                     </object>
                                 </child>
@@ -331,9 +286,6 @@
                                                 <property name="model">EF_relachements_liste_type</property>
                                                 <signal name="edited" handler="EF_gtk_relachements_edit_type"/>
                                             </object>
-                                            <attributes>
-                                                <attribute name="text">11</attribute>
-                                            </attributes>
                                         </child>
                                     </object>
                                 </child>
@@ -348,9 +300,6 @@
                                                 <property name="xalign">0.5</property>
                                                 <signal name="edited" handler="EF_gtk_relachements_edit_clicked"/>
                                             </object>
-                                            <attributes>
-                                                <attribute name="text">12</attribute>
-                                            </attributes>
                                         </child>
                                     </object>
                                 </child>
