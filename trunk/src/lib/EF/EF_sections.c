@@ -172,6 +172,9 @@ gboolean EF_sections_repositionne(Projet *projet, EF_Section *section)
             list_parcours = g_list_next(list_parcours);
         }
     }
+    gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section->Iter_liste, 0, section->nom, -1);
+    if ((projet->list_gtk.ef_sections_rectangulaire.builder != NULL) && (projet->list_gtk.ef_sections_rectangulaire.section == section))
+        gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk.ef_sections_rectangulaire.builder, "EF_section_rectangulaire_textview_nom"))), section->nom, -1);
 #endif
     
     return TRUE;
@@ -243,11 +246,6 @@ gboolean EF_sections_rectangulaire_modif(Projet *projet, EF_Section *section, co
         free(section->nom);
         BUGMSG(section->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
         BUG(EF_sections_repositionne(projet, section), FALSE);
-#ifdef ENABLE_GTK
-        gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section->Iter_liste, 0, section->nom, -1);
-        if ((projet->list_gtk.ef_sections_rectangulaire.builder != NULL) && (projet->list_gtk.ef_sections_rectangulaire.section == section))
-            gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk.ef_sections_rectangulaire.builder, "EF_section_rectangulaire_textview_nom"))), nom, -1);
-#endif
     }
     if ((!isnan(common_math_get(l))) && (!ERREUR_RELATIVE_EGALE(common_math_get(section_data->largeur_retombee), common_math_get(l))))
     {

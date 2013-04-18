@@ -490,6 +490,21 @@ gboolean _1992_1_1_materiaux_repositionne(Projet *projet, EF_Materiau *materiau)
 #ifdef ENABLE_GTK
     if ((projet->list_gtk._1992_1_1_materiaux.builder != NULL) && (projet->list_gtk._1992_1_1_materiaux.materiau == materiau))
         gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk._1992_1_1_materiaux.builder, "_1992_1_1_materiaux_beton_textview_nom"))), materiau->nom, -1);
+    if (projet->list_gtk.ef_barres.builder != NULL)
+    {
+        list_parcours = projet->modele.barres;
+        
+        while (list_parcours != NULL)
+        {
+            Beton_Barre *barre = list_parcours->data;
+            
+            if (barre->materiau == materiau)
+                gtk_tree_store_set(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treestore")), &barre->Iter, 3, barre->materiau->nom, -1);
+            
+            list_parcours = g_list_next(list_parcours);
+        }
+    }
+    gtk_list_store_set(projet->list_gtk.ef_materiaux.liste_materiaux, &materiau->Iter_liste, 0, materiau->nom, -1);
 #endif
     
     return TRUE;
@@ -526,7 +541,6 @@ gboolean _1992_1_1_materiaux_modif(Projet *projet, EF_Materiau *materiau, char *
         free(materiau->nom);
         BUGMSG(materiau->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
         BUG(_1992_1_1_materiaux_repositionne(projet, materiau), FALSE);
-        gtk_list_store_set(projet->list_gtk.ef_materiaux.liste_materiaux, &materiau->Iter_liste, 0, materiau->nom, -1);
     }
     
     if (!isnan(common_math_get(fck)))
@@ -576,20 +590,6 @@ gboolean _1992_1_1_materiaux_modif(Projet *projet, EF_Materiau *materiau, char *
     }
     
 #ifdef ENABLE_GTK
-    if (projet->list_gtk.ef_barres.builder != NULL)
-    {
-        GList   *list_parcours = projet->modele.barres;
-        
-        while (list_parcours != NULL)
-        {
-            Beton_Barre *barre = list_parcours->data;
-            
-            if (barre->materiau == materiau)
-                gtk_tree_store_set(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treestore")), &barre->Iter, 3, barre->materiau->nom, -1);
-            
-            list_parcours = g_list_next(list_parcours);
-        }
-    }
     if (projet->list_gtk.ef_materiaux.builder != NULL)
         gtk_widget_queue_draw(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_materiaux.builder, "EF_materiaux_treeview")));
 #endif
