@@ -700,7 +700,6 @@ typedef struct __Beton_Barre
     unsigned int        discretisation_element;     // Nombre de noeuds intermédiaires
     GList               *noeuds_intermediaires;
     Barre_Info_EF       *info_EF;                   // Une info par élément discrétisé
-    
 #ifdef ENABLE_GTK
     GtkTreeIter         Iter;
 #endif                  

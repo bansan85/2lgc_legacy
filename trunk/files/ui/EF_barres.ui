@@ -3,15 +3,7 @@
     <requires lib="gtk+" version="3.2"/>
     <object class="GtkTreeStore" id="EF_barres_treestore">
         <columns>
-            <column type="guint"/>
-            <column type="gchararray"/>
-            <column type="gchararray"/>
-            <column type="gchararray"/>
-            <column type="guint"/>
-            <column type="guint"/>
-            <column type="gchararray"/>
-            <column type="guint"/>
-            <column type="gchararray"/>
+            <column type="gpointer"/>
         </columns>
     </object>
     <object class="GtkMenu" id="EF_barres_supprimer_menu">
@@ -65,9 +57,6 @@
                                                 <property name="xalign">0.5</property>
                                                 <property name="background">#EEEEEE</property>
                                             </object>
-                                            <attributes>
-                                                <attribute name="text">0</attribute>
-                                            </attributes>
                                         </child>
                                     </object>
                                 </child>
@@ -85,9 +74,6 @@
                                                 <property name="has-entry">False</property>
                                                 <signal name="edited" handler="EF_gtk_barres_edit_type"/>
                                             </object>
-                                            <attributes>
-                                                <attribute name="text">1</attribute>
-                                            </attributes>
                                         </child>
                                     </object>
                                 </child>
@@ -105,9 +91,6 @@
                                                 <property name="has-entry">False</property>
                                                 <signal name="edited" handler="EF_gtk_barres_edit_section"/>
                                             </object>
-                                            <attributes>
-                                                <attribute name="text">2</attribute>
-                                            </attributes>
                                         </child>
                                     </object>
                                 </child>
@@ -125,9 +108,6 @@
                                                 <property name="has-entry">False</property>
                                                 <signal name="edited" handler="EF_gtk_barres_edit_materiau"/>
                                             </object>
-                                            <attributes>
-                                                <attribute name="text">3</attribute>
-                                            </attributes>
                                         </child>
                                     </object>
                                 </child>
@@ -143,9 +123,6 @@
                                                 <property name="editable">True</property>
                                                 <signal name="edited" handler="EF_gtk_barres_edit_noeud"/>
                                             </object>
-                                            <attributes>
-                                                <attribute name="text">4</attribute>
-                                            </attributes>
                                         </child>
                                     </object>
                                 </child>
@@ -161,9 +138,6 @@
                                                 <property name="editable">True</property>
                                                 <signal name="edited" handler="EF_gtk_barres_edit_noeud"/>
                                             </object>
-                                            <attributes>
-                                                <attribute name="text">5</attribute>
-                                            </attributes>
                                         </child>
                                     </object>
                                 </child>
@@ -181,9 +155,6 @@
                                                 <property name="has-entry">False</property>
                                                 <signal name="edited" handler="EF_gtk_barres_edit_relachement"/>
                                             </object>
-                                            <attributes>
-                                                <attribute name="text">6</attribute>
-                                            </attributes>
                                         </child>
                                     </object>
                                 </child>

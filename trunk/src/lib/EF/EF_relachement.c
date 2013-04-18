@@ -264,19 +264,7 @@ gboolean EF_relachement_modif(Projet *projet, EF_Relachement *relachement, const
     
 #ifdef ENABLE_GTK
         if (projet->list_gtk.ef_barres.builder != NULL)
-        {
-            GList   *list_parcours2 = projet->modele.barres;
-            
-            while (list_parcours2 != NULL)
-            {
-                Beton_Barre *barre = list_parcours2->data;
-                
-                if (barre->relachement == relachement)
-                    gtk_tree_store_set(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treestore")), &barre->Iter, 6, barre->relachement->nom, -1);
-                
-                list_parcours2 = g_list_next(list_parcours2);
-            }
-        }
+            gtk_widget_queue_draw(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treeview")));
 #endif
     }
     
@@ -565,7 +553,7 @@ gboolean EF_relachement_modif(Projet *projet, EF_Relachement *relachement, const
             
 #ifdef ENABLE_GTK
     if (projet->list_gtk.ef_relachements.builder != NULL)
-        gtk_tree_store_set(projet->list_gtk.ef_relachements.relachements, &relachement->Iter_fenetre, 0, relachement, -1);
+        gtk_widget_queue_draw(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_treeview")));
 #endif
     
     return TRUE;
