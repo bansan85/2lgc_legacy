@@ -28,9 +28,9 @@ make -j9 && sudo make install && cd .. && \
 sudo unzip gettext-runtime_0.18.1.1-2_win32.zip -d /usr/i686-pc-mingw32/usr/ && \
 (test -f gettext-runtime-dev_0.18.1.1-2_win32.zip || wget http://ftp.gnome.org/pub/gnome/binaries/win32/dependencies/gettext-runtime-dev_0.18.1.1-2_win32.zip) && \
 sudo unzip gettext-runtime-dev_0.18.1.1-2_win32.zip -d /usr/i686-pc-mingw32/usr/ && \
-(test -f glib-2.36.0.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/glib/2.36/glib-2.36.0.tar.xz) && \
-tar xvaf glib-2.36.0.tar.xz && \
-cd glib-2.36.0 && \
+(test -f glib-2.36.1.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/glib/2.36/glib-2.36.1.tar.xz) && \
+tar xvaf glib-2.36.1.tar.xz && \
+cd glib-2.36.1 && \
 sed -i 's/tests//g' gio/Makefile.am glib/Makefile.am gobject/Makefile.am && \
 sed -i 's/tests$//g' Makefile.am Makefile.in gio/Makefile.in glib/Makefile.in gobject/Makefile.in && \
 sed -i 's/tests $//g' Makefile.am Makefile.in gio/Makefile.in glib/Makefile.in gobject/Makefile.in && \
@@ -52,14 +52,14 @@ unzip tiff-4.0.3.zip && \
 cd tiff-4.0.3 && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -pipe" CXXFLAGS="-march=i686 -O0 -g3 -ggdb3 -pipe" ./configure --disable-static --enable-shared --enable-zlib --enable-jpeg --without-x --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
 make -j9 && sudo make install && cd .. && \
-(test -f libpng-1.5.15.tar.xz || wget ftp://ftp.simplesystems.org/pub/png/src/libpng15/libpng-1.5.15.tar.xz) && \
-tar xvaf libpng-1.5.15.tar.xz && \
-cd libpng-1.5.15 && \
+(test -f libpng-1.6.1.tar.xz || wget ftp://ftp.simplesystems.org/pub/png/src/libpng16/libpng-1.6.1.tar.xz) && \
+tar xvaf libpng-1.6.1.tar.xz && \
+cd libpng-1.6.1 && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -pipe" ./configure --disable-static --enable-shared --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
 make -j9 && sudo make install && cd .. && \
-(test -f gdk-pixbuf-2.28.0.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/gdk-pixbuf/2.28/gdk-pixbuf-2.28.0.tar.xz) && \
-tar xvaf gdk-pixbuf-2.28.0.tar.xz && \
-cd gdk-pixbuf-2.28.0 && \
+(test -f gdk-pixbuf-2.28.1.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/gdk-pixbuf/2.28/gdk-pixbuf-2.28.1.tar.xz) && \
+tar xvaf gdk-pixbuf-2.28.1.tar.xz && \
+cd gdk-pixbuf-2.28.1 && \
 (test -e /usr/i686-pc-mingw32/usr/i686-pc-mingw32 || sudo ln -s .. /usr/i686-pc-mingw32/usr/i686-pc-mingw32) && \
 sed -i 's/docs tests//g' Makefile.am Makefile.in && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -pipe" ./configure --disable-static --enable-shared --with-libjpeg --with-libtiff --with-libpng --disable-introspection --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
@@ -197,15 +197,15 @@ sed -i 's#test "$cross_compiling" = yes &&##g' ./configure && \
 sed -i 's#as_fn_error $? "cannot check for file existence when cross compiling" "$LINENO" 5##g' ./configure && \
 CXXFLAGS="-march=i686 -O0 -g3 -ggdb3 -pipe" CFLAGS="-march=i686 -O0 -g3 -ggdb3 -pipe" ./configure --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
 make -j9 CXXFLAGS="-march=i686 -O0 -g3 -ggdb3 -pipe" && sudo make install && cd .. && \
-(test -f harfbuzz-0.9.12.tar.gz || wget http://cgit.freedesktop.org/harfbuzz/snapshot/harfbuzz-0.9.12.tar.gz) && \
-tar xvzf harfbuzz-0.9.12.tar.gz && \
-cd harfbuzz-0.9.12 && \
+(test -f harfbuzz-0.9.15.tar.gz || wget http://cgit.freedesktop.org/harfbuzz/snapshot/harfbuzz-0.9.15.tar.gz) && \
+tar xvzf harfbuzz-0.9.15.tar.gz && \
+cd harfbuzz-0.9.15 && \
 autoheader && \
 aclocal -I m4 && \
 libtoolize && \
 automake --add-missing --copy && \
 autoconf && \
-CXXFLAGS="-march=i686 -O0 -g3 -ggdb3 -pipe" CFLAGS="-march=i686 -O0 -g3 -ggdb3 -pipe" ./configure --disable-static --enable-shared --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
+ICU_CONFIG="no" CXXFLAGS="-march=i686 -O0 -g3 -ggdb3 -pipe" CFLAGS="-march=i686 -O0 -g3 -ggdb3 -pipe" ./configure --disable-static --enable-shared --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
 make -j9 && sudo make install && cd .. && \
 (test -f pango-1.34.0.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/pango/1.34/pango-1.34.0.tar.xz) && \
 tar xvaf pango-1.34.0.tar.xz && \
@@ -217,9 +217,9 @@ tar xvaf libcroco-0.6.8.tar.xz && \
 cd libcroco-0.6.8 && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -pipe" ./configure --disable-static --enable-shared --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
 make -j9 && sudo make install && cd .. && \
-(test -f poppler-0.22.2.tar.gz || wget http://poppler.freedesktop.org/poppler-0.22.2.tar.gz) && \
-tar xvzf poppler-0.22.2.tar.gz && \
-cd poppler-0.22.2 && \
+(test -f poppler-0.22.3.tar.gz || wget http://poppler.freedesktop.org/poppler-0.22.3.tar.gz) && \
+tar xvzf poppler-0.22.3.tar.gz && \
+cd poppler-0.22.3 && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -pipe" ./configure --without-x --disable-static --enable-shared --enable-zlib --enable-libjpeg --enable-libpng --enable-cairo-output --disable-introspection --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
 make -j9 && sudo make install && cd .. && \
 (test -f atk-2.8.0.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/atk/2.8/atk-2.8.0.tar.xz) && \
@@ -254,9 +254,9 @@ make -j9 && sudo make install && cd .. && \
 	CFLAGS="-march=i686 -O0 -g3 -ggdb3 -pipe" ./configure --disable-static --enable-shared --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
 	make -j9 && sudo make install && cd .. \
 )) && \
-(test -f gtk+-3.8.0.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/gtk+/3.8/gtk+-3.8.0.tar.xz) && \
-tar xvaf gtk+-3.8.0.tar.xz && \
-cd gtk+-3.8.0 && \
+(test -f gtk+-3.8.1.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/gtk+/3.8/gtk+-3.8.1.tar.xz) && \
+tar xvaf gtk+-3.8.1.tar.xz && \
+cd gtk+-3.8.1 && \
 sed -i 's/modules demos tests perf examples//g' Makefile.in Makefile.am && \
 sed -i 's/\. tests/\./g' gtk/Makefile.in gtk/Makefile.am gdk/Makefile.in gdk/Makefile.am && \
 sed -i 's/ tests$//g' gtk/Makefile.in gtk/Makefile.am gdk/Makefile.in gdk/Makefile.am && \
