@@ -101,7 +101,7 @@ gboolean EF_relachements_update_ligne_treeview(Projet *projet, EF_Relachement *r
             char    tmp[30];
             
             data = (EF_Relachement_Donnees_Elastique_Lineaire *)relachement->rx_d_data;
-            common_math_double_to_char(data->raideur, tmp, DECIMAL_NEWTON_PAR_METRE);
+            common_math_double_to_char2(data->raideur, tmp, DECIMAL_NEWTON_PAR_METRE);
             gtk_tree_store_set(ef_gtk->relachements, &relachement->Iter_fenetre, 1, gettext("Linéaire"), 2, tmp, -1);
             break;
         }
@@ -129,7 +129,7 @@ gboolean EF_relachements_update_ligne_treeview(Projet *projet, EF_Relachement *r
             char    tmp[30];
             
             data = (EF_Relachement_Donnees_Elastique_Lineaire *)relachement->ry_d_data;
-            common_math_double_to_char(data->raideur, tmp, DECIMAL_NEWTON_PAR_METRE);
+            common_math_double_to_char2(data->raideur, tmp, DECIMAL_NEWTON_PAR_METRE);
             gtk_tree_store_set(ef_gtk->relachements, &relachement->Iter_fenetre, 3, gettext("Linéaire"), 4, tmp, -1);
             break;
         }
@@ -157,7 +157,7 @@ gboolean EF_relachements_update_ligne_treeview(Projet *projet, EF_Relachement *r
             char    tmp[30];
             
             data = (EF_Relachement_Donnees_Elastique_Lineaire *)relachement->rz_d_data;
-            common_math_double_to_char(data->raideur, tmp, DECIMAL_NEWTON_PAR_METRE);
+            common_math_double_to_char2(data->raideur, tmp, DECIMAL_NEWTON_PAR_METRE);
             gtk_tree_store_set(ef_gtk->relachements, &relachement->Iter_fenetre, 5, gettext("Linéaire"), 6, tmp, -1);
             break;
         }
@@ -185,7 +185,7 @@ gboolean EF_relachements_update_ligne_treeview(Projet *projet, EF_Relachement *r
             char    tmp[30];
             
             data = (EF_Relachement_Donnees_Elastique_Lineaire *)relachement->rx_f_data;
-            common_math_double_to_char(data->raideur, tmp, DECIMAL_NEWTON_PAR_METRE);
+            common_math_double_to_char2(data->raideur, tmp, DECIMAL_NEWTON_PAR_METRE);
             gtk_tree_store_set(ef_gtk->relachements, &relachement->Iter_fenetre, 7, gettext("Linéaire"), 8, tmp, -1);
             break;
         }
@@ -213,7 +213,7 @@ gboolean EF_relachements_update_ligne_treeview(Projet *projet, EF_Relachement *r
             char    tmp[30];
             
             data = (EF_Relachement_Donnees_Elastique_Lineaire *)relachement->ry_f_data;
-            common_math_double_to_char(data->raideur, tmp, DECIMAL_NEWTON_PAR_METRE);
+            common_math_double_to_char2(data->raideur, tmp, DECIMAL_NEWTON_PAR_METRE);
             gtk_tree_store_set(ef_gtk->relachements, &relachement->Iter_fenetre, 9, gettext("Linéaire"), 10, tmp, -1);
             break;
         }
@@ -241,7 +241,7 @@ gboolean EF_relachements_update_ligne_treeview(Projet *projet, EF_Relachement *r
             char    tmp[30];
             
             data = (EF_Relachement_Donnees_Elastique_Lineaire *)relachement->rz_f_data;
-            common_math_double_to_char(data->raideur, tmp, DECIMAL_NEWTON_PAR_METRE);
+            common_math_double_to_char2(data->raideur, tmp, DECIMAL_NEWTON_PAR_METRE);
             gtk_tree_store_set(ef_gtk->relachements, &relachement->Iter_fenetre, 11, gettext("Linéaire"), 12, tmp, -1);
             break;
         }

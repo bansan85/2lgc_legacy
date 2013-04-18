@@ -1045,10 +1045,10 @@ gboolean _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
                         EF_Relachement_Donnees_Elastique_Lineaire *donnees;
                         
                         donnees = (EF_Relachement_Donnees_Elastique_Lineaire*)element->relachement->rx_d_data;
-                        if (ERREUR_RELATIVE_EGALE(donnees->raideur, 0.))
+                        if (ERREUR_RELATIVE_EGALE(common_math_get(donnees->raideur), 0.))
                             element->info_EF[j].kAx = MAXDOUBLE;
                         else
-                            element->info_EF[j].kAx = 1./donnees->raideur;
+                            element->info_EF[j].kAx = 1./common_math_get(donnees->raideur);
                         break;
                     }
                     default :
@@ -1075,10 +1075,10 @@ gboolean _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
                         EF_Relachement_Donnees_Elastique_Lineaire *donnees;
                         
                         donnees = (EF_Relachement_Donnees_Elastique_Lineaire*)element->relachement->ry_d_data;
-                        if (ERREUR_RELATIVE_EGALE(donnees->raideur, 0.))
+                        if (ERREUR_RELATIVE_EGALE(common_math_get(donnees->raideur), 0.))
                             element->info_EF[j].kAy = MAXDOUBLE;
                         else
-                            element->info_EF[j].kAy = 1./donnees->raideur;
+                            element->info_EF[j].kAy = 1./common_math_get(donnees->raideur);
                         break;
                     }
                     default :
@@ -1105,10 +1105,10 @@ gboolean _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
                         EF_Relachement_Donnees_Elastique_Lineaire *donnees;
                         
                         donnees = (EF_Relachement_Donnees_Elastique_Lineaire*)element->relachement->rz_d_data;
-                        if (ERREUR_RELATIVE_EGALE(donnees->raideur, 0.))
+                        if (ERREUR_RELATIVE_EGALE(common_math_get(donnees->raideur), 0.))
                             element->info_EF[j].kAz = MAXDOUBLE;
                         else
-                            element->info_EF[j].kAz = 1./donnees->raideur;
+                            element->info_EF[j].kAz = 1./common_math_get(donnees->raideur);
                         break;
                     }
                     default :
@@ -1144,10 +1144,10 @@ gboolean _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
                         EF_Relachement_Donnees_Elastique_Lineaire *donnees;
                         
                         donnees = (EF_Relachement_Donnees_Elastique_Lineaire*)element->relachement->rx_f_data;
-                        if (ERREUR_RELATIVE_EGALE(donnees->raideur, 0.))
+                        if (ERREUR_RELATIVE_EGALE(common_math_get(donnees->raideur), 0.))
                             element->info_EF[j].kBx = MAXDOUBLE;
                         else
-                            element->info_EF[j].kBx = 1./donnees->raideur;
+                            element->info_EF[j].kBx = 1./common_math_get(donnees->raideur);
                         break;
                     }
                     default :
@@ -1174,10 +1174,10 @@ gboolean _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
                         EF_Relachement_Donnees_Elastique_Lineaire *donnees;
                         
                         donnees = (EF_Relachement_Donnees_Elastique_Lineaire*)element->relachement->ry_f_data;
-                        if (ERREUR_RELATIVE_EGALE(donnees->raideur, 0.))
+                        if (ERREUR_RELATIVE_EGALE(common_math_get(donnees->raideur), 0.))
                             element->info_EF[j].kBy = MAXDOUBLE;
                         else
-                            element->info_EF[j].kBy = 1./donnees->raideur;
+                            element->info_EF[j].kBy = 1./common_math_get(donnees->raideur);
                         break;
                     }
                     default :
@@ -1204,10 +1204,10 @@ gboolean _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
                         EF_Relachement_Donnees_Elastique_Lineaire *donnees;
                         
                         donnees = (EF_Relachement_Donnees_Elastique_Lineaire*)element->relachement->rz_f_data;
-                        if (ERREUR_RELATIVE_EGALE(donnees->raideur, 0.))
+                        if (ERREUR_RELATIVE_EGALE(common_math_get(donnees->raideur), 0.))
                             element->info_EF[j].kBz = MAXDOUBLE;
                         else
-                            element->info_EF[j].kBz = 1./donnees->raideur;
+                            element->info_EF[j].kBz = 1./common_math_get(donnees->raideur);
                         break;
                     }
                     default :
