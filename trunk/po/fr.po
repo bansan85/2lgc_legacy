@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2013-04-17 00:30+0200\n"
+"POT-Creation-Date: 2013-04-19 01:29+0200\n"
 "PO-Revision-Date: 2013-04-17 00:51+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
@@ -470,9 +470,6 @@ msgid ""
 msgstr ""
 "Impossible de créer la barre, la distance entre les deux noeuds %d et %d est "
 "nulle.\n"
-
-msgid "Aucun"
-msgstr "Aucun"
 
 #, c-format
 msgid "Barre en béton %u introuvable.\n"
@@ -1304,6 +1301,9 @@ msgstr ""
 "Commentaire : %s\n"
 "Erreur : %s\n"
 "\n"
+
+msgid "Aucun"
+msgstr "Aucun"
 
 msgid "Aucune"
 msgstr "Aucun"

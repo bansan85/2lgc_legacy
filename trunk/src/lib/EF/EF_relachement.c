@@ -228,7 +228,9 @@ gboolean EF_relachement_modif(Projet *projet, EF_Relachement *relachement, const
         BUGMSG(!EF_relachement_cherche_nom(projet, nom, FALSE), FALSE, gettext("Le relâchement %s existe déjà.\n"), nom);
         free(relachement->nom);
         BUGMSG(relachement->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+#ifdef ENABLE_GTK
         gtk_list_store_set(projet->list_gtk.ef_relachements.liste_relachements, &relachement->Iter_liste, 0, relachement->nom, -1);
+#endif
         
         // On réinsère le relâchement au bon endroit
         projet->modele.relachements = g_list_remove(projet->modele.relachements, relachement);
