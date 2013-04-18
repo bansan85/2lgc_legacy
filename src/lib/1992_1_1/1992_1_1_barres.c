@@ -177,7 +177,7 @@ gboolean _1992_1_1_barres_ajout(Projet *projet, Type_Element type, EF_Section *s
         gtk_tree_model_get(GTK_TREE_MODEL(projet->list_gtk.ef_barres.liste_types), &iter, 0, &tmp, -1);
         
         gtk_tree_store_append(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treestore")), &element_nouveau->Iter, NULL);
-        gtk_tree_store_set(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treestore")), &element_nouveau->Iter, 0, element_nouveau->numero, 1, tmp, 2, element_nouveau->section->nom, 3, element_nouveau->materiau->nom, 4, element_nouveau->noeud_debut->numero, 5, element_nouveau->noeud_fin->numero, 6, (element_nouveau->relachement == NULL ? gettext("Aucun") : element_nouveau->relachement->nom), -1);
+        gtk_tree_store_set(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treestore")), &element_nouveau->Iter, 0, element_nouveau, -1);
         free(tmp);
     }
     
@@ -643,17 +643,10 @@ gboolean _1992_1_1_barres_change_type(Beton_Barre *barre, Type_Element type, Pro
     switch (type)
     {
         case BETON_ELEMENT_POTEAU :
-        {
-#ifdef ENABLE_GTK
-            gtk_tree_store_set(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treestore")), &barre->Iter, 1, gettext("Poteau en béton"), -1);
-#endif
-            barre->type = type;
-            break;
-        }
         case BETON_ELEMENT_POUTRE :
         {
 #ifdef ENABLE_GTK
-            gtk_tree_store_set(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treestore")), &barre->Iter, 1, gettext("Poutre en béton"), -1);
+            gtk_widget_queue_draw(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treeview")));
 #endif
             barre->type = type;
             break;
@@ -695,11 +688,7 @@ gboolean _1992_1_1_barres_change_section(Beton_Barre *barre, EF_Section *section
     BUG(m3d_rafraichit(projet), FALSE);
     
     if (projet->list_gtk.ef_barres.builder != NULL)
-    {
-        GtkTreeModel    *model = GTK_TREE_MODEL(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treestore"));
-        
-        gtk_tree_store_set(GTK_TREE_STORE(model), &barre->Iter, 2, section->nom, -1);
-    }
+        gtk_widget_queue_draw(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treeview")));
 #endif
     
     return TRUE;
@@ -728,11 +717,7 @@ gboolean _1992_1_1_barres_change_materiau(Beton_Barre *barre, EF_Materiau *mater
     
 #ifdef ENABLE_GTK
     if (projet->list_gtk.ef_barres.builder != NULL)
-    {
-        GtkTreeModel    *model = GTK_TREE_MODEL(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treestore"));
-        
-        gtk_tree_store_set(GTK_TREE_STORE(model), &barre->Iter, 3, materiau->nom, -1);
-    }
+        gtk_widget_queue_draw(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treeview")));
 #endif
     
     return TRUE;
@@ -787,11 +772,7 @@ gboolean _1992_1_1_barres_change_noeud(Beton_Barre *barre, EF_Noeud *noeud, gboo
     
 #ifdef ENABLE_GTK
     if (projet->list_gtk.ef_barres.builder != NULL)
-    {
-        GtkTreeModel    *model = GTK_TREE_MODEL(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treestore"));
-        
-        gtk_tree_store_set(GTK_TREE_STORE(model), &barre->Iter, noeud_1 == TRUE ? 4 : 5, noeud->numero, -1);
-    }
+        gtk_widget_queue_draw(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treeview")));
 #endif
     
     return TRUE;
@@ -820,14 +801,7 @@ gboolean _1992_1_1_barres_change_relachement(Beton_Barre *barre, EF_Relachement 
     
 #ifdef ENABLE_GTK
     if (projet->list_gtk.ef_barres.builder != NULL)
-    {
-        GtkTreeModel    *model = GTK_TREE_MODEL(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treestore"));
-        
-        if (relachement == NULL)
-            gtk_tree_store_set(GTK_TREE_STORE(model), &barre->Iter, 6, gettext("Aucun"), -1);
-        else
-            gtk_tree_store_set(GTK_TREE_STORE(model), &barre->Iter, 6, relachement->nom, -1);
-    }
+        gtk_widget_queue_draw(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treeview")));
 #endif
     
     return TRUE;
