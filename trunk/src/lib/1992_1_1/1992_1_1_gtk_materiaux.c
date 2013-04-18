@@ -281,7 +281,7 @@ gboolean _1992_1_1_gtk_materiaux_recupere_donnees(Projet *projet, char **nom, do
     {
         if (gtk_widget_get_visible(GTK_WIDGET(gtk_builder_get_object(builder, "_1992_1_1_materiaux_beton_scrolledwindow_nu"))))
         {
-            *nu = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(builder, "_1992_1_1_materiaux_beton_buffer_nu")), 0., FALSE, INFINITY, FALSE);
+            *nu = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(builder, "_1992_1_1_materiaux_beton_buffer_nu")), 0., TRUE, 0.5, FALSE);
             if (isnan(*nu))
                 ok = FALSE;
         }
