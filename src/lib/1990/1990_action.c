@@ -450,7 +450,7 @@ Action* _1990_action_cherche_numero(Projet *projet, unsigned int numero)
 }
 
 
-gboolean _1990_action_renomme(Projet *projet, unsigned int action_num, const char* nom)
+gboolean _1990_action_renomme(Projet *projet, Action *action, const char* nom)
 /* Description : Renomme une charge.
  * Paramètres : Projet *projet : la variable projet,
  *            : unsigned int action : numéro de l'action à renommer,
@@ -463,15 +463,12 @@ gboolean _1990_action_renomme(Projet *projet, unsigned int action_num, const cha
  *             erreur d'allocation mémoire.
  */
 {
-    Action  *action;
 #ifdef ENABLE_GTK
     char    *ancien_nom;
 #endif
     
-    
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    
-    BUG(action = _1990_action_cherche_numero(projet, action_num), FALSE);
+    BUGMSG(action, FALSE, gettext("Paramètre %s incorrect.\n"), "action");
     
 #ifdef ENABLE_GTK
     ancien_nom = action->nom;
@@ -537,7 +534,7 @@ gboolean _1990_action_renomme(Projet *projet, unsigned int action_num, const cha
 }
 
 
-gboolean _1990_action_change_type(Projet *projet, unsigned int action_num, unsigned int type)
+gboolean _1990_action_change_type(Projet *projet, Action *action, unsigned int type)
 /* Description : Change le type d'une action, y compris psi0, psi1 et psi2.
  * Paramètres : Projet *projet : la variable projet,
  *            : unsigned int action_num : numéro de l'action à renommer,
@@ -550,11 +547,8 @@ gboolean _1990_action_change_type(Projet *projet, unsigned int action_num, unsig
  *             erreur d'allocation mémoire.
  */
 {
-    Action      *action;
-    
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    
-    BUG(action = _1990_action_cherche_numero(projet, action_num), FALSE);
+    BUGMSG(action, FALSE, gettext("Paramètre %s incorrect.\n"), "action");
     
     action->type = type;
     action->psi0 = common_math_f(_1990_coef_psi0_bat(type, projet->parametres.pays), FLOTTANT_ORDINATEUR);
@@ -575,7 +569,7 @@ gboolean _1990_action_change_type(Projet *projet, unsigned int action_num, unsig
 }
 
 
-gboolean _1990_action_change_psi(Projet *projet, unsigned int action_num, unsigned int psi_num,
+gboolean _1990_action_change_psi(Projet *projet, Action *action, unsigned int psi_num,
   double psi)
 /* Description : Change le coefficient psi d'une action.
  * Paramètres : Projet *projet : la variable projet,
@@ -591,12 +585,9 @@ gboolean _1990_action_change_psi(Projet *projet, unsigned int action_num, unsign
  *             erreur d'allocation mémoire.
  */
 {
-    Action      *action;
-    
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(action, FALSE, gettext("Paramètre %s incorrect.\n"), "action");
     BUGMSG((psi_num == 0) || (psi_num == 1) || (psi_num == 2), FALSE, gettext("Le numéro %u du coefficient spi à changer est incorrect.\n"), psi_num);
-    
-    BUG(action = _1990_action_cherche_numero(projet, action_num), FALSE);
     
     if (psi_num == 0)
     {

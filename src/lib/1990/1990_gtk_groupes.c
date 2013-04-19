@@ -1056,7 +1056,7 @@ void _1990_gtk_tree_view_etat_cell_edited(GtkCellRendererText *cell, gchar *path
     {
         // Le nom est celui d'une action
         if (niveau == 0)
-            BUG(_1990_action_renomme(projet, numero, new_text), );
+            BUG(_1990_action_renomme(projet, _1990_action_cherche_numero(projet, numero), new_text), );
         else // Le nom est celui d'un groupe du niveau n-1
             BUG(_1990_groupe_modifie_nom(niveau-1, numero, new_text, projet), );
     }
@@ -1092,7 +1092,7 @@ void _1990_gtk_tree_view_dispo_cell_edited(GtkCellRendererText *cell, gchar *pat
     niveau = GTK_COMMON_SPINBUTTON_AS_UINT(GTK_SPIN_BUTTON(projet->list_gtk._1990_groupes.spin_button_niveau));
     // Le nom est celui d'une action
     if (niveau == 0)
-        BUG(_1990_action_renomme(projet, numero, new_text), );
+        BUG(_1990_action_renomme(projet, _1990_action_cherche_numero(projet, numero), new_text), );
     else // Le nom est celui d'un groupe du niveau n-1
         BUG(_1990_groupe_modifie_nom(niveau-1, numero, new_text, projet), );
 }

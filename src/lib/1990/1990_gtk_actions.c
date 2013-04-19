@@ -340,7 +340,7 @@ void _1990_gtk_actions_description_edited(GtkCellRendererText *cell, gchar *path
     gtk_tree_model_get(GTK_TREE_MODEL(projet->list_gtk._1990_actions.tree_store_actions), &iter, 0, &action, -1);
     
     // On lui modifie son nom
-    BUG(_1990_action_renomme(projet, action->numero, new_text), );
+    BUG(_1990_action_renomme(projet, action, new_text), );
     
     return;
 }
@@ -377,7 +377,7 @@ void _1990_gtk_actions_type_edited(GtkCellRendererText *cell, const gchar *path_
     }
     BUGMSG(type != _1990_action_num_bat_txt(projet->parametres.pays), , gettext("Type d'action '%s' inconnu.\n"), new_text);
     
-    BUG(_1990_action_change_type(projet, action->numero, type), );
+    BUG(_1990_action_change_type(projet, action, type), );
     
     return;
 }
@@ -411,7 +411,7 @@ void _1990_gtk_tree_view_actions_psi_edited(GtkCellRendererText *cell, gchar *pa
     // On vérifie si le texte contient bien un nombre flottant
     convertion = common_text_str_to_double(new_text, 0, TRUE, 1., TRUE);
     if (!isnan(convertion))
-        BUG(_1990_action_change_psi(projet, action->numero, column-3, convertion), );
+        BUG(_1990_action_change_psi(projet, action, column-3, convertion), );
     
     return;
 }
