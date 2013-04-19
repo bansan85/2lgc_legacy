@@ -835,34 +835,13 @@ void _1990_gtk_actions_render_0(GtkTreeViewColumn *tree_column, GtkCellRenderer 
     
     gtk_tree_model_get(tree_model, iter, 0, &action, -1);
     
-    g_object_set(cell, "text", "0", NULL);
-    
-    return;
-}
-
-
-void _1990_gtk_actions_render_1(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
-  GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data2)
-/* Description : Affiche la distance vy de la section.
- * Paramètres : GtkTreeViewColumn *tree_column : composant à l'origine de l'évènement,
- *            : GtkCellRenderer *cell : la cellule en cours d'édition,
- *            : GtkTreeModel *tree_model : le mode en cours d'édition,
- *            : GtkTreeIter *iter : la ligne en cours d'édition,
- *            : gpointer data2 : la variable projet.
- * Valeur renvoyée : Aucune.
- */
-{
-    Action *action;
-    
-    gtk_tree_model_get(tree_model, iter, 0, &action, -1);
-    
     g_object_set(cell, "text", action->nom, NULL);
     
     return;
 }
 
 
-void _1990_gtk_actions_render_2(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
+void _1990_gtk_actions_render_1(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
   GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data2)
 /* Description : Affiche la distance vy de la section.
  * Paramètres : GtkTreeViewColumn *tree_column : composant à l'origine de l'évènement,
@@ -884,7 +863,7 @@ void _1990_gtk_actions_render_2(GtkTreeViewColumn *tree_column, GtkCellRenderer 
 }
 
 
-void _1990_gtk_actions_render_3(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
+void _1990_gtk_actions_render_2(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
   GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data2)
 /* Description : Affiche la distance vy de la section.
  * Paramètres : GtkTreeViewColumn *tree_column : composant à l'origine de l'évènement,
@@ -908,7 +887,7 @@ void _1990_gtk_actions_render_3(GtkTreeViewColumn *tree_column, GtkCellRenderer 
 }
 
 
-void _1990_gtk_actions_render_4(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
+void _1990_gtk_actions_render_3(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
   GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data2)
 /* Description : Affiche la distance vy de la section.
  * Paramètres : GtkTreeViewColumn *tree_column : composant à l'origine de l'évènement,
@@ -932,7 +911,7 @@ void _1990_gtk_actions_render_4(GtkTreeViewColumn *tree_column, GtkCellRenderer 
 }
 
 
-void _1990_gtk_actions_render_5(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
+void _1990_gtk_actions_render_4(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
   GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data2)
 /* Description : Affiche la distance vy de la section.
  * Paramètres : GtkTreeViewColumn *tree_column : composant à l'origine de l'évènement,
@@ -984,18 +963,17 @@ void _1990_gtk_actions(Projet *projet)
     projet->list_gtk._1990_actions.tree_view_actions = GTK_TREE_VIEW(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_treeview_action"));
     projet->list_gtk._1990_actions.tree_select_actions = GTK_TREE_SELECTION(gtk_tree_view_get_selection(projet->list_gtk._1990_actions.tree_view_actions));
     
-    g_object_set(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_treeview_cell2"), "model", projet->list_gtk._1990_actions.choix_type_action, NULL);
+    g_object_set(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_treeview_cell1"), "model", projet->list_gtk._1990_actions.choix_type_action, NULL);
     
-    g_object_set_data(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_treeview_cell3"), "column", GINT_TO_POINTER(3));
-    g_object_set_data(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_treeview_cell4"), "column", GINT_TO_POINTER(4));
-    g_object_set_data(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_treeview_cell5"), "column", GINT_TO_POINTER(5));
+    g_object_set_data(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_treeview_cell2"), "column", GINT_TO_POINTER(3));
+    g_object_set_data(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_treeview_cell3"), "column", GINT_TO_POINTER(4));
+    g_object_set_data(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_treeview_cell4"), "column", GINT_TO_POINTER(5));
     
     gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_treeview_column0")), GTK_CELL_RENDERER(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_treeview_cell0")), _1990_gtk_actions_render_0, projet, NULL);
     gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_treeview_column1")), GTK_CELL_RENDERER(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_treeview_cell1")), _1990_gtk_actions_render_1, projet, NULL);
     gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_treeview_column2")), GTK_CELL_RENDERER(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_treeview_cell2")), _1990_gtk_actions_render_2, projet, NULL);
     gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_treeview_column3")), GTK_CELL_RENDERER(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_treeview_cell3")), _1990_gtk_actions_render_3, projet, NULL);
     gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_treeview_column4")), GTK_CELL_RENDERER(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_treeview_cell4")), _1990_gtk_actions_render_4, projet, NULL);
-    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_treeview_column5")), GTK_CELL_RENDERER(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_treeview_cell5")), _1990_gtk_actions_render_5, projet, NULL);
     
     // Affiche la liste des actions
     if (projet->actions != NULL)

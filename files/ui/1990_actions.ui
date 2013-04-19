@@ -91,16 +91,6 @@
                                                         </child>
                                                         <child>
                                                             <object class="GtkTreeViewColumn" id="1990_actions_treeview_column0">
-                                                                <property name="visible">False</property>
-                                                                <property name="resizable">True</property>
-                                                                <property name="title" translatable="yes">Numéro</property>
-                                                                <child>
-                                                                    <object class="GtkCellRendererText" id="1990_actions_treeview_cell0"/>
-                                                                </child>
-                                                            </object>
-                                                        </child>
-                                                        <child>
-                                                            <object class="GtkTreeViewColumn" id="1990_actions_treeview_column1">
                                                                 <property name="visible">True</property>
                                                                 <property name="alignment">0.5</property>
                                                                 <property name="resizable">True</property>
@@ -108,7 +98,7 @@
                                                                 <property name="sizing">GTK_TREE_VIEW_COLUMN_FIXED</property>
                                                                 <property name="fixed-width">180</property>
                                                                 <child>
-                                                                    <object class="GtkCellRendererText" id="1990_actions_treeview_cell1">
+                                                                    <object class="GtkCellRendererText" id="1990_actions_treeview_cell0">
                                                                         <property name="editable">True</property>
                                                                         <signal name="edited" handler="_1990_gtk_actions_description_edited"/>
                                                                     </object>
@@ -116,7 +106,7 @@
                                                             </object>
                                                         </child>
                                                         <child>
-                                                            <object class="GtkTreeViewColumn" id="1990_actions_treeview_column2">
+                                                            <object class="GtkTreeViewColumn" id="1990_actions_treeview_column1">
                                                                 <property name="alignment">0.5</property>
                                                                 <property name="visible">True</property>
                                                                 <property name="resizable">True</property>
@@ -124,7 +114,7 @@
                                                                 <property name="sizing">GTK_TREE_VIEW_COLUMN_FIXED</property>
                                                                 <property name="fixed-width">180</property>
                                                                 <child>
-                                                                    <object class="GtkCellRendererCombo" id="1990_actions_treeview_cell2">
+                                                                    <object class="GtkCellRendererCombo" id="1990_actions_treeview_cell1">
                                                                         <property name="editable">True</property>
                                                                         <property name="text-column">0</property>
                                                                         <property name="has-entry">False</property>
@@ -134,11 +124,26 @@
                                                             </object>
                                                         </child>
                                                         <child>
-                                                            <object class="GtkTreeViewColumn" id="1990_actions_treeview_column3">
+                                                            <object class="GtkTreeViewColumn" id="1990_actions_treeview_column2">
                                                                 <property name="alignment">0.5</property>
                                                                 <property name="visible">True</property>
                                                                 <property name="resizable">True</property>
                                                                 <property name="widget">1990_actions_treeview_column3_widget</property>
+                                                                <child>
+                                                                    <object class="GtkCellRendererText" id="1990_actions_treeview_cell2">
+                                                                        <property name="editable">True</property>
+                                                                        <property name="xalign">0.5</property>
+                                                                        <signal name="edited" handler="_1990_gtk_tree_view_actions_psi_edited"/>
+                                                                    </object>
+                                                                </child>
+                                                            </object>
+                                                        </child>
+                                                        <child>
+                                                            <object class="GtkTreeViewColumn" id="1990_actions_treeview_column3">
+                                                                <property name="alignment">0.5</property>
+                                                                <property name="visible">True</property>
+                                                                <property name="resizable">True</property>
+                                                                <property name="widget">1990_actions_treeview_column4_widget</property>
                                                                 <child>
                                                                     <object class="GtkCellRendererText" id="1990_actions_treeview_cell3">
                                                                         <property name="editable">True</property>
@@ -153,7 +158,7 @@
                                                                 <property name="alignment">0.5</property>
                                                                 <property name="visible">True</property>
                                                                 <property name="resizable">True</property>
-                                                                <property name="widget">1990_actions_treeview_column4_widget</property>
+                                                                <property name="widget">1990_actions_treeview_column5_widget</property>
                                                                 <child>
                                                                     <object class="GtkCellRendererText" id="1990_actions_treeview_cell4">
                                                                         <property name="editable">True</property>
@@ -165,21 +170,6 @@
                                                         </child>
                                                         <child>
                                                             <object class="GtkTreeViewColumn" id="1990_actions_treeview_column5">
-                                                                <property name="alignment">0.5</property>
-                                                                <property name="visible">True</property>
-                                                                <property name="resizable">True</property>
-                                                                <property name="widget">1990_actions_treeview_column5_widget</property>
-                                                                <child>
-                                                                    <object class="GtkCellRendererText" id="1990_actions_treeview_cell5">
-                                                                        <property name="editable">True</property>
-                                                                        <property name="xalign">0.5</property>
-                                                                        <signal name="edited" handler="_1990_gtk_tree_view_actions_psi_edited"/>
-                                                                    </object>
-                                                                </child>
-                                                            </object>
-                                                        </child>
-                                                        <child>
-                                                            <object class="GtkTreeViewColumn" id="1990_actions_treeview_column6">
                                                                 <property name="visible">True</property>
                                                             </object>
                                                         </child>
