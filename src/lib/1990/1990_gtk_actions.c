@@ -29,6 +29,7 @@
 #include "common_projet.h"
 #include "common_gtk.h"
 #include "common_text.h"
+#include "common_math.h"
 #include "EF_charge.h"
 #include "EF_gtk_charge_noeud.h"
 #include "EF_gtk_charge_barre_ponctuelle.h"
@@ -109,7 +110,6 @@ void _1990_gtk_actions_cursor_changed(GtkTreeView *tree_view, Projet *projet)
 {
     GtkTreeModel    *model;
     GtkTreeIter     iter;
-    unsigned int    numero;
     Action          *action;
     GList           *list_parcours;
     
@@ -119,9 +119,7 @@ void _1990_gtk_actions_cursor_changed(GtkTreeView *tree_view, Projet *projet)
     // On récupère l'action sélectionnée.
     if (!gtk_tree_selection_get_selected(projet->list_gtk._1990_actions.tree_select_actions, &model, &iter))
         return;
-    gtk_tree_model_get(model, &iter, 0, &numero, -1);
-    
-    BUG(action = _1990_action_cherche_numero(projet, numero), );
+    gtk_tree_model_get(model, &iter, 0, &action, -1);
     
     // On actualise la liste des charges
     gtk_tree_store_clear(projet->list_gtk._1990_actions.tree_store_charges);
@@ -221,14 +219,15 @@ gboolean _1990_gtk_actions_tree_view_drag(GtkWidget *widget, GdkDragContext *dra
     list_store = gtk_tree_view_get_model(GTK_TREE_VIEW(list_gtk_1990_actions->tree_view_actions));
     if (path != NULL)
     {
-        unsigned int    num_action_dest,  num_charge_source,  num_action_source;
+        Action          *action_dest, *action_source;
+        unsigned int    num_charge_source;
         GtkTreeIter     iter_action_dest, iter_charge_source, iter_action_source;
         GtkTreeModel    *model_charge_source, *model_action_source;
         GList           *list, *list_fixe, *list_parcours;
         
         // On récupère le numéro de l'action de destination
         gtk_tree_model_get_iter(list_store, &iter_action_dest, path);
-        gtk_tree_model_get(list_store, &iter_action_dest, 0, &num_action_dest, -1);
+        gtk_tree_model_get(list_store, &iter_action_dest, 0, &action_dest, -1);
         
         // On récupère le numéro de l'action actuelle
         if (!gtk_tree_selection_get_selected(list_gtk_1990_actions->tree_select_actions, &model_action_source, &iter_action_source))
@@ -236,10 +235,10 @@ gboolean _1990_gtk_actions_tree_view_drag(GtkWidget *widget, GdkDragContext *dra
             gtk_tree_path_free(path);
             return FALSE;
         }
-        gtk_tree_model_get(model_action_source, &iter_action_source, 0, &num_action_source, -1);
+        gtk_tree_model_get(model_action_source, &iter_action_source, 0, &action_source, -1);
         
         // Si l'action de destination est la même que l'action source, on ne fait rien.
-        if (num_action_dest == num_action_source)
+        if (action_dest == action_source)
         {
             gtk_tree_path_free(path);
             return FALSE;
@@ -261,7 +260,7 @@ gboolean _1990_gtk_actions_tree_view_drag(GtkWidget *widget, GdkDragContext *dra
             if (gtk_tree_model_get_iter(model_charge_source, &iter_charge_source, gtk_tree_row_reference_get_path((GtkTreeRowReference*)list_parcours->data)))
             {
                 gtk_tree_model_get(model_charge_source, &iter_charge_source, 0, &num_charge_source, -1);
-                BUG(EF_charge_deplace(projet, num_action_source, num_charge_source, num_action_dest), FALSE);
+                BUG(EF_charge_deplace(projet, action_source->numero, num_charge_source, action_dest->numero), FALSE);
             }
         }
         g_list_foreach(list_fixe, (GFunc)gtk_tree_row_reference_free, NULL);
@@ -330,18 +329,18 @@ void _1990_gtk_actions_description_edited(GtkCellRendererText *cell, gchar *path
  *           _1990_action_renomme.
  */
 {
-    GtkTreeIter   iter;
-    unsigned int  numero;
+    GtkTreeIter iter;
+    Action      *action;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk._1990_actions.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Actions");
     
     // On récupère l'action en cours d'édition
     gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(projet->list_gtk._1990_actions.tree_store_actions), &iter, path_string);
-    gtk_tree_model_get(GTK_TREE_MODEL(projet->list_gtk._1990_actions.tree_store_actions), &iter, 0, &numero, -1);
+    gtk_tree_model_get(GTK_TREE_MODEL(projet->list_gtk._1990_actions.tree_store_actions), &iter, 0, &action, -1);
     
     // On lui modifie son nom
-    BUG(_1990_action_renomme(projet, numero, new_text), );
+    BUG(_1990_action_renomme(projet, action->numero, new_text), );
     
     return;
 }
@@ -362,13 +361,14 @@ void _1990_gtk_actions_type_edited(GtkCellRendererText *cell, const gchar *path_
 */
 {
     GtkTreeIter     iter;
-    unsigned int    action_num, type;
+    unsigned int    type;
+    Action          *action;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk._1990_actions.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Actions");
     
     gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(projet->list_gtk._1990_actions.tree_store_actions), &iter, path_string);
-    gtk_tree_model_get(GTK_TREE_MODEL(projet->list_gtk._1990_actions.tree_store_actions), &iter, 0, &action_num, -1);
+    gtk_tree_model_get(GTK_TREE_MODEL(projet->list_gtk._1990_actions.tree_store_actions), &iter, 0, &action, -1);
     
     for (type=0;type<_1990_action_num_bat_txt(projet->parametres.pays);type++)
     {
@@ -377,7 +377,7 @@ void _1990_gtk_actions_type_edited(GtkCellRendererText *cell, const gchar *path_
     }
     BUGMSG(type != _1990_action_num_bat_txt(projet->parametres.pays), , gettext("Type d'action '%s' inconnu.\n"), new_text);
     
-    BUG(_1990_action_change_type(projet, action_num, type), );
+    BUG(_1990_action_change_type(projet, action->numero, type), );
     
     return;
 }
@@ -397,21 +397,21 @@ void _1990_gtk_tree_view_actions_psi_edited(GtkCellRendererText *cell, gchar *pa
  *           _1990_action_renomme.
  */
 {
-    GtkTreeIter     iter;
-    unsigned int    num_action;
-    double          convertion;
-    guint           column = GPOINTER_TO_UINT(g_object_get_data(G_OBJECT(cell), "column"));
+    GtkTreeIter iter;
+    Action      *action;
+    double      convertion;
+    guint       column = GPOINTER_TO_UINT(g_object_get_data(G_OBJECT(cell), "column"));
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk._1990_actions.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Actions");
     
     gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(projet->list_gtk._1990_actions.tree_store_actions), &iter, path_string);
-    gtk_tree_model_get(GTK_TREE_MODEL(projet->list_gtk._1990_actions.tree_store_actions), &iter, 0, &num_action, -1);
+    gtk_tree_model_get(GTK_TREE_MODEL(projet->list_gtk._1990_actions.tree_store_actions), &iter, 0, &action, -1);
     
     // On vérifie si le texte contient bien un nombre flottant
     convertion = common_text_str_to_double(new_text, 0, TRUE, 1., TRUE);
     if (!isnan(convertion))
-        BUG(_1990_action_change_psi(projet, num_action, column-3, convertion), );
+        BUG(_1990_action_change_psi(projet, action->numero, column-3, convertion), );
     
     return;
 }
@@ -476,7 +476,7 @@ void _1990_gtk_menu_suppr_action_activate(GtkWidget *toolbutton, Projet *projet)
 {
     GtkTreeIter     iter;
     GtkTreeModel    *model;
-    unsigned int    numero_action;
+    Action          *action;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk._1990_actions.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Actions");
@@ -485,10 +485,10 @@ void _1990_gtk_menu_suppr_action_activate(GtkWidget *toolbutton, Projet *projet)
         return;
     
     // On récupère le numéro de l'action sélectionnée
-    gtk_tree_model_get(model, &iter, 0, &numero_action, -1);
+    gtk_tree_model_get(model, &iter, 0, &action, -1);
     
     // Et on la supprime ainsi que les charges la contenant
-    BUG(_1990_action_free_num(projet, numero_action), );
+    BUG(_1990_action_free_num(projet, action->numero), );
     
     return;
 }
@@ -578,7 +578,8 @@ void _1990_gtk_tree_view_charges_description_edited(GtkCellRendererText *cell,
     GtkTreeModel    *model;
     GtkTreeIter     iter, iter_action;
     GtkTreeModel    *model_action;
-    unsigned int    numero_action, numero_charge;
+    Action          *action;
+    unsigned int    numero_charge;
     char            *description;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
@@ -589,12 +590,12 @@ void _1990_gtk_tree_view_charges_description_edited(GtkCellRendererText *cell,
     
     if (!gtk_tree_selection_get_selected(projet->list_gtk._1990_actions.tree_select_actions, &model_action, &iter_action))
         return;
-    gtk_tree_model_get(model_action, &iter_action, 0, &numero_action, -1);
+    gtk_tree_model_get(model_action, &iter_action, 0, &action, -1);
     
     gtk_tree_model_get_iter_from_string(model, &iter, path_string);
     gtk_tree_model_get(model, &iter, 0, &numero_charge, 1, &description, -1);
     
-    BUG(EF_charge_renomme(projet, numero_action, numero_charge, new_text), );
+    BUG(EF_charge_renomme(projet, action->numero, numero_charge, new_text), );
     
     return;
 }
@@ -611,7 +612,8 @@ void _1990_gtk_menu_edit_charge_clicked(GtkWidget *toolbutton, Projet *projet)
 {
     GtkTreeIter     iter;
     GtkTreeModel    *model;
-    unsigned int    numero_action, numero_charge;
+    Action          *action;
+    unsigned int    numero_charge;
     GList           *list, *list_parcours;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
@@ -620,7 +622,7 @@ void _1990_gtk_menu_edit_charge_clicked(GtkWidget *toolbutton, Projet *projet)
     // On récupère le numéro de l'action qui contient les charges à éditer.
     if (!gtk_tree_selection_get_selected(projet->list_gtk._1990_actions.tree_select_actions, &model, &iter))
         return;
-    gtk_tree_model_get(model, &iter, 0, &numero_action, -1);
+    gtk_tree_model_get(model, &iter, 0, &action, -1);
     
     // On récupère la liste des charges à éditer.
     list = gtk_tree_selection_get_selected_rows(projet->list_gtk._1990_actions.tree_select_charges, &model);
@@ -633,23 +635,23 @@ void _1990_gtk_menu_edit_charge_clicked(GtkWidget *toolbutton, Projet *projet)
             Charge_Noeud    *charge_noeud;
             
             gtk_tree_model_get(model, &iter, 0, &numero_charge, -1);
-            BUG(charge_noeud = EF_charge_cherche(projet, numero_action, numero_charge), );
+            BUG(charge_noeud = EF_charge_cherche(projet, action->numero, numero_charge), );
             
             switch (charge_noeud->type)
             {
                 case CHARGE_NOEUD :
                 {
-                    BUG(EF_gtk_charge_noeud(projet, numero_action, numero_charge), );
+                    BUG(EF_gtk_charge_noeud(projet, action->numero, numero_charge), );
                     break;
                 }
                 case CHARGE_BARRE_PONCTUELLE :
                 {
-                    BUG(EF_gtk_charge_barre_ponctuelle(projet, numero_action, numero_charge), );
+                    BUG(EF_gtk_charge_barre_ponctuelle(projet, action->numero, numero_charge), );
                     break;
                 }
                 case CHARGE_BARRE_REPARTIE_UNIFORME :
                 {
-                    BUG(EF_gtk_charge_barre_repartie_uniforme(projet, numero_action, numero_charge), );
+                    BUG(EF_gtk_charge_barre_repartie_uniforme(projet, action->numero, numero_charge), );
                     break;
                 }
                 default :
@@ -678,7 +680,8 @@ void _1990_gtk_menu_suppr_charge_clicked(GtkWidget *toolbutton, Projet *projet)
 {
     GtkTreeIter     iter;
     GtkTreeModel    *model;
-    unsigned int    numero_action, numero_charge;
+    Action          *action;
+    unsigned int    numero_charge;
     GList           *list, *list_fixe, *list_parcours;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
@@ -687,7 +690,7 @@ void _1990_gtk_menu_suppr_charge_clicked(GtkWidget *toolbutton, Projet *projet)
     // On récupère le numéro de l'action qui contient les charges à supprimer.
     if (!gtk_tree_selection_get_selected(projet->list_gtk._1990_actions.tree_select_actions, &model, &iter))
         return;
-    gtk_tree_model_get(model, &iter, 0, &numero_action, -1);
+    gtk_tree_model_get(model, &iter, 0, &action, -1);
     
     // On récupère la liste des charges à supprimer.
     list = gtk_tree_selection_get_selected_rows(projet->list_gtk._1990_actions.tree_select_charges, &model);
@@ -707,7 +710,7 @@ void _1990_gtk_menu_suppr_charge_clicked(GtkWidget *toolbutton, Projet *projet)
         if (gtk_tree_model_get_iter(model, &iter, gtk_tree_row_reference_get_path((GtkTreeRowReference*)list_parcours->data)))
         {
             gtk_tree_model_get(model, &iter, 0, &numero_charge, -1);
-            BUG(EF_charge_supprime(projet, numero_action, numero_charge), );
+            BUG(EF_charge_supprime(projet, action->numero, numero_charge), );
         }
     }
     g_list_foreach(list_fixe, (GFunc)gtk_tree_row_reference_free, NULL);
@@ -750,16 +753,16 @@ void _1990_gtk_menu_nouvelle_charge_nodale_activate(GtkMenuItem *menuitem, Proje
 {
     GtkTreeIter     iter_action;
     GtkTreeModel    *model_action;
-    unsigned int    numero_action;
+    Action          *action;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk._1990_actions.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Actions");
     
     if (!gtk_tree_selection_get_selected(projet->list_gtk._1990_actions.tree_select_actions, &model_action, &iter_action))
         return;
-    gtk_tree_model_get(model_action, &iter_action, 0, &numero_action, -1);
+    gtk_tree_model_get(model_action, &iter_action, 0, &action, -1);
     
-    BUG(EF_gtk_charge_noeud(projet, numero_action, G_MAXUINT), );
+    BUG(EF_gtk_charge_noeud(projet, action->numero, G_MAXUINT), );
 }
 
 
@@ -773,18 +776,18 @@ void _1990_gtk_menu_nouvelle_charge_barre_ponctuelle_activate(GtkMenuItem *menui
  *           interface graphique non initialisée.
  */
 {
-    GtkTreeIter                 iter_action;
-    GtkTreeModel                *model_action;
-    unsigned int                numero_action;
+    GtkTreeIter     iter_action;
+    GtkTreeModel    *model_action;
+    Action          *action;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk._1990_actions.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Actions");
     
     if (!gtk_tree_selection_get_selected(projet->list_gtk._1990_actions.tree_select_actions, &model_action, &iter_action))
         return;
-    gtk_tree_model_get(model_action, &iter_action, 0, &numero_action, -1);
+    gtk_tree_model_get(model_action, &iter_action, 0, &action, -1);
     
-    BUG(EF_gtk_charge_barre_ponctuelle(projet, numero_action, G_MAXUINT), );
+    BUG(EF_gtk_charge_barre_ponctuelle(projet, action->numero, G_MAXUINT), );
     
     return;
 }
@@ -800,18 +803,154 @@ void _1990_gtk_menu_nouvelle_charge_barre_repartie_uniforme_activate(GtkMenuItem
  *           interface graphique non initialisée.
  */
 {
-    GtkTreeIter                 iter_action;
-    GtkTreeModel                *model_action;
-    unsigned int                numero_action;
+    GtkTreeIter     iter_action;
+    GtkTreeModel    *model_action;
+    Action          *action;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk._1990_actions.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Actions");
     
     if (!gtk_tree_selection_get_selected(projet->list_gtk._1990_actions.tree_select_actions, &model_action, &iter_action))
         return;
-    gtk_tree_model_get(model_action, &iter_action, 0, &numero_action, -1);
+    gtk_tree_model_get(model_action, &iter_action, 0, &action, -1);
     
-    BUG(EF_gtk_charge_barre_repartie_uniforme(projet, numero_action, G_MAXUINT), );
+    BUG(EF_gtk_charge_barre_repartie_uniforme(projet, action->numero, G_MAXUINT), );
+    
+    return;
+}
+
+
+void _1990_gtk_actions_render_0(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
+  GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data2)
+/* Description : Affiche la distance vy de la section.
+ * Paramètres : GtkTreeViewColumn *tree_column : composant à l'origine de l'évènement,
+ *            : GtkCellRenderer *cell : la cellule en cours d'édition,
+ *            : GtkTreeModel *tree_model : le mode en cours d'édition,
+ *            : GtkTreeIter *iter : la ligne en cours d'édition,
+ *            : gpointer data2 : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    Action *action;
+    
+    gtk_tree_model_get(tree_model, iter, 0, &action, -1);
+    
+    g_object_set(cell, "text", "0", NULL);
+    
+    return;
+}
+
+
+void _1990_gtk_actions_render_1(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
+  GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data2)
+/* Description : Affiche la distance vy de la section.
+ * Paramètres : GtkTreeViewColumn *tree_column : composant à l'origine de l'évènement,
+ *            : GtkCellRenderer *cell : la cellule en cours d'édition,
+ *            : GtkTreeModel *tree_model : le mode en cours d'édition,
+ *            : GtkTreeIter *iter : la ligne en cours d'édition,
+ *            : gpointer data2 : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    Action *action;
+    
+    gtk_tree_model_get(tree_model, iter, 0, &action, -1);
+    
+    g_object_set(cell, "text", action->nom, NULL);
+    
+    return;
+}
+
+
+void _1990_gtk_actions_render_2(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
+  GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data2)
+/* Description : Affiche la distance vy de la section.
+ * Paramètres : GtkTreeViewColumn *tree_column : composant à l'origine de l'évènement,
+ *            : GtkCellRenderer *cell : la cellule en cours d'édition,
+ *            : GtkTreeModel *tree_model : le mode en cours d'édition,
+ *            : GtkTreeIter *iter : la ligne en cours d'édition,
+ *            : gpointer data2 : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    Action  *action;
+    Projet  *projet = data2;
+    
+    gtk_tree_model_get(tree_model, iter, 0, &action, -1);
+    
+    g_object_set(cell, "text", _1990_action_type_bat_txt(action->type, projet->parametres.pays), NULL);
+    
+    return;
+}
+
+
+void _1990_gtk_actions_render_3(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
+  GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data2)
+/* Description : Affiche la distance vy de la section.
+ * Paramètres : GtkTreeViewColumn *tree_column : composant à l'origine de l'évènement,
+ *            : GtkCellRenderer *cell : la cellule en cours d'édition,
+ *            : GtkTreeModel *tree_model : le mode en cours d'édition,
+ *            : GtkTreeIter *iter : la ligne en cours d'édition,
+ *            : gpointer data2 : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    Action  *action;
+    char    tmp[30];
+    
+    gtk_tree_model_get(tree_model, iter, 0, &action, -1);
+    
+    common_math_double_to_char2(action->psi0, tmp, DECIMAL_SANS_UNITE);
+    
+    g_object_set(cell, "text", tmp, NULL);
+    
+    return;
+}
+
+
+void _1990_gtk_actions_render_4(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
+  GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data2)
+/* Description : Affiche la distance vy de la section.
+ * Paramètres : GtkTreeViewColumn *tree_column : composant à l'origine de l'évènement,
+ *            : GtkCellRenderer *cell : la cellule en cours d'édition,
+ *            : GtkTreeModel *tree_model : le mode en cours d'édition,
+ *            : GtkTreeIter *iter : la ligne en cours d'édition,
+ *            : gpointer data2 : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    Action  *action;
+    char    tmp[30];
+    
+    gtk_tree_model_get(tree_model, iter, 0, &action, -1);
+    
+    common_math_double_to_char2(action->psi1, tmp, DECIMAL_SANS_UNITE);
+    
+    g_object_set(cell, "text", tmp, NULL);
+    
+    return;
+}
+
+
+void _1990_gtk_actions_render_5(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
+  GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data2)
+/* Description : Affiche la distance vy de la section.
+ * Paramètres : GtkTreeViewColumn *tree_column : composant à l'origine de l'évènement,
+ *            : GtkCellRenderer *cell : la cellule en cours d'édition,
+ *            : GtkTreeModel *tree_model : le mode en cours d'édition,
+ *            : GtkTreeIter *iter : la ligne en cours d'édition,
+ *            : gpointer data2 : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    Action  *action;
+    char    tmp[30];
+    
+    gtk_tree_model_get(tree_model, iter, 0, &action, -1);
+    
+    common_math_double_to_char2(action->psi2, tmp, DECIMAL_SANS_UNITE);
+    
+    g_object_set(cell, "text", tmp, NULL);
     
     return;
 }
@@ -851,6 +990,13 @@ void _1990_gtk_actions(Projet *projet)
     g_object_set_data(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_treeview_cell4"), "column", GINT_TO_POINTER(4));
     g_object_set_data(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_treeview_cell5"), "column", GINT_TO_POINTER(5));
     
+    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_treeview_column0")), GTK_CELL_RENDERER(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_treeview_cell0")), _1990_gtk_actions_render_0, projet, NULL);
+    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_treeview_column1")), GTK_CELL_RENDERER(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_treeview_cell1")), _1990_gtk_actions_render_1, projet, NULL);
+    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_treeview_column2")), GTK_CELL_RENDERER(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_treeview_cell2")), _1990_gtk_actions_render_2, projet, NULL);
+    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_treeview_column3")), GTK_CELL_RENDERER(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_treeview_cell3")), _1990_gtk_actions_render_3, projet, NULL);
+    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_treeview_column4")), GTK_CELL_RENDERER(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_treeview_cell4")), _1990_gtk_actions_render_4, projet, NULL);
+    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_treeview_column5")), GTK_CELL_RENDERER(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_treeview_cell5")), _1990_gtk_actions_render_5, projet, NULL);
+    
     // Affiche la liste des actions
     if (projet->actions != NULL)
     {
@@ -862,7 +1008,7 @@ void _1990_gtk_actions(Projet *projet)
             Action  *action = list_parcours->data;
             
             gtk_tree_store_append(store_actions, &action->Iter_fenetre, NULL);
-            gtk_tree_store_set(store_actions, &action->Iter_fenetre, 0, action->numero, 1, action->nom, 2, _1990_action_type_bat_txt(action->type, projet->parametres.pays), 3, action->psi0, 4, action->psi1, 5, action->psi2, -1);
+            gtk_tree_store_set(store_actions, &action->Iter_fenetre, 0, action, -1);
             
             list_parcours = g_list_next(list_parcours);
         } while (list_parcours != NULL);

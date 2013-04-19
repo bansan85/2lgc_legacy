@@ -1082,11 +1082,20 @@ char* _1990_ponderations_description(Ponderation *ponderation)
         GList   *list_parcours = ponderation->elements;
         do
         {
+            char                psi[30];
             Ponderation_Element *ponderation_element = list_parcours->data;
             
             tmp = retour;
+            if (ponderation_element->psi == 0)
+                common_math_double_to_char2(ponderation_element->action->psi0, psi, DECIMAL_SANS_UNITE);
+            else if (ponderation_element->psi == 1)
+                common_math_double_to_char2(ponderation_element->action->psi1, psi, DECIMAL_SANS_UNITE);
+            else if (ponderation_element->psi == 2)
+                common_math_double_to_char2(ponderation_element->action->psi2, psi, DECIMAL_SANS_UNITE);
+            else
+                psi[0] = '\000';
             if (ponderation_element->psi != -1)
-                BUGMSG(retour = g_strdup_printf("%s%s%.*lf*%.*lf*%s", tmp, tmp[0] != 0 ? "+" : "", DECIMAL_SANS_UNITE, ponderation_element->ponderation, DECIMAL_SANS_UNITE, ponderation_element->psi == 0 ? ponderation_element->action->psi0 : ponderation_element->psi == 1 ? ponderation_element->action->psi1 : ponderation_element->psi == 2 ? ponderation_element->action->psi2 : NAN, ponderation_element->action->nom), NULL, gettext("Erreur d'allocation mémoire.\n"));
+                BUGMSG(retour = g_strdup_printf("%s%s%.*lf*%s*%s", tmp, tmp[0] != 0 ? "+" : "", DECIMAL_SANS_UNITE, ponderation_element->ponderation, psi, ponderation_element->action->nom), NULL, gettext("Erreur d'allocation mémoire.\n"));
             else
                 BUGMSG(retour = g_strdup_printf("%s%s%.*lf*%s", tmp, tmp[0] != 0 ? "+" : "", DECIMAL_SANS_UNITE, ponderation_element->ponderation, ponderation_element->action->nom), NULL, gettext("Erreur d'allocation mémoire.\n"));
             

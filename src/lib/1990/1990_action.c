@@ -378,12 +378,12 @@ Action *_1990_action_ajout(Projet *projet, unsigned int type, const char* descri
     action_nouveau->type = type;
     action_nouveau->charges = NULL;
     action_nouveau->flags = 0;
-    action_nouveau->psi0 = _1990_coef_psi0_bat(type, projet->parametres.pays);
-    BUG(!isnan(action_nouveau->psi0), NULL);
-    action_nouveau->psi1 = _1990_coef_psi1_bat(type, projet->parametres.pays);
-    BUG(!isnan(action_nouveau->psi1), NULL);
-    action_nouveau->psi2 = _1990_coef_psi2_bat(type, projet->parametres.pays);
-    BUG(!isnan(action_nouveau->psi2), NULL);
+    action_nouveau->psi0 = common_math_f(_1990_coef_psi0_bat(type, projet->parametres.pays), FLOTTANT_ORDINATEUR);
+    BUG(!isnan(common_math_get(action_nouveau->psi0)), NULL);
+    action_nouveau->psi1 = common_math_f(_1990_coef_psi1_bat(type, projet->parametres.pays), FLOTTANT_ORDINATEUR);
+    BUG(!isnan(common_math_get(action_nouveau->psi1)), NULL);
+    action_nouveau->psi2 = common_math_f(_1990_coef_psi2_bat(type, projet->parametres.pays), FLOTTANT_ORDINATEUR);
+    BUG(!isnan(common_math_get(action_nouveau->psi2)), NULL);
     action_nouveau->deplacement_complet = NULL;
     action_nouveau->forces_complet = NULL;
     action_nouveau->efforts_noeuds = NULL;
@@ -409,7 +409,7 @@ Action *_1990_action_ajout(Projet *projet, unsigned int type, const char* descri
     if (projet->list_gtk._1990_actions.builder != NULL)
     {
         gtk_tree_store_append(projet->list_gtk._1990_actions.tree_store_actions, &action_nouveau->Iter_fenetre, NULL);
-        gtk_tree_store_set(projet->list_gtk._1990_actions.tree_store_actions, &action_nouveau->Iter_fenetre, 0, action_nouveau->numero, 1, action_nouveau->nom, 2, _1990_action_type_bat_txt(action_nouveau->type, projet->parametres.pays), 3, action_nouveau->psi0, 4, action_nouveau->psi1, 5, action_nouveau->psi2, -1);
+        gtk_tree_store_set(projet->list_gtk._1990_actions.tree_store_actions, &action_nouveau->Iter_fenetre, 0, action_nouveau, -1);
     }
     if (projet->list_gtk.ef_resultats.builder != NULL)
         gtk_adjustment_set_upper(GTK_ADJUSTMENT(gtk_builder_get_object(projet->list_gtk.ef_resultats.builder, "adjustment_cas")), g_list_length(projet->actions)-1);
@@ -484,7 +484,7 @@ gboolean _1990_action_renomme(Projet *projet, unsigned int action_num, const cha
     gtk_list_store_set(projet->list_gtk._1990_actions.list_actions, &action->Iter_liste, 0, nom, -1);
     
     if (projet->list_gtk._1990_actions.builder != NULL)
-        gtk_tree_store_set(projet->list_gtk._1990_actions.tree_store_actions, &action->Iter_fenetre, 1, nom, -1);
+        gtk_widget_queue_draw(GTK_WIDGET(projet->list_gtk._1990_actions.tree_view_actions));
     if ((projet->list_gtk._1990_groupes.builder != NULL) && (GTK_COMMON_SPINBUTTON_AS_UINT(GTK_SPIN_BUTTON(projet->list_gtk._1990_groupes.spin_button_niveau)) == 0))
     {
         GtkTreeModel    *model;
@@ -557,18 +557,18 @@ gboolean _1990_action_change_type(Projet *projet, unsigned int action_num, unsig
     BUG(action = _1990_action_cherche_numero(projet, action_num), FALSE);
     
     action->type = type;
-    action->psi0 = _1990_coef_psi0_bat(type, projet->parametres.pays);
-    BUG(!isnan(action->psi0), FALSE);
-    action->psi1 = _1990_coef_psi1_bat(type, projet->parametres.pays);
-    BUG(!isnan(action->psi1), FALSE);
-    action->psi2 = _1990_coef_psi2_bat(type, projet->parametres.pays);
-    BUG(!isnan(action->psi2), FALSE);
+    action->psi0 = common_math_f(_1990_coef_psi0_bat(type, projet->parametres.pays), FLOTTANT_ORDINATEUR);
+    BUG(!isnan(common_math_get(action->psi0)), FALSE);
+    action->psi1 = common_math_f(_1990_coef_psi1_bat(type, projet->parametres.pays), FLOTTANT_ORDINATEUR);
+    BUG(!isnan(common_math_get(action->psi1)), FALSE);
+    action->psi2 = common_math_f(_1990_coef_psi2_bat(type, projet->parametres.pays), FLOTTANT_ORDINATEUR);
+    BUG(!isnan(common_math_get(action->psi2)), FALSE);
     
     BUG(EF_calculs_free(projet), FALSE);
     
 #ifdef ENABLE_GTK
     if (projet->list_gtk._1990_actions.builder != NULL)
-        gtk_tree_store_set(projet->list_gtk._1990_actions.tree_store_actions, &action->Iter_fenetre, 2, _1990_action_type_bat_txt(type, projet->parametres.pays), 3, action->psi0, 4, action->psi1, 5, action->psi2, -1);
+        gtk_widget_queue_draw(GTK_WIDGET(projet->list_gtk._1990_actions.tree_view_actions));
 #endif
     
     return TRUE;
@@ -600,26 +600,26 @@ gboolean _1990_action_change_psi(Projet *projet, unsigned int action_num, unsign
     
     if (psi_num == 0)
     {
-        action->psi0 = psi;
+        action->psi0 = common_math_f(psi, FLOTTANT_UTILISATEUR);
 #ifdef ENABLE_GTK
         if (projet->list_gtk._1990_actions.builder != NULL)
-            gtk_tree_store_set(projet->list_gtk._1990_actions.tree_store_actions, &action->Iter_fenetre, 3, psi, -1);
+            gtk_widget_queue_draw(GTK_WIDGET(projet->list_gtk._1990_actions.tree_view_actions));
 #endif
     }
     else if (psi_num == 1)
     {
-        action->psi1 = psi;
+        action->psi1 = common_math_f(psi, FLOTTANT_UTILISATEUR);
 #ifdef ENABLE_GTK
         if (projet->list_gtk._1990_actions.builder != NULL)
-            gtk_tree_store_set(projet->list_gtk._1990_actions.tree_store_actions, &action->Iter_fenetre, 4, psi, -1);
+            gtk_widget_queue_draw(GTK_WIDGET(projet->list_gtk._1990_actions.tree_view_actions));
 #endif
     }
     else if (psi_num == 2)
     {
-        action->psi2 = psi;
+        action->psi2 = common_math_f(psi, FLOTTANT_UTILISATEUR);
 #ifdef ENABLE_GTK
         if (projet->list_gtk._1990_actions.builder != NULL)
-            gtk_tree_store_set(projet->list_gtk._1990_actions.tree_store_actions, &action->Iter_fenetre, 5, psi, -1);
+            gtk_widget_queue_draw(GTK_WIDGET(projet->list_gtk._1990_actions.tree_view_actions));
 #endif
     }
     else
@@ -834,18 +834,13 @@ gboolean _1990_action_free_num(Projet *projet, unsigned int num)
             free(action);
         }
         else if (action->numero > num)
-        {
             action->numero--;
-            
-#ifdef ENABLE_GTK
-            if (projet->list_gtk._1990_actions.builder != NULL)
-                gtk_tree_store_set(projet->list_gtk._1990_actions.tree_store_actions, &action->Iter_fenetre, 0, action->numero, -1);
-#endif
-        }
         
     } while (list_parcours != NULL);
-    
+
 #ifdef ENABLE_GTK
+    if (projet->list_gtk._1990_actions.builder != NULL)
+        gtk_widget_queue_draw(GTK_WIDGET(projet->list_gtk._1990_actions.tree_view_actions));
     if (projet->list_gtk.ef_resultats.builder != NULL)
         gtk_adjustment_set_upper(GTK_ADJUSTMENT(gtk_builder_get_object(projet->list_gtk.ef_resultats.builder, "adjustment_cas")), g_list_length(projet->actions)-1);
 #endif
