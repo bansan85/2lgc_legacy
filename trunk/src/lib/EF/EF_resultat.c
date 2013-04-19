@@ -68,7 +68,7 @@ Action *EF_resultat_action_ponderation(Ponderation* ponderation, Projet *projet)
         Ponderation_Element *element = list_parcours->data;
         double              *x2 = element->action->efforts_noeuds->x;
         double              *y2 = element->action->deplacement_complet->x;
-        double              mult = element->ponderation*(element->psi == 0 ? element->action->psi0 : element->psi == 1 ? element->action->psi1 : element->psi == 2 ? element->action->psi2 : 1.);
+        double              mult = element->ponderation*(element->psi == 0 ? common_math_get(element->action->psi0) : element->psi == 1 ? common_math_get(element->action->psi1) : element->psi == 2 ? common_math_get(element->action->psi2) : 1.);
         unsigned int        i;
         
         for (i=0;i<g_list_length(projet->modele.noeuds)*6;i++)

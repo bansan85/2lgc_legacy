@@ -3,12 +3,7 @@
     <requires lib="gtk+" version="3.2"/>
     <object class="GtkTreeStore" id="1990_actions_tree_store_action">
         <columns>
-            <column type="guint"/>
-            <column type="gchararray"/>
-            <column type="gchararray"/>
-            <column type="gdouble"/>
-            <column type="gdouble"/>
-            <column type="gdouble"/>
+            <column type="gpointer"/>
         </columns>
     </object>
     <object class="GtkTreeStore" id="1990_actions_tree_store_charge">
@@ -101,9 +96,6 @@
                                                                 <property name="title" translatable="yes">Numéro</property>
                                                                 <child>
                                                                     <object class="GtkCellRendererText" id="1990_actions_treeview_cell0"/>
-                                                                    <attributes>
-                                                                        <attribute name="text">0</attribute>
-                                                                    </attributes>
                                                                 </child>
                                                             </object>
                                                         </child>
@@ -120,9 +112,6 @@
                                                                         <property name="editable">True</property>
                                                                         <signal name="edited" handler="_1990_gtk_actions_description_edited"/>
                                                                     </object>
-                                                                    <attributes>
-                                                                        <attribute name="text">1</attribute>
-                                                                    </attributes>
                                                                 </child>
                                                             </object>
                                                         </child>
@@ -141,9 +130,6 @@
                                                                         <property name="has-entry">False</property>
                                                                         <signal name="edited" handler="_1990_gtk_actions_type_edited"/>
                                                                     </object>
-                                                                    <attributes>
-                                                                        <attribute name="text">2</attribute>
-                                                                    </attributes>
                                                                 </child>
                                                             </object>
                                                         </child>
@@ -159,9 +145,6 @@
                                                                         <property name="xalign">0.5</property>
                                                                         <signal name="edited" handler="_1990_gtk_tree_view_actions_psi_edited"/>
                                                                     </object>
-                                                                    <attributes>
-                                                                        <attribute name="text">3</attribute>
-                                                                    </attributes>
                                                                 </child>
                                                             </object>
                                                         </child>
@@ -177,9 +160,6 @@
                                                                         <property name="xalign">0.5</property>
                                                                         <signal name="edited" handler="_1990_gtk_tree_view_actions_psi_edited"/>
                                                                     </object>
-                                                                    <attributes>
-                                                                        <attribute name="text">4</attribute>
-                                                                    </attributes>
                                                                 </child>
                                                             </object>
                                                         </child>
@@ -195,9 +175,6 @@
                                                                         <property name="xalign">0.5</property>
                                                                         <signal name="edited" handler="_1990_gtk_tree_view_actions_psi_edited"/>
                                                                     </object>
-                                                                    <attributes>
-                                                                        <attribute name="text">5</attribute>
-                                                                    </attributes>
                                                                 </child>
                                                             </object>
                                                         </child>

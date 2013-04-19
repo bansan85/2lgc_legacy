@@ -790,9 +790,9 @@ typedef struct __Action
     unsigned int    type;                   // Les catégories sont conformes à _1990_action_type
     GList           *charges;
     int             flags;                  // bit 0 : Action prédominante.
-    double          psi0;                   // valeur_combinaison
-    double          psi1;                   // valeur_frequente
-    double          psi2;                   // valeur_quasi_permanente
+    Flottant        psi0;                   // valeur_combinaison
+    Flottant        psi1;                   // valeur_frequente
+    Flottant        psi2;                   // valeur_quasi_permanente
     cholmod_sparse  *deplacement_complet;
     cholmod_sparse  *forces_complet;
     cholmod_sparse  *efforts_noeuds;
