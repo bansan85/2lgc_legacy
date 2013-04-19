@@ -31,9 +31,9 @@ gboolean _1990_action_init(Projet *projet) __attribute__((__warn_unused_result__
 Action *_1990_action_ajout(Projet *projet, unsigned int categorie, const char* description) __attribute__((__warn_unused_result__));
 Action *_1990_action_cherche_numero(Projet *projet, unsigned int numero) __attribute__((__warn_unused_result__));
 
-gboolean _1990_action_renomme(Projet *projet, unsigned int action_num, const char* description) __attribute__((__warn_unused_result__));
-gboolean _1990_action_change_type(Projet *projet, unsigned int action_num, unsigned int type) __attribute__((__warn_unused_result__));
-gboolean _1990_action_change_psi(Projet *projet, unsigned int action_num, unsigned int psi_num, double psi) __attribute__((__warn_unused_result__));
+gboolean _1990_action_renomme(Projet *projet, Action *action, const char* description) __attribute__((__warn_unused_result__));
+gboolean _1990_action_change_type(Projet *projet, Action *action, unsigned int type) __attribute__((__warn_unused_result__));
+gboolean _1990_action_change_psi(Projet *projet, Action *action, unsigned int psi_num, double psi) __attribute__((__warn_unused_result__));
 
 gboolean _1990_action_affiche_tout(Projet *projet) __attribute__((__warn_unused_result__));
 gboolean _1990_action_affiche_resultats(Projet *projet, unsigned int num_action) __attribute__((__warn_unused_result__));
