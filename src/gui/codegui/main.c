@@ -184,13 +184,13 @@ int main(int argc, char *argv[])
     g_list_free(tmp1);*/
     BUG(tmp1 = common_selection_renvoie_numeros("2"), -1);
     BUG(tmp2 = common_selection_converti_numeros_en_noeuds(tmp1, projet), -1);
-    BUG(EF_charge_noeud_ajout(projet, 0, tmp2, 0., 0., 0., 0., 0., 0., "test1"), -1);
+    BUG(EF_charge_noeud_ajout(projet, 0, tmp2, common_math_f(0., FLOTTANT_UTILISATEUR), common_math_f(0., FLOTTANT_UTILISATEUR), common_math_f(0., FLOTTANT_UTILISATEUR), common_math_f(0., FLOTTANT_UTILISATEUR), common_math_f(0., FLOTTANT_UTILISATEUR), common_math_f(0., FLOTTANT_UTILISATEUR), "test1"), -1);
     g_list_free(tmp1);
     BUG(tmp1 = common_selection_renvoie_numeros("1"), -1);
     BUG(tmp2 = common_selection_converti_numeros_en_barres(tmp1, projet), -1);
-    BUG(EF_charge_barre_ponctuelle_ajout(projet, 2, tmp2, FALSE, 1.0, 0., 0., -10000., 0., 0., 0., "test2"), -1);
+    BUG(EF_charge_barre_ponctuelle_ajout(projet, 2, tmp2, FALSE, common_math_f(1.0, FLOTTANT_UTILISATEUR), common_math_f(0., FLOTTANT_UTILISATEUR), common_math_f(0., FLOTTANT_UTILISATEUR), common_math_f(-10000., FLOTTANT_UTILISATEUR), common_math_f(0., FLOTTANT_UTILISATEUR), common_math_f(0., FLOTTANT_UTILISATEUR), common_math_f(0., FLOTTANT_UTILISATEUR), "test2"), -1);
     BUG(tmp2 = common_selection_converti_numeros_en_barres(tmp1, projet), -1);
-    BUG(EF_charge_barre_repartie_uniforme_ajout(projet, 3, tmp2, FALSE, FALSE, 0., 0., 0., 0., -10000., 0., 0., 0., "test3"), -1);
+    BUG(EF_charge_barre_repartie_uniforme_ajout(projet, 3, tmp2, FALSE, FALSE, common_math_f(0., FLOTTANT_UTILISATEUR), common_math_f(0., FLOTTANT_UTILISATEUR), common_math_f(0., FLOTTANT_UTILISATEUR), common_math_f(0., FLOTTANT_UTILISATEUR), common_math_f(-10000., FLOTTANT_UTILISATEUR), common_math_f(0., FLOTTANT_UTILISATEUR), common_math_f(0., FLOTTANT_UTILISATEUR), common_math_f(0., FLOTTANT_UTILISATEUR), "test3"), -1);
     g_list_free(tmp1);
 /*    BUG(tmp1 = common_selection_renvoie_numeros("0-2/2"), -1);
     BUG(tmp2 = common_selection_converti_numeros_en_barres(tmp1, projet), -1);

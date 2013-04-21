@@ -35,8 +35,9 @@
 #include "EF_gtk_charge_barre_repartie_uniforme.h"
 
 Charge_Barre_Repartie_Uniforme *EF_charge_barre_repartie_uniforme_ajout(Projet *projet,
-  unsigned int num_action, GList *barres, int repere_local, int projection, double a, double b,
-  double fx, double fy, double fz, double mx, double my, double mz, const char* nom)
+  unsigned int num_action, GList *barres, int repere_local, int projection, Flottant a,
+  Flottant b, Flottant fx, Flottant fy, Flottant fz, Flottant mx, Flottant my, Flottant mz, 
+  const char* nom)
 /* Description : Ajoute une charge répartie uniforme à une action et le long d'une barre en
  *               lui attribuant le numéro suivant la dernière charge de l'action.
  * Paramètres : Projet *projet : la variable projet,
@@ -47,14 +48,14 @@ Charge_Barre_Repartie_Uniforme *EF_charge_barre_repartie_uniforme_ajout(Projet *
  *            : int projection : TRUE si la charge doit être projetée sur la barre,
  *                               FALSE si aucune projection,
  *                               projection = TRUE est incompatible avec repere_local = TRUE,
- *            : double a : position en mètre de la charge par rapport au début de la barre,
- *            : double b : position en mètre de la charge par rapport à la fin de la barre,
- *            : double fx : force suivant l'axe x,
- *            : double fy : force suivant l'axe y,
- *            : double fz : force suivant l'axe z,
- *            : double mx : moment autour de l'axe x,
- *            : double my : moment autour de l'axe y,
- *            : double mz : moment autour de l'axe z,
+ *            : Flottant a : position en mètre de la charge par rapport au début de la barre,
+ *            : Flottant b : position en mètre de la charge par rapport à la fin de la barre,
+ *            : Flottant fx : force suivant l'axe x,
+ *            : Flottant fy : force suivant l'axe y,
+ *            : Flottant fz : force suivant l'axe z,
+ *            : Flottant mx : moment autour de l'axe x,
+ *            : Flottant my : moment autour de l'axe y,
+ *            : Flottant mz : moment autour de l'axe z,
  *            : const char* nom : nom de l'action
  * Valeur renvoyée :
  *   Succès : 0
@@ -81,8 +82,8 @@ Charge_Barre_Repartie_Uniforme *EF_charge_barre_repartie_uniforme_ajout(Projet *
     BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
 
     BUGMSG((projection == FALSE) || (repere_local == FALSE), NULL, gettext("Impossible d'effectuer une projection dans un repère local.\n"));
-    BUGMSG(!((a < 0.) && (!(ERREUR_RELATIVE_EGALE(a, 0.)))), NULL, gettext("Le début de la position de la charge répartie uniformément (%f) est incorrect.\n"), a);
-    BUGMSG(!((b < 0.) && (!(ERREUR_RELATIVE_EGALE(b, 0.)))), NULL, gettext("La fin de la position de la charge répartie uniformément (%f) est incorrecte.\n"), b);
+    BUGMSG(!((common_math_get(a) < 0.) && (!(ERREUR_RELATIVE_EGALE(common_math_get(a), 0.)))), NULL, gettext("Le début de la position de la charge répartie uniformément (%f) est incorrect.\n"), common_math_get(a));
+    BUGMSG(!((common_math_get(b) < 0.) && (!(ERREUR_RELATIVE_EGALE(common_math_get(b), 0.)))), NULL, gettext("La fin de la position de la charge répartie uniformément (%f) est incorrecte.\n"), common_math_get(b));
     BUGMSG(charge_nouveau, NULL, gettext("Erreur d'allocation mémoire.\n"));
     if (barres != NULL)
     {
@@ -93,9 +94,9 @@ Charge_Barre_Repartie_Uniforme *EF_charge_barre_repartie_uniforme_ajout(Projet *
             
             double l = EF_noeuds_distance(barre->noeud_debut, barre->noeud_fin);
             
-            BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), NULL, gettext("Le début de la charge répartie uniformément (%f) est incorrect. La longueur de la barre %d est de %f m.\n"), a, barre->numero, l);
-            BUGMSG(!((b > l) && (!(ERREUR_RELATIVE_EGALE(b, l)))), NULL, gettext("La fin de la charge répartie uniformément (%f) est incorrecte. La longueur de la barre %d est de %f m.\n"), b, barre->numero, l);
-            BUGMSG(!((a+b > l) && (!(ERREUR_RELATIVE_EGALE(a+b, l)))), NULL, gettext("Le début (%f) et la fin (%f) de la charge répartie uniformément sont incompatible avec la longueur de la barre %d qui est de %f m.\n"), a, b, barre->numero, l);
+            BUGMSG(!((common_math_get(a) > l) && (!(ERREUR_RELATIVE_EGALE(common_math_get(a), l)))), NULL, gettext("Le début de la charge répartie uniformément (%f) est incorrect. La longueur de la barre %d est de %f m.\n"), common_math_get(a), barre->numero, l);
+            BUGMSG(!((common_math_get(b) > l) && (!(ERREUR_RELATIVE_EGALE(common_math_get(b), l)))), NULL, gettext("La fin de la charge répartie uniformément (%f) est incorrecte. La longueur de la barre %d est de %f m.\n"), common_math_get(b), barre->numero, l);
+            BUGMSG(!((common_math_get(a)+common_math_get(b) > l) && (!(ERREUR_RELATIVE_EGALE(common_math_get(a)+common_math_get(b), l)))), NULL, gettext("Le début (%f) et la fin (%f) de la charge répartie uniformément sont incompatible avec la longueur de la barre %d qui est de %f m.\n"), common_math_get(a), common_math_get(b), barre->numero, l);
             
             list_parcours = g_list_next(list_parcours);
         }
@@ -156,14 +157,14 @@ char* EF_charge_barre_repartie_uniforme_description(Charge_Barre_Repartie_Unifor
     BUGMSG(charge, NULL, gettext("Paramètre %s incorrect.\n"), "charge");
     
     BUG(txt_liste_barres = common_selection_converti_barres_en_texte(charge->barres), NULL);
-    common_math_double_to_char(charge->a, txt_debut, DECIMAL_DISTANCE);
-    common_math_double_to_char(charge->b, txt_fin, DECIMAL_DISTANCE);
-    common_math_double_to_char(charge->fx, txt_fx, DECIMAL_FORCE);
-    common_math_double_to_char(charge->fy, txt_fy, DECIMAL_FORCE);
-    common_math_double_to_char(charge->fz, txt_fz, DECIMAL_FORCE);
-    common_math_double_to_char(charge->mx, txt_mx, DECIMAL_MOMENT);
-    common_math_double_to_char(charge->my, txt_my, DECIMAL_MOMENT);
-    common_math_double_to_char(charge->mz, txt_mz, DECIMAL_MOMENT);
+    common_math_double_to_char2(charge->a, txt_debut, DECIMAL_DISTANCE);
+    common_math_double_to_char2(charge->b, txt_fin, DECIMAL_DISTANCE);
+    common_math_double_to_char2(charge->fx, txt_fx, DECIMAL_FORCE);
+    common_math_double_to_char2(charge->fy, txt_fy, DECIMAL_FORCE);
+    common_math_double_to_char2(charge->fz, txt_fz, DECIMAL_FORCE);
+    common_math_double_to_char2(charge->mx, txt_mx, DECIMAL_MOMENT);
+    common_math_double_to_char2(charge->my, txt_my, DECIMAL_MOMENT);
+    common_math_double_to_char2(charge->mz, txt_mz, DECIMAL_MOMENT);
     
     BUGMSG(description = g_strdup_printf("%s : %s, %s : %s m, %s : %s m, %s, %s, Fx : %s N/m, Fy : %s N/m, Fz : %s N/m, Mx : %s N.m/m, My : %s N.m/m, Mz : %s N.m/m", strstr(txt_liste_barres, ";") == NULL ? gettext("Barre") : gettext("Barres"), txt_liste_barres, gettext("début"), txt_debut, gettext("fin (par rapport à la fin)"), txt_fin, charge->projection == TRUE ? gettext("projection : oui") : gettext("projection : non"), charge->repere_local ? gettext("repère : local") : gettext("repère : global"), txt_fx, txt_fy, txt_fz, txt_mx, txt_my, txt_mz), NULL, gettext("Erreur d'allocation mémoire.\n"));
     

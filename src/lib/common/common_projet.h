@@ -503,12 +503,12 @@ typedef struct __EF_Noeud
 typedef struct __Charge_Noeud
 {
     ENTETE_CHARGES_NOEUDS
-    double              fx;
-    double              fy;
-    double              fz;
-    double              mx;
-    double              my;
-    double              mz;
+    Flottant    fx;
+    Flottant    fy;
+    Flottant    fz;
+    Flottant    mx;
+    Flottant    my;
+    Flottant    mz;
 } Charge_Noeud;
 
 
@@ -727,15 +727,15 @@ typedef struct __EF_Noeud_Barre
 typedef struct __Charge_Barre_Ponctuelle
 {
     ENTETE_CHARGES_BARRES
-    gboolean            repere_local;
-    double              position; // Position de la charge ponctuelle en mètre
-                                  // depuis le début de la barre
-    double              fx;
-    double              fy;
-    double              fz;
-    double              mx;
-    double              my;
-    double              mz;
+    gboolean    repere_local;
+    Flottant    position; // Position de la charge ponctuelle en mètre
+                          // depuis le début de la barre
+    Flottant    fx;
+    Flottant    fy;
+    Flottant    fz;
+    Flottant    mx;
+    Flottant    my;
+    Flottant    mz;
     
 } Charge_Barre_Ponctuelle;
 
@@ -743,16 +743,16 @@ typedef struct __Charge_Barre_Ponctuelle
 typedef struct __Charge_Barre_Repartie_Uniforme
 {
     ENTETE_CHARGES_BARRES
-    gboolean            repere_local;
-    gboolean            projection;
-    double              a; // Position du début de la charge répartie par rapport au début
-    double              b;   // Position de la fin de la charge par rapport à la fin
-    double              fx;
-    double              fy;
-    double              fz;
-    double              mx;
-    double              my;
-    double              mz;
+    gboolean    repere_local;
+    gboolean    projection;
+    Flottant    a; // Position du début de la charge répartie par rapport au début
+    Flottant    b;   // Position de la fin de la charge par rapport à la fin
+    Flottant    fx;
+    Flottant    fy;
+    Flottant    fz;
+    Flottant    mx;
+    Flottant    my;
+    Flottant    mz;
 } Charge_Barre_Repartie_Uniforme;
 
 

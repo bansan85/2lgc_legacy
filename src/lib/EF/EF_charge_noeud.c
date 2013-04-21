@@ -32,18 +32,18 @@
 
 
 Charge_Noeud*  EF_charge_noeud_ajout(Projet *projet, unsigned int num_action, GList *noeuds,
-  double fx, double fy, double fz, double mx, double my, double mz, const char* nom)
+  Flottant fx, Flottant fy, Flottant fz, Flottant mx, Flottant my, Flottant mz, const char* nom)
 /* Description : Ajoute une charge ponctuelle à une action et à un noeud de la structure en
  *               lui attribuant le numéro suivant la dernière charge de l'action.
  * Paramètres : Projet *projet : la variable projet,
  *            : int num_action : numero de l'action qui contiendra la charge,
  *            : GList *noeuds : liste des noeuds qui supportera la charge,
- *            : double fx : force suivant l'axe global x,
- *            : double fy : force suivant l'axe global y,
- *            : double fz : force suivant l'axe global z,
- *            : double mx : moment autour de l'axe global x,
- *            : double my : moment autour de l'axe global y,
- *            : double mz : moment autour de l'axe global z.
+ *            : Flottant fx : force suivant l'axe global x,
+ *            : Flottant fy : force suivant l'axe global y,
+ *            : Flottant fz : force suivant l'axe global z,
+ *            : Flottant mx : moment autour de l'axe global x,
+ *            : Flottant my : moment autour de l'axe global y,
+ *            : Flottant mz : moment autour de l'axe global z.
  * Valeur renvoyée :
  *   Succès : un pointeur vers la nouvelle charge
  *   Échec : NULL :
@@ -113,12 +113,12 @@ char* EF_charge_noeud_description(Charge_Noeud *charge)
     BUGMSG(charge, FALSE, gettext("Paramètre %s incorrect.\n"), "charge");
     
     BUG(txt_liste_noeuds = common_selection_converti_noeuds_en_texte(charge->noeuds), NULL);
-    common_math_double_to_char(charge->fx, txt_fx, DECIMAL_FORCE);
-    common_math_double_to_char(charge->fy, txt_fy, DECIMAL_FORCE);
-    common_math_double_to_char(charge->fz, txt_fz, DECIMAL_FORCE);
-    common_math_double_to_char(charge->mx, txt_mx, DECIMAL_MOMENT);
-    common_math_double_to_char(charge->my, txt_my, DECIMAL_MOMENT);
-    common_math_double_to_char(charge->mz, txt_mz, DECIMAL_MOMENT);
+    common_math_double_to_char2(charge->fx, txt_fx, DECIMAL_FORCE);
+    common_math_double_to_char2(charge->fy, txt_fy, DECIMAL_FORCE);
+    common_math_double_to_char2(charge->fz, txt_fz, DECIMAL_FORCE);
+    common_math_double_to_char2(charge->mx, txt_mx, DECIMAL_MOMENT);
+    common_math_double_to_char2(charge->my, txt_my, DECIMAL_MOMENT);
+    common_math_double_to_char2(charge->mz, txt_mz, DECIMAL_MOMENT);
     
     BUGMSG(description = g_strdup_printf("%s : %s, Fx : %s N, Fy : %s N, Fz : %s N, Mx : %s N.m, My : %s N.m, Mz : %s N.m", strstr(txt_liste_noeuds, ";") == NULL ? gettext("Noeud") : gettext("Noeuds"), txt_liste_noeuds, txt_fx, txt_fy, txt_fz, txt_mx, txt_my, txt_mz), FALSE, gettext("Erreur d'allocation mémoire.\n"));
     

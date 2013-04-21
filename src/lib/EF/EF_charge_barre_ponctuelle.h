@@ -23,7 +23,7 @@
 #include "common_projet.h"
 
 
-Charge_Barre_Ponctuelle *EF_charge_barre_ponctuelle_ajout(Projet *projet, unsigned int num_action, GList *barre, int repere_local, double a, double fx, double fy, double fz, double mx, double my, double mz, const char* nom) __attribute__((__warn_unused_result__));
+Charge_Barre_Ponctuelle *EF_charge_barre_ponctuelle_ajout(Projet *projet, unsigned int num_action, GList *barre, int repere_local, Flottant a, Flottant fx, Flottant fy, Flottant fz, Flottant mx, Flottant my, Flottant mz, const char* nom) __attribute__((__warn_unused_result__));
 char* EF_charge_barre_ponctuelle_description(Charge_Barre_Ponctuelle *charge) __attribute__((__warn_unused_result__));
 
 gboolean EF_charge_barre_ponctuelle_mx(Beton_Barre *barre, unsigned int discretisation, double position, Barre_Info_EF *infos, double mx, double *ma, double *mb) __attribute__((__warn_unused_result__));

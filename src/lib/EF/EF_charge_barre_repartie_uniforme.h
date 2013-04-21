@@ -22,7 +22,7 @@
 #include "config.h"
 #include "common_projet.h"
 
-Charge_Barre_Repartie_Uniforme *EF_charge_barre_repartie_uniforme_ajout(Projet *projet, unsigned int num_action, GList *barres, int repere_local, int projection, double a, double b, double fx, double fy, double fz, double mx, double my, double mz, const char *nom) __attribute__((__warn_unused_result__));
+Charge_Barre_Repartie_Uniforme *EF_charge_barre_repartie_uniforme_ajout(Projet *projet, unsigned int num_action, GList *barres, int repere_local, int projection, Flottant a, Flottant b, Flottant fx, Flottant fy, Flottant fz, Flottant mx, Flottant my, Flottant mz, const char *nom) __attribute__((__warn_unused_result__));
 char* EF_charge_barre_repartie_uniforme_description(Charge_Barre_Repartie_Uniforme *charge) __attribute__((__warn_unused_result__));
 
 gboolean EF_charge_barre_repartie_uniforme_mx(Beton_Barre *barre, unsigned int discretisation, double a, double b, Barre_Info_EF *infos, double mx, double *ma, double *mb) __attribute__((__warn_unused_result__));

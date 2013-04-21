@@ -35,8 +35,8 @@
 #include "EF_gtk_charge_barre_ponctuelle.h"
 
 Charge_Barre_Ponctuelle *EF_charge_barre_ponctuelle_ajout(Projet *projet,
-  unsigned int num_action, GList *barres, gboolean repere_local, double a, double fx,
-  double fy, double fz, double mx, double my, double mz, const char* nom)
+  unsigned int num_action, GList *barres, gboolean repere_local, Flottant a, Flottant fx,
+  Flottant fy, Flottant fz, Flottant mx, Flottant my, Flottant mz, const char* nom)
 /* Description : Ajoute une charge ponctuelle à une action et à l'intérieur d'une barre en lui
  *               attribuant le numéro suivant la dernière charge de l'action.
  * Paramètres : Projet *projet : la variable projet,
@@ -44,13 +44,13 @@ Charge_Barre_Ponctuelle *EF_charge_barre_ponctuelle_ajout(Projet *projet,
  *            : GList *barres : liste des barres qui supportera la charge,
  *            : int repere_local : TRUE si les charges doivent être prise dans le repère local,
  *                                 FALSE pour le repère global,
- *            : double a : position en mètre de la charge par rapport au début de la barre,
- *            : double fx : force suivant l'axe x,
- *            : double fy : force suivant l'axe y,
- *            : double fz : force suivant l'axe z,
- *            : double mx : moment autour de l'axe x,
- *            : double my : moment autour de l'axe y,
- *            : double mz : moment autour de l'axe z,
+ *            : Flottant a : position en mètre de la charge par rapport au début de la barre,
+ *            : Flottant fx : force suivant l'axe x,
+ *            : Flottant fy : force suivant l'axe y,
+ *            : Flottant fz : force suivant l'axe z,
+ *            : Flottant mx : moment autour de l'axe x,
+ *            : Flottant my : moment autour de l'axe y,
+ *            : Flottant mz : moment autour de l'axe z,
  *            : const char* nom : nom de la charge.
  * Valeur renvoyée :
  *   Succès : pointeur vers la nouvelle charge
@@ -74,7 +74,7 @@ Charge_Barre_Ponctuelle *EF_charge_barre_ponctuelle_ajout(Projet *projet,
     // Trivial
     BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
     BUG(action_en_cours = _1990_action_cherche_numero(projet, num_action), NULL);
-    BUGMSG(!((a < 0.) && (!(ERREUR_RELATIVE_EGALE(a, 0.)))), NULL, gettext("La position de la charge ponctuelle (%f) est incorrecte.\n"), a);
+    BUGMSG(!((common_math_get(a) < 0.) && (!(ERREUR_RELATIVE_EGALE(common_math_get(a), 0.)))), NULL, gettext("La position de la charge ponctuelle (%f) est incorrecte.\n"), common_math_get(a));
     BUGMSG(charge_nouveau = malloc(sizeof(Charge_Barre_Ponctuelle)), NULL, gettext("Erreur d'allocation mémoire.\n"));
     if (barres != NULL)
     {
@@ -84,7 +84,7 @@ Charge_Barre_Ponctuelle *EF_charge_barre_ponctuelle_ajout(Projet *projet,
             Beton_Barre *barre = list_parcours->data;
             
             double distance = EF_noeuds_distance(barre->noeud_debut, barre->noeud_fin);
-            BUGMSG(!((a > distance) && (!(ERREUR_RELATIVE_EGALE(a, distance)))), NULL, gettext("La position de la charge ponctuelle (%f) est incorrecte. La longueur de la barre %d est de %f m.\n"), a, barre->numero, distance);
+            BUGMSG(!((common_math_get(a) > distance) && (!(ERREUR_RELATIVE_EGALE(common_math_get(a), distance)))), NULL, gettext("La position de la charge ponctuelle (%f) est incorrecte. La longueur de la barre %d est de %f m.\n"), common_math_get(a), barre->numero, distance);
             
             list_parcours = g_list_next(list_parcours);
         }
@@ -141,14 +141,14 @@ char* EF_charge_barre_ponctuelle_description(Charge_Barre_Ponctuelle *charge)
     BUGMSG(charge, FALSE, gettext("Paramètre %s incorrect.\n"), "charge");
     
     BUG(txt_liste_barres = common_selection_converti_noeuds_en_texte(charge->barres), NULL);
-    common_math_double_to_char(charge->position, txt_pos, DECIMAL_DISTANCE);
-    common_math_double_to_char(charge->fx, txt_fx, DECIMAL_FORCE);
-    common_math_double_to_char(charge->fx, txt_fx, DECIMAL_FORCE);
-    common_math_double_to_char(charge->fy, txt_fy, DECIMAL_FORCE);
-    common_math_double_to_char(charge->fz, txt_fz, DECIMAL_FORCE);
-    common_math_double_to_char(charge->mx, txt_mx, DECIMAL_MOMENT);
-    common_math_double_to_char(charge->my, txt_my, DECIMAL_MOMENT);
-    common_math_double_to_char(charge->mz, txt_mz, DECIMAL_MOMENT);
+    common_math_double_to_char2(charge->position, txt_pos, DECIMAL_DISTANCE);
+    common_math_double_to_char2(charge->fx, txt_fx, DECIMAL_FORCE);
+    common_math_double_to_char2(charge->fx, txt_fx, DECIMAL_FORCE);
+    common_math_double_to_char2(charge->fy, txt_fy, DECIMAL_FORCE);
+    common_math_double_to_char2(charge->fz, txt_fz, DECIMAL_FORCE);
+    common_math_double_to_char2(charge->mx, txt_mx, DECIMAL_MOMENT);
+    common_math_double_to_char2(charge->my, txt_my, DECIMAL_MOMENT);
+    common_math_double_to_char2(charge->mz, txt_mz, DECIMAL_MOMENT);
     
     BUGMSG(description = g_strdup_printf("%s : %s, %s : %s m, %s, Fx : %s N, Fy : %s N, Fz : %s N, Mx : %s N.m, My : %s N.m, Mz : %s N.m", strstr(txt_liste_barres, ";") == NULL ? gettext("Barre") : gettext("Barres"), txt_liste_barres, gettext("position"), txt_pos, charge->repere_local ? gettext("repère : local") : gettext("repère : global"), txt_fx, txt_fy, txt_fz, txt_mx, txt_my, txt_mz), FALSE, gettext("Erreur d'allocation mémoire.\n"));
     

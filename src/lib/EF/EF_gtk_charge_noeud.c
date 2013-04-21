@@ -208,7 +208,7 @@ void EF_gtk_charge_noeud_ajouter_clicked(GtkButton *button, Projet *projet)
     BUG(EF_gtk_charge_noeud_recupere_donnees(projet, &num_action, &noeuds, &fx, &fy, &fz, &mx, &my, &mz, &texte) == TRUE, );
     
     // Création de la nouvelle charge ponctuelle au noeud
-    BUG(charge_noeud = EF_charge_noeud_ajout(projet, num_action, noeuds, fx, fy, fz, mx, my, mz, texte), );
+    BUG(charge_noeud = EF_charge_noeud_ajout(projet, num_action, noeuds, common_math_f(fx, FLOTTANT_UTILISATEUR), common_math_f(fy, FLOTTANT_UTILISATEUR), common_math_f(fz, FLOTTANT_UTILISATEUR), common_math_f(mx, FLOTTANT_UTILISATEUR), common_math_f(my, FLOTTANT_UTILISATEUR), common_math_f(mz, FLOTTANT_UTILISATEUR), texte), );
     
     free(texte);
     
@@ -243,12 +243,12 @@ void EF_gtk_charge_noeud_editer_clicked(GtkButton *button, Projet *projet)
     BUG(charge_noeud = EF_charge_cherche(projet, ef_gtk->action, ef_gtk->charge), );
     free(charge_noeud->nom);
     charge_noeud->nom = texte;
-    charge_noeud->fx = fx;
-    charge_noeud->fy = fy;
-    charge_noeud->fz = fz;
-    charge_noeud->mx = mx;
-    charge_noeud->my = my;
-    charge_noeud->mz = mz;
+    charge_noeud->fx = common_math_f(fx, FLOTTANT_UTILISATEUR);
+    charge_noeud->fy = common_math_f(fy, FLOTTANT_UTILISATEUR);
+    charge_noeud->fz = common_math_f(fz, FLOTTANT_UTILISATEUR);
+    charge_noeud->mx = common_math_f(mx, FLOTTANT_UTILISATEUR);
+    charge_noeud->my = common_math_f(my, FLOTTANT_UTILISATEUR);
+    charge_noeud->mz = common_math_f(mz, FLOTTANT_UTILISATEUR);
     g_list_free(charge_noeud->noeuds);
     charge_noeud->noeuds = noeuds;
     if (num_action != ef_gtk->action)
@@ -360,17 +360,17 @@ gboolean EF_gtk_charge_noeud(Projet *projet, unsigned int action_defaut, unsigne
     {
         char   tmp[30], *tmp2;
         gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_textview_description"))), charge_noeud->nom, -1);
-        common_math_double_to_char(charge_noeud->fx, tmp, DECIMAL_FORCE);
+        common_math_double_to_char2(charge_noeud->fx, tmp, DECIMAL_FORCE);
         gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_buffer_fx")), tmp, -1);
-        common_math_double_to_char(charge_noeud->fy, tmp, DECIMAL_FORCE);
+        common_math_double_to_char2(charge_noeud->fy, tmp, DECIMAL_FORCE);
         gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_buffer_fy")), tmp, -1);
-        common_math_double_to_char(charge_noeud->fz, tmp, DECIMAL_FORCE);
+        common_math_double_to_char2(charge_noeud->fz, tmp, DECIMAL_FORCE);
         gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_buffer_fz")), tmp, -1);
-        common_math_double_to_char(charge_noeud->mx, tmp, DECIMAL_MOMENT);
+        common_math_double_to_char2(charge_noeud->mx, tmp, DECIMAL_MOMENT);
         gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_buffer_mx")), tmp, -1);
-        common_math_double_to_char(charge_noeud->my, tmp, DECIMAL_MOMENT);
+        common_math_double_to_char2(charge_noeud->my, tmp, DECIMAL_MOMENT);
         gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_buffer_my")), tmp, -1);
-        common_math_double_to_char(charge_noeud->mz, tmp, DECIMAL_MOMENT);
+        common_math_double_to_char2(charge_noeud->mz, tmp, DECIMAL_MOMENT);
         gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_buffer_mz")), tmp, -1);
         BUG(tmp2 = common_selection_converti_noeuds_en_texte(charge_noeud->noeuds), FALSE);
         gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_buffer_noeuds")), tmp2, -1);
