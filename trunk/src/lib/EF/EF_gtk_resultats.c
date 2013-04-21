@@ -2616,7 +2616,6 @@ void EF_gtk_resultats(Projet *projet)
     ef_gtk->combobox_cas = GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder, "EF_resultats_combo_box_cas"));
     ef_gtk->combobox_ponderations = GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder, "EF_resultats_combo_box_ponderations"));
     
-    gtk_adjustment_set_upper(GTK_ADJUSTMENT(gtk_builder_get_object(ef_gtk->builder, "adjustment_cas")), g_list_length(projet->actions)-1);
     gtk_combo_box_set_active(ef_gtk->combobox, 0);
     
     list_parcours = ef_gtk->tableaux;

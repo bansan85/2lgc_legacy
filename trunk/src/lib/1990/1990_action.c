@@ -411,8 +411,13 @@ Action *_1990_action_ajout(Projet *projet, unsigned int type, const char* descri
         gtk_tree_store_append(projet->list_gtk._1990_actions.tree_store_actions, &action_nouveau->Iter_fenetre, NULL);
         gtk_tree_store_set(projet->list_gtk._1990_actions.tree_store_actions, &action_nouveau->Iter_fenetre, 0, action_nouveau, -1);
     }
-    if (projet->list_gtk.ef_resultats.builder != NULL)
-        gtk_adjustment_set_upper(GTK_ADJUSTMENT(gtk_builder_get_object(projet->list_gtk.ef_resultats.builder, "adjustment_cas")), g_list_length(projet->actions)-1);
+    if ((projet->list_gtk._1990_groupes.builder != NULL) && (GTK_COMMON_SPINBUTTON_AS_UINT(GTK_SPIN_BUTTON(projet->list_gtk._1990_groupes.spin_button_niveau)) == 0))
+    {
+        GtkTreeIter iter;
+        
+        gtk_tree_store_append(projet->list_gtk._1990_groupes.tree_store_dispo, &iter, NULL);
+        gtk_tree_store_set(projet->list_gtk._1990_groupes.tree_store_dispo, &iter, 0, action_nouveau->numero, 1, action_nouveau->nom, -1);
+    }
 #endif
     
     BUG(EF_calculs_free(projet), FALSE);
@@ -846,8 +851,6 @@ gboolean _1990_action_free_num(Projet *projet, unsigned int num)
 #ifdef ENABLE_GTK
     if (projet->list_gtk._1990_actions.builder != NULL)
         gtk_widget_queue_draw(GTK_WIDGET(projet->list_gtk._1990_actions.tree_view_actions));
-    if (projet->list_gtk.ef_resultats.builder != NULL)
-        gtk_adjustment_set_upper(GTK_ADJUSTMENT(gtk_builder_get_object(projet->list_gtk.ef_resultats.builder, "adjustment_cas")), g_list_length(projet->actions)-1);
 #endif
     
     // On enlève l'action dans la liste des groupes de niveau 0 tout en modifiant le numéro

@@ -160,6 +160,7 @@ gboolean EF_gtk_charge_barre_ponctuelle_recupere_donnees(Projet *projet,
             if (strcmp(*nom, "") == 0)
             {
                 free(*nom);
+                *nom = NULL;
                 ok = FALSE;
             }
         }
@@ -181,7 +182,7 @@ void EF_gtk_charge_barre_ponct_check(GtkWidget *object, Projet *projet)
     unsigned int num_action;
     GList *barres;
     double fx, fy, fz, mx, my, mz;
-    gchar *nom;
+    gchar *nom = NULL;
     gboolean repere_local;
     double position;
     
@@ -193,9 +194,9 @@ void EF_gtk_charge_barre_ponct_check(GtkWidget *object, Projet *projet)
     else
     {
         gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_charge_barre_ponctuelle.builder, "EF_charge_barre_ponct_button_add_edit")), TRUE);
-        free(nom);
         g_list_free(barres);
     }
+    free(nom);
     return;
 }
 
