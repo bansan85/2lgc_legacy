@@ -33,7 +33,7 @@ Action *_1990_action_cherche_numero(Projet *projet, unsigned int numero) __attri
 
 gboolean _1990_action_renomme(Projet *projet, Action *action, const char* description) __attribute__((__warn_unused_result__));
 gboolean _1990_action_change_type(Projet *projet, Action *action, unsigned int type) __attribute__((__warn_unused_result__));
-gboolean _1990_action_change_psi(Projet *projet, Action *action, unsigned int psi_num, double psi) __attribute__((__warn_unused_result__));
+gboolean _1990_action_change_psi(Projet *projet, Action *action, unsigned int psi_num, Flottant psi) __attribute__((__warn_unused_result__));
 
 gboolean _1990_action_affiche_tout(Projet *projet) __attribute__((__warn_unused_result__));
 gboolean _1990_action_affiche_resultats(Projet *projet, unsigned int num_action) __attribute__((__warn_unused_result__));

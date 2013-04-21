@@ -123,6 +123,33 @@ void _1990_gtk_actions_cursor_changed(GtkTreeView *tree_view, Projet *projet)
     if (!gtk_tree_selection_get_selected(projet->list_gtk._1990_actions.tree_select_actions, &model, &iter))
         return;
     gtk_tree_model_get(model, &iter, 0, &action, -1);
+    switch (_1990_action_categorie_bat(action->type, projet->parametres.pays))
+    {
+        case ACTION_POIDS_PROPRE :
+        case ACTION_PRECONTRAINTE :
+        {
+            g_object_set(GTK_CELL_RENDERER_TEXT(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_treeview_cell2")), "editable", FALSE, NULL);
+            g_object_set(GTK_CELL_RENDERER_TEXT(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_treeview_cell3")), "editable", FALSE, NULL);
+            g_object_set(GTK_CELL_RENDERER_TEXT(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_treeview_cell4")), "editable", FALSE, NULL);
+            break;
+        }
+        case ACTION_VARIABLE :
+        case ACTION_ACCIDENTELLE :
+        case ACTION_SISMIQUE :
+        case ACTION_EAUX_SOUTERRAINES :
+        {
+            g_object_set(GTK_CELL_RENDERER_TEXT(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_treeview_cell2")), "editable", TRUE, NULL);
+            g_object_set(GTK_CELL_RENDERER_TEXT(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_treeview_cell3")), "editable", TRUE, NULL);
+            g_object_set(GTK_CELL_RENDERER_TEXT(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_treeview_cell4")), "editable", TRUE, NULL);
+            break;
+        }
+        case ACTION_INCONNUE :
+        default :
+        {
+            BUGMSG(NULL, , gettext("Type d'action %u inconnu.\n"), action->type);
+            break;
+        }
+    }
     
     // On actualise la liste des charges
     gtk_tree_store_clear(projet->list_gtk._1990_actions.tree_store_charges);
@@ -386,7 +413,7 @@ void _1990_gtk_tree_view_actions_psi_edited(GtkCellRendererText *cell, gchar *pa
     // On vérifie si le texte contient bien un nombre flottant
     convertion = common_text_str_to_double(new_text, 0, TRUE, 1., TRUE);
     if (!isnan(convertion))
-        BUG(_1990_action_change_psi(projet, action, column-3, convertion), );
+        BUG(_1990_action_change_psi(projet, action, column-3, common_math_f(convertion, FLOTTANT_UTILISATEUR)), );
     
     return;
 }
@@ -425,7 +452,7 @@ void _1990_gtk_menu_nouvelle_action_activate(GtkMenuItem *menuitem, Projet *proj
             free(tmp);
             
             path = gtk_tree_model_get_path(GTK_TREE_MODEL(projet->list_gtk._1990_actions.tree_store_actions), &action->Iter_fenetre);
-            gtk_tree_view_set_cursor(GTK_TREE_VIEW(projet->list_gtk._1990_actions.tree_view_actions), path, gtk_tree_view_get_column(GTK_TREE_VIEW(projet->list_gtk._1990_actions.tree_view_actions), 1), TRUE);
+            gtk_tree_view_set_cursor(GTK_TREE_VIEW(projet->list_gtk._1990_actions.tree_view_actions), path, gtk_tree_view_get_column(GTK_TREE_VIEW(projet->list_gtk._1990_actions.tree_view_actions), 0), TRUE);
             gtk_tree_path_free(path);
             
             return;

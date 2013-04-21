@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2013-04-21 13:31+0200\n"
+"POT-Creation-Date: 2013-04-21 17:09+0200\n"
 "PO-Revision-Date: 2013-04-21 13:55+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
@@ -854,6 +854,10 @@ msgid "Type de nombre est inconnu.\n"
 msgstr "Type de nombre est inconnu.\n"
 
 #, c-format
+msgid "Type d'action %u inconnu.\n"
+msgstr "Type d'action %u inconnu.\n"
+
+#, c-format
 msgid "Type d'action '%s' inconnu.\n"
 msgstr "Type d'action '%s' inconnu.\n"
 
@@ -875,10 +879,6 @@ msgstr "Répartie uniforme sur barre"
 #, c-format
 msgid "La génération de la fenêtre %s a échouée.\n"
 msgstr "La génération de la fenêtre %s a échouée.\n"
-
-#, c-format
-msgid "Type d'action %u inconnu.\n"
-msgstr "Type d'action %u inconnu.\n"
 
 #, c-format
 msgid "Pays %d inconnu.\n"

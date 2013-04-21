@@ -679,6 +679,9 @@ gboolean _1992_1_1_barres_change_section(Beton_Barre *barre, EF_Section *section
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(section, FALSE, gettext("La section n'est pas spécifiée.\n"));
     
+    if (barre->section == section)
+        return TRUE;
+    
     barre->section = section;
     
     BUG(EF_calculs_free(projet), FALSE);
@@ -710,6 +713,9 @@ gboolean _1992_1_1_barres_change_materiau(Beton_Barre *barre, EF_Materiau *mater
 {
     BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre");
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    
+    if (barre->materiau == materiau)
+        return TRUE;
     
     barre->materiau = materiau;
     
@@ -751,6 +757,10 @@ gboolean _1992_1_1_barres_change_noeud(Beton_Barre *barre, EF_Noeud *noeud, gboo
     BUGMSG(!((noeud_1 == TRUE) && (barre->noeud_fin == noeud)), FALSE, gettext("Impossible d'appliquer le même noeud aux deux extrémités d'une barre.\n"));
     BUGMSG(!((noeud_1 == FALSE) && (barre->noeud_debut == noeud)), FALSE, gettext("Impossible d'appliquer le même noeud aux deux extrémités d'une barre.\n"));
     
+    if ((noeud_1) && (barre->noeud_debut == noeud))
+        return TRUE;
+    if ((!noeud_1) && (barre->noeud_fin == noeud))
+        return TRUE;
     liste_barre = g_list_append(liste_barre, barre);
     BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, NULL, NULL, liste_barre, &liste_noeuds_dep, NULL, NULL, FALSE, TRUE), FALSE);
     BUGMSG(g_list_find(liste_noeuds_dep, noeud) == NULL, FALSE, gettext("Impossible d'affecter le noeud %d à la barre %d car il est dépendant de la barre à modifier.\n"), noeud->numero, barre->numero);
@@ -794,6 +804,9 @@ gboolean _1992_1_1_barres_change_relachement(Beton_Barre *barre, EF_Relachement 
 {
     BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre");
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    
+    if (barre->relachement == relachement)
+        return TRUE;
     
     barre->relachement = relachement;
     

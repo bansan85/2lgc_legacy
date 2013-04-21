@@ -508,7 +508,7 @@ double EF_calculs_resid(int *Ap, int *Ai, double *Ax, double *b, unsigned int n,
 }
 
 
-gboolean EF_calculs_resoud_charge(Projet *projet, unsigned int num_action)
+gboolean EF_calculs_resoud_charge(Projet *projet, Action *action)
 /* Description : Détermine à partir de la matrice de rigidité partielle factorisée les
  *               déplacements et les efforts dans les noeuds pour l'action demandée ainsi
  *               que la courbe des sollicitations dans les barres.
@@ -524,7 +524,6 @@ gboolean EF_calculs_resoud_charge(Projet *projet, unsigned int num_action)
  *             en cas d'erreur due à une fonction interne.
  */
 {
-    Action          *action_en_cours;
     cholmod_triplet *triplet_deplacements_totaux, *triplet_deplacements_partiels;
     cholmod_triplet *triplet_force_partielle, *triplet_force_complete;
     cholmod_triplet *triplet_efforts_locaux_finaux, *triplet_efforts_globaux_initiaux;
@@ -544,14 +543,14 @@ gboolean EF_calculs_resoud_charge(Projet *projet, unsigned int num_action)
     GList           *list_parcours;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUG(action_en_cours = _1990_action_cherche_numero(projet, num_action), FALSE);
+    BUGMSG(action, FALSE, gettext("Paramètre %s incorrect.\n"), "action");
     BUGMSG(projet->calculs.numeric, FALSE, gettext("Paramètre %s incorrect.\n"), "numeric");
     BUGMSG(projet->calculs.rigidite_matrice_partielle->nrow != 0, FALSE, gettext("Paramètre %s incorrect.\n"), "rigidite_matrice_partielle->nrow");
     
     /* Création du triplet partiel et complet contenant les forces extérieures
      * sur les noeuds et initialisation des valeurs à 0. Le vecteur partiel sera 
      * utilisé dans l'équation finale : {F} = [K]{D}*/
-    BUG(common_fonction_init(projet, action_en_cours), FALSE);
+    BUG(common_fonction_init(projet, action), FALSE);
     BUGMSG(triplet_force_partielle = cholmod_allocate_triplet(projet->calculs.rigidite_matrice_partielle->nrow, 1, projet->calculs.rigidite_matrice_partielle->nrow, 0, CHOLMOD_REAL, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"));
     ai = (int*)triplet_force_partielle->i;
     aj = (int*)triplet_force_partielle->j;
@@ -577,9 +576,9 @@ gboolean EF_calculs_resoud_charge(Projet *projet, unsigned int num_action)
     
     // Détermination des charges aux noeuds :
     //   Pour chaque charge dans l'action
-    if (action_en_cours->charges != NULL)
+    if (action->charges != NULL)
     {
-        list_parcours = action_en_cours->charges;
+        list_parcours = action->charges;
         do
         {
             switch (((Charge_Barre_Ponctuelle *)list_parcours->data)->type)
@@ -787,38 +786,38 @@ gboolean EF_calculs_resoud_charge(Projet *projet, unsigned int num_action)
                             // N(x) & = -F_{Ax} & &\textrm{ pour x de 0 à a}\nonumber\\
                             // N(x) & = F_{Bx} & &\textrm{ pour x de a à l}\nonumber\\
                             
-                            BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[0][num], 0., a, -FAx, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
-                            BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[0][num], a,  l,  FBx, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
+                            BUG(common_fonction_ajout_poly(action->fonctions_efforts[0][num], 0., a, -FAx, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
+                            BUG(common_fonction_ajout_poly(action->fonctions_efforts[0][num], a,  l,  FBx, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
                             
                             // T_y(x) & = -F_{Ay_i} - F_{Ay_h} & &\textrm{ pour x de 0 à a}\nonumber\\
                             // T_y(x) & =  F_{By_i} + F_{By_h} & &\textrm{ pour x de a à l}\nonumber\\
                             
-                            BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[1][num], 0., a, -FAy_i-FAy_h, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
-                            BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[1][num], a,  l,  FBy_i+FBy_h, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
+                            BUG(common_fonction_ajout_poly(action->fonctions_efforts[1][num], 0., a, -FAy_i-FAy_h, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
+                            BUG(common_fonction_ajout_poly(action->fonctions_efforts[1][num], a,  l,  FBy_i+FBy_h, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
                             
                             // T_z(x) & = -F_{Az_i} - F_{Az_h} & &\textrm{ pour x de 0 à a}\nonumber\\
                             // T_z(x) & =  F_{Bz_i} + F_{Bz_h} & &\textrm{ pour x de a à l}\nonumber\\
                             
-                            BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[2][num], 0., a, -FAz_i-FAz_h, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
-                            BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[2][num], a,  l,  FBz_i+FBz_h, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
+                            BUG(common_fonction_ajout_poly(action->fonctions_efforts[2][num], 0., a, -FAz_i-FAz_h, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
+                            BUG(common_fonction_ajout_poly(action->fonctions_efforts[2][num], a,  l,  FBz_i+FBz_h, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
                             
                             // M_x(x) & = -M_{Ax} & &\textrm{ pour x de 0 à a}\nonumber\\
                             // M_x(x) & = M_{Bx} & &\textrm{ pour x de a à l}\nonumber\\
                             
-                            BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[3][num], 0., a, -MAx, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
-                            BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[3][num], a,  l,  MBx, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
+                            BUG(common_fonction_ajout_poly(action->fonctions_efforts[3][num], 0., a, -MAx, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
+                            BUG(common_fonction_ajout_poly(action->fonctions_efforts[3][num], a,  l,  MBx, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
                             
                             // M_y(x) & = -M_{Ay} - (F_{Az_i}+F_{Az_h}) \cdot x & &\textrm{ pour x de 0 à a}\nonumber\\
                             // M_y(x) & = F_{Bz_i} \cdot L - M_{Ay} + (F_{Bz_i}+F_{Bz_h}) \cdot x & &\textrm{ pour x de a à l}\nonumber\\
                             
-                            BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[4][num], 0., a, -MAy,         -FAz_i-FAz_h, 0., 0., 0., 0., 0., debut_barre), FALSE);
-                            BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[4][num], a,  l, -FBz_i*l-MAy,  FBz_i+FBz_h, 0., 0., 0., 0., 0., debut_barre), FALSE);
+                            BUG(common_fonction_ajout_poly(action->fonctions_efforts[4][num], 0., a, -MAy,         -FAz_i-FAz_h, 0., 0., 0., 0., 0., debut_barre), FALSE);
+                            BUG(common_fonction_ajout_poly(action->fonctions_efforts[4][num], a,  l, -FBz_i*l-MAy,  FBz_i+FBz_h, 0., 0., 0., 0., 0., debut_barre), FALSE);
                             
                             // M_z(x) & = -M_{Az} + (F_{Ay_i}+F_{Ay_h}) \cdot x & &\textrm{ pour x de 0 à a}\nonumber\\
                             // M_z(x) & = F_{By_i} \cdot L - M_{Az} - (F_{By_i}+F_{By_h}) \cdot x & &\textrm{ pour x de a à l}
                             
-                            BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[5][num], 0., a, -MAz,         FAy_i+FAy_h, 0., 0., 0., 0., 0., debut_barre), FALSE);
-                            BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[5][num], a,  l, FBy_i*l-MAz, -FBy_i-FBy_h, 0., 0., 0., 0., 0., debut_barre), FALSE);
+                            BUG(common_fonction_ajout_poly(action->fonctions_efforts[5][num], 0., a, -MAz,         FAy_i+FAy_h, 0., 0., 0., 0., 0., debut_barre), FALSE);
+                            BUG(common_fonction_ajout_poly(action->fonctions_efforts[5][num], a,  l, FBy_i*l-MAz, -FBy_i-FBy_h, 0., 0., 0., 0., 0., debut_barre), FALSE);
                             // \end{align*}\begin{verbatim}
                             
                             
@@ -828,10 +827,10 @@ gboolean EF_calculs_resoud_charge(Projet *projet, unsigned int num_action)
             //           EF_charge_barre_ponctuelle_fonc_ry,
             //           EF_charge_barre_ponctuelle_fonc_rz,
             //           EF_charge_barre_ponctuelle_n)\begin{align*}
-                            BUG(EF_charge_barre_ponctuelle_fonc_rx(action_en_cours->fonctions_rotation[0][num], element_en_beton, pos, a, MAx, MBx), FALSE);
-                            BUG(EF_charge_barre_ponctuelle_fonc_ry(action_en_cours->fonctions_rotation[1][num], action_en_cours->fonctions_deformation[2][num], element_en_beton, pos, a, ax2[2], ax2[4], -MAy, -MBy), FALSE);
-                            BUG(EF_charge_barre_ponctuelle_fonc_rz(action_en_cours->fonctions_rotation[2][num], action_en_cours->fonctions_deformation[1][num], element_en_beton, pos, a, ax2[1], ax2[5], -MAz, -MBz), FALSE);
-                            BUG(EF_charge_barre_ponctuelle_n(action_en_cours->fonctions_deformation[0][num], element_en_beton, pos, a, FAx, FBx), FALSE);
+                            BUG(EF_charge_barre_ponctuelle_fonc_rx(action->fonctions_rotation[0][num], element_en_beton, pos, a, MAx, MBx), FALSE);
+                            BUG(EF_charge_barre_ponctuelle_fonc_ry(action->fonctions_rotation[1][num], action->fonctions_deformation[2][num], element_en_beton, pos, a, ax2[2], ax2[4], -MAy, -MBy), FALSE);
+                            BUG(EF_charge_barre_ponctuelle_fonc_rz(action->fonctions_rotation[2][num], action->fonctions_deformation[1][num], element_en_beton, pos, a, ax2[1], ax2[5], -MAz, -MBz), FALSE);
+                            BUG(EF_charge_barre_ponctuelle_n(action->fonctions_deformation[0][num], element_en_beton, pos, a, FAx, FBx), FALSE);
                             
                             cholmod_free_triplet(&triplet_efforts_locaux_initiaux, projet->calculs.c);
                             
@@ -1091,49 +1090,49 @@ gboolean EF_calculs_resoud_charge(Projet *projet, unsigned int num_action)
             //               N(x) & = \frac{(F_{Ax}+F_{Bx}) \cdot x - a \cdot F_{Bx} - (L-b) \cdot F_{Ax}}{L-a-b} & &\textrm{ pour x de a à L-b}\nonumber\\
             //               N(x) & = F_{Bx} & &\textrm{ pour x de L-b à L}\nonumber\\
                                 
-                                BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[0][num], 0., a, -FAx, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
-                                BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[0][num], a, l-b, (-a*FBx-(l-b)*FAx)/(l-a-b), (FAx+FBx)/(l-a-b), 0., 0., 0., 0., 0., debut_barre), FALSE);
-                                BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[0][num], l-b, l, FBx,  0., 0., 0., 0., 0., 0., debut_barre), FALSE);
+                                BUG(common_fonction_ajout_poly(action->fonctions_efforts[0][num], 0., a, -FAx, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
+                                BUG(common_fonction_ajout_poly(action->fonctions_efforts[0][num], a, l-b, (-a*FBx-(l-b)*FAx)/(l-a-b), (FAx+FBx)/(l-a-b), 0., 0., 0., 0., 0., debut_barre), FALSE);
+                                BUG(common_fonction_ajout_poly(action->fonctions_efforts[0][num], l-b, l, FBx,  0., 0., 0., 0., 0., 0., debut_barre), FALSE);
                                 
                             // T_y(x) & = -F_{Ay_i} - F_{Ay_h} & &\textrm{ pour x de 0 à a}\nonumber\\
                             // T_y(x) & = \frac{-a (F_{By_i}+F_{By_h})-(L-b)(F_{Ay_i}+F_{Ay_h})}{L-a-b} + \frac{F_{Ay_i}+F_{Ay_h}+F_{By_i}+F_{By_h}}{L-a-b} x & &\textrm{ pour x de a à L-b}\nonumber\\
                             // T_y(x) & =  F_{By_i} + F_{By_h} & &\textrm{ pour x de L-b à L}\nonumber\\
                                 
-                                BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[1][num], 0., a,  -FAy_i-FAy_h, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
-                                BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[1][num], a, l-b, (-a*(FBy_i+FBy_h)-(l-b)*(FAy_i+FAy_h))/(l-a-b), (FAy_i+FAy_h+FBy_i+FBy_h)/(l-a-b), 0., 0., 0., 0., 0., debut_barre), FALSE);
-                                BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[1][num], l-b, l, FBy_i+FBy_h, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
+                                BUG(common_fonction_ajout_poly(action->fonctions_efforts[1][num], 0., a,  -FAy_i-FAy_h, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
+                                BUG(common_fonction_ajout_poly(action->fonctions_efforts[1][num], a, l-b, (-a*(FBy_i+FBy_h)-(l-b)*(FAy_i+FAy_h))/(l-a-b), (FAy_i+FAy_h+FBy_i+FBy_h)/(l-a-b), 0., 0., 0., 0., 0., debut_barre), FALSE);
+                                BUG(common_fonction_ajout_poly(action->fonctions_efforts[1][num], l-b, l, FBy_i+FBy_h, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
                                 
                             // T_z(x) & = -F_{Az_i} - F_{Az_h} & &\textrm{ pour x de 0 à a}\nonumber\\
                             // T_z(x) & = \frac{-a (F_{Bz_i}+F_{Bz_h})-(L-b) (F_{Az_i}+F_{Az_h})}{L-a-b} + \frac{F_{Az_i}+F_{Az_h}+F_{Bz_i}+F_{Bz_h}}{L-a-b} x & &\textrm{ pour x de a à L-b}\nonumber\\
                             // T_z(x) & =  F_{Bz_i} + F_{Bz_h} & &\textrm{ pour x de L-b à L}\nonumber\\
                                 
-                                BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[2][num], 0., a, -FAz_i-FAz_h, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
-                                BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[2][num], a, l-b, (-a*(FBz_i+FBz_h)-(l-b)*(FAz_i+FAz_h))/(l-a-b), (FAz_i+FAz_h+FBz_i+FBz_h)/(l-a-b), 0., 0., 0., 0., 0., debut_barre), FALSE);
-                                BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[2][num], l-b,  l,  FBz_i+FBz_h, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
+                                BUG(common_fonction_ajout_poly(action->fonctions_efforts[2][num], 0., a, -FAz_i-FAz_h, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
+                                BUG(common_fonction_ajout_poly(action->fonctions_efforts[2][num], a, l-b, (-a*(FBz_i+FBz_h)-(l-b)*(FAz_i+FAz_h))/(l-a-b), (FAz_i+FAz_h+FBz_i+FBz_h)/(l-a-b), 0., 0., 0., 0., 0., debut_barre), FALSE);
+                                BUG(common_fonction_ajout_poly(action->fonctions_efforts[2][num], l-b,  l,  FBz_i+FBz_h, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
                                 
                             // M_x(x) & = -M_{Ax} & &\textrm{ pour x de 0 à a}\nonumber\\
                             // M_x(x) & = \frac{-a \cdot M_{Bx}-(L-b) \cdot M_{Ax}}{L-a-b} + \frac{M_{Ax}+M_{Bx}}{L-a-b} \cdot x & &\textrm{ pour x de a à L-b}\nonumber\\
                             // M_x(x) & = M_{Bx} & &\textrm{ pour x de L-b à L}\nonumber\\
                                 
-                                BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[3][num], 0., a,  -MAx, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
-                                BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[3][num], a, l-b, (-a*MBx-(l-b)*MAx)/(l-a-b), (MAx+MBx)/(l-a-b), 0., 0., 0., 0., 0., debut_barre), FALSE);
-                                BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[3][num], l-b,  l, MBx, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
+                                BUG(common_fonction_ajout_poly(action->fonctions_efforts[3][num], 0., a,  -MAx, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
+                                BUG(common_fonction_ajout_poly(action->fonctions_efforts[3][num], a, l-b, (-a*MBx-(l-b)*MAx)/(l-a-b), (MAx+MBx)/(l-a-b), 0., 0., 0., 0., 0., debut_barre), FALSE);
+                                BUG(common_fonction_ajout_poly(action->fonctions_efforts[3][num], l-b,  l, MBx, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
                                 
                             // M_y(x) & = -M_{Ay} - (F_{Az_i}+F_{Az_h}) \cdot x & &\textrm{ pour x de 0 à a}\nonumber\\
                             // M_y(x) & = -(F_{Bz_i}+F_{Bz_h}) \cdot (L-x) + M_{By} - M_y \cdot (L-b-x) + F_z \cdot \frac{(L-b-x)^2}{2} & &\textrm{ pour x de a à L-b}\nonumber\\
                             // M_y(x) & =  M_{By} - L \cdot (F_{Bz_i}+F_{Bz_h}) + (F_{Bz_i}+F_{Bz_h}) \cdot x & &\textrm{ pour x de L-b à L}\nonumber\\
                                 
-                                BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[4][num], 0., a, -MAy, -FAz_i-FAz_h, 0., 0., 0., 0., 0., debut_barre), FALSE);
-                                BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[4][num], a, l-b, b*b*ax2[2]/2.+b*(ax2[4]-ax2[2]*l)+ax2[2]*l*l/2.-l*(ax2[4]+FBz_i+FBz_h)+MBy, -ax2[2]*(l-b)+ax2[4]+FBz_i+FBz_h, ax2[2]/2., 0., 0., 0., 0., debut_barre), FALSE);
-                                BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[4][num], l-b,  l, MBy-l*(FBz_i+FBz_h), FBz_i+FBz_h, 0., 0., 0., 0., 0., debut_barre), FALSE);
+                                BUG(common_fonction_ajout_poly(action->fonctions_efforts[4][num], 0., a, -MAy, -FAz_i-FAz_h, 0., 0., 0., 0., 0., debut_barre), FALSE);
+                                BUG(common_fonction_ajout_poly(action->fonctions_efforts[4][num], a, l-b, b*b*ax2[2]/2.+b*(ax2[4]-ax2[2]*l)+ax2[2]*l*l/2.-l*(ax2[4]+FBz_i+FBz_h)+MBy, -ax2[2]*(l-b)+ax2[4]+FBz_i+FBz_h, ax2[2]/2., 0., 0., 0., 0., debut_barre), FALSE);
+                                BUG(common_fonction_ajout_poly(action->fonctions_efforts[4][num], l-b,  l, MBy-l*(FBz_i+FBz_h), FBz_i+FBz_h, 0., 0., 0., 0., 0., debut_barre), FALSE);
                                 
                             // M_z(x) & = -M_{Az} + (F_{Ay_i}+F_{Ay_h}) \cdot x & &\textrm{ pour x de 0 à a}\nonumber\\
                             // M_z(x) & = (F_{By_i}+F_{By_h}) \cdot (L-x) - M_{Bz} - M_z \cdot (L-b-x) - F_y \cdot \frac{(L-b-x)^2}{2} & &\textrm{ pour x de a à L-b}\nonumber\\
                             // M_z(x) & =  M_{Bz} + L \cdot (F_{By_i}+F_{By_h}) - (F_{By_i}+F_{By_h}) \cdot x & &\textrm{ pour x de L-b à L}
                                 
-                                BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[5][num], 0., a, -MAz, +FAy_i+FAy_h, 0., 0., 0., 0., 0., debut_barre), FALSE);
-                                BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[5][num], a, l-b, -b*b*ax2[1]/2.+b*(ax2[1]*l+ax2[5])-ax2[1]*l*l/2.+l*(FBy_i+FBy_h-ax2[5])+MBz, ax2[1]*(l-b)+ax2[5]-FBy_i-FBy_h, -ax2[1]/2., 0., 0., 0., 0., debut_barre), FALSE);
-                                BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[5][num], l-b,  l, MBz+l*(FBy_i+FBy_h), -FBy_i-FBy_h, 0., 0., 0., 0., 0., debut_barre), FALSE);
+                                BUG(common_fonction_ajout_poly(action->fonctions_efforts[5][num], 0., a, -MAz, +FAy_i+FAy_h, 0., 0., 0., 0., 0., debut_barre), FALSE);
+                                BUG(common_fonction_ajout_poly(action->fonctions_efforts[5][num], a, l-b, -b*b*ax2[1]/2.+b*(ax2[1]*l+ax2[5])-ax2[1]*l*l/2.+l*(FBy_i+FBy_h-ax2[5])+MBz, ax2[1]*(l-b)+ax2[5]-FBy_i-FBy_h, -ax2[1]/2., 0., 0., 0., 0., debut_barre), FALSE);
+                                BUG(common_fonction_ajout_poly(action->fonctions_efforts[5][num], l-b,  l, MBz+l*(FBy_i+FBy_h), -FBy_i-FBy_h, 0., 0., 0., 0., 0., debut_barre), FALSE);
                             // \end{align*}\begin{verbatim}
                                 
             //             Détermination des fonctions de déformation et rotation de la même façon que
@@ -1142,10 +1141,10 @@ gboolean EF_calculs_resoud_charge(Projet *projet, unsigned int num_action)
             //               EF_charge_barre_repartie_uniforme_fonc_ry,
             //               EF_charge_barre_repartie_uniforme_fonc_rz,
             //               EF_charge_barre_repartie_uniforme_n) :
-                                BUG(EF_charge_barre_repartie_uniforme_fonc_rx(action_en_cours->fonctions_rotation[0][num], element_en_beton, i, a, b, MAx, MBx), FALSE);
-                                BUG(EF_charge_barre_repartie_uniforme_fonc_ry(action_en_cours->fonctions_rotation[1][num], action_en_cours->fonctions_deformation[2][num], element_en_beton, i, a, b, ax2[2], ax2[4], MAy, MBy), FALSE);
-                                BUG(EF_charge_barre_repartie_uniforme_fonc_rz(action_en_cours->fonctions_rotation[2][num], action_en_cours->fonctions_deformation[1][num], element_en_beton, i, a, b, ax2[1], ax2[5], MAz, MBz), FALSE);
-                                BUG(EF_charge_barre_repartie_uniforme_n(action_en_cours->fonctions_deformation[0][num], element_en_beton, i, a, b, FAx, FBx), FALSE);
+                                BUG(EF_charge_barre_repartie_uniforme_fonc_rx(action->fonctions_rotation[0][num], element_en_beton, i, a, b, MAx, MBx), FALSE);
+                                BUG(EF_charge_barre_repartie_uniforme_fonc_ry(action->fonctions_rotation[1][num], action->fonctions_deformation[2][num], element_en_beton, i, a, b, ax2[2], ax2[4], MAy, MBy), FALSE);
+                                BUG(EF_charge_barre_repartie_uniforme_fonc_rz(action->fonctions_rotation[2][num], action->fonctions_deformation[1][num], element_en_beton, i, a, b, ax2[1], ax2[5], MAz, MBz), FALSE);
+                                BUG(EF_charge_barre_repartie_uniforme_n(action->fonctions_deformation[0][num], element_en_beton, i, a, b, FAx, FBx), FALSE);
                             
             //             Convertion des réactions d'appuis locales dans le repère global :\end{verbatim}\begin{center}
             //           $\{ R \}_{global} = [K] \cdot \{ F \}_{local}$\end{center}\begin{verbatim}
@@ -1218,7 +1217,7 @@ gboolean EF_calculs_resoud_charge(Projet *projet, unsigned int num_action)
     // FinPour
     
     /* On converti les données dans des structures permettant les calculs via les libraries */
-    BUGMSG(action_en_cours->forces_complet = cholmod_triplet_to_sparse(triplet_force_complete, 0, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(action->forces_complet = cholmod_triplet_to_sparse(triplet_force_complete, 0, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"));
     cholmod_free_triplet(&triplet_force_complete, projet->calculs.c);
     
     // Calcul des déplacements des noeuds :\end{verbatim}\begin{align*}
@@ -1247,8 +1246,8 @@ gboolean EF_calculs_resoud_charge(Projet *projet, unsigned int num_action)
     cholmod_free_triplet(&triplet_force_partielle, projet->calculs.c);
     
     /* Création du vecteur déplacement complet */
-    BUGMSG(triplet_deplacements_totaux = cholmod_allocate_triplet(action_en_cours->forces_complet->nrow, 1, action_en_cours->forces_complet->nrow, 0, CHOLMOD_REAL, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-    triplet_deplacements_totaux->nnz = action_en_cours->forces_complet->nrow;
+    BUGMSG(triplet_deplacements_totaux = cholmod_allocate_triplet(action->forces_complet->nrow, 1, action->forces_complet->nrow, 0, CHOLMOD_REAL, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    triplet_deplacements_totaux->nnz = action->forces_complet->nrow;
     ai2 = (int*)triplet_deplacements_totaux->i;
     aj2 = (int*)triplet_deplacements_totaux->j;
     ax2 = (double*)triplet_deplacements_totaux->x;
@@ -1273,12 +1272,12 @@ gboolean EF_calculs_resoud_charge(Projet *projet, unsigned int num_action)
         }
     }
     cholmod_free_triplet(&triplet_deplacements_partiels, projet->calculs.c);
-    BUGMSG(action_en_cours->deplacement_complet = cholmod_triplet_to_sparse(triplet_deplacements_totaux, 0, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(action->deplacement_complet = cholmod_triplet_to_sparse(triplet_deplacements_totaux, 0, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"));
     
     // Calcule des réactions d'appuis :\end{verbatim}\begin{displaymath}
     // \{F\} = [K] \cdot \{\Delta\} - \{F_0\} \end{displaymath}\begin{verbatim}
-    BUGMSG(sparse_tmp = cholmod_ssmult(projet->calculs.rigidite_matrice_complete, action_en_cours->deplacement_complet, 0, TRUE, TRUE, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-    BUGMSG(action_en_cours->efforts_noeuds = cholmod_add(sparse_tmp, action_en_cours->forces_complet, one, minusone, TRUE, TRUE, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(sparse_tmp = cholmod_ssmult(projet->calculs.rigidite_matrice_complete, action->deplacement_complet, 0, TRUE, TRUE, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(action->efforts_noeuds = cholmod_add(sparse_tmp, action->forces_complet, one, minusone, TRUE, TRUE, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"));
     cholmod_free_sparse(&sparse_tmp, projet->calculs.c);
     
     // Pour chaque barre, ajout des efforts et déplacement dus au mouvement de l'ensemble de
@@ -1384,12 +1383,12 @@ gboolean EF_calculs_resoud_charge(Projet *projet, unsigned int num_action)
             // M_y(x) & = M_y(x) + M_{Ay} - (M_{Ay}+M_{By}) \cdot x/L\nonumber\\
             // M_z(x) & = M_z(x) + M_{Az} - (M_{Az}+M_{Bz}) \cdot x/L
             // \end{align*}\begin{verbatim}
-            BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[0][num], 0., l, ax2[0], -(ax2[0]+ax2[6])/l,  0., 0., 0., 0., 0., l_debut), FALSE);
-            BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[1][num], 0., l, ax2[1], -(ax2[1]+ax2[7])/l,  0., 0., 0., 0., 0., l_debut), FALSE);
-            BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[2][num], 0., l, ax2[2], -(ax2[2]+ax2[8])/l,  0., 0., 0., 0., 0., l_debut), FALSE);
-            BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[3][num], 0., l, ax2[3], -(ax2[3]+ax2[9])/l,  0., 0., 0., 0., 0., l_debut), FALSE);
-            BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[4][num], 0., l, ax2[4], -(ax2[4]+ax2[10])/l, 0., 0., 0., 0., 0., l_debut), FALSE);
-            BUG(common_fonction_ajout_poly(action_en_cours->fonctions_efforts[5][num], 0., l, ax2[5], -(ax2[5]+ax2[11])/l, 0., 0., 0., 0., 0., l_debut), FALSE);
+            BUG(common_fonction_ajout_poly(action->fonctions_efforts[0][num], 0., l, ax2[0], -(ax2[0]+ax2[6])/l,  0., 0., 0., 0., 0., l_debut), FALSE);
+            BUG(common_fonction_ajout_poly(action->fonctions_efforts[1][num], 0., l, ax2[1], -(ax2[1]+ax2[7])/l,  0., 0., 0., 0., 0., l_debut), FALSE);
+            BUG(common_fonction_ajout_poly(action->fonctions_efforts[2][num], 0., l, ax2[2], -(ax2[2]+ax2[8])/l,  0., 0., 0., 0., 0., l_debut), FALSE);
+            BUG(common_fonction_ajout_poly(action->fonctions_efforts[3][num], 0., l, ax2[3], -(ax2[3]+ax2[9])/l,  0., 0., 0., 0., 0., l_debut), FALSE);
+            BUG(common_fonction_ajout_poly(action->fonctions_efforts[4][num], 0., l, ax2[4], -(ax2[4]+ax2[10])/l, 0., 0., 0., 0., 0., l_debut), FALSE);
+            BUG(common_fonction_ajout_poly(action->fonctions_efforts[5][num], 0., l, ax2[5], -(ax2[5]+ax2[11])/l, 0., 0., 0., 0., 0., l_debut), FALSE);
             
     //         Ajout des déplacements & rotations entre deux noeuds dus à leur déplacement
     //           relatif, la courbe vient s'ajouter à la courbe (si existante) déja définie
@@ -1429,15 +1428,15 @@ gboolean EF_calculs_resoud_charge(Projet *projet, unsigned int num_action)
     //              r_y(x) = & -B - \frac{M_{Ay}}{E \cdot I_y} \cdot x + \frac{M_{Ay}+M_{By}}{2 \cdot L \cdot E \cdot I_y} \cdot x^2 \nonumber\\
     //              r_z(x) = & A - \frac{M_{Az}}{E \cdot I_z} \cdot x + \frac{M_{Az}+M_{Bz}}{2 \cdot L \cdot E \cdot I_z} \cdot x^2
 
-                    BUG(common_fonction_ajout_poly(action_en_cours->fonctions_deformation[0][num], 0., l, ax[0], -ax2[0]/(E*S), (ax2[0]+ax2[6])/(2*E*S*l), 0., 0., 0., 0., l_debut), FALSE);
-                    BUG(common_fonction_ajout_poly(action_en_cours->fonctions_deformation[1][num], 0., l, ax[1], (ax2[5]/(2*E*Iz)*l*l-(ax2[5]+ax2[11])/(6*E*Iz)*l*l-ax[1]+ax[7])/l, -ax2[5]/(2*E*Iz),  (ax2[5]+ax2[11])/(6*l*E*Iz), 0., 0., 0., l_debut), FALSE);
-                    BUG(common_fonction_ajout_poly(action_en_cours->fonctions_deformation[2][num], 0., l, ax[2], (-ax2[4]/(2*E*Iy)*l*l+(ax2[4]+ax2[10])/(6*E*Iy)*l*l-ax[2]+ax[8])/l,  ax2[4]/(2*E*Iy), -(ax2[4]+ax2[10])/(6*l*E*Iy), 0., 0., 0., l_debut), FALSE);
+                    BUG(common_fonction_ajout_poly(action->fonctions_deformation[0][num], 0., l, ax[0], -ax2[0]/(E*S), (ax2[0]+ax2[6])/(2*E*S*l), 0., 0., 0., 0., l_debut), FALSE);
+                    BUG(common_fonction_ajout_poly(action->fonctions_deformation[1][num], 0., l, ax[1], (ax2[5]/(2*E*Iz)*l*l-(ax2[5]+ax2[11])/(6*E*Iz)*l*l-ax[1]+ax[7])/l, -ax2[5]/(2*E*Iz),  (ax2[5]+ax2[11])/(6*l*E*Iz), 0., 0., 0., l_debut), FALSE);
+                    BUG(common_fonction_ajout_poly(action->fonctions_deformation[2][num], 0., l, ax[2], (-ax2[4]/(2*E*Iy)*l*l+(ax2[4]+ax2[10])/(6*E*Iy)*l*l-ax[2]+ax[8])/l,  ax2[4]/(2*E*Iy), -(ax2[4]+ax2[10])/(6*l*E*Iy), 0., 0., 0., l_debut), FALSE);
                     if ((j == 0) && (element_en_beton->relachement != NULL) && (element_en_beton->relachement->rx_debut != EF_RELACHEMENT_BLOQUE))
-                        BUG(common_fonction_ajout_poly(action_en_cours->fonctions_rotation[0][num], 0., l, ax2[3]/(G*J)*l-(ax2[3]+ax2[9])/(2*G*J*l)*l*l+ax[9], -ax2[3]/(G*J), (ax2[3]+ax2[9])/(2*G*J*l), 0., 0., 0., 0., l_debut), FALSE);
+                        BUG(common_fonction_ajout_poly(action->fonctions_rotation[0][num], 0., l, ax2[3]/(G*J)*l-(ax2[3]+ax2[9])/(2*G*J*l)*l*l+ax[9], -ax2[3]/(G*J), (ax2[3]+ax2[9])/(2*G*J*l), 0., 0., 0., 0., l_debut), FALSE);
                     else
-                        BUG(common_fonction_ajout_poly(action_en_cours->fonctions_rotation[0][num], 0., l, ax[3], -ax2[3]/(G*J), (ax2[3]+ax2[9])/(2*G*J*l), 0., 0., 0., 0., l_debut), FALSE);
-                    BUG(common_fonction_ajout_poly(action_en_cours->fonctions_rotation[1][num], 0., l, -(-ax2[4]/(2*E*Iy)*l*l+(ax2[4]+ax2[10])/(6*E*Iy)*l*l-ax[2]+ax[8])/l, -ax2[4]/(E*Iy), (ax2[4]+ax2[10])/(2*l*E*Iy), 0., 0., 0., 0., l_debut), FALSE);
-                    BUG(common_fonction_ajout_poly(action_en_cours->fonctions_rotation[2][num], 0., l,  (ax2[5]/(2*E*Iz)*l*l+(-ax2[5]-ax2[11])/(6*E*Iz)*l*l-ax[1]+ax[7])/l, -ax2[5]/(E*Iz), (ax2[5]+ax2[11])/(2*l*E*Iz), 0., 0., 0., 0., l_debut), FALSE);
+                        BUG(common_fonction_ajout_poly(action->fonctions_rotation[0][num], 0., l, ax[3], -ax2[3]/(G*J), (ax2[3]+ax2[9])/(2*G*J*l), 0., 0., 0., 0., l_debut), FALSE);
+                    BUG(common_fonction_ajout_poly(action->fonctions_rotation[1][num], 0., l, -(-ax2[4]/(2*E*Iy)*l*l+(ax2[4]+ax2[10])/(6*E*Iy)*l*l-ax[2]+ax[8])/l, -ax2[4]/(E*Iy), (ax2[4]+ax2[10])/(2*l*E*Iy), 0., 0., 0., 0., l_debut), FALSE);
+                    BUG(common_fonction_ajout_poly(action->fonctions_rotation[2][num], 0., l,  (ax2[5]/(2*E*Iz)*l*l+(-ax2[5]-ax2[11])/(6*E*Iz)*l*l-ax[1]+ax[7])/l, -ax2[5]/(E*Iz), (ax2[5]+ax2[11])/(2*l*E*Iz), 0., 0., 0., 0., l_debut), FALSE);
     //              \end{align*}\begin{verbatim}
                     break;
                 }

@@ -31,7 +31,7 @@ Flottant EF_calculs_G(EF_Materiau *materiau, gboolean nu_null) __attribute__((__
 gboolean EF_calculs_moment_hyper_y(Barre_Info_EF *infos, double phia, double phib, double *ma, double *mb) __attribute__((__warn_unused_result__));
 gboolean EF_calculs_moment_hyper_z(Barre_Info_EF *infos, double phia, double phib, double *ma, double *mb) __attribute__((__warn_unused_result__));
 
-gboolean EF_calculs_resoud_charge(Projet *projet, unsigned int num_action) __attribute__((__warn_unused_result__));
+gboolean EF_calculs_resoud_charge(Projet *projet, Action *action) __attribute__((__warn_unused_result__));
 
 gboolean EF_calculs_free(Projet *projet) __attribute__((__warn_unused_result__));
 
