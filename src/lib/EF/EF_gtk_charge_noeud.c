@@ -33,51 +33,6 @@
 #include "EF_charge_noeud.h"
 #include "EF_charge.h"
 
-gboolean EF_gtk_charge_noeud_ajout_affichage(Charge_Noeud *charge, Projet *projet,
-  gboolean nouvelle_ligne)
-/* Description : Ajoute une ligne contenant les informations sur une charge ponctuelle au
- *               tableau dans la fenêtre des actions.
- * Paramètres : Charge_Barre_Ponctuelle *charge : charge à ajouter,
- *            : Projet *projet : la variable projet,
- *            : gboolean nouvelle_ligne : Ajoute une ligne ou modifie la ligne existante.
- * Valeur renvoyée :
- *   Succès : TRUE
- *   Échec : FALSE :
- *             projet == NULL,
- *             en cas d'erreur d'allocation mémoire.
- */
-{
-    char    *description, txt_fx[30], txt_fy[30], txt_fz[30], txt_mx[30], txt_my[30], txt_mz[30], *txt_liste_noeuds;
-    
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    
-    if (projet->list_gtk._1990_actions.builder == NULL)
-        return TRUE;
-     
-    BUG(txt_liste_noeuds = common_selection_converti_noeuds_en_texte(charge->noeuds), FALSE);
-    common_math_double_to_char(charge->fx, txt_fx, DECIMAL_FORCE);
-    common_math_double_to_char(charge->fy, txt_fy, DECIMAL_FORCE);
-    common_math_double_to_char(charge->fz, txt_fz, DECIMAL_FORCE);
-    common_math_double_to_char(charge->mx, txt_mx, DECIMAL_MOMENT);
-    common_math_double_to_char(charge->my, txt_my, DECIMAL_MOMENT);
-    common_math_double_to_char(charge->mz, txt_mz, DECIMAL_MOMENT);
-    
-    BUGMSG(description = g_strdup_printf("%s : %s, Fx : %s N, Fy : %s N, Fz : %s N, Mx : %s N.m, My : %s N.m, Mz : %s N.m", strstr(txt_liste_noeuds, ";") == NULL ? gettext("Noeud") : gettext("Noeuds"), txt_liste_noeuds, txt_fx, txt_fy, txt_fz, txt_mx, txt_my, txt_mz), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-    
-    free(txt_liste_noeuds);
-    
-    if (nouvelle_ligne == TRUE)
-        gtk_tree_store_append(projet->list_gtk._1990_actions.tree_store_charges, &charge->Iter, NULL);
-    gtk_tree_store_set(projet->list_gtk._1990_actions.tree_store_charges, &charge->Iter, 0, charge->numero, 1, charge->nom, 2, gettext("Ponctuelle sur noeud"), 3, description, -1);
-    
-    free(description);
-    
-    return TRUE;
-}
-
-
-/* DEBUT DE LA FENETRE GRAPHIQUE*/
-
 
 void EF_gtk_charge_noeud_annuler_clicked(GtkButton *button, Projet *projet)
 /* Description : Ferme la fenêtre sans effectuer les modifications.
@@ -298,7 +253,7 @@ void EF_gtk_charge_noeud_editer_clicked(GtkButton *button, Projet *projet)
     if (num_action != ef_gtk->action)
         BUG(EF_charge_deplace(projet, ef_gtk->action, ef_gtk->charge, num_action), );
     else
-        BUG(EF_gtk_charge_noeud_ajout_affichage(charge_noeud, projet, FALSE), );
+        gtk_widget_queue_draw(GTK_WIDGET(projet->list_gtk._1990_actions.tree_view_charges));
     
     gtk_widget_destroy(projet->list_gtk.ef_charge_noeud.window);
     

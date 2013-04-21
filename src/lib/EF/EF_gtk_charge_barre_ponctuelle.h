@@ -26,7 +26,6 @@
 #include "common_projet.h"
 
 gboolean EF_gtk_charge_barre_ponctuelle(Projet *projet, unsigned int action_defaut, unsigned int charge) __attribute__((__warn_unused_result__));
-gboolean EF_gtk_charge_barre_ponctuelle_ajout_affichage(Charge_Barre_Ponctuelle *charge, Projet *projet, gboolean nouvelle_ligne) __attribute__((__warn_unused_result__));
 
 #endif
 

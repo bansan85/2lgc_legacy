@@ -561,7 +561,7 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GLi
                 }
                 default :
                 {
-                    BUGMSG(0, FALSE, gettext("Type de charge %d inconnu."), charge_type->type);
+                    BUGMSG(0, FALSE, gettext("Type de charge %d inconnu.\n"), charge_type->type);
                     break;
                 }
             }
@@ -1596,7 +1596,7 @@ gboolean _1992_1_1_barres_supprime_liste(Projet *projet, GList *liste_noeuds,
             }
             default :
             {
-                BUGMSG(0, FALSE, gettext("Type de charge %d inconnu."), charge_type->type);
+                BUGMSG(0, FALSE, gettext("Type de charge %d inconnu.\n"), charge_type->type);
                 break;
             }
         }
