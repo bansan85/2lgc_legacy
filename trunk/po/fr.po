@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2013-04-19 01:29+0200\n"
-"PO-Revision-Date: 2013-04-17 00:51+0100\n"
+"POT-Creation-Date: 2013-04-21 13:31+0200\n"
+"PO-Revision-Date: 2013-04-21 13:55+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -27,9 +27,6 @@ msgstr "Actions"
 
 msgid "<b>Actions :</b>"
 msgstr "<b>Actions :</b>"
-
-msgid "Numéro"
-msgstr "Numéro"
 
 msgid "Description"
 msgstr "Description"
@@ -123,6 +120,9 @@ msgstr "Personnaliser"
 
 msgid "Barres"
 msgstr "Barres"
+
+msgid "Numéro"
+msgstr "Numéro"
 
 msgid "Section"
 msgstr "Section"
@@ -476,8 +476,8 @@ msgid "Barre en béton %u introuvable.\n"
 msgstr "Barre en béton %u introuvable.\n"
 
 #, c-format
-msgid "Type de charge %d inconnu."
-msgstr "Type de charge %d inconnu."
+msgid "Type de charge %d inconnu.\n"
+msgstr "Type de charge %d inconnu.\n"
 
 #, c-format
 msgid "La distance entre les noeuds %d et %d est nulle\n"
@@ -787,8 +787,8 @@ msgstr "Sections..."
 msgid "Matériaux..."
 msgstr "Matériaux..."
 
-msgid "Relâchement..."
-msgstr "Relâchement..."
+msgid "Relâchements..."
+msgstr "Relâchements..."
 
 msgid "Gestion des barres..."
 msgstr "Gestion des barres..."
@@ -862,6 +862,15 @@ msgstr "Sans nom"
 
 msgid "Impossible de trouver le type d'action correspondant à cette action.\n"
 msgstr "Impossible de trouver le type d'action correspondant à cette action.\n"
+
+msgid "Ponctuelle sur noeud"
+msgstr "Ponctuelle sur noeud"
+
+msgid "Ponctuelle sur barre"
+msgstr "Ponctuelle sur barre"
+
+msgid "Répartie uniforme sur barre"
+msgstr "Répartie uniforme sur barre"
 
 #, c-format
 msgid "La génération de la fenêtre %s a échouée.\n"
@@ -1187,18 +1196,6 @@ msgstr ""
 msgid "Flag %d inconnu.\n"
 msgstr "Flag %d inconnu.\n"
 
-msgid "position"
-msgstr "position"
-
-msgid "repère : local"
-msgstr "repère : local"
-
-msgid "repère : global"
-msgstr "repère : global"
-
-msgid "Ponctuelle sur barre"
-msgstr "Ponctuelle sur barre"
-
 msgid "Ajout d'une charge ponctuelle sur barre"
 msgstr "Ajout d'une charge ponctuelle sur barre"
 
@@ -1375,21 +1372,6 @@ msgstr "Erreur lors de la résolution de la matrice.\n"
 #, c-format
 msgid "Type d'élément %d inconnu.\n"
 msgstr "Type d'élément %d inconnu.\n"
-
-msgid "début"
-msgstr "début"
-
-msgid "fin (par rapport à la fin)"
-msgstr "fin (par rapport à la fin)"
-
-msgid "projection : oui"
-msgstr "projection : oui"
-
-msgid "projection : non"
-msgstr "projection : non"
-
-msgid "Répartie uniforme sur barre"
-msgstr "Répartie uniforme sur barre"
 
 msgid "Ajout d'une charge répartie uniforme sur barre"
 msgstr "Ajout d'une charge répartie uniforme sur barre"
@@ -1765,6 +1747,24 @@ msgstr ""
 "Le début (%f) et la fin (%f) de la charge répartie uniformément sont "
 "incompatible avec la longueur de la barre %d qui est de %f m.\n"
 
+msgid "début"
+msgstr "début"
+
+msgid "fin (par rapport à la fin)"
+msgstr "fin (par rapport à la fin)"
+
+msgid "projection : oui"
+msgstr "projection : oui"
+
+msgid "projection : non"
+msgstr "projection : non"
+
+msgid "repère : local"
+msgstr "repère : local"
+
+msgid "repère : global"
+msgstr "repère : global"
+
 msgid "Section indéfinie.\n"
 msgstr "Section indéfinie.\n"
 
@@ -1862,6 +1862,9 @@ msgstr ""
 "La position de la charge ponctuelle (%f) est incorrecte. La longueur de la "
 "barre %d est de %f m.\n"
 
+msgid "position"
+msgstr "position"
+
 #, c-format
 msgid ""
 "La position de la charge ponctuelle (%f) est incorrecte. La longueur de la "
@@ -1869,12 +1872,6 @@ msgid ""
 msgstr ""
 "La position de la charge ponctuelle (%f) est incorrecte. La longueur de la "
 "barre est de %f m.\n"
-
-msgid "Noeud"
-msgstr "Noeud"
-
-msgid "Ponctuelle sur noeud"
-msgstr "Ponctuelle sur noeud"
 
 msgid "Ajout d'une charge au noeud"
 msgstr "Ajout d'une charge au noeud"
@@ -1935,6 +1932,9 @@ msgstr "La charge n'est dans aucune action.\n"
 
 msgid "Indice hors limite.\n"
 msgstr "Indice hors limite.\n"
+
+msgid "Noeud"
+msgstr "Noeud"
 
 msgid "Impossible d'initialiser gtk.\n"
 msgstr "Impossible d'initialiser gtk.\n"

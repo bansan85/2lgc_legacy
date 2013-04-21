@@ -173,7 +173,7 @@ int main(int argc, char *argv[])
     
     // Création de l'élément en béton
     BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, EF_sections_cherche_nom(projet, "Rect_0.3*0.5ht", TRUE), _1992_1_1_materiaux_cherche_nom(projet, "B25", TRUE), 0, 1, NULL, 1), -1);
-    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, EF_sections_cherche_nom(projet, "T_1.00*0.20*0.10*0.50", TRUE), _1992_1_1_materiaux_cherche_nom(projet, "B25", TRUE), 1, 2, NULL, 2), -1);
+    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, EF_sections_cherche_nom(projet, "T_1.00*0.20*0.10*0.50", TRUE), _1992_1_1_materiaux_cherche_nom(projet, "B25", TRUE), 1, 2, EF_relachement_cherche_nom(projet, "Articulation", TRUE), 2), -1);
     BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, EF_sections_cherche_nom(projet, "Carre_0.50", TRUE), _1992_1_1_materiaux_cherche_nom(projet, "B25", TRUE), 2, 3, NULL, 3), -1);
     BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, EF_sections_cherche_nom(projet, "Circulaire_0.05", TRUE), _1992_1_1_materiaux_cherche_nom(projet, "B25", TRUE), 3, 4, NULL, 0), -1);
     
