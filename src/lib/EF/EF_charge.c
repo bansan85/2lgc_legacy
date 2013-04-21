@@ -193,14 +193,8 @@ gboolean EF_charge_deplace(Projet *projet, unsigned int action_src, unsigned int
         
     //         Sinon Si la charge possède un numéro supérieur à la charge supprimée alors
         if ((charge_data != NULL) && (charge != NULL) && (charge->numero > charge_src))
-        {
     //             On décrémente son numéro dans le tree-view-charges
             charge->numero--;
-#ifdef ENABLE_GTK
-            if (projet->list_gtk._1990_actions.builder != NULL)
-                gtk_tree_store_set(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_tree_store_charge")), &charge->Iter, 0, charge->numero, -1);
-#endif
-        }
         
         list_parcours = g_list_next(list_parcours);
     //     FinPour
@@ -293,14 +287,8 @@ gboolean EF_charge_supprime(Projet *projet, unsigned int action_num, unsigned in
         }
     //     Sinon Si la charge possède un numéro supérieur à la charge supprimée alors
         if ((charge_data != NULL) && (charge != NULL) && (charge->numero > charge_num))
-        {
     //         On décrémente son numéro dans le tree-view
             charge->numero--;
-#ifdef ENABLE_GTK
-            if (projet->list_gtk._1990_actions.builder != NULL)
-                gtk_tree_store_set(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_tree_store_charge")), &charge->Iter, 0, charge->numero, -1);
-#endif
-         }
     // FinPour
         list_parcours = g_list_next(list_parcours);
     }

@@ -713,6 +713,7 @@ gboolean _1990_groupe_free_element(Projet *projet, unsigned int niveau, unsigned
 #endif
     
     groupe_en_cours->elements = g_list_remove(groupe_en_cours->elements, element_en_cours);
+    free(element_en_cours);
     
     return TRUE;
 }

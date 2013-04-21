@@ -151,6 +151,7 @@ gboolean EF_gtk_charge_noeud_recupere_donnees(Projet *projet, unsigned int *num_
             if (strcmp(*nom, "") == 0)
             {
                 free(*nom);
+                *nom = NULL;
                 ok = FALSE;
             }
         }
@@ -172,7 +173,7 @@ void EF_gtk_charge_noeud_check(GtkWidget *object, Projet *projet)
     unsigned int    num_action;
     GList           *noeuds;
     double          fx, fy, fz, mx, my, mz;
-    gchar           *nom;
+    gchar           *nom = NULL;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_charge_noeud.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Nodale");
@@ -182,9 +183,9 @@ void EF_gtk_charge_noeud_check(GtkWidget *object, Projet *projet)
     else
     {
         gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_button_add_edit")), TRUE);
-        free(nom);
         g_list_free(noeuds);
     }
+    g_free(nom);
     return;
 }
 

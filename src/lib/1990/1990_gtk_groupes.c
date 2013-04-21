@@ -472,7 +472,6 @@ void _1990_gtk_button_groupe_suppr_clicked(GtkWidget *button, Projet *projet)
     GtkTreeIter         iter, iter_tmp;
     unsigned int        niveau;
     unsigned int        numero, ngroupe;
-    char                *nom;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk._1990_groupes.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes");
@@ -481,7 +480,7 @@ void _1990_gtk_button_groupe_suppr_clicked(GtkWidget *button, Projet *projet)
         return;
     
     /* On récupère les informations de la ligne sélectionnée */
-    gtk_tree_model_get(model, &iter, 0, &numero, 1, &nom, -1);
+    gtk_tree_model_get(model, &iter, 0, &numero, -1);
     ngroupe = _1990_gtk_get_groupe(model, &iter);
     
     niveau = GTK_COMMON_SPINBUTTON_AS_UINT(GTK_SPIN_BUTTON(projet->list_gtk._1990_groupes.spin_button_niveau));

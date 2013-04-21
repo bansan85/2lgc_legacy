@@ -157,11 +157,40 @@ Ensuite compiler et installer l'application normalement :
     Retour à la fenêtre Actions,
     Renommer l'action Neige en "NEIGE" et "Charmente" en "CHARGEMENT" et vérifier que l'action est bien renommée dans la fenêtre groupes.
     Changer le type de "Poids propre" en "Vent" puis en "Permanente". Vérifier si le coefficient psi est bien changé.
-    Editer les coeficients psi0, psi1 et psi2 du chargement.
+    Editer les coeficients psi0, psi1 et psi2 du chargement,
+    Ajouter une action, de n'importe quel type,
+    Supprimer l'action Chargement via la touche Suppr,
+    Supprimer la nouvelle action via le bouton supprimer,
+    Sélectionner l'action "Vent",
+    Déplacer via le D&D la charge vers "Poids Propre"
+    Sélectionner l'action "Neige",
+    Déplacer via le D&D la charge vers "Poids Propre"
+    Sélectionner l'action "Poids propre",
+    Ajouter une charge nodale,
+    Editer la charge existante "test1" en double-cliquant,
+    Réediter la charge existante "test1" via le bouton modifier sans fermer la fenêtre ouverte,
+    Valider les modifications,
+    Rouvrir la fenêtre d'édition et la fermer avec le bouton annuler,
+    Supprimer la charge nouvellement ajoutée via la touche SUPPR.
+    Ajouter une charge Ponctuelle sur barre,
+    Editer la charge existante "test2" en double-cliquant,
+    Réediter la charge existante "test2" via le bouton modifier sans fermer la fenêtre ouverte,
+    Valider les modifications,
+    Rouvrir la fenêtre d'édition et la fermer avec le bouton annuler,
+    Supprimer la charge nouvellement ajoutée via le bouton Supprimer.
+    Ajouter une charge Répartie uniforme sur barre,
+    Editer la charge existante "test3" en double-cliquant,
+    Réediter la charge existante "test3" via le bouton modifier sans fermer la fenêtre ouverte,
+    Valider les modifications,
+    Rouvrir la fenêtre d'édition et la fermer avec le bouton annuler,
+    Supprimer la charge nouvellement ajoutée,
+    Supprimer l'action "Poids propre",
+    Fermer la fenêtre avec le bouton Fermer
+    Rouvrir 2 fois la fenêtre (sans la fermer entre les deux),
+    Fermer la fenêtre avec la touche ECHAP.
     
     
-    Sélectionner Chargement et le supprimer en appuyant sur le bouton SUPPR,
-    Sélectionner Poids Chargement et le supprimer en appuyant sur le bouton SUPPR,
+    
     
     
     
@@ -169,5 +198,5 @@ Ensuite compiler et installer l'application normalement :
     Fichier|Quitter
 
 Une fois cette procédure terminée, lancer la commande dans la racine de la source :
-  - lcov --capture --directory . --output-file coverage.info
-  - genhtml coverage.info --output-directory out_html
+  lcov --capture --directory . --output-file coverage.info
+  genhtml coverage.info --output-directory out_html
