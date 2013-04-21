@@ -32,6 +32,7 @@
 #include "common_math.h"
 #include "EF_charge.h"
 #include "EF_charge_barre_repartie_uniforme.h"
+#include "EF_calculs.h"
 
 void EF_gtk_charge_barre_rep_uni_window_destroy(GtkWidget *object, Projet *projet)
 /* Description : Met projet->list_gtk.ef_charge_barre_repartie_uniforme.builder à NULL quand la
@@ -312,6 +313,8 @@ void EF_gtk_charge_barre_repartie_uniforme_editer_clicked(GtkButton *button, Pro
         gtk_widget_queue_draw(GTK_WIDGET(projet->list_gtk._1990_actions.tree_view_charges));
     
     gtk_widget_destroy(projet->list_gtk.ef_charge_barre_repartie_uniforme.window);
+    
+    BUG(EF_calculs_free(projet), );
     
     return;
 }

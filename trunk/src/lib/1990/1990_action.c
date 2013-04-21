@@ -415,6 +415,8 @@ Action *_1990_action_ajout(Projet *projet, unsigned int type, const char* descri
         gtk_adjustment_set_upper(GTK_ADJUSTMENT(gtk_builder_get_object(projet->list_gtk.ef_resultats.builder, "adjustment_cas")), g_list_length(projet->actions)-1);
 #endif
     
+    BUG(EF_calculs_free(projet), FALSE);
+    
     return action_nouveau;
 }
 
@@ -550,6 +552,9 @@ gboolean _1990_action_change_type(Projet *projet, Action *action, unsigned int t
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(action, FALSE, gettext("Paramètre %s incorrect.\n"), "action");
     
+    if (action->type == type)
+        return TRUE;
+    
     action->type = type;
     action->psi0 = common_math_f(_1990_coef_psi0_bat(type, projet->parametres.pays), FLOTTANT_ORDINATEUR);
     BUG(!isnan(common_math_get(action->psi0)), FALSE);
@@ -570,7 +575,7 @@ gboolean _1990_action_change_type(Projet *projet, Action *action, unsigned int t
 
 
 gboolean _1990_action_change_psi(Projet *projet, Action *action, unsigned int psi_num,
-  double psi)
+  Flottant psi)
 /* Description : Change le coefficient psi d'une action.
  * Paramètres : Projet *projet : la variable projet,
  *            : unsigned int action_num : numéro de l'action à changer,
@@ -591,7 +596,10 @@ gboolean _1990_action_change_psi(Projet *projet, Action *action, unsigned int ps
     
     if (psi_num == 0)
     {
-        action->psi0 = common_math_f(psi, FLOTTANT_UTILISATEUR);
+        if (ERREUR_RELATIVE_EGALE(common_math_get(psi), common_math_get(action->psi0)))
+            return TRUE;
+        
+        action->psi0 = psi;
 #ifdef ENABLE_GTK
         if (projet->list_gtk._1990_actions.builder != NULL)
             gtk_widget_queue_draw(GTK_WIDGET(projet->list_gtk._1990_actions.tree_view_actions));
@@ -599,7 +607,10 @@ gboolean _1990_action_change_psi(Projet *projet, Action *action, unsigned int ps
     }
     else if (psi_num == 1)
     {
-        action->psi1 = common_math_f(psi, FLOTTANT_UTILISATEUR);
+        if (ERREUR_RELATIVE_EGALE(common_math_get(psi), common_math_get(action->psi1)))
+            return TRUE;
+        
+        action->psi1 = psi;
 #ifdef ENABLE_GTK
         if (projet->list_gtk._1990_actions.builder != NULL)
             gtk_widget_queue_draw(GTK_WIDGET(projet->list_gtk._1990_actions.tree_view_actions));
@@ -607,7 +618,10 @@ gboolean _1990_action_change_psi(Projet *projet, Action *action, unsigned int ps
     }
     else if (psi_num == 2)
     {
-        action->psi2 = common_math_f(psi, FLOTTANT_UTILISATEUR);
+        if (ERREUR_RELATIVE_EGALE(common_math_get(psi), common_math_get(action->psi2)))
+            return TRUE;
+        
+        action->psi2 = psi;
 #ifdef ENABLE_GTK
         if (projet->list_gtk._1990_actions.builder != NULL)
             gtk_widget_queue_draw(GTK_WIDGET(projet->list_gtk._1990_actions.tree_view_actions));
@@ -902,6 +916,8 @@ gboolean _1990_action_free_num(Projet *projet, unsigned int num)
     }
 #endif
     
+    BUG(EF_calculs_free(projet), FALSE);
+    
     return TRUE;
 }
 
@@ -968,8 +984,6 @@ gboolean _1990_action_free(Projet *projet)
         
         free(action);
     }
-    
-    BUG(EF_calculs_free(projet), FALSE);
     
 #ifdef ENABLE_GTK
     if (projet->list_gtk._1990_actions.builder != NULL)

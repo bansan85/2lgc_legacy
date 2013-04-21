@@ -40,9 +40,9 @@ void EF_gtk_calculs_calculer(GtkMenuItem *menuitem, Projet *projet)
  * Valeur renvoyée : Aucune.
  */
 {
-    unsigned int    i;
     GList           *rapport = NULL;
     int             erreur;
+    GList           *list_parcours;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     
@@ -55,8 +55,14 @@ void EF_gtk_calculs_calculer(GtkMenuItem *menuitem, Projet *projet)
     BUG(EF_calculs_initialise(projet), );
     BUG(_1992_1_1_barres_rigidite_ajout_tout(projet), );
     BUG(EF_calculs_genere_mat_rig(projet), );
-    for (i=0;i<g_list_length(projet->actions);i++)
-        BUG(EF_calculs_resoud_charge(projet, i), );
+    list_parcours = projet->actions;
+    while (list_parcours)
+    {
+        Action  *action = list_parcours->data;
+        BUG(EF_calculs_resoud_charge(projet, action), );
+        
+        list_parcours = g_list_next(list_parcours);
+    }
     
     BUG(_1990_combinaisons_genere(projet), );
     

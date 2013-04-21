@@ -132,7 +132,6 @@ Ensuite compiler et installer l'application normalement :
     La même chose (réouvrir via le menu) mais sans fermer la fenêtre
     Fermer la fenêtre en cliquant sur la touche Echap.
   
-  
   Pour la fenêtre Barres (fichiers EF_gtk_barres, EF_gtk_barres_add et *1992_1_1_barres*)
     Ouvrez toutes les fenêtres, à savoir :
         Modélisation|Barres|Gestion des barres
@@ -150,6 +149,19 @@ Ensuite compiler et installer l'application normalement :
         Pour ne pas fermer la fenêtre avec une liste de barres vide.
     Fermer la fenêtre en cliquant sur la touche Echap
     
+  Pour la fenêtre Actions (fichiers 1990_action, 1990_gtk_actions, EF_charge_barre_ponctuelle, EF_charge_barre_repartie_uniforme, EF_charge, EF_charge_noeud, EF_gtk_charge_barre_ponctuelle, EF_gtk_charge_barre_repartie_uniforme, EF_gtk_charge_noeud)
+    Ouvrez toutes les fenêtres, à savoir :
+        Modélisation|Charges|Actions
+        Modélisation|Charges|Groupes
+    Dans la fenêtre groupe, déplacer l'action Chargement dans la liste des éléments disponibles.
+    Retour à la fenêtre Actions,
+    Renommer l'action Neige en "NEIGE" et "Charmente" en "CHARGEMENT" et vérifier que l'action est bien renommée dans la fenêtre groupes.
+    Changer le type de "Poids propre" en "Vent" puis en "Permanente". Vérifier si le coefficient psi est bien changé.
+    Editer les coeficients psi0, psi1 et psi2 du chargement.
+    
+    
+    Sélectionner Chargement et le supprimer en appuyant sur le bouton SUPPR,
+    Sélectionner Poids Chargement et le supprimer en appuyant sur le bouton SUPPR,
     
     
     

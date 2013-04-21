@@ -183,28 +183,19 @@ int main(int argc, char *argv[])
     BUG(EF_charge_noeud_ajout(projet, 0, tmp2, 1000., 500., 1000., 3000., 5000., 5000., "test1"), -1);
     g_list_free(tmp1);*/
     BUG(tmp1 = common_selection_renvoie_numeros("2"), -1);
-    BUG(tmp2 = common_selection_converti_numeros_en_barres(tmp1, projet), -1);
-    BUG(EF_charge_barre_ponctuelle_ajout(projet, 0, tmp2, FALSE, 2.5, 0., 0., 0., 0., 0., 0., "test1"), -1);
+    BUG(tmp2 = common_selection_converti_numeros_en_noeuds(tmp1, projet), -1);
+    BUG(EF_charge_noeud_ajout(projet, 0, tmp2, 0., 0., 0., 0., 0., 0., "test1"), -1);
     g_list_free(tmp1);
     BUG(tmp1 = common_selection_renvoie_numeros("1"), -1);
     BUG(tmp2 = common_selection_converti_numeros_en_barres(tmp1, projet), -1);
     BUG(EF_charge_barre_ponctuelle_ajout(projet, 2, tmp2, FALSE, 1.0, 0., 0., -10000., 0., 0., 0., "test2"), -1);
     BUG(tmp2 = common_selection_converti_numeros_en_barres(tmp1, projet), -1);
-    BUG(EF_charge_barre_ponctuelle_ajout(projet, 3, tmp2, FALSE, 3.0, 0., 0., -10000., 0., 0., 0., "test3"), -1);
+    BUG(EF_charge_barre_repartie_uniforme_ajout(projet, 3, tmp2, FALSE, FALSE, 0., 0., 0., 0., -10000., 0., 0., 0., "test3"), -1);
     g_list_free(tmp1);
 /*    BUG(tmp1 = common_selection_renvoie_numeros("0-2/2"), -1);
     BUG(tmp2 = common_selection_converti_numeros_en_barres(tmp1, projet), -1);
     BUG(EF_charge_barre_repartie_uniforme_ajout(projet, 0, tmp2, FALSE, FALSE, 1.5, 1.0, 10000., 9000., 8000., 7000., 6000., 5000., "test3"), -1);
     g_list_free(tmp1);*/
-    
-    // Initialise les éléments nécessaire pour l'ajout des rigidités
-    BUG(EF_calculs_initialise(projet), -1);
-    
-    // Ajout de la rigidité de l'élément à la matrice globale du projet
-    BUG(_1992_1_1_barres_rigidite_ajout_tout(projet), -1);
-    
-    BUG(EF_calculs_genere_mat_rig(projet), -1);
-    BUG(EF_calculs_resoud_charge(projet, 0), -1);
     
     // Affichage de l'interface graphique
     BUG(m3d_camera_axe_x_z(projet), -1);

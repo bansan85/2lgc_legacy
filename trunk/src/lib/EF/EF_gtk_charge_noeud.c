@@ -32,6 +32,7 @@
 #include "common_selection.h"
 #include "EF_charge_noeud.h"
 #include "EF_charge.h"
+#include "EF_calculs.h"
 
 
 void EF_gtk_charge_noeud_annuler_clicked(GtkButton *button, Projet *projet)
@@ -256,6 +257,8 @@ void EF_gtk_charge_noeud_editer_clicked(GtkButton *button, Projet *projet)
         gtk_widget_queue_draw(GTK_WIDGET(projet->list_gtk._1990_actions.tree_view_charges));
     
     gtk_widget_destroy(projet->list_gtk.ef_charge_noeud.window);
+    
+    BUG(EF_calculs_free(projet), );
     
     return;
 }
