@@ -220,7 +220,7 @@ void EF_gtk_charge_barre_ponctuelle_ajouter_clicked(GtkButton *button, Projet *p
     BUG(EF_gtk_charge_barre_ponctuelle_recupere_donnees(projet, &num_action, &barres, &fx, &fy, &fz, &mx, &my, &mz, &texte, &repere_local, &position) == TRUE, );
     
     // Création de la nouvelle charge ponctuelle sur barre
-    BUG(charge = EF_charge_barre_ponctuelle_ajout(projet, num_action, barres, repere_local, position, fx, fy, fz, mx, my, mz, texte), );
+    BUG(charge = EF_charge_barre_ponctuelle_ajout(projet, num_action, barres, repere_local, common_math_f(position, FLOTTANT_UTILISATEUR), common_math_f(fx, FLOTTANT_UTILISATEUR), common_math_f(fy, FLOTTANT_UTILISATEUR), common_math_f(fz, FLOTTANT_UTILISATEUR), common_math_f(mx, FLOTTANT_UTILISATEUR), common_math_f(my, FLOTTANT_UTILISATEUR), common_math_f(mz, FLOTTANT_UTILISATEUR), texte), );
     
     free(texte);
     
@@ -256,15 +256,15 @@ void EF_gtk_charge_barre_ponctuelle_editer_clicked(GtkButton *button, Projet *pr
     BUG(charge = EF_charge_cherche(projet, ef_gtk->action, ef_gtk->charge), );
     free(charge->nom);
     charge->nom = texte;
-    charge->fx = fx;
-    charge->fy = fy;
-    charge->fz = fz;
-    charge->mx = mx;
-    charge->my = my;
-    charge->mz = mz;
+    charge->fx = common_math_f(fx, FLOTTANT_UTILISATEUR);
+    charge->fy = common_math_f(fy, FLOTTANT_UTILISATEUR);
+    charge->fz = common_math_f(fz, FLOTTANT_UTILISATEUR);
+    charge->mx = common_math_f(mx, FLOTTANT_UTILISATEUR);
+    charge->my = common_math_f(my, FLOTTANT_UTILISATEUR);
+    charge->mz = common_math_f(mz, FLOTTANT_UTILISATEUR);
     g_list_free(charge->barres);
     charge->barres = barres;
-    charge->position = position;
+    charge->position = common_math_f(position, FLOTTANT_UTILISATEUR);
     charge->repere_local = repere_local;
     if (num_action != ef_gtk->action)
         BUG(EF_charge_deplace(projet, ef_gtk->action, ef_gtk->charge, num_action), );
@@ -377,19 +377,19 @@ gboolean EF_gtk_charge_barre_ponctuelle(Projet *projet, unsigned int action_defa
     {
         gchar   tmp[30], *tmp2;
         gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_ponct_textview_description"))), charge_barre->nom, -1);
-        common_math_double_to_char(charge_barre->fx, tmp, DECIMAL_FORCE);
+        common_math_double_to_char2(charge_barre->fx, tmp, DECIMAL_FORCE);
         gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_ponct_buffer_fx")), tmp, -1);
-        common_math_double_to_char(charge_barre->fy, tmp, DECIMAL_FORCE);
+        common_math_double_to_char2(charge_barre->fy, tmp, DECIMAL_FORCE);
         gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_ponct_buffer_fy")), tmp, -1);
-        common_math_double_to_char(charge_barre->fz, tmp, DECIMAL_FORCE);
+        common_math_double_to_char2(charge_barre->fz, tmp, DECIMAL_FORCE);
         gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_ponct_buffer_fz")), tmp, -1);
-        common_math_double_to_char(charge_barre->mx, tmp, DECIMAL_MOMENT);
+        common_math_double_to_char2(charge_barre->mx, tmp, DECIMAL_MOMENT);
         gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_ponct_buffer_mx")), tmp, -1);
-        common_math_double_to_char(charge_barre->my, tmp, DECIMAL_MOMENT);
+        common_math_double_to_char2(charge_barre->my, tmp, DECIMAL_MOMENT);
         gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_ponct_buffer_my")), tmp, -1);
-        common_math_double_to_char(charge_barre->mz, tmp, DECIMAL_MOMENT);
+        common_math_double_to_char2(charge_barre->mz, tmp, DECIMAL_MOMENT);
         gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_ponct_buffer_mz")), tmp, -1);
-        common_math_double_to_char(charge_barre->position, tmp, DECIMAL_DISTANCE);
+        common_math_double_to_char2(charge_barre->position, tmp, DECIMAL_DISTANCE);
         gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_ponct_buffer_pos")), tmp, -1);
         if (charge_barre->repere_local)
             gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_ponct_radio_local")), TRUE);

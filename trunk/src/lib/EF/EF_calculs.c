@@ -598,23 +598,23 @@ gboolean EF_calculs_resoud_charge(Projet *projet, Action *action)
                             int         num = g_list_index(projet->modele.noeuds, noeud);
                             
                             if (projet->calculs.noeuds_pos_partielle[num][0] != -1)
-                                ax[projet->calculs.noeuds_pos_partielle[num][0]] += charge_noeud->fx;
+                                ax[projet->calculs.noeuds_pos_partielle[num][0]] += common_math_get(charge_noeud->fx);
                             if (projet->calculs.noeuds_pos_partielle[num][1] != -1)
-                                ax[projet->calculs.noeuds_pos_partielle[num][1]] += charge_noeud->fy;
+                                ax[projet->calculs.noeuds_pos_partielle[num][1]] += common_math_get(charge_noeud->fy);
                             if (projet->calculs.noeuds_pos_partielle[num][2] != -1)
-                                ax[projet->calculs.noeuds_pos_partielle[num][2]] += charge_noeud->fz;
+                                ax[projet->calculs.noeuds_pos_partielle[num][2]] += common_math_get(charge_noeud->fz);
                             if (projet->calculs.noeuds_pos_partielle[num][3] != -1)
-                                ax[projet->calculs.noeuds_pos_partielle[num][3]] += charge_noeud->mx;
+                                ax[projet->calculs.noeuds_pos_partielle[num][3]] += common_math_get(charge_noeud->mx);
                             if (projet->calculs.noeuds_pos_partielle[num][4] != -1)
-                                ax[projet->calculs.noeuds_pos_partielle[num][4]] += charge_noeud->my;
+                                ax[projet->calculs.noeuds_pos_partielle[num][4]] += common_math_get(charge_noeud->my);
                             if (projet->calculs.noeuds_pos_partielle[num][5] != -1)
-                                ax[projet->calculs.noeuds_pos_partielle[num][5]] += charge_noeud->mz;
-                            ax3[projet->calculs.noeuds_pos_complete[num][0]] += charge_noeud->fx;
-                            ax3[projet->calculs.noeuds_pos_complete[num][1]] += charge_noeud->fy;
-                            ax3[projet->calculs.noeuds_pos_complete[num][2]] += charge_noeud->fz;
-                            ax3[projet->calculs.noeuds_pos_complete[num][3]] += charge_noeud->mx;
-                            ax3[projet->calculs.noeuds_pos_complete[num][4]] += charge_noeud->my;
-                            ax3[projet->calculs.noeuds_pos_complete[num][5]] += charge_noeud->mz;
+                                ax[projet->calculs.noeuds_pos_partielle[num][5]] += common_math_get(charge_noeud->mz);
+                            ax3[projet->calculs.noeuds_pos_complete[num][0]] += common_math_get(charge_noeud->fx);
+                            ax3[projet->calculs.noeuds_pos_complete[num][1]] += common_math_get(charge_noeud->fy);
+                            ax3[projet->calculs.noeuds_pos_complete[num][2]] += common_math_get(charge_noeud->fz);
+                            ax3[projet->calculs.noeuds_pos_complete[num][3]] += common_math_get(charge_noeud->mx);
+                            ax3[projet->calculs.noeuds_pos_complete[num][4]] += common_math_get(charge_noeud->my);
+                            ax3[projet->calculs.noeuds_pos_complete[num][5]] += common_math_get(charge_noeud->mz);
                             
                             list_parcours2 = g_list_next(list_parcours2);
                         }
@@ -664,12 +664,12 @@ gboolean EF_calculs_resoud_charge(Projet *projet, Action *action)
                                 ax2 = (double*)triplet_efforts_locaux_initiaux->x;
                                 triplet_efforts_locaux_initiaux->nnz = 12;
                             }
-                            ai2[0] = 0;     aj2[0] = 0;     ax2[0] = charge_barre->fx;
-                            ai2[1] = 1;     aj2[1] = 0;     ax2[1] = charge_barre->fy;
-                            ai2[2] = 2;     aj2[2] = 0;     ax2[2] = charge_barre->fz;
-                            ai2[3] = 3;     aj2[3] = 0;     ax2[3] = charge_barre->mx;
-                            ai2[4] = 4;     aj2[4] = 0;     ax2[4] = charge_barre->my;
-                            ai2[5] = 5;     aj2[5] = 0;     ax2[5] = charge_barre->mz;
+                            ai2[0] = 0;     aj2[0] = 0;     ax2[0] = common_math_get(charge_barre->fx);
+                            ai2[1] = 1;     aj2[1] = 0;     ax2[1] = common_math_get(charge_barre->fy);
+                            ai2[2] = 2;     aj2[2] = 0;     ax2[2] = common_math_get(charge_barre->fz);
+                            ai2[3] = 3;     aj2[3] = 0;     ax2[3] = common_math_get(charge_barre->mx);
+                            ai2[4] = 4;     aj2[4] = 0;     ax2[4] = common_math_get(charge_barre->my);
+                            ai2[5] = 5;     aj2[5] = 0;     ax2[5] = common_math_get(charge_barre->mz);
                             ai2[6] = 6;     aj2[6] = 0;     ax2[6] = 0.;
                             ai2[7] = 7;     aj2[7] = 0;     ax2[7] = 0.;
                             ai2[8] = 8;     aj2[8] = 0;     ax2[8] = 0.;
@@ -706,7 +706,7 @@ gboolean EF_calculs_resoud_charge(Projet *projet, Action *action)
                                 pos = 0;
                                 l = -1.;
                                 /* On regarde pour chaque noeud intermédiaire si la position de la charge devient inférieur à la distance entre le noeud de départ et le noeud intermédiaire */
-                                while ((pos<=element_en_beton->discretisation_element) && (l < charge_barre->position))
+                                while ((pos<=element_en_beton->discretisation_element) && (l < common_math_get(charge_barre->position)))
                                 {
                                     if (pos==element_en_beton->discretisation_element)
                                         l = EF_noeuds_distance(element_en_beton->noeud_fin, element_en_beton->noeud_debut);
@@ -738,7 +738,7 @@ gboolean EF_calculs_resoud_charge(Projet *projet, Action *action)
                             num_f = g_list_index(projet->modele.noeuds, noeud_fin);
                             debut_barre = EF_noeuds_distance(noeud_debut, element_en_beton->noeud_debut);
                             BUG(!isnan(debut_barre), FALSE);
-                            a = charge_barre->position-debut_barre;
+                            a = common_math_get(charge_barre->position)-debut_barre;
                             fin_barre = EF_noeuds_distance(noeud_fin, element_en_beton->noeud_debut);
                             BUG(!isnan(fin_barre), FALSE);
                             l = ABS(fin_barre-debut_barre);
@@ -924,21 +924,21 @@ gboolean EF_calculs_resoud_charge(Projet *projet, Action *action)
                             BUG(!isnan(ll), FALSE);
                             if (charge_barre->projection == TRUE)
                             {
-                                ai2[0] = 0;     aj2[0] = 0;     ax2[0] = charge_barre->fx*sqrt(yy*yy+zz*zz)/ll;
-                                ai2[1] = 1;     aj2[1] = 0;     ax2[1] = charge_barre->fy*sqrt(xx*xx+zz*zz)/ll;
-                                ai2[2] = 2;     aj2[2] = 0;     ax2[2] = charge_barre->fz*sqrt(xx*xx+yy*yy)/ll;
-                                ai2[3] = 3;     aj2[3] = 0;     ax2[3] = charge_barre->mx*sqrt(yy*yy+zz*zz)/ll;
-                                ai2[4] = 4;     aj2[4] = 0;     ax2[4] = charge_barre->my*sqrt(xx*xx+zz*zz)/ll;
-                                ai2[5] = 5;     aj2[5] = 0;     ax2[5] = charge_barre->mz*sqrt(xx*xx+yy*yy)/ll;
+                                ai2[0] = 0;     aj2[0] = 0;     ax2[0] = common_math_get(charge_barre->fx)*sqrt(yy*yy+zz*zz)/ll;
+                                ai2[1] = 1;     aj2[1] = 0;     ax2[1] = common_math_get(charge_barre->fy)*sqrt(xx*xx+zz*zz)/ll;
+                                ai2[2] = 2;     aj2[2] = 0;     ax2[2] = common_math_get(charge_barre->fz)*sqrt(xx*xx+yy*yy)/ll;
+                                ai2[3] = 3;     aj2[3] = 0;     ax2[3] = common_math_get(charge_barre->mx)*sqrt(yy*yy+zz*zz)/ll;
+                                ai2[4] = 4;     aj2[4] = 0;     ax2[4] = common_math_get(charge_barre->my)*sqrt(xx*xx+zz*zz)/ll;
+                                ai2[5] = 5;     aj2[5] = 0;     ax2[5] = common_math_get(charge_barre->mz)*sqrt(xx*xx+yy*yy)/ll;
                             }
                             else
                             {
-                                ai2[0] = 0;     aj2[0] = 0;     ax2[0] = charge_barre->fx;
-                                ai2[1] = 1;     aj2[1] = 0;     ax2[1] = charge_barre->fy;
-                                ai2[2] = 2;     aj2[2] = 0;     ax2[2] = charge_barre->fz;
-                                ai2[3] = 3;     aj2[3] = 0;     ax2[3] = charge_barre->mx;
-                                ai2[4] = 4;     aj2[4] = 0;     ax2[4] = charge_barre->my;
-                                ai2[5] = 5;     aj2[5] = 0;     ax2[5] = charge_barre->mz;
+                                ai2[0] = 0;     aj2[0] = 0;     ax2[0] = common_math_get(charge_barre->fx);
+                                ai2[1] = 1;     aj2[1] = 0;     ax2[1] = common_math_get(charge_barre->fy);
+                                ai2[2] = 2;     aj2[2] = 0;     ax2[2] = common_math_get(charge_barre->fz);
+                                ai2[3] = 3;     aj2[3] = 0;     ax2[3] = common_math_get(charge_barre->mx);
+                                ai2[4] = 4;     aj2[4] = 0;     ax2[4] = common_math_get(charge_barre->my);
+                                ai2[5] = 5;     aj2[5] = 0;     ax2[5] = common_math_get(charge_barre->mz);
                             }
                             ai2[6]  = 6;    aj2[6]  = 0;    ax2[6]  = 0.;
                             ai2[7]  = 7;    aj2[7]  = 0;    ax2[7]  = 0.;
@@ -974,7 +974,7 @@ gboolean EF_calculs_resoud_charge(Projet *projet, Action *action)
                                 j_d = 0;
                                 l = -1.;
                                 /* On regarde pour chaque noeud intermédiaire si la position de la charge devient inférieur à la distance entre le noeud de départ et le noeud intermédiaire */
-                                while ((j_d<=element_en_beton->discretisation_element) && (l < charge_barre->a))
+                                while ((j_d<=element_en_beton->discretisation_element) && (l < common_math_get(charge_barre->a)))
                                 {
                                     if (j_d==element_en_beton->discretisation_element)
                                         l = EF_noeuds_distance(element_en_beton->noeud_fin, element_en_beton->noeud_debut);
@@ -987,7 +987,7 @@ gboolean EF_calculs_resoud_charge(Projet *projet, Action *action)
                                 j_f = j_d;
                                 l = -1.;
                                 /* On regarde pour chaque noeud intermédiaire si la position de la charge devient inférieur à la distance entre le noeud de départ et le noeud intermédiaire */
-                                while ((j_f<=element_en_beton->discretisation_element) && (l < ll-charge_barre->b))
+                                while ((j_f<=element_en_beton->discretisation_element) && (l < ll-common_math_get(charge_barre->b)))
                                 {
                                     if (j_f==element_en_beton->discretisation_element)
                                         l = EF_noeuds_distance(element_en_beton->noeud_fin, element_en_beton->noeud_debut);
@@ -1025,7 +1025,7 @@ gboolean EF_calculs_resoud_charge(Projet *projet, Action *action)
                                 debut_barre = EF_noeuds_distance(noeud_debut, element_en_beton->noeud_debut);
                                 BUG(!isnan(debut_barre), FALSE);
                                 if (i == j_d)
-                                    a = charge_barre->a-debut_barre;
+                                    a = common_math_get(charge_barre->a)-debut_barre;
                                 else
                                     a = 0.;
                                 fin_barre = EF_noeuds_distance(noeud_fin, element_en_beton->noeud_debut);
@@ -1034,7 +1034,7 @@ gboolean EF_calculs_resoud_charge(Projet *projet, Action *action)
                                 if (i == j_f)
                                 {
                                     fin_barre = EF_noeuds_distance(noeud_fin, element_en_beton->noeud_fin);
-                                    b = charge_barre->b-fin_barre;
+                                    b = common_math_get(charge_barre->b)-fin_barre;
                                 }
                                 else
                                     b = 0.;
