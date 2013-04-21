@@ -229,7 +229,7 @@ gboolean projet_init_graphique(Projet *projet)
     gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_modelisation_barres_list), comps->menu_modelisation_barres_materiau);
     g_signal_connect_swapped(comps->menu_modelisation_barres_materiau, "activate", G_CALLBACK(EF_gtk_materiaux), projet);
     
-    comps->menu_modelisation_barres_relachement = gtk_menu_item_new_with_label(gettext("Relâchement..."));
+    comps->menu_modelisation_barres_relachement = gtk_menu_item_new_with_label(gettext("Relâchements..."));
     gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_modelisation_barres_list), comps->menu_modelisation_barres_relachement);
     g_signal_connect_swapped(comps->menu_modelisation_barres_relachement, "activate", G_CALLBACK(EF_gtk_relachement), projet);
     

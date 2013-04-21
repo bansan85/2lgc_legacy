@@ -114,6 +114,25 @@ Ensuite compiler et installer l'application normalement :
         Pour ne pas fermer la fenêtre avec une liste de matériaux vide.
     Fermer la fenêtre en cliquant sur la touche Echap
     
+    Pour la fenêtre Relachements (fichiers EF_relachement et EF_gtk_relachement)
+    Ouvrir toutes les fenêtres, à savoir :
+        Modélisation|Barres|Relâchements
+        Modélisation|Barres|Gestion des barres
+    Sélectionner et supprimer avec la touche SUPPR le relâchement "Partiel",
+    Sélectionner et supprimer avec le bouton supprimer le relâchement "Rotation nulle",
+    Renommer la section restante,
+    Modifier tous les relâchements Bloqué en Libre et Libre en bloqué,
+    Refaire la même chose une deuxième fois,
+    Modifier tous les relâchements en Linéaire et le paramètre en 300000,
+    Ajouter 3 relâchements,
+    Renommer "Sans nom" en "AAA" puis en "ZZZ".
+    Supprimer le relâchement "Articulation" et ses dépendances.
+    Fermer la fenêtre en cliquant sur le bouton Fermer
+    La rouvrir via le menu
+    La même chose (réouvrir via le menu) mais sans fermer la fenêtre
+    Fermer la fenêtre en cliquant sur la touche Echap.
+  
+  
   Pour la fenêtre Barres (fichiers EF_gtk_barres, EF_gtk_barres_add et *1992_1_1_barres*)
     Ouvrez toutes les fenêtres, à savoir :
         Modélisation|Barres|Gestion des barres

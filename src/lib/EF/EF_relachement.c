@@ -278,11 +278,19 @@ gboolean EF_relachement_modif(Projet *projet, EF_Relachement *relachement, const
             case EF_RELACHEMENT_BLOQUE :
             case EF_RELACHEMENT_LIBRE :
             {
+#ifdef ENABLE_GTK
+                if (projet->list_gtk.ef_relachements.builder != NULL)
+                    g_object_set(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_treeview_cell2"), "editable", FALSE, NULL);
+#endif
                 relachement->rx_d_data = NULL;
                 break;
             }
             case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
             {
+#ifdef ENABLE_GTK
+                if (projet->list_gtk.ef_relachements.builder != NULL)
+                    g_object_set(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_treeview_cell2"), "editable", TRUE, NULL);
+#endif
                 BUGMSG(relachement->rx_d_data = malloc(sizeof(EF_Relachement_Donnees_Elastique_Lineaire)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                 memset(relachement->rx_d_data, 0, sizeof(EF_Relachement_Donnees_Elastique_Lineaire));
                 break;
@@ -325,11 +333,19 @@ gboolean EF_relachement_modif(Projet *projet, EF_Relachement *relachement, const
             case EF_RELACHEMENT_BLOQUE :
             case EF_RELACHEMENT_LIBRE :
             {
+#ifdef ENABLE_GTK
+                if (projet->list_gtk.ef_relachements.builder != NULL)
+                    g_object_set(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_treeview_cell4"), "editable", FALSE, NULL);
+#endif
                 relachement->ry_d_data = NULL;
                 break;
             }
             case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
             {
+#ifdef ENABLE_GTK
+                if (projet->list_gtk.ef_relachements.builder != NULL)
+                    g_object_set(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_treeview_cell4"), "editable", TRUE, NULL);
+#endif
                 BUGMSG(relachement->ry_d_data = malloc(sizeof(EF_Relachement_Donnees_Elastique_Lineaire)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                 memset(relachement->ry_d_data, 0, sizeof(EF_Relachement_Donnees_Elastique_Lineaire));
                 break;
@@ -372,11 +388,19 @@ gboolean EF_relachement_modif(Projet *projet, EF_Relachement *relachement, const
             case EF_RELACHEMENT_BLOQUE :
             case EF_RELACHEMENT_LIBRE :
             {
+#ifdef ENABLE_GTK
+                if (projet->list_gtk.ef_relachements.builder != NULL)
+                    g_object_set(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_treeview_cell6"), "editable", FALSE, NULL);
+#endif
                 relachement->rz_d_data = NULL;
                 break;
             }
             case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
             {
+#ifdef ENABLE_GTK
+                if (projet->list_gtk.ef_relachements.builder != NULL)
+                    g_object_set(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_treeview_cell6"), "editable", TRUE , NULL);
+#endif
                 BUGMSG(relachement->rz_d_data = malloc(sizeof(EF_Relachement_Donnees_Elastique_Lineaire)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                 memset(relachement->rz_d_data, 0, sizeof(EF_Relachement_Donnees_Elastique_Lineaire));
                 break;
@@ -419,11 +443,19 @@ gboolean EF_relachement_modif(Projet *projet, EF_Relachement *relachement, const
             case EF_RELACHEMENT_BLOQUE :
             case EF_RELACHEMENT_LIBRE :
             {
+#ifdef ENABLE_GTK
+                if (projet->list_gtk.ef_relachements.builder != NULL)
+                    g_object_set(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_treeview_cell8"), "editable", FALSE, NULL);
+#endif
                 relachement->rx_f_data = NULL;
                 break;
             }
             case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
             {
+#ifdef ENABLE_GTK
+                if (projet->list_gtk.ef_relachements.builder != NULL)
+                    g_object_set(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_treeview_cell8"), "editable", TRUE, NULL);
+#endif
                 BUGMSG(relachement->rx_f_data = malloc(sizeof(EF_Relachement_Donnees_Elastique_Lineaire)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                 memset(relachement->rx_f_data, 0, sizeof(EF_Relachement_Donnees_Elastique_Lineaire));
                 break;
@@ -466,11 +498,19 @@ gboolean EF_relachement_modif(Projet *projet, EF_Relachement *relachement, const
             case EF_RELACHEMENT_BLOQUE :
             case EF_RELACHEMENT_LIBRE :
             {
+#ifdef ENABLE_GTK
+                if (projet->list_gtk.ef_relachements.builder != NULL)
+                    g_object_set(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_treeview_cell10"), "editable", FALSE, NULL);
+#endif
                 relachement->ry_f_data = NULL;
                 break;
             }
             case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
             {
+#ifdef ENABLE_GTK
+                if (projet->list_gtk.ef_relachements.builder != NULL)
+                    g_object_set(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_treeview_cell10"), "editable", TRUE, NULL);
+#endif
                 BUGMSG(relachement->ry_f_data = malloc(sizeof(EF_Relachement_Donnees_Elastique_Lineaire)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                 memset(relachement->ry_f_data, 0, sizeof(EF_Relachement_Donnees_Elastique_Lineaire));
                 break;
@@ -513,11 +553,19 @@ gboolean EF_relachement_modif(Projet *projet, EF_Relachement *relachement, const
             case EF_RELACHEMENT_BLOQUE :
             case EF_RELACHEMENT_LIBRE :
             {
+#ifdef ENABLE_GTK
+                if (projet->list_gtk.ef_relachements.builder != NULL)
+                    g_object_set(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_treeview_cell12"), "editable", FALSE, NULL);
+#endif
                 relachement->rz_f_data = NULL;
                 break;
             }
             case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
             {
+#ifdef ENABLE_GTK
+                if (projet->list_gtk.ef_relachements.builder != NULL)
+                    g_object_set(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_treeview_cell12"), "editable", TRUE, NULL);
+#endif
                 BUGMSG(relachement->rz_f_data = malloc(sizeof(EF_Relachement_Donnees_Elastique_Lineaire)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                 memset(relachement->rz_f_data, 0, sizeof(EF_Relachement_Donnees_Elastique_Lineaire));
                 break;
