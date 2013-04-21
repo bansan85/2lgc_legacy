@@ -20,10 +20,13 @@
 #include <libintl.h>
 #include <locale.h>
 #include <gmodule.h>
+#include <string.h>
 
 #include "1990_action.h"
 #include "common_projet.h"
 #include "common_erreurs.h"
+#include "common_selection.h"
+#include "common_math.h"
 #include "EF_calculs.h"
 #include "EF_gtk_charge_noeud.h"
 
@@ -53,7 +56,7 @@ Charge_Noeud*  EF_charge_noeud_ajout(Projet *projet, unsigned int num_action, GL
     Charge_Noeud    *charge_nouveau;
 #ifdef ENABLE_GTK
     GtkTreeIter     iter_action;
-    unsigned int    numero_action;
+    Action          *action;
     GtkTreeModel    *model_action;
 #endif
     
@@ -81,13 +84,47 @@ Charge_Noeud*  EF_charge_noeud_ajout(Projet *projet, unsigned int num_action, GL
 #ifdef ENABLE_GTK
     if ((projet->list_gtk._1990_actions.builder != NULL) && (gtk_tree_selection_get_selected(projet->list_gtk._1990_actions.tree_select_actions, &model_action, &iter_action)))
     {
-        gtk_tree_model_get(model_action, &iter_action, 0, &numero_action, -1);
-        if (numero_action == num_action)
-            BUG(EF_gtk_charge_noeud_ajout_affichage(charge_nouveau, projet, TRUE), FALSE);
+        gtk_tree_model_get(model_action, &iter_action, 0, &action, -1);
+        if (action->numero == num_action)
+        {
+            gtk_tree_store_append(projet->list_gtk._1990_actions.tree_store_charges, &charge_nouveau->Iter, NULL);
+            gtk_tree_store_set(projet->list_gtk._1990_actions.tree_store_charges, &charge_nouveau->Iter, 0, charge_nouveau, -1);
+        }
     }
 #endif
     
     return charge_nouveau;
+}
+
+
+char* EF_charge_noeud_description(Charge_Noeud *charge)
+/* Description : Renvoie la description d'une charge de type ponctuelle sur noeud.
+ * Paramètres : Charge_Noeud *charge : la charge à décrire.
+ * Valeur renvoyée :
+ *   Succès : une chaîne de caractère.
+ *   Échec : NULL :
+ *             charge == NULL,
+ *             en cas d'erreur d'allocation mémoire.
+ */
+{
+    char    txt_fx[30], txt_fy[30], txt_fz[30], txt_mx[30], txt_my[30], txt_mz[30];
+    char    *txt_liste_noeuds, *description;
+    
+    BUGMSG(charge, FALSE, gettext("Paramètre %s incorrect.\n"), "charge");
+    
+    BUG(txt_liste_noeuds = common_selection_converti_noeuds_en_texte(charge->noeuds), NULL);
+    common_math_double_to_char(charge->fx, txt_fx, DECIMAL_FORCE);
+    common_math_double_to_char(charge->fy, txt_fy, DECIMAL_FORCE);
+    common_math_double_to_char(charge->fz, txt_fz, DECIMAL_FORCE);
+    common_math_double_to_char(charge->mx, txt_mx, DECIMAL_MOMENT);
+    common_math_double_to_char(charge->my, txt_my, DECIMAL_MOMENT);
+    common_math_double_to_char(charge->mz, txt_mz, DECIMAL_MOMENT);
+    
+    BUGMSG(description = g_strdup_printf("%s : %s, Fx : %s N, Fy : %s N, Fz : %s N, Mx : %s N.m, My : %s N.m, Mz : %s N.m", strstr(txt_liste_noeuds, ";") == NULL ? gettext("Noeud") : gettext("Noeuds"), txt_liste_noeuds, txt_fx, txt_fy, txt_fz, txt_mx, txt_my, txt_mz), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    
+    free(txt_liste_noeuds);
+    
+    return description;
 }
 
 
@@ -125,15 +162,12 @@ gboolean EF_charge_noeud_enleve_noeuds(Charge_Noeud *charge, GList *noeuds, Proj
         
         if (gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_treeview_select_action")), &model, &Iter))
         {
-            unsigned int    num;
             Action          *action;
             
-            gtk_tree_model_get(model, &Iter, 0, &num, -1);
-            
-            BUG(action = _1990_action_cherche_numero(projet, num), FALSE);
+            gtk_tree_model_get(model, &Iter, 0, &action, -1);
             
             if (g_list_find(action->charges, charge))
-                BUG(EF_gtk_charge_noeud_ajout_affichage(charge, projet, FALSE), FALSE);
+                gtk_widget_queue_draw(GTK_WIDGET(projet->list_gtk._1990_actions.tree_view_charges));
         }
     }
 #endif

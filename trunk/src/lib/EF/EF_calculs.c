@@ -1207,7 +1207,7 @@ gboolean EF_calculs_resoud_charge(Projet *projet, unsigned int num_action)
                 /* Charge inconnue */
                 default :
                 {
-                    BUGMSG(0, FALSE, gettext("Type de charge %d inconnu."), ((Charge_Barre_Ponctuelle *)list_parcours->data)->type);
+                    BUGMSG(0, FALSE, gettext("Type de charge %d inconnu.\n"), ((Charge_Barre_Ponctuelle *)list_parcours->data)->type);
                     break;
                 }
             }

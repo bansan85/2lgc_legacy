@@ -796,7 +796,7 @@ gboolean _1990_action_free_num(Projet *projet, unsigned int num)
                     }
                     default :
                     {
-                        BUGMSG(0, FALSE, gettext("Type de charge %d inconnu."), charge->type);
+                        BUGMSG(0, FALSE, gettext("Type de charge %d inconnu.\n"), charge->type);
                         break;
                     }
                 }
@@ -951,7 +951,7 @@ gboolean _1990_action_free(Projet *projet)
                 }
                 default :
                 {
-                    BUGMSG(0, FALSE, gettext("Type de charge %d inconnu."), charge->type);
+                    BUGMSG(0, FALSE, gettext("Type de charge %d inconnu.\n"), charge->type);
                     break;
                 }
             }

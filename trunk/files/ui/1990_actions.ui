@@ -8,11 +8,7 @@
     </object>
     <object class="GtkTreeStore" id="1990_actions_tree_store_charge">
         <columns>
-            <column type="guint"/>
-            <column type="gchararray"/>
-            <column type="gchararray"/>
-            <column type="gchararray"/>
-            <column type="gchararray"/>
+            <column type="gpointer"/>
         </columns>
     </object>
     <object class="GtkLabel" id="1990_actions_treeview_column3_widget">
@@ -268,14 +264,15 @@
                                                         </child>
                                                         <child>
                                                             <object class="GtkTreeViewColumn" id="1990_actions_treeview_charge_column0">
-                                                                <property name="visible">False</property>
+                                                                <property name="alignment">0.5</property>
+                                                                <property name="visible">True</property>
                                                                 <property name="resizable">True</property>
-                                                                <property name="title" translatable="yes">Numéro</property>
+                                                                <property name="title" translatable="yes">Description</property>
                                                                 <child>
-                                                                    <object class="GtkCellRendererText" id="1990_actions_treeview_charge_cell0"/>
-                                                                    <attributes>
-                                                                        <attribute name="text">0</attribute>
-                                                                    </attributes>
+                                                                    <object class="GtkCellRendererText" id="1990_actions_treeview_charge_cell0">
+                                                                        <property name="editable">True</property>
+                                                                        <signal name="edited" handler="_1990_gtk_tree_view_charges_description_edited"/>
+                                                                    </object>
                                                                 </child>
                                                             </object>
                                                         </child>
@@ -284,47 +281,24 @@
                                                                 <property name="alignment">0.5</property>
                                                                 <property name="visible">True</property>
                                                                 <property name="resizable">True</property>
-                                                                <property name="title" translatable="yes">Description</property>
+                                                                <property name="title" translatable="yes">Charge</property>
                                                                 <child>
-                                                                    <object class="GtkCellRendererText" id="1990_actions_treeview_charge_cell1">
-                                                                        <property name="editable">True</property>
-                                                                        <signal name="edited" handler="_1990_gtk_tree_view_charges_description_edited"/>
-                                                                    </object>
-                                                                    <attributes>
-                                                                        <attribute name="text">1</attribute>
-                                                                    </attributes>
+                                                                    <object class="GtkCellRendererText" id="1990_actions_treeview_charge_cell1" />
                                                                 </child>
                                                             </object>
                                                         </child>
                                                         <child>
                                                             <object class="GtkTreeViewColumn" id="1990_actions_treeview_charge_column2">
-                                                                <property name="alignment">0.5</property>
                                                                 <property name="visible">True</property>
                                                                 <property name="resizable">True</property>
-                                                                <property name="title" translatable="yes">Charge</property>
+                                                                <property name="title" translatable="yes">Valeur</property>
                                                                 <child>
-                                                                    <object class="GtkCellRendererText" id="1990_actions_treeview_charge_cell2" />
-                                                                    <attributes>
-                                                                        <attribute name="text">2</attribute>
-                                                                    </attributes>
+                                                                    <object class="GtkCellRendererText" id="1990_actions_treeview_charge_cell2"/>
                                                                 </child>
                                                             </object>
                                                         </child>
                                                         <child>
                                                             <object class="GtkTreeViewColumn" id="1990_actions_treeview_charge_column3">
-                                                                <property name="visible">True</property>
-                                                                <property name="resizable">True</property>
-                                                                <property name="title" translatable="yes">Valeur</property>
-                                                                <child>
-                                                                    <object class="GtkCellRendererText" id="1990_actions_treeview_charge_cell3"/>
-                                                                    <attributes>
-                                                                        <attribute name="text">3</attribute>
-                                                                    </attributes>
-                                                                </child>
-                                                            </object>
-                                                        </child>
-                                                        <child>
-                                                            <object class="GtkTreeViewColumn" id="1990_actions_treeview_charge_column4">
                                                                 <property name="visible">True</property>
                                                             </object>
                                                         </child>

@@ -124,7 +124,7 @@ gboolean EF_charge_renomme(Projet *projet, unsigned int numero_action,
     
 #ifdef ENABLE_GTK
     if (projet->list_gtk._1990_actions.builder != NULL)
-        gtk_tree_store_set(projet->list_gtk._1990_actions.tree_store_charges, &charge->Iter, 1, nom, -1);
+        gtk_widget_queue_draw(GTK_WIDGET(projet->list_gtk._1990_actions.tree_view_charges));
 #endif
     
     return TRUE;
@@ -286,7 +286,7 @@ gboolean EF_charge_supprime(Projet *projet, unsigned int action_num, unsigned in
                 }
                 default :
                 {
-                    BUGMSG(0, FALSE, gettext("Type de charge %d inconnu."), charge_data->type);
+                    BUGMSG(0, FALSE, gettext("Type de charge %d inconnu.\n"), charge_data->type);
                     break;
                 }
             }
