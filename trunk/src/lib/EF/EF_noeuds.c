@@ -231,8 +231,16 @@ EF_Noeud* EF_noeuds_ajout_noeud_barre(Projet *projet, Beton_Barre *barre,
     barre->discretisation_element++;
     
     liste = barre->noeuds_intermediaires;
-    while ((liste != NULL) && (common_math_get(((EF_Noeud_Barre*)liste->data)->position_relative_barre) < common_math_get(position_relative_barre)))
-        liste = g_list_next(liste);
+    while (liste != NULL)
+    {
+        EF_Noeud        *noeud = liste->data;
+        EF_Noeud_Barre  *data2 = noeud->data;
+        
+        if (common_math_get(data2->position_relative_barre) < common_math_get(position_relative_barre))
+            liste = g_list_next(liste);
+        else
+            break;
+    }
     
     barre->noeuds_intermediaires = g_list_insert_before(barre->noeuds_intermediaires, liste, noeud_nouveau);
     
@@ -480,8 +488,16 @@ gboolean EF_noeuds_change_pos_relat(Projet *projet, EF_Noeud *noeud, Flottant po
         
         // On parcours la liste pour l'insérer au bon endroit
         list_parcours = info->barre->noeuds_intermediaires;
-        while ((list_parcours != NULL) && (common_math_get(((EF_Noeud_Barre*)list_parcours->data)->position_relative_barre) < common_math_get(pos)))
-            list_parcours = g_list_next(list_parcours);
+        while (list_parcours != NULL)
+        {
+            EF_Noeud        *noeud_tmp = list_parcours->data;
+            EF_Noeud_Barre  *data2 = noeud_tmp->data;
+            
+            if (common_math_get(data2->position_relative_barre) < common_math_get(pos))
+                list_parcours = g_list_next(list_parcours);
+            else
+                break;
+        }
         
         info->barre->noeuds_intermediaires = g_list_insert_before(info->barre->noeuds_intermediaires, list_parcours, liste->data);
         

@@ -53,6 +53,7 @@ Ensuite compiler et installer l'application normalement :
         Modélisation|Barres|Gestion des barres
     Dans la fenêtre appuis, sélectionner l'appui Encastrement
     Retourner dans la fenêtre noeuds.
+    Editer la position relative du noeud 7 (qui est le deuxième noeud de la barre 1) en 0.2  puis en 0.6667.
     Cliquer sur le bouton ajouter
         Test l'ajout d'un noeud libre
     Lui donner les coordonnées 1 2 3 et l'appui Encastrement et remettre l'appui en Aucun
