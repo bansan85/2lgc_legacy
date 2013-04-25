@@ -27,6 +27,7 @@
 #include "common_math.h"
 
 #ifdef ENABLE_GTK
+#include "ressources.h"
 #include "common_m3d.hpp"
 #include "1990_gtk_groupes.h"
 #include "1990_gtk_actions.h"
@@ -64,6 +65,8 @@ Projet* projet_init(Type_Pays pays)
  */
 {
     Projet      *projet;
+    
+    _2lgc_register_resource();
     
     // Alloue toutes les zones mémoires du projet à savoir (par module) :
     BUGMSG(projet = (Projet*)malloc(sizeof(Projet)), NULL, gettext("Erreur d'allocation mémoire.\n"));
@@ -319,6 +322,8 @@ gboolean projet_free(Projet *projet)
     cholmod_finish(projet->calculs.c);
     
     free(projet);
+    
+    _2lgc_unregister_resource();
     
     return TRUE;
 }

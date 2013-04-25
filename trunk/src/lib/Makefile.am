@@ -55,6 +55,7 @@ libeurocodes_la_SOURCES +=	common/common_m3d.cc \
 							1992_1_1/1992_1_1_gtk_materiaux.c \
 							common/common_gtk.c \
 							common/common_gtk_informations.c \
+							common/ressources.c \
 							EF/EF_gtk_charge_noeud.c \
 							EF/EF_gtk_charge_barre_ponctuelle.c \
 							EF/EF_gtk_charge_barre_repartie_uniforme.c \
@@ -72,6 +73,7 @@ libeurocodes_la_SOURCES +=	common/common_m3d.cc \
 							EF/EF_gtk_rapport.c \
 							EF/EF_gtk_relachement.c \
 							EF/EF_gtk_resultats.c
+
 endif
 
 libeurocodes_ladir = $(includedir)/2lgc
@@ -111,7 +113,8 @@ libeurocodes_la_HEADERS +=	common/common_m3d.hpp \
 							1990/1990_gtk_actions.h \
 							1992_1_1/1992_1_1_gtk_materiaux.h \
 							common/common_gtk.h \
-							common/common_gtk_informations.c \
+							common/common_gtk_informations.h \
+							common/ressources.h \
 							EF/EF_gtk_charge_noeud.h \
 							EF/EF_gtk_charge_barre_ponctuelle.h \
 							EF/EF_gtk_charge_barre_repartie_uniforme.h \
@@ -131,4 +134,11 @@ libeurocodes_la_HEADERS +=	common/common_m3d.hpp \
 							EF/EF_gtk_resultats.h
 endif
 
-CLEANFILES = *.gcno *.gcda
+common/common_projet.c: common/ressources.h common/ressources.c
+
+common/ressources.h: ../../files/ressources.xml common/ressources.c
+	glib-compile-resources --target=$@ --sourcedir=../../files ../../files/ressources.xml --c-name _2lgc --generate-header --manual-register
+common/ressources.c: ../../files/ressources.xml
+	glib-compile-resources --target=$@ --sourcedir=../../files ../../files/ressources.xml --c-name _2lgc --generate-source --manual-register
+
+CLEANFILES = *.gcno *.gcda common/ressources.c common/ressources.h

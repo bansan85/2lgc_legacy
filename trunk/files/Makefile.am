@@ -9,25 +9,3 @@ application_DATA	=	formules/1990_6_10.svg \
 						csv/france_vent.csv \
 						csv/france_seisme.csv
 
-applicationuidir	=	$(datadir)/2lgc/ui
-applicationui_DATA	=	ui/1990_actions.ui \
-						ui/1990_groupes.ui \
-						ui/1990_groupes_options.ui \
-						ui/1992_1_1_materiaux_beton.ui \
-						ui/common_informations.ui \
-						ui/EF_appuis.ui \
-						ui/EF_barres.ui \
-						ui/EF_sections.ui \
-						ui/EF_sections_rectangulaire.ui \
-						ui/EF_sections_T.ui \
-						ui/EF_sections_carree.ui \
-						ui/EF_sections_circulaire.ui \
-						ui/EF_barres_add.ui \
-						ui/EF_noeud.ui \
-						ui/EF_charge_barre_ponctuelle.ui \
-						ui/EF_charge_barre_repartie_uniforme.ui \
-						ui/EF_charge_noeud.ui \
-						ui/EF_materiaux.ui \
-						ui/EF_rapport.ui \
-						ui/EF_relachements.ui \
-						ui/EF_resultats.ui
