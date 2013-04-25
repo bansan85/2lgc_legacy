@@ -1070,7 +1070,7 @@ void _1990_gtk_actions(Projet *projet)
     }
     
     projet->list_gtk._1990_actions.builder = gtk_builder_new();
-    BUGMSG(gtk_builder_add_from_file(projet->list_gtk._1990_actions.builder, DATADIR"/ui/1990_actions.ui", NULL) != 0, , gettext("La génération de la fenêtre %s a échouée.\n"), "Actions");
+    BUGMSG(gtk_builder_add_from_resource(projet->list_gtk._1990_actions.builder, "/org/2lgc/codegui/ui/1990_actions.ui", NULL) != 0, , gettext("La génération de la fenêtre %s a échouée.\n"), "Actions");
     gtk_builder_connect_signals(projet->list_gtk._1990_actions.builder, projet);
     
     projet->list_gtk._1990_actions.window = GTK_WIDGET(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_window"));

@@ -350,7 +350,7 @@ gboolean EF_gtk_charge_barre_ponctuelle(Projet *projet, unsigned int action_defa
     
     ef_gtk = &projet->list_gtk.ef_charge_barre_ponctuelle;
     ef_gtk->builder = gtk_builder_new();
-    BUGMSG(gtk_builder_add_from_file(ef_gtk->builder, DATADIR"/ui/EF_charge_barre_ponctuelle.ui", NULL) != 0, FALSE, gettext("Builder Failed\n"));
+    BUGMSG(gtk_builder_add_from_resource(ef_gtk->builder, "/org/2lgc/codegui/ui/EF_charge_barre_ponctuelle.ui", NULL) != 0, FALSE, gettext("Builder Failed\n"));
     gtk_builder_connect_signals(ef_gtk->builder, projet);
     
     ef_gtk->window = GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_ponct_window"));

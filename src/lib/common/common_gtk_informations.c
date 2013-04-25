@@ -407,7 +407,7 @@ gboolean common_gtk_informations(Projet *projet)
     }
     
     ef_gtk->builder = gtk_builder_new();
-    BUGMSG(gtk_builder_add_from_file(ef_gtk->builder, DATADIR"/ui/common_informations.ui", NULL) != 0, FALSE, gettext("Builder Failed\n"));
+    BUGMSG(gtk_builder_add_from_resource(ef_gtk->builder, "/org/2lgc/codegui/ui/common_informations.ui", NULL) != 0, FALSE, gettext("Builder Failed\n"));
     gtk_builder_connect_signals(ef_gtk->builder, projet);
     ef_gtk->window = GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder, "common_informations_window"));
     ef_gtk->model_completion = GTK_LIST_STORE(gtk_builder_get_object(ef_gtk->builder, "common_informations_completion_model"));

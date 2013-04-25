@@ -1206,7 +1206,7 @@ void _1990_gtk_groupes(Projet *projet)
         BUG(_1990_groupe_ajout_niveau(projet), );
     
     projet->list_gtk._1990_groupes.builder = gtk_builder_new();
-    BUGMSG(gtk_builder_add_from_file(projet->list_gtk._1990_groupes.builder, DATADIR"/ui/1990_groupes.ui", NULL) != 0, , gettext("Builder Failed\n"));
+    BUGMSG(gtk_builder_add_from_resource(projet->list_gtk._1990_groupes.builder, "/org/2lgc/codegui/ui/1990_groupes.ui", NULL) != 0, , gettext("Builder Failed\n"));
     gtk_builder_connect_signals(projet->list_gtk._1990_groupes.builder, projet);
     
     projet->list_gtk._1990_groupes.window_groupe = GTK_WIDGET(gtk_builder_get_object(projet->list_gtk._1990_groupes.builder, "1990_groupes_window"));
