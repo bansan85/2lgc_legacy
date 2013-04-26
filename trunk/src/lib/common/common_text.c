@@ -218,6 +218,9 @@ char *strcasestr_internal(const char *haystack, const char *needle)
     }
     
     tmp = strstr(meule, aiguille);
+    // Si ce n'est pas au début, il faut vérifier que c'est bien au début d'un mot
+    while ((tmp != NULL) && (tmp != meule) && (tmp[-1] != ' ') && (tmp[-1] != '-'))
+        tmp = strstr(tmp+1, aiguille);
     
     free(meule);
     free(aiguille);

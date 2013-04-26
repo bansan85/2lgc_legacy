@@ -206,7 +206,6 @@ void common_gtk_informations_entry_del_char(GtkEntryBuffer *buffer, guint positi
         char    *code_postal2;
         char    departement[4];
         int     commune;
-        Ligne_Adresse   *adresse;
         
         BUG(common_ville_get_ville(ligne, NULL, NULL, NULL, departement, &commune, NULL, NULL, &article, &artmaj, &ncc, &artmin, &nccenr, &codepostal, NULL, &population), );
         BUGMSG(code_postal2 = g_strdup_printf("%d", codepostal), , gettext("Erreur d'allocation mémoire.\n"));
@@ -214,6 +213,7 @@ void common_gtk_informations_entry_del_char(GtkEntryBuffer *buffer, guint positi
         
         if ((strncmp(code_postal2, code_postal, strlen(code_postal)) == 0) && (strcasestr_internal(minuscule, ville) != NULL))
         {
+            Ligne_Adresse   *adresse;
             BUGMSG(adresse = malloc(sizeof(Ligne_Adresse)), , gettext("Erreur d'allocation mémoire.\n"));
             BUGMSG(adresse->affichage = g_strdup_printf("%d %s%s%s", codepostal, artmin, ((article == 5) || (article == 1) || (article == 0)) ? "" : " ", nccenr), , gettext("Erreur d'allocation mémoire.\n"));
             adresse->population = population;
