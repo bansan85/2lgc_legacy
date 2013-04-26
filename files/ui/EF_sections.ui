@@ -156,7 +156,10 @@
                                         <property name="resizable">True</property>
                                         <property name="title" translatable="yes">Description</property>
                                         <child>
-                                            <object class="GtkCellRendererText" id="EF_sections_treeview_cell2" />
+                                            <object class="GtkCellRendererText" id="EF_sections_treeview_cell2">
+                                                <property name="ellipsize-set">True</property>
+                                                <property name="ellipsize">PANGO_ELLIPSIZE_END</property>
+                                            </object>
                                         </child>
                                     </object>
                                 </child>
