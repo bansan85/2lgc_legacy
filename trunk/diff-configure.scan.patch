@@ -3,7 +3,7 @@
 @@ -5,1 +5,2 @@
 -AC_INIT([FULL-PACKAGE-NAME], [VERSION], [BUG-REPORT-ADDRESS])
 +AC_INIT(2lgc_code, 0.0.0.2, devel@2lgc.org, 2lgc_code, http://2lgc.org)
-+AM_INIT_AUTOMAKE
++AM_INIT_AUTOMAKE([-Wno-portability])
 @@ -7,2 +0,4 @@
  AC_CONFIG_HEADERS([config.h])
 +AM_GNU_GETTEXT([external])

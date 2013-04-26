@@ -138,7 +138,7 @@ common/common_projet.c: common/ressources.h common/ressources.c
 
 common/ressources.h: ../../files/ressources.xml common/ressources.c
 	glib-compile-resources --target=$@ --sourcedir=../../files ../../files/ressources.xml --c-name _2lgc --generate-header --manual-register
-common/ressources.c: ../../files/ressources.xml
+common/ressources.c: ../../files/ressources.xml $(wildcard ../../files/ui/*.ui)
 	glib-compile-resources --target=$@ --sourcedir=../../files ../../files/ressources.xml --c-name _2lgc --generate-source --manual-register
 
 CLEANFILES = *.gcno *.gcda common/ressources.c common/ressources.h
