@@ -20,8 +20,8 @@ else
 CUSTOM_CFLAGS 	+= -DLOCALEDIR=\""@localedir@"\" -DDATADIR=\""@datadir@/2lgc"\"
 endif
 
-AM_CFLAGS 		= $(CUSTOM_CFLAGS) -Wdeclaration-after-statement
-AM_CXXFLAGS		= $(CUSTOM_CFLAGS) -std=c++0x 
+AM_CFLAGS 		= $(CUSTOM_CFLAGS) -Wdeclaration-after-statement -std=gnu11
+AM_CXXFLAGS		= $(CUSTOM_CFLAGS) -std=gnu++11
 if ENABLE_GTK
 AM_CFLAGS      += @GTK_CFLAGS@
 AM_CXXFLAGS    += @GTK_CFLAGS@

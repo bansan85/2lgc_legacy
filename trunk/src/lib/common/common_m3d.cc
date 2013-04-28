@@ -68,7 +68,7 @@ gboolean m3d_init(Projet *projet)
     global_data->scene->add_light(light);
     
     g_signal_connect(m3d->drawing, "draw", G_CALLBACK(m3d_draw), global_data);
-    g_signal_connect(m3d->drawing, "configure-event", G_CALLBACK(m3d_configure_event), global_data);
+    g_signal_connect(m3d->drawing, "configure-event", G_CALLBACK(m3d_configure_event), projet);
     
     BUG(projet_init_graphique(projet), FALSE);
     
@@ -84,7 +84,12 @@ gboolean m3d_configure_event(GtkWidget *drawing, GdkEventConfigure *ev, gpointer
  * Valeur renvoyée : FALSE.
  */
 {
-    SGlobalData *data = (SGlobalData*)data2;
+    Projet      *projet = (Projet*) data2;
+    SGlobalData *data = (SGlobalData*)projet->list_gtk.m3d.data;
+    
+    if ((data->camera == NULL) && (projet->list_gtk.comp.window != NULL))
+        BUG(m3d_camera_axe_x_z_y(projet), FALSE);
+    
     data->camera->set_size_of_window(ev->width, ev->height);
     
     if (data->camera->get_window_height() < data->camera->get_window_width())
@@ -92,6 +97,7 @@ gboolean m3d_configure_event(GtkWidget *drawing, GdkEventConfigure *ev, gpointer
     else
         data->camera->set_d(data->camera->get_window_width() / (2 * tan(data->camera->get_angle() / 2)));
     data->scene->rendering(data->camera);
+    
     return FALSE;
 }
 
@@ -276,11 +282,12 @@ gboolean m3d_key_press(GtkWidget *widget, GdkEventKey *event, Projet *projet)
 
 
 
-gboolean m3d_camera_axe_x_z(Projet *projet)
-/* Description : Positionne la caméra pour voir toute la structure dans le plan xz.
+gboolean m3d_camera_axe_x_z_y(Projet *projet)
+/* Description : Positionne la caméra pour voir toute la structure dans le plan xz vers la
+ *               direction y.
  * Paramètres : Projet *projet : la variable projet.
  * Valeur renvoyée :
- *   Succès : TRUE. Ne fait rien si (list_size(projet->modele.noeuds) <= 1)
+ *   Succès : TRUE.
  *   Échec : FALSE :
  *             projet == NULL,
  *             projet->list_gtk.m3d == NULL,
@@ -288,51 +295,76 @@ gboolean m3d_camera_axe_x_z(Projet *projet)
  *             en cas d'erreur due à une fonction interne.
  */
 {
-    GList       *list_parcours;
     Gtk_m3d     *m3d;
     SGlobalData *vue;
-    double      x_min, x_max, z_min, z_max, x, y, z;
+    double      x, y, z;
+    double      x1, y1, z1;
     EF_Noeud    *noeud;
+    EF_Noeud    *n_h, *n_b, *n_g, *n_b;
     EF_Point    *point;
+//    GList       *list_parcours;
+    CM3dVertex  v1, v2, v3;
+    CM3dPolygon *poly;
+    GtkAllocation   allocation;
+    
+    gtk_widget_get_allocation(GTK_WIDGET(m3d->drawing), &allocation);
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    if (g_list_length(projet->modele.noeuds) <= 1)
+    
+    BUGMSG(projet->list_gtk.comp.window, FALSE, gettext("La fenêtre principale n'est pas encore visible.\n"));
+    
+    // Aucune noeud, on ne fait rien
+    if (projet->modele.noeuds == NULL)
         return TRUE;
-    BUG(EF_noeuds_min_max(projet, &x_min, &x_max, NULL, NULL, &z_min, &z_max), FALSE);
     
-    x = (x_min+x_max)/2.;
-    z = (z_min+z_max)/2.;
+    // Un seul noeud, on l'affiche en gros plan.
+    noeud = (EF_Noeud*)projet->modele.noeuds->data;
+    point = EF_noeuds_renvoie_position(noeud);
     
-    list_parcours = projet->modele.noeuds;
-    noeud = (EF_Noeud *)list_parcours->data;
-    BUG(point = EF_noeuds_renvoie_position(noeud), FALSE);
-    y = common_math_get(point->y)-sqrt((common_math_get(point->x)-x)*(common_math_get(point->x)-x)+(common_math_get(point->z)-z)*(common_math_get(point->z)-z));
-    free(point);
+    x = common_math_get(point->x);
+    y = common_math_get(point->y)-0.2;
+    z = common_math_get(point->z);
     
-    list_parcours = g_list_next(list_parcours);
-    while (list_parcours != NULL)
-    {
-        noeud = (EF_Noeud *)list_parcours->data;
-        BUG(point = EF_noeuds_renvoie_position(noeud), FALSE);
-        y = MIN(y, common_math_get(point->y)-sqrt((common_math_get(point->x)-x)*(common_math_get(point->x)-x)+(common_math_get(point->z)-z)*(common_math_get(point->z)-z)));
-        free(point);
-        list_parcours = g_list_next(list_parcours);
-    }
+    v1.set_coordinates(common_math_get(point->x), common_math_get(point->y), common_math_get(point->z));
+    v2.set_coordinates(common_math_get(point->x), common_math_get(point->y), common_math_get(point->z));
+    v3.set_coordinates(common_math_get(point->x), common_math_get(point->y), common_math_get(point->z));
+    gtk_widget_get_allocation(GTK_WIDGET(m3d->drawing), &allocation);
     
     m3d = &projet->list_gtk.m3d;
     BUGMSG(m3d->data, FALSE, gettext("Paramètre %s incorrect.\n"), "m3d->data");
     vue = (SGlobalData*)m3d->data;
     
+    
+/*    list_parcours = g_list_next(projet->modele.noeuds);
+    
+    {
+        noeud = (EF_Noeud*)projet->modele.noeuds->data;
+        point = EF_noeuds_renvoie_position(noeud);
+        
+        x = common_math_get(point->x);
+        y = common_math_get(point->y)-0.2;
+        z = common_math_get(point->z);
+        
+        free(point);
+    }*/
+    
     if (vue->camera == NULL)
     {
-        vue->camera = new CM3dCamera (x, y*1.1, z, x, 0., z, 90, (int)(x_max-x_min), (int)(z_max-z_min));
+        vue->camera = new CM3dCamera(x, y, z, x, y+1., z, 90, allocation.width, allocation.height);
         vue->camera->rotation_on_axe_of_view(0);
+        poly = new CM3dPolygon(v1, v2, v3);
+        poly->convert_to_2d(vue->camera);
+        poly->get_vertex1_to_2d()->get_coordinates(&x1, &y1, &z1);
+        printf("%d %d\n", allocation.width, allocation.height);
+        delete poly;
     }
     else
     {
         vue->camera->set_position(x, y, z);
         vue->camera->set_target(x, y+1, z);
     }
+    
+    free(point);
     
     return TRUE;
 }

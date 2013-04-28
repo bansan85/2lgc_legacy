@@ -198,7 +198,6 @@ int main(int argc, char *argv[])
     g_list_free(tmp1);*/
     
     // Affichage de l'interface graphique
-    BUG(m3d_camera_axe_x_z(projet), -1);
     gtk_widget_show_all(projet->list_gtk.comp.window);
     gtk_main();
     
