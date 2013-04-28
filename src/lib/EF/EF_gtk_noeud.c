@@ -705,13 +705,12 @@ void EF_gtk_noeuds_render_1(GtkTreeViewColumn *tree_column, GtkCellRenderer *cel
  */
 {
     EF_Noeud        *noeud;
-    EF_Point        *point;
+    EF_Point        point;
     char            tmp[30];
     
     gtk_tree_model_get(tree_model, iter, 0, &noeud, -1);
-    point = EF_noeuds_renvoie_position(noeud);
-    common_math_double_to_char2(point->x, tmp, DECIMAL_DISTANCE);
-    free(point);
+    BUG(EF_noeuds_renvoie_position(noeud, &point), );
+    common_math_double_to_char2(point.x, tmp, DECIMAL_DISTANCE);
     
     g_object_set(cell, "text", tmp, NULL);
 }
@@ -730,13 +729,12 @@ void EF_gtk_noeuds_render_2(GtkTreeViewColumn *tree_column, GtkCellRenderer *cel
  */
 {
     EF_Noeud        *noeud;
-    EF_Point        *point;
+    EF_Point        point;
     char            tmp[30];
     
     gtk_tree_model_get(tree_model, iter, 0, &noeud, -1);
-    point = EF_noeuds_renvoie_position(noeud);
-    common_math_double_to_char2(point->y, tmp, DECIMAL_DISTANCE);
-    free(point);
+    BUG(EF_noeuds_renvoie_position(noeud, &point), );
+    common_math_double_to_char2(point.y, tmp, DECIMAL_DISTANCE);
     
     g_object_set(cell, "text", tmp, NULL);
 }
@@ -755,13 +753,12 @@ void EF_gtk_noeuds_render_3(GtkTreeViewColumn *tree_column, GtkCellRenderer *cel
  */
 {
     EF_Noeud        *noeud;
-    EF_Point        *point;
+    EF_Point        point;
     char            tmp[30];
     
     gtk_tree_model_get(tree_model, iter, 0, &noeud, -1);
-    point = EF_noeuds_renvoie_position(noeud);
-    common_math_double_to_char2(point->z, tmp, DECIMAL_DISTANCE);
-    free(point);
+    BUG(EF_noeuds_renvoie_position(noeud, &point), );
+    common_math_double_to_char2(point.z, tmp, DECIMAL_DISTANCE);
     
     g_object_set(cell, "text", tmp, NULL);
 }
@@ -929,17 +926,9 @@ void EF_gtk_noeud(Projet *projet)
             }
             else if (noeud->type == NOEUD_BARRE)
             {
-                EF_Noeud_Barre  *info = (EF_Noeud_Barre *)noeud->data;
-                EF_Point        *point = EF_noeuds_renvoie_position(noeud);
-                gchar           tmp[30];
-                
-                BUG(point, );
-                
                 gtk_tree_store_append(ef_gtk->tree_store_barre, &noeud->Iter, NULL);
-                common_math_double_to_char2(info->position_relative_barre, tmp, DECIMAL_DISTANCE);
                 gtk_tree_store_set(ef_gtk->tree_store_barre, &noeud->Iter, 0, noeud, -1);
                 
-                free(point);
             }
             
             list_parcours = g_list_next(list_parcours);
