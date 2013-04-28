@@ -300,18 +300,16 @@ gboolean m3d_camera_axe_x_z_y(Projet *projet)
     double      x, y, z;
     double      x1, y1, z1;
     EF_Noeud    *noeud;
-    EF_Noeud    *n_h, *n_b, *n_g, *n_b;
-    EF_Point    *point;
+//    EF_Noeud    *n_h, *n_b, *n_g, *n_d;
+    EF_Point    point;
 //    GList       *list_parcours;
     CM3dVertex  v1, v2, v3;
     CM3dPolygon *poly;
     GtkAllocation   allocation;
     
-    gtk_widget_get_allocation(GTK_WIDGET(m3d->drawing), &allocation);
-    
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
-    BUGMSG(projet->list_gtk.comp.window, FALSE, gettext("La fenêtre principale n'est pas encore visible.\n"));
+    BUGMSG(projet->list_gtk.comp.window, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "principale");
     
     // Aucune noeud, on ne fait rien
     if (projet->modele.noeuds == NULL)
@@ -319,20 +317,20 @@ gboolean m3d_camera_axe_x_z_y(Projet *projet)
     
     // Un seul noeud, on l'affiche en gros plan.
     noeud = (EF_Noeud*)projet->modele.noeuds->data;
-    point = EF_noeuds_renvoie_position(noeud);
+    BUG(EF_noeuds_renvoie_position(noeud, &point), FALSE);
     
-    x = common_math_get(point->x);
-    y = common_math_get(point->y)-0.2;
-    z = common_math_get(point->z);
+    x = common_math_get(point.x);
+    y = common_math_get(point.y)-0.2;
+    z = common_math_get(point.z);
     
-    v1.set_coordinates(common_math_get(point->x), common_math_get(point->y), common_math_get(point->z));
-    v2.set_coordinates(common_math_get(point->x), common_math_get(point->y), common_math_get(point->z));
-    v3.set_coordinates(common_math_get(point->x), common_math_get(point->y), common_math_get(point->z));
-    gtk_widget_get_allocation(GTK_WIDGET(m3d->drawing), &allocation);
+    v1.set_coordinates(common_math_get(point.x), common_math_get(point.y), common_math_get(point.z));
+    v2.set_coordinates(common_math_get(point.x), common_math_get(point.y), common_math_get(point.z));
+    v3.set_coordinates(common_math_get(point.x), common_math_get(point.y), common_math_get(point.z));
     
     m3d = &projet->list_gtk.m3d;
     BUGMSG(m3d->data, FALSE, gettext("Paramètre %s incorrect.\n"), "m3d->data");
     vue = (SGlobalData*)m3d->data;
+    gtk_widget_get_allocation(GTK_WIDGET(m3d->drawing), &allocation);
     
     
 /*    list_parcours = g_list_next(projet->modele.noeuds);
@@ -363,8 +361,6 @@ gboolean m3d_camera_axe_x_z_y(Projet *projet)
         vue->camera->set_position(x, y, z);
         vue->camera->set_target(x, y+1, z);
     }
-    
-    free(point);
     
     return TRUE;
 }
@@ -448,14 +444,14 @@ void* m3d_noeud(void *donnees_m3d, EF_Noeud *noeud)
 {
     CM3dObject  *cube;
     char        *nom;
-    EF_Point    *point;
+    EF_Point    point;
     SGlobalData *vue;
     
     BUGMSG(noeud, NULL, gettext("Paramètre %s incorrect.\n"), "noeud");
     BUGMSG(donnees_m3d, NULL, gettext("Paramètre %s incorrect.\n"), "donnees_m3d");
     
     BUGMSG(nom = g_strdup_printf("noeud %u", noeud->numero), NULL, gettext("Erreur d'allocation mémoire.\n"));
-    BUG(point = EF_noeuds_renvoie_position(noeud), NULL);
+    BUG(EF_noeuds_renvoie_position(noeud, &point), NULL);
     
     vue = (SGlobalData*)((Gtk_m3d *)donnees_m3d)->data;
     
@@ -467,10 +463,9 @@ void* m3d_noeud(void *donnees_m3d, EF_Noeud *noeud)
     cube->set_ambient_reflexion (1.);
     cube->set_smooth(GOURAUD);
     vue->scene->add_object(cube);
-    cube->set_position(common_math_get(point->x), common_math_get(point->y), common_math_get(point->z));
+    cube->set_position(common_math_get(point.x), common_math_get(point.y), common_math_get(point.z));
     
     free(nom);
-    free(point);
     
     return cube;
 }
@@ -551,7 +546,7 @@ gboolean m3d_barre(void *donnees_m3d, Beton_Barre *barre)
     
     switch (barre->section->type)
     {
-        EF_Point *p_d, *p_f;
+        EF_Point p_d, p_f;
         case SECTION_RECTANGULAIRE :
         {
             double      y, z;
@@ -603,12 +598,10 @@ gboolean m3d_barre(void *donnees_m3d, Beton_Barre *barre)
             tout->set_smooth(GOURAUD);
             BUG(_1992_1_1_barres_angle_rotation(barre->noeud_debut, barre->noeud_fin, &y, &z), FALSE);
             tout->rotations(0., -y/M_PI*180., z/M_PI*180.);
-            BUG(p_d = EF_noeuds_renvoie_position(barre->noeud_debut), FALSE);
-            BUG(p_f = EF_noeuds_renvoie_position(barre->noeud_fin), FALSE);
-            tout->set_position((common_math_get(p_d->x)+common_math_get(p_f->x))/2., (common_math_get(p_d->y)+common_math_get(p_f->y))/2., (common_math_get(p_d->z)+common_math_get(p_f->z))/2.);
+            BUG(EF_noeuds_renvoie_position(barre->noeud_debut, &p_d), FALSE);
+            BUG(EF_noeuds_renvoie_position(barre->noeud_fin, &p_f), FALSE);
+            tout->set_position((common_math_get(p_d.x)+common_math_get(p_f.x))/2., (common_math_get(p_d.y)+common_math_get(p_f.y))/2., (common_math_get(p_d.z)+common_math_get(p_f.z))/2.);
             tout->set_ambient_reflexion(0.8);
-            free(p_d);
-            free(p_f);
             
             vue->scene->add_object(tout);
             
@@ -694,11 +687,9 @@ gboolean m3d_barre(void *donnees_m3d, Beton_Barre *barre)
             tout->set_smooth(GOURAUD);
             BUG(_1992_1_1_barres_angle_rotation(barre->noeud_debut, barre->noeud_fin, &y, &z), FALSE);
             tout->rotations(0., -y/M_PI*180., z/M_PI*180.);
-            BUG(p_d = EF_noeuds_renvoie_position(barre->noeud_debut), FALSE);
-            BUG(p_f = EF_noeuds_renvoie_position(barre->noeud_fin), FALSE);
-            tout->set_position((common_math_get(p_d->x)+common_math_get(p_f->x))/2., (common_math_get(p_d->y)+common_math_get(p_f->y))/2., (common_math_get(p_d->z)+common_math_get(p_f->z))/2.);
-            free(p_d);
-            free(p_f);
+            BUG(EF_noeuds_renvoie_position(barre->noeud_debut, &p_d), FALSE);
+            BUG(EF_noeuds_renvoie_position(barre->noeud_fin, &p_f), FALSE);
+            tout->set_position((common_math_get(p_d.x)+common_math_get(p_f.x))/2., (common_math_get(p_d.y)+common_math_get(p_f.y))/2., (common_math_get(p_d.z)+common_math_get(p_f.z))/2.);
             
             vue->scene->add_object(tout);
             
@@ -757,11 +748,9 @@ gboolean m3d_barre(void *donnees_m3d, Beton_Barre *barre)
             tout->set_smooth(GOURAUD);
             BUG(_1992_1_1_barres_angle_rotation(barre->noeud_debut, barre->noeud_fin, &y, &z), FALSE);
             tout->rotations(0., -y/M_PI*180., z/M_PI*180.);
-            BUG(p_d = EF_noeuds_renvoie_position(barre->noeud_debut), FALSE);
-            BUG(p_f = EF_noeuds_renvoie_position(barre->noeud_fin), FALSE);
-            tout->set_position((common_math_get(p_d->x)+common_math_get(p_f->x))/2., (common_math_get(p_d->y)+common_math_get(p_f->y))/2., (common_math_get(p_d->z)+common_math_get(p_f->z))/2.);
-            free(p_d);
-            free(p_f);
+            BUG(EF_noeuds_renvoie_position(barre->noeud_debut, &p_d), FALSE);
+            BUG(EF_noeuds_renvoie_position(barre->noeud_fin, &p_f), FALSE);
+            tout->set_position((common_math_get(p_d.x)+common_math_get(p_f.x))/2., (common_math_get(p_d.y)+common_math_get(p_f.y))/2., (common_math_get(p_d.z)+common_math_get(p_f.z))/2.);
             
             vue->scene->add_object(tout);
             
@@ -799,11 +788,9 @@ gboolean m3d_barre(void *donnees_m3d, Beton_Barre *barre)
             tout->set_smooth(GOURAUD);
             BUG(_1992_1_1_barres_angle_rotation(barre->noeud_debut, barre->noeud_fin, &y, &z), FALSE);
             tout->rotations(0., -y/M_PI*180., z/M_PI*180.);
-            BUG(p_d = EF_noeuds_renvoie_position(barre->noeud_debut), FALSE);
-            BUG(p_f = EF_noeuds_renvoie_position(barre->noeud_fin), FALSE);
-            tout->set_position((common_math_get(p_d->x)+common_math_get(p_f->x))/2., (common_math_get(p_d->y)+common_math_get(p_f->y))/2., (common_math_get(p_d->z)+common_math_get(p_f->z))/2.);
-            free(p_d);
-            free(p_f);
+            BUG(EF_noeuds_renvoie_position(barre->noeud_debut, &p_d), FALSE);
+            BUG(EF_noeuds_renvoie_position(barre->noeud_fin, &p_f), FALSE);
+            tout->set_position((common_math_get(p_d.x)+common_math_get(p_f.x))/2., (common_math_get(p_d.y)+common_math_get(p_f.y))/2., (common_math_get(p_d.z)+common_math_get(p_f.z))/2.);
             
             vue->scene->add_object(tout);
             

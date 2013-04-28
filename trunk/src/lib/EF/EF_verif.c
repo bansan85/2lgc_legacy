@@ -396,18 +396,18 @@ gboolean EF_verif_EF(Projet *projet, GList **rapport, int *erreur)
     {
         EF_Noeud    *noeud1 = list_parcours->data;
         GList       *list_parcours2 = g_list_next(list_parcours);
-        EF_Point    *point1;
+        EF_Point    point1;
         
-        BUG(point1 = EF_noeuds_renvoie_position(noeud1), FALSE);
+        BUG(EF_noeuds_renvoie_position(noeud1, &point1), FALSE);
         
         while (list_parcours2 != NULL)
         {
             EF_Noeud    *noeud2 = list_parcours2->data;
-            EF_Point    *point2;
+            EF_Point    point2;
             
-            BUG(point2 = EF_noeuds_renvoie_position(noeud2), FALSE);
+            BUG(EF_noeuds_renvoie_position(noeud2, &point2), FALSE);
             
-            if ((ERREUR_RELATIVE_EGALE(common_math_get(point1->x), common_math_get(point2->x))) && (ERREUR_RELATIVE_EGALE(common_math_get(point1->y), common_math_get(point2->y))) && (ERREUR_RELATIVE_EGALE(common_math_get(point1->z), common_math_get(point2->z))))
+            if ((ERREUR_RELATIVE_EGALE(common_math_get(point1.x), common_math_get(point2.x))) && (ERREUR_RELATIVE_EGALE(common_math_get(point1.y), common_math_get(point2.y))) && (ERREUR_RELATIVE_EGALE(common_math_get(point1.z), common_math_get(point2.z))))
             {
                 ligne->resultat = 1;
                 if (*erreur < ligne->resultat)
@@ -427,11 +427,9 @@ gboolean EF_verif_EF(Projet *projet, GList **rapport, int *erreur)
                 list_parcours2 = NULL;
             }
             
-            free(point2);
             list_parcours2 = g_list_next(list_parcours2);
         }
         
-        free(point1);
         list_parcours = g_list_next(list_parcours);
     }
     *rapport = g_list_append(*rapport, ligne);

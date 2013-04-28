@@ -335,29 +335,32 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                         }
                         case COLRES_NOEUDS_X :
                         {
-                            EF_Point    *point = EF_noeuds_renvoie_position(noeud);
+                            EF_Point    point;
                             
-                            gtk_list_store_set(res->list_store, &Iter, j-1, point->x, -1);
+                            BUG(EF_noeuds_renvoie_position(noeud, &point), FALSE);
                             
-                            free(point);
+                            gtk_list_store_set(res->list_store, &Iter, j-1, point.x, -1);
+                            
                             break;
                         }
                         case COLRES_NOEUDS_Y :
                         {
-                            EF_Point    *point = EF_noeuds_renvoie_position(noeud);
+                            EF_Point    point;
                             
-                            gtk_list_store_set(res->list_store, &Iter, j-1, point->y, -1);
+                            BUG(EF_noeuds_renvoie_position(noeud, &point), FALSE);
                             
-                            free(point);
+                            gtk_list_store_set(res->list_store, &Iter, j-1, point.y, -1);
+                            
                             break;
                         }
                         case COLRES_NOEUDS_Z :
                         {
-                            EF_Point    *point = EF_noeuds_renvoie_position(noeud);
+                            EF_Point    point;
                             
-                            gtk_list_store_set(res->list_store, &Iter, j-1, point->z, -1);
+                            BUG(EF_noeuds_renvoie_position(noeud, &point), FALSE);
                             
-                            free(point);
+                            gtk_list_store_set(res->list_store, &Iter, j-1, point.z, -1);
+                            
                             break;
                         }
                         case COLRES_REACTION_APPUI_FX :

@@ -27,7 +27,7 @@ gboolean EF_noeuds_init(Projet *projet) __attribute__((__warn_unused_result__));
 EF_Noeud* EF_noeuds_ajout_noeud_libre(Projet *projet, Flottant x, Flottant y, Flottant z, EF_Appui *appui, EF_Noeud* relatif) __attribute__((__warn_unused_result__));
 EF_Noeud* EF_noeuds_ajout_noeud_barre(Projet *projet, Beton_Barre *barre, Flottant position_relative_barre, EF_Appui *appui) __attribute__((__warn_unused_result__));
 
-EF_Point *EF_noeuds_renvoie_position(EF_Noeud *noeud) __attribute__((__warn_unused_result__));
+gboolean EF_noeuds_renvoie_position(EF_Noeud *noeud, EF_Point *point) __attribute__((__warn_unused_result__));
 
 EF_Noeud* EF_noeuds_cherche_numero(Projet *projet, unsigned int numero, gboolean critique) __attribute__((__warn_unused_result__));
 

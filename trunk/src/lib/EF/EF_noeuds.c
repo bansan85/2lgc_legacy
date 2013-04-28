@@ -50,21 +50,19 @@ gboolean EF_noeuds_init(Projet *projet)
 }
 
 
-EF_Point *EF_noeuds_renvoie_position(EF_Noeud *noeud) 
+gboolean EF_noeuds_renvoie_position(EF_Noeud *noeud, EF_Point *point)
 /* Description : Renvoie un point contenant la position du noeud.
- *               La valeur de retour doit être libérée par l'appel à la fonction free();
- * Paramètres : EF_Noeud *noeud : le noeud à étudier.
+ * Paramètres : EF_Noeud *noeud : le noeud à étudier,
+ *              EF_Point *point : la position du noeud.
  * Valeur renvoyée :
- *   Succès : pointeur vers la position du noeud.
- *   Échec : NULL en cas de paramètres invalides
+ *   Succès : TRUE
+ *   Échec : FALSE en cas de paramètres invalides
  *             noeud == NULL,
  *             en cas d'erreur d'allocation mémoire.
  */
 {
-    EF_Point *retour;
-    
-    BUGMSG(noeud, NULL, gettext("Paramètre %s incorrect.\n"), "noeud");
-    BUGMSG(retour = malloc(sizeof(EF_Point)), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(noeud, FALSE, gettext("Paramètre %s incorrect.\n"), "noeud");
+    BUGMSG(point, FALSE, gettext("Paramètre %s incorrect.\n"), "point");
     
     switch (noeud->type)
     {
@@ -74,21 +72,19 @@ EF_Point *EF_noeuds_renvoie_position(EF_Noeud *noeud)
             
             if (tmp->relatif != NULL)
             {
-                EF_Point        *p;
+                EF_Point    p;
                 
-                BUG(p = EF_noeuds_renvoie_position(tmp->relatif), NULL);
+                BUG(EF_noeuds_renvoie_position(tmp->relatif, &p), FALSE);
                 
-                retour->x = common_math_add(p->x, tmp->x);
-                retour->y = common_math_add(p->y, tmp->y);
-                retour->z = common_math_add(p->z, tmp->z);
-                
-                free(p);
+                point->x = common_math_add(p.x, tmp->x);
+                point->y = common_math_add(p.y, tmp->y);
+                point->z = common_math_add(p.z, tmp->z);
             }
             else
             {
-                retour->x = tmp->x;
-                retour->y = tmp->y;
-                retour->z = tmp->z;
+                point->x = tmp->x;
+                point->y = tmp->y;
+                point->z = tmp->z;
             }
             
             break;
@@ -96,28 +92,25 @@ EF_Point *EF_noeuds_renvoie_position(EF_Noeud *noeud)
         case NOEUD_BARRE :
         {
             EF_Noeud_Barre  *data = noeud->data;
-            EF_Point        *point1, *point2;
+            EF_Point        point1, point2;
             
-            BUG(point1 = EF_noeuds_renvoie_position(data->barre->noeud_debut), NULL);
-            BUG(point2 = EF_noeuds_renvoie_position(data->barre->noeud_fin), NULL);
+            BUG(EF_noeuds_renvoie_position(data->barre->noeud_debut, &point1), FALSE);
+            BUG(EF_noeuds_renvoie_position(data->barre->noeud_fin, &point2), FALSE);
             
-            retour->x = common_math_add(point1->x, common_math_dot_f(common_math_sub(point2->x, point1->x), data->position_relative_barre));
-            retour->y = common_math_add(point1->y, common_math_dot_f(common_math_sub(point2->y, point1->y), data->position_relative_barre));
-            retour->z = common_math_add(point1->z, common_math_dot_f(common_math_sub(point2->z, point1->z), data->position_relative_barre));
-            
-            free(point1);
-            free(point2);
+            point->x = common_math_add(point1.x, common_math_dot_f(common_math_sub(point2.x, point1.x), data->position_relative_barre));
+            point->y = common_math_add(point1.y, common_math_dot_f(common_math_sub(point2.y, point1.y), data->position_relative_barre));
+            point->z = common_math_add(point1.z, common_math_dot_f(common_math_sub(point2.z, point1.z), data->position_relative_barre));
             
             break;
         }
         default :
         {
-            BUGMSG(0, NULL, gettext("Le type de noeud %d est inconnu.\n"), noeud->type);
+            BUGMSG(NULL, FALSE, gettext("Le type de noeud %d est inconnu.\n"), noeud->type);
             break;
         }
     }
     
-    return retour;
+    return TRUE;
 }
 
 
@@ -251,15 +244,8 @@ EF_Noeud* EF_noeuds_ajout_noeud_barre(Projet *projet, Beton_Barre *barre,
     BUG(m3d_noeud(&projet->list_gtk.m3d, noeud_nouveau), NULL);
     if (projet->list_gtk.ef_noeud.builder != NULL)
     {
-        EF_Point    *point;
-        gchar       tmp[30];
-        
-        BUG(point = EF_noeuds_renvoie_position(noeud_nouveau), NULL);
         gtk_tree_store_append(projet->list_gtk.ef_noeud.tree_store_barre, &noeud_nouveau->Iter, NULL);
-        common_math_double_to_char2(data->position_relative_barre, tmp, DECIMAL_DISTANCE);
         gtk_tree_store_set(projet->list_gtk.ef_noeud.tree_store_barre, &noeud_nouveau->Iter, 0, noeud_nouveau, -1);
-        
-        free(point);
     }
 #endif
     
@@ -595,22 +581,19 @@ double EF_noeuds_distance(EF_Noeud* n1, EF_Noeud* n2)
  *             n2 == NULL.
  */
 {
-    EF_Point    *p1, *p2;
+    EF_Point    p1, p2;
     double      x, y, z;
     
     // \end{verbatim}\texttt{distance }$= \sqrt{x^2+y^2+z^2}$\begin{verbatim}
     BUGMSG(n1, NAN, gettext("Paramètre %s incorrect.\n"), "n1");
     BUGMSG(n2, NAN, gettext("Paramètre %s incorrect.\n"), "n2");
     
-    BUG(p1 = EF_noeuds_renvoie_position(n1), NAN);
-    BUG(p2 = EF_noeuds_renvoie_position(n2), NAN);
+    BUG(EF_noeuds_renvoie_position(n1, &p1), NAN);
+    BUG(EF_noeuds_renvoie_position(n2, &p2), NAN);
     
-    x = common_math_get(p2->x) - common_math_get(p1->x);
-    y = common_math_get(p2->y) - common_math_get(p1->y);
-    z = common_math_get(p2->z) - common_math_get(p1->z);
-    
-    free(p1);
-    free(p2);
+    x = common_math_get(p2.x) - common_math_get(p1.x);
+    y = common_math_get(p2.y) - common_math_get(p1.y);
+    z = common_math_get(p2.z) - common_math_get(p1.z);
     
     return sqrt(x*x+y*y+z*z);
 }
@@ -634,21 +617,18 @@ double EF_noeuds_distance_x_y_z(EF_Noeud* n1, EF_Noeud* n2, double *x, double *y
  *             z == NULL.
  */
 {
-    EF_Point    *p1, *p2;
+    EF_Point    p1, p2;
     
     // \end{verbatim}\texttt{distance }$= \sqrt{x^2+y^2+z^2}$\begin{verbatim}
     BUGMSG(n1, NAN, gettext("Paramètre %s incorrect.\n"), "n1");
     BUGMSG(n2, NAN, gettext("Paramètre %s incorrect.\n"), "n2");
     
-    BUG(p1 = EF_noeuds_renvoie_position(n1), NAN);
-    BUG(p2 = EF_noeuds_renvoie_position(n2), NAN);
+    BUG(EF_noeuds_renvoie_position(n1, &p1), NAN);
+    BUG(EF_noeuds_renvoie_position(n2, &p2), NAN);
 
-    *x = common_math_get(p2->x) - common_math_get(p1->x);
-    *y = common_math_get(p2->y) - common_math_get(p1->y);
-    *z = common_math_get(p2->z) - common_math_get(p1->z);
-    
-    free(p1);
-    free(p2);
+    *x = common_math_get(p2.x) - common_math_get(p1.x);
+    *y = common_math_get(p2.y) - common_math_get(p1.y);
+    *z = common_math_get(p2.z) - common_math_get(p1.z);
     
     return sqrt((*x)*(*x)+(*y)*(*y)+(*z)*(*z));
 }
