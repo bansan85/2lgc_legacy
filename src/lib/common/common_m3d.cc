@@ -110,14 +110,10 @@ gboolean m3d_draw(GtkWidget *drawing, GdkEventExpose* ev, gpointer *data)
  * Valeur renvoyée : FALSE.
  */
 {
-    cairo_t *context = NULL;
     SGlobalData *data2 = (SGlobalData*)data;
 
-    data2->scene->show_to_GtkDrawingarea (drawing, data2->camera);
+    data2->scene->show_to_GtkDrawingarea(drawing, data2->camera);
     
-    context = gdk_cairo_create (gtk_widget_get_window(drawing));
-    cairo_select_font_face (context, "URW Chancery L", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL);
-    cairo_set_font_size (context, 18);
     return FALSE;
 }
 
@@ -297,19 +293,24 @@ gboolean m3d_camera_axe_x_z_y(Projet *projet)
 {
     Gtk_m3d     *m3d;
     SGlobalData *vue;
-    double      x, y, z;
-    double      x1, y1, z1;
-    EF_Noeud    *noeud;
-//    EF_Noeud    *n_h, *n_b, *n_g, *n_d;
-    EF_Point    point;
-//    GList       *list_parcours;
-    CM3dVertex  v1, v2, v3;
-    CM3dPolygon *poly;
-    GtkAllocation   allocation;
+    double      x, y, z; // Les coordonnées de la caméra
+    double      x1, y1; // valeurs permettant de récupérer les coordonnées des vecteurs.
+    EF_Noeud    *noeud; // Noeud en cours d'étude
+    EF_Point    point; // Position du noeud en cours d'étude
+    double      ph[3], pb[3], pg[3], pd[3]; // Les coordonnées des noeuds en 3D
+    double      ph2, pb2, pg2, pd2; // Leur projection en 2D
+    GList       *list_parcours; // Noeud en cours d'étude
+    CM3dVertex  v1; // Vecteur permettant de créer le polygone
+    CM3dPolygon *poly; // Polygone qui servira à obtenir la projection dans la fenêtre 2D.
+    GtkAllocation   allocation; // Dimension de la fenêtre 2D.
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
     BUGMSG(projet->list_gtk.comp.window, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "principale");
+    
+    m3d = &projet->list_gtk.m3d;
+    BUGMSG(m3d->data, FALSE, gettext("Paramètre %s incorrect.\n"), "m3d->data");
+    vue = (SGlobalData*)m3d->data;
     
     // Aucune noeud, on ne fait rien
     if (projet->modele.noeuds == NULL)
@@ -319,48 +320,141 @@ gboolean m3d_camera_axe_x_z_y(Projet *projet)
     noeud = (EF_Noeud*)projet->modele.noeuds->data;
     BUG(EF_noeuds_renvoie_position(noeud, &point), FALSE);
     
-    x = common_math_get(point.x);
-    y = common_math_get(point.y)-0.2;
-    z = common_math_get(point.z);
+    ph[0] = common_math_get(point.x);
+    ph[1] = common_math_get(point.y);
+    ph[2] = common_math_get(point.z);
+    pb[0] = common_math_get(point.x);
+    pb[1] = common_math_get(point.y);
+    pb[2] = common_math_get(point.z);
+    pg[0] = common_math_get(point.x);
+    pg[1] = common_math_get(point.y);
+    pg[2] = common_math_get(point.z);
+    pd[0] = common_math_get(point.x);
+    pd[1] = common_math_get(point.y);
+    pd[2] = common_math_get(point.z);
     
-    v1.set_coordinates(common_math_get(point.x), common_math_get(point.y), common_math_get(point.z));
-    v2.set_coordinates(common_math_get(point.x), common_math_get(point.y), common_math_get(point.z));
-    v3.set_coordinates(common_math_get(point.x), common_math_get(point.y), common_math_get(point.z));
-    
-    m3d = &projet->list_gtk.m3d;
-    BUGMSG(m3d->data, FALSE, gettext("Paramètre %s incorrect.\n"), "m3d->data");
-    vue = (SGlobalData*)m3d->data;
+    // On cherche le xmin, xmax, zmin, zmax et ymin de l'ensemble des noeuds afin de définir
+    // la position optimale de la caméra.
     gtk_widget_get_allocation(GTK_WIDGET(m3d->drawing), &allocation);
-    
-    
-/*    list_parcours = g_list_next(projet->modele.noeuds);
-    
+    ph2 = common_math_get(point.z);
+    pb2 = common_math_get(point.z);
+    pg2 = common_math_get(point.x);
+    pd2 = common_math_get(point.x);
+    y = common_math_get(point.y);
+    list_parcours = g_list_next(projet->modele.noeuds);
+    while (list_parcours != NULL)
     {
-        noeud = (EF_Noeud*)projet->modele.noeuds->data;
-        point = EF_noeuds_renvoie_position(noeud);
+        noeud = (EF_Noeud*)list_parcours->data;
+        BUG(EF_noeuds_renvoie_position(noeud, &point), FALSE);
         
-        x = common_math_get(point->x);
-        y = common_math_get(point->y)-0.2;
-        z = common_math_get(point->z);
+        if (pg2 > common_math_get(point.x))
+            pg2 = common_math_get(point.x);
+        if (pd2 < common_math_get(point.x))
+            pd2 = common_math_get(point.x);
+        if (pb2 > common_math_get(point.z))
+            pb2 = common_math_get(point.z);
+        if (ph2 < common_math_get(point.z))
+            ph2 = common_math_get(point.z);
+        if (y > common_math_get(point.y))
+            y = common_math_get(point.y);
         
-        free(point);
-    }*/
+        list_parcours = g_list_next(list_parcours);
+    }
     
+    x = (pg2+pd2)/2.;
+    y = y-0.5;
+    z = (pb2+ph2)/2.;
     if (vue->camera == NULL)
     {
         vue->camera = new CM3dCamera(x, y, z, x, y+1., z, 90, allocation.width, allocation.height);
         vue->camera->rotation_on_axe_of_view(0);
-        poly = new CM3dPolygon(v1, v2, v3);
-        poly->convert_to_2d(vue->camera);
-        poly->get_vertex1_to_2d()->get_coordinates(&x1, &y1, &z1);
-        printf("%d %d\n", allocation.width, allocation.height);
-        delete poly;
     }
     else
     {
         vue->camera->set_position(x, y, z);
-        vue->camera->set_target(x, y+1, z);
+        vue->camera->set_target(x, y+1., z);
+        vue->camera->rotation_on_axe_of_view(0);
     }
+    
+    // Depuis la position de la caméra, on cherche les 4 noeuds délimitant le rectangle
+    // optimal. Pour cela, on parcours tous les noeuds, on calcule leur projection dans la
+    // fenêtre et on cherche les valeurs xmin, xmax, ymin et ymax de la fenetre.
+    v1.set_coordinates(ph[0], ph[1], ph[2]);
+    poly = new CM3dPolygon(v1, v1, v1);
+    poly->convert_by_camera_view(vue->camera);
+    poly->convert_to_2d(vue->camera);
+    poly->get_vertex1_to_2d()->get_coordinates(&x1, &y1, NULL);
+    delete poly;
+    ph2 = y1;
+    pb2 = y1;
+    pg2 = x1;
+    pd2 = x1;
+    list_parcours = g_list_next(projet->modele.noeuds);
+    while (list_parcours != NULL)
+    {
+        noeud = (EF_Noeud*)list_parcours->data;
+        BUG(EF_noeuds_renvoie_position(noeud, &point), FALSE);
+        
+        v1.set_coordinates(common_math_get(point.x), common_math_get(point.y), common_math_get(point.z));
+        
+        poly = new CM3dPolygon(v1, v1, v1);
+        poly->convert_by_camera_view(vue->camera);
+        poly->convert_to_2d(vue->camera);
+        poly->get_vertex1_to_2d()->get_coordinates(&x1, &y1, NULL);
+        delete poly;
+        
+        if (pg2 > x1)
+        {
+            pg[0] = common_math_get(point.x);
+            pg[1] = common_math_get(point.y);
+            pg[2] = common_math_get(point.z);
+            pg2 = x1;
+        }
+        if (pd2 < x1)
+        {
+            pd[0] = common_math_get(point.x);
+            pd[1] = common_math_get(point.y);
+            pd[2] = common_math_get(point.z);
+            pd2 = x1;
+        }
+        if (pb2 > y1)
+        {
+            pb[0] = common_math_get(point.x);
+            pb[1] = common_math_get(point.y);
+            pb[2] = common_math_get(point.z);
+            pb2 = y1;
+        }
+        if (ph2 < y1)
+        {
+            ph[0] = common_math_get(point.x);
+            ph[1] = common_math_get(point.y);
+            ph[2] = common_math_get(point.z);
+            ph2 = y1;
+        }
+        
+        list_parcours = g_list_next(list_parcours);
+    }
+    
+    // Détail pour la fonction x.
+    // Soit deux droite :
+    // La première passe par le noeud le plus à droite,
+    // la deuxième passe par le noeud le plus à gauche.
+    // Comme on regarde avec un angle de 90° (45° en haut et 45° en bas), le coefficient
+    // directeur de la droite 1 est de -1 et de la droite 2 de 1.
+    // L'objectif est de trouver l'intersection entre les deux droite.
+    // => droite 1 :  f(x) = -x1+b=y1 soit b = y1+x1
+    // => droite 2 :  f(x) =  x2+b=y2 soit b = y2-x2
+    // En cherchant l'égalité entre les deux barres, on obtient la position de la caméra en x.
+    // Il suffit de faire la même chose pour obtenir la position de la caméra en z.
+    // Pour obtenir la position en y, il suffit de calculer l'ordonnée des deux courbes et de
+    // prendre le cas le plus défavorable. Je rajoute forfaitairement -1 afin que les lignes
+    // ne soient pas trop sur le bord de la fenêtre.
+    // Un shéma aurait été plus simple mais je ne suis pas un spécialiste en art ASCII...
+    x = -((pd[1]-pd[0])-pg[1]-pg[0])/2.;
+    z = -((ph[1]-ph[2])-pb[1]-pb[2])/2.;
+    y = MIN(pd[1]-pd[0]+pg[1]+pg[0], ph[1]-ph[2]+pb[1]+pb[2])/2. - 1.;
+    vue->camera->set_position(x, y, z);
+    vue->camera->set_target(x, y+1., z);
     
     return TRUE;
 }
