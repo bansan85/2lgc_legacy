@@ -201,6 +201,20 @@ gboolean projet_init_graphique(Projet *projet)
     gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_fichier_list), comps->menu_fichier_quitter);
     g_signal_connect_swapped(comps->menu_fichier_quitter, "activate", G_CALLBACK(gui_window_option_destroy_button), comps->window);
     
+    comps->menu_affichage_list = gtk_menu_new();
+    comps->menu_affichage = gtk_menu_item_new_with_label(gettext("Affichage"));
+    gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu), comps->menu_affichage);
+    gtk_menu_item_set_submenu(GTK_MENU_ITEM(comps->menu_affichage), comps->menu_affichage_list);
+    
+    comps->menu_affichage_vues_list = gtk_menu_new();
+    comps->menu_affichage_vues = gtk_menu_item_new_with_label(gettext("Vues"));
+    gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_affichage_list), comps->menu_affichage_vues);
+    gtk_menu_item_set_submenu(GTK_MENU_ITEM(comps->menu_affichage_vues), comps->menu_affichage_vues_list);
+    
+    comps->menu_affichage_xzy = gtk_menu_item_new_with_label(gettext("XZ vers Y+"));
+    gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_affichage_vues_list), comps->menu_affichage_xzy);
+    g_signal_connect_swapped(comps->menu_affichage_xzy, "activate", G_CALLBACK(m3d_camera_axe_x_z_y), projet);
+    
     comps->menu_modelisation_list = gtk_menu_new();
     comps->menu_modelisation = gtk_menu_item_new_with_label(gettext("Modélisation"));
     gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu), comps->menu_modelisation);
