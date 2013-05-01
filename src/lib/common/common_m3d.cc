@@ -456,6 +456,8 @@ gboolean m3d_camera_axe_x_z_y(Projet *projet)
     vue->camera->set_position(x, y, z);
     vue->camera->set_target(x, y+1., z);
     
+    BUG(m3d_rafraichit(projet), FALSE);
+    
     return TRUE;
 }
 

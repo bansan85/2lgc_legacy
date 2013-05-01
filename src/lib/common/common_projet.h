@@ -424,6 +424,12 @@ typedef enum __Type_Flottant
 } Type_Flottant;
 
 
+typedef enum __Type_Vue
+{
+    VUE_XYZ
+} Type_Vue;
+
+
 typedef struct __Flottant
 {
     double          d;
@@ -921,6 +927,11 @@ typedef struct __Comp_Gtk
     GtkWidget   *menu_fichier_list;
     GtkWidget   *menu_fichier_informations;
     GtkWidget   *menu_fichier_quitter;
+    GtkWidget   *menu_affichage;
+    GtkWidget   *menu_affichage_list;
+    GtkWidget   *menu_affichage_vues;
+    GtkWidget   *menu_affichage_vues_list;
+    GtkWidget   *menu_affichage_xzy;
     GtkWidget   *menu_modelisation;
     GtkWidget   *menu_modelisation_list;
     GtkWidget   *menu_modelisation_noeud;
