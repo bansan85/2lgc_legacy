@@ -120,6 +120,7 @@ gboolean m3d_draw(GtkWidget *drawing, GdkEventExpose* ev, gpointer *data)
 
 gboolean m3d_key_press(GtkWidget *widget, GdkEventKey *event, Projet *projet)
 {
+    Gtk_m3d     *m3d = &projet->list_gtk.m3d;
     SGlobalData *vue  = (SGlobalData*)projet->list_gtk.m3d.data;
     
     if (event->type == GDK_KEY_PRESS)
@@ -172,19 +173,12 @@ gboolean m3d_key_press(GtkWidget *widget, GdkEventKey *event, Projet *projet)
             case GDK_KEY_d :
             case GDK_KEY_D :
             {
-                S1.set_coordinates(1., 0., 0.);
-                S1.y_rotate(&som1_roty, vue->camera->get_cosy(), vue->camera->get_siny());
-                som1_roty.x_rotate(&som1_rotx, vue->camera->get_cosx(), vue->camera->get_sinx());
-                som1_rotx.z_rotate(&S1, vue->camera->get_cosz(), vue->camera->get_sinz());
-                S1.get_coordinates(&x2,&y2,&z2);
-                
-                vect = vue->camera->get_position();
-                vect->get_coordinates(&x1,&y1,&z1);
-                vue->camera->set_position(x1+x2, y1+y2, z1+z2);
+                vue->camera->get_position()->get_coordinates(&x1,&y1,&z1);
+                vue->camera->set_position(x1+m3d->gdx, y1+m3d->gdy, z1+m3d->gdz);
                 
                 vect = vue->camera->get_target();
                 vect->get_coordinates(&x1,&y1,&z1);
-                vue->camera->set_target(x1+x2, y1+y2, z1+z2);
+                vue->camera->set_target(x1+m3d->gdx, y1+m3d->gdy, z1+m3d->gdz);
                 
                 BUG(m3d_rafraichit(projet), FALSE);
                 
@@ -195,19 +189,12 @@ gboolean m3d_key_press(GtkWidget *widget, GdkEventKey *event, Projet *projet)
             case GDK_KEY_q :
             case GDK_KEY_Q :
             {
-                S1.set_coordinates(-1., 0., 0.);
-                S1.y_rotate(&som1_roty, vue->camera->get_cosy(), vue->camera->get_siny());
-                som1_roty.x_rotate(&som1_rotx, vue->camera->get_cosx(), vue->camera->get_sinx());
-                som1_rotx.z_rotate(&S1, vue->camera->get_cosz(), vue->camera->get_sinz());
-                S1.get_coordinates(&x2,&y2,&z2);
-                
-                vect = vue->camera->get_position();
-                vect->get_coordinates(&x1,&y1,&z1);
-                vue->camera->set_position(x1+x2, y1+y2, z1+z2);
+                vue->camera->get_position()->get_coordinates(&x1,&y1,&z1);
+                vue->camera->set_position(x1-m3d->gdx, y1-m3d->gdy, z1-m3d->gdz);
                 
                 vect = vue->camera->get_target();
                 vect->get_coordinates(&x1,&y1,&z1);
-                vue->camera->set_target(x1+x2, y1+y2, z1+z2);
+                vue->camera->set_target(x1-m3d->gdx, y1-m3d->gdy, z1-m3d->gdz);
                 
                 BUG(m3d_rafraichit(projet), FALSE);
                 
@@ -218,22 +205,12 @@ gboolean m3d_key_press(GtkWidget *widget, GdkEventKey *event, Projet *projet)
             case GDK_KEY_z :
             case GDK_KEY_Z :
             {
-                if (vue->scene->y_axis_is_inverted())
-                    S1.set_coordinates(0., 1., 0.);
-                else
-                    S1.set_coordinates(0., -1., 0.);
-                S1.y_rotate(&som1_roty, vue->camera->get_cosy(), vue->camera->get_siny());
-                som1_roty.x_rotate(&som1_rotx, vue->camera->get_cosx(), vue->camera->get_sinx());
-                som1_rotx.z_rotate(&S1, vue->camera->get_cosz(), vue->camera->get_sinz());
-                S1.get_coordinates(&x2,&y2,&z2);
-                
-                vect = vue->camera->get_position();
-                vect->get_coordinates(&x1,&y1,&z1);
-                vue->camera->set_position(x1+x2, y1+y2, z1+z2);
+                vue->camera->get_position()->get_coordinates(&x1,&y1,&z1);
+                vue->camera->set_position(x1+m3d->hbx, y1+m3d->hby, z1+m3d->hbz);
                 
                 vect = vue->camera->get_target();
                 vect->get_coordinates(&x1,&y1,&z1);
-                vue->camera->set_target(x1+x2, y1+y2, z1+z2);
+                vue->camera->set_target(x1+m3d->hbx, y1+m3d->hby, z1+m3d->hbz);
                 
                 BUG(m3d_rafraichit(projet), FALSE);
                 
@@ -244,22 +221,12 @@ gboolean m3d_key_press(GtkWidget *widget, GdkEventKey *event, Projet *projet)
             case GDK_KEY_s :
             case GDK_KEY_S :
             {
-                if (vue->scene->y_axis_is_inverted())
-                    S1.set_coordinates(0., -1., 0.);
-                else
-                    S1.set_coordinates(0., 1., 0.);
-                S1.y_rotate(&som1_roty, vue->camera->get_cosy(), vue->camera->get_siny());
-                som1_roty.x_rotate(&som1_rotx, vue->camera->get_cosx(), vue->camera->get_sinx());
-                som1_rotx.z_rotate(&S1, vue->camera->get_cosz(), vue->camera->get_sinz());
-                S1.get_coordinates(&x2,&y2,&z2);
-                
-                vect = vue->camera->get_position();
-                vect->get_coordinates(&x1,&y1,&z1);
-                vue->camera->set_position(x1+x2, y1+y2, z1+z2);
+                vue->camera->get_position()->get_coordinates(&x1,&y1,&z1);
+                vue->camera->set_position(x1-m3d->hbx, y1-m3d->hby, z1-m3d->hbz);
                 
                 vect = vue->camera->get_target();
                 vect->get_coordinates(&x1,&y1,&z1);
-                vue->camera->set_target(x1+x2, y1+y2, z1+z2);
+                vue->camera->set_target(x1-m3d->hbx, y1-m3d->hby, z1-m3d->hbz);
                 
                 BUG(m3d_rafraichit(projet), FALSE);
                 
@@ -303,6 +270,7 @@ gboolean m3d_camera_axe_x_z_y(Projet *projet)
     CM3dVertex  v1; // Vecteur permettant de créer le polygone
     CM3dPolygon *poly; // Polygone qui servira à obtenir la projection dans la fenêtre 2D.
     GtkAllocation   allocation; // Dimension de la fenêtre 2D.
+    double      xold, zold, ecart;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
@@ -319,19 +287,6 @@ gboolean m3d_camera_axe_x_z_y(Projet *projet)
     // Un seul noeud, on l'affiche en gros plan.
     noeud = (EF_Noeud*)projet->modele.noeuds->data;
     BUG(EF_noeuds_renvoie_position(noeud, &point), FALSE);
-    
-    ph[0] = common_math_get(point.x);
-    ph[1] = common_math_get(point.y);
-    ph[2] = common_math_get(point.z);
-    pb[0] = common_math_get(point.x);
-    pb[1] = common_math_get(point.y);
-    pb[2] = common_math_get(point.z);
-    pg[0] = common_math_get(point.x);
-    pg[1] = common_math_get(point.y);
-    pg[2] = common_math_get(point.z);
-    pd[0] = common_math_get(point.x);
-    pd[1] = common_math_get(point.y);
-    pd[2] = common_math_get(point.z);
     
     // On cherche le xmin, xmax, zmin, zmax et ymin de l'ensemble des noeuds afin de définir
     // la position optimale de la caméra.
@@ -364,6 +319,9 @@ gboolean m3d_camera_axe_x_z_y(Projet *projet)
     x = (pg2+pd2)/2.;
     y = y-0.5;
     z = (pb2+ph2)/2.;
+    xold = x;
+    zold = z;
+    
     if (vue->camera == NULL)
     {
         vue->camera = new CM3dCamera(x, y, z, x, y+1., z, 90, allocation.width, allocation.height);
@@ -375,18 +333,46 @@ gboolean m3d_camera_axe_x_z_y(Projet *projet)
         vue->camera->set_target(x, y+1., z);
         vue->camera->rotation_on_axe_of_view(0);
     }
+    m3d->gdx = 1.;
+    m3d->gdy = 0.;
+    m3d->gdz = 0.;
+    m3d->hbx = 0.;
+    m3d->hby = 0.;
+    m3d->hbz = 1.;
+    
+    do
+    {
+    ph[0] = common_math_get(point.x);
+    ph[1] = common_math_get(point.y);
+    ph[2] = common_math_get(point.z);
+    pb[0] = common_math_get(point.x);
+    pb[1] = common_math_get(point.y);
+    pb[2] = common_math_get(point.z);
+    pg[0] = common_math_get(point.x);
+    pg[1] = common_math_get(point.y);
+    pg[2] = common_math_get(point.z);
+    pd[0] = common_math_get(point.x);
+    pd[1] = common_math_get(point.y);
+    pd[2] = common_math_get(point.z);
     
     // Depuis la position de la caméra, on cherche les 4 noeuds délimitant le rectangle
     // optimal. Pour cela, on parcours tous les noeuds, on calcule leur projection dans la
     // fenêtre et on cherche les valeurs xmin, xmax, ymin et ymax de la fenetre.
     v1.set_coordinates(ph[0], ph[1], ph[2]);
+    vue->camera->set_d(vue->camera->get_window_width() / (2 * tan(vue->camera->get_angle() / 2)));
     poly = new CM3dPolygon(v1, v1, v1);
     poly->convert_by_camera_view(vue->camera);
     poly->convert_to_2d(vue->camera);
-    poly->get_vertex1_to_2d()->get_coordinates(&x1, &y1, NULL);
+    poly->get_vertex1_to_2d()->get_coordinates(NULL, &y1, NULL);
     delete poly;
     ph2 = y1;
     pb2 = y1;
+    vue->camera->set_d(vue->camera->get_window_height() / (2 * tan(vue->camera->get_angle() / 2)));
+    poly = new CM3dPolygon(v1, v1, v1);
+    poly->convert_by_camera_view(vue->camera);
+    poly->convert_to_2d(vue->camera);
+    poly->get_vertex1_to_2d()->get_coordinates(&x1, NULL, NULL);
+    delete poly;
     pg2 = x1;
     pd2 = x1;
     list_parcours = g_list_next(projet->modele.noeuds);
@@ -397,10 +383,17 @@ gboolean m3d_camera_axe_x_z_y(Projet *projet)
         
         v1.set_coordinates(common_math_get(point.x), common_math_get(point.y), common_math_get(point.z));
         
+        vue->camera->set_d(vue->camera->get_window_width() / (2 * tan(vue->camera->get_angle() / 2)));
         poly = new CM3dPolygon(v1, v1, v1);
         poly->convert_by_camera_view(vue->camera);
         poly->convert_to_2d(vue->camera);
-        poly->get_vertex1_to_2d()->get_coordinates(&x1, &y1, NULL);
+        poly->get_vertex1_to_2d()->get_coordinates(NULL, &y1, NULL);
+        delete poly;
+        vue->camera->set_d(vue->camera->get_window_height() / (2 * tan(vue->camera->get_angle() / 2)));
+        poly = new CM3dPolygon(v1, v1, v1);
+        poly->convert_by_camera_view(vue->camera);
+        poly->convert_to_2d(vue->camera);
+        poly->get_vertex1_to_2d()->get_coordinates(&x1, NULL, NULL);
         delete poly;
         
         if (pg2 > x1)
@@ -452,9 +445,20 @@ gboolean m3d_camera_axe_x_z_y(Projet *projet)
     // Un shéma aurait été plus simple mais je ne suis pas un spécialiste en art ASCII...
     x = -((pd[1]-pd[0])-pg[1]-pg[0])/2.;
     z = -((ph[1]-ph[2])-pb[1]-pb[2])/2.;
-    y = MIN(pd[1]-pd[0]+pg[1]+pg[0], ph[1]-ph[2]+pb[1]+pb[2])/2. - 1.;
-    vue->camera->set_position(x, y, z);
-    vue->camera->set_target(x, y+1., z);
+    y = MIN(pd[1]-pd[0]+pg[1]+pg[0], ph[1]-ph[2]+pb[1]+pb[2])/2.;
+    x = (xold+x)/2.;
+    z = (zold+z)/2.;
+    ecart = sqrt((x-xold)*(x-xold) + (z-zold)*(z-zold));
+    vue->camera->set_position(x, y-1, z);
+    vue->camera->set_target(x, y-1+1., z);
+    xold = x;
+    zold = z;
+    } while (!ERREUR_RELATIVE_EGALE(ecart, 0));
+    
+    if (vue->camera->get_window_height() < vue->camera->get_window_width())
+        vue->camera->set_d(vue->camera->get_window_height() / (2 * tan(vue->camera->get_angle() / 2)));
+    else
+        vue->camera->set_d(vue->camera->get_window_width() / (2 * tan(vue->camera->get_angle() / 2)));
     
     BUG(m3d_rafraichit(projet), FALSE);
     
