@@ -244,6 +244,90 @@ gboolean m3d_key_press(GtkWidget *widget, GdkEventKey *event, Projet *projet)
 }
 
 
+gboolean m3d_get_rect(double *xmin, double *xmax, double *ymin, double *ymax, Projet *projet)
+/* Description : Renvoie le rectangle anglobant la structure dans le cas d'une projection en 2D
+ *               en fonction de la caméra en cours.
+ * Paramètres : double *xmin : l'abscisse mini,
+ *            : double *xmax : l'abscisse maxi,
+ *            : double *ymin : l'ordonnée mini,
+ *            : double *ymax : l'ordonnée maxi,
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée :
+ *   Succès : TRUE.
+ *   Échec : FALSE :
+ *             projet == NULL,
+ *             projet->list_gtk.m3d == NULL,
+ *             m3d->data == NULL,
+ *             en cas d'erreur due à une fonction interne.
+ */
+{
+    SGlobalData *vue;
+    GList       *list_parcours;
+    EF_Noeud    *noeud;
+    EF_Point    point;
+    CM3dVertex  v1; // Vecteur permettant de créer le polygone
+    CM3dPolygon *poly; // Polygone qui servira à obtenir la projection dans la fenêtre 2D.
+    double      x1, y1; // valeurs permettant de récupérer les coordonnées des vecteurs.
+    
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(xmin, FALSE, gettext("Paramètre %s incorrect.\n"), "xmin");
+    BUGMSG(xmax, FALSE, gettext("Paramètre %s incorrect.\n"), "xmax");
+    BUGMSG(ymin, FALSE, gettext("Paramètre %s incorrect.\n"), "ymin");
+    BUGMSG(ymax, FALSE, gettext("Paramètre %s incorrect.\n"), "ymax");
+    
+    vue = (SGlobalData*)(&projet->list_gtk.m3d)->data;
+    
+    noeud = (EF_Noeud*)projet->modele.noeuds->data;
+    BUG(EF_noeuds_renvoie_position(noeud, &point), FALSE);
+    v1.set_coordinates(common_math_get(point.x), common_math_get(point.y), common_math_get(point.z));
+    poly = new CM3dPolygon(v1, v1, v1);
+    poly->convert_by_camera_view(vue->camera);
+    poly->convert_to_2d(vue->camera);
+    poly->get_vertex1_to_2d()->get_coordinates(NULL, &y1, NULL);
+    delete poly;
+    *ymax = y1;
+    *ymin = y1;
+    poly = new CM3dPolygon(v1, v1, v1);
+    poly->convert_by_camera_view(vue->camera);
+    poly->convert_to_2d(vue->camera);
+    poly->get_vertex1_to_2d()->get_coordinates(&x1, NULL, NULL);
+    delete poly;
+    *xmax = x1;
+    *xmin = x1;
+    
+    list_parcours = g_list_next(projet->modele.noeuds);
+    while (list_parcours != NULL)
+    {
+        noeud = (EF_Noeud*)list_parcours->data;
+        BUG(EF_noeuds_renvoie_position(noeud, &point), FALSE);
+        
+        v1.set_coordinates(common_math_get(point.x), common_math_get(point.y), common_math_get(point.z));
+        poly = new CM3dPolygon(v1, v1, v1);
+        poly->convert_by_camera_view(vue->camera);
+        poly->convert_to_2d(vue->camera);
+        poly->get_vertex1_to_2d()->get_coordinates(NULL, &y1, NULL);
+        delete poly;
+        poly = new CM3dPolygon(v1, v1, v1);
+        poly->convert_by_camera_view(vue->camera);
+        poly->convert_to_2d(vue->camera);
+        poly->get_vertex1_to_2d()->get_coordinates(&x1, NULL, NULL);
+        delete poly;
+        
+        if (*xmin > x1)
+            *xmin = x1;
+        if (*xmax < x1)
+            *xmax = x1;
+        if (*ymin > y1)
+            *ymin = y1;
+        if (*ymax < y1)
+            *ymax = y1;
+        
+        list_parcours = g_list_next(list_parcours);
+    }
+    
+    return TRUE;
+}
+
 
 gboolean m3d_camera_axe_x_z_y(Projet *projet)
 /* Description : Positionne la caméra pour voir toute la structure dans le plan xz vers la
@@ -260,17 +344,15 @@ gboolean m3d_camera_axe_x_z_y(Projet *projet)
 {
     Gtk_m3d     *m3d;
     SGlobalData *vue;
+    double      yymin;
     double      x, y, z; // Les coordonnées de la caméra
-    double      x1, y1; // valeurs permettant de récupérer les coordonnées des vecteurs.
     EF_Noeud    *noeud; // Noeud en cours d'étude
     EF_Point    point; // Position du noeud en cours d'étude
-    double      ph[3], pb[3], pg[3], pd[3]; // Les coordonnées des noeuds en 3D
-    double      ph2, pb2, pg2, pd2; // Leur projection en 2D
+    double      ymax, ymin, xmin, xmax; // Leur projection en 2D
+    double      ymax2, ymin2, xmin2, xmax2; // Leur projection en 2D
     GList       *list_parcours; // Noeud en cours d'étude
-    CM3dVertex  v1; // Vecteur permettant de créer le polygone
-    CM3dPolygon *poly; // Polygone qui servira à obtenir la projection dans la fenêtre 2D.
     GtkAllocation   allocation; // Dimension de la fenêtre 2D.
-    gboolean    ok;
+    double      dx, dz, dy;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
@@ -291,10 +373,10 @@ gboolean m3d_camera_axe_x_z_y(Projet *projet)
     // On cherche le xmin, xmax, zmin, zmax et ymin de l'ensemble des noeuds afin de définir
     // la position optimale de la caméra.
     gtk_widget_get_allocation(GTK_WIDGET(m3d->drawing), &allocation);
-    ph2 = common_math_get(point.z);
-    pb2 = common_math_get(point.z);
-    pg2 = common_math_get(point.x);
-    pd2 = common_math_get(point.x);
+    ymax = common_math_get(point.z);
+    ymin = common_math_get(point.z);
+    xmin = common_math_get(point.x);
+    xmax = common_math_get(point.x);
     y = common_math_get(point.y);
     list_parcours = g_list_next(projet->modele.noeuds);
     while (list_parcours != NULL)
@@ -302,25 +384,25 @@ gboolean m3d_camera_axe_x_z_y(Projet *projet)
         noeud = (EF_Noeud*)list_parcours->data;
         BUG(EF_noeuds_renvoie_position(noeud, &point), FALSE);
         
-        if (pg2 > common_math_get(point.x))
-            pg2 = common_math_get(point.x);
-        if (pd2 < common_math_get(point.x))
-            pd2 = common_math_get(point.x);
-        if (pb2 > common_math_get(point.z))
-            pb2 = common_math_get(point.z);
-        if (ph2 < common_math_get(point.z))
-            ph2 = common_math_get(point.z);
+        if (xmin > common_math_get(point.x))
+            xmin = common_math_get(point.x);
+        if (xmax < common_math_get(point.x))
+            xmax = common_math_get(point.x);
+        if (ymin > common_math_get(point.z))
+            ymin = common_math_get(point.z);
+        if (ymax < common_math_get(point.z))
+            ymax = common_math_get(point.z);
         if (y > common_math_get(point.y))
             y = common_math_get(point.y);
         
         list_parcours = g_list_next(list_parcours);
     }
     
+    yymin = y;
     // On positionne le centre de la caméra
-    x = (pg2+pd2)/2.;
-    z = (pb2+ph2)/2.;
-    y = y-MAX(pd2-pg2,ph2-pb2);
-    printf("début : %lf %lf %lf\n", x, y, z);
+    x = (xmin+xmax)/2.;
+    z = (ymin+ymax)/2.;
+    y = y-MAX(xmax-xmin,ymax-ymin);
     if (vue->camera == NULL)
     {
         vue->camera = new CM3dCamera(x, y, z, x, y+1., z, 90, allocation.width, allocation.height);
@@ -332,6 +414,9 @@ gboolean m3d_camera_axe_x_z_y(Projet *projet)
         vue->camera->set_target(x, y+1., z);
         vue->camera->rotation_on_axe_of_view(0);
     }
+    // A ce stade, on est sûr qu'il n'y a besoin plus que de zoomer et de centrer la structure
+    // au sein de la fenêtre.
+    
     // Initialisation du vecteur de déplacement.
     m3d->gdx = 1.;
     m3d->gdy = 0.;
@@ -340,153 +425,81 @@ gboolean m3d_camera_axe_x_z_y(Projet *projet)
     m3d->hby = 0.;
     m3d->hbz = 1.;
     
-    // On commence par positionner la caméra de tel sorte que la fenêtre puisse voir tous les
-    // points.
     do
     {
-        noeud = (EF_Noeud*)projet->modele.noeuds->data;
-        BUG(EF_noeuds_renvoie_position(noeud, &point), FALSE);
-        
-        ok = TRUE;
-        ph[0] = common_math_get(point.x);
-        ph[1] = common_math_get(point.y);
-        ph[2] = common_math_get(point.z);
-        pb[0] = common_math_get(point.x);
-        pb[1] = common_math_get(point.y);
-        pb[2] = common_math_get(point.z);
-        pg[0] = common_math_get(point.x);
-        pg[1] = common_math_get(point.y);
-        pg[2] = common_math_get(point.z);
-        pd[0] = common_math_get(point.x);
-        pd[1] = common_math_get(point.y);
-        pd[2] = common_math_get(point.z);
-        
-        // Depuis la position de la caméra, on cherche les 4 noeuds délimitant le rectangle
-        // optimal. Pour cela, on parcours tous les noeuds, on calcule leur projection dans la
-        // fenêtre et on cherche les valeurs xmin, xmax, ymin et ymax de la fenetre.
-        v1.set_coordinates(ph[0], ph[1], ph[2]);
-        vue->camera->set_d(vue->camera->get_window_width() / (2 * tan(vue->camera->get_angle() / 2)));
-        poly = new CM3dPolygon(v1, v1, v1);
-        poly->convert_by_camera_view(vue->camera);
-        poly->convert_to_2d(vue->camera);
-        poly->get_vertex1_to_2d()->get_coordinates(NULL, &y1, NULL);
-        delete poly;
-        ph2 = y1;
-        pb2 = y1;
-        vue->camera->set_d(vue->camera->get_window_height() / (2 * tan(vue->camera->get_angle() / 2)));
-        poly = new CM3dPolygon(v1, v1, v1);
-        poly->convert_by_camera_view(vue->camera);
-        poly->convert_to_2d(vue->camera);
-        poly->get_vertex1_to_2d()->get_coordinates(&x1, NULL, NULL);
-        delete poly;
-        pg2 = x1;
-        pd2 = x1;
-        printf("point de vue : %lf %lf %lf\n", x, y, z);
-        printf("noeud %d : %lf %lf\n", noeud->numero, x1, y1);
-        list_parcours = g_list_next(projet->modele.noeuds);
-        while (list_parcours != NULL)
+        // On centre les points par rapport à l'abscisse
+        BUG(m3d_get_rect(&xmin, &xmax, &ymin, &ymax, projet), FALSE);
+        dx = 1;
+        do
         {
-            noeud = (EF_Noeud*)list_parcours->data;
-            BUG(EF_noeuds_renvoie_position(noeud, &point), FALSE);
-            
-            v1.set_coordinates(common_math_get(point.x), common_math_get(point.y), common_math_get(point.z));
-            
-            vue->camera->set_d(vue->camera->get_window_width() / (2 * tan(vue->camera->get_angle() / 2)));
-            poly = new CM3dPolygon(v1, v1, v1);
-            poly->convert_by_camera_view(vue->camera);
-            poly->convert_to_2d(vue->camera);
-            poly->get_vertex1_to_2d()->get_coordinates(NULL, &y1, NULL);
-            delete poly;
-            vue->camera->set_d(vue->camera->get_window_height() / (2 * tan(vue->camera->get_angle() / 2)));
-            poly = new CM3dPolygon(v1, v1, v1);
-            poly->convert_by_camera_view(vue->camera);
-            poly->convert_to_2d(vue->camera);
-            poly->get_vertex1_to_2d()->get_coordinates(&x1, NULL, NULL);
-            delete poly;
-            
-            if (pg2 > x1)
+            vue->camera->set_position(x+dx, y, z);
+            vue->camera->set_target(x+dx, y+1., z);
+            BUG(m3d_get_rect(&xmin2, &xmax2, &ymin2, &ymax2, projet), FALSE);
+            // Droite (a*X+b=Y) passant en X=x et Y = (xmin+xmax)/2
+            //                             X=x+dx et Y = (xmin2+xmax2)/2
+            // Le nouveau x est obtenu en cherchant f(x)=allocation.width/2.
+            if (!ERREUR_RELATIVE_EGALE(xmax-xmax2+xmin-xmin2, 0.))
             {
-                printf("gauche %d : %lf\n", noeud->numero, x1);
-                pg[0] = common_math_get(point.x);
-                pg[1] = common_math_get(point.y);
-                pg[2] = common_math_get(point.z);
-                pg2 = x1;
+                dx = -dx*(allocation.width-xmax-xmin)/(xmax-xmax2+xmin-xmin2)/5.;
+                x = x + dx*5;
             }
-            if (pd2 < x1)
-            {
-                printf("droite %d : %lf\n", noeud->numero, x1);
-                pd[0] = common_math_get(point.x);
-                pd[1] = common_math_get(point.y);
-                pd[2] = common_math_get(point.z);
-                pd2 = x1;
-            }
-            if (pb2 > y1)
-            {
-                pb[0] = common_math_get(point.x);
-                pb[1] = common_math_get(point.y);
-                pb[2] = common_math_get(point.z);
-                pb2 = y1;
-            }
-            if (ph2 < y1)
-            {
-                ph[0] = common_math_get(point.x);
-                ph[1] = common_math_get(point.y);
-                ph[2] = common_math_get(point.z);
-                ph2 = y1;
-            }
-            
-            list_parcours = g_list_next(list_parcours);
-        }
+            vue->camera->set_position(x, y, z);
+            vue->camera->set_target(x, y+1., z);
+            BUG(m3d_get_rect(&xmin, &xmax, &ymin, &ymax, projet), FALSE);
+        } while (fabs((xmin+xmax)/2.-(xmin2+xmax2)/2.) > 1.);
         
-        // Détail pour l'abscisse.
-        // Soit deux droites :
-        // La première passe par le noeud le plus à droite,
-        // la deuxième passe par le noeud le plus à gauche.
-        // Comme on regarde avec un angle de 90° (45° en haut et 45° en bas), le coefficient
-        // directeur de la droite 1 est de -1 et de la droite 2 de 1.
-        // L'objectif est de trouver l'intersection entre les deux droite.
-        // => droite 1 :  f(x) = -x1+b=y1 soit b = y1+x1
-        // => droite 2 :  f(x) =  x2+b=y2 soit b = y2-x2
-        // L'égalité entre les deux barres permet d'avoir la position de la caméra en x.
-        // Il suffit de faire la même chose pour obtenir la position de la caméra en z.
-        // Pour obtenir la position en y, il suffit de calculer l'ordonnée des deux courbes et
-        // de prendre le cas le plus défavorable.
-        // Un shéma aurait été plus simple mais je ne suis pas un spécialiste en art ASCII...
-        x = (pg[1]+pg[0]-pd[1]+pd[0])/2.;
-        printf("gauche, droite %lf %lf %lf %lf\n", pg[1], pg[0], pd[1], pd[0]);
-        z = (pb[1]+pb[2]-ph[1]+ph[2])/2.;
-        y = MIN(x-pg[1]-pg[0], -z+pb[1]+pb[2]);
-        vue->camera->set_position(x, y, z);
-        vue->camera->set_target(x, y+1., z);
-        
-        // On vérifie que tous les points sont bien dans la fenêtre. En effet, le déplacement
-        // de la caméra et les différentes projections des points peut faire apparaître des
-        // problèmes.
-        list_parcours = projet->modele.noeuds;
-        while (list_parcours != NULL)
+        // On centre les points par rapport à l'abscisse
+        BUG(m3d_get_rect(&xmin, &xmax, &ymin, &ymax, projet), FALSE);
+        dz = 1;
+        do
         {
-            noeud = (EF_Noeud*)list_parcours->data;
-            BUG(EF_noeuds_renvoie_position(noeud, &point), FALSE);
-            v1.set_coordinates(common_math_get(point.x), common_math_get(point.y), common_math_get(point.z));
-            poly = new CM3dPolygon(v1, v1, v1);
-            poly->convert_by_camera_view(vue->camera);
-            poly->convert_to_2d(vue->camera);
-            poly->get_vertex1_to_2d()->get_coordinates(&x1, &y1, NULL);
-            delete poly;
-            if ((x1 < -1) || (x1 > vue->camera->get_window_width()+1))
+            vue->camera->set_position(x, y, z+dz);
+            vue->camera->set_target(x, y+1., z+dz);
+            BUG(m3d_get_rect(&xmin2, &xmax2, &ymin2, &ymax2, projet), FALSE);
+            if (!ERREUR_RELATIVE_EGALE(ymax-ymax2+ymin-ymin2, 0.))
             {
-                ok = FALSE;
-                break;
+                dz = -dz*(allocation.height-ymax-ymin)/(ymax-ymax2+ymin-ymin2)/5.;
+                z = z + dz*5.;
             }
-            if ((y1 < -1) || (y1 > vue->camera->get_window_height()+1))
+            vue->camera->set_position(x, y, z);
+            vue->camera->set_target(x, y+1., z);
+            BUG(m3d_get_rect(&xmin, &xmax, &ymin, &ymax, projet), FALSE);
+        } while (fabs((ymin+ymax)/2.-(ymin2+ymax2)/2.) > 1.);
+        
+        // On centre les points par rapport à l'abscisse
+        BUG(m3d_get_rect(&xmin, &xmax, &ymin, &ymax, projet), FALSE);
+        dy = (yymin-y)/5.;
+        do
+        {
+            vue->camera->set_position(x, y+dy, z);
+            vue->camera->set_target(x, y+dy+1., z);
+            BUG(m3d_get_rect(&xmin2, &xmax2, &ymin2, &ymax2, projet), FALSE);
+            // 1er cas : étude des abscisses
+            // Droite (a*X+b=Y) passant en X=y et Y= xmax-xmin
+            //                             X=y+dy et Y = xmax2-xmin2
+            // Le nouveau y est obtenu en cherchant f(x)=allocation.width
+            // On fait le même calcul pour les ordonnées.
+            // Ensuite, on retient la valeur de dx minimale.
+            if ((!ERREUR_RELATIVE_EGALE(xmax-xmax2-xmin+xmin2, 0.)) && (!ERREUR_RELATIVE_EGALE(ymax-ymax2-ymin+ymin2, 0.)))
             {
-                ok = FALSE;
-                break;
+                dy = MIN(-dy*(allocation.width-xmax+xmin)/(xmax-xmax2-xmin+xmin2),
+                         -dy*(allocation.height-ymax+ymin)/(ymax-ymax2-ymin+ymin2))/5.;
+                // Il est nécessaire de brider les déplacements pour éviter que l'estimation
+                // ne mette un point derrière la caméra.
+                // On recule un tout petit peu plus pour éviter que le point le plus proche
+                // de la caméra ne se trouve dans le plan XZ.
+                if (y + dy*5. > yymin)
+                    dy = (yymin-y)/5.5;
+                y = y + dy*5.;
             }
-            
-            list_parcours = g_list_next(list_parcours);
-        }
-    } while (ok == FALSE);
+            vue->camera->set_position(x, y, z);
+            vue->camera->set_target(x, y+1., z);
+            BUG(m3d_get_rect(&xmin, &xmax, &ymin, &ymax, projet), FALSE);
+        } while ((fabs(xmax-xmin-allocation.width) > 1.) && (fabs(ymax-ymin-allocation.height) > 1.));
+        
+        BUG(m3d_get_rect(&xmin2, &xmax2, &ymin2, &ymax2, projet), FALSE);
+        // Tant qu'une fois le zoom fini, le dessin n'est pas centré.
+    } while ((fabs(xmax2+xmin2-allocation.width) > 1.) || (fabs(ymax2+ymin2-allocation.height) > 1.));
     
     BUG(m3d_rafraichit(projet), FALSE);
     
