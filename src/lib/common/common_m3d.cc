@@ -407,6 +407,10 @@ gboolean m3d_camera_axe_x_z_y(Projet *projet)
     {
         vue->camera = new CM3dCamera(x, y, z, x, y+1., z, 90, allocation.width, allocation.height);
         vue->camera->rotation_on_axe_of_view(0);
+        if (allocation.height < allocation.width)
+            vue->camera->set_d(allocation.height / (2 * tan(vue->camera->get_angle() / 2)));
+        else
+            vue->camera->set_d(allocation.width / (2 * tan(vue->camera->get_angle() / 2)));
     }
     else
     {
@@ -443,6 +447,8 @@ gboolean m3d_camera_axe_x_z_y(Projet *projet)
                 dx = -dx*(allocation.width-xmax-xmin)/(xmax-xmax2+xmin-xmin2)/5.;
                 x = x + dx*5;
             }
+            else
+                break;
             vue->camera->set_position(x, y, z);
             vue->camera->set_target(x, y+1., z);
             BUG(m3d_get_rect(&xmin, &xmax, &ymin, &ymax, projet), FALSE);
@@ -461,6 +467,8 @@ gboolean m3d_camera_axe_x_z_y(Projet *projet)
                 dz = -dz*(allocation.height-ymax-ymin)/(ymax-ymax2+ymin-ymin2)/5.;
                 z = z + dz*5.;
             }
+            else
+                break;
             vue->camera->set_position(x, y, z);
             vue->camera->set_target(x, y+1., z);
             BUG(m3d_get_rect(&xmin, &xmax, &ymin, &ymax, projet), FALSE);
@@ -492,6 +500,8 @@ gboolean m3d_camera_axe_x_z_y(Projet *projet)
                     dy = (yymin-y)/5.5;
                 y = y + dy*5.;
             }
+            else
+                break;
             vue->camera->set_position(x, y, z);
             vue->camera->set_target(x, y+1., z);
             BUG(m3d_get_rect(&xmin, &xmax, &ymin, &ymax, projet), FALSE);
