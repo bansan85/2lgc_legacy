@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+    <requires lib="gtk+" version="3.2"/>
+    <object class="GtkTextTagTable" id="EF_section_T_tag_table">
+        <child type="tag">
+            <object class="GtkTextTag" id="EF_section_T_tag_mauvais">
+                <property name="name">mauvais</property>
+                <property name="foreground">red</property>
+                <property name="weight">800</property>
+            </object>
+        </child>
+        <child type="tag">
+            <object class="GtkTextTag" id="EF_section_T_tag_ok">
+                <property name="name">OK</property>
+                <property name="foreground">black</property>
+                <property name="weight">400</property>
+            </object>
+        </child>
+    </object>
+    <object class="GtkTextBuffer" id="EF_section_T_buffer_nom">
+        <property name="tag-table">EF_section_T_tag_table</property>
+        <signal name="changed" handler="EF_gtk_section_T_check"/>
+    </object>
+    <object class="GtkTextBuffer" id="EF_section_T_buffer_lr">
+        <property name="tag-table">EF_section_T_tag_table</property>
+        <property name="text">0</property>
+        <signal name="changed" handler="EF_gtk_section_T_check"/>
+    </object>
+    <object class="GtkTextBuffer" id="EF_section_T_buffer_hr">
+        <property name="tag-table">EF_section_T_tag_table</property>
+        <property name="text">0</property>
+        <signal name="changed" handler="EF_gtk_section_T_check"/>
+    </object>
+    <object class="GtkTextBuffer" id="EF_section_T_buffer_lt">
+        <property name="tag-table">EF_section_T_tag_table</property>
+        <property name="text">0</property>
+        <signal name="changed" handler="EF_gtk_section_T_check"/>
+    </object>
+    <object class="GtkTextBuffer" id="EF_section_T_buffer_ht">
+        <property name="tag-table">EF_section_T_tag_table</property>
+        <property name="text">0</property>
+        <signal name="changed" handler="EF_gtk_section_T_check"/>
+    </object>
+    <object id="EF_section_T_window" class="GtkWindow">
+        <property name="visible">True</property>
+        <property name="window-position">GTK_WIN_POS_CENTER</property>
+        <property name="default-width">400</property>
+        <signal name="key-press-event" handler="EF_gtk_section_T_window_key_press"/>
+        <signal name="destroy" handler="EF_gtk_section_T_window_destroy"/>
+        <child>
+            <object class="GtkGrid" id="EF_section_T_grille_principale">
+                <property name="visible">True</property>
+                <property name="border-width">12</property>
+                <property name="column-spacing">12</property>
+                <property name="row-spacing">12</property>
+                <child>
+                    <object class="GtkLabel" id="EF_section_T_label_nom">
+                        <property name="label" translatable="yes">Nom :</property>
+                        <property name="visible">True</property>
+                    </object>
+                    <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">0</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkScrolledWindow" id="EF_section_T_scrolledwindow_nom">
+                        <property name="visible">True</property>
+                        <property name="expand">True</property>
+                        <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                        <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                        <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
+                        <child>
+                            <object class="GtkTextView" id="EF_section_T_textview_nom">
+                                <property name="visible">True</property>
+                                <property name="accepts-tab">False</property>
+                                <property name="wrap-mode">GTK_WRAP_WORD</property>
+                                <property name="buffer">EF_section_T_buffer_nom</property>
+                            </object>
+                        </child>
+                    </object>
+                    <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">0</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkLabel" id="EF_section_T_label_lt">
+                        <property name="label" translatable="yes">Largeur de la table [m] :</property>
+                        <property name="visible">True</property>
+                    </object>
+                    <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">1</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkScrolledWindow" id="EF_section_T_scrolledwindow_lt">
+                        <property name="visible">True</property>
+                        <property name="expand">True</property>
+                        <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                        <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                        <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
+                        <child>
+                            <object class="GtkTextView" id="EF_section_T_textview_lt">
+                                <property name="visible">True</property>
+                                <property name="accepts-tab">False</property>
+                                <property name="wrap-mode">GTK_WRAP_CHAR</property>
+                                <property name="buffer">EF_section_T_buffer_lt</property>
+                            </object>
+                        </child>
+                    </object>
+                    <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">1</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkLabel" id="EF_section_T_label_ht">
+                        <property name="label" translatable="yes">Hauteur de la table [m] :</property>
+                        <property name="visible">True</property>
+                    </object>
+                    <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">2</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkScrolledWindow" id="EF_section_T_scrolledwindow_ht">
+                        <property name="visible">True</property>
+                        <property name="expand">True</property>
+                        <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                        <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                        <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
+                        <child>
+                            <object class="GtkTextView" id="EF_section_T_textview_ht">
+                                <property name="visible">True</property>
+                                <property name="accepts-tab">False</property>
+                                <property name="buffer">EF_section_T_buffer_ht</property>
+                                <property name="wrap-mode">GTK_WRAP_CHAR</property>
+                            </object>
+                        </child>
+                    </object>
+                    <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">2</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkLabel" id="EF_section_T_label_lr">
+                        <property name="label" translatable="yes">Largeur de la retombée [m] :</property>
+                        <property name="visible">True</property>
+                    </object>
+                    <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">3</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkScrolledWindow" id="EF_section_T_scrolledwindow_la">
+                        <property name="visible">True</property>
+                        <property name="expand">True</property>
+                        <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                        <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                        <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
+                        <child>
+                            <object class="GtkTextView" id="EF_section_T_textview_la">
+                                <property name="visible">True</property>
+                                <property name="accepts-tab">False</property>
+                                <property name="wrap-mode">GTK_WRAP_CHAR</property>
+                                <property name="buffer">EF_section_T_buffer_lr</property>
+                            </object>
+                        </child>
+                    </object>
+                    <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">3</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkLabel" id="EF_section_T_label_hr">
+                        <property name="label" translatable="yes">Hauteur de la retombée [m] :</property>
+                        <property name="visible">True</property>
+                    </object>
+                    <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">4</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkScrolledWindow" id="EF_section_T_scrolledwindow_ha">
+                        <property name="visible">True</property>
+                        <property name="expand">True</property>
+                        <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                        <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                        <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
+                        <child>
+                            <object class="GtkTextView" id="EF_section_T_textview_ha">
+                                <property name="visible">True</property>
+                                <property name="accepts-tab">False</property>
+                                <property name="buffer">EF_section_T_buffer_hr</property>
+                                <property name="wrap-mode">GTK_WRAP_CHAR</property>
+                            </object>
+                        </child>
+                    </object>
+                    <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">4</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkButtonBox" id="EF_section_T_buttons">
+                        <property name="visible">True</property>
+                        <property name="orientation">horizontal</property>
+                        <property name="layout_style">end</property>
+                        <property name="spacing">6</property>
+                        <child>
+                            <object class="GtkButton" id="EF_section_T_button_annuler">
+                                <property name="visible">True</property>
+                                <property name="use_stock">True</property>
+                                <property name="label">gtk-cancel</property>
+                                <signal name="clicked" handler="EF_gtk_section_T_annuler_clicked"/>
+                            </object>
+                            <packing>
+                                <property name="position">0</property>
+                                <property name="pack_type">end</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GtkButton" id="EF_section_T_button_add_edit">
+                                <property name="visible">True</property>
+                                <property name="sensitive">False</property>
+                                <property name="use_stock">True</property>
+                            </object>
+                            <packing>
+                                <property name="position">1</property>
+                                <property name="pack_type">end</property>
+                            </packing>
+                        </child>
+                    </object>
+                    <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">5</property>
+                        <property name="width">2</property>
+                    </packing>
+                </child>
+            </object>
+        </child>
+    </object>
+</interface>

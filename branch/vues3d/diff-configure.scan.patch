@@ -1,0 +1,74 @@
+--- configure.scan.old	2011-09-10 19:40:15.109918470 +0200
++++ configure.scan	2011-09-10 19:40:05.964918617 +0200
+@@ -5,1 +5,2 @@
+-AC_INIT([FULL-PACKAGE-NAME], [VERSION], [BUG-REPORT-ADDRESS])
++AC_INIT(2lgc_code, 0.0.0.2, devel@2lgc.org, 2lgc_code, http://2lgc.org)
++AM_INIT_AUTOMAKE([-Wno-portability])
+@@ -7,2 +0,4 @@
+ AC_CONFIG_HEADERS([config.h])
++AM_GNU_GETTEXT([external])
++AC_CONFIG_MACRO_DIR([m4])
+
+@@ -13,15 +0,52 @@
+ AC_PROG_MAKE_SET
++AM_PROG_CC_C_O
++AC_PROG_F77
++AC_PROG_LIBTOOL
++LIBXML_REQUIRED_VERSION=2.8.0
++AC_SUBST(XML_CPPFLAGS)
++AC_SUBST(XML_LIBS)
++AM_PATH_XML2($LIBXML_REQUIRED_VERSION, :, AC_MSG_ERROR(Test for libXML failed.))
++GLIB_REQUIRED_VERSION=2.34.0
++AM_PATH_GLIB_2_0($GLIB_REQUIRED_VERSION, :, AC_MSG_ERROR(Test for GLIB failed.))
++AC_ARG_WITH(gtk,  [  --without-gtk           build without gtk support], [withgtk=true], [withgtk=false])
++AC_MSG_RESULT([XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
++with-gtk $withgtk
++XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX])
++AM_CONDITIONAL(ENABLE_GTK, test x$withgtk = xtrue)
++if test x$withgtk = xtrue; then
++GTK_REQUIRED_VERSION=3.6.0
++AM_PATH_GTK_3_0($GTK_REQUIRED_VERSION, :, AC_MSG_ERROR(Test for GTK+ failed.))
++AC_CHECK_LIB([M3d++], [main], [], [AC_MSG_ERROR([M3d++ ( http://m3dlib.tuxfamily.org ) est necessaire])])
++AC_DEFINE(ENABLE_GTK, 1, [Défini si GTK doit être supporté])
++fi
++AM_GNU_GETTEXT([external])
++ALL_LINGUAS="fr"
++PKG_PROG_PKG_CONFIG
++
++AC_MSG_CHECKING([for some Win32 platform])
++case "$host" in
++  *-*-mingw*|*-*-cygwin*)
++    platform_win32=yes
++    ;;
++  *)
++    platform_win32=no
++    ;;
++esac
++AC_MSG_RESULT([$platform_win32])
++AM_CONDITIONAL(PLATFORM_WIN32, test "$platform_win32" = "yes")
+ 
+ # Checks for libraries.
+-# FIXME: Replace `main' with a function in `-lamd':
+-AC_CHECK_LIB([amd], [main])
+-# FIXME: Replace `main' with a function in `-lcholmod':
+-AC_CHECK_LIB([cholmod], [main])
+-# FIXME: Replace `main' with a function in `-lcolamd':
+-AC_CHECK_LIB([colamd], [main])
+-# FIXME: Replace `main' with a function in `-lgfortran':
+-AC_CHECK_LIB([gfortran], [main])
+-# FIXME: Replace `main' with a function in `-lumfpack':
+-AC_CHECK_LIB([umfpack], [main])
++AC_CHECK_LIB(m, sqrt)
++AC_CHECK_LIB([colamd], [colamd_recommended], [], [AC_MSG_ERROR([colamd ( www.cise.ufl.edu/research/sparse/colamd ) est necessaire])])
++AC_CHECK_LIB([suitesparseconfig], [SuiteSparse_time], [LIBS="-lsuitesparseconfig $LIBS"], [AC_CHECK_LIB([ufconfig], [UFfree], [LIBS="-lufconfig $LIBS"], [AC_MSG_ERROR([suitesparseconfig ( www.cise.ufl.edu/research/sparse ) est necessaire])])])
++AC_CHECK_LIB([amd], [amd_malloc], [], [AC_MSG_ERROR([amd ( http://www.cise.ufl.edu/research/sparse/amd ) est necessaire])])
++LIBS="-lgfortran $LIBS"
++sinclude(acx_blas.m4)
++ACX_BLAS
++if test x"$BLAS_LIBS" = x; then
++    AC_MSG_ERROR([Cannot find blas libraries])
++fi
++AC_CHECK_LIB([cholmod], [cholmod_start], [], [AC_MSG_ERROR([cholmod ( http://www.cise.ufl.edu/research/sparse/cholmod ) est necessaire])])
++AC_CHECK_LIB([umfpack], [main], [], [AC_MSG_ERROR([umfpack ( www.cise.ufl.edu/research/sparse/umfpack ) est necessaire])])
+ 
+ # Checks for header files.

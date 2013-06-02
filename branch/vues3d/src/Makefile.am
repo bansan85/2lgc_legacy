@@ -1,0 +1,4 @@
+SUBDIRS =	lib \
+		gui \
+		test
+

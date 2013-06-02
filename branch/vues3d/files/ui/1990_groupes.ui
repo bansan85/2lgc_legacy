@@ -1,0 +1,434 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+    <requires lib="gtk+" version="3.2"/>
+    <object class="GtkTreeStore" id="1990_actions_tree_store_etat">
+        <columns>
+            <column type="guint"/>
+            <column type="gchararray"/>
+        </columns>
+    </object>
+    <object class="GtkTreeStore" id="1990_actions_tree_store_dispo">
+        <columns>
+            <column type="guint"/>
+            <column type="gchararray"/>
+        </columns>
+    </object>
+    <object class="GtkAdjustment" id="adjustment_niveaux">
+        <property name="lower">0</property>
+        <property name="upper">0</property>
+        <property name="step-increment">1</property>
+    </object>
+    <object class="GtkImage" id="1990_charges_icon_etat_ajout">
+        <property name="visible">True</property>
+        <property name="stock">gtk-add</property>
+        <property name="icon_size">4</property>
+    </object>
+    <object class="GtkImage" id="1990_charges_icon_etat_suppr">
+        <property name="visible">True</property>
+        <property name="stock">gtk-go-forward</property>
+        <property name="icon_size">4</property>
+    </object>
+    <object class="GtkImage" id="1990_charges_icon_dispo_ajout">
+        <property name="visible">True</property>
+        <property name="stock">gtk-go-back</property>
+        <property name="icon_size">4</property>
+    </object>
+    <object class="GtkImage" id="1990_charges_icon_dispo_ajout_tout">
+        <property name="visible">True</property>
+        <property name="stock">gtk-goto-first</property>
+        <property name="icon_size">4</property>
+    </object>
+    <object class="GtkWindow" id="1990_groupes_window">
+        <property name="visible">True</property>
+        <property name="title" translatable="yes">Groupes</property>
+        <property name="default-height">600</property>
+        <property name="default-width">800</property>
+        <property name="window-position">GTK_WIN_POS_CENTER</property>
+        <signal name="key-press-event" handler="_1990_gtk_groupe_window_key_press"/>
+        <signal name="destroy" handler="_1990_gtk_groupes_window_destroy"/>
+        <child>
+            <object class="GtkGrid" id="1990_groupes_grille_principale">
+                <property name="visible">True</property>
+                <property name="border-width">6</property>
+                <child>
+                    <object class="GtkGrid" id="1990_groupes_grille_niveaux">
+                        <property name="visible">True</property>
+                        <property name="border-width">6</property>
+                        <property name="column-spacing">6</property>
+                        <child>
+                            <object class="GtkLabel" id="1990_groupes_label_niveaux">
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">Niveau :</property>
+                            </object>
+                            <packing>
+                                <property name="left-attach">0</property>
+                                <property name="top-attach">0</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GtkSpinButton" id="1990_groupes_spin_button_niveaux">
+                                <property name="adjustment">adjustment_niveaux</property>
+                                <property name="visible">True</property>
+                                <property name="hexpand">True</property>
+                                <signal name="value-changed" handler="_1990_gtk_spin_button_niveau_change"/>
+                            </object>
+                            <packing>
+                                <property name="left-attach">1</property>
+                                <property name="top-attach">0</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GtkButton" id="1990_groupes_button_add_niveau">
+                                <property name="visible">True</property>
+                                <property name="label"> + </property>
+                                <signal name="clicked" handler="_1990_gtk_button_niveau_ajout_clicked"/>
+                            </object>
+                            <packing>
+                                <property name="left-attach">2</property>
+                                <property name="top-attach">0</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GtkButton" id="1990_groupes_button_remove_niveau">
+                                <property name="visible">True</property>
+                                <property name="label"> - </property>
+                                <signal name="clicked" handler="_1990_gtk_button_niveau_suppr_clicked"/>
+                            </object>
+                            <packing>
+                                <property name="left-attach">3</property>
+                                <property name="top-attach">0</property>
+                            </packing>
+                        </child>
+                    </object>
+                    <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">0</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkPaned" id="1990_groupes_paned">
+                        <property name="visible">True</property>
+                        <property name="orientation">horizontal</property>
+                        <property name="position">400</property>
+                        <child>
+                            <object class="GtkGrid" id="1990_groupes_grille_etat">
+                                <property name="visible">True</property>
+                                <property name="border-width">6</property>
+                                <child>
+                                    <object class="GtkLabel" id="1990_groupes_label_etat">
+                                        <property name="label" translatable="yes">&lt;b&gt;Groupes :&lt;/b&gt;</property>
+                                        <property name="visible">True</property>
+                                        <property name="hexpand">True</property>
+                                        <property name="use_markup">True</property>
+                                        <property name="xalign">0</property>
+                                    </object>
+                                    <packing>
+                                        <property name="left-attach">0</property>
+                                        <property name="top-attach">0</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkGrid" id="1990_groupes_grille_etat2">
+                                        <property name="visible">True</property>
+                                        <property name="border-width">6</property>
+                                        <property name="row-spacing">6</property>
+                                        <child>
+                                            <object class="GtkScrolledWindow" id="1990_groupes_scrolled_etat">
+                                                <property name="visible">True</property>
+                                                <property name="expand">True</property>
+                                                <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                                                <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                                                <child>
+                                                    <object class="GtkTreeView" id="1990_groupes_treeview_etat">
+                                                        <property name="visible">True</property>
+                                                        <property name="model">1990_actions_tree_store_etat</property>
+                                                        <property name="reorderable">True</property>
+                                                        <signal name="drag-begin" handler="_1990_gtk_tree_view_drag_begin"/>
+                                                        <signal name="drag-drop" handler="_1990_gtk_tree_view_etat_drag"/>
+                                                        <signal name="row-expanded" handler="_1990_gtk_tree_view_etat_row_expanded"/>
+                                                        <signal name="row-collapsed" handler="_1990_gtk_tree_view_etat_row_collapsed"/>
+                                                        <signal name="cursor-changed" handler="_1990_gtk_groupes_tree_view_etat_cursor_changed"/>
+                                                        <signal name="key-press-event" handler="_1990_gtk_tree_view_etat_key_press_event"/>
+                                                        <signal name="button-press-event" handler="common_gtk_treeview_button_press_unselect"/>
+                                                        <child internal-child="selection">
+                                                            <object class="GtkTreeSelection" id="1990_groupes_treeview_select_etat">
+                                                                <signal name="changed" handler="_1990_gtk_tree_select_changed"/>
+                                                            </object>
+                                                        </child>
+                                                        <child>
+                                                            <object class="GtkTreeViewColumn" id="1990_groupes_treeview_etat_column0">
+                                                                <property name="visible">True</property>
+                                                                <property name="resizable">True</property>
+                                                                <property name="title" translatable="yes">Numéro</property>
+                                                                <child>
+                                                                    <object class="GtkCellRendererText" id="1990_groupes_treeview_etat_cell0"/>
+                                                                    <attributes>
+                                                                        <attribute name="text">0</attribute>
+                                                                    </attributes>
+                                                                </child>
+                                                            </object>
+                                                        </child>
+                                                        <child>
+                                                            <object class="GtkTreeViewColumn" id="1990_groupes_treeview_etat_column1">
+                                                                <property name="visible">True</property>
+                                                                <property name="resizable">True</property>
+                                                                <property name="title" translatable="yes">Description</property>
+                                                                <child>
+                                                                    <object class="GtkCellRendererText" id="1990_groupes_treeview_etat_cell1">
+                                                                        <property name="editable">True</property>
+                                                                        <signal name="edited" handler="_1990_gtk_tree_view_etat_cell_edited"/>
+                                                                    </object>
+                                                                    <attributes>
+                                                                        <attribute name="text">1</attribute>
+                                                                    </attributes>
+                                                                </child>
+                                                            </object>
+                                                        </child>
+                                                    </object>
+                                                </child>
+                                            </object>
+                                            <packing>
+                                                <property name="left-attach">0</property>
+                                                <property name="top-attach">0</property>
+                                            </packing>
+                                        </child>
+                                        <child>
+                                            <object class="GtkToolbar" id="1990_charges_toolbar_etat">
+                                                <property name="visible">True</property>
+                                                <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
+                                                <property name="toolbar-style">GTK_TOOLBAR_ICONS</property>
+                                                <property name="border-width">0</property>
+                                                <child>
+                                                    <object class="GtkToolButton" id="1990_charges_toolbar_etat_ajout">
+                                                        <property name="visible">True</property>
+                                                        <property name="label" translatable="yes">Ajouter</property>
+                                                        <property name="stock_id">GTK_STOCK_ADD</property>
+                                                        <property name="icon-widget">1990_charges_icon_etat_ajout</property>
+                                                        <signal name="clicked" handler="_1990_gtk_button_groupe_ajout_clicked"/>
+                                                    </object>
+                                                </child>
+                                                <child>
+                                                    <object class="GtkRadioToolButton" id="1990_charges_toolbar_etat_and">
+                                                        <property name="visible">True</property>
+                                                        <property name="sensitive">False</property>
+                                                        <property name="label">AND</property>
+                                                        <signal name="toggled" handler="_1990_gtk_button_groupe_toggled"/>
+                                                    </object>
+                                                </child>
+                                                <child>
+                                                    <object class="GtkRadioToolButton" id="1990_charges_toolbar_etat_or">
+                                                        <property name="visible">True</property>
+                                                        <property name="sensitive">False</property>
+                                                        <property name="label">OR</property>
+                                                        <property name="group">1990_charges_toolbar_etat_and</property>
+                                                        <signal name="toggled" handler="_1990_gtk_button_groupe_toggled"/>
+                                                    </object>
+                                                </child>
+                                                <child>
+                                                    <object class="GtkRadioToolButton" id="1990_charges_toolbar_etat_xor">
+                                                        <property name="visible">True</property>
+                                                        <property name="sensitive">False</property>
+                                                        <property name="label">XOR</property>
+                                                        <property name="group">1990_charges_toolbar_etat_and</property>
+                                                        <signal name="toggled" handler="_1990_gtk_button_groupe_toggled"/>
+                                                    </object>
+                                                </child>
+                                                <child>
+                                                    <object class="GtkToolButton" id="1990_charges_toolbar_etat_suppr">
+                                                        <property name="visible">True</property>
+                                                        <property name="sensitive">False</property>
+                                                        <property name="label" translatable="yes">Supprimer</property>
+                                                        <property name="stock_id">GTK_STOCK_GO_FORWARD</property>
+                                                        <property name="icon-widget">1990_charges_icon_etat_suppr</property>
+                                                        <signal name="clicked" handler="_1990_gtk_button_groupe_suppr_clicked"/>
+                                                    </object>
+                                                </child>
+                                            </object>
+                                            <packing>
+                                                <property name="left-attach">0</property>
+                                                <property name="top-attach">1</property>
+                                            </packing>
+                                        </child>
+                                    </object>
+                                    <packing>
+                                        <property name="left-attach">0</property>
+                                        <property name="top-attach">1</property>
+                                    </packing>
+                                </child>
+                            </object>
+                        </child>
+                        <child>
+                            <object class="GtkGrid" id="1990_groupes_grille_dispo">
+                                <property name="visible">True</property>
+                                <property name="border-width">6</property>
+                                <child>
+                                    <object class="GtkLabel" id="1990_groupes_label_dispo">
+                                        <property name="label" translatable="yes">&lt;b&gt;Éléments disponibles :&lt;/b&gt;</property>
+                                        <property name="visible">True</property>
+                                        <property name="hexpand">True</property>
+                                        <property name="use_markup">True</property>
+                                        <property name="xalign">0</property>
+                                    </object>
+                                    <packing>
+                                        <property name="left-attach">0</property>
+                                        <property name="top-attach">0</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkGrid" id="1990_groupes_grille_dispo2">
+                                        <property name="visible">True</property>
+                                        <property name="border-width">6</property>
+                                        <property name="row-spacing">6</property>
+                                        <child>
+                                            <object class="GtkScrolledWindow" id="1990_groupes_scrolled_dispo">
+                                                <property name="visible">True</property>
+                                                <property name="expand">True</property>
+                                                <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                                                <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                                                <child>
+                                                    <object class="GtkTreeView" id="1990_groupes_treeview_dispo">
+                                                        <property name="visible">True</property>
+                                                        <property name="model">1990_actions_tree_store_dispo</property>
+                                                        <property name="reorderable">True</property>
+                                                        <signal name="drag-begin" handler="_1990_gtk_tree_view_drag_begin"/>
+                                                        <signal name="drag-drop" handler="_1990_gtk_tree_view_dispo_drag"/>
+                                                        <signal name="button-press-event" handler="common_gtk_treeview_button_press_unselect"/>
+                                                        <child internal-child="selection">
+                                                            <object class="GtkTreeSelection" id="1990_groupes_treeview_select_dispo">
+                                                                <property name="mode">multiple</property>
+                                                                <signal name="changed" handler="_1990_gtk_tree_select_changed"/>
+                                                            </object>
+                                                        </child>
+                                                        <child>
+                                                            <object class="GtkTreeViewColumn" id="1990_groupes_treeview_dispo_column0">
+                                                                <property name="visible">True</property>
+                                                                <property name="resizable">True</property>
+                                                                <property name="title" translatable="yes">Numéro</property>
+                                                                <child>
+                                                                    <object class="GtkCellRendererText" id="1990_groupes_treeview_dispo_cell0"/>
+                                                                    <attributes>
+                                                                        <attribute name="text">0</attribute>
+                                                                    </attributes>
+                                                                </child>
+                                                            </object>
+                                                        </child>
+                                                        <child>
+                                                            <object class="GtkTreeViewColumn" id="1990_groupes_treeview_dispo_column1">
+                                                                <property name="visible">True</property>
+                                                                <property name="resizable">True</property>
+                                                                <property name="title" translatable="yes">Description</property>
+                                                                <child>
+                                                                    <object class="GtkCellRendererText" id="1990_groupes_treeview_dispo_cell1">
+                                                                        <property name="editable">True</property>
+                                                                        <signal name="edited" handler="_1990_gtk_tree_view_dispo_cell_edited"/>
+                                                                    </object>
+                                                                    <attributes>
+                                                                        <attribute name="text">1</attribute>
+                                                                    </attributes>
+                                                                </child>
+                                                            </object>
+                                                        </child>
+                                                    </object>
+                                                </child>
+                                            </object>
+                                            <packing>
+                                                <property name="left-attach">0</property>
+                                                <property name="top-attach">0</property>
+                                            </packing>
+                                        </child>
+                                        <child>
+                                            <object class="GtkToolbar" id="1990_charges_toolbar_dispo">
+                                                <property name="visible">True</property>
+                                                <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
+                                                <property name="toolbar-style">GTK_TOOLBAR_ICONS</property>
+                                                <property name="border-width">0</property>
+                                                <child>
+                                                    <object class="GtkToolButton" id="1990_charges_toolbar_dispo_ajout">
+                                                        <property name="visible">True</property>
+                                                        <property name="sensitive">False</property>
+                                                        <property name="label" translatable="yes">Ajouter</property>
+                                                        <property name="stock_id">GTK_STOCK_GO_BACK</property>
+                                                        <property name="icon-widget">1990_charges_icon_dispo_ajout</property>
+                                                        <signal name="clicked" handler="_1990_gtk_button_ajout_dispo_clicked"/>
+                                                    </object>
+                                                </child>
+                                                <child>
+                                                    <object class="GtkToolButton" id="1990_charges_toolbar_dispo_ajout_tout">
+                                                        <property name="visible">True</property>
+                                                        <property name="sensitive">False</property>
+                                                        <property name="label" translatable="yes">Ajouter tout</property>
+                                                        <property name="stock_id">GTK_STOCK_GOTO_FIRST</property>
+                                                        <property name="icon-widget">1990_charges_icon_dispo_ajout_tout</property>
+                                                        <signal name="clicked" handler="_1990_gtk_button_ajout_tout_dispo_clicked"/>
+                                                    </object>
+                                                </child>
+                                            </object>
+                                            <packing>
+                                                <property name="left-attach">0</property>
+                                                <property name="top-attach">1</property>
+                                            </packing>
+                                        </child>
+                                    </object>
+                                    <packing>
+                                        <property name="left-attach">0</property>
+                                        <property name="top-attach">1</property>
+                                    </packing>
+                                </child>
+                            </object>
+                        </child>
+                    </object>
+                    <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">1</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkButtonBox" id="1990_charges_buttons">
+                        <property name="visible">True</property>
+                        <property name="orientation">horizontal</property>
+                        <property name="layout_style">end</property>
+                        <property name="spacing">6</property>
+                        <child>
+                            <object class="GtkButton" id="1990_charges_button_options">
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">Options</property>
+                                <signal name="clicked" handler="_1990_gtk_groupes_button_options_clicked"/>
+                            </object>
+                            <packing>
+                                <property name="position">0</property>
+                                <property name="pack_type">end</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GtkButton" id="1990_charges_button_generer">
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">Générer</property>
+                                <signal name="clicked" handler="_1990_gtk_groupes_button_generer_clicked"/>
+                            </object>
+                            <packing>
+                                <property name="position">1</property>
+                                <property name="pack_type">end</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GtkButton" id="1990_charges_button_close">
+                                <property name="visible">True</property>
+                                <property name="label">gtk-close</property>
+                                <property name="use_stock">True</property>
+                                <signal name="clicked" handler="_1990_gtk_groupes_window_quitter_button"/>
+                            </object>
+                            <packing>
+                                <property name="position">2</property>
+                                <property name="pack_type">end</property>
+                            </packing>
+                        </child>
+                    </object>
+                    <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">2</property>
+                    </packing>
+                </child>
+            </object>
+        </child>
+    </object>
+</interface>

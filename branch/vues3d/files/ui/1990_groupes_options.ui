@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+    <requires lib="gtk+" version="3.2"/>
+    <object class="GtkWindow" id="1990_groupes_options_window">
+        <property name="visible">True</property>
+        <property name="title" translatable="yes">Options des combinaisons</property>
+        <property name="resizable">False</property>
+        <property name="window-position">GTK_WIN_POS_CENTER</property>
+        <signal name="destroy" handler="_1990_gtk_groupes_options_window_destroy"/>
+        <signal name="key-press-event" handler="_1990_gtk_groupe_option_window_key_press"/>
+        <child>
+            <object class="GtkGrid" id="1990_groupes_options_grille_principale">
+                <property name="visible">True</property>
+                <property name="border-width">12</property>
+                <child>
+                    <object class="GtkLabel" id="1990_groupes_options_label_ELU_EQU">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">&lt;b&gt;ELU Équilibre :&lt;/b&gt;</property>
+                        <property name="hexpand">True</property>
+                        <property name="use_markup">True</property>
+                        <property name="xalign">0</property>
+                    </object>
+                    <packing>
+                        <property name="top-attach">0</property>
+                        <property name="left-attach">0</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkGrid" id="1990_groupes_options_grille_ELU_EQU">
+                        <property name="visible">True</property>>
+                        <property name="border-width">6</property>
+                        <child>
+                            <object class="GtkLabel" id="1990_groupes_options_label_ELU_EQU_description">
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">À l'État Limite Ultime d'ÉQUilibre, il est possible de générer les combinaisons pour la vérification à l'équilibre statique seulement ou à l'équilibre statique incluant la résistance d'éléments structuraux.</property>
+                                <property name="wrap">True</property>
+                                <property name="xalign">0</property>
+                                <property name="justify">fill</property>
+                            </object>
+                            <packing>
+                                <property name="top-attach">0</property>
+                                <property name="left-attach">0</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GtkRadioButton" id="1990_groupes_options_radio_button_EQU">
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">Équilibre seulement</property>
+                                <signal name="toggled" handler="_1990_gtk_radio_button_eluequ_equ_seul"/>
+                            </object>
+                            <packing>
+                                <property name="top-attach">1</property>
+                                <property name="left-attach">0</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GtkRadioButton" id="1990_groupes_options_radio_button_EQU_RES">
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">Équilibre et résistance</property>
+                                <property name="group">1990_groupes_options_radio_button_EQU</property>
+                                <signal name="toggled" handler="_1990_gtk_radio_button_eluequ_equ_resist"/>
+                            </object>
+                            <packing>
+                                <property name="top-attach">2</property>
+                                <property name="left-attach">0</property>
+                            </packing>
+                        </child>
+                    </object>
+                    <packing>
+                        <property name="top-attach">1</property>
+                        <property name="left-attach">0</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkLabel" id="1990_groupes_options_label_ELU_STR_comb">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">&lt;b&gt;ELU STR et GEO, formule de combinaison :&lt;/b&gt;</property>
+                        <property name="hexpand">True</property>
+                        <property name="use_markup">True</property>
+                        <property name="xalign">0</property>
+                    </object>
+                    <packing>
+                        <property name="top-attach">2</property>
+                        <property name="left-attach">0</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkGrid" id="1990_groupes_options_grille_ELU_STR_comb">
+                        <property name="visible">True</property>>
+                        <property name="border-width">6</property>
+                        <child>
+                            <object class="GtkLabel" id="1990_groupes_options_label_ELU_STR_comb_description">
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">À l'État Limite Ultime STRucture et GÉOtechnique, deux formules de combinaison sont possibles. La première est la formule 6.10 et la deuxième est 6.10a et 6.10b.</property>
+                                <property name="wrap">True</property>
+                                <property name="xalign">0</property>
+                                <property name="justify">fill</property>
+                            </object>
+                            <packing>
+                                <property name="top-attach">0</property>
+                                <property name="left-attach">0</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GtkRadioButton" id="1990_groupes_options_radio_button_6_10">
+                                <property name="visible">True</property>
+                                <property name="label">6.10</property>
+                                <property name="has-tooltip">True</property>
+                                <signal name="toggled" handler="_1990_gtk_radio_button_elustrgeo_6_10"/>
+                                <signal name="query-tooltip" handler="_1990_gtk_tooltip"/>
+                            </object>
+                            <packing>
+                                <property name="top-attach">1</property>
+                                <property name="left-attach">0</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GtkRadioButton" id="1990_groupes_options_radio_button_6_10a_b">
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">6.10a et 6.10b</property>
+                                <property name="group">1990_groupes_options_radio_button_6_10</property>
+                                <property name="has-tooltip">True</property>
+                                <signal name="toggled" handler="_1990_gtk_radio_button_elustrgeo_6_10ab"/>
+                                <signal name="query-tooltip" handler="_1990_gtk_tooltip"/>
+                            </object>
+                            <packing>
+                                <property name="top-attach">2</property>
+                                <property name="left-attach">0</property>
+                            </packing>
+                        </child>
+                    </object>
+                    <packing>
+                        <property name="top-attach">3</property>
+                        <property name="left-attach">0</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkLabel" id="1990_groupes_options_label_ELU_STR_calc">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">&lt;b&gt;ELU STR et GEO, ensemble de calcul :&lt;/b&gt;</property>
+                        <property name="hexpand">True</property>
+                        <property name="use_markup">True</property>
+                        <property name="xalign">0</property>
+                    </object>
+                    <packing>
+                        <property name="top-attach">4</property>
+                        <property name="left-attach">0</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkGrid" id="1990_groupes_options_grille_ELU_STR_calc">
+                        <property name="visible">True</property>>
+                        <property name="border-width">6</property>
+                        <child>
+                            <object class="GtkLabel" id="1990_groupes_options_label_ELU_STR_calc_description">
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">Lorsqu'il est nécessaire de réaliser un calcul à l'État Limite Ultime STRucture et GÉOtechnique, trois approches sont possibles. Approche 1 : vérification de la structure et du sol via les coefficients de l'ensemble B puis les coefficients de l'ensemble C. Approche 2 : vérification de la structure et du sol via les coefficients de l'ensemble B. Approche 3 : vérification de la structure et du sol via les coefficients de l'ensemble B pour les actions géotechniques et les coefficients de l'ensemble C pour les actions appliquées à la structure.</property>
+                                <property name="wrap">True</property>
+                                <property name="xalign">0</property>
+                                <property name="justify">fill</property>
+                            </object>
+                            <packing>
+                                <property name="top-attach">0</property>
+                                <property name="left-attach">0</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GtkRadioButton" id="1990_groupes_options_radio_button_appr1">
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">Approche 1</property>
+                                <signal name="toggled" handler="_1990_gtk_radio_button_elustrgeo_1"/>
+                            </object>
+                            <packing>
+                                <property name="top-attach">1</property>
+                                <property name="left-attach">0</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GtkRadioButton" id="1990_groupes_options_radio_button_appr2">
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">Approche 2</property>
+                                <property name="group">1990_groupes_options_radio_button_appr1</property>
+                                <signal name="toggled" handler="_1990_gtk_radio_button_elustrgeo_2"/>
+                            </object>
+                            <packing>
+                                <property name="top-attach">2</property>
+                                <property name="left-attach">0</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GtkRadioButton" id="1990_groupes_options_radio_button_appr3">
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">Approche 3</property>
+                                <property name="group">1990_groupes_options_radio_button_appr1</property>
+                                <signal name="toggled" handler="_1990_gtk_radio_button_elustrgeo_3"/>
+                            </object>
+                            <packing>
+                                <property name="top-attach">3</property>
+                                <property name="left-attach">0</property>
+                            </packing>
+                        </child>
+                    </object>
+                    <packing>
+                        <property name="top-attach">5</property>
+                        <property name="left-attach">0</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkLabel" id="1990_groupes_options_label_ELU_ACC">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">&lt;b&gt;ELU ACCidentel :&lt;/b&gt;</property>
+                        <property name="hexpand">True</property>
+                        <property name="use_markup">True</property>
+                        <property name="xalign">0</property>
+                    </object>
+                    <packing>
+                        <property name="top-attach">6</property>
+                        <property name="left-attach">0</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkGrid" id="1990_groupes_options_grille_ELU_ACC">
+                        <property name="visible">True</property>>
+                        <property name="border-width">6</property>
+                        <child>
+                            <object class="GtkLabel" id="1990_groupes_options_label_ELU_ACC_description">
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">À l'État Limite Ultime ACCidentel, la charge variable dominante utilisée est soit la valeur fréquente, soit la valeur quasi-permanente.</property>
+                                <property name="wrap">True</property>
+                                <property name="xalign">0</property>
+                                <property name="justify">fill</property>
+                            </object>
+                            <packing>
+                                <property name="top-attach">0</property>
+                                <property name="left-attach">0</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GtkRadioButton" id="1990_groupes_options_radio_button_freq">
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">valeur fréquence</property>
+                                <signal name="toggled" handler="_1990_gtk_radio_button_eluacc_frequente"/>
+                            </object>
+                            <packing>
+                                <property name="top-attach">1</property>
+                                <property name="left-attach">0</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GtkRadioButton" id="1990_groupes_options_radio_button_quasi_perm">
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">valeur quasi-permanente</property>
+                                <property name="group">1990_groupes_options_radio_button_freq</property>
+                                <signal name="toggled" handler="_1990_gtk_radio_button_eluacc_quasi_permanente"/>
+                            </object>
+                            <packing>
+                                <property name="top-attach">2</property>
+                                <property name="left-attach">0</property>
+                            </packing>
+                        </child>
+                    </object>
+                    <packing>
+                        <property name="top-attach">7</property>
+                        <property name="left-attach">0</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkButtonBox" id="1990_groupes_options_buttons">
+                        <property name="visible">True</property>
+                        <property name="orientation">horizontal</property>
+                        <property name="layout_style">end</property>
+                        <property name="spacing">6</property>
+                        <child>
+                            <object class="GtkButton" id="1990_charges_options_button_close">
+                                <property name="visible">True</property>
+                                <property name="label">gtk-close</property>
+                                <property name="use_stock">True</property>
+                                <signal name="clicked" handler="_1990_gtk_groupes_option_window_quitter_button"/>
+                            </object>
+                            <packing>
+                                <property name="position">2</property>
+                                <property name="pack_type">end</property>
+                            </packing>
+                        </child>
+                    </object>
+                    <packing>
+                        <property name="top-attach">8</property>
+                        <property name="left-attach">0</property>
+                    </packing>
+                </child>
+            </object>
+        </child>
+    </object>
+</interface>

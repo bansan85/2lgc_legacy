@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+    <requires lib="gtk+" version="3.2"/>
+    <object class="GtkTextTagTable" id="EF_charge_noeud_tag_table">
+        <child type="tag">
+            <object class="GtkTextTag" id="EF_charge_noeud_tag_mauvais">
+                <property name="name">mauvais</property>
+                <property name="foreground">red</property>
+                <property name="weight">800</property>
+            </object>
+        </child>
+        <child type="tag">
+            <object class="GtkTextTag" id="EF_charge_noeud_tag_ok">
+                <property name="name">OK</property>
+                <property name="foreground">black</property>
+                <property name="weight">400</property>
+            </object>
+        </child>
+    </object>
+    <object class="GtkTextBuffer" id="EF_charge_noeud_buffer_nom">
+        <property name="tag-table">EF_charge_noeud_tag_table</property>
+        <signal name="changed" handler="EF_gtk_charge_noeud_check"/>
+    </object>
+    <object class="GtkTextBuffer" id="EF_charge_noeud_buffer_fx">
+        <property name="tag-table">EF_charge_noeud_tag_table</property>
+        <property name="text">0</property>
+        <signal name="changed" handler="EF_gtk_charge_noeud_check"/>
+    </object>
+    <object class="GtkTextBuffer" id="EF_charge_noeud_buffer_fy">
+        <property name="tag-table">EF_charge_noeud_tag_table</property>
+        <property name="text">0</property>
+        <signal name="changed" handler="EF_gtk_charge_noeud_check"/>
+    </object>
+    <object class="GtkTextBuffer" id="EF_charge_noeud_buffer_fz">
+        <property name="tag-table">EF_charge_noeud_tag_table</property>
+        <property name="text">0</property>
+        <signal name="changed" handler="EF_gtk_charge_noeud_check"/>
+    </object>
+    <object class="GtkTextBuffer" id="EF_charge_noeud_buffer_mx">
+        <property name="tag-table">EF_charge_noeud_tag_table</property>
+        <property name="text">0</property>
+        <signal name="changed" handler="EF_gtk_charge_noeud_check"/>
+    </object>
+    <object class="GtkTextBuffer" id="EF_charge_noeud_buffer_my">
+        <property name="tag-table">EF_charge_noeud_tag_table</property>
+        <property name="text">0</property>
+        <signal name="changed" handler="EF_gtk_charge_noeud_check"/>
+    </object>
+    <object class="GtkTextBuffer" id="EF_charge_noeud_buffer_mz">
+        <property name="tag-table">EF_charge_noeud_tag_table</property>
+        <property name="text">0</property>
+        <signal name="changed" handler="EF_gtk_charge_noeud_check"/>
+    </object>
+    <object class="GtkTextBuffer" id="EF_charge_noeud_buffer_noeuds">
+        <property name="tag-table">EF_charge_noeud_tag_table</property>
+        <property name="text">0</property>
+        <signal name="changed" handler="EF_gtk_charge_noeud_check"/>
+    </object>
+    <object id="EF_charge_noeud_window" class="GtkWindow">
+        <property name="visible">True</property>
+        <property name="default-width">500</property>
+        <property name="window-position">GTK_WIN_POS_CENTER</property>
+        <signal name="key-press-event" handler="EF_gtk_charge_noeud_window_key_press"/>
+        <signal name="destroy" handler="EF_gtk_charge_noeud_window_destroy"/>
+        <child>
+            <object class="GtkGrid" id="EF_charge_noeud_grille_principale">
+                <property name="visible">True</property>
+                <property name="border-width">12</property>
+                <property name="column-spacing">12</property>
+                <property name="row-spacing">12</property>
+                <child>
+                    <object class="GtkLabel" id="EF_charge_noeud_label_charge">
+                        <property name="label" translatable="yes">Charge :</property>
+                        <property name="visible">True</property>
+                    </object>
+                    <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">0</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkComboBoxText" id="EF_charge_noeud_combo_box_charge">
+                        <property name="visible">True</property>
+                        <property name="hexpand">True</property>
+                    </object>
+                    <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">0</property>
+                        <property name="width">3</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkLabel" id="EF_charge_noeud_label_description">
+                        <property name="label" translatable="yes">Description :</property>
+                        <property name="visible">True</property>
+                    </object>
+                    <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">1</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkScrolledWindow" id="EF_charge_noeud_scrolledwindow_description">
+                        <property name="visible">True</property>
+                        <property name="expand">True</property>
+                        <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                        <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                        <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
+                        <child>
+                            <object class="GtkTextView" id="EF_charge_noeud_textview_description">
+                                <property name="visible">True</property>
+                                <property name="accepts-tab">False</property>
+                                <property name="wrap-mode">GTK_WRAP_WORD</property>
+                                <property name="buffer">EF_charge_noeud_buffer_nom</property>
+                            </object>
+                        </child>
+                    </object>
+                    <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">1</property>
+                        <property name="width">3</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkLabel" id="EF_charge_noeud_label_fx">
+                        <property name="label">Fx [N] :</property>
+                        <property name="visible">True</property>
+                    </object>
+                    <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">2</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkScrolledWindow" id="EF_charge_noeud_scrolledwindow_fx">
+                        <property name="visible">True</property>
+                        <property name="expand">True</property>
+                        <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                        <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                        <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
+                        <child>
+                            <object class="GtkTextView" id="EF_charge_noeud_textview_fx">
+                                <property name="visible">True</property>
+                                <property name="accepts-tab">False</property>
+                                <property name="wrap-mode">GTK_WRAP_CHAR</property>
+                                <property name="buffer">EF_charge_noeud_buffer_fx</property>
+                            </object>
+                        </child>
+                    </object>
+                    <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">2</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkLabel" id="EF_charge_noeud_label_fy">
+                        <property name="label">Fy [N] :</property>
+                        <property name="visible">True</property>
+                    </object>
+                    <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">3</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkScrolledWindow" id="EF_charge_noeud_scrolledwindow_fy">
+                        <property name="visible">True</property>
+                        <property name="expand">True</property>
+                        <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                        <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                        <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
+                        <child>
+                            <object class="GtkTextView" id="EF_charge_noeud_textview_fy">
+                                <property name="visible">True</property>
+                                <property name="accepts-tab">False</property>
+                                <property name="buffer">EF_charge_noeud_buffer_fy</property>
+                                <property name="wrap-mode">GTK_WRAP_CHAR</property>
+                            </object>
+                        </child>
+                    </object>
+                    <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">3</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkLabel" id="EF_charge_noeud_label_fz">
+                        <property name="label">Fz [N] :</property>
+                        <property name="visible">True</property>
+                    </object>
+                    <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">4</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkScrolledWindow" id="EF_charge_noeud_scrolledwindow_fz">
+                        <property name="visible">True</property>
+                        <property name="expand">True</property>
+                        <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                        <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                        <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
+                        <child>
+                            <object class="GtkTextView" id="EF_charge_noeud_textview_fz">
+                                <property name="visible">True</property>
+                                <property name="accepts-tab">False</property>
+                                <property name="buffer">EF_charge_noeud_buffer_fz</property>
+                                <property name="wrap-mode">GTK_WRAP_CHAR</property>
+                            </object>
+                        </child>
+                    </object>
+                    <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">4</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkLabel" id="EF_charge_noeud_label_mx">
+                        <property name="label">Mx [N.m] :</property>
+                        <property name="visible">True</property>
+                    </object>
+                    <packing>
+                        <property name="left-attach">2</property>
+                        <property name="top-attach">2</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkScrolledWindow" id="EF_charge_noeud_scrolledwindow_mx">
+                        <property name="visible">True</property>
+                        <property name="expand">True</property>
+                        <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                        <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                        <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
+                        <child>
+                            <object class="GtkTextView" id="EF_charge_noeud_textview_mx">
+                                <property name="visible">True</property>
+                                <property name="accepts-tab">False</property>
+                                <property name="buffer">EF_charge_noeud_buffer_mx</property>
+                                <property name="wrap-mode">GTK_WRAP_CHAR</property>
+                            </object>
+                        </child>
+                    </object>
+                    <packing>
+                        <property name="left-attach">3</property>
+                        <property name="top-attach">2</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkLabel" id="EF_charge_noeud_label_my">
+                        <property name="label">My [N.m] :</property>
+                        <property name="visible">True</property>
+                    </object>
+                    <packing>
+                        <property name="left-attach">2</property>
+                        <property name="top-attach">3</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkScrolledWindow" id="EF_charge_noeud_scrolledwindow_my">
+                        <property name="visible">True</property>
+                        <property name="expand">True</property>
+                        <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                        <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                        <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
+                        <child>
+                            <object class="GtkTextView" id="EF_charge_noeud_textview_my">
+                                <property name="visible">True</property>
+                                <property name="accepts-tab">False</property>
+                                <property name="buffer">EF_charge_noeud_buffer_my</property>
+                                <property name="wrap-mode">GTK_WRAP_CHAR</property>
+                            </object>
+                        </child>
+                    </object>
+                    <packing>
+                        <property name="left-attach">3</property>
+                        <property name="top-attach">3</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkLabel" id="EF_charge_noeud_label_mz">
+                        <property name="label">Mz [N.m] :</property>
+                        <property name="visible">True</property>
+                    </object>
+                    <packing>
+                        <property name="left-attach">2</property>
+                        <property name="top-attach">4</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkScrolledWindow" id="EF_charge_noeud_scrolledwindow_mz">
+                        <property name="visible">True</property>
+                        <property name="expand">True</property>
+                        <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                        <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                        <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
+                        <child>
+                            <object class="GtkTextView" id="EF_charge_noeud_textview_mz">
+                                <property name="visible">True</property>
+                                <property name="accepts-tab">False</property>
+                                <property name="buffer">EF_charge_noeud_buffer_mz</property>
+                                <property name="wrap-mode">GTK_WRAP_CHAR</property>
+                            </object>
+                        </child>
+                    </object>
+                    <packing>
+                        <property name="left-attach">3</property>
+                        <property name="top-attach">4</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkLabel" id="EF_charge_noeud_label_noeuds">
+                        <property name="label" translatable="yes">Noeuds :</property>
+                        <property name="visible">True</property>
+                    </object>
+                    <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">5</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkScrolledWindow" id="EF_charge_noeud_scrolledwindow_noeuds">
+                        <property name="visible">True</property>
+                        <property name="expand">True</property>
+                        <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                        <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                        <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
+                        <child>
+                            <object class="GtkTextView" id="EF_charge_noeud_textview_noeuds">
+                                <property name="visible">True</property>
+                                <property name="accepts-tab">False</property>
+                                <property name="buffer">EF_charge_noeud_buffer_noeuds</property>
+                                <property name="wrap-mode">GTK_WRAP_WORD</property>
+                            </object>
+                        </child>
+                    </object>
+                    <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">5</property>
+                        <property name="width">3</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkButtonBox" id="EF_charge_noeud_buttons">
+                        <property name="visible">True</property>
+                        <property name="orientation">horizontal</property>
+                        <property name="layout_style">end</property>
+                        <property name="spacing">6</property>
+                        <child>
+                            <object class="GtkButton" id="EF_charge_noeud_button_annuler">
+                                <property name="visible">True</property>
+                                <property name="use_stock">True</property>
+                                <property name="label">gtk-cancel</property>
+                                <signal name="clicked" handler="EF_gtk_charge_noeud_annuler_clicked"/>
+                            </object>
+                            <packing>
+                                <property name="position">0</property>
+                                <property name="pack_type">end</property>
+                            </packing>
+                        </child>
+                        <child>
+                            <object class="GtkButton" id="EF_charge_noeud_button_add_edit">
+                                <property name="visible">True</property>
+                                <property name="sensitive">False</property>
+                                <property name="use_stock">True</property>
+                            </object>
+                            <packing>
+                                <property name="position">1</property>
+                                <property name="pack_type">end</property>
+                            </packing>
+                        </child>
+                    </object>
+                    <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">6</property>
+                        <property name="width">4</property>
+                    </packing>
+                </child>
+            </object>
+        </child>
+    </object>
+</interface>
