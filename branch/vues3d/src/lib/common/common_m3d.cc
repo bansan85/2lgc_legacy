@@ -329,9 +329,9 @@ gboolean m3d_get_rect(double *xmin, double *xmax, double *ymin, double *ymax, Pr
 }
 
 
-gboolean m3d_camera_axe_x_z_y(Projet *projet)
-/* Description : Positionne la caméra pour voir toute la structure dans le plan xz vers la
- *               direction y.
+gboolean m3d_camera_zoom_all(Projet *projet)
+/* Description : Modifie la position de la caméra en x, y et z pour voir l'ensemble de la
+ *               structure.
  * Paramètres : Projet *projet : la variable projet.
  * Valeur renvoyée :
  *   Succès : TRUE.
@@ -344,15 +344,24 @@ gboolean m3d_camera_axe_x_z_y(Projet *projet)
 {
     Gtk_m3d     *m3d;
     SGlobalData *vue;
-    double      yymin;
+//    double      yymin;
     double      x, y, z; // Les coordonnées de la caméra
+    double      xtmp, ytmp, ztmp; // Les coordonnées de la caméra
     EF_Noeud    *noeud; // Noeud en cours d'étude
     EF_Point    point; // Position du noeud en cours d'étude
-    double      ymax, ymin, xmin, xmax; // Leur projection en 2D
-    double      ymax2, ymin2, xmin2, xmax2; // Leur projection en 2D
+    double      ymax, ymin, xmin, xmax, zmin; // Leur projection en 2D
+//    double      ymax2, ymin2, xmin2, xmax2; // Leur projection en 2D
     GList       *list_parcours; // Noeud en cours d'étude
     GtkAllocation   allocation; // Dimension de la fenêtre 2D.
-    double      dx, dz, dy;
+//    double      dx, dz, dy;
+    double      cx, cy, cz; // Le vecteur de la caméra
+    CM3dVertex  v1, v2;
+    CM3dPolygon *poly;
+    double      tmpx, tmpy, tmpz;
+    double      tmpx2, tmpy2, tmpz2;
+    double      tmpxx, tmpxy, tmpxz;
+    double      tmpyx, tmpyy, tmpyz;
+    double      tmpzx, tmpzy, tmpzz;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
@@ -362,6 +371,8 @@ gboolean m3d_camera_axe_x_z_y(Projet *projet)
     BUGMSG(m3d->data, FALSE, gettext("Paramètre %s incorrect.\n"), "m3d->data");
     vue = (SGlobalData*)m3d->data;
     
+    BUGMSG(vue->camera, FALSE, gettext("La caméra n'est pas initialisée.\n"));
+    
     // Aucune noeud, on ne fait rien
     if (projet->modele.noeuds == NULL)
         return TRUE;
@@ -370,66 +381,116 @@ gboolean m3d_camera_axe_x_z_y(Projet *projet)
     noeud = (EF_Noeud*)projet->modele.noeuds->data;
     BUG(EF_noeuds_renvoie_position(noeud, &point), FALSE);
     
+    gtk_widget_get_allocation(GTK_WIDGET(m3d->drawing), &allocation);
+    x = 0;
+    y = 0;
+    z = 0;
+    vue->camera->get_target_vector()->get_coordinates(&cx, &cy, &cz);
+    vue->camera->set_position(x, y, z);
+    vue->camera->set_target(x+cx, y+cy, z+cz);
+    
     // On cherche le xmin, xmax, zmin, zmax et ymin de l'ensemble des noeuds afin de définir
     // la position optimale de la caméra.
-    gtk_widget_get_allocation(GTK_WIDGET(m3d->drawing), &allocation);
-    ymax = common_math_get(point.z);
-    ymin = common_math_get(point.z);
-    xmin = common_math_get(point.x);
-    xmax = common_math_get(point.x);
-    y = common_math_get(point.y);
+    v1.set_coordinates(common_math_get(point.x), common_math_get(point.y), common_math_get(point.z));
+    poly = new CM3dPolygon(v1, v1, v1);
+    poly->convert_by_camera_view(vue->camera);
+    poly->get_vertex1_by_camera()->get_coordinates(&tmpx, &tmpy, &tmpz);
+    delete poly;
+    if (vue->scene->y_axis_is_inverted())
+        tmpy = -tmpy;
+    xmin = tmpx;
+    xmax = tmpx;
+    ymax = tmpy;
+    ymin = tmpy;
+    zmin = tmpz;
     list_parcours = g_list_next(projet->modele.noeuds);
     while (list_parcours != NULL)
     {
         noeud = (EF_Noeud*)list_parcours->data;
         BUG(EF_noeuds_renvoie_position(noeud, &point), FALSE);
         
-        if (xmin > common_math_get(point.x))
-            xmin = common_math_get(point.x);
-        if (xmax < common_math_get(point.x))
-            xmax = common_math_get(point.x);
-        if (ymin > common_math_get(point.z))
-            ymin = common_math_get(point.z);
-        if (ymax < common_math_get(point.z))
-            ymax = common_math_get(point.z);
-        if (y > common_math_get(point.y))
-            y = common_math_get(point.y);
+        v1.set_coordinates(common_math_get(point.x), common_math_get(point.y), common_math_get(point.z));
+        poly = new CM3dPolygon(v1, v1, v1);
+        poly->convert_by_camera_view(vue->camera);
+        poly->get_vertex1_by_camera()->get_coordinates(&tmpx, &tmpy, &tmpz);
+        delete poly;
+        if (vue->scene->y_axis_is_inverted())
+            tmpy = -tmpy;
+        if (xmin > tmpx)
+            xmin = tmpx;
+        if (xmax < tmpx)
+            xmax = tmpx;
+        if (ymin > tmpy)
+            ymin = tmpy;
+        if (ymax < tmpy)
+            ymax = tmpy;
+        if (zmin > tmpz)
+            zmin = tmpz;
         
         list_parcours = g_list_next(list_parcours);
     }
+    printf("xmin, xmax, ymin, ymax, zmin : %lf %lf %lf %lf %lf\n", xmin, xmax, ymin, ymax, zmin);
     
-    yymin = y;
+//    yymin = zmin;
     // On positionne le centre de la caméra
-    x = (xmin+xmax)/2.;
-    z = (ymin+ymax)/2.;
-    y = y-MAX(xmax-xmin,ymax-ymin);
-    if (vue->camera == NULL)
-    {
-        vue->camera = new CM3dCamera(x, y, z, x, y+1., z, 90, allocation.width, allocation.height);
-        vue->camera->rotation_on_axe_of_view(0);
-        if (allocation.height < allocation.width)
-            vue->camera->set_d(allocation.height / (2 * tan(vue->camera->get_angle() / 2)));
-        else
-            vue->camera->set_d(allocation.width / (2 * tan(vue->camera->get_angle() / 2)));
-    }
-    else
-    {
-        vue->camera->set_position(x, y, z);
-        vue->camera->set_target(x, y+1., z);
-        vue->camera->rotation_on_axe_of_view(0);
-    }
+    xtmp = (xmin+xmax)/2.;
+    ytmp = zmin-sqrt((xmax-xmin)*(xmax-xmin)+(ymax-ymin)*(ymax-ymin));
+    ztmp = (ymin+ymax)/2.;
+    printf("xyz : %lf %lf %lf\n", xtmp, ytmp, ztmp);
+    
+    v1.set_coordinates(1, 0, 0);
+    v2.set_coordinates(0, 0, 0);
+    poly = new CM3dPolygon(v1, v2, v2);
+    poly->convert_by_camera_view(vue->camera);
+    poly->get_vertex1_by_camera()->get_coordinates(&tmpx, &tmpy, &tmpz);
+    poly->get_vertex2_by_camera()->get_coordinates(&tmpx2, &tmpy2, &tmpz2);
+    delete poly;
+    tmpxx = tmpx-tmpx2;
+    tmpxy = tmpy-tmpy2;
+    tmpxz = tmpz-tmpz2;
+    printf("vx : %lf %lf %lf\n", tmpxx, tmpxy, tmpxz);
+    
+    v1.set_coordinates(0, 0, -1);
+    v2.set_coordinates(0, 0, 0);
+    poly = new CM3dPolygon(v1, v2, v2);
+    poly->convert_by_camera_view(vue->camera);
+    poly->get_vertex1_by_camera()->get_coordinates(&tmpx, &tmpy, &tmpz);
+    poly->get_vertex2_by_camera()->get_coordinates(&tmpx2, &tmpy2, &tmpz2);
+    delete poly;
+    tmpyx = tmpx-tmpx2;
+    tmpyy = tmpy-tmpy2;
+    tmpyz = tmpz-tmpz2;
+    printf("vy : %lf %lf %lf\n", tmpyx, tmpyy, tmpyz);
+    
+    v1.set_coordinates(0, 1, 0);
+    v2.set_coordinates(0, 0, 0);
+    poly = new CM3dPolygon(v1, v2, v2);
+    poly->convert_by_camera_view(vue->camera);
+    poly->get_vertex1_by_camera()->get_coordinates(&tmpx, &tmpy, &tmpz);
+    poly->get_vertex2_by_camera()->get_coordinates(&tmpx2, &tmpy2, &tmpz2);
+    delete poly;
+    tmpzx = tmpx-tmpx2;
+    tmpzy = tmpy-tmpy2;
+    tmpzz = tmpz-tmpz2;
+    printf("vz : %lf %lf %lf\n", tmpzx, tmpzy, tmpzz);
+    
+    printf("%lf\n", y);
+    printf("xyzold : %lf %lf %lf\n", x, y, z);
+    printf("z : %lf %lf\n", vue->camera->get_cosz(), vue->camera->get_sinz());
+    x = tmpxx*xtmp+tmpyx*ytmp+tmpzx*ztmp;
+    y = tmpxy*xtmp+tmpyy*ytmp+tmpzy*ztmp;
+    z = tmpxz*xtmp+tmpyz*ytmp+tmpzz*ztmp;
+    printf("xyzold2 : %lf %lf %lf\n", x, y, z);
+    xtmp = x*vue->camera->get_cosz() - z*vue->camera->get_sinz();
+    ztmp = x*vue->camera->get_sinz() + z*vue->camera->get_cosz();
+    ytmp = y;
+    printf("xyznew : %lf %lf %lf\n", xtmp, ytmp, ztmp);
+    vue->camera->set_position(xtmp, ytmp, ztmp);
+    vue->camera->set_target(xtmp+cx, ytmp+cy, ztmp+cz);
     // A ce stade, on est sûr qu'il n'y a besoin plus que de zoomer et de centrer la structure
     // au sein de la fenêtre.
     
-    // Initialisation du vecteur de déplacement.
-    m3d->gdx = 1.;
-    m3d->gdy = 0.;
-    m3d->gdz = 0.;
-    m3d->hbx = 0.;
-    m3d->hby = 0.;
-    m3d->hbz = 1.;
-    
-    do
+/*    do
     {
         // On centre les points par rapport à l'abscisse
         BUG(m3d_get_rect(&xmin, &xmax, &ymin, &ymax, projet), FALSE);
@@ -509,9 +570,147 @@ gboolean m3d_camera_axe_x_z_y(Projet *projet)
         
         BUG(m3d_get_rect(&xmin2, &xmax2, &ymin2, &ymax2, projet), FALSE);
         // Tant qu'une fois le zoom fini, le dessin n'est pas centré.
-    } while ((fabs(xmax2+xmin2-allocation.width) > 1.) || (fabs(ymax2+ymin2-allocation.height) > 1.));
+    } while ((fabs(xmax2+xmin2-allocation.width) > 1.) || (fabs(ymax2+ymin2-allocation.height) > 1.));*/
     
     BUG(m3d_rafraichit(projet), FALSE);
+    
+    return TRUE;
+}
+
+
+gboolean m3d_camera_axe_x_z_y(Projet *projet)
+/* Description : Positionne la caméra pour voir toute la structure dans le plan xz vers la
+ *               direction y.
+ * Paramètres : Projet *projet : la variable projet.
+ * Valeur renvoyée :
+ *   Succès : TRUE.
+ *   Échec : FALSE :
+ *             projet == NULL,
+ *             projet->list_gtk.m3d == NULL,
+ *             m3d->data == NULL,
+ *             en cas d'erreur due à une fonction interne.
+ */
+{
+    Gtk_m3d     *m3d;
+    SGlobalData *vue;
+    double      x, y, z; // Les coordonnées de la caméra
+    EF_Noeud    *noeud; // Noeud en cours d'étude
+    EF_Point    point; // Position du noeud en cours d'étude
+    GtkAllocation   allocation; // Dimension de la fenêtre 2D.
+    double      cx, cy, cz; // Le vecteur de la caméra
+    
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    
+    BUGMSG(projet->list_gtk.comp.window, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "principale");
+    
+    m3d = &projet->list_gtk.m3d;
+    BUGMSG(m3d->data, FALSE, gettext("Paramètre %s incorrect.\n"), "m3d->data");
+    vue = (SGlobalData*)m3d->data;
+    
+    // Aucune noeud, on ne fait rien
+    if (projet->modele.noeuds == NULL)
+        return TRUE;
+    
+    // Un seul noeud, on l'affiche en gros plan.
+    noeud = (EF_Noeud*)projet->modele.noeuds->data;
+    BUG(EF_noeuds_renvoie_position(noeud, &point), FALSE);
+    
+    gtk_widget_get_allocation(GTK_WIDGET(m3d->drawing), &allocation);
+    x = 0;
+    y = 0;
+    z = 0;
+    cx = 0.;
+    cy = 1.;
+    cz = 0.;
+    if (vue->camera == NULL)
+    {
+        vue->camera = new CM3dCamera(x, y, z, x+cx, y+cy, z+cz, 90, allocation.width, allocation.height);
+    }
+    else
+    {
+        vue->camera->set_position(x, y, z);
+        vue->camera->set_target(x+cx, y+cy, z+cz);
+    }
+    vue->camera->rotation_on_axe_of_view(0);
+    
+    // Initialisation du vecteur de déplacement.
+    m3d->gdx = 1.;
+    m3d->gdy = 0.;
+    m3d->gdz = 0.;
+    m3d->hbx = 0.;
+    m3d->hby = 0.;
+    m3d->hbz = 1.;
+    
+    BUG(m3d_camera_zoom_all(projet), FALSE);
+    
+    return TRUE;
+}
+
+
+gboolean m3d_camera_axe_x_z__y(Projet *projet)
+/* Description : Positionne la caméra pour voir toute la structure dans le plan xz vers la
+ *               direction -y.
+ * Paramètres : Projet *projet : la variable projet.
+ * Valeur renvoyée :
+ *   Succès : TRUE.
+ *   Échec : FALSE :
+ *             projet == NULL,
+ *             projet->list_gtk.m3d == NULL,
+ *             m3d->data == NULL,
+ *             en cas d'erreur due à une fonction interne.
+ */
+{
+    Gtk_m3d     *m3d;
+    SGlobalData *vue;
+    double      x, y, z; // Les coordonnées de la caméra
+    EF_Noeud    *noeud; // Noeud en cours d'étude
+    EF_Point    point; // Position du noeud en cours d'étude
+    GtkAllocation   allocation; // Dimension de la fenêtre 2D.
+    double      cx, cy, cz; // Le vecteur de la caméra
+    
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    
+    BUGMSG(projet->list_gtk.comp.window, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "principale");
+    
+    m3d = &projet->list_gtk.m3d;
+    BUGMSG(m3d->data, FALSE, gettext("Paramètre %s incorrect.\n"), "m3d->data");
+    vue = (SGlobalData*)m3d->data;
+    
+    // Aucune noeud, on ne fait rien
+    if (projet->modele.noeuds == NULL)
+        return TRUE;
+    
+    // Un seul noeud, on l'affiche en gros plan.
+    noeud = (EF_Noeud*)projet->modele.noeuds->data;
+    BUG(EF_noeuds_renvoie_position(noeud, &point), FALSE);
+    
+    gtk_widget_get_allocation(GTK_WIDGET(m3d->drawing), &allocation);
+    x = 0;
+    y = 0;
+    z = 0;
+    cx = 0.;
+    cy = -1.;
+    cz = 0.;
+    if (vue->camera == NULL)
+    {
+        vue->camera = new CM3dCamera(x, y, z, x+cx, y+cy, z+cz, 90, allocation.width, allocation.height);
+    }
+    else
+    {
+        vue->camera->set_position(x, y, z);
+        vue->camera->set_target(x+cx, y+cy, z+cz);
+    }
+    vue->camera->rotation_on_axe_of_view(180);
+    
+    // Initialisation du vecteur de déplacement.
+    m3d->gdx = 1.;
+    m3d->gdy = 0.;
+    m3d->gdz = 0.;
+    m3d->hbx = 0.;
+    m3d->hby = 0.;
+    m3d->hbz = 1.;
+    
+    BUG(m3d_camera_zoom_all(projet), FALSE);
     
     return TRUE;
 }
