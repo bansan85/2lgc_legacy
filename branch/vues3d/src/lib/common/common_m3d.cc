@@ -491,9 +491,6 @@ gboolean m3d_camera_zoom_all(Projet *projet)
     v1.y_rotate(&v1, vue->camera->get_cosy(), -vue->camera->get_siny());
     v1.get_coordinates(&xtmp, &ztmp, &ytmp);
     printf("xyztest : %lf %lf %lf\n", xtmp, ytmp, ztmp);
-    xtmp = 0;
-    ytmp = 0;
-    ztmp = 0;
     vue->camera->set_position(xtmp, ytmp, ztmp);
     vue->camera->set_target(xtmp+cx, ytmp+cy, ztmp+cz);
     // A ce stade, on est sûr qu'il n'y a besoin plus que de zoomer et de centrer la structure
