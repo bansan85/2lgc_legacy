@@ -450,7 +450,7 @@ gboolean m3d_camera_zoom_all(Projet *projet)
     tmpxz = tmpz-tmpz2;
     printf("vx : %lf %lf %lf\n", tmpxx, tmpxy, tmpxz);
     
-    v1.set_coordinates(0, 0, -1);
+    v1.set_coordinates(0, 0, 1);
     v2.set_coordinates(0, 0, 0);
     poly = new CM3dPolygon(v1, v2, v2);
     poly->convert_by_camera_view(vue->camera);
@@ -481,10 +481,19 @@ gboolean m3d_camera_zoom_all(Projet *projet)
     y = tmpxy*xtmp+tmpyy*ytmp+tmpzy*ztmp;
     z = tmpxz*xtmp+tmpyz*ytmp+tmpzz*ztmp;
     printf("xyzold2 : %lf %lf %lf\n", x, y, z);
-    xtmp = x*vue->camera->get_cosz() - z*vue->camera->get_sinz();
-    ztmp = x*vue->camera->get_sinz() + z*vue->camera->get_cosz();
-    ytmp = y;
+    v1.set_coordinates(x, y, z);
+    v1.z_rotate(&v1, vue->camera->get_cosz(), vue->camera->get_sinz());
+    v1.get_coordinates(&xtmp, &ytmp, &ztmp);
     printf("xyznew : %lf %lf %lf\n", xtmp, ytmp, ztmp);
+    // On fait l'inverse de convert_by_camera_view
+    v1.z_rotate(&v1, vue->camera->get_cosz(), -vue->camera->get_sinz());
+    v1.x_rotate(&v1, vue->camera->get_cosx(), -vue->camera->get_sinx());
+    v1.y_rotate(&v1, vue->camera->get_cosy(), -vue->camera->get_siny());
+    v1.get_coordinates(&xtmp, &ztmp, &ytmp);
+    printf("xyztest : %lf %lf %lf\n", xtmp, ytmp, ztmp);
+    xtmp = 0;
+    ytmp = 0;
+    ztmp = 0;
     vue->camera->set_position(xtmp, ytmp, ztmp);
     vue->camera->set_target(xtmp+cx, ytmp+cy, ztmp+cz);
     // A ce stade, on est sûr qu'il n'y a besoin plus que de zoomer et de centrer la structure
