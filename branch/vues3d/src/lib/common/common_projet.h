@@ -933,6 +933,7 @@ typedef struct __Comp_Gtk
     GtkWidget   *menu_affichage_vues_list;
     GtkWidget   *menu_affichage_xzy;
     GtkWidget   *menu_affichage_xz_y;
+    GtkWidget   *menu_affichage_yzx;
     GtkWidget   *menu_modelisation;
     GtkWidget   *menu_modelisation_list;
     GtkWidget   *menu_modelisation_noeud;

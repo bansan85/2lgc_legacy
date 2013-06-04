@@ -709,8 +709,77 @@ gboolean m3d_camera_axe_x_z__y(Projet *projet)
     vue->camera->rotation_on_axe_of_view(180);
     
     // Initialisation du vecteur de déplacement.
-    m3d->gdx = 1.;
+    m3d->gdx = -1.;
     m3d->gdy = 0.;
+    m3d->gdz = 0.;
+    m3d->hbx = 0.;
+    m3d->hby = 0.;
+    m3d->hbz = 1.;
+    
+    BUG(m3d_camera_zoom_all(projet), FALSE);
+    
+    return TRUE;
+}
+
+
+gboolean m3d_camera_axe_y_z_x(Projet *projet)
+/* Description : Positionne la caméra pour voir toute la structure dans le plan yz vers la
+ *               direction +x.
+ * Paramètres : Projet *projet : la variable projet.
+ * Valeur renvoyée :
+ *   Succès : TRUE.
+ *   Échec : FALSE :
+ *             projet == NULL,
+ *             projet->list_gtk.m3d == NULL,
+ *             m3d->data == NULL,
+ *             en cas d'erreur due à une fonction interne.
+ */
+{
+    Gtk_m3d     *m3d;
+    SGlobalData *vue;
+    double      x, y, z; // Les coordonnées de la caméra
+    EF_Noeud    *noeud; // Noeud en cours d'étude
+    EF_Point    point; // Position du noeud en cours d'étude
+    GtkAllocation   allocation; // Dimension de la fenêtre 2D.
+    double      cx, cy, cz; // Le vecteur de la caméra
+    
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    
+    BUGMSG(projet->list_gtk.comp.window, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "principale");
+    
+    m3d = &projet->list_gtk.m3d;
+    BUGMSG(m3d->data, FALSE, gettext("Paramètre %s incorrect.\n"), "m3d->data");
+    vue = (SGlobalData*)m3d->data;
+    
+    // Aucune noeud, on ne fait rien
+    if (projet->modele.noeuds == NULL)
+        return TRUE;
+    
+    // Un seul noeud, on l'affiche en gros plan.
+    noeud = (EF_Noeud*)projet->modele.noeuds->data;
+    BUG(EF_noeuds_renvoie_position(noeud, &point), FALSE);
+    
+    gtk_widget_get_allocation(GTK_WIDGET(m3d->drawing), &allocation);
+    x = 0;
+    y = 0;
+    z = 0;
+    cx = 1.;
+    cy = 0.;
+    cz = 0.;
+    if (vue->camera == NULL)
+    {
+        vue->camera = new CM3dCamera(x, y, z, x+cx, y+cy, z+cz, 90, allocation.width, allocation.height);
+    }
+    else
+    {
+        vue->camera->set_position(x, y, z);
+        vue->camera->set_target(x+cx, y+cy, z+cz);
+    }
+    vue->camera->rotation_on_axe_of_view(90);
+    
+    // Initialisation du vecteur de déplacement.
+    m3d->gdx = 0.;
+    m3d->gdy = -1.;
     m3d->gdz = 0.;
     m3d->hbx = 0.;
     m3d->hby = 0.;

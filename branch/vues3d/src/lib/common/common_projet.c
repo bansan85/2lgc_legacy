@@ -219,6 +219,10 @@ gboolean projet_init_graphique(Projet *projet)
     gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_affichage_vues_list), comps->menu_affichage_xz_y);
     g_signal_connect_swapped(comps->menu_affichage_xz_y, "activate", G_CALLBACK(m3d_camera_axe_x_z__y), projet);
     
+    comps->menu_affichage_yzx = gtk_menu_item_new_with_label(gettext("YZ vers X+"));
+    gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu_affichage_vues_list), comps->menu_affichage_yzx);
+    g_signal_connect_swapped(comps->menu_affichage_yzx, "activate", G_CALLBACK(m3d_camera_axe_y_z_x), projet);
+    
     comps->menu_modelisation_list = gtk_menu_new();
     comps->menu_modelisation = gtk_menu_item_new_with_label(gettext("Modélisation"));
     gtk_menu_shell_append(GTK_MENU_SHELL(comps->menu), comps->menu_modelisation);
