@@ -344,24 +344,17 @@ gboolean m3d_camera_zoom_all(Projet *projet)
 {
     Gtk_m3d     *m3d;
     SGlobalData *vue;
-//    double      yymin;
     double      x, y, z; // Les coordonnées de la caméra
     double      xtmp, ytmp, ztmp; // Les coordonnées de la caméra
     EF_Noeud    *noeud; // Noeud en cours d'étude
     EF_Point    point; // Position du noeud en cours d'étude
     double      ymax, ymin, xmin, xmax, zmin; // Leur projection en 2D
-//    double      ymax2, ymin2, xmin2, xmax2; // Leur projection en 2D
     GList       *list_parcours; // Noeud en cours d'étude
     GtkAllocation   allocation; // Dimension de la fenêtre 2D.
-//    double      dx, dz, dy;
     double      cx, cy, cz; // Le vecteur de la caméra
     CM3dVertex  v1, v2;
     CM3dPolygon *poly;
     double      tmpx, tmpy, tmpz;
-    double      tmpx2, tmpy2, tmpz2;
-    double      tmpxx, tmpxy, tmpxz;
-    double      tmpyx, tmpyy, tmpyz;
-    double      tmpzx, tmpzy, tmpzz;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
@@ -396,8 +389,7 @@ gboolean m3d_camera_zoom_all(Projet *projet)
     poly->convert_by_camera_view(vue->camera);
     poly->get_vertex1_by_camera()->get_coordinates(&tmpx, &tmpy, &tmpz);
     delete poly;
-    if (vue->scene->y_axis_is_inverted())
-        tmpy = -tmpy;
+    printf("noeud : xyz : %lf %lf %lf, écran : %lf %lf %lf\n", common_math_get(point.x), common_math_get(point.y), common_math_get(point.z), tmpx, tmpz, tmpy);
     xmin = tmpx;
     xmax = tmpx;
     ymax = tmpy;
@@ -414,8 +406,7 @@ gboolean m3d_camera_zoom_all(Projet *projet)
         poly->convert_by_camera_view(vue->camera);
         poly->get_vertex1_by_camera()->get_coordinates(&tmpx, &tmpy, &tmpz);
         delete poly;
-        if (vue->scene->y_axis_is_inverted())
-            tmpy = -tmpy;
+        printf("noeud : xyz : %lf %lf %lf, écran : %lf %lf %lf\n", common_math_get(point.x), common_math_get(point.y), common_math_get(point.z), tmpx, tmpz, tmpy);
         if (xmin > tmpx)
             xmin = tmpx;
         if (xmax < tmpx)
@@ -431,66 +422,17 @@ gboolean m3d_camera_zoom_all(Projet *projet)
     }
     printf("xmin, xmax, ymin, ymax, zmin : %lf %lf %lf %lf %lf\n", xmin, xmax, ymin, ymax, zmin);
     
-//    yymin = zmin;
     // On positionne le centre de la caméra
     xtmp = (xmin+xmax)/2.;
     ytmp = zmin-sqrt((xmax-xmin)*(xmax-xmin)+(ymax-ymin)*(ymax-ymin));
     ztmp = (ymin+ymax)/2.;
-    printf("xyz : %lf %lf %lf\n", xtmp, ytmp, ztmp);
-    
-    v1.set_coordinates(1, 0, 0);
-    v2.set_coordinates(0, 0, 0);
-    poly = new CM3dPolygon(v1, v2, v2);
-    poly->convert_by_camera_view(vue->camera);
-    poly->get_vertex1_by_camera()->get_coordinates(&tmpx, &tmpy, &tmpz);
-    poly->get_vertex2_by_camera()->get_coordinates(&tmpx2, &tmpy2, &tmpz2);
-    delete poly;
-    tmpxx = tmpx-tmpx2;
-    tmpxy = tmpy-tmpy2;
-    tmpxz = tmpz-tmpz2;
-    printf("vx : %lf %lf %lf\n", tmpxx, tmpxy, tmpxz);
-    
-    v1.set_coordinates(0, 0, 1);
-    v2.set_coordinates(0, 0, 0);
-    poly = new CM3dPolygon(v1, v2, v2);
-    poly->convert_by_camera_view(vue->camera);
-    poly->get_vertex1_by_camera()->get_coordinates(&tmpx, &tmpy, &tmpz);
-    poly->get_vertex2_by_camera()->get_coordinates(&tmpx2, &tmpy2, &tmpz2);
-    delete poly;
-    tmpyx = tmpx-tmpx2;
-    tmpyy = tmpy-tmpy2;
-    tmpyz = tmpz-tmpz2;
-    printf("vy : %lf %lf %lf\n", tmpyx, tmpyy, tmpyz);
-    
-    v1.set_coordinates(0, 1, 0);
-    v2.set_coordinates(0, 0, 0);
-    poly = new CM3dPolygon(v1, v2, v2);
-    poly->convert_by_camera_view(vue->camera);
-    poly->get_vertex1_by_camera()->get_coordinates(&tmpx, &tmpy, &tmpz);
-    poly->get_vertex2_by_camera()->get_coordinates(&tmpx2, &tmpy2, &tmpz2);
-    delete poly;
-    tmpzx = tmpx-tmpx2;
-    tmpzy = tmpy-tmpy2;
-    tmpzz = tmpz-tmpz2;
-    printf("vz : %lf %lf %lf\n", tmpzx, tmpzy, tmpzz);
-    
-    printf("%lf\n", y);
-    printf("xyzold : %lf %lf %lf\n", x, y, z);
-    printf("z : %lf %lf\n", vue->camera->get_cosz(), vue->camera->get_sinz());
-    x = tmpxx*xtmp+tmpyx*ytmp+tmpzx*ztmp;
-    y = tmpxy*xtmp+tmpyy*ytmp+tmpzy*ztmp;
-    z = tmpxz*xtmp+tmpyz*ytmp+tmpzz*ztmp;
-    printf("xyzold2 : %lf %lf %lf\n", x, y, z);
-    v1.set_coordinates(x, y, z);
-    v1.z_rotate(&v1, vue->camera->get_cosz(), vue->camera->get_sinz());
-    v1.get_coordinates(&xtmp, &ytmp, &ztmp);
-    printf("xyznew : %lf %lf %lf\n", xtmp, ytmp, ztmp);
-    // On fait l'inverse de convert_by_camera_view
+    v1.set_coordinates(xtmp, ztmp, ytmp);
     v1.z_rotate(&v1, vue->camera->get_cosz(), -vue->camera->get_sinz());
     v1.x_rotate(&v1, vue->camera->get_cosx(), -vue->camera->get_sinx());
     v1.y_rotate(&v1, vue->camera->get_cosy(), -vue->camera->get_siny());
-    v1.get_coordinates(&xtmp, &ztmp, &ytmp);
-    printf("xyztest : %lf %lf %lf\n", xtmp, ytmp, ztmp);
+    v1.get_coordinates(&xtmp, &ytmp, &ztmp);
+    printf("xyz : %lf %lf %lf\n", xtmp, ytmp, ztmp);
+    
     vue->camera->set_position(xtmp, ytmp, ztmp);
     vue->camera->set_target(xtmp+cx, ytmp+cy, ztmp+cz);
     // A ce stade, on est sûr qu'il n'y a besoin plus que de zoomer et de centrer la structure
