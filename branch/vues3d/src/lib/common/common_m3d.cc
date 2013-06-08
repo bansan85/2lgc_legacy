@@ -356,6 +356,10 @@ gboolean m3d_camera_zoom_all(Projet *projet)
     CM3dPolygon *poly;
     double      tmpx, tmpy, tmpz;
     
+    double      dx, dy, dz;
+    double      xmin2, xmax2, ymin2, ymax2;
+    double      yymin;
+    
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
     BUGMSG(projet->list_gtk.comp.window, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "principale");
@@ -389,7 +393,6 @@ gboolean m3d_camera_zoom_all(Projet *projet)
     poly->convert_by_camera_view(vue->camera);
     poly->get_vertex1_by_camera()->get_coordinates(&tmpx, &tmpy, &tmpz);
     delete poly;
-    printf("noeud : xyz : %lf %lf %lf, écran : %lf %lf %lf\n", common_math_get(point.x), common_math_get(point.y), common_math_get(point.z), tmpx, tmpz, tmpy);
     xmin = tmpx;
     xmax = tmpx;
     ymax = tmpy;
@@ -406,7 +409,6 @@ gboolean m3d_camera_zoom_all(Projet *projet)
         poly->convert_by_camera_view(vue->camera);
         poly->get_vertex1_by_camera()->get_coordinates(&tmpx, &tmpy, &tmpz);
         delete poly;
-        printf("noeud : xyz : %lf %lf %lf, écran : %lf %lf %lf\n", common_math_get(point.x), common_math_get(point.y), common_math_get(point.z), tmpx, tmpz, tmpy);
         if (xmin > tmpx)
             xmin = tmpx;
         if (xmax < tmpx)
@@ -420,7 +422,6 @@ gboolean m3d_camera_zoom_all(Projet *projet)
         
         list_parcours = g_list_next(list_parcours);
     }
-    printf("xmin, xmax, ymin, ymax, zmin : %lf %lf %lf %lf %lf\n", xmin, xmax, ymin, ymax, zmin);
     
     // On positionne le centre de la caméra
     xtmp = (xmin+xmax)/2.;
@@ -430,19 +431,21 @@ gboolean m3d_camera_zoom_all(Projet *projet)
     v1.z_rotate(&v1, vue->camera->get_cosz(), -vue->camera->get_sinz());
     v1.x_rotate(&v1, vue->camera->get_cosx(), -vue->camera->get_sinx());
     v1.y_rotate(&v1, vue->camera->get_cosy(), -vue->camera->get_siny());
-    v1.get_coordinates(&xtmp, &ytmp, &ztmp);
-    printf("xyz : %lf %lf %lf\n", xtmp, ytmp, ztmp);
+    v1.get_coordinates(&x, &y, &z);
     
-    vue->camera->set_position(xtmp, ytmp, ztmp);
-    vue->camera->set_target(xtmp+cx, ytmp+cy, ztmp+cz);
+    vue->camera->set_position(x, y, z);
+    vue->camera->set_target(x+cx, y+cy, z+cz);
     // A ce stade, on est sûr qu'il n'y a besoin plus que de zoomer et de centrer la structure
     // au sein de la fenêtre.
     
-/*    do
+    yymin = zmin;
+    do
     {
-        // On centre les points par rapport à l'abscisse
+        // On centre les points par rapport à l'abscisse (x)
         BUG(m3d_get_rect(&xmin, &xmax, &ymin, &ymax, projet), FALSE);
+        printf("mini/maxi : %lf %lf %lf %lf\n", xmin, xmax, ymin, ymax);
         dx = 1;
+        printf("X\n");
         do
         {
             vue->camera->set_position(x+dx, y, z);
@@ -461,9 +464,14 @@ gboolean m3d_camera_zoom_all(Projet *projet)
             vue->camera->set_position(x, y, z);
             vue->camera->set_target(x, y+1., z);
             BUG(m3d_get_rect(&xmin, &xmax, &ymin, &ymax, projet), FALSE);
+            printf("xmini/xmaxi : %lf/%lf %lf/%lf\n", xmin, xmin2, xmax, xmax2);
+            printf("xcentre : %lf %lf\n", xmin+xmax, xmin2+xmax2);
         } while (fabs((xmin+xmax)/2.-(xmin2+xmax2)/2.) > 1.);
         
-        // On centre les points par rapport à l'abscisse
+        printf("xmini/xmaxi : %lf/%lf %lf/%lf\n", xmin, xmin2, xmax, xmax2);
+        printf("xcentre : %lf %lf\n", xmin+xmax, xmin2+xmax2);
+        printf("Y\n");
+        // On centre les points par rapport à l'ordonnée (y)
         BUG(m3d_get_rect(&xmin, &xmax, &ymin, &ymax, projet), FALSE);
         dz = 1;
         do
@@ -481,9 +489,14 @@ gboolean m3d_camera_zoom_all(Projet *projet)
             vue->camera->set_position(x, y, z);
             vue->camera->set_target(x, y+1., z);
             BUG(m3d_get_rect(&xmin, &xmax, &ymin, &ymax, projet), FALSE);
+            printf("ymini/ymaxi : %lf/%lf %lf/%lf\n", ymin, ymin2, ymax, ymax2);
+            printf("ycentre : %lf %lf\n", ymin+ymax, ymin2+ymax2);
         } while (fabs((ymin+ymax)/2.-(ymin2+ymax2)/2.) > 1.);
+        printf("ymini/ymaxi : %lf/%lf %lf/%lf\n", ymin, ymin2, ymax, ymax2);
+        printf("ycentre : %lf %lf\n", ymin+ymax, ymin2+ymax2);
         
-        // On centre les points par rapport à l'abscisse
+        // On zoom autant que possible de tel sorte que la structure tienne au plus juste
+        // dans la fenêtre.
         BUG(m3d_get_rect(&xmin, &xmax, &ymin, &ymax, projet), FALSE);
         dy = (yymin-y)/5.;
         do
@@ -497,10 +510,10 @@ gboolean m3d_camera_zoom_all(Projet *projet)
             // Le nouveau y est obtenu en cherchant f(x)=allocation.width
             // On fait le même calcul pour les ordonnées.
             // Ensuite, on retient la valeur de dx minimale.
-            if ((!ERREUR_RELATIVE_EGALE(xmax-xmax2-xmin+xmin2, 0.)) && (!ERREUR_RELATIVE_EGALE(ymax-ymax2-ymin+ymin2, 0.)))
+            if ((!ERREUR_RELATIVE_EGALE(xmax-xmin-(xmax2-xmin2), 0.)) && (!ERREUR_RELATIVE_EGALE(ymax-ymin-(ymax2-ymin2), 0.)))
             {
-                dy = MIN(-dy*(allocation.width-xmax+xmin)/(xmax-xmax2-xmin+xmin2),
-                         -dy*(allocation.height-ymax+ymin)/(ymax-ymax2-ymin+ymin2))/5.;
+                dy = MIN(-dy*(allocation.width-xmax+xmin)/(xmax-xmin-(xmax2-xmin2)),
+                         -dy*(allocation.height-ymax+ymin)/(ymax-ymin-(ymax2-ymin2)))/5.;
                 // Il est nécessaire de brider les déplacements pour éviter que l'estimation
                 // ne mette un point derrière la caméra.
                 // On recule un tout petit peu plus pour éviter que le point le plus proche
@@ -518,7 +531,7 @@ gboolean m3d_camera_zoom_all(Projet *projet)
         
         BUG(m3d_get_rect(&xmin2, &xmax2, &ymin2, &ymax2, projet), FALSE);
         // Tant qu'une fois le zoom fini, le dessin n'est pas centré.
-    } while ((fabs(xmax2+xmin2-allocation.width) > 1.) || (fabs(ymax2+ymin2-allocation.height) > 1.));*/
+    } while ((fabs(xmax2+xmin2-allocation.width) > 1.) || (fabs(ymax2+ymin2-allocation.height) > 1.));
     
     BUG(m3d_rafraichit(projet), FALSE);
     
