@@ -356,9 +356,10 @@ gboolean m3d_camera_zoom_all(Projet *projet)
     CM3dPolygon *poly;
     double      tmpx, tmpy, tmpz;
     
-    double      dx, dy, dz;
+    double      dx, dz;
     double      xmin2, xmax2, ymin2, ymax2;
-    double      yymin;
+    int         i;
+//    double      yymin, dy;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
@@ -438,18 +439,24 @@ gboolean m3d_camera_zoom_all(Projet *projet)
     // A ce stade, on est sûr qu'il n'y a besoin plus que de zoomer et de centrer la structure
     // au sein de la fenêtre.
     
-    yymin = zmin;
+//    yymin = zmin;
+    i = 1;
     do
     {
         // On centre les points par rapport à l'abscisse (x)
         BUG(m3d_get_rect(&xmin, &xmax, &ymin, &ymax, projet), FALSE);
         printf("mini/maxi : %lf %lf %lf %lf\n", xmin, xmax, ymin, ymax);
         dx = 1;
-        printf("X\n");
+        v1.set_coordinates(dx, 0, 0);
+        v1.z_rotate(&v1, vue->camera->get_cosz(), -vue->camera->get_sinz());
+        v1.x_rotate(&v1, vue->camera->get_cosx(), -vue->camera->get_sinx());
+        v1.y_rotate(&v1, vue->camera->get_cosy(), -vue->camera->get_siny());
+        v1.get_coordinates(&tmpx, &tmpy, &tmpz);
+        printf("X : %lf %lf %lf\n", tmpx, tmpy, tmpz);
         do
         {
-            vue->camera->set_position(x+dx, y, z);
-            vue->camera->set_target(x+dx, y+1., z);
+            vue->camera->set_position(x+tmpx, y+tmpy, z+tmpz);
+            vue->camera->set_target(x+tmpx+cx, y+tmpy+cy, z+tmpz+cz);
             BUG(m3d_get_rect(&xmin2, &xmax2, &ymin2, &ymax2, projet), FALSE);
             // Droite (a*X+b=Y) passant en X=x et Y = (xmin+xmax)/2
             //                             X=x+dx et Y = (xmin2+xmax2)/2
@@ -457,12 +464,19 @@ gboolean m3d_camera_zoom_all(Projet *projet)
             if (!ERREUR_RELATIVE_EGALE(xmax-xmax2+xmin-xmin2, 0.))
             {
                 dx = -dx*(allocation.width-xmax-xmin)/(xmax-xmax2+xmin-xmin2)/5.;
-                x = x + dx*5;
+                v1.set_coordinates(dx, 0, 0);
+                v1.z_rotate(&v1, vue->camera->get_cosz(), -vue->camera->get_sinz());
+                v1.x_rotate(&v1, vue->camera->get_cosx(), -vue->camera->get_sinx());
+                v1.y_rotate(&v1, vue->camera->get_cosy(), -vue->camera->get_siny());
+                v1.get_coordinates(&tmpx, &tmpy, &tmpz);
+                x = x + tmpx*5.;
+                y = y + tmpy*5.;
+                z = z + tmpz*5.;
             }
             else
                 break;
-            vue->camera->set_position(x, y, z);
-            vue->camera->set_target(x, y+1., z);
+            vue->camera->set_position(x+tmpx, y+tmpy, z+tmpz);
+            vue->camera->set_target(x+tmpx+cx, y+tmpy+cy, z+tmpz+cz);
             BUG(m3d_get_rect(&xmin, &xmax, &ymin, &ymax, projet), FALSE);
             printf("xmini/xmaxi : %lf/%lf %lf/%lf\n", xmin, xmin2, xmax, xmax2);
             printf("xcentre : %lf %lf\n", xmin+xmax, xmin2+xmax2);
@@ -474,20 +488,32 @@ gboolean m3d_camera_zoom_all(Projet *projet)
         // On centre les points par rapport à l'ordonnée (y)
         BUG(m3d_get_rect(&xmin, &xmax, &ymin, &ymax, projet), FALSE);
         dz = 1;
+        v1.set_coordinates(0, dz, 0);
+        v1.z_rotate(&v1, vue->camera->get_cosz(), -vue->camera->get_sinz());
+        v1.x_rotate(&v1, vue->camera->get_cosx(), -vue->camera->get_sinx());
+        v1.y_rotate(&v1, vue->camera->get_cosy(), -vue->camera->get_siny());
+        v1.get_coordinates(&tmpx, &tmpy, &tmpz);
         do
         {
-            vue->camera->set_position(x, y, z+dz);
-            vue->camera->set_target(x, y+1., z+dz);
+            vue->camera->set_position(x+tmpx, y+tmpy, z+tmpz);
+            vue->camera->set_target(x+tmpx+cx, y+tmpy+cy, z+tmpz+cz);
             BUG(m3d_get_rect(&xmin2, &xmax2, &ymin2, &ymax2, projet), FALSE);
             if (!ERREUR_RELATIVE_EGALE(ymax-ymax2+ymin-ymin2, 0.))
             {
                 dz = -dz*(allocation.height-ymax-ymin)/(ymax-ymax2+ymin-ymin2)/5.;
-                z = z + dz*5.;
+                v1.set_coordinates(0, dz, 0);
+                v1.z_rotate(&v1, vue->camera->get_cosz(), -vue->camera->get_sinz());
+                v1.x_rotate(&v1, vue->camera->get_cosx(), -vue->camera->get_sinx());
+                v1.y_rotate(&v1, vue->camera->get_cosy(), -vue->camera->get_siny());
+                v1.get_coordinates(&tmpx, &tmpy, &tmpz);
+                x = x + tmpx*5.;
+                y = y + tmpy*5.;
+                z = z + tmpz*5.;
             }
             else
                 break;
-            vue->camera->set_position(x, y, z);
-            vue->camera->set_target(x, y+1., z);
+            vue->camera->set_position(x+tmpx, y+tmpy, z+tmpz);
+            vue->camera->set_target(x+tmpx+cx, y+tmpy+cy, z+tmpz+cz);
             BUG(m3d_get_rect(&xmin, &xmax, &ymin, &ymax, projet), FALSE);
             printf("ymini/ymaxi : %lf/%lf %lf/%lf\n", ymin, ymin2, ymax, ymax2);
             printf("ycentre : %lf %lf\n", ymin+ymax, ymin2+ymax2);
@@ -496,7 +522,7 @@ gboolean m3d_camera_zoom_all(Projet *projet)
         printf("ycentre : %lf %lf\n", ymin+ymax, ymin2+ymax2);
         
         // On zoom autant que possible de tel sorte que la structure tienne au plus juste
-        // dans la fenêtre.
+/*        // dans la fenêtre.
         BUG(m3d_get_rect(&xmin, &xmax, &ymin, &ymax, projet), FALSE);
         dy = (yymin-y)/5.;
         do
@@ -527,11 +553,16 @@ gboolean m3d_camera_zoom_all(Projet *projet)
             vue->camera->set_position(x, y, z);
             vue->camera->set_target(x, y+1., z);
             BUG(m3d_get_rect(&xmin, &xmax, &ymin, &ymax, projet), FALSE);
-        } while ((fabs(xmax-xmin-allocation.width) > 1.) && (fabs(ymax-ymin-allocation.height) > 1.));
+        } while ((fabs(xmax-xmin-allocation.width) > 1.) && (fabs(ymax-ymin-allocation.height) > 1.));*/
         
         BUG(m3d_get_rect(&xmin2, &xmax2, &ymin2, &ymax2, projet), FALSE);
+        
+        i++;
+        if (i==100)
+            break;
         // Tant qu'une fois le zoom fini, le dessin n'est pas centré.
     } while ((fabs(xmax2+xmin2-allocation.width) > 1.) || (fabs(ymax2+ymin2-allocation.height) > 1.));
+    printf("%lf %lf %lf\n", x, y, z);
     
     BUG(m3d_rafraichit(projet), FALSE);
     
