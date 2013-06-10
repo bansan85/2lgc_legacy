@@ -359,7 +359,8 @@ gboolean m3d_camera_zoom_all(Projet *projet)
     double      dx, dy;
     double      xmin2, xmax2, ymin2, ymax2;
     int         i;
-//    double      yymin, dz;
+    double      yymin;
+//    double      dz;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
@@ -439,7 +440,8 @@ gboolean m3d_camera_zoom_all(Projet *projet)
     // A ce stade, on est sûr qu'il n'y a besoin plus que de zoomer et de centrer la structure
     // au sein de la fenêtre.
     
-//    yymin = zmin;
+    yymin = zmin - ytmp;
+    printf("yymin : %lf\n", yymin);
     i = 1;
     do
     {
@@ -959,11 +961,11 @@ gboolean m3d_camera_axe_x_y__z(Projet *projet)
     vue->camera->rotation_on_axe_of_view(180);
     
     // Initialisation du vecteur de déplacement.
-    m3d->gdx = -1.;
+    m3d->gdx = 1.;
     m3d->gdy = 0.;
     m3d->gdz = 0.;
     m3d->hbx = 0.;
-    m3d->hby = -1.;
+    m3d->hby = 1.;
     m3d->hbz = 0.;
     
     BUG(m3d_camera_zoom_all(projet), FALSE);
