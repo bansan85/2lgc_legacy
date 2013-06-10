@@ -47,6 +47,11 @@ gboolean m3d_configure_event(GtkWidget *drawing, GdkEventConfigure * ev, gpointe
 gboolean m3d_key_press(GtkWidget *widget, GdkEventKey *event, Projet *projet);
 
 gboolean m3d_camera_axe_x_z_y(Projet *projet) __attribute__((__warn_unused_result__));
+gboolean m3d_camera_axe_x_z__y(Projet *projet) __attribute__((__warn_unused_result__));
+gboolean m3d_camera_axe_y_z_x(Projet *projet) __attribute__((__warn_unused_result__));
+gboolean m3d_camera_axe_y_z__x(Projet *projet) __attribute__((__warn_unused_result__));
+gboolean m3d_camera_axe_x_y_z(Projet *projet) __attribute__((__warn_unused_result__));
+gboolean m3d_camera_axe_x_y__z(Projet *projet) __attribute__((__warn_unused_result__));
 gboolean m3d_actualise_graphique(Projet *projet, GList *noeuds, GList *barres) __attribute__((__warn_unused_result__));
 gboolean m3d_rafraichit(Projet *projet) __attribute__((__warn_unused_result__));
 
