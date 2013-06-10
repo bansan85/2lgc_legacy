@@ -356,9 +356,8 @@ gboolean m3d_camera_zoom_all(Projet *projet)
     CM3dPolygon *poly;
     double      tmpx, tmpy, tmpz;
     
-    double      dx, dy, dz;
+    double      dx, dy, dz, dztmp;
     double      xmin2, xmax2, ymin2, ymax2;
-    int         i;
     double      yymin;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
@@ -440,8 +439,6 @@ gboolean m3d_camera_zoom_all(Projet *projet)
     // au sein de la fenêtre.
     
     yymin = zmin - ytmp;
-    printf("yymin : %lf\n", yymin);
-    i = 1;
     do
     {
         // On centre les points par rapport à l'abscisse (x)
@@ -515,56 +512,63 @@ gboolean m3d_camera_zoom_all(Projet *projet)
         // dans la fenêtre.
         BUG(m3d_get_rect(&xmin, &xmax, &ymin, &ymax, projet), FALSE);
         dz = yymin/5.; // On commence par avancer d'1/5 de la distance maximale autorisée.
-        printf("dz : %lf\n", dz);
         do
         {
-            printf("On avance de %lf dans la direction %lf %lf %lf.\n", dz, cx, cy, cz);
+            // On avance de dz dans la direction de la caméra.
             vue->camera->set_position(x+dz*cx, y+dz*cy, z+dz*cz);
             vue->camera->set_target(x+dz*cx+cx, y+dz*cy+cy, z+dz*cz+cz);
             BUG(m3d_get_rect(&xmin2, &xmax2, &ymin2, &ymax2, projet), FALSE);
-            printf("Est-ce que ? %lf %lf %lf %lf\n", xmax-xmin, xmax2-xmin2, ymax-ymin, ymax2-ymin2);
-            printf("%lf %lf %lf %lf\n", xmax, xmin, xmax2, xmin2);
             // 1er cas : étude des abscisses
             // Droite (a*X+b=Y) passant en X=z et Y= xmax-xmin
             //                             X=z+dz et Y = xmax2-xmin2
             // Le nouveau y est obtenu en cherchant f(x)=allocation.width
             // On fait le même calcul pour les ordonnées.
             // Ensuite, on retient la valeur de dx minimale.
-            if ((!ERREUR_RELATIVE_EGALE(xmax-xmin-(xmax2-xmin2), 0.)) && (!ERREUR_RELATIVE_EGALE(ymax-ymin-(ymax2-ymin2), 0.)))
+            if (((!ERREUR_RELATIVE_EGALE(xmax-xmin-(xmax2-xmin2), 0.)) || ((xmax-xmin < 1.) && (xmax2-xmin2 < 1.) && (fabs(allocation.width-xmax-xmin) < 1.) && (fabs(allocation.width-xmax2-xmin2) < 1.))) &&
+              ((!ERREUR_RELATIVE_EGALE(ymax-ymin-(ymax2-ymin2), 0.)) || ((ymax-ymin < 1.) && (ymax2-ymin2 < 1.) && (fabs(allocation.height-ymax-ymin) < 1.) && (fabs(allocation.height-ymax2-ymin2) < 1.))))
             {
-                printf("testx : %d %lf %lf\n", allocation.width, xmax-xmin, xmax2-xmin2);
-                printf("testy : %d %lf %lf\n", allocation.height, ymax-ymin, ymax2-ymin2);
-                dz = MIN(-dz*(allocation.width-xmax+xmin)/(xmax-xmin-(xmax2-xmin2)),
-                         -dz*(allocation.height-ymax+ymin)/(ymax-ymin-(ymax2-ymin2)))/5.;
-                printf("L'extrapolation dit qu'il faut plutôt avancer de %lf.\n", dz*5.);
+                // Ici, les conditions (xmax-xmin < 0.5) && (xmax2-xmin2 < 0.5) &&
+                // (fabs(allocation.width-xmax-xmin) < 1.) &&
+                // (fabs(allocation.width-xmax2-xmin2) < 1.) sont là au cas où tous les noeuds
+                // sont alignés parfaitement à la vertical. Par exemple un schéma 2D en XZ
+                // avec la vue en YZ.
+                dztmp = NAN;
+                if (!ERREUR_RELATIVE_EGALE(xmax-xmin-(xmax2-xmin2), 0.))
+                    dztmp = -dz*(allocation.width-xmax+xmin)/(xmax-xmin-(xmax2-xmin2))/5.;
+                if (!ERREUR_RELATIVE_EGALE(ymax-ymin-(ymax2-ymin2), 0.))
+                {
+                    if (isnan(dztmp))
+                        dztmp = -dz*(allocation.height-ymax+ymin)/(ymax-ymin-(ymax2-ymin2))/5.;
+                    else
+                        dztmp = MIN(-dz*(allocation.height-ymax+ymin)/(ymax-ymin-(ymax2-ymin2))/5., dztmp);
+                }
+                dz = dztmp;
+                // L'extrapolation dit qu'il faut plutôt avancer de dz*5.
                 // Il est nécessaire de brider les déplacements pour éviter que l'estimation
-                // ne mette un point derrière la caméra.
+                // ne mette un point derrière la caméra. En effet, il est probable qu'une
+                // interpolation en 1/x soit plus adaptée (avec partant vers l'infini en 
+                // dz = yymin). TODO ;-)
                 // On recule un tout petit peu plus pour éviter que le point le plus proche
                 // de la caméra ne se trouve dans le plan XZ.
                 if (dz*5. > yymin)
                 {
-                    printf("Oups, c'est trop. On bride à %lf\n", yymin/5.5*5.);
+                    // Oups, on avance trop. On bride à yymin/5.5*5.
                     dz = yymin/5.5;
                 }
                 x = x+dz*cx*5.;
                 y = y+dz*cy*5.;
                 z = z+dz*cz*5.;
                 yymin = yymin - dz*5;
-                printf("Maintenant, on ne peut pas avancer de plus de %lf\n", yymin);
+                // Maintenant, on ne peut pas avancer de plus de yymin.
             }
             else
                 break;
-            printf("dz : %lf\n", dz);
             vue->camera->set_position(x, y, z);
             vue->camera->set_target(x+cx, y+cy, z+cz);
             BUG(m3d_get_rect(&xmin, &xmax, &ymin, &ymax, projet), FALSE);
         } while ((fabs(xmax-xmin-allocation.width) > 1.) && (fabs(ymax-ymin-allocation.height) > 1.));
         
         BUG(m3d_get_rect(&xmin2, &xmax2, &ymin2, &ymax2, projet), FALSE);
-        
-        i++;
-        if (i==100)
-            break;
         // Tant qu'une fois le zoom fini, le dessin n'est pas centré.
     } while ((fabs(xmax2+xmin2-allocation.width) > 1.) || (fabs(ymax2+ymin2-allocation.height) > 1.));
     
