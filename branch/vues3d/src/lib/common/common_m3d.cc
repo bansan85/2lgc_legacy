@@ -356,11 +356,10 @@ gboolean m3d_camera_zoom_all(Projet *projet)
     CM3dPolygon *poly;
     double      tmpx, tmpy, tmpz;
     
-    double      dx, dy;
+    double      dx, dy, dz;
     double      xmin2, xmax2, ymin2, ymax2;
     int         i;
     double      yymin;
-//    double      dz;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
@@ -513,38 +512,53 @@ gboolean m3d_camera_zoom_all(Projet *projet)
         } while (fabs((ymin+ymax)/2.-(ymin2+ymax2)/2.) > 1.);
         
         // On zoom autant que possible de tel sorte que la structure tienne au plus juste
-/*        // dans la fenêtre.
+        // dans la fenêtre.
         BUG(m3d_get_rect(&xmin, &xmax, &ymin, &ymax, projet), FALSE);
-        dy = (yymin-y)/5.;
+        dz = yymin/5.; // On commence par avancer d'1/5 de la distance maximale autorisée.
+        printf("dz : %lf\n", dz);
         do
         {
-            vue->camera->set_position(x, y+dy, z);
-            vue->camera->set_target(x, y+dy+1., z);
+            printf("On avance de %lf dans la direction %lf %lf %lf.\n", dz, cx, cy, cz);
+            vue->camera->set_position(x+dz*cx, y+dz*cy, z+dz*cz);
+            vue->camera->set_target(x+dz*cx+cx, y+dz*cy+cy, z+dz*cz+cz);
             BUG(m3d_get_rect(&xmin2, &xmax2, &ymin2, &ymax2, projet), FALSE);
+            printf("Est-ce que ? %lf %lf %lf %lf\n", xmax-xmin, xmax2-xmin2, ymax-ymin, ymax2-ymin2);
+            printf("%lf %lf %lf %lf\n", xmax, xmin, xmax2, xmin2);
             // 1er cas : étude des abscisses
-            // Droite (a*X+b=Y) passant en X=y et Y= xmax-xmin
-            //                             X=y+dy et Y = xmax2-xmin2
+            // Droite (a*X+b=Y) passant en X=z et Y= xmax-xmin
+            //                             X=z+dz et Y = xmax2-xmin2
             // Le nouveau y est obtenu en cherchant f(x)=allocation.width
             // On fait le même calcul pour les ordonnées.
             // Ensuite, on retient la valeur de dx minimale.
             if ((!ERREUR_RELATIVE_EGALE(xmax-xmin-(xmax2-xmin2), 0.)) && (!ERREUR_RELATIVE_EGALE(ymax-ymin-(ymax2-ymin2), 0.)))
             {
-                dy = MIN(-dy*(allocation.width-xmax+xmin)/(xmax-xmin-(xmax2-xmin2)),
-                         -dy*(allocation.height-ymax+ymin)/(ymax-ymin-(ymax2-ymin2)))/5.;
+                printf("testx : %d %lf %lf\n", allocation.width, xmax-xmin, xmax2-xmin2);
+                printf("testy : %d %lf %lf\n", allocation.height, ymax-ymin, ymax2-ymin2);
+                dz = MIN(-dz*(allocation.width-xmax+xmin)/(xmax-xmin-(xmax2-xmin2)),
+                         -dz*(allocation.height-ymax+ymin)/(ymax-ymin-(ymax2-ymin2)))/5.;
+                printf("L'extrapolation dit qu'il faut plutôt avancer de %lf.\n", dz*5.);
                 // Il est nécessaire de brider les déplacements pour éviter que l'estimation
                 // ne mette un point derrière la caméra.
                 // On recule un tout petit peu plus pour éviter que le point le plus proche
                 // de la caméra ne se trouve dans le plan XZ.
-                if (y + dy*5. > yymin)
-                    dy = (yymin-y)/5.5;
-                y = y + dy*5.;
+                if (dz*5. > yymin)
+                {
+                    printf("Oups, c'est trop. On bride à %lf\n", yymin/5.5*5.);
+                    dz = yymin/5.5;
+                }
+                x = x+dz*cx*5.;
+                y = y+dz*cy*5.;
+                z = z+dz*cz*5.;
+                yymin = yymin - dz*5;
+                printf("Maintenant, on ne peut pas avancer de plus de %lf\n", yymin);
             }
             else
                 break;
+            printf("dz : %lf\n", dz);
             vue->camera->set_position(x, y, z);
-            vue->camera->set_target(x, y+1., z);
+            vue->camera->set_target(x+cx, y+cy, z+cz);
             BUG(m3d_get_rect(&xmin, &xmax, &ymin, &ymax, projet), FALSE);
-        } while ((fabs(xmax-xmin-allocation.width) > 1.) && (fabs(ymax-ymin-allocation.height) > 1.));*/
+        } while ((fabs(xmax-xmin-allocation.width) > 1.) && (fabs(ymax-ymin-allocation.height) > 1.));
         
         BUG(m3d_get_rect(&xmin2, &xmax2, &ymin2, &ymax2, projet), FALSE);
         
