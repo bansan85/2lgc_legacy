@@ -1,4 +1,0 @@
-SUBDIRS =	lib \
-		gui \
-		test
-
