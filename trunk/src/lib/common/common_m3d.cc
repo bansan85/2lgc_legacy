@@ -559,6 +559,7 @@ gboolean m3d_camera_zoom_all(Projet *projet)
                 y = y+dz*cy*5.;
                 z = z+dz*cz*5.;
                 yymin = yymin - dz*5;
+                dz = yymin/5.;
                 // Maintenant, on ne peut pas avancer de plus de yymin.
             }
             else
