@@ -355,10 +355,10 @@ gboolean m3d_camera_zoom_all(Projet *projet)
     CM3dVertex  v1, v2;
     CM3dPolygon *poly;
     double      tmpx, tmpy, tmpz;
-    
     double      dx, dy, dz, dztmp;
     double      xmin2, xmax2, ymin2, ymax2;
     double      yymin;
+    int         i = 0; // Sécurité pour éviter que la boucle ne tourne à l'infini.
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
@@ -552,11 +552,9 @@ gboolean m3d_camera_zoom_all(Projet *projet)
                 dz = dztmp;
                 // L'extrapolation dit qu'il faut plutôt avancer de dz*5.
                 // Il est nécessaire de brider les déplacements pour éviter que l'estimation
-                // ne mette un point derrière la caméra. En effet, il est probable qu'une
-                // interpolation en 1/x soit plus adaptée (avec partant vers l'infini en 
-                // dz = yymin). TODO ;-)
-                // On recule un tout petit peu plus pour éviter que le point le plus proche
-                // de la caméra ne se trouve dans le plan XZ.
+                // ne mette un point derrière la caméra. On recule un tout petit peu plus pour
+                // éviter que le point le plus proche de la caméra ne se trouve dans le plan XZ.
+                // Normalement, ça ne devrait pas se produire mais c'est une sécurité.
                 if (dz*5. > yymin)
                 {
                     // Oups, on avance trop. On bride à yymin/5.5*5.
@@ -578,9 +576,15 @@ gboolean m3d_camera_zoom_all(Projet *projet)
         
         BUG(m3d_get_rect(&xmin2, &xmax2, &ymin2, &ymax2, projet), FALSE);
         // Tant qu'une fois le zoom fini, le dessin n'est pas centré.
+        i++;
+        if (i==100)
+            break;
     } while ((fabs(xmax2+xmin2-allocation.width) > 1.) || (fabs(ymax2+ymin2-allocation.height) > 1.));
     
     BUG(m3d_rafraichit(projet), FALSE);
+    
+    if (i == 100)
+        BUGMSG(NULL, FALSE, "La fonction \"zoom tout\" vient de tourner en boucle.\n");
     
     return TRUE;
 }
