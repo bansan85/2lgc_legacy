@@ -518,12 +518,19 @@ gboolean m3d_camera_zoom_all(Projet *projet)
             vue->camera->set_position(x+dz*cx, y+dz*cy, z+dz*cz);
             vue->camera->set_target(x+dz*cx+cx, y+dz*cy+cy, z+dz*cz+cz);
             BUG(m3d_get_rect(&xmin2, &xmax2, &ymin2, &ymax2, projet), FALSE);
-            // 1er cas : étude des abscisses
-            // Droite (a*X+b=Y) passant en X=z et Y= xmax-xmin
-            //                             X=z+dz et Y = xmax2-xmin2
+            // 1er cas : étude des abscisses.
+            // Le choix de l'interpolation est : f(x) = (a*x+b)/(c*x+d).
+            // avec les conditions suivantes : f(-inf) = 0. En effet, si on recule au maximum,
+            // la largeur de la vue sera nulle. Soit a/c = 0. On peut donc fixer
+            //   forfaitairement c = 1 et a à 0.
+            // On se retrouve donc avec la fonction f(x) = b/(x+d)
+            // Droite (b/(X+d)=Y) passant en X=z et Y= xmax-xmin=x1
+            //                               X=z+dz et Y = xmax2-xmin2=x2
+            // On obtient : b = (dz*x1*x2)/(x1-x2) et c = ((x2-x1)*z+dz*x2)/(x1-x2)
             // Le nouveau y est obtenu en cherchant f(x)=allocation.width
+            // Ainsi, on obtient une valeur optimale de dz = dz*x2*(x1-w)/((x1-x2)*w)
             // On fait le même calcul pour les ordonnées.
-            // Ensuite, on retient la valeur de dx minimale.
+            // Ensuite, on retient la valeur de dz minimale.
             if (((!ERREUR_RELATIVE_EGALE(xmax-xmin-(xmax2-xmin2), 0.)) || ((xmax-xmin < 1.) && (xmax2-xmin2 < 1.) && (fabs(allocation.width-xmax-xmin) < 1.) && (fabs(allocation.width-xmax2-xmin2) < 1.))) &&
               ((!ERREUR_RELATIVE_EGALE(ymax-ymin-(ymax2-ymin2), 0.)) || ((ymax-ymin < 1.) && (ymax2-ymin2 < 1.) && (fabs(allocation.height-ymax-ymin) < 1.) && (fabs(allocation.height-ymax2-ymin2) < 1.))))
             {
@@ -534,13 +541,13 @@ gboolean m3d_camera_zoom_all(Projet *projet)
                 // avec la vue en YZ.
                 dztmp = NAN;
                 if (!ERREUR_RELATIVE_EGALE(xmax-xmin-(xmax2-xmin2), 0.))
-                    dztmp = -dz*(allocation.width-xmax+xmin)/(xmax-xmin-(xmax2-xmin2))/5.;
+                    dztmp = dz*(xmax2-xmin2)*(xmax-xmin-allocation.width)/((xmax-xmin-(xmax2-xmin2))*allocation.width)/5.;
                 if (!ERREUR_RELATIVE_EGALE(ymax-ymin-(ymax2-ymin2), 0.))
                 {
                     if (isnan(dztmp))
-                        dztmp = -dz*(allocation.height-ymax+ymin)/(ymax-ymin-(ymax2-ymin2))/5.;
+                        dztmp = dz*(ymax2-ymin2)*(ymax-ymin-allocation.height)/((ymax-ymin-(ymax2-ymin2))*allocation.height)/5.;
                     else
-                        dztmp = MIN(-dz*(allocation.height-ymax+ymin)/(ymax-ymin-(ymax2-ymin2))/5., dztmp);
+                        dztmp = MIN(dz*(ymax2-ymin2)*(ymax-ymin-allocation.height)/((ymax-ymin-(ymax2-ymin2))*allocation.height)/5., dztmp);
                 }
                 dz = dztmp;
                 // L'extrapolation dit qu'il faut plutôt avancer de dz*5.
