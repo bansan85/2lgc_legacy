@@ -27,7 +27,6 @@
 #include "common_math.h"
 
 #ifdef ENABLE_GTK
-#include "ressources.h"
 #include "common_m3d.hpp"
 #include "1990_gtk_groupes.h"
 #include "1990_gtk_actions.h"
@@ -41,6 +40,7 @@
 #include "EF_gtk_resultats.h"
 #endif
 
+#include "ressources.h"
 #include "common_ville.h"
 #include "common_gtk_informations.h"
 #include "EF_appuis.h"
