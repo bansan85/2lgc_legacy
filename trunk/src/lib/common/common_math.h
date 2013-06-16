@@ -43,7 +43,6 @@
 /* Vérifie si x == y avec une erreur relative maximale D,
  * y étant la valeur recherchée et x la valeur à vérifier */
 
-double common_math_flottant(Flottant *flottant);
 double common_math_arrondi_nombre(double nombre);
 void common_math_arrondi_triplet(cholmod_triplet *triplet);
 void common_math_arrondi_sparse(cholmod_sparse *sparse);
