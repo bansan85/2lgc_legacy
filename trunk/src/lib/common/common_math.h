@@ -21,7 +21,6 @@
 
 #include "config.h"
 #include <cholmod.h>
-#include <values.h>
 #include <glib.h>
 #include "common_projet.h"
 

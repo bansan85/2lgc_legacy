@@ -1,5 +1,12 @@
 Compilation de l'environnement sous Gentoo
 ==========================================
+Pour avoir ce script en version 64bit, il faut lancer les commandes suivantes :
+cp INSTALL.mingw32 INSTALL.mingw64
+sed -i 's/i686-pc-mingw32/x86_64-w64-mingw32/g' INSTALL.mingw64
+sed -i 's/march=i686/march=x86-64/g' INSTALL.mingw64
+sed -i 's/_win32/_win64/g' INSTALL.mingw64
+sed -i 's#binaries/win32/dependencies#binaries/win64/dependencies#g' INSTALL.mingw64
+sed -i 's/OPT="-O0/OPT="-march=x86-64 -O0/g' INSTALL.mingw64
 
 sudo crossdev i686-pc-mingw32 && \
 (test -d comp || mkdir comp) && \
@@ -96,7 +103,7 @@ tar xvaf cairo-1.12.14.tar.xz && \
 cd cairo-1.12.14 && \
 sed -i "s/typedef SSIZE_T ssize_t;//g" util/cairo-missing/cairo-missing.h && \
 sed -i "s/test perf//g" Makefile.am Makefile.in && \
-CFLAGS="-O0 -g3 -ggdb3 -pipe" ./configure --disable-static --enable-shared --enable-svg --enable-pdf --enable-ps --enable-png --enable-xml --enable-pthread --enable-gobject --disable-xlib --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
+CFLAGS="-march=i686 -O0 -g3 -ggdb3 -pipe" ./configure --disable-static --enable-shared --enable-svg --enable-pdf --enable-ps --enable-png --enable-xml --enable-pthread --enable-gobject --disable-xlib --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
 make -j9 && sudo make install && cd .. && \
 (test -f ragel-6.8.tar.gz || wget http://www.complang.org/ragel/ragel-6.8.tar.gz) && \
 tar xvzf ragel-6.8.tar.gz && \
@@ -172,7 +179,7 @@ cd .. && \
 (test -f AMD.tar.gz || wget http://www.cise.ufl.edu/research/sparse/amd/current/AMD.tar.gz) && \
 tar xvzf AMD.tar.gz && \
 cd AMD && \
-make library -j3 && \
+make library -j9 && \
 sudo make library install && \
 i686-pc-mingw32-gcc -shared -Wl,-soname,libamd.dll -o libamd.dll Lib/*.o && \
 sudo cp libamd.dll /usr/i686-pc-mingw32/usr/bin && \
