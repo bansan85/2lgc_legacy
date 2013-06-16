@@ -30,6 +30,7 @@
 #include "common_erreurs.h"
 #include "common_fonction.h"
 #include "common_gtk.h"
+#include "common_math.h"
 #include "EF_noeuds.h"
 #include "EF_resultat.h"
 #include "EF_gtk_sections.h"
@@ -322,6 +323,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                 GtkTreeIter     Iter;
                 unsigned int    j;
                 char            *tmp_double;
+                char            tmp_double30[30];
                 
                 gtk_list_store_append(res->list_store, &Iter);
                 for (j=1;j<=res->col_tab[0];j++)
@@ -338,8 +340,9 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             EF_Point    point;
                             
                             BUG(EF_noeuds_renvoie_position(noeud, &point), FALSE);
+                            common_math_double_to_char2(point.x, tmp_double30, DECIMAL_DISTANCE);
                             
-                            gtk_list_store_set(res->list_store, &Iter, j-1, point.x, -1);
+                            gtk_list_store_set(res->list_store, &Iter, j-1, tmp_double30, -1);
                             
                             break;
                         }
@@ -348,8 +351,9 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             EF_Point    point;
                             
                             BUG(EF_noeuds_renvoie_position(noeud, &point), FALSE);
+                            common_math_double_to_char2(point.y, tmp_double30, DECIMAL_DISTANCE);
                             
-                            gtk_list_store_set(res->list_store, &Iter, j-1, point.y, -1);
+                            gtk_list_store_set(res->list_store, &Iter, j-1, tmp_double30, -1);
                             
                             break;
                         }
@@ -358,8 +362,9 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             EF_Point    point;
                             
                             BUG(EF_noeuds_renvoie_position(noeud, &point), FALSE);
+                            common_math_double_to_char2(point.z, tmp_double30, DECIMAL_DISTANCE);
                             
-                            gtk_list_store_set(res->list_store, &Iter, j-1, point.z, -1);
+                            gtk_list_store_set(res->list_store, &Iter, j-1, tmp_double30, -1);
                             
                             break;
                         }
@@ -1786,24 +1791,24 @@ gboolean EF_gtk_resultats_add_page(Gtk_EF_Resultats_Tableau *res, Projet *projet
             {
                 BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
                 BUGMSG(res->col_tab[1] == COLRES_NUM_NOEUDS, FALSE, gettext("La position en %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"), "x");
-                col_type[i-1] = G_TYPE_DOUBLE;
-                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("x [m]"), col_type[i-1], i-1, 1., DECIMAL_DISTANCE));
+                col_type[i-1] = G_TYPE_STRING;
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("x [m]"), col_type[i-1], i-1, 1., 0));
                 break;
             }
             case COLRES_NOEUDS_Y :
             {
                 BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
                 BUGMSG(res->col_tab[1] == COLRES_NUM_NOEUDS, FALSE, gettext("La position en %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"), "y");
-                col_type[i-1] = G_TYPE_DOUBLE;
-                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("y [m]"), col_type[i-1], i-1, 1., DECIMAL_DISTANCE));
+                col_type[i-1] = G_TYPE_STRING;
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("y [m]"), col_type[i-1], i-1, 1., 0));
                 break;
             }
             case COLRES_NOEUDS_Z :
             {
                 BUGMSG(i!=1, FALSE, gettext("La première colonne est réservée à la liste des noeuds et des barres.\n"));
                 BUGMSG(res->col_tab[1] == COLRES_NUM_NOEUDS, FALSE, gettext("La position en %s ne peut être affichée que si la première colonne affiche les numéros des noeuds.\n"), "z");
-                col_type[i-1] = G_TYPE_DOUBLE;
-                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("z [m]"), col_type[i-1], i-1, 1., DECIMAL_DISTANCE));
+                col_type[i-1] = G_TYPE_STRING;
+                gtk_tree_view_append_column(res->treeview, common_gtk_cree_colonne(gettext("z [m]"), col_type[i-1], i-1, 1., 0));
                 break;
             }
             case COLRES_REACTION_APPUI_FX :
