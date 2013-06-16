@@ -26,34 +26,6 @@
 #include "common_erreurs.h"
 
 
-double common_math_flottant(Flottant *flottant)
-/* Description : Renvoie la valeur d'un nombre flottant.
- * Paramètres : Flottant *flottant : le nombre flottant à renvoyer.
- * Valeur renvoyée : le nombre arrondi.
- */
-{
-    BUGMSG(flottant, NAN, gettext("Paramètre %s incorrect.\n"), "flottant");
-    switch (flottant->type)
-    {
-        case FLOTTANT_ORDINATEUR :
-        {
-            return flottant->d;
-            break;
-        }
-        case FLOTTANT_UTILISATEUR :
-        {
-            return flottant->d;
-            break;
-        }
-        default :
-        {
-            BUGMSG(NULL, NAN, gettext("Type de donnée du nombre flottant inconnu.\n"));
-            break;
-        }
-    }
-}
-
-
 double common_math_arrondi_nombre(double nombre)
 /* Description : Arrondi un nombre en supprimant la partie négligeable (ERREUR_RELATIVE_MIN)
  *   L'algorithme est perfectible puisque lors de l'arrondi, une nouvelle imprécision apparait
