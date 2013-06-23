@@ -20,7 +20,7 @@ aclocal -I m4
 libtoolize
 automake --add-missing --copy
 autoconf
-./configure --with-gtk --prefix=/usr/local CFLAGS="" CXXFLAGS=""
+./configure --with-gtk --with-debug --prefix=/usr/local CFLAGS="" CXXFLAGS=""
 sed -i 's/-DPIC/-DPIC -Wl,--as-needed/g' libtool
 make -j9 && sudo make install && /usr/local/bin/codegui
 sudo make install-data && make check -j9

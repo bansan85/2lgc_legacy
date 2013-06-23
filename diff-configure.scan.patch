@@ -9,7 +9,7 @@
 +AM_GNU_GETTEXT([external])
 +AC_CONFIG_MACRO_DIR([m4])
 
-@@ -13,15 +0,52 @@
+@@ -13,15 +0,64 @@
  AC_PROG_MAKE_SET
 +AM_PROG_CC_C_O
 +AC_PROG_F77
@@ -20,7 +20,15 @@
 +AM_PATH_XML2($LIBXML_REQUIRED_VERSION, :, AC_MSG_ERROR(Test for libXML failed.))
 +GLIB_REQUIRED_VERSION=2.34.0
 +AM_PATH_GLIB_2_0($GLIB_REQUIRED_VERSION, :, AC_MSG_ERROR(Test for GLIB failed.))
-+AC_ARG_WITH(gtk,  [  --without-gtk           build without gtk support], [withgtk=true], [withgtk=false])
++AC_ARG_WITH(debug,  [  --with-debug           build with debug support], [withdebug=true], [withdebug=false])
++AC_MSG_RESULT([XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
++with-debug $withdebug
++XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX])
++AM_CONDITIONAL(ENABLE_DEBUG, test x$withdebug = xtrue)
++if test x$withdebug = xtrue; then
++AC_DEFINE(ENABLE_DEBUG, 1, [Défini si les options de débug doivent être activés])
++fi
++AC_ARG_WITH(gtk,  [  --with-gtk           build with gtk support], [withgtk=true], [withgtk=false])
 +AC_MSG_RESULT([XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 +with-gtk $withgtk
 +XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX])
@@ -35,17 +43,21 @@
 +ALL_LINGUAS="fr"
 +PKG_PROG_PKG_CONFIG
 +
-+AC_MSG_CHECKING([for some Win32 platform])
++AC_MSG_CHECKING([for some Win platform])
 +case "$host" in
++  *-*64-mingw*|*-*64-cygwin*)
++    platform_win=Win64
++    ;;
 +  *-*-mingw*|*-*-cygwin*)
-+    platform_win32=yes
++    platform_win=Win32
 +    ;;
 +  *)
-+    platform_win32=no
++    platform_win=no
 +    ;;
 +esac
-+AC_MSG_RESULT([$platform_win32])
-+AM_CONDITIONAL(PLATFORM_WIN32, test "$platform_win32" = "yes")
++AC_MSG_RESULT([$platform_win])
++AM_CONDITIONAL(PLATFORM_WIN32, test "$platform_win" = "Win32")
++AM_CONDITIONAL(PLATFORM_WIN64, test "$platform_win" = "Win64")
  
  # Checks for libraries.
 -# FIXME: Replace `main' with a function in `-lamd':

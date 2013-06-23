@@ -43,7 +43,7 @@ gboolean common_selection_ajout_nombre(void *data, GList **liste, Type_Liste typ
  */
 {
     GList   *list_parcours;
-    Action  *action;
+    Action  *action = NULL;
     
     BUGMSG(liste, FALSE, gettext("Paramètre %s incorrect.\n"), "liste");
     BUGMSG((projet) || (type != LISTE_CHARGES), FALSE, gettext("Paramètre %s incorrect.\n"), "projet");

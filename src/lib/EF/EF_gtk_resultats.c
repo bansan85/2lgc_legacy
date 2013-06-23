@@ -121,7 +121,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
     unsigned int    i;
     GList           *actions = NULL;
     Action          *action;
-    GList           *comb;
+    GList           *comb = NULL;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(res, FALSE, gettext("Paramètre %s incorrect.\n"), "res");
