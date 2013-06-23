@@ -25,7 +25,7 @@
 #include "common_projet.h"
 #include "common_erreurs.h"
 #include "common_math.h"
-#include "1990_action.h"
+#include "1990_action.hpp"
 
 int _1990_ponderations_verifie_double(GList *liste_ponderations, Ponderation* pond_a_verifier)
 /* Description : Vérifie dans la liste des ponderations si la ponderation à vérifier est déjà

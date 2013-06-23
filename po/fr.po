@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2013-06-16 08:13+0200\n"
+"POT-Creation-Date: 2013-06-23 23:27+0200\n"
 "PO-Revision-Date: 2013-06-16 08:23+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
@@ -991,6 +991,71 @@ msgstr "\t\tGroupes du niveau %d contenus dans ce groupe : "
 msgid "\t\tCombinaisons :\n"
 msgstr "\t\tCombinaisons :\n"
 
+msgid "Le projet ne possède pas de niveaux de groupes.\n"
+msgstr "Le projet ne possède pas de niveaux de groupes.\n"
+
+#, c-format
+msgid "Le niveau %u est vide. Veuillez soit le remplir, soit le supprimer.\n"
+msgstr "Le niveau %u est vide. Veuillez soit le remplir, soit le supprimer.\n"
+
+msgid ""
+"Seuls les groupes possédant un type de combinaison XOR peuvent appeler "
+"_1990_combinaisons_genere_xor.\n"
+msgstr ""
+"Seuls les groupes possédant un type de combinaison XOR peuvent appeler "
+"_1990_combinaisons_genere_xor.\n"
+
+#, c-format
+msgid ""
+"Impossible de trouver le niveau %u dans la liste des niveaux de groupes.\n"
+msgstr ""
+"Impossible de trouver le niveau %u dans la liste des niveaux de groupes.\n"
+
+#, c-format
+msgid "Impossible de trouver le niveau précédent le niveau %u.\n"
+msgstr "Impossible de trouver le niveau précédent le niveau %u.\n"
+
+msgid ""
+"Seuls les groupes possédant un type de combinaison AND peuvent appeler "
+"_1990_combinaisons_genere_and.\n"
+msgstr ""
+"Seuls les groupes possédant un type de combinaison AND peuvent appeler "
+"_1990_combinaisons_genere_and.\n"
+
+msgid ""
+"Seuls les groupes possédant un type de combinaison OR peuvent appeler "
+"_1990_combinaisons_genere_or.\n"
+msgstr ""
+"Seuls les groupes possédant un type de combinaison OR peuvent appeler "
+"_1990_combinaisons_genere_or.\n"
+
+msgid "ELU équilibre"
+msgstr "ELU équilibre"
+
+msgid "ELU structure"
+msgstr "ELU structure"
+
+msgid "ELU géotechnique"
+msgstr "ELU géotechnique"
+
+msgid "ELU fatigue"
+msgstr "ELU fatigue"
+
+msgid "ELU accidentel"
+msgstr "ELU accidentel"
+
+msgid "ELU sismique"
+msgstr "ELU sismique"
+
+msgid "ELS caractéristique"
+msgstr "ELS caractéristique"
+
+msgid "ELS fréquent"
+msgstr "ELS fréquent"
+
+msgid "ELS permanent"
+msgstr "ELS permanent"
+
 msgid "Permanente"
 msgstr "Permanente"
 
@@ -1121,71 +1186,6 @@ msgstr "Action n° %u, description '%s', type n°%d\n"
 #, c-format
 msgid "Aucune barre existante.\n"
 msgstr "Aucune barre existante.\n"
-
-msgid "Le projet ne possède pas de niveaux de groupes.\n"
-msgstr "Le projet ne possède pas de niveaux de groupes.\n"
-
-#, c-format
-msgid "Le niveau %u est vide. Veuillez soit le remplir, soit le supprimer.\n"
-msgstr "Le niveau %u est vide. Veuillez soit le remplir, soit le supprimer.\n"
-
-msgid ""
-"Seuls les groupes possédant un type de combinaison XOR peuvent appeler "
-"_1990_combinaisons_genere_xor.\n"
-msgstr ""
-"Seuls les groupes possédant un type de combinaison XOR peuvent appeler "
-"_1990_combinaisons_genere_xor.\n"
-
-#, c-format
-msgid ""
-"Impossible de trouver le niveau %u dans la liste des niveaux de groupes.\n"
-msgstr ""
-"Impossible de trouver le niveau %u dans la liste des niveaux de groupes.\n"
-
-#, c-format
-msgid "Impossible de trouver le niveau précédent le niveau %u.\n"
-msgstr "Impossible de trouver le niveau précédent le niveau %u.\n"
-
-msgid ""
-"Seuls les groupes possédant un type de combinaison AND peuvent appeler "
-"_1990_combinaisons_genere_and.\n"
-msgstr ""
-"Seuls les groupes possédant un type de combinaison AND peuvent appeler "
-"_1990_combinaisons_genere_and.\n"
-
-msgid ""
-"Seuls les groupes possédant un type de combinaison OR peuvent appeler "
-"_1990_combinaisons_genere_or.\n"
-msgstr ""
-"Seuls les groupes possédant un type de combinaison OR peuvent appeler "
-"_1990_combinaisons_genere_or.\n"
-
-msgid "ELU équilibre"
-msgstr "ELU équilibre"
-
-msgid "ELU structure"
-msgstr "ELU structure"
-
-msgid "ELU géotechnique"
-msgstr "ELU géotechnique"
-
-msgid "ELU fatigue"
-msgstr "ELU fatigue"
-
-msgid "ELU accidentel"
-msgstr "ELU accidentel"
-
-msgid "ELU sismique"
-msgstr "ELU sismique"
-
-msgid "ELS caractéristique"
-msgstr "ELS caractéristique"
-
-msgid "ELS fréquent"
-msgstr "ELS fréquent"
-
-msgid "ELS permanent"
-msgstr "ELS permanent"
 
 #, c-format
 msgid "Le groupe %s (%d) n'est combiné ni de type OR, XOR ou AND.\n"
