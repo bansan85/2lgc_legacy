@@ -21,7 +21,7 @@ libeurocodes_la_LDFLAGS		= 	$(AM_LDFLAGS) -no-undefined -version-info 0:0:0
 
 libeurocodes_la_CPPFLAGS	=	@XML_CPPFLAGS@
 
-libeurocodes_la_SOURCES =	1990/1990_action.c \
+libeurocodes_la_SOURCES =	1990/1990_action.cpp \
 							1990/1990_coef_psi.c \
 							1990/1990_combinaisons.c \
 							1990/1990_duree.c \
@@ -79,7 +79,7 @@ libeurocodes_la_SOURCES +=	common/common_m3d.cc \
 endif
 
 libeurocodes_ladir = $(includedir)/2lgc
-libeurocodes_la_HEADERS =	1990/1990_action.h \
+libeurocodes_la_HEADERS =	1990/1990_action.hpp \
 							1990/1990_coef_psi.h \
 							1990/1990_combinaisons.h \
 							1990/1990_duree.h \

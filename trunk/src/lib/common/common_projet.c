@@ -49,7 +49,7 @@
 #include "EF_relachement.h"
 #include "EF_sections.h"
 #include "EF_calculs.h"
-#include "1990_action.h"
+#include "1990_action.hpp"
 #include "1990_groupe.h"
 #include "1990_combinaisons.h"
 #include "1992_1_1_barres.h"

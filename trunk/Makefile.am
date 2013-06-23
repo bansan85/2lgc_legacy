@@ -36,7 +36,7 @@ endif
 
 export AM_CFLAGS AM_CXXFLAGS
 
-EXTRA_DIST = config.rpath
+EXTRA_DIST = config.rpath  config.rpath  config.rpath  config.rpath
 
 package_win :
 if PLATFORM_WIN32

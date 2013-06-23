@@ -24,7 +24,7 @@
 
 #include "common_projet.h"
 #include "common_erreurs.h"
-#include "1990_action.h"
+#include "1990_action.hpp"
 
 #ifdef ENABLE_GTK
 #include "1990_gtk_groupes.h"
