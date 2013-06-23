@@ -4,6 +4,8 @@ DEFAULT_INCLUDES	=	-I../.. \
 						-I1990 \
 						-I1992_1_1
 
+AUTOMAKE_OPTIONS = subdir-objects
+
 lib_LTLIBRARIES = libeurocodes.la
 
 libeurocodes_la_LIBADD		=	@BLAS_LIBS@ -lgfortran @XML_LIBS@
