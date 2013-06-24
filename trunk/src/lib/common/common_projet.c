@@ -28,8 +28,8 @@
 
 #ifdef ENABLE_GTK
 #include "common_m3d.hpp"
-#include "1990_gtk_groupes.h"
-#include "1990_gtk_actions.h"
+#include "1990_gtk_groupes.hpp"
+#include "1990_gtk_actions.hpp"
 #include "EF_gtk_noeud.h"
 #include "EF_gtk_appuis.h"
 #include "EF_gtk_calculs.h"
@@ -50,8 +50,8 @@
 #include "EF_sections.h"
 #include "EF_calculs.h"
 #include "1990_action.hpp"
-#include "1990_groupe.h"
-#include "1990_combinaisons.h"
+#include "1990_groupe.hpp"
+#include "1990_combinaisons.hpp"
 #include "1992_1_1_barres.h"
 #include "1992_1_1_materiaux.h"
 

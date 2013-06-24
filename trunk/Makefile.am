@@ -28,7 +28,7 @@ CUSTOM_CFLAGS 	+= -DLOCALEDIR=\""@localedir@"\" -DDATADIR=\""@datadir@/2lgc"\"
 endif
 
 AM_CFLAGS 		= $(CUSTOM_CFLAGS) -Wdeclaration-after-statement -std=gnu11
-AM_CXXFLAGS		= $(CUSTOM_CFLAGS) -std=gnu++11
+AM_CXXFLAGS		= $(CUSTOM_CFLAGS) -Wold-style-cast -std=gnu++11
 if ENABLE_GTK
 AM_CFLAGS      += @GTK_CFLAGS@
 AM_CXXFLAGS    += @GTK_CFLAGS@
@@ -36,7 +36,7 @@ endif
 
 export AM_CFLAGS AM_CXXFLAGS
 
-EXTRA_DIST = config.rpath  config.rpath  config.rpath  config.rpath
+EXTRA_DIST = config.rpath
 
 package_win :
 if PLATFORM_WIN32

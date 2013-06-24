@@ -24,6 +24,7 @@
 #include <string.h>
 #include <gtk/gtk.h>
 
+extern "C" {
 #include "1990_action.hpp"
 #include "common_erreurs.h"
 #include "common_projet.h"
@@ -48,7 +49,7 @@ void _1990_gtk_menu_edit_charge_clicked(GtkWidget *toolbutton, Projet *projet);
 /*********************** Tout ce qui concerne la fenêtre en général **********************/
 
 
-const GtkTargetEntry drag_targets_actions[] = { {(gchar*)PACKAGE"1_SAME_PROC", GTK_TARGET_SAME_APP, 0}}; 
+const GtkTargetEntry drag_targets_actions[] = { {const_cast<gchar*>(PACKAGE"1_SAME_PROC"), GTK_TARGET_SAME_APP, 0}}; 
 
 
 gboolean _1990_gtk_actions_window_key_press(GtkWidget *widget, GdkEvent *event, Projet *projet)
@@ -89,7 +90,7 @@ void _1990_gtk_actions_window_destroy(GtkWidget *object, Projet *projet)
     BUGMSG(projet->list_gtk._1990_actions.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Actions");
     
     // Désactivation des évènements pouvant s'activer lors de la fermeture de la fenêtre.
-    g_signal_handler_block(projet->list_gtk._1990_actions.tree_view_actions, g_signal_handler_find(G_OBJECT(projet->list_gtk._1990_actions.tree_view_actions),G_SIGNAL_MATCH_FUNC,0,0,NULL,_1990_gtk_actions_cursor_changed,NULL));
+    g_signal_handler_block(projet->list_gtk._1990_actions.tree_view_actions, g_signal_handler_find(G_OBJECT(projet->list_gtk._1990_actions.tree_view_actions), G_SIGNAL_MATCH_FUNC, 0, 0, NULL, reinterpret_cast<void*>(_1990_gtk_actions_cursor_changed), NULL));
     g_object_unref(G_OBJECT(projet->list_gtk._1990_actions.builder));
     projet->list_gtk._1990_actions.builder = NULL;
     
@@ -157,7 +158,7 @@ void _1990_gtk_actions_cursor_changed(GtkTreeView *tree_view, Projet *projet)
     list_parcours = action->charges;
     while (list_parcours != NULL)
     {
-        Charge_Noeud    *charge = list_parcours->data;
+        Charge_Noeud    *charge = static_cast<Charge_Noeud*>(list_parcours->data);
         
         gtk_tree_store_append(projet->list_gtk._1990_actions.tree_store_charges, &charge->Iter, NULL);
         gtk_tree_store_set(projet->list_gtk._1990_actions.tree_store_charges, &charge->Iter, 0, list_parcours->data, -1);
@@ -251,21 +252,21 @@ gboolean _1990_gtk_actions_tree_view_drag(GtkWidget *widget, GdkDragContext *dra
         list_parcours = g_list_last(list);
         list_fixe = NULL;
         for(;list_parcours != NULL; list_parcours = g_list_previous(list_parcours))
-            list_fixe = g_list_append(list_fixe, gtk_tree_row_reference_new(model_charge_source, (GtkTreePath*)list_parcours->data));
-        g_list_foreach(list, (GFunc)gtk_tree_path_free, NULL);
+            list_fixe = g_list_append(list_fixe, gtk_tree_row_reference_new(model_charge_source, static_cast<GtkTreePath*>(list_parcours->data)));
+        g_list_foreach(list, reinterpret_cast<GFunc>(gtk_tree_path_free), NULL);
         g_list_free(list);
         
         // On déplace les charges, charge par charge vers leur nouvelle action;
         list_parcours = g_list_last(list_fixe);
         for(;list_parcours != NULL; list_parcours = g_list_previous(list_parcours))
         {
-            if (gtk_tree_model_get_iter(model_charge_source, &iter_charge_source, gtk_tree_row_reference_get_path((GtkTreeRowReference*)list_parcours->data)))
+            if (gtk_tree_model_get_iter(model_charge_source, &iter_charge_source, gtk_tree_row_reference_get_path(static_cast<GtkTreeRowReference*>(list_parcours->data))))
             {
                 gtk_tree_model_get(model_charge_source, &iter_charge_source, 0, &charge_source, -1);
                 BUG(EF_charge_deplace(projet, action_source->numero, charge_source->numero, action_dest->numero), FALSE);
             }
         }
-        g_list_foreach(list_fixe, (GFunc)gtk_tree_row_reference_free, NULL);
+        g_list_foreach(list_fixe, reinterpret_cast<GFunc>(gtk_tree_row_reference_free), NULL);
         g_list_free(list_fixe);
         
         gtk_tree_path_free(path);
@@ -440,7 +441,7 @@ void _1990_gtk_menu_nouvelle_action_activate(GtkMenuItem *menuitem, Projet *proj
     list_parcours = projet->list_gtk._1990_actions.menu_list_widget_action;
     while (list_parcours != NULL)
     {
-        if ((GTK_IS_MENU_TOOL_BUTTON(menuitem)) || ((GtkMenuItem *)list_parcours->data == menuitem))
+        if ((GTK_IS_MENU_TOOL_BUTTON(menuitem)) || (static_cast<GtkMenuItem*>(list_parcours->data) == menuitem))
         {
             char        *tmp;
             Action      *action;
@@ -630,13 +631,13 @@ void _1990_gtk_menu_edit_charge_clicked(GtkWidget *toolbutton, Projet *projet)
     list_parcours = g_list_first(list);
     for(;list_parcours != NULL; list_parcours = g_list_next(list_parcours))
     {
-        if (gtk_tree_model_get_iter(model, &iter, (GtkTreePath*)list_parcours->data))
+        if (gtk_tree_model_get_iter(model, &iter, static_cast<GtkTreePath*>(list_parcours->data)))
         {
     // Et on les édite les unes après les autres.
             Charge_Noeud    *charge_noeud;
             
             gtk_tree_model_get(model, &iter, 0, &charge, -1);
-            BUG(charge_noeud = EF_charge_cherche(projet, action->numero, charge->numero), );
+            BUG(charge_noeud = static_cast<Charge_Noeud*>(EF_charge_cherche(projet, action->numero, charge->numero)), );
             
             switch (charge_noeud->type)
             {
@@ -663,7 +664,7 @@ void _1990_gtk_menu_edit_charge_clicked(GtkWidget *toolbutton, Projet *projet)
             }
         }
     }
-    g_list_foreach(list, (GFunc)gtk_tree_path_free, NULL);
+    g_list_foreach(list, reinterpret_cast<GFunc>(gtk_tree_path_free), NULL);
     g_list_free(list);
     
     return;
@@ -700,21 +701,21 @@ void _1990_gtk_menu_suppr_charge_clicked(GtkWidget *toolbutton, Projet *projet)
     list_parcours = g_list_last(list);
     list_fixe = NULL;
     for(;list_parcours != NULL; list_parcours = g_list_previous(list_parcours))
-        list_fixe = g_list_append(list_fixe, gtk_tree_row_reference_new(model, (GtkTreePath*)list_parcours->data));
-    g_list_foreach(list, (GFunc)gtk_tree_path_free, NULL);
+        list_fixe = g_list_append(list_fixe, gtk_tree_row_reference_new(model, static_cast<GtkTreePath*>(list_parcours->data)));
+    g_list_foreach(list, reinterpret_cast<GFunc>(gtk_tree_path_free), NULL);
     g_list_free(list);
     
     // On supprime les charges sélectionnées. Pas besoin de remettre à jour le tree-view, c'est inclus dans EF_charge_supprime
     list_parcours = g_list_first(list_fixe);
     for(;list_parcours != NULL; list_parcours = g_list_next(list_parcours))
     {
-        if (gtk_tree_model_get_iter(model, &iter, gtk_tree_row_reference_get_path((GtkTreeRowReference*)list_parcours->data)))
+        if (gtk_tree_model_get_iter(model, &iter, gtk_tree_row_reference_get_path(static_cast<GtkTreeRowReference*>(list_parcours->data))))
         {
             gtk_tree_model_get(model, &iter, 0, &charge, -1);
             BUG(EF_charge_supprime(projet, action->numero, charge->numero), );
         }
     }
-    g_list_foreach(list_fixe, (GFunc)gtk_tree_row_reference_free, NULL);
+    g_list_foreach(list_fixe, reinterpret_cast<GFunc>(gtk_tree_row_reference_free), NULL);
     g_list_free(list_fixe);
     
     return;
@@ -854,7 +855,7 @@ void _1990_gtk_actions_render_1(GtkTreeViewColumn *tree_column, GtkCellRenderer 
  */
 {
     Action  *action;
-    Projet  *projet = data2;
+    Projet  *projet = static_cast<Projet*>(data2);
     
     gtk_tree_model_get(tree_model, iter, 0, &action, -1);
     
@@ -1027,14 +1028,14 @@ void _1990_gtk_actions_charge_render_2(GtkTreeViewColumn *tree_column, GtkCellRe
         }
         case CHARGE_BARRE_PONCTUELLE :
         {
-            tmp = EF_charge_barre_ponctuelle_description((Charge_Barre_Ponctuelle*)charge);
+            tmp = EF_charge_barre_ponctuelle_description(static_cast<Charge_Barre_Ponctuelle*>(static_cast<void*>(charge)));
             g_object_set(cell, "text", tmp, NULL);
             free(tmp);
             break;
         }
         case CHARGE_BARRE_REPARTIE_UNIFORME :
         {
-            tmp = EF_charge_barre_repartie_uniforme_description((Charge_Barre_Repartie_Uniforme*)charge);
+            tmp = EF_charge_barre_repartie_uniforme_description(static_cast<Charge_Barre_Repartie_Uniforme*>(static_cast<void*>(charge)));
             g_object_set(cell, "text", tmp, NULL);
             free(tmp);
             break;
@@ -1101,7 +1102,7 @@ void _1990_gtk_actions(Projet *projet)
         
         do
         {
-            Action  *action = list_parcours->data;
+            Action  *action = static_cast<Action*>(list_parcours->data);
             
             gtk_tree_store_append(projet->list_gtk._1990_actions.tree_store_actions, &action->Iter_fenetre, NULL);
             gtk_tree_store_set(projet->list_gtk._1990_actions.tree_store_actions, &action->Iter_fenetre, 0, action, -1);
@@ -1128,6 +1129,8 @@ void _1990_gtk_actions(Projet *projet)
     gtk_window_set_transient_for(GTK_WINDOW(projet->list_gtk._1990_actions.window), GTK_WINDOW(projet->list_gtk.comp.window));
     
     return;
+}
+
 }
 
 #endif

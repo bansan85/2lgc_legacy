@@ -22,6 +22,7 @@
 #include <locale.h>
 #include <gtk/gtk.h>
 
+extern "C" {
 #include "common_erreurs.h"
 #include "common_projet.h"
 #include "common_tooltip.h"
@@ -141,5 +142,6 @@ void _1990_gtk_groupes_button_options_clicked(GtkWidget *button, Projet *projet)
     return;
 }
 
+}
 
 #endif

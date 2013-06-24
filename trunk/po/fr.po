@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2013-06-23 23:27+0200\n"
+"POT-Creation-Date: 2013-06-23 23:40+0200\n"
 "PO-Revision-Date: 2013-06-16 08:23+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
@@ -877,122 +877,52 @@ msgstr "'%s' n'est pas de la forme 'largeurxhauteur'.\n"
 msgid "Type de nombre est inconnu.\n"
 msgstr "Type de nombre est inconnu.\n"
 
-#, c-format
-msgid "Type d'action %u inconnu.\n"
-msgstr "Type d'action %u inconnu.\n"
+msgid "Le projet ne possède pas de niveaux de groupes.\n"
+msgstr "Le projet ne possède pas de niveaux de groupes.\n"
 
 #, c-format
-msgid "Type d'action '%s' inconnu.\n"
-msgstr "Type d'action '%s' inconnu.\n"
+msgid "Le groupe %s (%d) n'est combiné ni de type OR, XOR ou AND.\n"
+msgstr "Le groupe %s (%d) n'est combiné ni de type OR, XOR ou AND.\n"
+
+#, c-format
+msgid "Le niveau de groupes %d ne possède pas de groupe.\n"
+msgstr "Le niveau de groupes %d ne possède pas de groupe.\n"
 
 msgid "Sans nom"
 msgstr "Sans nom"
 
-msgid "Impossible de trouver le type d'action correspondant à cette action.\n"
-msgstr "Impossible de trouver le type d'action correspondant à cette action.\n"
+#, c-format
+msgid "Élément %d existant.\n"
+msgstr "Élément %d existant.\n"
 
-msgid "Ponctuelle sur noeud"
-msgstr "Ponctuelle sur noeud"
+msgid "Le type de combinaison est inconnu.\n"
+msgstr "Le type de combinaison est inconnu.\n"
 
-msgid "Ponctuelle sur barre"
-msgstr "Ponctuelle sur barre"
+msgid ""
+"La génération des pondérations est impossible.\n"
+"Le dernier niveau ne peut possèder qu'un seul groupe.\n"
+msgstr ""
+"La génération des pondérations est impossible.\n"
+"Le dernier niveau ne peut possèder qu'un seul groupe.\n"
 
-msgid "Répartie uniforme sur barre"
-msgstr "Répartie uniforme sur barre"
+msgid ""
+"Le dernier niveau ne possède aucune combinaison permettant la génération des "
+"pondérations.\n"
+msgstr ""
+"Le dernier niveau ne possède aucune combinaison permettant la génération des "
+"pondérations.\n"
 
 #, c-format
-msgid "La génération de la fenêtre %s a échouée.\n"
-msgstr "La génération de la fenêtre %s a échouée.\n"
+msgid "Flag %d inconnu.\n"
+msgstr "Flag %d inconnu.\n"
 
 #, c-format
 msgid "Pays %d inconnu.\n"
 msgstr "Pays %d inconnu.\n"
 
 #, c-format
-msgid "Catégorie de durée %u inconnue.\n"
-msgstr "Catégorie de durée %u inconnue.\n"
-
-msgid "Structures provisoires"
-msgstr "Structures provisoires"
-
-msgid ""
-"Éléments structuraux remplaçables, par exemple poutres de roulement, "
-"appareils d'appui"
-msgstr ""
-"Éléments structuraux remplaçables, par exemple poutres de roulement, "
-"appareils d'appui"
-
-msgid "Structures agricoles et similaires"
-msgstr "Structures agricoles et similaires"
-
-msgid "Structures de bâtiments et autres structures courantes"
-msgstr "Structures de bâtiments et autres structures courantes"
-
-msgid ""
-"Structures monumentales de bâtiments, pont et autres ouvrages de génie civil"
-msgstr ""
-"Structures monumentales de bâtiments, pont et autres ouvrages de génie civil"
-
-#, c-format
-msgid "Catégorie de durée %d inconnue.\n"
-msgstr "Catégorie de durée %d inconnue.\n"
-
-#, c-format
-msgid "Élément %u du groupe %u introuvable.\n"
-msgstr "Élément %u du groupe %u introuvable.\n"
-
-#, c-format
-msgid "Groupe %u du niveau %u introuvable.\n"
-msgstr "Groupe %u du niveau %u introuvable.\n"
-
-#, c-format
-msgid "Niveau de groupes %u introuvable.\n"
-msgstr "Niveau de groupes %u introuvable.\n"
-
-msgid ""
-"Le projet ne possède pas de niveaux de groupes permettant de regrouper "
-"plusieurs groupes d'actions.\n"
-msgstr ""
-"Le projet ne possède pas de niveaux de groupes permettant de regrouper "
-"plusieurs groupes d'actions.\n"
-
-#, c-format
-msgid "Le numéro %u est déjà présent dans le groupe %u du niveau %u.\n"
-msgstr "Le numéro %u est déjà présent dans le groupe %u du niveau %u.\n"
-
-#, c-format
-msgid "Le type de combinaison %d est inconnu.\n"
-msgstr "Le type de combinaison %d est inconnu.\n"
-
-msgid "Erreur lors de l'actualisation de la fenêtre graphique.\n"
-msgstr "Erreur lors de l'actualisation de la fenêtre graphique.\n"
-
-#, c-format
-msgid "niveau : %d\n"
-msgstr "niveau : %d\n"
-
-#, c-format
-msgid "\tgroupe : %d, combinaison : "
-msgstr "\tgroupe : %d, combinaison : "
-
-#, c-format
-msgid "Combinaison %d inconnue"
-msgstr "Combinaison %d inconnue"
-
-#, c-format
-msgid "\t\tActions contenus dans ce groupe : "
-msgstr "\t\tActions contenus dans ce groupe : "
-
-#, c-format
-msgid "\t\tGroupes du niveau %d contenus dans ce groupe : "
-msgstr "\t\tGroupes du niveau %d contenus dans ce groupe : "
-
-#, c-format
-msgid "\t\tCombinaisons :\n"
-msgstr "\t\tCombinaisons :\n"
-
-msgid "Le projet ne possède pas de niveaux de groupes.\n"
-msgstr "Le projet ne possède pas de niveaux de groupes.\n"
+msgid "Type d'action %u inconnu.\n"
+msgstr "Type d'action %u inconnu.\n"
 
 #, c-format
 msgid "Le niveau %u est vide. Veuillez soit le remplir, soit le supprimer.\n"
@@ -1055,6 +985,80 @@ msgstr "ELS fréquent"
 
 msgid "ELS permanent"
 msgstr "ELS permanent"
+
+#, c-format
+msgid "Type d'action '%s' inconnu.\n"
+msgstr "Type d'action '%s' inconnu.\n"
+
+msgid "Impossible de trouver le type d'action correspondant à cette action.\n"
+msgstr "Impossible de trouver le type d'action correspondant à cette action.\n"
+
+msgid "Ponctuelle sur noeud"
+msgstr "Ponctuelle sur noeud"
+
+msgid "Ponctuelle sur barre"
+msgstr "Ponctuelle sur barre"
+
+msgid "Répartie uniforme sur barre"
+msgstr "Répartie uniforme sur barre"
+
+#, c-format
+msgid "La génération de la fenêtre %s a échouée.\n"
+msgstr "La génération de la fenêtre %s a échouée.\n"
+
+#, c-format
+msgid "Élément %u du groupe %u introuvable.\n"
+msgstr "Élément %u du groupe %u introuvable.\n"
+
+#, c-format
+msgid "Groupe %u du niveau %u introuvable.\n"
+msgstr "Groupe %u du niveau %u introuvable.\n"
+
+#, c-format
+msgid "Niveau de groupes %u introuvable.\n"
+msgstr "Niveau de groupes %u introuvable.\n"
+
+msgid ""
+"Le projet ne possède pas de niveaux de groupes permettant de regrouper "
+"plusieurs groupes d'actions.\n"
+msgstr ""
+"Le projet ne possède pas de niveaux de groupes permettant de regrouper "
+"plusieurs groupes d'actions.\n"
+
+#, c-format
+msgid "Le numéro %u est déjà présent dans le groupe %u du niveau %u.\n"
+msgstr "Le numéro %u est déjà présent dans le groupe %u du niveau %u.\n"
+
+#, c-format
+msgid "Le type de combinaison %d est inconnu.\n"
+msgstr "Le type de combinaison %d est inconnu.\n"
+
+msgid "Erreur lors de l'actualisation de la fenêtre graphique.\n"
+msgstr "Erreur lors de l'actualisation de la fenêtre graphique.\n"
+
+#, c-format
+msgid "niveau : %d\n"
+msgstr "niveau : %d\n"
+
+#, c-format
+msgid "\tgroupe : %d, combinaison : "
+msgstr "\tgroupe : %d, combinaison : "
+
+#, c-format
+msgid "Combinaison %d inconnue"
+msgstr "Combinaison %d inconnue"
+
+#, c-format
+msgid "\t\tActions contenus dans ce groupe : "
+msgstr "\t\tActions contenus dans ce groupe : "
+
+#, c-format
+msgid "\t\tGroupes du niveau %d contenus dans ce groupe : "
+msgstr "\t\tGroupes du niveau %d contenus dans ce groupe : "
+
+#, c-format
+msgid "\t\tCombinaisons :\n"
+msgstr "\t\tCombinaisons :\n"
 
 msgid "Permanente"
 msgstr "Permanente"
@@ -1188,37 +1192,33 @@ msgid "Aucune barre existante.\n"
 msgstr "Aucune barre existante.\n"
 
 #, c-format
-msgid "Le groupe %s (%d) n'est combiné ni de type OR, XOR ou AND.\n"
-msgstr "Le groupe %s (%d) n'est combiné ni de type OR, XOR ou AND.\n"
+msgid "Catégorie de durée %u inconnue.\n"
+msgstr "Catégorie de durée %u inconnue.\n"
 
-#, c-format
-msgid "Le niveau de groupes %d ne possède pas de groupe.\n"
-msgstr "Le niveau de groupes %d ne possède pas de groupe.\n"
-
-#, c-format
-msgid "Élément %d existant.\n"
-msgstr "Élément %d existant.\n"
-
-msgid "Le type de combinaison est inconnu.\n"
-msgstr "Le type de combinaison est inconnu.\n"
+msgid "Structures provisoires"
+msgstr "Structures provisoires"
 
 msgid ""
-"La génération des pondérations est impossible.\n"
-"Le dernier niveau ne peut possèder qu'un seul groupe.\n"
+"Éléments structuraux remplaçables, par exemple poutres de roulement, "
+"appareils d'appui"
 msgstr ""
-"La génération des pondérations est impossible.\n"
-"Le dernier niveau ne peut possèder qu'un seul groupe.\n"
+"Éléments structuraux remplaçables, par exemple poutres de roulement, "
+"appareils d'appui"
+
+msgid "Structures agricoles et similaires"
+msgstr "Structures agricoles et similaires"
+
+msgid "Structures de bâtiments et autres structures courantes"
+msgstr "Structures de bâtiments et autres structures courantes"
 
 msgid ""
-"Le dernier niveau ne possède aucune combinaison permettant la génération des "
-"pondérations.\n"
+"Structures monumentales de bâtiments, pont et autres ouvrages de génie civil"
 msgstr ""
-"Le dernier niveau ne possède aucune combinaison permettant la génération des "
-"pondérations.\n"
+"Structures monumentales de bâtiments, pont et autres ouvrages de génie civil"
 
 #, c-format
-msgid "Flag %d inconnu.\n"
-msgstr "Flag %d inconnu.\n"
+msgid "Catégorie de durée %d inconnue.\n"
+msgstr "Catégorie de durée %d inconnue.\n"
 
 msgid "Ajout d'une charge ponctuelle sur barre"
 msgstr "Ajout d'une charge ponctuelle sur barre"

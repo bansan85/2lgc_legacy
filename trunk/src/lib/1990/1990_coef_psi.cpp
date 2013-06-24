@@ -23,6 +23,7 @@
 #include <math.h>
 #include <gmodule.h>
 
+extern "C" {
 #include "common_erreurs.h"
 #include "common_projet.h"
 
@@ -429,4 +430,6 @@ double _1990_coef_psi2_bat(unsigned int type, Type_Pays pays)
         case PAYS_FR : { return _1990_coef_psi2_bat_fr(type); break; }
         default : { BUGMSG(0, NAN, gettext("Pays %d inconnu.\n"), pays); break; }
     }
+}
+
 }

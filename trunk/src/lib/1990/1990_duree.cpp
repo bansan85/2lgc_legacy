@@ -21,6 +21,7 @@
 #include <locale.h>
 #include <gmodule.h>
 
+extern "C" {
 #include "common_erreurs.h"
 #include "common_projet.h"
 
@@ -181,4 +182,6 @@ char* _1990_duree_projet_txt(unsigned int type, Type_Pays pays)
         case PAYS_FR : { return _1990_duree_projet_txt_fr(type); break; }
         default : { BUGMSG(0, NULL, gettext("Pays %d inconnu.\n"), pays); break; }
     }
+}
+
 }

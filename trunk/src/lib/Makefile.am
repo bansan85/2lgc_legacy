@@ -22,11 +22,11 @@ libeurocodes_la_LDFLAGS		= 	$(AM_LDFLAGS) -no-undefined -version-info 0:0:0
 libeurocodes_la_CPPFLAGS	=	@XML_CPPFLAGS@
 
 libeurocodes_la_SOURCES =	1990/1990_action.cpp \
-							1990/1990_coef_psi.c \
-							1990/1990_combinaisons.c \
-							1990/1990_duree.c \
-							1990/1990_groupe.c \
-							1990/1990_ponderations.c \
+							1990/1990_coef_psi.cpp \
+							1990/1990_combinaisons.cpp \
+							1990/1990_duree.cpp \
+							1990/1990_groupe.cpp \
+							1990/1990_ponderations.cpp \
 							1992_1_1/1992_1_1_barres.c \
 							1992_1_1/1992_1_1_materiaux.c \
 							common/common_fonction.c \
@@ -51,9 +51,9 @@ libeurocodes_la_SOURCES =	1990/1990_action.cpp \
 
 if ENABLE_GTK
 libeurocodes_la_SOURCES +=	common/common_m3d.cc \
-							1990/1990_gtk_groupes.c \
-							1990/1990_gtk_groupes_options.c \
-							1990/1990_gtk_actions.c \
+							1990/1990_gtk_groupes.cpp \
+							1990/1990_gtk_groupes_options.cpp \
+							1990/1990_gtk_actions.cpp \
 							1992_1_1/1992_1_1_gtk_materiaux.c \
 							common/common_gtk.c \
 							common/common_gtk_informations.c \
@@ -80,11 +80,11 @@ endif
 
 libeurocodes_ladir = $(includedir)/2lgc
 libeurocodes_la_HEADERS =	1990/1990_action.hpp \
-							1990/1990_coef_psi.h \
-							1990/1990_combinaisons.h \
-							1990/1990_duree.h \
-							1990/1990_groupe.h \
-							1990/1990_ponderations.h \
+							1990/1990_coef_psi.hpp \
+							1990/1990_combinaisons.hpp \
+							1990/1990_duree.hpp \
+							1990/1990_groupe.hpp \
+							1990/1990_ponderations.hpp \
 							1992_1_1/1992_1_1_barres.h \
 							1992_1_1/1992_1_1_materiaux.h \
 							common/common_erreurs.h \
@@ -110,9 +110,9 @@ libeurocodes_la_HEADERS =	1990/1990_action.hpp \
 
 if ENABLE_GTK
 libeurocodes_la_HEADERS +=	common/common_m3d.hpp \
-							1990/1990_gtk_groupes.h \
-							1990/1990_gtk_groupes_options.h \
-							1990/1990_gtk_actions.h \
+							1990/1990_gtk_groupes.hpp \
+							1990/1990_gtk_groupes_options.hpp \
+							1990/1990_gtk_actions.hpp \
 							1992_1_1/1992_1_1_gtk_materiaux.h \
 							common/common_gtk.h \
 							common/common_gtk_informations.h \
