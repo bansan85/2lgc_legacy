@@ -25,8 +25,8 @@
 #include <math.h>
 
 extern "C" {
-#include "1990_coef_psi.h"
-#include "1990_groupe.h"
+#include "1990_coef_psi.hpp"
+#include "1990_groupe.hpp"
 #include "common_projet.h"
 #include "common_math.h"
 #include "common_erreurs.h"
@@ -38,7 +38,7 @@ extern "C" {
 
 #ifdef ENABLE_GTK
 #include "common_gtk.h"
-#include "1990_gtk_actions.h"
+#include "1990_gtk_actions.hpp"
 #endif
 
 char* _1990_action_type_bat_txt_eu(unsigned int type)

@@ -23,19 +23,20 @@
 #include <gtk/gtk.h>
 #include <math.h>
 
+extern "C" {
 #include "1990_action.hpp"
-#include "1990_groupe.h"
-#include "1990_ponderations.h"
-#include "1990_combinaisons.h"
+#include "1990_groupe.hpp"
+#include "1990_ponderations.hpp"
+#include "1990_combinaisons.hpp"
 #include "common_erreurs.h"
 #include "common_projet.h"
 #include "common_tooltip.h"
 #include "common_gtk.h"
 
-const GtkTargetEntry drag_targets_groupes_1[] = { {(gchar*)PACKAGE"1_SAME_PROC", GTK_TARGET_SAME_APP, 0}};
-const GtkTargetEntry drag_targets_groupes_2[] = { {(gchar*)PACKAGE"2_SAME_PROC", GTK_TARGET_SAME_APP, 0}};
-const GtkTargetEntry drag_targets_groupes_3[] = { {(gchar*)PACKAGE"1_SAME_PROC", GTK_TARGET_SAME_APP, 0},
-                                                  {(gchar*)PACKAGE"2_SAME_PROC", GTK_TARGET_SAME_APP, 0}};
+const GtkTargetEntry drag_targets_groupes_1[] = { {const_cast<gchar*>(PACKAGE"1_SAME_PROC"), GTK_TARGET_SAME_APP, 0}};
+const GtkTargetEntry drag_targets_groupes_2[] = { {const_cast<gchar*>(PACKAGE"2_SAME_PROC"), GTK_TARGET_SAME_APP, 0}};
+const GtkTargetEntry drag_targets_groupes_3[] = { {const_cast<gchar*>(PACKAGE"1_SAME_PROC"), GTK_TARGET_SAME_APP, 0},
+                                                  {const_cast<gchar*>(PACKAGE"2_SAME_PROC"), GTK_TARGET_SAME_APP, 0}};
  
 unsigned int _1990_gtk_get_groupe(GtkTreeModel *tree_model, GtkTreeIter *iter)
 /* Description : Renvoie le numéro du groupe de l'élément iter.
@@ -171,10 +172,10 @@ gboolean _1990_gtk_groupes_affiche_niveau(Projet *projet, unsigned int niveau)
     gtk_1990_groupes = &projet->list_gtk._1990_groupes;
     
     // Il convient de bloquer le signal. Sinon, des erreurs peuvent apparaitre si une ligne a été sélectionnée (par exemple la première) à la souris et qu'on demande ensuite de changer de niveau via le spin_button.
-    g_signal_handler_block(gtk_1990_groupes->tree_view_etat, g_signal_handler_find(G_OBJECT(gtk_1990_groupes->tree_view_etat),G_SIGNAL_MATCH_FUNC,0,0,NULL,_1990_gtk_groupes_tree_view_etat_cursor_changed,NULL));
+    g_signal_handler_block(gtk_1990_groupes->tree_view_etat, g_signal_handler_find(G_OBJECT(gtk_1990_groupes->tree_view_etat), G_SIGNAL_MATCH_FUNC, 0, 0, NULL, reinterpret_cast<void*>(_1990_gtk_groupes_tree_view_etat_cursor_changed), NULL));
     /* On supprime le contenu des deux composants tree_view */
     gtk_tree_store_clear(gtk_1990_groupes->tree_store_etat);
-    g_signal_handler_unblock(gtk_1990_groupes->tree_view_etat, g_signal_handler_find(G_OBJECT(gtk_1990_groupes->tree_view_etat),G_SIGNAL_MATCH_FUNC,0,0,NULL,_1990_gtk_groupes_tree_view_etat_cursor_changed,NULL));
+    g_signal_handler_unblock(gtk_1990_groupes->tree_view_etat, g_signal_handler_find(G_OBJECT(gtk_1990_groupes->tree_view_etat), G_SIGNAL_MATCH_FUNC, 0, 0, NULL, reinterpret_cast<void*>(_1990_gtk_groupes_tree_view_etat_cursor_changed), NULL));
     gtk_tree_store_clear(gtk_1990_groupes->tree_store_dispo);
     
     /* dispo_max contient le nombre d'éléments maximum pouvant être disponible depuis le 
@@ -206,7 +207,7 @@ gboolean _1990_gtk_groupes_affiche_niveau(Projet *projet, unsigned int niveau)
     /* Parcours le niveau à afficher */
     while (list_parcours != NULL)
     {
-        Groupe      *groupe = list_parcours->data;
+        Groupe      *groupe = static_cast<Groupe*>(list_parcours->data);
         
         /* Ajoute de la ligne dans le tree_store */
         gtk_tree_store_append(gtk_1990_groupes->tree_store_etat, &groupe->Iter, NULL);
@@ -226,7 +227,7 @@ gboolean _1990_gtk_groupes_affiche_niveau(Projet *projet, unsigned int niveau)
             
             do
             {
-                Element     *element = list_parcours2->data;
+                Element     *element = static_cast<Element*>(list_parcours2->data);
                 
                 /* On signale que l'élément a déjà été inséré */
                 dispos[element->numero] = 1;
@@ -582,7 +583,7 @@ int _1990_gtk_button_ajout_dispo_proc(unsigned int ngroupe, Projet *projet)
     
     for(;list != NULL; list = g_list_previous(list))
     {
-        gtk_tree_model_get_iter(model1, &iter1, (GtkTreePath*)list->data);
+        gtk_tree_model_get_iter(model1, &iter1, static_cast<GtkTreePath*>(list->data));
         
         // On récupère les informations des lignes sélectionnées
         gtk_tree_model_get(model1, &iter1, 0, &numero, 1, &nom, -1);
@@ -590,7 +591,7 @@ int _1990_gtk_button_ajout_dispo_proc(unsigned int ngroupe, Projet *projet)
         // On ajoute l'élément au groupe
         BUG(_1990_groupe_ajout_element(projet, niveau, ngroupe, numero), -1);
     }
-    g_list_foreach(list_orig, (GFunc)gtk_tree_path_free, NULL);
+    g_list_foreach(list_orig, reinterpret_cast<GFunc>(gtk_tree_path_free), NULL);
     
     return 0;
 }
@@ -805,11 +806,11 @@ void _1990_gtk_button_groupe_toggled(GtkRadioToolButton *radiobutton, Projet *pr
     BUG(groupe = _1990_groupe_positionne_groupe(niveau_groupe, ngroupe), );
     
     /* On attribue le nouveau type de combinaison */
-    if (radiobutton == (void *)projet->list_gtk._1990_groupes.item_groupe_and)
+    if (radiobutton == static_cast<void*>(projet->list_gtk._1990_groupes.item_groupe_and))
         BUG(_1990_groupe_modifie_combinaison(groupe, GROUPE_COMBINAISON_AND), );
-    else if (radiobutton == (void *)projet->list_gtk._1990_groupes.item_groupe_or)
+    else if (radiobutton == static_cast<void*>(projet->list_gtk._1990_groupes.item_groupe_or))
         BUG(_1990_groupe_modifie_combinaison(groupe, GROUPE_COMBINAISON_OR), );
-    else if (radiobutton == (void *)projet->list_gtk._1990_groupes.item_groupe_xor)
+    else if (radiobutton == static_cast<void*>(projet->list_gtk._1990_groupes.item_groupe_xor))
         BUG(_1990_groupe_modifie_combinaison(groupe, GROUPE_COMBINAISON_XOR), );
     else
         BUGMSG(0, , gettext("Le type de combinaison est inconnu.\n"));
@@ -1164,7 +1165,7 @@ void _1990_gtk_tree_select_changed(GtkTreeSelection *treeselection, Projet *proj
         else
             gtk_widget_set_sensitive(GTK_WIDGET(gtk_1990_groupes->item_ajout_dispo), TRUE);
         
-        g_list_foreach(list_orig, (GFunc)gtk_tree_path_free, NULL);
+        g_list_foreach(list_orig, reinterpret_cast<GFunc>(gtk_tree_path_free), NULL);
         g_list_free(list_orig);
     }
 }
@@ -1180,7 +1181,7 @@ void _1990_gtk_groupes_window_destroy(GtkWidget *object, Projet *projet)
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk._1990_groupes.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes");
     
-    g_signal_handler_block(projet->list_gtk._1990_groupes.tree_view_etat, g_signal_handler_find(G_OBJECT(projet->list_gtk._1990_groupes.tree_view_etat),G_SIGNAL_MATCH_FUNC,0,0,NULL,_1990_gtk_groupes_tree_view_etat_cursor_changed,NULL));
+    g_signal_handler_block(projet->list_gtk._1990_groupes.tree_view_etat, g_signal_handler_find(G_OBJECT(projet->list_gtk._1990_groupes.tree_view_etat), G_SIGNAL_MATCH_FUNC, 0, 0, NULL, reinterpret_cast<void*>(_1990_gtk_groupes_tree_view_etat_cursor_changed), NULL));
     g_object_unref(G_OBJECT(projet->list_gtk._1990_groupes.builder));
     projet->list_gtk._1990_groupes.builder = NULL;
     return;
@@ -1236,6 +1237,8 @@ void _1990_gtk_groupes(Projet *projet)
     gtk_window_set_transient_for(GTK_WINDOW(projet->list_gtk._1990_groupes.window_groupe), GTK_WINDOW(projet->list_gtk.comp.window));
     
     return;
+}
+
 }
 
 #endif

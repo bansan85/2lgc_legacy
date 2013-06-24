@@ -33,7 +33,7 @@
 #include "common_math.h"
 #include "common_selection.h"
 #include "common_projet.h"
-#include "1990_groupe.h"
+#include "1990_groupe.hpp"
 #include "1990_action.hpp"
 #include "1992_1_1_barres.h"
 #include "1992_1_1_materiaux.h"
