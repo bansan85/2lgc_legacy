@@ -34,7 +34,7 @@
 #include "EF_noeuds.h"
 #include "EF_appuis.h"
 #include "EF_calculs.h"
-#include "1992_1_1_barres.h"
+#include "1992_1_1_barres.hpp"
 
 void EF_gtk_noeud_fermer(GtkButton *button, Projet *projet)
 /* Description : Ferme la fenêtre sans effectuer les modifications.
