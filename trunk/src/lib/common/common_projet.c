@@ -52,8 +52,8 @@
 #include "1990_action.hpp"
 #include "1990_groupe.hpp"
 #include "1990_combinaisons.hpp"
-#include "1992_1_1_barres.h"
-#include "1992_1_1_materiaux.h"
+#include "1992_1_1_barres.hpp"
+#include "1992_1_1_materiaux.hpp"
 
 Projet* projet_init(Type_Pays pays)
 /* Description : Initialise la variable projet.

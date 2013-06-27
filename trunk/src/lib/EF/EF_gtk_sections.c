@@ -38,7 +38,7 @@
 #include "EF_gtk_section_T.h"
 #include "EF_gtk_section_carree.h"
 #include "EF_gtk_section_circulaire.h"
-#include "1992_1_1_barres.h"
+#include "1992_1_1_barres.hpp"
 
 void EF_gtk_sections_fermer(GtkButton *button, Projet *projet)
 /* Description : Ferme la fenêtre.

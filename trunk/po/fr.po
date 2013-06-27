@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2013-06-23 23:40+0200\n"
+"POT-Creation-Date: 2013-06-27 07:20+0200\n"
 "PO-Revision-Date: 2013-06-16 08:23+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
@@ -443,6 +443,36 @@ msgstr "Le matériau n'est pas en béton.\n"
 msgid "Modification d'un matériau béton"
 msgstr "Modification d'un matériau béton"
 
+msgid ""
+"La résistance caractéristique à la compression du béton doit être inférieure "
+"ou égale à 90 MPa.\n"
+msgstr ""
+"La résistance caractéristique à la compression du béton doit être inférieure "
+"ou égale à 90 MPa.\n"
+
+msgid "Erreur d'allocation mémoire.\n"
+msgstr "Erreur d'allocation mémoire.\n"
+
+#, c-format
+msgid "Le matériau %s existe déjà.\n"
+msgstr "Le matériau %s existe déjà.\n"
+
+#, c-format
+msgid "Matériau en béton '%s' introuvable.\n"
+msgstr "Matériau en béton '%s' introuvable.\n"
+
+#, c-format
+msgid ""
+"Impossible de supprimer le matériau car il est utilisé par la barre %s.\n"
+msgstr ""
+"Impossible de supprimer le matériau car il est utilisé par la barre %s.\n"
+
+#, c-format
+msgid ""
+"Impossible de supprimer le matériau car il est utilisé par les barres %s.\n"
+msgstr ""
+"Impossible de supprimer le matériau car il est utilisé par les barres %s.\n"
+
 msgid "Poteau en béton"
 msgstr "Poteau en béton"
 
@@ -453,9 +483,6 @@ msgid ""
 "La création d'une barre nécessite l'utilisation de des noeuds différents.\n"
 msgstr ""
 "La création d'une barre nécessite l'utilisation de des noeuds différents.\n"
-
-msgid "Erreur d'allocation mémoire.\n"
-msgstr "Erreur d'allocation mémoire.\n"
 
 msgid "Le matériau n'est pas spécifié.\n"
 msgstr "Le matériau n'est pas spécifié.\n"
@@ -498,33 +525,6 @@ msgstr ""
 #, c-format
 msgid "Relachement %d inconnu."
 msgstr "Relachement %d inconnu."
-
-msgid ""
-"La résistance caractéristique à la compression du béton doit être inférieure "
-"ou égale à 90 MPa.\n"
-msgstr ""
-"La résistance caractéristique à la compression du béton doit être inférieure "
-"ou égale à 90 MPa.\n"
-
-#, c-format
-msgid "Le matériau %s existe déjà.\n"
-msgstr "Le matériau %s existe déjà.\n"
-
-#, c-format
-msgid "Matériau en béton '%s' introuvable.\n"
-msgstr "Matériau en béton '%s' introuvable.\n"
-
-#, c-format
-msgid ""
-"Impossible de supprimer le matériau car il est utilisé par la barre %s.\n"
-msgstr ""
-"Impossible de supprimer le matériau car il est utilisé par la barre %s.\n"
-
-#, c-format
-msgid ""
-"Impossible de supprimer le matériau car il est utilisé par les barres %s.\n"
-msgstr ""
-"Impossible de supprimer le matériau car il est utilisé par les barres %s.\n"
 
 #, c-format
 msgid "Le type %d de la liste est inconnu.\n"

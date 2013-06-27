@@ -31,7 +31,7 @@ extern "C" {
 #include "common_math.h"
 #include "common_selection.h"
 #include "EF_noeuds.h"
-#include "1992_1_1_barres.h"
+#include "1992_1_1_barres.hpp"
 #include "common_m3d.hpp"
 
 gboolean m3d_init(Projet *projet)

@@ -27,8 +27,8 @@ libeurocodes_la_SOURCES =	1990/1990_action.cpp \
 							1990/1990_duree.cpp \
 							1990/1990_groupe.cpp \
 							1990/1990_ponderations.cpp \
-							1992_1_1/1992_1_1_barres.c \
-							1992_1_1/1992_1_1_materiaux.c \
+							1992_1_1/1992_1_1_barres.cpp \
+							1992_1_1/1992_1_1_materiaux.cpp \
 							common/common_fonction.c \
 							common/common_math.c \
 							common/common_projet.c \
@@ -54,7 +54,7 @@ libeurocodes_la_SOURCES +=	common/common_m3d.cc \
 							1990/1990_gtk_groupes.cpp \
 							1990/1990_gtk_groupes_options.cpp \
 							1990/1990_gtk_actions.cpp \
-							1992_1_1/1992_1_1_gtk_materiaux.c \
+							1992_1_1/1992_1_1_gtk_materiaux.cpp \
 							common/common_gtk.c \
 							common/common_gtk_informations.c \
 							common/ressources.c \
@@ -85,8 +85,8 @@ libeurocodes_la_HEADERS =	1990/1990_action.hpp \
 							1990/1990_duree.hpp \
 							1990/1990_groupe.hpp \
 							1990/1990_ponderations.hpp \
-							1992_1_1/1992_1_1_barres.h \
-							1992_1_1/1992_1_1_materiaux.h \
+							1992_1_1/1992_1_1_barres.hpp \
+							1992_1_1/1992_1_1_materiaux.hpp \
 							common/common_erreurs.h \
 							common/common_fonction.h \
 							common/common_math.h \
@@ -113,7 +113,7 @@ libeurocodes_la_HEADERS +=	common/common_m3d.hpp \
 							1990/1990_gtk_groupes.hpp \
 							1990/1990_gtk_groupes_options.hpp \
 							1990/1990_gtk_actions.hpp \
-							1992_1_1/1992_1_1_gtk_materiaux.h \
+							1992_1_1/1992_1_1_gtk_materiaux.hpp \
 							common/common_gtk.h \
 							common/common_gtk_informations.h \
 							common/ressources.h \

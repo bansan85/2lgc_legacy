@@ -22,7 +22,7 @@
 #include <string.h>
 #include <gmodule.h>
 
-#include "1992_1_1_barres.h"
+#include "1992_1_1_barres.hpp"
 #include "common_projet.h"
 #include "common_erreurs.h"
 #include "common_selection.h"

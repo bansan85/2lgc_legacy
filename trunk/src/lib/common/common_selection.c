@@ -25,7 +25,7 @@
 #include "common_projet.h"
 #include "EF_noeuds.h"
 #include "EF_charge.h"
-#include "1992_1_1_barres.h"
+#include "1992_1_1_barres.hpp"
 #include "common_erreurs.h"
 
 gboolean common_selection_ajout_nombre(void *data, GList **liste, Type_Liste type,
