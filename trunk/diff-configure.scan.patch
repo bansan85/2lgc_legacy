@@ -9,7 +9,7 @@
 +AM_GNU_GETTEXT([external])
 +AC_CONFIG_MACRO_DIR([m4])
 
-@@ -13,15 +0,64 @@
+@@ -13,15 +0,65 @@
  AC_PROG_MAKE_SET
 +AM_PROG_CC_C_O
 +AC_PROG_F77
@@ -58,6 +58,7 @@
 +AC_MSG_RESULT([$platform_win])
 +AM_CONDITIONAL(PLATFORM_WIN32, test "$platform_win" = "Win32")
 +AM_CONDITIONAL(PLATFORM_WIN64, test "$platform_win" = "Win64")
++AM_CONDITIONAL(PLATFORM_LINUX, test "$platform_win" = "no")
  
  # Checks for libraries.
 -# FIXME: Replace `main' with a function in `-lamd':
