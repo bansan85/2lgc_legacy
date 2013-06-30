@@ -28,11 +28,11 @@
 #include "1990_ponderations.h"
 
 
-int _1990_combinaisons_verifie_double(GList *liste_combinaisons, Combinaison *comb_a_verifier)
+int _1990_combinaisons_verifie_double(GList *liste_combinaisons, GList *comb_a_verifier)
 /* Description : Vérifie si une combinaison est déjà présente dans une liste de combinaisons.
  *               FONCTION INTERNE.
  * Paramètres : GList *liste_combinaisons : liste de combinaisons,
- *            : Combinaison *comb_a_verifier : combinaison à vérifier.
+ *            : GList *comb_a_verifier : combinaison à vérifier.
  * Valeur renvoyée :
  *   Succès : 0 si la combinaison n'est pas présente,
  *          : 1 si la combinaison est présente,
@@ -47,22 +47,22 @@ int _1990_combinaisons_verifie_double(GList *liste_combinaisons, Combinaison *co
     
     if (liste_combinaisons == NULL)
         return 0;
-    if (comb_a_verifier->elements == NULL)
+    if (comb_a_verifier == NULL)
         return 1;
     
     list_parcours = liste_combinaisons;
     do
     {
-        int         doublon = 1;
-        Combinaison *comb_en_cours = list_parcours->data;
+        int     doublon = 1;
+        GList   *comb_en_cours = list_parcours->data;
         
         /* On vérifie si la combinaison en cours possède le même nombre d'éléments que la combinaison à vérifier */
-        if (g_list_length(comb_en_cours->elements) == g_list_length(comb_a_verifier->elements))
+        if (g_list_length(comb_en_cours) == g_list_length(comb_a_verifier))
         {
             GList   *list_1, *list_2;
             
-            list_1 = comb_en_cours->elements;
-            list_2 = comb_a_verifier->elements;
+            list_1 = comb_en_cours;
+            list_2 = comb_a_verifier;
             
             do
             {
@@ -115,8 +115,8 @@ gboolean _1990_combinaisons_duplique(GList **liste_comb_destination, GList *list
     list_parcours = liste_comb_source;
     do
     {
-        Combinaison *combinaison_source = list_parcours->data;
-        int         verifie_double;
+        GList   *combinaison_source = list_parcours->data;
+        int     verifie_double;
         
         if (sans_double == TRUE)
             verifie_double = _1990_combinaisons_verifie_double(*liste_comb_destination, combinaison_source);
@@ -128,15 +128,13 @@ gboolean _1990_combinaisons_duplique(GList **liste_comb_destination, GList *list
             /* On l'ajoute donc */
             case 0 :
             {
-                Combinaison *combinaison_destination = malloc(sizeof(Combinaison));
-                
-                BUGMSG(combinaison_destination, FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                GList   *combinaison_destination;
                 
                 /* Duplication de la combinaison */
-                combinaison_destination->elements = NULL;
-                if (combinaison_source->elements != NULL)
+                combinaison_destination = NULL;
+                if (combinaison_source != NULL)
                 {
-                    GList   *list_parcours2 = combinaison_source->elements;
+                    GList   *list_parcours2 = combinaison_source;
                     
                     do
                     {
@@ -147,7 +145,7 @@ gboolean _1990_combinaisons_duplique(GList **liste_comb_destination, GList *list
                         
                         element_destination->action = element_source->action;
                         element_destination->flags = element_source->flags;
-                        combinaison_destination->elements = g_list_append(combinaison_destination->elements, element_destination);
+                        combinaison_destination = g_list_append(combinaison_destination, element_destination);
                         
                         list_parcours2 = g_list_next(list_parcours2);
                     }
@@ -178,11 +176,11 @@ gboolean _1990_combinaisons_duplique(GList **liste_comb_destination, GList *list
 }
 
 
-gboolean _1990_combinaisons_action_predominante(Combinaison *combinaison, Type_Pays pays)
+gboolean _1990_combinaisons_action_predominante(GList *combinaison, Type_Pays pays)
 /* Description : Modifie le flag de toutes les actions variables d'une combinaison afin de les
  *               considérer comme action prédominante.
  *               FONCTION INTERNE.
- * Paramètres : Combinaison *combinaison : combinaison à modifier,
+ * Paramètres : GList *combinaison : combinaison à modifier,
  *            : Type_Pays pays : le pays.
  * Valeur renvoyée :
  *   Succès : TRUE
@@ -195,10 +193,10 @@ gboolean _1990_combinaisons_action_predominante(Combinaison *combinaison, Type_P
     
     BUGMSG(combinaison, FALSE, gettext("Paramètre %s incorrect.\n"), "combinaison");
     
-    if (combinaison->elements == NULL)
+    if (combinaison == NULL)
         return 0;
     
-    list_parcours = combinaison->elements;
+    list_parcours = combinaison;
     do
     {
         Combinaison_Element *combinaison_element = list_parcours->data;
@@ -264,7 +262,7 @@ gboolean _1990_combinaisons_genere_xor(Projet *projet, Niveau_Groupe *niveau, Gr
         do
         {
             Element             *element_en_cours = list_parcours->data;
-            Combinaison         *nouvelle_combinaison;
+            GList               *nouvelle_combinaison;
             Combinaison_Element *nouveau_element;
             Action              *action;
             
@@ -272,12 +270,11 @@ gboolean _1990_combinaisons_genere_xor(Projet *projet, Niveau_Groupe *niveau, Gr
             BUG(action = _1990_action_cherche_numero(projet, element_en_cours->numero), FALSE);
             if (action->charges != NULL)
             {
-                BUGMSG(nouvelle_combinaison = malloc(sizeof(Combinaison)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                 BUGMSG(nouveau_element = malloc(sizeof(Combinaison_Element)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-                nouvelle_combinaison->elements = NULL;
+                nouvelle_combinaison = NULL;
                 nouveau_element->action = action;
                 nouveau_element->flags = nouveau_element->action->flags;
-                nouvelle_combinaison->elements = g_list_append(nouvelle_combinaison->elements, nouveau_element);
+                nouvelle_combinaison = g_list_append(nouvelle_combinaison, nouveau_element);
                 groupe->tmp_combinaison = g_list_append(groupe->tmp_combinaison, nouvelle_combinaison);
             }
             
@@ -316,12 +313,12 @@ gboolean _1990_combinaisons_genere_xor(Projet *projet, Niveau_Groupe *niveau, Gr
 }
 
 
-gboolean _1990_combinaisons_fusion(Combinaison *destination, Combinaison *source)
+gboolean _1990_combinaisons_fusion(GList *destination, GList *source)
 /* Description : Fusionne deux combinaisons. Les éléments de la combinaison source sont ajoutés
  *               à la fin de la combinaison destination.
  *               FONCTION INTERNE.
- * Paramètres : Combinaison *destination : combinaison de destination,
- *            : Combinaison *source : combinaison source.
+ * Paramètres : GList *destination : combinaison de destination,
+ *            : GList *source : combinaison source.
  * Valeur renvoyée :
  *   Succès : TRUE
  *   Échec : FALSE :
@@ -335,7 +332,7 @@ gboolean _1990_combinaisons_fusion(Combinaison *destination, Combinaison *source
     BUGMSG(destination, FALSE, gettext("Paramètre %s incorrect.\n"), "destination");
     BUGMSG(source, FALSE, gettext("Paramètre %s incorrect.\n"), "source");
     
-    list_parcours = source->elements;
+    list_parcours = source;
     while (list_parcours != NULL)
     {
         Combinaison_Element *element_source = list_parcours->data;
@@ -344,7 +341,7 @@ gboolean _1990_combinaisons_fusion(Combinaison *destination, Combinaison *source
         BUGMSG(element_destination, FALSE, gettext("Erreur d'allocation mémoire.\n"));
         element_destination->action = element_source->action;
         element_destination->flags = element_source->flags;
-        destination->elements = g_list_append(destination->elements, element_destination);
+        destination = g_list_append(destination, element_destination);
         
         list_parcours = g_list_next(list_parcours);
     }
@@ -361,13 +358,12 @@ void _1990_combinaisons_free_groupe_tmp_combinaison(void *data)
  * Valeur renvoyée : void.
  */
 {
-    Combinaison *combinaison = (Combinaison*)data;
+    GList   *combinaison = (GList*)data;
     
     BUGMSG(data, , gettext("Paramètre %s incorrect.\n"), "data");
     
-    if (combinaison->elements != NULL)
-        g_list_free_full(combinaison->elements, g_free);
-    free(data);
+    if (combinaison != NULL)
+        g_list_free_full(combinaison, g_free);
     
     return;
 }
@@ -417,11 +413,10 @@ gboolean _1990_combinaisons_genere_and(Projet *projet, Niveau_Groupe *niveau, Gr
     //       les actions variables deviennent prédominantes.
     if (niveau == projet->niveaux_groupes->data)
     {
-        Combinaison *comb;
-        int         action_predominante = 0;
+        GList   *comb;
+        int     action_predominante = 0;
         
-        BUGMSG(comb = malloc(sizeof(Combinaison)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-        comb->elements = NULL;
+        comb = NULL;
         
         do
         {
@@ -438,14 +433,14 @@ gboolean _1990_combinaisons_genere_and(Projet *projet, Niveau_Groupe *niveau, Gr
                 nouveau_element->flags = nouveau_element->action->flags;
                 if ((nouveau_element->flags & 1) != 0)
                     action_predominante = 1;
-                comb->elements = g_list_append(comb->elements, nouveau_element);
+                comb = g_list_append(comb, nouveau_element);
             }
             
             list_parcours = g_list_next(list_parcours);
         }
         while (list_parcours != NULL);
         
-        if (comb->elements != NULL)
+        if (comb != NULL)
         {
             if (action_predominante == 1)
                 BUG(_1990_combinaisons_action_predominante(comb, projet->parametres.pays), FALSE);
@@ -518,12 +513,12 @@ gboolean _1990_combinaisons_genere_and(Projet *projet, Niveau_Groupe *niveau, Gr
                 list_parcours3 = nouvelles_combinaisons;
                 for (i=1;i<=nbboucle;i++)
                 {
-                    Combinaison *combinaison2;
+                    GList   *combinaison2;
                     
                     combinaison2 = list_parcours2->data;
                     for (j=1;j<=g_list_length(transition);j++)
                     {
-                        Combinaison *combinaison1;
+                        GList   *combinaison1;
                         
                         combinaison1 = list_parcours3->data;
                         BUG(_1990_combinaisons_fusion(combinaison1, combinaison2), FALSE);
@@ -581,7 +576,7 @@ gboolean _1990_combinaisons_genere_or(Projet *projet, Niveau_Groupe *niveau, Gro
     BUGMSG(niveau->groupes, FALSE, gettext("Le niveau %u est vide. Veuillez soit le remplir, soit le supprimer.\n"), niveau->numero);
     BUGMSG(groupe->type_combinaison == GROUPE_COMBINAISON_OR, FALSE, gettext("Seuls les groupes possédant un type de combinaison OR peuvent appeler _1990_combinaisons_genere_or.\n"));
     
-    if (groupe->elements == NULL)
+    if (groupe == NULL)
         return TRUE;
     
     boucle = 2;
@@ -590,7 +585,7 @@ gboolean _1990_combinaisons_genere_or(Projet *projet, Niveau_Groupe *niveau, Gro
     
     // Si l'élément courant de niveaux_groupes est le premier de la liste Alors
     //     Afin de générer l'ensemble des combinaisons, il va être nécessaire de réaliser une
-    //       boucle de 2^(g_list_length(groupe->elements)).
+    //       boucle de 2^(g_list_length(groupe)).
     //     Le principe consiste à générer toutes les combinaisons possibles avec une
     //       combinaison de type OR. Ainsi, dans le cas où il y a trois éléments dans un
     //       groupe, il est donc possible de générer les combinaisons suivantes :
@@ -604,13 +599,12 @@ gboolean _1990_combinaisons_genere_or(Projet *projet, Niveau_Groupe *niveau, Gro
         {
             unsigned int    parcours_bits = i;
             int             action_predominante = 0;
-            Combinaison     *nouvelle_combinaison;
+            GList           *nouvelle_combinaison;
             
-            BUGMSG(nouvelle_combinaison = malloc(sizeof(Combinaison)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-            nouvelle_combinaison->elements = NULL;
+            nouvelle_combinaison = NULL;
             
             list_parcours = groupe->elements;
-    
+            
             do
             {
                 if ((parcours_bits & 1) == 1)
@@ -628,7 +622,7 @@ gboolean _1990_combinaisons_genere_or(Projet *projet, Niveau_Groupe *niveau, Gro
                         element->flags = element->action->flags;
                         if ((element->flags & 1) != 0)
                             action_predominante = 1;
-                        nouvelle_combinaison->elements = g_list_append(nouvelle_combinaison->elements, element);
+                        nouvelle_combinaison = g_list_append(nouvelle_combinaison, element);
                     }
                 }
                 parcours_bits = parcours_bits >> 1;
@@ -636,7 +630,7 @@ gboolean _1990_combinaisons_genere_or(Projet *projet, Niveau_Groupe *niveau, Gro
             }
             while (parcours_bits != 0);
             
-            if (nouvelle_combinaison->elements != NULL)
+            if (nouvelle_combinaison != NULL)
             {
                 if (action_predominante == 1)
                     BUG(_1990_combinaisons_action_predominante(nouvelle_combinaison, projet->parametres.pays), FALSE);
@@ -647,7 +641,7 @@ gboolean _1990_combinaisons_genere_or(Projet *projet, Niveau_Groupe *niveau, Gro
         }
     }
     // Sinon
-    //     Création d'une boucle pour générer 2^(g_list_length(groupe->elements)) combinaisons
+    //     Création d'une boucle pour générer 2^(g_list_length(groupe)) combinaisons
     //     Pour chaque itération (i variant de 0 à nb_boucle-1)
     //         Pour chaque bit de i valant 1 (chaque bit de i représente si l'élément doit être
     //           pris en compte (1) ou non (0))
@@ -715,11 +709,11 @@ gboolean _1990_combinaisons_genere_or(Projet *projet, Niveau_Groupe *niveau, Gro
                             list_parcours3 = nouvelles_combinaisons;
                             for (j=1;j<=g_list_length(groupe_n_1->tmp_combinaison);j++)
                             {
-                                Combinaison *combinaison2 = list_parcours2->data;
+                                GList   *combinaison2 = list_parcours2->data;
                                 
                                 for (k=1;k<=g_list_length(transition);k++)
                                 {
-                                    Combinaison *combinaison1 = list_parcours3->data;
+                                    GList   *combinaison1 = list_parcours3->data;
                                     
                                     BUG(_1990_combinaisons_fusion(combinaison1, combinaison2), FALSE);
                                     list_parcours3 = g_list_next(list_parcours3);
@@ -930,8 +924,7 @@ gboolean _1990_combinaisons_genere(Projet *projet)
                     
                     while (groupe->tmp_combinaison != NULL)
                     {
-                        g_list_free_full(((Combinaison*)groupe->tmp_combinaison->data)->elements, g_free);
-                        free(groupe->tmp_combinaison->data);
+                        g_list_free_full((GList*)groupe->tmp_combinaison->data, g_free);
                         groupe->tmp_combinaison = g_list_delete_link(groupe->tmp_combinaison, groupe->tmp_combinaison);
                     }
                     list_parcours2 = g_list_next(list_parcours2);

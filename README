@@ -13,12 +13,12 @@ La description des messages doit toujours commencer par :
 [AMELIORATION] : Amélioration d'une fonctionnalité existante. Optimisation modifie du code existant par un code plus efficace. Amélioration ajoute une fonctionnalité à une fonctionnalité existante. Elle améliore donc une fonction existante.
 [BRANCHE nom_de_la_branche] : modification sur une branche. Dans ce cas, dans le message, il faut préciser ET le nom de la branche, et le type de modification. Ex : [BRANCHE vues3d][AMELIORATION]
 [DOC] : Ajout / Modification de la documentation.
-+[CODE] : Réécriture d'une partie du code source qui marche très bien par une autre qui marche tout aussi bien mais écrite de façon plus rigoureuse (cast, indentation, renommage d'une structure, ...).
+[CODE] : Réécriture d'une partie du code source qui marche très bien par une autre qui marche tout aussi bien mais écrite de façon plus rigoureuse (cast, indentation, renommage d'une structure, ...).
 
 
 Performances :
 Pour tester l'intégralité de l'application, il convient de la compiler avec l'option FLAGS="--coverage". Par exemple :
-  ./configure --with-gtk --prefix=/usr/local CFLAGS="--coverage" CXXFLAGS="--coverage"
+  ./configure --with-gtk --with-debug --prefix=/usr/local CFLAGS="--coverage" CXXFLAGS="--coverage"
 Ensuite compiler et installer l'application normalement :
   make -j9 && sudo make install && /usr/local/bin/codegui
   
