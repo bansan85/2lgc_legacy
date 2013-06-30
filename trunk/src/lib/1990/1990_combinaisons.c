@@ -797,10 +797,9 @@ void _1990_combinaisons_free_1(void *data)
  * Valeur renvoyée : Aucune.
  */
 {
-    Ponderation *pond = data;
+    GList   *pond = data;
     
-    g_list_free_full(pond->elements, free);
-    free(pond);
+    g_list_free_full(pond, free);
     
     return;
 }
