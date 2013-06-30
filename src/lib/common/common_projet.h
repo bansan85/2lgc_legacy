@@ -867,7 +867,9 @@ typedef struct __Groupe
     char                    *nom;
     unsigned int            numero;
     Type_Groupe_Combinaison type_combinaison;
-    GList                   *elements;
+    GList                   *elements;          // Contient des Action si le groupe appartient
+                                                // au niveau 0,
+                                                // Contient des Groupe sinon.
     Combinaisons            tmp_combinaison;
 #ifdef ENABLE_GTK
     GtkTreeIter             Iter;         // Pour la fenêtre groupes
@@ -878,10 +880,14 @@ typedef struct __Groupe
 
 typedef struct __Niveau_Groupe
 {
-    unsigned int    numero;
-    GList           *groupes;
+    unsigned int    numero;     // numero contient le niveau de niveau_groupe.
+    GList           *groupes;   // groupes contient une liste de groupe.
+                                // Si le niveau vaut 0, chaque groupe contiendra une liste
+                                // d'action.
+                                // Si le niveau est supérieur à 0, chaque groupe contiendra une
+                                // liste de groupe du niveau inférieur.
 #ifdef ENABLE_GTK
-    GtkTreeIter     Iter;                 // Pour la fenêtre groupes
+    GtkTreeIter     Iter;       // Pour la fenêtre groupes
 #endif
 } Niveau_Groupe;
 

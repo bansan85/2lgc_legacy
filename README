@@ -13,7 +13,7 @@ La description des messages doit toujours commencer par :
 [AMELIORATION] : Amélioration d'une fonctionnalité existante. Optimisation modifie du code existant par un code plus efficace. Amélioration ajoute une fonctionnalité à une fonctionnalité existante. Elle améliore donc une fonction existante.
 [BRANCHE nom_de_la_branche] : modification sur une branche. Dans ce cas, dans le message, il faut préciser ET le nom de la branche, et le type de modification. Ex : [BRANCHE vues3d][AMELIORATION]
 [DOC] : Ajout / Modification de la documentation.
-[CODE] : Réécriture du code.
++[CODE] : Réécriture d'une partie du code source qui marche très bien par une autre qui marche tout aussi bien mais écrite de façon plus rigoureuse (cast, indentation, renommage d'une structure, ...).
 
 
 Performances :
