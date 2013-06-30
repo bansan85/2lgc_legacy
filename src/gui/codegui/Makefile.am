@@ -11,4 +11,11 @@ codegui_CPPFLAGS	=	@GTK_CFLAGS@
 codegui_LDADD		=	-lcholmod -lamd -lcolamd -lumfpack @BLAS_LIBS@ -lgfortran @XML_LIBS@ @GTK_LIBS@ \
 						../../lib/libeurocodes.la
 codegui_LDFLAGS		=   $(AM_LDFLAGS) -no-undefined
+if !ENABLE_DEBUG
+if !PLATFORM_LINUX
+codegui_LDFLAGS		+=  -mwindows
 endif
+endif #ENABLE_DEBUG
+
+
+endif #ENABLE_GTK
