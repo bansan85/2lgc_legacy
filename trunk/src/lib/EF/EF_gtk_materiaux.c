@@ -33,8 +33,8 @@
 #include "common_math.h"
 #include "common_selection.h"
 #include "common_text.h"
-#include "1992_1_1_materiaux.hpp"
-#include "1992_1_1_barres.hpp"
+#include "1992_1_1_materiaux.h"
+#include "1992_1_1_barres.h"
 
 void EF_gtk_materiaux_fermer(GtkButton *button, Projet *projet)
 /* Description : Ferme la fenêtre.

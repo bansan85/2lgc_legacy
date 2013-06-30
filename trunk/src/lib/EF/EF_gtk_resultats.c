@@ -24,8 +24,8 @@
 #include <gtk/gtk.h>
 #include <string.h>
 
-#include "1990_action.hpp"
-#include "1990_ponderations.hpp"
+#include "1990_action.h"
+#include "1990_ponderations.h"
 #include "common_projet.h"
 #include "common_erreurs.h"
 #include "common_fonction.h"

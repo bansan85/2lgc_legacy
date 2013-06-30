@@ -29,7 +29,6 @@ endif
 
 AM_CFLAGS 		= $(CUSTOM_CFLAGS) -Wdeclaration-after-statement -std=gnu11
 AM_CXXFLAGS		= $(CUSTOM_CFLAGS) -std=gnu++11
-# -Wold-style-cast
 if ENABLE_GTK
 AM_CFLAGS      += @GTK_CFLAGS@
 AM_CXXFLAGS    += @GTK_CFLAGS@

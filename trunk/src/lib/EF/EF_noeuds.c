@@ -28,7 +28,7 @@
 #include "common_math.h"
 #include "common_m3d.hpp"
 #include "EF_calculs.h"
-#include "1992_1_1_barres.hpp"
+#include "1992_1_1_barres.h"
 #ifdef ENABLE_GTK
 #include "EF_gtk_appuis.h"
 #endif

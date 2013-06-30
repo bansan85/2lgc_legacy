@@ -22,13 +22,12 @@
 #include <gmodule.h>
 #include <math.h>
 
-extern "C" {
 #include "common_projet.h"
 #include "common_erreurs.h"
-#include "1990_action.hpp"
+#include "1990_action.h"
 
 #ifdef ENABLE_GTK
-#include "1990_gtk_groupes.hpp"
+#include "1990_gtk_groupes.h"
 #include "common_gtk.h"
 #endif
 
@@ -61,7 +60,7 @@ gboolean _1990_groupe_ajout_niveau(Projet *projet)
  *             erreur d'allocation mémoire.
  */
 {
-    Niveau_Groupe   *niveau_nouveau = static_cast<Niveau_Groupe*>(malloc(sizeof(Niveau_Groupe)));
+    Niveau_Groupe   *niveau_nouveau = malloc(sizeof(Niveau_Groupe));
     
     // Trivial
     BUGMSG(niveau_nouveau, FALSE, gettext("Erreur d'allocation mémoire.\n"));
@@ -109,7 +108,7 @@ Element *_1990_groupe_positionne_element(Groupe *groupe, unsigned int numero)
     list_parcours = groupe->elements;
     while (list_parcours != NULL)
     {
-        Element     *element_en_cours = static_cast<Element*>(list_parcours->data);
+        Element     *element_en_cours = list_parcours->data;
         
         if (element_en_cours->numero == numero)
             return element_en_cours;
@@ -140,7 +139,7 @@ Groupe *_1990_groupe_positionne_groupe(Niveau_Groupe *niveau, unsigned int numer
     list_parcours = niveau->groupes;
     while (list_parcours != NULL)
     {
-        Groupe *groupe = static_cast<Groupe*>(list_parcours->data);
+        Groupe *groupe = list_parcours->data;
         if (groupe->numero == numero)
             return groupe;
          
@@ -171,7 +170,7 @@ Niveau_Groupe *_1990_groupe_positionne_niveau(Projet *projet, unsigned int numer
     list_parcours = projet->niveaux_groupes;
     while (list_parcours != NULL)
     {
-        niveau = static_cast<Niveau_Groupe*>(list_parcours->data);
+        niveau = list_parcours->data;
         if (niveau->numero == numero)
             return niveau;
         
@@ -197,7 +196,7 @@ Groupe *_1990_groupe_ajout_groupe(Projet *projet, unsigned int niveau,
  *             _1990_groupe_positionne_niveau.
  */
 {
-    Groupe          *groupe_nouveau = static_cast<Groupe*>(malloc(sizeof(Groupe)));
+    Groupe          *groupe_nouveau = malloc(sizeof(Groupe));
     Niveau_Groupe   *niveau_groupe;
     
     BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
@@ -266,7 +265,7 @@ gboolean _1990_groupe_ajout_element(Projet *projet, unsigned int niveau, unsigne
 {
     Niveau_Groupe   *niveau_groupe;
     Groupe          *groupe;
-    Element         *element_nouveau = static_cast<Element*>(malloc(sizeof(Element)));
+    Element         *element_nouveau = malloc(sizeof(Element));
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->niveaux_groupes, FALSE, gettext("Le projet ne possède pas de niveaux de groupes permettant de regrouper plusieurs groupes d'actions.\n"));
@@ -279,7 +278,7 @@ gboolean _1990_groupe_ajout_element(Projet *projet, unsigned int niveau, unsigne
     {
         // On vérifie si l'action num_element existe.
         BUG(_1990_action_cherche_numero(projet, num_element), FALSE);
-        niveau_groupe = static_cast<Niveau_Groupe*>(projet->niveaux_groupes->data);
+        niveau_groupe = projet->niveaux_groupes->data;
     }
     else
     {
@@ -303,14 +302,14 @@ gboolean _1990_groupe_ajout_element(Projet *projet, unsigned int niveau, unsigne
     {
         int     element_ajoute = 0;
         GList   *list_parcours;
-        Element *element;
+        Element         *element;
         
         list_parcours = groupe->elements;
         element_ajoute = 0;
         /* On l'ajoute en triant pour faire plus joli */
         do
         {
-            element = static_cast<Element*>(list_parcours->data);
+            element = list_parcours->data;
             if (element->numero == num_element)
             {
                 free(element_nouveau);
@@ -363,7 +362,7 @@ gboolean _1990_groupe_ajout_element(Projet *projet, unsigned int niveau, unsigne
             gtk_tree_store_prepend(gtk_1990_groupes->tree_store_etat, &element->Iter, &groupe->Iter);
         else
         {
-            element2 = static_cast<Element*>(g_list_previous(g_list_find(groupe->elements, element))->data);
+            element2 = g_list_previous(g_list_find(groupe->elements, element))->data;
             gtk_tree_store_insert_after(gtk_1990_groupes->tree_store_etat, &element->Iter, &groupe->Iter, &element2->Iter);
         }
         
@@ -574,14 +573,14 @@ gboolean _1990_groupe_affiche_tout(Projet *projet)
     list_parcours = projet->niveaux_groupes;
     while (list_parcours != NULL)
     {
-        Niveau_Groupe   *niveau = static_cast<Niveau_Groupe*>(list_parcours->data);
+        Niveau_Groupe   *niveau = list_parcours->data;
         GList           *list_parcours2 = niveau->groupes;
         
         printf(gettext("niveau : %d\n"), niveau->numero);
         
         while (list_parcours2 != NULL)
         {
-            Groupe  *groupe = static_cast<Groupe*>(list_parcours2->data);
+            Groupe  *groupe = list_parcours2->data;
             GList   *list_parcours3 = groupe->elements;
             
             printf(gettext("\tgroupe : %d, combinaison : "), groupe->numero);
@@ -615,7 +614,7 @@ gboolean _1990_groupe_affiche_tout(Projet *projet)
             
             while (list_parcours3 != NULL)
             {
-                Element *element = static_cast<Element*>(list_parcours3->data);
+                Element *element = list_parcours3->data;
                 printf("%d ", element->numero);
                 
                 list_parcours3 = g_list_next(list_parcours3);
@@ -628,15 +627,15 @@ gboolean _1990_groupe_affiche_tout(Projet *projet)
                 
                 do
                 {
-                    Combinaison *combinaison = static_cast<Combinaison*>(list_parcours3->data);
+                    Combinaison *combinaison = list_parcours3->data;
                     printf("\t\t\t");
                     if (combinaison->elements != NULL)
                     {
                         GList   *list_parcours4 = combinaison->elements;
                         do
                         {
-                            Combinaison_Element *comb_element = static_cast<Combinaison_Element*>(list_parcours4->data);
-                            Action          *action = comb_element->action;
+                            Combinaison_Element *comb_element = list_parcours4->data;
+                            Action          *action = (Action*)comb_element->action;
                             
                             printf("%u(%d) ", action->numero, comb_element->flags);
                             
@@ -741,7 +740,7 @@ gboolean _1990_groupe_free_niveau(Projet *projet, unsigned int niveau, gboolean 
     list_parcours = projet->niveaux_groupes;
     do
     {
-        niveau_groupe = static_cast<Niveau_Groupe*>(list_parcours->data);
+        niveau_groupe = list_parcours->data;
         if (niveau_groupe->numero >= niveau)
         {
             /* Il peut être possible d'utiliser la fonction _1990_groupe_free_groupe
@@ -750,7 +749,7 @@ gboolean _1990_groupe_free_niveau(Projet *projet, unsigned int niveau, gboolean 
              * supérieurs vont également être supprimés. */
             while (niveau_groupe->groupes != NULL)
             {
-                Groupe  *groupe = static_cast<Groupe*>(niveau_groupe->groupes->data);
+                Groupe      *groupe = niveau_groupe->groupes->data;
                 
                 free(groupe->nom);
                 
@@ -763,7 +762,7 @@ gboolean _1990_groupe_free_niveau(Projet *projet, unsigned int niveau, gboolean 
                 {
                     while (groupe->tmp_combinaison.combinaisons != NULL)
                     {
-                        Combinaison *combinaison = static_cast<Combinaison*>(groupe->tmp_combinaison.combinaisons->data);
+                        Combinaison *combinaison = groupe->tmp_combinaison.combinaisons->data;
                         if (combinaison->elements != NULL)
                             g_list_free_full(combinaison->elements, free);
                         free(combinaison);
@@ -786,7 +785,7 @@ gboolean _1990_groupe_free_niveau(Projet *projet, unsigned int niveau, gboolean 
         else
             list_parcours = g_list_next(list_parcours);
         if (list_parcours != NULL)
-            niveau_groupe = static_cast<Niveau_Groupe*>(list_parcours->data);
+            niveau_groupe = list_parcours->data;
         else
             niveau_groupe = NULL;
     }
@@ -872,7 +871,7 @@ gboolean _1990_groupe_free_groupe(Projet *projet, unsigned int niveau, unsigned 
         list_parcours = groupe_curr->elements;
         while (list_parcours != NULL)
         {
-            Element     *element = static_cast<Element*>(list_parcours->data);
+            Element     *element = list_parcours->data;
             
             BUG(_1990_gtk_insert_dispo(projet, element->numero, niveau_groupe) == 0, FALSE);
             
@@ -886,7 +885,7 @@ gboolean _1990_groupe_free_groupe(Projet *projet, unsigned int niveau, unsigned 
         list_parcours = niveau_groupe->groupes;
         while (list_parcours != NULL)
         {
-            groupe_parcours = static_cast<Groupe*>(list_parcours->data);
+            groupe_parcours = list_parcours->data;
             if (groupe_parcours->numero > groupe)
                 gtk_tree_store_set(projet->list_gtk._1990_groupes.tree_store_etat, &groupe_parcours->Iter, 0, groupe_parcours->numero-1, -1);
             list_parcours = g_list_next(list_parcours);
@@ -905,7 +904,7 @@ gboolean _1990_groupe_free_groupe(Projet *projet, unsigned int niveau, unsigned 
     {
         while (groupe_curr->tmp_combinaison.combinaisons != NULL)
         {
-            Combinaison *combinaison = static_cast<Combinaison*>(groupe_curr->tmp_combinaison.combinaisons->data);
+            Combinaison *combinaison = groupe_curr->tmp_combinaison.combinaisons->data;
             if (combinaison->elements != NULL)
                 g_list_free_full(combinaison->elements, free);
             free(combinaison);
@@ -924,7 +923,7 @@ gboolean _1990_groupe_free_groupe(Projet *projet, unsigned int niveau, unsigned 
         list_parcours = niveau_groupe->groupes;
         do
         {
-            groupe_curr = static_cast<Groupe*>(list_parcours->data);
+            groupe_curr = list_parcours->data;
             
             if (groupe_curr->numero > groupe)
                 groupe_curr->numero--;
@@ -941,7 +940,7 @@ gboolean _1990_groupe_free_groupe(Projet *projet, unsigned int niveau, unsigned 
     /* On passe au niveau suivant (s'il existe) */
     if (list_parcours != NULL)
     {
-        niveau_groupe = static_cast<Niveau_Groupe*>(list_parcours->data);
+        niveau_groupe = list_parcours->data;
         if (niveau_groupe->groupes != NULL)
         {
             GList   *list_parcours2 = niveau_groupe->groupes;
@@ -952,13 +951,13 @@ gboolean _1990_groupe_free_groupe(Projet *projet, unsigned int niveau, unsigned 
                  * On ne s'arrête pas volontairement au premier élément qu'on trouve.
                  * Il est possible que quelqu'un trouve utile de pouvoir insérer un même
                  * élément dans plusieurs groupes */
-                groupe_curr = static_cast<Groupe*>(list_parcours2->data);
+                groupe_curr = list_parcours2->data;
                 if (groupe_curr->elements != NULL)
                 {
                     GList   *list_parcours3 = groupe_curr->elements;
                     do
                     {
-                        Element     *element = static_cast<Element*>(list_parcours3->data);
+                        Element     *element = list_parcours3->data;
                         
                         list_parcours3 = g_list_next(list_parcours3);
                         
@@ -996,6 +995,4 @@ gboolean _1990_groupe_free(Projet *projet)
     BUG(_1990_groupe_free_niveau(projet, 0, TRUE), FALSE);
     
     return TRUE;
-}
-
 }

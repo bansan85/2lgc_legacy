@@ -33,7 +33,7 @@
 #include "common_selection.h"
 #include "common_text.h"
 #include "EF_relachement.h"
-#include "1992_1_1_barres.hpp"
+#include "1992_1_1_barres.h"
 
 void EF_gtk_relachements_fermer(GtkButton *button, Projet *projet)
 /* Description : Ferme la fenêtre.

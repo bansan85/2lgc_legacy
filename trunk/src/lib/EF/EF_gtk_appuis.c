@@ -32,7 +32,7 @@
 #include "common_selection.h"
 #include "common_text.h"
 #include "EF_appuis.h"
-#include "1992_1_1_barres.hpp"
+#include "1992_1_1_barres.h"
 
 void EF_gtk_appuis_fermer(GtkButton *button, Projet *projet)
 /* Description : Ferme la fenêtre.

@@ -25,13 +25,12 @@
 #include <math.h>
 #include <string.h>
 
-extern "C" {
 #include "common_projet.h"
 #include "common_erreurs.h"
 #include "common_gtk.h"
 #include "common_math.h"
 #include "common_selection.h"
-#include "1992_1_1_materiaux.hpp"
+#include "1992_1_1_materiaux.h"
 
 gboolean _1992_1_1_gtk_materiaux_window_key_press(GtkWidget *widget, GdkEvent *event,
   Projet *projet)
@@ -449,7 +448,7 @@ void _1992_1_1_gtk_materiaux_toggled(GtkCheckMenuItem *checkmenuitem, Projet *pr
     builder = projet->list_gtk._1992_1_1_materiaux.builder;
     mat = projet->list_gtk._1992_1_1_materiaux.materiau;
     if (mat != NULL)
-        beton_data = static_cast<Materiau_Beton*>(projet->list_gtk._1992_1_1_materiaux.materiau->data);
+        beton_data = projet->list_gtk._1992_1_1_materiaux.materiau->data;
     else
         beton_data = NULL;
     
@@ -654,7 +653,7 @@ gboolean _1992_1_1_gtk_materiaux(Projet *projet, EF_Materiau *materiau)
         BUGMSG(materiau->type == MATERIAU_BETON, FALSE, gettext("Le matériau n'est pas en béton.\n"));
         gtk_window_set_title(GTK_WINDOW(ef_gtk->window), gettext("Modification d'un matériau béton"));
         ef_gtk->materiau = materiau;
-        beton_data = static_cast<Materiau_Beton*>(materiau->data);
+        beton_data = materiau->data;
         
         gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_beton_textview_nom"))), materiau->nom, -1);
         common_math_double_to_char2(common_math_f(common_math_get(beton_data->fck)/1000000., beton_data->fck.type), tmp, DECIMAL_DISTANCE);
@@ -763,8 +762,6 @@ gboolean _1992_1_1_gtk_materiaux_double_clicked(GtkWidget *widget, GdkEvent *eve
     }
     else
         return common_gtk_treeview_button_press_unselect(GTK_TREE_VIEW(widget), event, projet);
-}
-
 }
 
 #endif

@@ -23,7 +23,7 @@
 #include <gmodule.h>
 #include <math.h>
 
-#include "1990_ponderations.hpp"
+#include "1990_ponderations.h"
 #include "common_projet.h"
 #include "common_erreurs.h"
 #include "common_math.h"

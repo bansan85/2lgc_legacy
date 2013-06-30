@@ -31,7 +31,7 @@ extern "C" {
 #include "common_math.h"
 #include "common_selection.h"
 #include "EF_noeuds.h"
-#include "1992_1_1_barres.hpp"
+#include "1992_1_1_barres.h"
 #include "common_m3d.hpp"
 
 gboolean m3d_init(Projet *projet)
@@ -56,7 +56,7 @@ gboolean m3d_init(Projet *projet)
     BUGMSG(m3d->data = malloc(sizeof(SGlobalData)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
     memset(m3d->data, 0, sizeof(SGlobalData));
     
-    global_data = static_cast<SGlobalData*>(m3d->data);
+    global_data = (SGlobalData*)m3d->data;
     global_data->scene = new CM3dScene();
     global_data->scene->reverse_y_axis();
     global_data->scene->show_repere(true, 1.1);
@@ -76,7 +76,7 @@ gboolean m3d_init(Projet *projet)
 }
 
 
-gboolean m3d_configure_event(GtkWidget *drawing, GdkEventConfigure *ev, gpointer data2)
+gboolean m3d_configure_event(GtkWidget *drawing, GdkEventConfigure *ev, gpointer *data2)
 /* Description : Configuration de la caméra en fonction de la taille du composant graphique.
  * Paramètres : GtkWidget *drawing : composant graphique,
  *              GdkEventConfigure *ev : caractéristique de l'évènement,
@@ -84,8 +84,8 @@ gboolean m3d_configure_event(GtkWidget *drawing, GdkEventConfigure *ev, gpointer
  * Valeur renvoyée : FALSE.
  */
 {
-    Projet      *projet = static_cast<Projet*>(data2);
-    SGlobalData *data = static_cast<SGlobalData*>(projet->list_gtk.m3d.data);
+    Projet      *projet = (Projet*) data2;
+    SGlobalData *data = (SGlobalData*)projet->list_gtk.m3d.data;
     
     if ((data->camera == NULL) && (projet->list_gtk.comp.window != NULL))
         BUG(m3d_camera_axe_x_z_y(projet), FALSE);
@@ -102,7 +102,7 @@ gboolean m3d_configure_event(GtkWidget *drawing, GdkEventConfigure *ev, gpointer
 }
 
 
-gboolean m3d_draw(GtkWidget *drawing, GdkEventExpose* ev, gpointer data)
+gboolean m3d_draw(GtkWidget *drawing, GdkEventExpose* ev, gpointer *data)
 /* Description : Rendu de l'image 3D dans le widget Zone-dessin.
  * Paramètres : GtkWidget *drawing : composant graphique,
  *              GdkEventConfigure *ev : caractéristique de l'évènement,
@@ -110,7 +110,7 @@ gboolean m3d_draw(GtkWidget *drawing, GdkEventExpose* ev, gpointer data)
  * Valeur renvoyée : FALSE.
  */
 {
-    SGlobalData *data2 = static_cast<SGlobalData*>(data);
+    SGlobalData *data2 = (SGlobalData*)data;
 
     data2->scene->show_to_GtkDrawingarea(drawing, data2->camera);
     
@@ -121,7 +121,7 @@ gboolean m3d_draw(GtkWidget *drawing, GdkEventExpose* ev, gpointer data)
 gboolean m3d_key_press(GtkWidget *widget, GdkEventKey *event, Projet *projet)
 {
     Gtk_m3d     *m3d = &projet->list_gtk.m3d;
-    SGlobalData *vue  = static_cast<SGlobalData*>(projet->list_gtk.m3d.data);
+    SGlobalData *vue  = (SGlobalData*)projet->list_gtk.m3d.data;
     
     if (event->type == GDK_KEY_PRESS)
     {
@@ -275,9 +275,9 @@ gboolean m3d_get_rect(double *xmin, double *xmax, double *ymin, double *ymax, Pr
     BUGMSG(ymin, FALSE, gettext("Paramètre %s incorrect.\n"), "ymin");
     BUGMSG(ymax, FALSE, gettext("Paramètre %s incorrect.\n"), "ymax");
     
-    vue = static_cast<SGlobalData*>((&projet->list_gtk.m3d)->data);
+    vue = (SGlobalData*)(&projet->list_gtk.m3d)->data;
     
-    noeud = static_cast<EF_Noeud*>(projet->modele.noeuds->data);
+    noeud = (EF_Noeud*)projet->modele.noeuds->data;
     BUG(EF_noeuds_renvoie_position(noeud, &point), FALSE);
     v1.set_coordinates(common_math_get(point.x), common_math_get(point.y), common_math_get(point.z));
     poly = new CM3dPolygon(v1, v1, v1);
@@ -298,7 +298,7 @@ gboolean m3d_get_rect(double *xmin, double *xmax, double *ymin, double *ymax, Pr
     list_parcours = g_list_next(projet->modele.noeuds);
     while (list_parcours != NULL)
     {
-        noeud = static_cast<EF_Noeud*>(list_parcours->data);
+        noeud = (EF_Noeud*)list_parcours->data;
         BUG(EF_noeuds_renvoie_position(noeud, &point), FALSE);
         
         v1.set_coordinates(common_math_get(point.x), common_math_get(point.y), common_math_get(point.z));
@@ -366,7 +366,7 @@ gboolean m3d_camera_zoom_all(Projet *projet)
     
     m3d = &projet->list_gtk.m3d;
     BUGMSG(m3d->data, FALSE, gettext("Paramètre %s incorrect.\n"), "m3d->data");
-    vue = static_cast<SGlobalData*>(m3d->data);
+    vue = (SGlobalData*)m3d->data;
     
     BUGMSG(vue->camera, FALSE, gettext("La caméra n'est pas initialisée.\n"));
     
@@ -375,7 +375,7 @@ gboolean m3d_camera_zoom_all(Projet *projet)
         return TRUE;
     
     // Un seul noeud, on l'affiche en gros plan.
-    noeud = static_cast<EF_Noeud*>(projet->modele.noeuds->data);
+    noeud = (EF_Noeud*)projet->modele.noeuds->data;
     BUG(EF_noeuds_renvoie_position(noeud, &point), FALSE);
     
     gtk_widget_get_allocation(GTK_WIDGET(m3d->drawing), &allocation);
@@ -401,7 +401,7 @@ gboolean m3d_camera_zoom_all(Projet *projet)
     list_parcours = g_list_next(projet->modele.noeuds);
     while (list_parcours != NULL)
     {
-        noeud = static_cast<EF_Noeud*>(list_parcours->data);
+        noeud = (EF_Noeud*)list_parcours->data;
         BUG(EF_noeuds_renvoie_position(noeud, &point), FALSE);
         
         v1.set_coordinates(common_math_get(point.x), common_math_get(point.y), common_math_get(point.z));
@@ -617,14 +617,14 @@ gboolean m3d_camera_axe_x_z_y(Projet *projet)
     
     m3d = &projet->list_gtk.m3d;
     BUGMSG(m3d->data, FALSE, gettext("Paramètre %s incorrect.\n"), "m3d->data");
-    vue = static_cast<SGlobalData*>(m3d->data);
+    vue = (SGlobalData*)m3d->data;
     
     // Aucune noeud, on ne fait rien
     if (projet->modele.noeuds == NULL)
         return TRUE;
     
     // Un seul noeud, on l'affiche en gros plan.
-    noeud = static_cast<EF_Noeud*>(projet->modele.noeuds->data);
+    noeud = (EF_Noeud*)projet->modele.noeuds->data;
     BUG(EF_noeuds_renvoie_position(noeud, &point), FALSE);
     
     gtk_widget_get_allocation(GTK_WIDGET(m3d->drawing), &allocation);
@@ -686,14 +686,14 @@ gboolean m3d_camera_axe_x_z__y(Projet *projet)
     
     m3d = &projet->list_gtk.m3d;
     BUGMSG(m3d->data, FALSE, gettext("Paramètre %s incorrect.\n"), "m3d->data");
-    vue = static_cast<SGlobalData*>(m3d->data);
+    vue = (SGlobalData*)m3d->data;
     
     // Aucune noeud, on ne fait rien
     if (projet->modele.noeuds == NULL)
         return TRUE;
     
     // Un seul noeud, on l'affiche en gros plan.
-    noeud = static_cast<EF_Noeud*>(projet->modele.noeuds->data);
+    noeud = (EF_Noeud*)projet->modele.noeuds->data;
     BUG(EF_noeuds_renvoie_position(noeud, &point), FALSE);
     
     gtk_widget_get_allocation(GTK_WIDGET(m3d->drawing), &allocation);
@@ -755,14 +755,14 @@ gboolean m3d_camera_axe_y_z_x(Projet *projet)
     
     m3d = &projet->list_gtk.m3d;
     BUGMSG(m3d->data, FALSE, gettext("Paramètre %s incorrect.\n"), "m3d->data");
-    vue = static_cast<SGlobalData*>(m3d->data);
+    vue = (SGlobalData*)m3d->data;
     
     // Aucune noeud, on ne fait rien
     if (projet->modele.noeuds == NULL)
         return TRUE;
     
     // Un seul noeud, on l'affiche en gros plan.
-    noeud = static_cast<EF_Noeud*>(projet->modele.noeuds->data);
+    noeud = (EF_Noeud*)projet->modele.noeuds->data;
     BUG(EF_noeuds_renvoie_position(noeud, &point), FALSE);
     
     gtk_widget_get_allocation(GTK_WIDGET(m3d->drawing), &allocation);
@@ -824,14 +824,14 @@ gboolean m3d_camera_axe_y_z__x(Projet *projet)
     
     m3d = &projet->list_gtk.m3d;
     BUGMSG(m3d->data, FALSE, gettext("Paramètre %s incorrect.\n"), "m3d->data");
-    vue = static_cast<SGlobalData*>(m3d->data);
+    vue = (SGlobalData*)m3d->data;
     
     // Aucune noeud, on ne fait rien
     if (projet->modele.noeuds == NULL)
         return TRUE;
     
     // Un seul noeud, on l'affiche en gros plan.
-    noeud = static_cast<EF_Noeud*>(projet->modele.noeuds->data);
+    noeud = (EF_Noeud*)projet->modele.noeuds->data;
     BUG(EF_noeuds_renvoie_position(noeud, &point), FALSE);
     
     gtk_widget_get_allocation(GTK_WIDGET(m3d->drawing), &allocation);
@@ -893,14 +893,14 @@ gboolean m3d_camera_axe_x_y_z(Projet *projet)
     
     m3d = &projet->list_gtk.m3d;
     BUGMSG(m3d->data, FALSE, gettext("Paramètre %s incorrect.\n"), "m3d->data");
-    vue = static_cast<SGlobalData*>(m3d->data);
+    vue = (SGlobalData*)m3d->data;
     
     // Aucune noeud, on ne fait rien
     if (projet->modele.noeuds == NULL)
         return TRUE;
     
     // Un seul noeud, on l'affiche en gros plan.
-    noeud = static_cast<EF_Noeud*>(projet->modele.noeuds->data);
+    noeud = (EF_Noeud*)projet->modele.noeuds->data;
     BUG(EF_noeuds_renvoie_position(noeud, &point), FALSE);
     
     gtk_widget_get_allocation(GTK_WIDGET(m3d->drawing), &allocation);
@@ -962,14 +962,14 @@ gboolean m3d_camera_axe_x_y__z(Projet *projet)
     
     m3d = &projet->list_gtk.m3d;
     BUGMSG(m3d->data, FALSE, gettext("Paramètre %s incorrect.\n"), "m3d->data");
-    vue = static_cast<SGlobalData*>(m3d->data);
+    vue = (SGlobalData*)m3d->data;
     
     // Aucune noeud, on ne fait rien
     if (projet->modele.noeuds == NULL)
         return TRUE;
     
     // Un seul noeud, on l'affiche en gros plan.
-    noeud = static_cast<EF_Noeud*>(projet->modele.noeuds->data);
+    noeud = (EF_Noeud*)projet->modele.noeuds->data;
     BUG(EF_noeuds_renvoie_position(noeud, &point), FALSE);
     
     gtk_widget_get_allocation(GTK_WIDGET(m3d->drawing), &allocation);
@@ -1027,7 +1027,7 @@ gboolean m3d_actualise_graphique(Projet *projet, GList *noeuds, GList *barres)
     list_parcours = noeuds_dep;
     while (list_parcours != NULL)
     {
-        BUG(m3d_noeud(&projet->list_gtk.m3d, static_cast<EF_Noeud*>(list_parcours->data)), FALSE);
+        BUG(m3d_noeud(&projet->list_gtk.m3d, (EF_Noeud *)list_parcours->data), FALSE);
         list_parcours = g_list_next(list_parcours);
     }
     g_list_free(noeuds_dep);
@@ -1035,7 +1035,7 @@ gboolean m3d_actualise_graphique(Projet *projet, GList *noeuds, GList *barres)
     list_parcours = barres_dep;
     while (list_parcours != NULL)
     {
-        BUG(m3d_barre(&projet->list_gtk.m3d, static_cast<Beton_Barre*>(list_parcours->data)), FALSE);
+        BUG(m3d_barre(&projet->list_gtk.m3d, (Beton_Barre *)list_parcours->data), FALSE);
         list_parcours = g_list_next(list_parcours);
     }
     g_list_free(barres_dep);
@@ -1058,7 +1058,7 @@ gboolean m3d_rafraichit(Projet *projet)
     SGlobalData *vue;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    vue = static_cast<SGlobalData*>(projet->list_gtk.m3d.data);
+    vue = (SGlobalData*)projet->list_gtk.m3d.data;
     // On force l'actualisation de l'affichage
     vue->scene->rendering(vue->camera);
     gtk_widget_queue_draw(projet->list_gtk.m3d.drawing);
@@ -1091,7 +1091,7 @@ void* m3d_noeud(void *donnees_m3d, EF_Noeud *noeud)
     BUGMSG(nom = g_strdup_printf("noeud %u", noeud->numero), NULL, gettext("Erreur d'allocation mémoire.\n"));
     BUG(EF_noeuds_renvoie_position(noeud, &point), NULL);
     
-    vue = static_cast<SGlobalData*>((static_cast<Gtk_m3d*>(donnees_m3d))->data);
+    vue = (SGlobalData*)((Gtk_m3d *)donnees_m3d)->data;
     
     cube = vue->scene->get_object_by_name(nom);
     if (cube != NULL)
@@ -1130,7 +1130,7 @@ void m3d_noeud_free(void *donnees_m3d, EF_Noeud *noeud)
     
     BUGMSG(nom = g_strdup_printf("noeud %u", noeud->numero), , gettext("Erreur d'allocation mémoire.\n"));
     
-    vue = static_cast<SGlobalData*>((static_cast<Gtk_m3d*>(donnees_m3d))->data);
+    vue = (SGlobalData*)((Gtk_m3d *)donnees_m3d)->data;
     
     cube = vue->scene->get_object_by_name(nom);
     vue->scene->remove_object(cube);
@@ -1167,8 +1167,8 @@ gboolean m3d_barre(void *donnees_m3d, Beton_Barre *barre)
     BUGMSG(donnees_m3d, FALSE, gettext("Paramètre %s incorrect.\n"), "donnees_m3d");
     BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre");
     
-    m3d = static_cast<Gtk_m3d*>(donnees_m3d);
-    vue = static_cast<SGlobalData*>(m3d->data);
+    m3d = (Gtk_m3d *)donnees_m3d;
+    vue = (SGlobalData*)m3d->data;
     
     // On supprime l'élément s'il existe déjà
     BUGMSG(tmp = g_strdup_printf("barre %u", barre->numero), FALSE, gettext("Erreur d'allocation mémoire.\n"));
@@ -1189,7 +1189,7 @@ gboolean m3d_barre(void *donnees_m3d, Beton_Barre *barre)
         {
             double      y, z;
             CM3dObject  *bas, *haut, *gauche, *droite;
-            Section_T   *section = static_cast<Section_T*>(barre->section->data);
+            Section_T   *section = (Section_T *)barre->section->data;
             
             droite = M3d_plan_new("", longueur, common_math_get(section->hauteur_retombee), 1);
             droite->rotations(180., 0., 0.);
@@ -1248,7 +1248,7 @@ gboolean m3d_barre(void *donnees_m3d, Beton_Barre *barre)
         }
         case SECTION_T :
         {
-            Section_T *section = static_cast<Section_T*>(barre->section->data);
+            Section_T *section = (Section_T *)barre->section->data;
             
             double  y, z;
             double  lt = common_math_get(section->largeur_table);
@@ -1336,7 +1336,7 @@ gboolean m3d_barre(void *donnees_m3d, Beton_Barre *barre)
         }
         case SECTION_CARREE :
         {
-            Section_T   *section = static_cast<Section_T*>(barre->section->data);
+            Section_T   *section = (Section_T *)barre->section->data;
             double      y, z;
             CM3dObject  *bas, *haut, *gauche, *droite;
             
@@ -1397,7 +1397,7 @@ gboolean m3d_barre(void *donnees_m3d, Beton_Barre *barre)
         }
         case SECTION_CIRCULAIRE :
         {
-            Section_Circulaire *section = static_cast<Section_Circulaire*>(barre->section->data);
+            Section_Circulaire *section = (Section_Circulaire *)barre->section->data;
             double  y, z;
             
             tout = M3d_cylindre_new(tmp, common_math_get(section->diametre)/2., longueur, 12);
@@ -1469,7 +1469,7 @@ void m3d_barre_free(void *donnees_m3d, Beton_Barre *barre)
     
     BUGMSG(nom = g_strdup_printf("barre %u", barre->numero), , gettext("Erreur d'allocation mémoire.\n"));
     
-    vue = static_cast<SGlobalData*>((static_cast<Gtk_m3d*>(donnees_m3d))->data);
+    vue = (SGlobalData*)((Gtk_m3d *)donnees_m3d)->data;
     
     cube = vue->scene->get_object_by_name(nom);
     vue->scene->remove_object(cube);
@@ -1492,8 +1492,8 @@ gboolean m3d_free(Projet *projet)
     // Trivial
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
-    delete (static_cast<SGlobalData*>(projet->list_gtk.m3d.data))->scene;
-    delete (static_cast<SGlobalData*>(projet->list_gtk.m3d.data))->camera;
+    delete ((SGlobalData*)projet->list_gtk.m3d.data)->scene;
+    delete ((SGlobalData*)projet->list_gtk.m3d.data)->camera;
     free(projet->list_gtk.m3d.data);
     projet->list_gtk.m3d.data = NULL;
     

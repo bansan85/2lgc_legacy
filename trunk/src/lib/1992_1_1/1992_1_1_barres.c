@@ -24,11 +24,10 @@
 #include <math.h>
 #include <gmodule.h>
 
-#include "common_m3d.hpp"
-extern "C" {
 #include "common_projet.h"
 #include "common_erreurs.h"
 #include "common_math.h"
+#include "common_m3d.hpp"
 #include "common_selection.h"
 #include "EF_charge_barre_ponctuelle.h"
 #include "EF_calculs.h"
@@ -99,7 +98,7 @@ gboolean _1992_1_1_barres_ajout(Projet *projet, Type_Element type, EF_Section *s
  *             en cas d'erreur due à une fonction interne.
  */
 {
-    Beton_Barre *element_nouveau = static_cast<Beton_Barre*>(malloc(sizeof(Beton_Barre)));
+    Beton_Barre *element_nouveau = malloc(sizeof(Beton_Barre));
     
     // Trivial
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
@@ -210,7 +209,7 @@ Beton_Barre* _1992_1_1_barres_cherche_numero(Projet *projet, unsigned int numero
     list_parcours = projet->modele.barres;
     while (list_parcours != NULL)
     {
-        Beton_Barre   *element = static_cast<Beton_Barre*>(list_parcours->data);
+        Beton_Barre   *element = list_parcours->data;
         
         if (element->numero == numero)
             return element;
@@ -282,7 +281,7 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GLi
         list_parcours = projet->modele.noeuds;
         while (list_parcours != NULL)
         {
-            EF_Noeud    *noeud = static_cast<EF_Noeud*>(list_parcours->data);
+            EF_Noeud    *noeud = list_parcours->data;
             
             if ((noeud->appui != NULL) && (g_list_find(appuis, noeud->appui) != NULL))
             {
@@ -300,11 +299,11 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GLi
     list_parcours = projet->modele.noeuds;
     while (list_parcours != NULL)
     {
-        EF_Noeud    *noeud = static_cast<EF_Noeud*>(list_parcours->data);
+        EF_Noeud    *noeud = list_parcours->data;
         
         if (noeud->type == NOEUD_LIBRE)
         {
-            EF_Noeud_Libre  *data = static_cast<EF_Noeud_Libre*>(noeud->data);
+            EF_Noeud_Libre  *data = noeud->data;
             
             if ((data->relatif != NULL) && (g_list_find(noeuds, data->relatif) != NULL))
                 noeuds_todo = g_list_append(noeuds_todo, noeud);
@@ -317,7 +316,7 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GLi
     list_parcours = projet->modele.barres;
     while (list_parcours != NULL)
     {
-        Beton_Barre *barre = static_cast<Beton_Barre*>(list_parcours->data);
+        Beton_Barre *barre = list_parcours->data;
         
         if ((g_list_find(sections, barre->section) != NULL)
           || (g_list_find(materiaux, barre->materiau) != NULL)
@@ -335,7 +334,7 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GLi
     list_parcours = barres;
     while (list_parcours != NULL)
     {
-        Beton_Barre *barre = static_cast<Beton_Barre*>(list_parcours->data);
+        Beton_Barre *barre = list_parcours->data;
         
         if (g_list_find(barres_todo, barre) == NULL)
             barres_todo = g_list_append(barres_todo, barre);
@@ -351,7 +350,7 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GLi
         Beton_Barre *barre;
         
         // Toutes les barres sélectionnées sont forcément des barres dépendantes.
-        barre = static_cast<Beton_Barre*>(list_parcours->data);
+        barre = list_parcours->data;
         if ((barres_dep != NULL) && ((origine) || (g_list_find(barres, barre) == NULL)))
         {
             if (numero)
@@ -370,7 +369,7 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GLi
         {
             EF_Noeud    *noeud;
             
-            noeud = static_cast<EF_Noeud*>(list_parcours2->data);
+            noeud = list_parcours2->data;
             noeuds_todo = g_list_append(noeuds_todo, noeud);
             
             list_parcours2 = g_list_next(list_parcours2);
@@ -385,7 +384,7 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GLi
     {
         EF_Noeud    *noeud;
         
-        noeud = static_cast<EF_Noeud*>(list_parcours->data);
+        noeud = list_parcours->data;
         noeuds_todo = g_list_append(noeuds_todo, noeud);
         
         list_parcours = g_list_next(list_parcours);
@@ -394,7 +393,7 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GLi
     // On étudie enfin tous les noeuds.
     while (noeuds_todo != NULL)
     {
-        EF_Noeud    *dataa = static_cast<EF_Noeud*>(noeuds_todo->data);
+        EF_Noeud    *dataa = noeuds_todo->data;
         
         noeuds_todo = g_list_delete_link(noeuds_todo, noeuds_todo);
         
@@ -426,7 +425,7 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GLi
         {
             Beton_Barre *barre;
             
-            barre = static_cast<Beton_Barre*>(list_parcours->data);
+            barre = list_parcours->data;
             
             // Si une barre est dépendante du noeud en cours d'étude
             if ((barre->noeud_debut == dataa) || (barre->noeud_fin == dataa))
@@ -457,7 +456,7 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GLi
                 {
                     EF_Noeud    *noeud;
                     
-                    noeud = static_cast<EF_Noeud*>(list_parcours2->data);
+                    noeud = list_parcours2->data;
                     if (g_list_find(noeuds_done, noeud) == NULL)
                         noeuds_todo = g_list_append(noeuds_todo, noeud);
                     
@@ -475,10 +474,10 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GLi
                 
                 while (list_parcours2 != NULL)
                 {
-                    EF_Noeud *noeud = static_cast<EF_Noeud*>(list_parcours2->data);
+                    EF_Noeud *noeud = list_parcours2->data;
                     if ((noeud->type == NOEUD_LIBRE) && (g_list_find(noeuds_done, noeud) == NULL))
                     {
-                        EF_Noeud_Libre *data = static_cast<EF_Noeud_Libre*>(noeud->data);
+                        EF_Noeud_Libre *data = noeud->data;
                         
                         if ((data->relatif != NULL) && (g_list_find(noeuds_done, data->relatif) != NULL))
                             noeuds_todo = g_list_append(noeuds_todo, noeud);
@@ -495,22 +494,22 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GLi
     list_parcours = projet->actions;
     while (list_parcours != NULL)
     {
-        Action  *action = static_cast<Action*>(list_parcours->data);
+        Action  *action = list_parcours->data;
         GList   *liste_parcours2 = action->charges;
         
         while (liste_parcours2 != NULL)
         {
-            Charge_Noeud    *charge_type = static_cast<Charge_Noeud*>(liste_parcours2->data);
+            Charge_Noeud    *charge_type = liste_parcours2->data;
             switch (charge_type->type)
             {
                 case CHARGE_NOEUD :
                 {
-                    Charge_Noeud    *charge = static_cast<Charge_Noeud*>(liste_parcours2->data);
+                    Charge_Noeud    *charge = liste_parcours2->data;
                     GList           *liste_parcours3 = charge->noeuds;
                     
                     while (liste_parcours3 != NULL)
                     {
-                        EF_Noeud *noeud = static_cast<EF_Noeud*>(liste_parcours3->data);
+                        EF_Noeud *noeud = liste_parcours3->data;
                         
                         if (charges_dep != NULL)
                         {
@@ -534,12 +533,12 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GLi
                 case CHARGE_BARRE_PONCTUELLE :
                 case CHARGE_BARRE_REPARTIE_UNIFORME :
                 {
-                    Charge_Barre_Ponctuelle *charge = static_cast<Charge_Barre_Ponctuelle*>(liste_parcours2->data);
+                    Charge_Barre_Ponctuelle *charge = liste_parcours2->data;
                     GList                   *liste_parcours3 = charge->barres;
                     
                     while (liste_parcours3 != NULL)
                     {
-                        Beton_Barre *barre = static_cast<Beton_Barre*>(liste_parcours3->data);
+                        Beton_Barre *barre = liste_parcours3->data;
                         
                         if (charges_dep != NULL)
                         {
@@ -963,19 +962,19 @@ gboolean _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
         {
             noeud1 = element->noeud_debut;
             if (element->discretisation_element != 0)
-                noeud2 = static_cast<EF_Noeud*>(g_list_first(element->noeuds_intermediaires)->data);
+                noeud2 = g_list_first(element->noeuds_intermediaires)->data;
             else
-                noeud2 = static_cast<EF_Noeud*>(element->noeud_fin);
+                noeud2 = element->noeud_fin;
         }
         else if (j == element->discretisation_element)
         {
-            noeud1 = static_cast<EF_Noeud*>(g_list_nth_data(element->noeuds_intermediaires, j-1));
-            noeud2 = static_cast<EF_Noeud*>(element->noeud_fin);
+            noeud1 = g_list_nth_data(element->noeuds_intermediaires, j-1);
+            noeud2 = element->noeud_fin;
         }
         else
         {
-            noeud1 = static_cast<EF_Noeud*>(g_list_nth_data(element->noeuds_intermediaires, j-1));
-            noeud2 = static_cast<EF_Noeud*>(g_list_nth_data(element->noeuds_intermediaires, j));
+            noeud1 = g_list_nth_data(element->noeuds_intermediaires, j-1);
+            noeud2 = g_list_nth_data(element->noeuds_intermediaires, j);
         }
         
         num1 = g_list_index(projet->modele.noeuds, noeud1);
@@ -1518,7 +1517,7 @@ gboolean _1992_1_1_barres_rigidite_ajout_tout(Projet *projet)
     list_parcours = projet->modele.barres;
     do
     {
-        Beton_Barre *element = static_cast<Beton_Barre*>(list_parcours->data);
+        Beton_Barre *element = list_parcours->data;
         
         BUG(_1992_1_1_barres_rigidite_ajout(projet, element), FALSE);
         
@@ -1589,7 +1588,7 @@ gboolean _1992_1_1_barres_supprime_liste(Projet *projet, GList *liste_noeuds,
     list_parcours = charges_suppr;
     while (list_parcours != NULL)
     {
-        Charge_Noeud    *charge_type = static_cast<Charge_Noeud*>(list_parcours->data);
+        Charge_Noeud    *charge_type = list_parcours->data;
         
         switch (charge_type->type)
         {
@@ -1695,6 +1694,4 @@ gboolean _1992_1_1_barres_free(Projet *projet)
 #endif
     
     return TRUE;
-}
-
 }

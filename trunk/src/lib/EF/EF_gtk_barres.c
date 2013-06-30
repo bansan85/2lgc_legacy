@@ -34,8 +34,8 @@
 #include "EF_noeuds.h"
 #include "EF_relachement.h"
 #include "EF_sections.h"
-#include "1992_1_1_barres.hpp"
-#include "1992_1_1_materiaux.hpp"
+#include "1992_1_1_barres.h"
+#include "1992_1_1_materiaux.h"
 
 void EF_gtk_barres_fermer(GtkButton *button, Projet *projet)
 /* Description : Ferme la fenêtre.

@@ -23,13 +23,12 @@
 #include <string.h>
 #include <gmodule.h>
 
-extern "C" {
 #include "common_projet.h"
 #include "common_math.h"
 #include "common_erreurs.h"
 #include "common_selection.h"
-#include "1992_1_1_barres.hpp"
-#include "1992_1_1_materiaux.hpp"
+#include "1992_1_1_barres.h"
+#include "1992_1_1_materiaux.h"
 #include "EF_calculs.h"
 
 
@@ -341,7 +340,7 @@ gboolean _1992_1_1_materiaux_insert(Projet *projet, EF_Materiau *materiau)
     list_parcours = projet->modele.materiaux;
     while (list_parcours != NULL)
     {
-        materiau_tmp = static_cast<EF_Materiau*>(list_parcours->data);
+        materiau_tmp = list_parcours->data;
         
         if (strcmp(materiau->nom, materiau_tmp->nom) < 0)
             break;
@@ -400,8 +399,8 @@ EF_Materiau* _1992_1_1_materiaux_ajout(Projet *projet, const char *nom, double f
     // Trivial
     BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG((fck > ERREUR_RELATIVE_MIN) && (fck <= 90.*(1+ERREUR_RELATIVE_MIN)), NULL, gettext("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"));
-    BUGMSG(materiau_nouveau = static_cast<EF_Materiau*>(malloc(sizeof(EF_Materiau))), NULL, gettext("Erreur d'allocation mémoire.\n"));
-    BUGMSG(data_beton = static_cast<Materiau_Beton*>(malloc(sizeof(Materiau_Beton))), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(materiau_nouveau = malloc(sizeof(EF_Materiau)), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(data_beton = malloc(sizeof(Materiau_Beton)), NULL, gettext("Erreur d'allocation mémoire.\n"));
     
     materiau_nouveau->type = MATERIAU_BETON;
     materiau_nouveau->data = data_beton;
@@ -461,7 +460,7 @@ gboolean _1992_1_1_materiaux_repositionne(Projet *projet, EF_Materiau *materiau)
     list_parcours = projet->modele.materiaux;
     while (list_parcours != NULL)
     {
-        EF_Materiau  *materiau_parcours = static_cast<EF_Materiau*>(list_parcours->data);
+        EF_Materiau  *materiau_parcours = list_parcours->data;
         
         if (strcmp(materiau->nom, materiau_parcours->nom) < 0)
         {
@@ -522,7 +521,7 @@ gboolean _1992_1_1_materiaux_modif(Projet *projet, EF_Materiau *materiau, char *
     BUGMSG(materiau, FALSE, gettext("Paramètre %s incorrect.\n"), "materiau");
     BUGMSG(materiau->type == MATERIAU_BETON, FALSE, gettext("Le matériau n'est pas en béton.\n"));
     
-    data_beton = static_cast<Materiau_Beton*>(materiau->data);
+    data_beton = materiau->data;
     
     if ((nom != NULL) && (strcmp(materiau->nom, nom) != 0))
     {
@@ -607,7 +606,7 @@ EF_Materiau* _1992_1_1_materiaux_cherche_nom(Projet *projet, const char *nom, gb
     list_parcours = projet->modele.materiaux;
     while (list_parcours != NULL)
     {
-        EF_Materiau  *materiau = static_cast<EF_Materiau*>(list_parcours->data);
+        EF_Materiau  *materiau = list_parcours->data;
         
         if (strcmp(materiau->nom, nom) == 0)
             return materiau;
@@ -641,7 +640,7 @@ char *_1992_1_1_materiaux_get_description(EF_Materiau* materiau)
     BUGMSG(materiau, NULL, gettext("Paramètre %s incorrect.\n"), "sect");
     BUGMSG(materiau->type == MATERIAU_BETON, FALSE, gettext("Le matériau n'est pas en béton.\n"));
     
-    data_beton = static_cast<Materiau_Beton*>(materiau->data);
+    data_beton = materiau->data;
     
     common_math_double_to_char2(common_math_f(common_math_get(data_beton->fck)/1000000., data_beton->fck.type), fck, DECIMAL_CONTRAINTE);
     
@@ -914,6 +913,4 @@ gboolean _1992_1_1_materiaux_free(Projet *projet)
 #endif
     
     return TRUE;
-}
-
 }
