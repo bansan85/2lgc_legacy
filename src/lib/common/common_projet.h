@@ -824,13 +824,6 @@ typedef struct __Ponderation_Element
 } Ponderation_Element;
 
 
-// Ne pas supprimer l'espace après le __Ponderation, c'est pour la génération du manuel Latex
-typedef struct __Ponderation 
-{
-    GList       *elements; // Liste de pointeur Action* avec leur ponderation
-} Ponderation;
-
-
 typedef struct __Element
 {
     unsigned int    numero;

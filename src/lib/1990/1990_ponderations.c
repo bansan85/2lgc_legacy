@@ -27,7 +27,7 @@
 #include "common_math.h"
 #include "1990_action.h"
 
-int _1990_ponderations_verifie_double(GList *liste_ponderations, Ponderation* pond_a_verifier)
+int _1990_ponderations_verifie_double(GList *liste_ponderations, GList* pond_a_verifier)
 /* Description : Vérifie dans la liste des ponderations si la ponderation à vérifier est déjà
  *                 présente.
  * Paramètres : GList *ponderations : liste des pondérations,
@@ -42,8 +42,6 @@ int _1990_ponderations_verifie_double(GList *liste_ponderations, Ponderation* po
 {
     GList   *list_parcours;
     
-    BUGMSG(pond_a_verifier, -1, gettext("Paramètre %s incorrect.\n"), "pond_a_verifier");
-    
     if (liste_ponderations == NULL)
         return 0;
     
@@ -51,22 +49,22 @@ int _1990_ponderations_verifie_double(GList *liste_ponderations, Ponderation* po
      * En vérité, c'est surtout qu'une pondération sans élément n'est pas intéressante
      * à conserver, à la différence des combinaisons vides qui peuvent être utilisées
      * par les niveaux supérieurs */
-    if (pond_a_verifier->elements == NULL)
+    if (pond_a_verifier == NULL)
         return 1;
     
     list_parcours = liste_ponderations;
     do
     {
-        int         doublon;
-        Ponderation *ponderation;
+        int     doublon;
+        GList   *ponderation;
         
         /* On pense que la pondération est identique jusqu'à preuve du contraire */
         doublon = 1;
         ponderation = list_parcours->data;
-        if (g_list_length(ponderation->elements) == g_list_length(pond_a_verifier->elements))
+        if (g_list_length(ponderation) == g_list_length(pond_a_verifier))
         {
-            GList   *list_parcours2 = ponderation->elements;
-            GList   *list_parcours3 = pond_a_verifier->elements;
+            GList   *list_parcours2 = ponderation;
+            GList   *list_parcours3 = pond_a_verifier;
             
             do
             {
@@ -119,7 +117,7 @@ gboolean _1990_ponderations_duplique_sans_double(GList **liste_pond_destination,
     list_parcours = liste_pond_source;
     do
     {
-        Ponderation *ponderation_source;
+        GList *ponderation_source;
         
         ponderation_source = list_parcours->data;
         /* Si la ponderation n'existe pas, on l'ajoute à la fin */
@@ -127,11 +125,10 @@ gboolean _1990_ponderations_duplique_sans_double(GList **liste_pond_destination,
         {
             case 0 :
             {
-                Ponderation *ponderation_destination = malloc(sizeof(Ponderation));
-                GList       *list_parcours2 = ponderation_source->elements;
+                GList   *ponderation_destination;
+                GList   *list_parcours2 = ponderation_source;
                 
-                BUGMSG(ponderation_destination, FALSE, gettext("Erreur d'allocation mémoire.\n"));
-                ponderation_destination->elements = NULL;
+                ponderation_destination = NULL;
                 
                 do
                 {
@@ -144,7 +141,7 @@ gboolean _1990_ponderations_duplique_sans_double(GList **liste_pond_destination,
                     element_destination->flags = element_source->flags;
                     element_destination->psi = element_source->psi;
                     element_destination->ponderation = element_source->ponderation;
-                    ponderation_destination->elements = g_list_append(ponderation_destination->elements, element_destination);
+                    ponderation_destination = g_list_append(ponderation_destination, element_destination);
                     
                     list_parcours2 = g_list_next(list_parcours2);
                 }
@@ -240,13 +237,12 @@ gboolean _1990_ponderations_genere_un(Projet *projet, GList **ponderations_desti
     //                 convient de ne pas prendre la pondération en compte. Par exemple,
     //                 lorsque les actions à ELU STR sont en cours de génération, il convient
     //                 de ne pas prendre les pondérations possédant des actions accidentelles.
-            int         suivant = 0, variable_accompagnement = 0, variable_dominante = 0;
-            GList       *combinaison;
-            Ponderation *ponderation = malloc(sizeof(Ponderation));
+            int     suivant = 0, variable_accompagnement = 0, variable_dominante = 0;
+            GList   *combinaison;
+            GList   *ponderation;
             
-            BUGMSG(ponderation, FALSE, gettext("Erreur d'allocation mémoire.\n"));
             combinaison = list_parcours->data;
-            ponderation->elements = NULL;
+            ponderation = NULL;
             if (combinaison != NULL)
             {
                 GList   *list_parcours2 = combinaison;
@@ -299,7 +295,7 @@ gboolean _1990_ponderations_genere_un(Projet *projet, GList **ponderations_desti
                             
                             ponderation_element->ponderation = pond;
                     
-                            ponderation->elements = g_list_append(ponderation->elements, ponderation_element);
+                            ponderation = g_list_append(ponderation, ponderation_element);
                         }
                     }
                     list_parcours2 = g_list_next(list_parcours2);
@@ -315,10 +311,8 @@ gboolean _1990_ponderations_genere_un(Projet *projet, GList **ponderations_desti
             if ((suivant == 0) && (_1990_ponderations_verifie_double(*ponderations_destination, ponderation) == 0))
                 *ponderations_destination = g_list_append(*ponderations_destination, ponderation);
             else
-            {
-                g_list_free_full(ponderation->elements, g_free);
-                free(ponderation);
-            }
+                g_list_free_full(ponderation, g_free);
+            
             list_parcours = g_list_next(list_parcours);
         }
         while (list_parcours != NULL);
@@ -1065,7 +1059,7 @@ gboolean _1990_ponderations_genere(Projet *projet)
 }
 
 
-char* _1990_ponderations_description(Ponderation *ponderation)
+char* _1990_ponderations_description(GList *ponderation)
 /* Description : Renvoie sous forme de texte une pondération.
  * Paramètres : GList *ponderation : la pondération.
  * Valeur renvoyée : Aucun.
@@ -1073,13 +1067,12 @@ char* _1990_ponderations_description(Ponderation *ponderation)
 {
     char    *retour = NULL, *tmp;
     
-    BUGMSG(ponderation, NULL, gettext("Paramètre %s incorrect.\n"), "ponderation");
     BUGMSG(retour = malloc(sizeof(char)), NULL, gettext("Erreur d'allocation mémoire.\n"));
     retour[0] = 0;
     // Trivial
-    if (ponderation->elements != NULL)
+    if (ponderation != NULL)
     {
-        GList   *list_parcours = ponderation->elements;
+        GList   *list_parcours = ponderation;
         do
         {
             char                psi[30];
@@ -1122,11 +1115,11 @@ void _1990_ponderations_affiche(GList *ponderations)
         GList   *list_parcours = ponderations;
         do
         {
-            Ponderation *ponderation = list_parcours->data;
+            GList *ponderation = list_parcours->data;
             
-            if (ponderation->elements != NULL)
+            if (ponderation != NULL)
             {
-                GList   *list_parcours2 = ponderation->elements;
+                GList   *list_parcours2 = ponderation;
                 do
                 {
                     Ponderation_Element *ponderation_element = list_parcours2->data;

@@ -28,7 +28,7 @@
 #include "common_fonction.h"
 
 
-Action *EF_resultat_action_ponderation(Ponderation* ponderation, Projet *projet)
+Action *EF_resultat_action_ponderation(GList* ponderation, Projet *projet)
 /* Description : Crée une fausse action sur la base d'une combinaison. L'objectif de cette
  *               fonction est uniquement de regrouper les résultats pondérés de chaque action.
  * Paramètres : Ponderation *ponderation : pondération sur laquelle sera créée l'action,
@@ -47,7 +47,6 @@ Action *EF_resultat_action_ponderation(Ponderation* ponderation, Projet *projet)
 
     
     BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(ponderation, NULL, gettext("Paramètre %s incorrect.\n"), "ponderation");
     
     // Initialisation de l'action
     BUGMSG(action = malloc(sizeof(Action)), NULL, gettext("Erreur d'allocation mémoire.\n"));
@@ -62,7 +61,7 @@ Action *EF_resultat_action_ponderation(Ponderation* ponderation, Projet *projet)
     y = action->deplacement_complet->x;
     
     // Remplissage de la variable action.
-    list_parcours = ponderation->elements;
+    list_parcours = ponderation;
     while (list_parcours != NULL)
     {
         Ponderation_Element *element = list_parcours->data;
