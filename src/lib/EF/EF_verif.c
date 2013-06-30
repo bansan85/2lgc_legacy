@@ -26,7 +26,7 @@
 #include "common_erreurs.h"
 #include "common_math.h"
 #include "common_selection.h"
-#include "1992_1_1_barres.hpp"
+#include "1992_1_1_barres.h"
 #include "EF_noeuds.h"
 
 

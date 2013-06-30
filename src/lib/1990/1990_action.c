@@ -24,9 +24,8 @@
 #include <gmodule.h>
 #include <math.h>
 
-extern "C" {
-#include "1990_coef_psi.hpp"
-#include "1990_groupe.hpp"
+#include "1990_coef_psi.h"
+#include "1990_groupe.h"
 #include "common_projet.h"
 #include "common_math.h"
 #include "common_erreurs.h"
@@ -38,7 +37,7 @@ extern "C" {
 
 #ifdef ENABLE_GTK
 #include "common_gtk.h"
-#include "1990_gtk_actions.hpp"
+#include "1990_gtk_actions.h"
 #endif
 
 char* _1990_action_type_bat_txt_eu(unsigned int type)
@@ -266,7 +265,7 @@ Action_Categorie _1990_action_categorie_bat(unsigned int type, Type_Pays pays)
 }
 
 
-unsigned int _1990_action_num_bat_txt(Type_Pays pays)
+Action_Categorie _1990_action_num_bat_txt(Type_Pays pays)
 /* Description : renvoie le nombre de catégories d'actions des bâtiments en fonction du pays.
  * Paramètres : Type_Pays pays : le numéro du pays.
  * Valeur renvoyée :
@@ -373,7 +372,7 @@ Action *_1990_action_ajout(Projet *projet, unsigned int type, const char* descri
     BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
     BUG(_1990_action_categorie_bat(type, projet->parametres.pays) != ACTION_INCONNUE, NULL);
     
-    BUGMSG(action_nouveau = static_cast<Action*>(malloc(sizeof(Action))), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(action_nouveau = (Action*)malloc(sizeof(Action)), NULL, gettext("Erreur d'allocation mémoire.\n"));
     BUGMSG(action_nouveau->nom = g_strdup_printf("%s", description), NULL, gettext("Erreur d'allocation mémoire.\n"));
     action_nouveau->numero = g_list_length(projet->actions);
     action_nouveau->type = type;
@@ -446,7 +445,7 @@ Action* _1990_action_cherche_numero(Projet *projet, unsigned int numero)
     list_parcours = projet->actions;
     while (list_parcours != NULL)
     {
-        Action  *action = static_cast<Action*>(list_parcours->data);
+        Action  *action = (Action*)list_parcours->data;
         
         if (action->numero == numero)
             return action;
@@ -664,7 +663,7 @@ gboolean _1990_action_affiche_tout(Projet *projet)
     list_parcours = projet->actions;
     do
     {
-        Action      *action = static_cast<Action*>(list_parcours->data);
+        Action      *action = list_parcours->data;
         
         printf(gettext("Action n° %u, description '%s', type n°%d\n"), action->numero, action->nom, action->type);
         
@@ -782,7 +781,7 @@ gboolean _1990_action_free_num(Projet *projet, unsigned int num)
     list_parcours = g_list_last(projet->actions);
     do
     {
-        Action      *action = static_cast<Action*>(list_parcours->data);
+        Action      *action = list_parcours->data;
         
         list_parcours = g_list_previous(list_parcours);
         if (action->numero == num)
@@ -793,13 +792,13 @@ gboolean _1990_action_free_num(Projet *projet, unsigned int num)
             {
                 Charge_Barre_Ponctuelle *charge;
                 
-                charge = static_cast<Charge_Barre_Ponctuelle*>(action->charges->data);
-                
+                charge = action->charges->data;
+                action->charges = g_list_delete_link(action->charges, action->charges);
                 switch (charge->type)
                 {
                     case CHARGE_NOEUD :
                     {
-                        Charge_Noeud *charge2 = static_cast<Charge_Noeud*>(action->charges->data);
+                        Charge_Noeud *charge2 = (Charge_Noeud *)charge;
                         BUG(EF_charge_noeud_free(charge2), FALSE);
                         break;
                     }
@@ -810,7 +809,7 @@ gboolean _1990_action_free_num(Projet *projet, unsigned int num)
                     }
                     case CHARGE_BARRE_REPARTIE_UNIFORME :
                     {
-                        Charge_Barre_Repartie_Uniforme *charge2 = static_cast<Charge_Barre_Repartie_Uniforme *>(action->charges->data);
+                        Charge_Barre_Repartie_Uniforme *charge2 = (Charge_Barre_Repartie_Uniforme *)charge;
                         BUG(EF_charge_barre_repartie_uniforme_free(charge2), FALSE);
                         break;
                     }
@@ -820,8 +819,6 @@ gboolean _1990_action_free_num(Projet *projet, unsigned int num)
                         break;
                     }
                 }
-                
-                action->charges = g_list_delete_link(action->charges, action->charges);
             }
             if (action->deplacement_complet != NULL)
                 cholmod_free_sparse(&action->deplacement_complet, projet->calculs.c);
@@ -861,21 +858,21 @@ gboolean _1990_action_free_num(Projet *projet, unsigned int num)
     list_parcours = projet->niveaux_groupes;
     if (list_parcours != NULL)
     {
-        Niveau_Groupe   *niveau_groupe = static_cast<Niveau_Groupe*>(list_parcours->data);
+        Niveau_Groupe   *niveau_groupe = list_parcours->data;
         GList           *list_groupes = niveau_groupe->groupes;
         
         while (list_groupes != NULL)
         {
-            Groupe      *groupe = static_cast<Groupe*>(list_groupes->data);
+            Groupe      *groupe = list_groupes->data;
             GList       *list_elements = groupe->elements;
-            gboolean    suppr = FALSE;
+            gboolean    delete = FALSE;
             
             while (list_elements != NULL)
             {
-                Element     *element_en_cours = static_cast<Element*>(list_elements->data);
+                Element     *element_en_cours = list_elements->data;
                 
                 if (element_en_cours->numero == num)
-                    suppr = TRUE;
+                    delete = TRUE;
                 else if (element_en_cours->numero > num)
                 {
                     element_en_cours->numero--;
@@ -888,7 +885,7 @@ gboolean _1990_action_free_num(Projet *projet, unsigned int num)
                 list_elements = g_list_next(list_elements);
             }
             
-            if (suppr)
+            if (delete)
                 BUG(_1990_groupe_free_element(projet, 0, groupe->numero, num), FALSE);
             
             list_groupes = g_list_next(list_groupes);
@@ -943,20 +940,22 @@ gboolean _1990_action_free(Projet *projet)
     // Trivial
     while (projet->actions != NULL)
     {
-        Action      *action = static_cast<Action*>(projet->actions->data);
+        Action      *action = projet->actions->data;
         
         projet->actions = g_list_delete_link(projet->actions, projet->actions);
         
         free(action->nom);
         while (action->charges != NULL)
         {
-            Charge_Barre_Ponctuelle *charge = static_cast<Charge_Barre_Ponctuelle*>(action->charges->data);
+            Charge_Barre_Ponctuelle *charge = action->charges->data;
+            
+            action->charges = g_list_delete_link(action->charges, action->charges);
             
             switch (charge->type)
             {
                 case CHARGE_NOEUD :
                 {
-                    BUG(EF_charge_noeud_free(static_cast<Charge_Noeud*>(action->charges->data)), FALSE);
+                    BUG(EF_charge_noeud_free((Charge_Noeud*)charge), FALSE);
                     break;
                 }
                 case CHARGE_BARRE_PONCTUELLE :
@@ -966,7 +965,7 @@ gboolean _1990_action_free(Projet *projet)
                 }
                 case CHARGE_BARRE_REPARTIE_UNIFORME :
                 {
-                    BUG(EF_charge_barre_repartie_uniforme_free(static_cast<Charge_Barre_Repartie_Uniforme*>(action->charges->data)), FALSE);
+                    BUG(EF_charge_barre_repartie_uniforme_free((Charge_Barre_Repartie_Uniforme*)charge), FALSE);
                     break;
                 }
                 default :
@@ -975,8 +974,6 @@ gboolean _1990_action_free(Projet *projet)
                     break;
                 }
             }
-            
-            action->charges = g_list_delete_link(action->charges, action->charges);
         }
         if (action->deplacement_complet != NULL)
             cholmod_free_sparse(&action->deplacement_complet, projet->calculs.c);
@@ -1007,6 +1004,4 @@ gboolean _1990_action_free(Projet *projet)
 #endif
     
     return TRUE;
-}
-
 }

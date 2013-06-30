@@ -21,6 +21,7 @@
 
 #include "config.h"
 #include "common_projet.h"
+#include "1990_action.h"
 
 Action *EF_resultat_action_ponderation(Ponderation* ponderation, Projet *projet) __attribute__((__warn_unused_result__));
 gboolean EF_resultat_noeud_reaction_appui(GList *liste, EF_Noeud *noeud, int indice, Projet *projet, char **texte, double* mini, double *maxi) __attribute__((__warn_unused_result__));
