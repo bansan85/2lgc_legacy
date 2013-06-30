@@ -627,11 +627,12 @@ gboolean _1990_groupe_affiche_tout(Projet *projet)
                 
                 do
                 {
-                    Combinaison *combinaison = list_parcours3->data;
+                    GList   *combinaison = list_parcours3->data;
+                    
                     printf("\t\t\t");
-                    if (combinaison->elements != NULL)
+                    if (combinaison != NULL)
                     {
-                        GList   *list_parcours4 = combinaison->elements;
+                        GList   *list_parcours4 = combinaison;
                         do
                         {
                             Combinaison_Element *comb_element = list_parcours4->data;
@@ -762,10 +763,10 @@ gboolean _1990_groupe_free_niveau(Projet *projet, unsigned int niveau, gboolean 
                 {
                     while (groupe->tmp_combinaison != NULL)
                     {
-                        Combinaison *combinaison = groupe->tmp_combinaison->data;
-                        if (combinaison->elements != NULL)
-                            g_list_free_full(combinaison->elements, free);
-                        free(combinaison);
+                        GList   *combinaison = groupe->tmp_combinaison->data;
+                        
+                        if (combinaison != NULL)
+                            g_list_free_full(combinaison, free);
                         groupe->tmp_combinaison = g_list_delete_link(groupe->tmp_combinaison, groupe->tmp_combinaison);
                     }
                     free(groupe->tmp_combinaison);
@@ -904,10 +905,10 @@ gboolean _1990_groupe_free_groupe(Projet *projet, unsigned int niveau, unsigned 
     {
         while (groupe_curr->tmp_combinaison != NULL)
         {
-            Combinaison *combinaison = groupe_curr->tmp_combinaison->data;
-            if (combinaison->elements != NULL)
-                g_list_free_full(combinaison->elements, free);
-            free(combinaison);
+            GList   *combinaison = groupe_curr->tmp_combinaison->data;
+            
+            if (combinaison != NULL)
+                g_list_free_full(combinaison, free);
             groupe_curr->tmp_combinaison = g_list_delete_link(groupe_curr->tmp_combinaison, groupe_curr->tmp_combinaison);
         }
     }

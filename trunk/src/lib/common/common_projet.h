@@ -848,14 +848,6 @@ typedef struct __Combinaison_Element
 } Combinaison_Element;
 
 
-// Nota : L'espace après __Combinaison est nécessaire pour la génération du document Latex.
-//        A ne surtout pas supprimer!!!
-typedef struct __Combinaison 
-{
-    GList       *elements;      // Liste de pointeurs Combinaison_Element
-} Combinaison;
-
-
 typedef struct __Groupe
 {
     char                    *nom;

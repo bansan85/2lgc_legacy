@@ -241,15 +241,15 @@ gboolean _1990_ponderations_genere_un(Projet *projet, GList **ponderations_desti
     //                 lorsque les actions à ELU STR sont en cours de génération, il convient
     //                 de ne pas prendre les pondérations possédant des actions accidentelles.
             int         suivant = 0, variable_accompagnement = 0, variable_dominante = 0;
-            Combinaison *combinaison;
+            GList       *combinaison;
             Ponderation *ponderation = malloc(sizeof(Ponderation));
             
             BUGMSG(ponderation, FALSE, gettext("Erreur d'allocation mémoire.\n"));
             combinaison = list_parcours->data;
             ponderation->elements = NULL;
-            if (combinaison->elements != NULL)
+            if (combinaison != NULL)
             {
-                GList   *list_parcours2 = combinaison->elements;
+                GList   *list_parcours2 = combinaison;
     //         Pour chaque élément de la combinaison Faire
                 do
                 {
