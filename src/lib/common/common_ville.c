@@ -47,9 +47,9 @@ gboolean common_ville_init(Projet *projet)
     projet->parametres.adresse.ville = NULL;
     
     // On initialise au moins à une valeur par défaut
-    projet->parametres.neige = 0;
-    projet->parametres.vent = 0;
-    projet->parametres.seisme = 0;
+    projet->parametres.neige = NEIGE_A1;
+    projet->parametres.vent = VENT_1;
+    projet->parametres.seisme = SEISME_1;
     
     return TRUE;
 }
