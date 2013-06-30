@@ -856,12 +856,6 @@ typedef struct __Combinaison
 } Combinaison;
 
 
-typedef struct __Combinaisons
-{
-    GList       *combinaisons;  // Liste de "combinaison"
-} Combinaisons;
-
-
 typedef struct __Groupe
 {
     char                    *nom;
@@ -870,7 +864,7 @@ typedef struct __Groupe
     GList                   *elements;          // Contient des Action si le groupe appartient
                                                 // au niveau 0,
                                                 // Contient des Groupe sinon.
-    Combinaisons            tmp_combinaison;
+    GList                   *tmp_combinaison;
 #ifdef ENABLE_GTK
     GtkTreeIter             Iter;         // Pour la fenêtre groupes
     int                     Iter_expand;

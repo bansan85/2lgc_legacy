@@ -213,7 +213,7 @@ Groupe *_1990_groupe_ajout_groupe(Projet *projet, unsigned int niveau,
     groupe_nouveau->Iter_expand = 1;
 #endif
     
-    groupe_nouveau->tmp_combinaison.combinaisons = NULL;
+    groupe_nouveau->tmp_combinaison = NULL;
     
     groupe_nouveau->elements = NULL;
     niveau_groupe->groupes = g_list_append(niveau_groupe->groupes, groupe_nouveau);
@@ -621,9 +621,9 @@ gboolean _1990_groupe_affiche_tout(Projet *projet)
             }
             printf("\n");
             printf(gettext("\t\tCombinaisons :\n"));
-            if (groupe->tmp_combinaison.combinaisons != NULL)
+            if (groupe->tmp_combinaison != NULL)
             {
-                list_parcours3 = groupe->tmp_combinaison.combinaisons;
+                list_parcours3 = groupe->tmp_combinaison;
                 
                 do
                 {
@@ -758,17 +758,17 @@ gboolean _1990_groupe_free_niveau(Projet *projet, unsigned int niveau, gboolean 
                     g_list_free_full(groupe->elements, free);
                 
                 /* On libère toutes les combinaisons temporaires */
-                if (groupe->tmp_combinaison.combinaisons != NULL)
+                if (groupe->tmp_combinaison != NULL)
                 {
-                    while (groupe->tmp_combinaison.combinaisons != NULL)
+                    while (groupe->tmp_combinaison != NULL)
                     {
-                        Combinaison *combinaison = groupe->tmp_combinaison.combinaisons->data;
+                        Combinaison *combinaison = groupe->tmp_combinaison->data;
                         if (combinaison->elements != NULL)
                             g_list_free_full(combinaison->elements, free);
                         free(combinaison);
-                        groupe->tmp_combinaison.combinaisons = g_list_delete_link(groupe->tmp_combinaison.combinaisons, groupe->tmp_combinaison.combinaisons);
+                        groupe->tmp_combinaison = g_list_delete_link(groupe->tmp_combinaison, groupe->tmp_combinaison);
                     }
-                    free(groupe->tmp_combinaison.combinaisons);
+                    free(groupe->tmp_combinaison);
                 }
                 
                 free(groupe);
@@ -900,15 +900,15 @@ gboolean _1990_groupe_free_groupe(Projet *projet, unsigned int niveau, unsigned 
         g_list_free_full(groupe_curr->elements, free);
     
     /* On libère toutes les combinaisons temporaires */
-    if (groupe_curr->tmp_combinaison.combinaisons != NULL)
+    if (groupe_curr->tmp_combinaison != NULL)
     {
-        while (groupe_curr->tmp_combinaison.combinaisons != NULL)
+        while (groupe_curr->tmp_combinaison != NULL)
         {
-            Combinaison *combinaison = groupe_curr->tmp_combinaison.combinaisons->data;
+            Combinaison *combinaison = groupe_curr->tmp_combinaison->data;
             if (combinaison->elements != NULL)
                 g_list_free_full(combinaison->elements, free);
             free(combinaison);
-            groupe_curr->tmp_combinaison.combinaisons = g_list_delete_link(groupe_curr->tmp_combinaison.combinaisons, groupe_curr->tmp_combinaison.combinaisons);
+            groupe_curr->tmp_combinaison = g_list_delete_link(groupe_curr->tmp_combinaison, groupe_curr->tmp_combinaison);
         }
     }
     

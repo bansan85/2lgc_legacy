@@ -195,7 +195,7 @@ gboolean _1990_ponderations_genere_un(Projet *projet, GList **ponderations_desti
  *   Échec : FALSE :
  *             projet == NULL) ou
  *             projet->niveaux_groupes == NULL,
- *             groupe->tmp_combinaison.combinaisons == NULL,
+ *             groupe->tmp_combinaison == NULL,
  *             en cas d'erreur d'allocation mémoire
  */
 {
@@ -216,7 +216,7 @@ gboolean _1990_ponderations_genere_un(Projet *projet, GList **ponderations_desti
     // Si le groupe du dernier niveau ne possède pas de combinaison Alors
     //     Fin.
     // FinSi
-    BUGMSG(groupe->tmp_combinaison.combinaisons, FALSE, gettext("Le dernier niveau ne possède aucune combinaison permettant la génération des pondérations.\n"));
+    BUGMSG(groupe->tmp_combinaison, FALSE, gettext("Le dernier niveau ne possède aucune combinaison permettant la génération des pondérations.\n"));
     
     // Génération d'une boucle contenant 2^(nom de ligne dans coef_min et coef_max) permettant
     //   ainsi à à chaque passage de déterminer si le coefficient min ou max doit être pris.
@@ -228,7 +228,7 @@ gboolean _1990_ponderations_genere_un(Projet *projet, GList **ponderations_desti
     nbboucle = 1 << dim_coef;
     for (j=0;j<nbboucle;j++)
     {
-        GList   *list_parcours = groupe->tmp_combinaison.combinaisons;
+        GList   *list_parcours = groupe->tmp_combinaison;
     //     Pour chaque combinaison dans le groupe final Faire
         do
         {

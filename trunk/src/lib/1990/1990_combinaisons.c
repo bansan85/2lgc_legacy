@@ -278,7 +278,7 @@ gboolean _1990_combinaisons_genere_xor(Projet *projet, Niveau_Groupe *niveau, Gr
                 nouveau_element->action = action;
                 nouveau_element->flags = nouveau_element->action->flags;
                 nouvelle_combinaison->elements = g_list_append(nouvelle_combinaison->elements, nouveau_element);
-                groupe->tmp_combinaison.combinaisons = g_list_append(groupe->tmp_combinaison.combinaisons, nouvelle_combinaison);
+                groupe->tmp_combinaison = g_list_append(groupe->tmp_combinaison, nouvelle_combinaison);
             }
             
             list_parcours = g_list_next(list_parcours);
@@ -304,7 +304,7 @@ gboolean _1990_combinaisons_genere_xor(Projet *projet, Niveau_Groupe *niveau, Gr
             Groupe      *groupe_n_1;
             
             BUG(groupe_n_1 = _1990_groupe_positionne_groupe(niveau, element_tmp->numero), FALSE);
-            BUG(_1990_combinaisons_duplique(&(groupe->tmp_combinaison.combinaisons), groupe_n_1->tmp_combinaison.combinaisons, TRUE), FALSE);
+            BUG(_1990_combinaisons_duplique(&(groupe->tmp_combinaison), groupe_n_1->tmp_combinaison, TRUE), FALSE);
             
             list_parcours = g_list_next(list_parcours);
         }
@@ -449,7 +449,7 @@ gboolean _1990_combinaisons_genere_and(Projet *projet, Niveau_Groupe *niveau, Gr
         {
             if (action_predominante == 1)
                 BUG(_1990_combinaisons_action_predominante(comb, projet->parametres.pays), FALSE);
-            groupe->tmp_combinaison.combinaisons = g_list_append(groupe->tmp_combinaison.combinaisons, comb);
+            groupe->tmp_combinaison = g_list_append(groupe->tmp_combinaison, comb);
         }
         else
             free(comb);
@@ -496,7 +496,7 @@ gboolean _1990_combinaisons_genere_and(Projet *projet, Niveau_Groupe *niveau, Gr
             
             /* Alors, il s'agit de la première passe. On duplique donc simplement. */
             if (groupe->elements->data == element_en_cours)
-                BUG(_1990_combinaisons_duplique(&nouvelles_combinaisons, groupe_n_1->tmp_combinaison.combinaisons, FALSE), FALSE);
+                BUG(_1990_combinaisons_duplique(&nouvelles_combinaisons, groupe_n_1->tmp_combinaison, FALSE), FALSE);
             else
             {
                 /* transition est utilisée de façon temporaire pour dupliquer nouvelles_combinaisons en cas de besoin */
@@ -508,13 +508,13 @@ gboolean _1990_combinaisons_genere_and(Projet *projet, Niveau_Groupe *niveau, Gr
                  * de fois (moins 1) qu'il y a d'éléments dans le groupe de la passe actuelle.
                  * (première partie de la passe 2) */
                 BUG(_1990_combinaisons_duplique(&transition, nouvelles_combinaisons, FALSE), FALSE);
-                nbboucle = g_list_length(groupe_n_1->tmp_combinaison.combinaisons);
+                nbboucle = g_list_length(groupe_n_1->tmp_combinaison);
                 for (i=2;i<=nbboucle;i++)
                     BUG(_1990_combinaisons_duplique(&nouvelles_combinaisons, transition, FALSE), FALSE);
                 
                 /* On ajoute à la fin de toutes les combinaisons dupliquées les combinaisons
                  * contenues dans le groupe en cours (deuxième partie de la passe 2) */
-                list_parcours2 = groupe_n_1->tmp_combinaison.combinaisons;
+                list_parcours2 = groupe_n_1->tmp_combinaison;
                 list_parcours3 = nouvelles_combinaisons;
                 for (i=1;i<=nbboucle;i++)
                 {
@@ -541,7 +541,7 @@ gboolean _1990_combinaisons_genere_and(Projet *projet, Niveau_Groupe *niveau, Gr
         while (list_parcours != NULL);
         
         /* On ajoute définitivement les nouvelles combinaisons */
-        BUG(_1990_combinaisons_duplique(&(groupe->tmp_combinaison.combinaisons), nouvelles_combinaisons, TRUE), FALSE);
+        BUG(_1990_combinaisons_duplique(&(groupe->tmp_combinaison), nouvelles_combinaisons, TRUE), FALSE);
         g_list_free_full(nouvelles_combinaisons, &_1990_combinaisons_free_groupe_tmp_combinaison);
     }
     // FinSi
@@ -640,7 +640,7 @@ gboolean _1990_combinaisons_genere_or(Projet *projet, Niveau_Groupe *niveau, Gro
             {
                 if (action_predominante == 1)
                     BUG(_1990_combinaisons_action_predominante(nouvelle_combinaison, projet->parametres.pays), FALSE);
-                groupe->tmp_combinaison.combinaisons = g_list_append(groupe->tmp_combinaison.combinaisons, nouvelle_combinaison);
+                groupe->tmp_combinaison = g_list_append(groupe->tmp_combinaison, nouvelle_combinaison);
             }
             else
                 free(nouvelle_combinaison);
@@ -690,11 +690,11 @@ gboolean _1990_combinaisons_genere_or(Projet *projet, Niveau_Groupe *niveau, Gro
                     
                     BUG(groupe_n_1 = _1990_groupe_positionne_groupe(niveau, element_en_cours->numero), FALSE);
                     
-                    if (groupe_n_1->tmp_combinaison.combinaisons != NULL)
+                    if (groupe_n_1->tmp_combinaison != NULL)
                     {
   /* Il s'agit de la première passe. On duplique donc simplement. */
                         if (nouvelles_combinaisons == NULL)
-                            BUG(_1990_combinaisons_duplique(&nouvelles_combinaisons, groupe_n_1->tmp_combinaison.combinaisons, FALSE), FALSE);
+                            BUG(_1990_combinaisons_duplique(&nouvelles_combinaisons, groupe_n_1->tmp_combinaison, FALSE), FALSE);
                         else
                         {
   /* transition est utilisée de façon temporaire pour dupliquer nouvelles_combinaisons en cas
@@ -706,14 +706,14 @@ gboolean _1990_combinaisons_genere_or(Projet *projet, Niveau_Groupe *niveau, Gro
                             
   /* On duplique les combinaisons actuellement dans nouvelles_combinaisons autant de fois
    * (moins 1) qu'il y a d'éléments dans le groupe de la passe actuelle. */
-                            for (j=2;j<=g_list_length(groupe_n_1->tmp_combinaison.combinaisons);j++)
+                            for (j=2;j<=g_list_length(groupe_n_1->tmp_combinaison);j++)
                                 BUG(_1990_combinaisons_duplique(&nouvelles_combinaisons, transition, FALSE), FALSE);
                             
   /* Ensuite on fusionne chaque série de doublon créée avec une combinaison provenant de
    * groupe_n_1 */
-                            list_parcours2 = groupe_n_1->tmp_combinaison.combinaisons;
+                            list_parcours2 = groupe_n_1->tmp_combinaison;
                             list_parcours3 = nouvelles_combinaisons;
-                            for (j=1;j<=g_list_length(groupe_n_1->tmp_combinaison.combinaisons);j++)
+                            for (j=1;j<=g_list_length(groupe_n_1->tmp_combinaison);j++)
                             {
                                 Combinaison *combinaison2 = list_parcours2->data;
                                 
@@ -735,7 +735,7 @@ gboolean _1990_combinaisons_genere_or(Projet *projet, Niveau_Groupe *niveau, Gro
             }
             while (parcours_bits != 0);
             
-            BUG(_1990_combinaisons_duplique(&(groupe->tmp_combinaison.combinaisons), nouvelles_combinaisons, TRUE), FALSE);
+            BUG(_1990_combinaisons_duplique(&(groupe->tmp_combinaison), nouvelles_combinaisons, TRUE), FALSE);
             g_list_free_full(nouvelles_combinaisons, &_1990_combinaisons_free_groupe_tmp_combinaison);
         }
     }
@@ -928,11 +928,11 @@ gboolean _1990_combinaisons_genere(Projet *projet)
                 {
                     Groupe      *groupe = list_parcours2->data;
                     
-                    while (groupe->tmp_combinaison.combinaisons != NULL)
+                    while (groupe->tmp_combinaison != NULL)
                     {
-                        g_list_free_full(((Combinaison*)groupe->tmp_combinaison.combinaisons->data)->elements, g_free);
-                        free(groupe->tmp_combinaison.combinaisons->data);
-                        groupe->tmp_combinaison.combinaisons = g_list_delete_link(groupe->tmp_combinaison.combinaisons, groupe->tmp_combinaison.combinaisons);
+                        g_list_free_full(((Combinaison*)groupe->tmp_combinaison->data)->elements, g_free);
+                        free(groupe->tmp_combinaison->data);
+                        groupe->tmp_combinaison = g_list_delete_link(groupe->tmp_combinaison, groupe->tmp_combinaison);
                     }
                     list_parcours2 = g_list_next(list_parcours2);
                 }
