@@ -31,7 +31,7 @@
 Action *EF_resultat_action_ponderation(GList* ponderation, Projet *projet)
 /* Description : Crée une fausse action sur la base d'une combinaison. L'objectif de cette
  *               fonction est uniquement de regrouper les résultats pondérés de chaque action.
- * Paramètres : Ponderation *ponderation : pondération sur laquelle sera créée l'action,
+ * Paramètres : GList *ponderation : pondération sur laquelle sera créée l'action,
  *              Projet *projet : la variable projet.
  * Valeur renvoyée :
  *   Succès : pointeur vers l'action équivalente créée.
@@ -64,11 +64,11 @@ Action *EF_resultat_action_ponderation(GList* ponderation, Projet *projet)
     list_parcours = ponderation;
     while (list_parcours != NULL)
     {
-        Ponderation_Element *element = list_parcours->data;
-        double              *x2 = element->action->efforts_noeuds->x;
-        double              *y2 = element->action->deplacement_complet->x;
-        double              mult = element->ponderation*(element->psi == 0 ? common_math_get(element->action->psi0) : element->psi == 1 ? common_math_get(element->action->psi1) : element->psi == 2 ? common_math_get(element->action->psi2) : 1.);
-        unsigned int        i;
+        Ponderation     *element = list_parcours->data;
+        double          *x2 = element->action->efforts_noeuds->x;
+        double          *y2 = element->action->deplacement_complet->x;
+        double          mult = element->ponderation*(element->psi == 0 ? common_math_get(element->action->psi0) : element->psi == 1 ? common_math_get(element->action->psi1) : element->psi == 2 ? common_math_get(element->action->psi2) : 1.);
+        unsigned int    i;
         
         for (i=0;i<g_list_length(projet->modele.noeuds)*6;i++)
         {

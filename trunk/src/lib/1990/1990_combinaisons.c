@@ -66,8 +66,8 @@ int _1990_combinaisons_verifie_double(GList *liste_combinaisons, GList *comb_a_v
             
             do
             {
-                Combinaison_Element *elem1 = list_1->data;
-                Combinaison_Element *elem2 = list_2->data;
+                Combinaison *elem1 = list_1->data;
+                Combinaison *elem2 = list_2->data;
                 /* On vérifie que chaque élément pointe vers la même action
                  *  et que les flags (paramètres de calculs) sont les mêmes */
                 if ((elem1->action != elem2->action) || (elem1->flags != elem2->flags))
@@ -138,8 +138,8 @@ gboolean _1990_combinaisons_duplique(GList **liste_comb_destination, GList *list
                     
                     do
                     {
-                        Combinaison_Element *element_source = list_parcours2->data;
-                        Combinaison_Element *element_destination = malloc(sizeof(Combinaison_Element));
+                        Combinaison *element_source = list_parcours2->data;
+                        Combinaison *element_destination = malloc(sizeof(Combinaison));
                         
                         BUGMSG(element_destination, FALSE, gettext("Erreur d'allocation mémoire.\n"));
                         
@@ -199,7 +199,7 @@ gboolean _1990_combinaisons_action_predominante(GList *combinaison, Type_Pays pa
     list_parcours = combinaison;
     do
     {
-        Combinaison_Element *combinaison_element = list_parcours->data;
+        Combinaison         *combinaison_element = list_parcours->data;
         Action_Categorie    categorie = _1990_action_categorie_bat(combinaison_element->action->type, pays);
         
         BUG(categorie != ACTION_INCONNUE, FALSE);
@@ -261,16 +261,16 @@ gboolean _1990_combinaisons_genere_xor(Projet *projet, Niveau_Groupe *niveau, Gr
         
         do
         {
-            Element             *element_en_cours = list_parcours->data;
-            GList               *nouvelle_combinaison;
-            Combinaison_Element *nouveau_element;
-            Action              *action;
+            Element     *element_en_cours = list_parcours->data;
+            GList       *nouvelle_combinaison;
+            Combinaison *nouveau_element;
+            Action      *action;
             
             // On vérifie si l'action possède une charge. Si non, on ignore l'action.
             BUG(action = _1990_action_cherche_numero(projet, element_en_cours->numero), FALSE);
             if (action->charges != NULL)
             {
-                BUGMSG(nouveau_element = malloc(sizeof(Combinaison_Element)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                BUGMSG(nouveau_element = malloc(sizeof(Combinaison)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                 nouvelle_combinaison = NULL;
                 nouveau_element->action = action;
                 nouveau_element->flags = nouveau_element->action->flags;
@@ -335,8 +335,8 @@ gboolean _1990_combinaisons_fusion(GList *destination, GList *source)
     list_parcours = source;
     while (list_parcours != NULL)
     {
-        Combinaison_Element *element_source = list_parcours->data;
-        Combinaison_Element *element_destination = malloc(sizeof(Combinaison_Element));
+        Combinaison *element_source = list_parcours->data;
+        Combinaison *element_destination = malloc(sizeof(Combinaison));
         
         BUGMSG(element_destination, FALSE, gettext("Erreur d'allocation mémoire.\n"));
         element_destination->action = element_source->action;
@@ -420,15 +420,15 @@ gboolean _1990_combinaisons_genere_and(Projet *projet, Niveau_Groupe *niveau, Gr
         
         do
         {
-            Element             *element_en_cours = list_parcours->data;
-            Combinaison_Element *nouveau_element;
-            Action              *action;
+            Element     *element_en_cours = list_parcours->data;
+            Combinaison *nouveau_element;
+            Action      *action;
             
             BUG(action = _1990_action_cherche_numero(projet, element_en_cours->numero), FALSE);
             // On ajoute l'action que si elle possède des charges
             if (action->charges != NULL)
             {
-                BUGMSG(nouveau_element = malloc(sizeof(Combinaison_Element)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                BUGMSG(nouveau_element = malloc(sizeof(Combinaison)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                 nouveau_element->action = action;
                 nouveau_element->flags = nouveau_element->action->flags;
                 if ((nouveau_element->flags & 1) != 0)
@@ -609,15 +609,15 @@ gboolean _1990_combinaisons_genere_or(Projet *projet, Niveau_Groupe *niveau, Gro
             {
                 if ((parcours_bits & 1) == 1)
                 {
-                    Combinaison_Element *element;
-                    Element             *element_en_cours = list_parcours->data;
-                    Action              *action;
+                    Combinaison *element;
+                    Element     *element_en_cours = list_parcours->data;
+                    Action      *action;
                     
                     BUG(action = _1990_action_cherche_numero(projet, element_en_cours->numero), FALSE);
                     // On ajoute l'action que si elle possède des charges
                     if (action->charges != NULL)
                     {
-                        BUGMSG(element = malloc(sizeof(Combinaison_Element)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                        BUGMSG(element = malloc(sizeof(Combinaison)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                         element->action = action;
                         element->flags = element->action->flags;
                         if ((element->flags & 1) != 0)

@@ -635,8 +635,8 @@ gboolean _1990_groupe_affiche_tout(Projet *projet)
                         GList   *list_parcours4 = combinaison;
                         do
                         {
-                            Combinaison_Element *comb_element = list_parcours4->data;
-                            Action          *action = (Action*)comb_element->action;
+                            Combinaison *comb_element = list_parcours4->data;
+                            Action      *action = (Action*)comb_element->action;
                             
                             printf("%u(%d) ", action->numero, comb_element->flags);
                             
