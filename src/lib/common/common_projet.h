@@ -815,13 +815,13 @@ typedef struct __Action
 } Action;
 
 
-typedef struct __Ponderation_Element
+typedef struct __Ponderation
 {
     double      ponderation;
     int         psi;
     int         flags;
     Action      *action;
-} Ponderation_Element;
+} Ponderation;
 
 
 typedef struct __Element
@@ -834,11 +834,11 @@ typedef struct __Element
 } Element;
 
 
-typedef struct __Combinaison_Element
+typedef struct __Combinaison
 {
     Action      *action;
     int         flags;          // bit 1 : 1 si les actions variables sont prédominantes
-} Combinaison_Element;
+} Combinaison;
 
 
 typedef struct __Groupe

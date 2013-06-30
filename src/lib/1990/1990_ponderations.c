@@ -31,7 +31,7 @@ int _1990_ponderations_verifie_double(GList *liste_ponderations, GList* pond_a_v
 /* Description : Vérifie dans la liste des ponderations si la ponderation à vérifier est déjà
  *                 présente.
  * Paramètres : GList *ponderations : liste des pondérations,
- *            : Ponderation* pond_a_verifier : pondération à vérifier.
+ *            : GList* pond_a_verifier : pondération à vérifier.
  * Valeur renvoyée :
  *   Succès : 0 si la pondération n'existe pas,
  *          : 1 si la pondération existe.
@@ -68,7 +68,7 @@ int _1990_ponderations_verifie_double(GList *liste_ponderations, GList* pond_a_v
             
             do
             {
-                Ponderation_Element *elem1, *elem2;
+                Ponderation *elem1, *elem2;
                 
                 elem1 = list_parcours2->data;
                 elem2 = list_parcours3->data;
@@ -83,6 +83,7 @@ int _1990_ponderations_verifie_double(GList *liste_ponderations, GList* pond_a_v
             if (doublon == 1)
                 return 1;
         }
+        
         list_parcours = g_list_next(list_parcours);
     }
     while (list_parcours != NULL);
@@ -132,8 +133,8 @@ gboolean _1990_ponderations_duplique_sans_double(GList **liste_pond_destination,
                 
                 do
                 {
-                    Ponderation_Element *element_source;
-                    Ponderation_Element *element_destination = malloc(sizeof(Ponderation_Element));
+                    Ponderation *element_source;
+                    Ponderation *element_destination = malloc(sizeof(Ponderation));
                     
                     BUGMSG(element_destination, FALSE, gettext("Erreur d'allocation mémoire.\n"));
                     element_source = list_parcours2->data;
@@ -249,9 +250,9 @@ gboolean _1990_ponderations_genere_un(Projet *projet, GList **ponderations_desti
     //         Pour chaque élément de la combinaison Faire
                 do
                 {
-                    Combinaison_Element *combinaison_element;
-                    unsigned int        categorie;
-                    double              pond;
+                    Combinaison     *combinaison_element;
+                    unsigned int    categorie;
+                    double          pond;
                     
                     combinaison_element = list_parcours2->data;
                     categorie = _1990_action_categorie_bat(combinaison_element->action->type, projet->parametres.pays);
@@ -270,7 +271,7 @@ gboolean _1990_ponderations_genere_un(Projet *projet, GList **ponderations_desti
                         
                         if (!(ERREUR_RELATIVE_EGALE(0., pond)))
                         {
-                            Ponderation_Element *ponderation_element = malloc(sizeof(Ponderation_Element));
+                            Ponderation *ponderation_element = malloc(sizeof(Ponderation));
                             
                             BUGMSG(ponderation_element, FALSE, gettext("Erreur d'allocation mémoire.\n"));
                             ponderation_element->action = combinaison_element->action;
@@ -1075,8 +1076,8 @@ char* _1990_ponderations_description(GList *ponderation)
         GList   *list_parcours = ponderation;
         do
         {
-            char                psi[30];
-            Ponderation_Element *ponderation_element = list_parcours->data;
+            char        psi[30];
+            Ponderation *ponderation_element = list_parcours->data;
             
             tmp = retour;
             if (ponderation_element->psi == 0)
@@ -1122,16 +1123,19 @@ void _1990_ponderations_affiche(GList *ponderations)
                 GList   *list_parcours2 = ponderation;
                 do
                 {
-                    Ponderation_Element *ponderation_element = list_parcours2->data;
+                    Ponderation *ponderation_element = list_parcours2->data;
+                    
                     if (g_list_next(list_parcours2) != NULL)
                         printf("%u*%f(%d)+", ponderation_element->action->numero+1, ponderation_element->ponderation, ponderation_element->psi);
                     else
                         printf("%u*%f(%d)", ponderation_element->action->numero+1, ponderation_element->ponderation, ponderation_element->psi);
+                    
                     list_parcours2 = g_list_next(list_parcours2);
                 }
                 while (list_parcours2 != NULL);
                 printf("\n");
             }
+            
             list_parcours = g_list_next(list_parcours);
         }
         while (list_parcours != NULL);
