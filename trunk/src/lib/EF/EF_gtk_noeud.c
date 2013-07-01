@@ -707,10 +707,20 @@ void EF_gtk_noeuds_render_1(GtkTreeViewColumn *tree_column, GtkCellRenderer *cel
     EF_Noeud        *noeud;
     EF_Point        point;
     char            tmp[30];
+    EF_Noeud_Libre  *data;
     
     gtk_tree_model_get(tree_model, iter, 0, &noeud, -1);
-    BUG(EF_noeuds_renvoie_position(noeud, &point), );
-    common_math_double_to_char2(point.x, tmp, DECIMAL_DISTANCE);
+    
+    data = noeud->data;
+    if ((noeud->type == NOEUD_LIBRE) && (data->relatif != NULL))
+    {
+        common_math_double_to_char2(data->x, tmp, DECIMAL_DISTANCE);
+    }
+    else
+    {
+        BUG(EF_noeuds_renvoie_position(noeud, &point), );
+        common_math_double_to_char2(point.x, tmp, DECIMAL_DISTANCE);
+    }
     
     g_object_set(cell, "text", tmp, NULL);
 }
@@ -731,10 +741,20 @@ void EF_gtk_noeuds_render_2(GtkTreeViewColumn *tree_column, GtkCellRenderer *cel
     EF_Noeud        *noeud;
     EF_Point        point;
     char            tmp[30];
+    EF_Noeud_Libre  *data;
     
     gtk_tree_model_get(tree_model, iter, 0, &noeud, -1);
-    BUG(EF_noeuds_renvoie_position(noeud, &point), );
-    common_math_double_to_char2(point.y, tmp, DECIMAL_DISTANCE);
+    
+    data = noeud->data;
+    if ((noeud->type == NOEUD_LIBRE) && (data->relatif != NULL))
+    {
+        common_math_double_to_char2(data->y, tmp, DECIMAL_DISTANCE);
+    }
+    else
+    {
+        BUG(EF_noeuds_renvoie_position(noeud, &point), );
+        common_math_double_to_char2(point.y, tmp, DECIMAL_DISTANCE);
+    }
     
     g_object_set(cell, "text", tmp, NULL);
 }
@@ -755,10 +775,20 @@ void EF_gtk_noeuds_render_3(GtkTreeViewColumn *tree_column, GtkCellRenderer *cel
     EF_Noeud        *noeud;
     EF_Point        point;
     char            tmp[30];
+    EF_Noeud_Libre  *data;
     
     gtk_tree_model_get(tree_model, iter, 0, &noeud, -1);
-    BUG(EF_noeuds_renvoie_position(noeud, &point), );
-    common_math_double_to_char2(point.z, tmp, DECIMAL_DISTANCE);
+    
+    data = noeud->data;
+    if ((noeud->type == NOEUD_LIBRE) && (data->relatif != NULL))
+    {
+        common_math_double_to_char2(data->z, tmp, DECIMAL_DISTANCE);
+    }
+    else
+    {
+        BUG(EF_noeuds_renvoie_position(noeud, &point), );
+        common_math_double_to_char2(point.z, tmp, DECIMAL_DISTANCE);
+    }
     
     g_object_set(cell, "text", tmp, NULL);
 }
