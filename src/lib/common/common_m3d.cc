@@ -266,7 +266,6 @@ gboolean m3d_get_rect(double *xmin, double *xmax, double *ymin, double *ymax, Pr
     EF_Noeud    *noeud;
     EF_Point    point;
     CM3dVertex  v1; // Vecteur permettant de créer le polygone
-    CM3dPolygon *poly; // Polygone qui servira à obtenir la projection dans la fenêtre 2D.
     double      x1, y1; // valeurs permettant de récupérer les coordonnées des vecteurs.
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
@@ -280,18 +279,11 @@ gboolean m3d_get_rect(double *xmin, double *xmax, double *ymin, double *ymax, Pr
     noeud = (EF_Noeud*)projet->modele.noeuds->data;
     BUG(EF_noeuds_renvoie_position(noeud, &point), FALSE);
     v1.set_coordinates(common_math_get(point.x), common_math_get(point.y), common_math_get(point.z));
-    poly = new CM3dPolygon(v1, v1, v1);
-    poly->convert_by_camera_view(vue->camera);
-    poly->convert_to_2d(vue->camera);
-    poly->get_vertex1_to_2d()->get_coordinates(NULL, &y1, NULL);
-    delete poly;
+    v1 = vue->camera->convert_vertex_by_camera_view(&v1);
+    v1 = vue->camera->convert_vertex_to_2d(&v1);
+    v1.get_coordinates(&x1, &y1, NULL);
     *ymax = y1;
     *ymin = y1;
-    poly = new CM3dPolygon(v1, v1, v1);
-    poly->convert_by_camera_view(vue->camera);
-    poly->convert_to_2d(vue->camera);
-    poly->get_vertex1_to_2d()->get_coordinates(&x1, NULL, NULL);
-    delete poly;
     *xmax = x1;
     *xmin = x1;
     
@@ -302,16 +294,9 @@ gboolean m3d_get_rect(double *xmin, double *xmax, double *ymin, double *ymax, Pr
         BUG(EF_noeuds_renvoie_position(noeud, &point), FALSE);
         
         v1.set_coordinates(common_math_get(point.x), common_math_get(point.y), common_math_get(point.z));
-        poly = new CM3dPolygon(v1, v1, v1);
-        poly->convert_by_camera_view(vue->camera);
-        poly->convert_to_2d(vue->camera);
-        poly->get_vertex1_to_2d()->get_coordinates(NULL, &y1, NULL);
-        delete poly;
-        poly = new CM3dPolygon(v1, v1, v1);
-        poly->convert_by_camera_view(vue->camera);
-        poly->convert_to_2d(vue->camera);
-        poly->get_vertex1_to_2d()->get_coordinates(&x1, NULL, NULL);
-        delete poly;
+        v1 = vue->camera->convert_vertex_by_camera_view(&v1);
+        v1 = vue->camera->convert_vertex_to_2d(&v1);
+        v1.get_coordinates(&x1, &y1, NULL);
         
         if (*xmin > x1)
             *xmin = x1;
@@ -353,7 +338,6 @@ gboolean m3d_camera_zoom_all(Projet *projet)
     GtkAllocation   allocation; // Dimension de la fenêtre 2D.
     double      cx, cy, cz; // Le vecteur de la caméra
     CM3dVertex  v1, v2;
-    CM3dPolygon *poly;
     double      tmpx, tmpy, tmpz;
     double      dx, dy, dz, dztmp;
     double      xmin2, xmax2, ymin2, ymax2;
@@ -389,10 +373,8 @@ gboolean m3d_camera_zoom_all(Projet *projet)
     // On cherche le xmin, xmax, zmin, zmax et ymin de l'ensemble des noeuds afin de définir
     // la position optimale de la caméra.
     v1.set_coordinates(common_math_get(point.x), common_math_get(point.y), common_math_get(point.z));
-    poly = new CM3dPolygon(v1, v1, v1);
-    poly->convert_by_camera_view(vue->camera);
-    poly->get_vertex1_by_camera()->get_coordinates(&tmpx, &tmpy, &tmpz);
-    delete poly;
+    v1 = vue->camera->convert_vertex_by_camera_view(&v1);
+    v1.get_coordinates(&tmpx, &tmpy, &tmpz);
     xmin = tmpx;
     xmax = tmpx;
     ymax = tmpy;
@@ -405,10 +387,8 @@ gboolean m3d_camera_zoom_all(Projet *projet)
         BUG(EF_noeuds_renvoie_position(noeud, &point), FALSE);
         
         v1.set_coordinates(common_math_get(point.x), common_math_get(point.y), common_math_get(point.z));
-        poly = new CM3dPolygon(v1, v1, v1);
-        poly->convert_by_camera_view(vue->camera);
-        poly->get_vertex1_by_camera()->get_coordinates(&tmpx, &tmpy, &tmpz);
-        delete poly;
+        v1 = vue->camera->convert_vertex_by_camera_view(&v1);
+        v1.get_coordinates(&tmpx, &tmpy, &tmpz);
         if (xmin > tmpx)
             xmin = tmpx;
         if (xmax < tmpx)
