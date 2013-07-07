@@ -488,7 +488,7 @@ gboolean _1990_action_renomme(Projet *projet, Action *action, const char* nom)
     gtk_list_store_set(projet->list_gtk._1990_actions.list_actions, &action->Iter_liste, 0, nom, -1);
     
     if (projet->list_gtk._1990_actions.builder != NULL)
-        gtk_widget_queue_draw(GTK_WIDGET(projet->list_gtk._1990_actions.tree_view_actions));
+        gtk_widget_queue_resize(GTK_WIDGET(projet->list_gtk._1990_actions.tree_view_actions));
     if ((projet->list_gtk._1990_groupes.builder != NULL) && (GTK_COMMON_SPINBUTTON_AS_UINT(GTK_SPIN_BUTTON(projet->list_gtk._1990_groupes.spin_button_niveau)) == 0))
     {
         GtkTreeModel    *model;
@@ -572,7 +572,7 @@ gboolean _1990_action_change_type(Projet *projet, Action *action, unsigned int t
     
 #ifdef ENABLE_GTK
     if (projet->list_gtk._1990_actions.builder != NULL)
-        gtk_widget_queue_draw(GTK_WIDGET(projet->list_gtk._1990_actions.tree_view_actions));
+        gtk_widget_queue_resize(GTK_WIDGET(projet->list_gtk._1990_actions.tree_view_actions));
 #endif
     
     return TRUE;
@@ -607,7 +607,7 @@ gboolean _1990_action_change_psi(Projet *projet, Action *action, unsigned int ps
         action->psi0 = psi;
 #ifdef ENABLE_GTK
         if (projet->list_gtk._1990_actions.builder != NULL)
-            gtk_widget_queue_draw(GTK_WIDGET(projet->list_gtk._1990_actions.tree_view_actions));
+            gtk_widget_queue_resize(GTK_WIDGET(projet->list_gtk._1990_actions.tree_view_actions));
 #endif
     }
     else if (psi_num == 1)
@@ -618,7 +618,7 @@ gboolean _1990_action_change_psi(Projet *projet, Action *action, unsigned int ps
         action->psi1 = psi;
 #ifdef ENABLE_GTK
         if (projet->list_gtk._1990_actions.builder != NULL)
-            gtk_widget_queue_draw(GTK_WIDGET(projet->list_gtk._1990_actions.tree_view_actions));
+            gtk_widget_queue_resize(GTK_WIDGET(projet->list_gtk._1990_actions.tree_view_actions));
 #endif
     }
     else if (psi_num == 2)
@@ -629,7 +629,7 @@ gboolean _1990_action_change_psi(Projet *projet, Action *action, unsigned int ps
         action->psi2 = psi;
 #ifdef ENABLE_GTK
         if (projet->list_gtk._1990_actions.builder != NULL)
-            gtk_widget_queue_draw(GTK_WIDGET(projet->list_gtk._1990_actions.tree_view_actions));
+            gtk_widget_queue_resize(GTK_WIDGET(projet->list_gtk._1990_actions.tree_view_actions));
 #endif
     }
     else
@@ -850,7 +850,7 @@ gboolean _1990_action_free_num(Projet *projet, unsigned int num)
 
 #ifdef ENABLE_GTK
     if (projet->list_gtk._1990_actions.builder != NULL)
-        gtk_widget_queue_draw(GTK_WIDGET(projet->list_gtk._1990_actions.tree_view_actions));
+        gtk_widget_queue_resize(GTK_WIDGET(projet->list_gtk._1990_actions.tree_view_actions));
 #endif
     
     // On enlève l'action dans la liste des groupes de niveau 0 tout en modifiant le numéro

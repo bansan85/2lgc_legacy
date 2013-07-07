@@ -124,7 +124,7 @@ gboolean EF_charge_renomme(Projet *projet, unsigned int numero_action,
     
 #ifdef ENABLE_GTK
     if (projet->list_gtk._1990_actions.builder != NULL)
-        gtk_widget_queue_draw(GTK_WIDGET(projet->list_gtk._1990_actions.tree_view_charges));
+        gtk_widget_queue_resize(GTK_WIDGET(projet->list_gtk._1990_actions.tree_view_charges));
 #endif
     
     return TRUE;

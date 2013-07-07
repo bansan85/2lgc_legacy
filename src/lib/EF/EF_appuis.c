@@ -321,7 +321,7 @@ gboolean EF_appuis_edit(EF_Appui *appui, int x, Type_EF_Appui type_x, Projet *pr
     
 #ifdef ENABLE_GTK
     if (projet->list_gtk.ef_appuis.builder != NULL)
-        gtk_widget_queue_draw(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_treeview")));
+        gtk_widget_queue_resize(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_treeview")));
 #endif
     
     list_appuis = g_list_append(list_appuis, appui);
@@ -402,7 +402,7 @@ gboolean EF_appuis_renomme(EF_Appui *appui, gchar *nom, Projet *projet, gboolean
     {
         GtkTreePath *path;
         
-        gtk_widget_queue_draw(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_treeview")));
+        gtk_widget_queue_resize(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_treeview")));
         
         // On modifie la position de l'ascenseur la ligne reste visible même si elle sort de la
         // fenêtre.
@@ -413,8 +413,8 @@ gboolean EF_appuis_renomme(EF_Appui *appui, gchar *nom, Projet *projet, gboolean
     
     if (projet->list_gtk.ef_noeud.builder != NULL)
     {
-        gtk_widget_queue_draw(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_treeview_noeuds_libres")));
-        gtk_widget_queue_draw(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_treeview_noeuds_intermediaires")));
+        gtk_widget_queue_resize(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_treeview_noeuds_libres")));
+        gtk_widget_queue_resize(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_treeview_noeuds_intermediaires")));
     }
 #endif
     

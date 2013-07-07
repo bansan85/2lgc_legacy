@@ -646,7 +646,7 @@ gboolean _1992_1_1_barres_change_type(Beton_Barre *barre, Type_Element type, Pro
         case BETON_ELEMENT_POUTRE :
         {
 #ifdef ENABLE_GTK
-            gtk_widget_queue_draw(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treeview")));
+            gtk_widget_queue_resize(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treeview")));
 #endif
             barre->type = type;
             break;
@@ -691,7 +691,7 @@ gboolean _1992_1_1_barres_change_section(Beton_Barre *barre, EF_Section *section
     BUG(m3d_rafraichit(projet), FALSE);
     
     if (projet->list_gtk.ef_barres.builder != NULL)
-        gtk_widget_queue_draw(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treeview")));
+        gtk_widget_queue_resize(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treeview")));
 #endif
     
     return TRUE;
@@ -723,7 +723,7 @@ gboolean _1992_1_1_barres_change_materiau(Beton_Barre *barre, EF_Materiau *mater
     
 #ifdef ENABLE_GTK
     if (projet->list_gtk.ef_barres.builder != NULL)
-        gtk_widget_queue_draw(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treeview")));
+        gtk_widget_queue_resize(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treeview")));
 #endif
     
     return TRUE;
@@ -782,7 +782,7 @@ gboolean _1992_1_1_barres_change_noeud(Beton_Barre *barre, EF_Noeud *noeud, gboo
     
 #ifdef ENABLE_GTK
     if (projet->list_gtk.ef_barres.builder != NULL)
-        gtk_widget_queue_draw(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treeview")));
+        gtk_widget_queue_resize(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treeview")));
 #endif
     
     return TRUE;
@@ -814,7 +814,7 @@ gboolean _1992_1_1_barres_change_relachement(Beton_Barre *barre, EF_Relachement 
     
 #ifdef ENABLE_GTK
     if (projet->list_gtk.ef_barres.builder != NULL)
-        gtk_widget_queue_draw(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treeview")));
+        gtk_widget_queue_resize(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treeview")));
 #endif
     
     return TRUE;

@@ -270,7 +270,7 @@ void EF_gtk_charge_barre_ponctuelle_editer_clicked(GtkButton *button, Projet *pr
     if (num_action != ef_gtk->action)
         BUG(EF_charge_deplace(projet, ef_gtk->action, ef_gtk->charge, num_action), );
     else
-        gtk_widget_queue_draw(GTK_WIDGET(projet->list_gtk._1990_actions.tree_view_charges));
+        gtk_widget_queue_resize(GTK_WIDGET(projet->list_gtk._1990_actions.tree_view_charges));
     
     gtk_widget_destroy(projet->list_gtk.ef_charge_barre_ponctuelle.window);
     
