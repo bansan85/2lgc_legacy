@@ -159,7 +159,7 @@ gboolean EF_sections_repositionne(Projet *projet, EF_Section *section)
     
 #ifdef ENABLE_GTK
     if (projet->list_gtk.ef_barres.builder != NULL)
-        gtk_widget_queue_draw(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treeview")));
+        gtk_widget_queue_resize(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treeview")));
     gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section->Iter_liste, 0, section->nom, -1);
     if ((projet->list_gtk.ef_sections_rectangulaire.builder != NULL) && (projet->list_gtk.ef_sections_rectangulaire.section == section))
         gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk.ef_sections_rectangulaire.builder, "EF_section_rectangulaire_textview_nom"))), section->nom, -1);
@@ -269,7 +269,7 @@ gboolean EF_sections_rectangulaire_modif(Projet *projet, EF_Section *section, co
     
 #ifdef ENABLE_GTK
     if (projet->list_gtk.ef_sections.builder != NULL)
-        gtk_widget_queue_draw(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections.builder, "EF_sections_treeview")));
+        gtk_widget_queue_resize(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections.builder, "EF_sections_treeview")));
 #endif
     
     return TRUE;
@@ -394,7 +394,7 @@ gboolean EF_sections_T_modif(Projet *projet, EF_Section *section, const char* no
     
 #ifdef ENABLE_GTK
     if (projet->list_gtk.ef_sections.builder != NULL)
-        gtk_widget_queue_draw(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections.builder, "EF_sections_treeview")));
+        gtk_widget_queue_resize(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections.builder, "EF_sections_treeview")));
 #endif
     
     return TRUE;
@@ -495,7 +495,7 @@ gboolean EF_sections_carree_modif(Projet *projet, EF_Section *section, const cha
     
 #ifdef ENABLE_GTK
     if (projet->list_gtk.ef_sections.builder != NULL)
-        gtk_widget_queue_draw(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections.builder, "EF_sections_treeview")));
+        gtk_widget_queue_resize(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections.builder, "EF_sections_treeview")));
 #endif
     
     return TRUE;
@@ -593,7 +593,7 @@ gboolean EF_sections_circulaire_modif(Projet *projet, EF_Section *section, const
     
 #ifdef ENABLE_GTK
     if (projet->list_gtk.ef_sections.builder != NULL)
-        gtk_widget_queue_draw(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections.builder, "EF_sections_treeview")));
+        gtk_widget_queue_resize(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections.builder, "EF_sections_treeview")));
 #endif
     
     return TRUE;

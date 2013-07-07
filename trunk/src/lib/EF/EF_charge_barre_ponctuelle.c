@@ -920,7 +920,7 @@ gboolean EF_charge_barre_ponctuelle_enleve_barres(Charge_Barre_Ponctuelle *charg
             gtk_tree_model_get(model, &Iter, 0, &action, -1);
             
             if (g_list_find(action->charges, charge))
-                gtk_widget_queue_draw(GTK_WIDGET(projet->list_gtk._1990_actions.tree_view_charges));
+                gtk_widget_queue_resize(GTK_WIDGET(projet->list_gtk._1990_actions.tree_view_charges));
         }
     }
 #endif

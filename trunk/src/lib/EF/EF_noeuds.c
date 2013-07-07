@@ -331,7 +331,7 @@ gboolean EF_noeuds_change_pos_abs(Projet *projet, EF_Noeud *noeud, Flottant x, F
     g_list_free(liste_noeuds);
     
     if (projet->list_gtk.ef_noeud.builder != NULL)
-        gtk_widget_queue_draw(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_treeview_noeuds_libres")));
+        gtk_widget_queue_resize(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_treeview_noeuds_libres")));
 #endif
     
     BUG(EF_calculs_free(projet), FALSE);
@@ -424,7 +424,7 @@ gboolean EF_noeuds_change_pos_relat(Projet *projet, EF_Noeud *noeud, Flottant po
     g_list_free(liste);
     
     if (projet->list_gtk.ef_noeud.builder != NULL)
-        gtk_widget_queue_draw(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_treeview_noeuds_intermediaires")));
+        gtk_widget_queue_resize(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_treeview_noeuds_intermediaires")));
 #endif
     
     BUG(EF_calculs_free(projet), FALSE);
@@ -461,12 +461,12 @@ gboolean EF_noeuds_change_appui(Projet *projet, EF_Noeud *noeud, EF_Appui *appui
         {
             case NOEUD_LIBRE :
             {
-                gtk_widget_queue_draw(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_treeview_noeuds_libres")));
+                gtk_widget_queue_resize(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_treeview_noeuds_libres")));
                 break;
             }
             case NOEUD_BARRE :
             {
-                gtk_widget_queue_draw(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_treeview_noeuds_intermediaires")));
+                gtk_widget_queue_resize(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_treeview_noeuds_intermediaires")));
                 break;
             }
             default :
@@ -559,7 +559,7 @@ gboolean EF_noeuds_change_noeud_relatif(Projet *projet, EF_Noeud *noeud, EF_Noeu
     BUG(m3d_rafraichit(projet), FALSE);
     
     if (projet->list_gtk.ef_noeud.builder != NULL)
-        gtk_widget_queue_draw(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_treeview_noeuds_libres")));
+        gtk_widget_queue_resize(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_treeview_noeuds_libres")));
 #endif
     
     g_list_free(liste_noeuds);

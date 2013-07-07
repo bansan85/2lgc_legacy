@@ -266,7 +266,7 @@ gboolean EF_relachement_modif(Projet *projet, EF_Relachement *relachement, const
     
 #ifdef ENABLE_GTK
         if (projet->list_gtk.ef_barres.builder != NULL)
-            gtk_widget_queue_draw(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treeview")));
+            gtk_widget_queue_resize(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treeview")));
 #endif
     }
     
@@ -603,7 +603,7 @@ gboolean EF_relachement_modif(Projet *projet, EF_Relachement *relachement, const
             
 #ifdef ENABLE_GTK
     if (projet->list_gtk.ef_relachements.builder != NULL)
-        gtk_widget_queue_draw(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_treeview")));
+        gtk_widget_queue_resize(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_treeview")));
 #endif
     
     return TRUE;

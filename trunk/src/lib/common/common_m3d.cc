@@ -1041,7 +1041,7 @@ gboolean m3d_rafraichit(Projet *projet)
     vue = (SGlobalData*)projet->list_gtk.m3d.data;
     // On force l'actualisation de l'affichage
     vue->scene->rendering(vue->camera);
-    gtk_widget_queue_draw(projet->list_gtk.m3d.drawing);
+    gtk_widget_queue_resize(projet->list_gtk.m3d.drawing);
     
     return TRUE;
 }
