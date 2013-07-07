@@ -255,7 +255,7 @@ cd .. && \
 (test -f libm3d-0.27.tar.bz2 || wget http://download.tuxfamily.org/m3dlib/libs_current/libm3d-0.27.tar.bz2) && \
 tar xvaf libm3d-0.27.tar.bz2 && \
 cd libm3d-0.27 && \
-CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe" ./configure --disable-static --enable-shared --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
+CXXFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe" ./configure --disable-static --enable-shared --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
 make -j9 && sudo make install && cd ..
 
 Si la compilation est en version débug, il faut :
