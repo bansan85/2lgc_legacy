@@ -181,12 +181,22 @@ void common_gtk_informations_entry_del_char(GtkEntryBuffer *buffer, guint positi
     int             i = 0;
     const char      *code_postal, *ville;
     GList           *list = NULL, *list_parcours;
+    int             f_codepostal; // Cherche sur la base du code postal.
     
     gtk_list_store_clear(projet->list_gtk.common_informations.model_completion);
     
+    if (gtk_entry_get_buffer(GTK_ENTRY(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_entry_code_postal"))) == buffer)
+        f_codepostal = TRUE;
+    else if (gtk_entry_get_buffer(GTK_ENTRY(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_entry_ville"))) == buffer)
+        f_codepostal = FALSE;
+    else
+        BUGMSG(NULL, , gettext("Paramètre %s incorrect.\n"), "buffer");
+    
     code_postal = gtk_entry_get_text(GTK_ENTRY(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_entry_code_postal")));
     ville = gtk_entry_get_text(GTK_ENTRY(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_entry_ville")));
-    if ((strcmp(code_postal, "") == 0) && (strcmp(ville, "") == 0))
+    
+    if (((f_codepostal) && (strcmp(code_postal, "") == 0))
+      || ((!f_codepostal) && (strcmp(ville, "") == 0)))
     {
         common_gtk_informations_check(NULL, projet);
         return;
@@ -211,7 +221,8 @@ void common_gtk_informations_entry_del_char(GtkEntryBuffer *buffer, guint positi
         BUGMSG(code_postal2 = g_strdup_printf("%d", codepostal), , gettext("Erreur d'allocation mémoire.\n"));
         BUGMSG(minuscule = g_strdup_printf("%s%s%s", artmin, ((article == 5) || (article == 1) || (article == 0)) ? "" : " ", nccenr), , gettext("Erreur d'allocation mémoire.\n"));
         
-        if ((strncmp(code_postal2, code_postal, strlen(code_postal)) == 0) && (strcasestr_internal(minuscule, ville) != NULL))
+        if (((f_codepostal) && (strncmp(code_postal2, code_postal, strlen(code_postal)) == 0))
+          || ((!f_codepostal) && (strcasestr_internal(minuscule, ville) != NULL)))
         {
             Ligne_Adresse   *adresse;
             BUGMSG(adresse = malloc(sizeof(Ligne_Adresse)), , gettext("Erreur d'allocation mémoire.\n"));
