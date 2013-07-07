@@ -23,7 +23,6 @@
 #include <locale.h>
 #include <gtk/gtk.h>
 #include <math.h>
-#define __USE_GNU
 #include <string.h>
 
 #include "common_projet.h"
@@ -163,9 +162,9 @@ typedef struct __Ligne_Adresse
 
 gint common_gtk_informations_compare_adresse(Ligne_Adresse *a, Ligne_Adresse *b)
 {
-    if (a->population < b->population)
+    if (a->population > b->population)
         return 1;
-    else if (a->population > b->population)
+    else if (a->population < b->population)
         return -1;
     else
         return 0;
@@ -175,13 +174,16 @@ gint common_gtk_informations_compare_adresse(Ligne_Adresse *a, Ligne_Adresse *b)
 void common_gtk_informations_entry_del_char(GtkEntryBuffer *buffer, guint position,
   guint n_chars, Projet *projet)
 {
+    #define         MAX_VILLES  10
     FILE            *villes;
     char            *ligne = NULL;
     GtkTreeIter     iter;
-    int             i = 0;
+    int             i;
     const char      *code_postal, *ville;
     GList           *list = NULL, *list_parcours;
     int             f_codepostal; // Cherche sur la base du code postal.
+    int             popmin; // La population minimale que doit avoir la ville pour être
+                            // autorisée à entrer dans la liste des propositions.
     
     gtk_list_store_clear(projet->list_gtk.common_informations.model_completion);
     
@@ -207,6 +209,8 @@ void common_gtk_informations_entry_del_char(GtkEntryBuffer *buffer, guint positi
     ligne = common_text_get_line(villes);
     free(ligne);
     
+    i = 0;
+    popmin = 0;
     ligne = common_text_get_line(villes);
     while (ligne != NULL)
     {
@@ -221,10 +225,16 @@ void common_gtk_informations_entry_del_char(GtkEntryBuffer *buffer, guint positi
         BUGMSG(code_postal2 = g_strdup_printf("%d", codepostal), , gettext("Erreur d'allocation mémoire.\n"));
         BUGMSG(minuscule = g_strdup_printf("%s%s%s", artmin, ((article == 5) || (article == 1) || (article == 0)) ? "" : " ", nccenr), , gettext("Erreur d'allocation mémoire.\n"));
         
-        if (((f_codepostal) && (strncmp(code_postal2, code_postal, strlen(code_postal)) == 0))
-          || ((!f_codepostal) && (strcasestr_internal(minuscule, ville) != NULL)))
+        if (
+          (population > popmin)
+          && (
+            ((f_codepostal) && (strncmp(code_postal2, code_postal, strlen(code_postal)) == 0))
+            || ((!f_codepostal) && (strcasestr_internal(minuscule, ville) != NULL))
+          )
+        )
         {
             Ligne_Adresse   *adresse;
+            
             BUGMSG(adresse = malloc(sizeof(Ligne_Adresse)), , gettext("Erreur d'allocation mémoire.\n"));
             BUGMSG(adresse->affichage = g_strdup_printf("%d %s%s%s", codepostal, artmin, ((article == 5) || (article == 1) || (article == 0)) ? "" : " ", nccenr), , gettext("Erreur d'allocation mémoire.\n"));
             adresse->population = population;
@@ -233,6 +243,21 @@ void common_gtk_informations_entry_del_char(GtkEntryBuffer *buffer, guint positi
             adresse->code_postal = codepostal;
             adresse->ville = minuscule;
             list = g_list_insert_sorted(list, adresse, (GCompareFunc)common_gtk_informations_compare_adresse);
+            i++;
+            
+            // On limite le nombre de villes dans la liste à MAX_VILLES
+            if (i > MAX_VILLES)
+            {
+                adresse = list->data;
+                free(adresse->affichage);
+                free(adresse->ville);
+                free(adresse);
+                
+                list = g_list_delete_link(list, list);
+            }
+            
+            adresse = list->data;
+            popmin = adresse->population;
         }
         else
             free(minuscule);
@@ -240,28 +265,25 @@ void common_gtk_informations_entry_del_char(GtkEntryBuffer *buffer, guint positi
         free(code_postal2);
         ligne = common_text_get_line(villes);
     }
-    list_parcours = list;
+    
+    // On ajoute dans le treeview la liste des villes
+    list_parcours = g_list_last(list);
     while (list_parcours != NULL)
     {
         Ligne_Adresse   *adresse = list_parcours->data;
         
-        i++;
-            
-        if (i < 10)
-        {
-            char    *tmp;
-            
-            BUGMSG(tmp = g_strdup_printf("%d", adresse->code_postal), , gettext("Erreur d'allocation mémoire.\n"));
-            gtk_list_store_append(projet->list_gtk.common_informations.model_completion, &iter);
-            gtk_list_store_set(projet->list_gtk.common_informations.model_completion, &iter, 0, adresse->affichage, 1, tmp, 2, adresse->ville, 3, adresse->departement, 4, adresse->commune, -1);
-            
-            free(tmp);
-        }
+        char    *tmp;
+        
+        BUGMSG(tmp = g_strdup_printf("%d", adresse->code_postal), , gettext("Erreur d'allocation mémoire.\n"));
+        gtk_list_store_append(projet->list_gtk.common_informations.model_completion, &iter);
+        gtk_list_store_set(projet->list_gtk.common_informations.model_completion, &iter, 0, adresse->affichage, 1, tmp, 2, adresse->ville, 3, adresse->departement, 4, adresse->commune, -1);
+        
+        free(tmp);
         free(adresse->affichage);
         free(adresse->ville);
         free(adresse);
         
-        list_parcours = g_list_next(list_parcours);
+        list_parcours = g_list_previous(list_parcours);
     }
     g_list_free(list);
     
@@ -270,6 +292,8 @@ void common_gtk_informations_entry_del_char(GtkEntryBuffer *buffer, guint positi
     fclose(villes);
     
     return;
+    
+    #undef MAX_VILLES
 }
 
 
