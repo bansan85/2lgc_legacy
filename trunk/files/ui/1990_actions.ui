@@ -192,6 +192,7 @@
                                                 <property name="visible">True</property>
                                                 <property name="label">gtk-add</property>
                                                 <property name="use_stock">True</property>
+                                                <signal name="key-press-event" handler="_1990_gtk_actions_tree_view_key_press_event"/>
                                             </object>
                                             <packing>
                                                 <property name="position">0</property>
@@ -205,6 +206,7 @@
                                                 <property name="label">gtk-delete</property>
                                                 <property name="use_stock">True</property>
                                                 <signal name="clicked" handler="_1990_gtk_menu_suppr_action_activate"/>
+                                                <signal name="key-press-event" handler="_1990_gtk_actions_tree_view_key_press_event"/>
                                             </object>
                                             <packing>
                                                 <property name="position">1</property>
@@ -327,6 +329,7 @@
                                                 <property name="label">gtk-add</property>
                                                 <property name="use_stock">True</property>
                                                 <property name="sensitive">False</property>
+                                                <signal name="key-press-event" handler="_1990_gtk_actions_charge_key_press_event"/>
                                             </object>
                                             <packing>
                                                 <property name="position">0</property>
@@ -340,6 +343,7 @@
                                                 <property name="label">gtk-edit</property>
                                                 <property name="use_stock">True</property>
                                                 <signal name="clicked" handler="_1990_gtk_menu_edit_charge_clicked"/>
+                                                <signal name="key-press-event" handler="_1990_gtk_actions_charge_key_press_event"/>
                                             </object>
                                             <packing>
                                                 <property name="position">1</property>
@@ -353,6 +357,7 @@
                                                 <property name="label">gtk-delete</property>
                                                 <property name="use_stock">True</property>
                                                 <signal name="clicked" handler="_1990_gtk_menu_suppr_charge_clicked"/>
+                                                <signal name="key-press-event" handler="_1990_gtk_actions_charge_key_press_event"/>
                                             </object>
                                             <packing>
                                                 <property name="position">2</property>
