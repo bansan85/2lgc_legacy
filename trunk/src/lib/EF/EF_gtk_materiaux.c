@@ -35,6 +35,7 @@
 #include "common_text.h"
 #include "1992_1_1_materiaux.h"
 #include "1992_1_1_barres.h"
+#include "EF_materiaux.h"
 
 void EF_gtk_materiaux_fermer(GtkButton *button, Projet *projet)
 /* Description : Ferme la fenêtre.
@@ -122,7 +123,7 @@ gboolean EF_gtk_materiaux_treeview_key_press(GtkTreeView *treeview, GdkEvent *ev
         
         liste_materiaux = g_list_append(liste_materiaux, materiau);
         if (_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, liste_materiaux, NULL, NULL, NULL, NULL, NULL, FALSE, FALSE) == FALSE)
-            BUG(_1992_1_1_materiaux_supprime(materiau, projet), FALSE);
+            BUG(EF_materiaux_supprime(materiau, projet), FALSE);
         
         g_list_free(liste_materiaux);
         
@@ -161,7 +162,7 @@ void EF_gtk_materiaux_edit_nom(GtkCellRendererText *cell, gchar *path_string, gc
     if ((strcmp(materiau->nom, new_text) == 0) || (strcmp(new_text, "") == 0))
         return;
     
-    if (_1992_1_1_materiaux_cherche_nom(projet, new_text, FALSE))
+    if (EF_materiaux_cherche_nom(projet, new_text, FALSE))
         return;
     
     BUG(_1992_1_1_materiaux_modif(projet, materiau, new_text, common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR)), );
@@ -300,7 +301,7 @@ void EF_gtk_materiaux_supprimer_menu_barres(GtkButton *button, Projet *projet)
     g_list_free(liste_materiaux);
     BUG(_1992_1_1_barres_supprime_liste(projet, NULL, liste_barres_dep), );
     g_list_free(liste_barres_dep);
-    BUG(_1992_1_1_materiaux_supprime(materiau, projet), );
+    BUG(EF_materiaux_supprime(materiau, projet), );
     
     BUG(m3d_rafraichit(projet), );
     
@@ -327,7 +328,7 @@ void EF_gtk_materiaux_supprimer_direct(GtkButton *button, Projet *projet)
     
     gtk_tree_model_get(model, &iter, 0, &materiau, -1);
     
-    BUG(_1992_1_1_materiaux_supprime(materiau, projet), );
+    BUG(EF_materiaux_supprime(materiau, projet), );
     
     return;
 }

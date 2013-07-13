@@ -29,6 +29,7 @@
 #include "common_erreurs.h"
 #include "common_gtk.h"
 #include "common_selection.h"
+#include "EF_materiaux.h"
 #include "EF_noeuds.h"
 #include "EF_relachement.h"
 #include "EF_sections.h"
@@ -91,7 +92,7 @@ void EF_gtk_barres_add_add_clicked(GtkButton *button, Projet *projet)
         return;
     gtk_tree_model_iter_nth_child(model, &Iter, NULL, type);
     gtk_tree_model_get(model, &Iter, 0, &nom, -1);
-    BUG(materiau = _1992_1_1_materiaux_cherche_nom(projet, nom, TRUE), );
+    BUG(materiau = EF_materiaux_cherche_nom(projet, nom, TRUE), );
     free(nom);
     
     model = gtk_combo_box_get_model(GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_relachement_combobox")));

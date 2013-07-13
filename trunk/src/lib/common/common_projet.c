@@ -44,6 +44,7 @@
 #include "common_ville.h"
 #include "common_gtk_informations.h"
 #include "EF_appuis.h"
+#include "EF_materiaux.h"
 #include "EF_noeuds.h"
 #include "EF_rigidite.h"
 #include "EF_relachement.h"
@@ -82,7 +83,7 @@ Projet* projet_init(Type_Pays pays)
     //     - 1992-1-1 : la liste des sections, des barres et des matériaux
     BUG(EF_sections_init(projet), NULL);
     BUG(_1992_1_1_barres_init(projet), NULL);
-    BUG(_1992_1_1_materiaux_init(projet), NULL);
+    BUG(EF_materiaux_init(projet), NULL);
     //     - EF : la liste des appuis, des relâchements et des noeuds ainsi que les éléments
     //              nécessaire pour les calculs aux éléments finis.
     BUG(EF_appuis_init(projet), NULL);
@@ -344,7 +345,7 @@ gboolean projet_free(Projet *projet)
     if (projet->modele.appuis != NULL)
         BUG(EF_appuis_free(projet), FALSE);
     if (projet->modele.materiaux != NULL)
-        BUG(_1992_1_1_materiaux_free(projet), FALSE);
+        BUG(EF_materiaux_free(projet), FALSE);
     if (projet->modele.relachements != NULL)
         BUG(EF_relachement_free(projet), FALSE);
 #ifdef ENABLE_GTK
