@@ -114,7 +114,7 @@ Projet* projet_init(Type_Pays pays)
     projet->list_gtk.ef_resultats.tableaux = NULL;
 #endif
     
-    BUG(common_ville_set(projet, "30", 59, FALSE), NULL);
+    BUG(common_ville_set(projet, "37", "Joué-lès-Tours", FALSE), NULL);
     
     projet->calculs.c = &(projet->calculs.Common);
     cholmod_start(projet->calculs.c);

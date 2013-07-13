@@ -225,13 +225,19 @@ gboolean common_ville_get_ville(char *ligne, int *cdc, int *cheflieu, int *reg, 
 }
 
 
-gboolean common_ville_set(Projet *projet, char *departement, int ville, int graphique_seul)
+gboolean common_ville_set(Projet *projet, char *departement, const char *ville,
+  int graphique_seul)
 /* Description : Initialise la ville (mais pas l'adresse exacte) du projet avec les paramètres
  *               régionaux (vent, neige, séisme).
  *               Departement DEP et ville COM doivent correspondre au fichier france_villes.csv
  * Paramètres : Projet *projet : la variable projet,
  *              char departement : le numéro du département (char* car 2A et 2B),
- *              int ville : le numéro de la ville. Nécessite d'avoir parcouru france_villes.csv,
+ *              const char *ville : le nom de la ville sous la forme :
+ *                g_strdup_printf("%s%s%s",
+ *                                artmin,
+ *                                ((article == 5) || (article == 1) || (article == 0)) ?
+ *                                  "" : " ",
+ *                                nccenr) pour la France,
  *              int graphique_seul : TRUE si on ne modifie que l'interface graphique et pas la
  *                                   variable projet.
  * Valeur renvoyée :
@@ -248,6 +254,7 @@ gboolean common_ville_set(Projet *projet, char *departement, int ville, int grap
     Type_Neige  neige_tmp;
     Type_Vent   vent_tmp;
     Type_Seisme seisme_tmp;
+    char        *tmp;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(departement, FALSE, gettext("Paramètre %s incorrect.\n"), "departement");
@@ -262,23 +269,24 @@ gboolean common_ville_set(Projet *projet, char *departement, int ville, int grap
     do
     {
         BUG(common_ville_get_ville(ligne, NULL, NULL, NULL, dep, &com, NULL, &ct, &article, NULL, NULL, &artmin, &nccenr, &code_postal, NULL, &population), FALSE);
+        BUGMSG(tmp = g_strdup_printf("%s%s%s", artmin, ((article == 5) || (article == 1) || (article == 0)) ? "" : " ", nccenr), FALSE, gettext("Erreur d'allocation mémoire.\n"));
         // On récupère les numéros caractéristant la ville en cours.
-        if ((strcmp(dep, departement) == 0) && (ville == com))
+        if ((strcmp(dep, departement) == 0) && (strcmp(tmp, ville) == 0))
         {
             char        *dep_parcours;
             char        *champ1, *champ2;
             gboolean    done;
-            char        *tmp;
             
             // Maintenant que tout est récupéré, on enregistre dans le projet ce qu'il faut.
             // Ville et code postal.
-            BUGMSG(tmp = g_strdup_printf("%s%s%s", artmin, ((article == 5) || (article == 1) || (article == 0)) ? "" : " ", nccenr), FALSE, gettext("Erreur d'allocation mémoire.\n"));
             if (!graphique_seul)
             {
+                free(projet->parametres.adresse.departement);
+                BUGMSG(projet->parametres.adresse.departement = g_strdup(departement), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                projet->parametres.adresse.commune = com;
                 projet->parametres.adresse.code_postal = code_postal;
                 free(projet->parametres.adresse.ville);
                 projet->parametres.adresse.ville = tmp;
-                projet->parametres.adresse.code_postal = code_postal;
             }
             
             free(ligne);
@@ -614,6 +622,8 @@ gboolean common_ville_set(Projet *projet, char *departement, int ville, int grap
             
             return TRUE;
         }
+        else
+            free(tmp);
         free(ligne);
         ligne = common_text_get_line(villes);
     } while (ligne != NULL);
