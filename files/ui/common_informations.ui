@@ -72,7 +72,7 @@
                         <property name="tab-pos">top</property>
                         <property name="expand">True</property>
                         <child>
-                            <object class="GtkScrolledWindow" id="common_informations_scrolled_noeuds_libres">
+                            <object class="GtkScrolledWindow" id="common_informations_scrolled_localisation">
                                 <property name="visible">True</property>
                                 <property name="expand">True</property>
                                 <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
@@ -201,6 +201,88 @@
                             <object class="GtkLabel" id="common_informations_notebook_localisation_label">
                                 <property name="visible">True</property>
                                 <property name="label" translatable="yes">Localisations</property>
+                            </object>
+                        </child>
+                        <child>
+                            <object class="GtkScrolledWindow" id="common_informations_scrolled_parametres_site">
+                                <property name="visible">True</property>
+                                <property name="expand">True</property>
+                                <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                                <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                                <child>
+                                    <object class="GtkGrid" id="common_informations_grille_parametres">
+                                        <property name="visible">True</property>
+                                        <property name="border-width">12</property>
+                                        <property name="column-spacing">12</property>
+                                        <property name="row-spacing">12</property>
+                                        <child>
+                                            <object class="GtkLabel" id="common_informations_label_neige">
+                                                <property name="label" translatable="yes">Neige :</property>
+                                                <property name="visible">True</property>
+                                            </object>
+                                            <packing>
+                                                <property name="left-attach">0</property>
+                                                <property name="top-attach">0</property>
+                                            </packing>
+                                        </child>
+                                        <child>
+                                            <object class="GtkComboBoxText" id="common_informations_neige_combobox">
+                                                <property name="visible">True</property>
+                                                <property name="hexpand">True</property>
+                                            </object>
+                                            <packing>
+                                                <property name="left-attach">1</property>
+                                                <property name="top-attach">0</property>
+                                            </packing>
+                                        </child>
+                                        <child>
+                                            <object class="GtkLabel" id="common_informations_label_vent">
+                                                <property name="label" translatable="yes">Vent :</property>
+                                                <property name="visible">True</property>
+                                            </object>
+                                            <packing>
+                                                <property name="left-attach">0</property>
+                                                <property name="top-attach">1</property>
+                                            </packing>
+                                        </child>
+                                        <child>
+                                            <object class="GtkComboBoxText" id="common_informations_vent_combobox">
+                                                <property name="visible">True</property>
+                                                <property name="hexpand">True</property>
+                                            </object>
+                                            <packing>
+                                                <property name="left-attach">1</property>
+                                                <property name="top-attach">1</property>
+                                            </packing>
+                                        </child>
+                                        <child>
+                                            <object class="GtkLabel" id="common_informations_label_seisme">
+                                                <property name="label" translatable="yes">Séisme :</property>
+                                                <property name="visible">True</property>
+                                            </object>
+                                            <packing>
+                                                <property name="left-attach">0</property>
+                                                <property name="top-attach">2</property>
+                                            </packing>
+                                        </child>
+                                        <child>
+                                            <object class="GtkComboBoxText" id="common_informations_seisme_combobox">
+                                                <property name="visible">True</property>
+                                                <property name="hexpand">True</property>
+                                            </object>
+                                            <packing>
+                                                <property name="left-attach">1</property>
+                                                <property name="top-attach">2</property>
+                                            </packing>
+                                        </child>
+                                    </object>
+                                </child>
+                            </object>
+                        </child>
+                        <child type="tab">
+                            <object class="GtkLabel" id="common_informations_notebook_parametre_label">
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">Paramètres</property>
                             </object>
                         </child>
                     </object>

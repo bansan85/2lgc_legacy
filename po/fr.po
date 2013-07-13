@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2013-06-16 08:13+0200\n"
-"PO-Revision-Date: 2013-06-16 08:23+0100\n"
+"POT-Creation-Date: 2013-07-13 09:23+0200\n"
+"PO-Revision-Date: 2013-07-13 09:26+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -60,6 +60,21 @@ msgstr "Code postal :"
 
 msgid "Ville :"
 msgstr "Ville :"
+
+msgid "Localisations"
+msgstr "Localisations"
+
+msgid "Neige :"
+msgstr "Neige :"
+
+msgid "Vent :"
+msgstr "Vent :"
+
+msgid "Séisme :"
+msgstr "Séisme :"
+
+msgid "Paramètres"
+msgstr "Paramètres"
 
 msgid "Rectangulaire"
 msgstr "Rectangulaire"
@@ -744,6 +759,57 @@ msgstr "La caméra n'est pas initialisée.\n"
 msgid "Type de section %d inconnu.\n"
 msgstr "Type de section %d inconnu.\n"
 
+msgid "Région A1"
+msgstr "Région A1"
+
+msgid "Région A2"
+msgstr "Région A2"
+
+msgid "Région B1"
+msgstr "Région B1"
+
+msgid "Région B2"
+msgstr "Région B2"
+
+msgid "Région C1"
+msgstr "Région C1"
+
+msgid "Région C2"
+msgstr "Région C2"
+
+msgid "Région D"
+msgstr "Région D"
+
+msgid "Région E"
+msgstr "Région E"
+
+msgid "Région 1"
+msgstr "Région 1"
+
+msgid "Région 2"
+msgstr "Région 2"
+
+msgid "Région 3"
+msgstr "Région 3"
+
+msgid "Région 4"
+msgstr "Région 4"
+
+msgid "Zone très faible"
+msgstr "Zone très faible"
+
+msgid "Zone faible"
+msgstr "Zone faible"
+
+msgid "Zone modérée"
+msgstr "Zone modérée"
+
+msgid "Zone moyenne"
+msgstr "Zone moyenne"
+
+msgid "Zone forte"
+msgstr "Zone forte"
+
 #, c-format
 msgid ""
 "La ligne en cours '%s' n'est pas dans un format correct pour une ville.\n"
@@ -765,6 +831,22 @@ msgstr "Le fichier '%s' est corrompu.\n"
 #, c-format
 msgid "Le fichier '%s' est corrumpu. Le champ2 '%s' est inconnu.\n"
 msgstr "Le fichier '%s' est corrumpu. Le champ2 '%s' est inconnu.\n"
+
+msgid "Êtes-vous sûr de vouloir choisir pour"
+msgstr "Êtes-vous sûr de vouloir choisir pour"
+
+msgid "la neige"
+msgstr "la neige"
+
+msgid "le vent"
+msgstr "le vent"
+
+msgid "le séisme"
+msgstr "le séisme"
+
+msgid " des paramètres de calculs différents que ceux imposés par les normes ?"
+msgstr ""
+" des paramètres de calculs différents que ceux imposés par les normes ?"
 
 msgid "Fichier"
 msgstr "Fichier"
