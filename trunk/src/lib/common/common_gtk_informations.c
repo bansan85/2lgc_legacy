@@ -345,18 +345,7 @@ gboolean common_gtk_informations_match_selected(GtkEntryCompletion *widget, GtkT
     projet->list_gtk.common_informations.departement = departement;
     projet->list_gtk.common_informations.commune = commune;
     
-    g_signal_handler_block(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_buffer_code_postal"), g_signal_handler_find(G_OBJECT(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_buffer_code_postal")), G_SIGNAL_MATCH_FUNC, 0, 0, NULL, common_gtk_informations_entry_add_char, NULL));
-    g_signal_handler_block(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_buffer_code_postal"), g_signal_handler_find(G_OBJECT(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_buffer_code_postal")), G_SIGNAL_MATCH_FUNC, 0, 0, NULL, common_gtk_informations_entry_del_char, NULL));
-    g_signal_handler_block(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_buffer_ville"), g_signal_handler_find(G_OBJECT(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_buffer_ville")), G_SIGNAL_MATCH_FUNC, 0, 0, NULL, common_gtk_informations_entry_add_char, NULL));
-    g_signal_handler_block(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_buffer_ville"), g_signal_handler_find(G_OBJECT(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_buffer_ville")), G_SIGNAL_MATCH_FUNC, 0, 0, NULL, common_gtk_informations_entry_del_char, NULL));
-    
-    gtk_entry_set_text(GTK_ENTRY(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_entry_code_postal")), code_postal);
-    gtk_entry_set_text(GTK_ENTRY(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_entry_ville")), ville);
-    
-    g_signal_handler_unblock(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_buffer_code_postal"), g_signal_handler_find(G_OBJECT(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_buffer_code_postal")), G_SIGNAL_MATCH_FUNC, 0, 0, NULL, common_gtk_informations_entry_add_char, NULL));
-    g_signal_handler_unblock(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_buffer_code_postal"), g_signal_handler_find(G_OBJECT(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_buffer_code_postal")), G_SIGNAL_MATCH_FUNC, 0, 0, NULL, common_gtk_informations_entry_del_char, NULL));
-    g_signal_handler_unblock(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_buffer_ville"), g_signal_handler_find(G_OBJECT(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_buffer_ville")), G_SIGNAL_MATCH_FUNC, 0, 0, NULL, common_gtk_informations_entry_add_char, NULL));
-    g_signal_handler_unblock(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_buffer_ville"), g_signal_handler_find(G_OBJECT(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_buffer_ville")), G_SIGNAL_MATCH_FUNC, 0, 0, NULL, common_gtk_informations_entry_del_char, NULL));
+    BUG(common_ville_set(projet, projet->list_gtk.common_informations.departement, projet->list_gtk.common_informations.commune, TRUE), FALSE);
     
     common_gtk_informations_check(NULL, projet);
     
@@ -376,6 +365,10 @@ void common_gtk_informations_modifier_clicked(GtkButton *button, Projet *projet)
 {
     unsigned int    code_postal;
     char            *destinataire = NULL, *adresse = NULL, *ville = NULL;
+    Type_Neige      neige;
+    Type_Vent       vent;
+    Type_Seisme     seisme;
+    char            *txt1, *txt2, *message;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.common_informations.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Informations");
@@ -388,7 +381,12 @@ void common_gtk_informations_modifier_clicked(GtkButton *button, Projet *projet)
         return;
     }
     
-    BUG(common_ville_set(projet, projet->list_gtk.common_informations.departement, projet->list_gtk.common_informations.commune), );
+    // On récupère avant common_ville_set car ce dernier réinitialise les valeurs.
+    neige = gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_neige_combobox")));
+    vent = gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_vent_combobox")));
+    seisme = gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_seisme_combobox")));
+    
+    BUG(common_ville_set(projet, projet->list_gtk.common_informations.departement, projet->list_gtk.common_informations.commune, FALSE), );
     free(projet->parametres.adresse.destinataire);
     projet->parametres.adresse.destinataire = destinataire;
     free(projet->parametres.adresse.adresse);
@@ -397,7 +395,63 @@ void common_gtk_informations_modifier_clicked(GtkButton *button, Projet *projet)
     free(projet->parametres.adresse.ville);
     projet->parametres.adresse.ville = ville;
     
-    gtk_widget_destroy(projet->list_gtk.common_informations.window);
+    message = NULL;
+    if (neige != projet->parametres.neige)
+    {
+        BUGMSG(message = g_strdup_printf("%s %s", gettext("Êtes-vous sûr de vouloir choisir pour"), gettext("la neige")), , gettext("Erreur d'allocation mémoire.\n"));
+    }
+    if (vent != projet->parametres.vent)
+    {
+        if (message == NULL)
+            BUGMSG(message = g_strdup_printf("%s %s", gettext("Êtes-vous sûr de vouloir choisir pour"), gettext("le vent")), , gettext("Erreur d'allocation mémoire.\n"));
+        else
+        {
+            txt1 = message;
+            BUGMSG(txt2 = g_strdup_printf(", %s", gettext("le vent")), , gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(message = g_strconcat(txt1, txt2, NULL), , gettext("Erreur d'allocation mémoire.\n"));
+            free(txt1);
+            free(txt2);
+        }
+    }
+    if (seisme != projet->parametres.seisme)
+    {
+        if (message == NULL)
+            BUGMSG(message = g_strdup_printf("%s %s", gettext("Êtes-vous sûr de vouloir choisir pour"), gettext("le séisme")), , gettext("Erreur d'allocation mémoire.\n"));
+        else
+        {
+            txt1 = message;
+            BUGMSG(txt2 = g_strdup_printf(", %s", gettext("le séisme")), , gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(message = g_strconcat(txt1, txt2, NULL), , gettext("Erreur d'allocation mémoire.\n"));
+            free(txt1);
+            free(txt2);
+        }
+    }
+    if (message != NULL)
+    {
+        GtkWidget       *dialog;
+        
+        txt1 = message;
+        BUGMSG(message = g_strconcat(txt1, gettext(" des paramètres de calculs différents que ceux imposés par les normes ?"), NULL), , gettext("Erreur d'allocation mémoire.\n"));
+        free(txt1);
+        dialog = gtk_message_dialog_new(GTK_WINDOW(projet->list_gtk.common_informations.window), GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_YES_NO, message);
+        if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_YES)
+        {
+            projet->parametres.neige = neige;
+            projet->parametres.vent = vent;
+            projet->parametres.seisme = seisme;
+            gtk_widget_destroy(projet->list_gtk.common_informations.window);
+        }
+        else
+        {
+            // On remet les bonnes valeurs à cause de common_ville_set
+            gtk_combo_box_set_active(GTK_COMBO_BOX(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_neige_combobox")), neige);
+            gtk_combo_box_set_active(GTK_COMBO_BOX(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_vent_combobox")), vent);
+            gtk_combo_box_set_active(GTK_COMBO_BOX(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_seisme_combobox")), seisme);
+        }
+        gtk_widget_destroy (dialog);
+    }
+    else
+        gtk_widget_destroy(projet->list_gtk.common_informations.window);
     
     return;
 }
@@ -472,6 +526,14 @@ gboolean common_gtk_informations(Projet *projet)
     }
     if (projet->parametres.adresse.ville != NULL)
         gtk_entry_set_text(GTK_ENTRY(gtk_builder_get_object(ef_gtk->builder, "common_informations_entry_ville")), projet->parametres.adresse.ville);
+    
+    g_object_set(gtk_builder_get_object(ef_gtk->builder, "common_informations_neige_combobox"), "model", projet->parametres.neige_desc, NULL);
+    g_object_set(gtk_builder_get_object(ef_gtk->builder, "common_informations_vent_combobox"), "model", projet->parametres.vent_desc, NULL);
+    g_object_set(gtk_builder_get_object(ef_gtk->builder, "common_informations_seisme_combobox"), "model", projet->parametres.seisme_desc, NULL);
+    
+    gtk_combo_box_set_active(GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder, "common_informations_neige_combobox")), projet->parametres.neige);
+    gtk_combo_box_set_active(GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder, "common_informations_vent_combobox")), projet->parametres.vent);
+    gtk_combo_box_set_active(GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder, "common_informations_seisme_combobox")), projet->parametres.seisme);
     
     gtk_window_set_transient_for(GTK_WINDOW(ef_gtk->window), GTK_WINDOW(projet->list_gtk.comp.window));
     

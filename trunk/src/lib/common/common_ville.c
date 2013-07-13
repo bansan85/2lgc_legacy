@@ -37,6 +37,10 @@ gboolean common_ville_init(Projet *projet)
  *             projet == NULL.
  */
 {
+#ifdef ENABLE_GTK
+    GtkTreeIter iter;
+#endif
+    
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     
     projet->parametres.adresse.departement = NULL;
@@ -50,6 +54,48 @@ gboolean common_ville_init(Projet *projet)
     projet->parametres.neige = NEIGE_A1;
     projet->parametres.vent = VENT_1;
     projet->parametres.seisme = SEISME_1;
+    
+#ifdef ENABLE_GTK
+    projet->parametres.neige_desc = gtk_list_store_new(1, G_TYPE_STRING);
+    gtk_list_store_append(projet->parametres.neige_desc, &iter);
+    gtk_list_store_set(projet->parametres.neige_desc, &iter, 0, gettext("Région A1"), -1);
+    gtk_list_store_append(projet->parametres.neige_desc, &iter);
+    gtk_list_store_set(projet->parametres.neige_desc, &iter, 0, gettext("Région A2"), -1);
+    gtk_list_store_append(projet->parametres.neige_desc, &iter);
+    gtk_list_store_set(projet->parametres.neige_desc, &iter, 0, gettext("Région B1"), -1);
+    gtk_list_store_append(projet->parametres.neige_desc, &iter);
+    gtk_list_store_set(projet->parametres.neige_desc, &iter, 0, gettext("Région B2"), -1);
+    gtk_list_store_append(projet->parametres.neige_desc, &iter);
+    gtk_list_store_set(projet->parametres.neige_desc, &iter, 0, gettext("Région C1"), -1);
+    gtk_list_store_append(projet->parametres.neige_desc, &iter);
+    gtk_list_store_set(projet->parametres.neige_desc, &iter, 0, gettext("Région C2"), -1);
+    gtk_list_store_append(projet->parametres.neige_desc, &iter);
+    gtk_list_store_set(projet->parametres.neige_desc, &iter, 0, gettext("Région D"), -1);
+    gtk_list_store_append(projet->parametres.neige_desc, &iter);
+    gtk_list_store_set(projet->parametres.neige_desc, &iter, 0, gettext("Région E"), -1);
+    
+    projet->parametres.vent_desc = gtk_list_store_new(1, G_TYPE_STRING);
+    gtk_list_store_append(projet->parametres.vent_desc, &iter);
+    gtk_list_store_set(projet->parametres.vent_desc, &iter, 0, gettext("Région 1"), -1);
+    gtk_list_store_append(projet->parametres.vent_desc, &iter);
+    gtk_list_store_set(projet->parametres.vent_desc, &iter, 0, gettext("Région 2"), -1);
+    gtk_list_store_append(projet->parametres.vent_desc, &iter);
+    gtk_list_store_set(projet->parametres.vent_desc, &iter, 0, gettext("Région 3"), -1);
+    gtk_list_store_append(projet->parametres.vent_desc, &iter);
+    gtk_list_store_set(projet->parametres.vent_desc, &iter, 0, gettext("Région 4"), -1);
+    
+    projet->parametres.seisme_desc = gtk_list_store_new(1, G_TYPE_STRING);
+    gtk_list_store_append(projet->parametres.seisme_desc, &iter);
+    gtk_list_store_set(projet->parametres.seisme_desc, &iter, 0, gettext("Zone très faible"), -1);
+    gtk_list_store_append(projet->parametres.seisme_desc, &iter);
+    gtk_list_store_set(projet->parametres.seisme_desc, &iter, 0, gettext("Zone faible"), -1);
+    gtk_list_store_append(projet->parametres.seisme_desc, &iter);
+    gtk_list_store_set(projet->parametres.seisme_desc, &iter, 0, gettext("Zone modérée"), -1);
+    gtk_list_store_append(projet->parametres.seisme_desc, &iter);
+    gtk_list_store_set(projet->parametres.seisme_desc, &iter, 0, gettext("Zone moyenne"), -1);
+    gtk_list_store_append(projet->parametres.seisme_desc, &iter);
+    gtk_list_store_set(projet->parametres.seisme_desc, &iter, 0, gettext("Zone forte"), -1);
+#endif
     
     return TRUE;
 }
@@ -179,26 +225,32 @@ gboolean common_ville_get_ville(char *ligne, int *cdc, int *cheflieu, int *reg, 
 }
 
 
-gboolean common_ville_set(Projet *projet, char *departement, int ville)
+gboolean common_ville_set(Projet *projet, char *departement, int ville, int graphique_seul)
 /* Description : Initialise la ville (mais pas l'adresse exacte) du projet avec les paramètres
  *               régionaux (vent, neige, séisme).
  *               Departement DEP et ville COM doivent correspondre au fichier france_villes.csv
  * Paramètres : Projet *projet : la variable projet,
  *              char departement : le numéro du département (char* car 2A et 2B),
- *              int ville : le numéro de la ville. Nécessite d'avoir parcouru france_villes.csv.
+ *              int ville : le numéro de la ville. Nécessite d'avoir parcouru france_villes.csv,
+ *              int graphique_seul : TRUE si on ne modifie que l'interface graphique et pas la
+ *                                   variable projet.
  * Valeur renvoyée :
  *   Succès : TRUE
  *   Échec : FALSE :
  *             en cas d'erreur d'allocation mémoire.
  */
 {
-    FILE    *villes;
-    char    *ligne = NULL;
-    int     com, ct, code_postal, population, article;
-    char    *artmin, *nccenr;
-    char    dep[4];
+    FILE        *villes;
+    char        *ligne = NULL;
+    int         com, ct, code_postal, population, article;
+    char        *artmin, *nccenr;
+    char        dep[4];
+    Type_Neige  neige_tmp;
+    Type_Vent   vent_tmp;
+    Type_Seisme seisme_tmp;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(departement, FALSE, gettext("Paramètre %s incorrect.\n"), "departement");
     
     BUGMSG(villes = fopen(DATADIR"/france_villes.csv", "r"), FALSE, gettext("Le fichier '%s' est introuvable.\n"), DATADIR"/france_villes.csv");
     
@@ -216,13 +268,18 @@ gboolean common_ville_set(Projet *projet, char *departement, int ville)
             char        *dep_parcours;
             char        *champ1, *champ2;
             gboolean    done;
+            char        *tmp;
             
             // Maintenant que tout est récupéré, on enregistre dans le projet ce qu'il faut.
             // Ville et code postal.
-            projet->parametres.adresse.code_postal = code_postal;
-            free(projet->parametres.adresse.ville);
-            BUGMSG(projet->parametres.adresse.ville = g_strdup_printf("%s%s%s", artmin, ((article == 5) || (article == 1) || (article == 0)) ? "" : " ", nccenr), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-            projet->parametres.adresse.code_postal = code_postal;
+            BUGMSG(tmp = g_strdup_printf("%s%s%s", artmin, ((article == 5) || (article == 1) || (article == 0)) ? "" : " ", nccenr), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+            if (!graphique_seul)
+            {
+                projet->parametres.adresse.code_postal = code_postal;
+                free(projet->parametres.adresse.ville);
+                projet->parametres.adresse.ville = tmp;
+                projet->parametres.adresse.code_postal = code_postal;
+            }
             
             free(ligne);
             
@@ -240,7 +297,7 @@ gboolean common_ville_set(Projet *projet, char *departement, int ville)
                 g_signal_handler_block(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_buffer_ville"), g_signal_handler_find(G_OBJECT(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_buffer_ville")), G_SIGNAL_MATCH_FUNC, 0, 0, NULL, common_gtk_informations_entry_del_char, NULL));
                 
                 gtk_entry_set_text(GTK_ENTRY(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_entry_code_postal")), code_postal2);
-                gtk_entry_set_text(GTK_ENTRY(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_entry_ville")), projet->parametres.adresse.ville);
+                gtk_entry_set_text(GTK_ENTRY(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_entry_ville")), tmp);
                 
                 g_signal_handler_unblock(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_buffer_code_postal"), g_signal_handler_find(G_OBJECT(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_buffer_code_postal")), G_SIGNAL_MATCH_FUNC, 0, 0, NULL, common_gtk_informations_entry_add_char, NULL));
                 g_signal_handler_unblock(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_buffer_code_postal"), g_signal_handler_find(G_OBJECT(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_buffer_code_postal")), G_SIGNAL_MATCH_FUNC, 0, 0, NULL, common_gtk_informations_entry_del_char, NULL));
@@ -250,6 +307,9 @@ gboolean common_ville_set(Projet *projet, char *departement, int ville)
                 free(code_postal2);
             }
 #endif
+            if (graphique_seul)
+                free(tmp);
+            
             // Le zonage neige.
             BUGMSG(villes = fopen(DATADIR"/france_neige.csv", "r"), FALSE, gettext("Le fichier '%s' est introuvable.\n"), DATADIR"/france_neige.csv");
             // On commande par chercher le département
@@ -277,21 +337,21 @@ gboolean common_ville_set(Projet *projet, char *departement, int ville)
                 free(champ1);
             }
             if (strcmp(champ2, "A1") == 0)
-                projet->parametres.neige = NEIGE_A1;
+                neige_tmp = NEIGE_A1;
             else if (strcmp(champ2, "A2") == 0)
-                projet->parametres.neige = NEIGE_A2;
+                neige_tmp = NEIGE_A2;
             else if (strcmp(champ2, "B1") == 0)
-                projet->parametres.neige = NEIGE_B1;
+                neige_tmp = NEIGE_B1;
             else if (strcmp(champ2, "B2") == 0)
-                projet->parametres.neige = NEIGE_B2;
+                neige_tmp = NEIGE_B2;
             else if (strcmp(champ2, "C1") == 0)
-                projet->parametres.neige = NEIGE_C1;
+                neige_tmp = NEIGE_C1;
             else if (strcmp(champ2, "C2") == 0)
-                projet->parametres.neige = NEIGE_C2;
+                neige_tmp = NEIGE_C2;
             else if (strcmp(champ2, "D") == 0)
-                projet->parametres.neige = NEIGE_D;
+                neige_tmp = NEIGE_D;
             else if (strcmp(champ2, "E") == 0)
-                projet->parametres.neige = NEIGE_E;
+                neige_tmp = NEIGE_E;
             else
                 BUGMSG(NULL, FALSE, gettext("Le fichier '%s' est corrumpu. Le champ2 '%s' est inconnu.\n"), DATADIR"/france_neige.csv", champ2);
             free(champ2);
@@ -319,24 +379,27 @@ gboolean common_ville_set(Projet *projet, char *departement, int ville)
                     if (((strcmp(champ1, "CAN") == 0) && (numero == ct)) ||
                             ((strcmp(champ1, "COM") == 0) && (numero == com)))
                     {
-                        if (strcmp(champ2, "A1") == 0)
-                            projet->parametres.neige = NEIGE_A1;
-                        else if (strcmp(champ2, "A2") == 0)
-                            projet->parametres.neige = NEIGE_A2;
-                        else if (strcmp(champ2, "B1") == 0)
-                            projet->parametres.neige = NEIGE_B1;
-                        else if (strcmp(champ2, "B2") == 0)
-                            projet->parametres.neige = NEIGE_B2;
-                        else if (strcmp(champ2, "C1") == 0)
-                            projet->parametres.neige = NEIGE_C1;
-                        else if (strcmp(champ2, "C2") == 0)
-                            projet->parametres.neige = NEIGE_C2;
-                        else if (strcmp(champ2, "D") == 0)
-                            projet->parametres.neige = NEIGE_D;
-                        else if (strcmp(champ2, "E") == 0)
-                            projet->parametres.neige = NEIGE_E;
-                        else
-                            BUGMSG(NULL, FALSE, gettext("Le fichier '%s' est corrumpu. Le champ2 '%s' est inconnu.\n"), DATADIR"/france_neige.csv", champ2);
+                        if (!graphique_seul)
+                        {
+                            if (strcmp(champ2, "A1") == 0)
+                                neige_tmp = NEIGE_A1;
+                            else if (strcmp(champ2, "A2") == 0)
+                                neige_tmp = NEIGE_A2;
+                            else if (strcmp(champ2, "B1") == 0)
+                                neige_tmp = NEIGE_B1;
+                            else if (strcmp(champ2, "B2") == 0)
+                                neige_tmp = NEIGE_B2;
+                            else if (strcmp(champ2, "C1") == 0)
+                                neige_tmp = NEIGE_C1;
+                            else if (strcmp(champ2, "C2") == 0)
+                                neige_tmp = NEIGE_C2;
+                            else if (strcmp(champ2, "D") == 0)
+                                neige_tmp = NEIGE_D;
+                            else if (strcmp(champ2, "E") == 0)
+                                neige_tmp = NEIGE_E;
+                            else
+                                BUGMSG(NULL, FALSE, gettext("Le fichier '%s' est corrumpu. Le champ2 '%s' est inconnu.\n"), DATADIR"/france_neige.csv", champ2);
+                        }
                         done = TRUE;
                     }
                     else
@@ -348,6 +411,13 @@ gboolean common_ville_set(Projet *projet, char *departement, int ville)
                 free(champ2);
             }
             fclose(villes);
+            
+            if (!graphique_seul)
+                projet->parametres.neige = neige_tmp;
+#ifdef ENABLE_GTK
+            if (projet->list_gtk.common_informations.builder != NULL)
+                gtk_combo_box_set_active(GTK_COMBO_BOX(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_neige_combobox")), neige_tmp);
+#endif
             // Fin Neige
             
             // Le zonage vent.
@@ -377,13 +447,13 @@ gboolean common_ville_set(Projet *projet, char *departement, int ville)
                 free(champ1);
             }
             if (strcmp(champ2, "1") == 0)
-                projet->parametres.vent = VENT_1;
+                vent_tmp = VENT_1;
             else if (strcmp(champ2, "2") == 0)
-                projet->parametres.vent = VENT_2;
+                vent_tmp = VENT_2;
             else if (strcmp(champ2, "3") == 0)
-                projet->parametres.vent = VENT_3;
+                vent_tmp = VENT_3;
             else if (strcmp(champ2, "4") == 0)
-                projet->parametres.vent = VENT_4;
+                vent_tmp = VENT_4;
             else
                 BUGMSG(NULL, FALSE, gettext("Le fichier '%s' est corrumpu. Le champ2 '%s' est inconnu.\n"), DATADIR"/france_vent.csv", champ2);
             free(champ2);
@@ -411,16 +481,19 @@ gboolean common_ville_set(Projet *projet, char *departement, int ville)
                     if (((strcmp(champ1, "CAN") == 0) && (numero == ct)) ||
                         ((strcmp(champ1, "COM") == 0) && (numero == com)))
                     {
-                        if (strcmp(champ2, "1") == 0)
-                            projet->parametres.vent = VENT_1;
-                        else if (strcmp(champ2, "2") == 0)
-                            projet->parametres.vent = VENT_2;
-                        else if (strcmp(champ2, "3") == 0)
-                            projet->parametres.vent = VENT_3;
-                        else if (strcmp(champ2, "4") == 0)
-                            projet->parametres.vent = VENT_4;
-                        else
-                            BUGMSG(NULL, FALSE, gettext("Le fichier '%s' est corrumpu. Le champ2 '%s' est inconnu.\n"), DATADIR"/france_vent.csv", champ2);
+                        if (!graphique_seul)
+                        {
+                            if (strcmp(champ2, "1") == 0)
+                                vent_tmp = VENT_1;
+                            else if (strcmp(champ2, "2") == 0)
+                                vent_tmp = VENT_2;
+                            else if (strcmp(champ2, "3") == 0)
+                                vent_tmp = VENT_3;
+                            else if (strcmp(champ2, "4") == 0)
+                                vent_tmp = VENT_4;
+                            else
+                                BUGMSG(NULL, FALSE, gettext("Le fichier '%s' est corrumpu. Le champ2 '%s' est inconnu.\n"), DATADIR"/france_vent.csv", champ2);
+                        }
                         done = TRUE;
                     }
                     else
@@ -432,7 +505,14 @@ gboolean common_ville_set(Projet *projet, char *departement, int ville)
                 free(champ2);
             }
             fclose(villes);
-            // Fin Neige
+            
+            if (!graphique_seul)
+                projet->parametres.vent = vent_tmp;
+#ifdef ENABLE_GTK
+            if (projet->list_gtk.common_informations.builder != NULL)
+                gtk_combo_box_set_active(GTK_COMBO_BOX(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_vent_combobox")), vent_tmp);
+#endif
+            // Fin Vent
             
             // Le zonage sismique.
             BUGMSG(villes = fopen(DATADIR"/france_seisme.csv", "r"), FALSE, gettext("Le fichier '%s' est introuvable.\n"), DATADIR"/france_seisme.csv");
@@ -461,15 +541,15 @@ gboolean common_ville_set(Projet *projet, char *departement, int ville)
                 free(champ1);
             }
             if (strcmp(champ2, "1") == 0)
-                projet->parametres.seisme = SEISME_1;
+                seisme_tmp = SEISME_1;
             else if (strcmp(champ2, "2") == 0)
-                projet->parametres.seisme = SEISME_2;
+                seisme_tmp = SEISME_2;
             else if (strcmp(champ2, "3") == 0)
-                projet->parametres.seisme = SEISME_3;
+                seisme_tmp = SEISME_3;
             else if (strcmp(champ2, "4") == 0)
-                projet->parametres.seisme = SEISME_4;
+                seisme_tmp = SEISME_4;
             else if (strcmp(champ2, "5") == 0)
-                projet->parametres.seisme = SEISME_5;
+                seisme_tmp = SEISME_5;
             else
                 BUGMSG(NULL, FALSE, gettext("Le fichier '%s' est corrumpu. Le champ2 '%s' est inconnu.\n"), DATADIR"/france_seisme.csv", champ2);
             free(champ2);
@@ -497,18 +577,21 @@ gboolean common_ville_set(Projet *projet, char *departement, int ville)
                     if (((strcmp(champ1, "CAN") == 0) && (numero == ct)) ||
                         ((strcmp(champ1, "COM") == 0) && (numero == com)))
                     {
-                        if (strcmp(champ2, "1") == 0)
-                            projet->parametres.seisme = SEISME_1;
-                        else if (strcmp(champ2, "2") == 0)
-                            projet->parametres.seisme = SEISME_2;
-                        else if (strcmp(champ2, "3") == 0)
-                            projet->parametres.seisme = SEISME_3;
-                        else if (strcmp(champ2, "4") == 0)
-                            projet->parametres.seisme = SEISME_4;
-                        else if (strcmp(champ2, "5") == 0)
-                            projet->parametres.seisme = SEISME_5;
-                        else
-                            BUGMSG(NULL, FALSE, gettext("Le fichier '%s' est corrumpu. Le champ2 '%s' est inconnu.\n"), DATADIR"/france_seisme.csv", champ2);
+                        if (!graphique_seul)
+                        {
+                            if (strcmp(champ2, "1") == 0)
+                                seisme_tmp = SEISME_1;
+                            else if (strcmp(champ2, "2") == 0)
+                                seisme_tmp = SEISME_2;
+                            else if (strcmp(champ2, "3") == 0)
+                                seisme_tmp = SEISME_3;
+                            else if (strcmp(champ2, "4") == 0)
+                                seisme_tmp = SEISME_4;
+                            else if (strcmp(champ2, "5") == 0)
+                                seisme_tmp = SEISME_5;
+                            else
+                                BUGMSG(NULL, FALSE, gettext("Le fichier '%s' est corrumpu. Le champ2 '%s' est inconnu.\n"), DATADIR"/france_seisme.csv", champ2);
+                        }
                         done = TRUE;
                     }
                     else
@@ -520,7 +603,14 @@ gboolean common_ville_set(Projet *projet, char *departement, int ville)
                 free(champ2);
             }
             fclose(villes);
-            // Fin Neige
+            
+            if (!graphique_seul)
+                projet->parametres.seisme = seisme_tmp;
+#ifdef ENABLE_GTK
+            if (projet->list_gtk.common_informations.builder != NULL)
+                gtk_combo_box_set_active(GTK_COMBO_BOX(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_seisme_combobox")), seisme_tmp);
+#endif
+            // Fin Sismique
             
             return TRUE;
         }

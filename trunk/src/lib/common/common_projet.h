@@ -1059,11 +1059,16 @@ typedef struct __Adresse
 
 typedef struct __Parametres
 {
-    Type_Pays   pays;               // Pays de calculs
-    Adresse     adresse;
-    Type_Neige  neige;
-    Type_Vent   vent;
-    Type_Seisme seisme;
+    Type_Pays       pays;               // Pays de calculs
+    Adresse         adresse;
+    Type_Neige      neige;
+    Type_Vent       vent;
+    Type_Seisme     seisme;
+#ifdef ENABLE_GTK
+    GtkListStore    *neige_desc;
+    GtkListStore    *vent_desc;
+    GtkListStore    *seisme_desc;
+#endif
 } Parametres;
 
 
