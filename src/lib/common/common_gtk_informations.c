@@ -345,7 +345,7 @@ gboolean common_gtk_informations_match_selected(GtkEntryCompletion *widget, GtkT
     projet->list_gtk.common_informations.departement = departement;
     projet->list_gtk.common_informations.commune = commune;
     
-    BUG(common_ville_set(projet, projet->list_gtk.common_informations.departement, projet->list_gtk.common_informations.commune, TRUE), FALSE);
+    BUG(common_ville_set(projet, projet->list_gtk.common_informations.departement, gtk_entry_get_text(GTK_ENTRY(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_entry_ville"))), TRUE), FALSE);
     
     common_gtk_informations_check(NULL, projet);
     
@@ -386,7 +386,7 @@ void common_gtk_informations_modifier_clicked(GtkButton *button, Projet *projet)
     vent = gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_vent_combobox")));
     seisme = gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_seisme_combobox")));
     
-    BUG(common_ville_set(projet, projet->list_gtk.common_informations.departement, projet->list_gtk.common_informations.commune, FALSE), );
+    BUG(common_ville_set(projet, projet->list_gtk.common_informations.departement, gtk_entry_get_text(GTK_ENTRY(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_entry_ville"))), FALSE), );
     free(projet->parametres.adresse.destinataire);
     projet->parametres.adresse.destinataire = destinataire;
     free(projet->parametres.adresse.adresse);
@@ -501,7 +501,8 @@ gboolean common_gtk_informations(Projet *projet)
     ef_gtk->window = GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder, "common_informations_window"));
     ef_gtk->model_completion = GTK_LIST_STORE(gtk_builder_get_object(ef_gtk->builder, "common_informations_completion_model"));
     
-    projet->list_gtk.common_informations.departement = NULL;
+    BUGMSG(projet->list_gtk.common_informations.departement = g_strdup(projet->parametres.adresse.departement), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    projet->list_gtk.common_informations.commune = projet->parametres.adresse.commune;
     common_gtk_informations_check(NULL, projet);
     
     // On ne peut pas mettre text-column directement dans le fichier ui car ça ne marche pas.
