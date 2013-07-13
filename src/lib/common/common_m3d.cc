@@ -1121,6 +1121,32 @@ void m3d_noeud_free(void *donnees_m3d, EF_Noeud *noeud)
 }
 
 
+gboolean m3d_barre_finition(CM3dObject *objet, Beton_Barre *barre)
+/* Description : Applique une liste d'instruction commune à toutes les barres.
+ * Paramètres : CM3dObject *objet : la modélisation de la barre,
+ *              Beton_Barre *barre : barre devant être représentée.
+ * Valeur renvoyée :
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             en cas d'erreur d'une fonction interne.
+ */
+{
+    double      y, z;
+    EF_Point    p_d, p_f;
+    
+    objet->set_color(100, 100, 100);
+    objet->set_ambient_reflexion(0.8);
+    objet->set_smooth(GOURAUD);
+    BUG(_1992_1_1_barres_angle_rotation(barre->noeud_debut, barre->noeud_fin, &y, &z), FALSE);
+    objet->rotations(0., -y/M_PI*180., z/M_PI*180.);
+    BUG(EF_noeuds_renvoie_position(barre->noeud_debut, &p_d), FALSE);
+    BUG(EF_noeuds_renvoie_position(barre->noeud_fin, &p_f), FALSE);
+    objet->set_position((common_math_get(p_d.x)+common_math_get(p_f.x))/2., (common_math_get(p_d.y)+common_math_get(p_f.y))/2., (common_math_get(p_d.z)+common_math_get(p_f.z))/2.);
+    
+    return TRUE;
+}
+
+
 gboolean m3d_barre(void *donnees_m3d, Beton_Barre *barre)
 /* Description : Crée une barre dans l'affichage graphique. Si la barre existe, elle est
  *               détruite au préalable.
@@ -1164,10 +1190,8 @@ gboolean m3d_barre(void *donnees_m3d, Beton_Barre *barre)
     
     switch (barre->section->type)
     {
-        EF_Point p_d, p_f;
         case SECTION_RECTANGULAIRE :
         {
-            double      y, z;
             CM3dObject  *bas, *haut, *gauche, *droite;
             Section_T   *section = (Section_T *)barre->section->data;
             
@@ -1193,15 +1217,7 @@ gboolean m3d_barre(void *donnees_m3d, Beton_Barre *barre)
             delete bas;
             delete haut;
             
-            tout->set_color(100, 100, 100);
-            tout->set_ambient_reflexion(0.8);
-            tout->set_smooth(GOURAUD);
-            BUG(_1992_1_1_barres_angle_rotation(barre->noeud_debut, barre->noeud_fin, &y, &z), FALSE);
-            tout->rotations(0., -y/M_PI*180., z/M_PI*180.);
-            BUG(EF_noeuds_renvoie_position(barre->noeud_debut, &p_d), FALSE);
-            BUG(EF_noeuds_renvoie_position(barre->noeud_fin, &p_f), FALSE);
-            tout->set_position((common_math_get(p_d.x)+common_math_get(p_f.x))/2., (common_math_get(p_d.y)+common_math_get(p_f.y))/2., (common_math_get(p_d.z)+common_math_get(p_f.z))/2.);
-            
+            m3d_barre_finition(tout, barre);
             vue->scene->add_object(tout);
             
             break;
@@ -1211,7 +1227,6 @@ gboolean m3d_barre(void *donnees_m3d, Beton_Barre *barre)
         {
             Section_T *section = (Section_T *)barre->section->data;
             
-            double  y, z;
             double  lt = common_math_get(section->largeur_table);
             double  lr = common_math_get(section->largeur_retombee);
             double  ht = common_math_get(section->hauteur_table);
@@ -1262,15 +1277,7 @@ gboolean m3d_barre(void *donnees_m3d, Beton_Barre *barre)
             delete dalle_gauche;
             delete dalle_sup;
             
-            tout->set_color(100, 100, 100);
-            tout->set_ambient_reflexion(0.8);
-            tout->set_smooth(GOURAUD);
-            BUG(_1992_1_1_barres_angle_rotation(barre->noeud_debut, barre->noeud_fin, &y, &z), FALSE);
-            tout->rotations(0., -y/M_PI*180., z/M_PI*180.);
-            BUG(EF_noeuds_renvoie_position(barre->noeud_debut, &p_d), FALSE);
-            BUG(EF_noeuds_renvoie_position(barre->noeud_fin, &p_f), FALSE);
-            tout->set_position((common_math_get(p_d.x)+common_math_get(p_f.x))/2., (common_math_get(p_d.y)+common_math_get(p_f.y))/2., (common_math_get(p_d.z)+common_math_get(p_f.z))/2.);
-            
+            m3d_barre_finition(tout, barre);
             vue->scene->add_object(tout);
             
             break;
@@ -1279,7 +1286,6 @@ gboolean m3d_barre(void *donnees_m3d, Beton_Barre *barre)
         case SECTION_CARREE :
         {
             Section_T   *section = (Section_T *)barre->section->data;
-            double      y, z;
             CM3dObject  *bas, *haut, *gauche, *droite;
             
             droite = M3d_plan_new("", longueur, common_math_get(section->largeur_table), 1);
@@ -1304,15 +1310,7 @@ gboolean m3d_barre(void *donnees_m3d, Beton_Barre *barre)
             delete bas;
             delete haut;
             
-            tout->set_color(100, 100, 100);
-            tout->set_ambient_reflexion(0.8);
-            tout->set_smooth(GOURAUD);
-            BUG(_1992_1_1_barres_angle_rotation(barre->noeud_debut, barre->noeud_fin, &y, &z), FALSE);
-            tout->rotations(0., -y/M_PI*180., z/M_PI*180.);
-            BUG(EF_noeuds_renvoie_position(barre->noeud_debut, &p_d), FALSE);
-            BUG(EF_noeuds_renvoie_position(barre->noeud_fin, &p_f), FALSE);
-            tout->set_position((common_math_get(p_d.x)+common_math_get(p_f.x))/2., (common_math_get(p_d.y)+common_math_get(p_f.y))/2., (common_math_get(p_d.z)+common_math_get(p_f.z))/2.);
-            
+            m3d_barre_finition(tout, barre);
             vue->scene->add_object(tout);
             
             break;
@@ -1321,19 +1319,11 @@ gboolean m3d_barre(void *donnees_m3d, Beton_Barre *barre)
         case SECTION_CIRCULAIRE :
         {
             Section_Circulaire *section = (Section_Circulaire *)barre->section->data;
-            double  y, z;
             
             tout = M3d_cylindre_new(tmp, common_math_get(section->diametre)/2., longueur, 12);
             tout->rotations(0., 0., 90.);
-            tout->set_color(100, 100, 100);
-            tout->set_ambient_reflexion(0.8);
-            tout->set_smooth(GOURAUD);
-            BUG(_1992_1_1_barres_angle_rotation(barre->noeud_debut, barre->noeud_fin, &y, &z), FALSE);
-            tout->rotations(0., -y/M_PI*180., z/M_PI*180.);
-            BUG(EF_noeuds_renvoie_position(barre->noeud_debut, &p_d), FALSE);
-            BUG(EF_noeuds_renvoie_position(barre->noeud_fin, &p_f), FALSE);
-            tout->set_position((common_math_get(p_d.x)+common_math_get(p_f.x))/2., (common_math_get(p_d.y)+common_math_get(p_f.y))/2., (common_math_get(p_d.z)+common_math_get(p_f.z))/2.);
             
+            m3d_barre_finition(tout, barre);
             vue->scene->add_object(tout);
             
             break;
