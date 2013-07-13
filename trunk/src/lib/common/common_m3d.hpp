@@ -29,8 +29,8 @@
 
 typedef struct
 {
-    CM3dScene *scene;
-    CM3dCamera *camera;
+    CM3dScene   *scene;
+    CM3dCamera  *camera;
 } SGlobalData;
 
 
