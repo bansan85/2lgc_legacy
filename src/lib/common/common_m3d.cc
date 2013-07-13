@@ -63,7 +63,7 @@ gboolean m3d_init(Projet *projet)
     global_data->scene->set_ambient_light(1.);
     global_data->scene->set_show_type(SOLID);
     
-    light = new CM3dLight("lumiere 1", DIFFUS, 1);
+    light = new CM3dLight("lumiere 1", DIFFUS, 1.);
     light->set_position(10., 20., -20.);
     global_data->scene->add_light(light);
     
@@ -1078,7 +1078,7 @@ void* m3d_noeud(void *donnees_m3d, EF_Noeud *noeud)
         vue->scene->remove_object(cube);
     
     cube = M3d_cube_new(nom, .1);
-    cube->set_ambient_reflexion (1.);
+    cube->set_ambient_reflexion(1.);
     cube->set_smooth(GOURAUD);
     vue->scene->add_object(cube);
     cube->set_position(common_math_get(point.x), common_math_get(point.y), common_math_get(point.z));
@@ -1193,33 +1193,14 @@ gboolean m3d_barre(void *donnees_m3d, Beton_Barre *barre)
             delete bas;
             delete haut;
             
-            switch(barre->numero)
-            {
-                case 0:
-                {
-                    tout->set_color(255, 0, 0);
-                    break;
-                }
-                case 1:
-                {
-                    tout->set_color(0, 255, 0);
-                    break;
-                }
-                case 2:
-                {
-                    tout->set_color(0, 0, 255);
-                    break;
-                }
-                default : break;
-
-            }
+            tout->set_color(100, 100, 100);
+            tout->set_ambient_reflexion(0.8);
             tout->set_smooth(GOURAUD);
             BUG(_1992_1_1_barres_angle_rotation(barre->noeud_debut, barre->noeud_fin, &y, &z), FALSE);
             tout->rotations(0., -y/M_PI*180., z/M_PI*180.);
             BUG(EF_noeuds_renvoie_position(barre->noeud_debut, &p_d), FALSE);
             BUG(EF_noeuds_renvoie_position(barre->noeud_fin, &p_f), FALSE);
             tout->set_position((common_math_get(p_d.x)+common_math_get(p_f.x))/2., (common_math_get(p_d.y)+common_math_get(p_f.y))/2., (common_math_get(p_d.z)+common_math_get(p_f.z))/2.);
-            tout->set_ambient_reflexion(0.8);
             
             vue->scene->add_object(tout);
             
@@ -1281,26 +1262,7 @@ gboolean m3d_barre(void *donnees_m3d, Beton_Barre *barre)
             delete dalle_gauche;
             delete dalle_sup;
             
-            switch(barre->numero)
-            {
-                case 0:
-                {
-                    tout->set_color(255, 0, 0);
-                    break;
-                }
-                case 1:
-                {
-                    tout->set_color(0, 255, 0);
-                    break;
-                }
-                case 2:
-                {
-                    tout->set_color(0, 0, 255);
-                    break;
-                }
-                default : break;
-
-            }
+            tout->set_color(100, 100, 100);
             tout->set_ambient_reflexion(0.8);
             tout->set_smooth(GOURAUD);
             BUG(_1992_1_1_barres_angle_rotation(barre->noeud_debut, barre->noeud_fin, &y, &z), FALSE);
@@ -1342,26 +1304,7 @@ gboolean m3d_barre(void *donnees_m3d, Beton_Barre *barre)
             delete bas;
             delete haut;
             
-            switch(barre->numero)
-            {
-                case 0:
-                {
-                    tout->set_color(255, 0, 0);
-                    break;
-                }
-                case 1:
-                {
-                    tout->set_color(0, 255, 0);
-                    break;
-                }
-                case 2:
-                {
-                    tout->set_color(0, 0, 255);
-                    break;
-                }
-                default : break;
-
-            }
+            tout->set_color(100, 100, 100);
             tout->set_ambient_reflexion(0.8);
             tout->set_smooth(GOURAUD);
             BUG(_1992_1_1_barres_angle_rotation(barre->noeud_debut, barre->noeud_fin, &y, &z), FALSE);
@@ -1382,26 +1325,7 @@ gboolean m3d_barre(void *donnees_m3d, Beton_Barre *barre)
             
             tout = M3d_cylindre_new(tmp, common_math_get(section->diametre)/2., longueur, 12);
             tout->rotations(0., 0., 90.);
-            switch(barre->numero)
-            {
-                case 0:
-                {
-                    tout->set_color(255, 0, 0);
-                    break;
-                }
-                case 1:
-                {
-                    tout->set_color(0, 255, 0);
-                    break;
-                }
-                case 2:
-                {
-                    tout->set_color(0, 0, 255);
-                    break;
-                }
-                default : break;
-
-            }
+            tout->set_color(100, 100, 100);
             tout->set_ambient_reflexion(0.8);
             tout->set_smooth(GOURAUD);
             BUG(_1992_1_1_barres_angle_rotation(barre->noeud_debut, barre->noeud_fin, &y, &z), FALSE);
