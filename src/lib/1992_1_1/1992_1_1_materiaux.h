@@ -24,8 +24,6 @@
 
 #define COEFFICIENT_NU_BETON    0.2
 
-gboolean _1992_1_1_materiaux_init(Projet *projet) __attribute__((__warn_unused_result__));
-
 double _1992_1_1_materiaux_fckcube(double fck) __attribute__((__warn_unused_result__));
 double _1992_1_1_materiaux_fcm(double fck) __attribute__((__warn_unused_result__));
 double _1992_1_1_materiaux_fctm(double fck, double fcm) __attribute__((__warn_unused_result__));
@@ -43,11 +41,7 @@ double _1992_1_1_materiaux_gnu(double ecm, double nu) __attribute__((__warn_unus
 
 EF_Materiau* _1992_1_1_materiaux_ajout(Projet *projet, const char *nom, double fck) __attribute__((__warn_unused_result__));
 gboolean _1992_1_1_materiaux_modif(Projet *projet, EF_Materiau *materiau, char *nom, Flottant fck, Flottant fckcube, Flottant fcm, Flottant fctm, Flottant fctk_0_05, Flottant fctk_0_95, Flottant ecm, Flottant ec1, Flottant ecu1, Flottant ec2, Flottant ecu2, Flottant n, Flottant ec3, Flottant ecu3, Flottant nu) __attribute__((__warn_unused_result__));
-EF_Materiau* _1992_1_1_materiaux_cherche_nom(Projet *projet, const char *nom, gboolean critique) __attribute__((__warn_unused_result__));
 
 char *_1992_1_1_materiaux_get_description(EF_Materiau* materiau) __attribute__((__warn_unused_result__));
-
-gboolean _1992_1_1_materiaux_supprime(EF_Materiau* materiau, Projet *projet) __attribute__((__warn_unused_result__));
-gboolean _1992_1_1_materiaux_free(Projet *projet) __attribute__((__warn_unused_result__));
 
 #endif

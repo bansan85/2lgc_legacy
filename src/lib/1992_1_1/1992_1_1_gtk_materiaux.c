@@ -31,6 +31,7 @@
 #include "common_math.h"
 #include "common_selection.h"
 #include "1992_1_1_materiaux.h"
+#include "EF_materiaux.h"
 
 gboolean _1992_1_1_gtk_materiaux_window_key_press(GtkWidget *widget, GdkEvent *event,
   Projet *projet)
@@ -300,7 +301,7 @@ gboolean _1992_1_1_gtk_materiaux_recupere_donnees(Projet *projet, char **nom, do
     
     if (projet->list_gtk._1992_1_1_materiaux.materiau == NULL)
     {
-        if ((strcmp(*nom, "") == 0) || (_1992_1_1_materiaux_cherche_nom(projet, *nom, FALSE)))
+        if ((strcmp(*nom, "") == 0) || (EF_materiaux_cherche_nom(projet, *nom, FALSE)))
         {
             gtk_text_buffer_apply_tag_by_name(textbuffer, "mauvais", &start, &end);
             ok = FALSE;
@@ -309,7 +310,7 @@ gboolean _1992_1_1_gtk_materiaux_recupere_donnees(Projet *projet, char **nom, do
             gtk_text_buffer_apply_tag_by_name(textbuffer, "OK", &start, &end);
     }
     else if ((strcmp(*nom, "") == 0) || 
-      ((strcmp(projet->list_gtk._1992_1_1_materiaux.materiau->nom, *nom) != 0) && (_1992_1_1_materiaux_cherche_nom(projet, *nom, FALSE))))
+      ((strcmp(projet->list_gtk._1992_1_1_materiaux.materiau->nom, *nom) != 0) && (EF_materiaux_cherche_nom(projet, *nom, FALSE))))
     {
         gtk_text_buffer_apply_tag_by_name(textbuffer, "mauvais", &start, &end);
         ok = FALSE;

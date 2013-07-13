@@ -39,6 +39,7 @@
 #include "1992_1_1_materiaux.h"
 #include "EF_appuis.h"
 #include "EF_relachement.h"
+#include "EF_materiaux.h"
 #include "EF_noeuds.h"
 #include "EF_calculs.h"
 #include "EF_charge_noeud.h"
@@ -172,10 +173,10 @@ int main(int argc, char *argv[])
     BUG(EF_relachement_ajout(projet, "Partiel", EF_RELACHEMENT_BLOQUE, NULL, EF_RELACHEMENT_ELASTIQUE_LINEAIRE, ry_d, EF_RELACHEMENT_ELASTIQUE_LINEAIRE, rz_d, EF_RELACHEMENT_BLOQUE, NULL, EF_RELACHEMENT_ELASTIQUE_LINEAIRE, ry_f, EF_RELACHEMENT_ELASTIQUE_LINEAIRE, rz_f), -1);
     
     // Création de l'élément en béton
-    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, EF_sections_cherche_nom(projet, "Rect_0.3*0.5ht", TRUE), _1992_1_1_materiaux_cherche_nom(projet, "B25", TRUE), 0, 1, NULL, 1), -1);
-    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, EF_sections_cherche_nom(projet, "T_1.00*0.20*0.10*0.50", TRUE), _1992_1_1_materiaux_cherche_nom(projet, "B25", TRUE), 1, 2, EF_relachement_cherche_nom(projet, "Articulation", TRUE), 2), -1);
-    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, EF_sections_cherche_nom(projet, "Carre_0.50", TRUE), _1992_1_1_materiaux_cherche_nom(projet, "B25", TRUE), 2, 3, NULL, 3), -1);
-    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, EF_sections_cherche_nom(projet, "Circulaire_0.05", TRUE), _1992_1_1_materiaux_cherche_nom(projet, "B25", TRUE), 3, 4, NULL, 0), -1);
+    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, EF_sections_cherche_nom(projet, "Rect_0.3*0.5ht", TRUE), EF_materiaux_cherche_nom(projet, "B25", TRUE), 0, 1, NULL, 1), -1);
+    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, EF_sections_cherche_nom(projet, "T_1.00*0.20*0.10*0.50", TRUE), EF_materiaux_cherche_nom(projet, "B25", TRUE), 1, 2, EF_relachement_cherche_nom(projet, "Articulation", TRUE), 2), -1);
+    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, EF_sections_cherche_nom(projet, "Carre_0.50", TRUE), EF_materiaux_cherche_nom(projet, "B25", TRUE), 2, 3, NULL, 3), -1);
+    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, EF_sections_cherche_nom(projet, "Circulaire_0.05", TRUE), EF_materiaux_cherche_nom(projet, "B25", TRUE), 3, 4, NULL, 0), -1);
     
     // Ajout de l'action ponctuelle
 /*    BUG(tmp1 = common_selection_renvoie_numeros("1;3-5"), -1);

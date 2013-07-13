@@ -31,6 +31,7 @@
 #include "common_gtk.h"
 #include "common_selection.h"
 #include "common_text.h"
+#include "EF_materiaux.h"
 #include "EF_noeuds.h"
 #include "EF_relachement.h"
 #include "EF_sections.h"
@@ -211,7 +212,7 @@ void EF_gtk_barres_edit_materiau(GtkCellRendererText *cell, const gchar *path_st
     gtk_tree_model_get_iter_from_string(model, &iter, path_string);
     gtk_tree_model_get(model, &iter, 0, &barre, -1);
     
-    BUG(materiau = _1992_1_1_materiaux_cherche_nom(projet, new_text, TRUE), );
+    BUG(materiau = EF_materiaux_cherche_nom(projet, new_text, TRUE), );
     BUG(_1992_1_1_barres_change_materiau(barre, materiau, projet), );
     
     return;
