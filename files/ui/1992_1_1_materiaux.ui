@@ -200,102 +200,102 @@
             </object>
         </child>
     </object>
-    <object class="GtkTextTagTable" id="_1992_1_1_materiaux_beton_tag_table">
+    <object class="GtkTextTagTable" id="_1992_1_1_materiaux_tag_table">
         <child type="tag">
-            <object class="GtkTextTag" id="_1992_1_1_materiaux_beton_tag_mauvais">
+            <object class="GtkTextTag" id="_1992_1_1_materiaux_tag_mauvais">
                 <property name="name">mauvais</property>
                 <property name="foreground">red</property>
                 <property name="weight">800</property>
             </object>
         </child>
         <child type="tag">
-            <object class="GtkTextTag" id="_1992_1_1_materiaux_beton_tag_ok">
+            <object class="GtkTextTag" id="_1992_1_1_materiaux_tag_ok">
                 <property name="name">OK</property>
                 <property name="foreground">black</property>
                 <property name="weight">400</property>
             </object>
         </child>
     </object>
-    <object class="GtkTextBuffer" id="_1992_1_1_materiaux_beton_buffer_nom">
-        <property name="tag-table">_1992_1_1_materiaux_beton_tag_table</property>
+    <object class="GtkTextBuffer" id="_1992_1_1_materiaux_buffer_nom">
+        <property name="tag-table">_1992_1_1_materiaux_tag_table</property>
         <signal name="changed" handler="_1992_1_1_gtk_materiaux_check"/>
     </object>
-    <object class="GtkTextBuffer" id="_1992_1_1_materiaux_beton_buffer_fck">
-        <property name="tag-table">_1992_1_1_materiaux_beton_tag_table</property>
+    <object class="GtkTextBuffer" id="_1992_1_1_materiaux_buffer_fck">
+        <property name="tag-table">_1992_1_1_materiaux_tag_table</property>
         <property name="text">0</property>
         <signal name="changed" handler="_1992_1_1_gtk_materiaux_check"/>
     </object>
-    <object class="GtkTextBuffer" id="_1992_1_1_materiaux_beton_buffer_fck_cube">
-        <property name="tag-table">_1992_1_1_materiaux_beton_tag_table</property>
+    <object class="GtkTextBuffer" id="_1992_1_1_materiaux_buffer_fck_cube">
+        <property name="tag-table">_1992_1_1_materiaux_tag_table</property>
         <property name="text">0</property>
         <signal name="changed" handler="_1992_1_1_gtk_materiaux_check"/>
     </object>
-    <object class="GtkTextBuffer" id="_1992_1_1_materiaux_beton_buffer_fcm">
-        <property name="tag-table">_1992_1_1_materiaux_beton_tag_table</property>
+    <object class="GtkTextBuffer" id="_1992_1_1_materiaux_buffer_fcm">
+        <property name="tag-table">_1992_1_1_materiaux_tag_table</property>
         <property name="text">0</property>
         <signal name="changed" handler="_1992_1_1_gtk_materiaux_check"/>
     </object>
-    <object class="GtkTextBuffer" id="_1992_1_1_materiaux_beton_buffer_fctm">
-        <property name="tag-table">_1992_1_1_materiaux_beton_tag_table</property>
+    <object class="GtkTextBuffer" id="_1992_1_1_materiaux_buffer_fctm">
+        <property name="tag-table">_1992_1_1_materiaux_tag_table</property>
         <property name="text">0</property>
         <signal name="changed" handler="_1992_1_1_gtk_materiaux_check"/>
     </object>
-    <object class="GtkTextBuffer" id="_1992_1_1_materiaux_beton_buffer_fctk_0_05">
-        <property name="tag-table">_1992_1_1_materiaux_beton_tag_table</property>
+    <object class="GtkTextBuffer" id="_1992_1_1_materiaux_buffer_fctk_0_05">
+        <property name="tag-table">_1992_1_1_materiaux_tag_table</property>
         <property name="text">0</property>
         <signal name="changed" handler="_1992_1_1_gtk_materiaux_check"/>
     </object>
-    <object class="GtkTextBuffer" id="_1992_1_1_materiaux_beton_buffer_fctk_0_95">
-        <property name="tag-table">_1992_1_1_materiaux_beton_tag_table</property>
+    <object class="GtkTextBuffer" id="_1992_1_1_materiaux_buffer_fctk_0_95">
+        <property name="tag-table">_1992_1_1_materiaux_tag_table</property>
         <property name="text">0</property>
         <signal name="changed" handler="_1992_1_1_gtk_materiaux_check"/>
     </object>
-    <object class="GtkTextBuffer" id="_1992_1_1_materiaux_beton_buffer_Ecm">
-        <property name="tag-table">_1992_1_1_materiaux_beton_tag_table</property>
+    <object class="GtkTextBuffer" id="_1992_1_1_materiaux_buffer_Ecm">
+        <property name="tag-table">_1992_1_1_materiaux_tag_table</property>
         <property name="text">0</property>
         <signal name="changed" handler="_1992_1_1_gtk_materiaux_check"/>
     </object>
-    <object class="GtkTextBuffer" id="_1992_1_1_materiaux_beton_buffer_ec1">
-        <property name="tag-table">_1992_1_1_materiaux_beton_tag_table</property>
+    <object class="GtkTextBuffer" id="_1992_1_1_materiaux_buffer_ec1">
+        <property name="tag-table">_1992_1_1_materiaux_tag_table</property>
         <property name="text">0</property>
         <signal name="changed" handler="_1992_1_1_gtk_materiaux_check"/>
     </object>
-    <object class="GtkTextBuffer" id="_1992_1_1_materiaux_beton_buffer_ecu1">
-        <property name="tag-table">_1992_1_1_materiaux_beton_tag_table</property>
+    <object class="GtkTextBuffer" id="_1992_1_1_materiaux_buffer_ecu1">
+        <property name="tag-table">_1992_1_1_materiaux_tag_table</property>
         <property name="text">0</property>
         <signal name="changed" handler="_1992_1_1_gtk_materiaux_check"/>
     </object>
-    <object class="GtkTextBuffer" id="_1992_1_1_materiaux_beton_buffer_ec2">
-        <property name="tag-table">_1992_1_1_materiaux_beton_tag_table</property>
+    <object class="GtkTextBuffer" id="_1992_1_1_materiaux_buffer_ec2">
+        <property name="tag-table">_1992_1_1_materiaux_tag_table</property>
         <property name="text">0</property>
         <signal name="changed" handler="_1992_1_1_gtk_materiaux_check"/>
     </object>
-    <object class="GtkTextBuffer" id="_1992_1_1_materiaux_beton_buffer_ecu2">
-        <property name="tag-table">_1992_1_1_materiaux_beton_tag_table</property>
+    <object class="GtkTextBuffer" id="_1992_1_1_materiaux_buffer_ecu2">
+        <property name="tag-table">_1992_1_1_materiaux_tag_table</property>
         <property name="text">0</property>
         <signal name="changed" handler="_1992_1_1_gtk_materiaux_check"/>
     </object>
-    <object class="GtkTextBuffer" id="_1992_1_1_materiaux_beton_buffer_n">
-        <property name="tag-table">_1992_1_1_materiaux_beton_tag_table</property>
+    <object class="GtkTextBuffer" id="_1992_1_1_materiaux_buffer_n">
+        <property name="tag-table">_1992_1_1_materiaux_tag_table</property>
         <property name="text">0</property>
         <signal name="changed" handler="_1992_1_1_gtk_materiaux_check"/>
     </object>
-    <object class="GtkTextBuffer" id="_1992_1_1_materiaux_beton_buffer_ec3">
-        <property name="tag-table">_1992_1_1_materiaux_beton_tag_table</property>
+    <object class="GtkTextBuffer" id="_1992_1_1_materiaux_buffer_ec3">
+        <property name="tag-table">_1992_1_1_materiaux_tag_table</property>
         <property name="text">0</property>
         <signal name="changed" handler="_1992_1_1_gtk_materiaux_check"/>
     </object>
-    <object class="GtkTextBuffer" id="_1992_1_1_materiaux_beton_buffer_ecu3">
-        <property name="tag-table">_1992_1_1_materiaux_beton_tag_table</property>
+    <object class="GtkTextBuffer" id="_1992_1_1_materiaux_buffer_ecu3">
+        <property name="tag-table">_1992_1_1_materiaux_tag_table</property>
         <property name="text">0</property>
         <signal name="changed" handler="_1992_1_1_gtk_materiaux_check"/>
     </object>
-    <object class="GtkTextBuffer" id="_1992_1_1_materiaux_beton_buffer_nu">
-        <property name="tag-table">_1992_1_1_materiaux_beton_tag_table</property>
+    <object class="GtkTextBuffer" id="_1992_1_1_materiaux_buffer_nu">
+        <property name="tag-table">_1992_1_1_materiaux_tag_table</property>
         <property name="text">0</property>
         <signal name="changed" handler="_1992_1_1_gtk_materiaux_check"/>
     </object>
-    <object id="_1992_1_1_materiaux_beton_window" class="GtkWindow">
+    <object id="_1992_1_1_materiaux_window" class="GtkWindow">
         <property name="visible">True</property>
         <property name="window-position">GTK_WIN_POS_CENTER</property>
         <property name="default-width">400</property>
@@ -303,7 +303,7 @@
         <signal name="key-press-event" handler="_1992_1_1_gtk_materiaux_window_key_press"/>
         <signal name="destroy" handler="_1992_1_1_gtk_materiaux_window_destroy"/>
         <child>
-            <object class="GtkGrid" id="_1992_1_1_materiaux_beton_grille_principale">
+            <object class="GtkGrid" id="_1992_1_1_materiaux_grille_principale">
                 <property name="visible">True</property>
                 <property name="border-width">12</property>
                 <property name="column-spacing">12</property>
@@ -319,13 +319,13 @@
                                 <property name="visible">True</property>
                                 <property name="expand">True</property>
                                 <child>
-                                    <object class="GtkGrid" id="_1992_1_1_materiaux_beton_grille_secondaire">
+                                    <object class="GtkGrid" id="_1992_1_1_materiaux_grille_secondaire">
                                         <property name="visible">True</property>
                                         <property name="border-width">0</property>
                                         <property name="column-spacing">12</property>
                                         <property name="row-spacing">12</property>
                                         <child>
-                                            <object class="GtkLabel" id="_1992_1_1_materiaux_beton_label_nom">
+                                            <object class="GtkLabel" id="_1992_1_1_materiaux_label_nom">
                                                 <property name="label" translatable="yes">Nom :</property>
                                                 <property name="visible">True</property>
                                             </object>
@@ -335,18 +335,18 @@
                                             </packing>
                                         </child>
                                         <child>
-                                            <object class="GtkScrolledWindow" id="_1992_1_1_materiaux_beton_scrolledwindow_nom">
+                                            <object class="GtkScrolledWindow" id="_1992_1_1_materiaux_scrolledwindow_nom">
                                                 <property name="visible">True</property>
                                                 <property name="expand">True</property>
                                                 <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
                                                 <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
                                                 <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
                                                 <child>
-                                                    <object class="GtkTextView" id="_1992_1_1_materiaux_beton_textview_nom">
+                                                    <object class="GtkTextView" id="_1992_1_1_materiaux_textview_nom">
                                                         <property name="visible">True</property>
                                                         <property name="accepts-tab">False</property>
                                                         <property name="wrap-mode">GTK_WRAP_WORD</property>
-                                                        <property name="buffer">_1992_1_1_materiaux_beton_buffer_nom</property>
+                                                        <property name="buffer">_1992_1_1_materiaux_buffer_nom</property>
                                                     </object>
                                                 </child>
                                             </object>
@@ -356,7 +356,7 @@
                                             </packing>
                                         </child>
                                         <child>
-                                            <object class="GtkLabel" id="_1992_1_1_materiaux_beton_label_fck">
+                                            <object class="GtkLabel" id="_1992_1_1_materiaux_label_fck">
                                                 <property name="label">f&lt;sub&gt;ck&lt;/sub&gt; [MPa] :</property>
                                                 <property name="use-markup">True</property>
                                                 <property name="visible">True</property>
@@ -367,18 +367,18 @@
                                             </packing>
                                         </child>
                                         <child>
-                                            <object class="GtkScrolledWindow" id="_1992_1_1_materiaux_beton_scrolledwindow_fck">
+                                            <object class="GtkScrolledWindow" id="_1992_1_1_materiaux_scrolledwindow_fck">
                                                 <property name="visible">True</property>
                                                 <property name="expand">True</property>
                                                 <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
                                                 <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
                                                 <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
                                                 <child>
-                                                    <object class="GtkTextView" id="_1992_1_1_materiaux_beton_textview_fck">
+                                                    <object class="GtkTextView" id="_1992_1_1_materiaux_textview_fck">
                                                         <property name="visible">True</property>
                                                         <property name="accepts-tab">False</property>
                                                         <property name="wrap-mode">GTK_WRAP_CHAR</property>
-                                                        <property name="buffer">_1992_1_1_materiaux_beton_buffer_fck</property>
+                                                        <property name="buffer">_1992_1_1_materiaux_buffer_fck</property>
                                                     </object>
                                                 </child>
                                             </object>
@@ -388,7 +388,7 @@
                                             </packing>
                                         </child>
                                         <child>
-                                            <object class="GtkLabel" id="_1992_1_1_materiaux_beton_label_fck_cube">
+                                            <object class="GtkLabel" id="_1992_1_1_materiaux_label_fck_cube">
                                                 <property name="label">f&lt;sub&gt;ck,cube&lt;/sub&gt; [MPa] :</property>
                                                 <property name="use-markup">True</property>
                                                 <property name="visible">False</property>
@@ -399,18 +399,18 @@
                                             </packing>
                                         </child>
                                         <child>
-                                            <object class="GtkScrolledWindow" id="_1992_1_1_materiaux_beton_scrolledwindow_fck_cube">
+                                            <object class="GtkScrolledWindow" id="_1992_1_1_materiaux_scrolledwindow_fck_cube">
                                                 <property name="visible">False</property>
                                                 <property name="expand">True</property>
                                                 <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
                                                 <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
                                                 <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
                                                 <child>
-                                                    <object class="GtkTextView" id="_1992_1_1_materiaux_beton_textview_fck_cube">
+                                                    <object class="GtkTextView" id="_1992_1_1_materiaux_textview_fck_cube">
                                                         <property name="visible">True</property>
                                                         <property name="accepts-tab">False</property>
                                                         <property name="wrap-mode">GTK_WRAP_CHAR</property>
-                                                        <property name="buffer">_1992_1_1_materiaux_beton_buffer_fck_cube</property>
+                                                        <property name="buffer">_1992_1_1_materiaux_buffer_fck_cube</property>
                                                     </object>
                                                 </child>
                                             </object>
@@ -420,7 +420,7 @@
                                             </packing>
                                         </child>
                                         <child>
-                                            <object class="GtkLabel" id="_1992_1_1_materiaux_beton_label_fcm">
+                                            <object class="GtkLabel" id="_1992_1_1_materiaux_label_fcm">
                                                 <property name="label">f&lt;sub&gt;cm&lt;/sub&gt; [MPa] :</property>
                                                 <property name="use-markup">True</property>
                                                 <property name="visible">False</property>
@@ -431,18 +431,18 @@
                                             </packing>
                                         </child>
                                         <child>
-                                            <object class="GtkScrolledWindow" id="_1992_1_1_materiaux_beton_scrolledwindow_fcm">
+                                            <object class="GtkScrolledWindow" id="_1992_1_1_materiaux_scrolledwindow_fcm">
                                                 <property name="visible">False</property>
                                                 <property name="expand">True</property>
                                                 <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
                                                 <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
                                                 <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
                                                 <child>
-                                                    <object class="GtkTextView" id="_1992_1_1_materiaux_beton_textview_fcm">
+                                                    <object class="GtkTextView" id="_1992_1_1_materiaux_textview_fcm">
                                                         <property name="visible">True</property>
                                                         <property name="accepts-tab">False</property>
                                                         <property name="wrap-mode">GTK_WRAP_CHAR</property>
-                                                        <property name="buffer">_1992_1_1_materiaux_beton_buffer_fcm</property>
+                                                        <property name="buffer">_1992_1_1_materiaux_buffer_fcm</property>
                                                     </object>
                                                 </child>
                                             </object>
@@ -452,7 +452,7 @@
                                             </packing>
                                         </child>
                                         <child>
-                                            <object class="GtkLabel" id="_1992_1_1_materiaux_beton_label_fctm">
+                                            <object class="GtkLabel" id="_1992_1_1_materiaux_label_fctm">
                                                 <property name="label">f&lt;sub&gt;ctm&lt;/sub&gt; [MPa] :</property>
                                                 <property name="use-markup">True</property>
                                                 <property name="visible">False</property>
@@ -463,18 +463,18 @@
                                             </packing>
                                         </child>
                                         <child>
-                                            <object class="GtkScrolledWindow" id="_1992_1_1_materiaux_beton_scrolledwindow_fctm">
+                                            <object class="GtkScrolledWindow" id="_1992_1_1_materiaux_scrolledwindow_fctm">
                                                 <property name="visible">False</property>
                                                 <property name="expand">True</property>
                                                 <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
                                                 <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
                                                 <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
                                                 <child>
-                                                    <object class="GtkTextView" id="_1992_1_1_materiaux_beton_textview_fctm">
+                                                    <object class="GtkTextView" id="_1992_1_1_materiaux_textview_fctm">
                                                         <property name="visible">True</property>
                                                         <property name="accepts-tab">False</property>
                                                         <property name="wrap-mode">GTK_WRAP_CHAR</property>
-                                                        <property name="buffer">_1992_1_1_materiaux_beton_buffer_fctm</property>
+                                                        <property name="buffer">_1992_1_1_materiaux_buffer_fctm</property>
                                                     </object>
                                                 </child>
                                             </object>
@@ -484,7 +484,7 @@
                                             </packing>
                                         </child>
                                         <child>
-                                            <object class="GtkLabel" id="_1992_1_1_materiaux_beton_label_fctk_0_05">
+                                            <object class="GtkLabel" id="_1992_1_1_materiaux_label_fctk_0_05">
                                                 <property name="label">f&lt;sub&gt;ctk,0.05&lt;/sub&gt; [MPa] :</property>
                                                 <property name="use-markup">True</property>
                                                 <property name="visible">False</property>
@@ -495,18 +495,18 @@
                                             </packing>
                                         </child>
                                         <child>
-                                            <object class="GtkScrolledWindow" id="_1992_1_1_materiaux_beton_scrolledwindow_fctk_0_05">
+                                            <object class="GtkScrolledWindow" id="_1992_1_1_materiaux_scrolledwindow_fctk_0_05">
                                                 <property name="visible">False</property>
                                                 <property name="expand">True</property>
                                                 <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
                                                 <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
                                                 <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
                                                 <child>
-                                                    <object class="GtkTextView" id="_1992_1_1_materiaux_beton_textview_fctk_0_05">
+                                                    <object class="GtkTextView" id="_1992_1_1_materiaux_textview_fctk_0_05">
                                                         <property name="visible">True</property>
                                                         <property name="accepts-tab">False</property>
                                                         <property name="wrap-mode">GTK_WRAP_CHAR</property>
-                                                        <property name="buffer">_1992_1_1_materiaux_beton_buffer_fctk_0_05</property>
+                                                        <property name="buffer">_1992_1_1_materiaux_buffer_fctk_0_05</property>
                                                     </object>
                                                 </child>
                                             </object>
@@ -516,7 +516,7 @@
                                             </packing>
                                         </child>
                                         <child>
-                                            <object class="GtkLabel" id="_1992_1_1_materiaux_beton_label_fctk_0_95">
+                                            <object class="GtkLabel" id="_1992_1_1_materiaux_label_fctk_0_95">
                                                 <property name="label">f&lt;sub&gt;ctk,0.95&lt;/sub&gt; [MPa] :</property>
                                                 <property name="use-markup">True</property>
                                                 <property name="visible">False</property>
@@ -527,18 +527,18 @@
                                             </packing>
                                         </child>
                                         <child>
-                                            <object class="GtkScrolledWindow" id="_1992_1_1_materiaux_beton_scrolledwindow_fctk_0_95">
+                                            <object class="GtkScrolledWindow" id="_1992_1_1_materiaux_scrolledwindow_fctk_0_95">
                                                 <property name="visible">False</property>
                                                 <property name="expand">True</property>
                                                 <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
                                                 <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
                                                 <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
                                                 <child>
-                                                    <object class="GtkTextView" id="_1992_1_1_materiaux_beton_textview_fctk_0_95">
+                                                    <object class="GtkTextView" id="_1992_1_1_materiaux_textview_fctk_0_95">
                                                         <property name="visible">True</property>
                                                         <property name="accepts-tab">False</property>
                                                         <property name="wrap-mode">GTK_WRAP_CHAR</property>
-                                                        <property name="buffer">_1992_1_1_materiaux_beton_buffer_fctk_0_95</property>
+                                                        <property name="buffer">_1992_1_1_materiaux_buffer_fctk_0_95</property>
                                                     </object>
                                                 </child>
                                             </object>
@@ -548,7 +548,7 @@
                                             </packing>
                                         </child>
                                         <child>
-                                            <object class="GtkLabel" id="_1992_1_1_materiaux_beton_label_Ecm">
+                                            <object class="GtkLabel" id="_1992_1_1_materiaux_label_Ecm">
                                                 <property name="label">E&lt;sub&gt;cm&lt;/sub&gt; [GPa] :</property>
                                                 <property name="use-markup">True</property>
                                                 <property name="visible">False</property>
@@ -559,18 +559,18 @@
                                             </packing>
                                         </child>
                                         <child>
-                                            <object class="GtkScrolledWindow" id="_1992_1_1_materiaux_beton_scrolledwindow_Ecm">
+                                            <object class="GtkScrolledWindow" id="_1992_1_1_materiaux_scrolledwindow_Ecm">
                                                 <property name="visible">False</property>
                                                 <property name="expand">True</property>
                                                 <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
                                                 <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
                                                 <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
                                                 <child>
-                                                    <object class="GtkTextView" id="_1992_1_1_materiaux_beton_textview_Ecm">
+                                                    <object class="GtkTextView" id="_1992_1_1_materiaux_textview_Ecm">
                                                         <property name="visible">True</property>
                                                         <property name="accepts-tab">False</property>
                                                         <property name="wrap-mode">GTK_WRAP_CHAR</property>
-                                                        <property name="buffer">_1992_1_1_materiaux_beton_buffer_Ecm</property>
+                                                        <property name="buffer">_1992_1_1_materiaux_buffer_Ecm</property>
                                                     </object>
                                                 </child>
                                             </object>
@@ -580,7 +580,7 @@
                                             </packing>
                                         </child>
                                         <child>
-                                            <object class="GtkLabel" id="_1992_1_1_materiaux_beton_label_ec1">
+                                            <object class="GtkLabel" id="_1992_1_1_materiaux_label_ec1">
                                                 <property name="label">&#949;&lt;sub&gt;c1&lt;/sub&gt; [&#8240;] :</property>
                                                 <property name="use-markup">True</property>
                                                 <property name="visible">False</property>
@@ -591,18 +591,18 @@
                                             </packing>
                                         </child>
                                         <child>
-                                            <object class="GtkScrolledWindow" id="_1992_1_1_materiaux_beton_scrolledwindow_ec1">
+                                            <object class="GtkScrolledWindow" id="_1992_1_1_materiaux_scrolledwindow_ec1">
                                                 <property name="visible">False</property>
                                                 <property name="expand">True</property>
                                                 <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
                                                 <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
                                                 <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
                                                 <child>
-                                                    <object class="GtkTextView" id="_1992_1_1_materiaux_beton_textview_ec1">
+                                                    <object class="GtkTextView" id="_1992_1_1_materiaux_textview_ec1">
                                                         <property name="visible">True</property>
                                                         <property name="accepts-tab">False</property>
                                                         <property name="wrap-mode">GTK_WRAP_CHAR</property>
-                                                        <property name="buffer">_1992_1_1_materiaux_beton_buffer_ec1</property>
+                                                        <property name="buffer">_1992_1_1_materiaux_buffer_ec1</property>
                                                     </object>
                                                 </child>
                                             </object>
@@ -612,7 +612,7 @@
                                             </packing>
                                         </child>
                                         <child>
-                                            <object class="GtkLabel" id="_1992_1_1_materiaux_beton_label_ecu1">
+                                            <object class="GtkLabel" id="_1992_1_1_materiaux_label_ecu1">
                                                 <property name="label">&#949;&lt;sub&gt;cu1&lt;/sub&gt; [&#8240;] :</property>
                                                 <property name="use-markup">True</property>
                                                 <property name="visible">False</property>
@@ -623,18 +623,18 @@
                                             </packing>
                                         </child>
                                         <child>
-                                            <object class="GtkScrolledWindow" id="_1992_1_1_materiaux_beton_scrolledwindow_ecu1">
+                                            <object class="GtkScrolledWindow" id="_1992_1_1_materiaux_scrolledwindow_ecu1">
                                                 <property name="visible">False</property>
                                                 <property name="expand">True</property>
                                                 <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
                                                 <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
                                                 <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
                                                 <child>
-                                                    <object class="GtkTextView" id="_1992_1_1_materiaux_beton_textview_ecu1">
+                                                    <object class="GtkTextView" id="_1992_1_1_materiaux_textview_ecu1">
                                                         <property name="visible">True</property>
                                                         <property name="accepts-tab">False</property>
                                                         <property name="wrap-mode">GTK_WRAP_CHAR</property>
-                                                        <property name="buffer">_1992_1_1_materiaux_beton_buffer_ecu1</property>
+                                                        <property name="buffer">_1992_1_1_materiaux_buffer_ecu1</property>
                                                     </object>
                                                 </child>
                                             </object>
@@ -644,7 +644,7 @@
                                             </packing>
                                         </child>
                                         <child>
-                                            <object class="GtkLabel" id="_1992_1_1_materiaux_beton_label_ec2">
+                                            <object class="GtkLabel" id="_1992_1_1_materiaux_label_ec2">
                                                 <property name="label">&#949;&lt;sub&gt;c2&lt;/sub&gt; [&#8240;] :</property>
                                                 <property name="use-markup">True</property>
                                                 <property name="visible">False</property>
@@ -655,18 +655,18 @@
                                             </packing>
                                         </child>
                                         <child>
-                                            <object class="GtkScrolledWindow" id="_1992_1_1_materiaux_beton_scrolledwindow_ec2">
+                                            <object class="GtkScrolledWindow" id="_1992_1_1_materiaux_scrolledwindow_ec2">
                                                 <property name="visible">False</property>
                                                 <property name="expand">True</property>
                                                 <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
                                                 <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
                                                 <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
                                                 <child>
-                                                    <object class="GtkTextView" id="_1992_1_1_materiaux_beton_textview_ec2">
+                                                    <object class="GtkTextView" id="_1992_1_1_materiaux_textview_ec2">
                                                         <property name="visible">True</property>
                                                         <property name="accepts-tab">False</property>
                                                         <property name="wrap-mode">GTK_WRAP_CHAR</property>
-                                                        <property name="buffer">_1992_1_1_materiaux_beton_buffer_ec2</property>
+                                                        <property name="buffer">_1992_1_1_materiaux_buffer_ec2</property>
                                                     </object>
                                                 </child>
                                             </object>
@@ -676,7 +676,7 @@
                                             </packing>
                                         </child>
                                         <child>
-                                            <object class="GtkLabel" id="_1992_1_1_materiaux_beton_label_ecu2">
+                                            <object class="GtkLabel" id="_1992_1_1_materiaux_label_ecu2">
                                                 <property name="label">&#949;&lt;sub&gt;cu2&lt;/sub&gt; [&#8240;] :</property>
                                                 <property name="use-markup">True</property>
                                                 <property name="visible">False</property>
@@ -687,18 +687,18 @@
                                             </packing>
                                         </child>
                                         <child>
-                                            <object class="GtkScrolledWindow" id="_1992_1_1_materiaux_beton_scrolledwindow_ecu2">
+                                            <object class="GtkScrolledWindow" id="_1992_1_1_materiaux_scrolledwindow_ecu2">
                                                 <property name="visible">False</property>
                                                 <property name="expand">True</property>
                                                 <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
                                                 <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
                                                 <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
                                                 <child>
-                                                    <object class="GtkTextView" id="_1992_1_1_materiaux_beton_textview_ecu2">
+                                                    <object class="GtkTextView" id="_1992_1_1_materiaux_textview_ecu2">
                                                         <property name="visible">True</property>
                                                         <property name="accepts-tab">False</property>
                                                         <property name="wrap-mode">GTK_WRAP_CHAR</property>
-                                                        <property name="buffer">_1992_1_1_materiaux_beton_buffer_ecu2</property>
+                                                        <property name="buffer">_1992_1_1_materiaux_buffer_ecu2</property>
                                                     </object>
                                                 </child>
                                             </object>
@@ -708,7 +708,7 @@
                                             </packing>
                                         </child>
                                         <child>
-                                            <object class="GtkLabel" id="_1992_1_1_materiaux_beton_label_n">
+                                            <object class="GtkLabel" id="_1992_1_1_materiaux_label_n">
                                                 <property name="label">n [] :</property>
                                                 <property name="use-markup">True</property>
                                                 <property name="visible">False</property>
@@ -719,18 +719,18 @@
                                             </packing>
                                         </child>
                                         <child>
-                                            <object class="GtkScrolledWindow" id="_1992_1_1_materiaux_beton_scrolledwindow_n">
+                                            <object class="GtkScrolledWindow" id="_1992_1_1_materiaux_scrolledwindow_n">
                                                 <property name="visible">False</property>
                                                 <property name="expand">True</property>
                                                 <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
                                                 <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
                                                 <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
                                                 <child>
-                                                    <object class="GtkTextView" id="_1992_1_1_materiaux_beton_textview_n">
+                                                    <object class="GtkTextView" id="_1992_1_1_materiaux_textview_n">
                                                         <property name="visible">True</property>
                                                         <property name="accepts-tab">False</property>
                                                         <property name="wrap-mode">GTK_WRAP_CHAR</property>
-                                                        <property name="buffer">_1992_1_1_materiaux_beton_buffer_n</property>
+                                                        <property name="buffer">_1992_1_1_materiaux_buffer_n</property>
                                                     </object>
                                                 </child>
                                             </object>
@@ -740,7 +740,7 @@
                                             </packing>
                                         </child>
                                         <child>
-                                            <object class="GtkLabel" id="_1992_1_1_materiaux_beton_label_ec3">
+                                            <object class="GtkLabel" id="_1992_1_1_materiaux_label_ec3">
                                                 <property name="label">&#949;&lt;sub&gt;c3&lt;/sub&gt; [&#8240;] :</property>
                                                 <property name="use-markup">True</property>
                                                 <property name="visible">False</property>
@@ -751,18 +751,18 @@
                                             </packing>
                                         </child>
                                         <child>
-                                            <object class="GtkScrolledWindow" id="_1992_1_1_materiaux_beton_scrolledwindow_ec3">
+                                            <object class="GtkScrolledWindow" id="_1992_1_1_materiaux_scrolledwindow_ec3">
                                                 <property name="visible">False</property>
                                                 <property name="expand">True</property>
                                                 <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
                                                 <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
                                                 <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
                                                 <child>
-                                                    <object class="GtkTextView" id="_1992_1_1_materiaux_beton_textview_ec3">
+                                                    <object class="GtkTextView" id="_1992_1_1_materiaux_textview_ec3">
                                                         <property name="visible">True</property>
                                                         <property name="accepts-tab">False</property>
                                                         <property name="wrap-mode">GTK_WRAP_CHAR</property>
-                                                        <property name="buffer">_1992_1_1_materiaux_beton_buffer_ec3</property>
+                                                        <property name="buffer">_1992_1_1_materiaux_buffer_ec3</property>
                                                     </object>
                                                 </child>
                                             </object>
@@ -772,7 +772,7 @@
                                             </packing>
                                         </child>
                                         <child>
-                                            <object class="GtkLabel" id="_1992_1_1_materiaux_beton_label_ecu3">
+                                            <object class="GtkLabel" id="_1992_1_1_materiaux_label_ecu3">
                                                 <property name="label">&#949;&lt;sub&gt;cu3&lt;/sub&gt; [&#8240;] :</property>
                                                 <property name="use-markup">True</property>
                                                 <property name="visible">False</property>
@@ -783,18 +783,18 @@
                                             </packing>
                                         </child>
                                         <child>
-                                            <object class="GtkScrolledWindow" id="_1992_1_1_materiaux_beton_scrolledwindow_ecu3">
+                                            <object class="GtkScrolledWindow" id="_1992_1_1_materiaux_scrolledwindow_ecu3">
                                                 <property name="visible">False</property>
                                                 <property name="expand">True</property>
                                                 <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
                                                 <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
                                                 <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
                                                 <child>
-                                                    <object class="GtkTextView" id="_1992_1_1_materiaux_beton_textview_ecu3">
+                                                    <object class="GtkTextView" id="_1992_1_1_materiaux_textview_ecu3">
                                                         <property name="visible">True</property>
                                                         <property name="accepts-tab">False</property>
                                                         <property name="wrap-mode">GTK_WRAP_CHAR</property>
-                                                        <property name="buffer">_1992_1_1_materiaux_beton_buffer_ecu3</property>
+                                                        <property name="buffer">_1992_1_1_materiaux_buffer_ecu3</property>
                                                     </object>
                                                 </child>
                                             </object>
@@ -804,7 +804,7 @@
                                             </packing>
                                         </child>
                                         <child>
-                                            <object class="GtkLabel" id="_1992_1_1_materiaux_beton_label_nu">
+                                            <object class="GtkLabel" id="_1992_1_1_materiaux_label_nu">
                                                 <property name="label">&#957; [] :</property>
                                                 <property name="use-markup">True</property>
                                                 <property name="visible">False</property>
@@ -815,18 +815,18 @@
                                             </packing>
                                         </child>
                                         <child>
-                                            <object class="GtkScrolledWindow" id="_1992_1_1_materiaux_beton_scrolledwindow_nu">
+                                            <object class="GtkScrolledWindow" id="_1992_1_1_materiaux_scrolledwindow_nu">
                                                 <property name="visible">False</property>
                                                 <property name="expand">True</property>
                                                 <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
                                                 <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
                                                 <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
                                                 <child>
-                                                    <object class="GtkTextView" id="_1992_1_1_materiaux_beton_textview_nu">
+                                                    <object class="GtkTextView" id="_1992_1_1_materiaux_textview_nu">
                                                         <property name="visible">True</property>
                                                         <property name="accepts-tab">False</property>
                                                         <property name="wrap-mode">GTK_WRAP_CHAR</property>
-                                                        <property name="buffer">_1992_1_1_materiaux_beton_buffer_nu</property>
+                                                        <property name="buffer">_1992_1_1_materiaux_buffer_nu</property>
                                                     </object>
                                                 </child>
                                             </object>
@@ -847,13 +847,13 @@
                     </packing>
                 </child>
                 <child>
-                    <object class="GtkButtonBox" id="_1992_1_1_materiaux_beton_personnalise">
+                    <object class="GtkButtonBox" id="_1992_1_1_materiaux_personnalise">
                         <property name="visible">True</property>
                         <property name="orientation">horizontal</property>
                         <property name="layout_style">start</property>
                         <property name="spacing">6</property>
                         <child>
-                            <object class="GtkMenuButton" id="_1992_1_1_materiaux_beton_personnalise_fck_cube">
+                            <object class="GtkMenuButton" id="_1992_1_1_materiaux_personnalise_fck_cube">
                                 <property name="visible">True</property>
                                 <property name="label" translatable="yes">Personnaliser</property>
                                 <property name="popup">_1992_1_1_materiaux_personnaliser_menu</property>
@@ -870,13 +870,13 @@
                     </packing>
                 </child>
                 <child>
-                    <object class="GtkButtonBox" id="_1992_1_1_materiaux_beton_buttons">
+                    <object class="GtkButtonBox" id="_1992_1_1_materiaux_buttons">
                         <property name="visible">True</property>
                         <property name="orientation">horizontal</property>
                         <property name="layout_style">end</property>
                         <property name="spacing">6</property>
                         <child>
-                            <object class="GtkButton" id="_1992_1_1_materiaux_beton_button_annuler">
+                            <object class="GtkButton" id="_1992_1_1_materiaux_button_annuler">
                                 <property name="visible">True</property>
                                 <property name="use_stock">True</property>
                                 <property name="label">gtk-cancel</property>
@@ -888,7 +888,7 @@
                             </packing>
                         </child>
                         <child>
-                            <object class="GtkButton" id="_1992_1_1_materiaux_beton_button_add_edit">
+                            <object class="GtkButton" id="_1992_1_1_materiaux_button_add_edit">
                                 <property name="visible">True</property>
                                 <property name="sensitive">False</property>
                                 <property name="use_stock">True</property>

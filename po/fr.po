@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2013-07-14 20:34+0200\n"
+"POT-Creation-Date: 2013-07-14 21:10+0200\n"
 "PO-Revision-Date: 2013-07-14 20:50+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
@@ -129,9 +129,6 @@ msgstr "Largeur de la retombée [m] :"
 
 msgid "Hauteur de la retombée [m] :"
 msgstr "Hauteur de la retombée [m] :"
-
-msgid "Personnaliser"
-msgstr "Personnaliser"
 
 msgid "Barres"
 msgstr "Barres"
@@ -327,6 +324,9 @@ msgstr "Relâchement :"
 
 msgid "Nombre de divisions :"
 msgstr "Nombre de divisions :"
+
+msgid "Personnaliser"
+msgstr "Personnaliser"
 
 msgid "Options des combinaisons"
 msgstr "Options des combinaisons"
