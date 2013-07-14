@@ -372,7 +372,7 @@ void _1992_1_1_gtk_materiaux_ajouter_clicked(GtkButton *button, Projet *projet)
         return;
     
     // Création de la nouvelle charge ponctuelle au noeud
-    BUG(materiau = _1992_1_1_materiaux_ajout(projet, nom, fck), );
+    BUG(materiau = _1992_1_1_materiaux_ajout(projet, nom, common_math_f(fck, FLOTTANT_UTILISATEUR)), );
     BUG(_1992_1_1_materiaux_modif(projet, materiau, NULL, common_math_f(NAN, FLOTTANT_UTILISATEUR), common_math_f(fckcube, FLOTTANT_UTILISATEUR), common_math_f(fcm, FLOTTANT_UTILISATEUR), common_math_f(fctm, FLOTTANT_UTILISATEUR), common_math_f(fctk_0_05, FLOTTANT_UTILISATEUR), common_math_f(fctk_0_95, FLOTTANT_UTILISATEUR), common_math_f(ecm, FLOTTANT_UTILISATEUR), common_math_f(ec1, FLOTTANT_UTILISATEUR), common_math_f(ecu1, FLOTTANT_UTILISATEUR), common_math_f(ec2, FLOTTANT_UTILISATEUR), common_math_f(ecu2, FLOTTANT_UTILISATEUR), common_math_f(n, FLOTTANT_UTILISATEUR), common_math_f(ec3, FLOTTANT_UTILISATEUR), common_math_f(ecu3, FLOTTANT_UTILISATEUR), common_math_f(nu, FLOTTANT_UTILISATEUR)), );
     
     free(nom);

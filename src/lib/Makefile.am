@@ -2,7 +2,8 @@ DEFAULT_INCLUDES	=	-I../.. \
 						-Icommon \
 						-IEF \
 						-I1990 \
-						-I1992_1_1
+						-I1992_1_1 \
+						-I1993_1_1
 
 AUTOMAKE_OPTIONS = subdir-objects
 
@@ -29,6 +30,7 @@ libeurocodes_la_SOURCES =	1990/1990_action.c \
 							1990/1990_ponderations.c \
 							1992_1_1/1992_1_1_barres.c \
 							1992_1_1/1992_1_1_materiaux.c \
+							1993_1_1/1993_1_1_materiaux.c \
 							common/common_fonction.c \
 							common/common_math.c \
 							common/common_projet.c \
@@ -88,6 +90,7 @@ libeurocodes_la_HEADERS =	1990/1990_action.h \
 							1990/1990_ponderations.h \
 							1992_1_1/1992_1_1_barres.h \
 							1992_1_1/1992_1_1_materiaux.h \
+							1993_1_1/1993_1_1_materiaux.h \
 							common/common_erreurs.h \
 							common/common_fonction.h \
 							common/common_math.h \

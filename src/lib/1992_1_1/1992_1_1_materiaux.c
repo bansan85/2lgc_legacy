@@ -302,19 +302,18 @@ double _1992_1_1_materiaux_gnu(double ecm, double nu)
 }
 
 
-EF_Materiau* _1992_1_1_materiaux_ajout(Projet *projet, const char *nom, double fck)
+EF_Materiau* _1992_1_1_materiaux_ajout(Projet *projet, const char *nom, Flottant fck)
 /* Description : Ajoute un matériau en béton et calcule ses caractéristiques mécaniques.
  *               Les propriétés du béton sont déterminées conformément au tableau 3.1 de
  *               l'Eurocode 2-1-1 les valeurs de fckcube est déterminée par interpolation
  *               linéaire si nécessaire.
  * Paramètres : Projet *projet : la variable projet,
- *            : double fck : résistance à la compression du béton à 28 jours en MPa,
- *            : double nu : coefficient de poisson pour un béton non fissuré.
+ *            : const char *nom : nom du nouveau matériau,
+ *            : Flottant fck : résistance à la compression du béton à 28 jours en MPa.
  * Valeur renvoyée :
  *   Succès : pointeur vers le nouveau matériau.
  *   Échec : NULL :
  *             projet == NULL,
- *             projet->modele.materiaux == NULL,
  *             fck > 90.,
  *             en cas d'erreur d'allocation mémoire.
  */
@@ -324,7 +323,7 @@ EF_Materiau* _1992_1_1_materiaux_ajout(Projet *projet, const char *nom, double f
     
     // Trivial
     BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG((fck > ERREUR_RELATIVE_MIN) && (fck <= 90.*(1+ERREUR_RELATIVE_MIN)), NULL, gettext("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"));
+    BUGMSG((common_math_get(fck) > ERREUR_RELATIVE_MIN) && (common_math_get(fck) <= 90.*(1+ERREUR_RELATIVE_MIN)), NULL, gettext("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"));
     BUGMSG(materiau_nouveau = malloc(sizeof(EF_Materiau)), NULL, gettext("Erreur d'allocation mémoire.\n"));
     BUGMSG(data_beton = malloc(sizeof(Materiau_Beton)), NULL, gettext("Erreur d'allocation mémoire.\n"));
     
@@ -333,12 +332,12 @@ EF_Materiau* _1992_1_1_materiaux_ajout(Projet *projet, const char *nom, double f
     
     BUGMSG(materiau_nouveau->nom = g_strdup_printf("%s", nom), NULL, gettext("Erreur d'allocation mémoire.\n"));
     
-    data_beton->fck = common_math_f(fck*1000000., FLOTTANT_UTILISATEUR);
-    data_beton->fckcube = common_math_f(_1992_1_1_materiaux_fckcube(fck), FLOTTANT_ORDINATEUR);
+    data_beton->fck = common_math_f(common_math_get(fck)*1000000., fck.type);
+    data_beton->fckcube = common_math_f(_1992_1_1_materiaux_fckcube(common_math_get(fck)), FLOTTANT_ORDINATEUR);
     BUG(!isnan(common_math_get(data_beton->fckcube)), NULL);
-    data_beton->fcm = common_math_f(_1992_1_1_materiaux_fcm(fck), FLOTTANT_ORDINATEUR);
+    data_beton->fcm = common_math_f(_1992_1_1_materiaux_fcm(common_math_get(fck)), FLOTTANT_ORDINATEUR);
     BUG(!isnan(common_math_get(data_beton->fcm)), NULL);
-    data_beton->fctm = common_math_f(_1992_1_1_materiaux_fctm(fck, common_math_get(data_beton->fcm)/1000000.), FLOTTANT_ORDINATEUR);
+    data_beton->fctm = common_math_f(_1992_1_1_materiaux_fctm(common_math_get(fck), common_math_get(data_beton->fcm)/1000000.), FLOTTANT_ORDINATEUR);
     BUG(!isnan(common_math_get(data_beton->fctm)), NULL);
     data_beton->fctk_0_05 = common_math_f(_1992_1_1_materiaux_fctk_0_05(common_math_get(data_beton->fctm)/1000000.), FLOTTANT_ORDINATEUR);
     BUG(!isnan(common_math_get(data_beton->fctk_0_05)), NULL);
@@ -348,17 +347,17 @@ EF_Materiau* _1992_1_1_materiaux_ajout(Projet *projet, const char *nom, double f
     BUG(!isnan(common_math_get(data_beton->ecm)), NULL);
     data_beton->ec1 = common_math_f(_1992_1_1_materiaux_ec1(common_math_get(data_beton->fcm)/1000000.), FLOTTANT_ORDINATEUR);
     BUG(!isnan(common_math_get(data_beton->ec1)), NULL);
-    data_beton->ecu1 = common_math_f(_1992_1_1_materiaux_ecu1(common_math_get(data_beton->fcm)/1000000., fck), FLOTTANT_ORDINATEUR);
+    data_beton->ecu1 = common_math_f(_1992_1_1_materiaux_ecu1(common_math_get(data_beton->fcm)/1000000., common_math_get(fck)), FLOTTANT_ORDINATEUR);
     BUG(!isnan(common_math_get(data_beton->ecu1)), NULL);
-    data_beton->ec2 = common_math_f(_1992_1_1_materiaux_ec2(fck), FLOTTANT_ORDINATEUR);
+    data_beton->ec2 = common_math_f(_1992_1_1_materiaux_ec2(common_math_get(fck)), FLOTTANT_ORDINATEUR);
     BUG(!isnan(common_math_get(data_beton->ec2)), NULL);
-    data_beton->ecu2 = common_math_f(_1992_1_1_materiaux_ecu2(fck), FLOTTANT_ORDINATEUR);
+    data_beton->ecu2 = common_math_f(_1992_1_1_materiaux_ecu2(common_math_get(fck)), FLOTTANT_ORDINATEUR);
     BUG(!isnan(common_math_get(data_beton->ecu2)), NULL);
-    data_beton->ec3 = common_math_f(_1992_1_1_materiaux_ec3(fck), FLOTTANT_ORDINATEUR);
+    data_beton->ec3 = common_math_f(_1992_1_1_materiaux_ec3(common_math_get(fck)), FLOTTANT_ORDINATEUR);
     BUG(!isnan(common_math_get(data_beton->ec3)), NULL);
-    data_beton->ecu3 = common_math_f(_1992_1_1_materiaux_ecu3(fck), FLOTTANT_ORDINATEUR);
+    data_beton->ecu3 = common_math_f(_1992_1_1_materiaux_ecu3(common_math_get(fck)), FLOTTANT_ORDINATEUR);
     BUG(!isnan(common_math_get(data_beton->ecu3)), NULL);
-    data_beton->n = common_math_f(_1992_1_1_materiaux_n(fck), FLOTTANT_ORDINATEUR);
+    data_beton->n = common_math_f(_1992_1_1_materiaux_n(common_math_get(fck)), FLOTTANT_ORDINATEUR);
     BUG(!isnan(common_math_get(data_beton->n)), NULL);
     data_beton->nu = common_math_f(COEFFICIENT_NU_BETON, FLOTTANT_ORDINATEUR);
     

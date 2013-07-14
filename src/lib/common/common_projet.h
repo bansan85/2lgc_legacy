@@ -381,7 +381,8 @@ typedef enum __Type_Liste
 
 typedef enum __Type_Materiau
 {
-    MATERIAU_BETON
+    MATERIAU_BETON,
+    MATERIAU_ACIER
 } Type_Materiau;
 
 
@@ -621,6 +622,16 @@ typedef struct __Materiau_Beton
 } Materiau_Beton;
 
 
+typedef struct __Materiau_Acier
+{
+    Flottant    fy;
+    Flottant    fu;
+    
+    Flottant    e;
+    Flottant    nu;
+} Materiau_Acier;
+
+
 typedef struct __EF_Materiau
 {
     Type_Materiau   type;
@@ -678,6 +689,15 @@ typedef struct __Gtk_1992_1_1_Materiaux
     
     EF_Materiau *materiau;
 } Gtk_1992_1_1_Materiaux;
+
+
+typedef struct __Gtk_1993_1_1_Materiaux
+{
+    GtkBuilder  *builder;
+    GtkWidget   *window;
+    
+    EF_Materiau *materiau;
+} Gtk_1993_1_1_Materiaux;
 
 
 typedef struct __Gtk_Common_Informations
@@ -973,6 +993,7 @@ typedef struct __List_Gtk
     Gtk_EF_Sections_Circulaire  ef_sections_circulaire;
     Gtk_EF_Materiaux    ef_materiaux;
     Gtk_1992_1_1_Materiaux  _1992_1_1_materiaux;
+    Gtk_1993_1_1_Materiaux  _1993_1_1_materiaux;
     Gtk_EF_Relachements ef_relachements;
     Gtk_EF_Rapport      ef_rapport;
     Gtk_EF_Resultats    ef_resultats;

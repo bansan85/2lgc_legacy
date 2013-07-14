@@ -37,6 +37,7 @@
 #include "1990_action.h"
 #include "1992_1_1_barres.h"
 #include "1992_1_1_materiaux.h"
+#include "1993_1_1_materiaux.h"
 #include "EF_appuis.h"
 #include "EF_relachement.h"
 #include "EF_materiaux.h"
@@ -149,15 +150,16 @@ int main(int argc, char *argv[])
     BUG(EF_sections_circulaire_ajout(projet, "Circulaire_0.4", common_math_f(0.44123, FLOTTANT_UTILISATEUR)), -1);
     
     // Création du matériau béton
-    BUG(_1992_1_1_materiaux_ajout(projet, "B20", 20.), -1);
-    BUG(_1992_1_1_materiaux_ajout(projet, "B30", 30.), -1);
-    BUG(_1992_1_1_materiaux_ajout(projet, "B40", 40.), -1);
-    BUG(_1992_1_1_materiaux_ajout(projet, "B50", 50.), -1);
-    BUG(_1992_1_1_materiaux_ajout(projet, "B60", 60.), -1);
-    BUG(_1992_1_1_materiaux_ajout(projet, "B25", 25.), -1);
-    BUG(_1992_1_1_materiaux_ajout(projet, "B35", 35.), -1);
-    BUG(_1992_1_1_materiaux_ajout(projet, "B45", 45.), -1);
-    BUG(_1992_1_1_materiaux_ajout(projet, "B55", 55.), -1);
+    BUG(_1992_1_1_materiaux_ajout(projet, "B20", common_math_f(20., FLOTTANT_UTILISATEUR)), -1);
+    BUG(_1992_1_1_materiaux_ajout(projet, "B30", common_math_f(30., FLOTTANT_UTILISATEUR)), -1);
+    BUG(_1992_1_1_materiaux_ajout(projet, "B40", common_math_f(40., FLOTTANT_UTILISATEUR)), -1);
+    BUG(_1992_1_1_materiaux_ajout(projet, "B50", common_math_f(50., FLOTTANT_UTILISATEUR)), -1);
+    BUG(_1992_1_1_materiaux_ajout(projet, "B60", common_math_f(60., FLOTTANT_UTILISATEUR)), -1);
+    BUG(_1992_1_1_materiaux_ajout(projet, "B25", common_math_f(25., FLOTTANT_UTILISATEUR)), -1);
+    BUG(_1992_1_1_materiaux_ajout(projet, "B35", common_math_f(35., FLOTTANT_UTILISATEUR)), -1);
+    BUG(_1992_1_1_materiaux_ajout(projet, "B45", common_math_f(45., FLOTTANT_UTILISATEUR)), -1);
+    BUG(_1992_1_1_materiaux_ajout(projet, "B55", common_math_f(55., FLOTTANT_UTILISATEUR)), -1);
+    BUG(_1993_1_1_materiaux_ajout(projet, "S235", common_math_f(235., FLOTTANT_UTILISATEUR), common_math_f(360., FLOTTANT_UTILISATEUR)), -1);
     
     // Création du relâchment
     ry_d = (EF_Relachement_Donnees_Elastique_Lineaire*)malloc(sizeof(EF_Relachement_Donnees_Elastique_Lineaire));

@@ -303,6 +303,14 @@ Flottant EF_calculs_E(EF_Materiau *materiau)
             
             break;
         }
+        case MATERIAU_ACIER :
+        {
+            Materiau_Acier  *data_acier = materiau->data;
+            
+            return data_acier->e;
+            
+            break;
+        }
         default :
         {
             BUGMSG(NULL, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Matériau %d inconnu.\n"), materiau->type);
@@ -338,6 +346,15 @@ Flottant EF_calculs_G(EF_Materiau *materiau, gboolean nu_null)
                 return common_math_f(common_math_get(data_beton->ecm)/2., FLOTTANT_ORDINATEUR);
             else
                 return common_math_f(common_math_get(data_beton->ecm)/(2.*(1.+common_math_get(data_beton->nu))), FLOTTANT_ORDINATEUR);
+            
+            break;
+        }
+        case MATERIAU_ACIER :
+        {
+            Materiau_Acier  *data_acier = materiau->data;
+            
+            BUGMSG(!nu_null, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Seul le matériau béton supporte nu à 0.\n"));
+            return common_math_f(common_math_get(data_acier->e)/(2.*(1.+common_math_get(data_acier->nu))), FLOTTANT_ORDINATEUR);
             
             break;
         }
