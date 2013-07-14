@@ -1,9 +1,6 @@
 Pour compiler et installer l'application, il suffit de lancer les commandes suivantes :
 ./clean_config
 
-autoscan
-patch < diff-configure.scan.patch
-mv configure.scan configure.ac
 gettextize -c -f --no-changelog
 
 cd po
