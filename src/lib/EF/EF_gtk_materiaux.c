@@ -408,7 +408,7 @@ void EF_gtk_materiaux_render_2(GtkTreeViewColumn *tree_column, GtkCellRenderer *
     {
         case MATERIAU_BETON :
         {
-            c = _1992_1_1_materiaux_get_description(materiau);
+            c = EF_materiaux_get_description(materiau);
             g_object_set(cell, "markup", c, NULL);
             free(c);
             break;

@@ -458,7 +458,7 @@ gboolean _1992_1_1_materiaux_modif(Projet *projet, EF_Materiau *materiau, char *
 char *_1992_1_1_materiaux_get_description(EF_Materiau* materiau)
 /* Description : Renvoie la description d'un matériau béton sous forme d'un texte.
  *               Il convient de libérer le texte renvoyée par la fonction free.
- * Paramètres : EF_Materiau* materiau : section à étudier.
+ * Paramètres : EF_Materiau* materiau : matériau à décrire.
  * Valeur renvoyée :
  *   Succès : Résultat
  *   Échec : NULL :

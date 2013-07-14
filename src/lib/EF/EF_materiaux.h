@@ -27,6 +27,7 @@ gboolean EF_materiaux_init(Projet *projet) __attribute__((__warn_unused_result__
 gboolean EF_materiaux_insert(Projet *projet, EF_Materiau *materiau) __attribute__((__warn_unused_result__));
 gboolean EF_materiaux_repositionne(Projet *projet, EF_Materiau *materiau) __attribute__((__warn_unused_result__));
 EF_Materiau* EF_materiaux_cherche_nom(Projet *projet, const char *nom, gboolean critique) __attribute__((__warn_unused_result__));
+char *EF_materiaux_get_description(EF_Materiau* materiau) __attribute__((__warn_unused_result__));
 
 gboolean EF_materiaux_supprime(EF_Materiau* materiau, Projet *projet) __attribute__((__warn_unused_result__));
 gboolean EF_materiaux_free(Projet *projet) __attribute__((__warn_unused_result__));

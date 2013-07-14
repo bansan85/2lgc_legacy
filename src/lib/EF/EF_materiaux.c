@@ -153,8 +153,20 @@ gboolean EF_materiaux_repositionne(Projet *projet, EF_Materiau *materiau)
     }
     
 #ifdef ENABLE_GTK
-    if ((projet->list_gtk._1992_1_1_materiaux.builder != NULL) && (projet->list_gtk._1992_1_1_materiaux.materiau == materiau))
-        gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk._1992_1_1_materiaux.builder, "_1992_1_1_materiaux_beton_textview_nom"))), materiau->nom, -1);
+    switch (materiau->type)
+    {
+        case MATERIAU_BETON :
+        {
+            if ((projet->list_gtk._1992_1_1_materiaux.builder != NULL) && (projet->list_gtk._1992_1_1_materiaux.materiau == materiau))
+                gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk._1992_1_1_materiaux.builder, "_1992_1_1_materiaux_beton_textview_nom"))), materiau->nom, -1);
+            break;
+        }
+        default :
+        {
+            BUGMSG(NULL, FALSE, gettext("Le type de matériau %d n'existe pas.\n"), materiau->type);
+            break;
+        }
+    }
     if (projet->list_gtk.ef_barres.builder != NULL)
         gtk_widget_queue_resize(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treeview")));
     gtk_list_store_set(projet->list_gtk.ef_materiaux.liste_materiaux, &materiau->Iter_liste, 0, materiau->nom, -1);
@@ -196,6 +208,33 @@ EF_Materiau* EF_materiaux_cherche_nom(Projet *projet, const char *nom, gboolean 
         BUGMSG(0, NULL, gettext("Matériau en béton '%s' introuvable.\n"), nom);
     else
         return NULL;
+}
+
+
+char *EF_materiaux_get_description(EF_Materiau* materiau)
+/* Description : Renvoie la description d'un matériau sous forme d'un texte.
+ *               Il convient de libérer le texte renvoyée par la fonction free.
+ * Paramètres : EF_Materiau* materiau : matériau à décrire.
+ * Valeur renvoyée :
+ *   Succès : Résultat
+ *   Échec : NULL :
+ *             (materiau == NULL),
+ *             erreur d'allocation mémoire.
+ */
+{
+    switch (materiau->type)
+    {
+        case MATERIAU_BETON :
+        {
+            return _1992_1_1_materiaux_get_description(materiau);
+            break;
+        }
+        default :
+        {
+            BUGMSG(NULL, FALSE, gettext("Le type de matériau %d n'existe pas.\n"), materiau->type);
+            break;
+        }
+    }
 }
 
 
