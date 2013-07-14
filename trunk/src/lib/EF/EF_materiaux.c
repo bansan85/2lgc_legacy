@@ -29,6 +29,7 @@
 #include "common_selection.h"
 #include "1992_1_1_barres.h"
 #include "1992_1_1_materiaux.h"
+#include "1993_1_1_materiaux.h"
 #include "EF_calculs.h"
 
 
@@ -161,6 +162,12 @@ gboolean EF_materiaux_repositionne(Projet *projet, EF_Materiau *materiau)
                 gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk._1992_1_1_materiaux.builder, "_1992_1_1_materiaux_beton_textview_nom"))), materiau->nom, -1);
             break;
         }
+        case MATERIAU_ACIER :
+        {
+            if ((projet->list_gtk._1993_1_1_materiaux.builder != NULL) && (projet->list_gtk._1993_1_1_materiaux.materiau == materiau))
+                gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk._1993_1_1_materiaux.builder, "_1993_1_1_materiaux_acier_textview_nom"))), materiau->nom, -1);
+            break;
+        }
         default :
         {
             BUGMSG(NULL, FALSE, gettext("Le type de matériau %d n'existe pas.\n"), materiau->type);
@@ -227,6 +234,11 @@ char *EF_materiaux_get_description(EF_Materiau* materiau)
         case MATERIAU_BETON :
         {
             return _1992_1_1_materiaux_get_description(materiau);
+            break;
+        }
+        case MATERIAU_ACIER :
+        {
+            return _1993_1_1_materiaux_get_description(materiau);
             break;
         }
         default :

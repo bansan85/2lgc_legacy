@@ -2,7 +2,8 @@ DEFAULT_INCLUDES	=	-I../../.. \
 						-I../../lib/common \
 						-I../../lib/1990 \
 						-I../../lib/EF \
-						-I../../lib/1992_1_1
+						-I../../lib/1992_1_1 \
+						-I../../lib/1993_1_1
 
 if ENABLE_GTK
 bin_PROGRAMS		=	codegui

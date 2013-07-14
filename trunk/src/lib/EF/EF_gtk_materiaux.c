@@ -377,6 +377,11 @@ void EF_gtk_materiaux_render_1(GtkTreeViewColumn *tree_column, GtkCellRenderer *
             g_object_set(cell, "text", gettext("Béton"), NULL);
             break;
         }
+        case MATERIAU_ACIER :
+        {
+            g_object_set(cell, "text", gettext("Acier"), NULL);
+            break;
+        }
         default :
         {
             g_object_set(cell, "text", gettext("Inconnu"), NULL);
@@ -407,6 +412,7 @@ void EF_gtk_materiaux_render_2(GtkTreeViewColumn *tree_column, GtkCellRenderer *
     switch (materiau->type)
     {
         case MATERIAU_BETON :
+        case MATERIAU_ACIER :
         {
             c = EF_materiaux_get_description(materiau);
             g_object_set(cell, "markup", c, NULL);
