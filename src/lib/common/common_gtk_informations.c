@@ -70,6 +70,7 @@ void common_gtk_informations_window_destroy(GtkWidget *object, Projet *projet)
     
     g_object_unref(G_OBJECT(projet->list_gtk.common_informations.builder));
     projet->list_gtk.common_informations.builder = NULL;
+    free(projet->list_gtk.common_informations.departement);
     
     return;
 }
