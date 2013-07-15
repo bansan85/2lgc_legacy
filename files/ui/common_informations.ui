@@ -57,7 +57,7 @@
         <property name="title" translatable="yes">Informations sur le projet</property>
         <property name="window-position">GTK_WIN_POS_CENTER</property>
         <property name="default-width">600</property>
-        <property name="default-height">300</property>
+        <property name="default-height">400</property>
         <signal name="key-press-event" handler="common_gtk_informations_window_key_press"/>
         <signal name="destroy" handler="common_gtk_informations_window_destroy"/>
         <child>
