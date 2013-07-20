@@ -71,7 +71,7 @@ EF_Materiau* _1993_1_1_materiaux_ajout(Projet *projet, const char *nom, Flottant
 }
 
 
-gboolean _1992_1_3_materiaux_modif(Projet *projet, EF_Materiau *materiau, char *nom,
+gboolean _1993_1_1_materiaux_modif(Projet *projet, EF_Materiau *materiau, char *nom,
   Flottant fy, Flottant fu, Flottant e, Flottant nu)
 /* Description : Modifie un matériau acier.
  * Paramètres : Projet *projet : la variable projet,

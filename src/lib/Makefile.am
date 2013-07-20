@@ -58,6 +58,7 @@ libeurocodes_la_SOURCES +=	common/common_m3d.cc \
 							1990/1990_gtk_groupes_options.c \
 							1990/1990_gtk_actions.c \
 							1992_1_1/1992_1_1_gtk_materiaux.c \
+							1993_1_1/1993_1_1_gtk_materiaux.c \
 							common/common_gtk.c \
 							common/common_gtk_informations.c \
 							common/ressources.c \
@@ -119,6 +120,7 @@ libeurocodes_la_HEADERS +=	common/common_m3d.hpp \
 							1990/1990_gtk_groupes_options.h \
 							1990/1990_gtk_actions.h \
 							1992_1_1/1992_1_1_gtk_materiaux.h \
+							1993_1_1/1993_1_1_gtk_materiaux.h \
 							common/common_gtk.h \
 							common/common_gtk_informations.h \
 							common/ressources.h \
