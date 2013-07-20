@@ -396,6 +396,10 @@ void common_gtk_informations_modifier_clicked(GtkButton *button, Projet *projet)
     free(projet->parametres.adresse.ville);
     projet->parametres.adresse.ville = ville;
     
+    gtk_combo_box_set_active(GTK_COMBO_BOX(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_neige_combobox")), neige);
+    gtk_combo_box_set_active(GTK_COMBO_BOX(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_vent_combobox")), vent);
+    gtk_combo_box_set_active(GTK_COMBO_BOX(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_seisme_combobox")), seisme);
+    
     message = NULL;
     if (neige != projet->parametres.neige)
     {
@@ -441,13 +445,6 @@ void common_gtk_informations_modifier_clicked(GtkButton *button, Projet *projet)
             projet->parametres.vent = vent;
             projet->parametres.seisme = seisme;
             gtk_widget_destroy(projet->list_gtk.common_informations.window);
-        }
-        else
-        {
-            // On remet les bonnes valeurs à cause de common_ville_set
-            gtk_combo_box_set_active(GTK_COMBO_BOX(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_neige_combobox")), neige);
-            gtk_combo_box_set_active(GTK_COMBO_BOX(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_vent_combobox")), vent);
-            gtk_combo_box_set_active(GTK_COMBO_BOX(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_seisme_combobox")), seisme);
         }
         gtk_widget_destroy (dialog);
     }
