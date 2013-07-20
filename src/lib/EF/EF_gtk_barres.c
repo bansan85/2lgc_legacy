@@ -107,7 +107,7 @@ void EF_gtk_barres_edit_type(GtkCellRendererText *cell, const gchar *path_string
     Gtk_EF_Barres   *ef_gtk;
     GtkTreeModel    *model;
     GtkTreeIter     iter, iter2;
-    Beton_Barre     *barre = NULL;
+    EF_Barre        *barre = NULL;
     char            *nom_type;
     gint            parcours;
     
@@ -166,7 +166,7 @@ void EF_gtk_barres_edit_section(GtkCellRendererText *cell, const gchar *path_str
 {
     GtkTreeModel    *model;
     GtkTreeIter     iter;
-    Beton_Barre     *barre = NULL;
+    EF_Barre        *barre = NULL;
     EF_Section      *section;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
@@ -198,7 +198,7 @@ void EF_gtk_barres_edit_materiau(GtkCellRendererText *cell, const gchar *path_st
     Gtk_EF_Barres   *ef_gtk;
     GtkTreeModel    *model;
     GtkTreeIter     iter;
-    Beton_Barre     *barre = NULL;
+    EF_Barre        *barre = NULL;
     EF_Materiau     *materiau;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
@@ -232,7 +232,7 @@ void EF_gtk_barres_edit_relachement(GtkCellRendererText *cell, const gchar *path
     Gtk_EF_Barres   *ef_gtk;
     GtkTreeModel    *model;
     GtkTreeIter     iter;
-    Beton_Barre     *barre = NULL;
+    EF_Barre        *barre = NULL;
     EF_Relachement  *relachement;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
@@ -274,7 +274,7 @@ void EF_gtk_barres_edit_noeud(GtkCellRendererText *cell, gchar *path_string, gch
     char            *fake = (char*)malloc(sizeof(char)*(strlen(new_text)+1));
     unsigned int    conversion;
     gint            column = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cell), "column"));
-    Beton_Barre     *barre;
+    EF_Barre        *barre;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_barres.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Barres");
@@ -317,7 +317,7 @@ void EF_gtk_barres_supprimer(GtkButton *button, Projet *projet)
     Gtk_EF_Barres   *ef_gtk;
     GtkTreeModel    *model;
     GtkTreeIter     Iter;
-    Beton_Barre     *barre;
+    EF_Barre        *barre;
     GList           *list = NULL;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
@@ -363,9 +363,8 @@ gboolean EF_gtk_barres_treeview_key_press(GtkWidget *widget, GdkEvent *event, Pr
         
         if (gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treeview_select")), &model, &Iter))
         {
-            Beton_Barre     *barre;
-            
-            GList           *liste_barres = NULL;
+            EF_Barre    *barre;
+            GList       *liste_barres = NULL;
             
             gtk_tree_model_get(model, &Iter, 0, &barre, -1);
             
@@ -410,8 +409,8 @@ void EF_gtk_barres_select_changed(GtkTreeSelection *treeselection, Projet *proje
     }
     else
     {
-        Beton_Barre     *barre;
-        GList           *liste_barres = NULL;
+        EF_Barre    *barre;
+        GList       *liste_barres = NULL;
         
         gtk_tree_model_get(model, &Iter, 0, &barre, -1);
         
@@ -449,7 +448,7 @@ void EF_gtk_barres_boutton_supprimer_menu(GtkButton *widget, Projet *projet)
 {
     GtkTreeModel    *model;
     GtkTreeIter     Iter;
-    Beton_Barre     *barre;
+    EF_Barre        *barre;
     GList           *liste_barres = NULL, *liste_noeuds_dep, *liste_barres_dep, *liste_charges_dep;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
@@ -495,7 +494,7 @@ void EF_gtk_barres_render_0(GtkTreeViewColumn *tree_column, GtkCellRenderer *cel
  * Valeur renvoyée : Aucune.
  */
 {
-    Beton_Barre *barre;
+    EF_Barre    *barre;
     char        *tmp;
     
     gtk_tree_model_get(tree_model, iter, 0, &barre, -1);
@@ -521,7 +520,7 @@ void EF_gtk_barres_render_1(GtkTreeViewColumn *tree_column, GtkCellRenderer *cel
  * Valeur renvoyée : Aucune.
  */
 {
-    Beton_Barre *barre;
+    EF_Barre    *barre;
     char        *tmp;
     GtkTreeIter iter2;
     Projet      *projet = data2;
@@ -552,7 +551,7 @@ void EF_gtk_barres_render_2(GtkTreeViewColumn *tree_column, GtkCellRenderer *cel
  * Valeur renvoyée : Aucune.
  */
 {
-    Beton_Barre *barre;
+    EF_Barre    *barre;
     
     gtk_tree_model_get(tree_model, iter, 0, &barre, -1);
     
@@ -573,7 +572,7 @@ void EF_gtk_barres_render_3(GtkTreeViewColumn *tree_column, GtkCellRenderer *cel
  * Valeur renvoyée : Aucune.
  */
 {
-    Beton_Barre *barre;
+    EF_Barre    *barre;
     
     gtk_tree_model_get(tree_model, iter, 0, &barre, -1);
     
@@ -594,7 +593,7 @@ void EF_gtk_barres_render_4(GtkTreeViewColumn *tree_column, GtkCellRenderer *cel
  * Valeur renvoyée : Aucune.
  */
 {
-    Beton_Barre *barre;
+    EF_Barre    *barre;
     char        *tmp;
     
     gtk_tree_model_get(tree_model, iter, 0, &barre, -1);
@@ -620,7 +619,7 @@ void EF_gtk_barres_render_5(GtkTreeViewColumn *tree_column, GtkCellRenderer *cel
  * Valeur renvoyée : Aucune.
  */
 {
-    Beton_Barre *barre;
+    EF_Barre    *barre;
     char        *tmp;
     
     gtk_tree_model_get(tree_model, iter, 0, &barre, -1);
@@ -646,7 +645,7 @@ void EF_gtk_barres_render_6(GtkTreeViewColumn *tree_column, GtkCellRenderer *cel
  * Valeur renvoyée : Aucune.
  */
 {
-    Beton_Barre *barre;
+    EF_Barre    *barre;
     
     gtk_tree_model_get(tree_model, iter, 0, &barre, -1);
     
@@ -705,7 +704,7 @@ void EF_gtk_barres(Projet *projet)
     list_parcours = projet->modele.barres;
     while (list_parcours != NULL)
     {
-        Beton_Barre *barre = (Beton_Barre*)list_parcours->data;
+        EF_Barre    *barre = list_parcours->data;
         GtkTreeIter iter;
         char        *tmp;
         

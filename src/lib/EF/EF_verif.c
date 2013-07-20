@@ -79,7 +79,7 @@ gboolean EF_verif_bloc(GList *noeuds, GList *barres, GList **noeuds_dep, GList *
             list_parcours = projet->modele.barres;
             while (list_parcours != NULL)
             {
-                Beton_Barre *barre = list_parcours->data;
+                EF_Barre    *barre = list_parcours->data;
                 
                 if ((barre->noeud_debut == noeuds_todo->data) || (barre->noeud_fin == noeuds_todo->data) || (g_list_find(barre->noeuds_intermediaires, noeuds_todo->data) != NULL))
                 {
@@ -94,7 +94,7 @@ gboolean EF_verif_bloc(GList *noeuds, GList *barres, GList **noeuds_dep, GList *
         }
         while (barres_todo != NULL)
         {
-            Beton_Barre *barre_parcours = barres_todo->data;
+            EF_Barre    *barre_parcours = barres_todo->data;
             
             if (g_list_find(*barres_dep, barres_todo->data) == NULL)
                 *barres_dep = g_list_append(*barres_dep, barres_todo->data);
@@ -443,7 +443,7 @@ gboolean EF_verif_EF(Projet *projet, GList **rapport, int *erreur)
     list_parcours = projet->modele.barres;
     while (list_parcours != NULL)
     {
-        Beton_Barre *barre = list_parcours->data;
+        EF_Barre    *barre = list_parcours->data;
         
         if (ERREUR_RELATIVE_EGALE(EF_noeuds_distance(barre->noeud_debut, barre->noeud_fin), 0.))
         {

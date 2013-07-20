@@ -713,7 +713,7 @@ typedef struct __Gtk_Common_Informations
 #endif
 
 
-typedef struct __Beton_Barre
+typedef struct __EF_Barre
 {
     unsigned int        numero;
     Type_Element        type;
@@ -731,7 +731,7 @@ typedef struct __Beton_Barre
 #endif                  
     cholmod_sparse      *matrice_rotation;
     cholmod_sparse      *matrice_rotation_transpose;
-} Beton_Barre;
+} EF_Barre;
 
 
 typedef struct __EF_Noeud_Libre
@@ -745,7 +745,7 @@ typedef struct __EF_Noeud_Libre
 
 typedef struct __EF_Noeud_Barre
 {
-    Beton_Barre *barre;
+    EF_Barre    *barre;
     Flottant    position_relative_barre;
 } EF_Noeud_Barre;
 

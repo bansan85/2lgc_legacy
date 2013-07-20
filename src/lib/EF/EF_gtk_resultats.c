@@ -517,7 +517,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
         
         while (list_parcours != NULL)
         {
-            Beton_Barre *barre = list_parcours->data;
+            EF_Barre    *barre = list_parcours->data;
             gboolean    ok;
             
             switch (res->filtre)

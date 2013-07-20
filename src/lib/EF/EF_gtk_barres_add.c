@@ -253,7 +253,7 @@ void EF_gtk_barres_ajouter(GtkButton *button, Projet *projet)
     
     if (projet->modele.barres != NULL)
     {
-        BUGMSG(nb_barres = g_strdup_printf("%d", ((Beton_Barre *)g_list_last(projet->modele.barres)->data)->numero+1), , gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(nb_barres = g_strdup_printf("%d", ((EF_Barre*)g_list_last(projet->modele.barres)->data)->numero+1), , gettext("Erreur d'allocation mémoire.\n"));
         gtk_label_set_text(GTK_LABEL(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_numero_label2")), nb_barres);
         free(nb_barres);
     }

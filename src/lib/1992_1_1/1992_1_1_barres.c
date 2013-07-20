@@ -76,7 +76,7 @@ gboolean _1992_1_1_barres_ajout(Projet *projet, Type_Element type, EF_Section *s
   EF_Relachement* relachement, unsigned int discretisation_element)
 /* Description : Ajoute un élément à la liste des éléments en béton.
  * Paramètres : Projet *projet : la variable projet,
- *            : Type_Beton_Barre type : type de l'élément en béton,
+ *            : Type_Element type : type de l'élément en béton,
  *            : EF_Section *section : section correspondant à l'élément,
  *            : EF_Materiau *materiau : matériau correspondant à l'élément,
  *            : unsigned int noeud_debut : numéro de départ de l'élément,
@@ -98,7 +98,7 @@ gboolean _1992_1_1_barres_ajout(Projet *projet, Type_Element type, EF_Section *s
  *             en cas d'erreur due à une fonction interne.
  */
 {
-    Beton_Barre *element_nouveau = malloc(sizeof(Beton_Barre));
+    EF_Barre    *element_nouveau = malloc(sizeof(EF_Barre));
     
     // Trivial
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
@@ -138,7 +138,7 @@ gboolean _1992_1_1_barres_ajout(Projet *projet, Type_Element type, EF_Section *s
     if (projet->modele.barres == NULL)
         element_nouveau->numero = 0;
     else
-        element_nouveau->numero = ((Beton_Barre *)g_list_last(projet->modele.barres)->data)->numero+1;
+        element_nouveau->numero = ((EF_Barre*)g_list_last(projet->modele.barres)->data)->numero+1;
     
     BUG(EF_calculs_free(projet), FALSE);
     
@@ -188,7 +188,7 @@ gboolean _1992_1_1_barres_ajout(Projet *projet, Type_Element type, EF_Section *s
 }
 
 
-Beton_Barre* _1992_1_1_barres_cherche_numero(Projet *projet, unsigned int numero,
+EF_Barre* _1992_1_1_barres_cherche_numero(Projet *projet, unsigned int numero,
   gboolean critique)
 /* Description : Positionne dans la liste des éléments en béton l'élément courant au numéro.
  * Paramètres : Projet *projet : la variable projet,
@@ -209,7 +209,7 @@ Beton_Barre* _1992_1_1_barres_cherche_numero(Projet *projet, unsigned int numero
     list_parcours = projet->modele.barres;
     while (list_parcours != NULL)
     {
-        Beton_Barre   *element = list_parcours->data;
+        EF_Barre    *element = list_parcours->data;
         
         if (element->numero == numero)
             return element;
@@ -316,7 +316,7 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GLi
     list_parcours = projet->modele.barres;
     while (list_parcours != NULL)
     {
-        Beton_Barre *barre = list_parcours->data;
+        EF_Barre    *barre = list_parcours->data;
         
         if ((g_list_find(sections, barre->section) != NULL)
           || (g_list_find(materiaux, barre->materiau) != NULL)
@@ -334,7 +334,7 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GLi
     list_parcours = barres;
     while (list_parcours != NULL)
     {
-        Beton_Barre *barre = list_parcours->data;
+        EF_Barre    *barre = list_parcours->data;
         
         if (g_list_find(barres_todo, barre) == NULL)
             barres_todo = g_list_append(barres_todo, barre);
@@ -347,7 +347,7 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GLi
     while (list_parcours != NULL)
     {
         GList       *list_parcours2;
-        Beton_Barre *barre;
+        EF_Barre    *barre;
         
         // Toutes les barres sélectionnées sont forcément des barres dépendantes.
         barre = list_parcours->data;
@@ -423,7 +423,7 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GLi
         list_parcours = projet->modele.barres;
         while (list_parcours != NULL)
         {
-            Beton_Barre *barre;
+            EF_Barre    *barre;
             
             barre = list_parcours->data;
             
@@ -538,7 +538,7 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GLi
                     
                     while (liste_parcours3 != NULL)
                     {
-                        Beton_Barre *barre = liste_parcours3->data;
+                        EF_Barre    *barre = liste_parcours3->data;
                         
                         if (charges_dep != NULL)
                         {
@@ -585,7 +585,8 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GLi
 gboolean _1992_1_1_barres_angle_rotation(EF_Noeud *debut, EF_Noeud *fin, double *y, double *z)
 /* Description : Calcule les deux angles de rotation pour faire tourner une barre horizontale
  *               en une barre parallèle à celle fournie dans l'argument 1.
- * Paramètres : Beton_Barre *barre : barre dont on souhaite connaitre les angles de rotation,
+ * Paramètres : EF_Noeud *debut : Premier et dernier noeud de la droite
+ *            : EF_Noeud *fin : dont on souhaite connaitre les angles de rotation,
  *            : double *y : angle autour de l'axe y,
  *            : double *z : angle autour de l'axe z.
  * Valeur renvoyée :
@@ -624,9 +625,9 @@ gboolean _1992_1_1_barres_angle_rotation(EF_Noeud *debut, EF_Noeud *fin, double 
 }
 
 
-gboolean _1992_1_1_barres_change_type(Beton_Barre *barre, Type_Element type, Projet *projet)
+gboolean _1992_1_1_barres_change_type(EF_Barre *barre, Type_Element type, Projet *projet)
 /* Description : Change le type d'une barre.
- * Paramètres : Beton_Barre *barre : barre à modifier,
+ * Paramètres : EF_Barre *barre : barre à modifier,
  *            : Type_Element type : nouveau type,
  *            : Projet *projet : variable projet.
  * Valeur renvoyée :
@@ -662,10 +663,10 @@ gboolean _1992_1_1_barres_change_type(Beton_Barre *barre, Type_Element type, Pro
 }
 
 
-gboolean _1992_1_1_barres_change_section(Beton_Barre *barre, EF_Section *section,
+gboolean _1992_1_1_barres_change_section(EF_Barre *barre, EF_Section *section,
   Projet *projet)
 /* Description : Change la section d'une barre depuis son nom.
- * Paramètres : Beton_Barre *barre : barre à modifier,
+ * Paramètres : EF_Barre *barre : barre à modifier,
  *            : EF_Section *section : la nouvelle section,
  *            : Projet *projet : variable projet.
  * Valeur renvoyée :
@@ -698,10 +699,10 @@ gboolean _1992_1_1_barres_change_section(Beton_Barre *barre, EF_Section *section
 }
 
 
-gboolean _1992_1_1_barres_change_materiau(Beton_Barre *barre, EF_Materiau *materiau,
+gboolean _1992_1_1_barres_change_materiau(EF_Barre *barre, EF_Materiau *materiau,
   Projet *projet)
 /* Description : Change le matériau d'une barre depuis son nom.
- * Paramètres : Beton_Barre *barre : barre à modifier,
+ * Paramètres : EF_Barre *barre : barre à modifier,
  *            : EF_Materiau *materiau : le nouveau materiau,
  *            : Projet *projet : variable projet.
  * Valeur renvoyée :
@@ -730,10 +731,10 @@ gboolean _1992_1_1_barres_change_materiau(Beton_Barre *barre, EF_Materiau *mater
 }
 
 
-gboolean _1992_1_1_barres_change_noeud(Beton_Barre *barre, EF_Noeud *noeud, gboolean noeud_1,
+gboolean _1992_1_1_barres_change_noeud(EF_Barre *barre, EF_Noeud *noeud, gboolean noeud_1,
   Projet *projet)
 /* Description : Change un des deux noeuds d'extrémité d'une barre.
- * Paramètres : Beton_Barre *barre : barre à modifier,
+ * Paramètres : EF_Barre *barre : barre à modifier,
  *            : EF_Noeud *noeud : le nouveau noeud,
  *            : gboolean noeud_1 : TRUE si le noeud_debut est à modifier,
  *                                 FALSE si le noeud_fin est à modifier.
@@ -789,10 +790,10 @@ gboolean _1992_1_1_barres_change_noeud(Beton_Barre *barre, EF_Noeud *noeud, gboo
 }
 
 
-gboolean _1992_1_1_barres_change_relachement(Beton_Barre *barre, EF_Relachement *relachement,
+gboolean _1992_1_1_barres_change_relachement(EF_Barre *barre, EF_Relachement *relachement,
   Projet *projet)
 /* Description : Change le relâchement d'une barre.
- * Paramètres : Beton_Barre *barre : barre à modifier,
+ * Paramètres : EF_Barre *barre : barre à modifier,
  *            : EF_Relachement *relachement : nouveau relâchement,
  *            : Projet *projet : variable projet.
  * Valeur renvoyée :
@@ -821,10 +822,10 @@ gboolean _1992_1_1_barres_change_relachement(Beton_Barre *barre, EF_Relachement 
 }
 
 
-gboolean _1992_1_1_barres_rigidite_ajout(Projet *projet, Beton_Barre *element)
+gboolean _1992_1_1_barres_rigidite_ajout(Projet *projet, EF_Barre *element)
 /* Description : Ajouter un élément à la matrice de rigidité partielle et complète.
  * Paramètres : Projet *projet : la variable projet,
- *            : Beton_Barre* element : pointeur vers l'élément en béton.
+ *            : EF_Barre* element : pointeur vers l'élément en béton.
  * Valeur renvoyée :
  *   Succès : TRUE
  *   Échec : FALSE :
@@ -1517,7 +1518,7 @@ gboolean _1992_1_1_barres_rigidite_ajout_tout(Projet *projet)
     list_parcours = projet->modele.barres;
     do
     {
-        Beton_Barre *element = list_parcours->data;
+        EF_Barre    *element = list_parcours->data;
         
         BUG(_1992_1_1_barres_rigidite_ajout(projet, element), FALSE);
         
@@ -1529,9 +1530,9 @@ gboolean _1992_1_1_barres_rigidite_ajout_tout(Projet *projet)
 }
 
 
-void _1992_1_1_barres_free_foreach(Beton_Barre *barre, Projet *projet)
+void _1992_1_1_barres_free_foreach(EF_Barre *barre, Projet *projet)
 /* Description : Fonction permettant de libérer iune barre contenue dans une liste.
- * Paramètres : Beton_Barre *barre : la barre à libérer,
+ * Paramètres : EF_Barre *barre : la barre à libérer,
  *            : Projet *projet : la variable projet.
  * Valeur renvoyée : Aucune.
  */
@@ -1642,7 +1643,7 @@ gboolean _1992_1_1_barres_supprime_liste(Projet *projet, GList *liste_noeuds,
     list_parcours = barres_suppr;
     while (list_parcours != NULL)
     {
-        Beton_Barre *barre = _1992_1_1_barres_cherche_numero(projet, GPOINTER_TO_UINT(list_parcours->data), FALSE);
+        EF_Barre    *barre = _1992_1_1_barres_cherche_numero(projet, GPOINTER_TO_UINT(list_parcours->data), FALSE);
         
         if (barre != NULL)
         {

@@ -90,7 +90,7 @@ Charge_Barre_Repartie_Uniforme *EF_charge_barre_repartie_uniforme_ajout(Projet *
         GList   *list_parcours = barres;
         do
         {
-            Beton_Barre *barre = list_parcours->data;
+            EF_Barre    *barre = list_parcours->data;
             
             double l = EF_noeuds_distance(barre->noeud_debut, barre->noeud_fin);
             
@@ -174,13 +174,13 @@ char* EF_charge_barre_repartie_uniforme_description(Charge_Barre_Repartie_Unifor
 }
 
 
-gboolean EF_charge_barre_repartie_uniforme_mx(Beton_Barre *barre, unsigned int discretisation,
+gboolean EF_charge_barre_repartie_uniforme_mx(EF_Barre *barre, unsigned int discretisation,
   double a, double b, Barre_Info_EF *infos, double mx, double *ma, double *mb)
 /* Description : Calcule l'opposé aux moments d'encastrements pour l'élément spécifié soumis
  *               au moment de torsion uniformément répartie mx dans le repère local. Les
  *               résultats sont renvoyés par l'intermédiaire des pointeurs ma et mb qui ne
  *               peuvent être NULL.
- * Paramètres : Beton_Barre *barre : Barre à étudier,
+ * Paramètres : EF_Barre *barre : Barre à étudier,
  *            : unsigned int discretisation : partie de la barre à étudier,
  *            : double a : début et fin de la charge uniformément répartie respectivement
  *            : double b : par rapport au début et la fin de la partie de barre étudiée,
@@ -277,14 +277,14 @@ gboolean EF_charge_barre_repartie_uniforme_mx(Beton_Barre *barre, unsigned int d
 }
 
 
-gboolean EF_charge_barre_repartie_uniforme_def_ang_iso_y(Beton_Barre *barre,
+gboolean EF_charge_barre_repartie_uniforme_def_ang_iso_y(EF_Barre *barre,
   unsigned int discretisation, double a, double b, double fz, double my,
   double *phia, double *phib)
 /* Description : Calcule les angles de rotation pour un élément bi-articulé soumis à une
  *                 charge uniformément répartie fz, my dans le repère local. Les résultats
  *                 sont renvoyés par l'intermédiaire des pointeurs phia et phib qui ne
  *                 peuvent être NULL.
- * Paramètres : Beton_Barre *barre : Barre à étudier,
+ * Paramètres : EF_Barre *barre : Barre à étudier,
  *            : unsigned int discretisation : partie de la barre à étudier,
  *            : double a : début et fin de la charge uniformément répartie respectivement
  *            : double b : par rapport au début et la fin de la partie de barre étudiée,
@@ -382,13 +382,13 @@ gboolean EF_charge_barre_repartie_uniforme_def_ang_iso_y(Beton_Barre *barre,
 }
 
 
-gboolean EF_charge_barre_repartie_uniforme_def_ang_iso_z(Beton_Barre *barre,
+gboolean EF_charge_barre_repartie_uniforme_def_ang_iso_z(EF_Barre *barre,
   unsigned int discretisation, double a, double b, double fy, double mz,
   double *phia, double *phib)
 /* Description : Calcule les angles de rotation pour un élément bi-articulé soumis au
  *                 chargement fy et mz dans le repère local. Les résultats sont renvoyés par
  *                 l'intermédiaire des pointeurs phia et phib qui ne peuvent être NULL.
- * Paramètres : Beton_Barre *barre : Barre à étudier,
+ * Paramètres : EF_Barre *barre : Barre à étudier,
  *            : unsigned int discretisation : partie de la barre à étudier,
  *            : double debut : début et fin de la charge uniformément répartie par rapport au
  *            : double fin : début de la partie de barre à étudier,
@@ -536,12 +536,12 @@ double EF_charge_barre_repartie_uniforme_position_resultante_x(EF_Section *secti
 }
 
 
-gboolean EF_charge_barre_repartie_uniforme_fonc_rx(Fonction *fonction, Beton_Barre *barre,
+gboolean EF_charge_barre_repartie_uniforme_fonc_rx(Fonction *fonction, EF_Barre *barre,
   unsigned int discretisation, double a, double b, double max, double mbx)
 /* Description : Calcule les déplacements d'une barre en rotation autour de l'axe x en fonction
  *                  des efforts aux extrémités de la poutre.
  * Paramètres : Fonction *fonction : fonction où sera ajoutée la déformée,
- *              Beton_Barre *barre : barre à étudier,
+ *              EF_Barre *barre : barre à étudier,
  *              unsigned int discretisation : partie de la barre à étudier,
  *              double a : position du début de la charge par rapport au début de la barre,
  *              double b : position de la fin de la charge par rapport à la fin de la barre,
@@ -659,14 +659,14 @@ gboolean EF_charge_barre_repartie_uniforme_fonc_rx(Fonction *fonction, Beton_Bar
 
 
 gboolean EF_charge_barre_repartie_uniforme_fonc_ry(Fonction *f_rotation, Fonction* f_deform,
-  Beton_Barre *barre, unsigned int discretisation, double a, double b, double fz, double my,
+  EF_Barre *barre, unsigned int discretisation, double a, double b, double fz, double my,
   double may, double mby)
 /* Description : Calcule les déplacements d'une barre en rotation autour de l'axe y et en
  *                 déformation selon l'axe z en fonction de la charge linéaire (fz et my) et
  *                 des efforts aux extrémités de la poutre.
  * Paramètres : Fonction *f_rotation : fonction où sera ajoutée la rotation,
  *            : Fonction *f_deform : fonction où sera ajoutée la déformée,
- *            : Beton_Barre *barre : Barre à étudier,
+ *            : EF_Barre *barre : Barre à étudier,
  *            : unsigned int discretisation : partie de la barre à étudier,
  *            : double a : position du début de la charge par rapport au début de la barre,
  *            : double b : position de la fin de la charge par rapport à la fin de la barre,
@@ -824,14 +824,14 @@ gboolean EF_charge_barre_repartie_uniforme_fonc_ry(Fonction *f_rotation, Fonctio
 
 
 gboolean EF_charge_barre_repartie_uniforme_fonc_rz(Fonction *f_rotation, Fonction* f_deform,
-  Beton_Barre *barre, unsigned int discretisation, double a, double b, double fy, double mz,
+  EF_Barre *barre, unsigned int discretisation, double a, double b, double fy, double mz,
   double maz, double mbz)
 /* Description : Calcule les déplacements d'une barre en rotation autour de l'axe z et en
  *                 déformation selon l'axe y en fonction de la charge linéaire (fy et mz) et
  *                 des efforts aux extrémités de la poutre.
  * Paramètres : Fonction *f_rotation : fonction où sera ajoutée la rotation,
  *            : Fonction *f_deform : fonction où sera ajoutée la déformée,
- *            : Beton_Barre *barre : Barre à étudier,
+ *            : EF_Barre *barre : Barre à étudier,
  *            : unsigned int discretisation : partie de la barre à étudier,
  *            : double a : position du début de la charge par rapport au début de la barre,
  *            : double b : position de la fin de la charge par rapport à la fin de la barre,
@@ -935,12 +935,12 @@ gboolean EF_charge_barre_repartie_uniforme_fonc_rz(Fonction *f_rotation, Fonctio
 }
 
 
-gboolean EF_charge_barre_repartie_uniforme_n(Fonction *fonction, Beton_Barre *barre,
+gboolean EF_charge_barre_repartie_uniforme_n(Fonction *fonction, EF_Barre *barre,
   unsigned int discretisation, double a, double b, double fax, double fbx)
 /* Description : Calcule les déplacements d'une barre selon l'axe x en fonction de l'effort
  *                 normal ponctuel n et des réactions d'appuis fax et fbx.
  * Paramètres : Fonction *fonction : fonction où sera ajoutée la déformée,
- *              Beton_Barre *barre : Barre à étudier,
+ *              EF_Barre *barre : Barre à étudier,
  *              unsigned int discretisation : partie de la barre à étudier,
  *              double a : position du début de la charge par rapport au début de la barre,
  *              double b : position de la fin de la charge par rapport à la fin de la barre,
@@ -1038,7 +1038,7 @@ gboolean EF_charge_barre_repartie_uniforme_enleve_barres(Charge_Barre_Repartie_U
  *               une barre de la liste n'est pas dans la charge, ce point ne sera pas considéré
  *               comme une erreur mais la barre sera simplement ignorée.
  * Paramètres : Charge_Barre_Repartie_Uniforme *charge : la charge à modifier,
- *              GList *barres : la liste de pointers de type Beton_Barre devant être retirés,
+ *              GList *barres : la liste de pointers de type EF_Barre devant être retirés,
  *              Projet *projet : la variable projet.
  * Valeur renvoyée :
  *   Succès : TRUE
@@ -1052,7 +1052,7 @@ gboolean EF_charge_barre_repartie_uniforme_enleve_barres(Charge_Barre_Repartie_U
     
     while (list_parcours != NULL)
     {
-        Beton_Barre *barre = list_parcours->data;
+        EF_Barre    *barre = list_parcours->data;
         
         charge->barres = g_list_remove(charge->barres, barre);
         

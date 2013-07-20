@@ -1007,7 +1007,7 @@ gboolean m3d_actualise_graphique(Projet *projet, GList *noeuds, GList *barres)
     list_parcours = noeuds_dep;
     while (list_parcours != NULL)
     {
-        BUG(m3d_noeud(&projet->list_gtk.m3d, (EF_Noeud *)list_parcours->data), FALSE);
+        BUG(m3d_noeud(&projet->list_gtk.m3d, (EF_Noeud*)list_parcours->data), FALSE);
         list_parcours = g_list_next(list_parcours);
     }
     g_list_free(noeuds_dep);
@@ -1015,7 +1015,7 @@ gboolean m3d_actualise_graphique(Projet *projet, GList *noeuds, GList *barres)
     list_parcours = barres_dep;
     while (list_parcours != NULL)
     {
-        BUG(m3d_barre(&projet->list_gtk.m3d, (Beton_Barre *)list_parcours->data), FALSE);
+        BUG(m3d_barre(&projet->list_gtk.m3d, (EF_Barre*)list_parcours->data), FALSE);
         list_parcours = g_list_next(list_parcours);
     }
     g_list_free(barres_dep);
@@ -1121,10 +1121,10 @@ void m3d_noeud_free(void *donnees_m3d, EF_Noeud *noeud)
 }
 
 
-gboolean m3d_barre_finition(CM3dObject *objet, Beton_Barre *barre)
+gboolean m3d_barre_finition(CM3dObject *objet, EF_Barre *barre)
 /* Description : Applique une liste d'instruction commune à toutes les barres.
  * Paramètres : CM3dObject *objet : la modélisation de la barre,
- *              Beton_Barre *barre : barre devant être représentée.
+ *              EF_Barre *barre : barre devant être représentée.
  * Valeur renvoyée :
  *   Succès : TRUE
  *   Échec : FALSE :
@@ -1147,11 +1147,11 @@ gboolean m3d_barre_finition(CM3dObject *objet, Beton_Barre *barre)
 }
 
 
-gboolean m3d_barre(void *donnees_m3d, Beton_Barre *barre)
+gboolean m3d_barre(void *donnees_m3d, EF_Barre *barre)
 /* Description : Crée une barre dans l'affichage graphique. Si la barre existe, elle est
  *               détruite au préalable.
  * Paramètres : void *donnees_m3d : données graphiques,
- *              Beton_Barre *barre : barre devant être représentée.
+ *              EF_Barre *barre : barre devant être représentée.
  * Valeur renvoyée :
  *   Succès : TRUE
  *   Échec : FALSE :
@@ -1342,10 +1342,10 @@ gboolean m3d_barre(void *donnees_m3d, Beton_Barre *barre)
 }
 
 
-void m3d_barre_free(void *donnees_m3d, Beton_Barre *barre)
+void m3d_barre_free(void *donnees_m3d, EF_Barre *barre)
 /* Description : Supprimer une barre dans l'affichage graphique.
  * Paramètres : void *donnees_m3d : données SGlobalData,
- *              EF_Noeud *noeud : noeud à ajouter ou à actualiser.
+ *              EF_Barre *barre : barre à supprimer.
  * Valeur renvoyée :
  *   Succès : Pointeur vers le nouvel objet noeud.
  *   Échec : NULL :

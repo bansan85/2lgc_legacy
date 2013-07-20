@@ -76,7 +76,7 @@ void EF_gtk_noeud_ajouter(GtkButton *button, Projet *projet)
         if (projet->modele.barres == NULL)
             return;
         
-        BUG(EF_noeuds_ajout_noeud_barre(projet, (Beton_Barre*)projet->modele.barres->data, common_math_f(0.5, FLOTTANT_UTILISATEUR), NULL), );
+        BUG(EF_noeuds_ajout_noeud_barre(projet, (EF_Barre*)projet->modele.barres->data, common_math_f(0.5, FLOTTANT_UTILISATEUR), NULL), );
     }
     
     return;
@@ -581,7 +581,7 @@ void EF_gtk_noeud_edit_noeud_barre_barre(GtkCellRendererText *cell, const gchar 
     // On vérifie si le texte contient bien un numéro
     if (sscanf(new_text, "%u%s", &conversion, fake) == 1)
     {
-        Beton_Barre *barre;
+        EF_Barre    *barre;
         EF_Noeud    *noeud;
         GList       *liste_noeuds = NULL;
         

@@ -46,16 +46,16 @@ Flottant EF_sections_vyp(EF_Section *sect) __attribute__((__warn_unused_result__
 Flottant EF_sections_vz(EF_Section *sect) __attribute__((__warn_unused_result__));
 Flottant EF_sections_vzp(EF_Section *sect) __attribute__((__warn_unused_result__));
 
-double EF_sections_ay(Beton_Barre *barre, unsigned int discretisation) __attribute__((__warn_unused_result__));
-double EF_sections_by(Beton_Barre *barre, unsigned int discretisation) __attribute__((__warn_unused_result__));
-double EF_sections_cy(Beton_Barre *barre, unsigned int discretisation) __attribute__((__warn_unused_result__));
-double EF_sections_az(Beton_Barre *barre, unsigned int discretisation) __attribute__((__warn_unused_result__));
-double EF_sections_bz(Beton_Barre *barre, unsigned int discretisation) __attribute__((__warn_unused_result__));
-double EF_sections_cz(Beton_Barre *barre, unsigned int discretisation) __attribute__((__warn_unused_result__));
+double EF_sections_ay(EF_Barre *barre, unsigned int discretisation) __attribute__((__warn_unused_result__));
+double EF_sections_by(EF_Barre *barre, unsigned int discretisation) __attribute__((__warn_unused_result__));
+double EF_sections_cy(EF_Barre *barre, unsigned int discretisation) __attribute__((__warn_unused_result__));
+double EF_sections_az(EF_Barre *barre, unsigned int discretisation) __attribute__((__warn_unused_result__));
+double EF_sections_bz(EF_Barre *barre, unsigned int discretisation) __attribute__((__warn_unused_result__));
+double EF_sections_cz(EF_Barre *barre, unsigned int discretisation) __attribute__((__warn_unused_result__));
 
 Flottant EF_sections_s(EF_Section *sect) __attribute__((__warn_unused_result__));
-double EF_sections_es_l(Beton_Barre *barre, unsigned int discretisation, double debut, double fin) __attribute__((__warn_unused_result__));
-double EF_sections_gj_l(Beton_Barre *barre, unsigned int discretisation) __attribute__((__warn_unused_result__));
+double EF_sections_es_l(EF_Barre *barre, unsigned int discretisation, double debut, double fin) __attribute__((__warn_unused_result__));
+double EF_sections_gj_l(EF_Barre *barre, unsigned int discretisation) __attribute__((__warn_unused_result__));
 
 gboolean EF_sections_free(Projet *projet) __attribute__((__warn_unused_result__));
 

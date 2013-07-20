@@ -109,7 +109,7 @@ gboolean common_selection_ajout_nombre(void *data, GList **liste, Type_Liste typ
             }
             case LISTE_BARRES :
             {
-                Beton_Barre *barre_liste, *barre;
+                EF_Barre    *barre_liste, *barre;
                 
                 barre_liste = list_parcours->data;
                 barre = data;
@@ -351,7 +351,7 @@ GList *common_selection_converti_numeros_en_barres(GList *liste_numeros, Projet 
         do
         {
             unsigned int    numero = GPOINTER_TO_UINT(list_parcours->data);
-            Beton_Barre     *barre = _1992_1_1_barres_cherche_numero(projet, numero, FALSE);
+            EF_Barre        *barre = _1992_1_1_barres_cherche_numero(projet, numero, FALSE);
             
             if (barre == NULL)
             {
@@ -424,7 +424,7 @@ char *common_selection_converti_barres_en_texte(GList *liste_barres)
     if (liste_barres != NULL)
     {
         GList       *list_parcours;
-        Beton_Barre *barre;
+        EF_Barre    *barre;
         
         list_parcours = liste_barres;
         barre = list_parcours->data;
