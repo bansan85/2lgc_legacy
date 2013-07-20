@@ -346,7 +346,7 @@ gboolean common_gtk_informations_match_selected(GtkEntryCompletion *widget, GtkT
     projet->list_gtk.common_informations.departement = departement;
     projet->list_gtk.common_informations.commune = commune;
     
-    BUG(common_ville_set(projet, projet->list_gtk.common_informations.departement, gtk_entry_get_text(GTK_ENTRY(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_entry_ville"))), TRUE), FALSE);
+    BUG(common_ville_set(projet, projet->list_gtk.common_informations.departement, ville, TRUE), FALSE);
     
     common_gtk_informations_check(NULL, projet);
     
