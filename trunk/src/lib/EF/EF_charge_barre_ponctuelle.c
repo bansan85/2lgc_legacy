@@ -81,9 +81,9 @@ Charge_Barre_Ponctuelle *EF_charge_barre_ponctuelle_ajout(Projet *projet,
         GList   *list_parcours = barres;
         do
         {
-            Beton_Barre *barre = list_parcours->data;
+            EF_Barre    *barre = list_parcours->data;
+            double      distance = EF_noeuds_distance(barre->noeud_debut, barre->noeud_fin);
             
-            double distance = EF_noeuds_distance(barre->noeud_debut, barre->noeud_fin);
             BUGMSG(!((common_math_get(a) > distance) && (!(ERREUR_RELATIVE_EGALE(common_math_get(a), distance)))), NULL, gettext("La position de la charge ponctuelle (%f) est incorrecte. La longueur de la barre %d est de %f m.\n"), common_math_get(a), barre->numero, distance);
             
             list_parcours = g_list_next(list_parcours);
@@ -158,12 +158,12 @@ char* EF_charge_barre_ponctuelle_description(Charge_Barre_Ponctuelle *charge)
 }
 
 
-gboolean EF_charge_barre_ponctuelle_mx(Beton_Barre *barre, unsigned int discretisation,
+gboolean EF_charge_barre_ponctuelle_mx(EF_Barre *barre, unsigned int discretisation,
   double a, Barre_Info_EF *infos, double mx, double *ma, double *mb)
 /* Description : Calcule l'opposé aux moments d'encastrement pour l'élément spécifié soumis
  *               au moment de torsion mx dans le repère local. Les résultats sont renvoyés
  *               par l'intermédiaire des pointeurs ma et mb qui ne peuvent être NULL.
- * Paramètres : Beton_Barre *barre : Barre à étudier,
+ * Paramètres : EF_Barre *barre : Barre à étudier,
  *            : unsigned int discretisation : partie de la barre à étudier,
  *            : double a : position de la charge par rapport au début de la partie de barre à
  *                         étudier,
@@ -256,12 +256,12 @@ gboolean EF_charge_barre_ponctuelle_mx(Beton_Barre *barre, unsigned int discreti
 }
 
 
-gboolean EF_charge_barre_ponctuelle_def_ang_iso_y(Beton_Barre *barre,
+gboolean EF_charge_barre_ponctuelle_def_ang_iso_y(EF_Barre *barre,
   unsigned int discretisation, double a, double fz, double my, double *phia, double *phib)
 /* Description : Calcule les angles de rotation autour de l'axe y pour un élément bi-articulé
  *               soumis au chargement fz, my dans le repère local. Les résultats sont renvoyés
  *               par l'intermédiaire des pointeurs phia et phib qui ne peuvent être NULL.
- * Paramètres : Beton_Barre *barre : Barre à étudier,
+ * Paramètres : EF_Barre *barre : Barre à étudier,
  *            : unsigned int discretisation : partie de la barre à étudier,
  *            : double a : position de la charge par rapport au début de la partie de
  *                         barre à étudier,
@@ -349,12 +349,12 @@ gboolean EF_charge_barre_ponctuelle_def_ang_iso_y(Beton_Barre *barre,
 }
 
 
-gboolean EF_charge_barre_ponctuelle_def_ang_iso_z(Beton_Barre *barre,
+gboolean EF_charge_barre_ponctuelle_def_ang_iso_z(EF_Barre *barre,
   unsigned int discretisation, double a, double fy, double mz, double *phia, double *phib)
 /* Description : Calcule les angles de rotation autour de l'axe z pour un élément bi-articulé
  *               soumis au chargement fy, mz dans le repère local. Les résultats sont renvoyés
  *               par l'intermédiaire des pointeurs phia et phib qui ne peuvent être NULL.
- * Paramètres : Beton_Barre *barre : Barre à étudier,
+ * Paramètres : EF_Barre *barre : Barre à étudier,
  *            : unsigned int discretisation : partie de la barre à étudier,
  *            : double a : position de la charge par rapport au début de la partie de barre
  *                         à étudier,
@@ -443,13 +443,13 @@ gboolean EF_charge_barre_ponctuelle_def_ang_iso_z(Beton_Barre *barre,
 }
 
 
-gboolean EF_charge_barre_ponctuelle_fonc_rx(Fonction *fonction, Beton_Barre *barre,
+gboolean EF_charge_barre_ponctuelle_fonc_rx(Fonction *fonction, EF_Barre *barre,
   unsigned int discretisation, double a, double max, double mbx)
 /* Description : Calcule les déplacements d'une barre en rotation autour de l'axe x en fonction
  *                  des efforts aux extrémités de la poutre soumise à un moment de torsion
  *                  ponctuel à la position a.
  * Paramètres : Fonction *fonction : fonction où sera ajoutée la déformée,
- *            : Beton_Barre *barre : Barre à étudier,
+ *            : EF_Barre *barre : Barre à étudier,
  *            : unsigned int discretisation : partie de la barre à étudier,
  *            : double a : position du moment ponctuel autour de l'axe x par rapport au début
  *                         de la partie de barre à étudier,
@@ -554,14 +554,14 @@ gboolean EF_charge_barre_ponctuelle_fonc_rx(Fonction *fonction, Beton_Barre *bar
 
 
 gboolean EF_charge_barre_ponctuelle_fonc_ry(Fonction *f_rotation, Fonction* f_deform,
-  Beton_Barre *barre, unsigned int discretisation, double a, double fz, double my, double may,
+  EF_Barre *barre, unsigned int discretisation, double a, double fz, double my, double may,
   double mby)
 /* Description : Calcule les déplacements d'une barre en rotation autour de l'axe y et en
  *                 déformation selon l'axe z en fonction de la charge ponctuelle (fz et my) et
  *                 des efforts aux extrémités de la poutre.
  * Paramètres : Fonction *f_rotation : fonction où sera ajoutée la rotation,
  *            : Fonction* f_deform : fonction où sera ajoutée la déformation,
- *            : Beton_Barre *barre : Barre à étudier,
+ *            : EF_Barre *barre : Barre à étudier,
  *            : unsigned int discretisation : partie de la barre à étudier,
  *            : double a : position de la charge par rapport au début de la partie de barre à
  *                         étudier,
@@ -690,14 +690,14 @@ gboolean EF_charge_barre_ponctuelle_fonc_ry(Fonction *f_rotation, Fonction* f_de
 
 
 gboolean EF_charge_barre_ponctuelle_fonc_rz(Fonction *f_rotation, Fonction* f_deform,
-  Beton_Barre *barre, unsigned int discretisation, double a, double fy, double mz, double maz,
+  EF_Barre *barre, unsigned int discretisation, double a, double fy, double mz, double maz,
   double mbz)
 /* Description : Calcule les déplacements d'une barre en rotation autour de l'axe z et en
  *                 déformation selon l'axe y en fonction de la charge ponctuelle (fy et mz) et
  *                 des efforts aux extrémités de la poutre.
  * Paramètres : Fonction *f_rotation : fonction où sera ajoutée la rotation,
  *            : Fonction *f_deform : fonction où sera ajoutée la déformation,
- *            : Beton_Barre *barre : Barre à étudier,
+ *            : EF_Barre *barre : Barre à étudier,
  *            : unsigned int discretisation : partie de la barre à étudier,
  *            : double a : position de la charge par rapport au début de la partie de barre à
  *                         étudier,
@@ -793,12 +793,12 @@ gboolean EF_charge_barre_ponctuelle_fonc_rz(Fonction *f_rotation, Fonction* f_de
 }
 
 
-gboolean EF_charge_barre_ponctuelle_n(Fonction *fonction, Beton_Barre *barre,
+gboolean EF_charge_barre_ponctuelle_n(Fonction *fonction, EF_Barre *barre,
   unsigned int discretisation, double a, double fax, double fbx)
 /* Description : Calcule les déplacements d'une barre selon l'axe x en fonction de l'effort
  *               normal ponctuel n et des réactions d'appuis fax et fbx.
  * Paramètres : Fonction *fonction : fonction où sera ajoutée la déformée,
- *            : Beton_Barre *barre : Barre à étudier,
+ *            : EF_Barre *barre : Barre à étudier,
  *            : unsigned int discretisation : partie de la barre à étudier,
  *            : double a : position de la charge par rapport au début de la partie de barre,
  *            : double n : effort normal de la charge ponctuelle,
@@ -886,7 +886,7 @@ gboolean EF_charge_barre_ponctuelle_enleve_barres(Charge_Barre_Ponctuelle *charg
  *               une barre de la liste n'est pas dans la charge, ce point ne sera pas considéré
  *               comme une erreur mais la barre sera simplement ignorée.
  * Paramètres : Charge_Barre_Ponctuelle *charge : la charge à modifier,
- *              GList *barres : la liste de pointers de type Beton_Barre devant être retirés,
+ *              GList *barres : la liste de pointers de type EF_Barre devant être retirés,
  *              Projet *projet : la variable projet.
  * Valeur renvoyée :
  *   Succès : TRUE
@@ -900,7 +900,7 @@ gboolean EF_charge_barre_ponctuelle_enleve_barres(Charge_Barre_Ponctuelle *charg
     
     while (list_parcours != NULL)
     {
-        Beton_Barre *barre = list_parcours->data;
+        EF_Barre    *barre = list_parcours->data;
         
         charge->barres = g_list_remove(charge->barres, barre);
         

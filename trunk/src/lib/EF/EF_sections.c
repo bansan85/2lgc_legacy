@@ -1123,9 +1123,9 @@ Flottant EF_sections_vzp(EF_Section* sect)
 }
 
 
-double EF_sections_ay(Beton_Barre *barre, unsigned int discretisation)
+double EF_sections_ay(EF_Barre *barre, unsigned int discretisation)
 /* Description : Renvoie le paramètre de souplesse a de la poutre selon l'axe y.
- * Paramètres : Beton_Barre *barre : la barre à étudier,
+ * Paramètres : EF_Barre *barre : la barre à étudier,
  *              unsigned int discretisation : partie de la barre à étudier.
  * Valeur renvoyée :
  *   Succès : Résultat
@@ -1178,9 +1178,9 @@ double EF_sections_ay(Beton_Barre *barre, unsigned int discretisation)
 }
 
 
-double EF_sections_by(Beton_Barre *barre, unsigned int discretisation)
+double EF_sections_by(EF_Barre *barre, unsigned int discretisation)
 /* Description : Renvoie le paramètre de souplesse b de la poutre selon l'axe y.
- * Paramètres : Beton_Barre *barre : la barre à étudier,
+ * Paramètres : EF_Barre *barre : la barre à étudier,
  *              unsigned int discretisation : partie de la barre à étudier.
  * Valeur renvoyée :
  *   Succès : Résultat
@@ -1233,9 +1233,9 @@ double EF_sections_by(Beton_Barre *barre, unsigned int discretisation)
 }
 
 
-double EF_sections_cy(Beton_Barre *barre, unsigned int discretisation)
+double EF_sections_cy(EF_Barre *barre, unsigned int discretisation)
 /* Description : Renvoie le paramètre de souplesse c de la poutre selon l'axe y.
- * Paramètres : Beton_Barre *barre : la barre à étudier,
+ * Paramètres : EF_Barre *barre : la barre à étudier,
  *              unsigned int discretisation : partie de la barre à étudier.
  * Valeur renvoyée :
  *   Succès : Résultat
@@ -1288,9 +1288,9 @@ double EF_sections_cy(Beton_Barre *barre, unsigned int discretisation)
 }
 
 
-double EF_sections_az(Beton_Barre *barre, unsigned int discretisation)
+double EF_sections_az(EF_Barre *barre, unsigned int discretisation)
 /* Description : Renvoie le paramètre de souplesse a de la poutre selon l'axe z.
- * Paramètres : Beton_Barre *barre : la barre à étudier,
+ * Paramètres : EF_Barre *barre : la barre à étudier,
  *              unsigned int discretisation : partie de la barre à étudier.
  * Valeur renvoyée :
  *   Succès : Résultat
@@ -1343,9 +1343,9 @@ double EF_sections_az(Beton_Barre *barre, unsigned int discretisation)
 }
 
 
-double EF_sections_bz(Beton_Barre *barre, unsigned int discretisation)
+double EF_sections_bz(EF_Barre *barre, unsigned int discretisation)
 /* Description : Renvoie le paramètre de souplesse b de la poutre selon l'axe z.
- * Paramètres : Beton_Barre *barre : la barre à étudier,
+ * Paramètres : EF_Barre *barre : la barre à étudier,
  *              unsigned int discretisation : partie de la barre à étudier.
  * Valeur renvoyée :
  *   Succès : Résultat
@@ -1398,9 +1398,9 @@ double EF_sections_bz(Beton_Barre *barre, unsigned int discretisation)
 }
 
 
-double EF_sections_cz(Beton_Barre *barre, unsigned int discretisation)
+double EF_sections_cz(EF_Barre *barre, unsigned int discretisation)
 /* Description : Renvoie le paramètre de souplesse c de la poutre selon l'axe z.
- * Paramètres : Beton_Barre *barre : la barre à étudier,
+ * Paramètres : EF_Barre *barre : la barre à étudier,
  *              unsigned int discretisation : partie de la barre à étudier.
  * Valeur renvoyée :
  *   Succès : Résultat
@@ -1496,9 +1496,9 @@ Flottant EF_sections_s(EF_Section *sect)
 }
 
 
-double EF_sections_es_l(Beton_Barre *barre, unsigned int discretisation, double d, double f)
+double EF_sections_es_l(EF_Barre *barre, unsigned int discretisation, double d, double f)
 /* Description : Renvoie l'équivalent du rapport ES/L pour la barre étudiée.
- * Paramètres : Beton_Barre *barre : la barre à étudier,
+ * Paramètres : EF_Barre *barre : la barre à étudier,
  *              unsigned int discretisation : partie de la barre à étudier,
  *              double d : début de la partie à prendre en compte,
  *              double f : fin de la partie à prendre en compte.
@@ -1522,9 +1522,9 @@ double EF_sections_es_l(Beton_Barre *barre, unsigned int discretisation, double 
 }
 
 
-double EF_sections_gj_l(Beton_Barre *barre, unsigned int discretisation)
+double EF_sections_gj_l(EF_Barre *barre, unsigned int discretisation)
 /* Description : Renvoie l'équivalent du rapport GJ/L pour la barre étudiée.
- * Paramètres : Beton_Barre *barre : la barre à étudier,
+ * Paramètres : EF_Barre *barre : la barre à étudier,
  *              unsigned int discretisation : partie de la barre à étudier.
  * Valeur renvoyée :
  *   Succès : Résultat

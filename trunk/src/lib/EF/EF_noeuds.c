@@ -178,13 +178,13 @@ EF_Noeud *EF_noeuds_ajout_noeud_libre(Projet *projet, Flottant x, Flottant y, Fl
 }
 
 
-EF_Noeud* EF_noeuds_ajout_noeud_barre(Projet *projet, Beton_Barre *barre,
+EF_Noeud* EF_noeuds_ajout_noeud_barre(Projet *projet, EF_Barre *barre,
   Flottant position_relative_barre, EF_Appui *appui)
 /* Description : Ajouter un noeud à la liste des noeuds en lui attribuant le numéro suivant le
  *               dernier noeud existant. Ce noeud se situe à l'intérieur d'une barre et permet
  *               la discrétisation.
  * Paramètres : Projet *projet : la variable projet,
- *            : Beton_Barre *barre : barre qui contiendra le noeud intermédiaire,
+ *            : EF_Barre *barre : barre qui contiendra le noeud intermédiaire,
  *            : Flottant position_relative_barre : position relative à l'intérieur de la barre
  *              (compris entre 0.0 et 1.0),
  *            : EF_Appui *appui : Pointeur vers l'appui, NULL si aucun.

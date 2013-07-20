@@ -181,7 +181,7 @@ gboolean EF_calculs_initialise(Projet *projet)
     list_parcours = projet->modele.barres;
     do
     {
-        Beton_Barre   *element = list_parcours->data;
+        EF_Barre    *element = list_parcours->data;
         
         nnz_max += 12*12*(element->discretisation_element+1);
         
@@ -659,7 +659,7 @@ gboolean EF_calculs_resoud_charge(Projet *projet, Action *action)
                         GList   *list_parcours2 = charge_barre->barres;
                         do
                         {
-                            Beton_Barre *element_en_beton = list_parcours2->data;
+                            EF_Barre    *element_en_beton = list_parcours2->data;
                             unsigned int num = g_list_index(projet->modele.barres, element_en_beton);
                             unsigned int num_d, num_f;
                     
@@ -916,7 +916,7 @@ gboolean EF_calculs_resoud_charge(Projet *projet, Action *action)
                         GList   *list_parcours2 = charge_barre->barres;
                         do
                         {
-                            Beton_Barre  *element_en_beton = list_parcours2->data;
+                            EF_Barre    *element_en_beton = list_parcours2->data;
                             unsigned int num = g_list_index(projet->modele.barres, element_en_beton);
                             
             //         Convertion des efforts globaux en efforts locaux si nécessaire :\end{verbatim}\begin{center}
@@ -1302,7 +1302,7 @@ gboolean EF_calculs_resoud_charge(Projet *projet, Action *action)
     list_parcours = projet->modele.barres;
     do
     {
-        Beton_Barre *element_en_beton = list_parcours->data;
+        EF_Barre    *element_en_beton = list_parcours->data;
         double      S = common_math_get(EF_sections_s(element_en_beton->section));
         int         num = g_list_index(projet->modele.barres, element_en_beton);
         
@@ -1528,7 +1528,7 @@ gboolean EF_calculs_free(Projet *projet)
     list_parcours = projet->modele.barres;
     while (list_parcours != NULL)
     {
-        Beton_Barre     *barre = list_parcours->data;
+        EF_Barre        *barre = list_parcours->data;
         unsigned int    i;
         
         for (i=0;i<=barre->discretisation_element;i++)
