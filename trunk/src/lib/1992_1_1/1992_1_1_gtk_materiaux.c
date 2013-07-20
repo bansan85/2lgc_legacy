@@ -31,6 +31,7 @@
 #include "common_math.h"
 #include "common_selection.h"
 #include "1992_1_1_materiaux.h"
+#include "1993_1_1_gtk_materiaux.h"
 #include "EF_materiaux.h"
 
 gboolean _1992_1_1_gtk_materiaux_window_key_press(GtkWidget *widget, GdkEvent *event,
@@ -607,7 +608,7 @@ gboolean _1992_1_1_gtk_materiaux(Projet *projet, EF_Materiau *materiau)
 /* Description : Affichage de la fenêtre permettant de créer ou modifier un matériau de type
  *               béton.
  * Paramètres : Projet *projet : la variable projet,
- *            : Beton_Materiau *materiau : materiau à modifier. NULL si nouveau matériau,
+ *            : EF_Materiau *materiau : materiau à modifier. NULL si nouveau matériau,
  * Valeur renvoyée :
  *   Succès : TRUE
  *   Echec : FALSE :
@@ -657,7 +658,7 @@ gboolean _1992_1_1_gtk_materiaux(Projet *projet, EF_Materiau *materiau)
         beton_data = materiau->data;
         
         gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_textview_nom"))), materiau->nom, -1);
-        common_math_double_to_char2(common_math_f(common_math_get(beton_data->fck)/1000000., beton_data->fck.type), tmp, DECIMAL_DISTANCE);
+        common_math_double_to_char2(common_math_f(common_math_get(beton_data->fck)/1000000., beton_data->fck.type), tmp, DECIMAL_CONTRAINTE);
         gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_buffer_fck")), tmp, -1);
         
         gtk_button_set_label(GTK_BUTTON(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_button_add_edit")), "gtk-edit");
@@ -730,7 +731,24 @@ void EF_gtk_materiaux_edit_clicked(GtkWidget *widget, Projet *projet)
             
             gtk_tree_model_get(model, &iter, 0, &materiau, -1);
             
-            BUG(_1992_1_1_gtk_materiaux(projet, materiau), );
+            switch (materiau->type)
+            {
+                case MATERIAU_BETON :
+                {
+                    BUG(_1992_1_1_gtk_materiaux(projet, materiau), );
+                    break;
+                }
+                case MATERIAU_ACIER :
+                {
+                    BUG(_1993_1_1_gtk_materiaux(projet, materiau), );
+                    break;
+                }
+                default :
+                {
+                    BUGMSG(NULL, , gettext("Matériau %d inconnu.\n"), materiau->type);
+                    break;
+                }
+            }
         }
     }
     g_list_foreach(list, (GFunc)gtk_tree_path_free, NULL);

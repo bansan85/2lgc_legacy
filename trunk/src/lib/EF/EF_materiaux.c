@@ -165,7 +165,7 @@ gboolean EF_materiaux_repositionne(Projet *projet, EF_Materiau *materiau)
         case MATERIAU_ACIER :
         {
             if ((projet->list_gtk._1993_1_1_materiaux.builder != NULL) && (projet->list_gtk._1993_1_1_materiaux.materiau == materiau))
-                gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk._1993_1_1_materiaux.builder, "_1993_1_1_materiaux_acier_textview_nom"))), materiau->nom, -1);
+                gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk._1993_1_1_materiaux.builder, "_1993_1_1_materiaux_textview_nom"))), materiau->nom, -1);
             break;
         }
         default :

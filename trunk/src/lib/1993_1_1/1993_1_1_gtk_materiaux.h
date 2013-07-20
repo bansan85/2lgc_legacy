@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __1992_1_1_GTK_MATERIAUX_H
-#define __1992_1_1_GTK_MATERIAUX_H
+#ifndef __1993_1_1_GTK_MATERIAUX_H
+#define __1993_1_1_GTK_MATERIAUX_H
 
 #include "config.h"
 #ifdef ENABLE_GTK
@@ -25,7 +25,7 @@
 
 #include "common_projet.h"
 
-gboolean _1992_1_1_gtk_materiaux(Projet *projet, EF_Materiau *materiau) __attribute__((__warn_unused_result__));
+gboolean _1993_1_1_gtk_materiaux(Projet *projet, EF_Materiau *materiau) __attribute__((__warn_unused_result__));
 
 #endif
 

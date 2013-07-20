@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2013-07-14 21:10+0200\n"
-"PO-Revision-Date: 2013-07-14 20:50+0100\n"
+"POT-Creation-Date: 2013-07-21 01:21+0200\n"
+"PO-Revision-Date: 2013-07-21 01:26+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -151,6 +151,9 @@ msgstr "Noeud 2"
 msgid "Relâchement"
 msgstr "Relâchement"
 
+msgid "Personnaliser"
+msgstr "Personnaliser"
+
 msgid "Charge :"
 msgstr "Charge :"
 
@@ -222,6 +225,9 @@ msgstr "Noeuds intermédiaires"
 
 msgid "et les barres utilisant le matériau."
 msgstr "et les barres utilisant le matériau."
+
+msgid "Acier"
+msgstr "Acier"
 
 msgid "Béton"
 msgstr "Béton"
@@ -324,9 +330,6 @@ msgstr "Relâchement :"
 
 msgid "Nombre de divisions :"
 msgstr "Nombre de divisions :"
-
-msgid "Personnaliser"
-msgstr "Personnaliser"
 
 msgid "Options des combinaisons"
 msgstr "Options des combinaisons"
@@ -457,6 +460,10 @@ msgstr "Le matériau n'est pas en béton.\n"
 
 msgid "Modification d'un matériau béton"
 msgstr "Modification d'un matériau béton"
+
+#, c-format
+msgid "Matériau %d inconnu.\n"
+msgstr "Matériau %d inconnu.\n"
 
 msgid "Poteau en béton"
 msgstr "Poteau en béton"
@@ -1452,10 +1459,6 @@ msgstr "Impossible de réaliser un calcul sans noeud existant.\n"
 msgid "Impossible de réaliser un calcul sans barre existante.\n"
 msgstr "Impossible de réaliser un calcul sans barre existante.\n"
 
-#, c-format
-msgid "Matériau %d inconnu.\n"
-msgstr "Matériau %d inconnu.\n"
-
 msgid "Seul le matériau béton supporte nu à 0.\n"
 msgstr "Seul le matériau béton supporte nu à 0.\n"
 
@@ -1945,9 +1948,6 @@ msgstr ""
 "Le début (%f) et la fin (%f) de la charge répartie uniformément sont "
 "incorrecte avec la longueur de la barre qui est de %f m.\n"
 
-msgid "Acier"
-msgstr "Acier"
-
 msgid "Inconnu"
 msgstr "Inconnu"
 
@@ -2054,6 +2054,12 @@ msgstr "Noeud"
 
 msgid "Le matériau n'est pas en acier.\n"
 msgstr "Le matériau n'est pas en acier.\n"
+
+msgid "Ajout d'un matériau acier"
+msgstr "Ajout d'un matériau acier"
+
+msgid "Modification d'un matériau acier"
+msgstr "Modification d'un matériau acier"
 
 msgid "Impossible d'initialiser gtk.\n"
 msgstr "Impossible d'initialiser gtk.\n"

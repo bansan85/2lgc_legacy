@@ -19,6 +19,13 @@
     <object class="GtkMenu" id="EF_materiaux_ajouter_menu">
         <property name="visible">True</property>
         <child>
+            <object class="GtkMenuItem" id="EF_materiaux_ajouter_acier">
+                <property name="label" translatable="yes">Acier</property>
+                <property name="visible">True</property>
+                <signal name="activate" handler="_1993_1_1_gtk_materiaux_ajout"/>
+            </object>
+        </child>
+        <child>
             <object class="GtkMenuItem" id="EF_materiaux_ajouter_beton">
                 <property name="label" translatable="yes">Béton</property>
                 <property name="visible">True</property>
