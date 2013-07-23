@@ -22,6 +22,7 @@
 #include <string.h>
 #include <gmodule.h>
 
+#include "1990_action.h"
 #include "common_projet.h"
 #include "EF_noeuds.h"
 #include "EF_charge.h"
@@ -132,9 +133,9 @@ gboolean common_selection_ajout_nombre(void *data, GList **liste, Type_Liste typ
                 BUG(action_en_cours = EF_charge_action(projet, charge_liste), FALSE);
                 charge = data;
                 
-                if ((action_en_cours->numero == action->numero) && (charge_liste->numero == charge->numero))
+                if ((_1990_action_numero_renvoie(action_en_cours) == _1990_action_numero_renvoie(action)) && (charge_liste->numero == charge->numero))
                     return TRUE;
-                else if ((action_en_cours->numero > action->numero) || ((action_en_cours->numero == action->numero) && (charge_liste->numero >= charge->numero)))
+                else if ((_1990_action_numero_renvoie(action_en_cours) > _1990_action_numero_renvoie(action)) || ((_1990_action_numero_renvoie(action_en_cours) == _1990_action_numero_renvoie(action)) && (charge_liste->numero >= charge->numero)))
                 {
                     *liste = g_list_insert_before(*liste, list_parcours, data);
                     return TRUE;
@@ -473,7 +474,7 @@ char *common_selection_converti_charges_en_texte(GList *liste_charges, Projet *p
         
         BUG(action = EF_charge_action(projet, charge), NULL);
         
-        BUGMSG(tmp = g_strdup_printf("%u:%u", action->numero, charge->numero), NULL, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(tmp = g_strdup_printf("%u:%u", _1990_action_numero_renvoie(action), charge->numero), NULL, gettext("Erreur d'allocation mémoire.\n"));
         if (g_list_next(list_parcours) != NULL)
         {
             list_parcours = g_list_next(list_parcours);
@@ -486,12 +487,12 @@ char *common_selection_converti_charges_en_texte(GList *liste_charges, Projet *p
                 {
                     action = list_parcours2->data;
                     
-                    if (g_list_find(action->charges, charge) != NULL)
+                    if (g_list_find(_1990_action_charges_renvoie(action), charge) != NULL)
                         list_parcours2 = NULL;
                      
                     list_parcours2 = g_list_next(list_parcours2);
                 }
-                BUGMSG(tmp2 = g_strdup_printf("%s;%u:%u", tmp, action->numero, charge->numero), NULL, gettext("Erreur d'allocation mémoire.\n"));
+                BUGMSG(tmp2 = g_strdup_printf("%s;%u:%u", tmp, _1990_action_numero_renvoie(action), charge->numero), NULL, gettext("Erreur d'allocation mémoire.\n"));
                 free(tmp);
                 tmp = tmp2;
                 tmp2 = NULL;

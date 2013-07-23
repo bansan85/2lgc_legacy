@@ -135,7 +135,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
             gtk_list_store_clear(res->list_store);
             return TRUE;
         }
-        BUG(action = _1990_action_cherche_numero(projet, gtk_combo_box_get_active(projet->list_gtk.ef_resultats.combobox_cas)), FALSE);
+        BUG(action = _1990_action_numero_cherche(projet, gtk_combo_box_get_active(projet->list_gtk.ef_resultats.combobox_cas)), FALSE);
         actions = g_list_append(actions, action);
     }
     // Combinaisons
@@ -203,7 +203,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
         }
         comb = g_list_nth(comb, gtk_combo_box_get_active(projet->list_gtk.ef_resultats.combobox_ponderations));
         
-        BUG(action = EF_resultat_action_ponderation(comb->data, projet), FALSE);
+        BUG(action = _1990_action_ponderation_resultat(comb->data, projet), FALSE);
         actions = g_list_append(actions, action);
     }
     else if (gtk_combo_box_get_active(projet->list_gtk.ef_resultats.combobox) == 2)
@@ -276,7 +276,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
             list_parcours = comb;
             while (list_parcours != NULL)
             {
-                BUG(action = EF_resultat_action_ponderation(list_parcours->data, projet), FALSE);
+                BUG(action = _1990_action_ponderation_resultat(list_parcours->data, projet), FALSE);
                 actions = g_list_append(actions, action);
                 list_parcours = g_list_next(list_parcours);
             }
@@ -600,7 +600,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             {
                                 Action  *action2 = list_parcours2->data;
                                 
-                                liste = g_list_append(liste, action2->fonctions_efforts[0][i]);
+                                liste = g_list_append(liste, _1990_action_fonctions_efforts_renvoie(action2, 0, i));
                                 
                                 list_parcours2 = g_list_next(list_parcours2);
                             }
@@ -620,7 +620,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             {
                                 Action  *action2 = list_parcours2->data;
                                 
-                                liste = g_list_append(liste, action2->fonctions_efforts[1][i]);
+                                liste = g_list_append(liste, _1990_action_fonctions_efforts_renvoie(action2, 1, i));
                                 
                                 list_parcours2 = g_list_next(list_parcours2);
                             }
@@ -640,7 +640,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             {
                                 Action  *action2 = list_parcours2->data;
                                 
-                                liste = g_list_append(liste, action2->fonctions_efforts[2][i]);
+                                liste = g_list_append(liste, _1990_action_fonctions_efforts_renvoie(action2, 2, i));
                                 
                                 list_parcours2 = g_list_next(list_parcours2);
                             }
@@ -660,7 +660,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             {
                                 Action  *action2 = list_parcours2->data;
                                 
-                                liste = g_list_append(liste, action2->fonctions_efforts[3][i]);
+                                liste = g_list_append(liste, _1990_action_fonctions_efforts_renvoie(action2, 3, i));
                                 
                                 list_parcours2 = g_list_next(list_parcours2);
                             }
@@ -680,7 +680,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             {
                                 Action  *action2 = list_parcours2->data;
                                 
-                                liste = g_list_append(liste, action2->fonctions_efforts[4][i]);
+                                liste = g_list_append(liste, _1990_action_fonctions_efforts_renvoie(action2, 4, i));
                                 
                                 list_parcours2 = g_list_next(list_parcours2);
                             }
@@ -700,7 +700,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             {
                                 Action  *action2 = list_parcours2->data;
                                 
-                                liste = g_list_append(liste, action2->fonctions_efforts[5][i]);
+                                liste = g_list_append(liste, _1990_action_fonctions_efforts_renvoie(action2, 5, i));
                                 
                                 list_parcours2 = g_list_next(list_parcours2);
                             }
@@ -721,7 +721,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                 {
                                     Action  *action2 = list_parcours2->data;
                                     
-                                    liste = g_list_append(liste, action2->fonctions_efforts[0][i]);
+                                    liste = g_list_append(liste, _1990_action_fonctions_efforts_renvoie(action2, 0, i));
                                     
                                     list_parcours2 = g_list_next(list_parcours2);
                                 }
@@ -739,7 +739,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             else
                             {
                                 Action  *action2 = list_parcours2->data;
-                                tmp = common_fonction_affiche_caract(action2->fonctions_efforts[0][i], DECIMAL_DISTANCE, DECIMAL_FORCE);
+                                tmp = common_fonction_affiche_caract(_1990_action_fonctions_efforts_renvoie(action2, 0, i), DECIMAL_DISTANCE, DECIMAL_FORCE);
                             }
                             gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
                             
@@ -755,7 +755,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                 {
                                     Action  *action2 = list_parcours2->data;
                                     
-                                    liste = g_list_append(liste, action2->fonctions_efforts[1][i]);
+                                    liste = g_list_append(liste, _1990_action_fonctions_efforts_renvoie(action2, 1, i));
                                     
                                     list_parcours2 = g_list_next(list_parcours2);
                                 }
@@ -773,7 +773,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             else
                             {
                                 Action  *action2 = list_parcours2->data;
-                                tmp = common_fonction_affiche_caract(action2->fonctions_efforts[1][i], DECIMAL_DISTANCE, DECIMAL_FORCE);
+                                tmp = common_fonction_affiche_caract(_1990_action_fonctions_efforts_renvoie(action2, 1, i), DECIMAL_DISTANCE, DECIMAL_FORCE);
                             }
                             gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
                             
@@ -789,7 +789,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                 {
                                     Action  *action2 = list_parcours2->data;
                                     
-                                    liste = g_list_append(liste, action2->fonctions_efforts[2][i]);
+                                    liste = g_list_append(liste, _1990_action_fonctions_efforts_renvoie(action2, 2, i));
                                     
                                     list_parcours2 = g_list_next(list_parcours2);
                                 }
@@ -807,7 +807,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             else
                             {
                                 Action  *action2 = list_parcours2->data;
-                                tmp = common_fonction_affiche_caract(action2->fonctions_efforts[2][i], DECIMAL_DISTANCE, DECIMAL_FORCE);
+                                tmp = common_fonction_affiche_caract(_1990_action_fonctions_efforts_renvoie(action2, 2, i), DECIMAL_DISTANCE, DECIMAL_FORCE);
                             }
                             gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
                             
@@ -823,7 +823,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                 {
                                     Action  *action2 = list_parcours2->data;
                                     
-                                    liste = g_list_append(liste, action2->fonctions_efforts[3][i]);
+                                    liste = g_list_append(liste, _1990_action_fonctions_efforts_renvoie(action2, 3, i));
                                     
                                     list_parcours2 = g_list_next(list_parcours2);
                                 }
@@ -840,7 +840,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             else
                             {
                                 Action  *action2 = list_parcours2->data;
-                                tmp = common_fonction_affiche_caract(action2->fonctions_efforts[3][i], DECIMAL_DISTANCE, DECIMAL_MOMENT);
+                                tmp = common_fonction_affiche_caract(_1990_action_fonctions_efforts_renvoie(action2, 3, i), DECIMAL_DISTANCE, DECIMAL_MOMENT);
                             }
                             gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
                             
@@ -856,7 +856,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                 {
                                     Action  *action2 = list_parcours2->data;
                                     
-                                    liste = g_list_append(liste, action2->fonctions_efforts[4][i]);
+                                    liste = g_list_append(liste, _1990_action_fonctions_efforts_renvoie(action2, 4, i));
                                     
                                     list_parcours2 = g_list_next(list_parcours2);
                                 }
@@ -874,7 +874,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             else
                             {
                                 Action  *action2 = list_parcours2->data;
-                                tmp = common_fonction_affiche_caract(action2->fonctions_efforts[4][i], DECIMAL_DISTANCE, DECIMAL_MOMENT);
+                                tmp = common_fonction_affiche_caract(_1990_action_fonctions_efforts_renvoie(action2, 4, i), DECIMAL_DISTANCE, DECIMAL_MOMENT);
                             }
                             gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
                             
@@ -890,7 +890,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                 {
                                     Action  *action2 = list_parcours2->data;
                                     
-                                    liste = g_list_append(liste, action2->fonctions_efforts[5][i]);
+                                    liste = g_list_append(liste, _1990_action_fonctions_efforts_renvoie(action2, 5, i));
                                     
                                     list_parcours2 = g_list_next(list_parcours2);
                                 }
@@ -908,7 +908,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             else
                             {
                                 Action  *action2 = list_parcours2->data;
-                                tmp = common_fonction_affiche_caract(action2->fonctions_efforts[5][i], DECIMAL_DISTANCE, DECIMAL_MOMENT);
+                                tmp = common_fonction_affiche_caract(_1990_action_fonctions_efforts_renvoie(action2, 5, i), DECIMAL_DISTANCE, DECIMAL_MOMENT);
                             }
                             gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
                             
@@ -924,7 +924,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                 {
                                     Action  *action2 = list_parcours2->data;
                                     
-                                    liste = g_list_append(liste, action2->fonctions_efforts[0][i]);
+                                    liste = g_list_append(liste, _1990_action_fonctions_efforts_renvoie(action2, 0, i));
                                     
                                     list_parcours2 = g_list_next(list_parcours2);
                                 }
@@ -945,7 +945,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             else
                             {
                                 Action  *action2 = list_parcours2->data;
-                                tmp = common_fonction_renvoie(action2->fonctions_efforts[0][i], NULL, DECIMAL_FORCE);
+                                tmp = common_fonction_renvoie(_1990_action_fonctions_efforts_renvoie(action2, 0, i), NULL, DECIMAL_FORCE);
                             }
                             gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
                             
@@ -961,7 +961,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                 {
                                     Action  *action2 = list_parcours2->data;
                                     
-                                    liste = g_list_append(liste, action2->fonctions_efforts[1][i]);
+                                    liste = g_list_append(liste, _1990_action_fonctions_efforts_renvoie(action2, 1, i));
                                     
                                     list_parcours2 = g_list_next(list_parcours2);
                                 }
@@ -982,7 +982,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             else
                             {
                                 Action  *action2 = list_parcours2->data;
-                                tmp = common_fonction_renvoie(action2->fonctions_efforts[1][i], NULL, DECIMAL_FORCE);
+                                tmp = common_fonction_renvoie(_1990_action_fonctions_efforts_renvoie(action2, 1, i), NULL, DECIMAL_FORCE);
                             }
                             gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
                             
@@ -998,7 +998,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                 {
                                     Action  *action2 = list_parcours2->data;
                                     
-                                    liste = g_list_append(liste, action2->fonctions_efforts[2][i]);
+                                    liste = g_list_append(liste, _1990_action_fonctions_efforts_renvoie(action2, 2, i));
                                     
                                     list_parcours2 = g_list_next(list_parcours2);
                                 }
@@ -1019,7 +1019,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             else
                             {
                                 Action  *action2 = list_parcours2->data;
-                                tmp = common_fonction_renvoie(action2->fonctions_efforts[2][i], NULL, DECIMAL_FORCE);
+                                tmp = common_fonction_renvoie(_1990_action_fonctions_efforts_renvoie(action2, 2, i), NULL, DECIMAL_FORCE);
                             }
                             gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
                             
@@ -1035,7 +1035,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                 {
                                     Action  *action2 = list_parcours2->data;
                                     
-                                    liste = g_list_append(liste, action2->fonctions_efforts[3][i]);
+                                    liste = g_list_append(liste, _1990_action_fonctions_efforts_renvoie(action2, 3, i));
                                     
                                     list_parcours2 = g_list_next(list_parcours2);
                                 }
@@ -1055,7 +1055,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             else
                             {
                                 Action  *action2 = list_parcours2->data;
-                                tmp = common_fonction_renvoie(action2->fonctions_efforts[3][i], NULL, DECIMAL_MOMENT);
+                                tmp = common_fonction_renvoie(_1990_action_fonctions_efforts_renvoie(action2, 3, i), NULL, DECIMAL_MOMENT);
                             }
                             gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
                             
@@ -1071,7 +1071,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                 {
                                     Action  *action2 = list_parcours2->data;
                                     
-                                    liste = g_list_append(liste, action2->fonctions_efforts[4][i]);
+                                    liste = g_list_append(liste, _1990_action_fonctions_efforts_renvoie(action2, 4, i));
                                     
                                     list_parcours2 = g_list_next(list_parcours2);
                                 }
@@ -1092,7 +1092,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             else
                             {
                                 Action  *action2 = list_parcours2->data;
-                                tmp = common_fonction_renvoie(action2->fonctions_efforts[4][i], NULL, DECIMAL_MOMENT);
+                                tmp = common_fonction_renvoie(_1990_action_fonctions_efforts_renvoie(action2, 4, i), NULL, DECIMAL_MOMENT);
                             }
                             gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
                             
@@ -1108,7 +1108,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                 {
                                     Action  *action2 = list_parcours2->data;
                                     
-                                    liste = g_list_append(liste, action2->fonctions_efforts[5][i]);
+                                    liste = g_list_append(liste, _1990_action_fonctions_efforts_renvoie(action2, 5, i));
                                     
                                     list_parcours2 = g_list_next(list_parcours2);
                                 }
@@ -1129,7 +1129,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             else
                             {
                                 Action  *action2 = list_parcours2->data;
-                                tmp = common_fonction_renvoie(action2->fonctions_efforts[5][i], NULL, DECIMAL_MOMENT);
+                                tmp = common_fonction_renvoie(_1990_action_fonctions_efforts_renvoie(action2, 5, i), NULL, DECIMAL_MOMENT);
                             }
                             gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
                             
@@ -1144,7 +1144,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             {
                                 Action  *action2 = list_parcours2->data;
                                 
-                                liste = g_list_append(liste, action2->fonctions_deformation[0][i]);
+                                liste = g_list_append(liste, _1990_action_fonctions_deformation_renvoie(action2, 0, i));
                                 
                                 list_parcours2 = g_list_next(list_parcours2);
                             }
@@ -1164,7 +1164,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             {
                                 Action  *action2 = list_parcours2->data;
                                 
-                                liste = g_list_append(liste, action2->fonctions_deformation[1][i]);
+                                liste = g_list_append(liste, _1990_action_fonctions_deformation_renvoie(action2, 1, i));
                                 
                                 list_parcours2 = g_list_next(list_parcours2);
                             }
@@ -1184,7 +1184,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             {
                                 Action  *action2 = list_parcours2->data;
                                 
-                                liste = g_list_append(liste, action2->fonctions_deformation[2][i]);
+                                liste = g_list_append(liste, _1990_action_fonctions_deformation_renvoie(action2, 2, i));
                                 
                                 list_parcours2 = g_list_next(list_parcours2);
                             }
@@ -1204,7 +1204,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             {
                                 Action  *action2 = list_parcours2->data;
                                 
-                                liste = g_list_append(liste, action2->fonctions_rotation[0][i]);
+                                liste = g_list_append(liste, _1990_action_fonctions_rotation_renvoie(action2, 0, i));
                                 
                                 list_parcours2 = g_list_next(list_parcours2);
                             }
@@ -1224,7 +1224,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             {
                                 Action  *action2 = list_parcours2->data;
                                 
-                                liste = g_list_append(liste, action2->fonctions_rotation[1][i]);
+                                liste = g_list_append(liste, _1990_action_fonctions_rotation_renvoie(action2, 1, i));
                                 
                                 list_parcours2 = g_list_next(list_parcours2);
                             }
@@ -1244,7 +1244,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             {
                                 Action  *action2 = list_parcours2->data;
                                 
-                                liste = g_list_append(liste, action2->fonctions_rotation[2][i]);
+                                liste = g_list_append(liste, _1990_action_fonctions_rotation_renvoie(action2, 2, i));
                                 
                                 list_parcours2 = g_list_next(list_parcours2);
                             }
@@ -1265,7 +1265,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                 {
                                     Action  *action2 = list_parcours2->data;
                                     
-                                    liste = g_list_append(liste, action2->fonctions_deformation[0][i]);
+                                    liste = g_list_append(liste, _1990_action_fonctions_deformation_renvoie(action2, 0, i));
                                     
                                     list_parcours2 = g_list_next(list_parcours2);
                                 }
@@ -1283,7 +1283,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             else
                             {
                                 Action  *action2 = list_parcours2->data;
-                                tmp = common_fonction_affiche_caract(action2->fonctions_deformation[0][i], DECIMAL_DISTANCE, DECIMAL_DEPLACEMENT);
+                                tmp = common_fonction_affiche_caract(_1990_action_fonctions_deformation_renvoie(action2, 0, i), DECIMAL_DISTANCE, DECIMAL_DEPLACEMENT);
                             }
                             gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
                             
@@ -1299,7 +1299,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                 {
                                     Action  *action2 = list_parcours2->data;
                                     
-                                    liste = g_list_append(liste, action2->fonctions_deformation[1][i]);
+                                    liste = g_list_append(liste, _1990_action_fonctions_deformation_renvoie(action2, 1, i));
                                     
                                     list_parcours2 = g_list_next(list_parcours2);
                                 }
@@ -1317,7 +1317,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             else
                             {
                                 Action  *action2 = list_parcours2->data;
-                                tmp = common_fonction_affiche_caract(action2->fonctions_deformation[1][i], DECIMAL_DISTANCE, DECIMAL_DEPLACEMENT);
+                                tmp = common_fonction_affiche_caract(_1990_action_fonctions_deformation_renvoie(action2, 1, i), DECIMAL_DISTANCE, DECIMAL_DEPLACEMENT);
                             }
                             gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
                             
@@ -1333,7 +1333,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                 {
                                     Action  *action2 = list_parcours2->data;
                                     
-                                    liste = g_list_append(liste, action2->fonctions_deformation[2][i]);
+                                    liste = g_list_append(liste, _1990_action_fonctions_deformation_renvoie(action2, 2, i));
                                     
                                     list_parcours2 = g_list_next(list_parcours2);
                                 }
@@ -1351,7 +1351,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             else
                             {
                                 Action  *action2 = list_parcours2->data;
-                                tmp = common_fonction_affiche_caract(action2->fonctions_deformation[2][i], DECIMAL_DISTANCE, DECIMAL_DEPLACEMENT);
+                                tmp = common_fonction_affiche_caract(_1990_action_fonctions_deformation_renvoie(action2, 2, i), DECIMAL_DISTANCE, DECIMAL_DEPLACEMENT);
                             }
                             gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
                             
@@ -1367,7 +1367,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                 {
                                     Action  *action2 = list_parcours2->data;
                                     
-                                    liste = g_list_append(liste, action2->fonctions_rotation[0][i]);
+                                    liste = g_list_append(liste, _1990_action_fonctions_rotation_renvoie(action2, 0, i));
                                     
                                     list_parcours2 = g_list_next(list_parcours2);
                                 }
@@ -1384,7 +1384,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             else
                             {
                                 Action  *action2 = list_parcours2->data;
-                                tmp = common_fonction_affiche_caract(action2->fonctions_rotation[0][i], DECIMAL_DISTANCE, DECIMAL_ROTATION);
+                                tmp = common_fonction_affiche_caract(_1990_action_fonctions_rotation_renvoie(action2, 0, i), DECIMAL_DISTANCE, DECIMAL_ROTATION);
                             }
                             gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
                             
@@ -1400,7 +1400,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                 {
                                     Action  *action2 = list_parcours2->data;
                                     
-                                    liste = g_list_append(liste, action2->fonctions_rotation[1][i]);
+                                    liste = g_list_append(liste, _1990_action_fonctions_rotation_renvoie(action2, 1, i));
                                     
                                     list_parcours2 = g_list_next(list_parcours2);
                                 }
@@ -1418,7 +1418,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             else
                             {
                                 Action  *action2 = list_parcours2->data;
-                                tmp = common_fonction_affiche_caract(action2->fonctions_rotation[1][i], DECIMAL_DISTANCE, DECIMAL_ROTATION);
+                                tmp = common_fonction_affiche_caract(_1990_action_fonctions_rotation_renvoie(action2, 1, i), DECIMAL_DISTANCE, DECIMAL_ROTATION);
                             }
                             gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
                             
@@ -1434,7 +1434,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                 {
                                     Action  *action2 = list_parcours2->data;
                                     
-                                    liste = g_list_append(liste, action2->fonctions_rotation[2][i]);
+                                    liste = g_list_append(liste, _1990_action_fonctions_rotation_renvoie(action2, 2, i));
                                     
                                     list_parcours2 = g_list_next(list_parcours2);
                                 }
@@ -1452,7 +1452,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             else
                             {
                                 Action  *action2 = list_parcours2->data;
-                                tmp = common_fonction_affiche_caract(action2->fonctions_rotation[2][i], DECIMAL_DISTANCE, DECIMAL_ROTATION);
+                                tmp = common_fonction_affiche_caract(_1990_action_fonctions_rotation_renvoie(action2, 2, i), DECIMAL_DISTANCE, DECIMAL_ROTATION);
                             }
                             gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
                             
@@ -1468,7 +1468,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                 {
                                     Action  *action2 = list_parcours2->data;
                                     
-                                    liste = g_list_append(liste, action2->fonctions_deformation[0][i]);
+                                    liste = g_list_append(liste, _1990_action_fonctions_deformation_renvoie(action2, 0, i));
                                     
                                     list_parcours2 = g_list_next(list_parcours2);
                                 }
@@ -1489,7 +1489,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             else
                             {
                                 Action  *action2 = list_parcours2->data;
-                                tmp = common_fonction_renvoie(action2->fonctions_deformation[0][i], NULL, DECIMAL_DEPLACEMENT);
+                                tmp = common_fonction_renvoie(_1990_action_fonctions_deformation_renvoie(action2, 0, i), NULL, DECIMAL_DEPLACEMENT);
                             }
                             gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
                             
@@ -1505,7 +1505,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                 {
                                     Action  *action2 = list_parcours2->data;
                                     
-                                    liste = g_list_append(liste, action2->fonctions_deformation[1][i]);
+                                    liste = g_list_append(liste, _1990_action_fonctions_deformation_renvoie(action2, 1, i));
                                     
                                     list_parcours2 = g_list_next(list_parcours2);
                                 }
@@ -1526,7 +1526,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             else
                             {
                                 Action  *action2 = list_parcours2->data;
-                                tmp = common_fonction_renvoie(action2->fonctions_deformation[1][i], NULL, DECIMAL_DEPLACEMENT);
+                                tmp = common_fonction_renvoie(_1990_action_fonctions_deformation_renvoie(action2, 1, i), NULL, DECIMAL_DEPLACEMENT);
                             }
                             gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
                             
@@ -1542,7 +1542,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                 {
                                     Action  *action2 = list_parcours2->data;
                                     
-                                    liste = g_list_append(liste, action2->fonctions_deformation[2][i]);
+                                    liste = g_list_append(liste, _1990_action_fonctions_deformation_renvoie(action2, 2, i));
                                     
                                     list_parcours2 = g_list_next(list_parcours2);
                                 }
@@ -1563,7 +1563,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             else
                             {
                                 Action  *action2 = list_parcours2->data;
-                                tmp = common_fonction_renvoie(action2->fonctions_deformation[2][i], NULL, DECIMAL_DEPLACEMENT);
+                                tmp = common_fonction_renvoie(_1990_action_fonctions_deformation_renvoie(action2, 2, i), NULL, DECIMAL_DEPLACEMENT);
                             }
                             gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
                             
@@ -1579,7 +1579,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                 {
                                     Action  *action2 = list_parcours2->data;
                                     
-                                    liste = g_list_append(liste, action2->fonctions_rotation[0][i]);
+                                    liste = g_list_append(liste, _1990_action_fonctions_rotation_renvoie(action2, 0, i));
                                     
                                     list_parcours2 = g_list_next(list_parcours2);
                                 }
@@ -1600,7 +1600,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             else
                             {
                                 Action  *action2 = list_parcours2->data;
-                                tmp = common_fonction_renvoie(action2->fonctions_rotation[0][i], NULL, DECIMAL_ROTATION);
+                                tmp = common_fonction_renvoie(_1990_action_fonctions_rotation_renvoie(action2, 0, i), NULL, DECIMAL_ROTATION);
                             }
                             gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
                             
@@ -1616,7 +1616,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                 {
                                     Action  *action2 = list_parcours2->data;
                                     
-                                    liste = g_list_append(liste, action2->fonctions_rotation[1][i]);
+                                    liste = g_list_append(liste, _1990_action_fonctions_rotation_renvoie(action2, 1, i));
                                     
                                     list_parcours2 = g_list_next(list_parcours2);
                                 }
@@ -1637,7 +1637,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             else
                             {
                                 Action  *action2 = list_parcours2->data;
-                                tmp = common_fonction_renvoie(action2->fonctions_rotation[1][i], NULL, DECIMAL_ROTATION);
+                                tmp = common_fonction_renvoie(_1990_action_fonctions_rotation_renvoie(action2, 1, i), NULL, DECIMAL_ROTATION);
                             }
                             gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
                             
@@ -1653,7 +1653,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                                 {
                                     Action  *action2 = list_parcours2->data;
                                     
-                                    liste = g_list_append(liste, action2->fonctions_rotation[2][i]);
+                                    liste = g_list_append(liste, _1990_action_fonctions_rotation_renvoie(action2, 2, i));
                                     
                                     list_parcours2 = g_list_next(list_parcours2);
                                 }
@@ -1675,7 +1675,7 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
                             else
                             {
                                 Action  *action2 = list_parcours2->data;
-                                tmp = common_fonction_renvoie(action2->fonctions_rotation[2][i], NULL, DECIMAL_ROTATION);
+                                tmp = common_fonction_renvoie(_1990_action_fonctions_rotation_renvoie(action2, 2, i), NULL, DECIMAL_ROTATION);
                             }
                             gtk_list_store_set(res->list_store, &Iter, j-1, tmp, -1);
                             
@@ -1716,11 +1716,8 @@ gboolean EF_gtk_resultats_remplit_page(Gtk_EF_Resultats_Tableau *res, Projet *pr
         while (list_parcours != NULL)
         {
             action = list_parcours->data;
-            BUG(common_fonction_free(projet, action), FALSE);
-            free(action->deplacement_complet->x);
-            free(action->deplacement_complet);
-            free(action->efforts_noeuds->x);
-            free(action->efforts_noeuds);
+            BUG(_1990_action_fonction_free(projet, action), FALSE);
+            BUG(_1990_action_ponderation_resultat_free_calculs(action), FALSE);
             free(action);
             
             list_parcours = g_list_next(list_parcours);

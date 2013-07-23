@@ -58,7 +58,7 @@ Charge_Barre_Ponctuelle *EF_charge_barre_ponctuelle_ajout(Projet *projet,
  *             projet == NULL,
  *             action introuvable,
  *             barre == NULL,
- *             _1990_action_cherche_numero(projet, num_action) == NULL,
+ *             _1990_action_numero_cherche(projet, num_action) == NULL,
  *             a < 0 ou a > l,
  *             en cas d'erreur d'allocation mémoire
  */
@@ -73,7 +73,7 @@ Charge_Barre_Ponctuelle *EF_charge_barre_ponctuelle_ajout(Projet *projet,
     
     // Trivial
     BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUG(action_en_cours = _1990_action_cherche_numero(projet, num_action), NULL);
+    BUG(action_en_cours = _1990_action_numero_cherche(projet, num_action), NULL);
     BUGMSG(!((common_math_get(a) < 0.) && (!(ERREUR_RELATIVE_EGALE(common_math_get(a), 0.)))), NULL, gettext("La position de la charge ponctuelle (%f) est incorrecte.\n"), common_math_get(a));
     BUGMSG(charge_nouveau = malloc(sizeof(Charge_Barre_Ponctuelle)), NULL, gettext("Erreur d'allocation mémoire.\n"));
     if (barres != NULL)
@@ -103,9 +103,9 @@ Charge_Barre_Ponctuelle *EF_charge_barre_ponctuelle_ajout(Projet *projet,
     charge_nouveau->my = my;
     charge_nouveau->mz = mz;
     
-    charge_nouveau->numero = g_list_length(action_en_cours->charges);
+    charge_nouveau->numero = g_list_length(_1990_action_charges_renvoie(action_en_cours));
     
-    action_en_cours->charges = g_list_append(action_en_cours->charges, charge_nouveau);
+    BUG(_1990_action_charges_change(action_en_cours, g_list_append(_1990_action_charges_renvoie(action_en_cours), charge_nouveau)), NULL);
     
     BUG(EF_calculs_free(projet), FALSE);
     
@@ -113,7 +113,7 @@ Charge_Barre_Ponctuelle *EF_charge_barre_ponctuelle_ajout(Projet *projet,
     if ((projet->list_gtk._1990_actions.builder != NULL) && (gtk_tree_selection_get_selected(projet->list_gtk._1990_actions.tree_select_actions, &model_action, &iter_action)))
     {
         gtk_tree_model_get(model_action, &iter_action, 0, &action, -1);
-        if (action->numero == num_action)
+        if (_1990_action_numero_renvoie(action) == num_action)
         {
             gtk_tree_store_append(projet->list_gtk._1990_actions.tree_store_charges, &charge_nouveau->Iter, NULL);
             gtk_tree_store_set(projet->list_gtk._1990_actions.tree_store_charges, &charge_nouveau->Iter, 0, charge_nouveau, -1);
@@ -919,7 +919,7 @@ gboolean EF_charge_barre_ponctuelle_enleve_barres(Charge_Barre_Ponctuelle *charg
             
             gtk_tree_model_get(model, &Iter, 0, &action, -1);
             
-            if (g_list_find(action->charges, charge))
+            if (g_list_find(_1990_action_charges_renvoie(action), charge))
                 gtk_widget_queue_resize(GTK_WIDGET(projet->list_gtk._1990_actions.tree_view_charges));
         }
     }

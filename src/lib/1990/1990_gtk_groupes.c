@@ -152,7 +152,7 @@ gboolean _1990_gtk_groupes_affiche_niveau(Projet *projet, unsigned int niveau)
  *                aucun niveau de groupes,
  *                erreur d'allocation mémoire,
  *                _1990_groupe_positionne_niveau,
- *                _1990_action_cherche_numero,
+ *                _1990_action_numero_cherche,
  *                _1990_groupe_positionne_groupe.
  */
 {
@@ -236,8 +236,8 @@ gboolean _1990_gtk_groupes_affiche_niveau(Projet *projet, unsigned int niveau)
                 {
                     Action *action;
                     
-                    BUG(action = _1990_action_cherche_numero(projet, element->numero), FALSE);
-                    gtk_tree_store_set(gtk_1990_groupes->tree_store_etat, &element->Iter, 0, element->numero, 1, action->nom, -1);
+                    BUG(action = _1990_action_numero_cherche(projet, element->numero), FALSE);
+                    gtk_tree_store_set(gtk_1990_groupes->tree_store_etat, &element->Iter, 0, element->numero, 1, _1990_action_nom_renvoie(action), -1);
                 }
                 else
                 {
@@ -285,8 +285,8 @@ gboolean _1990_gtk_groupes_affiche_niveau(Projet *projet, unsigned int niveau)
             {
                 Action *action;
                 
-                BUG(action = _1990_action_cherche_numero(projet, i), FALSE);
-                gtk_tree_store_set(gtk_1990_groupes->tree_store_dispo, &Iter, 0, i, 1, action->nom, -1);
+                BUG(action = _1990_action_numero_cherche(projet, i), FALSE);
+                gtk_tree_store_set(gtk_1990_groupes->tree_store_dispo, &Iter, 0, i, 1, _1990_action_nom_renvoie(action), -1);
             }
             else
             {
@@ -444,8 +444,8 @@ int _1990_gtk_insert_dispo(Projet *projet, unsigned int numero, Niveau_Groupe *n
     {
         Action *action;
         
-        BUG(action = _1990_action_cherche_numero(projet, numero), -3);
-        gtk_tree_store_set(gtk_1990_groupes->tree_store_dispo, &iter, 0, numero, 1, action->nom, -1);
+        BUG(action = _1990_action_numero_cherche(projet, numero), -3);
+        gtk_tree_store_set(gtk_1990_groupes->tree_store_dispo, &iter, 0, numero, 1, _1990_action_nom_renvoie(action), -1);
     }
     else
     {
@@ -1055,7 +1055,7 @@ void _1990_gtk_tree_view_etat_cell_edited(GtkCellRendererText *cell, gchar *path
     {
         // Le nom est celui d'une action
         if (niveau == 0)
-            BUG(_1990_action_renomme(projet, _1990_action_cherche_numero(projet, numero), new_text), );
+            BUG(_1990_action_nom_change(projet, _1990_action_numero_cherche(projet, numero), new_text), );
         else // Le nom est celui d'un groupe du niveau n-1
             BUG(_1990_groupe_modifie_nom(niveau-1, numero, new_text, projet), );
     }
@@ -1091,7 +1091,7 @@ void _1990_gtk_tree_view_dispo_cell_edited(GtkCellRendererText *cell, gchar *pat
     niveau = GTK_COMMON_SPINBUTTON_AS_UINT(GTK_SPIN_BUTTON(projet->list_gtk._1990_groupes.spin_button_niveau));
     // Le nom est celui d'une action
     if (niveau == 0)
-        BUG(_1990_action_renomme(projet, _1990_action_cherche_numero(projet, numero), new_text), );
+        BUG(_1990_action_nom_change(projet, _1990_action_numero_cherche(projet, numero), new_text), );
     else // Le nom est celui d'un groupe du niveau n-1
         BUG(_1990_groupe_modifie_nom(niveau-1, numero, new_text, projet), );
 }

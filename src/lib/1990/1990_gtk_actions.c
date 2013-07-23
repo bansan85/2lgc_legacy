@@ -123,7 +123,7 @@ void _1990_gtk_actions_cursor_changed(GtkTreeView *tree_view, Projet *projet)
     if (!gtk_tree_selection_get_selected(projet->list_gtk._1990_actions.tree_select_actions, &model, &iter))
         return;
     gtk_tree_model_get(model, &iter, 0, &action, -1);
-    switch (_1990_action_categorie_bat(action->type, projet->parametres.pays))
+    switch (_1990_action_categorie_bat(_1990_action_type_renvoie(action), projet->parametres.pays))
     {
         case ACTION_POIDS_PROPRE :
         case ACTION_PRECONTRAINTE :
@@ -146,7 +146,7 @@ void _1990_gtk_actions_cursor_changed(GtkTreeView *tree_view, Projet *projet)
         case ACTION_INCONNUE :
         default :
         {
-            BUGMSG(NULL, , gettext("Type d'action %u inconnu.\n"), action->type);
+            BUGMSG(NULL, , gettext("Type d'action %u inconnu.\n"), _1990_action_type_renvoie(action));
             break;
         }
     }
@@ -154,7 +154,7 @@ void _1990_gtk_actions_cursor_changed(GtkTreeView *tree_view, Projet *projet)
     // On actualise la liste des charges
     gtk_tree_store_clear(projet->list_gtk._1990_actions.tree_store_charges);
     
-    list_parcours = action->charges;
+    list_parcours = _1990_action_charges_renvoie(action);
     while (list_parcours != NULL)
     {
         Charge_Noeud    *charge = list_parcours->data;
@@ -262,7 +262,7 @@ gboolean _1990_gtk_actions_tree_view_drag(GtkWidget *widget, GdkDragContext *dra
             if (gtk_tree_model_get_iter(model_charge_source, &iter_charge_source, gtk_tree_row_reference_get_path((GtkTreeRowReference*)list_parcours->data)))
             {
                 gtk_tree_model_get(model_charge_source, &iter_charge_source, 0, &charge_source, -1);
-                BUG(EF_charge_deplace(projet, action_source->numero, charge_source->numero, action_dest->numero), FALSE);
+                BUG(EF_charge_deplace(projet, _1990_action_numero_renvoie(action_source), charge_source->numero, _1990_action_numero_renvoie(action_dest)), FALSE);
             }
         }
         g_list_foreach(list_fixe, (GFunc)gtk_tree_row_reference_free, NULL);
@@ -328,7 +328,7 @@ void _1990_gtk_actions_description_edited(GtkCellRendererText *cell, gchar *path
  * Valeur renvoyée : Aucune.
  *   Echec : projet == NULL,
  *           interface graphique non initialisée,
- *           _1990_action_renomme.
+ *           _1990_action_nom_change.
  */
 {
     GtkTreeIter iter;
@@ -342,7 +342,7 @@ void _1990_gtk_actions_description_edited(GtkCellRendererText *cell, gchar *path
     gtk_tree_model_get(GTK_TREE_MODEL(projet->list_gtk._1990_actions.tree_store_actions), &iter, 0, &action, -1);
     
     // On lui modifie son nom
-    BUG(_1990_action_renomme(projet, action, new_text), );
+    BUG(_1990_action_nom_change(projet, action, new_text), );
     
     return;
 }
@@ -359,7 +359,7 @@ void _1990_gtk_actions_type_edited(GtkCellRendererText *cell, const gchar *path_
  *   Echec : projet == NULL,
  *           interface graphique non initialisée,
  *           type d'action new_text inconnu,
- *           _1990_action_change_type.
+ *           _1990_action_type_change.
 */
 {
     GtkTreeIter     iter;
@@ -379,7 +379,7 @@ void _1990_gtk_actions_type_edited(GtkCellRendererText *cell, const gchar *path_
     }
     BUGMSG(type != _1990_action_num_bat_txt(projet->parametres.pays), , gettext("Type d'action '%s' inconnu.\n"), new_text);
     
-    BUG(_1990_action_change_type(projet, action, type), );
+    BUG(_1990_action_type_change(projet, action, type), );
     
     return;
 }
@@ -396,7 +396,7 @@ void _1990_gtk_tree_view_actions_psi_edited(GtkCellRendererText *cell, gchar *pa
  *   Echec : projet == NULL,
  *           interface graphique non initialisée,
  *           erreur d'allocation mémoire,
- *           _1990_action_renomme.
+ *           _1990_action_nom_change.
  */
 {
     GtkTreeIter iter;
@@ -413,7 +413,7 @@ void _1990_gtk_tree_view_actions_psi_edited(GtkCellRendererText *cell, gchar *pa
     // On vérifie si le texte contient bien un nombre flottant
     convertion = common_text_str_to_double(new_text, 0, TRUE, 1., TRUE);
     if (!isnan(convertion))
-        BUG(_1990_action_change_psi(projet, action, column-3, common_math_f(convertion, FLOTTANT_UTILISATEUR)), );
+        BUG(_1990_action_psi_change(projet, action, column-3, common_math_f(convertion, FLOTTANT_UTILISATEUR)), );
     
     return;
 }
@@ -451,7 +451,7 @@ void _1990_gtk_menu_nouvelle_action_activate(GtkMenuItem *menuitem, Projet *proj
             BUG(action = _1990_action_ajout(projet, type, tmp), );
             free(tmp);
             
-            path = gtk_tree_model_get_path(GTK_TREE_MODEL(projet->list_gtk._1990_actions.tree_store_actions), &action->Iter_fenetre);
+            path = gtk_tree_model_get_path(GTK_TREE_MODEL(projet->list_gtk._1990_actions.tree_store_actions), _1990_action_Iter_fenetre_renvoie(action));
             gtk_tree_view_set_cursor(GTK_TREE_VIEW(projet->list_gtk._1990_actions.tree_view_actions), path, gtk_tree_view_get_column(GTK_TREE_VIEW(projet->list_gtk._1990_actions.tree_view_actions), 0), TRUE);
             gtk_tree_path_free(path);
             
@@ -473,7 +473,7 @@ void _1990_gtk_menu_suppr_action_activate(GtkWidget *toolbutton, Projet *projet)
  *   Echec : projet == NULL,
  *           interface graphique non initialisée,
  *           erreur d'allocation mémoire,
- *           _1990_action_renomme.
+ *           _1990_action_nom_change.
  */
 {
     GtkTreeIter     iter;
@@ -490,7 +490,7 @@ void _1990_gtk_menu_suppr_action_activate(GtkWidget *toolbutton, Projet *projet)
     gtk_tree_model_get(model, &iter, 0, &action, -1);
     
     // Et on la supprime ainsi que les charges la contenant
-    BUG(_1990_action_free_num(projet, action->numero), );
+    BUG(_1990_action_free_num(projet, _1990_action_numero_renvoie(action)), );
     
     return;
 }
@@ -596,7 +596,7 @@ void _1990_gtk_tree_view_charges_description_edited(GtkCellRendererText *cell,
     gtk_tree_model_get_iter_from_string(model, &iter, path_string);
     gtk_tree_model_get(model, &iter, 0, &charge, -1);
     
-    BUG(EF_charge_renomme(projet, action->numero, charge->numero, new_text), );
+    BUG(EF_charge_renomme(projet, _1990_action_numero_renvoie(action), charge->numero, new_text), );
     
     return;
 }
@@ -636,23 +636,23 @@ void _1990_gtk_menu_edit_charge_clicked(GtkWidget *toolbutton, Projet *projet)
             Charge_Noeud    *charge_noeud;
             
             gtk_tree_model_get(model, &iter, 0, &charge, -1);
-            BUG(charge_noeud = EF_charge_cherche(projet, action->numero, charge->numero), );
+            BUG(charge_noeud = EF_charge_cherche(projet, _1990_action_numero_renvoie(action), charge->numero), );
             
             switch (charge_noeud->type)
             {
                 case CHARGE_NOEUD :
                 {
-                    BUG(EF_gtk_charge_noeud(projet, action->numero, charge->numero), );
+                    BUG(EF_gtk_charge_noeud(projet, _1990_action_numero_renvoie(action), charge->numero), );
                     break;
                 }
                 case CHARGE_BARRE_PONCTUELLE :
                 {
-                    BUG(EF_gtk_charge_barre_ponctuelle(projet, action->numero, charge->numero), );
+                    BUG(EF_gtk_charge_barre_ponctuelle(projet, _1990_action_numero_renvoie(action), charge->numero), );
                     break;
                 }
                 case CHARGE_BARRE_REPARTIE_UNIFORME :
                 {
-                    BUG(EF_gtk_charge_barre_repartie_uniforme(projet, action->numero, charge->numero), );
+                    BUG(EF_gtk_charge_barre_repartie_uniforme(projet, _1990_action_numero_renvoie(action), charge->numero), );
                     break;
                 }
                 default :
@@ -711,7 +711,7 @@ void _1990_gtk_menu_suppr_charge_clicked(GtkWidget *toolbutton, Projet *projet)
         if (gtk_tree_model_get_iter(model, &iter, gtk_tree_row_reference_get_path((GtkTreeRowReference*)list_parcours->data)))
         {
             gtk_tree_model_get(model, &iter, 0, &charge, -1);
-            BUG(EF_charge_supprime(projet, action->numero, charge->numero), );
+            BUG(EF_charge_supprime(projet, _1990_action_numero_renvoie(action), charge->numero), );
         }
     }
     g_list_foreach(list_fixe, (GFunc)gtk_tree_row_reference_free, NULL);
@@ -763,7 +763,7 @@ void _1990_gtk_menu_nouvelle_charge_nodale_activate(GtkMenuItem *menuitem, Proje
         return;
     gtk_tree_model_get(model_action, &iter_action, 0, &action, -1);
     
-    BUG(EF_gtk_charge_noeud(projet, action->numero, G_MAXUINT), );
+    BUG(EF_gtk_charge_noeud(projet, _1990_action_numero_renvoie(action), G_MAXUINT), );
 }
 
 
@@ -788,7 +788,7 @@ void _1990_gtk_menu_nouvelle_charge_barre_ponctuelle_activate(GtkMenuItem *menui
         return;
     gtk_tree_model_get(model_action, &iter_action, 0, &action, -1);
     
-    BUG(EF_gtk_charge_barre_ponctuelle(projet, action->numero, G_MAXUINT), );
+    BUG(EF_gtk_charge_barre_ponctuelle(projet, _1990_action_numero_renvoie(action), G_MAXUINT), );
     
     return;
 }
@@ -815,7 +815,7 @@ void _1990_gtk_menu_nouvelle_charge_barre_repartie_uniforme_activate(GtkMenuItem
         return;
     gtk_tree_model_get(model_action, &iter_action, 0, &action, -1);
     
-    BUG(EF_gtk_charge_barre_repartie_uniforme(projet, action->numero, G_MAXUINT), );
+    BUG(EF_gtk_charge_barre_repartie_uniforme(projet, _1990_action_numero_renvoie(action), G_MAXUINT), );
     
     return;
 }
@@ -836,7 +836,7 @@ void _1990_gtk_actions_render_0(GtkTreeViewColumn *tree_column, GtkCellRenderer 
     
     gtk_tree_model_get(tree_model, iter, 0, &action, -1);
     
-    g_object_set(cell, "text", action->nom, NULL);
+    g_object_set(cell, "text", _1990_action_nom_renvoie(action), NULL);
     
     return;
 }
@@ -858,7 +858,7 @@ void _1990_gtk_actions_render_1(GtkTreeViewColumn *tree_column, GtkCellRenderer 
     
     gtk_tree_model_get(tree_model, iter, 0, &action, -1);
     
-    g_object_set(cell, "text", _1990_action_type_bat_txt(action->type, projet->parametres.pays), NULL);
+    g_object_set(cell, "text", _1990_action_type_bat_txt(_1990_action_type_renvoie(action), projet->parametres.pays), NULL);
     
     return;
 }
@@ -880,7 +880,7 @@ void _1990_gtk_actions_render_2(GtkTreeViewColumn *tree_column, GtkCellRenderer 
     
     gtk_tree_model_get(tree_model, iter, 0, &action, -1);
     
-    common_math_double_to_char2(action->psi0, tmp, DECIMAL_SANS_UNITE);
+    common_math_double_to_char2(_1990_action_psi_renvoie_0(action), tmp, DECIMAL_SANS_UNITE);
     
     g_object_set(cell, "text", tmp, NULL);
     
@@ -904,7 +904,7 @@ void _1990_gtk_actions_render_3(GtkTreeViewColumn *tree_column, GtkCellRenderer 
     
     gtk_tree_model_get(tree_model, iter, 0, &action, -1);
     
-    common_math_double_to_char2(action->psi1, tmp, DECIMAL_SANS_UNITE);
+    common_math_double_to_char2(_1990_action_psi_renvoie_1(action), tmp, DECIMAL_SANS_UNITE);
     
     g_object_set(cell, "text", tmp, NULL);
     
@@ -928,7 +928,7 @@ void _1990_gtk_actions_render_4(GtkTreeViewColumn *tree_column, GtkCellRenderer 
     
     gtk_tree_model_get(tree_model, iter, 0, &action, -1);
     
-    common_math_double_to_char2(action->psi2, tmp, DECIMAL_SANS_UNITE);
+    common_math_double_to_char2(_1990_action_psi_renvoie_2(action), tmp, DECIMAL_SANS_UNITE);
     
     g_object_set(cell, "text", tmp, NULL);
     
@@ -1103,8 +1103,8 @@ void _1990_gtk_actions(Projet *projet)
         {
             Action  *action = list_parcours->data;
             
-            gtk_tree_store_append(projet->list_gtk._1990_actions.tree_store_actions, &action->Iter_fenetre, NULL);
-            gtk_tree_store_set(projet->list_gtk._1990_actions.tree_store_actions, &action->Iter_fenetre, 0, action, -1);
+            gtk_tree_store_append(projet->list_gtk._1990_actions.tree_store_actions, _1990_action_Iter_fenetre_renvoie(action), NULL);
+            gtk_tree_store_set(projet->list_gtk._1990_actions.tree_store_actions, _1990_action_Iter_fenetre_renvoie(action), 0, action, -1);
             
             list_parcours = g_list_next(list_parcours);
         } while (list_parcours != NULL);

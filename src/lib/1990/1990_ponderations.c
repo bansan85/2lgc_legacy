@@ -255,7 +255,7 @@ gboolean _1990_ponderations_genere_un(Projet *projet, GList **ponderations_desti
                     double          pond;
                     
                     combinaison_element = list_parcours2->data;
-                    categorie = _1990_action_categorie_bat(combinaison_element->action->type, projet->parametres.pays);
+                    categorie = _1990_action_categorie_bat(_1990_action_type_renvoie(combinaison_element->action), projet->parametres.pays);
                     BUG(categorie != ACTION_INCONNUE, FALSE);
     //             Vérification si le coefficient min et max de la catégorie vaut 0.
     //               Si oui, pondération ignorée.
@@ -1081,17 +1081,17 @@ char* _1990_ponderations_description(GList *ponderation)
             
             tmp = retour;
             if (ponderation_element->psi == 0)
-                common_math_double_to_char2(ponderation_element->action->psi0, psi, DECIMAL_SANS_UNITE);
+                common_math_double_to_char2(_1990_action_psi_renvoie_0(ponderation_element->action), psi, DECIMAL_SANS_UNITE);
             else if (ponderation_element->psi == 1)
-                common_math_double_to_char2(ponderation_element->action->psi1, psi, DECIMAL_SANS_UNITE);
+                common_math_double_to_char2(_1990_action_psi_renvoie_1(ponderation_element->action), psi, DECIMAL_SANS_UNITE);
             else if (ponderation_element->psi == 2)
-                common_math_double_to_char2(ponderation_element->action->psi2, psi, DECIMAL_SANS_UNITE);
+                common_math_double_to_char2(_1990_action_psi_renvoie_2(ponderation_element->action), psi, DECIMAL_SANS_UNITE);
             else
                 psi[0] = '\000';
             if (ponderation_element->psi != -1)
-                BUGMSG(retour = g_strdup_printf("%s%s%.*lf*%s*%s", tmp, tmp[0] != 0 ? "+" : "", DECIMAL_SANS_UNITE, ponderation_element->ponderation, psi, ponderation_element->action->nom), NULL, gettext("Erreur d'allocation mémoire.\n"));
+                BUGMSG(retour = g_strdup_printf("%s%s%.*lf*%s*%s", tmp, tmp[0] != 0 ? "+" : "", DECIMAL_SANS_UNITE, ponderation_element->ponderation, psi, _1990_action_nom_renvoie(ponderation_element->action)), NULL, gettext("Erreur d'allocation mémoire.\n"));
             else
-                BUGMSG(retour = g_strdup_printf("%s%s%.*lf*%s", tmp, tmp[0] != 0 ? "+" : "", DECIMAL_SANS_UNITE, ponderation_element->ponderation, ponderation_element->action->nom), NULL, gettext("Erreur d'allocation mémoire.\n"));
+                BUGMSG(retour = g_strdup_printf("%s%s%.*lf*%s", tmp, tmp[0] != 0 ? "+" : "", DECIMAL_SANS_UNITE, ponderation_element->ponderation, _1990_action_nom_renvoie(ponderation_element->action)), NULL, gettext("Erreur d'allocation mémoire.\n"));
             
             free(tmp);
             
@@ -1126,9 +1126,9 @@ void _1990_ponderations_affiche(GList *ponderations)
                     Ponderation *ponderation_element = list_parcours2->data;
                     
                     if (g_list_next(list_parcours2) != NULL)
-                        printf("%u*%f(%d)+", ponderation_element->action->numero+1, ponderation_element->ponderation, ponderation_element->psi);
+                        printf("%u*%f(%d)+", _1990_action_numero_renvoie(ponderation_element->action)+1, ponderation_element->ponderation, ponderation_element->psi);
                     else
-                        printf("%u*%f(%d)", ponderation_element->action->numero+1, ponderation_element->ponderation, ponderation_element->psi);
+                        printf("%u*%f(%d)", _1990_action_numero_renvoie(ponderation_element->action)+1, ponderation_element->ponderation, ponderation_element->psi);
                     
                     list_parcours2 = g_list_next(list_parcours2);
                 }
