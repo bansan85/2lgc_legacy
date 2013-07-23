@@ -387,27 +387,24 @@ gboolean common_ville_set(Projet *projet, char *departement, const char *ville,
                     if (((strcmp(champ1, "CAN") == 0) && (numero == ct)) ||
                             ((strcmp(champ1, "COM") == 0) && (numero == com)))
                     {
-                        if (!graphique_seul)
-                        {
-                            if (strcmp(champ2, "A1") == 0)
-                                neige_tmp = NEIGE_A1;
-                            else if (strcmp(champ2, "A2") == 0)
-                                neige_tmp = NEIGE_A2;
-                            else if (strcmp(champ2, "B1") == 0)
-                                neige_tmp = NEIGE_B1;
-                            else if (strcmp(champ2, "B2") == 0)
-                                neige_tmp = NEIGE_B2;
-                            else if (strcmp(champ2, "C1") == 0)
-                                neige_tmp = NEIGE_C1;
-                            else if (strcmp(champ2, "C2") == 0)
-                                neige_tmp = NEIGE_C2;
-                            else if (strcmp(champ2, "D") == 0)
-                                neige_tmp = NEIGE_D;
-                            else if (strcmp(champ2, "E") == 0)
-                                neige_tmp = NEIGE_E;
-                            else
-                                BUGMSG(NULL, FALSE, gettext("Le fichier '%s' est corrumpu. Le champ2 '%s' est inconnu.\n"), DATADIR"/france_neige.csv", champ2);
-                        }
+                        if (strcmp(champ2, "A1") == 0)
+                            neige_tmp = NEIGE_A1;
+                        else if (strcmp(champ2, "A2") == 0)
+                            neige_tmp = NEIGE_A2;
+                        else if (strcmp(champ2, "B1") == 0)
+                            neige_tmp = NEIGE_B1;
+                        else if (strcmp(champ2, "B2") == 0)
+                            neige_tmp = NEIGE_B2;
+                        else if (strcmp(champ2, "C1") == 0)
+                            neige_tmp = NEIGE_C1;
+                        else if (strcmp(champ2, "C2") == 0)
+                            neige_tmp = NEIGE_C2;
+                        else if (strcmp(champ2, "D") == 0)
+                            neige_tmp = NEIGE_D;
+                        else if (strcmp(champ2, "E") == 0)
+                            neige_tmp = NEIGE_E;
+                        else
+                            BUGMSG(NULL, FALSE, gettext("Le fichier '%s' est corrumpu. Le champ2 '%s' est inconnu.\n"), DATADIR"/france_neige.csv", champ2);
                         done = TRUE;
                     }
                     else
@@ -489,19 +486,16 @@ gboolean common_ville_set(Projet *projet, char *departement, const char *ville,
                     if (((strcmp(champ1, "CAN") == 0) && (numero == ct)) ||
                         ((strcmp(champ1, "COM") == 0) && (numero == com)))
                     {
-                        if (!graphique_seul)
-                        {
-                            if (strcmp(champ2, "1") == 0)
-                                vent_tmp = VENT_1;
-                            else if (strcmp(champ2, "2") == 0)
-                                vent_tmp = VENT_2;
-                            else if (strcmp(champ2, "3") == 0)
-                                vent_tmp = VENT_3;
-                            else if (strcmp(champ2, "4") == 0)
-                                vent_tmp = VENT_4;
-                            else
-                                BUGMSG(NULL, FALSE, gettext("Le fichier '%s' est corrumpu. Le champ2 '%s' est inconnu.\n"), DATADIR"/france_vent.csv", champ2);
-                        }
+                        if (strcmp(champ2, "1") == 0)
+                            vent_tmp = VENT_1;
+                        else if (strcmp(champ2, "2") == 0)
+                            vent_tmp = VENT_2;
+                        else if (strcmp(champ2, "3") == 0)
+                            vent_tmp = VENT_3;
+                        else if (strcmp(champ2, "4") == 0)
+                            vent_tmp = VENT_4;
+                        else
+                            BUGMSG(NULL, FALSE, gettext("Le fichier '%s' est corrumpu. Le champ2 '%s' est inconnu.\n"), DATADIR"/france_vent.csv", champ2);
                         done = TRUE;
                     }
                     else
@@ -585,21 +579,18 @@ gboolean common_ville_set(Projet *projet, char *departement, const char *ville,
                     if (((strcmp(champ1, "CAN") == 0) && (numero == ct)) ||
                         ((strcmp(champ1, "COM") == 0) && (numero == com)))
                     {
-                        if (!graphique_seul)
-                        {
-                            if (strcmp(champ2, "1") == 0)
-                                seisme_tmp = SEISME_1;
-                            else if (strcmp(champ2, "2") == 0)
-                                seisme_tmp = SEISME_2;
-                            else if (strcmp(champ2, "3") == 0)
-                                seisme_tmp = SEISME_3;
-                            else if (strcmp(champ2, "4") == 0)
-                                seisme_tmp = SEISME_4;
-                            else if (strcmp(champ2, "5") == 0)
-                                seisme_tmp = SEISME_5;
-                            else
-                                BUGMSG(NULL, FALSE, gettext("Le fichier '%s' est corrumpu. Le champ2 '%s' est inconnu.\n"), DATADIR"/france_seisme.csv", champ2);
-                        }
+                        if (strcmp(champ2, "1") == 0)
+                            seisme_tmp = SEISME_1;
+                        else if (strcmp(champ2, "2") == 0)
+                            seisme_tmp = SEISME_2;
+                        else if (strcmp(champ2, "3") == 0)
+                            seisme_tmp = SEISME_3;
+                        else if (strcmp(champ2, "4") == 0)
+                            seisme_tmp = SEISME_4;
+                        else if (strcmp(champ2, "5") == 0)
+                            seisme_tmp = SEISME_5;
+                        else
+                            BUGMSG(NULL, FALSE, gettext("Le fichier '%s' est corrumpu. Le champ2 '%s' est inconnu.\n"), DATADIR"/france_seisme.csv", champ2);
                         done = TRUE;
                     }
                     else
