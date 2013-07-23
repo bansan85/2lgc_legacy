@@ -942,24 +942,6 @@ GtkTreeIter* _1990_action_Iter_fenetre_renvoie(Action *action)
 }
 
 
-gboolean _1990_action_Iter_fenetre_change(Action *action, GtkTreeIter iter)
-/* Description : Change la variable Iter_fenetre.
- * Paramètres : Action *action : l'action dont on souhaite changer la variable Iter_fenetre,
- *            : GtkTreeIter iter : la nouvelle valeur de Iter_fenetre;
- * Valeur renvoyée :
- *   Succès : Iter_fenetre.
- *   Échec : NULL :
- *             action == NULL,
- */
-{
-    BUGMSG(action, FALSE, gettext("Paramètre %s incorrect.\n"), "action");
-    
-    action->Iter_fenetre = iter;
-    
-    return TRUE;
-}
-
-
 Fonction* _1990_action_fonctions_efforts_renvoie(Action *action, int ligne, int barre)
 /* Description : Renvoie la fonction Effort dans la barre.
  * Paramètres : Action *action : l'action dont on souhaite connaître les efforts,
