@@ -29,63 +29,6 @@
 #include "common_math.h"
 #include "common_fonction.h"
 
-gboolean common_fonction_init(Projet *projet, Action *action)
-/* Description : Initialise les fonctions décrivant les sollicitations, les rotations ou les
- *               déplacements des barres. Cette fonction doit être appelée lorsque toutes les
- *               barres ont été modélisées. En effet, il est nécessaire de connaître leur
- *               nombre afin de stocker dans un tableau dynamique unique les fonctions.
- *               L'initialisation des fonctions consiste à définir un nombre de tronçon à 0 et
- *               les données à NULL.
- * Paramètres : Projet *projet : la variable projet,
- *            : Action *action : pointeur vers l'action.
- * Valeur renvoyée :
- *   Succès : TRUE
- *   Échec : FALSE :
- *             projet == NULL,
- *             action == NULL,
- *             en cas d'erreur d'allocation mémoire.
- */
-{
-    unsigned int        i, j;
-    
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(action, FALSE, gettext("Paramètre %s incorrect.\n"), "action");
-    
-    // Trivial
-    for (i=0;i<6;i++)
-    {
-        BUGMSG(action->fonctions_efforts[i] = (Fonction**)malloc(sizeof(Fonction*)*g_list_length(projet->modele.barres)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-        for (j=0;j<g_list_length(projet->modele.barres);j++)
-        {
-            BUGMSG(action->fonctions_efforts[i][j] = (Fonction*)malloc(sizeof(Fonction)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-            action->fonctions_efforts[i][j]->nb_troncons = 0;
-            action->fonctions_efforts[i][j]->troncons = NULL;
-        }
-    }
-    
-    for (i=0;i<3;i++)
-    {
-        BUGMSG(action->fonctions_deformation[i] = (Fonction**)malloc(sizeof(Fonction*)*g_list_length(projet->modele.barres)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-        for (j=0;j<g_list_length(projet->modele.barres);j++)
-        {
-            BUGMSG(action->fonctions_deformation[i][j] = (Fonction*)malloc(sizeof(Fonction)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-            action->fonctions_deformation[i][j]->nb_troncons = 0;
-            action->fonctions_deformation[i][j]->troncons = NULL;
-        }
-        
-        BUGMSG(action->fonctions_rotation[i] = (Fonction**)malloc(sizeof(Fonction*)*g_list_length(projet->modele.barres)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-        for (j=0;j<g_list_length(projet->modele.barres);j++)
-        {
-            BUGMSG(action->fonctions_rotation[i][j] = (Fonction*)malloc(sizeof(Fonction)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-            action->fonctions_rotation[i][j]->nb_troncons = 0;
-            action->fonctions_rotation[i][j]->troncons = NULL;
-        }
-    }
-    
-    return TRUE;
-}
-
-
 gboolean common_fonction_scinde_troncon(Fonction* fonction, double coupure)
 /* Description : Divise un tronçon en deux à la position coupure.
  *               Si la coupure est en dehors de la borne de validité actuelle de la fonction,
@@ -1768,67 +1711,6 @@ gboolean common_fonction_renvoie_enveloppe(GList* fonctions, Fonction *fonction_
         
         list_parcours = g_list_next(list_parcours);
         num++;
-    }
-    
-    return TRUE;
-}
-
-
-gboolean common_fonction_free(Projet *projet, Action *action)
-/* Description : Libère les fonctions de toutes les barres de l'action souhaitée.
- * Paramètres : Projet *projet : la variable projet,
- *            : Action *action : pointeur vers l'action.
- * Valeur renvoyée :
- *   Succès : TRUE
- *   Échec : FALSE :
- *             projet == NULL,
- *             action == NULL,
- *             projet->modele.barres == NULL.
- */
-{
-    unsigned int        i, j;
-    
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(action, FALSE, gettext("Paramètre %s incorrect.\n"), "action");
-    
-    // Trivial
-    for (i=0;i<6;i++)
-    {
-        if (action->fonctions_efforts[i] != NULL)
-        {
-            for (j=0;j<g_list_length(projet->modele.barres);j++)
-            {
-                free(action->fonctions_efforts[i][j]->troncons);
-                free(action->fonctions_efforts[i][j]);
-            }
-            free(action->fonctions_efforts[i]);
-            action->fonctions_efforts[i] = NULL;
-        }
-    }
-    
-    for (i=0;i<3;i++)
-    {
-        if (action->fonctions_deformation[i] != NULL)
-        {
-            for (j=0;j<g_list_length(projet->modele.barres);j++)
-            {
-                free(action->fonctions_deformation[i][j]->troncons);
-                free(action->fonctions_deformation[i][j]);
-            }
-            free(action->fonctions_deformation[i]);
-            action->fonctions_deformation[i] = NULL;
-        }
-        
-        if (action->fonctions_rotation[i] != NULL)
-        {
-            for (j=0;j<g_list_length(projet->modele.barres);j++)
-            {
-                free(action->fonctions_rotation[i][j]->troncons);
-                free(action->fonctions_rotation[i][j]);
-            }
-            free(action->fonctions_rotation[i]);
-            action->fonctions_rotation[i] = NULL;
-        }
     }
     
     return TRUE;

@@ -809,30 +809,7 @@ typedef struct __Fonction
 } Fonction;
 
 
-typedef struct __Action
-{
-    char            *nom;
-    unsigned int    numero;
-    unsigned int    type;                   // Les catégories sont conformes à _1990_action_type
-    GList           *charges;
-    int             flags;                  // bit 0 : Action prédominante.
-    Flottant        psi0;                   // valeur_combinaison
-    Flottant        psi1;                   // valeur_frequente
-    Flottant        psi2;                   // valeur_quasi_permanente
-    cholmod_sparse  *deplacement_complet;
-    cholmod_sparse  *forces_complet;
-    cholmod_sparse  *efforts_noeuds;
-#ifdef ENABLE_GTK
-    GtkTreeIter     Iter_fenetre;           // Pour le treeview
-    GtkTreeIter     Iter_liste;             // pour le composant list_actions
-#endif
-    
-    Fonction        **fonctions_efforts[6]; // 6 fonctions (N, Ty, Tz, Mx, My, Mz) par barre.
-                    // Les fonctions représentent la courbe des efforts dues aux charges dans
-                    // les barres et dus aux déplacements calculés par la méthode des EF.
-    Fonction        **fonctions_deformation[3]; // Les 3 déformations x, y, z pour chaque barre
-    Fonction        **fonctions_rotation[3];    // Les 3 rotations rx, ry, rz pour chaque barre
-} Action;
+typedef struct __Action Action;
 
 
 typedef struct __Ponderation

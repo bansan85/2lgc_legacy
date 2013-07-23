@@ -24,6 +24,7 @@
 #include <math.h>
 #include <gmodule.h>
 
+#include "1990_action.h"
 #include "common_projet.h"
 #include "common_erreurs.h"
 #include "common_math.h"
@@ -495,7 +496,7 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GLi
     while (list_parcours != NULL)
     {
         Action  *action = list_parcours->data;
-        GList   *liste_parcours2 = action->charges;
+        GList   *liste_parcours2 = _1990_action_charges_renvoie(action);
         
         while (liste_parcours2 != NULL)
         {

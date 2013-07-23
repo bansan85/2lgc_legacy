@@ -24,9 +24,10 @@
 #include <gmodule.h>
 #include <math.h>
 
+#include "1990_action_private.h"
+#include "common_projet.h"
 #include "1990_coef_psi.h"
 #include "1990_groupe.h"
-#include "common_projet.h"
 #include "common_math.h"
 #include "common_erreurs.h"
 #include "common_fonction.h"
@@ -377,7 +378,7 @@ Action *_1990_action_ajout(Projet *projet, unsigned int type, const char* descri
     action_nouveau->numero = g_list_length(projet->actions);
     action_nouveau->type = type;
     action_nouveau->charges = NULL;
-    action_nouveau->flags = 0;
+    action_nouveau->action_predominante = 0;
     action_nouveau->psi0 = common_math_f(_1990_coef_psi0_bat(type, projet->parametres.pays), FLOTTANT_ORDINATEUR);
     BUG(!isnan(common_math_get(action_nouveau->psi0)), NULL);
     action_nouveau->psi1 = common_math_f(_1990_coef_psi1_bat(type, projet->parametres.pays), FLOTTANT_ORDINATEUR);
@@ -426,41 +427,26 @@ Action *_1990_action_ajout(Projet *projet, unsigned int type, const char* descri
 }
 
 
-Action* _1990_action_cherche_numero(Projet *projet, unsigned int numero)
-/* Description : Cherche et renvoie l'action désignée par numero.
- * Paramètres : Projet *projet : la variable projet,
- *            : unsigned int numero : le numéro de l'action.
+const char* _1990_action_nom_renvoie(Action *action)
+/* Description : Renvoie le nom de l'action. Il convient de ne pas libérer ou modifier la valeur
+ *               renvoyée.
+ * Paramètres : Action *action : l'action dont on souhaite connaître le nom.
  * Valeur renvoyée :
- *   Succès : Pointeur vers l'action recherchée
+ *   Succès : le nom de l'action.
  *   Échec : NULL :
- *             projet == NULL,
- *             action introuvable.
+ *             action == NULL,
  */
 {
-    GList   *list_parcours;
+    BUGMSG(action, NULL, gettext("Paramètre %s incorrect.\n"), "action");
     
-    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
-    
-    // Trivial
-    list_parcours = projet->actions;
-    while (list_parcours != NULL)
-    {
-        Action  *action = (Action*)list_parcours->data;
-        
-        if (action->numero == numero)
-            return action;
-        
-        list_parcours = g_list_next(list_parcours);
-    }
-    
-    BUGMSG(0, NULL, gettext("Action %u introuvable.\n"), numero);
+    return action->nom;
 }
 
 
-gboolean _1990_action_renomme(Projet *projet, Action *action, const char* nom)
+gboolean _1990_action_nom_change(Projet *projet, Action *action, const char* nom)
 /* Description : Renomme une charge.
  * Paramètres : Projet *projet : la variable projet,
- *            : unsigned int action : numéro de l'action à renommer,
+ *            : Action *action : l'action à renommer,
  *            : const char* nom : nouveau nom de l'action.
  * Valeur renvoyée :
  *   Succès : TRUE
@@ -541,10 +527,72 @@ gboolean _1990_action_renomme(Projet *projet, Action *action, const char* nom)
 }
 
 
-gboolean _1990_action_change_type(Projet *projet, Action *action, unsigned int type)
+unsigned int _1990_action_numero_renvoie(Action *action)
+/* Description : Renvoie le numéro de l'action.
+ * Paramètres : Action *action : l'action dont on souhaite connaître le nom.
+ * Valeur renvoyée :
+ *   Succès : le nom de l'action.
+ *   Échec : -1 :
+ *             action == NULL,
+ */
+{
+    BUGMSG(action, -1, gettext("Paramètre %s incorrect.\n"), "action");
+    
+    return action->numero;
+}
+
+
+Action* _1990_action_numero_cherche(Projet *projet, unsigned int numero)
+/* Description : Cherche et renvoie l'action désignée par numero.
+ * Paramètres : Projet *projet : la variable projet,
+ *            : unsigned int numero : le numéro de l'action.
+ * Valeur renvoyée :
+ *   Succès : Pointeur vers l'action recherchée
+ *   Échec : NULL :
+ *             projet == NULL,
+ *             action introuvable.
+ */
+{
+    GList   *list_parcours;
+    
+    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
+    
+    // Trivial
+    list_parcours = projet->actions;
+    while (list_parcours != NULL)
+    {
+        Action  *action = (Action*)list_parcours->data;
+        
+        if (action->numero == numero)
+            return action;
+        
+        list_parcours = g_list_next(list_parcours);
+    }
+    
+    BUGMSG(0, NULL, gettext("Action %u introuvable.\n"), numero);
+}
+
+
+unsigned int _1990_action_type_renvoie(Action *action)
+/* Description : Renvoie le type de l'action. La correspondance avec la description est obtenue
+ *               avec la fonction _1990_action_type_bat_txt.
+ * Paramètres : Action *action : l'action dont on souhaite connaître le type.
+ * Valeur renvoyée :
+ *   Succès : le type d'action.
+ *   Échec : -1 :
+ *             action == NULL,
+ */
+{
+    BUGMSG(action, -1, gettext("Paramètre %s incorrect.\n"), "action");
+    
+    return action->type;
+}
+
+
+gboolean _1990_action_type_change(Projet *projet, Action *action, unsigned int type)
 /* Description : Change le type d'une action, y compris psi0, psi1 et psi2.
  * Paramètres : Projet *projet : la variable projet,
- *            : unsigned int action_num : numéro de l'action à renommer,
+ *            : Action *action : l'action à modifier,
  *            : unsigned int type : nouveau type d'action.
  * Valeur renvoyée :
  *   Succès : TRUE
@@ -554,6 +602,8 @@ gboolean _1990_action_change_type(Projet *projet, Action *action, unsigned int t
  *             erreur d'allocation mémoire.
  */
 {
+    Flottant    psi0, psi1, psi2;
+    
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(action, FALSE, gettext("Paramètre %s incorrect.\n"), "action");
     
@@ -561,12 +611,16 @@ gboolean _1990_action_change_type(Projet *projet, Action *action, unsigned int t
         return TRUE;
     
     action->type = type;
-    action->psi0 = common_math_f(_1990_coef_psi0_bat(type, projet->parametres.pays), FLOTTANT_ORDINATEUR);
-    BUG(!isnan(common_math_get(action->psi0)), FALSE);
-    action->psi1 = common_math_f(_1990_coef_psi1_bat(type, projet->parametres.pays), FLOTTANT_ORDINATEUR);
-    BUG(!isnan(common_math_get(action->psi1)), FALSE);
-    action->psi2 = common_math_f(_1990_coef_psi2_bat(type, projet->parametres.pays), FLOTTANT_ORDINATEUR);
-    BUG(!isnan(common_math_get(action->psi2)), FALSE);
+    psi0 = common_math_f(_1990_coef_psi0_bat(type, projet->parametres.pays), FLOTTANT_ORDINATEUR);
+    BUG(!isnan(common_math_get(psi0)), FALSE);
+    psi1 = common_math_f(_1990_coef_psi1_bat(type, projet->parametres.pays), FLOTTANT_ORDINATEUR);
+    BUG(!isnan(common_math_get(psi1)), FALSE);
+    psi2 = common_math_f(_1990_coef_psi2_bat(type, projet->parametres.pays), FLOTTANT_ORDINATEUR);
+    BUG(!isnan(common_math_get(psi2)), FALSE);
+    
+    action->psi0 = psi0;
+    action->psi1 = psi1;
+    action->psi2 = psi2;
     
     BUG(EF_calculs_free(projet), FALSE);
     
@@ -579,7 +633,134 @@ gboolean _1990_action_change_type(Projet *projet, Action *action, unsigned int t
 }
 
 
-gboolean _1990_action_change_psi(Projet *projet, Action *action, unsigned int psi_num,
+gboolean _1990_action_charges_vide(Action *action)
+/* Description : Renvoie TRUE si la liste des charges est vide.
+ * Paramètres : Action *action : l'action.
+ * Valeur renvoyée :
+ *   Succès : action->charges == NULL
+ *   Échec : TRUE :
+ *             action == NULL.
+ */
+{
+    BUGMSG(action, TRUE, gettext("Paramètre %s incorrect.\n"), "action");
+    
+    return action->charges == NULL;
+}
+
+
+GList* _1990_action_charges_renvoie(Action *action)
+/* Description : Renvoie la liste des charges.
+ * Paramètres : Action *action : l'action.
+ * Valeur renvoyée :
+ *   Succès : action->charges
+ *   Échec : NULL :
+ *             action == NULL.
+ */
+{
+    BUGMSG(action, NULL, gettext("Paramètre %s incorrect.\n"), "action");
+    
+    return action->charges;
+}
+
+
+gboolean _1990_action_charges_change(Action *action, GList *charges)
+/* Description : Change la liste des charges.
+ * Paramètres : Action *action : l'action,
+ *            : GList *charges : la nouvelle liste des charges.
+ * Valeur renvoyée :
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             action == NULL.
+ */
+{
+    BUGMSG(action, FALSE, gettext("Paramètre %s incorrect.\n"), "action");
+    
+    action->charges = charges;
+    
+    return TRUE;
+}
+
+
+unsigned int _1990_action_flags_action_predominante_renvoie(Action *action)
+/* Description : Renvoie le flag "Action prédominante" de l'action.
+ * Paramètres : Action *action : l'action dont on souhaite connaître le flag.
+ * Valeur renvoyée :
+ *   Succès : le flag de l'action.
+ *   Échec : -1 :
+ *             action == NULL,
+ */
+{
+    BUGMSG(action, -1, gettext("Paramètre %s incorrect.\n"), "action");
+    
+    return action->action_predominante;
+}
+
+
+gboolean _1990_action_flags_action_predominante_change(Action *action, unsigned int flag)
+/* Description : Change le flag "Action prédominante" de l'action.
+ * Paramètres : Action *action : l'action dont on souhaite connaître le flag,
+ *            : unsigned int flag : la nouvelle valeur du flag (0 ou 1).
+ * Valeur renvoyée :
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             action == NULL,
+ */
+{
+    BUGMSG(action, FALSE, gettext("Paramètre %s incorrect.\n"), "action");
+    BUGMSG((flag == 0) || (flag == 1), FALSE, gettext("Le paramètre flag est de type strictement boolean et doit valoir soit 0 soit 1.\n"));
+    
+    action->action_predominante = flag;
+    
+    return TRUE;
+}
+
+
+Flottant _1990_action_psi_renvoie_0(Action *action)
+/* Description : Renvoie le coefficient psi0 de l'action.
+ * Paramètres : Action *action : l'action dont on souhaite connaître le coefficient psi0.
+ * Valeur renvoyée :
+ *   Succès : le coefficient psi0.
+ *   Échec : NAN :
+ *             action == NULL,
+ */
+{
+    BUGMSG(action, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Paramètre %s incorrect.\n"), "action");
+    
+    return action->psi0;
+}
+
+
+Flottant _1990_action_psi_renvoie_1(Action *action)
+/* Description : Renvoie le coefficient psi1 de l'action.
+ * Paramètres : Action *action : l'action dont on souhaite connaître le coefficient psi1.
+ * Valeur renvoyée :
+ *   Succès : le coefficient psi1.
+ *   Échec : NAN :
+ *             action == NULL,
+ */
+{
+    BUGMSG(action, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Paramètre %s incorrect.\n"), "action");
+    
+    return action->psi1;
+}
+
+
+Flottant _1990_action_psi_renvoie_2(Action *action)
+/* Description : Renvoie le coefficient psi2 de l'action.
+ * Paramètres : Action *action : l'action dont on souhaite connaître le coefficient psi2.
+ * Valeur renvoyée :
+ *   Succès : le coefficient psi2
+ *   Échec : NAN :
+ *             action == NULL,
+ */
+{
+    BUGMSG(action, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Paramètre %s incorrect.\n"), "action");
+    
+    return action->psi2;
+}
+
+
+gboolean _1990_action_psi_change(Projet *projet, Action *action, unsigned int psi_num,
   Flottant psi)
 /* Description : Change le coefficient psi d'une action.
  * Paramètres : Projet *projet : la variable projet,
@@ -641,6 +822,319 @@ gboolean _1990_action_change_psi(Projet *projet, Action *action, unsigned int ps
 }
 
 
+cholmod_sparse* _1990_action_deplacement_complet_renvoie(Action *action)
+/* Description : Renvoie la matrice sparse deplacement_complet de l'action.
+ * Paramètres : Action *action : l'action dont on souhaite connaître la matrice,
+ * Valeur renvoyée :
+ *   Succès : la matrice sparse deplacement_complet correspondante.
+ *   Échec : NULL :
+ *             action == NULL,
+ */
+{
+    BUGMSG(action, NULL, gettext("Paramètre %s incorrect.\n"), "action");
+    
+    return action->deplacement_complet;
+}
+
+
+gboolean _1990_action_deplacement_complet_change(Action *action, cholmod_sparse *sparse)
+/* Description : Modifie la matrice sparse deplacement_complet de l'action.
+ * Paramètres : Action *action : l'action dont on souhaite modifier la matrice,
+ *            : cholmod_sparse *sparse : la nouvelle matrice.
+ * Valeur renvoyée :
+ *   Succès : TRUE.
+ *   Échec : NULL :
+ *             action == NULL,
+ *             sparse == NULL.
+ */
+{
+    BUGMSG(action, FALSE, gettext("Paramètre %s incorrect.\n"), "action");
+    BUGMSG(sparse, FALSE, gettext("Paramètre %s incorrect.\n"), "sparse");
+    
+    action->deplacement_complet = sparse;
+    
+    return TRUE;
+}
+
+
+cholmod_sparse* _1990_action_forces_complet_renvoie(Action *action)
+/* Description : Renvoie la matrice sparse forces_complet de l'action.
+ * Paramètres : Action *action : l'action dont on souhaite connaître la matrice,
+ * Valeur renvoyée :
+ *   Succès : la matrice sparse forces_complet correspondante.
+ *   Échec : NULL :
+ *             action == NULL,
+ */
+{
+    BUGMSG(action, NULL, gettext("Paramètre %s incorrect.\n"), "action");
+    
+    return action->forces_complet;
+}
+
+
+gboolean _1990_action_forces_complet_change(Action *action, cholmod_sparse *sparse)
+/* Description : Modifie la matrice sparse forces_complet de l'action.
+ * Paramètres : Action *action : l'action dont on souhaite modifier la matrice,
+ *            : cholmod_sparse *sparse : la nouvelle matrice.
+ * Valeur renvoyée :
+ *   Succès : TRUE.
+ *   Échec : NULL :
+ *             action == NULL,
+ *             sparse == NULL.
+ */
+{
+    BUGMSG(action, FALSE, gettext("Paramètre %s incorrect.\n"), "action");
+    BUGMSG(sparse, FALSE, gettext("Paramètre %s incorrect.\n"), "sparse");
+    
+    action->forces_complet = sparse;
+    
+    return TRUE;
+}
+
+
+cholmod_sparse* _1990_action_efforts_noeuds_renvoie(Action *action)
+/* Description : Renvoie la matrice sparse efforts_noeuds de l'action.
+ * Paramètres : Action *action : l'action dont on souhaite connaître la matrice,
+ * Valeur renvoyée :
+ *   Succès : la matrice sparse efforts_noeuds correspondante.
+ *   Échec : NULL :
+ *             action == NULL,
+ */
+{
+    BUGMSG(action, NULL, gettext("Paramètre %s incorrect.\n"), "action");
+    
+    return action->efforts_noeuds;
+}
+
+
+gboolean _1990_action_efforts_noeuds_change(Action *action, cholmod_sparse *sparse)
+/* Description : Modifie la matrice sparse efforts_noeuds de l'action.
+ * Paramètres : Action *action : l'action dont on souhaite modifier la matrice,
+ *            : cholmod_sparse *sparse : la nouvelle matrice.
+ * Valeur renvoyée :
+ *   Succès : TRUE.
+ *   Échec : NULL :
+ *             action == NULL,
+ *             sparse == NULL.
+ */
+{
+    BUGMSG(action, FALSE, gettext("Paramètre %s incorrect.\n"), "action");
+    BUGMSG(sparse, FALSE, gettext("Paramètre %s incorrect.\n"), "sparse");
+    
+    action->efforts_noeuds = sparse;
+    
+    return TRUE;
+}
+
+
+GtkTreeIter* _1990_action_Iter_fenetre_renvoie(Action *action)
+/* Description : Renvoie la variable Iter_fenetre.
+ * Paramètres : Action *action : l'action dont on souhaite connaître la variable Iter_fenetre.
+ * Valeur renvoyée :
+ *   Succès : Iter_fenetre.
+ *   Échec : NULL :
+ *             action == NULL,
+ */
+{
+    BUGMSG(action, NULL, gettext("Paramètre %s incorrect.\n"), "action");
+    
+    return &action->Iter_fenetre;
+}
+
+
+gboolean _1990_action_Iter_fenetre_change(Action *action, GtkTreeIter iter)
+/* Description : Change la variable Iter_fenetre.
+ * Paramètres : Action *action : l'action dont on souhaite changer la variable Iter_fenetre,
+ *            : GtkTreeIter iter : la nouvelle valeur de Iter_fenetre;
+ * Valeur renvoyée :
+ *   Succès : Iter_fenetre.
+ *   Échec : NULL :
+ *             action == NULL,
+ */
+{
+    BUGMSG(action, FALSE, gettext("Paramètre %s incorrect.\n"), "action");
+    
+    action->Iter_fenetre = iter;
+    
+    return TRUE;
+}
+
+
+Fonction* _1990_action_fonctions_efforts_renvoie(Action *action, int ligne, int barre)
+/* Description : Renvoie la fonction Effort dans la barre.
+ * Paramètres : Action *action : l'action dont on souhaite connaître les efforts,
+ *            : int ligne : ligne de l'effort (N : 0, Ty : 1, Tz : 2, Mx : 3, My : 4, Mz : 5),
+ *            : int barre : ce n'est pas le numéro de la barre mais la position de la barre
+ *                          dans la liste des barres.
+ * Valeur renvoyée :
+ *   Succès : la fonction Effort correspondante.
+ *   Échec : NULL :
+ *             action == NULL,
+ */
+{
+    BUGMSG(action, NULL, gettext("Paramètre %s incorrect.\n"), "action");
+    BUGMSG((0 <= ligne) && (ligne <= 5), NULL, gettext("Paramètre %s incorrect.\n"), "ligne");
+    
+    return action->fonctions_efforts[ligne][barre];
+}
+
+
+Fonction* _1990_action_fonctions_rotation_renvoie(Action *action, int ligne, int barre)
+/* Description : Renvoie la fonction Rotation dans la barre.
+ * Paramètres : Action *action : l'action dont on souhaite connaître les rotations,
+ *            : int ligne : ligne de l'effort (rx : 0, ry : 1, rz : 2),
+ *            : int barre : ce n'est pas le numéro de la barre mais la position de la barre
+ *                          dans la liste des barres.
+ * Valeur renvoyée :
+ *   Succès : la fonction Effort correspondante.
+ *   Échec : NULL :
+ *             action == NULL,
+ */
+{
+    BUGMSG(action, NULL, gettext("Paramètre %s incorrect.\n"), "action");
+    BUGMSG((0 <= ligne) && (ligne <= 2), NULL, gettext("Paramètre %s incorrect.\n"), "ligne");
+    
+    return action->fonctions_rotation[ligne][barre];
+}
+
+
+Fonction* _1990_action_fonctions_deformation_renvoie(Action *action, int ligne, int barre)
+/* Description : Renvoie la fonction Déformation dans la barre.
+ * Paramètres : Action *action : l'action dont on souhaite connaître les déformations,
+ *            : int ligne : ligne de l'effort (ux : 0, uy : 1, uz : 2),
+ *            : int barre : ce n'est pas le numéro de la barre mais la position de la barre
+ *                          dans la liste des barres.
+ * Valeur renvoyée :
+ *   Succès : la fonction Effort correspondante.
+ *   Échec : NULL :
+ *             action == NULL,
+ */
+{
+    BUGMSG(action, NULL, gettext("Paramètre %s incorrect.\n"), "action");
+    BUGMSG((0 <= ligne) && (ligne <= 2), NULL, gettext("Paramètre %s incorrect.\n"), "ligne");
+    
+    return action->fonctions_deformation[ligne][barre];
+}
+
+
+gboolean _1990_action_fonction_init(Projet *projet, Action *action)
+/* Description : Initialise les fonctions décrivant les sollicitations, les rotations ou les
+ *               déplacements des barres. Cette fonction doit être appelée lorsque toutes les
+ *               barres ont été modélisées. En effet, il est nécessaire de connaître leur
+ *               nombre afin de stocker dans un tableau dynamique unique les fonctions.
+ *               L'initialisation des fonctions consiste à définir un nombre de tronçon à 0 et
+ *               les données à NULL.
+ * Paramètres : Projet *projet : la variable projet,
+ *            : Action *action : pointeur vers l'action.
+ * Valeur renvoyée :
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL,
+ *             action == NULL,
+ *             en cas d'erreur d'allocation mémoire.
+ */
+{
+    unsigned int        i, j;
+    
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(action, FALSE, gettext("Paramètre %s incorrect.\n"), "action");
+    
+    // Trivial
+    for (i=0;i<6;i++)
+    {
+        BUGMSG(action->fonctions_efforts[i] = (Fonction**)malloc(sizeof(Fonction*)*g_list_length(projet->modele.barres)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+        for (j=0;j<g_list_length(projet->modele.barres);j++)
+        {
+            BUGMSG(action->fonctions_efforts[i][j] = (Fonction*)malloc(sizeof(Fonction)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+            action->fonctions_efforts[i][j]->nb_troncons = 0;
+            action->fonctions_efforts[i][j]->troncons = NULL;
+        }
+    }
+    
+    for (i=0;i<3;i++)
+    {
+        BUGMSG(action->fonctions_deformation[i] = (Fonction**)malloc(sizeof(Fonction*)*g_list_length(projet->modele.barres)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+        for (j=0;j<g_list_length(projet->modele.barres);j++)
+        {
+            BUGMSG(action->fonctions_deformation[i][j] = (Fonction*)malloc(sizeof(Fonction)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+            action->fonctions_deformation[i][j]->nb_troncons = 0;
+            action->fonctions_deformation[i][j]->troncons = NULL;
+        }
+        
+        BUGMSG(action->fonctions_rotation[i] = (Fonction**)malloc(sizeof(Fonction*)*g_list_length(projet->modele.barres)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+        for (j=0;j<g_list_length(projet->modele.barres);j++)
+        {
+            BUGMSG(action->fonctions_rotation[i][j] = (Fonction*)malloc(sizeof(Fonction)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+            action->fonctions_rotation[i][j]->nb_troncons = 0;
+            action->fonctions_rotation[i][j]->troncons = NULL;
+        }
+    }
+    
+    return TRUE;
+}
+
+
+gboolean _1990_action_fonction_free(Projet *projet, Action *action)
+/* Description : Libère les fonctions de toutes les barres de l'action souhaitée.
+ * Paramètres : Projet *projet : la variable projet,
+ *            : Action *action : pointeur vers l'action.
+ * Valeur renvoyée :
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL,
+ *             action == NULL,
+ *             projet->modele.barres == NULL.
+ */
+{
+    unsigned int        i, j;
+    
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(action, FALSE, gettext("Paramètre %s incorrect.\n"), "action");
+    
+    // Trivial
+    for (i=0;i<6;i++)
+    {
+        if (action->fonctions_efforts[i] != NULL)
+        {
+            for (j=0;j<g_list_length(projet->modele.barres);j++)
+            {
+                free(action->fonctions_efforts[i][j]->troncons);
+                free(action->fonctions_efforts[i][j]);
+            }
+            free(action->fonctions_efforts[i]);
+            action->fonctions_efforts[i] = NULL;
+        }
+    }
+    
+    for (i=0;i<3;i++)
+    {
+        if (action->fonctions_deformation[i] != NULL)
+        {
+            for (j=0;j<g_list_length(projet->modele.barres);j++)
+            {
+                free(action->fonctions_deformation[i][j]->troncons);
+                free(action->fonctions_deformation[i][j]);
+            }
+            free(action->fonctions_deformation[i]);
+            action->fonctions_deformation[i] = NULL;
+        }
+        
+        if (action->fonctions_rotation[i] != NULL)
+        {
+            for (j=0;j<g_list_length(projet->modele.barres);j++)
+            {
+                free(action->fonctions_rotation[i][j]->troncons);
+                free(action->fonctions_rotation[i][j]);
+            }
+            free(action->fonctions_rotation[i]);
+            action->fonctions_rotation[i] = NULL;
+        }
+    }
+    
+    return TRUE;
+}
+
+
 gboolean _1990_action_affiche_tout(Projet *projet)
 /* Description : Affiche dans l'entrée standard les actions existantes.
  * Paramètres : Projet *projet : la variable projet.
@@ -691,7 +1185,7 @@ gboolean _1990_action_affiche_resultats(Projet *projet, unsigned int num_action)
     unsigned int    i;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUG(action_en_cours = _1990_action_cherche_numero(projet, num_action), FALSE);
+    BUG(action_en_cours = _1990_action_numero_cherche(projet, num_action), FALSE);
     if (projet->modele.barres == NULL)
     {
         printf(gettext("Aucune barre existante.\n"));
@@ -755,6 +1249,137 @@ gboolean _1990_action_affiche_resultats(Projet *projet, unsigned int num_action)
 }
 
 
+Action *_1990_action_ponderation_resultat(GList* ponderation, Projet *projet)
+/* Description : Crée une fausse action sur la base d'une combinaison. L'objectif de cette
+ *               fonction est uniquement de regrouper les résultats pondérés de chaque action.
+ * Paramètres : GList *ponderation : pondération sur laquelle sera créée l'action,
+ *              Projet *projet : la variable projet.
+ * Valeur renvoyée :
+ *   Succès : pointeur vers l'action équivalente créée.
+ *   Échec : NULL :
+ *             projet == NULL,
+ *             ponderation == NULL,
+ *             une des actions de pondération est introuvable.
+ */
+{
+    GList   *list_parcours;
+    Action  *action;
+    double  *x, *y;
+
+    
+    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
+    
+    // Initialisation de l'action
+    BUGMSG(action = malloc(sizeof(Action)), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(action->efforts_noeuds = malloc(sizeof(cholmod_sparse)), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(action->efforts_noeuds->x = malloc(sizeof(double)*g_list_length(projet->modele.noeuds)*6), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    memset(action->efforts_noeuds->x, 0, sizeof(double)*g_list_length(projet->modele.noeuds)*6);
+    BUGMSG(action->deplacement_complet = malloc(sizeof(cholmod_sparse)), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(action->deplacement_complet->x = malloc(sizeof(double)*g_list_length(projet->modele.noeuds)*6), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    memset(action->deplacement_complet->x, 0, sizeof(double)*g_list_length(projet->modele.noeuds)*6);
+    BUG(_1990_action_fonction_init(projet, action), NULL);
+    x = action->efforts_noeuds->x;
+    y = action->deplacement_complet->x;
+    
+    // Remplissage de la variable action.
+    list_parcours = ponderation;
+    while (list_parcours != NULL)
+    {
+        Ponderation     *element = list_parcours->data;
+        double          *x2 = element->action->efforts_noeuds->x;
+        double          *y2 = element->action->deplacement_complet->x;
+        double          mult = element->ponderation*(element->psi == 0 ? common_math_get(element->action->psi0) : element->psi == 1 ? common_math_get(element->action->psi1) : element->psi == 2 ? common_math_get(element->action->psi2) : 1.);
+        unsigned int    i;
+        
+        for (i=0;i<g_list_length(projet->modele.noeuds)*6;i++)
+        {
+            x[i] = x[i] + mult*x2[i];
+            y[i] = y[i] + mult*y2[i];
+        }
+        
+        for (i=0;i<g_list_length(projet->modele.barres);i++)
+        {
+            BUG(common_fonction_ajout_fonction(action->fonctions_efforts[0][i], element->action->fonctions_efforts[0][i], mult), NULL);
+            BUG(common_fonction_ajout_fonction(action->fonctions_efforts[1][i], element->action->fonctions_efforts[1][i], mult), NULL);
+            BUG(common_fonction_ajout_fonction(action->fonctions_efforts[2][i], element->action->fonctions_efforts[2][i], mult), NULL);
+            BUG(common_fonction_ajout_fonction(action->fonctions_efforts[3][i], element->action->fonctions_efforts[3][i], mult), NULL);
+            BUG(common_fonction_ajout_fonction(action->fonctions_efforts[4][i], element->action->fonctions_efforts[4][i], mult), NULL);
+            BUG(common_fonction_ajout_fonction(action->fonctions_efforts[5][i], element->action->fonctions_efforts[5][i], mult), NULL);
+            BUG(common_fonction_ajout_fonction(action->fonctions_deformation[0][i], element->action->fonctions_deformation[0][i], mult), NULL);
+            BUG(common_fonction_ajout_fonction(action->fonctions_deformation[1][i], element->action->fonctions_deformation[1][i], mult), NULL);
+            BUG(common_fonction_ajout_fonction(action->fonctions_deformation[2][i], element->action->fonctions_deformation[2][i], mult), NULL);
+            BUG(common_fonction_ajout_fonction(action->fonctions_rotation[0][i], element->action->fonctions_rotation[0][i], mult), NULL);
+            BUG(common_fonction_ajout_fonction(action->fonctions_rotation[1][i], element->action->fonctions_rotation[1][i], mult), NULL);
+            BUG(common_fonction_ajout_fonction(action->fonctions_rotation[2][i], element->action->fonctions_rotation[2][i], mult), NULL);
+        }
+        
+        list_parcours = g_list_next(list_parcours);
+    }
+    
+    return action;
+}
+
+
+gboolean _1990_action_ponderation_resultat_free_calculs(Action *action)
+/* Description : Libère les résultats de l'action souhaitée crée par
+ *               _1990_action_ponderation_resultat.
+ * Paramètres : Action *action : l'action à libérer.
+ * Valeur renvoyée :
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             action == NULL.
+ */
+{
+    BUGMSG(action, FALSE, gettext("Paramètre %s incorrect.\n"), "action");
+    
+    free(action->deplacement_complet->x);
+    free(action->deplacement_complet);
+    free(action->efforts_noeuds->x);
+    free(action->efforts_noeuds);
+    
+    return TRUE;
+}
+
+
+gboolean _1990_action_free_calculs(Projet *projet, Action *action)
+/* Description : Libère les résultats de l'action souhaitée.
+ * Paramètres : Projet *projet : la variable projet,
+ *            : Action *action : l'action à libérer.
+ * Valeur renvoyée :
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL,
+ *             action == NULL.
+ */
+{
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(action, FALSE, gettext("Paramètre %s incorrect.\n"), "action");
+    
+    if (action->deplacement_complet != NULL)
+    {
+        cholmod_free_sparse(&action->deplacement_complet, projet->calculs.c);
+        action->deplacement_complet = NULL;
+    }
+    
+    if (action->forces_complet != NULL)
+    {
+        cholmod_free_sparse(&action->forces_complet, projet->calculs.c);
+        action->forces_complet = NULL;
+    }
+    
+    if (action->efforts_noeuds != NULL)
+    {
+        cholmod_free_sparse(&action->efforts_noeuds, projet->calculs.c);
+        action->efforts_noeuds = NULL;
+    }
+    
+    if (action->fonctions_efforts[0] != NULL)
+        BUG(_1990_action_fonction_free(projet, action), FALSE);
+    
+    return TRUE;
+}
+
+
 gboolean _1990_action_free_num(Projet *projet, unsigned int num)
 /* Description : Libère l'action souhaitée et décrémente de 1 les actions dons le numéro est
  *               supérieur.
@@ -775,7 +1400,7 @@ gboolean _1990_action_free_num(Projet *projet, unsigned int num)
 #endif
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUG(_1990_action_cherche_numero(projet, num), FALSE);
+    BUG(_1990_action_numero_cherche(projet, num), FALSE);
     
     // On enlève l'action de la liste des actions
     list_parcours = g_list_last(projet->actions);
@@ -828,7 +1453,7 @@ gboolean _1990_action_free_num(Projet *projet, unsigned int num)
                 cholmod_free_sparse(&action->efforts_noeuds, projet->calculs.c);
             
             if (action->fonctions_efforts[0] != NULL)
-                BUG(common_fonction_free(projet, action), FALSE);
+                BUG(_1990_action_fonction_free(projet, action), FALSE);
             
 #ifdef ENABLE_GTK
             if (projet->list_gtk._1990_actions.builder != NULL)
@@ -983,7 +1608,7 @@ gboolean _1990_action_free(Projet *projet)
             cholmod_free_sparse(&action->efforts_noeuds, projet->calculs.c);
         
         if (action->fonctions_efforts[0] != NULL)
-            BUG(common_fonction_free(projet, action), FALSE);
+            BUG(_1990_action_fonction_free(projet, action), FALSE);
         
         free(action);
     }

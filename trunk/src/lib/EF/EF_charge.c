@@ -48,9 +48,9 @@ void *EF_charge_cherche(Projet *projet, unsigned int num_action, unsigned int nu
     
     BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
     
-    BUG(action = _1990_action_cherche_numero(projet, num_action), NULL);
+    BUG(action = _1990_action_numero_cherche(projet, num_action), NULL);
     
-    list_parcours = action->charges;
+    list_parcours = _1990_action_charges_renvoie(action);
     while (list_parcours != NULL)
     {
         Charge_Noeud *charge = list_parcours->data;
@@ -87,7 +87,7 @@ Action *EF_charge_action(Projet *projet, void *charge)
     {
         Action  *action = list_parcours->data;
         
-        if (g_list_find(action->charges, charge) != NULL)
+        if (g_list_find(_1990_action_charges_renvoie(action), charge) != NULL)
             return action;
         
         list_parcours = g_list_next(list_parcours);
@@ -156,15 +156,15 @@ gboolean EF_charge_deplace(Projet *projet, unsigned int action_src, unsigned int
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
     // On cherche l'action qui contient la charge
-    BUG(action1 = _1990_action_cherche_numero(projet, action_src), -1);
-    BUG(action2 = _1990_action_cherche_numero(projet, action_dest), -1);
+    BUG(action1 = _1990_action_numero_cherche(projet, action_src), -1);
+    BUG(action2 = _1990_action_numero_cherche(projet, action_dest), -1);
     
     if (action_src == action_dest)
         return TRUE;
     
     // Lorsqu'elle est trouvée,
     
-    list_parcours = action1->charges;
+    list_parcours = _1990_action_charges_renvoie(action1);
     //     Pour chaque charge de l'action en cours Faire
     while (list_parcours != NULL)
     {
@@ -183,7 +183,7 @@ gboolean EF_charge_deplace(Projet *projet, unsigned int action_src, unsigned int
     //             et de la liste des charges tout en conservant les données
     //               de la charge dans charge_data.
             charge_data = charge;
-            action1->charges = g_list_delete_link(action1->charges, list_parcours);
+            BUG(_1990_action_charges_change(action1, g_list_delete_link(_1990_action_charges_renvoie(action1), list_parcours)), FALSE);
             list_parcours = list_next;
             if (list_parcours != NULL)
                 charge = list_parcours->data;
@@ -204,8 +204,8 @@ gboolean EF_charge_deplace(Projet *projet, unsigned int action_src, unsigned int
     
     // On insère la charge à la fin de la liste des charges dans l'action de destination
     //   en modifiant son numéro.
-    charge_data->numero = g_list_length(action2->charges);
-    action2->charges = g_list_append(action2->charges, charge_data);
+    charge_data->numero = g_list_length(_1990_action_charges_renvoie(action2));
+    BUG(_1990_action_charges_change(action2, g_list_append(_1990_action_charges_renvoie(action2), charge_data)), FALSE);
     
     BUG(EF_calculs_free(projet), FALSE);
     
@@ -234,9 +234,9 @@ gboolean EF_charge_supprime(Projet *projet, unsigned int action_num, unsigned in
     Action                  *action;
     
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUG(action = _1990_action_cherche_numero(projet, action_num), FALSE);
+    BUG(action = _1990_action_numero_cherche(projet, action_num), FALSE);
     
-    list_parcours = action->charges;
+    list_parcours = _1990_action_charges_renvoie(action);
     // Pour chaque charge de l'action en cours Faire
     while (list_parcours != NULL)
     {
@@ -253,7 +253,7 @@ gboolean EF_charge_supprime(Projet *projet, unsigned int action_num, unsigned in
     //         et de la liste des charges tout en conservant les données
     //           de la charge dans charge_data
             charge_data = list_parcours->data;
-            action->charges = g_list_delete_link(action->charges, list_parcours);
+            BUG(_1990_action_charges_change(action, g_list_delete_link(_1990_action_charges_renvoie(action), list_parcours)), FALSE);
             list_parcours = list_next;
             if (list_parcours != NULL)
                 charge = list_parcours->data;

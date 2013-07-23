@@ -62,7 +62,7 @@ Charge_Noeud*  EF_charge_noeud_ajout(Projet *projet, unsigned int num_action, GL
     
     // Trivial
     BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUG(action_en_cours = _1990_action_cherche_numero(projet, num_action), NULL);
+    BUG(action_en_cours = _1990_action_numero_cherche(projet, num_action), NULL);
     BUGMSG(charge_nouveau = malloc(sizeof(Charge_Noeud)), NULL, gettext("Erreur d'allocation mémoire.\n"));
     
     charge_nouveau->type = CHARGE_NOEUD;
@@ -75,9 +75,9 @@ Charge_Noeud*  EF_charge_noeud_ajout(Projet *projet, unsigned int num_action, GL
     charge_nouveau->my = my;
     charge_nouveau->mz = mz;
     
-    charge_nouveau->numero = g_list_length(action_en_cours->charges);
+    charge_nouveau->numero = g_list_length(_1990_action_charges_renvoie(action_en_cours));
     
-    action_en_cours->charges = g_list_append(action_en_cours->charges, charge_nouveau);
+    BUG(_1990_action_charges_change(action_en_cours, g_list_append(_1990_action_charges_renvoie(action_en_cours), charge_nouveau)), NULL);
     
     BUG(EF_calculs_free(projet), FALSE);
     
@@ -85,7 +85,7 @@ Charge_Noeud*  EF_charge_noeud_ajout(Projet *projet, unsigned int num_action, GL
     if ((projet->list_gtk._1990_actions.builder != NULL) && (gtk_tree_selection_get_selected(projet->list_gtk._1990_actions.tree_select_actions, &model_action, &iter_action)))
     {
         gtk_tree_model_get(model_action, &iter_action, 0, &action, -1);
-        if (action->numero == num_action)
+        if (_1990_action_numero_renvoie(action) == num_action)
         {
             gtk_tree_store_append(projet->list_gtk._1990_actions.tree_store_charges, &charge_nouveau->Iter, NULL);
             gtk_tree_store_set(projet->list_gtk._1990_actions.tree_store_charges, &charge_nouveau->Iter, 0, charge_nouveau, -1);
@@ -166,7 +166,7 @@ gboolean EF_charge_noeud_enleve_noeuds(Charge_Noeud *charge, GList *noeuds, Proj
             
             gtk_tree_model_get(model, &Iter, 0, &action, -1);
             
-            if (g_list_find(action->charges, charge))
+            if (g_list_find(_1990_action_charges_renvoie(action), charge))
                 gtk_widget_queue_resize(GTK_WIDGET(projet->list_gtk._1990_actions.tree_view_charges));
         }
     }

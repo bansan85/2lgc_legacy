@@ -84,6 +84,7 @@ endif
 
 libeurocodes_ladir = $(includedir)/2lgc
 libeurocodes_la_HEADERS =	1990/1990_action.h \
+							1990/1990_action_private.h \
 							1990/1990_coef_psi.h \
 							1990/1990_combinaisons.h \
 							1990/1990_duree.h \

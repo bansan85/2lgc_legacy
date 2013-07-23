@@ -200,7 +200,7 @@ gboolean _1990_combinaisons_action_predominante(GList *combinaison, Type_Pays pa
     do
     {
         Combinaison         *combinaison_element = list_parcours->data;
-        Action_Categorie    categorie = _1990_action_categorie_bat(combinaison_element->action->type, pays);
+        Action_Categorie    categorie = _1990_action_categorie_bat(_1990_action_type_renvoie(combinaison_element->action), pays);
         
         BUG(categorie != ACTION_INCONNUE, FALSE);
         if (categorie == ACTION_VARIABLE)
@@ -230,7 +230,7 @@ gboolean _1990_combinaisons_genere_xor(Projet *projet, Niveau_Groupe *niveau, Gr
  *             niveau->groupes == NULL,
  *             groupe->type_combinaison != GROUPE_COMBINAISON_XOR,
  *             erreur d'allocation mémoire,
- *             _1990_action_cherche_numero,
+ *             _1990_action_numero_cherche,
  *             _1990_groupe_positionne_groupe,
  *             _1990_combinaisons_duplique.
  */
@@ -267,13 +267,13 @@ gboolean _1990_combinaisons_genere_xor(Projet *projet, Niveau_Groupe *niveau, Gr
             Action      *action;
             
             // On vérifie si l'action possède une charge. Si non, on ignore l'action.
-            BUG(action = _1990_action_cherche_numero(projet, element_en_cours->numero), FALSE);
-            if (action->charges != NULL)
+            BUG(action = _1990_action_numero_cherche(projet, element_en_cours->numero), FALSE);
+            if (!_1990_action_charges_vide(action))
             {
                 BUGMSG(nouveau_element = malloc(sizeof(Combinaison)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                 nouvelle_combinaison = NULL;
                 nouveau_element->action = action;
-                nouveau_element->flags = nouveau_element->action->flags;
+                nouveau_element->flags = _1990_action_flags_action_predominante_renvoie(nouveau_element->action);
                 nouvelle_combinaison = g_list_append(nouvelle_combinaison, nouveau_element);
                 groupe->tmp_combinaison = g_list_append(groupe->tmp_combinaison, nouvelle_combinaison);
             }
@@ -385,7 +385,7 @@ gboolean _1990_combinaisons_genere_and(Projet *projet, Niveau_Groupe *niveau, Gr
  *             niveau->groupes == NULL,
  *             groupe->type_combinaison != GROUPE_COMBINAISON_AND,
  *             erreur d'allocation mémoire,
- *             _1990_action_cherche_numero,
+ *             _1990_action_numero_cherche,
  *             _1990_combinaisons_action_predominante,
  *             _1990_groupe_positionne_groupe,
  *             _1990_combinaisons_duplique,
@@ -424,13 +424,13 @@ gboolean _1990_combinaisons_genere_and(Projet *projet, Niveau_Groupe *niveau, Gr
             Combinaison *nouveau_element;
             Action      *action;
             
-            BUG(action = _1990_action_cherche_numero(projet, element_en_cours->numero), FALSE);
+            BUG(action = _1990_action_numero_cherche(projet, element_en_cours->numero), FALSE);
             // On ajoute l'action que si elle possède des charges
-            if (action->charges != NULL)
+            if (!_1990_action_charges_vide(action))
             {
                 BUGMSG(nouveau_element = malloc(sizeof(Combinaison)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                 nouveau_element->action = action;
-                nouveau_element->flags = nouveau_element->action->flags;
+                nouveau_element->flags = _1990_action_flags_action_predominante_renvoie(nouveau_element->action);
                 if ((nouveau_element->flags & 1) != 0)
                     action_predominante = 1;
                 comb = g_list_append(comb, nouveau_element);
@@ -561,7 +561,7 @@ gboolean _1990_combinaisons_genere_or(Projet *projet, Niveau_Groupe *niveau, Gro
  *             niveau->groupes == NULL,
  *             groupe->type_combinaison != GROUPE_COMBINAISON_OR,
  *             erreur d'allocation mémoire,
- *             _1990_action_cherche_numero,
+ *             _1990_action_numero_cherche,
  *             _1990_groupe_positionne_groupe,
  *             _1990_combinaisons_duplique,
  *             _1990_combinaisons_fusion.
@@ -613,13 +613,13 @@ gboolean _1990_combinaisons_genere_or(Projet *projet, Niveau_Groupe *niveau, Gro
                     Element     *element_en_cours = list_parcours->data;
                     Action      *action;
                     
-                    BUG(action = _1990_action_cherche_numero(projet, element_en_cours->numero), FALSE);
+                    BUG(action = _1990_action_numero_cherche(projet, element_en_cours->numero), FALSE);
                     // On ajoute l'action que si elle possède des charges
-                    if (action->charges != NULL)
+                    if (!_1990_action_charges_vide(action))
                     {
                         BUGMSG(element = malloc(sizeof(Combinaison)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
                         element->action = action;
-                        element->flags = element->action->flags;
+                        element->flags = _1990_action_flags_action_predominante_renvoie(element->action);
                         if ((element->flags & 1) != 0)
                             action_predominante = 1;
                         nouvelle_combinaison = g_list_append(nouvelle_combinaison, element);
@@ -934,27 +934,27 @@ gboolean _1990_combinaisons_genere(Projet *projet)
         }
         while (list_parcours != NULL);
         
-    //     Attribution à l'action numéro i du flags&1 = 1 afin d'indiquer qu'il s'agit d'une
-    //       action prédominante et mise à 0 du flags&1 pour les autres actions.
+    //     Attribution à l'action numéro i du flags "action prédominante" à 1 afin d'indiquer
+    //       qu'il s'agit d'une action prédominante et mise à 0 pour les autres actions.
         list_parcours = projet->actions;
         for (j=0;j<i;j++)
         {
             action = list_parcours->data;
-            action->flags = 0;
+            BUG(_1990_action_flags_action_predominante_change(action, 0), FALSE);
             list_parcours = g_list_next(list_parcours);
         }
         action = list_parcours->data;
-        categorie = _1990_action_categorie_bat(action->type, projet->parametres.pays);
+        categorie = _1990_action_categorie_bat(_1990_action_type_renvoie(action), projet->parametres.pays);
         BUG(categorie != ACTION_INCONNUE, FALSE);
         if (categorie == ACTION_VARIABLE)
-            action->flags = 1;
+            BUG(_1990_action_flags_action_predominante_change(action, 1), FALSE);
         else
-            action->flags = 0;
+            BUG(_1990_action_flags_action_predominante_change(action, 0), FALSE);
         list_parcours = g_list_next(list_parcours);
         for (j=i+1;j<g_list_length(projet->actions);j++)
         {
             action = list_parcours->data;
-            action->flags = 0;
+            BUG(_1990_action_flags_action_predominante_change(action, 0), FALSE);
             list_parcours = g_list_next(list_parcours);
         }
         

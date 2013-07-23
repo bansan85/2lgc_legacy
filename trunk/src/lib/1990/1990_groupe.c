@@ -258,7 +258,7 @@ gboolean _1990_groupe_ajout_element(Projet *projet, unsigned int niveau, unsigne
  *             projet->niveaux_groupes == NULL,
  *             si l'élément num_element, est déjà présentant dans le groupe groupe_n.
  *             erreur d'allocation mémoire,
- *             _1990_action_cherche_numero,
+ *             _1990_action_numero_cherche,
  *             _1990_groupe_positionne_niveau,
  *             _1990_groupe_positionne_groupe.
  */
@@ -277,7 +277,7 @@ gboolean _1990_groupe_ajout_element(Projet *projet, unsigned int niveau, unsigne
     if (niveau == 0)
     {
         // On vérifie si l'action num_element existe.
-        BUG(_1990_action_cherche_numero(projet, num_element), FALSE);
+        BUG(_1990_action_numero_cherche(projet, num_element), FALSE);
         niveau_groupe = projet->niveaux_groupes->data;
     }
     else
@@ -370,8 +370,8 @@ gboolean _1990_groupe_ajout_element(Projet *projet, unsigned int niveau, unsigne
         {
             Action *action;
             
-            BUG(action = _1990_action_cherche_numero(projet, num_element), FALSE);
-            gtk_tree_store_set(gtk_1990_groupes->tree_store_etat, &element->Iter, 0, num_element, 1, action->nom, -1);
+            BUG(action = _1990_action_numero_cherche(projet, num_element), FALSE);
+            gtk_tree_store_set(gtk_1990_groupes->tree_store_etat, &element->Iter, 0, num_element, 1, _1990_action_nom_renvoie(action), -1);
         }
         else
         {
@@ -638,7 +638,7 @@ gboolean _1990_groupe_affiche_tout(Projet *projet)
                             Combinaison *comb_element = list_parcours4->data;
                             Action      *action = (Action*)comb_element->action;
                             
-                            printf("%u(%d) ", action->numero, comb_element->flags);
+                            printf("%u(%d) ", _1990_action_numero_renvoie(action), comb_element->flags);
                             
                             list_parcours4 = g_list_next(list_parcours4);
                         }
