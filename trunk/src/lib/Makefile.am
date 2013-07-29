@@ -76,6 +76,7 @@ libeurocodes_la_SOURCES +=	common/common_m3d.cc \
 							EF/EF_gtk_section_T.c \
 							EF/EF_gtk_section_carree.c \
 							EF/EF_gtk_section_circulaire.c \
+							EF/EF_gtk_section_personnalisee.c \
 							EF/EF_gtk_rapport.c \
 							EF/EF_gtk_relachement.c \
 							EF/EF_gtk_resultats.c
@@ -139,6 +140,7 @@ libeurocodes_la_HEADERS +=	common/common_m3d.hpp \
 							EF/EF_gtk_section_T.h \
 							EF/EF_gtk_section_carree.h \
 							EF/EF_gtk_section_circulaire.h \
+							EF/EF_gtk_section_personnalisee.h \
 							EF/EF_gtk_rapport.h \
 							EF/EF_gtk_relachement.h \
 							EF/EF_gtk_resultats.h

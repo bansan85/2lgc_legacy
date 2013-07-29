@@ -163,7 +163,7 @@ void EF_gtk_section_circulaire_check(GtkWidget *object, Projet *projet)
 
 
 void EF_gtk_section_circulaire_ajouter_clicked(GtkButton *button, Projet *projet)
-/* Description : Ferme la fenêtre en ajoutant la charge.
+/* Description : Ferme la fenêtre en ajoutant la section.
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
  * Valeur renvoyée : Aucune.

@@ -207,7 +207,7 @@ gboolean EF_charge_barre_repartie_uniforme_mx(EF_Barre *barre, unsigned int disc
  */
 {
     EF_Noeud    *debut, *fin;
-    double      l, G;
+    double      l, G, J;
     
     BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre");
     BUGMSG(infos, FALSE, gettext("Paramètre %s incorrect.\n"), "infos");
@@ -244,36 +244,22 @@ gboolean EF_charge_barre_repartie_uniforme_mx(EF_Barre *barre, unsigned int disc
     BUGMSG(!((a+b > l) && (!(ERREUR_RELATIVE_EGALE(a+b, l)))), FALSE, gettext("Le début (%f) et la fin (%f) de la charge répartie uniformément sont incompatibles avec la longueur de la barre %d qui est de %f m.\n"), a, b, barre->numero, l);
     
     G = common_math_get(EF_calculs_G(barre->materiau, FALSE));
+    J = common_math_get(EF_sections_j(barre->section));
+    BUG(!isnan(G), FALSE);
+    BUG(!isnan(J), FALSE);
     
-    switch (barre->section->type)
-    {
-        case SECTION_RECTANGULAIRE :
-        case SECTION_T :
-        case SECTION_CARREE :
-        case SECTION_CIRCULAIRE :
-        {
-            double      J = common_math_get(EF_sections_j(barre->section));
-            
-            BUG(!isnan(J), FALSE);
-            
     // Pour une section section constante, les moments valent :\end{verbatim}\begin{displaymath}
     // M_{Bx} = \frac{(L-a-b) \cdot m_x \cdot (a-b+2 \cdot G \cdot J \cdot k_A+l)}{2 \cdot (G \cdot J \cdot (k_A+k_B)+l)}\end{displaymath}\begin{verbatim}
-            if (ERREUR_RELATIVE_EGALE(infos->kAx, MAXDOUBLE))
-                *mb = mx*(l-a-b);
-            else if (ERREUR_RELATIVE_EGALE(infos->kBx, MAXDOUBLE))
-                *mb = 0.;
-            else
-                *mb = (l-a-b)*mx*(a-b+2.*G*J*infos->kAx+l)/(2.*(G*J*(infos->kAx+infos->kBx)+l));
-            *ma = mx*(l-a-b) - *mb;
-            return TRUE;
-            break;
-        }
-        default :
-        {
-            BUGMSG(0, FALSE, gettext("Type de section %d inconnu.\n"), barre->section->type);
-            break;
-        }
-    }
+    
+    if (ERREUR_RELATIVE_EGALE(infos->kAx, MAXDOUBLE))
+        *mb = mx*(l-a-b);
+    else if (ERREUR_RELATIVE_EGALE(infos->kBx, MAXDOUBLE))
+        *mb = 0.;
+    else
+        *mb = (l-a-b)*mx*(a-b+2.*G*J*infos->kAx+l)/(2.*(G*J*(infos->kAx+infos->kBx)+l));
+    *ma = mx*(l-a-b) - *mb;
+    
+    return TRUE;
 }
 
 
@@ -310,7 +296,7 @@ gboolean EF_charge_barre_repartie_uniforme_def_ang_iso_y(EF_Barre *barre,
 {
     EF_Noeud    *debut, *fin;
     double      l;
-    double      E;
+    double      E, I;
     
     BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre");
     BUGMSG(barre->section, FALSE, gettext("Section indéfinie.\n"));
@@ -335,6 +321,7 @@ gboolean EF_charge_barre_repartie_uniforme_def_ang_iso_y(EF_Barre *barre,
     // Mf_{23} = & B_1 \cdot (L-x) &            Mf_3 = & -\frac{x}{L} \nonumber\\
     // A_1 = & -m_y \cdot \frac{L-a-b}{L}                  & B_1 = & m_y \cdot \frac{L-a-b}{L} \nonumber\\
     // A_2 = & -\frac{f_z \cdot (L-a-b)(L-a+b)}{2 \cdot L} & B_2 = & -\frac{f_z \cdot (L-a-b)(L+a-b)}{2 \cdot L}\end{align*}\begin{verbatim}
+    
     if (discretisation == 0)
         debut = barre->noeud_debut;
     else
@@ -353,32 +340,18 @@ gboolean EF_charge_barre_repartie_uniforme_def_ang_iso_y(EF_Barre *barre,
     BUGMSG(!((a+b > l) && (!(ERREUR_RELATIVE_EGALE(a+b, l)))), FALSE, gettext("Le début (%f) et la fin (%f) de la charge répartie uniformément sont incorrecte avec la longueur de la barre %d qui est de %f m.\n"), a, b, barre->numero, l);
     
     E = common_math_get(EF_calculs_E(barre->materiau));
+    I = common_math_get(EF_sections_iy(barre->section));
+    BUG(!isnan(E), FALSE);
+    BUG(!isnan(I), FALSE);
     
-    switch (barre->section->type)
-    {
-        case SECTION_RECTANGULAIRE :
-        case SECTION_T :
-        case SECTION_CARREE :
-        case SECTION_CIRCULAIRE :
-        {
-            double      I = common_math_get(EF_sections_iy(barre->section));
-            
-            BUG(!isnan(I), FALSE);
-            
     // Pour une section constante, les angles valent :\end{verbatim}\begin{displaymath}
     // \varphi_A = \frac{[a^2-a \cdot (b+2 \cdot L) + b \cdot (b+L)] \cdot m_y \cdot (L-a-b)}{6 \cdot E \cdot I_y \cdot L} - \frac{f_z \cdot (L-a-b) \cdot (L-a+b) \cdot (L^2-a^2-b^2+2 \cdot a \cdot L)}{24 \cdot E \cdot I_y \cdot L}\end{displaymath}\begin{displaymath}
     // \varphi_B = \frac{[a^2+a \cdot (L-b) - b \cdot (2L-b)] \cdot m_y \cdot (L-a-b)}{6 \cdot E \cdot I_y \cdot L} + \frac{F \cdot (L-a-b) \cdot (L+a-b) \cdot (L^2-a^2-b^2+2 \cdot b \cdot L)}{24 \cdot E \cdot I_y \cdot L}\end{displaymath}\begin{verbatim}
-            *phia = (a*a-a*(b+2*l)+b*(b+l))*my*(l-a-b)/(6*E*I*l)-fz*(l-a-b)*(l-a+b)*(l*l-a*a-b*b+2*a*l)/(24*E*I*l);
-            *phib = (a*a-b*(2*l-b)+a*(l-b))*my*(l-a-b)/(6*E*I*l)+fz*(l-a-b)*(l+a-b)*(l*l-a*a-b*b+2*b*l)/(24*E*I*l);
-            return TRUE;
-            break;
-        }
-        default :
-        {
-            BUGMSG(0, FALSE, gettext("Type de section %d inconnu.\n"), barre->section->type);
-            break;
-        }
-    }
+    
+    *phia = (a*a-a*(b+2*l)+b*(b+l))*my*(l-a-b)/(6*E*I*l)-fz*(l-a-b)*(l-a+b)*(l*l-a*a-b*b+2*a*l)/(24*E*I*l);
+    *phib = (a*a-b*(2*l-b)+a*(l-b))*my*(l-a-b)/(6*E*I*l)+fz*(l-a-b)*(l+a-b)*(l*l-a*a-b*b+2*b*l)/(24*E*I*l);
+    
+    return TRUE;
 }
 
 
@@ -414,7 +387,7 @@ gboolean EF_charge_barre_repartie_uniforme_def_ang_iso_z(EF_Barre *barre,
 {
     EF_Noeud    *debut, *fin;
     double      l;
-    double      E;
+    double      E, I;
     
     BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre");
     BUGMSG(barre->section, FALSE, gettext("Section indéfinie.\n"));
@@ -448,6 +421,7 @@ gboolean EF_charge_barre_repartie_uniforme_def_ang_iso_z(EF_Barre *barre,
     // Mf_{23} = & B_1 \cdot (L-x) &            Mf_3 = & -\frac{x}{L} \nonumber\\
     // A_1 = & -m_z \cdot \frac{L-a-b}{L}                  & B_1 = & m_z \cdot \frac{L-a-b}{L} \nonumber\\
     // A_2 = & \frac{f_y \cdot (L-a-b)(L-a+b)}{2 \cdot L} & B_2 = & \frac{f_y \cdot (L-a-b)(L+a-b)}{2 \cdot L}\end{align*}\begin{verbatim}
+    
     l = EF_noeuds_distance(debut, fin);
     BUG(!isnan(l), FALSE);
     BUGMSG(!((a < 0.) && (!(ERREUR_RELATIVE_EGALE(a, 0.)))), FALSE, gettext("Le début de la position de la charge répartie uniformément (%f) est incorrect.\n"), a);
@@ -457,32 +431,18 @@ gboolean EF_charge_barre_repartie_uniforme_def_ang_iso_z(EF_Barre *barre,
     BUGMSG(!((a+b > l) && (!(ERREUR_RELATIVE_EGALE(a+b, l)))), FALSE, gettext("Le début (%f) et la fin (%f) de la charge répartie uniformément sont incorrecte avec la longueur de la barre %d qui est de %f m.\n"), a, b, barre->numero, l);
     
     E = common_math_get(EF_calculs_E(barre->materiau));
+    I = common_math_get(EF_sections_iz(barre->section));
+    BUG(!isnan(E), FALSE);
+    BUG(!isnan(I), FALSE);
     
-    switch (barre->section->type)
-    {
-        case SECTION_RECTANGULAIRE :
-        case SECTION_T :
-        case SECTION_CARREE :
-        case SECTION_CIRCULAIRE :
-        {
-            double      I = common_math_get(EF_sections_iz(barre->section));
-            
-            BUG(!isnan(I), FALSE);
-            
     // Pour une section constante, les angles valent :\end{verbatim}\begin{displaymath}
     // \varphi_A = \frac{[a^2-a \cdot (b+2 \cdot L) + b \cdot (b+L)] \cdot m_z \cdot (L-a-b)}{6 \cdot E \cdot I_z \cdot L} + \frac{f_y \cdot (L-a-b) \cdot (L-a+b) \cdot (L^2-a^2-b^2+2 \cdot a \cdot L)}{24 \cdot E \cdot I_z \cdot L}\end{displaymath}\begin{displaymath}
     // \varphi_B = \frac{[a^2+a \cdot (L-b) - b \cdot (2L-b)] \cdot m_z \cdot (L-a-b)}{6 \cdot E \cdot I_z \cdot L} - \frac{f_y \cdot (L-a-b) \cdot (L+a-b) \cdot (L^2-a^2-b^2+2 \cdot b \cdot L)}{24 \cdot E \cdot I_z \cdot L}\end{displaymath}\begin{verbatim}
-            *phia = (a*a-a*(b+2*l)+b*(b+l))*mz*(l-a-b)/(6*E*I*l)+fy*(l-a-b)*(l-a+b)*(l*l-a*a-b*b+2*a*l)/(24*E*I*l);
-            *phib = (a*a-b*(2*l-b)+a*(l-b))*mz*(l-a-b)/(6*E*I*l)-fy*(l-a-b)*(l+a-b)*(l*l-a*a-b*b+2*b*l)/(24*E*I*l);
-            return TRUE;
-            break;
-        }
-        default :
-        {
-            BUGMSG(0, FALSE, gettext("Type de section %d inconnu.\n"), barre->section->type);
-            break;
-        }
-    }
+    
+    *phia = (a*a-a*(b+2*l)+b*(b+l))*mz*(l-a-b)/(6*E*I*l)+fy*(l-a-b)*(l-a+b)*(l*l-a*a-b*b+2*a*l)/(24*E*I*l);
+    *phib = (a*a-b*(2*l-b)+a*(l-b))*mz*(l-a-b)/(6*E*I*l)-fy*(l-a-b)*(l+a-b)*(l*l-a*a-b*b+2*b*l)/(24*E*I*l);
+    
+    return TRUE;
 }
 
 
@@ -514,25 +474,10 @@ double EF_charge_barre_repartie_uniforme_position_resultante_x(EF_Section *secti
     // \includegraphics[width=8cm]{images/charge_barre_rep_uni_n.pdf}\end{center}\begin{displaymath}
     // \int_a^{L-b} \frac{x-a}{S(x)} dx + \int_{L-b}^X \frac{L-b-a}{S(x)} dx = 0\end{displaymath}\begin{verbatim}
     
-    switch (section->type)
-    {
-        case SECTION_RECTANGULAIRE :
-        case SECTION_T :
-        case SECTION_CARREE :
-        case SECTION_CIRCULAIRE :
-        {
-            
     // Pour une section rectantulaire de section constante, X vaut :\end{verbatim}\begin{displaymath}
     // X = \frac{a+L-b}{2} \end{displaymath}\begin{verbatim}
-            return (a+l-b)/2.;
-            break;
-        }
-        default :
-        {
-            BUGMSG(0, NAN, gettext("Type de section %d inconnu.\n"), section->type);
-            break;
-        }
-    }
+    
+    return (a+l-b)/2.;
 }
 
 
@@ -566,7 +511,7 @@ gboolean EF_charge_barre_repartie_uniforme_fonc_rx(Fonction *fonction, EF_Barre 
     EF_Noeud    *debut, *fin;
     Barre_Info_EF *infos;
     double      l;
-    double      G, debut_barre;
+    double      G, debut_barre, J;
     
     BUGMSG(fonction, FALSE, gettext("Paramètre %s incorrect.\n"), "fonction");
     BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre");
@@ -611,31 +556,24 @@ gboolean EF_charge_barre_repartie_uniforme_fonc_rx(Fonction *fonction, EF_Barre 
     BUGMSG(!((a+b > l) && (!(ERREUR_RELATIVE_EGALE(a+b, l)))), FALSE, gettext("Le début (%f) et la fin (%f) de la charge répartie uniformément sont incompatibles avec la longueur de la barre %d qui est de %f m.\n"), a, b, barre->numero, l);
     
     G = common_math_get(EF_calculs_G(barre->materiau, FALSE));
+    J = common_math_get(EF_sections_j(barre->section));
     
-    switch (barre->section->type)
+    BUG(!isnan(G), FALSE);
+    BUG(!isnan(J), FALSE);
+    
+    if (ERREUR_RELATIVE_EGALE(infos->kBx, MAXDOUBLE))
     {
-        case SECTION_RECTANGULAIRE :
-        case SECTION_T :
-        case SECTION_CARREE :
-        case SECTION_CIRCULAIRE :
-        {
-            double      J = common_math_get(EF_sections_j(barre->section));
-            
-            BUG(!isnan(J), FALSE);
-            
-            if (ERREUR_RELATIVE_EGALE(infos->kBx, MAXDOUBLE))
-            {
-                BUG(common_fonction_ajout_poly(fonction, 0., a, max*infos->kAx, max/(G*J), 0., 0., 0., 0., 0., debut_barre), FALSE);
-                BUG(common_fonction_ajout_poly(fonction, a, l-b, max*infos->kAx+(a*a*(max+mbx))/(2.*(a+b-l)*G*J), (-2*a*mbx+2*b*max-2*l*max)/(2.*(a+b-l)*G*J), (max+mbx)/(2.*(a+b-l)*G*J), 0., 0., 0., 0., debut_barre), FALSE);
-                BUG(common_fonction_ajout_poly(fonction, l-b, l, max*infos->kAx+(l+a-b)*(max+mbx)/(2.*G*J), (-2*mbx)/(2.*G*J), 0., 0., 0., 0., 0., debut_barre), FALSE);
-            }
-            else
-            {
-                BUG(common_fonction_ajout_poly(fonction, 0., a, mbx*infos->kBx+((max+mbx)*(-a+b)-l*(max-mbx))/(2.*G*J), (2.*max)/(2.*G*J), 0., 0., 0., 0., 0., debut_barre), FALSE);
-                BUG(common_fonction_ajout_poly(fonction, a, l-b, mbx*infos->kBx+(2.*a*l*mbx+b*b*max+b*b*mbx-2.*b*l*max+l*l*max-l*l*mbx)/(2.*(a+b-l)*G*J), (-2.*a*mbx+2.*b*max-2.*l*max)/(2.*(a+b-l)*G*J), (max+mbx)/(2.*(a+b-l)*G*J), 0., 0., 0., 0., debut_barre), FALSE);
-                BUG(common_fonction_ajout_poly(fonction, l-b, l, mbx*(infos->kBx + l/(G*J)), -mbx/(G*J), 0., 0., 0., 0., 0., debut_barre), FALSE);
-            }
-            
+        BUG(common_fonction_ajout_poly(fonction, 0., a, max*infos->kAx, max/(G*J), 0., 0., 0., 0., 0., debut_barre), FALSE);
+        BUG(common_fonction_ajout_poly(fonction, a, l-b, max*infos->kAx+(a*a*(max+mbx))/(2.*(a+b-l)*G*J), (-2*a*mbx+2*b*max-2*l*max)/(2.*(a+b-l)*G*J), (max+mbx)/(2.*(a+b-l)*G*J), 0., 0., 0., 0., debut_barre), FALSE);
+        BUG(common_fonction_ajout_poly(fonction, l-b, l, max*infos->kAx+(l+a-b)*(max+mbx)/(2.*G*J), (-2*mbx)/(2.*G*J), 0., 0., 0., 0., 0., debut_barre), FALSE);
+    }
+    else
+    {
+        BUG(common_fonction_ajout_poly(fonction, 0., a, mbx*infos->kBx+((max+mbx)*(-a+b)-l*(max-mbx))/(2.*G*J), (2.*max)/(2.*G*J), 0., 0., 0., 0., 0., debut_barre), FALSE);
+        BUG(common_fonction_ajout_poly(fonction, a, l-b, mbx*infos->kBx+(2.*a*l*mbx+b*b*max+b*b*mbx-2.*b*l*max+l*l*max-l*l*mbx)/(2.*(a+b-l)*G*J), (-2.*a*mbx+2.*b*max-2.*l*max)/(2.*(a+b-l)*G*J), (max+mbx)/(2.*(a+b-l)*G*J), 0., 0., 0., 0., debut_barre), FALSE);
+        BUG(common_fonction_ajout_poly(fonction, l-b, l, mbx*(infos->kBx + l/(G*J)), -mbx/(G*J), 0., 0., 0., 0., 0., debut_barre), FALSE);
+    }
+    
     // Pour une section section constante, les moments valent :
     // Si le noeud B est relaché en rotation Alors\end{verbatim}\begin{align*}
     // r_x(x) = & M_{Ax} \cdot \left( k_{Ax} + \frac{x}{J \cdot G} \right) & & \textrm{ pour x variant de 0 à a}\nonumber\\
@@ -646,15 +584,8 @@ gboolean EF_charge_barre_repartie_uniforme_fonc_rx(Fonction *fonction, EF_Barre 
     // r_x(x) = & k_{Bx} \cdot M_{Bx} + \frac{(M_{Ax} + M_{Bx}) \cdot (L-b-x)^2}{2 \cdot (a+b-L) \cdot G \cdot J} + \frac{(L-x) \cdot M_{Bx}}{J \cdot G} & & \textrm{ pour x variant de a à L-b} \nonumber\\
     // r_x(x) = & M_{Bx} \cdot \left( k_{Bx} + \frac{L-x}{J \cdot G} \right) & & \textrm{ pour x variant de L-b à L}\end{align*}\begin{verbatim}
     // FinSi
-            return TRUE;
-            break;
-        }
-        default :
-        {
-            BUGMSG(0, FALSE, gettext("Type de section %d inconnu.\n"), barre->section->type);
-            break;
-        }
-    }
+    
+    return TRUE;
 }
 
 
@@ -692,7 +623,7 @@ gboolean EF_charge_barre_repartie_uniforme_fonc_ry(Fonction *f_rotation, Fonctio
 {
     EF_Noeud    *debut, *fin;
     double      l;
-    double      E, debut_barre;
+    double      E, debut_barre, I;
     
     BUGMSG(f_rotation, FALSE, gettext("Paramètre %s incorrect.\n"), "f_rotation");
     BUGMSG(f_deform, FALSE, gettext("Paramètre %s incorrect.\n"), "f_deform");
@@ -765,33 +696,26 @@ gboolean EF_charge_barre_repartie_uniforme_fonc_ry(Fonction *f_rotation, Fonctio
     BUGMSG(!((a+b > l) && (!(ERREUR_RELATIVE_EGALE(a+b, l)))), FALSE, gettext("Le début (%f) et la fin (%f) de la charge répartie uniformément sont incompatibles avec la longueur de la barre %d qui est de %f m.\n"), a, b, barre->numero, l);
     
     E = common_math_get(EF_calculs_E(barre->materiau));
+    I = common_math_get(EF_sections_iy(barre->section));
+    BUG(!isnan(E), FALSE);
+    BUG(!isnan(I), FALSE);
     
-    switch (barre->section->type)
-    {
-        case SECTION_RECTANGULAIRE :
-        case SECTION_T :
-        case SECTION_CARREE :
-        case SECTION_CIRCULAIRE :
-        {
-            double      I = common_math_get(EF_sections_iy(barre->section));
-            
-            BUG(!isnan(I), FALSE);
-            
-            BUG(common_fonction_ajout_poly(f_rotation, 0., a, -fz*(l-a-b)*(l-a+b)*(l*l-a*a-b*b+2*a*l)/(24.*l*E*I), 0., fz*(l-a-b)*(l-a+b)*(6.)/(24.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout_poly(f_rotation, a, l-b, fz*(a*a*a*a+4.*a*a*l*l-b*b*b*b+2.*b*b*l*l-l*l*l*l)/(24.*l*E*I), fz*(-12.*a*a*l)/(24.*l*E*I), fz*(6.*a*a-6.*b*b+6.*l*l)/(24.*l*E*I), fz*(-4.*l)/(24.*l*E*I), 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout_poly(f_rotation, l-b, l, fz*(a*a*a*a+4.*a*a*l*l-b*b*b*b+4.*b*b*b*l-10.*b*b*l*l+12.*b*l*l*l-5.*l*l*l*l)/(24.*l*E*I), fz*(-12.*a*a*l+12.*b*b*l-24.*b*l*l+12.*l*l*l)/(24.*l*E*I), fz*(6.*a*a-6.*b*b+12.*b*l-6.*l*l)/(24.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout_poly(f_rotation, 0., a, my*(-a*a*a+3.*a*a*l-2.*a*l*l-b*b*b+b*l*l)/(6.*l*E*I), 0., my*(-3.*a-3.*b+3.*l)/(6.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout_poly(f_rotation, a, l-b, my*(-a*a*a-2.*a*l*l-b*b*b+b*l*l)/(6.*l*E*I), my*(6.*a*l)/(6.*l*E*I), my*(-3.*a-3.*b)/(6.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout_poly(f_rotation, l-b, l, my*(-a*a*a-2.*a*l*l-b*b*b+3.*b*b*l-5.*b*l*l+3.*l*l*l)/(6.*l*E*I), my*(6.*a*l+6*b*l-6*l*l)/(6.*l*E*I), my*(-3.*a-3.*b+3.*l)/(6.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout_poly(f_rotation, 0., l, -l/(6.*E*I)*(2.*may-mby), may/(E*I), -(may+mby)/(2.*E*I*l), 0., 0., 0., 0., debut_barre), FALSE);
-            
-            BUG(common_fonction_ajout_poly(f_deform, 0., a, 0., fz/(24.*E*I*l)*(l-a-b)*(l-a+b)*(l*l-a*a+2.*a*l-b*b), 0., fz/(24.*E*I*l)*(l-a-b)*(l-a+b)*(-2.), 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout_poly(f_deform, a, l-b, fz/(24.*E*I*l)*(a*a*a*a*l), fz/(24.*E*I*l)*(-a*a*a*a-4.*a*a*l*l+b*b*b*b-2.*b*b*l*l+l*l*l*l), fz/(24.*E*I*l)*(6.*a*a*l), fz/(24.*E*I*l)*(-2.*a*a+2.*b*b-2.*l*l), fz/(24.*E*I*l)*(l), 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout_poly(f_deform, l-b, l, fz/(24.*E*I*l)*(l-a-b)*(l+a-b)*(-a*a*l-b*b*l+2*b*l*l-l*l*l), fz/(24.*E*I*l)*(l-a-b)*(l+a-b)*(a*a+b*b-2*b*l+5*l*l), fz/(24.*E*I*l)*(l-a-b)*(l+a-b)*(-6.*l), fz/(24.*E*I*l)*(l-a-b)*(l+a-b)*(2.), 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout_poly(f_deform, 0., a, 0., my/(6.*E*I*l)*(l-a-b)*(-a*a+a*b+2.*a*l-b*b-b*l), 0., -my/(6.*E*I*l)*(l-a-b), 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout_poly(f_deform, a, l-b, my/(6.*E*I*l)*(-a*a*a*l), my/(6.*E*I*l)*(a*a*a+2.*a*l*l+b*b*b-b*l*l), my/(6.*E*I*l)*(-3.*a*l), my/(6.*E*I*l)*(a+b), 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout_poly(f_deform, l-b, l, my/(6.*E*I*l)*(l-a-b)*(a*a*l-a*b*l+a*l*l+b*b*l-2.*b*l*l+l*l*l), my/(6.*E*I*l)*(l-a-b)*(-a*a+a*b-a*l-b*b+2.*b*l-3.*l*l), my/(6.*E*I*l)*(l-a-b)*(3.*l), -my/(6.*E*I*l)*(l-a-b), 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout_poly(f_deform, 0., l, 0., l/(6*E*I)*(2*may-mby), -may/(2*E*I), (mby+may)/(6*E*I*l), 0., 0., 0., debut_barre), FALSE);
+    BUG(common_fonction_ajout_poly(f_rotation, 0., a, -fz*(l-a-b)*(l-a+b)*(l*l-a*a-b*b+2*a*l)/(24.*l*E*I), 0., fz*(l-a-b)*(l-a+b)*(6.)/(24.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE);
+    BUG(common_fonction_ajout_poly(f_rotation, a, l-b, fz*(a*a*a*a+4.*a*a*l*l-b*b*b*b+2.*b*b*l*l-l*l*l*l)/(24.*l*E*I), fz*(-12.*a*a*l)/(24.*l*E*I), fz*(6.*a*a-6.*b*b+6.*l*l)/(24.*l*E*I), fz*(-4.*l)/(24.*l*E*I), 0., 0., 0., debut_barre), FALSE);
+    BUG(common_fonction_ajout_poly(f_rotation, l-b, l, fz*(a*a*a*a+4.*a*a*l*l-b*b*b*b+4.*b*b*b*l-10.*b*b*l*l+12.*b*l*l*l-5.*l*l*l*l)/(24.*l*E*I), fz*(-12.*a*a*l+12.*b*b*l-24.*b*l*l+12.*l*l*l)/(24.*l*E*I), fz*(6.*a*a-6.*b*b+12.*b*l-6.*l*l)/(24.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE);
+    BUG(common_fonction_ajout_poly(f_rotation, 0., a, my*(-a*a*a+3.*a*a*l-2.*a*l*l-b*b*b+b*l*l)/(6.*l*E*I), 0., my*(-3.*a-3.*b+3.*l)/(6.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE);
+    BUG(common_fonction_ajout_poly(f_rotation, a, l-b, my*(-a*a*a-2.*a*l*l-b*b*b+b*l*l)/(6.*l*E*I), my*(6.*a*l)/(6.*l*E*I), my*(-3.*a-3.*b)/(6.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE);
+    BUG(common_fonction_ajout_poly(f_rotation, l-b, l, my*(-a*a*a-2.*a*l*l-b*b*b+3.*b*b*l-5.*b*l*l+3.*l*l*l)/(6.*l*E*I), my*(6.*a*l+6*b*l-6*l*l)/(6.*l*E*I), my*(-3.*a-3.*b+3.*l)/(6.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE);
+    BUG(common_fonction_ajout_poly(f_rotation, 0., l, -l/(6.*E*I)*(2.*may-mby), may/(E*I), -(may+mby)/(2.*E*I*l), 0., 0., 0., 0., debut_barre), FALSE);
+    
+    BUG(common_fonction_ajout_poly(f_deform, 0., a, 0., fz/(24.*E*I*l)*(l-a-b)*(l-a+b)*(l*l-a*a+2.*a*l-b*b), 0., fz/(24.*E*I*l)*(l-a-b)*(l-a+b)*(-2.), 0., 0., 0., debut_barre), FALSE);
+    BUG(common_fonction_ajout_poly(f_deform, a, l-b, fz/(24.*E*I*l)*(a*a*a*a*l), fz/(24.*E*I*l)*(-a*a*a*a-4.*a*a*l*l+b*b*b*b-2.*b*b*l*l+l*l*l*l), fz/(24.*E*I*l)*(6.*a*a*l), fz/(24.*E*I*l)*(-2.*a*a+2.*b*b-2.*l*l), fz/(24.*E*I*l)*(l), 0., 0., debut_barre), FALSE);
+    BUG(common_fonction_ajout_poly(f_deform, l-b, l, fz/(24.*E*I*l)*(l-a-b)*(l+a-b)*(-a*a*l-b*b*l+2*b*l*l-l*l*l), fz/(24.*E*I*l)*(l-a-b)*(l+a-b)*(a*a+b*b-2*b*l+5*l*l), fz/(24.*E*I*l)*(l-a-b)*(l+a-b)*(-6.*l), fz/(24.*E*I*l)*(l-a-b)*(l+a-b)*(2.), 0., 0., 0., debut_barre), FALSE);
+    BUG(common_fonction_ajout_poly(f_deform, 0., a, 0., my/(6.*E*I*l)*(l-a-b)*(-a*a+a*b+2.*a*l-b*b-b*l), 0., -my/(6.*E*I*l)*(l-a-b), 0., 0., 0., debut_barre), FALSE);
+    BUG(common_fonction_ajout_poly(f_deform, a, l-b, my/(6.*E*I*l)*(-a*a*a*l), my/(6.*E*I*l)*(a*a*a+2.*a*l*l+b*b*b-b*l*l), my/(6.*E*I*l)*(-3.*a*l), my/(6.*E*I*l)*(a+b), 0., 0., 0., debut_barre), FALSE);
+    BUG(common_fonction_ajout_poly(f_deform, l-b, l, my/(6.*E*I*l)*(l-a-b)*(a*a*l-a*b*l+a*l*l+b*b*l-2.*b*l*l+l*l*l), my/(6.*E*I*l)*(l-a-b)*(-a*a+a*b-a*l-b*b+2.*b*l-3.*l*l), my/(6.*E*I*l)*(l-a-b)*(3.*l), -my/(6.*E*I*l)*(l-a-b), 0., 0., 0., debut_barre), FALSE);
+    BUG(common_fonction_ajout_poly(f_deform, 0., l, 0., l/(6*E*I)*(2*may-mby), -may/(2*E*I), (mby+may)/(6*E*I*l), 0., 0., 0., debut_barre), FALSE);
+    
     // Pour une section constante, les formules valent :\end{verbatim}\begin{align*}
     // r_y(x) = & \frac{f_z \cdot (L-a-b) \cdot (L-a+b) \cdot (-L^2 + a^2 + b^2 - 2 \cdot a \cdot L + 6 \cdot x^2)}{24 \cdot E \cdot I_y \cdot L}\nonumber\\
     //          & + \frac{m_y \cdot (L-a-b) \cdot (a^2-a \cdot (b + 2 \cdot L) + b^2 + b \cdot L + 3 \cdot x^2)}{6 \cdot E \cdot I_y \cdot L}\nonumber\\
@@ -811,15 +735,8 @@ gboolean EF_charge_barre_repartie_uniforme_fonc_ry(Fonction *f_rotation, Fonctio
     // f_z(x) = & \frac{f_z \cdot (L-b-a) \cdot (L-b+a) \cdot (x-L) \cdot (2 \cdot x^2-4 \cdot L \cdot x+L^2-2 \cdot b \cdot L+b^2+a^2)}{24 \cdot L \cdot E \cdot I_y} \nonumber\\
     //          & -\frac{(L-b-a) \cdot m_y \cdot (x-L) \cdot (x^2-2 \cdot L \cdot x+L^2-2 \cdot b \cdot L+a \cdot L+b^2-a \cdot b+a^2)}{6 \cdot L \cdot E \cdot I_y} \nonumber\\
     //          & x \cdot \frac{L^2 \cdot (2 \cdot M_{Ay} - M_{By}) - 3 \cdot L \cdot M_{Ay} \cdot x + (M_{Ay} + M_{By}) \cdot x^2}{6 \cdot E \cdot I_y} \textrm{ pour x variant de L-b à L}\end{align*}\begin{verbatim}
-            return TRUE;
-            break;
-        }
-        default :
-        {
-            BUGMSG(0, FALSE, gettext("Type de section %d inconnu.\n"), barre->section->type);
-            break;
-        }
-    }
+    
+    return TRUE;
 }
 
 
@@ -857,7 +774,7 @@ gboolean EF_charge_barre_repartie_uniforme_fonc_rz(Fonction *f_rotation, Fonctio
 {
     EF_Noeud    *debut, *fin;
     double      l;
-    double      E, debut_barre;
+    double      E, debut_barre, I;
     
     BUGMSG(f_rotation, FALSE, gettext("Paramètre %s incorrect.\n"), "f_rotation");
     BUGMSG(f_deform, FALSE, gettext("Paramètre %s incorrect.\n"), "f_deform");
@@ -896,42 +813,27 @@ gboolean EF_charge_barre_repartie_uniforme_fonc_rz(Fonction *f_rotation, Fonctio
     BUGMSG(!((a+b > l) && (!(ERREUR_RELATIVE_EGALE(a+b, l)))), FALSE, gettext("Le début (%f) et la fin (%f) de la charge répartie uniformément sont incompatibles avec la longueur de la barre %d qui est de %f m.\n"), a, b, barre->numero, l);
     
     E = common_math_get(EF_calculs_E(barre->materiau));
+    I = common_math_get(EF_sections_iz(barre->section));
+    BUG(!isnan(E), FALSE);
+    BUG(!isnan(I), FALSE);
     
-    switch (barre->section->type)
-    {
-        case SECTION_RECTANGULAIRE :
-        case SECTION_T :
-        case SECTION_CARREE :
-        case SECTION_CIRCULAIRE :
-        {
-            double      I = common_math_get(EF_sections_iz(barre->section));
-            
-            BUG(!isnan(I), FALSE);
-            
-            BUG(common_fonction_ajout_poly(f_rotation, 0., a, fy*(l-a-b)*(l-a+b)*(l*l-a*a-b*b+2*a*l)/(24.*l*E*I), 0., -fy*(l-a-b)*(l-a+b)*(6.)/(24.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout_poly(f_rotation, a, l-b, -fy*(a*a*a*a+4.*a*a*l*l-b*b*b*b+2.*b*b*l*l-l*l*l*l)/(24.*l*E*I), -fy*(-12.*a*a*l)/(24.*l*E*I), -fy*(6.*a*a-6.*b*b+6.*l*l)/(24.*l*E*I), -fy*(-4.*l)/(24.*l*E*I), 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout_poly(f_rotation, l-b, l, -fy*(a*a*a*a+4.*a*a*l*l-b*b*b*b+4.*b*b*b*l-10.*b*b*l*l+12.*b*l*l*l-5.*l*l*l*l)/(24.*l*E*I), -fy*(-12.*a*a*l+12.*b*b*l-24.*b*l*l+12.*l*l*l)/(24.*l*E*I), -fy*(6.*a*a-6.*b*b+12.*b*l-6.*l*l)/(24.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout_poly(f_rotation, 0., a, mz*(-a*a*a+3.*a*a*l-2.*a*l*l-b*b*b+b*l*l)/(6.*l*E*I), 0., mz*(-3.*a-3.*b+3.*l)/(6.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout_poly(f_rotation, a, l-b, mz*(-a*a*a-2.*a*l*l-b*b*b+b*l*l)/(6.*l*E*I), mz*(6.*a*l)/(6.*l*E*I), mz*(-3.*a-3.*b)/(6.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout_poly(f_rotation, l-b, l, mz*(-a*a*a-2.*a*l*l-b*b*b+3.*b*b*l-5.*b*l*l+3.*l*l*l)/(6.*l*E*I), mz*(6.*a*l+6*b*l-6*l*l)/(6.*l*E*I), mz*(-3.*a-3.*b+3.*l)/(6.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout_poly(f_rotation, 0., l, -l/(6.*E*I)*(2.*maz-mbz), maz/(E*I), -(maz+mbz)/(2.*E*I*l), 0., 0., 0., 0., debut_barre), FALSE);
-            
-            BUG(common_fonction_ajout_poly(f_deform, 0., a, 0., fy/(24.*E*I*l)*(l-a-b)*(l-a+b)*(l*l-a*a+2.*a*l-b*b), 0., fy/(24.*E*I*l)*(l-a-b)*(l-a+b)*(-2.), 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout_poly(f_deform, a, l-b, fy/(24.*E*I*l)*(a*a*a*a*l), fy/(24.*E*I*l)*(-a*a*a*a-4.*a*a*l*l+b*b*b*b-2.*b*b*l*l+l*l*l*l), fy/(24.*E*I*l)*(6.*a*a*l), fy/(24.*E*I*l)*(-2.*a*a+2.*b*b-2.*l*l), fy/(24.*E*I*l)*(l), 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout_poly(f_deform, l-b, l, fy/(24.*E*I*l)*(l-a-b)*(l+a-b)*(-a*a*l-b*b*l+2*b*l*l-l*l*l), fy/(24.*E*I*l)*(l-a-b)*(l+a-b)*(a*a+b*b-2*b*l+5*l*l), fy/(24.*E*I*l)*(l-a-b)*(l+a-b)*(-6.*l), fy/(24.*E*I*l)*(l-a-b)*(l+a-b)*(2.), 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout_poly(f_deform, 0., a, 0., -mz/(6.*E*I*l)*(l-a-b)*(-a*a+a*b+2.*a*l-b*b-b*l), 0., mz/(6.*E*I*l)*(l-a-b), 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout_poly(f_deform, a, l-b, -mz/(6.*E*I*l)*(-a*a*a*l), -mz/(6.*E*I*l)*(a*a*a+2.*a*l*l+b*b*b-b*l*l), -mz/(6.*E*I*l)*(-3.*a*l), -mz/(6.*E*I*l)*(a+b), 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout_poly(f_deform, l-b, l, -mz/(6.*E*I*l)*(l-a-b)*(a*a*l-a*b*l+a*l*l+b*b*l-2.*b*l*l+l*l*l), -mz/(6.*E*I*l)*(l-a-b)*(-a*a+a*b-a*l-b*b+2.*b*l-3.*l*l), -mz/(6.*E*I*l)*(l-a-b)*(3.*l), mz/(6.*E*I*l)*(l-a-b), 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout_poly(f_deform, 0., l, 0., -l/(6*E*I)*(2*maz-mbz), maz/(2*E*I), -(mbz+maz)/(6*E*I*l), 0., 0., 0., debut_barre), FALSE);
-            return TRUE;
-            break;
-        }
-        default :
-        {
-            BUGMSG(0, FALSE, gettext("Type de section %d inconnu.\n"), barre->section->type);
-            break;
-        }
-    }
+    BUG(common_fonction_ajout_poly(f_rotation, 0., a, fy*(l-a-b)*(l-a+b)*(l*l-a*a-b*b+2*a*l)/(24.*l*E*I), 0., -fy*(l-a-b)*(l-a+b)*(6.)/(24.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE);
+    BUG(common_fonction_ajout_poly(f_rotation, a, l-b, -fy*(a*a*a*a+4.*a*a*l*l-b*b*b*b+2.*b*b*l*l-l*l*l*l)/(24.*l*E*I), -fy*(-12.*a*a*l)/(24.*l*E*I), -fy*(6.*a*a-6.*b*b+6.*l*l)/(24.*l*E*I), -fy*(-4.*l)/(24.*l*E*I), 0., 0., 0., debut_barre), FALSE);
+    BUG(common_fonction_ajout_poly(f_rotation, l-b, l, -fy*(a*a*a*a+4.*a*a*l*l-b*b*b*b+4.*b*b*b*l-10.*b*b*l*l+12.*b*l*l*l-5.*l*l*l*l)/(24.*l*E*I), -fy*(-12.*a*a*l+12.*b*b*l-24.*b*l*l+12.*l*l*l)/(24.*l*E*I), -fy*(6.*a*a-6.*b*b+12.*b*l-6.*l*l)/(24.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE);
+    BUG(common_fonction_ajout_poly(f_rotation, 0., a, mz*(-a*a*a+3.*a*a*l-2.*a*l*l-b*b*b+b*l*l)/(6.*l*E*I), 0., mz*(-3.*a-3.*b+3.*l)/(6.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE);
+    BUG(common_fonction_ajout_poly(f_rotation, a, l-b, mz*(-a*a*a-2.*a*l*l-b*b*b+b*l*l)/(6.*l*E*I), mz*(6.*a*l)/(6.*l*E*I), mz*(-3.*a-3.*b)/(6.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE);
+    BUG(common_fonction_ajout_poly(f_rotation, l-b, l, mz*(-a*a*a-2.*a*l*l-b*b*b+3.*b*b*l-5.*b*l*l+3.*l*l*l)/(6.*l*E*I), mz*(6.*a*l+6*b*l-6*l*l)/(6.*l*E*I), mz*(-3.*a-3.*b+3.*l)/(6.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE);
+    BUG(common_fonction_ajout_poly(f_rotation, 0., l, -l/(6.*E*I)*(2.*maz-mbz), maz/(E*I), -(maz+mbz)/(2.*E*I*l), 0., 0., 0., 0., debut_barre), FALSE);
+    
+    BUG(common_fonction_ajout_poly(f_deform, 0., a, 0., fy/(24.*E*I*l)*(l-a-b)*(l-a+b)*(l*l-a*a+2.*a*l-b*b), 0., fy/(24.*E*I*l)*(l-a-b)*(l-a+b)*(-2.), 0., 0., 0., debut_barre), FALSE);
+    BUG(common_fonction_ajout_poly(f_deform, a, l-b, fy/(24.*E*I*l)*(a*a*a*a*l), fy/(24.*E*I*l)*(-a*a*a*a-4.*a*a*l*l+b*b*b*b-2.*b*b*l*l+l*l*l*l), fy/(24.*E*I*l)*(6.*a*a*l), fy/(24.*E*I*l)*(-2.*a*a+2.*b*b-2.*l*l), fy/(24.*E*I*l)*(l), 0., 0., debut_barre), FALSE);
+    BUG(common_fonction_ajout_poly(f_deform, l-b, l, fy/(24.*E*I*l)*(l-a-b)*(l+a-b)*(-a*a*l-b*b*l+2*b*l*l-l*l*l), fy/(24.*E*I*l)*(l-a-b)*(l+a-b)*(a*a+b*b-2*b*l+5*l*l), fy/(24.*E*I*l)*(l-a-b)*(l+a-b)*(-6.*l), fy/(24.*E*I*l)*(l-a-b)*(l+a-b)*(2.), 0., 0., 0., debut_barre), FALSE);
+    BUG(common_fonction_ajout_poly(f_deform, 0., a, 0., -mz/(6.*E*I*l)*(l-a-b)*(-a*a+a*b+2.*a*l-b*b-b*l), 0., mz/(6.*E*I*l)*(l-a-b), 0., 0., 0., debut_barre), FALSE);
+    BUG(common_fonction_ajout_poly(f_deform, a, l-b, -mz/(6.*E*I*l)*(-a*a*a*l), -mz/(6.*E*I*l)*(a*a*a+2.*a*l*l+b*b*b-b*l*l), -mz/(6.*E*I*l)*(-3.*a*l), -mz/(6.*E*I*l)*(a+b), 0., 0., 0., debut_barre), FALSE);
+    BUG(common_fonction_ajout_poly(f_deform, l-b, l, -mz/(6.*E*I*l)*(l-a-b)*(a*a*l-a*b*l+a*l*l+b*b*l-2.*b*l*l+l*l*l), -mz/(6.*E*I*l)*(l-a-b)*(-a*a+a*b-a*l-b*b+2.*b*l-3.*l*l), -mz/(6.*E*I*l)*(l-a-b)*(3.*l), mz/(6.*E*I*l)*(l-a-b), 0., 0., 0., debut_barre), FALSE);
+    BUG(common_fonction_ajout_poly(f_deform, 0., l, 0., -l/(6*E*I)*(2*maz-mbz), maz/(2*E*I), -(mbz+maz)/(6*E*I*l), 0., 0., 0., debut_barre), FALSE);
+    
+    return TRUE;
 }
 
 
@@ -961,7 +863,7 @@ gboolean EF_charge_barre_repartie_uniforme_n(Fonction *fonction, EF_Barre *barre
 {
     EF_Noeud    *debut, *fin;
     double      l, debut_barre;
-    double      E;
+    double      E, S;
     
     BUGMSG(fonction, FALSE, gettext("Paramètre %s incorrect.\n"), "fonction");
     BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre");
@@ -1001,34 +903,20 @@ gboolean EF_charge_barre_repartie_uniforme_n(Fonction *fonction, EF_Barre *barre
     BUGMSG(!((a+b > l) && (!(ERREUR_RELATIVE_EGALE(a+b, l)))), FALSE, gettext("Le début (%f) et la fin (%f) de la charge répartie uniformément sont incorrecte avec la longueur de la barre %d qui est de %f m.\n"), a, b, barre->numero, l);
     
     E = common_math_get(EF_calculs_E(barre->materiau));
+    S = common_math_get(EF_sections_s(barre->section));
+    BUG(!isnan(E), FALSE);
+    BUG(!isnan(S), FALSE);
     
-    switch (barre->section->type)
-    {
-        case SECTION_RECTANGULAIRE :
-        case SECTION_T :
-        case SECTION_CARREE :
-        case SECTION_CIRCULAIRE :
-        {
-            double      S = common_math_get(EF_sections_s(barre->section));
-            
-            BUG(!isnan(S), FALSE);
-            
     // Pour une section constante, les déformations valent :\end{verbatim}\begin{align*}
     // f_x(x) = &\frac{F_{Ax} \cdot (L-a+b) \cdot (F_{Ax} + F_{Bx}) x}{2 \cdot L \cdot E \cdot S} & & \textrm{ pour x variant de 0 à a}\nonumber\\
     // f_x(x) = &\frac{(fbx+fax) \cdot (L \cdot x^2-L^2 \cdot x+b^2 \cdot x-a^2 \cdot x+a^2 \cdot L)}{2 \cdot L \cdot (L-b-a) \cdot E \cdot S}) & & \textrm{ pour x variant de a à L-b}\nonumber\\
     // f_x(x) = &\frac{(fbx+fax) \cdot (L-b+a) \cdot (L-x)}{2 \cdot L \cdot E \cdot S} & & \textrm{ pour x variant de L-b à L}\end{align*}\begin{verbatim}
-            BUG(common_fonction_ajout_poly(fonction, 0., a, 0., (l-a+b)*(fax+fbx)/(2*l*E*S), 0., 0., 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout_poly(fonction, a, l-b, (fax+fbx)/(2*l*E*S)/(a+b-l)*(a*a*l), (fax+fbx)/(2*l*E*S)/(a+b-l)*(-a*a+b*b-l*l), (fax+fbx)/(2*l*E*S)/(a+b-l)*(l), 0., 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout_poly(fonction, l-b, l, (fax+fbx)/(2*l*E*S)*l*(a-b+l), -(fax+fbx)/(2*l*E*S)*(a-b+l), 0., 0., 0., 0., 0., debut_barre), FALSE);
-            return TRUE;
-            break;
-        }
-        default :
-        {
-            BUGMSG(0, FALSE, gettext("Type de section %d inconnu.\n"), barre->section->type);
-            break;
-        }
-    }
+    
+    BUG(common_fonction_ajout_poly(fonction, 0., a, 0., (l-a+b)*(fax+fbx)/(2*l*E*S), 0., 0., 0., 0., 0., debut_barre), FALSE);
+    BUG(common_fonction_ajout_poly(fonction, a, l-b, (fax+fbx)/(2*l*E*S)/(a+b-l)*(a*a*l), (fax+fbx)/(2*l*E*S)/(a+b-l)*(-a*a+b*b-l*l), (fax+fbx)/(2*l*E*S)/(a+b-l)*(l), 0., 0., 0., 0., debut_barre), FALSE);
+    BUG(common_fonction_ajout_poly(fonction, l-b, l, (fax+fbx)/(2*l*E*S)*l*(a-b+l), -(fax+fbx)/(2*l*E*S)*(a-b+l), 0., 0., 0., 0., 0., debut_barre), FALSE);
+    
+    return TRUE;
 }
 
 

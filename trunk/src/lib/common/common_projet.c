@@ -107,6 +107,7 @@ Projet* projet_init(Type_Pays pays)
     projet->list_gtk.ef_sections_T.builder = NULL;
     projet->list_gtk.ef_sections_carree.builder = NULL;
     projet->list_gtk.ef_sections_circulaire.builder = NULL;
+    projet->list_gtk.ef_sections_personnalisee.builder = NULL;
     projet->list_gtk.ef_materiaux.builder = NULL;
     projet->list_gtk._1992_1_1_materiaux.builder = NULL;
     projet->list_gtk._1993_1_1_materiaux.builder = NULL;

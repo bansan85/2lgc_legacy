@@ -351,7 +351,8 @@ typedef enum __Type_Section
     SECTION_RECTANGULAIRE,
     SECTION_T,
     SECTION_CARREE,
-    SECTION_CIRCULAIRE
+    SECTION_CIRCULAIRE,
+    SECTION_PERSONNALISEE
 } Type_Section;
 
 
@@ -587,6 +588,21 @@ typedef struct __Section_Circulaire
 } Section_Circulaire;
 
 
+typedef struct __Section_Personnalisee
+{
+    char        *description;
+    Flottant    j;
+    Flottant    iy;
+    Flottant    iz;
+    Flottant    vy;
+    Flottant    vyp;
+    Flottant    vz;
+    Flottant    vzp;
+    Flottant    s;
+    GList       *forme;
+} Section_Personnalisee;
+
+
 typedef struct __EF_Section
 {
     Type_Section    type;
@@ -680,6 +696,18 @@ typedef struct __Gtk_EF_Sections_Circulaire
     
     EF_Section      *section;
 } Gtk_EF_Sections_Circulaire;
+
+
+typedef struct __Gtk_EF_Sections_Personnalisee
+{
+    GtkBuilder      *builder;
+    GtkWidget       *window;
+    
+    EF_Section      *section;
+    GtkTreeModel    *model;
+    
+    gboolean        keep; // Ne libère pas la liste des noeuds à la fermeture.
+} Gtk_EF_Sections_Personnalisee;
 
 
 typedef struct __Gtk_1992_1_1_Materiaux
@@ -968,6 +996,7 @@ typedef struct __List_Gtk
     Gtk_EF_Sections_T   ef_sections_T;
     Gtk_EF_Sections_Carree  ef_sections_carree;
     Gtk_EF_Sections_Circulaire  ef_sections_circulaire;
+    Gtk_EF_Sections_Personnalisee  ef_sections_personnalisee;
     Gtk_EF_Materiaux    ef_materiaux;
     Gtk_1992_1_1_Materiaux  _1992_1_1_materiaux;
     Gtk_1993_1_1_Materiaux  _1993_1_1_materiaux;

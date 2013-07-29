@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2013-07-23 10:01+0200\n"
+"POT-Creation-Date: 2013-07-29 23:26+0200\n"
 "PO-Revision-Date: 2013-07-23 10:02+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
@@ -46,6 +46,18 @@ msgstr "Valeur"
 msgid "Nom :"
 msgstr "Nom :"
 
+msgid "x"
+msgstr ""
+
+msgid "y"
+msgstr ""
+
+msgid "Ajouter"
+msgstr "Ajouter"
+
+msgid "Supprimer"
+msgstr "Supprimer"
+
 msgid "Informations sur le projet"
 msgstr "Informations sur le projet"
 
@@ -87,6 +99,10 @@ msgstr "Carrée"
 
 msgid "Circulaire"
 msgstr "Circulaire"
+
+#, fuzzy
+msgid "Personnalisée"
+msgstr "Personnaliser"
 
 msgid "J [m<sup>4</sup>]"
 msgstr "J [m<sup>4</sup>]"
@@ -273,12 +289,6 @@ msgstr "Niveau :"
 
 msgid "<b>Groupes :</b>"
 msgstr "<b>Groupes :</b>"
-
-msgid "Ajouter"
-msgstr "Ajouter"
-
-msgid "Supprimer"
-msgstr "Supprimer"
 
 msgid "<b>Éléments disponibles :</b>"
 msgstr "<b>Éléments disponibles :</b>"
@@ -1415,6 +1425,18 @@ msgstr "Avertissement"
 msgid "Critique"
 msgstr "Sismique"
 
+#, fuzzy
+msgid "Ajout d'une section personnalisée"
+msgstr "Ajout d'une section en T"
+
+#, fuzzy
+msgid "Modification d'une section personnalisée"
+msgstr "Modification d'une section en T"
+
+#, fuzzy
+msgid "La section à modifier n'est pas personnalisée.\n"
+msgstr "La section à modifier n'est pas en T.\n"
+
 msgid "Le type de relâchement est inconnu.\n"
 msgstr "Le type de relâchement est inconnu.\n"
 
@@ -2018,9 +2040,13 @@ msgstr "La section doit être de type carrée.\n"
 msgid "La section doit être de type circulaire.\n"
 msgstr "La section doit être de type circulaire.\n"
 
-#, c-format
-msgid "Section en béton '%s' introuvable.\n"
-msgstr "Section en béton '%s' introuvable.\n"
+#, fuzzy
+msgid "La section doit être de type personnalisée.\n"
+msgstr "La section doit être de type carrée.\n"
+
+#, fuzzy, c-format
+msgid "Section '%s' introuvable.\n"
+msgstr "Action %u introuvable.\n"
 
 msgid "Largeur"
 msgstr "Largeur"
@@ -2070,3 +2096,6 @@ msgstr "Modification d'un matériau acier"
 
 msgid "Impossible d'initialiser gtk.\n"
 msgstr "Impossible d'initialiser gtk.\n"
+
+#~ msgid "Section en béton '%s' introuvable.\n"
+#~ msgstr "Section en béton '%s' introuvable.\n"

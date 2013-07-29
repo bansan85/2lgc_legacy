@@ -32,6 +32,8 @@ gboolean EF_sections_carree_ajout(Projet *projet, const char* nom, Flottant cote
 gboolean EF_sections_carree_modif(Projet *projet, EF_Section *section, const char* nom, Flottant cote)  __attribute__((__warn_unused_result__));
 gboolean EF_sections_circulaire_ajout(Projet *projet, const char* nom, Flottant diametre) __attribute__((__warn_unused_result__));
 gboolean EF_sections_circulaire_modif(Projet *projet, EF_Section *section, const char* nom, Flottant diametre) __attribute__((__warn_unused_result__));
+gboolean EF_sections_personnalisee_ajout(Projet *projet, const char* nom, const char* description, Flottant j, Flottant iy, Flottant iz, Flottant vy, Flottant vyp, Flottant vz, Flottant vzp, Flottant s, GList *forme) __attribute__((__warn_unused_result__));
+gboolean EF_sections_personnalisee_modif(Projet *projet, EF_Section *section, const char* nom, const char* description, Flottant j, Flottant iy, Flottant iz, Flottant vy, Flottant vyp, Flottant vz, Flottant vzp, Flottant s, GList *forme) __attribute__((__warn_unused_result__));
 
 EF_Section* EF_sections_cherche_nom(Projet *projet, const char *nom, gboolean critique) __attribute__((__warn_unused_result__));
 char *EF_sections_get_description(EF_Section *sect) __attribute__((__warn_unused_result__));

@@ -1221,7 +1221,6 @@ gboolean m3d_barre(void *donnees_m3d, EF_Barre *barre)
             vue->scene->add_object(tout);
             
             break;
-            
         }
         case SECTION_T :
         {
@@ -1281,7 +1280,6 @@ gboolean m3d_barre(void *donnees_m3d, EF_Barre *barre)
             vue->scene->add_object(tout);
             
             break;
-            
         }
         case SECTION_CARREE :
         {
@@ -1314,7 +1312,6 @@ gboolean m3d_barre(void *donnees_m3d, EF_Barre *barre)
             vue->scene->add_object(tout);
             
             break;
-            
         }
         case SECTION_CIRCULAIRE :
         {
@@ -1327,7 +1324,61 @@ gboolean m3d_barre(void *donnees_m3d, EF_Barre *barre)
             vue->scene->add_object(tout);
             
             break;
+        }
+        case SECTION_PERSONNALISEE :
+        {
+            Section_Personnalisee *section = (Section_Personnalisee*)barre->section->data;
+            GList   *list_parcours;
             
+            tout = new CM3dObject("");
+            
+            list_parcours = section->forme;
+            while (list_parcours != NULL)
+            {
+                GList       *list_parcours2 = (GList*)list_parcours->data;
+                EF_Point    *point1 = NULL, *point2 = NULL;
+                
+                while (list_parcours2 != NULL)
+                {
+                    CM3dObject *object_tmp = NULL;
+                    
+                    if (point2 == NULL)
+                        point2 = (EF_Point*)list_parcours2->data;
+                    else
+                    {
+                        double  angle;
+                        GList   *list_poly;
+                        
+                        point1 = point2;
+                        point2 = (EF_Point*)list_parcours2->data;
+                        
+                        angle = atan2(common_math_get(point2->y)-common_math_get(point1->y), common_math_get(point2->x)-common_math_get(point1->x))/M_PI*180.;
+                        
+                        object_tmp = M3d_plan_new("", longueur, EF_points_distance(point1, point2), 1);
+                        object_tmp->rotations(angle, 0., 180.);
+                        object_tmp->set_position(0., (common_math_get(point2->x)+common_math_get(point1->x))/2., (common_math_get(point2->y)+common_math_get(point1->y))/2.);
+                        
+                        list_poly = object_tmp->get_list_of_polygons();
+                        while (list_poly != NULL)
+                        {
+                            CM3dPolygon *polygon = new CM3dPolygon(*(CM3dPolygon*)(list_poly->data));
+                            tout->add_polygon(polygon);
+                            list_poly = g_list_next(list_poly);
+                        }
+                        
+                        delete object_tmp;
+                    }
+                    
+                    list_parcours2 = g_list_next(list_parcours2);
+                }
+                
+                list_parcours = g_list_next(list_parcours);
+            }
+            
+            m3d_barre_finition(tout, barre);
+            vue->scene->add_object(tout);
+            
+            break;
         }
         default :
         {

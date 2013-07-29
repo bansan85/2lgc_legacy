@@ -215,6 +215,7 @@ double common_math_get(Flottant f)
         }
         default :
         {
+            free(GUINT_TO_POINTER(1234156789));
             BUGMSG(NULL, NAN, gettext("Type de nombre est inconnu.\n"));
             break;
         }
