@@ -1352,10 +1352,10 @@ gboolean m3d_barre(void *donnees_m3d, EF_Barre *barre)
                         point1 = point2;
                         point2 = (EF_Point*)list_parcours2->data;
                         
-                        angle = atan2(common_math_get(point2->y)-common_math_get(point1->y), common_math_get(point2->x)-common_math_get(point1->x))/M_PI*180.;
+                        angle = atan2(common_math_get(point2->y)-common_math_get(point1->y), common_math_get(point2->x)-common_math_get(point1->x))/M_PI*180.-90.;
                         
                         object_tmp = M3d_plan_new("", longueur, EF_points_distance(point1, point2), 1);
-                        object_tmp->rotations(angle, 0., 180.);
+                        object_tmp->rotations(angle, 0., 0.);
                         object_tmp->set_position(0., (common_math_get(point2->x)+common_math_get(point1->x))/2., (common_math_get(point2->y)+common_math_get(point1->y))/2.);
                         
                         list_poly = object_tmp->get_list_of_polygons();
