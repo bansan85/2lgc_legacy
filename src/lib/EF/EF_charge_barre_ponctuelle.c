@@ -188,7 +188,7 @@ gboolean EF_charge_barre_ponctuelle_mx(EF_Barre *barre, unsigned int discretisat
  */
 {
     EF_Noeud    *debut, *fin;
-    double      l, G;
+    double      l, G, J;
 
     BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre");
     BUGMSG(infos, FALSE, gettext("Paramètre %s incorrect.\n"), "infos");
@@ -223,36 +223,23 @@ gboolean EF_charge_barre_ponctuelle_mx(EF_Barre *barre, unsigned int discretisat
     BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), FALSE, gettext("La position de la charge ponctuelle (%f) est incorrecte. La longueur de la barre est de %f m.\n"), a, l);
     
     G = common_math_get(EF_calculs_G(barre->materiau, FALSE));
+    J = common_math_get(EF_sections_j(barre->section));
     
-    switch (barre->section->type)
-    {
-        case SECTION_RECTANGULAIRE :
-        case SECTION_T :
-        case SECTION_CARREE :
-        case SECTION_CIRCULAIRE :
-        {
-            double      J = common_math_get(EF_sections_j(barre->section));
-            
-            BUG(!isnan(J), FALSE);
-            
+    BUG(!isnan(G), FALSE);
+    BUG(!isnan(J), FALSE);
+    
     // Pour une section section constante, les moments valent :\end{verbatim}\begin{displaymath}
     // M_{Bx} = \frac{\frac{a}{G \cdot J} +k_{Ax}}{\frac{L}{G \cdot J} +k_{Ax}+k_{Bx}} \cdot M_x\end{displaymath}\begin{verbatim}
-            if (ERREUR_RELATIVE_EGALE(infos->kAx, MAXDOUBLE))
-                *mb = mx;
-            else if (ERREUR_RELATIVE_EGALE(infos->kBx, MAXDOUBLE))
-                *mb = 0.;
-            else
-                *mb = (a/(G*J)+infos->kAx)/(l/(G*J)+infos->kAx+infos->kBx)*mx;
-            *ma = mx - *mb;
-            return TRUE;
-            break;
-        }
-        default :
-        {
-            BUGMSG(0, FALSE, gettext("Type de section %d inconnu.\n"), barre->section->type);
-            break;
-        }
-    }
+    
+    if (ERREUR_RELATIVE_EGALE(infos->kAx, MAXDOUBLE))
+        *mb = mx;
+    else if (ERREUR_RELATIVE_EGALE(infos->kBx, MAXDOUBLE))
+        *mb = 0.;
+    else
+        *mb = (a/(G*J)+infos->kAx)/(l/(G*J)+infos->kAx+infos->kBx)*mx;
+    *ma = mx - *mb;
+    
+    return TRUE;
 }
 
 
@@ -284,7 +271,7 @@ gboolean EF_charge_barre_ponctuelle_def_ang_iso_y(EF_Barre *barre,
  */
 {
     EF_Noeud    *debut, *fin;
-    double      l, b, E;
+    double      l, b, E, I;
 
     BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre");
     BUGMSG(barre->section, FALSE, gettext("Section indéfinie.\n"));
@@ -321,31 +308,18 @@ gboolean EF_charge_barre_ponctuelle_def_ang_iso_y(EF_Barre *barre,
     b = l-a;
     
     E = common_math_get(EF_calculs_E(barre->materiau));
+    I = common_math_get(EF_sections_iy(barre->section));
+    BUG(!isnan(I), FALSE);
+    BUG(!isnan(E), FALSE);
     
-    switch (barre->section->type)
-    {
-        case SECTION_RECTANGULAIRE :
-        case SECTION_T :
-        case SECTION_CARREE :
-        case SECTION_CIRCULAIRE :
-        {
-            double      I = common_math_get(EF_sections_iy(barre->section));
-            
-            BUG(!isnan(l), FALSE);
     // Pour une section constante, les angles valent :\end{verbatim}\begin{align*}
     // \varphi_A = &-\frac{F_z \cdot a}{6 \cdot E \cdot I_y \cdot L} \cdot b \cdot (2 \cdot L-a)-\frac{M_y}{6 \cdot E \cdot I_y \cdot L} \cdot (L^2-3 \cdot b^2)\nonumber\\
     // \varphi_B = &\frac{F_z \cdot a}{6 \cdot E \cdot I_y \cdot L} \cdot (L^2-a^2)-\frac{M_y}{6 \cdot E \cdot I_y \cdot L} \cdot (L^2-3 \cdot a^2)\end{align*}\begin{verbatim}
-            *phia = -fz*a/(6*E*I*l)*b*(2*l-a)-my/(6*E*I*l)*(l*l-3*b*b);
-            *phib = fz*a/(6*E*I*l)*(l*l-a*a)-my/(6*E*I*l)*(l*l-3*a*a);
-            return TRUE;
-            break;
-        }
-        default :
-        {
-            BUGMSG(0, FALSE, gettext("Type de section %d inconnu.\n"), barre->section->type);
-            break;
-        }
-    }
+    
+    *phia = -fz*a/(6*E*I*l)*b*(2*l-a)-my/(6*E*I*l)*(l*l-3*b*b);
+    *phib = fz*a/(6*E*I*l)*(l*l-a*a)-my/(6*E*I*l)*(l*l-3*a*a);
+    
+    return TRUE;
 }
 
 
@@ -377,7 +351,7 @@ gboolean EF_charge_barre_ponctuelle_def_ang_iso_z(EF_Barre *barre,
  */
 {
     EF_Noeud    *debut, *fin;
-    double      l, b, E;
+    double      l, b, E, I;
     
     BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre");
     BUGMSG(barre->section, FALSE, gettext("Section indéfinie.\n"));
@@ -414,32 +388,17 @@ gboolean EF_charge_barre_ponctuelle_def_ang_iso_z(EF_Barre *barre,
     b = l-a;
     
     E = common_math_get(EF_calculs_E(barre->materiau));
+    I = common_math_get(EF_sections_iz(barre->section));
+    BUG(!isnan(E), FALSE);
+    BUG(!isnan(I), FALSE);
     
-    switch (barre->section->type)
-    {
-        case SECTION_RECTANGULAIRE :
-        case SECTION_T :
-        case SECTION_CARREE :
-        case SECTION_CIRCULAIRE :
-        {
-            double      I = common_math_get(EF_sections_iz(barre->section));
-            
-            BUG(!isnan(I), FALSE);
-            
     // Pour une section constante, les angles valent :\end{verbatim}\begin{displaymath}
     // \varphi_A = \frac{ F_y \cdot a}{6 \cdot E \cdot I_z \cdot L} b \cdot (2 \cdot L-a) - \frac{M_z}{6 \cdot E \cdot I_z \cdot L} \left(L^2-3 \cdot b^2 \right)\end{displaymath}\begin{displaymath}
     // \varphi_B = \frac{-F_y \cdot a}{6 \cdot E \cdot I_z \cdot L} (L^2-a^2) - \frac{M_z}{6 \cdot E \cdot I_z \cdot L} \left(L^2-3 \cdot a^2 \right)\end{displaymath}\begin{verbatim}
-            *phia = fy*a/(6*E*I*l)*b*(2*l-a)-mz/(6*E*I*l)*(l*l-3*b*b);
-            *phib = -fy*a/(6*E*I*l)*(l*l-a*a)-mz/(6*E*I*l)*(l*l-3*a*a);
-            return TRUE;
-            break;
-        }
-        default :
-        {
-            BUGMSG(0, FALSE, gettext("Type de section %d inconnu.\n"), barre->section->type);
-            break;
-        }
-    }
+    *phia = fy*a/(6*E*I*l)*b*(2*l-a)-mz/(6*E*I*l)*(l*l-3*b*b);
+    *phib = -fy*a/(6*E*I*l)*(l*l-a*a)-mz/(6*E*I*l)*(l*l-3*a*a);
+    
+    return TRUE;
 }
 
 
@@ -472,7 +431,7 @@ gboolean EF_charge_barre_ponctuelle_fonc_rx(Fonction *fonction, EF_Barre *barre,
     EF_Noeud    *debut, *fin;
     Barre_Info_EF *infos;
     double      l;
-    double      G, debut_barre;
+    double      G, debut_barre, J;
     
     BUGMSG(fonction, FALSE, gettext("Paramètre %s incorrect.\n"), "fonction");
     BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre");
@@ -510,29 +469,21 @@ gboolean EF_charge_barre_ponctuelle_fonc_rx(Fonction *fonction, EF_Barre *barre,
     BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), FALSE, gettext("La position de la charge ponctuelle (%f) est incorrecte. La longueur de la barre est de %f m.\n"), a, l);
     
     G = common_math_get(EF_calculs_G(barre->materiau, FALSE));
+    J = common_math_get(EF_sections_j(barre->section));
+    BUG(!isnan(G), FALSE);
+    BUG(!isnan(J), FALSE);
     
-    switch (barre->section->type)
+    if (ERREUR_RELATIVE_EGALE(infos->kBx, MAXDOUBLE))
     {
-        case SECTION_RECTANGULAIRE :
-        case SECTION_T :
-        case SECTION_CARREE :
-        case SECTION_CIRCULAIRE :
-        {
-            double      J = common_math_get(EF_sections_j(barre->section));
-            
-            BUG(!isnan(J), FALSE);
-            
-            if (ERREUR_RELATIVE_EGALE(infos->kBx, MAXDOUBLE))
-            {
-                BUG(common_fonction_ajout_poly(fonction, 0., a, max*infos->kAx, max/(G*J), 0., 0., 0., 0., 0., debut_barre), FALSE);
-                BUG(common_fonction_ajout_poly(fonction, a, l, max*infos->kAx+a*(max+mbx)/(G*J), -mbx/(G*J), 0., 0., 0., 0., 0., debut_barre), FALSE);
-            }
-            else
-            {
-                BUG(common_fonction_ajout_poly(fonction, 0., a, mbx*infos->kBx - (a*(max+mbx)-l*mbx)/(G*J), +max/(G*J), 0., 0., 0., 0., 0., debut_barre), FALSE);
-                BUG(common_fonction_ajout_poly(fonction, a, l, mbx*(infos->kBx + l/(G*J)), -mbx/(G*J), 0., 0., 0., 0., 0., debut_barre), FALSE);
-            }
-            
+        BUG(common_fonction_ajout_poly(fonction, 0., a, max*infos->kAx, max/(G*J), 0., 0., 0., 0., 0., debut_barre), FALSE);
+        BUG(common_fonction_ajout_poly(fonction, a, l, max*infos->kAx+a*(max+mbx)/(G*J), -mbx/(G*J), 0., 0., 0., 0., 0., debut_barre), FALSE);
+    }
+    else
+    {
+        BUG(common_fonction_ajout_poly(fonction, 0., a, mbx*infos->kBx - (a*(max+mbx)-l*mbx)/(G*J), +max/(G*J), 0., 0., 0., 0., 0., debut_barre), FALSE);
+        BUG(common_fonction_ajout_poly(fonction, a, l, mbx*(infos->kBx + l/(G*J)), -mbx/(G*J), 0., 0., 0., 0., 0., debut_barre), FALSE);
+    }
+    
     // Pour une section section constante, les moments valent :
     // Si le noeud B est relaché en rotation Alors\end{verbatim}\begin{align*}
     // r_x(x) = & M_{Ax} \cdot \left( k_{Ax} + \frac{x}{J \cdot G} \right) & & \textrm{ pour x variant de 0 à a}\nonumber\\
@@ -541,15 +492,8 @@ gboolean EF_charge_barre_ponctuelle_fonc_rx(Fonction *fonction, EF_Barre *barre,
     // r_x(x) = & M_{Bx} \cdot k_{Bx} - \frac{a \cdot (M_{Ax}+M_{Bx})-l \cdot M_{Bx} - M_{Ax} \cdot x}{J \cdot G} & & \textrm{ pour x variant de 0 à a}\nonumber\\
     // r_x(x) = & M_{Bx} \cdot \left( k_{Bx} + \frac{L-x}{J \cdot G} \right) & & \textrm{ pour x variant de a à L}\end{align*}\begin{verbatim}
     // FinSi
-            return TRUE;
-            break;
-        }
-        default :
-        {
-            BUGMSG(0, FALSE, gettext("Type de section %d inconnu.\n"), barre->section->type);
-            break;
-        }
-    }
+    
+    return TRUE;
 }
 
 
@@ -586,7 +530,7 @@ gboolean EF_charge_barre_ponctuelle_fonc_ry(Fonction *f_rotation, Fonction* f_de
 {
     EF_Noeud    *debut, *fin;
     double      l, b;
-    double      E, debut_barre;
+    double      E, debut_barre, I;
     
     BUGMSG(f_rotation, FALSE, gettext("Paramètre %s incorrect.\n"), "f_rotation");
     BUGMSG(f_deform, FALSE, gettext("Paramètre %s incorrect.\n"), "f_deform");
@@ -625,6 +569,7 @@ gboolean EF_charge_barre_ponctuelle_fonc_ry(Fonction *f_rotation, Fonction* f_de
     //                 Mf_{31}(X) = &-\frac{X}{L} & Mf_{32}(X) = &\frac{L-X}{L}\nonumber\\
     //                 Mf_{41}(X) = &-\frac{(L-x) \cdot X}{L} & Mf_{42}(X) = &-\frac{x \cdot (L-X)}{L}\nonumber\\
     //                 Mf_{5}(X) =  &\frac{M_{Ay} \cdot (L-X)}{L}-\frac{M_{By} \cdot X}{L} & & \end{align*}\begin{verbatim}
+    
     if (discretisation == 0)
         debut = barre->noeud_debut;
     else
@@ -641,29 +586,22 @@ gboolean EF_charge_barre_ponctuelle_fonc_ry(Fonction *f_rotation, Fonction* f_de
     
     b = l-a;
     E = common_math_get(EF_calculs_E(barre->materiau));
+    I = common_math_get(EF_sections_iy(barre->section));
+    BUG(!isnan(E), FALSE);
+    BUG(!isnan(I), FALSE);
     
-    switch (barre->section->type)
-    {
-        case SECTION_RECTANGULAIRE :
-        case SECTION_T :
-        case SECTION_CARREE :
-        case SECTION_CIRCULAIRE :
-        {
-            double      I = common_math_get(EF_sections_iy(barre->section));
-            
-            BUG(!isnan(I), FALSE);
-            
-            BUG(common_fonction_ajout_poly(f_rotation, 0., a,  fz*b/(6*E*I*l)*(-l*l+b*b),  0.,          fz*b/(2*E*I*l),      0., 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout_poly(f_rotation, a,  l, -fz*a/(6*E*I*l)*(2*l*l+a*a), fz*a/(E*I), -fz*a/(2*E*I*l),      0., 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout_poly(f_rotation, 0., a,  my/(6*E*I*l)*(-l*l+3*b*b),  0.,          my/(2*E*I*l),        0., 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout_poly(f_rotation, a,  l, my/(6*E*I*l)*(2*l*l+3*a*a),  -my/(E*I),   my/(2*E*I*l),        0., 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout_poly(f_rotation, 0., l, l/(6*E*I)*(2*may-mby),       -may/(E*I),  (may+mby)/(2*E*I*l), 0., 0., 0., 0., debut_barre), FALSE);
-            
-            BUG(common_fonction_ajout_poly(f_deform, 0., a,  0.,                fz*b/(6*E*I*l)*(l*l-b*b),    0.,                 -fz*b/(6*E*I*l),      0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout_poly(f_deform, a,  l, -fz*a*a*a/(6*E*I),  fz*a/(6*E*I*l)*(a*a+2*l*l),  -fz*a/(2*E*I),      fz*a/(6*E*I*l),       0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout_poly(f_deform, 0., a,  0.,                my/(6*E*I*l)*(l*l-3*b*b),    0.,                 -my/(6*E*I*l),        0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout_poly(f_deform, a,  l, my/(6*E*I)*(3*a*a), -my/(6*E*I*l)*(2*l*l+3*a*a), my/(6*E*I*l)*(3*l), -my/(6*E*I*l),        0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout_poly(f_deform, 0., l, 0.,                 l/(6*E*I)*(-2*may+mby),      may/(2*E*I),        -(mby+may)/(6*E*I*l), 0., 0., 0., debut_barre), FALSE);
+    BUG(common_fonction_ajout_poly(f_rotation, 0., a,  fz*b/(6*E*I*l)*(-l*l+b*b),  0.,          fz*b/(2*E*I*l),      0., 0., 0., 0., debut_barre), FALSE);
+    BUG(common_fonction_ajout_poly(f_rotation, a,  l, -fz*a/(6*E*I*l)*(2*l*l+a*a), fz*a/(E*I), -fz*a/(2*E*I*l),      0., 0., 0., 0., debut_barre), FALSE);
+    BUG(common_fonction_ajout_poly(f_rotation, 0., a,  my/(6*E*I*l)*(-l*l+3*b*b),  0.,          my/(2*E*I*l),        0., 0., 0., 0., debut_barre), FALSE);
+    BUG(common_fonction_ajout_poly(f_rotation, a,  l, my/(6*E*I*l)*(2*l*l+3*a*a),  -my/(E*I),   my/(2*E*I*l),        0., 0., 0., 0., debut_barre), FALSE);
+    BUG(common_fonction_ajout_poly(f_rotation, 0., l, l/(6*E*I)*(2*may-mby),       -may/(E*I),  (may+mby)/(2*E*I*l), 0., 0., 0., 0., debut_barre), FALSE);
+    
+    BUG(common_fonction_ajout_poly(f_deform, 0., a,  0.,                fz*b/(6*E*I*l)*(l*l-b*b),    0.,                 -fz*b/(6*E*I*l),      0., 0., 0., debut_barre), FALSE);
+    BUG(common_fonction_ajout_poly(f_deform, a,  l, -fz*a*a*a/(6*E*I),  fz*a/(6*E*I*l)*(a*a+2*l*l),  -fz*a/(2*E*I),      fz*a/(6*E*I*l),       0., 0., 0., debut_barre), FALSE);
+    BUG(common_fonction_ajout_poly(f_deform, 0., a,  0.,                my/(6*E*I*l)*(l*l-3*b*b),    0.,                 -my/(6*E*I*l),        0., 0., 0., debut_barre), FALSE);
+    BUG(common_fonction_ajout_poly(f_deform, a,  l, my/(6*E*I)*(3*a*a), -my/(6*E*I*l)*(2*l*l+3*a*a), my/(6*E*I*l)*(3*l), -my/(6*E*I*l),        0., 0., 0., debut_barre), FALSE);
+    BUG(common_fonction_ajout_poly(f_deform, 0., l, 0.,                 l/(6*E*I)*(-2*may+mby),      may/(2*E*I),        -(mby+may)/(6*E*I*l), 0., 0., 0., debut_barre), FALSE);
+    
     // Pour une section constante, les rotations valent :\end{verbatim}\begin{align*}
     // r_y(x) = & \frac{F_z \cdot b}{6 \cdot E \cdot I_y \cdot L} [-L^2+b^2 + 3 \cdot x^2] & &\\
     //          & +\frac{M_y}{6 \cdot E \cdot I_y \cdot L} (-L^2+3 \cdot b^2 + 3 \cdot x^2) & &\\
@@ -677,15 +615,8 @@ gboolean EF_charge_barre_ponctuelle_fonc_ry(Fonction *f_rotation, Fonction* f_de
     // f_z(x) = & \frac{F_z \cdot a}{6 \cdot E \cdot I_y \cdot L} \cdot \left( -a^2 \cdot L + (a^2+2 \cdot L^2) \cdot x - 3 \cdot L \cdot x^2 + x^3 \right) & &\\
     //          & + \frac{M_y}{6 \cdot E \cdot I_y \cdot L} \left(3 \cdot a^2 \cdot L - (2 \cdot L^2+3 \cdot a^2) \cdot x + 3 \cdot L \cdot x^2 - x^3 \right) & &\\
     //          & + \frac{x}{6 \cdot E \cdot I_y} \cdot \left( L \cdot (-2 \cdot M_{Ay}+M_{By}) + 3 \cdot M_{Ay} \cdot x - \frac{M_{By}+M_{Ay}}{L} \cdot x^2 \right) & &\textrm{ pour x variant de a à L}\end{align*}\begin{verbatim}
-            return TRUE;
-            break;
-        }
-        default :
-        {
-            BUGMSG(0, FALSE, gettext("Type de section %d inconnu.\n"), barre->section->type);
-            break;
-        }
-    }
+    
+    return TRUE;
 }
 
 
@@ -722,7 +653,7 @@ gboolean EF_charge_barre_ponctuelle_fonc_rz(Fonction *f_rotation, Fonction* f_de
 {
     EF_Noeud    *debut, *fin;
     double      l, b;
-    double      E, debut_barre;
+    double      E, debut_barre, I;
     
     BUGMSG(f_rotation, FALSE, gettext("Paramètre %s incorrect.\n"), "f_rotation");
     BUGMSG(f_deform, FALSE, gettext("Paramètre %s incorrect.\n"), "f_deform");
@@ -758,38 +689,23 @@ gboolean EF_charge_barre_ponctuelle_fonc_rz(Fonction *f_rotation, Fonction* f_de
     
     b = l-a;
     E = common_math_get(EF_calculs_E(barre->materiau));
+    I = common_math_get(EF_sections_iz(barre->section));
+    BUG(!isnan(E), FALSE);
+    BUG(!isnan(I), FALSE);
     
-    switch (barre->section->type)
-    {
-        case SECTION_RECTANGULAIRE :
-        case SECTION_T :
-        case SECTION_CARREE :
-        case SECTION_CIRCULAIRE :
-        {
-            double      I = common_math_get(EF_sections_iz(barre->section));
-            
-            BUG(!isnan(I), FALSE);
-            
-            BUG(common_fonction_ajout_poly(f_rotation, 0., a, fy*b/(6*E*I*l)*a*(l+b),     0.,          -fy*b/(2*E*I*l),     0., 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout_poly(f_rotation, a,  l, fy*a/(6*E*I*l)*(2*l*l+a*a), -fy*a/(E*I), fy*a/(2*E*I*l),      0., 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout_poly(f_rotation, 0., a, mz/(6*E*I*l)*(-l*l+3*b*b),  0.,          mz/(2*E*I*l),        0., 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout_poly(f_rotation, a,  l, mz/(6*E*I*l)*(2*l*l+3*a*a), -mz/(E*I),   mz/(2*E*I*l),        0., 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout_poly(f_rotation, 0., l, l/(6*E*I)*(2*maz-mbz),      -maz/(E*I),  (maz+mbz)/(2*E*I*l), 0., 0., 0., 0., debut_barre), FALSE);
-            
-            BUG(common_fonction_ajout_poly(f_deform, 0., a, 0.,                  fy*b/(6*E*I*l)*(l*l-b*b),   0.,                  -fy*b/(6*E*I*l),     0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout_poly(f_deform, a,  l, -fy*a*a*a/(6*E*I),   fy*a/(6*E*I*l)*(a*a+2*l*l), -fy*a/(2*E*I),       fy*a/(6*E*I*l),      0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout_poly(f_deform, 0., a, 0.,                  mz/(6*E*I*l)*(-l*l+3*b*b),  0.,                  mz/(6*E*I*l),        0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout_poly(f_deform, a,  l, -mz/(6*E*I)*(3*a*a), mz/(6*E*I*l)*(2*l*l+3*a*a), -mz/(6*E*I*l)*(3*l), mz/(6*E*I*l),        0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout_poly(f_deform, 0., l, 0.,                  l/(6*E*I)*(2*maz-mbz),      -maz/(2*E*I),        (mbz+maz)/(6*E*I*l), 0., 0., 0., debut_barre), FALSE);
-            return TRUE;
-            break;
-        }
-        default :
-        {
-            BUGMSG(0, FALSE, gettext("Type de section %d inconnu.\n"), barre->section->type);
-            break;
-        }
-    }
+    BUG(common_fonction_ajout_poly(f_rotation, 0., a, fy*b/(6*E*I*l)*a*(l+b),     0.,          -fy*b/(2*E*I*l),     0., 0., 0., 0., debut_barre), FALSE);
+    BUG(common_fonction_ajout_poly(f_rotation, a,  l, fy*a/(6*E*I*l)*(2*l*l+a*a), -fy*a/(E*I), fy*a/(2*E*I*l),      0., 0., 0., 0., debut_barre), FALSE);
+    BUG(common_fonction_ajout_poly(f_rotation, 0., a, mz/(6*E*I*l)*(-l*l+3*b*b),  0.,          mz/(2*E*I*l),        0., 0., 0., 0., debut_barre), FALSE);
+    BUG(common_fonction_ajout_poly(f_rotation, a,  l, mz/(6*E*I*l)*(2*l*l+3*a*a), -mz/(E*I),   mz/(2*E*I*l),        0., 0., 0., 0., debut_barre), FALSE);
+    BUG(common_fonction_ajout_poly(f_rotation, 0., l, l/(6*E*I)*(2*maz-mbz),      -maz/(E*I),  (maz+mbz)/(2*E*I*l), 0., 0., 0., 0., debut_barre), FALSE);
+    
+    BUG(common_fonction_ajout_poly(f_deform, 0., a, 0.,                  fy*b/(6*E*I*l)*(l*l-b*b),   0.,                  -fy*b/(6*E*I*l),     0., 0., 0., debut_barre), FALSE);
+    BUG(common_fonction_ajout_poly(f_deform, a,  l, -fy*a*a*a/(6*E*I),   fy*a/(6*E*I*l)*(a*a+2*l*l), -fy*a/(2*E*I),       fy*a/(6*E*I*l),      0., 0., 0., debut_barre), FALSE);
+    BUG(common_fonction_ajout_poly(f_deform, 0., a, 0.,                  mz/(6*E*I*l)*(-l*l+3*b*b),  0.,                  mz/(6*E*I*l),        0., 0., 0., debut_barre), FALSE);
+    BUG(common_fonction_ajout_poly(f_deform, a,  l, -mz/(6*E*I)*(3*a*a), mz/(6*E*I*l)*(2*l*l+3*a*a), -mz/(6*E*I*l)*(3*l), mz/(6*E*I*l),        0., 0., 0., debut_barre), FALSE);
+    BUG(common_fonction_ajout_poly(f_deform, 0., l, 0.,                  l/(6*E*I)*(2*maz-mbz),      -maz/(2*E*I),        (mbz+maz)/(6*E*I*l), 0., 0., 0., debut_barre), FALSE);
+    
+    return TRUE;
 }
 
 
@@ -820,7 +736,7 @@ gboolean EF_charge_barre_ponctuelle_n(Fonction *fonction, EF_Barre *barre,
 {
     EF_Noeud    *debut, *fin;
     double      l, debut_barre;
-    double      E;
+    double      E, S;
     
     BUGMSG(fonction, FALSE, gettext("Paramètre %s incorrect.\n"), "fonction");
     BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre");
@@ -851,32 +767,18 @@ gboolean EF_charge_barre_ponctuelle_n(Fonction *fonction, EF_Barre *barre,
     BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), FALSE, gettext("La position de la charge ponctuelle (%f) est incorrecte. La longueur de la barre est de %f m.\n"), a, l);
     
     E = common_math_get(EF_calculs_E(barre->materiau));
+    S = common_math_get(EF_sections_s(barre->section));
+    BUG(!isnan(E), FALSE);
+    BUG(!isnan(S), FALSE);
     
-    switch (barre->section->type)
-    {
-        case SECTION_RECTANGULAIRE :
-        case SECTION_T :
-        case SECTION_CARREE :
-        case SECTION_CIRCULAIRE :
-        {
-            double      S = common_math_get(EF_sections_s(barre->section));
-            
-            BUG(!isnan(S), FALSE);
-            
     // Pour une section constante, les déformations valent :\end{verbatim}\begin{align*}
     // f_x(x) = & \frac{F_{Ax} \cdot x}{E \cdot S} & &\textrm{ pour x variant de 0 à a}\nonumber\\
     // f_x(x) = & \frac{a \cdot (F_{Ax} + F_{Bx}) - F_{Bx} \cdot x}{E \cdot S} & & \textrm{ pour x variant de a à l}\end{align*}\begin{verbatim}
-            BUG(common_fonction_ajout_poly(fonction, 0., a, 0.,                 fax/(E*S), 0., 0., 0., 0., 0., debut_barre), FALSE);
-            BUG(common_fonction_ajout_poly(fonction, a,  l, a*(fax+fbx)/(E*S), -fbx/(E*S), 0., 0., 0., 0., 0., debut_barre), FALSE);
-            return TRUE;
-            break;
-        }
-        default :
-        {
-            BUGMSG(0, FALSE, gettext("Type de section %d inconnu.\n"), barre->section->type);
-            break;
-        }
-    }
+    
+     BUG(common_fonction_ajout_poly(fonction, 0., a, 0.,                 fax/(E*S), 0., 0., 0., 0., 0., debut_barre), FALSE);
+     BUG(common_fonction_ajout_poly(fonction, a,  l, a*(fax+fbx)/(E*S), -fbx/(E*S), 0., 0., 0., 0., 0., debut_barre), FALSE);
+     
+     return TRUE;
 }
 
 

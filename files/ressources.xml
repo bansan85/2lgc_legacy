@@ -14,6 +14,7 @@
     <file compressed="true">ui/EF_sections_T.ui</file>
     <file compressed="true">ui/EF_sections_carree.ui</file>
     <file compressed="true">ui/EF_sections_circulaire.ui</file>
+    <file compressed="true">ui/EF_sections_personnalisee.ui</file>
     <file compressed="true">ui/EF_barres_add.ui</file>
     <file compressed="true">ui/EF_noeud.ui</file>
     <file compressed="true">ui/EF_charge_barre_ponctuelle.ui</file>

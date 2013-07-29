@@ -38,7 +38,7 @@
 #endif
 
 gboolean EF_sections_init(Projet *projet)
-/* Description : Initialise la liste des section en béton.
+/* Description : Initialise la liste des sections.
  * Paramètres : Projet *projet : la variable projet.
  * Valeur renvoyée :
  *   Succès : TRUE
@@ -171,7 +171,7 @@ gboolean EF_sections_repositionne(Projet *projet, EF_Section *section)
 
 gboolean EF_sections_rectangulaire_ajout(Projet *projet, const char* nom, Flottant l,
   Flottant h)
-/* Description : Ajouter une nouvelle section rectangulaire à la liste des sections en béton.
+/* Description : Ajouter une nouvelle section rectangulaire à la liste des sections.
  * Paramètres : Projet *projet : la variable projet,
  *            : Flottant l : la largeur,
  *            : Flottant h : la hauteur.
@@ -193,7 +193,7 @@ gboolean EF_sections_rectangulaire_ajout(Projet *projet, const char* nom, Flotta
     
     // Trivial
     section_nouvelle->type = SECTION_RECTANGULAIRE;
-    BUGMSG(section_nouvelle->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(section_nouvelle->nom = g_strdup(nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
     section_data->largeur_retombee = l;
     section_data->hauteur_retombee = h;
     section_data->largeur_table = l;
@@ -232,7 +232,7 @@ gboolean EF_sections_rectangulaire_modif(Projet *projet, EF_Section *section, co
     {
         BUGMSG(!EF_sections_cherche_nom(projet, nom, FALSE), FALSE, gettext("La section %s existe déjà.\n"), nom);
         free(section->nom);
-        BUGMSG(section->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(section->nom = g_strdup(nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
         BUG(EF_sections_repositionne(projet, section), FALSE);
     }
     if ((!isnan(common_math_get(l))) && (!ERREUR_RELATIVE_EGALE(common_math_get(section_data->largeur_retombee), common_math_get(l))))
@@ -278,7 +278,7 @@ gboolean EF_sections_rectangulaire_modif(Projet *projet, EF_Section *section, co
 
 gboolean EF_sections_T_ajout(Projet *projet, const char* nom, Flottant lt, Flottant lr,
   Flottant ht, Flottant hr)
-/* Description : Ajouter une nouvelle section en T à la liste des sections en béton.
+/* Description : Ajouter une nouvelle section en T à la liste des sections.
  * Paramètres : Projet *projet : la variable projet,
  *            : chat *nom : nom de la section,
  *            : Flottant lt : la largeur de la table,
@@ -308,7 +308,7 @@ gboolean EF_sections_T_ajout(Projet *projet, const char* nom, Flottant lt, Flott
     //   J = \frac{a \cdot b^3}{16} \cdot \left[\frac{16}{3}-3.364 \cdot \frac{b}{a} \cdot \left(1-\frac{b^4}{12 \cdot a^4}\right)\right]+\frac{aa \cdot bb^3}{16} \cdot \left[\frac{16}{3}-3.364 \cdot \frac{bb}{aa} \cdot \left(1-\frac{bb^4}{12 \cdot aa^4}\right)\right]\texttt{ avec }\substack{a=max(ht,lt)\\b=min(ht,lt)\\aa=max(ha,la)\\bb=min(ha,la)}
     //   \end{displaymath}\begin{verbatim}
     section_nouvelle->type = SECTION_T;
-    BUGMSG(section_nouvelle->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(section_nouvelle->nom = g_strdup(nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
     section_data->largeur_table = lt;
     section_data->largeur_retombee = lr;
     section_data->hauteur_table = ht;
@@ -348,7 +348,7 @@ gboolean EF_sections_T_modif(Projet *projet, EF_Section *section, const char* no
     {
         BUGMSG(!EF_sections_cherche_nom(projet, nom, FALSE), FALSE, gettext("La section %s existe déjà.\n"), nom);
         free(section->nom);
-        BUGMSG(section->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(section->nom = g_strdup(nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
         BUG(EF_sections_repositionne(projet, section), FALSE);
 #ifdef ENABLE_GTK
         gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section->Iter_liste, 0, section->nom, -1);
@@ -402,7 +402,7 @@ gboolean EF_sections_T_modif(Projet *projet, EF_Section *section, const char* no
 
 
 gboolean EF_sections_carree_ajout(Projet *projet, const char* nom, Flottant cote)
-/* Description : Ajouter une nouvelle section carrée à la liste des sections en béton.
+/* Description : Ajouter une nouvelle section carrée à la liste des sections.
  * Paramètres : Projet *projet : la variable projet,
  *            : char *nom : nom de la section,
  *            : Flottant cote : le coté.
@@ -423,7 +423,7 @@ gboolean EF_sections_carree_ajout(Projet *projet, const char* nom, Flottant cote
     section_nouvelle->data = section_data;
     
     section_nouvelle->type = SECTION_CARREE;
-    BUGMSG(section_nouvelle->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(section_nouvelle->nom = g_strdup(nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
     section_data->largeur_retombee = cote;
     section_data->hauteur_retombee = cote;
     section_data->largeur_table = cote;
@@ -460,7 +460,7 @@ gboolean EF_sections_carree_modif(Projet *projet, EF_Section *section, const cha
     {
         BUGMSG(!EF_sections_cherche_nom(projet, nom, FALSE), FALSE, gettext("La section %s existe déjà.\n"), nom);
         free(section->nom);
-        BUGMSG(section->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(section->nom = g_strdup(nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
         BUG(EF_sections_repositionne(projet, section), FALSE);
 #ifdef ENABLE_GTK
         gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section->Iter_liste, 0, section->nom, -1);
@@ -503,7 +503,7 @@ gboolean EF_sections_carree_modif(Projet *projet, EF_Section *section, const cha
 
 
 gboolean EF_sections_circulaire_ajout(Projet *projet, const char* nom, Flottant diametre)
-/* Description : Ajouter une nouvelle section circulaire à la liste des sections en béton.
+/* Description : Ajouter une nouvelle section circulaire à la liste des sections.
  * Paramètres : Projet *projet : la variable projet,
  *            : char *nom : nom de la section,
  *            : Flottant diametre : le diamètre.
@@ -527,8 +527,9 @@ gboolean EF_sections_circulaire_ajout(Projet *projet, const char* nom, Flottant 
     //   S = \frac{\pi \cdot diametre^2}{4}\end{displaymath}\begin{displaymath}
     //   cdg_{haut} = \frac{diametre}{2}\texttt{  et  }cdg_{bas} = \frac{diametre}{2}\texttt{  et  }cdg_{droite} = \frac{diametre}{2}\texttt{  et  }cdg_{gauche} = \frac{diametre}{2}\end{displaymath}\begin{displaymath}
     //   I_y = \frac{\pi \cdot diametre^4}{64}\texttt{  et  }I_z = I_y\texttt{  et  }J = \frac{\pi \cdot diametre^4}{32}\end{displaymath}\begin{verbatim}
+    
     section_nouvelle->type = SECTION_CIRCULAIRE;
-    BUGMSG(section_nouvelle->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(section_nouvelle->nom = g_strdup(nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
     section_data->diametre = diametre;
     
     BUG(EF_sections_insert(projet, section_nouvelle), FALSE);
@@ -562,7 +563,7 @@ gboolean EF_sections_circulaire_modif(Projet *projet, EF_Section *section, const
     {
         BUGMSG(!EF_sections_cherche_nom(projet, nom, FALSE), FALSE, gettext("La section %s existe déjà.\n"), nom);
         free(section->nom);
-        BUGMSG(section->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(section->nom = g_strdup(nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
         BUG(EF_sections_repositionne(projet, section), FALSE);
 #ifdef ENABLE_GTK
         gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section->Iter_liste, 0, section->nom, -1);
@@ -600,8 +601,198 @@ gboolean EF_sections_circulaire_modif(Projet *projet, EF_Section *section, const
 }
 
 
+gboolean EF_sections_personnalisee_ajout(Projet *projet, const char* nom,
+  const char* description, Flottant j, Flottant iy, Flottant iz, Flottant vy, Flottant vyp,
+  Flottant vz, Flottant vzp, Flottant s, GList *forme)
+/* Description : Ajouter une nouvelle section personnalisée à la liste des sections.
+ * Paramètres : Projet *projet : la variable projet,
+ *            : const char *nom : nom de la section,
+ *            : const char *description : description (géométrique de préférence) de la section,
+ *            : Flottant j : le moment d’inertie de torsion.
+ *            : Flottant iy : le moment d'inertie de flexion selon l'axe y,
+ *            : Flottant iz : le moment d'inertie de flexion selon l'axe z,
+ *            : Flottant vy : distance entre le centre de gravité et le point le plus haut
+ *                            selon l'axe y,
+ *            : Flottant vyp : distance entre le centre de gravité et le point le plus bas
+ *                            selon l'axe y,
+ *            : Flottant vz : distance entre le centre de gravité et le point le plus haut
+ *                            selon l'axe z,
+ *            : Flottant vzp : distance entre le centre de gravité et le point le plus bas
+ *                            selon l'axe z,
+ *            : Flottant s : surface de la section,
+ *            : GList *forme : dessin de la section. Il s'agit d'une liste contenant une liste
+ *                             de points reliés en eux. Cette deuxième liste permet de dessiner
+ *                             plusieurs formes l'une à coté des autres.
+ *                             Bien placer le centre de gravité au point 0;0.
+ *                             La liste est directement ajoutée à la section. Il ne faut donc
+ *                             pas la libérer une fois l'ajout effectué.
+ * Valeur renvoyée :
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL,
+ *             en cas d'erreur d'allocation mémoire.
+ */
+{
+    Section_Personnalisee   *section_data;
+    EF_Section              *section_nouvelle;
+    
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(!EF_sections_cherche_nom(projet, nom, FALSE), FALSE, gettext("La section %s existe déjà.\n"), nom);
+    BUGMSG(section_nouvelle = malloc(sizeof(EF_Section)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(section_data = malloc(sizeof(Section_Personnalisee)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    section_nouvelle->data = section_data;
+    
+    section_nouvelle->type = SECTION_PERSONNALISEE;
+    BUGMSG(section_nouvelle->nom = g_strdup(nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(section_data->description = g_strdup(description), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    section_data->j = j;
+    section_data->iy = iy;
+    section_data->iz = iz;
+    section_data->vy = vy;
+    section_data->vyp = vyp;
+    section_data->vz = vz;
+    section_data->vzp = vzp;
+    section_data->s = s;
+    section_data->forme = forme;
+    
+    BUG(EF_sections_insert(projet, section_nouvelle), FALSE);
+    
+    return TRUE;
+}
+
+
+gboolean EF_sections_personnalisee_modif(Projet *projet, EF_Section *section, const char* nom,
+  const char* description, Flottant j, Flottant iy, Flottant iz, Flottant vy, Flottant vyp,
+  Flottant vz, Flottant vzp, Flottant s, GList *forme)
+/* Description : Modifie une section circulaire.
+ * Paramètres : Projet *projet : la variable projet,
+ *            : EF_Section *section : la section à modifier,
+ *            : const char *nom : nom de la section, NULL si aucun changement,
+ *            : const char *description : description de la section, NULL si aucun changement,
+ *            : Flottant j : le moment d’inertie de torsion, NAN si aucun changement.
+ *            : Flottant iy : le moment d'inertie de flexion selon l'axe y, NAN si aucun changement,
+ *            : Flottant iz : le moment d'inertie de flexion selon l'axe z, NAN si aucun changement,
+ *            : Flottant vy : distance entre le centre de gravité et le point le plus haut
+ *                            selon l'axe y, NAN si aucun changement,
+ *            : Flottant vyp : distance entre le centre de gravité et le point le plus bas
+ *                            selon l'axe y, NAN si aucun changement,
+ *            : Flottant vz : distance entre le centre de gravité et le point le plus haut
+ *                            selon l'axe z, NAN si aucun changement,
+ *            : Flottant vzp : distance entre le centre de gravité et le point le plus bas
+ *                            selon l'axe z, NAN si aucun changement,
+ *            : Flottant s : surface de la section, NAN si aucun changement,
+ *            : GList *forme : dessin de la section, NULL si aucun changement. 
+ * Valeur renvoyée :
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             projet == NULL,
+ *             section == NULL,
+ *             section->type != SECTION_PERSONNALISEE.
+ */
+{
+    Section_Personnalisee   *section_data = section->data;
+    
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(section, FALSE, gettext("Paramètre %s incorrect.\n"), "section");
+    BUGMSG(section->type == SECTION_PERSONNALISEE, FALSE, gettext("La section doit être de type personnalisée.\n"));
+    
+    if ((nom != NULL) && (strcmp(section->nom, nom) != 0))
+    {
+        BUGMSG(!EF_sections_cherche_nom(projet, nom, FALSE), FALSE, gettext("La section %s existe déjà.\n"), nom);
+        free(section->nom);
+        BUGMSG(section->nom = g_strdup(nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+        BUG(EF_sections_repositionne(projet, section), FALSE);
+#ifdef ENABLE_GTK
+        gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section->Iter_liste, 0, section->nom, -1);
+        if ((projet->list_gtk.ef_sections_personnalisee.builder != NULL) && (projet->list_gtk.ef_sections_personnalisee.section == section))
+            gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk.ef_sections_personnalisee.builder, "EF_section_personnalisee_textview_nom"))), nom, -1);
+#endif
+    }
+    
+    if ((description != NULL) && (strcmp(section_data->description, description) != 0))
+    {
+        free(section_data->description);
+        BUGMSG(section_data->description = g_strdup(description), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    }
+    
+    if ((!isnan(common_math_get(j))) && (!ERREUR_RELATIVE_EGALE(common_math_get(section_data->j), common_math_get(j))))
+        section_data->j = j;
+    else
+        j = common_math_f(NAN, FLOTTANT_ORDINATEUR);
+    if ((!isnan(common_math_get(iy))) && (!ERREUR_RELATIVE_EGALE(common_math_get(section_data->iy), common_math_get(iy))))
+        section_data->iy = iy;
+    else
+        iy = common_math_f(NAN, FLOTTANT_ORDINATEUR);
+    if ((!isnan(common_math_get(iz))) && (!ERREUR_RELATIVE_EGALE(common_math_get(section_data->iz), common_math_get(iz))))
+        section_data->iz = iz;
+    else
+        iz = common_math_f(NAN, FLOTTANT_ORDINATEUR);
+    if ((!isnan(common_math_get(vy))) && (!ERREUR_RELATIVE_EGALE(common_math_get(section_data->vy), common_math_get(vy))))
+        section_data->vy = vy;
+    else
+        vy = common_math_f(NAN, FLOTTANT_ORDINATEUR);
+    if ((!isnan(common_math_get(vyp))) && (!ERREUR_RELATIVE_EGALE(common_math_get(section_data->vyp), common_math_get(vyp))))
+        section_data->vyp = vyp;
+    else
+        vyp = common_math_f(NAN, FLOTTANT_ORDINATEUR);
+    if ((!isnan(common_math_get(vz))) && (!ERREUR_RELATIVE_EGALE(common_math_get(section_data->vz), common_math_get(vz))))
+        section_data->vz = vz;
+    else
+        vz = common_math_f(NAN, FLOTTANT_ORDINATEUR);
+    if ((!isnan(common_math_get(vzp))) && (!ERREUR_RELATIVE_EGALE(common_math_get(section_data->vzp), common_math_get(vzp))))
+        section_data->vzp = vzp;
+    else
+        vzp = common_math_f(NAN, FLOTTANT_ORDINATEUR);
+    if ((!isnan(common_math_get(s))) && (!ERREUR_RELATIVE_EGALE(common_math_get(section_data->s), common_math_get(s))))
+        section_data->s = s;
+    else
+        s = common_math_f(NAN, FLOTTANT_ORDINATEUR);
+    if (forme != NULL)
+    {
+        while (section_data->forme != NULL)
+        {
+            g_list_free_full(section_data->forme->data, free);
+            
+            section_data->forme = g_list_delete_link(section_data->forme, section_data->forme);
+        }
+        
+        section_data->forme = forme;
+    }
+    
+    if ((!isnan(common_math_get(j))) || (!isnan(common_math_get(iy))) || (!isnan(common_math_get(iz))) || (!isnan(common_math_get(vy))) || (!isnan(common_math_get(vyp))) || (!isnan(common_math_get(vz))) || (!isnan(common_math_get(vzp))) || (!isnan(common_math_get(s))) || (forme != NULL))
+    {
+        GList   *liste_sections = NULL, *liste_barres_dep;
+        
+        liste_sections = g_list_append(liste_sections, section);
+        BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, liste_sections, NULL, NULL, NULL, NULL, &liste_barres_dep, NULL, FALSE, FALSE), FALSE);
+        g_list_free(liste_sections);
+        
+        if (liste_barres_dep != NULL)
+        {
+#ifdef ENABLE_GTK
+            if (forme != NULL)
+            {
+                BUG(m3d_actualise_graphique(projet, NULL, liste_barres_dep), FALSE);
+                BUG(m3d_rafraichit(projet), FALSE);
+            }
+#endif
+            if ((forme == NULL) || (!isnan(common_math_get(j))) || (!isnan(common_math_get(iy))) || (!isnan(common_math_get(iz))) || (!isnan(common_math_get(vy))) || (!isnan(common_math_get(vyp))) || (!isnan(common_math_get(vz))) || (!isnan(common_math_get(vzp))) || (!isnan(common_math_get(s))))
+                BUG(EF_calculs_free(projet), FALSE);
+            g_list_free(liste_barres_dep);
+        }
+    }
+    
+#ifdef ENABLE_GTK
+    if (projet->list_gtk.ef_sections.builder != NULL)
+        gtk_widget_queue_resize(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections.builder, "EF_sections_treeview")));
+#endif
+    
+    return TRUE;
+}
+
+
 EF_Section* EF_sections_cherche_nom(Projet *projet, const char *nom, gboolean critique)
-/* Description : Positionne dans la liste des sections en béton l'élément courant au numéro
+/* Description : Positionne dans la liste des sections l'élément courant au numéro
  *               souhaité.
  * Paramètres : Projet *projet : la variable projet,
  *            : const char *nom : le nom de la section.
@@ -630,7 +821,7 @@ EF_Section* EF_sections_cherche_nom(Projet *projet, const char *nom, gboolean cr
     }
     
     if (critique)
-        BUGMSG(0, NULL, gettext("Section en béton '%s' introuvable.\n"), nom);
+        BUGMSG(0, NULL, gettext("Section '%s' introuvable.\n"), nom);
     else
         return NULL;
 }
@@ -694,6 +885,14 @@ char* EF_sections_get_description(EF_Section *sect)
             
             common_math_double_to_char2(section->diametre, diam, DECIMAL_DISTANCE);
             BUGMSG(description = g_strdup_printf("%s : %s m", gettext("Diamètre"), diam), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            
+            return description;
+        }
+        case SECTION_PERSONNALISEE :
+        {
+            Section_Personnalisee   *section = sect->data;
+            
+            BUGMSG(description = g_strdup(section->description), NULL, gettext("Erreur d'allocation mémoire.\n"));
             
             return description;
         }
@@ -779,6 +978,12 @@ gboolean EF_sections_supprime(EF_Section *section, gboolean annule_si_utilise, P
                 gtk_widget_destroy(projet->list_gtk.ef_sections_circulaire.window);
             break;
         }
+        case SECTION_PERSONNALISEE :
+        {
+            if ((projet->list_gtk.ef_sections_personnalisee.builder != NULL) && (projet->list_gtk.ef_sections_personnalisee.section == section))
+                gtk_widget_destroy(projet->list_gtk.ef_sections_personnalisee.window);
+            break;
+        }
         default :
         {
             BUGMSG(0, FALSE, gettext("Type de section %d inconnu.\n"), section->type);
@@ -834,6 +1039,7 @@ Flottant EF_sections_j(EF_Section* sect)
     // Pour une section en T de section constante (lt : largeur de la table, lr : largeur de
     //   la retombée, ht : hauteur de la table, hr : hauteur de la retombée), J vaut :\end{verbatim}\begin{displaymath}
     // J = \frac{a \cdot b^3}{16} \left[\frac{16}{3}-3.364 \frac{b}{a} \left(1-\frac{b^4}{12 a^4}\right)\right]+\frac{aa \cdot bb^3}{16} \left[\frac{16}{3}-3.364 \frac{bb}{aa} \left(1-\frac{bb^4}{12 aa^4}\right)\right]\texttt{ avec }\substack{a=max(h_t,l_t)\\b=min(h_t,l_t)\\aa=max(h_r,l_r)\\bb=min(h_r,l_r)}\end{displaymath}\begin{verbatim}
+    
             break;
         }
         case SECTION_CIRCULAIRE :
@@ -842,8 +1048,18 @@ Flottant EF_sections_j(EF_Section* sect)
             double              diametre = common_math_get(section->diametre);
             
             return common_math_f(M_PI*diametre*diametre*diametre*diametre/32., FLOTTANT_ORDINATEUR);
+            
     // Pour une section circulaire de section constante, J vaut :\end{verbatim}\begin{displaymath}
     // J = \frac{\pi \cdot \phi^4}{32}\end{displaymath}\begin{verbatim}
+            
+            break;
+        }
+        case SECTION_PERSONNALISEE :
+        {
+            Section_Personnalisee *section = sect->data;
+            
+            return section->j;
+            
             break;
         }
         default :
@@ -878,10 +1094,12 @@ Flottant EF_sections_iy(EF_Section* sect)
             double      lr = common_math_get(section->largeur_retombee);
             double      ht = common_math_get(section->hauteur_table);
             double      hr = common_math_get(section->hauteur_retombee);
+            
     // Pour une section en T de section constante (lt : largeur de la table, lr : largeur de
     //   la retombée, ht : hauteur de la table, hr : hauteur de la retombée), Iy vaut :\end{verbatim}\begin{displaymath}
     // I_y = \frac{l_t \cdot h_t^3}{12}+\frac{l_r \cdot h_r^3}{12}+l_t \cdot h_t \cdot \left(\frac{h_t}{2}-cdg_h \right)^2+l_r \cdot h_r \cdot \left(\frac{h_r}{2}-cdg_b \right)^2 \texttt{, }\end{displaymath}\begin{displaymath}
     // cdg_h = \frac{\frac{l_t \cdot h_t^2}{2}+l_r \cdot h_r \cdot \left(h_t+\frac{h_r}{2} \right)}{S}  \texttt{, } cdg_b = h_t+h_r-cdg_h \texttt{ et } S = l_t \cdot h_t+l_r \cdot h_r \end{displaymath}\begin{verbatim}
+            
             double      S = lt*ht+lr*hr;
             double      cdgh = (lt*ht*ht/2.+lr*hr*(ht+hr/2.))/S;
             double      cdgb = (ht+hr)-cdgh;
@@ -895,8 +1113,18 @@ Flottant EF_sections_iy(EF_Section* sect)
             double              diametre = common_math_get(section->diametre);
             
             return common_math_f(M_PI*diametre*diametre*diametre*diametre/64., FLOTTANT_ORDINATEUR);
+            
     // Pour une section circulaire de section constante, Iy vaut :\end{verbatim}\begin{displaymath}
     // I_y = \frac{\pi \cdot \phi^4}{64} \end{displaymath}\begin{verbatim}
+            
+            break;
+        }
+        case SECTION_PERSONNALISEE :
+        {
+            Section_Personnalisee *section = sect->data;
+            
+            return section->iy;
+            
             break;
         }
         default :
@@ -931,9 +1159,11 @@ Flottant EF_sections_iz(EF_Section* sect)
             double      lr = common_math_get(section->largeur_retombee);
             double      ht = common_math_get(section->hauteur_table);
             double      hr = common_math_get(section->hauteur_retombee);
+            
     // Pour une section en T de section constante (lt : largeur de la table, lr : largeur de
     //   la retombée, ht : hauteur de la table, hr : hauteur de la retombée), I vaut :\end{verbatim}\begin{displaymath}
     // I = \frac{h_t \cdot l_t^3}{12}+\frac{h_r \cdot l_r^3}{12}\end{displaymath}\begin{verbatim}
+            
             return common_math_f(ht*lt*lt*lt/12.+hr*lr*lr*lr/12., FLOTTANT_ORDINATEUR);
             break;
         }
@@ -942,8 +1172,18 @@ Flottant EF_sections_iz(EF_Section* sect)
             Section_Circulaire  *section = sect->data;
             double              diametre = common_math_get(section->diametre);
             return common_math_f(M_PI*diametre*diametre*diametre*diametre/64., FLOTTANT_ORDINATEUR);
+            
     // Pour une section circulaire de section constante, I vaut :\end{verbatim}\begin{displaymath}
     // I = \frac{\pi \cdot \phi^4}{64} \end{displaymath}\begin{verbatim}
+            
+            break;
+        }
+        case SECTION_PERSONNALISEE :
+        {
+            Section_Personnalisee *section = sect->data;
+            
+            return section->iz;
+            
             break;
         }
         default :
@@ -985,6 +1225,14 @@ Flottant EF_sections_vy(EF_Section* sect)
             Section_Circulaire *section = sect->data;
             
             return common_math_f(common_math_get(section->diametre)/2., FLOTTANT_ORDINATEUR);
+            
+            break;
+        }
+        case SECTION_PERSONNALISEE :
+        {
+            Section_Personnalisee *section = sect->data;
+            
+            return section->vy;
             
             break;
         }
@@ -1030,6 +1278,14 @@ Flottant EF_sections_vyp(EF_Section* sect)
             
             break;
         }
+        case SECTION_PERSONNALISEE :
+        {
+            Section_Personnalisee *section = sect->data;
+            
+            return section->vyp;
+            
+            break;
+        }
         default :
         {
             BUGMSG(0, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Type de section %d inconnu.\n"), sect->type);
@@ -1069,6 +1325,14 @@ Flottant EF_sections_vz(EF_Section* sect)
             Section_Circulaire *section = sect->data;
             
             return common_math_f(common_math_get(section->diametre)/2., FLOTTANT_ORDINATEUR);
+            
+            break;
+        }
+        case SECTION_PERSONNALISEE :
+        {
+            Section_Personnalisee *section = sect->data;
+            
+            return section->vz;
             
             break;
         }
@@ -1114,6 +1378,14 @@ Flottant EF_sections_vzp(EF_Section* sect)
             
             break;
         }
+        case SECTION_PERSONNALISEE :
+        {
+            Section_Personnalisee *section = sect->data;
+            
+            return section->vzp;
+            
+            break;
+        }
         default :
         {
             BUGMSG(0, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Type de section %d inconnu.\n"), sect->type);
@@ -1156,25 +1428,10 @@ double EF_sections_ay(EF_Barre *barre, unsigned int discretisation)
     
     ll = EF_noeuds_distance(fin, debut);
     BUG(!isnan(ll), NAN);
-    
     E = common_math_get(EF_calculs_E(barre->materiau));
+    BUG(!isnan(E), NAN);
     
-    switch (barre->section->type)
-    {
-        case SECTION_RECTANGULAIRE :
-        case SECTION_T :
-        case SECTION_CARREE :
-        case SECTION_CIRCULAIRE :
-        {
-            return ll/(3.*E*common_math_get(EF_sections_iy(barre->section)));
-            break;
-        }
-        default :
-        {
-            BUGMSG(0, NAN, gettext("Type de section %d inconnu.\n"), barre->section->type);
-            break;
-        }
-    }
+    return ll/(3.*E*common_math_get(EF_sections_iy(barre->section)));
 }
 
 
@@ -1211,25 +1468,10 @@ double EF_sections_by(EF_Barre *barre, unsigned int discretisation)
     
     ll = EF_noeuds_distance(fin, debut);
     BUG(!isnan(ll), NAN);
-    
     E = common_math_get(EF_calculs_E(barre->materiau));
+    BUG(!isnan(E), NAN);
     
-    switch (barre->section->type)
-    {
-        case SECTION_RECTANGULAIRE :
-        case SECTION_T :
-        case SECTION_CARREE :
-        case SECTION_CIRCULAIRE :
-        {
-            return ll/(6.*E*common_math_get(EF_sections_iy(barre->section)));
-            break;
-        }
-        default :
-        {
-            BUGMSG(0, NAN, gettext("Type de section %d inconnu.\n"), barre->section->type);
-            break;
-        }
-    }
+    return ll/(6.*E*common_math_get(EF_sections_iy(barre->section)));
 }
 
 
@@ -1266,25 +1508,10 @@ double EF_sections_cy(EF_Barre *barre, unsigned int discretisation)
     
     ll = EF_noeuds_distance(fin, debut);
     BUG(!isnan(ll), NAN);
-    
     E = common_math_get(EF_calculs_E(barre->materiau));
+    BUG(!isnan(E), NAN);
     
-    switch (barre->section->type)
-    {
-        case SECTION_RECTANGULAIRE :
-        case SECTION_T :
-        case SECTION_CARREE :
-        case SECTION_CIRCULAIRE :
-        {
-            return ll/(3.*E*common_math_get(EF_sections_iy(barre->section)));
-            break;
-        }
-        default :
-        {
-            BUGMSG(0, NAN, gettext("Type de section %d inconnu.\n"), barre->section->type);
-            break;
-        }
-    }
+    return ll/(3.*E*common_math_get(EF_sections_iy(barre->section)));
 }
 
 
@@ -1321,25 +1548,10 @@ double EF_sections_az(EF_Barre *barre, unsigned int discretisation)
     
     ll = EF_noeuds_distance(fin, debut);
     BUG(!isnan(ll), NAN);
-    
     E = common_math_get(EF_calculs_E(barre->materiau));
+    BUG(!isnan(E), NAN);
     
-    switch (barre->section->type)
-    {
-        case SECTION_RECTANGULAIRE :
-        case SECTION_T :
-        case SECTION_CARREE :
-        case SECTION_CIRCULAIRE :
-        {
-            return ll/(3.*E*common_math_get(EF_sections_iz(barre->section)));
-            break;
-        }
-        default :
-        {
-            BUGMSG(0, NAN, gettext("Type de section %d inconnu.\n"), barre->section->type);
-            break;
-        }
-    }
+    return ll/(3.*E*common_math_get(EF_sections_iz(barre->section)));
 }
 
 
@@ -1376,25 +1588,10 @@ double EF_sections_bz(EF_Barre *barre, unsigned int discretisation)
     
     ll = EF_noeuds_distance(fin, debut);
     BUG(!isnan(ll), NAN);
-    
     E = common_math_get(EF_calculs_E(barre->materiau));
+    BUG(!isnan(E), NAN);
     
-    switch (barre->section->type)
-    {
-        case SECTION_RECTANGULAIRE :
-        case SECTION_T :
-        case SECTION_CARREE :
-        case SECTION_CIRCULAIRE :
-        {
-            return ll/(6.*E*common_math_get(EF_sections_iz(barre->section)));
-            break;
-        }
-        default :
-        {
-            BUGMSG(0, NAN, gettext("Type de section %d inconnu.\n"), barre->section->type);
-            break;
-        }
-    }
+    return ll/(6.*E*common_math_get(EF_sections_iz(barre->section)));
 }
 
 
@@ -1431,25 +1628,10 @@ double EF_sections_cz(EF_Barre *barre, unsigned int discretisation)
     
     ll = EF_noeuds_distance(fin, debut);
     BUG(!isnan(ll), NAN);
-    
     E = common_math_get(EF_calculs_E(barre->materiau));
+    BUG(!isnan(E), NAN);
     
-    switch (barre->section->type)
-    {
-        case SECTION_RECTANGULAIRE :
-        case SECTION_T :
-        case SECTION_CARREE :
-        case SECTION_CIRCULAIRE :
-        {
-            return ll/(3.*E*common_math_get(EF_sections_iz(barre->section)));
-            break;
-        }
-        default :
-        {
-            BUGMSG(0, NAN, gettext("Type de section %d inconnu.\n"), barre->section->type);
-            break;
-        }
-    }
+    return ll/(3.*E*common_math_get(EF_sections_iz(barre->section)));
 }
 
 
@@ -1477,14 +1659,25 @@ Flottant EF_sections_s(EF_Section *sect)
     // Pour une section en T de section constante (lt : largeur de la table, lr : largeur de
     //   la retombée, ht : hauteur de la table, hr : hauteur de la retombée), S vaut :\end{verbatim}\begin{displaymath}
     // S = h_t \cdot l_t+h_r \cdot l_r\end{displaymath}\begin{verbatim}
+            
             break;
         }
         case SECTION_CIRCULAIRE :
         {
             Section_Circulaire *section = sect->data;
             return common_math_f(M_PI*common_math_get(section->diametre)*common_math_get(section->diametre)/4., FLOTTANT_ORDINATEUR);
+            
     // Pour une section circulaire de section constante, S vaut :\end{verbatim}\begin{displaymath}
     // S = \frac{\pi \cdot \phi^2}{4} \end{displaymath}\begin{verbatim}
+            
+            break;
+        }
+        case SECTION_PERSONNALISEE :
+        {
+            Section_Personnalisee *section = sect->data;
+            
+            return section->s;
+            
             break;
         }
         default :
@@ -1574,8 +1767,8 @@ void EF_sections_free_un(EF_Section *section)
 
 
 gboolean EF_sections_free(Projet *projet)
-/* Description : Libère l'ensemble des sections en béton
- * Paramètres : Projet *projet : la variable projet
+/* Description : Libère l'ensemble des sections.
+ * Paramètres : Projet *projet : la variable projet.
  * Valeur renvoyée :
  *   Succès : TRUE
  *   Échec : FALSE :

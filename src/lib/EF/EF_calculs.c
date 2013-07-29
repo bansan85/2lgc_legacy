@@ -1317,6 +1317,14 @@ gboolean EF_calculs_resoud_charge(Projet *projet, Action *action)
             cholmod_sparse      *sparse_deplacement_globaux, *sparse_deplacement_locaux;
             double              l;
             int                 num_d, num_f;
+            double              J = common_math_get(EF_sections_j(element_en_beton->section));
+            double              Iy = common_math_get(EF_sections_iy(element_en_beton->section));
+            double              Iz = common_math_get(EF_sections_iz(element_en_beton->section));
+            
+            BUG(!isnan(J), FALSE);
+            BUG(!isnan(Iy), FALSE);
+            BUG(!isnan(Iz), FALSE);
+            
             
             /* Récupération du noeud de départ et de fin de la partie discrétisée */
             if (j == 0)
@@ -1418,21 +1426,6 @@ gboolean EF_calculs_resoud_charge(Projet *projet, Action *action)
     //           rx est obtenue par intégration du moment en x. La constante est déterminée
     //           pour f(0) égal à la rotation au noeud à gauche s'il n'y a pas de relachement
     //           (sinon f(l) égal à la rotation à droite).\end{verbatim}\begin{align*}
-            switch(element_en_beton->section->type)
-            {
-                case SECTION_RECTANGULAIRE :
-                case SECTION_T :
-                case SECTION_CARREE :
-                case SECTION_CIRCULAIRE :
-                {
-                    double J = common_math_get(EF_sections_j(element_en_beton->section));
-                    double Iy = common_math_get(EF_sections_iy(element_en_beton->section));
-                    double Iz = common_math_get(EF_sections_iz(element_en_beton->section));
-                    
-                    BUG(!isnan(J), FALSE);
-                    BUG(!isnan(Iy), FALSE);
-                    BUG(!isnan(Iz), FALSE);
-                    
     //              f_x(x) = & u_A - \frac{F_{Ax}}{E \cdot S} \cdot x + \frac{F_{Ax}+F_{Bx}}{2 \cdot E \cdot S \cdot L} \cdot x^2 \nonumber\\
     //              f_y(x) = & v_A + A \cdot x - \frac{M_{Az}}{2 \cdot E \cdot I_z} \cdot x^2 + \frac{M_{Az}+M_{Bz}}{6 \cdot L \cdot E \cdot I_z} \cdot x^3 \text{ avec } \nonumber\\
     //                       & \text{A tel que } f_y(l)=v_B \text{ soit } A = \frac{M_{Az} \cdot L}{2*E*Iz}-\frac{(M_{Az}+M_{Bz}) \cdot L}{6*E*Iz}+\frac{-v_A+v_B}{L} \nonumber\\
@@ -1455,14 +1448,6 @@ gboolean EF_calculs_resoud_charge(Projet *projet, Action *action)
                     BUG(common_fonction_ajout_poly(_1990_action_fonctions_rotation_renvoie(action, 1, num), 0., l, -(-ax2[4]/(2*E*Iy)*l*l+(ax2[4]+ax2[10])/(6*E*Iy)*l*l-ax[2]+ax[8])/l, -ax2[4]/(E*Iy), (ax2[4]+ax2[10])/(2*l*E*Iy), 0., 0., 0., 0., l_debut), FALSE);
                     BUG(common_fonction_ajout_poly(_1990_action_fonctions_rotation_renvoie(action, 2, num), 0., l,  (ax2[5]/(2*E*Iz)*l*l+(-ax2[5]-ax2[11])/(6*E*Iz)*l*l-ax[1]+ax[7])/l, -ax2[5]/(E*Iz), (ax2[5]+ax2[11])/(2*l*E*Iz), 0., 0., 0., 0., l_debut), FALSE);
     //              \end{align*}\begin{verbatim}
-                    break;
-                }
-                default :
-                {
-                    BUGMSG(0, FALSE, gettext("Type de section %d inconnu.\n"), element_en_beton->section->type);
-                    break;
-                }
-            }
             
             cholmod_free_sparse(&sparse_deplacement_locaux, projet->calculs.c);
             cholmod_free_sparse(&sparse_effort_locaux, projet->calculs.c);

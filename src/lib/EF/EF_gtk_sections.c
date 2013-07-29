@@ -38,6 +38,7 @@
 #include "EF_gtk_section_T.h"
 #include "EF_gtk_section_carree.h"
 #include "EF_gtk_section_circulaire.h"
+#include "EF_gtk_section_personnalisee.h"
 #include "1992_1_1_barres.h"
 
 void EF_gtk_sections_fermer(GtkButton *button, Projet *projet)
@@ -290,6 +291,11 @@ void EF_gtk_sections_edit_nom(GtkCellRendererText *cell, gchar *path_string, gch
             BUG(EF_sections_circulaire_modif(projet, section, new_text, common_math_f(NAN, FLOTTANT_ORDINATEUR)), );
             break;
         }
+        case SECTION_PERSONNALISEE :
+        {
+            BUG(EF_sections_personnalisee_modif(projet, section, new_text, NULL, common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), NULL), );
+            break;
+        }
         default :
         {
             BUGMSG(0, , gettext("Type de section %d inconnu.\n"), section->type);
@@ -516,6 +522,97 @@ GdkPixbuf *EF_gtk_sections_dessin(EF_Section *section, int width, int height)
             
             break;
         }
+        case SECTION_PERSONNALISEE :
+        {
+            Section_Personnalisee *data = section->data;
+            
+            double  aa;
+            GList   *list_parcours;
+            GList   *list_parcours2;
+            double  xmin = NAN, xmax = NAN, ymin = NAN, ymax = NAN;
+            
+            // On commence par calculer la largeur et la hauteur de la section.
+            list_parcours = data->forme;
+            while (list_parcours != NULL)
+            {
+                list_parcours2 = list_parcours->data;
+                
+                while (list_parcours2 != NULL)
+                {
+                    EF_Point    *point = list_parcours2->data;
+                    
+                    if (isnan(xmin))
+                    {
+                        xmin = common_math_get(point->x);
+                        xmax = common_math_get(point->x);
+                        ymin = common_math_get(point->y);
+                        ymax = common_math_get(point->y);
+                    }
+                    else
+                    {
+                        if (common_math_get(point->x) < xmin)
+                            xmin = common_math_get(point->x);
+                        if (common_math_get(point->x) > xmax)
+                            xmax = common_math_get(point->x);
+                        if (common_math_get(point->y) < ymin)
+                            ymin = common_math_get(point->y);
+                        if (common_math_get(point->y) > ymax)
+                            ymax = common_math_get(point->y);
+                    }
+                    
+                    list_parcours2 = g_list_next(list_parcours2);
+                }
+                
+                list_parcours = g_list_next(list_parcours);
+            }
+            
+            aa = (xmax-xmin)/(ymax-ymin);
+            
+            cairo_set_source_rgba(cr, 0.8, 0.8, 0.8, 1.);
+            
+            // Le schéma prend toute la largeur
+            if (aa > a)
+                convert = (width-1)/(xmax-xmin);
+            else
+                convert = (height-1)/(ymax-ymin);
+            
+            // On dessine la section.
+            list_parcours = data->forme;
+            while (list_parcours != NULL)
+            {
+                list_parcours2 = list_parcours->data;
+                
+                cairo_new_path(cr);
+                
+                while (list_parcours2 != NULL)
+                {
+                    EF_Point    *point = list_parcours2->data;
+                    
+                    if (list_parcours2 == list_parcours->data)
+                        cairo_move_to(cr, 1.+((common_math_get(point->x) - xmin)*convert), 1.+((ymax - common_math_get(point->y))*convert));
+                    else
+                        cairo_line_to(cr, 1.+((common_math_get(point->x) - xmin)*convert), 1.+((ymax - common_math_get(point->y))*convert));
+                    
+                    list_parcours2 = g_list_next(list_parcours2);
+                }
+                cairo_close_path(cr);
+                save_path = cairo_copy_path(cr);
+                cairo_fill(cr);
+                cairo_set_source_rgba(cr, 0., 0., 0., 1.);
+                cairo_set_line_width(cr, 1.);
+                cairo_new_path(cr);
+                cairo_append_path(cr, save_path);
+                cairo_stroke(cr);
+                
+                cairo_path_destroy(save_path);
+                list_parcours = g_list_next(list_parcours);
+            }
+            cairo_destroy(cr);
+            pixbuf = gdk_pixbuf_get_from_surface(surface, 0, 0, width, height);
+            cairo_surface_destroy(surface);
+            
+            break;
+        }
         default :
         {
             BUGMSG(0, NULL, gettext("Type de section %d inconnu.\n"), section->type);
@@ -591,6 +688,22 @@ void EF_gtk_sections_ajout_circulaire(GtkMenuItem *menuitem, Projet *projet)
 }
 
 
+void EF_gtk_sections_ajout_personnalisee(GtkMenuItem *menuitem, Projet *projet)
+/* Description : Lance la fenêtre permettant d'ajouter une section personnalisée.
+ * Paramètres : GtkMenuItem *menuitem : composant à l'origine de l'évènement,
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : Aucune.
+ *   Echec : projet == NULL,
+ *           interface graphique non initialisée.
+ */
+{
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet->list_gtk.ef_sections.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Section");
+    
+    BUG(EF_gtk_section_personnalisee(projet, NULL), );
+}
+
+
 void EF_gtk_sections_edit_clicked(GtkWidget *widget, Projet *projet)
 /* Description : Edite les sections sélectionnées.
  * Paramètres : GtkToolButton *toolbutton : composant à l'origine de l'évènement,
@@ -639,6 +752,11 @@ void EF_gtk_sections_edit_clicked(GtkWidget *widget, Projet *projet)
                 case SECTION_CIRCULAIRE :
                 {
                     BUG(EF_gtk_section_circulaire(projet, section), );
+                    break;
+                }
+                case SECTION_PERSONNALISEE :
+                {
+                    BUG(EF_gtk_section_personnalisee(projet, section), );
                     break;
                 }
                 default :

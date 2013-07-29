@@ -570,6 +570,31 @@ gboolean EF_noeuds_change_noeud_relatif(Projet *projet, EF_Noeud *noeud, EF_Noeu
 }
 
 
+double EF_points_distance(EF_Point* p1, EF_Point* p2)
+/* Description : Renvoie la distance entre deux noeuds.
+ * Paramètres : EF_Point* p1 : point de départ,
+ *            : EF_Point* p2 : point de fin.
+ * Valeur renvoyée :
+ *   Succès : distance entre les deux point
+ *   Échec : NAN :
+ *             p1 == NULL,
+ *             p2 == NULL.
+ */
+{
+    double      x, y, z;
+    
+    // \end{verbatim}\texttt{distance }$= \sqrt{x^2+y^2+z^2}$\begin{verbatim}
+    BUGMSG(p1, NAN, gettext("Paramètre %s incorrect.\n"), "n1");
+    BUGMSG(p2, NAN, gettext("Paramètre %s incorrect.\n"), "n2");
+    
+    x = common_math_get(p2->x) - common_math_get(p1->x);
+    y = common_math_get(p2->y) - common_math_get(p1->y);
+    z = common_math_get(p2->z) - common_math_get(p1->z);
+    
+    return sqrt(x*x+y*y+z*z);
+}
+
+
 double EF_noeuds_distance(EF_Noeud* n1, EF_Noeud* n2)
 /* Description : Renvoie la distance entre deux noeuds.
  * Paramètres : EF_Noeud* n1 : noeud de départ,

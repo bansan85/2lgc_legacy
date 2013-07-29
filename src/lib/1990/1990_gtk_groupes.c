@@ -1118,16 +1118,18 @@ gboolean _1990_gtk_tree_view_etat_key_press_event(GtkWidget *widget, GdkEvent *e
 
 void _1990_gtk_tree_select_changed(GtkTreeSelection *treeselection, Projet *projet)
 /* Description : Permet de activer/désactiver les boutons ajout en fonction de la selection.
- * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
+ * Paramètres : GtkTreeSelection *treeselection : composant à l'origine de l'évènement,
  *            : Projet *projet : la variable projet.
  * Valeur renvoyée : Aucune.
  */
 {
-    Gtk_1990_Groupes    *gtk_1990_groupes = &projet->list_gtk._1990_groupes;
+    Gtk_1990_Groupes    *gtk_1990_groupes;
     GtkTreeIter         iter;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk._1990_groupes.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes");
+    
+    gtk_1990_groupes = &projet->list_gtk._1990_groupes;
     
     // Si le tree_view est vide ou qu'aucun groupe n'est sélectionné
     if ( (!gtk_tree_model_get_iter_first(GTK_TREE_MODEL(gtk_1990_groupes->tree_store_dispo), &iter)) ||
