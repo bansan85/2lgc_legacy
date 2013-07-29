@@ -443,7 +443,7 @@
                                         <property name="visible">True</property>
                                         <property name="resizable">True</property>
                                         <property name="alignment">0.5</property>
-                                        <property name="title" translatable="yes">x</property>
+                                        <property name="title">x</property>
                                         <child>
                                             <object class="GtkCellRendererText" id="EF_section_treeview_cell1">
                                                 <property name="xalign">1.</property>
@@ -458,7 +458,7 @@
                                         <property name="visible">True</property>
                                         <property name="resizable">True</property>
                                         <property name="alignment">0.5</property>
-                                        <property name="title" translatable="yes">y</property>
+                                        <property name="title">y</property>
                                         <child>
                                             <object class="GtkCellRendererText" id="EF_section_treeview_cell2">
                                                 <property name="xalign">1.</property>

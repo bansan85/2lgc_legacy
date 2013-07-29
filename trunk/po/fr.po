@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2013-07-29 23:26+0200\n"
-"PO-Revision-Date: 2013-07-23 10:02+0100\n"
+"POT-Creation-Date: 2013-07-30 02:30+0200\n"
+"PO-Revision-Date: 2013-07-30 02:29+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -46,11 +46,11 @@ msgstr "Valeur"
 msgid "Nom :"
 msgstr "Nom :"
 
-msgid "x"
-msgstr ""
+msgid "Nom court :"
+msgstr "Nom court :"
 
-msgid "y"
-msgstr ""
+msgid "Description :"
+msgstr "Description :"
 
 msgid "Ajouter"
 msgstr "Ajouter"
@@ -100,9 +100,8 @@ msgstr "Carrée"
 msgid "Circulaire"
 msgstr "Circulaire"
 
-#, fuzzy
 msgid "Personnalisée"
-msgstr "Personnaliser"
+msgstr "Personnalisée"
 
 msgid "J [m<sup>4</sup>]"
 msgstr "J [m<sup>4</sup>]"
@@ -172,9 +171,6 @@ msgstr "Personnaliser"
 
 msgid "Charge :"
 msgstr "Charge :"
-
-msgid "Description :"
-msgstr "Description :"
 
 msgid "Repere :"
 msgstr "Repere :"
@@ -1425,17 +1421,14 @@ msgstr "Avertissement"
 msgid "Critique"
 msgstr "Sismique"
 
-#, fuzzy
 msgid "Ajout d'une section personnalisée"
-msgstr "Ajout d'une section en T"
+msgstr "Ajout d'une section personnalisée"
 
-#, fuzzy
 msgid "Modification d'une section personnalisée"
-msgstr "Modification d'une section en T"
+msgstr "Modification d'une section personnalisée"
 
-#, fuzzy
 msgid "La section à modifier n'est pas personnalisée.\n"
-msgstr "La section à modifier n'est pas en T.\n"
+msgstr "La section à modifier n'est pas personnalisée.\n"
 
 msgid "Le type de relâchement est inconnu.\n"
 msgstr "Le type de relâchement est inconnu.\n"
@@ -2040,13 +2033,12 @@ msgstr "La section doit être de type carrée.\n"
 msgid "La section doit être de type circulaire.\n"
 msgstr "La section doit être de type circulaire.\n"
 
-#, fuzzy
 msgid "La section doit être de type personnalisée.\n"
-msgstr "La section doit être de type carrée.\n"
+msgstr "La section doit être de type personnalisée.\n"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Section '%s' introuvable.\n"
-msgstr "Action %u introuvable.\n"
+msgstr "Section '%s' introuvable.\n"
 
 msgid "Largeur"
 msgstr "Largeur"
