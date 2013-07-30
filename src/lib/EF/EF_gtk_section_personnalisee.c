@@ -714,9 +714,12 @@ gboolean EF_gtk_section_personnalisee(Projet *projet, EF_Section *section)
             while (list_parcours2 != NULL)
             {
                 GtkTreeIter iter2;
+                EF_Point    *point_bis;
                 
                 gtk_tree_store_append(GTK_TREE_STORE(ef_gtk->model), &iter2, &iter);
-                gtk_tree_store_set(GTK_TREE_STORE(ef_gtk->model), &iter2, 0, list_parcours2->data, -1);
+                point_bis = malloc(sizeof(EF_Point));
+                memcpy(point_bis, list_parcours2->data, sizeof(EF_Point));
+                gtk_tree_store_set(GTK_TREE_STORE(ef_gtk->model), &iter2, 0, point_bis, -1);
                 
                 list_parcours2 = g_list_next(list_parcours2);
             }
