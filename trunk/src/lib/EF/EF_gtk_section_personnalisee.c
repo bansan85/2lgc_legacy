@@ -460,16 +460,30 @@ void EF_gtk_tree_select_changed(GtkTreeSelection *treeselection, Projet *projet)
  * Valeur renvoyée : Aucune.
  */
 {
-    Gtk_EF_Sections_Personnalisee  *ef_gtk;
+    Gtk_EF_Sections_Personnalisee   *ef_gtk;
+    GtkTreeIter                     iter, iter2;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     ef_gtk = &projet->list_gtk.ef_sections_personnalisee;
     BUGMSG(ef_gtk->builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section Personnalisee");
     
-    if (!gtk_tree_selection_get_selected(treeselection, NULL, NULL))
+    if (!gtk_tree_selection_get_selected(treeselection, NULL, &iter))
         gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder, "EF_section_personnalisee_button_treeview_remove")), FALSE);
     else
+    {
         gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder, "EF_section_personnalisee_button_treeview_remove")), TRUE);
+        // Possède un parent donc les coordonnées peuvent être éditées.
+        if (gtk_tree_model_iter_parent(ef_gtk->model, &iter2, &iter))
+        {
+            g_object_set(gtk_builder_get_object(ef_gtk->builder, "EF_section_treeview_cell1"), "editable", TRUE, NULL);
+            g_object_set(gtk_builder_get_object(ef_gtk->builder, "EF_section_treeview_cell2"), "editable", TRUE, NULL);
+        }
+        else
+        {
+            g_object_set(gtk_builder_get_object(ef_gtk->builder, "EF_section_treeview_cell1"), "editable", FALSE, NULL);
+            g_object_set(gtk_builder_get_object(ef_gtk->builder, "EF_section_treeview_cell2"), "editable", FALSE, NULL);
+        }
+    }
     
     return;
 }
