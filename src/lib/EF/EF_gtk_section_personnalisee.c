@@ -361,11 +361,32 @@ void EF_gtk_section_personnalisee_render_0(GtkTreeViewColumn *tree_column,
  * Valeur renvoyée : Aucune.
  */
 {
-    EF_Point    *point;
+    GtkTreeIter iter2;
+    char        *tmp;
+    char        *tmp2;
+    Projet      *projet = data2;
+    int         nombre;
     
-    gtk_tree_model_get(tree_model, iter, 0, &point, -1);
-    
-    g_object_set(cell, "text", "", NULL);
+    // C'est une ligne de groupe de points
+    if (!gtk_tree_model_iter_parent(projet->list_gtk.ef_sections_personnalisee.model, &iter2, iter))
+    {
+        tmp = gtk_tree_model_get_string_from_iter(projet->list_gtk.ef_sections_personnalisee.model, iter);
+        BUGMSG(sscanf(tmp, "%d", &nombre) == 1, , gettext("Erreur impossible.\n"));
+        g_free(tmp);
+        BUGMSG(tmp = g_strdup_printf(gettext("Groupe %d"), nombre+1), , gettext("Erreur d'allocation mémoire.\n"));
+        g_object_set(cell, "text", tmp, NULL);
+        g_free(tmp);
+    }
+    else
+    {
+        tmp = gtk_tree_model_get_string_from_iter(projet->list_gtk.ef_sections_personnalisee.model, iter);
+        tmp2 = strchr(tmp, ':')+1;
+        BUGMSG(sscanf(tmp2, "%d", &nombre) == 1, , gettext("Erreur impossible.\n"));
+        BUGMSG(tmp2 = g_strdup_printf(gettext("Point %d"), nombre+1), , gettext("Erreur d'allocation mémoire.\n"));
+        g_object_set(cell, "text", tmp2, NULL);
+        g_free(tmp);
+        g_free(tmp2);
+    }
     
     return;
 }
