@@ -526,7 +526,10 @@ void EF_gtk_section_personnalisee_treeview_remove(GtkToolButton *widget, Projet 
     }
     else
         free(point);
+    
     gtk_tree_store_remove(GTK_TREE_STORE(ef_gtk->model), &iter);
+    
+    EF_gtk_section_personnalisee_check(NULL, projet);
     
     return;
 }
@@ -588,6 +591,8 @@ void EF_gtk_section_personnalisee_treeview_add(GtkToolButton *widget, Projet *pr
         }
     }
     
+    EF_gtk_section_personnalisee_check(NULL, projet);
+    
     return;
 }
 
@@ -622,6 +627,8 @@ void EF_gtk_section_personnalisee_edit_x(GtkCellRendererText *cell, gchar *path_
         gtk_widget_queue_resize(GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder, "EF_section_personnalisee_treeview")));
     }
     
+    EF_gtk_section_personnalisee_check(NULL, projet);
+    
     return;
 }
 
@@ -655,6 +662,8 @@ void EF_gtk_section_personnalisee_edit_y(GtkCellRendererText *cell, gchar *path_
         
         gtk_widget_queue_resize(GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder, "EF_section_personnalisee_treeview")));
     }
+    
+    EF_gtk_section_personnalisee_check(NULL, projet);
     
     return;
 }
