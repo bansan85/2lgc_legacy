@@ -530,6 +530,7 @@ GdkPixbuf *EF_gtk_sections_dessin(EF_Section *section, int width, int height)
             GList   *list_parcours;
             GList   *list_parcours2;
             double  xmin = NAN, xmax = NAN, ymin = NAN, ymax = NAN;
+            double  decalagex, decalagey;
             
             // On commence par calculer la largeur et la hauteur de la section.
             list_parcours = data->forme;
@@ -575,6 +576,8 @@ GdkPixbuf *EF_gtk_sections_dessin(EF_Section *section, int width, int height)
                 convert = (width-1)/(xmax-xmin);
             else
                 convert = (height-1)/(ymax-ymin);
+            decalagex = (width - (xmax-xmin)*convert)/2.;
+            decalagey = (height - (ymax-ymin)*convert)/2.;
             
             // On dessine la section.
             list_parcours = data->forme;
@@ -589,9 +592,9 @@ GdkPixbuf *EF_gtk_sections_dessin(EF_Section *section, int width, int height)
                     EF_Point    *point = list_parcours2->data;
                     
                     if (list_parcours2 == list_parcours->data)
-                        cairo_move_to(cr, 1.+((common_math_get(point->x) - xmin)*convert), 1.+((ymax - common_math_get(point->y))*convert));
+                        cairo_move_to(cr, decalagex+((common_math_get(point->x) - xmin)*convert), decalagey+((ymax - common_math_get(point->y))*convert));
                     else
-                        cairo_line_to(cr, 1.+((common_math_get(point->x) - xmin)*convert), 1.+((ymax - common_math_get(point->y))*convert));
+                        cairo_line_to(cr, decalagex+((common_math_get(point->x) - xmin)*convert), decalagey+((ymax - common_math_get(point->y))*convert));
                     
                     list_parcours2 = g_list_next(list_parcours2);
                 }
