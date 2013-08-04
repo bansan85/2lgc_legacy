@@ -195,12 +195,14 @@ gboolean EF_gtk_section_personnalisee_recupere_donnees(Projet *projet, double *j
                 GList       *liste_noeuds = NULL;
                 EF_Point    *point;
                 
-                do
+                gtk_tree_model_get(ef_gtk->model, &iter2, 0, &point, -1);
+                // Comme ça, on ajoute pas le dernier point qui est le même que le premier.
+                while (gtk_tree_model_iter_next(ef_gtk->model, &iter2))
                 {
-                    gtk_tree_model_get(ef_gtk->model, &iter2, 0, &point, -1);
-                    
                     liste_noeuds = g_list_append(liste_noeuds, point);
-                } while (gtk_tree_model_iter_next(ef_gtk->model, &iter2));
+                    
+                    gtk_tree_model_get(ef_gtk->model, &iter2, 0, &point, -1);
+                }
                 
                 if (liste_noeuds != NULL)
                     *forme = g_list_append(*forme, liste_noeuds);
@@ -553,6 +555,7 @@ void EF_gtk_section_personnalisee_treeview_add(GtkToolButton *widget, Projet *pr
     else
     {
         GtkTreeIter iter2;
+        GtkTreeIter iter3;
         EF_Point    *point;
         
         point = malloc(sizeof(EF_Point));
@@ -562,13 +565,26 @@ void EF_gtk_section_personnalisee_treeview_add(GtkToolButton *widget, Projet *pr
         // Si iter est un parent
         if (!gtk_tree_model_iter_parent(ef_gtk->model, &iter2, &iter))
         {
-            gtk_tree_store_append(GTK_TREE_STORE(ef_gtk->model), &iter2, &iter);
+            // On ajout un point à la fin de la liste afin que la section soit toujours fermée.
+            if (!gtk_tree_model_iter_has_child(ef_gtk->model, &iter))
+            {
+                gtk_tree_store_append(GTK_TREE_STORE(ef_gtk->model), &iter2, &iter);
+                gtk_tree_store_set(GTK_TREE_STORE(ef_gtk->model), &iter2, 0, point, -1);
+            }
+            gtk_tree_model_iter_nth_child(ef_gtk->model, &iter3, &iter, gtk_tree_model_iter_n_children(ef_gtk->model, &iter)-1);
+            gtk_tree_store_insert_before(GTK_TREE_STORE(ef_gtk->model), &iter2, &iter, &iter3);
             gtk_tree_store_set(GTK_TREE_STORE(ef_gtk->model), &iter2, 0, point, -1);
         }
         else
         {
-            gtk_tree_store_append(GTK_TREE_STORE(ef_gtk->model), &iter, &iter2);
-            gtk_tree_store_set(GTK_TREE_STORE(ef_gtk->model), &iter, 0, point, -1);
+            GtkTreeIter *iter_test = gtk_tree_iter_copy(&iter);
+            
+            if (gtk_tree_model_iter_next(ef_gtk->model, iter_test))
+                gtk_tree_store_insert_after(GTK_TREE_STORE(ef_gtk->model), &iter3, &iter2, &iter);
+            else
+                gtk_tree_store_insert_before(GTK_TREE_STORE(ef_gtk->model), &iter3, &iter2, &iter);
+            gtk_tree_iter_free(iter_test);
+            gtk_tree_store_set(GTK_TREE_STORE(ef_gtk->model), &iter3, 0, point, -1);
         }
     }
     
@@ -720,19 +736,32 @@ gboolean EF_gtk_section_personnalisee(Projet *projet, EF_Section *section)
         while (list_parcours != NULL)
         {
             GList       *list_parcours2 = list_parcours->data;
-            GtkTreeIter iter;
+            GtkTreeIter iter, iter_last;
+            EF_Point    *point_bis;
             
             gtk_tree_store_append(GTK_TREE_STORE(ef_gtk->model), &iter, NULL);
             gtk_tree_store_set(GTK_TREE_STORE(ef_gtk->model), &iter, 0, NULL, -1);
             
+            // On ajoute le dernier point de la forme qui est le même que le premier.
+            if (list_parcours2 != NULL)
+            {
+                gtk_tree_store_append(GTK_TREE_STORE(ef_gtk->model), &iter_last, &iter);
+                point_bis = malloc(sizeof(EF_Point));
+                memcpy(point_bis, list_parcours2->data, sizeof(EF_Point));
+                gtk_tree_store_set(GTK_TREE_STORE(ef_gtk->model), &iter_last, 0, point_bis, -1);
+            }
+            
             while (list_parcours2 != NULL)
             {
                 GtkTreeIter iter2;
-                EF_Point    *point_bis;
                 
-                gtk_tree_store_append(GTK_TREE_STORE(ef_gtk->model), &iter2, &iter);
-                point_bis = malloc(sizeof(EF_Point));
-                memcpy(point_bis, list_parcours2->data, sizeof(EF_Point));
+                gtk_tree_store_insert_before(GTK_TREE_STORE(ef_gtk->model), &iter2, &iter, &iter_last);
+                // On forme le dernier point à être le même que le premier.
+                if (list_parcours2 != list_parcours->data)
+                {
+                    point_bis = malloc(sizeof(EF_Point));
+                    memcpy(point_bis, list_parcours2->data, sizeof(EF_Point));
+                }
                 gtk_tree_store_set(GTK_TREE_STORE(ef_gtk->model), &iter2, 0, point_bis, -1);
                 
                 list_parcours2 = g_list_next(list_parcours2);

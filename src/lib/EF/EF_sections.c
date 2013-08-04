@@ -1759,6 +1759,37 @@ void EF_sections_free_un(EF_Section *section)
  */
 {
     free(section->nom);
+    switch (section->type)
+    {
+        case SECTION_RECTANGULAIRE :
+        case SECTION_T :
+        case SECTION_CARREE :
+        case SECTION_CIRCULAIRE :
+            break;
+        case SECTION_PERSONNALISEE :
+        {
+            Section_Personnalisee   *section2 = section->data;
+            
+            free(section2->description);
+            
+            while (section2->forme != NULL)
+            {
+                GList   *list_parcours;
+                
+                list_parcours = section2->forme->data;
+                g_list_free_full(list_parcours, (GDestroyNotify)free);
+                
+                section2->forme = g_list_delete_link(section2->forme, section2->forme);
+            }
+            
+            break;
+        }
+        default :
+        {
+            BUGMSG(0, , gettext("Type de section %d inconnu.\n"), section->type);
+            break;
+        }
+    }
     free(section->data);
     free(section);
     

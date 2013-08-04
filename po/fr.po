@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2013-07-30 02:30+0200\n"
-"PO-Revision-Date: 2013-07-30 02:29+0100\n"
+"POT-Creation-Date: 2013-07-30 09:37+0200\n"
+"PO-Revision-Date: 2013-08-04 18:06+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -1419,7 +1419,18 @@ msgid "Avertissement"
 msgstr "Avertissement"
 
 msgid "Critique"
-msgstr "Sismique"
+msgstr "Critique"
+
+msgid "Erreur impossible.\n"
+msgstr "Erreur impossible.\n"
+
+#, c-format
+msgid "Groupe %d"
+msgstr "Groupe %d"
+
+#, c-format
+msgid "Point %d"
+msgstr "Point %d"
 
 msgid "Ajout d'une section personnalisée"
 msgstr "Ajout d'une section personnalisée"
