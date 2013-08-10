@@ -564,6 +564,7 @@ void EF_gtk_section_personnalisee_treeview_add(GtkToolButton *widget, Projet *pr
         point = malloc(sizeof(EF_Point));
         point->x = common_math_f(0., FLOTTANT_UTILISATEUR);
         point->y = common_math_f(0., FLOTTANT_UTILISATEUR);
+        point->z = common_math_f(0., FLOTTANT_UTILISATEUR);
         
         // Si iter est un parent
         if (!gtk_tree_model_iter_parent(ef_gtk->model, &iter2, &iter))
