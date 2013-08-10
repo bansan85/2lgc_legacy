@@ -1132,16 +1132,45 @@ gboolean m3d_barre_finition(CM3dObject *objet, EF_Barre *barre)
  */
 {
     double      y, z;
+    double      x1, y1, z1;
+    double      dx, dy, dz;
     EF_Point    p_d, p_f;
     
     objet->set_color(100, 100, 100);
     objet->set_ambient_reflexion(0.8);
     objet->set_smooth(GOURAUD);
+    switch (barre->section->type)
+    {
+        case SECTION_RECTANGULAIRE :
+        case SECTION_T :
+        case SECTION_CARREE :
+        case SECTION_CIRCULAIRE :
+        {
+            x1 = 0.;
+            y1 = 0.;
+            z1 = 0.;
+            break;
+        }
+        case SECTION_PERSONNALISEE :
+        {
+            objet->get_center()->get_coordinates(&x1, &y1, &z1);
+            printf("%lf %lf %lf\n", x1, y1, z1);
+            break;
+        }
+        default :
+        {
+            BUGMSG(0, FALSE, gettext("Type de section %d inconnu.\n"), barre->section->type);
+            break;
+        }
+    }
     BUG(_1992_1_1_barres_angle_rotation(barre->noeud_debut, barre->noeud_fin, &y, &z), FALSE);
-    objet->rotations(0., -y/M_PI*180., z/M_PI*180.);
+    objet->rotations(0., y/M_PI*180., z/M_PI*180.);
     BUG(EF_noeuds_renvoie_position(barre->noeud_debut, &p_d), FALSE);
     BUG(EF_noeuds_renvoie_position(barre->noeud_fin, &p_f), FALSE);
-    objet->set_position((common_math_get(p_d.x)+common_math_get(p_f.x))/2., (common_math_get(p_d.y)+common_math_get(p_f.y))/2., (common_math_get(p_d.z)+common_math_get(p_f.z))/2.);
+    dx = (common_math_get(p_d.x)+common_math_get(p_f.x))/2.;
+    dy = (common_math_get(p_d.y)+common_math_get(p_f.y))/2.;
+    dz = (common_math_get(p_d.z)+common_math_get(p_f.z))/2.;
+    objet->set_position(-(cos(z)*cos(y)*x1-sin(z)*y1-sin(y)*cos(z)*z1) + dx, sin(z)*cos(y)*x1+cos(z)*y1-sin(z)*sin(y)*z1 + dy, sin(y)*x1+cos(y)*z1 + dz);
     
     return TRUE;
 }
