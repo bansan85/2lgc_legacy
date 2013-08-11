@@ -32,6 +32,7 @@
 #include "common_text.h"
 #include "common_selection.h"
 #include "EF_sections.h"
+#include "EF_gtk_sections.h"
 
 gboolean EF_gtk_section_personnalisee_window_key_press(GtkWidget *widget, GdkEvent *event,
   Projet *projet)
@@ -260,9 +261,12 @@ void EF_gtk_section_personnalisee_check(GtkWidget *object, Projet *projet)
  * Valeur renvoyée : Aucune.
  */
 {
-    double  j, iy, iz, vy, vyp, vz, vzp, s;
-    GList   *forme = NULL;
-    char    *nom = NULL, *description = NULL;
+    double      j, iy, iz, vy, vyp, vz, vzp, s;
+    GList       *forme = NULL;
+    char        *nom = NULL, *description = NULL;
+    EF_Section  section;
+    Section_Personnalisee   data;
+    GdkPixbuf   *pixbuf;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_sections_personnalisee.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section Personnalisee");
@@ -271,6 +275,16 @@ void EF_gtk_section_personnalisee_check(GtkWidget *object, Projet *projet)
         gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections_personnalisee.builder, "EF_section_personnalisee_button_add_edit")), FALSE);
     else
         gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections_personnalisee.builder, "EF_section_personnalisee_button_add_edit")), TRUE);
+    
+    section.type = SECTION_PERSONNALISEE;
+    section.data = &data;
+    data.forme = forme;
+    
+    BUG(pixbuf = EF_gtk_sections_dessin(&section, 32, 32), );
+    
+    gtk_image_set_from_pixbuf(GTK_IMAGE(gtk_builder_get_object(projet->list_gtk.ef_sections_personnalisee.builder, "EF_section_personnalisee_image_forme")), pixbuf);
+    
+    g_object_unref(pixbuf);
     
     free(nom);
     free(description);
@@ -296,7 +310,7 @@ void EF_gtk_section_personnalisee_ajouter_clicked(GtkButton *button, Projet *pro
     
     if (!EF_gtk_section_personnalisee_recupere_donnees(projet, &j, &iy, &iz, &vy, &vyp, &vz, &vzp, &s, &forme, &texte, &description))
     {
-        free(nom);
+        free(texte);
         free(description);
         g_list_free_full(forme, (GDestroyNotify)g_list_free);
         return;
