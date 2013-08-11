@@ -1163,7 +1163,7 @@ gboolean m3d_barre_finition(CM3dObject *objet, EF_Barre *barre)
         }
     }
     BUG(_1992_1_1_barres_angle_rotation(barre->noeud_debut, barre->noeud_fin, &y, &z), FALSE);
-    objet->rotations(0., y/M_PI*180., z/M_PI*180.);
+    objet->rotations(0., -y/M_PI*180., z/M_PI*180.);
     BUG(EF_noeuds_renvoie_position(barre->noeud_debut, &p_d), FALSE);
     BUG(EF_noeuds_renvoie_position(barre->noeud_fin, &p_f), FALSE);
     dx = (common_math_get(p_d.x)+common_math_get(p_f.x))/2.;
