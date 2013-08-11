@@ -151,6 +151,7 @@ cd gtk+-3.8.2 && \
 sed -i 's/modules demos tests perf examples//g' Makefile.in Makefile.am && \
 sed -i 's/\. tests/\./g' gtk/Makefile.in gtk/Makefile.am gdk/Makefile.in gdk/Makefile.am && \
 sed -i 's/ tests$//g' gtk/Makefile.in gtk/Makefile.am gdk/Makefile.in gdk/Makefile.am && \
+sed -i 's~_gdk_display_device_grab_update (display, device, NULL, 0)~_gdk_display_device_grab_update (display, device, device, 0)~g' gdk/win32/gdkdevice-virtual.c && \
 cd gtk && \
 patch -p1 < gtk+-3.8.2.patch && \
 cd .. && \
