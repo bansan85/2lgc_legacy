@@ -151,6 +151,9 @@ cd gtk+-3.8.2 && \
 sed -i 's/modules demos tests perf examples//g' Makefile.in Makefile.am && \
 sed -i 's/\. tests/\./g' gtk/Makefile.in gtk/Makefile.am gdk/Makefile.in gdk/Makefile.am && \
 sed -i 's/ tests$//g' gtk/Makefile.in gtk/Makefile.am gdk/Makefile.in gdk/Makefile.am && \
+cd gtk && \
+patch -p1 < gtk+-3.8.2.patch && \
+cd .. && \
 PKG_CONFIG_FOR_BUILD="/usr/bin/pkg-config" CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe" ./configure --disable-modules --disable-packagekit --disable-cups --disable-papi --disable-introspection --disable-static --enable-shared --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 --enable-gtk2-dependency && \
 make -j9 && sudo make install && cd .. && \
 (test -f librsvg-2.37.0.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/librsvg/2.37/librsvg-2.37.0.tar.xz) && \

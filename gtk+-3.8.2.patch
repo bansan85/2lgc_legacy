@@ -1,0 +1,43 @@
+--- gtk/gtkentrycompletion.c.old	2013-03-17 16:30:07.000000000 +0100
++++ gtk/gtkentrycompletion.c	2013-08-12 00:07:05.780596693 +0200
+@@ -82,6 +82,7 @@
+ #include "gtkentry.h"
+ #include "gtkmain.h"
+ #include "gtkmarshalers.h"
++#include "gtkcssprovider.h"
+ 
+ #include "gtkprivate.h"
+ 
+@@ -516,6 +517,7 @@ gtk_entry_completion_constructor (GType
+   GtkCellRenderer           *cell;
+   GtkTreeSelection          *sel;
+   GtkWidget                 *popup_frame;
++  GtkCssProvider            *cssprovider = gtk_css_provider_new ();
+ 
+   object = G_OBJECT_CLASS (gtk_entry_completion_parent_class)->constructor
+     (type, n_construct_properties, construct_properties);
+@@ -531,6 +533,16 @@ gtk_entry_completion_constructor (GType
+ 
+   /* completions */
+   priv->tree_view = gtk_tree_view_new ();
++  gtk_css_provider_load_from_data (cssprovider,
++                                   "GtkTreeView:hover {\n"
++                                   "    background-color: -gtk-win32-color(button, 13);\n"
++                                   "    color: -gtk-win32-color(button, 14);\n"
++                                   "}\n",
++                                   -1, NULL);
++  gtk_style_context_add_provider (gtk_widget_get_style_context (priv->tree_view),
++                                  GTK_STYLE_PROVIDER(cssprovider),
++                                  GTK_STYLE_PROVIDER_PRIORITY_USER);
++  g_object_unref (cssprovider);
+   g_signal_connect (priv->tree_view, "button-press-event",
+                     G_CALLBACK (gtk_entry_completion_list_button_press),
+                     completion);
+@@ -542,7 +554,6 @@ gtk_entry_completion_constructor (GType
+                     completion);
+ 
+   gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (priv->tree_view), FALSE);
+-  gtk_tree_view_set_hover_selection (GTK_TREE_VIEW (priv->tree_view), TRUE);
+ 
+   sel = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->tree_view));
+   gtk_tree_selection_set_mode (sel, GTK_SELECTION_SINGLE);
