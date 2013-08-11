@@ -1357,15 +1357,62 @@ gboolean m3d_barre(void *donnees_m3d, EF_Barre *barre)
         {
             Section_Personnalisee *section = (Section_Personnalisee*)barre->section->data;
             GList   *list_parcours;
+            double  angle;
             
             tout = new CM3dObject("");
             
             list_parcours = section->forme;
             while (list_parcours != NULL)
             {
-                GList       *list_parcours2 = (GList*)list_parcours->data;
+                GList       *list_parcours2;
                 EF_Point    *point1 = NULL, *point2 = NULL;
+                double      somme_angle = 0.;
+                double      angle1 = NAN, angle2 = NAN;
                 
+                // On commence par parcourir la liste des points pour savoir si le dessin est
+                // réalisé dans le sens horaire ou anti-horaire. Ce point est important car
+                // les plans ne sont dessinés que s'ils sont vus de face.
+                list_parcours2 = (GList*)list_parcours->data;
+                while (list_parcours2 != NULL)
+                {
+                    if (point2 == NULL)
+                        point2 = (EF_Point*)list_parcours2->data;
+                    else
+                    {
+                        point1 = point2;
+                        if (list_parcours2 != GINT_TO_POINTER(1))
+                            point2 = (EF_Point*)list_parcours2->data;
+                        else
+                            point2 = (EF_Point*)((GList*)list_parcours->data)->data;
+                        
+                        angle = atan2(common_math_get(point2->y)-common_math_get(point1->y), common_math_get(point2->x)-common_math_get(point1->x))/M_PI*180.;
+                        angle1 = angle2;
+                        angle2 = angle;
+                        if (!isnan(angle1))
+                        {
+                            angle = angle2 - angle1;
+                            if (angle > 180.)
+                                angle = angle - 180.;
+                            if (angle < -180.)
+                                angle = angle + 180.;
+                            
+                            somme_angle = somme_angle + angle;
+                        }
+                    }
+                    
+                    if (list_parcours2 != GINT_TO_POINTER(1))
+                    {
+                        list_parcours2 = g_list_next(list_parcours2);
+                        // On force à faire un dernier passage après la fin de la liste dans le
+                        // but de fermer la forme.
+                        if (list_parcours2 == NULL)
+                            list_parcours2 = static_cast<GList*>GINT_TO_POINTER(1);
+                    }
+                    else
+                        list_parcours2 = NULL;
+                }
+                
+                list_parcours2 = (GList*)list_parcours->data;
                 while (list_parcours2 != NULL)
                 {
                     CM3dObject *object_tmp = NULL;
@@ -1374,7 +1421,6 @@ gboolean m3d_barre(void *donnees_m3d, EF_Barre *barre)
                         point2 = (EF_Point*)list_parcours2->data;
                     else
                     {
-                        double  angle;
                         GList   *list_poly;
                         
                         point1 = point2;
@@ -1384,6 +1430,8 @@ gboolean m3d_barre(void *donnees_m3d, EF_Barre *barre)
                             point2 = (EF_Point*)((GList*)list_parcours->data)->data;
                         
                         angle = atan2(common_math_get(point2->y)-common_math_get(point1->y), common_math_get(point2->x)-common_math_get(point1->x))/M_PI*180.-180.;
+                        if (somme_angle < 0)
+                            angle = angle + 180.;
                         
                         object_tmp = M3d_plan_new("", longueur, EF_points_distance(point1, point2), 1);
                         object_tmp->rotations(angle, 180., 0.);
