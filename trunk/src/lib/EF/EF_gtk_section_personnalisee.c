@@ -475,7 +475,7 @@ void EF_gtk_section_personnalisee_render_2(GtkTreeViewColumn *tree_column,
 }
 
 
-void EF_gtk_tree_select_changed(GtkTreeSelection *treeselection, Projet *projet)
+void EF_gtk_section_personnalisee_select_change(GtkTreeSelection *treeselection, Projet *projet)
 /* Description : Permet de activer/désactiver les boutons + et - correspondant au treeview en
  *               fonction de la selection.
  * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
@@ -553,6 +553,35 @@ void EF_gtk_section_personnalisee_treeview_remove(GtkToolButton *widget, Projet 
     EF_gtk_section_personnalisee_check(NULL, projet);
     
     return;
+}
+
+
+gboolean EF_gtk_section_personnalisee_treeview_key_press(GtkTreeView *treeview, GdkEvent *event,
+  Projet *projet)
+/* Description : Supprime un point ou un groupe de points si la touche SUPPR est appuyée.
+ * Paramètres : GtkTreeView *treeview : composant à l'origine de l'évènement,
+ *            : GdkEvent *event : Caractéristique de l'évènement,
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : TRUE si la touche SUPPR est pressée, FALSE sinon.
+ *   Echec : projet == NULL,
+ *           interface graphique non initialisée.
+ *  
+ */
+{
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet->list_gtk.ef_sections_personnalisee.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section Personnalisee");
+    
+    if (event->key.keyval == GDK_KEY_Delete)
+    {
+        if (!gtk_tree_selection_get_selected(gtk_tree_view_get_selection(treeview), NULL, NULL))
+            return FALSE;
+        
+        EF_gtk_section_personnalisee_treeview_remove(NULL, projet);
+        
+        return TRUE;
+    }
+    else
+        return FALSE;
 }
 
 

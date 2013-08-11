@@ -468,9 +468,10 @@
                                                 <property name="visible">True</property>
                                                 <property name="model">EF_section_personnalisee_treestore</property>
                                                 <signal name="button-press-event" handler="common_gtk_treeview_button_press_unselect" />
+                                                <signal name="key-press-event" handler="EF_gtk_section_personnalisee_treeview_key_press"/>
                                                 <child internal-child="selection">
                                                     <object class="GtkTreeSelection" id="EF_section_treeview_select">
-                                                        <signal name="changed" handler="EF_gtk_tree_select_changed"/>
+                                                        <signal name="changed" handler="EF_gtk_section_personnalisee_select_change"/>
                                                     </object>
                                                 </child>
                                                 <child>
