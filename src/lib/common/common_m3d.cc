@@ -1154,7 +1154,6 @@ gboolean m3d_barre_finition(CM3dObject *objet, EF_Barre *barre)
         case SECTION_PERSONNALISEE :
         {
             objet->get_center()->get_coordinates(&x1, &y1, &z1);
-            printf("%lf %lf %lf\n", x1, y1, z1);
             break;
         }
         default :

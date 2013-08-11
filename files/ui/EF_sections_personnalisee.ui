@@ -519,43 +519,44 @@
                                         <property name="top-attach">0</property>
                                     </packing>
                                 </child>
+                                <child>
+                                    <object class="GtkToolbar" id="EF_section_personnalisee_buttons_treeview">
+                                        <property name="visible">True</property>
+                                        <property name="orientation">horizontal</property>
+                                        <property name="toolbar-style">icons</property>
+                                        <property name="border-width">0</property>
+                                        <child>
+                                            <object class="GtkToolButton" id="EF_section_personnalisee_button_treeview_add">
+                                                <property name="visible">True</property>
+                                                <property name="label" translatable="yes">Ajouter</property>
+                                                <property name="stock_id">add</property>
+                                                <property name="icon-widget">EF_section_personnalisee_icon_add</property>
+                                                <signal name="clicked" handler="EF_gtk_section_personnalisee_treeview_add"/>
+                                            </object>
+                                        </child>
+                                        <child>
+                                            <object class="GtkToolButton" id="EF_section_personnalisee_button_treeview_remove">
+                                                <property name="visible">True</property>
+                                                <property name="sensitive">False</property>
+                                                <property name="label" translatable="yes">Supprimer</property>
+                                                <property name="stock_id">remove</property>
+                                                <property name="icon-widget">EF_section_personnalisee_icon_remove</property>
+                                                <signal name="clicked" handler="EF_gtk_section_personnalisee_treeview_remove"/>
+                                            </object>
+                                        </child>
+                                    </object>
+                                    <packing>
+                                        <property name="left-attach">0</property>
+                                        <property name="top-attach">1</property>
+                                        <property name="width">2</property>
+                                    </packing>
+                                </child>
                             </object>
                         </child>
                     </object>
                     <packing>
                         <property name="left-attach">0</property>
                         <property name="top-attach">0</property>
-                    </packing>
-                </child>
-                <child>
-                    <object class="GtkToolbar" id="EF_section_personnalisee_buttons_treeview">
-                        <property name="visible">True</property>
-                        <property name="orientation">horizontal</property>
-                        <property name="toolbar-style">icons</property>
-                        <property name="border-width">0</property>
-                        <child>
-                            <object class="GtkToolButton" id="EF_section_personnalisee_button_treeview_add">
-                                <property name="visible">True</property>
-                                <property name="label" translatable="yes">Ajouter</property>
-                                <property name="stock_id">add</property>
-                                <property name="icon-widget">EF_section_personnalisee_icon_add</property>
-                                <signal name="clicked" handler="EF_gtk_section_personnalisee_treeview_add"/>
-                            </object>
-                        </child>
-                        <child>
-                            <object class="GtkToolButton" id="EF_section_personnalisee_button_treeview_remove">
-                                <property name="visible">True</property>
-                                <property name="sensitive">False</property>
-                                <property name="label" translatable="yes">Supprimer</property>
-                                <property name="stock_id">remove</property>
-                                <property name="icon-widget">EF_section_personnalisee_icon_remove</property>
-                                <signal name="clicked" handler="EF_gtk_section_personnalisee_treeview_remove"/>
-                            </object>
-                        </child>
-                    </object>
-                    <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">1</property>
                     </packing>
                 </child>
                 <child>
