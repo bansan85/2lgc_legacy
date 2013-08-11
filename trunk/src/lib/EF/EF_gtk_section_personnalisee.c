@@ -244,7 +244,10 @@ gboolean EF_gtk_section_personnalisee_recupere_donnees(Projet *projet, double *j
         gtk_text_buffer_apply_tag_by_name(textbuffer, "OK", &start, &end);
     
     if (ok == FALSE)
+    {
         free(*nom);
+        *nom = NULL;
+    }
     
     return ok;
 }
@@ -258,7 +261,7 @@ void EF_gtk_section_personnalisee_check(GtkWidget *object, Projet *projet)
  */
 {
     double  j, iy, iz, vy, vyp, vz, vzp, s;
-    GList   *forme;
+    GList   *forme = NULL;
     char    *nom = NULL, *description = NULL;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
@@ -267,12 +270,11 @@ void EF_gtk_section_personnalisee_check(GtkWidget *object, Projet *projet)
     if (!EF_gtk_section_personnalisee_recupere_donnees(projet, &j, &iy, &iz, &vy, &vyp, &vz, &vzp, &s, &forme, &nom, &description))
         gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections_personnalisee.builder, "EF_section_personnalisee_button_add_edit")), FALSE);
     else
-    {
         gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections_personnalisee.builder, "EF_section_personnalisee_button_add_edit")), TRUE);
-        free(nom);
-        free(description);
-        g_list_free_full(forme, (GDestroyNotify)g_list_free);
-    }
+    
+    free(nom);
+    free(description);
+    g_list_free_full(forme, (GDestroyNotify)g_list_free);
     
     return;
 }
@@ -286,14 +288,19 @@ void EF_gtk_section_personnalisee_ajouter_clicked(GtkButton *button, Projet *pro
  */
 {
     double  j, iy, iz, vy, vyp, vz, vzp, s;
-    GList   *forme;
+    GList   *forme = NULL;
     gchar   *texte = NULL, *description = NULL;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_sections_personnalisee.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section Personnalisee");
     
     if (!EF_gtk_section_personnalisee_recupere_donnees(projet, &j, &iy, &iz, &vy, &vyp, &vz, &vzp, &s, &forme, &texte, &description))
+    {
+        free(nom);
+        free(description);
+        g_list_free_full(forme, (GDestroyNotify)g_list_free);
         return;
+    }
     
     BUG(EF_sections_personnalisee_ajout(projet, texte, description, common_math_f(j, FLOTTANT_UTILISATEUR), common_math_f(iy, FLOTTANT_UTILISATEUR), common_math_f(iz, FLOTTANT_UTILISATEUR), common_math_f(vy, FLOTTANT_UTILISATEUR), common_math_f(vyp, FLOTTANT_UTILISATEUR), common_math_f(vz, FLOTTANT_UTILISATEUR), common_math_f(vzp, FLOTTANT_UTILISATEUR), common_math_f(s, FLOTTANT_UTILISATEUR), forme), );
     
