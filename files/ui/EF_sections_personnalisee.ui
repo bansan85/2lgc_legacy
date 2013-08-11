@@ -449,6 +449,15 @@
                                     </packing>
                                 </child>
                                 <child>
+                                    <object class="GtkImage" id="EF_section_personnalisee_image_forme">
+                                        <property name="visible">True</property>
+                                    </object>
+                                    <packing>
+                                        <property name="left-attach">0</property>
+                                        <property name="top-attach">1</property>
+                                    </packing>
+                                </child>
+                                <child>
                                     <object class="GtkScrolledWindow" id="EF_section_personnalisee_scrolledwindow_treeview">
                                         <property name="visible">True</property>
                                         <property name="expand">True</property>
@@ -517,6 +526,7 @@
                                     <packing>
                                         <property name="left-attach">1</property>
                                         <property name="top-attach">0</property>
+                                        <property name="height">2</property>
                                     </packing>
                                 </child>
                                 <child>
@@ -547,7 +557,7 @@
                                     </object>
                                     <packing>
                                         <property name="left-attach">0</property>
-                                        <property name="top-attach">1</property>
+                                        <property name="top-attach">2</property>
                                         <property name="width">2</property>
                                     </packing>
                                 </child>
