@@ -569,8 +569,6 @@ GdkPixbuf *EF_gtk_sections_dessin(EF_Section *section, int width, int height)
             
             aa = (xmax-xmin)/(ymax-ymin);
             
-            cairo_set_source_rgba(cr, 0.8, 0.8, 0.8, 1.);
-            
             // Le schéma prend toute la largeur
             if (aa > a)
                 convert = (width-1)/(xmax-xmin);
@@ -585,6 +583,7 @@ GdkPixbuf *EF_gtk_sections_dessin(EF_Section *section, int width, int height)
             {
                 list_parcours2 = list_parcours->data;
                 
+                cairo_set_source_rgba(cr, 0.8, 0.8, 0.8, 1.);
                 cairo_new_path(cr);
                 
                 while (list_parcours2 != NULL)
