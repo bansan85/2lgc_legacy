@@ -147,7 +147,7 @@ int main(int argc, char *argv[])
     BUG(EF_sections_rectangulaire_ajout(projet, "Rect_0.3*0.1ht", common_math_f(0.3, FLOTTANT_UTILISATEUR), common_math_f(0.1, FLOTTANT_UTILISATEUR)), -1);
     BUG(EF_sections_T_ajout(projet, "T_0.20*0.60*0.30*0.20", common_math_f(0.20, FLOTTANT_UTILISATEUR), common_math_f(0.60, FLOTTANT_UTILISATEUR), common_math_f(0.30, FLOTTANT_UTILISATEUR), common_math_f(0.20, FLOTTANT_UTILISATEUR)), -1);
     BUG(EF_sections_carree_ajout(projet, "Carre_0.20", common_math_f(0.2, FLOTTANT_UTILISATEUR)), -1);
-    BUG(EF_sections_circulaire_ajout(projet, "Circulaire_0.4", common_math_f(0.44123, FLOTTANT_UTILISATEUR)), -1);
+    BUG(EF_sections_circulaire_ajout(projet, "Circulaire_0.4", common_math_f(0.4, FLOTTANT_UTILISATEUR)), -1);
     
     // Création du matériau béton
     BUG(_1992_1_1_materiaux_ajout(projet, "B20", common_math_f(20., FLOTTANT_UTILISATEUR)), -1);
