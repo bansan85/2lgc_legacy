@@ -544,11 +544,64 @@ void EF_gtk_section_personnalisee_treeview_remove(GtkToolButton *widget, Projet 
                 free(point);
             } while (gtk_tree_model_iter_next(ef_gtk->model, &iter2));
         }
+        gtk_tree_store_remove(GTK_TREE_STORE(ef_gtk->model), &iter);
     }
     else
-        free(point);
-    
-    gtk_tree_store_remove(GTK_TREE_STORE(ef_gtk->model), &iter);
+    {
+        GtkTreeIter iter2 = iter;
+        GtkTreeIter iter3 = iter;
+        
+        // Si ce n'est pas le premiere ou le dernier point
+        if ((gtk_tree_model_iter_next(ef_gtk->model, &iter2)) && (gtk_tree_model_iter_previous(ef_gtk->model, &iter3)))
+        {
+            free(point);
+            gtk_tree_store_remove(GTK_TREE_STORE(ef_gtk->model), &iter);
+        }
+        else
+        {
+            GtkTreeIter parent;
+            gint        n_child;
+            
+            // On récupère le premier et dernier point qui est le même
+            gtk_tree_model_iter_parent(ef_gtk->model, &parent, &iter);
+            gtk_tree_model_iter_children(ef_gtk->model, &iter2, &parent);
+            n_child = gtk_tree_model_iter_n_children(ef_gtk->model, &parent);
+            gtk_tree_model_iter_nth_child(ef_gtk->model, &iter3, &parent, n_child-1);
+            
+            // Un seul noeud, on supprime les deux.
+            if (n_child == 2)
+            {
+                gtk_tree_store_remove(GTK_TREE_STORE(ef_gtk->model), &iter3);
+                gtk_tree_store_remove(GTK_TREE_STORE(ef_gtk->model), &iter2);
+                free(point);
+            }
+            else
+            {
+                EF_Point    *point2;
+                if (gtk_tree_model_iter_next(ef_gtk->model, &iter))
+                {
+                    // Alors, c'est le deuxième point qui devient le point de base
+                    // et on supprime la première ligne.
+                    gtk_tree_model_get(ef_gtk->model, &iter, 0, &point2, -1);
+                    gtk_tree_store_set(GTK_TREE_STORE(ef_gtk->model), &iter3, 0, point2, -1);
+                    gtk_tree_store_remove(GTK_TREE_STORE(ef_gtk->model), &iter2);
+                    free(point);
+                }
+                else
+                {
+                    // Alors, c'est l'avant dernier point qui devient le point de base
+                    // et on supprime la dernière ligne.
+                    iter = iter3;
+                    gtk_tree_model_iter_previous(ef_gtk->model, &iter);
+                    gtk_tree_model_get(ef_gtk->model, &iter, 0, &point2, -1);
+                    gtk_tree_store_set(GTK_TREE_STORE(ef_gtk->model), &iter2, 0, point2, -1);
+                    gtk_tree_store_remove(GTK_TREE_STORE(ef_gtk->model), &iter3);
+                    free(point);
+                }
+            }
+        }
+        
+    }
     
     EF_gtk_section_personnalisee_check(NULL, projet);
     
@@ -631,13 +684,12 @@ void EF_gtk_section_personnalisee_treeview_add(GtkToolButton *widget, Projet *pr
         }
         else
         {
-            GtkTreeIter *iter_test = gtk_tree_iter_copy(&iter);
+            GtkTreeIter iter_test = iter;
             
-            if (gtk_tree_model_iter_next(ef_gtk->model, iter_test))
+            if (gtk_tree_model_iter_next(ef_gtk->model, &iter_test))
                 gtk_tree_store_insert_after(GTK_TREE_STORE(ef_gtk->model), &iter3, &iter2, &iter);
             else
                 gtk_tree_store_insert_before(GTK_TREE_STORE(ef_gtk->model), &iter3, &iter2, &iter);
-            gtk_tree_iter_free(iter_test);
             gtk_tree_store_set(GTK_TREE_STORE(ef_gtk->model), &iter3, 0, point, -1);
         }
     }
