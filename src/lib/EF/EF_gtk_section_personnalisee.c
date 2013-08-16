@@ -724,11 +724,8 @@ void EF_gtk_section_personnalisee_edit_x(GtkCellRendererText *cell, gchar *path_
     
     conversion = common_text_str_to_double(new_text, -INFINITY, FALSE, INFINITY, FALSE);
     if (!isnan(conversion))
-    {
         point->x = common_math_f(conversion, FLOTTANT_UTILISATEUR);
-        
-        gtk_widget_queue_resize(GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder, "EF_section_personnalisee_treeview")));
-    }
+    gtk_tree_store_set(GTK_TREE_STORE(ef_gtk->model), &iter, 0, point, -1);
     
     EF_gtk_section_personnalisee_check(NULL, projet);
     
@@ -760,11 +757,7 @@ void EF_gtk_section_personnalisee_edit_y(GtkCellRendererText *cell, gchar *path_
     
     conversion = common_text_str_to_double(new_text, -INFINITY, FALSE, INFINITY, FALSE);
     if (!isnan(conversion))
-    {
         point->y = common_math_f(conversion, FLOTTANT_UTILISATEUR);
-        
-        gtk_widget_queue_resize(GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder, "EF_section_personnalisee_treeview")));
-    }
     
     EF_gtk_section_personnalisee_check(NULL, projet);
     
