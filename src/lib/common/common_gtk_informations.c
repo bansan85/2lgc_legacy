@@ -438,7 +438,7 @@ void common_gtk_informations_modifier_clicked(GtkButton *button, Projet *projet)
         txt1 = message;
         BUGMSG(message = g_strconcat(txt1, gettext(" des paramètres de calculs différents que ceux imposés par les normes ?"), NULL), , gettext("Erreur d'allocation mémoire.\n"));
         free(txt1);
-        dialog = gtk_message_dialog_new(GTK_WINDOW(projet->list_gtk.common_informations.window), GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_YES_NO, message);
+        dialog = gtk_message_dialog_new(GTK_WINDOW(projet->list_gtk.common_informations.window), GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_YES_NO, "%s", message);
         if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_YES)
         {
             projet->parametres.neige = neige;
