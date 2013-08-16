@@ -7,9 +7,13 @@ SUBDIRS =	po \
 
 #-Wconversion
 if PLATFORM_WIN32
-CUSTOM_CFLAGS 	= @CFLAGS@ -march=i686
+CUSTOM_CFLAGS 	= @CFLAGS@ -march=i686 -mms-bitfields
+else
+if PLATFORM_WIN64
+CUSTOM_CFLAGS 	= @CFLAGS@ -march=x86-64 -mms-bitfields
 else
 CUSTOM_CFLAGS 	= @CFLAGS@ -march=native
+endif
 endif
 
 if ENABLE_DEBUG
@@ -24,7 +28,11 @@ CUSTOM_CFLAGS 	+= -ftracer -fsched2-use-traces -Wl,-O0 -fno-inline -Wall -Wextra
 if PLATFORM_WIN32
 CUSTOM_CFLAGS	+= -DLOCALEDIR=\""./locale"\" -DDATADIR=\""./files"\"
 else
+if PLATFORM_WIN32
+CUSTOM_CFLAGS	+= -DLOCALEDIR=\""./locale"\" -DDATADIR=\""./files"\"
+else
 CUSTOM_CFLAGS 	+= -DLOCALEDIR=\""@localedir@"\" -DDATADIR=\""@datadir@/2lgc"\"
+endif
 endif
 
 AM_CFLAGS 		= $(CUSTOM_CFLAGS) -Wdeclaration-after-statement -std=gnu11
@@ -42,9 +50,9 @@ package_win :
 if PLATFORM_WIN32
 
 if ENABLE_DEBUG
-PREFIX = ../comp/libs32debug
+PREFIX = ../comp32debug/libs
 else
-PREFIX = ../comp/libs32
+PREFIX = ../comp32/libs
 endif
 
 #Après PLATFORM_WIN32 on teste PLATFORM_WIN64
@@ -52,9 +60,9 @@ else
 
 if PLATFORM_WIN64
 if ENABLE_DEBUG
-PREFIX = ../comp/libs64debug
+PREFIX = ../comp64/libs
 else
-PREFIX = ../comp/libs64
+PREFIX = ../comp64/libs
 endif
 
 #Après PLATFORM_WIN64 on échoue
