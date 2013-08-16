@@ -60,7 +60,7 @@ else
 
 if PLATFORM_WIN64
 if ENABLE_DEBUG
-PREFIX = ../comp64/libs
+PREFIX = ../comp64debug/libs
 else
 PREFIX = ../comp64/libs
 endif

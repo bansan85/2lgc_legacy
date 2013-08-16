@@ -8,6 +8,7 @@ sed -i 's/_win32/_win64/g' INSTALL.mingw64
 sed -i 's#binaries/win32/dependencies#binaries/win64/dependencies#g' INSTALL.mingw64
 sed -i 's/OPT="-O0/OPT="-march=x86-64 -O0/g' INSTALL.mingw64
 sed -i 's/comp32/comp64/g' INSTALL.mingw64
+sed -i 's/intl.dll/libintl-8.dll/g' INSTALL.mingw64
 
 Si la compilation est en version débug, il faut -march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields
 Si en version de production : -march=i686 -O2 -fomit-frame-pointer -pipe
