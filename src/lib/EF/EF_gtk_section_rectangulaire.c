@@ -273,7 +273,7 @@ gboolean EF_gtk_section_rectangulaire(Projet *projet, EF_Section *section)
         gtk_window_set_title(GTK_WINDOW(ef_gtk->window), gettext("Ajout d'une section rectangulaire"));
         ef_gtk->section = NULL;
         
-        gtk_button_set_label(GTK_BUTTON(gtk_builder_get_object(ef_gtk->builder, "EF_section_rectangulaire_button_add_edit")), "gtk-add");
+        gtk_button_set_label(GTK_BUTTON(gtk_builder_get_object(ef_gtk->builder, "EF_section_rectangulaire_button_add_edit")), gettext("_Ajouter"));
         g_signal_connect(gtk_builder_get_object(ef_gtk->builder, "EF_section_rectangulaire_button_add_edit"), "clicked", G_CALLBACK(EF_gtk_section_rectangulaire_ajouter_clicked), projet);
         EF_gtk_section_rectangulaire_check(NULL, projet);
     }
@@ -293,7 +293,7 @@ gboolean EF_gtk_section_rectangulaire(Projet *projet, EF_Section *section)
         common_math_double_to_char2(data->hauteur_retombee, tmp, DECIMAL_DISTANCE);
         gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder, "EF_section_rectangulaire_buffer_hauteur")), tmp, -1);
         
-        gtk_button_set_label(GTK_BUTTON(gtk_builder_get_object(ef_gtk->builder, "EF_section_rectangulaire_button_add_edit")), "gtk-edit");
+        gtk_button_set_label(GTK_BUTTON(gtk_builder_get_object(ef_gtk->builder, "EF_section_rectangulaire_button_add_edit")), gettext("_Modifier"));
         g_signal_connect(gtk_builder_get_object(ef_gtk->builder, "EF_section_rectangulaire_button_add_edit"), "clicked", G_CALLBACK(EF_gtk_section_rectangulaire_modifier_clicked), projet);
     }
     

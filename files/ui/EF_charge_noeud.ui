@@ -70,8 +70,10 @@
                 <property name="row-spacing">12</property>
                 <child>
                     <object class="GtkLabel" id="EF_charge_noeud_label_charge">
-                        <property name="label" translatable="yes">Charge :</property>
+                        <property name="label" translatable="yes">_Charge :</property>
                         <property name="visible">True</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic-widget">EF_charge_noeud_combo_box_charge</property>
                     </object>
                     <packing>
                         <property name="left-attach">0</property>
@@ -91,8 +93,10 @@
                 </child>
                 <child>
                     <object class="GtkLabel" id="EF_charge_noeud_label_description">
-                        <property name="label" translatable="yes">Description :</property>
+                        <property name="label" translatable="yes">_Description :</property>
                         <property name="visible">True</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic-widget">EF_charge_noeud_textview_description</property>
                     </object>
                     <packing>
                         <property name="left-attach">0</property>
@@ -103,8 +107,8 @@
                     <object class="GtkScrolledWindow" id="EF_charge_noeud_scrolledwindow_description">
                         <property name="visible">True</property>
                         <property name="expand">True</property>
-                        <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
-                        <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                        <property name="hscrollbar-policy">automatic</property>
+                        <property name="vscrollbar-policy">automatic</property>
                         <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
                         <child>
                             <object class="GtkTextView" id="EF_charge_noeud_textview_description">
@@ -123,8 +127,10 @@
                 </child>
                 <child>
                     <object class="GtkLabel" id="EF_charge_noeud_label_fx">
-                        <property name="label">Fx [N] :</property>
+                        <property name="label">F_x [N] :</property>
                         <property name="visible">True</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic-widget">EF_charge_noeud_textview_fx</property>
                     </object>
                     <packing>
                         <property name="left-attach">0</property>
@@ -135,8 +141,8 @@
                     <object class="GtkScrolledWindow" id="EF_charge_noeud_scrolledwindow_fx">
                         <property name="visible">True</property>
                         <property name="expand">True</property>
-                        <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
-                        <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                        <property name="hscrollbar-policy">automatic</property>
+                        <property name="vscrollbar-policy">automatic</property>
                         <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
                         <child>
                             <object class="GtkTextView" id="EF_charge_noeud_textview_fx">
@@ -154,8 +160,10 @@
                 </child>
                 <child>
                     <object class="GtkLabel" id="EF_charge_noeud_label_fy">
-                        <property name="label">Fy [N] :</property>
+                        <property name="label">F_y [N] :</property>
                         <property name="visible">True</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic-widget">EF_charge_noeud_textview_fy</property>
                     </object>
                     <packing>
                         <property name="left-attach">0</property>
@@ -166,8 +174,8 @@
                     <object class="GtkScrolledWindow" id="EF_charge_noeud_scrolledwindow_fy">
                         <property name="visible">True</property>
                         <property name="expand">True</property>
-                        <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
-                        <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                        <property name="hscrollbar-policy">automatic</property>
+                        <property name="vscrollbar-policy">automatic</property>
                         <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
                         <child>
                             <object class="GtkTextView" id="EF_charge_noeud_textview_fy">
@@ -185,8 +193,10 @@
                 </child>
                 <child>
                     <object class="GtkLabel" id="EF_charge_noeud_label_fz">
-                        <property name="label">Fz [N] :</property>
+                        <property name="label">F_z [N] :</property>
                         <property name="visible">True</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic-widget">EF_charge_noeud_textview_fz</property>
                     </object>
                     <packing>
                         <property name="left-attach">0</property>
@@ -197,8 +207,8 @@
                     <object class="GtkScrolledWindow" id="EF_charge_noeud_scrolledwindow_fz">
                         <property name="visible">True</property>
                         <property name="expand">True</property>
-                        <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
-                        <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                        <property name="hscrollbar-policy">automatic</property>
+                        <property name="vscrollbar-policy">automatic</property>
                         <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
                         <child>
                             <object class="GtkTextView" id="EF_charge_noeud_textview_fz">
@@ -216,8 +226,10 @@
                 </child>
                 <child>
                     <object class="GtkLabel" id="EF_charge_noeud_label_mx">
-                        <property name="label">Mx [N.m] :</property>
+                        <property name="label">M_x [N.m] :</property>
                         <property name="visible">True</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic-widget">EF_charge_noeud_textview_mx</property>
                     </object>
                     <packing>
                         <property name="left-attach">2</property>
@@ -228,8 +240,8 @@
                     <object class="GtkScrolledWindow" id="EF_charge_noeud_scrolledwindow_mx">
                         <property name="visible">True</property>
                         <property name="expand">True</property>
-                        <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
-                        <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                        <property name="hscrollbar-policy">automatic</property>
+                        <property name="vscrollbar-policy">automatic</property>
                         <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
                         <child>
                             <object class="GtkTextView" id="EF_charge_noeud_textview_mx">
@@ -247,8 +259,10 @@
                 </child>
                 <child>
                     <object class="GtkLabel" id="EF_charge_noeud_label_my">
-                        <property name="label">My [N.m] :</property>
+                        <property name="label">M_y [N.m] :</property>
                         <property name="visible">True</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic-widget">EF_charge_noeud_textview_my</property>
                     </object>
                     <packing>
                         <property name="left-attach">2</property>
@@ -259,8 +273,8 @@
                     <object class="GtkScrolledWindow" id="EF_charge_noeud_scrolledwindow_my">
                         <property name="visible">True</property>
                         <property name="expand">True</property>
-                        <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
-                        <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                        <property name="hscrollbar-policy">automatic</property>
+                        <property name="vscrollbar-policy">automatic</property>
                         <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
                         <child>
                             <object class="GtkTextView" id="EF_charge_noeud_textview_my">
@@ -278,8 +292,10 @@
                 </child>
                 <child>
                     <object class="GtkLabel" id="EF_charge_noeud_label_mz">
-                        <property name="label">Mz [N.m] :</property>
+                        <property name="label">M_z [N.m] :</property>
                         <property name="visible">True</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic-widget">EF_charge_noeud_textview_mz</property>
                     </object>
                     <packing>
                         <property name="left-attach">2</property>
@@ -290,8 +306,8 @@
                     <object class="GtkScrolledWindow" id="EF_charge_noeud_scrolledwindow_mz">
                         <property name="visible">True</property>
                         <property name="expand">True</property>
-                        <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
-                        <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                        <property name="hscrollbar-policy">automatic</property>
+                        <property name="vscrollbar-policy">automatic</property>
                         <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
                         <child>
                             <object class="GtkTextView" id="EF_charge_noeud_textview_mz">
@@ -309,8 +325,10 @@
                 </child>
                 <child>
                     <object class="GtkLabel" id="EF_charge_noeud_label_noeuds">
-                        <property name="label" translatable="yes">Noeuds :</property>
+                        <property name="label" translatable="yes">_Noeuds :</property>
                         <property name="visible">True</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic-widget">EF_charge_noeud_textview_noeuds</property>
                     </object>
                     <packing>
                         <property name="left-attach">0</property>
@@ -321,8 +339,8 @@
                     <object class="GtkScrolledWindow" id="EF_charge_noeud_scrolledwindow_noeuds">
                         <property name="visible">True</property>
                         <property name="expand">True</property>
-                        <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
-                        <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                        <property name="hscrollbar-policy">automatic</property>
+                        <property name="vscrollbar-policy">automatic</property>
                         <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
                         <child>
                             <object class="GtkTextView" id="EF_charge_noeud_textview_noeuds">
@@ -348,8 +366,8 @@
                         <child>
                             <object class="GtkButton" id="EF_charge_noeud_button_annuler">
                                 <property name="visible">True</property>
-                                <property name="use_stock">True</property>
-                                <property name="label">gtk-cancel</property>
+                                <property name="label" translatable="yes">_Annuler</property>
+                                <property name="use_underline">True</property>
                                 <signal name="clicked" handler="EF_gtk_charge_noeud_annuler_clicked"/>
                             </object>
                             <packing>
@@ -361,7 +379,7 @@
                             <object class="GtkButton" id="EF_charge_noeud_button_add_edit">
                                 <property name="visible">True</property>
                                 <property name="sensitive">False</property>
-                                <property name="use_stock">True</property>
+                                <property name="use_underline">True</property>
                             </object>
                             <packing>
                                 <property name="position">1</property>

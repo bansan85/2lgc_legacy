@@ -377,7 +377,7 @@ gboolean _1993_1_1_gtk_materiaux(Projet *projet, EF_Materiau *materiau)
         gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(ef_gtk->builder, "_1993_1_1_materiaux_textview_fy"))), "", -1);
         gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(ef_gtk->builder, "_1993_1_1_materiaux_textview_fu"))), "", -1);
         
-        gtk_button_set_label(GTK_BUTTON(gtk_builder_get_object(ef_gtk->builder, "_1993_1_1_materiaux_button_add_edit")), "gtk-add");
+        gtk_button_set_label(GTK_BUTTON(gtk_builder_get_object(ef_gtk->builder, "_1993_1_1_materiaux_button_add_edit")), gettext("_Ajouter"));
         g_signal_connect(gtk_builder_get_object(ef_gtk->builder, "_1993_1_1_materiaux_button_add_edit"), "clicked", G_CALLBACK(_1993_1_1_gtk_materiaux_ajouter_clicked), projet);
         _1993_1_1_gtk_materiaux_check(NULL, projet);
     }
@@ -396,7 +396,7 @@ gboolean _1993_1_1_gtk_materiaux(Projet *projet, EF_Materiau *materiau)
         common_math_double_to_char2(common_math_f(common_math_get(acier_data->fu)/1000000., acier_data->fu.type), tmp, DECIMAL_CONTRAINTE);
         gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder, "_1993_1_1_materiaux_buffer_fu")), tmp, -1);
         
-        gtk_button_set_label(GTK_BUTTON(gtk_builder_get_object(ef_gtk->builder, "_1993_1_1_materiaux_button_add_edit")), "gtk-edit");
+        gtk_button_set_label(GTK_BUTTON(gtk_builder_get_object(ef_gtk->builder, "_1993_1_1_materiaux_button_add_edit")), gettext("_Modifier"));
         g_signal_connect(gtk_builder_get_object(ef_gtk->builder, "_1993_1_1_materiaux_button_add_edit"), "clicked", G_CALLBACK(_1993_1_1_gtk_materiaux_modifier_clicked), projet);
     }
     

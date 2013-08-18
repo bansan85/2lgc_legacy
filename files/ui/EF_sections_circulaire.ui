@@ -40,7 +40,9 @@
                 <property name="row-spacing">12</property>
                 <child>
                     <object class="GtkLabel" id="EF_section_circulaire_label_nom">
-                        <property name="label" translatable="yes">Nom :</property>
+                        <property name="label" translatable="yes">_Nom :</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic-widget">EF_section_circulaire_textview_nom</property>
                         <property name="visible">True</property>
                     </object>
                     <packing>
@@ -52,8 +54,8 @@
                     <object class="GtkScrolledWindow" id="EF_section_circulaire_scrolledwindow_nom">
                         <property name="visible">True</property>
                         <property name="expand">True</property>
-                        <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
-                        <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                        <property name="hscrollbar-policy">automatic</property>
+                        <property name="vscrollbar-policy">automatic</property>
                         <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
                         <child>
                             <object class="GtkTextView" id="EF_section_circulaire_textview_nom">
@@ -71,7 +73,9 @@
                 </child>
                 <child>
                     <object class="GtkLabel" id="EF_section_circulaire_label_diametre">
-                        <property name="label">Coté [m] :</property>
+                        <property name="label" translatable="yes">_Diamètre [m] :</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic-widget">EF_section_circulaire_textview_diametre</property>
                         <property name="visible">True</property>
                     </object>
                     <packing>
@@ -83,8 +87,8 @@
                     <object class="GtkScrolledWindow" id="EF_section_circulaire_scrolledwindow_diametre">
                         <property name="visible">True</property>
                         <property name="expand">True</property>
-                        <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
-                        <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                        <property name="hscrollbar-policy">automatic</property>
+                        <property name="vscrollbar-policy">automatic</property>
                         <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
                         <child>
                             <object class="GtkTextView" id="EF_section_circulaire_textview_diametre">
@@ -109,8 +113,8 @@
                         <child>
                             <object class="GtkButton" id="EF_section_circulaire_button_annuler">
                                 <property name="visible">True</property>
-                                <property name="use_stock">True</property>
-                                <property name="label">gtk-cancel</property>
+                                <property name="label" translatable="yes">_Annuler</property>
+                                <property name="use_underline">True</property>
                                 <signal name="clicked" handler="EF_gtk_section_circulaire_annuler_clicked"/>
                             </object>
                             <packing>
@@ -121,8 +125,8 @@
                         <child>
                             <object class="GtkButton" id="EF_section_circulaire_button_add_edit">
                                 <property name="visible">True</property>
+                                <property name="use_underline">True</property>
                                 <property name="sensitive">False</property>
-                                <property name="use_stock">True</property>
                             </object>
                             <packing>
                                 <property name="position">1</property>

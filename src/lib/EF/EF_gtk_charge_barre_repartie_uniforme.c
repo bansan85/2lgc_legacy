@@ -450,12 +450,12 @@ gboolean EF_gtk_charge_barre_repartie_uniforme(Projet *projet, unsigned int acti
     
     if (charge == G_MAXUINT)
     {
-        gtk_button_set_label(GTK_BUTTON(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_rep_uni_button_add_edit")), "gtk-add");
+        gtk_button_set_label(GTK_BUTTON(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_rep_uni_button_add_edit")), gettext("_Ajouter"));
         g_signal_connect(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_rep_uni_button_add_edit"), "clicked", G_CALLBACK(EF_gtk_charge_barre_repartie_uniforme_ajouter_clicked), projet);
     }
     else
     {
-        gtk_button_set_label(GTK_BUTTON(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_rep_uni_button_add_edit")), "gtk-edit");
+        gtk_button_set_label(GTK_BUTTON(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_rep_uni_button_add_edit")), gettext("_Modifier"));
         g_signal_connect(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_rep_uni_button_add_edit"), "clicked", G_CALLBACK(EF_gtk_charge_barre_repartie_uniforme_editer_clicked), projet);
     }
     

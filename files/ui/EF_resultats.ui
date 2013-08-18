@@ -2,7 +2,7 @@
 <interface>
     <requires lib="gtk+" version="3.2"/>
     <object class="GtkMenu" id="EF_resultats_menu">
-        <property name="visible">True</property>
+        <property name="visible">False</property>
         <child>
             <object class="GtkMenuItem" id="EF_resultats_menu_noeuds">
                 <property name="label" translatable="yes">Noeuds</property>
@@ -62,7 +62,9 @@
                 <child>
                     <object class="GtkLabel" id="EF_resultats_afficher_label">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Afficher : </property>
+                        <property name="label" translatable="yes">_Afficher : </property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic-widget">EF_resultats_combobox</property>
                     </object>
                     <packing>
                         <property name="left-attach">0</property>
@@ -111,8 +113,8 @@
                     <object class="GtkScrolledWindow" id="EF_resultats_scrolled">
                         <property name="visible">True</property>
                         <property name="expand">True</property>
-                        <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
-                        <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                        <property name="hscrollbar-policy">automatic</property>
+                        <property name="vscrollbar-policy">automatic</property>
                         <child>
                             <object class="GtkViewport" id="EF_resultats_viewport">
                                 <property name="visible">True</property>
@@ -156,8 +158,8 @@
                         <child>
                             <object class="GtkButton" id="EF_resultats_boutton_fermer">
                                 <property name="visible">True</property>
-                                <property name="label">gtk-close</property>
-                                <property name="use_stock">True</property>
+                                <property name="label" translatable="yes">_Fermer</property>
+                                <property name="use_underline">True</property>
                                 <signal name="clicked" handler="EF_gtk_resultats_fermer"/>
                             </object>
                             <packing>

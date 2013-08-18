@@ -316,7 +316,6 @@ void common_gtk_informations_annuler_clicked(GtkButton *button, Projet *projet)
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.common_informations.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Informations");
     
-    free(projet->list_gtk.common_informations.departement);
     gtk_widget_destroy(projet->list_gtk.common_informations.window);
     
     return;

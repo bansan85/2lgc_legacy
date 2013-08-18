@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2013-08-06 22:08+0200\n"
-"PO-Revision-Date: 2013-08-10 12:41+0100\n"
+"POT-Creation-Date: 2013-08-18 13:25+0200\n"
+"PO-Revision-Date: 2013-08-18 13:27+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -13,20 +13,11 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 1.5.5\n"
 
-msgid "&#968;<sub>0</sub>"
-msgstr "&#968;<sub>0</sub>"
-
-msgid "&#968;<sub>1</sub>"
-msgstr "&#968;<sub>1</sub>"
-
-msgid "&#968;<sub>2</sub>"
-msgstr "&#968;<sub>2</sub>"
-
 msgid "Actions"
 msgstr "Actions"
 
-msgid "<b>Actions :</b>"
-msgstr "<b>Actions :</b>"
+msgid "<b>A_ctions :</b>"
+msgstr "<b>A_ctions :</b>"
 
 msgid "Description"
 msgstr "Description"
@@ -34,8 +25,14 @@ msgstr "Description"
 msgid "Type"
 msgstr "Type"
 
-msgid "<b>Charges :</b>"
-msgstr "<b>Charges :</b>"
+msgid "_Ajouter"
+msgstr "_Ajouter"
+
+msgid "_Supprimer"
+msgstr "_Supprimer"
+
+msgid "<b>_Charges :</b>"
+msgstr "<b>_Charges :</b>"
 
 msgid "Charge"
 msgstr "Charge"
@@ -43,53 +40,68 @@ msgstr "Charge"
 msgid "Valeur"
 msgstr "Valeur"
 
-msgid "Nom :"
-msgstr "Nom :"
+msgid "_Modifier"
+msgstr "_Modifier"
 
-msgid "Nom court :"
-msgstr "Nom court :"
+msgid "_Fermer"
+msgstr "_Fermer"
 
-msgid "Description :"
-msgstr "Description :"
+msgid "_Nom :"
+msgstr "_Nom :"
 
-msgid "Forme :"
-msgstr "Forme :"
+msgid "_Diamètre [m] :"
+msgstr "_Diamètre [m] :"
 
-msgid "Ajouter"
-msgstr "Ajouter"
+msgid "_Annuler"
+msgstr "_Annuler"
 
-msgid "Supprimer"
-msgstr "Supprimer"
+msgid "_Nom court :"
+msgstr "_Nom court :"
+
+msgid "_Description :"
+msgstr "_Description :"
+
+msgid "_Forme :"
+msgstr "_Forme :"
 
 msgid "Informations sur le projet"
 msgstr "Informations sur le projet"
 
-msgid "Client :"
-msgstr "Client :"
+msgid "_Client :"
+msgstr "_Client :"
 
-msgid "Adresse :"
-msgstr "Adresse :"
+msgid "A_dresse :"
+msgstr "A_dresse :"
 
-msgid "Code postal :"
-msgstr "Code postal :"
+msgid "C_ode postal :"
+msgstr "C_ode postal :"
 
-msgid "Ville :"
-msgstr "Ville :"
+msgid "_Ville :"
+msgstr "_Ville :"
 
-msgid "Localisations"
-msgstr "Localisations"
+msgid "_Localisation"
+msgstr "_Localisation"
 
-msgid "Neige :"
-msgstr "Neige :"
+msgid "_Neige :"
+msgstr "_Neige :"
 
-msgid "Vent :"
-msgstr "Vent :"
+msgid "_Vent :"
+msgstr "_Vent :"
 
-msgid "Séisme :"
-msgstr "Séisme :"
+msgid "_Séisme :"
+msgstr "_Séisme :"
 
-msgid "Paramètres"
-msgstr "Paramètres"
+msgid "_Paramètres"
+msgstr "_Paramètres"
+
+msgid "_Coté [m] :"
+msgstr "_Coté [m] :"
+
+msgid "_Largeur [m] :"
+msgstr "_Largeur [m] :"
+
+msgid "_Hauteur [m] :"
+msgstr "_Hauteur [m] :"
 
 msgid "Rectangulaire"
 msgstr "Rectangulaire"
@@ -136,17 +148,20 @@ msgstr "Sections"
 msgid "Nom"
 msgstr "Nom"
 
-msgid "Largeur de la table [m] :"
-msgstr "Largeur de la table [m] :"
+msgid "_Largeur de la table [m] :"
+msgstr "_Largeur de la table [m] :"
 
-msgid "Hauteur de la table [m] :"
-msgstr "Hauteur de la table [m] :"
+msgid "_Hauteur de la table [m] :"
+msgstr "_Hauteur de la table [m] :"
 
-msgid "Largeur de la retombée [m] :"
-msgstr "Largeur de la retombée [m] :"
+msgid "_Largeur de la retombée [m] :"
+msgstr "_Largeur de la retombée [m] :"
 
-msgid "Hauteur de la retombée [m] :"
-msgstr "Hauteur de la retombée [m] :"
+msgid "_Hauteur de la retombée [m] :"
+msgstr "_Hauteur de la retombée [m] :"
+
+msgid "et ces dépendances."
+msgstr "et ces dépendances."
 
 msgid "Barres"
 msgstr "Barres"
@@ -169,53 +184,41 @@ msgstr "Noeud 2"
 msgid "Relâchement"
 msgstr "Relâchement"
 
-msgid "Personnaliser"
-msgstr "Personnaliser"
+msgid "_Personnaliser"
+msgstr "_Personnaliser"
 
-msgid "Charge :"
-msgstr "Charge :"
+msgid "_Charge :"
+msgstr "_Charge :"
 
-msgid "Repere :"
-msgstr "Repere :"
+msgid "Repère :"
+msgstr "Repère :"
 
-msgid "Local"
-msgstr "Local"
+msgid "_Local"
+msgstr "_Local"
 
-msgid "Global"
-msgstr "Global"
+msgid "_Global"
+msgstr "_Global"
 
-msgid "Position :"
-msgstr "Position :"
+msgid "_Position :"
+msgstr "_Position :"
 
-msgid "Barres :"
-msgstr "Barres :"
+msgid "_Barres :"
+msgstr "_Barres :"
 
 msgid "et annule les conditions d'appuis sur les noeuds l'utilisant."
 msgstr "et annule les conditions d'appuis sur les noeuds l'utilisant."
 
-msgid "u<sub>x</sub>"
-msgstr "u<sub>x</sub>"
-
-msgid "u<sub>y</sub>"
-msgstr "u<sub>y</sub>"
-
-msgid "u<sub>z</sub>"
-msgstr "u<sub>z</sub>"
-
-msgid "r<sub>x</sub>"
-msgstr "r<sub>x</sub>"
-
-msgid "r<sub>y</sub>"
-msgstr "r<sub>y</sub>"
-
-msgid "r<sub>z</sub>"
-msgstr "r<sub>z</sub>"
-
 msgid "Appuis"
 msgstr "Appuis"
 
-msgid "Charge projetée sur la barre"
-msgstr "Charge projetée sur la barre"
+msgid "C_harge projetée sur la barre"
+msgstr "C_harge projetée sur la barre"
+
+msgid "Repere :"
+msgstr "Repere :"
+
+msgid "Ba_rres :"
+msgstr "Ba_rres :"
 
 msgid "Noeuds"
 msgstr "Noeuds"
@@ -226,8 +229,8 @@ msgstr "Appui"
 msgid "Noeud relatif"
 msgstr "Noeud relatif"
 
-msgid "Noeuds libres"
-msgstr "Noeuds libres"
+msgid "Noeuds _libres"
+msgstr "Noeuds _libres"
 
 msgid "Barre"
 msgstr "Barre"
@@ -235,8 +238,8 @@ msgstr "Barre"
 msgid "Position relative"
 msgstr "Position relative"
 
-msgid "Noeuds intermédiaires"
-msgstr "Noeuds intermédiaires"
+msgid "Noeuds _intermédiaires"
+msgstr "Noeuds _intermédiaires"
 
 msgid "et les barres utilisant le matériau."
 msgstr "et les barres utilisant le matériau."
@@ -283,26 +286,29 @@ msgstr "Relâchements"
 msgid "Groupes"
 msgstr "Groupes"
 
-msgid "Niveau :"
-msgstr "Niveau :"
+msgid "_Niveau :"
+msgstr "_Niveau :"
 
-msgid "<b>Groupes :</b>"
-msgstr "<b>Groupes :</b>"
+msgid "<b>_Groupes :</b>"
+msgstr "<b>_Groupes :</b>"
 
-msgid "<b>Éléments disponibles :</b>"
-msgstr "<b>Éléments disponibles :</b>"
+msgid "<b>É_léments disponibles :</b>"
+msgstr "<b>É_léments disponibles :</b>"
+
+msgid "Ajouter"
+msgstr "Ajouter"
 
 msgid "Ajouter tout"
 msgstr "Ajouter tout"
 
-msgid "Options"
-msgstr "Options"
+msgid "_Options"
+msgstr "_Options"
 
-msgid "Générer"
-msgstr "Générer"
+msgid "_Générer"
+msgstr "_Générer"
 
-msgid "Noeuds :"
-msgstr "Noeuds :"
+msgid "_Noeuds :"
+msgstr "_Noeuds :"
 
 msgid "Rapport"
 msgstr "Rapport"
@@ -319,26 +325,26 @@ msgstr "Ajout d'une barre"
 msgid "Numéro :"
 msgstr "Numéro :"
 
-msgid "Type :"
-msgstr "Type :"
+msgid "_Type :"
+msgstr "_Type :"
 
-msgid "Section :"
-msgstr "Section :"
+msgid "_Section :"
+msgstr "_Section :"
 
-msgid "Matériau :"
-msgstr "Matériau :"
+msgid "_Matériau :"
+msgstr "_Matériau :"
 
-msgid "Noeud 1 :"
-msgstr "Noeud 1 :"
+msgid "Noeud _1 :"
+msgstr "Noeud _1 :"
 
-msgid "Noeud 2 :"
-msgstr "Noeud 2 :"
+msgid "Noeud _2 :"
+msgstr "Noeud _2 :"
 
-msgid "Relâchement :"
-msgstr "Relâchement :"
+msgid "_Relâchement :"
+msgstr "_Relâchement :"
 
-msgid "Nombre de divisions :"
-msgstr "Nombre de divisions :"
+msgid "_Nombre de divisions :"
+msgstr "_Nombre de divisions :"
 
 msgid "Options des combinaisons"
 msgstr "Options des combinaisons"
@@ -355,11 +361,11 @@ msgstr ""
 "combinaisons pour la vérification à l'équilibre statique seulement ou à "
 "l'équilibre statique incluant la résistance d'éléments structuraux."
 
-msgid "Équilibre seulement"
-msgstr "Équilibre seulement"
+msgid "É_quilibre seulement"
+msgstr "É_quilibre seulement"
 
-msgid "Équilibre et résistance"
-msgstr "Équilibre et résistance"
+msgid "Équilibre et _résistance"
+msgstr "Équilibre et _résistance"
 
 msgid "<b>ELU STR et GEO, formule de combinaison :</b>"
 msgstr "<b>ELU STR et GEO, formule de combinaison :</b>"
@@ -373,39 +379,39 @@ msgstr ""
 "combinaison sont possibles. La première est la formule 6.10 et la deuxième "
 "est 6.10a et 6.10b."
 
-msgid "6.10a et 6.10b"
-msgstr "6.10a et 6.10b"
+msgid "6.10_a et 6.10b"
+msgstr "6.10_a et 6.10b"
 
 msgid "<b>ELU STR et GEO, ensemble de calcul :</b>"
 msgstr "<b>ELU STR et GEO, ensemble de calcul :</b>"
 
 msgid ""
 "Lorsqu'il est nécessaire de réaliser un calcul à l'État Limite Ultime "
-"STRucture et GÉOtechnique, trois approches sont possibles. Approche 1 : "
+"STRucture et GÉOtechnique, trois approches sont possibles.&#013;Approche 1 : "
 "vérification de la structure et du sol via les coefficients de l'ensemble B "
-"puis les coefficients de l'ensemble C. Approche 2 : vérification de la "
-"structure et du sol via les coefficients de l'ensemble B. Approche 3 : "
+"puis les coefficients de l'ensemble C.&#013;Approche 2 : vérification de la "
+"structure et du sol via les coefficients de l'ensemble B.&#013;Approche 3 : "
 "vérification de la structure et du sol via les coefficients de l'ensemble B "
 "pour les actions géotechniques et les coefficients de l'ensemble C pour les "
 "actions appliquées à la structure."
 msgstr ""
 "Lorsqu'il est nécessaire de réaliser un calcul à l'État Limite Ultime "
-"STRucture et GÉOtechnique, trois approches sont possibles. Approche 1 : "
+"STRucture et GÉOtechnique, trois approches sont possibles.&#013;Approche 1 : "
 "vérification de la structure et du sol via les coefficients de l'ensemble B "
-"puis les coefficients de l'ensemble C. Approche 2 : vérification de la "
-"structure et du sol via les coefficients de l'ensemble B. Approche 3 : "
+"puis les coefficients de l'ensemble C.&#013;Approche 2 : vérification de la "
+"structure et du sol via les coefficients de l'ensemble B.&#013;Approche 3 : "
 "vérification de la structure et du sol via les coefficients de l'ensemble B "
 "pour les actions géotechniques et les coefficients de l'ensemble C pour les "
 "actions appliquées à la structure."
 
-msgid "Approche 1"
-msgstr "Approche 1"
+msgid "Approche _1"
+msgstr "v"
 
-msgid "Approche 2"
-msgstr "Approche 2"
+msgid "Approche _2"
+msgstr "Approche _2"
 
-msgid "Approche 3"
-msgstr "Approche 3"
+msgid "Approche _3"
+msgstr "Approche _3"
 
 msgid "<b>ELU ACCidentel :</b>"
 msgstr "<b>ELU ACCidentel :</b>"
@@ -417,11 +423,11 @@ msgstr ""
 "À l'État Limite Ultime ACCidentel, la charge variable dominante utilisée est "
 "soit la valeur fréquente, soit la valeur quasi-permanente."
 
-msgid "valeur fréquence"
-msgstr "valeur fréquence"
+msgid "valeur _fréquence"
+msgstr "valeur _fréquence"
 
-msgid "valeur quasi-permanente"
-msgstr "valeur quasi-permanente"
+msgid "valeur q_uasi-permanente"
+msgstr "valeur q_uasi-permanente"
 
 msgid "Réactions d'appuis"
 msgstr "Réactions d'appuis"
@@ -438,8 +444,8 @@ msgstr "Déformations des barres"
 msgid "Résultats"
 msgstr "Résultats"
 
-msgid "Afficher : "
-msgstr "Afficher : "
+msgid "_Afficher : "
+msgstr "_Afficher : "
 
 msgid "Cas élémentaires"
 msgstr "Cas élémentaires"
@@ -2102,6 +2108,42 @@ msgstr "Modification d'un matériau acier"
 
 msgid "Impossible d'initialiser gtk.\n"
 msgstr "Impossible d'initialiser gtk.\n"
+
+#~ msgid "Nom :"
+#~ msgstr "Nom :"
+
+#~ msgid "Description :"
+#~ msgstr "Description :"
+
+#~ msgid "Supprimer"
+#~ msgstr "Supprimer"
+
+#~ msgid "u<sub>x</sub>"
+#~ msgstr "u<sub>x</sub>"
+
+#~ msgid "u<sub>y</sub>"
+#~ msgstr "u<sub>y</sub>"
+
+#~ msgid "u<sub>z</sub>"
+#~ msgstr "u<sub>z</sub>"
+
+#~ msgid "r<sub>x</sub>"
+#~ msgstr "r<sub>x</sub>"
+
+#~ msgid "r<sub>y</sub>"
+#~ msgstr "r<sub>y</sub>"
+
+#~ msgid "r<sub>z</sub>"
+#~ msgstr "r<sub>z</sub>"
+
+#~ msgid "&#968;<sub>0</sub>"
+#~ msgstr "&#968;<sub>0</sub>"
+
+#~ msgid "&#968;<sub>1</sub>"
+#~ msgstr "&#968;<sub>1</sub>"
+
+#~ msgid "&#968;<sub>2</sub>"
+#~ msgstr "&#968;<sub>2</sub>"
 
 #~ msgid "Section en béton '%s' introuvable.\n"
 #~ msgstr "Section en béton '%s' introuvable.\n"

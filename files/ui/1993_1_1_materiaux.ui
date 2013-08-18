@@ -2,7 +2,7 @@
 <interface>
     <requires lib="gtk+" version="3.2"/>
     <object class="GtkMenu" id="_1993_1_1_materiaux_personnaliser_menu">
-        <property name="visible">True</property>
+        <property name="visible">False</property>
         <child>
             <object class="GtkCheckMenuItem" id="_1993_1_1_materiaux_personnaliser_menu_e">
                 <property name="visible">True</property>
@@ -89,8 +89,8 @@
                     <object class="GtkScrolledWindow" id="_1993_1_1_materiaux_scrolled">
                         <property name="visible">True</property>
                         <property name="expand">True</property>
-                        <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
-                        <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                        <property name="hscrollbar-policy">automatic</property>
+                        <property name="vscrollbar-policy">automatic</property>
                         <child>
                             <object class="GtkViewport" id="_1993_1_1_materiaux_viewport">
                                 <property name="visible">True</property>
@@ -103,8 +103,10 @@
                                         <property name="row-spacing">12</property>
                                         <child>
                                             <object class="GtkLabel" id="_1993_1_1_materiaux_label_nom">
-                                                <property name="label" translatable="yes">Nom :</property>
+                                                <property name="label" translatable="yes">_Nom :</property>
                                                 <property name="visible">True</property>
+                                                <property name="use_underline">True</property>
+                                                <property name="mnemonic-widget">_1993_1_1_materiaux_textview_nom</property>
                                             </object>
                                             <packing>
                                                 <property name="left-attach">0</property>
@@ -115,8 +117,8 @@
                                             <object class="GtkScrolledWindow" id="_1993_1_1_materiaux_scrolledwindow_nom">
                                                 <property name="visible">True</property>
                                                 <property name="expand">True</property>
-                                                <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
-                                                <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                                                <property name="hscrollbar-policy">automatic</property>
+                                                <property name="vscrollbar-policy">automatic</property>
                                                 <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
                                                 <child>
                                                     <object class="GtkTextView" id="_1993_1_1_materiaux_textview_nom">
@@ -134,9 +136,11 @@
                                         </child>
                                         <child>
                                             <object class="GtkLabel" id="_1993_1_1_materiaux_label_fy">
-                                                <property name="label">f&lt;sub&gt;y&lt;/sub&gt; [MPa] :</property>
+                                                <property name="label">f&lt;sub&gt;_y&lt;/sub&gt; [MPa] :</property>
                                                 <property name="use-markup">True</property>
                                                 <property name="visible">True</property>
+                                                <property name="use_underline">True</property>
+                                                <property name="mnemonic-widget">_1993_1_1_materiaux_textview_fy</property>
                                             </object>
                                             <packing>
                                                 <property name="left-attach">0</property>
@@ -147,8 +151,8 @@
                                             <object class="GtkScrolledWindow" id="_1993_1_1_materiaux_scrolledwindow_fy">
                                                 <property name="visible">True</property>
                                                 <property name="expand">True</property>
-                                                <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
-                                                <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                                                <property name="hscrollbar-policy">automatic</property>
+                                                <property name="vscrollbar-policy">automatic</property>
                                                 <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
                                                 <child>
                                                     <object class="GtkTextView" id="_1993_1_1_materiaux_textview_fy">
@@ -166,9 +170,11 @@
                                         </child>
                                         <child>
                                             <object class="GtkLabel" id="_1993_1_1_materiaux_label_fu">
-                                                <property name="label">f&lt;sub&gt;u&lt;/sub&gt; [MPa] :</property>
+                                                <property name="label">f&lt;sub&gt;_u&lt;/sub&gt; [MPa] :</property>
                                                 <property name="use-markup">True</property>
                                                 <property name="visible">True</property>
+                                                <property name="use_underline">True</property>
+                                                <property name="mnemonic-widget">_1993_1_1_materiaux_textview_fu</property>
                                             </object>
                                             <packing>
                                                 <property name="left-attach">0</property>
@@ -179,8 +185,8 @@
                                             <object class="GtkScrolledWindow" id="_1993_1_1_materiaux_scrolledwindow_fu">
                                                 <property name="visible">True</property>
                                                 <property name="expand">True</property>
-                                                <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
-                                                <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                                                <property name="hscrollbar-policy">automatic</property>
+                                                <property name="vscrollbar-policy">automatic</property>
                                                 <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
                                                 <child>
                                                     <object class="GtkTextView" id="_1993_1_1_materiaux_textview_fu">
@@ -211,8 +217,8 @@
                                             <object class="GtkScrolledWindow" id="_1993_1_1_materiaux_scrolledwindow_e">
                                                 <property name="visible">False</property>
                                                 <property name="expand">True</property>
-                                                <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
-                                                <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                                                <property name="hscrollbar-policy">automatic</property>
+                                                <property name="vscrollbar-policy">automatic</property>
                                                 <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
                                                 <child>
                                                     <object class="GtkTextView" id="_1993_1_1_materiaux_textview_e">
@@ -243,8 +249,8 @@
                                             <object class="GtkScrolledWindow" id="_1993_1_1_materiaux_scrolledwindow_nu">
                                                 <property name="visible">False</property>
                                                 <property name="expand">True</property>
-                                                <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
-                                                <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                                                <property name="hscrollbar-policy">automatic</property>
+                                                <property name="vscrollbar-policy">automatic</property>
                                                 <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
                                                 <child>
                                                     <object class="GtkTextView" id="_1993_1_1_materiaux_textview_nu">
@@ -268,30 +274,6 @@
                     <packing>
                         <property name="left-attach">0</property>
                         <property name="top-attach">0</property>
-                        <property name="width">2</property>
-                    </packing>
-                </child>
-                <child>
-                    <object class="GtkButtonBox" id="_1993_1_1_materiaux_personnalise">
-                        <property name="visible">True</property>
-                        <property name="orientation">horizontal</property>
-                        <property name="layout_style">start</property>
-                        <property name="spacing">6</property>
-                        <child>
-                            <object class="GtkMenuButton" id="_1993_1_1_materiaux_personnalise_champ">
-                                <property name="visible">True</property>
-                                <property name="label" translatable="yes">Personnaliser</property>
-                                <property name="popup">_1993_1_1_materiaux_personnaliser_menu</property>
-                            </object>
-                            <packing>
-                                <property name="position">0</property>
-                                <property name="pack_type">end</property>
-                            </packing>
-                        </child>
-                    </object>
-                    <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">2</property>
                     </packing>
                 </child>
                 <child>
@@ -301,11 +283,11 @@
                         <property name="layout_style">end</property>
                         <property name="spacing">6</property>
                         <child>
-                            <object class="GtkButton" id="_1993_1_1_materiaux_button_annuler">
+                            <object class="GtkMenuButton" id="_1993_1_1_materiaux_personnalise_champ">
                                 <property name="visible">True</property>
-                                <property name="use_stock">True</property>
-                                <property name="label">gtk-cancel</property>
-                                <signal name="clicked" handler="_1993_1_1_gtk_materiaux_annuler_clicked"/>
+                                <property name="label" translatable="yes">_Personnaliser</property>
+                                <property name="use_underline">True</property>
+                                <property name="popup">_1993_1_1_materiaux_personnaliser_menu</property>
                             </object>
                             <packing>
                                 <property name="position">0</property>
@@ -313,20 +295,32 @@
                             </packing>
                         </child>
                         <child>
-                            <object class="GtkButton" id="_1993_1_1_materiaux_button_add_edit">
+                            <object class="GtkButton" id="_1993_1_1_materiaux_button_annuler">
                                 <property name="visible">True</property>
-                                <property name="sensitive">False</property>
-                                <property name="use_stock">True</property>
+                                <property name="use_underline">True</property>
+                                <property name="label" translatable="yes">_Annuler</property>
+                                <signal name="clicked" handler="_1993_1_1_gtk_materiaux_annuler_clicked"/>
                             </object>
                             <packing>
                                 <property name="position">1</property>
                                 <property name="pack_type">end</property>
                             </packing>
                         </child>
+                        <child>
+                            <object class="GtkButton" id="_1993_1_1_materiaux_button_add_edit">
+                                <property name="visible">True</property>
+                                <property name="sensitive">False</property>
+                                <property name="use_underline">True</property>
+                            </object>
+                            <packing>
+                                <property name="position">2</property>
+                                <property name="pack_type">end</property>
+                            </packing>
+                        </child>
                     </object>
                     <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">2</property>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">1</property>
                     </packing>
                 </child>
             </object>

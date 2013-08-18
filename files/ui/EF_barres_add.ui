@@ -62,7 +62,9 @@
                 <child>
                     <object class="GtkLabel" id="EF_gtk_barres_add_type_label">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Type :</property>
+                        <property name="label" translatable="yes">_Type :</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic-widget">EF_gtk_barres_add_type_combobox</property>
                     </object>
                     <packing>
                         <property name="left-attach">0</property>
@@ -83,7 +85,9 @@
                 <child>
                     <object class="GtkLabel" id="EF_gtk_barres_add_section_label">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Section :</property>
+                        <property name="label" translatable="yes">_Section :</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic-widget">EF_gtk_barres_add_section_combobox</property>
                     </object>
                     <packing>
                         <property name="left-attach">0</property>
@@ -104,7 +108,9 @@
                 <child>
                     <object class="GtkLabel" id="EF_gtk_barres_add_materiau_label">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Matériau :</property>
+                        <property name="label" translatable="yes">_Matériau :</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic-widget">EF_gtk_barres_add_materiau_combobox</property>
                     </object>
                     <packing>
                         <property name="left-attach">0</property>
@@ -125,7 +131,9 @@
                 <child>
                     <object class="GtkLabel" id="EF_gtk_barres_add_noeud1_label">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Noeud 1 :</property>
+                        <property name="label" translatable="yes">Noeud _1 :</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic-widget">EF_gtk_barres_add_noeud1_textview</property>
                     </object>
                     <packing>
                         <property name="left-attach">0</property>
@@ -146,7 +154,9 @@
                 <child>
                     <object class="GtkLabel" id="EF_gtk_barres_add_noeud2_label">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Noeud 2 :</property>
+                        <property name="label" translatable="yes">Noeud _2 :</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic-widget">EF_gtk_barres_add_noeud2_textview</property>
                     </object>
                     <packing>
                         <property name="left-attach">0</property>
@@ -167,7 +177,9 @@
                 <child>
                     <object class="GtkLabel" id="EF_gtk_barres_add_relachement_label">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Relâchement :</property>
+                        <property name="label" translatable="yes">_Relâchement :</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic-widget">EF_gtk_barres_add_relachement_combobox</property>
                     </object>
                     <packing>
                         <property name="left-attach">0</property>
@@ -188,7 +200,9 @@
                 <child>
                     <object class="GtkLabel" id="EF_gtk_barres_add_nb_noeuds_intermediaire_label">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Nombre de divisions :</property>
+                        <property name="label" translatable="yes">_Nombre de divisions :</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic-widget">EF_gtk_barres_add_nb_noeuds_intermediaire_textview</property>
                     </object>
                     <packing>
                         <property name="left-attach">0</property>
@@ -215,8 +229,8 @@
                         <child>
                             <object class="GtkButton" id="EF_gtk_barres_add_button_annuler">
                                 <property name="visible">True</property>
-                                <property name="use_stock">True</property>
-                                <property name="label">gtk-cancel</property>
+                                <property name="use_underline">True</property>
+                                <property name="label" translatable="yes">_Annuler</property>
                                 <signal name="clicked" handler="EF_gtk_barres_add_annuler_clicked"/>
                             </object>
                             <packing>
@@ -227,8 +241,8 @@
                         <child>
                             <object class="GtkButton" id="EF_gtk_barres_add_button_add">
                                 <property name="visible">True</property>
-                                <property name="use_stock">True</property>
-                                <property name="label">gtk-add</property>
+                                <property name="use_underline">True</property>
+                                <property name="label" translatable="yes">_Ajouter</property>
                                 <signal name="clicked" handler="EF_gtk_barres_add_add_clicked"/>
                             </object>
                             <packing>
