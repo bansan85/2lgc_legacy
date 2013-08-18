@@ -106,7 +106,7 @@ void EF_gtk_section_personnalisee_window_destroy(GtkWidget *object, Projet *proj
 
 gboolean EF_gtk_section_personnalisee_recupere_donnees(Projet *projet, double *j, double *iy,
   double *iz, double *vy, double *vyp, double *vz, double *vzp, double *s, GList **forme,
-  gchar **nom, gchar **description)
+  gboolean *ok_forme, gchar **nom, gchar **description)
 /* Description : Récupère toutes les données de la fenêtre permettant d'ajouter ou d'éditer une
  *               section de type personnalisée.
  * Paramètres : Projet *projet : la variable projet,
@@ -124,6 +124,7 @@ gboolean EF_gtk_section_personnalisee_recupere_donnees(Projet *projet, double *j
  *             vz == NULL,
  *             vzp == NULL,
  *             s == NULL,
+ *             ok_forme == NULL,
  *             forme == NULL,
  *             nom == NULL,
  *             en cas d'erreur d'allocation mémoire.
@@ -187,6 +188,9 @@ gboolean EF_gtk_section_personnalisee_recupere_donnees(Projet *projet, double *j
         ok = FALSE;
     else
     {
+        GList       *list_parcours;
+        
+        *ok_forme = TRUE;
         do
         {
             GtkTreeIter iter2;
@@ -210,6 +214,250 @@ gboolean EF_gtk_section_personnalisee_recupere_donnees(Projet *projet, double *j
             }
             
         } while (gtk_tree_model_iter_next(ef_gtk->model, &iter));
+        
+        // Maintenant, on va vérifier que les droites ne se coupent pas entre elles.
+        list_parcours = *forme;
+        // Il faut un minimum d'un groupe.
+        if (list_parcours == NULL)
+            *ok_forme = FALSE;
+        while ((list_parcours != NULL) && (*ok_forme == TRUE))
+        {
+            GList   *list_parcours2;
+            EF_Point    *point1 = NULL, *point2 = NULL;
+            
+            list_parcours2 = list_parcours->data;
+            
+            // Il faut un minimum de trois points par groupe.
+            if (g_list_next(g_list_next(list_parcours2)) == NULL)
+                *ok_forme = FALSE;
+            
+            while ((list_parcours2 != NULL) && (*ok_forme == TRUE))
+            {
+                
+                if (point2 == NULL)
+                    point2 = list_parcours2->data;
+                else
+                {
+                    double      a, b;
+                    GList       *list_parcours3, *list_parcours4;
+                    EF_Point    *point3 = NULL, *point4 = NULL;
+                    
+                    point1 = point2;
+                    if (list_parcours2 != GINT_TO_POINTER(1))
+                        point2 = list_parcours2->data;
+                    else
+                        point2 = (EF_Point*)((GList*)list_parcours->data)->data;
+
+                    // On refuse le cas où point1 == point2
+                    if (ERREUR_RELATIVE_EGALE(common_math_get(point1->x), common_math_get(point2->x)) && ERREUR_RELATIVE_EGALE(common_math_get(point1->y), common_math_get(point2->y)))
+                        *ok_forme = FALSE;
+                    
+                    // Equation de la droite passant par les deux points.
+                    if (ERREUR_RELATIVE_EGALE(common_math_get(point1->x), common_math_get(point2->x)))
+                    {
+                        a = NAN;
+                        b = common_math_get(point1->x);
+                    }
+                    else
+                    {
+                        a = (common_math_get(point1->y)-common_math_get(point2->y))/(common_math_get(point1->x)-common_math_get(point2->x));
+                        b = -(common_math_get(point2->x)*common_math_get(point1->y)-common_math_get(point1->x)*common_math_get(point2->y))/(common_math_get(point1->x)-common_math_get(point2->x));
+                    }
+                    
+                    // Maintenant, on parcours tous les points suivants afin de vérifier s'il
+                    // se coupe avec le segment en cours.
+                    if (list_parcours2 == GINT_TO_POINTER(1))
+                    {
+                        list_parcours3 = g_list_next(list_parcours);
+                        if (list_parcours3 == NULL)
+                            list_parcours4 = NULL;
+                        else
+                            list_parcours4 = list_parcours3->data;
+                    }
+                    else
+                    {
+                        list_parcours3 = list_parcours;
+                        point4 = point2;
+                        if (g_list_next(list_parcours2) == NULL)
+                            list_parcours4 = GINT_TO_POINTER(1);
+                        else
+                            list_parcours4 = g_list_next(list_parcours2);
+                    }
+                    while ((list_parcours3 != NULL) && (*ok_forme == TRUE))
+                    {
+                        while ((list_parcours4 != NULL) && (*ok_forme == TRUE))
+                        {
+                            if (point4 == NULL)
+                                point4 = list_parcours4->data;
+                            else
+                            {
+                                double a2, b2;
+                                double xmin1, xmax1;
+                                double xmin2, xmax2;
+                                double ymin1, ymax1;
+                                double ymin2, ymax2;
+                                
+                                point3 = point4;
+                                if (list_parcours4 != GINT_TO_POINTER(1))
+                                    point4 = list_parcours4->data;
+                                else
+                                    point4 = ((GList*)list_parcours3->data)->data;
+                                
+                                // Maintenant, on s'assure qu'il n'y a pas d'intersection
+                                // entre les deux segments de droite [point1, point2] et
+                                // [point3, point4].
+                                if (ERREUR_RELATIVE_EGALE(common_math_get(point3->x), common_math_get(point4->x)))
+                                {
+                                    a2 = NAN;
+                                    b2 = common_math_get(point3->x);
+                                }
+                                else
+                                {
+                                    a2 = (common_math_get(point3->y)-common_math_get(point4->y))/(common_math_get(point3->x)-common_math_get(point4->x));
+                                    b2 = -(common_math_get(point4->x)*common_math_get(point3->y)-common_math_get(point3->x)*common_math_get(point4->y))/(common_math_get(point3->x)-common_math_get(point4->x));
+                                }
+                                
+                                xmin1 = MIN(common_math_get(point1->x), common_math_get(point2->x));
+                                xmax1 = MAX(common_math_get(point1->x), common_math_get(point2->x));
+                                xmin2 = MIN(common_math_get(point3->x), common_math_get(point4->x));
+                                xmax2 = MAX(common_math_get(point3->x), common_math_get(point4->x));
+                                ymin1 = MIN(common_math_get(point1->y), common_math_get(point2->y));
+                                ymax1 = MAX(common_math_get(point1->y), common_math_get(point2->y));
+                                ymin2 = MIN(common_math_get(point3->y), common_math_get(point4->y));
+                                ymax2 = MAX(common_math_get(point3->y), common_math_get(point4->y));
+                                
+                                if ((ERREUR_RELATIVE_EGALE(xmax1, xmin2)) || (ERREUR_RELATIVE_EGALE(xmax2, xmin1)))
+                                {
+                                    // Alors, le seul moyen qu'il y ait une collision est que
+                                    // les deux segments soient verticaux.
+                                    if ((isnan(a)) && (isnan(a2)))
+                                    {
+                                        // Si les deux segments se suivent
+                                        if ((ERREUR_RELATIVE_EGALE(ymax1, ymin2)) || (ERREUR_RELATIVE_EGALE(ymax2, ymin1)))
+                                        {
+                                            // OK
+                                        }
+                                        // Si l'un des deux segments commencent ou finit à
+                                        // l'intérieur de l'autre segment.
+                                        else if (((ymin2 < ymin1) && (ymin1 < ymax2)) ||
+                                          ((ymin2 < ymax1) && (ymax1 < ymax2)) ||
+                                          ((ymin1 < ymin2) && (ymin2 < ymax1)) ||
+                                          ((ymin1 < ymax2) && (ymax2 < ymax1)) ||
+                                          ((ERREUR_RELATIVE_EGALE(ymin1, ymin2)) && (ERREUR_RELATIVE_EGALE(ymax1, ymax2))))
+                                            *ok_forme = FALSE;
+                                    }
+                                }
+                                // si le segment 1 est vertical et que le deuxième non
+                                else if (isnan(a))
+                                {
+                                    double  y_b;
+                                    
+                                    // Valeur y du 2ème segment en position x du segment 1
+                                    y_b = a2*b + b2;
+                                    
+                                    if ((ERREUR_RELATIVE_EGALE(y_b, ymin1)) || (ERREUR_RELATIVE_EGALE(y_b, ymax1)))
+                                    {
+                                        // OK
+                                    }
+                                    else if ((ymin1 < y_b) && (y_b < ymax1))
+                                        *ok_forme = FALSE;
+                                    
+                                }
+                                // si le segment 2 est vertical et que le premier non
+                                else if (isnan(a2))
+                                {
+                                    double  y_b;
+                                    
+                                    // Valeur y du 1er segment en position x du segment 2
+                                    y_b = a*b2 + b;
+                                    
+                                    if ((ERREUR_RELATIVE_EGALE(y_b, ymin2)) || (ERREUR_RELATIVE_EGALE(y_b, ymax2)))
+                                    {
+                                        // OK
+                                    }
+                                    else if ((ymin2 < y_b) && (y_b < ymax2))
+                                        *ok_forme = FALSE;
+                                    
+                                }
+                                // Si les deux segments ne sont pas verticaux, on recherche
+                                // simplement l'intersection f1(x) = f2(x) et on regarde si
+                                // le x est présent dans les deux segments
+                                else
+                                {
+                                    if (ERREUR_RELATIVE_EGALE(a, a2))
+                                    {
+                                        // La seule possibilité d'une intersection est que les
+                                        // deux b soient identiques.
+                                        if (ERREUR_RELATIVE_EGALE(b, b2))
+                                        {
+                                            // On regarde si les deux segments ont un x en
+                                            // commun
+                                            if ((ERREUR_RELATIVE_EGALE(xmax1, xmin2)) || (ERREUR_RELATIVE_EGALE(xmax2, xmin1)))
+                                            {
+                                                // OK
+                                            }
+                                            // Si l'un des deux segments commencent ou finit à
+                                            // l'intérieur de l'autre segment.
+                                            else if (((xmin2 < xmin1) && (xmin1 < xmax2)) ||
+                                              ((xmin2 < xmax1) && (xmax1 < xmax2)) ||
+                                              ((xmin1 < xmin2) && (xmin2 < xmax1)) ||
+                                              ((xmin1 < xmax2) && (xmax2 < xmax1)))
+                                                *ok_forme = FALSE;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        double x_inter = -(b2-b)/(a2-a);
+                                        
+                                        if ((ERREUR_RELATIVE_EGALE(x_inter, xmin1)) ||
+                                          (ERREUR_RELATIVE_EGALE(x_inter, xmin2)) ||
+                                          (ERREUR_RELATIVE_EGALE(x_inter, xmax1)) ||
+                                          (ERREUR_RELATIVE_EGALE(x_inter, xmax2)))
+                                        {
+                                            // OK
+                                        }
+                                        else if ((xmin1 < x_inter) && (x_inter < xmax1) &&
+                                          (xmin2 < x_inter) && (x_inter < xmax2))
+                                            *ok_forme = FALSE;
+                                    }
+                                }
+                            }
+                            
+                            if (list_parcours4 != GINT_TO_POINTER(1))
+                            {
+                                list_parcours4 = g_list_next(list_parcours4);
+                                if (list_parcours4 == NULL)
+                                    list_parcours4 = GINT_TO_POINTER(1);
+                            }
+                            else
+                                list_parcours4 = NULL;
+                        }
+                        list_parcours3 = g_list_next(list_parcours3);
+                        point3 = NULL;
+                        point4 = NULL;
+                        if (list_parcours3 == NULL)
+                            list_parcours4 = NULL;
+                        else
+                            list_parcours4 = list_parcours3->data;
+                    }
+                }
+                
+                
+                if (list_parcours2 != GINT_TO_POINTER(1))
+                {
+                    list_parcours2 = g_list_next(list_parcours2);
+                    if (list_parcours2 == NULL)
+                        list_parcours2 = GINT_TO_POINTER(1);
+                }
+                else
+                    list_parcours2 = NULL;
+            }
+            
+            list_parcours = g_list_next(list_parcours);
+        }
+        
+        if (*ok_forme == FALSE)
+            ok = FALSE;
     }
     
     // Si tous les paramètres sont corrects
@@ -261,20 +509,37 @@ void EF_gtk_section_personnalisee_check(GtkWidget *object, Projet *projet)
  * Valeur renvoyée : Aucune.
  */
 {
-    double      j, iy, iz, vy, vyp, vz, vzp, s;
-    GList       *forme = NULL;
-    char        *nom = NULL, *description = NULL;
-    EF_Section  section;
+    double          j, iy, iz, vy, vyp, vz, vzp, s;
+    gboolean        ok_forme;
+    GList           *forme = NULL;
+    char            *nom = NULL, *description = NULL;
+    EF_Section      section;
     Section_Personnalisee   data;
-    GdkPixbuf   *pixbuf;
+    GdkPixbuf       *pixbuf;
+    GtkCssProvider  *cssprovider = gtk_css_provider_new();
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_sections_personnalisee.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section Personnalisee");
     
-    if (!EF_gtk_section_personnalisee_recupere_donnees(projet, &j, &iy, &iz, &vy, &vyp, &vz, &vzp, &s, &forme, &nom, &description))
+    if (!EF_gtk_section_personnalisee_recupere_donnees(projet, &j, &iy, &iz, &vy, &vyp, &vz, &vzp, &s, &forme, &ok_forme, &nom, &description))
         gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections_personnalisee.builder, "EF_section_personnalisee_button_add_edit")), FALSE);
     else
         gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections_personnalisee.builder, "EF_section_personnalisee_button_add_edit")), TRUE);
+    
+    if (ok_forme == FALSE)
+        gtk_css_provider_load_from_data(cssprovider,
+           "GtkLabel {\n"
+           "    font-weight: bold;\n"
+           "    color: #FF0000;\n"
+           "}\n", -1, NULL);
+    else
+        gtk_css_provider_load_from_data(cssprovider,
+           "GtkLabel {\n"
+           "    font-weight: normal;\n"
+           "    color: #000000;\n"
+           "}\n", -1, NULL);
+    gtk_style_context_add_provider(gtk_widget_get_style_context(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections_personnalisee.builder, "EF_section_personnalisee_label_forme"))), GTK_STYLE_PROVIDER(cssprovider), GTK_STYLE_PROVIDER_PRIORITY_USER);
+    g_object_unref(cssprovider);
     
     section.type = SECTION_PERSONNALISEE;
     section.data = &data;
@@ -301,14 +566,15 @@ void EF_gtk_section_personnalisee_ajouter_clicked(GtkButton *button, Projet *pro
  * Valeur renvoyée : Aucune.
  */
 {
-    double  j, iy, iz, vy, vyp, vz, vzp, s;
-    GList   *forme = NULL;
-    gchar   *texte = NULL, *description = NULL;
+    double      j, iy, iz, vy, vyp, vz, vzp, s;
+    gboolean    ok_forme;
+    GList       *forme = NULL;
+    gchar       *texte = NULL, *description = NULL;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_sections_personnalisee.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section Personnalisee");
     
-    if (!EF_gtk_section_personnalisee_recupere_donnees(projet, &j, &iy, &iz, &vy, &vyp, &vz, &vzp, &s, &forme, &texte, &description))
+    if (!EF_gtk_section_personnalisee_recupere_donnees(projet, &j, &iy, &iz, &vy, &vyp, &vz, &vzp, &s, &forme, &ok_forme, &texte, &description))
     {
         free(texte);
         free(description);
@@ -352,13 +618,14 @@ void EF_gtk_section_personnalisee_modifier_clicked(GtkButton *button, Projet *pr
  */
 {
     double  j, iy, iz, vy, vyp, vz, vzp, s;
+    gboolean    ok_forme;
     GList   *forme;
     gchar   *texte, *description;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
     BUGMSG(projet->list_gtk.ef_sections_personnalisee.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section Personnalisee");
     
-    if (!EF_gtk_section_personnalisee_recupere_donnees(projet, &j, &iy, &iz, &vy, &vyp, &vz, &vzp, &s, &forme, &texte, &description))
+    if (!EF_gtk_section_personnalisee_recupere_donnees(projet, &j, &iy, &iz, &vy, &vyp, &vz, &vzp, &s, &forme, &ok_forme, &texte, &description))
         return;
     
     BUG(EF_sections_personnalisee_modif(projet, projet->list_gtk.ef_sections_personnalisee.section, texte, description, common_math_f(j, FLOTTANT_UTILISATEUR), common_math_f(iy, FLOTTANT_UTILISATEUR), common_math_f(iz, FLOTTANT_UTILISATEUR), common_math_f(vy, FLOTTANT_UTILISATEUR), common_math_f(vyp, FLOTTANT_UTILISATEUR), common_math_f(vz, FLOTTANT_UTILISATEUR), common_math_f(vzp, FLOTTANT_UTILISATEUR), common_math_f(s, FLOTTANT_UTILISATEUR), forme), );

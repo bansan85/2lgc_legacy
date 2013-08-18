@@ -120,21 +120,19 @@ Projet* projet_init(Type_Pays pays)
     projet->list_gtk.ef_rapport.builder = NULL;
     projet->list_gtk.ef_resultats.builder = NULL;
     projet->list_gtk.ef_resultats.tableaux = NULL;
-    gtk_css_provider_load_from_data (provider,
-       "GtkPaned GtkToolbar{\n"
-       "    background-image: -gtk-gradient (linear,"
-       "                                     left top, left bottom,"
-       "                                     from(#a7aba7), to(#ededed));\n"
+    gtk_css_provider_load_from_data(provider,
+       "GtkPaned GtkToolbar {\n"
+       "    background-image: -gtk-gradient(linear,"
+       "                                    left top, left bottom,"
+       "                                    from(#a7aba7), to(#ededed));\n"
        "    border-color: #a7aba7;\n"
        "    border-width: 1px;"
        "    border-style: solid;"
        "}\n", -1, NULL);
-    display = gdk_display_get_default ();
-    screen = gdk_display_get_default_screen (display);
-    gtk_style_context_add_provider_for_screen (screen,
-    GTK_STYLE_PROVIDER (provider),
-    GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-    g_object_unref (provider);
+    display = gdk_display_get_default();
+    screen = gdk_display_get_default_screen(display);
+    gtk_style_context_add_provider_for_screen(screen, GTK_STYLE_PROVIDER(provider), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    g_object_unref(provider);
 #endif
     
     BUG(common_ville_set(projet, "37", "Joué-lès-Tours", FALSE), NULL);
