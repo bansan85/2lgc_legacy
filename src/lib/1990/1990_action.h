@@ -58,7 +58,9 @@ gboolean _1990_action_forces_complet_change(Action *action, cholmod_sparse *spar
 cholmod_sparse* _1990_action_efforts_noeuds_renvoie(Action *action) __attribute__((__warn_unused_result__));
 gboolean _1990_action_efforts_noeuds_change(Action *action, cholmod_sparse *sparse) __attribute__((__warn_unused_result__));
 
+#ifdef ENABLE_GTK
 GtkTreeIter* _1990_action_Iter_fenetre_renvoie(Action *action) __attribute__((__warn_unused_result__));
+#endif
 
 Fonction* _1990_action_fonctions_efforts_renvoie(Action *action, int ligne, int barre) __attribute__((__warn_unused_result__));
 Fonction* _1990_action_fonctions_rotation_renvoie(Action *action, int ligne, int barre) __attribute__((__warn_unused_result__));
