@@ -927,6 +927,7 @@ gboolean _1990_action_efforts_noeuds_change(Action *action, cholmod_sparse *spar
 }
 
 
+#ifdef ENABLE_GTK
 GtkTreeIter* _1990_action_Iter_fenetre_renvoie(Action *action)
 /* Description : Renvoie la variable Iter_fenetre.
  * Paramètres : Action *action : l'action dont on souhaite connaître la variable Iter_fenetre.
@@ -940,6 +941,7 @@ GtkTreeIter* _1990_action_Iter_fenetre_renvoie(Action *action)
     
     return &action->Iter_fenetre;
 }
+#endif
 
 
 Fonction* _1990_action_fonctions_efforts_renvoie(Action *action, int ligne, int barre)

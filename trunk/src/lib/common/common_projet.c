@@ -66,9 +66,11 @@ Projet* projet_init(Type_Pays pays)
  */
 {
     Projet          *projet;
+#ifdef ENABLE_GTK
     GtkCssProvider  *provider = gtk_css_provider_new();
     GdkDisplay      *display;
     GdkScreen       *screen;
+#endif
     
     _2lgc_register_resource();
     
