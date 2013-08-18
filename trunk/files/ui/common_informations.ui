@@ -75,8 +75,8 @@
                             <object class="GtkScrolledWindow" id="common_informations_scrolled_localisation">
                                 <property name="visible">True</property>
                                 <property name="expand">True</property>
-                                <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
-                                <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                                <property name="hscrollbar-policy">automatic</property>
+                                <property name="vscrollbar-policy">automatic</property>
                                 <child>
                                     <object class="GtkGrid" id="common_informations_grille_informations">
                                         <property name="visible">True</property>
@@ -85,8 +85,10 @@
                                         <property name="row-spacing">12</property>
                                         <child>
                                             <object class="GtkLabel" id="common_informations_label_destinataire">
-                                                <property name="label" translatable="yes">Client :</property>
+                                                <property name="label" translatable="yes">_Client :</property>
                                                 <property name="visible">True</property>
+                                                <property name="use_underline">True</property>
+                                                <property name="mnemonic-widget">common_informations_textview_destinataire</property>
                                             </object>
                                             <packing>
                                                 <property name="left-attach">0</property>
@@ -97,8 +99,8 @@
                                             <object class="GtkScrolledWindow" id="common_informations_scrolledwindow_destinataire">
                                                 <property name="visible">True</property>
                                                 <property name="expand">True</property>
-                                                <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
-                                                <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                                                <property name="hscrollbar-policy">automatic</property>
+                                                <property name="vscrollbar-policy">automatic</property>
                                                 <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
                                                 <child>
                                                     <object class="GtkTextView" id="common_informations_textview_destinataire">
@@ -117,8 +119,10 @@
                                         </child>
                                         <child>
                                             <object class="GtkLabel" id="common_informations_label_adresse">
-                                                <property name="label" translatable="yes">Adresse :</property>
+                                                <property name="label" translatable="yes">A_dresse :</property>
                                                 <property name="visible">True</property>
+                                                <property name="use_underline">True</property>
+                                                <property name="mnemonic-widget">common_informations_textview_adresse</property>
                                             </object>
                                             <packing>
                                                 <property name="left-attach">0</property>
@@ -129,8 +133,8 @@
                                             <object class="GtkScrolledWindow" id="common_informations_scrolledwindow_adresse">
                                                 <property name="visible">True</property>
                                                 <property name="expand">True</property>
-                                                <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
-                                                <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                                                <property name="hscrollbar-policy">automatic</property>
+                                                <property name="vscrollbar-policy">automatic</property>
                                                 <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
                                                 <child>
                                                     <object class="GtkTextView" id="common_informations_textview_adresse">
@@ -149,9 +153,11 @@
                                         </child>
                                         <child>
                                             <object class="GtkLabel" id="common_informations_label_code_postal">
-                                                <property name="label" translatable="yes">Code postal :</property>
+                                                <property name="label" translatable="yes">C_ode postal :</property>
                                                 <property name="visible">True</property>
                                                 <property name="hexpand">False</property>
+                                                <property name="use_underline">True</property>
+                                                <property name="mnemonic-widget">common_informations_entry_code_postal</property>
                                             </object>
                                             <packing>
                                                 <property name="left-attach">0</property>
@@ -172,9 +178,11 @@
                                         </child>
                                         <child>
                                             <object class="GtkLabel" id="common_informations_label_ville">
-                                                <property name="label" translatable="yes">Ville :</property>
+                                                <property name="label" translatable="yes">_Ville :</property>
                                                 <property name="visible">True</property>
                                                 <property name="hexpand">False</property>
+                                                <property name="use_underline">True</property>
+                                                <property name="mnemonic-widget">common_informations_entry_ville</property>
                                             </object>
                                             <packing>
                                                 <property name="left-attach">2</property>
@@ -200,15 +208,16 @@
                         <child type="tab">
                             <object class="GtkLabel" id="common_informations_notebook_localisation_label">
                                 <property name="visible">True</property>
-                                <property name="label" translatable="yes">Localisations</property>
+                                <property name="label" translatable="yes">_Localisation</property>
+                                <property name="use_underline">True</property>
                             </object>
                         </child>
                         <child>
                             <object class="GtkScrolledWindow" id="common_informations_scrolled_parametres_site">
                                 <property name="visible">True</property>
                                 <property name="expand">True</property>
-                                <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
-                                <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                                <property name="hscrollbar-policy">automatic</property>
+                                <property name="vscrollbar-policy">automatic</property>
                                 <child>
                                     <object class="GtkGrid" id="common_informations_grille_parametres">
                                         <property name="visible">True</property>
@@ -217,8 +226,10 @@
                                         <property name="row-spacing">12</property>
                                         <child>
                                             <object class="GtkLabel" id="common_informations_label_neige">
-                                                <property name="label" translatable="yes">Neige :</property>
+                                                <property name="label" translatable="yes">_Neige :</property>
                                                 <property name="visible">True</property>
+                                                <property name="use_underline">True</property>
+                                                <property name="mnemonic-widget">common_informations_neige_combobox</property>
                                             </object>
                                             <packing>
                                                 <property name="left-attach">0</property>
@@ -237,8 +248,10 @@
                                         </child>
                                         <child>
                                             <object class="GtkLabel" id="common_informations_label_vent">
-                                                <property name="label" translatable="yes">Vent :</property>
+                                                <property name="label" translatable="yes">_Vent :</property>
                                                 <property name="visible">True</property>
+                                                <property name="use_underline">True</property>
+                                                <property name="mnemonic-widget">common_informations_vent_combobox</property>
                                             </object>
                                             <packing>
                                                 <property name="left-attach">0</property>
@@ -257,8 +270,10 @@
                                         </child>
                                         <child>
                                             <object class="GtkLabel" id="common_informations_label_seisme">
-                                                <property name="label" translatable="yes">Séisme :</property>
+                                                <property name="label" translatable="yes">_Séisme :</property>
                                                 <property name="visible">True</property>
+                                                <property name="use_underline">True</property>
+                                                <property name="mnemonic-widget">common_informations_seisme_combobox</property>
                                             </object>
                                             <packing>
                                                 <property name="left-attach">0</property>
@@ -282,7 +297,8 @@
                         <child type="tab">
                             <object class="GtkLabel" id="common_informations_notebook_parametre_label">
                                 <property name="visible">True</property>
-                                <property name="label" translatable="yes">Paramètres</property>
+                                <property name="label" translatable="yes">_Paramètres</property>
+                                <property name="use_underline">True</property>
                             </object>
                         </child>
                     </object>
@@ -300,8 +316,8 @@
                         <child>
                             <object class="GtkButton" id="common_informations_button_annuler">
                                 <property name="visible">True</property>
-                                <property name="use_stock">True</property>
-                                <property name="label">gtk-cancel</property>
+                                <property name="use_underline">True</property>
+                                <property name="label" translatable="yes">_Annuler</property>
                                 <signal name="clicked" handler="common_gtk_informations_annuler_clicked"/>
                             </object>
                             <packing>
@@ -312,8 +328,8 @@
                         <child>
                             <object class="GtkButton" id="common_informations_button_edit">
                                 <property name="visible">True</property>
-                                <property name="use_stock">True</property>
-                                <property name="label">gtk-edit</property>
+                                <property name="use_underline">True</property>
+                                <property name="label" translatable="yes">_Modifier</property>
                                 <signal name="clicked" handler="common_gtk_informations_modifier_clicked"/>
                             </object>
                             <packing>

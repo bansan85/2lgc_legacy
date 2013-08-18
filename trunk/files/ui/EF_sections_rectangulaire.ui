@@ -45,7 +45,9 @@
                 <property name="row-spacing">12</property>
                 <child>
                     <object class="GtkLabel" id="EF_section_rectangulaire_label_nom">
-                        <property name="label" translatable="yes">Nom :</property>
+                        <property name="label" translatable="yes">_Nom :</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic-widget">EF_section_rectangulaire_textview_nom</property>
                         <property name="visible">True</property>
                     </object>
                     <packing>
@@ -57,8 +59,8 @@
                     <object class="GtkScrolledWindow" id="EF_section_rectangulaire_scrolledwindow_nom">
                         <property name="visible">True</property>
                         <property name="expand">True</property>
-                        <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
-                        <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                        <property name="hscrollbar-policy">automatic</property>
+                        <property name="vscrollbar-policy">automatic</property>
                         <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
                         <child>
                             <object class="GtkTextView" id="EF_section_rectangulaire_textview_nom">
@@ -76,7 +78,9 @@
                 </child>
                 <child>
                     <object class="GtkLabel" id="EF_section_rectangulaire_label_largeur">
-                        <property name="label">Largeur [m] :</property>
+                        <property name="label" translatable="yes">_Largeur [m] :</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic-widget">EF_section_rectangulaire_textview_largeur</property>
                         <property name="visible">True</property>
                     </object>
                     <packing>
@@ -88,8 +92,8 @@
                     <object class="GtkScrolledWindow" id="EF_section_rectangulaire_scrolledwindow_largeur">
                         <property name="visible">True</property>
                         <property name="expand">True</property>
-                        <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
-                        <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                        <property name="hscrollbar-policy">automatic</property>
+                        <property name="vscrollbar-policy">automatic</property>
                         <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
                         <child>
                             <object class="GtkTextView" id="EF_section_rectangulaire_textview_largeur">
@@ -107,7 +111,9 @@
                 </child>
                 <child>
                     <object class="GtkLabel" id="EF_section_rectangulaire_label_hauteur">
-                        <property name="label">Hauteur [m] :</property>
+                        <property name="label" translatable="yes">_Hauteur [m] :</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic-widget">EF_section_rectangulaire_textview_hauteur</property>
                         <property name="visible">True</property>
                     </object>
                     <packing>
@@ -119,8 +125,8 @@
                     <object class="GtkScrolledWindow" id="EF_section_rectangulaire_scrolledwindow_hauteur">
                         <property name="visible">True</property>
                         <property name="expand">True</property>
-                        <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
-                        <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                        <property name="hscrollbar-policy">automatic</property>
+                        <property name="vscrollbar-policy">automatic</property>
                         <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
                         <child>
                             <object class="GtkTextView" id="EF_section_rectangulaire_textview_hauteur">
@@ -145,8 +151,8 @@
                         <child>
                             <object class="GtkButton" id="EF_section_rectangulaire_button_annuler">
                                 <property name="visible">True</property>
-                                <property name="use_stock">True</property>
-                                <property name="label">gtk-cancel</property>
+                                <property name="label" translatable="yes">_Annuler</property>
+                                <property name="use_underline">True</property>
                                 <signal name="clicked" handler="EF_gtk_section_rectangulaire_annuler_clicked"/>
                             </object>
                             <packing>
@@ -158,7 +164,7 @@
                             <object class="GtkButton" id="EF_section_rectangulaire_button_add_edit">
                                 <property name="visible">True</property>
                                 <property name="sensitive">False</property>
-                                <property name="use_stock">True</property>
+                                <property name="use_underline">True</property>
                             </object>
                             <packing>
                                 <property name="position">1</property>

@@ -25,8 +25,8 @@
                     <object class="GtkScrolledWindow" id="EF_rapport_scrolled">
                         <property name="visible">True</property>
                         <property name="expand">True</property>
-                        <property name="hscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
-                        <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property>
+                        <property name="hscrollbar-policy">automatic</property>
+                        <property name="vscrollbar-policy">automatic</property>
                         <child>
                             <object class="GtkTreeView" id="EF_rapport_treeview">
                                 <property name="visible">True</property>
@@ -82,19 +82,6 @@
                     <packing>
                         <property name="left-attach">0</property>
                         <property name="top-attach">0</property>
-                        <property name="width">2</property>
-                    </packing>
-                </child>
-                <child>
-                    <object class="GtkButtonBox" id="EF_rapport_bouttons_rapport">
-                        <property name="visible">True</property>
-                        <property name="orientation">horizontal</property>
-                        <property name="layout_style">start</property>
-                        <property name="spacing">6</property>
-                    </object>
-                    <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">1</property>
                     </packing>
                 </child>
                 <child>
@@ -106,8 +93,8 @@
                         <child>
                             <object class="GtkButton" id="EF_rapport_boutton_fermer">
                                 <property name="visible">True</property>
-                                <property name="label">gtk-close</property>
-                                <property name="use_stock">True</property>
+                                <property name="label" translatable="yes">_Fermer</property>
+                                <property name="use_underline">True</property>
                                 <signal name="clicked" handler="EF_gtk_rapport_fermer"/>
                             </object>
                             <packing>
@@ -117,7 +104,7 @@
                         </child>
                     </object>
                     <packing>
-                        <property name="left-attach">1</property>
+                        <property name="left-attach">0</property>
                         <property name="top-attach">1</property>
                     </packing>
                 </child>

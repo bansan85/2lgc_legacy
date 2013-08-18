@@ -1114,11 +1114,11 @@ void _1990_gtk_actions(Projet *projet)
     projet->list_gtk._1990_actions.tree_view_charges = GTK_TREE_VIEW(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_treeview_charge"));
     projet->list_gtk._1990_actions.tree_select_charges = GTK_TREE_SELECTION(gtk_tree_view_get_selection(projet->list_gtk._1990_actions.tree_view_charges));
     
-    gtk_menu_button_set_popup(GTK_MENU_BUTTON(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_toolbar_action_ajout")), projet->list_gtk._1990_actions.menu_type_list_action);
+    gtk_menu_tool_button_set_menu(GTK_MENU_TOOL_BUTTON(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_toolbar_action_ajout")), projet->list_gtk._1990_actions.menu_type_list_action);
     // Pour éviter que le menu menu_type_list_action soit libéré en même temps que le bouton 1990_actions_toolbar_action_ajout.
     g_object_ref(projet->list_gtk._1990_actions.menu_type_list_action);
 
-    gtk_menu_button_set_popup(GTK_MENU_BUTTON(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_toolbar_charge_ajout")), projet->list_gtk._1990_actions.menu_type_list_charge);
+    gtk_menu_tool_button_set_menu(GTK_MENU_TOOL_BUTTON(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_toolbar_charge_ajout")), projet->list_gtk._1990_actions.menu_type_list_charge);
     gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_toolbar_charge_ajout")), FALSE);
     
     /* Défini le comportement du glissé etat vers dispo*/
