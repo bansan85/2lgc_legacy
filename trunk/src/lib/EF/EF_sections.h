@@ -26,12 +26,17 @@ gboolean EF_sections_init(Projet *projet) __attribute__((__warn_unused_result__)
 
 gboolean EF_sections_rectangulaire_ajout(Projet *projet, const char* nom, Flottant l, Flottant h) __attribute__((__warn_unused_result__));
 gboolean EF_sections_rectangulaire_modif(Projet *projet, EF_Section *section, const char* nom, Flottant l, Flottant h) __attribute__((__warn_unused_result__));
+
 gboolean EF_sections_T_ajout(Projet *projet, const char* nom, Flottant lt, Flottant lr, Flottant ht, Flottant hr) __attribute__((__warn_unused_result__));
 gboolean EF_sections_T_modif(Projet *projet, EF_Section *section, const char* nom, Flottant lt, Flottant lr, Flottant ht, Flottant hr) __attribute__((__warn_unused_result__));
+
 gboolean EF_sections_carree_ajout(Projet *projet, const char* nom, Flottant cote) __attribute__((__warn_unused_result__));
 gboolean EF_sections_carree_modif(Projet *projet, EF_Section *section, const char* nom, Flottant cote)  __attribute__((__warn_unused_result__));
+
 gboolean EF_sections_circulaire_ajout(Projet *projet, const char* nom, Flottant diametre) __attribute__((__warn_unused_result__));
 gboolean EF_sections_circulaire_modif(Projet *projet, EF_Section *section, const char* nom, Flottant diametre) __attribute__((__warn_unused_result__));
+
+gboolean EF_sections_personnalisee_verif_forme(GList *forme) __attribute__((__warn_unused_result__));
 gboolean EF_sections_personnalisee_ajout(Projet *projet, const char* nom, const char* description, Flottant j, Flottant iy, Flottant iz, Flottant vy, Flottant vyp, Flottant vz, Flottant vzp, Flottant s, GList *forme) __attribute__((__warn_unused_result__));
 gboolean EF_sections_personnalisee_modif(Projet *projet, EF_Section *section, const char* nom, const char* description, Flottant j, Flottant iy, Flottant iz, Flottant vy, Flottant vyp, Flottant vz, Flottant vzp, Flottant s, GList *forme) __attribute__((__warn_unused_result__));
 
