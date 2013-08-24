@@ -1066,6 +1066,270 @@ void EF_gtk_sections_render_10(GtkTreeViewColumn *tree_column, GtkCellRenderer *
 }
 
 
+gboolean EF_gtk_sections_get_section(char *ligne, char **nom, double *g, double *h, double *b,
+  double *tw, double *tf, double *r1, double *r2, double *A, double *hi, double *d, int *phi,
+  double *pmin, double *pmax, double *AL, double *AG, double *iiy, double *Wely, double *Wply,
+  double *iy, double *Avz, double *iiz, double *Welz, double *Wplz, double *iz, double *ss,
+  double *It, double *Iw, double *vy, double *vyp, double *vz, double *vzp, double *vt,
+  GList **forme)
+/* Description : Renvoie sous forme de variables la ligne de section en cours d'analyse.
+ * Paramètres : char *ligne : ligne en cours d'analyse, seul paramètre devant être non NULL,
+ *              char **nom : nom de la section. La valeur renvoyée doit être libérée avec free,
+ *              double *g : masse par unité de longueur en kg/ml,
+ *              double *h : hauteur en m,
+ *              double *b : largeur en m,
+ *              double *tw : épaisseur d’âme en m,
+ *              double *tf : épaisseur d’aile en m,
+ *              double *r1 : rayon de congé intérieur en m,
+ *              double *r2 : rayon de congé extérieur en m,
+ *              double *A : aire de section en m²,
+ *              double *hi : hauteur intérieure entre les ailes en m,
+ *              double *d :  hauteur de la portion droite de l’âme
+ *              int *phi : diamètre de boulon maximal en mm
+ *              double *pmin : pince minimale admissible en m,
+ *              double *pmax : pince maximale admissible en m,
+ *              double *AL : surface à peindre par unité de longueur en m²/ml,
+ *              double *AG : surface à peindre par unité de masse en m²/t,
+ *              double *iiy : moment d’inertie de flexion selon l'axe y en m⁴,
+ *              double *Wely : module de flexion élastique selon l'axe y en m³,
+ *              double *Wply : module de flexion plastique selon l'axe y en m³,
+ *              double *iy : rayon de giration selon l'axe y en m,
+ *              double *Avz : aire de cisaillement, effort parallèle à l’âme, en m²,
+ *              double *iiz : moment d’inertie de flexion selon l'axe z en m⁴,
+ *              double *Welz : module de flexion élastique selon l'axe z en m³,
+ *              double *Wplz : module de flexion plastique selon l'axe z en m³,
+ *              double *iz : rayon de giration selon l'axe z en m,
+ *              double *ss : longueur d’appui rigide de l'aile en m,
+ *              double *It : moment d’inertie de torsion en m⁴,
+ *              double *Iw : moment d’inertie de gauchissement par rapport au centre de
+ *                           cisaillement en m⁶,
+ *              double *vy : distance entre le centre de gravité et la fibre extrême haute en m,
+ *              double *vyp : distance entre le centre de gravité et la fibre extrême basse en
+ *                            m,
+ *              double *vz : distance entre le centre de gravité et la fibre extrême gauche en
+ *                           m,
+ *              double *vzp : distance entre le centre de gravité et la fibre extrême droite en
+ *                            m,
+ *              double *vt : distance entre le centre de gravité et le centre de cisaillement en
+ *                           m, positif si vers la gauchela fibre extrême droite en m,
+ *              GList **forme : forme de la section. Contient une liste de groupe formant chacun
+ *                              une section par une liste de points.
+ * vakeyr renvoyée :
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             ligne == NULL,
+ *             en cas d'erreur d'allocation mémoire.
+ */
+{
+    char    *nom_, *ligne_tmp;
+    
+    double  g_, h_, b_, tw_, tf_, r1_, r2_, A_, hi_, d_, pmin_, pmax_, AL_, AG_, iiy_, Wely_;
+    double  Wply_, iy_, Avz_, iiz_, Welz_, Wplz_, iz_, ss_, It_, Iw_, vy_, vyp_, vz_, vzp_, vt_;
+    int     phi_;
+    
+    int     i;
+    GList   *forme_, *points;
+    double  x, y;
+    
+    BUGMSG(ligne, FALSE, gettext("Paramètre %s incorrect.\n"), "ligne");
+    
+    ligne_tmp = &ligne[strchr(ligne, '\t')-ligne+1];
+    BUGMSG(sscanf(ligne_tmp, "%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%d\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t", &g_, &h_, &b_, &tw_, &tf_, &r1_, &r2_, &A_, &hi_, &d_, &phi_, &pmin_, &pmax_, &AL_, &AG_, &iiy_, &Wely_, &Wply_, &iy_, &Avz_, &iiz_, &Welz_, &Wplz_, &iz_, &ss_, &It_, &Iw_, &vy_, &vyp_, &vz_, &vzp_, &vt_) == 32, FALSE, gettext("La ligne en cours '%s' n'est pas dans un format correct pour une section.\n"), ligne);
+    
+    if (g != NULL)
+        *g = g_;
+    if (h != NULL)
+        *h = h_;
+    if (b != NULL)
+        *b = b_;
+    if (tw != NULL)
+        *tw = tw_;
+    if (tf != NULL)
+        *tf = tf_;
+    if (r1 != NULL)
+        *r1 = r1_;
+    if (r2 != NULL)
+        *r2 = r2_;
+    if (A != NULL)
+        *A = A_;
+    if (hi != NULL)
+        *hi = hi_;
+    if (d != NULL)
+        *d = d_;
+    if (phi != NULL)
+        *phi = phi_;
+    if (pmin != NULL)
+        *pmin = pmin_;
+    if (pmax != NULL)
+        *pmax = pmax_;
+    if (AL != NULL)
+        *AL = AL_;
+    if (AG != NULL)
+        *AG = AG_;
+    if (iiy != NULL)
+        *iiy = iiy_;
+    if (Wely != NULL)
+        *Wely = Wely_;
+    if (Wply != NULL)
+        *Wply = Wply_;
+    if (iy != NULL)
+        *iy = iy_;
+    if (Avz != NULL)
+        *Avz = Avz_;
+    if (iiz != NULL)
+        *iiz = iiz_;
+    if (Welz != NULL)
+        *Welz = Welz_;
+    if (Wplz != NULL)
+        *Wplz = Wplz_;
+    if (iz != NULL)
+        *iz = iz_;
+    if (ss != NULL)
+        *ss = ss_;
+    if (It != NULL)
+        *It = It_;
+    if (Iw != NULL)
+        *Iw = Iw_;
+    if (vy != NULL)
+        *vy = vy_;
+    if (vyp != NULL)
+        *vyp = vyp_;
+    if (vz != NULL)
+        *vz = vz_;
+    if (vzp != NULL)
+        *vzp = vzp_;
+    if (vt != NULL)
+        *vt = vt_;
+    
+    ligne_tmp = ligne;
+    i = 0;
+    while ((i != 33) && (ligne_tmp[0] != 0))
+    {
+        if (ligne_tmp[0] == '\t')
+            i++;
+        ligne_tmp++;
+    }
+    forme_ = NULL;
+    points = NULL;
+    
+    while (ligne_tmp[0] != 0)
+    {
+        BUGMSG(sscanf(ligne_tmp, "%lf\t%lf", &x, &y) == 2, FALSE, gettext("La ligne en cours '%s' n'est pas dans un format correct pour une section.\n"), ligne);
+        
+        // Nouveau groupe de points
+        if ((isnan(x)) && (isnan(y)))
+        {
+            // On ajoute pas un groupe de point vide
+            if (points != NULL)
+                forme_ = g_list_append(forme_, points);
+            points = NULL;
+        }
+        else
+        {
+            EF_Point    *point;
+            
+            point = malloc(sizeof(EF_Point));
+            point->x = common_math_f(x, FLOTTANT_UTILISATEUR);
+            point->y = common_math_f(y, FLOTTANT_UTILISATEUR);
+            point->z = common_math_f(0., FLOTTANT_UTILISATEUR);
+            
+            points = g_list_append(points, point);
+        }
+        
+        // On passe au groupe de point suivant
+        i = 0;
+        while ((i != 2) && (ligne_tmp[0] != 0))
+        {
+            if (ligne_tmp[0] == '\t')
+                i++;
+            ligne_tmp++;
+        }
+    }
+    if (points != NULL)
+        forme_ = g_list_append(forme_, points);
+    
+    if (!EF_sections_personnalisee_verif_forme(forme_))
+    {
+        while (forme_ != NULL)
+        {
+            g_list_free_full(forme_->data, free);
+            forme_ = g_list_next(forme_);
+        }
+        g_list_free(forme_);
+        
+        BUGMSG(NULL, FALSE, gettext("La ligne en cours '%s' n'est pas dans un format correct pour une section.\n"), ligne);
+    }
+    else if (forme == NULL)
+    {
+        while (forme_ != NULL)
+        {
+            g_list_free_full(forme_->data, free);
+            forme_ = g_list_next(forme_);
+        }
+        g_list_free(forme_);
+        
+    }
+    else
+        *forme = forme_;
+    
+    // On le fait à la fin pour éviter d'allouer inutilement de la mémoire.
+    if (ligne != NULL)
+    {
+        nom_ = malloc(sizeof(char)*(strchr(ligne, '\t')-ligne+1));
+        strncpy(nom_, ligne, strchr(ligne, '\t')-ligne);
+        nom_[strchr(ligne, '\t')-ligne] = 0;
+        
+        *nom = nom_;
+    }
+    
+    return TRUE;
+}
+
+
+void EF_gtk_sections_importe_section(GtkMenuItem *menuitem, Projet *projet)
+/* Description : Permet d'importer une section depuis les menus.
+ * Paramètres : GtkMenuItem *menuitem : l'item dont le nom contient la section à importer,
+ *              Projet *projet : la variable projet.
+ * Valeur renvoyée : Aucune.
+ *   Echec : projet == NULL.
+ */
+{
+    FILE    *file;
+    char    *ligne, *section;
+    
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    
+    BUGMSG(file = fopen(DATADIR"/profiles_acier.csv", "r"), , "Le fichier des sections est introuvable.\n");
+    
+    BUGMSG(section = g_strdup_printf("%s\t", gtk_menu_item_get_label(menuitem)), , gettext("Erreur d'allocation mémoire.\n"));
+    
+    ligne = common_text_get_line(file);
+    free(ligne);
+    
+    ligne = common_text_get_line(file);
+    while (ligne != NULL)
+    {
+        if (strncmp(ligne, section, strlen(section)) == 0)
+        {
+            double  j, iy, iz, vy, vyp, vz, vzp, s;
+            GList   *forme;
+            char    *desc;
+            
+            BUG(EF_gtk_sections_get_section(ligne, &desc, NULL, NULL, NULL, NULL, NULL, NULL, NULL, &s, NULL, NULL, NULL, NULL, NULL, NULL, NULL, &iy, NULL, NULL, NULL, NULL, &iz, NULL, NULL, NULL, NULL, &j, NULL, &vy, &vyp, &vz, &vzp, NULL, &forme), );
+            BUG(EF_sections_personnalisee_ajout(projet, desc, desc, common_math_f(j, FLOTTANT_UTILISATEUR), common_math_f(iy, FLOTTANT_UTILISATEUR), common_math_f(iz, FLOTTANT_UTILISATEUR), common_math_f(vy, FLOTTANT_UTILISATEUR), common_math_f(vyp, FLOTTANT_UTILISATEUR), common_math_f(vz, FLOTTANT_UTILISATEUR), common_math_f(vzp, FLOTTANT_UTILISATEUR), common_math_f(s, FLOTTANT_UTILISATEUR), forme), );
+            free(desc);
+        }
+        free(ligne);
+        ligne = common_text_get_line(file);
+    }
+    
+    free(section);
+    fclose(file);
+    
+    return;
+}
+
+
 void EF_gtk_sections(Projet *projet)
 /* Description : Création de la fenêtre permettant d'afficher les sections sous forme d'un
  *               tableau.
@@ -1077,8 +1341,10 @@ void EF_gtk_sections(Projet *projet)
 {
     Gtk_EF_Sections *ef_gtk;
     GList           *list_parcours;
+    FILE            *file;
     
     BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    
     if (projet->list_gtk.ef_sections.builder != NULL)
     {
         gtk_window_present(GTK_WINDOW(projet->list_gtk.ef_sections.window));
@@ -1116,6 +1382,79 @@ void EF_gtk_sections(Projet *projet)
         
         list_parcours = g_list_next(list_parcours);
     }
+    
+    file = fopen(DATADIR"/profiles_acier.csv", "r");
+    if (file != NULL)
+    {
+        char        *ligne;
+        GtkWidget   *sous_menu;
+        GList       *list_categorie = NULL;
+        
+        sous_menu = gtk_menu_item_get_submenu(GTK_MENU_ITEM(gtk_builder_get_object(ef_gtk->builder, "EF_sections_ajouter_menu_importee")));
+        if (sous_menu == NULL)
+        {
+            sous_menu = gtk_menu_new();
+            gtk_menu_item_set_submenu(GTK_MENU_ITEM(gtk_builder_get_object(ef_gtk->builder, "EF_sections_ajouter_menu_importee")), sous_menu);
+        }
+        
+        // On passe la première ligne qui est l'étiquette des colonnes.
+        ligne = common_text_get_line(file);
+        free(ligne);
+        
+        ligne = common_text_get_line(file);
+        while (ligne != NULL)
+        {
+            char        *nom_section, *categorie;
+            GtkWidget   *menu, *categorie_menu = NULL;
+            
+            BUG(EF_gtk_sections_get_section(ligne, &nom_section, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL), );
+            categorie = malloc(sizeof(char)*(strlen(nom_section)+1));
+            if (strchr(nom_section, ' ') == NULL)
+                strcpy(categorie, nom_section);
+            else
+            {
+                strncpy(categorie, nom_section, strchr(nom_section, ' ')-nom_section);
+                categorie[strchr(nom_section, ' ')-nom_section] = 0;
+            }
+            
+            list_parcours = list_categorie;
+            while (list_parcours != NULL)
+            {
+                GtkWidget   *widget = list_parcours->data;
+                
+                if (strcmp(categorie, gtk_menu_item_get_label(GTK_MENU_ITEM(widget))) == 0)
+                {
+                    categorie_menu = widget;
+                    break;
+                }
+                
+                list_parcours = g_list_next(list_parcours);
+            }
+            if (list_parcours == NULL)
+            {
+                categorie_menu = gtk_menu_item_new_with_label(categorie);
+                gtk_menu_shell_append(GTK_MENU_SHELL(sous_menu), categorie_menu);
+                gtk_menu_item_set_submenu(GTK_MENU_ITEM(categorie_menu), gtk_menu_new());
+                list_categorie = g_list_append(list_categorie, categorie_menu);
+            }
+            
+            menu = gtk_menu_item_new_with_label(nom_section);
+            gtk_menu_shell_append(GTK_MENU_SHELL(gtk_menu_item_get_submenu(GTK_MENU_ITEM(categorie_menu))), menu);
+            g_signal_connect(menu, "activate", G_CALLBACK(EF_gtk_sections_importe_section), projet);
+            
+            free(ligne);
+            free(nom_section);
+            free(categorie);
+            ligne = common_text_get_line(file);
+        }
+        g_list_free(list_categorie);
+        
+        gtk_widget_show_all(sous_menu);
+        
+        fclose(file);
+    }
+    else
+        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder, "EF_sections_ajouter_menu_importee")), FALSE);
     
     gtk_window_set_transient_for(GTK_WINDOW(ef_gtk->window), GTK_WINDOW(projet->list_gtk.comp.window));
 }
