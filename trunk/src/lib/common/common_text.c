@@ -338,9 +338,13 @@ char *common_text_get_line(FILE *fichier)
             retour = g_strconcat(ligne_tmp, buffer, NULL);
             free(ligne_tmp);
         }
+        
+        // On a atteint la fin de la ligne
         if (buffer[strlen(buffer)-1] == '\n')
         {
             free(buffer);
+            // Suppression du retour chariot
+            retour[strlen(retour)-1] = 0;
             return retour;
         }
     } while (TRUE);

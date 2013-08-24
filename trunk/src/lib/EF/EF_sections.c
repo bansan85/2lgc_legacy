@@ -621,7 +621,12 @@ gboolean EF_sections_personnalisee_verif_forme(GList *forme)
     list_parcours = forme;
     // Il faut un minimum d'un groupe.
     if (list_parcours == NULL)
+    {
+#ifdef DEBUG_TMP
+        printf("%s : 1\n", __FUNCTION__);
+#endif
         return FALSE;
+    }
     while (list_parcours != NULL)
     {
         GList   *list_parcours2;
@@ -631,7 +636,12 @@ gboolean EF_sections_personnalisee_verif_forme(GList *forme)
         
         // Il faut un minimum de trois points par groupe.
         if (g_list_next(g_list_next(list_parcours2)) == NULL)
+        {
+#ifdef DEBUG_TMP
+            printf("%s : 2\n", __FUNCTION__);
+#endif
             return FALSE;
+        }
         
         while (list_parcours2 != NULL)
         {
@@ -645,14 +655,21 @@ gboolean EF_sections_personnalisee_verif_forme(GList *forme)
                 EF_Point    *point3 = NULL, *point4 = NULL;
                 
                 point1 = point2;
-                if (list_parcours2 != GINT_TO_POINTER(1))
-                    point2 = list_parcours2->data;
-                else
-                    point2 = (EF_Point*)((GList*)list_parcours->data)->data;
-
+                point2 = list_parcours2->data;
+                
+#ifdef DEBUG_TMP
+                printf("point 1 et 2 : %lf %lf %lf %lf\n", common_math_get(point1->x), common_math_get(point1->y), common_math_get(point2->x), common_math_get(point2->y));
+#endif
+                
+                
                 // On refuse le cas où point1 == point2
                 if (ERREUR_RELATIVE_EGALE(common_math_get(point1->x), common_math_get(point2->x)) && ERREUR_RELATIVE_EGALE(common_math_get(point1->y), common_math_get(point2->y)))
+                {
+#ifdef DEBUG_TMP
+                    printf("%s : 3\n", __FUNCTION__);
+#endif
                     return FALSE;
+                }
                 
                 // Equation de la droite passant par les deux points.
                 if (ERREUR_RELATIVE_EGALE(common_math_get(point1->x), common_math_get(point2->x)))
@@ -668,23 +685,10 @@ gboolean EF_sections_personnalisee_verif_forme(GList *forme)
                 
                 // Maintenant, on parcours tous les points suivants afin de vérifier s'il
                 // se coupe avec le segment en cours.
-                if (list_parcours2 == GINT_TO_POINTER(1))
-                {
-                    list_parcours3 = g_list_next(list_parcours);
-                    if (list_parcours3 == NULL)
-                        list_parcours4 = NULL;
-                    else
-                        list_parcours4 = list_parcours3->data;
-                }
-                else
-                {
-                    list_parcours3 = list_parcours;
-                    point4 = point2;
-                    if (g_list_next(list_parcours2) == NULL)
-                        list_parcours4 = GINT_TO_POINTER(1);
-                    else
-                        list_parcours4 = g_list_next(list_parcours2);
-                }
+                list_parcours3 = list_parcours;
+                point4 = point2;
+                list_parcours4 = g_list_next(list_parcours2);
+                
                 while (list_parcours3 != NULL)
                 {
                     while (list_parcours4 != NULL)
@@ -700,10 +704,11 @@ gboolean EF_sections_personnalisee_verif_forme(GList *forme)
                             double ymin2, ymax2;
                             
                             point3 = point4;
-                            if (list_parcours4 != GINT_TO_POINTER(1))
-                                point4 = list_parcours4->data;
-                            else
-                                point4 = ((GList*)list_parcours3->data)->data;
+                            point4 = list_parcours4->data;
+                            
+#ifdef DEBUG_TMP
+                            printf("point 3 et 4 : %lf %lf %lf %lf\n", common_math_get(point3->x), common_math_get(point3->y), common_math_get(point4->x), common_math_get(point4->y));
+#endif
                             
                             // Maintenant, on s'assure qu'il n'y a pas d'intersection
                             // entre les deux segments de droite [point1, point2] et
@@ -746,7 +751,12 @@ gboolean EF_sections_personnalisee_verif_forme(GList *forme)
                                       ((ymin1 < ymin2) && (ymin2 < ymax1)) ||
                                       ((ymin1 < ymax2) && (ymax2 < ymax1)) ||
                                       ((ERREUR_RELATIVE_EGALE(ymin1, ymin2)) && (ERREUR_RELATIVE_EGALE(ymax1, ymax2))))
+                                    {
+#ifdef DEBUG_TMP
+                                        printf("%s : 4\n", __FUNCTION__);
+#endif
                                         return FALSE;
+                                    }
                                 }
                             }
                             // si le segment 1 est vertical et que le deuxième non
@@ -762,7 +772,12 @@ gboolean EF_sections_personnalisee_verif_forme(GList *forme)
                                     // OK
                                 }
                                 else if ((ymin1 < y_b) && (y_b < ymax1))
+                                {
+#ifdef DEBUG_TMP
+                                    printf("%s : 5\n", __FUNCTION__);
+#endif
                                     return FALSE;
+                                }
                                 
                             }
                             // si le segment 2 est vertical et que le premier non
@@ -778,7 +793,13 @@ gboolean EF_sections_personnalisee_verif_forme(GList *forme)
                                     // OK
                                 }
                                 else if ((ymin2 < y_b) && (y_b < ymax2))
+                                {
+#ifdef DEBUG_TMP
+                                    printf("%lf %lf %lf %lf %lf %lf %lf %lf\n", common_math_get(point1->x), common_math_get(point1->y), common_math_get(point2->x), common_math_get(point2->y), common_math_get(point3->x), common_math_get(point3->y), common_math_get(point4->x), common_math_get(point4->y));
+                                    printf("%s : 6\n", __FUNCTION__);
+#endif
                                     return FALSE;
+                                }
                                 
                             }
                             // Si les deux segments ne sont pas verticaux, on recherche
@@ -804,7 +825,12 @@ gboolean EF_sections_personnalisee_verif_forme(GList *forme)
                                           ((xmin2 < xmax1) && (xmax1 < xmax2)) ||
                                           ((xmin1 < xmin2) && (xmin2 < xmax1)) ||
                                           ((xmin1 < xmax2) && (xmax2 < xmax1)))
+                                        {
+#ifdef DEBUG_TMP
+                                            printf("%s : 7\n", __FUNCTION__);
+#endif
                                             return FALSE;
+                                        }
                                     }
                                 }
                                 else
@@ -820,20 +846,19 @@ gboolean EF_sections_personnalisee_verif_forme(GList *forme)
                                     }
                                     else if ((xmin1 < x_inter) && (x_inter < xmax1) &&
                                       (xmin2 < x_inter) && (x_inter < xmax2))
+                                    {
+#ifdef DEBUG_TMP
+                                        printf("%s : 8\n", __FUNCTION__);
+#endif
                                         return FALSE;
+                                    }
                                 }
                             }
                         }
                         
-                        if (list_parcours4 != GINT_TO_POINTER(1))
-                        {
-                            list_parcours4 = g_list_next(list_parcours4);
-                            if (list_parcours4 == NULL)
-                                list_parcours4 = GINT_TO_POINTER(1);
-                        }
-                        else
-                            list_parcours4 = NULL;
+                        list_parcours4 = g_list_next(list_parcours4);
                     }
+                    
                     list_parcours3 = g_list_next(list_parcours3);
                     point3 = NULL;
                     point4 = NULL;
@@ -845,20 +870,14 @@ gboolean EF_sections_personnalisee_verif_forme(GList *forme)
             }
             
             
-            if (list_parcours2 != GINT_TO_POINTER(1))
-            {
-                list_parcours2 = g_list_next(list_parcours2);
-                if (list_parcours2 == NULL)
-                    list_parcours2 = GINT_TO_POINTER(1);
-            }
-            else
-                list_parcours2 = NULL;
+            list_parcours2 = g_list_next(list_parcours2);
         }
         
         list_parcours = g_list_next(list_parcours);
     }
     
     return TRUE;
+#undef DEBUG_TMP
 }
 
 
