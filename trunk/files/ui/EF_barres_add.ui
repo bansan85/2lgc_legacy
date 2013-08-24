@@ -24,6 +24,10 @@
         <property name="tag-table">EF_gtk_barres_add_tag_table</property>
         <signal name="changed" handler="EF_gtk_barres_add_check_add"/>
     </object>
+    <object class="GtkTextBuffer" id="EF_gtk_barres_add_angle_buffer">
+        <property name="tag-table">EF_gtk_barres_add_tag_table</property>
+        <signal name="changed" handler="EF_gtk_barres_add_check_add"/>
+    </object>
     <object class="GtkTextBuffer" id="EF_gtk_barres_add_nb_noeuds_intermediaire_buffer">
         <property name="tag-table">EF_gtk_barres_add_tag_table</property>
         <signal name="changed" handler="EF_gtk_barres_add_check_add"/>
@@ -175,6 +179,29 @@
                     </packing>
                 </child>
                 <child>
+                    <object class="GtkLabel" id="EF_gtk_barres_add_angle_label">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">A_ngle :</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic-widget">EF_gtk_barres_add_angle_textview</property>
+                    </object>
+                    <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">6</property>
+                    </packing>
+                </child>
+                <child>
+                    <object class="GtkTextView" id="EF_gtk_barres_add_angle_textview">
+                        <property name="visible">True</property>
+                        <property name="accepts-tab">False</property>
+                        <property name="buffer">EF_gtk_barres_add_angle_buffer</property>
+                    </object>
+                    <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">6</property>
+                    </packing>
+                </child>
+                <child>
                     <object class="GtkLabel" id="EF_gtk_barres_add_relachement_label">
                         <property name="visible">True</property>
                         <property name="label" translatable="yes">_Relâchement :</property>
@@ -183,7 +210,7 @@
                     </object>
                     <packing>
                         <property name="left-attach">0</property>
-                        <property name="top-attach">6</property>
+                        <property name="top-attach">7</property>
                     </packing>
                 </child>
                 <child>
@@ -194,7 +221,7 @@
                     </object>
                     <packing>
                         <property name="left-attach">1</property>
-                        <property name="top-attach">6</property>
+                        <property name="top-attach">7</property>
                     </packing>
                 </child>
                 <child>
@@ -206,7 +233,7 @@
                     </object>
                     <packing>
                         <property name="left-attach">0</property>
-                        <property name="top-attach">7</property>
+                        <property name="top-attach">8</property>
                     </packing>
                 </child>
                 <child>
@@ -217,7 +244,7 @@
                     </object>
                     <packing>
                         <property name="left-attach">1</property>
-                        <property name="top-attach">7</property>
+                        <property name="top-attach">8</property>
                     </packing>
                 </child>
                 <child>
@@ -253,7 +280,7 @@
                     </object>
                     <packing>
                         <property name="left-attach">0</property>
-                        <property name="top-attach">8</property>
+                        <property name="top-attach">9</property>
                         <property name="width">2</property>
                     </packing>
                 </child>

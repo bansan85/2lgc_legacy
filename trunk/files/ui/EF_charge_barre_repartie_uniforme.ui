@@ -506,6 +506,7 @@
                             <object class="GtkButton" id="EF_charge_barre_rep_uni_button_annuler">
                                 <property name="visible">True</property>
                                 <property name="label" translatable="yes">_Annuler</property>
+                                <property name="use_underline">True</property>
                                 <signal name="clicked" handler="EF_gtk_charge_barre_repartie_uniforme_annuler_clicked"/>
                             </object>
                             <packing>
@@ -517,6 +518,7 @@
                             <object class="GtkButton" id="EF_charge_barre_rep_uni_button_add_edit">
                                 <property name="visible">True</property>
                                 <property name="sensitive">False</property>
+                                <property name="use_underline">True</property>
                             </object>
                             <packing>
                                 <property name="position">1</property>

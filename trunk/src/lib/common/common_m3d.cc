@@ -90,6 +90,9 @@ gboolean m3d_configure_event(GtkWidget *drawing, GdkEventConfigure *ev, gpointer
     if ((data->camera == NULL) && (projet->list_gtk.comp.window != NULL))
         BUG(m3d_camera_axe_x_z_y(projet), FALSE);
     
+    if (data->camera == NULL)
+        data->camera = new CM3dCamera(10., 10., 10., 10., 11., 10., 90, ev->width, ev->height);
+    
     data->camera->set_size_of_window(ev->width, ev->height);
     
     if (data->camera->get_window_height() < data->camera->get_window_width())
@@ -1136,6 +1139,7 @@ gboolean m3d_barre_finition(CM3dObject *objet, EF_Barre *barre)
     double      dx, dy, dz;
     EF_Point    p_d, p_f;
     
+    objet->rotations(common_math_get(barre->angle), 0., 0.);
     objet->set_color(100, 100, 100);
     objet->set_ambient_reflexion(0.8);
     objet->set_smooth(GOURAUD);

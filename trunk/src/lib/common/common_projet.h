@@ -26,6 +26,7 @@
 #include <glib.h>
 
 // Nombre de décimal en fonction des unités
+#define DECIMAL_ANGLE 3
 #define DECIMAL_DISTANCE 3
 #define DECIMAL_DEPLACEMENT 6
 #define DECIMAL_ROTATION 6
@@ -750,6 +751,7 @@ typedef struct __EF_Barre
     
     EF_Noeud            *noeud_debut;
     EF_Noeud            *noeud_fin;
+    Flottant            angle;
     EF_Relachement      *relachement;
     unsigned int        discretisation_element;     // Nombre de noeuds intermédiaires
     GList               *noeuds_intermediaires;
