@@ -20,7 +20,7 @@
         <property name="visible">True</property>
         <property name="title" translatable="yes">Barres</property>
         <property name="default-height">400</property>
-        <property name="default-width">600</property>
+        <property name="default-width">750</property>
         <property name="window-position">GTK_WIN_POS_CENTER</property>
         <signal name="key-press-event" handler="EF_gtk_barres_window_key_press"/>
         <signal name="destroy" handler="EF_gtk_barres_window_destroy"/>
@@ -146,9 +146,24 @@
                                         <property name="visible">True</property>
                                         <property name="resizable">True</property>
                                         <property name="alignment">0.5</property>
+                                        <property name="title" translatable="yes">Angle</property>
+                                        <child>
+                                            <object class="GtkCellRendererText" id="EF_barres_treeview_cell6">
+                                                <property name="xalign">0.5</property>
+                                                <property name="editable">True</property>
+                                                <signal name="edited" handler="EF_gtk_barres_edit_angle"/>
+                                            </object>
+                                        </child>
+                                    </object>
+                                </child>
+                                <child>
+                                    <object class="GtkTreeViewColumn" id="EF_barres_treeview_column7">
+                                        <property name="visible">True</property>
+                                        <property name="resizable">True</property>
+                                        <property name="alignment">0.5</property>
                                         <property name="title" translatable="yes">Relâchement</property>
                                         <child>
-                                            <object class="GtkCellRendererCombo" id="EF_barres_treeview_cell6">
+                                            <object class="GtkCellRendererCombo" id="EF_barres_treeview_cell7">
                                                 <property name="xalign">0.5</property>
                                                 <property name="editable">True</property>
                                                 <property name="text-column">0</property>
@@ -159,7 +174,7 @@
                                     </object>
                                 </child>
                                 <child>
-                                    <object class="GtkTreeViewColumn" id="EF_barres_treeview_column7">
+                                    <object class="GtkTreeViewColumn" id="EF_barres_treeview_column8">
                                         <property name="visible">True</property>
                                     </object>
                                 </child>

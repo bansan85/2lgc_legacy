@@ -27,6 +27,7 @@
 #include "common_m3d.hpp"
 
 #include "common_projet.h"
+#include "common_math.h"
 #include "common_erreurs.h"
 #include "common_gtk.h"
 #include "common_selection.h"
@@ -302,6 +303,42 @@ void EF_gtk_barres_edit_noeud(GtkCellRendererText *cell, gchar *path_string, gch
     }
     
     free(fake);
+     
+    return;
+}
+
+
+void EF_gtk_barres_edit_angle(GtkCellRendererText *cell, gchar *path_string, gchar *new_text,
+  Projet *projet)
+/* Description : Change l'angle de la barre.
+ * Paramètres : GtkCellRendererText *cell : cellule en cours,
+ *            : gchar *path_string : path de la ligne en cours,
+ *            : gchar *new_text : nouvelle valeur,
+ *            : Projet *projet : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    Gtk_EF_Barres   *gtk_barre;
+    GtkTreeModel    *model;
+    GtkTreeIter     iter;
+    double          conversion;
+    EF_Barre        *barre;
+    
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet->list_gtk.ef_barres.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Barres");
+    
+    gtk_barre = &projet->list_gtk.ef_barres;
+    
+    model = GTK_TREE_MODEL(gtk_builder_get_object(gtk_barre->builder, "EF_barres_treestore"));
+    
+    gtk_tree_model_get_iter_from_string(model, &iter, path_string);
+    gtk_tree_model_get(model, &iter, 0, &barre, -1);
+    
+    conversion = common_text_str_to_double(new_text, -360., FALSE, 360., FALSE);
+    if (isnan(conversion))
+        return;
+    
+    BUG(_1992_1_1_barres_change_angle(barre, common_math_f(conversion, FLOTTANT_UTILISATEUR), projet), );
      
     return;
 }
@@ -646,6 +683,30 @@ void EF_gtk_barres_render_6(GtkTreeViewColumn *tree_column, GtkCellRenderer *cel
  */
 {
     EF_Barre    *barre;
+    char        tmp[30];
+    
+    gtk_tree_model_get(tree_model, iter, 0, &barre, -1);
+    
+    common_math_double_to_char2(barre->angle, tmp, DECIMAL_ANGLE);
+    
+    g_object_set(cell, "text", tmp, NULL);
+    
+    return;
+}
+
+
+void EF_gtk_barres_render_7(GtkTreeViewColumn *tree_column, GtkCellRenderer *cell,
+  GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data2)
+/* Description : Affiche la distance vz de la section.
+ * Paramètres : GtkTreeViewColumn *tree_column : composant à l'origine de l'évènement,
+ *            : GtkCellRenderer *cell : la cellule en cours d'édition,
+ *            : GtkTreeModel *tree_model : le mode en cours d'édition,
+ *            : GtkTreeIter *iter : la ligne en cours d'édition,
+ *            : gpointer data2 : la variable projet.
+ * Valeur renvoyée : Aucune.
+ */
+{
+    EF_Barre    *barre;
     
     gtk_tree_model_get(tree_model, iter, 0, &barre, -1);
     
@@ -688,7 +749,7 @@ void EF_gtk_barres(Projet *projet)
     g_object_set(gtk_builder_get_object(ef_gtk->builder, "EF_barres_treeview_cell1"), "model", projet->list_gtk.ef_barres.liste_types, NULL);
     g_object_set(gtk_builder_get_object(ef_gtk->builder, "EF_barres_treeview_cell2"), "model", projet->list_gtk.ef_sections.liste_sections, NULL);
     g_object_set(gtk_builder_get_object(ef_gtk->builder, "EF_barres_treeview_cell3"), "model", projet->list_gtk.ef_materiaux.liste_materiaux, NULL);
-    g_object_set(gtk_builder_get_object(ef_gtk->builder, "EF_barres_treeview_cell6"), "model", projet->list_gtk.ef_relachements.liste_relachements, NULL);
+    g_object_set(gtk_builder_get_object(ef_gtk->builder, "EF_barres_treeview_cell7"), "model", projet->list_gtk.ef_relachements.liste_relachements, NULL);
     
     g_object_set_data(gtk_builder_get_object(ef_gtk->builder, "EF_barres_treeview_cell4"), "column", GINT_TO_POINTER(4));
     g_object_set_data(gtk_builder_get_object(ef_gtk->builder, "EF_barres_treeview_cell5"), "column", GINT_TO_POINTER(5));
@@ -700,6 +761,7 @@ void EF_gtk_barres(Projet *projet)
     gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(ef_gtk->builder, "EF_barres_treeview_column4")), GTK_CELL_RENDERER(gtk_builder_get_object(ef_gtk->builder, "EF_barres_treeview_cell4")), EF_gtk_barres_render_4, projet, NULL);
     gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(ef_gtk->builder, "EF_barres_treeview_column5")), GTK_CELL_RENDERER(gtk_builder_get_object(ef_gtk->builder, "EF_barres_treeview_cell5")), EF_gtk_barres_render_5, projet, NULL);
     gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(ef_gtk->builder, "EF_barres_treeview_column6")), GTK_CELL_RENDERER(gtk_builder_get_object(ef_gtk->builder, "EF_barres_treeview_cell6")), EF_gtk_barres_render_6, projet, NULL);
+    gtk_tree_view_column_set_cell_data_func(GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(ef_gtk->builder, "EF_barres_treeview_column7")), GTK_CELL_RENDERER(gtk_builder_get_object(ef_gtk->builder, "EF_barres_treeview_cell7")), EF_gtk_barres_render_7, projet, NULL);
     
     list_parcours = projet->modele.barres;
     while (list_parcours != NULL)

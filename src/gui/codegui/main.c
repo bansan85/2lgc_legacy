@@ -52,9 +52,9 @@ int main(int argc, char *argv[])
 {
     /* Variables */
     Projet *projet;
-    GList   *tmp1, *tmp2;
+//    GList   *tmp1, *tmp2;
     
-    EF_Relachement_Donnees_Elastique_Lineaire *ry_d, *rz_d, *ry_f, *rz_f;
+//    EF_Relachement_Donnees_Elastique_Lineaire *ry_d, *rz_d, *ry_f, *rz_f;
     
     // On charge la localisation
     setlocale( LC_ALL, "" );
@@ -92,7 +92,7 @@ int main(int argc, char *argv[])
     BUG(projet = projet_init(PAYS_FR), -1);
     
     // Création des actions
-    BUG(_1990_action_ajout(projet, 0, "Poids propre"), -1); // Poids propre
+/*    BUG(_1990_action_ajout(projet, 0, "Poids propre"), -1); // Poids propre
     BUG(_1990_action_ajout(projet, 2, "Chargement"), -1); // 2 Exploitation
     BUG(_1990_action_ajout(projet, 16, "Neige"), -1); // 3 Neige
     BUG(_1990_action_ajout(projet, 17, "Vent"), -1); // 4 Vent
@@ -175,16 +175,16 @@ int main(int argc, char *argv[])
     BUG(EF_relachement_ajout(projet, "Partiel", EF_RELACHEMENT_BLOQUE, NULL, EF_RELACHEMENT_ELASTIQUE_LINEAIRE, ry_d, EF_RELACHEMENT_ELASTIQUE_LINEAIRE, rz_d, EF_RELACHEMENT_BLOQUE, NULL, EF_RELACHEMENT_ELASTIQUE_LINEAIRE, ry_f, EF_RELACHEMENT_ELASTIQUE_LINEAIRE, rz_f), -1);
     
     // Création de l'élément en béton
-    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, EF_sections_cherche_nom(projet, "Rect_0.3*0.5ht", TRUE), EF_materiaux_cherche_nom(projet, "B25", TRUE), 0, 1, NULL, 1), -1);
-    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, EF_sections_cherche_nom(projet, "T_1.00*0.20*0.10*0.50", TRUE), EF_materiaux_cherche_nom(projet, "B25", TRUE), 1, 2, EF_relachement_cherche_nom(projet, "Articulation", TRUE), 2), -1);
-    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, EF_sections_cherche_nom(projet, "Carre_0.50", TRUE), EF_materiaux_cherche_nom(projet, "B25", TRUE), 2, 3, NULL, 3), -1);
-    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, EF_sections_cherche_nom(projet, "Circulaire_0.05", TRUE), EF_materiaux_cherche_nom(projet, "B25", TRUE), 3, 4, NULL, 0), -1);
+    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, EF_sections_cherche_nom(projet, "Rect_0.3*0.5ht", TRUE), EF_materiaux_cherche_nom(projet, "B25", TRUE), 0, 1, common_math_f(0., FLOTTANT_UTILISATEUR), NULL, 1), -1);
+    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, EF_sections_cherche_nom(projet, "T_1.00*0.20*0.10*0.50", TRUE), EF_materiaux_cherche_nom(projet, "B25", TRUE), 1, 2, common_math_f(0., FLOTTANT_UTILISATEUR), EF_relachement_cherche_nom(projet, "Articulation", TRUE), 2), -1);
+    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, EF_sections_cherche_nom(projet, "Carre_0.50", TRUE), EF_materiaux_cherche_nom(projet, "B25", TRUE), 2, 3, common_math_f(0., FLOTTANT_UTILISATEUR), NULL, 3), -1);
+    BUG(_1992_1_1_barres_ajout(projet, BETON_ELEMENT_POUTRE, EF_sections_cherche_nom(projet, "Circulaire_0.05", TRUE), EF_materiaux_cherche_nom(projet, "B25", TRUE), 3, 4, common_math_f(0., FLOTTANT_UTILISATEUR), NULL, 0), -1);
     
     // Ajout de l'action ponctuelle
-/*    BUG(tmp1 = common_selection_renvoie_numeros("1;3-5"), -1);
+    BUG(tmp1 = common_selection_renvoie_numeros("1;3-5"), -1);
     BUG(tmp2 = common_selection_converti_numeros_en_noeuds(tmp1, projet), -1);
     BUG(EF_charge_noeud_ajout(projet, 0, tmp2, 1000., 500., 1000., 3000., 5000., 5000., "test1"), -1);
-    g_list_free(tmp1);*/
+    g_list_free(tmp1);
     BUG(tmp1 = common_selection_renvoie_numeros("2"), -1);
     BUG(tmp2 = common_selection_converti_numeros_en_noeuds(tmp1, projet), -1);
     BUG(EF_charge_noeud_ajout(projet, 0, tmp2, common_math_f(0., FLOTTANT_UTILISATEUR), common_math_f(0., FLOTTANT_UTILISATEUR), common_math_f(0., FLOTTANT_UTILISATEUR), common_math_f(0., FLOTTANT_UTILISATEUR), common_math_f(0., FLOTTANT_UTILISATEUR), common_math_f(0., FLOTTANT_UTILISATEUR), "test1"), -1);
@@ -195,7 +195,7 @@ int main(int argc, char *argv[])
     BUG(tmp2 = common_selection_converti_numeros_en_barres(tmp1, projet), -1);
     BUG(EF_charge_barre_repartie_uniforme_ajout(projet, 3, tmp2, FALSE, FALSE, common_math_f(0., FLOTTANT_UTILISATEUR), common_math_f(0., FLOTTANT_UTILISATEUR), common_math_f(0., FLOTTANT_UTILISATEUR), common_math_f(0., FLOTTANT_UTILISATEUR), common_math_f(-10000., FLOTTANT_UTILISATEUR), common_math_f(0., FLOTTANT_UTILISATEUR), common_math_f(0., FLOTTANT_UTILISATEUR), common_math_f(0., FLOTTANT_UTILISATEUR), "test3"), -1);
     g_list_free(tmp1);
-/*    BUG(tmp1 = common_selection_renvoie_numeros("0-2/2"), -1);
+    BUG(tmp1 = common_selection_renvoie_numeros("0-2/2"), -1);
     BUG(tmp2 = common_selection_converti_numeros_en_barres(tmp1, projet), -1);
     BUG(EF_charge_barre_repartie_uniforme_ajout(projet, 0, tmp2, FALSE, FALSE, 1.5, 1.0, 10000., 9000., 8000., 7000., 6000., 5000., "test3"), -1);
     g_list_free(tmp1);*/

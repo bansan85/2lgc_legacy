@@ -26,6 +26,7 @@
 #include "common_m3d.hpp"
 
 #include "common_projet.h"
+#include "common_math.h"
 #include "common_erreurs.h"
 #include "common_gtk.h"
 #include "common_selection.h"
@@ -65,6 +66,7 @@ void EF_gtk_barres_add_add_clicked(GtkButton *button, Projet *projet)
     EF_Materiau     *materiau;
     unsigned int    noeud_debut;
     unsigned int    noeud_fin;
+    double          angle;
     EF_Relachement  *relachement;
     unsigned int    nb_noeuds;
     GtkTreeModel    *model;
@@ -114,12 +116,16 @@ void EF_gtk_barres_add_add_clicked(GtkButton *button, Projet *projet)
     if ((EF_noeuds_cherche_numero(projet, noeud_debut, TRUE) == NULL) || (EF_noeuds_cherche_numero(projet, noeud_fin, TRUE) == NULL))
         return;
     
+    angle = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_angle_buffer")), -360., FALSE, 360., FALSE);
+    if (isnan(angle))
+        return;
+    
     type = gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_type_combobox")));
     
     nb_noeuds = common_gtk_text_buffer_uint(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_nb_noeuds_intermediaire_buffer")), 0, TRUE, UINT_MAX, FALSE);
     BUG(nb_noeuds != UINT_MAX, );
     
-    BUG(_1992_1_1_barres_ajout(projet, (Type_Element)type, section, materiau, noeud_debut, noeud_fin, relachement, nb_noeuds), );
+    BUG(_1992_1_1_barres_ajout(projet, (Type_Element)type, section, materiau, noeud_debut, noeud_fin, common_math_f(angle, FLOTTANT_UTILISATEUR), relachement, nb_noeuds), );
     BUG(m3d_rafraichit(projet), );
     
     return;
@@ -213,6 +219,8 @@ void EF_gtk_barres_add_check_add(GtkWidget *widget, Projet *projet)
         ok = TRUE;
     
     if (common_gtk_text_buffer_uint(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_nb_noeuds_intermediaire_buffer")), 0, TRUE, UINT_MAX, FALSE) == UINT_MAX)
+        ok = FALSE;
+    if (isnan(common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_angle_buffer")), -360., FALSE, 360., FALSE)))
         ok = FALSE;
     
     gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_button_add")), ok);

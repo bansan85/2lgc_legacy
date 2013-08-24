@@ -73,7 +73,7 @@ gboolean _1992_1_1_barres_init(Projet *projet)
 
 
 gboolean _1992_1_1_barres_ajout(Projet *projet, Type_Element type, EF_Section *section,
-  EF_Materiau *materiau, unsigned int noeud_debut, unsigned int noeud_fin,
+  EF_Materiau *materiau, unsigned int noeud_debut, unsigned int noeud_fin, Flottant angle,
   EF_Relachement* relachement, unsigned int discretisation_element)
 /* Description : Ajoute un élément à la liste des éléments en béton.
  * Paramètres : Projet *projet : la variable projet,
@@ -82,6 +82,7 @@ gboolean _1992_1_1_barres_ajout(Projet *projet, Type_Element type, EF_Section *s
  *            : EF_Materiau *materiau : matériau correspondant à l'élément,
  *            : unsigned int noeud_debut : numéro de départ de l'élément,
  *            : unsigned int noeud_fin : numéro de fin de l'élément,
+ *            : Flottant angle : angle de la barre en degré,
  *            : EF_Relachement* relachement : relachement de la barre (NULL si aucun),
  *            : unsigned int discretisation_element : nombre d'élément une fois discrétisé.
  * Valeur renvoyée :
@@ -112,6 +113,7 @@ gboolean _1992_1_1_barres_ajout(Projet *projet, Type_Element type, EF_Section *s
     
     element_nouveau->section = section;
     element_nouveau->materiau = materiau;
+    element_nouveau->angle = angle;
     element_nouveau->noeud_debut = EF_noeuds_cherche_numero(projet, noeud_debut, TRUE);
     element_nouveau->noeud_fin = EF_noeuds_cherche_numero(projet, noeud_fin, TRUE);
     if ((element_nouveau->noeud_debut == NULL) || (element_nouveau->noeud_fin == NULL))
@@ -724,6 +726,46 @@ gboolean _1992_1_1_barres_change_materiau(EF_Barre *barre, EF_Materiau *materiau
     BUG(EF_calculs_free(projet), FALSE);
     
 #ifdef ENABLE_GTK
+    if (projet->list_gtk.ef_barres.builder != NULL)
+        gtk_widget_queue_resize(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treeview")));
+#endif
+    
+    return TRUE;
+}
+
+
+gboolean _1992_1_1_barres_change_angle(EF_Barre *barre, Flottant angle, Projet *projet)
+/* Description : Change le matériau d'une barre depuis son nom.
+ * Paramètres : EF_Barre *barre : barre à modifier,
+ *            : Flottant angle : le nouvel angle,
+ *            : Projet *projet : variable projet.
+ * Valeur renvoyée :
+ *   Succès : TRUE
+ *   Échec : FALSE :
+ *             barre == NULL,
+ *             projet == NULL.
+ */
+{
+#ifdef ENABLE_GTK
+    GList   *liste_barre = NULL;
+#endif
+    
+    BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    
+    if (ERREUR_RELATIVE_EGALE(common_math_get(barre->angle), common_math_get(angle)))
+        return TRUE;
+    
+    barre->angle = angle;
+    
+    BUG(EF_calculs_free(projet), FALSE);
+    
+#ifdef ENABLE_GTK
+    liste_barre = g_list_append(liste_barre, barre);
+    BUG(m3d_actualise_graphique(projet, NULL, liste_barre), FALSE);
+    BUG(m3d_rafraichit(projet), FALSE);
+    g_list_free(liste_barre);
+    
     if (projet->list_gtk.ef_barres.builder != NULL)
         gtk_widget_queue_resize(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treeview")));
 #endif

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2013-08-24 19:24+0200\n"
-"PO-Revision-Date: 2013-08-24 19:54+0100\n"
+"POT-Creation-Date: 2013-08-25 01:35+0200\n"
+"PO-Revision-Date: 2013-08-25 01:36+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -184,6 +184,9 @@ msgstr "Noeud 1"
 msgid "Noeud 2"
 msgstr "Noeud 2"
 
+msgid "Angle"
+msgstr "Angle"
+
 msgid "Relâchement"
 msgstr "Relâchement"
 
@@ -345,6 +348,9 @@ msgstr "Noeud _1 :"
 
 msgid "Noeud _2 :"
 msgstr "Noeud _2 :"
+
+msgid "A_ngle :"
+msgstr "A_ngle :"
 
 msgid "_Relâchement :"
 msgstr "_Relâchement :"
