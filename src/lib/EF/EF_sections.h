@@ -36,6 +36,7 @@ gboolean EF_sections_carree_modif(Projet *projet, EF_Section *section, const cha
 gboolean EF_sections_circulaire_ajout(Projet *projet, const char* nom, Flottant diametre) __attribute__((__warn_unused_result__));
 gboolean EF_sections_circulaire_modif(Projet *projet, EF_Section *section, const char* nom, Flottant diametre) __attribute__((__warn_unused_result__));
 
+void EF_sections_personnalisee_forme_free(GList *forme);
 gboolean EF_sections_personnalisee_verif_forme(GList *forme) __attribute__((__warn_unused_result__));
 gboolean EF_sections_personnalisee_ajout(Projet *projet, const char* nom, const char* description, Flottant j, Flottant iy, Flottant iz, Flottant vy, Flottant vyp, Flottant vz, Flottant vzp, Flottant s, GList *forme) __attribute__((__warn_unused_result__));
 gboolean EF_sections_personnalisee_modif(Projet *projet, EF_Section *section, const char* nom, const char* description, Flottant j, Flottant iy, Flottant iz, Flottant vy, Flottant vyp, Flottant vz, Flottant vzp, Flottant s, GList *forme) __attribute__((__warn_unused_result__));
