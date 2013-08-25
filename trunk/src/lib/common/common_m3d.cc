@@ -1467,6 +1467,7 @@ gboolean m3d_barre(void *donnees_m3d, EF_Barre *barre)
                 list_parcours = g_list_next(list_parcours);
             }
             tout->rotations(90., 0., 0.);
+            tout->set_name(tmp);
             
             m3d_barre_finition(tout, barre);
             vue->scene->add_object(tout);
