@@ -161,6 +161,21 @@ cd .. && \
 autoreconf -i --force && \
 PKG_CONFIG_FOR_BUILD="/usr/bin/pkg-config" CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --disable-modules --disable-packagekit --disable-cups --disable-papi --disable-introspection --disable-static --enable-shared --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 --enable-gtk2-dependency && \
 make -j9 && sudo make install && cd .. && \
+(test -f icon-naming-utils-0.8.90.tar.gz || wget http://tango.freedesktop.org/releases/icon-naming-utils-0.8.90.tar.gz) && \
+tar xvzf icon-naming-utils-0.8.90.tar.gz && \
+cd icon-naming-utils-0.8.90 && \
+CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
+make -j9 && sudo make install && cd .. && \
+(test -f gnome-icon-theme-3.8.3.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/gnome-icon-theme/3.8/gnome-icon-theme-3.8.3.tar.xz) && \
+tar xvaf gnome-icon-theme-3.8.3.tar.xz && \
+cd gnome-icon-theme-3.8.3 && \
+CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
+make -j9 && sudo make install && cd .. && \
+(test -f gnome-icon-theme-symbolic-3.8.3.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/gnome-icon-theme-symbolic/3.8/gnome-icon-theme-symbolic-3.8.3.tar.xz) && \
+tar xvaf gnome-icon-theme-symbolic-3.8.3.tar.xz && \
+cd gnome-icon-theme-symbolic-3.8.3 && \
+CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
+make -j9 && sudo make install && cd .. && \
 (test -f librsvg-2.36.4.tar.xz || wget http://ftp.acc.umu.se/pub/gnome/sources/librsvg/2.36/librsvg-2.36.4.tar.xz) && \
 tar xvaf librsvg-2.36.4.tar.xz && \
 cd librsvg-2.36.4 && \
@@ -281,6 +296,11 @@ cp /usr/i686-pc-mingw32/usr/bin/lib{cairo-2,fontconfig-1,freetype-6,xml2-2,iconv
 cp /usr/i686-pc-mingw32/usr/bin/intl.dll libs/
 cp /usr/i686-pc-mingw32/usr/bin/libz.dll libs/zlib1.dll
 cp /usr/lib64/gcc/i686-pc-mingw32/*/lib{stdc++-6,gfortran-3,quadmath-0,gcc_s_sjlj-1}.dll libs/
+mkdir -p libs/etc/gtk-3.0
+echo -e "[Settings]\ngtk-icon-theme-name = gnome" > libs/etc/gtk-3.0/settings.ini
+mkdir -p libs/share/icons/gnome/scalable/actions
+cp /usr/i686-pc-mingw32/usr/share/icons/gnome/index.theme libs/share/icons/gnome
+cp /usr/i686-pc-mingw32/usr/share/icons/gnome/scalable/actions/{list-add,list-remove,go-previous,go-first}-symbolic.svg libs/share/icons/gnome/scalable/actions
 
 Pour la version sans débug :
 :%s/comp32debug/comp32/cg
