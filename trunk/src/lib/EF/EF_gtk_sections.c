@@ -1070,8 +1070,8 @@ gboolean EF_gtk_sections_get_section(char *ligne, char **nom, double *g, double 
   double *tw, double *tf, double *r1, double *r2, double *A, double *hi, double *d, int *phi,
   double *pmin, double *pmax, double *AL, double *AG, double *iiy, double *Wely, double *Wply,
   double *iy, double *Avz, double *iiz, double *Welz, double *Wplz, double *iz, double *ss,
-  double *It, double *Iw, double *vy, double *vyp, double *vz, double *vzp, double *vt,
-  GList **forme)
+  double *It, double *Iw, double *vy, double *vyp, double *vz, double *vzp, double *vty,
+  double *vtz, GList **forme)
 /* Description : Renvoie sous forme de variables la ligne de section en cours d'analyse.
  * Paramètres : char *ligne : ligne en cours d'analyse, seul paramètre devant être non NULL,
  *              char **nom : nom de la section. La valeur renvoyée doit être libérée avec free,
@@ -1103,15 +1103,18 @@ gboolean EF_gtk_sections_get_section(char *ligne, char **nom, double *g, double 
  *              double *It : moment d’inertie de torsion en m⁴,
  *              double *Iw : moment d’inertie de gauchissement par rapport au centre de
  *                           cisaillement en m⁶,
- *              double *vy : distance entre le centre de gravité et la fibre extrême haute en m,
- *              double *vyp : distance entre le centre de gravité et la fibre extrême basse en
- *                            m,
- *              double *vz : distance entre le centre de gravité et la fibre extrême gauche en
- *                           m,
- *              double *vzp : distance entre le centre de gravité et la fibre extrême droite en
- *                            m,
- *              double *vt : distance entre le centre de gravité et le centre de cisaillement en
- *                           m, positif si vers la gauchela fibre extrême droite en m,
+ *              double *vy : distance horizontale entre le centre de gravité et la fibre extrême
+ *                           droite en m,
+ *              double *vyp : distance horizontale entre le centre de gravité et la fibre
+ *                            extrême gauche en m,
+ *              double *vz : distance verticale entre le centre de gravité et la fibre extrême
+ *                           haute en m,
+ *              double *vzp : distance verticale entre le centre de gravité et la fibre extrême
+ *                            basse en m,
+ *              double *vty : distance horizontale entre le centre de gravité et le centre de
+ *                            cisaillement en m, positif si vers la droite,
+ *              double *vtz : distance verticale entre le centre de gravité et le centre de
+ *                           cisaillement en m, positif si vers le haut,
  *              GList **forme : forme de la section. Contient une liste de groupe formant chacun
  *                              une section par une liste de points.
  * vakeyr renvoyée :
@@ -1124,7 +1127,8 @@ gboolean EF_gtk_sections_get_section(char *ligne, char **nom, double *g, double 
     char    *nom_, *ligne_tmp;
     
     double  g_, h_, b_, tw_, tf_, r1_, r2_, A_, hi_, d_, pmin_, pmax_, AL_, AG_, iiy_, Wely_;
-    double  Wply_, iy_, Avz_, iiz_, Welz_, Wplz_, iz_, ss_, It_, Iw_, vy_, vyp_, vz_, vzp_, vt_;
+    double  Wply_, iy_, Avz_, iiz_, Welz_, Wplz_, iz_, ss_, It_, Iw_, vy_, vyp_, vz_, vzp_;
+    double  vty_, vtz_;
     int     phi_;
     
     int     i;
@@ -1134,7 +1138,7 @@ gboolean EF_gtk_sections_get_section(char *ligne, char **nom, double *g, double 
     BUGMSG(ligne, FALSE, gettext("Paramètre %s incorrect.\n"), "ligne");
     
     ligne_tmp = &ligne[strchr(ligne, '\t')-ligne+1];
-    BUGMSG(sscanf(ligne_tmp, "%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%d\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t", &g_, &h_, &b_, &tw_, &tf_, &r1_, &r2_, &A_, &hi_, &d_, &phi_, &pmin_, &pmax_, &AL_, &AG_, &iiy_, &Wely_, &Wply_, &iy_, &Avz_, &iiz_, &Welz_, &Wplz_, &iz_, &ss_, &It_, &Iw_, &vy_, &vyp_, &vz_, &vzp_, &vt_) == 32, FALSE, gettext("La ligne en cours '%s' n'est pas dans un format correct pour une section.\n"), ligne);
+    BUGMSG(sscanf(ligne_tmp, "%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%d\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t", &g_, &h_, &b_, &tw_, &tf_, &r1_, &r2_, &A_, &hi_, &d_, &phi_, &pmin_, &pmax_, &AL_, &AG_, &iiy_, &Wely_, &Wply_, &iy_, &Avz_, &iiz_, &Welz_, &Wplz_, &iz_, &ss_, &It_, &Iw_, &vy_, &vyp_, &vz_, &vzp_, &vty_, &vtz_) == 33, FALSE, gettext("La ligne en cours '%s' n'est pas dans un format correct pour une section.\n"), ligne);
     
     if (g != NULL)
         *g = g_;
@@ -1198,12 +1202,14 @@ gboolean EF_gtk_sections_get_section(char *ligne, char **nom, double *g, double 
         *vz = vz_;
     if (vzp != NULL)
         *vzp = vzp_;
-    if (vt != NULL)
-        *vt = vt_;
+    if (vty != NULL)
+        *vty = vty_;
+    if (vtz != NULL)
+        *vtz = vtz_;
     
     ligne_tmp = ligne;
     i = 0;
-    while ((i != 33) && (ligne_tmp[0] != 0))
+    while ((i != 34) && (ligne_tmp[0] != 0))
     {
         if (ligne_tmp[0] == '\t')
             i++;
@@ -1250,25 +1256,12 @@ gboolean EF_gtk_sections_get_section(char *ligne, char **nom, double *g, double 
     
     if (!EF_sections_personnalisee_verif_forme(forme_))
     {
-        while (forme_ != NULL)
-        {
-            g_list_free_full(forme_->data, free);
-            forme_ = g_list_next(forme_);
-        }
-        g_list_free(forme_);
+        EF_sections_personnalisee_forme_free(forme_);
         
         BUGMSG(NULL, FALSE, gettext("La ligne en cours '%s' n'est pas dans un format correct pour une section.\n"), ligne);
     }
     else if (forme == NULL)
-    {
-        while (forme_ != NULL)
-        {
-            g_list_free_full(forme_->data, free);
-            forme_ = g_list_next(forme_);
-        }
-        g_list_free(forme_);
-        
-    }
+        EF_sections_personnalisee_forme_free(forme_);
     else
         *forme = forme_;
     
@@ -1315,7 +1308,7 @@ void EF_gtk_sections_importe_section(GtkMenuItem *menuitem, Projet *projet)
             GList   *forme;
             char    *desc;
             
-            BUG(EF_gtk_sections_get_section(ligne, &desc, NULL, NULL, NULL, NULL, NULL, NULL, NULL, &s, NULL, NULL, NULL, NULL, NULL, NULL, NULL, &iy, NULL, NULL, NULL, NULL, &iz, NULL, NULL, NULL, NULL, &j, NULL, &vy, &vyp, &vz, &vzp, NULL, &forme), );
+            BUG(EF_gtk_sections_get_section(ligne, &desc, NULL, NULL, NULL, NULL, NULL, NULL, NULL, &s, NULL, NULL, NULL, NULL, NULL, NULL, NULL, &iy, NULL, NULL, NULL, NULL, &iz, NULL, NULL, NULL, NULL, &j, NULL, &vy, &vyp, &vz, &vzp, NULL, NULL, &forme), );
             BUG(EF_sections_personnalisee_ajout(projet, desc, desc, common_math_f(j, FLOTTANT_UTILISATEUR), common_math_f(iy, FLOTTANT_UTILISATEUR), common_math_f(iz, FLOTTANT_UTILISATEUR), common_math_f(vy, FLOTTANT_UTILISATEUR), common_math_f(vyp, FLOTTANT_UTILISATEUR), common_math_f(vz, FLOTTANT_UTILISATEUR), common_math_f(vzp, FLOTTANT_UTILISATEUR), common_math_f(s, FLOTTANT_UTILISATEUR), forme), );
             free(desc);
         }
@@ -1406,8 +1399,9 @@ void EF_gtk_sections(Projet *projet)
         {
             char        *nom_section, *categorie;
             GtkWidget   *menu, *categorie_menu = NULL;
+            GList       *forme;
             
-            BUG(EF_gtk_sections_get_section(ligne, &nom_section, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL), );
+            BUG(EF_gtk_sections_get_section(ligne, &nom_section, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, &forme), );
             categorie = malloc(sizeof(char)*(strlen(nom_section)+1));
             if (strchr(nom_section, ' ') == NULL)
                 strcpy(categorie, nom_section);
@@ -1432,11 +1426,21 @@ void EF_gtk_sections(Projet *projet)
             }
             if (list_parcours == NULL)
             {
-                categorie_menu = gtk_menu_item_new_with_label(categorie);
+                EF_Section section;
+                Section_Personnalisee data;
+                
+                section.data = &data;
+                section.type = SECTION_PERSONNALISEE;
+                data.forme = forme;
+                
+                categorie_menu = gtk_image_menu_item_new_with_label(categorie);
                 gtk_menu_shell_append(GTK_MENU_SHELL(sous_menu), categorie_menu);
                 gtk_menu_item_set_submenu(GTK_MENU_ITEM(categorie_menu), gtk_menu_new());
                 list_categorie = g_list_append(list_categorie, categorie_menu);
+                gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(categorie_menu), gtk_image_new_from_pixbuf(EF_gtk_sections_dessin(&section, 32, 32)));
+                gtk_image_menu_item_set_always_show_image(GTK_IMAGE_MENU_ITEM(categorie_menu), TRUE);
             }
+            EF_sections_personnalisee_forme_free(forme);
             
             menu = gtk_menu_item_new_with_label(nom_section);
             gtk_menu_shell_append(GTK_MENU_SHELL(gtk_menu_item_get_submenu(GTK_MENU_ITEM(categorie_menu))), menu);

@@ -601,6 +601,25 @@ gboolean EF_sections_circulaire_modif(Projet *projet, EF_Section *section, const
 }
 
 
+void EF_sections_personnalisee_forme_free(GList *forme)
+/* Description : Libère la forme d'une section personnalisée.
+ * Paramètres : GList *forme : la forme à libérer.
+ * Valeur renvoyée : Aucune
+ */
+{
+    GList   *list_parcours = forme;
+    
+    while (list_parcours != NULL)
+    {
+        g_list_free_full(list_parcours->data, free);
+        list_parcours = g_list_next(list_parcours);
+    }
+    g_list_free(forme);
+    
+    return;
+}
+
+
 gboolean EF_sections_personnalisee_verif_forme(GList *forme)
 /* Description : Vérifie la forme d'une section personnalisée.
  * Paramètres : GList *forme : la forme à vérifier. Pour mémoire, la liste contient une liste de
@@ -1031,12 +1050,7 @@ gboolean EF_sections_personnalisee_modif(Projet *projet, EF_Section *section, co
         s = common_math_f(NAN, FLOTTANT_ORDINATEUR);
     if (forme != NULL)
     {
-        while (section_data->forme != NULL)
-        {
-            g_list_free_full(section_data->forme->data, free);
-            
-            section_data->forme = g_list_delete_link(section_data->forme, section_data->forme);
-        }
+        EF_sections_personnalisee_forme_free(section_data->forme);
         
         section_data->forme = forme;
     }
@@ -2053,16 +2067,7 @@ void EF_sections_free_un(EF_Section *section)
             Section_Personnalisee   *section2 = section->data;
             
             free(section2->description);
-            
-            while (section2->forme != NULL)
-            {
-                GList   *list_parcours;
-                
-                list_parcours = section2->forme->data;
-                g_list_free_full(list_parcours, (GDestroyNotify)free);
-                
-                section2->forme = g_list_delete_link(section2->forme, section2->forme);
-            }
+            EF_sections_personnalisee_forme_free(section2->forme);
             
             break;
         }
