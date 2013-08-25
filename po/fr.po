@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2013-08-25 01:35+0200\n"
-"PO-Revision-Date: 2013-08-25 01:36+0100\n"
+"POT-Creation-Date: 2013-08-25 15:02+0200\n"
+"PO-Revision-Date: 2013-08-25 15:15+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -441,17 +441,17 @@ msgstr "valeur _fréquence"
 msgid "valeur q_uasi-permanente"
 msgstr "valeur q_uasi-permanente"
 
-msgid "Réactions d'appuis"
-msgstr "Réactions d'appuis"
+msgid "Réactions d'appuis (repère global)"
+msgstr "Réactions d'appuis (repère global)"
 
-msgid "Déplacements"
-msgstr "Déplacements"
+msgid "Déplacements (repère global)"
+msgstr "Déplacements (repère global)"
 
-msgid "Efforts dans les barres"
-msgstr "Efforts dans les barres"
+msgid "Efforts dans les barres (repère local)"
+msgstr "Efforts dans les barres (repère local)"
 
-msgid "Déformations des barres"
-msgstr "Déformations des barres"
+msgid "Déformations des barres (repère local)"
+msgstr "Déformations des barres (repère local)"
 
 msgid "Résultats"
 msgstr "Résultats"
@@ -2129,42 +2129,3 @@ msgstr "Modification d'un matériau acier"
 
 msgid "Impossible d'initialiser gtk.\n"
 msgstr "Impossible d'initialiser gtk.\n"
-
-#~ msgid "Nom :"
-#~ msgstr "Nom :"
-
-#~ msgid "Description :"
-#~ msgstr "Description :"
-
-#~ msgid "Supprimer"
-#~ msgstr "Supprimer"
-
-#~ msgid "u<sub>x</sub>"
-#~ msgstr "u<sub>x</sub>"
-
-#~ msgid "u<sub>y</sub>"
-#~ msgstr "u<sub>y</sub>"
-
-#~ msgid "u<sub>z</sub>"
-#~ msgstr "u<sub>z</sub>"
-
-#~ msgid "r<sub>x</sub>"
-#~ msgstr "r<sub>x</sub>"
-
-#~ msgid "r<sub>y</sub>"
-#~ msgstr "r<sub>y</sub>"
-
-#~ msgid "r<sub>z</sub>"
-#~ msgstr "r<sub>z</sub>"
-
-#~ msgid "&#968;<sub>0</sub>"
-#~ msgstr "&#968;<sub>0</sub>"
-
-#~ msgid "&#968;<sub>1</sub>"
-#~ msgstr "&#968;<sub>1</sub>"
-
-#~ msgid "&#968;<sub>2</sub>"
-#~ msgstr "&#968;<sub>2</sub>"
-
-#~ msgid "Section en béton '%s' introuvable.\n"
-#~ msgstr "Section en béton '%s' introuvable.\n"
