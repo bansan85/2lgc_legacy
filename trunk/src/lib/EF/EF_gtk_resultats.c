@@ -2462,7 +2462,7 @@ void EF_gtk_resultats_add_page_type(GtkMenuItem *menuitem, Projet *projet)
         
         projet->list_gtk.ef_resultats.tableaux = g_list_append(projet->list_gtk.ef_resultats.tableaux, res);
     }
-    else if (strcmp(gtk_menu_item_get_label(menuitem), gettext("Réactions d'appuis")) == 0)
+    else if (strcmp(gtk_menu_item_get_label(menuitem), gettext("Réactions d'appuis (repère global)")) == 0)
     {
         BUGMSG(res->col_tab = malloc(sizeof(Colonne_Resultats)*8), , gettext("Erreur d'allocation mémoire.\n"));
         res->col_tab[0] = 7;
@@ -2482,7 +2482,7 @@ void EF_gtk_resultats_add_page_type(GtkMenuItem *menuitem, Projet *projet)
         
         projet->list_gtk.ef_resultats.tableaux = g_list_append(projet->list_gtk.ef_resultats.tableaux, res);
     }
-    else if (strcmp(gtk_menu_item_get_label(menuitem), gettext("Déplacements")) == 0)
+    else if (strcmp(gtk_menu_item_get_label(menuitem), gettext("Déplacements (repère global)")) == 0)
     {
         BUGMSG(res->col_tab = malloc(sizeof(Colonne_Resultats)*8), , gettext("Erreur d'allocation mémoire.\n"));
         res->col_tab[0] = 7;
@@ -2517,7 +2517,7 @@ void EF_gtk_resultats_add_page_type(GtkMenuItem *menuitem, Projet *projet)
         
         projet->list_gtk.ef_resultats.tableaux = g_list_append(projet->list_gtk.ef_resultats.tableaux, res);
     }
-    else if (strcmp(gtk_menu_item_get_label(menuitem), gettext("Efforts dans les barres")) == 0)
+    else if (strcmp(gtk_menu_item_get_label(menuitem), gettext("Efforts dans les barres (repère local)")) == 0)
     {
         BUGMSG(res->col_tab = malloc(sizeof(Colonne_Resultats)*21), , gettext("Erreur d'allocation mémoire.\n"));
         res->col_tab[0] = 20;
@@ -2550,7 +2550,7 @@ void EF_gtk_resultats_add_page_type(GtkMenuItem *menuitem, Projet *projet)
         
         projet->list_gtk.ef_resultats.tableaux = g_list_append(projet->list_gtk.ef_resultats.tableaux, res);
     }
-    else if (strcmp(gtk_menu_item_get_label(menuitem), gettext("Déformations des barres")) == 0)
+    else if (strcmp(gtk_menu_item_get_label(menuitem), gettext("Déformations des barres (repère local)")) == 0)
     {
         BUGMSG(res->col_tab = malloc(sizeof(Colonne_Resultats)*21), , gettext("Erreur d'allocation mémoire.\n"));
         res->col_tab[0] = 20;

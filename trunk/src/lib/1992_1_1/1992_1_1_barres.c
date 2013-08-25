@@ -889,7 +889,7 @@ gboolean _1992_1_1_barres_rigidite_ajout(Projet *projet, EF_Barre *element)
     double              *ax2;
     int                 *ai3, *aj3;
     double              *ax3;
-    double              y, z;
+    double              x, y, z;
     double              ll;
     unsigned int        i, j;
     int                 k;
@@ -966,24 +966,26 @@ gboolean _1992_1_1_barres_rigidite_ajout(Projet *projet, EF_Barre *element)
     //   pour avoir un L_x positif et la deuxième solution doit être utilisée pour avoir un
     //   L_x négatif. Il est donc possible d'obtenir une seule et unique solution :\end{verbatim}\begin{displaymath}
     //   cos(z) = signe\{L_x\} \cdot \sqrt{\frac{L_x^2}{L^2-L_z^2}}\texttt{ et }sin(z) = \frac{yy}{\sqrt{L^2-L_z^2}}\end{displaymath}\begin{verbatim}
-    triplet = cholmod_allocate_triplet(12, 12, 32, 0, CHOLMOD_REAL, projet->calculs.c);
+    triplet = cholmod_allocate_triplet(12, 12, 36, 0, CHOLMOD_REAL, projet->calculs.c);
     BUGMSG(triplet, FALSE, gettext("Erreur d'allocation mémoire.\n"));
     ai = (int*)triplet->i;
     aj = (int*)triplet->j;
     ax = (double*)triplet->x;
+    x = common_math_get(element->angle)/180*M_PI;
     BUG(_1992_1_1_barres_angle_rotation(element->noeud_debut, element->noeud_fin, &y, &z), FALSE);
     for (k=0;k<4;k++)
     {
-        ai[k*8+0] = k*3+0; aj[k*8+0] = k*3+0; ax[k*8+0] = cos(z)*cos(y);
-        ai[k*8+1] = k*3+0; aj[k*8+1] = k*3+1; ax[k*8+1] = -sin(z);
-        ai[k*8+2] = k*3+0; aj[k*8+2] = k*3+2; ax[k*8+2] = -cos(z)*sin(y);
-        ai[k*8+3] = k*3+1; aj[k*8+3] = k*3+0; ax[k*8+3] = sin(z)*cos(y);
-        ai[k*8+4] = k*3+1; aj[k*8+4] = k*3+1; ax[k*8+4] = cos(z);
-        ai[k*8+5] = k*3+1; aj[k*8+5] = k*3+2; ax[k*8+5] = -sin(z)*sin(y);
-        ai[k*8+6] = k*3+2; aj[k*8+6] = k*3+0; ax[k*8+6] = sin(y);
-        ai[k*8+7] = k*3+2; aj[k*8+7] = k*3+2; ax[k*8+7] = cos(y);
+        ai[k*9+0] = k*3+0; aj[k*9+0] = k*3+0; ax[k*9+0] = cos(y)*cos(z);
+        ai[k*9+1] = k*3+0; aj[k*9+1] = k*3+1; ax[k*9+1] = -sin(z);
+        ai[k*9+2] = k*3+0; aj[k*9+2] = k*3+2; ax[k*9+2] = -sin(y)*cos(z);
+        ai[k*9+3] = k*3+1; aj[k*9+3] = k*3+0; ax[k*9+3] = cos(x)*cos(y)*sin(z)-sin(x)*sin(y);
+        ai[k*9+4] = k*3+1; aj[k*9+4] = k*3+1; ax[k*9+4] = cos(x)*cos(z);
+        ai[k*9+5] = k*3+1; aj[k*9+5] = k*3+2; ax[k*9+5] = -cos(x)*sin(y)*sin(z)-sin(x)*cos(y);
+        ai[k*9+6] = k*3+2; aj[k*9+6] = k*3+0; ax[k*9+6] = sin(x)*cos(y)*sin(z)+cos(x)*sin(y);
+        ai[k*9+7] = k*3+2; aj[k*9+7] = k*3+1; ax[k*9+7] = sin(x)*cos(z);
+        ai[k*9+8] = k*3+2; aj[k*9+8] = k*3+2; ax[k*9+8] = cos(x)*cos(y)-sin(x)*sin(y)*sin(z);
     }
-    triplet->nnz=32;
+    triplet->nnz=36;
     element->matrice_rotation = cholmod_triplet_to_sparse(triplet, 0, projet->calculs.c);
     BUGMSG(element->matrice_rotation, FALSE, gettext("Erreur d'allocation mémoire.\n"));
     element->matrice_rotation_transpose = cholmod_transpose(element->matrice_rotation, 1, projet->calculs.c);

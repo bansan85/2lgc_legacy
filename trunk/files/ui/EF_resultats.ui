@@ -12,14 +12,14 @@
         </child>
         <child>
             <object class="GtkMenuItem" id="EF_resultats_menu_reaction_appui">
-                <property name="label" translatable="yes">Réactions d'appuis</property>
+                <property name="label" translatable="yes">Réactions d'appuis (repère global)</property>
                 <property name="visible">True</property>
                 <signal name="activate" handler="EF_gtk_resultats_add_page_type"/>
             </object>
         </child>
         <child>
             <object class="GtkMenuItem" id="EF_resultats_menu_deplacements">
-                <property name="label" translatable="yes">Déplacements</property>
+                <property name="label" translatable="yes">Déplacements (repère global)</property>
                 <property name="visible">True</property>
                 <signal name="activate" handler="EF_gtk_resultats_add_page_type"/>
             </object>
@@ -33,14 +33,14 @@
         </child>
         <child>
             <object class="GtkMenuItem" id="EF_resultats_menu_efforts">
-                <property name="label" translatable="yes">Efforts dans les barres</property>
+                <property name="label" translatable="yes">Efforts dans les barres (repère local)</property>
                 <property name="visible">True</property>
                 <signal name="activate" handler="EF_gtk_resultats_add_page_type"/>
             </object>
         </child>
         <child>
             <object class="GtkMenuItem" id="EF_resultats_menu_déformations">
-                <property name="label" translatable="yes">Déformations des barres</property>
+                <property name="label" translatable="yes">Déformations des barres (repère local)</property>
                 <property name="visible">True</property>
                 <signal name="activate" handler="EF_gtk_resultats_add_page_type"/>
             </object>
