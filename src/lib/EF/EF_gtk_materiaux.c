@@ -35,6 +35,7 @@
 #include "common_text.h"
 #include "1992_1_1_materiaux.h"
 #include "1992_1_1_barres.h"
+#include "1993_1_1_materiaux.h"
 #include "EF_materiaux.h"
 
 void EF_gtk_materiaux_fermer(GtkButton *button, Projet *projet)
@@ -165,7 +166,24 @@ void EF_gtk_materiaux_edit_nom(GtkCellRendererText *cell, gchar *path_string, gc
     if (EF_materiaux_cherche_nom(projet, new_text, FALSE))
         return;
     
-    BUG(_1992_1_1_materiaux_modif(projet, materiau, new_text, common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR)), );
+    switch (materiau->type)
+    {
+        case MATERIAU_BETON :
+        {
+            BUG(_1992_1_1_materiaux_modif(projet, materiau, new_text, common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR)), );
+            break;
+        }
+        case MATERIAU_ACIER :
+        {
+            BUG(_1993_1_1_materiaux_modif(projet, materiau, new_text, common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR)), );
+            break;
+        }
+        default :
+        {
+            BUGMSG(NULL, , gettext("Le type de matériau %d n'existe pas.\n"), materiau->type);
+            break;
+        }
+    }
     
     return;
 }
