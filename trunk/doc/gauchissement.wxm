@@ -1,0 +1,225 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 12.04.0 ] */
+
+/* [wxMaxima: input   start ] */
+kill(all);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+expand((y+z+aa)^3);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+f(x) := a*z^3+b*y*z^2+c*z^2+d*y^2*z+e*y*z+f*z+g*y^3+h*y^2+i*y;
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+diff(f(x),y,2)+diff(f(x),z,2);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+solve(2*d*z+6*a*z=0,a);
+solve(6*g*y+2*b*y=0,b);
+solve(2*h+2*c=0,c);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+a:-d/3;
+b:-3*g;
+c:-h;
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+ratsimp(f(x));
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+f(x) := -(d*z^3+(9*g*y+3*h)*z^2+(-3*d*y^2-3*e*y-3*f)*z-3*g*y^3-3*h*y^2-3*i*y)/3;
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+ratsimp(subst(-A, y, subst(-A, z, subst(-%pi/2, an, diff(f(x),y)*cos(an)+diff(f(x),z)*sin(an)-z*cos(an)+y*sin(an)))));
+solve(%=0,h);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+h:(6*g*A^2+(e+1)*A-f)/(2*A);
+ratsimp(f(x));
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+f(x):=-((18*g*z^2-18*g*y^2)*A^2+(2*d*z^3+(18*g*y+3*e+3)*z^2+(-6*d*y^2-6*e*y-6*f)*z-6*g*y^3+(-3*e-3)*y^2-6*i*y)*A-3*f*z^2+3*f*y^2)/(6*A);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+ratsimp(subst(A, y, subst(-A, z, subst(-%pi/2, an, diff(f(x),y)*cos(an)+diff(f(x),z)*sin(an)-z*cos(an)+y*sin(an)))));
+solve(%=0,e);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+e:-6*g*A-1;
+ratsimp(f(x));
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+f(x):=-(36*g*y*z*A^2+(2*d*z^3+18*g*y*z^2+(-6*d*y^2+6*y-6*f)*z-6*g*y^3-6*i*y)*A-3*f*z^2+3*f*y^2)/(6*A);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+cos(%pi/6);
+sin(%pi/6);
+ratsimp(subst((2*A)/(A+R3), y, subst((2*A)/(A+R3), z, diff(f(x),y)*R3/2+diff(f(x),z)/2-z*R3/2+y/2)));
+solve(%=0,g);
+ratsimp(%);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+g:(i*R3^3+((2*i-4)*A-f)*R3^2+((i+8*d-4)*A^2+2*f)*R3+f*A^2+2*f*A)/(12*A^2*R3^2+(12*A^3+12*A^2)*R3+12*A^3+24*A^2);
+ratsimp(f(x));
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+f(x) := -((6*i*y*z*A+3*i*y*z^2-i*y^3)*R3^3+
+((4*d*z^3+(-12*d*y^2+(12*i-12)*y-12*f)*z-12*i*y)*A^2+(((6*i-12)*y-6*f)*z^2-6*f*y*z+(4-2*i)*y^3+6*f*y^2)*A-3*f*y*z^2+f*y^3)*R3^2+(
+(4*d*z^3+(-12*d*y^2+(6*i+48*d-12)*y-12*f)*z-12*i*y)*A^3+(4*d*z^3+((3*i+24*d-12)*y-6*f)*z^2+(-12*d*y^2+12*y-12*f)*z+(-i-8*d+4)*y^3+6*f*y^2-12*i*y)*A^2+
+(-6*f*z^2+12*f*y*z+6*f*y^2)*A+6*f*y*z^2-2*f*y^3)*R3+(4*d*z^3+(-12*d*y^2+(6*f+12)*y-12*f)*z-12*i*y)*A^3+
+(8*d*z^3+(3*f*y-6*f)*z^2+(-24*d*y^2+(12*f+24)*y-24*f)*z-f*y^3+6*f*y^2-24*i*y)*A^2+((6*f*y-12*f)*z^2-2*f*y^3+12*f*y^2)*A)/(12*A^2*R3^2+(12*A^3+12*A^2)*R3+12*
+A^3+24*A^2);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+cos(5*%pi/6);
+sin(5*%pi/6);
+ratsimp(subst(-(2*A)/(A+R3), y, subst((2*A)/(A+R3), z, diff(f(x),y)*-R3/2+diff(f(x),z)/2-z*-R3/2+y/2)));
+solve(%=0,d);
+ratsimp(%);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+d:(f*R3^2-2*f*R3-f*A^2-2*f*A)/(8*A^2*R3);
+ratsimp(f(x));
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+f(x) := -((12*i*y*z*A+f*z^3+6*i*y*z^2-3*f*y^2*z-2*i*y^3)*R3^4+
+((((24*i-24)*y-24*f)*z-24*i*y)*A^2+(f*z^3+((12*i-24)*y-12*f)*z^2-3*f*y^2*z+(8-4*i)*y^3+12*f*y^2)*A-f*z^3+3*f*y^2*z)*R3^3+((((12*i-24)*y-24*f)*z-24*i*y)*A^3+
+(-f*z^3+((6*i-24)*y-12*f)*z^2+(3*f*y^2+24*y-24*f)*z+(8-2*i)*y^3+12*f*y^2-24*i*y)*A^2+(-3*f*z^3-12*f*z^2+9*f*y^2*z+12*f*y^2)*A)*R3^2+(
+(-f*z^3+(3*f*y^2+24*y-24*f)*z-24*i*y)*A^3+(-3*f*z^3-12*f*z^2+(9*f*y^2+48*y-48*f)*z+12*f*y^2-48*i*y)*A^2+(-4*f*z^3-24*f*z^2+12*f*y^2*z+24*f*y^2)*A-4*f*z^3+
+12*f*y^2*z)*R3+(3*f*y^2*z-f*z^3)*A^3+(12*f*y^2*z-4*f*z^3)*A^2+(12*f*y^2*z-4*f*z^3)*A)/(24*A^2*R3^3+(24*A^3+24*A^2)*R3^2+(24*A^3+48*A^2)*R3);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+cos(%pi/6);
+sin(%pi/6);
+ratsimp(subst(2/3*A*R3, y, subst(0, z, diff(f(x),y)*R3/2+diff(f(x),z)/2-z*R3/2+y/2)));
+solve(%=0,i);
+ratsimp(%);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+i:((8*A-f)*R3^5+(8*A^2-f*A+13*f)*R3^4+(f*A^2+(15*f-24)*A+12*f)*R3^3+(f*A^3+(3*f-24)*A^2+16*f*A+10*f)*R3^2+(f*A^3+4*f*A^2-14*f*A-18*f)*R3-18*f*A-36*f)/(2*R3^6+4*A*R3^5+(2*A^2-6)*R3^4+(18-12*A)*R3^3+(-6*A^2+18*A+18)*R3^2+(18*A+36)*R3);
+ratsimp(f(x));
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+f(x) := -((f*z^3-3*f*y^2*z)*R3^7+((24*y-24*f)*z*A^2+(2*f*z^3-12*f*z^2+(-6*f*y^2-6*f*y)*z+12*f*y^2)*A-2*f*z^3-3*f*y*z^2+6*f*y^2*z+f*y^3)*R3^6+
+(((48*y-48*f)*z-96*y)*A^3+(-24*f*z^2-12*f*y*z+24*f*y^2+12*f*y)*A^2+(-6*f*z^3-6*f*y*z^2+(18*f*y^2+84*f*y)*z+2*f*y^3)*A-3*f*z^3+42*f*y*z^2+9*f*y^2*z-14*f*y^3)*
+R3^5+(((24*y-24*f)*z-96*y)*A^4+(-2*f*z^3-12*f*z^2+6*f*y^2*z+12*f*y^2+12*f*y)*A^3+(-6*f*z^3+(18*f*y^2+(180*f-72)*y+72*f)*z-156*f*y)*A^2+
+(-6*f*z^3+(90*f*y+36*f)*z^2+18*f*y^2*z-30*f*y^3-36*f*y^2)*A+15*f*z^3-45*f*y^2*z)*R3^4+((-f*z^3+(3*f*y^2+12*f*y)*z-12*f*y)*A^4+
+(-2*f*z^3+6*f*y*z^2+(6*f*y^2+(108*f-144)*y+144*f)*z-2*f*y^3+(288-180*f)*y)*A^3+((54*f*y+72*f)*z^2+(-216*y-216*f)*z-18*f*y^3-72*f*y^2-144*f*y)*A^2+
+(27*f*z^3+(-216*y-108*f)*z^2+(-81*f*y^2-108*f*y)*z+72*y^3+108*f*y^2)*A-9*f*z^3-54*f*y*z^2+27*f*y^2*z+18*f*y^3)*R3^3+((6*f*y*z-12*f*y)*A^5+
+(3*f*y*z^2+((12*f-72)*y+72*f)*z-f*y^3+(288-36*f)*y)*A^4+(6*f*z^3+(6*f*y+36*f)*z^2+(-18*f*y^2-216*y-216*f)*z-2*f*y^3-36*f*y^2-192*f*y)*A^3+
+(9*f*z^3+(-216*y-108*f)*z^2+(-27*f*y^2+(216-216*f)*y-216*f)*z+72*y^3+108*f*y^2-120*f*y)*A^2+
+(-27*f*z^3+(-108*f*y-108*f)*z^2+81*f*y^2*z+36*f*y^3+108*f*y^2)*A)*R3^2+(-12*f*y*A^5+(3*f*z^3-9*f*y^2*z-48*f*y)*A^4+
+(-3*f*z^3+(9*f*y^2+(216-108*f)*y-216*f)*z+168*f*y)*A^3+(-27*f*z^3+(-54*f*y-108*f)*z^2+(81*f*y^2+432*y-432*f)*z+18*f*y^3+108*f*y^2+216*f*y)*A^2+
+(-36*f*z^3-216*f*z^2+108*f*y^2*z+216*f*y^2)*A-36*f*z^3+108*f*y^2*z)*R3+(-9*f*z^3+27*f*y^2*z+216*f*y)*A^3+(-36*f*z^3+108*f*y^2*z+432*f*y)*A^2+
+(108*f*y^2*z-36*f*z^3)*A)/(24*A^2*R3^6+48*A^3*R3^5+(24*A^4-72*A^2)*R3^4+(216*A^2-144*A^3)*R3^3+(-72*A^4+216*A^3+216*A^2)*R3^2+(216*A^3+432*A^2)*R3);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+cos(5*%pi/6);
+sin(5*%pi/6);
+ratsimp(subst(-2/3*A*R3, y, subst(0, z, diff(f(x),y)*-R3/2+diff(f(x),z)/2-z*-R3/2+y/2)));
+solve(%=0,f);
+ratsimp(%);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+f:0;
+ratsimp(f(x));
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+f(x) := -
+(y*z*A*R3^5+(2*y*z-4*y)*A^2*R3^4+((y*z-4*y)*A^3-3*y*z*A)*R3^3+((12*y-6*y*z)*A^2-9*y*z*A-9*y*z^2+3*y^3)*R3^2+((12*y-3*y*z)*A^3-9*y*z*A^2+(-9*y*z^2+9*y*z+3*y^3)*A)*R3+9*y*z*A^2+18*y*z*A)/(A*R3^5+2*A^2*R3^4+(A^3-3*A)*R3^3+(9*A-6*A^2)*R3^2+(-3*A^3+9*A^2+9*A)*R3+9*A^2+18*A);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+ratsimp(integrate(integrate(f(x)+j, y, (z-2*A)/R3, -(z-2*A)/R3), z, -A, 2*A));
+solve(j=0,j);
+j:0;
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+"gauchissement à ajouter à Ip pour avoir Ix";
+ratsimp(y*diff(f(x),z)-z*diff(f(x),y));
+ratsimp(integrate(integrate(%, y, (z-2*A)/R3, -(z-2*A)/R3), z, -A, 2*A));
+factor(ratsimp(subst(sqrt(3), R3, subst(sqrt(2), R2, %))));
+float(subst(1, A, %));
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+factor(ratsimp(subst(sqrt(3), R3, subst(sqrt(2), R2, f(x)))));
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+f(x) := (y*(3^(3/2)*z*A^2-3*z*A^2+3^(3/2)*z^2*A-3^(3/2)*z*A+3*z*A-sqrt(3)*y^2*A+9*z^2-3*y^2))/(3*A*(sqrt(3)*A+A+sqrt(3)+5));
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+ratsimp(f(x));
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+f(x) := ((3^(3/2)-3)*y*z*A^2+(3^(3/2)*y*z^2+(3-3^(3/2))*y*z-sqrt(3)*y^3)*A+9*y*z^2-3*y^3)/((3^(3/2)+3)*A^2+(3^(3/2)+15)*A);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+"vérification";
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+ratsimp(diff(f(x),y,2)+diff(f(x),z,2));
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+ratsimp(subst(-A, y, subst(-A, z, subst(-%pi/2, an, diff(f(x),y)*cos(an)+diff(f(x),z)*sin(an)-z*cos(an)+y*sin(an)))));
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+ratsimp(subst(A, y, subst(-A, z, subst(-%pi/2, an, diff(f(x),y)*cos(an)+diff(f(x),z)*sin(an)-z*cos(an)+y*sin(an)))));
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+ratsimp(subst((2*A)/(A+sqrt(3)), y, subst((2*A)/(A+sqrt(3)), z, subst(%pi/6, an, diff(f(x),y)*cos(an)+diff(f(x),z)*sin(an)-z*cos(an)+y*sin(an)))));
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+ratsimp(subst(-(2*A)/(A+sqrt(3)), y, subst((2*A)/(A+sqrt(3)), z, subst(5*%pi/6, an, diff(f(x),y)*cos(an)+diff(f(x),z)*sin(an)-z*cos(an)+y*sin(an)))));
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+ratsimp(subst(2/3*A*sqrt(3), y, subst(0, z, subst(%pi/6, an, diff(f(x),y)*cos(an)+diff(f(x),z)*sin(an)-z*cos(an)+y*sin(an)))));
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+ratsimp(subst(-2/3*A*sqrt(3), y, subst(0, z, subst(5*%pi/6, an, diff(f(x),y)*cos(an)+diff(f(x),z)*sin(an)-z*cos(an)+y*sin(an)))));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+"ratsimp(integrate(integrate(f(x),y,0,-2/R3*z+(4*A)/R3),z,-A,2*A))";
+/* [wxMaxima: input   end   ] */
+
+/* Maxima can't load/batch files which end with a comment! */
+"Created with wxMaxima"$
