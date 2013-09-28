@@ -1,0 +1,125 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 12.04.0 ] */
+
+/* [wxMaxima: input   start ] */
+kill(all);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+expand((y+z+aa)^3);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+FF : a*z^3+b*y*z^2+c*z^2+d*y^2*z+e*y*z+f*z+g*y^3+h*y^2+i*y;
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+diff(FF,y,2)+diff(FF,z,2);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+a:rhs(first(solve(2*d*z+6*a*z=0,a)));
+b:rhs(first(solve(6*g*y+2*b*y=0,b)));
+c:rhs(first(solve(2*h+2*c=0,c)));
+FF:ratsimp(ev(FF));
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+ratsimp(subst(-A, y, subst(-A, z, subst(-%pi/2, an, diff(FF,y)*cos(an)+diff(FF,z)*sin(an)-z*cos(an)+y*sin(an)))));
+h:rhs(first(solve(%=0,h)));
+FF:ratsimp(ev(FF));
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+ratsimp(subst(A, y, subst(-A, z, subst(-%pi/2, an, diff(FF,y)*cos(an)+diff(FF,z)*sin(an)-z*cos(an)+y*sin(an)))));
+e:rhs(first(solve(%=0,e)));
+FF:ratsimp(ev(FF));
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+cos(%pi/6);
+sin(%pi/6);
+ratsimp(subst((2*A)/(A+R3), y, subst((2*A)/(A+R3), z, diff(FF,y)*R3/2+diff(FF,z)/2-z*R3/2+y/2)));
+g:rhs(first(ratsimp(solve(%=0,g))));
+FF:ratsimp(ev(FF));
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+cos(5*%pi/6);
+sin(5*%pi/6);
+ratsimp(subst(-(2*A)/(A+R3), y, subst((2*A)/(A+R3), z, diff(FF,y)*-R3/2+diff(FF,z)/2-z*-R3/2+y/2)));
+d:rhs(first(ratsimp(solve(%=0,d))));
+FF:ratsimp(ev(FF));
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+cos(%pi/6);
+sin(%pi/6);
+ratsimp(subst(2/3*A*R3, y, subst(0, z, diff(FF,y)*R3/2+diff(FF,z)/2-z*R3/2+y/2)));
+i:rhs(first(ratsimp(solve(%=0,i))));
+FF:ratsimp(ev(FF));
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+cos(5*%pi/6);
+sin(5*%pi/6);
+ratsimp(subst(-2/3*A*R3, y, subst(0, z, diff(FF,y)*-R3/2+diff(FF,z)/2-z*-R3/2+y/2)));
+f:rhs(first(ratsimp(solve(%=0,f))));
+FF:ratsimp(ev(FF));
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+ratsimp(integrate(integrate(FF+j, y, (z-2*A)/R3, -(z-2*A)/R3), z, -A, 2*A));
+j:rhs(first(ratsimp(solve(%=0,j))));
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+"gauchissement a ajouter a Ip pour avoir Ix";
+ratsimp(y*diff(FF,z)-z*diff(FF,y));
+ratsimp(integrate(integrate(%, y, (z-2*A)/R3, -(z-2*A)/R3), z, -A, 2*A));
+factor(ratsimp(subst(sqrt(3), R3, subst(sqrt(2), R2, %))));
+float(subst(1, A, %));
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+FF:ratsimp(factor(subst(sqrt(3), R3, subst(sqrt(2), R2, FF))));
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+"verification";
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+ratsimp(diff(FF,y,2)+diff(FF,z,2));
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+ratsimp(subst(-A, y, subst(-A, z, subst(-%pi/2, an, diff(FF,y)*cos(an)+diff(FF,z)*sin(an)-z*cos(an)+y*sin(an)))));
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+ratsimp(subst(A, y, subst(-A, z, subst(-%pi/2, an, diff(FF,y)*cos(an)+diff(FF,z)*sin(an)-z*cos(an)+y*sin(an)))));
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+ratsimp(subst((2*A)/(A+sqrt(3)), y, subst((2*A)/(A+sqrt(3)), z, subst(%pi/6, an, diff(FF,y)*cos(an)+diff(FF,z)*sin(an)-z*cos(an)+y*sin(an)))));
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+ratsimp(subst(-(2*A)/(A+sqrt(3)), y, subst((2*A)/(A+sqrt(3)), z, subst(5*%pi/6, an, diff(FF,y)*cos(an)+diff(FF,z)*sin(an)-z*cos(an)+y*sin(an)))));
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+ratsimp(subst(2/3*A*sqrt(3), y, subst(0, z, subst(%pi/6, an, diff(FF,y)*cos(an)+diff(FF,z)*sin(an)-z*cos(an)+y*sin(an)))));
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+ratsimp(subst(-2/3*A*sqrt(3), y, subst(0, z, subst(5*%pi/6, an, diff(FF,y)*cos(an)+diff(FF,z)*sin(an)-z*cos(an)+y*sin(an)))));
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+ratsimp(integrate(integrate(FF, y, (z-2*A)/R3, -(z-2*A)/R3), z, -A, 2*A));
+/* [wxMaxima: input   end   ] */
+
+/* Maxima can't load/batch files which end with a comment! */
+"Created with wxMaxima"$
