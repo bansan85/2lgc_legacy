@@ -41,35 +41,36 @@
 #include "1990_gtk_actions.h"
 #endif
 
-char* _1990_action_type_bat_txt_eu(unsigned int type)
-/* Description : renvoie la description des types de charge pour les bâtiments de la norme
- *               européenne.
- *               FONCTION INTERNE. Utiliser _1990_action_type_bat_txt.
- * Paramètres : unsigned int type : type de charge.
- * Valeur renvoyée :
- *   Succès : le texte correspondant :
- *            0 : Permanente
- *            1 : Précontrainte
- *            2 : Exploitation : Catégorie A : habitation, zones résidentielles
- *            3 : Exploitation : Catégorie B : bureaux
- *            4 : Exploitation : Catégorie C : lieux de réunion
- *            5 : Exploitation : Catégorie D : commerces
- *            6 : Exploitation : Catégorie E : stockage
- *            7 : Exploitation : Catégorie F : zone de trafic, véhicules inférieur à 30 kN
- *            8 : Exploitation : Catégorie G : zone de trafic, véhicules entre 30 kN et 160 kN
- *            9 : Exploitation : Catégorie H : toits
- *            10: Neige : Finlande, Islande, Norvège, Suède
- *            11: Neige : Autres états membres CEN, altitude > 1000 m
- *            12: Neige : Autres états membres CEN, altitude <= 1000 m
- *            13: Vent
- *            14: Température (hors incendie)
- *            15: Accidentelle
- *            16: Sismique
- *   Échec : NULL :
- *             la catégorie n'existe pas.
+/**
+ * \fn char* _1990_action_type_bat_txt_eu(unsigned int type)
+ * \brief Renvoie la description des types de charge pour les bâtiments de la norme européenne.
+ * 
+ * \param type : type de charge.
+ * \return 
+ *   Succès : le texte correspondant en fonction du paramètre type :\n
+ *     - 0 : Permanente,
+ *     - 1 : Précontrainte,
+ *     - 2 : Exploitation : Catégorie A : habitation, zones résidentielles,
+ *     - 3 : Exploitation : Catégorie B : bureaux,
+ *     - 4 : Exploitation : Catégorie C : lieux de réunion,
+ *     - 5 : Exploitation : Catégorie D : commerces,
+ *     - 6 : Exploitation : Catégorie E : stockage,
+ *     - 7 : Exploitation : Catégorie F : zone de trafic, véhicules inférieur à 30 kN,
+ *     - 8 : Exploitation : Catégorie G : zone de trafic, véhicules entre 30 kN et 160 kN,
+ *     - 9 : Exploitation : Catégorie H : toits,
+ *     - 10: Neige : Finlande, Islande, Norvège, Suède,
+ *     - 11: Neige : Autres états membres CEN, altitude > 1000 m,
+ *     - 12: Neige : Autres états membres CEN, altitude <= 1000 m,
+ *     - 13: Vent,
+ *     - 14: Température (hors incendie),
+ *     - 15: Accidentelle,
+ *     - 16: Sismique.
+ *
+ *  \return Échec : NULL :
+ *     - La catégorie n'existe pas. Le paramètre type doit être compris entre
  */
+char* _1990_action_type_bat_txt_eu(unsigned int type)
 {
-    // Trivial
     switch(type)
     {
         case 0 : { return gettext("Permanente"); break; }
