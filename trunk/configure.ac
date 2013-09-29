@@ -46,6 +46,7 @@ AM_GNU_GETTEXT([external])
 ALL_LINGUAS="fr"
 PKG_PROG_PKG_CONFIG
 
+# Détermination de la version de Windows que l'on est en train de compiler
 AC_MSG_CHECKING([for some Win platform])
 case "$host" in
   *-*64-mingw*|*-*64-cygwin*)
@@ -62,6 +63,13 @@ AC_MSG_RESULT([$platform_win])
 AM_CONDITIONAL(PLATFORM_WIN32, test "$platform_win" = "Win32")
 AM_CONDITIONAL(PLATFORM_WIN64, test "$platform_win" = "Win64")
 AM_CONDITIONAL(PLATFORM_LINUX, test "$platform_win" = "no")
+
+# Vérification de la possibilité de compiler la documentation via doxygen
+AC_CHECK_PROGS([DOXYGEN], [doxygen])
+if test -z "$DOXYGEN";
+    then AC_MSG_WARN([Doxygen introuvable - documentation non compilable])
+fi
+AM_CONDITIONAL([HAVE_DOXYGEN], [test -n "$DOXYGEN"])
 
 # Checks for libraries.
 AC_CHECK_LIB(m, sqrt)
@@ -89,11 +97,12 @@ AC_FUNC_REALLOC
 AC_CHECK_FUNCS([localeconv memset modf pow setlocale sqrt strchr strstr])
 
 AC_CONFIG_FILES([Makefile po/Makefile.in
-                 doc/Makefile
+                 docs/Makefile
                  files/Makefile
                  src/Makefile
                  src/gui/Makefile
                  src/gui/codegui/Makefile
                  src/lib/Makefile
+                 docs/Doxyfile
                  src/test/Makefile])
 AC_OUTPUT
