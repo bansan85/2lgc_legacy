@@ -50,7 +50,7 @@ int _1990_duree_projet_eu(unsigned int type)
         case 2 : { return 30; break; }
         case 3 : { return 50; break; }
         case 4 : { return 100; break; }
-        default : { BUGMSG(0, 0, gettext("Catégorie de durée %u inconnue.\n"), type); break; }
+        default : { BUGMSG(0, 0, gettext("Catégorie de durée %u inconnue.\n"), type) break; }
     }
 }
 
@@ -78,7 +78,7 @@ int _1990_duree_projet_fr(unsigned int type)
         case 2 : { return 25; break; }
         case 3 : { return 50; break; }
         case 4 : { return 100; break; }
-        default : { BUGMSG(0, 0, gettext("Catégorie de durée %u inconnue.\n"), type); break; }
+        default : { BUGMSG(0, 0, gettext("Catégorie de durée %u inconnue.\n"), type) break; }
     }
 }
 
@@ -107,7 +107,7 @@ char* _1990_duree_projet_txt_eu(unsigned int type)
         case 2 : { return gettext("Structures agricoles et similaires"); break; }
         case 3 : { return gettext("Structures de bâtiments et autres structures courantes"); break; }
         case 4 : { return gettext("Structures monumentales de bâtiments, pont et autres ouvrages de génie civil"); break; }
-        default : { BUGMSG(0, NULL, gettext("Catégorie de durée %d inconnue.\n"), type); break; }
+        default : { BUGMSG(0, NULL, gettext("Catégorie de durée %d inconnue.\n"), type) break; }
     }
 }
 
@@ -136,7 +136,7 @@ char* _1990_duree_projet_txt_fr(unsigned int type)
         case 2 : { return gettext("Structures agricoles et similaires"); break; }
         case 3 : { return gettext("Structures de bâtiments et autres structures courantes"); break; }
         case 4 : { return gettext("Structures monumentales de bâtiments, pont et autres ouvrages de génie civil"); break; }
-        default : { BUGMSG(0, NULL, gettext("Catégorie de durée %d inconnue.\n"), type); break; }
+        default : { BUGMSG(0, NULL, gettext("Catégorie de durée %d inconnue.\n"), type) break; }
     }
 }
 
@@ -157,7 +157,7 @@ int _1990_duree_projet(unsigned int type, Type_Pays pays)
     {
         case PAYS_EU : { return _1990_duree_projet_eu(type); break; }
         case PAYS_FR : { return _1990_duree_projet_fr(type); break; }
-        default : { BUGMSG(0, 0, gettext("Pays %d inconnu.\n"), pays); break; }
+        default : { BUGMSG(0, 0, gettext("Pays %d inconnu.\n"), pays) break; }
     }
 }
 
@@ -179,6 +179,6 @@ char* _1990_duree_projet_txt(unsigned int type, Type_Pays pays)
     {
         case PAYS_EU : { return _1990_duree_projet_txt_eu(type); break; }
         case PAYS_FR : { return _1990_duree_projet_txt_fr(type); break; }
-        default : { BUGMSG(0, NULL, gettext("Pays %d inconnu.\n"), pays); break; }
+        default : { BUGMSG(0, NULL, gettext("Pays %d inconnu.\n"), pays) break; }
     }
 }

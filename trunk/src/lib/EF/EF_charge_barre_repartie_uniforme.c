@@ -79,12 +79,12 @@ Charge_Barre_Repartie_Uniforme *EF_charge_barre_repartie_uniforme_ajout(Projet *
 #endif
     
     // Trivial
-    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet")
 
-    BUGMSG((projection == FALSE) || (repere_local == FALSE), NULL, gettext("Impossible d'effectuer une projection dans un repère local.\n"));
-    BUGMSG(!((common_math_get(a) < 0.) && (!(ERREUR_RELATIVE_EGALE(common_math_get(a), 0.)))), NULL, gettext("Le début de la position de la charge répartie uniformément (%f) est incorrect.\n"), common_math_get(a));
-    BUGMSG(!((common_math_get(b) < 0.) && (!(ERREUR_RELATIVE_EGALE(common_math_get(b), 0.)))), NULL, gettext("La fin de la position de la charge répartie uniformément (%f) est incorrecte.\n"), common_math_get(b));
-    BUGMSG(charge_nouveau, NULL, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG((projection == FALSE) || (repere_local == FALSE), NULL, gettext("Impossible d'effectuer une projection dans un repère local.\n"))
+    BUGMSG(!((common_math_get(a) < 0.) && (!(ERREUR_RELATIVE_EGALE(common_math_get(a), 0.)))), NULL, gettext("Le début de la position de la charge répartie uniformément (%f) est incorrect.\n"), common_math_get(a))
+    BUGMSG(!((common_math_get(b) < 0.) && (!(ERREUR_RELATIVE_EGALE(common_math_get(b), 0.)))), NULL, gettext("La fin de la position de la charge répartie uniformément (%f) est incorrecte.\n"), common_math_get(b))
+    BUGMSG(charge_nouveau, NULL, gettext("Erreur d'allocation mémoire.\n"))
     if (barres != NULL)
     {
         GList   *list_parcours = barres;
@@ -94,19 +94,19 @@ Charge_Barre_Repartie_Uniforme *EF_charge_barre_repartie_uniforme_ajout(Projet *
             
             double l = EF_noeuds_distance(barre->noeud_debut, barre->noeud_fin);
             
-            BUGMSG(!((common_math_get(a) > l) && (!(ERREUR_RELATIVE_EGALE(common_math_get(a), l)))), NULL, gettext("Le début de la charge répartie uniformément (%f) est incorrect. La longueur de la barre %d est de %f m.\n"), common_math_get(a), barre->numero, l);
-            BUGMSG(!((common_math_get(b) > l) && (!(ERREUR_RELATIVE_EGALE(common_math_get(b), l)))), NULL, gettext("La fin de la charge répartie uniformément (%f) est incorrecte. La longueur de la barre %d est de %f m.\n"), common_math_get(b), barre->numero, l);
-            BUGMSG(!((common_math_get(a)+common_math_get(b) > l) && (!(ERREUR_RELATIVE_EGALE(common_math_get(a)+common_math_get(b), l)))), NULL, gettext("Le début (%f) et la fin (%f) de la charge répartie uniformément sont incompatible avec la longueur de la barre %d qui est de %f m.\n"), common_math_get(a), common_math_get(b), barre->numero, l);
+            BUGMSG(!((common_math_get(a) > l) && (!(ERREUR_RELATIVE_EGALE(common_math_get(a), l)))), NULL, gettext("Le début de la charge répartie uniformément (%f) est incorrect. La longueur de la barre %d est de %f m.\n"), common_math_get(a), barre->numero, l)
+            BUGMSG(!((common_math_get(b) > l) && (!(ERREUR_RELATIVE_EGALE(common_math_get(b), l)))), NULL, gettext("La fin de la charge répartie uniformément (%f) est incorrecte. La longueur de la barre %d est de %f m.\n"), common_math_get(b), barre->numero, l)
+            BUGMSG(!((common_math_get(a)+common_math_get(b) > l) && (!(ERREUR_RELATIVE_EGALE(common_math_get(a)+common_math_get(b), l)))), NULL, gettext("Le début (%f) et la fin (%f) de la charge répartie uniformément sont incompatible avec la longueur de la barre %d qui est de %f m.\n"), common_math_get(a), common_math_get(b), barre->numero, l)
             
             list_parcours = g_list_next(list_parcours);
         }
         while (list_parcours != NULL);
     }
     
-    BUG(action_en_cours = _1990_action_numero_cherche(projet, num_action), NULL);
+    BUG(action_en_cours = _1990_action_numero_cherche(projet, num_action), NULL)
     
     charge_nouveau->type = CHARGE_BARRE_REPARTIE_UNIFORME;
-    BUGMSG(charge_nouveau->nom = g_strdup_printf("%s", nom), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(charge_nouveau->nom = g_strdup_printf("%s", nom), NULL, gettext("Erreur d'allocation mémoire.\n"))
     charge_nouveau->barres = barres;
     charge_nouveau->repere_local = repere_local;
     charge_nouveau->projection = projection;
@@ -121,9 +121,9 @@ Charge_Barre_Repartie_Uniforme *EF_charge_barre_repartie_uniforme_ajout(Projet *
     
     charge_nouveau->numero = g_list_length(_1990_action_charges_renvoie(action_en_cours));
     
-    BUG(_1990_action_charges_change(action_en_cours, g_list_append(_1990_action_charges_renvoie(action_en_cours), charge_nouveau)), FALSE);
+    BUG(_1990_action_charges_change(action_en_cours, g_list_append(_1990_action_charges_renvoie(action_en_cours), charge_nouveau)), FALSE)
     
-    BUG(EF_calculs_free(projet), FALSE);
+    BUG(EF_calculs_free(projet), FALSE)
     
 #ifdef ENABLE_GTK
     if ((projet->list_gtk._1990_actions.builder != NULL) && (gtk_tree_selection_get_selected(projet->list_gtk._1990_actions.tree_select_actions, &model_action, &iter_action)))
@@ -154,9 +154,9 @@ char* EF_charge_barre_repartie_uniforme_description(Charge_Barre_Repartie_Unifor
     char    *description, *txt_liste_barres, txt_debut[30], txt_fin[30];
     char    txt_fx[30], txt_fy[30], txt_fz[30], txt_mx[30], txt_my[30], txt_mz[30];
     
-    BUGMSG(charge, NULL, gettext("Paramètre %s incorrect.\n"), "charge");
+    BUGMSG(charge, NULL, gettext("Paramètre %s incorrect.\n"), "charge")
     
-    BUG(txt_liste_barres = common_selection_converti_barres_en_texte(charge->barres), NULL);
+    BUG(txt_liste_barres = common_selection_converti_barres_en_texte(charge->barres), NULL)
     common_math_double_to_char2(charge->a, txt_debut, DECIMAL_DISTANCE);
     common_math_double_to_char2(charge->b, txt_fin, DECIMAL_DISTANCE);
     common_math_double_to_char2(charge->fx, txt_fx, DECIMAL_FORCE);
@@ -166,7 +166,7 @@ char* EF_charge_barre_repartie_uniforme_description(Charge_Barre_Repartie_Unifor
     common_math_double_to_char2(charge->my, txt_my, DECIMAL_MOMENT);
     common_math_double_to_char2(charge->mz, txt_mz, DECIMAL_MOMENT);
     
-    BUGMSG(description = g_strdup_printf("%s : %s, %s : %s m, %s : %s m, %s, %s, Fx : %s N/m, Fy : %s N/m, Fz : %s N/m, Mx : %s N.m/m, My : %s N.m/m, Mz : %s N.m/m", strstr(txt_liste_barres, ";") == NULL ? gettext("Barre") : gettext("Barres"), txt_liste_barres, gettext("début"), txt_debut, gettext("fin (par rapport à la fin)"), txt_fin, charge->projection == TRUE ? gettext("projection : oui") : gettext("projection : non"), charge->repere_local ? gettext("repère : local") : gettext("repère : global"), txt_fx, txt_fy, txt_fz, txt_mx, txt_my, txt_mz), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(description = g_strdup_printf("%s : %s, %s : %s m, %s : %s m, %s, %s, Fx : %s N/m, Fy : %s N/m, Fz : %s N/m, Mx : %s N.m/m, My : %s N.m/m, Mz : %s N.m/m", strstr(txt_liste_barres, ";") == NULL ? gettext("Barre") : gettext("Barres"), txt_liste_barres, gettext("début"), txt_debut, gettext("fin (par rapport à la fin)"), txt_fin, charge->projection == TRUE ? gettext("projection : oui") : gettext("projection : non"), charge->repere_local ? gettext("repère : local") : gettext("repère : global"), txt_fx, txt_fy, txt_fz, txt_mx, txt_my, txt_mz), NULL, gettext("Erreur d'allocation mémoire.\n"))
     
     free(txt_liste_barres);
     
@@ -209,18 +209,18 @@ gboolean EF_charge_barre_repartie_uniforme_mx(EF_Barre *barre, unsigned int disc
     EF_Noeud    *debut, *fin;
     double      l, G, J;
     
-    BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre");
-    BUGMSG(infos, FALSE, gettext("Paramètre %s incorrect.\n"), "infos");
-    BUGMSG(barre->section, FALSE, gettext("Section indéfinie.\n"));
-    BUGMSG(barre->materiau, FALSE, gettext("Matériau indéfini.\n"));
-    BUGMSG(barre->noeud_debut, FALSE, gettext("Noeud 1 indéfini.\n"));
-    BUGMSG(barre->noeud_fin, FALSE, gettext("Noeud 2 indéfini.\n"));
-    BUGMSG(discretisation<=barre->discretisation_element, FALSE, gettext("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element);
-    BUGMSG(ma, FALSE, gettext("Paramètre %s incorrect.\n"), "ma");
-    BUGMSG(mb, FALSE, gettext("Paramètre %s incorrect.\n"), "mb");
-    BUGMSG(!((ERREUR_RELATIVE_EGALE(infos->kAx, MAXDOUBLE)) && (ERREUR_RELATIVE_EGALE(infos->kBx, MAXDOUBLE))), FALSE, gettext("Impossible de relâcher rx simultanément des deux cotés de la barre.\n"));
-    BUGMSG(!((a < 0.) && (!(ERREUR_RELATIVE_EGALE(a, 0.)))), FALSE, gettext("Le début de la charge répartie uniformément (%f) est incorrect.\n"), a);
-    BUGMSG(!((b < 0.) && (!(ERREUR_RELATIVE_EGALE(b, 0.)))), FALSE, gettext("La fin de la charge répartie uniformément (%f) est incorrecte.\n"), b);
+    BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre")
+    BUGMSG(infos, FALSE, gettext("Paramètre %s incorrect.\n"), "infos")
+    BUGMSG(barre->section, FALSE, gettext("Section indéfinie.\n"))
+    BUGMSG(barre->materiau, FALSE, gettext("Matériau indéfini.\n"))
+    BUGMSG(barre->noeud_debut, FALSE, gettext("Noeud 1 indéfini.\n"))
+    BUGMSG(barre->noeud_fin, FALSE, gettext("Noeud 2 indéfini.\n"))
+    BUGMSG(discretisation<=barre->discretisation_element, FALSE, gettext("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element)
+    BUGMSG(ma, FALSE, gettext("Paramètre %s incorrect.\n"), "ma")
+    BUGMSG(mb, FALSE, gettext("Paramètre %s incorrect.\n"), "mb")
+    BUGMSG(!((ERREUR_RELATIVE_EGALE(infos->kAx, MAXDOUBLE)) && (ERREUR_RELATIVE_EGALE(infos->kBx, MAXDOUBLE))), FALSE, gettext("Impossible de relâcher rx simultanément des deux cotés de la barre.\n"))
+    BUGMSG(!((a < 0.) && (!(ERREUR_RELATIVE_EGALE(a, 0.)))), FALSE, gettext("Le début de la charge répartie uniformément (%f) est incorrect.\n"), a)
+    BUGMSG(!((b < 0.) && (!(ERREUR_RELATIVE_EGALE(b, 0.)))), FALSE, gettext("La fin de la charge répartie uniformément (%f) est incorrecte.\n"), b)
     
     // Les moments aux extrémités de la barre sont déterminés par les intégrales de Mohr
     //   et valent dans le cas général :\end{verbatim}\begin{center}
@@ -238,15 +238,15 @@ gboolean EF_charge_barre_repartie_uniforme_mx(EF_Barre *barre, unsigned int disc
         fin = g_list_nth_data(barre->noeuds_intermediaires, discretisation);
     
     l = EF_noeuds_distance(debut, fin);
-    BUG(!isnan(l), FALSE);
-    BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), FALSE, gettext("Le début de la charge répartie uniformément (%f) est incorrect. La longueur de la barre %d est de %f m.\n"), a, barre->numero, l);
-    BUGMSG(!((b > l) && (!(ERREUR_RELATIVE_EGALE(b, l)))), FALSE, gettext("La fin de la charge répartie uniformément (%f) est incorrecte. La longueur de la barre %d est de %f m.\n"), a, barre->numero, l);
-    BUGMSG(!((a+b > l) && (!(ERREUR_RELATIVE_EGALE(a+b, l)))), FALSE, gettext("Le début (%f) et la fin (%f) de la charge répartie uniformément sont incompatibles avec la longueur de la barre %d qui est de %f m.\n"), a, b, barre->numero, l);
+    BUG(!isnan(l), FALSE)
+    BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), FALSE, gettext("Le début de la charge répartie uniformément (%f) est incorrect. La longueur de la barre %d est de %f m.\n"), a, barre->numero, l)
+    BUGMSG(!((b > l) && (!(ERREUR_RELATIVE_EGALE(b, l)))), FALSE, gettext("La fin de la charge répartie uniformément (%f) est incorrecte. La longueur de la barre %d est de %f m.\n"), a, barre->numero, l)
+    BUGMSG(!((a+b > l) && (!(ERREUR_RELATIVE_EGALE(a+b, l)))), FALSE, gettext("Le début (%f) et la fin (%f) de la charge répartie uniformément sont incompatibles avec la longueur de la barre %d qui est de %f m.\n"), a, b, barre->numero, l)
     
     G = common_math_get(EF_calculs_G(barre->materiau, FALSE));
     J = common_math_get(EF_sections_j(barre->section));
-    BUG(!isnan(G), FALSE);
-    BUG(!isnan(J), FALSE);
+    BUG(!isnan(G), FALSE)
+    BUG(!isnan(J), FALSE)
     
     // Pour une section section constante, les moments valent :\end{verbatim}\begin{displaymath}
     // M_{Bx} = \frac{(L-a-b) \cdot m_x \cdot (a-b+2 \cdot G \cdot J \cdot k_A+l)}{2 \cdot (G \cdot J \cdot (k_A+k_B)+l)}\end{displaymath}\begin{verbatim}
@@ -298,14 +298,14 @@ gboolean EF_charge_barre_repartie_uniforme_def_ang_iso_y(EF_Barre *barre,
     double      l;
     double      E, I;
     
-    BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre");
-    BUGMSG(barre->section, FALSE, gettext("Section indéfinie.\n"));
-    BUGMSG(barre->materiau, FALSE, gettext("Matériau indéfini.\n"));
-    BUGMSG(barre->noeud_debut, FALSE, gettext("Noeud 1 indéfini.\n"));
-    BUGMSG(barre->noeud_fin, FALSE, gettext("Noeud 2 indéfini.\n"));
-    BUGMSG(discretisation<=barre->discretisation_element, FALSE, gettext("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element);
-    BUGMSG(phia, FALSE, gettext("Paramètre %s incorrect.\n"), "phia");
-    BUGMSG(phib, FALSE, gettext("Paramètre %s incorrect.\n"), "phib");
+    BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre")
+    BUGMSG(barre->section, FALSE, gettext("Section indéfinie.\n"))
+    BUGMSG(barre->materiau, FALSE, gettext("Matériau indéfini.\n"))
+    BUGMSG(barre->noeud_debut, FALSE, gettext("Noeud 1 indéfini.\n"))
+    BUGMSG(barre->noeud_fin, FALSE, gettext("Noeud 2 indéfini.\n"))
+    BUGMSG(discretisation<=barre->discretisation_element, FALSE, gettext("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element)
+    BUGMSG(phia, FALSE, gettext("Paramètre %s incorrect.\n"), "phia")
+    BUGMSG(phib, FALSE, gettext("Paramètre %s incorrect.\n"), "phib")
     
     // Les angles phi_A et phi_B sont déterminés par les intégrales de Mohr
     //   et valent dans le cas général :\end{verbatim}\begin{center}
@@ -332,17 +332,17 @@ gboolean EF_charge_barre_repartie_uniforme_def_ang_iso_y(EF_Barre *barre,
         fin = g_list_nth_data(barre->noeuds_intermediaires, discretisation);
     
     l = EF_noeuds_distance(debut, fin);
-    BUG(!isnan(l), FALSE);
-    BUGMSG(!((a < 0.) && (!(ERREUR_RELATIVE_EGALE(a, 0.)))), FALSE, gettext("Le début de la position de la charge répartie uniformément (%f) est incorrect.\n"), a);
-    BUGMSG(!((b < 0.) && (!(ERREUR_RELATIVE_EGALE(b, 0.)))), FALSE, gettext("La fin de la position de la charge répartie uniformément (%f) est incorrecte.\n"), b);
-    BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), FALSE, gettext("Le début de la charge répartie uniformément (%f) est incorrect. La longueur de la barre %d est de %f m.\n"), a, barre->numero, l);
-    BUGMSG(!((b > l) && (!(ERREUR_RELATIVE_EGALE(b, l)))), FALSE, gettext("La fin de la charge répartie uniformément (%f) est incorrecte. La longueur de la barre %d est de %f m.\n"), b, barre->numero, l);
-    BUGMSG(!((a+b > l) && (!(ERREUR_RELATIVE_EGALE(a+b, l)))), FALSE, gettext("Le début (%f) et la fin (%f) de la charge répartie uniformément sont incorrecte avec la longueur de la barre %d qui est de %f m.\n"), a, b, barre->numero, l);
+    BUG(!isnan(l), FALSE)
+    BUGMSG(!((a < 0.) && (!(ERREUR_RELATIVE_EGALE(a, 0.)))), FALSE, gettext("Le début de la position de la charge répartie uniformément (%f) est incorrect.\n"), a)
+    BUGMSG(!((b < 0.) && (!(ERREUR_RELATIVE_EGALE(b, 0.)))), FALSE, gettext("La fin de la position de la charge répartie uniformément (%f) est incorrecte.\n"), b)
+    BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), FALSE, gettext("Le début de la charge répartie uniformément (%f) est incorrect. La longueur de la barre %d est de %f m.\n"), a, barre->numero, l)
+    BUGMSG(!((b > l) && (!(ERREUR_RELATIVE_EGALE(b, l)))), FALSE, gettext("La fin de la charge répartie uniformément (%f) est incorrecte. La longueur de la barre %d est de %f m.\n"), b, barre->numero, l)
+    BUGMSG(!((a+b > l) && (!(ERREUR_RELATIVE_EGALE(a+b, l)))), FALSE, gettext("Le début (%f) et la fin (%f) de la charge répartie uniformément sont incorrecte avec la longueur de la barre %d qui est de %f m.\n"), a, b, barre->numero, l)
     
     E = common_math_get(EF_calculs_E(barre->materiau));
     I = common_math_get(EF_sections_iy(barre->section));
-    BUG(!isnan(E), FALSE);
-    BUG(!isnan(I), FALSE);
+    BUG(!isnan(E), FALSE)
+    BUG(!isnan(I), FALSE)
     
     // Pour une section constante, les angles valent :\end{verbatim}\begin{displaymath}
     // \varphi_A = \frac{[a^2-a \cdot (b+2 \cdot L) + b \cdot (b+L)] \cdot m_y \cdot (L-a-b)}{6 \cdot E \cdot I_y \cdot L} - \frac{f_z \cdot (L-a-b) \cdot (L-a+b) \cdot (L^2-a^2-b^2+2 \cdot a \cdot L)}{24 \cdot E \cdot I_y \cdot L}\end{displaymath}\begin{displaymath}
@@ -389,14 +389,14 @@ gboolean EF_charge_barre_repartie_uniforme_def_ang_iso_z(EF_Barre *barre,
     double      l;
     double      E, I;
     
-    BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre");
-    BUGMSG(barre->section, FALSE, gettext("Section indéfinie.\n"));
-    BUGMSG(barre->materiau, FALSE, gettext("Matériau indéfini.\n"));
-    BUGMSG(barre->noeud_debut, FALSE, gettext("Noeud 1 indéfini.\n"));
-    BUGMSG(barre->noeud_fin, FALSE, gettext("Noeud 2 indéfini.\n"));
-    BUGMSG(discretisation<=barre->discretisation_element, FALSE, gettext("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element);
-    BUGMSG(phia, FALSE, gettext("Paramètre %s incorrect.\n"), "phia");
-    BUGMSG(phib, FALSE, gettext("Paramètre %s incorrect.\n"), "phib");
+    BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre")
+    BUGMSG(barre->section, FALSE, gettext("Section indéfinie.\n"))
+    BUGMSG(barre->materiau, FALSE, gettext("Matériau indéfini.\n"))
+    BUGMSG(barre->noeud_debut, FALSE, gettext("Noeud 1 indéfini.\n"))
+    BUGMSG(barre->noeud_fin, FALSE, gettext("Noeud 2 indéfini.\n"))
+    BUGMSG(discretisation<=barre->discretisation_element, FALSE, gettext("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element)
+    BUGMSG(phia, FALSE, gettext("Paramètre %s incorrect.\n"), "phia")
+    BUGMSG(phib, FALSE, gettext("Paramètre %s incorrect.\n"), "phib")
     
     if (discretisation == 0)
         debut = barre->noeud_debut;
@@ -423,17 +423,17 @@ gboolean EF_charge_barre_repartie_uniforme_def_ang_iso_z(EF_Barre *barre,
     // A_2 = & \frac{f_y \cdot (L-a-b)(L-a+b)}{2 \cdot L} & B_2 = & \frac{f_y \cdot (L-a-b)(L+a-b)}{2 \cdot L}\end{align*}\begin{verbatim}
     
     l = EF_noeuds_distance(debut, fin);
-    BUG(!isnan(l), FALSE);
-    BUGMSG(!((a < 0.) && (!(ERREUR_RELATIVE_EGALE(a, 0.)))), FALSE, gettext("Le début de la position de la charge répartie uniformément (%f) est incorrect.\n"), a);
-    BUGMSG(!((b < 0.) && (!(ERREUR_RELATIVE_EGALE(b, 0.)))), FALSE, gettext("La fin de la position de la charge répartie uniformément (%f) est incorrecte.\n"), b);
-    BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), FALSE, gettext("Le début de la charge répartie uniformément (%f) est incorrect. La longueur de la barre %d est de %f m.\n"), a, barre->numero, l);
-    BUGMSG(!((b > l) && (!(ERREUR_RELATIVE_EGALE(b, l)))), FALSE, gettext("La fin de la charge répartie uniformément (%f) est incorrecte. La longueur de la barre %d est de %f m.\n"), b, barre->numero, l);
-    BUGMSG(!((a+b > l) && (!(ERREUR_RELATIVE_EGALE(a+b, l)))), FALSE, gettext("Le début (%f) et la fin (%f) de la charge répartie uniformément sont incorrecte avec la longueur de la barre %d qui est de %f m.\n"), a, b, barre->numero, l);
+    BUG(!isnan(l), FALSE)
+    BUGMSG(!((a < 0.) && (!(ERREUR_RELATIVE_EGALE(a, 0.)))), FALSE, gettext("Le début de la position de la charge répartie uniformément (%f) est incorrect.\n"), a)
+    BUGMSG(!((b < 0.) && (!(ERREUR_RELATIVE_EGALE(b, 0.)))), FALSE, gettext("La fin de la position de la charge répartie uniformément (%f) est incorrecte.\n"), b)
+    BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), FALSE, gettext("Le début de la charge répartie uniformément (%f) est incorrect. La longueur de la barre %d est de %f m.\n"), a, barre->numero, l)
+    BUGMSG(!((b > l) && (!(ERREUR_RELATIVE_EGALE(b, l)))), FALSE, gettext("La fin de la charge répartie uniformément (%f) est incorrecte. La longueur de la barre %d est de %f m.\n"), b, barre->numero, l)
+    BUGMSG(!((a+b > l) && (!(ERREUR_RELATIVE_EGALE(a+b, l)))), FALSE, gettext("Le début (%f) et la fin (%f) de la charge répartie uniformément sont incorrecte avec la longueur de la barre %d qui est de %f m.\n"), a, b, barre->numero, l)
     
     E = common_math_get(EF_calculs_E(barre->materiau));
     I = common_math_get(EF_sections_iz(barre->section));
-    BUG(!isnan(E), FALSE);
-    BUG(!isnan(I), FALSE);
+    BUG(!isnan(E), FALSE)
+    BUG(!isnan(I), FALSE)
     
     // Pour une section constante, les angles valent :\end{verbatim}\begin{displaymath}
     // \varphi_A = \frac{[a^2-a \cdot (b+2 \cdot L) + b \cdot (b+L)] \cdot m_z \cdot (L-a-b)}{6 \cdot E \cdot I_z \cdot L} + \frac{f_y \cdot (L-a-b) \cdot (L-a+b) \cdot (L^2-a^2-b^2+2 \cdot a \cdot L)}{24 \cdot E \cdot I_z \cdot L}\end{displaymath}\begin{displaymath}
@@ -463,12 +463,12 @@ double EF_charge_barre_repartie_uniforme_position_resultante_x(EF_Section *secti
  *             a > l-b.
  */
 {
-    BUGMSG(section, NAN, gettext("Paramètre %s incorrect.\n"), "section");
-    BUGMSG(!((a < 0.) && (!(ERREUR_RELATIVE_EGALE(a, 0.)))), NAN, gettext("Le début de la position de la charge répartie uniformément (%f) est incorrect.\n"), a);
-    BUGMSG(!((b < 0.) && (!(ERREUR_RELATIVE_EGALE(b, 0.)))), NAN, gettext("La fin de la position de la charge répartie uniformément (%f) est incorrecte.\n"), b);
-    BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), NAN, gettext("Le début de la charge répartie uniformément (%f) est incorrect. La longueur de la barre est de %f m.\n"), a, l);
-    BUGMSG(!((b > l) && (!(ERREUR_RELATIVE_EGALE(b, l)))), NAN, gettext("La fin de la charge répartie uniformément (%f) est incorrecte. La longueur de la barre est de %f m.\n"), b, l);
-    BUGMSG(!((a+b > l) && (!(ERREUR_RELATIVE_EGALE(a+b, l)))), NAN, gettext("Le début (%f) et la fin (%f) de la charge répartie uniformément sont incorrecte avec la longueur de la barre qui est de %f m.\n"), a, b, l);
+    BUGMSG(section, NAN, gettext("Paramètre %s incorrect.\n"), "section")
+    BUGMSG(!((a < 0.) && (!(ERREUR_RELATIVE_EGALE(a, 0.)))), NAN, gettext("Le début de la position de la charge répartie uniformément (%f) est incorrect.\n"), a)
+    BUGMSG(!((b < 0.) && (!(ERREUR_RELATIVE_EGALE(b, 0.)))), NAN, gettext("La fin de la position de la charge répartie uniformément (%f) est incorrecte.\n"), b)
+    BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), NAN, gettext("Le début de la charge répartie uniformément (%f) est incorrect. La longueur de la barre est de %f m.\n"), a, l)
+    BUGMSG(!((b > l) && (!(ERREUR_RELATIVE_EGALE(b, l)))), NAN, gettext("La fin de la charge répartie uniformément (%f) est incorrecte. La longueur de la barre est de %f m.\n"), b, l)
+    BUGMSG(!((a+b > l) && (!(ERREUR_RELATIVE_EGALE(a+b, l)))), NAN, gettext("Le début (%f) et la fin (%f) de la charge répartie uniformément sont incorrecte avec la longueur de la barre qui est de %f m.\n"), a, b, l)
     
     // La position de la résultante de la charge est obtenue en résolvant X dans la formule :\end{verbatim}\begin{center}
     // \includegraphics[width=8cm]{images/charge_barre_rep_uni_n.pdf}\end{center}\begin{displaymath}
@@ -513,15 +513,15 @@ gboolean EF_charge_barre_repartie_uniforme_fonc_rx(Fonction *fonction, EF_Barre 
     double      l;
     double      G, debut_barre, J;
     
-    BUGMSG(fonction, FALSE, gettext("Paramètre %s incorrect.\n"), "fonction");
-    BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre");
-    BUGMSG(barre->section, FALSE, gettext("Section indéfinie.\n"));
-    BUGMSG(barre->materiau, FALSE, gettext("Matériau indéfini.\n"));
-    BUGMSG(barre->noeud_debut, FALSE, gettext("Noeud 1 indéfini.\n"));
-    BUGMSG(barre->noeud_fin, FALSE, gettext("Noeud 2 indéfini.\n"));
-    BUGMSG(discretisation<=barre->discretisation_element, FALSE, gettext("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element);
+    BUGMSG(fonction, FALSE, gettext("Paramètre %s incorrect.\n"), "fonction")
+    BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre")
+    BUGMSG(barre->section, FALSE, gettext("Section indéfinie.\n"))
+    BUGMSG(barre->materiau, FALSE, gettext("Matériau indéfini.\n"))
+    BUGMSG(barre->noeud_debut, FALSE, gettext("Noeud 1 indéfini.\n"))
+    BUGMSG(barre->noeud_fin, FALSE, gettext("Noeud 2 indéfini.\n"))
+    BUGMSG(discretisation<=barre->discretisation_element, FALSE, gettext("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element)
     infos = &(barre->info_EF[discretisation]);
-    BUGMSG(!((ERREUR_RELATIVE_EGALE(infos->kAx, MAXDOUBLE)) && (ERREUR_RELATIVE_EGALE(infos->kBx, MAXDOUBLE))), FALSE, gettext("Impossible de relâcher rx simultanément des deux cotés de la barre.\n"));
+    BUGMSG(!((ERREUR_RELATIVE_EGALE(infos->kAx, MAXDOUBLE)) && (ERREUR_RELATIVE_EGALE(infos->kBx, MAXDOUBLE))), FALSE, gettext("Impossible de relâcher rx simultanément des deux cotés de la barre.\n"))
     
     // La déformation d'une barre soumise à un effort de torsion est défini par les formules :\end{verbatim}\begin{center}
     //   \includegraphics[width=8cm]{images/charge_barre_rep_uni_mx2.pdf}\end{center}\begin{verbatim}
@@ -546,32 +546,32 @@ gboolean EF_charge_barre_repartie_uniforme_fonc_rx(Fonction *fonction, EF_Barre 
         fin = g_list_nth_data(barre->noeuds_intermediaires, discretisation);
     
     debut_barre = EF_noeuds_distance(debut, barre->noeud_debut);
-    BUG(!isnan(debut_barre), FALSE);
+    BUG(!isnan(debut_barre), FALSE)
     l = EF_noeuds_distance(debut, fin);
-    BUG(!isnan(l), FALSE);
-    BUGMSG(!((a < 0.) && (!(ERREUR_RELATIVE_EGALE(a, 0.)))), FALSE, gettext("Le début de la charge répartie uniformément (%f) est incorrect.\n"), a);
-    BUGMSG(!((b < 0.) && (!(ERREUR_RELATIVE_EGALE(b, 0.)))), FALSE, gettext("La fin de la charge répartie uniformément (%f) est incorrecte.\n"), b);
-    BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), FALSE, gettext("Le début de la charge répartie uniformément (%f) est incorrect. La longueur de la barre %d est de %f m.\n"), a, barre->numero, l);
-    BUGMSG(!((b > l) && (!(ERREUR_RELATIVE_EGALE(b, l)))), FALSE, gettext("La fin de la charge répartie uniformément (%f) est incorrecte. La longueur de la barre %d est de %f m.\n"), a, barre->numero, l);
-    BUGMSG(!((a+b > l) && (!(ERREUR_RELATIVE_EGALE(a+b, l)))), FALSE, gettext("Le début (%f) et la fin (%f) de la charge répartie uniformément sont incompatibles avec la longueur de la barre %d qui est de %f m.\n"), a, b, barre->numero, l);
+    BUG(!isnan(l), FALSE)
+    BUGMSG(!((a < 0.) && (!(ERREUR_RELATIVE_EGALE(a, 0.)))), FALSE, gettext("Le début de la charge répartie uniformément (%f) est incorrect.\n"), a)
+    BUGMSG(!((b < 0.) && (!(ERREUR_RELATIVE_EGALE(b, 0.)))), FALSE, gettext("La fin de la charge répartie uniformément (%f) est incorrecte.\n"), b)
+    BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), FALSE, gettext("Le début de la charge répartie uniformément (%f) est incorrect. La longueur de la barre %d est de %f m.\n"), a, barre->numero, l)
+    BUGMSG(!((b > l) && (!(ERREUR_RELATIVE_EGALE(b, l)))), FALSE, gettext("La fin de la charge répartie uniformément (%f) est incorrecte. La longueur de la barre %d est de %f m.\n"), a, barre->numero, l)
+    BUGMSG(!((a+b > l) && (!(ERREUR_RELATIVE_EGALE(a+b, l)))), FALSE, gettext("Le début (%f) et la fin (%f) de la charge répartie uniformément sont incompatibles avec la longueur de la barre %d qui est de %f m.\n"), a, b, barre->numero, l)
     
     G = common_math_get(EF_calculs_G(barre->materiau, FALSE));
     J = common_math_get(EF_sections_j(barre->section));
     
-    BUG(!isnan(G), FALSE);
-    BUG(!isnan(J), FALSE);
+    BUG(!isnan(G), FALSE)
+    BUG(!isnan(J), FALSE)
     
     if (ERREUR_RELATIVE_EGALE(infos->kBx, MAXDOUBLE))
     {
-        BUG(common_fonction_ajout_poly(fonction, 0., a, max*infos->kAx, max/(G*J), 0., 0., 0., 0., 0., debut_barre), FALSE);
-        BUG(common_fonction_ajout_poly(fonction, a, l-b, max*infos->kAx+(a*a*(max+mbx))/(2.*(a+b-l)*G*J), (-2*a*mbx+2*b*max-2*l*max)/(2.*(a+b-l)*G*J), (max+mbx)/(2.*(a+b-l)*G*J), 0., 0., 0., 0., debut_barre), FALSE);
-        BUG(common_fonction_ajout_poly(fonction, l-b, l, max*infos->kAx+(l+a-b)*(max+mbx)/(2.*G*J), (-2*mbx)/(2.*G*J), 0., 0., 0., 0., 0., debut_barre), FALSE);
+        BUG(common_fonction_ajout_poly(fonction, 0., a, max*infos->kAx, max/(G*J), 0., 0., 0., 0., 0., debut_barre), FALSE)
+        BUG(common_fonction_ajout_poly(fonction, a, l-b, max*infos->kAx+(a*a*(max+mbx))/(2.*(a+b-l)*G*J), (-2*a*mbx+2*b*max-2*l*max)/(2.*(a+b-l)*G*J), (max+mbx)/(2.*(a+b-l)*G*J), 0., 0., 0., 0., debut_barre), FALSE)
+        BUG(common_fonction_ajout_poly(fonction, l-b, l, max*infos->kAx+(l+a-b)*(max+mbx)/(2.*G*J), (-2*mbx)/(2.*G*J), 0., 0., 0., 0., 0., debut_barre), FALSE)
     }
     else
     {
-        BUG(common_fonction_ajout_poly(fonction, 0., a, mbx*infos->kBx+((max+mbx)*(-a+b)-l*(max-mbx))/(2.*G*J), (2.*max)/(2.*G*J), 0., 0., 0., 0., 0., debut_barre), FALSE);
-        BUG(common_fonction_ajout_poly(fonction, a, l-b, mbx*infos->kBx+(2.*a*l*mbx+b*b*max+b*b*mbx-2.*b*l*max+l*l*max-l*l*mbx)/(2.*(a+b-l)*G*J), (-2.*a*mbx+2.*b*max-2.*l*max)/(2.*(a+b-l)*G*J), (max+mbx)/(2.*(a+b-l)*G*J), 0., 0., 0., 0., debut_barre), FALSE);
-        BUG(common_fonction_ajout_poly(fonction, l-b, l, mbx*(infos->kBx + l/(G*J)), -mbx/(G*J), 0., 0., 0., 0., 0., debut_barre), FALSE);
+        BUG(common_fonction_ajout_poly(fonction, 0., a, mbx*infos->kBx+((max+mbx)*(-a+b)-l*(max-mbx))/(2.*G*J), (2.*max)/(2.*G*J), 0., 0., 0., 0., 0., debut_barre), FALSE)
+        BUG(common_fonction_ajout_poly(fonction, a, l-b, mbx*infos->kBx+(2.*a*l*mbx+b*b*max+b*b*mbx-2.*b*l*max+l*l*max-l*l*mbx)/(2.*(a+b-l)*G*J), (-2.*a*mbx+2.*b*max-2.*l*max)/(2.*(a+b-l)*G*J), (max+mbx)/(2.*(a+b-l)*G*J), 0., 0., 0., 0., debut_barre), FALSE)
+        BUG(common_fonction_ajout_poly(fonction, l-b, l, mbx*(infos->kBx + l/(G*J)), -mbx/(G*J), 0., 0., 0., 0., 0., debut_barre), FALSE)
     }
     
     // Pour une section section constante, les moments valent :
@@ -625,14 +625,14 @@ gboolean EF_charge_barre_repartie_uniforme_fonc_ry(Fonction *f_rotation, Fonctio
     double      l;
     double      E, debut_barre, I;
     
-    BUGMSG(f_rotation, FALSE, gettext("Paramètre %s incorrect.\n"), "f_rotation");
-    BUGMSG(f_deform, FALSE, gettext("Paramètre %s incorrect.\n"), "f_deform");
-    BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre");
-    BUGMSG(barre->section, FALSE, gettext("Section indéfinie.\n"));
-    BUGMSG(barre->materiau, FALSE, gettext("Matériau indéfini.\n"));
-    BUGMSG(barre->noeud_debut, FALSE, gettext("Noeud 1 indéfini.\n"));
-    BUGMSG(barre->noeud_fin, FALSE, gettext("Noeud 2 indéfini.\n"));
-    BUGMSG(discretisation<=barre->discretisation_element, FALSE, gettext("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element);
+    BUGMSG(f_rotation, FALSE, gettext("Paramètre %s incorrect.\n"), "f_rotation")
+    BUGMSG(f_deform, FALSE, gettext("Paramètre %s incorrect.\n"), "f_deform")
+    BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre")
+    BUGMSG(barre->section, FALSE, gettext("Section indéfinie.\n"))
+    BUGMSG(barre->materiau, FALSE, gettext("Matériau indéfini.\n"))
+    BUGMSG(barre->noeud_debut, FALSE, gettext("Noeud 1 indéfini.\n"))
+    BUGMSG(barre->noeud_fin, FALSE, gettext("Noeud 2 indéfini.\n"))
+    BUGMSG(discretisation<=barre->discretisation_element, FALSE, gettext("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element)
     
     // La déformation et la  rotation d'une barre soumise à un effort de flexion autour de
     // l'axe y est calculée selon le principe des intégrales de Mohr et est définie par les
@@ -686,35 +686,35 @@ gboolean EF_charge_barre_repartie_uniforme_fonc_ry(Fonction *f_rotation, Fonctio
         fin = g_list_nth_data(barre->noeuds_intermediaires, discretisation);
     
     debut_barre = EF_noeuds_distance(debut, barre->noeud_debut);
-    BUG(!isnan(debut_barre), FALSE);
+    BUG(!isnan(debut_barre), FALSE)
     l = EF_noeuds_distance(debut, fin);
-    BUG(!isnan(l), FALSE);
-    BUGMSG(!((a < 0.) && (!(ERREUR_RELATIVE_EGALE(a, 0.)))), FALSE, gettext("Le début de la charge répartie uniformément (%f) est incorrect.\n"), a);
-    BUGMSG(!((b < 0.) && (!(ERREUR_RELATIVE_EGALE(b, 0.)))), FALSE, gettext("La fin de la charge répartie uniformément (%f) est incorrecte.\n"), b);
-    BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), FALSE, gettext("Le début de la charge répartie uniformément (%f) est incorrect. La longueur de la barre %d est de %f m.\n"), a, barre->numero, l);
-    BUGMSG(!((b > l) && (!(ERREUR_RELATIVE_EGALE(b, l)))), FALSE, gettext("La fin de la charge répartie uniformément (%f) est incorrecte. La longueur de la barre %d est de %f m.\n"), a, barre->numero, l);
-    BUGMSG(!((a+b > l) && (!(ERREUR_RELATIVE_EGALE(a+b, l)))), FALSE, gettext("Le début (%f) et la fin (%f) de la charge répartie uniformément sont incompatibles avec la longueur de la barre %d qui est de %f m.\n"), a, b, barre->numero, l);
+    BUG(!isnan(l), FALSE)
+    BUGMSG(!((a < 0.) && (!(ERREUR_RELATIVE_EGALE(a, 0.)))), FALSE, gettext("Le début de la charge répartie uniformément (%f) est incorrect.\n"), a)
+    BUGMSG(!((b < 0.) && (!(ERREUR_RELATIVE_EGALE(b, 0.)))), FALSE, gettext("La fin de la charge répartie uniformément (%f) est incorrecte.\n"), b)
+    BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), FALSE, gettext("Le début de la charge répartie uniformément (%f) est incorrect. La longueur de la barre %d est de %f m.\n"), a, barre->numero, l)
+    BUGMSG(!((b > l) && (!(ERREUR_RELATIVE_EGALE(b, l)))), FALSE, gettext("La fin de la charge répartie uniformément (%f) est incorrecte. La longueur de la barre %d est de %f m.\n"), a, barre->numero, l)
+    BUGMSG(!((a+b > l) && (!(ERREUR_RELATIVE_EGALE(a+b, l)))), FALSE, gettext("Le début (%f) et la fin (%f) de la charge répartie uniformément sont incompatibles avec la longueur de la barre %d qui est de %f m.\n"), a, b, barre->numero, l)
     
     E = common_math_get(EF_calculs_E(barre->materiau));
     I = common_math_get(EF_sections_iy(barre->section));
-    BUG(!isnan(E), FALSE);
-    BUG(!isnan(I), FALSE);
+    BUG(!isnan(E), FALSE)
+    BUG(!isnan(I), FALSE)
     
-    BUG(common_fonction_ajout_poly(f_rotation, 0., a, -fz*(l-a-b)*(l-a+b)*(l*l-a*a-b*b+2*a*l)/(24.*l*E*I), 0., fz*(l-a-b)*(l-a+b)*(6.)/(24.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE);
-    BUG(common_fonction_ajout_poly(f_rotation, a, l-b, fz*(a*a*a*a+4.*a*a*l*l-b*b*b*b+2.*b*b*l*l-l*l*l*l)/(24.*l*E*I), fz*(-12.*a*a*l)/(24.*l*E*I), fz*(6.*a*a-6.*b*b+6.*l*l)/(24.*l*E*I), fz*(-4.*l)/(24.*l*E*I), 0., 0., 0., debut_barre), FALSE);
-    BUG(common_fonction_ajout_poly(f_rotation, l-b, l, fz*(a*a*a*a+4.*a*a*l*l-b*b*b*b+4.*b*b*b*l-10.*b*b*l*l+12.*b*l*l*l-5.*l*l*l*l)/(24.*l*E*I), fz*(-12.*a*a*l+12.*b*b*l-24.*b*l*l+12.*l*l*l)/(24.*l*E*I), fz*(6.*a*a-6.*b*b+12.*b*l-6.*l*l)/(24.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE);
-    BUG(common_fonction_ajout_poly(f_rotation, 0., a, my*(-a*a*a+3.*a*a*l-2.*a*l*l-b*b*b+b*l*l)/(6.*l*E*I), 0., my*(-3.*a-3.*b+3.*l)/(6.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE);
-    BUG(common_fonction_ajout_poly(f_rotation, a, l-b, my*(-a*a*a-2.*a*l*l-b*b*b+b*l*l)/(6.*l*E*I), my*(6.*a*l)/(6.*l*E*I), my*(-3.*a-3.*b)/(6.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE);
-    BUG(common_fonction_ajout_poly(f_rotation, l-b, l, my*(-a*a*a-2.*a*l*l-b*b*b+3.*b*b*l-5.*b*l*l+3.*l*l*l)/(6.*l*E*I), my*(6.*a*l+6*b*l-6*l*l)/(6.*l*E*I), my*(-3.*a-3.*b+3.*l)/(6.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE);
-    BUG(common_fonction_ajout_poly(f_rotation, 0., l, -l/(6.*E*I)*(2.*may-mby), may/(E*I), -(may+mby)/(2.*E*I*l), 0., 0., 0., 0., debut_barre), FALSE);
+    BUG(common_fonction_ajout_poly(f_rotation, 0., a, -fz*(l-a-b)*(l-a+b)*(l*l-a*a-b*b+2*a*l)/(24.*l*E*I), 0., fz*(l-a-b)*(l-a+b)*(6.)/(24.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE)
+    BUG(common_fonction_ajout_poly(f_rotation, a, l-b, fz*(a*a*a*a+4.*a*a*l*l-b*b*b*b+2.*b*b*l*l-l*l*l*l)/(24.*l*E*I), fz*(-12.*a*a*l)/(24.*l*E*I), fz*(6.*a*a-6.*b*b+6.*l*l)/(24.*l*E*I), fz*(-4.*l)/(24.*l*E*I), 0., 0., 0., debut_barre), FALSE)
+    BUG(common_fonction_ajout_poly(f_rotation, l-b, l, fz*(a*a*a*a+4.*a*a*l*l-b*b*b*b+4.*b*b*b*l-10.*b*b*l*l+12.*b*l*l*l-5.*l*l*l*l)/(24.*l*E*I), fz*(-12.*a*a*l+12.*b*b*l-24.*b*l*l+12.*l*l*l)/(24.*l*E*I), fz*(6.*a*a-6.*b*b+12.*b*l-6.*l*l)/(24.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE)
+    BUG(common_fonction_ajout_poly(f_rotation, 0., a, my*(-a*a*a+3.*a*a*l-2.*a*l*l-b*b*b+b*l*l)/(6.*l*E*I), 0., my*(-3.*a-3.*b+3.*l)/(6.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE)
+    BUG(common_fonction_ajout_poly(f_rotation, a, l-b, my*(-a*a*a-2.*a*l*l-b*b*b+b*l*l)/(6.*l*E*I), my*(6.*a*l)/(6.*l*E*I), my*(-3.*a-3.*b)/(6.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE)
+    BUG(common_fonction_ajout_poly(f_rotation, l-b, l, my*(-a*a*a-2.*a*l*l-b*b*b+3.*b*b*l-5.*b*l*l+3.*l*l*l)/(6.*l*E*I), my*(6.*a*l+6*b*l-6*l*l)/(6.*l*E*I), my*(-3.*a-3.*b+3.*l)/(6.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE)
+    BUG(common_fonction_ajout_poly(f_rotation, 0., l, -l/(6.*E*I)*(2.*may-mby), may/(E*I), -(may+mby)/(2.*E*I*l), 0., 0., 0., 0., debut_barre), FALSE)
     
-    BUG(common_fonction_ajout_poly(f_deform, 0., a, 0., fz/(24.*E*I*l)*(l-a-b)*(l-a+b)*(l*l-a*a+2.*a*l-b*b), 0., fz/(24.*E*I*l)*(l-a-b)*(l-a+b)*(-2.), 0., 0., 0., debut_barre), FALSE);
-    BUG(common_fonction_ajout_poly(f_deform, a, l-b, fz/(24.*E*I*l)*(a*a*a*a*l), fz/(24.*E*I*l)*(-a*a*a*a-4.*a*a*l*l+b*b*b*b-2.*b*b*l*l+l*l*l*l), fz/(24.*E*I*l)*(6.*a*a*l), fz/(24.*E*I*l)*(-2.*a*a+2.*b*b-2.*l*l), fz/(24.*E*I*l)*(l), 0., 0., debut_barre), FALSE);
-    BUG(common_fonction_ajout_poly(f_deform, l-b, l, fz/(24.*E*I*l)*(l-a-b)*(l+a-b)*(-a*a*l-b*b*l+2*b*l*l-l*l*l), fz/(24.*E*I*l)*(l-a-b)*(l+a-b)*(a*a+b*b-2*b*l+5*l*l), fz/(24.*E*I*l)*(l-a-b)*(l+a-b)*(-6.*l), fz/(24.*E*I*l)*(l-a-b)*(l+a-b)*(2.), 0., 0., 0., debut_barre), FALSE);
-    BUG(common_fonction_ajout_poly(f_deform, 0., a, 0., my/(6.*E*I*l)*(l-a-b)*(-a*a+a*b+2.*a*l-b*b-b*l), 0., -my/(6.*E*I*l)*(l-a-b), 0., 0., 0., debut_barre), FALSE);
-    BUG(common_fonction_ajout_poly(f_deform, a, l-b, my/(6.*E*I*l)*(-a*a*a*l), my/(6.*E*I*l)*(a*a*a+2.*a*l*l+b*b*b-b*l*l), my/(6.*E*I*l)*(-3.*a*l), my/(6.*E*I*l)*(a+b), 0., 0., 0., debut_barre), FALSE);
-    BUG(common_fonction_ajout_poly(f_deform, l-b, l, my/(6.*E*I*l)*(l-a-b)*(a*a*l-a*b*l+a*l*l+b*b*l-2.*b*l*l+l*l*l), my/(6.*E*I*l)*(l-a-b)*(-a*a+a*b-a*l-b*b+2.*b*l-3.*l*l), my/(6.*E*I*l)*(l-a-b)*(3.*l), -my/(6.*E*I*l)*(l-a-b), 0., 0., 0., debut_barre), FALSE);
-    BUG(common_fonction_ajout_poly(f_deform, 0., l, 0., l/(6*E*I)*(2*may-mby), -may/(2*E*I), (mby+may)/(6*E*I*l), 0., 0., 0., debut_barre), FALSE);
+    BUG(common_fonction_ajout_poly(f_deform, 0., a, 0., fz/(24.*E*I*l)*(l-a-b)*(l-a+b)*(l*l-a*a+2.*a*l-b*b), 0., fz/(24.*E*I*l)*(l-a-b)*(l-a+b)*(-2.), 0., 0., 0., debut_barre), FALSE)
+    BUG(common_fonction_ajout_poly(f_deform, a, l-b, fz/(24.*E*I*l)*(a*a*a*a*l), fz/(24.*E*I*l)*(-a*a*a*a-4.*a*a*l*l+b*b*b*b-2.*b*b*l*l+l*l*l*l), fz/(24.*E*I*l)*(6.*a*a*l), fz/(24.*E*I*l)*(-2.*a*a+2.*b*b-2.*l*l), fz/(24.*E*I*l)*(l), 0., 0., debut_barre), FALSE)
+    BUG(common_fonction_ajout_poly(f_deform, l-b, l, fz/(24.*E*I*l)*(l-a-b)*(l+a-b)*(-a*a*l-b*b*l+2*b*l*l-l*l*l), fz/(24.*E*I*l)*(l-a-b)*(l+a-b)*(a*a+b*b-2*b*l+5*l*l), fz/(24.*E*I*l)*(l-a-b)*(l+a-b)*(-6.*l), fz/(24.*E*I*l)*(l-a-b)*(l+a-b)*(2.), 0., 0., 0., debut_barre), FALSE)
+    BUG(common_fonction_ajout_poly(f_deform, 0., a, 0., my/(6.*E*I*l)*(l-a-b)*(-a*a+a*b+2.*a*l-b*b-b*l), 0., -my/(6.*E*I*l)*(l-a-b), 0., 0., 0., debut_barre), FALSE)
+    BUG(common_fonction_ajout_poly(f_deform, a, l-b, my/(6.*E*I*l)*(-a*a*a*l), my/(6.*E*I*l)*(a*a*a+2.*a*l*l+b*b*b-b*l*l), my/(6.*E*I*l)*(-3.*a*l), my/(6.*E*I*l)*(a+b), 0., 0., 0., debut_barre), FALSE)
+    BUG(common_fonction_ajout_poly(f_deform, l-b, l, my/(6.*E*I*l)*(l-a-b)*(a*a*l-a*b*l+a*l*l+b*b*l-2.*b*l*l+l*l*l), my/(6.*E*I*l)*(l-a-b)*(-a*a+a*b-a*l-b*b+2.*b*l-3.*l*l), my/(6.*E*I*l)*(l-a-b)*(3.*l), -my/(6.*E*I*l)*(l-a-b), 0., 0., 0., debut_barre), FALSE)
+    BUG(common_fonction_ajout_poly(f_deform, 0., l, 0., l/(6*E*I)*(2*may-mby), -may/(2*E*I), (mby+may)/(6*E*I*l), 0., 0., 0., debut_barre), FALSE)
     
     // Pour une section constante, les formules valent :\end{verbatim}\begin{align*}
     // r_y(x) = & \frac{f_z \cdot (L-a-b) \cdot (L-a+b) \cdot (-L^2 + a^2 + b^2 - 2 \cdot a \cdot L + 6 \cdot x^2)}{24 \cdot E \cdot I_y \cdot L}\nonumber\\
@@ -776,14 +776,14 @@ gboolean EF_charge_barre_repartie_uniforme_fonc_rz(Fonction *f_rotation, Fonctio
     double      l;
     double      E, debut_barre, I;
     
-    BUGMSG(f_rotation, FALSE, gettext("Paramètre %s incorrect.\n"), "f_rotation");
-    BUGMSG(f_deform, FALSE, gettext("Paramètre %s incorrect.\n"), "f_deform");
-    BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre");
-    BUGMSG(barre->section, FALSE, gettext("Section indéfinie.\n"));
-    BUGMSG(barre->materiau, FALSE, gettext("Matériau indéfini.\n"));
-    BUGMSG(barre->noeud_debut, FALSE, gettext("Noeud 1 indéfini.\n"));
-    BUGMSG(barre->noeud_fin, FALSE, gettext("Noeud 2 indéfini.\n"));
-    BUGMSG(discretisation<=barre->discretisation_element, FALSE, gettext("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element);
+    BUGMSG(f_rotation, FALSE, gettext("Paramètre %s incorrect.\n"), "f_rotation")
+    BUGMSG(f_deform, FALSE, gettext("Paramètre %s incorrect.\n"), "f_deform")
+    BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre")
+    BUGMSG(barre->section, FALSE, gettext("Section indéfinie.\n"))
+    BUGMSG(barre->materiau, FALSE, gettext("Matériau indéfini.\n"))
+    BUGMSG(barre->noeud_debut, FALSE, gettext("Noeud 1 indéfini.\n"))
+    BUGMSG(barre->noeud_fin, FALSE, gettext("Noeud 2 indéfini.\n"))
+    BUGMSG(discretisation<=barre->discretisation_element, FALSE, gettext("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element)
     
     // La déformation et la rotation d'une barre soumise à un effort de flexion autour de
     //   l'axe y est calculée selon le principe des intégrales de Mohr et est définie par les
@@ -803,35 +803,35 @@ gboolean EF_charge_barre_repartie_uniforme_fonc_rz(Fonction *f_rotation, Fonctio
         fin = g_list_nth_data(barre->noeuds_intermediaires, discretisation);
     
     debut_barre = EF_noeuds_distance(debut, barre->noeud_debut);
-    BUG(!isnan(debut_barre), FALSE);
+    BUG(!isnan(debut_barre), FALSE)
     l = EF_noeuds_distance(debut, fin);
-    BUG(!isnan(l), FALSE);
-    BUGMSG(!((a < 0.) && (!(ERREUR_RELATIVE_EGALE(a, 0.)))), FALSE, gettext("Le début de la charge répartie uniformément (%f) est incorrect.\n"), a);
-    BUGMSG(!((b < 0.) && (!(ERREUR_RELATIVE_EGALE(b, 0.)))), FALSE, gettext("La fin de la charge répartie uniformément (%f) est incorrecte.\n"), b);
-    BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), FALSE, gettext("Le début de la charge répartie uniformément (%f) est incorrect. La longueur de la barre %d est de %f m.\n"), a, barre->numero, l);
-    BUGMSG(!((b > l) && (!(ERREUR_RELATIVE_EGALE(b, l)))), FALSE, gettext("La fin de la charge répartie uniformément (%f) est incorrecte. La longueur de la barre %d est de %f m.\n"), a, barre->numero, l);
-    BUGMSG(!((a+b > l) && (!(ERREUR_RELATIVE_EGALE(a+b, l)))), FALSE, gettext("Le début (%f) et la fin (%f) de la charge répartie uniformément sont incompatibles avec la longueur de la barre %d qui est de %f m.\n"), a, b, barre->numero, l);
+    BUG(!isnan(l), FALSE)
+    BUGMSG(!((a < 0.) && (!(ERREUR_RELATIVE_EGALE(a, 0.)))), FALSE, gettext("Le début de la charge répartie uniformément (%f) est incorrect.\n"), a)
+    BUGMSG(!((b < 0.) && (!(ERREUR_RELATIVE_EGALE(b, 0.)))), FALSE, gettext("La fin de la charge répartie uniformément (%f) est incorrecte.\n"), b)
+    BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), FALSE, gettext("Le début de la charge répartie uniformément (%f) est incorrect. La longueur de la barre %d est de %f m.\n"), a, barre->numero, l)
+    BUGMSG(!((b > l) && (!(ERREUR_RELATIVE_EGALE(b, l)))), FALSE, gettext("La fin de la charge répartie uniformément (%f) est incorrecte. La longueur de la barre %d est de %f m.\n"), a, barre->numero, l)
+    BUGMSG(!((a+b > l) && (!(ERREUR_RELATIVE_EGALE(a+b, l)))), FALSE, gettext("Le début (%f) et la fin (%f) de la charge répartie uniformément sont incompatibles avec la longueur de la barre %d qui est de %f m.\n"), a, b, barre->numero, l)
     
     E = common_math_get(EF_calculs_E(barre->materiau));
     I = common_math_get(EF_sections_iz(barre->section));
-    BUG(!isnan(E), FALSE);
-    BUG(!isnan(I), FALSE);
+    BUG(!isnan(E), FALSE)
+    BUG(!isnan(I), FALSE)
     
-    BUG(common_fonction_ajout_poly(f_rotation, 0., a, fy*(l-a-b)*(l-a+b)*(l*l-a*a-b*b+2*a*l)/(24.*l*E*I), 0., -fy*(l-a-b)*(l-a+b)*(6.)/(24.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE);
-    BUG(common_fonction_ajout_poly(f_rotation, a, l-b, -fy*(a*a*a*a+4.*a*a*l*l-b*b*b*b+2.*b*b*l*l-l*l*l*l)/(24.*l*E*I), -fy*(-12.*a*a*l)/(24.*l*E*I), -fy*(6.*a*a-6.*b*b+6.*l*l)/(24.*l*E*I), -fy*(-4.*l)/(24.*l*E*I), 0., 0., 0., debut_barre), FALSE);
-    BUG(common_fonction_ajout_poly(f_rotation, l-b, l, -fy*(a*a*a*a+4.*a*a*l*l-b*b*b*b+4.*b*b*b*l-10.*b*b*l*l+12.*b*l*l*l-5.*l*l*l*l)/(24.*l*E*I), -fy*(-12.*a*a*l+12.*b*b*l-24.*b*l*l+12.*l*l*l)/(24.*l*E*I), -fy*(6.*a*a-6.*b*b+12.*b*l-6.*l*l)/(24.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE);
-    BUG(common_fonction_ajout_poly(f_rotation, 0., a, mz*(-a*a*a+3.*a*a*l-2.*a*l*l-b*b*b+b*l*l)/(6.*l*E*I), 0., mz*(-3.*a-3.*b+3.*l)/(6.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE);
-    BUG(common_fonction_ajout_poly(f_rotation, a, l-b, mz*(-a*a*a-2.*a*l*l-b*b*b+b*l*l)/(6.*l*E*I), mz*(6.*a*l)/(6.*l*E*I), mz*(-3.*a-3.*b)/(6.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE);
-    BUG(common_fonction_ajout_poly(f_rotation, l-b, l, mz*(-a*a*a-2.*a*l*l-b*b*b+3.*b*b*l-5.*b*l*l+3.*l*l*l)/(6.*l*E*I), mz*(6.*a*l+6*b*l-6*l*l)/(6.*l*E*I), mz*(-3.*a-3.*b+3.*l)/(6.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE);
-    BUG(common_fonction_ajout_poly(f_rotation, 0., l, -l/(6.*E*I)*(2.*maz-mbz), maz/(E*I), -(maz+mbz)/(2.*E*I*l), 0., 0., 0., 0., debut_barre), FALSE);
+    BUG(common_fonction_ajout_poly(f_rotation, 0., a, fy*(l-a-b)*(l-a+b)*(l*l-a*a-b*b+2*a*l)/(24.*l*E*I), 0., -fy*(l-a-b)*(l-a+b)*(6.)/(24.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE)
+    BUG(common_fonction_ajout_poly(f_rotation, a, l-b, -fy*(a*a*a*a+4.*a*a*l*l-b*b*b*b+2.*b*b*l*l-l*l*l*l)/(24.*l*E*I), -fy*(-12.*a*a*l)/(24.*l*E*I), -fy*(6.*a*a-6.*b*b+6.*l*l)/(24.*l*E*I), -fy*(-4.*l)/(24.*l*E*I), 0., 0., 0., debut_barre), FALSE)
+    BUG(common_fonction_ajout_poly(f_rotation, l-b, l, -fy*(a*a*a*a+4.*a*a*l*l-b*b*b*b+4.*b*b*b*l-10.*b*b*l*l+12.*b*l*l*l-5.*l*l*l*l)/(24.*l*E*I), -fy*(-12.*a*a*l+12.*b*b*l-24.*b*l*l+12.*l*l*l)/(24.*l*E*I), -fy*(6.*a*a-6.*b*b+12.*b*l-6.*l*l)/(24.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE)
+    BUG(common_fonction_ajout_poly(f_rotation, 0., a, mz*(-a*a*a+3.*a*a*l-2.*a*l*l-b*b*b+b*l*l)/(6.*l*E*I), 0., mz*(-3.*a-3.*b+3.*l)/(6.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE)
+    BUG(common_fonction_ajout_poly(f_rotation, a, l-b, mz*(-a*a*a-2.*a*l*l-b*b*b+b*l*l)/(6.*l*E*I), mz*(6.*a*l)/(6.*l*E*I), mz*(-3.*a-3.*b)/(6.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE)
+    BUG(common_fonction_ajout_poly(f_rotation, l-b, l, mz*(-a*a*a-2.*a*l*l-b*b*b+3.*b*b*l-5.*b*l*l+3.*l*l*l)/(6.*l*E*I), mz*(6.*a*l+6*b*l-6*l*l)/(6.*l*E*I), mz*(-3.*a-3.*b+3.*l)/(6.*l*E*I), 0., 0., 0., 0., debut_barre), FALSE)
+    BUG(common_fonction_ajout_poly(f_rotation, 0., l, -l/(6.*E*I)*(2.*maz-mbz), maz/(E*I), -(maz+mbz)/(2.*E*I*l), 0., 0., 0., 0., debut_barre), FALSE)
     
-    BUG(common_fonction_ajout_poly(f_deform, 0., a, 0., fy/(24.*E*I*l)*(l-a-b)*(l-a+b)*(l*l-a*a+2.*a*l-b*b), 0., fy/(24.*E*I*l)*(l-a-b)*(l-a+b)*(-2.), 0., 0., 0., debut_barre), FALSE);
-    BUG(common_fonction_ajout_poly(f_deform, a, l-b, fy/(24.*E*I*l)*(a*a*a*a*l), fy/(24.*E*I*l)*(-a*a*a*a-4.*a*a*l*l+b*b*b*b-2.*b*b*l*l+l*l*l*l), fy/(24.*E*I*l)*(6.*a*a*l), fy/(24.*E*I*l)*(-2.*a*a+2.*b*b-2.*l*l), fy/(24.*E*I*l)*(l), 0., 0., debut_barre), FALSE);
-    BUG(common_fonction_ajout_poly(f_deform, l-b, l, fy/(24.*E*I*l)*(l-a-b)*(l+a-b)*(-a*a*l-b*b*l+2*b*l*l-l*l*l), fy/(24.*E*I*l)*(l-a-b)*(l+a-b)*(a*a+b*b-2*b*l+5*l*l), fy/(24.*E*I*l)*(l-a-b)*(l+a-b)*(-6.*l), fy/(24.*E*I*l)*(l-a-b)*(l+a-b)*(2.), 0., 0., 0., debut_barre), FALSE);
-    BUG(common_fonction_ajout_poly(f_deform, 0., a, 0., -mz/(6.*E*I*l)*(l-a-b)*(-a*a+a*b+2.*a*l-b*b-b*l), 0., mz/(6.*E*I*l)*(l-a-b), 0., 0., 0., debut_barre), FALSE);
-    BUG(common_fonction_ajout_poly(f_deform, a, l-b, -mz/(6.*E*I*l)*(-a*a*a*l), -mz/(6.*E*I*l)*(a*a*a+2.*a*l*l+b*b*b-b*l*l), -mz/(6.*E*I*l)*(-3.*a*l), -mz/(6.*E*I*l)*(a+b), 0., 0., 0., debut_barre), FALSE);
-    BUG(common_fonction_ajout_poly(f_deform, l-b, l, -mz/(6.*E*I*l)*(l-a-b)*(a*a*l-a*b*l+a*l*l+b*b*l-2.*b*l*l+l*l*l), -mz/(6.*E*I*l)*(l-a-b)*(-a*a+a*b-a*l-b*b+2.*b*l-3.*l*l), -mz/(6.*E*I*l)*(l-a-b)*(3.*l), mz/(6.*E*I*l)*(l-a-b), 0., 0., 0., debut_barre), FALSE);
-    BUG(common_fonction_ajout_poly(f_deform, 0., l, 0., -l/(6*E*I)*(2*maz-mbz), maz/(2*E*I), -(mbz+maz)/(6*E*I*l), 0., 0., 0., debut_barre), FALSE);
+    BUG(common_fonction_ajout_poly(f_deform, 0., a, 0., fy/(24.*E*I*l)*(l-a-b)*(l-a+b)*(l*l-a*a+2.*a*l-b*b), 0., fy/(24.*E*I*l)*(l-a-b)*(l-a+b)*(-2.), 0., 0., 0., debut_barre), FALSE)
+    BUG(common_fonction_ajout_poly(f_deform, a, l-b, fy/(24.*E*I*l)*(a*a*a*a*l), fy/(24.*E*I*l)*(-a*a*a*a-4.*a*a*l*l+b*b*b*b-2.*b*b*l*l+l*l*l*l), fy/(24.*E*I*l)*(6.*a*a*l), fy/(24.*E*I*l)*(-2.*a*a+2.*b*b-2.*l*l), fy/(24.*E*I*l)*(l), 0., 0., debut_barre), FALSE)
+    BUG(common_fonction_ajout_poly(f_deform, l-b, l, fy/(24.*E*I*l)*(l-a-b)*(l+a-b)*(-a*a*l-b*b*l+2*b*l*l-l*l*l), fy/(24.*E*I*l)*(l-a-b)*(l+a-b)*(a*a+b*b-2*b*l+5*l*l), fy/(24.*E*I*l)*(l-a-b)*(l+a-b)*(-6.*l), fy/(24.*E*I*l)*(l-a-b)*(l+a-b)*(2.), 0., 0., 0., debut_barre), FALSE)
+    BUG(common_fonction_ajout_poly(f_deform, 0., a, 0., -mz/(6.*E*I*l)*(l-a-b)*(-a*a+a*b+2.*a*l-b*b-b*l), 0., mz/(6.*E*I*l)*(l-a-b), 0., 0., 0., debut_barre), FALSE)
+    BUG(common_fonction_ajout_poly(f_deform, a, l-b, -mz/(6.*E*I*l)*(-a*a*a*l), -mz/(6.*E*I*l)*(a*a*a+2.*a*l*l+b*b*b-b*l*l), -mz/(6.*E*I*l)*(-3.*a*l), -mz/(6.*E*I*l)*(a+b), 0., 0., 0., debut_barre), FALSE)
+    BUG(common_fonction_ajout_poly(f_deform, l-b, l, -mz/(6.*E*I*l)*(l-a-b)*(a*a*l-a*b*l+a*l*l+b*b*l-2.*b*l*l+l*l*l), -mz/(6.*E*I*l)*(l-a-b)*(-a*a+a*b-a*l-b*b+2.*b*l-3.*l*l), -mz/(6.*E*I*l)*(l-a-b)*(3.*l), mz/(6.*E*I*l)*(l-a-b), 0., 0., 0., debut_barre), FALSE)
+    BUG(common_fonction_ajout_poly(f_deform, 0., l, 0., -l/(6*E*I)*(2*maz-mbz), maz/(2*E*I), -(mbz+maz)/(6*E*I*l), 0., 0., 0., debut_barre), FALSE)
     
     return TRUE;
 }
@@ -865,13 +865,13 @@ gboolean EF_charge_barre_repartie_uniforme_n(Fonction *fonction, EF_Barre *barre
     double      l, debut_barre;
     double      E, S;
     
-    BUGMSG(fonction, FALSE, gettext("Paramètre %s incorrect.\n"), "fonction");
-    BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre");
-    BUGMSG(barre->section, FALSE, gettext("Section indéfinie.\n"));
-    BUGMSG(barre->materiau, FALSE, gettext("Matériau indéfini.\n"));
-    BUGMSG(barre->noeud_debut, FALSE, gettext("Noeud 1 indéfini.\n"));
-    BUGMSG(barre->noeud_fin, FALSE, gettext("Noeud 2 indéfini.\n"));
-    BUGMSG(discretisation<=barre->discretisation_element, FALSE, gettext("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element);
+    BUGMSG(fonction, FALSE, gettext("Paramètre %s incorrect.\n"), "fonction")
+    BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre")
+    BUGMSG(barre->section, FALSE, gettext("Section indéfinie.\n"))
+    BUGMSG(barre->materiau, FALSE, gettext("Matériau indéfini.\n"))
+    BUGMSG(barre->noeud_debut, FALSE, gettext("Noeud 1 indéfini.\n"))
+    BUGMSG(barre->noeud_fin, FALSE, gettext("Noeud 2 indéfini.\n"))
+    BUGMSG(discretisation<=barre->discretisation_element, FALSE, gettext("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element)
     
     // La déformation selon l'axe x est par la formule :\end{verbatim}\begin{center}
     // \includegraphics[width=8cm]{images/charge_barre_rep_uni_n2.pdf}\includegraphics[width=8cm]{images/charge_barre_ponctuelle_n2.pdf}\end{center}\begin{align*}
@@ -893,28 +893,28 @@ gboolean EF_charge_barre_repartie_uniforme_n(Fonction *fonction, EF_Barre *barre
         fin = g_list_nth_data(barre->noeuds_intermediaires, discretisation);
     
     debut_barre = EF_noeuds_distance(debut, barre->noeud_debut);
-    BUG(!isnan(debut_barre), FALSE);
+    BUG(!isnan(debut_barre), FALSE)
     l = EF_noeuds_distance(debut, fin);
-    BUG(!isnan(l), FALSE);
-    BUGMSG(!((a < 0.) && (!(ERREUR_RELATIVE_EGALE(a, 0.)))), FALSE, gettext("Le début de la position de la charge répartie uniformément (%f) est incorrect.\n"), a);
-    BUGMSG(!((b < 0.) && (!(ERREUR_RELATIVE_EGALE(b, 0.)))), FALSE, gettext("La fin de la position de la charge répartie uniformément (%f) est incorrecte.\n"), b);
-    BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), FALSE, gettext("Le début de la charge répartie uniformément (%f) est incorrect. La longueur de la barre %d est de %f m.\n"), a, barre->numero, l);
-    BUGMSG(!((b > l) && (!(ERREUR_RELATIVE_EGALE(b, l)))), FALSE, gettext("La fin de la charge répartie uniformément (%f) est incorrecte. La longueur de la barre %d est de %f m.\n"), b, barre->numero, l);
-    BUGMSG(!((a+b > l) && (!(ERREUR_RELATIVE_EGALE(a+b, l)))), FALSE, gettext("Le début (%f) et la fin (%f) de la charge répartie uniformément sont incorrecte avec la longueur de la barre %d qui est de %f m.\n"), a, b, barre->numero, l);
+    BUG(!isnan(l), FALSE)
+    BUGMSG(!((a < 0.) && (!(ERREUR_RELATIVE_EGALE(a, 0.)))), FALSE, gettext("Le début de la position de la charge répartie uniformément (%f) est incorrect.\n"), a)
+    BUGMSG(!((b < 0.) && (!(ERREUR_RELATIVE_EGALE(b, 0.)))), FALSE, gettext("La fin de la position de la charge répartie uniformément (%f) est incorrecte.\n"), b)
+    BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), FALSE, gettext("Le début de la charge répartie uniformément (%f) est incorrect. La longueur de la barre %d est de %f m.\n"), a, barre->numero, l)
+    BUGMSG(!((b > l) && (!(ERREUR_RELATIVE_EGALE(b, l)))), FALSE, gettext("La fin de la charge répartie uniformément (%f) est incorrecte. La longueur de la barre %d est de %f m.\n"), b, barre->numero, l)
+    BUGMSG(!((a+b > l) && (!(ERREUR_RELATIVE_EGALE(a+b, l)))), FALSE, gettext("Le début (%f) et la fin (%f) de la charge répartie uniformément sont incorrecte avec la longueur de la barre %d qui est de %f m.\n"), a, b, barre->numero, l)
     
     E = common_math_get(EF_calculs_E(barre->materiau));
     S = common_math_get(EF_sections_s(barre->section));
-    BUG(!isnan(E), FALSE);
-    BUG(!isnan(S), FALSE);
+    BUG(!isnan(E), FALSE)
+    BUG(!isnan(S), FALSE)
     
     // Pour une section constante, les déformations valent :\end{verbatim}\begin{align*}
     // f_x(x) = &\frac{F_{Ax} \cdot (L-a+b) \cdot (F_{Ax} + F_{Bx}) x}{2 \cdot L \cdot E \cdot S} & & \textrm{ pour x variant de 0 à a}\nonumber\\
     // f_x(x) = &\frac{(fbx+fax) \cdot (L \cdot x^2-L^2 \cdot x+b^2 \cdot x-a^2 \cdot x+a^2 \cdot L)}{2 \cdot L \cdot (L-b-a) \cdot E \cdot S}) & & \textrm{ pour x variant de a à L-b}\nonumber\\
     // f_x(x) = &\frac{(fbx+fax) \cdot (L-b+a) \cdot (L-x)}{2 \cdot L \cdot E \cdot S} & & \textrm{ pour x variant de L-b à L}\end{align*}\begin{verbatim}
     
-    BUG(common_fonction_ajout_poly(fonction, 0., a, 0., (l-a+b)*(fax+fbx)/(2*l*E*S), 0., 0., 0., 0., 0., debut_barre), FALSE);
-    BUG(common_fonction_ajout_poly(fonction, a, l-b, (fax+fbx)/(2*l*E*S)/(a+b-l)*(a*a*l), (fax+fbx)/(2*l*E*S)/(a+b-l)*(-a*a+b*b-l*l), (fax+fbx)/(2*l*E*S)/(a+b-l)*(l), 0., 0., 0., 0., debut_barre), FALSE);
-    BUG(common_fonction_ajout_poly(fonction, l-b, l, (fax+fbx)/(2*l*E*S)*l*(a-b+l), -(fax+fbx)/(2*l*E*S)*(a-b+l), 0., 0., 0., 0., 0., debut_barre), FALSE);
+    BUG(common_fonction_ajout_poly(fonction, 0., a, 0., (l-a+b)*(fax+fbx)/(2*l*E*S), 0., 0., 0., 0., 0., debut_barre), FALSE)
+    BUG(common_fonction_ajout_poly(fonction, a, l-b, (fax+fbx)/(2*l*E*S)/(a+b-l)*(a*a*l), (fax+fbx)/(2*l*E*S)/(a+b-l)*(-a*a+b*b-l*l), (fax+fbx)/(2*l*E*S)/(a+b-l)*(l), 0., 0., 0., 0., debut_barre), FALSE)
+    BUG(common_fonction_ajout_poly(fonction, l-b, l, (fax+fbx)/(2*l*E*S)*l*(a-b+l), -(fax+fbx)/(2*l*E*S)*(a-b+l), 0., 0., 0., 0., 0., debut_barre), FALSE)
     
     return TRUE;
 }
@@ -936,7 +936,7 @@ gboolean EF_charge_barre_repartie_uniforme_enleve_barres(Charge_Barre_Repartie_U
 {
     GList   *list_parcours = barres;
     
-    BUGMSG(charge, FALSE, gettext("Paramètre %s incorrect.\n"), "charge");
+    BUGMSG(charge, FALSE, gettext("Paramètre %s incorrect.\n"), "charge")
     
     while (list_parcours != NULL)
     {
@@ -965,7 +965,7 @@ gboolean EF_charge_barre_repartie_uniforme_enleve_barres(Charge_Barre_Repartie_U
     }
 #endif
     
-    BUG(EF_calculs_free(projet), FALSE);
+    BUG(EF_calculs_free(projet), FALSE)
     
     return TRUE;
 }
@@ -980,7 +980,7 @@ gboolean EF_charge_barre_repartie_uniforme_free(Charge_Barre_Repartie_Uniforme *
  *             charge == NULL.
  */
 {
-    BUGMSG(charge, FALSE, gettext("Paramètre %s incorrect.\n"), "charge");
+    BUGMSG(charge, FALSE, gettext("Paramètre %s incorrect.\n"), "charge")
     
     free(charge->nom);
     g_list_free(charge->barres);

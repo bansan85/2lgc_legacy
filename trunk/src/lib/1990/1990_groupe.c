@@ -40,7 +40,7 @@ gboolean _1990_groupe_init(Projet *projet)
  *             projet == NULL.
  */
 {
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
     
     // Trivial
     projet->niveaux_groupes = NULL;
@@ -63,8 +63,8 @@ gboolean _1990_groupe_ajout_niveau(Projet *projet)
     Niveau_Groupe   *niveau_nouveau = malloc(sizeof(Niveau_Groupe));
     
     // Trivial
-    BUGMSG(niveau_nouveau, FALSE, gettext("Erreur d'allocation mémoire.\n"));
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(niveau_nouveau, FALSE, gettext("Erreur d'allocation mémoire.\n"))
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
     
     niveau_nouveau->numero = g_list_length(projet->niveaux_groupes);
     niveau_nouveau->groupes = NULL;
@@ -102,7 +102,7 @@ Element *_1990_groupe_positionne_element(Groupe *groupe, unsigned int numero)
 {
     GList   *list_parcours;
     
-    BUGMSG(groupe, NULL, gettext("Paramètre %s incorrect.\n"), "groupe");
+    BUGMSG(groupe, NULL, gettext("Paramètre %s incorrect.\n"), "groupe")
     
     // Trivial
     list_parcours = groupe->elements;
@@ -116,7 +116,7 @@ Element *_1990_groupe_positionne_element(Groupe *groupe, unsigned int numero)
         list_parcours = g_list_next(list_parcours);
     }
     
-    BUGMSG(0, NULL, gettext("Élément %u du groupe %u introuvable.\n"), numero, groupe->numero);
+    BUGMSG(0, NULL, gettext("Élément %u du groupe %u introuvable.\n"), numero, groupe->numero)
 }
 
 
@@ -133,7 +133,7 @@ Groupe *_1990_groupe_positionne_groupe(Niveau_Groupe *niveau, unsigned int numer
 {
     GList   *list_parcours;
     
-    BUGMSG(niveau, NULL, gettext("Paramètre %s incorrect.\n"), "niveau");
+    BUGMSG(niveau, NULL, gettext("Paramètre %s incorrect.\n"), "niveau")
     
     // Trivial
     list_parcours = niveau->groupes;
@@ -146,7 +146,7 @@ Groupe *_1990_groupe_positionne_groupe(Niveau_Groupe *niveau, unsigned int numer
         list_parcours = g_list_next(list_parcours);
     }
     
-    BUGMSG(0, NULL, gettext("Groupe %u du niveau %u introuvable.\n"), numero, niveau->numero);
+    BUGMSG(0, NULL, gettext("Groupe %u du niveau %u introuvable.\n"), numero, niveau->numero)
 }
 
 
@@ -164,7 +164,7 @@ Niveau_Groupe *_1990_groupe_positionne_niveau(Projet *projet, unsigned int numer
     GList           *list_parcours;
     Niveau_Groupe   *niveau;
     
-    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet")
     
     // Trivial
     list_parcours = projet->niveaux_groupes;
@@ -177,7 +177,7 @@ Niveau_Groupe *_1990_groupe_positionne_niveau(Projet *projet, unsigned int numer
         list_parcours = g_list_next(list_parcours);
     }
     
-    BUGMSG(0, NULL, gettext("Niveau de groupes %u introuvable.\n"), numero);
+    BUGMSG(0, NULL, gettext("Niveau de groupes %u introuvable.\n"), numero)
 }
 
 
@@ -199,15 +199,15 @@ Groupe *_1990_groupe_ajout_groupe(Projet *projet, unsigned int niveau,
     Groupe          *groupe_nouveau = malloc(sizeof(Groupe));
     Niveau_Groupe   *niveau_groupe;
     
-    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(groupe_nouveau, NULL, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(groupe_nouveau, NULL, gettext("Erreur d'allocation mémoire.\n"))
     
     // Trivial
     
-    BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, niveau), NULL);
+    BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, niveau), NULL)
     
     groupe_nouveau->numero = g_list_length(niveau_groupe->groupes);
-    BUGMSG(groupe_nouveau->nom = g_strdup_printf("%s", nom), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(groupe_nouveau->nom = g_strdup_printf("%s", nom), NULL, gettext("Erreur d'allocation mémoire.\n"))
     groupe_nouveau->type_combinaison = type_combinaison;
 #ifdef ENABLE_GTK
     groupe_nouveau->Iter_expand = 1;
@@ -267,9 +267,9 @@ gboolean _1990_groupe_ajout_element(Projet *projet, unsigned int niveau, unsigne
     Groupe          *groupe;
     Element         *element_nouveau = malloc(sizeof(Element));
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->niveaux_groupes, FALSE, gettext("Le projet ne possède pas de niveaux de groupes permettant de regrouper plusieurs groupes d'actions.\n"));
-    BUGMSG(element_nouveau, FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->niveaux_groupes, FALSE, gettext("Le projet ne possède pas de niveaux de groupes permettant de regrouper plusieurs groupes d'actions.\n"))
+    BUGMSG(element_nouveau, FALSE, gettext("Erreur d'allocation mémoire.\n"))
     
     // Trivial
     /* On commence par positionner le numéro num_element de l'étage n-1
@@ -277,19 +277,19 @@ gboolean _1990_groupe_ajout_element(Projet *projet, unsigned int niveau, unsigne
     if (niveau == 0)
     {
         // On vérifie si l'action num_element existe.
-        BUG(_1990_action_numero_cherche(projet, num_element), FALSE);
+        BUG(_1990_action_numero_cherche(projet, num_element), FALSE)
         niveau_groupe = projet->niveaux_groupes->data;
     }
     else
     {
         // On vérifie si le groupe du niveau n-1 existe;
-        BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, niveau-1), FALSE);
-        BUG(_1990_groupe_positionne_groupe(niveau_groupe, num_element), FALSE);
+        BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, niveau-1), FALSE)
+        BUG(_1990_groupe_positionne_groupe(niveau_groupe, num_element), FALSE)
         // Et on positionne le niveau en cours
-        BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, niveau), FALSE);
+        BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, niveau), FALSE)
     }
     
-    BUG(groupe = _1990_groupe_positionne_groupe(niveau_groupe, groupe_n), FALSE);
+    BUG(groupe = _1990_groupe_positionne_groupe(niveau_groupe, groupe_n), FALSE)
     element_nouveau->numero = num_element;
     #ifdef ENABLE_GTK
     element_nouveau->Iter_expand = 1;
@@ -355,7 +355,7 @@ gboolean _1990_groupe_ajout_element(Projet *projet, unsigned int niveau, unsigne
         }
         
         // On positionne l'élément en cours
-        BUG(element = _1990_groupe_positionne_element(groupe, num_element), FALSE);
+        BUG(element = _1990_groupe_positionne_element(groupe, num_element), FALSE)
         
         // On ajoute la ligne dans l'interface graphique
         if (groupe->elements->data == element)
@@ -370,7 +370,7 @@ gboolean _1990_groupe_ajout_element(Projet *projet, unsigned int niveau, unsigne
         {
             Action *action;
             
-            BUG(action = _1990_action_numero_cherche(projet, num_element), FALSE);
+            BUG(action = _1990_action_numero_cherche(projet, num_element), FALSE)
             gtk_tree_store_set(gtk_1990_groupes->tree_store_etat, &element->Iter, 0, num_element, 1, _1990_action_nom_renvoie(action), -1);
         }
         else
@@ -378,8 +378,8 @@ gboolean _1990_groupe_ajout_element(Projet *projet, unsigned int niveau, unsigne
             Niveau_Groupe *groupe_niveau_moins_1;
             Groupe *groupe_moins_1;
             
-            BUG(groupe_niveau_moins_1 = _1990_groupe_positionne_niveau(projet, niveau-1), FALSE);
-            BUG(groupe_moins_1 = _1990_groupe_positionne_groupe(groupe_niveau_moins_1, num_element), FALSE);
+            BUG(groupe_niveau_moins_1 = _1990_groupe_positionne_niveau(projet, niveau-1), FALSE)
+            BUG(groupe_moins_1 = _1990_groupe_positionne_groupe(groupe_niveau_moins_1, num_element), FALSE)
             gtk_tree_store_set(gtk_1990_groupes->tree_store_etat, &element->Iter, 0, num_element, 1, groupe_moins_1->nom, -1);
         }
         
@@ -407,7 +407,7 @@ gboolean _1990_groupe_modifie_combinaison(Groupe *groupe,
  *             type_combinaison inconnu.
  */
 {
-    BUGMSG(groupe, FALSE, gettext("Paramètre %s incorrect.\n"), "groupe");
+    BUGMSG(groupe, FALSE, gettext("Paramètre %s incorrect.\n"), "groupe")
     
     switch (type_combinaison)
     {
@@ -420,7 +420,7 @@ gboolean _1990_groupe_modifie_combinaison(Groupe *groupe,
         }
         default :
         {
-            BUGMSG(0, FALSE, gettext("Le type de combinaison %d est inconnu.\n"), type_combinaison);
+            BUGMSG(0, FALSE, gettext("Le type de combinaison %d est inconnu.\n"), type_combinaison)
             break;
         }
     }
@@ -446,11 +446,11 @@ gboolean _1990_groupe_modifie_nom(unsigned int niveau, unsigned int numero, cons
     Niveau_Groupe   *groupe_niveau;
     Groupe          *groupe;
     
-    BUG(groupe_niveau = _1990_groupe_positionne_niveau(projet, niveau), FALSE);
-    BUG(groupe = _1990_groupe_positionne_groupe(groupe_niveau, numero), FALSE);
+    BUG(groupe_niveau = _1990_groupe_positionne_niveau(projet, niveau), FALSE)
+    BUG(groupe = _1990_groupe_positionne_groupe(groupe_niveau, numero), FALSE)
     
     free(groupe->nom);
-    BUGMSG(groupe->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(groupe->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"))
     
 #ifdef ENABLE_GTK
     if (projet->list_gtk._1990_groupes.builder != NULL)
@@ -546,7 +546,7 @@ gboolean _1990_groupe_modifie_nom(unsigned int niveau, unsigned int numero, cons
             }
             
             // Sécurité...
-            BUGMSG(NULL, FALSE, gettext("Erreur lors de l'actualisation de la fenêtre graphique.\n"));
+            BUGMSG(NULL, FALSE, gettext("Erreur lors de l'actualisation de la fenêtre graphique.\n"))
         }
     }
 #endif
@@ -567,7 +567,7 @@ gboolean _1990_groupe_affiche_tout(Projet *projet)
  */
 {
     GList   *list_parcours;
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
     
     // Trivial
     list_parcours = projet->niveaux_groupes;
@@ -603,7 +603,7 @@ gboolean _1990_groupe_affiche_tout(Projet *projet)
                 }
                 default :
                 {
-                    BUGMSG(0, FALSE, gettext("Combinaison %d inconnue"), groupe->type_combinaison);
+                    BUGMSG(0, FALSE, gettext("Combinaison %d inconnue"), groupe->type_combinaison)
                     break;
                 }
             }
@@ -680,11 +680,11 @@ gboolean _1990_groupe_free_element(Projet *projet, unsigned int niveau, unsigned
     
     // Trivial
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
     
-    BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, niveau), FALSE);
-    BUG(groupe_en_cours = _1990_groupe_positionne_groupe(niveau_groupe, groupe), FALSE);
-    BUG(element_en_cours = _1990_groupe_positionne_element(groupe_en_cours, element), FALSE);
+    BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, niveau), FALSE)
+    BUG(groupe_en_cours = _1990_groupe_positionne_groupe(niveau_groupe, groupe), FALSE)
+    BUG(element_en_cours = _1990_groupe_positionne_element(groupe_en_cours, element), FALSE)
     
     // On sélectionne dans la liste des groupes la ligne suivante. Et si elle n'existe pas,
     // on sélectionne la ligne précédente.
@@ -735,8 +735,8 @@ gboolean _1990_groupe_free_niveau(Projet *projet, unsigned int niveau, gboolean 
     Niveau_Groupe   *niveau_groupe;
     
     // Trivial
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, niveau), FALSE);
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, niveau), FALSE)
     
     list_parcours = projet->niveaux_groupes;
     do
@@ -795,12 +795,12 @@ gboolean _1990_groupe_free_niveau(Projet *projet, unsigned int niveau, gboolean 
     /* On oblige la liste des niveaux à posséder au moins un niveau vide */
     if ((projet->niveaux_groupes == NULL) && (accept_vide == FALSE))
     {
-        BUG(_1990_groupe_ajout_niveau(projet), FALSE);
+        BUG(_1990_groupe_ajout_niveau(projet), FALSE)
 #ifdef ENABLE_GTK
         if (projet->list_gtk._1990_groupes.builder != NULL)
         {
             gtk_tree_store_clear(projet->list_gtk._1990_groupes.tree_store_etat);
-            BUG(_1990_gtk_groupes_affiche_niveau(projet, 0), FALSE);
+            BUG(_1990_gtk_groupes_affiche_niveau(projet, 0), FALSE)
         }
 #endif
     }
@@ -841,9 +841,9 @@ gboolean _1990_groupe_free_groupe(Projet *projet, unsigned int niveau, unsigned 
     GList           *list_parcours;
     
     // Trivial
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, niveau), FALSE);
-    BUG(groupe_curr = _1990_groupe_positionne_groupe(niveau_groupe, groupe), FALSE);
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, niveau), FALSE)
+    BUG(groupe_curr = _1990_groupe_positionne_groupe(niveau_groupe, groupe), FALSE)
     
 #ifdef ENABLE_GTK
     if ((projet->list_gtk._1990_groupes.builder != NULL) && (GTK_COMMON_SPINBUTTON_AS_UINT(GTK_SPIN_BUTTON(projet->list_gtk._1990_groupes.spin_button_niveau)) == niveau))
@@ -874,7 +874,7 @@ gboolean _1990_groupe_free_groupe(Projet *projet, unsigned int niveau, unsigned 
         {
             Element     *element = list_parcours->data;
             
-            BUG(_1990_gtk_insert_dispo(projet, element->numero, niveau_groupe) == 0, FALSE);
+            BUG(_1990_gtk_insert_dispo(projet, element->numero, niveau_groupe) == 0, FALSE)
             
             list_parcours = g_list_next(list_parcours);
         }
@@ -989,11 +989,11 @@ gboolean _1990_groupe_free(Projet *projet)
  *             _1990_groupe_free_niveau.
  */
 {
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
     
     // Trivial
     /* On supprime tous les niveaux */
-    BUG(_1990_groupe_free_niveau(projet, 0, TRUE), FALSE);
+    BUG(_1990_groupe_free_niveau(projet, 0, TRUE), FALSE)
     
     return TRUE;
 }

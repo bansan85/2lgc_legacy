@@ -35,7 +35,7 @@ gboolean EF_rigidite_init(Projet *projet)
  *             projet == NULL.
  */
 {
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
     
     // Trivial
     projet->calculs.rigidite_matrice_partielle = NULL;
@@ -64,7 +64,7 @@ gboolean EF_rigidite_free(Projet *projet)
 {
     unsigned int    i;
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
     
     // Trivial
     cholmod_free_triplet(&projet->calculs.triplet_rigidite_partielle, projet->calculs.c);

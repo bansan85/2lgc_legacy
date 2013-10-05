@@ -47,7 +47,7 @@ gboolean EF_relachement_init(Projet *projet)
     GtkTreeIter     iter;
 #endif
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
     
     // Trivial
     projet->modele.relachements = NULL;
@@ -97,10 +97,10 @@ EF_Relachement *EF_relachement_ajout(Projet *projet, const char *nom,
     
     // Trivial
     
-    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(relachement_nouveau, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(!((rx_debut == EF_RELACHEMENT_LIBRE) && (rx_fin == EF_RELACHEMENT_LIBRE)), NULL, "Impossible de relâcher rx simultanément des deux cotés de la barre.\n");
-    BUGMSG(strcmp(gettext("Aucun"), nom), NULL, "Impossible d'utiliser comme nom 'Aucun'.\n");
+    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(relachement_nouveau, NULL, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(!((rx_debut == EF_RELACHEMENT_LIBRE) && (rx_fin == EF_RELACHEMENT_LIBRE)), NULL, "Impossible de relâcher rx simultanément des deux cotés de la barre.\n")
+    BUGMSG(strcmp(gettext("Aucun"), nom), NULL, "Impossible d'utiliser comme nom 'Aucun'.\n")
     
     relachement_nouveau->rx_debut = rx_debut;
     relachement_nouveau->rx_d_data = rx_d_data;
@@ -114,7 +114,7 @@ EF_Relachement *EF_relachement_ajout(Projet *projet, const char *nom,
     relachement_nouveau->ry_f_data = ry_f_data;
     relachement_nouveau->rz_fin = rz_fin;
     relachement_nouveau->rz_f_data = rz_f_data;
-    BUGMSG(relachement_nouveau->nom = g_strdup_printf("%s", nom), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(relachement_nouveau->nom = g_strdup_printf("%s", nom), NULL, gettext("Erreur d'allocation mémoire.\n"))
     
     list_parcours = projet->modele.relachements;
     while (list_parcours != NULL)
@@ -159,7 +159,7 @@ EF_Relachement* EF_relachement_cherche_nom(Projet *projet, const char *nom, gboo
 /* Description : Renvoie le relachement cherché.
  * Paramètres : Projet *projet : la variable projet,
  *            : const char *nom : le nom du relachement.
- *            : gboolean critique : si critique = TRUE, BUG est utilisé, return sinon.
+ *            : gboolean critique : si critique = TRUE, BUG est utilisé, return sinon
  * Valeur renvoyée :
  *   Succès : pointeur vers le relachement recherché
  *   Échec : NULL :
@@ -169,7 +169,7 @@ EF_Relachement* EF_relachement_cherche_nom(Projet *projet, const char *nom, gboo
 {
     GList   *list_parcours;
     
-    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet")
     
     // Trivial
     list_parcours = projet->modele.relachements;
@@ -184,7 +184,7 @@ EF_Relachement* EF_relachement_cherche_nom(Projet *projet, const char *nom, gboo
     }
     
     if (critique)
-        BUGMSG(0, NULL, gettext("Relachement '%s' introuvable.\n"), nom);
+        BUGMSG(0, NULL, gettext("Relachement '%s' introuvable.\n"), nom)
     else
         return NULL;
 }
@@ -211,23 +211,23 @@ gboolean EF_relachement_modif(Projet *projet, EF_Relachement *relachement, const
 {
     GList   *liste_relachement = NULL, *liste_barres_dep;
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(relachement, FALSE, gettext("Paramètre %s incorrect.\n"), "relachement");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(relachement, FALSE, gettext("Paramètre %s incorrect.\n"), "relachement")
     
     liste_relachement = g_list_append(liste_relachement, relachement);
-    BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, NULL, liste_relachement, NULL, NULL, &liste_barres_dep, NULL, FALSE, FALSE), FALSE);
+    BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, NULL, liste_relachement, NULL, NULL, &liste_barres_dep, NULL, FALSE, FALSE), FALSE)
     g_list_free(liste_relachement);
     if (liste_barres_dep != NULL)
-        BUG(EF_calculs_free(projet), FALSE);
+        BUG(EF_calculs_free(projet), FALSE)
     g_list_free(liste_barres_dep);
     
     if ((nom != NULL) && (strcmp(relachement->nom, nom) != 0))
     {
         GList   *list_parcours;
         
-        BUGMSG(!EF_relachement_cherche_nom(projet, nom, FALSE), FALSE, gettext("Le relâchement %s existe déjà.\n"), nom);
+        BUGMSG(!EF_relachement_cherche_nom(projet, nom, FALSE), FALSE, gettext("Le relâchement %s existe déjà.\n"), nom)
         free(relachement->nom);
-        BUGMSG(relachement->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(relachement->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"))
 #ifdef ENABLE_GTK
         gtk_list_store_set(projet->list_gtk.ef_relachements.liste_relachements, &relachement->Iter_liste, 0, relachement->nom, -1);
 #endif
@@ -291,13 +291,13 @@ gboolean EF_relachement_modif(Projet *projet, EF_Relachement *relachement, const
                 if (projet->list_gtk.ef_relachements.builder != NULL)
                     g_object_set(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_treeview_cell2"), "editable", TRUE, NULL);
 #endif
-                BUGMSG(relachement->rx_d_data = malloc(sizeof(EF_Relachement_Donnees_Elastique_Lineaire)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                BUGMSG(relachement->rx_d_data = malloc(sizeof(EF_Relachement_Donnees_Elastique_Lineaire)), FALSE, gettext("Erreur d'allocation mémoire.\n"))
                 memset(relachement->rx_d_data, 0, sizeof(EF_Relachement_Donnees_Elastique_Lineaire));
                 break;
             }
             default :
             {
-                BUGMSG(NULL, FALSE, "Le type de relâchement est inconnu.\n");
+                BUGMSG(NULL, FALSE, "Le type de relâchement est inconnu.\n")
                 break;
             }
         }
@@ -310,7 +310,7 @@ gboolean EF_relachement_modif(Projet *projet, EF_Relachement *relachement, const
             case EF_RELACHEMENT_BLOQUE :
             case EF_RELACHEMENT_LIBRE :
             {
-                BUGMSG(NULL, FALSE, "Impossible d'éditer ce type de relâchement.\n");
+                BUGMSG(NULL, FALSE, "Impossible d'éditer ce type de relâchement.\n")
                 break;
             }
             case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
@@ -320,7 +320,7 @@ gboolean EF_relachement_modif(Projet *projet, EF_Relachement *relachement, const
             }
             default :
             {
-                BUGMSG(NULL, FALSE, "Le type de relâchement est inconnu.\n");
+                BUGMSG(NULL, FALSE, "Le type de relâchement est inconnu.\n")
                 break;
             }
         }
@@ -346,13 +346,13 @@ gboolean EF_relachement_modif(Projet *projet, EF_Relachement *relachement, const
                 if (projet->list_gtk.ef_relachements.builder != NULL)
                     g_object_set(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_treeview_cell4"), "editable", TRUE, NULL);
 #endif
-                BUGMSG(relachement->ry_d_data = malloc(sizeof(EF_Relachement_Donnees_Elastique_Lineaire)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                BUGMSG(relachement->ry_d_data = malloc(sizeof(EF_Relachement_Donnees_Elastique_Lineaire)), FALSE, gettext("Erreur d'allocation mémoire.\n"))
                 memset(relachement->ry_d_data, 0, sizeof(EF_Relachement_Donnees_Elastique_Lineaire));
                 break;
             }
             default :
             {
-                BUGMSG(NULL, FALSE, "Le type de relâchement est inconnu.\n");
+                BUGMSG(NULL, FALSE, "Le type de relâchement est inconnu.\n")
                 break;
             }
         }
@@ -365,7 +365,7 @@ gboolean EF_relachement_modif(Projet *projet, EF_Relachement *relachement, const
             case EF_RELACHEMENT_BLOQUE :
             case EF_RELACHEMENT_LIBRE :
             {
-                BUGMSG(NULL, FALSE, "Impossible d'éditer ce type de relâchement.\n");
+                BUGMSG(NULL, FALSE, "Impossible d'éditer ce type de relâchement.\n")
                 break;
             }
             case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
@@ -375,7 +375,7 @@ gboolean EF_relachement_modif(Projet *projet, EF_Relachement *relachement, const
             }
             default :
             {
-                BUGMSG(NULL, FALSE, "Le type de relâchement est inconnu.\n");
+                BUGMSG(NULL, FALSE, "Le type de relâchement est inconnu.\n")
                 break;
             }
         }
@@ -401,13 +401,13 @@ gboolean EF_relachement_modif(Projet *projet, EF_Relachement *relachement, const
                 if (projet->list_gtk.ef_relachements.builder != NULL)
                     g_object_set(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_treeview_cell6"), "editable", TRUE , NULL);
 #endif
-                BUGMSG(relachement->rz_d_data = malloc(sizeof(EF_Relachement_Donnees_Elastique_Lineaire)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                BUGMSG(relachement->rz_d_data = malloc(sizeof(EF_Relachement_Donnees_Elastique_Lineaire)), FALSE, gettext("Erreur d'allocation mémoire.\n"))
                 memset(relachement->rz_d_data, 0, sizeof(EF_Relachement_Donnees_Elastique_Lineaire));
                 break;
             }
             default :
             {
-                BUGMSG(NULL, FALSE, "Le type de relâchement est inconnu.\n");
+                BUGMSG(NULL, FALSE, "Le type de relâchement est inconnu.\n")
                 break;
             }
         }
@@ -420,7 +420,7 @@ gboolean EF_relachement_modif(Projet *projet, EF_Relachement *relachement, const
             case EF_RELACHEMENT_BLOQUE :
             case EF_RELACHEMENT_LIBRE :
             {
-                BUGMSG(NULL, FALSE, "Impossible d'éditer ce type de relâchement.\n");
+                BUGMSG(NULL, FALSE, "Impossible d'éditer ce type de relâchement.\n")
                 break;
             }
             case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
@@ -430,7 +430,7 @@ gboolean EF_relachement_modif(Projet *projet, EF_Relachement *relachement, const
             }
             default :
             {
-                BUGMSG(NULL, FALSE, "Le type de relâchement est inconnu.\n");
+                BUGMSG(NULL, FALSE, "Le type de relâchement est inconnu.\n")
                 break;
             }
         }
@@ -456,13 +456,13 @@ gboolean EF_relachement_modif(Projet *projet, EF_Relachement *relachement, const
                 if (projet->list_gtk.ef_relachements.builder != NULL)
                     g_object_set(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_treeview_cell8"), "editable", TRUE, NULL);
 #endif
-                BUGMSG(relachement->rx_f_data = malloc(sizeof(EF_Relachement_Donnees_Elastique_Lineaire)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                BUGMSG(relachement->rx_f_data = malloc(sizeof(EF_Relachement_Donnees_Elastique_Lineaire)), FALSE, gettext("Erreur d'allocation mémoire.\n"))
                 memset(relachement->rx_f_data, 0, sizeof(EF_Relachement_Donnees_Elastique_Lineaire));
                 break;
             }
             default :
             {
-                BUGMSG(NULL, FALSE, "Le type de relâchement est inconnu.\n");
+                BUGMSG(NULL, FALSE, "Le type de relâchement est inconnu.\n")
                 break;
             }
         }
@@ -475,7 +475,7 @@ gboolean EF_relachement_modif(Projet *projet, EF_Relachement *relachement, const
             case EF_RELACHEMENT_BLOQUE :
             case EF_RELACHEMENT_LIBRE :
             {
-                BUGMSG(NULL, FALSE, "Impossible d'éditer ce type de relâchement.\n");
+                BUGMSG(NULL, FALSE, "Impossible d'éditer ce type de relâchement.\n")
                 break;
             }
             case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
@@ -485,7 +485,7 @@ gboolean EF_relachement_modif(Projet *projet, EF_Relachement *relachement, const
             }
             default :
             {
-                BUGMSG(NULL, FALSE, "Le type de relâchement est inconnu.\n");
+                BUGMSG(NULL, FALSE, "Le type de relâchement est inconnu.\n")
                 break;
             }
         }
@@ -511,13 +511,13 @@ gboolean EF_relachement_modif(Projet *projet, EF_Relachement *relachement, const
                 if (projet->list_gtk.ef_relachements.builder != NULL)
                     g_object_set(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_treeview_cell10"), "editable", TRUE, NULL);
 #endif
-                BUGMSG(relachement->ry_f_data = malloc(sizeof(EF_Relachement_Donnees_Elastique_Lineaire)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                BUGMSG(relachement->ry_f_data = malloc(sizeof(EF_Relachement_Donnees_Elastique_Lineaire)), FALSE, gettext("Erreur d'allocation mémoire.\n"))
                 memset(relachement->ry_f_data, 0, sizeof(EF_Relachement_Donnees_Elastique_Lineaire));
                 break;
             }
             default :
             {
-                BUGMSG(NULL, FALSE, "Le type de relâchement est inconnu.\n");
+                BUGMSG(NULL, FALSE, "Le type de relâchement est inconnu.\n")
                 break;
             }
         }
@@ -530,7 +530,7 @@ gboolean EF_relachement_modif(Projet *projet, EF_Relachement *relachement, const
             case EF_RELACHEMENT_BLOQUE :
             case EF_RELACHEMENT_LIBRE :
             {
-                BUGMSG(NULL, FALSE, "Impossible d'éditer ce type de relâchement.\n");
+                BUGMSG(NULL, FALSE, "Impossible d'éditer ce type de relâchement.\n")
                 break;
             }
             case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
@@ -540,7 +540,7 @@ gboolean EF_relachement_modif(Projet *projet, EF_Relachement *relachement, const
             }
             default :
             {
-                BUGMSG(NULL, FALSE, "Le type de relâchement est inconnu.\n");
+                BUGMSG(NULL, FALSE, "Le type de relâchement est inconnu.\n")
                 break;
             }
         }
@@ -566,13 +566,13 @@ gboolean EF_relachement_modif(Projet *projet, EF_Relachement *relachement, const
                 if (projet->list_gtk.ef_relachements.builder != NULL)
                     g_object_set(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_treeview_cell12"), "editable", TRUE, NULL);
 #endif
-                BUGMSG(relachement->rz_f_data = malloc(sizeof(EF_Relachement_Donnees_Elastique_Lineaire)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                BUGMSG(relachement->rz_f_data = malloc(sizeof(EF_Relachement_Donnees_Elastique_Lineaire)), FALSE, gettext("Erreur d'allocation mémoire.\n"))
                 memset(relachement->rz_f_data, 0, sizeof(EF_Relachement_Donnees_Elastique_Lineaire));
                 break;
             }
             default :
             {
-                BUGMSG(NULL, FALSE, "Le type de relâchement est inconnu.\n");
+                BUGMSG(NULL, FALSE, "Le type de relâchement est inconnu.\n")
                 break;
             }
         }
@@ -585,7 +585,7 @@ gboolean EF_relachement_modif(Projet *projet, EF_Relachement *relachement, const
             case EF_RELACHEMENT_BLOQUE :
             case EF_RELACHEMENT_LIBRE :
             {
-                BUGMSG(NULL, FALSE, "Impossible d'éditer ce type de relâchement.\n");
+                BUGMSG(NULL, FALSE, "Impossible d'éditer ce type de relâchement.\n")
                 break;
             }
             case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
@@ -595,7 +595,7 @@ gboolean EF_relachement_modif(Projet *projet, EF_Relachement *relachement, const
             }
             default :
             {
-                BUGMSG(NULL, FALSE, "Le type de relâchement est inconnu.\n");
+                BUGMSG(NULL, FALSE, "Le type de relâchement est inconnu.\n")
                 break;
             }
         }
@@ -628,12 +628,12 @@ gboolean EF_relachement_supprime(EF_Relachement *relachement, gboolean annule_si
 {
     GList   *liste_relachements = NULL, *liste_barres_dep;
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(relachement, FALSE, gettext("Paramètre %s incorrect.\n"), "relachement");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(relachement, FALSE, gettext("Paramètre %s incorrect.\n"), "relachement")
     
     // On vérifie les dépendances.
     liste_relachements = g_list_append(liste_relachements, relachement);
-    BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, NULL, liste_relachements, NULL, NULL, &liste_barres_dep, NULL, FALSE, FALSE), FALSE);
+    BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, NULL, liste_relachements, NULL, NULL, &liste_barres_dep, NULL, FALSE, FALSE), FALSE)
     
     if ((annule_si_utilise) && (liste_barres_dep != NULL))
     {
@@ -641,13 +641,13 @@ gboolean EF_relachement_supprime(EF_Relachement *relachement, gboolean annule_si
         
         liste = common_selection_converti_barres_en_texte(liste_relachements);
         if (g_list_next(liste_relachements) == NULL)
-            BUGMSG(NULL, FALSE, gettext("Impossible de supprimer la section car elle est utilisée par la barre %s.\n"), liste);
+            BUGMSG(NULL, FALSE, gettext("Impossible de supprimer la section car elle est utilisée par la barre %s.\n"), liste)
         else
-            BUGMSG(NULL, FALSE, gettext("Impossible de supprimer la section car elle est utilisée par les barres %s.\n"), liste);
+            BUGMSG(NULL, FALSE, gettext("Impossible de supprimer la section car elle est utilisée par les barres %s.\n"), liste)
     }
     
     g_list_free(liste_relachements);
-    BUG(_1992_1_1_barres_supprime_liste(projet, NULL, liste_barres_dep), TRUE);
+    BUG(_1992_1_1_barres_supprime_liste(projet, NULL, liste_barres_dep), TRUE)
     g_list_free(liste_barres_dep);
     
     free(relachement->nom);
@@ -680,7 +680,7 @@ gboolean EF_relachement_free(Projet *projet)
  *             projet == NULL.
  */
 {
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
     
     // Trivial
     while (projet->modele.relachements != NULL)
@@ -699,7 +699,7 @@ gboolean EF_relachement_free(Projet *projet)
         free(relachement);
     }
     
-    BUG(EF_calculs_free(projet), FALSE);
+    BUG(EF_calculs_free(projet), FALSE)
     
 #ifdef ENABLE_GTK
     g_object_unref(projet->list_gtk.ef_relachements.liste_relachements);

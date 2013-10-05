@@ -42,7 +42,7 @@ gboolean EF_noeuds_init(Projet *projet)
  *             projet == NULL.
  */
 {
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
     // Trivial
     projet->modele.noeuds = NULL;
     
@@ -61,8 +61,8 @@ gboolean EF_noeuds_renvoie_position(EF_Noeud *noeud, EF_Point *point)
  *             en cas d'erreur d'allocation mémoire.
  */
 {
-    BUGMSG(noeud, FALSE, gettext("Paramètre %s incorrect.\n"), "noeud");
-    BUGMSG(point, FALSE, gettext("Paramètre %s incorrect.\n"), "point");
+    BUGMSG(noeud, FALSE, gettext("Paramètre %s incorrect.\n"), "noeud")
+    BUGMSG(point, FALSE, gettext("Paramètre %s incorrect.\n"), "point")
     
     switch (noeud->type)
     {
@@ -74,7 +74,7 @@ gboolean EF_noeuds_renvoie_position(EF_Noeud *noeud, EF_Point *point)
             {
                 EF_Point    p;
                 
-                BUG(EF_noeuds_renvoie_position(tmp->relatif, &p), FALSE);
+                BUG(EF_noeuds_renvoie_position(tmp->relatif, &p), FALSE)
                 
                 point->x = common_math_add(p.x, tmp->x);
                 point->y = common_math_add(p.y, tmp->y);
@@ -94,8 +94,8 @@ gboolean EF_noeuds_renvoie_position(EF_Noeud *noeud, EF_Point *point)
             EF_Noeud_Barre  *data = noeud->data;
             EF_Point        point1, point2;
             
-            BUG(EF_noeuds_renvoie_position(data->barre->noeud_debut, &point1), FALSE);
-            BUG(EF_noeuds_renvoie_position(data->barre->noeud_fin, &point2), FALSE);
+            BUG(EF_noeuds_renvoie_position(data->barre->noeud_debut, &point1), FALSE)
+            BUG(EF_noeuds_renvoie_position(data->barre->noeud_fin, &point2), FALSE)
             
             point->x = common_math_add(point1.x, common_math_dot_f(common_math_sub(point2.x, point1.x), data->position_relative_barre));
             point->y = common_math_add(point1.y, common_math_dot_f(common_math_sub(point2.y, point1.y), data->position_relative_barre));
@@ -105,7 +105,7 @@ gboolean EF_noeuds_renvoie_position(EF_Noeud *noeud, EF_Point *point)
         }
         default :
         {
-            BUGMSG(NULL, FALSE, gettext("Le type de noeud %d est inconnu.\n"), noeud->type);
+            BUGMSG(NULL, FALSE, gettext("Le type de noeud %d est inconnu.\n"), noeud->type)
             break;
         }
     }
@@ -134,10 +134,10 @@ EF_Noeud *EF_noeuds_ajout_noeud_libre(Projet *projet, Flottant x, Flottant y, Fl
     EF_Noeud        *noeud_nouveau = malloc(sizeof(EF_Noeud));
     EF_Noeud_Libre  *data;
     
-    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(noeud_nouveau, NULL, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(noeud_nouveau, NULL, gettext("Erreur d'allocation mémoire.\n"))
     
-    BUGMSG(data = malloc(sizeof(EF_Noeud_Libre)), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(data = malloc(sizeof(EF_Noeud_Libre)), NULL, gettext("Erreur d'allocation mémoire.\n"))
     
     // Trivial
     noeud_nouveau->type = NOEUD_LIBRE;
@@ -154,18 +154,18 @@ EF_Noeud *EF_noeuds_ajout_noeud_libre(Projet *projet, Flottant x, Flottant y, Fl
     else
         noeud_nouveau->numero = ((EF_Noeud *)g_list_last(projet->modele.noeuds)->data)->numero+1;
     
-    BUG(EF_calculs_free(projet), NULL);
+    BUG(EF_calculs_free(projet), NULL)
     
     projet->modele.noeuds = g_list_append(projet->modele.noeuds, noeud_nouveau);
     
 #ifdef ENABLE_GTK
-    BUG(m3d_noeud(&projet->list_gtk.m3d, noeud_nouveau), NULL);
+    BUG(m3d_noeud(&projet->list_gtk.m3d, noeud_nouveau), NULL)
     if (projet->list_gtk.ef_noeud.builder != NULL)
     {
         char    *tmp = NULL;
         
         if (data->relatif != NULL)
-            BUGMSG(tmp = g_strdup_printf("%d", data->relatif->numero), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(tmp = g_strdup_printf("%d", data->relatif->numero), NULL, gettext("Erreur d'allocation mémoire.\n"))
         
         gtk_tree_store_append(projet->list_gtk.ef_noeud.tree_store_libre, &noeud_nouveau->Iter, NULL);
         gtk_tree_store_set(projet->list_gtk.ef_noeud.tree_store_libre, &noeud_nouveau->Iter, 0, noeud_nouveau, -1);
@@ -199,10 +199,10 @@ EF_Noeud* EF_noeuds_ajout_noeud_barre(Projet *projet, EF_Barre *barre,
     EF_Noeud_Barre  *data;
     GList           *liste;
     
-    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(noeud_nouveau, NULL, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(noeud_nouveau, NULL, gettext("Erreur d'allocation mémoire.\n"))
     
-    BUGMSG(data = malloc(sizeof(EF_Noeud_Barre)), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(data = malloc(sizeof(EF_Noeud_Barre)), NULL, gettext("Erreur d'allocation mémoire.\n"))
     
     // Trivial
     noeud_nouveau->type = NOEUD_BARRE;
@@ -217,7 +217,7 @@ EF_Noeud* EF_noeuds_ajout_noeud_barre(Projet *projet, EF_Barre *barre,
     else
         noeud_nouveau->numero = ((EF_Noeud *)g_list_last(projet->modele.noeuds)->data)->numero+1;
     
-    BUG(EF_calculs_free(projet), NULL);
+    BUG(EF_calculs_free(projet), NULL)
     
     projet->modele.noeuds = g_list_append(projet->modele.noeuds, noeud_nouveau);
     
@@ -237,11 +237,11 @@ EF_Noeud* EF_noeuds_ajout_noeud_barre(Projet *projet, EF_Barre *barre,
     
     barre->noeuds_intermediaires = g_list_insert_before(barre->noeuds_intermediaires, liste, noeud_nouveau);
     
-    BUGMSG(barre->info_EF = realloc(barre->info_EF, sizeof(Barre_Info_EF)*(barre->discretisation_element+1)), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(barre->info_EF = realloc(barre->info_EF, sizeof(Barre_Info_EF)*(barre->discretisation_element+1)), NULL, gettext("Erreur d'allocation mémoire.\n"))
     memset(barre->info_EF, 0, sizeof(Barre_Info_EF)*(barre->discretisation_element+1));
     
 #ifdef ENABLE_GTK
-    BUG(m3d_noeud(&projet->list_gtk.m3d, noeud_nouveau), NULL);
+    BUG(m3d_noeud(&projet->list_gtk.m3d, noeud_nouveau), NULL)
     if (projet->list_gtk.ef_noeud.builder != NULL)
     {
         gtk_tree_store_append(projet->list_gtk.ef_noeud.tree_store_barre, &noeud_nouveau->Iter, NULL);
@@ -257,7 +257,7 @@ EF_Noeud* EF_noeuds_cherche_numero(Projet *projet, unsigned int numero, gboolean
 /* Description : Positionne dans la liste des noeuds le noeud souhaité et le renvoie.
  * Paramètres : Projet *projet : la variable projet,
  *            : unsigned int numero : le numéro du noeud.
- *            : gboolean critique : si TRUE alors BUGMSG, si FALSE alors return.
+ *            : gboolean critique : si TRUE alors BUGMSG, si FALSE alors return
  * Valeur renvoyée :
  *   Succès : pointeur vers le noeud recherché
  *   Échec : NULL :
@@ -267,7 +267,7 @@ EF_Noeud* EF_noeuds_cherche_numero(Projet *projet, unsigned int numero, gboolean
 {
     GList   *list_parcours;
     
-    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet")
     
     // Trivial
     list_parcours = projet->modele.noeuds;
@@ -282,7 +282,7 @@ EF_Noeud* EF_noeuds_cherche_numero(Projet *projet, unsigned int numero, gboolean
     }
     
     if (critique)
-        BUGMSG(0, NULL, gettext("Noeud n°%u introuvable.\n"), numero);
+        BUGMSG(0, NULL, gettext("Noeud n°%u introuvable.\n"), numero)
     else
         return NULL;
 }
@@ -309,9 +309,9 @@ gboolean EF_noeuds_change_pos_abs(Projet *projet, EF_Noeud *noeud, Flottant x, F
     GList           *liste_noeuds = NULL;
 #endif
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(noeud, FALSE, gettext("Paramètre %s incorrect.\n"), "noeud");
-    BUGMSG(noeud->type == NOEUD_LIBRE, FALSE, gettext("Le type du noeud est incorrect.\n"));
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(noeud, FALSE, gettext("Paramètre %s incorrect.\n"), "noeud")
+    BUGMSG(noeud->type == NOEUD_LIBRE, FALSE, gettext("Le type du noeud est incorrect.\n"))
     
     point = noeud->data;
     
@@ -325,8 +325,8 @@ gboolean EF_noeuds_change_pos_abs(Projet *projet, EF_Noeud *noeud, Flottant x, F
 #ifdef ENABLE_GTK
     liste_noeuds = g_list_append(liste_noeuds, noeud);
     
-    BUG(m3d_actualise_graphique(projet, liste_noeuds, NULL), FALSE);
-    BUG(m3d_rafraichit(projet), FALSE);
+    BUG(m3d_actualise_graphique(projet, liste_noeuds, NULL), FALSE)
+    BUG(m3d_rafraichit(projet), FALSE)
     
     g_list_free(liste_noeuds);
     
@@ -334,7 +334,7 @@ gboolean EF_noeuds_change_pos_abs(Projet *projet, EF_Noeud *noeud, Flottant x, F
         gtk_widget_queue_resize(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_treeview_noeuds_libres")));
 #endif
     
-    BUG(EF_calculs_free(projet), FALSE);
+    BUG(EF_calculs_free(projet), FALSE)
     
     return TRUE;
 }
@@ -358,10 +358,10 @@ gboolean EF_noeuds_change_pos_relat(Projet *projet, EF_Noeud *noeud, Flottant po
     GList           *liste;
     double          avant, apres;
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(noeud, FALSE, gettext("Paramètre %s incorrect.\n"), "noeud");
-    BUGMSG(noeud->type == NOEUD_BARRE, FALSE, gettext("Le type du noeud est incorrect.\n"));
-    BUGMSG((0. <= common_math_get(pos)) && (common_math_get(pos) <= 1.), FALSE, gettext("Paramètre %s incorrect.\n"), "pos");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(noeud, FALSE, gettext("Paramètre %s incorrect.\n"), "noeud")
+    BUGMSG(noeud->type == NOEUD_BARRE, FALSE, gettext("Le type du noeud est incorrect.\n"))
+    BUGMSG((0. <= common_math_get(pos)) && (common_math_get(pos) <= 1.), FALSE, gettext("Paramètre %s incorrect.\n"), "pos")
     
     info = noeud->data;
     
@@ -418,8 +418,8 @@ gboolean EF_noeuds_change_pos_relat(Projet *projet, EF_Noeud *noeud, Flottant po
 #ifdef ENABLE_GTK
     liste = g_list_append(NULL, noeud);
     
-    BUG(m3d_actualise_graphique(projet, liste, NULL), FALSE);
-    BUG(m3d_rafraichit(projet), FALSE);
+    BUG(m3d_actualise_graphique(projet, liste, NULL), FALSE)
+    BUG(m3d_rafraichit(projet), FALSE)
     
     g_list_free(liste);
     
@@ -427,7 +427,7 @@ gboolean EF_noeuds_change_pos_relat(Projet *projet, EF_Noeud *noeud, Flottant po
         gtk_widget_queue_resize(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_treeview_noeuds_intermediaires")));
 #endif
     
-    BUG(EF_calculs_free(projet), FALSE);
+    BUG(EF_calculs_free(projet), FALSE)
     
     return TRUE;
 }
@@ -449,8 +449,8 @@ gboolean EF_noeuds_change_appui(Projet *projet, EF_Noeud *noeud, EF_Appui *appui
     EF_Appui    *appui_old = noeud->appui;
 #endif
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(noeud, FALSE, gettext("Paramètre %s incorrect.\n"), "noeud");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(noeud, FALSE, gettext("Paramètre %s incorrect.\n"), "noeud")
     
     noeud->appui = appui;
     
@@ -471,7 +471,7 @@ gboolean EF_noeuds_change_appui(Projet *projet, EF_Noeud *noeud, EF_Appui *appui
             }
             default :
             {
-                BUGMSG(NULL, FALSE, gettext("Le type de noeud %d est inconnu.\n"), noeud->type);
+                BUGMSG(NULL, FALSE, gettext("Le type de noeud %d est inconnu.\n"), noeud->type)
                 break;
             }
         }
@@ -513,9 +513,9 @@ gboolean EF_noeuds_change_noeud_relatif(Projet *projet, EF_Noeud *noeud, EF_Noeu
     EF_Noeud_Libre  *point;
     GList           *liste_noeuds = NULL, *noeuds_dep = NULL;
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(noeud, FALSE, gettext("Paramètre %s incorrect.\n"), "noeud");
-    BUGMSG(noeud->type == NOEUD_LIBRE, FALSE, gettext("Le type du noeud est incorrect.\n"));
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(noeud, FALSE, gettext("Paramètre %s incorrect.\n"), "noeud")
+    BUGMSG(noeud->type == NOEUD_LIBRE, FALSE, gettext("Le type du noeud est incorrect.\n"))
     
     point = noeud->data;
     
@@ -525,26 +525,26 @@ gboolean EF_noeuds_change_noeud_relatif(Projet *projet, EF_Noeud *noeud, EF_Noeu
     if (relatif != NULL)
     {
         liste_noeuds = g_list_append(NULL, relatif);
-        BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, liste_noeuds, NULL, NULL, NULL, NULL, &noeuds_dep, NULL, NULL, FALSE, TRUE), FALSE);
+        BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, liste_noeuds, NULL, NULL, NULL, NULL, &noeuds_dep, NULL, NULL, FALSE, TRUE), FALSE)
         
         if (g_list_find(noeuds_dep, noeud) != NULL)
         {
             g_list_free(noeuds_dep);
             g_list_free(liste_noeuds);
-            BUGMSG(NULL, FALSE, gettext("Le noeud %d est déjà dépendant du noeud %d.\n"), relatif->numero, noeud->numero);
+            BUGMSG(NULL, FALSE, gettext("Le noeud %d est déjà dépendant du noeud %d.\n"), relatif->numero, noeud->numero)
         }
         
         g_list_free(noeuds_dep);
         g_list_free(liste_noeuds);
         
         liste_noeuds = g_list_append(NULL, noeud);
-        BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, liste_noeuds, NULL, NULL, NULL, NULL, &noeuds_dep, NULL, NULL, FALSE, TRUE), FALSE);
+        BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, liste_noeuds, NULL, NULL, NULL, NULL, &noeuds_dep, NULL, NULL, FALSE, TRUE), FALSE)
         
         if (g_list_find(noeuds_dep, relatif) != NULL)
         {
             g_list_free(noeuds_dep);
             g_list_free(liste_noeuds);
-            BUGMSG(NULL, FALSE, gettext("Le noeud %d est déjà dépendant du noeud %d.\n"), noeud->numero, relatif->numero);
+            BUGMSG(NULL, FALSE, gettext("Le noeud %d est déjà dépendant du noeud %d.\n"), noeud->numero, relatif->numero)
         }
         
         g_list_free(noeuds_dep);
@@ -555,8 +555,8 @@ gboolean EF_noeuds_change_noeud_relatif(Projet *projet, EF_Noeud *noeud, EF_Noeu
     
     liste_noeuds = g_list_append(NULL, noeud);
 #ifdef ENABLE_GTK
-    BUG(m3d_actualise_graphique(projet, liste_noeuds, NULL), FALSE);
-    BUG(m3d_rafraichit(projet), FALSE);
+    BUG(m3d_actualise_graphique(projet, liste_noeuds, NULL), FALSE)
+    BUG(m3d_rafraichit(projet), FALSE)
     
     if (projet->list_gtk.ef_noeud.builder != NULL)
         gtk_widget_queue_resize(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_noeud.builder, "EF_noeuds_treeview_noeuds_libres")));
@@ -564,7 +564,7 @@ gboolean EF_noeuds_change_noeud_relatif(Projet *projet, EF_Noeud *noeud, EF_Noeu
     
     g_list_free(liste_noeuds);
     
-    BUG(EF_calculs_free(projet), FALSE);
+    BUG(EF_calculs_free(projet), FALSE)
     
     return TRUE;
 }
@@ -584,8 +584,8 @@ double EF_points_distance(EF_Point* p1, EF_Point* p2)
     double      x, y, z;
     
     // \end{verbatim}\texttt{distance }$= \sqrt{x^2+y^2+z^2}$\begin{verbatim}
-    BUGMSG(p1, NAN, gettext("Paramètre %s incorrect.\n"), "n1");
-    BUGMSG(p2, NAN, gettext("Paramètre %s incorrect.\n"), "n2");
+    BUGMSG(p1, NAN, gettext("Paramètre %s incorrect.\n"), "n1")
+    BUGMSG(p2, NAN, gettext("Paramètre %s incorrect.\n"), "n2")
     
     x = common_math_get(p2->x) - common_math_get(p1->x);
     y = common_math_get(p2->y) - common_math_get(p1->y);
@@ -610,11 +610,11 @@ double EF_noeuds_distance(EF_Noeud* n1, EF_Noeud* n2)
     double      x, y, z;
     
     // \end{verbatim}\texttt{distance }$= \sqrt{x^2+y^2+z^2}$\begin{verbatim}
-    BUGMSG(n1, NAN, gettext("Paramètre %s incorrect.\n"), "n1");
-    BUGMSG(n2, NAN, gettext("Paramètre %s incorrect.\n"), "n2");
+    BUGMSG(n1, NAN, gettext("Paramètre %s incorrect.\n"), "n1")
+    BUGMSG(n2, NAN, gettext("Paramètre %s incorrect.\n"), "n2")
     
-    BUG(EF_noeuds_renvoie_position(n1, &p1), NAN);
-    BUG(EF_noeuds_renvoie_position(n2, &p2), NAN);
+    BUG(EF_noeuds_renvoie_position(n1, &p1), NAN)
+    BUG(EF_noeuds_renvoie_position(n2, &p2), NAN)
     
     x = common_math_get(p2.x) - common_math_get(p1.x);
     y = common_math_get(p2.y) - common_math_get(p1.y);
@@ -645,11 +645,11 @@ double EF_noeuds_distance_x_y_z(EF_Noeud* n1, EF_Noeud* n2, double *x, double *y
     EF_Point    p1, p2;
     
     // \end{verbatim}\texttt{distance }$= \sqrt{x^2+y^2+z^2}$\begin{verbatim}
-    BUGMSG(n1, NAN, gettext("Paramètre %s incorrect.\n"), "n1");
-    BUGMSG(n2, NAN, gettext("Paramètre %s incorrect.\n"), "n2");
+    BUGMSG(n1, NAN, gettext("Paramètre %s incorrect.\n"), "n1")
+    BUGMSG(n2, NAN, gettext("Paramètre %s incorrect.\n"), "n2")
     
-    BUG(EF_noeuds_renvoie_position(n1, &p1), NAN);
-    BUG(EF_noeuds_renvoie_position(n2, &p2), NAN);
+    BUG(EF_noeuds_renvoie_position(n1, &p1), NAN)
+    BUG(EF_noeuds_renvoie_position(n2, &p2), NAN)
 
     *x = common_math_get(p2.x) - common_math_get(p1.x);
     *y = common_math_get(p2.y) - common_math_get(p1.y);
@@ -681,7 +681,7 @@ void EF_noeuds_free_foreach(EF_Noeud *noeud, Projet *projet)
                 cholmod_free_sparse(&infos->barre->info_EF[i].matrice_rigidite_locale, projet->calculs.c);
         }
         infos->barre->discretisation_element--;
-        BUGMSG(infos->barre->info_EF = realloc(infos->barre->info_EF, sizeof(Barre_Info_EF)*(infos->barre->discretisation_element+1)), , gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(infos->barre->info_EF = realloc(infos->barre->info_EF, sizeof(Barre_Info_EF)*(infos->barre->discretisation_element+1)), , gettext("Erreur d'allocation mémoire.\n"))
         memset(infos->barre->info_EF, 0, sizeof(Barre_Info_EF)*(infos->barre->discretisation_element+1));
     }
     
@@ -706,7 +706,7 @@ void EF_noeuds_free_foreach(EF_Noeud *noeud, Projet *projet)
             }
             default :
             {
-                BUGMSG(NULL, , gettext("Le type de noeud %d est inconnu.\n"), noeud->type);
+                BUGMSG(NULL, , gettext("Le type de noeud %d est inconnu.\n"), noeud->type)
                 break;
             }
         }
@@ -730,9 +730,9 @@ gboolean EF_noeuds_free(Projet *projet)
  *             projet == NULL.
  */
 {
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
     
-    BUG(EF_calculs_free(projet), FALSE);
+    BUG(EF_calculs_free(projet), FALSE)
     
     // Trivial
     g_list_foreach(projet->modele.noeuds, (GFunc)EF_noeuds_free_foreach, projet);

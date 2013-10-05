@@ -46,9 +46,9 @@ void *EF_charge_cherche(Projet *projet, unsigned int num_action, unsigned int nu
     Action  *action;
     GList   *list_parcours;
     
-    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet")
     
-    BUG(action = _1990_action_numero_cherche(projet, num_action), NULL);
+    BUG(action = _1990_action_numero_cherche(projet, num_action), NULL)
     
     list_parcours = _1990_action_charges_renvoie(action);
     while (list_parcours != NULL)
@@ -61,7 +61,7 @@ void *EF_charge_cherche(Projet *projet, unsigned int num_action, unsigned int nu
         list_parcours = g_list_next(list_parcours);
     }
     
-    BUGMSG(0, NULL, gettext("Charge %u de l'action %u introuvable.\n"), num_charge, num_action);
+    BUGMSG(0, NULL, gettext("Charge %u de l'action %u introuvable.\n"), num_charge, num_action)
 }
 
 
@@ -79,8 +79,8 @@ Action *EF_charge_action(Projet *projet, void *charge)
 {
     GList   *list_parcours;
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(charge, FALSE, gettext("Paramètre %s incorrect.\n"), "charge");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(charge, FALSE, gettext("Paramètre %s incorrect.\n"), "charge")
     
     list_parcours = projet->actions;
     while (list_parcours != NULL)
@@ -93,7 +93,7 @@ Action *EF_charge_action(Projet *projet, void *charge)
         list_parcours = g_list_next(list_parcours);
     }
     
-    BUGMSG(0, NULL, gettext("La charge n'est dans aucune action.\n"));
+    BUGMSG(0, NULL, gettext("La charge n'est dans aucune action.\n"))
 }
 
 
@@ -115,12 +115,12 @@ gboolean EF_charge_renomme(Projet *projet, unsigned int numero_action,
 {
     Charge_Noeud    *charge;
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
     
-    BUG(charge = EF_charge_cherche(projet, numero_action, numero_charge), -1);
+    BUG(charge = EF_charge_cherche(projet, numero_action, numero_charge), -1)
     
     free(charge->nom);
-    BUGMSG(charge->nom = g_strdup_printf("%s", nom), -1, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(charge->nom = g_strdup_printf("%s", nom), -1, gettext("Erreur d'allocation mémoire.\n"))
     
 #ifdef ENABLE_GTK
     if (projet->list_gtk._1990_actions.builder != NULL)
@@ -154,10 +154,10 @@ gboolean EF_charge_deplace(Projet *projet, unsigned int action_src, unsigned int
     GList           *list_parcours;
     Action          *action1, *action2;
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
     // On cherche l'action qui contient la charge
-    BUG(action1 = _1990_action_numero_cherche(projet, action_src), -1);
-    BUG(action2 = _1990_action_numero_cherche(projet, action_dest), -1);
+    BUG(action1 = _1990_action_numero_cherche(projet, action_src), -1)
+    BUG(action2 = _1990_action_numero_cherche(projet, action_dest), -1)
     
     if (action_src == action_dest)
         return TRUE;
@@ -183,7 +183,7 @@ gboolean EF_charge_deplace(Projet *projet, unsigned int action_src, unsigned int
     //             et de la liste des charges tout en conservant les données
     //               de la charge dans charge_data.
             charge_data = charge;
-            BUG(_1990_action_charges_change(action1, g_list_delete_link(_1990_action_charges_renvoie(action1), list_parcours)), FALSE);
+            BUG(_1990_action_charges_change(action1, g_list_delete_link(_1990_action_charges_renvoie(action1), list_parcours)), FALSE)
             list_parcours = list_next;
             if (list_parcours != NULL)
                 charge = list_parcours->data;
@@ -200,14 +200,14 @@ gboolean EF_charge_deplace(Projet *projet, unsigned int action_src, unsigned int
     //     FinPour
     }
     
-    BUGMSG(charge_data, FALSE, gettext("Charge %u de l'action %u introuvable.\n"), charge_src, action_src);
+    BUGMSG(charge_data, FALSE, gettext("Charge %u de l'action %u introuvable.\n"), charge_src, action_src)
     
     // On insère la charge à la fin de la liste des charges dans l'action de destination
     //   en modifiant son numéro.
     charge_data->numero = g_list_length(_1990_action_charges_renvoie(action2));
-    BUG(_1990_action_charges_change(action2, g_list_append(_1990_action_charges_renvoie(action2), charge_data)), FALSE);
+    BUG(_1990_action_charges_change(action2, g_list_append(_1990_action_charges_renvoie(action2), charge_data)), FALSE)
     
-    BUG(EF_calculs_free(projet), FALSE);
+    BUG(EF_calculs_free(projet), FALSE)
     
     return TRUE;
 }
@@ -233,8 +233,8 @@ gboolean EF_charge_supprime(Projet *projet, unsigned int action_num, unsigned in
     GList                   *list_parcours;
     Action                  *action;
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUG(action = _1990_action_numero_cherche(projet, action_num), FALSE);
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUG(action = _1990_action_numero_cherche(projet, action_num), FALSE)
     
     list_parcours = _1990_action_charges_renvoie(action);
     // Pour chaque charge de l'action en cours Faire
@@ -253,7 +253,7 @@ gboolean EF_charge_supprime(Projet *projet, unsigned int action_num, unsigned in
     //         et de la liste des charges tout en conservant les données
     //           de la charge dans charge_data
             charge_data = list_parcours->data;
-            BUG(_1990_action_charges_change(action, g_list_delete_link(_1990_action_charges_renvoie(action), list_parcours)), FALSE);
+            BUG(_1990_action_charges_change(action, g_list_delete_link(_1990_action_charges_renvoie(action), list_parcours)), FALSE)
             list_parcours = list_next;
             if (list_parcours != NULL)
                 charge = list_parcours->data;
@@ -265,22 +265,22 @@ gboolean EF_charge_supprime(Projet *projet, unsigned int action_num, unsigned in
             {
                 case CHARGE_NOEUD :
                 {
-                    BUG(EF_charge_noeud_free(charge_data), FALSE);
+                    BUG(EF_charge_noeud_free(charge_data), FALSE)
                     break;
                 }
                 case CHARGE_BARRE_PONCTUELLE :
                 {
-                    BUG(EF_charge_barre_ponctuelle_free((Charge_Barre_Ponctuelle*)charge_data), FALSE);
+                    BUG(EF_charge_barre_ponctuelle_free((Charge_Barre_Ponctuelle*)charge_data), FALSE)
                     break;
                 }
                 case CHARGE_BARRE_REPARTIE_UNIFORME :
                 {
-                    BUG(EF_charge_barre_repartie_uniforme_free((Charge_Barre_Repartie_Uniforme*)charge_data), FALSE);
+                    BUG(EF_charge_barre_repartie_uniforme_free((Charge_Barre_Repartie_Uniforme*)charge_data), FALSE)
                     break;
                 }
                 default :
                 {
-                    BUGMSG(0, FALSE, gettext("Type de charge %d inconnu.\n"), charge_data->type);
+                    BUGMSG(0, FALSE, gettext("Type de charge %d inconnu.\n"), charge_data->type)
                     break;
                 }
             }
@@ -293,9 +293,9 @@ gboolean EF_charge_supprime(Projet *projet, unsigned int action_num, unsigned in
         list_parcours = g_list_next(list_parcours);
     }
     
-    BUGMSG(charge_data, FALSE, gettext("Charge %u de l'action %u introuvable.\n"), charge_num, action_num);
+    BUGMSG(charge_data, FALSE, gettext("Charge %u de l'action %u introuvable.\n"), charge_num, action_num)
     
-    BUG(EF_calculs_free(projet), FALSE);
+    BUG(EF_calculs_free(projet), FALSE)
     
     return TRUE;
 }

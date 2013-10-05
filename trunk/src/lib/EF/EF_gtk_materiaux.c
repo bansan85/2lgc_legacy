@@ -45,8 +45,8 @@ void EF_gtk_materiaux_fermer(GtkButton *button, Projet *projet)
  * Valeur renvoyée : Aucune.
  */
 {
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_materiaux.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Matériau");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_materiaux.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Matériau")
     
     gtk_widget_destroy(projet->list_gtk.ef_materiaux.window);
     
@@ -61,8 +61,8 @@ void EF_gtk_materiaux_window_destroy(GtkWidget *object, Projet *projet)
  * Valeur renvoyée : Aucune.
  */
 {
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_materiaux.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Matériau");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_materiaux.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Matériau")
     
     g_object_unref(G_OBJECT(projet->list_gtk.ef_materiaux.builder));
     projet->list_gtk.ef_materiaux.builder = NULL;
@@ -82,8 +82,8 @@ gboolean EF_gtk_materiaux_window_key_press(GtkWidget *widget, GdkEvent *event, P
  *  
  */
 {
-    BUGMSG(projet, TRUE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_materiaux.builder, TRUE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Matériau");
+    BUGMSG(projet, TRUE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_materiaux.builder, TRUE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Matériau")
     
     if (event->key.keyval == GDK_KEY_Escape)
     {
@@ -107,8 +107,8 @@ gboolean EF_gtk_materiaux_treeview_key_press(GtkTreeView *treeview, GdkEvent *ev
  *  
  */
 {
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_materiaux.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Matériau");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_materiaux.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Matériau")
     
     if (event->key.keyval == GDK_KEY_Delete)
     {
@@ -124,7 +124,7 @@ gboolean EF_gtk_materiaux_treeview_key_press(GtkTreeView *treeview, GdkEvent *ev
         
         liste_materiaux = g_list_append(liste_materiaux, materiau);
         if (_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, liste_materiaux, NULL, NULL, NULL, NULL, NULL, FALSE, FALSE) == FALSE)
-            BUG(EF_materiaux_supprime(materiau, projet), FALSE);
+            BUG(EF_materiaux_supprime(materiau, projet), FALSE)
         
         g_list_free(liste_materiaux);
         
@@ -151,8 +151,8 @@ void EF_gtk_materiaux_edit_nom(GtkCellRendererText *cell, gchar *path_string, gc
     GtkTreePath         *path;
     EF_Materiau         *materiau;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_materiaux.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Matériau");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_materiaux.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Matériau")
     
     ef_gtk = &projet->list_gtk.ef_materiaux;
     model = GTK_TREE_MODEL(ef_gtk->materiaux);
@@ -170,17 +170,17 @@ void EF_gtk_materiaux_edit_nom(GtkCellRendererText *cell, gchar *path_string, gc
     {
         case MATERIAU_BETON :
         {
-            BUG(_1992_1_1_materiaux_modif(projet, materiau, new_text, common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR)), );
+            BUG(_1992_1_1_materiaux_modif(projet, materiau, new_text, common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR)), )
             break;
         }
         case MATERIAU_ACIER :
         {
-            BUG(_1993_1_1_materiaux_modif(projet, materiau, new_text, common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR)), );
+            BUG(_1993_1_1_materiaux_modif(projet, materiau, new_text, common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR)), )
             break;
         }
         default :
         {
-            BUGMSG(NULL, , gettext("Le type de matériau %d n'existe pas.\n"), materiau->type);
+            BUGMSG(NULL, , gettext("Le type de matériau %d n'existe pas.\n"), materiau->type)
             break;
         }
     }
@@ -201,8 +201,8 @@ void EF_gtk_materiaux_select_changed(GtkTreeSelection *treeselection, Projet *pr
     GtkTreeModel    *model;
     GtkTreeIter     Iter;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_materiaux.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Matériau");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_materiaux.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Matériau")
     
     // Si aucune section n'est sélectionnée, il n'est pas possible d'en supprimer ou d'en éditer une.
     if (!gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_materiaux.builder, "EF_materiaux_treeview_select")), &model, &Iter))
@@ -260,18 +260,18 @@ void EF_gtk_materiaux_boutton_supprimer_menu(GtkButton *widget, Projet *projet)
     EF_Materiau     *materiau;
     GList           *liste_materiaux = NULL, *liste_noeuds_dep, *liste_barres_dep, *liste_charges_dep;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_materiaux.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Matériau");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_materiaux.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Matériau")
     
     // Si aucune section n'est sélectionnée, il n'est pas possible d'en supprimer ou d'en
     // éditer une.
     if (!gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_materiaux.builder, "EF_materiaux_treeview_select")), &model, &Iter))
-        BUGMSG(NULL, , gettext("Aucun élément n'est sélectionné.\n"));
+        BUGMSG(NULL, , gettext("Aucun élément n'est sélectionné.\n"))
     
     gtk_tree_model_get(model, &Iter, 0, &materiau, -1);
     
     liste_materiaux = g_list_append(liste_materiaux, materiau);
-    BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, liste_materiaux, NULL, NULL, &liste_noeuds_dep, &liste_barres_dep, &liste_charges_dep, FALSE, FALSE), );
+    BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, liste_materiaux, NULL, NULL, &liste_noeuds_dep, &liste_barres_dep, &liste_charges_dep, FALSE, FALSE), )
     g_list_free(liste_materiaux);
     
     if ((liste_noeuds_dep != NULL) || (liste_barres_dep != NULL) || (liste_charges_dep != NULL))
@@ -283,7 +283,7 @@ void EF_gtk_materiaux_boutton_supprimer_menu(GtkButton *widget, Projet *projet)
         free(desc);
     }
     else
-        BUGMSG(NULL, , gettext("L'élément ne possède aucune dépendance.\n"));
+        BUGMSG(NULL, , gettext("L'élément ne possède aucune dépendance.\n"))
     
     g_list_free(liste_noeuds_dep);
     g_list_free(liste_barres_dep);
@@ -306,8 +306,8 @@ void EF_gtk_materiaux_supprimer_menu_barres(GtkButton *button, Projet *projet)
     EF_Materiau     *materiau;
     GList           *liste_materiaux = NULL, *liste_barres_dep;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_materiaux.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Matériau");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_materiaux.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Matériau")
     
     if (!gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_materiaux.builder, "EF_materiaux_treeview_select")), &model, &iter))
         return;
@@ -315,13 +315,13 @@ void EF_gtk_materiaux_supprimer_menu_barres(GtkButton *button, Projet *projet)
     gtk_tree_model_get(model, &iter, 0, &materiau, -1);
     
     liste_materiaux = g_list_append(liste_materiaux, materiau);
-    BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, liste_materiaux, NULL, NULL, NULL, &liste_barres_dep, NULL, FALSE, FALSE), );
+    BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, liste_materiaux, NULL, NULL, NULL, &liste_barres_dep, NULL, FALSE, FALSE), )
     g_list_free(liste_materiaux);
-    BUG(_1992_1_1_barres_supprime_liste(projet, NULL, liste_barres_dep), );
+    BUG(_1992_1_1_barres_supprime_liste(projet, NULL, liste_barres_dep), )
     g_list_free(liste_barres_dep);
-    BUG(EF_materiaux_supprime(materiau, projet), );
+    BUG(EF_materiaux_supprime(materiau, projet), )
     
-    BUG(m3d_rafraichit(projet), );
+    BUG(m3d_rafraichit(projet), )
     
     return;
 }
@@ -338,15 +338,15 @@ void EF_gtk_materiaux_supprimer_direct(GtkButton *button, Projet *projet)
     GtkTreeModel    *model;
     EF_Materiau     *materiau;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_materiaux.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Matériau");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_materiaux.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Matériau")
     
     if (!gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_materiaux.builder, "EF_materiaux_treeview_select")), &model, &iter))
         return;
     
     gtk_tree_model_get(model, &iter, 0, &materiau, -1);
     
-    BUG(EF_materiaux_supprime(materiau, projet), );
+    BUG(EF_materiaux_supprime(materiau, projet), )
     
     return;
 }
@@ -460,7 +460,7 @@ void EF_gtk_materiaux(Projet *projet)
     Gtk_EF_Materiaux *ef_gtk;
     GList            *list_parcours;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
     if (projet->list_gtk.ef_materiaux.builder != NULL)
     {
         gtk_window_present(GTK_WINDOW(projet->list_gtk.ef_materiaux.window));
@@ -470,7 +470,7 @@ void EF_gtk_materiaux(Projet *projet)
     ef_gtk = &projet->list_gtk.ef_materiaux;
     
     ef_gtk->builder = gtk_builder_new();
-    BUGMSG(gtk_builder_add_from_resource(ef_gtk->builder, "/org/2lgc/codegui/ui/EF_materiaux.ui", NULL) != 0, , gettext("Builder Failed\n"));
+    BUGMSG(gtk_builder_add_from_resource(ef_gtk->builder, "/org/2lgc/codegui/ui/EF_materiaux.ui", NULL) != 0, , gettext("Builder Failed\n"))
     gtk_builder_connect_signals(ef_gtk->builder, projet);
     
     ef_gtk->window = GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder, "EF_materiaux_window"));

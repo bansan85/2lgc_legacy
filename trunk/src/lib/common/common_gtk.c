@@ -39,7 +39,7 @@ gboolean common_gtk_treeview_button_press_unselect(GtkTreeView *widget,
  *  
  */
 {
-    BUGMSG(projet, TRUE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, TRUE, gettext("Paramètre %s incorrect.\n"), "projet")
     
     if (event->type == GDK_BUTTON_PRESS)
     {
@@ -122,7 +122,7 @@ unsigned int common_gtk_text_buffer_uint(GtkTextBuffer *textbuffer, unsigned int
     gtk_text_buffer_get_iter_at_offset(textbuffer, &start, 0);
     gtk_text_buffer_get_iter_at_offset(textbuffer, &end, -1);
     texte = gtk_text_buffer_get_text(textbuffer, &start, &end, FALSE);
-    BUGMSG(fake = (char*)malloc(sizeof(char)*(strlen(texte)+1)), UINT_MAX, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(fake = (char*)malloc(sizeof(char)*(strlen(texte)+1)), UINT_MAX, gettext("Erreur d'allocation mémoire.\n"))
     
     gtk_text_buffer_remove_all_tags(textbuffer, &start, &end);
     if (sscanf(texte, "%u%s", &nombre, fake) != 1)
@@ -180,7 +180,7 @@ unsigned int common_gtk_entry_uint(GtkEntry *entry, unsigned int val_min, gboole
     gboolean        max_check;
     
     texte = gtk_entry_get_text(entry);
-    BUGMSG(fake = (char*)malloc(sizeof(char)*(strlen(texte)+1)), UINT_MAX, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(fake = (char*)malloc(sizeof(char)*(strlen(texte)+1)), UINT_MAX, gettext("Erreur d'allocation mémoire.\n"))
     
     if (sscanf(texte, "%u%s", &nombre, fake) != 1)
     {

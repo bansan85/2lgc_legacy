@@ -42,8 +42,8 @@ void EF_gtk_charge_barre_rep_uni_window_destroy(GtkWidget *object, Projet *proje
  * Valeur renvoyée : Aucune.
  */
 {
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_charge_barre_repartie_uniforme.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Barre Répartie Uniforme");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_charge_barre_repartie_uniforme.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Barre Répartie Uniforme")
     
     g_object_unref(G_OBJECT(projet->list_gtk.ef_charge_barre_repartie_uniforme.builder));
     projet->list_gtk.ef_charge_barre_repartie_uniforme.builder = NULL;
@@ -64,8 +64,8 @@ gboolean EF_gtk_charge_barre_rep_uni_window_key_press(GtkWidget *widget, GdkEven
  *             interface graphique non initialisée.
  */
 {
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_charge_barre_repartie_uniforme.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Barre Répartie Uniforme");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_charge_barre_repartie_uniforme.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Barre Répartie Uniforme")
     
     if (event->key.keyval == GDK_KEY_Escape)
     {
@@ -84,8 +84,8 @@ void EF_gtk_charge_barre_repartie_uniforme_annuler_clicked(GtkButton *button, Pr
  * Valeur renvoyée : Aucune.
  */
 {
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_charge_barre_repartie_uniforme.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Barre Répartie Uniforme");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_charge_barre_repartie_uniforme.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Barre Répartie Uniforme")
     
     gtk_widget_destroy(projet->list_gtk.ef_charge_barre_repartie_uniforme.window);
     
@@ -129,8 +129,8 @@ gboolean EF_gtk_charge_barre_repartie_uniforme_recupere_donnees(Projet *projet,
     GtkTextBuffer                           *textbuffer;
     gboolean                                ok = TRUE;
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_charge_barre_repartie_uniforme.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Barre Répartie Uniforme");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_charge_barre_repartie_uniforme.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Barre Répartie Uniforme")
     
     ef_gtk = &projet->list_gtk.ef_charge_barre_repartie_uniforme;
     
@@ -225,8 +225,8 @@ void EF_gtk_charge_barre_rep_uni_check(GtkWidget *object, Projet *projet)
     gboolean        repere_local, projection;
     double          a, b;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_charge_barre_repartie_uniforme.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Barre Répartie Uniforme");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_charge_barre_repartie_uniforme.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Barre Répartie Uniforme")
     
     if (!EF_gtk_charge_barre_repartie_uniforme_recupere_donnees(projet, &num_action, &barres, &fx, &fy, &fz, &mx, &my, &mz, &nom, &repere_local, &projection, &a, &b))
         gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_charge_barre_repartie_uniforme.builder, "EF_charge_barre_rep_uni_button_add_edit")), FALSE);
@@ -254,13 +254,13 @@ void EF_gtk_charge_barre_repartie_uniforme_ajouter_clicked(GtkButton *button, Pr
     gchar                           *texte;
     Charge_Barre_Repartie_Uniforme  *charge;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_charge_barre_repartie_uniforme.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Barre Répartie Uniforme");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_charge_barre_repartie_uniforme.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Barre Répartie Uniforme")
     
-    BUG(EF_gtk_charge_barre_repartie_uniforme_recupere_donnees(projet, &num_action, &barres, &fx, &fy, &fz, &mx, &my, &mz, &texte, &repere_local, &projection, &a, &b) == TRUE, );
+    BUG(EF_gtk_charge_barre_repartie_uniforme_recupere_donnees(projet, &num_action, &barres, &fx, &fy, &fz, &mx, &my, &mz, &texte, &repere_local, &projection, &a, &b) == TRUE, )
     
     // Création de la nouvelle charge ponctuelle sur barre
-    BUG(charge = EF_charge_barre_repartie_uniforme_ajout(projet, num_action, barres, repere_local, projection, common_math_f(a, FLOTTANT_UTILISATEUR), common_math_f(b, FLOTTANT_UTILISATEUR), common_math_f(fx, FLOTTANT_UTILISATEUR), common_math_f(fy, FLOTTANT_UTILISATEUR), common_math_f(fz, FLOTTANT_UTILISATEUR), common_math_f(mx, FLOTTANT_UTILISATEUR), common_math_f(my, FLOTTANT_UTILISATEUR), common_math_f(mz, FLOTTANT_UTILISATEUR), texte), );
+    BUG(charge = EF_charge_barre_repartie_uniforme_ajout(projet, num_action, barres, repere_local, projection, common_math_f(a, FLOTTANT_UTILISATEUR), common_math_f(b, FLOTTANT_UTILISATEUR), common_math_f(fx, FLOTTANT_UTILISATEUR), common_math_f(fy, FLOTTANT_UTILISATEUR), common_math_f(fz, FLOTTANT_UTILISATEUR), common_math_f(mx, FLOTTANT_UTILISATEUR), common_math_f(my, FLOTTANT_UTILISATEUR), common_math_f(mz, FLOTTANT_UTILISATEUR), texte), )
     
     free(texte);
     
@@ -285,15 +285,15 @@ void EF_gtk_charge_barre_repartie_uniforme_editer_clicked(GtkButton *button, Pro
     gchar                                   *texte;
     Charge_Barre_Repartie_Uniforme          *charge;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_charge_barre_repartie_uniforme.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Barre Répartie Uniforme");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_charge_barre_repartie_uniforme.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Barre Répartie Uniforme")
     
     ef_gtk = &projet->list_gtk.ef_charge_barre_repartie_uniforme;
     
-    BUG(EF_gtk_charge_barre_repartie_uniforme_recupere_donnees(projet, &num_action, &barres, &fx, &fy, &fz, &mx, &my, &mz, &texte, &repere_local, &projection, &a, &b) == TRUE, );
+    BUG(EF_gtk_charge_barre_repartie_uniforme_recupere_donnees(projet, &num_action, &barres, &fx, &fy, &fz, &mx, &my, &mz, &texte, &repere_local, &projection, &a, &b) == TRUE, )
     
     // Création de la nouvelle charge ponctuelle sur barre
-    BUG(charge = EF_charge_cherche(projet, ef_gtk->action, ef_gtk->charge), );
+    BUG(charge = EF_charge_cherche(projet, ef_gtk->action, ef_gtk->charge), )
     free(charge->nom);
     charge->nom = texte;
     g_list_free(charge->barres);
@@ -309,13 +309,13 @@ void EF_gtk_charge_barre_repartie_uniforme_editer_clicked(GtkButton *button, Pro
     charge->my = common_math_f(my, FLOTTANT_UTILISATEUR);
     charge->mz = common_math_f(mz, FLOTTANT_UTILISATEUR);
     if (num_action != ef_gtk->action)
-        BUG(EF_charge_deplace(projet, ef_gtk->action, ef_gtk->charge, num_action), );
+        BUG(EF_charge_deplace(projet, ef_gtk->action, ef_gtk->charge, num_action), )
     else
         gtk_widget_queue_resize(GTK_WIDGET(projet->list_gtk._1990_actions.tree_view_charges));
     
     gtk_widget_destroy(projet->list_gtk.ef_charge_barre_repartie_uniforme.window);
     
-    BUG(EF_calculs_free(projet), );
+    BUG(EF_calculs_free(projet), )
     
     return;
 }
@@ -332,8 +332,8 @@ void EF_gtk_charge_barre_repartie_uniforme_toggled( GtkToggleButton *togglebutto
 {
     Gtk_EF_Charge_Barre_Repartie_Uniforme  *ef_gtk;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_charge_barre_repartie_uniforme.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Barre Répartie Uniforme");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_charge_barre_repartie_uniforme.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Barre Répartie Uniforme")
     
     ef_gtk = &projet->list_gtk.ef_charge_barre_repartie_uniforme;
     if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ef_gtk->check_button_repere_local)))
@@ -375,7 +375,7 @@ gboolean EF_gtk_charge_barre_repartie_uniforme(Projet *projet, unsigned int acti
     Gtk_EF_Charge_Barre_Repartie_Uniforme   *ef_gtk;
     Charge_Barre_Repartie_Uniforme          *charge_barre;
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
     if (projet->list_gtk.ef_charge_barre_repartie_uniforme.builder != NULL)
     {
         gtk_window_present(GTK_WINDOW(projet->list_gtk.ef_charge_barre_repartie_uniforme.window));
@@ -384,7 +384,7 @@ gboolean EF_gtk_charge_barre_repartie_uniforme(Projet *projet, unsigned int acti
     
     ef_gtk = &projet->list_gtk.ef_charge_barre_repartie_uniforme;
     ef_gtk->builder = gtk_builder_new();
-    BUGMSG(gtk_builder_add_from_resource(ef_gtk->builder, "/org/2lgc/codegui/ui/EF_charge_barre_repartie_uniforme.ui", NULL) != 0, FALSE, gettext("Builder Failed\n"));
+    BUGMSG(gtk_builder_add_from_resource(ef_gtk->builder, "/org/2lgc/codegui/ui/EF_charge_barre_repartie_uniforme.ui", NULL) != 0, FALSE, gettext("Builder Failed\n"))
     gtk_builder_connect_signals(ef_gtk->builder, projet);
     
     ef_gtk->window = GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_rep_uni_window"));
@@ -405,7 +405,7 @@ gboolean EF_gtk_charge_barre_repartie_uniforme(Projet *projet, unsigned int acti
         ef_gtk->action = action_defaut;
         ef_gtk->charge = charge;
         gtk_window_set_title(GTK_WINDOW(ef_gtk->window), gettext("Modification d'une charge répartie uniforme sur barre"));
-        BUG(charge_barre = EF_charge_cherche(projet, action_defaut, charge), FALSE);
+        BUG(charge_barre = EF_charge_cherche(projet, action_defaut, charge), FALSE)
     }
     
     gtk_combo_box_set_model(GTK_COMBO_BOX(ef_gtk->combobox_charge), GTK_TREE_MODEL(projet->list_gtk._1990_actions.list_actions));
@@ -443,7 +443,7 @@ gboolean EF_gtk_charge_barre_repartie_uniforme(Projet *projet, unsigned int acti
         else
             gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ef_gtk->check_button_repere_global), TRUE);
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ef_gtk->check_button_projection), charge_barre->projection);
-        BUG(tmp2 = common_selection_converti_barres_en_texte(charge_barre->barres), FALSE);
+        BUG(tmp2 = common_selection_converti_barres_en_texte(charge_barre->barres), FALSE)
         gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_rep_uni_buffer_barres")), tmp2, -1);
         free(tmp2);
     }

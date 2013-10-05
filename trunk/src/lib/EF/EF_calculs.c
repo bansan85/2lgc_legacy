@@ -50,19 +50,19 @@ gboolean EF_calculs_initialise(Projet *projet)
     int             nb_col_partielle, nb_col_complete;
     GList           *list_parcours;
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->modele.noeuds, FALSE, gettext("Impossible de réaliser un calcul sans noeud existant.\n"));
-    BUGMSG(projet->modele.barres, FALSE, gettext("Impossible de réaliser un calcul sans barre existante.\n"));
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->modele.noeuds, FALSE, gettext("Impossible de réaliser un calcul sans noeud existant.\n"))
+    BUGMSG(projet->modele.barres, FALSE, gettext("Impossible de réaliser un calcul sans barre existante.\n"))
     
     // Allocation de la mémoire nécessaire pour contenir la position de chaque degré de
     //   liberté des noeuds (via noeuds_pos_partielle et noeuds_pos_complete) dans la matrice
     //   de rigidité globale partielle et complète.
-    BUGMSG(projet->calculs.noeuds_pos_partielle = (int**)malloc(sizeof(int*)*g_list_length(projet->modele.noeuds)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(projet->calculs.noeuds_pos_partielle = (int**)malloc(sizeof(int*)*g_list_length(projet->modele.noeuds)), FALSE, gettext("Erreur d'allocation mémoire.\n"))
     for (i=0;i<g_list_length(projet->modele.noeuds);i++)
-        BUGMSG(projet->calculs.noeuds_pos_partielle[i] = (int*)malloc(6*sizeof(int)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-    BUGMSG(projet->calculs.noeuds_pos_complete = (int**)malloc(sizeof(int*)*g_list_length(projet->modele.noeuds)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(projet->calculs.noeuds_pos_partielle[i] = (int*)malloc(6*sizeof(int)), FALSE, gettext("Erreur d'allocation mémoire.\n"))
+    BUGMSG(projet->calculs.noeuds_pos_complete = (int**)malloc(sizeof(int*)*g_list_length(projet->modele.noeuds)), FALSE, gettext("Erreur d'allocation mémoire.\n"))
     for (i=0;i<g_list_length(projet->modele.noeuds);i++)
-        BUGMSG(projet->calculs.noeuds_pos_complete[i] = (int*)malloc(6*sizeof(int)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(projet->calculs.noeuds_pos_complete[i] = (int*)malloc(6*sizeof(int)), FALSE, gettext("Erreur d'allocation mémoire.\n"))
     
     // Détermination du nombre de colonnes pour la matrice de rigidité complète et partielle :
     // nb_col_partielle = 0.
@@ -191,9 +191,9 @@ gboolean EF_calculs_initialise(Projet *projet)
     
     // Allocation des triplets de la matrice de rigidité partielle (triplet_rigidite_partielle)
     //   et la matrice de rigidité globale (triplet_rigidite_globale).
-    BUGMSG(projet->calculs.triplet_rigidite_partielle = cholmod_allocate_triplet(nb_col_partielle, nb_col_partielle, nnz_max, 0, CHOLMOD_REAL, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(projet->calculs.triplet_rigidite_partielle = cholmod_allocate_triplet(nb_col_partielle, nb_col_partielle, nnz_max, 0, CHOLMOD_REAL, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"))
     projet->calculs.triplet_rigidite_partielle->nnz = nnz_max;
-    BUGMSG(projet->calculs.triplet_rigidite_complete = cholmod_allocate_triplet(nb_col_complete, nb_col_complete, nnz_max, 0, CHOLMOD_REAL, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(projet->calculs.triplet_rigidite_complete = cholmod_allocate_triplet(nb_col_complete, nb_col_complete, nnz_max, 0, CHOLMOD_REAL, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"))
     projet->calculs.triplet_rigidite_complete->nnz = nnz_max;
     
     // Initialisation de l'indice du triplet en cours à 0 pour la matrice de rigidité partielle
@@ -222,9 +222,9 @@ gboolean EF_calculs_genere_mat_rig(Projet *projet)
     double          *ax;
     void            *symbolic;
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->calculs.triplet_rigidite_partielle, FALSE, gettext("Paramètre %s incorrect.\n"), "triplet_rigidite_partielle");
-    BUGMSG(projet->calculs.triplet_rigidite_complete, FALSE, gettext("Paramètre %s incorrect.\n"), "triplet_rigidite_complete");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->calculs.triplet_rigidite_partielle, FALSE, gettext("Paramètre %s incorrect.\n"), "triplet_rigidite_partielle")
+    BUGMSG(projet->calculs.triplet_rigidite_complete, FALSE, gettext("Paramètre %s incorrect.\n"), "triplet_rigidite_complete")
     
     ai = (int*)projet->calculs.triplet_rigidite_partielle->i;
     aj = (int*)projet->calculs.triplet_rigidite_partielle->j;
@@ -249,10 +249,10 @@ gboolean EF_calculs_genere_mat_rig(Projet *projet)
     {
         cholmod_triplet     *triplet_rigidite;
         
-        BUGMSG(triplet_rigidite = cholmod_allocate_triplet(0, 0, 0, 0, CHOLMOD_REAL, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-        BUGMSG(projet->calculs.rigidite_matrice_partielle = cholmod_triplet_to_sparse(triplet_rigidite, 0, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(triplet_rigidite = cholmod_allocate_triplet(0, 0, 0, 0, CHOLMOD_REAL, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"))
+        BUGMSG(projet->calculs.rigidite_matrice_partielle = cholmod_triplet_to_sparse(triplet_rigidite, 0, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"))
         projet->calculs.rigidite_matrice_partielle->stype = 0;
-        BUGMSG(projet->calculs.rigidite_matrice_complete = cholmod_triplet_to_sparse(projet->calculs.triplet_rigidite_complete, 0, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(projet->calculs.rigidite_matrice_complete = cholmod_triplet_to_sparse(projet->calculs.triplet_rigidite_complete, 0, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"))
         cholmod_free_triplet(&triplet_rigidite, projet->calculs.c);
         umfpack_di_symbolic(0., 0., NULL, NULL, NULL, &symbolic, NULL, NULL);
         umfpack_di_numeric(NULL, NULL, NULL, symbolic, &projet->calculs.numeric, NULL, NULL);
@@ -260,21 +260,21 @@ gboolean EF_calculs_genere_mat_rig(Projet *projet)
         return 0;
     }
     
-    BUGMSG(projet->calculs.rigidite_matrice_partielle = cholmod_triplet_to_sparse(projet->calculs.triplet_rigidite_partielle, 0, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-    BUGMSG(projet->calculs.rigidite_matrice_complete = cholmod_triplet_to_sparse(projet->calculs.triplet_rigidite_complete, 0, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(projet->calculs.rigidite_matrice_partielle = cholmod_triplet_to_sparse(projet->calculs.triplet_rigidite_partielle, 0, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"))
+    BUGMSG(projet->calculs.rigidite_matrice_complete = cholmod_triplet_to_sparse(projet->calculs.triplet_rigidite_complete, 0, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"))
     
     // Factorisation de la matrice de rigidité partielle.
-    BUGMSG(projet->calculs.ap = (int*)malloc(sizeof(int)*(projet->calculs.triplet_rigidite_partielle->ncol+1)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-    BUGMSG(projet->calculs.ai = (int*)malloc(sizeof(int)*projet->calculs.triplet_rigidite_partielle->nnz), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-    BUGMSG(projet->calculs.ax = (double*)malloc(sizeof(double)*projet->calculs.triplet_rigidite_partielle->nnz), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(projet->calculs.ap = (int*)malloc(sizeof(int)*(projet->calculs.triplet_rigidite_partielle->ncol+1)), FALSE, gettext("Erreur d'allocation mémoire.\n"))
+    BUGMSG(projet->calculs.ai = (int*)malloc(sizeof(int)*projet->calculs.triplet_rigidite_partielle->nnz), FALSE, gettext("Erreur d'allocation mémoire.\n"))
+    BUGMSG(projet->calculs.ax = (double*)malloc(sizeof(double)*projet->calculs.triplet_rigidite_partielle->nnz), FALSE, gettext("Erreur d'allocation mémoire.\n"))
     ai = (int*)projet->calculs.triplet_rigidite_partielle->i;
     aj = (int*)projet->calculs.triplet_rigidite_partielle->j;
     ax = (double*)projet->calculs.triplet_rigidite_partielle->x;
     umfpack_di_triplet_to_col(projet->calculs.triplet_rigidite_partielle->nrow, projet->calculs.triplet_rigidite_partielle->ncol, projet->calculs.triplet_rigidite_partielle->nnz, ai, aj, ax, projet->calculs.ap, projet->calculs.ai, projet->calculs.ax, NULL);
     umfpack_di_symbolic(projet->calculs.triplet_rigidite_partielle->nrow, projet->calculs.triplet_rigidite_partielle->ncol, projet->calculs.ap, projet->calculs.ai, projet->calculs.ax, &symbolic, NULL, NULL);
-    BUGMSG(symbolic, FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(symbolic, FALSE, gettext("Erreur d'allocation mémoire.\n"))
     umfpack_di_numeric(projet->calculs.ap, projet->calculs.ai, projet->calculs.ax, symbolic, &projet->calculs.numeric, NULL, NULL);
-    BUGMSG(projet->calculs.numeric, FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(projet->calculs.numeric, FALSE, gettext("Erreur d'allocation mémoire.\n"))
     umfpack_di_free_symbolic(&symbolic);
     
     return TRUE;
@@ -291,7 +291,7 @@ Flottant EF_calculs_E(EF_Materiau *materiau)
  *             materiau inconnu.
  */
 {
-    BUGMSG(materiau, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Paramètre %s incorrect.\n"), "materiau");
+    BUGMSG(materiau, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Paramètre %s incorrect.\n"), "materiau")
     
     switch (materiau->type)
     {
@@ -313,7 +313,7 @@ Flottant EF_calculs_E(EF_Materiau *materiau)
         }
         default :
         {
-            BUGMSG(NULL, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Matériau %d inconnu.\n"), materiau->type);
+            BUGMSG(NULL, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Matériau %d inconnu.\n"), materiau->type)
             break;
         }
     }
@@ -334,7 +334,7 @@ Flottant EF_calculs_G(EF_Materiau *materiau, gboolean nu_null)
  *             materiau inconnu.
  */
 {
-    BUGMSG(materiau, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Paramètre %s incorrect.\n"), "materiau");
+    BUGMSG(materiau, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Paramètre %s incorrect.\n"), "materiau")
     
     switch (materiau->type)
     {
@@ -353,14 +353,14 @@ Flottant EF_calculs_G(EF_Materiau *materiau, gboolean nu_null)
         {
             Materiau_Acier  *data_acier = materiau->data;
             
-            BUGMSG(!nu_null, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Seul le matériau béton supporte nu à 0.\n"));
+            BUGMSG(!nu_null, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Seul le matériau béton supporte nu à 0.\n"))
             return common_math_f(common_math_get(data_acier->e)/(2.*(1.+common_math_get(data_acier->nu))), FLOTTANT_ORDINATEUR);
             
             break;
         }
         default :
         {
-            BUGMSG(NULL, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Matériau %d inconnu.\n"), materiau->type);
+            BUGMSG(NULL, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Matériau %d inconnu.\n"), materiau->type)
             break;
         }
     }
@@ -384,7 +384,7 @@ gboolean EF_calculs_moment_hyper_y(Barre_Info_EF *infos, double phia, double phi
  *             infos == NULL.
  */
 {
-    BUGMSG(infos, FALSE, gettext("Paramètre %s incorrect.\n"), "infos");
+    BUGMSG(infos, FALSE, gettext("Paramètre %s incorrect.\n"), "infos")
     // Calcul des moments créés par les raideurs :\end{verbatim}\texttt{Référence : \cite{RDM_articulation}}\begin{align*}
     //               M_{Ay} & = \frac{b_y \cdot \varphi_{By}+(c_y+k_{By}) \cdot \varphi_{Ay}}{(a_y+k_{Ay}) \cdot (c_y+k_{By})-b_y^2} \nonumber\\
     //               M_{By} & = \frac{b_y \cdot \varphi_{Ay}+(a_y+k_{Ay}) \cdot \varphi_{By}}{(a_y+k_{Ay}) \cdot (c_y+k_{By})-b_y^2} \end{align*}\begin{verbatim}
@@ -436,7 +436,7 @@ gboolean EF_calculs_moment_hyper_z(Barre_Info_EF *infos, double phia, double phi
  *             infos == NULL
  */
 {
-    BUGMSG(infos, FALSE, gettext("Paramètre %s incorrect.\n"), "infos");
+    BUGMSG(infos, FALSE, gettext("Paramètre %s incorrect.\n"), "infos")
     // Calcul des moments créés par les raideurs :\end{verbatim}\texttt{Référence : \cite{RDM_articulation}}\begin{align*}
     //               M_{Az} & = \frac{b_z \cdot \varphi_{Bz}+(c_z+k_{Bz}) \cdot \varphi_{Az}}{(a_z+k_{Az}) \cdot (c_z+k_{Bz})-b_z^2} \nonumber\\
     //               M_{Bz} & = \frac{b_z \cdot \varphi_{Az}+(a_z+k_{Az}) \cdot \varphi_{Bz}}{(a_z+k_{Az}) \cdot (c_z+k_{Bz})-b_z^2}\end{align*}\begin{verbatim}
@@ -499,12 +499,12 @@ double EF_calculs_resid(int *Ap, int *Ai, double *Ax, double *b, unsigned int n,
     double          *r = (double*)malloc(sizeof(double)*n);
     
     // Fonction tirée de la librarie UMFPACK, du fichier umfpack_di_demo.c
-    BUGMSG(Ap, NAN, gettext("Paramètre %s incorrect.\n"), "infos");
-    BUGMSG(Ai, NAN, gettext("Paramètre %s incorrect.\n"), "infos");
-    BUGMSG(Ax, NAN, gettext("Paramètre %s incorrect.\n"), "infos");
-    BUGMSG(b, NAN, gettext("Paramètre %s incorrect.\n"), "infos");
-    BUGMSG(x, NAN, gettext("Paramètre %s incorrect.\n"), "infos");
-    BUGMSG(r, NAN, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(Ap, NAN, gettext("Paramètre %s incorrect.\n"), "infos")
+    BUGMSG(Ai, NAN, gettext("Paramètre %s incorrect.\n"), "infos")
+    BUGMSG(Ax, NAN, gettext("Paramètre %s incorrect.\n"), "infos")
+    BUGMSG(b, NAN, gettext("Paramètre %s incorrect.\n"), "infos")
+    BUGMSG(x, NAN, gettext("Paramètre %s incorrect.\n"), "infos")
+    BUGMSG(r, NAN, gettext("Erreur d'allocation mémoire.\n"))
     
     for (k=0;k<n;k++)
     	r[k] = -b[k] ;
@@ -559,16 +559,16 @@ gboolean EF_calculs_resoud_charge(Projet *projet, Action *action)
     double          minusone[2] = {-1., 0.}, one[2] = {1., 0.};
     GList           *list_parcours;
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(action, FALSE, gettext("Paramètre %s incorrect.\n"), "action");
-    BUGMSG(projet->calculs.numeric, FALSE, gettext("Paramètre %s incorrect.\n"), "numeric");
-    BUGMSG(projet->calculs.rigidite_matrice_partielle->nrow != 0, FALSE, gettext("Paramètre %s incorrect.\n"), "rigidite_matrice_partielle->nrow");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(action, FALSE, gettext("Paramètre %s incorrect.\n"), "action")
+    BUGMSG(projet->calculs.numeric, FALSE, gettext("Paramètre %s incorrect.\n"), "numeric")
+    BUGMSG(projet->calculs.rigidite_matrice_partielle->nrow != 0, FALSE, gettext("Paramètre %s incorrect.\n"), "rigidite_matrice_partielle->nrow")
     
     /* Création du triplet partiel et complet contenant les forces extérieures
      * sur les noeuds et initialisation des valeurs à 0. Le vecteur partiel sera 
      * utilisé dans l'équation finale : {F} = [K]{D}*/
-    BUG(_1990_action_fonction_init(projet, action), FALSE);
-    BUGMSG(triplet_force_partielle = cholmod_allocate_triplet(projet->calculs.rigidite_matrice_partielle->nrow, 1, projet->calculs.rigidite_matrice_partielle->nrow, 0, CHOLMOD_REAL, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUG(_1990_action_fonction_init(projet, action), FALSE)
+    BUGMSG(triplet_force_partielle = cholmod_allocate_triplet(projet->calculs.rigidite_matrice_partielle->nrow, 1, projet->calculs.rigidite_matrice_partielle->nrow, 0, CHOLMOD_REAL, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"))
     ai = (int*)triplet_force_partielle->i;
     aj = (int*)triplet_force_partielle->j;
     ax = (double*)triplet_force_partielle->x;
@@ -579,7 +579,7 @@ gboolean EF_calculs_resoud_charge(Projet *projet, Action *action)
         aj[i] = 0;
         ax[i] = 0.;
     }
-    BUGMSG(triplet_force_complete = cholmod_allocate_triplet(projet->calculs.rigidite_matrice_complete->nrow, 1, projet->calculs.rigidite_matrice_complete->nrow, 0, CHOLMOD_REAL, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(triplet_force_complete = cholmod_allocate_triplet(projet->calculs.rigidite_matrice_complete->nrow, 1, projet->calculs.rigidite_matrice_complete->nrow, 0, CHOLMOD_REAL, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"))
     ai3 = (int*)triplet_force_complete->i;
     aj3 = (int*)triplet_force_complete->j;
     ax3 = (double*)triplet_force_complete->x;
@@ -667,7 +667,7 @@ gboolean EF_calculs_resoud_charge(Projet *projet, Action *action)
             //         $\{ F \}_{local} = [R]^T \cdot \{ F \}_{global}$\end{center}\begin{verbatim}
                             if (charge_barre->repere_local == FALSE)
                             {
-                                BUGMSG(triplet_efforts_globaux_initiaux = cholmod_allocate_triplet(12, 1, 12, 0, CHOLMOD_REAL, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                                BUGMSG(triplet_efforts_globaux_initiaux = cholmod_allocate_triplet(12, 1, 12, 0, CHOLMOD_REAL, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"))
                                 ai2 = (int*)triplet_efforts_globaux_initiaux->i;
                                 aj2 = (int*)triplet_efforts_globaux_initiaux->j;
                                 ax2 = (double*)triplet_efforts_globaux_initiaux->x;
@@ -675,7 +675,7 @@ gboolean EF_calculs_resoud_charge(Projet *projet, Action *action)
                             }
                             else
                             {
-                                BUGMSG(triplet_efforts_locaux_initiaux = cholmod_allocate_triplet(12, 1, 12, 0, CHOLMOD_REAL, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                                BUGMSG(triplet_efforts_locaux_initiaux = cholmod_allocate_triplet(12, 1, 12, 0, CHOLMOD_REAL, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"))
                                 ai2 = (int*)triplet_efforts_locaux_initiaux->i;
                                 aj2 = (int*)triplet_efforts_locaux_initiaux->j;
                                 ax2 = (double*)triplet_efforts_locaux_initiaux->x;
@@ -695,11 +695,11 @@ gboolean EF_calculs_resoud_charge(Projet *projet, Action *action)
                             ai2[11] = 11;   aj2[11] = 0;    ax2[11] = 0.;
                             if (charge_barre->repere_local == FALSE)
                             {
-                                BUGMSG(sparse_efforts_globaux_initiaux = cholmod_triplet_to_sparse(triplet_efforts_globaux_initiaux, 0, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                                BUGMSG(sparse_efforts_globaux_initiaux = cholmod_triplet_to_sparse(triplet_efforts_globaux_initiaux, 0, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"))
                                 cholmod_free_triplet(&triplet_efforts_globaux_initiaux, projet->calculs.c);
-                                BUGMSG(sparse_efforts_locaux_initiaux = cholmod_ssmult(element_en_beton->matrice_rotation_transpose, sparse_efforts_globaux_initiaux, 0, 1, 0, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                                BUGMSG(sparse_efforts_locaux_initiaux = cholmod_ssmult(element_en_beton->matrice_rotation_transpose, sparse_efforts_globaux_initiaux, 0, 1, 0, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"))
                                 cholmod_free_sparse(&sparse_efforts_globaux_initiaux, projet->calculs.c);
-                                BUGMSG(triplet_efforts_locaux_initiaux = cholmod_sparse_to_triplet(sparse_efforts_locaux_initiaux, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                                BUGMSG(triplet_efforts_locaux_initiaux = cholmod_sparse_to_triplet(sparse_efforts_locaux_initiaux, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"))
                                 ai2 = (int*)triplet_efforts_locaux_initiaux->i;
                                 aj2 = (int*)triplet_efforts_locaux_initiaux->j;
                                 ax2 = (double*)triplet_efforts_locaux_initiaux->x;
@@ -729,7 +729,7 @@ gboolean EF_calculs_resoud_charge(Projet *projet, Action *action)
                                         l = EF_noeuds_distance(element_en_beton->noeud_fin, element_en_beton->noeud_debut);
                                     else
                                         l = EF_noeuds_distance(g_list_nth_data(element_en_beton->noeuds_intermediaires, pos), element_en_beton->noeud_debut);
-                                    BUG(!isnan(l), FALSE);
+                                    BUG(!isnan(l), FALSE)
                                     pos++;
                                 }
                                 pos--;
@@ -754,24 +754,24 @@ gboolean EF_calculs_resoud_charge(Projet *projet, Action *action)
                             num_d = g_list_index(projet->modele.noeuds, noeud_debut);
                             num_f = g_list_index(projet->modele.noeuds, noeud_fin);
                             debut_barre = EF_noeuds_distance(noeud_debut, element_en_beton->noeud_debut);
-                            BUG(!isnan(debut_barre), FALSE);
+                            BUG(!isnan(debut_barre), FALSE)
                             a = common_math_get(charge_barre->position)-debut_barre;
                             fin_barre = EF_noeuds_distance(noeud_fin, element_en_beton->noeud_debut);
-                            BUG(!isnan(fin_barre), FALSE);
+                            BUG(!isnan(fin_barre), FALSE)
                             l = ABS(fin_barre-debut_barre);
                             b = l-a;
                             
             //         Détermination des moments mx de rotation (EF_charge_barre_ponctuelle_mx) :
-                            BUG(EF_charge_barre_ponctuelle_mx(element_en_beton, pos, a, &(element_en_beton->info_EF[pos]), ax2[3], &MAx, &MBx), FALSE);
+                            BUG(EF_charge_barre_ponctuelle_mx(element_en_beton, pos, a, &(element_en_beton->info_EF[pos]), ax2[3], &MAx, &MBx), FALSE)
                             
             //         Détermination de la rotation y et z aux noeuds de l'élément discrétisé en le
             //           supposant isostatique (EF_charge_barre_ponctuelle_def_ang_iso_y et z):
-                            BUG(EF_charge_barre_ponctuelle_def_ang_iso_y(element_en_beton, pos, a, ax2[2], ax2[4], &phiAy, &phiBy), FALSE);
-                            BUG(EF_charge_barre_ponctuelle_def_ang_iso_z(element_en_beton, pos, a, ax2[1], ax2[5], &phiAz, &phiBz), FALSE);
+                            BUG(EF_charge_barre_ponctuelle_def_ang_iso_y(element_en_beton, pos, a, ax2[2], ax2[4], &phiAy, &phiBy), FALSE)
+                            BUG(EF_charge_barre_ponctuelle_def_ang_iso_z(element_en_beton, pos, a, ax2[1], ax2[5], &phiAz, &phiBz), FALSE)
                             
             //         Calcul des moments créés par les raideurs (EF_calculs_moment_hyper_y et z) :
-                            BUG(EF_calculs_moment_hyper_y(&(element_en_beton->info_EF[pos]), phiAy, phiBy, &MAy, &MBy), FALSE);
-                            BUG(EF_calculs_moment_hyper_z(&(element_en_beton->info_EF[pos]), phiAz, phiBz, &MAz, &MBz), FALSE);
+                            BUG(EF_calculs_moment_hyper_y(&(element_en_beton->info_EF[pos]), phiAy, phiBy, &MAy, &MBy), FALSE)
+                            BUG(EF_calculs_moment_hyper_z(&(element_en_beton->info_EF[pos]), phiAz, phiBz, &MAz, &MBz), FALSE)
                             
             //         Réaction d'appui sur les noeuds :\end{verbatim}\begin{align*}
                             // F_{Ax} & = F_x \cdot \frac{\int_a^l \frac{1}{E \cdot S(x)}}{\int_0^l \frac{1}{E \cdot S(x)}}\nonumber\\
@@ -785,7 +785,7 @@ gboolean EF_calculs_resoud_charge(Projet *projet, Action *action)
                             // F_{Bz_i}   & = \frac{F_z \cdot a}{l}-\frac{M_y}{l}\nonumber\\
                             // F_{Bz_h} & = \frac{M_{By}+M_{Ay}}{l}\end{align*}\begin{verbatim}
                             FAx = ax2[0]*EF_sections_es_l(element_en_beton, pos, 0, l)/EF_sections_es_l(element_en_beton, pos, a, l);
-                            BUG(!isnan(FAx), FALSE);
+                            BUG(!isnan(FAx), FALSE)
                             FBx = ax2[0] - FAx;
                             FAy_i = ax2[1]*b/l-ax2[5]/l;
                             FAy_h = (MBz+MAz)/l;
@@ -803,38 +803,38 @@ gboolean EF_calculs_resoud_charge(Projet *projet, Action *action)
                             // N(x) & = -F_{Ax} & &\textrm{ pour x de 0 à a}\nonumber\\
                             // N(x) & = F_{Bx} & &\textrm{ pour x de a à l}\nonumber\\
                             
-                            BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 0, num), 0., a, -FAx, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
-                            BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 0, num), a,  l,  FBx, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
+                            BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 0, num), 0., a, -FAx, 0., 0., 0., 0., 0., 0., debut_barre), FALSE)
+                            BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 0, num), a,  l,  FBx, 0., 0., 0., 0., 0., 0., debut_barre), FALSE)
                             
                             // T_y(x) & = -F_{Ay_i} - F_{Ay_h} & &\textrm{ pour x de 0 à a}\nonumber\\
                             // T_y(x) & =  F_{By_i} + F_{By_h} & &\textrm{ pour x de a à l}\nonumber\\
                             
-                            BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 1, num), 0., a, -FAy_i-FAy_h, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
-                            BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 1, num), a,  l,  FBy_i+FBy_h, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
+                            BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 1, num), 0., a, -FAy_i-FAy_h, 0., 0., 0., 0., 0., 0., debut_barre), FALSE)
+                            BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 1, num), a,  l,  FBy_i+FBy_h, 0., 0., 0., 0., 0., 0., debut_barre), FALSE)
                             
                             // T_z(x) & = -F_{Az_i} - F_{Az_h} & &\textrm{ pour x de 0 à a}\nonumber\\
                             // T_z(x) & =  F_{Bz_i} + F_{Bz_h} & &\textrm{ pour x de a à l}\nonumber\\
                             
-                            BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 2, num), 0., a, -FAz_i-FAz_h, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
-                            BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 2, num), a,  l,  FBz_i+FBz_h, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
+                            BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 2, num), 0., a, -FAz_i-FAz_h, 0., 0., 0., 0., 0., 0., debut_barre), FALSE)
+                            BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 2, num), a,  l,  FBz_i+FBz_h, 0., 0., 0., 0., 0., 0., debut_barre), FALSE)
                             
                             // M_x(x) & = -M_{Ax} & &\textrm{ pour x de 0 à a}\nonumber\\
                             // M_x(x) & = M_{Bx} & &\textrm{ pour x de a à l}\nonumber\\
                             
-                            BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 3, num), 0., a, -MAx, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
-                            BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 3, num), a,  l,  MBx, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
+                            BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 3, num), 0., a, -MAx, 0., 0., 0., 0., 0., 0., debut_barre), FALSE)
+                            BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 3, num), a,  l,  MBx, 0., 0., 0., 0., 0., 0., debut_barre), FALSE)
                             
                             // M_y(x) & = -M_{Ay} - (F_{Az_i}+F_{Az_h}) \cdot x & &\textrm{ pour x de 0 à a}\nonumber\\
                             // M_y(x) & = F_{Bz_i} \cdot L - M_{Ay} + (F_{Bz_i}+F_{Bz_h}) \cdot x & &\textrm{ pour x de a à l}\nonumber\\
                             
-                            BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 4, num), 0., a, -MAy,         -FAz_i-FAz_h, 0., 0., 0., 0., 0., debut_barre), FALSE);
-                            BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 4, num), a,  l, -FBz_i*l-MAy,  FBz_i+FBz_h, 0., 0., 0., 0., 0., debut_barre), FALSE);
+                            BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 4, num), 0., a, -MAy,         -FAz_i-FAz_h, 0., 0., 0., 0., 0., debut_barre), FALSE)
+                            BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 4, num), a,  l, -FBz_i*l-MAy,  FBz_i+FBz_h, 0., 0., 0., 0., 0., debut_barre), FALSE)
                             
                             // M_z(x) & = -M_{Az} + (F_{Ay_i}+F_{Ay_h}) \cdot x & &\textrm{ pour x de 0 à a}\nonumber\\
                             // M_z(x) & = F_{By_i} \cdot L - M_{Az} - (F_{By_i}+F_{By_h}) \cdot x & &\textrm{ pour x de a à l}
                             
-                            BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 5, num), 0., a, -MAz,         FAy_i+FAy_h, 0., 0., 0., 0., 0., debut_barre), FALSE);
-                            BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 5, num), a,  l, FBy_i*l-MAz, -FBy_i-FBy_h, 0., 0., 0., 0., 0., debut_barre), FALSE);
+                            BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 5, num), 0., a, -MAz,         FAy_i+FAy_h, 0., 0., 0., 0., 0., debut_barre), FALSE)
+                            BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 5, num), a,  l, FBy_i*l-MAz, -FBy_i-FBy_h, 0., 0., 0., 0., 0., debut_barre), FALSE)
                             // \end{align*}\begin{verbatim}
                             
                             
@@ -844,16 +844,16 @@ gboolean EF_calculs_resoud_charge(Projet *projet, Action *action)
             //           EF_charge_barre_ponctuelle_fonc_ry,
             //           EF_charge_barre_ponctuelle_fonc_rz,
             //           EF_charge_barre_ponctuelle_n)\begin{align*}
-                            BUG(EF_charge_barre_ponctuelle_fonc_rx(_1990_action_fonctions_rotation_renvoie(action, 0, num), element_en_beton, pos, a, MAx, MBx), FALSE);
-                            BUG(EF_charge_barre_ponctuelle_fonc_ry(_1990_action_fonctions_rotation_renvoie(action, 1, num), _1990_action_fonctions_deformation_renvoie(action, 2, num), element_en_beton, pos, a, ax2[2], ax2[4], -MAy, -MBy), FALSE);
-                            BUG(EF_charge_barre_ponctuelle_fonc_rz(_1990_action_fonctions_rotation_renvoie(action, 2, num), _1990_action_fonctions_deformation_renvoie(action, 1, num), element_en_beton, pos, a, ax2[1], ax2[5], -MAz, -MBz), FALSE);
-                            BUG(EF_charge_barre_ponctuelle_n(_1990_action_fonctions_deformation_renvoie(action, 0, num), element_en_beton, pos, a, FAx, FBx), FALSE);
+                            BUG(EF_charge_barre_ponctuelle_fonc_rx(_1990_action_fonctions_rotation_renvoie(action, 0, num), element_en_beton, pos, a, MAx, MBx), FALSE)
+                            BUG(EF_charge_barre_ponctuelle_fonc_ry(_1990_action_fonctions_rotation_renvoie(action, 1, num), _1990_action_fonctions_deformation_renvoie(action, 2, num), element_en_beton, pos, a, ax2[2], ax2[4], -MAy, -MBy), FALSE)
+                            BUG(EF_charge_barre_ponctuelle_fonc_rz(_1990_action_fonctions_rotation_renvoie(action, 2, num), _1990_action_fonctions_deformation_renvoie(action, 1, num), element_en_beton, pos, a, ax2[1], ax2[5], -MAz, -MBz), FALSE)
+                            BUG(EF_charge_barre_ponctuelle_n(_1990_action_fonctions_deformation_renvoie(action, 0, num), element_en_beton, pos, a, FAx, FBx), FALSE)
                             
                             cholmod_free_triplet(&triplet_efforts_locaux_initiaux, projet->calculs.c);
                             
             //         Convertion des réactions d'appuis locales dans le repère global :\end{verbatim}\begin{center}
             //           $\{ R \}_{global} = [K] \cdot \{ F \}_{local}$\end{center}\begin{verbatim}
-                            BUGMSG(triplet_efforts_locaux_finaux = cholmod_allocate_triplet(12, 1, 12, 0, CHOLMOD_REAL, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                            BUGMSG(triplet_efforts_locaux_finaux = cholmod_allocate_triplet(12, 1, 12, 0, CHOLMOD_REAL, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"))
                             ai2 = (int*)triplet_efforts_locaux_finaux->i;
                             aj2 = (int*)triplet_efforts_locaux_finaux->j;
                             ax2 = (double*)triplet_efforts_locaux_finaux->x;
@@ -870,11 +870,11 @@ gboolean EF_calculs_resoud_charge(Projet *projet, Action *action)
                             ai2[9] = 9;   aj2[9] = 0;  ax2[9] = MBx;
                             ai2[10] = 10; aj2[10] = 0; ax2[10] = MBy;
                             ai2[11] = 11; aj2[11] = 0; ax2[11] = MBz;
-                            BUGMSG(sparse_efforts_locaux_finaux = cholmod_triplet_to_sparse(triplet_efforts_locaux_finaux, 0, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                            BUGMSG(sparse_efforts_locaux_finaux = cholmod_triplet_to_sparse(triplet_efforts_locaux_finaux, 0, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"))
                             cholmod_free_triplet(&triplet_efforts_locaux_finaux, projet->calculs.c);
-                            BUGMSG(sparse_efforts_globaux_finaux = cholmod_ssmult(element_en_beton->matrice_rotation, sparse_efforts_locaux_finaux, 0, 1, 0, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                            BUGMSG(sparse_efforts_globaux_finaux = cholmod_ssmult(element_en_beton->matrice_rotation, sparse_efforts_locaux_finaux, 0, 1, 0, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"))
                             cholmod_free_sparse(&(sparse_efforts_locaux_finaux), projet->calculs.c);
-                            BUGMSG(triplet_efforts_globaux_finaux = cholmod_sparse_to_triplet(sparse_efforts_globaux_finaux, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                            BUGMSG(triplet_efforts_globaux_finaux = cholmod_sparse_to_triplet(sparse_efforts_globaux_finaux, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"))
                             ai2 = (int*)triplet_efforts_globaux_finaux->i;
                             aj2 = (int*)triplet_efforts_globaux_finaux->j;
                             ax2 = (double*)triplet_efforts_globaux_finaux->x;
@@ -923,7 +923,7 @@ gboolean EF_calculs_resoud_charge(Projet *projet, Action *action)
             //           $\{ F \}_{local} = [R_e]^T \cdot \{ F \}_{global}$\end{center}\begin{verbatim}
                             if (charge_barre->repere_local == FALSE)
                             {
-                                BUGMSG(triplet_efforts_globaux_initiaux = cholmod_allocate_triplet(12, 1, 12, 0, CHOLMOD_REAL, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                                BUGMSG(triplet_efforts_globaux_initiaux = cholmod_allocate_triplet(12, 1, 12, 0, CHOLMOD_REAL, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"))
                                 ai2 = (int*)triplet_efforts_globaux_initiaux->i;
                                 aj2 = (int*)triplet_efforts_globaux_initiaux->j;
                                 ax2 = (double*)triplet_efforts_globaux_initiaux->x;
@@ -931,14 +931,14 @@ gboolean EF_calculs_resoud_charge(Projet *projet, Action *action)
                             }
                             else
                             {
-                                BUGMSG(triplet_efforts_locaux_initiaux = cholmod_allocate_triplet(12, 1, 12, 0, CHOLMOD_REAL, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                                BUGMSG(triplet_efforts_locaux_initiaux = cholmod_allocate_triplet(12, 1, 12, 0, CHOLMOD_REAL, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"))
                                 ai2 = (int*)triplet_efforts_locaux_initiaux->i;
                                 aj2 = (int*)triplet_efforts_locaux_initiaux->j;
                                 ax2 = (double*)triplet_efforts_locaux_initiaux->x;
                                 triplet_efforts_locaux_initiaux->nnz = 12;
                             }
                             ll = EF_noeuds_distance_x_y_z(element_en_beton->noeud_debut, element_en_beton->noeud_fin, &xx, &yy, &zz);
-                            BUG(!isnan(ll), FALSE);
+                            BUG(!isnan(ll), FALSE)
                             if (charge_barre->projection == TRUE)
                             {
                                 ai2[0] = 0;     aj2[0] = 0;     ax2[0] = common_math_get(charge_barre->fx)*sqrt(yy*yy+zz*zz)/ll;
@@ -965,11 +965,11 @@ gboolean EF_calculs_resoud_charge(Projet *projet, Action *action)
                             ai2[11] = 11;   aj2[11] = 0;    ax2[11] = 0.;
                             if (charge_barre->repere_local == FALSE)
                             {
-                                BUGMSG(sparse_efforts_globaux_initiaux = cholmod_triplet_to_sparse(triplet_efforts_globaux_initiaux, 0, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                                BUGMSG(sparse_efforts_globaux_initiaux = cholmod_triplet_to_sparse(triplet_efforts_globaux_initiaux, 0, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"))
                                 cholmod_free_triplet(&triplet_efforts_globaux_initiaux, projet->calculs.c);
-                                BUGMSG(sparse_efforts_locaux_initiaux = cholmod_ssmult(element_en_beton->matrice_rotation_transpose, sparse_efforts_globaux_initiaux, 0, 1, 0, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                                BUGMSG(sparse_efforts_locaux_initiaux = cholmod_ssmult(element_en_beton->matrice_rotation_transpose, sparse_efforts_globaux_initiaux, 0, 1, 0, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"))
                                 cholmod_free_sparse(&(sparse_efforts_globaux_initiaux), projet->calculs.c);
-                                BUGMSG(triplet_efforts_locaux_initiaux = cholmod_sparse_to_triplet(sparse_efforts_locaux_initiaux, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                                BUGMSG(triplet_efforts_locaux_initiaux = cholmod_sparse_to_triplet(sparse_efforts_locaux_initiaux, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"))
                                 ai2 = (int*)triplet_efforts_locaux_initiaux->i;
                                 aj2 = (int*)triplet_efforts_locaux_initiaux->j;
                                 ax2 = (double*)triplet_efforts_locaux_initiaux->x;
@@ -997,7 +997,7 @@ gboolean EF_calculs_resoud_charge(Projet *projet, Action *action)
                                         l = EF_noeuds_distance(element_en_beton->noeud_fin, element_en_beton->noeud_debut);
                                     else
                                         l = EF_noeuds_distance(g_list_nth_data(element_en_beton->noeuds_intermediaires, j_d), element_en_beton->noeud_debut);
-                                    BUG(!isnan(l), FALSE);
+                                    BUG(!isnan(l), FALSE)
                                     j_d++;
                                 }
                                 j_d--;
@@ -1010,7 +1010,7 @@ gboolean EF_calculs_resoud_charge(Projet *projet, Action *action)
                                         l = EF_noeuds_distance(element_en_beton->noeud_fin, element_en_beton->noeud_debut);
                                     else
                                         l = EF_noeuds_distance(g_list_nth_data(element_en_beton->noeuds_intermediaires, j_f), element_en_beton->noeud_debut);
-                                    BUG(!isnan(l), FALSE);
+                                    BUG(!isnan(l), FALSE)
                                     j_f++;
                                 }
                                 j_f--;
@@ -1040,13 +1040,13 @@ gboolean EF_calculs_resoud_charge(Projet *projet, Action *action)
                                 else
                                     noeud_fin = g_list_nth_data(element_en_beton->noeuds_intermediaires, i);
                                 debut_barre = EF_noeuds_distance(noeud_debut, element_en_beton->noeud_debut);
-                                BUG(!isnan(debut_barre), FALSE);
+                                BUG(!isnan(debut_barre), FALSE)
                                 if (i == j_d)
                                     a = common_math_get(charge_barre->a)-debut_barre;
                                 else
                                     a = 0.;
                                 fin_barre = EF_noeuds_distance(noeud_fin, element_en_beton->noeud_debut);
-                                BUG(!isnan(fin_barre), FALSE);
+                                BUG(!isnan(fin_barre), FALSE)
                                 l = ABS(fin_barre-debut_barre);
                                 if (i == j_f)
                                 {
@@ -1061,17 +1061,17 @@ gboolean EF_calculs_resoud_charge(Projet *projet, Action *action)
                                 
             //             Détermination des moments mx de rotation
             //               (EF_charge_barre_repartie_uniforme_mx):
-                                BUG(EF_charge_barre_repartie_uniforme_mx(element_en_beton, i, a, b, &(element_en_beton->info_EF[i]), ax2[3], &MAx, &MBx), FALSE);
+                                BUG(EF_charge_barre_repartie_uniforme_mx(element_en_beton, i, a, b, &(element_en_beton->info_EF[i]), ax2[3], &MAx, &MBx), FALSE)
                                 
             //             Détermination de la rotation y et z aux noeuds de l'élément discrétisé en
             //               le supposant isostatique 
             //               (EF_charge_barre_repartie_uniforme_def_ang_iso_y et z):
-                                BUG(EF_charge_barre_repartie_uniforme_def_ang_iso_y(element_en_beton, i, a, b, ax2[2], ax2[4], &phiAy, &phiBy), FALSE);
-                                BUG(EF_charge_barre_repartie_uniforme_def_ang_iso_z(element_en_beton, i, a, b, ax2[1], ax2[5], &phiAz, &phiBz), FALSE);
+                                BUG(EF_charge_barre_repartie_uniforme_def_ang_iso_y(element_en_beton, i, a, b, ax2[2], ax2[4], &phiAy, &phiBy), FALSE)
+                                BUG(EF_charge_barre_repartie_uniforme_def_ang_iso_z(element_en_beton, i, a, b, ax2[1], ax2[5], &phiAz, &phiBz), FALSE)
                                 
             //             Calcul des moments créés par les raideurs (EF_calculs_moment_hyper_y et z):
-                                BUG(EF_calculs_moment_hyper_y(&(element_en_beton->info_EF[i]), phiAy, phiBy, &MAy, &MBy), FALSE);
-                                BUG(EF_calculs_moment_hyper_z(&(element_en_beton->info_EF[i]), phiAz, phiBz, &MAz, &MBz), FALSE);
+                                BUG(EF_calculs_moment_hyper_y(&(element_en_beton->info_EF[i]), phiAy, phiBy, &MAy, &MBy), FALSE)
+                                BUG(EF_calculs_moment_hyper_z(&(element_en_beton->info_EF[i]), phiAz, phiBz, &MAz, &MBz), FALSE)
                             
             //             Réaction d'appui sur les noeuds (X représente la position de la résultante
             //               pour une force équivalente, déterminée par la fonction
@@ -1087,7 +1087,7 @@ gboolean EF_calculs_resoud_charge(Projet *projet, Action *action)
                   // F_{Bz_i}   & = \frac{F_z \cdot (L-a-b) \cdot (L+a-b)}{2 \cdot L}-\frac{M_y \cdot (L-a+b)}{l}\nonumber\\
                   // F_{Bz_h} & = \frac{M_{By}+M_{Ay}}{l}\end{align*}\begin{verbatim}
                                 FAx = ax2[0]*(l-a-b)*EF_sections_es_l(element_en_beton, i, 0, l)/EF_sections_es_l(element_en_beton, i, EF_charge_barre_repartie_uniforme_position_resultante_x(element_en_beton->section, a, b, l), l);
-                                BUG(!isnan(FAx), FALSE);
+                                BUG(!isnan(FAx), FALSE)
                                 FBx = ax2[0]*(l-a-b) - FAx;
                                 FAy_i = ax2[1]*(l-a-b)*(l-a+b)/(2.*l)-ax2[5]*(l-a-b)/l;
                                 FAy_h = (MBz+MAz)/l;
@@ -1107,49 +1107,49 @@ gboolean EF_calculs_resoud_charge(Projet *projet, Action *action)
             //               N(x) & = \frac{(F_{Ax}+F_{Bx}) \cdot x - a \cdot F_{Bx} - (L-b) \cdot F_{Ax}}{L-a-b} & &\textrm{ pour x de a à L-b}\nonumber\\
             //               N(x) & = F_{Bx} & &\textrm{ pour x de L-b à L}\nonumber\\
                                 
-                                BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 0, num), 0., a, -FAx, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
-                                BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 0, num), a, l-b, (-a*FBx-(l-b)*FAx)/(l-a-b), (FAx+FBx)/(l-a-b), 0., 0., 0., 0., 0., debut_barre), FALSE);
-                                BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 0, num), l-b, l, FBx,  0., 0., 0., 0., 0., 0., debut_barre), FALSE);
+                                BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 0, num), 0., a, -FAx, 0., 0., 0., 0., 0., 0., debut_barre), FALSE)
+                                BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 0, num), a, l-b, (-a*FBx-(l-b)*FAx)/(l-a-b), (FAx+FBx)/(l-a-b), 0., 0., 0., 0., 0., debut_barre), FALSE)
+                                BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 0, num), l-b, l, FBx,  0., 0., 0., 0., 0., 0., debut_barre), FALSE)
                                 
                             // T_y(x) & = -F_{Ay_i} - F_{Ay_h} & &\textrm{ pour x de 0 à a}\nonumber\\
                             // T_y(x) & = \frac{-a (F_{By_i}+F_{By_h})-(L-b)(F_{Ay_i}+F_{Ay_h})}{L-a-b} + \frac{F_{Ay_i}+F_{Ay_h}+F_{By_i}+F_{By_h}}{L-a-b} x & &\textrm{ pour x de a à L-b}\nonumber\\
                             // T_y(x) & =  F_{By_i} + F_{By_h} & &\textrm{ pour x de L-b à L}\nonumber\\
                                 
-                                BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 1, num), 0., a,  -FAy_i-FAy_h, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
-                                BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 1, num), a, l-b, (-a*(FBy_i+FBy_h)-(l-b)*(FAy_i+FAy_h))/(l-a-b), (FAy_i+FAy_h+FBy_i+FBy_h)/(l-a-b), 0., 0., 0., 0., 0., debut_barre), FALSE);
-                                BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 1, num), l-b, l, FBy_i+FBy_h, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
+                                BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 1, num), 0., a,  -FAy_i-FAy_h, 0., 0., 0., 0., 0., 0., debut_barre), FALSE)
+                                BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 1, num), a, l-b, (-a*(FBy_i+FBy_h)-(l-b)*(FAy_i+FAy_h))/(l-a-b), (FAy_i+FAy_h+FBy_i+FBy_h)/(l-a-b), 0., 0., 0., 0., 0., debut_barre), FALSE)
+                                BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 1, num), l-b, l, FBy_i+FBy_h, 0., 0., 0., 0., 0., 0., debut_barre), FALSE)
                                 
                             // T_z(x) & = -F_{Az_i} - F_{Az_h} & &\textrm{ pour x de 0 à a}\nonumber\\
                             // T_z(x) & = \frac{-a (F_{Bz_i}+F_{Bz_h})-(L-b) (F_{Az_i}+F_{Az_h})}{L-a-b} + \frac{F_{Az_i}+F_{Az_h}+F_{Bz_i}+F_{Bz_h}}{L-a-b} x & &\textrm{ pour x de a à L-b}\nonumber\\
                             // T_z(x) & =  F_{Bz_i} + F_{Bz_h} & &\textrm{ pour x de L-b à L}\nonumber\\
                                 
-                                BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 2, num), 0., a, -FAz_i-FAz_h, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
-                                BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 2, num), a, l-b, (-a*(FBz_i+FBz_h)-(l-b)*(FAz_i+FAz_h))/(l-a-b), (FAz_i+FAz_h+FBz_i+FBz_h)/(l-a-b), 0., 0., 0., 0., 0., debut_barre), FALSE);
-                                BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 2, num), l-b,  l,  FBz_i+FBz_h, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
+                                BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 2, num), 0., a, -FAz_i-FAz_h, 0., 0., 0., 0., 0., 0., debut_barre), FALSE)
+                                BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 2, num), a, l-b, (-a*(FBz_i+FBz_h)-(l-b)*(FAz_i+FAz_h))/(l-a-b), (FAz_i+FAz_h+FBz_i+FBz_h)/(l-a-b), 0., 0., 0., 0., 0., debut_barre), FALSE)
+                                BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 2, num), l-b,  l,  FBz_i+FBz_h, 0., 0., 0., 0., 0., 0., debut_barre), FALSE)
                                 
                             // M_x(x) & = -M_{Ax} & &\textrm{ pour x de 0 à a}\nonumber\\
                             // M_x(x) & = \frac{-a \cdot M_{Bx}-(L-b) \cdot M_{Ax}}{L-a-b} + \frac{M_{Ax}+M_{Bx}}{L-a-b} \cdot x & &\textrm{ pour x de a à L-b}\nonumber\\
                             // M_x(x) & = M_{Bx} & &\textrm{ pour x de L-b à L}\nonumber\\
                                 
-                                BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 3, num), 0., a,  -MAx, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
-                                BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 3, num), a, l-b, (-a*MBx-(l-b)*MAx)/(l-a-b), (MAx+MBx)/(l-a-b), 0., 0., 0., 0., 0., debut_barre), FALSE);
-                                BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 3, num), l-b,  l, MBx, 0., 0., 0., 0., 0., 0., debut_barre), FALSE);
+                                BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 3, num), 0., a,  -MAx, 0., 0., 0., 0., 0., 0., debut_barre), FALSE)
+                                BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 3, num), a, l-b, (-a*MBx-(l-b)*MAx)/(l-a-b), (MAx+MBx)/(l-a-b), 0., 0., 0., 0., 0., debut_barre), FALSE)
+                                BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 3, num), l-b,  l, MBx, 0., 0., 0., 0., 0., 0., debut_barre), FALSE)
                                 
                             // M_y(x) & = -M_{Ay} - (F_{Az_i}+F_{Az_h}) \cdot x & &\textrm{ pour x de 0 à a}\nonumber\\
                             // M_y(x) & = -(F_{Bz_i}+F_{Bz_h}) \cdot (L-x) + M_{By} - M_y \cdot (L-b-x) + F_z \cdot \frac{(L-b-x)^2}{2} & &\textrm{ pour x de a à L-b}\nonumber\\
                             // M_y(x) & =  M_{By} - L \cdot (F_{Bz_i}+F_{Bz_h}) + (F_{Bz_i}+F_{Bz_h}) \cdot x & &\textrm{ pour x de L-b à L}\nonumber\\
                                 
-                                BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 4, num), 0., a, -MAy, -FAz_i-FAz_h, 0., 0., 0., 0., 0., debut_barre), FALSE);
-                                BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 4, num), a, l-b, b*b*ax2[2]/2.+b*(ax2[4]-ax2[2]*l)+ax2[2]*l*l/2.-l*(ax2[4]+FBz_i+FBz_h)+MBy, -ax2[2]*(l-b)+ax2[4]+FBz_i+FBz_h, ax2[2]/2., 0., 0., 0., 0., debut_barre), FALSE);
-                                BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 4, num), l-b,  l, MBy-l*(FBz_i+FBz_h), FBz_i+FBz_h, 0., 0., 0., 0., 0., debut_barre), FALSE);
+                                BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 4, num), 0., a, -MAy, -FAz_i-FAz_h, 0., 0., 0., 0., 0., debut_barre), FALSE)
+                                BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 4, num), a, l-b, b*b*ax2[2]/2.+b*(ax2[4]-ax2[2]*l)+ax2[2]*l*l/2.-l*(ax2[4]+FBz_i+FBz_h)+MBy, -ax2[2]*(l-b)+ax2[4]+FBz_i+FBz_h, ax2[2]/2., 0., 0., 0., 0., debut_barre), FALSE)
+                                BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 4, num), l-b,  l, MBy-l*(FBz_i+FBz_h), FBz_i+FBz_h, 0., 0., 0., 0., 0., debut_barre), FALSE)
                                 
                             // M_z(x) & = -M_{Az} + (F_{Ay_i}+F_{Ay_h}) \cdot x & &\textrm{ pour x de 0 à a}\nonumber\\
                             // M_z(x) & = (F_{By_i}+F_{By_h}) \cdot (L-x) - M_{Bz} - M_z \cdot (L-b-x) - F_y \cdot \frac{(L-b-x)^2}{2} & &\textrm{ pour x de a à L-b}\nonumber\\
                             // M_z(x) & =  M_{Bz} + L \cdot (F_{By_i}+F_{By_h}) - (F_{By_i}+F_{By_h}) \cdot x & &\textrm{ pour x de L-b à L}
                                 
-                                BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 5, num), 0., a, -MAz, +FAy_i+FAy_h, 0., 0., 0., 0., 0., debut_barre), FALSE);
-                                BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 5, num), a, l-b, -b*b*ax2[1]/2.+b*(ax2[1]*l+ax2[5])-ax2[1]*l*l/2.+l*(FBy_i+FBy_h-ax2[5])+MBz, ax2[1]*(l-b)+ax2[5]-FBy_i-FBy_h, -ax2[1]/2., 0., 0., 0., 0., debut_barre), FALSE);
-                                BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 5, num), l-b,  l, MBz+l*(FBy_i+FBy_h), -FBy_i-FBy_h, 0., 0., 0., 0., 0., debut_barre), FALSE);
+                                BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 5, num), 0., a, -MAz, +FAy_i+FAy_h, 0., 0., 0., 0., 0., debut_barre), FALSE)
+                                BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 5, num), a, l-b, -b*b*ax2[1]/2.+b*(ax2[1]*l+ax2[5])-ax2[1]*l*l/2.+l*(FBy_i+FBy_h-ax2[5])+MBz, ax2[1]*(l-b)+ax2[5]-FBy_i-FBy_h, -ax2[1]/2., 0., 0., 0., 0., debut_barre), FALSE)
+                                BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 5, num), l-b,  l, MBz+l*(FBy_i+FBy_h), -FBy_i-FBy_h, 0., 0., 0., 0., 0., debut_barre), FALSE)
                             // \end{align*}\begin{verbatim}
                                 
             //             Détermination des fonctions de déformation et rotation de la même façon que
@@ -1158,14 +1158,14 @@ gboolean EF_calculs_resoud_charge(Projet *projet, Action *action)
             //               EF_charge_barre_repartie_uniforme_fonc_ry,
             //               EF_charge_barre_repartie_uniforme_fonc_rz,
             //               EF_charge_barre_repartie_uniforme_n) :
-                                BUG(EF_charge_barre_repartie_uniforme_fonc_rx(_1990_action_fonctions_rotation_renvoie(action, 0, num), element_en_beton, i, a, b, MAx, MBx), FALSE);
-                                BUG(EF_charge_barre_repartie_uniforme_fonc_ry(_1990_action_fonctions_rotation_renvoie(action, 1, num), _1990_action_fonctions_deformation_renvoie(action, 2, num), element_en_beton, i, a, b, ax2[2], ax2[4], MAy, MBy), FALSE);
-                                BUG(EF_charge_barre_repartie_uniforme_fonc_rz(_1990_action_fonctions_rotation_renvoie(action, 2, num), _1990_action_fonctions_deformation_renvoie(action, 1, num), element_en_beton, i, a, b, ax2[1], ax2[5], MAz, MBz), FALSE);
-                                BUG(EF_charge_barre_repartie_uniforme_n(_1990_action_fonctions_deformation_renvoie(action, 0, num), element_en_beton, i, a, b, FAx, FBx), FALSE);
+                                BUG(EF_charge_barre_repartie_uniforme_fonc_rx(_1990_action_fonctions_rotation_renvoie(action, 0, num), element_en_beton, i, a, b, MAx, MBx), FALSE)
+                                BUG(EF_charge_barre_repartie_uniforme_fonc_ry(_1990_action_fonctions_rotation_renvoie(action, 1, num), _1990_action_fonctions_deformation_renvoie(action, 2, num), element_en_beton, i, a, b, ax2[2], ax2[4], MAy, MBy), FALSE)
+                                BUG(EF_charge_barre_repartie_uniforme_fonc_rz(_1990_action_fonctions_rotation_renvoie(action, 2, num), _1990_action_fonctions_deformation_renvoie(action, 1, num), element_en_beton, i, a, b, ax2[1], ax2[5], MAz, MBz), FALSE)
+                                BUG(EF_charge_barre_repartie_uniforme_n(_1990_action_fonctions_deformation_renvoie(action, 0, num), element_en_beton, i, a, b, FAx, FBx), FALSE)
                             
             //             Convertion des réactions d'appuis locales dans le repère global :\end{verbatim}\begin{center}
             //           $\{ R \}_{global} = [K] \cdot \{ F \}_{local}$\end{center}\begin{verbatim}
-                                BUGMSG(triplet_efforts_locaux_finaux = cholmod_allocate_triplet(12, 1, 12, 0, CHOLMOD_REAL, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                                BUGMSG(triplet_efforts_locaux_finaux = cholmod_allocate_triplet(12, 1, 12, 0, CHOLMOD_REAL, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"))
                                 ai4 = (int*)triplet_efforts_locaux_finaux->i;
                                 aj4 = (int*)triplet_efforts_locaux_finaux->j;
                                 ax4 = (double*)triplet_efforts_locaux_finaux->x;
@@ -1182,11 +1182,11 @@ gboolean EF_calculs_resoud_charge(Projet *projet, Action *action)
                                 ai4[9] = 9;   aj4[9] = 0;  ax4[9] = MBx;
                                 ai4[10] = 10; aj4[10] = 0; ax4[10] = MBy;
                                 ai4[11] = 11; aj4[11] = 0; ax4[11] = MBz;
-                                BUGMSG(sparse_efforts_locaux_finaux = cholmod_triplet_to_sparse(triplet_efforts_locaux_finaux, 0, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                                BUGMSG(sparse_efforts_locaux_finaux = cholmod_triplet_to_sparse(triplet_efforts_locaux_finaux, 0, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"))
                                 cholmod_free_triplet(&triplet_efforts_locaux_finaux, projet->calculs.c);
-                                BUGMSG(sparse_efforts_globaux_finaux = cholmod_ssmult(element_en_beton->matrice_rotation, sparse_efforts_locaux_finaux, 0, 1, 0, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                                BUGMSG(sparse_efforts_globaux_finaux = cholmod_ssmult(element_en_beton->matrice_rotation, sparse_efforts_locaux_finaux, 0, 1, 0, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"))
                                 cholmod_free_sparse(&(sparse_efforts_locaux_finaux), projet->calculs.c);
-                                BUGMSG(triplet_efforts_globaux_finaux = cholmod_sparse_to_triplet(sparse_efforts_globaux_finaux, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                                BUGMSG(triplet_efforts_globaux_finaux = cholmod_sparse_to_triplet(sparse_efforts_globaux_finaux, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"))
                                 ai4 = (int*)triplet_efforts_globaux_finaux->i;
                                 aj4 = (int*)triplet_efforts_globaux_finaux->j;
                                 ax4 = (double*)triplet_efforts_globaux_finaux->x;
@@ -1223,7 +1223,7 @@ gboolean EF_calculs_resoud_charge(Projet *projet, Action *action)
                 /* Charge inconnue */
                 default :
                 {
-                    BUGMSG(0, FALSE, gettext("Type de charge %d inconnu.\n"), ((Charge_Barre_Ponctuelle *)list_parcours->data)->type);
+                    BUGMSG(0, FALSE, gettext("Type de charge %d inconnu.\n"), ((Charge_Barre_Ponctuelle *)list_parcours->data)->type)
                     break;
                 }
             }
@@ -1234,13 +1234,13 @@ gboolean EF_calculs_resoud_charge(Projet *projet, Action *action)
     // FinPour
     
     /* On converti les données dans des structures permettant les calculs via les libraries */
-    BUGMSG(_1990_action_forces_complet_change(action, cholmod_triplet_to_sparse(triplet_force_complete, 0, projet->calculs.c)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(_1990_action_forces_complet_change(action, cholmod_triplet_to_sparse(triplet_force_complete, 0, projet->calculs.c)), FALSE, gettext("Erreur d'allocation mémoire.\n"))
     cholmod_free_triplet(&triplet_force_complete, projet->calculs.c);
     
     // Calcul des déplacements des noeuds :\end{verbatim}\begin{align*}
     // \{ \Delta \}_{global} = [K]^{-1} \cdot \{ F \}_{global}\end{align*}\begin{verbatim}
     
-    BUGMSG(triplet_deplacements_partiels = cholmod_allocate_triplet(projet->calculs.rigidite_matrice_partielle->nrow, 1, projet->calculs.rigidite_matrice_partielle->nrow, 0, CHOLMOD_REAL, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(triplet_deplacements_partiels = cholmod_allocate_triplet(projet->calculs.rigidite_matrice_partielle->nrow, 1, projet->calculs.rigidite_matrice_partielle->nrow, 0, CHOLMOD_REAL, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"))
     triplet_deplacements_partiels->nnz = projet->calculs.rigidite_matrice_partielle->nrow;
     ai = (int*)triplet_deplacements_partiels->i;
     aj = (int*)triplet_deplacements_partiels->j;
@@ -1248,9 +1248,9 @@ gboolean EF_calculs_resoud_charge(Projet *projet, Action *action)
     if (projet->calculs.rigidite_matrice_partielle->nrow != 0)
     {
         ax2 = (double*)triplet_force_partielle->x;
-        BUGMSG(umfpack_di_solve(UMFPACK_A, projet->calculs.ap, projet->calculs.ai, projet->calculs.ax, ax, ax2, projet->calculs.numeric, NULL, NULL) == UMFPACK_OK, FALSE, gettext("Erreur lors de la résolution de la matrice.\n"));
+        BUGMSG(umfpack_di_solve(UMFPACK_A, projet->calculs.ap, projet->calculs.ai, projet->calculs.ax, ax, ax2, projet->calculs.numeric, NULL, NULL) == UMFPACK_OK, FALSE, gettext("Erreur lors de la résolution de la matrice.\n"))
         projet->calculs.residu = EF_calculs_resid(projet->calculs.ap, projet->calculs.ai, projet->calculs.ax, ax2, projet->calculs.triplet_rigidite_partielle->nrow, ax);
-        BUG(!isnan(projet->calculs.residu), FALSE);
+        BUG(!isnan(projet->calculs.residu), FALSE)
         printf("Residu sur les déplacements : %g\n", projet->calculs.residu);
         for (i=0;i<projet->calculs.rigidite_matrice_partielle->nrow;i++)
         {
@@ -1263,7 +1263,7 @@ gboolean EF_calculs_resoud_charge(Projet *projet, Action *action)
     cholmod_free_triplet(&triplet_force_partielle, projet->calculs.c);
     
     /* Création du vecteur déplacement complet */
-    BUGMSG(triplet_deplacements_totaux = cholmod_allocate_triplet(_1990_action_forces_complet_renvoie(action)->nrow, 1, _1990_action_forces_complet_renvoie(action)->nrow, 0, CHOLMOD_REAL, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(triplet_deplacements_totaux = cholmod_allocate_triplet(_1990_action_forces_complet_renvoie(action)->nrow, 1, _1990_action_forces_complet_renvoie(action)->nrow, 0, CHOLMOD_REAL, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"))
     triplet_deplacements_totaux->nnz = _1990_action_forces_complet_renvoie(action)->nrow;
     ai2 = (int*)triplet_deplacements_totaux->i;
     aj2 = (int*)triplet_deplacements_totaux->j;
@@ -1289,12 +1289,12 @@ gboolean EF_calculs_resoud_charge(Projet *projet, Action *action)
         }
     }
     cholmod_free_triplet(&triplet_deplacements_partiels, projet->calculs.c);
-    BUGMSG(_1990_action_deplacement_complet_change(action, cholmod_triplet_to_sparse(triplet_deplacements_totaux, 0, projet->calculs.c)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(_1990_action_deplacement_complet_change(action, cholmod_triplet_to_sparse(triplet_deplacements_totaux, 0, projet->calculs.c)), FALSE, gettext("Erreur d'allocation mémoire.\n"))
     
     // Calcule des réactions d'appuis :\end{verbatim}\begin{displaymath}
     // \{F\} = [K] \cdot \{\Delta\} - \{F_0\} \end{displaymath}\begin{verbatim}
-    BUGMSG(sparse_tmp = cholmod_ssmult(projet->calculs.rigidite_matrice_complete, _1990_action_deplacement_complet_renvoie(action), 0, TRUE, TRUE, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-    BUGMSG(_1990_action_efforts_noeuds_change(action, cholmod_add(sparse_tmp, _1990_action_forces_complet_renvoie(action), one, minusone, TRUE, TRUE, projet->calculs.c)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(sparse_tmp = cholmod_ssmult(projet->calculs.rigidite_matrice_complete, _1990_action_deplacement_complet_renvoie(action), 0, TRUE, TRUE, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"))
+    BUGMSG(_1990_action_efforts_noeuds_change(action, cholmod_add(sparse_tmp, _1990_action_forces_complet_renvoie(action), one, minusone, TRUE, TRUE, projet->calculs.c)), FALSE, gettext("Erreur d'allocation mémoire.\n"))
     cholmod_free_sparse(&sparse_tmp, projet->calculs.c);
     
     // Pour chaque barre, ajout des efforts et déplacement dus au mouvement de l'ensemble de
@@ -1321,9 +1321,9 @@ gboolean EF_calculs_resoud_charge(Projet *projet, Action *action)
             double              Iy = common_math_get(EF_sections_iy(element_en_beton->section));
             double              Iz = common_math_get(EF_sections_iz(element_en_beton->section));
             
-            BUG(!isnan(J), FALSE);
-            BUG(!isnan(Iy), FALSE);
-            BUG(!isnan(Iz), FALSE);
+            BUG(!isnan(J), FALSE)
+            BUG(!isnan(Iy), FALSE)
+            BUG(!isnan(Iz), FALSE)
             
             
             /* Récupération du noeud de départ et de fin de la partie discrétisée */
@@ -1351,13 +1351,13 @@ gboolean EF_calculs_resoud_charge(Projet *projet, Action *action)
                 }
                 default :
                 {
-                    BUGMSG(0, FALSE, gettext("Type d'élément %d inconnu.\n"), element_en_beton->type);
+                    BUGMSG(0, FALSE, gettext("Type d'élément %d inconnu.\n"), element_en_beton->type)
                     break;
                 }
             }
             
     //         Récupération des déplacements du noeud de départ et du noeud final de l'élément
-            BUGMSG(triplet_deplacement_globaux = cholmod_allocate_triplet(12, 1, 12, 0, CHOLMOD_REAL, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(triplet_deplacement_globaux = cholmod_allocate_triplet(12, 1, 12, 0, CHOLMOD_REAL, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"))
             ai = (int*)triplet_deplacement_globaux->i;
             aj = (int*)triplet_deplacement_globaux->j;
             ax = (double*)triplet_deplacement_globaux->x;
@@ -1380,21 +1380,21 @@ gboolean EF_calculs_resoud_charge(Projet *projet, Action *action)
     //           theta_{Ax}, theta_{Ay}, theta_{Az}, u_B, v_B, w_B, theta_{Bx}, theta_{By} et
     //           theta_{Bz}) : \end{verbatim}\begin{align*}
             // \{ \Delta \}_{local} = [R]^T \cdot \{ \Delta \}_{global}\end{align*}\begin{verbatim}
-            BUGMSG(sparse_deplacement_globaux = cholmod_triplet_to_sparse(triplet_deplacement_globaux, 0, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(sparse_deplacement_globaux = cholmod_triplet_to_sparse(triplet_deplacement_globaux, 0, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"))
             cholmod_free_triplet(&triplet_deplacement_globaux, projet->calculs.c);
-            BUGMSG(sparse_deplacement_locaux = cholmod_ssmult(element_en_beton->matrice_rotation_transpose, sparse_deplacement_globaux, 0, 1, TRUE, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(sparse_deplacement_locaux = cholmod_ssmult(element_en_beton->matrice_rotation_transpose, sparse_deplacement_globaux, 0, 1, TRUE, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"))
             cholmod_free_sparse(&sparse_deplacement_globaux, projet->calculs.c);
     //         Détermination des efforts (F_{Ax}, F_{Bx}, F_{Ay}, F_{By}, F_{Az}, F_{Bz},
     //           M_{Ax}, M_{Bx}, M_{Ay}, M_{By}, M_{Az} et M_{Bz}) dans le repère local : \end{verbatim}\begin{align*}
             // \{ F \}_{local} = [K] \cdot \{ \Delta \}_{local}\end{align*}\begin{verbatim}
-            BUGMSG(sparse_effort_locaux = cholmod_ssmult(element_en_beton->info_EF[j].matrice_rigidite_locale, sparse_deplacement_locaux, 0, 1, TRUE, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(sparse_effort_locaux = cholmod_ssmult(element_en_beton->info_EF[j].matrice_rigidite_locale, sparse_deplacement_locaux, 0, 1, TRUE, projet->calculs.c), FALSE, gettext("Erreur d'allocation mémoire.\n"))
             
             ax = (double*)sparse_deplacement_locaux->x;
             ax2 = (double*)sparse_effort_locaux->x;
             l_debut = EF_noeuds_distance(noeud_debut, element_en_beton->noeud_debut);
             l_fin = EF_noeuds_distance(noeud_fin, element_en_beton->noeud_debut);
-            BUG(!isnan(l_debut), FALSE);
-            BUG(!isnan(l_fin), FALSE);
+            BUG(!isnan(l_debut), FALSE)
+            BUG(!isnan(l_fin), FALSE)
             l = ABS(l_fin-l_debut);
             
     //         Ajout des efforts entre deux noeuds dus à leur déplacement relatif, la courbe
@@ -1408,12 +1408,12 @@ gboolean EF_calculs_resoud_charge(Projet *projet, Action *action)
             // M_y(x) & = M_y(x) + M_{Ay} - (M_{Ay}+M_{By}) \cdot x/L\nonumber\\
             // M_z(x) & = M_z(x) + M_{Az} - (M_{Az}+M_{Bz}) \cdot x/L
             // \end{align*}\begin{verbatim}
-            BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 0, num), 0., l, ax2[0], -(ax2[0]+ax2[6])/l,  0., 0., 0., 0., 0., l_debut), FALSE);
-            BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 1, num), 0., l, ax2[1], -(ax2[1]+ax2[7])/l,  0., 0., 0., 0., 0., l_debut), FALSE);
-            BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 2, num), 0., l, ax2[2], -(ax2[2]+ax2[8])/l,  0., 0., 0., 0., 0., l_debut), FALSE);
-            BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 3, num), 0., l, ax2[3], -(ax2[3]+ax2[9])/l,  0., 0., 0., 0., 0., l_debut), FALSE);
-            BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 4, num), 0., l, ax2[4], -(ax2[4]+ax2[10])/l, 0., 0., 0., 0., 0., l_debut), FALSE);
-            BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 5, num), 0., l, ax2[5], -(ax2[5]+ax2[11])/l, 0., 0., 0., 0., 0., l_debut), FALSE);
+            BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 0, num), 0., l, ax2[0], -(ax2[0]+ax2[6])/l,  0., 0., 0., 0., 0., l_debut), FALSE)
+            BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 1, num), 0., l, ax2[1], -(ax2[1]+ax2[7])/l,  0., 0., 0., 0., 0., l_debut), FALSE)
+            BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 2, num), 0., l, ax2[2], -(ax2[2]+ax2[8])/l,  0., 0., 0., 0., 0., l_debut), FALSE)
+            BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 3, num), 0., l, ax2[3], -(ax2[3]+ax2[9])/l,  0., 0., 0., 0., 0., l_debut), FALSE)
+            BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 4, num), 0., l, ax2[4], -(ax2[4]+ax2[10])/l, 0., 0., 0., 0., 0., l_debut), FALSE)
+            BUG(common_fonction_ajout_poly(_1990_action_fonctions_efforts_renvoie(action, 5, num), 0., l, ax2[5], -(ax2[5]+ax2[11])/l, 0., 0., 0., 0., 0., l_debut), FALSE)
             
     //         Ajout des déplacements & rotations entre deux noeuds dus à leur déplacement
     //           relatif, la courbe vient s'ajouter à la courbe (si existante) déja définie
@@ -1438,15 +1438,15 @@ gboolean EF_calculs_resoud_charge(Projet *projet, Action *action)
     //              r_y(x) = & -B - \frac{M_{Ay}}{E \cdot I_y} \cdot x + \frac{M_{Ay}+M_{By}}{2 \cdot L \cdot E \cdot I_y} \cdot x^2 \nonumber\\
     //              r_z(x) = & A - \frac{M_{Az}}{E \cdot I_z} \cdot x + \frac{M_{Az}+M_{Bz}}{2 \cdot L \cdot E \cdot I_z} \cdot x^2
 
-                    BUG(common_fonction_ajout_poly(_1990_action_fonctions_deformation_renvoie(action, 0, num), 0., l, ax[0], -ax2[0]/(E*S), (ax2[0]+ax2[6])/(2*E*S*l), 0., 0., 0., 0., l_debut), FALSE);
-                    BUG(common_fonction_ajout_poly(_1990_action_fonctions_deformation_renvoie(action, 1, num), 0., l, ax[1], (ax2[5]/(2*E*Iz)*l*l-(ax2[5]+ax2[11])/(6*E*Iz)*l*l-ax[1]+ax[7])/l, -ax2[5]/(2*E*Iz),  (ax2[5]+ax2[11])/(6*l*E*Iz), 0., 0., 0., l_debut), FALSE);
-                    BUG(common_fonction_ajout_poly(_1990_action_fonctions_deformation_renvoie(action, 2, num), 0., l, ax[2], (-ax2[4]/(2*E*Iy)*l*l+(ax2[4]+ax2[10])/(6*E*Iy)*l*l-ax[2]+ax[8])/l,  ax2[4]/(2*E*Iy), -(ax2[4]+ax2[10])/(6*l*E*Iy), 0., 0., 0., l_debut), FALSE);
+                    BUG(common_fonction_ajout_poly(_1990_action_fonctions_deformation_renvoie(action, 0, num), 0., l, ax[0], -ax2[0]/(E*S), (ax2[0]+ax2[6])/(2*E*S*l), 0., 0., 0., 0., l_debut), FALSE)
+                    BUG(common_fonction_ajout_poly(_1990_action_fonctions_deformation_renvoie(action, 1, num), 0., l, ax[1], (ax2[5]/(2*E*Iz)*l*l-(ax2[5]+ax2[11])/(6*E*Iz)*l*l-ax[1]+ax[7])/l, -ax2[5]/(2*E*Iz),  (ax2[5]+ax2[11])/(6*l*E*Iz), 0., 0., 0., l_debut), FALSE)
+                    BUG(common_fonction_ajout_poly(_1990_action_fonctions_deformation_renvoie(action, 2, num), 0., l, ax[2], (-ax2[4]/(2*E*Iy)*l*l+(ax2[4]+ax2[10])/(6*E*Iy)*l*l-ax[2]+ax[8])/l,  ax2[4]/(2*E*Iy), -(ax2[4]+ax2[10])/(6*l*E*Iy), 0., 0., 0., l_debut), FALSE)
                     if ((j == 0) && (element_en_beton->relachement != NULL) && (element_en_beton->relachement->rx_debut != EF_RELACHEMENT_BLOQUE))
-                        BUG(common_fonction_ajout_poly(_1990_action_fonctions_rotation_renvoie(action, 0, num), 0., l, ax2[3]/(G*J)*l-(ax2[3]+ax2[9])/(2*G*J*l)*l*l+ax[9], -ax2[3]/(G*J), (ax2[3]+ax2[9])/(2*G*J*l), 0., 0., 0., 0., l_debut), FALSE);
+                        BUG(common_fonction_ajout_poly(_1990_action_fonctions_rotation_renvoie(action, 0, num), 0., l, ax2[3]/(G*J)*l-(ax2[3]+ax2[9])/(2*G*J*l)*l*l+ax[9], -ax2[3]/(G*J), (ax2[3]+ax2[9])/(2*G*J*l), 0., 0., 0., 0., l_debut), FALSE)
                     else
-                        BUG(common_fonction_ajout_poly(_1990_action_fonctions_rotation_renvoie(action, 0, num), 0., l, ax[3], -ax2[3]/(G*J), (ax2[3]+ax2[9])/(2*G*J*l), 0., 0., 0., 0., l_debut), FALSE);
-                    BUG(common_fonction_ajout_poly(_1990_action_fonctions_rotation_renvoie(action, 1, num), 0., l, -(-ax2[4]/(2*E*Iy)*l*l+(ax2[4]+ax2[10])/(6*E*Iy)*l*l-ax[2]+ax[8])/l, -ax2[4]/(E*Iy), (ax2[4]+ax2[10])/(2*l*E*Iy), 0., 0., 0., 0., l_debut), FALSE);
-                    BUG(common_fonction_ajout_poly(_1990_action_fonctions_rotation_renvoie(action, 2, num), 0., l,  (ax2[5]/(2*E*Iz)*l*l+(-ax2[5]-ax2[11])/(6*E*Iz)*l*l-ax[1]+ax[7])/l, -ax2[5]/(E*Iz), (ax2[5]+ax2[11])/(2*l*E*Iz), 0., 0., 0., 0., l_debut), FALSE);
+                        BUG(common_fonction_ajout_poly(_1990_action_fonctions_rotation_renvoie(action, 0, num), 0., l, ax[3], -ax2[3]/(G*J), (ax2[3]+ax2[9])/(2*G*J*l), 0., 0., 0., 0., l_debut), FALSE)
+                    BUG(common_fonction_ajout_poly(_1990_action_fonctions_rotation_renvoie(action, 1, num), 0., l, -(-ax2[4]/(2*E*Iy)*l*l+(ax2[4]+ax2[10])/(6*E*Iy)*l*l-ax[2]+ax[8])/l, -ax2[4]/(E*Iy), (ax2[4]+ax2[10])/(2*l*E*Iy), 0., 0., 0., 0., l_debut), FALSE)
+                    BUG(common_fonction_ajout_poly(_1990_action_fonctions_rotation_renvoie(action, 2, num), 0., l,  (ax2[5]/(2*E*Iz)*l*l+(-ax2[5]-ax2[11])/(6*E*Iz)*l*l-ax[1]+ax[7])/l, -ax2[5]/(E*Iz), (ax2[5]+ax2[11])/(2*l*E*Iz), 0., 0., 0., 0., l_debut), FALSE)
     //              \end{align*}\begin{verbatim}
             
             cholmod_free_sparse(&sparse_deplacement_locaux, projet->calculs.c);
@@ -1477,16 +1477,16 @@ gboolean EF_calculs_free(Projet *projet)
 {
     GList *list_parcours;
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
     
-    BUG(EF_rigidite_free(projet), FALSE);
+    BUG(EF_rigidite_free(projet), FALSE)
     
     list_parcours = projet->actions;
     while (list_parcours != NULL)
     {
         Action *action = list_parcours->data;
         
-        BUG(_1990_action_free_calculs(projet, action), FALSE);
+        BUG(_1990_action_free_calculs(projet, action), FALSE)
         
         list_parcours = g_list_next(list_parcours);
     }

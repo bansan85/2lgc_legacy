@@ -42,8 +42,8 @@ void EF_gtk_relachements_fermer(GtkButton *button, Projet *projet)
  * Valeur renvoyée : Aucune.
  */
 {
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_relachements.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Relachement");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_relachements.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Relachement")
     
     gtk_widget_destroy(projet->list_gtk.ef_relachements.window);
     
@@ -58,8 +58,8 @@ void EF_gtk_relachements_window_destroy(GtkWidget *object, Projet *projet)
  * Valeur renvoyée : Aucune.
  */
 {
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_relachements.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Relachement");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_relachements.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Relachement")
     
     g_object_unref(G_OBJECT(projet->list_gtk.ef_relachements.builder));
     projet->list_gtk.ef_relachements.builder = NULL;
@@ -80,8 +80,8 @@ gboolean EF_gtk_relachements_window_key_press(GtkWidget *widget, GdkEvent *event
  *  
  */
 {
-    BUGMSG(projet, TRUE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_relachements.builder, TRUE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Relachement");
+    BUGMSG(projet, TRUE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_relachements.builder, TRUE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Relachement")
     
     if (event->key.keyval == GDK_KEY_Escape)
     {
@@ -105,8 +105,8 @@ void EF_gtk_relachements_select_changed(GtkTreeSelection *treeselection, Projet 
     GtkTreeModel    *model;
     GtkTreeIter     Iter;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_relachements.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Relachement");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_relachements.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Relachement")
     
     // Si aucun relâchenement n'est sélectionné, il n'est pas possible d'en supprimer ou d'en
     // éditer un.
@@ -157,7 +157,7 @@ void EF_gtk_relachements_select_changed(GtkTreeSelection *treeselection, Projet 
             }
             default :
             {
-                BUGMSG(NULL, , gettext("Relachement %d inconnu."), relachement->rx_debut);
+                BUGMSG(NULL, , gettext("Relachement %d inconnu."), relachement->rx_debut)
                 break;
             }
         }
@@ -177,7 +177,7 @@ void EF_gtk_relachements_select_changed(GtkTreeSelection *treeselection, Projet 
             }
             default :
             {
-                BUGMSG(NULL, , gettext("Relachement %d inconnu."), relachement->ry_debut);
+                BUGMSG(NULL, , gettext("Relachement %d inconnu."), relachement->ry_debut)
                 break;
             }
         }
@@ -197,7 +197,7 @@ void EF_gtk_relachements_select_changed(GtkTreeSelection *treeselection, Projet 
             }
             default :
             {
-                BUGMSG(NULL, , gettext("Relachement %d inconnu."), relachement->rz_debut);
+                BUGMSG(NULL, , gettext("Relachement %d inconnu."), relachement->rz_debut)
                 break;
             }
         }
@@ -217,7 +217,7 @@ void EF_gtk_relachements_select_changed(GtkTreeSelection *treeselection, Projet 
             }
             default :
             {
-                BUGMSG(NULL, , gettext("Relachement %d inconnu."), relachement->rx_fin);
+                BUGMSG(NULL, , gettext("Relachement %d inconnu."), relachement->rx_fin)
                 break;
             }
         }
@@ -237,7 +237,7 @@ void EF_gtk_relachements_select_changed(GtkTreeSelection *treeselection, Projet 
             }
             default :
             {
-                BUGMSG(NULL, , gettext("Relachement %d inconnu."), relachement->ry_fin);
+                BUGMSG(NULL, , gettext("Relachement %d inconnu."), relachement->ry_fin)
                 break;
             }
         }
@@ -257,7 +257,7 @@ void EF_gtk_relachements_select_changed(GtkTreeSelection *treeselection, Projet 
             }
             default :
             {
-                BUGMSG(NULL, , gettext("Relachement %d inconnu."), relachement->rz_fin);
+                BUGMSG(NULL, , gettext("Relachement %d inconnu."), relachement->rz_fin)
                 break;
             }
         }
@@ -281,18 +281,18 @@ void EF_gtk_relachements_boutton_supprimer_menu(GtkButton *widget, Projet *proje
     EF_Relachement      *relachement;
     GList               *liste_relachements = NULL, *liste_noeuds_dep, *liste_barres_dep, *liste_charges_dep;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_relachements.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Relachement");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_relachements.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Relachement")
     
     // Si aucun relâchenement n'est sélectionné, il n'est pas possible d'en supprimer ou d'en
     // éditer un.
     if (!gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_treeview_select")), &model, &Iter))
-        BUGMSG(NULL, , gettext("Aucun élément n'est sélectionné.\n"));
+        BUGMSG(NULL, , gettext("Aucun élément n'est sélectionné.\n"))
     
     gtk_tree_model_get(model, &Iter, 0, &relachement, -1);
     
     liste_relachements = g_list_append(liste_relachements, relachement);
-    BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, NULL, liste_relachements, NULL, &liste_noeuds_dep, &liste_barres_dep, &liste_charges_dep, FALSE, FALSE), );
+    BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, NULL, liste_relachements, NULL, &liste_noeuds_dep, &liste_barres_dep, &liste_charges_dep, FALSE, FALSE), )
     
     if ((liste_noeuds_dep != NULL) || (liste_barres_dep != NULL) || (liste_charges_dep != NULL))
     {
@@ -303,7 +303,7 @@ void EF_gtk_relachements_boutton_supprimer_menu(GtkButton *widget, Projet *proje
         free(desc);
     }
     else
-        BUGMSG(NULL, , gettext("L'élément ne possède aucune dépendance.\n"));
+        BUGMSG(NULL, , gettext("L'élément ne possède aucune dépendance.\n"))
     
     g_list_free(liste_noeuds_dep);
     g_list_free(liste_barres_dep);
@@ -329,8 +329,8 @@ void EF_gtk_relachements_edit_nom(GtkCellRendererText *cell, gchar *path_string,
     GtkTreePath         *path;
     EF_Relachement      *relachement;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_relachements.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Relachement");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_relachements.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Relachement")
     
     ef_gtk = &projet->list_gtk.ef_relachements;
     model = GTK_TREE_MODEL(ef_gtk->relachements);
@@ -343,7 +343,7 @@ void EF_gtk_relachements_edit_nom(GtkCellRendererText *cell, gchar *path_string,
     if (EF_relachement_cherche_nom(projet, new_text, FALSE))
         return;
 
-    BUG(EF_relachement_modif(projet, relachement, new_text, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL), );
+    BUG(EF_relachement_modif(projet, relachement, new_text, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL), )
     
     return;
 }
@@ -360,17 +360,17 @@ void EF_gtk_relachements_supprimer_direct(GtkButton *button, Projet *projet)
     GtkTreeModel    *model;
     EF_Relachement  *relachement;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_relachements.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Relachement");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_relachements.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Relachement")
     
     if (!gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_treeview_select")), &model, &iter))
         return;
     
     gtk_tree_model_get(model, &iter, 0, &relachement, -1);
     
-    BUG(EF_relachement_supprime(relachement, TRUE, projet), );
+    BUG(EF_relachement_supprime(relachement, TRUE, projet), )
     
-    BUG(m3d_rafraichit(projet), );
+    BUG(m3d_rafraichit(projet), )
     
     return;
 }
@@ -388,8 +388,8 @@ gboolean EF_gtk_relachements_treeview_key_press(GtkWidget *widget, GdkEvent *eve
  *  
  */
 {
-    BUGMSG(projet, TRUE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_relachements.builder, TRUE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Relachement");
+    BUGMSG(projet, TRUE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_relachements.builder, TRUE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Relachement")
     
     if (event->key.keyval == GDK_KEY_Delete)
     {
@@ -429,17 +429,17 @@ void EF_gtk_relachements_supprimer_menu_barres(GtkButton *button, Projet *projet
     GtkTreeModel    *model;
     EF_Relachement  *relachement;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_relachements.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Relachement");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_relachements.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Relachement")
     
     if (!gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_treeview_select")), &model, &iter))
         return;
     
     gtk_tree_model_get(model, &iter, 0, &relachement, -1);
     
-    BUG(EF_relachement_supprime(relachement, FALSE, projet), );
+    BUG(EF_relachement_supprime(relachement, FALSE, projet), )
     
-    BUG(m3d_rafraichit(projet), );
+    BUG(m3d_rafraichit(projet), )
     
     return;
 }
@@ -455,11 +455,11 @@ void EF_gtk_relachements_ajouter(GtkButton *button, Projet *projet)
 {
     EF_Relachement      *relachement;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_relachements.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Relâchement");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_relachements.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Relâchement")
     
     if (EF_relachement_cherche_nom(projet, gettext("Sans nom"), FALSE) == NULL)
-        BUG(relachement = EF_relachement_ajout(projet, gettext("Sans nom"), EF_RELACHEMENT_BLOQUE, NULL, EF_RELACHEMENT_BLOQUE, NULL, EF_RELACHEMENT_BLOQUE, NULL, EF_RELACHEMENT_BLOQUE, NULL, EF_RELACHEMENT_BLOQUE, NULL, EF_RELACHEMENT_BLOQUE, NULL), );
+        BUG(relachement = EF_relachement_ajout(projet, gettext("Sans nom"), EF_RELACHEMENT_BLOQUE, NULL, EF_RELACHEMENT_BLOQUE, NULL, EF_RELACHEMENT_BLOQUE, NULL, EF_RELACHEMENT_BLOQUE, NULL, EF_RELACHEMENT_BLOQUE, NULL, EF_RELACHEMENT_BLOQUE, NULL), )
     else
     {
         char    *nom;
@@ -472,7 +472,7 @@ void EF_gtk_relachements_ajouter(GtkButton *button, Projet *projet)
             free(nom);
             nom = g_strdup_printf("%s (%d)", gettext("Sans nom"), i);
         }
-        BUG(relachement = EF_relachement_ajout(projet, nom, EF_RELACHEMENT_BLOQUE, NULL, EF_RELACHEMENT_BLOQUE, NULL, EF_RELACHEMENT_BLOQUE, NULL, EF_RELACHEMENT_BLOQUE, NULL, EF_RELACHEMENT_BLOQUE, NULL, EF_RELACHEMENT_BLOQUE, NULL), );
+        BUG(relachement = EF_relachement_ajout(projet, nom, EF_RELACHEMENT_BLOQUE, NULL, EF_RELACHEMENT_BLOQUE, NULL, EF_RELACHEMENT_BLOQUE, NULL, EF_RELACHEMENT_BLOQUE, NULL, EF_RELACHEMENT_BLOQUE, NULL, EF_RELACHEMENT_BLOQUE, NULL), )
         free(nom);
     }
     
@@ -501,8 +501,8 @@ void EF_gtk_relachements_edit_clicked(GtkCellRendererText *cell, gchar *path_str
     double              conversion;
     Flottant            conversion2;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_relachements.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Relachement");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_relachements.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Relachement")
     
     ef_gtk = &projet->list_gtk.ef_relachements;
     model = GTK_TREE_MODEL(ef_gtk->relachements);
@@ -525,7 +525,7 @@ void EF_gtk_relachements_edit_clicked(GtkCellRendererText *cell, gchar *path_str
             case EF_RELACHEMENT_BLOQUE :
             case EF_RELACHEMENT_LIBRE :
             {
-                BUGMSG(NULL, , "Impossible d'éditer ce type de relâchement.\n");
+                BUGMSG(NULL, , "Impossible d'éditer ce type de relâchement.\n")
                 break;
             }
             case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
@@ -533,13 +533,13 @@ void EF_gtk_relachements_edit_clicked(GtkCellRendererText *cell, gchar *path_str
                 EF_Relachement_Donnees_Elastique_Lineaire data;
                 
                 data.raideur = conversion2;
-                BUG(EF_relachement_modif(projet, relachement, NULL, UINT_MAX, &data, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL), );
+                BUG(EF_relachement_modif(projet, relachement, NULL, UINT_MAX, &data, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL), )
                 
                 break;
             }
             default :
             {
-                BUGMSG(NULL, , "Le type de relâchement est inconnu.\n");
+                BUGMSG(NULL, , "Le type de relâchement est inconnu.\n")
                 break;
             }
         }
@@ -551,7 +551,7 @@ void EF_gtk_relachements_edit_clicked(GtkCellRendererText *cell, gchar *path_str
             case EF_RELACHEMENT_BLOQUE :
             case EF_RELACHEMENT_LIBRE :
             {
-                BUGMSG(NULL, , "Impossible d'éditer ce type de relâchement.\n");
+                BUGMSG(NULL, , "Impossible d'éditer ce type de relâchement.\n")
                 break;
             }
             case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
@@ -559,13 +559,13 @@ void EF_gtk_relachements_edit_clicked(GtkCellRendererText *cell, gchar *path_str
                 EF_Relachement_Donnees_Elastique_Lineaire data;
                 
                 data.raideur = conversion2;
-                BUG(EF_relachement_modif(projet, relachement, NULL, UINT_MAX, NULL, UINT_MAX, &data, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL), );
+                BUG(EF_relachement_modif(projet, relachement, NULL, UINT_MAX, NULL, UINT_MAX, &data, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL), )
                 
                 break;
             }
             default :
             {
-                BUGMSG(NULL, , "Le type de relâchement est inconnu.\n");
+                BUGMSG(NULL, , "Le type de relâchement est inconnu.\n")
                 break;
             }
         }
@@ -577,7 +577,7 @@ void EF_gtk_relachements_edit_clicked(GtkCellRendererText *cell, gchar *path_str
             case EF_RELACHEMENT_BLOQUE :
             case EF_RELACHEMENT_LIBRE :
             {
-                BUGMSG(NULL, , "Impossible d'éditer ce type de relâchement.\n");
+                BUGMSG(NULL, , "Impossible d'éditer ce type de relâchement.\n")
                 break;
             }
             case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
@@ -585,13 +585,13 @@ void EF_gtk_relachements_edit_clicked(GtkCellRendererText *cell, gchar *path_str
                 EF_Relachement_Donnees_Elastique_Lineaire data;
                 
                 data.raideur = conversion2;
-                BUG(EF_relachement_modif(projet, relachement, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, &data, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL), );
+                BUG(EF_relachement_modif(projet, relachement, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, &data, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL), )
                 
                 break;
             }
             default :
             {
-                BUGMSG(NULL, , "Le type de relâchement est inconnu.\n");
+                BUGMSG(NULL, , "Le type de relâchement est inconnu.\n")
                 break;
             }
         }
@@ -603,7 +603,7 @@ void EF_gtk_relachements_edit_clicked(GtkCellRendererText *cell, gchar *path_str
             case EF_RELACHEMENT_BLOQUE :
             case EF_RELACHEMENT_LIBRE :
             {
-                BUGMSG(NULL, , "Impossible d'éditer ce type de relâchement.\n");
+                BUGMSG(NULL, , "Impossible d'éditer ce type de relâchement.\n")
                 break;
             }
             case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
@@ -611,13 +611,13 @@ void EF_gtk_relachements_edit_clicked(GtkCellRendererText *cell, gchar *path_str
                 EF_Relachement_Donnees_Elastique_Lineaire data;
                 
                 data.raideur = conversion2;
-                BUG(EF_relachement_modif(projet, relachement, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, &data, UINT_MAX, NULL, UINT_MAX, NULL), );
+                BUG(EF_relachement_modif(projet, relachement, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, &data, UINT_MAX, NULL, UINT_MAX, NULL), )
                 
                 break;
             }
             default :
             {
-                BUGMSG(NULL, , "Le type de relâchement est inconnu.\n");
+                BUGMSG(NULL, , "Le type de relâchement est inconnu.\n")
                 break;
             }
         }
@@ -629,7 +629,7 @@ void EF_gtk_relachements_edit_clicked(GtkCellRendererText *cell, gchar *path_str
             case EF_RELACHEMENT_BLOQUE :
             case EF_RELACHEMENT_LIBRE :
             {
-                BUGMSG(NULL, , "Impossible d'éditer ce type de relâchement.\n");
+                BUGMSG(NULL, , "Impossible d'éditer ce type de relâchement.\n")
                 break;
             }
             case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
@@ -637,13 +637,13 @@ void EF_gtk_relachements_edit_clicked(GtkCellRendererText *cell, gchar *path_str
                 EF_Relachement_Donnees_Elastique_Lineaire data;
                 
                 data.raideur = conversion2;
-                BUG(EF_relachement_modif(projet, relachement, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, &data, UINT_MAX, NULL), );
+                BUG(EF_relachement_modif(projet, relachement, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, &data, UINT_MAX, NULL), )
                 
                 break;
             }
             default :
             {
-                BUGMSG(NULL, , "Le type de relâchement est inconnu.\n");
+                BUGMSG(NULL, , "Le type de relâchement est inconnu.\n")
                 break;
             }
         }
@@ -655,7 +655,7 @@ void EF_gtk_relachements_edit_clicked(GtkCellRendererText *cell, gchar *path_str
             case EF_RELACHEMENT_BLOQUE :
             case EF_RELACHEMENT_LIBRE :
             {
-                BUGMSG(NULL, , "Impossible d'éditer ce type de relâchement.\n");
+                BUGMSG(NULL, , "Impossible d'éditer ce type de relâchement.\n")
                 break;
             }
             case EF_RELACHEMENT_ELASTIQUE_LINEAIRE :
@@ -663,13 +663,13 @@ void EF_gtk_relachements_edit_clicked(GtkCellRendererText *cell, gchar *path_str
                 EF_Relachement_Donnees_Elastique_Lineaire data;
                 
                 data.raideur = conversion2;
-                BUG(EF_relachement_modif(projet, relachement, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, &data), );
+                BUG(EF_relachement_modif(projet, relachement, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, &data), )
                 
                 break;
             }
             default :
             {
-                BUGMSG(NULL, , "Le type de relâchement est inconnu.\n");
+                BUGMSG(NULL, , "Le type de relâchement est inconnu.\n")
                 break;
             }
         }
@@ -699,8 +699,8 @@ void EF_gtk_relachements_edit_type(GtkCellRendererText *cell, gchar *path_string
     EF_Relachement      *relachement;
     EF_Relachement_Type type;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_relachements.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Relachement");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_relachements.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Relachement")
     
     ef_gtk = &projet->list_gtk.ef_relachements;
     model = GTK_TREE_MODEL(ef_gtk->relachements);
@@ -716,43 +716,43 @@ void EF_gtk_relachements_edit_type(GtkCellRendererText *cell, gchar *path_string
     else if (strcmp(gettext("Linéaire"), new_text) == 0)
         type = EF_RELACHEMENT_ELASTIQUE_LINEAIRE;
     else
-        BUGMSG(NULL, , gettext("Le type de relâchement est inconnu.\n"));
+        BUGMSG(NULL, , gettext("Le type de relâchement est inconnu.\n"))
     
     switch (column)
     {
         case 0 :
         {
-            BUG(EF_relachement_modif(projet, relachement, NULL, type, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL), );
+            BUG(EF_relachement_modif(projet, relachement, NULL, type, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL), )
             break;
         }
         case 1 :
         {
-            BUG(EF_relachement_modif(projet, relachement, NULL, UINT_MAX, NULL, type, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL), );
+            BUG(EF_relachement_modif(projet, relachement, NULL, UINT_MAX, NULL, type, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL), )
             break;
         }
         case 2 :
         {
-            BUG(EF_relachement_modif(projet, relachement, NULL, UINT_MAX, NULL, UINT_MAX, NULL, type, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL), );
+            BUG(EF_relachement_modif(projet, relachement, NULL, UINT_MAX, NULL, UINT_MAX, NULL, type, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL), )
             break;
         }
         case 3 :
         {
-            BUG(EF_relachement_modif(projet, relachement, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL, type, NULL, UINT_MAX, NULL, UINT_MAX, NULL), );
+            BUG(EF_relachement_modif(projet, relachement, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL, type, NULL, UINT_MAX, NULL, UINT_MAX, NULL), )
             break;
         }
         case 4 :
         {
-            BUG(EF_relachement_modif(projet, relachement, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL, type, NULL, UINT_MAX, NULL), );
+            BUG(EF_relachement_modif(projet, relachement, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL, type, NULL, UINT_MAX, NULL), )
             break;
         }
         case 5 :
         {
-            BUG(EF_relachement_modif(projet, relachement, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL, type, NULL), );
+            BUG(EF_relachement_modif(projet, relachement, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL, UINT_MAX, NULL, type, NULL), )
             break;
         }
         default :
         {
-            BUGMSG(NULL, , "Paramètre %s incorrect.\n", "column");
+            BUGMSG(NULL, , "Paramètre %s incorrect.\n", "column")
             break;
         }
     }
@@ -816,7 +816,7 @@ void EF_gtk_relachements_render_1(GtkTreeViewColumn *tree_column, GtkCellRendere
         }
         default :
         {
-            BUGMSG(NULL, , "Le type de relâchement est inconnu.\n");
+            BUGMSG(NULL, , "Le type de relâchement est inconnu.\n")
             break;
         }
     }
@@ -861,7 +861,7 @@ void EF_gtk_relachements_render_2(GtkTreeViewColumn *tree_column, GtkCellRendere
         }
         default :
         {
-            BUGMSG(NULL, , "Le type de relâchement est inconnu.\n");
+            BUGMSG(NULL, , "Le type de relâchement est inconnu.\n")
             break;
         }
     }
@@ -904,7 +904,7 @@ void EF_gtk_relachements_render_3(GtkTreeViewColumn *tree_column, GtkCellRendere
         }
         default :
         {
-            BUGMSG(NULL, , "Le type de relâchement est inconnu.\n");
+            BUGMSG(NULL, , "Le type de relâchement est inconnu.\n")
             break;
         }
     }
@@ -949,7 +949,7 @@ void EF_gtk_relachements_render_4(GtkTreeViewColumn *tree_column, GtkCellRendere
         }
         default :
         {
-            BUGMSG(NULL, , "Le type de relâchement est inconnu.\n");
+            BUGMSG(NULL, , "Le type de relâchement est inconnu.\n")
             break;
         }
     }
@@ -992,7 +992,7 @@ void EF_gtk_relachements_render_5(GtkTreeViewColumn *tree_column, GtkCellRendere
         }
         default :
         {
-            BUGMSG(NULL, , "Le type de relâchement est inconnu.\n");
+            BUGMSG(NULL, , "Le type de relâchement est inconnu.\n")
             break;
         }
     }
@@ -1037,7 +1037,7 @@ void EF_gtk_relachements_render_6(GtkTreeViewColumn *tree_column, GtkCellRendere
         }
         default :
         {
-            BUGMSG(NULL, , "Le type de relâchement est inconnu.\n");
+            BUGMSG(NULL, , "Le type de relâchement est inconnu.\n")
             break;
         }
     }
@@ -1080,7 +1080,7 @@ void EF_gtk_relachements_render_7(GtkTreeViewColumn *tree_column, GtkCellRendere
         }
         default :
         {
-            BUGMSG(NULL, , "Le type de relâchement est inconnu.\n");
+            BUGMSG(NULL, , "Le type de relâchement est inconnu.\n")
             break;
         }
     }
@@ -1125,7 +1125,7 @@ void EF_gtk_relachements_render_8(GtkTreeViewColumn *tree_column, GtkCellRendere
         }
         default :
         {
-            BUGMSG(NULL, , "Le type de relâchement est inconnu.\n");
+            BUGMSG(NULL, , "Le type de relâchement est inconnu.\n")
             break;
         }
     }
@@ -1168,7 +1168,7 @@ void EF_gtk_relachements_render_9(GtkTreeViewColumn *tree_column, GtkCellRendere
         }
         default :
         {
-            BUGMSG(NULL, , "Le type de relâchement est inconnu.\n");
+            BUGMSG(NULL, , "Le type de relâchement est inconnu.\n")
             break;
         }
     }
@@ -1213,7 +1213,7 @@ void EF_gtk_relachements_render_10(GtkTreeViewColumn *tree_column, GtkCellRender
         }
         default :
         {
-            BUGMSG(NULL, , "Le type de relâchement est inconnu.\n");
+            BUGMSG(NULL, , "Le type de relâchement est inconnu.\n")
             break;
         }
     }
@@ -1256,7 +1256,7 @@ void EF_gtk_relachements_render_11(GtkTreeViewColumn *tree_column, GtkCellRender
         }
         default :
         {
-            BUGMSG(NULL, , "Le type de relâchement est inconnu.\n");
+            BUGMSG(NULL, , "Le type de relâchement est inconnu.\n")
             break;
         }
     }
@@ -1301,7 +1301,7 @@ void EF_gtk_relachements_render_12(GtkTreeViewColumn *tree_column, GtkCellRender
         }
         default :
         {
-            BUGMSG(NULL, , "Le type de relâchement est inconnu.\n");
+            BUGMSG(NULL, , "Le type de relâchement est inconnu.\n")
             break;
         }
     }
@@ -1322,7 +1322,7 @@ void EF_gtk_relachement(Projet *projet)
     Gtk_EF_Relachements *ef_gtk;
     GList               *list_parcours;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
     if (projet->list_gtk.ef_relachements.builder != NULL)
     {
         gtk_window_present(GTK_WINDOW(projet->list_gtk.ef_relachements.window));
@@ -1332,7 +1332,7 @@ void EF_gtk_relachement(Projet *projet)
     ef_gtk = &projet->list_gtk.ef_relachements;
     
     ef_gtk->builder = gtk_builder_new();
-    BUGMSG(gtk_builder_add_from_resource(ef_gtk->builder, "/org/2lgc/codegui/ui/EF_relachements.ui", NULL) != 0, , gettext("Builder Failed\n"));
+    BUGMSG(gtk_builder_add_from_resource(ef_gtk->builder, "/org/2lgc/codegui/ui/EF_relachements.ui", NULL) != 0, , gettext("Builder Failed\n"))
     gtk_builder_connect_signals(ef_gtk->builder, projet);
     
     g_object_set_data(gtk_builder_get_object(projet->list_gtk.ef_relachements.builder, "EF_relachements_treeview_cell1"), "column", GINT_TO_POINTER(0));

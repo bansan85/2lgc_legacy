@@ -44,8 +44,8 @@ gboolean EF_gtk_section_carree_window_key_press(GtkWidget *widget, GdkEvent *eve
  *             interface graphique non initialisée.
  */
 {
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_sections_carree.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section Carrée");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_sections_carree.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section Carrée")
     
     if (event->key.keyval == GDK_KEY_Escape)
     {
@@ -65,8 +65,8 @@ void EF_gtk_section_carree_window_destroy(GtkWidget *object, Projet *projet)
  * Valeur renvoyée : Aucune.
  */
 {
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_sections_carree.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section Carrée");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_sections_carree.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section Carrée")
     
     g_object_unref(G_OBJECT(projet->list_gtk.ef_sections_carree.builder));
     projet->list_gtk.ef_sections_carree.builder = NULL;
@@ -92,10 +92,10 @@ gboolean EF_gtk_section_carree_recupere_donnees(Projet *projet, double *cote, gc
     GtkTextBuffer   *textbuffer;
     gboolean        ok = TRUE;
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(cote, FALSE, gettext("Paramètre %s incorrect.\n"), "cote");
-    BUGMSG(nom, FALSE, gettext("Paramètre %s incorrect.\n"), "nom");
-    BUGMSG(projet->list_gtk.ef_sections_carree.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section Carrée");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(cote, FALSE, gettext("Paramètre %s incorrect.\n"), "cote")
+    BUGMSG(nom, FALSE, gettext("Paramètre %s incorrect.\n"), "nom")
+    BUGMSG(projet->list_gtk.ef_sections_carree.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section Carrée")
     
     *cote = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_sections_carree.builder, "EF_section_carree_buffer_cote")), 0, FALSE, INFINITY, FALSE);
     if (isnan(*cote))
@@ -146,8 +146,8 @@ void EF_gtk_section_carree_check(GtkWidget *object, Projet *projet)
     double  cote;
     char    *nom;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_sections_carree.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section Carrée");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_sections_carree.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section Carrée")
     
     if (!EF_gtk_section_carree_recupere_donnees(projet, &cote, &nom))
         gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections_carree.builder, "EF_section_carree_button_add_edit")), FALSE);
@@ -171,15 +171,15 @@ void EF_gtk_section_carree_ajouter_clicked(GtkButton *button, Projet *projet)
     double  cote;
     gchar   *texte;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_sections_carree.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section Carrée");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_sections_carree.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section Carrée")
     
     if (!EF_gtk_section_carree_recupere_donnees(projet, &cote, &texte))
         return;
     
     gtk_widget_destroy(projet->list_gtk.ef_sections_carree.window);
     
-    BUG(EF_sections_carree_ajout(projet, texte, common_math_f(cote, FLOTTANT_UTILISATEUR)), );
+    BUG(EF_sections_carree_ajout(projet, texte, common_math_f(cote, FLOTTANT_UTILISATEUR)), )
     
     free(texte);
     
@@ -194,8 +194,8 @@ void EF_gtk_section_carree_annuler_clicked(GtkButton *button, Projet *projet)
  * Valeur renvoyée : Aucune.
  */
 {
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_sections_carree.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section Carrée");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_sections_carree.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section Carrée")
     
     gtk_widget_destroy(projet->list_gtk.ef_sections_carree.window);
     
@@ -213,13 +213,13 @@ void EF_gtk_section_carree_modifier_clicked(GtkButton *button, Projet *projet)
     double      cote;
     gchar       *texte;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_sections_carree.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section Carrée");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_sections_carree.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section Carrée")
     
     if (!EF_gtk_section_carree_recupere_donnees(projet, &cote, &texte))
         return;
     
-    BUG(EF_sections_carree_modif(projet, projet->list_gtk.ef_sections_carree.section, texte, common_math_f(cote, FLOTTANT_UTILISATEUR)), );
+    BUG(EF_sections_carree_modif(projet, projet->list_gtk.ef_sections_carree.section, texte, common_math_f(cote, FLOTTANT_UTILISATEUR)), )
     
     free(texte);
     
@@ -243,7 +243,7 @@ gboolean EF_gtk_section_carree(Projet *projet, EF_Section *section)
 {
     Gtk_EF_Sections_Carree  *ef_gtk;
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
     
     ef_gtk = &projet->list_gtk.ef_sections_carree;
     if (projet->list_gtk.ef_sections_carree.builder != NULL)
@@ -255,7 +255,7 @@ gboolean EF_gtk_section_carree(Projet *projet, EF_Section *section)
     else
     {
         ef_gtk->builder = gtk_builder_new();
-        BUGMSG(gtk_builder_add_from_resource(ef_gtk->builder, "/org/2lgc/codegui/ui/EF_sections_carree.ui", NULL) != 0, FALSE, gettext("Builder Failed\n"));
+        BUGMSG(gtk_builder_add_from_resource(ef_gtk->builder, "/org/2lgc/codegui/ui/EF_sections_carree.ui", NULL) != 0, FALSE, gettext("Builder Failed\n"))
         gtk_builder_connect_signals(ef_gtk->builder, projet);
         ef_gtk->window = GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder, "EF_section_carree_window"));
     }
@@ -276,7 +276,7 @@ gboolean EF_gtk_section_carree(Projet *projet, EF_Section *section)
         
         gtk_window_set_title(GTK_WINDOW(ef_gtk->window), gettext("Modification d'une section carrée"));
         ef_gtk->section = section;
-        BUGMSG(ef_gtk->section->type == SECTION_CARREE, FALSE, gettext("La section à modifier n'est pas carrée.\n"));
+        BUGMSG(ef_gtk->section->type == SECTION_CARREE, FALSE, gettext("La section à modifier n'est pas carrée.\n"))
         data = ef_gtk->section->data;
         
         gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(ef_gtk->builder, "EF_section_carree_textview_nom"))), ef_gtk->section->nom, -1);

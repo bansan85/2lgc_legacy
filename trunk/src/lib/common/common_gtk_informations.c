@@ -44,8 +44,8 @@ gboolean common_gtk_informations_window_key_press(GtkWidget *widget, GdkEvent *e
  *             interface graphique non initialisée.
  */
 {
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.common_informations.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Informations");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.common_informations.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Informations")
     
     if (event->key.keyval == GDK_KEY_Escape)
     {
@@ -65,8 +65,8 @@ void common_gtk_informations_window_destroy(GtkWidget *object, Projet *projet)
  * Valeur renvoyée : Aucune.
  */
 {
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.common_informations.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Informations");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.common_informations.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Informations")
     
     g_object_unref(G_OBJECT(projet->list_gtk.common_informations.builder));
     projet->list_gtk.common_informations.builder = NULL;
@@ -96,12 +96,12 @@ gboolean common_gtk_informations_recupere_donnees(Projet *projet, char **destina
     GtkTextIter     start, end;
     GtkTextBuffer   *textbuffer;
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(destinataire, FALSE, gettext("Paramètre %s incorrect.\n"), "destinataire");
-    BUGMSG(adresse, FALSE, gettext("Paramètre %s incorrect.\n"), "adresse");
-    BUGMSG(code_postal, FALSE, gettext("Paramètre %s incorrect.\n"), "code_postal");
-    BUGMSG(ville, FALSE, gettext("Paramètre %s incorrect.\n"), "ville");
-    BUGMSG(projet->list_gtk.common_informations.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Informations");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(destinataire, FALSE, gettext("Paramètre %s incorrect.\n"), "destinataire")
+    BUGMSG(adresse, FALSE, gettext("Paramètre %s incorrect.\n"), "adresse")
+    BUGMSG(code_postal, FALSE, gettext("Paramètre %s incorrect.\n"), "code_postal")
+    BUGMSG(ville, FALSE, gettext("Paramètre %s incorrect.\n"), "ville")
+    BUGMSG(projet->list_gtk.common_informations.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Informations")
     
     *code_postal = common_gtk_entry_uint(GTK_ENTRY(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_entry_code_postal")), 0, TRUE, UINT_MAX, FALSE);
     if (*code_postal == UINT_MAX)
@@ -117,7 +117,7 @@ gboolean common_gtk_informations_recupere_donnees(Projet *projet, char **destina
     gtk_text_buffer_get_iter_at_offset(textbuffer, &end, -1);
     *adresse = gtk_text_buffer_get_text(textbuffer, &start, &end, FALSE);
     
-    BUGMSG(*ville = g_strdup(gtk_entry_buffer_get_text(GTK_ENTRY_BUFFER(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_buffer_ville")))), FALSE, gettext("Erreur d'allocation mémoire.\n"));;
+    BUGMSG(*ville = g_strdup(gtk_entry_buffer_get_text(GTK_ENTRY_BUFFER(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_buffer_ville")))), FALSE, gettext("Erreur d'allocation mémoire.\n"));
     
     return ok;
 }
@@ -133,8 +133,8 @@ void common_gtk_informations_check(GtkEntryBuffer *entrybuffer, Projet *projet)
     unsigned int    code_postal;
     char            *destinataire = NULL, *adresse = NULL, *ville = NULL;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.common_informations.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Informations");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.common_informations.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Informations")
     
     if (!common_gtk_informations_recupere_donnees(projet, &destinataire, &adresse, &code_postal, &ville))
         gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_button_edit")), FALSE);
@@ -193,7 +193,7 @@ void common_gtk_informations_entry_del_char(GtkEntryBuffer *buffer, guint positi
     else if (gtk_entry_get_buffer(GTK_ENTRY(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_entry_ville"))) == buffer)
         f_codepostal = FALSE;
     else
-        BUGMSG(NULL, , gettext("Paramètre %s incorrect.\n"), "buffer");
+        BUGMSG(NULL, , gettext("Paramètre %s incorrect.\n"), "buffer")
     
     code_postal = gtk_entry_get_text(GTK_ENTRY(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_entry_code_postal")));
     ville = gtk_entry_get_text(GTK_ENTRY(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_entry_ville")));
@@ -205,7 +205,7 @@ void common_gtk_informations_entry_del_char(GtkEntryBuffer *buffer, guint positi
         return;
     }
     
-    BUGMSG(villes = fopen(DATADIR"/france_villes.csv", "r"), , gettext("Le fichier '%s' est introuvable.\n"), DATADIR"/france_villes.csv");
+    BUGMSG(villes = fopen(DATADIR"/france_villes.csv", "r"), , gettext("Le fichier '%s' est introuvable.\n"), DATADIR"/france_villes.csv")
     
     ligne = common_text_get_line(villes);
     free(ligne);
@@ -222,9 +222,9 @@ void common_gtk_informations_entry_del_char(GtkEntryBuffer *buffer, guint positi
         char    departement[4];
         int     commune;
         
-        BUG(common_ville_get_ville(ligne, NULL, NULL, NULL, departement, &commune, NULL, NULL, &article, &artmaj, &ncc, &artmin, &nccenr, &codepostal, NULL, &population), );
-        BUGMSG(code_postal2 = g_strdup_printf("%d", codepostal), , gettext("Erreur d'allocation mémoire.\n"));
-        BUGMSG(minuscule = g_strdup_printf("%s%s%s", artmin, ((article == 5) || (article == 1) || (article == 0)) ? "" : " ", nccenr), , gettext("Erreur d'allocation mémoire.\n"));
+        BUG(common_ville_get_ville(ligne, NULL, NULL, NULL, departement, &commune, NULL, NULL, &article, &artmaj, &ncc, &artmin, &nccenr, &codepostal, NULL, &population), )
+        BUGMSG(code_postal2 = g_strdup_printf("%d", codepostal), , gettext("Erreur d'allocation mémoire.\n"))
+        BUGMSG(minuscule = g_strdup_printf("%s%s%s", artmin, ((article == 5) || (article == 1) || (article == 0)) ? "" : " ", nccenr), , gettext("Erreur d'allocation mémoire.\n"))
         
         if (
           (population > popmin)
@@ -236,8 +236,8 @@ void common_gtk_informations_entry_del_char(GtkEntryBuffer *buffer, guint positi
         {
             Ligne_Adresse   *adresse;
             
-            BUGMSG(adresse = malloc(sizeof(Ligne_Adresse)), , gettext("Erreur d'allocation mémoire.\n"));
-            BUGMSG(adresse->affichage = g_strdup_printf("%d %s%s%s", codepostal, artmin, ((article == 5) || (article == 1) || (article == 0)) ? "" : " ", nccenr), , gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(adresse = malloc(sizeof(Ligne_Adresse)), , gettext("Erreur d'allocation mémoire.\n"))
+            BUGMSG(adresse->affichage = g_strdup_printf("%d %s%s%s", codepostal, artmin, ((article == 5) || (article == 1) || (article == 0)) ? "" : " ", nccenr), , gettext("Erreur d'allocation mémoire.\n"))
             adresse->population = population;
             strncpy(adresse->departement, departement, 4);
             adresse->commune = commune;
@@ -275,7 +275,7 @@ void common_gtk_informations_entry_del_char(GtkEntryBuffer *buffer, guint positi
         
         char    *tmp;
         
-        BUGMSG(tmp = g_strdup_printf("%d", adresse->code_postal), , gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(tmp = g_strdup_printf("%d", adresse->code_postal), , gettext("Erreur d'allocation mémoire.\n"))
         gtk_list_store_append(projet->list_gtk.common_informations.model_completion, &iter);
         gtk_list_store_set(projet->list_gtk.common_informations.model_completion, &iter, 0, adresse->affichage, 1, tmp, 2, adresse->ville, 3, adresse->departement, 4, adresse->commune, -1);
         
@@ -313,8 +313,8 @@ void common_gtk_informations_annuler_clicked(GtkButton *button, Projet *projet)
  * Valeur renvoyée : Aucune.
  */
 {
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.common_informations.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Informations");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.common_informations.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Informations")
     
     gtk_widget_destroy(projet->list_gtk.common_informations.window);
     
@@ -337,7 +337,7 @@ gboolean common_gtk_informations_match_selected(GtkEntryCompletion *widget, GtkT
     char    *departement;
     char    *code_postal, *ville;
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
     
     gtk_tree_model_get(model, iter, 1, &code_postal, 2, &ville, 3, &departement, 4, &commune, -1);
     
@@ -345,7 +345,7 @@ gboolean common_gtk_informations_match_selected(GtkEntryCompletion *widget, GtkT
     projet->list_gtk.common_informations.departement = departement;
     projet->list_gtk.common_informations.commune = commune;
     
-    BUG(common_ville_set(projet, projet->list_gtk.common_informations.departement, ville, TRUE), FALSE);
+    BUG(common_ville_set(projet, projet->list_gtk.common_informations.departement, ville, TRUE), FALSE)
     
     common_gtk_informations_check(NULL, projet);
     
@@ -370,8 +370,8 @@ void common_gtk_informations_modifier_clicked(GtkButton *button, Projet *projet)
     Type_Seisme     seisme;
     char            *txt1, *txt2, *message;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.common_informations.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Informations");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.common_informations.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Informations")
     
     if (!common_gtk_informations_recupere_donnees(projet, &destinataire, &adresse, &code_postal, &ville))
     {
@@ -386,7 +386,7 @@ void common_gtk_informations_modifier_clicked(GtkButton *button, Projet *projet)
     vent = gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_vent_combobox")));
     seisme = gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_seisme_combobox")));
     
-    BUG(common_ville_set(projet, projet->list_gtk.common_informations.departement, gtk_entry_get_text(GTK_ENTRY(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_entry_ville"))), FALSE), );
+    BUG(common_ville_set(projet, projet->list_gtk.common_informations.departement, gtk_entry_get_text(GTK_ENTRY(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_entry_ville"))), FALSE), )
     free(projet->parametres.adresse.destinataire);
     projet->parametres.adresse.destinataire = destinataire;
     free(projet->parametres.adresse.adresse);
@@ -402,17 +402,17 @@ void common_gtk_informations_modifier_clicked(GtkButton *button, Projet *projet)
     message = NULL;
     if (neige != projet->parametres.neige)
     {
-        BUGMSG(message = g_strdup_printf("%s %s", gettext("Êtes-vous sûr de vouloir choisir pour"), gettext("la neige")), , gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(message = g_strdup_printf("%s %s", gettext("Êtes-vous sûr de vouloir choisir pour"), gettext("la neige")), , gettext("Erreur d'allocation mémoire.\n"))
     }
     if (vent != projet->parametres.vent)
     {
         if (message == NULL)
-            BUGMSG(message = g_strdup_printf("%s %s", gettext("Êtes-vous sûr de vouloir choisir pour"), gettext("le vent")), , gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(message = g_strdup_printf("%s %s", gettext("Êtes-vous sûr de vouloir choisir pour"), gettext("le vent")), , gettext("Erreur d'allocation mémoire.\n"))
         else
         {
             txt1 = message;
-            BUGMSG(txt2 = g_strdup_printf(", %s", gettext("le vent")), , gettext("Erreur d'allocation mémoire.\n"));
-            BUGMSG(message = g_strconcat(txt1, txt2, NULL), , gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(txt2 = g_strdup_printf(", %s", gettext("le vent")), , gettext("Erreur d'allocation mémoire.\n"))
+            BUGMSG(message = g_strconcat(txt1, txt2, NULL), , gettext("Erreur d'allocation mémoire.\n"))
             free(txt1);
             free(txt2);
         }
@@ -420,12 +420,12 @@ void common_gtk_informations_modifier_clicked(GtkButton *button, Projet *projet)
     if (seisme != projet->parametres.seisme)
     {
         if (message == NULL)
-            BUGMSG(message = g_strdup_printf("%s %s", gettext("Êtes-vous sûr de vouloir choisir pour"), gettext("le séisme")), , gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(message = g_strdup_printf("%s %s", gettext("Êtes-vous sûr de vouloir choisir pour"), gettext("le séisme")), , gettext("Erreur d'allocation mémoire.\n"))
         else
         {
             txt1 = message;
-            BUGMSG(txt2 = g_strdup_printf(", %s", gettext("le séisme")), , gettext("Erreur d'allocation mémoire.\n"));
-            BUGMSG(message = g_strconcat(txt1, txt2, NULL), , gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(txt2 = g_strdup_printf(", %s", gettext("le séisme")), , gettext("Erreur d'allocation mémoire.\n"))
+            BUGMSG(message = g_strconcat(txt1, txt2, NULL), , gettext("Erreur d'allocation mémoire.\n"))
             free(txt1);
             free(txt2);
         }
@@ -435,7 +435,7 @@ void common_gtk_informations_modifier_clicked(GtkButton *button, Projet *projet)
         GtkWidget       *dialog;
         
         txt1 = message;
-        BUGMSG(message = g_strconcat(txt1, gettext(" des paramètres de calculs différents que ceux imposés par les normes ?"), NULL), , gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(message = g_strconcat(txt1, gettext(" des paramètres de calculs différents que ceux imposés par les normes ?"), NULL), , gettext("Erreur d'allocation mémoire.\n"))
         free(txt1);
         dialog = gtk_message_dialog_new(GTK_WINDOW(projet->list_gtk.common_informations.window), GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_YES_NO, "%s", message);
         if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_YES)
@@ -483,7 +483,7 @@ gboolean common_gtk_informations(Projet *projet)
     Gtk_Common_Informations *ef_gtk;
     GtkEntryCompletion *completion;
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
     
     ef_gtk = &projet->list_gtk.common_informations;
     if (projet->list_gtk.common_informations.builder != NULL)
@@ -493,12 +493,12 @@ gboolean common_gtk_informations(Projet *projet)
     }
     
     ef_gtk->builder = gtk_builder_new();
-    BUGMSG(gtk_builder_add_from_resource(ef_gtk->builder, "/org/2lgc/codegui/ui/common_informations.ui", NULL) != 0, FALSE, gettext("Builder Failed\n"));
+    BUGMSG(gtk_builder_add_from_resource(ef_gtk->builder, "/org/2lgc/codegui/ui/common_informations.ui", NULL) != 0, FALSE, gettext("Builder Failed\n"))
     gtk_builder_connect_signals(ef_gtk->builder, projet);
     ef_gtk->window = GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder, "common_informations_window"));
     ef_gtk->model_completion = GTK_LIST_STORE(gtk_builder_get_object(ef_gtk->builder, "common_informations_completion_model"));
     
-    BUGMSG(projet->list_gtk.common_informations.departement = g_strdup(projet->parametres.adresse.departement), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(projet->list_gtk.common_informations.departement = g_strdup(projet->parametres.adresse.departement), FALSE, gettext("Erreur d'allocation mémoire.\n"))
     projet->list_gtk.common_informations.commune = projet->parametres.adresse.commune;
     common_gtk_informations_check(NULL, projet);
     
@@ -518,7 +518,7 @@ gboolean common_gtk_informations(Projet *projet)
     {
         char    *texte;
         
-        BUGMSG(texte = g_strdup_printf("%d", projet->parametres.adresse.code_postal), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(texte = g_strdup_printf("%d", projet->parametres.adresse.code_postal), FALSE, gettext("Erreur d'allocation mémoire.\n"))
         gtk_entry_set_text(GTK_ENTRY(gtk_builder_get_object(ef_gtk->builder, "common_informations_entry_code_postal")), texte);
         free(texte);
     }

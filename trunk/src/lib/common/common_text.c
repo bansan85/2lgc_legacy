@@ -108,8 +108,8 @@ double common_text_str_to_double(char *texte, double val_min, gboolean min_inclu
     struct lconv    *locale_conv;
     char            *retour;
     
-    BUGMSG(fake = (char*)malloc(sizeof(char)*(strlen(texte)+1)), NAN, gettext("Erreur d'allocation mémoire.\n"));
-    BUGMSG(textebis = g_strdup(texte), NAN, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(fake = (char*)malloc(sizeof(char)*(strlen(texte)+1)), NAN, gettext("Erreur d'allocation mémoire.\n"))
+    BUGMSG(textebis = g_strdup(texte), NAN, gettext("Erreur d'allocation mémoire.\n"))
     
     // On remplace par la bonne décimale.
     locale_conv = localeconv();
@@ -132,7 +132,7 @@ double common_text_str_to_double(char *texte, double val_min, gboolean min_inclu
         }
     }
     else
-        BUGMSG(NULL, NAN, gettext("Impossible de déterminer le caractère décimal.\n"));
+        BUGMSG(NULL, NAN, gettext("Impossible de déterminer le caractère décimal.\n"))
     
     if (sscanf(textebis, "%lf%s", &nombre, fake) != 1)
     {
@@ -185,11 +185,11 @@ char *strcasestr_internal(const char *haystack, const char *needle)
     char            *meule, *aiguille;
     char            *tmp;
     
-    BUGMSG(haystack, NULL, gettext("Paramètre %s incorrect.\n"), "haystack");
-    BUGMSG(needle, NULL, gettext("Paramètre %s incorrect.\n"), "needle");
+    BUGMSG(haystack, NULL, gettext("Paramètre %s incorrect.\n"), "haystack")
+    BUGMSG(needle, NULL, gettext("Paramètre %s incorrect.\n"), "needle")
     
-    BUGMSG(meule = g_strdup(haystack), NULL, gettext("Erreur d'allocation mémoire.\n"));
-    BUGMSG(aiguille = g_strdup(needle), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(meule = g_strdup(haystack), NULL, gettext("Erreur d'allocation mémoire.\n"))
+    BUGMSG(aiguille = g_strdup(needle), NULL, gettext("Erreur d'allocation mémoire.\n"))
     
     for (i=0;meule[i];i++)
         meule[i] = tolower(meule[i]);
@@ -321,7 +321,7 @@ char *common_text_get_line(FILE *fichier)
     int   CUR_MAX = 256;
     char  *buffer, *ligne_tmp, *retour = NULL;
     
-    BUGMSG(buffer = malloc(sizeof(char)*CUR_MAX), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(buffer = malloc(sizeof(char)*CUR_MAX), FALSE, gettext("Erreur d'allocation mémoire.\n"))
     
     do
     {

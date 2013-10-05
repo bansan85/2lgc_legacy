@@ -56,14 +56,14 @@ gboolean EF_resultat_noeud_reaction_appui(GList *liste, EF_Noeud *noeud, int ind
     double  *x;
     Action  *action;
     
-    BUGMSG(noeud, FALSE, gettext("Paramètre %s incorrect.\n"), "noeud");
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG((0 <= indice) && (indice <= 5), FALSE, gettext("Paramètre %s incorrect.\n"), gettext("Indice hors limite.\n"));
+    BUGMSG(noeud, FALSE, gettext("Paramètre %s incorrect.\n"), "noeud")
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG((0 <= indice) && (indice <= 5), FALSE, gettext("Paramètre %s incorrect.\n"), gettext("Indice hors limite.\n"))
     
     if (liste == NULL)
     {
         if (texte != NULL)
-            BUGMSG(*texte = g_strdup_printf("%.*lf", indice < 3 ? DECIMAL_FORCE : DECIMAL_MOMENT, 0.), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(*texte = g_strdup_printf("%.*lf", indice < 3 ? DECIMAL_FORCE : DECIMAL_MOMENT, 0.), FALSE, gettext("Erreur d'allocation mémoire.\n"))
         if (mini != NULL)
             *mini = 0.;
         if (maxi != NULL)
@@ -100,9 +100,9 @@ gboolean EF_resultat_noeud_reaction_appui(GList *liste, EF_Noeud *noeud, int ind
     if (texte != NULL)
     {
         if (!ERREUR_RELATIVE_EGALE(mi, ma))
-            BUGMSG(*texte = g_strdup_printf("%.*lf/%.*lf", indice < 3 ? DECIMAL_FORCE : DECIMAL_MOMENT, mi, indice < 3 ? DECIMAL_FORCE : DECIMAL_MOMENT, ma), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(*texte = g_strdup_printf("%.*lf/%.*lf", indice < 3 ? DECIMAL_FORCE : DECIMAL_MOMENT, mi, indice < 3 ? DECIMAL_FORCE : DECIMAL_MOMENT, ma), FALSE, gettext("Erreur d'allocation mémoire.\n"))
         else
-            BUGMSG(*texte = g_strdup_printf("%.*lf", indice < 3 ? DECIMAL_FORCE : DECIMAL_MOMENT, mi), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(*texte = g_strdup_printf("%.*lf", indice < 3 ? DECIMAL_FORCE : DECIMAL_MOMENT, mi), FALSE, gettext("Erreur d'allocation mémoire.\n"))
     }
     
     return TRUE;
@@ -136,14 +136,14 @@ gboolean EF_resultat_noeud_deplacement(GList *liste, EF_Noeud *noeud, int indice
     double  *x;
     Action  *action;
     
-    BUGMSG(noeud, FALSE, gettext("Paramètre %s incorrect.\n"), "noeud");
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG((0 <= indice) && (indice <= 5), FALSE, gettext("Paramètre %s incorrect.\n"), gettext("Indice hors limite.\n"));
+    BUGMSG(noeud, FALSE, gettext("Paramètre %s incorrect.\n"), "noeud")
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG((0 <= indice) && (indice <= 5), FALSE, gettext("Paramètre %s incorrect.\n"), gettext("Indice hors limite.\n"))
     
     if (liste == NULL)
     {
         if (texte != NULL)
-            BUGMSG(*texte = g_strdup_printf("%.*lf", indice < 3 ? DECIMAL_DEPLACEMENT : DECIMAL_ROTATION, 0.), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(*texte = g_strdup_printf("%.*lf", indice < 3 ? DECIMAL_DEPLACEMENT : DECIMAL_ROTATION, 0.), FALSE, gettext("Erreur d'allocation mémoire.\n"))
         if (mini != NULL)
             *mini = 0.;
         if (maxi != NULL)
@@ -180,9 +180,9 @@ gboolean EF_resultat_noeud_deplacement(GList *liste, EF_Noeud *noeud, int indice
     if (texte != NULL)
     {
         if (!ERREUR_RELATIVE_EGALE(mi, ma))
-            BUGMSG(*texte = g_strdup_printf("%.*lf/%.*lf", indice < 3 ? DECIMAL_DEPLACEMENT : DECIMAL_ROTATION, mi, indice < 3 ? DECIMAL_DEPLACEMENT : DECIMAL_ROTATION, ma), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(*texte = g_strdup_printf("%.*lf/%.*lf", indice < 3 ? DECIMAL_DEPLACEMENT : DECIMAL_ROTATION, mi, indice < 3 ? DECIMAL_DEPLACEMENT : DECIMAL_ROTATION, ma), FALSE, gettext("Erreur d'allocation mémoire.\n"))
         else
-            BUGMSG(*texte = g_strdup_printf("%.*lf", indice < 3 ? DECIMAL_DEPLACEMENT : DECIMAL_ROTATION, mi), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(*texte = g_strdup_printf("%.*lf", indice < 3 ? DECIMAL_DEPLACEMENT : DECIMAL_ROTATION, mi), FALSE, gettext("Erreur d'allocation mémoire.\n"))
     }
     
     return TRUE;

@@ -44,8 +44,8 @@ void EF_gtk_barres_add_annuler_clicked(GtkButton *button, Projet *projet)
  * Valeur renvoyée : Aucune.
  */
 {
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_barres.builder_add, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Appui");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_barres.builder_add, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Appui")
     
     gtk_widget_destroy(projet->list_gtk.ef_barres.window_add);
     
@@ -74,8 +74,8 @@ void EF_gtk_barres_add_add_clicked(GtkButton *button, Projet *projet)
     
     Gtk_EF_Barres   *ef_gtk;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_barres.builder_add, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Appui");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_barres.builder_add, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Appui")
     
     ef_gtk = &projet->list_gtk.ef_barres;
     
@@ -85,7 +85,7 @@ void EF_gtk_barres_add_add_clicked(GtkButton *button, Projet *projet)
         return;
     gtk_tree_model_iter_nth_child(model, &Iter, NULL, type);
     gtk_tree_model_get(model, &Iter, 0, &nom, -1);
-    BUG(section = EF_sections_cherche_nom(projet, nom, TRUE), );
+    BUG(section = EF_sections_cherche_nom(projet, nom, TRUE), )
     free(nom);
     
     model = gtk_combo_box_get_model(GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_materiau_combobox")));
@@ -94,7 +94,7 @@ void EF_gtk_barres_add_add_clicked(GtkButton *button, Projet *projet)
         return;
     gtk_tree_model_iter_nth_child(model, &Iter, NULL, type);
     gtk_tree_model_get(model, &Iter, 0, &nom, -1);
-    BUG(materiau = EF_materiaux_cherche_nom(projet, nom, TRUE), );
+    BUG(materiau = EF_materiaux_cherche_nom(projet, nom, TRUE), )
     free(nom);
     
     model = gtk_combo_box_get_model(GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_relachement_combobox")));
@@ -107,7 +107,7 @@ void EF_gtk_barres_add_add_clicked(GtkButton *button, Projet *projet)
     {
         gtk_tree_model_iter_nth_child(model, &Iter, NULL, type);
         gtk_tree_model_get(model, &Iter, 0, &nom, -1);
-        BUG(relachement = EF_relachement_cherche_nom(projet, nom, TRUE), );
+        BUG(relachement = EF_relachement_cherche_nom(projet, nom, TRUE), )
         free(nom);
     }
     
@@ -123,10 +123,10 @@ void EF_gtk_barres_add_add_clicked(GtkButton *button, Projet *projet)
     type = gtk_combo_box_get_active(GTK_COMBO_BOX(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_type_combobox")));
     
     nb_noeuds = common_gtk_text_buffer_uint(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_nb_noeuds_intermediaire_buffer")), 0, TRUE, UINT_MAX, FALSE);
-    BUG(nb_noeuds != UINT_MAX, );
+    BUG(nb_noeuds != UINT_MAX, )
     
-    BUG(_1992_1_1_barres_ajout(projet, (Type_Element)type, section, materiau, noeud_debut, noeud_fin, common_math_f(angle, FLOTTANT_UTILISATEUR), relachement, nb_noeuds), );
-    BUG(m3d_rafraichit(projet), );
+    BUG(_1992_1_1_barres_ajout(projet, (Type_Element)type, section, materiau, noeud_debut, noeud_fin, common_math_f(angle, FLOTTANT_UTILISATEUR), relachement, nb_noeuds), )
+    BUG(m3d_rafraichit(projet), )
     
     return;
 }
@@ -139,8 +139,8 @@ void EF_gtk_barres_add_window_destroy(GtkWidget *object, Projet *projet)
  * Valeur renvoyée : Aucune.
  */
 {
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_barres.builder_add, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Appui");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_barres.builder_add, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Appui")
     
     g_object_unref(G_OBJECT(projet->list_gtk.ef_barres.builder_add));
     projet->list_gtk.ef_barres.builder_add = NULL;
@@ -159,8 +159,8 @@ gboolean EF_gtk_barres_add_window_key_press(GtkWidget *widget, GdkEvent *event, 
  *  
  */
 {
-    BUGMSG(projet, TRUE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_barres.builder_add, TRUE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Appui");
+    BUGMSG(projet, TRUE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_barres.builder_add, TRUE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Appui")
     
     if (event->key.keyval == GDK_KEY_Escape)
     {
@@ -187,8 +187,8 @@ void EF_gtk_barres_add_check_add(GtkWidget *widget, Projet *projet)
     GtkTextIter     start, end;
     GtkTextBuffer   *buff;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_barres.builder_add, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Appui");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_barres.builder_add, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Appui")
     
     ef_gtk = &projet->list_gtk.ef_barres;
     
@@ -239,7 +239,7 @@ void EF_gtk_barres_ajouter(GtkButton *button, Projet *projet)
     Gtk_EF_Barres   *ef_gtk;
     char            *nb_barres;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
     if (projet->list_gtk.ef_barres.builder_add != NULL)
     {
         gtk_window_present(GTK_WINDOW(projet->list_gtk.ef_barres.window_add));
@@ -249,7 +249,7 @@ void EF_gtk_barres_ajouter(GtkButton *button, Projet *projet)
     ef_gtk = &projet->list_gtk.ef_barres;
     
     ef_gtk->builder_add = gtk_builder_new();
-    BUGMSG(gtk_builder_add_from_resource(ef_gtk->builder_add, "/org/2lgc/codegui/ui/EF_barres_add.ui", NULL) != 0, , gettext("Builder Failed\n"));
+    BUGMSG(gtk_builder_add_from_resource(ef_gtk->builder_add, "/org/2lgc/codegui/ui/EF_barres_add.ui", NULL) != 0, , gettext("Builder Failed\n"))
     gtk_builder_connect_signals(ef_gtk->builder_add, projet);
     
     ef_gtk->window_add = GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder_add, "EF_barres_add_window"));
@@ -261,7 +261,7 @@ void EF_gtk_barres_ajouter(GtkButton *button, Projet *projet)
     
     if (projet->modele.barres != NULL)
     {
-        BUGMSG(nb_barres = g_strdup_printf("%d", ((EF_Barre*)g_list_last(projet->modele.barres)->data)->numero+1), , gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(nb_barres = g_strdup_printf("%d", ((EF_Barre*)g_list_last(projet->modele.barres)->data)->numero+1), , gettext("Erreur d'allocation mémoire.\n"))
         gtk_label_set_text(GTK_LABEL(gtk_builder_get_object(ef_gtk->builder_add, "EF_gtk_barres_add_numero_label2")), nb_barres);
         free(nb_barres);
     }

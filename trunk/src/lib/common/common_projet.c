@@ -75,28 +75,28 @@ Projet* projet_init(Type_Pays pays)
     _2lgc_register_resource();
     
     // Alloue toutes les zones mémoires du projet à savoir (par module) :
-    BUGMSG(projet = (Projet*)malloc(sizeof(Projet)), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(projet = (Projet*)malloc(sizeof(Projet)), NULL, gettext("Erreur d'allocation mémoire.\n"))
     
     projet->parametres.pays = pays;
     
-    BUG(common_ville_init(projet), NULL);
+    BUG(common_ville_init(projet), NULL)
     
     //     - 1990 : la liste des actions, des groupes et des combinaisons,
-    BUG(_1990_action_init(projet), NULL);
-    BUG(_1990_groupe_init(projet), NULL);
-    BUG(_1990_combinaisons_init(projet), NULL);
+    BUG(_1990_action_init(projet), NULL)
+    BUG(_1990_groupe_init(projet), NULL)
+    BUG(_1990_combinaisons_init(projet), NULL)
     //     - 1992-1-1 : la liste des sections, des barres et des matériaux
-    BUG(EF_sections_init(projet), NULL);
-    BUG(_1992_1_1_barres_init(projet), NULL);
-    BUG(EF_materiaux_init(projet), NULL);
+    BUG(EF_sections_init(projet), NULL)
+    BUG(_1992_1_1_barres_init(projet), NULL)
+    BUG(EF_materiaux_init(projet), NULL)
     //     - EF : la liste des appuis, des relâchements et des noeuds ainsi que les éléments
     //              nécessaire pour les calculs aux éléments finis.
-    BUG(EF_appuis_init(projet), NULL);
-    BUG(EF_rigidite_init(projet), NULL);
-    BUG(EF_relachement_init(projet), NULL);
-    BUG(EF_noeuds_init(projet), NULL);
+    BUG(EF_appuis_init(projet), NULL)
+    BUG(EF_rigidite_init(projet), NULL)
+    BUG(EF_relachement_init(projet), NULL)
+    BUG(EF_noeuds_init(projet), NULL)
 #ifdef ENABLE_GTK
-    BUG(m3d_init(projet), NULL);
+    BUG(m3d_init(projet), NULL)
     projet->list_gtk._1990_groupes.builder = NULL;
     projet->list_gtk._1990_groupes.builder_options = NULL;
     projet->list_gtk.ef_charge_noeud.builder = NULL;
@@ -135,7 +135,7 @@ Projet* projet_init(Type_Pays pays)
     g_object_unref(provider);
 #endif
     
-    BUG(common_ville_set(projet, "37", "Joué-lès-Tours", FALSE), NULL);
+    BUG(common_ville_set(projet, "37", "Joué-lès-Tours", FALSE), NULL)
     
     projet->calculs.c = &(projet->calculs.Common);
     cholmod_start(projet->calculs.c);
@@ -152,9 +152,9 @@ void gui_window_destroy_event(GtkWidget *pWidget, Projet *projet)
  * Valeur renvoyée : Aucune.
  */
 {
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
     
-    BUG(projet_free(projet), );
+    BUG(projet_free(projet), )
     gtk_widget_destroy(pWidget);
     gtk_main_quit();
     
@@ -188,7 +188,7 @@ gboolean projet_init_graphique(Projet *projet)
     Gtk_m3d     *m3d;
     GtkWidget   *menu_separator;
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
     
     comps = &(projet->list_gtk.comp);
     
@@ -345,32 +345,32 @@ gboolean projet_free(Projet *projet)
     /* Action doit être libéré avant projet->modele.barres */
     // Trivial
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
     
-    BUG(common_ville_free(projet), FALSE);
+    BUG(common_ville_free(projet), FALSE)
     if (projet->actions != NULL)
-        BUG(_1990_action_free(projet), FALSE);
+        BUG(_1990_action_free(projet), FALSE)
     if (projet->niveaux_groupes != NULL)
-        BUG(_1990_groupe_free(projet), FALSE);
+        BUG(_1990_groupe_free(projet), FALSE)
     if (projet->combinaisons.elu_equ != NULL)
-        BUG(_1990_combinaisons_free(projet), FALSE);
+        BUG(_1990_combinaisons_free(projet), FALSE)
     /* Rigidite doit être libéré avant noeud car pour libérer toute la mémoire, il est nécessaire d'avoir accès aux informations contenues dans les noeuds */
-    BUG(EF_calculs_free(projet), FALSE);
+    BUG(EF_calculs_free(projet), FALSE)
     if (projet->modele.sections != NULL)
-        BUG(EF_sections_free(projet), FALSE);
+        BUG(EF_sections_free(projet), FALSE)
     if (projet->modele.noeuds != NULL)
-        BUG(EF_noeuds_free(projet), FALSE);
+        BUG(EF_noeuds_free(projet), FALSE)
     if (projet->modele.barres != NULL)
-        BUG(_1992_1_1_barres_free(projet), FALSE);
+        BUG(_1992_1_1_barres_free(projet), FALSE)
     if (projet->modele.appuis != NULL)
-        BUG(EF_appuis_free(projet), FALSE);
+        BUG(EF_appuis_free(projet), FALSE)
     if (projet->modele.materiaux != NULL)
-        BUG(EF_materiaux_free(projet), FALSE);
+        BUG(EF_materiaux_free(projet), FALSE)
     if (projet->modele.relachements != NULL)
-        BUG(EF_relachement_free(projet), FALSE);
+        BUG(EF_relachement_free(projet), FALSE)
 #ifdef ENABLE_GTK
     if (projet->list_gtk.m3d.data != NULL)
-        BUG(m3d_free(projet), FALSE);
+        BUG(m3d_free(projet), FALSE)
     EF_gtk_resultats_free(projet);
 #endif
     

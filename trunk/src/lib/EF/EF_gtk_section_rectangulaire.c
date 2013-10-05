@@ -44,8 +44,8 @@ gboolean EF_gtk_section_rectangulaire_window_key_press(GtkWidget *widget, GdkEve
  *             interface graphique non initialisée.
  */
 {
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_sections_rectangulaire.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section Rectangulaire");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_sections_rectangulaire.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section Rectangulaire")
     
     if (event->key.keyval == GDK_KEY_Escape)
     {
@@ -65,8 +65,8 @@ void EF_gtk_section_rectangulaire_window_destroy(GtkWidget *object, Projet *proj
  * Valeur renvoyée : Aucune.
  */
 {
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_sections_rectangulaire.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section Rectangulaire");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_sections_rectangulaire.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section Rectangulaire")
     
     g_object_unref(G_OBJECT(projet->list_gtk.ef_sections_rectangulaire.builder));
     projet->list_gtk.ef_sections_rectangulaire.builder = NULL;
@@ -94,11 +94,11 @@ gboolean EF_gtk_section_rectangulaire_recupere_donnees(Projet *projet, double *l
     GtkTextBuffer   *textbuffer;
     gboolean        ok = TRUE;
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(largeur, FALSE, gettext("Paramètre %s incorrect.\n"), "largeur");
-    BUGMSG(hauteur, FALSE, gettext("Paramètre %s incorrect.\n"), "hauteur");
-    BUGMSG(nom, FALSE, gettext("Paramètre %s incorrect.\n"), "nom");
-    BUGMSG(projet->list_gtk.ef_sections_rectangulaire.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section Rectangulaire");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(largeur, FALSE, gettext("Paramètre %s incorrect.\n"), "largeur")
+    BUGMSG(hauteur, FALSE, gettext("Paramètre %s incorrect.\n"), "hauteur")
+    BUGMSG(nom, FALSE, gettext("Paramètre %s incorrect.\n"), "nom")
+    BUGMSG(projet->list_gtk.ef_sections_rectangulaire.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section Rectangulaire")
     
     *largeur = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_sections_rectangulaire.builder, "EF_section_rectangulaire_buffer_largeur")), 0, FALSE, INFINITY, FALSE);
     if (isnan(*largeur))
@@ -153,8 +153,8 @@ void EF_gtk_section_rectangulaire_check(GtkWidget *object, Projet *projet)
     double  largeur, hauteur;
     char    *nom;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_sections_rectangulaire.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section Rectangulaire");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_sections_rectangulaire.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section Rectangulaire")
     
     if (!EF_gtk_section_rectangulaire_recupere_donnees(projet, &largeur, &hauteur, &nom))
         gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections_rectangulaire.builder, "EF_section_rectangulaire_button_add_edit")), FALSE);
@@ -178,14 +178,14 @@ void EF_gtk_section_rectangulaire_ajouter_clicked(GtkButton *button, Projet *pro
     double  largeur, hauteur;
     gchar   *texte;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_sections_rectangulaire.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section Rectangulaire");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_sections_rectangulaire.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section Rectangulaire")
     
     if (!(EF_gtk_section_rectangulaire_recupere_donnees(projet, &largeur, &hauteur, &texte)))
         return;
     
     // Création de la nouvelle charge ponctuelle au noeud
-    BUG(EF_sections_rectangulaire_ajout(projet, texte, common_math_f(largeur, FLOTTANT_UTILISATEUR), common_math_f(hauteur, FLOTTANT_UTILISATEUR)), );
+    BUG(EF_sections_rectangulaire_ajout(projet, texte, common_math_f(largeur, FLOTTANT_UTILISATEUR), common_math_f(hauteur, FLOTTANT_UTILISATEUR)), )
     
     free(texte);
     
@@ -202,7 +202,7 @@ void EF_gtk_section_rectangulaire_annuler_clicked(GtkButton *button, Projet *pro
  * Valeur renvoyée : Aucune.
  */
 {
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
     BUGMSG(projet->list_gtk.ef_sections_rectangulaire.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section Rectangulaire");
     
     gtk_widget_destroy(projet->list_gtk.ef_sections_rectangulaire.window);
@@ -221,15 +221,15 @@ void EF_gtk_section_rectangulaire_modifier_clicked(GtkButton *button, Projet *pr
     double      largeur, hauteur;
     gchar       *texte;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_sections_rectangulaire.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section Rectangulaire");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_sections_rectangulaire.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section Rectangulaire")
     
     if (!(EF_gtk_section_rectangulaire_recupere_donnees(projet, &largeur, &hauteur, &texte)))
         return;
     
     gtk_widget_destroy(projet->list_gtk.ef_sections_rectangulaire.window);
     
-    BUG(EF_sections_rectangulaire_modif(projet, projet->list_gtk.ef_sections_rectangulaire.section, texte, common_math_f(largeur, FLOTTANT_UTILISATEUR), common_math_f(hauteur, FLOTTANT_UTILISATEUR)), );
+    BUG(EF_sections_rectangulaire_modif(projet, projet->list_gtk.ef_sections_rectangulaire.section, texte, common_math_f(largeur, FLOTTANT_UTILISATEUR), common_math_f(hauteur, FLOTTANT_UTILISATEUR)), )
     
     free(texte);
     
@@ -251,7 +251,7 @@ gboolean EF_gtk_section_rectangulaire(Projet *projet, EF_Section *section)
 {
     Gtk_EF_Sections_Rectangulaire   *ef_gtk;
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
     ef_gtk = &projet->list_gtk.ef_sections_rectangulaire;
     if (projet->list_gtk.ef_sections_rectangulaire.builder != NULL)
     {
@@ -262,7 +262,7 @@ gboolean EF_gtk_section_rectangulaire(Projet *projet, EF_Section *section)
     else
     {
         ef_gtk->builder = gtk_builder_new();
-        BUGMSG(gtk_builder_add_from_resource(ef_gtk->builder, "/org/2lgc/codegui/ui/EF_sections_rectangulaire.ui", NULL) != 0, FALSE, gettext("Builder Failed\n"));
+        BUGMSG(gtk_builder_add_from_resource(ef_gtk->builder, "/org/2lgc/codegui/ui/EF_sections_rectangulaire.ui", NULL) != 0, FALSE, gettext("Builder Failed\n"))
         gtk_builder_connect_signals(ef_gtk->builder, projet);
         ef_gtk->window = GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder, "EF_section_rectangulaire_window"));
     }
@@ -284,7 +284,7 @@ gboolean EF_gtk_section_rectangulaire(Projet *projet, EF_Section *section)
         
         gtk_window_set_title(GTK_WINDOW(ef_gtk->window), gettext("Modification d'une section rectangulaire"));
         ef_gtk->section = section;
-        BUGMSG(ef_gtk->section->type == SECTION_RECTANGULAIRE, FALSE, gettext("La section à modifier n'est pas rectangulaire.\n"));
+        BUGMSG(ef_gtk->section->type == SECTION_RECTANGULAIRE, FALSE, gettext("La section à modifier n'est pas rectangulaire.\n"))
         data = ef_gtk->section->data;
         
         gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(ef_gtk->builder, "EF_section_rectangulaire_textview_nom"))), ef_gtk->section->nom, -1);

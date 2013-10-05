@@ -187,7 +187,7 @@ void common_math_double_to_char2(Flottant nombre, char *dest, int decimales)
         }
         default :
         {
-            BUGMSG(NULL, , gettext("Type de nombre est inconnu.\n"));
+            BUGMSG(NULL, , gettext("Type de nombre est inconnu.\n"))
             break;
         }
     }
@@ -216,7 +216,7 @@ double common_math_get(Flottant f)
         default :
         {
             free(GUINT_TO_POINTER(1234156789));
-            BUGMSG(NULL, NAN, gettext("Type de nombre est inconnu.\n"));
+            BUGMSG(NULL, NAN, gettext("Type de nombre est inconnu.\n"))
             break;
         }
     }
@@ -246,7 +246,7 @@ Flottant common_math_f(double f, Type_Flottant type)
         default :
         {
             retour.d = NAN;
-            BUGMSG(NULL, retour, gettext("Type de nombre est inconnu.\n"));
+            BUGMSG(NULL, retour, gettext("Type de nombre est inconnu.\n"))
             break;
         }
     }

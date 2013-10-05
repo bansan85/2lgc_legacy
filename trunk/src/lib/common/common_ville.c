@@ -41,7 +41,7 @@ gboolean common_ville_init(Projet *projet)
     GtkTreeIter iter;
 #endif
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
     
     projet->parametres.adresse.departement = NULL;
     projet->parametres.adresse.commune = 0;
@@ -152,13 +152,13 @@ gboolean common_ville_get_ville(char *ligne, int *cdc, int *cheflieu, int *reg, 
     int     code_postal_, altitude_, population_;
     char    *dep_;
     
-    BUGMSG(ligne, FALSE, gettext("Paramètre %s incorrect.\n"), "ligne");
+    BUGMSG(ligne, FALSE, gettext("Paramètre %s incorrect.\n"), "ligne")
     
-    BUGMSG(dep_ = malloc(sizeof(char)*(strlen(ligne)+1)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(dep_ = malloc(sizeof(char)*(strlen(ligne)+1)), FALSE, gettext("Erreur d'allocation mémoire.\n"))
     
     // On récupère les numéros caractéristant la ville en cours.
-    BUGMSG(sscanf(ligne, "%d\t%d\t%d\t%s\t%d\t%d\t%d\t%d\t", &cdc_, &cheflieu_, &reg_, dep_, &com_, &ar_, &ct_, &tncc_) == 8, FALSE, gettext("La ligne en cours '%s' n'est pas dans un format correct pour une ville.\n"), ligne);
-    BUGMSG((0 < strlen(dep_)) && (strlen(dep_) <= 3), FALSE, gettext("La ligne en cours '%s' n'est pas dans un format correct pour une ville.\n"), ligne);
+    BUGMSG(sscanf(ligne, "%d\t%d\t%d\t%s\t%d\t%d\t%d\t%d\t", &cdc_, &cheflieu_, &reg_, dep_, &com_, &ar_, &ct_, &tncc_) == 8, FALSE, gettext("La ligne en cours '%s' n'est pas dans un format correct pour une ville.\n"), ligne)
+    BUGMSG((0 < strlen(dep_)) && (strlen(dep_) <= 3), FALSE, gettext("La ligne en cours '%s' n'est pas dans un format correct pour une ville.\n"), ligne)
     if (cdc != NULL)
         *cdc = cdc_;
     if (cheflieu != NULL)
@@ -211,8 +211,8 @@ gboolean common_ville_get_ville(char *ligne, int *cdc, int *cheflieu, int *reg, 
         }
     }
     
-    BUGMSG(ligne[j] != '\000', FALSE, gettext("La ligne en cours '%s' n'est pas dans un format correct pour une ville.\n"), ligne);
-    BUGMSG(sscanf(&(ligne[j]), "%d\t%d\t%d\n", &code_postal_, &altitude_, &population_) == 3, FALSE, gettext("La ligne en cours '%s' n'est pas dans un format correct pour une ville.\n"), ligne);
+    BUGMSG(ligne[j] != '\000', FALSE, gettext("La ligne en cours '%s' n'est pas dans un format correct pour une ville.\n"), ligne)
+    BUGMSG(sscanf(&(ligne[j]), "%d\t%d\t%d\n", &code_postal_, &altitude_, &population_) == 3, FALSE, gettext("La ligne en cours '%s' n'est pas dans un format correct pour une ville.\n"), ligne)
     
     if (code_postal != NULL)
         *code_postal = code_postal_;
@@ -256,10 +256,10 @@ gboolean common_ville_set(Projet *projet, char *departement, const char *ville,
     Type_Seisme seisme_tmp;
     char        *tmp;
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(departement, FALSE, gettext("Paramètre %s incorrect.\n"), "departement");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(departement, FALSE, gettext("Paramètre %s incorrect.\n"), "departement")
     
-    BUGMSG(villes = fopen(DATADIR"/france_villes.csv", "r"), FALSE, gettext("Le fichier '%s' est introuvable.\n"), DATADIR"/france_villes.csv");
+    BUGMSG(villes = fopen(DATADIR"/france_villes.csv", "r"), FALSE, gettext("Le fichier '%s' est introuvable.\n"), DATADIR"/france_villes.csv")
     
     // On passe la première ligne qui est l'étiquette des colonnes.
     ligne = common_text_get_line(villes);
@@ -268,8 +268,8 @@ gboolean common_ville_set(Projet *projet, char *departement, const char *ville,
     ligne = common_text_get_line(villes);
     do
     {
-        BUG(common_ville_get_ville(ligne, NULL, NULL, NULL, dep, &com, NULL, &ct, &article, NULL, NULL, &artmin, &nccenr, &code_postal, NULL, &population), FALSE);
-        BUGMSG(tmp = g_strdup_printf("%s%s%s", artmin, ((article == 5) || (article == 1) || (article == 0)) ? "" : " ", nccenr), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+        BUG(common_ville_get_ville(ligne, NULL, NULL, NULL, dep, &com, NULL, &ct, &article, NULL, NULL, &artmin, &nccenr, &code_postal, NULL, &population), FALSE)
+        BUGMSG(tmp = g_strdup_printf("%s%s%s", artmin, ((article == 5) || (article == 1) || (article == 0)) ? "" : " ", nccenr), FALSE, gettext("Erreur d'allocation mémoire.\n"))
         // On récupère les numéros caractéristant la ville en cours.
         if ((strcmp(dep, departement) == 0) && (strcmp(tmp, ville) == 0))
         {
@@ -282,7 +282,7 @@ gboolean common_ville_set(Projet *projet, char *departement, const char *ville,
             if (!graphique_seul)
             {
                 free(projet->parametres.adresse.departement);
-                BUGMSG(projet->parametres.adresse.departement = g_strdup(departement), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                BUGMSG(projet->parametres.adresse.departement = g_strdup(departement), FALSE, gettext("Erreur d'allocation mémoire.\n"))
                 projet->parametres.adresse.commune = com;
                 projet->parametres.adresse.code_postal = code_postal;
                 free(projet->parametres.adresse.ville);
@@ -297,7 +297,7 @@ gboolean common_ville_set(Projet *projet, char *departement, const char *ville,
             {
                 char    *code_postal2;
                 
-                BUGMSG(code_postal2 = g_strdup_printf("%d", code_postal), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                BUGMSG(code_postal2 = g_strdup_printf("%d", code_postal), FALSE, gettext("Erreur d'allocation mémoire.\n"))
                 
                 g_signal_handler_block(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_buffer_code_postal"), g_signal_handler_find(G_OBJECT(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_buffer_code_postal")), G_SIGNAL_MATCH_FUNC, 0, 0, NULL, common_gtk_informations_entry_add_char, NULL));
                 g_signal_handler_block(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_buffer_code_postal"), g_signal_handler_find(G_OBJECT(gtk_builder_get_object(projet->list_gtk.common_informations.builder, "common_informations_buffer_code_postal")), G_SIGNAL_MATCH_FUNC, 0, 0, NULL, common_gtk_informations_entry_del_char, NULL));
@@ -319,18 +319,18 @@ gboolean common_ville_set(Projet *projet, char *departement, const char *ville,
                 free(tmp);
             
             // Le zonage neige.
-            BUGMSG(villes = fopen(DATADIR"/france_neige.csv", "r"), FALSE, gettext("Le fichier '%s' est introuvable.\n"), DATADIR"/france_neige.csv");
+            BUGMSG(villes = fopen(DATADIR"/france_neige.csv", "r"), FALSE, gettext("Le fichier '%s' est introuvable.\n"), DATADIR"/france_neige.csv")
             // On commande par chercher le département
             dep_parcours = NULL;
             while (dep_parcours == NULL)
             {
-                BUGMSG(ligne = common_text_get_line(villes), FALSE, gettext("Le fichier '%s' est incomplet.\n"), DATADIR"/france_neige.csv");
+                BUGMSG(ligne = common_text_get_line(villes), FALSE, gettext("Le fichier '%s' est incomplet.\n"), DATADIR"/france_neige.csv")
                 
-                BUGMSG(champ1 = malloc(sizeof(char)*(strlen(ligne)+1)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-                BUGMSG(champ2 = malloc(sizeof(char)*(strlen(ligne)+1)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-                BUGMSG(dep_parcours = malloc(sizeof(char)*(strlen(ligne)+1)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                BUGMSG(champ1 = malloc(sizeof(char)*(strlen(ligne)+1)), FALSE, gettext("Erreur d'allocation mémoire.\n"))
+                BUGMSG(champ2 = malloc(sizeof(char)*(strlen(ligne)+1)), FALSE, gettext("Erreur d'allocation mémoire.\n"))
+                BUGMSG(dep_parcours = malloc(sizeof(char)*(strlen(ligne)+1)), FALSE, gettext("Erreur d'allocation mémoire.\n"))
                 
-                BUGMSG(sscanf(ligne, "%s\t%s\t%s\n", champ1, dep_parcours, champ2) == 3, FALSE, gettext("Le fichier '%s' est corrompu.\n"), DATADIR"/france_neige.csv");
+                BUGMSG(sscanf(ligne, "%s\t%s\t%s\n", champ1, dep_parcours, champ2) == 3, FALSE, gettext("Le fichier '%s' est corrompu.\n"), DATADIR"/france_neige.csv")
                 
                 if ((strcmp(dep_parcours, dep) != 0) || (strcmp(champ1, "DEP") != 0))
                 {
@@ -361,7 +361,7 @@ gboolean common_ville_set(Projet *projet, char *departement, const char *ville,
             else if (strcmp(champ2, "E") == 0)
                 neige_tmp = NEIGE_E;
             else
-                BUGMSG(NULL, FALSE, gettext("Le fichier '%s' est corrumpu. Le champ2 '%s' est inconnu.\n"), DATADIR"/france_neige.csv", champ2);
+                BUGMSG(NULL, FALSE, gettext("Le fichier '%s' est corrumpu. Le champ2 '%s' est inconnu.\n"), DATADIR"/france_neige.csv", champ2)
             free(champ2);
             // On recherche si il y a une exception à la règle de base.
             done = FALSE;
@@ -372,10 +372,10 @@ gboolean common_ville_set(Projet *projet, char *departement, const char *ville,
                 if (ligne == NULL)
                     break;
                 
-                BUGMSG(champ1 = malloc(sizeof(char)*(strlen(ligne)+1)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-                BUGMSG(champ2 = malloc(sizeof(char)*(strlen(ligne)+1)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                BUGMSG(champ1 = malloc(sizeof(char)*(strlen(ligne)+1)), FALSE, gettext("Erreur d'allocation mémoire.\n"))
+                BUGMSG(champ2 = malloc(sizeof(char)*(strlen(ligne)+1)), FALSE, gettext("Erreur d'allocation mémoire.\n"))
                 
-                BUGMSG(sscanf(ligne, "%s", champ1) == 1, FALSE, gettext("Le fichier '%s' est corrompu.\n"), DATADIR"/france_neige.csv");
+                BUGMSG(sscanf(ligne, "%s", champ1) == 1, FALSE, gettext("Le fichier '%s' est corrompu.\n"), DATADIR"/france_neige.csv")
                 
                 if (strcmp(champ1, "DEP") == 0)
                     done = TRUE;
@@ -383,7 +383,7 @@ gboolean common_ville_set(Projet *projet, char *departement, const char *ville,
                 {
                     int numero;
                     
-                    BUGMSG(sscanf(ligne, "%s\t%d\t%s\n", champ1, &numero, champ2) == 3, FALSE, gettext("Le fichier '%s' est corrompu.\n"), DATADIR"/france_neige.csv");
+                    BUGMSG(sscanf(ligne, "%s\t%d\t%s\n", champ1, &numero, champ2) == 3, FALSE, gettext("Le fichier '%s' est corrompu.\n"), DATADIR"/france_neige.csv")
                     if (((strcmp(champ1, "CAN") == 0) && (numero == ct)) ||
                             ((strcmp(champ1, "COM") == 0) && (numero == com)))
                     {
@@ -404,7 +404,7 @@ gboolean common_ville_set(Projet *projet, char *departement, const char *ville,
                         else if (strcmp(champ2, "E") == 0)
                             neige_tmp = NEIGE_E;
                         else
-                            BUGMSG(NULL, FALSE, gettext("Le fichier '%s' est corrumpu. Le champ2 '%s' est inconnu.\n"), DATADIR"/france_neige.csv", champ2);
+                            BUGMSG(NULL, FALSE, gettext("Le fichier '%s' est corrumpu. Le champ2 '%s' est inconnu.\n"), DATADIR"/france_neige.csv", champ2)
                         done = TRUE;
                     }
                     else
@@ -426,18 +426,18 @@ gboolean common_ville_set(Projet *projet, char *departement, const char *ville,
             // Fin Neige
             
             // Le zonage vent.
-            BUGMSG(villes = fopen(DATADIR"/france_vent.csv", "r"), FALSE, gettext("Le fichier '%s' est introuvable.\n"), DATADIR"/france_vent.csv");
+            BUGMSG(villes = fopen(DATADIR"/france_vent.csv", "r"), FALSE, gettext("Le fichier '%s' est introuvable.\n"), DATADIR"/france_vent.csv")
             // On commande par chercher le département
             dep_parcours = NULL;
             while (dep_parcours == NULL)
             {
-                BUGMSG(ligne = common_text_get_line(villes), FALSE, gettext("Le fichier '%s' est incomplet.\n"), DATADIR"/france_vent.csv");
+                BUGMSG(ligne = common_text_get_line(villes), FALSE, gettext("Le fichier '%s' est incomplet.\n"), DATADIR"/france_vent.csv")
                 
-                BUGMSG(champ1 = malloc(sizeof(char)*(strlen(ligne)+1)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-                BUGMSG(champ2 = malloc(sizeof(char)*(strlen(ligne)+1)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-                BUGMSG(dep_parcours = malloc(sizeof(char)*(strlen(ligne)+1)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                BUGMSG(champ1 = malloc(sizeof(char)*(strlen(ligne)+1)), FALSE, gettext("Erreur d'allocation mémoire.\n"))
+                BUGMSG(champ2 = malloc(sizeof(char)*(strlen(ligne)+1)), FALSE, gettext("Erreur d'allocation mémoire.\n"))
+                BUGMSG(dep_parcours = malloc(sizeof(char)*(strlen(ligne)+1)), FALSE, gettext("Erreur d'allocation mémoire.\n"))
                 
-                BUGMSG(sscanf(ligne, "%s\t%s\t%s\n", champ1, dep_parcours, champ2) == 3, FALSE, gettext("Le fichier '%s' est corrompu.\n"), DATADIR"/france_vent.csv");
+                BUGMSG(sscanf(ligne, "%s\t%s\t%s\n", champ1, dep_parcours, champ2) == 3, FALSE, gettext("Le fichier '%s' est corrompu.\n"), DATADIR"/france_vent.csv")
                 
                 if ((strcmp(dep_parcours, dep) != 0) || (strcmp(champ1, "DEP") != 0))
                 {
@@ -460,7 +460,7 @@ gboolean common_ville_set(Projet *projet, char *departement, const char *ville,
             else if (strcmp(champ2, "4") == 0)
                 vent_tmp = VENT_4;
             else
-                BUGMSG(NULL, FALSE, gettext("Le fichier '%s' est corrumpu. Le champ2 '%s' est inconnu.\n"), DATADIR"/france_vent.csv", champ2);
+                BUGMSG(NULL, FALSE, gettext("Le fichier '%s' est corrumpu. Le champ2 '%s' est inconnu.\n"), DATADIR"/france_vent.csv", champ2)
             free(champ2);
             // On recherche si il y a une exception à la règle de base.
             done = FALSE;
@@ -471,10 +471,10 @@ gboolean common_ville_set(Projet *projet, char *departement, const char *ville,
                 if (ligne == NULL)
                     break;
                 
-                BUGMSG(champ1 = malloc(sizeof(char)*(strlen(ligne)+1)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-                BUGMSG(champ2 = malloc(sizeof(char)*(strlen(ligne)+1)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                BUGMSG(champ1 = malloc(sizeof(char)*(strlen(ligne)+1)), FALSE, gettext("Erreur d'allocation mémoire.\n"))
+                BUGMSG(champ2 = malloc(sizeof(char)*(strlen(ligne)+1)), FALSE, gettext("Erreur d'allocation mémoire.\n"))
                 
-                BUGMSG(sscanf(ligne, "%s", champ1) == 1, FALSE, gettext("Le fichier '%s' est corrompu.\n"), DATADIR"/france_vent.csv");
+                BUGMSG(sscanf(ligne, "%s", champ1) == 1, FALSE, gettext("Le fichier '%s' est corrompu.\n"), DATADIR"/france_vent.csv")
                 
                 if (strcmp(champ1, "DEP") == 0)
                     done = TRUE;
@@ -482,7 +482,7 @@ gboolean common_ville_set(Projet *projet, char *departement, const char *ville,
                 {
                     int numero;
                     
-                    BUGMSG(sscanf(ligne, "%s\t%d\t%s\n", champ1, &numero, champ2) == 3, FALSE, gettext("Le fichier '%s' est corrompu.\n"), DATADIR"/france_vent.csv");
+                    BUGMSG(sscanf(ligne, "%s\t%d\t%s\n", champ1, &numero, champ2) == 3, FALSE, gettext("Le fichier '%s' est corrompu.\n"), DATADIR"/france_vent.csv")
                     if (((strcmp(champ1, "CAN") == 0) && (numero == ct)) ||
                         ((strcmp(champ1, "COM") == 0) && (numero == com)))
                     {
@@ -495,7 +495,7 @@ gboolean common_ville_set(Projet *projet, char *departement, const char *ville,
                         else if (strcmp(champ2, "4") == 0)
                             vent_tmp = VENT_4;
                         else
-                            BUGMSG(NULL, FALSE, gettext("Le fichier '%s' est corrumpu. Le champ2 '%s' est inconnu.\n"), DATADIR"/france_vent.csv", champ2);
+                            BUGMSG(NULL, FALSE, gettext("Le fichier '%s' est corrumpu. Le champ2 '%s' est inconnu.\n"), DATADIR"/france_vent.csv", champ2)
                         done = TRUE;
                     }
                     else
@@ -517,18 +517,18 @@ gboolean common_ville_set(Projet *projet, char *departement, const char *ville,
             // Fin Vent
             
             // Le zonage sismique.
-            BUGMSG(villes = fopen(DATADIR"/france_seisme.csv", "r"), FALSE, gettext("Le fichier '%s' est introuvable.\n"), DATADIR"/france_seisme.csv");
+            BUGMSG(villes = fopen(DATADIR"/france_seisme.csv", "r"), FALSE, gettext("Le fichier '%s' est introuvable.\n"), DATADIR"/france_seisme.csv")
             // On commande par chercher le département
             dep_parcours = NULL;
             while (dep_parcours == NULL)
             {
-                BUGMSG(ligne = common_text_get_line(villes), FALSE, gettext("Le fichier '%s' est incomplet.\n"), DATADIR"/france_seisme.csv");
+                BUGMSG(ligne = common_text_get_line(villes), FALSE, gettext("Le fichier '%s' est incomplet.\n"), DATADIR"/france_seisme.csv")
                 
-                BUGMSG(champ1 = malloc(sizeof(char)*(strlen(ligne)+1)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-                BUGMSG(champ2 = malloc(sizeof(char)*(strlen(ligne)+1)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-                BUGMSG(dep_parcours = malloc(sizeof(char)*(strlen(ligne)+1)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                BUGMSG(champ1 = malloc(sizeof(char)*(strlen(ligne)+1)), FALSE, gettext("Erreur d'allocation mémoire.\n"))
+                BUGMSG(champ2 = malloc(sizeof(char)*(strlen(ligne)+1)), FALSE, gettext("Erreur d'allocation mémoire.\n"))
+                BUGMSG(dep_parcours = malloc(sizeof(char)*(strlen(ligne)+1)), FALSE, gettext("Erreur d'allocation mémoire.\n"))
                 
-                BUGMSG(sscanf(ligne, "%s\t%s\t%s\n", champ1, dep_parcours, champ2) == 3, FALSE, gettext("Le fichier '%s' est corrompu.\n"), DATADIR"/france_seisme.csv");
+                BUGMSG(sscanf(ligne, "%s\t%s\t%s\n", champ1, dep_parcours, champ2) == 3, FALSE, gettext("Le fichier '%s' est corrompu.\n"), DATADIR"/france_seisme.csv")
                 
                 if ((strcmp(dep_parcours, dep) != 0) || (strcmp(champ1, "DEP") != 0))
                 {
@@ -553,7 +553,7 @@ gboolean common_ville_set(Projet *projet, char *departement, const char *ville,
             else if (strcmp(champ2, "5") == 0)
                 seisme_tmp = SEISME_5;
             else
-                BUGMSG(NULL, FALSE, gettext("Le fichier '%s' est corrumpu. Le champ2 '%s' est inconnu.\n"), DATADIR"/france_seisme.csv", champ2);
+                BUGMSG(NULL, FALSE, gettext("Le fichier '%s' est corrumpu. Le champ2 '%s' est inconnu.\n"), DATADIR"/france_seisme.csv", champ2)
             free(champ2);
             // On recherche si il y a une exception à la règle de base.
             done = FALSE;
@@ -564,10 +564,10 @@ gboolean common_ville_set(Projet *projet, char *departement, const char *ville,
                 if (ligne == NULL)
                     break;
                 
-                BUGMSG(champ1 = malloc(sizeof(char)*(strlen(ligne)+1)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-                BUGMSG(champ2 = malloc(sizeof(char)*(strlen(ligne)+1)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                BUGMSG(champ1 = malloc(sizeof(char)*(strlen(ligne)+1)), FALSE, gettext("Erreur d'allocation mémoire.\n"))
+                BUGMSG(champ2 = malloc(sizeof(char)*(strlen(ligne)+1)), FALSE, gettext("Erreur d'allocation mémoire.\n"))
                 
-                BUGMSG(sscanf(ligne, "%s", champ1) == 1, FALSE, gettext("Le fichier '%s' est corrompu.\n"), DATADIR"/france_seisme.csv");
+                BUGMSG(sscanf(ligne, "%s", champ1) == 1, FALSE, gettext("Le fichier '%s' est corrompu.\n"), DATADIR"/france_seisme.csv")
                 
                 if (strcmp(champ1, "DEP") == 0)
                     done = TRUE;
@@ -575,7 +575,7 @@ gboolean common_ville_set(Projet *projet, char *departement, const char *ville,
                 {
                     int numero;
                     
-                    BUGMSG(sscanf(ligne, "%s\t%d\t%s\n", champ1, &numero, champ2) == 3, FALSE, gettext("Le fichier '%s' est corrompu.\n"), DATADIR"/france_seisme.csv");
+                    BUGMSG(sscanf(ligne, "%s\t%d\t%s\n", champ1, &numero, champ2) == 3, FALSE, gettext("Le fichier '%s' est corrompu.\n"), DATADIR"/france_seisme.csv")
                     if (((strcmp(champ1, "CAN") == 0) && (numero == ct)) ||
                         ((strcmp(champ1, "COM") == 0) && (numero == com)))
                     {
@@ -590,7 +590,7 @@ gboolean common_ville_set(Projet *projet, char *departement, const char *ville,
                         else if (strcmp(champ2, "5") == 0)
                             seisme_tmp = SEISME_5;
                         else
-                            BUGMSG(NULL, FALSE, gettext("Le fichier '%s' est corrumpu. Le champ2 '%s' est inconnu.\n"), DATADIR"/france_seisme.csv", champ2);
+                            BUGMSG(NULL, FALSE, gettext("Le fichier '%s' est corrumpu. Le champ2 '%s' est inconnu.\n"), DATADIR"/france_seisme.csv", champ2)
                         done = TRUE;
                     }
                     else
@@ -634,7 +634,7 @@ gboolean common_ville_free(Projet *projet)
  *             projet == NULL,
  */
 {
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
     
     free(projet->parametres.adresse.departement);
     free(projet->parametres.adresse.destinataire);

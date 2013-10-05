@@ -46,11 +46,11 @@ gboolean common_selection_ajout_nombre(void *data, GList **liste, Type_Liste typ
     GList   *list_parcours;
     Action  *action = NULL;
     
-    BUGMSG(liste, FALSE, gettext("Paramètre %s incorrect.\n"), "liste");
-    BUGMSG((projet) || (type != LISTE_CHARGES), FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(liste, FALSE, gettext("Paramètre %s incorrect.\n"), "liste")
+    BUGMSG((projet) || (type != LISTE_CHARGES), FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
     
     if (type == LISTE_CHARGES)
-        BUG(action = EF_charge_action(projet, data), FALSE);
+        BUG(action = EF_charge_action(projet, data), FALSE)
     
     if (*liste == NULL)
     {
@@ -66,7 +66,7 @@ gboolean common_selection_ajout_nombre(void *data, GList **liste, Type_Liste typ
             }
             default :
             {
-                BUGMSG(NULL, FALSE, gettext("Le type %d de la liste est inconnu.\n"), type);
+                BUGMSG(NULL, FALSE, gettext("Le type %d de la liste est inconnu.\n"), type)
             }
         }
     }
@@ -130,7 +130,7 @@ gboolean common_selection_ajout_nombre(void *data, GList **liste, Type_Liste typ
                 Action          *action_en_cours;
                 
                 charge_liste = list_parcours->data;
-                BUG(action_en_cours = EF_charge_action(projet, charge_liste), FALSE);
+                BUG(action_en_cours = EF_charge_action(projet, charge_liste), FALSE)
                 charge = data;
                 
                 if ((_1990_action_numero_renvoie(action_en_cours) == _1990_action_numero_renvoie(action)) && (charge_liste->numero == charge->numero))
@@ -144,7 +144,7 @@ gboolean common_selection_ajout_nombre(void *data, GList **liste, Type_Liste typ
             }
             default :
             {
-                BUGMSG(NULL, FALSE, gettext("Le type %d de la liste est inconnu.\n"), type);
+                BUGMSG(NULL, FALSE, gettext("Le type %d de la liste est inconnu.\n"), type)
             }
         }
         list_parcours = g_list_next(list_parcours);
@@ -166,7 +166,7 @@ gboolean common_selection_ajout_nombre(void *data, GList **liste, Type_Liste typ
         }
         default :
         {
-            BUGMSG(NULL, FALSE, gettext("Le type %d de la liste est inconnu.\n"), type);
+            BUGMSG(NULL, FALSE, gettext("Le type %d de la liste est inconnu.\n"), type)
         }
     }
 }
@@ -192,7 +192,7 @@ GList *common_selection_renvoie_numeros(const char *texte)
     if (texte == NULL)
         return NULL;
     
-    BUGMSG(texte_clean = malloc(sizeof(char)*(strlen(texte)+1)), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(texte_clean = malloc(sizeof(char)*(strlen(texte)+1)), NULL, gettext("Erreur d'allocation mémoire.\n"))
     
     // On vérifie si le texte contient bien une liste correcte de numéros
     i=0;
@@ -251,8 +251,8 @@ GList *common_selection_renvoie_numeros(const char *texte)
                 char            *fake = malloc(sizeof(char)*(j-i+2));
                 unsigned int    debut, fin, pas;
                 
-                BUGMSG(tmp, NULL, gettext("Erreur d'allocation mémoire.\n"));
-                BUGMSG(fake, NULL, gettext("Erreur d'allocation mémoire.\n"));
+                BUGMSG(tmp, NULL, gettext("Erreur d'allocation mémoire.\n"))
+                BUGMSG(fake, NULL, gettext("Erreur d'allocation mémoire.\n"))
                 
                 strncpy(tmp, texte_clean+i, j-i+1);
                 tmp[j-i+1] = 0;
@@ -261,17 +261,17 @@ GList *common_selection_renvoie_numeros(const char *texte)
                 if (sscanf(tmp, "%u-%u/%u%s", &debut, &fin, &pas, fake) == 3)
                 {
                     for (i=debut;i<=fin;i=i+pas)
-                        BUG(common_selection_ajout_nombre(GUINT_TO_POINTER(i), &list, LISTE_UINT, NULL), NULL);
+                        BUG(common_selection_ajout_nombre(GUINT_TO_POINTER(i), &list, LISTE_UINT, NULL), NULL)
                 }
                 // Si c'est du format debut-fin
                 else if (sscanf(tmp, "%u-%u%s", &debut, &fin, fake) == 2)
                 {
                     for (i=debut;i<=fin;i++)
-                        BUG(common_selection_ajout_nombre(GUINT_TO_POINTER(i), &list, LISTE_UINT, NULL), NULL);
+                        BUG(common_selection_ajout_nombre(GUINT_TO_POINTER(i), &list, LISTE_UINT, NULL), NULL)
                 }
                 // Si c'est du format nombre simple
                 else if (sscanf(tmp, "%u%s", &debut, fake) == 1)
-                    BUG(common_selection_ajout_nombre(GUINT_TO_POINTER(debut), &list, LISTE_UINT, NULL), NULL);
+                    BUG(common_selection_ajout_nombre(GUINT_TO_POINTER(debut), &list, LISTE_UINT, NULL), NULL)
                 // Le format est inconnu.
                 else
                 {
@@ -388,14 +388,14 @@ char *common_selection_converti_noeuds_en_texte(GList *liste_noeuds)
         
         list_parcours = liste_noeuds;
         noeud = list_parcours->data;
-        BUGMSG(tmp = g_strdup_printf("%d", noeud->numero), NULL, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(tmp = g_strdup_printf("%d", noeud->numero), NULL, gettext("Erreur d'allocation mémoire.\n"))
         if (g_list_next(list_parcours) != NULL)
         {
             list_parcours = g_list_next(list_parcours);
             do
             {
                 noeud = list_parcours->data;
-                BUGMSG(tmp2 = g_strdup_printf("%s;%d", tmp, noeud->numero), NULL, gettext("Erreur d'allocation mémoire.\n"));
+                BUGMSG(tmp2 = g_strdup_printf("%s;%d", tmp, noeud->numero), NULL, gettext("Erreur d'allocation mémoire.\n"))
                 free(tmp);
                 tmp = tmp2;
                 tmp2 = NULL;
@@ -405,7 +405,7 @@ char *common_selection_converti_noeuds_en_texte(GList *liste_noeuds)
         }
     }
     else
-        BUGMSG(tmp = g_strdup_printf(" "), NULL, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(tmp = g_strdup_printf(" "), NULL, gettext("Erreur d'allocation mémoire.\n"))
     
     return tmp;
 }
@@ -429,14 +429,14 @@ char *common_selection_converti_barres_en_texte(GList *liste_barres)
         
         list_parcours = liste_barres;
         barre = list_parcours->data;
-        BUGMSG(tmp = g_strdup_printf("%u", barre->numero), NULL, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(tmp = g_strdup_printf("%u", barre->numero), NULL, gettext("Erreur d'allocation mémoire.\n"))
         if (g_list_next(list_parcours) != NULL)
         {
             list_parcours = g_list_next(list_parcours);
             do
             {
                 barre = list_parcours->data;
-                BUGMSG(tmp2 = g_strdup_printf("%s;%u", tmp, barre->numero), NULL, gettext("Erreur d'allocation mémoire.\n"));
+                BUGMSG(tmp2 = g_strdup_printf("%s;%u", tmp, barre->numero), NULL, gettext("Erreur d'allocation mémoire.\n"))
                 free(tmp);
                 tmp = tmp2;
                 tmp2 = NULL;
@@ -446,7 +446,7 @@ char *common_selection_converti_barres_en_texte(GList *liste_barres)
         }
     }
     else
-        BUGMSG(tmp = g_strdup_printf(" "), NULL, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(tmp = g_strdup_printf(" "), NULL, gettext("Erreur d'allocation mémoire.\n"))
     
     return tmp;
 }
@@ -472,9 +472,9 @@ char *common_selection_converti_charges_en_texte(GList *liste_charges, Projet *p
         list_parcours = liste_charges;
         charge = list_parcours->data;
         
-        BUG(action = EF_charge_action(projet, charge), NULL);
+        BUG(action = EF_charge_action(projet, charge), NULL)
         
-        BUGMSG(tmp = g_strdup_printf("%u:%u", _1990_action_numero_renvoie(action), charge->numero), NULL, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(tmp = g_strdup_printf("%u:%u", _1990_action_numero_renvoie(action), charge->numero), NULL, gettext("Erreur d'allocation mémoire.\n"))
         if (g_list_next(list_parcours) != NULL)
         {
             list_parcours = g_list_next(list_parcours);
@@ -492,7 +492,7 @@ char *common_selection_converti_charges_en_texte(GList *liste_charges, Projet *p
                      
                     list_parcours2 = g_list_next(list_parcours2);
                 }
-                BUGMSG(tmp2 = g_strdup_printf("%s;%u:%u", tmp, _1990_action_numero_renvoie(action), charge->numero), NULL, gettext("Erreur d'allocation mémoire.\n"));
+                BUGMSG(tmp2 = g_strdup_printf("%s;%u:%u", tmp, _1990_action_numero_renvoie(action), charge->numero), NULL, gettext("Erreur d'allocation mémoire.\n"))
                 free(tmp);
                 tmp = tmp2;
                 tmp2 = NULL;

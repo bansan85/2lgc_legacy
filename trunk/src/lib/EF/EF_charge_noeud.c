@@ -61,12 +61,12 @@ Charge_Noeud*  EF_charge_noeud_ajout(Projet *projet, unsigned int num_action, GL
 #endif
     
     // Trivial
-    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUG(action_en_cours = _1990_action_numero_cherche(projet, num_action), NULL);
-    BUGMSG(charge_nouveau = malloc(sizeof(Charge_Noeud)), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUG(action_en_cours = _1990_action_numero_cherche(projet, num_action), NULL)
+    BUGMSG(charge_nouveau = malloc(sizeof(Charge_Noeud)), NULL, gettext("Erreur d'allocation mémoire.\n"))
     
     charge_nouveau->type = CHARGE_NOEUD;
-    BUGMSG(charge_nouveau->nom = g_strdup_printf("%s", nom), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(charge_nouveau->nom = g_strdup_printf("%s", nom), NULL, gettext("Erreur d'allocation mémoire.\n"))
     charge_nouveau->noeuds = noeuds;
     charge_nouveau->fx = fx;
     charge_nouveau->fy = fy;
@@ -77,9 +77,9 @@ Charge_Noeud*  EF_charge_noeud_ajout(Projet *projet, unsigned int num_action, GL
     
     charge_nouveau->numero = g_list_length(_1990_action_charges_renvoie(action_en_cours));
     
-    BUG(_1990_action_charges_change(action_en_cours, g_list_append(_1990_action_charges_renvoie(action_en_cours), charge_nouveau)), NULL);
+    BUG(_1990_action_charges_change(action_en_cours, g_list_append(_1990_action_charges_renvoie(action_en_cours), charge_nouveau)), NULL)
     
-    BUG(EF_calculs_free(projet), FALSE);
+    BUG(EF_calculs_free(projet), FALSE)
     
 #ifdef ENABLE_GTK
     if ((projet->list_gtk._1990_actions.builder != NULL) && (gtk_tree_selection_get_selected(projet->list_gtk._1990_actions.tree_select_actions, &model_action, &iter_action)))
@@ -110,9 +110,9 @@ char* EF_charge_noeud_description(Charge_Noeud *charge)
     char    txt_fx[30], txt_fy[30], txt_fz[30], txt_mx[30], txt_my[30], txt_mz[30];
     char    *txt_liste_noeuds, *description;
     
-    BUGMSG(charge, FALSE, gettext("Paramètre %s incorrect.\n"), "charge");
+    BUGMSG(charge, FALSE, gettext("Paramètre %s incorrect.\n"), "charge")
     
-    BUG(txt_liste_noeuds = common_selection_converti_noeuds_en_texte(charge->noeuds), NULL);
+    BUG(txt_liste_noeuds = common_selection_converti_noeuds_en_texte(charge->noeuds), NULL)
     common_math_double_to_char2(charge->fx, txt_fx, DECIMAL_FORCE);
     common_math_double_to_char2(charge->fy, txt_fy, DECIMAL_FORCE);
     common_math_double_to_char2(charge->fz, txt_fz, DECIMAL_FORCE);
@@ -120,7 +120,7 @@ char* EF_charge_noeud_description(Charge_Noeud *charge)
     common_math_double_to_char2(charge->my, txt_my, DECIMAL_MOMENT);
     common_math_double_to_char2(charge->mz, txt_mz, DECIMAL_MOMENT);
     
-    BUGMSG(description = g_strdup_printf("%s : %s, Fx : %s N, Fy : %s N, Fz : %s N, Mx : %s N.m, My : %s N.m, Mz : %s N.m", strstr(txt_liste_noeuds, ";") == NULL ? gettext("Noeud") : gettext("Noeuds"), txt_liste_noeuds, txt_fx, txt_fy, txt_fz, txt_mx, txt_my, txt_mz), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(description = g_strdup_printf("%s : %s, Fx : %s N, Fy : %s N, Fz : %s N, Mx : %s N.m, My : %s N.m, Mz : %s N.m", strstr(txt_liste_noeuds, ";") == NULL ? gettext("Noeud") : gettext("Noeuds"), txt_liste_noeuds, txt_fx, txt_fy, txt_fz, txt_mx, txt_my, txt_mz), FALSE, gettext("Erreur d'allocation mémoire.\n"))
     
     free(txt_liste_noeuds);
     
@@ -143,7 +143,7 @@ gboolean EF_charge_noeud_enleve_noeuds(Charge_Noeud *charge, GList *noeuds, Proj
 {
     GList   *list_parcours = noeuds;
     
-    BUGMSG(charge, FALSE, gettext("Paramètre %s incorrect.\n"), "charge");
+    BUGMSG(charge, FALSE, gettext("Paramètre %s incorrect.\n"), "charge")
     
     while (list_parcours != NULL)
     {
@@ -172,7 +172,7 @@ gboolean EF_charge_noeud_enleve_noeuds(Charge_Noeud *charge, GList *noeuds, Proj
     }
 #endif
     
-    BUG(EF_calculs_free(projet), FALSE);
+    BUG(EF_calculs_free(projet), FALSE)
     
     return TRUE;
 }
@@ -187,7 +187,7 @@ gboolean EF_charge_noeud_free(Charge_Noeud *charge)
  *             charge == NULL.
  */
 {
-    BUGMSG(charge, FALSE, gettext("Paramètre %s incorrect.\n"), "charge");
+    BUGMSG(charge, FALSE, gettext("Paramètre %s incorrect.\n"), "charge")
     
     free(charge->nom);
     g_list_free(charge->noeuds);

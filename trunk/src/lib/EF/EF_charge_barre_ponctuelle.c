@@ -72,10 +72,10 @@ Charge_Barre_Ponctuelle *EF_charge_barre_ponctuelle_ajout(Projet *projet,
 #endif
     
     // Trivial
-    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUG(action_en_cours = _1990_action_numero_cherche(projet, num_action), NULL);
-    BUGMSG(!((common_math_get(a) < 0.) && (!(ERREUR_RELATIVE_EGALE(common_math_get(a), 0.)))), NULL, gettext("La position de la charge ponctuelle (%f) est incorrecte.\n"), common_math_get(a));
-    BUGMSG(charge_nouveau = malloc(sizeof(Charge_Barre_Ponctuelle)), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUG(action_en_cours = _1990_action_numero_cherche(projet, num_action), NULL)
+    BUGMSG(!((common_math_get(a) < 0.) && (!(ERREUR_RELATIVE_EGALE(common_math_get(a), 0.)))), NULL, gettext("La position de la charge ponctuelle (%f) est incorrecte.\n"), common_math_get(a))
+    BUGMSG(charge_nouveau = malloc(sizeof(Charge_Barre_Ponctuelle)), NULL, gettext("Erreur d'allocation mémoire.\n"))
     if (barres != NULL)
     {
         GList   *list_parcours = barres;
@@ -84,7 +84,7 @@ Charge_Barre_Ponctuelle *EF_charge_barre_ponctuelle_ajout(Projet *projet,
             EF_Barre    *barre = list_parcours->data;
             double      distance = EF_noeuds_distance(barre->noeud_debut, barre->noeud_fin);
             
-            BUGMSG(!((common_math_get(a) > distance) && (!(ERREUR_RELATIVE_EGALE(common_math_get(a), distance)))), NULL, gettext("La position de la charge ponctuelle (%f) est incorrecte. La longueur de la barre %d est de %f m.\n"), common_math_get(a), barre->numero, distance);
+            BUGMSG(!((common_math_get(a) > distance) && (!(ERREUR_RELATIVE_EGALE(common_math_get(a), distance)))), NULL, gettext("La position de la charge ponctuelle (%f) est incorrecte. La longueur de la barre %d est de %f m.\n"), common_math_get(a), barre->numero, distance)
             
             list_parcours = g_list_next(list_parcours);
         }
@@ -92,7 +92,7 @@ Charge_Barre_Ponctuelle *EF_charge_barre_ponctuelle_ajout(Projet *projet,
     }
     
     charge_nouveau->type = CHARGE_BARRE_PONCTUELLE;
-    BUGMSG(charge_nouveau->nom = g_strdup_printf("%s", nom), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(charge_nouveau->nom = g_strdup_printf("%s", nom), NULL, gettext("Erreur d'allocation mémoire.\n"))
     charge_nouveau->barres = barres;
     charge_nouveau->repere_local = repere_local;
     charge_nouveau->position = a;
@@ -105,9 +105,9 @@ Charge_Barre_Ponctuelle *EF_charge_barre_ponctuelle_ajout(Projet *projet,
     
     charge_nouveau->numero = g_list_length(_1990_action_charges_renvoie(action_en_cours));
     
-    BUG(_1990_action_charges_change(action_en_cours, g_list_append(_1990_action_charges_renvoie(action_en_cours), charge_nouveau)), NULL);
+    BUG(_1990_action_charges_change(action_en_cours, g_list_append(_1990_action_charges_renvoie(action_en_cours), charge_nouveau)), NULL)
     
-    BUG(EF_calculs_free(projet), FALSE);
+    BUG(EF_calculs_free(projet), FALSE)
     
 #ifdef ENABLE_GTK
     if ((projet->list_gtk._1990_actions.builder != NULL) && (gtk_tree_selection_get_selected(projet->list_gtk._1990_actions.tree_select_actions, &model_action, &iter_action)))
@@ -138,9 +138,9 @@ char* EF_charge_barre_ponctuelle_description(Charge_Barre_Ponctuelle *charge)
     char    txt_pos[30], txt_fx[30], txt_fy[30], txt_fz[30], txt_mx[30], txt_my[30], txt_mz[30];
     char    *txt_liste_barres, *description;
     
-    BUGMSG(charge, FALSE, gettext("Paramètre %s incorrect.\n"), "charge");
+    BUGMSG(charge, FALSE, gettext("Paramètre %s incorrect.\n"), "charge")
     
-    BUG(txt_liste_barres = common_selection_converti_noeuds_en_texte(charge->barres), NULL);
+    BUG(txt_liste_barres = common_selection_converti_noeuds_en_texte(charge->barres), NULL)
     common_math_double_to_char2(charge->position, txt_pos, DECIMAL_DISTANCE);
     common_math_double_to_char2(charge->fx, txt_fx, DECIMAL_FORCE);
     common_math_double_to_char2(charge->fx, txt_fx, DECIMAL_FORCE);
@@ -150,7 +150,7 @@ char* EF_charge_barre_ponctuelle_description(Charge_Barre_Ponctuelle *charge)
     common_math_double_to_char2(charge->my, txt_my, DECIMAL_MOMENT);
     common_math_double_to_char2(charge->mz, txt_mz, DECIMAL_MOMENT);
     
-    BUGMSG(description = g_strdup_printf("%s : %s, %s : %s m, %s, Fx : %s N, Fy : %s N, Fz : %s N, Mx : %s N.m, My : %s N.m, Mz : %s N.m", strstr(txt_liste_barres, ";") == NULL ? gettext("Barre") : gettext("Barres"), txt_liste_barres, gettext("position"), txt_pos, charge->repere_local ? gettext("repère : local") : gettext("repère : global"), txt_fx, txt_fy, txt_fz, txt_mx, txt_my, txt_mz), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(description = g_strdup_printf("%s : %s, %s : %s m, %s, Fx : %s N, Fy : %s N, Fz : %s N, Mx : %s N.m, My : %s N.m, Mz : %s N.m", strstr(txt_liste_barres, ";") == NULL ? gettext("Barre") : gettext("Barres"), txt_liste_barres, gettext("position"), txt_pos, charge->repere_local ? gettext("repère : local") : gettext("repère : global"), txt_fx, txt_fy, txt_fz, txt_mx, txt_my, txt_mz), FALSE, gettext("Erreur d'allocation mémoire.\n"))
     
     free(txt_liste_barres);
     
@@ -190,17 +190,17 @@ gboolean EF_charge_barre_ponctuelle_mx(EF_Barre *barre, unsigned int discretisat
     EF_Noeud    *debut, *fin;
     double      l, G, J;
 
-    BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre");
-    BUGMSG(infos, FALSE, gettext("Paramètre %s incorrect.\n"), "infos");
-    BUGMSG(barre->section, FALSE, gettext("Section indéfinie.\n"));
-    BUGMSG(barre->materiau, FALSE, gettext("Matériau indéfini.\n"));
-    BUGMSG(barre->noeud_debut, FALSE, gettext("Noeud 1 indéfini.\n"));
-    BUGMSG(barre->noeud_fin, FALSE, gettext("Noeud 2 indéfini.\n"));
-    BUGMSG(discretisation<=barre->discretisation_element, FALSE, gettext("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element);
-    BUGMSG(ma, FALSE, gettext("Paramètre %s incorrect.\n"), "ma");
-    BUGMSG(mb, FALSE, gettext("Paramètre %s incorrect.\n"), "mb");
-    BUGMSG(!((ERREUR_RELATIVE_EGALE(infos->kAx, MAXDOUBLE)) && (ERREUR_RELATIVE_EGALE(infos->kBx, MAXDOUBLE))), FALSE, gettext("Impossible de relâcher rx simultanément des deux cotés de la barre.\n"));
-    BUGMSG(!((a < 0.) && (!(ERREUR_RELATIVE_EGALE(a, 0.)))), FALSE, gettext("La position de la charge ponctuelle (%f) est incorrecte.\n"), a);
+    BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre")
+    BUGMSG(infos, FALSE, gettext("Paramètre %s incorrect.\n"), "infos")
+    BUGMSG(barre->section, FALSE, gettext("Section indéfinie.\n"))
+    BUGMSG(barre->materiau, FALSE, gettext("Matériau indéfini.\n"))
+    BUGMSG(barre->noeud_debut, FALSE, gettext("Noeud 1 indéfini.\n"))
+    BUGMSG(barre->noeud_fin, FALSE, gettext("Noeud 2 indéfini.\n"))
+    BUGMSG(discretisation<=barre->discretisation_element, FALSE, gettext("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element)
+    BUGMSG(ma, FALSE, gettext("Paramètre %s incorrect.\n"), "ma")
+    BUGMSG(mb, FALSE, gettext("Paramètre %s incorrect.\n"), "mb")
+    BUGMSG(!((ERREUR_RELATIVE_EGALE(infos->kAx, MAXDOUBLE)) && (ERREUR_RELATIVE_EGALE(infos->kBx, MAXDOUBLE))), FALSE, gettext("Impossible de relâcher rx simultanément des deux cotés de la barre.\n"))
+    BUGMSG(!((a < 0.) && (!(ERREUR_RELATIVE_EGALE(a, 0.)))), FALSE, gettext("La position de la charge ponctuelle (%f) est incorrecte.\n"), a)
 
     // Les moments aux extrémités de la barre sont déterminés par les intégrales de Mohr
     //   et valent dans le cas général :\end{verbatim}\begin{center}
@@ -219,14 +219,14 @@ gboolean EF_charge_barre_ponctuelle_mx(EF_Barre *barre, unsigned int discretisat
         fin = g_list_nth_data(barre->noeuds_intermediaires, discretisation);
     
     l = EF_noeuds_distance(debut, fin);
-    BUG(!isnan(l), FALSE);
-    BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), FALSE, gettext("La position de la charge ponctuelle (%f) est incorrecte. La longueur de la barre est de %f m.\n"), a, l);
+    BUG(!isnan(l), FALSE)
+    BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), FALSE, gettext("La position de la charge ponctuelle (%f) est incorrecte. La longueur de la barre est de %f m.\n"), a, l)
     
     G = common_math_get(EF_calculs_G(barre->materiau, FALSE));
     J = common_math_get(EF_sections_j(barre->section));
     
-    BUG(!isnan(G), FALSE);
-    BUG(!isnan(J), FALSE);
+    BUG(!isnan(G), FALSE)
+    BUG(!isnan(J), FALSE)
     
     // Pour une section section constante, les moments valent :\end{verbatim}\begin{displaymath}
     // M_{Bx} = \frac{\frac{a}{G \cdot J} +k_{Ax}}{\frac{L}{G \cdot J} +k_{Ax}+k_{Bx}} \cdot M_x\end{displaymath}\begin{verbatim}
@@ -273,15 +273,15 @@ gboolean EF_charge_barre_ponctuelle_def_ang_iso_y(EF_Barre *barre,
     EF_Noeud    *debut, *fin;
     double      l, b, E, I;
 
-    BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre");
-    BUGMSG(barre->section, FALSE, gettext("Section indéfinie.\n"));
-    BUGMSG(barre->materiau, FALSE, gettext("Matériau indéfini.\n"));
-    BUGMSG(barre->noeud_debut, FALSE, gettext("Noeud 1 indéfini.\n"));
-    BUGMSG(barre->noeud_fin, FALSE, gettext("Noeud 2 indéfini.\n"));
-    BUGMSG(discretisation<=barre->discretisation_element, FALSE, gettext("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element);
-    BUGMSG(phia, FALSE, gettext("Paramètre %s incorrect.\n"), "phia");
-    BUGMSG(phib, FALSE, gettext("Paramètre %s incorrect.\n"), "phib");
-    BUGMSG(!((a < 0.) && (!(ERREUR_RELATIVE_EGALE(a, 0.)))), FALSE, gettext("La position de la charge ponctuelle (%f) est incorrecte.\n"), a);
+    BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre")
+    BUGMSG(barre->section, FALSE, gettext("Section indéfinie.\n"))
+    BUGMSG(barre->materiau, FALSE, gettext("Matériau indéfini.\n"))
+    BUGMSG(barre->noeud_debut, FALSE, gettext("Noeud 1 indéfini.\n"))
+    BUGMSG(barre->noeud_fin, FALSE, gettext("Noeud 2 indéfini.\n"))
+    BUGMSG(discretisation<=barre->discretisation_element, FALSE, gettext("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element)
+    BUGMSG(phia, FALSE, gettext("Paramètre %s incorrect.\n"), "phia")
+    BUGMSG(phib, FALSE, gettext("Paramètre %s incorrect.\n"), "phib")
+    BUGMSG(!((a < 0.) && (!(ERREUR_RELATIVE_EGALE(a, 0.)))), FALSE, gettext("La position de la charge ponctuelle (%f) est incorrecte.\n"), a)
     
     // Les rotations aux extrémités de la barre sont déterminées par les intégrales de Mohr
     //   et valent dans le cas général :\end{verbatim}\begin{center}
@@ -303,14 +303,14 @@ gboolean EF_charge_barre_ponctuelle_def_ang_iso_y(EF_Barre *barre,
         fin = g_list_nth_data(barre->noeuds_intermediaires, discretisation);
     
     l = EF_noeuds_distance(debut, fin);
-    BUG(!isnan(l), FALSE);
-    BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), FALSE, gettext("La position de la charge ponctuelle (%f) est incorrecte. La longueur de la barre est de %f m.\n"), a, l);
+    BUG(!isnan(l), FALSE)
+    BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), FALSE, gettext("La position de la charge ponctuelle (%f) est incorrecte. La longueur de la barre est de %f m.\n"), a, l)
     b = l-a;
     
     E = common_math_get(EF_calculs_E(barre->materiau));
     I = common_math_get(EF_sections_iy(barre->section));
-    BUG(!isnan(I), FALSE);
-    BUG(!isnan(E), FALSE);
+    BUG(!isnan(I), FALSE)
+    BUG(!isnan(E), FALSE)
     
     // Pour une section constante, les angles valent :\end{verbatim}\begin{align*}
     // \varphi_A = &-\frac{F_z \cdot a}{6 \cdot E \cdot I_y \cdot L} \cdot b \cdot (2 \cdot L-a)-\frac{M_y}{6 \cdot E \cdot I_y \cdot L} \cdot (L^2-3 \cdot b^2)\nonumber\\
@@ -353,15 +353,15 @@ gboolean EF_charge_barre_ponctuelle_def_ang_iso_z(EF_Barre *barre,
     EF_Noeud    *debut, *fin;
     double      l, b, E, I;
     
-    BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre");
-    BUGMSG(barre->section, FALSE, gettext("Section indéfinie.\n"));
-    BUGMSG(barre->materiau, FALSE, gettext("Matériau indéfini.\n"));
-    BUGMSG(barre->noeud_debut, FALSE, gettext("Noeud 1 indéfini.\n"));
-    BUGMSG(barre->noeud_fin, FALSE, gettext("Noeud 2 indéfini.\n"));
-    BUGMSG(discretisation<=barre->discretisation_element, FALSE, gettext("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element);
-    BUGMSG(phia, FALSE, gettext("Paramètre %s incorrect.\n"), "phia");
-    BUGMSG(phib, FALSE, gettext("Paramètre %s incorrect.\n"), "phib");
-    BUGMSG(!((a < 0.) && (!(ERREUR_RELATIVE_EGALE(a, 0.)))), FALSE, gettext("La position de la charge ponctuelle (%f) est incorrecte.\n"), a);
+    BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre")
+    BUGMSG(barre->section, FALSE, gettext("Section indéfinie.\n"))
+    BUGMSG(barre->materiau, FALSE, gettext("Matériau indéfini.\n"))
+    BUGMSG(barre->noeud_debut, FALSE, gettext("Noeud 1 indéfini.\n"))
+    BUGMSG(barre->noeud_fin, FALSE, gettext("Noeud 2 indéfini.\n"))
+    BUGMSG(discretisation<=barre->discretisation_element, FALSE, gettext("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element)
+    BUGMSG(phia, FALSE, gettext("Paramètre %s incorrect.\n"), "phia")
+    BUGMSG(phib, FALSE, gettext("Paramètre %s incorrect.\n"), "phib")
+    BUGMSG(!((a < 0.) && (!(ERREUR_RELATIVE_EGALE(a, 0.)))), FALSE, gettext("La position de la charge ponctuelle (%f) est incorrecte.\n"), a)
     
     // Les rotations aux extrémités de la barre sont déterminées par les intégrales de Mohr
     //   et valent dans le cas général :\end{verbatim}\begin{center}
@@ -383,14 +383,14 @@ gboolean EF_charge_barre_ponctuelle_def_ang_iso_z(EF_Barre *barre,
         fin = g_list_nth_data(barre->noeuds_intermediaires, discretisation);
     
     l = EF_noeuds_distance(debut, fin);
-    BUG(!isnan(l), FALSE);
-    BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), FALSE, gettext("La position de la charge ponctuelle (%f) est incorrecte. La longueur de la barre est de %f m.\n"), a, l);
+    BUG(!isnan(l), FALSE)
+    BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), FALSE, gettext("La position de la charge ponctuelle (%f) est incorrecte. La longueur de la barre est de %f m.\n"), a, l)
     b = l-a;
     
     E = common_math_get(EF_calculs_E(barre->materiau));
     I = common_math_get(EF_sections_iz(barre->section));
-    BUG(!isnan(E), FALSE);
-    BUG(!isnan(I), FALSE);
+    BUG(!isnan(E), FALSE)
+    BUG(!isnan(I), FALSE)
     
     // Pour une section constante, les angles valent :\end{verbatim}\begin{displaymath}
     // \varphi_A = \frac{ F_y \cdot a}{6 \cdot E \cdot I_z \cdot L} b \cdot (2 \cdot L-a) - \frac{M_z}{6 \cdot E \cdot I_z \cdot L} \left(L^2-3 \cdot b^2 \right)\end{displaymath}\begin{displaymath}
@@ -433,16 +433,16 @@ gboolean EF_charge_barre_ponctuelle_fonc_rx(Fonction *fonction, EF_Barre *barre,
     double      l;
     double      G, debut_barre, J;
     
-    BUGMSG(fonction, FALSE, gettext("Paramètre %s incorrect.\n"), "fonction");
-    BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre");
-    BUGMSG(barre->section, FALSE, gettext("Section indéfinie.\n"));
-    BUGMSG(barre->materiau, FALSE, gettext("Matériau indéfini.\n"));
-    BUGMSG(barre->noeud_debut, FALSE, gettext("Noeud 1 indéfini.\n"));
-    BUGMSG(barre->noeud_fin, FALSE, gettext("Noeud 2 indéfini.\n"));
-    BUGMSG(discretisation<=barre->discretisation_element, FALSE, gettext("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element);
+    BUGMSG(fonction, FALSE, gettext("Paramètre %s incorrect.\n"), "fonction")
+    BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre")
+    BUGMSG(barre->section, FALSE, gettext("Section indéfinie.\n"))
+    BUGMSG(barre->materiau, FALSE, gettext("Matériau indéfini.\n"))
+    BUGMSG(barre->noeud_debut, FALSE, gettext("Noeud 1 indéfini.\n"))
+    BUGMSG(barre->noeud_fin, FALSE, gettext("Noeud 2 indéfini.\n"))
+    BUGMSG(discretisation<=barre->discretisation_element, FALSE, gettext("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element)
     infos = &(barre->info_EF[discretisation]);
-    BUGMSG(!((ERREUR_RELATIVE_EGALE(infos->kAx, MAXDOUBLE)) && (ERREUR_RELATIVE_EGALE(infos->kBx, MAXDOUBLE))), FALSE, gettext("Impossible de relâcher rx simultanément des deux cotés de la barre.\n")); 
-    BUGMSG(!((a < 0.) && (!(ERREUR_RELATIVE_EGALE(a, 0.)))), FALSE, gettext("La position de la charge ponctuelle (%f) est incorrecte.\n"), a);
+    BUGMSG(!((ERREUR_RELATIVE_EGALE(infos->kAx, MAXDOUBLE)) && (ERREUR_RELATIVE_EGALE(infos->kBx, MAXDOUBLE))), FALSE, gettext("Impossible de relâcher rx simultanément des deux cotés de la barre.\n"));
+    BUGMSG(!((a < 0.) && (!(ERREUR_RELATIVE_EGALE(a, 0.)))), FALSE, gettext("La position de la charge ponctuelle (%f) est incorrecte.\n"), a)
     
     // La déformation d'une barre soumise à un effort de torsion est défini par les formules :\end{verbatim}\begin{center}
     // \includegraphics[width=8cm]{images/charge_barre_ponctuelle_mx.pdf}\end{center}\begin{verbatim}
@@ -465,23 +465,23 @@ gboolean EF_charge_barre_ponctuelle_fonc_rx(Fonction *fonction, EF_Barre *barre,
     
     debut_barre = EF_noeuds_distance(barre->noeud_debut, debut);
     l = EF_noeuds_distance(debut, fin);
-    BUG(!isnan(l), FALSE);
-    BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), FALSE, gettext("La position de la charge ponctuelle (%f) est incorrecte. La longueur de la barre est de %f m.\n"), a, l);
+    BUG(!isnan(l), FALSE)
+    BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), FALSE, gettext("La position de la charge ponctuelle (%f) est incorrecte. La longueur de la barre est de %f m.\n"), a, l)
     
     G = common_math_get(EF_calculs_G(barre->materiau, FALSE));
     J = common_math_get(EF_sections_j(barre->section));
-    BUG(!isnan(G), FALSE);
-    BUG(!isnan(J), FALSE);
+    BUG(!isnan(G), FALSE)
+    BUG(!isnan(J), FALSE)
     
     if (ERREUR_RELATIVE_EGALE(infos->kBx, MAXDOUBLE))
     {
-        BUG(common_fonction_ajout_poly(fonction, 0., a, max*infos->kAx, max/(G*J), 0., 0., 0., 0., 0., debut_barre), FALSE);
-        BUG(common_fonction_ajout_poly(fonction, a, l, max*infos->kAx+a*(max+mbx)/(G*J), -mbx/(G*J), 0., 0., 0., 0., 0., debut_barre), FALSE);
+        BUG(common_fonction_ajout_poly(fonction, 0., a, max*infos->kAx, max/(G*J), 0., 0., 0., 0., 0., debut_barre), FALSE)
+        BUG(common_fonction_ajout_poly(fonction, a, l, max*infos->kAx+a*(max+mbx)/(G*J), -mbx/(G*J), 0., 0., 0., 0., 0., debut_barre), FALSE)
     }
     else
     {
-        BUG(common_fonction_ajout_poly(fonction, 0., a, mbx*infos->kBx - (a*(max+mbx)-l*mbx)/(G*J), +max/(G*J), 0., 0., 0., 0., 0., debut_barre), FALSE);
-        BUG(common_fonction_ajout_poly(fonction, a, l, mbx*(infos->kBx + l/(G*J)), -mbx/(G*J), 0., 0., 0., 0., 0., debut_barre), FALSE);
+        BUG(common_fonction_ajout_poly(fonction, 0., a, mbx*infos->kBx - (a*(max+mbx)-l*mbx)/(G*J), +max/(G*J), 0., 0., 0., 0., 0., debut_barre), FALSE)
+        BUG(common_fonction_ajout_poly(fonction, a, l, mbx*(infos->kBx + l/(G*J)), -mbx/(G*J), 0., 0., 0., 0., 0., debut_barre), FALSE)
     }
     
     // Pour une section section constante, les moments valent :
@@ -532,15 +532,15 @@ gboolean EF_charge_barre_ponctuelle_fonc_ry(Fonction *f_rotation, Fonction* f_de
     double      l, b;
     double      E, debut_barre, I;
     
-    BUGMSG(f_rotation, FALSE, gettext("Paramètre %s incorrect.\n"), "f_rotation");
-    BUGMSG(f_deform, FALSE, gettext("Paramètre %s incorrect.\n"), "f_deform");
-    BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre");
-    BUGMSG(barre->section, FALSE, gettext("Section indéfinie.\n"));
-    BUGMSG(barre->materiau, FALSE, gettext("Matériau indéfini.\n"));
-    BUGMSG(barre->noeud_debut, FALSE, gettext("Noeud 1 indéfini.\n"));
-    BUGMSG(barre->noeud_fin, FALSE, gettext("Noeud 2 indéfini.\n"));
-    BUGMSG(discretisation<=barre->discretisation_element, FALSE, gettext("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element);
-    BUGMSG(!((a < 0.) && (!(ERREUR_RELATIVE_EGALE(a, 0.)))), FALSE, gettext("La position de la charge ponctuelle (%f) est incorrecte.\n"), a);
+    BUGMSG(f_rotation, FALSE, gettext("Paramètre %s incorrect.\n"), "f_rotation")
+    BUGMSG(f_deform, FALSE, gettext("Paramètre %s incorrect.\n"), "f_deform")
+    BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre")
+    BUGMSG(barre->section, FALSE, gettext("Section indéfinie.\n"))
+    BUGMSG(barre->materiau, FALSE, gettext("Matériau indéfini.\n"))
+    BUGMSG(barre->noeud_debut, FALSE, gettext("Noeud 1 indéfini.\n"))
+    BUGMSG(barre->noeud_fin, FALSE, gettext("Noeud 2 indéfini.\n"))
+    BUGMSG(discretisation<=barre->discretisation_element, FALSE, gettext("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element)
+    BUGMSG(!((a < 0.) && (!(ERREUR_RELATIVE_EGALE(a, 0.)))), FALSE, gettext("La position de la charge ponctuelle (%f) est incorrecte.\n"), a)
     
     // La déformation en rotation d'une barre soumise à un effort de flexion autour de l'axe y
     // est calculée selon le principe des intégrales de Mohr et est définie par les formules :\end{verbatim}\begin{center}
@@ -581,26 +581,26 @@ gboolean EF_charge_barre_ponctuelle_fonc_ry(Fonction *f_rotation, Fonction* f_de
     
     debut_barre = EF_noeuds_distance(barre->noeud_debut, debut);
     l = EF_noeuds_distance(debut, fin);
-    BUG(!isnan(l), FALSE);
-    BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), FALSE, gettext("La position de la charge ponctuelle (%f) est incorrecte. La longueur de la barre est de %f m.\n"), a, l);
+    BUG(!isnan(l), FALSE)
+    BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), FALSE, gettext("La position de la charge ponctuelle (%f) est incorrecte. La longueur de la barre est de %f m.\n"), a, l)
     
     b = l-a;
     E = common_math_get(EF_calculs_E(barre->materiau));
     I = common_math_get(EF_sections_iy(barre->section));
-    BUG(!isnan(E), FALSE);
-    BUG(!isnan(I), FALSE);
+    BUG(!isnan(E), FALSE)
+    BUG(!isnan(I), FALSE)
     
-    BUG(common_fonction_ajout_poly(f_rotation, 0., a,  fz*b/(6*E*I*l)*(-l*l+b*b),  0.,          fz*b/(2*E*I*l),      0., 0., 0., 0., debut_barre), FALSE);
-    BUG(common_fonction_ajout_poly(f_rotation, a,  l, -fz*a/(6*E*I*l)*(2*l*l+a*a), fz*a/(E*I), -fz*a/(2*E*I*l),      0., 0., 0., 0., debut_barre), FALSE);
-    BUG(common_fonction_ajout_poly(f_rotation, 0., a,  my/(6*E*I*l)*(-l*l+3*b*b),  0.,          my/(2*E*I*l),        0., 0., 0., 0., debut_barre), FALSE);
-    BUG(common_fonction_ajout_poly(f_rotation, a,  l, my/(6*E*I*l)*(2*l*l+3*a*a),  -my/(E*I),   my/(2*E*I*l),        0., 0., 0., 0., debut_barre), FALSE);
-    BUG(common_fonction_ajout_poly(f_rotation, 0., l, l/(6*E*I)*(2*may-mby),       -may/(E*I),  (may+mby)/(2*E*I*l), 0., 0., 0., 0., debut_barre), FALSE);
+    BUG(common_fonction_ajout_poly(f_rotation, 0., a,  fz*b/(6*E*I*l)*(-l*l+b*b),  0.,          fz*b/(2*E*I*l),      0., 0., 0., 0., debut_barre), FALSE)
+    BUG(common_fonction_ajout_poly(f_rotation, a,  l, -fz*a/(6*E*I*l)*(2*l*l+a*a), fz*a/(E*I), -fz*a/(2*E*I*l),      0., 0., 0., 0., debut_barre), FALSE)
+    BUG(common_fonction_ajout_poly(f_rotation, 0., a,  my/(6*E*I*l)*(-l*l+3*b*b),  0.,          my/(2*E*I*l),        0., 0., 0., 0., debut_barre), FALSE)
+    BUG(common_fonction_ajout_poly(f_rotation, a,  l, my/(6*E*I*l)*(2*l*l+3*a*a),  -my/(E*I),   my/(2*E*I*l),        0., 0., 0., 0., debut_barre), FALSE)
+    BUG(common_fonction_ajout_poly(f_rotation, 0., l, l/(6*E*I)*(2*may-mby),       -may/(E*I),  (may+mby)/(2*E*I*l), 0., 0., 0., 0., debut_barre), FALSE)
     
-    BUG(common_fonction_ajout_poly(f_deform, 0., a,  0.,                fz*b/(6*E*I*l)*(l*l-b*b),    0.,                 -fz*b/(6*E*I*l),      0., 0., 0., debut_barre), FALSE);
-    BUG(common_fonction_ajout_poly(f_deform, a,  l, -fz*a*a*a/(6*E*I),  fz*a/(6*E*I*l)*(a*a+2*l*l),  -fz*a/(2*E*I),      fz*a/(6*E*I*l),       0., 0., 0., debut_barre), FALSE);
-    BUG(common_fonction_ajout_poly(f_deform, 0., a,  0.,                my/(6*E*I*l)*(l*l-3*b*b),    0.,                 -my/(6*E*I*l),        0., 0., 0., debut_barre), FALSE);
-    BUG(common_fonction_ajout_poly(f_deform, a,  l, my/(6*E*I)*(3*a*a), -my/(6*E*I*l)*(2*l*l+3*a*a), my/(6*E*I*l)*(3*l), -my/(6*E*I*l),        0., 0., 0., debut_barre), FALSE);
-    BUG(common_fonction_ajout_poly(f_deform, 0., l, 0.,                 l/(6*E*I)*(-2*may+mby),      may/(2*E*I),        -(mby+may)/(6*E*I*l), 0., 0., 0., debut_barre), FALSE);
+    BUG(common_fonction_ajout_poly(f_deform, 0., a,  0.,                fz*b/(6*E*I*l)*(l*l-b*b),    0.,                 -fz*b/(6*E*I*l),      0., 0., 0., debut_barre), FALSE)
+    BUG(common_fonction_ajout_poly(f_deform, a,  l, -fz*a*a*a/(6*E*I),  fz*a/(6*E*I*l)*(a*a+2*l*l),  -fz*a/(2*E*I),      fz*a/(6*E*I*l),       0., 0., 0., debut_barre), FALSE)
+    BUG(common_fonction_ajout_poly(f_deform, 0., a,  0.,                my/(6*E*I*l)*(l*l-3*b*b),    0.,                 -my/(6*E*I*l),        0., 0., 0., debut_barre), FALSE)
+    BUG(common_fonction_ajout_poly(f_deform, a,  l, my/(6*E*I)*(3*a*a), -my/(6*E*I*l)*(2*l*l+3*a*a), my/(6*E*I*l)*(3*l), -my/(6*E*I*l),        0., 0., 0., debut_barre), FALSE)
+    BUG(common_fonction_ajout_poly(f_deform, 0., l, 0.,                 l/(6*E*I)*(-2*may+mby),      may/(2*E*I),        -(mby+may)/(6*E*I*l), 0., 0., 0., debut_barre), FALSE)
     
     // Pour une section constante, les rotations valent :\end{verbatim}\begin{align*}
     // r_y(x) = & \frac{F_z \cdot b}{6 \cdot E \cdot I_y \cdot L} [-L^2+b^2 + 3 \cdot x^2] & &\\
@@ -655,15 +655,15 @@ gboolean EF_charge_barre_ponctuelle_fonc_rz(Fonction *f_rotation, Fonction* f_de
     double      l, b;
     double      E, debut_barre, I;
     
-    BUGMSG(f_rotation, FALSE, gettext("Paramètre %s incorrect.\n"), "f_rotation");
-    BUGMSG(f_deform, FALSE, gettext("Paramètre %s incorrect.\n"), "f_deform");
-    BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre");
-    BUGMSG(barre->section, FALSE, gettext("Section indéfinie.\n"));
-    BUGMSG(barre->materiau, FALSE, gettext("Matériau indéfini.\n"));
-    BUGMSG(barre->noeud_debut, FALSE, gettext("Noeud 1 indéfini.\n"));
-    BUGMSG(barre->noeud_fin, FALSE, gettext("Noeud 2 indéfini.\n"));
-    BUGMSG(discretisation<=barre->discretisation_element, FALSE, gettext("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element);
-    BUGMSG(!((a < 0.) && (!(ERREUR_RELATIVE_EGALE(a, 0.)))), FALSE, gettext("La position de la charge ponctuelle (%f) est incorrecte.\n"), a);
+    BUGMSG(f_rotation, FALSE, gettext("Paramètre %s incorrect.\n"), "f_rotation")
+    BUGMSG(f_deform, FALSE, gettext("Paramètre %s incorrect.\n"), "f_deform")
+    BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre")
+    BUGMSG(barre->section, FALSE, gettext("Section indéfinie.\n"))
+    BUGMSG(barre->materiau, FALSE, gettext("Matériau indéfini.\n"))
+    BUGMSG(barre->noeud_debut, FALSE, gettext("Noeud 1 indéfini.\n"))
+    BUGMSG(barre->noeud_fin, FALSE, gettext("Noeud 2 indéfini.\n"))
+    BUGMSG(discretisation<=barre->discretisation_element, FALSE, gettext("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element)
+    BUGMSG(!((a < 0.) && (!(ERREUR_RELATIVE_EGALE(a, 0.)))), FALSE, gettext("La position de la charge ponctuelle (%f) est incorrecte.\n"), a)
     
     // La déformation en rotation d'une barre soumise à un effort de flexion autour de l'axe y
     //   est calculée selon le principe des intégrales de Mohr et est définie par les mêmes
@@ -684,26 +684,26 @@ gboolean EF_charge_barre_ponctuelle_fonc_rz(Fonction *f_rotation, Fonction* f_de
     
     debut_barre = EF_noeuds_distance(barre->noeud_debut, debut);
     l = EF_noeuds_distance(debut, fin);
-    BUG(!isnan(l), FALSE);
-    BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), FALSE, gettext("La position de la charge ponctuelle (%f) est incorrecte. La longueur de la barre est de %f m.\n"), a, l);
+    BUG(!isnan(l), FALSE)
+    BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), FALSE, gettext("La position de la charge ponctuelle (%f) est incorrecte. La longueur de la barre est de %f m.\n"), a, l)
     
     b = l-a;
     E = common_math_get(EF_calculs_E(barre->materiau));
     I = common_math_get(EF_sections_iz(barre->section));
-    BUG(!isnan(E), FALSE);
-    BUG(!isnan(I), FALSE);
+    BUG(!isnan(E), FALSE)
+    BUG(!isnan(I), FALSE)
     
-    BUG(common_fonction_ajout_poly(f_rotation, 0., a, fy*b/(6*E*I*l)*a*(l+b),     0.,          -fy*b/(2*E*I*l),     0., 0., 0., 0., debut_barre), FALSE);
-    BUG(common_fonction_ajout_poly(f_rotation, a,  l, fy*a/(6*E*I*l)*(2*l*l+a*a), -fy*a/(E*I), fy*a/(2*E*I*l),      0., 0., 0., 0., debut_barre), FALSE);
-    BUG(common_fonction_ajout_poly(f_rotation, 0., a, mz/(6*E*I*l)*(-l*l+3*b*b),  0.,          mz/(2*E*I*l),        0., 0., 0., 0., debut_barre), FALSE);
-    BUG(common_fonction_ajout_poly(f_rotation, a,  l, mz/(6*E*I*l)*(2*l*l+3*a*a), -mz/(E*I),   mz/(2*E*I*l),        0., 0., 0., 0., debut_barre), FALSE);
-    BUG(common_fonction_ajout_poly(f_rotation, 0., l, l/(6*E*I)*(2*maz-mbz),      -maz/(E*I),  (maz+mbz)/(2*E*I*l), 0., 0., 0., 0., debut_barre), FALSE);
+    BUG(common_fonction_ajout_poly(f_rotation, 0., a, fy*b/(6*E*I*l)*a*(l+b),     0.,          -fy*b/(2*E*I*l),     0., 0., 0., 0., debut_barre), FALSE)
+    BUG(common_fonction_ajout_poly(f_rotation, a,  l, fy*a/(6*E*I*l)*(2*l*l+a*a), -fy*a/(E*I), fy*a/(2*E*I*l),      0., 0., 0., 0., debut_barre), FALSE)
+    BUG(common_fonction_ajout_poly(f_rotation, 0., a, mz/(6*E*I*l)*(-l*l+3*b*b),  0.,          mz/(2*E*I*l),        0., 0., 0., 0., debut_barre), FALSE)
+    BUG(common_fonction_ajout_poly(f_rotation, a,  l, mz/(6*E*I*l)*(2*l*l+3*a*a), -mz/(E*I),   mz/(2*E*I*l),        0., 0., 0., 0., debut_barre), FALSE)
+    BUG(common_fonction_ajout_poly(f_rotation, 0., l, l/(6*E*I)*(2*maz-mbz),      -maz/(E*I),  (maz+mbz)/(2*E*I*l), 0., 0., 0., 0., debut_barre), FALSE)
     
-    BUG(common_fonction_ajout_poly(f_deform, 0., a, 0.,                  fy*b/(6*E*I*l)*(l*l-b*b),   0.,                  -fy*b/(6*E*I*l),     0., 0., 0., debut_barre), FALSE);
-    BUG(common_fonction_ajout_poly(f_deform, a,  l, -fy*a*a*a/(6*E*I),   fy*a/(6*E*I*l)*(a*a+2*l*l), -fy*a/(2*E*I),       fy*a/(6*E*I*l),      0., 0., 0., debut_barre), FALSE);
-    BUG(common_fonction_ajout_poly(f_deform, 0., a, 0.,                  mz/(6*E*I*l)*(-l*l+3*b*b),  0.,                  mz/(6*E*I*l),        0., 0., 0., debut_barre), FALSE);
-    BUG(common_fonction_ajout_poly(f_deform, a,  l, -mz/(6*E*I)*(3*a*a), mz/(6*E*I*l)*(2*l*l+3*a*a), -mz/(6*E*I*l)*(3*l), mz/(6*E*I*l),        0., 0., 0., debut_barre), FALSE);
-    BUG(common_fonction_ajout_poly(f_deform, 0., l, 0.,                  l/(6*E*I)*(2*maz-mbz),      -maz/(2*E*I),        (mbz+maz)/(6*E*I*l), 0., 0., 0., debut_barre), FALSE);
+    BUG(common_fonction_ajout_poly(f_deform, 0., a, 0.,                  fy*b/(6*E*I*l)*(l*l-b*b),   0.,                  -fy*b/(6*E*I*l),     0., 0., 0., debut_barre), FALSE)
+    BUG(common_fonction_ajout_poly(f_deform, a,  l, -fy*a*a*a/(6*E*I),   fy*a/(6*E*I*l)*(a*a+2*l*l), -fy*a/(2*E*I),       fy*a/(6*E*I*l),      0., 0., 0., debut_barre), FALSE)
+    BUG(common_fonction_ajout_poly(f_deform, 0., a, 0.,                  mz/(6*E*I*l)*(-l*l+3*b*b),  0.,                  mz/(6*E*I*l),        0., 0., 0., debut_barre), FALSE)
+    BUG(common_fonction_ajout_poly(f_deform, a,  l, -mz/(6*E*I)*(3*a*a), mz/(6*E*I*l)*(2*l*l+3*a*a), -mz/(6*E*I*l)*(3*l), mz/(6*E*I*l),        0., 0., 0., debut_barre), FALSE)
+    BUG(common_fonction_ajout_poly(f_deform, 0., l, 0.,                  l/(6*E*I)*(2*maz-mbz),      -maz/(2*E*I),        (mbz+maz)/(6*E*I*l), 0., 0., 0., debut_barre), FALSE)
     
     return TRUE;
 }
@@ -738,14 +738,14 @@ gboolean EF_charge_barre_ponctuelle_n(Fonction *fonction, EF_Barre *barre,
     double      l, debut_barre;
     double      E, S;
     
-    BUGMSG(fonction, FALSE, gettext("Paramètre %s incorrect.\n"), "fonction");
-    BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre");
-    BUGMSG(barre->section, FALSE, gettext("Section indéfinie.\n"));
-    BUGMSG(barre->materiau, FALSE, gettext("Matériau indéfini.\n"));
-    BUGMSG(barre->noeud_debut, FALSE, gettext("Noeud 1 indéfini.\n"));
-    BUGMSG(barre->noeud_fin, FALSE, gettext("Noeud 2 indéfini.\n"));
-    BUGMSG(discretisation<=barre->discretisation_element, FALSE, gettext("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element);
-    BUGMSG(!((a < 0.) && (!(ERREUR_RELATIVE_EGALE(a, 0.)))), FALSE, gettext("La position de la charge ponctuelle (%f) est incorrecte.\n"), a);
+    BUGMSG(fonction, FALSE, gettext("Paramètre %s incorrect.\n"), "fonction")
+    BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre")
+    BUGMSG(barre->section, FALSE, gettext("Section indéfinie.\n"))
+    BUGMSG(barre->materiau, FALSE, gettext("Matériau indéfini.\n"))
+    BUGMSG(barre->noeud_debut, FALSE, gettext("Noeud 1 indéfini.\n"))
+    BUGMSG(barre->noeud_fin, FALSE, gettext("Noeud 2 indéfini.\n"))
+    BUGMSG(discretisation<=barre->discretisation_element, FALSE, gettext("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element)
+    BUGMSG(!((a < 0.) && (!(ERREUR_RELATIVE_EGALE(a, 0.)))), FALSE, gettext("La position de la charge ponctuelle (%f) est incorrecte.\n"), a)
     
     // La déformation selon l'axe x est par la formule :\end{verbatim}\begin{center}
     // \includegraphics[width=8cm]{images/charge_barre_ponctuelle_n.pdf}\end{center}\begin{align*}
@@ -763,20 +763,20 @@ gboolean EF_charge_barre_ponctuelle_n(Fonction *fonction, EF_Barre *barre,
     
     debut_barre = EF_noeuds_distance(barre->noeud_debut, debut);
     l = EF_noeuds_distance(debut, fin);
-    BUG(!isnan(l), FALSE);
-    BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), FALSE, gettext("La position de la charge ponctuelle (%f) est incorrecte. La longueur de la barre est de %f m.\n"), a, l);
+    BUG(!isnan(l), FALSE)
+    BUGMSG(!((a > l) && (!(ERREUR_RELATIVE_EGALE(a, l)))), FALSE, gettext("La position de la charge ponctuelle (%f) est incorrecte. La longueur de la barre est de %f m.\n"), a, l)
     
     E = common_math_get(EF_calculs_E(barre->materiau));
     S = common_math_get(EF_sections_s(barre->section));
-    BUG(!isnan(E), FALSE);
-    BUG(!isnan(S), FALSE);
+    BUG(!isnan(E), FALSE)
+    BUG(!isnan(S), FALSE)
     
     // Pour une section constante, les déformations valent :\end{verbatim}\begin{align*}
     // f_x(x) = & \frac{F_{Ax} \cdot x}{E \cdot S} & &\textrm{ pour x variant de 0 à a}\nonumber\\
     // f_x(x) = & \frac{a \cdot (F_{Ax} + F_{Bx}) - F_{Bx} \cdot x}{E \cdot S} & & \textrm{ pour x variant de a à l}\end{align*}\begin{verbatim}
     
-     BUG(common_fonction_ajout_poly(fonction, 0., a, 0.,                 fax/(E*S), 0., 0., 0., 0., 0., debut_barre), FALSE);
-     BUG(common_fonction_ajout_poly(fonction, a,  l, a*(fax+fbx)/(E*S), -fbx/(E*S), 0., 0., 0., 0., 0., debut_barre), FALSE);
+     BUG(common_fonction_ajout_poly(fonction, 0., a, 0.,                 fax/(E*S), 0., 0., 0., 0., 0., debut_barre), FALSE)
+     BUG(common_fonction_ajout_poly(fonction, a,  l, a*(fax+fbx)/(E*S), -fbx/(E*S), 0., 0., 0., 0., 0., debut_barre), FALSE)
      
      return TRUE;
 }
@@ -798,7 +798,7 @@ gboolean EF_charge_barre_ponctuelle_enleve_barres(Charge_Barre_Ponctuelle *charg
 {
     GList   *list_parcours = barres;
     
-    BUGMSG(charge, FALSE, gettext("Paramètre %s incorrect.\n"), "charge");
+    BUGMSG(charge, FALSE, gettext("Paramètre %s incorrect.\n"), "charge")
     
     while (list_parcours != NULL)
     {
@@ -827,7 +827,7 @@ gboolean EF_charge_barre_ponctuelle_enleve_barres(Charge_Barre_Ponctuelle *charg
     }
 #endif
     
-    BUG(EF_calculs_free(projet), FALSE);
+    BUG(EF_calculs_free(projet), FALSE)
     
     return TRUE;
 }
@@ -842,7 +842,7 @@ gboolean EF_charge_barre_ponctuelle_free(Charge_Barre_Ponctuelle *charge)
  *             charge == NULL.
  */
 {
-    BUGMSG(charge, FALSE, gettext("Paramètre %s incorrect.\n"), "charge");
+    BUGMSG(charge, FALSE, gettext("Paramètre %s incorrect.\n"), "charge")
     
     free(charge->nom);
     g_list_free(charge->barres);
