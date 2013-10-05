@@ -38,8 +38,8 @@ gboolean _1990_gtk_groupe_option_window_key_press(GtkWidget *widget, GdkEvent *e
  *           interface graphique non initialisée.
  */
 {
-    BUGMSG(projet, TRUE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk._1990_groupes.builder_options, TRUE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Option Groupes");
+    BUGMSG(projet, TRUE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk._1990_groupes.builder_options, TRUE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Option Groupes")
     
     if (event->key.keyval == GDK_KEY_Escape)
     {
@@ -59,8 +59,8 @@ void _1990_gtk_groupes_options_window_destroy(GtkWidget *object, Projet *projet)
  * Valeur renvoyée : Aucune.
  */
 {
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk._1990_groupes.builder_options, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Option Groupes");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk._1990_groupes.builder_options, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Option Groupes")
     
     g_object_unref(G_OBJECT(projet->list_gtk._1990_groupes.builder_options));
     projet->list_gtk._1990_groupes.builder_options = NULL;
@@ -76,8 +76,8 @@ void _1990_gtk_groupes_option_window_quitter_button(GtkWidget *object, Projet *p
  * Valeur renvoyée : Aucune.
  */
 {
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk._1990_groupes.builder_options, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Option Groupes");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk._1990_groupes.builder_options, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Option Groupes")
     
     gtk_widget_destroy(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk._1990_groupes.builder_options, "1990_groupes_options_window")));
     
@@ -96,8 +96,8 @@ void _1990_gtk_groupes_button_options_clicked(GtkWidget *button, Projet *projet)
 {
     GtkSettings *settings;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk._1990_groupes.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk._1990_groupes.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes")
     if (projet->list_gtk._1990_groupes.builder_options != NULL)
     {
         gtk_window_present(GTK_WINDOW(gtk_builder_get_object(projet->list_gtk._1990_groupes.builder_options, "1990_groupes_options_window")));
@@ -105,7 +105,7 @@ void _1990_gtk_groupes_button_options_clicked(GtkWidget *button, Projet *projet)
     }
     
     projet->list_gtk._1990_groupes.builder_options = gtk_builder_new();
-    BUGMSG(gtk_builder_add_from_resource(projet->list_gtk._1990_groupes.builder_options, "/org/2lgc/codegui/ui/1990_groupes_options.ui", NULL) != 0, , gettext("Builder Failed\n"));
+    BUGMSG(gtk_builder_add_from_resource(projet->list_gtk._1990_groupes.builder_options, "/org/2lgc/codegui/ui/1990_groupes_options.ui", NULL) != 0, , gettext("Builder Failed\n"))
     gtk_builder_connect_signals(projet->list_gtk._1990_groupes.builder_options, projet);
     
     if ((projet->combinaisons.flags & 1) == 0)

@@ -42,8 +42,8 @@ void EF_gtk_charge_barre_ponctuelle_annuler_clicked(GtkButton *button, Projet *p
  * Valeur renvoyée : Aucune.
  */
 {
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_charge_barre_ponctuelle.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Barre Ponctuelle");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_charge_barre_ponctuelle.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Barre Ponctuelle")
     
     gtk_widget_destroy(projet->list_gtk.ef_charge_barre_ponctuelle.window);
     
@@ -84,19 +84,19 @@ gboolean EF_gtk_charge_barre_ponctuelle_recupere_donnees(Projet *projet,
     GtkTextBuffer                   *textbuffer;
     gboolean                        ok = TRUE;
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(num_action, FALSE, gettext("Paramètre %s incorrect.\n"), "num_action");
-    BUGMSG(barres, FALSE, gettext("Paramètre %s incorrect.\n"), "barres");
-    BUGMSG(fx, FALSE, gettext("Paramètre %s incorrect.\n"), "fx");
-    BUGMSG(fy, FALSE, gettext("Paramètre %s incorrect.\n"), "fy");
-    BUGMSG(fz, FALSE, gettext("Paramètre %s incorrect.\n"), "fz");
-    BUGMSG(mx, FALSE, gettext("Paramètre %s incorrect.\n"), "mx");
-    BUGMSG(my, FALSE, gettext("Paramètre %s incorrect.\n"), "my");
-    BUGMSG(mz, FALSE, gettext("Paramètre %s incorrect.\n"), "mz");
-    BUGMSG(nom, FALSE, gettext("Paramètre %s incorrect.\n"), "nom");
-    BUGMSG(repere_local, FALSE, gettext("Paramètre %s incorrect.\n"), "repere_local");
-    BUGMSG(position, FALSE, gettext("Paramètre %s incorrect.\n"), "position");
-    BUGMSG(projet->list_gtk.ef_charge_barre_ponctuelle.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Barre Ponctuelle");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(num_action, FALSE, gettext("Paramètre %s incorrect.\n"), "num_action")
+    BUGMSG(barres, FALSE, gettext("Paramètre %s incorrect.\n"), "barres")
+    BUGMSG(fx, FALSE, gettext("Paramètre %s incorrect.\n"), "fx")
+    BUGMSG(fy, FALSE, gettext("Paramètre %s incorrect.\n"), "fy")
+    BUGMSG(fz, FALSE, gettext("Paramètre %s incorrect.\n"), "fz")
+    BUGMSG(mx, FALSE, gettext("Paramètre %s incorrect.\n"), "mx")
+    BUGMSG(my, FALSE, gettext("Paramètre %s incorrect.\n"), "my")
+    BUGMSG(mz, FALSE, gettext("Paramètre %s incorrect.\n"), "mz")
+    BUGMSG(nom, FALSE, gettext("Paramètre %s incorrect.\n"), "nom")
+    BUGMSG(repere_local, FALSE, gettext("Paramètre %s incorrect.\n"), "repere_local")
+    BUGMSG(position, FALSE, gettext("Paramètre %s incorrect.\n"), "position")
+    BUGMSG(projet->list_gtk.ef_charge_barre_ponctuelle.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Barre Ponctuelle")
     
     ef_gtk = &projet->list_gtk.ef_charge_barre_ponctuelle;
     
@@ -186,8 +186,8 @@ void EF_gtk_charge_barre_ponct_check(GtkWidget *object, Projet *projet)
     gboolean repere_local;
     double position;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_charge_barre_ponctuelle.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Barre Ponctuelle");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_charge_barre_ponctuelle.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Barre Ponctuelle")
     
     if (!EF_gtk_charge_barre_ponctuelle_recupere_donnees(projet, &num_action, &barres, &fx, &fy, &fz, &mx, &my, &mz, &nom, &repere_local, &position))
         gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_charge_barre_ponctuelle.builder, "EF_charge_barre_ponct_button_add_edit")), FALSE);
@@ -215,13 +215,13 @@ void EF_gtk_charge_barre_ponctuelle_ajouter_clicked(GtkButton *button, Projet *p
     gchar                       *texte;
     Charge_Barre_Ponctuelle     *charge;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_charge_barre_ponctuelle.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Barre Ponctuelle");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_charge_barre_ponctuelle.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Barre Ponctuelle")
     
-    BUG(EF_gtk_charge_barre_ponctuelle_recupere_donnees(projet, &num_action, &barres, &fx, &fy, &fz, &mx, &my, &mz, &texte, &repere_local, &position) == TRUE, );
+    BUG(EF_gtk_charge_barre_ponctuelle_recupere_donnees(projet, &num_action, &barres, &fx, &fy, &fz, &mx, &my, &mz, &texte, &repere_local, &position) == TRUE, )
     
     // Création de la nouvelle charge ponctuelle sur barre
-    BUG(charge = EF_charge_barre_ponctuelle_ajout(projet, num_action, barres, repere_local, common_math_f(position, FLOTTANT_UTILISATEUR), common_math_f(fx, FLOTTANT_UTILISATEUR), common_math_f(fy, FLOTTANT_UTILISATEUR), common_math_f(fz, FLOTTANT_UTILISATEUR), common_math_f(mx, FLOTTANT_UTILISATEUR), common_math_f(my, FLOTTANT_UTILISATEUR), common_math_f(mz, FLOTTANT_UTILISATEUR), texte), );
+    BUG(charge = EF_charge_barre_ponctuelle_ajout(projet, num_action, barres, repere_local, common_math_f(position, FLOTTANT_UTILISATEUR), common_math_f(fx, FLOTTANT_UTILISATEUR), common_math_f(fy, FLOTTANT_UTILISATEUR), common_math_f(fz, FLOTTANT_UTILISATEUR), common_math_f(mx, FLOTTANT_UTILISATEUR), common_math_f(my, FLOTTANT_UTILISATEUR), common_math_f(mz, FLOTTANT_UTILISATEUR), texte), )
     
     free(texte);
     
@@ -246,15 +246,15 @@ void EF_gtk_charge_barre_ponctuelle_editer_clicked(GtkButton *button, Projet *pr
     gchar                           *texte;
     Charge_Barre_Ponctuelle         *charge;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_charge_barre_ponctuelle.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Barre Ponctuelle");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_charge_barre_ponctuelle.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Barre Ponctuelle")
     
     ef_gtk = &projet->list_gtk.ef_charge_barre_ponctuelle;
     
-    BUG(EF_gtk_charge_barre_ponctuelle_recupere_donnees(projet, &num_action, &barres, &fx, &fy, &fz, &mx, &my, &mz, &texte, &repere_local, &position) == TRUE, );
+    BUG(EF_gtk_charge_barre_ponctuelle_recupere_donnees(projet, &num_action, &barres, &fx, &fy, &fz, &mx, &my, &mz, &texte, &repere_local, &position) == TRUE, )
     
     // Création de la nouvelle charge ponctuelle sur barre
-    BUG(charge = EF_charge_cherche(projet, ef_gtk->action, ef_gtk->charge), );
+    BUG(charge = EF_charge_cherche(projet, ef_gtk->action, ef_gtk->charge), )
     free(charge->nom);
     charge->nom = texte;
     charge->fx = common_math_f(fx, FLOTTANT_UTILISATEUR);
@@ -268,13 +268,13 @@ void EF_gtk_charge_barre_ponctuelle_editer_clicked(GtkButton *button, Projet *pr
     charge->position = common_math_f(position, FLOTTANT_UTILISATEUR);
     charge->repere_local = repere_local;
     if (num_action != ef_gtk->action)
-        BUG(EF_charge_deplace(projet, ef_gtk->action, ef_gtk->charge, num_action), );
+        BUG(EF_charge_deplace(projet, ef_gtk->action, ef_gtk->charge, num_action), )
     else
         gtk_widget_queue_resize(GTK_WIDGET(projet->list_gtk._1990_actions.tree_view_charges));
     
     gtk_widget_destroy(projet->list_gtk.ef_charge_barre_ponctuelle.window);
     
-    BUG(EF_calculs_free(projet), );
+    BUG(EF_calculs_free(projet), )
     
     return;
 }
@@ -292,8 +292,8 @@ gboolean EF_gtk_charge_barre_ponct_window_key_press(GtkWidget *widget, GdkEvent 
  *             interface graphique non initialisée.
  */
 {
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_charge_barre_ponctuelle.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Barre Ponctuelle");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_charge_barre_ponctuelle.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Barre Ponctuelle")
     
     if (event->key.keyval == GDK_KEY_Escape)
     {
@@ -313,8 +313,8 @@ void EF_gtk_charge_barre_ponct_window_destroy(GtkWidget *object, Projet *projet)
  * Valeur renvoyée : Aucune.
  */
 {
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_charge_barre_ponctuelle.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Barre Ponctuelle");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_charge_barre_ponctuelle.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Barre Ponctuelle")
     
     g_object_unref(G_OBJECT(projet->list_gtk.ef_charge_barre_ponctuelle.builder));
     projet->list_gtk.ef_charge_barre_ponctuelle.builder = NULL;
@@ -341,7 +341,7 @@ gboolean EF_gtk_charge_barre_ponctuelle(Projet *projet, unsigned int action_defa
     Gtk_EF_Charge_Barre_Ponctuelle  *ef_gtk;
     Charge_Barre_Ponctuelle         *charge_barre;
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
     if (projet->list_gtk.ef_charge_barre_ponctuelle.builder != NULL)
     {
         gtk_window_present(GTK_WINDOW(projet->list_gtk.ef_charge_barre_ponctuelle.window));
@@ -350,7 +350,7 @@ gboolean EF_gtk_charge_barre_ponctuelle(Projet *projet, unsigned int action_defa
     
     ef_gtk = &projet->list_gtk.ef_charge_barre_ponctuelle;
     ef_gtk->builder = gtk_builder_new();
-    BUGMSG(gtk_builder_add_from_resource(ef_gtk->builder, "/org/2lgc/codegui/ui/EF_charge_barre_ponctuelle.ui", NULL) != 0, FALSE, gettext("Builder Failed\n"));
+    BUGMSG(gtk_builder_add_from_resource(ef_gtk->builder, "/org/2lgc/codegui/ui/EF_charge_barre_ponctuelle.ui", NULL) != 0, FALSE, gettext("Builder Failed\n"))
     gtk_builder_connect_signals(ef_gtk->builder, projet);
     
     ef_gtk->window = GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_ponct_window"));
@@ -368,7 +368,7 @@ gboolean EF_gtk_charge_barre_ponctuelle(Projet *projet, unsigned int action_defa
         ef_gtk->action = action_defaut;
         ef_gtk->charge = charge;
         gtk_window_set_title(GTK_WINDOW(ef_gtk->window), gettext("Modification d'une charge ponctuelle sur barre"));
-        BUG(charge_barre = EF_charge_cherche(projet, action_defaut, charge), FALSE);
+        BUG(charge_barre = EF_charge_cherche(projet, action_defaut, charge), FALSE)
     }
     
     gtk_combo_box_set_model(GTK_COMBO_BOX(ef_gtk->combobox_charge), GTK_TREE_MODEL(projet->list_gtk._1990_actions.list_actions));
@@ -397,7 +397,7 @@ gboolean EF_gtk_charge_barre_ponctuelle(Projet *projet, unsigned int action_defa
             gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_ponct_radio_local")), TRUE);
         else
             gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_ponct_radio_global")), TRUE);
-        BUG(tmp2 = common_selection_converti_barres_en_texte(charge_barre->barres), FALSE);
+        BUG(tmp2 = common_selection_converti_barres_en_texte(charge_barre->barres), FALSE)
         gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_ponct_buffer_barres")), tmp2, -1);
         free(tmp2);
     }

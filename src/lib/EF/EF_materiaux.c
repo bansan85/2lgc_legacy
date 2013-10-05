@@ -42,7 +42,7 @@ gboolean EF_materiaux_init(Projet *projet)
  *             projet == NULL.
  */
 {
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
     
     // Trivial
     projet->modele.materiaux = NULL;
@@ -66,8 +66,8 @@ gboolean EF_materiaux_insert(Projet *projet, EF_Materiau *materiau)
     GList       *list_parcours;
     EF_Materiau *materiau_tmp;
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(materiau, FALSE, gettext("Paramètre %s incorrect.\n"), "materiau");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(materiau, FALSE, gettext("Paramètre %s incorrect.\n"), "materiau")
     
     list_parcours = projet->modele.materiaux;
     while (list_parcours != NULL)
@@ -118,8 +118,8 @@ gboolean EF_materiaux_repositionne(Projet *projet, EF_Materiau *materiau)
 {
     GList   *list_parcours;
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(materiau, FALSE, gettext("Paramètre %s incorrect.\n"), "materiau");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(materiau, FALSE, gettext("Paramètre %s incorrect.\n"), "materiau")
     
     // On réinsère le matériau au bon endroit
     projet->modele.materiaux = g_list_remove(projet->modele.materiaux, materiau);
@@ -170,7 +170,7 @@ gboolean EF_materiaux_repositionne(Projet *projet, EF_Materiau *materiau)
         }
         default :
         {
-            BUGMSG(NULL, FALSE, gettext("Le type de matériau %d n'existe pas.\n"), materiau->type);
+            BUGMSG(NULL, FALSE, gettext("Le type de matériau %d n'existe pas.\n"), materiau->type)
             break;
         }
     }
@@ -187,7 +187,7 @@ EF_Materiau* EF_materiaux_cherche_nom(Projet *projet, const char *nom, gboolean 
 /* Description : Renvoie le matériau en fonction de son nom.
  * Paramètres : Projet *projet : la variable projet,
  *            : const char *nom : le nom du matériau.
- *            : gboolean critique : utilise BUG si TRUE, return sinon
+ *            : gboolean critique : utilise BUG si TRUE, return sino
  * Valeur renvoyée :
  *   Succès : pointeur vers le matériau en béton
  *   Échec : NULL :
@@ -197,7 +197,7 @@ EF_Materiau* EF_materiaux_cherche_nom(Projet *projet, const char *nom, gboolean 
 {
     GList   *list_parcours;
     
-    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet")
     
     // Trivial
     list_parcours = projet->modele.materiaux;
@@ -212,7 +212,7 @@ EF_Materiau* EF_materiaux_cherche_nom(Projet *projet, const char *nom, gboolean 
     }
     
     if (critique)
-        BUGMSG(0, NULL, gettext("Matériau en béton '%s' introuvable.\n"), nom);
+        BUGMSG(0, NULL, gettext("Matériau en béton '%s' introuvable.\n"), nom)
     else
         return NULL;
 }
@@ -243,7 +243,7 @@ char *EF_materiaux_get_description(EF_Materiau* materiau)
         }
         default :
         {
-            BUGMSG(NULL, FALSE, gettext("Le type de matériau %d n'existe pas.\n"), materiau->type);
+            BUGMSG(NULL, FALSE, gettext("Le type de matériau %d n'existe pas.\n"), materiau->type)
             break;
         }
     }
@@ -277,12 +277,12 @@ gboolean EF_materiaux_supprime(EF_Materiau* materiau, Projet *projet)
 {
     GList   *liste_materiaux = NULL, *liste_barres_dep;
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(materiau, FALSE, gettext("Paramètre %s incorrect.\n"), "materiau");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(materiau, FALSE, gettext("Paramètre %s incorrect.\n"), "materiau")
    
     // On vérifie les dépendances.
     liste_materiaux = g_list_append(liste_materiaux, materiau);
-    BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, liste_materiaux, NULL, NULL, NULL, &liste_barres_dep, NULL, FALSE, FALSE), FALSE);
+    BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, liste_materiaux, NULL, NULL, NULL, &liste_barres_dep, NULL, FALSE, FALSE), FALSE)
     g_list_free(liste_materiaux);
     
     if (liste_barres_dep != NULL)
@@ -291,12 +291,12 @@ gboolean EF_materiaux_supprime(EF_Materiau* materiau, Projet *projet)
         
         liste = common_selection_converti_barres_en_texte(liste_barres_dep);
         if (g_list_next(liste_barres_dep) == NULL)
-            BUGMSG(NULL, FALSE, gettext("Impossible de supprimer le matériau car il est utilisé par la barre %s.\n"), liste);
+            BUGMSG(NULL, FALSE, gettext("Impossible de supprimer le matériau car il est utilisé par la barre %s.\n"), liste)
         else
-            BUGMSG(NULL, FALSE, gettext("Impossible de supprimer le matériau car il est utilisé par les barres %s.\n"), liste);
+            BUGMSG(NULL, FALSE, gettext("Impossible de supprimer le matériau car il est utilisé par les barres %s.\n"), liste)
     }
     
-    BUG(_1992_1_1_barres_supprime_liste(projet, NULL, liste_barres_dep), TRUE);
+    BUG(_1992_1_1_barres_supprime_liste(projet, NULL, liste_barres_dep), TRUE)
     g_list_free(liste_barres_dep);
     
 #ifdef ENABLE_GTK
@@ -321,7 +321,7 @@ gboolean EF_materiaux_free(Projet *projet)
  *             projet == NULL.
  */
 {
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
     
     // Trivial
     while (projet->modele.materiaux != NULL)
@@ -330,7 +330,7 @@ gboolean EF_materiaux_free(Projet *projet)
         projet->modele.materiaux = NULL;
     }
     
-    BUG(EF_calculs_free(projet), TRUE);
+    BUG(EF_calculs_free(projet), TRUE)
     
 #ifdef ENABLE_GTK
     g_object_unref(projet->list_gtk.ef_materiaux.liste_materiaux);

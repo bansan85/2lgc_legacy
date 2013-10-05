@@ -56,7 +56,7 @@ gboolean _1992_1_1_barres_init(Projet *projet)
     GtkTreeIter iter;
 #endif
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
     
     // Trivial
     projet->modele.barres = NULL;
@@ -103,11 +103,11 @@ gboolean _1992_1_1_barres_ajout(Projet *projet, Type_Element type, EF_Section *s
     EF_Barre    *element_nouveau = malloc(sizeof(EF_Barre));
     
     // Trivial
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(noeud_debut != noeud_fin, FALSE, gettext("La création d'une barre nécessite l'utilisation de des noeuds différents.\n"));
-    BUGMSG(element_nouveau, FALSE, gettext("Erreur d'allocation mémoire.\n"));
-    BUGMSG(materiau, FALSE, gettext("Le matériau n'est pas spécifié.\n"));
-    BUGMSG(section, FALSE, gettext("La section n'est pas spécifiée.\n"));
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(noeud_debut != noeud_fin, FALSE, gettext("La création d'une barre nécessite l'utilisation de des noeuds différents.\n"))
+    BUGMSG(element_nouveau, FALSE, gettext("Erreur d'allocation mémoire.\n"))
+    BUGMSG(materiau, FALSE, gettext("Le matériau n'est pas spécifié.\n"))
+    BUGMSG(section, FALSE, gettext("La section n'est pas spécifiée.\n"))
     
     element_nouveau->type = type;
     
@@ -119,20 +119,20 @@ gboolean _1992_1_1_barres_ajout(Projet *projet, Type_Element type, EF_Section *s
     if ((element_nouveau->noeud_debut == NULL) || (element_nouveau->noeud_fin == NULL))
     {
         free(element_nouveau);
-        BUG(NULL, FALSE);
+        BUG(NULL, FALSE)
     }
     
     if (ERREUR_RELATIVE_EGALE(0.0, EF_noeuds_distance(element_nouveau->noeud_debut, element_nouveau->noeud_fin)))
     {
         free(element_nouveau);
-        BUGMSG(NULL, FALSE, gettext("Impossible de créer la barre, la distance entre les deux noeuds %d et %d est nulle.\n"), noeud_debut, noeud_fin);
+        BUGMSG(NULL, FALSE, gettext("Impossible de créer la barre, la distance entre les deux noeuds %d et %d est nulle.\n"), noeud_debut, noeud_fin)
     }
     
     element_nouveau->relachement = relachement;
     
     element_nouveau->discretisation_element = 0;
     
-    BUGMSG(element_nouveau->info_EF = (Barre_Info_EF*)malloc(sizeof(Barre_Info_EF)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(element_nouveau->info_EF = (Barre_Info_EF*)malloc(sizeof(Barre_Info_EF)), FALSE, gettext("Erreur d'allocation mémoire.\n"))
     memset(element_nouveau->info_EF, 0, sizeof(Barre_Info_EF));
     
     element_nouveau->matrice_rotation = NULL;
@@ -143,7 +143,7 @@ gboolean _1992_1_1_barres_ajout(Projet *projet, Type_Element type, EF_Section *s
     else
         element_nouveau->numero = ((EF_Barre*)g_list_last(projet->modele.barres)->data)->numero+1;
     
-    BUG(EF_calculs_free(projet), FALSE);
+    BUG(EF_calculs_free(projet), FALSE)
     
     element_nouveau->noeuds_intermediaires = NULL;
     if (discretisation_element != 0)
@@ -152,7 +152,7 @@ gboolean _1992_1_1_barres_ajout(Projet *projet, Type_Element type, EF_Section *s
         
         /* Création des noeuds intermédiaires */
         for (i=0;i<discretisation_element;i++)
-            BUG(EF_noeuds_ajout_noeud_barre(projet, element_nouveau, common_math_f((i+1.)/(discretisation_element+1.), FLOTTANT_ORDINATEUR), NULL), FALSE);
+            BUG(EF_noeuds_ajout_noeud_barre(projet, element_nouveau, common_math_f((i+1.)/(discretisation_element+1.), FLOTTANT_ORDINATEUR), NULL), FALSE)
     }
     
     projet->modele.barres = g_list_append(projet->modele.barres, element_nouveau);
@@ -163,7 +163,7 @@ gboolean _1992_1_1_barres_ajout(Projet *projet, Type_Element type, EF_Section *s
     {
         char *nb_barres;
         
-        BUGMSG(nb_barres = g_strdup_printf("%d", element_nouveau->numero+1), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(nb_barres = g_strdup_printf("%d", element_nouveau->numero+1), FALSE, gettext("Erreur d'allocation mémoire.\n"))
         gtk_label_set_text(GTK_LABEL(gtk_builder_get_object(projet->list_gtk.ef_barres.builder_add, "EF_gtk_barres_add_numero_label2")), nb_barres);
         free(nb_barres);
     }
@@ -174,7 +174,7 @@ gboolean _1992_1_1_barres_ajout(Projet *projet, Type_Element type, EF_Section *s
         char        *tmp;
         GtkTreeIter iter;
         
-        BUGMSG(tmp = g_strdup_printf("%d", (int)type), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(tmp = g_strdup_printf("%d", (int)type), FALSE, gettext("Erreur d'allocation mémoire.\n"))
         gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(projet->list_gtk.ef_barres.liste_types), &iter, tmp);
         free(tmp);
         gtk_tree_model_get(GTK_TREE_MODEL(projet->list_gtk.ef_barres.liste_types), &iter, 0, &tmp, -1);
@@ -184,7 +184,7 @@ gboolean _1992_1_1_barres_ajout(Projet *projet, Type_Element type, EF_Section *s
         free(tmp);
     }
     
-    BUG(m3d_barre(&projet->list_gtk.m3d, element_nouveau), FALSE);
+    BUG(m3d_barre(&projet->list_gtk.m3d, element_nouveau), FALSE)
 #endif
     
     return TRUE;
@@ -206,7 +206,7 @@ EF_Barre* _1992_1_1_barres_cherche_numero(Projet *projet, unsigned int numero,
  */
 {
     GList   *list_parcours;
-    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet")
     
     // Trivial
     list_parcours = projet->modele.barres;
@@ -221,7 +221,7 @@ EF_Barre* _1992_1_1_barres_cherche_numero(Projet *projet, unsigned int numero,
     }
     
     if (critique)
-        BUGMSG(0, NULL, gettext("Barre en béton %u introuvable.\n"), numero);
+        BUGMSG(0, NULL, gettext("Barre en béton %u introuvable.\n"), numero)
     else
         return NULL;
 }
@@ -264,7 +264,7 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GLi
     GList   *noeuds_todo = NULL, *noeuds_done = NULL, *barres_todo = NULL;
     gboolean    verif;
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
     
     if ((noeuds_dep == NULL) && (barres_dep == NULL) && (charges_dep == NULL))
         verif = TRUE;
@@ -357,9 +357,9 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GLi
         if ((barres_dep != NULL) && ((origine) || (g_list_find(barres, barre) == NULL)))
         {
             if (numero)
-                BUG(common_selection_ajout_nombre(GUINT_TO_POINTER(barre->numero), barres_dep, LISTE_UINT, NULL), FALSE);
+                BUG(common_selection_ajout_nombre(GUINT_TO_POINTER(barre->numero), barres_dep, LISTE_UINT, NULL), FALSE)
             else
-                BUG(common_selection_ajout_nombre(barre, barres_dep, LISTE_BARRES, NULL), FALSE);
+                BUG(common_selection_ajout_nombre(barre, barres_dep, LISTE_BARRES, NULL), FALSE)
         }
         // Ici, pas besoin de vérifier la variable verif. En effet à ce stade, tout ce qui est
         // dans barres_todo ne sont que les barres à analyser. barres_todo ne peut contenir une
@@ -401,15 +401,15 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GLi
         noeuds_todo = g_list_delete_link(noeuds_todo, noeuds_todo);
         
         // On commence par ajouter le noeud en cours d'étude dans la liste des noeuds traités.
-        BUG(common_selection_ajout_nombre(dataa, &noeuds_done, LISTE_NOEUDS, NULL), FALSE);
+        BUG(common_selection_ajout_nombre(dataa, &noeuds_done, LISTE_NOEUDS, NULL), FALSE)
         
         // On ajoute le noeud à la liste des noeuds dépendants.
         if ((noeuds_dep != NULL) && ((origine) || (g_list_find(noeuds, dataa) == NULL)))
         {
             if (numero)
-                BUG(common_selection_ajout_nombre(GUINT_TO_POINTER(((EF_Noeud*)dataa)->numero), noeuds_dep, LISTE_UINT, NULL), FALSE);
+                BUG(common_selection_ajout_nombre(GUINT_TO_POINTER(((EF_Noeud*)dataa)->numero), noeuds_dep, LISTE_UINT, NULL), FALSE)
             else
-                BUG(common_selection_ajout_nombre(dataa, noeuds_dep, LISTE_NOEUDS, NULL), FALSE);
+                BUG(common_selection_ajout_nombre(dataa, noeuds_dep, LISTE_NOEUDS, NULL), FALSE)
         }
         // Rappel : si un noeud est de type intermédiaire, on considère qu'il n'est pas une
         // dépendance suffisante pour justifier une impossibilité de suppression d'un élément.
@@ -439,9 +439,9 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GLi
                 if ((barres_dep != NULL) && ((origine) || (g_list_find(barres, barre) == NULL)))
                 {
                     if (numero)
-                        BUG(common_selection_ajout_nombre(GUINT_TO_POINTER(barre->numero), barres_dep, LISTE_UINT, NULL), FALSE);
+                        BUG(common_selection_ajout_nombre(GUINT_TO_POINTER(barre->numero), barres_dep, LISTE_UINT, NULL), FALSE)
                     else
-                        BUG(common_selection_ajout_nombre(barre, barres_dep, LISTE_BARRES, NULL), FALSE);
+                        BUG(common_selection_ajout_nombre(barre, barres_dep, LISTE_BARRES, NULL), FALSE)
                 }
                 else if (verif == TRUE)
                 {
@@ -518,7 +518,7 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GLi
                         {
                             if (g_list_find(noeuds_done, noeud) != NULL)
                             {
-                                BUG(common_selection_ajout_nombre(charge, charges_dep, LISTE_CHARGES, projet), FALSE);
+                                BUG(common_selection_ajout_nombre(charge, charges_dep, LISTE_CHARGES, projet), FALSE)
                                 liste_parcours3 = NULL;
                             }
                         }
@@ -547,7 +547,7 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GLi
                         {
                             if (g_list_find(barres_todo, barre) != NULL)
                             {
-                                BUG(common_selection_ajout_nombre(charge, charges_dep, LISTE_CHARGES, projet), FALSE);
+                                BUG(common_selection_ajout_nombre(charge, charges_dep, LISTE_CHARGES, projet), FALSE)
                                 liste_parcours3 = NULL;
                             }
                         }
@@ -564,7 +564,7 @@ gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GLi
                 }
                 default :
                 {
-                    BUGMSG(0, FALSE, gettext("Type de charge %d inconnu.\n"), charge_type->type);
+                    BUGMSG(0, FALSE, gettext("Type de charge %d inconnu.\n"), charge_type->type)
                     break;
                 }
             }
@@ -602,15 +602,15 @@ gboolean _1992_1_1_barres_angle_rotation(EF_Noeud *debut, EF_Noeud *fin, double 
 {
     double      xx, yy, zz, ll;
     
-    BUGMSG(debut, FALSE, gettext("Paramètre %s incorrect.\n"), "debut");
-    BUGMSG(fin, FALSE, gettext("Paramètre %s incorrect.\n"), "fin");
-    BUGMSG(y, FALSE, gettext("Paramètre %s incorrect.\n"), "y");
-    BUGMSG(z, FALSE, gettext("Paramètre %s incorrect.\n"), "z");
+    BUGMSG(debut, FALSE, gettext("Paramètre %s incorrect.\n"), "debut")
+    BUGMSG(fin, FALSE, gettext("Paramètre %s incorrect.\n"), "fin")
+    BUGMSG(y, FALSE, gettext("Paramètre %s incorrect.\n"), "y")
+    BUGMSG(z, FALSE, gettext("Paramètre %s incorrect.\n"), "z")
     
     ll = EF_noeuds_distance_x_y_z(debut, fin, &xx, &yy, &zz);
     
-    BUG(!isnan(ll), FALSE);
-    BUGMSG(!ERREUR_RELATIVE_EGALE(0.0, ll), FALSE, gettext("La distance entre les noeuds %d et %d est nulle\n"), debut->numero, fin->numero);
+    BUG(!isnan(ll), FALSE)
+    BUGMSG(!ERREUR_RELATIVE_EGALE(0.0, ll), FALSE, gettext("La distance entre les noeuds %d et %d est nulle\n"), debut->numero, fin->numero)
     
     // Détermination de l'angle de rotation autour de l'axe Y.
     *y = asin(zz/ll);
@@ -641,8 +641,8 @@ gboolean _1992_1_1_barres_change_type(EF_Barre *barre, Type_Element type, Projet
  *             type inconnu.
  */
 {
-    BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre");
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre")
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
     
     switch (type)
     {
@@ -657,7 +657,7 @@ gboolean _1992_1_1_barres_change_type(EF_Barre *barre, Type_Element type, Projet
         }
         default :
         {
-            BUGMSG(NULL, FALSE, "Le type de l'élément %d est inconnu.\n", type);
+            BUGMSG(NULL, FALSE, "Le type de l'élément %d est inconnu.\n", type)
             break;
         }
     }
@@ -679,20 +679,20 @@ gboolean _1992_1_1_barres_change_section(EF_Barre *barre, EF_Section *section,
  *             projet == NULL.
  */
 {
-    BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre");
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(section, FALSE, gettext("La section n'est pas spécifiée.\n"));
+    BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre")
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(section, FALSE, gettext("La section n'est pas spécifiée.\n"))
     
     if (barre->section == section)
         return TRUE;
     
     barre->section = section;
     
-    BUG(EF_calculs_free(projet), FALSE);
+    BUG(EF_calculs_free(projet), FALSE)
     
 #ifdef ENABLE_GTK
-    BUG(m3d_barre(&projet->list_gtk.m3d, barre), FALSE);
-    BUG(m3d_rafraichit(projet), FALSE);
+    BUG(m3d_barre(&projet->list_gtk.m3d, barre), FALSE)
+    BUG(m3d_rafraichit(projet), FALSE)
     
     if (projet->list_gtk.ef_barres.builder != NULL)
         gtk_widget_queue_resize(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treeview")));
@@ -715,15 +715,15 @@ gboolean _1992_1_1_barres_change_materiau(EF_Barre *barre, EF_Materiau *materiau
  *             projet == NULL.
  */
 {
-    BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre");
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre")
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
     
     if (barre->materiau == materiau)
         return TRUE;
     
     barre->materiau = materiau;
     
-    BUG(EF_calculs_free(projet), FALSE);
+    BUG(EF_calculs_free(projet), FALSE)
     
 #ifdef ENABLE_GTK
     if (projet->list_gtk.ef_barres.builder != NULL)
@@ -750,20 +750,20 @@ gboolean _1992_1_1_barres_change_angle(EF_Barre *barre, Flottant angle, Projet *
     GList   *liste_barre = NULL;
 #endif
     
-    BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre");
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre")
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
     
     if (ERREUR_RELATIVE_EGALE(common_math_get(barre->angle), common_math_get(angle)))
         return TRUE;
     
     barre->angle = angle;
     
-    BUG(EF_calculs_free(projet), FALSE);
+    BUG(EF_calculs_free(projet), FALSE)
     
 #ifdef ENABLE_GTK
     liste_barre = g_list_append(liste_barre, barre);
-    BUG(m3d_actualise_graphique(projet, NULL, liste_barre), FALSE);
-    BUG(m3d_rafraichit(projet), FALSE);
+    BUG(m3d_actualise_graphique(projet, NULL, liste_barre), FALSE)
+    BUG(m3d_rafraichit(projet), FALSE)
     g_list_free(liste_barre);
     
     if (projet->list_gtk.ef_barres.builder != NULL)
@@ -795,19 +795,19 @@ gboolean _1992_1_1_barres_change_noeud(EF_Barre *barre, EF_Noeud *noeud, gboolea
     GList   *liste_barre = NULL;
     GList   *liste_noeuds_dep;
     
-    BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre");
-    BUGMSG(noeud, FALSE, gettext("Paramètre %s incorrect.\n"), "noeud");
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(!((noeud_1 == TRUE) && (barre->noeud_fin == noeud)), FALSE, gettext("Impossible d'appliquer le même noeud aux deux extrémités d'une barre.\n"));
-    BUGMSG(!((noeud_1 == FALSE) && (barre->noeud_debut == noeud)), FALSE, gettext("Impossible d'appliquer le même noeud aux deux extrémités d'une barre.\n"));
+    BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre")
+    BUGMSG(noeud, FALSE, gettext("Paramètre %s incorrect.\n"), "noeud")
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(!((noeud_1 == TRUE) && (barre->noeud_fin == noeud)), FALSE, gettext("Impossible d'appliquer le même noeud aux deux extrémités d'une barre.\n"))
+    BUGMSG(!((noeud_1 == FALSE) && (barre->noeud_debut == noeud)), FALSE, gettext("Impossible d'appliquer le même noeud aux deux extrémités d'une barre.\n"))
     
     if ((noeud_1) && (barre->noeud_debut == noeud))
         return TRUE;
     if ((!noeud_1) && (barre->noeud_fin == noeud))
         return TRUE;
     liste_barre = g_list_append(liste_barre, barre);
-    BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, NULL, NULL, liste_barre, &liste_noeuds_dep, NULL, NULL, FALSE, TRUE), FALSE);
-    BUGMSG(g_list_find(liste_noeuds_dep, noeud) == NULL, FALSE, gettext("Impossible d'affecter le noeud %d à la barre %d car il est dépendant de la barre à modifier.\n"), noeud->numero, barre->numero);
+    BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, NULL, NULL, liste_barre, &liste_noeuds_dep, NULL, NULL, FALSE, TRUE), FALSE)
+    BUGMSG(g_list_find(liste_noeuds_dep, noeud) == NULL, FALSE, gettext("Impossible d'affecter le noeud %d à la barre %d car il est dépendant de la barre à modifier.\n"), noeud->numero, barre->numero)
     g_list_free(liste_noeuds_dep);
     
     if (noeud_1 == TRUE)
@@ -815,11 +815,11 @@ gboolean _1992_1_1_barres_change_noeud(EF_Barre *barre, EF_Noeud *noeud, gboolea
     else
         barre->noeud_fin = noeud;
     
-    BUG(EF_calculs_free(projet), FALSE);
+    BUG(EF_calculs_free(projet), FALSE)
     
 #ifdef ENABLE_GTK
-    BUG(m3d_actualise_graphique(projet, NULL, liste_barre), FALSE);
-    BUG(m3d_rafraichit(projet), FALSE);
+    BUG(m3d_actualise_graphique(projet, NULL, liste_barre), FALSE)
+    BUG(m3d_rafraichit(projet), FALSE)
 #endif
     
     g_list_free(liste_barre);
@@ -846,15 +846,15 @@ gboolean _1992_1_1_barres_change_relachement(EF_Barre *barre, EF_Relachement *re
  *             projet == NULL.
  */
 {
-    BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre");
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(barre, FALSE, gettext("Paramètre %s incorrect.\n"), "barre")
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
     
     if (barre->relachement == relachement)
         return TRUE;
     
     barre->relachement = relachement;
     
-    BUG(EF_calculs_free(projet), FALSE);
+    BUG(EF_calculs_free(projet), FALSE)
     
 #ifdef ENABLE_GTK
     if (projet->list_gtk.ef_barres.builder != NULL)
@@ -896,11 +896,11 @@ gboolean _1992_1_1_barres_rigidite_ajout(Projet *projet, EF_Barre *element)
     cholmod_triplet     *triplet;
     cholmod_sparse      *sparse_tmp, *matrice_rigidite_globale;
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->calculs.triplet_rigidite_partielle, FALSE, gettext("Paramètre %s incorrect.\n"), "triplet_rigidite_partielle");
-    BUGMSG(element, FALSE, gettext("Paramètre %s incorrect.\n"), "element");
-    BUGMSG(projet->calculs.triplet_rigidite_complete, FALSE, gettext("Paramètre %s incorrect.\n"), "triplet_rigidite_complete");
-    BUGMSG(element->section, FALSE, gettext("La section n'est pas spécifiée.\n"));
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->calculs.triplet_rigidite_partielle, FALSE, gettext("Paramètre %s incorrect.\n"), "triplet_rigidite_partielle")
+    BUGMSG(element, FALSE, gettext("Paramètre %s incorrect.\n"), "element")
+    BUGMSG(projet->calculs.triplet_rigidite_complete, FALSE, gettext("Paramètre %s incorrect.\n"), "triplet_rigidite_complete")
+    BUGMSG(element->section, FALSE, gettext("La section n'est pas spécifiée.\n"))
     
     // Calcul de la matrice de rotation 3D qui permet de passer du repère local au repère
     //   global. Elle est déterminée par le calcul de deux angles : z faisant une rotation
@@ -967,12 +967,12 @@ gboolean _1992_1_1_barres_rigidite_ajout(Projet *projet, EF_Barre *element)
     //   L_x négatif. Il est donc possible d'obtenir une seule et unique solution :\end{verbatim}\begin{displaymath}
     //   cos(z) = signe\{L_x\} \cdot \sqrt{\frac{L_x^2}{L^2-L_z^2}}\texttt{ et }sin(z) = \frac{yy}{\sqrt{L^2-L_z^2}}\end{displaymath}\begin{verbatim}
     triplet = cholmod_allocate_triplet(12, 12, 36, 0, CHOLMOD_REAL, projet->calculs.c);
-    BUGMSG(triplet, FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(triplet, FALSE, gettext("Erreur d'allocation mémoire.\n"))
     ai = (int*)triplet->i;
     aj = (int*)triplet->j;
     ax = (double*)triplet->x;
     x = common_math_get(element->angle)/180*M_PI;
-    BUG(_1992_1_1_barres_angle_rotation(element->noeud_debut, element->noeud_fin, &y, &z), FALSE);
+    BUG(_1992_1_1_barres_angle_rotation(element->noeud_debut, element->noeud_fin, &y, &z), FALSE)
     for (k=0;k<4;k++)
     {
         ai[k*9+0] = k*3+0; aj[k*9+0] = k*3+0; ax[k*9+0] = cos(y)*cos(z);
@@ -987,9 +987,9 @@ gboolean _1992_1_1_barres_rigidite_ajout(Projet *projet, EF_Barre *element)
     }
     triplet->nnz=36;
     element->matrice_rotation = cholmod_triplet_to_sparse(triplet, 0, projet->calculs.c);
-    BUGMSG(element->matrice_rotation, FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(element->matrice_rotation, FALSE, gettext("Erreur d'allocation mémoire.\n"))
     element->matrice_rotation_transpose = cholmod_transpose(element->matrice_rotation, 1, projet->calculs.c);
-    BUGMSG(element->matrice_rotation_transpose, FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(element->matrice_rotation_transpose, FALSE, gettext("Erreur d'allocation mémoire.\n"))
     cholmod_free_triplet(&triplet, projet->calculs.c);
     
     // Une fois la matrice de rotation déterminée, il est nécessaire de calculer la matrice de
@@ -1028,7 +1028,7 @@ gboolean _1992_1_1_barres_rigidite_ajout(Projet *projet, EF_Barre *element)
         
     //     Calcul des L_x, L_y, L_z et L.
         ll = EF_noeuds_distance(noeud2, noeud1);
-        BUG(!isnan(ll), FALSE);
+        BUG(!isnan(ll), FALSE)
         
     //     Détermination des paramètres de souplesse de l'élément de barre par l'utilisation
     //       des fonctions EF_sections_ay, by, cy, az, bz et cz.
@@ -1086,7 +1086,7 @@ gboolean _1992_1_1_barres_rigidite_ajout(Projet *projet, EF_Barre *element)
                     }
                     default :
                     {
-                        BUGMSG(0, FALSE, gettext("Relachement %d inconnu."), element->relachement->rx_debut);
+                        BUGMSG(0, FALSE, gettext("Relachement %d inconnu."), element->relachement->rx_debut)
                         break;
                     }
                 }
@@ -1116,7 +1116,7 @@ gboolean _1992_1_1_barres_rigidite_ajout(Projet *projet, EF_Barre *element)
                     }
                     default :
                     {
-                        BUGMSG(0, FALSE, gettext("Relachement %d inconnu."), element->relachement->rx_debut);
+                        BUGMSG(0, FALSE, gettext("Relachement %d inconnu."), element->relachement->rx_debut)
                         break;
                     }
                 }
@@ -1146,7 +1146,7 @@ gboolean _1992_1_1_barres_rigidite_ajout(Projet *projet, EF_Barre *element)
                     }
                     default :
                     {
-                        BUGMSG(0, FALSE, gettext("Relachement %d inconnu."), element->relachement->rx_debut);
+                        BUGMSG(0, FALSE, gettext("Relachement %d inconnu."), element->relachement->rx_debut)
                         break;
                     }
                 }
@@ -1185,7 +1185,7 @@ gboolean _1992_1_1_barres_rigidite_ajout(Projet *projet, EF_Barre *element)
                     }
                     default :
                     {
-                        BUGMSG(0, FALSE, gettext("Relachement %d inconnu."), element->relachement->rx_debut);
+                        BUGMSG(0, FALSE, gettext("Relachement %d inconnu."), element->relachement->rx_debut)
                         break;
                     }
                 }
@@ -1215,7 +1215,7 @@ gboolean _1992_1_1_barres_rigidite_ajout(Projet *projet, EF_Barre *element)
                     }
                     default :
                     {
-                        BUGMSG(0, FALSE, gettext("Relachement %d inconnu."), element->relachement->rx_debut);
+                        BUGMSG(0, FALSE, gettext("Relachement %d inconnu."), element->relachement->rx_debut)
                         break;
                     }
                 }
@@ -1245,7 +1245,7 @@ gboolean _1992_1_1_barres_rigidite_ajout(Projet *projet, EF_Barre *element)
                     }
                     default :
                     {
-                        BUGMSG(0, FALSE, gettext("Relachement %d inconnu."), element->relachement->rx_debut);
+                        BUGMSG(0, FALSE, gettext("Relachement %d inconnu."), element->relachement->rx_debut)
                         break;
                     }
                 }
@@ -1254,7 +1254,7 @@ gboolean _1992_1_1_barres_rigidite_ajout(Projet *projet, EF_Barre *element)
         
     //     Calcul des valeurs de la matrice de rigidité locale :
         triplet = cholmod_allocate_triplet(12, 12, 40, 0, CHOLMOD_REAL, projet->calculs.c);
-        BUGMSG(triplet, FALSE, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(triplet, FALSE, gettext("Erreur d'allocation mémoire.\n"))
         ai = (int*)triplet->i;
         aj = (int*)triplet->j;
         ax = (double*)triplet->x;
@@ -1268,7 +1268,7 @@ gboolean _1992_1_1_barres_rigidite_ajout(Projet *projet, EF_Barre *element)
     //                 -\frac{E \cdot S}{L} &  \frac{E \cdot S}{L}
     // \end{bmatrix}\end{displaymath}\begin{verbatim}
         es_l = EF_sections_es_l(element, j, 0., ll);
-        BUG(!isnan(es_l), FALSE);
+        BUG(!isnan(es_l), FALSE)
         ai[i] = 0;  aj[i] = 0;  ax[i] =  es_l; i++;
         ai[i] = 0;  aj[i] = 6;  ax[i] = -es_l; i++;
         ai[i] = 6;  aj[i] = 0;  ax[i] = -es_l; i++;
@@ -1297,7 +1297,7 @@ gboolean _1992_1_1_barres_rigidite_ajout(Projet *projet, EF_Barre *element)
     //         supposant arctan(v/l) = 1/l (hypothèse des petites déplacements).\end{verbatim}\begin{align*}
     //         a = & \frac{M_A}{L}+\frac{M_B}{L} & b = & M_A\nonumber\\
     //         c = & -\frac{M_A}{L}-\frac{M_B}{L} & d = & M_B\end{align*}\begin{verbatim}
-        BUG(EF_calculs_moment_hyper_z(&(element->info_EF[j]), 1./ll, 1./ll, &MA, &MB), FALSE);
+        BUG(EF_calculs_moment_hyper_z(&(element->info_EF[j]), 1./ll, 1./ll, &MA, &MB), FALSE)
         ai[i] = 1;  aj[i] = 1;  ax[i] = MA/ll+MB/ll; i++;
         ai[i] = 5;  aj[i] = 1;  ax[i] = MA;           i++;
         ai[i] = 7;  aj[i] = 1;  ax[i] = -MA/ll-MB/ll; i++;
@@ -1309,7 +1309,7 @@ gboolean _1992_1_1_barres_rigidite_ajout(Projet *projet, EF_Barre *element)
     //         M_B = \frac{M_A*\varphi_B}{c+k_B}\end{displaymath}\begin{align*}
     //         e = & \frac{M_A}{L}-\frac{M_B}{L} & f = & M_A\nonumber\\
     //         g = & -\frac{M_A}{L}+\frac{M_B}{L} & h = & -M_B\end{align*}\begin{verbatim}
-        BUG(EF_charge_barre_ponctuelle_def_ang_iso_z(element, j, 0., 0., 1., &phia_iso, &phib_iso), FALSE);
+        BUG(EF_charge_barre_ponctuelle_def_ang_iso_z(element, j, 0., 0., 1., &phia_iso, &phib_iso), FALSE)
         if (ERREUR_RELATIVE_EGALE(element->info_EF[j].kAz, MAXDOUBLE))
             MA = 0.;
         else if (ERREUR_RELATIVE_EGALE(element->info_EF[j].kBz, MAXDOUBLE))
@@ -1327,7 +1327,7 @@ gboolean _1992_1_1_barres_rigidite_ajout(Projet *projet, EF_Barre *element)
     //         supposant arctan(-1/l) = -1/l (hypothèse des petites déplacements).\end{verbatim}\begin{align*}
     //         i = & \frac{M_A}{L}+\frac{M_B}{L} & j = & M_A\nonumber\\
     //         k = & -\frac{M_A}{L}-\frac{M_B}{L} & l = & M_B\end{align*}\begin{verbatim}
-        BUG(EF_calculs_moment_hyper_z(&(element->info_EF[j]), -1./ll, -1./ll, &MA, &MB), FALSE);
+        BUG(EF_calculs_moment_hyper_z(&(element->info_EF[j]), -1./ll, -1./ll, &MA, &MB), FALSE)
         ai[i] = 1;  aj[i] = 7;  ax[i] =  MA/ll+MB/ll; i++;
         ai[i] = 5;  aj[i] = 7;  ax[i] =  MA;          i++;
         ai[i] = 7;  aj[i] = 7;  ax[i] = -MA/ll-MB/ll; i++;
@@ -1341,7 +1341,7 @@ gboolean _1992_1_1_barres_rigidite_ajout(Projet *projet, EF_Barre *element)
     //         o = & \frac{M_A}{L}-\frac{M_B}{L} & p = & M_B\end{align*}\begin{verbatim}
     //         L'ensemble des valeurs sont à inséré dans la matrice suivante et permet
     //         d'obtenir la matrice de rigidité élémentaire.\end{verbatim}\begin{displaymath}
-        BUG(EF_charge_barre_ponctuelle_def_ang_iso_z(element, j, ll, 0., 1., &phia_iso, &phib_iso), FALSE);
+        BUG(EF_charge_barre_ponctuelle_def_ang_iso_z(element, j, ll, 0., 1., &phia_iso, &phib_iso), FALSE)
         if (ERREUR_RELATIVE_EGALE(element->info_EF[j].kBz, MAXDOUBLE))
             MB = 0.;
         else if (ERREUR_RELATIVE_EGALE(element->info_EF[j].kAz, MAXDOUBLE))
@@ -1368,7 +1368,7 @@ gboolean _1992_1_1_barres_rigidite_ajout(Projet *projet, EF_Barre *element)
     //         supposant arctan(v/l) = 1/l (hypothèse des petites déplacements).\end{verbatim}\begin{align*}
     //         a = & -\frac{M_A}{L}-\frac{M_B}{L} & b = & M_A\nonumber\\
     //         c = & \frac{M_A}{L}+\frac{M_B}{L} & d = & M_B\end{align*}\begin{verbatim}
-        BUG(EF_calculs_moment_hyper_y(&(element->info_EF[j]), 1./ll, 1./ll, &MA, &MB), FALSE);
+        BUG(EF_calculs_moment_hyper_y(&(element->info_EF[j]), 1./ll, 1./ll, &MA, &MB), FALSE)
         ai[i] = 2;  aj[i] = 2;  ax[i] = MA/ll+MB/ll; i++;
         ai[i] = 4;  aj[i] = 2;  ax[i] = -MA;           i++;
         ai[i] = 8;  aj[i] = 2;  ax[i] = -MA/ll-MB/ll; i++;
@@ -1380,7 +1380,7 @@ gboolean _1992_1_1_barres_rigidite_ajout(Projet *projet, EF_Barre *element)
     //         M_B = \frac{M_A*\varphi_B}{c+k_B}\end{displaymath}\begin{align*}
     //         e = & \-frac{M_A}{L}-\frac{M_B}{L} & f = & M_A\nonumber\\
     //         g = & \frac{M_A}{L}+\frac{M_B}{L} & h = & -M_B\end{align*}\begin{verbatim}
-        BUG(EF_charge_barre_ponctuelle_def_ang_iso_y(element, j, 0., 0., 1., &phia_iso, &phib_iso), FALSE);
+        BUG(EF_charge_barre_ponctuelle_def_ang_iso_y(element, j, 0., 0., 1., &phia_iso, &phib_iso), FALSE)
         if (ERREUR_RELATIVE_EGALE(element->info_EF[j].kAy, MAXDOUBLE))
             MA = 0.;
         else if (ERREUR_RELATIVE_EGALE(element->info_EF[j].kBy, MAXDOUBLE))
@@ -1398,7 +1398,7 @@ gboolean _1992_1_1_barres_rigidite_ajout(Projet *projet, EF_Barre *element)
     //         supposant arctan(-1/l) = -1/l (hypothèse des petites déplacements).\end{verbatim}\begin{align*}
     //         i = & -\frac{M_A}{L}-\frac{M_B}{L} & j = & M_A\nonumber\\
     //         k = & \frac{M_A}{L}\frac{M_B}{L} & l = & M_B\end{align*}\begin{verbatim}
-        BUG(EF_calculs_moment_hyper_y(&(element->info_EF[j]), -1./ll, -1./ll, &MA, &MB), FALSE);
+        BUG(EF_calculs_moment_hyper_y(&(element->info_EF[j]), -1./ll, -1./ll, &MA, &MB), FALSE)
         ai[i] = 2;  aj[i] = 8;  ax[i] = +MA/ll+MB/ll; i++;
         ai[i] = 4;  aj[i] = 8;  ax[i] = -MA;          i++;
         ai[i] = 8;  aj[i] = 8;  ax[i] = -MA/ll-MB/ll; i++;
@@ -1410,7 +1410,7 @@ gboolean _1992_1_1_barres_rigidite_ajout(Projet *projet, EF_Barre *element)
     //         M_A = \frac{M_B*\varphi_A}{c+k_A}\end{displaymath}\begin{align*}
     //         m = & -\frac{M_A}{L}-\frac{M_B}{L} & n = & M_A\nonumber\\
     //         o = & \frac{M_A}{L}+\frac{M_B}{L} & p = & M_B\end{align*}\begin{verbatim}
-        BUG(EF_charge_barre_ponctuelle_def_ang_iso_y(element, j, ll, 0., 1., &phia_iso, &phib_iso), FALSE);
+        BUG(EF_charge_barre_ponctuelle_def_ang_iso_y(element, j, ll, 0., 1., &phia_iso, &phib_iso), FALSE)
         if (ERREUR_RELATIVE_EGALE(element->info_EF[j].kBy, MAXDOUBLE))
             MB = 0.;
         else if (ERREUR_RELATIVE_EGALE(element->info_EF[j].kAy, MAXDOUBLE))
@@ -1451,18 +1451,18 @@ gboolean _1992_1_1_barres_rigidite_ajout(Projet *projet, EF_Barre *element)
         
         cholmod_free_sparse(&element->info_EF[j].matrice_rigidite_locale, projet->calculs.c);
         element->info_EF[j].matrice_rigidite_locale = cholmod_triplet_to_sparse(triplet, 0, projet->calculs.c);
-        BUGMSG(element->info_EF[j].matrice_rigidite_locale, FALSE, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(element->info_EF[j].matrice_rigidite_locale, FALSE, gettext("Erreur d'allocation mémoire.\n"))
         cholmod_free_triplet(&triplet, projet->calculs.c);
         
     //       Calcul la matrice locale dans le repère globale :\end{verbatim}\begin{displaymath}
     //       [K]_{global} = [R] \cdot [K]_{local} \cdot [R]^{-1} = [R] \cdot [K]_{local} \cdot [R]^T\end{displaymath}\begin{verbatim}
         sparse_tmp = cholmod_ssmult(element->matrice_rotation, element->info_EF[j].matrice_rigidite_locale, 0, 1, 0, projet->calculs.c);
-        BUGMSG(sparse_tmp, FALSE, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(sparse_tmp, FALSE, gettext("Erreur d'allocation mémoire.\n"))
         matrice_rigidite_globale = cholmod_ssmult(sparse_tmp, element->matrice_rotation_transpose, 0, 1, 0, projet->calculs.c);
-        BUGMSG(matrice_rigidite_globale, FALSE, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(matrice_rigidite_globale, FALSE, gettext("Erreur d'allocation mémoire.\n"))
         cholmod_free_sparse(&(sparse_tmp), projet->calculs.c);
         triplet = cholmod_sparse_to_triplet(matrice_rigidite_globale, projet->calculs.c);
-        BUGMSG(triplet, FALSE, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(triplet, FALSE, gettext("Erreur d'allocation mémoire.\n"))
         ai = (int*)triplet->i;
         aj = (int*)triplet->j;
         ax = (double*)triplet->x;
@@ -1554,7 +1554,7 @@ gboolean _1992_1_1_barres_rigidite_ajout_tout(Projet *projet)
  */
 {
     GList   *list_parcours;
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
     
     // Trivial
     if (projet->modele.barres == NULL)
@@ -1565,7 +1565,7 @@ gboolean _1992_1_1_barres_rigidite_ajout_tout(Projet *projet)
     {
         EF_Barre    *element = list_parcours->data;
         
-        BUG(_1992_1_1_barres_rigidite_ajout(projet, element), FALSE);
+        BUG(_1992_1_1_barres_rigidite_ajout(projet, element), FALSE)
         
         list_parcours = g_list_next(list_parcours);
     }
@@ -1582,7 +1582,7 @@ void _1992_1_1_barres_free_foreach(EF_Barre *barre, Projet *projet)
  * Valeur renvoyée : Aucune.
  */
 {
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
     
     while (barre->noeuds_intermediaires != NULL)
     {
@@ -1626,9 +1626,9 @@ gboolean _1992_1_1_barres_supprime_liste(Projet *projet, GList *liste_noeuds,
     GList   *noeuds_suppr, *barres_suppr, *charges_suppr;
     GList   *list_parcours;
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
     
-    BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, liste_noeuds, NULL, NULL, NULL, liste_barres, &noeuds_suppr, &barres_suppr, &charges_suppr, FALSE, TRUE), FALSE);
+    BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, liste_noeuds, NULL, NULL, NULL, liste_barres, &noeuds_suppr, &barres_suppr, &charges_suppr, FALSE, TRUE), FALSE)
     
     // On enlève dans les charges les noeuds et barres qui seront supprimés
     list_parcours = charges_suppr;
@@ -1640,22 +1640,22 @@ gboolean _1992_1_1_barres_supprime_liste(Projet *projet, GList *liste_noeuds,
         {
             case CHARGE_NOEUD :
             {
-                BUG(EF_charge_noeud_enleve_noeuds(charge_type, noeuds_suppr, projet), FALSE);
+                BUG(EF_charge_noeud_enleve_noeuds(charge_type, noeuds_suppr, projet), FALSE)
                 break;
             }
             case CHARGE_BARRE_PONCTUELLE :
             {
-                BUG(EF_charge_barre_ponctuelle_enleve_barres((Charge_Barre_Ponctuelle*)charge_type, barres_suppr, projet), FALSE);
+                BUG(EF_charge_barre_ponctuelle_enleve_barres((Charge_Barre_Ponctuelle*)charge_type, barres_suppr, projet), FALSE)
                 break;
             }
             case CHARGE_BARRE_REPARTIE_UNIFORME :
             {
-                BUG(EF_charge_barre_repartie_uniforme_enleve_barres((Charge_Barre_Repartie_Uniforme*)charge_type, barres_suppr, projet), FALSE);
+                BUG(EF_charge_barre_repartie_uniforme_enleve_barres((Charge_Barre_Repartie_Uniforme*)charge_type, barres_suppr, projet), FALSE)
                 break;
             }
             default :
             {
-                BUGMSG(0, FALSE, gettext("Type de charge %d inconnu.\n"), charge_type->type);
+                BUGMSG(0, FALSE, gettext("Type de charge %d inconnu.\n"), charge_type->type)
                 break;
             }
         }
@@ -1666,10 +1666,10 @@ gboolean _1992_1_1_barres_supprime_liste(Projet *projet, GList *liste_noeuds,
     g_list_free(barres_suppr);
     g_list_free(charges_suppr);
     
-    BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, liste_noeuds, NULL, NULL, NULL, liste_barres, &noeuds_suppr, &barres_suppr, NULL, TRUE, TRUE), FALSE);
+    BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, liste_noeuds, NULL, NULL, NULL, liste_barres, &noeuds_suppr, &barres_suppr, NULL, TRUE, TRUE), FALSE)
     
     if ((noeuds_suppr != NULL) || (barres_suppr != NULL))
-        BUG(EF_calculs_free(projet), FALSE);
+        BUG(EF_calculs_free(projet), FALSE)
     
     // On supprime les noeuds
     list_parcours = noeuds_suppr;
@@ -1727,9 +1727,9 @@ gboolean _1992_1_1_barres_free(Projet *projet)
  */
 {
     // Trivial
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
     
-    BUG(EF_calculs_free(projet), FALSE);
+    BUG(EF_calculs_free(projet), FALSE)
     
     g_list_foreach(projet->modele.barres, (GFunc)_1992_1_1_barres_free_foreach, projet);
     g_list_free(projet->modele.barres);

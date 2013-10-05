@@ -75,9 +75,9 @@ void _1990_gtk_groupes_tree_view_etat_cursor_changed(GtkTreeView *tree_view, Pro
     Niveau_Groupe   *niveau_groupe;
     Groupe          *groupe;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->niveaux_groupes, , gettext("Le projet ne possède pas de niveaux de groupes.\n"));
-    BUGMSG(projet->list_gtk._1990_groupes.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->niveaux_groupes, , gettext("Le projet ne possède pas de niveaux de groupes.\n"))
+    BUGMSG(projet->list_gtk._1990_groupes.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes")
     
     /* Détermine le groupe sélectionné */
     // Si aucune sélection.
@@ -85,8 +85,8 @@ void _1990_gtk_groupes_tree_view_etat_cursor_changed(GtkTreeView *tree_view, Pro
         return;
     
     ngroupe = _1990_gtk_get_groupe(model, &iter);
-    BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, GTK_COMMON_SPINBUTTON_AS_UINT(GTK_SPIN_BUTTON(projet->list_gtk._1990_groupes.spin_button_niveau))), );
-    BUG(groupe = _1990_groupe_positionne_groupe(niveau_groupe, ngroupe), );
+    BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, GTK_COMMON_SPINBUTTON_AS_UINT(GTK_SPIN_BUTTON(projet->list_gtk._1990_groupes.spin_button_niveau))), )
+    BUG(groupe = _1990_groupe_positionne_groupe(niveau_groupe, ngroupe), )
     
     /* On active le toggle_button correspondant au type de combinaison du groupe */
     switch (groupe->type_combinaison)
@@ -108,7 +108,7 @@ void _1990_gtk_groupes_tree_view_etat_cursor_changed(GtkTreeView *tree_view, Pro
         }
         default :
         {
-            BUGMSG(0, , gettext("Le groupe %s (%d) n'est combiné ni de type OR, XOR ou AND.\n"), groupe->nom, groupe->numero);
+            BUGMSG(0, , gettext("Le groupe %s (%d) n'est combiné ni de type OR, XOR ou AND.\n"), groupe->nom, groupe->numero)
             break;
         }
     }
@@ -128,8 +128,8 @@ gboolean _1990_gtk_groupe_window_key_press(GtkWidget *widget, GdkEvent *event, P
  *           interface graphique non initialisée.
  */
 {
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk._1990_groupes.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk._1990_groupes.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes")
     
     if (event->key.keyval == GDK_KEY_Escape)
     {
@@ -164,9 +164,9 @@ gboolean _1990_gtk_groupes_affiche_niveau(Projet *projet, unsigned int niveau)
     GtkTreePath         *path;
     GList               *list_parcours;
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->niveaux_groupes, FALSE, gettext("Le projet ne possède pas de niveaux de groupes.\n"));
-    BUGMSG(projet->list_gtk._1990_groupes.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->niveaux_groupes, FALSE, gettext("Le projet ne possède pas de niveaux de groupes.\n"))
+    BUGMSG(projet->list_gtk._1990_groupes.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes")
     
     gtk_1990_groupes = &projet->list_gtk._1990_groupes;
     
@@ -183,8 +183,8 @@ gboolean _1990_gtk_groupes_affiche_niveau(Projet *projet, unsigned int niveau)
         dispo_max = g_list_length(projet->actions);
     else
     {
-        BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, niveau-1), FALSE);
-        BUGMSG(niveau_groupe->groupes, FALSE, gettext("Le niveau de groupes %d ne possède pas de groupe.\n"), niveau_groupe->numero);
+        BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, niveau-1), FALSE)
+        BUGMSG(niveau_groupe->groupes, FALSE, gettext("Le niveau de groupes %d ne possède pas de groupe.\n"), niveau_groupe->numero)
         dispo_max = g_list_length(niveau_groupe->groupes);
     }
     
@@ -193,14 +193,14 @@ gboolean _1990_gtk_groupes_affiche_niveau(Projet *projet, unsigned int niveau)
      * quelques sont les éléments du niveau n-1 encore non placés */
     if (dispo_max != 0)
     {
-        BUGMSG(dispos = (char*)malloc(sizeof(char)*dispo_max), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(dispos = (char*)malloc(sizeof(char)*dispo_max), FALSE, gettext("Erreur d'allocation mémoire.\n"))
         for (i=0;i<dispo_max;i++)
             dispos[i] = 0;
     }
     else
         dispos = NULL;
     
-    BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, niveau), FALSE);
+    BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, niveau), FALSE)
     list_parcours = niveau_groupe->groupes;
     
     /* Parcours le niveau à afficher */
@@ -236,15 +236,15 @@ gboolean _1990_gtk_groupes_affiche_niveau(Projet *projet, unsigned int niveau)
                 {
                     Action *action;
                     
-                    BUG(action = _1990_action_numero_cherche(projet, element->numero), FALSE);
+                    BUG(action = _1990_action_numero_cherche(projet, element->numero), FALSE)
                     gtk_tree_store_set(gtk_1990_groupes->tree_store_etat, &element->Iter, 0, element->numero, 1, _1990_action_nom_renvoie(action), -1);
                 }
                 else
                 {
                     Niveau_Groupe *groupe_niveau_moins_1;
                     Groupe *groupe_moins_1;
-                    BUG(groupe_niveau_moins_1 = _1990_groupe_positionne_niveau(projet, niveau-1), FALSE);
-                    BUG(groupe_moins_1 = _1990_groupe_positionne_groupe(groupe_niveau_moins_1, element->numero), FALSE);
+                    BUG(groupe_niveau_moins_1 = _1990_groupe_positionne_niveau(projet, niveau-1), FALSE)
+                    BUG(groupe_moins_1 = _1990_groupe_positionne_groupe(groupe_niveau_moins_1, element->numero), FALSE)
                     gtk_tree_store_set(gtk_1990_groupes->tree_store_etat, &element->Iter, 0, element->numero, 1, groupe_moins_1->nom, -1);
                 }
                 
@@ -285,15 +285,15 @@ gboolean _1990_gtk_groupes_affiche_niveau(Projet *projet, unsigned int niveau)
             {
                 Action *action;
                 
-                BUG(action = _1990_action_numero_cherche(projet, i), FALSE);
+                BUG(action = _1990_action_numero_cherche(projet, i), FALSE)
                 gtk_tree_store_set(gtk_1990_groupes->tree_store_dispo, &Iter, 0, i, 1, _1990_action_nom_renvoie(action), -1);
             }
             else
             {
                 Niveau_Groupe *groupe_niveau_moins_1;
                 Groupe *groupe_moins_1;
-                BUG(groupe_niveau_moins_1 = _1990_groupe_positionne_niveau(projet, niveau-1), FALSE);
-                BUG(groupe_moins_1 = _1990_groupe_positionne_groupe(groupe_niveau_moins_1, i), FALSE);
+                BUG(groupe_niveau_moins_1 = _1990_groupe_positionne_niveau(projet, niveau-1), FALSE)
+                BUG(groupe_moins_1 = _1990_groupe_positionne_groupe(groupe_niveau_moins_1, i), FALSE)
                 gtk_tree_store_set(gtk_1990_groupes->tree_store_dispo, &Iter, 0, i, 1, groupe_moins_1->nom, -1);
             }
         }
@@ -315,10 +315,10 @@ void _1990_gtk_spin_button_niveau_change(GtkWidget *button, Projet *projet)
  *         _1990_gtk_groupes_affiche_niveau.
  */
 {
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk._1990_groupes.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk._1990_groupes.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes")
     
-    BUG(_1990_gtk_groupes_affiche_niveau(projet, GTK_COMMON_SPINBUTTON_AS_UINT(GTK_SPIN_BUTTON(projet->list_gtk._1990_groupes.spin_button_niveau))), );
+    BUG(_1990_gtk_groupes_affiche_niveau(projet, GTK_COMMON_SPINBUTTON_AS_UINT(GTK_SPIN_BUTTON(projet->list_gtk._1990_groupes.spin_button_niveau))), )
     return;
 }
 
@@ -333,10 +333,10 @@ void _1990_gtk_button_niveau_suppr_clicked(GtkWidget *button, Projet *projet)
  *         _1990_groupe_free_niveau.
  */
 {
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk._1990_groupes.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk._1990_groupes.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes")
     
-    BUG(_1990_groupe_free_niveau(projet, GTK_COMMON_SPINBUTTON_AS_UINT(GTK_SPIN_BUTTON(projet->list_gtk._1990_groupes.spin_button_niveau)), FALSE), );
+    BUG(_1990_groupe_free_niveau(projet, GTK_COMMON_SPINBUTTON_AS_UINT(GTK_SPIN_BUTTON(projet->list_gtk._1990_groupes.spin_button_niveau)), FALSE), )
     
     return;
 }
@@ -352,10 +352,10 @@ void _1990_gtk_button_niveau_ajout_clicked(GtkWidget *button, Projet *projet)
  *         _1990_groupe_ajout_niveau.
  */
 {
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk._1990_groupes.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk._1990_groupes.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes")
     
-    BUG(_1990_groupe_ajout_niveau(projet), );
+    BUG(_1990_groupe_ajout_niveau(projet), )
     
     return;
 }
@@ -375,12 +375,12 @@ void _1990_gtk_button_groupe_ajout_clicked(GtkWidget *button, Projet *projet)
     Niveau_Groupe   *niveau_groupe;
     Groupe          *groupe;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk._1990_groupes.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk._1990_groupes.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes")
     
     /* On ajoute un niveau */
-    BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, GTK_COMMON_SPINBUTTON_AS_UINT(GTK_SPIN_BUTTON(projet->list_gtk._1990_groupes.spin_button_niveau))), );
-    BUG(groupe = _1990_groupe_ajout_groupe(projet, niveau_groupe->numero, GROUPE_COMBINAISON_AND, gettext("Sans nom")), );
+    BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, GTK_COMMON_SPINBUTTON_AS_UINT(GTK_SPIN_BUTTON(projet->list_gtk._1990_groupes.spin_button_niveau))), )
+    BUG(groupe = _1990_groupe_ajout_groupe(projet, niveau_groupe->numero, GROUPE_COMBINAISON_AND, gettext("Sans nom")), )
     
     return;
 }
@@ -406,8 +406,8 @@ int _1990_gtk_insert_dispo(Projet *projet, unsigned int numero, Niveau_Groupe *n
     char                *nom;
     GtkTreePath         *path;
     
-    BUGMSG(projet, -1, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk._1990_groupes.builder, -1, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes");
+    BUGMSG(projet, -1, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk._1990_groupes.builder, -1, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes")
     
     gtk_1990_groupes = &projet->list_gtk._1990_groupes;
     model = gtk_tree_view_get_model(gtk_1990_groupes->tree_view_dispo);
@@ -417,7 +417,7 @@ int _1990_gtk_insert_dispo(Projet *projet, unsigned int numero, Niveau_Groupe *n
     if (retour == TRUE)
     {
         gtk_tree_model_get(model, &iter2, 0, &nombre, 1, &nom, -1);
-        BUGMSG(nombre != numero, -1, gettext("Élément %d existant.\n"), numero);
+        BUGMSG(nombre != numero, -1, gettext("Élément %d existant.\n"), numero)
     }
     while ((retour == TRUE) && (nombre < numero))
     {
@@ -425,7 +425,7 @@ int _1990_gtk_insert_dispo(Projet *projet, unsigned int numero, Niveau_Groupe *n
         if (retour == TRUE)
         {
             gtk_tree_model_get(model, &iter2, 0, &nombre, 1, &nom, -1);
-            BUGMSG(nombre != numero, -1, gettext("Élément %d existant.\n"), numero);
+            BUGMSG(nombre != numero, -1, gettext("Élément %d existant.\n"), numero)
         }
     }
     
@@ -444,7 +444,7 @@ int _1990_gtk_insert_dispo(Projet *projet, unsigned int numero, Niveau_Groupe *n
     {
         Action *action;
         
-        BUG(action = _1990_action_numero_cherche(projet, numero), -3);
+        BUG(action = _1990_action_numero_cherche(projet, numero), -3)
         gtk_tree_store_set(gtk_1990_groupes->tree_store_dispo, &iter, 0, numero, 1, _1990_action_nom_renvoie(action), -1);
     }
     else
@@ -452,8 +452,8 @@ int _1990_gtk_insert_dispo(Projet *projet, unsigned int numero, Niveau_Groupe *n
         Niveau_Groupe *groupe_niveau_moins_1;
         Groupe *groupe_moins_1;
         
-        BUG(groupe_niveau_moins_1 = _1990_groupe_positionne_niveau(projet, niveau->numero-1), -3);
-        BUG(groupe_moins_1 = _1990_groupe_positionne_groupe(groupe_niveau_moins_1, numero), -3);
+        BUG(groupe_niveau_moins_1 = _1990_groupe_positionne_niveau(projet, niveau->numero-1), -3)
+        BUG(groupe_moins_1 = _1990_groupe_positionne_groupe(groupe_niveau_moins_1, numero), -3)
         gtk_tree_store_set(gtk_1990_groupes->tree_store_dispo, &iter, 0, numero, 1, groupe_moins_1->nom, -1);
     }
     
@@ -473,8 +473,8 @@ void _1990_gtk_button_groupe_suppr_clicked(GtkWidget *button, Projet *projet)
     unsigned int        niveau;
     unsigned int        numero, ngroupe;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk._1990_groupes.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk._1990_groupes.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes")
     
     if (!gtk_tree_selection_get_selected(projet->list_gtk._1990_groupes.tree_select_etat, &model, &iter))
         return;
@@ -491,18 +491,18 @@ void _1990_gtk_button_groupe_suppr_clicked(GtkWidget *button, Projet *projet)
         Groupe          *groupe;
         
         /* On positionne le groupe en cours */
-        BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, niveau), );
-        BUG(groupe = _1990_groupe_positionne_groupe(niveau_groupe, ngroupe), );
+        BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, niveau), )
+        BUG(groupe = _1990_groupe_positionne_groupe(niveau_groupe, ngroupe), )
         
         /* On supprime le groupe */
-        BUG(_1990_groupe_free_groupe(projet, niveau, ngroupe), );
+        BUG(_1990_groupe_free_groupe(projet, niveau, ngroupe), )
     }
     /* Si c'est un élément, on l'ajoute à la liste des éléments disponibles
      * et on le supprime du groupe */
     else
     {
-        BUG(_1990_gtk_insert_dispo(projet, numero, _1990_groupe_positionne_niveau(projet, niveau)) == 0, );
-        BUG(_1990_groupe_free_element(projet, niveau, ngroupe, numero), );
+        BUG(_1990_gtk_insert_dispo(projet, numero, _1990_groupe_positionne_niveau(projet, niveau)) == 0, )
+        BUG(_1990_groupe_free_element(projet, niveau, ngroupe, numero), )
     }
     
     return;
@@ -518,7 +518,7 @@ void _1990_gtk_tree_view_drag_begin(GtkWidget *widget, GdkDragContext *drag_cont
  * Valeur renvoyée : Aucune.
  */
 {
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
     
     projet->list_gtk._1990_groupes.drag_from = widget;
     
@@ -538,7 +538,7 @@ gboolean _1990_gtk_tree_view_dispo_drag(GtkWidget *widget, GdkDragContext *drag_
  * Valeur renvoyée : FALSE
  */
 {
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
     
     _1990_gtk_button_groupe_suppr_clicked(widget, projet);
     
@@ -569,14 +569,14 @@ int _1990_gtk_button_ajout_dispo_proc(unsigned int ngroupe, Projet *projet)
     GList               *list, *list_orig;
     Gtk_1990_Groupes    *gtk_1990_groupes;
     
-    BUGMSG(projet, -1, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->niveaux_groupes, -1, gettext("Le projet ne possède pas de niveaux de groupes.\n"));
-    BUGMSG(projet->list_gtk._1990_groupes.builder, -1, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes");
+    BUGMSG(projet, -1, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->niveaux_groupes, -1, gettext("Le projet ne possède pas de niveaux de groupes.\n"))
+    BUGMSG(projet->list_gtk._1990_groupes.builder, -1, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes")
     
     gtk_1990_groupes = &projet->list_gtk._1990_groupes;
     niveau = GTK_COMMON_SPINBUTTON_AS_UINT(GTK_SPIN_BUTTON(gtk_1990_groupes->spin_button_niveau));
-    BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, niveau), -1);
-    BUG(groupe = _1990_groupe_positionne_groupe(niveau_groupe, ngroupe), -1);
+    BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, niveau), -1)
+    BUG(groupe = _1990_groupe_positionne_groupe(niveau_groupe, ngroupe), -1)
     list_orig = gtk_tree_selection_get_selected_rows(gtk_1990_groupes->tree_select_dispo, &model1);
     list = g_list_last(list_orig);
     
@@ -588,7 +588,7 @@ int _1990_gtk_button_ajout_dispo_proc(unsigned int ngroupe, Projet *projet)
         gtk_tree_model_get(model1, &iter1, 0, &numero, 1, &nom, -1);
         
         // On ajoute l'élément au groupe
-        BUG(_1990_groupe_ajout_element(projet, niveau, ngroupe, numero), -1);
+        BUG(_1990_groupe_ajout_element(projet, niveau, ngroupe, numero), -1)
     }
     g_list_foreach(list_orig, (GFunc)gtk_tree_path_free, NULL);
     
@@ -607,16 +607,16 @@ void _1990_gtk_button_ajout_dispo_clicked(GtkWidget *button, Projet *projet)
     GtkTreeModel    *model;
     unsigned int    ngroupe;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->niveaux_groupes, , gettext("Le projet ne possède pas de niveaux de groupes.\n"));
-    BUGMSG(projet->list_gtk._1990_groupes.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->niveaux_groupes, , gettext("Le projet ne possède pas de niveaux de groupes.\n"))
+    BUGMSG(projet->list_gtk._1990_groupes.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes")
     
     /* On vérifie s'il y a des éléments sélectionnés */
     if (!gtk_tree_selection_get_selected(projet->list_gtk._1990_groupes.tree_select_etat, &model, &iter))
         return;
     ngroupe = _1990_gtk_get_groupe(model, &iter);
     
-    BUG(_1990_gtk_button_ajout_dispo_proc(ngroupe, projet) == 0, );
+    BUG(_1990_gtk_button_ajout_dispo_proc(ngroupe, projet) == 0, )
     
     return;
 }
@@ -634,9 +634,9 @@ void _1990_gtk_button_ajout_tout_dispo_clicked(GtkWidget *button, Projet *projet
     GtkTreeModel    *model;
     unsigned int    ngroupe;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->niveaux_groupes, , gettext("Le projet ne possède pas de niveaux de groupes.\n"));
-    BUGMSG(projet->list_gtk._1990_groupes.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->niveaux_groupes, , gettext("Le projet ne possède pas de niveaux de groupes.\n"))
+    BUGMSG(projet->list_gtk._1990_groupes.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes")
     
     gtk_tree_selection_select_all(projet->list_gtk._1990_groupes.tree_select_dispo);
     
@@ -645,7 +645,7 @@ void _1990_gtk_button_ajout_tout_dispo_clicked(GtkWidget *button, Projet *projet
         return;
     ngroupe = _1990_gtk_get_groupe(model, &iter);
     
-    BUG(_1990_gtk_button_ajout_dispo_proc(ngroupe, projet) == 0, );
+    BUG(_1990_gtk_button_ajout_dispo_proc(ngroupe, projet) == 0, )
     
     return;
 }
@@ -668,9 +668,9 @@ void _1990_gtk_tree_view_etat_drag(GtkWidget *widget, GdkDragContext *drag_conte
     GtkTreePath         *path;
     GtkTreeIter         iter, iter_tmp;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->niveaux_groupes, , gettext("Le projet ne possède pas de niveaux de groupes.\n"));
-    BUGMSG(projet->list_gtk._1990_groupes.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->niveaux_groupes, , gettext("Le projet ne possède pas de niveaux de groupes.\n"))
+    BUGMSG(projet->list_gtk._1990_groupes.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes")
     
     gdk_window_get_geometry(gtk_tree_view_get_bin_window(GTK_TREE_VIEW(gtk_1990_groupes->tree_view_etat)), &cx, &cy, NULL, NULL);
     gtk_tree_view_get_path_at_pos(GTK_TREE_VIEW(widget), x -=cx, y -=cy, &path, NULL, &cx, &cy);
@@ -684,7 +684,7 @@ void _1990_gtk_tree_view_etat_drag(GtkWidget *widget, GdkDragContext *drag_conte
         ngroupe_dest = _1990_gtk_get_groupe(list_store, &iter);
         // Ajout les éléments disponibles sélectionnées dans le groupe souhaité.
         if (gtk_1990_groupes->drag_from == GTK_WIDGET(gtk_1990_groupes->tree_view_dispo))
-            BUG(_1990_gtk_button_ajout_dispo_proc(ngroupe_dest, projet) == 0, );
+            BUG(_1990_gtk_button_ajout_dispo_proc(ngroupe_dest, projet) == 0, )
         // Déplace l'élément sélectionné dans un autre groupe.
         else
         {
@@ -701,8 +701,8 @@ void _1990_gtk_tree_view_etat_drag(GtkWidget *widget, GdkDragContext *drag_conte
                 if (ngroupe_source != ngroupe_dest)
                 {
                     gtk_tree_model_get(model, &iter, 0, &numero, -1);
-                    BUG(_1990_groupe_free_element(projet, niveau, ngroupe_source, numero), );
-                    BUG(_1990_groupe_ajout_element(projet, niveau, ngroupe_dest, numero), );
+                    BUG(_1990_groupe_free_element(projet, niveau, ngroupe_source, numero), )
+                    BUG(_1990_groupe_ajout_element(projet, niveau, ngroupe_dest, numero), )
                 }
             }
         }
@@ -729,15 +729,15 @@ void _1990_gtk_tree_view_etat_row_expanded(GtkTreeView *tree_view, GtkTreeIter *
     Niveau_Groupe   *niveau_groupe;
     Groupe          *groupe;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->niveaux_groupes, , gettext("Le projet ne possède pas de niveaux de groupes.\n"));
-    BUGMSG(projet->list_gtk._1990_groupes.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->niveaux_groupes, , gettext("Le projet ne possède pas de niveaux de groupes.\n"))
+    BUGMSG(projet->list_gtk._1990_groupes.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes")
     
     // On détermine le groupe ayant entraîné une ouverture
     // En effet, seul un groupe dans le tree_view_etat peut entraîner une ouverture
     ngroupe = _1990_gtk_get_groupe(model, iter);
-    BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, GTK_COMMON_SPINBUTTON_AS_UINT(GTK_SPIN_BUTTON(projet->list_gtk._1990_groupes.spin_button_niveau))), );
-    BUG(groupe = _1990_groupe_positionne_groupe(niveau_groupe, ngroupe), );
+    BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, GTK_COMMON_SPINBUTTON_AS_UINT(GTK_SPIN_BUTTON(projet->list_gtk._1990_groupes.spin_button_niveau))), )
+    BUG(groupe = _1990_groupe_positionne_groupe(niveau_groupe, ngroupe), )
     
     // On le marque comme ouvert.
     groupe->Iter_expand = 1;
@@ -763,15 +763,15 @@ void _1990_gtk_tree_view_etat_row_collapsed(GtkTreeView *tree_view, GtkTreeIter 
     Niveau_Groupe   *niveau_groupe;
     Groupe          *groupe;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->niveaux_groupes, , gettext("Le projet ne possède pas de niveaux de groupes.\n"));
-    BUGMSG(projet->list_gtk._1990_groupes.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->niveaux_groupes, , gettext("Le projet ne possède pas de niveaux de groupes.\n"))
+    BUGMSG(projet->list_gtk._1990_groupes.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes")
     
     // On détermine le groupe ayant entraîné une fermeture
     // En effet, seul un groupe dans le tree_view_etat peut entraîner une fermeture
     ngroupe = _1990_gtk_get_groupe(model, iter);
-    BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, GTK_COMMON_SPINBUTTON_AS_UINT(GTK_SPIN_BUTTON(projet->list_gtk._1990_groupes.spin_button_niveau))), );
-    BUG(groupe = _1990_groupe_positionne_groupe(niveau_groupe, ngroupe), );
+    BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, GTK_COMMON_SPINBUTTON_AS_UINT(GTK_SPIN_BUTTON(projet->list_gtk._1990_groupes.spin_button_niveau))), )
+    BUG(groupe = _1990_groupe_positionne_groupe(niveau_groupe, ngroupe), )
     
     // On le marque comme fermé.
     groupe->Iter_expand = 0;
@@ -793,26 +793,26 @@ void _1990_gtk_button_groupe_toggled(GtkRadioToolButton *radiobutton, Projet *pr
     Niveau_Groupe    *niveau_groupe;
     Groupe           *groupe;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->niveaux_groupes, , gettext("Le projet ne possède pas de niveaux de groupes.\n"));
-    BUGMSG(projet->list_gtk._1990_groupes.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->niveaux_groupes, , gettext("Le projet ne possède pas de niveaux de groupes.\n"))
+    BUGMSG(projet->list_gtk._1990_groupes.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes")
     
     /* On détermine le groupe sélectionné */
     if (!gtk_tree_selection_get_selected(projet->list_gtk._1990_groupes.tree_select_etat, &model, &iter))
         return;
     ngroupe = _1990_gtk_get_groupe(model, &iter);
-    BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, GTK_COMMON_SPINBUTTON_AS_UINT(GTK_SPIN_BUTTON(projet->list_gtk._1990_groupes.spin_button_niveau))), );
-    BUG(groupe = _1990_groupe_positionne_groupe(niveau_groupe, ngroupe), );
+    BUG(niveau_groupe = _1990_groupe_positionne_niveau(projet, GTK_COMMON_SPINBUTTON_AS_UINT(GTK_SPIN_BUTTON(projet->list_gtk._1990_groupes.spin_button_niveau))), )
+    BUG(groupe = _1990_groupe_positionne_groupe(niveau_groupe, ngroupe), )
     
     /* On attribue le nouveau type de combinaison */
     if (radiobutton == (void *)projet->list_gtk._1990_groupes.item_groupe_and)
-        BUG(_1990_groupe_modifie_combinaison(groupe, GROUPE_COMBINAISON_AND), );
+        BUG(_1990_groupe_modifie_combinaison(groupe, GROUPE_COMBINAISON_AND), )
     else if (radiobutton == (void *)projet->list_gtk._1990_groupes.item_groupe_or)
-        BUG(_1990_groupe_modifie_combinaison(groupe, GROUPE_COMBINAISON_OR), );
+        BUG(_1990_groupe_modifie_combinaison(groupe, GROUPE_COMBINAISON_OR), )
     else if (radiobutton == (void *)projet->list_gtk._1990_groupes.item_groupe_xor)
-        BUG(_1990_groupe_modifie_combinaison(groupe, GROUPE_COMBINAISON_XOR), );
+        BUG(_1990_groupe_modifie_combinaison(groupe, GROUPE_COMBINAISON_XOR), )
     else
-        BUGMSG(0, , gettext("Le type de combinaison est inconnu.\n"));
+        BUGMSG(0, , gettext("Le type de combinaison est inconnu.\n"))
     
     return;
 }
@@ -825,13 +825,13 @@ void _1990_gtk_groupes_button_generer_clicked(GtkWidget *button, Projet *projet)
  * Valeur renvoyée : Aucune.
  */
 {
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->niveaux_groupes, , gettext("Le projet ne possède pas de niveaux de groupes.\n"));
-    BUGMSG(projet->list_gtk._1990_groupes.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->niveaux_groupes, , gettext("Le projet ne possède pas de niveaux de groupes.\n"))
+    BUGMSG(projet->list_gtk._1990_groupes.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes")
     
-    BUG(_1990_combinaisons_genere(projet), );
-    BUG(_1990_groupe_affiche_tout(projet), );
-    BUG(_1990_ponderations_affiche_tout(projet), );
+    BUG(_1990_combinaisons_genere(projet), )
+    BUG(_1990_groupe_affiche_tout(projet), )
+    BUG(_1990_ponderations_affiche_tout(projet), )
     return;
 }
 
@@ -844,7 +844,7 @@ void _1990_gtk_radio_button_eluequ_equ_seul(GtkRadioButton *radiobutton, Projet 
  * Valeur renvoyée : Aucune.
  */
 {
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
     
     if ((projet->combinaisons.flags & 1) != 0)
         projet->combinaisons.flags ^= 1;
@@ -861,7 +861,7 @@ void _1990_gtk_radio_button_eluequ_equ_resist(GtkRadioButton *radiobutton, Proje
  * Valeur renvoyée : Aucune.
  */
 {
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
     
     if ((projet->combinaisons.flags & 1) == 0)
         projet->combinaisons.flags++;
@@ -878,7 +878,7 @@ void _1990_gtk_radio_button_elustrgeo_1(GtkRadioButton *radiobutton, Projet *pro
  * Valeur renvoyée : Aucune.
  */
 {
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
     
     projet->combinaisons.flags = projet->combinaisons.flags - (projet->combinaisons.flags & 6);
     projet->combinaisons.flags = projet->combinaisons.flags + 0;
@@ -895,7 +895,7 @@ void _1990_gtk_radio_button_elustrgeo_2(GtkRadioButton *radiobutton, Projet *pro
  * Valeur renvoyée : Aucune.
  */
 {
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
     
     projet->combinaisons.flags = projet->combinaisons.flags - (projet->combinaisons.flags & 6);
     projet->combinaisons.flags = projet->combinaisons.flags + 2;
@@ -912,7 +912,7 @@ void _1990_gtk_radio_button_elustrgeo_3(GtkRadioButton *radiobutton, Projet *pro
  * Valeur renvoyée : Aucune.
  */
 {
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
     
     projet->combinaisons.flags = projet->combinaisons.flags - (projet->combinaisons.flags & 6);
     projet->combinaisons.flags = projet->combinaisons.flags + 4;
@@ -929,7 +929,7 @@ void _1990_gtk_radio_button_elustrgeo_6_10(GtkRadioButton *radiobutton, Projet *
  * Valeur renvoyée : Aucune.
  */
 {
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
     
     projet->combinaisons.flags = projet->combinaisons.flags - (projet->combinaisons.flags & 8);
     projet->combinaisons.flags = projet->combinaisons.flags + 8;
@@ -946,7 +946,7 @@ void _1990_gtk_radio_button_elustrgeo_6_10ab(GtkRadioButton *radiobutton, Projet
  * Valeur renvoyée : Aucune.
  */
 {
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
     
     projet->combinaisons.flags = projet->combinaisons.flags - (projet->combinaisons.flags & 8);
     projet->combinaisons.flags = projet->combinaisons.flags + 0; 
@@ -963,7 +963,7 @@ void _1990_gtk_radio_button_eluacc_frequente(GtkRadioButton *radiobutton, Projet
  * Valeur renvoyée : Aucune.
  */
 {
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
     
     projet->combinaisons.flags = projet->combinaisons.flags - (projet->combinaisons.flags & 16);
     projet->combinaisons.flags = projet->combinaisons.flags + 0;
@@ -980,7 +980,7 @@ void _1990_gtk_radio_button_eluacc_quasi_permanente(GtkRadioButton *radiobutton,
  * Valeur renvoyée : Aucune.
  */
 {
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
     
     projet->combinaisons.flags = projet->combinaisons.flags - (projet->combinaisons.flags & 16);
     projet->combinaisons.flags = projet->combinaisons.flags + 16;
@@ -1011,8 +1011,8 @@ void _1990_gtk_groupes_window_quitter_button(GtkWidget *object, Projet *projet)
  * Valeur renvoyée : Aucune.
  */
 {
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk._1990_groupes.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk._1990_groupes.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes")
     
     gtk_widget_destroy(projet->list_gtk._1990_groupes.window_groupe);
     
@@ -1037,8 +1037,8 @@ void _1990_gtk_tree_view_etat_cell_edited(GtkCellRendererText *cell, gchar *path
     unsigned int  numero, niveau;
     GtkTreeIter   iter_parent;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk._1990_groupes.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk._1990_groupes.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes")
     
     path = gtk_tree_path_new_from_string(path_string);
     model = gtk_tree_view_get_model(GTK_TREE_VIEW(projet->list_gtk._1990_groupes.tree_view_etat));
@@ -1050,14 +1050,14 @@ void _1990_gtk_tree_view_etat_cell_edited(GtkCellRendererText *cell, gchar *path
     niveau = GTK_COMMON_SPINBUTTON_AS_UINT(GTK_SPIN_BUTTON(projet->list_gtk._1990_groupes.spin_button_niveau));
     // On prend le niveau correspondant à niveau
     if (!gtk_tree_model_iter_parent(model, &iter_parent, &iter))
-        BUG(_1990_groupe_modifie_nom(niveau, numero, new_text, projet), );
+        BUG(_1990_groupe_modifie_nom(niveau, numero, new_text, projet), )
     else // On prend niveau-1
     {
         // Le nom est celui d'une action
         if (niveau == 0)
-            BUG(_1990_action_nom_change(projet, _1990_action_numero_cherche(projet, numero), new_text), );
+            BUG(_1990_action_nom_change(projet, _1990_action_numero_cherche(projet, numero), new_text), )
         else // Le nom est celui d'un groupe du niveau n-1
-            BUG(_1990_groupe_modifie_nom(niveau-1, numero, new_text, projet), );
+            BUG(_1990_groupe_modifie_nom(niveau-1, numero, new_text, projet), )
     }
 }
 
@@ -1078,8 +1078,8 @@ void _1990_gtk_tree_view_dispo_cell_edited(GtkCellRendererText *cell, gchar *pat
     GtkTreeModel  *model;
     unsigned int  numero, niveau;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk._1990_groupes.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk._1990_groupes.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes")
     
     path = gtk_tree_path_new_from_string(path_string);
     model = gtk_tree_view_get_model(GTK_TREE_VIEW(projet->list_gtk._1990_groupes.tree_view_dispo));
@@ -1091,9 +1091,9 @@ void _1990_gtk_tree_view_dispo_cell_edited(GtkCellRendererText *cell, gchar *pat
     niveau = GTK_COMMON_SPINBUTTON_AS_UINT(GTK_SPIN_BUTTON(projet->list_gtk._1990_groupes.spin_button_niveau));
     // Le nom est celui d'une action
     if (niveau == 0)
-        BUG(_1990_action_nom_change(projet, _1990_action_numero_cherche(projet, numero), new_text), );
+        BUG(_1990_action_nom_change(projet, _1990_action_numero_cherche(projet, numero), new_text), )
     else // Le nom est celui d'un groupe du niveau n-1
-        BUG(_1990_groupe_modifie_nom(niveau-1, numero, new_text, projet), );
+        BUG(_1990_groupe_modifie_nom(niveau-1, numero, new_text, projet), )
 }
 
 
@@ -1106,8 +1106,8 @@ gboolean _1990_gtk_tree_view_etat_key_press_event(GtkWidget *widget, GdkEvent *e
  * Valeur renvoyée : FALSE.
  */
 {
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk._1990_groupes.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk._1990_groupes.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes")
     
     if (event->key.keyval == GDK_KEY_Delete)
         _1990_gtk_button_groupe_suppr_clicked(widget, projet);
@@ -1126,8 +1126,8 @@ void _1990_gtk_tree_select_changed(GtkTreeSelection *treeselection, Projet *proj
     Gtk_1990_Groupes    *gtk_1990_groupes;
     GtkTreeIter         iter;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk._1990_groupes.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk._1990_groupes.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes")
     
     gtk_1990_groupes = &projet->list_gtk._1990_groupes;
     
@@ -1179,8 +1179,8 @@ void _1990_gtk_groupes_window_destroy(GtkWidget *object, Projet *projet)
  * Valeur renvoyée : Aucune.
  */
 {
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk._1990_groupes.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk._1990_groupes.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes")
     
     g_signal_handler_block(projet->list_gtk._1990_groupes.tree_view_etat, g_signal_handler_find(G_OBJECT(projet->list_gtk._1990_groupes.tree_view_etat),G_SIGNAL_MATCH_FUNC,0,0,NULL,_1990_gtk_groupes_tree_view_etat_cursor_changed,NULL));
     g_object_unref(G_OBJECT(projet->list_gtk._1990_groupes.builder));
@@ -1197,7 +1197,7 @@ void _1990_gtk_groupes(Projet *projet)
  *           interface graphique impossible à générer.
  */
 {
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
     if (projet->list_gtk._1990_groupes.builder != NULL)
     {
         gtk_window_present(GTK_WINDOW(projet->list_gtk._1990_groupes.window_groupe));
@@ -1205,10 +1205,10 @@ void _1990_gtk_groupes(Projet *projet)
     }
     
     if (projet->niveaux_groupes == NULL)
-        BUG(_1990_groupe_ajout_niveau(projet), );
+        BUG(_1990_groupe_ajout_niveau(projet), )
     
     projet->list_gtk._1990_groupes.builder = gtk_builder_new();
-    BUGMSG(gtk_builder_add_from_resource(projet->list_gtk._1990_groupes.builder, "/org/2lgc/codegui/ui/1990_groupes.ui", NULL) != 0, , gettext("Builder Failed\n"));
+    BUGMSG(gtk_builder_add_from_resource(projet->list_gtk._1990_groupes.builder, "/org/2lgc/codegui/ui/1990_groupes.ui", NULL) != 0, , gettext("Builder Failed\n"))
     gtk_builder_connect_signals(projet->list_gtk._1990_groupes.builder, projet);
     
     projet->list_gtk._1990_groupes.window_groupe = GTK_WIDGET(gtk_builder_get_object(projet->list_gtk._1990_groupes.builder, "1990_groupes_window"));
@@ -1234,7 +1234,7 @@ void _1990_gtk_groupes(Projet *projet)
     
     gtk_adjustment_set_upper(gtk_spin_button_get_adjustment(GTK_SPIN_BUTTON(gtk_builder_get_object(projet->list_gtk._1990_groupes.builder, "1990_groupes_spin_button_niveaux"))), g_list_length(projet->niveaux_groupes)-1);
     
-    BUG(_1990_gtk_groupes_affiche_niveau(projet, GTK_COMMON_SPINBUTTON_AS_UINT(GTK_SPIN_BUTTON(gtk_builder_get_object(projet->list_gtk._1990_groupes.builder, "1990_groupes_spin_button_niveaux")))), );
+    BUG(_1990_gtk_groupes_affiche_niveau(projet, GTK_COMMON_SPINBUTTON_AS_UINT(GTK_SPIN_BUTTON(gtk_builder_get_object(projet->list_gtk._1990_groupes.builder, "1990_groupes_spin_button_niveaux")))), )
     gtk_window_set_transient_for(GTK_WINDOW(projet->list_gtk._1990_groupes.window_groupe), GTK_WINDOW(projet->list_gtk.comp.window));
     
     return;

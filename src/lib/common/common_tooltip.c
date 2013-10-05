@@ -48,11 +48,11 @@ GtkWidget* common_tooltip_generation(const char *nom)
     
     // Ouverture et vérification du fichier DATADIR"/tooltips.xml" par rapport au format XML.
     doc = xmlParseFile(DATADIR"/tooltips.xml");
-    BUGMSG(doc, NULL, gettext("Le fichier '%s' est introuvable ou corrompu.\n"), DATADIR"/tooltips.xml");
+    BUGMSG(doc, NULL, gettext("Le fichier '%s' est introuvable ou corrompu.\n"), DATADIR"/tooltips.xml")
     
     // Récupération du noeud racine.
     racine = xmlDocGetRootElement(doc);
-    BUGMSG(racine, NULL, gettext("Le fichier '%s' est vide.\n"), DATADIR"/tooltips.xml");
+    BUGMSG(racine, NULL, gettext("Le fichier '%s' est vide.\n"), DATADIR"/tooltips.xml")
     
     for (n0 = racine; n0 != NULL; n0 = n0->next)
     {
@@ -100,8 +100,8 @@ GtkWidget* common_tooltip_generation(const char *nom)
                                     GError      *error = NULL;
                                     GtkWidget   *element;
                                     
-                                    BUGMSG(nom_fichier = g_strdup_printf("%s/%s", DATADIR, contenu), NULL, gettext("Erreur d'allocation mémoire.\n"));
-                                    BUGMSG(image = gdk_pixbuf_new_from_file(nom_fichier, &error), NULL, gettext("Impossible d'ouvrir l'image %s : %s.\n"), nom_fichier, error->message);
+                                    BUGMSG(nom_fichier = g_strdup_printf("%s/%s", DATADIR, contenu), NULL, gettext("Erreur d'allocation mémoire.\n"))
+                                    BUGMSG(image = gdk_pixbuf_new_from_file(nom_fichier, &error), NULL, gettext("Impossible d'ouvrir l'image %s : %s.\n"), nom_fichier, error->message)
                                     element = gtk_image_new_from_pixbuf(image);
                                     g_object_unref(image);
                                     free(nom_fichier);
@@ -141,10 +141,10 @@ GtkWidget* common_tooltip_generation(const char *nom)
                                     char    *fake = (char*)malloc(sizeof(char)*(strlen((char *)contenu)+1));
                                     int     largeur, hauteur;
                                     
-                                    BUGMSG(fake, NULL, gettext("Erreur d'allocation mémoire.\n"));
+                                    BUGMSG(fake, NULL, gettext("Erreur d'allocation mémoire.\n"))
                                     
                                     if (sscanf((char *)contenu, "%dx%d %s", &largeur, &hauteur, fake) != 2)
-                                        BUGMSG(0, NULL, gettext("'%s' n'est pas de la forme 'largeurxhauteur'.\n"), (char *)contenu);
+                                        BUGMSG(0, NULL, gettext("'%s' n'est pas de la forme 'largeurxhauteur'.\n"), (char *)contenu)
                                     else
                                         gtk_window_set_default_size(GTK_WINDOW(pwindow), largeur, hauteur);
                                     free(fake);
@@ -163,7 +163,7 @@ GtkWidget* common_tooltip_generation(const char *nom)
     }
     
     xmlFreeDoc(doc);
-    BUGMSG(0, NULL, gettext("Le fichier '%s' est corrompu.\n"), DATADIR"/tooltips.xml");
+    BUGMSG(0, NULL, gettext("Le fichier '%s' est corrompu.\n"), DATADIR"/tooltips.xml")
 }
 
 #endif

@@ -109,7 +109,7 @@ gboolean _1990_ponderations_duplique_sans_double(GList **liste_pond_destination,
 {
     GList   *list_parcours;
     
-    BUGMSG(liste_pond_destination, FALSE, gettext("Paramètre %s incorrect.\n"), "liste_pond_destination");
+    BUGMSG(liste_pond_destination, FALSE, gettext("Paramètre %s incorrect.\n"), "liste_pond_destination")
     
     if (liste_pond_source == NULL)
         return 0;
@@ -136,7 +136,7 @@ gboolean _1990_ponderations_duplique_sans_double(GList **liste_pond_destination,
                     Ponderation *element_source;
                     Ponderation *element_destination = malloc(sizeof(Ponderation));
                     
-                    BUGMSG(element_destination, FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                    BUGMSG(element_destination, FALSE, gettext("Erreur d'allocation mémoire.\n"))
                     element_source = list_parcours2->data;
                     element_destination->action = element_source->action;
                     element_destination->flags = element_source->flags;
@@ -157,7 +157,7 @@ gboolean _1990_ponderations_duplique_sans_double(GList **liste_pond_destination,
             }
             default :
             {
-                BUG(0, FALSE);
+                BUG(0, FALSE)
                 break;
             }
         }
@@ -201,20 +201,20 @@ gboolean _1990_ponderations_genere_un(Projet *projet, GList **ponderations_desti
     Groupe          *groupe;
     Niveau_Groupe   *niveau;
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->niveaux_groupes, FALSE, gettext("Le projet ne possède pas de niveaux de groupes.\n"));
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->niveaux_groupes, FALSE, gettext("Le projet ne possède pas de niveaux de groupes.\n"))
     
     // Si le dernier niveau ne possède pas un seul et unique groupe Alors
     //     Fin.
     // FinSi
     niveau = g_list_last(projet->niveaux_groupes)->data;
-    BUGMSG(g_list_length(niveau->groupes) == 1, FALSE, gettext("La génération des pondérations est impossible.\nLe dernier niveau ne peut possèder qu'un seul groupe.\n"));
+    BUGMSG(g_list_length(niveau->groupes) == 1, FALSE, gettext("La génération des pondérations est impossible.\nLe dernier niveau ne peut possèder qu'un seul groupe.\n"))
     groupe = niveau->groupes->data;
     
     // Si le groupe du dernier niveau ne possède pas de combinaison Alors
     //     Fin.
     // FinSi
-    BUGMSG(groupe->tmp_combinaison, FALSE, gettext("Le dernier niveau ne possède aucune combinaison permettant la génération des pondérations.\n"));
+    BUGMSG(groupe->tmp_combinaison, FALSE, gettext("Le dernier niveau ne possède aucune combinaison permettant la génération des pondérations.\n"))
     
     // Génération d'une boucle contenant 2^(nom de ligne dans coef_min et coef_max) permettant
     //   ainsi à à chaque passage de déterminer si le coefficient min ou max doit être pris.
@@ -256,7 +256,7 @@ gboolean _1990_ponderations_genere_un(Projet *projet, GList **ponderations_desti
                     
                     combinaison_element = list_parcours2->data;
                     categorie = _1990_action_categorie_bat(_1990_action_type_renvoie(combinaison_element->action), projet->parametres.pays);
-                    BUG(categorie != ACTION_INCONNUE, FALSE);
+                    BUG(categorie != ACTION_INCONNUE, FALSE)
     //             Vérification si le coefficient min et max de la catégorie vaut 0.
     //               Si oui, pondération ignorée.
                     if ((ERREUR_RELATIVE_EGALE(0., coef_min[categorie])) && (ERREUR_RELATIVE_EGALE(0., coef_max[categorie])))
@@ -273,7 +273,7 @@ gboolean _1990_ponderations_genere_un(Projet *projet, GList **ponderations_desti
                         {
                             Ponderation *ponderation_element = malloc(sizeof(Ponderation));
                             
-                            BUGMSG(ponderation_element, FALSE, gettext("Erreur d'allocation mémoire.\n"));
+                            BUGMSG(ponderation_element, FALSE, gettext("Erreur d'allocation mémoire.\n"))
                             ponderation_element->action = combinaison_element->action;
                             ponderation_element->flags = combinaison_element->flags;
                             
@@ -344,7 +344,7 @@ gboolean _1990_ponderations_genere_eu(Projet *projet)
 {
     double  coef_min[ACTION_INCONNUE], coef_max[ACTION_INCONNUE];
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
     
     // Pour ELU_EQU, générer les pondérations suivantes :
     //     Si à l'équilibre seulement Alors
@@ -359,7 +359,7 @@ gboolean _1990_ponderations_genere_eu(Projet *projet)
         coef_min[ACTION_VARIABLE]      = 0.0;  coef_max[ACTION_VARIABLE]      = 1.5;
         coef_min[ACTION_ACCIDENTELLE]  = 0.0;  coef_max[ACTION_ACCIDENTELLE]  = 0.0;
         coef_min[ACTION_SISMIQUE]      = 0.0;  coef_max[ACTION_SISMIQUE]      = 0.0;
-        BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_equ, coef_min, coef_max, 5, -1, 0), FALSE);
+        BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_equ, coef_min, coef_max, 5, -1, 0), FALSE)
     }
     //     Sinon (à l'équilibre et à la résistance structurelle)
     //         coefficient charges variables prédominante : 1.
@@ -380,13 +380,13 @@ gboolean _1990_ponderations_genere_eu(Projet *projet)
         coef_min[ACTION_VARIABLE]      = 0.0;  coef_max[ACTION_VARIABLE]      = 1.5;
         coef_min[ACTION_ACCIDENTELLE]  = 0.0;  coef_max[ACTION_ACCIDENTELLE]  = 0.0;
         coef_min[ACTION_SISMIQUE]      = 0.0;  coef_max[ACTION_SISMIQUE]      = 0.0;
-        BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_equ, coef_min, coef_max, 5, -1, 0), FALSE);
+        BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_equ, coef_min, coef_max, 5, -1, 0), FALSE)
         coef_min[ACTION_POIDS_PROPRE]  = 1.0;  coef_max[ACTION_POIDS_PROPRE]  = 1.0;
         coef_min[ACTION_PRECONTRAINTE] = 1.0;  coef_max[ACTION_PRECONTRAINTE] = 1.3;
         coef_min[ACTION_VARIABLE]      = 0.0;  coef_max[ACTION_VARIABLE]      = 1.5;
         coef_min[ACTION_ACCIDENTELLE]  = 0.0;  coef_max[ACTION_ACCIDENTELLE]  = 0.0;
         coef_min[ACTION_SISMIQUE]      = 0.0;  coef_max[ACTION_SISMIQUE]      = 0.0;
-        BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_equ, coef_min, coef_max, 5, -1, 0), FALSE);
+        BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_equ, coef_min, coef_max, 5, -1, 0), FALSE)
     }
     // Si utilisation des formules 6.10a et 6.10b de l'Eurocode 0 Alors
     if ((projet->combinaisons.flags & 8) == 0)
@@ -416,20 +416,20 @@ gboolean _1990_ponderations_genere_eu(Projet *projet)
                 coef_min[ACTION_VARIABLE]      = 0.0;  coef_max[ACTION_VARIABLE]      = 1.5;
                 coef_min[ACTION_ACCIDENTELLE]  = 0.0;  coef_max[ACTION_ACCIDENTELLE]  = 0.0;
                 coef_min[ACTION_SISMIQUE]      = 0.0;  coef_max[ACTION_SISMIQUE]      = 0.0;
-                BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_str, coef_min, coef_max, 5, 0, 0), FALSE);
+                BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_str, coef_min, coef_max, 5, 0, 0), FALSE)
                 coef_min[ACTION_POIDS_PROPRE]  = 1.0;  coef_max[ACTION_POIDS_PROPRE]  = 1.15;
                 coef_min[ACTION_PRECONTRAINTE] = 1.0;  coef_max[ACTION_PRECONTRAINTE] = 1.3;
                 coef_min[ACTION_VARIABLE]      = 0.0;  coef_max[ACTION_VARIABLE]      = 1.5;
                 coef_min[ACTION_ACCIDENTELLE]  = 0.0;  coef_max[ACTION_ACCIDENTELLE]  = 0.0;
                 coef_min[ACTION_SISMIQUE]      = 0.0;  coef_max[ACTION_SISMIQUE]      = 0.0;
-                BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_str, coef_min, coef_max, 5, -1, 0), FALSE);
+                BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_str, coef_min, coef_max, 5, -1, 0), FALSE)
                 coef_min[ACTION_POIDS_PROPRE]  = 1.0;  coef_max[ACTION_POIDS_PROPRE]  = 1.0;
                 coef_min[ACTION_PRECONTRAINTE] = 1.0;  coef_max[ACTION_PRECONTRAINTE] = 1.3;
                 coef_min[ACTION_VARIABLE]      = 0.0;  coef_max[ACTION_VARIABLE]      = 1.3;
                 coef_min[ACTION_ACCIDENTELLE]  = 0.0;  coef_max[ACTION_ACCIDENTELLE]  = 0.0;
                 coef_min[ACTION_SISMIQUE]      = 0.0;  coef_max[ACTION_SISMIQUE]      = 0.0;
-                BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_str, coef_min, coef_max, 5, -1, 0), FALSE);
-                BUG(_1990_ponderations_duplique_sans_double(&projet->combinaisons.elu_geo, projet->combinaisons.elu_str), FALSE);
+                BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_str, coef_min, coef_max, 5, -1, 0), FALSE)
+                BUG(_1990_ponderations_duplique_sans_double(&projet->combinaisons.elu_geo, projet->combinaisons.elu_str), FALSE)
                 break;
             }
     //     Sinon Si selon l'approche 2 Alors
@@ -450,14 +450,14 @@ gboolean _1990_ponderations_genere_eu(Projet *projet)
                 coef_min[ACTION_VARIABLE]      = 0.0;  coef_max[ACTION_VARIABLE]      = 1.5;
                 coef_min[ACTION_ACCIDENTELLE]  = 0.0;  coef_max[ACTION_ACCIDENTELLE]  = 0.0;
                 coef_min[ACTION_SISMIQUE]      = 0.0;  coef_max[ACTION_SISMIQUE]      = 0.0;
-                BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_str, coef_min, coef_max, 5, 0, 0), FALSE);
+                BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_str, coef_min, coef_max, 5, 0, 0), FALSE)
                 coef_min[ACTION_POIDS_PROPRE]  = 1.0;  coef_max[ACTION_POIDS_PROPRE]  = 1.15;
                 coef_min[ACTION_PRECONTRAINTE] = 1.0;  coef_max[ACTION_PRECONTRAINTE] = 1.3;
                 coef_min[ACTION_VARIABLE]      = 0.0;  coef_max[ACTION_VARIABLE]      = 1.5;
                 coef_min[ACTION_ACCIDENTELLE]  = 0.0;  coef_max[ACTION_ACCIDENTELLE]  = 0.0;
                 coef_min[ACTION_SISMIQUE]      = 0.0;  coef_max[ACTION_SISMIQUE]      = 0.0;
-                BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_str, coef_min, coef_max, 5, -1, 0), FALSE);
-                BUG(_1990_ponderations_duplique_sans_double(&projet->combinaisons.elu_geo, projet->combinaisons.elu_str), FALSE);
+                BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_str, coef_min, coef_max, 5, -1, 0), FALSE)
+                BUG(_1990_ponderations_duplique_sans_double(&projet->combinaisons.elu_geo, projet->combinaisons.elu_str), FALSE)
                 break;
             }
     //     Si selon l'approche 3 Alors
@@ -478,13 +478,13 @@ gboolean _1990_ponderations_genere_eu(Projet *projet)
                 coef_min[ACTION_VARIABLE]      = 0.0;  coef_max[ACTION_VARIABLE]      = 1.5;
                 coef_min[ACTION_ACCIDENTELLE]  = 0.0;  coef_max[ACTION_ACCIDENTELLE]  = 0.0;
                 coef_min[ACTION_SISMIQUE]      = 0.0;  coef_max[ACTION_SISMIQUE]      = 0.0;
-                BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_str, coef_min, coef_max, 5, 0, 0), FALSE);
+                BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_str, coef_min, coef_max, 5, 0, 0), FALSE)
                 coef_min[ACTION_POIDS_PROPRE]  = 1.0;  coef_max[ACTION_POIDS_PROPRE]  = 1.15;
                 coef_min[ACTION_PRECONTRAINTE] = 1.0;  coef_max[ACTION_PRECONTRAINTE] = 1.3;
                 coef_min[ACTION_VARIABLE]      = 0.0;  coef_max[ACTION_VARIABLE]      = 1.5;
                 coef_min[ACTION_ACCIDENTELLE]  = 0.0;  coef_max[ACTION_ACCIDENTELLE]  = 0.0;
                 coef_min[ACTION_SISMIQUE]      = 0.0;  coef_max[ACTION_SISMIQUE]      = 0.0;
-                BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_str, coef_min, coef_max, 5, -1, 0), FALSE);
+                BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_str, coef_min, coef_max, 5, -1, 0), FALSE)
     //         Pour ELU_GEO, générer les pondérations suivantes :
     //             coefficient charges variables prédominante : 1.
     //             coefficient charges variables d'accompagnement : psi0.
@@ -495,13 +495,13 @@ gboolean _1990_ponderations_genere_eu(Projet *projet)
                 coef_min[ACTION_VARIABLE]      = 0.0;  coef_max[ACTION_VARIABLE]      = 1.3;
                 coef_min[ACTION_ACCIDENTELLE]  = 0.0;  coef_max[ACTION_ACCIDENTELLE]  = 0.0;
                 coef_min[ACTION_SISMIQUE]      = 0.0;  coef_max[ACTION_SISMIQUE]      = 0.0;
-                BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_geo, coef_min, coef_max, 5, -1, 0), FALSE);
+                BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_geo, coef_min, coef_max, 5, -1, 0), FALSE)
                 break;
     //     FinSi
             }
             default:
             {
-                BUGMSG(0, FALSE, gettext("Flag %d inconnu.\n"), projet->combinaisons.flags);
+                BUGMSG(0, FALSE, gettext("Flag %d inconnu.\n"), projet->combinaisons.flags)
                 break;
             }
         }
@@ -529,14 +529,14 @@ gboolean _1990_ponderations_genere_eu(Projet *projet)
                 coef_min[ACTION_VARIABLE]      = 0.0;  coef_max[ACTION_VARIABLE]      = 1.5;
                 coef_min[ACTION_ACCIDENTELLE]  = 0.0;  coef_max[ACTION_ACCIDENTELLE]  = 0.0;
                 coef_min[ACTION_SISMIQUE]      = 0.0;  coef_max[ACTION_SISMIQUE]      = 0.0;
-                BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_str, coef_min, coef_max, 5, -1, 0), FALSE);
+                BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_str, coef_min, coef_max, 5, -1, 0), FALSE)
                 coef_min[ACTION_POIDS_PROPRE]  = 1.0;  coef_max[ACTION_POIDS_PROPRE]  = 1.0;
                 coef_min[ACTION_PRECONTRAINTE] = 1.0;  coef_max[ACTION_PRECONTRAINTE] = 1.3;
                 coef_min[ACTION_VARIABLE]      = 0.0;  coef_max[ACTION_VARIABLE]      = 1.3;
                 coef_min[ACTION_ACCIDENTELLE]  = 0.0;  coef_max[ACTION_ACCIDENTELLE]  = 0.0;
                 coef_min[ACTION_SISMIQUE]      = 0.0;  coef_max[ACTION_SISMIQUE]      = 0.0;
-                BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_str, coef_min, coef_max, 5, -1, 0), FALSE);
-                BUG(_1990_ponderations_duplique_sans_double(&projet->combinaisons.elu_geo, projet->combinaisons.elu_str), FALSE);
+                BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_str, coef_min, coef_max, 5, -1, 0), FALSE)
+                BUG(_1990_ponderations_duplique_sans_double(&projet->combinaisons.elu_geo, projet->combinaisons.elu_str), FALSE)
                 break;
             }
     //     Sinon Si selon l'approche 2 Alors
@@ -552,8 +552,8 @@ gboolean _1990_ponderations_genere_eu(Projet *projet)
                 coef_min[ACTION_VARIABLE]      = 0.0;  coef_max[ACTION_VARIABLE]      = 1.5;
                 coef_min[ACTION_ACCIDENTELLE]  = 0.0;  coef_max[ACTION_ACCIDENTELLE]  = 0.0;
                 coef_min[ACTION_SISMIQUE]      = 0.0;  coef_max[ACTION_SISMIQUE]      = 0.0;
-                BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_str, coef_min, coef_max, 5, -1, 0), FALSE);
-                BUG(_1990_ponderations_duplique_sans_double(&projet->combinaisons.elu_geo, projet->combinaisons.elu_str), FALSE);
+                BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_str, coef_min, coef_max, 5, -1, 0), FALSE)
+                BUG(_1990_ponderations_duplique_sans_double(&projet->combinaisons.elu_geo, projet->combinaisons.elu_str), FALSE)
                 break;
             }
     //     Si selon l'approche 3 Alors
@@ -569,7 +569,7 @@ gboolean _1990_ponderations_genere_eu(Projet *projet)
                 coef_min[ACTION_VARIABLE]      = 0.0;  coef_max[ACTION_VARIABLE]      = 1.5;
                 coef_min[ACTION_ACCIDENTELLE]  = 0.0;  coef_max[ACTION_ACCIDENTELLE]  = 0.0;
                 coef_min[ACTION_SISMIQUE]      = 0.0;  coef_max[ACTION_SISMIQUE]      = 0.0;
-                BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_str, coef_min, coef_max, 5, -1, 0), FALSE);
+                BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_str, coef_min, coef_max, 5, -1, 0), FALSE)
     //         Pour ELU_GEO, générer les pondérations suivantes :
     //             coefficient charges variables prédominante : 1.
     //             coefficient charges variables d'accompagnement : psi0.
@@ -580,13 +580,13 @@ gboolean _1990_ponderations_genere_eu(Projet *projet)
                 coef_min[ACTION_VARIABLE]      = 0.0;  coef_max[ACTION_VARIABLE]      = 1.3;
                 coef_min[ACTION_ACCIDENTELLE]  = 0.0;  coef_max[ACTION_ACCIDENTELLE]  = 0.0;
                 coef_min[ACTION_SISMIQUE]      = 0.0;  coef_max[ACTION_SISMIQUE]      = 0.0;
-                BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_geo, coef_min, coef_max, 5, -1, 0), FALSE);
+                BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_geo, coef_min, coef_max, 5, -1, 0), FALSE)
                 break;
             }
     //     FinSi
             default :
             {
-                BUGMSG(0, FALSE, gettext("Flag %d inconnu.\n"), projet->combinaisons.flags);
+                BUGMSG(0, FALSE, gettext("Flag %d inconnu.\n"), projet->combinaisons.flags)
                 break;
             }
         }
@@ -609,9 +609,9 @@ gboolean _1990_ponderations_genere_eu(Projet *projet)
     //     coefficient charges variables d'accompagnement : psi2.
     // FinPour
     if ((projet->combinaisons.flags & 16) == 0)
-        BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_acc, coef_min, coef_max, 5, 1, 2), FALSE);
+        BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_acc, coef_min, coef_max, 5, 1, 2), FALSE)
     else
-        BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_acc, coef_min, coef_max, 5, 2, 2), FALSE);
+        BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_acc, coef_min, coef_max, 5, 2, 2), FALSE)
     
     // Pour ELU_SIS, générer les pondérations suivantes :
     //     min_pp = 1.00, min_p = 1.0, min_var = 0.0, min_acc = 0.0, min_sis = 1.0
@@ -624,7 +624,7 @@ gboolean _1990_ponderations_genere_eu(Projet *projet)
     coef_min[ACTION_VARIABLE]      = 0.0;  coef_max[ACTION_VARIABLE]      = 1.0;
     coef_min[ACTION_ACCIDENTELLE]  = 0.0;  coef_max[ACTION_ACCIDENTELLE]  = 0.0;
     coef_min[ACTION_SISMIQUE]      = 1.0;  coef_max[ACTION_SISMIQUE]      = 1.0;
-    BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_sis, coef_min, coef_max, 5, 2, 2), FALSE);
+    BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_sis, coef_min, coef_max, 5, 2, 2), FALSE)
     
     // Pour ELU_CAR, générer les pondérations suivantes :
     //     min_pp = 1.00, min_p = 1.0, min_var = 0.0, min_acc = 0.0, min_sis = 1.0
@@ -637,7 +637,7 @@ gboolean _1990_ponderations_genere_eu(Projet *projet)
     coef_min[ACTION_VARIABLE]      = 0.0;  coef_max[ACTION_VARIABLE]      = 1.0;
     coef_min[ACTION_ACCIDENTELLE]  = 0.0;  coef_max[ACTION_ACCIDENTELLE]  = 0.0;
     coef_min[ACTION_SISMIQUE]      = 0.0;  coef_max[ACTION_SISMIQUE]      = 0.0;
-    BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.els_car, coef_min, coef_max, 5, -1, 0), FALSE);
+    BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.els_car, coef_min, coef_max, 5, -1, 0), FALSE)
     
     // Pour ELU_FREQ, générer les pondérations suivantes :
     //     min_pp = 1.00, min_p = 1.0, min_var = 0.0, min_acc = 0.0, min_sis = 1.0
@@ -650,7 +650,7 @@ gboolean _1990_ponderations_genere_eu(Projet *projet)
     coef_min[ACTION_VARIABLE]      = 0.0;  coef_max[ACTION_VARIABLE]      = 1.0;
     coef_min[ACTION_ACCIDENTELLE]  = 0.0;  coef_max[ACTION_ACCIDENTELLE]  = 0.0;
     coef_min[ACTION_SISMIQUE]      = 0.0;  coef_max[ACTION_SISMIQUE]      = 0.0;
-    BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.els_freq, coef_min, coef_max, 5, 1, 2), FALSE);
+    BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.els_freq, coef_min, coef_max, 5, 1, 2), FALSE)
     
     // Pour ELU_PERM, générer les pondérations suivantes :
     //     min_pp = 1.00, min_p = 1.0, min_var = 0.0, min_acc = 0.0, min_sis = 1.0
@@ -663,7 +663,7 @@ gboolean _1990_ponderations_genere_eu(Projet *projet)
     coef_min[ACTION_VARIABLE]      = 0.0;  coef_max[ACTION_VARIABLE]      = 1.0;
     coef_min[ACTION_ACCIDENTELLE]  = 0.0;  coef_max[ACTION_ACCIDENTELLE]  = 0.0;
     coef_min[ACTION_SISMIQUE]      = 0.0;  coef_max[ACTION_SISMIQUE]      = 0.0;
-    BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.els_perm, coef_min, coef_max, 5, 2, 2), FALSE);
+    BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.els_perm, coef_min, coef_max, 5, 2, 2), FALSE)
     
     return TRUE;
 }
@@ -689,7 +689,7 @@ gboolean _1990_ponderations_genere_fr(Projet *projet)
 {
     double  coef_min[ACTION_INCONNUE], coef_max[ACTION_INCONNUE];
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
     
     // Pour ELU_EQU, générer les pondérations suivantes :
     //     Si à l'équilibre seulement Alors
@@ -705,7 +705,7 @@ gboolean _1990_ponderations_genere_fr(Projet *projet)
         coef_min[ACTION_ACCIDENTELLE]  = 0.0;  coef_max[ACTION_ACCIDENTELLE]  = 0.0;
         coef_min[ACTION_SISMIQUE]      = 0.0;  coef_max[ACTION_SISMIQUE]      = 0.0;
         coef_min[ACTION_EAUX_SOUTERRAINES] = 0.0;  coef_max[ACTION_EAUX_SOUTERRAINES] = 1.2;
-        BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_equ, coef_min, coef_max, 6, -1, 0), FALSE);
+        BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_equ, coef_min, coef_max, 6, -1, 0), FALSE)
     }
     else
     //     Sinon (à l'équilibre et à la résistance structurelle)
@@ -727,14 +727,14 @@ gboolean _1990_ponderations_genere_fr(Projet *projet)
         coef_min[ACTION_ACCIDENTELLE]  = 0.0;  coef_max[ACTION_ACCIDENTELLE]  = 0.0;
         coef_min[ACTION_SISMIQUE]      = 0.0;  coef_max[ACTION_SISMIQUE]      = 0.0;
         coef_min[ACTION_EAUX_SOUTERRAINES] = 0.0;  coef_max[ACTION_EAUX_SOUTERRAINES] = 1.2;
-        BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_equ, coef_min, coef_max, 6, -1, 0), FALSE);
+        BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_equ, coef_min, coef_max, 6, -1, 0), FALSE)
         coef_min[ACTION_POIDS_PROPRE]  = 1.0;  coef_max[ACTION_POIDS_PROPRE]  = 1.0;
         coef_min[ACTION_PRECONTRAINTE] = 1.0;  coef_max[ACTION_PRECONTRAINTE] = 1.3;
         coef_min[ACTION_VARIABLE]      = 0.0;  coef_max[ACTION_VARIABLE]      = 1.5;
         coef_min[ACTION_ACCIDENTELLE]  = 0.0;  coef_max[ACTION_ACCIDENTELLE]  = 0.0;
         coef_min[ACTION_SISMIQUE]      = 0.0;  coef_max[ACTION_SISMIQUE]      = 1.0;
         coef_min[ACTION_EAUX_SOUTERRAINES] = 0.0;  coef_max[ACTION_EAUX_SOUTERRAINES] = 1.2;
-        BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_equ, coef_min, coef_max, 6, -1, 0), FALSE);
+        BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_equ, coef_min, coef_max, 6, -1, 0), FALSE)
     }
     // Si utilisation des formules 6.10a et 6.10b de l'Eurocode 0 Alors
     if ((projet->combinaisons.flags & 8) == 0)
@@ -765,22 +765,22 @@ gboolean _1990_ponderations_genere_fr(Projet *projet)
                 coef_min[ACTION_ACCIDENTELLE]  = 0.0;  coef_max[ACTION_ACCIDENTELLE]  = 0.0;
                 coef_min[ACTION_SISMIQUE]      = 0.0;  coef_max[ACTION_SISMIQUE]      = 0.0;
                 coef_min[ACTION_EAUX_SOUTERRAINES] = 0.0;  coef_max[ACTION_EAUX_SOUTERRAINES] = 1.2;
-                BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_str, coef_min, coef_max, 6, 0, 0), FALSE);
+                BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_str, coef_min, coef_max, 6, 0, 0), FALSE)
                 coef_min[ACTION_POIDS_PROPRE]  = 1.0;  coef_max[ACTION_POIDS_PROPRE]  = 1.15;
                 coef_min[ACTION_PRECONTRAINTE] = 1.0;  coef_max[ACTION_PRECONTRAINTE] = 1.3;
                 coef_min[ACTION_VARIABLE]      = 0.0;  coef_max[ACTION_VARIABLE]      = 1.5;
                 coef_min[ACTION_ACCIDENTELLE]  = 0.0;  coef_max[ACTION_ACCIDENTELLE]  = 0.0;
                 coef_min[ACTION_SISMIQUE]      = 0.0;  coef_max[ACTION_SISMIQUE]      = 0.0;
                 coef_min[ACTION_EAUX_SOUTERRAINES] = 0.0;  coef_max[ACTION_EAUX_SOUTERRAINES] = 1.2;
-                BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_str, coef_min, coef_max, 6, -1, 0), FALSE);
+                BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_str, coef_min, coef_max, 6, -1, 0), FALSE)
                 coef_min[ACTION_POIDS_PROPRE]  = 1.0;  coef_max[ACTION_POIDS_PROPRE]  = 1.0;
                 coef_min[ACTION_PRECONTRAINTE] = 1.0;  coef_max[ACTION_PRECONTRAINTE] = 1.3;
                 coef_min[ACTION_VARIABLE]      = 0.0;  coef_max[ACTION_VARIABLE]      = 1.3;
                 coef_min[ACTION_ACCIDENTELLE]  = 0.0;  coef_max[ACTION_ACCIDENTELLE]  = 0.0;
                 coef_min[ACTION_SISMIQUE]      = 0.0;  coef_max[ACTION_SISMIQUE]      = 0.0;
                 coef_min[ACTION_EAUX_SOUTERRAINES] = 0.0;  coef_max[ACTION_EAUX_SOUTERRAINES] = 1.2;
-                BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_str, coef_min, coef_max, 6, -1, 0), FALSE);
-                BUG(_1990_ponderations_duplique_sans_double(&projet->combinaisons.elu_geo, projet->combinaisons.elu_str), FALSE);
+                BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_str, coef_min, coef_max, 6, -1, 0), FALSE)
+                BUG(_1990_ponderations_duplique_sans_double(&projet->combinaisons.elu_geo, projet->combinaisons.elu_str), FALSE)
                 break;
             }
     //     Sinon Si selon l'approche 2 Alors
@@ -802,15 +802,15 @@ gboolean _1990_ponderations_genere_fr(Projet *projet)
                 coef_min[ACTION_ACCIDENTELLE]  = 0.0;  coef_max[ACTION_ACCIDENTELLE]  = 0.0;
                 coef_min[ACTION_SISMIQUE]      = 0.0;  coef_max[ACTION_SISMIQUE]      = 0.0;
                 coef_min[ACTION_EAUX_SOUTERRAINES] = 0.0;  coef_max[ACTION_EAUX_SOUTERRAINES] = 1.2;
-                BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_str, coef_min, coef_max, 6, 0, 0), FALSE);
+                BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_str, coef_min, coef_max, 6, 0, 0), FALSE)
                 coef_min[ACTION_POIDS_PROPRE]  = 1.0;  coef_max[ACTION_POIDS_PROPRE]  = 1.15;
                 coef_min[ACTION_PRECONTRAINTE] = 1.0;  coef_max[ACTION_PRECONTRAINTE] = 1.3;
                 coef_min[ACTION_VARIABLE]      = 0.0;  coef_max[ACTION_VARIABLE]      = 1.5;
                 coef_min[ACTION_ACCIDENTELLE]  = 0.0;  coef_max[ACTION_ACCIDENTELLE]  = 0.0;
                 coef_min[ACTION_SISMIQUE]      = 0.0;  coef_max[ACTION_SISMIQUE]      = 0.0;
                 coef_min[ACTION_EAUX_SOUTERRAINES] = 0.0;  coef_max[ACTION_EAUX_SOUTERRAINES] = 1.2;
-                BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_str, coef_min, coef_max, 6, -1, 0), FALSE);
-                BUG(_1990_ponderations_duplique_sans_double(&projet->combinaisons.elu_geo, projet->combinaisons.elu_str), FALSE);
+                BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_str, coef_min, coef_max, 6, -1, 0), FALSE)
+                BUG(_1990_ponderations_duplique_sans_double(&projet->combinaisons.elu_geo, projet->combinaisons.elu_str), FALSE)
                 break;
             }
     //     Si selon l'approche 3 Alors
@@ -832,14 +832,14 @@ gboolean _1990_ponderations_genere_fr(Projet *projet)
                 coef_min[ACTION_ACCIDENTELLE]  = 0.0;  coef_max[ACTION_ACCIDENTELLE]  = 0.0;
                 coef_min[ACTION_SISMIQUE]      = 0.0;  coef_max[ACTION_SISMIQUE]      = 0.0;
                 coef_min[ACTION_EAUX_SOUTERRAINES] = 0.0;  coef_max[ACTION_EAUX_SOUTERRAINES] = 1.2;
-                BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_str, coef_min, coef_max, 6, 0, 0), FALSE);
+                BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_str, coef_min, coef_max, 6, 0, 0), FALSE)
                 coef_min[ACTION_POIDS_PROPRE]  = 1.0;  coef_max[ACTION_POIDS_PROPRE]  = 1.15;
                 coef_min[ACTION_PRECONTRAINTE] = 1.0;  coef_max[ACTION_PRECONTRAINTE] = 1.3;
                 coef_min[ACTION_VARIABLE]      = 0.0;  coef_max[ACTION_VARIABLE]      = 1.5;
                 coef_min[ACTION_ACCIDENTELLE]  = 0.0;  coef_max[ACTION_ACCIDENTELLE]  = 0.0;
                 coef_min[ACTION_SISMIQUE]      = 0.0;  coef_max[ACTION_SISMIQUE]      = 0.0;
                 coef_min[ACTION_EAUX_SOUTERRAINES] = 0.0;  coef_max[ACTION_EAUX_SOUTERRAINES] = 1.2;
-                BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_str, coef_min, coef_max, 6, -1, 0), FALSE);
+                BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_str, coef_min, coef_max, 6, -1, 0), FALSE)
     //         Pour ELU_GEO, générer les pondérations suivantes :
     //         coefficient charges variables prédominante : 1.
     //         coefficient charges variables d'accompagnement : psi0.
@@ -851,13 +851,13 @@ gboolean _1990_ponderations_genere_fr(Projet *projet)
                 coef_min[ACTION_ACCIDENTELLE]  = 0.0;  coef_max[ACTION_ACCIDENTELLE]  = 0.0;
                 coef_min[ACTION_SISMIQUE]      = 0.0;  coef_max[ACTION_SISMIQUE]      = 0.0;
                 coef_min[ACTION_EAUX_SOUTERRAINES] = 0.0;  coef_max[ACTION_EAUX_SOUTERRAINES] = 1.2;
-                BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_geo, coef_min, coef_max, 6, -1, 0), FALSE);
+                BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_geo, coef_min, coef_max, 6, -1, 0), FALSE)
                 break;
     //     FinSi
             }
             default :
             {
-                BUGMSG(0, FALSE, gettext("Flag %d inconnu.\n"), projet->combinaisons.flags);
+                BUGMSG(0, FALSE, gettext("Flag %d inconnu.\n"), projet->combinaisons.flags)
                 break;
             }
         }
@@ -887,15 +887,15 @@ gboolean _1990_ponderations_genere_fr(Projet *projet)
                 coef_min[ACTION_ACCIDENTELLE]  = 0.0;  coef_max[ACTION_ACCIDENTELLE]  = 0.0;
                 coef_min[ACTION_SISMIQUE]      = 0.0;  coef_max[ACTION_SISMIQUE]      = 0.0;
                 coef_min[ACTION_EAUX_SOUTERRAINES] = 0.0;  coef_max[ACTION_EAUX_SOUTERRAINES] = 1.2;
-                BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_str, coef_min, coef_max, 6, -1, 0), FALSE);
+                BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_str, coef_min, coef_max, 6, -1, 0), FALSE)
                 coef_min[ACTION_POIDS_PROPRE]  = 1.0;  coef_max[ACTION_POIDS_PROPRE]  = 1.0;
                 coef_min[ACTION_PRECONTRAINTE] = 1.0;  coef_max[ACTION_PRECONTRAINTE] = 1.3;
                 coef_min[ACTION_VARIABLE]      = 0.0;  coef_max[ACTION_VARIABLE]      = 1.3;
                 coef_min[ACTION_ACCIDENTELLE]  = 0.0;  coef_max[ACTION_ACCIDENTELLE]  = 0.0;
                 coef_min[ACTION_SISMIQUE]      = 0.0;  coef_max[ACTION_SISMIQUE]      = 0.0;
                 coef_min[ACTION_EAUX_SOUTERRAINES] = 0.0;  coef_max[ACTION_EAUX_SOUTERRAINES] = 1.2;
-                BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_str, coef_min, coef_max, 6, -1, 0), FALSE);
-                BUG(_1990_ponderations_duplique_sans_double(&projet->combinaisons.elu_geo, projet->combinaisons.elu_str), FALSE);
+                BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_str, coef_min, coef_max, 6, -1, 0), FALSE)
+                BUG(_1990_ponderations_duplique_sans_double(&projet->combinaisons.elu_geo, projet->combinaisons.elu_str), FALSE)
                 break;
             }
     //     Sinon Si selon l'approche 2 Alors
@@ -912,8 +912,8 @@ gboolean _1990_ponderations_genere_fr(Projet *projet)
                 coef_min[ACTION_ACCIDENTELLE]  = 0.0;  coef_max[ACTION_ACCIDENTELLE]  = 0.0;
                 coef_min[ACTION_SISMIQUE]      = 0.0;  coef_max[ACTION_SISMIQUE]      = 0.0;
                 coef_min[ACTION_EAUX_SOUTERRAINES] = 0.0;  coef_max[ACTION_EAUX_SOUTERRAINES] = 1.2;
-                BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_str, coef_min, coef_max, 6, -1, 0), FALSE);
-                BUG(_1990_ponderations_duplique_sans_double(&projet->combinaisons.elu_geo, projet->combinaisons.elu_str), FALSE);
+                BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_str, coef_min, coef_max, 6, -1, 0), FALSE)
+                BUG(_1990_ponderations_duplique_sans_double(&projet->combinaisons.elu_geo, projet->combinaisons.elu_str), FALSE)
                 break;
             }
     //     Si selon l'approche 3 Alors
@@ -930,7 +930,7 @@ gboolean _1990_ponderations_genere_fr(Projet *projet)
                 coef_min[ACTION_ACCIDENTELLE]  = 0.0;  coef_max[ACTION_ACCIDENTELLE]  = 0.0;
                 coef_min[ACTION_SISMIQUE]      = 0.0;  coef_max[ACTION_SISMIQUE]      = 0.0;
                 coef_min[ACTION_EAUX_SOUTERRAINES] = 0.0;  coef_max[ACTION_EAUX_SOUTERRAINES] = 1.2;
-                BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_str, coef_min, coef_max, 6, -1, 0), FALSE);
+                BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_str, coef_min, coef_max, 6, -1, 0), FALSE)
     //         Pour ELU_GEO, générer les pondérations suivantes :
     //         coefficient charges variables prédominante : 1.
     //         coefficient charges variables d'accompagnement : psi0.
@@ -942,13 +942,13 @@ gboolean _1990_ponderations_genere_fr(Projet *projet)
                 coef_min[ACTION_ACCIDENTELLE]  = 0.0;  coef_max[ACTION_ACCIDENTELLE]  = 0.0;
                 coef_min[ACTION_SISMIQUE]      = 0.0;  coef_max[ACTION_SISMIQUE]      = 0.0;
                 coef_min[ACTION_EAUX_SOUTERRAINES] = 0.0;  coef_max[ACTION_EAUX_SOUTERRAINES] = 1.2;
-                BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_geo, coef_min, coef_max, 6, -1, 0), FALSE);
+                BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_geo, coef_min, coef_max, 6, -1, 0), FALSE)
                 break;
             }
     //     FinSi
             default :
             {
-                BUGMSG(0, FALSE, gettext("Flag %d inconnu.\n"), projet->combinaisons.flags);
+                BUGMSG(0, FALSE, gettext("Flag %d inconnu.\n"), projet->combinaisons.flags)
                 break;
             }
         }
@@ -972,9 +972,9 @@ gboolean _1990_ponderations_genere_fr(Projet *projet)
     //     coefficient charges variables d'accompagnement : psi2.
     // FinPour
     if ((projet->combinaisons.flags & 16) == 0)
-        BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_acc, coef_min, coef_max, 6, 1, 2), FALSE);
+        BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_acc, coef_min, coef_max, 6, 1, 2), FALSE)
     else
-        BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_acc, coef_min, coef_max, 6, 2, 2), FALSE);
+        BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_acc, coef_min, coef_max, 6, 2, 2), FALSE)
     
     // Pour ELU_SIS, générer les pondérations suivantes :
     //     coefficient charges variables prédominante : psi2.
@@ -988,7 +988,7 @@ gboolean _1990_ponderations_genere_fr(Projet *projet)
     coef_min[ACTION_ACCIDENTELLE]  = 0.0;  coef_max[ACTION_ACCIDENTELLE]  = 0.0;
     coef_min[ACTION_SISMIQUE]      = 1.0;  coef_max[ACTION_SISMIQUE]      = 1.0;
     coef_min[ACTION_EAUX_SOUTERRAINES] = 0.0;  coef_max[ACTION_EAUX_SOUTERRAINES] = 1.0;
-    BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_acc, coef_min, coef_max, 6, 2, 2), FALSE);
+    BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.elu_acc, coef_min, coef_max, 6, 2, 2), FALSE)
     
     // Pour ELS_CAR, générer les pondérations suivantes :
     //     coefficient charges variables prédominante : 1.
@@ -1002,7 +1002,7 @@ gboolean _1990_ponderations_genere_fr(Projet *projet)
     coef_min[ACTION_ACCIDENTELLE]  = 0.0;  coef_max[ACTION_ACCIDENTELLE]  = 0.0;
     coef_min[ACTION_SISMIQUE]      = 0.0;  coef_max[ACTION_SISMIQUE]      = 0.0;
     coef_min[ACTION_EAUX_SOUTERRAINES] = 0.0;  coef_max[ACTION_EAUX_SOUTERRAINES] = 1.2;
-    BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.els_car, coef_min, coef_max, 6, -1, 0), FALSE);
+    BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.els_car, coef_min, coef_max, 6, -1, 0), FALSE)
 
     // Pour ELS_FREQ, générer les pondérations suivantes :
     //     coefficient charges variables prédominante : psi1.
@@ -1016,7 +1016,7 @@ gboolean _1990_ponderations_genere_fr(Projet *projet)
     coef_min[ACTION_ACCIDENTELLE]  = 0.0;  coef_max[ACTION_ACCIDENTELLE]  = 0.0;
     coef_min[ACTION_SISMIQUE]      = 0.0;  coef_max[ACTION_SISMIQUE]      = 0.0;
     coef_min[ACTION_EAUX_SOUTERRAINES] = 0.0;  coef_max[ACTION_EAUX_SOUTERRAINES] = 1.0;
-    BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.els_freq, coef_min, coef_max, 6, 1, 2), FALSE);
+    BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.els_freq, coef_min, coef_max, 6, 1, 2), FALSE)
 
     // Pour ELS_PERM, générer les pondérations suivantes :
     //     coefficient charges variables prédominante : psi2.
@@ -1030,7 +1030,7 @@ gboolean _1990_ponderations_genere_fr(Projet *projet)
     coef_min[ACTION_ACCIDENTELLE]  = 0.0;  coef_max[ACTION_ACCIDENTELLE]  = 0.0;
     coef_min[ACTION_SISMIQUE]      = 0.0;  coef_max[ACTION_SISMIQUE]      = 0.0;
     coef_min[ACTION_EAUX_SOUTERRAINES] = 0.0;  coef_max[ACTION_EAUX_SOUTERRAINES] = 1.0;
-    BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.els_perm, coef_min, coef_max, 6, 2, 2), FALSE);
+    BUG(_1990_ponderations_genere_un(projet, &projet->combinaisons.els_perm, coef_min, coef_max, 6, 2, 2), FALSE)
     
     return TRUE;
 }
@@ -1048,14 +1048,14 @@ gboolean _1990_ponderations_genere(Projet *projet)
  *             erreur en cas de fonction interne.
  */
 {
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
     
     // Trivial
     switch (projet->parametres.pays)
     {
         case PAYS_EU : { return _1990_ponderations_genere_eu(projet); break; }
         case PAYS_FR : { return _1990_ponderations_genere_fr(projet); break; }
-        default : { BUGMSG(0, FALSE, gettext("Pays %d inconnu.\n"), projet->parametres.pays); break; }
+        default : { BUGMSG(0, FALSE, gettext("Pays %d inconnu.\n"), projet->parametres.pays) break; }
     }
 }
 
@@ -1068,7 +1068,7 @@ char* _1990_ponderations_description(GList *ponderation)
 {
     char    *retour = NULL, *tmp;
     
-    BUGMSG(retour = malloc(sizeof(char)), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(retour = malloc(sizeof(char)), NULL, gettext("Erreur d'allocation mémoire.\n"))
     retour[0] = 0;
     // Trivial
     if (ponderation != NULL)
@@ -1089,9 +1089,9 @@ char* _1990_ponderations_description(GList *ponderation)
             else
                 psi[0] = '\000';
             if (ponderation_element->psi != -1)
-                BUGMSG(retour = g_strdup_printf("%s%s%.*lf*%s*%s", tmp, tmp[0] != 0 ? "+" : "", DECIMAL_SANS_UNITE, ponderation_element->ponderation, psi, _1990_action_nom_renvoie(ponderation_element->action)), NULL, gettext("Erreur d'allocation mémoire.\n"));
+                BUGMSG(retour = g_strdup_printf("%s%s%.*lf*%s*%s", tmp, tmp[0] != 0 ? "+" : "", DECIMAL_SANS_UNITE, ponderation_element->ponderation, psi, _1990_action_nom_renvoie(ponderation_element->action)), NULL, gettext("Erreur d'allocation mémoire.\n"))
             else
-                BUGMSG(retour = g_strdup_printf("%s%s%.*lf*%s", tmp, tmp[0] != 0 ? "+" : "", DECIMAL_SANS_UNITE, ponderation_element->ponderation, _1990_action_nom_renvoie(ponderation_element->action)), NULL, gettext("Erreur d'allocation mémoire.\n"));
+                BUGMSG(retour = g_strdup_printf("%s%s%.*lf*%s", tmp, tmp[0] != 0 ? "+" : "", DECIMAL_SANS_UNITE, ponderation_element->ponderation, _1990_action_nom_renvoie(ponderation_element->action)), NULL, gettext("Erreur d'allocation mémoire.\n"))
             
             free(tmp);
             
@@ -1154,7 +1154,7 @@ gboolean _1990_ponderations_affiche_tout(Projet *projet)
  *             projet == NULL.
  */
 {
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
     
     // Trivial
     printf("elu_equ\n");

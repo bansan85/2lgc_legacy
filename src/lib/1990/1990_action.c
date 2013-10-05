@@ -90,7 +90,7 @@ char* _1990_action_type_bat_txt_eu(unsigned int type)
         case 14 : { return gettext("Température (hors incendie)"); break; }
         case 15 : { return gettext("Accidentelle"); break; }
         case 16 : { return gettext("Sismique"); break; }
-        default : { BUGMSG(0, NULL, gettext("Type d'action %u inconnu.\n"), type); break; }
+        default : { BUGMSG(0, NULL, gettext("Type d'action %u inconnu.\n"), type) break; }
     }
 }
 
@@ -153,7 +153,7 @@ char* _1990_action_type_bat_txt_fr(unsigned int type)
         case 19 : { return gettext("Accidentelle"); break; }
         case 20 : { return gettext("Sismique"); break; }
         case 21 : { return gettext("Eaux souterraines"); break; }
-        default : { BUGMSG(0, NULL, gettext("Type d'action %u inconnu.\n"), type); break; }
+        default : { BUGMSG(0, NULL, gettext("Type d'action %u inconnu.\n"), type) break; }
     }
 }
 
@@ -175,7 +175,7 @@ char* _1990_action_type_bat_txt(unsigned int type, Type_Pays pays)
     {
         case PAYS_EU : { return _1990_action_type_bat_txt_eu(type); break; }
         case PAYS_FR : { return _1990_action_type_bat_txt_fr(type); break; }
-        default : { BUGMSG(0, NULL, gettext("Pays %d inconnu.\n"), pays); break; }
+        default : { BUGMSG(0, NULL, gettext("Pays %d inconnu.\n"), pays) break; }
     }
 }
 
@@ -207,7 +207,7 @@ Action_Categorie _1990_action_categorie_bat_eu(unsigned int type)
     else if (type == 16)
         return ACTION_SISMIQUE;
     else
-        BUGMSG(0, ACTION_INCONNUE, gettext("Type d'action %u inconnu.\n"), type);
+        BUGMSG(0, ACTION_INCONNUE, gettext("Type d'action %u inconnu.\n"), type)
 }
 
 
@@ -241,7 +241,7 @@ Action_Categorie _1990_action_categorie_bat_fr(unsigned int type)
     else if (type == 21)
         return ACTION_EAUX_SOUTERRAINES;
     else
-        BUGMSG(0, ACTION_INCONNUE, gettext("Type d'action %u inconnu.\n"), type);
+        BUGMSG(0, ACTION_INCONNUE, gettext("Type d'action %u inconnu.\n"), type)
 }
 
 
@@ -262,7 +262,7 @@ Action_Categorie _1990_action_categorie_bat(unsigned int type, Type_Pays pays)
     {
         case PAYS_EU : { return _1990_action_categorie_bat_eu(type); break; }
         case PAYS_FR : { return _1990_action_categorie_bat_fr(type); break; }
-        default : { BUGMSG(0, ACTION_INCONNUE, gettext("Pays %d inconnu.\n"), pays); break; }
+        default : { BUGMSG(0, ACTION_INCONNUE, gettext("Pays %d inconnu.\n"), pays) break; }
     }
 }
 
@@ -281,7 +281,7 @@ Action_Categorie _1990_action_num_bat_txt(Type_Pays pays)
     {
         case PAYS_EU : { return 17; break; }
         case PAYS_FR : { return 22; break; }
-        default : { BUGMSG(0, 0, gettext("Pays %d inconnu.\n"), pays); break; }
+        default : { BUGMSG(0, 0, gettext("Pays %d inconnu.\n"), pays) break; }
     }
 }
 
@@ -301,7 +301,7 @@ gboolean _1990_action_init(Projet *projet)
 #endif
     
     // Trivial
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
     
     projet->actions = NULL;
     
@@ -371,21 +371,21 @@ Action *_1990_action_ajout(Projet *projet, unsigned int type, const char* descri
     // Trivial
     Action      *action_nouveau;
     
-    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUG(_1990_action_categorie_bat(type, projet->parametres.pays) != ACTION_INCONNUE, NULL);
+    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUG(_1990_action_categorie_bat(type, projet->parametres.pays) != ACTION_INCONNUE, NULL)
     
-    BUGMSG(action_nouveau = (Action*)malloc(sizeof(Action)), NULL, gettext("Erreur d'allocation mémoire.\n"));
-    BUGMSG(action_nouveau->nom = g_strdup_printf("%s", description), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(action_nouveau = (Action*)malloc(sizeof(Action)), NULL, gettext("Erreur d'allocation mémoire.\n"))
+    BUGMSG(action_nouveau->nom = g_strdup_printf("%s", description), NULL, gettext("Erreur d'allocation mémoire.\n"))
     action_nouveau->numero = g_list_length(projet->actions);
     action_nouveau->type = type;
     action_nouveau->charges = NULL;
     action_nouveau->action_predominante = 0;
     action_nouveau->psi0 = common_math_f(_1990_coef_psi0_bat(type, projet->parametres.pays), FLOTTANT_ORDINATEUR);
-    BUG(!isnan(common_math_get(action_nouveau->psi0)), NULL);
+    BUG(!isnan(common_math_get(action_nouveau->psi0)), NULL)
     action_nouveau->psi1 = common_math_f(_1990_coef_psi1_bat(type, projet->parametres.pays), FLOTTANT_ORDINATEUR);
-    BUG(!isnan(common_math_get(action_nouveau->psi1)), NULL);
+    BUG(!isnan(common_math_get(action_nouveau->psi1)), NULL)
     action_nouveau->psi2 = common_math_f(_1990_coef_psi2_bat(type, projet->parametres.pays), FLOTTANT_ORDINATEUR);
-    BUG(!isnan(common_math_get(action_nouveau->psi2)), NULL);
+    BUG(!isnan(common_math_get(action_nouveau->psi2)), NULL)
     action_nouveau->deplacement_complet = NULL;
     action_nouveau->forces_complet = NULL;
     action_nouveau->efforts_noeuds = NULL;
@@ -422,7 +422,7 @@ Action *_1990_action_ajout(Projet *projet, unsigned int type, const char* descri
     }
 #endif
     
-    BUG(EF_calculs_free(projet), FALSE);
+    BUG(EF_calculs_free(projet), FALSE)
     
     return action_nouveau;
 }
@@ -438,7 +438,7 @@ const char* _1990_action_nom_renvoie(Action *action)
  *             action == NULL,
  */
 {
-    BUGMSG(action, NULL, gettext("Paramètre %s incorrect.\n"), "action");
+    BUGMSG(action, NULL, gettext("Paramètre %s incorrect.\n"), "action")
     
     return action->nom;
 }
@@ -461,15 +461,15 @@ gboolean _1990_action_nom_change(Projet *projet, Action *action, const char* nom
     char    *ancien_nom;
 #endif
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(action, FALSE, gettext("Paramètre %s incorrect.\n"), "action");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(action, FALSE, gettext("Paramètre %s incorrect.\n"), "action")
     
 #ifdef ENABLE_GTK
     ancien_nom = action->nom;
 #else
     free(action->nom);
 #endif
-    BUGMSG(action->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(action->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"))
     
 #ifdef ENABLE_GTK
     gtk_list_store_set(projet->list_gtk._1990_actions.list_actions, &action->Iter_liste, 0, nom, -1);
@@ -537,7 +537,7 @@ unsigned int _1990_action_numero_renvoie(Action *action)
  *             action == NULL,
  */
 {
-    BUGMSG(action, -1, gettext("Paramètre %s incorrect.\n"), "action");
+    BUGMSG(action, -1, gettext("Paramètre %s incorrect.\n"), "action")
     
     return action->numero;
 }
@@ -556,7 +556,7 @@ Action* _1990_action_numero_cherche(Projet *projet, unsigned int numero)
 {
     GList   *list_parcours;
     
-    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet")
     
     // Trivial
     list_parcours = projet->actions;
@@ -570,7 +570,7 @@ Action* _1990_action_numero_cherche(Projet *projet, unsigned int numero)
         list_parcours = g_list_next(list_parcours);
     }
     
-    BUGMSG(0, NULL, gettext("Action %u introuvable.\n"), numero);
+    BUGMSG(0, NULL, gettext("Action %u introuvable.\n"), numero)
 }
 
 
@@ -584,7 +584,7 @@ unsigned int _1990_action_type_renvoie(Action *action)
  *             action == NULL,
  */
 {
-    BUGMSG(action, -1, gettext("Paramètre %s incorrect.\n"), "action");
+    BUGMSG(action, -1, gettext("Paramètre %s incorrect.\n"), "action")
     
     return action->type;
 }
@@ -605,25 +605,25 @@ gboolean _1990_action_type_change(Projet *projet, Action *action, unsigned int t
 {
     Flottant    psi0, psi1, psi2;
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(action, FALSE, gettext("Paramètre %s incorrect.\n"), "action");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(action, FALSE, gettext("Paramètre %s incorrect.\n"), "action")
     
     if (action->type == type)
         return TRUE;
     
     action->type = type;
     psi0 = common_math_f(_1990_coef_psi0_bat(type, projet->parametres.pays), FLOTTANT_ORDINATEUR);
-    BUG(!isnan(common_math_get(psi0)), FALSE);
+    BUG(!isnan(common_math_get(psi0)), FALSE)
     psi1 = common_math_f(_1990_coef_psi1_bat(type, projet->parametres.pays), FLOTTANT_ORDINATEUR);
-    BUG(!isnan(common_math_get(psi1)), FALSE);
+    BUG(!isnan(common_math_get(psi1)), FALSE)
     psi2 = common_math_f(_1990_coef_psi2_bat(type, projet->parametres.pays), FLOTTANT_ORDINATEUR);
-    BUG(!isnan(common_math_get(psi2)), FALSE);
+    BUG(!isnan(common_math_get(psi2)), FALSE)
     
     action->psi0 = psi0;
     action->psi1 = psi1;
     action->psi2 = psi2;
     
-    BUG(EF_calculs_free(projet), FALSE);
+    BUG(EF_calculs_free(projet), FALSE)
     
 #ifdef ENABLE_GTK
     if (projet->list_gtk._1990_actions.builder != NULL)
@@ -643,7 +643,7 @@ gboolean _1990_action_charges_vide(Action *action)
  *             action == NULL.
  */
 {
-    BUGMSG(action, TRUE, gettext("Paramètre %s incorrect.\n"), "action");
+    BUGMSG(action, TRUE, gettext("Paramètre %s incorrect.\n"), "action")
     
     return action->charges == NULL;
 }
@@ -658,7 +658,7 @@ GList* _1990_action_charges_renvoie(Action *action)
  *             action == NULL.
  */
 {
-    BUGMSG(action, NULL, gettext("Paramètre %s incorrect.\n"), "action");
+    BUGMSG(action, NULL, gettext("Paramètre %s incorrect.\n"), "action")
     
     return action->charges;
 }
@@ -674,7 +674,7 @@ gboolean _1990_action_charges_change(Action *action, GList *charges)
  *             action == NULL.
  */
 {
-    BUGMSG(action, FALSE, gettext("Paramètre %s incorrect.\n"), "action");
+    BUGMSG(action, FALSE, gettext("Paramètre %s incorrect.\n"), "action")
     
     action->charges = charges;
     
@@ -691,7 +691,7 @@ unsigned int _1990_action_flags_action_predominante_renvoie(Action *action)
  *             action == NULL,
  */
 {
-    BUGMSG(action, -1, gettext("Paramètre %s incorrect.\n"), "action");
+    BUGMSG(action, -1, gettext("Paramètre %s incorrect.\n"), "action")
     
     return action->action_predominante;
 }
@@ -707,8 +707,8 @@ gboolean _1990_action_flags_action_predominante_change(Action *action, unsigned 
  *             action == NULL,
  */
 {
-    BUGMSG(action, FALSE, gettext("Paramètre %s incorrect.\n"), "action");
-    BUGMSG((flag == 0) || (flag == 1), FALSE, gettext("Le paramètre flag est de type strictement boolean et doit valoir soit 0 soit 1.\n"));
+    BUGMSG(action, FALSE, gettext("Paramètre %s incorrect.\n"), "action")
+    BUGMSG((flag == 0) || (flag == 1), FALSE, gettext("Le paramètre flag est de type strictement boolean et doit valoir soit 0 soit 1.\n"))
     
     action->action_predominante = flag;
     
@@ -725,7 +725,7 @@ Flottant _1990_action_psi_renvoie_0(Action *action)
  *             action == NULL,
  */
 {
-    BUGMSG(action, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Paramètre %s incorrect.\n"), "action");
+    BUGMSG(action, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Paramètre %s incorrect.\n"), "action")
     
     return action->psi0;
 }
@@ -740,7 +740,7 @@ Flottant _1990_action_psi_renvoie_1(Action *action)
  *             action == NULL,
  */
 {
-    BUGMSG(action, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Paramètre %s incorrect.\n"), "action");
+    BUGMSG(action, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Paramètre %s incorrect.\n"), "action")
     
     return action->psi1;
 }
@@ -755,7 +755,7 @@ Flottant _1990_action_psi_renvoie_2(Action *action)
  *             action == NULL,
  */
 {
-    BUGMSG(action, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Paramètre %s incorrect.\n"), "action");
+    BUGMSG(action, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Paramètre %s incorrect.\n"), "action")
     
     return action->psi2;
 }
@@ -777,9 +777,9 @@ gboolean _1990_action_psi_change(Projet *projet, Action *action, unsigned int ps
  *             erreur d'allocation mémoire.
  */
 {
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(action, FALSE, gettext("Paramètre %s incorrect.\n"), "action");
-    BUGMSG((psi_num == 0) || (psi_num == 1) || (psi_num == 2), FALSE, gettext("Le numéro %u du coefficient spi à changer est incorrect.\n"), psi_num);
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(action, FALSE, gettext("Paramètre %s incorrect.\n"), "action")
+    BUGMSG((psi_num == 0) || (psi_num == 1) || (psi_num == 2), FALSE, gettext("Le numéro %u du coefficient spi à changer est incorrect.\n"), psi_num)
     
     if (psi_num == 0)
     {
@@ -815,9 +815,9 @@ gboolean _1990_action_psi_change(Projet *projet, Action *action, unsigned int ps
 #endif
     }
     else
-        BUGMSG(NULL, FALSE, gettext("Le coefficient phi %d n'existe pas.\n"), psi_num);
+        BUGMSG(NULL, FALSE, gettext("Le coefficient phi %d n'existe pas.\n"), psi_num)
     
-    BUG(EF_calculs_free(projet), FALSE);
+    BUG(EF_calculs_free(projet), FALSE)
     
     return TRUE;
 }
@@ -832,7 +832,7 @@ cholmod_sparse* _1990_action_deplacement_complet_renvoie(Action *action)
  *             action == NULL,
  */
 {
-    BUGMSG(action, NULL, gettext("Paramètre %s incorrect.\n"), "action");
+    BUGMSG(action, NULL, gettext("Paramètre %s incorrect.\n"), "action")
     
     return action->deplacement_complet;
 }
@@ -849,8 +849,8 @@ gboolean _1990_action_deplacement_complet_change(Action *action, cholmod_sparse 
  *             sparse == NULL.
  */
 {
-    BUGMSG(action, FALSE, gettext("Paramètre %s incorrect.\n"), "action");
-    BUGMSG(sparse, FALSE, gettext("Paramètre %s incorrect.\n"), "sparse");
+    BUGMSG(action, FALSE, gettext("Paramètre %s incorrect.\n"), "action")
+    BUGMSG(sparse, FALSE, gettext("Paramètre %s incorrect.\n"), "sparse")
     
     action->deplacement_complet = sparse;
     
@@ -867,7 +867,7 @@ cholmod_sparse* _1990_action_forces_complet_renvoie(Action *action)
  *             action == NULL,
  */
 {
-    BUGMSG(action, NULL, gettext("Paramètre %s incorrect.\n"), "action");
+    BUGMSG(action, NULL, gettext("Paramètre %s incorrect.\n"), "action")
     
     return action->forces_complet;
 }
@@ -884,8 +884,8 @@ gboolean _1990_action_forces_complet_change(Action *action, cholmod_sparse *spar
  *             sparse == NULL.
  */
 {
-    BUGMSG(action, FALSE, gettext("Paramètre %s incorrect.\n"), "action");
-    BUGMSG(sparse, FALSE, gettext("Paramètre %s incorrect.\n"), "sparse");
+    BUGMSG(action, FALSE, gettext("Paramètre %s incorrect.\n"), "action")
+    BUGMSG(sparse, FALSE, gettext("Paramètre %s incorrect.\n"), "sparse")
     
     action->forces_complet = sparse;
     
@@ -902,7 +902,7 @@ cholmod_sparse* _1990_action_efforts_noeuds_renvoie(Action *action)
  *             action == NULL,
  */
 {
-    BUGMSG(action, NULL, gettext("Paramètre %s incorrect.\n"), "action");
+    BUGMSG(action, NULL, gettext("Paramètre %s incorrect.\n"), "action")
     
     return action->efforts_noeuds;
 }
@@ -919,8 +919,8 @@ gboolean _1990_action_efforts_noeuds_change(Action *action, cholmod_sparse *spar
  *             sparse == NULL.
  */
 {
-    BUGMSG(action, FALSE, gettext("Paramètre %s incorrect.\n"), "action");
-    BUGMSG(sparse, FALSE, gettext("Paramètre %s incorrect.\n"), "sparse");
+    BUGMSG(action, FALSE, gettext("Paramètre %s incorrect.\n"), "action")
+    BUGMSG(sparse, FALSE, gettext("Paramètre %s incorrect.\n"), "sparse")
     
     action->efforts_noeuds = sparse;
     
@@ -938,7 +938,7 @@ GtkTreeIter* _1990_action_Iter_fenetre_renvoie(Action *action)
  *             action == NULL,
  */
 {
-    BUGMSG(action, NULL, gettext("Paramètre %s incorrect.\n"), "action");
+    BUGMSG(action, NULL, gettext("Paramètre %s incorrect.\n"), "action")
     
     return &action->Iter_fenetre;
 }
@@ -957,8 +957,8 @@ Fonction* _1990_action_fonctions_efforts_renvoie(Action *action, int ligne, int 
  *             action == NULL,
  */
 {
-    BUGMSG(action, NULL, gettext("Paramètre %s incorrect.\n"), "action");
-    BUGMSG((0 <= ligne) && (ligne <= 5), NULL, gettext("Paramètre %s incorrect.\n"), "ligne");
+    BUGMSG(action, NULL, gettext("Paramètre %s incorrect.\n"), "action")
+    BUGMSG((0 <= ligne) && (ligne <= 5), NULL, gettext("Paramètre %s incorrect.\n"), "ligne")
     
     return action->fonctions_efforts[ligne][barre];
 }
@@ -976,8 +976,8 @@ Fonction* _1990_action_fonctions_rotation_renvoie(Action *action, int ligne, int
  *             action == NULL,
  */
 {
-    BUGMSG(action, NULL, gettext("Paramètre %s incorrect.\n"), "action");
-    BUGMSG((0 <= ligne) && (ligne <= 2), NULL, gettext("Paramètre %s incorrect.\n"), "ligne");
+    BUGMSG(action, NULL, gettext("Paramètre %s incorrect.\n"), "action")
+    BUGMSG((0 <= ligne) && (ligne <= 2), NULL, gettext("Paramètre %s incorrect.\n"), "ligne")
     
     return action->fonctions_rotation[ligne][barre];
 }
@@ -995,8 +995,8 @@ Fonction* _1990_action_fonctions_deformation_renvoie(Action *action, int ligne, 
  *             action == NULL,
  */
 {
-    BUGMSG(action, NULL, gettext("Paramètre %s incorrect.\n"), "action");
-    BUGMSG((0 <= ligne) && (ligne <= 2), NULL, gettext("Paramètre %s incorrect.\n"), "ligne");
+    BUGMSG(action, NULL, gettext("Paramètre %s incorrect.\n"), "action")
+    BUGMSG((0 <= ligne) && (ligne <= 2), NULL, gettext("Paramètre %s incorrect.\n"), "ligne")
     
     return action->fonctions_deformation[ligne][barre];
 }
@@ -1021,16 +1021,16 @@ gboolean _1990_action_fonction_init(Projet *projet, Action *action)
 {
     unsigned int        i, j;
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(action, FALSE, gettext("Paramètre %s incorrect.\n"), "action");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(action, FALSE, gettext("Paramètre %s incorrect.\n"), "action")
     
     // Trivial
     for (i=0;i<6;i++)
     {
-        BUGMSG(action->fonctions_efforts[i] = (Fonction**)malloc(sizeof(Fonction*)*g_list_length(projet->modele.barres)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(action->fonctions_efforts[i] = (Fonction**)malloc(sizeof(Fonction*)*g_list_length(projet->modele.barres)), FALSE, gettext("Erreur d'allocation mémoire.\n"))
         for (j=0;j<g_list_length(projet->modele.barres);j++)
         {
-            BUGMSG(action->fonctions_efforts[i][j] = (Fonction*)malloc(sizeof(Fonction)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(action->fonctions_efforts[i][j] = (Fonction*)malloc(sizeof(Fonction)), FALSE, gettext("Erreur d'allocation mémoire.\n"))
             action->fonctions_efforts[i][j]->nb_troncons = 0;
             action->fonctions_efforts[i][j]->troncons = NULL;
         }
@@ -1038,18 +1038,18 @@ gboolean _1990_action_fonction_init(Projet *projet, Action *action)
     
     for (i=0;i<3;i++)
     {
-        BUGMSG(action->fonctions_deformation[i] = (Fonction**)malloc(sizeof(Fonction*)*g_list_length(projet->modele.barres)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(action->fonctions_deformation[i] = (Fonction**)malloc(sizeof(Fonction*)*g_list_length(projet->modele.barres)), FALSE, gettext("Erreur d'allocation mémoire.\n"))
         for (j=0;j<g_list_length(projet->modele.barres);j++)
         {
-            BUGMSG(action->fonctions_deformation[i][j] = (Fonction*)malloc(sizeof(Fonction)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(action->fonctions_deformation[i][j] = (Fonction*)malloc(sizeof(Fonction)), FALSE, gettext("Erreur d'allocation mémoire.\n"))
             action->fonctions_deformation[i][j]->nb_troncons = 0;
             action->fonctions_deformation[i][j]->troncons = NULL;
         }
         
-        BUGMSG(action->fonctions_rotation[i] = (Fonction**)malloc(sizeof(Fonction*)*g_list_length(projet->modele.barres)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(action->fonctions_rotation[i] = (Fonction**)malloc(sizeof(Fonction*)*g_list_length(projet->modele.barres)), FALSE, gettext("Erreur d'allocation mémoire.\n"))
         for (j=0;j<g_list_length(projet->modele.barres);j++)
         {
-            BUGMSG(action->fonctions_rotation[i][j] = (Fonction*)malloc(sizeof(Fonction)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(action->fonctions_rotation[i][j] = (Fonction*)malloc(sizeof(Fonction)), FALSE, gettext("Erreur d'allocation mémoire.\n"))
             action->fonctions_rotation[i][j]->nb_troncons = 0;
             action->fonctions_rotation[i][j]->troncons = NULL;
         }
@@ -1073,8 +1073,8 @@ gboolean _1990_action_fonction_free(Projet *projet, Action *action)
 {
     unsigned int        i, j;
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(action, FALSE, gettext("Paramètre %s incorrect.\n"), "action");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(action, FALSE, gettext("Paramètre %s incorrect.\n"), "action")
     
     // Trivial
     for (i=0;i<6;i++)
@@ -1131,7 +1131,7 @@ gboolean _1990_action_affiche_tout(Projet *projet)
 {
     GList   *list_parcours;
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
     if (projet->actions == NULL)
     {
         printf(gettext("Aucune action existante.\n"));
@@ -1169,8 +1169,8 @@ gboolean _1990_action_affiche_resultats(Projet *projet, unsigned int num_action)
     Action          *action_en_cours;
     unsigned int    i;
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUG(action_en_cours = _1990_action_numero_cherche(projet, num_action), FALSE);
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUG(action_en_cours = _1990_action_numero_cherche(projet, num_action), FALSE)
     if (projet->modele.barres == NULL)
     {
         printf(gettext("Aucune barre existante.\n"));
@@ -1190,43 +1190,43 @@ gboolean _1990_action_affiche_resultats(Projet *projet, unsigned int num_action)
     {
     //     Affichage de la courbe des sollicitations vis-à-vis de l'effort normal
         printf("Barre n°%d, Effort normal\n", i);
-        BUG(common_fonction_affiche(action_en_cours->fonctions_efforts[0][i]), FALSE);
+        BUG(common_fonction_affiche(action_en_cours->fonctions_efforts[0][i]), FALSE)
     //     Affichage de la courbe des sollicitations vis-à-vis de l'effort trnt selon Y
         printf("Barre n°%d, Effort tranchant Y\n", i);
-        BUG(common_fonction_affiche(action_en_cours->fonctions_efforts[1][i]), FALSE);
+        BUG(common_fonction_affiche(action_en_cours->fonctions_efforts[1][i]), FALSE)
     //     Affichage de la courbe des sollicitations vis-à-vis de l'effort trnt selon Z
         printf("Barre n°%d, Effort tranchant Z\n", i);
-        BUG(common_fonction_affiche(action_en_cours->fonctions_efforts[2][i]), FALSE);
+        BUG(common_fonction_affiche(action_en_cours->fonctions_efforts[2][i]), FALSE)
     //     Affichage de la courbe des sollicitations vis-à-vis du moment de tn
         printf("Barre n°%d, Moment de torsion\n", i);
-        BUG(common_fonction_affiche(action_en_cours->fonctions_efforts[3][i]), FALSE);
+        BUG(common_fonction_affiche(action_en_cours->fonctions_efforts[3][i]), FALSE)
     //     Affichage de la courbe des sollicitations vis-à-vis du moment flécnt selon Y
         printf("Barre n°%d, Moment de flexion Y\n", i);
-        BUG(common_fonction_affiche(action_en_cours->fonctions_efforts[4][i]), FALSE);
+        BUG(common_fonction_affiche(action_en_cours->fonctions_efforts[4][i]), FALSE)
     //     Affichage de la courbe des sollicitations vis-à-vis du moment flécnt selon Z
         printf("Barre n°%d, Moment de flexion Z\n", i);
-        BUG(common_fonction_affiche(action_en_cours->fonctions_efforts[5][i]), FALSE);
+        BUG(common_fonction_affiche(action_en_cours->fonctions_efforts[5][i]), FALSE)
     }
     for (i=0;i<g_list_length(projet->modele.barres);i++)
     {
     //     Affichage de la courbe de déformation selon l'axe X
         printf("Barre n°%d, Déformation en X\n", i);
-        BUG(common_fonction_affiche(action_en_cours->fonctions_deformation[0][i]), FALSE);
+        BUG(common_fonction_affiche(action_en_cours->fonctions_deformation[0][i]), FALSE)
     //     Affichage de la courbe de déformation selon l'axe Y
         printf("Barre n°%d, Déformation en Y\n", i);
-        BUG(common_fonction_affiche(action_en_cours->fonctions_deformation[1][i]), FALSE);
+        BUG(common_fonction_affiche(action_en_cours->fonctions_deformation[1][i]), FALSE)
     //     Affichage de la courbe de déformation selon l'axe Z
         printf("Barre n°%d, Déformation en Z\n", i);
-        BUG(common_fonction_affiche(action_en_cours->fonctions_deformation[2][i]), FALSE);
+        BUG(common_fonction_affiche(action_en_cours->fonctions_deformation[2][i]), FALSE)
     //     Affichage de la courbe de rotation selon l'axe X
         printf("Barre n°%d, Rotation en X\n", i);
-        BUG(common_fonction_affiche(action_en_cours->fonctions_rotation[0][i]), FALSE);
+        BUG(common_fonction_affiche(action_en_cours->fonctions_rotation[0][i]), FALSE)
     //     Affichage de la courbe de rotation selon l'axe Y
         printf("Barre n°%d, Rotation en Y\n", i);
-        BUG(common_fonction_affiche(action_en_cours->fonctions_rotation[1][i]), FALSE);
+        BUG(common_fonction_affiche(action_en_cours->fonctions_rotation[1][i]), FALSE)
     //     Affichage de la courbe de rotation selon l'axe Z
         printf("Barre n°%d, Rotation en Z\n", i);
-        BUG(common_fonction_affiche(action_en_cours->fonctions_rotation[2][i]), FALSE);
+        BUG(common_fonction_affiche(action_en_cours->fonctions_rotation[2][i]), FALSE)
     }
     // FinPour
     
@@ -1252,17 +1252,17 @@ Action *_1990_action_ponderation_resultat(GList* ponderation, Projet *projet)
     double  *x, *y;
 
     
-    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet")
     
     // Initialisation de l'action
-    BUGMSG(action = malloc(sizeof(Action)), NULL, gettext("Erreur d'allocation mémoire.\n"));
-    BUGMSG(action->efforts_noeuds = malloc(sizeof(cholmod_sparse)), NULL, gettext("Erreur d'allocation mémoire.\n"));
-    BUGMSG(action->efforts_noeuds->x = malloc(sizeof(double)*g_list_length(projet->modele.noeuds)*6), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(action = malloc(sizeof(Action)), NULL, gettext("Erreur d'allocation mémoire.\n"))
+    BUGMSG(action->efforts_noeuds = malloc(sizeof(cholmod_sparse)), NULL, gettext("Erreur d'allocation mémoire.\n"))
+    BUGMSG(action->efforts_noeuds->x = malloc(sizeof(double)*g_list_length(projet->modele.noeuds)*6), NULL, gettext("Erreur d'allocation mémoire.\n"))
     memset(action->efforts_noeuds->x, 0, sizeof(double)*g_list_length(projet->modele.noeuds)*6);
-    BUGMSG(action->deplacement_complet = malloc(sizeof(cholmod_sparse)), NULL, gettext("Erreur d'allocation mémoire.\n"));
-    BUGMSG(action->deplacement_complet->x = malloc(sizeof(double)*g_list_length(projet->modele.noeuds)*6), NULL, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(action->deplacement_complet = malloc(sizeof(cholmod_sparse)), NULL, gettext("Erreur d'allocation mémoire.\n"))
+    BUGMSG(action->deplacement_complet->x = malloc(sizeof(double)*g_list_length(projet->modele.noeuds)*6), NULL, gettext("Erreur d'allocation mémoire.\n"))
     memset(action->deplacement_complet->x, 0, sizeof(double)*g_list_length(projet->modele.noeuds)*6);
-    BUG(_1990_action_fonction_init(projet, action), NULL);
+    BUG(_1990_action_fonction_init(projet, action), NULL)
     x = action->efforts_noeuds->x;
     y = action->deplacement_complet->x;
     
@@ -1284,18 +1284,18 @@ Action *_1990_action_ponderation_resultat(GList* ponderation, Projet *projet)
         
         for (i=0;i<g_list_length(projet->modele.barres);i++)
         {
-            BUG(common_fonction_ajout_fonction(action->fonctions_efforts[0][i], element->action->fonctions_efforts[0][i], mult), NULL);
-            BUG(common_fonction_ajout_fonction(action->fonctions_efforts[1][i], element->action->fonctions_efforts[1][i], mult), NULL);
-            BUG(common_fonction_ajout_fonction(action->fonctions_efforts[2][i], element->action->fonctions_efforts[2][i], mult), NULL);
-            BUG(common_fonction_ajout_fonction(action->fonctions_efforts[3][i], element->action->fonctions_efforts[3][i], mult), NULL);
-            BUG(common_fonction_ajout_fonction(action->fonctions_efforts[4][i], element->action->fonctions_efforts[4][i], mult), NULL);
-            BUG(common_fonction_ajout_fonction(action->fonctions_efforts[5][i], element->action->fonctions_efforts[5][i], mult), NULL);
-            BUG(common_fonction_ajout_fonction(action->fonctions_deformation[0][i], element->action->fonctions_deformation[0][i], mult), NULL);
-            BUG(common_fonction_ajout_fonction(action->fonctions_deformation[1][i], element->action->fonctions_deformation[1][i], mult), NULL);
-            BUG(common_fonction_ajout_fonction(action->fonctions_deformation[2][i], element->action->fonctions_deformation[2][i], mult), NULL);
-            BUG(common_fonction_ajout_fonction(action->fonctions_rotation[0][i], element->action->fonctions_rotation[0][i], mult), NULL);
-            BUG(common_fonction_ajout_fonction(action->fonctions_rotation[1][i], element->action->fonctions_rotation[1][i], mult), NULL);
-            BUG(common_fonction_ajout_fonction(action->fonctions_rotation[2][i], element->action->fonctions_rotation[2][i], mult), NULL);
+            BUG(common_fonction_ajout_fonction(action->fonctions_efforts[0][i], element->action->fonctions_efforts[0][i], mult), NULL)
+            BUG(common_fonction_ajout_fonction(action->fonctions_efforts[1][i], element->action->fonctions_efforts[1][i], mult), NULL)
+            BUG(common_fonction_ajout_fonction(action->fonctions_efforts[2][i], element->action->fonctions_efforts[2][i], mult), NULL)
+            BUG(common_fonction_ajout_fonction(action->fonctions_efforts[3][i], element->action->fonctions_efforts[3][i], mult), NULL)
+            BUG(common_fonction_ajout_fonction(action->fonctions_efforts[4][i], element->action->fonctions_efforts[4][i], mult), NULL)
+            BUG(common_fonction_ajout_fonction(action->fonctions_efforts[5][i], element->action->fonctions_efforts[5][i], mult), NULL)
+            BUG(common_fonction_ajout_fonction(action->fonctions_deformation[0][i], element->action->fonctions_deformation[0][i], mult), NULL)
+            BUG(common_fonction_ajout_fonction(action->fonctions_deformation[1][i], element->action->fonctions_deformation[1][i], mult), NULL)
+            BUG(common_fonction_ajout_fonction(action->fonctions_deformation[2][i], element->action->fonctions_deformation[2][i], mult), NULL)
+            BUG(common_fonction_ajout_fonction(action->fonctions_rotation[0][i], element->action->fonctions_rotation[0][i], mult), NULL)
+            BUG(common_fonction_ajout_fonction(action->fonctions_rotation[1][i], element->action->fonctions_rotation[1][i], mult), NULL)
+            BUG(common_fonction_ajout_fonction(action->fonctions_rotation[2][i], element->action->fonctions_rotation[2][i], mult), NULL)
         }
         
         list_parcours = g_list_next(list_parcours);
@@ -1315,7 +1315,7 @@ gboolean _1990_action_ponderation_resultat_free_calculs(Action *action)
  *             action == NULL.
  */
 {
-    BUGMSG(action, FALSE, gettext("Paramètre %s incorrect.\n"), "action");
+    BUGMSG(action, FALSE, gettext("Paramètre %s incorrect.\n"), "action")
     
     free(action->deplacement_complet->x);
     free(action->deplacement_complet);
@@ -1337,8 +1337,8 @@ gboolean _1990_action_free_calculs(Projet *projet, Action *action)
  *             action == NULL.
  */
 {
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(action, FALSE, gettext("Paramètre %s incorrect.\n"), "action");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(action, FALSE, gettext("Paramètre %s incorrect.\n"), "action")
     
     if (action->deplacement_complet != NULL)
     {
@@ -1359,7 +1359,7 @@ gboolean _1990_action_free_calculs(Projet *projet, Action *action)
     }
     
     if (action->fonctions_efforts[0] != NULL)
-        BUG(_1990_action_fonction_free(projet, action), FALSE);
+        BUG(_1990_action_fonction_free(projet, action), FALSE)
     
     return TRUE;
 }
@@ -1384,8 +1384,8 @@ gboolean _1990_action_free_num(Projet *projet, unsigned int num)
     GtkTreeIter Iter;
 #endif
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUG(_1990_action_numero_cherche(projet, num), FALSE);
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUG(_1990_action_numero_cherche(projet, num), FALSE)
     
     // On enlève l'action de la liste des actions
     list_parcours = g_list_last(projet->actions);
@@ -1409,23 +1409,23 @@ gboolean _1990_action_free_num(Projet *projet, unsigned int num)
                     case CHARGE_NOEUD :
                     {
                         Charge_Noeud *charge2 = (Charge_Noeud *)charge;
-                        BUG(EF_charge_noeud_free(charge2), FALSE);
+                        BUG(EF_charge_noeud_free(charge2), FALSE)
                         break;
                     }
                     case CHARGE_BARRE_PONCTUELLE :
                     {
-                        BUG(EF_charge_barre_ponctuelle_free(charge), FALSE);
+                        BUG(EF_charge_barre_ponctuelle_free(charge), FALSE)
                         break;
                     }
                     case CHARGE_BARRE_REPARTIE_UNIFORME :
                     {
                         Charge_Barre_Repartie_Uniforme *charge2 = (Charge_Barre_Repartie_Uniforme *)charge;
-                        BUG(EF_charge_barre_repartie_uniforme_free(charge2), FALSE);
+                        BUG(EF_charge_barre_repartie_uniforme_free(charge2), FALSE)
                         break;
                     }
                     default :
                     {
-                        BUGMSG(0, FALSE, gettext("Type de charge %d inconnu.\n"), charge->type);
+                        BUGMSG(0, FALSE, gettext("Type de charge %d inconnu.\n"), charge->type)
                         break;
                     }
                 }
@@ -1438,7 +1438,7 @@ gboolean _1990_action_free_num(Projet *projet, unsigned int num)
                 cholmod_free_sparse(&action->efforts_noeuds, projet->calculs.c);
             
             if (action->fonctions_efforts[0] != NULL)
-                BUG(_1990_action_fonction_free(projet, action), FALSE);
+                BUG(_1990_action_fonction_free(projet, action), FALSE)
             
 #ifdef ENABLE_GTK
             if (projet->list_gtk._1990_actions.builder != NULL)
@@ -1496,7 +1496,7 @@ gboolean _1990_action_free_num(Projet *projet, unsigned int num)
             }
             
             if (delete)
-                BUG(_1990_groupe_free_element(projet, 0, groupe->numero, num), FALSE);
+                BUG(_1990_groupe_free_element(projet, 0, groupe->numero, num), FALSE)
             
             list_groupes = g_list_next(list_groupes);
         }
@@ -1529,7 +1529,7 @@ gboolean _1990_action_free_num(Projet *projet, unsigned int num)
     }
 #endif
     
-    BUG(EF_calculs_free(projet), FALSE);
+    BUG(EF_calculs_free(projet), FALSE)
     
     return TRUE;
 }
@@ -1545,7 +1545,7 @@ gboolean _1990_action_free(Projet *projet)
  *             erreur lors de la libération d'une charge de l'action à supprimer.
  */
 {
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
     
     // Trivial
     while (projet->actions != NULL)
@@ -1565,22 +1565,22 @@ gboolean _1990_action_free(Projet *projet)
             {
                 case CHARGE_NOEUD :
                 {
-                    BUG(EF_charge_noeud_free((Charge_Noeud*)charge), FALSE);
+                    BUG(EF_charge_noeud_free((Charge_Noeud*)charge), FALSE)
                     break;
                 }
                 case CHARGE_BARRE_PONCTUELLE :
                 {
-                    BUG(EF_charge_barre_ponctuelle_free(charge), FALSE);
+                    BUG(EF_charge_barre_ponctuelle_free(charge), FALSE)
                     break;
                 }
                 case CHARGE_BARRE_REPARTIE_UNIFORME :
                 {
-                    BUG(EF_charge_barre_repartie_uniforme_free((Charge_Barre_Repartie_Uniforme*)charge), FALSE);
+                    BUG(EF_charge_barre_repartie_uniforme_free((Charge_Barre_Repartie_Uniforme*)charge), FALSE)
                     break;
                 }
                 default :
                 {
-                    BUGMSG(0, FALSE, gettext("Type de charge %d inconnu.\n"), charge->type);
+                    BUGMSG(0, FALSE, gettext("Type de charge %d inconnu.\n"), charge->type)
                     break;
                 }
             }
@@ -1593,7 +1593,7 @@ gboolean _1990_action_free(Projet *projet)
             cholmod_free_sparse(&action->efforts_noeuds, projet->calculs.c);
         
         if (action->fonctions_efforts[0] != NULL)
-            BUG(_1990_action_fonction_free(projet, action), FALSE);
+            BUG(_1990_action_fonction_free(projet, action), FALSE)
         
         free(action);
     }

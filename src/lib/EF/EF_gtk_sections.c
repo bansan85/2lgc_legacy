@@ -48,8 +48,8 @@ void EF_gtk_sections_fermer(GtkButton *button, Projet *projet)
  * Valeur renvoyée : Aucune.
  */
 {
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_sections.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Section");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_sections.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Section")
     
     gtk_widget_destroy(projet->list_gtk.ef_sections.window);
     
@@ -64,8 +64,8 @@ void EF_gtk_sections_window_destroy(GtkWidget *object, Projet *projet)
  * Valeur renvoyée : Aucune.
  */
 {
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_sections.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Section");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_sections.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Section")
     
     g_object_unref(G_OBJECT(projet->list_gtk.ef_sections.builder));
     projet->list_gtk.ef_sections.builder = NULL;
@@ -85,8 +85,8 @@ gboolean EF_gtk_sections_window_key_press(GtkWidget *widget, GdkEvent *event, Pr
  *  
  */
 {
-    BUGMSG(projet, TRUE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_sections.builder, TRUE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Section");
+    BUGMSG(projet, TRUE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_sections.builder, TRUE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Section")
     
     if (event->key.keyval == GDK_KEY_Escape)
     {
@@ -110,8 +110,8 @@ gboolean EF_gtk_sections_treeview_key_press(GtkTreeView *treeview, GdkEvent *eve
  *  
  */
 {
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_sections.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Sections");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_sections.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Sections")
     
     if (event->key.keyval == GDK_KEY_Delete)
     {
@@ -127,7 +127,7 @@ gboolean EF_gtk_sections_treeview_key_press(GtkTreeView *treeview, GdkEvent *eve
         
         liste_sections = g_list_append(liste_sections, section);
         if (_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, liste_sections, NULL, NULL, NULL, NULL, NULL, NULL, FALSE, FALSE) == FALSE)
-            BUG(EF_sections_supprime(section, TRUE, projet), FALSE);
+            BUG(EF_sections_supprime(section, TRUE, projet), FALSE)
         
         g_list_free(liste_sections);
         
@@ -150,8 +150,8 @@ void EF_gtk_sections_select_changed(GtkTreeSelection *treeselection, Projet *pro
     GtkTreeModel    *model;
     GtkTreeIter     Iter;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_sections.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Section");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_sections.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Section")
     
     // Si aucune section n'est sélectionnée, il n'est pas possible d'en supprimer ou d'en éditer une.
     if (!gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_sections.builder, "EF_sections_treeview_select")), &model, &Iter))
@@ -207,17 +207,17 @@ void EF_gtk_sections_boutton_supprimer_menu(GtkButton *widget, Projet *projet)
     EF_Section      *section;
     GList           *liste_sections = NULL, *liste_noeuds_dep, *liste_barres_dep, *liste_charges_dep;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_sections.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Section");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_sections.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Section")
     
     // Si aucune section n'est sélectionnée
     if (!gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_sections.builder, "EF_sections_treeview_select")), &model, &Iter))
-        BUGMSG(NULL, , gettext("Aucun élément n'est sélectionné.\n"));
+        BUGMSG(NULL, , gettext("Aucun élément n'est sélectionné.\n"))
     
     gtk_tree_model_get(model, &Iter, 0, &section, -1);
     
     liste_sections = g_list_append(liste_sections, section);
-    BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, liste_sections, NULL, NULL, NULL, &liste_noeuds_dep, &liste_barres_dep, &liste_charges_dep, FALSE, FALSE), );
+    BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, liste_sections, NULL, NULL, NULL, &liste_noeuds_dep, &liste_barres_dep, &liste_charges_dep, FALSE, FALSE), )
     g_list_free(liste_sections);
     
     if ((liste_noeuds_dep != NULL) || (liste_barres_dep != NULL) || (liste_charges_dep != NULL))
@@ -229,7 +229,7 @@ void EF_gtk_sections_boutton_supprimer_menu(GtkButton *widget, Projet *projet)
         free(desc);
     }
     else
-        BUGMSG(NULL, , gettext("L'élément ne possède aucune dépendance.\n"));
+        BUGMSG(NULL, , gettext("L'élément ne possède aucune dépendance.\n"))
     
     g_list_free(liste_noeuds_dep);
     g_list_free(liste_barres_dep);
@@ -255,8 +255,8 @@ void EF_gtk_sections_edit_nom(GtkCellRendererText *cell, gchar *path_string, gch
     GtkTreePath     *path;
     EF_Section      *section;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_sections.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Section");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_sections.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Section")
     
     ef_gtk = &projet->list_gtk.ef_sections;
     model = GTK_TREE_MODEL(ef_gtk->sections);
@@ -273,32 +273,32 @@ void EF_gtk_sections_edit_nom(GtkCellRendererText *cell, gchar *path_string, gch
     {
         case SECTION_RECTANGULAIRE :
         {
-            BUG(EF_sections_rectangulaire_modif(projet, section, new_text, common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR)), );
+            BUG(EF_sections_rectangulaire_modif(projet, section, new_text, common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR)), )
             break;
         }
         case SECTION_T :
         {
-            BUG(EF_sections_T_modif(projet, section, new_text, common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR)), );
+            BUG(EF_sections_T_modif(projet, section, new_text, common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR)), )
             break;
         }
         case SECTION_CARREE :
         {
-            BUG(EF_sections_carree_modif(projet, section, new_text, common_math_f(NAN, FLOTTANT_ORDINATEUR)), );
+            BUG(EF_sections_carree_modif(projet, section, new_text, common_math_f(NAN, FLOTTANT_ORDINATEUR)), )
             break;
         }
         case SECTION_CIRCULAIRE :
         {
-            BUG(EF_sections_circulaire_modif(projet, section, new_text, common_math_f(NAN, FLOTTANT_ORDINATEUR)), );
+            BUG(EF_sections_circulaire_modif(projet, section, new_text, common_math_f(NAN, FLOTTANT_ORDINATEUR)), )
             break;
         }
         case SECTION_PERSONNALISEE :
         {
-            BUG(EF_sections_personnalisee_modif(projet, section, new_text, NULL, common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), NULL), );
+            BUG(EF_sections_personnalisee_modif(projet, section, new_text, NULL, common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), common_math_f(NAN, FLOTTANT_ORDINATEUR), NULL), )
             break;
         }
         default :
         {
-            BUGMSG(0, , gettext("Type de section %d inconnu.\n"), section->type);
+            BUGMSG(0, , gettext("Type de section %d inconnu.\n"), section->type)
         }
     }
     
@@ -317,15 +317,15 @@ void EF_gtk_sections_supprimer_direct(GtkButton *button, Projet *projet)
     GtkTreeModel    *model;
     EF_Section      *section;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_sections.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Section");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_sections.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Section")
     
     if (!gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_sections.builder, "EF_sections_treeview_select")), &model, &iter))
         return;
     
     gtk_tree_model_get(model, &iter, 0, &section, -1);
     
-    BUG(EF_sections_supprime(section, TRUE, projet), );
+    BUG(EF_sections_supprime(section, TRUE, projet), )
     
     return;
 }
@@ -343,17 +343,17 @@ void EF_gtk_sections_supprimer_menu_barres(GtkButton *button, Projet *projet)
     GtkTreeModel    *model;
     EF_Section      *section;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_sections.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Section");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_sections.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Section")
     
     if (!gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_sections.builder, "EF_sections_treeview_select")), &model, &iter))
         return;
     
     gtk_tree_model_get(model, &iter, 0, &section, -1);
     
-    BUG(EF_sections_supprime(section, FALSE, projet), );
+    BUG(EF_sections_supprime(section, FALSE, projet), )
     
-    BUG(m3d_rafraichit(projet), );
+    BUG(m3d_rafraichit(projet), )
     
     return;
 }
@@ -380,10 +380,10 @@ GdkPixbuf *EF_gtk_sections_dessin(EF_Section *section, int width, int height)
     double          convert;
     cairo_path_t    *save_path;
     
-    BUGMSG(section, NULL, gettext("Paramètre %s incorrect.\n"), "section");
-    BUGMSG(width, NULL, gettext("La largeur du dessin ne peut être nulle.\n"));
-    BUGMSG(height, NULL, gettext("La hauteur du dessin ne peut être nulle.\n"));
-    BUGMSG(cairo_surface_status(surface) == CAIRO_STATUS_SUCCESS, NULL, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(section, NULL, gettext("Paramètre %s incorrect.\n"), "section")
+    BUGMSG(width, NULL, gettext("La largeur du dessin ne peut être nulle.\n"))
+    BUGMSG(height, NULL, gettext("La hauteur du dessin ne peut être nulle.\n"))
+    BUGMSG(cairo_surface_status(surface) == CAIRO_STATUS_SUCCESS, NULL, gettext("Erreur d'allocation mémoire.\n"))
     
     a = (double)width/height;
     pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, width, height);
@@ -617,7 +617,7 @@ GdkPixbuf *EF_gtk_sections_dessin(EF_Section *section, int width, int height)
         }
         default :
         {
-            BUGMSG(0, NULL, gettext("Type de section %d inconnu.\n"), section->type);
+            BUGMSG(0, NULL, gettext("Type de section %d inconnu.\n"), section->type)
             break;
         }
     }
@@ -635,10 +635,10 @@ void EF_gtk_sections_ajout_rectangulaire(GtkMenuItem *menuitem, Projet *projet)
  *           interface graphique non initialisée.
  */
 {
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_sections.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Section");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_sections.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Section")
     
-    BUG(EF_gtk_section_rectangulaire(projet, NULL), );
+    BUG(EF_gtk_section_rectangulaire(projet, NULL), )
 }
 
 
@@ -651,10 +651,10 @@ void EF_gtk_sections_ajout_T(GtkMenuItem *menuitem, Projet *projet)
  *           interface graphique non initialisée.
  */
 {
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_sections.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Section");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_sections.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Section")
     
-    BUG(EF_gtk_section_T(projet, NULL), );
+    BUG(EF_gtk_section_T(projet, NULL), )
 }
 
 
@@ -667,10 +667,10 @@ void EF_gtk_sections_ajout_carree(GtkMenuItem *menuitem, Projet *projet)
  *           interface graphique non initialisée.
  */
 {
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_sections.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Section");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_sections.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Section")
     
-    BUG(EF_gtk_section_carree(projet, NULL), );
+    BUG(EF_gtk_section_carree(projet, NULL), )
 }
 
 
@@ -683,10 +683,10 @@ void EF_gtk_sections_ajout_circulaire(GtkMenuItem *menuitem, Projet *projet)
  *           interface graphique non initialisée.
  */
 {
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_sections.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Section");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_sections.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Section")
     
-    BUG(EF_gtk_section_circulaire(projet, NULL), );
+    BUG(EF_gtk_section_circulaire(projet, NULL), )
 }
 
 
@@ -699,10 +699,10 @@ void EF_gtk_sections_ajout_personnalisee(GtkMenuItem *menuitem, Projet *projet)
  *           interface graphique non initialisée.
  */
 {
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_sections.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Section");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_sections.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Section")
     
-    BUG(EF_gtk_section_personnalisee(projet, NULL), );
+    BUG(EF_gtk_section_personnalisee(projet, NULL), )
 }
 
 
@@ -719,8 +719,8 @@ void EF_gtk_sections_edit_clicked(GtkWidget *widget, Projet *projet)
     GtkTreeModel    *model;
     GList           *list, *list_parcours;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_sections.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Section");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_sections.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Section")
     
     // On récupère la liste des charges à éditer.
     list = gtk_tree_selection_get_selected_rows(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_sections.builder, "EF_sections_treeview_select")), &model);
@@ -738,32 +738,32 @@ void EF_gtk_sections_edit_clicked(GtkWidget *widget, Projet *projet)
             {
                 case SECTION_RECTANGULAIRE :
                 {
-                    BUG(EF_gtk_section_rectangulaire(projet, section), );
+                    BUG(EF_gtk_section_rectangulaire(projet, section), )
                     break;
                 }
                 case SECTION_T :
                 {
-                    BUG(EF_gtk_section_T(projet, section), );
+                    BUG(EF_gtk_section_T(projet, section), )
                     break;
                 }
                 case SECTION_CARREE :
                 {
-                    BUG(EF_gtk_section_carree(projet, section), );
+                    BUG(EF_gtk_section_carree(projet, section), )
                     break;
                 }
                 case SECTION_CIRCULAIRE :
                 {
-                    BUG(EF_gtk_section_circulaire(projet, section), );
+                    BUG(EF_gtk_section_circulaire(projet, section), )
                     break;
                 }
                 case SECTION_PERSONNALISEE :
                 {
-                    BUG(EF_gtk_section_personnalisee(projet, section), );
+                    BUG(EF_gtk_section_personnalisee(projet, section), )
                     break;
                 }
                 default :
                 {
-                    BUGMSG(0, , gettext("Type de section %d inconnu.\n"), section->type);
+                    BUGMSG(0, , gettext("Type de section %d inconnu.\n"), section->type)
                     break;
                 }
             }
@@ -788,8 +788,8 @@ gboolean EF_gtk_sections_double_clicked(GtkWidget *widget, GdkEvent *event, Proj
  *             interface graphique non initialisée.
  */
 {
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_sections.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Section");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_sections.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Section")
     
     if ((event->type == GDK_2BUTTON_PRESS) && (gtk_widget_get_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections.builder, "EF_sections_boutton_modifier")))))
     {
@@ -817,7 +817,7 @@ void EF_gtk_sections_render_0(GtkTreeViewColumn *tree_column, GtkCellRenderer *c
     
     gtk_tree_model_get(tree_model, iter, 0, &section, -1);
     
-    BUG(pixbuf = EF_gtk_sections_dessin(section, 32, 32), );
+    BUG(pixbuf = EF_gtk_sections_dessin(section, 32, 32), )
     
     g_object_set(cell, "pixbuf", pixbuf, NULL);
     
@@ -864,7 +864,7 @@ void EF_gtk_sections_render_2(GtkTreeViewColumn *tree_column, GtkCellRenderer *c
     
     gtk_tree_model_get(tree_model, iter, 0, &section, -1);
     
-    BUG(description = EF_sections_get_description(section), );
+    BUG(description = EF_sections_get_description(section), )
     
     g_object_set(cell, "text", description, NULL);
     
@@ -1135,10 +1135,10 @@ gboolean EF_gtk_sections_get_section(char *ligne, char **nom, double *g, double 
     GList   *forme_, *points;
     double  x, y;
     
-    BUGMSG(ligne, FALSE, gettext("Paramètre %s incorrect.\n"), "ligne");
+    BUGMSG(ligne, FALSE, gettext("Paramètre %s incorrect.\n"), "ligne")
     
     ligne_tmp = &ligne[strchr(ligne, '\t')-ligne+1];
-    BUGMSG(sscanf(ligne_tmp, "%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%d\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t", &g_, &h_, &b_, &tw_, &tf_, &r1_, &r2_, &A_, &hi_, &d_, &phi_, &pmin_, &pmax_, &AL_, &AG_, &iiy_, &Wely_, &Wply_, &iy_, &Avz_, &iiz_, &Welz_, &Wplz_, &iz_, &ss_, &It_, &Iw_, &vy_, &vyp_, &vz_, &vzp_, &vty_, &vtz_) == 33, FALSE, gettext("La ligne en cours '%s' n'est pas dans un format correct pour une section.\n"), ligne);
+    BUGMSG(sscanf(ligne_tmp, "%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%d\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t", &g_, &h_, &b_, &tw_, &tf_, &r1_, &r2_, &A_, &hi_, &d_, &phi_, &pmin_, &pmax_, &AL_, &AG_, &iiy_, &Wely_, &Wply_, &iy_, &Avz_, &iiz_, &Welz_, &Wplz_, &iz_, &ss_, &It_, &Iw_, &vy_, &vyp_, &vz_, &vzp_, &vty_, &vtz_) == 33, FALSE, gettext("La ligne en cours '%s' n'est pas dans un format correct pour une section.\n"), ligne)
     
     if (g != NULL)
         *g = g_;
@@ -1220,7 +1220,7 @@ gboolean EF_gtk_sections_get_section(char *ligne, char **nom, double *g, double 
     
     while (ligne_tmp[0] != 0)
     {
-        BUGMSG(sscanf(ligne_tmp, "%lf\t%lf", &x, &y) == 2, FALSE, gettext("La ligne en cours '%s' n'est pas dans un format correct pour une section.\n"), ligne);
+        BUGMSG(sscanf(ligne_tmp, "%lf\t%lf", &x, &y) == 2, FALSE, gettext("La ligne en cours '%s' n'est pas dans un format correct pour une section.\n"), ligne)
         
         // Nouveau groupe de points
         if ((isnan(x)) && (isnan(y)))
@@ -1258,7 +1258,7 @@ gboolean EF_gtk_sections_get_section(char *ligne, char **nom, double *g, double 
     {
         EF_sections_personnalisee_forme_free(forme_);
         
-        BUGMSG(NULL, FALSE, gettext("La ligne en cours '%s' n'est pas dans un format correct pour une section.\n"), ligne);
+        BUGMSG(NULL, FALSE, gettext("La ligne en cours '%s' n'est pas dans un format correct pour une section.\n"), ligne)
     }
     else if (forme == NULL)
         EF_sections_personnalisee_forme_free(forme_);
@@ -1290,11 +1290,11 @@ void EF_gtk_sections_importe_section(GtkMenuItem *menuitem, Projet *projet)
     FILE    *file;
     char    *ligne, *section;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
     
-    BUGMSG(file = fopen(DATADIR"/profiles_acier.csv", "r"), , "Le fichier des sections est introuvable.\n");
+    BUGMSG(file = fopen(DATADIR"/profiles_acier.csv", "r"), , "Le fichier des sections est introuvable.\n")
     
-    BUGMSG(section = g_strdup_printf("%s\t", gtk_menu_item_get_label(menuitem)), , gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(section = g_strdup_printf("%s\t", gtk_menu_item_get_label(menuitem)), , gettext("Erreur d'allocation mémoire.\n"))
     
     ligne = common_text_get_line(file);
     free(ligne);
@@ -1308,8 +1308,8 @@ void EF_gtk_sections_importe_section(GtkMenuItem *menuitem, Projet *projet)
             GList   *forme;
             char    *desc;
             
-            BUG(EF_gtk_sections_get_section(ligne, &desc, NULL, NULL, NULL, NULL, NULL, NULL, NULL, &s, NULL, NULL, NULL, NULL, NULL, NULL, NULL, &iy, NULL, NULL, NULL, NULL, &iz, NULL, NULL, NULL, NULL, &j, NULL, &vy, &vyp, &vz, &vzp, NULL, NULL, &forme), );
-            BUG(EF_sections_personnalisee_ajout(projet, desc, desc, common_math_f(j, FLOTTANT_UTILISATEUR), common_math_f(iy, FLOTTANT_UTILISATEUR), common_math_f(iz, FLOTTANT_UTILISATEUR), common_math_f(vy, FLOTTANT_UTILISATEUR), common_math_f(vyp, FLOTTANT_UTILISATEUR), common_math_f(vz, FLOTTANT_UTILISATEUR), common_math_f(vzp, FLOTTANT_UTILISATEUR), common_math_f(s, FLOTTANT_UTILISATEUR), forme), );
+            BUG(EF_gtk_sections_get_section(ligne, &desc, NULL, NULL, NULL, NULL, NULL, NULL, NULL, &s, NULL, NULL, NULL, NULL, NULL, NULL, NULL, &iy, NULL, NULL, NULL, NULL, &iz, NULL, NULL, NULL, NULL, &j, NULL, &vy, &vyp, &vz, &vzp, NULL, NULL, &forme), )
+            BUG(EF_sections_personnalisee_ajout(projet, desc, desc, common_math_f(j, FLOTTANT_UTILISATEUR), common_math_f(iy, FLOTTANT_UTILISATEUR), common_math_f(iz, FLOTTANT_UTILISATEUR), common_math_f(vy, FLOTTANT_UTILISATEUR), common_math_f(vyp, FLOTTANT_UTILISATEUR), common_math_f(vz, FLOTTANT_UTILISATEUR), common_math_f(vzp, FLOTTANT_UTILISATEUR), common_math_f(s, FLOTTANT_UTILISATEUR), forme), )
             free(desc);
         }
         free(ligne);
@@ -1336,7 +1336,7 @@ void EF_gtk_sections(Projet *projet)
     GList           *list_parcours;
     FILE            *file;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
     
     if (projet->list_gtk.ef_sections.builder != NULL)
     {
@@ -1347,7 +1347,7 @@ void EF_gtk_sections(Projet *projet)
     ef_gtk = &projet->list_gtk.ef_sections;
     
     ef_gtk->builder = gtk_builder_new();
-    BUGMSG(gtk_builder_add_from_resource(ef_gtk->builder, "/org/2lgc/codegui/ui/EF_sections.ui", NULL) != 0, , gettext("Builder Failed\n"));
+    BUGMSG(gtk_builder_add_from_resource(ef_gtk->builder, "/org/2lgc/codegui/ui/EF_sections.ui", NULL) != 0, , gettext("Builder Failed\n"))
     gtk_builder_connect_signals(ef_gtk->builder, projet);
     
     ef_gtk->window = GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder, "EF_sections_window"));
@@ -1401,7 +1401,7 @@ void EF_gtk_sections(Projet *projet)
             GtkWidget   *menu, *categorie_menu = NULL;
             GList       *forme;
             
-            BUG(EF_gtk_sections_get_section(ligne, &nom_section, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, &forme), );
+            BUG(EF_gtk_sections_get_section(ligne, &nom_section, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, &forme), )
             categorie = malloc(sizeof(char)*(strlen(nom_section)+1));
             if (strchr(nom_section, ' ') == NULL)
                 strcpy(categorie, nom_section);

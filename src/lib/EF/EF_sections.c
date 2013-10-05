@@ -46,7 +46,7 @@ gboolean EF_sections_init(Projet *projet)
  *             projet == NULL.
  */
 {
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
     
     // Trivial
     projet->modele.sections = NULL;
@@ -70,8 +70,8 @@ gboolean EF_sections_insert(Projet *projet, EF_Section *section)
     GList       *list_parcours;
     EF_Section  *section_tmp;
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(section, FALSE, gettext("Paramètre %s incorrect.\n"), "section");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(section, FALSE, gettext("Paramètre %s incorrect.\n"), "section")
     
     list_parcours = projet->modele.sections;
     while (list_parcours != NULL)
@@ -122,8 +122,8 @@ gboolean EF_sections_repositionne(Projet *projet, EF_Section *section)
 {
     GList   *list_parcours;
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(section, FALSE, gettext("Paramètre %s incorrect.\n"), "section");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(section, FALSE, gettext("Paramètre %s incorrect.\n"), "section")
     
     // On réinsère la section au bon endroit
     projet->modele.sections = g_list_remove(projet->modele.sections, section);
@@ -185,21 +185,21 @@ gboolean EF_sections_rectangulaire_ajout(Projet *projet, const char* nom, Flotta
     Section_T   *section_data;
     EF_Section  *section_nouvelle;
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(!EF_sections_cherche_nom(projet, nom, FALSE), FALSE, gettext("La section %s existe déjà.\n"), nom);
-    BUGMSG(section_nouvelle = malloc(sizeof(EF_Section)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-    BUGMSG(section_data = malloc(sizeof(Section_T)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(!EF_sections_cherche_nom(projet, nom, FALSE), FALSE, gettext("La section %s existe déjà.\n"), nom)
+    BUGMSG(section_nouvelle = malloc(sizeof(EF_Section)), FALSE, gettext("Erreur d'allocation mémoire.\n"))
+    BUGMSG(section_data = malloc(sizeof(Section_T)), FALSE, gettext("Erreur d'allocation mémoire.\n"))
     section_nouvelle->data = section_data;
     
     // Trivial
     section_nouvelle->type = SECTION_RECTANGULAIRE;
-    BUGMSG(section_nouvelle->nom = g_strdup(nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(section_nouvelle->nom = g_strdup(nom), FALSE, gettext("Erreur d'allocation mémoire.\n"))
     section_data->largeur_retombee = l;
     section_data->hauteur_retombee = h;
     section_data->largeur_table = l;
     section_data->hauteur_table = common_math_f(0., FLOTTANT_ORDINATEUR);
     
-    BUG(EF_sections_insert(projet, section_nouvelle), FALSE);
+    BUG(EF_sections_insert(projet, section_nouvelle), FALSE)
     
     return TRUE;
 }
@@ -223,17 +223,17 @@ gboolean EF_sections_rectangulaire_modif(Projet *projet, EF_Section *section, co
 {
     Section_T   *section_data = section->data;
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(section, FALSE, gettext("Paramètre %s incorrect.\n"), "section");
-    BUGMSG(section->type == SECTION_RECTANGULAIRE, FALSE, gettext("La section doit être de type rectangulaire.\n"));
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(section, FALSE, gettext("Paramètre %s incorrect.\n"), "section")
+    BUGMSG(section->type == SECTION_RECTANGULAIRE, FALSE, gettext("La section doit être de type rectangulaire.\n"))
     
     // Trivial
     if ((nom != NULL) && (strcmp(section->nom, nom) != 0))
     {
-        BUGMSG(!EF_sections_cherche_nom(projet, nom, FALSE), FALSE, gettext("La section %s existe déjà.\n"), nom);
+        BUGMSG(!EF_sections_cherche_nom(projet, nom, FALSE), FALSE, gettext("La section %s existe déjà.\n"), nom)
         free(section->nom);
-        BUGMSG(section->nom = g_strdup(nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-        BUG(EF_sections_repositionne(projet, section), FALSE);
+        BUGMSG(section->nom = g_strdup(nom), FALSE, gettext("Erreur d'allocation mémoire.\n"))
+        BUG(EF_sections_repositionne(projet, section), FALSE)
     }
     if ((!isnan(common_math_get(l))) && (!ERREUR_RELATIVE_EGALE(common_math_get(section_data->largeur_retombee), common_math_get(l))))
     {
@@ -253,16 +253,16 @@ gboolean EF_sections_rectangulaire_modif(Projet *projet, EF_Section *section, co
         GList   *liste_sections = NULL, *liste_barres_dep;
         
         liste_sections = g_list_append(liste_sections, section);
-        BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, liste_sections, NULL, NULL, NULL, NULL, &liste_barres_dep, NULL, FALSE, FALSE), FALSE);
+        BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, liste_sections, NULL, NULL, NULL, NULL, &liste_barres_dep, NULL, FALSE, FALSE), FALSE)
         g_list_free(liste_sections);
         
         if (liste_barres_dep != NULL)
         {
 #ifdef ENABLE_GTK
-            BUG(m3d_actualise_graphique(projet, NULL, liste_barres_dep), FALSE);
-            BUG(m3d_rafraichit(projet), FALSE);
+            BUG(m3d_actualise_graphique(projet, NULL, liste_barres_dep), FALSE)
+            BUG(m3d_rafraichit(projet), FALSE)
 #endif
-            BUG(EF_calculs_free(projet), FALSE);
+            BUG(EF_calculs_free(projet), FALSE)
             g_list_free(liste_barres_dep);
         }
     }
@@ -295,10 +295,10 @@ gboolean EF_sections_T_ajout(Projet *projet, const char* nom, Flottant lt, Flott
     Section_T   *section_data;
     EF_Section  *section_nouvelle;
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(!EF_sections_cherche_nom(projet, nom, FALSE), FALSE, gettext("La section %s existe déjà.\n"), nom);
-    BUGMSG(section_nouvelle = malloc(sizeof(EF_Section)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-    BUGMSG(section_data = malloc(sizeof(Section_T)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(!EF_sections_cherche_nom(projet, nom, FALSE), FALSE, gettext("La section %s existe déjà.\n"), nom)
+    BUGMSG(section_nouvelle = malloc(sizeof(EF_Section)), FALSE, gettext("Erreur d'allocation mémoire.\n"))
+    BUGMSG(section_data = malloc(sizeof(Section_T)), FALSE, gettext("Erreur d'allocation mémoire.\n"))
     section_nouvelle->data = section_data;
     
     // Les caractéristiques de la section sont les suivantes :\end{verbatim}\begin{displaymath}
@@ -308,13 +308,13 @@ gboolean EF_sections_T_ajout(Projet *projet, const char* nom, Flottant lt, Flott
     //   J = \frac{a \cdot b^3}{16} \cdot \left[\frac{16}{3}-3.364 \cdot \frac{b}{a} \cdot \left(1-\frac{b^4}{12 \cdot a^4}\right)\right]+\frac{aa \cdot bb^3}{16} \cdot \left[\frac{16}{3}-3.364 \cdot \frac{bb}{aa} \cdot \left(1-\frac{bb^4}{12 \cdot aa^4}\right)\right]\texttt{ avec }\substack{a=max(ht,lt)\\b=min(ht,lt)\\aa=max(ha,la)\\bb=min(ha,la)}
     //   \end{displaymath}\begin{verbatim}
     section_nouvelle->type = SECTION_T;
-    BUGMSG(section_nouvelle->nom = g_strdup(nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(section_nouvelle->nom = g_strdup(nom), FALSE, gettext("Erreur d'allocation mémoire.\n"))
     section_data->largeur_table = lt;
     section_data->largeur_retombee = lr;
     section_data->hauteur_table = ht;
     section_data->hauteur_retombee = hr;
     
-    BUG(EF_sections_insert(projet, section_nouvelle), FALSE);
+    BUG(EF_sections_insert(projet, section_nouvelle), FALSE)
     
     return TRUE;
 }
@@ -340,16 +340,16 @@ gboolean EF_sections_T_modif(Projet *projet, EF_Section *section, const char* no
 {
     Section_T   *section_data = section->data;
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(section, FALSE, gettext("Paramètre %s incorrect.\n"), "section");
-    BUGMSG(section->type == SECTION_T, FALSE, gettext("La section doit être de type en T.\n"));
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(section, FALSE, gettext("Paramètre %s incorrect.\n"), "section")
+    BUGMSG(section->type == SECTION_T, FALSE, gettext("La section doit être de type en T.\n"))
     
     if ((nom != NULL) && (strcmp(section->nom, nom) != 0))
     {
-        BUGMSG(!EF_sections_cherche_nom(projet, nom, FALSE), FALSE, gettext("La section %s existe déjà.\n"), nom);
+        BUGMSG(!EF_sections_cherche_nom(projet, nom, FALSE), FALSE, gettext("La section %s existe déjà.\n"), nom)
         free(section->nom);
-        BUGMSG(section->nom = g_strdup(nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-        BUG(EF_sections_repositionne(projet, section), FALSE);
+        BUGMSG(section->nom = g_strdup(nom), FALSE, gettext("Erreur d'allocation mémoire.\n"))
+        BUG(EF_sections_repositionne(projet, section), FALSE)
 #ifdef ENABLE_GTK
         gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section->Iter_liste, 0, section->nom, -1);
         if ((projet->list_gtk.ef_sections_T.builder != NULL) && (projet->list_gtk.ef_sections_T.section == section))
@@ -378,16 +378,16 @@ gboolean EF_sections_T_modif(Projet *projet, EF_Section *section, const char* no
         GList   *liste_sections = NULL, *liste_barres_dep;
         
         liste_sections = g_list_append(liste_sections, section);
-        BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, liste_sections, NULL, NULL, NULL, NULL, &liste_barres_dep, NULL, FALSE, FALSE), FALSE);
+        BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, liste_sections, NULL, NULL, NULL, NULL, &liste_barres_dep, NULL, FALSE, FALSE), FALSE)
         g_list_free(liste_sections);
         
         if (liste_barres_dep != NULL)
         {
 #ifdef ENABLE_GTK
-            BUG(m3d_actualise_graphique(projet, NULL, liste_barres_dep), FALSE);
-            BUG(m3d_rafraichit(projet), FALSE);
+            BUG(m3d_actualise_graphique(projet, NULL, liste_barres_dep), FALSE)
+            BUG(m3d_rafraichit(projet), FALSE)
 #endif
-            BUG(EF_calculs_free(projet), FALSE);
+            BUG(EF_calculs_free(projet), FALSE)
             g_list_free(liste_barres_dep);
         }
     }
@@ -416,20 +416,20 @@ gboolean EF_sections_carree_ajout(Projet *projet, const char* nom, Flottant cote
     Section_T   *section_data;
     EF_Section  *section_nouvelle;
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(!EF_sections_cherche_nom(projet, nom, FALSE), FALSE, gettext("La section %s existe déjà.\n"), nom);
-    BUGMSG(section_nouvelle = malloc(sizeof(EF_Section)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-    BUGMSG(section_data = malloc(sizeof(Section_T)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(!EF_sections_cherche_nom(projet, nom, FALSE), FALSE, gettext("La section %s existe déjà.\n"), nom)
+    BUGMSG(section_nouvelle = malloc(sizeof(EF_Section)), FALSE, gettext("Erreur d'allocation mémoire.\n"))
+    BUGMSG(section_data = malloc(sizeof(Section_T)), FALSE, gettext("Erreur d'allocation mémoire.\n"))
     section_nouvelle->data = section_data;
     
     section_nouvelle->type = SECTION_CARREE;
-    BUGMSG(section_nouvelle->nom = g_strdup(nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(section_nouvelle->nom = g_strdup(nom), FALSE, gettext("Erreur d'allocation mémoire.\n"))
     section_data->largeur_retombee = cote;
     section_data->hauteur_retombee = cote;
     section_data->largeur_table = cote;
     section_data->hauteur_table = common_math_f(0., FLOTTANT_ORDINATEUR);
     
-    BUG(EF_sections_insert(projet, section_nouvelle), FALSE);
+    BUG(EF_sections_insert(projet, section_nouvelle), FALSE)
     
     return TRUE;
 }
@@ -452,16 +452,16 @@ gboolean EF_sections_carree_modif(Projet *projet, EF_Section *section, const cha
 {
     Section_T   *section_data = section->data;
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(section, FALSE, gettext("Paramètre %s incorrect.\n"), "section");
-    BUGMSG(section->type == SECTION_CARREE, FALSE, gettext("La section doit être de type carrée.\n"));
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(section, FALSE, gettext("Paramètre %s incorrect.\n"), "section")
+    BUGMSG(section->type == SECTION_CARREE, FALSE, gettext("La section doit être de type carrée.\n"))
     
     if ((nom != NULL) && (strcmp(section->nom, nom) != 0))
     {
-        BUGMSG(!EF_sections_cherche_nom(projet, nom, FALSE), FALSE, gettext("La section %s existe déjà.\n"), nom);
+        BUGMSG(!EF_sections_cherche_nom(projet, nom, FALSE), FALSE, gettext("La section %s existe déjà.\n"), nom)
         free(section->nom);
-        BUGMSG(section->nom = g_strdup(nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-        BUG(EF_sections_repositionne(projet, section), FALSE);
+        BUGMSG(section->nom = g_strdup(nom), FALSE, gettext("Erreur d'allocation mémoire.\n"))
+        BUG(EF_sections_repositionne(projet, section), FALSE)
 #ifdef ENABLE_GTK
         gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section->Iter_liste, 0, section->nom, -1);
         if ((projet->list_gtk.ef_sections_carree.builder != NULL) && (projet->list_gtk.ef_sections_carree.section == section))
@@ -478,16 +478,16 @@ gboolean EF_sections_carree_modif(Projet *projet, EF_Section *section, const cha
         section_data->hauteur_table = common_math_f(0., FLOTTANT_ORDINATEUR);
         
         liste_sections = g_list_append(liste_sections, section);
-        BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, liste_sections, NULL, NULL, NULL, NULL, &liste_barres_dep, NULL, FALSE, FALSE), FALSE);
+        BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, liste_sections, NULL, NULL, NULL, NULL, &liste_barres_dep, NULL, FALSE, FALSE), FALSE)
         g_list_free(liste_sections);
         
         if (liste_barres_dep != NULL)
         {
 #ifdef ENABLE_GTK
-            BUG(m3d_actualise_graphique(projet, NULL, liste_barres_dep), FALSE);
-            BUG(m3d_rafraichit(projet), FALSE);
+            BUG(m3d_actualise_graphique(projet, NULL, liste_barres_dep), FALSE)
+            BUG(m3d_rafraichit(projet), FALSE)
 #endif
-            BUG(EF_calculs_free(projet), FALSE);
+            BUG(EF_calculs_free(projet), FALSE)
             g_list_free(liste_barres_dep);
         }
         
@@ -517,10 +517,10 @@ gboolean EF_sections_circulaire_ajout(Projet *projet, const char* nom, Flottant 
     Section_Circulaire  *section_data;
     EF_Section          *section_nouvelle;
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(!EF_sections_cherche_nom(projet, nom, FALSE), FALSE, gettext("La section %s existe déjà.\n"), nom);
-    BUGMSG(section_nouvelle = malloc(sizeof(EF_Section)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-    BUGMSG(section_data = malloc(sizeof(Section_Circulaire)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(!EF_sections_cherche_nom(projet, nom, FALSE), FALSE, gettext("La section %s existe déjà.\n"), nom)
+    BUGMSG(section_nouvelle = malloc(sizeof(EF_Section)), FALSE, gettext("Erreur d'allocation mémoire.\n"))
+    BUGMSG(section_data = malloc(sizeof(Section_Circulaire)), FALSE, gettext("Erreur d'allocation mémoire.\n"))
     section_nouvelle->data = section_data;
     
     // Les caractéristiques de la section sont les suivantes :\end{verbatim}\begin{displaymath}
@@ -529,10 +529,10 @@ gboolean EF_sections_circulaire_ajout(Projet *projet, const char* nom, Flottant 
     //   I_y = \frac{\pi \cdot diametre^4}{64}\texttt{  et  }I_z = I_y\texttt{  et  }J = \frac{\pi \cdot diametre^4}{32}\end{displaymath}\begin{verbatim}
     
     section_nouvelle->type = SECTION_CIRCULAIRE;
-    BUGMSG(section_nouvelle->nom = g_strdup(nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(section_nouvelle->nom = g_strdup(nom), FALSE, gettext("Erreur d'allocation mémoire.\n"))
     section_data->diametre = diametre;
     
-    BUG(EF_sections_insert(projet, section_nouvelle), FALSE);
+    BUG(EF_sections_insert(projet, section_nouvelle), FALSE)
     
     return TRUE;
 }
@@ -555,16 +555,16 @@ gboolean EF_sections_circulaire_modif(Projet *projet, EF_Section *section, const
 {
     Section_Circulaire    *section_data = section->data;
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(section, FALSE, gettext("Paramètre %s incorrect.\n"), "section");
-    BUGMSG(section->type == SECTION_CIRCULAIRE, FALSE, gettext("La section doit être de type circulaire.\n"));
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(section, FALSE, gettext("Paramètre %s incorrect.\n"), "section")
+    BUGMSG(section->type == SECTION_CIRCULAIRE, FALSE, gettext("La section doit être de type circulaire.\n"))
     
     if ((nom != NULL) && (strcmp(section->nom, nom) != 0))
     {
-        BUGMSG(!EF_sections_cherche_nom(projet, nom, FALSE), FALSE, gettext("La section %s existe déjà.\n"), nom);
+        BUGMSG(!EF_sections_cherche_nom(projet, nom, FALSE), FALSE, gettext("La section %s existe déjà.\n"), nom)
         free(section->nom);
-        BUGMSG(section->nom = g_strdup(nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-        BUG(EF_sections_repositionne(projet, section), FALSE);
+        BUGMSG(section->nom = g_strdup(nom), FALSE, gettext("Erreur d'allocation mémoire.\n"))
+        BUG(EF_sections_repositionne(projet, section), FALSE)
 #ifdef ENABLE_GTK
         gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section->Iter_liste, 0, section->nom, -1);
         if ((projet->list_gtk.ef_sections_circulaire.builder != NULL) && (projet->list_gtk.ef_sections_circulaire.section == section))
@@ -578,14 +578,14 @@ gboolean EF_sections_circulaire_modif(Projet *projet, EF_Section *section, const
         section_data->diametre = diametre;
         
         liste_sections = g_list_append(liste_sections, section);
-        BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, liste_sections, NULL, NULL, NULL, NULL, &liste_barres_dep, NULL, FALSE, FALSE), FALSE);
+        BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, liste_sections, NULL, NULL, NULL, NULL, &liste_barres_dep, NULL, FALSE, FALSE), FALSE)
         g_list_free(liste_sections);
         
         if (liste_barres_dep != NULL)
         {
 #ifdef ENABLE_GTK
-            BUG(m3d_actualise_graphique(projet, NULL, liste_barres_dep), FALSE);
-            BUG(m3d_rafraichit(projet), FALSE);
+            BUG(m3d_actualise_graphique(projet, NULL, liste_barres_dep), FALSE)
+            BUG(m3d_rafraichit(projet), FALSE)
 #endif
             BUG(EF_calculs_free(projet), FALSE);
             g_list_free(liste_barres_dep);
@@ -935,16 +935,16 @@ gboolean EF_sections_personnalisee_ajout(Projet *projet, const char* nom,
     Section_Personnalisee   *section_data;
     EF_Section              *section_nouvelle;
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(!EF_sections_cherche_nom(projet, nom, FALSE), FALSE, gettext("La section %s existe déjà.\n"), nom);
-    BUGMSG(EF_sections_personnalisee_verif_forme(forme), FALSE, gettext("La forme est incorrecte.\n"));
-    BUGMSG(section_nouvelle = malloc(sizeof(EF_Section)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-    BUGMSG(section_data = malloc(sizeof(Section_Personnalisee)), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(!EF_sections_cherche_nom(projet, nom, FALSE), FALSE, gettext("La section %s existe déjà.\n"), nom)
+    BUGMSG(EF_sections_personnalisee_verif_forme(forme), FALSE, gettext("La forme est incorrecte.\n"))
+    BUGMSG(section_nouvelle = malloc(sizeof(EF_Section)), FALSE, gettext("Erreur d'allocation mémoire.\n"))
+    BUGMSG(section_data = malloc(sizeof(Section_Personnalisee)), FALSE, gettext("Erreur d'allocation mémoire.\n"))
     section_nouvelle->data = section_data;
     
     section_nouvelle->type = SECTION_PERSONNALISEE;
-    BUGMSG(section_nouvelle->nom = g_strdup(nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-    BUGMSG(section_data->description = g_strdup(description), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+    BUGMSG(section_nouvelle->nom = g_strdup(nom), FALSE, gettext("Erreur d'allocation mémoire.\n"))
+    BUGMSG(section_data->description = g_strdup(description), FALSE, gettext("Erreur d'allocation mémoire.\n"))
     section_data->j = j;
     section_data->iy = iy;
     section_data->iz = iz;
@@ -955,7 +955,7 @@ gboolean EF_sections_personnalisee_ajout(Projet *projet, const char* nom,
     section_data->s = s;
     section_data->forme = forme;
     
-    BUG(EF_sections_insert(projet, section_nouvelle), FALSE);
+    BUG(EF_sections_insert(projet, section_nouvelle), FALSE)
     
     return TRUE;
 }
@@ -992,17 +992,17 @@ gboolean EF_sections_personnalisee_modif(Projet *projet, EF_Section *section, co
 {
     Section_Personnalisee   *section_data = section->data;
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(section, FALSE, gettext("Paramètre %s incorrect.\n"), "section");
-    BUGMSG(section->type == SECTION_PERSONNALISEE, FALSE, gettext("La section doit être de type personnalisée.\n"));
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(section, FALSE, gettext("Paramètre %s incorrect.\n"), "section")
+    BUGMSG(section->type == SECTION_PERSONNALISEE, FALSE, gettext("La section doit être de type personnalisée.\n"))
     
-    BUGMSG(EF_sections_personnalisee_verif_forme(forme), FALSE, gettext("La forme est incorrecte.\n"));
+    BUGMSG(EF_sections_personnalisee_verif_forme(forme), FALSE, gettext("La forme est incorrecte.\n"))
     if ((nom != NULL) && (strcmp(section->nom, nom) != 0))
     {
-        BUGMSG(!EF_sections_cherche_nom(projet, nom, FALSE), FALSE, gettext("La section %s existe déjà.\n"), nom);
+        BUGMSG(!EF_sections_cherche_nom(projet, nom, FALSE), FALSE, gettext("La section %s existe déjà.\n"), nom)
         free(section->nom);
-        BUGMSG(section->nom = g_strdup(nom), FALSE, gettext("Erreur d'allocation mémoire.\n"));
-        BUG(EF_sections_repositionne(projet, section), FALSE);
+        BUGMSG(section->nom = g_strdup(nom), FALSE, gettext("Erreur d'allocation mémoire.\n"))
+        BUG(EF_sections_repositionne(projet, section), FALSE)
 #ifdef ENABLE_GTK
         gtk_list_store_set(projet->list_gtk.ef_sections.liste_sections, &section->Iter_liste, 0, section->nom, -1);
         if ((projet->list_gtk.ef_sections_personnalisee.builder != NULL) && (projet->list_gtk.ef_sections_personnalisee.section == section))
@@ -1013,7 +1013,7 @@ gboolean EF_sections_personnalisee_modif(Projet *projet, EF_Section *section, co
     if ((description != NULL) && (strcmp(section_data->description, description) != 0))
     {
         free(section_data->description);
-        BUGMSG(section_data->description = g_strdup(description), FALSE, gettext("Erreur d'allocation mémoire.\n"));
+        BUGMSG(section_data->description = g_strdup(description), FALSE, gettext("Erreur d'allocation mémoire.\n"))
     }
     
     if ((!isnan(common_math_get(j))) && (!ERREUR_RELATIVE_EGALE(common_math_get(section_data->j), common_math_get(j))))
@@ -1060,7 +1060,7 @@ gboolean EF_sections_personnalisee_modif(Projet *projet, EF_Section *section, co
         GList   *liste_sections = NULL, *liste_barres_dep;
         
         liste_sections = g_list_append(liste_sections, section);
-        BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, liste_sections, NULL, NULL, NULL, NULL, &liste_barres_dep, NULL, FALSE, FALSE), FALSE);
+        BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, liste_sections, NULL, NULL, NULL, NULL, &liste_barres_dep, NULL, FALSE, FALSE), FALSE)
         g_list_free(liste_sections);
         
         if (liste_barres_dep != NULL)
@@ -1068,12 +1068,12 @@ gboolean EF_sections_personnalisee_modif(Projet *projet, EF_Section *section, co
 #ifdef ENABLE_GTK
             if (forme != NULL)
             {
-                BUG(m3d_actualise_graphique(projet, NULL, liste_barres_dep), FALSE);
-                BUG(m3d_rafraichit(projet), FALSE);
+                BUG(m3d_actualise_graphique(projet, NULL, liste_barres_dep), FALSE)
+                BUG(m3d_rafraichit(projet), FALSE)
             }
 #endif
             if ((forme == NULL) || (!isnan(common_math_get(j))) || (!isnan(common_math_get(iy))) || (!isnan(common_math_get(iz))) || (!isnan(common_math_get(vy))) || (!isnan(common_math_get(vyp))) || (!isnan(common_math_get(vz))) || (!isnan(common_math_get(vzp))) || (!isnan(common_math_get(s))))
-                BUG(EF_calculs_free(projet), FALSE);
+                BUG(EF_calculs_free(projet), FALSE)
             g_list_free(liste_barres_dep);
         }
     }
@@ -1092,7 +1092,7 @@ EF_Section* EF_sections_cherche_nom(Projet *projet, const char *nom, gboolean cr
  *               souhaité.
  * Paramètres : Projet *projet : la variable projet,
  *            : const char *nom : le nom de la section.
- *            : gboolean critique : TRUE si en cas d'echec, la fonction BUG est utilisée.
+ *            : gboolean critique : TRUE si en cas d'echec, la fonction BUG est utilisée
  * Valeur renvoyée :
  *   Succès : pointeur vers la section
  *   Échec : NULL :
@@ -1102,7 +1102,7 @@ EF_Section* EF_sections_cherche_nom(Projet *projet, const char *nom, gboolean cr
 {
     GList   *list_parcours;
     
-    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet")
     
     // Trivial
     list_parcours = projet->modele.sections;
@@ -1117,7 +1117,7 @@ EF_Section* EF_sections_cherche_nom(Projet *projet, const char *nom, gboolean cr
     }
     
     if (critique)
-        BUGMSG(0, NULL, gettext("Section '%s' introuvable.\n"), nom);
+        BUGMSG(0, NULL, gettext("Section '%s' introuvable.\n"), nom)
     else
         return NULL;
 }
@@ -1136,7 +1136,7 @@ char* EF_sections_get_description(EF_Section *sect)
 {
     char    *description;
     
-    BUGMSG(sect, NULL, gettext("Paramètre %s incorrect.\n"), "sect");
+    BUGMSG(sect, NULL, gettext("Paramètre %s incorrect.\n"), "sect")
     
     switch (sect->type)
     {
@@ -1147,7 +1147,7 @@ char* EF_sections_get_description(EF_Section *sect)
             
             common_math_double_to_char2(section->largeur_retombee, larg, DECIMAL_DISTANCE);
             common_math_double_to_char2(section->hauteur_retombee, haut, DECIMAL_DISTANCE);
-            BUGMSG(description = g_strdup_printf("%s : %s m, %s : %s m", gettext("Largeur"), larg, gettext("Hauteur"), haut), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(description = g_strdup_printf("%s : %s m, %s : %s m", gettext("Largeur"), larg, gettext("Hauteur"), haut), NULL, gettext("Erreur d'allocation mémoire.\n"))
             
             return description;
         }
@@ -1160,7 +1160,7 @@ char* EF_sections_get_description(EF_Section *sect)
             common_math_double_to_char2(section->largeur_retombee, larg_r, DECIMAL_DISTANCE);
             common_math_double_to_char2(section->hauteur_table, haut_t, DECIMAL_DISTANCE);
             common_math_double_to_char2(section->hauteur_retombee, haut_r, DECIMAL_DISTANCE);
-            BUGMSG(description = g_strdup_printf("%s : %s m, %s : %s m, %s : %s m, %s : %s m", gettext("Largeur table"), larg_t, gettext("Hauteur table"), haut_t, gettext("Largeur retombée"), larg_r, gettext("Hauteur retombée"), haut_r), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(description = g_strdup_printf("%s : %s m, %s : %s m, %s : %s m, %s : %s m", gettext("Largeur table"), larg_t, gettext("Hauteur table"), haut_t, gettext("Largeur retombée"), larg_r, gettext("Hauteur retombée"), haut_r), NULL, gettext("Erreur d'allocation mémoire.\n"))
             
             return description;
         }
@@ -1170,7 +1170,7 @@ char* EF_sections_get_description(EF_Section *sect)
             Section_T   *section = sect->data;
             
             common_math_double_to_char2(section->largeur_table, cote, DECIMAL_DISTANCE);
-            BUGMSG(description = g_strdup_printf("%s : %s m", gettext("Coté"), cote), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(description = g_strdup_printf("%s : %s m", gettext("Coté"), cote), NULL, gettext("Erreur d'allocation mémoire.\n"))
             
             return description;
         }
@@ -1180,7 +1180,7 @@ char* EF_sections_get_description(EF_Section *sect)
             Section_Circulaire *section = sect->data;
             
             common_math_double_to_char2(section->diametre, diam, DECIMAL_DISTANCE);
-            BUGMSG(description = g_strdup_printf("%s : %s m", gettext("Diamètre"), diam), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(description = g_strdup_printf("%s : %s m", gettext("Diamètre"), diam), NULL, gettext("Erreur d'allocation mémoire.\n"))
             
             return description;
         }
@@ -1188,13 +1188,13 @@ char* EF_sections_get_description(EF_Section *sect)
         {
             Section_Personnalisee   *section = sect->data;
             
-            BUGMSG(description = g_strdup(section->description), NULL, gettext("Erreur d'allocation mémoire.\n"));
+            BUGMSG(description = g_strdup(section->description), NULL, gettext("Erreur d'allocation mémoire.\n"))
             
             return description;
         }
         default :
         {
-            BUGMSG(0, NULL, gettext("Type de section %d inconnu.\n"), sect->type);
+            BUGMSG(0, NULL, gettext("Type de section %d inconnu.\n"), sect->type)
             break;
         }
     }
@@ -1218,12 +1218,12 @@ gboolean EF_sections_supprime(EF_Section *section, gboolean annule_si_utilise, P
 {
     GList   *liste_sections = NULL, *liste_barres_dep;
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(section, FALSE, gettext("Paramètre %s incorrect.\n"), "section");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(section, FALSE, gettext("Paramètre %s incorrect.\n"), "section")
     
     // On vérifie les dépendances.
     liste_sections = g_list_append(liste_sections, section);
-    BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, liste_sections, NULL, NULL, NULL, NULL, &liste_barres_dep, NULL, FALSE, FALSE), FALSE);
+    BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, liste_sections, NULL, NULL, NULL, NULL, &liste_barres_dep, NULL, FALSE, FALSE), FALSE)
     
     if ((annule_si_utilise) && (liste_barres_dep != NULL))
     {
@@ -1231,12 +1231,12 @@ gboolean EF_sections_supprime(EF_Section *section, gboolean annule_si_utilise, P
         
         liste = common_selection_converti_barres_en_texte(liste_barres_dep);
         if (g_list_next(liste_barres_dep) == NULL)
-            BUGMSG(NULL, FALSE, gettext("Impossible de supprimer la section car elle est utilisée par la barre %s.\n"), liste);
+            BUGMSG(NULL, FALSE, gettext("Impossible de supprimer la section car elle est utilisée par la barre %s.\n"), liste)
         else
-            BUGMSG(NULL, FALSE, gettext("Impossible de supprimer la section car elle est utilisée par les barres %s.\n"), liste);
+            BUGMSG(NULL, FALSE, gettext("Impossible de supprimer la section car elle est utilisée par les barres %s.\n"), liste)
     }
     
-    BUG(_1992_1_1_barres_supprime_liste(projet, NULL, liste_barres_dep), TRUE);
+    BUG(_1992_1_1_barres_supprime_liste(projet, NULL, liste_barres_dep), TRUE)
     g_list_free(liste_sections);
     g_list_free(liste_barres_dep);
     
@@ -1282,7 +1282,7 @@ gboolean EF_sections_supprime(EF_Section *section, gboolean annule_si_utilise, P
         }
         default :
         {
-            BUGMSG(0, FALSE, gettext("Type de section %d inconnu.\n"), section->type);
+            BUGMSG(0, FALSE, gettext("Type de section %d inconnu.\n"), section->type)
             break;
         }
     }
@@ -1304,7 +1304,7 @@ Flottant EF_sections_j(EF_Section* sect)
  *             type de section inconnu.
  */
 {
-    BUGMSG(sect, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Paramètre %s incorrect.\n"), "sect");
+    BUGMSG(sect, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Paramètre %s incorrect.\n"), "sect")
     
     switch (sect->type)
     {
@@ -1360,7 +1360,7 @@ Flottant EF_sections_j(EF_Section* sect)
         }
         default :
         {
-            BUGMSG(NULL, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Type de section %d inconnu.\n"), sect->type);
+            BUGMSG(NULL, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Type de section %d inconnu.\n"), sect->type)
             break;
         }
     }
@@ -1377,7 +1377,7 @@ Flottant EF_sections_iy(EF_Section* sect)
  *             type de section inconnu.
  */
 {
-    BUGMSG(sect, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Paramètre %s incorrect.\n"), "sect");
+    BUGMSG(sect, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Paramètre %s incorrect.\n"), "sect")
     
     switch (sect->type)
     {
@@ -1425,7 +1425,7 @@ Flottant EF_sections_iy(EF_Section* sect)
         }
         default :
         {
-            BUGMSG(NULL, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Type de section %d inconnu.\n"), sect->type);
+            BUGMSG(NULL, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Type de section %d inconnu.\n"), sect->type)
             break;
         }
     }
@@ -1442,7 +1442,7 @@ Flottant EF_sections_iz(EF_Section* sect)
  *             type de section inconnu.
  */
 {
-    BUGMSG(sect, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Paramètre %s incorrect.\n"), "sect");
+    BUGMSG(sect, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Paramètre %s incorrect.\n"), "sect")
     
     switch (sect->type)
     {
@@ -1484,7 +1484,7 @@ Flottant EF_sections_iz(EF_Section* sect)
         }
         default :
         {
-            BUGMSG(0, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Type de section %d inconnu.\n"), sect->type);
+            BUGMSG(0, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Type de section %d inconnu.\n"), sect->type)
             break;
         }
     }
@@ -1502,7 +1502,7 @@ Flottant EF_sections_vy(EF_Section* sect)
  *             type de section inconnu.
  */
 {
-    BUGMSG(sect, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Paramètre %s incorrect.\n"), "sect");
+    BUGMSG(sect, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Paramètre %s incorrect.\n"), "sect")
     
     switch (sect->type)
     {
@@ -1534,7 +1534,7 @@ Flottant EF_sections_vy(EF_Section* sect)
         }
         default :
         {
-            BUGMSG(0, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Type de section %d inconnu.\n"), sect->type);
+            BUGMSG(0, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Type de section %d inconnu.\n"), sect->type)
             break;
         }
     }
@@ -1552,7 +1552,7 @@ Flottant EF_sections_vyp(EF_Section* sect)
  *             type de section inconnu.
  */
 {
-    BUGMSG(sect, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Paramètre %s incorrect.\n"), "sect");
+    BUGMSG(sect, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Paramètre %s incorrect.\n"), "sect")
     
     switch (sect->type)
     {
@@ -1584,7 +1584,7 @@ Flottant EF_sections_vyp(EF_Section* sect)
         }
         default :
         {
-            BUGMSG(0, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Type de section %d inconnu.\n"), sect->type);
+            BUGMSG(0, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Type de section %d inconnu.\n"), sect->type)
             break;
         }
     }
@@ -1602,7 +1602,7 @@ Flottant EF_sections_vz(EF_Section* sect)
  *             type de section inconnu.
  */
 {
-    BUGMSG(sect, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Paramètre %s incorrect.\n"), "sect");
+    BUGMSG(sect, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Paramètre %s incorrect.\n"), "sect")
     
     switch (sect->type)
     {
@@ -1634,7 +1634,7 @@ Flottant EF_sections_vz(EF_Section* sect)
         }
         default :
         {
-            BUGMSG(0, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Type de section %d inconnu.\n"), sect->type);
+            BUGMSG(0, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Type de section %d inconnu.\n"), sect->type)
             break;
         }
     }
@@ -1652,7 +1652,7 @@ Flottant EF_sections_vzp(EF_Section* sect)
  *             type de section inconnu.
  */
 {
-    BUGMSG(sect, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Paramètre %s incorrect.\n"), "sect");
+    BUGMSG(sect, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Paramètre %s incorrect.\n"), "sect")
     
     switch (sect->type)
     {
@@ -1684,7 +1684,7 @@ Flottant EF_sections_vzp(EF_Section* sect)
         }
         default :
         {
-            BUGMSG(0, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Type de section %d inconnu.\n"), sect->type);
+            BUGMSG(0, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Type de section %d inconnu.\n"), sect->type)
             break;
         }
     }
@@ -1707,8 +1707,8 @@ double EF_sections_ay(EF_Barre *barre, unsigned int discretisation)
     double      ll;
     double      E;
     
-    BUGMSG(barre, NAN, gettext("Paramètre %s incorrect.\n"), "barre");
-    BUGMSG(discretisation<=barre->discretisation_element, NAN, gettext("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element);
+    BUGMSG(barre, NAN, gettext("Paramètre %s incorrect.\n"), "barre")
+    BUGMSG(discretisation<=barre->discretisation_element, NAN, gettext("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element)
     
     // Le coefficient a est défini par la formule :\end{verbatim}\begin{displaymath}
     // a_y = \frac{1}{l^2}\int_0^l \frac{(l-x)^2}{E \cdot I_y(x)} dx\end{displaymath}\begin{verbatim}
@@ -1723,9 +1723,9 @@ double EF_sections_ay(EF_Barre *barre, unsigned int discretisation)
         fin = g_list_nth_data(barre->noeuds_intermediaires, discretisation);
     
     ll = EF_noeuds_distance(fin, debut);
-    BUG(!isnan(ll), NAN);
+    BUG(!isnan(ll), NAN)
     E = common_math_get(EF_calculs_E(barre->materiau));
-    BUG(!isnan(E), NAN);
+    BUG(!isnan(E), NAN)
     
     return ll/(3.*E*common_math_get(EF_sections_iy(barre->section)));
 }
@@ -1747,8 +1747,8 @@ double EF_sections_by(EF_Barre *barre, unsigned int discretisation)
     double      ll;
     double      E;
     
-    BUGMSG(barre, NAN, gettext("Paramètre %s incorrect.\n"), "barre");
-    BUGMSG(discretisation<=barre->discretisation_element, NAN, gettext("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element);
+    BUGMSG(barre, NAN, gettext("Paramètre %s incorrect.\n"), "barre")
+    BUGMSG(discretisation<=barre->discretisation_element, NAN, gettext("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element)
     
     // Le coefficient b est défini par la formule :\end{verbatim}\begin{displaymath}
     // b_y = \frac{1}{l^2}\int_0^l \frac{x \cdot (l-x)^2}{E \cdot I_y(x)} dx\end{displaymath}\begin{verbatim}
@@ -1763,9 +1763,9 @@ double EF_sections_by(EF_Barre *barre, unsigned int discretisation)
         fin = g_list_nth_data(barre->noeuds_intermediaires, discretisation);
     
     ll = EF_noeuds_distance(fin, debut);
-    BUG(!isnan(ll), NAN);
+    BUG(!isnan(ll), NAN)
     E = common_math_get(EF_calculs_E(barre->materiau));
-    BUG(!isnan(E), NAN);
+    BUG(!isnan(E), NAN)
     
     return ll/(6.*E*common_math_get(EF_sections_iy(barre->section)));
 }
@@ -1787,8 +1787,8 @@ double EF_sections_cy(EF_Barre *barre, unsigned int discretisation)
     double      ll;
     double      E;
     
-    BUGMSG(barre, NAN, gettext("Paramètre %s incorrect.\n"), "barre");
-    BUGMSG(discretisation<=barre->discretisation_element, NAN, gettext("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element);
+    BUGMSG(barre, NAN, gettext("Paramètre %s incorrect.\n"), "barre")
+    BUGMSG(discretisation<=barre->discretisation_element, NAN, gettext("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element)
     
     // Le coefficient c est défini par la formule :\end{verbatim}\begin{displaymath}
     // c_y = \frac{1}{l^2}\int_0^l \frac{x^2}{E \cdot I_y(x)} dx\end{displaymath}\begin{verbatim}
@@ -1803,9 +1803,9 @@ double EF_sections_cy(EF_Barre *barre, unsigned int discretisation)
         fin = g_list_nth_data(barre->noeuds_intermediaires, discretisation);
     
     ll = EF_noeuds_distance(fin, debut);
-    BUG(!isnan(ll), NAN);
+    BUG(!isnan(ll), NAN)
     E = common_math_get(EF_calculs_E(barre->materiau));
-    BUG(!isnan(E), NAN);
+    BUG(!isnan(E), NAN)
     
     return ll/(3.*E*common_math_get(EF_sections_iy(barre->section)));
 }
@@ -1827,8 +1827,8 @@ double EF_sections_az(EF_Barre *barre, unsigned int discretisation)
     double      ll;
     double      E;
     
-    BUGMSG(barre, NAN, gettext("Paramètre %s incorrect.\n"), "barre");
-    BUGMSG(discretisation<=barre->discretisation_element, NAN, gettext("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element);
+    BUGMSG(barre, NAN, gettext("Paramètre %s incorrect.\n"), "barre")
+    BUGMSG(discretisation<=barre->discretisation_element, NAN, gettext("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element)
     
     // Le coefficient a est défini par la formule :\end{verbatim}\begin{displaymath}
     // a_z = \frac{1}{l^2}\int_0^l \frac{(l-x)^2}{E \cdot I_z(x)} dx\end{displaymath}\begin{verbatim}
@@ -1843,9 +1843,9 @@ double EF_sections_az(EF_Barre *barre, unsigned int discretisation)
         fin = g_list_nth_data(barre->noeuds_intermediaires, discretisation);
     
     ll = EF_noeuds_distance(fin, debut);
-    BUG(!isnan(ll), NAN);
+    BUG(!isnan(ll), NAN)
     E = common_math_get(EF_calculs_E(barre->materiau));
-    BUG(!isnan(E), NAN);
+    BUG(!isnan(E), NAN)
     
     return ll/(3.*E*common_math_get(EF_sections_iz(barre->section)));
 }
@@ -1867,8 +1867,8 @@ double EF_sections_bz(EF_Barre *barre, unsigned int discretisation)
     double      ll;
     double      E;
     
-    BUGMSG(barre, NAN, gettext("Paramètre %s incorrect.\n"), "barre");
-    BUGMSG(discretisation<=barre->discretisation_element, NAN, gettext("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element);
+    BUGMSG(barre, NAN, gettext("Paramètre %s incorrect.\n"), "barre")
+    BUGMSG(discretisation<=barre->discretisation_element, NAN, gettext("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element)
     
     // Le coefficient b est défini par la formule :\end{verbatim}\begin{displaymath}
     // b_z = \frac{1}{l^2}\int_0^l \frac{x \cdot (l-x)^2}{E \cdot I_z(x)} dx\end{displaymath}\begin{verbatim}
@@ -1883,9 +1883,9 @@ double EF_sections_bz(EF_Barre *barre, unsigned int discretisation)
         fin = g_list_nth_data(barre->noeuds_intermediaires, discretisation);
     
     ll = EF_noeuds_distance(fin, debut);
-    BUG(!isnan(ll), NAN);
+    BUG(!isnan(ll), NAN)
     E = common_math_get(EF_calculs_E(barre->materiau));
-    BUG(!isnan(E), NAN);
+    BUG(!isnan(E), NAN)
     
     return ll/(6.*E*common_math_get(EF_sections_iz(barre->section)));
 }
@@ -1907,8 +1907,8 @@ double EF_sections_cz(EF_Barre *barre, unsigned int discretisation)
     double      ll;
     double      E;
     
-    BUGMSG(barre, NAN, gettext("Paramètre %s incorrect.\n"), "barre");
-    BUGMSG(discretisation<=barre->discretisation_element, NAN, gettext("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element);
+    BUGMSG(barre, NAN, gettext("Paramètre %s incorrect.\n"), "barre")
+    BUGMSG(discretisation<=barre->discretisation_element, NAN, gettext("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element)
     
     // Le coefficient c est défini par la formule :\end{verbatim}\begin{displaymath}
     // c_z = \frac{1}{l^2}\int_0^l \frac{x^2}{E \cdot I_y(x)} dx\end{displaymath}\begin{verbatim}
@@ -1923,9 +1923,9 @@ double EF_sections_cz(EF_Barre *barre, unsigned int discretisation)
         fin = g_list_nth_data(barre->noeuds_intermediaires, discretisation);
     
     ll = EF_noeuds_distance(fin, debut);
-    BUG(!isnan(ll), NAN);
+    BUG(!isnan(ll), NAN)
     E = common_math_get(EF_calculs_E(barre->materiau));
-    BUG(!isnan(E), NAN);
+    BUG(!isnan(E), NAN)
     
     return ll/(3.*E*common_math_get(EF_sections_iz(barre->section)));
 }
@@ -1941,7 +1941,7 @@ Flottant EF_sections_s(EF_Section *sect)
  *             type de section inconnue.
  */
 {
-    BUGMSG(sect, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Paramètre %s incorrect.\n"), "sect");
+    BUGMSG(sect, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Paramètre %s incorrect.\n"), "sect")
     
     switch (sect->type)
     {
@@ -1978,7 +1978,7 @@ Flottant EF_sections_s(EF_Section *sect)
         }
         default :
         {
-            BUGMSG(0, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Type de section %d inconnu.\n"), sect->type);
+            BUGMSG(0, common_math_f(NAN, FLOTTANT_ORDINATEUR), gettext("Type de section %d inconnu.\n"), sect->type)
             break;
         }
     }
@@ -2000,9 +2000,9 @@ double EF_sections_es_l(EF_Barre *barre, unsigned int discretisation, double d, 
  *             type de section inconnue.
  */
 {
-    BUGMSG(barre, NAN, gettext("Paramètre %s incorrect.\n"), "barre");
-    BUGMSG(discretisation<=barre->discretisation_element, NAN, gettext("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element);
-    BUGMSG(!((d>f) && (!(ERREUR_RELATIVE_EGALE(d, f)))), NAN, gettext("\n"));
+    BUGMSG(barre, NAN, gettext("Paramètre %s incorrect.\n"), "barre")
+    BUGMSG(discretisation<=barre->discretisation_element, NAN, gettext("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element)
+    BUGMSG(!((d>f) && (!(ERREUR_RELATIVE_EGALE(d, f)))), NAN, gettext("\n"))
     
     // Le facteur ES/L est défini par la formule :\end{verbatim}\begin{displaymath}
     // \frac{E \cdot S}{L} = \frac{E}{\int_d^f \frac{1}{S(x)} dx}\end{displaymath}\begin{verbatim}
@@ -2026,8 +2026,8 @@ double EF_sections_gj_l(EF_Barre *barre, unsigned int discretisation)
     EF_Noeud    *debut, *fin;
     double      ll;
     
-    BUGMSG(barre, NAN, gettext("Paramètre %s incorrect.\n"), "barre");
-    BUGMSG(discretisation<=barre->discretisation_element, NAN, gettext("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element);
+    BUGMSG(barre, NAN, gettext("Paramètre %s incorrect.\n"), "barre")
+    BUGMSG(discretisation<=barre->discretisation_element, NAN, gettext("La discrétisation %d souhaitée est hors domaine %d.\n"), discretisation, barre->discretisation_element)
     
     // Le facteur GJ/L est défini par la formule :\end{verbatim}\begin{displaymath}
     // \frac{G \cdot J}{L} = \frac{G}{\int_0^l \frac{1}{J(x)} dx}\end{displaymath}\begin{verbatim}
@@ -2042,7 +2042,7 @@ double EF_sections_gj_l(EF_Barre *barre, unsigned int discretisation)
         fin = g_list_nth_data(barre->noeuds_intermediaires, discretisation);
     
     ll = EF_noeuds_distance(fin, debut);
-    BUG(!isnan(ll), NAN);
+    BUG(!isnan(ll), NAN)
     
     return common_math_get(EF_calculs_G(barre->materiau, FALSE))*common_math_get(EF_sections_j(barre->section))/ll;
 }
@@ -2073,7 +2073,7 @@ void EF_sections_free_un(EF_Section *section)
         }
         default :
         {
-            BUGMSG(0, , gettext("Type de section %d inconnu.\n"), section->type);
+            BUGMSG(0, , gettext("Type de section %d inconnu.\n"), section->type)
             break;
         }
     }
@@ -2093,7 +2093,7 @@ gboolean EF_sections_free(Projet *projet)
  *             projet == NULL.
  */
 {
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
     
     // Trivial
     if (projet->modele.sections != NULL)
@@ -2102,7 +2102,7 @@ gboolean EF_sections_free(Projet *projet)
         projet->modele.sections = NULL;
     }
     
-    BUG(EF_calculs_free(projet), FALSE);
+    BUG(EF_calculs_free(projet), FALSE)
     
 #ifdef ENABLE_GTK
     g_object_unref(projet->list_gtk.ef_sections.liste_sections);

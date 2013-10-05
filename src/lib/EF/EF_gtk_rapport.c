@@ -37,8 +37,8 @@ void EF_gtk_rapport_fermer(GtkButton *button, Projet *projet)
  * Valeur renvoyée : Aucune.
  */
 {
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_rapport.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Appui");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_rapport.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Appui")
     
     gtk_widget_destroy(projet->list_gtk.ef_rapport.window);
     
@@ -53,8 +53,8 @@ void EF_gtk_rapport_window_destroy(GtkWidget *object, Projet *projet)
  * Valeur renvoyée : Aucune.
  */
 {
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_rapport.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Rapport");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_rapport.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Rapport")
     
     g_object_unref(G_OBJECT(projet->list_gtk.ef_rapport.builder));
     projet->list_gtk.ef_rapport.builder = NULL;
@@ -74,8 +74,8 @@ gboolean EF_gtk_rapport_window_key_press(GtkWidget *widget, GdkEvent *event, Pro
  *  
  */
 {
-    BUGMSG(projet, TRUE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_rapport.builder, TRUE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Rapport");
+    BUGMSG(projet, TRUE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_rapport.builder, TRUE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Rapport")
     
     if (event->key.keyval == GDK_KEY_Escape)
     {
@@ -98,7 +98,7 @@ void EF_gtk_rapport(Projet *projet, GList *rapport)
     Gtk_EF_Rapport  *ef_gtk;
     GList           *list_parcours;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
     
     ef_gtk = &projet->list_gtk.ef_rapport;
     
@@ -111,7 +111,7 @@ void EF_gtk_rapport(Projet *projet, GList *rapport)
     {
         
         ef_gtk->builder = gtk_builder_new();
-        BUGMSG(gtk_builder_add_from_resource(ef_gtk->builder, "/org/2lgc/codegui/ui/EF_rapport.ui", NULL) != 0, , gettext("Builder Failed\n"));
+        BUGMSG(gtk_builder_add_from_resource(ef_gtk->builder, "/org/2lgc/codegui/ui/EF_rapport.ui", NULL) != 0, , gettext("Builder Failed\n"))
         gtk_builder_connect_signals(ef_gtk->builder, projet);
         
         ef_gtk->window = GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder, "EF_rapport_window"));
@@ -133,7 +133,7 @@ void EF_gtk_rapport(Projet *projet, GList *rapport)
         else if (analyse->resultat == 2)
             pixbuf = gtk_widget_render_icon_pixbuf(ef_gtk->window, GTK_STOCK_DIALOG_ERROR, GTK_ICON_SIZE_MENU);
         else
-            BUGMSG(NULL, , gettext("Le résultat d'un rapport doit être compris entre 0 et 2.\n"));
+            BUGMSG(NULL, , gettext("Le résultat d'un rapport doit être compris entre 0 et 2.\n"))
         
         gtk_list_store_append(ef_gtk->liste, &Iter);
         gtk_list_store_set(ef_gtk->liste, &Iter, 0, pixbuf, 1, analyse->analyse, 2, analyse->commentaire, -1);

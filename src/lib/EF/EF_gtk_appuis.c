@@ -41,8 +41,8 @@ void EF_gtk_appuis_fermer(GtkButton *button, Projet *projet)
  * Valeur renvoyée : Aucune.
  */
 {
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_appuis.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Appui");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_appuis.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Appui")
     
     gtk_widget_destroy(projet->list_gtk.ef_appuis.window);
     
@@ -57,8 +57,8 @@ void EF_gtk_appuis_window_destroy(GtkWidget *object, Projet *projet)
  * Valeur renvoyée : Aucune.
  */
 {
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_appuis.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Appui");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_appuis.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Appui")
     
     g_object_unref(G_OBJECT(projet->list_gtk.ef_appuis.builder));
     projet->list_gtk.ef_appuis.builder = NULL;
@@ -78,8 +78,8 @@ gboolean EF_gtk_appuis_window_key_press(GtkWidget *widget, GdkEvent *event, Proj
  *  
  */
 {
-    BUGMSG(projet, TRUE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_appuis.builder, TRUE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Appui");
+    BUGMSG(projet, TRUE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_appuis.builder, TRUE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Appui")
     
     if (event->key.keyval == GDK_KEY_Escape)
     {
@@ -102,11 +102,11 @@ void EF_gtk_appuis_ajouter(GtkButton *button, Projet *projet)
     GtkTreePath *path;
     GtkTreeModel *model;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_appuis.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Appui");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_appuis.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Appui")
     
     if (EF_appuis_cherche_nom(projet, gettext("Sans nom"), FALSE) == NULL)
-        BUG(appui = EF_appuis_ajout(projet, gettext("Sans nom"), EF_APPUI_LIBRE, EF_APPUI_LIBRE, EF_APPUI_LIBRE, EF_APPUI_LIBRE, EF_APPUI_LIBRE, EF_APPUI_LIBRE), );
+        BUG(appui = EF_appuis_ajout(projet, gettext("Sans nom"), EF_APPUI_LIBRE, EF_APPUI_LIBRE, EF_APPUI_LIBRE, EF_APPUI_LIBRE, EF_APPUI_LIBRE, EF_APPUI_LIBRE), )
     else
     {
         char    *nom;
@@ -119,7 +119,7 @@ void EF_gtk_appuis_ajouter(GtkButton *button, Projet *projet)
             free(nom);
             nom = g_strdup_printf("%s (%d)", gettext("Sans nom"), i);
         }
-        BUG(appui = EF_appuis_ajout(projet, nom, EF_APPUI_LIBRE, EF_APPUI_LIBRE, EF_APPUI_LIBRE, EF_APPUI_LIBRE, EF_APPUI_LIBRE, EF_APPUI_LIBRE), );
+        BUG(appui = EF_appuis_ajout(projet, nom, EF_APPUI_LIBRE, EF_APPUI_LIBRE, EF_APPUI_LIBRE, EF_APPUI_LIBRE, EF_APPUI_LIBRE, EF_APPUI_LIBRE), )
         free(nom);
     }
     
@@ -141,17 +141,17 @@ void EF_gtk_appuis_supprimer(GtkButton *button, Projet *projet)
     GtkTreeModel    *model;
     EF_Appui        *appui;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_appuis.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Appui");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_appuis.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Appui")
     
     if (!gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_treeview_select")), &model, &iter))
         return;
     
     gtk_tree_model_get(model, &iter, 0, &appui, -1);
     
-    BUG(EF_appuis_supprime(appui, TRUE, FALSE, projet), );
+    BUG(EF_appuis_supprime(appui, TRUE, FALSE, projet), )
     
-    BUG(m3d_rafraichit(projet), );
+    BUG(m3d_rafraichit(projet), )
     
     return;
 }
@@ -168,8 +168,8 @@ gboolean EF_gtk_appuis_treeview_key_press(GtkWidget *widget, GdkEvent *event, Pr
  *  
  */
 {
-    BUGMSG(projet, TRUE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_appuis.builder, TRUE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Appui");
+    BUGMSG(projet, TRUE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_appuis.builder, TRUE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Appui")
     
     if (event->key.keyval == GDK_KEY_Delete)
     {
@@ -209,17 +209,17 @@ void EF_gtk_appuis_supprimer_menu_suppr_noeud(GtkButton *button, Projet *projet)
     GtkTreeModel    *model;
     EF_Appui        *appui;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_appuis.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Appui");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_appuis.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Appui")
     
     if (!gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_treeview_select")), &model, &iter))
         return;
     
     gtk_tree_model_get(model, &iter, 0, &appui, -1);
     
-    BUG(EF_appuis_supprime(appui, FALSE, TRUE, projet), );
+    BUG(EF_appuis_supprime(appui, FALSE, TRUE, projet), )
     
-    BUG(m3d_rafraichit(projet), );
+    BUG(m3d_rafraichit(projet), )
     
     return;
 }
@@ -237,15 +237,15 @@ void EF_gtk_appuis_supprimer_menu_modif_noeud(GtkButton *button, Projet *projet)
     GtkTreeModel    *model;
     EF_Appui        *appui;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_appuis.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Appui");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_appuis.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Appui")
     
     if (!gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_treeview_select")), &model, &iter))
         return;
     
     gtk_tree_model_get(model, &iter, 0, &appui, -1);
     
-    BUG(EF_appuis_supprime(appui, FALSE, FALSE, projet), );
+    BUG(EF_appuis_supprime(appui, FALSE, FALSE, projet), )
     
     return;
 }
@@ -268,8 +268,8 @@ void EF_gtk_appuis_edit_type(GtkCellRendererText *cell, gchar *path_string, gcha
     EF_Appui        *appui;
     int             column = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(cell), "column"));
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_appuis.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Appui");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_appuis.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Appui")
     
     ef_gtk = &projet->list_gtk.ef_appuis;
     model = GTK_TREE_MODEL(ef_gtk->appuis);
@@ -279,11 +279,11 @@ void EF_gtk_appuis_edit_type(GtkCellRendererText *cell, gchar *path_string, gcha
     gtk_tree_model_get(model, &iter, 0, &appui, -1);
 
     if (strcmp(new_text, gettext("Libre")) == 0)
-        BUG(EF_appuis_edit(appui, column-1, EF_APPUI_LIBRE, projet), );
+        BUG(EF_appuis_edit(appui, column-1, EF_APPUI_LIBRE, projet), )
     else if (strcmp(new_text, gettext("Bloqué")) == 0)
-        BUG(EF_appuis_edit(appui, column-1, EF_APPUI_BLOQUE, projet), );
+        BUG(EF_appuis_edit(appui, column-1, EF_APPUI_BLOQUE, projet), )
     else
-        BUGMSG(NULL, , gettext("Type d'appui %s inconnu.\n"), new_text);
+        BUGMSG(NULL, , gettext("Type d'appui %s inconnu.\n"), new_text)
     
     return;
 }
@@ -305,8 +305,8 @@ void EF_gtk_appuis_edit_nom(GtkCellRendererText *cell, gchar *path_string, gchar
     GtkTreePath     *path;
     EF_Appui        *appui;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_appuis.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Appui");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_appuis.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Appui")
     
     ef_gtk = &projet->list_gtk.ef_appuis;
     model = GTK_TREE_MODEL(ef_gtk->appuis);
@@ -336,8 +336,8 @@ void EF_gtk_appuis_select_changed(GtkTreeSelection *treeselection, Projet *proje
     GtkTreeModel    *model;
     GtkTreeIter     Iter;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_appuis.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Appui");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_appuis.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Appui")
     
     // Si aucun appui n'est sélectionné, il n'est pas possible d'en supprimer un.
     if (!gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_treeview_select")), &model, &Iter))
@@ -391,16 +391,16 @@ void EF_gtk_appuis_boutton_supprimer_menu(GtkButton *widget, Projet *projet)
     EF_Appui        *appui;
     GList           *liste_appuis = NULL, *liste_noeuds_dep, *liste_barres_dep, *liste_charges_dep;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_appuis.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Appui");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_appuis.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Appui")
     
     if (!gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_appuis.builder, "EF_appuis_treeview_select")), &model, &Iter))
-        BUGMSG(NULL, , gettext("Aucun élément n'est sélectionné.\n"));
+        BUGMSG(NULL, , gettext("Aucun élément n'est sélectionné.\n"))
     
     gtk_tree_model_get(model, &Iter, 0, &appui, -1);
     
     liste_appuis = g_list_append(liste_appuis, appui);
-    BUG(_1992_1_1_barres_cherche_dependances(projet, liste_appuis, NULL, NULL, NULL, NULL, NULL, &liste_noeuds_dep, &liste_barres_dep, &liste_charges_dep, FALSE, FALSE), );
+    BUG(_1992_1_1_barres_cherche_dependances(projet, liste_appuis, NULL, NULL, NULL, NULL, NULL, &liste_noeuds_dep, &liste_barres_dep, &liste_charges_dep, FALSE, FALSE), )
     g_list_free(liste_appuis);
     
     if ((liste_noeuds_dep != NULL) || (liste_barres_dep != NULL) || (liste_charges_dep != NULL))
@@ -412,7 +412,7 @@ void EF_gtk_appuis_boutton_supprimer_menu(GtkButton *widget, Projet *projet)
         free(desc);
     }
     else
-        BUGMSG(NULL, , gettext("L'élément ne possède aucune dépendance.\n"));
+        BUGMSG(NULL, , gettext("L'élément ne possède aucune dépendance.\n"))
     
     g_list_free(liste_noeuds_dep);
     g_list_free(liste_barres_dep);
@@ -462,18 +462,18 @@ void EF_gtk_appuis_render_1(GtkTreeViewColumn *tree_column, GtkCellRenderer *cel
         case EF_APPUI_LIBRE :
         {
             txt = gettext("Libre");
-            BUGMSG(appui->ux_donnees == NULL, , gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "ux", gettext("Libre"));
+            BUGMSG(appui->ux_donnees == NULL, , gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "ux", gettext("Libre"))
             break;
         }
         case EF_APPUI_BLOQUE :
         {
             txt = gettext("Bloqué");
-            BUGMSG(appui->ux_donnees == NULL, , gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "ux", gettext("Bloqué"));
+            BUGMSG(appui->ux_donnees == NULL, , gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "ux", gettext("Bloqué"))
             break;
         }
         default :
         {
-            BUGMSG(NULL, , gettext("Le type d'appui de %s (%d) est inconnu.\n"), "ux", appui->ux);
+            BUGMSG(NULL, , gettext("Le type d'appui de %s (%d) est inconnu.\n"), "ux", appui->ux)
         }
     }
     
@@ -502,18 +502,18 @@ void EF_gtk_appuis_render_2(GtkTreeViewColumn *tree_column, GtkCellRenderer *cel
         case EF_APPUI_LIBRE :
         {
             txt = gettext("Libre");
-            BUGMSG(appui->uy_donnees == NULL, , gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "uy", gettext("Libre"));
+            BUGMSG(appui->uy_donnees == NULL, , gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "uy", gettext("Libre"))
             break;
         }
         case EF_APPUI_BLOQUE :
         {
             txt = gettext("Bloqué");
-            BUGMSG(appui->uy_donnees == NULL, , gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "uy", gettext("Bloqué"));
+            BUGMSG(appui->uy_donnees == NULL, , gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "uy", gettext("Bloqué"))
             break;
         }
         default :
         {
-            BUGMSG(NULL, , gettext("Le type d'appui de %s (%d) est inconnu.\n"), "ux", appui->uy);
+            BUGMSG(NULL, , gettext("Le type d'appui de %s (%d) est inconnu.\n"), "ux", appui->uy)
         }
     }
     
@@ -542,18 +542,18 @@ void EF_gtk_appuis_render_3(GtkTreeViewColumn *tree_column, GtkCellRenderer *cel
         case EF_APPUI_LIBRE :
         {
             txt = gettext("Libre");
-            BUGMSG(appui->uz_donnees == NULL, , gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "uz", gettext("Libre"));
+            BUGMSG(appui->uz_donnees == NULL, , gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "uz", gettext("Libre"))
             break;
         }
         case EF_APPUI_BLOQUE :
         {
             txt = gettext("Bloqué");
-            BUGMSG(appui->uz_donnees == NULL, , gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "uz", gettext("Bloqué"));
+            BUGMSG(appui->uz_donnees == NULL, , gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "uz", gettext("Bloqué"))
             break;
         }
         default :
         {
-            BUGMSG(NULL, , gettext("Le type d'appui de %s (%d) est inconnu.\n"), "ux", appui->uz);
+            BUGMSG(NULL, , gettext("Le type d'appui de %s (%d) est inconnu.\n"), "ux", appui->uz)
         }
     }
     
@@ -582,18 +582,18 @@ void EF_gtk_appuis_render_4(GtkTreeViewColumn *tree_column, GtkCellRenderer *cel
         case EF_APPUI_LIBRE :
         {
             txt = gettext("Libre");
-            BUGMSG(appui->rx_donnees == NULL, , gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "rx", gettext("Libre"));
+            BUGMSG(appui->rx_donnees == NULL, , gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "rx", gettext("Libre"))
             break;
         }
         case EF_APPUI_BLOQUE :
         {
             txt = gettext("Bloqué");
-            BUGMSG(appui->rx_donnees == NULL, , gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "rx", gettext("Bloqué"));
+            BUGMSG(appui->rx_donnees == NULL, , gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "rx", gettext("Bloqué"))
             break;
         }
         default :
         {
-            BUGMSG(NULL, , gettext("Le type d'appui de %s (%d) est inconnu.\n"), "rx", appui->rx);
+            BUGMSG(NULL, , gettext("Le type d'appui de %s (%d) est inconnu.\n"), "rx", appui->rx)
         }
     }
     
@@ -622,18 +622,18 @@ void EF_gtk_appuis_render_5(GtkTreeViewColumn *tree_column, GtkCellRenderer *cel
         case EF_APPUI_LIBRE :
         {
             txt = gettext("Libre");
-            BUGMSG(appui->ry_donnees == NULL, , gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "ry", gettext("Libre"));
+            BUGMSG(appui->ry_donnees == NULL, , gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "ry", gettext("Libre"))
             break;
         }
         case EF_APPUI_BLOQUE :
         {
             txt = gettext("Bloqué");
-            BUGMSG(appui->ry_donnees == NULL, , gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "ry", gettext("Bloqué"));
+            BUGMSG(appui->ry_donnees == NULL, , gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "ry", gettext("Bloqué"))
             break;
         }
         default :
         {
-            BUGMSG(NULL, , gettext("Le type d'appui de %s (%d) est inconnu.\n"), "ry", appui->ry);
+            BUGMSG(NULL, , gettext("Le type d'appui de %s (%d) est inconnu.\n"), "ry", appui->ry)
         }
     }
     
@@ -662,18 +662,18 @@ void EF_gtk_appuis_render_6(GtkTreeViewColumn *tree_column, GtkCellRenderer *cel
         case EF_APPUI_LIBRE :
         {
             txt = gettext("Libre");
-            BUGMSG(appui->rz_donnees == NULL, , gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "rz", gettext("Libre"));
+            BUGMSG(appui->rz_donnees == NULL, , gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "rz", gettext("Libre"))
             break;
         }
         case EF_APPUI_BLOQUE :
         {
             txt = gettext("Bloqué");
-            BUGMSG(appui->rz_donnees == NULL, , gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "rz", gettext("Bloqué"));
+            BUGMSG(appui->rz_donnees == NULL, , gettext("Le type d'appui de %s (%s) n'a pas à posséder de données.\n"), "rz", gettext("Bloqué"))
             break;
         }
         default :
         {
-            BUGMSG(NULL, , gettext("Le type d'appui de %s (%d) est inconnu.\n"), "rz", appui->rz);
+            BUGMSG(NULL, , gettext("Le type d'appui de %s (%d) est inconnu.\n"), "rz", appui->rz)
         }
     }
     
@@ -693,7 +693,7 @@ void EF_gtk_appuis(Projet *projet)
     Gtk_EF_Appuis   *ef_gtk;
     GList           *list_parcours;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
     if (projet->list_gtk.ef_appuis.builder != NULL)
     {
         gtk_window_present(GTK_WINDOW(projet->list_gtk.ef_appuis.window));
@@ -703,7 +703,7 @@ void EF_gtk_appuis(Projet *projet)
     ef_gtk = &projet->list_gtk.ef_appuis;
     
     ef_gtk->builder = gtk_builder_new();
-    BUGMSG(gtk_builder_add_from_resource(ef_gtk->builder, "/org/2lgc/codegui/ui/EF_appuis.ui", NULL) != 0, , gettext("Builder Failed\n"));
+    BUGMSG(gtk_builder_add_from_resource(ef_gtk->builder, "/org/2lgc/codegui/ui/EF_appuis.ui", NULL) != 0, , gettext("Builder Failed\n"))
     gtk_builder_connect_signals(ef_gtk->builder, projet);
     
     ef_gtk->window = GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder, "EF_appuis_window"));

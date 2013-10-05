@@ -46,8 +46,8 @@ gboolean _1992_1_1_gtk_materiaux_window_key_press(GtkWidget *widget, GdkEvent *e
  *             interface graphique non initialisée.
  */
 {
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk._1992_1_1_materiaux.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Matériau Béton");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk._1992_1_1_materiaux.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Matériau Béton")
     
     if (event->key.keyval == GDK_KEY_Escape)
     {
@@ -67,8 +67,8 @@ void _1992_1_1_gtk_materiaux_window_destroy(GtkWidget *object, Projet *projet)
  * Valeur renvoyée : Aucune.
  */
 {
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk._1992_1_1_materiaux.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Matériau Béton");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk._1992_1_1_materiaux.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Matériau Béton")
     
     g_object_unref(G_OBJECT(projet->list_gtk._1992_1_1_materiaux.builder));
     projet->list_gtk._1992_1_1_materiaux.builder = NULL;
@@ -98,24 +98,24 @@ gboolean _1992_1_1_gtk_materiaux_recupere_donnees(Projet *projet, char **nom, do
     gboolean        ok = TRUE;
     GtkBuilder      *builder;
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(nom, FALSE, gettext("Paramètre %s incorrect.\n"), "nom");
-    BUGMSG(fck, FALSE, gettext("Paramètre %s incorrect.\n"), "fck");
-    BUGMSG(fckcube, FALSE, gettext("Paramètre %s incorrect.\n"), "fckcube");
-    BUGMSG(fcm, FALSE, gettext("Paramètre %s incorrect.\n"), "fcm");
-    BUGMSG(fctm, FALSE, gettext("Paramètre %s incorrect.\n"), "fctm");
-    BUGMSG(fctk_0_05, FALSE, gettext("Paramètre %s incorrect.\n"), "fctk_0_05");
-    BUGMSG(fctk_0_95, FALSE, gettext("Paramètre %s incorrect.\n"), "fctk_0_95");
-    BUGMSG(ecm, FALSE, gettext("Paramètre %s incorrect.\n"), "ecm");
-    BUGMSG(ec1, FALSE, gettext("Paramètre %s incorrect.\n"), "ec1");
-    BUGMSG(ecu1, FALSE, gettext("Paramètre %s incorrect.\n"), "ecu1");
-    BUGMSG(ec2, FALSE, gettext("Paramètre %s incorrect.\n"), "ec2");
-    BUGMSG(ecu2, FALSE, gettext("Paramètre %s incorrect.\n"), "ecu2");
-    BUGMSG(n, FALSE, gettext("Paramètre %s incorrect.\n"), "n");
-    BUGMSG(ec3, FALSE, gettext("Paramètre %s incorrect.\n"), "ec3");
-    BUGMSG(ecu3, FALSE, gettext("Paramètre %s incorrect.\n"), "ecu3");
-    BUGMSG(nu, FALSE, gettext("Paramètre %s incorrect.\n"), "nu");
-    BUGMSG(projet->list_gtk._1992_1_1_materiaux.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Matériau Béton");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(nom, FALSE, gettext("Paramètre %s incorrect.\n"), "nom")
+    BUGMSG(fck, FALSE, gettext("Paramètre %s incorrect.\n"), "fck")
+    BUGMSG(fckcube, FALSE, gettext("Paramètre %s incorrect.\n"), "fckcube")
+    BUGMSG(fcm, FALSE, gettext("Paramètre %s incorrect.\n"), "fcm")
+    BUGMSG(fctm, FALSE, gettext("Paramètre %s incorrect.\n"), "fctm")
+    BUGMSG(fctk_0_05, FALSE, gettext("Paramètre %s incorrect.\n"), "fctk_0_05")
+    BUGMSG(fctk_0_95, FALSE, gettext("Paramètre %s incorrect.\n"), "fctk_0_95")
+    BUGMSG(ecm, FALSE, gettext("Paramètre %s incorrect.\n"), "ecm")
+    BUGMSG(ec1, FALSE, gettext("Paramètre %s incorrect.\n"), "ec1")
+    BUGMSG(ecu1, FALSE, gettext("Paramètre %s incorrect.\n"), "ecu1")
+    BUGMSG(ec2, FALSE, gettext("Paramètre %s incorrect.\n"), "ec2")
+    BUGMSG(ecu2, FALSE, gettext("Paramètre %s incorrect.\n"), "ecu2")
+    BUGMSG(n, FALSE, gettext("Paramètre %s incorrect.\n"), "n")
+    BUGMSG(ec3, FALSE, gettext("Paramètre %s incorrect.\n"), "ec3")
+    BUGMSG(ecu3, FALSE, gettext("Paramètre %s incorrect.\n"), "ecu3")
+    BUGMSG(nu, FALSE, gettext("Paramètre %s incorrect.\n"), "nu")
+    BUGMSG(projet->list_gtk._1992_1_1_materiaux.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Matériau Béton")
     
     builder = projet->list_gtk._1992_1_1_materiaux.builder;
     
@@ -338,8 +338,8 @@ void _1992_1_1_gtk_materiaux_check(GtkWidget *object, Projet *projet)
     double ecm;
     double ec1, ecu1, ec2, ecu2, n, ec3, ecu3, nu;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk._1992_1_1_materiaux.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Matériau Béton");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk._1992_1_1_materiaux.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Matériau Béton")
     
     if (!_1992_1_1_gtk_materiaux_recupere_donnees(projet, &nom, &fck, &fckcube, &fcm, &fctm, &fctk_0_05, &fctk_0_95, &ecm, &ec1, &ecu1, &ec2, &ecu2, &n, &ec3, &ecu3, &nu))
         gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk._1992_1_1_materiaux.builder, "_1992_1_1_materiaux_button_add_edit")), FALSE);
@@ -366,15 +366,15 @@ void _1992_1_1_gtk_materiaux_ajouter_clicked(GtkButton *button, Projet *projet)
     double          ec1, ecu1, ec2, ecu2, n, ec3, ecu3, nu;
     EF_Materiau     *materiau;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk._1992_1_1_materiaux.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Matériau Béton");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk._1992_1_1_materiaux.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Matériau Béton")
     
     if (!_1992_1_1_gtk_materiaux_recupere_donnees(projet, &nom, &fck, &fckcube, &fcm, &fctm, &fctk_0_05, &fctk_0_95, &ecm, &ec1, &ecu1, &ec2, &ecu2, &n, &ec3, &ecu3, &nu))
         return;
     
     // Création de la nouvelle charge ponctuelle au noeud
-    BUG(materiau = _1992_1_1_materiaux_ajout(projet, nom, common_math_f(fck, FLOTTANT_UTILISATEUR)), );
-    BUG(_1992_1_1_materiaux_modif(projet, materiau, NULL, common_math_f(NAN, FLOTTANT_UTILISATEUR), common_math_f(fckcube, FLOTTANT_UTILISATEUR), common_math_f(fcm, FLOTTANT_UTILISATEUR), common_math_f(fctm, FLOTTANT_UTILISATEUR), common_math_f(fctk_0_05, FLOTTANT_UTILISATEUR), common_math_f(fctk_0_95, FLOTTANT_UTILISATEUR), common_math_f(ecm, FLOTTANT_UTILISATEUR), common_math_f(ec1, FLOTTANT_UTILISATEUR), common_math_f(ecu1, FLOTTANT_UTILISATEUR), common_math_f(ec2, FLOTTANT_UTILISATEUR), common_math_f(ecu2, FLOTTANT_UTILISATEUR), common_math_f(n, FLOTTANT_UTILISATEUR), common_math_f(ec3, FLOTTANT_UTILISATEUR), common_math_f(ecu3, FLOTTANT_UTILISATEUR), common_math_f(nu, FLOTTANT_UTILISATEUR)), );
+    BUG(materiau = _1992_1_1_materiaux_ajout(projet, nom, common_math_f(fck, FLOTTANT_UTILISATEUR)), )
+    BUG(_1992_1_1_materiaux_modif(projet, materiau, NULL, common_math_f(NAN, FLOTTANT_UTILISATEUR), common_math_f(fckcube, FLOTTANT_UTILISATEUR), common_math_f(fcm, FLOTTANT_UTILISATEUR), common_math_f(fctm, FLOTTANT_UTILISATEUR), common_math_f(fctk_0_05, FLOTTANT_UTILISATEUR), common_math_f(fctk_0_95, FLOTTANT_UTILISATEUR), common_math_f(ecm, FLOTTANT_UTILISATEUR), common_math_f(ec1, FLOTTANT_UTILISATEUR), common_math_f(ecu1, FLOTTANT_UTILISATEUR), common_math_f(ec2, FLOTTANT_UTILISATEUR), common_math_f(ecu2, FLOTTANT_UTILISATEUR), common_math_f(n, FLOTTANT_UTILISATEUR), common_math_f(ec3, FLOTTANT_UTILISATEUR), common_math_f(ecu3, FLOTTANT_UTILISATEUR), common_math_f(nu, FLOTTANT_UTILISATEUR)), )
     
     free(nom);
     
@@ -391,8 +391,8 @@ void _1992_1_1_gtk_materiaux_annuler_clicked(GtkButton *button, Projet *projet)
  * Valeur renvoyée : Aucune.
  */
 {
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk._1992_1_1_materiaux.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Matériau Béton");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk._1992_1_1_materiaux.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Matériau Béton")
     
     gtk_widget_destroy(projet->list_gtk._1992_1_1_materiaux.window);
     
@@ -414,15 +414,15 @@ void _1992_1_1_gtk_materiaux_modifier_clicked(GtkButton *button, Projet *projet)
     double  ecm;
     double  ec1, ecu1, ec2, ecu2, n, ec3, ecu3, nu;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk._1992_1_1_materiaux.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Matériau Béton");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk._1992_1_1_materiaux.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Matériau Béton")
     
     ef_gtk = &projet->list_gtk._1992_1_1_materiaux;
     
     if (!_1992_1_1_gtk_materiaux_recupere_donnees(projet, &nom, &fck, &fckcube, &fcm, &fctm, &fctk_0_05, &fctk_0_95, &ecm, &ec1, &ecu1, &ec2, &ecu2, &n, &ec3, &ecu3, &nu))
         return;
     
-    BUG(_1992_1_1_materiaux_modif(projet, ef_gtk->materiau, nom, common_math_f(fck*1000000., FLOTTANT_UTILISATEUR), common_math_f(fckcube, FLOTTANT_UTILISATEUR), common_math_f(fcm, FLOTTANT_UTILISATEUR), common_math_f(fctm, FLOTTANT_UTILISATEUR), common_math_f(fctk_0_05, FLOTTANT_UTILISATEUR), common_math_f(fctk_0_95, FLOTTANT_UTILISATEUR), common_math_f(ecm, FLOTTANT_UTILISATEUR), common_math_f(ec1, FLOTTANT_UTILISATEUR), common_math_f(ecu1, FLOTTANT_UTILISATEUR), common_math_f(ec2, FLOTTANT_UTILISATEUR), common_math_f(ecu2, FLOTTANT_UTILISATEUR), common_math_f(n, FLOTTANT_UTILISATEUR), common_math_f(ec3, FLOTTANT_UTILISATEUR), common_math_f(ecu3, FLOTTANT_UTILISATEUR), common_math_f(nu, FLOTTANT_UTILISATEUR)), );
+    BUG(_1992_1_1_materiaux_modif(projet, ef_gtk->materiau, nom, common_math_f(fck*1000000., FLOTTANT_UTILISATEUR), common_math_f(fckcube, FLOTTANT_UTILISATEUR), common_math_f(fcm, FLOTTANT_UTILISATEUR), common_math_f(fctm, FLOTTANT_UTILISATEUR), common_math_f(fctk_0_05, FLOTTANT_UTILISATEUR), common_math_f(fctk_0_95, FLOTTANT_UTILISATEUR), common_math_f(ecm, FLOTTANT_UTILISATEUR), common_math_f(ec1, FLOTTANT_UTILISATEUR), common_math_f(ecu1, FLOTTANT_UTILISATEUR), common_math_f(ec2, FLOTTANT_UTILISATEUR), common_math_f(ecu2, FLOTTANT_UTILISATEUR), common_math_f(n, FLOTTANT_UTILISATEUR), common_math_f(ec3, FLOTTANT_UTILISATEUR), common_math_f(ecu3, FLOTTANT_UTILISATEUR), common_math_f(nu, FLOTTANT_UTILISATEUR)), )
     
     free(nom);
     
@@ -445,7 +445,7 @@ void _1992_1_1_gtk_materiaux_toggled(GtkCheckMenuItem *checkmenuitem, Projet *pr
     Materiau_Beton  *beton_data;
     char            tmp[30];
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
     
     builder = projet->list_gtk._1992_1_1_materiaux.builder;
     mat = projet->list_gtk._1992_1_1_materiaux.materiau;
@@ -596,7 +596,7 @@ void _1992_1_1_gtk_materiaux_toggled(GtkCheckMenuItem *checkmenuitem, Projet *pr
         gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(builder, "_1992_1_1_materiaux_scrolledwindow_nu")), check);
     }
     else
-        BUGMSG(NULL, , gettext("Paramètre %s incorrect.\n"), "checkmenuitem");
+        BUGMSG(NULL, , gettext("Paramètre %s incorrect.\n"), "checkmenuitem")
     
     _1992_1_1_gtk_materiaux_check(NULL, projet);
     
@@ -619,7 +619,7 @@ gboolean _1992_1_1_gtk_materiaux(Projet *projet, EF_Materiau *materiau)
     Gtk_1992_1_1_Materiaux  *ef_gtk;
     Materiau_Beton          *beton_data;
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
     
     ef_gtk = &projet->list_gtk._1992_1_1_materiaux;
     if (ef_gtk->builder != NULL)
@@ -631,7 +631,7 @@ gboolean _1992_1_1_gtk_materiaux(Projet *projet, EF_Materiau *materiau)
     else
     {
         ef_gtk->builder = gtk_builder_new();
-        BUGMSG(gtk_builder_add_from_resource(ef_gtk->builder, "/org/2lgc/codegui/ui/1992_1_1_materiaux.ui", NULL) != 0, FALSE, gettext("Builder Failed\n"));
+        BUGMSG(gtk_builder_add_from_resource(ef_gtk->builder, "/org/2lgc/codegui/ui/1992_1_1_materiaux.ui", NULL) != 0, FALSE, gettext("Builder Failed\n"))
         gtk_builder_connect_signals(ef_gtk->builder, projet);
         ef_gtk->window = GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_window"));
     }
@@ -652,7 +652,7 @@ gboolean _1992_1_1_gtk_materiaux(Projet *projet, EF_Materiau *materiau)
     {
         gchar           tmp[30];
         
-        BUGMSG(materiau->type == MATERIAU_BETON, FALSE, gettext("Le matériau n'est pas en béton.\n"));
+        BUGMSG(materiau->type == MATERIAU_BETON, FALSE, gettext("Le matériau n'est pas en béton.\n"))
         gtk_window_set_title(GTK_WINDOW(ef_gtk->window), gettext("Modification d'un matériau béton"));
         ef_gtk->materiau = materiau;
         beton_data = materiau->data;
@@ -696,10 +696,10 @@ void _1992_1_1_gtk_materiaux_ajout(GtkMenuItem *menuitem, Projet *projet)
  *           interface graphique non initialisée.
  */
 {
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_materiaux.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Matériaux");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_materiaux.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Matériaux")
     
-    BUG(_1992_1_1_gtk_materiaux(projet, NULL), );
+    BUG(_1992_1_1_gtk_materiaux(projet, NULL), )
 }
 
 
@@ -716,8 +716,8 @@ void EF_gtk_materiaux_edit_clicked(GtkWidget *widget, Projet *projet)
     GtkTreeModel    *model;
     GList           *list, *list_parcours;
     
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_materiaux.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Matériaux");
+    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_materiaux.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Matériaux")
     
     // On récupère la liste des matériaux à éditer.
     list = gtk_tree_selection_get_selected_rows(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_materiaux.builder, "EF_materiaux_treeview_select")), &model);
@@ -735,17 +735,17 @@ void EF_gtk_materiaux_edit_clicked(GtkWidget *widget, Projet *projet)
             {
                 case MATERIAU_BETON :
                 {
-                    BUG(_1992_1_1_gtk_materiaux(projet, materiau), );
+                    BUG(_1992_1_1_gtk_materiaux(projet, materiau), )
                     break;
                 }
                 case MATERIAU_ACIER :
                 {
-                    BUG(_1993_1_1_gtk_materiaux(projet, materiau), );
+                    BUG(_1993_1_1_gtk_materiaux(projet, materiau), )
                     break;
                 }
                 default :
                 {
-                    BUGMSG(NULL, , gettext("Matériau %d inconnu.\n"), materiau->type);
+                    BUGMSG(NULL, , gettext("Matériau %d inconnu.\n"), materiau->type)
                     break;
                 }
             }
@@ -771,8 +771,8 @@ gboolean _1992_1_1_gtk_materiaux_double_clicked(GtkWidget *widget, GdkEvent *eve
  *             interface graphique non initialisée.
  */
 {
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet");
-    BUGMSG(projet->list_gtk.ef_materiaux.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Matériaux");
+    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG(projet->list_gtk.ef_materiaux.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Matériaux")
     
     if ((event->type == GDK_2BUTTON_PRESS) && (gtk_widget_get_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_materiaux.builder, "EF_materiaux_boutton_modifier")))))
     {
