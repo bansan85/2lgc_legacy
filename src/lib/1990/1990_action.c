@@ -16,6 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/** \file 1990_action.c
+ * Code source de tout ce qui concerne les actions de l'Eurocode 0.
+ */
+
 #include "config.h"
 #include <libintl.h>
 #include <locale.h>
@@ -41,161 +45,178 @@
 #include "1990_gtk_actions.h"
 #endif
 
+char *
+_1990_action_bat_txt_type_eu (unsigned int type)
 /**
- * \fn char* _1990_action_type_bat_txt_eu(unsigned int type)
- * \brief Renvoie la description des types de charge pour les bâtiments de la norme européenne.
- * 
- * \param type : type de charge.
+ * \brief Renvoie la description du type de l'action pour les bâtiments de la
+ *        norme européenne.
+ * \param type : type de l'action. Ce paramètre doit être compris entre 0 et la
+ *               valeur retournée par #_1990_action_num_bat_txt.
  * \return 
  *   Succès : le texte correspondant en fonction du paramètre type :\n
- *     - 0 : Permanente,
- *     - 1 : Précontrainte,
- *     - 2 : Exploitation : Catégorie A : habitation, zones résidentielles,
- *     - 3 : Exploitation : Catégorie B : bureaux,
- *     - 4 : Exploitation : Catégorie C : lieux de réunion,
- *     - 5 : Exploitation : Catégorie D : commerces,
- *     - 6 : Exploitation : Catégorie E : stockage,
- *     - 7 : Exploitation : Catégorie F : zone de trafic, véhicules inférieur à 30 kN,
- *     - 8 : Exploitation : Catégorie G : zone de trafic, véhicules entre 30 kN et 160 kN,
- *     - 9 : Exploitation : Catégorie H : toits,
- *     - 10: Neige : Finlande, Islande, Norvège, Suède,
- *     - 11: Neige : Autres états membres CEN, altitude > 1000 m,
- *     - 12: Neige : Autres états membres CEN, altitude <= 1000 m,
- *     - 13: Vent,
- *     - 14: Température (hors incendie),
- *     - 15: Accidentelle,
- *     - 16: Sismique.
- *
- *  \return Échec : NULL :
- *     - La catégorie n'existe pas. Le paramètre type doit être compris entre
+ *     - 0 : "Permanente",
+ *     - 1 : "Précontrainte",
+ *     - 2 : "Exploitation : Catégorie A : habitation, zones résidentielles",
+ *     - 3 : "Exploitation : Catégorie B : bureaux",
+ *     - 4 : "Exploitation : Catégorie C : lieux de réunion",
+ *     - 5 : "Exploitation : Catégorie D : commerces",
+ *     - 6 : "Exploitation : Catégorie E : stockage",
+ *     - 7 : "Exploitation : Catégorie F : zone de trafic, véhicules inférieur
+ *            à 30 kN",
+ *     - 8 : "Exploitation : Catégorie G : zone de trafic, véhicules entre 30
+ *            kN et 160 kN",
+ *     - 9 : "Exploitation : Catégorie H : toits",
+ *     - 10: "Neige : Finlande, Islande, Norvège, Suède",
+ *     - 11: "Neige : Autres états membres CEN, altitude > 1000 m",
+ *     - 12: "Neige : Autres états membres CEN, altitude <= 1000 m",
+ *     - 13: "Vent",
+ *     - 14: "Température (hors incendie)",
+ *     - 15: "Accidentelle",
+ *     - 16: "Sismique".
+ * \return Échec : NULL :
+ *   - Le type d'action n'existe pas.
+ * \warning Fonction interne. Il convient d'utiliser la fonction
+ *          #_1990_action_bat_txt_type.
  */
-char* _1990_action_type_bat_txt_eu(unsigned int type)
 {
-    switch(type)
+    switch (type)
     {
-        case 0 : { return gettext("Permanente"); break; }
-        case 1 : { return gettext("Précontrainte"); break; }
-        case 2 : { return gettext("Exploitation : Catégorie A : habitation, zones résidentielles"); break; }
-        case 3 : { return gettext("Exploitation : Catégorie B : bureaux"); break; }
-        case 4 : { return gettext("Exploitation : Catégorie C : lieux de réunion"); break; }
-        case 5 : { return gettext("Exploitation : Catégorie D : commerces"); break; }
-        case 6 : { return gettext("Exploitation : Catégorie E : stockage"); break; }
-        case 7 : { return gettext("Exploitation : Catégorie F : zone de trafic, véhicules de poids inférieur à 30 kN"); break; }
-        case 8 : { return gettext("Exploitation : Catégorie G : zone de trafic, véhicules de poids entre 30 kN et 160 kN"); break; }
-        case 9 : { return gettext("Exploitation : Catégorie H : toits"); break; }
-        case 10 : { return gettext("Neige : Finlande, Islande, Norvège, Suède"); break; }
-        case 11 : { return gettext("Neige : Autres états membres CEN, altitude > 1000 m"); break; }
-        case 12 : { return gettext("Neige : Autres états membres CEN, altitude <= 1000 m"); break; }
-        case 13 : { return gettext("Vent"); break; }
-        case 14 : { return gettext("Température (hors incendie)"); break; }
-        case 15 : { return gettext("Accidentelle"); break; }
-        case 16 : { return gettext("Sismique"); break; }
-        default : { BUGMSG(0, NULL, gettext("Type d'action %u inconnu.\n"), type) break; }
+        case 0 : { return gettext ("Permanente"); break; }
+        case 1 : { return gettext ("Précontrainte"); break; }
+        case 2 : { return gettext ("Exploitation : Catégorie A : habitation, zones résidentielles"); break; }
+        case 3 : { return gettext ("Exploitation : Catégorie B : bureaux"); break; }
+        case 4 : { return gettext ("Exploitation : Catégorie C : lieux de réunion"); break; }
+        case 5 : { return gettext ("Exploitation : Catégorie D : commerces"); break; }
+        case 6 : { return gettext ("Exploitation : Catégorie E : stockage"); break; }
+        case 7 : { return gettext ("Exploitation : Catégorie F : zone de trafic, véhicules de poids inférieur à 30 kN"); break; }
+        case 8 : { return gettext ("Exploitation : Catégorie G : zone de trafic, véhicules de poids entre 30 kN et 160 kN"); break; }
+        case 9 : { return gettext ("Exploitation : Catégorie H : toits"); break; }
+        case 10 : { return gettext ("Neige : Finlande, Islande, Norvège, Suède"); break; }
+        case 11 : { return gettext ("Neige : Autres états membres CEN, altitude > 1000 m"); break; }
+        case 12 : { return gettext ("Neige : Autres états membres CEN, altitude <= 1000 m"); break; }
+        case 13 : { return gettext ("Vent"); break; }
+        case 14 : { return gettext ("Température (hors incendie)"); break; }
+        case 15 : { return gettext ("Accidentelle"); break; }
+        case 16 : { return gettext ("Sismique"); break; }
+        default : { BUGMSG (0, NULL, gettext ("Type d'action %u inconnu.\n"), type) break; }
     }
 }
 
 
-char* _1990_action_type_bat_txt_fr(unsigned int type)
-/* Description : renvoie la description des types de charge pour les bâtiments de la norme
- *               française.
- *               FONCTION INTERNE. Utiliser _1990_action_type_bat_txt.
- * Paramètres : unsigned int type : type de charge.
- * Valeur renvoyée :
- *   Succès : le texte correspondant :
- *            0 : Permanente
- *            1 : Précontrainte
- *            2 : Exploitation : Catégorie A : habitation, zones résidentielles
- *            3 : Exploitation : Catégorie B : bureaux
- *            4 : Exploitation : Catégorie C : lieux de réunion
- *            5 : Exploitation : Catégorie D : commerces
- *            6 : Exploitation : Catégorie E : stockage
- *            7 : Exploitation : Catégorie F : zone de trafic, véhicules inférieur à 30 kN
- *            8 : Exploitation : Catégorie G : zone de trafic, véhicules entre 30 kN et 160 kN
- *            9 : Exploitation : Catégorie H : toits d'un bâtiment de catégorie A ou B
- *            10: Exploitation : Catégorie I : toitures accessibles avec locaux de type A ou B
- *            11: Exploitation : Catégorie I : toitures accessibles avec locaux de type C ou D
- *            12: Exploitation : Catégorie K : Hélicoptère sur la toiture
- *            13: Exploitation : Catégorie K : Hélicoptère sur la toiture, autres charges
- *            14: Neige : Saint-Pierre-et-Miquelon
- *            15: Neige : Altitude > 1000 m
- *            16: Neige : Altitude <= 1000 m
- *            17: Vent
- *            18: Température (hors incendie)
- *            19: Accidentelle
- *            20: Sismique
- *            21: Eaux souterraines
+char *
+_1990_action_bat_txt_type_fr (unsigned int type)
+/**
+ * \brief Renvoie la description du type de l'action pour les bâtiments de la
+ *        norme française.
+ * \param type : type de l'action. Ce paramètre doit être compris entre 0 et la
+ *               valeur retournée par #_1990_action_num_bat_txt.
+ * \return
+ *   Succès : le texte correspondant en fonction du paramètre type :\n
+ *     - 0 : "Permanente",
+ *     - 1 : "Précontrainte",
+ *     - 2 : "Exploitation : Catégorie A : habitation, zones résidentielles",
+ *     - 3 : "Exploitation : Catégorie B : bureaux",
+ *     - 4 : "Exploitation : Catégorie C : lieux de réunion",
+ *     - 5 : "Exploitation : Catégorie D : commerces",
+ *     - 6 : "Exploitation : Catégorie E : stockage",
+ *     - 7 : "Exploitation : Catégorie F : zone de trafic, véhicules inférieur
+ *            à 30 kN",
+ *     - 8 : "Exploitation : Catégorie G : zone de trafic, véhicules entre 30
+ *            kN et 160 kN",
+ *     - 9 : "Exploitation : Catégorie H : toits d'un bâtiment de catégorie A
+ *            ou B",
+ *     - 10: "Exploitation : Catégorie I : toitures accessibles avec locaux de
+ *            type A ou B",
+ *     - 11: "Exploitation : Catégorie I : toitures accessibles avec locaux de
+ *            type C ou D",
+ *     - 12: "Exploitation : Catégorie K : Hélicoptère sur la toiture",
+ *     - 13: "Exploitation : Catégorie K : Hélicoptère sur la toiture, autres
+ *            charges",
+ *     - 14: "Neige : Saint-Pierre-et-Miquelon",
+ *     - 15: "Neige : Altitude > 1000 m",
+ *     - 16: "Neige : Altitude <= 1000 m",
+ *     - 17: "Vent",
+ *     - 18: "Température (hors incendie)",
+ *     - 19: "Accidentelle",
+ *     - 20: "Sismique",
+ *     - 21: "Eaux souterraines".
+ * \return Échec : NULL :
+ *   - Le type d'action n'existe pas.
+ * \warning Fonction interne. Il convient d'utiliser la fonction
+ *          #_1990_action_bat_txt_type.
+ */
+{
+    switch (type)
+    {
+        case 0 : { return gettext ("Permanente"); break; }
+        case 1 : { return gettext ("Précontrainte"); break; }
+        case 2 : { return gettext ("Exploitation : Catégorie A : habitation, zones résidentielles"); break; }
+        case 3 : { return gettext ("Exploitation : Catégorie B : bureaux"); break; }
+        case 4 : { return gettext ("Exploitation : Catégorie C : lieux de réunion"); break; }
+        case 5 : { return gettext ("Exploitation : Catégorie D : commerces"); break; }
+        case 6 : { return gettext ("Exploitation : Catégorie E : stockage"); break; }
+        case 7 : { return gettext ("Exploitation : Catégorie F : zone de trafic, véhicules de poids inférieur à 30 kN"); break; }
+        case 8 : { return gettext ("Exploitation : Catégorie G : zone de trafic, véhicules de poids entre 30 kN et 160 kN"); break; }
+        case 9 : { return gettext ("Exploitation : Catégorie H : toits d'un bâtiment de catégorie A ou B"); break; }
+        case 10 : { return gettext ("Exploitation : Catégorie I : toitures accessibles avec locaux des catégories A ou B"); break; }
+        case 11 : { return gettext ("Exploitation : Catégorie I : toitures accessibles avec locaux des catégories C ou D"); break; }
+        case 12 : { return gettext ("Exploitation : Catégorie K : Hélicoptère sur la toiture"); break; }
+        case 13 : { return gettext ("Exploitation : Catégorie K : Hélicoptère sur la toiture, autres charges (fret, personnel, accessoires ou équipements divers)"); break; }
+        case 14 : { return gettext ("Neige : Saint-Pierre-et-Miquelon"); break; }
+        case 15 : { return gettext ("Neige : Altitude > 1000 m"); break; }
+        case 16 : { return gettext ("Neige : Altitude <= 1000 m"); break; }
+        case 17 : { return gettext ("Vent"); break; }
+        case 18 : { return gettext ("Température (hors incendie)"); break; }
+        case 19 : { return gettext ("Accidentelle"); break; }
+        case 20 : { return gettext ("Sismique"); break; }
+        case 21 : { return gettext ("Eaux souterraines"); break; }
+        default : { BUGMSG (0, NULL, gettext ("Type d'action %u inconnu.\n"), type) break; }
+    }
+}
+
+
+char *
+_1990_action_bat_txt_type (unsigned int type, Norme norme)
+/**
+ * \brief Renvoie la description du type de l'action pour les bâtiments en
+ *        fonction de la norme demandée.
+ * \param type : type de l'action,
+ * \param norme : la norme souhaitée.
+ * \return
+ *   Succès : cf. _1990_action_bat_txt_type_PAYS\n
  *   Échec : NULL :
- *             la catégorie n'existe pas.
+ *     - le type d'action n'existe pas,
+ *     - la norme n'existe pas.
  */
 {
-    // Trivial
-    switch(type)
+    switch (norme)
     {
-        case 0 : { return gettext("Permanente"); break; }
-        case 1 : { return gettext("Précontrainte"); break; }
-        case 2 : { return gettext("Exploitation : Catégorie A : habitation, zones résidentielles"); break; }
-        case 3 : { return gettext("Exploitation : Catégorie B : bureaux"); break; }
-        case 4 : { return gettext("Exploitation : Catégorie C : lieux de réunion"); break; }
-        case 5 : { return gettext("Exploitation : Catégorie D : commerces"); break; }
-        case 6 : { return gettext("Exploitation : Catégorie E : stockage"); break; }
-        case 7 : { return gettext("Exploitation : Catégorie F : zone de trafic, véhicules de poids inférieur à 30 kN"); break; }
-        case 8 : { return gettext("Exploitation : Catégorie G : zone de trafic, véhicules de poids entre 30 kN et 160 kN"); break; }
-        case 9 : { return gettext("Exploitation : Catégorie H : toits d'un bâtiment de catégorie A ou B"); break; }
-        case 10 : { return gettext("Exploitation : Catégorie I : toitures accessibles avec locaux des catégories A ou B"); break; }
-        case 11 : { return gettext("Exploitation : Catégorie I : toitures accessibles avec locaux des catégories C ou D"); break; }
-        case 12 : { return gettext("Exploitation : Catégorie K : Hélicoptère sur la toiture"); break; }
-        case 13 : { return gettext("Exploitation : Catégorie K : Hélicoptère sur la toiture, autres charges (fret, personnel, accessoires ou équipements divers)"); break; }
-        case 14 : { return gettext("Neige : Saint-Pierre-et-Miquelon"); break; }
-        case 15 : { return gettext("Neige : Altitude > 1000 m"); break; }
-        case 16 : { return gettext("Neige : Altitude <= 1000 m"); break; }
-        case 17 : { return gettext("Vent"); break; }
-        case 18 : { return gettext("Température (hors incendie)"); break; }
-        case 19 : { return gettext("Accidentelle"); break; }
-        case 20 : { return gettext("Sismique"); break; }
-        case 21 : { return gettext("Eaux souterraines"); break; }
-        default : { BUGMSG(0, NULL, gettext("Type d'action %u inconnu.\n"), type) break; }
+        case NORME_EU : { return _1990_action_bat_txt_type_eu (type); break; }
+        case NORME_FR : { return _1990_action_bat_txt_type_fr (type); break; }
+        default : { BUGMSG (0, NULL, gettext ("Norme %d inconnue.\n"), norme) break; }
     }
 }
 
 
-char* _1990_action_type_bat_txt(unsigned int type, Type_Pays pays)
-/* Description : renvoie la description des types de charge pour les bâtiments en fonction de
- *               la norme demandée.
- * Paramètres : unsigned int type : type de charge,
- *            : Type_Pays pays : le numéro du pays.
- * Valeur renvoyée :
- *   Succès : cf. _1990_action_type_bat_txt_PAYS
- *   Échec : NULL :
- *             le type n'existe pas,
- *             le pays n'existe pas.
+Action_Categorie
+_1990_action_categorie_bat_eu (unsigned int type)
+/**
+ * \brief Renvoie la catégorie du type de l'action pour les bâtiments selon la
+ *        norme européenne.
+ * \param type : type de l'action.
+ * \return
+ *   Succès :\n
+ *     - 0 : ACTION_POIDS_PROPRE (Poids propre),
+ *     - 1 : ACTION_PRECONTRAINTE (Précontrainte),
+ *     - 2 à 14 : ACTION_VARIABLE (Action variable),
+ *     - 15 : ACTION_ACCIDENTELLE (Action accidentelle),
+ *     - 16 : ACTION_SISMIQUE (Action sismique).
+ * \return Échec : ACTION_INCONNUE :
+ *   - Le type d'action n'existe pas.
+ * \warning Fonction interne. Il convient d'utiliser la fonction
+ *          #_1990_action_categorie_bat.
  */
 {
-    // Trivial
-    switch (pays)
-    {
-        case PAYS_EU : { return _1990_action_type_bat_txt_eu(type); break; }
-        case PAYS_FR : { return _1990_action_type_bat_txt_fr(type); break; }
-        default : { BUGMSG(0, NULL, gettext("Pays %d inconnu.\n"), pays) break; }
-    }
-}
-
-
-Action_Categorie _1990_action_categorie_bat_eu(unsigned int type)
-/* Description : renvoie la categorie d'une action pour les combinaisons d'action des bâtiments
- *               selon la norme européenne.
- *               FONCTION INTERNE. Utiliser _1990_action_categorie_bat.
- * Paramètres : unsigned int type : type de l'action.
- * Valeur renvoyée :
- *   Succès : ACTION_POIDS_PROPRE : Poids propre
- *            ACTION_PRECONTRAINTE : Précontrainte
- *            ACTION_VARIABLE : Action variable
- *            ACTION_ACCIDENTELLE : Action accidentelle
- *            ACTION_SISMIQUE : Action sismique
- *   Échec : ACTION_INCONNUE :
- *             La catégorie n'existe pas.
- */
-{
-    // Trivial
     if (type == 0)
         return ACTION_POIDS_PROPRE;
     else if (type == 1)
@@ -207,27 +228,30 @@ Action_Categorie _1990_action_categorie_bat_eu(unsigned int type)
     else if (type == 16)
         return ACTION_SISMIQUE;
     else
-        BUGMSG(0, ACTION_INCONNUE, gettext("Type d'action %u inconnu.\n"), type)
+        BUGMSG (0, ACTION_INCONNUE, gettext ("Type d'action %u inconnu.\n"), type)
 }
 
 
-Action_Categorie _1990_action_categorie_bat_fr(unsigned int type)
-/* Description : renvoie la catégorie d'une action pour les combinaisons d'action des bâtiments
- *               selon la norme française.
- *               FONCTION INTERNE. Utiliser _1990_action_categorie_bat.
- * Paramètres : unsigned int type : catégorie de l'action.
- * Valeur renvoyée :
- *   Succès : ACTION_POIDS_PROPRE : Poids propre
- *            ACTION_PRECONTRAINTE : Précontrainte
- *            ACTION_VARIABLE : Action variable
- *            ACTION_ACCIDENTELLE : Action accidentelle
- *            ACTION_SISMIQUE : Action sismique
- *            ACTION_EAUX_SOUTERRAINES : Action due aux eaux souterraines
- *   Échec : ACTION_INCONNUE :
- *             La catégorie n'existe pas
+Action_Categorie
+_1990_action_categorie_bat_fr (unsigned int type)
+/**
+ * \brief Renvoie la catégorie du type de l'action pour les bâtiments selon la
+ *        norme française.
+ * \param type : type de l'action.
+ * \return
+ *   Succès :\n
+ *     - 0 : ACTION_POIDS_PROPRE (Poids propre),
+ *     - 1 : ACTION_PRECONTRAINTE (Précontrainte),
+ *     - 2 à 18: ACTION_VARIABLE (Action variable),
+ *     - 19 : ACTION_ACCIDENTELLE (Action accidentelle),
+ *     - 20 : ACTION_SISMIQUE (Action sismique),
+ *     - 21 : ACTION_EAUX_SOUTERRAINES (Action due aux eaux souterraines).
+ * \return Échec : ACTION_INCONNUE :
+ *   - Le type d'action n'existe pas.
+ * \warning Fonction interne. Il convient d'utiliser la fonction
+ *          #_1990_action_categorie_bat.
  */
 {
-    // Trivial
     if (type == 0) 
         return ACTION_POIDS_PROPRE;
     else if (type == 1) 
@@ -241,47 +265,48 @@ Action_Categorie _1990_action_categorie_bat_fr(unsigned int type)
     else if (type == 21)
         return ACTION_EAUX_SOUTERRAINES;
     else
-        BUGMSG(0, ACTION_INCONNUE, gettext("Type d'action %u inconnu.\n"), type)
+        BUGMSG (0, ACTION_INCONNUE, gettext ("Type d'action %u inconnu.\n"), type)
 }
 
 
-Action_Categorie _1990_action_categorie_bat(unsigned int type, Type_Pays pays)
-/* Description : renvoie la catégorie d'une action pour les combinaisons d'action des bâtiments
- *               en fonction du pays.
- * Paramètres : unsigned int type : type de l'action,
- *            : Type_Pays pays : le numéro du pays.
- * Valeur renvoyée :
- *   Succès : cf les fonctions _1990_action_categorie_bat_PAYS
+Action_Categorie
+_1990_action_categorie_bat (unsigned int type, Norme norme)
+/**
+ * \brief Renvoie la catégorie du type de l'action pour les bâtiments en
+ *        fonction de la norme souhaitée.
+ * \param type : type de l'action,
+ * \param norme : la norme souhaitée.
+ * \return
+ *   Succès : cf. _1990_action_categorie_bat_PAYS\n
  *   Échec : ACTION_INCONNUE :
- *             La catégorie n'existe pas,
- *             Le pays n'existe pas.
+ *     - La catégorie n'existe pas,
+ *     - La norme n'existe pas.
  */
 {
-    // Trivial
-    switch (pays)
+    switch (norme)
     {
-        case PAYS_EU : { return _1990_action_categorie_bat_eu(type); break; }
-        case PAYS_FR : { return _1990_action_categorie_bat_fr(type); break; }
-        default : { BUGMSG(0, ACTION_INCONNUE, gettext("Pays %d inconnu.\n"), pays) break; }
+        case NORME_EU : { return _1990_action_categorie_bat_eu (type); break; }
+        case NORME_FR : { return _1990_action_categorie_bat_fr (type); break; }
+        default : { BUGMSG (0, ACTION_INCONNUE, gettext ("Norme %d inconnue.\n"), norme) break; }
     }
 }
 
 
-Action_Categorie _1990_action_num_bat_txt(Type_Pays pays)
-/* Description : renvoie le nombre de catégories d'actions des bâtiments en fonction du pays.
- * Paramètres : Type_Pays pays : le numéro du pays.
+Action_Categorie _1990_action_num_bat_txt(Norme norme)
+/* Description : renvoie le nombre de catégories d'actions des bâtiments en fonction de la norme.
+ * Paramètres : Norme norme : le numéro de la norme.
  * Valeur renvoyée :
  *   Succès : le nombre de catégorie d'actions
  *   Échec : 0 :
- *             Le pays n'existe pas.
+ *             La norme n'existe pas.
  */
 {
     // Trivial
-    switch (pays)
+    switch (norme)
     {
-        case PAYS_EU : { return 17; break; }
-        case PAYS_FR : { return 22; break; }
-        default : { BUGMSG(0, 0, gettext("Pays %d inconnu.\n"), pays) break; }
+        case NORME_EU : { return 17; break; }
+        case NORME_FR : { return 22; break; }
+        default : { BUGMSG(0, 0, gettext("Norme %d inconnue.\n"), norme) break; }
     }
 }
 
@@ -312,12 +337,12 @@ gboolean _1990_action_init(Projet *projet)
     projet->list_gtk._1990_actions.menu_list_widget_action = NULL;
     projet->list_gtk._1990_actions.menu_type_list_action = gtk_menu_new();
     projet->list_gtk._1990_actions.choix_type_action = gtk_list_store_new(1, G_TYPE_STRING);
-    for (i=0;i<_1990_action_num_bat_txt(projet->parametres.pays);i++)
+    for (i=0;i<_1990_action_num_bat_txt(projet->parametres.norme);i++)
     {
         GtkTreeIter iter;
         
         // Génération du menu contenant la liste des types d'action pour la création d'une nouvelle action.
-        w_temp = gtk_menu_item_new_with_label(_1990_action_type_bat_txt(i, projet->parametres.pays));
+        w_temp = gtk_menu_item_new_with_label(_1990_action_bat_txt_type(i, projet->parametres.norme));
         gtk_menu_shell_append(GTK_MENU_SHELL(projet->list_gtk._1990_actions.menu_type_list_action), w_temp);
         projet->list_gtk._1990_actions.menu_list_widget_action = g_list_append(projet->list_gtk._1990_actions.menu_list_widget_action, w_temp);
         gtk_widget_show(w_temp);
@@ -325,7 +350,7 @@ gboolean _1990_action_init(Projet *projet)
         
         // Génération de la liste des types d'action pour la modification via le treeview Action.
         gtk_list_store_append(projet->list_gtk._1990_actions.choix_type_action, &iter);
-        gtk_list_store_set(projet->list_gtk._1990_actions.choix_type_action, &iter, 0, _1990_action_type_bat_txt(i, projet->parametres.pays), -1);
+        gtk_list_store_set(projet->list_gtk._1990_actions.choix_type_action, &iter, 0, _1990_action_bat_txt_type(i, projet->parametres.norme), -1);
     }
     
     projet->list_gtk._1990_actions.menu_list_widget_charge = NULL;
@@ -372,7 +397,7 @@ Action *_1990_action_ajout(Projet *projet, unsigned int type, const char* descri
     Action      *action_nouveau;
     
     BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet")
-    BUG(_1990_action_categorie_bat(type, projet->parametres.pays) != ACTION_INCONNUE, NULL)
+    BUG(_1990_action_categorie_bat(type, projet->parametres.norme) != ACTION_INCONNUE, NULL)
     
     BUGMSG(action_nouveau = (Action*)malloc(sizeof(Action)), NULL, gettext("Erreur d'allocation mémoire.\n"))
     BUGMSG(action_nouveau->nom = g_strdup_printf("%s", description), NULL, gettext("Erreur d'allocation mémoire.\n"))
@@ -380,11 +405,11 @@ Action *_1990_action_ajout(Projet *projet, unsigned int type, const char* descri
     action_nouveau->type = type;
     action_nouveau->charges = NULL;
     action_nouveau->action_predominante = 0;
-    action_nouveau->psi0 = common_math_f(_1990_coef_psi0_bat(type, projet->parametres.pays), FLOTTANT_ORDINATEUR);
+    action_nouveau->psi0 = common_math_f(_1990_coef_psi0_bat(type, projet->parametres.norme), FLOTTANT_ORDINATEUR);
     BUG(!isnan(common_math_get(action_nouveau->psi0)), NULL)
-    action_nouveau->psi1 = common_math_f(_1990_coef_psi1_bat(type, projet->parametres.pays), FLOTTANT_ORDINATEUR);
+    action_nouveau->psi1 = common_math_f(_1990_coef_psi1_bat(type, projet->parametres.norme), FLOTTANT_ORDINATEUR);
     BUG(!isnan(common_math_get(action_nouveau->psi1)), NULL)
-    action_nouveau->psi2 = common_math_f(_1990_coef_psi2_bat(type, projet->parametres.pays), FLOTTANT_ORDINATEUR);
+    action_nouveau->psi2 = common_math_f(_1990_coef_psi2_bat(type, projet->parametres.norme), FLOTTANT_ORDINATEUR);
     BUG(!isnan(common_math_get(action_nouveau->psi2)), NULL)
     action_nouveau->deplacement_complet = NULL;
     action_nouveau->forces_complet = NULL;
@@ -576,7 +601,7 @@ Action* _1990_action_numero_cherche(Projet *projet, unsigned int numero)
 
 unsigned int _1990_action_type_renvoie(Action *action)
 /* Description : Renvoie le type de l'action. La correspondance avec la description est obtenue
- *               avec la fonction _1990_action_type_bat_txt.
+ *               avec la fonction _1990_action_bat_txt_type.
  * Paramètres : Action *action : l'action dont on souhaite connaître le type.
  * Valeur renvoyée :
  *   Succès : le type d'action.
@@ -612,11 +637,11 @@ gboolean _1990_action_type_change(Projet *projet, Action *action, unsigned int t
         return TRUE;
     
     action->type = type;
-    psi0 = common_math_f(_1990_coef_psi0_bat(type, projet->parametres.pays), FLOTTANT_ORDINATEUR);
+    psi0 = common_math_f(_1990_coef_psi0_bat(type, projet->parametres.norme), FLOTTANT_ORDINATEUR);
     BUG(!isnan(common_math_get(psi0)), FALSE)
-    psi1 = common_math_f(_1990_coef_psi1_bat(type, projet->parametres.pays), FLOTTANT_ORDINATEUR);
+    psi1 = common_math_f(_1990_coef_psi1_bat(type, projet->parametres.norme), FLOTTANT_ORDINATEUR);
     BUG(!isnan(common_math_get(psi1)), FALSE)
-    psi2 = common_math_f(_1990_coef_psi2_bat(type, projet->parametres.pays), FLOTTANT_ORDINATEUR);
+    psi2 = common_math_f(_1990_coef_psi2_bat(type, projet->parametres.norme), FLOTTANT_ORDINATEUR);
     BUG(!isnan(common_math_get(psi2)), FALSE)
     
     action->psi0 = psi0;

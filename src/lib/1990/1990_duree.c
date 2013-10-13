@@ -141,10 +141,10 @@ char* _1990_duree_projet_txt_fr(unsigned int type)
 }
 
 
-int _1990_duree_projet(unsigned int type, Type_Pays pays)
-/* Description : Renvoie la durée (en année) indicative de la norme du pays spécifié.
+int _1990_duree_projet(unsigned int type, Norme norme)
+/* Description : Renvoie la durée (en année) indicative de la norme spécifiée.
  * Paramètres : unsigned int type : categorie de durée d'utilisation de projet,
- *            : Type_Pays pays : pays souhaité.
+ *            : Norme norme : norme souhaitée.
  * Valeur renvoyée :
  *   Succès : cf les fonctions _1990_duree_projet_PAYS.
  *   Échec : -1 :
@@ -153,20 +153,20 @@ int _1990_duree_projet(unsigned int type, Type_Pays pays)
  */
 {
     // Trivial
-    switch (pays)
+    switch (norme)
     {
-        case PAYS_EU : { return _1990_duree_projet_eu(type); break; }
-        case PAYS_FR : { return _1990_duree_projet_fr(type); break; }
-        default : { BUGMSG(0, 0, gettext("Pays %d inconnu.\n"), pays) break; }
+        case NORME_EU : { return _1990_duree_projet_eu(type); break; }
+        case NORME_FR : { return _1990_duree_projet_fr(type); break; }
+        default : { BUGMSG(0, 0, gettext("Norme %d inconnue.\n"), norme) break; }
     }
 }
 
 
-char* _1990_duree_projet_txt(unsigned int type, Type_Pays pays)
-/* Description : Renvoie la description des catérogies des durées indicatives de la norme du
- *               pays spécifié.
+char* _1990_duree_projet_txt(unsigned int type, Norme norme)
+/* Description : Renvoie la description des catérogies des durées indicatives
+ *               de la norme spécifiée.
  * Paramètres : unsigned int type : categorie de durée d'utilisation de projet,
- *            : Type_Pays pays : pays souhaité.
+ *            : Norme norme : norme souhaitée.
  * Valeur renvoyée :
  *   Succès : cf les fonctions _1990_duree_projet_txt_PAYS.
  *   Échec : NULL :
@@ -175,10 +175,10 @@ char* _1990_duree_projet_txt(unsigned int type, Type_Pays pays)
  */
 {
     // Trivial
-    switch (pays)
+    switch (norme)
     {
-        case PAYS_EU : { return _1990_duree_projet_txt_eu(type); break; }
-        case PAYS_FR : { return _1990_duree_projet_txt_fr(type); break; }
-        default : { BUGMSG(0, NULL, gettext("Pays %d inconnu.\n"), pays) break; }
+        case NORME_EU : { return _1990_duree_projet_txt_eu(type); break; }
+        case NORME_FR : { return _1990_duree_projet_txt_fr(type); break; }
+        default : { BUGMSG(0, NULL, gettext("Norme %d inconnue.\n"), norme) break; }
     }
 }

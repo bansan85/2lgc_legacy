@@ -113,7 +113,6 @@ gboolean _1990_ponderations_duplique_sans_double(GList **liste_pond_destination,
     
     if (liste_pond_source == NULL)
         return 0;
-
     
     list_parcours = liste_pond_source;
     do
@@ -255,7 +254,7 @@ gboolean _1990_ponderations_genere_un(Projet *projet, GList **ponderations_desti
                     double          pond;
                     
                     combinaison_element = list_parcours2->data;
-                    categorie = _1990_action_categorie_bat(_1990_action_type_renvoie(combinaison_element->action), projet->parametres.pays);
+                    categorie = _1990_action_categorie_bat(_1990_action_type_renvoie(combinaison_element->action), projet->parametres.norme);
                     BUG(categorie != ACTION_INCONNUE, FALSE)
     //             Vérification si le coefficient min et max de la catégorie vaut 0.
     //               Si oui, pondération ignorée.
@@ -1037,26 +1036,25 @@ gboolean _1990_ponderations_genere_fr(Projet *projet)
 
 
 gboolean _1990_ponderations_genere(Projet *projet)
-/* Description : Génération de l'ensemble des pondérations selon la norme du pays spécifié.
+/* Description : Génération de l'ensemble des pondérations selon la norme spécifiée.
  *               cf. _1990_ponderations_genere_PAYS.
  * Paramètres : Projet *projet : la variable projet.
  * Valeur renvoyée :
  *   Succès : TRUE
  *   Échec : FALSE :
  *             projet == NULL,
- *             pays inconnu,
+ *             norme inconnue,
  *             erreur en cas de fonction interne.
  */
 {
     BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
     
     // Trivial
-    switch (projet->parametres.pays)
+    switch (projet->parametres.norme)
     {
-        case PAYS_EU : { return _1990_ponderations_genere_eu(projet); break; }
-        case PAYS_FR : { return _1990_ponderations_genere_fr(projet); break; }
-        default : { BUGMSG(0, FALSE, gettext("Pays %d inconnu.\n"), projet->parametres.pays) break; }
-    }
+        case NORME_EU : { return _1990_ponderations_genere_eu(projet); break; }
+        case NORME_FR : { return _1990_ponderations_genere_fr(projet); break; }
+        default : { BUGMSG(0, FALSE, gettext("Norme %d inconnue.\n"), projet->parametres.norme) break; } }
 }
 
 

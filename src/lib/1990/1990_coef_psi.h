@@ -22,8 +22,8 @@
 #include "config.h"
 #include "common_projet.h"
 
-double _1990_coef_psi0_bat(unsigned int type, Type_Pays pays) __attribute__((__warn_unused_result__));
-double _1990_coef_psi1_bat(unsigned int type, Type_Pays pays) __attribute__((__warn_unused_result__));
-double _1990_coef_psi2_bat(unsigned int type, Type_Pays pays) __attribute__((__warn_unused_result__));
+double _1990_coef_psi0_bat(unsigned int type, Norme norme) __attribute__((__warn_unused_result__));
+double _1990_coef_psi1_bat(unsigned int type, Norme norme) __attribute__((__warn_unused_result__));
+double _1990_coef_psi2_bat(unsigned int type, Norme norme) __attribute__((__warn_unused_result__));
 
 #endif
