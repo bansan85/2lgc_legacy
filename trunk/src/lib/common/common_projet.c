@@ -56,9 +56,9 @@
 #include "1992_1_1_barres.h"
 #include "1992_1_1_materiaux.h"
 
-Projet* projet_init(Type_Pays pays)
+Projet* projet_init(Norme norme)
 /* Description : Initialise la variable projet.
- * Paramètres : Type_Pays pays : pays du calcul.
+ * Paramètres : Norme norme : norme de calcul.
  * Valeur renvoyée :
  *   Succès : Un pointeur vers une zone mémoire projet.
  *   Échec : NULL :
@@ -77,7 +77,7 @@ Projet* projet_init(Type_Pays pays)
     // Alloue toutes les zones mémoires du projet à savoir (par module) :
     BUGMSG(projet = (Projet*)malloc(sizeof(Projet)), NULL, gettext("Erreur d'allocation mémoire.\n"))
     
-    projet->parametres.pays = pays;
+    projet->parametres.norme = norme;
     
     BUG(common_ville_init(projet), NULL)
     

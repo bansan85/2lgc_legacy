@@ -369,64 +369,64 @@ double _1990_coef_psi2_bat_fr(unsigned int type)
 }
 
 
-double _1990_coef_psi0_bat(unsigned int type, Type_Pays pays)
-/* Description : renvoie le coefficient psi0 en fonction de la norme du pays spécifié pour les
+double _1990_coef_psi0_bat(unsigned int type, Norme norme)
+/* Description : renvoie le coefficient psi0 en fonction de la norme spécifié pour les
  *               batiments.
  * Paramètres : unsigned int type : type de l'action,
- *            : Type_Pays pays : référence du pays.
+ *            : Norme norme : la norme souhaitée.
  * Valeur renvoyée :
  *   Succès : cf les fonctions _1990_coef_psi0_bat_PAYS.
  *   Échec : NAN :
- *             le pays ou le type n'existe pas.
+ *             la norme ou le type de l'action n'existe pas.
  */
 {
     // Trivial
-    switch (pays)
+    switch (norme)
     {
-        case PAYS_EU : { return _1990_coef_psi0_bat_eu(type); break; }
-        case PAYS_FR : { return _1990_coef_psi0_bat_fr(type); break; }
-        default : { BUGMSG(0, NAN, gettext("Pays %d inconnu.\n"), pays) break; }
+        case NORME_EU : { return _1990_coef_psi0_bat_eu(type); break; }
+        case NORME_FR : { return _1990_coef_psi0_bat_fr(type); break; }
+        default : { BUGMSG(0, NAN, gettext("Pays %d inconnu.\n"), norme) break; }
     }
 }
 
 
-double _1990_coef_psi1_bat(unsigned int type, Type_Pays pays)
-/* Description : renvoie le coefficient psi1 en fonction de la norme du pays spécifié pour les
+double _1990_coef_psi1_bat(unsigned int type, Norme norme)
+/* Description : renvoie le coefficient psi1 en fonction de la norme spécifié pour les
  *               batiments.
  * Paramètres : unsigned int type : type de l'action,
- *            : Type_Pays pays : référence du pays.
+ *            : Norme norme : la norme souhaitée.
  * Valeur renvoyée :
  *   Succès : cf les fonctions _1990_coef_psi1_bat_PAYS.
  *   Échec : NAN :
- *             le pays ou le type n'existe pas.
+ *             la norme ou le type de l'action n'existe pas.
  */
 {
     // Trivial
-    switch (pays)
+    switch (norme)
     {
-        case PAYS_EU : { return _1990_coef_psi1_bat_eu(type); break; }
-        case PAYS_FR : { return _1990_coef_psi1_bat_fr(type); break; }
-        default : { BUGMSG(0, NAN, gettext("Pays %d inconnu.\n"), pays) break; }
+        case NORME_EU : { return _1990_coef_psi1_bat_eu(type); break; }
+        case NORME_FR : { return _1990_coef_psi1_bat_fr(type); break; }
+        default : { BUGMSG(0, NAN, gettext("Pays %d inconnu.\n"), norme) break; }
     }
 }
 
 
-double _1990_coef_psi2_bat(unsigned int type, Type_Pays pays)
-/* Description : renvoie le coefficient psi2 en fonction de la norme du pays spécifié pour les
+double _1990_coef_psi2_bat(unsigned int type, Norme norme)
+/* Description : renvoie le coefficient psi2 en fonction de la norme spécifié pour les
  *               batiments.
  * Paramètres : unsigned int type : type de l'action,
- *            : Type_Pays pays : référence du pays.
+ *            : Norme norme : la norme souhaitée.
  * Valeur renvoyée :
  *   Succès : cf les fonctions _1990_coef_psi2_bat_PAYS.
  *   Échec : NAN :
- *             le pays ou le type n'existe pas.
+ *             la norme ou le type de l'action n'existe pas.
  */
 {
     // Trivial
-    switch (pays)
+    switch (norme)
     {
-        case PAYS_EU : { return _1990_coef_psi2_bat_eu(type); break; }
-        case PAYS_FR : { return _1990_coef_psi2_bat_fr(type); break; }
-        default : { BUGMSG(0, NAN, gettext("Pays %d inconnu.\n"), pays) break; }
+        case NORME_EU : { return _1990_coef_psi2_bat_eu(type); break; }
+        case NORME_FR : { return _1990_coef_psi2_bat_fr(type); break; }
+        default : { BUGMSG(0, NAN, gettext("Pays %d inconnu.\n"), norme) break; }
     }
 }

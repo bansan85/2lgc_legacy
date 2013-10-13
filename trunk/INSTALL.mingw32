@@ -47,6 +47,7 @@ cd glib-2.36.4 && \
 sed -i 's/tests//g' gio/Makefile.am glib/Makefile.am gobject/Makefile.am && \
 sed -i 's/tests$//g' Makefile.am Makefile.in gio/Makefile.in glib/Makefile.in gobject/Makefile.in && \
 sed -i 's/tests $//g' Makefile.am Makefile.in gio/Makefile.in glib/Makefile.in gobject/Makefile.in && \
+autoreconf --force -i && \
 CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" LIBFFI_CFLAGS="-I/usr/i686-pc-mingw32/usr/lib/libffi-3.0.13/include" LIBFFI_LIBS="-lffi" ./configure --disable-static --enable-shared --with-threads=win32 --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
 make -j9 && sudo make install && cd .. && \
 (test -f libxml2-2.9.1.tar.gz || wget ftp://xmlsoft.org/libxml2/libxml2-2.9.1.tar.gz) && \
@@ -80,7 +81,7 @@ make -j9 && sudo make install && cd .. && \
 (test -f pixman-0.30.2.tar.gz || wget http://cairographics.org/releases/pixman-0.30.2.tar.gz) && \
 tar xvzf pixman-0.30.2.tar.gz && \
 cd pixman-0.30.2 && \
-CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields" ./configure --disable-static --enable-shared --disable-sse2 --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
+CFLAGS="-march=i686 -O0 -g3 -ggdb3 -fno-omit-frame-pointer -pipe -mms-bitfields -mstackrealign" ./configure --disable-static --enable-shared --enable-sse2 --prefix=/usr/i686-pc-mingw32/usr/ --build=x86_64-pc-linux-gnu --host=i686-pc-mingw32 && \
 sed -i "s/demos test//g" Makefile.am Makefile.in && \
 make -j9 && sudo make install && cd .. && \
 (test -f freetype-2.5.0.1.tar.bz2 || wget http://downloads.sourceforge.net/project/freetype/freetype2/2.5.0/freetype-2.5.0.1.tar.bz2) && \
@@ -295,7 +296,7 @@ mkdir -p libs/files
 cp /usr/i686-pc-mingw32/usr/bin/lib{cairo-2,fontconfig-1,freetype-6,xml2-2,iconv-2,pixman-1-0,png16-16,ffi-6,gdk-3-0,cairo-gobject-2,glib-2.0-0,gobject-2.0-0,gdk_pixbuf-2.0-0,gio-2.0-0,gmodule-2.0-0,pango-1.0-0,pangocairo-1.0-0,harfbuzz-0,pangowin32-1.0-0,gtk-3-0,atk-1.0-0,M3d++-0,refblas,lapack,rsvg-2-2,croco-0.6-3}.dll libs/
 cp /usr/i686-pc-mingw32/usr/bin/intl.dll libs/
 cp /usr/i686-pc-mingw32/usr/bin/libz.dll libs/zlib1.dll
-cp /usr/lib64/gcc/i686-pc-mingw32/*/lib{stdc++-6,gfortran-3,quadmath-0,gcc_s_sjlj-1}.dll libs/
+cp /usr/lib64/gcc/i686-pc-mingw32/*/lib{stdc++-6,gfortran-3,quadmath-0,gcc_s_seh-1}.dll libs/
 mkdir -p libs/etc/gtk-3.0
 echo -e "[Settings]\ngtk-icon-theme-name = gnome" > libs/etc/gtk-3.0/settings.ini
 mkdir -p libs/share/icons/gnome/scalable/actions

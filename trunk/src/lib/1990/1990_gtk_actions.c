@@ -123,7 +123,7 @@ void _1990_gtk_actions_cursor_changed(GtkTreeView *tree_view, Projet *projet)
     if (!gtk_tree_selection_get_selected(projet->list_gtk._1990_actions.tree_select_actions, &model, &iter))
         return;
     gtk_tree_model_get(model, &iter, 0, &action, -1);
-    switch (_1990_action_categorie_bat(_1990_action_type_renvoie(action), projet->parametres.pays))
+    switch (_1990_action_categorie_bat(_1990_action_type_renvoie(action), projet->parametres.norme))
     {
         case ACTION_POIDS_PROPRE :
         case ACTION_PRECONTRAINTE :
@@ -372,12 +372,12 @@ void _1990_gtk_actions_type_edited(GtkCellRendererText *cell, const gchar *path_
     gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(projet->list_gtk._1990_actions.tree_store_actions), &iter, path_string);
     gtk_tree_model_get(GTK_TREE_MODEL(projet->list_gtk._1990_actions.tree_store_actions), &iter, 0, &action, -1);
     
-    for (type=0;type<_1990_action_num_bat_txt(projet->parametres.pays);type++)
+    for (type=0;type<_1990_action_num_bat_txt(projet->parametres.norme);type++)
     {
-        if (strcmp(new_text, _1990_action_type_bat_txt(type, projet->parametres.pays)) == 0)
+        if (strcmp(new_text, _1990_action_bat_txt_type(type, projet->parametres.norme)) == 0)
             break;
     }
-    BUGMSG(type != _1990_action_num_bat_txt(projet->parametres.pays), , gettext("Type d'action '%s' inconnu.\n"), new_text)
+    BUGMSG(type != _1990_action_num_bat_txt(projet->parametres.norme), , gettext("Type d'action '%s' inconnu.\n"), new_text)
     
     BUG(_1990_action_type_change(projet, action, type), )
     
@@ -858,7 +858,7 @@ void _1990_gtk_actions_render_1(GtkTreeViewColumn *tree_column, GtkCellRenderer 
     
     gtk_tree_model_get(tree_model, iter, 0, &action, -1);
     
-    g_object_set(cell, "text", _1990_action_type_bat_txt(_1990_action_type_renvoie(action), projet->parametres.pays), NULL);
+    g_object_set(cell, "text", _1990_action_bat_txt_type(_1990_action_type_renvoie(action), projet->parametres.norme), NULL);
     
     return;
 }

@@ -176,12 +176,12 @@ gboolean _1990_combinaisons_duplique(GList **liste_comb_destination, GList *list
 }
 
 
-gboolean _1990_combinaisons_action_predominante(GList *combinaison, Type_Pays pays)
+gboolean _1990_combinaisons_action_predominante(GList *combinaison, Norme norme)
 /* Description : Modifie le flag de toutes les actions variables d'une combinaison afin de les
  *               considérer comme action prédominante.
  *               FONCTION INTERNE.
  * Paramètres : GList *combinaison : combinaison à modifier,
- *            : Type_Pays pays : le pays.
+ *            : Norme norme : la norme.
  * Valeur renvoyée :
  *   Succès : TRUE
  *   Échec : FALSE :
@@ -200,7 +200,7 @@ gboolean _1990_combinaisons_action_predominante(GList *combinaison, Type_Pays pa
     do
     {
         Combinaison         *combinaison_element = list_parcours->data;
-        Action_Categorie    categorie = _1990_action_categorie_bat(_1990_action_type_renvoie(combinaison_element->action), pays);
+        Action_Categorie    categorie = _1990_action_categorie_bat(_1990_action_type_renvoie(combinaison_element->action), norme);
         
         BUG(categorie != ACTION_INCONNUE, FALSE)
         if (categorie == ACTION_VARIABLE)
@@ -443,7 +443,7 @@ gboolean _1990_combinaisons_genere_and(Projet *projet, Niveau_Groupe *niveau, Gr
         if (comb != NULL)
         {
             if (action_predominante == 1)
-                BUG(_1990_combinaisons_action_predominante(comb, projet->parametres.pays), FALSE)
+                BUG(_1990_combinaisons_action_predominante(comb, projet->parametres.norme), FALSE)
             groupe->tmp_combinaison = g_list_append(groupe->tmp_combinaison, comb);
         }
         else
@@ -633,7 +633,7 @@ gboolean _1990_combinaisons_genere_or(Projet *projet, Niveau_Groupe *niveau, Gro
             if (nouvelle_combinaison != NULL)
             {
                 if (action_predominante == 1)
-                    BUG(_1990_combinaisons_action_predominante(nouvelle_combinaison, projet->parametres.pays), FALSE)
+                    BUG(_1990_combinaisons_action_predominante(nouvelle_combinaison, projet->parametres.norme), FALSE)
                 groupe->tmp_combinaison = g_list_append(groupe->tmp_combinaison, nouvelle_combinaison);
             }
             else
@@ -944,7 +944,7 @@ gboolean _1990_combinaisons_genere(Projet *projet)
             list_parcours = g_list_next(list_parcours);
         }
         action = list_parcours->data;
-        categorie = _1990_action_categorie_bat(_1990_action_type_renvoie(action), projet->parametres.pays);
+        categorie = _1990_action_categorie_bat(_1990_action_type_renvoie(action), projet->parametres.norme);
         BUG(categorie != ACTION_INCONNUE, FALSE)
         if (categorie == ACTION_VARIABLE)
             BUG(_1990_action_flags_action_predominante_change(action, 1), FALSE)

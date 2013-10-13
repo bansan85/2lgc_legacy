@@ -305,11 +305,11 @@ typedef enum __Type_Element // La liste des différents éléments de type de ba
 } Type_Element;
 
 
-typedef enum __Type_Pays
-{               // Spécifie le pays et l'annexe nationnale à utiliser :
-    PAYS_EU,    // Norme européenne sans application des annexes nationales
-    PAYS_FR     // Annexe nationale française
-} Type_Pays;
+typedef enum __Norme
+{             // Spécifie la norme et l'annexe nationnale à utiliser :
+    NORME_EU, // Norme européenne sans application des annexes nationales,
+    NORME_FR  // Annexe nationale française.
+} Norme;
 
 
 typedef enum __Type_Groupe_Combinaison
@@ -1088,7 +1088,7 @@ typedef struct __Adresse
 
 typedef struct __Parametres
 {
-    Type_Pays       pays;               // Pays de calculs
+    Norme           norme;
     Adresse         adresse;
     Type_Neige      neige;
     Type_Vent       vent;
@@ -1115,7 +1115,7 @@ typedef struct __Projet
 } Projet;
 
 
-Projet *projet_init(Type_Pays pays) __attribute__((__warn_unused_result__));
+Projet *projet_init(Norme norme) __attribute__((__warn_unused_result__));
 #ifdef ENABLE_GTK
 gboolean projet_init_graphique(Projet *projet) __attribute__((__warn_unused_result__));
 #endif

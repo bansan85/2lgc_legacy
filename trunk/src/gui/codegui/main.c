@@ -89,7 +89,7 @@ int main(int argc, char *argv[])
     BUGMSG(gtk_init_check(&argc, &argv) == TRUE, -1, gettext("Impossible d'initialiser gtk.\n"))
     
     // Création d'un projet type
-    BUG(projet = projet_init(PAYS_FR), -1)
+    BUG(projet = projet_init(NORME_FR), -1)
     
     // Création des actions
 /*    BUG(_1990_action_ajout(projet, 0, "Poids propre"), -1) // Poids propre
