@@ -48,4 +48,7 @@ struct __Action
 };
 
 
+gboolean _1990_action_init(Projet *projet) __attribute__((__warn_unused_result__));
+
+
 #endif

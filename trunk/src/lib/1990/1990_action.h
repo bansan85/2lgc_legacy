@@ -26,8 +26,6 @@ char * _1990_action_bat_txt_type(unsigned int type, Norme norme) __attribute__((
 Action_Categorie _1990_action_categorie_bat(unsigned int type, Norme norme) __attribute__((__warn_unused_result__));
 unsigned int _1990_action_num_bat_txt(Norme norme) __attribute__((__warn_unused_result__));
 
-gboolean _1990_action_init(Projet *projet) __attribute__((__warn_unused_result__));
-
 Action* _1990_action_ajout(Projet *projet, unsigned int categorie, const char* description) __attribute__((__warn_unused_result__));
 
 const char* _1990_action_nom_renvoie(Action *action) __attribute__((__warn_unused_result__));

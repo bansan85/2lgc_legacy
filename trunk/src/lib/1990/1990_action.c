@@ -292,13 +292,16 @@ _1990_action_categorie_bat (unsigned int type, Norme norme)
 }
 
 
-Action_Categorie _1990_action_num_bat_txt(Norme norme)
-/* Description : renvoie le nombre de catégories d'actions des bâtiments en fonction de la norme.
- * Paramètres : Norme norme : le numéro de la norme.
- * Valeur renvoyée :
- *   Succès : le nombre de catégorie d'actions
+unsigned int
+_1990_action_num_bat_txt (Norme norme)
+/**
+ * \brief Renvoie le nombre de catégories d'actions des bâtiments en fonction
+ *        de la norme.
+ * \param norme : la norme souhaitée.
+ * \return
+ *   Succès : le nombre de catégorie d'actions\n
  *   Échec : 0 :
- *             La norme n'existe pas.
+ *     - La norme n'existe pas.
  */
 {
     // Trivial
@@ -306,18 +309,21 @@ Action_Categorie _1990_action_num_bat_txt(Norme norme)
     {
         case NORME_EU : { return 17; break; }
         case NORME_FR : { return 22; break; }
-        default : { BUGMSG(0, 0, gettext("Norme %d inconnue.\n"), norme) break; }
+        default : { BUGMSG (0, 0, gettext ("Norme %d inconnue.\n"), norme) break; }
     }
 }
 
 
-gboolean _1990_action_init(Projet *projet)
-/* Description : Initialise la liste des actions.
- * Paramètres : Projet *projet : la variable projet.
- * Valeur renvoyée :
- *   Succès : TRUE
+gboolean
+_1990_action_init (Projet *projet)
+/**
+ * \brief Initialise la liste des actions.
+ * \param projet : la variable projet.
+ * \return
+ *   Succès : TRUE\n
  *   Échec : FALSE :
- *             projet == NULL.
+ *     - projet == NULL.
+ * \warning Fonction interne. Il convient d'utiliser la fonction #projet_init.
  */
 {
 #ifdef ENABLE_GTK
@@ -326,7 +332,7 @@ gboolean _1990_action_init(Projet *projet)
 #endif
     
     // Trivial
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    BUGMSG (projet, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
     
     projet->actions = NULL;
     
