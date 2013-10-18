@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2013-08-25 15:02+0200\n"
-"PO-Revision-Date: 2013-08-25 15:15+0100\n"
+"POT-Creation-Date: 2013-10-14 10:59+0200\n"
+"PO-Revision-Date: 2013-10-18 22:42+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -1036,6 +1036,10 @@ msgstr ""
 #, c-format
 msgid "Catégorie de durée %d inconnue.\n"
 msgstr "Catégorie de durée %d inconnue.\n"
+
+#, c-format
+msgid "Norme %d inconnue.\n"
+msgstr "Norme %d inconnue.\n"
 
 #, c-format
 msgid "Élément %u du groupe %u introuvable.\n"
