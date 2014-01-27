@@ -22,9 +22,24 @@
 #include "config.h"
 #include "common_projet.h"
 
-Charge_Noeud* EF_charge_noeud_ajout(Projet *projet, unsigned int num_action, GList *noeud, Flottant fx, Flottant fy, Flottant fz, Flottant mx, Flottant my, Flottant mz, const char* nom) __attribute__((__warn_unused_result__));
-char* EF_charge_noeud_description(Charge_Noeud *charge) __attribute__((__warn_unused_result__));
-gboolean EF_charge_noeud_enleve_noeuds(Charge_Noeud *charge, GList *noeuds, Projet *projet) __attribute__((__warn_unused_result__));
-gboolean EF_charge_noeud_free(Charge_Noeud *charge) __attribute__((__warn_unused_result__));
+Charge *EF_charge_noeud_ajout          (Projet     *p,
+                                        Action     *action,
+                                        GList      *noeud,
+                                        Flottant    fx,
+                                        Flottant    fy,
+                                        Flottant    fz,
+                                        Flottant    mx,
+                                        Flottant    my,
+                                        Flottant    mz,
+                                        const char *nom)
+                                       __attribute__((__warn_unused_result__));
+char *EF_charge_noeud_description      (Charge     *charge)
+                                       __attribute__((__warn_unused_result__));
+gboolean EF_charge_noeud_enleve_noeuds (Charge     *charge,
+                                        GList      *noeuds,
+                                        Projet     *p)
+                                       __attribute__((__warn_unused_result__));
+gboolean EF_charge_noeud_free          (Charge     *charge)
+                                       __attribute__((__warn_unused_result__));
 
 #endif

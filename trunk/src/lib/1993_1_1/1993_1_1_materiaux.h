@@ -22,12 +22,24 @@
 #include "config.h"
 #include "common_projet.h"
 
-#define COEFFICIENT_NU_ACIER    0.3
-#define MODULE_YOUNG_ACIER      210000000000.
+#define COEFFICIENT_NU_ACIER  0.3
+#define MODULE_YOUNG_ACIER    210000000000.
 
-EF_Materiau* _1993_1_1_materiaux_ajout(Projet *projet, const char *nom, Flottant fy, Flottant fu) __attribute__((__warn_unused_result__));
-gboolean _1993_1_1_materiaux_modif(Projet *projet, EF_Materiau *materiau, char *nom, Flottant fy, Flottant fu, Flottant e, Flottant nu) __attribute__((__warn_unused_result__));
+EF_Materiau *_1993_1_1_materiaux_ajout (Projet      *p,
+                                        const char  *nom,
+                                        Flottant     fy,
+                                        Flottant     fu)
+                                       __attribute__((__warn_unused_result__));
+gboolean     _1993_1_1_materiaux_modif (Projet      *p,
+                                        EF_Materiau *materiau,
+                                        char        *nom,
+                                        Flottant     fy,
+                                        Flottant     fu,
+                                        Flottant     e,
+                                        Flottant     nu)
+                                       __attribute__((__warn_unused_result__));
 
-char *_1993_1_1_materiaux_get_description(EF_Materiau* materiau) __attribute__((__warn_unused_result__));
+char *_1993_1_1_materiaux_get_description (EF_Materiau *materiau)
+                                       __attribute__((__warn_unused_result__));
 
 #endif

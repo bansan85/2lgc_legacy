@@ -25,7 +25,9 @@
 
 #include "common_projet.h"
 
-gboolean EF_gtk_section_carree(Projet *projet, EF_Section *section) __attribute__((__warn_unused_result__));
+gboolean EF_gtk_section_carree (Projet  *p,
+                                Section *section)
+                                       __attribute__((__warn_unused_result__));
 
 #endif
 

@@ -25,7 +25,7 @@
 
 #include "common_projet.h"
 
-gboolean EF_gtk_section_rectangulaire(Projet *projet, EF_Section *section) __attribute__((__warn_unused_result__));
+gboolean EF_gtk_section_rectangulaire(Projet *p, Section *section) __attribute__((__warn_unused_result__));
 
 #endif
 

@@ -25,7 +25,7 @@
 #include "common_projet.h"
 
 #ifndef M_PI
-#define M_PI        3.1415926535897932384626433
+#define M_PI    3.1415926535897932384626433
 #endif
 
 #ifndef MAXDOUBLE
@@ -33,27 +33,37 @@
 #endif
 
 #define ERREUR_RELATIVE_PUISSANCE 8 // Avec 13, common_fonction_compacte peut ne pas marcher
-                                     // correctement.
- #define ERREUR_RELATIVE_MIN 1e-8
- #define ERREUR_RELATIVE_EGALE(x, y) ( \
-   (((ABS(x)) < ERREUR_RELATIVE_MIN) || ((ABS(y)) < ERREUR_RELATIVE_MIN)) ? \
-   ((ABS(MAX(x,y)-MIN(x,y))) < (ERREUR_RELATIVE_MIN)) : \
-   ((ABS((MAX(x,y)-MIN(x,y))/(MIN(x,y)))) < (ERREUR_RELATIVE_MIN) ))
+                   // correctement.
+#define ERR_MIN 1e-8
+#define ERR(x, y) ( \
+   (((ABS (x)) < ERR_MIN) || ((ABS (y)) < ERR_MIN)) ? \
+   ((ABS (MAX (x,y) - MIN (x,y))) < (ERR_MIN)) : \
+   ((ABS ((MAX (x,y) - MIN (x,y)) / (MIN (x,y)))) < (ERR_MIN) ))
 /* Vérifie si x == y avec une erreur relative maximale D,
  * y étant la valeur recherchée et x la valeur à vérifier */
 
-double common_math_arrondi_nombre(double nombre);
-void common_math_arrondi_triplet(cholmod_triplet *triplet);
-void common_math_arrondi_sparse(cholmod_sparse *sparse);
-void common_math_double_to_char(double nombre, char *dest, int decimales);
-void common_math_double_to_char2(Flottant nombre, char *dest, int decimales);
+double common_math_arrondi_nombre  (double           nombre);
+void   common_math_arrondi_triplet (cholmod_triplet *triplet);
+void   common_math_arrondi_sparse  (cholmod_sparse  *sparse);
+void   common_math_double_to_char  (double nombre,
+                                    char            *dest,
+                                    int              decimales);
+void   conv_f_c                    (Flottant         nombre,
+                                    char            *dest,
+                                    int              decimales);
 
-double common_math_get(Flottant f);
-Flottant common_math_f(double f, Type_Flottant type);
-Flottant common_math_add(Flottant f1, Flottant f2);
-Flottant common_math_sub(Flottant f1, Flottant f2);
-Flottant common_math_div_d(Flottant f, double d);
-Flottant common_math_dot_d(Flottant f, double d);
-Flottant common_math_dot_f(Flottant f1, Flottant f2);
+double   m_g     (Flottant      f);
+Flottant m_f     (double        f,
+                  Type_Flottant type);
+Flottant m_add_f (Flottant      f1,
+                  Flottant      f2);
+Flottant m_sub_f (Flottant      f1,
+                  Flottant      f2);
+Flottant m_div_d (Flottant      f,
+                  double        d);
+Flottant m_dot_d (Flottant      f,
+                  double        d);
+Flottant m_dot_f (Flottant      f1,
+                  Flottant      f2);
 
 #endif

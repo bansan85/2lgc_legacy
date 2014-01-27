@@ -22,7 +22,33 @@
 #include "config.h"
 #include "common_projet.h"
 
-gboolean _1990_combinaisons_init(Projet *projet) __attribute__((__warn_unused_result__));
-gboolean _1990_combinaisons_genere(Projet *projet) __attribute__((__warn_unused_result__));
-gboolean _1990_combinaisons_free(Projet *projet) __attribute__((__warn_unused_result__));
+gboolean _1990_combinaisons_init   (Projet *p)
+                                       __attribute__((__warn_unused_result__));
+gboolean _1990_combinaisons_genere (Projet *p)
+                                       __attribute__((__warn_unused_result__));
+gboolean _1990_combinaisons_free   (Projet *p)
+                                       __attribute__((__warn_unused_result__));
+
+gboolean _1990_combinaisons_eluequ_equ_seul   (Projet *p)
+                                       __attribute__((__warn_unused_result__));
+gboolean _1990_combinaisons_eluequ_equ_resist (Projet *p)
+                                       __attribute__((__warn_unused_result__));
+
+gboolean _1990_combinaisons_elustrgeo_1 (Projet *p)
+                                       __attribute__((__warn_unused_result__));
+gboolean _1990_combinaisons_elustrgeo_2 (Projet *p)
+                                       __attribute__((__warn_unused_result__));
+gboolean _1990_combinaisons_elustrgeo_3 (Projet *p)
+                                       __attribute__((__warn_unused_result__));
+
+gboolean _1990_combinaisons_elustrgeo_6_10   (Projet *p)
+                                       __attribute__((__warn_unused_result__));
+gboolean _1990_combinaisons_elustrgeo_6_10ab (Projet *p)
+                                       __attribute__((__warn_unused_result__));
+
+gboolean _1990_combinaisons_eluacc_frequente        (Projet *p)
+                                       __attribute__((__warn_unused_result__));
+gboolean _1990_combinaisons_eluacc_quasi_permanente (Projet *p)
+                                       __attribute__((__warn_unused_result__));
+
 #endif

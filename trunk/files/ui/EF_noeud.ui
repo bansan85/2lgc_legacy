@@ -1,370 +1,370 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-    <requires lib="gtk+" version="3.2"/>
-    <object class="GtkTreeStore" id="EF_noeuds_treestore_noeuds_libres">
-        <columns>
-            <column type="gpointer"/>
-        </columns>
-    </object>
-    <object class="GtkTreeStore" id="EF_noeuds_treestore_noeuds_intermediaires">
-        <columns>
-            <column type="gpointer"/>
-        </columns>
-    </object>
-    <object class="GtkMenu" id="EF_noeuds_supprimer_menu">
-        <property name="visible">False</property>
-        <child>
-            <object class="GtkMenuItem" id="EF_noeuds_supprimer_menu_barres">
-                <property name="label" translatable="yes">et ces dépendances.</property>
-                <property name="visible">True</property>
-                <signal name="activate" handler="EF_gtk_noeud_supprimer"/>
-            </object>
-        </child>
-    </object>
-    <object class="GtkWindow" id="EF_noeuds_window">
+  <requires lib="gtk+" version="3.2"/>
+  <object class="GtkTreeStore" id="EF_noeuds_treestore_noeuds_libres">
+    <columns>
+      <column type="gpointer"/>
+    </columns>
+  </object>
+  <object class="GtkTreeStore" id="EF_noeuds_treestore_noeuds_intermediaires">
+    <columns>
+      <column type="gpointer"/>
+    </columns>
+  </object>
+  <object class="GtkMenu" id="EF_noeuds_supprimer_menu">
+    <property name="visible">False</property>
+    <child>
+      <object class="GtkMenuItem" id="EF_noeuds_supprimer_menu_barres">
+        <property name="label" translatable="yes">et ces dépendances.</property>
         <property name="visible">True</property>
-        <property name="title" translatable="yes">Noeuds</property>
-        <property name="default-height">400</property>
-        <property name="default-width">600</property>
-        <property name="window-position">GTK_WIN_POS_CENTER</property>
-        <signal name="key-press-event" handler="EF_gtk_noeuds_window_key_press"/>
-        <signal name="destroy" handler="EF_gtk_noeuds_window_destroy"/>
+        <signal name="activate" handler="EF_gtk_noeud_supprimer"/>
+      </object>
+    </child>
+  </object>
+  <object class="GtkWindow" id="EF_noeuds_window">
+    <property name="visible">True</property>
+    <property name="title" translatable="yes">Noeuds</property>
+    <property name="default-height">400</property>
+    <property name="default-width">600</property>
+    <property name="window-position">GTK_WIN_POS_CENTER</property>
+    <signal name="key-press-event" handler="ef_gtk_noeud_window_key_press"/>
+    <signal name="destroy" handler="ef_gtk_noeud_window_destroy"/>
+    <child>
+      <object class="GtkGrid" id="EF_noeuds_grille_principale">
+        <property name="visible">True</property>
+        <property name="border-width">12</property>
+        <property name="row-spacing">12</property>
         <child>
-            <object class="GtkGrid" id="EF_noeuds_grille_principale">
+          <object class="GtkNotebook" id="EF_noeuds_notebook">
+            <property name="visible">True</property>
+            <property name="tab-pos">top</property>
+            <property name="expand">True</property>
+            <signal name="switch-page" handler="EF_gtk_noeuds_notebook_change"/>
+            <child>
+              <object class="GtkScrolledWindow" id="EF_noeuds_scrolled_noeuds_libres">
                 <property name="visible">True</property>
-                <property name="border-width">12</property>
-                <property name="row-spacing">12</property>
+                <property name="expand">True</property>
+                <property name="hscrollbar-policy">automatic</property>
+                <property name="vscrollbar-policy">automatic</property>
                 <child>
-                    <object class="GtkNotebook" id="EF_noeuds_notebook">
+                  <object class="GtkTreeView" id="EF_noeuds_treeview_noeuds_libres">
+                    <property name="visible">True</property>
+                    <property name="model">EF_noeuds_treestore_noeuds_libres</property>
+                    <signal name="button-press-event" handler="common_gtk_treeview_button_press_unselect"/>
+                    <signal name="key-press-event" handler="EF_gtk_noeud_treeview_key_press"/>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection" id="EF_noeuds_treeview_noeuds_libres_select">
+                        <signal name="changed" handler="EF_noeuds_treeview_select_changed"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="EF_noeuds_treeview_noeuds_libres_column0">
                         <property name="visible">True</property>
-                        <property name="tab-pos">top</property>
-                        <property name="expand">True</property>
-                        <signal name="switch-page" handler="EF_gtk_noeuds_notebook_change"/>
+                        <property name="resizable">True</property>
+                        <property name="alignment">0.5</property>
+                        <property name="title" translatable="yes">Numéro</property>
                         <child>
-                            <object class="GtkScrolledWindow" id="EF_noeuds_scrolled_noeuds_libres">
-                                <property name="visible">True</property>
-                                <property name="expand">True</property>
-                                <property name="hscrollbar-policy">automatic</property>
-                                <property name="vscrollbar-policy">automatic</property>
-                                <child>
-                                    <object class="GtkTreeView" id="EF_noeuds_treeview_noeuds_libres">
-                                        <property name="visible">True</property>
-                                        <property name="model">EF_noeuds_treestore_noeuds_libres</property>
-                                        <signal name="button-press-event" handler="common_gtk_treeview_button_press_unselect"/>
-                                        <signal name="key-press-event" handler="EF_gtk_noeud_treeview_key_press"/>
-                                        <child internal-child="selection">
-                                            <object class="GtkTreeSelection" id="EF_noeuds_treeview_noeuds_libres_select">
-                                                <signal name="changed" handler="EF_noeuds_treeview_select_changed"/>
-                                            </object>
-                                        </child>
-                                        <child>
-                                            <object class="GtkTreeViewColumn" id="EF_noeuds_treeview_noeuds_libres_column0">
-                                                <property name="visible">True</property>
-                                                <property name="resizable">True</property>
-                                                <property name="alignment">0.5</property>
-                                                <property name="title" translatable="yes">Numéro</property>
-                                                <child>
-                                                    <object class="GtkCellRendererText" id="EF_noeuds_treeview_noeuds_libres_cell0">
-                                                        <property name="xalign">0.5</property>
-                                                        <property name="background">#EEEEEE</property>
-                                                    </object>
-                                                </child>
-                                            </object>
-                                        </child>
-                                        <child>
-                                            <object class="GtkTreeViewColumn" id="EF_noeuds_treeview_noeuds_libres_column1">
-                                                <property name="visible">True</property>
-                                                <property name="resizable">True</property>
-                                                <property name="alignment">0.5</property>
-                                                <property name="title">x</property>
-                                                <child>
-                                                    <object class="GtkCellRendererText" id="EF_noeuds_treeview_noeuds_libres_cell1">
-                                                        <property name="editable">True</property>
-                                                        <property name="xalign">1.</property>
-                                                        <signal name="edited" handler="EF_gtk_noeud_edit_pos_abs"/>
-                                                    </object>
-                                                </child>
-                                            </object>
-                                        </child>
-                                        <child>
-                                            <object class="GtkTreeViewColumn" id="EF_noeuds_treeview_noeuds_libres_column2">
-                                                <property name="visible">True</property>
-                                                <property name="resizable">True</property>
-                                                <property name="alignment">0.5</property>
-                                                <property name="title">y</property>
-                                                <child>
-                                                    <object class="GtkCellRendererText" id="EF_noeuds_treeview_noeuds_libres_cell2">
-                                                        <property name="editable">True</property>
-                                                        <property name="xalign">1.</property>
-                                                        <signal name="edited" handler="EF_gtk_noeud_edit_pos_abs"/>
-                                                    </object>
-                                                </child>
-                                            </object>
-                                        </child>
-                                        <child>
-                                            <object class="GtkTreeViewColumn" id="EF_noeuds_treeview_noeuds_libres_column3">
-                                                <property name="visible">True</property>
-                                                <property name="resizable">True</property>
-                                                <property name="alignment">0.5</property>
-                                                <property name="title">z</property>
-                                                <child>
-                                                    <object class="GtkCellRendererText" id="EF_noeuds_treeview_noeuds_libres_cell3">
-                                                        <property name="editable">True</property>
-                                                        <property name="xalign">1.</property>
-                                                        <signal name="edited" handler="EF_gtk_noeud_edit_pos_abs"/>
-                                                    </object>
-                                                </child>
-                                            </object>
-                                        </child>
-                                        <child>
-                                            <object class="GtkTreeViewColumn" id="EF_noeuds_treeview_noeuds_libres_column4">
-                                                <property name="visible">True</property>
-                                                <property name="resizable">True</property>
-                                                <property name="alignment">0.5</property>
-                                                <property name="title" translatable="yes">Appui</property>
-                                                <child>
-                                                    <object class="GtkCellRendererCombo" id="EF_noeuds_treeview_noeuds_libres_cell4">
-                                                        <property name="editable">True</property>
-                                                        <property name="text-column">0</property>
-                                                        <property name="has-entry">False</property>
-                                                        <signal name="edited" handler="EF_gtk_noeud_edit_noeud_appui"/>
-                                                    </object>
-                                                </child>
-                                            </object>
-                                        </child>
-                                        <child>
-                                            <object class="GtkTreeViewColumn" id="EF_noeuds_treeview_noeuds_libres_column5">
-                                                <property name="visible">True</property>
-                                                <property name="resizable">True</property>
-                                                <property name="alignment">0.5</property>
-                                                <property name="title" translatable="yes">Noeud relatif</property>
-                                                <child>
-                                                    <object class="GtkCellRendererText" id="EF_noeuds_treeview_noeuds_libres_cell5">
-                                                        <property name="editable">True</property>
-                                                        <property name="xalign">0.5</property>
-                                                        <signal name="edited" handler="EF_gtk_noeud_edit_noeud_relatif"/>
-                                                    </object>
-                                                </child>
-                                            </object>
-                                        </child>
-                                        <child>
-                                            <object class="GtkTreeViewColumn" id="EF_noeuds_treeview_noeuds_libres_column6">
-                                                <property name="visible">True</property>
-                                            </object>
-                                        </child>
-                                    </object>
-                                </child>
-                            </object>
+                          <object class="GtkCellRendererText" id="EF_noeuds_treeview_noeuds_libres_cell0">
+                            <property name="xalign">0.5</property>
+                            <property name="background">#EEEEEE</property>
+                          </object>
                         </child>
-                        <child type="tab">
-                            <object class="GtkLabel" id="EF_noeuds_notebook_noeuds_libres_label">
-                                <property name="visible">True</property>
-                                <property name="label" translatable="yes">Noeuds _libres</property>
-                                <property name="use_underline">True</property>
-                            </object>
-                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="EF_noeuds_treeview_noeuds_libres_column1">
+                        <property name="visible">True</property>
+                        <property name="resizable">True</property>
+                        <property name="alignment">0.5</property>
+                        <property name="title">x</property>
                         <child>
-                            <object class="GtkScrolledWindow" id="EF_noeuds_scrolled_noeuds_intermediaires">
-                                <property name="visible">True</property>
-                                <property name="expand">True</property>
-                                <property name="hscrollbar-policy">automatic</property>
-                                <property name="vscrollbar-policy">automatic</property>
-                                <child>
-                                    <object class="GtkTreeView" id="EF_noeuds_treeview_noeuds_intermediaires">
-                                        <property name="visible">True</property>
-                                        <property name="model">EF_noeuds_treestore_noeuds_intermediaires</property>
-                                        <signal name="key-press-event" handler="EF_gtk_noeud_treeview_key_press"/>
-                                        <signal name="button-press-event" handler="common_gtk_treeview_button_press_unselect"/>
-                                        <child internal-child="selection">
-                                            <object class="GtkTreeSelection" id="EF_noeuds_treeview_noeuds_intermediaires_select">
-                                                <signal name="changed" handler="EF_noeuds_treeview_select_changed"/>
-                                            </object>
-                                        </child>
-                                        <child>
-                                            <object class="GtkTreeViewColumn" id="EF_noeuds_treeview_noeuds_intermediaires_column0">
-                                                <property name="visible">True</property>
-                                                <property name="resizable">True</property>
-                                                <property name="alignment">0.5</property>
-                                                <property name="title" translatable="yes">Numéro</property>
-                                                <child>
-                                                    <object class="GtkCellRendererText" id="EF_noeuds_treeview_noeuds_intermediaires_cell0">
-                                                        <property name="xalign">0.5</property>
-                                                        <property name="background">#EEEEEE</property>
-                                                    </object>
-                                                </child>
-                                            </object>
-                                        </child>
-                                        <child>
-                                            <object class="GtkTreeViewColumn" id="EF_noeuds_treeview_noeuds_intermediaires_column1">
-                                                <property name="visible">True</property>
-                                                <property name="resizable">True</property>
-                                                <property name="alignment">0.5</property>
-                                                <property name="title">x</property>
-                                                <child>
-                                                    <object class="GtkCellRendererText" id="EF_noeuds_treeview_noeuds_intermediaires_cell1">
-                                                        <property name="xalign">1.</property>
-                                                    </object>
-                                                </child>
-                                            </object>
-                                        </child>
-                                        <child>
-                                            <object class="GtkTreeViewColumn" id="EF_noeuds_treeview_noeuds_intermediaires_column2">
-                                                <property name="visible">True</property>
-                                                <property name="resizable">True</property>
-                                                <property name="alignment">0.5</property>
-                                                <property name="title">y</property>
-                                                <child>
-                                                    <object class="GtkCellRendererText" id="EF_noeuds_treeview_noeuds_intermediaires_cell2">
-                                                        <property name="xalign">1.</property>
-                                                    </object>
-                                                </child>
-                                            </object>
-                                        </child>
-                                        <child>
-                                            <object class="GtkTreeViewColumn" id="EF_noeuds_treeview_noeuds_intermediaires_column3">
-                                                <property name="visible">True</property>
-                                                <property name="resizable">True</property>
-                                                <property name="alignment">0.5</property>
-                                                <property name="title">z</property>
-                                                <child>
-                                                    <object class="GtkCellRendererText" id="EF_noeuds_treeview_noeuds_intermediaires_cell3">
-                                                        <property name="xalign">1.</property>
-                                                    </object>
-                                                </child>
-                                            </object>
-                                        </child>
-                                        <child>
-                                            <object class="GtkTreeViewColumn" id="EF_noeuds_treeview_noeuds_intermediaires_column4">
-                                                <property name="visible">True</property>
-                                                <property name="resizable">True</property>
-                                                <property name="alignment">0.5</property>
-                                                <property name="title" translatable="yes">Appui</property>
-                                                <child>
-                                                    <object class="GtkCellRendererCombo" id="EF_noeuds_treeview_noeuds_intermediaires_cell4">
-                                                        <property name="editable">True</property>
-                                                        <property name="text-column">0</property>
-                                                        <property name="has-entry">False</property>
-                                                        <signal name="edited" handler="EF_gtk_noeud_edit_noeud_appui"/>
-                                                    </object>
-                                                </child>
-                                            </object>
-                                        </child>
-                                        <child>
-                                            <object class="GtkTreeViewColumn" id="EF_noeuds_treeview_noeuds_intermediaires_column5">
-                                                <property name="visible">True</property>
-                                                <property name="resizable">True</property>
-                                                <property name="alignment">0.5</property>
-                                                <property name="title" translatable="yes">Barre</property>
-                                                <child>
-                                                    <object class="GtkCellRendererText" id="EF_noeuds_treeview_noeuds_intermediaires_cell5">
-                                                        <property name="editable">True</property>
-                                                        <property name="xalign">0.5</property>
-                                                        <signal name="edited" handler="EF_gtk_noeud_edit_noeud_barre_barre"/>
-                                                    </object>
-                                                </child>
-                                            </object>
-                                        </child>
-                                        <child>
-                                            <object class="GtkTreeViewColumn" id="EF_noeuds_treeview_noeuds_intermediaires_column6">
-                                                <property name="visible">True</property>
-                                                <property name="resizable">True</property>
-                                                <property name="alignment">0.5</property>
-                                                <property name="title" translatable="yes">Position relative</property>
-                                                <child>
-                                                    <object class="GtkCellRendererText" id="EF_noeuds_treeview_noeuds_intermediaires_cell6">
-                                                        <property name="editable">True</property>
-                                                        <property name="xalign">1.</property>
-                                                        <signal name="edited" handler="EF_gtk_noeud_edit_pos_relat"/>
-                                                    </object>
-                                                </child>
-                                            </object>
-                                        </child>
-                                        <child>
-                                            <object class="GtkTreeViewColumn" id="EF_noeuds_treeview_noeuds_intermediaires_column7">
-                                                <property name="visible">True</property>
-                                            </object>
-                                        </child>
-                                    </object>
-                                </child>
-                            </object>
+                          <object class="GtkCellRendererText" id="EF_noeuds_treeview_noeuds_libres_cell1">
+                            <property name="editable">True</property>
+                            <property name="xalign">1.</property>
+                            <signal name="edited" handler="EF_gtk_noeud_edit_pos_abs"/>
+                          </object>
                         </child>
-                        <child type="tab">
-                            <object class="GtkLabel" id="EF_noeuds_notebook_noeuds_intermediaires_label">
-                                <property name="visible">True</property>
-                                <property name="label" translatable="yes">Noeuds _intermédiaires</property>
-                                <property name="use_underline">True</property>
-                            </object>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="EF_noeuds_treeview_noeuds_libres_column2">
+                        <property name="visible">True</property>
+                        <property name="resizable">True</property>
+                        <property name="alignment">0.5</property>
+                        <property name="title">y</property>
+                        <child>
+                          <object class="GtkCellRendererText" id="EF_noeuds_treeview_noeuds_libres_cell2">
+                            <property name="editable">True</property>
+                            <property name="xalign">1.</property>
+                            <signal name="edited" handler="EF_gtk_noeud_edit_pos_abs"/>
+                          </object>
                         </child>
-                    </object>
-                    <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">0</property>
-                    </packing>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="EF_noeuds_treeview_noeuds_libres_column3">
+                        <property name="visible">True</property>
+                        <property name="resizable">True</property>
+                        <property name="alignment">0.5</property>
+                        <property name="title">z</property>
+                        <child>
+                          <object class="GtkCellRendererText" id="EF_noeuds_treeview_noeuds_libres_cell3">
+                            <property name="editable">True</property>
+                            <property name="xalign">1.</property>
+                            <signal name="edited" handler="EF_gtk_noeud_edit_pos_abs"/>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="EF_noeuds_treeview_noeuds_libres_column4">
+                        <property name="visible">True</property>
+                        <property name="resizable">True</property>
+                        <property name="alignment">0.5</property>
+                        <property name="title" translatable="yes">Appui</property>
+                        <child>
+                          <object class="GtkCellRendererCombo" id="EF_noeuds_treeview_noeuds_libres_cell4">
+                            <property name="editable">True</property>
+                            <property name="text-column">0</property>
+                            <property name="has-entry">False</property>
+                            <signal name="edited" handler="EF_gtk_noeud_edit_noeud_appui"/>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="EF_noeuds_treeview_noeuds_libres_column5">
+                        <property name="visible">True</property>
+                        <property name="resizable">True</property>
+                        <property name="alignment">0.5</property>
+                        <property name="title" translatable="yes">Noeud relatif</property>
+                        <child>
+                          <object class="GtkCellRendererText" id="EF_noeuds_treeview_noeuds_libres_cell5">
+                            <property name="editable">True</property>
+                            <property name="xalign">0.5</property>
+                            <signal name="edited" handler="EF_gtk_noeud_edit_noeud_relatif"/>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="EF_noeuds_treeview_noeuds_libres_column6">
+                        <property name="visible">True</property>
+                      </object>
+                    </child>
+                  </object>
                 </child>
+              </object>
+            </child>
+            <child type="tab">
+              <object class="GtkLabel" id="EF_noeuds_notebook_noeuds_libres_label">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">Noeuds _libres</property>
+                <property name="use_underline">True</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow" id="EF_noeuds_scrolled_noeuds_intermediaires">
+                <property name="visible">True</property>
+                <property name="expand">True</property>
+                <property name="hscrollbar-policy">automatic</property>
+                <property name="vscrollbar-policy">automatic</property>
                 <child>
-                    <object class="GtkButtonBox" id="EF_noeuds_bouttons_fenetre">
+                  <object class="GtkTreeView" id="EF_noeuds_treeview_noeuds_intermediaires">
+                    <property name="visible">True</property>
+                    <property name="model">EF_noeuds_treestore_noeuds_intermediaires</property>
+                    <signal name="key-press-event" handler="EF_gtk_noeud_treeview_key_press"/>
+                    <signal name="button-press-event" handler="common_gtk_treeview_button_press_unselect"/>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection" id="EF_noeuds_treeview_noeuds_intermediaires_select">
+                        <signal name="changed" handler="EF_noeuds_treeview_select_changed"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="EF_noeuds_treeview_noeuds_intermediaires_column0">
                         <property name="visible">True</property>
-                        <property name="orientation">horizontal</property>
-                        <property name="layout_style">end</property>
-                        <property name="spacing">6</property>
+                        <property name="resizable">True</property>
+                        <property name="alignment">0.5</property>
+                        <property name="title" translatable="yes">Numéro</property>
                         <child>
-                            <object class="GtkButton" id="EF_noeuds_boutton_ajouter">
-                                <property name="visible">True</property>
-                                <property name="label" translatable="yes">_Ajouter</property>
-                                <property name="use_underline">True</property>
-                                <signal name="clicked" handler="EF_gtk_noeud_ajouter"/>
-                            </object>
-                            <packing>
-                                <property name="position">0</property>
-                                <property name="pack_type">start</property>
-                            </packing>
+                          <object class="GtkCellRendererText" id="EF_noeuds_treeview_noeuds_intermediaires_cell0">
+                            <property name="xalign">0.5</property>
+                            <property name="background">#EEEEEE</property>
+                          </object>
                         </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="EF_noeuds_treeview_noeuds_intermediaires_column1">
+                        <property name="visible">True</property>
+                        <property name="resizable">True</property>
+                        <property name="alignment">0.5</property>
+                        <property name="title">x</property>
                         <child>
-                            <object class="GtkButton" id="EF_noeuds_boutton_supprimer">
-                                <property name="visible">True</property>
-                                <property name="sensitive">False</property>
-                                <property name="label" translatable="yes">_Supprimer</property>
-                                <property name="use_underline">True</property>
-                                <signal name="clicked" handler="EF_gtk_noeud_supprimer"/>
-                            </object>
-                            <packing>
-                                <property name="position">1</property>
-                                <property name="pack_type">start</property>
-                            </packing>
+                          <object class="GtkCellRendererText" id="EF_noeuds_treeview_noeuds_intermediaires_cell1">
+                            <property name="xalign">1.</property>
+                          </object>
                         </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="EF_noeuds_treeview_noeuds_intermediaires_column2">
+                        <property name="visible">True</property>
+                        <property name="resizable">True</property>
+                        <property name="alignment">0.5</property>
+                        <property name="title">y</property>
                         <child>
-                            <object class="GtkMenuButton" id="EF_noeuds_boutton_supprimer_menu">
-                                <property name="visible">False</property>
-                                <property name="label" translatable="yes">_Supprimer</property>
-                                <property name="use_underline">True</property>
-                                <property name="sensitive">False</property>
-                                <property name="popup">EF_noeuds_supprimer_menu</property>
-                                <signal name="clicked" handler="EF_gtk_noeuds_boutton_supprimer_menu"/>
-                            </object>
-                            <packing>
-                                <property name="position">2</property>
-                                <property name="pack_type">start</property>
-                            </packing>
+                          <object class="GtkCellRendererText" id="EF_noeuds_treeview_noeuds_intermediaires_cell2">
+                            <property name="xalign">1.</property>
+                          </object>
                         </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="EF_noeuds_treeview_noeuds_intermediaires_column3">
+                        <property name="visible">True</property>
+                        <property name="resizable">True</property>
+                        <property name="alignment">0.5</property>
+                        <property name="title">z</property>
                         <child>
-                            <object class="GtkButton" id="EF_noeuds_boutton_fermer">
-                                <property name="visible">True</property>
-                                <property name="label" translatable="yes">_Fermer</property>
-                                <property name="use_underline">True</property>
-                                <signal name="clicked" handler="EF_gtk_noeud_fermer"/>
-                            </object>
-                            <packing>
-                                <property name="position">3</property>
-                                <property name="pack_type">end</property>
-                            </packing>
+                          <object class="GtkCellRendererText" id="EF_noeuds_treeview_noeuds_intermediaires_cell3">
+                            <property name="xalign">1.</property>
+                          </object>
                         </child>
-                    </object>
-                    <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">1</property>
-                    </packing>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="EF_noeuds_treeview_noeuds_intermediaires_column4">
+                        <property name="visible">True</property>
+                        <property name="resizable">True</property>
+                        <property name="alignment">0.5</property>
+                        <property name="title" translatable="yes">Appui</property>
+                        <child>
+                          <object class="GtkCellRendererCombo" id="EF_noeuds_treeview_noeuds_intermediaires_cell4">
+                            <property name="editable">True</property>
+                            <property name="text-column">0</property>
+                            <property name="has-entry">False</property>
+                            <signal name="edited" handler="EF_gtk_noeud_edit_noeud_appui"/>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="EF_noeuds_treeview_noeuds_intermediaires_column5">
+                        <property name="visible">True</property>
+                        <property name="resizable">True</property>
+                        <property name="alignment">0.5</property>
+                        <property name="title" translatable="yes">Barre</property>
+                        <child>
+                          <object class="GtkCellRendererText" id="EF_noeuds_treeview_noeuds_intermediaires_cell5">
+                            <property name="editable">True</property>
+                            <property name="xalign">0.5</property>
+                            <signal name="edited" handler="EF_gtk_noeud_edit_noeud_barre_barre"/>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="EF_noeuds_treeview_noeuds_intermediaires_column6">
+                        <property name="visible">True</property>
+                        <property name="resizable">True</property>
+                        <property name="alignment">0.5</property>
+                        <property name="title" translatable="yes">Position relative</property>
+                        <child>
+                          <object class="GtkCellRendererText" id="EF_noeuds_treeview_noeuds_intermediaires_cell6">
+                            <property name="editable">True</property>
+                            <property name="xalign">1.</property>
+                            <signal name="edited" handler="EF_gtk_noeud_edit_pos_relat"/>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="EF_noeuds_treeview_noeuds_intermediaires_column7">
+                        <property name="visible">True</property>
+                      </object>
+                    </child>
+                  </object>
                 </child>
-            </object>
+              </object>
+            </child>
+            <child type="tab">
+              <object class="GtkLabel" id="EF_noeuds_notebook_noeuds_intermediaires_label">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">Noeuds _intermédiaires</property>
+                <property name="use_underline">True</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">0</property>
+          </packing>
         </child>
-    </object>
+        <child>
+          <object class="GtkButtonBox" id="EF_noeuds_bouttons_fenetre">
+            <property name="visible">True</property>
+            <property name="orientation">horizontal</property>
+            <property name="layout_style">end</property>
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkButton" id="EF_noeuds_boutton_ajouter">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">_Ajouter</property>
+                <property name="use_underline">True</property>
+                <signal name="clicked" handler="EF_gtk_noeud_ajouter"/>
+              </object>
+              <packing>
+                <property name="position">0</property>
+                <property name="pack_type">start</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="EF_noeuds_boutton_supprimer">
+                <property name="visible">True</property>
+                <property name="sensitive">False</property>
+                <property name="label" translatable="yes">_Supprimer</property>
+                <property name="use_underline">True</property>
+                <signal name="clicked" handler="EF_gtk_noeud_supprimer"/>
+              </object>
+              <packing>
+                <property name="position">1</property>
+                <property name="pack_type">start</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkMenuButton" id="EF_noeuds_boutton_supprimer_menu">
+                <property name="visible">False</property>
+                <property name="label" translatable="yes">_Supprimer</property>
+                <property name="use_underline">True</property>
+                <property name="sensitive">False</property>
+                <property name="popup">EF_noeuds_supprimer_menu</property>
+                <signal name="clicked" handler="EF_gtk_noeuds_boutton_supprimer_menu"/>
+              </object>
+              <packing>
+                <property name="position">2</property>
+                <property name="pack_type">start</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="EF_noeuds_boutton_fermer">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">_Fermer</property>
+                <property name="use_underline">True</property>
+                <signal name="clicked" handler="ef_gtk_noeud_window_button_close"/>
+              </object>
+              <packing>
+                <property name="position">3</property>
+                <property name="pack_type">end</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">1</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
 </interface>

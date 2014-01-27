@@ -33,152 +33,211 @@
 #include "EF_materiaux.h"
 
 
-EF_Materiau* _1993_1_1_materiaux_ajout(Projet *projet, const char *nom, Flottant fy,
-  Flottant fu)
-/* Description : Ajoute un matériau en acier.
- * Paramètres : Projet *projet : la variable projet,
- *            : const char *nom : nom du nouveau matériau,
- *            : Flottant fy : limite d’élasticité en MPa,
- *            : Flottant fu : résistance à la traction en MPa.
- * Valeur renvoyée :
+EF_Materiau *
+_1993_1_1_materiaux_ajout (Projet     *p,
+                           const char *nom,
+                           Flottant    fy,
+                           Flottant    fu)
+/**
+ * \brief Ajoute un matériau en acier.
+ * \param p : la variable projet,
+ * \param nom : nom du nouveau matériau,
+ * \param fy : limite d’élasticité en MPa,
+ * \param fu : résistance à la traction en MPa.
+ * \return
  *   Succès : pointeur vers le nouveau matériau.
  *   Échec : NULL :
- *             projet == NULL,
- *             en cas d'erreur d'allocation mémoire.
+ *     - p == NULL,
+ *     - en cas d'erreur d'allocation mémoire.
  */
 {
-    EF_Materiau     *materiau_nouveau;
-    Materiau_Acier  *data_acier;
-    
-    // Trivial
-    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet")
-    BUGMSG(materiau_nouveau = malloc(sizeof(EF_Materiau)), NULL, gettext("Erreur d'allocation mémoire.\n"))
-    BUGMSG(data_acier = malloc(sizeof(Materiau_Acier)), NULL, gettext("Erreur d'allocation mémoire.\n"))
-    
-    materiau_nouveau->type = MATERIAU_ACIER;
-    materiau_nouveau->data = data_acier;
-    
-    BUGMSG(materiau_nouveau->nom = g_strdup_printf("%s", nom), NULL, gettext("Erreur d'allocation mémoire.\n"))
-    
-    data_acier->fy = common_math_f(common_math_get(fy)*1000000., fy.type);
-    data_acier->fu = common_math_f(common_math_get(fu)*1000000., fu.type);
-    data_acier->e = common_math_f(MODULE_YOUNG_ACIER, FLOTTANT_ORDINATEUR);
-    data_acier->nu = common_math_f(COEFFICIENT_NU_ACIER, FLOTTANT_ORDINATEUR);
-    
-    BUG(EF_materiaux_insert(projet, materiau_nouveau), NULL)
-    
-    return materiau_nouveau;
+  EF_Materiau    *materiau_nouveau;
+  Materiau_Acier *data_acier;
+  
+  BUGMSG (p, NULL, gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGMSG (materiau_nouveau = malloc (sizeof (EF_Materiau)),
+          NULL,
+          gettext ("Erreur d'allocation mémoire.\n"))
+  BUGMSG (data_acier = malloc (sizeof (Materiau_Acier)),
+          NULL,
+          gettext("Erreur d'allocation mémoire.\n"))
+  
+  materiau_nouveau->type = MATERIAU_ACIER;
+  materiau_nouveau->data = data_acier;
+  
+  BUGMSG (materiau_nouveau->nom = g_strdup_printf ("%s", nom),
+          NULL,
+          gettext ("Erreur d'allocation mémoire.\n"))
+  
+  data_acier->fy = m_f (m_g (fy) * 1000000., fy.type);
+  data_acier->fu = m_f (m_g (fu)*1000000., fu.type);
+  data_acier->e  = m_f (MODULE_YOUNG_ACIER, FLOTTANT_ORDINATEUR);
+  data_acier->nu = m_f (COEFFICIENT_NU_ACIER, FLOTTANT_ORDINATEUR);
+  
+  BUG (EF_materiaux_insert (p, materiau_nouveau), NULL)
+  
+  return materiau_nouveau;
 }
 
 
-gboolean _1993_1_1_materiaux_modif(Projet *projet, EF_Materiau *materiau, char *nom,
-  Flottant fy, Flottant fu, Flottant e, Flottant nu)
-/* Description : Modifie un matériau acier.
- * Paramètres : Projet *projet : la variable projet,
- *            : EF_Materiau *materiau : le matériau à modifier,
- *            : Autres : caractéristiques du matériau. Pour ne pas modifier un paramètre,
- *                il suffit de mettre NULL pour le nom et NAN pour les nombres.
- * Valeur renvoyée :
- *   Succès : TRUE
+gboolean
+_1993_1_1_materiaux_modif (Projet      *p,
+                           EF_Materiau *materiau,
+                           char        *nom,
+                           Flottant     fy,
+                           Flottant     fu,
+                           Flottant     e,
+                           Flottant     nu)
+/**
+ * \brief Modifie un matériau acier.
+ * \param p : la variable projet,
+ * \param materiau : le matériau à modifier,
+ * \param nom : nouvelle valeur de nom, peut être NULL.
+ * \param fy : nouvelle valeur de fy, peut être NAN.
+ * \param fu : nouvelle valeur de fu, peut être NAN.
+ * \param e : nouvelle valeur de e, peut être NAN.
+ * \param nu : nouvelle valeur de nu, peut être NAN.
+ * \return
+ *   Succès : TRUE.
  *   Échec : FALSE :
- *             projet == NULL,
- *             materiau == NULL.
+ *     - p == NULL,
+ *     - materiau == NULL.
  */
 {
-    Materiau_Acier  *data_acier;
+  Materiau_Acier *data_acier;
+  
+  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGMSG (materiau, FALSE, gettext ("Paramètre %s incorrect.\n"), "materiau")
+  BUGMSG (materiau->type == MATERIAU_ACIER,
+          FALSE,
+          gettext ("Le matériau n'est pas en acier.\n"))
+  
+  data_acier = materiau->data;
+  
+  if ((nom != NULL) && (strcmp (materiau->nom, nom) != 0))
+  {
+    BUGMSG (!EF_materiaux_cherche_nom (p, nom, FALSE),
+            FALSE,
+            gettext ("Le matériau %s existe déjà.\n"), nom)
+    free (materiau->nom);
+    BUGMSG (materiau->nom = g_strdup_printf ("%s", nom),
+            FALSE,
+            gettext ("Erreur d'allocation mémoire.\n"))
+    BUG (EF_materiaux_repositionne (p, materiau), FALSE)
+  }
+  
+  if (!isnan (m_g (fy)))
+    data_acier->fy = fy;
+  if (!isnan (m_g (fu)))
+    data_acier->fu = fu;
+  if (!isnan (m_g (e)))
+    data_acier->e = e;
+  if (!isnan (m_g (nu)))
+    data_acier->nu = nu;
+  
+  if ((!isnan (m_g (fy))) || (!isnan (m_g (fu))) ||
+      (!isnan (m_g (e))) || (!isnan (m_g (nu))))
+  {
+    GList *liste_materiaux = NULL;
+    GList *liste_barres_dep;
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
-    BUGMSG(materiau, FALSE, gettext("Paramètre %s incorrect.\n"), "materiau")
-    BUGMSG(materiau->type == MATERIAU_ACIER, FALSE, gettext("Le matériau n'est pas en acier.\n"))
+    liste_materiaux = g_list_append (liste_materiaux, materiau);
+    BUG (_1992_1_1_barres_cherche_dependances (p,
+                                               NULL,
+                                               NULL,
+                                               NULL,
+                                               liste_materiaux,
+                                               NULL,
+                                               NULL,
+                                               NULL,
+                                               &liste_barres_dep,
+                                               NULL,
+                                               FALSE,
+                                               FALSE),
+         FALSE)
+    g_list_free (liste_materiaux);
     
-    data_acier = materiau->data;
+    if (liste_barres_dep != NULL)
+      BUG (EF_calculs_free (p), FALSE)
     
-    if ((nom != NULL) && (strcmp(materiau->nom, nom) != 0))
-    {
-        BUGMSG(!EF_materiaux_cherche_nom(projet, nom, FALSE), FALSE, gettext("Le matériau %s existe déjà.\n"), nom)
-        free(materiau->nom);
-        BUGMSG(materiau->nom = g_strdup_printf("%s", nom), FALSE, gettext("Erreur d'allocation mémoire.\n"))
-        BUG(EF_materiaux_repositionne(projet, materiau), FALSE)
-    }
-    
-    if (!isnan(common_math_get(fy)))
-        data_acier->fy = fy;
-    if (!isnan(common_math_get(fu)))
-        data_acier->fu = fu;
-    if (!isnan(common_math_get(e)))
-        data_acier->e = e;
-    if (!isnan(common_math_get(nu)))
-        data_acier->nu = nu;
-    
-    if ((!isnan(common_math_get(fy))) || (!isnan(common_math_get(fu))) || (!isnan(common_math_get(e))) || (!isnan(common_math_get(nu))))
-    {
-        GList   *liste_materiaux = NULL;
-        GList   *liste_barres_dep;
-        
-        liste_materiaux = g_list_append(liste_materiaux, materiau);
-        BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, liste_materiaux, NULL, NULL, NULL, &liste_barres_dep, NULL, FALSE, FALSE), FALSE)
-        g_list_free(liste_materiaux);
-        
-        if (liste_barres_dep != NULL)
-            BUG(EF_calculs_free(projet), FALSE)
-        
-        g_list_free(liste_barres_dep);
-    }
-    
+    g_list_free (liste_barres_dep);
+  }
+  
 #ifdef ENABLE_GTK
-    if (projet->list_gtk.ef_materiaux.builder != NULL)
-        gtk_widget_queue_resize(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_materiaux.builder, "EF_materiaux_treeview")));
+  if (p->ui.ef_materiaux.builder != NULL)
+    gtk_widget_queue_resize (GTK_WIDGET (gtk_builder_get_object (
+                        p->ui.ef_materiaux.builder, "EF_materiaux_treeview")));
 #endif
-    
-    return TRUE;
+  
+  return TRUE;
 }
 
 
-char *_1993_1_1_materiaux_get_description(EF_Materiau* materiau)
-/* Description : Renvoie la description d'un matériau acier sous forme d'un texte.
- *               Il convient de libérer le texte renvoyée par la fonction free.
- * Paramètres : EF_Materiau* materiau : matériau à décrire.
- * Valeur renvoyée :
- *   Succès : Résultat
+char *
+_1993_1_1_materiaux_get_description (EF_Materiau* materiau)
+/**
+ * \brief Renvoie la description d'un matériau acier sous forme d'un texte.
+ *        Il convient de libérer le texte renvoyée par la fonction free.
+ * \param materiau : matériau à décrire.
+ * \return
+ *   Succès : Résultat.\n
  *   Échec : NULL :
- *             (materiau == NULL),
- *             erreur d'allocation mémoire.
+ *     - materiau == NULL,
+ *     - erreur d'allocation mémoire.
  */
 {
-    char            *description = NULL;
-    char            tmp1[30];
-    char            *tmp2;
-    Materiau_Acier  *data_acier;
-    
-    BUGMSG(materiau, NULL, gettext("Paramètre %s incorrect.\n"), "sect")
-    BUGMSG(materiau->type == MATERIAU_ACIER, FALSE, gettext("Le matériau n'est pas en acier.\n"))
-    
-    data_acier = materiau->data;
-    
-    common_math_double_to_char2(common_math_f(common_math_get(data_acier->fy)/1000000., data_acier->fy.type), tmp1, DECIMAL_CONTRAINTE);
-    BUGMSG(description = g_strdup_printf("f<sub>y</sub> : %s MPa", tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"))
-    
-    // On affiche les différences si le matériau a été personnalisé
-    common_math_double_to_char2(common_math_f(common_math_get(data_acier->fu)/1000000., data_acier->fu.type), tmp1, DECIMAL_CONTRAINTE);
+  char           *description = NULL;
+  char            tmp1[30];
+  char           *tmp2;
+  Materiau_Acier *data_acier;
+  
+  BUGMSG (materiau, NULL, gettext ("Paramètre %s incorrect.\n"), "sect")
+  BUGMSG (materiau->type == MATERIAU_ACIER,
+          FALSE,
+          gettext ("Le matériau n'est pas en acier.\n"))
+  
+  data_acier = materiau->data;
+  
+  conv_f_c (m_f (m_g (data_acier->fy) / 1000000., data_acier->fy.type),
+            tmp1,
+            DECIMAL_CONTRAINTE);
+  BUGMSG (description = g_strdup_printf ("f<sub>y</sub> : %s MPa", tmp1),
+          NULL,
+          gettext ("Erreur d'allocation mémoire.\n"))
+  
+  // On affiche les différences si le matériau a été personnalisé
+  conv_f_c (m_f (m_g (data_acier->fu) / 1000000., data_acier->fu.type),
+            tmp1,
+            DECIMAL_CONTRAINTE);
+  tmp2 = description;
+  BUGMSG (description = g_strdup_printf ("%s, f<sub>u</sub> : %s MPa",
+                                         tmp2,
+                                         tmp1),
+          NULL,
+          gettext ("Erreur d'allocation mémoire.\n"))
+  free (tmp2);
+  
+  if (!ERR (m_g (data_acier->e), MODULE_YOUNG_ACIER))
+  {
+    conv_f_c (m_f (m_g (data_acier->e) / 1000000., data_acier->e.type),
+              tmp1,
+              DECIMAL_CONTRAINTE);
     tmp2 = description;
-    BUGMSG(description = g_strdup_printf("%s, f<sub>u</sub> : %s MPa", tmp2, tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"))
-    free(tmp2);
-    
-    if (!ERREUR_RELATIVE_EGALE(common_math_get(data_acier->e), MODULE_YOUNG_ACIER))
-    {
-        common_math_double_to_char2(common_math_f(common_math_get(data_acier->e)/1000000., data_acier->e.type), tmp1, DECIMAL_CONTRAINTE);
-        tmp2 = description;
-        BUGMSG(description = g_strdup_printf("%s, E : %s MPa", tmp2, tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"))
-        free(tmp2);
-    }
-    
-    if (!ERREUR_RELATIVE_EGALE(common_math_get(data_acier->nu), COEFFICIENT_NU_ACIER))
-    {
-        common_math_double_to_char2(data_acier->nu, tmp1, DECIMAL_SANS_UNITE);
-        tmp2 = description;
-        BUGMSG(description = g_strdup_printf("%s, &#957; : %s", tmp2, tmp1), NULL, gettext("Erreur d'allocation mémoire.\n"))
-        free(tmp2);
-    }
-    
-    return description;
+    BUGMSG (description = g_strdup_printf ("%s, E : %s MPa", tmp2, tmp1),
+            NULL,
+            gettext ("Erreur d'allocation mémoire.\n"))
+    free (tmp2);
+  }
+  
+  if (!ERR (m_g (data_acier->nu), COEFFICIENT_NU_ACIER))
+  {
+    conv_f_c (data_acier->nu, tmp1, DECIMAL_SANS_UNITE);
+    tmp2 = description;
+    BUGMSG (description = g_strdup_printf ("%s, &#957; : %s", tmp2, tmp1),
+            NULL,
+            gettext ("Erreur d'allocation mémoire.\n"))
+    free (tmp2);
+  }
+  
+  return description;
 }

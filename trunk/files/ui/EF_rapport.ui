@@ -1,114 +1,114 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-    <requires lib="gtk+" version="3.2"/>
-    <object class="GtkListStore" id="EF_rapport_treestore">
-        <columns>
-            <column type="GdkPixbuf"/>
-            <column type="gchararray"/>
-            <column type="gchararray"/>
-        </columns>
-    </object>
-    <object class="GtkWindow" id="EF_rapport_window">
+  <requires lib="gtk+" version="3.2"/>
+  <object class="GtkListStore" id="EF_rapport_treestore">
+    <columns>
+      <column type="GdkPixbuf"/>
+      <column type="gchararray"/>
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkWindow" id="EF_rapport_window">
+    <property name="visible">True</property>
+    <property name="title" translatable="yes">Rapport</property>
+    <property name="default-height">400</property>
+    <property name="default-width">600</property>
+    <property name="window-position">GTK_WIN_POS_CENTER</property>
+    <signal name="key-press-event" handler="ef_gtk_rapport_window_key_press"/>
+    <signal name="destroy" handler="ef_gtk_rapport_window_destroy"/>
+    <child>
+      <object class="GtkGrid" id="EF_rapport_grille_principale">
         <property name="visible">True</property>
-        <property name="title" translatable="yes">Rapport</property>
-        <property name="default-height">400</property>
-        <property name="default-width">600</property>
-        <property name="window-position">GTK_WIN_POS_CENTER</property>
-        <signal name="key-press-event" handler="EF_gtk_rapport_window_key_press"/>
-        <signal name="destroy" handler="EF_gtk_rapport_window_destroy"/>
+        <property name="border-width">12</property>
+        <property name="row-spacing">12</property>
         <child>
-            <object class="GtkGrid" id="EF_rapport_grille_principale">
+          <object class="GtkScrolledWindow" id="EF_rapport_scrolled">
+            <property name="visible">True</property>
+            <property name="expand">True</property>
+            <property name="hscrollbar-policy">automatic</property>
+            <property name="vscrollbar-policy">automatic</property>
+            <child>
+              <object class="GtkTreeView" id="EF_rapport_treeview">
                 <property name="visible">True</property>
-                <property name="border-width">12</property>
-                <property name="row-spacing">12</property>
+                <property name="model">EF_rapport_treestore</property>
+                <signal name="button-press-event" handler="common_gtk_treeview_button_press_unselect"/>
                 <child>
-                    <object class="GtkScrolledWindow" id="EF_rapport_scrolled">
-                        <property name="visible">True</property>
-                        <property name="expand">True</property>
-                        <property name="hscrollbar-policy">automatic</property>
-                        <property name="vscrollbar-policy">automatic</property>
-                        <child>
-                            <object class="GtkTreeView" id="EF_rapport_treeview">
-                                <property name="visible">True</property>
-                                <property name="model">EF_rapport_treestore</property>
-                                <signal name="button-press-event" handler="common_gtk_treeview_button_press_unselect"/>
-                                <child>
-                                    <object class="GtkTreeViewColumn" id="EF_rapport_treeview_column0">
-                                        <property name="visible">True</property>
-                                        <property name="resizable">FALSE</property>
-                                        <property name="title"></property>
-                                        <child>
-                                            <object class="GtkCellRendererPixbuf" id="EF_rapport_treeview_cell0" />
-                                            <attributes>
-                                                <attribute name="pixbuf">0</attribute>
-                                            </attributes>
-                                        </child>
-                                    </object>
-                                </child>
-                                <child>
-                                    <object class="GtkTreeViewColumn" id="EF_rapport_treeview_column1">
-                                        <property name="visible">True</property>
-                                        <property name="resizable">True</property>
-                                        <property name="title" translatable="yes">Point analysé</property>
-                                        <child>
-                                            <object class="GtkCellRendererText" id="EF_rapport_treeview_cell1" />
-                                            <attributes>
-                                                <attribute name="text">1</attribute>
-                                            </attributes>
-                                        </child>
-                                    </object>
-                                </child>
-                                <child>
-                                    <object class="GtkTreeViewColumn" id="EF_rapport_treeview_column2">
-                                        <property name="visible">True</property>
-                                        <property name="resizable">True</property>
-                                        <property name="title" translatable="yes">Commentaires</property>
-                                        <child>
-                                            <object class="GtkCellRendererText" id="EF_rapport_treeview_cell2" />
-                                            <attributes>
-                                                <attribute name="text">2</attribute>
-                                            </attributes>
-                                        </child>
-                                    </object>
-                                </child>
-                                <child>
-                                    <object class="GtkTreeViewColumn" id="EF_rapport_treeview_column3">
-                                        <property name="visible">True</property>
-                                    </object>
-                                </child>
-                            </object>
-                        </child>
-                    </object>
-                    <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">0</property>
-                    </packing>
+                  <object class="GtkTreeViewColumn" id="EF_rapport_treeview_column0">
+                    <property name="visible">True</property>
+                    <property name="resizable">FALSE</property>
+                    <property name="title"></property>
+                    <child>
+                      <object class="GtkCellRendererPixbuf" id="EF_rapport_treeview_cell0" />
+                      <attributes>
+                        <attribute name="pixbuf">0</attribute>
+                      </attributes>
+                    </child>
+                  </object>
                 </child>
                 <child>
-                    <object class="GtkButtonBox" id="EF_rapport_bouttons_fenetre">
-                        <property name="visible">True</property>
-                        <property name="orientation">horizontal</property>
-                        <property name="layout_style">end</property>
-                        <property name="spacing">6</property>
-                        <child>
-                            <object class="GtkButton" id="EF_rapport_boutton_fermer">
-                                <property name="visible">True</property>
-                                <property name="label" translatable="yes">_Fermer</property>
-                                <property name="use_underline">True</property>
-                                <signal name="clicked" handler="EF_gtk_rapport_fermer"/>
-                            </object>
-                            <packing>
-                                <property name="position">0</property>
-                                <property name="pack_type">end</property>
-                            </packing>
-                        </child>
-                    </object>
-                    <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">1</property>
-                    </packing>
+                  <object class="GtkTreeViewColumn" id="EF_rapport_treeview_column1">
+                    <property name="visible">True</property>
+                    <property name="resizable">True</property>
+                    <property name="title" translatable="yes">Point analysé</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="EF_rapport_treeview_cell1" />
+                      <attributes>
+                        <attribute name="text">1</attribute>
+                      </attributes>
+                    </child>
+                  </object>
                 </child>
-            </object>
+                <child>
+                  <object class="GtkTreeViewColumn" id="EF_rapport_treeview_column2">
+                    <property name="visible">True</property>
+                    <property name="resizable">True</property>
+                    <property name="title" translatable="yes">Commentaires</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="EF_rapport_treeview_cell2" />
+                      <attributes>
+                        <attribute name="text">2</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn" id="EF_rapport_treeview_column3">
+                    <property name="visible">True</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">0</property>
+          </packing>
         </child>
-    </object>
+        <child>
+          <object class="GtkButtonBox" id="EF_rapport_bouttons_fenetre">
+            <property name="visible">True</property>
+            <property name="orientation">horizontal</property>
+            <property name="layout_style">end</property>
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkButton" id="EF_rapport_boutton_fermer">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">_Fermer</property>
+                <property name="use_underline">True</property>
+                <signal name="clicked" handler="ef_gtk_rapport_window_button_close"/>
+              </object>
+              <packing>
+                <property name="position">0</property>
+                <property name="pack_type">end</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">1</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
 </interface>

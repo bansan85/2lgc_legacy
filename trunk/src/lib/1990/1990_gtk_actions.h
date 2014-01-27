@@ -25,12 +25,16 @@
 
 #include "common_projet.h"
 
-void _1990_gtk_menu_nouvelle_action_activate(GtkMenuItem *menuitem, Projet *projet);
-void _1990_gtk_menu_nouvelle_charge_nodale_activate(GtkMenuItem *menuitem , Projet* projet);
-void _1990_gtk_menu_nouvelle_charge_barre_ponctuelle_activate(GtkMenuItem *menuitem, Projet* projet);
-void _1990_gtk_menu_nouvelle_charge_barre_repartie_uniforme_activate(GtkMenuItem *menuitem, Projet* projet);
+void _1990_gtk_nouvelle_action                         (GtkMenuItem *menuitem,
+                                                        Projet      *p);
+void _1990_gtk_nouvelle_charge_nodale                  (GtkMenuItem *menuitem,
+                                                        Projet      *p);
+void _1990_gtk_nouvelle_charge_barre_ponctuelle        (GtkMenuItem *menuitem,
+                                                        Projet      *p);
+void _1990_gtk_nouvelle_charge_barre_repartie_uniforme (GtkMenuItem *menuitem,
+                                                        Projet      *p);
 
-void _1990_gtk_actions(Projet *projet);
+void _1990_gtk_actions (Projet *p);
 
 #endif
 

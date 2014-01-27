@@ -1,349 +1,349 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-    <requires lib="gtk+" version="3.2"/>
-    <object class="GtkTextTagTable" id="common_informations_tag_table">
-        <child type="tag">
-            <object class="GtkTextTag" id="common_informations_tag_mauvais">
-                <property name="name">mauvais</property>
-                <property name="foreground">red</property>
-                <property name="weight">800</property>
-            </object>
-        </child>
-        <child type="tag">
-            <object class="GtkTextTag" id="common_informations_tag_ok">
-                <property name="name">OK</property>
-                <property name="foreground">black</property>
-                <property name="weight">400</property>
-            </object>
-        </child>
-    </object>
-    <object class="GtkTextBuffer" id="common_informations_buffer_destinataire">
-        <property name="tag-table">common_informations_tag_table</property>
-        <signal name="changed" handler="common_gtk_informations_check"/>
-    </object>
-    <object class="GtkTextBuffer" id="common_informations_buffer_adresse">
-        <property name="tag-table">common_informations_tag_table</property>
-        <signal name="changed" handler="common_gtk_informations_check"/>
-    </object>
-    <object class="GtkEntryBuffer" id="common_informations_buffer_code_postal">
-        <signal name="inserted-text" handler="common_gtk_informations_entry_add_char"/>
-        <signal name="deleted-text" handler="common_gtk_informations_entry_del_char"/>
-    </object>
-    <object class="GtkEntryBuffer" id="common_informations_buffer_ville">
-        <signal name="inserted-text" handler="common_gtk_informations_entry_add_char"/>
-        <signal name="deleted-text" handler="common_gtk_informations_entry_del_char"/>
-    </object>
-    <object class="GtkListStore" id="common_informations_completion_model">
-        <columns>
-            <column type="gchararray"/><!-- le code postal et la ville de façon présentable pour la liste des propositions -->
-            <column type="gchararray"/><!-- le code postal -->
-            <column type="gchararray"/><!-- la ville -->
-            <column type="gchararray"/><!-- le département -->
-            <column type="gint"/><!-- le numéro de la commune selon l'INSEE -->
-        </columns>
-    </object>
-    <object class="GtkEntryCompletion" id="common_informations_completion_code_postal">
-        <property name="model">common_informations_completion_model</property>
-        <property name="text-column">0</property>
-        <signal name="match-selected" handler="common_gtk_informations_match_selected"/>
-    </object>
-    <object class="GtkEntryCompletion" id="common_informations_completion_ville">
-        <property name="model">common_informations_completion_model</property>
-        <property name="text-column">0</property>
-        <signal name="match-selected" handler="common_gtk_informations_match_selected"/>
-    </object>
-    <object id="common_informations_window" class="GtkWindow">
+  <requires lib="gtk+" version="3.2"/>
+  <object class="GtkTextTagTable" id="common_informations_tag_table">
+    <child type="tag">
+      <object class="GtkTextTag" id="common_informations_tag_mauvais">
+        <property name="name">mauvais</property>
+        <property name="foreground">red</property>
+        <property name="weight">800</property>
+      </object>
+    </child>
+    <child type="tag">
+      <object class="GtkTextTag" id="common_informations_tag_ok">
+        <property name="name">OK</property>
+        <property name="foreground">black</property>
+        <property name="weight">400</property>
+      </object>
+    </child>
+  </object>
+  <object class="GtkTextBuffer" id="common_informations_buffer_destinataire">
+    <property name="tag-table">common_informations_tag_table</property>
+    <signal name="changed" handler="common_gtk_informations_check"/>
+  </object>
+  <object class="GtkTextBuffer" id="common_informations_buffer_adresse">
+    <property name="tag-table">common_informations_tag_table</property>
+    <signal name="changed" handler="common_gtk_informations_check"/>
+  </object>
+  <object class="GtkEntryBuffer" id="common_informations_buffer_code_postal">
+    <signal name="inserted-text" handler="common_gtk_informations_entry_add_char"/>
+    <signal name="deleted-text" handler="common_gtk_informations_entry_del_char"/>
+  </object>
+  <object class="GtkEntryBuffer" id="common_informations_buffer_ville">
+    <signal name="inserted-text" handler="common_gtk_informations_entry_add_char"/>
+    <signal name="deleted-text" handler="common_gtk_informations_entry_del_char"/>
+  </object>
+  <object class="GtkListStore" id="common_informations_completion_model">
+    <columns>
+      <column type="gchararray"/><!-- le code postal et la ville de façon présentable pour la liste des propositions -->
+      <column type="gchararray"/><!-- le code postal -->
+      <column type="gchararray"/><!-- la ville -->
+      <column type="gchararray"/><!-- le département -->
+      <column type="gint"/><!-- le numéro de la commune selon l'INSEE -->
+    </columns>
+  </object>
+  <object class="GtkEntryCompletion" id="common_informations_completion_code_postal">
+    <property name="model">common_informations_completion_model</property>
+    <property name="text-column">0</property>
+    <signal name="match-selected" handler="common_gtk_informations_match_selected"/>
+  </object>
+  <object class="GtkEntryCompletion" id="common_informations_completion_ville">
+    <property name="model">common_informations_completion_model</property>
+    <property name="text-column">0</property>
+    <signal name="match-selected" handler="common_gtk_informations_match_selected"/>
+  </object>
+  <object id="common_informations_window" class="GtkWindow">
+    <property name="visible">True</property>
+    <property name="title" translatable="yes">Informations sur le projet</property>
+    <property name="window-position">GTK_WIN_POS_CENTER</property>
+    <property name="default-width">600</property>
+    <property name="default-height">400</property>
+    <signal name="key-press-event" handler="common_gtk_informations_window_key_press"/>
+    <signal name="destroy" handler="common_gtk_informations_window_destroy"/>
+    <child>
+      <object class="GtkGrid" id="common_informations_grille_principale">
         <property name="visible">True</property>
-        <property name="title" translatable="yes">Informations sur le projet</property>
-        <property name="window-position">GTK_WIN_POS_CENTER</property>
-        <property name="default-width">600</property>
-        <property name="default-height">400</property>
-        <signal name="key-press-event" handler="common_gtk_informations_window_key_press"/>
-        <signal name="destroy" handler="common_gtk_informations_window_destroy"/>
+        <property name="border-width">12</property>
+        <property name="column-spacing">12</property>
+        <property name="row-spacing">12</property>
         <child>
-            <object class="GtkGrid" id="common_informations_grille_principale">
+          <object class="GtkNotebook" id="common_informations_notebook">
+            <property name="visible">True</property>
+            <property name="tab-pos">top</property>
+            <property name="expand">True</property>
+            <child>
+              <object class="GtkScrolledWindow" id="common_informations_scrolled_localisation">
                 <property name="visible">True</property>
-                <property name="border-width">12</property>
-                <property name="column-spacing">12</property>
-                <property name="row-spacing">12</property>
+                <property name="expand">True</property>
+                <property name="hscrollbar-policy">automatic</property>
+                <property name="vscrollbar-policy">automatic</property>
                 <child>
-                    <object class="GtkNotebook" id="common_informations_notebook">
+                  <object class="GtkGrid" id="common_informations_grille_informations">
+                    <property name="visible">True</property>
+                    <property name="border-width">12</property>
+                    <property name="column-spacing">12</property>
+                    <property name="row-spacing">12</property>
+                    <child>
+                      <object class="GtkLabel" id="common_informations_label_destinataire">
+                        <property name="label" translatable="yes">_Client :</property>
                         <property name="visible">True</property>
-                        <property name="tab-pos">top</property>
-                        <property name="expand">True</property>
-                        <child>
-                            <object class="GtkScrolledWindow" id="common_informations_scrolled_localisation">
-                                <property name="visible">True</property>
-                                <property name="expand">True</property>
-                                <property name="hscrollbar-policy">automatic</property>
-                                <property name="vscrollbar-policy">automatic</property>
-                                <child>
-                                    <object class="GtkGrid" id="common_informations_grille_informations">
-                                        <property name="visible">True</property>
-                                        <property name="border-width">12</property>
-                                        <property name="column-spacing">12</property>
-                                        <property name="row-spacing">12</property>
-                                        <child>
-                                            <object class="GtkLabel" id="common_informations_label_destinataire">
-                                                <property name="label" translatable="yes">_Client :</property>
-                                                <property name="visible">True</property>
-                                                <property name="use_underline">True</property>
-                                                <property name="mnemonic-widget">common_informations_textview_destinataire</property>
-                                            </object>
-                                            <packing>
-                                                <property name="left-attach">0</property>
-                                                <property name="top-attach">0</property>
-                                            </packing>
-                                        </child>
-                                        <child>
-                                            <object class="GtkScrolledWindow" id="common_informations_scrolledwindow_destinataire">
-                                                <property name="visible">True</property>
-                                                <property name="expand">True</property>
-                                                <property name="hscrollbar-policy">automatic</property>
-                                                <property name="vscrollbar-policy">automatic</property>
-                                                <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
-                                                <child>
-                                                    <object class="GtkTextView" id="common_informations_textview_destinataire">
-                                                        <property name="visible">True</property>
-                                                        <property name="accepts-tab">False</property>
-                                                        <property name="wrap-mode">GTK_WRAP_WORD</property>
-                                                        <property name="buffer">common_informations_buffer_destinataire</property>
-                                                    </object>
-                                                </child>
-                                            </object>
-                                            <packing>
-                                                <property name="left-attach">1</property>
-                                                <property name="top-attach">0</property>
-                                                <property name="width">3</property>
-                                            </packing>
-                                        </child>
-                                        <child>
-                                            <object class="GtkLabel" id="common_informations_label_adresse">
-                                                <property name="label" translatable="yes">A_dresse :</property>
-                                                <property name="visible">True</property>
-                                                <property name="use_underline">True</property>
-                                                <property name="mnemonic-widget">common_informations_textview_adresse</property>
-                                            </object>
-                                            <packing>
-                                                <property name="left-attach">0</property>
-                                                <property name="top-attach">1</property>
-                                            </packing>
-                                        </child>
-                                        <child>
-                                            <object class="GtkScrolledWindow" id="common_informations_scrolledwindow_adresse">
-                                                <property name="visible">True</property>
-                                                <property name="expand">True</property>
-                                                <property name="hscrollbar-policy">automatic</property>
-                                                <property name="vscrollbar-policy">automatic</property>
-                                                <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
-                                                <child>
-                                                    <object class="GtkTextView" id="common_informations_textview_adresse">
-                                                        <property name="visible">True</property>
-                                                        <property name="accepts-tab">False</property>
-                                                        <property name="wrap-mode">GTK_WRAP_WORD</property>
-                                                        <property name="buffer">common_informations_buffer_adresse</property>
-                                                    </object>
-                                                </child>
-                                            </object>
-                                            <packing>
-                                                <property name="left-attach">1</property>
-                                                <property name="top-attach">1</property>
-                                                <property name="width">3</property>
-                                            </packing>
-                                        </child>
-                                        <child>
-                                            <object class="GtkLabel" id="common_informations_label_code_postal">
-                                                <property name="label" translatable="yes">C_ode postal :</property>
-                                                <property name="visible">True</property>
-                                                <property name="hexpand">False</property>
-                                                <property name="use_underline">True</property>
-                                                <property name="mnemonic-widget">common_informations_entry_code_postal</property>
-                                            </object>
-                                            <packing>
-                                                <property name="left-attach">0</property>
-                                                <property name="top-attach">2</property>
-                                            </packing>
-                                        </child>
-                                        <child>
-                                            <object class="GtkEntry" id="common_informations_entry_code_postal">
-                                                <property name="visible">True</property>
-                                                <property name="hexpand">False</property>
-                                                <property name="buffer">common_informations_buffer_code_postal</property>
-                                                <property name="completion">common_informations_completion_code_postal</property>
-                                            </object>
-                                            <packing>
-                                                <property name="left-attach">1</property>
-                                                <property name="top-attach">2</property>
-                                            </packing>
-                                        </child>
-                                        <child>
-                                            <object class="GtkLabel" id="common_informations_label_ville">
-                                                <property name="label" translatable="yes">_Ville :</property>
-                                                <property name="visible">True</property>
-                                                <property name="hexpand">False</property>
-                                                <property name="use_underline">True</property>
-                                                <property name="mnemonic-widget">common_informations_entry_ville</property>
-                                            </object>
-                                            <packing>
-                                                <property name="left-attach">2</property>
-                                                <property name="top-attach">2</property>
-                                            </packing>
-                                        </child>
-                                        <child>
-                                            <object class="GtkEntry" id="common_informations_entry_ville">
-                                                <property name="visible">True</property>
-                                                <property name="hexpand">True</property>
-                                                <property name="buffer">common_informations_buffer_ville</property>
-                                                <property name="completion">common_informations_completion_ville</property>
-                                            </object>
-                                            <packing>
-                                                <property name="left-attach">3</property>
-                                                <property name="top-attach">2</property>
-                                            </packing>
-                                        </child>
-                                    </object>
-                                </child>
-                            </object>
-                        </child>
-                        <child type="tab">
-                            <object class="GtkLabel" id="common_informations_notebook_localisation_label">
-                                <property name="visible">True</property>
-                                <property name="label" translatable="yes">_Localisation</property>
-                                <property name="use_underline">True</property>
-                            </object>
-                        </child>
-                        <child>
-                            <object class="GtkScrolledWindow" id="common_informations_scrolled_parametres_site">
-                                <property name="visible">True</property>
-                                <property name="expand">True</property>
-                                <property name="hscrollbar-policy">automatic</property>
-                                <property name="vscrollbar-policy">automatic</property>
-                                <child>
-                                    <object class="GtkGrid" id="common_informations_grille_parametres">
-                                        <property name="visible">True</property>
-                                        <property name="border-width">12</property>
-                                        <property name="column-spacing">12</property>
-                                        <property name="row-spacing">12</property>
-                                        <child>
-                                            <object class="GtkLabel" id="common_informations_label_neige">
-                                                <property name="label" translatable="yes">_Neige :</property>
-                                                <property name="visible">True</property>
-                                                <property name="use_underline">True</property>
-                                                <property name="mnemonic-widget">common_informations_neige_combobox</property>
-                                            </object>
-                                            <packing>
-                                                <property name="left-attach">0</property>
-                                                <property name="top-attach">0</property>
-                                            </packing>
-                                        </child>
-                                        <child>
-                                            <object class="GtkComboBoxText" id="common_informations_neige_combobox">
-                                                <property name="visible">True</property>
-                                                <property name="hexpand">True</property>
-                                            </object>
-                                            <packing>
-                                                <property name="left-attach">1</property>
-                                                <property name="top-attach">0</property>
-                                            </packing>
-                                        </child>
-                                        <child>
-                                            <object class="GtkLabel" id="common_informations_label_vent">
-                                                <property name="label" translatable="yes">_Vent :</property>
-                                                <property name="visible">True</property>
-                                                <property name="use_underline">True</property>
-                                                <property name="mnemonic-widget">common_informations_vent_combobox</property>
-                                            </object>
-                                            <packing>
-                                                <property name="left-attach">0</property>
-                                                <property name="top-attach">1</property>
-                                            </packing>
-                                        </child>
-                                        <child>
-                                            <object class="GtkComboBoxText" id="common_informations_vent_combobox">
-                                                <property name="visible">True</property>
-                                                <property name="hexpand">True</property>
-                                            </object>
-                                            <packing>
-                                                <property name="left-attach">1</property>
-                                                <property name="top-attach">1</property>
-                                            </packing>
-                                        </child>
-                                        <child>
-                                            <object class="GtkLabel" id="common_informations_label_seisme">
-                                                <property name="label" translatable="yes">_Séisme :</property>
-                                                <property name="visible">True</property>
-                                                <property name="use_underline">True</property>
-                                                <property name="mnemonic-widget">common_informations_seisme_combobox</property>
-                                            </object>
-                                            <packing>
-                                                <property name="left-attach">0</property>
-                                                <property name="top-attach">2</property>
-                                            </packing>
-                                        </child>
-                                        <child>
-                                            <object class="GtkComboBoxText" id="common_informations_seisme_combobox">
-                                                <property name="visible">True</property>
-                                                <property name="hexpand">True</property>
-                                            </object>
-                                            <packing>
-                                                <property name="left-attach">1</property>
-                                                <property name="top-attach">2</property>
-                                            </packing>
-                                        </child>
-                                    </object>
-                                </child>
-                            </object>
-                        </child>
-                        <child type="tab">
-                            <object class="GtkLabel" id="common_informations_notebook_parametre_label">
-                                <property name="visible">True</property>
-                                <property name="label" translatable="yes">_Paramètres</property>
-                                <property name="use_underline">True</property>
-                            </object>
-                        </child>
-                    </object>
-                    <packing>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic-widget">common_informations_textview_destinataire</property>
+                      </object>
+                      <packing>
                         <property name="left-attach">0</property>
                         <property name="top-attach">0</property>
-                    </packing>
-                </child>
-                <child>
-                    <object class="GtkButtonBox" id="common_informations_buttons">
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkScrolledWindow" id="common_informations_scrolledwindow_destinataire">
                         <property name="visible">True</property>
-                        <property name="orientation">horizontal</property>
-                        <property name="layout_style">end</property>
-                        <property name="spacing">6</property>
+                        <property name="expand">True</property>
+                        <property name="hscrollbar-policy">automatic</property>
+                        <property name="vscrollbar-policy">automatic</property>
+                        <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
                         <child>
-                            <object class="GtkButton" id="common_informations_button_annuler">
-                                <property name="visible">True</property>
-                                <property name="use_underline">True</property>
-                                <property name="label" translatable="yes">_Annuler</property>
-                                <signal name="clicked" handler="common_gtk_informations_annuler_clicked"/>
-                            </object>
-                            <packing>
-                                <property name="position">0</property>
-                                <property name="pack_type">end</property>
-                            </packing>
+                          <object class="GtkTextView" id="common_informations_textview_destinataire">
+                            <property name="visible">True</property>
+                            <property name="accepts-tab">False</property>
+                            <property name="wrap-mode">GTK_WRAP_WORD</property>
+                            <property name="buffer">common_informations_buffer_destinataire</property>
+                          </object>
                         </child>
-                        <child>
-                            <object class="GtkButton" id="common_informations_button_edit">
-                                <property name="visible">True</property>
-                                <property name="use_underline">True</property>
-                                <property name="label" translatable="yes">_Modifier</property>
-                                <signal name="clicked" handler="common_gtk_informations_modifier_clicked"/>
-                            </object>
-                            <packing>
-                                <property name="position">1</property>
-                                <property name="pack_type">end</property>
-                            </packing>
-                        </child>
-                    </object>
-                    <packing>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">0</property>
+                        <property name="width">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="common_informations_label_adresse">
+                        <property name="label" translatable="yes">A_dresse :</property>
+                        <property name="visible">True</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic-widget">common_informations_textview_adresse</property>
+                      </object>
+                      <packing>
                         <property name="left-attach">0</property>
                         <property name="top-attach">1</property>
-                    </packing>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkScrolledWindow" id="common_informations_scrolledwindow_adresse">
+                        <property name="visible">True</property>
+                        <property name="expand">True</property>
+                        <property name="hscrollbar-policy">automatic</property>
+                        <property name="vscrollbar-policy">automatic</property>
+                        <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
+                        <child>
+                          <object class="GtkTextView" id="common_informations_textview_adresse">
+                            <property name="visible">True</property>
+                            <property name="accepts-tab">False</property>
+                            <property name="wrap-mode">GTK_WRAP_WORD</property>
+                            <property name="buffer">common_informations_buffer_adresse</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">1</property>
+                        <property name="width">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="common_informations_label_code_postal">
+                        <property name="label" translatable="yes">C_ode postal :</property>
+                        <property name="visible">True</property>
+                        <property name="hexpand">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic-widget">common_informations_entry_code_postal</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="common_informations_entry_code_postal">
+                        <property name="visible">True</property>
+                        <property name="hexpand">False</property>
+                        <property name="buffer">common_informations_buffer_code_postal</property>
+                        <property name="completion">common_informations_completion_code_postal</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="common_informations_label_ville">
+                        <property name="label" translatable="yes">_Ville :</property>
+                        <property name="visible">True</property>
+                        <property name="hexpand">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic-widget">common_informations_entry_ville</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">2</property>
+                        <property name="top-attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="common_informations_entry_ville">
+                        <property name="visible">True</property>
+                        <property name="hexpand">True</property>
+                        <property name="buffer">common_informations_buffer_ville</property>
+                        <property name="completion">common_informations_completion_ville</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">3</property>
+                        <property name="top-attach">2</property>
+                      </packing>
+                    </child>
+                  </object>
                 </child>
-            </object>
+              </object>
+            </child>
+            <child type="tab">
+              <object class="GtkLabel" id="common_informations_notebook_localisation_label">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">_Localisation</property>
+                <property name="use_underline">True</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow" id="common_informations_scrolled_parametres_site">
+                <property name="visible">True</property>
+                <property name="expand">True</property>
+                <property name="hscrollbar-policy">automatic</property>
+                <property name="vscrollbar-policy">automatic</property>
+                <child>
+                  <object class="GtkGrid" id="common_informations_grille_parametres">
+                    <property name="visible">True</property>
+                    <property name="border-width">12</property>
+                    <property name="column-spacing">12</property>
+                    <property name="row-spacing">12</property>
+                    <child>
+                      <object class="GtkLabel" id="common_informations_label_neige">
+                        <property name="label" translatable="yes">_Neige :</property>
+                        <property name="visible">True</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic-widget">common_informations_neige_combobox</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkComboBoxText" id="common_informations_neige_combobox">
+                        <property name="visible">True</property>
+                        <property name="hexpand">True</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="common_informations_label_vent">
+                        <property name="label" translatable="yes">_Vent :</property>
+                        <property name="visible">True</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic-widget">common_informations_vent_combobox</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkComboBoxText" id="common_informations_vent_combobox">
+                        <property name="visible">True</property>
+                        <property name="hexpand">True</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="common_informations_label_seisme">
+                        <property name="label" translatable="yes">_Séisme :</property>
+                        <property name="visible">True</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic-widget">common_informations_seisme_combobox</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkComboBoxText" id="common_informations_seisme_combobox">
+                        <property name="visible">True</property>
+                        <property name="hexpand">True</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">2</property>
+                      </packing>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child type="tab">
+              <object class="GtkLabel" id="common_informations_notebook_parametre_label">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">_Paramètres</property>
+                <property name="use_underline">True</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">0</property>
+          </packing>
         </child>
-    </object>
+        <child>
+          <object class="GtkButtonBox" id="common_informations_buttons">
+            <property name="visible">True</property>
+            <property name="orientation">horizontal</property>
+            <property name="layout_style">end</property>
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkButton" id="common_informations_button_annuler">
+                <property name="visible">True</property>
+                <property name="use_underline">True</property>
+                <property name="label" translatable="yes">_Annuler</property>
+                <signal name="clicked" handler="common_gtk_informations_window_button_close"/>
+              </object>
+              <packing>
+                <property name="position">0</property>
+                <property name="pack_type">end</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="common_informations_button_edit">
+                <property name="visible">True</property>
+                <property name="use_underline">True</property>
+                <property name="label" translatable="yes">_Modifier</property>
+                <signal name="clicked" handler="common_gtk_informations_modifier_clicked"/>
+              </object>
+              <packing>
+                <property name="position">1</property>
+                <property name="pack_type">end</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">1</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
 </interface>

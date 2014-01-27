@@ -24,23 +24,45 @@
 
 #include <glib.h>
 
-gboolean _1990_groupe_init(Projet *projet) __attribute__((__warn_unused_result__));
+gboolean _1990_groupe_init (Projet *p) __attribute__((__warn_unused_result__));
 
-gboolean _1990_groupe_ajout_niveau(Projet *projet) __attribute__((__warn_unused_result__));
-Groupe *_1990_groupe_ajout_groupe(Projet *projet, unsigned int niveau, Type_Groupe_Combinaison type_combinaison, const char* nom) __attribute__((__warn_unused_result__));
-gboolean _1990_groupe_ajout_element(Projet *projet, unsigned int niveau, unsigned int groupe_n, unsigned int num_element) __attribute__((__warn_unused_result__));
-gboolean _1990_groupe_modifie_combinaison(Groupe *groupe, Type_Groupe_Combinaison type_combinaison) __attribute__((__warn_unused_result__));
-gboolean _1990_groupe_modifie_nom(unsigned int niveau, unsigned int groupe, const char *nom, Projet* projet) __attribute__((__warn_unused_result__));
+gboolean _1990_groupe_ajout_niveau  (Projet                 *p)
+                                       __attribute__((__warn_unused_result__));
+Groupe  *_1990_groupe_ajout_groupe  (Projet                 *p,
+                                     Niveau_Groupe          *niveau_groupe,
+                                     Type_Groupe_Combinaison type_combinaison,
+                                     const char             *nom)
+                                       __attribute__((__warn_unused_result__));
+gboolean _1990_groupe_ajout_element (Projet                 *p,
+                                     Niveau_Groupe          *niveau_groupe,
+                                     Groupe                 *groupe,
+                                     void                   *element_add)
+                                       __attribute__((__warn_unused_result__));
+gboolean _1990_groupe_modifie_combinaison (Groupe           *groupe,
+                                     Type_Groupe_Combinaison type_combinaison)
+                                       __attribute__((__warn_unused_result__));
+gboolean _1990_groupe_modifie_nom   (Niveau_Groupe          *groupe_niveau,
+                                     Groupe                 *groupe,
+                                     const char             *nom,
+                                     Projet                 *p)
+                                       __attribute__((__warn_unused_result__));
 
-Niveau_Groupe *_1990_groupe_positionne_niveau(Projet *projet, unsigned int numero) __attribute__((__warn_unused_result__));
-Groupe *_1990_groupe_positionne_groupe(Niveau_Groupe *niveau, unsigned int numero) __attribute__((__warn_unused_result__));
-Element *_1990_groupe_positionne_element(Groupe *groupe, unsigned int numero) __attribute__((__warn_unused_result__));
+gboolean _1990_groupe_free_niveau    (Projet        *p,
+                                      Niveau_Groupe *niveau_groupe,
+                                      gboolean       accept_vide)
+                                       __attribute__((__warn_unused_result__));
+gboolean _1990_groupe_free_groupe    (Projet        *p,
+                                      Niveau_Groupe *niveau_groupe,
+                                      Groupe        *groupe)
+                                       __attribute__((__warn_unused_result__));
+gboolean _1990_groupe_retire_element (Projet        *p,
+                                      Niveau_Groupe *niveau_groupe,
+                                      Groupe        *groupe,
+                                      void          *element)
+                                       __attribute__((__warn_unused_result__));
+gboolean _1990_groupe_free (Projet *p) __attribute__((__warn_unused_result__));
 
-gboolean _1990_groupe_free_niveau(Projet *projet, unsigned int niveau, gboolean accept_vide) __attribute__((__warn_unused_result__));
-gboolean _1990_groupe_free_groupe(Projet *projet, unsigned int niveau, unsigned int groupe) __attribute__((__warn_unused_result__));
-gboolean _1990_groupe_free_element(Projet *projet, unsigned int niveau, unsigned int groupe, unsigned int element) __attribute__((__warn_unused_result__));
-gboolean _1990_groupe_free(Projet *projet) __attribute__((__warn_unused_result__));
-
-gboolean _1990_groupe_affiche_tout(Projet *projet) __attribute__((__warn_unused_result__));
+gboolean _1990_groupe_affiche_tout (Projet *p)
+                                       __attribute__((__warn_unused_result__));
 
 #endif

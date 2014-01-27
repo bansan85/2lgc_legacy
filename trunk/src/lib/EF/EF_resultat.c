@@ -29,161 +29,236 @@
 #include "common_fonction.h"
 
 
-gboolean EF_resultat_noeud_reaction_appui(GList *liste, EF_Noeud *noeud, int indice,
-  Projet *projet, char **texte, double* mini, double *maxi)
-/* Description : Renvoie la réaction d'appui d'un noeud en fonction d'une liste de pondérations.
- * Paramètres : GList *liste : liste d'actions préalablement créées par la fonction 
- *                EF_resultat_action_ponderation,
- *              EF_Noeud *noeud : noeud à étudier,
- *              int indice : 0 si Fx, 1 si Fy, 2 si Fz, 3 si Mx, 4 si My et 5 si Mz,
- *              Projet *projet : la variable projet,
- *              char **texte : la réaction d'appui sous forme d'un texte (peut être NULL),
- *              double *mini : la valeur minimale (dans le cas d'une liste à plusieurs actions),
- *                               peut être NULL,
- *              double *maxi : la valeur maximale (dans le cas d'une liste à plusieurs actions),
- *                               peut être NULL.
- * Valeur renvoyée :
- *   Succès : TRUE.
+gboolean
+EF_resultat_noeud_reaction_appui (GList    *liste,
+                                  EF_Noeud *noeud,
+                                  int       indice,
+                                  Projet   *p,
+                                  char    **texte,
+                                  double   *mini,
+                                  double   *maxi)
+/**
+ * \brief Renvoie la réaction d'appui d'un noeud en fonction d'une liste de
+ *        pondérations.
+ * \param liste : liste d'actions préalablement créées par la fonction 
+ *        #_1990_action_ponderation_resultat,
+ * \param noeud : noeud à étudier,
+ * \param indice : 0 si Fx,
+ *                 1 si Fy,
+ *                 2 si Fz,
+ *                 3 si Mx, 
+ *                 4 si My et 
+ *                 5 si Mz,
+ * \param p : la variable projet,
+ * \param texte : la réaction d'appui sous forme d'un texte (peut être NULL),
+ * \param mini : la valeur minimale (dans le cas d'une liste à plusieurs
+ *               actions), peut être NULL,
+ * \param maxi : la valeur maximale (dans le cas d'une liste à plusieurs
+ *               actions), peut être NULL.
+ * \return
+ *   Succès : TRUE.\n
  *   Échec : FALSE :
- *             liste == NULL,
- *             noeud == NULL,
- *             projet == NULL.
+ *     - liste == NULL,
+ *     - noeud == NULL,
+ *     - p == NULL.
  */
 {
-    GList   *list_parcours;
-    int     i;
-    double  mi, ma;
-    double  *x;
-    Action  *action;
-    
-    BUGMSG(noeud, FALSE, gettext("Paramètre %s incorrect.\n"), "noeud")
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
-    BUGMSG((0 <= indice) && (indice <= 5), FALSE, gettext("Paramètre %s incorrect.\n"), gettext("Indice hors limite.\n"))
-    
-    if (liste == NULL)
-    {
-        if (texte != NULL)
-            BUGMSG(*texte = g_strdup_printf("%.*lf", indice < 3 ? DECIMAL_FORCE : DECIMAL_MOMENT, 0.), FALSE, gettext("Erreur d'allocation mémoire.\n"))
-        if (mini != NULL)
-            *mini = 0.;
-        if (maxi != NULL)
-            *maxi = 0.;
-        return TRUE;
-    }
-    
-    i = g_list_index(projet->modele.noeuds, noeud);
-    
-    list_parcours = liste;
-    action = list_parcours->data;
-    x = _1990_action_efforts_noeuds_renvoie(action)->x;
-    mi = x[i*6+indice];
-    ma = x[i*6+indice];
-    list_parcours = g_list_next(list_parcours);
-    while (list_parcours != NULL)
-    {
-        action = list_parcours->data;
-        
-        x = _1990_action_efforts_noeuds_renvoie(action)->x;
-        
-        if (x[i*6+indice] < mi)
-            mi = x[i*6+indice];
-        if (x[i*6+indice] > ma)
-            ma = x[i*6+indice];
-        
-        list_parcours = g_list_next(list_parcours);
-    }
-    
-    if (mini != NULL)
-        *mini = mi;
-    if (maxi != NULL)
-        *maxi = ma;
+  GList  *list_parcours;
+  int     i;
+  double  mi, ma;
+  double *x;
+  Action *action;
+  
+  BUGMSG (noeud, FALSE, gettext ("Paramètre %s incorrect.\n"), "noeud")
+  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGMSG ((0 <= indice) && (indice <= 3),
+          FALSE,
+          gettext ("Paramètre %s incorrect.\n"), gettext ("Indice hors limite.\n"))
+  
+  if (liste == NULL)
+  {
     if (texte != NULL)
-    {
-        if (!ERREUR_RELATIVE_EGALE(mi, ma))
-            BUGMSG(*texte = g_strdup_printf("%.*lf/%.*lf", indice < 3 ? DECIMAL_FORCE : DECIMAL_MOMENT, mi, indice < 3 ? DECIMAL_FORCE : DECIMAL_MOMENT, ma), FALSE, gettext("Erreur d'allocation mémoire.\n"))
-        else
-            BUGMSG(*texte = g_strdup_printf("%.*lf", indice < 3 ? DECIMAL_FORCE : DECIMAL_MOMENT, mi), FALSE, gettext("Erreur d'allocation mémoire.\n"))
-    }
-    
+      BUGMSG (*texte = g_strdup_printf ("%.*lf",
+                                        indice < 3 ?
+                                          DECIMAL_FORCE :
+                                          DECIMAL_MOMENT,
+                                        0.),
+              FALSE,
+              gettext ("Erreur d'allocation mémoire.\n"))
+    if (mini != NULL)
+      *mini = 0.;
+    if (maxi != NULL)
+      *maxi = 0.;
     return TRUE;
+  }
+  
+  i = g_list_index (p->modele.noeuds, noeud);
+  
+  list_parcours = liste;
+  action = list_parcours->data;
+  x = _1990_action_efforts_noeuds_renvoie (action)->x;
+  mi = x[i * 6 + indice];
+  ma = x[i * 6 + indice];
+  list_parcours = g_list_next (list_parcours);
+  while (list_parcours != NULL)
+  {
+    action = list_parcours->data;
+    
+    x = _1990_action_efforts_noeuds_renvoie (action)->x;
+    
+    if (x[i * 6 + indice] < mi)
+      mi = x[i * 6 + indice];
+    if (x[i * 6 + indice] > ma)
+      ma = x[i * 6 + indice];
+    
+    list_parcours = g_list_next (list_parcours);
+  }
+  
+  if (mini != NULL)
+    *mini = mi;
+  if (maxi != NULL)
+    *maxi = ma;
+  if (texte != NULL)
+  {
+    if (!ERR (mi, ma))
+      BUGMSG (*texte = g_strdup_printf ("%.*lf/%.*lf",
+                                        indice < 3 ?
+                                          DECIMAL_FORCE :
+                                          DECIMAL_MOMENT,
+                                        mi,
+                                        indice < 3 ?
+                                          DECIMAL_FORCE :
+                                          DECIMAL_MOMENT,
+                                        ma),
+              FALSE,
+              gettext ("Erreur d'allocation mémoire.\n"))
+    else
+      BUGMSG (*texte = g_strdup_printf ("%.*lf",
+                                        indice < 3 ?
+                                          DECIMAL_FORCE :
+                                          DECIMAL_MOMENT,
+                                        mi),
+              FALSE,
+              gettext ("Erreur d'allocation mémoire.\n"))
+  }
+  
+  return TRUE;
 }
 
 
-gboolean EF_resultat_noeud_deplacement(GList *liste, EF_Noeud *noeud, int indice,
-  Projet *projet, char **texte, double* mini, double *maxi)
-/* Description : Renvoie le déplacement d'un noeud en fonction d'une liste de pondérations.
- * Paramètres : GList *liste : liste d'actions préalablement créées par la fonction 
- *                EF_resultat_action_ponderation,
- *              EF_Noeud *noeud : noeud à étudier,
- *              int indice : 0 si Ux, 1 si Uy, 2 si Uz, 3 si rx, 4 si ry et 5 si rz,
- *              Projet *projet : la variable projet,
- *              char **texte : le déplacement sous forme d'un texte (peut être NULL),
- *              double *mini : la valeur minimale (dans le cas d'une liste à plusieurs actions),
- *                               peut être NULL,
- *              double *maxi : la valeur maximale (dans le cas d'une liste à plusieurs actions),
- *                               peut être NULL.
- * Valeur renvoyée :
- *   Succès : TRUE.
+gboolean
+EF_resultat_noeud_deplacement (GList    *liste,
+                               EF_Noeud *noeud,
+                               int       indice,
+                               Projet   *p,
+                               char    **texte,
+                               double   *mini,
+                               double   *maxi)
+/**
+ * \brief Renvoie le déplacement d'un noeud en fonction d'une liste de
+ *        pondérations.
+ * \param liste : liste d'actions préalablement créées par la fonction 
+ *        #_1990_action_ponderation_resultat,
+ * \param noeud : noeud à étudier,
+ * \param indice : 0 si Ux,
+ *                 1 si Uy, 
+ *                 2 si Uz, 
+ *                 3 si rx, 
+ *                 4 si ry et 
+ *                 5 si rz,
+ * \param p : la variable projet,
+ * \param texte : le déplacement sous forme d'un texte (peut être NULL),
+ * \param mini : la valeur minimale (dans le cas d'une liste à plusieurs
+ *               actions), peut être NULL,
+ * \param maxi : la valeur maximale (dans le cas d'une liste à plusieurs
+ *               actions), peut être NULL.
+ * \return
+ *   Succès : TRUE.\n
  *   Échec : FALSE :
- *             liste == NULL,
- *             noeud == NULL,
- *             projet == NULL.
+ *     - liste == NULL,
+ *     - noeud == NULL,
+ *     - p == NULL.
  */
 {
-    GList   *list_parcours;
-    int     i;
-    double  mi, ma;
-    double  *x;
-    Action  *action;
-    
-    BUGMSG(noeud, FALSE, gettext("Paramètre %s incorrect.\n"), "noeud")
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
-    BUGMSG((0 <= indice) && (indice <= 5), FALSE, gettext("Paramètre %s incorrect.\n"), gettext("Indice hors limite.\n"))
-    
-    if (liste == NULL)
-    {
-        if (texte != NULL)
-            BUGMSG(*texte = g_strdup_printf("%.*lf", indice < 3 ? DECIMAL_DEPLACEMENT : DECIMAL_ROTATION, 0.), FALSE, gettext("Erreur d'allocation mémoire.\n"))
-        if (mini != NULL)
-            *mini = 0.;
-        if (maxi != NULL)
-            *maxi = 0.;
-        return TRUE;
-    }
-    
-    i = g_list_index(projet->modele.noeuds, noeud);
-    
-    list_parcours = liste;
-    action = list_parcours->data;
-    x = _1990_action_deplacement_complet_renvoie(action)->x;
-    mi = x[i*6+indice];
-    ma = x[i*6+indice];
-    list_parcours = g_list_next(list_parcours);
-    while (list_parcours != NULL)
-    {
-        action = list_parcours->data;
-        
-        x = _1990_action_deplacement_complet_renvoie(action)->x;
-        
-        if (x[i*6+indice] < mi)
-            mi = x[i*6+indice];
-        if (x[i*6+indice] > ma)
-            ma = x[i*6+indice];
-        
-        list_parcours = g_list_next(list_parcours);
-    }
-    
-    if (mini != NULL)
-        *mini = mi;
-    if (maxi != NULL)
-        *maxi = ma;
+  GList  *list_parcours;
+  int     i;
+  double  mi, ma;
+  double *x;
+  Action *action;
+  
+  BUGMSG (noeud, FALSE, gettext ("Paramètre %s incorrect.\n"), "noeud")
+  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGMSG ((0 <= indice) && (indice <= 5),
+          FALSE,
+          gettext ("Paramètre %s incorrect.\n"),
+                   gettext ("Indice hors limite.\n"))
+  
+  if (liste == NULL)
+  {
     if (texte != NULL)
-    {
-        if (!ERREUR_RELATIVE_EGALE(mi, ma))
-            BUGMSG(*texte = g_strdup_printf("%.*lf/%.*lf", indice < 3 ? DECIMAL_DEPLACEMENT : DECIMAL_ROTATION, mi, indice < 3 ? DECIMAL_DEPLACEMENT : DECIMAL_ROTATION, ma), FALSE, gettext("Erreur d'allocation mémoire.\n"))
-        else
-            BUGMSG(*texte = g_strdup_printf("%.*lf", indice < 3 ? DECIMAL_DEPLACEMENT : DECIMAL_ROTATION, mi), FALSE, gettext("Erreur d'allocation mémoire.\n"))
-    }
-    
+      BUGMSG (*texte = g_strdup_printf ("%.*lf",
+                                        indice < 3 ?
+                                          DECIMAL_DEPLACEMENT :
+                                          DECIMAL_ROTATION,
+                                        0.),
+              FALSE,
+              gettext ("Erreur d'allocation mémoire.\n"))
+    if (mini != NULL)
+      *mini = 0.;
+    if (maxi != NULL)
+      *maxi = 0.;
     return TRUE;
+  }
+  
+  i = g_list_index (p->modele.noeuds, noeud);
+  
+  list_parcours = liste;
+  action = list_parcours->data;
+  x = _1990_action_deplacement_renvoie (action)->x;
+  mi = x[i * 6 + indice];
+  ma = x[i * 6 + indice];
+  list_parcours = g_list_next (list_parcours);
+  while (list_parcours != NULL)
+  {
+    action = list_parcours->data;
+    
+    x = _1990_action_deplacement_renvoie (action)->x;
+    
+    if (x[i * 6 + indice] < mi)
+      mi = x[i * 6 + indice];
+    if (x[i * 6 + indice] > ma)
+      ma = x[i * 6 + indice];
+    
+    list_parcours = g_list_next (list_parcours);
+  }
+  
+  if (mini != NULL)
+    *mini = mi;
+  if (maxi != NULL)
+    *maxi = ma;
+  if (texte != NULL)
+  {
+    if (!ERR (mi, ma))
+      BUGMSG (*texte = g_strdup_printf ("%.*lf/%.*lf",
+                                        indice < 3 ?
+                                          DECIMAL_DEPLACEMENT :
+                                          DECIMAL_ROTATION,
+                                        mi,
+                                        indice < 3 ?
+                                          DECIMAL_DEPLACEMENT :
+                                          DECIMAL_ROTATION,
+                                        ma),
+              FALSE,
+              gettext ("Erreur d'allocation mémoire.\n"))
+    else
+      BUGMSG (*texte = g_strdup_printf ("%.*lf",
+                                        indice < 3 ?
+                                          DECIMAL_DEPLACEMENT :
+                                          DECIMAL_ROTATION,
+                                        mi),
+              FALSE,
+              gettext ("Erreur d'allocation mémoire.\n"))
+  }
+  
+  return TRUE;
 }

@@ -1,290 +1,290 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-    <object class="GtkTextTagTable" id="EF_gtk_barres_add_tag_table">
-        <child type="tag">
-            <object class="GtkTextTag" id="EF_gtk_barres_add_tag_mauvais">
-                <property name="name">mauvais</property>
-                <property name="foreground">red</property>
-                <property name="weight">800</property>
-            </object>
-        </child>
-        <child type="tag">
-            <object class="GtkTextTag" id="EF_gtk_barres_add_tag_ok">
-                <property name="name">OK</property>
-                <property name="foreground">black</property>
-                <property name="weight">400</property>
-            </object>
-        </child>
-    </object>
-    <object class="GtkTextBuffer" id="EF_gtk_barres_add_noeud1_buffer">
-        <property name="tag-table">EF_gtk_barres_add_tag_table</property>
-        <signal name="changed" handler="EF_gtk_barres_add_check_add"/>
-    </object>
-    <object class="GtkTextBuffer" id="EF_gtk_barres_add_noeud2_buffer">
-        <property name="tag-table">EF_gtk_barres_add_tag_table</property>
-        <signal name="changed" handler="EF_gtk_barres_add_check_add"/>
-    </object>
-    <object class="GtkTextBuffer" id="EF_gtk_barres_add_angle_buffer">
-        <property name="tag-table">EF_gtk_barres_add_tag_table</property>
-        <signal name="changed" handler="EF_gtk_barres_add_check_add"/>
-    </object>
-    <object class="GtkTextBuffer" id="EF_gtk_barres_add_nb_noeuds_intermediaire_buffer">
-        <property name="tag-table">EF_gtk_barres_add_tag_table</property>
-        <signal name="changed" handler="EF_gtk_barres_add_check_add"/>
-    </object>
-    <object class="GtkWindow" id="EF_barres_add_window">
+  <object class="GtkTextTagTable" id="EF_gtk_barres_add_tag_table">
+    <child type="tag">
+      <object class="GtkTextTag" id="EF_gtk_barres_add_tag_mauvais">
+        <property name="name">mauvais</property>
+        <property name="foreground">red</property>
+        <property name="weight">800</property>
+      </object>
+    </child>
+    <child type="tag">
+      <object class="GtkTextTag" id="EF_gtk_barres_add_tag_ok">
+        <property name="name">OK</property>
+        <property name="foreground">black</property>
+        <property name="weight">400</property>
+      </object>
+    </child>
+  </object>
+  <object class="GtkTextBuffer" id="EF_gtk_barres_add_noeud1_buffer">
+    <property name="tag-table">EF_gtk_barres_add_tag_table</property>
+    <signal name="changed" handler="EF_gtk_barres_add_check_add"/>
+  </object>
+  <object class="GtkTextBuffer" id="EF_gtk_barres_add_noeud2_buffer">
+    <property name="tag-table">EF_gtk_barres_add_tag_table</property>
+    <signal name="changed" handler="EF_gtk_barres_add_check_add"/>
+  </object>
+  <object class="GtkTextBuffer" id="EF_gtk_barres_add_angle_buffer">
+    <property name="tag-table">EF_gtk_barres_add_tag_table</property>
+    <signal name="changed" handler="EF_gtk_barres_add_check_add"/>
+  </object>
+  <object class="GtkTextBuffer" id="EF_gtk_barres_add_nb_noeuds_intermediaire_buffer">
+    <property name="tag-table">EF_gtk_barres_add_tag_table</property>
+    <signal name="changed" handler="EF_gtk_barres_add_check_add"/>
+  </object>
+  <object class="GtkWindow" id="EF_barres_add_window">
+    <property name="visible">True</property>
+    <property name="title" translatable="yes">Ajout d'une barre</property>
+    <property name="window-position">GTK_WIN_POS_CENTER</property>
+    <signal name="key-press-event" handler="ef_gtk_barres_add_window_key_press"/>
+    <signal name="destroy" handler="ef_gtk_barres_add_window_destroy"/>
+    <child>
+      <object class="GtkGrid" id="EF_barres_add_grille_principale">
         <property name="visible">True</property>
-        <property name="title" translatable="yes">Ajout d'une barre</property>
-        <property name="window-position">GTK_WIN_POS_CENTER</property>
-        <signal name="key-press-event" handler="EF_gtk_barres_add_window_key_press"/>
-        <signal name="destroy" handler="EF_gtk_barres_add_window_destroy"/>
+        <property name="border-width">12</property>
+        <property name="row-spacing">12</property>
+        <property name="column-spacing">12</property>
         <child>
-            <object class="GtkGrid" id="EF_barres_add_grille_principale">
-                <property name="visible">True</property>
-                <property name="border-width">12</property>
-                <property name="row-spacing">12</property>
-                <property name="column-spacing">12</property>
-                <child>
-                    <object class="GtkLabel" id="EF_gtk_barres_add_numero_label">
-                        <property name="visible">True</property>
-                        <property name="label" translatable="yes">Numéro :</property>
-                    </object>
-                    <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">0</property>
-                    </packing>
-                </child>
-                <child>
-                    <object class="GtkLabel" id="EF_gtk_barres_add_numero_label2">
-                        <property name="visible">True</property>
-                    </object>
-                    <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">0</property>
-                    </packing>
-                </child>
-                <child>
-                    <object class="GtkLabel" id="EF_gtk_barres_add_type_label">
-                        <property name="visible">True</property>
-                        <property name="label" translatable="yes">_Type :</property>
-                        <property name="use_underline">True</property>
-                        <property name="mnemonic-widget">EF_gtk_barres_add_type_combobox</property>
-                    </object>
-                    <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">1</property>
-                    </packing>
-                </child>
-                <child>
-                    <object class="GtkComboBoxText" id="EF_gtk_barres_add_type_combobox">
-                        <property name="visible">True</property>
-                        <property name="hexpand">True</property>
-                        <signal name="changed" handler="EF_gtk_barres_add_check_add"/>
-                    </object>
-                    <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">1</property>
-                    </packing>
-                </child>
-                <child>
-                    <object class="GtkLabel" id="EF_gtk_barres_add_section_label">
-                        <property name="visible">True</property>
-                        <property name="label" translatable="yes">_Section :</property>
-                        <property name="use_underline">True</property>
-                        <property name="mnemonic-widget">EF_gtk_barres_add_section_combobox</property>
-                    </object>
-                    <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">2</property>
-                    </packing>
-                </child>
-                <child>
-                    <object class="GtkComboBoxText" id="EF_gtk_barres_add_section_combobox">
-                        <property name="visible">True</property>
-                        <property name="hexpand">True</property>
-                        <signal name="changed" handler="EF_gtk_barres_add_check_add"/>
-                    </object>
-                    <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">2</property>
-                    </packing>
-                </child>
-                <child>
-                    <object class="GtkLabel" id="EF_gtk_barres_add_materiau_label">
-                        <property name="visible">True</property>
-                        <property name="label" translatable="yes">_Matériau :</property>
-                        <property name="use_underline">True</property>
-                        <property name="mnemonic-widget">EF_gtk_barres_add_materiau_combobox</property>
-                    </object>
-                    <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">3</property>
-                    </packing>
-                </child>
-                <child>
-                    <object class="GtkComboBoxText" id="EF_gtk_barres_add_materiau_combobox">
-                        <property name="visible">True</property>
-                        <property name="hexpand">True</property>
-                        <signal name="changed" handler="EF_gtk_barres_add_check_add"/>
-                    </object>
-                    <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">3</property>
-                    </packing>
-                </child>
-                <child>
-                    <object class="GtkLabel" id="EF_gtk_barres_add_noeud1_label">
-                        <property name="visible">True</property>
-                        <property name="label" translatable="yes">Noeud _1 :</property>
-                        <property name="use_underline">True</property>
-                        <property name="mnemonic-widget">EF_gtk_barres_add_noeud1_textview</property>
-                    </object>
-                    <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">4</property>
-                    </packing>
-                </child>
-                <child>
-                    <object class="GtkTextView" id="EF_gtk_barres_add_noeud1_textview">
-                        <property name="visible">True</property>
-                        <property name="accepts-tab">False</property>
-                        <property name="buffer">EF_gtk_barres_add_noeud1_buffer</property>
-                    </object>
-                    <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">4</property>
-                    </packing>
-                </child>
-                <child>
-                    <object class="GtkLabel" id="EF_gtk_barres_add_noeud2_label">
-                        <property name="visible">True</property>
-                        <property name="label" translatable="yes">Noeud _2 :</property>
-                        <property name="use_underline">True</property>
-                        <property name="mnemonic-widget">EF_gtk_barres_add_noeud2_textview</property>
-                    </object>
-                    <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">5</property>
-                    </packing>
-                </child>
-                <child>
-                    <object class="GtkTextView" id="EF_gtk_barres_add_noeud2_textview">
-                        <property name="visible">True</property>
-                        <property name="accepts-tab">False</property>
-                        <property name="buffer">EF_gtk_barres_add_noeud2_buffer</property>
-                    </object>
-                    <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">5</property>
-                    </packing>
-                </child>
-                <child>
-                    <object class="GtkLabel" id="EF_gtk_barres_add_angle_label">
-                        <property name="visible">True</property>
-                        <property name="label" translatable="yes">A_ngle :</property>
-                        <property name="use_underline">True</property>
-                        <property name="mnemonic-widget">EF_gtk_barres_add_angle_textview</property>
-                    </object>
-                    <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">6</property>
-                    </packing>
-                </child>
-                <child>
-                    <object class="GtkTextView" id="EF_gtk_barres_add_angle_textview">
-                        <property name="visible">True</property>
-                        <property name="accepts-tab">False</property>
-                        <property name="buffer">EF_gtk_barres_add_angle_buffer</property>
-                    </object>
-                    <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">6</property>
-                    </packing>
-                </child>
-                <child>
-                    <object class="GtkLabel" id="EF_gtk_barres_add_relachement_label">
-                        <property name="visible">True</property>
-                        <property name="label" translatable="yes">_Relâchement :</property>
-                        <property name="use_underline">True</property>
-                        <property name="mnemonic-widget">EF_gtk_barres_add_relachement_combobox</property>
-                    </object>
-                    <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">7</property>
-                    </packing>
-                </child>
-                <child>
-                    <object class="GtkComboBoxText" id="EF_gtk_barres_add_relachement_combobox">
-                        <property name="visible">True</property>
-                        <property name="hexpand">True</property>
-                        <signal name="changed" handler="EF_gtk_barres_add_check_add"/>
-                    </object>
-                    <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">7</property>
-                    </packing>
-                </child>
-                <child>
-                    <object class="GtkLabel" id="EF_gtk_barres_add_nb_noeuds_intermediaire_label">
-                        <property name="visible">True</property>
-                        <property name="label" translatable="yes">_Nombre de divisions :</property>
-                        <property name="use_underline">True</property>
-                        <property name="mnemonic-widget">EF_gtk_barres_add_nb_noeuds_intermediaire_textview</property>
-                    </object>
-                    <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">8</property>
-                    </packing>
-                </child>
-                <child>
-                    <object class="GtkTextView" id="EF_gtk_barres_add_nb_noeuds_intermediaire_textview">
-                        <property name="visible">True</property>
-                        <property name="accepts-tab">False</property>
-                        <property name="buffer">EF_gtk_barres_add_nb_noeuds_intermediaire_buffer</property>
-                    </object>
-                    <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">8</property>
-                    </packing>
-                </child>
-                <child>
-                    <object class="GtkButtonBox" id="EF_gtk_barres_add_buttons">
-                        <property name="visible">True</property>
-                        <property name="orientation">horizontal</property>
-                        <property name="layout_style">end</property>
-                        <property name="spacing">6</property>
-                        <child>
-                            <object class="GtkButton" id="EF_gtk_barres_add_button_annuler">
-                                <property name="visible">True</property>
-                                <property name="use_underline">True</property>
-                                <property name="label" translatable="yes">_Annuler</property>
-                                <signal name="clicked" handler="EF_gtk_barres_add_annuler_clicked"/>
-                            </object>
-                            <packing>
-                                <property name="position">0</property>
-                                <property name="pack_type">end</property>
-                            </packing>
-                        </child>
-                        <child>
-                            <object class="GtkButton" id="EF_gtk_barres_add_button_add">
-                                <property name="visible">True</property>
-                                <property name="use_underline">True</property>
-                                <property name="label" translatable="yes">_Ajouter</property>
-                                <signal name="clicked" handler="EF_gtk_barres_add_add_clicked"/>
-                            </object>
-                            <packing>
-                                <property name="position">1</property>
-                                <property name="pack_type">end</property>
-                            </packing>
-                        </child>
-                    </object>
-                    <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">9</property>
-                        <property name="width">2</property>
-                    </packing>
-                </child>
-            </object>
+          <object class="GtkLabel" id="EF_gtk_barres_add_numero_label">
+            <property name="visible">True</property>
+            <property name="label" translatable="yes">Numéro :</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">0</property>
+          </packing>
         </child>
-    </object>
+        <child>
+          <object class="GtkLabel" id="EF_gtk_barres_add_numero_label2">
+            <property name="visible">True</property>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="EF_gtk_barres_add_type_label">
+            <property name="visible">True</property>
+            <property name="label" translatable="yes">_Type :</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic-widget">EF_gtk_barres_add_type_combobox</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkComboBoxText" id="EF_gtk_barres_add_type_combobox">
+            <property name="visible">True</property>
+            <property name="hexpand">True</property>
+            <signal name="changed" handler="EF_gtk_barres_add_check_add"/>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="EF_gtk_barres_add_section_label">
+            <property name="visible">True</property>
+            <property name="label" translatable="yes">_Section :</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic-widget">EF_gtk_barres_add_section_combobox</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkComboBoxText" id="EF_gtk_barres_add_section_combobox">
+            <property name="visible">True</property>
+            <property name="hexpand">True</property>
+            <signal name="changed" handler="EF_gtk_barres_add_check_add"/>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="EF_gtk_barres_add_materiau_label">
+            <property name="visible">True</property>
+            <property name="label" translatable="yes">_Matériau :</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic-widget">EF_gtk_barres_add_materiau_combobox</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">3</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkComboBoxText" id="EF_gtk_barres_add_materiau_combobox">
+            <property name="visible">True</property>
+            <property name="hexpand">True</property>
+            <signal name="changed" handler="EF_gtk_barres_add_check_add"/>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">3</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="EF_gtk_barres_add_noeud1_label">
+            <property name="visible">True</property>
+            <property name="label" translatable="yes">Noeud _1 :</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic-widget">EF_gtk_barres_add_noeud1_textview</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">4</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkTextView" id="EF_gtk_barres_add_noeud1_textview">
+            <property name="visible">True</property>
+            <property name="accepts-tab">False</property>
+            <property name="buffer">EF_gtk_barres_add_noeud1_buffer</property>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">4</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="EF_gtk_barres_add_noeud2_label">
+            <property name="visible">True</property>
+            <property name="label" translatable="yes">Noeud _2 :</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic-widget">EF_gtk_barres_add_noeud2_textview</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">5</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkTextView" id="EF_gtk_barres_add_noeud2_textview">
+            <property name="visible">True</property>
+            <property name="accepts-tab">False</property>
+            <property name="buffer">EF_gtk_barres_add_noeud2_buffer</property>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">5</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="EF_gtk_barres_add_angle_label">
+            <property name="visible">True</property>
+            <property name="label" translatable="yes">A_ngle :</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic-widget">EF_gtk_barres_add_angle_textview</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">6</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkTextView" id="EF_gtk_barres_add_angle_textview">
+            <property name="visible">True</property>
+            <property name="accepts-tab">False</property>
+            <property name="buffer">EF_gtk_barres_add_angle_buffer</property>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">6</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="EF_gtk_barres_add_relachement_label">
+            <property name="visible">True</property>
+            <property name="label" translatable="yes">_Relâchement :</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic-widget">EF_gtk_barres_add_relachement_combobox</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">7</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkComboBoxText" id="EF_gtk_barres_add_relachement_combobox">
+            <property name="visible">True</property>
+            <property name="hexpand">True</property>
+            <signal name="changed" handler="EF_gtk_barres_add_check_add"/>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">7</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="EF_gtk_barres_add_nb_noeuds_intermediaire_label">
+            <property name="visible">True</property>
+            <property name="label" translatable="yes">_Nombre de divisions :</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic-widget">EF_gtk_barres_add_nb_noeuds_intermediaire_textview</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">8</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkTextView" id="EF_gtk_barres_add_nb_noeuds_intermediaire_textview">
+            <property name="visible">True</property>
+            <property name="accepts-tab">False</property>
+            <property name="buffer">EF_gtk_barres_add_nb_noeuds_intermediaire_buffer</property>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">8</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButtonBox" id="EF_gtk_barres_add_buttons">
+            <property name="visible">True</property>
+            <property name="orientation">horizontal</property>
+            <property name="layout_style">end</property>
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkButton" id="EF_gtk_barres_add_button_annuler">
+                <property name="visible">True</property>
+                <property name="use_underline">True</property>
+                <property name="label" translatable="yes">_Annuler</property>
+                <signal name="clicked" handler="ef_gtk_barres_add_window_button_close"/>
+              </object>
+              <packing>
+                <property name="position">0</property>
+                <property name="pack_type">end</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="EF_gtk_barres_add_button_add">
+                <property name="visible">True</property>
+                <property name="use_underline">True</property>
+                <property name="label" translatable="yes">_Ajouter</property>
+                <signal name="clicked" handler="EF_gtk_barres_add_add_clicked"/>
+              </object>
+              <packing>
+                <property name="position">1</property>
+                <property name="pack_type">end</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">9</property>
+            <property name="width">2</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
 </interface>

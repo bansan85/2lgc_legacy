@@ -22,7 +22,11 @@
 #include "config.h"
 #include "common_projet.h"
 
-int _1990_duree_projet(unsigned int type, Type_Pays pays) __attribute__((__warn_unused_result__));
-char *_1990_duree_projet_txt(unsigned int type, Type_Pays pays) __attribute__((__warn_unused_result__));
+int _1990_duree_norme       (unsigned int type,
+                             Type_Pays    pays)
+                                       __attribute__((__warn_unused_result__));
+char *_1990_duree_norme_txt (unsigned int type,
+                             Type_Pays    pays)
+                                       __attribute__((__warn_unused_result__));
 
 #endif

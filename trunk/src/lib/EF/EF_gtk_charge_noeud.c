@@ -35,368 +35,490 @@
 #include "EF_calculs.h"
 
 
-void EF_gtk_charge_noeud_annuler_clicked(GtkButton *button, Projet *projet)
-/* Description : Ferme la fenêtre sans effectuer les modifications.
- * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
- *            : Projet *projet : la variable projet.
- * Valeur renvoyée : Aucune.
- */
-{
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
-    BUGMSG(projet->list_gtk.ef_charge_noeud.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Nodale")
-    
-    gtk_widget_destroy(projet->list_gtk.ef_charge_noeud.window);
-    
-    return;
-}
+GTK_WINDOW_CLOSE (ef, charge_noeud);
 
 
-gboolean EF_gtk_charge_noeud_recupere_donnees(Projet *projet, unsigned int *num_action,
-  GList **noeuds, double *fx, double *fy, double *fz, double *mx, double *my, double *mz,
-  gchar **nom)
-/* Description : Récupère toutes les données de la fenêtre permettant d'ajouter ou d'éditer une
- *               charge nodale.
- * Paramètres : Projet *projet : la variable projet,
- *            : unsigned int *num_action : numéro de l'action où sera ajoutée la charge,
- *            : GList **noeuds : liste des noeuds qui supportera la charge,
- *            : double *fx : force selon x,
- *            : double *fy : force selon y,
- *            : double *fz : force selon z,
- *            : double *mx : moment selon x,
- *            : double *my : moment selon y,
- *            : double *mz : moment selon z,
- *            : gchar **nom : nom de l'action.
- * Valeur renvoyée :
- *   Succès : TRUE
+GTK_WINDOW_KEY_PRESS (ef, charge_noeud);
+
+
+GTK_WINDOW_DESTROY (ef, charge_noeud, );
+
+
+gboolean EF_gtk_charge_noeud_recupere (Projet  *p,
+                                       Action **action,
+                                       GList  **noeuds,
+                                       double  *fx,
+                                       double  *fy,
+                                       double  *fz,
+                                       double  *mx,
+                                       double  *my,
+                                       double  *mz,
+                                       gchar  **nom)
+/**
+ * \brief Récupère toutes les données de la fenêtre permettant d'ajouter ou
+ *        d'éditer une charge nodale.
+ * \param p : la variable projet,
+ * \param action : numéro de l'action où sera ajoutée la charge,
+ * \param noeuds : liste des noeuds qui supportera la charge,
+ * \param fx : force selon x,
+ * \param fy : force selon y,
+ * \param fz : force selon z,
+ * \param mx : moment selon x,
+ * \param my : moment selon y,
+ * \param mz : moment selon z,
+ * \param nom : nom de l'action.
+ * \return
+ *   Succès : TRUE.\n
  *   Échec : FALSE :
- *             projet == NULL, num_action == NULL, noeuds == NULL, fx == NULL, fy == NULL,
- *             fz == NULL, mx == NULL, my == NULL, mz == NULL, nom == NULL,
- *             en cas d'erreur d'allocation mémoire.
+ *     - p == NULL,
+ *     - action == NULL,
+ *     - noeuds == NULL,
+ *     - fx == NULL,
+ *     - fy == NULL,
+ *     - fz == NULL,
+ *     - mx == NULL,
+ *     - my == NULL,
+ *     - mz == NULL,
+ *     - nom == NULL,
+ *      - en cas d'erreur d'allocation mémoire,
+ *      - interface graphique non initialisée.
  */
 {
-    Gtk_EF_Charge_Noeud *ef_gtk;
-    GList               *num_noeuds;
-    GtkTextIter         start, end;
-    gchar               *texte_tmp;
-    GtkTextBuffer       *textbuffer;
-    gint                get_active;
-    gboolean            ok = TRUE;
-    
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
-    BUGMSG(num_action, FALSE, gettext("Paramètre %s incorrect.\n"), "num_action")
-    BUGMSG(noeuds, FALSE, gettext("Paramètre %s incorrect.\n"), "noeuds")
-    BUGMSG(fx, FALSE, gettext("Paramètre %s incorrect.\n"), "fx")
-    BUGMSG(fy, FALSE, gettext("Paramètre %s incorrect.\n"), "fy")
-    BUGMSG(fz, FALSE, gettext("Paramètre %s incorrect.\n"), "fz")
-    BUGMSG(mx, FALSE, gettext("Paramètre %s incorrect.\n"), "mx")
-    BUGMSG(my, FALSE, gettext("Paramètre %s incorrect.\n"), "my")
-    BUGMSG(mz, FALSE, gettext("Paramètre %s incorrect.\n"), "mz")
-    BUGMSG(nom, FALSE, gettext("Paramètre %s incorrect.\n"), "nom")
-    BUGMSG(projet->list_gtk.ef_charge_noeud.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Nodale")
-    
-    ef_gtk = &projet->list_gtk.ef_charge_noeud;
-    
-    get_active = gtk_combo_box_get_active(GTK_COMBO_BOX(ef_gtk->combobox_charge));
-    if (get_active < 0)
-        ok = FALSE;
-    else
-        *num_action = (unsigned int)get_active;
-    
-    *fx = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_buffer_fx")), -INFINITY, FALSE, INFINITY, FALSE);
-    if (isnan(*fx))
-        ok = FALSE;
-    
-    *fy = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_buffer_fy")), -INFINITY, FALSE, INFINITY, FALSE);
-    if (isnan(*fy))
-        ok = FALSE;
-    
-    *fz = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_buffer_fz")), -INFINITY, FALSE, INFINITY, FALSE);
-    if (isnan(*fz))
-        ok = FALSE;
-    
-    *mx = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_buffer_mx")), -INFINITY, FALSE, INFINITY, FALSE);
-    if (isnan(*mx))
-        ok = FALSE;
-    
-    *my = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_buffer_my")), -INFINITY, FALSE, INFINITY, FALSE);
-    if (isnan(*my))
-        ok = FALSE;
-    
-    *mz = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_buffer_mz")), -INFINITY, FALSE, INFINITY, FALSE);
-    if (isnan(*mz))
-        ok = FALSE;
-    
-    textbuffer = GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_buffer_noeuds"));
-    gtk_text_buffer_get_iter_at_offset(textbuffer, &start, 0);
-    gtk_text_buffer_get_iter_at_offset(textbuffer, &end, -1);
-    texte_tmp = gtk_text_buffer_get_text(textbuffer, &start, &end, FALSE);
-    num_noeuds = common_selection_renvoie_numeros(texte_tmp);
-    if (num_noeuds == NULL)
-        ok = FALSE;
+  GList         *num_noeuds;
+  GtkTextIter    start, end;
+  gchar         *texte_tmp;
+  GtkTextBuffer *textbuffer;
+  gint           get_active;
+  gboolean       ok = TRUE;
+  
+  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGMSG (action, FALSE, gettext ("Paramètre %s incorrect.\n"), "action")
+  BUGMSG (noeuds, FALSE, gettext ("Paramètre %s incorrect.\n"), "noeuds")
+  BUGMSG (fx, FALSE, gettext ("Paramètre %s incorrect.\n"), "fx")
+  BUGMSG (fy, FALSE, gettext ("Paramètre %s incorrect.\n"), "fy")
+  BUGMSG (fz, FALSE, gettext ("Paramètre %s incorrect.\n"), "fz")
+  BUGMSG (mx, FALSE, gettext ("Paramètre %s incorrect.\n"), "mx")
+  BUGMSG (my, FALSE, gettext ("Paramètre %s incorrect.\n"), "my")
+  BUGMSG (mz, FALSE, gettext ("Paramètre %s incorrect.\n"), "mz")
+  BUGMSG (nom, FALSE, gettext ("Paramètre %s incorrect.\n"), "nom")
+  BUGMSG (UI_CHNO.builder,
+          FALSE,
+          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                   "Charge Nodale")
+  
+  get_active = gtk_combo_box_get_active (GTK_COMBO_BOX (
+                                                     UI_CHNO.combobox_charge));
+  if (get_active < 0)
+    ok = FALSE;
+  else
+    *action = g_list_nth_data (p->actions, (unsigned int) get_active);
+  
+  *fx = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (UI_CHNO.builder,
+                                                 "EF_charge_noeud_buffer_fx")),
+                     -INFINITY,
+                     FALSE,
+                     INFINITY,
+                     FALSE);
+  if (isnan (*fx))
+    ok = FALSE;
+  
+  *fy = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (UI_CHNO.builder,
+                                                 "EF_charge_noeud_buffer_fy")),
+                     -INFINITY,
+                     FALSE,
+                     INFINITY,
+                     FALSE);
+  if (isnan (*fy))
+    ok = FALSE;
+  
+  *fz = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (UI_CHNO.builder,
+                                                 "EF_charge_noeud_buffer_fz")),
+                     -INFINITY,
+                     FALSE,
+                     INFINITY,
+                     FALSE);
+  if (isnan (*fz))
+    ok = FALSE;
+  
+  *mx = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (UI_CHNO.builder,
+                                                 "EF_charge_noeud_buffer_mx")),
+                     -INFINITY,
+                     FALSE,
+                     INFINITY,
+                     FALSE);
+  if (isnan (*mx))
+    ok = FALSE;
+  
+  *my = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (UI_CHNO.builder,
+                                                 "EF_charge_noeud_buffer_my")),
+                     -INFINITY,
+                     FALSE,
+                     INFINITY,
+                     FALSE);
+  if (isnan (*my))
+    ok = FALSE;
+  
+  *mz = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (UI_CHNO.builder,
+                                                 "EF_charge_noeud_buffer_mz")),
+                     -INFINITY,
+                     FALSE,
+                     INFINITY,
+                     FALSE);
+  if (isnan (*mz))
+    ok = FALSE;
+  
+  textbuffer = GTK_TEXT_BUFFER (gtk_builder_get_object (UI_CHNO.builder,
+                                             "EF_charge_noeud_buffer_noeuds"));
+  gtk_text_buffer_get_iter_at_offset (textbuffer, &start, 0);
+  gtk_text_buffer_get_iter_at_offset (textbuffer, &end, -1);
+  texte_tmp = gtk_text_buffer_get_text (textbuffer, &start, &end, FALSE);
+  num_noeuds = common_selection_renvoie_numeros (texte_tmp);
+  if (num_noeuds == NULL)
+    ok = FALSE;
+  else
+  {
+    *noeuds = common_selection_numeros_en_noeuds (num_noeuds, p);
+    g_list_free (num_noeuds);
+    if (*noeuds == NULL)
+      ok = FALSE;
     else
     {
-        *noeuds = common_selection_converti_numeros_en_noeuds(num_noeuds, projet);
-        g_list_free(num_noeuds);
-        if (*noeuds == NULL)
-            ok = FALSE;
-        else
-        {
-            // Si tous les paramètres sont corrects
-            textbuffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_textview_description")));
-            
-            gtk_text_buffer_get_iter_at_offset(textbuffer, &start, 0);
-            gtk_text_buffer_get_iter_at_offset(textbuffer, &end, -1);
-            *nom = gtk_text_buffer_get_text(textbuffer, &start, &end, FALSE);
-         
-            if (strcmp(*nom, "") == 0)
-            {
-                free(*nom);
-                *nom = NULL;
-                ok = FALSE;
-            }
-        }
+      // Si tous les paramètres sont corrects
+      textbuffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (
+                                       gtk_builder_get_object (UI_CHNO.builder,
+                                     "EF_charge_noeud_textview_description")));
+      
+      gtk_text_buffer_get_iter_at_offset (textbuffer, &start, 0);
+      gtk_text_buffer_get_iter_at_offset (textbuffer, &end, -1);
+      *nom = gtk_text_buffer_get_text (textbuffer, &start, &end, FALSE);
+     
+      if (strcmp (*nom, "") == 0)
+      {
+        free (*nom);
+        *nom = NULL;
+        ok = FALSE;
+      }
     }
-    
-    free(texte_tmp);
-    
-    return ok;
+  }
+  
+  free (texte_tmp);
+  
+  return ok;
 }
 
 
-void EF_gtk_charge_noeud_check(GtkWidget *object, Projet *projet)
-/* Description : Vérifie si l'ensemble des éléments est correct pour activer le bouton add/edit.
- * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
- *            : Projet *projet : la variable projet.
- * Valeur renvoyée : Aucune.
+void
+EF_gtk_charge_noeud_check (GtkWidget *button,
+                           Projet    *p)
+/**
+ * \brief Vérifie si l'ensemble des éléments est correct pour activer le bouton
+ *        add/edit.
+ * \param button : composant à l'origine de l'évènement,
+ * \param p : la variable projet.
+ * \return Rien.\n
+ *   Echec :
+ *     - p == NULL,
+ *     - interface graphique non initialisée.
  */
 {
-    unsigned int    num_action;
-    GList           *noeuds;
-    double          fx, fy, fz, mx, my, mz;
-    gchar           *nom = NULL;
-    
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
-    BUGMSG(projet->list_gtk.ef_charge_noeud.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Nodale")
-    
-    if (!EF_gtk_charge_noeud_recupere_donnees(projet, &num_action, &noeuds, &fx, &fy, &fz, &mx, &my, &mz, &nom))
-        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_button_add_edit")), FALSE);
-    else
-    {
-        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_button_add_edit")), TRUE);
-        g_list_free(noeuds);
-    }
-    g_free(nom);
-    return;
+  Action *action;
+  GList  *noeuds;
+  double  fx, fy, fz, mx, my, mz;
+  gchar  *nom = NULL;
+  
+  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGMSG (UI_CHNO.builder,
+          ,
+          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                   "Charge Nodale")
+  
+  if (!EF_gtk_charge_noeud_recupere (p,
+                                     &action,
+                                     &noeuds,
+                                     &fx,
+                                     &fy,
+                                     &fz,
+                                     &mx,
+                                     &my,
+                                     &mz,
+                                     &nom))
+    gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (
+                          UI_CHNO.builder, "EF_charge_noeud_button_add_edit")),
+                              FALSE);
+  else
+  {
+    gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (
+                          UI_CHNO.builder, "EF_charge_noeud_button_add_edit")),
+                              TRUE);
+    g_list_free (noeuds);
+  }
+  
+  g_free (nom);
+  
+  return;
 }
 
 
-void EF_gtk_charge_noeud_ajouter_clicked(GtkButton *button, Projet *projet)
-/* Description : Ferme la fenêtre en ajoutant la charge.
- * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
- *            : Projet *projet : la variable projet.
- * Valeur renvoyée : Aucune.
+void
+EF_gtk_charge_noeud_ajouter (GtkButton *button,
+                             Projet    *p)
+/**
+ * \brief Ferme la fenêtre en ajoutant la charge.
+ * \param button : composant à l'origine de l'évènement,
+ * \param p : la variable projet.
+ * \return Rien.\n
+ *   Echec :
+ *     - p == NULL,
+ *     - interface graphique non initialisée.
  */
 {
-    double          fx, fy, fz, mx, my, mz;
-    unsigned int    num_action;
-    GList           *noeuds;
-    gchar           *texte;
-    Charge_Noeud    *charge_noeud;
-    
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
-    BUGMSG(projet->list_gtk.ef_charge_noeud.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Nodale")
-    
-    BUG(EF_gtk_charge_noeud_recupere_donnees(projet, &num_action, &noeuds, &fx, &fy, &fz, &mx, &my, &mz, &texte) == TRUE, )
-    
-    // Création de la nouvelle charge ponctuelle au noeud
-    BUG(charge_noeud = EF_charge_noeud_ajout(projet, num_action, noeuds, common_math_f(fx, FLOTTANT_UTILISATEUR), common_math_f(fy, FLOTTANT_UTILISATEUR), common_math_f(fz, FLOTTANT_UTILISATEUR), common_math_f(mx, FLOTTANT_UTILISATEUR), common_math_f(my, FLOTTANT_UTILISATEUR), common_math_f(mz, FLOTTANT_UTILISATEUR), texte), )
-    
-    free(texte);
-    
-    gtk_widget_destroy(projet->list_gtk.ef_charge_noeud.window);
-    
-    return;
+  double  fx, fy, fz, mx, my, mz;
+  Action *action;
+  GList  *noeuds;
+  gchar  *texte;
+  
+  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGMSG (UI_CHNO.builder,
+          ,
+          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                   "Charge Nodale")
+  
+  BUG (EF_gtk_charge_noeud_recupere (p,
+                                     &action,
+                                     &noeuds,
+                                     &fx,
+                                     &fy,
+                                     &fz,
+                                     &mx,
+                                     &my,
+                                     &mz,
+                                     &texte) == TRUE,
+      )
+  
+  // Création de la nouvelle charge nodale
+  BUG (EF_charge_noeud_ajout (p,
+                              action,
+                              noeuds,
+                              m_f (fx, FLOTTANT_UTILISATEUR),
+                              m_f (fy, FLOTTANT_UTILISATEUR),
+                              m_f (fz, FLOTTANT_UTILISATEUR),
+                              m_f (mx, FLOTTANT_UTILISATEUR),
+                              m_f (my, FLOTTANT_UTILISATEUR),
+                              m_f (mz, FLOTTANT_UTILISATEUR),
+                              texte),
+      )
+  
+  free (texte);
+  
+  gtk_widget_destroy (UI_CHNO.window);
+  
+  return;
 }
 
 
-void EF_gtk_charge_noeud_editer_clicked(GtkButton *button, Projet *projet)
-/* Description : Ferme la fenêtre en appliquant les modifications.
- * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
- *            : Projet *projet : la variable projet.
- * Valeur renvoyée : Aucune.
+void
+EF_gtk_charge_noeud_editer (GtkButton *button,
+                            Projet    *p)
+/**
+ * \brief Ferme la fenêtre en appliquant les modifications.
+ * \param button : composant à l'origine de l'évènement,
+ * \param p : la variable projet.
+ * \return Rien.\n
+ *   Echec :
+ *     - p == NULL,
+ *     - interface graphique non initialisée.
  */
 {
-    Gtk_EF_Charge_Noeud *ef_gtk;
-    double              fx, fy, fz, mx, my, mz;
-    unsigned int        num_action;
-    GList               *noeuds;
-    gchar               *texte;
-    Charge_Noeud        *charge_noeud;
-    
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
-    BUGMSG(projet->list_gtk.ef_charge_noeud.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Nodale")
-    
-    ef_gtk = &projet->list_gtk.ef_charge_noeud;
-    
-    BUG(EF_gtk_charge_noeud_recupere_donnees(projet, &num_action, &noeuds, &fx, &fy, &fz, &mx, &my, &mz, &texte) == TRUE, )
-    
-    // Création de la nouvelle charge ponctuelle au noeud
-    BUG(charge_noeud = EF_charge_cherche(projet, ef_gtk->action, ef_gtk->charge), )
-    free(charge_noeud->nom);
-    charge_noeud->nom = texte;
-    charge_noeud->fx = common_math_f(fx, FLOTTANT_UTILISATEUR);
-    charge_noeud->fy = common_math_f(fy, FLOTTANT_UTILISATEUR);
-    charge_noeud->fz = common_math_f(fz, FLOTTANT_UTILISATEUR);
-    charge_noeud->mx = common_math_f(mx, FLOTTANT_UTILISATEUR);
-    charge_noeud->my = common_math_f(my, FLOTTANT_UTILISATEUR);
-    charge_noeud->mz = common_math_f(mz, FLOTTANT_UTILISATEUR);
-    g_list_free(charge_noeud->noeuds);
-    charge_noeud->noeuds = noeuds;
-    if (num_action != ef_gtk->action)
-        BUG(EF_charge_deplace(projet, ef_gtk->action, ef_gtk->charge, num_action), )
-    else
-        gtk_widget_queue_resize(GTK_WIDGET(projet->list_gtk._1990_actions.tree_view_charges));
-    
-    gtk_widget_destroy(projet->list_gtk.ef_charge_noeud.window);
-    
-    BUG(EF_calculs_free(projet), )
-    
-    return;
+  double        fx, fy, fz, mx, my, mz;
+  Action       *action;
+  GList        *noeuds;
+  gchar        *texte;
+  Charge_Noeud *charge_d;
+  
+  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGMSG (UI_CHNO.builder,
+          ,
+          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                   "Charge Nodale")
+  
+  BUG (EF_gtk_charge_noeud_recupere (p,
+                                     &action,
+                                     &noeuds,
+                                     &fx,
+                                     &fy,
+                                     &fz,
+                                     &mx,
+                                     &my,
+                                     &mz,
+                                     &texte) == TRUE,
+       )
+  
+  // Création de la nouvelle charge nodale
+  free (UI_CHNO.charge->nom);
+  UI_CHNO.charge->nom = texte;
+  charge_d = UI_CHNO.charge->data;
+  charge_d->fx = m_f (fx, FLOTTANT_UTILISATEUR);
+  charge_d->fy = m_f (fy, FLOTTANT_UTILISATEUR);
+  charge_d->fz = m_f (fz, FLOTTANT_UTILISATEUR);
+  charge_d->mx = m_f (mx, FLOTTANT_UTILISATEUR);
+  charge_d->my = m_f (my, FLOTTANT_UTILISATEUR);
+  charge_d->mz = m_f (mz, FLOTTANT_UTILISATEUR);
+  g_list_free (charge_d->noeuds);
+  charge_d->noeuds = noeuds;
+  if (action != UI_CHNO.action)
+    BUG (EF_charge_deplace (p, UI_CHNO.action, UI_CHNO.charge, action), )
+  else
+    gtk_widget_queue_resize (GTK_WIDGET (UI_ACT.tree_view_charges));
+  
+  gtk_widget_destroy (UI_CHNO.window);
+  
+  BUG (EF_calculs_free (p), )
+  
+  return;
 }
 
 
-gboolean EF_gtk_charge_noeud_window_key_press(GtkWidget *widget, GdkEvent *event,
-  Projet *projet)
-/* Description : Gestion des touches de l'ensemble des composants de la fenêtre.
- * Paramètres : GtkWidget *widget : composant à l'origine de l'évènement,
- *            : GdkEvent *event : description de la touche pressée,
- *            : Projet *projet : la variable projet.
- * Valeur renvoyée : TRUE si la touche ECHAP est pressée, FALSE sinon.
+gboolean
+EF_gtk_charge_noeud (Projet *p,
+                     Action *action_defaut,
+                     Charge *charge)
+/**
+ * \brief Affichage de la fenêtre permettant de créer ou modifier une action de
+ *        type charge nodale.
+ * \param p : la variable projet
+ * \param action_defaut : action par défaut dans la fenêtre,
+ * \param charge : vaut NULL si une nouvelle charge doit être ajoutée,
+ *                 vaut le numéro de la charge si elle doit être modifiée.
+ * \return
+ *   Succès : TRUE.\n
  *   Echec : FALSE :
- *             projet == NULL,
- *             interface graphique non initialisée.
+ *     - p == NULL,
+ *     - interface graphique impossible à générer.
  */
 {
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
-    BUGMSG(projet->list_gtk.ef_charge_noeud.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Nodale")
-    
-    if (event->key.keyval == GDK_KEY_Escape)
-    {
-        gtk_widget_destroy(projet->list_gtk.ef_charge_noeud.window);
-        return TRUE;
-    }
-    else
-        return FALSE;
-}
-
-
-void EF_gtk_charge_noeud_window_destroy(GtkWidget *object, Projet *projet)
-/* Description : met projet->list_gtk.ef_charge_noeud.builder à NULL quand la fenêtre se ferme.
- * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
- *            : Projet *projet : la variable projet.
- * Valeur renvoyée : Aucune.
- */
-{
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
-    BUGMSG(projet->list_gtk.ef_charge_noeud.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Nodale")
-    
-    g_object_unref(G_OBJECT(projet->list_gtk.ef_charge_noeud.builder));
-    projet->list_gtk.ef_charge_noeud.builder = NULL;
-    
-    return;
-}
-
-
-gboolean EF_gtk_charge_noeud(Projet *projet, unsigned int action_defaut, unsigned int charge)
-/* Description : Affichage de la fenêtre permettant de créer ou modifier une action de type
- *               charge ponctuelle au noeud.
- * Paramètres : Projet *projet : la variable projet
- *            : unsigned int action_defaut : action par défaut dans la fenêtre,
- *            : unsigned int charge : vaut G_MAXUINT si une nouvelle charge doit être ajoutée,
- *                                    vaut le numéro de la charge si elle doit être modifiée.
- * Valeur renvoyée :
- *   Succès : TRUE
- *   Echec : FALSE :
- *             projet == NULL,
- *             Fenêtre graphique déjà initialisée.
- */
-{
-    Gtk_EF_Charge_Noeud *ef_gtk;
-    Charge_Noeud        *charge_noeud;
-    
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
-    if (projet->list_gtk.ef_charge_noeud.builder != NULL)
-    {
-        gtk_window_present(GTK_WINDOW(projet->list_gtk.ef_charge_noeud.window));
-        return TRUE;
-    }
-    
-    ef_gtk = &projet->list_gtk.ef_charge_noeud;
-    projet->list_gtk.ef_charge_noeud.builder = gtk_builder_new();
-    BUGMSG(gtk_builder_add_from_resource(projet->list_gtk.ef_charge_noeud.builder, "/org/2lgc/codegui/ui/EF_charge_noeud.ui", NULL) != 0, FALSE, gettext("Builder Failed\n"))
-    gtk_builder_connect_signals(projet->list_gtk.ef_charge_noeud.builder, projet);
-    
-    ef_gtk->window = GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_window"));
-    ef_gtk->combobox_charge = GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_combo_box_charge"));
-    
-    if (charge == G_MAXUINT)
-    {
-        ef_gtk->action = 0;
-        ef_gtk->charge = 0;
-        gtk_window_set_title(GTK_WINDOW(ef_gtk->window), gettext("Ajout d'une charge au noeud"));
-        charge_noeud = NULL;
-    }
-    else
-    {
-        ef_gtk->action = action_defaut;
-        ef_gtk->charge = charge;
-        gtk_window_set_title(GTK_WINDOW(ef_gtk->window), gettext("Modification d'une charge au noeud"));
-        BUG(charge_noeud = EF_charge_cherche(projet, action_defaut, charge), FALSE)
-    }
-    
-    gtk_combo_box_set_model(GTK_COMBO_BOX(ef_gtk->combobox_charge), GTK_TREE_MODEL(projet->list_gtk._1990_actions.list_actions));
-    gtk_combo_box_set_active(GTK_COMBO_BOX(ef_gtk->combobox_charge), (gint)action_defaut);
-    
-    if (charge_noeud != NULL)
-    {
-        char   tmp[30], *tmp2;
-        gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_textview_description"))), charge_noeud->nom, -1);
-        common_math_double_to_char2(charge_noeud->fx, tmp, DECIMAL_FORCE);
-        gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_buffer_fx")), tmp, -1);
-        common_math_double_to_char2(charge_noeud->fy, tmp, DECIMAL_FORCE);
-        gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_buffer_fy")), tmp, -1);
-        common_math_double_to_char2(charge_noeud->fz, tmp, DECIMAL_FORCE);
-        gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_buffer_fz")), tmp, -1);
-        common_math_double_to_char2(charge_noeud->mx, tmp, DECIMAL_MOMENT);
-        gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_buffer_mx")), tmp, -1);
-        common_math_double_to_char2(charge_noeud->my, tmp, DECIMAL_MOMENT);
-        gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_buffer_my")), tmp, -1);
-        common_math_double_to_char2(charge_noeud->mz, tmp, DECIMAL_MOMENT);
-        gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_buffer_mz")), tmp, -1);
-        BUG(tmp2 = common_selection_converti_noeuds_en_texte(charge_noeud->noeuds), FALSE)
-        gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_buffer_noeuds")), tmp2, -1);
-        free(tmp2);
-    }
-    
-    if (charge == G_MAXUINT)
-    {
-        gtk_button_set_label(GTK_BUTTON(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_button_add_edit")), gettext("_Ajouter"));
-        g_signal_connect(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_button_add_edit"), "clicked", G_CALLBACK(EF_gtk_charge_noeud_ajouter_clicked), projet);
-    }
-    else
-    {
-        gtk_button_set_label(GTK_BUTTON(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_button_add_edit")), gettext("_Modifier"));
-        g_signal_connect(gtk_builder_get_object(projet->list_gtk.ef_charge_noeud.builder, "EF_charge_noeud_button_add_edit"), "clicked", G_CALLBACK(EF_gtk_charge_noeud_editer_clicked), projet);
-    }
-    
-    EF_gtk_charge_noeud_check(NULL, projet);
-    
-    if (projet->list_gtk._1990_actions.window == NULL)
-        gtk_window_set_transient_for(GTK_WINDOW(ef_gtk->window), GTK_WINDOW(projet->list_gtk.comp.window));
-    else
-        gtk_window_set_transient_for(GTK_WINDOW(ef_gtk->window), GTK_WINDOW(projet->list_gtk._1990_actions.window));
-    
+  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
+  
+  if (UI_CHNO.builder != NULL)
+  {
+    gtk_window_present (GTK_WINDOW (UI_CHNO.window));
     return TRUE;
+  }
+  
+  UI_CHNO.builder = gtk_builder_new ();
+  BUGMSG (gtk_builder_add_from_resource (UI_CHNO.builder,
+                                     "/org/2lgc/codegui/ui/EF_charge_noeud.ui",
+                                         NULL) != 0,
+          FALSE,
+          gettext ("Builder Failed\n"))
+  gtk_builder_connect_signals (UI_CHNO.builder, p);
+  
+  UI_CHNO.window = GTK_WIDGET (gtk_builder_get_object (UI_CHNO.builder,
+                                                    "EF_charge_noeud_window"));
+  UI_CHNO.combobox_charge = GTK_WIDGET (gtk_builder_get_object (
+                         UI_CHNO.builder, "EF_charge_noeud_combo_box_charge"));
+  
+  if (charge == NULL)
+  {
+    UI_CHNO.action = 0;
+    UI_CHNO.charge = 0;
+    gtk_window_set_title (GTK_WINDOW (UI_CHNO.window),
+                          gettext ("Ajout d'une charge au noeud"));
+  }
+  else
+  {
+    UI_CHNO.action = action_defaut;
+    UI_CHNO.charge = charge;
+    gtk_window_set_title (GTK_WINDOW (UI_CHNO.window),
+                          gettext ("Modification d'une charge au noeud"));
+  }
+  
+  gtk_combo_box_set_model (GTK_COMBO_BOX (UI_CHNO.combobox_charge),
+                           GTK_TREE_MODEL (UI_ACT.liste));
+  gtk_combo_box_set_active (GTK_COMBO_BOX (UI_CHNO.combobox_charge),
+                            g_list_index (p->actions, action_defaut));
+  
+  if (charge != NULL)
+  {
+    Charge_Noeud *charge_d;
+    char          tmp[30], *tmp2;
+    
+    charge_d = charge->data;
+    gtk_text_buffer_set_text (gtk_text_view_get_buffer (GTK_TEXT_VIEW (
+                                       gtk_builder_get_object (UI_CHNO.builder,
+                                     "EF_charge_noeud_textview_description"))),
+                              charge->nom,
+                              -1);
+    conv_f_c (charge_d->fx, tmp, DECIMAL_FORCE);
+    gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
+                                UI_CHNO.builder, "EF_charge_noeud_buffer_fx")),
+                              tmp,
+                              -1);
+    conv_f_c (charge_d->fy, tmp, DECIMAL_FORCE);
+    gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
+                                UI_CHNO.builder, "EF_charge_noeud_buffer_fy")),
+                              tmp,
+                              -1);
+    conv_f_c (charge_d->fz, tmp, DECIMAL_FORCE);
+    gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
+                                UI_CHNO.builder, "EF_charge_noeud_buffer_fz")),
+                              tmp,
+                              -1);
+    conv_f_c (charge_d->mx, tmp, DECIMAL_MOMENT);
+    gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
+                                UI_CHNO.builder, "EF_charge_noeud_buffer_mx")),
+                              tmp,
+                              -1);
+    conv_f_c (charge_d->my, tmp, DECIMAL_MOMENT);
+    gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
+                                UI_CHNO.builder, "EF_charge_noeud_buffer_my")),
+                              tmp,
+                              -1);
+    conv_f_c (charge_d->mz, tmp, DECIMAL_MOMENT);
+    gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
+                                UI_CHNO.builder, "EF_charge_noeud_buffer_mz")),
+                              tmp,
+                              -1);
+    BUG (tmp2 = common_selection_noeuds_en_texte (charge_d->noeuds), FALSE)
+    gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
+                            UI_CHNO.builder, "EF_charge_noeud_buffer_noeuds")),
+                              tmp2,
+                              -1);
+    free (tmp2);
+  }
+  
+  if (charge == NULL)
+  {
+    gtk_button_set_label (GTK_BUTTON (gtk_builder_get_object (UI_CHNO.builder,
+                                           "EF_charge_noeud_button_add_edit")),
+                          gettext ("_Ajouter"));
+    g_signal_connect (gtk_builder_get_object (UI_CHNO.builder,
+                                            "EF_charge_noeud_button_add_edit"),
+                      "clicked",
+                      G_CALLBACK (EF_gtk_charge_noeud_ajouter),
+                      p);
+  }
+  else
+  {
+    gtk_button_set_label (GTK_BUTTON (gtk_builder_get_object (UI_CHNO.builder,
+                                           "EF_charge_noeud_button_add_edit")),
+                          gettext ("_Modifier"));
+    g_signal_connect (gtk_builder_get_object (UI_CHNO.builder,
+                                            "EF_charge_noeud_button_add_edit"),
+                      "clicked",
+                      G_CALLBACK (EF_gtk_charge_noeud_editer),
+                      p);
+  }
+  
+  EF_gtk_charge_noeud_check (NULL, p);
+  
+  if (UI_ACT.window == NULL)
+    gtk_window_set_transient_for (GTK_WINDOW (UI_CHNO.window),
+                                  GTK_WINDOW (p->ui.comp.window));
+  else
+    gtk_window_set_transient_for (GTK_WINDOW (UI_CHNO.window),
+                                  GTK_WINDOW (UI_ACT.window));
+  
+  return TRUE;
 }
 
 

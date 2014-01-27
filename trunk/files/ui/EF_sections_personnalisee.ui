@@ -1,621 +1,621 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-    <requires lib="gtk+" version="3.2"/>
-    <object class="GtkTreeStore" id="EF_section_personnalisee_treestore">
-        <columns>
-            <column type="gpointer"/>
-        </columns>
-    </object>
-    <object class="GtkTextTagTable" id="EF_section_personnalisee_tag_table">
-        <child type="tag">
-            <object class="GtkTextTag" id="EF_section_personnalisee_tag_mauvais">
-                <property name="name">mauvais</property>
-                <property name="foreground">red</property>
-                <property name="weight">800</property>
-            </object>
-        </child>
-        <child type="tag">
-            <object class="GtkTextTag" id="EF_section_personnalisee_tag_ok">
-                <property name="name">OK</property>
-                <property name="foreground">black</property>
-                <property name="weight">400</property>
-            </object>
-        </child>
-    </object>
-    <object class="GtkTextBuffer" id="EF_section_personnalisee_buffer_nom">
-        <property name="tag-table">EF_section_personnalisee_tag_table</property>
-        <signal name="changed" handler="EF_gtk_section_personnalisee_check"/>
-    </object>
-    <object class="GtkTextBuffer" id="EF_section_personnalisee_buffer_description">
-        <property name="tag-table">EF_section_personnalisee_tag_table</property>
-        <signal name="changed" handler="EF_gtk_section_personnalisee_check"/>
-    </object>
-    <object class="GtkTextBuffer" id="EF_section_personnalisee_buffer_j">
-        <property name="tag-table">EF_section_personnalisee_tag_table</property>
-        <property name="text">0</property>
-        <signal name="changed" handler="EF_gtk_section_personnalisee_check"/>
-    </object>
-    <object class="GtkTextBuffer" id="EF_section_personnalisee_buffer_iy">
-        <property name="tag-table">EF_section_personnalisee_tag_table</property>
-        <property name="text">0</property>
-        <signal name="changed" handler="EF_gtk_section_personnalisee_check"/>
-    </object>
-    <object class="GtkTextBuffer" id="EF_section_personnalisee_buffer_iz">
-        <property name="tag-table">EF_section_personnalisee_tag_table</property>
-        <property name="text">0</property>
-        <signal name="changed" handler="EF_gtk_section_personnalisee_check"/>
-    </object>
-    <object class="GtkTextBuffer" id="EF_section_personnalisee_buffer_vy">
-        <property name="tag-table">EF_section_personnalisee_tag_table</property>
-        <property name="text">0</property>
-        <signal name="changed" handler="EF_gtk_section_personnalisee_check"/>
-    </object>
-    <object class="GtkTextBuffer" id="EF_section_personnalisee_buffer_vyp">
-        <property name="tag-table">EF_section_personnalisee_tag_table</property>
-        <property name="text">0</property>
-        <signal name="changed" handler="EF_gtk_section_personnalisee_check"/>
-    </object>
-    <object class="GtkTextBuffer" id="EF_section_personnalisee_buffer_vz">
-        <property name="tag-table">EF_section_personnalisee_tag_table</property>
-        <property name="text">0</property>
-        <signal name="changed" handler="EF_gtk_section_personnalisee_check"/>
-    </object>
-    <object class="GtkTextBuffer" id="EF_section_personnalisee_buffer_vzp">
-        <property name="tag-table">EF_section_personnalisee_tag_table</property>
-        <property name="text">0</property>
-        <signal name="changed" handler="EF_gtk_section_personnalisee_check"/>
-    </object>
-    <object class="GtkTextBuffer" id="EF_section_personnalisee_buffer_s">
-        <property name="tag-table">EF_section_personnalisee_tag_table</property>
-        <property name="text">0</property>
-        <signal name="changed" handler="EF_gtk_section_personnalisee_check"/>
-    </object>
-    <object id="EF_section_personnalisee_window" class="GtkWindow">
+  <requires lib="gtk+" version="3.2"/>
+  <object class="GtkTreeStore" id="EF_section_personnalisee_treestore">
+    <columns>
+      <column type="gpointer"/>
+    </columns>
+  </object>
+  <object class="GtkTextTagTable" id="EF_section_personnalisee_tag_table">
+    <child type="tag">
+      <object class="GtkTextTag" id="EF_section_personnalisee_tag_mauvais">
+        <property name="name">mauvais</property>
+        <property name="foreground">red</property>
+        <property name="weight">800</property>
+      </object>
+    </child>
+    <child type="tag">
+      <object class="GtkTextTag" id="EF_section_personnalisee_tag_ok">
+        <property name="name">OK</property>
+        <property name="foreground">black</property>
+        <property name="weight">400</property>
+      </object>
+    </child>
+  </object>
+  <object class="GtkTextBuffer" id="EF_section_personnalisee_buffer_nom">
+    <property name="tag-table">EF_section_personnalisee_tag_table</property>
+    <signal name="changed" handler="EF_gtk_section_personnalisee_check"/>
+  </object>
+  <object class="GtkTextBuffer" id="EF_section_personnalisee_buffer_description">
+    <property name="tag-table">EF_section_personnalisee_tag_table</property>
+    <signal name="changed" handler="EF_gtk_section_personnalisee_check"/>
+  </object>
+  <object class="GtkTextBuffer" id="EF_section_personnalisee_buffer_j">
+    <property name="tag-table">EF_section_personnalisee_tag_table</property>
+    <property name="text">0</property>
+    <signal name="changed" handler="EF_gtk_section_personnalisee_check"/>
+  </object>
+  <object class="GtkTextBuffer" id="EF_section_personnalisee_buffer_iy">
+    <property name="tag-table">EF_section_personnalisee_tag_table</property>
+    <property name="text">0</property>
+    <signal name="changed" handler="EF_gtk_section_personnalisee_check"/>
+  </object>
+  <object class="GtkTextBuffer" id="EF_section_personnalisee_buffer_iz">
+    <property name="tag-table">EF_section_personnalisee_tag_table</property>
+    <property name="text">0</property>
+    <signal name="changed" handler="EF_gtk_section_personnalisee_check"/>
+  </object>
+  <object class="GtkTextBuffer" id="EF_section_personnalisee_buffer_vy">
+    <property name="tag-table">EF_section_personnalisee_tag_table</property>
+    <property name="text">0</property>
+    <signal name="changed" handler="EF_gtk_section_personnalisee_check"/>
+  </object>
+  <object class="GtkTextBuffer" id="EF_section_personnalisee_buffer_vyp">
+    <property name="tag-table">EF_section_personnalisee_tag_table</property>
+    <property name="text">0</property>
+    <signal name="changed" handler="EF_gtk_section_personnalisee_check"/>
+  </object>
+  <object class="GtkTextBuffer" id="EF_section_personnalisee_buffer_vz">
+    <property name="tag-table">EF_section_personnalisee_tag_table</property>
+    <property name="text">0</property>
+    <signal name="changed" handler="EF_gtk_section_personnalisee_check"/>
+  </object>
+  <object class="GtkTextBuffer" id="EF_section_personnalisee_buffer_vzp">
+    <property name="tag-table">EF_section_personnalisee_tag_table</property>
+    <property name="text">0</property>
+    <signal name="changed" handler="EF_gtk_section_personnalisee_check"/>
+  </object>
+  <object class="GtkTextBuffer" id="EF_section_personnalisee_buffer_s">
+    <property name="tag-table">EF_section_personnalisee_tag_table</property>
+    <property name="text">0</property>
+    <signal name="changed" handler="EF_gtk_section_personnalisee_check"/>
+  </object>
+  <object id="EF_section_personnalisee_window" class="GtkWindow">
+    <property name="visible">True</property>
+    <property name="window-position">GTK_WIN_POS_CENTER</property>
+    <property name="default-width">500</property>
+    <property name="default-height">700</property>
+    <signal name="key-press-event" handler="ef_gtk_section_personnalisee_window_key_press"/>
+    <signal name="destroy" handler="ef_gtk_section_personnalisee_window_destroy"/>
+    <child>
+      <object class="GtkGrid" id="EF_section_personnalisee_grille_principale">
         <property name="visible">True</property>
-        <property name="window-position">GTK_WIN_POS_CENTER</property>
-        <property name="default-width">500</property>
-        <property name="default-height">700</property>
-        <signal name="key-press-event" handler="EF_gtk_section_personnalisee_window_key_press"/>
-        <signal name="destroy" handler="EF_gtk_section_personnalisee_window_destroy"/>
+        <property name="border-width">12</property>
+        <property name="column-spacing">12</property>
+        <property name="row-spacing">12</property>
         <child>
-            <object class="GtkGrid" id="EF_section_personnalisee_grille_principale">
+          <object class="GtkPaned" id="EF_section_personnalisee_paned">
+            <property name="visible">True</property>
+            <property name="orientation">vertical</property>
+            <property name="position">400</property>
+            <child>
+              <object class="GtkScrolledWindow" id="EF_appuis_scrolled">
                 <property name="visible">True</property>
-                <property name="border-width">12</property>
+                <property name="expand">True</property>
+                <property name="hscrollbar-policy">automatic</property>
+                <property name="vscrollbar-policy">automatic</property>
+                <child>
+                  <object class="GtkGrid" id="EF_section_personnalisee_grille_haut">
+                    <property name="visible">True</property>
+                    <property name="border-width">0</property>
+                    <property name="column-spacing">12</property>
+                    <property name="row-spacing">12</property>
+                    <child>
+                      <object class="GtkLabel" id="EF_section_personnalisee_label_nom">
+                        <property name="label" translatable="yes">_Nom court :</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic-widget">EF_section_personnalisee_textview_nom</property>
+                        <property name="visible">True</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkScrolledWindow" id="EF_section_personnalisee_scrolledwindow_nom">
+                        <property name="visible">True</property>
+                        <property name="expand">True</property>
+                        <property name="hscrollbar-policy">automatic</property>
+                        <property name="vscrollbar-policy">automatic</property>
+                        <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
+                        <child>
+                          <object class="GtkTextView" id="EF_section_personnalisee_textview_nom">
+                            <property name="visible">True</property>
+                            <property name="accepts-tab">False</property>
+                            <property name="wrap-mode">GTK_WRAP_WORD</property>
+                            <property name="buffer">EF_section_personnalisee_buffer_nom</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="EF_section_personnalisee_label_description">
+                        <property name="label" translatable="yes">_Description :</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic-widget">EF_section_personnalisee_textview_description</property>
+                        <property name="visible">True</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">2</property>
+                        <property name="top-attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkScrolledWindow" id="EF_section_personnalisee_scrolledwindow_description">
+                        <property name="visible">True</property>
+                        <property name="expand">True</property>
+                        <property name="hscrollbar-policy">automatic</property>
+                        <property name="vscrollbar-policy">automatic</property>
+                        <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
+                        <child>
+                          <object class="GtkTextView" id="EF_section_personnalisee_textview_description">
+                            <property name="visible">True</property>
+                            <property name="accepts-tab">False</property>
+                            <property name="wrap-mode">GTK_WRAP_WORD</property>
+                            <property name="buffer">EF_section_personnalisee_buffer_description</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">3</property>
+                        <property name="top-attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="EF_section_personnalisee_label_j">
+                        <property name="label">_J [m&lt;sup&gt;4&lt;/sup&gt;] :</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic-widget">EF_section_personnalisee_textview_j</property>
+                        <property name="visible">True</property>
+                        <property name="use_markup">True</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkScrolledWindow" id="EF_section_personnalisee_scrolledwindow_j">
+                        <property name="visible">True</property>
+                        <property name="expand">True</property>
+                        <property name="hscrollbar-policy">automatic</property>
+                        <property name="vscrollbar-policy">automatic</property>
+                        <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
+                        <child>
+                          <object class="GtkTextView" id="EF_section_personnalisee_textview_j">
+                            <property name="visible">True</property>
+                            <property name="accepts-tab">False</property>
+                            <property name="wrap-mode">GTK_WRAP_CHAR</property>
+                            <property name="buffer">EF_section_personnalisee_buffer_j</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="EF_section_personnalisee_label_iy">
+                        <property name="label">_I&lt;sub&gt;y&lt;/sub&gt; [m&lt;sup&gt;4&lt;/sup&gt;] :</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic-widget">EF_section_personnalisee_textview_iy</property>
+                        <property name="visible">True</property>
+                        <property name="use_markup">True</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkScrolledWindow" id="EF_section_personnalisee_scrolledwindow_iy">
+                        <property name="visible">True</property>
+                        <property name="expand">True</property>
+                        <property name="hscrollbar-policy">automatic</property>
+                        <property name="vscrollbar-policy">automatic</property>
+                        <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
+                        <child>
+                          <object class="GtkTextView" id="EF_section_personnalisee_textview_iy">
+                            <property name="visible">True</property>
+                            <property name="accepts-tab">False</property>
+                            <property name="wrap-mode">GTK_WRAP_CHAR</property>
+                            <property name="buffer">EF_section_personnalisee_buffer_iy</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="EF_section_personnalisee_label_iz">
+                        <property name="label">_I&lt;sub&gt;z&lt;/sub&gt; [m&lt;sup&gt;4&lt;/sup&gt;] :</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic-widget">EF_section_personnalisee_textview_iz</property>
+                        <property name="visible">True</property>
+                        <property name="use_markup">True</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkScrolledWindow" id="EF_section_personnalisee_scrolledwindow_iz">
+                        <property name="visible">True</property>
+                        <property name="expand">True</property>
+                        <property name="hscrollbar-policy">automatic</property>
+                        <property name="vscrollbar-policy">automatic</property>
+                        <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
+                        <child>
+                          <object class="GtkTextView" id="EF_section_personnalisee_textview_iz">
+                            <property name="visible">True</property>
+                            <property name="accepts-tab">False</property>
+                            <property name="wrap-mode">GTK_WRAP_CHAR</property>
+                            <property name="buffer">EF_section_personnalisee_buffer_iz</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="EF_section_personnalisee_label_s">
+                        <property name="label">_S [m&lt;sup&gt;2&lt;/sup&gt;] :</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic-widget">EF_section_personnalisee_textview_s</property>
+                        <property name="visible">True</property>
+                        <property name="use_markup">True</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">4</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkScrolledWindow" id="EF_section_personnalisee_scrolledwindow_s">
+                        <property name="visible">True</property>
+                        <property name="expand">True</property>
+                        <property name="hscrollbar-policy">automatic</property>
+                        <property name="vscrollbar-policy">automatic</property>
+                        <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
+                        <child>
+                          <object class="GtkTextView" id="EF_section_personnalisee_textview_s">
+                            <property name="visible">True</property>
+                            <property name="accepts-tab">False</property>
+                            <property name="wrap-mode">GTK_WRAP_CHAR</property>
+                            <property name="buffer">EF_section_personnalisee_buffer_s</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">4</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="EF_section_personnalisee_label_vy">
+                        <property name="label">_v&lt;sub&gt;y&lt;/sub&gt; [m] :</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic-widget">EF_section_personnalisee_textview_vy</property>
+                        <property name="visible">True</property>
+                        <property name="use_markup">True</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">2</property>
+                        <property name="top-attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkScrolledWindow" id="EF_section_personnalisee_scrolledwindow_vy">
+                        <property name="visible">True</property>
+                        <property name="expand">True</property>
+                        <property name="hscrollbar-policy">automatic</property>
+                        <property name="vscrollbar-policy">automatic</property>
+                        <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
+                        <child>
+                          <object class="GtkTextView" id="EF_section_personnalisee_textview_vy">
+                            <property name="visible">True</property>
+                            <property name="accepts-tab">False</property>
+                            <property name="wrap-mode">GTK_WRAP_CHAR</property>
+                            <property name="buffer">EF_section_personnalisee_buffer_vy</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">3</property>
+                        <property name="top-attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="EF_section_personnalisee_label_vyp">
+                        <property name="label">_v&lt;sub&gt;y&lt;/sub&gt;' [m] :</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic-widget">EF_section_personnalisee_textview_vyp</property>
+                        <property name="visible">True</property>
+                        <property name="use_markup">True</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">2</property>
+                        <property name="top-attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkScrolledWindow" id="EF_section_personnalisee_scrolledwindow_vyp">
+                        <property name="visible">True</property>
+                        <property name="expand">True</property>
+                        <property name="hscrollbar-policy">automatic</property>
+                        <property name="vscrollbar-policy">automatic</property>
+                        <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
+                        <child>
+                          <object class="GtkTextView" id="EF_section_personnalisee_textview_vyp">
+                            <property name="visible">True</property>
+                            <property name="accepts-tab">False</property>
+                            <property name="wrap-mode">GTK_WRAP_CHAR</property>
+                            <property name="buffer">EF_section_personnalisee_buffer_vyp</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">3</property>
+                        <property name="top-attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="EF_section_personnalisee_label_vz">
+                        <property name="label">_v&lt;sub&gt;z&lt;/sub&gt; [m] :</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic-widget">EF_section_personnalisee_textview_vz</property>
+                        <property name="visible">True</property>
+                        <property name="use_markup">True</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">2</property>
+                        <property name="top-attach">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkScrolledWindow" id="EF_section_personnalisee_scrolledwindow_vz">
+                        <property name="visible">True</property>
+                        <property name="expand">True</property>
+                        <property name="hscrollbar-policy">automatic</property>
+                        <property name="vscrollbar-policy">automatic</property>
+                        <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
+                        <child>
+                          <object class="GtkTextView" id="EF_section_personnalisee_textview_vz">
+                            <property name="visible">True</property>
+                            <property name="accepts-tab">False</property>
+                            <property name="wrap-mode">GTK_WRAP_CHAR</property>
+                            <property name="buffer">EF_section_personnalisee_buffer_vz</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">3</property>
+                        <property name="top-attach">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="EF_section_personnalisee_label_vzp">
+                        <property name="label">_v&lt;sub&gt;z&lt;/sub&gt;' [m] :</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic-widget">EF_section_personnalisee_textview_vzp</property>
+                        <property name="visible">True</property>
+                        <property name="use_markup">True</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">2</property>
+                        <property name="top-attach">4</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkScrolledWindow" id="EF_section_personnalisee_scrolledwindow_vzp">
+                        <property name="visible">True</property>
+                        <property name="expand">True</property>
+                        <property name="hscrollbar-policy">automatic</property>
+                        <property name="vscrollbar-policy">automatic</property>
+                        <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
+                        <child>
+                          <object class="GtkTextView" id="EF_section_personnalisee_textview_vzp">
+                            <property name="visible">True</property>
+                            <property name="accepts-tab">False</property>
+                            <property name="wrap-mode">GTK_WRAP_CHAR</property>
+                            <property name="buffer">EF_section_personnalisee_buffer_vzp</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">3</property>
+                        <property name="top-attach">4</property>
+                      </packing>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkGrid" id="EF_section_personnalisee_grille_bas">
+                <property name="visible">True</property>
+                <property name="border-width">0</property>
                 <property name="column-spacing">12</property>
                 <property name="row-spacing">12</property>
                 <child>
-                    <object class="GtkPaned" id="EF_section_personnalisee_paned">
-                        <property name="visible">True</property>
-                        <property name="orientation">vertical</property>
-                        <property name="position">400</property>
-                        <child>
-                            <object class="GtkScrolledWindow" id="EF_appuis_scrolled">
-                                <property name="visible">True</property>
-                                <property name="expand">True</property>
-                                <property name="hscrollbar-policy">automatic</property>
-                                <property name="vscrollbar-policy">automatic</property>
-                                <child>
-                                    <object class="GtkGrid" id="EF_section_personnalisee_grille_haut">
-                                        <property name="visible">True</property>
-                                        <property name="border-width">0</property>
-                                        <property name="column-spacing">12</property>
-                                        <property name="row-spacing">12</property>
-                                        <child>
-                                            <object class="GtkLabel" id="EF_section_personnalisee_label_nom">
-                                                <property name="label" translatable="yes">_Nom court :</property>
-                                                <property name="use_underline">True</property>
-                                                <property name="mnemonic-widget">EF_section_personnalisee_textview_nom</property>
-                                                <property name="visible">True</property>
-                                            </object>
-                                            <packing>
-                                                <property name="left-attach">0</property>
-                                                <property name="top-attach">0</property>
-                                            </packing>
-                                        </child>
-                                        <child>
-                                            <object class="GtkScrolledWindow" id="EF_section_personnalisee_scrolledwindow_nom">
-                                                <property name="visible">True</property>
-                                                <property name="expand">True</property>
-                                                <property name="hscrollbar-policy">automatic</property>
-                                                <property name="vscrollbar-policy">automatic</property>
-                                                <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
-                                                <child>
-                                                    <object class="GtkTextView" id="EF_section_personnalisee_textview_nom">
-                                                        <property name="visible">True</property>
-                                                        <property name="accepts-tab">False</property>
-                                                        <property name="wrap-mode">GTK_WRAP_WORD</property>
-                                                        <property name="buffer">EF_section_personnalisee_buffer_nom</property>
-                                                    </object>
-                                                </child>
-                                            </object>
-                                            <packing>
-                                                <property name="left-attach">1</property>
-                                                <property name="top-attach">0</property>
-                                            </packing>
-                                        </child>
-                                        <child>
-                                            <object class="GtkLabel" id="EF_section_personnalisee_label_description">
-                                                <property name="label" translatable="yes">_Description :</property>
-                                                <property name="use_underline">True</property>
-                                                <property name="mnemonic-widget">EF_section_personnalisee_textview_description</property>
-                                                <property name="visible">True</property>
-                                            </object>
-                                            <packing>
-                                                <property name="left-attach">2</property>
-                                                <property name="top-attach">0</property>
-                                            </packing>
-                                        </child>
-                                        <child>
-                                            <object class="GtkScrolledWindow" id="EF_section_personnalisee_scrolledwindow_description">
-                                                <property name="visible">True</property>
-                                                <property name="expand">True</property>
-                                                <property name="hscrollbar-policy">automatic</property>
-                                                <property name="vscrollbar-policy">automatic</property>
-                                                <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
-                                                <child>
-                                                    <object class="GtkTextView" id="EF_section_personnalisee_textview_description">
-                                                        <property name="visible">True</property>
-                                                        <property name="accepts-tab">False</property>
-                                                        <property name="wrap-mode">GTK_WRAP_WORD</property>
-                                                        <property name="buffer">EF_section_personnalisee_buffer_description</property>
-                                                    </object>
-                                                </child>
-                                            </object>
-                                            <packing>
-                                                <property name="left-attach">3</property>
-                                                <property name="top-attach">0</property>
-                                            </packing>
-                                        </child>
-                                        <child>
-                                            <object class="GtkLabel" id="EF_section_personnalisee_label_j">
-                                                <property name="label">_J [m&lt;sup&gt;4&lt;/sup&gt;] :</property>
-                                                <property name="use_underline">True</property>
-                                                <property name="mnemonic-widget">EF_section_personnalisee_textview_j</property>
-                                                <property name="visible">True</property>
-                                                <property name="use_markup">True</property>
-                                            </object>
-                                            <packing>
-                                                <property name="left-attach">0</property>
-                                                <property name="top-attach">1</property>
-                                            </packing>
-                                        </child>
-                                        <child>
-                                            <object class="GtkScrolledWindow" id="EF_section_personnalisee_scrolledwindow_j">
-                                                <property name="visible">True</property>
-                                                <property name="expand">True</property>
-                                                <property name="hscrollbar-policy">automatic</property>
-                                                <property name="vscrollbar-policy">automatic</property>
-                                                <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
-                                                <child>
-                                                    <object class="GtkTextView" id="EF_section_personnalisee_textview_j">
-                                                        <property name="visible">True</property>
-                                                        <property name="accepts-tab">False</property>
-                                                        <property name="wrap-mode">GTK_WRAP_CHAR</property>
-                                                        <property name="buffer">EF_section_personnalisee_buffer_j</property>
-                                                    </object>
-                                                </child>
-                                            </object>
-                                            <packing>
-                                                <property name="left-attach">1</property>
-                                                <property name="top-attach">1</property>
-                                            </packing>
-                                        </child>
-                                        <child>
-                                            <object class="GtkLabel" id="EF_section_personnalisee_label_iy">
-                                                <property name="label">_I&lt;sub&gt;y&lt;/sub&gt; [m&lt;sup&gt;4&lt;/sup&gt;] :</property>
-                                                <property name="use_underline">True</property>
-                                                <property name="mnemonic-widget">EF_section_personnalisee_textview_iy</property>
-                                                <property name="visible">True</property>
-                                                <property name="use_markup">True</property>
-                                            </object>
-                                            <packing>
-                                                <property name="left-attach">0</property>
-                                                <property name="top-attach">2</property>
-                                            </packing>
-                                        </child>
-                                        <child>
-                                            <object class="GtkScrolledWindow" id="EF_section_personnalisee_scrolledwindow_iy">
-                                                <property name="visible">True</property>
-                                                <property name="expand">True</property>
-                                                <property name="hscrollbar-policy">automatic</property>
-                                                <property name="vscrollbar-policy">automatic</property>
-                                                <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
-                                                <child>
-                                                    <object class="GtkTextView" id="EF_section_personnalisee_textview_iy">
-                                                        <property name="visible">True</property>
-                                                        <property name="accepts-tab">False</property>
-                                                        <property name="wrap-mode">GTK_WRAP_CHAR</property>
-                                                        <property name="buffer">EF_section_personnalisee_buffer_iy</property>
-                                                    </object>
-                                                </child>
-                                            </object>
-                                            <packing>
-                                                <property name="left-attach">1</property>
-                                                <property name="top-attach">2</property>
-                                            </packing>
-                                        </child>
-                                        <child>
-                                            <object class="GtkLabel" id="EF_section_personnalisee_label_iz">
-                                                <property name="label">_I&lt;sub&gt;z&lt;/sub&gt; [m&lt;sup&gt;4&lt;/sup&gt;] :</property>
-                                                <property name="use_underline">True</property>
-                                                <property name="mnemonic-widget">EF_section_personnalisee_textview_iz</property>
-                                                <property name="visible">True</property>
-                                                <property name="use_markup">True</property>
-                                            </object>
-                                            <packing>
-                                                <property name="left-attach">0</property>
-                                                <property name="top-attach">3</property>
-                                            </packing>
-                                        </child>
-                                        <child>
-                                            <object class="GtkScrolledWindow" id="EF_section_personnalisee_scrolledwindow_iz">
-                                                <property name="visible">True</property>
-                                                <property name="expand">True</property>
-                                                <property name="hscrollbar-policy">automatic</property>
-                                                <property name="vscrollbar-policy">automatic</property>
-                                                <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
-                                                <child>
-                                                    <object class="GtkTextView" id="EF_section_personnalisee_textview_iz">
-                                                        <property name="visible">True</property>
-                                                        <property name="accepts-tab">False</property>
-                                                        <property name="wrap-mode">GTK_WRAP_CHAR</property>
-                                                        <property name="buffer">EF_section_personnalisee_buffer_iz</property>
-                                                    </object>
-                                                </child>
-                                            </object>
-                                            <packing>
-                                                <property name="left-attach">1</property>
-                                                <property name="top-attach">3</property>
-                                            </packing>
-                                        </child>
-                                        <child>
-                                            <object class="GtkLabel" id="EF_section_personnalisee_label_s">
-                                                <property name="label">_S [m&lt;sup&gt;2&lt;/sup&gt;] :</property>
-                                                <property name="use_underline">True</property>
-                                                <property name="mnemonic-widget">EF_section_personnalisee_textview_s</property>
-                                                <property name="visible">True</property>
-                                                <property name="use_markup">True</property>
-                                            </object>
-                                            <packing>
-                                                <property name="left-attach">0</property>
-                                                <property name="top-attach">4</property>
-                                            </packing>
-                                        </child>
-                                        <child>
-                                            <object class="GtkScrolledWindow" id="EF_section_personnalisee_scrolledwindow_s">
-                                                <property name="visible">True</property>
-                                                <property name="expand">True</property>
-                                                <property name="hscrollbar-policy">automatic</property>
-                                                <property name="vscrollbar-policy">automatic</property>
-                                                <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
-                                                <child>
-                                                    <object class="GtkTextView" id="EF_section_personnalisee_textview_s">
-                                                        <property name="visible">True</property>
-                                                        <property name="accepts-tab">False</property>
-                                                        <property name="wrap-mode">GTK_WRAP_CHAR</property>
-                                                        <property name="buffer">EF_section_personnalisee_buffer_s</property>
-                                                    </object>
-                                                </child>
-                                            </object>
-                                            <packing>
-                                                <property name="left-attach">1</property>
-                                                <property name="top-attach">4</property>
-                                            </packing>
-                                        </child>
-                                        <child>
-                                            <object class="GtkLabel" id="EF_section_personnalisee_label_vy">
-                                                <property name="label">_v&lt;sub&gt;y&lt;/sub&gt; [m] :</property>
-                                                <property name="use_underline">True</property>
-                                                <property name="mnemonic-widget">EF_section_personnalisee_textview_vy</property>
-                                                <property name="visible">True</property>
-                                                <property name="use_markup">True</property>
-                                            </object>
-                                            <packing>
-                                                <property name="left-attach">2</property>
-                                                <property name="top-attach">1</property>
-                                            </packing>
-                                        </child>
-                                        <child>
-                                            <object class="GtkScrolledWindow" id="EF_section_personnalisee_scrolledwindow_vy">
-                                                <property name="visible">True</property>
-                                                <property name="expand">True</property>
-                                                <property name="hscrollbar-policy">automatic</property>
-                                                <property name="vscrollbar-policy">automatic</property>
-                                                <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
-                                                <child>
-                                                    <object class="GtkTextView" id="EF_section_personnalisee_textview_vy">
-                                                        <property name="visible">True</property>
-                                                        <property name="accepts-tab">False</property>
-                                                        <property name="wrap-mode">GTK_WRAP_CHAR</property>
-                                                        <property name="buffer">EF_section_personnalisee_buffer_vy</property>
-                                                    </object>
-                                                </child>
-                                            </object>
-                                            <packing>
-                                                <property name="left-attach">3</property>
-                                                <property name="top-attach">1</property>
-                                            </packing>
-                                        </child>
-                                        <child>
-                                            <object class="GtkLabel" id="EF_section_personnalisee_label_vyp">
-                                                <property name="label">_v&lt;sub&gt;y&lt;/sub&gt;' [m] :</property>
-                                                <property name="use_underline">True</property>
-                                                <property name="mnemonic-widget">EF_section_personnalisee_textview_vyp</property>
-                                                <property name="visible">True</property>
-                                                <property name="use_markup">True</property>
-                                            </object>
-                                            <packing>
-                                                <property name="left-attach">2</property>
-                                                <property name="top-attach">2</property>
-                                            </packing>
-                                        </child>
-                                        <child>
-                                            <object class="GtkScrolledWindow" id="EF_section_personnalisee_scrolledwindow_vyp">
-                                                <property name="visible">True</property>
-                                                <property name="expand">True</property>
-                                                <property name="hscrollbar-policy">automatic</property>
-                                                <property name="vscrollbar-policy">automatic</property>
-                                                <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
-                                                <child>
-                                                    <object class="GtkTextView" id="EF_section_personnalisee_textview_vyp">
-                                                        <property name="visible">True</property>
-                                                        <property name="accepts-tab">False</property>
-                                                        <property name="wrap-mode">GTK_WRAP_CHAR</property>
-                                                        <property name="buffer">EF_section_personnalisee_buffer_vyp</property>
-                                                    </object>
-                                                </child>
-                                            </object>
-                                            <packing>
-                                                <property name="left-attach">3</property>
-                                                <property name="top-attach">2</property>
-                                            </packing>
-                                        </child>
-                                        <child>
-                                            <object class="GtkLabel" id="EF_section_personnalisee_label_vz">
-                                                <property name="label">_v&lt;sub&gt;z&lt;/sub&gt; [m] :</property>
-                                                <property name="use_underline">True</property>
-                                                <property name="mnemonic-widget">EF_section_personnalisee_textview_vz</property>
-                                                <property name="visible">True</property>
-                                                <property name="use_markup">True</property>
-                                            </object>
-                                            <packing>
-                                                <property name="left-attach">2</property>
-                                                <property name="top-attach">3</property>
-                                            </packing>
-                                        </child>
-                                        <child>
-                                            <object class="GtkScrolledWindow" id="EF_section_personnalisee_scrolledwindow_vz">
-                                                <property name="visible">True</property>
-                                                <property name="expand">True</property>
-                                                <property name="hscrollbar-policy">automatic</property>
-                                                <property name="vscrollbar-policy">automatic</property>
-                                                <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
-                                                <child>
-                                                    <object class="GtkTextView" id="EF_section_personnalisee_textview_vz">
-                                                        <property name="visible">True</property>
-                                                        <property name="accepts-tab">False</property>
-                                                        <property name="wrap-mode">GTK_WRAP_CHAR</property>
-                                                        <property name="buffer">EF_section_personnalisee_buffer_vz</property>
-                                                    </object>
-                                                </child>
-                                            </object>
-                                            <packing>
-                                                <property name="left-attach">3</property>
-                                                <property name="top-attach">3</property>
-                                            </packing>
-                                        </child>
-                                        <child>
-                                            <object class="GtkLabel" id="EF_section_personnalisee_label_vzp">
-                                                <property name="label">_v&lt;sub&gt;z&lt;/sub&gt;' [m] :</property>
-                                                <property name="use_underline">True</property>
-                                                <property name="mnemonic-widget">EF_section_personnalisee_textview_vzp</property>
-                                                <property name="visible">True</property>
-                                                <property name="use_markup">True</property>
-                                            </object>
-                                            <packing>
-                                                <property name="left-attach">2</property>
-                                                <property name="top-attach">4</property>
-                                            </packing>
-                                        </child>
-                                        <child>
-                                            <object class="GtkScrolledWindow" id="EF_section_personnalisee_scrolledwindow_vzp">
-                                                <property name="visible">True</property>
-                                                <property name="expand">True</property>
-                                                <property name="hscrollbar-policy">automatic</property>
-                                                <property name="vscrollbar-policy">automatic</property>
-                                                <property name="shadow-type">GTK_SHADOW_ETCHED_OUT</property>
-                                                <child>
-                                                    <object class="GtkTextView" id="EF_section_personnalisee_textview_vzp">
-                                                        <property name="visible">True</property>
-                                                        <property name="accepts-tab">False</property>
-                                                        <property name="wrap-mode">GTK_WRAP_CHAR</property>
-                                                        <property name="buffer">EF_section_personnalisee_buffer_vzp</property>
-                                                    </object>
-                                                </child>
-                                            </object>
-                                            <packing>
-                                                <property name="left-attach">3</property>
-                                                <property name="top-attach">4</property>
-                                            </packing>
-                                        </child>
-                                    </object>
-                                </child>
-                            </object>
-                        </child>
-                        <child>
-                            <object class="GtkGrid" id="EF_section_personnalisee_grille_bas">
-                                <property name="visible">True</property>
-                                <property name="border-width">0</property>
-                                <property name="column-spacing">12</property>
-                                <property name="row-spacing">12</property>
-                                <child>
-                                    <object class="GtkLabel" id="EF_section_personnalisee_label_forme">
-                                        <property name="label" translatable="yes">_Forme :</property>
-                                        <property name="use_underline">True</property>
-                                        <property name="mnemonic-widget">EF_section_personnalisee_treeview</property>
-                                        <property name="visible">True</property>
-                                    </object>
-                                    <packing>
-                                        <property name="left-attach">0</property>
-                                        <property name="top-attach">0</property>
-                                    </packing>
-                                </child>
-                                <child>
-                                    <object class="GtkImage" id="EF_section_personnalisee_image_forme">
-                                        <property name="visible">True</property>
-                                    </object>
-                                    <packing>
-                                        <property name="left-attach">0</property>
-                                        <property name="top-attach">1</property>
-                                    </packing>
-                                </child>
-                                <child>
-                                    <object class="GtkScrolledWindow" id="EF_section_personnalisee_scrolledwindow_treeview">
-                                        <property name="visible">True</property>
-                                        <property name="expand">True</property>
-                                        <property name="hscrollbar-policy">automatic</property>
-                                        <property name="vscrollbar-policy">automatic</property>
-                                        <child>
-                                            <object class="GtkTreeView" id="EF_section_personnalisee_treeview">
-                                                <property name="visible">True</property>
-                                                <property name="model">EF_section_personnalisee_treestore</property>
-                                                <signal name="button-press-event" handler="common_gtk_treeview_button_press_unselect" />
-                                                <signal name="key-press-event" handler="EF_gtk_section_personnalisee_treeview_key_press"/>
-                                                <child internal-child="selection">
-                                                    <object class="GtkTreeSelection" id="EF_section_treeview_select">
-                                                        <signal name="changed" handler="EF_gtk_section_personnalisee_select_change"/>
-                                                    </object>
-                                                </child>
-                                                <child>
-                                                    <object class="GtkTreeViewColumn" id="EF_section_treeview_column0">
-                                                        <property name="visible">True</property>
-                                                        <property name="resizable">True</property>
-                                                        <property name="alignment">0.5</property>
-                                                        <child>
-                                                            <object class="GtkCellRendererText" id="EF_section_treeview_cell0">
-                                                                <property name="xalign">0.5</property>
-                                                            </object>
-                                                        </child>
-                                                    </object>
-                                                </child>
-                                                <child>
-                                                    <object class="GtkTreeViewColumn" id="EF_section_treeview_column1">
-                                                        <property name="visible">True</property>
-                                                        <property name="resizable">True</property>
-                                                        <property name="alignment">0.5</property>
-                                                        <property name="title">x [m]</property>
-                                                        <child>
-                                                            <object class="GtkCellRendererText" id="EF_section_treeview_cell1">
-                                                                <property name="xalign">1.</property>
-                                                                <property name="editable">True</property>
-                                                                <signal name="edited" handler="EF_gtk_section_personnalisee_edit_x"/>
-                                                            </object>
-                                                        </child>
-                                                    </object>
-                                                </child>
-                                                <child>
-                                                    <object class="GtkTreeViewColumn" id="EF_section_treeview_column2">
-                                                        <property name="visible">True</property>
-                                                        <property name="resizable">True</property>
-                                                        <property name="alignment">0.5</property>
-                                                        <property name="title">y [m]</property>
-                                                        <child>
-                                                            <object class="GtkCellRendererText" id="EF_section_treeview_cell2">
-                                                                <property name="xalign">1.</property>
-                                                                <property name="editable">True</property>
-                                                                <signal name="edited" handler="EF_gtk_section_personnalisee_edit_y"/>
-                                                            </object>
-                                                        </child>
-                                                    </object>
-                                                </child>
-                                                <child>
-                                                    <object class="GtkTreeViewColumn" id="EF_section_treeview_column3">
-                                                        <property name="visible">True</property>
-                                                    </object>
-                                                </child>
-                                            </object>
-                                        </child>
-                                    </object>
-                                    <packing>
-                                        <property name="left-attach">1</property>
-                                        <property name="top-attach">0</property>
-                                        <property name="height">2</property>
-                                    </packing>
-                                </child>
-                                <child>
-                                    <object class="GtkToolbar" id="EF_section_personnalisee_buttons_treeview">
-                                        <property name="visible">True</property>
-                                        <property name="orientation">horizontal</property>
-                                        <property name="toolbar-style">icons</property>
-                                        <property name="show-arrow">False</property>
-                                        <property name="icon_size">4</property>
-                                        <property name="border-width">0</property>
-                                        <child>
-                                            <object class="GtkToolButton" id="EF_section_personnalisee_button_treeview_add">
-                                                <property name="visible">True</property>
-                                                <property name="icon-name">list-add-symbolic</property>
-                                                <signal name="clicked" handler="EF_gtk_section_personnalisee_treeview_add"/>
-                                            </object>
-                                        </child>
-                                        <child>
-                                            <object class="GtkToolButton" id="EF_section_personnalisee_button_treeview_remove">
-                                                <property name="visible">True</property>
-                                                <property name="sensitive">False</property>
-                                                <property name="icon-name">list-remove-symbolic</property>
-                                                <signal name="clicked" handler="EF_gtk_section_personnalisee_treeview_remove"/>
-                                            </object>
-                                        </child>
-                                    </object>
-                                    <packing>
-                                        <property name="left-attach">0</property>
-                                        <property name="top-attach">2</property>
-                                        <property name="width">2</property>
-                                    </packing>
-                                </child>
-                            </object>
-                        </child>
-                    </object>
-                    <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">0</property>
-                    </packing>
+                  <object class="GtkLabel" id="EF_section_personnalisee_label_forme">
+                    <property name="label" translatable="yes">_Forme :</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic-widget">EF_section_personnalisee_treeview</property>
+                    <property name="visible">True</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
+                  </packing>
                 </child>
                 <child>
-                    <object class="GtkButtonBox" id="EF_section_personnalisee_buttons">
-                        <property name="visible">True</property>
-                        <property name="orientation">horizontal</property>
-                        <property name="layout_style">end</property>
-                        <property name="spacing">6</property>
-                        <child>
-                            <object class="GtkButton" id="EF_section_personnalisee_button_annuler">
-                                <property name="visible">True</property>
-                                <property name="label" translatable="yes">_Annuler</property>
-                                <property name="use_underline">True</property>
-                                <signal name="clicked" handler="EF_gtk_section_personnalisee_annuler_clicked"/>
-                            </object>
-                            <packing>
-                                <property name="position">0</property>
-                                <property name="pack_type">end</property>
-                            </packing>
-                        </child>
-                        <child>
-                            <object class="GtkButton" id="EF_section_personnalisee_button_add_edit">
-                                <property name="visible">True</property>
-                                <property name="sensitive">False</property>
-                                <property name="use_underline">True</property>
-                            </object>
-                            <packing>
-                                <property name="position">1</property>
-                                <property name="pack_type">end</property>
-                            </packing>
-                        </child>
-                    </object>
-                    <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">2</property>
-                    </packing>
+                  <object class="GtkImage" id="EF_section_personnalisee_image_forme">
+                    <property name="visible">True</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">1</property>
+                  </packing>
                 </child>
-            </object>
+                <child>
+                  <object class="GtkScrolledWindow" id="EF_section_personnalisee_scrolledwindow_treeview">
+                    <property name="visible">True</property>
+                    <property name="expand">True</property>
+                    <property name="hscrollbar-policy">automatic</property>
+                    <property name="vscrollbar-policy">automatic</property>
+                    <child>
+                      <object class="GtkTreeView" id="EF_section_personnalisee_treeview">
+                        <property name="visible">True</property>
+                        <property name="model">EF_section_personnalisee_treestore</property>
+                        <signal name="button-press-event" handler="common_gtk_treeview_button_press_unselect" />
+                        <signal name="key-press-event" handler="EF_gtk_section_personnalisee_treeview_key_press"/>
+                        <child internal-child="selection">
+                          <object class="GtkTreeSelection" id="EF_section_treeview_select">
+                            <signal name="changed" handler="EF_gtk_section_personnalisee_select_change"/>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkTreeViewColumn" id="EF_section_treeview_column0">
+                            <property name="visible">True</property>
+                            <property name="resizable">True</property>
+                            <property name="alignment">0.5</property>
+                            <child>
+                              <object class="GtkCellRendererText" id="EF_section_treeview_cell0">
+                                <property name="xalign">0.5</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkTreeViewColumn" id="EF_section_treeview_column1">
+                            <property name="visible">True</property>
+                            <property name="resizable">True</property>
+                            <property name="alignment">0.5</property>
+                            <property name="title">x [m]</property>
+                            <child>
+                              <object class="GtkCellRendererText" id="EF_section_treeview_cell1">
+                                <property name="xalign">1.</property>
+                                <property name="editable">True</property>
+                                <signal name="edited" handler="EF_gtk_section_personnalisee_edit_x"/>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkTreeViewColumn" id="EF_section_treeview_column2">
+                            <property name="visible">True</property>
+                            <property name="resizable">True</property>
+                            <property name="alignment">0.5</property>
+                            <property name="title">y [m]</property>
+                            <child>
+                              <object class="GtkCellRendererText" id="EF_section_treeview_cell2">
+                                <property name="xalign">1.</property>
+                                <property name="editable">True</property>
+                                <signal name="edited" handler="EF_gtk_section_personnalisee_edit_y"/>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkTreeViewColumn" id="EF_section_treeview_column3">
+                            <property name="visible">True</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">0</property>
+                    <property name="height">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolbar" id="EF_section_personnalisee_buttons_treeview">
+                    <property name="visible">True</property>
+                    <property name="orientation">horizontal</property>
+                    <property name="toolbar-style">icons</property>
+                    <property name="show-arrow">False</property>
+                    <property name="icon_size">4</property>
+                    <property name="border-width">0</property>
+                    <child>
+                      <object class="GtkToolButton" id="EF_section_personnalisee_button_treeview_add">
+                        <property name="visible">True</property>
+                        <property name="icon-name">list-add-symbolic</property>
+                        <signal name="clicked" handler="EF_gtk_section_personnalisee_treeview_add"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkToolButton" id="EF_section_personnalisee_button_treeview_remove">
+                        <property name="visible">True</property>
+                        <property name="sensitive">False</property>
+                        <property name="icon-name">list-remove-symbolic</property>
+                        <signal name="clicked" handler="EF_gtk_section_personnalisee_treeview_remove"/>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">2</property>
+                    <property name="width">2</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">0</property>
+          </packing>
         </child>
-    </object>
+        <child>
+          <object class="GtkButtonBox" id="EF_section_personnalisee_buttons">
+            <property name="visible">True</property>
+            <property name="orientation">horizontal</property>
+            <property name="layout_style">end</property>
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkButton" id="EF_section_personnalisee_button_annuler">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">_Annuler</property>
+                <property name="use_underline">True</property>
+                <signal name="clicked" handler="ef_gtk_section_personnalisee_window_button_close"/>
+              </object>
+              <packing>
+                <property name="position">0</property>
+                <property name="pack_type">end</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="EF_section_personnalisee_button_add_edit">
+                <property name="visible">True</property>
+                <property name="sensitive">False</property>
+                <property name="use_underline">True</property>
+              </object>
+              <packing>
+                <property name="position">1</property>
+                <property name="pack_type">end</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">2</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
 </interface>

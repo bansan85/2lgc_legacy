@@ -25,8 +25,8 @@
 
 #include "common_projet.h"
 
-void EF_gtk_resultats(Projet *projet);
-void EF_gtk_resultats_free(Projet *projet);
+void EF_gtk_resultats      (Projet *p);
+void EF_gtk_resultats_free (Projet *p);
 
 #endif
 

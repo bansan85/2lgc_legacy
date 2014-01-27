@@ -22,8 +22,10 @@
 #include "config.h"
 #include "common_projet.h"
 
-gboolean EF_verif_EF(Projet *projet, GList **rapport, int *erreur) __attribute__((__warn_unused_result__));
-gboolean EF_verif_rapport_affiche(GList *rapport) __attribute__((__warn_unused_result__));
-void EF_verif_rapport_free(GList *rapport);
+gboolean EF_verif_EF           (Projet *p,
+                                GList **rapport,
+                                int    *erreur)
+                                       __attribute__((__warn_unused_result__));
+void     EF_verif_rapport_free (GList  *rapport);
 
 #endif

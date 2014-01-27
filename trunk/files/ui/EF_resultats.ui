@@ -1,180 +1,180 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-    <requires lib="gtk+" version="3.2"/>
-    <object class="GtkMenu" id="EF_resultats_menu">
-        <property name="visible">False</property>
-        <child>
-            <object class="GtkMenuItem" id="EF_resultats_menu_noeuds">
-                <property name="label" translatable="yes">Noeuds</property>
-                <property name="visible">True</property>
-                <signal name="activate" handler="EF_gtk_resultats_add_page_type"/>
-            </object>
-        </child>
-        <child>
-            <object class="GtkMenuItem" id="EF_resultats_menu_reaction_appui">
-                <property name="label" translatable="yes">Réactions d'appuis (repère global)</property>
-                <property name="visible">True</property>
-                <signal name="activate" handler="EF_gtk_resultats_add_page_type"/>
-            </object>
-        </child>
-        <child>
-            <object class="GtkMenuItem" id="EF_resultats_menu_deplacements">
-                <property name="label" translatable="yes">Déplacements (repère global)</property>
-                <property name="visible">True</property>
-                <signal name="activate" handler="EF_gtk_resultats_add_page_type"/>
-            </object>
-        </child>
-        <child>
-            <object class="GtkMenuItem" id="EF_resultats_menu_barres">
-                <property name="label" translatable="yes">Barres</property>
-                <property name="visible">True</property>
-                <signal name="activate" handler="EF_gtk_resultats_add_page_type"/>
-            </object>
-        </child>
-        <child>
-            <object class="GtkMenuItem" id="EF_resultats_menu_efforts">
-                <property name="label" translatable="yes">Efforts dans les barres (repère local)</property>
-                <property name="visible">True</property>
-                <signal name="activate" handler="EF_gtk_resultats_add_page_type"/>
-            </object>
-        </child>
-        <child>
-            <object class="GtkMenuItem" id="EF_resultats_menu_déformations">
-                <property name="label" translatable="yes">Déformations des barres (repère local)</property>
-                <property name="visible">True</property>
-                <signal name="activate" handler="EF_gtk_resultats_add_page_type"/>
-            </object>
-        </child>
-    </object>
-    <object class="GtkWindow" id="EF_resultats_window">
+  <requires lib="gtk+" version="3.2"/>
+  <object class="GtkMenu" id="EF_resultats_menu">
+    <property name="visible">False</property>
+    <child>
+      <object class="GtkMenuItem" id="EF_resultats_menu_noeuds">
+        <property name="label" translatable="yes">Noeuds</property>
         <property name="visible">True</property>
-        <property name="title" translatable="yes">Résultats</property>
-        <property name="default-height">400</property>
-        <property name="default-width">600</property>
-        <property name="window-position">GTK_WIN_POS_CENTER</property>
-        <signal name="key-press-event" handler="EF_gtk_resultats_window_key_press"/>
-        <signal name="destroy" handler="EF_gtk_resultats_window_destroy"/>
+        <signal name="activate" handler="EF_gtk_resultats_add_page_type"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="EF_resultats_menu_reaction_appui">
+        <property name="label" translatable="yes">Réactions d'appuis (repère global)</property>
+        <property name="visible">True</property>
+        <signal name="activate" handler="EF_gtk_resultats_add_page_type"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="EF_resultats_menu_deplacements">
+        <property name="label" translatable="yes">Déplacements (repère global)</property>
+        <property name="visible">True</property>
+        <signal name="activate" handler="EF_gtk_resultats_add_page_type"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="EF_resultats_menu_barres">
+        <property name="label" translatable="yes">Barres</property>
+        <property name="visible">True</property>
+        <signal name="activate" handler="EF_gtk_resultats_add_page_type"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="EF_resultats_menu_efforts">
+        <property name="label" translatable="yes">Efforts dans les barres (repère local)</property>
+        <property name="visible">True</property>
+        <signal name="activate" handler="EF_gtk_resultats_add_page_type"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="EF_resultats_menu_déformations">
+        <property name="label" translatable="yes">Déformations des barres (repère local)</property>
+        <property name="visible">True</property>
+        <signal name="activate" handler="EF_gtk_resultats_add_page_type"/>
+      </object>
+    </child>
+  </object>
+  <object class="GtkWindow" id="EF_resultats_window">
+    <property name="visible">True</property>
+    <property name="title" translatable="yes">Résultats</property>
+    <property name="default-height">400</property>
+    <property name="default-width">600</property>
+    <property name="window-position">GTK_WIN_POS_CENTER</property>
+    <signal name="key-press-event" handler="ef_gtk_resultats_window_key_press"/>
+    <signal name="destroy" handler="ef_gtk_resultats_window_destroy"/>
+    <child>
+      <object class="GtkGrid" id="EF_resultats_grille_principale">
+        <property name="visible">True</property>
+        <property name="border-width">12</property>
+        <property name="row-spacing">12</property>
         <child>
-            <object class="GtkGrid" id="EF_resultats_grille_principale">
+          <object class="GtkLabel" id="EF_resultats_afficher_label">
+            <property name="visible">True</property>
+            <property name="label" translatable="yes">_Afficher : </property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic-widget">EF_resultats_combobox</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkComboBoxText" id="EF_resultats_combobox">
+            <property name="visible">True</property>
+            <property name="hexpand">False</property>
+            <signal name="changed" handler="EF_gtk_resultats_combobox_changed"/>
+            <items>
+              <item translatable="yes">Cas élémentaires</item>
+              <item translatable="yes">Combinaisons</item>
+              <item translatable="yes">Enveloppe</item>
+            </items>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkComboBoxText" id="EF_resultats_combo_box_cas">
+            <property name="visible">True</property>
+            <property name="hexpand">True</property>
+            <signal name="changed" handler="EF_gtk_resultats_cas_change"/>
+          </object>
+          <packing>
+            <property name="left-attach">2</property>
+            <property name="top-attach">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkComboBoxText" id="EF_resultats_combo_box_ponderations">
+            <property name="visible">False</property>
+            <property name="hexpand">True</property>
+            <signal name="changed" handler="EF_gtk_resultats_ponderations_change"/>
+          </object>
+          <packing>
+            <property name="left-attach">3</property>
+            <property name="top-attach">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow" id="EF_resultats_scrolled">
+            <property name="visible">True</property>
+            <property name="expand">True</property>
+            <property name="hscrollbar-policy">automatic</property>
+            <property name="vscrollbar-policy">automatic</property>
+            <child>
+              <object class="GtkViewport" id="EF_resultats_viewport">
                 <property name="visible">True</property>
-                <property name="border-width">12</property>
-                <property name="row-spacing">12</property>
+                <property name="expand">True</property>
                 <child>
-                    <object class="GtkLabel" id="EF_resultats_afficher_label">
-                        <property name="visible">True</property>
-                        <property name="label" translatable="yes">_Afficher : </property>
-                        <property name="use_underline">True</property>
-                        <property name="mnemonic-widget">EF_resultats_combobox</property>
-                    </object>
-                    <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">0</property>
-                    </packing>
-                </child>
-                <child>
-                    <object class="GtkComboBoxText" id="EF_resultats_combobox">
-                        <property name="visible">True</property>
-                        <property name="hexpand">False</property>
-                        <signal name="changed" handler="EF_gtk_resultats_combobox_changed"/>
-                        <items>
-                            <item translatable="yes">Cas élémentaires</item>
-                            <item translatable="yes">Combinaisons</item>
-                            <item translatable="yes">Enveloppe</item>
-                        </items>
-                    </object>
-                    <packing>
-                        <property name="left-attach">1</property>
-                        <property name="top-attach">0</property>
-                    </packing>
-                </child>
-                <child>
-                    <object class="GtkComboBoxText" id="EF_resultats_combo_box_cas">
-                        <property name="visible">True</property>
-                        <property name="hexpand">True</property>
-                        <signal name="changed" handler="EF_gtk_resultats_cas_change"/>
-                    </object>
-                    <packing>
-                        <property name="left-attach">2</property>
-                        <property name="top-attach">0</property>
-                    </packing>
-                </child>
-                <child>
-                    <object class="GtkComboBoxText" id="EF_resultats_combo_box_ponderations">
-                        <property name="visible">False</property>
-                        <property name="hexpand">True</property>
-                        <signal name="changed" handler="EF_gtk_resultats_ponderations_change"/>
-                    </object>
-                    <packing>
-                        <property name="left-attach">3</property>
-                        <property name="top-attach">0</property>
-                    </packing>
-                </child>
-                <child>
-                    <object class="GtkScrolledWindow" id="EF_resultats_scrolled">
+                  <object class="GtkNotebook" id="EF_resultats_notebook">
+                    <property name="visible">True</property>
+                    <property name="tab-pos">top</property>
+                    <property name="expand">True</property>
+                    <signal name="switch-page" handler="EF_gtk_resultats_notebook_switch"/>
+                    <child>
+                      <object class="GtkScrolledWindow" id="EF_resultats_scrolled_add">
                         <property name="visible">True</property>
                         <property name="expand">True</property>
-                        <property name="hscrollbar-policy">automatic</property>
-                        <property name="vscrollbar-policy">automatic</property>
-                        <child>
-                            <object class="GtkViewport" id="EF_resultats_viewport">
-                                <property name="visible">True</property>
-                                <property name="expand">True</property>
-                                <child>
-                                    <object class="GtkNotebook" id="EF_resultats_notebook">
-                                        <property name="visible">True</property>
-                                        <property name="tab-pos">top</property>
-                                        <property name="expand">True</property>
-                                        <signal name="switch-page" handler="EF_gtk_resultats_notebook_switch"/>
-                                        <child>
-                                            <object class="GtkScrolledWindow" id="EF_resultats_scrolled_add">
-                                                <property name="visible">True</property>
-                                                <property name="expand">True</property>
-                                                <property name="sensitive">False</property>
-                                            </object>
-                                        </child>
-                                        <child type="tab">
-                                            <object class="GtkMenuButton" id="EF_noeuds_notebook_button_add">
-                                                <property name="visible">True</property>
-                                                <property name="popup">EF_resultats_menu</property>
-                                            </object>
-                                        </child>
-                                    </object>
-                                </child>
-                            </object>
-                        </child>
-                    </object>
-                    <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">1</property>
-                        <property name="width">4</property>
-                    </packing>
-                </child>
-                <child>
-                    <object class="GtkButtonBox" id="EF_resultats_bouttons_fenetre">
+                        <property name="sensitive">False</property>
+                      </object>
+                    </child>
+                    <child type="tab">
+                      <object class="GtkMenuButton" id="EF_noeuds_notebook_button_add">
                         <property name="visible">True</property>
-                        <property name="orientation">horizontal</property>
-                        <property name="layout_style">end</property>
-                        <property name="spacing">6</property>
-                        <child>
-                            <object class="GtkButton" id="EF_resultats_boutton_fermer">
-                                <property name="visible">True</property>
-                                <property name="label" translatable="yes">_Fermer</property>
-                                <property name="use_underline">True</property>
-                                <signal name="clicked" handler="EF_gtk_resultats_fermer"/>
-                            </object>
-                            <packing>
-                                <property name="position">0</property>
-                                <property name="pack_type">end</property>
-                            </packing>
-                        </child>
-                    </object>
-                    <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">2</property>
-                        <property name="width">4</property>
-                    </packing>
+                        <property name="popup">EF_resultats_menu</property>
+                      </object>
+                    </child>
+                  </object>
                 </child>
-            </object>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">1</property>
+            <property name="width">4</property>
+          </packing>
         </child>
-    </object>
+        <child>
+          <object class="GtkButtonBox" id="EF_resultats_bouttons_fenetre">
+            <property name="visible">True</property>
+            <property name="orientation">horizontal</property>
+            <property name="layout_style">end</property>
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkButton" id="EF_resultats_boutton_fermer">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">_Fermer</property>
+                <property name="use_underline">True</property>
+                <signal name="clicked" handler="ef_gtk_resultats_window_button_close"/>
+              </object>
+              <packing>
+                <property name="position">0</property>
+                <property name="pack_type">end</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">2</property>
+            <property name="width">4</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
 </interface>
