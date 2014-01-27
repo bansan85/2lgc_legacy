@@ -25,8 +25,9 @@
 
 #include "common_projet.h"
 
-void EF_gtk_appuis_select_changed(GtkTreeSelection *treeselection, Projet *projet);
-void EF_gtk_appuis(Projet *projet);
+void EF_gtk_appuis_select_changed (GtkTreeSelection *treeselection,
+                                   Projet           *p);
+void EF_gtk_appuis                (Projet           *p);
 
 #endif
 

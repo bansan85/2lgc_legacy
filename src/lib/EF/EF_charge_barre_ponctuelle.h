@@ -23,22 +23,90 @@
 #include "common_projet.h"
 
 
-Charge_Barre_Ponctuelle *EF_charge_barre_ponctuelle_ajout(Projet *projet, unsigned int num_action, GList *barre, int repere_local, Flottant a, Flottant fx, Flottant fy, Flottant fz, Flottant mx, Flottant my, Flottant mz, const char* nom) __attribute__((__warn_unused_result__));
-char* EF_charge_barre_ponctuelle_description(Charge_Barre_Ponctuelle *charge) __attribute__((__warn_unused_result__));
+Charge *EF_charge_barre_ponctuelle_ajout          (Projet      *p,
+                                                   Action      *action,
+                                                   GList       *barre,
+                                                   int          repere_local,
+                                                   Flottant     a,
+                                                   Flottant     fx,
+                                                   Flottant     fy,
+                                                   Flottant     fz,
+                                                   Flottant     mx,
+                                                   Flottant     my,
+                                                   Flottant     mz,
+                                                   const char  *nom)
+                                       __attribute__((__warn_unused_result__));
+char *EF_charge_barre_ponctuelle_description      (Charge      *charge)
+                                       __attribute__((__warn_unused_result__));
 
-gboolean EF_charge_barre_ponctuelle_mx(EF_Barre *barre, unsigned int discretisation, double position, Barre_Info_EF *infos, double mx, double *ma, double *mb) __attribute__((__warn_unused_result__));
+gboolean EF_charge_barre_ponctuelle_mx            (EF_Barre    *barre,
+                                                   unsigned int discretisation,
+                                                   double       position,
+                                                   Barre_Info_EF *infos,
+                                                   double       mx,
+                                                   double      *ma,
+                                                   double      *mb)
+                                       __attribute__((__warn_unused_result__));
 
-gboolean EF_charge_barre_ponctuelle_def_ang_iso_y(EF_Barre *barre, unsigned int discretisation, double position, double fz, double my, double *phia, double *phib) __attribute__((__warn_unused_result__));
-gboolean EF_charge_barre_ponctuelle_def_ang_iso_z(EF_Barre *barre, unsigned int discretisation, double position, double fy, double mz, double *phia, double *phib) __attribute__((__warn_unused_result__));
+gboolean EF_charge_barre_ponctuelle_def_ang_iso_y (EF_Barre    *barre,
+                                                   unsigned int discretisation,
+                                                   double       position,
+                                                   double       fz,
+                                                   double       my,
+                                                   double      *phia,
+                                                   double      *phib)
+                                       __attribute__((__warn_unused_result__));
+gboolean EF_charge_barre_ponctuelle_def_ang_iso_z (EF_Barre    *barre,
+                                                   unsigned int discretisation,
+                                                   double       position,
+                                                   double       fy,
+                                                   double       mz,
+                                                   double      *phia,
+                                                   double      *phib)
+                                       __attribute__((__warn_unused_result__));
 
-gboolean EF_charge_barre_ponctuelle_fonc_rx(Fonction *fonction, EF_Barre *barre, unsigned int discretisation, double a, double max, double mbx) __attribute__((__warn_unused_result__));
-gboolean EF_charge_barre_ponctuelle_fonc_ry(Fonction *f_rotation, Fonction* f_deform, EF_Barre *barre, unsigned int discretisation, double position, double fz, double my, double may, double mby) __attribute__((__warn_unused_result__));
-gboolean EF_charge_barre_ponctuelle_fonc_rz(Fonction *f_rotation, Fonction* f_deform, EF_Barre *barre, unsigned int discretisation, double a, double fy, double mz, double maz, double mbz) __attribute__((__warn_unused_result__));
+gboolean EF_charge_barre_ponctuelle_fonc_rx       (Fonction    *fonction,
+                                                   EF_Barre    *barre,
+                                                   unsigned int discretisation,
+                                                   double       a,
+                                                   double       max,
+                                                   double       mbx)
+                                       __attribute__((__warn_unused_result__));
+gboolean EF_charge_barre_ponctuelle_fonc_ry       (Fonction    *f_rotation,
+                                                   Fonction    *f_deform,
+                                                   EF_Barre    *barre,
+                                                   unsigned int discretisation,
+                                                   double       position,
+                                                   double       fz,
+                                                   double       my,
+                                                   double       may,
+                                                   double       mby)
+                                       __attribute__((__warn_unused_result__));
+gboolean EF_charge_barre_ponctuelle_fonc_rz       (Fonction    *f_rotation,
+                                                   Fonction    *f_deform,
+                                                   EF_Barre    *barre,
+                                                   unsigned int discretisation,
+                                                   double       a,
+                                                   double       fy,
+                                                   double       mz,
+                                                   double       maz,
+                                                   double       mbz)
+                                       __attribute__((__warn_unused_result__));
 
-gboolean EF_charge_barre_ponctuelle_n(Fonction *fonction, EF_Barre *barre, unsigned int discretisation, double a, double fax, double fbx) __attribute__((__warn_unused_result__));
+gboolean EF_charge_barre_ponctuelle_n             (Fonction    *fonction,
+                                                   EF_Barre    *barre,
+                                                   unsigned int discretisation,
+                                                   double       a,
+                                                   double       fax,
+                                                   double       fbx)
+                                       __attribute__((__warn_unused_result__));
 
-gboolean EF_charge_barre_ponctuelle_enleve_barres(Charge_Barre_Ponctuelle *charge, GList *barres, Projet *projet) __attribute__((__warn_unused_result__));
+gboolean EF_charge_barre_ponctuelle_enleve_barres (Charge      *charge,
+                                                   GList       *barres,
+                                                   Projet      *p)
+                                       __attribute__((__warn_unused_result__));
 
-gboolean EF_charge_barre_ponctuelle_free(Charge_Barre_Ponctuelle *charge) __attribute__((__warn_unused_result__));
+gboolean EF_charge_barre_ponctuelle_free          (Charge      *charge)
+                                       __attribute__((__warn_unused_result__));
 
 #endif

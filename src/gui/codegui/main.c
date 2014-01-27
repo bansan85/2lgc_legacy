@@ -201,7 +201,7 @@ int main(int argc, char *argv[])
     g_list_free(tmp1);*/
     
     // Affichage de l'interface graphique
-    gtk_widget_show_all(projet->list_gtk.comp.window);
+    gtk_widget_show_all(projet->ui.comp.window);
     gtk_main();
     
     return 0;

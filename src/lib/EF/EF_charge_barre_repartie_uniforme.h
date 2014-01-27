@@ -22,23 +22,105 @@
 #include "config.h"
 #include "common_projet.h"
 
-Charge_Barre_Repartie_Uniforme *EF_charge_barre_repartie_uniforme_ajout(Projet *projet, unsigned int num_action, GList *barres, int repere_local, int projection, Flottant a, Flottant b, Flottant fx, Flottant fy, Flottant fz, Flottant mx, Flottant my, Flottant mz, const char *nom) __attribute__((__warn_unused_result__));
-char* EF_charge_barre_repartie_uniforme_description(Charge_Barre_Repartie_Uniforme *charge) __attribute__((__warn_unused_result__));
+Charge *EF_charge_barre_repartie_uniforme_ajout     (Projet     *p,
+                                                     Action     *action,
+                                                     GList      *barres,
+                                                     gboolean    repere_local,
+                                                     gboolean    projection,
+                                                     Flottant    a,
+                                                     Flottant    b,
+                                                     Flottant    fx,
+                                                     Flottant    fy,
+                                                     Flottant    fz,
+                                                     Flottant    mx,
+                                                     Flottant    my,
+                                                     Flottant    mz,
+                                                     const char *nom)
+                                       __attribute__((__warn_unused_result__));
+char *EF_charge_barre_repartie_uniforme_description (Charge     *charge)
+                                       __attribute__((__warn_unused_result__));
 
-gboolean EF_charge_barre_repartie_uniforme_mx(EF_Barre *barre, unsigned int discretisation, double a, double b, Barre_Info_EF *infos, double mx, double *ma, double *mb) __attribute__((__warn_unused_result__));
+gboolean EF_charge_barre_repartie_uniforme_mx     (EF_Barre    *barre,
+                                                   unsigned int discretisation,
+                                                   double       a,
+                                                   double       b,
+                                                   Barre_Info_EF *infos,
+                                                   double       mx,
+                                                   double      *ma,
+                                                   double      *mb)
+                                       __attribute__((__warn_unused_result__));
 
-gboolean EF_charge_barre_repartie_uniforme_def_ang_iso_y(EF_Barre *barre, unsigned int discretisation, double a, double b, double fz, double my, double *phia, double *phib) __attribute__((__warn_unused_result__));
-gboolean EF_charge_barre_repartie_uniforme_def_ang_iso_z(EF_Barre *barre, unsigned int discretisation, double a, double b, double fy, double mz, double *phia, double *phib) __attribute__((__warn_unused_result__));
+gboolean EF_charge_barre_repartie_uniforme_def_ang_iso_y (EF_Barre *barre,
+                                                   unsigned int discretisation,
+                                                          double    a,
+                                                          double    b,
+                                                          double    fz,
+                                                          double    my,
+                                                          double   *phia,
+                                                          double   *phib)
+                                       __attribute__((__warn_unused_result__));
+gboolean EF_charge_barre_repartie_uniforme_def_ang_iso_z (EF_Barre *barre,
+                                                   unsigned int discretisation,
+                                                          double    a,
+                                                          double    b,
+                                                          double    fy,
+                                                          double    mz,
+                                                          double   *phia,
+                                                          double   *phib)
+                                       __attribute__((__warn_unused_result__));
 
-double EF_charge_barre_repartie_uniforme_position_resultante_x(EF_Section *section, double a, double b, double l) __attribute__((__warn_unused_result__));
+double EF_charge_barre_repartie_uniforme_position_resultante_x (
+                                                              Section *section,
+                                                              double   a,
+                                                              double   b,
+                                                              double   l)
+                                       __attribute__((__warn_unused_result__));
 
-gboolean EF_charge_barre_repartie_uniforme_fonc_rx(Fonction *fonction, EF_Barre *barre, unsigned int discretisation, double a, double b, double max, double mbx) __attribute__((__warn_unused_result__));
-gboolean EF_charge_barre_repartie_uniforme_fonc_ry(Fonction *f_rotation, Fonction* f_deform, EF_Barre *barre, unsigned int discretisation, double a, double b, double fz, double my, double may, double mby) __attribute__((__warn_unused_result__));
-gboolean EF_charge_barre_repartie_uniforme_fonc_rz(Fonction *f_rotation, Fonction* f_deform, EF_Barre *barre, unsigned int discretisation, double a, double b, double fy, double mz, double maz, double mbz) __attribute__((__warn_unused_result__));
+gboolean EF_charge_barre_repartie_uniforme_fonc_rx (Fonction *fonction,
+                                                    EF_Barre *barre,
+                                                   unsigned int discretisation,
+                                                    double    a,
+                                                    double    b,
+                                                    double    max,
+                                                    double    mbx)
+                                       __attribute__((__warn_unused_result__));
+gboolean EF_charge_barre_repartie_uniforme_fonc_ry (Fonction *f_rotation,
+                                                    Fonction *f_deform,
+                                                    EF_Barre *barre,
+                                                   unsigned int discretisation,
+                                                    double    a,
+                                                    double    b,
+                                                    double    fz,
+                                                    double    my,
+                                                    double    may,
+                                                    double    mby)
+                                       __attribute__((__warn_unused_result__));
+gboolean EF_charge_barre_repartie_uniforme_fonc_rz (Fonction *f_rotation,
+                                                    Fonction *f_deform,
+                                                    EF_Barre *barre,
+                                                   unsigned int discretisation,
+                                                    double    a,
+                                                    double    b,
+                                                    double    fy,
+                                                    double    mz,
+                                                    double    maz,
+                                                    double    mbz)
+                                       __attribute__((__warn_unused_result__));
 
-gboolean EF_charge_barre_repartie_uniforme_n(Fonction *fonction, EF_Barre *barre, unsigned int discretisation, double a, double b, double fax, double fbx) __attribute__((__warn_unused_result__));
+gboolean EF_charge_barre_repartie_uniforme_n (Fonction    *fonction,
+                                              EF_Barre    *barre,
+                                              unsigned int discretisation,
+                                              double       a,
+                                              double       b,
+                                              double       fax,
+                                              double       fbx)
+                                       __attribute__((__warn_unused_result__));
 
-gboolean EF_charge_barre_repartie_uniforme_enleve_barres(Charge_Barre_Repartie_Uniforme *charge, GList *barres, Projet *projet) __attribute__((__warn_unused_result__));
-gboolean EF_charge_barre_repartie_uniforme_free(Charge_Barre_Repartie_Uniforme *charge) __attribute__((__warn_unused_result__));
+gboolean EF_charge_barre_repartie_uniforme_enleve_barres (Charge *charge,
+                                                          GList  *barres,
+                                                          Projet *p)
+                                       __attribute__((__warn_unused_result__));
+gboolean EF_charge_barre_repartie_uniforme_free (Charge *charge)
+                                       __attribute__((__warn_unused_result__));
 
 #endif

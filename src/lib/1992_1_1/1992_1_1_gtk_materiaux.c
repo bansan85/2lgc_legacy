@@ -34,753 +34,1123 @@
 #include "1993_1_1_gtk_materiaux.h"
 #include "EF_materiaux.h"
 
-gboolean _1992_1_1_gtk_materiaux_window_key_press(GtkWidget *widget, GdkEvent *event,
-  Projet *projet)
-/* Description : Gestion des touches de l'ensemble des composants de la fenêtre.
- * Paramètres : GtkWidget *widget : composant à l'origine de l'évènement,
- *            : GdkEvent *event : description de la touche pressée,
- *            : Projet *projet : la variable projet.
- * Valeur renvoyée : TRUE si la touche ECHAP est pressée, FALSE sinon.
- *   Echec : FALSE :
- *             projet == NULL,
- *             interface graphique non initialisée.
- */
-{
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
-    BUGMSG(projet->list_gtk._1992_1_1_materiaux.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Matériau Béton")
-    
-    if (event->key.keyval == GDK_KEY_Escape)
-    {
-        gtk_widget_destroy(projet->list_gtk._1992_1_1_materiaux.window);
-        return TRUE;
-    }
-    else
-        return FALSE;
-}
+
+GTK_WINDOW_KEY_PRESS (_1992_1_1, materiaux);
 
 
-void _1992_1_1_gtk_materiaux_window_destroy(GtkWidget *object, Projet *projet)
-/* Description : Met projet->list_gtk._1992_1_1_materiaux.builder à NULL quand la
- *               fenêtre se ferme.
- * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
- *            : Projet *projet : la variable projet.
- * Valeur renvoyée : Aucune.
- */
-{
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
-    BUGMSG(projet->list_gtk._1992_1_1_materiaux.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Matériau Béton")
-    
-    g_object_unref(G_OBJECT(projet->list_gtk._1992_1_1_materiaux.builder));
-    projet->list_gtk._1992_1_1_materiaux.builder = NULL;
-    
-    return;
-}
+GTK_WINDOW_DESTROY (_1992_1_1, materiaux, );
 
 
-gboolean _1992_1_1_gtk_materiaux_recupere_donnees(Projet *projet, char **nom, double *fck,
-  double *fckcube, double *fcm, double *fctm, double *fctk_0_05, double *fctk_0_95, double *ecm,
-  double *ec1, double *ecu1, double *ec2, double *ecu2, double *n, double *ec3, double *ecu3,
-  double *nu)
-/* Description : Récupère toutes les données de la fenêtre permettant d'ajouter ou d'éditer un
- *               matériau de type béton.
- * Paramètres : Projet *projet : la variable projet,
- *            : *double fck : pointeur vers le résultats fck, en MPa,
- *            : le reste : les différentes propriétés du matériau béton, en unité SI.
- * Valeur renvoyée :
- *   Succès : TRUE
+GTK_WINDOW_CLOSE (_1992_1_1, materiaux);
+
+
+gboolean
+_1992_1_1_gtk_materiaux_recupere_donnees (Projet *p,
+                                          char  **nom,
+                                          double *fck,
+                                          double *fckcube,
+                                          double *fcm,
+                                          double *fctm,
+                                          double *fctk_0_05,
+                                          double *fctk_0_95,
+                                          double *ecm,
+                                          double *ec1,
+                                          double *ecu1,
+                                          double *ec2,
+                                          double *ecu2,
+                                          double *n,
+                                          double *ec3,
+                                          double *ecu3,
+                                          double *nu)
+/**
+ * \brief Récupère toutes les données de la fenêtre permettant d'ajouter ou
+ *        d'éditer un matériau de type béton.
+ * \param p : la variable projet,
+ * \param nom : nom du matériau,
+ * \param fck : Résistance caractéristique en compression du béton, mesurée sur
+ *              cylindre à 28 jours en MPa,
+ * \param fckcube : Résistance caractéristique en compression du béton, mesurée
+ *                  sur cube à 28 jours en Pa,
+ * \param fcm : Valeur moyenne de la résistance en compression du béton,
+ *              mesurée sur cylindre en Pa,
+ * \param fctm : Valeur moyenne de la résistance en traction directe du béton
+ *               en Pa,
+ * \param fctk_0_05 : fractile 5% en Pa,
+ * \param fctk_0_95 : fractile 95% en Pa,
+ * \param ecm : Module d'élasticité sécant du béton en Pa,
+ * \param ec1 : Déformation relative en compression du béton au pic de
+ *              contrainte f_c en valeur unitaire,
+ * \param ecu1 : Déformation relative ultime du béton en compression en valeur
+ *               unitaire
+ * \param ec2 : Déformation relative en compression du béton au point 2
+ *              en valeur unitaire,
+ * \param ecu2 : Déformation relative ultime du béton en compression au point 2
+ *               en valeur unitaire,
+ * \param n : coefficient n utilisé dans la courbe parabole rectangle,
+ * \param ec3 : Déformation relative en compression du béton au point 3
+ *              en valeur unitaire,
+ * \param ecu3 : Déformation relative ultime du béton en compression au point 3
+ *               en valeur unitaire,
+ * \param nu : coefficient de poisson.
+ * \return
+ *   Succès : TRUE.\n
  *   Échec : FALSE :
- *             projet == NULL, diametre == NULL, nom == NULL,
- *             en cas d'erreur d'allocation mémoire.
+ *     - l'un des arguments == NULL,
+ *     - interface graphique non initialisée,
+ *     - en cas d'erreur d'allocation mémoire.
  */
 {
-    GtkTextIter     start, end;
-    GtkTextBuffer   *textbuffer;
-    gboolean        ok = TRUE;
-    GtkBuilder      *builder;
-    
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
-    BUGMSG(nom, FALSE, gettext("Paramètre %s incorrect.\n"), "nom")
-    BUGMSG(fck, FALSE, gettext("Paramètre %s incorrect.\n"), "fck")
-    BUGMSG(fckcube, FALSE, gettext("Paramètre %s incorrect.\n"), "fckcube")
-    BUGMSG(fcm, FALSE, gettext("Paramètre %s incorrect.\n"), "fcm")
-    BUGMSG(fctm, FALSE, gettext("Paramètre %s incorrect.\n"), "fctm")
-    BUGMSG(fctk_0_05, FALSE, gettext("Paramètre %s incorrect.\n"), "fctk_0_05")
-    BUGMSG(fctk_0_95, FALSE, gettext("Paramètre %s incorrect.\n"), "fctk_0_95")
-    BUGMSG(ecm, FALSE, gettext("Paramètre %s incorrect.\n"), "ecm")
-    BUGMSG(ec1, FALSE, gettext("Paramètre %s incorrect.\n"), "ec1")
-    BUGMSG(ecu1, FALSE, gettext("Paramètre %s incorrect.\n"), "ecu1")
-    BUGMSG(ec2, FALSE, gettext("Paramètre %s incorrect.\n"), "ec2")
-    BUGMSG(ecu2, FALSE, gettext("Paramètre %s incorrect.\n"), "ecu2")
-    BUGMSG(n, FALSE, gettext("Paramètre %s incorrect.\n"), "n")
-    BUGMSG(ec3, FALSE, gettext("Paramètre %s incorrect.\n"), "ec3")
-    BUGMSG(ecu3, FALSE, gettext("Paramètre %s incorrect.\n"), "ecu3")
-    BUGMSG(nu, FALSE, gettext("Paramètre %s incorrect.\n"), "nu")
-    BUGMSG(projet->list_gtk._1992_1_1_materiaux.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Matériau Béton")
-    
-    builder = projet->list_gtk._1992_1_1_materiaux.builder;
-    
-    *fck = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(builder, "_1992_1_1_materiaux_buffer_fck")), 0., FALSE, 90., TRUE);
-    if (isnan(*fck))
-        ok = FALSE;
-    
-    if (ok)
+  GtkTextIter    start, end;
+  GtkTextBuffer *textbuffer;
+  gboolean       ok = TRUE;
+  GtkBuilder    *builder;
+  
+  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGMSG (nom, FALSE, gettext ("Paramètre %s incorrect.\n"), "nom")
+  BUGMSG (fck, FALSE, gettext ("Paramètre %s incorrect.\n"), "fck")
+  BUGMSG (fckcube, FALSE, gettext ("Paramètre %s incorrect.\n"), "fckcube")
+  BUGMSG (fcm, FALSE, gettext ("Paramètre %s incorrect.\n"), "fcm")
+  BUGMSG (fctm, FALSE, gettext ("Paramètre %s incorrect.\n"), "fctm")
+  BUGMSG (fctk_0_05, FALSE, gettext ("Paramètre %s incorrect.\n"), "fctk_0_05")
+  BUGMSG (fctk_0_95, FALSE, gettext ("Paramètre %s incorrect.\n"), "fctk_0_95")
+  BUGMSG (ecm, FALSE, gettext ("Paramètre %s incorrect.\n"), "ecm")
+  BUGMSG (ec1, FALSE, gettext ("Paramètre %s incorrect.\n"), "ec1")
+  BUGMSG (ecu1, FALSE, gettext ("Paramètre %s incorrect.\n"), "ecu1")
+  BUGMSG (ec2, FALSE, gettext ("Paramètre %s incorrect.\n"), "ec2")
+  BUGMSG (ecu2, FALSE, gettext ("Paramètre %s incorrect.\n"), "ecu2")
+  BUGMSG (n, FALSE, gettext ("Paramètre %s incorrect.\n"), "n")
+  BUGMSG (ec3, FALSE, gettext ("Paramètre %s incorrect.\n"), "ec3")
+  BUGMSG (ecu3, FALSE, gettext ("Paramètre %s incorrect.\n"), "ecu3")
+  BUGMSG (nu, FALSE, gettext ("Paramètre %s incorrect.\n"), "nu")
+  BUGMSG (UI_BET.builder,
+          FALSE,
+          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Matériau Béton")
+  
+  builder = UI_BET.builder;
+  
+  *fck = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (builder,
+                                            "_1992_1_1_materiaux_buffer_fck")),
+                                        0., FALSE,
+                                        90., TRUE);
+  if (isnan (*fck))
+    ok = FALSE;
+  
+  if (ok)
+  {
+    if (gtk_widget_get_visible (GTK_WIDGET (gtk_builder_get_object (builder,
+                              "_1992_1_1_materiaux_scrolledwindow_fck_cube"))))
     {
-        if (gtk_widget_get_visible(GTK_WIDGET(gtk_builder_get_object(builder, "_1992_1_1_materiaux_scrolledwindow_fck_cube"))))
-        {
-            *fckcube = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(builder, "_1992_1_1_materiaux_buffer_fck_cube")), 0., FALSE, INFINITY, FALSE)*1000000.;
-            if (isnan(*fckcube))
-                ok = FALSE;
-        }
-        else
-            *fckcube = _1992_1_1_materiaux_fckcube(*fck);
-    }
-    
-    if (ok)
-    {
-        if (gtk_widget_get_visible(GTK_WIDGET(gtk_builder_get_object(builder, "_1992_1_1_materiaux_scrolledwindow_fcm"))))
-        {
-            *fcm = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(builder, "_1992_1_1_materiaux_buffer_fcm")), 0., FALSE, INFINITY, FALSE)*1000000.;
-            if (isnan(*fcm))
-                ok = FALSE;
-        }
-        else
-            *fcm = _1992_1_1_materiaux_fcm(*fck);
-    }
-    
-    if (ok)
-    {
-        if (gtk_widget_get_visible(GTK_WIDGET(gtk_builder_get_object(builder, "_1992_1_1_materiaux_scrolledwindow_fctm"))))
-        {
-            *fctm = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(builder, "_1992_1_1_materiaux_buffer_fctm")), 0., FALSE, INFINITY, FALSE)*1000000.;
-            if (isnan(*fctm))
-                ok = FALSE;
-        }
-        else
-            *fctm = _1992_1_1_materiaux_fctm(*fck, *fcm/1000000.);
-    }
-    
-    if (ok)
-    {
-        if (gtk_widget_get_visible(GTK_WIDGET(gtk_builder_get_object(builder, "_1992_1_1_materiaux_scrolledwindow_fctk_0_05"))))
-        {
-            *fctk_0_05 = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(builder, "_1992_1_1_materiaux_buffer_fctk_0_05")), 0., FALSE, INFINITY, FALSE)*1000000.;
-            if (isnan(*fctk_0_05))
-                ok = FALSE;
-        }
-        else
-            *fctk_0_05 = _1992_1_1_materiaux_fctk_0_05(*fctm/1000000.);
-    }
-    
-    if (ok)
-    {
-        if (gtk_widget_get_visible(GTK_WIDGET(gtk_builder_get_object(builder, "_1992_1_1_materiaux_scrolledwindow_fctk_0_95"))))
-        {
-            *fctk_0_95 = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(builder, "_1992_1_1_materiaux_buffer_fctk_0_95")), 0., FALSE, INFINITY, FALSE)*1000000.;
-            if (isnan(*fctk_0_95))
-                ok = FALSE;
-        }
-        else
-            *fctk_0_95 = _1992_1_1_materiaux_fctk_0_95(*fctm/1000000.);
-    }
-    
-    if (ok)
-    {
-        if (gtk_widget_get_visible(GTK_WIDGET(gtk_builder_get_object(builder, "_1992_1_1_materiaux_scrolledwindow_Ecm"))))
-        {
-            *ecm = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(builder, "_1992_1_1_materiaux_buffer_Ecm")), 0., FALSE, INFINITY, FALSE)*1000000000.;
-            if (isnan(*ecm))
-                ok = FALSE;
-        }
-        else
-            *ecm = _1992_1_1_materiaux_ecm(*fcm/1000000.);
-    }
-    
-    if (ok)
-    {
-        if (gtk_widget_get_visible(GTK_WIDGET(gtk_builder_get_object(builder, "_1992_1_1_materiaux_scrolledwindow_ec1"))))
-        {
-            *ec1 = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(builder, "_1992_1_1_materiaux_buffer_ec1")), 0., FALSE, INFINITY, FALSE)/1000.;
-            if (isnan(*ec1))
-                ok = FALSE;
-        }
-        else
-            *ec1 = _1992_1_1_materiaux_ec1(*fcm/1000000.);
-    }
-    
-    if (ok)
-    {
-        if (gtk_widget_get_visible(GTK_WIDGET(gtk_builder_get_object(builder, "_1992_1_1_materiaux_scrolledwindow_ecu1"))))
-        {
-            *ecu1 = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(builder, "_1992_1_1_materiaux_buffer_ecu1")), 0., FALSE, INFINITY, FALSE)/1000.;
-            if (isnan(*ecu1))
-                ok = FALSE;
-        }
-        else
-            *ecu1 = _1992_1_1_materiaux_ecu1(*fcm/1000000., *fck/1000000.);
-    }
-    
-    if (ok)
-    {
-        if (gtk_widget_get_visible(GTK_WIDGET(gtk_builder_get_object(builder, "_1992_1_1_materiaux_scrolledwindow_ec2"))))
-        {
-            *ec2 = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(builder, "_1992_1_1_materiaux_buffer_ec2")), 0., FALSE, INFINITY, FALSE)/1000.;
-            if (isnan(*ec2))
-                ok = FALSE;
-        }
-        else
-            *ec2 = _1992_1_1_materiaux_ec2(*fck/1000000.);
-    }
-    
-    if (ok)
-    {
-        if (gtk_widget_get_visible(GTK_WIDGET(gtk_builder_get_object(builder, "_1992_1_1_materiaux_scrolledwindow_ecu2"))))
-        {
-            *ecu2 = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(builder, "_1992_1_1_materiaux_buffer_ecu2")), 0., FALSE, INFINITY, FALSE)/1000.;
-            if (isnan(*ecu2))
-                ok = FALSE;
-        }
-        else
-            *ecu2 = _1992_1_1_materiaux_ecu2(*fck/1000000.);
-    }
-    
-    if (ok)
-    {
-        if (gtk_widget_get_visible(GTK_WIDGET(gtk_builder_get_object(builder, "_1992_1_1_materiaux_scrolledwindow_n"))))
-        {
-            *n = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(builder, "_1992_1_1_materiaux_buffer_n")), 0., FALSE, INFINITY, FALSE);
-            if (isnan(*n))
-                ok = FALSE;
-        }
-        else
-            *n = _1992_1_1_materiaux_n(*fck/1000000.);
-    }
-    
-    if (ok)
-    {
-        if (gtk_widget_get_visible(GTK_WIDGET(gtk_builder_get_object(builder, "_1992_1_1_materiaux_scrolledwindow_ec3"))))
-        {
-            *ec3 = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(builder, "_1992_1_1_materiaux_buffer_ec3")), 0., FALSE, INFINITY, FALSE)/1000.;
-            if (isnan(*ec3))
-                ok = FALSE;
-        }
-        else
-            *ec3 = _1992_1_1_materiaux_ec3(*fck/1000000.);
-    }
-    
-    if (ok)
-    {
-        if (gtk_widget_get_visible(GTK_WIDGET(gtk_builder_get_object(builder, "_1992_1_1_materiaux_scrolledwindow_ecu3"))))
-        {
-            *ecu3 = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(builder, "_1992_1_1_materiaux_buffer_ecu3")), 0., FALSE, INFINITY, FALSE)/1000.;
-            if (isnan(*ecu3))
-                ok = FALSE;
-        }
-        else
-            *ecu3 = _1992_1_1_materiaux_ecu3(*fck/1000000.);
-    }
-    
-    if (ok)
-    {
-        if (gtk_widget_get_visible(GTK_WIDGET(gtk_builder_get_object(builder, "_1992_1_1_materiaux_scrolledwindow_nu"))))
-        {
-            *nu = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(builder, "_1992_1_1_materiaux_buffer_nu")), 0., TRUE, 0.5, FALSE);
-            if (isnan(*nu))
-                ok = FALSE;
-        }
-        else
-            *nu = COEFFICIENT_NU_BETON;
-    }
-    
-    // Si tous les paramètres sont corrects
-    textbuffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk._1992_1_1_materiaux.builder, "_1992_1_1_materiaux_textview_nom")));
-    
-    gtk_text_buffer_get_iter_at_offset(textbuffer, &start, 0);
-    gtk_text_buffer_get_iter_at_offset(textbuffer, &end, -1);
-    *nom = gtk_text_buffer_get_text(textbuffer, &start, &end, FALSE);
-    
-    gtk_text_buffer_remove_all_tags(textbuffer, &start, &end);
-    
-    if (projet->list_gtk._1992_1_1_materiaux.materiau == NULL)
-    {
-        if ((strcmp(*nom, "") == 0) || (EF_materiaux_cherche_nom(projet, *nom, FALSE)))
-        {
-            gtk_text_buffer_apply_tag_by_name(textbuffer, "mauvais", &start, &end);
-            ok = FALSE;
-        }
-        else
-            gtk_text_buffer_apply_tag_by_name(textbuffer, "OK", &start, &end);
-    }
-    else if ((strcmp(*nom, "") == 0) || 
-      ((strcmp(projet->list_gtk._1992_1_1_materiaux.materiau->nom, *nom) != 0) && (EF_materiaux_cherche_nom(projet, *nom, FALSE))))
-    {
-        gtk_text_buffer_apply_tag_by_name(textbuffer, "mauvais", &start, &end);
+      *fckcube = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (builder,
+                                       "_1992_1_1_materiaux_buffer_fck_cube")),
+                                                0., FALSE,
+                                                INFINITY, FALSE)
+                 * 1000000.;
+      if (isnan (*fckcube))
         ok = FALSE;
     }
     else
-        gtk_text_buffer_apply_tag_by_name(textbuffer, "OK", &start, &end);
-    
-    if (ok == FALSE)
-        free(*nom);
-    
-    return ok;
-}
-
-
-void _1992_1_1_gtk_materiaux_check(GtkWidget *object, Projet *projet)
-/* Description : Vérifie si l'ensemble des éléments est correct pour activer le bouton add/edit.
- * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
- *            : Projet *projet : la variable projet.
- * Valeur renvoyée : Aucune.
- */
-{
-    char *nom;
-    double fck, fckcube, fcm, fctm, fctk_0_05, fctk_0_95;
-    double ecm;
-    double ec1, ecu1, ec2, ecu2, n, ec3, ecu3, nu;
-    
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
-    BUGMSG(projet->list_gtk._1992_1_1_materiaux.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Matériau Béton")
-    
-    if (!_1992_1_1_gtk_materiaux_recupere_donnees(projet, &nom, &fck, &fckcube, &fcm, &fctm, &fctk_0_05, &fctk_0_95, &ecm, &ec1, &ecu1, &ec2, &ecu2, &n, &ec3, &ecu3, &nu))
-        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk._1992_1_1_materiaux.builder, "_1992_1_1_materiaux_button_add_edit")), FALSE);
-    else
+      *fckcube = _1992_1_1_materiaux_fckcube (*fck);
+  }
+  
+  if (ok)
+  {
+    if (gtk_widget_get_visible (GTK_WIDGET (gtk_builder_get_object (builder,
+                                   "_1992_1_1_materiaux_scrolledwindow_fcm"))))
     {
-        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk._1992_1_1_materiaux.builder, "_1992_1_1_materiaux_button_add_edit")), TRUE);
-        free(nom);
-    }
-    
-    return;
-}
-
-
-void _1992_1_1_gtk_materiaux_ajouter_clicked(GtkButton *button, Projet *projet)
-/* Description : Ferme la fenêtre en ajoutant la charge.
- * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
- *            : Projet *projet : la variable projet.
- * Valeur renvoyée : Aucune.
- */
-{
-    char            *nom;
-    double          fck, fckcube, fcm, fctm, fctk_0_05, fctk_0_95;
-    double          ecm;
-    double          ec1, ecu1, ec2, ecu2, n, ec3, ecu3, nu;
-    EF_Materiau     *materiau;
-    
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
-    BUGMSG(projet->list_gtk._1992_1_1_materiaux.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Matériau Béton")
-    
-    if (!_1992_1_1_gtk_materiaux_recupere_donnees(projet, &nom, &fck, &fckcube, &fcm, &fctm, &fctk_0_05, &fctk_0_95, &ecm, &ec1, &ecu1, &ec2, &ecu2, &n, &ec3, &ecu3, &nu))
-        return;
-    
-    // Création de la nouvelle charge ponctuelle au noeud
-    BUG(materiau = _1992_1_1_materiaux_ajout(projet, nom, common_math_f(fck, FLOTTANT_UTILISATEUR)), )
-    BUG(_1992_1_1_materiaux_modif(projet, materiau, NULL, common_math_f(NAN, FLOTTANT_UTILISATEUR), common_math_f(fckcube, FLOTTANT_UTILISATEUR), common_math_f(fcm, FLOTTANT_UTILISATEUR), common_math_f(fctm, FLOTTANT_UTILISATEUR), common_math_f(fctk_0_05, FLOTTANT_UTILISATEUR), common_math_f(fctk_0_95, FLOTTANT_UTILISATEUR), common_math_f(ecm, FLOTTANT_UTILISATEUR), common_math_f(ec1, FLOTTANT_UTILISATEUR), common_math_f(ecu1, FLOTTANT_UTILISATEUR), common_math_f(ec2, FLOTTANT_UTILISATEUR), common_math_f(ecu2, FLOTTANT_UTILISATEUR), common_math_f(n, FLOTTANT_UTILISATEUR), common_math_f(ec3, FLOTTANT_UTILISATEUR), common_math_f(ecu3, FLOTTANT_UTILISATEUR), common_math_f(nu, FLOTTANT_UTILISATEUR)), )
-    
-    free(nom);
-    
-    gtk_widget_destroy(projet->list_gtk._1992_1_1_materiaux.window);
-    
-    return;
-}
-
-
-void _1992_1_1_gtk_materiaux_annuler_clicked(GtkButton *button, Projet *projet)
-/* Description : Ferme la fenêtre sans effectuer les modifications.
- * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
- *            : Projet *projet : la variable projet.
- * Valeur renvoyée : Aucune.
- */
-{
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
-    BUGMSG(projet->list_gtk._1992_1_1_materiaux.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Matériau Béton")
-    
-    gtk_widget_destroy(projet->list_gtk._1992_1_1_materiaux.window);
-    
-    return;
-}
-
-
-void _1992_1_1_gtk_materiaux_modifier_clicked(GtkButton *button, Projet *projet)
-/* Description : Ferme la fenêtre en appliquant les modifications.
- * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
- *            : Projet *projet : la variable projet.
- * Valeur renvoyée : Aucune.
- */
-{
-    Gtk_1992_1_1_Materiaux  *ef_gtk;
-    
-    char    *nom;
-    double  fck, fckcube, fcm, fctm, fctk_0_05, fctk_0_95;
-    double  ecm;
-    double  ec1, ecu1, ec2, ecu2, n, ec3, ecu3, nu;
-    
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
-    BUGMSG(projet->list_gtk._1992_1_1_materiaux.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Matériau Béton")
-    
-    ef_gtk = &projet->list_gtk._1992_1_1_materiaux;
-    
-    if (!_1992_1_1_gtk_materiaux_recupere_donnees(projet, &nom, &fck, &fckcube, &fcm, &fctm, &fctk_0_05, &fctk_0_95, &ecm, &ec1, &ecu1, &ec2, &ecu2, &n, &ec3, &ecu3, &nu))
-        return;
-    
-    BUG(_1992_1_1_materiaux_modif(projet, ef_gtk->materiau, nom, common_math_f(fck*1000000., FLOTTANT_UTILISATEUR), common_math_f(fckcube, FLOTTANT_UTILISATEUR), common_math_f(fcm, FLOTTANT_UTILISATEUR), common_math_f(fctm, FLOTTANT_UTILISATEUR), common_math_f(fctk_0_05, FLOTTANT_UTILISATEUR), common_math_f(fctk_0_95, FLOTTANT_UTILISATEUR), common_math_f(ecm, FLOTTANT_UTILISATEUR), common_math_f(ec1, FLOTTANT_UTILISATEUR), common_math_f(ecu1, FLOTTANT_UTILISATEUR), common_math_f(ec2, FLOTTANT_UTILISATEUR), common_math_f(ecu2, FLOTTANT_UTILISATEUR), common_math_f(n, FLOTTANT_UTILISATEUR), common_math_f(ec3, FLOTTANT_UTILISATEUR), common_math_f(ecu3, FLOTTANT_UTILISATEUR), common_math_f(nu, FLOTTANT_UTILISATEUR)), )
-    
-    free(nom);
-    
-    gtk_widget_destroy(projet->list_gtk._1992_1_1_materiaux.window);
-    
-    return;
-}
-
-
-void _1992_1_1_gtk_materiaux_toggled(GtkCheckMenuItem *checkmenuitem, Projet *projet)
-/* Description : Evènement pour (dés)activer la personnalisation d'une propriété du béton.
- * Paramètres : GtkCheckMenuItem *checkmenuitem : composant à l'origine de l'évènement,
- *            : Projet *projet : la variable projet.
- * Valeur renvoyée : Aucune.
- */
-{
-    GtkBuilder      *builder;
-    gboolean        check = gtk_check_menu_item_get_active(checkmenuitem);
-    EF_Materiau     *mat;
-    Materiau_Beton  *beton_data;
-    char            tmp[30];
-    
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
-    
-    builder = projet->list_gtk._1992_1_1_materiaux.builder;
-    mat = projet->list_gtk._1992_1_1_materiaux.materiau;
-    if (mat != NULL)
-        beton_data = projet->list_gtk._1992_1_1_materiaux.materiau->data;
-    else
-        beton_data = NULL;
-    
-    if (checkmenuitem == GTK_CHECK_MENU_ITEM(gtk_builder_get_object(builder, "_1992_1_1_materiaux_personnaliser_menu_fck_cube")))
-    {
-        if (check && mat)
-        {
-            common_math_double_to_char2(common_math_f(common_math_get(beton_data->fckcube)/1000000., beton_data->fckcube.type), tmp, DECIMAL_CONTRAINTE);
-            gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(builder, "_1992_1_1_materiaux_buffer_fck_cube")), tmp, -1);
-        }
-        
-        gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(builder, "_1992_1_1_materiaux_label_fck_cube")), check);
-        gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(builder, "_1992_1_1_materiaux_scrolledwindow_fck_cube")), check);
-    }
-    else if (checkmenuitem == GTK_CHECK_MENU_ITEM(gtk_builder_get_object(builder, "_1992_1_1_materiaux_personnaliser_menu_fcm")))
-    {
-        if (check && mat)
-        {
-            common_math_double_to_char2(common_math_f(common_math_get(beton_data->fcm)/1000000., beton_data->fcm.type), tmp, DECIMAL_CONTRAINTE);
-            gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(builder, "_1992_1_1_materiaux_buffer_fcm")), tmp, -1);
-        }
-        gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(builder, "_1992_1_1_materiaux_label_fcm")), check);
-        gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(builder, "_1992_1_1_materiaux_scrolledwindow_fcm")), check);
-    }
-    else if (checkmenuitem == GTK_CHECK_MENU_ITEM(gtk_builder_get_object(builder, "_1992_1_1_materiaux_personnaliser_menu_fctm")))
-    {
-        if (check && mat)
-        {
-            common_math_double_to_char2(common_math_f(common_math_get(beton_data->fctm)/1000000., beton_data->fctm.type), tmp, DECIMAL_CONTRAINTE);
-            gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(builder, "_1992_1_1_materiaux_buffer_fctm")), tmp, -1);
-        }
-        gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(builder, "_1992_1_1_materiaux_label_fctm")), check);
-        gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(builder, "_1992_1_1_materiaux_scrolledwindow_fctm")), check);
-    }
-    else if (checkmenuitem == GTK_CHECK_MENU_ITEM(gtk_builder_get_object(builder, "_1992_1_1_materiaux_personnaliser_menu_fctk_0_05")))
-    {
-        if (check && mat)
-        {
-            common_math_double_to_char2(common_math_f(common_math_get(beton_data->fctk_0_05)/1000000., beton_data->fctk_0_05.type), tmp, DECIMAL_CONTRAINTE);
-            gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(builder, "_1992_1_1_materiaux_buffer_fctk_0_05")), tmp, -1);
-        }
-        gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(builder, "_1992_1_1_materiaux_label_fctk_0_05")), check);
-        gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(builder, "_1992_1_1_materiaux_scrolledwindow_fctk_0_05")), check);
-    }
-    else if (checkmenuitem == GTK_CHECK_MENU_ITEM(gtk_builder_get_object(builder, "_1992_1_1_materiaux_personnaliser_menu_fctk_0_95")))
-    {
-        if (check && mat)
-        {
-            common_math_double_to_char2(common_math_f(common_math_get(beton_data->fctk_0_95)/1000000., beton_data->fctk_0_95.type), tmp, DECIMAL_CONTRAINTE);
-            gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(builder, "_1992_1_1_materiaux_buffer_fctk_0_95")), tmp, -1);
-        }
-        gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(builder, "_1992_1_1_materiaux_label_fctk_0_95")), check);
-        gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(builder, "_1992_1_1_materiaux_scrolledwindow_fctk_0_95")), check);
-    }
-    else if (checkmenuitem == GTK_CHECK_MENU_ITEM(gtk_builder_get_object(builder, "_1992_1_1_materiaux_personnaliser_menu_Ecm")))
-    {
-        if (check && mat)
-        {
-            common_math_double_to_char2(common_math_f(common_math_get(beton_data->ecm)/1000000000., beton_data->ecm.type), tmp, DECIMAL_CONTRAINTE);
-            gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(builder, "_1992_1_1_materiaux_buffer_Ecm")), tmp, -1);
-        }
-        gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(builder, "_1992_1_1_materiaux_label_Ecm")), check);
-        gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(builder, "_1992_1_1_materiaux_scrolledwindow_Ecm")), check);
-    }
-    else if (checkmenuitem == GTK_CHECK_MENU_ITEM(gtk_builder_get_object(builder, "_1992_1_1_materiaux_personnaliser_menu_ec1")))
-    {
-        if (check && mat)
-        {
-            common_math_double_to_char2(common_math_f(common_math_get(beton_data->ec1)*1000, beton_data->ec1.type), tmp, DECIMAL_SANS_UNITE);
-            gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(builder, "_1992_1_1_materiaux_buffer_ec1")), tmp, -1);
-        }
-        gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(builder, "_1992_1_1_materiaux_label_ec1")), check);
-        gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(builder, "_1992_1_1_materiaux_scrolledwindow_ec1")), check);
-    }
-    else if (checkmenuitem == GTK_CHECK_MENU_ITEM(gtk_builder_get_object(builder, "_1992_1_1_materiaux_personnaliser_menu_ecu1")))
-    {
-        if (check && mat)
-        {
-            common_math_double_to_char2(common_math_f(common_math_get(beton_data->ecu1)*1000, beton_data->ecu1.type), tmp, DECIMAL_SANS_UNITE);
-            gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(builder, "_1992_1_1_materiaux_buffer_ecu1")), tmp, -1);
-        }
-        gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(builder, "_1992_1_1_materiaux_label_ecu1")), check);
-        gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(builder, "_1992_1_1_materiaux_scrolledwindow_ecu1")), check);
-    }
-    else if (checkmenuitem == GTK_CHECK_MENU_ITEM(gtk_builder_get_object(builder, "_1992_1_1_materiaux_personnaliser_menu_ec2")))
-    {
-        if (check && mat)
-        {
-            common_math_double_to_char2(common_math_f(common_math_get(beton_data->ec2)*1000, beton_data->ec2.type), tmp, DECIMAL_SANS_UNITE);
-            gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(builder, "_1992_1_1_materiaux_buffer_ec2")), tmp, -1);
-        }
-        gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(builder, "_1992_1_1_materiaux_label_ec2")), check);
-        gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(builder, "_1992_1_1_materiaux_scrolledwindow_ec2")), check);
-    }
-    else if (checkmenuitem == GTK_CHECK_MENU_ITEM(gtk_builder_get_object(builder, "_1992_1_1_materiaux_personnaliser_menu_ecu2")))
-    {
-        if (check && mat)
-        {
-            common_math_double_to_char2(common_math_f(common_math_get(beton_data->ecu2)*1000, beton_data->ecu2.type), tmp, DECIMAL_SANS_UNITE);
-            gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(builder, "_1992_1_1_materiaux_buffer_ecu2")), tmp, -1);
-        }
-        gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(builder, "_1992_1_1_materiaux_label_ecu2")), check);
-        gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(builder, "_1992_1_1_materiaux_scrolledwindow_ecu2")), check);
-    }
-    else if (checkmenuitem == GTK_CHECK_MENU_ITEM(gtk_builder_get_object(builder, "_1992_1_1_materiaux_personnaliser_menu_n")))
-    {
-        if (check && mat)
-        {
-            common_math_double_to_char2(beton_data->n, tmp, DECIMAL_SANS_UNITE);
-            gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(builder, "_1992_1_1_materiaux_buffer_n")), tmp, -1);
-        }
-        gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(builder, "_1992_1_1_materiaux_label_n")), check);
-        gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(builder, "_1992_1_1_materiaux_scrolledwindow_n")), check);
-    }
-    else if (checkmenuitem == GTK_CHECK_MENU_ITEM(gtk_builder_get_object(builder, "_1992_1_1_materiaux_personnaliser_menu_ec3")))
-    {
-        if (check && mat)
-        {
-            common_math_double_to_char2(common_math_f(common_math_get(beton_data->ec3)*1000, beton_data->ec3.type), tmp, DECIMAL_SANS_UNITE);
-            gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(builder, "_1992_1_1_materiaux_buffer_ec3")), tmp, -1);
-        }
-        gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(builder, "_1992_1_1_materiaux_label_ec3")), check);
-        gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(builder, "_1992_1_1_materiaux_scrolledwindow_ec3")), check);
-    }
-    else if (checkmenuitem == GTK_CHECK_MENU_ITEM(gtk_builder_get_object(builder, "_1992_1_1_materiaux_personnaliser_menu_ecu3")))
-    {
-        if (check && mat)
-        {
-            common_math_double_to_char2(common_math_f(common_math_get(beton_data->ecu3)*1000, beton_data->ecu3.type), tmp, DECIMAL_SANS_UNITE);
-            gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(builder, "_1992_1_1_materiaux_buffer_ecu3")), tmp, -1);
-        }
-        gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(builder, "_1992_1_1_materiaux_label_ecu3")), check);
-        gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(builder, "_1992_1_1_materiaux_scrolledwindow_ecu3")), check);
-    }
-    else if (checkmenuitem == GTK_CHECK_MENU_ITEM(gtk_builder_get_object(builder, "_1992_1_1_materiaux_personnaliser_menu_nu")))
-    {
-        if (check && mat)
-        {
-            common_math_double_to_char2(beton_data->nu, tmp, DECIMAL_SANS_UNITE);
-            gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(builder, "_1992_1_1_materiaux_buffer_nu")), tmp, -1);
-        }
-        gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(builder, "_1992_1_1_materiaux_label_nu")), check);
-        gtk_widget_set_visible(GTK_WIDGET(gtk_builder_get_object(builder, "_1992_1_1_materiaux_scrolledwindow_nu")), check);
+      *fcm = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (builder,
+                                            "_1992_1_1_materiaux_buffer_fcm")),
+                                            0., FALSE,
+                                            INFINITY, FALSE)
+             * 1000000.;
+      if (isnan (*fcm))
+        ok = FALSE;
     }
     else
-        BUGMSG(NULL, , gettext("Paramètre %s incorrect.\n"), "checkmenuitem")
-    
-    _1992_1_1_gtk_materiaux_check(NULL, projet);
-    
-    return;
+      *fcm = _1992_1_1_materiaux_fcm (*fck);
+  }
+  
+  if (ok)
+  {
+    if (gtk_widget_get_visible (GTK_WIDGET (gtk_builder_get_object (builder,
+                                  "_1992_1_1_materiaux_scrolledwindow_fctm"))))
+    {
+      *fctm = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (builder,
+                                           "_1992_1_1_materiaux_buffer_fctm")),
+                                             0., FALSE,
+                                             INFINITY, FALSE)
+              * 1000000.;
+      if (isnan (*fctm))
+        ok = FALSE;
+    }
+    else
+      *fctm = _1992_1_1_materiaux_fctm (*fck, *fcm/1000000.);
+  }
+  
+  if (ok)
+  {
+    if (gtk_widget_get_visible (GTK_WIDGET (gtk_builder_get_object (builder,
+                             "_1992_1_1_materiaux_scrolledwindow_fctk_0_05"))))
+    {
+      *fctk_0_05 = conv_buff_d (GTK_TEXT_BUFFER (
+              gtk_builder_get_object (builder,
+                                      "_1992_1_1_materiaux_buffer_fctk_0_05")),
+                                                  0., FALSE,
+                                                  INFINITY, FALSE)
+                   * 1000000.;
+      if (isnan (*fctk_0_05))
+        ok = FALSE;
+    }
+    else
+      *fctk_0_05 = _1992_1_1_materiaux_fctk_0_05 (*fctm / 1000000.);
+  }
+  
+  if (ok)
+  {
+    if (gtk_widget_get_visible (GTK_WIDGET (gtk_builder_get_object (builder,
+                             "_1992_1_1_materiaux_scrolledwindow_fctk_0_95"))))
+    {
+      *fctk_0_95 = conv_buff_d (GTK_TEXT_BUFFER (
+              gtk_builder_get_object (builder,
+                                      "_1992_1_1_materiaux_buffer_fctk_0_95")),
+                                                  0., FALSE,
+                                                  INFINITY, FALSE)
+                   * 1000000.;
+      if (isnan (*fctk_0_95))
+        ok = FALSE;
+    }
+    else
+      *fctk_0_95 = _1992_1_1_materiaux_fctk_0_95 (*fctm / 1000000.);
+  }
+  
+  if (ok)
+  {
+    if (gtk_widget_get_visible (GTK_WIDGET (gtk_builder_get_object (builder,
+                                   "_1992_1_1_materiaux_scrolledwindow_Ecm"))))
+    {
+      *ecm = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (builder,
+                                            "_1992_1_1_materiaux_buffer_Ecm")),
+                                            0., FALSE,
+                                            INFINITY, FALSE)
+             * 1000000000.;
+      if (isnan (*ecm))
+        ok = FALSE;
+    }
+    else
+      *ecm = _1992_1_1_materiaux_ecm (*fcm / 1000000.);
+  }
+  
+  if (ok)
+  {
+    if (gtk_widget_get_visible (GTK_WIDGET (gtk_builder_get_object (builder,
+                                   "_1992_1_1_materiaux_scrolledwindow_ec1"))))
+    {
+      *ec1 = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (builder,
+                                            "_1992_1_1_materiaux_buffer_ec1")),
+                                            0., FALSE,
+                                            INFINITY, FALSE)
+             / 1000.;
+      if (isnan (*ec1))
+        ok = FALSE;
+    }
+    else
+      *ec1 = _1992_1_1_materiaux_ec1 (*fcm / 1000000.);
+  }
+  
+  if (ok)
+  {
+    if (gtk_widget_get_visible (GTK_WIDGET (gtk_builder_get_object (builder,
+                                  "_1992_1_1_materiaux_scrolledwindow_ecu1"))))
+    {
+      *ecu1 = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (builder,
+                                           "_1992_1_1_materiaux_buffer_ecu1")),
+                                             0., FALSE,
+                                             INFINITY, FALSE)
+              / 1000.;
+      if (isnan (*ecu1))
+        ok = FALSE;
+    }
+    else
+      *ecu1 = _1992_1_1_materiaux_ecu1 (*fcm / 1000000., *fck / 1000000.);
+  }
+  
+  if (ok)
+  {
+    if (gtk_widget_get_visible (GTK_WIDGET (gtk_builder_get_object (builder,
+                                   "_1992_1_1_materiaux_scrolledwindow_ec2"))))
+    {
+      *ec2 = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (builder,
+                                            "_1992_1_1_materiaux_buffer_ec2")),
+                                            0., FALSE,
+                                            INFINITY, FALSE)
+             / 1000.;
+      if (isnan (*ec2))
+        ok = FALSE;
+    }
+    else
+      *ec2 = _1992_1_1_materiaux_ec2 (*fck / 1000000.);
+  }
+  
+  if (ok)
+  {
+    if (gtk_widget_get_visible (GTK_WIDGET (gtk_builder_get_object (builder,
+                                  "_1992_1_1_materiaux_scrolledwindow_ecu2"))))
+    {
+      *ecu2 = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (builder,
+                                           "_1992_1_1_materiaux_buffer_ecu2")),
+                                             0., FALSE,
+                                             INFINITY, FALSE)
+              / 1000.;
+      if (isnan (*ecu2))
+        ok = FALSE;
+    }
+    else
+      *ecu2 = _1992_1_1_materiaux_ecu2 (*fck / 1000000.);
+  }
+  
+  if (ok)
+  {
+    if (gtk_widget_get_visible (GTK_WIDGET (gtk_builder_get_object (builder,
+                                     "_1992_1_1_materiaux_scrolledwindow_n"))))
+    {
+      *n = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (builder,
+                                              "_1992_1_1_materiaux_buffer_n")),
+                                          0., FALSE,
+                                          INFINITY, FALSE);
+      if (isnan (*n))
+        ok = FALSE;
+    }
+    else
+      *n = _1992_1_1_materiaux_n (*fck / 1000000.);
+  }
+  
+  if (ok)
+  {
+    if (gtk_widget_get_visible (GTK_WIDGET (gtk_builder_get_object (builder,
+                                   "_1992_1_1_materiaux_scrolledwindow_ec3"))))
+    {
+      *ec3 = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (builder,
+                                            "_1992_1_1_materiaux_buffer_ec3")),
+                                            0., FALSE,
+                                            INFINITY, FALSE)
+             / 1000.;
+      if (isnan (*ec3))
+        ok = FALSE;
+    }
+    else
+      *ec3 = _1992_1_1_materiaux_ec3 (*fck / 1000000.);
+  }
+  
+  if (ok)
+  {
+    if (gtk_widget_get_visible (GTK_WIDGET (gtk_builder_get_object (builder,
+                                  "_1992_1_1_materiaux_scrolledwindow_ecu3"))))
+    {
+      *ecu3 = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (builder,
+                                           "_1992_1_1_materiaux_buffer_ecu3")),
+                                             0., FALSE,
+                                             INFINITY, FALSE)
+              / 1000.;
+      if (isnan (*ecu3))
+        ok = FALSE;
+    }
+    else
+      *ecu3 = _1992_1_1_materiaux_ecu3 (*fck / 1000000.);
+  }
+  
+  if (ok)
+  {
+    if (gtk_widget_get_visible (GTK_WIDGET (gtk_builder_get_object (builder,
+                                    "_1992_1_1_materiaux_scrolledwindow_nu"))))
+    {
+      *nu = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (builder,
+                                             "_1992_1_1_materiaux_buffer_nu")),
+                                           0., TRUE,
+                                           0.5, FALSE);
+      if (isnan (*nu))
+        ok = FALSE;
+    }
+    else
+      *nu = COEFFICIENT_NU_BETON;
+  }
+  
+  // Si tous les paramètres sont corrects
+  textbuffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (
+                 gtk_builder_get_object (UI_BET.builder,
+                                         "_1992_1_1_materiaux_textview_nom")));
+  
+  gtk_text_buffer_get_iter_at_offset (textbuffer, &start, 0);
+  gtk_text_buffer_get_iter_at_offset (textbuffer, &end, -1);
+  *nom = gtk_text_buffer_get_text (textbuffer, &start, &end, FALSE);
+  
+  gtk_text_buffer_remove_all_tags (textbuffer, &start, &end);
+  
+  if (UI_BET.materiau == NULL)
+  {
+    if ((strcmp (*nom, "") == 0) ||
+        (EF_materiaux_cherche_nom (p, *nom, FALSE)))
+    {
+      gtk_text_buffer_apply_tag_by_name (textbuffer, "mauvais", &start, &end);
+      ok = FALSE;
+    }
+    else
+      gtk_text_buffer_apply_tag_by_name (textbuffer, "OK", &start, &end);
+  }
+  else if ((strcmp(*nom, "") == 0) || 
+    ((strcmp (UI_BET.materiau->nom, *nom) != 0) &&
+     (EF_materiaux_cherche_nom (p, *nom, FALSE))))
+  {
+    gtk_text_buffer_apply_tag_by_name (textbuffer, "mauvais", &start, &end);
+    ok = FALSE;
+  }
+  else
+    gtk_text_buffer_apply_tag_by_name (textbuffer, "OK", &start, &end);
+  
+  if (ok == FALSE)
+    free (*nom);
+  
+  return ok;
 }
 
 
-gboolean _1992_1_1_gtk_materiaux(Projet *projet, EF_Materiau *materiau)
-/* Description : Affichage de la fenêtre permettant de créer ou modifier un matériau de type
- *               béton.
- * Paramètres : Projet *projet : la variable projet,
- *            : EF_Materiau *materiau : materiau à modifier. NULL si nouveau matériau,
- * Valeur renvoyée :
- *   Succès : TRUE
+void
+_1992_1_1_gtk_materiaux_check (GtkWidget *object,
+                               Projet    *p)
+/**
+ * \brief Vérifie si l'ensemble des éléments est correct pour activer le bouton
+ *        add/edit.
+ * \param object : composant à l'origine de l'évènement,
+ * \param p : la variable projet.
+ * \return Rien.\n
+ * Echec :
+ *   - p == NULL,
+ *   - interface graphique non initialisée.
+ */
+{
+  char  *nom;
+  double fck, fckcube, fcm, fctm, fctk_0_05, fctk_0_95;
+  double ecm;
+  double ec1, ecu1, ec2, ecu2, n, ec3, ecu3, nu;
+  
+  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGMSG (UI_BET.builder,
+          ,
+          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Matériau Béton")
+  
+  if (!_1992_1_1_gtk_materiaux_recupere_donnees (p,
+                                                 &nom,
+                                                 &fck,
+                                                 &fckcube,
+                                                 &fcm,
+                                                 &fctm,
+                                                 &fctk_0_05,
+                                                 &fctk_0_95,
+                                                 &ecm,
+                                                 &ec1,
+                                                 &ecu1,
+                                                 &ec2,
+                                                 &ecu2,
+                                                 &n,
+                                                 &ec3,
+                                                 &ecu3,
+                                                 &nu))
+    gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (
+                       UI_BET.builder, "_1992_1_1_materiaux_button_add_edit")),
+                              FALSE);
+  else
+  {
+    gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (
+                       UI_BET.builder, "_1992_1_1_materiaux_button_add_edit")),
+                              TRUE);
+    free (nom);
+  }
+  
+  return;
+}
+
+
+void
+_1992_1_1_gtk_materiaux_ajouter_clicked (GtkButton *button,
+                                         Projet    *p)
+/**
+ * \brief Ferme la fenêtre en ajoutant la charge.
+ * \param button : composant à l'origine de l'évènement,
+ * \param p : la variable projet.
+ * \return Rien.\n
+ * Echec :
+ *   - p == NULL,
+ *   - interface graphique non initialisée,
+ *   - #_1992_1_1_materiaux_ajout,
+ *   - #_1992_1_1_materiaux_modif.
+ */
+{
+  char        *nom;
+  double       fck, fckcube, fcm, fctm, fctk_0_05, fctk_0_95;
+  double       ecm;
+  double       ec1, ecu1, ec2, ecu2, n, ec3, ecu3, nu;
+  EF_Materiau *materiau;
+  
+  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGMSG (UI_BET.builder,
+          ,
+          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Matériau Béton")
+  
+  if (!_1992_1_1_gtk_materiaux_recupere_donnees (p,
+                                                 &nom,
+                                                 &fck,
+                                                 &fckcube,
+                                                 &fcm,
+                                                 &fctm,
+                                                 &fctk_0_05,
+                                                 &fctk_0_95,
+                                                 &ecm,
+                                                 &ec1,
+                                                 &ecu1,
+                                                 &ec2,
+                                                 &ecu2,
+                                                 &n,
+                                                 &ec3,
+                                                 &ecu3,
+                                                 &nu))
+    return;
+  
+  // Création de la nouvelle charge ponctuelle au noeud
+  BUG (materiau = _1992_1_1_materiaux_ajout (p,
+                                             nom,
+                                             m_f (fck, FLOTTANT_UTILISATEUR)),
+      )
+  BUG (_1992_1_1_materiaux_modif (
+         p,
+         materiau,
+         NULL,
+         m_f (NAN,       FLOTTANT_UTILISATEUR),
+         m_f (fckcube,   FLOTTANT_UTILISATEUR),
+         m_f (fcm,       FLOTTANT_UTILISATEUR),
+         m_f (fctm,      FLOTTANT_UTILISATEUR),
+         m_f (fctk_0_05, FLOTTANT_UTILISATEUR),
+         m_f (fctk_0_95, FLOTTANT_UTILISATEUR),
+         m_f (ecm,       FLOTTANT_UTILISATEUR),
+         m_f (ec1,       FLOTTANT_UTILISATEUR),
+         m_f (ecu1,      FLOTTANT_UTILISATEUR),
+         m_f (ec2,       FLOTTANT_UTILISATEUR),
+         m_f (ecu2,      FLOTTANT_UTILISATEUR),
+         m_f (n,         FLOTTANT_UTILISATEUR),
+         m_f (ec3,       FLOTTANT_UTILISATEUR),
+         m_f (ecu3,      FLOTTANT_UTILISATEUR),
+         m_f (nu,        FLOTTANT_UTILISATEUR)),
+      )
+  
+  free (nom);
+  
+  gtk_widget_destroy (UI_BET.window);
+  
+  return;
+}
+
+
+void
+_1992_1_1_gtk_materiaux_modifier_clicked (GtkButton *button,
+                                          Projet    *p)
+/**
+ * \brief Ferme la fenêtre en appliquant les modifications.
+ * \param button : composant à l'origine de l'évènement,
+ * \param p : la variable projet.
+ * \return Rien.\n
+ * Echec :
+ *   - p == NULL,
+ *   - interface graphique non initialisée,
+ *   - #_1992_1_1_materiaux_modif.
+ */
+{
+  char  *nom;
+  double fck, fckcube, fcm, fctm, fctk_0_05, fctk_0_95;
+  double ecm;
+  double ec1, ecu1, ec2, ecu2, n, ec3, ecu3, nu;
+  
+  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGMSG (UI_BET.builder,
+          ,
+          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Matériau Béton")
+  
+  if (!_1992_1_1_gtk_materiaux_recupere_donnees (p,
+                                                 &nom,
+                                                 &fck,
+                                                 &fckcube,
+                                                 &fcm,
+                                                 &fctm,
+                                                 &fctk_0_05,
+                                                 &fctk_0_95,
+                                                 &ecm,
+                                                 &ec1,
+                                                 &ecu1,
+                                                 &ec2,
+                                                 &ecu2,
+                                                 &n,
+                                                 &ec3,
+                                                 &ecu3,
+                                                 &nu))
+    return;
+  
+  BUG (_1992_1_1_materiaux_modif (
+         p,
+         UI_BET.materiau,
+         nom,
+         m_f (fck * 1000000., FLOTTANT_UTILISATEUR),
+         m_f (fckcube,        FLOTTANT_UTILISATEUR),
+         m_f (fcm,            FLOTTANT_UTILISATEUR),
+         m_f (fctm,           FLOTTANT_UTILISATEUR),
+         m_f (fctk_0_05,      FLOTTANT_UTILISATEUR),
+         m_f (fctk_0_95,      FLOTTANT_UTILISATEUR),
+         m_f (ecm,            FLOTTANT_UTILISATEUR),
+         m_f (ec1,            FLOTTANT_UTILISATEUR),
+         m_f (ecu1,           FLOTTANT_UTILISATEUR),
+         m_f (ec2,            FLOTTANT_UTILISATEUR),
+         m_f (ecu2,           FLOTTANT_UTILISATEUR),
+         m_f (n,              FLOTTANT_UTILISATEUR),
+         m_f (ec3,            FLOTTANT_UTILISATEUR),
+         m_f (ecu3,           FLOTTANT_UTILISATEUR),
+         m_f (nu,             FLOTTANT_UTILISATEUR)),
+      )
+  
+  free (nom);
+  
+  gtk_widget_destroy (UI_BET.window);
+  
+  return;
+}
+
+
+void
+_1992_1_1_gtk_materiaux_toggled (GtkCheckMenuItem *checkmenuitem,
+                                 Projet           *p)
+/**
+ * \brief Evènement pour (dés)activer la personnalisation d'une propriété du
+ *        béton.
+ * \param checkmenuitem : composant à l'origine de l'évènement,
+ * \param p : la variable projet.
+ * \return Rien.\n
+ * Echec :
+ *   - p == NULL,
+ *   - interface graphique non initialisée.
+ */
+{
+  GtkBuilder     *builder;
+  gboolean        check = gtk_check_menu_item_get_active (checkmenuitem);
+  EF_Materiau    *mat;
+  Materiau_Beton *beton_data;
+  char            tmp[30];
+  
+  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
+  
+  builder = UI_BET.builder;
+  mat = UI_BET.materiau;
+  if (mat != NULL)
+    beton_data = UI_BET.materiau->data;
+  else
+    beton_data = NULL;
+  
+  if (checkmenuitem == GTK_CHECK_MENU_ITEM (gtk_builder_get_object (builder,
+                           "_1992_1_1_materiaux_personnaliser_menu_fck_cube")))
+  {
+    if (check && mat)
+    {
+      conv_f_c (m_f (m_g (beton_data->fckcube) / 1000000.,
+                     beton_data->fckcube.type),
+                tmp,
+                DECIMAL_CONTRAINTE);
+      gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
+                              builder, "_1992_1_1_materiaux_buffer_fck_cube")),
+                                tmp,
+                                -1);
+    }
+    
+    gtk_widget_set_visible (GTK_WIDGET (gtk_builder_get_object (builder,
+                                        "_1992_1_1_materiaux_label_fck_cube")),
+                            check);
+    gtk_widget_set_visible (GTK_WIDGET (gtk_builder_get_object (builder,
+                               "_1992_1_1_materiaux_scrolledwindow_fck_cube")),
+                            check);
+  }
+  else if (checkmenuitem == GTK_CHECK_MENU_ITEM (gtk_builder_get_object (
+                       builder, "_1992_1_1_materiaux_personnaliser_menu_fcm")))
+  {
+    if (check && mat)
+    {
+      conv_f_c (m_f (m_g (beton_data->fcm) / 1000000., beton_data->fcm.type),
+                tmp,
+                DECIMAL_CONTRAINTE);
+      gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
+                                   builder, "_1992_1_1_materiaux_buffer_fcm")),
+                                tmp,
+                                -1);
+    }
+    gtk_widget_set_visible (GTK_WIDGET (gtk_builder_get_object (builder,
+                                             "_1992_1_1_materiaux_label_fcm")),
+                            check);
+    gtk_widget_set_visible (GTK_WIDGET (gtk_builder_get_object (builder,
+                                    "_1992_1_1_materiaux_scrolledwindow_fcm")),
+                            check);
+  }
+  else if (checkmenuitem == GTK_CHECK_MENU_ITEM (gtk_builder_get_object (
+                      builder, "_1992_1_1_materiaux_personnaliser_menu_fctm")))
+  {
+    if (check && mat)
+    {
+      conv_f_c (m_f (m_g (beton_data->fctm) / 1000000., beton_data->fctm.type),
+                tmp,
+                DECIMAL_CONTRAINTE);
+      gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
+                                  builder, "_1992_1_1_materiaux_buffer_fctm")),
+                                tmp,
+                                -1);
+    }
+    gtk_widget_set_visible (GTK_WIDGET (gtk_builder_get_object (builder,
+                                            "_1992_1_1_materiaux_label_fctm")),
+                            check);
+    gtk_widget_set_visible (GTK_WIDGET (gtk_builder_get_object (builder,
+                                   "_1992_1_1_materiaux_scrolledwindow_fctm")),
+                            check);
+  }
+  else if (checkmenuitem == GTK_CHECK_MENU_ITEM (gtk_builder_get_object (
+                 builder, "_1992_1_1_materiaux_personnaliser_menu_fctk_0_05")))
+  {
+    if (check && mat)
+    {
+      conv_f_c (m_f (m_g (beton_data->fctk_0_05) / 1000000.,
+                     beton_data->fctk_0_05.type),
+                tmp,
+                DECIMAL_CONTRAINTE);
+      gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
+                             builder, "_1992_1_1_materiaux_buffer_fctk_0_05")),
+                                tmp,
+                                -1);
+    }
+    gtk_widget_set_visible (GTK_WIDGET (gtk_builder_get_object (builder,
+                                       "_1992_1_1_materiaux_label_fctk_0_05")),
+                            check);
+    gtk_widget_set_visible (GTK_WIDGET (gtk_builder_get_object (builder,
+                              "_1992_1_1_materiaux_scrolledwindow_fctk_0_05")),
+                            check);
+  }
+  else if (checkmenuitem == GTK_CHECK_MENU_ITEM (gtk_builder_get_object (
+                 builder, "_1992_1_1_materiaux_personnaliser_menu_fctk_0_95")))
+  {
+    if (check && mat)
+    {
+      conv_f_c (m_f (m_g (beton_data->fctk_0_95) / 1000000.,
+                     beton_data->fctk_0_95.type),
+                tmp,
+                DECIMAL_CONTRAINTE);
+      gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
+                             builder, "_1992_1_1_materiaux_buffer_fctk_0_95")),
+                                tmp,
+                                -1);
+    }
+    gtk_widget_set_visible (GTK_WIDGET (gtk_builder_get_object (builder,
+                                       "_1992_1_1_materiaux_label_fctk_0_95")),
+                            check);
+    gtk_widget_set_visible (GTK_WIDGET (gtk_builder_get_object (builder,
+                              "_1992_1_1_materiaux_scrolledwindow_fctk_0_95")),
+                            check);
+  }
+  else if (checkmenuitem == GTK_CHECK_MENU_ITEM (gtk_builder_get_object (
+                       builder, "_1992_1_1_materiaux_personnaliser_menu_Ecm")))
+  {
+    if (check && mat)
+    {
+      conv_f_c (m_f (m_g (beton_data->ecm) / 1000000000.,
+                     beton_data->ecm.type),
+                tmp,
+                DECIMAL_CONTRAINTE);
+      gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
+                                   builder, "_1992_1_1_materiaux_buffer_Ecm")),
+                                tmp,
+                                -1);
+    }
+    gtk_widget_set_visible (GTK_WIDGET (gtk_builder_get_object (builder,
+                                             "_1992_1_1_materiaux_label_Ecm")),
+                            check);
+    gtk_widget_set_visible (GTK_WIDGET (gtk_builder_get_object (builder,
+                                    "_1992_1_1_materiaux_scrolledwindow_Ecm")),
+                            check);
+  }
+  else if (checkmenuitem == GTK_CHECK_MENU_ITEM (gtk_builder_get_object (
+                       builder, "_1992_1_1_materiaux_personnaliser_menu_ec1")))
+  {
+    if (check && mat)
+    {
+      conv_f_c (m_f (m_g (beton_data->ec1) * 1000, beton_data->ec1.type),
+                tmp,
+                DECIMAL_SANS_UNITE);
+      gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
+                                   builder, "_1992_1_1_materiaux_buffer_ec1")),
+                                tmp,
+                                -1);
+    }
+    gtk_widget_set_visible (GTK_WIDGET (gtk_builder_get_object (builder,
+                                             "_1992_1_1_materiaux_label_ec1")),
+                            check);
+    gtk_widget_set_visible (GTK_WIDGET (gtk_builder_get_object (builder,
+                                    "_1992_1_1_materiaux_scrolledwindow_ec1")),
+                            check);
+  }
+  else if (checkmenuitem == GTK_CHECK_MENU_ITEM (gtk_builder_get_object (
+                      builder, "_1992_1_1_materiaux_personnaliser_menu_ecu1")))
+  {
+    if (check && mat)
+    {
+      conv_f_c (m_f (m_g (beton_data->ecu1) * 1000, beton_data->ecu1.type),
+                tmp,
+                DECIMAL_SANS_UNITE);
+      gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
+                                  builder, "_1992_1_1_materiaux_buffer_ecu1")),
+                                tmp,
+                                -1);
+    }
+    gtk_widget_set_visible (GTK_WIDGET (gtk_builder_get_object (builder,
+                                            "_1992_1_1_materiaux_label_ecu1")),
+                            check);
+    gtk_widget_set_visible (GTK_WIDGET (gtk_builder_get_object (builder,
+                                   "_1992_1_1_materiaux_scrolledwindow_ecu1")),
+                            check);
+  }
+  else if (checkmenuitem == GTK_CHECK_MENU_ITEM (gtk_builder_get_object (
+                       builder, "_1992_1_1_materiaux_personnaliser_menu_ec2")))
+  {
+    if (check && mat)
+    {
+      conv_f_c (m_f (m_g (beton_data->ec2) * 1000, beton_data->ec2.type),
+                tmp,
+                DECIMAL_SANS_UNITE);
+      gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
+                                   builder, "_1992_1_1_materiaux_buffer_ec2")),
+                                tmp,
+                                -1);
+    }
+    gtk_widget_set_visible (GTK_WIDGET (gtk_builder_get_object (builder,
+                                             "_1992_1_1_materiaux_label_ec2")),
+                            check);
+    gtk_widget_set_visible (GTK_WIDGET (gtk_builder_get_object (builder,
+                                    "_1992_1_1_materiaux_scrolledwindow_ec2")),
+                            check);
+  }
+  else if (checkmenuitem == GTK_CHECK_MENU_ITEM (gtk_builder_get_object (
+                      builder, "_1992_1_1_materiaux_personnaliser_menu_ecu2")))
+  {
+    if (check && mat)
+    {
+      conv_f_c (m_f (m_g (beton_data->ecu2) * 1000, beton_data->ecu2.type),
+                tmp,
+                DECIMAL_SANS_UNITE);
+      gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
+                                  builder, "_1992_1_1_materiaux_buffer_ecu2")),
+                                tmp,
+                                -1);
+    }
+    gtk_widget_set_visible (GTK_WIDGET (gtk_builder_get_object (builder,
+                                            "_1992_1_1_materiaux_label_ecu2")),
+                            check);
+    gtk_widget_set_visible (GTK_WIDGET (gtk_builder_get_object (builder,
+                                   "_1992_1_1_materiaux_scrolledwindow_ecu2")),
+                            check);
+  }
+  else if (checkmenuitem == GTK_CHECK_MENU_ITEM (gtk_builder_get_object (
+                         builder, "_1992_1_1_materiaux_personnaliser_menu_n")))
+  {
+    if (check && mat)
+    {
+      conv_f_c (beton_data->n, tmp, DECIMAL_SANS_UNITE);
+      gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
+                                     builder, "_1992_1_1_materiaux_buffer_n")),
+                                tmp,
+                                -1);
+    }
+    gtk_widget_set_visible (GTK_WIDGET (gtk_builder_get_object (builder,
+                                               "_1992_1_1_materiaux_label_n")),
+                            check);
+    gtk_widget_set_visible (GTK_WIDGET (gtk_builder_get_object (builder,
+                                      "_1992_1_1_materiaux_scrolledwindow_n")),
+                            check);
+  }
+  else if (checkmenuitem == GTK_CHECK_MENU_ITEM (gtk_builder_get_object (
+                       builder, "_1992_1_1_materiaux_personnaliser_menu_ec3")))
+  {
+    if (check && mat)
+    {
+      conv_f_c (m_f (m_g (beton_data->ec3) * 1000, beton_data->ec3.type),
+                tmp,
+                DECIMAL_SANS_UNITE);
+      gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
+                                   builder, "_1992_1_1_materiaux_buffer_ec3")),
+                                tmp,
+                                -1);
+    }
+    gtk_widget_set_visible (GTK_WIDGET (gtk_builder_get_object (builder,
+                                             "_1992_1_1_materiaux_label_ec3")),
+                            check);
+    gtk_widget_set_visible (GTK_WIDGET (gtk_builder_get_object (builder,
+                                    "_1992_1_1_materiaux_scrolledwindow_ec3")),
+                            check);
+  }
+  else if (checkmenuitem == GTK_CHECK_MENU_ITEM (gtk_builder_get_object (
+                      builder, "_1992_1_1_materiaux_personnaliser_menu_ecu3")))
+  {
+    if (check && mat)
+    {
+      conv_f_c (m_f (m_g (beton_data->ecu3) * 1000, beton_data->ecu3.type),
+                tmp,
+                DECIMAL_SANS_UNITE);
+      gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
+                                  builder, "_1992_1_1_materiaux_buffer_ecu3")),
+                                tmp,
+                                -1);
+    }
+    gtk_widget_set_visible (GTK_WIDGET (gtk_builder_get_object (builder,
+                                            "_1992_1_1_materiaux_label_ecu3")),
+                            check);
+    gtk_widget_set_visible (GTK_WIDGET (gtk_builder_get_object (builder,
+                                   "_1992_1_1_materiaux_scrolledwindow_ecu3")),
+                            check);
+  }
+  else if (checkmenuitem == GTK_CHECK_MENU_ITEM (gtk_builder_get_object (
+                        builder, "_1992_1_1_materiaux_personnaliser_menu_nu")))
+  {
+    if (check && mat)
+    {
+      conv_f_c (beton_data->nu, tmp, DECIMAL_SANS_UNITE);
+      gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
+                                    builder, "_1992_1_1_materiaux_buffer_nu")),
+                                tmp,
+                                -1);
+    }
+    gtk_widget_set_visible (GTK_WIDGET (gtk_builder_get_object (builder,
+                                              "_1992_1_1_materiaux_label_nu")),
+                            check);
+    gtk_widget_set_visible (GTK_WIDGET (gtk_builder_get_object (builder,
+                                     "_1992_1_1_materiaux_scrolledwindow_nu")),
+                            check);
+  }
+  else
+    BUGMSG (NULL, , gettext ("Paramètre %s incorrect.\n"), "checkmenuitem")
+  
+  _1992_1_1_gtk_materiaux_check (NULL, p);
+  
+  return;
+}
+
+
+gboolean
+_1992_1_1_gtk_materiaux (Projet      *p,
+                         EF_Materiau *materiau)
+/**
+ * \brief Affichage de la fenêtre permettant de créer ou modifier un matériau
+ *        de type béton.
+ * \param p : la variable projet,
+ * \param materiau : materiau à modifier. NULL si nouveau matériau,
+ * \return
+ *   Succès : TRUE.\n
  *   Echec : FALSE :
- *             projet == NULL,
- *             Fenêtre graphique déjà initialisée.
+ *     - p == NULL.
  */
 {
-    Gtk_1992_1_1_Materiaux  *ef_gtk;
-    Materiau_Beton          *beton_data;
+  Materiau_Beton *beton_data;
+  
+  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
+  
+  if (UI_BET.builder != NULL)
+  {
+    gtk_window_present (GTK_WINDOW (UI_BET.window));
+    if (UI_BET.materiau == materiau)
+      return TRUE;
+  }
+  else
+  {
+    UI_BET.builder = gtk_builder_new ();
+    BUGMSG (gtk_builder_add_from_resource (UI_BET.builder,
+                                  "/org/2lgc/codegui/ui/1992_1_1_materiaux.ui",
+                                           NULL) != 0,
+            FALSE,
+            gettext ("Builder Failed\n"))
+    gtk_builder_connect_signals (UI_BET.builder, p);
+    UI_BET.window = GTK_WIDGET (gtk_builder_get_object (UI_BET.builder,
+                                                "_1992_1_1_materiaux_window"));
+  }
+  
+  if (materiau == NULL)
+  {
+    gtk_window_set_title (GTK_WINDOW (UI_BET.window),
+                          gettext ("Ajout d'un matériau béton"));
+    UI_BET.materiau = NULL;
+    beton_data = NULL;
+    gtk_text_buffer_set_text (gtk_text_view_get_buffer (GTK_TEXT_VIEW (
+                 gtk_builder_get_object (UI_BET.builder,
+                                         "_1992_1_1_materiaux_textview_nom"))),
+                              "",
+                              -1);
+    gtk_text_buffer_set_text (gtk_text_view_get_buffer (GTK_TEXT_VIEW (
+                 gtk_builder_get_object (UI_BET.builder,
+                                         "_1992_1_1_materiaux_textview_fck"))),
+                              "",
+                              -1);
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    gtk_button_set_label (GTK_BUTTON (gtk_builder_get_object (UI_BET.builder,
+                                       "_1992_1_1_materiaux_button_add_edit")),
+                          gettext ("_Ajouter"));
+    g_signal_connect (gtk_builder_get_object (UI_BET.builder,
+                                        "_1992_1_1_materiaux_button_add_edit"),
+                      "clicked",
+                      G_CALLBACK (_1992_1_1_gtk_materiaux_ajouter_clicked),
+                      p);
+    _1992_1_1_gtk_materiaux_check (NULL, p);
+  }
+  else
+  {
+    gchar tmp[30];
     
-    ef_gtk = &projet->list_gtk._1992_1_1_materiaux;
-    if (ef_gtk->builder != NULL)
-    {
-        gtk_window_present(GTK_WINDOW(projet->list_gtk._1992_1_1_materiaux.window));
-        if (projet->list_gtk._1992_1_1_materiaux.materiau == materiau)
-            return TRUE;
-    }
-    else
-    {
-        ef_gtk->builder = gtk_builder_new();
-        BUGMSG(gtk_builder_add_from_resource(ef_gtk->builder, "/org/2lgc/codegui/ui/1992_1_1_materiaux.ui", NULL) != 0, FALSE, gettext("Builder Failed\n"))
-        gtk_builder_connect_signals(ef_gtk->builder, projet);
-        ef_gtk->window = GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_window"));
-    }
+    BUGMSG (materiau->type == MATERIAU_BETON,
+            FALSE,
+            gettext ("Le matériau n'est pas en béton.\n"))
+    gtk_window_set_title (GTK_WINDOW (UI_BET.window),
+                          gettext ("Modification d'un matériau béton"));
+    UI_BET.materiau = materiau;
+    beton_data = materiau->data;
     
-    if (materiau == NULL)
-    {
-        gtk_window_set_title(GTK_WINDOW(ef_gtk->window), gettext("Ajout d'un matériau béton"));
-        ef_gtk->materiau = NULL;
-        beton_data = NULL;
-        gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_textview_nom"))), "", -1);
-        gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_textview_fck"))), "", -1);
-        
-        gtk_button_set_label(GTK_BUTTON(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_button_add_edit")), gettext("_Ajouter"));
-        g_signal_connect(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_button_add_edit"), "clicked", G_CALLBACK(_1992_1_1_gtk_materiaux_ajouter_clicked), projet);
-        _1992_1_1_gtk_materiaux_check(NULL, projet);
-    }
-    else
-    {
-        gchar           tmp[30];
-        
-        BUGMSG(materiau->type == MATERIAU_BETON, FALSE, gettext("Le matériau n'est pas en béton.\n"))
-        gtk_window_set_title(GTK_WINDOW(ef_gtk->window), gettext("Modification d'un matériau béton"));
-        ef_gtk->materiau = materiau;
-        beton_data = materiau->data;
-        
-        gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_textview_nom"))), materiau->nom, -1);
-        common_math_double_to_char2(common_math_f(common_math_get(beton_data->fck)/1000000., beton_data->fck.type), tmp, DECIMAL_CONTRAINTE);
-        gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_buffer_fck")), tmp, -1);
-        
-        gtk_button_set_label(GTK_BUTTON(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_button_add_edit")), gettext("_Modifier"));
-        g_signal_connect(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_button_add_edit"), "clicked", G_CALLBACK(_1992_1_1_gtk_materiaux_modifier_clicked), projet);
-    }
+    gtk_text_buffer_set_text (gtk_text_view_get_buffer (GTK_TEXT_VIEW (
+                 gtk_builder_get_object (UI_BET.builder,
+                                         "_1992_1_1_materiaux_textview_nom"))),
+                              materiau->nom,
+                              -1);
+    conv_f_c (m_f (m_g (beton_data->fck) / 1000000., beton_data->fck.type),
+              tmp,
+              DECIMAL_CONTRAINTE);
+    gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
+                            UI_BET.builder, "_1992_1_1_materiaux_buffer_fck")),
+                              tmp,
+                              -1);
     
-    // On affiche les propriétés qui ne sont pas égale à celle par défaut.
-    gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_personnaliser_menu_fck_cube")), beton_data && !ERREUR_RELATIVE_EGALE(common_math_get(beton_data->fckcube), _1992_1_1_materiaux_fckcube(common_math_get(beton_data->fck)/1000000.)));
-    gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_personnaliser_menu_fcm")), beton_data && !ERREUR_RELATIVE_EGALE(common_math_get(beton_data->fcm), _1992_1_1_materiaux_fcm(common_math_get(beton_data->fck)/1000000.)));
-    gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_personnaliser_menu_fctm")), beton_data && !ERREUR_RELATIVE_EGALE(common_math_get(beton_data->fctm), _1992_1_1_materiaux_fctm(common_math_get(beton_data->fck)/1000000., common_math_get(beton_data->fcm)/1000000.)));
-    gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_personnaliser_menu_fctk_0_05")), beton_data && !ERREUR_RELATIVE_EGALE(common_math_get(beton_data->fctk_0_05), _1992_1_1_materiaux_fctk_0_05(common_math_get(beton_data->fctm)/1000000.)));
-    gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_personnaliser_menu_fctk_0_95")), beton_data && !ERREUR_RELATIVE_EGALE(common_math_get(beton_data->fctk_0_95), _1992_1_1_materiaux_fctk_0_95(common_math_get(beton_data->fctm)/1000000.)));
-    gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_personnaliser_menu_Ecm")), beton_data && !ERREUR_RELATIVE_EGALE(common_math_get(beton_data->ecm), _1992_1_1_materiaux_ecm(common_math_get(beton_data->fcm)/1000000.)));
-    gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_personnaliser_menu_ec1")), beton_data && !ERREUR_RELATIVE_EGALE(common_math_get(beton_data->ec1), _1992_1_1_materiaux_ec1(common_math_get(beton_data->fcm)/1000000.)));
-    gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_personnaliser_menu_ecu1")), beton_data && !ERREUR_RELATIVE_EGALE(common_math_get(beton_data->ecu1), _1992_1_1_materiaux_ecu1(common_math_get(beton_data->fcm)/1000000., common_math_get(beton_data->fck)/1000000.)));
-    gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_personnaliser_menu_ec2")), beton_data && !ERREUR_RELATIVE_EGALE(common_math_get(beton_data->ec2), _1992_1_1_materiaux_ec2(common_math_get(beton_data->fck)/1000000.)));
-    gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_personnaliser_menu_ecu2")), beton_data && !ERREUR_RELATIVE_EGALE(common_math_get(beton_data->ecu2), _1992_1_1_materiaux_ecu2(common_math_get(beton_data->fck)/1000000.)));
-    gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_personnaliser_menu_n")), beton_data && !ERREUR_RELATIVE_EGALE(common_math_get(beton_data->n), _1992_1_1_materiaux_n(common_math_get(beton_data->fck)/1000000.)));
-    gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_personnaliser_menu_ec3")), beton_data && !ERREUR_RELATIVE_EGALE(common_math_get(beton_data->ec3), _1992_1_1_materiaux_ec3(common_math_get(beton_data->fck)/1000000.)));
-    gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_personnaliser_menu_ecu3")), beton_data && !ERREUR_RELATIVE_EGALE(common_math_get(beton_data->ecu3), _1992_1_1_materiaux_ecu3(common_math_get(beton_data->fck)/1000000.)));
-    gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(gtk_builder_get_object(ef_gtk->builder, "_1992_1_1_materiaux_personnaliser_menu_nu")), beton_data && !ERREUR_RELATIVE_EGALE(common_math_get(beton_data->nu), COEFFICIENT_NU_BETON));
-    
-    gtk_window_set_transient_for(GTK_WINDOW(ef_gtk->window), GTK_WINDOW(projet->list_gtk.comp.window));
-    
-    return TRUE;
+    gtk_button_set_label (GTK_BUTTON (gtk_builder_get_object (UI_BET.builder,
+                                       "_1992_1_1_materiaux_button_add_edit")),
+                          gettext ("_Modifier"));
+    g_signal_connect (gtk_builder_get_object (UI_BET.builder,
+                                        "_1992_1_1_materiaux_button_add_edit"),
+                      "clicked",
+                      G_CALLBACK (_1992_1_1_gtk_materiaux_modifier_clicked),
+                      p);
+  }
+  
+  // On affiche les propriétés qui ne sont pas égale à celle par défaut.
+  gtk_check_menu_item_set_active (
+    GTK_CHECK_MENU_ITEM (gtk_builder_get_object (UI_BET.builder,
+                           "_1992_1_1_materiaux_personnaliser_menu_fck_cube")),
+    beton_data &&
+    !ERR (m_g (beton_data->fckcube),
+          _1992_1_1_materiaux_fckcube (m_g (beton_data->fck) / 1000000.)));
+  gtk_check_menu_item_set_active (
+    GTK_CHECK_MENU_ITEM (gtk_builder_get_object (UI_BET.builder,
+                                "_1992_1_1_materiaux_personnaliser_menu_fcm")),
+    beton_data &&
+    !ERR (m_g (beton_data->fcm),
+          _1992_1_1_materiaux_fcm (m_g (beton_data->fck) / 1000000.)));
+  gtk_check_menu_item_set_active (
+    GTK_CHECK_MENU_ITEM (gtk_builder_get_object (UI_BET.builder,
+                               "_1992_1_1_materiaux_personnaliser_menu_fctm")),
+    beton_data &&
+    !ERR (m_g (beton_data->fctm),
+          _1992_1_1_materiaux_fctm (m_g (beton_data->fck) / 1000000.,
+                                    m_g (beton_data->fcm) / 1000000.)));
+  gtk_check_menu_item_set_active (
+    GTK_CHECK_MENU_ITEM (gtk_builder_get_object (UI_BET.builder,
+                          "_1992_1_1_materiaux_personnaliser_menu_fctk_0_05")),
+    beton_data &&
+    !ERR (m_g (beton_data->fctk_0_05),
+          _1992_1_1_materiaux_fctk_0_05 (m_g (beton_data->fctm) / 1000000.)));
+  gtk_check_menu_item_set_active (
+    GTK_CHECK_MENU_ITEM (gtk_builder_get_object (UI_BET.builder,
+                          "_1992_1_1_materiaux_personnaliser_menu_fctk_0_95")),
+    beton_data &&
+    !ERR (m_g (beton_data->fctk_0_95),
+          _1992_1_1_materiaux_fctk_0_95 (m_g (beton_data->fctm) / 1000000.)));
+  gtk_check_menu_item_set_active (
+    GTK_CHECK_MENU_ITEM (gtk_builder_get_object (UI_BET.builder,
+                                "_1992_1_1_materiaux_personnaliser_menu_Ecm")),
+    beton_data &&
+    !ERR (m_g (beton_data->ecm),
+          _1992_1_1_materiaux_ecm (m_g (beton_data->fcm) / 1000000.)));
+  gtk_check_menu_item_set_active (
+    GTK_CHECK_MENU_ITEM (gtk_builder_get_object (UI_BET.builder,
+                                "_1992_1_1_materiaux_personnaliser_menu_ec1")),
+    beton_data &&
+    !ERR (m_g (beton_data->ec1),
+          _1992_1_1_materiaux_ec1 (m_g (beton_data->fcm) / 1000000.)));
+  gtk_check_menu_item_set_active (
+    GTK_CHECK_MENU_ITEM (gtk_builder_get_object (UI_BET.builder,
+                               "_1992_1_1_materiaux_personnaliser_menu_ecu1")),
+    beton_data &&
+    !ERR (m_g (beton_data->ecu1),
+          _1992_1_1_materiaux_ecu1 (m_g (beton_data->fcm) / 1000000.,
+                                    m_g (beton_data->fck) / 1000000.)));
+  gtk_check_menu_item_set_active (
+    GTK_CHECK_MENU_ITEM (gtk_builder_get_object (UI_BET.builder,
+                                "_1992_1_1_materiaux_personnaliser_menu_ec2")),
+    beton_data &&
+    !ERR (m_g (beton_data->ec2),
+          _1992_1_1_materiaux_ec2 (m_g (beton_data->fck) / 1000000.)));
+  gtk_check_menu_item_set_active (
+    GTK_CHECK_MENU_ITEM (gtk_builder_get_object (UI_BET.builder,
+                               "_1992_1_1_materiaux_personnaliser_menu_ecu2")),
+    beton_data &&
+    !ERR (m_g (beton_data->ecu2),
+          _1992_1_1_materiaux_ecu2 (m_g (beton_data->fck) / 1000000.)));
+  gtk_check_menu_item_set_active (
+    GTK_CHECK_MENU_ITEM (gtk_builder_get_object (UI_BET.builder,
+                                  "_1992_1_1_materiaux_personnaliser_menu_n")),
+    beton_data &&
+    !ERR (m_g (beton_data->n),
+          _1992_1_1_materiaux_n (m_g (beton_data->fck) / 1000000.)));
+  gtk_check_menu_item_set_active(
+    GTK_CHECK_MENU_ITEM ( gtk_builder_get_object (UI_BET.builder,
+                                "_1992_1_1_materiaux_personnaliser_menu_ec3")),
+    beton_data &&
+    !ERR (m_g (beton_data->ec3),
+          _1992_1_1_materiaux_ec3 (m_g (beton_data->fck) / 1000000.)));
+  gtk_check_menu_item_set_active (
+    GTK_CHECK_MENU_ITEM (gtk_builder_get_object (UI_BET.builder,
+                               "_1992_1_1_materiaux_personnaliser_menu_ecu3")),
+    beton_data &&
+    !ERR (m_g (beton_data->ecu3),
+          _1992_1_1_materiaux_ecu3 (m_g (beton_data->fck) / 1000000.)));
+  gtk_check_menu_item_set_active (
+    GTK_CHECK_MENU_ITEM (gtk_builder_get_object (UI_BET.builder,
+                                 "_1992_1_1_materiaux_personnaliser_menu_nu")),
+    beton_data &&
+    !ERR (m_g (beton_data->nu), COEFFICIENT_NU_BETON));
+  
+  gtk_window_set_transient_for (GTK_WINDOW (UI_BET.window),
+                                GTK_WINDOW (p->ui.comp.window));
+  
+  return TRUE;
 }
 
 
-void _1992_1_1_gtk_materiaux_ajout(GtkMenuItem *menuitem, Projet *projet)
-/* Description : Lance la fenêtre permettant d'ajouter un matériau béton.
- * Paramètres : GtkMenuItem *menuitem : composant à l'origine de l'évènement,
- *            : Projet *projet : la variable projet.
- * Valeur renvoyée : Aucune.
- *   Echec : projet == NULL,
- *           interface graphique non initialisée.
+void
+_1992_1_1_gtk_materiaux_ajout (GtkMenuItem *menuitem,
+                               Projet      *p)
+/**
+ * \brief Lance la fenêtre permettant d'ajouter un matériau béton.
+ * \param menuitem : composant à l'origine de l'évènement,
+ * \param p : la variable projet.
+ * \return Rien.\n
+ * Echec :
+ *   - p == NULL,
+ *   - interface graphique non initialisée.
  */
 {
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
-    BUGMSG(projet->list_gtk.ef_materiaux.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Matériaux")
-    
-    BUG(_1992_1_1_gtk_materiaux(projet, NULL), )
+  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGMSG (p->ui.ef_materiaux.builder,
+          ,
+          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"), "Matériaux")
+  
+  BUG (_1992_1_1_gtk_materiaux (p, NULL), )
 }
 
-
-void EF_gtk_materiaux_edit_clicked(GtkWidget *widget, Projet *projet)
-/* Description : Edite les matériaux sélectionnés.
- * Paramètres : GtkToolButton *toolbutton : composant à l'origine de l'évènement,
- *            : Projet *projet : la variable projet.
- * Valeur renvoyée : Aucune.
- *   Echec : projet == NULL,
- *           interface graphique non initialisée.
- */
-{
-    GtkTreeIter     iter;
-    GtkTreeModel    *model;
-    GList           *list, *list_parcours;
-    
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
-    BUGMSG(projet->list_gtk.ef_materiaux.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Matériaux")
-    
-    // On récupère la liste des matériaux à éditer.
-    list = gtk_tree_selection_get_selected_rows(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk.ef_materiaux.builder, "EF_materiaux_treeview_select")), &model);
-    list_parcours = g_list_first(list);
-    for(;list_parcours != NULL; list_parcours = g_list_next(list_parcours))
-    {
-        if (gtk_tree_model_get_iter(model, &iter, (GtkTreePath*)list_parcours->data))
-        {
-    // Et on les édite les unes après les autres.
-            EF_Materiau *materiau;
-            
-            gtk_tree_model_get(model, &iter, 0, &materiau, -1);
-            
-            switch (materiau->type)
-            {
-                case MATERIAU_BETON :
-                {
-                    BUG(_1992_1_1_gtk_materiaux(projet, materiau), )
-                    break;
-                }
-                case MATERIAU_ACIER :
-                {
-                    BUG(_1993_1_1_gtk_materiaux(projet, materiau), )
-                    break;
-                }
-                default :
-                {
-                    BUGMSG(NULL, , gettext("Matériau %d inconnu.\n"), materiau->type)
-                    break;
-                }
-            }
-        }
-    }
-    g_list_foreach(list, (GFunc)gtk_tree_path_free, NULL);
-    g_list_free(list);
-    
-    return;
-}
-
-
-gboolean _1992_1_1_gtk_materiaux_double_clicked(GtkWidget *widget, GdkEvent *event,
-  Projet *projet)
-/* Description : Lance la fenêtre d'édition du matériau sélectionné en cas de double-clique
- *               dans le tree-view.
- * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
- *            : GdkEvent *event : Information sur l'évènement,
- *            : Projet *projet : la variable projet.
- * Valeur renvoyée : TRUE s'il y a édition via un double-clique, FALSE sinon.
- *   Echec : FALSE :
- *             projet == NULL,
- *             interface graphique non initialisée.
- */
-{
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
-    BUGMSG(projet->list_gtk.ef_materiaux.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Matériaux")
-    
-    if ((event->type == GDK_2BUTTON_PRESS) && (gtk_widget_get_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_materiaux.builder, "EF_materiaux_boutton_modifier")))))
-    {
-        EF_gtk_materiaux_edit_clicked(widget, projet);
-        return TRUE;
-    }
-    else
-        return common_gtk_treeview_button_press_unselect(GTK_TREE_VIEW(widget), event, projet);
-}
 
 #endif

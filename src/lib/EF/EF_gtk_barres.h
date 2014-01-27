@@ -25,7 +25,7 @@
 
 #include "common_projet.h"
 
-void EF_gtk_barres(Projet *projet);
+void EF_gtk_barres (Projet *p);
 
 #endif
 

@@ -22,9 +22,31 @@
 #include "config.h"
 #include "common_projet.h"
 
-gboolean common_ville_init(Projet *projet) __attribute__((__warn_unused_result__));
-gboolean common_ville_get_ville(char *ligne, int *cdc, int *cheflieu, int *reg, char *dep, int *com, int *ar, int *ct, int *tncc, char **artmaj, char **ncc, char **artmin, char **nccenr, int *code_postal, int *altitude, int *population) __attribute__((__warn_unused_result__));
-gboolean common_ville_set(Projet *projet, char *departement, const char *ville, int graphique_seul) __attribute__((__warn_unused_result__));
-gboolean common_ville_free(Projet *projet) __attribute__((__warn_unused_result__));
+gboolean common_ville_init      (Projet     *p)
+                                       __attribute__((__warn_unused_result__));
+gboolean common_ville_get_ville (char       *ligne,
+                                 int        *cdc,
+                                 int        *cheflieu,
+                                 int        *reg,
+                                 char       *dep,
+                                 int        *com,
+                                 int        *ar,
+                                 int        *ct,
+                                 int        *tncc,
+                                 char      **artmaj,
+                                 char      **ncc,
+                                 char      **artmin,
+                                 char      **nccenr,
+                                 int        *code_postal,
+                                 int        *altitude,
+                                 int        *population)
+                                       __attribute__((__warn_unused_result__));
+gboolean common_ville_set       (Projet     *p,
+                                 char       *departement,
+                                 const char *ville,
+                                 gboolean    graphique_seul)
+                                       __attribute__((__warn_unused_result__));
+gboolean common_ville_free      (Projet     *p)
+                                       __attribute__((__warn_unused_result__));
 
 #endif

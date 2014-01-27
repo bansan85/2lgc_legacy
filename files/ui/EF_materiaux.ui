@@ -1,189 +1,189 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-    <requires lib="gtk+" version="3.2"/>
-    <object class="GtkTreeStore" id="EF_materiaux_treestore">
-        <columns>
-            <column type="gpointer"/>
-        </columns>
-    </object>
-    <object class="GtkMenu" id="EF_materiaux_supprimer_menu">
-        <property name="visible">False</property>
-        <child>
-            <object class="GtkMenuItem" id="EF_materiaux_supprimer_menu_barres">
-                <property name="label" translatable="yes">et les barres utilisant le matériau.</property>
-                <property name="visible">True</property>
-                <signal name="activate" handler="EF_gtk_materiaux_supprimer_menu_barres"/>
-            </object>
-        </child>
-    </object>
-    <object class="GtkMenu" id="EF_materiaux_ajouter_menu">
-        <property name="visible">False</property>
-        <child>
-            <object class="GtkMenuItem" id="EF_materiaux_ajouter_acier">
-                <property name="label" translatable="yes">Acier</property>
-                <property name="visible">True</property>
-                <signal name="activate" handler="_1993_1_1_gtk_materiaux_ajout"/>
-            </object>
-        </child>
-        <child>
-            <object class="GtkMenuItem" id="EF_materiaux_ajouter_beton">
-                <property name="label" translatable="yes">Béton</property>
-                <property name="visible">True</property>
-                <signal name="activate" handler="_1992_1_1_gtk_materiaux_ajout"/>
-            </object>
-        </child>
-    </object>
-    <object class="GtkWindow" id="EF_materiaux_window">
+  <requires lib="gtk+" version="3.2"/>
+  <object class="GtkTreeStore" id="EF_materiaux_treestore">
+    <columns>
+      <column type="gpointer"/>
+    </columns>
+  </object>
+  <object class="GtkMenu" id="EF_materiaux_supprimer_menu">
+    <property name="visible">False</property>
+    <child>
+      <object class="GtkMenuItem" id="EF_materiaux_supprimer_menu_barres">
+        <property name="label" translatable="yes">et les barres utilisant le matériau.</property>
         <property name="visible">True</property>
-        <property name="title" translatable="yes">Matériaux</property>
-        <property name="default-height">400</property>
-        <property name="default-width">600</property>
-        <property name="window-position">GTK_WIN_POS_CENTER</property>
-        <signal name="key-press-event" handler="EF_gtk_materiaux_window_key_press"/>
-        <signal name="destroy" handler="EF_gtk_materiaux_window_destroy"/>
+        <signal name="activate" handler="EF_gtk_materiaux_supprimer_menu_barres"/>
+      </object>
+    </child>
+  </object>
+  <object class="GtkMenu" id="EF_materiaux_ajouter_menu">
+    <property name="visible">False</property>
+    <child>
+      <object class="GtkMenuItem" id="EF_materiaux_ajouter_acier">
+        <property name="label" translatable="yes">Acier</property>
+        <property name="visible">True</property>
+        <signal name="activate" handler="_1993_1_1_gtk_materiaux_ajout"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="EF_materiaux_ajouter_beton">
+        <property name="label" translatable="yes">Béton</property>
+        <property name="visible">True</property>
+        <signal name="activate" handler="_1992_1_1_gtk_materiaux_ajout"/>
+      </object>
+    </child>
+  </object>
+  <object class="GtkWindow" id="EF_materiaux_window">
+    <property name="visible">True</property>
+    <property name="title" translatable="yes">Matériaux</property>
+    <property name="default-height">400</property>
+    <property name="default-width">600</property>
+    <property name="window-position">GTK_WIN_POS_CENTER</property>
+    <signal name="key-press-event" handler="ef_gtk_materiaux_window_key_press"/>
+    <signal name="destroy" handler="ef_gtk_materiaux_window_destroy"/>
+    <child>
+      <object class="GtkGrid" id="EF_materiaux_grille_principale">
+        <property name="visible">True</property>
+        <property name="border-width">12</property>
+        <property name="row-spacing">12</property>
         <child>
-            <object class="GtkGrid" id="EF_materiaux_grille_principale">
+          <object class="GtkScrolledWindow" id="EF_materiaux_scrolled">
+            <property name="visible">True</property>
+            <property name="expand">True</property>
+            <property name="hscrollbar-policy">automatic</property>
+            <property name="vscrollbar-policy">automatic</property>
+            <child>
+              <object class="GtkTreeView" id="EF_materiaux_treeview">
                 <property name="visible">True</property>
-                <property name="border-width">12</property>
-                <property name="row-spacing">12</property>
-                <child>
-                    <object class="GtkScrolledWindow" id="EF_materiaux_scrolled">
-                        <property name="visible">True</property>
-                        <property name="expand">True</property>
-                        <property name="hscrollbar-policy">automatic</property>
-                        <property name="vscrollbar-policy">automatic</property>
-                        <child>
-                            <object class="GtkTreeView" id="EF_materiaux_treeview">
-                                <property name="visible">True</property>
-                                <property name="model">EF_materiaux_treestore</property>
-                                <signal   name="button-press-event" handler="_1992_1_1_gtk_materiaux_double_clicked"/>
-                                <signal name="key-press-event" handler="EF_gtk_materiaux_treeview_key_press"/>
-                                <child internal-child="selection">
-                                    <object class="GtkTreeSelection" id="EF_materiaux_treeview_select">
-                                        <signal name="changed" handler="EF_gtk_materiaux_select_changed"/>
-                                    </object>
-                                </child>
-                                <child>
-                                    <object class="GtkTreeViewColumn" id="EF_materiaux_treeview_column0">
-                                        <property name="visible">True</property>
-                                        <property name="resizable">True</property>
-                                        <property name="title" translatable="yes">Nom</property>
-                                        <child>
-                                            <object class="GtkCellRendererText" id="EF_materiaux_treeview_cell0">
-                                                <property name="editable">True</property>
-                                                <signal name="edited" handler="EF_gtk_materiaux_edit_nom"/>
-                                            </object>
-                                        </child>
-                                    </object>
-                                </child>
-                                <child>
-                                    <object class="GtkTreeViewColumn" id="EF_materiaux_treeview_column1">
-                                        <property name="visible">True</property>
-                                        <property name="resizable">True</property>
-                                        <property name="alignment">0.5</property>
-                                        <property name="title" translatable="yes">Matériau</property>
-                                        <child>
-                                            <object class="GtkCellRendererText" id="EF_materiaux_treeview_cell1">
-                                                <property name="xalign">0.5</property>
-                                            </object>
-                                        </child>
-                                    </object>
-                                </child>
-                                <child>
-                                    <object class="GtkTreeViewColumn" id="EF_materiaux_treeview_column2">
-                                        <property name="visible">True</property>
-                                        <property name="resizable">False</property>
-                                        <property name="title" translatable="yes">Description</property>
-                                        <child>
-                                            <object class="GtkCellRendererText" id="EF_materiaux_treeview_cell2" />
-                                        </child>
-                                    </object>
-                                </child>
-                            </object>
-                        </child>
-                    </object>
-                    <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">0</property>
-                    </packing>
+                <property name="model">EF_materiaux_treestore</property>
+                <signal   name="button-press-event" handler="EF_gtk_materiaux_double_clicked"/>
+                <signal name="key-press-event" handler="EF_gtk_materiaux_treeview_key_press"/>
+                <child internal-child="selection">
+                  <object class="GtkTreeSelection" id="EF_materiaux_treeview_select">
+                    <signal name="changed" handler="EF_gtk_materiaux_select_changed"/>
+                  </object>
                 </child>
                 <child>
-                    <object class="GtkButtonBox" id="EF_materiaux_bouttons_fenetre">
-                        <property name="visible">True</property>
-                        <property name="orientation">horizontal</property>
-                        <property name="layout_style">end</property>
-                        <property name="spacing">6</property>
-                        <child>
-                            <object class="GtkMenuButton" id="EF_materiaux_boutton_ajouter">
-                                <property name="visible">True</property>
-                                <property name="label" translatable="yes">_Ajouter</property>
-                                <property name="popup">EF_materiaux_ajouter_menu</property>
-                                <property name="use_underline">True</property>
-                            </object>
-                            <packing>
-                                <property name="position">0</property>
-                                <property name="pack_type">start</property>
-                            </packing>
-                        </child>
-                        <child>
-                            <object class="GtkButton" id="EF_materiaux_boutton_modifier">
-                                <property name="visible">True</property>
-                                <property name="label" translatable="yes">_Modifier</property>
-                                <property name="use_underline">True</property>
-                                <property name="sensitive">False</property>
-                                <signal name="clicked" handler="EF_gtk_materiaux_edit_clicked"/>
-                            </object>
-                            <packing>
-                                <property name="position">1</property>
-                                <property name="pack_type">start</property>
-                            </packing>
-                        </child>
-                        <child>
-                            <object class="GtkButton" id="EF_materiaux_boutton_supprimer_direct">
-                                <property name="visible">True</property>
-                                <property name="label" translatable="yes">_Supprimer</property>
-                                <property name="use_underline">True</property>
-                                <property name="sensitive">False</property>
-                                <signal name="clicked" handler="EF_gtk_materiaux_supprimer_direct"/>
-                            </object>
-                            <packing>
-                                <property name="position">2</property>
-                                <property name="pack_type">start</property>
-                            </packing>
-                        </child>
-                        <child>
-                            <object class="GtkMenuButton" id="EF_materiaux_boutton_supprimer_menu">
-                                <property name="visible">False</property>
-                                <property name="label" translatable="yes">_Supprimer</property>
-                                <property name="use_underline">True</property>
-                                <property name="sensitive">False</property>
-                                <property name="popup">EF_materiaux_supprimer_menu</property>
-                                <signal name="clicked" handler="EF_gtk_materiaux_boutton_supprimer_menu"/>
-                            </object>
-                            <packing>
-                                <property name="position">3</property>
-                                <property name="pack_type">start</property>
-                            </packing>
-                        </child>
-                        <child>
-                            <object class="GtkButton" id="EF_materiaux_boutton_fermer">
-                                <property name="visible">True</property>
-                                <property name="label" translatable="yes">_Fermer</property>
-                                <property name="use_underline">True</property>
-                                <signal name="clicked" handler="EF_gtk_materiaux_fermer"/>
-                            </object>
-                            <packing>
-                                <property name="position">4</property>
-                                <property name="pack_type">end</property>
-                            </packing>
-                        </child>
-                    </object>
-                    <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">1</property>
-                    </packing>
+                  <object class="GtkTreeViewColumn" id="EF_materiaux_treeview_column0">
+                    <property name="visible">True</property>
+                    <property name="resizable">True</property>
+                    <property name="title" translatable="yes">Nom</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="EF_materiaux_treeview_cell0">
+                        <property name="editable">True</property>
+                        <signal name="edited" handler="EF_gtk_materiaux_edit_nom"/>
+                      </object>
+                    </child>
+                  </object>
                 </child>
-            </object>
+                <child>
+                  <object class="GtkTreeViewColumn" id="EF_materiaux_treeview_column1">
+                    <property name="visible">True</property>
+                    <property name="resizable">True</property>
+                    <property name="alignment">0.5</property>
+                    <property name="title" translatable="yes">Matériau</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="EF_materiaux_treeview_cell1">
+                        <property name="xalign">0.5</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn" id="EF_materiaux_treeview_column2">
+                    <property name="visible">True</property>
+                    <property name="resizable">False</property>
+                    <property name="title" translatable="yes">Description</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="EF_materiaux_treeview_cell2" />
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">0</property>
+          </packing>
         </child>
-    </object>
+        <child>
+          <object class="GtkButtonBox" id="EF_materiaux_bouttons_fenetre">
+            <property name="visible">True</property>
+            <property name="orientation">horizontal</property>
+            <property name="layout_style">end</property>
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkMenuButton" id="EF_materiaux_boutton_ajouter">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">_Ajouter</property>
+                <property name="popup">EF_materiaux_ajouter_menu</property>
+                <property name="use_underline">True</property>
+              </object>
+              <packing>
+                <property name="position">0</property>
+                <property name="pack_type">start</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="EF_materiaux_boutton_modifier">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">_Modifier</property>
+                <property name="use_underline">True</property>
+                <property name="sensitive">False</property>
+                <signal name="clicked" handler="EF_gtk_materiaux_edit_clicked"/>
+              </object>
+              <packing>
+                <property name="position">1</property>
+                <property name="pack_type">start</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="EF_materiaux_boutton_supprimer_direct">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">_Supprimer</property>
+                <property name="use_underline">True</property>
+                <property name="sensitive">False</property>
+                <signal name="clicked" handler="EF_gtk_materiaux_supprimer_direct"/>
+              </object>
+              <packing>
+                <property name="position">2</property>
+                <property name="pack_type">start</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkMenuButton" id="EF_materiaux_boutton_supprimer_menu">
+                <property name="visible">False</property>
+                <property name="label" translatable="yes">_Supprimer</property>
+                <property name="use_underline">True</property>
+                <property name="sensitive">False</property>
+                <property name="popup">EF_materiaux_supprimer_menu</property>
+                <signal name="clicked" handler="EF_gtk_materiaux_boutton_supprimer_menu"/>
+              </object>
+              <packing>
+                <property name="position">3</property>
+                <property name="pack_type">start</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="EF_materiaux_boutton_fermer">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">_Fermer</property>
+                <property name="use_underline">True</property>
+                <signal name="clicked" handler="ef_gtk_materiaux_window_button_close"/>
+              </object>
+              <packing>
+                <property name="position">4</property>
+                <property name="pack_type">end</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">1</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
 </interface>

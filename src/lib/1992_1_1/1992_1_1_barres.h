@@ -23,26 +23,81 @@
 #include "common_projet.h"
 
 
-gboolean _1992_1_1_barres_init(Projet *projet) __attribute__((__warn_unused_result__));
+gboolean _1992_1_1_barres_init (Projet *p)
+                                       __attribute__((__warn_unused_result__));
 
-gboolean _1992_1_1_barres_ajout(Projet *projet, Type_Element type, EF_Section *section, EF_Materiau *materiau, unsigned int noeud_debut, unsigned int noeud_fin, Flottant angle, EF_Relachement* relachement, unsigned int discretisation_element) __attribute__((__warn_unused_result__));
+gboolean _1992_1_1_barres_ajout (Projet *p,
+                                 Type_Element    type,
+                                 Section        *section,
+                                 EF_Materiau    *materiau,
+                                 EF_Noeud       *noeud_debut,
+                                 EF_Noeud       *noeud_fin,
+                                 Flottant        angle,
+                                 EF_Relachement *relachement,
+                                 unsigned int    discretisation_element)
+                                       __attribute__((__warn_unused_result__));
 
-EF_Barre* _1992_1_1_barres_cherche_numero(Projet *projet, unsigned int numero, gboolean critique) __attribute__((__warn_unused_result__));
-gboolean _1992_1_1_barres_cherche_dependances(Projet *projet, GList *appuis, GList* noeuds, GList* sections, GList* materiaux, GList *relachements, GList* barres, GList** noeuds_dep, GList** barres_dep, GList **charges_dep, gboolean numero, gboolean origine) __attribute__((__warn_unused_result__));
-gboolean _1992_1_1_barres_angle_rotation(EF_Noeud *debut, EF_Noeud *fin, double *y, double *z) __attribute__((__warn_unused_result__));
+EF_Barre *_1992_1_1_barres_cherche_numero     (Projet        *p,
+                                               unsigned int   numero,
+                                               gboolean       critique)
+                                       __attribute__((__warn_unused_result__));
+gboolean _1992_1_1_barres_cherche_dependances (Projet        *p,
+                                               GList         *appuis,
+                                               GList         *noeuds,
+                                               GList         *sections,
+                                               GList         *materiaux,
+                                               GList         *relachements,
+                                               GList         *barres,
+                                               GList        **noeuds_dep,
+                                               GList        **barres_dep,
+                                               GList        **charges_dep,
+                                               gboolean       numero,
+                                               gboolean       origine)
+                                       __attribute__((__warn_unused_result__));
+gboolean _1992_1_1_barres_angle_rotation      (EF_Noeud      *debut,
+                                               EF_Noeud      *fin,
+                                               double        *y,
+                                               double        *z)
+                                       __attribute__((__warn_unused_result__));
 
-gboolean _1992_1_1_barres_change_type(EF_Barre *barre, Type_Element type, Projet *projet) __attribute__((__warn_unused_result__));
-gboolean _1992_1_1_barres_change_section(EF_Barre *barre, EF_Section *section, Projet *projet) __attribute__((__warn_unused_result__));
-gboolean _1992_1_1_barres_change_materiau(EF_Barre *barre, EF_Materiau *materiau, Projet *projet) __attribute__((__warn_unused_result__));
-gboolean _1992_1_1_barres_change_angle(EF_Barre *barre, Flottant angle, Projet *projet) __attribute__((__warn_unused_result__));
-gboolean _1992_1_1_barres_change_noeud(EF_Barre *barre, EF_Noeud *noeud, gboolean noeud_1, Projet *projet) __attribute__((__warn_unused_result__));
-gboolean _1992_1_1_barres_change_relachement(EF_Barre *barre, EF_Relachement *relachement, Projet *projet) __attribute__((__warn_unused_result__));
+gboolean _1992_1_1_barres_change_type        (EF_Barre       *barre,
+                                              Type_Element    type,
+                                              Projet         *p)
+                                       __attribute__((__warn_unused_result__));
+gboolean _1992_1_1_barres_change_section     (EF_Barre       *barre,
+                                              Section        *section,
+                                              Projet         *p)
+                                       __attribute__((__warn_unused_result__));
+gboolean _1992_1_1_barres_change_materiau    (EF_Barre       *barre,
+                                              EF_Materiau    *materiau,
+                                              Projet         *p)
+                                       __attribute__((__warn_unused_result__));
+gboolean _1992_1_1_barres_change_angle       (EF_Barre       *barre,
+                                              Flottant        angle,
+                                              Projet         *p)
+                                       __attribute__((__warn_unused_result__));
+gboolean _1992_1_1_barres_change_noeud       (EF_Barre       *barre,
+                                              EF_Noeud       *noeud,
+                                              gboolean        noeud_1,
+                                              Projet         *p)
+                                       __attribute__((__warn_unused_result__));
+gboolean _1992_1_1_barres_change_relachement (EF_Barre       *barre,
+                                              EF_Relachement *relachement,
+                                              Projet         *p) __attribute__((__warn_unused_result__));
 
-gboolean _1992_1_1_barres_rigidite_ajout(Projet *projet, EF_Barre *element) __attribute__((__warn_unused_result__));
-gboolean _1992_1_1_barres_rigidite_ajout_tout(Projet *projet) __attribute__((__warn_unused_result__));
+gboolean _1992_1_1_barres_rigidite_ajout     (Projet         *p,
+                                              EF_Barre       *element)
+                                       __attribute__((__warn_unused_result__));
+gboolean _1992_1_1_barres_rigidite_ajout_tout(Projet         *p)
+                                       __attribute__((__warn_unused_result__));
 
-gboolean _1992_1_1_barres_supprime_liste(Projet *projet, GList *liste_noeuds, GList *liste_barres) __attribute__((__warn_unused_result__));
-void _1992_1_1_barres_free_foreach(EF_Barre *barre, Projet *projet);
-gboolean _1992_1_1_barres_free(Projet *projet) __attribute__((__warn_unused_result__));
+gboolean _1992_1_1_barres_supprime_liste     (Projet         *p,
+                                              GList          *liste_noeuds,
+                                              GList          *liste_barres)
+                                       __attribute__((__warn_unused_result__));
+void     _1992_1_1_barres_free_foreach       (EF_Barre       *barre,
+                                              Projet         *p);
+gboolean _1992_1_1_barres_free               (Projet         *p)
+                                       __attribute__((__warn_unused_result__));
 
 #endif

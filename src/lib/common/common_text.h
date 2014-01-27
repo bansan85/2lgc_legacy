@@ -22,12 +22,24 @@
 #include "config.h"
 #include "common_projet.h"
 
-void show_warranty();
-void show_help();
+void show_warranty ();
+void show_help     ();
 
-double common_text_str_to_double(char *texte, double val_min, gboolean min_include, double val_max, gboolean max_include);
-char *strcasestr_internal(const char *haystack, const char *needle);
-char *common_text_dependances(GList *liste_noeuds, GList *liste_barres, GList *liste_charges, Projet *projet);
-char *common_text_get_line(FILE *fichier);
+double common_text_str_to_double (char       *texte,
+                                  double      val_min,
+                                  gboolean    min_include,
+                                  double      val_max,
+                                  gboolean    max_include)
+                                       __attribute__((__warn_unused_result__));
+char *strcasestr_internal        (const char *haystack,
+                                  const char *needle)
+                                       __attribute__((__warn_unused_result__));
+char *common_text_dependances    (GList      *liste_noeuds,
+                                  GList      *liste_barres,
+                                  GList      *liste_charges,
+                                  Projet     *p)
+                                       __attribute__((__warn_unused_result__));
+char *common_text_get_line       (FILE       *fichier)
+                                       __attribute__((__warn_unused_result__));
 
 #endif

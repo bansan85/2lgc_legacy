@@ -32,288 +32,361 @@
 #include "common_selection.h"
 #include "EF_sections.h"
 
-gboolean EF_gtk_section_T_window_key_press(GtkWidget *widget, GdkEvent *event, Projet *projet)
-/* Description : Gestion des touches de l'ensemble des composants de la fenêtre.
- * Paramètres : GtkWidget *widget : composant à l'origine de l'évènement,
- *            : GdkEvent *event : description de la touche pressée,
- *            : Projet *projet : la variable projet.
- * Valeur renvoyée : TRUE si la touche ECHAP est pressée, FALSE sinon.
- *   Echec : FALSE :
- *             projet == NULL,
- *             interface graphique non initialisée.
- */
-{
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
-    BUGMSG(projet->list_gtk.ef_sections_T.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section T")
-    
-    if (event->key.keyval == GDK_KEY_Escape)
-    {
-        gtk_widget_destroy(projet->list_gtk.ef_sections_T.window);
-        return TRUE;
-    }
-    else
-        return FALSE;
-}
+
+GTK_WINDOW_KEY_PRESS (ef, section_T);
 
 
-void EF_gtk_section_T_window_destroy(GtkWidget *object, Projet *projet)
-/* Description : Met projet->list_gtk.ef_sections_T.builder à NULL quand la
- *               fenêtre se ferme.
- * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
- *            : Projet *projet : la variable projet.
- * Valeur renvoyée : Aucune.
- */
-{
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
-    BUGMSG(projet->list_gtk.ef_sections_T.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section T")
-    
-    g_object_unref(G_OBJECT(projet->list_gtk.ef_sections_T.builder));
-    projet->list_gtk.ef_sections_T.builder = NULL;
-    
-    return;
-}
+GTK_WINDOW_DESTROY (ef, section_T, );
 
 
-gboolean EF_gtk_section_T_recupere_donnees(Projet *projet, double *lt, double *ht, double *lr,
-  double *hr, gchar **nom)
-/* Description : Récupère toutes les données de la fenêtre permettant d'ajouter ou d'éditer une
- *               section. Ici, la fonction utilise return et non pas la macro BUG
- * Paramètres : Projet *projet : la variable projet,
- *            : double *lt : la largeur de la table de la section,
- *            : double *ht : la hauteur de la table de la section,
- *            : double *lr : la largeur de la retombée de la section,
- *            : double *hr : la hauteur de la retombée de la section,
- *            : gchar **nom : le nom de la section,
- * Valeur renvoyée :
- *   Succès : TRUE
+GTK_WINDOW_CLOSE (ef, section_T);
+
+
+gboolean
+EF_gtk_section_T_recupere_donnees (Projet *p,
+                                   double *lt,
+                                   double *ht,
+                                   double *lr,
+                                   double *hr,
+                                   gchar **nom)
+/**
+ * \brief Récupère toutes les données de la fenêtre permettant d'ajouter ou
+ *        d'éditer une section en T.
+ * \param p : la variable projet,
+ * \param lt : la largeur de la table de la section,
+ * \param ht : la hauteur de la table de la section,
+ * \param lr : la largeur de la retombée de la section,
+ * \param hr : la hauteur de la retombée de la section,
+ * \param nom : le nom de la section,
+ * \return
+ *   Succès : TRUE.\n
  *   Échec : FALSE :
- *             projet == NULL, lt == NULL, ht == NULL, la == NULL, ha == NULL, nom == NULL,
- *             en cas d'erreur d'allocation mémoire.
+ *     - p == NULL,
+ *     - lt == NULL,
+ *     - ht == NULL,
+ *     - la == NULL,
+ *     - ha == NULL,
+ *     - nom == NULL,
+ *     - en cas d'erreur d'allocation mémoire.
  */
 {
-    GtkTextIter     start, end;
-    GtkTextBuffer   *textbuffer;
-    gboolean        ok = TRUE;
-    
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
-    BUGMSG(lt, FALSE, gettext("Paramètre %s incorrect.\n"), "largeur")
-    BUGMSG(ht, FALSE, gettext("Paramètre %s incorrect.\n"), "hauteur")
-    BUGMSG(lr, FALSE, gettext("Paramètre %s incorrect.\n"), "largeur")
-    BUGMSG(hr, FALSE, gettext("Paramètre %s incorrect.\n"), "hauteur")
-    BUGMSG(nom, FALSE, gettext("Paramètre %s incorrect.\n"), "nom")
-    BUGMSG(projet->list_gtk.ef_sections_T.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section T")
-    
-    *lr = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_sections_T.builder, "EF_section_T_buffer_lr")), 0., FALSE, INFINITY, FALSE);
-    if (isnan(*lr))
-        ok = FALSE;
-    
-    *hr = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_sections_T.builder, "EF_section_T_buffer_hr")), 0., FALSE, INFINITY, FALSE);
-    if (isnan(*hr))
-        ok = FALSE;
-    
-    *lt = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_sections_T.builder, "EF_section_T_buffer_lt")), 0., FALSE, INFINITY, FALSE);
-    if (isnan(*lt))
-        ok = FALSE;
-    
-    *ht = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_sections_T.builder, "EF_section_T_buffer_ht")), 0., FALSE, INFINITY, FALSE);
-    if (isnan(*ht))
-        ok = FALSE;
-    
-    // Si tous les paramètres sont corrects
-    textbuffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk.ef_sections_T.builder, "EF_section_T_textview_nom")));
-    
-    gtk_text_buffer_get_iter_at_offset(textbuffer, &start, 0);
-    gtk_text_buffer_get_iter_at_offset(textbuffer, &end, -1);
-    *nom = gtk_text_buffer_get_text(textbuffer, &start, &end, FALSE);
-    
-    gtk_text_buffer_remove_all_tags(textbuffer, &start, &end);
-    
-    if (projet->list_gtk.ef_sections_T.section == NULL)
+  GtkTextIter    start, end;
+  GtkTextBuffer *textbuffer;
+  gboolean       ok = TRUE;
+  
+  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGMSG (lt, FALSE, gettext ("Paramètre %s incorrect.\n"), "largeur")
+  BUGMSG (ht, FALSE, gettext ("Paramètre %s incorrect.\n"), "hauteur")
+  BUGMSG (lr, FALSE, gettext ("Paramètre %s incorrect.\n"), "largeur")
+  BUGMSG (hr, FALSE, gettext ("Paramètre %s incorrect.\n"), "hauteur")
+  BUGMSG (nom, FALSE, gettext ("Paramètre %s incorrect.\n"), "nom")
+  BUGMSG (UI_SEC_T.builder,
+          FALSE,
+          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                   "Ajout Section T")
+  
+  *lr = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (UI_SEC_T.builder,
+                                                    "EF_section_T_buffer_lr")),
+                     0.,
+                     FALSE,
+                     INFINITY,
+                     FALSE);
+  if (isnan (*lr))
+    ok = FALSE;
+  
+  *hr = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (UI_SEC_T.builder,
+                                                    "EF_section_T_buffer_hr")),
+                     0.,
+                     FALSE,
+                     INFINITY,
+                     FALSE);
+  if (isnan (*hr))
+    ok = FALSE;
+  
+  *lt = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (UI_SEC_T.builder,
+                                                    "EF_section_T_buffer_lt")),
+                     0.,
+                     FALSE,
+                     INFINITY,
+                     FALSE);
+  if (isnan (*lt))
+    ok = FALSE;
+  
+  *ht = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (UI_SEC_T.builder,
+                                                    "EF_section_T_buffer_ht")),
+                     0.,
+                     FALSE,
+                     INFINITY,
+                     FALSE);
+  if (isnan (*ht))
+    ok = FALSE;
+  
+  // Si tous les paramètres sont corrects
+  textbuffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (
+      gtk_builder_get_object (UI_SEC_T.builder, "EF_section_T_textview_nom")));
+  
+  gtk_text_buffer_get_iter_at_offset (textbuffer, &start, 0);
+  gtk_text_buffer_get_iter_at_offset (textbuffer, &end, -1);
+  *nom = gtk_text_buffer_get_text (textbuffer, &start, &end, FALSE);
+  
+  gtk_text_buffer_remove_all_tags (textbuffer, &start, &end);
+  
+  if (UI_SEC_T.section == NULL)
+  {
+    if ((strcmp (*nom, "") == 0) ||
+        (EF_sections_cherche_nom (p, *nom, FALSE)))
     {
-        if ((strcmp(*nom, "") == 0) || (EF_sections_cherche_nom(projet, *nom, FALSE)))
-        {
-            gtk_text_buffer_apply_tag_by_name(textbuffer, "mauvais", &start, &end);
-            ok = FALSE;
-        }
-        else
-            gtk_text_buffer_apply_tag_by_name(textbuffer, "OK", &start, &end);
-    }
-    else if ((strcmp(*nom, "") == 0) ||
-      ((strcmp(projet->list_gtk.ef_sections_T.section->nom, *nom) != 0) && (EF_sections_cherche_nom(projet, *nom, FALSE))))
-    {
-        gtk_text_buffer_apply_tag_by_name(textbuffer, "mauvais", &start, &end);
-        ok = FALSE;
+      gtk_text_buffer_apply_tag_by_name (textbuffer, "mauvais", &start, &end);
+      ok = FALSE;
     }
     else
-        gtk_text_buffer_apply_tag_by_name(textbuffer, "OK", &start, &end);
-    
-    if (ok == FALSE)
-        free(*nom);
-    
-    return ok;
+      gtk_text_buffer_apply_tag_by_name (textbuffer, "OK", &start, &end);
+  }
+  else if ((strcmp (*nom, "") == 0) ||
+           ((strcmp (UI_SEC_T.section->nom, *nom) != 0) &&
+            (EF_sections_cherche_nom (p, *nom, FALSE))))
+  {
+    gtk_text_buffer_apply_tag_by_name (textbuffer, "mauvais", &start, &end);
+    ok = FALSE;
+  }
+  else
+    gtk_text_buffer_apply_tag_by_name (textbuffer, "OK", &start, &end);
+  
+  if (ok == FALSE)
+    free (*nom);
+  
+  return ok;
 }
 
 
-void EF_gtk_section_T_check(GtkWidget *object, Projet *projet)
-/* Description : Vérifie si l'ensemble des éléments est correct pour activer le bouton add/edit.
- * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
- *            : Projet *projet : la variable projet.
- * Valeur renvoyée : Aucune.
+void
+EF_gtk_section_T_check (GtkWidget *button,
+                        Projet    *p)
+/**
+ * \brief Vérifie si l'ensemble des éléments est correct pour activer le bouton
+ *        add/edit.
+ * \param button : composant à l'origine de l'évènement,
+ * \param p : la variable projet.
+ * \return Rien.\n
+ *   Echec :
+ *     - p == NULL,
+ *     - interface graphique non initialisée.
  */
 {
-    double  lt, ht, lr, hr;
-    char    *nom;
-    
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
-    BUGMSG(projet->list_gtk.ef_sections_T.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section T")
-    
-    if (!EF_gtk_section_T_recupere_donnees(projet, &lt, &ht, &lr, &hr, &nom))
-        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections_T.builder, "EF_section_T_button_add_edit")), FALSE);
-    else
-    {
-        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_sections_T.builder, "EF_section_T_button_add_edit")), TRUE);
-        free(nom);
-    }
-    
-    return;
+  double lt, ht, lr, hr;
+  char  *nom;
+  
+  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGMSG (UI_SEC_T.builder,
+          ,
+          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                   "Ajout Section T")
+  
+  if (!EF_gtk_section_T_recupere_donnees (p, &lt, &ht, &lr, &hr, &nom))
+    gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (
+                            UI_SEC_T.builder, "EF_section_T_button_add_edit")),
+                              FALSE);
+  else
+  {
+    gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (
+                            UI_SEC_T.builder, "EF_section_T_button_add_edit")),
+                              TRUE);
+    free (nom);
+  }
+  
+  return;
 }
 
 
-void EF_gtk_section_T_ajouter_clicked(GtkButton *button, Projet *projet)
-/* Description : Ferme la fenêtre en ajoutant la section.
- * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
- *            : Projet *projet : la variable projet.
- * Valeur renvoyée : Aucune.
+void
+EF_gtk_section_T_ajouter_clicked (GtkButton *button,
+                                  Projet    *p)
+/**
+ * \brief Ferme la fenêtre en ajoutant la section.
+ * \param button : composant à l'origine de l'évènement,
+ * \param p : la variable projet.
+ * \return Rien.\n
+ *   Echec :
+ *     - p == NULL,
+ *     - interface graphique non initialisée.
  */
 {
-    double  lr, hr, lt, ht;
-    gchar   *texte;
-    
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
-    BUGMSG(projet->list_gtk.ef_sections_T.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section T")
-    
-    if (!(EF_gtk_section_T_recupere_donnees(projet, &lt, &ht, &lr, &hr, &texte)))
-        return;
-    
-    // Création de la nouvelle charge ponctuelle au noeud
-    BUG(EF_sections_T_ajout(projet, texte, common_math_f(lt, FLOTTANT_UTILISATEUR), common_math_f(lr, FLOTTANT_UTILISATEUR), common_math_f(ht, FLOTTANT_UTILISATEUR), common_math_f(hr, FLOTTANT_UTILISATEUR)), )
-    
-    free(texte);
-    
-    gtk_widget_destroy(projet->list_gtk.ef_sections_T.window);
-    
+  double lr, hr, lt, ht;
+  gchar *texte;
+  
+  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGMSG (UI_SEC_T.builder,
+          ,
+          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                   "Ajout Section T")
+  
+  if (!(EF_gtk_section_T_recupere_donnees (p, &lt, &ht, &lr, &hr, &texte)))
     return;
+  
+  // Création de la nouvelle charge ponctuelle au noeud
+  BUG (EF_sections_T_ajout (p,
+                            texte,
+                            m_f (lt, FLOTTANT_UTILISATEUR),
+                            m_f (lr, FLOTTANT_UTILISATEUR),
+                            m_f (ht, FLOTTANT_UTILISATEUR),
+                            m_f (hr, FLOTTANT_UTILISATEUR)),
+      )
+  
+  free (texte);
+  
+  gtk_widget_destroy (UI_SEC_T.window);
+  
+  return;
 }
 
 
-void EF_gtk_section_T_annuler_clicked(GtkButton *button, Projet *projet)
-/* Description : Ferme la fenêtre sans effectuer les modifications.
- * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
- *            : Projet *projet : la variable projet.
- * Valeur renvoyée : Aucune.
+void
+EF_gtk_section_T_modifier_clicked (GtkButton *button,
+                                   Projet    *p)
+/**
+ * \brief Ferme la fenêtre en appliquant les modifications.
+ * \param button : composant à l'origine de l'évènement,
+ * \param p : la variable projet.
+ * \return Rien.\n
+ *   Echec :
+ *     - p == NULL,
+ *     - interface graphique non initialisée.
  */
 {
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
-    BUGMSG(projet->list_gtk.ef_sections_T.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section T")
-    
-    gtk_widget_destroy(projet->list_gtk.ef_sections_T.window);
-    
+  double lt, ht, lr, hr;
+  gchar *texte;
+  
+  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGMSG (UI_SEC_T.builder,
+          ,
+          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                   "Ajout Section T")
+  
+  if (!(EF_gtk_section_T_recupere_donnees (p, &lt, &ht, &lr, &hr, &texte)))
     return;
+  
+  gtk_widget_destroy (UI_SEC_T.window);
+  
+  BUG (EF_sections_T_modif (p,
+                            UI_SEC_T.section,
+                            texte,
+                            m_f (lt, FLOTTANT_UTILISATEUR),
+                            m_f (lr, FLOTTANT_UTILISATEUR),
+                            m_f (ht, FLOTTANT_UTILISATEUR),
+                            m_f (hr, FLOTTANT_UTILISATEUR)),
+      )
+  
+  free (texte);
+  
+  return;
 }
 
 
-void EF_gtk_section_T_modifier_clicked(GtkButton *button, Projet *projet)
-/* Description : Ferme la fenêtre en appliquant les modifications.
- * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
- *            : Projet *projet : la variable projet.
- * Valeur renvoyée : Aucune.
- */
-{
-    double      lt, ht, lr, hr;
-    gchar       *texte;
-    
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
-    BUGMSG(projet->list_gtk.ef_sections_T.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Section T")
-    
-    if (!(EF_gtk_section_T_recupere_donnees(projet, &lt, &ht, &lr, &hr, &texte)))
-        return;
-    
-    gtk_widget_destroy(projet->list_gtk.ef_sections_T.window);
-    
-    BUG(EF_sections_T_modif(projet, projet->list_gtk.ef_sections_T.section, texte, common_math_f(lt, FLOTTANT_UTILISATEUR), common_math_f(lr, FLOTTANT_UTILISATEUR), common_math_f(ht, FLOTTANT_UTILISATEUR), common_math_f(hr, FLOTTANT_UTILISATEUR)), )
-    
-    free(texte);
-    
-    return;
-}
-
-
-gboolean EF_gtk_section_T(Projet *projet, EF_Section *section)
-/* Description : Affichage de la fenêtre permettant de créer ou modifier une section de type
- *               en T.
- * Paramètres : Projet *projet : la variable projet,
- *            : EF_Section *section : section à modifier. NULL si nouvelle section,
- * Valeur renvoyée :
- *   Succès : TRUE
+gboolean
+EF_gtk_section_T (Projet  *p,
+                  Section *section)
+/**
+ * \brief Affichage de la fenêtre permettant de créer ou modifier une section
+ *        de type en T.
+ * \param p : la variable projet,
+ * \param section : section à modifier. NULL si nouvelle section,
+ * \return
+ *   Succès : TRUE.\n
  *   Echec : FALSE :
- *             projet == NULL,
- *             Fenêtre graphique déjà initialisée.
+ *     - p == NULL,
+ *     - interface graphique impossible à générer.
  */
 {
-    Gtk_EF_Sections_T   *ef_gtk;
+  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
+  
+  if (UI_SEC_T.builder != NULL)
+  {
+    gtk_window_present (GTK_WINDOW (UI_SEC_T.window));
+    if (UI_SEC_T.section == section)
+      return TRUE;
+  }
+  else
+  {
+    UI_SEC_T.builder = gtk_builder_new ();
+    BUGMSG (gtk_builder_add_from_resource (UI_SEC_T.builder,
+                                       "/org/2lgc/codegui/ui/EF_sections_T.ui",
+                                           NULL) != 0,
+            FALSE,
+            gettext ("Builder Failed\n"))
+    gtk_builder_connect_signals (UI_SEC_T.builder, p);
+    UI_SEC_T.window = GTK_WIDGET (gtk_builder_get_object (UI_SEC_T.builder,
+                                                       "EF_section_T_window"));
+  }
+  
+  if (section == NULL)
+  {
+    gtk_window_set_title (GTK_WINDOW (UI_SEC_T.window),
+                          gettext ("Ajout d'une section en T"));
+    UI_SEC_T.section = NULL;
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
+    gtk_button_set_label (GTK_BUTTON (gtk_builder_get_object (UI_SEC_T.builder,
+                                              "EF_section_T_button_add_edit")),
+                          gettext ("_Ajouter"));
+    g_signal_connect (gtk_builder_get_object (UI_SEC_T.builder,
+                                               "EF_section_T_button_add_edit"),
+                      "clicked",
+                      G_CALLBACK (EF_gtk_section_T_ajouter_clicked),
+                      p);
+    EF_gtk_section_T_check (NULL, p);
+  }
+  else
+  {
+    gchar      tmp[30];
+    Section_T *data;
     
-    ef_gtk = &projet->list_gtk.ef_sections_T;
-    if (projet->list_gtk.ef_sections_T.builder != NULL)
-    {
-        gtk_window_present(GTK_WINDOW(projet->list_gtk.ef_sections_T.window));
-        if (projet->list_gtk.ef_sections_T.section == section)
-            return TRUE;
-    }
-    else
-    {
-        ef_gtk->builder = gtk_builder_new();
-        BUGMSG(gtk_builder_add_from_resource(ef_gtk->builder, "/org/2lgc/codegui/ui/EF_sections_T.ui", NULL) != 0, FALSE, gettext("Builder Failed\n"))
-        gtk_builder_connect_signals(ef_gtk->builder, projet);
-        ef_gtk->window = GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder, "EF_section_T_window"));
-    }
+    gtk_window_set_title (GTK_WINDOW (UI_SEC_T.window),
+                          gettext ("Modification d'une section en T"));
+    UI_SEC_T.section = section;
+    BUGMSG (UI_SEC_T.section->type == SECTION_T,
+            FALSE,
+            gettext ("La section à modifier n'est pas en T.\n"))
+    data = UI_SEC_T.section->data;
     
-    if (section == NULL)
-    {
-        gtk_window_set_title(GTK_WINDOW(ef_gtk->window), gettext("Ajout d'une section en T"));
-        ef_gtk->section = NULL;
-        
-        gtk_button_set_label(GTK_BUTTON(gtk_builder_get_object(ef_gtk->builder, "EF_section_T_button_add_edit")), gettext("_Ajouter"));
-        g_signal_connect(gtk_builder_get_object(ef_gtk->builder, "EF_section_T_button_add_edit"), "clicked", G_CALLBACK(EF_gtk_section_T_ajouter_clicked), projet);
-        EF_gtk_section_T_check(NULL, projet);
-    }
-    else
-    {
-        gchar       tmp[30];
-        Section_T   *data;
-        
-        gtk_window_set_title(GTK_WINDOW(ef_gtk->window), gettext("Modification d'une section en T"));
-        ef_gtk->section = section;
-        BUGMSG(ef_gtk->section->type == SECTION_T, FALSE, gettext("La section à modifier n'est pas en T.\n"))
-        data = ef_gtk->section->data;
-        
-        gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(ef_gtk->builder, "EF_section_T_textview_nom"))), ef_gtk->section->nom, -1);
-        common_math_double_to_char2(data->largeur_table, tmp, DECIMAL_DISTANCE);
-        gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder, "EF_section_T_buffer_lt")), tmp, -1);
-        common_math_double_to_char2(data->hauteur_table, tmp, DECIMAL_DISTANCE);
-        gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder, "EF_section_T_buffer_ht")), tmp, -1);
-        common_math_double_to_char2(data->largeur_retombee, tmp, DECIMAL_DISTANCE);
-        gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder, "EF_section_T_buffer_lr")), tmp, -1);
-        common_math_double_to_char2(data->hauteur_retombee, tmp, DECIMAL_DISTANCE);
-        gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder, "EF_section_T_buffer_hr")), tmp, -1);
-        
-        gtk_button_set_label(GTK_BUTTON(gtk_builder_get_object(ef_gtk->builder, "EF_section_T_button_add_edit")), gettext("_Modifier"));
-        g_signal_connect(gtk_builder_get_object(ef_gtk->builder, "EF_section_T_button_add_edit"), "clicked", G_CALLBACK(EF_gtk_section_T_modifier_clicked), projet);
-    }
+    gtk_text_buffer_set_text (gtk_text_view_get_buffer (GTK_TEXT_VIEW (
+      gtk_builder_get_object (UI_SEC_T.builder, "EF_section_T_textview_nom"))),
+                              UI_SEC_T.section->nom,
+                              -1);
+    conv_f_c (data->largeur_table, tmp, DECIMAL_DISTANCE);
+    gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
+                                  UI_SEC_T.builder, "EF_section_T_buffer_lt")),
+                              tmp,
+                              -1);
+    conv_f_c (data->hauteur_table, tmp, DECIMAL_DISTANCE);
+    gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
+                                  UI_SEC_T.builder, "EF_section_T_buffer_ht")),
+                              tmp,
+                              -1);
+    conv_f_c (data->largeur_retombee, tmp, DECIMAL_DISTANCE);
+    gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
+                                  UI_SEC_T.builder, "EF_section_T_buffer_lr")),
+                              tmp,
+                              -1);
+    conv_f_c (data->hauteur_retombee, tmp, DECIMAL_DISTANCE);
+    gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
+                                  UI_SEC_T.builder, "EF_section_T_buffer_hr")),
+                              tmp,
+                              -1);
     
-    gtk_window_set_transient_for(GTK_WINDOW(ef_gtk->window), GTK_WINDOW(projet->list_gtk.comp.window));
-    
-    return TRUE;
+    gtk_button_set_label (GTK_BUTTON (gtk_builder_get_object (UI_SEC_T.builder,
+                                              "EF_section_T_button_add_edit")),
+                          gettext ("_Modifier"));
+    g_signal_connect (gtk_builder_get_object (UI_SEC_T.builder,
+                                               "EF_section_T_button_add_edit"),
+                      "clicked",
+                      G_CALLBACK (EF_gtk_section_T_modifier_clicked),
+                      p);
+  }
+  
+  gtk_window_set_transient_for (GTK_WINDOW (UI_SEC_T.window),
+                                GTK_WINDOW (p->ui.comp.window));
+  
+  return TRUE;
 }
+
+
 #endif

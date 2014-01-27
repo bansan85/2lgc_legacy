@@ -25,8 +25,9 @@
 
 #include "common_projet.h"
 
-void EF_gtk_relachements_select_changed(GtkTreeSelection *treeselection, Projet *projet);
-void EF_gtk_relachement(Projet *projet);
+void EF_gtk_relachements_select_changed (GtkTreeSelection *treeselection,
+                                         Projet           *p);
+void EF_gtk_relachement                 (Projet           *p);
 
 #endif
 

@@ -25,6 +25,7 @@
 
 #include "common_projet.h"
 #include "common_math.h"
+#include "common_gtk.h"
 #include "common_erreurs.h"
 #include "common_selection.h"
 #include "1992_1_1_barres.h"
@@ -33,308 +34,500 @@
 #include "EF_calculs.h"
 
 
-gboolean EF_materiaux_init(Projet *projet)
-/* Description : Initialise la liste des matériaux.
- * Paramètres : Projet *projet : la variable projet.
- * Valeur renvoyée :
- *   Succès : TRUE
+gboolean
+EF_materiaux_init (Projet *p)
+/**
+ * \brief Initialise la liste des matériaux.
+ * \param p : la variable projet.
+ * \return
+ *   Succès : TRUE.
  *   Échec : FALSE :
- *             projet == NULL.
+ *     - p == NULL.
  */
 {
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
-    
-    // Trivial
-    projet->modele.materiaux = NULL;
-    
+  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
+  
+  p->modele.materiaux = NULL;
+  
 #ifdef ENABLE_GTK
-    projet->list_gtk.ef_materiaux.liste_materiaux = gtk_list_store_new(1, G_TYPE_STRING);
+  UI_MAT.liste_materiaux = gtk_list_store_new (1, G_TYPE_STRING);
 #endif
-    
-    return TRUE;
+  
+  return TRUE;
 }
 
 
-gboolean EF_materiaux_insert(Projet *projet, EF_Materiau *materiau)
-/* Description : Insère un materiau dans projet->modele.materiaux. Procédure commune à tous les
- *               matériaux.
- * Paramètres : Projet *projet : la variable projet,
- *            : EF_Materiau *materiau : le matériau à insérer.
- * Valeur renvoyée : Aucune.
- */
-{
-    GList       *list_parcours;
-    EF_Materiau *materiau_tmp;
-    
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
-    BUGMSG(materiau, FALSE, gettext("Paramètre %s incorrect.\n"), "materiau")
-    
-    list_parcours = projet->modele.materiaux;
-    while (list_parcours != NULL)
-    {
-        materiau_tmp = list_parcours->data;
-        
-        if (strcmp(materiau->nom, materiau_tmp->nom) < 0)
-            break;
-        
-        list_parcours = g_list_next(list_parcours);
-    }
-    if (list_parcours == NULL)
-    {
-        projet->modele.materiaux = g_list_append(projet->modele.materiaux, materiau);
-#ifdef ENABLE_GTK
-        gtk_list_store_append(projet->list_gtk.ef_materiaux.liste_materiaux, &materiau->Iter_liste);
-        if (projet->list_gtk.ef_materiaux.builder != NULL)
-            gtk_tree_store_append(projet->list_gtk.ef_materiaux.materiaux, &materiau->Iter_fenetre, NULL);
-#endif
-    }
-    else
-    {
-        projet->modele.materiaux = g_list_insert_before(projet->modele.materiaux, list_parcours, materiau);
-#ifdef ENABLE_GTK
-        gtk_list_store_insert_before(projet->list_gtk.ef_materiaux.liste_materiaux, &materiau->Iter_liste, &materiau_tmp->Iter_liste);
-        if (projet->list_gtk.ef_materiaux.builder != NULL)
-            gtk_tree_store_insert_before(projet->list_gtk.ef_materiaux.materiaux, &materiau->Iter_fenetre, NULL, &materiau_tmp->Iter_fenetre);
-#endif
-    }
-    
-#ifdef ENABLE_GTK
-    gtk_list_store_set(projet->list_gtk.ef_materiaux.liste_materiaux, &materiau->Iter_liste, 0, materiau->nom, -1);
-    if (projet->list_gtk.ef_materiaux.builder != NULL)
-        gtk_tree_store_set(projet->list_gtk.ef_materiaux.materiaux, &materiau->Iter_fenetre, 0, materiau, -1);
-#endif
-    
-    return TRUE;
-}
-
-
-gboolean EF_materiaux_repositionne(Projet *projet, EF_Materiau *materiau)
-/* Description : Repositionne un matériau après un renommage. Procédure commune à toutes les
- *               matériaux.
- * Paramètres : Projet *projet : la variable projet,
- *            : EF_Materiau *materiau : le matériau à repositionner.
- * Valeur renvoyée : Aucune.
- */
-{
-    GList   *list_parcours;
-    
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
-    BUGMSG(materiau, FALSE, gettext("Paramètre %s incorrect.\n"), "materiau")
-    
-    // On réinsère le matériau au bon endroit
-    projet->modele.materiaux = g_list_remove(projet->modele.materiaux, materiau);
-    list_parcours = projet->modele.materiaux;
-    while (list_parcours != NULL)
-    {
-        EF_Materiau  *materiau_parcours = list_parcours->data;
-        
-        if (strcmp(materiau->nom, materiau_parcours->nom) < 0)
-        {
-            projet->modele.materiaux = g_list_insert_before(projet->modele.materiaux, list_parcours, materiau);
-            
-#ifdef ENABLE_GTK
-            gtk_list_store_move_before(projet->list_gtk.ef_materiaux.liste_materiaux, &materiau->Iter_liste, &materiau_parcours->Iter_liste);
-            if (projet->list_gtk.ef_materiaux.builder != NULL)
-                gtk_tree_store_move_before(projet->list_gtk.ef_materiaux.materiaux, &materiau->Iter_fenetre, &materiau_parcours->Iter_fenetre);
-#endif
-            break;
-        }
-        
-        list_parcours = g_list_next(list_parcours);
-    }
-    if (list_parcours == NULL)
-    {
-        projet->modele.materiaux = g_list_append(projet->modele.materiaux, materiau);
-        
-#ifdef ENABLE_GTK
-        gtk_list_store_move_before(projet->list_gtk.ef_materiaux.liste_materiaux, &materiau->Iter_liste, NULL);
-        if (projet->list_gtk.ef_materiaux.builder != NULL)
-            gtk_tree_store_move_before(projet->list_gtk.ef_materiaux.materiaux, &materiau->Iter_fenetre, NULL);
-#endif
-    }
-    
-#ifdef ENABLE_GTK
-    switch (materiau->type)
-    {
-        case MATERIAU_BETON :
-        {
-            if ((projet->list_gtk._1992_1_1_materiaux.builder != NULL) && (projet->list_gtk._1992_1_1_materiaux.materiau == materiau))
-                gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk._1992_1_1_materiaux.builder, "_1992_1_1_materiaux_textview_nom"))), materiau->nom, -1);
-            break;
-        }
-        case MATERIAU_ACIER :
-        {
-            if ((projet->list_gtk._1993_1_1_materiaux.builder != NULL) && (projet->list_gtk._1993_1_1_materiaux.materiau == materiau))
-                gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(projet->list_gtk._1993_1_1_materiaux.builder, "_1993_1_1_materiaux_textview_nom"))), materiau->nom, -1);
-            break;
-        }
-        default :
-        {
-            BUGMSG(NULL, FALSE, gettext("Le type de matériau %d n'existe pas.\n"), materiau->type)
-            break;
-        }
-    }
-    if (projet->list_gtk.ef_barres.builder != NULL)
-        gtk_widget_queue_resize(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_barres.builder, "EF_barres_treeview")));
-    gtk_list_store_set(projet->list_gtk.ef_materiaux.liste_materiaux, &materiau->Iter_liste, 0, materiau->nom, -1);
-#endif
-    
-    return TRUE;
-}
-
-
-EF_Materiau* EF_materiaux_cherche_nom(Projet *projet, const char *nom, gboolean critique)
-/* Description : Renvoie le matériau en fonction de son nom.
- * Paramètres : Projet *projet : la variable projet,
- *            : const char *nom : le nom du matériau.
- *            : gboolean critique : utilise BUG si TRUE, return sino
- * Valeur renvoyée :
- *   Succès : pointeur vers le matériau en béton
- *   Échec : NULL :
- *             projet == NULL,
- *             materiau introuvable.
- */
-{
-    GList   *list_parcours;
-    
-    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet")
-    
-    // Trivial
-    list_parcours = projet->modele.materiaux;
-    while (list_parcours != NULL)
-    {
-        EF_Materiau  *materiau = list_parcours->data;
-        
-        if (strcmp(materiau->nom, nom) == 0)
-            return materiau;
-        
-        list_parcours = g_list_next(list_parcours);
-    }
-    
-    if (critique)
-        BUGMSG(0, NULL, gettext("Matériau en béton '%s' introuvable.\n"), nom)
-    else
-        return NULL;
-}
-
-
-char *EF_materiaux_get_description(EF_Materiau* materiau)
-/* Description : Renvoie la description d'un matériau sous forme d'un texte.
- *               Il convient de libérer le texte renvoyée par la fonction free.
- * Paramètres : EF_Materiau* materiau : matériau à décrire.
- * Valeur renvoyée :
- *   Succès : Résultat
- *   Échec : NULL :
- *             (materiau == NULL),
- *             erreur d'allocation mémoire.
- */
-{
-    switch (materiau->type)
-    {
-        case MATERIAU_BETON :
-        {
-            return _1992_1_1_materiaux_get_description(materiau);
-            break;
-        }
-        case MATERIAU_ACIER :
-        {
-            return _1993_1_1_materiaux_get_description(materiau);
-            break;
-        }
-        default :
-        {
-            BUGMSG(NULL, FALSE, gettext("Le type de matériau %d n'existe pas.\n"), materiau->type)
-            break;
-        }
-    }
-}
-
-
-void EF_materiaux_free_un(EF_Materiau *materiau)
-/* Description : Fonction permettant de libérer un matériau.
- * Paramètres : EF_Materiau *materiau : matériau à libérer.
- * Valeur renvoyée : Aucun.
- */
-{
-    free(materiau->nom);
-    free(materiau->data);
-    free(materiau);
-    
-    return;
-}
-
-
-gboolean EF_materiaux_supprime(EF_Materiau* materiau, Projet *projet)
-/* Description : Supprime le matériau spécifié. Impossible si le matériau est utilisé.
- * Paramètres : EF_Materiau* materiau : le matériau à supprimer,
- *            : Projet *projet : la variable projet.
- * Valeur renvoyée :
- *   Succès : TRUE
+gboolean
+EF_materiaux_insert (Projet      *p,
+                     EF_Materiau *materiau)
+/**
+ * \brief Insère un materiau en triant la liste en fonction du nom. Procédure
+ *        commune à tous les matériaux.
+ * \param p : la variable projet,
+ * \param materiau : le matériau à insérer.
+ * \return
+ *   Succès : TRUE.
  *   Échec : FALSE :
- *             projet == NULL,
- *             materiau == NULL.
+ *     - p == NULL,
+ *     - materiau == NULL.
  */
 {
-    GList   *liste_materiaux = NULL, *liste_barres_dep;
+  GList       *list_parcours;
+  EF_Materiau *materiau_tmp;
+  
+  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGMSG (materiau, FALSE, gettext ("Paramètre %s incorrect.\n"), "materiau")
+  
+  list_parcours = p->modele.materiaux;
+  while (list_parcours != NULL)
+  {
+    materiau_tmp = list_parcours->data;
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
-    BUGMSG(materiau, FALSE, gettext("Paramètre %s incorrect.\n"), "materiau")
+    if (strcmp (materiau->nom, materiau_tmp->nom) < 0)
+      break;
+    
+    list_parcours = g_list_next (list_parcours);
+  }
+  if (list_parcours == NULL)
+  {
+    p->modele.materiaux = g_list_append (p->modele.materiaux, materiau);
+#ifdef ENABLE_GTK
+    gtk_list_store_append (UI_MAT.liste_materiaux,
+                           &materiau->Iter_liste);
+    if (UI_MAT.builder != NULL)
+      gtk_tree_store_append (UI_MAT.materiaux,
+                             &materiau->Iter_fenetre,
+                             NULL);
+#endif
+  }
+  else
+  {
+    p->modele.materiaux = g_list_insert_before (p->modele.materiaux,
+                                                list_parcours,
+                                                materiau);
+#ifdef ENABLE_GTK
+    gtk_list_store_insert_before (UI_MAT.liste_materiaux,
+                                  &materiau->Iter_liste,
+                                  &materiau_tmp->Iter_liste);
+    if (UI_MAT.builder != NULL)
+      gtk_tree_store_insert_before (UI_MAT.materiaux,
+                                    &materiau->Iter_fenetre,
+                                    NULL,
+                                    &materiau_tmp->Iter_fenetre);
+#endif
+  }
+  
+#ifdef ENABLE_GTK
+  gtk_list_store_set (UI_MAT.liste_materiaux,
+                      &materiau->Iter_liste,
+                      0, materiau->nom,
+                      -1);
+  if (UI_MAT.builder != NULL)
+    gtk_tree_store_set (UI_MAT.materiaux,
+                        &materiau->Iter_fenetre,
+                        0, materiau,
+                        -1);
+#endif
+  
+  return TRUE;
+}
+
+
+gboolean
+EF_materiaux_repositionne (Projet      *p,
+                           EF_Materiau *materiau)
+/**
+ * \brief Repositionne un matériau après un renommage. Procédure commune à
+ *        toutes les matériaux.
+ * \param p : la variable projet,
+ * \param materiau : le matériau à repositionner.
+ * \return
+ *   Succès : TRUE.
+ *   Échec : FALSE :
+ *     - p == NULL,
+ *     - materiau == NULL.
+ */
+{
+  GList *list_parcours;
+  
+  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGMSG (materiau, FALSE, gettext ("Paramètre %s incorrect.\n"), "materiau")
+  
+  // On réinsère le matériau au bon endroit
+  p->modele.materiaux = g_list_remove (p->modele.materiaux, materiau);
+  list_parcours = p->modele.materiaux;
+  while (list_parcours != NULL)
+  {
+    EF_Materiau *materiau_parcours = list_parcours->data;
+    
+    if (strcmp (materiau->nom, materiau_parcours->nom) < 0)
+    {
+      p->modele.materiaux = g_list_insert_before (p->modele.materiaux,
+                                                  list_parcours,
+                                                  materiau);
+      
+#ifdef ENABLE_GTK
+      gtk_list_store_move_before (UI_MAT.liste_materiaux,
+                                  &materiau->Iter_liste,
+                                  &materiau_parcours->Iter_liste);
+      if (UI_MAT.builder != NULL)
+        gtk_tree_store_move_before (UI_MAT.materiaux,
+                                    &materiau->Iter_fenetre,
+                                    &materiau_parcours->Iter_fenetre);
+#endif
+      break;
+    }
+    
+    list_parcours = g_list_next (list_parcours);
+  }
+  if (list_parcours == NULL)
+  {
+    p->modele.materiaux = g_list_append (p->modele.materiaux, materiau);
+    
+#ifdef ENABLE_GTK
+    gtk_list_store_move_before (UI_MAT.liste_materiaux,
+                                &materiau->Iter_liste,
+                                NULL);
+    if (UI_MAT.builder != NULL)
+      gtk_tree_store_move_before (UI_MAT.materiaux,
+                                  &materiau->Iter_fenetre,
+                                  NULL);
+#endif
+  }
+  
+#ifdef ENABLE_GTK
+  switch (materiau->type)
+  {
+    case MATERIAU_BETON :
+    {
+      if ((UI_BET.builder != NULL) && (UI_BET.materiau == materiau))
+        gtk_text_buffer_set_text (gtk_text_view_get_buffer (GTK_TEXT_VIEW (
+                                        gtk_builder_get_object (UI_BET.builder,
+                                         "_1992_1_1_materiaux_textview_nom"))),
+                                  materiau->nom,
+                                  -1);
+      break;
+    }
+    case MATERIAU_ACIER :
+    {
+      if ((UI_ACI.builder != NULL) && (UI_ACI.materiau == materiau))
+        gtk_text_buffer_set_text (gtk_text_view_get_buffer (GTK_TEXT_VIEW (
+                                        gtk_builder_get_object (UI_ACI.builder,
+                                         "_1993_1_1_materiaux_textview_nom"))),
+                                  materiau->nom,
+                                  -1);
+      break;
+    }
+    default :
+    {
+      BUGMSG (NULL,
+              FALSE,
+              gettext ("Le type de matériau %d n'existe pas.\n"), materiau->type)
+      break;
+    }
+  }
+  if (p->ui.ef_barres.builder != NULL)
+    gtk_widget_queue_resize (GTK_WIDGET (gtk_builder_get_object (
+                              p->ui.ef_barres.builder, "EF_barres_treeview")));
+  gtk_list_store_set (UI_MAT.liste_materiaux,
+                      &materiau->Iter_liste,
+                      0, materiau->nom,
+                      -1);
+#endif
+  
+  return TRUE;
+}
+
+
+EF_Materiau *
+EF_materiaux_cherche_nom (Projet     *p,
+                          const char *nom,
+                          gboolean    critique)
+/**
+ * \brief Renvoie le matériau en fonction de son nom.
+ * \param p : la variable projet,
+ * \param nom : le nom du matériau,
+ * \param critique : utilise BUG si TRUE, return sinon.
+ * \return
+ *   Succès : pointeur vers le matériau en béton.\n
+ *   Échec : NULL :
+ *     - p == NULL,
+ *     - materiau introuvable.
+ */
+{
+  GList *list_parcours;
+  
+  BUGMSG (p, NULL, gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGMSG (nom, NULL, gettext ("Paramètre %s incorrect.\n"), "nom")
+  
+  list_parcours = p->modele.materiaux;
+  while (list_parcours != NULL)
+  {
+    EF_Materiau *materiau = list_parcours->data;
+    
+    if (strcmp (materiau->nom, nom) == 0)
+      return materiau;
+    
+    list_parcours = g_list_next (list_parcours);
+  }
+  
+  if (critique)
+    BUGMSG (0, NULL, gettext ("Matériau '%s' introuvable.\n"), nom)
+  else
+    return NULL;
+}
+
+
+char *
+EF_materiaux_get_description (EF_Materiau *materiau)
+/**
+ * \brief Renvoie la description d'un matériau sous forme d'un texte. Il
+ *        convient de libérer le texte renvoyée par la fonction free.
+ * \param materiau : matériau à décrire.
+ * \return
+ *   Succès : Résultat.\n
+ *   Échec : NULL :
+ *     - materiau == NULL,
+ *     - erreur d'allocation mémoire.
+ */
+{
+  switch (materiau->type)
+  {
+    case MATERIAU_BETON :
+    {
+      return _1992_1_1_materiaux_get_description (materiau);
+      break;
+    }
+    case MATERIAU_ACIER :
+    {
+      return _1993_1_1_materiaux_get_description (materiau);
+      break;
+    }
+    default :
+    {
+      BUGMSG (NULL,
+              FALSE,
+              gettext ("Le type de matériau %d n'existe pas.\n"), materiau->type)
+      break;
+    }
+  }
+}
+
+
+Flottant
+EF_materiaux_E (EF_Materiau *materiau)
+/**
+ * \brief Renvoie le module d'Young du matériau.
+ * \param materiau : le matériau à analyser.
+ * \return
+ *   Succès : le module d'Young.\n
+ *   Échec : NAN :
+ *     - materiau == NULL,
+ *     - materiau inconnu.
+ */
+{
+  BUGMSG (materiau,
+          m_f (NAN, FLOTTANT_ORDINATEUR),
+          gettext ("Paramètre %s incorrect.\n"), "materiau")
+  
+  switch (materiau->type)
+  {
+    case MATERIAU_BETON :
+    {
+      Materiau_Beton *data_beton = materiau->data;
+      
+      return data_beton->ecm;
+      
+      break;
+    }
+    case MATERIAU_ACIER :
+    {
+      Materiau_Acier *data_acier = materiau->data;
+      
+      return data_acier->e;
+      
+      break;
+    }
+    default :
+    {
+      BUGMSG (NULL,
+              m_f (NAN, FLOTTANT_ORDINATEUR),
+              gettext ("Matériau %d inconnu.\n"), materiau->type)
+      break;
+    }
+  }
+  
+  return m_f (NAN, FLOTTANT_ORDINATEUR);
+}
+
+
+Flottant
+EF_materiaux_G (EF_Materiau *materiau,
+                gboolean     nu_null)
+/**
+ * \brief Renvoie le module de cisaillement du matériau.
+ * \param materiau : le matériau à analyser,
+ * \param nu_null : TRUE si on force le coefficient de poisson à 0,
+ *                  FALSE si on prend la valeur définie dans le matériau.
+ * \return
+ *   Succès : le module de cisaillement.\n
+ *   Échec : NAN :
+ *     - materiau == NULL,
+ *     - materiau inconnu.
+ */
+{
+  BUGMSG (materiau,
+          m_f (NAN, FLOTTANT_ORDINATEUR),
+          gettext ("Paramètre %s incorrect.\n"), "materiau")
+  
+  switch (materiau->type)
+  {
+    case MATERIAU_BETON :
+    {
+      Materiau_Beton *data_beton = materiau->data;
+      
+      if (nu_null)
+        return m_f (m_g (data_beton->ecm) / 2., FLOTTANT_ORDINATEUR);
+      else
+        return m_f (m_g (data_beton->ecm) / (2. * (1. + m_g (data_beton->nu))),
+                    FLOTTANT_ORDINATEUR);
+      
+      break;
+    }
+    case MATERIAU_ACIER :
+    {
+      Materiau_Acier *data_acier = materiau->data;
+      
+      BUGMSG (!nu_null,
+              m_f (NAN, FLOTTANT_ORDINATEUR),
+              gettext ("Seul le matériau béton supporte nu à 0.\n"))
+      return m_f (m_g (data_acier->e) / (2. * (1. + m_g (data_acier->nu))),
+                  FLOTTANT_ORDINATEUR);
+      
+      break;
+    }
+    default :
+    {
+      BUGMSG (NULL,
+              m_f (NAN, FLOTTANT_ORDINATEUR),
+              gettext ("Matériau %d inconnu.\n"), materiau->type)
+      break;
+    }
+  }
+  
+  return m_f (NAN, FLOTTANT_ORDINATEUR);
+}
+
+
+void
+EF_materiaux_free_un (EF_Materiau *materiau)
+/**
+ * \brief Fonction permettant de libérer un matériau.
+ * \param materiau : matériau à libérer.
+ * \return : Rien.
+ *   Échec : 
+ *       materiau == NULL,
+ */
+{
+  BUGMSG (materiau, , gettext("Paramètre %s incorrect.\n"), "materiau")
+  
+  free (materiau->nom);
+  free (materiau->data);
+  free (materiau);
+  
+  return;
+}
+
+
+gboolean
+EF_materiaux_supprime (EF_Materiau *materiau,
+                       Projet      *p)
+/**
+ * \brief Supprime le matériau spécifié. Impossible si le matériau est utilisé.
+ * \param materiau : le matériau à supprimer,
+ * \param p : la variable projet.
+ * \return
+ *   Succès : TRUE.\n
+ *   Échec : FALSE :
+ *       p == NULL,
+ *       materiau == NULL,
+ *       Le materiau est utilisé.
+ */
+{
+  GList *liste_materiaux = NULL, *liste_barres_dep;
+  
+  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGMSG (materiau, FALSE, gettext ("Paramètre %s incorrect.\n"), "materiau")
    
-    // On vérifie les dépendances.
-    liste_materiaux = g_list_append(liste_materiaux, materiau);
-    BUG(_1992_1_1_barres_cherche_dependances(projet, NULL, NULL, NULL, liste_materiaux, NULL, NULL, NULL, &liste_barres_dep, NULL, FALSE, FALSE), FALSE)
-    g_list_free(liste_materiaux);
+  // On vérifie les dépendances.
+  liste_materiaux = g_list_append (liste_materiaux, materiau);
+  BUG (_1992_1_1_barres_cherche_dependances (p,
+                                             NULL,
+                                             NULL,
+                                             NULL,
+                                             liste_materiaux,
+                                             NULL,
+                                             NULL,
+                                             NULL,
+                                             &liste_barres_dep,
+                                             NULL,
+                                             FALSE,
+                                             FALSE),
+       FALSE)
+  g_list_free (liste_materiaux);
+  
+  if (liste_barres_dep != NULL)
+  {
+    char *liste;
     
-    if (liste_barres_dep != NULL)
-    {
-        char *liste;
-        
-        liste = common_selection_converti_barres_en_texte(liste_barres_dep);
-        if (g_list_next(liste_barres_dep) == NULL)
-            BUGMSG(NULL, FALSE, gettext("Impossible de supprimer le matériau car il est utilisé par la barre %s.\n"), liste)
-        else
-            BUGMSG(NULL, FALSE, gettext("Impossible de supprimer le matériau car il est utilisé par les barres %s.\n"), liste)
-    }
-    
-    BUG(_1992_1_1_barres_supprime_liste(projet, NULL, liste_barres_dep), TRUE)
-    g_list_free(liste_barres_dep);
-    
+    liste = common_selection_barres_en_texte (liste_barres_dep);
+    if (g_list_next (liste_barres_dep) == NULL)
+      BUGMSG (NULL, FALSE, gettext ("Impossible de supprimer le matériau car il est utilisé par la barre %s.\n"), liste)
+    else
+      BUGMSG (NULL, FALSE, gettext ("Impossible de supprimer le matériau car il est utilisé par les barres %s.\n"), liste)
+  }
+  
+  BUG (_1992_1_1_barres_supprime_liste (p, NULL, liste_barres_dep), TRUE)
+  g_list_free (liste_barres_dep);
+  
 #ifdef ENABLE_GTK
-    gtk_list_store_remove(projet->list_gtk.ef_materiaux.liste_materiaux, &materiau->Iter_liste);
-    if (projet->list_gtk.ef_materiaux.builder != NULL)
-        gtk_tree_store_remove(projet->list_gtk.ef_materiaux.materiaux, &materiau->Iter_fenetre);
+  gtk_list_store_remove (UI_MAT.liste_materiaux, &materiau->Iter_liste);
+  if (UI_MAT.builder != NULL)
+    gtk_tree_store_remove (UI_MAT.materiaux, &materiau->Iter_fenetre);
 #endif
-    
-    EF_materiaux_free_un(materiau);
-    projet->modele.materiaux = g_list_remove(projet->modele.materiaux, materiau);
-    
-    return TRUE;
+  
+  EF_materiaux_free_un (materiau);
+  p->modele.materiaux = g_list_remove (p->modele.materiaux, materiau);
+  
+  return TRUE;
 }
 
 
-gboolean EF_materiaux_free(Projet *projet)
-/* Description : Libère l'ensemble des matériaux en béton.
- * Paramètres : Projet *projet : la variable projet.
- * Valeur renvoyée :
- *   Succès : TRUE
+gboolean
+EF_materiaux_free (Projet *p)
+/**
+ * \brief Libère l'ensemble des matériaux en béton.
+ * \param p : la variable projet.
+ * \return
+ *   Succès : TRUE.\n
  *   Échec : FALSE :
- *             projet == NULL.
+ *     - p == NULL.
  */
 {
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
-    
-    // Trivial
-    while (projet->modele.materiaux != NULL)
-    {
-        g_list_free_full(projet->modele.materiaux, (GDestroyNotify)&EF_materiaux_free_un);
-        projet->modele.materiaux = NULL;
-    }
-    
-    BUG(EF_calculs_free(projet), TRUE)
-    
+  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
+  
+  while (p->modele.materiaux != NULL)
+  {
+    g_list_free_full (p->modele.materiaux,
+                      (GDestroyNotify) &EF_materiaux_free_un);
+    p->modele.materiaux = NULL;
+  }
+  
+  BUG (EF_calculs_free (p), TRUE)
+  
 #ifdef ENABLE_GTK
-    g_object_unref(projet->list_gtk.ef_materiaux.liste_materiaux);
+  g_object_unref (UI_MAT.liste_materiaux);
 #endif
-    
-    return TRUE;
+  
+  return TRUE;
 }

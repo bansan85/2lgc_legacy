@@ -24,39 +24,50 @@
 
 //#ifdef NDEBUG
 #define BUG(X, Y) {if (!(X)) \
-                        { \
-                            printf(gettext("fichier %s, fonction %s, ligne %d, test : %s\n"), __FILE__, __FUNCTION__, __LINE__, #X); \
-                            return Y; \
-                        } \
-                    }
-/* La macro BUG(X, Y) est l'équivalent d'un return Y; si la condition X n'est pas vérifiée
- * cependant, afin de faciliter le débogage des erreurs via gdb, il est rajouté, pour la
- * version expérimentale du programme un "assert" qui s'assure de créer une erreur si la
- * condition X n'est pas respectée.*/
+  { \
+    printf(gettext("fichier %s, fonction %s, ligne %d, test : %s\n"), __FILE__, __FUNCTION__, __LINE__, #X); \
+    return Y; \
+  } \
+}
 //#else
-// #define BUG(X, Y) ({assert(X);})
+//#define BUG(X, Y) ({assert(X);})
 //#endif
+/**
+ * \def BUG(X, Y)
+ * \brief La macro est l'équivalent d'un "return Y;" si la condition X n'est
+ * pas vérifiée. Cependant, afin de faciliter le débogage des erreurs via gdb,
+ * il est rajouté, pour la version expérimentale du programme un "assert" qui
+ * s'assure de créer une erreur si la condition X n'est pas respectée.
+ * \param X : condition à vérifier,
+ * \param Y : Renvoie Y si la condition X n'est pas vérifiée.
+ */
 
-//#ifdef NDEBUG
 #define BUGMSG(X, Y, ...) {if (!(X)) \
-                        { \
-                            printf(gettext("fichier %s, fonction %s, ligne %d, test : %s, texte : "), __FILE__, __FUNCTION__, __LINE__, #X); \
-                            printf(__VA_ARGS__); \
-                            return Y; \
-                        } \
-                    }
-/* La macro BUGMSG(X, Y, ...) est identique à la commande BUG mais ajoute un message d'erreur
- * avant l'arrêt du programme. D'une maniète générale, la macro BUGMSG doit être utilisée
- * dès que l'erreur arrive et la macro BUG doit être utilisée pour indiquer une erreur par
- * la valeur retour des fonctions utilisant déjà la macro BUGMSG.*/
+            { \
+              printf(gettext("fichier %s, fonction %s, ligne %d, test : %s, texte : "), __FILE__, __FUNCTION__, __LINE__, #X); \
+              printf(__VA_ARGS__); \
+              return Y; \
+            } \
+          }
 //#else
 //#define BUGMSG(X, Y, ...) ({if (!(X)) \
-//                       { \
-//                           printf(__VA_ARGS__); \
-//                           assert(X); \
-//                           return Y; \
-//                       } \
-//                   })
+//             { \
+//               printf(__VA_ARGS__); \
+//               assert(X); \
+//               return Y; \
+//             } \
+//           })
 //#endif
+/**
+ * \def BUGMSG(X, Y, ...)
+ * \brief Cette macro est identique à la commande #BUG mais ajoute un message
+ *        d'erreur avant l'arrêt du programme. D'une maniète générale, cette 
+ *        macro doit être utilisée dès que l'erreur arrive et la macro BUG doit
+ *        être utilisée pour indiquer une erreur par la valeur retour des
+ *        fonctions utilisant déjà la macro BUGMSG.
+ * \param X : condition à vérifier,
+ * \param Y : Renvoie Y si la condition X n'est pas vérifiée,
+ * \param ... : message à afficher sous la forme __format, arg.
+ */
 
 #endif

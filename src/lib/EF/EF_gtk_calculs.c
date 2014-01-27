@@ -33,42 +33,52 @@
 #include "EF_calculs.h"
 #include "EF_verif.h"
 
-void EF_gtk_calculs_calculer(GtkMenuItem *menuitem, Projet *projet)
-/* Description : Exécute le calcul de la structure.
- * Paramètres : GtkMenuItem *menuitem : composant à l'origine de l'évènement,
- *            : Projet *projet : la variable projet.
- * Valeur renvoyée : Aucune.
+void
+EF_gtk_calculs_calculer (GtkMenuItem *menuitem,
+                         Projet      *p)
+/**
+ * \brief Exécute le calcul de la structure.
+ * \param menuitem : composant à l'origine de l'évènement,
+ * \param p : la variable projet.
+ * \return Rien.\n
+ *   Echec :
+ *     - p == NULL,
+ *     - Erreur de calcul.
  */
 {
-    GList           *rapport = NULL;
-    int             erreur;
-    GList           *list_parcours;
-    
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
-    
-    BUG(EF_calculs_free(projet), )
-    BUG(EF_verif_EF(projet, &rapport, &erreur), )
-    EF_gtk_rapport(projet, rapport);
-    EF_verif_rapport_free(rapport);
-    if (erreur != 0)
-        return;
-    BUG(EF_calculs_initialise(projet), )
-    BUG(_1992_1_1_barres_rigidite_ajout_tout(projet), )
-    BUG(EF_calculs_genere_mat_rig(projet), )
-    list_parcours = projet->actions;
-    while (list_parcours)
-    {
-        Action  *action = list_parcours->data;
-        BUG(EF_calculs_resoud_charge(projet, action), )
-        
-        list_parcours = g_list_next(list_parcours);
-    }
-    
-    BUG(_1990_combinaisons_genere(projet), )
-    
-    gtk_widget_set_sensitive(projet->list_gtk.comp.menu_resultats_afficher, TRUE);
-    
+  GList *rapport = NULL;
+  int    erreur;
+  GList *list_parcours;
+  
+  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
+  
+  BUG (EF_calculs_free (p), )
+  BUG (EF_verif_EF (p, &rapport, &erreur), )
+  EF_gtk_rapport (p, rapport);
+  EF_verif_rapport_free (rapport);
+  
+  if (erreur != 0)
     return;
+  
+  BUG (EF_calculs_initialise (p), )
+  BUG (_1992_1_1_barres_rigidite_ajout_tout (p), )
+  BUG (EF_calculs_genere_mat_rig (p), )
+  
+  list_parcours = p->actions;
+  while (list_parcours)
+  {
+    Action *action = list_parcours->data;
+    
+    BUG (EF_calculs_resoud_charge (p, action), )
+    
+    list_parcours = g_list_next (list_parcours);
+  }
+  
+  BUG (_1990_combinaisons_genere (p), )
+  
+  gtk_widget_set_sensitive (p->ui.comp.menu_resultats_afficher, TRUE);
+  
+  return;
 }
 
 

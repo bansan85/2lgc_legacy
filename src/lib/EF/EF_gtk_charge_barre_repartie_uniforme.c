@@ -34,439 +34,642 @@
 #include "EF_charge_barre_repartie_uniforme.h"
 #include "EF_calculs.h"
 
-void EF_gtk_charge_barre_rep_uni_window_destroy(GtkWidget *object, Projet *projet)
-/* Description : Met projet->list_gtk.ef_charge_barre_repartie_uniforme.builder à NULL quand la
- *               fenêtre se ferme.
- * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
- *            : Projet *projet : la variable projet.
- * Valeur renvoyée : Aucune.
- */
-{
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
-    BUGMSG(projet->list_gtk.ef_charge_barre_repartie_uniforme.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Barre Répartie Uniforme")
-    
-    g_object_unref(G_OBJECT(projet->list_gtk.ef_charge_barre_repartie_uniforme.builder));
-    projet->list_gtk.ef_charge_barre_repartie_uniforme.builder = NULL;
-    
-    return;
-}
+
+GTK_WINDOW_CLOSE (ef, charge_barre_repartie_uniforme);
 
 
-gboolean EF_gtk_charge_barre_rep_uni_window_key_press(GtkWidget *widget, GdkEvent *event,
-  Projet *projet)
-/* Description : Gestion des touches de l'ensemble des composants de la fenêtre.
- * Paramètres : GtkWidget *widget : composant à l'origine de l'évènement,
- *            : GdkEvent *event : description de la touche pressée,
- *            : Projet *projet : la variable projet.
- * Valeur renvoyée : TRUE si la touche ECHAP est pressée, FALSE sinon.
- *   Echec : FALSE :
- *             projet == NULL,
- *             interface graphique non initialisée.
- */
-{
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
-    BUGMSG(projet->list_gtk.ef_charge_barre_repartie_uniforme.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Barre Répartie Uniforme")
-    
-    if (event->key.keyval == GDK_KEY_Escape)
-    {
-        gtk_widget_destroy(projet->list_gtk.ef_charge_barre_repartie_uniforme.window);
-        return TRUE;
-    }
-    else
-        return FALSE;
-}
+GTK_WINDOW_KEY_PRESS (ef, charge_barre_repartie_uniforme);
 
 
-void EF_gtk_charge_barre_repartie_uniforme_annuler_clicked(GtkButton *button, Projet *projet)
-/* Description : Ferme la fenêtre sans effectuer les modifications.
- * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
- *            : Projet *projet : la variable projet.
- * Valeur renvoyée : Aucune.
- */
-{
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
-    BUGMSG(projet->list_gtk.ef_charge_barre_repartie_uniforme.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Barre Répartie Uniforme")
-    
-    gtk_widget_destroy(projet->list_gtk.ef_charge_barre_repartie_uniforme.window);
-    
-    return;
-}
+GTK_WINDOW_DESTROY (ef, charge_barre_repartie_uniforme, );
 
 
-gboolean EF_gtk_charge_barre_repartie_uniforme_recupere_donnees(Projet *projet,
-  unsigned int *num_action, GList **barres, double *fx, double *fy, double *fz, double *mx,
-  double *my, double *mz, gchar **nom, gboolean *repere_local, gboolean *projection,
-  double *a, double *b)
-/* Description : Récupère toutes les données de la fenêtre permettant d'ajouter ou d'éditer une
- *               charge répartie uniformément.
- * Paramètres : Projet *projet : la variable projet,
- *            : unsigned int *num_action : numéro de l'action où sera ajoutée la charge,
- *            : GList **barres : liste des barres qui supportera la charge,
- *            : double *fx : force selon x,
- *            : double *fy : force selon y,
- *            : double *fz : force selon z,
- *            : double *mx : moment selon x,
- *            : double *my : moment selon y,
- *            : double *mz : moment selon z,
- *            : gchar **nom : nom de l'action,
- *            : gboolean *repere_local : si utilisation du repère local,
- *            : gboolean *projection : si utilisatation d'un projection sur la barre,
- *            : double *a : début de la charge par rapport au début de la barre,
- *            : double *b : fin de la charge par rapport à la fin de la charge.
- * Valeur renvoyée :
- *   Succès : TRUE
+gboolean EF_gtk_charge_barre_repartie_uniforme_recupere (Projet  *p,
+                                                        Action  **action,
+                                                        GList   **barres,
+                                                        double   *fx,
+                                                        double   *fy,
+                                                        double   *fz,
+                                                        double   *mx,
+                                                        double   *my,
+                                                        double   *mz,
+                                                        gchar   **nom,
+                                                        gboolean *repere_local,
+                                                        gboolean *projection,
+                                                        double   *a,
+                                                        double   *b)
+/**
+ * \brief Récupère toutes les données de la fenêtre permettant d'ajouter ou
+ *        d'éditer une charge répartie uniformément sur barre.
+ * \param p : la variable projet,
+ * \param action : l'action où sera ajoutée la charge,
+ * \param barres : liste des barres qui supportera la charge,
+ * \param fx : force selon x,
+ * \param fy : force selon y,
+ * \param fz : force selon z,
+ * \param mx : moment selon x,
+ * \param my : moment selon y,
+ * \param mz : moment selon z,
+ * \param nom : nom de l'action,
+ * \param repere_local : si utilisation du repère local,
+ * \param projection : si utilisatation d'un projection sur la barre,
+ * \param a : début de la charge par rapport au début de la barre,
+ * \param b : fin de la charge par rapport à la fin de la charge.
+ * \return
+ *   Succès : TRUE.\n
  *   Échec : FALSE :
- *             projet == NULL, num_action == NULL, barres == NULL, fx == NULL, fy == NULL,
- *             fz == NULL, mx == NULL, my == NULL, mz == NULL, nom == NULL,
- *             repere_local == NULL, projection == NULL, a == NULL, b == NULL,
- *             en cas d'erreur d'allocation mémoire.
+ *     - p == NULL,
+ *     - action == NULL,
+ *     - barres == NULL,
+ *     - fx == NULL,
+ *     - fy == NULL,
+ *     - fz == NULL,
+ *     - mx == NULL,
+ *     - my == NULL,
+ *     - mz == NULL,
+ *     - nom == NULL,
+ *     - repere_local == NULL,
+ *     - projection == NULL,
+ *     - a == NULL,
+ *     - b == NULL,
+ *     - en cas d'erreur d'allocation mémoire,
+ *     - interface graphique non initialisée.
  */
 {
-    Gtk_EF_Charge_Barre_Repartie_Uniforme   *ef_gtk;
-    GList                                   *num_barres;
-    GtkTextIter                             start, end;
-    gchar                                   *texte_tmp;
-    GtkTextBuffer                           *textbuffer;
-    gboolean                                ok = TRUE;
-    
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
-    BUGMSG(projet->list_gtk.ef_charge_barre_repartie_uniforme.builder, FALSE, gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Barre Répartie Uniforme")
-    
-    ef_gtk = &projet->list_gtk.ef_charge_barre_repartie_uniforme;
-    
-    if (gtk_combo_box_get_active(GTK_COMBO_BOX(ef_gtk->combobox_charge)) < 0)
-        ok = FALSE;
-    else
-        *num_action = (unsigned int)gtk_combo_box_get_active(GTK_COMBO_BOX(ef_gtk->combobox_charge));
-    
-    *fx = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_barre_repartie_uniforme.builder, "EF_charge_barre_rep_uni_buffer_fx")), -INFINITY, FALSE, INFINITY, FALSE);
-    if (isnan(*fx))
-        ok = FALSE;
-    
-    *fy = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_barre_repartie_uniforme.builder, "EF_charge_barre_rep_uni_buffer_fy")), -INFINITY, FALSE, INFINITY, FALSE);
-    if (isnan(*fy))
-        ok = FALSE;
-    
-    *fz = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_barre_repartie_uniforme.builder, "EF_charge_barre_rep_uni_buffer_fz")), -INFINITY, FALSE, INFINITY, FALSE);
-    if (isnan(*fz))
-        ok = FALSE;
-    
-    *mx = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_barre_repartie_uniforme.builder, "EF_charge_barre_rep_uni_buffer_mx")), -INFINITY, FALSE, INFINITY, FALSE);
-    if (isnan(*mx))
-        ok = FALSE;
-    
-    *my = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_barre_repartie_uniforme.builder, "EF_charge_barre_rep_uni_buffer_my")), -INFINITY, FALSE, INFINITY, FALSE);
-    if (isnan(*my))
-        ok = FALSE;
-    
-    *mz = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_barre_repartie_uniforme.builder, "EF_charge_barre_rep_uni_buffer_mz")), -INFINITY, FALSE, INFINITY, FALSE);
-    if (isnan(*mz))
-        ok = FALSE;
-    
-    *a = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_barre_repartie_uniforme.builder, "EF_charge_barre_rep_uni_buffer_a")), 0, TRUE, INFINITY, FALSE);
-    if (isnan(*a))
-        ok = FALSE;
-    
-    *b = common_gtk_text_buffer_double(GTK_TEXT_BUFFER(gtk_builder_get_object(projet->list_gtk.ef_charge_barre_repartie_uniforme.builder, "EF_charge_barre_rep_uni_buffer_b")), 0, TRUE, INFINITY, FALSE);
-    if (isnan(*b))
-        ok = FALSE;
-    
-    *repere_local = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_rep_uni_radio_local")));
-    
-    *projection = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_rep_uni_check_projection")));
-    
-    textbuffer = GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_rep_uni_buffer_barres"));
-    gtk_text_buffer_get_iter_at_offset(textbuffer, &start, 0);
-    gtk_text_buffer_get_iter_at_offset(textbuffer, &end, -1);
-    texte_tmp = gtk_text_buffer_get_text(textbuffer, &start, &end, FALSE);
-    num_barres = common_selection_renvoie_numeros(texte_tmp);
-    if (num_barres == NULL)
-        ok = FALSE;
+  GList         *num_barres;
+  GtkTextIter    start, end;
+  gchar         *texte_tmp;
+  GtkTextBuffer *textbuffer;
+  gboolean       ok = TRUE;
+  
+  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGMSG (action, FALSE, gettext ("Paramètre %s incorrect.\n"), "action")
+  BUGMSG (barres, FALSE, gettext ("Paramètre %s incorrect.\n"), "barres")
+  BUGMSG (fx, FALSE, gettext ("Paramètre %s incorrect.\n"), "fx")
+  BUGMSG (fy, FALSE, gettext ("Paramètre %s incorrect.\n"), "fy")
+  BUGMSG (fz, FALSE, gettext ("Paramètre %s incorrect.\n"), "fz")
+  BUGMSG (mx, FALSE, gettext ("Paramètre %s incorrect.\n"), "mx")
+  BUGMSG (my, FALSE, gettext ("Paramètre %s incorrect.\n"), "my")
+  BUGMSG (mz, FALSE, gettext ("Paramètre %s incorrect.\n"), "mz")
+  BUGMSG (nom, FALSE, gettext ("Paramètre %s incorrect.\n"), "nom")
+  BUGMSG (repere_local,
+          FALSE,
+          gettext ("Paramètre %s incorrect.\n"), "repere_local")
+  BUGMSG (projection,
+          FALSE,
+          gettext ("Paramètre %s incorrect.\n"), "projection")
+  BUGMSG (a, FALSE, gettext ("Paramètre %s incorrect.\n"), "a")
+  BUGMSG (b, FALSE, gettext ("Paramètre %s incorrect.\n"), "b")
+  BUGMSG (UI_CHBARR.builder,
+          FALSE,
+          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                   "Charge Barre Répartie Uniforme")
+  
+  if (gtk_combo_box_get_active (UI_CHBARR.combobox_charge) < 0)
+    ok = FALSE;
+  else
+    *action = g_list_nth_data (p->actions,
+                               (unsigned int) gtk_combo_box_get_active (
+                                                   UI_CHBARR.combobox_charge));
+  
+  *fx = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (
+                      UI_CHBARR.builder, "EF_charge_barre_rep_uni_buffer_fx")),
+                     -INFINITY,
+                     FALSE,
+                     INFINITY,
+                     FALSE);
+  if (isnan (*fx))
+    ok = FALSE;
+  
+  *fy = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (
+                      UI_CHBARR.builder, "EF_charge_barre_rep_uni_buffer_fy")),
+                     -INFINITY,
+                     FALSE,
+                     INFINITY,
+                     FALSE);
+  if (isnan (*fy))
+    ok = FALSE;
+  
+  *fz = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (
+                      UI_CHBARR.builder, "EF_charge_barre_rep_uni_buffer_fz")),
+                     -INFINITY,
+                     FALSE,
+                     INFINITY,
+                     FALSE);
+  if (isnan (*fz))
+    ok = FALSE;
+  
+  *mx = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (
+                      UI_CHBARR.builder, "EF_charge_barre_rep_uni_buffer_mx")),
+                     -INFINITY,
+                     FALSE,
+                     INFINITY,
+                     FALSE);
+  if (isnan (*mx))
+    ok = FALSE;
+  
+  *my = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (
+                      UI_CHBARR.builder, "EF_charge_barre_rep_uni_buffer_my")),
+                     -INFINITY,
+                     FALSE,
+                     INFINITY,
+                     FALSE);
+  if (isnan (*my))
+    ok = FALSE;
+  
+  *mz = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (
+                      UI_CHBARR.builder, "EF_charge_barre_rep_uni_buffer_mz")),
+                     -INFINITY,
+                     FALSE,
+                     INFINITY,
+                     FALSE);
+  if (isnan (*mz))
+    ok = FALSE;
+  
+  *a = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (UI_CHBARR.builder,
+                                          "EF_charge_barre_rep_uni_buffer_a")),
+                    0,
+                    TRUE,
+                    INFINITY,
+                    FALSE);
+  if (isnan (*a))
+    ok = FALSE;
+  
+  *b = conv_buff_d (GTK_TEXT_BUFFER (gtk_builder_get_object (UI_CHBARR.builder,
+                                          "EF_charge_barre_rep_uni_buffer_b")),
+                    0,
+                    TRUE,
+                    INFINITY,
+                    FALSE);
+  if (isnan (*b))
+    ok = FALSE;
+  
+  *repere_local = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (
+                                     gtk_builder_get_object (UI_CHBARR.builder,
+                                      "EF_charge_barre_rep_uni_radio_local")));
+  
+  *projection = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (
+                                     gtk_builder_get_object (UI_CHBARR.builder,
+                                 "EF_charge_barre_rep_uni_check_projection")));
+  
+  textbuffer = GTK_TEXT_BUFFER (gtk_builder_get_object (UI_CHBARR.builder,
+                                     "EF_charge_barre_rep_uni_buffer_barres"));
+  gtk_text_buffer_get_iter_at_offset (textbuffer, &start, 0);
+  gtk_text_buffer_get_iter_at_offset (textbuffer, &end, -1);
+  texte_tmp = gtk_text_buffer_get_text (textbuffer, &start, &end, FALSE);
+  num_barres = common_selection_renvoie_numeros (texte_tmp);
+  if (num_barres == NULL)
+    ok = FALSE;
+  else
+  {
+    *barres = common_selection_numeros_en_barres (num_barres, p);
+    if (*barres == NULL)
+      ok = FALSE;
     else
     {
-        *barres = common_selection_converti_numeros_en_barres(num_barres, projet);
-        if (*barres == NULL)
-            ok = FALSE;
-        else
-        {
-            // Si tous les paramètres sont corrects
-            textbuffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_rep_uni_textview_description")));
-            
-            gtk_text_buffer_get_iter_at_offset(textbuffer, &start, 0);
-            gtk_text_buffer_get_iter_at_offset(textbuffer, &end, -1);
-            *nom = gtk_text_buffer_get_text(textbuffer, &start, &end, FALSE);
-            
-            if (strcmp(*nom, "") == 0)
-            {
-                free(*nom);
-                *nom = NULL;
-                ok = FALSE;
-            }
-        }
+      // Si tous les paramètres sont corrects
+      textbuffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (
+                                     gtk_builder_get_object (UI_CHBARR.builder,
+                             "EF_charge_barre_rep_uni_textview_description")));
+      
+      gtk_text_buffer_get_iter_at_offset (textbuffer, &start, 0);
+      gtk_text_buffer_get_iter_at_offset (textbuffer, &end, -1);
+      *nom = gtk_text_buffer_get_text (textbuffer, &start, &end, FALSE);
+      
+      if (strcmp (*nom, "") == 0)
+      {
+        free (*nom);
+        *nom = NULL;
+        ok = FALSE;
+      }
     }
-    
-    free(texte_tmp);
-    
-    return ok;
+  }
+  
+  free (texte_tmp);
+  
+  return ok;
 }
 
 
-void EF_gtk_charge_barre_rep_uni_check(GtkWidget *object, Projet *projet)
-/* Description : Vérifie si l'ensemble des éléments est correct pour activer le bouton add/edit.
- * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
- *            : Projet *projet : la variable projet.
- * Valeur renvoyée : Aucune.
+void
+EF_gtk_charge_barre_rep_uni_check (GtkWidget *button,
+                                   Projet    *p)
+/**
+ * \brief Vérifie si l'ensemble des éléments est correct pour activer le bouton
+ *        add/edit.
+ * \param button : composant à l'origine de l'évènement,
+ * \param p : la variable projet.
+ * \return Rien.\n
+ *   Echec :
+ *     - p == NULL,
+ *     - interface graphique non initialisée.
  */
 {
-    unsigned int    num_action;
-    GList           *barres;
-    double          fx, fy, fz, mx, my, mz;
-    gchar           *nom = NULL;
-    gboolean        repere_local, projection;
-    double          a, b;
-    
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
-    BUGMSG(projet->list_gtk.ef_charge_barre_repartie_uniforme.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Barre Répartie Uniforme")
-    
-    if (!EF_gtk_charge_barre_repartie_uniforme_recupere_donnees(projet, &num_action, &barres, &fx, &fy, &fz, &mx, &my, &mz, &nom, &repere_local, &projection, &a, &b))
-        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_charge_barre_repartie_uniforme.builder, "EF_charge_barre_rep_uni_button_add_edit")), FALSE);
-    else
-    {
-        gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(projet->list_gtk.ef_charge_barre_repartie_uniforme.builder, "EF_charge_barre_rep_uni_button_add_edit")), TRUE);
-        g_list_free(barres);
-    }
-    free(nom);
-    return;
+  Action  *action;
+  GList   *barres;
+  double   fx, fy, fz, mx, my, mz;
+  gchar   *nom = NULL;
+  gboolean repere_local, projection;
+  double   a, b;
+  
+  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGMSG (UI_CHBARR.builder,
+          ,
+          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+          "Charge Barre Répartie Uniforme")
+  
+  if (!EF_gtk_charge_barre_repartie_uniforme_recupere (p,
+                                                       &action,
+                                                       &barres,
+                                                       &fx,
+                                                       &fy,
+                                                       &fz,
+                                                       &mx,
+                                                       &my,
+                                                       &mz,
+                                                       &nom,
+                                                       &repere_local,
+                                                       &projection,
+                                                       &a,
+                                                       &b))
+    gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (
+                UI_CHBARR.builder, "EF_charge_barre_rep_uni_button_add_edit")),
+                              FALSE);
+  else
+  {
+    gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (
+                UI_CHBARR.builder, "EF_charge_barre_rep_uni_button_add_edit")),
+                              TRUE);
+    g_list_free (barres);
+  }
+  free (nom);
+  
+  return;
 }
 
 
-void EF_gtk_charge_barre_repartie_uniforme_ajouter_clicked(GtkButton *button, Projet *projet)
-/* Description : Ferme la fenêtre en ajoutant la charge.
- * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
- *            : Projet *projet : la variable projet.
- * Valeur renvoyée : Aucune.
+void
+EF_gtk_charge_barre_repartie_uniforme_ajouter (GtkButton *button,
+                                               Projet    *p)
+/**
+ * \brief Ferme la fenêtre en ajoutant la charge.
+ * \param button : composant à l'origine de l'évènement,
+ * \param p : la variable projet.
+ * \return Rien.\n
+ *   Echec :
+ *     - p == NULL,
+ *     - interface graphique non initialisée.
  */
 {
-    double                          fx, fy, fz, mx, my, mz, a, b;
-    unsigned int                    num_action;
-    gboolean                        repere_local, projection;
-    GList                           *barres;
-    gchar                           *texte;
-    Charge_Barre_Repartie_Uniforme  *charge;
-    
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
-    BUGMSG(projet->list_gtk.ef_charge_barre_repartie_uniforme.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Barre Répartie Uniforme")
-    
-    BUG(EF_gtk_charge_barre_repartie_uniforme_recupere_donnees(projet, &num_action, &barres, &fx, &fy, &fz, &mx, &my, &mz, &texte, &repere_local, &projection, &a, &b) == TRUE, )
-    
-    // Création de la nouvelle charge ponctuelle sur barre
-    BUG(charge = EF_charge_barre_repartie_uniforme_ajout(projet, num_action, barres, repere_local, projection, common_math_f(a, FLOTTANT_UTILISATEUR), common_math_f(b, FLOTTANT_UTILISATEUR), common_math_f(fx, FLOTTANT_UTILISATEUR), common_math_f(fy, FLOTTANT_UTILISATEUR), common_math_f(fz, FLOTTANT_UTILISATEUR), common_math_f(mx, FLOTTANT_UTILISATEUR), common_math_f(my, FLOTTANT_UTILISATEUR), common_math_f(mz, FLOTTANT_UTILISATEUR), texte), )
-    
-    free(texte);
-    
-    gtk_widget_destroy(projet->list_gtk.ef_charge_barre_repartie_uniforme.window);
-    
-    return;
+  double   fx, fy, fz, mx, my, mz, a, b;
+  Action  *action;
+  gboolean repere_local, projection;
+  GList   *barres;
+  gchar   *texte;
+  
+  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGMSG (UI_CHBARR.builder,
+          ,
+          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                   "Charge Barre Répartie Uniforme")
+  
+  BUG (EF_gtk_charge_barre_repartie_uniforme_recupere (p,
+                                                       &action,
+                                                       &barres,
+                                                       &fx,
+                                                       &fy,
+                                                       &fz,
+                                                       &mx,
+                                                       &my,
+                                                       &mz,
+                                                       &texte,
+                                                       &repere_local,
+                                                       &projection,
+                                                       &a,
+                                                       &b) == TRUE,
+      )
+  
+  // Création de la nouvelle charge répartie uniformément sur barre
+  BUG (EF_charge_barre_repartie_uniforme_ajout (p,
+                                                action,
+                                                barres,
+                                                repere_local,
+                                                projection,
+                                                m_f (a, FLOTTANT_UTILISATEUR),
+                                                m_f (b, FLOTTANT_UTILISATEUR),
+                                                m_f (fx, FLOTTANT_UTILISATEUR),
+                                                m_f (fy, FLOTTANT_UTILISATEUR),
+                                                m_f (fz, FLOTTANT_UTILISATEUR),
+                                                m_f (mx, FLOTTANT_UTILISATEUR),
+                                                m_f (my, FLOTTANT_UTILISATEUR),
+                                                m_f (mz, FLOTTANT_UTILISATEUR),
+                                                texte), )
+  
+  free (texte);
+  
+  gtk_widget_destroy (UI_CHBARR.window);
+  
+  return;
 }
 
 
-void EF_gtk_charge_barre_repartie_uniforme_editer_clicked(GtkButton *button, Projet *projet)
-/* Description : Ferme la fenêtre en appliquant les modifications.
- * Paramètres : GtkWidget *button : composant à l'origine de l'évènement,
- *            : Projet *projet : la variable projet.
- * Valeur renvoyée : Aucune.
+void
+EF_gtk_charge_barre_repartie_uniforme_editer (GtkButton *button,
+                                              Projet    *p)
+/**
+ * \brief Ferme la fenêtre en appliquant les modifications.
+ * \param button : composant à l'origine de l'évènement,
+ * \param p : la variable projet.
+ * \return Rien.\n
+ *   Echec :
+ *     - p == NULL,
+ *     - interface graphique non initialisée.
  */
 {
-    Gtk_EF_Charge_Barre_Repartie_Uniforme   *ef_gtk;
-    double                                  fx, fy, fz, mx, my, mz, a, b;
-    unsigned int                            num_action;
-    gboolean                                repere_local, projection;
-    GList                                   *barres;
-    gchar                                   *texte;
-    Charge_Barre_Repartie_Uniforme          *charge;
-    
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
-    BUGMSG(projet->list_gtk.ef_charge_barre_repartie_uniforme.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Barre Répartie Uniforme")
-    
-    ef_gtk = &projet->list_gtk.ef_charge_barre_repartie_uniforme;
-    
-    BUG(EF_gtk_charge_barre_repartie_uniforme_recupere_donnees(projet, &num_action, &barres, &fx, &fy, &fz, &mx, &my, &mz, &texte, &repere_local, &projection, &a, &b) == TRUE, )
-    
-    // Création de la nouvelle charge ponctuelle sur barre
-    BUG(charge = EF_charge_cherche(projet, ef_gtk->action, ef_gtk->charge), )
-    free(charge->nom);
-    charge->nom = texte;
-    g_list_free(charge->barres);
-    charge->barres = barres;
-    charge->repere_local = repere_local;
-    charge->projection = projection;
-    charge->a = common_math_f(a, FLOTTANT_UTILISATEUR);
-    charge->b = common_math_f(b, FLOTTANT_UTILISATEUR);
-    charge->fx = common_math_f(fx, FLOTTANT_UTILISATEUR);
-    charge->fy = common_math_f(fy, FLOTTANT_UTILISATEUR);
-    charge->fz = common_math_f(fz, FLOTTANT_UTILISATEUR);
-    charge->mx = common_math_f(mx, FLOTTANT_UTILISATEUR);
-    charge->my = common_math_f(my, FLOTTANT_UTILISATEUR);
-    charge->mz = common_math_f(mz, FLOTTANT_UTILISATEUR);
-    if (num_action != ef_gtk->action)
-        BUG(EF_charge_deplace(projet, ef_gtk->action, ef_gtk->charge, num_action), )
-    else
-        gtk_widget_queue_resize(GTK_WIDGET(projet->list_gtk._1990_actions.tree_view_charges));
-    
-    gtk_widget_destroy(projet->list_gtk.ef_charge_barre_repartie_uniforme.window);
-    
-    BUG(EF_calculs_free(projet), )
-    
-    return;
+  double                          fx, fy, fz, mx, my, mz, a, b;
+  Action                         *action;
+  gboolean                        repere_local, projection;
+  GList                          *barres;
+  gchar                          *texte;
+  Charge_Barre_Repartie_Uniforme *charge_d;
+  
+  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGMSG (UI_CHBARR.builder,
+          ,
+          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                   "Charge Barre Répartie Uniforme")
+  
+  BUG (EF_gtk_charge_barre_repartie_uniforme_recupere (p,
+                                                       &action,
+                                                       &barres,
+                                                       &fx,
+                                                       &fy,
+                                                       &fz,
+                                                       &mx,
+                                                       &my,
+                                                       &mz,
+                                                       &texte,
+                                                       &repere_local,
+                                                       &projection,
+                                                       &a,
+                                                       &b) == TRUE,
+      )
+  
+  // Création de la nouvelle charge répartie uniformément sur barre
+  free (UI_CHBARR.charge->nom);
+  UI_CHBARR.charge->nom = texte;
+  charge_d = UI_CHBARR.charge->data;
+  g_list_free (charge_d->barres);
+  charge_d->barres = barres;
+  charge_d->repere_local = repere_local;
+  charge_d->projection = projection;
+  charge_d->a = m_f (a, FLOTTANT_UTILISATEUR);
+  charge_d->b = m_f (b, FLOTTANT_UTILISATEUR);
+  charge_d->fx = m_f (fx, FLOTTANT_UTILISATEUR);
+  charge_d->fy = m_f (fy, FLOTTANT_UTILISATEUR);
+  charge_d->fz = m_f (fz, FLOTTANT_UTILISATEUR);
+  charge_d->mx = m_f (mx, FLOTTANT_UTILISATEUR);
+  charge_d->my = m_f (my, FLOTTANT_UTILISATEUR);
+  charge_d->mz = m_f (mz, FLOTTANT_UTILISATEUR);
+  if (action != UI_CHBARR.action)
+    BUG (EF_charge_deplace (p, UI_CHBARR.action, UI_CHBARR.charge, action), )
+  else
+    gtk_widget_queue_resize (GTK_WIDGET (UI_ACT.tree_view_charges));
+  
+  gtk_widget_destroy (UI_CHBARR.window);
+  
+  BUG (EF_calculs_free (p), )
+  
+  return;
 }
 
 
-void EF_gtk_charge_barre_repartie_uniforme_toggled( GtkToggleButton *togglebutton,
-  Projet *projet)
-/* Description : Évènement lors du cochage de projection et repère globale. En effet, il n'est
- *               pas possible de faire à la fois une projection dans le repère local.
- * Paramètres : GtkToggleButton *togglebutton : composant à l'origine de l'évènement,
- *              Projet *projet : la variable projet.
- * Valeur renvoyée : Aucune.
+void
+EF_gtk_charge_barre_repartie_uniforme_toggled (GtkToggleButton *togglebutton,
+                                               Projet          *p)
+/**
+ * \brief Évènement lors du cochage de projection et repère globale. En effet,
+ *        il n'est pas possible de faire à la fois une projection dans le
+ *        repère local.
+ * \param togglebutton : composant à l'origine de l'évènement,
+ * \param p : la variable projet.
+ * \return Rien.\n
+ *   Echec :
+ *     - p == NULL,
+ *     - interface graphique non initialisée.
  */
 {
-    Gtk_EF_Charge_Barre_Repartie_Uniforme  *ef_gtk;
-    
-    BUGMSG(projet, , gettext("Paramètre %s incorrect.\n"), "projet")
-    BUGMSG(projet->list_gtk.ef_charge_barre_repartie_uniforme.builder, , gettext("La fenêtre graphique %s n'est pas initialisée.\n"), "Charge Barre Répartie Uniforme")
-    
-    ef_gtk = &projet->list_gtk.ef_charge_barre_repartie_uniforme;
-    if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ef_gtk->check_button_repere_local)))
-    {
-        gtk_widget_set_sensitive(ef_gtk->check_button_projection, FALSE);
-        gtk_widget_set_sensitive(ef_gtk->check_button_repere_local, TRUE);
-        gtk_widget_set_sensitive(ef_gtk->check_button_repere_global, TRUE);
-    }
-    else if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(ef_gtk->check_button_projection)))
-    {
-        gtk_widget_set_sensitive(ef_gtk->check_button_projection, TRUE);
-        gtk_widget_set_sensitive(ef_gtk->check_button_repere_global, TRUE);
-        gtk_widget_set_sensitive(ef_gtk->check_button_repere_local, FALSE);
-    }
-    else
-    {
-        gtk_widget_set_sensitive(ef_gtk->check_button_projection, TRUE);
-        gtk_widget_set_sensitive(ef_gtk->check_button_repere_local, TRUE);
-        gtk_widget_set_sensitive(ef_gtk->check_button_repere_global, TRUE);
-    }
+  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGMSG (UI_CHBARR.builder,
+          ,
+          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                   "Charge Barre Répartie Uniforme")
+  
+  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (
+                                         UI_CHBARR.check_button_repere_local)))
+  {
+    gtk_widget_set_sensitive (UI_CHBARR.check_button_projection, FALSE);
+    gtk_widget_set_sensitive (UI_CHBARR.check_button_repere_local, TRUE);
+    gtk_widget_set_sensitive (UI_CHBARR.check_button_repere_global, TRUE);
+  }
+  else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (
+                                           UI_CHBARR.check_button_projection)))
+  {
+    gtk_widget_set_sensitive (UI_CHBARR.check_button_projection, TRUE);
+    gtk_widget_set_sensitive (UI_CHBARR.check_button_repere_global, TRUE);
+    gtk_widget_set_sensitive (UI_CHBARR.check_button_repere_local, FALSE);
+  }
+  else
+  {
+    gtk_widget_set_sensitive (UI_CHBARR.check_button_projection, TRUE);
+    gtk_widget_set_sensitive (UI_CHBARR.check_button_repere_local, TRUE);
+    gtk_widget_set_sensitive (UI_CHBARR.check_button_repere_global, TRUE);
+  }
 }
 
 
-gboolean EF_gtk_charge_barre_repartie_uniforme(Projet *projet, unsigned int action_defaut,
-  unsigned int charge)
-/* Description : Affichage de la fenêtre permettant de créer ou modifier une action de type
- *               charge repartie uniforme sur barre.
- * Paramètres : Projet *projet : la variable projet,
- *              unsigned int action_defaut : action par défaut dans la fenêtre,
- *              unsigned int charge : vaut G_MAXUINT si une nouvelle charge doit être ajoutée,
- *                                    vaut le numéro de la charge si elle doit être modifiée.
- * Valeur renvoyée :
- *   Succès : TRUE
+gboolean
+EF_gtk_charge_barre_repartie_uniforme (Projet *p,
+                                       Action *action_defaut,
+                                       Charge *charge)
+/**
+ * \brief Affichage de la fenêtre permettant de créer ou modifier une action de
+ *        type charge repartie uniforme sur barre.
+ * \param p : la variable projet,
+ * \param action_defaut : action par défaut dans la fenêtre,
+ * \param charge : vaut NULL si une nouvelle charge doit être ajoutée,
+ *                 vaut la charge si elle doit être modifiée.
+ * \return
+ *   Succès : TRUE.\n
  *   Echec : FALSE :
- *             projet == NULL,
- *             Fenêtre graphique déjà initialisée.
+ *     - p == NULL,
+ *     - interface graphique impossible à générer.
  */
 {
-    Gtk_EF_Charge_Barre_Repartie_Uniforme   *ef_gtk;
-    Charge_Barre_Repartie_Uniforme          *charge_barre;
-    
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
-    if (projet->list_gtk.ef_charge_barre_repartie_uniforme.builder != NULL)
-    {
-        gtk_window_present(GTK_WINDOW(projet->list_gtk.ef_charge_barre_repartie_uniforme.window));
-        return TRUE;
-    }
-    
-    ef_gtk = &projet->list_gtk.ef_charge_barre_repartie_uniforme;
-    ef_gtk->builder = gtk_builder_new();
-    BUGMSG(gtk_builder_add_from_resource(ef_gtk->builder, "/org/2lgc/codegui/ui/EF_charge_barre_repartie_uniforme.ui", NULL) != 0, FALSE, gettext("Builder Failed\n"))
-    gtk_builder_connect_signals(ef_gtk->builder, projet);
-    
-    ef_gtk->window = GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_rep_uni_window"));
-    ef_gtk->combobox_charge = GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_rep_uni_combo_box_charge"));
-    ef_gtk->check_button_repere_local = GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_rep_uni_radio_local"));
-    ef_gtk->check_button_repere_global = GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_rep_uni_radio_global"));
-    ef_gtk->check_button_projection = GTK_WIDGET(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_rep_uni_check_projection"));
-    
-    if (charge == G_MAXUINT)
-    {
-        ef_gtk->action = 0;
-        ef_gtk->charge = 0;
-        gtk_window_set_title(GTK_WINDOW(ef_gtk->window), gettext("Ajout d'une charge répartie uniforme sur barre"));
-        charge_barre = NULL;
-    }
-    else
-    {
-        ef_gtk->action = action_defaut;
-        ef_gtk->charge = charge;
-        gtk_window_set_title(GTK_WINDOW(ef_gtk->window), gettext("Modification d'une charge répartie uniforme sur barre"));
-        BUG(charge_barre = EF_charge_cherche(projet, action_defaut, charge), FALSE)
-    }
-    
-    gtk_combo_box_set_model(GTK_COMBO_BOX(ef_gtk->combobox_charge), GTK_TREE_MODEL(projet->list_gtk._1990_actions.list_actions));
-    gtk_combo_box_set_active(GTK_COMBO_BOX(ef_gtk->combobox_charge), (gint)action_defaut);
-    
-    if (charge_barre != NULL)
-    {
-        gchar   tmp[30], *tmp2;
-        gtk_text_buffer_set_text(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_rep_uni_textview_description"))), charge_barre->nom, -1);
-        common_math_double_to_char2(charge_barre->fx, tmp, DECIMAL_FORCE);
-        gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_rep_uni_buffer_fx")), tmp, -1);
-        common_math_double_to_char2(charge_barre->fy, tmp, DECIMAL_FORCE);
-        gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_rep_uni_buffer_fy")), tmp, -1);
-        common_math_double_to_char2(charge_barre->fz, tmp, DECIMAL_FORCE);
-        gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_rep_uni_buffer_fz")), tmp, -1);
-        common_math_double_to_char2(charge_barre->mx, tmp, DECIMAL_MOMENT);
-        gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_rep_uni_buffer_mx")), tmp, -1);
-        common_math_double_to_char2(charge_barre->my, tmp, DECIMAL_MOMENT);
-        gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_rep_uni_buffer_my")), tmp, -1);
-        common_math_double_to_char2(charge_barre->mz, tmp, DECIMAL_MOMENT);
-        gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_rep_uni_buffer_mz")), tmp, -1);
-        common_math_double_to_char2(charge_barre->a, tmp, DECIMAL_DISTANCE);
-        gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_rep_uni_buffer_a")), tmp, -1);
-        common_math_double_to_char2(charge_barre->b, tmp, DECIMAL_DISTANCE);
-        gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_rep_uni_buffer_b")), tmp, -1);
-        if ((charge_barre->repere_local) && (charge_barre->projection))
-        {
-            GtkWidget *dialog = gtk_message_dialog_new(GTK_WINDOW(ef_gtk->window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK, gettext("Il n'est pas possible d'activer à la fois la projection et l'utilisation du repère local."));
-            gtk_dialog_run(GTK_DIALOG(dialog));
-            gtk_widget_destroy(dialog);
-            return -1;
-        }
-        if (charge_barre->repere_local)
-            gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ef_gtk->check_button_repere_local), TRUE);
-        else
-            gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ef_gtk->check_button_repere_global), TRUE);
-        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ef_gtk->check_button_projection), charge_barre->projection);
-        BUG(tmp2 = common_selection_converti_barres_en_texte(charge_barre->barres), FALSE)
-        gtk_text_buffer_set_text(GTK_TEXT_BUFFER(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_rep_uni_buffer_barres")), tmp2, -1);
-        free(tmp2);
-    }
-    
-    if (charge == G_MAXUINT)
-    {
-        gtk_button_set_label(GTK_BUTTON(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_rep_uni_button_add_edit")), gettext("_Ajouter"));
-        g_signal_connect(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_rep_uni_button_add_edit"), "clicked", G_CALLBACK(EF_gtk_charge_barre_repartie_uniforme_ajouter_clicked), projet);
-    }
-    else
-    {
-        gtk_button_set_label(GTK_BUTTON(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_rep_uni_button_add_edit")), gettext("_Modifier"));
-        g_signal_connect(gtk_builder_get_object(ef_gtk->builder, "EF_charge_barre_rep_uni_button_add_edit"), "clicked", G_CALLBACK(EF_gtk_charge_barre_repartie_uniforme_editer_clicked), projet);
-    }
-    
-    EF_gtk_charge_barre_rep_uni_check(NULL, projet);
-    
-    if (projet->list_gtk._1990_actions.window == NULL)
-        gtk_window_set_transient_for(GTK_WINDOW(ef_gtk->window), GTK_WINDOW(projet->list_gtk.comp.window));
-    else
-        gtk_window_set_transient_for(GTK_WINDOW(ef_gtk->window), GTK_WINDOW(projet->list_gtk._1990_actions.window));
-    
+  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
+  if (UI_CHBARR.builder != NULL)
+  {
+    gtk_window_present (GTK_WINDOW (UI_CHBARR.window));
     return TRUE;
+  }
+  
+  UI_CHBARR.builder = gtk_builder_new ();
+  BUGMSG (gtk_builder_add_from_resource (UI_CHBARR.builder,
+                   "/org/2lgc/codegui/ui/EF_charge_barre_repartie_uniforme.ui",
+                                         NULL) != 0,
+          FALSE,
+          gettext ("Builder Failed\n"))
+  gtk_builder_connect_signals (UI_CHBARR.builder, p);
+  
+  UI_CHBARR.window = GTK_WIDGET (gtk_builder_get_object (UI_CHBARR.builder,
+                                            "EF_charge_barre_rep_uni_window"));
+  UI_CHBARR.combobox_charge = GTK_COMBO_BOX (gtk_builder_get_object (
+               UI_CHBARR.builder, "EF_charge_barre_rep_uni_combo_box_charge"));
+  UI_CHBARR.check_button_repere_local = GTK_WIDGET (gtk_builder_get_object (
+                    UI_CHBARR.builder, "EF_charge_barre_rep_uni_radio_local"));
+  UI_CHBARR.check_button_repere_global = GTK_WIDGET (gtk_builder_get_object (
+                   UI_CHBARR.builder, "EF_charge_barre_rep_uni_radio_global"));
+  UI_CHBARR.check_button_projection = GTK_WIDGET (gtk_builder_get_object (
+               UI_CHBARR.builder, "EF_charge_barre_rep_uni_check_projection"));
+  
+  if (charge == NULL)
+  {
+    UI_CHBARR.action = 0;
+    UI_CHBARR.charge = 0;
+    gtk_window_set_title (GTK_WINDOW (UI_CHBARR.window),
+                          gettext ("Ajout d'une charge répartie uniforme sur barre"));
+  }
+  else
+  {
+    UI_CHBARR.action = action_defaut;
+    UI_CHBARR.charge = charge;
+    gtk_window_set_title (GTK_WINDOW (UI_CHBARR.window),
+                          gettext ("Modification d'une charge répartie uniforme sur barre"));
+  }
+  
+  gtk_combo_box_set_model (GTK_COMBO_BOX (UI_CHBARR.combobox_charge),
+                           GTK_TREE_MODEL (UI_ACT.liste));
+  gtk_combo_box_set_active (GTK_COMBO_BOX (UI_CHBARR.combobox_charge),
+                            g_list_index (p->actions, action_defaut));
+  
+  if (charge != NULL)
+  {
+    gchar                           tmp[30], *tmp2;
+    Charge_Barre_Repartie_Uniforme *charge_d;
+    
+    gtk_text_buffer_set_text (gtk_text_view_get_buffer (GTK_TEXT_VIEW (
+                                     gtk_builder_get_object (UI_CHBARR.builder,
+                             "EF_charge_barre_rep_uni_textview_description"))),
+                              charge->nom,
+                              -1);
+    charge_d = charge->data;
+    conv_f_c (charge_d->fx, tmp, DECIMAL_FORCE);
+    gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
+                      UI_CHBARR.builder, "EF_charge_barre_rep_uni_buffer_fx")),
+                              tmp,
+                              -1);
+    conv_f_c (charge_d->fy, tmp, DECIMAL_FORCE);
+    gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
+                      UI_CHBARR.builder, "EF_charge_barre_rep_uni_buffer_fy")),
+                              tmp,
+                              -1);
+    conv_f_c (charge_d->fz, tmp, DECIMAL_FORCE);
+    gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
+                      UI_CHBARR.builder, "EF_charge_barre_rep_uni_buffer_fz")),
+                              tmp,
+                              -1);
+    conv_f_c (charge_d->mx, tmp, DECIMAL_MOMENT);
+    gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
+                      UI_CHBARR.builder, "EF_charge_barre_rep_uni_buffer_mx")),
+                              tmp,
+                              -1);
+    conv_f_c (charge_d->my, tmp, DECIMAL_MOMENT);
+    gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
+                      UI_CHBARR.builder, "EF_charge_barre_rep_uni_buffer_my")),
+                              tmp,
+                              -1);
+    conv_f_c (charge_d->mz, tmp, DECIMAL_MOMENT);
+    gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
+                      UI_CHBARR.builder, "EF_charge_barre_rep_uni_buffer_mz")),
+                              tmp,
+                              -1);
+    conv_f_c (charge_d->a, tmp, DECIMAL_DISTANCE);
+    gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
+                       UI_CHBARR.builder, "EF_charge_barre_rep_uni_buffer_a")),
+                              tmp,
+                              -1);
+    conv_f_c (charge_d->b, tmp, DECIMAL_DISTANCE);
+    gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
+                       UI_CHBARR.builder, "EF_charge_barre_rep_uni_buffer_b")),
+                              tmp,
+                              -1);
+    if ((charge_d->repere_local) && (charge_d->projection))
+    {
+      GtkWidget *dialog;
+      
+      dialog = gtk_message_dialog_new (GTK_WINDOW (UI_CHBARR.window),
+                                       GTK_DIALOG_MODAL,
+                                       GTK_MESSAGE_ERROR,
+                                       GTK_BUTTONS_OK,
+                                       gettext ("Il n'est pas possible d'activer à la fois la projection et l'utilisation du repère local."));
+      gtk_dialog_run (GTK_DIALOG (dialog));
+      gtk_widget_destroy (dialog);
+      
+      return FALSE;
+    }
+    
+    if (charge_d->repere_local)
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (
+                                          UI_CHBARR.check_button_repere_local),
+                                    TRUE);
+    else
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (
+                                         UI_CHBARR.check_button_repere_global),
+                                    TRUE);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (
+                                            UI_CHBARR.check_button_projection),
+                                  charge_d->projection);
+    BUG (tmp2 = common_selection_barres_en_texte (charge_d->barres), FALSE)
+    gtk_text_buffer_set_text (GTK_TEXT_BUFFER (gtk_builder_get_object (
+                  UI_CHBARR.builder, "EF_charge_barre_rep_uni_buffer_barres")),
+                              tmp2,
+                              -1);
+    free (tmp2);
+  }
+  
+  if (charge == NULL)
+  {
+    gtk_button_set_label (GTK_BUTTON (gtk_builder_get_object (
+                UI_CHBARR.builder, "EF_charge_barre_rep_uni_button_add_edit")),
+                          gettext ("_Ajouter"));
+    g_signal_connect (gtk_builder_get_object (UI_CHBARR.builder,
+                                    "EF_charge_barre_rep_uni_button_add_edit"),
+                      "clicked",
+                    G_CALLBACK (EF_gtk_charge_barre_repartie_uniforme_ajouter),
+                      p);
+  }
+  else
+  {
+    gtk_button_set_label (GTK_BUTTON (gtk_builder_get_object 
+               (UI_CHBARR.builder, "EF_charge_barre_rep_uni_button_add_edit")),
+                          gettext ("_Modifier"));
+    g_signal_connect (gtk_builder_get_object (UI_CHBARR.builder,
+                                    "EF_charge_barre_rep_uni_button_add_edit"),
+                      "clicked",
+                     G_CALLBACK (EF_gtk_charge_barre_repartie_uniforme_editer),
+                      p);
+  }
+  
+  EF_gtk_charge_barre_rep_uni_check (NULL, p);
+  
+  if (UI_ACT.window == NULL)
+    gtk_window_set_transient_for (GTK_WINDOW (UI_CHBARR.window),
+                                  GTK_WINDOW (p->ui.comp.window));
+  else
+    gtk_window_set_transient_for (GTK_WINDOW (UI_CHBARR.window),
+                                  GTK_WINDOW (UI_ACT.window));
+  
+  return TRUE;
 }
 
 

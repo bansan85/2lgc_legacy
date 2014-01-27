@@ -25,7 +25,8 @@
 
 #include "common_projet.h"
 
-void EF_gtk_rapport(Projet *projet, GList *rapport);
+void EF_gtk_rapport (Projet *p,
+                     GList  *rapport);
 
 #endif
 

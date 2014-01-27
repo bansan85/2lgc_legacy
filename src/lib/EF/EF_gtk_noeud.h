@@ -25,8 +25,9 @@
 
 #include "common_projet.h"
 
-void EF_noeuds_set_supprimer_visible(gboolean select, Projet *projet);
-void EF_gtk_noeud(Projet *projet);
+void EF_noeuds_set_supprimer_visible (gboolean select,
+                                      Projet  *p);
+void EF_gtk_noeud                    (Projet  *p);
 
 #endif
 

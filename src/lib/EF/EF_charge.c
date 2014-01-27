@@ -20,9 +20,11 @@
 #include <libintl.h>
 #include <locale.h>
 #include <gmodule.h>
+#include <string.h>
 
 #include "common_projet.h"
 #include "common_erreurs.h"
+#include "common_gtk.h"
 #include "1990_action.h"
 #include "EF_charge_noeud.h"
 #include "EF_charge_barre_ponctuelle.h"
@@ -30,272 +32,362 @@
 #include "EF_calculs.h"
 
 
-void *EF_charge_cherche(Projet *projet, unsigned int num_action, unsigned int num_charge)
-/* Description : Cherche et renvoie la charge demandée.
- * Paramètres : Projet *projet : la variable projet,
- *            : unsigned int num_action : le numéro de l'action,
- *            : unsigned int num_charge : le numéro de la charge.
- * Valeur renvoyée :
- *   Succès : Pointeur vers la charge recherchée.
+Charge *
+EF_charge_ajout (Projet     *p,
+                 Action     *action,
+                 Charge     *charge,
+                 const char *nom)
+/**
+ * \brief Ajoute une charge ponctuelle à une action à l'intérieur d'une barre.
+ * \param p : la variable projet,
+ * \param action : l'action qui contiendra la charge,
+ * \param charge : la charge à ajouter,
+ * \param nom : nom de la charge.
+ * \return
+ *   Succès : pointeur vers la nouvelle charge.\n
  *   Échec : NULL :
- *             projet == NULL,
- *             action introuvable,
- *             charge introuvable.
+ *     - p == NULL,
+ *     - action == NULL,
+ *     - charge == NULL.
  */
 {
-    Action  *action;
-    GList   *list_parcours;
+#ifdef ENABLE_GTK
+  GtkTreeIter   iter_action;
+  GtkTreeModel *model_action;
+#endif
+  
+  BUGMSG (p, NULL, gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGMSG (action, NULL, gettext ("Paramètre %s incorrect.\n"), "action")
+  BUGMSG (charge, NULL, gettext ("Paramètre %s incorrect.\n"), "charge")
+  
+  BUGMSG (charge->nom = g_strdup_printf ("%s", nom),
+          NULL,
+          gettext ("Erreur d'allocation mémoire.\n"))
+  
+  BUG (_1990_action_charges_change (action,
+                          g_list_append (_1990_action_charges_renvoie (action),
+                                    charge)),
+       NULL)
+  
+  BUG (EF_calculs_free (p), FALSE)
+  
+#ifdef ENABLE_GTK
+  if ((UI_ACT.builder != NULL) &&
+      (gtk_tree_selection_get_selected (UI_ACT.tree_select_actions,
+                                        &model_action,
+                                        &iter_action)))
+  {
+    Action *action2;
     
-    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet")
-    
-    BUG(action = _1990_action_numero_cherche(projet, num_action), NULL)
-    
-    list_parcours = _1990_action_charges_renvoie(action);
-    while (list_parcours != NULL)
+    gtk_tree_model_get (model_action, &iter_action, 0, &action2, -1);
+    if (action2 == action)
     {
-        Charge_Noeud *charge = list_parcours->data;
-        
-        if (charge->numero == num_charge)
-            return charge;
-        
-        list_parcours = g_list_next(list_parcours);
+      gtk_tree_store_append (UI_ACT.tree_store_charges, &charge->Iter, NULL);
+      gtk_tree_store_set (UI_ACT.tree_store_charges,
+                          &charge->Iter,
+                          0, charge,
+                          -1);
     }
-    
-    BUGMSG(0, NULL, gettext("Charge %u de l'action %u introuvable.\n"), num_charge, num_action)
+  }
+#endif
+  
+  return charge;
 }
 
 
-Action *EF_charge_action(Projet *projet, void *charge)
-/* Description : Envoie l'action possédant la charge.
- * Paramètres : Projet *projet : la variable projet,
- *            : void *charge : la charge dont on souhaite connaitre l'action.
- * Valeur renvoyée :
- *   Succès : pointeur vers l'action
+Charge *EF_charge_cherche (Projet     *p,
+                           Action     *action,
+                           const char *nom)
+/**
+ * \brief Cherche et renvoie la charge demandée.
+ * \param p : la variable projet,
+ * \param action : l'action,
+ * \param nom : le nom de la charge.
+ * \return
+ *   Succès : Pointeur vers la charge recherchée.\n
  *   Échec : NULL :
- *             projet == NULL,
- *             charge == NULL,
- *             la charge n'est pas dans une action.
+ *     - p == NULL,
+ *     - action == NULL,
+ *     - charge introuvable.
  */
 {
-    GList   *list_parcours;
+  GList *list_parcours;
+  
+  BUGMSG (p, NULL, gettext ("Paramètre %s incorrect.\n"), "projet")
+  
+  list_parcours = _1990_action_charges_renvoie (action);
+  while (list_parcours != NULL)
+  {
+    Charge *charge = list_parcours->data;
     
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
-    BUGMSG(charge, FALSE, gettext("Paramètre %s incorrect.\n"), "charge")
+    if (strcmp (charge->nom, nom) == 0)
+      return charge;
     
-    list_parcours = projet->actions;
-    while (list_parcours != NULL)
+    list_parcours = g_list_next (list_parcours);
+  }
+  
+  BUGMSG (0,
+          NULL,
+          gettext ("Charge '%s' de l'action '%s' introuvable.\n"), nom, _1990_action_nom_renvoie (action))
+}
+
+
+Action *
+EF_charge_action (Projet *p,
+                  Charge *charge)
+/**
+ * \brief Envoie l'action possédant la charge.
+ * \param p : la variable projet,
+ * \param charge : la charge dont on souhaite connaitre l'action.
+ * \return
+ *   Succès : pointeur vers l'action.\n
+ *   Échec : NULL :
+ *     - p == NULL,
+ *     - charge == NULL,
+ *     - la charge n'est pas dans une action.
+ */
+{
+  GList *list_parcours;
+  
+  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGMSG (charge, FALSE, gettext ("Paramètre %s incorrect.\n"), "charge")
+  
+  list_parcours = p->actions;
+  while (list_parcours != NULL)
+  {
+    Action *action = list_parcours->data;
+    
+    if (g_list_find (_1990_action_charges_renvoie (action), charge) != NULL)
+      return action;
+    
+    list_parcours = g_list_next (list_parcours);
+  }
+  
+  BUGMSG (0, NULL, gettext ("La charge n'est dans aucune action.\n"))
+}
+
+
+gboolean
+EF_charge_renomme (Projet     *p,
+                   Charge     *charge,
+                   const char *nom)
+/**
+ * \brief Renomme une charge.
+ * \param p : la variable projet,
+ * \param charge : la charge,
+ * \param nom : le nouveau nom.
+ * \return
+ *   Succès : TRUE.
+ *   Échec : FALSE :
+ *     - p == NULL,
+ *     - charge == NULL,
+ *     - erreur d'allocation mémoire.
+ */
+{
+  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGMSG (charge, FALSE, gettext ("Paramètre %s incorrect.\n"), "charge")
+  
+  free (charge->nom);
+  BUGMSG (charge->nom = g_strdup_printf ("%s", nom),
+          FALSE,
+          gettext ("Erreur d'allocation mémoire.\n"))
+  
+#ifdef ENABLE_GTK
+  if (UI_ACT.builder != NULL)
+    gtk_widget_queue_resize (GTK_WIDGET (UI_ACT.tree_view_charges));
+#endif
+  
+  return TRUE;
+}
+
+
+gboolean
+EF_charge_deplace (Projet *p,
+                   Action *action_src,
+                   Charge *charge_s,
+                   Action *action_dest)
+/**
+ * \brief Déplace une charge d'une action à l'autre. La charge une fois
+ *        déplacée sera en fin de la liste et les numéros des charges dans
+ *        l'action d'origine seront décrémentés afin que les numéros soit
+ *        toujours continus.
+ * \param p : la variable projet,
+ * \param action_src : l'action où se situe la charge à déplacer,
+ * \param charge_s : la charge à déplacer,
+ * \param action_dest : l'action où sera déplacer la charge.
+ * \return
+ *   Succès : TRUE.\n
+ *   Échec : FALSE :
+ *     - p == NULL,
+ *     - action_src == NULL,
+ *     - action_dest == NULL,
+ *     - charge charge_src dans l'action action_src introuvable.
+ */
+{
+  Charge *charge_data = NULL;
+  GList  *list_parcours;
+  
+  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGMSG (action_src,
+          FALSE,
+          gettext ("Paramètre %s incorrect.\n"), "action_src")
+  BUGMSG (charge_s,
+          FALSE,
+          gettext ("Paramètre %s incorrect.\n"), "charge_s")
+  BUGMSG (action_dest,
+          FALSE,
+          gettext ("Paramètre %s incorrect.\n"), "action_dest")
+  
+  if (action_src == action_dest)
+    return TRUE;
+  
+  // Lorsqu'elle est trouvée,
+  list_parcours = _1990_action_charges_renvoie (action_src);
+  //   Pour chaque charge de l'action en cours Faire
+  while (list_parcours != NULL)
+  {
+    Charge *charge = list_parcours->data;
+    
+  //     Si la charge est celle à supprimer Alors
+    if (charge == charge_s)
     {
-        Action  *action = list_parcours->data;
-        
-        if (g_list_find(_1990_action_charges_renvoie(action), charge) != NULL)
-            return action;
-        
-        list_parcours = g_list_next(list_parcours);
+      GList *list_next = g_list_next(list_parcours);
+      
+#ifdef ENABLE_GTK
+  //       On la supprime du tree-view-charge
+      if (UI_ACT.builder != NULL)
+        gtk_tree_store_remove (GTK_TREE_STORE (gtk_builder_get_object (
+                            UI_ACT.builder, "1990_actions_tree_store_charge")),
+                               &charge->Iter);
+#endif
+  //       et de la liste des charges tout en conservant les données
+  //         de la charge dans charge_data.
+      charge_data = charge;
+      BUG (_1990_action_charges_change (action_src,
+                                        g_list_delete_link
+                                                (_1990_action_charges_renvoie (
+                                                                   action_src),
+                                                 list_parcours)),
+           FALSE)
+      list_parcours = list_next;
+      if (list_parcours != NULL)
+        charge = list_parcours->data;
+      else
+        charge = NULL;
     }
     
-    BUGMSG(0, NULL, gettext("La charge n'est dans aucune action.\n"))
+    list_parcours = g_list_next (list_parcours);
+  //   FinPour
+  }
+  
+  BUGMSG (charge_data,
+          FALSE,
+          gettext ("Charge '%s' de l'action %s introuvable.\n"), charge_s->nom, _1990_action_nom_renvoie (action_src))
+  
+  // On insère la charge à la fin de la liste des charges dans l'action de
+  // destination en modifiant son numéro.
+  BUG (_1990_action_charges_change (
+         action_dest,
+         g_list_append (_1990_action_charges_renvoie (action_dest),
+                        charge_data)),
+       FALSE)
+  
+  BUG (EF_calculs_free (p), FALSE)
+  
+  return TRUE;
 }
 
 
-gboolean EF_charge_renomme(Projet *projet, unsigned int numero_action,
-  unsigned int numero_charge, const char *nom)
-/* Description : Renomme une charge.
- * Paramètres : Projet *projet : la variable projet,
- *            : unsigned int num_action : le numéro de l'action,
- *            : unsigned int num_charge : le numéro de la charge,
- *            : const char *nom : le nouveau nom.
- * Valeur renvoyée :
- *   Succès : TRUE
+gboolean
+EF_charge_supprime (Projet *p,
+                    Action *action,
+                    Charge *charge_s)
+/**
+ * \brief Supprime une charge. Décrémente également le numéro des charges
+ *        possédant un numéro supérieur à la charge supprimée afin que la liste
+ *        des numéros soit toujours continue.
+ * \param p : la variable projet,
+ * \param action : l'action où se situe la charge à supprimer,
+ * \param charge_s : la charge à supprimer.
+ * \return
+ *   Succès : TRUE.\n
  *   Échec : FALSE :
- *             projet == NULL,
- *             action introuvable,
- *             charge introuvable,
- *             erreur d'allocation mémoire.
+ *     - p == NULL,
+ *     - action == NULL,
+ *     - charge_s == NULL.
  */
 {
-    Charge_Noeud    *charge;
-    
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
-    
-    BUG(charge = EF_charge_cherche(projet, numero_action, numero_charge), -1)
-    
-    free(charge->nom);
-    BUGMSG(charge->nom = g_strdup_printf("%s", nom), -1, gettext("Erreur d'allocation mémoire.\n"))
-    
-#ifdef ENABLE_GTK
-    if (projet->list_gtk._1990_actions.builder != NULL)
-        gtk_widget_queue_resize(GTK_WIDGET(projet->list_gtk._1990_actions.tree_view_charges));
-#endif
-    
-    return TRUE;
-}
-
-
-gboolean EF_charge_deplace(Projet *projet, unsigned int action_src, unsigned int charge_src,
-  unsigned int action_dest)
-/* Description : Déplace une charge d'une action à l'autre.
- *               La charge une dois déplacée sera en fin de la liste et les numéros des charges
- *               dans l'action d'origine seront décrémentés afin que les numéros soit toujours
- *               continus.
- * Paramètres : Projet *projet : la variable projet,
- *              unsigned int action_src : numéro de l'action où se situe la charge à déplacer,
- *              unsigned int charge_src : numéro de la charge à déplacer,
- *              unsigned int action_dest : numéro de l'action où sera déplacer la charge.
- * Valeur renvoyée :
- *   Succès : TRUE
- *   Échec : FALSE :
- *             projet == NULL,
- *             action action_src introuvable,
- *             action action_dest introuvable,
- *             charge charge_src dans l'action action_src introuvable.
- */
-{
-    Charge_Noeud    *charge_data = NULL;
-    GList           *list_parcours;
-    Action          *action1, *action2;
-    
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
-    // On cherche l'action qui contient la charge
-    BUG(action1 = _1990_action_numero_cherche(projet, action_src), -1)
-    BUG(action2 = _1990_action_numero_cherche(projet, action_dest), -1)
-    
-    if (action_src == action_dest)
-        return TRUE;
-    
-    // Lorsqu'elle est trouvée,
-    
-    list_parcours = _1990_action_charges_renvoie(action1);
-    //     Pour chaque charge de l'action en cours Faire
-    while (list_parcours != NULL)
+  Charge *charge_data = NULL;
+  GList  *list_parcours;
+  
+  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
+  
+  list_parcours = _1990_action_charges_renvoie (action);
+  // Pour chaque charge de l'action en cours Faire
+  while (list_parcours != NULL)
+  {
+    Charge *charge = list_parcours->data;
+  //   Si la charge est celle à supprimer Alors
+    if (charge == charge_s)
     {
-        Charge_Noeud *charge = (Charge_Noeud*)list_parcours->data;
-        
-    //         Si la charge est celle à supprimer Alors
-        if (charge->numero == charge_src)
+      GList *list_next = g_list_next (list_parcours);
+#ifdef ENABLE_GTK
+  //     On la supprime du tree-view-charge
+       if (UI_ACT.builder != NULL)
+         gtk_tree_store_remove (GTK_TREE_STORE (gtk_builder_get_object (
+                            UI_ACT.builder, "1990_actions_tree_store_charge")),
+                                &charge->Iter);
+#endif
+  //     et de la liste des charges tout en conservant les données
+  //       de la charge dans charge_data
+      charge_data = list_parcours->data;
+      BUG (_1990_action_charges_change (action,
+                      g_list_delete_link (_1990_action_charges_renvoie(action),
+                                        list_parcours)),
+           FALSE)
+      list_parcours = list_next;
+      if (list_parcours != NULL)
+        charge = list_parcours->data;
+      else
+        charge = NULL;
+  
+  //     On libère la charge charge_data
+      switch (charge_data->type)
+      {
+        case CHARGE_NOEUD :
         {
-            GList   *list_next = g_list_next(list_parcours);
-            
-#ifdef ENABLE_GTK
-    //             On la supprime du tree-view-charge
-            if (projet->list_gtk._1990_actions.builder != NULL)
-                gtk_tree_store_remove(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_tree_store_charge")), &charge->Iter);
-#endif
-    //             et de la liste des charges tout en conservant les données
-    //               de la charge dans charge_data.
-            charge_data = charge;
-            BUG(_1990_action_charges_change(action1, g_list_delete_link(_1990_action_charges_renvoie(action1), list_parcours)), FALSE)
-            list_parcours = list_next;
-            if (list_parcours != NULL)
-                charge = list_parcours->data;
-            else
-                charge = NULL;
+          BUG (EF_charge_noeud_free (charge_data), FALSE)
+          break;
         }
-        
-    //         Sinon Si la charge possède un numéro supérieur à la charge supprimée alors
-        if ((charge_data != NULL) && (charge != NULL) && (charge->numero > charge_src))
-    //             On décrémente son numéro dans le tree-view-charges
-            charge->numero--;
-        
-        list_parcours = g_list_next(list_parcours);
-    //     FinPour
-    }
-    
-    BUGMSG(charge_data, FALSE, gettext("Charge %u de l'action %u introuvable.\n"), charge_src, action_src)
-    
-    // On insère la charge à la fin de la liste des charges dans l'action de destination
-    //   en modifiant son numéro.
-    charge_data->numero = g_list_length(_1990_action_charges_renvoie(action2));
-    BUG(_1990_action_charges_change(action2, g_list_append(_1990_action_charges_renvoie(action2), charge_data)), FALSE)
-    
-    BUG(EF_calculs_free(projet), FALSE)
-    
-    return TRUE;
-}
-
-
-gboolean EF_charge_supprime(Projet *projet, unsigned int action_num, unsigned int charge_num)
-/* Description : Supprime une charge. Décrémente également le numéro des charges possédant un
- *               numéro supérieur à la charge supprimée afin que la liste des numéros soit
- *               toujours continue.
- * Paramètres : Projet *projet : la variable projet,
- *              unsigned int action_num : numéro de l'action où se situe la charge à supprimer,
- *              unsigned int charge_num : numéro de la charge à supprimer.
- * Valeur renvoyée :
- *   Succès : TRUE
- *   Échec : FALSE :
- *             projet == NULL,
- *             action introuvable,
- *             charge introuvable,
- *             erreur lors de la libération de la charge.
- */
-{
-    Charge_Noeud            *charge_data = NULL;
-    GList                   *list_parcours;
-    Action                  *action;
-    
-    BUGMSG(projet, FALSE, gettext("Paramètre %s incorrect.\n"), "projet")
-    BUG(action = _1990_action_numero_cherche(projet, action_num), FALSE)
-    
-    list_parcours = _1990_action_charges_renvoie(action);
-    // Pour chaque charge de l'action en cours Faire
-    while (list_parcours != NULL)
-    {
-        Charge_Noeud *charge = list_parcours->data;
-    //     Si la charge est celle à supprimer Alors
-        if (charge->numero == charge_num)
+        case CHARGE_BARRE_PONCTUELLE :
         {
-            GList   *list_next = g_list_next(list_parcours);
-#ifdef ENABLE_GTK
-    //         On la supprime du tree-view-charge
-             if (projet->list_gtk._1990_actions.builder != NULL)
-                 gtk_tree_store_remove(GTK_TREE_STORE(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_tree_store_charge")), &charge->Iter);
-#endif
-    //         et de la liste des charges tout en conservant les données
-    //           de la charge dans charge_data
-            charge_data = list_parcours->data;
-            BUG(_1990_action_charges_change(action, g_list_delete_link(_1990_action_charges_renvoie(action), list_parcours)), FALSE)
-            list_parcours = list_next;
-            if (list_parcours != NULL)
-                charge = list_parcours->data;
-            else
-                charge = NULL;
-    
-    //         On libère la charge charge_data
-            switch (charge_data->type)
-            {
-                case CHARGE_NOEUD :
-                {
-                    BUG(EF_charge_noeud_free(charge_data), FALSE)
-                    break;
-                }
-                case CHARGE_BARRE_PONCTUELLE :
-                {
-                    BUG(EF_charge_barre_ponctuelle_free((Charge_Barre_Ponctuelle*)charge_data), FALSE)
-                    break;
-                }
-                case CHARGE_BARRE_REPARTIE_UNIFORME :
-                {
-                    BUG(EF_charge_barre_repartie_uniforme_free((Charge_Barre_Repartie_Uniforme*)charge_data), FALSE)
-                    break;
-                }
-                default :
-                {
-                    BUGMSG(0, FALSE, gettext("Type de charge %d inconnu.\n"), charge_data->type)
-                    break;
-                }
-            }
+          BUG (EF_charge_barre_ponctuelle_free (charge_data), FALSE)
+          break;
         }
-    //     Sinon Si la charge possède un numéro supérieur à la charge supprimée alors
-        if ((charge_data != NULL) && (charge != NULL) && (charge->numero > charge_num))
-    //         On décrémente son numéro dans le tree-view
-            charge->numero--;
-    // FinPour
-        list_parcours = g_list_next(list_parcours);
+        case CHARGE_BARRE_REPARTIE_UNIFORME :
+        {
+          BUG (EF_charge_barre_repartie_uniforme_free (charge_data), FALSE)
+          break;
+        }
+        default :
+        {
+          BUGMSG (0,
+                  FALSE,
+                  gettext ("Type de charge %d inconnu.\n"), charge_data->type)
+          break;
+        }
+      }
+      break;
     }
-    
-    BUGMSG(charge_data, FALSE, gettext("Charge %u de l'action %u introuvable.\n"), charge_num, action_num)
-    
-    BUG(EF_calculs_free(projet), FALSE)
-    
-    return TRUE;
+  // FinPour
+    list_parcours = g_list_next (list_parcours);
+  }
+  
+  BUGMSG (charge_data,
+          FALSE,
+          gettext("Charge '%s' de l'action %s introuvable.\n"), charge_s->nom, _1990_action_nom_renvoie (action))
+  
+  BUG (EF_calculs_free (p), FALSE)
+  
+  return TRUE;
 }

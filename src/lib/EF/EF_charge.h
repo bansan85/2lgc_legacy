@@ -22,13 +22,35 @@
 #include "config.h"
 #include "common_projet.h"
 
-void *EF_charge_cherche(Projet *projet, unsigned int num_action, unsigned int num_charge) __attribute__((__warn_unused_result__));
 
-Action *EF_charge_action(Projet *projet, void *charge) __attribute__((__warn_unused_result__));
+Charge *EF_charge_ajout     (Projet     *p,
+                             Action     *action,
+                             Charge     *charge,
+                             const char *nom)
+                                       __attribute__((__warn_unused_result__));
 
-gboolean EF_charge_renomme(Projet *projet, unsigned int numero_action, unsigned int numero_charge, const char *nom) __attribute__((__warn_unused_result__));
-gboolean EF_charge_deplace(Projet *projet, unsigned int action_src, unsigned int charge_src, unsigned int action_dest) __attribute__((__warn_unused_result__));
+Charge *EF_charge_cherche   (Projet     *p,
+                             Action     *action,
+                             const char *nom)
+                                       __attribute__((__warn_unused_result__));
 
-gboolean EF_charge_supprime(Projet *projet, unsigned int action_num, unsigned int charge_num) __attribute__((__warn_unused_result__));
+Action *EF_charge_action    (Projet     *p,
+                             Charge     *charge)
+                                       __attribute__((__warn_unused_result__));
+
+gboolean EF_charge_renomme  (Projet     *p,
+                             Charge     *charge,
+                             const char *nom)
+                                       __attribute__((__warn_unused_result__));
+gboolean EF_charge_deplace  (Projet     *p,
+                             Action     *action_src,
+                             Charge     *charge_s,
+                             Action     *action_dest)
+                                       __attribute__((__warn_unused_result__));
+
+gboolean EF_charge_supprime (Projet     *p,
+                             Action     *action,
+                             Charge     *charge)
+                                       __attribute__((__warn_unused_result__));
 
 #endif

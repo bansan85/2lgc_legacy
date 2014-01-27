@@ -27,171 +27,208 @@
 #include "common_erreurs.h"
 #include "common_selection.h"
 #include "common_math.h"
+#include "common_gtk.h"
 #include "EF_calculs.h"
+#include "EF_charge.h"
 #include "EF_gtk_charge_noeud.h"
 
 
-Charge_Noeud*  EF_charge_noeud_ajout(Projet *projet, unsigned int num_action, GList *noeuds,
-  Flottant fx, Flottant fy, Flottant fz, Flottant mx, Flottant my, Flottant mz, const char* nom)
-/* Description : Ajoute une charge ponctuelle à une action et à un noeud de la structure en
- *               lui attribuant le numéro suivant la dernière charge de l'action.
- * Paramètres : Projet *projet : la variable projet,
- *            : int num_action : numero de l'action qui contiendra la charge,
- *            : GList *noeuds : liste des noeuds qui supportera la charge,
- *            : Flottant fx : force suivant l'axe global x,
- *            : Flottant fy : force suivant l'axe global y,
- *            : Flottant fz : force suivant l'axe global z,
- *            : Flottant mx : moment autour de l'axe global x,
- *            : Flottant my : moment autour de l'axe global y,
- *            : Flottant mz : moment autour de l'axe global z.
- * Valeur renvoyée :
- *   Succès : un pointeur vers la nouvelle charge
+Charge *
+EF_charge_noeud_ajout (Projet     *p,
+                       Action     *action,
+                       GList      *noeuds,
+                       Flottant    fx,
+                       Flottant    fy,
+                       Flottant    fz,
+                       Flottant    mx,
+                       Flottant    my,
+                       Flottant    mz,
+                       const char *nom)
+/**
+ * \brief Ajoute une charge ponctuelle à une action et à un noeud de la
+ *        structure.
+ * \param p : la variable projet,
+ * \param action : l'action qui contiendra la charge,
+ * \param noeuds : liste des noeuds qui supportera la charge,
+ * \param fx : force suivant l'axe global x en N,
+ * \param fy : force suivant l'axe global y en N,
+ * \param fz : force suivant l'axe global z en N,
+ * \param mx : moment autour de l'axe global x en N.m,
+ * \param my : moment autour de l'axe global y en N.m,
+ * \param mz : moment autour de l'axe global z en N.m.
+ * \param nom : nom de la charge.
+ * \return
+ *   Succès : un pointeur vers la nouvelle charge.\n
  *   Échec : NULL :
- *             projet == NULL,
- *             action introuvable,
- *             en cas d'erreur d'allocation mémoire.
+ *     - p == NULL,
+ *     - action == NULL,
+ *     - noeuds == NULL,
+ *     - en cas d'erreur d'allocation mémoire.
  */
 {
-    Action          *action_en_cours;
-    Charge_Noeud    *charge_nouveau;
-#ifdef ENABLE_GTK
-    GtkTreeIter     iter_action;
-    Action          *action;
-    GtkTreeModel    *model_action;
-#endif
-    
-    // Trivial
-    BUGMSG(projet, NULL, gettext("Paramètre %s incorrect.\n"), "projet")
-    BUG(action_en_cours = _1990_action_numero_cherche(projet, num_action), NULL)
-    BUGMSG(charge_nouveau = malloc(sizeof(Charge_Noeud)), NULL, gettext("Erreur d'allocation mémoire.\n"))
-    
-    charge_nouveau->type = CHARGE_NOEUD;
-    BUGMSG(charge_nouveau->nom = g_strdup_printf("%s", nom), NULL, gettext("Erreur d'allocation mémoire.\n"))
-    charge_nouveau->noeuds = noeuds;
-    charge_nouveau->fx = fx;
-    charge_nouveau->fy = fy;
-    charge_nouveau->fz = fz;
-    charge_nouveau->mx = mx;
-    charge_nouveau->my = my;
-    charge_nouveau->mz = mz;
-    
-    charge_nouveau->numero = g_list_length(_1990_action_charges_renvoie(action_en_cours));
-    
-    BUG(_1990_action_charges_change(action_en_cours, g_list_append(_1990_action_charges_renvoie(action_en_cours), charge_nouveau)), NULL)
-    
-    BUG(EF_calculs_free(projet), FALSE)
-    
-#ifdef ENABLE_GTK
-    if ((projet->list_gtk._1990_actions.builder != NULL) && (gtk_tree_selection_get_selected(projet->list_gtk._1990_actions.tree_select_actions, &model_action, &iter_action)))
-    {
-        gtk_tree_model_get(model_action, &iter_action, 0, &action, -1);
-        if (_1990_action_numero_renvoie(action) == num_action)
-        {
-            gtk_tree_store_append(projet->list_gtk._1990_actions.tree_store_charges, &charge_nouveau->Iter, NULL);
-            gtk_tree_store_set(projet->list_gtk._1990_actions.tree_store_charges, &charge_nouveau->Iter, 0, charge_nouveau, -1);
-        }
-    }
-#endif
-    
-    return charge_nouveau;
+  Charge       *charge;
+  Charge_Noeud *charge_d;
+  
+  BUGMSG (p, NULL, gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGMSG (action, NULL, gettext ("Paramètre %s incorrect.\n"), "action")
+  BUGMSG (noeuds, NULL, gettext ("Paramètre %s incorrect.\n"), "noeuds")
+  BUGMSG (charge = malloc (sizeof (Charge)),
+          NULL,
+          gettext ("Erreur d'allocation mémoire.\n"))
+  BUGMSG (charge_d = malloc (sizeof (Charge_Noeud)),
+          NULL,
+          gettext ("Erreur d'allocation mémoire.\n"))
+  charge->data = charge_d;
+  
+  charge->type = CHARGE_NOEUD;
+  BUGMSG (charge->nom = g_strdup_printf ("%s", nom),
+          NULL,
+          gettext ("Erreur d'allocation mémoire.\n"))
+  charge_d->noeuds = noeuds;
+  charge_d->fx = fx;
+  charge_d->fy = fy;
+  charge_d->fz = fz;
+  charge_d->mx = mx;
+  charge_d->my = my;
+  charge_d->mz = mz;
+  
+  BUG (EF_charge_ajout (p, action, charge, nom), NULL);
+  
+  return charge;
 }
 
 
-char* EF_charge_noeud_description(Charge_Noeud *charge)
-/* Description : Renvoie la description d'une charge de type ponctuelle sur noeud.
- * Paramètres : Charge_Noeud *charge : la charge à décrire.
- * Valeur renvoyée :
- *   Succès : une chaîne de caractère.
+char *
+EF_charge_noeud_description (Charge *charge)
+/**
+ * \brief Renvoie la description d'une charge de type ponctuelle sur noeud.
+ * \param charge : la charge à décrire.
+ * \return
+ *   Succès : une chaîne de caractère.\n
  *   Échec : NULL :
- *             charge == NULL,
- *             en cas d'erreur d'allocation mémoire.
+ *     - charge == NULL,
+ *     - en cas d'erreur d'allocation mémoire.
  */
 {
-    char    txt_fx[30], txt_fy[30], txt_fz[30], txt_mx[30], txt_my[30], txt_mz[30];
-    char    *txt_liste_noeuds, *description;
-    
-    BUGMSG(charge, FALSE, gettext("Paramètre %s incorrect.\n"), "charge")
-    
-    BUG(txt_liste_noeuds = common_selection_converti_noeuds_en_texte(charge->noeuds), NULL)
-    common_math_double_to_char2(charge->fx, txt_fx, DECIMAL_FORCE);
-    common_math_double_to_char2(charge->fy, txt_fy, DECIMAL_FORCE);
-    common_math_double_to_char2(charge->fz, txt_fz, DECIMAL_FORCE);
-    common_math_double_to_char2(charge->mx, txt_mx, DECIMAL_MOMENT);
-    common_math_double_to_char2(charge->my, txt_my, DECIMAL_MOMENT);
-    common_math_double_to_char2(charge->mz, txt_mz, DECIMAL_MOMENT);
-    
-    BUGMSG(description = g_strdup_printf("%s : %s, Fx : %s N, Fy : %s N, Fz : %s N, Mx : %s N.m, My : %s N.m, Mz : %s N.m", strstr(txt_liste_noeuds, ";") == NULL ? gettext("Noeud") : gettext("Noeuds"), txt_liste_noeuds, txt_fx, txt_fy, txt_fz, txt_mx, txt_my, txt_mz), FALSE, gettext("Erreur d'allocation mémoire.\n"))
-    
-    free(txt_liste_noeuds);
-    
-    return description;
+  Charge_Noeud *charge_d;
+  char  txt_fx[30], txt_fy[30], txt_fz[30];
+  char  txt_mx[30], txt_my[30], txt_mz[30];
+  char  *txt_liste_noeuds, *description;
+  
+  BUGMSG (charge, FALSE, gettext ("Paramètre %s incorrect.\n"), "charge")
+  charge_d = charge->data;
+  
+  BUG (txt_liste_noeuds = common_selection_noeuds_en_texte (charge_d->noeuds),
+       NULL)
+  conv_f_c (charge_d->fx, txt_fx, DECIMAL_FORCE);
+  conv_f_c (charge_d->fy, txt_fy, DECIMAL_FORCE);
+  conv_f_c (charge_d->fz, txt_fz, DECIMAL_FORCE);
+  conv_f_c (charge_d->mx, txt_mx, DECIMAL_MOMENT);
+  conv_f_c (charge_d->my, txt_my, DECIMAL_MOMENT);
+  conv_f_c (charge_d->mz, txt_mz, DECIMAL_MOMENT);
+  
+  BUGMSG (description = g_strdup_printf (
+            "%s : %s, Fx : %s N, Fy : %s N, Fz : %s N, Mx : %s N.m, My : %s N.m, Mz : %s N.m",
+            strstr (txt_liste_noeuds, ";") == NULL ?
+              gettext ("Noeud") :
+              gettext ("Noeuds"),
+            txt_liste_noeuds,
+            txt_fx,
+            txt_fy,
+            txt_fz,
+            txt_mx,
+            txt_my,
+            txt_mz),
+          FALSE,
+          gettext ("Erreur d'allocation mémoire.\n"))
+  
+  free (txt_liste_noeuds);
+  
+  return description;
 }
 
 
-gboolean EF_charge_noeud_enleve_noeuds(Charge_Noeud *charge, GList *noeuds, Projet *projet)
-/* Description : Enlève à la charge une liste de noeuds pouvant être utilisés. Dans le cas où
- *               un noeud de la liste n'est pas dans la charge, ce point ne sera pas considéré
- *               comme une erreur mais le noeud sera simplement ignoré.
- * Paramètres : Charge_Noeud *charge : la charge à modifier,
- *              GList *noeuds : la liste de pointers de type EF_Noeud devant être retirés,
- *              Projet *projet : la variable projet.
- * Valeur renvoyée :
- *   Succès : TRUE
+gboolean
+EF_charge_noeud_enleve_noeuds (Charge *charge,
+                               GList  *noeuds,
+                               Projet *p)
+/**
+ * \brief Enlève à la charge une liste de noeuds pouvant être utilisés. Dans le
+ *        cas où un noeud de la liste n'est pas dans la charge, ce point ne
+ *        sera pas considéré comme une erreur mais le noeud sera simplement
+ *        ignoré.
+ * \param charge : la charge à modifier,
+ * \param noeuds : la liste de pointers de type EF_Noeud devant être retirés,
+ * \param  p : la variable projet.
+ * \return
+ *   Succès : TRUE.\n
  *   Échec : FALSE :
- *             charge == NULL.
+ *     - charge == NULL.
  */
 {
-    GList   *list_parcours = noeuds;
+  GList        *list_parcours = noeuds;
+  Charge_Noeud *charge_d;
+  
+  BUGMSG (charge, FALSE, gettext ("Paramètre %s incorrect.\n"), "charge")
+  charge_d = charge->data;
+  
+  while (list_parcours != NULL)
+  {
+    EF_Noeud *noeud = list_parcours->data;
     
-    BUGMSG(charge, FALSE, gettext("Paramètre %s incorrect.\n"), "charge")
+    charge_d->noeuds = g_list_remove (charge_d->noeuds, noeud);
     
-    while (list_parcours != NULL)
-    {
-        EF_Noeud *noeud = list_parcours->data;
-        
-        charge->noeuds = g_list_remove(charge->noeuds, noeud);
-        
-        list_parcours = g_list_next(list_parcours);
-    }
-    
+    list_parcours = g_list_next (list_parcours);
+  }
+  
 #ifdef ENABLE_GTK
-    if (projet->list_gtk._1990_actions.builder != NULL)
+  if (UI_ACT.builder != NULL)
+  {
+    GtkTreeModel *model;
+    GtkTreeIter   Iter;
+    
+    if (gtk_tree_selection_get_selected (GTK_TREE_SELECTION (
+                                        gtk_builder_get_object (UI_ACT.builder,
+                                       "1990_actions_treeview_select_action")),
+                                         &model,
+                                         &Iter))
     {
-        GtkTreeModel    *model;
-        GtkTreeIter     Iter;
-        
-        if (gtk_tree_selection_get_selected(GTK_TREE_SELECTION(gtk_builder_get_object(projet->list_gtk._1990_actions.builder, "1990_actions_treeview_select_action")), &model, &Iter))
-        {
-            Action          *action;
-            
-            gtk_tree_model_get(model, &Iter, 0, &action, -1);
-            
-            if (g_list_find(_1990_action_charges_renvoie(action), charge))
-                gtk_widget_queue_resize(GTK_WIDGET(projet->list_gtk._1990_actions.tree_view_charges));
-        }
+      Action *action;
+      
+      gtk_tree_model_get (model, &Iter, 0, &action, -1);
+      
+      if (g_list_find (_1990_action_charges_renvoie (action), charge))
+        gtk_widget_queue_resize (GTK_WIDGET (UI_ACT.tree_view_charges));
     }
+  }
 #endif
-    
-    BUG(EF_calculs_free(projet), FALSE)
-    
-    return TRUE;
+  
+  BUG (EF_calculs_free (p), FALSE)
+  
+  return TRUE;
 }
 
 
-gboolean EF_charge_noeud_free(Charge_Noeud *charge)
-/* Description : Libère une charge nodale.
- * Paramètres : Charge_Noeud *charge : la charge à libérer.
- * Valeur renvoyée :
- *   Succès : TRUE
+gboolean
+EF_charge_noeud_free (Charge *charge)
+/**
+ * \brief Libère une charge nodale.
+ * \param charge : la charge à libérer.
+ * \return
+ *   Succès : TRUE.\n
  *   Échec : FALSE :
- *             charge == NULL.
+ *     - charge == NULL.
  */
 {
-    BUGMSG(charge, FALSE, gettext("Paramètre %s incorrect.\n"), "charge")
-    
-    free(charge->nom);
-    g_list_free(charge->noeuds);
-    free(charge);
-    
-    return TRUE;
+  Charge_Noeud *charge_d;
+  
+  BUGMSG (charge, FALSE, gettext ("Paramètre %s incorrect.\n"), "charge")
+  charge_d = charge->data;
+  
+  free (charge->nom);
+  g_list_free (charge_d->noeuds);
+  free (charge_d);
+  free (charge);
+  
+  return TRUE;
 }
