@@ -26,7 +26,9 @@
 #include "common_erreurs.h"
 #include "common_math.h"
 #include "common_text.h"
+#ifdef ENABLE_GTK
 #include "common_gtk.h"
+#endif
 #include "common_gtk_informations.h"
 
 gboolean
