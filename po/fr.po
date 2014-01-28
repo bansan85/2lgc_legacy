@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2014-01-12 16:20+0100\n"
-"PO-Revision-Date: 2013-12-25 18:32+0100\n"
+"POT-Creation-Date: 2014-01-28 09:13+0100\n"
+"PO-Revision-Date: 2014-01-28 10:50+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -1580,9 +1580,9 @@ msgstr "Indice hors limite.\n"
 msgid "Le type de matériau %d n'existe pas.\n"
 msgstr "Le type de matériau %d n'existe pas.\n"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Matériau '%s' introuvable.\n"
-msgstr "Matériau en béton '%s' introuvable.\n"
+msgstr "Matériau '%s' introuvable.\n"
 
 #, c-format
 msgid "Matériau %d inconnu.\n"
@@ -1642,6 +1642,9 @@ msgid ""
 msgstr ""
 "La ligne en cours '%s' n'est pas dans un format correct pour une section.\n"
 
+msgid "Le fichier des sections est introuvable.\n"
+msgstr "Le fichier des sections est introuvable.\n"
+
 #, c-format
 msgid "La position de la charge ponctuelle (%f) est incorrecte.\n"
 msgstr "La position de la charge ponctuelle (%f) est incorrecte.\n"
@@ -1678,9 +1681,8 @@ msgstr ""
 "La position de la charge ponctuelle (%f) est incorrecte. La longueur de la "
 "barre est de %f m.\n"
 
-#, fuzzy
 msgid "Impossible d'éditer ce type de relâchement.\n"
-msgstr "Impossible de trouver le type de l'élément.\n"
+msgstr "Impossible d'éditer ce type de relâchement.\n"
 
 msgid "Le type de relâchement est inconnu.\n"
 msgstr "Le type de relâchement est inconnu.\n"
@@ -1912,18 +1914,14 @@ msgstr "La section doit être de type carrée.\n"
 msgid "La section doit être de type circulaire.\n"
 msgstr "La section doit être de type circulaire.\n"
 
-#, fuzzy
 msgid "La forme de la section est vide.\n"
-msgstr "La liste des sections est indéfinie.\n"
+msgstr "La forme de la section est vide.\n"
 
 msgid "Un groupe de points doit avoir au minimum 3 points.\n"
-msgstr ""
+msgstr "Un groupe de points doit avoir au minimum 3 points.\n"
 
-#, fuzzy
 msgid "2 points se suivant ne peuvent avoir les mêmes coordonnées.\n"
-msgstr ""
-"%s\n"
-"Les noeuds %d et %d ont les mêmes coordonnées."
+msgstr "2 points se suivant ne peuvent avoir les mêmes coordonnées.\n"
 
 #, c-format
 msgid ""
@@ -1931,6 +1929,9 @@ msgid ""
 "coupe avec celui défini par les points x = %lf, y = %lf et x = %lf, y = "
 "%lf.\n"
 msgstr ""
+"Le segment défini par les points x = %lf, y = %lf et x = %lf, y = %lf se "
+"coupe avec celui défini par les points x = %lf, y = %lf et x = %lf, y = "
+"%lf.\n"
 
 msgid "La forme est incorrecte.\n"
 msgstr "La forme est incorrecte.\n"
@@ -2090,13 +2091,14 @@ msgstr ""
 
 msgid "Un relachement élastique linéaire doit être défini avec ses paramètres."
 msgstr ""
+"Un relachement élastique linéaire doit être défini avec ses paramètres."
 
 #, c-format
 msgid "Relachement '%s' introuvable.\n"
 msgstr "Relachement '%s' introuvable.\n"
 
 msgid "Un relachement libre ou bloqué ne doit pas avoir de paramètres."
-msgstr ""
+msgstr "Un relachement libre ou bloqué ne doit pas avoir de paramètres."
 
 #, c-format
 msgid "Le relâchement %s existe déjà.\n"

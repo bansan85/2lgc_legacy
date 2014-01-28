@@ -38,11 +38,11 @@
 #define DECIMAL_NEWTON_PAR_METRE 3
 #define DECIMAL_SANS_UNITE 3
 
+typedef struct __Action Action;
+
+
 #ifdef ENABLE_GTK
 #include <gtk/gtk.h>
-
-
-typedef struct __Action Action;
 
 
 typedef struct __Gtk_1990_Groupes
@@ -168,10 +168,8 @@ typedef struct __Gtk_EF_Relachements
   GtkTreeStore *relachements;
   GtkListStore *liste_relachements;
 } Gtk_EF_Relachements;
-#endif
 
 
-#ifdef ENABLE_GTK
 typedef struct __Gtk_EF_Rapport
 {
   GtkBuilder   *builder;
@@ -794,6 +792,7 @@ typedef struct __EF_Noeud_Barre
 } EF_Noeud_Barre;
 
 
+#ifdef ENABLE_GTK
 typedef struct __Gtk_EF_Charge_Noeud
 {
   GtkBuilder *builder;
@@ -828,6 +827,7 @@ typedef struct __Gtk_EF_Charge_Barre_Repartie_Uniforme
   GtkWidget   *check_button_repere_global;
   GtkWidget   *check_button_projection;
 } Gtk_EF_Charge_Barre_Repartie_Uniforme;
+#endif          
 
 
 typedef struct __Troncon // Définition de la structure Troncon qui contient une fonction

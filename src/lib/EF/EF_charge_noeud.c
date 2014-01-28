@@ -27,7 +27,9 @@
 #include "common_erreurs.h"
 #include "common_selection.h"
 #include "common_math.h"
+#ifdef ENABLE_GTK
 #include "common_gtk.h"
+#endif
 #include "EF_calculs.h"
 #include "EF_charge.h"
 #include "EF_gtk_charge_noeud.h"

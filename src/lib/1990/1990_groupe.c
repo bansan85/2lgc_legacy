@@ -514,7 +514,9 @@ _1990_groupe_retire_element (Projet        *p,
  *     - groupe == NULL.
  */
 {
+#ifdef ENABLE_GTK
   Groupe  *groupe2 = element;
+#endif
   
   BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
   BUGMSG (niveau_groupe,

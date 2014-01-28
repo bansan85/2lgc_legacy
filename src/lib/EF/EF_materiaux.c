@@ -25,7 +25,9 @@
 
 #include "common_projet.h"
 #include "common_math.h"
+#ifdef ENABLE_GTK
 #include "common_gtk.h"
+#endif
 #include "common_erreurs.h"
 #include "common_selection.h"
 #include "1992_1_1_barres.h"

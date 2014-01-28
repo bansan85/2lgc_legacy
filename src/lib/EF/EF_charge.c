@@ -24,7 +24,9 @@
 
 #include "common_projet.h"
 #include "common_erreurs.h"
+#ifdef ENABLE_GTK
 #include "common_gtk.h"
+#endif
 #include "1990_action.h"
 #include "EF_charge_noeud.h"
 #include "EF_charge_barre_ponctuelle.h"
