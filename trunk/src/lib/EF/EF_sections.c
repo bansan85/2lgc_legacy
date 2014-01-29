@@ -1432,7 +1432,6 @@ EF_sections_free_un (Section *section)
  * \return Rien.
  */
 {
-  free (section->nom);
   switch (section->type)
   {
     case SECTION_RECTANGULAIRE :

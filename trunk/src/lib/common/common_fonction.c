@@ -47,7 +47,7 @@ common_fonction_scinde_troncon (Fonction *fonction,
  *     - en cas d'erreur d'allocation mémoire.
  */
 {
-  unsigned int i, j;
+  unsigned int i;
   
   BUGMSG (fonction, FALSE, gettext ("Paramètre %s incorrect.\n"), "fonction")
   BUGMSG (fonction->nb_troncons,
@@ -103,6 +103,8 @@ common_fonction_scinde_troncon (Fonction *fonction,
         return TRUE;
       else if (fonction->troncons[i].fin_troncon > coupure)
       {
+        unsigned int j;
+        
         fonction->nb_troncons++;
         BUGMSG (fonction->troncons = (Troncon *) realloc (fonction->troncons,
                                      fonction->nb_troncons * sizeof (Troncon)),
@@ -348,8 +350,7 @@ common_fonction_compacte (Fonction *fonction,
         (ERR (fonction->troncons[i].x5, fonction->troncons[k].x5)) &&
         (ERR (fonction->troncons[i].x6, fonction->troncons[k].x6)) &&
         ((index == NULL) ||
-         ((index != NULL) &&
-          (ERR (index->troncons[i].x0, index->troncons[k].x0)))))
+         (ERR (index->troncons[i].x0, index->troncons[k].x0))))
     {
       fonction->troncons[j-1].fin_troncon = fonction->troncons[i].fin_troncon;
       if (index != NULL)
@@ -529,7 +530,6 @@ common_fonction_cherche_zero (Fonction *fonction,
   double yy1, yy2, yy3;
   double a, b, c;
   double zero1, zero2;
-  double zero1_old, zero2_old;
   double ecart_x;
   
   BUGMSG (fonction, FALSE, gettext ("Paramètre %s incorrect.\n"), "fonction")
@@ -589,7 +589,8 @@ common_fonction_cherche_zero (Fonction *fonction,
   ecart_x = (maxi - mini) / 4.;
   if (!isnan (zero1))
   {
-    zero1_old = zero1;
+    double zero1_old = zero1;
+    
     if (zero1 - ecart_x < mini)
       xx1_2 = mini;
     else
@@ -654,7 +655,7 @@ common_fonction_cherche_zero (Fonction *fonction,
   ecart_x = (maxi - mini) / 4.;
   if (!isnan (zero2))
   {
-    zero2_old = zero2;
+    double zero2_old = zero2;
     if (zero2 - ecart_x < mini)
       xx1_2 = mini;
     else
@@ -879,7 +880,7 @@ common_fonction_caracteristiques (Fonction *fonction,
       double xx1_2, xx2_2, xx3_2;
       double a, b, c; // forme de l'interpolation : a*x²+b*x+c
       double zero1, zero2, deriv_zero;
-      double zero1_old, zero2_old = NAN, deriv_zero_old = NAN;
+      double zero2_old = NAN, deriv_zero_old = NAN;
       double ecart_x, ecart_old;
       
       // On commence par calculer une interpolation hyperbolique
@@ -949,7 +950,8 @@ common_fonction_caracteristiques (Fonction *fonction,
       ecart_x = (xx3 - xx1) / 4.;
       while ((!isnan (zero1)) && (ABS (ecart_x) > ERR_MIN / 1000.))
       {
-        zero1_old = zero1;
+        double zero1_old = zero1;
+        
         if (zero1 - ecart_x < xx1)
           xx1_2 = xx1;
         else
@@ -1279,7 +1281,7 @@ char *common_fonction_affiche_caract (Fonction *fonction,
 {
   double      *pos, *val;
   unsigned int nb_val, i;
-  char        *retour, *tmp;
+  char        *retour;
   
   BUGMSG (fonction, FALSE, gettext ("Paramètre %s incorrect.\n"), "fonction")
   
@@ -1298,7 +1300,8 @@ char *common_fonction_affiche_caract (Fonction *fonction,
   
   for (i = 1; i < nb_val; i++)
   {
-    tmp = retour;
+    char *tmp = retour;
+    
     BUGMSG (retour = g_strdup_printf ("%s\n%.*lf : %.*lf",
                                       retour,
                                       decimales_x,
@@ -1390,7 +1393,6 @@ common_fonction_dessin (GList *fonctions,
                                                          height);
   cairo_t         *cr = cairo_create (surface);
   double           fy_min = 0., fy_max = 0., echelle;
-  cairo_path_t    *save_path;
   double          *mi, *ma;
   GList           *list_parcours;
   Fonction        *fonction;
@@ -1482,6 +1484,8 @@ common_fonction_dessin (GList *fonctions,
   if ((ABS (fy_max) > pow (10, -decimales)) ||
       (ABS (fy_min) > pow (10, -decimales)))
   {
+    cairo_path_t *save_path;
+    
     echelle = ((height - 1.) / 2.) / MAX (ABS (fy_max), ABS (fy_min));
     
     cairo_set_source_rgba (cr, 0.8, 0.8, 0.8, 1.);
@@ -1557,7 +1561,6 @@ common_fonction_conversion_combinaisons (Fonction *fonction,
  */
 {
   GList       *list_tmp = NULL;
-  unsigned int numero;
   unsigned int i;
   
   BUGMSG (fonction, FALSE, gettext ("Paramètre %s incorrect.\n"), "fonction")
@@ -1568,8 +1571,8 @@ common_fonction_conversion_combinaisons (Fonction *fonction,
   
   for (i = 0; i < fonction->nb_troncons; i++)
   {
+    unsigned int numero = (unsigned int) fonction->troncons[i].x0;
     
-    numero = (unsigned int) fonction->troncons[i].x0;
     list_tmp = g_list_append (list_tmp,
                               g_list_nth (ponderations, numero)->data);
   }

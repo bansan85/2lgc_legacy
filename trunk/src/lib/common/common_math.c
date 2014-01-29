@@ -150,7 +150,6 @@ conv_f_c (Flottant nombre,
  */
 {
   double test, f;
-  int    width;
   
   if (decimales > 15)
     decimales = 15;
@@ -169,6 +168,8 @@ conv_f_c (Flottant nombre,
     // que des informations ont été tronquées.
     case FLOTTANT_UTILISATEUR :
     {
+      int width;
+      
       if (ABS (f) > 1e15)
       {
         for (width = 0; width <= 15; width++)

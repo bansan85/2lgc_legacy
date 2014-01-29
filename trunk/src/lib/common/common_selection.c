@@ -349,11 +349,11 @@ common_selection_numeros_en_noeuds (GList  *liste_numeros,
  */
 {
   GList *liste_noeuds = NULL;
-  GList *list_parcours;
   
   if (liste_numeros != NULL)
   {
-    list_parcours = liste_numeros;
+    GList *list_parcours = liste_numeros;
+    
     do
     {
       unsigned int numero = GPOINTER_TO_UINT (list_parcours->data);
@@ -390,12 +390,12 @@ common_selection_numeros_en_barres (GList  *liste_numeros,
  *     - une des barres est introuvable.
  */
 {
-  GList *list_parcours;
   GList *liste_barres = NULL;
   
   if (liste_numeros != NULL)
   {
-    list_parcours = liste_numeros;
+    GList *list_parcours = liste_numeros;
+    
     do
     {
       unsigned int numero = GPOINTER_TO_UINT (list_parcours->data);

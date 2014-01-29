@@ -361,7 +361,7 @@ common_text_get_line (FILE *fichier)
  */
 {
 #define CUR_MAX 256
-  char *buffer, *ligne_tmp, *retour = NULL;
+  char *buffer, *retour = NULL;
   
   BUGMSG (buffer = malloc (sizeof (char) * CUR_MAX),
           FALSE,
@@ -369,6 +369,8 @@ common_text_get_line (FILE *fichier)
   
   do
   {
+    char *ligne_tmp;
+    
     if ((fgets (buffer, CUR_MAX, fichier) == NULL) && (retour == NULL))
     {
       free (buffer);
@@ -384,11 +386,11 @@ common_text_get_line (FILE *fichier)
     }
     
     // On a atteint la fin de la ligne
-    if (buffer[strlen(buffer)-1] == '\n')
+    if (buffer[strlen (buffer) - 1] == '\n')
     {
       free (buffer);
       // Suppression du retour chariot
-      retour[strlen(retour)-1] = 0;
+      retour[strlen (retour) - 1] = 0;
       return retour;
     }
   } while (TRUE);
