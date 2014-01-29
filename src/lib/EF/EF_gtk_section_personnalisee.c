@@ -542,7 +542,7 @@ EF_gtk_section_personnalisee_render_0 (GtkTreeViewColumn *tree_column,
  */
 {
   GtkTreeIter iter2;
-  char       *tmp, *tmp2;
+  char       *tmp;
   Projet     *p = data2;
   int         nombre;
   
@@ -562,6 +562,8 @@ EF_gtk_section_personnalisee_render_0 (GtkTreeViewColumn *tree_column,
   }
   else
   {
+    char *tmp2;
+    
     tmp = gtk_tree_model_get_string_from_iter (UI_SEC_PE.model, iter);
     tmp2 = strchr (tmp, ':')+1;
     BUGMSG (sscanf (tmp2, "%d", &nombre) == 1,

@@ -570,7 +570,6 @@ EF_gtk_materiaux_render_2 (GtkTreeViewColumn *tree_column,
  */
 {
   EF_Materiau *materiau;
-  char        *c;
   
   gtk_tree_model_get (tree_model, iter, 0, &materiau, -1);
   
@@ -579,9 +578,11 @@ EF_gtk_materiaux_render_2 (GtkTreeViewColumn *tree_column,
     case MATERIAU_BETON :
     case MATERIAU_ACIER :
     {
-      c = EF_materiaux_get_description (materiau);
+      char *c = EF_materiaux_get_description (materiau);
+      
       g_object_set (cell, "markup", c, NULL);
       free (c);
+      
       break;
     }
     default :

@@ -280,8 +280,6 @@ EF_gtk_barres_ajouter (GtkButton *button,
  *     - interface graphique impossible à générer.
  */
 {
-  char *nb_barres;
-  
   BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
   if (UI_BARADD.builder != NULL)
   {
@@ -319,6 +317,8 @@ EF_gtk_barres_ajouter (GtkButton *button,
   
   if (p->modele.barres != NULL)
   {
+    char *nb_barres;
+    
     BUGMSG (nb_barres = g_strdup_printf ("%d",
               ((EF_Barre *) g_list_last (p->modele.barres)->data)->numero + 1),
             ,
