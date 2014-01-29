@@ -640,21 +640,10 @@ _1992_1_1_materiaux_get_description (EF_Materiau* materiau)
               data_beton->fckcube.type),
               tmp1,
               DECIMAL_CONTRAINTE);
-    if (complement == NULL)
-      BUGMSG (complement = g_strdup_printf ("f<sub>ck,cube</sub> : %s MPa",
-                                            tmp1),
-              NULL,
-              gettext ("Erreur d'allocation mémoire.\n"))
-    else
-    {
-      tmp2 = complement;
-      BUGMSG (complement = g_strdup_printf ("%s, f<sub>ck,cube</sub> : %s MPa",
-                                            tmp2,
-                                            tmp1),
-              NULL,
-              gettext ("Erreur d'allocation mémoire.\n"))
-      free (tmp2);
-    }
+    BUGMSG (complement = g_strdup_printf ("f<sub>ck,cube</sub> : %s MPa",
+                                          tmp1),
+            NULL,
+            gettext ("Erreur d'allocation mémoire.\n"))
   }
   if (!ERR (m_g (data_beton->fcm),
             _1992_1_1_materiaux_fcm (m_g (data_beton->fck) / 1000000.)))
