@@ -1073,6 +1073,7 @@ EF_gtk_section_personnalisee (Projet  *p,
  *   Succès : TRUE.\n
  *   Echec : FALSE :
  *     - p == NULL,
+ *     - en cas d'erreur d'allocation mémoire,
  *     - interface graphique impossible à générer.
  */
 {
@@ -1200,7 +1201,9 @@ EF_gtk_section_personnalisee (Projet  *p,
         gtk_tree_store_append (GTK_TREE_STORE (UI_SEC_PE.model),
                                &iter_last,
                                &iter);
-        point_bis = malloc (sizeof (EF_Point));
+        BUGMSG (point_bis = malloc (sizeof (EF_Point)),
+                FALSE,
+                gettext ("Erreur d'allocation mémoire.\n"));
         memcpy (point_bis, list_parcours2->data, sizeof (EF_Point));
         gtk_tree_store_set (GTK_TREE_STORE (UI_SEC_PE.model),
                             &iter_last,
@@ -1219,7 +1222,9 @@ EF_gtk_section_personnalisee (Projet  *p,
         // On forme le dernier point à être le même que le premier.
         if (list_parcours2 != list_parcours->data)
         {
-          point_bis = malloc (sizeof (EF_Point));
+          BUGMSG (point_bis = malloc (sizeof (EF_Point)),
+                  FALSE,
+                  gettext ("Erreur d'allocation mémoire.\n"));
           memcpy (point_bis, list_parcours2->data, sizeof (EF_Point));
         }
         gtk_tree_store_set (GTK_TREE_STORE (UI_SEC_PE.model),
