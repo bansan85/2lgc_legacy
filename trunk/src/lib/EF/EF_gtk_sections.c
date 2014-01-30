@@ -1584,7 +1584,9 @@ EF_gtk_sections_get_section (char   *ligne,
     {
       EF_Point *point;
       
-      point = malloc (sizeof (EF_Point));
+      BUGMSG (point = malloc (sizeof (EF_Point)),
+              FALSE,
+              gettext ("Erreur d'allocation mémoire.\n"))
       point->x = m_f (x, FLOTTANT_UTILISATEUR);
       point->y = m_f (y, FLOTTANT_UTILISATEUR);
       point->z = m_f (0., FLOTTANT_UTILISATEUR);
