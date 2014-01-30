@@ -749,7 +749,7 @@ EF_gtk_section_personnalisee_treeview_add (GtkToolButton *widget,
     EF_Point   *point;
     
     BUGMSG (point = malloc (sizeof (EF_Point)),
-            NULL,
+            ,
             gettext ("Erreur d'allocation mémoire.\n"))
     point->x = m_f (0., FLOTTANT_UTILISATEUR);
     point->y = m_f (0., FLOTTANT_UTILISATEUR);

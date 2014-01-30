@@ -1621,7 +1621,9 @@ EF_gtk_sections_get_section (char   *ligne,
   // On le fait à la fin pour éviter d'allouer inutilement de la mémoire.
   if (ligne != NULL)
   {
-    nom_ = malloc (sizeof (char) * (strchr (ligne, '\t') - ligne + 1));
+    BUGMSG (nom_ = malloc (sizeof (char) * (strchr (ligne, '\t') - ligne + 1)),
+            FALSE,
+            gettext ("Erreur d'allocation mémoire.\n"))
     strncpy (nom_, ligne, strchr (ligne, '\t')-ligne);
     nom_[strchr (ligne, '\t') - ligne] = 0;
     
