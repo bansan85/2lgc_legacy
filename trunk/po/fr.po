@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2014-01-28 11:14+0100\n"
-"PO-Revision-Date: 2014-01-29 05:15+0100\n"
+"POT-Creation-Date: 2014-01-30 20:25+0100\n"
+"PO-Revision-Date: 2014-01-30 20:31+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -12,6 +12,461 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 1.5.5\n"
+
+msgid "et ces dépendances."
+msgstr "et ces dépendances."
+
+msgid "Noeuds"
+msgstr "Noeuds"
+
+msgid "Numéro"
+msgstr "Numéro"
+
+msgid "Appui"
+msgstr "Appui"
+
+msgid "Noeud relatif"
+msgstr "Noeud relatif"
+
+msgid "Noeuds _libres"
+msgstr "Noeuds _libres"
+
+msgid "Barre"
+msgstr "Barre"
+
+msgid "Position relative"
+msgstr "Position relative"
+
+msgid "Noeuds _intermédiaires"
+msgstr "Noeuds _intermédiaires"
+
+msgid "_Ajouter"
+msgstr "_Ajouter"
+
+msgid "_Supprimer"
+msgstr "_Supprimer"
+
+msgid "_Fermer"
+msgstr "_Fermer"
+
+msgid "Réactions d'appuis (repère global)"
+msgstr "Réactions d'appuis (repère global)"
+
+msgid "Déplacements (repère global)"
+msgstr "Déplacements (repère global)"
+
+msgid "Barres"
+msgstr "Barres"
+
+msgid "Efforts dans les barres (repère local)"
+msgstr "Efforts dans les barres (repère local)"
+
+msgid "Déformations des barres (repère local)"
+msgstr "Déformations des barres (repère local)"
+
+msgid "Résultats"
+msgstr "Résultats"
+
+msgid "_Afficher : "
+msgstr "_Afficher : "
+
+msgid "Cas élémentaires"
+msgstr "Cas élémentaires"
+
+msgid "Combinaisons"
+msgstr "Combinaisons"
+
+msgid "Enveloppe"
+msgstr "Enveloppe"
+
+msgid "Rapport"
+msgstr "Rapport"
+
+msgid "Point analysé"
+msgstr "Point analysé"
+
+msgid "Commentaires"
+msgstr "Commentaires"
+
+msgid "Informations sur le projet"
+msgstr "Informations sur le projet"
+
+msgid "_Client :"
+msgstr "_Client :"
+
+msgid "A_dresse :"
+msgstr "A_dresse :"
+
+msgid "C_ode postal :"
+msgstr "C_ode postal :"
+
+msgid "_Ville :"
+msgstr "_Ville :"
+
+msgid "_Localisation"
+msgstr "_Localisation"
+
+msgid "_Neige :"
+msgstr "_Neige :"
+
+msgid "_Vent :"
+msgstr "_Vent :"
+
+msgid "_Séisme :"
+msgstr "_Séisme :"
+
+msgid "_Paramètres"
+msgstr "_Paramètres"
+
+msgid "_Annuler"
+msgstr "_Annuler"
+
+msgid "_Modifier"
+msgstr "_Modifier"
+
+msgid "_Nom :"
+msgstr "_Nom :"
+
+msgid "_Diamètre [m] :"
+msgstr "_Diamètre [m] :"
+
+msgid "_Coté [m] :"
+msgstr "_Coté [m] :"
+
+msgid "Libre"
+msgstr "Libre"
+
+msgid "Bloqué"
+msgstr "Bloqué"
+
+msgid "Linéaire"
+msgstr "Linéaire"
+
+msgid "r<sub>x</sub> début"
+msgstr "r<sub>x</sub> début"
+
+msgid "r<sub>y</sub> début"
+msgstr "r<sub>y</sub> début"
+
+msgid "r<sub>z</sub> début"
+msgstr "r<sub>z</sub> début"
+
+msgid "r<sub>x</sub> fin"
+msgstr "r<sub>x</sub> fin"
+
+msgid "r<sub>y</sub> fin"
+msgstr "r<sub>y</sub> fin"
+
+msgid "r<sub>z</sub> fin"
+msgstr "r<sub>z</sub> fin"
+
+msgid "Relâchements"
+msgstr "Relâchements"
+
+msgid "Nom"
+msgstr "Nom"
+
+msgid "Paramètre"
+msgstr "Paramètre"
+
+msgid "_Largeur de la table [m] :"
+msgstr "_Largeur de la table [m] :"
+
+msgid "_Hauteur de la table [m] :"
+msgstr "_Hauteur de la table [m] :"
+
+msgid "_Largeur de la retombée [m] :"
+msgstr "_Largeur de la retombée [m] :"
+
+msgid "_Hauteur de la retombée [m] :"
+msgstr "_Hauteur de la retombée [m] :"
+
+msgid "et annule les conditions d'appuis sur les noeuds l'utilisant."
+msgstr "et annule les conditions d'appuis sur les noeuds l'utilisant."
+
+msgid "Appuis"
+msgstr "Appuis"
+
+msgid "Ajout d'une barre"
+msgstr "Ajout d'une barre"
+
+msgid "Numéro :"
+msgstr "Numéro :"
+
+msgid "_Type :"
+msgstr "_Type :"
+
+msgid "_Section :"
+msgstr "_Section :"
+
+msgid "_Matériau :"
+msgstr "_Matériau :"
+
+msgid "Noeud _1 :"
+msgstr "Noeud _1 :"
+
+msgid "Noeud _2 :"
+msgstr "Noeud _2 :"
+
+msgid "A_ngle :"
+msgstr "A_ngle :"
+
+msgid "_Relâchement :"
+msgstr "_Relâchement :"
+
+msgid "_Nombre de divisions :"
+msgstr "_Nombre de divisions :"
+
+msgid "Groupes"
+msgstr "Groupes"
+
+msgid "_Niveau :"
+msgstr "_Niveau :"
+
+msgid "<b>_Groupes :</b>"
+msgstr "<b>_Groupes :</b>"
+
+msgid "Description"
+msgstr "Description"
+
+msgid "<b>É_léments disponibles :</b>"
+msgstr "<b>É_léments disponibles :</b>"
+
+msgid "Ajouter"
+msgstr "Ajouter"
+
+msgid "Ajouter tout"
+msgstr "Ajouter tout"
+
+msgid "_Options"
+msgstr "_Options"
+
+msgid "_Générer"
+msgstr "_Générer"
+
+msgid "et les barres utilisant le matériau."
+msgstr "et les barres utilisant le matériau."
+
+msgid "Acier"
+msgstr "Acier"
+
+msgid "Béton"
+msgstr "Béton"
+
+msgid "Matériaux"
+msgstr "Matériaux"
+
+msgid "Matériau"
+msgstr "Matériau"
+
+msgid "_Charge :"
+msgstr "_Charge :"
+
+msgid "_Description :"
+msgstr "_Description :"
+
+msgid "C_harge projetée sur la barre"
+msgstr "C_harge projetée sur la barre"
+
+msgid "Repere :"
+msgstr "Repere :"
+
+msgid "_Local"
+msgstr "_Local"
+
+msgid "_Global"
+msgstr "_Global"
+
+msgid "Ba_rres :"
+msgstr "Ba_rres :"
+
+msgid "Type"
+msgstr "Type"
+
+msgid "Section"
+msgstr "Section"
+
+msgid "Noeud 1"
+msgstr "Noeud 1"
+
+msgid "Noeud 2"
+msgstr "Noeud 2"
+
+msgid "Angle"
+msgstr "Angle"
+
+msgid "Relâchement"
+msgstr "Relâchement"
+
+msgid "Rectangulaire"
+msgstr "Rectangulaire"
+
+msgid "T"
+msgstr "T"
+
+msgid "Carrée"
+msgstr "Carrée"
+
+msgid "Circulaire"
+msgstr "Circulaire"
+
+msgid "Personnalisée"
+msgstr "Personnalisée"
+
+msgid "Importée"
+msgstr "Importée"
+
+msgid "J [m<sup>4</sup>]"
+msgstr "J [m<sup>4</sup>]"
+
+msgid "I<sub>y</sub> [m<sup>4</sup>]"
+msgstr "I<sub>y</sub> [m<sup>4</sup>]"
+
+msgid "I<sub>z</sub> [m<sup>4</sup>]"
+msgstr "I<sub>z</sub> [m<sup>4</sup>]"
+
+msgid "S [m<sup>2</sup>]"
+msgstr "S [m<sup>2</sup>]"
+
+msgid "v<sub>y</sub> [m]"
+msgstr "v<sub>y</sub> [m]"
+
+msgid "v'<sub>y</sub> [m]"
+msgstr "v'<sub>y</sub> [m]"
+
+msgid "v<sub>z</sub> [m]"
+msgstr "v<sub>z</sub> [m]"
+
+msgid "v'<sub>z</sub> [m]"
+msgstr "v'<sub>z</sub> [m]"
+
+msgid "Sections"
+msgstr "Sections"
+
+msgid "_Largeur [m] :"
+msgstr "_Largeur [m] :"
+
+msgid "_Hauteur [m] :"
+msgstr "_Hauteur [m] :"
+
+msgid "Options des combinaisons"
+msgstr "Options des combinaisons"
+
+msgid "<b>ELU Équilibre :</b>"
+msgstr "<b>ELU Équilibre :</b>"
+
+msgid ""
+"À l'État Limite Ultime d'ÉQUilibre, il est possible de générer les "
+"combinaisons pour la vérification à l'équilibre statique seulement ou à "
+"l'équilibre statique incluant la résistance d'éléments structuraux."
+msgstr ""
+"À l'État Limite Ultime d'ÉQUilibre, il est possible de générer les "
+"combinaisons pour la vérification à l'équilibre statique seulement ou à "
+"l'équilibre statique incluant la résistance d'éléments structuraux."
+
+msgid "É_quilibre seulement"
+msgstr "É_quilibre seulement"
+
+msgid "Équilibre et _résistance"
+msgstr "Équilibre et _résistance"
+
+msgid "<b>ELU STR et GEO, formule de combinaison :</b>"
+msgstr "<b>ELU STR et GEO, formule de combinaison :</b>"
+
+msgid ""
+"À l'État Limite Ultime STRucture et GÉOtechnique, deux formules de "
+"combinaison sont possibles. La première est la formule 6.10 et la deuxième "
+"est 6.10a et 6.10b."
+msgstr ""
+"À l'État Limite Ultime STRucture et GÉOtechnique, deux formules de "
+"combinaison sont possibles. La première est la formule 6.10 et la deuxième "
+"est 6.10a et 6.10b."
+
+msgid "6.10_a et 6.10b"
+msgstr "6.10_a et 6.10b"
+
+msgid "<b>ELU STR et GEO, ensemble de calcul :</b>"
+msgstr "<b>ELU STR et GEO, ensemble de calcul :</b>"
+
+msgid ""
+"Lorsqu'il est nécessaire de réaliser un calcul à l'État Limite Ultime "
+"STRucture et GÉOtechnique, trois approches sont possibles.&#013;Approche 1 : "
+"vérification de la structure et du sol via les coefficients de l'ensemble B "
+"puis les coefficients de l'ensemble C.&#013;Approche 2 : vérification de la "
+"structure et du sol via les coefficients de l'ensemble B.&#013;Approche 3 : "
+"vérification de la structure et du sol via les coefficients de l'ensemble B "
+"pour les actions géotechniques et les coefficients de l'ensemble C pour les "
+"actions appliquées à la structure."
+msgstr ""
+"Lorsqu'il est nécessaire de réaliser un calcul à l'État Limite Ultime "
+"STRucture et GÉOtechnique, trois approches sont possibles.&#013;Approche 1 : "
+"vérification de la structure et du sol via les coefficients de l'ensemble B "
+"puis les coefficients de l'ensemble C.&#013;Approche 2 : vérification de la "
+"structure et du sol via les coefficients de l'ensemble B.&#013;Approche 3 : "
+"vérification de la structure et du sol via les coefficients de l'ensemble B "
+"pour les actions géotechniques et les coefficients de l'ensemble C pour les "
+"actions appliquées à la structure."
+
+msgid "Approche _1"
+msgstr "Approche _1"
+
+msgid "Approche _2"
+msgstr "Approche _2"
+
+msgid "Approche _3"
+msgstr "Approche _3"
+
+msgid "<b>ELU ACCidentel :</b>"
+msgstr "<b>ELU ACCidentel :</b>"
+
+msgid ""
+"À l'État Limite Ultime ACCidentel, la charge variable dominante utilisée est "
+"soit la valeur fréquente, soit la valeur quasi-permanente."
+msgstr ""
+"À l'État Limite Ultime ACCidentel, la charge variable dominante utilisée est "
+"soit la valeur fréquente, soit la valeur quasi-permanente."
+
+msgid "valeur _fréquence"
+msgstr "valeur _fréquence"
+
+msgid "valeur q_uasi-permanente"
+msgstr "valeur q_uasi-permanente"
+
+msgid "_Noeuds :"
+msgstr "_Noeuds :"
+
+msgid "Repère :"
+msgstr "Repère :"
+
+msgid "_Position :"
+msgstr "_Position :"
+
+msgid "_Barres :"
+msgstr "_Barres :"
+
+msgid "_Personnaliser"
+msgstr "_Personnaliser"
+
+msgid "_Nom court :"
+msgstr "_Nom court :"
+
+msgid "_Forme :"
+msgstr "_Forme :"
+
+msgid "Actions"
+msgstr "Actions"
+
+msgid "<b>A_ctions :</b>"
+msgstr "<b>A_ctions :</b>"
+
+msgid "<b>_Charges :</b>"
+msgstr "<b>_Charges :</b>"
+
+msgid "Charge"
+msgstr "Charge"
+
+msgid "Valeur"
+msgstr "Valeur"
 
 msgid "Impossible d'initialiser gtk.\n"
 msgstr "Impossible d'initialiser gtk.\n"
@@ -364,17 +819,11 @@ msgstr "Flag %d inconnu.\n"
 msgid "Ajout d'un matériau béton"
 msgstr "Ajout d'un matériau béton"
 
-msgid "_Ajouter"
-msgstr "_Ajouter"
-
 msgid "Le matériau n'est pas en béton.\n"
 msgstr "Le matériau n'est pas en béton.\n"
 
 msgid "Modification d'un matériau béton"
 msgstr "Modification d'un matériau béton"
-
-msgid "_Modifier"
-msgstr "_Modifier"
 
 msgid ""
 "La résistance caractéristique à la compression du béton doit être inférieure "
@@ -834,17 +1283,11 @@ msgstr "XY vers Z-"
 msgid "Modélisation"
 msgstr "Modélisation"
 
-msgid "Noeuds"
-msgstr "Noeuds"
-
 msgid "Appuis..."
 msgstr "Appuis..."
 
 msgid "Gestion des noeuds..."
 msgstr "Gestion des noeuds..."
-
-msgid "Barres"
-msgstr "Barres"
 
 msgid "Sections..."
 msgstr "Sections..."
@@ -866,9 +1309,6 @@ msgstr "Actions..."
 
 msgid "Groupes..."
 msgstr "Groupes..."
-
-msgid "Résultats"
-msgstr "Résultats"
 
 msgid "Calculer"
 msgstr "Calculer"
@@ -1100,18 +1540,6 @@ msgstr "Points caractéristiques de r<sub>z</sub> [rad]"
 msgid "Tout"
 msgstr "Tout"
 
-msgid "Réactions d'appuis (repère global)"
-msgstr "Réactions d'appuis (repère global)"
-
-msgid "Déplacements (repère global)"
-msgstr "Déplacements (repère global)"
-
-msgid "Efforts dans les barres (repère local)"
-msgstr "Efforts dans les barres (repère local)"
-
-msgid "Déformations des barres (repère local)"
-msgstr "Déformations des barres (repère local)"
-
 #, c-format
 msgid "Le type de noeud %d est inconnu.\n"
 msgstr "Le type de noeud %d est inconnu.\n"
@@ -1126,12 +1554,6 @@ msgstr "Le type du noeud est incorrect.\n"
 #, c-format
 msgid "Le noeud %d est déjà dépendant du noeud %d.\n"
 msgstr "Le noeud %d est déjà dépendant du noeud %d.\n"
-
-msgid "Libre"
-msgstr "Libre"
-
-msgid "Bloqué"
-msgstr "Bloqué"
 
 #, c-format
 msgid "Type d'appui %s inconnu.\n"
@@ -1235,9 +1657,6 @@ msgstr ""
 "La position de la charge ponctuelle (%f) est incorrecte. La longueur de la "
 "barre %d est de %f m.\n"
 
-msgid "Barre"
-msgstr "Barre"
-
 msgid "position"
 msgstr "position"
 
@@ -1267,9 +1686,6 @@ msgstr "Impossible d'éditer ce type de relâchement.\n"
 
 msgid "Le type de relâchement est inconnu.\n"
 msgstr "Le type de relâchement est inconnu.\n"
-
-msgid "Linéaire"
-msgstr "Linéaire"
 
 msgid "Ajout d'une section en T"
 msgstr "Ajout d'une section en T"
@@ -1688,12 +2104,6 @@ msgstr "Un relachement libre ou bloqué ne doit pas avoir de paramètres."
 msgid "Le relâchement %s existe déjà.\n"
 msgstr "Le relâchement %s existe déjà.\n"
 
-msgid "Béton"
-msgstr "Béton"
-
-msgid "Acier"
-msgstr "Acier"
-
 msgid "Inconnu"
 msgstr "Inconnu"
 
@@ -1705,416 +2115,6 @@ msgstr "Le matériau n'est pas en acier.\n"
 
 msgid "Modification d'un matériau acier"
 msgstr "Modification d'un matériau acier"
-
-msgid "et ces dépendances."
-msgstr "et ces dépendances."
-
-msgid "Numéro"
-msgstr "Numéro"
-
-msgid "Appui"
-msgstr "Appui"
-
-msgid "Noeud relatif"
-msgstr "Noeud relatif"
-
-msgid "Noeuds _libres"
-msgstr "Noeuds _libres"
-
-msgid "Position relative"
-msgstr "Position relative"
-
-msgid "Noeuds _intermédiaires"
-msgstr "Noeuds _intermédiaires"
-
-msgid "_Supprimer"
-msgstr "_Supprimer"
-
-msgid "_Fermer"
-msgstr "_Fermer"
-
-msgid "_Afficher : "
-msgstr "_Afficher : "
-
-msgid "Cas élémentaires"
-msgstr "Cas élémentaires"
-
-msgid "Combinaisons"
-msgstr "Combinaisons"
-
-msgid "Enveloppe"
-msgstr "Enveloppe"
-
-msgid "Rapport"
-msgstr "Rapport"
-
-msgid "Point analysé"
-msgstr "Point analysé"
-
-msgid "Commentaires"
-msgstr "Commentaires"
-
-msgid "Informations sur le projet"
-msgstr "Informations sur le projet"
-
-msgid "_Client :"
-msgstr "_Client :"
-
-msgid "A_dresse :"
-msgstr "A_dresse :"
-
-msgid "C_ode postal :"
-msgstr "C_ode postal :"
-
-msgid "_Ville :"
-msgstr "_Ville :"
-
-msgid "_Localisation"
-msgstr "_Localisation"
-
-msgid "_Neige :"
-msgstr "_Neige :"
-
-msgid "_Vent :"
-msgstr "_Vent :"
-
-msgid "_Séisme :"
-msgstr "_Séisme :"
-
-msgid "_Paramètres"
-msgstr "_Paramètres"
-
-msgid "_Annuler"
-msgstr "_Annuler"
-
-msgid "_Nom :"
-msgstr "_Nom :"
-
-msgid "_Diamètre [m] :"
-msgstr "_Diamètre [m] :"
-
-msgid "_Coté [m] :"
-msgstr "_Coté [m] :"
-
-msgid "r<sub>x</sub> début"
-msgstr "r<sub>x</sub> début"
-
-msgid "r<sub>y</sub> début"
-msgstr "r<sub>y</sub> début"
-
-msgid "r<sub>z</sub> début"
-msgstr "r<sub>z</sub> début"
-
-msgid "r<sub>x</sub> fin"
-msgstr "r<sub>x</sub> fin"
-
-msgid "r<sub>y</sub> fin"
-msgstr "r<sub>y</sub> fin"
-
-msgid "r<sub>z</sub> fin"
-msgstr "r<sub>z</sub> fin"
-
-msgid "Relâchements"
-msgstr "Relâchements"
-
-msgid "Nom"
-msgstr "Nom"
-
-msgid "Paramètre"
-msgstr "Paramètre"
-
-msgid "_Largeur de la table [m] :"
-msgstr "_Largeur de la table [m] :"
-
-msgid "_Hauteur de la table [m] :"
-msgstr "_Hauteur de la table [m] :"
-
-msgid "_Largeur de la retombée [m] :"
-msgstr "_Largeur de la retombée [m] :"
-
-msgid "_Hauteur de la retombée [m] :"
-msgstr "_Hauteur de la retombée [m] :"
-
-msgid "et annule les conditions d'appuis sur les noeuds l'utilisant."
-msgstr "et annule les conditions d'appuis sur les noeuds l'utilisant."
-
-msgid "Appuis"
-msgstr "Appuis"
-
-msgid "Ajout d'une barre"
-msgstr "Ajout d'une barre"
-
-msgid "Numéro :"
-msgstr "Numéro :"
-
-msgid "_Type :"
-msgstr "_Type :"
-
-msgid "_Section :"
-msgstr "_Section :"
-
-msgid "_Matériau :"
-msgstr "_Matériau :"
-
-msgid "Noeud _1 :"
-msgstr "Noeud _1 :"
-
-msgid "Noeud _2 :"
-msgstr "Noeud _2 :"
-
-msgid "A_ngle :"
-msgstr "A_ngle :"
-
-msgid "_Relâchement :"
-msgstr "_Relâchement :"
-
-msgid "_Nombre de divisions :"
-msgstr "_Nombre de divisions :"
-
-msgid "Groupes"
-msgstr "Groupes"
-
-msgid "_Niveau :"
-msgstr "_Niveau :"
-
-msgid "<b>_Groupes :</b>"
-msgstr "<b>_Groupes :</b>"
-
-msgid "Description"
-msgstr "Description"
-
-msgid "<b>É_léments disponibles :</b>"
-msgstr "<b>É_léments disponibles :</b>"
-
-msgid "Ajouter"
-msgstr "Ajouter"
-
-msgid "Ajouter tout"
-msgstr "Ajouter tout"
-
-msgid "_Options"
-msgstr "_Options"
-
-msgid "_Générer"
-msgstr "_Générer"
-
-msgid "et les barres utilisant le matériau."
-msgstr "et les barres utilisant le matériau."
-
-msgid "Matériaux"
-msgstr "Matériaux"
-
-msgid "Matériau"
-msgstr "Matériau"
-
-msgid "_Charge :"
-msgstr "_Charge :"
-
-msgid "_Description :"
-msgstr "_Description :"
-
-msgid "C_harge projetée sur la barre"
-msgstr "C_harge projetée sur la barre"
-
-msgid "Repere :"
-msgstr "Repere :"
-
-msgid "_Local"
-msgstr "_Local"
-
-msgid "_Global"
-msgstr "_Global"
-
-msgid "Ba_rres :"
-msgstr "Ba_rres :"
-
-msgid "Type"
-msgstr "Type"
-
-msgid "Section"
-msgstr "Section"
-
-msgid "Noeud 1"
-msgstr "Noeud 1"
-
-msgid "Noeud 2"
-msgstr "Noeud 2"
-
-msgid "Angle"
-msgstr "Angle"
-
-msgid "Relâchement"
-msgstr "Relâchement"
-
-msgid "Rectangulaire"
-msgstr "Rectangulaire"
-
-msgid "T"
-msgstr "T"
-
-msgid "Carrée"
-msgstr "Carrée"
-
-msgid "Circulaire"
-msgstr "Circulaire"
-
-msgid "Personnalisée"
-msgstr "Personnalisée"
-
-msgid "Importée"
-msgstr "Importée"
-
-msgid "J [m<sup>4</sup>]"
-msgstr "J [m<sup>4</sup>]"
-
-msgid "I<sub>y</sub> [m<sup>4</sup>]"
-msgstr "I<sub>y</sub> [m<sup>4</sup>]"
-
-msgid "I<sub>z</sub> [m<sup>4</sup>]"
-msgstr "I<sub>z</sub> [m<sup>4</sup>]"
-
-msgid "S [m<sup>2</sup>]"
-msgstr "S [m<sup>2</sup>]"
-
-msgid "v<sub>y</sub> [m]"
-msgstr "v<sub>y</sub> [m]"
-
-msgid "v'<sub>y</sub> [m]"
-msgstr "v'<sub>y</sub> [m]"
-
-msgid "v<sub>z</sub> [m]"
-msgstr "v<sub>z</sub> [m]"
-
-msgid "v'<sub>z</sub> [m]"
-msgstr "v'<sub>z</sub> [m]"
-
-msgid "Sections"
-msgstr "Sections"
-
-msgid "_Largeur [m] :"
-msgstr "_Largeur [m] :"
-
-msgid "_Hauteur [m] :"
-msgstr "_Hauteur [m] :"
-
-msgid "Options des combinaisons"
-msgstr "Options des combinaisons"
-
-msgid "<b>ELU Équilibre :</b>"
-msgstr "<b>ELU Équilibre :</b>"
-
-msgid ""
-"À l'État Limite Ultime d'ÉQUilibre, il est possible de générer les "
-"combinaisons pour la vérification à l'équilibre statique seulement ou à "
-"l'équilibre statique incluant la résistance d'éléments structuraux."
-msgstr ""
-"À l'État Limite Ultime d'ÉQUilibre, il est possible de générer les "
-"combinaisons pour la vérification à l'équilibre statique seulement ou à "
-"l'équilibre statique incluant la résistance d'éléments structuraux."
-
-msgid "É_quilibre seulement"
-msgstr "É_quilibre seulement"
-
-msgid "Équilibre et _résistance"
-msgstr "Équilibre et _résistance"
-
-msgid "<b>ELU STR et GEO, formule de combinaison :</b>"
-msgstr "<b>ELU STR et GEO, formule de combinaison :</b>"
-
-msgid ""
-"À l'État Limite Ultime STRucture et GÉOtechnique, deux formules de "
-"combinaison sont possibles. La première est la formule 6.10 et la deuxième "
-"est 6.10a et 6.10b."
-msgstr ""
-"À l'État Limite Ultime STRucture et GÉOtechnique, deux formules de "
-"combinaison sont possibles. La première est la formule 6.10 et la deuxième "
-"est 6.10a et 6.10b."
-
-msgid "6.10_a et 6.10b"
-msgstr "6.10_a et 6.10b"
-
-msgid "<b>ELU STR et GEO, ensemble de calcul :</b>"
-msgstr "<b>ELU STR et GEO, ensemble de calcul :</b>"
-
-msgid ""
-"Lorsqu'il est nécessaire de réaliser un calcul à l'État Limite Ultime "
-"STRucture et GÉOtechnique, trois approches sont possibles.&#013;Approche 1 : "
-"vérification de la structure et du sol via les coefficients de l'ensemble B "
-"puis les coefficients de l'ensemble C.&#013;Approche 2 : vérification de la "
-"structure et du sol via les coefficients de l'ensemble B.&#013;Approche 3 : "
-"vérification de la structure et du sol via les coefficients de l'ensemble B "
-"pour les actions géotechniques et les coefficients de l'ensemble C pour les "
-"actions appliquées à la structure."
-msgstr ""
-"Lorsqu'il est nécessaire de réaliser un calcul à l'État Limite Ultime "
-"STRucture et GÉOtechnique, trois approches sont possibles.&#013;Approche 1 : "
-"vérification de la structure et du sol via les coefficients de l'ensemble B "
-"puis les coefficients de l'ensemble C.&#013;Approche 2 : vérification de la "
-"structure et du sol via les coefficients de l'ensemble B.&#013;Approche 3 : "
-"vérification de la structure et du sol via les coefficients de l'ensemble B "
-"pour les actions géotechniques et les coefficients de l'ensemble C pour les "
-"actions appliquées à la structure."
-
-msgid "Approche _1"
-msgstr "Approche _1"
-
-msgid "Approche _2"
-msgstr "Approche _2"
-
-msgid "Approche _3"
-msgstr "Approche _3"
-
-msgid "<b>ELU ACCidentel :</b>"
-msgstr "<b>ELU ACCidentel :</b>"
-
-msgid ""
-"À l'État Limite Ultime ACCidentel, la charge variable dominante utilisée est "
-"soit la valeur fréquente, soit la valeur quasi-permanente."
-msgstr ""
-"À l'État Limite Ultime ACCidentel, la charge variable dominante utilisée est "
-"soit la valeur fréquente, soit la valeur quasi-permanente."
-
-msgid "valeur _fréquence"
-msgstr "valeur _fréquence"
-
-msgid "valeur q_uasi-permanente"
-msgstr "valeur q_uasi-permanente"
-
-msgid "_Noeuds :"
-msgstr "_Noeuds :"
-
-msgid "Repère :"
-msgstr "Repère :"
-
-msgid "_Position :"
-msgstr "_Position :"
-
-msgid "_Barres :"
-msgstr "_Barres :"
-
-msgid "_Personnaliser"
-msgstr "_Personnaliser"
-
-msgid "_Nom court :"
-msgstr "_Nom court :"
-
-msgid "_Forme :"
-msgstr "_Forme :"
-
-msgid "Actions"
-msgstr "Actions"
-
-msgid "<b>A_ctions :</b>"
-msgstr "<b>A_ctions :</b>"
-
-msgid "<b>_Charges :</b>"
-msgstr "<b>_Charges :</b>"
-
-msgid "Charge"
-msgstr "Charge"
-
-msgid "Valeur"
-msgstr "Valeur"
 
 #~ msgid "Section indéfinie.\n"
 #~ msgstr "Section indéfinie.\n"
