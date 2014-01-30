@@ -721,6 +721,7 @@ EF_gtk_section_personnalisee_treeview_add (GtkToolButton *widget,
  * \return Rien.\n
  *   Echec :
  *     - p == NULL,
+ *     - en cas d'erreur d'allocation mémoire,
  *     - interface graphique non initialisée.
  */
 {
@@ -747,7 +748,9 @@ EF_gtk_section_personnalisee_treeview_add (GtkToolButton *widget,
     GtkTreeIter iter3;
     EF_Point   *point;
     
-    point = malloc (sizeof (EF_Point));
+    BUGMSG (point = malloc (sizeof (EF_Point)),
+            NULL,
+            gettext ("Erreur d'allocation mémoire.\n"))
     point->x = m_f (0., FLOTTANT_UTILISATEUR);
     point->y = m_f (0., FLOTTANT_UTILISATEUR);
     point->z = m_f (0., FLOTTANT_UTILISATEUR);
@@ -1203,7 +1206,7 @@ EF_gtk_section_personnalisee (Projet  *p,
                                &iter);
         BUGMSG (point_bis = malloc (sizeof (EF_Point)),
                 FALSE,
-                gettext ("Erreur d'allocation mémoire.\n"));
+                gettext ("Erreur d'allocation mémoire.\n"))
         memcpy (point_bis, list_parcours2->data, sizeof (EF_Point));
         gtk_tree_store_set (GTK_TREE_STORE (UI_SEC_PE.model),
                             &iter_last,
@@ -1224,7 +1227,7 @@ EF_gtk_section_personnalisee (Projet  *p,
         {
           BUGMSG (point_bis = malloc (sizeof (EF_Point)),
                   FALSE,
-                  gettext ("Erreur d'allocation mémoire.\n"));
+                  gettext ("Erreur d'allocation mémoire.\n"))
           memcpy (point_bis, list_parcours2->data, sizeof (EF_Point));
         }
         gtk_tree_store_set (GTK_TREE_STORE (UI_SEC_PE.model),
