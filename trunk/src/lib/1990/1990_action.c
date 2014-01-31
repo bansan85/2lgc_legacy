@@ -94,7 +94,7 @@ _1990_action_bat_txt_type_eu (unsigned int type)
     case 14 : { return gettext ("Température (hors incendie)"); break; }
     case 15 : { return gettext ("Accidentelle"); break; }
     case 16 : { return gettext ("Sismique"); break; }
-    default : { BUGMSG (0, NULL, gettext ("Type d'action %u inconnu.\n"), type) break; }
+    default : { BUGPARAM (type, "%d", 0, NULL, ) break; }
   }
 }
 
@@ -166,7 +166,7 @@ _1990_action_bat_txt_type_fr (unsigned int type)
     case 19 : { return gettext ("Accidentelle"); break; }
     case 20 : { return gettext ("Sismique"); break; }
     case 21 : { return gettext ("Eaux souterraines"); break; }
-    default : { BUGMSG (0, NULL, gettext ("Type d'action %u inconnu.\n"), type) break; }
+    default : { BUGPARAM (type, "%d", 0, NULL, ) break; }
   }
 }
 
@@ -190,7 +190,7 @@ _1990_action_bat_txt_type (unsigned int type,
   {
     case NORME_EU : { return _1990_action_bat_txt_type_eu (type); break; }
     case NORME_FR : { return _1990_action_bat_txt_type_fr (type); break; }
-    default : { BUGMSG (0, NULL, gettext ("Norme %d inconnue.\n"), norme) break; }
+    default : { BUGPARAM (norme, "%d", 0, NULL, ) break; }
   }
 }
 
@@ -225,7 +225,7 @@ _1990_action_categorie_bat_eu (unsigned int type)
   else if (type == 16)
     return ACTION_SISMIQUE;
   else
-    BUGMSG (0, ACTION_INCONNUE, gettext ("Type d'action %u inconnu.\n"), type)
+    BUGPARAM (type, "%d", 0, ACTION_INCONNUE, )
 }
 
 
@@ -262,7 +262,7 @@ _1990_action_categorie_bat_fr (unsigned int type)
   else if (type == 21)
     return ACTION_EAUX_SOUTERRAINES;
   else
-    BUGMSG (0, ACTION_INCONNUE, gettext ("Type d'action %u inconnu.\n"), type)
+    BUGPARAM (type, "%d", 0, ACTION_INCONNUE, )
 }
 
 
@@ -285,7 +285,7 @@ _1990_action_categorie_bat (unsigned int type,
   {
     case NORME_EU : { return _1990_action_categorie_bat_eu (type); break; }
     case NORME_FR : { return _1990_action_categorie_bat_fr (type); break; }
-    default : { BUGMSG (0, ACTION_INCONNUE, gettext ("Norme %d inconnue.\n"), norme) break; }
+    default : { BUGPARAM (norme, "%d", 0, ACTION_INCONNUE, ) break; }
   }
 }
 
@@ -306,7 +306,7 @@ _1990_action_num_bat_txt (Norme norme)
   {
     case NORME_EU : { return 17; break; }
     case NORME_FR : { return 22; break; }
-    default : { BUGMSG (0, 0, gettext ("Norme %d inconnue.\n"), norme) break; }
+    default : { BUGPARAM (norme, "%d", 0, 0, ) break; }
   }
 }
 
@@ -328,7 +328,7 @@ _1990_action_init (Projet *p)
   GtkWidget     *w_temp;
 #endif
   
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGPARAMCRIT (p, "%p", p, FALSE, )
   
   p->actions = NULL;
   
@@ -346,7 +346,7 @@ _1990_action_init (Projet *p)
     // Génération du menu contenant la liste des types d'action pour la
     // création d'une nouvelle action.
     w_temp = gtk_menu_item_new_with_label (
-      _1990_action_bat_txt_type (i, p->parametres.norme));
+                           _1990_action_bat_txt_type (i, p->parametres.norme));
     gtk_menu_shell_append (GTK_MENU_SHELL (UI_ACT.type_action), w_temp);
     UI_ACT.items_type_action = g_list_append (UI_ACT.items_type_action,
                                               w_temp);
@@ -372,15 +372,13 @@ _1990_action_init (Projet *p)
                     "activate",
                     G_CALLBACK (_1990_gtk_nouvelle_charge_nodale),
                     p);
-  w_temp = gtk_menu_item_new_with_label (gettext (
-    "Charge ponctuelle sur barre"));
+  w_temp = gtk_menu_item_new_with_label (gettext ("Charge ponctuelle sur barre"));
   gtk_menu_shell_append (GTK_MENU_SHELL (UI_ACT.type_charges), w_temp);
   g_signal_connect (w_temp,
                     "activate",
                     G_CALLBACK (_1990_gtk_nouvelle_charge_barre_ponctuelle),
                     p);
-  w_temp = gtk_menu_item_new_with_label (gettext (
-    "Charge répartie uniforme sur barre"));
+  w_temp = gtk_menu_item_new_with_label (gettext ("Charge répartie uniforme sur barre"));
   gtk_menu_shell_append (GTK_MENU_SHELL (UI_ACT.type_charges), w_temp);
   g_signal_connect (
     w_temp,
@@ -421,28 +419,35 @@ _1990_action_ajout (Projet      *p,
 {
   Action  *action_nouveau;
   
-  BUGMSG (p, NULL, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUG (_1990_action_categorie_bat (type, p->parametres.norme) !=
-    ACTION_INCONNUE, NULL)
+  BUGPARAM (p, "%p", p, NULL, )
+  BUGPARAM (type,
+            "%d",
+            _1990_action_categorie_bat (type, p->parametres.norme) !=
+                                                               ACTION_INCONNUE,
+            NULL,
+            )
   
-  BUGMSG (action_nouveau = (Action *) malloc (sizeof (Action)),
-          NULL,
-          gettext ("Erreur d'allocation mémoire.\n"))
-  BUGMSG (action_nouveau->nom = g_strdup_printf ("%s", nom),
-          NULL,
-          gettext ("Erreur d'allocation mémoire.\n"))
+  BUG (EF_calculs_free (p), FALSE, )
+  
+  BUGCRIT (action_nouveau = (Action *) malloc (sizeof (Action)),
+           NULL,
+           (gettext ("Erreur d'allocation mémoire.\n"));)
   action_nouveau->type = type;
   action_nouveau->charges = NULL;
   action_nouveau->action_predominante = 0;
   action_nouveau->psi0 = m_f (_1990_coef_psi0_bat (type, p->parametres.norme),
                               FLOTTANT_ORDINATEUR);
-  BUG (!isnan (m_g (action_nouveau->psi0)), NULL)
+  BUG (!isnan (m_g (action_nouveau->psi0)), NULL, free (action_nouveau);)
   action_nouveau->psi1 = m_f (_1990_coef_psi1_bat (type, p->parametres.norme),
                               FLOTTANT_ORDINATEUR);
-  BUG (!isnan (m_g (action_nouveau->psi1)), NULL)
+  BUG (!isnan (m_g (action_nouveau->psi1)), NULL, free (action_nouveau);)
   action_nouveau->psi2 = m_f (_1990_coef_psi2_bat (type, p->parametres.norme),
                               FLOTTANT_ORDINATEUR);
-  BUG (!isnan (m_g (action_nouveau->psi2)), NULL)
+  BUG (!isnan (m_g (action_nouveau->psi2)), NULL, free (action_nouveau);)
+  BUGCRIT (action_nouveau->nom = g_strdup_printf ("%s", nom),
+           NULL,
+           (gettext ("Erreur d'allocation mémoire.\n"));
+             free (action_nouveau);)
   action_nouveau->deplacement = NULL;
   action_nouveau->forces = NULL;
   action_nouveau->efforts_noeuds = NULL;
@@ -478,6 +483,7 @@ _1990_action_ajout (Projet      *p,
                         0, action_nouveau,
                         -1);
   }
+  
   if ((UI_GRO.builder != NULL) &&
       (GTK_COMMON_SPINBUTTON_AS_UINT (GTK_SPIN_BUTTON (
                                              UI_GRO.spin_button_niveau)) == 0))
@@ -491,8 +497,6 @@ _1990_action_ajout (Projet      *p,
                         -1);
   }
 #endif
-  
-  BUG (EF_calculs_free (p), FALSE)
   
   return action_nouveau;
 }
@@ -510,7 +514,7 @@ _1990_action_nom_renvoie (Action *action)
  *     - action == NULL,
  */
 {
-  BUGMSG (action, NULL, gettext ("Paramètre %s incorrect.\n"), "action")
+  BUGPARAM (action, "%p", action, NULL, )
   
   return action->nom;
 }
@@ -533,13 +537,14 @@ _1990_action_nom_change (Projet     *p,
  *     - erreur d'allocation mémoire.
  */
 {
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (action, FALSE, gettext ("Paramètre %s incorrect.\n"), "action")
+  BUGPARAM (p, "%p", p, FALSE, )
+  BUGPARAM (action, "%p", action, FALSE, )
+  BUGPARAM (nom, "%p", nom, FALSE, )
   
   free (action->nom);
-  BUGMSG (action->nom = g_strdup_printf ("%s", nom),
-          FALSE,
-          gettext ("Erreur d'allocation mémoire.\n"))
+  BUGCRIT (action->nom = g_strdup_printf ("%s", nom),
+           FALSE,
+           (gettext ("Erreur d'allocation mémoire.\n"));)
   
 #ifdef ENABLE_GTK
   gtk_list_store_set (UI_ACT.liste, &action->Iter_liste, 0, nom, -1);
@@ -564,7 +569,7 @@ _1990_action_nom_cherche (Projet     *p,
                           char const *nom)
 /**
  * \brief Renvoie l'action désignée par son nom. Si l'action est introuvable,
- *        #BUGMSG renvoie NULL.
+ *        NULL est renvoyé.
  * \param p : la variable projet,
  * \param nom : le nom de l'action.
  * \return
@@ -576,12 +581,13 @@ _1990_action_nom_cherche (Projet     *p,
 {
   GList *list_parcours;
   
-  BUGMSG (p, NULL, gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGPARAM (p, "%p", p, NULL, )
+  BUGPARAM (nom, "%p", nom, NULL, )
   
   list_parcours = p->actions;
   while (list_parcours != NULL)
   {
-    Action  *action = (Action *) list_parcours->data;
+    Action *action = (Action *) list_parcours->data;
     
     if (strcmp (action->nom, nom) == 0)
       return action;
@@ -589,7 +595,7 @@ _1990_action_nom_cherche (Projet     *p,
     list_parcours = g_list_next (list_parcours);
   }
   
-  BUGMSG (0, NULL, gettext ("Action %s introuvable.\n"), nom)
+  return NULL;
 }
 
 
@@ -605,7 +611,7 @@ _1990_action_type_renvoie (Action *action)
  *     - action == NULL.
  */
 {
-  BUGMSG (action, G_MAXUINT, gettext ("Paramètre %s incorrect.\n"), "action")
+  BUGPARAM (action, "%p", action, G_MAXUINT, )
   
   return action->type;
 }
@@ -631,28 +637,28 @@ _1990_action_type_change (Projet      *p,
 {
   Flottant  psi0, psi1, psi2;
   
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (action, FALSE, gettext ("Paramètre %s incorrect.\n"), "action")
+  BUGPARAM (p, "%p", p, FALSE, )
+  BUGPARAM (action, "%p", action, FALSE, )
   
   if (action->type == type)
     return TRUE;
   
-  action->type = type;
   psi0 = m_f (_1990_coef_psi0_bat (type, p->parametres.norme),
               FLOTTANT_ORDINATEUR);
-  BUG (!isnan (m_g(psi0)), FALSE)
+  BUG (!isnan (m_g (psi0)), FALSE, )
   psi1 = m_f (_1990_coef_psi1_bat (type, p->parametres.norme),
               FLOTTANT_ORDINATEUR);
-  BUG (!isnan (m_g(psi1)), FALSE)
+  BUG (!isnan (m_g (psi1)), FALSE, )
   psi2 = m_f (_1990_coef_psi2_bat (type, p->parametres.norme),
               FLOTTANT_ORDINATEUR);
-  BUG (!isnan (m_g(psi2)), FALSE)
+  BUG (!isnan (m_g (psi2)), FALSE)
   
+  BUG (EF_calculs_free (p), FALSE, )
+  
+  action->type = type;
   action->psi0 = psi0;
   action->psi1 = psi1;
   action->psi2 = psi2;
-  
-  BUG (EF_calculs_free (p), FALSE)
   
 #ifdef ENABLE_GTK
   if (UI_ACT.builder != NULL)
@@ -666,7 +672,8 @@ _1990_action_type_change (Projet      *p,
 gboolean
 _1990_action_charges_vide (Action *action)
 /**
- * \brief Renvoie TRUE si la liste des charges est vide.
+ * \brief Renvoie TRUE si la liste des charges est vide ou si action est égale
+ *        à NULL.
  * \param action : une action.
  * \return
  *   Succès : action->charges == NULL.\n
@@ -674,7 +681,7 @@ _1990_action_charges_vide (Action *action)
  *     - action == NULL.
  */
 {
-  BUGMSG (action, TRUE, gettext ("Paramètre %s incorrect.\n"), "action")
+  BUGPARAM (action, "%p", action, TRUE, )
   
   return action->charges == NULL;
 }
@@ -691,7 +698,7 @@ _1990_action_charges_renvoie (Action *action)
  *     - action == NULL.
  */
 {
-  BUGMSG (action, NULL, gettext ("Paramètre %s incorrect.\n"), "action")
+  BUGPARAM (action, "%p", action, NULL, )
   
   return action->charges;
 }
@@ -710,7 +717,7 @@ _1990_action_charges_change (Action *action,
  *     - action == NULL.
  */
 {
-  BUGMSG (action, FALSE, gettext ("Paramètre %s incorrect.\n"), "action")
+  BUGPARAM (action, "%p", action, FALSE, )
   
   action->charges = charges;
   
@@ -729,7 +736,7 @@ _1990_action_flags_action_predominante_renvoie (Action *action)
  *     - action == NULL.
  */
 {
-  BUGMSG (action, 2, gettext ("Paramètre %s incorrect.\n"), "action")
+  BUGPARAM (action, "%p", action, 2, )
   
   return action->action_predominante;
 }
@@ -749,10 +756,8 @@ _1990_action_flags_action_predominante_change (Action      *action,
  *     - flag != 0 ou 1.
  */
 {
-  BUGMSG (action, FALSE, gettext ("Paramètre %s incorrect.\n"), "action")
-  BUGMSG ((flag == 0) || (flag == 1),
-          FALSE,
-          gettext ("Le paramètre flag est de type strictement boolean et doit valoir soit 0 soit 1.\n"))
+  BUGPARAM (action, "%p", action, FALSE, )
+  BUGPARAM (flag, "%d", (flag == 0) || (flag == 1), FALSE, )
   
   action->action_predominante = flag;
   
@@ -771,9 +776,7 @@ _1990_action_psi_renvoie_0 (Action *action)
  *       action == NULL.
  */
 {
-  BUGMSG (action,
-          m_f (NAN, FLOTTANT_ORDINATEUR),
-          gettext ("Paramètre %s incorrect.\n"), "action")
+  BUGPARAM (action, "%p", action, m_f (NAN, FLOTTANT_ORDINATEUR), )
   
   return action->psi0;
 }
@@ -790,9 +793,7 @@ _1990_action_psi_renvoie_1 (Action *action)
  *       action == NULL.
  */
 {
-  BUGMSG (action,
-          m_f (NAN, FLOTTANT_ORDINATEUR),
-          gettext ("Paramètre %s incorrect.\n"), "action")
+  BUGPARAM (action, "%p", action, m_f (NAN, FLOTTANT_ORDINATEUR), )
   
   return action->psi1;
 }
@@ -809,9 +810,7 @@ _1990_action_psi_renvoie_2 (Action *action)
  *     - action == NULL.
  */
 {
-  BUGMSG (action,
-          m_f (NAN, FLOTTANT_ORDINATEUR),
-          gettext ("Paramètre %s incorrect.\n"), "action")
+  BUGPARAM (action, "%p", action, m_f (NAN, FLOTTANT_ORDINATEUR), )
   
   return action->psi2;
 }
@@ -827,20 +826,24 @@ _1990_action_psi_change (Projet      *p,
  * \param p : la variable projet,
  * \param action : une action,
  * \param psi_num : coefficient &psi; à changer (0, 1 ou 2),
- * \param psi : nouveau coefficient psi.
+ * \param psi : nouveau coefficient psi (supérieur ou égale à 0).
  * \return
  *   Succès : TRUE\n
  *   Échec : FALSE :
  *     - p == NULL,
  *     - action == NULL,
- *     - psi_num != 0 et 1 et 2.
+ *     - psi_num != 0 et 1 et 2,
+ *     - psi < 0.
  */
 {
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (action, FALSE, gettext ("Paramètre %s incorrect.\n"), "action")
-  BUGMSG ((psi_num == 0) || (psi_num == 1) || (psi_num == 2),
-          FALSE,
-          gettext("Le numéro %u du coefficient spi à changer est incorrect.\n"), psi_num)
+  BUGPARAM (p, "%p", p, FALSE, )
+  BUGPARAM (action, "%p", action, FALSE, )
+  BUGPARAM (psi_num,
+            "%d",
+            (psi_num == 0) || (psi_num == 1) || (psi_num == 2),
+            FALSE,
+            )
+  BUGPARAM (m_g (psi), "%lf", m_g (psi) >= 0., FALSE, )
   
   if (psi_num == 0)
   {
@@ -876,7 +879,7 @@ _1990_action_psi_change (Projet      *p,
 #endif
   }
   
-  BUG (EF_calculs_free (p), FALSE)
+  BUG (EF_calculs_free (p), FALSE, )
   
   return TRUE;
 }
@@ -893,7 +896,7 @@ _1990_action_deplacement_renvoie (Action *action)
  *     - action == NULL.
  */
 {
-  BUGMSG (action, NULL, gettext ("Paramètre %s incorrect.\n"), "action")
+  BUGPARAM (action, "%p", action, NULL, )
   
   return action->deplacement;
 }
@@ -914,8 +917,8 @@ _1990_action_deplacement_change (Action         *action,
  *     - sparse == NULL.
  */
 {
-  BUGMSG (action, FALSE, gettext ("Paramètre %s incorrect.\n"), "action")
-  BUGMSG (sparse, FALSE, gettext ("Paramètre %s incorrect.\n"), "sparse")
+  BUGPARAM (action, "%p", action, FALSE, )
+  BUGPARAM (sparse, "%p", sparse, FALSE, )
   
   action->deplacement = sparse;
   
@@ -934,7 +937,7 @@ _1990_action_forces_renvoie (Action *action)
  *     - action == NULL.
  */
 {
-  BUGMSG (action, NULL, gettext ("Paramètre %s incorrect.\n"), "action")
+  BUGPARAM (action, "%p", action, NULL, )
   
   return action->forces;
 }
@@ -955,8 +958,8 @@ _1990_action_forces_change (Action         *action,
  *       sparse == NULL.
  */
 {
-  BUGMSG (action, FALSE, gettext ("Paramètre %s incorrect.\n"), "action")
-  BUGMSG (sparse, FALSE, gettext ("Paramètre %s incorrect.\n"), "sparse")
+  BUGPARAM (action, "%p", action, FALSE, )
+  BUGPARAM (sparse, "%p", sparse, FALSE, )
   
   action->forces = sparse;
   
@@ -975,7 +978,7 @@ _1990_action_efforts_noeuds_renvoie (Action *action)
  *     - action == NULL.
  */
 {
-  BUGMSG (action, NULL, gettext ("Paramètre %s incorrect.\n"), "action")
+  BUGPARAM (action, "%p", action, NULL, )
   
   return action->efforts_noeuds;
 }
@@ -996,8 +999,8 @@ _1990_action_efforts_noeuds_change (Action         *action,
  *       sparse == NULL.
  */
 {
-  BUGMSG (action, FALSE, gettext ("Paramètre %s incorrect.\n"), "action")
-  BUGMSG (sparse, FALSE, gettext ("Paramètre %s incorrect.\n"), "sparse")
+  BUGPARAM (action, "%p", action, FALSE, )
+  BUGPARAM (sparse, "%p", sparse, FALSE, )
   
   action->efforts_noeuds = sparse;
   
@@ -1017,7 +1020,7 @@ _1990_action_Iter_fenetre_renvoie (Action *action)
  *     - action == NULL.
  */
 {
-  BUGMSG (action, NULL, gettext ("Paramètre %s incorrect.\n"), "action")
+  BUGPARAM (action, "%p", action, NULL, )
   
   return &action->Iter_fenetre;
 }
@@ -1033,7 +1036,7 @@ _1990_action_efforts_renvoie (Action *action,
  * \param action : une action,
  * \param effort : l'effort (N : 0, T<sub>y</sub> : 1, T<sub>z</sub> : 2,
  *                 M<sub>x</sub> : 3, M<sub>y</sub> : 4, M<sub>z</sub> : 5),
- * \param barre : la position de la barre dans la liste des barres.
+ * \param barre : la position de la barre dans la liste des barres. 
  * \return
  *   Succès : la fonction effort correspondante.\n
  *   Échec : NULL :
@@ -1041,10 +1044,8 @@ _1990_action_efforts_renvoie (Action *action,
  *     - effort != 0, 1, 2, 3, 4 et 5.
  */
 {
-  BUGMSG (action, NULL, gettext ("Paramètre %s incorrect.\n"), "action")
-  BUGMSG ((0 <= effort) && (effort <= 5),
-          NULL,
-          gettext ("Paramètre %s incorrect.\n"), "ligne")
+  BUGPARAM (action, "%p", action, NULL, )
+  BUGPARAM (effort, "%d", (0 <= effort) && (effort <= 5), NULL, )
   
   return action->efforts[effort][barre];
 }
@@ -1067,10 +1068,8 @@ _1990_action_rotation_renvoie (Action *action,
  *     - effort != 0, 1 et 2.
  */
 {
-  BUGMSG (action, NULL, gettext ("Paramètre %s incorrect.\n"), "action")
-  BUGMSG ((0 <= effort) && (effort <= 2),
-          NULL,
-          gettext ("Paramètre %s incorrect.\n"), "ligne")
+  BUGPARAM (action, "%p", action, NULL, )
+  BUGPARAM (effort, "%d", (0 <= effort) && (effort <= 2), NULL, )
   
   return action->rotation[effort][barre];
 }
@@ -1093,87 +1092,10 @@ _1990_action_deformation_renvoie (Action *action,
  *     - effort != 0, 1 et 2.
  */
 {
-  BUGMSG (action, NULL, gettext ("Paramètre %s incorrect.\n"), "action")
-  BUGMSG ((0 <= effort) && (effort <= 2),
-          NULL,
-          gettext ("Paramètre %s incorrect.\n"), "ligne")
+  BUGPARAM (action, "%p", action, NULL, )
+  BUGPARAM (effort, "%d", (0 <= effort) && (effort <= 2), NULL, )
   
   return action->deformation[effort][barre];
-}
-
-
-gboolean
-_1990_action_fonction_init (Projet *p,
-                            Action *action)
-/**
- * \brief Initialise les fonctions décrivant les sollicitations, les rotations
- *        et les déplacements des barres. Cette fonction doit être appelée
- *        lorsque toutes les barres ont été modélisées. En effet, il est
- *        nécessaire de connaître leur nombre afin de stocker dans un tableau
- *        dynamique unique les fonctions. L'initialisation des fonctions
- *        consiste à définir un nombre de tronçon à 0 et les données à NULL.
- * \param p : la variable projet,
- * \param action : une action.
- * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
- *     - p == NULL,
- *     - action == NULL,
- *     - en cas d'erreur d'allocation mémoire.
- */
-{
-  unsigned int  i, j;
-  
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (action, FALSE, gettext ("Paramètre %s incorrect.\n"), "action")
-  
-  for (i = 0; i < 6; i++)
-  {
-    BUGMSG (action->efforts[i] = (Fonction **) malloc (
-                       sizeof (Fonction *) * g_list_length (p->modele.barres)),
-            FALSE,
-            gettext ("Erreur d'allocation mémoire.\n"))
-    for (j = 0; j < g_list_length (p->modele.barres); j++)
-    {
-      BUGMSG (action->efforts[i][j] = (Fonction *) malloc (sizeof (Fonction)),
-              FALSE,
-              gettext ("Erreur d'allocation mémoire.\n"))
-      action->efforts[i][j]->nb_troncons = 0;
-      action->efforts[i][j]->troncons = NULL;
-    }
-  }
-  
-  for (i = 0; i < 3; i++)
-  {
-    BUGMSG (action->deformation[i] = (Fonction **) malloc (
-                       sizeof (Fonction *) * g_list_length (p->modele.barres)),
-            FALSE,
-            gettext("Erreur d'allocation mémoire.\n"))
-    for (j = 0; j < g_list_length (p->modele.barres); j++)
-    {
-      BUGMSG (action->deformation[i][j] = (Fonction *) malloc (
-                                                            sizeof (Fonction)),
-              FALSE,
-              gettext ("Erreur d'allocation mémoire.\n"))
-      action->deformation[i][j]->nb_troncons = 0;
-      action->deformation[i][j]->troncons = NULL;
-    }
-    
-    BUGMSG (action->rotation[i] = (Fonction **) malloc (
-                       sizeof (Fonction *) * g_list_length (p->modele.barres)),
-            FALSE,
-            gettext ("Erreur d'allocation mémoire.\n"))
-    for (j = 0; j < g_list_length (p->modele.barres); j++)
-    {
-      BUGMSG (action->rotation[i][j] = (Fonction *) malloc (sizeof (Fonction)),
-              FALSE,
-              gettext ("Erreur d'allocation mémoire.\n"))
-      action->rotation[i][j]->nb_troncons = 0;
-      action->rotation[i][j]->troncons = NULL;
-    }
-  }
-  
-  return TRUE;
 }
 
 
@@ -1193,8 +1115,8 @@ _1990_action_fonction_free (Projet *p,
 {
   unsigned int  i, j;
   
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (action, FALSE, gettext ("Paramètre %s incorrect.\n"), "action")
+  BUGPARAM (p, "%p", p, FALSE, )
+  BUGPARAM (action, "%p", action, FALSE, )
   
   for (i = 0; i < 6; i++)
   {
@@ -1240,6 +1162,88 @@ _1990_action_fonction_free (Projet *p,
 
 
 gboolean
+_1990_action_fonction_init (Projet *p,
+                            Action *action)
+/**
+ * \brief Initialise les fonctions décrivant les sollicitations, les rotations
+ *        et les déplacements des barres. Cette fonction doit être appelée
+ *        lorsque toutes les barres ont été modélisées. En effet, il est
+ *        nécessaire de connaître leur nombre afin de stocker dans un tableau
+ *        dynamique unique les fonctions. L'initialisation des fonctions
+ *        consiste à définir un nombre de tronçon à 0 et les données à NULL.
+ * \param p : la variable projet,
+ * \param action : une action.
+ * \return
+ *   Succès : TRUE.\n
+ *   Échec : FALSE :
+ *     - p == NULL,
+ *     - action == NULL,
+ *     - en cas d'erreur d'allocation mémoire.
+ */
+{
+  unsigned int  i, j;
+  
+  BUGPARAM (p, "%p", p, FALSE, )
+  BUGPARAM (action, "%p", action, FALSE, )
+  
+  for (i = 0; i < 6; i++)
+  {
+    BUGCRIT (action->efforts[i] = (Fonction **) malloc (
+                       sizeof (Fonction *) * g_list_length (p->modele.barres)),
+             FALSE,
+             (gettext ("Erreur d'allocation mémoire.\n"));
+               _1990_action_fonction_free (p, action);)
+    for (j = 0; j < g_list_length (p->modele.barres); j++)
+    {
+      BUGCRIT (action->efforts[i][j] = (Fonction *) malloc (sizeof (Fonction)),
+               FALSE,
+               (gettext ("Erreur d'allocation mémoire.\n"));
+                 _1990_action_fonction_free (p, action);)
+      action->efforts[i][j]->nb_troncons = 0;
+      action->efforts[i][j]->troncons = NULL;
+    }
+  }
+  
+  for (i = 0; i < 3; i++)
+  {
+    BUGCRIT (action->deformation[i] = (Fonction **) malloc (
+                       sizeof (Fonction *) * g_list_length (p->modele.barres)),
+             FALSE,
+             (gettext("Erreur d'allocation mémoire.\n"));
+               _1990_action_fonction_free (p, action);)
+    for (j = 0; j < g_list_length (p->modele.barres); j++)
+    {
+      BUGCRIT (action->deformation[i][j] = (Fonction *) malloc (
+                                                            sizeof (Fonction)),
+               FALSE,
+               (gettext ("Erreur d'allocation mémoire.\n"));
+                 _1990_action_fonction_free (p, action);)
+      action->deformation[i][j]->nb_troncons = 0;
+      action->deformation[i][j]->troncons = NULL;
+    }
+    
+    BUGCRIT (action->rotation[i] = (Fonction **) malloc (
+                       sizeof (Fonction *) * g_list_length (p->modele.barres)),
+             FALSE,
+             (gettext ("Erreur d'allocation mémoire.\n"));
+               _1990_action_fonction_free (p, action);)
+    for (j = 0; j < g_list_length (p->modele.barres); j++)
+    {
+      BUGCRIT (action->rotation[i][j] = (Fonction *) malloc (sizeof (
+                                                                    Fonction)),
+               FALSE,
+               (gettext ("Erreur d'allocation mémoire.\n"));
+                 _1990_action_fonction_free (p, action);)
+      action->rotation[i][j]->nb_troncons = 0;
+      action->rotation[i][j]->troncons = NULL;
+    }
+  }
+  
+  return TRUE;
+}
+
+
+gboolean
 _1990_action_affiche_tout (Projet *p)
 /**
  * \brief Affiche dans l'entrée standard les actions existantes.
@@ -1250,9 +1254,10 @@ _1990_action_affiche_tout (Projet *p)
  *     - p == NULL.
  */
 {
-  GList   *list_parcours;
+  GList *list_parcours;
   
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGPARAM (p, "%p", p, FALSE, )
+  
   if (p->actions == NULL)
   {
     printf (gettext ("Aucune action existante.\n"));
@@ -1262,7 +1267,7 @@ _1990_action_affiche_tout (Projet *p)
   list_parcours = p->actions;
   do
   {
-    Action    *action = list_parcours->data;
+    Action *action = list_parcours->data;
     
     printf (gettext ("Action '%s', type n°%d\n"), action->nom, action->type);
     
@@ -1290,7 +1295,8 @@ _1990_action_affiche_resultats (Projet *p,
 {
   unsigned int  i;
   
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGPARAM (p, "%p", p, FALSE, )
+  BUGPARAM (action, "%p", action, FALSE, )
   
   if (p->modele.barres == NULL)
   {
@@ -1321,45 +1327,68 @@ _1990_action_affiche_resultats (Projet *p,
   {
     // Affichage de la courbe des sollicitations de l'effort normal
     printf ("Barre n°%d, Effort normal\n", i);
-    BUG (common_fonction_affiche (action->efforts[0][i]), FALSE)
+    BUG (common_fonction_affiche (action->efforts[0][i]), FALSE, )
     // Affichage de la courbe des sollicitations de l'effort tranchant selon Y
     printf ("Barre n°%d, Effort tranchant Y\n", i);
-    BUG (common_fonction_affiche (action->efforts[1][i]), FALSE)
+    BUG (common_fonction_affiche (action->efforts[1][i]), FALSE, )
     // Affichage de la courbe des sollicitations de l'effort tranchant selon Z
     printf ("Barre n°%d, Effort tranchant Z\n", i);
-    BUG (common_fonction_affiche (action->efforts[2][i]), FALSE)
+    BUG (common_fonction_affiche (action->efforts[2][i]), FALSE, )
     // Affichage de la courbe des sollicitations du moment de torsion
     printf ("Barre n°%d, Moment de torsion\n", i);
-    BUG (common_fonction_affiche (action->efforts[3][i]), FALSE)
+    BUG (common_fonction_affiche (action->efforts[3][i]), FALSE, )
     // Affichage de la courbe des sollicitations du moment fléchissant selon Y
     printf ("Barre n°%d, Moment de flexion Y\n", i);
-    BUG (common_fonction_affiche (action->efforts[4][i]), FALSE)
+    BUG (common_fonction_affiche (action->efforts[4][i]), FALSE, )
     // Affichage de la courbe des sollicitations du moment fléchissant selon Z
     printf ("Barre n°%d, Moment de flexion Z\n", i);
-    BUG (common_fonction_affiche (action->efforts[5][i]), FALSE)
+    BUG (common_fonction_affiche (action->efforts[5][i]), FALSE, )
   }
   for (i = 0; i < g_list_length (p->modele.barres); i++)
   {
     // Affichage de la courbe de déformation selon l'axe X
     printf ("Barre n°%d, Déformation en X\n", i);
-    BUG (common_fonction_affiche (action->deformation[0][i]), FALSE)
+    BUG (common_fonction_affiche (action->deformation[0][i]), FALSE, )
     // Affichage de la courbe de déformation selon l'axe Y
     printf ("Barre n°%d, Déformation en Y\n", i);
-    BUG (common_fonction_affiche (action->deformation[1][i]), FALSE)
+    BUG (common_fonction_affiche (action->deformation[1][i]), FALSE, )
     // Affichage de la courbe de déformation selon l'axe Z
     printf ("Barre n°%d, Déformation en Z\n", i);
-    BUG (common_fonction_affiche (action->deformation[2][i]), FALSE)
+    BUG (common_fonction_affiche (action->deformation[2][i]), FALSE, )
     // Affichage de la courbe de rotation selon l'axe X
     printf ("Barre n°%d, Rotation en X\n", i);
-    BUG (common_fonction_affiche (action->rotation[0][i]), FALSE)
+    BUG (common_fonction_affiche (action->rotation[0][i]), FALSE, )
     // Affichage de la courbe de rotation selon l'axe Y
     printf ("Barre n°%d, Rotation en Y\n", i);
-    BUG (common_fonction_affiche (action->rotation[1][i]), FALSE)
+    BUG (common_fonction_affiche (action->rotation[1][i]), FALSE, )
     // Affichage de la courbe de rotation selon l'axe Z
     printf ("Barre n°%d, Rotation en Z\n", i);
-    BUG (common_fonction_affiche (action->rotation[2][i]), FALSE)
+    BUG (common_fonction_affiche (action->rotation[2][i]), FALSE, )
   }
   // FinPour
+  
+  return TRUE;
+}
+
+
+gboolean
+_1990_action_ponderation_resultat_free_calculs (Action *action)
+/**
+ * \brief Libère les résultats de l'action souhaitée crée par
+ *        #_1990_action_ponderation_resultat.
+ * \param action : une action.
+ * \return
+ *   Succès : TRUE.\n
+ *   Échec : FALSE :
+ *     - action == NULL.
+ */
+{
+  BUGPARAM (action, "%p", action, FALSE, )
+  
+  free (action->deplacement->x);
+  free (action->deplacement);
+  free (action->efforts_noeuds->x);
+  free (action->efforts_noeuds);
   
   return TRUE;
 }
@@ -1382,40 +1411,58 @@ _1990_action_ponderation_resultat (GList  *ponderation,
  *       #common_fonction_ajout_fonction).
  */
 {
-  GList   *list_parcours;
-  Action  *action;
-  double  *x, *y;
+  GList  *list_parcours;
+  Action *action;
+  double *x, *y;
   
-  BUGMSG (p, NULL, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (p->modele.noeuds, NULL, gettext ("Aucun noeud n'est existant.\n"))
+  BUGPARAM (p, "%p", p, NULL, )
+  INFO (p->modele.noeuds, NULL, (gettext ("Aucun noeud n'est existant.\n"));)
   
   // Initialisation de l'action
-  BUGMSG (action = malloc (sizeof (Action)),
-          NULL,
-          gettext ("Erreur d'allocation mémoire.\n"))
-  BUGMSG (action->efforts_noeuds = malloc (sizeof (cholmod_sparse)),
-          NULL,
-          gettext ("Erreur d'allocation mémoire.\n"))
-  BUGMSG (action->efforts_noeuds->x = malloc (sizeof (double) *
+  BUGCRIT (action = malloc (sizeof (Action)),
+           NULL,
+           (gettext ("Erreur d'allocation mémoire.\n"));)
+  BUGCRIT (action->efforts_noeuds = malloc (sizeof (cholmod_sparse)),
+           NULL,
+           (gettext ("Erreur d'allocation mémoire.\n"));
+             free (action);)
+  BUGCRIT (action->efforts_noeuds->x = malloc (sizeof (double) *
                                          g_list_length (p->modele.noeuds) * 6),
-          NULL,
-          gettext ("Erreur d'allocation mémoire.\n"))
+           NULL,
+           (gettext ("Erreur d'allocation mémoire.\n"));
+             free (action->efforts_noeuds);
+             free (action);)
   memset (action->efforts_noeuds->x,
           0,
           sizeof (double) * g_list_length (p->modele.noeuds) * 6);
-  BUGMSG (action->deplacement = malloc (sizeof (cholmod_sparse)),
-          NULL,
-          gettext ("Erreur d'allocation mémoire.\n"))
-  BUGMSG (action->deplacement->x = malloc (sizeof (double) *
+  BUGCRIT (action->deplacement = malloc (sizeof (cholmod_sparse)),
+           NULL,
+           (gettext ("Erreur d'allocation mémoire.\n"));
+             free (action->efforts_noeuds->x);
+             free (action->efforts_noeuds);
+             free (action);)
+  BUGCRIT (action->deplacement->x = malloc (sizeof (double) *
                                          g_list_length (p->modele.noeuds) * 6),
-          NULL,
-          gettext ("Erreur d'allocation mémoire.\n"))
+           NULL,
+           (gettext ("Erreur d'allocation mémoire.\n"));
+             free (action->deplacement);
+             free (action->efforts_noeuds->x);
+             free (action->efforts_noeuds);
+             free (action);)
   memset (action->deplacement->x,
           0,
           sizeof (double) * g_list_length (p->modele.noeuds) * 6);
-  BUG (_1990_action_fonction_init (p, action), NULL)
+  BUG (_1990_action_fonction_init (p, action),
+       NULL,
+       _1990_action_ponderation_resultat_free_calculs (action);
+         free (action);)
   x = action->efforts_noeuds->x;
   y = action->deplacement->x;
+  
+#define FREE_ALL \
+  _1990_action_fonction_free (p, action); \
+  _1990_action_ponderation_resultat_free_calculs (action); \
+  free (action);
   
   // Remplissage de la variable action.
   list_parcours = ponderation;
@@ -1428,9 +1475,9 @@ _1990_action_ponderation_resultat (GList  *ponderation,
     unsigned int  i;
     
     mult = element->ponderation *
-                              (element->psi == 0 ? m_g(element->action->psi0) :
-                               element->psi == 1 ? m_g(element->action->psi1) :
-                               element->psi == 2 ? m_g(element->action->psi2) :
+                             (element->psi == 0 ? m_g (element->action->psi0) :
+                              element->psi == 1 ? m_g (element->action->psi1) :
+                              element->psi == 2 ? m_g (element->action->psi2) :
                                1.);
     for (i = 0; i < g_list_length (p->modele.noeuds) * 6; i++)
     {
@@ -1443,79 +1490,71 @@ _1990_action_ponderation_resultat (GList  *ponderation,
       BUG (common_fonction_ajout_fonction (action->efforts[0][i],
                                            element->action->efforts[0][i],
                                            mult),
-           NULL)
+           NULL,
+           FREE_ALL)
       BUG (common_fonction_ajout_fonction (action->efforts[1][i],
                                            element->action->efforts[1][i],
                                            mult),
-           NULL)
+           NULL,
+           FREE_ALL)
       BUG (common_fonction_ajout_fonction (action->efforts[2][i],
                                            element->action->efforts[2][i],
                                            mult),
-           NULL)
+           NULL,
+           FREE_ALL)
       BUG (common_fonction_ajout_fonction (action->efforts[3][i],
                                            element->action->efforts[3][i],
                                            mult),
-           NULL)
+           NULL,
+           FREE_ALL)
       BUG (common_fonction_ajout_fonction (action->efforts[4][i],
                                            element->action->efforts[4][i],
                                            mult),
-           NULL)
+           NULL,
+           FREE_ALL)
       BUG (common_fonction_ajout_fonction (action->efforts[5][i],
                                            element->action->efforts[5][i],
                                            mult),
-           NULL)
+           NULL,
+           FREE_ALL)
       BUG (common_fonction_ajout_fonction (action->deformation[0][i],
                                            element->action->deformation[0][i],
                                            mult),
-           NULL)
+           NULL,
+           FREE_ALL)
       BUG (common_fonction_ajout_fonction (action->deformation[1][i],
                                            element->action->deformation[1][i],
                                            mult),
-           NULL)
+           NULL,
+           FREE_ALL)
       BUG (common_fonction_ajout_fonction (action->deformation[2][i],
                                            element->action->deformation[2][i],
                                            mult),
-           NULL)
+           NULL,
+           FREE_ALL)
       BUG (common_fonction_ajout_fonction (action->rotation[0][i],
                                            element->action->rotation[0][i],
-                                           mult), NULL)
+                                           mult),
+           NULL,
+           FREE_ALL)
       BUG (common_fonction_ajout_fonction (action->rotation[1][i],
                                            element->action->rotation[1][i],
                                            mult),
-           NULL)
+           NULL,
+           FREE_ALL)
       BUG (common_fonction_ajout_fonction (action->rotation[2][i],
                                            element->action->rotation[2][i],
                                            mult),
-           NULL)
+           NULL,
+           FREE_ALL)
     }
     
     list_parcours = g_list_next (list_parcours);
   }
   
+#undef FREE_ALL
+  
   return action;
-}
-
-
-gboolean
-_1990_action_ponderation_resultat_free_calculs (Action *action)
-/**
- * \brief Libère les résultats de l'action souhaitée crée par
- *        #_1990_action_ponderation_resultat.
- * \param action : une action.
- * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
- *     - action == NULL.
- */
-{
-  BUGMSG (action, FALSE, gettext ("Paramètre %s incorrect.\n"), "action")
-  
-  free (action->deplacement->x);
-  free (action->deplacement);
-  free (action->efforts_noeuds->x);
-  free (action->efforts_noeuds);
-  
-  return TRUE;
 }
 
 
@@ -1533,8 +1572,8 @@ _1990_action_free_calculs (Projet *p,
  *     - action == NULL.
  */
 {
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (action, FALSE, gettext ("Paramètre %s incorrect.\n"), "action")
+  BUGPARAM (p, "%p", p, FALSE, )
+  BUGPARAM (action, "%p", action, FALSE, )
   
   if (action->deplacement != NULL)
   {
@@ -1555,7 +1594,7 @@ _1990_action_free_calculs (Projet *p,
   }
   
   if (action->efforts[0] != NULL)
-    BUG (_1990_action_fonction_free (p, action), FALSE)
+    BUG (_1990_action_fonction_free (p, action), FALSE, )
   
   return TRUE;
 }
@@ -1572,22 +1611,24 @@ _1990_action_free_1 (Projet *p,
  *   Succès : TRUE.\n
  *   Échec : FALSE :
  *     - p == NULL,
+ *     - action_free == NULL,
  *     - un type d'une des actions est inconnu.
  */
 {
-  GList      *list_parcours;
+  GList *list_parcours;
   
 #ifdef ENABLE_GTK
   GtkTreeIter Iter;
 #endif
   
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGPARAM (p, "%p", p, FALSE, )
+  BUGPARAM (action_free, "%p", action_free, FALSE, )
   
   // On enlève l'action de la liste des actions
   list_parcours = g_list_last (p->actions);
   do
   {
-    Action  *action = list_parcours->data;
+    Action *action = list_parcours->data;
     
     list_parcours = g_list_previous (list_parcours);
     if (action == action_free)
@@ -1605,24 +1646,24 @@ _1990_action_free_1 (Projet *p,
         {
           case CHARGE_NOEUD :
           {
-            BUG (EF_charge_noeud_free (charge), FALSE)
+            BUG (EF_charge_noeud_free (charge), FALSE, )
             break;
           }
           case CHARGE_BARRE_PONCTUELLE :
           {
-            BUG (EF_charge_barre_ponctuelle_free (charge), FALSE)
+            BUG (EF_charge_barre_ponctuelle_free (charge), FALSE, )
             break;
           }
           case CHARGE_BARRE_REPARTIE_UNIFORME :
           {
-            BUG (EF_charge_barre_repartie_uniforme_free (charge), FALSE)
+            BUG (EF_charge_barre_repartie_uniforme_free (charge), FALSE, )
             break;
           }
           default :
           {
-            BUGMSG (0,
-                    FALSE,
-                    gettext ("Type de charge %d inconnu.\n"), charge->type)
+            BUGCRIT (0,
+                     FALSE,
+                     (gettext ("Type de charge %d inconnu.\n"), charge->type);)
             break;
           }
         }
@@ -1635,7 +1676,7 @@ _1990_action_free_1 (Projet *p,
         cholmod_free_sparse (&action->efforts_noeuds, p->calculs.c);
       
       if (action->efforts[0] != NULL)
-        BUG (_1990_action_fonction_free (p, action), FALSE)
+        BUG (_1990_action_fonction_free (p, action), FALSE, )
       
 #ifdef ENABLE_GTK
       if (UI_ACT.builder != NULL)
@@ -1650,7 +1691,7 @@ _1990_action_free_1 (Projet *p,
       gtk_list_store_remove (UI_ACT.liste, &action->Iter_liste);
 #endif
       
-      free(action);
+      free (action);
       
       break;
     }
@@ -1670,8 +1711,8 @@ _1990_action_free_1 (Projet *p,
     
     while (list_groupes != NULL)
     {
-      Groupe    *groupe = list_groupes->data;
-      GList     *list_elements = groupe->elements;
+      Groupe *groupe = list_groupes->data;
+      GList  *list_elements = groupe->elements;
       
       while (list_elements != NULL)
       {
@@ -1681,7 +1722,8 @@ _1990_action_free_1 (Projet *p,
                                             niveau_groupe,
                                             groupe,
                                             list_elements->data),
-               FALSE)
+               FALSE,
+               )
           break;
         }
         
@@ -1703,10 +1745,8 @@ _1990_action_free_1 (Projet *p,
   {
     do
     {
-      GtkTreeIter Iter_en_cours;
+      GtkTreeIter Iter_en_cours = Iter;
       Action     *action_en_cours;
-      
-      Iter_en_cours = Iter;
       
       gtk_tree_model_get (GTK_TREE_MODEL (UI_GRO.tree_store_dispo),
                           &Iter_en_cours,
@@ -1725,7 +1765,7 @@ _1990_action_free_1 (Projet *p,
   }
 #endif
   
-  BUG (EF_calculs_free (p), FALSE)
+  BUG (EF_calculs_free (p), FALSE, )
   
   return TRUE;
 }
@@ -1742,11 +1782,11 @@ _1990_action_free (Projet *p)
  *     - p == NULL.
  */
 {
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGPARAM (p, "%p", p, FALSE, )
   
   while (p->actions != NULL)
   {
-    Action  *action = p->actions->data;
+    Action *action = p->actions->data;
     
     p->actions = g_list_delete_link (p->actions, p->actions);
     
@@ -1761,25 +1801,24 @@ _1990_action_free (Projet *p)
       {
         case CHARGE_NOEUD :
         {
-          BUG(EF_charge_noeud_free (charge), FALSE)
+          BUG (EF_charge_noeud_free (charge), FALSE, )
           break;
         }
         case CHARGE_BARRE_PONCTUELLE :
         {
-          BUG(EF_charge_barre_ponctuelle_free (charge), FALSE)
+          BUG (EF_charge_barre_ponctuelle_free (charge), FALSE, )
           break;
         }
         case CHARGE_BARRE_REPARTIE_UNIFORME :
         {
-          BUG (EF_charge_barre_repartie_uniforme_free (charge),
-               FALSE)
+          BUG (EF_charge_barre_repartie_uniforme_free (charge), FALSE, )
           break;
         }
         default :
         {
-          BUGMSG(0,
-                 FALSE,
-                 gettext ("Type de charge %d inconnu.\n"), charge->type)
+          BUGCRIT (0,
+                   FALSE,
+                   (gettext ("Type de charge %d inconnu.\n"), charge->type);)
           break;
         }
       }
@@ -1792,7 +1831,7 @@ _1990_action_free (Projet *p)
       cholmod_free_sparse (&action->efforts_noeuds, p->calculs.c);
     
     if (action->efforts[0] != NULL)
-      BUG (_1990_action_fonction_free (p, action), FALSE)
+      BUG (_1990_action_fonction_free (p, action), FALSE, )
     
     free (action);
   }

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2014-01-30 20:25+0100\n"
-"PO-Revision-Date: 2014-01-30 20:31+0100\n"
+"POT-Creation-Date: 2014-02-01 00:54+0100\n"
+"PO-Revision-Date: 2014-02-01 00:55+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -769,21 +769,6 @@ msgid "Charge répartie uniforme sur barre"
 msgstr "Charge répartie uniforme sur barre"
 
 #, c-format
-msgid "Action %s introuvable.\n"
-msgstr "Action %s introuvable.\n"
-
-msgid ""
-"Le paramètre flag est de type strictement boolean et doit valoir soit 0 soit "
-"1.\n"
-msgstr ""
-"Le paramètre flag est de type strictement boolean et doit valoir soit 0 soit "
-"1.\n"
-
-#, c-format
-msgid "Le numéro %u du coefficient spi à changer est incorrect.\n"
-msgstr "Le numéro %u du coefficient spi à changer est incorrect.\n"
-
-#, c-format
 msgid "Aucune action existante.\n"
 msgstr "Aucune action existante.\n"
 
@@ -1181,6 +1166,10 @@ msgstr "fichier %s, fonction %s, ligne %d, test : %s\n"
 #, c-format
 msgid "fichier %s, fonction %s, ligne %d, test : %s, texte : "
 msgstr "fichier %s, fonction %s, ligne %d, test : %s, texte : "
+
+#, c-format
+msgid "Erreur critique. "
+msgstr "Erreur critique. "
 
 msgid "Région A1"
 msgstr "Région A1"
@@ -2115,6 +2104,19 @@ msgstr "Le matériau n'est pas en acier.\n"
 
 msgid "Modification d'un matériau acier"
 msgstr "Modification d'un matériau acier"
+
+#~ msgid "Action %s introuvable.\n"
+#~ msgstr "Action %s introuvable.\n"
+
+#~ msgid ""
+#~ "Le paramètre flag est de type strictement boolean et doit valoir soit 0 "
+#~ "soit 1.\n"
+#~ msgstr ""
+#~ "Le paramètre flag est de type strictement boolean et doit valoir soit 0 "
+#~ "soit 1.\n"
+
+#~ msgid "Le numéro %u du coefficient spi à changer est incorrect.\n"
+#~ msgstr "Le numéro %u du coefficient spi à changer est incorrect.\n"
 
 #~ msgid "Section indéfinie.\n"
 #~ msgstr "Section indéfinie.\n"
