@@ -29,8 +29,8 @@
 
 typedef struct
 {
-  CM3dScene   *scene;
-  CM3dCamera  *camera;
+  CM3dScene  scene;
+  CM3dCamera camera;
 } SGlobalData;
 
 
@@ -69,7 +69,7 @@ gboolean m3d_actualise_graphique (Projet *p,
 gboolean m3d_rafraichit          (Projet *p)
                                        __attribute__((__warn_unused_result__));
 
-void    *m3d_noeud      (void     *donnees_m3d,
+gboolean m3d_noeud      (void     *donnees_m3d,
                          EF_Noeud *noeud);
 void     m3d_noeud_free (void     *donnees_m3d,
                          EF_Noeud *noeud);

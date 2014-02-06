@@ -990,8 +990,6 @@ typedef struct __Gtk_m3d
 {
   GtkWidget *drawing;
   gpointer   data;
-  double     gdx, gdy, gdz;
-  double     hbx, hby, hbz;
 } Gtk_m3d;
 
 
