@@ -77,24 +77,24 @@ _1990_action_bat_txt_type_eu (unsigned int type)
 {
   switch (type)
   {
-    case 0 : { return gettext ("Permanente"); break; }
-    case 1 : { return gettext ("Précontrainte"); break; }
-    case 2 : { return gettext ("Exploitation : Catégorie A : habitation, zones résidentielles"); break; }
-    case 3 : { return gettext ("Exploitation : Catégorie B : bureaux"); break; }
-    case 4 : { return gettext ("Exploitation : Catégorie C : lieux de réunion"); break; }
-    case 5 : { return gettext ("Exploitation : Catégorie D : commerces"); break; }
-    case 6 : { return gettext ("Exploitation : Catégorie E : stockage"); break; }
-    case 7 : { return gettext ("Exploitation : Catégorie F : zone de trafic, véhicules de poids inférieur à 30 kN"); break; }
-    case 8 : { return gettext ("Exploitation : Catégorie G : zone de trafic, véhicules de poids entre 30 kN et 160 kN"); break; }
-    case 9 : { return gettext ("Exploitation : Catégorie H : toits"); break; }
-    case 10 : { return gettext ("Neige : Finlande, Islande, Norvège, Suède"); break; }
-    case 11 : { return gettext ("Neige : Autres états membres CEN, altitude > 1000 m"); break; }
-    case 12 : { return gettext ("Neige : Autres états membres CEN, altitude <= 1000 m"); break; }
-    case 13 : { return gettext ("Vent"); break; }
-    case 14 : { return gettext ("Température (hors incendie)"); break; }
-    case 15 : { return gettext ("Accidentelle"); break; }
-    case 16 : { return gettext ("Sismique"); break; }
-    default : { BUGPARAM (type, "%d", 0, NULL, ) break; }
+    case 0 : return gettext ("Permanente");
+    case 1 : return gettext ("Précontrainte");
+    case 2 : return gettext ("Exploitation : Catégorie A : habitation, zones résidentielles");
+    case 3 : return gettext ("Exploitation : Catégorie B : bureaux");
+    case 4 : return gettext ("Exploitation : Catégorie C : lieux de réunion");
+    case 5 : return gettext ("Exploitation : Catégorie D : commerces");
+    case 6 : return gettext ("Exploitation : Catégorie E : stockage");
+    case 7 : return gettext ("Exploitation : Catégorie F : zone de trafic, véhicules de poids inférieur à 30 kN");
+    case 8 : return gettext ("Exploitation : Catégorie G : zone de trafic, véhicules de poids entre 30 kN et 160 kN");
+    case 9 : return gettext ("Exploitation : Catégorie H : toits"); 
+    case 10 : return gettext ("Neige : Finlande, Islande, Norvège, Suède"); 
+    case 11 : return gettext ("Neige : Autres états membres CEN, altitude > 1000 m"); 
+    case 12 : return gettext ("Neige : Autres états membres CEN, altitude <= 1000 m"); 
+    case 13 : return gettext ("Vent");
+    case 14 : return gettext ("Température (hors incendie)");
+    case 15 : return gettext ("Accidentelle");
+    case 16 : return gettext ("Sismique");
+    default : { BUGPARAM (type, "%u", 0, NULL, ) break; }
   }
 }
 
@@ -144,29 +144,29 @@ _1990_action_bat_txt_type_fr (unsigned int type)
 {
   switch (type)
   {
-    case 0 : { return gettext ("Permanente"); break; }
-    case 1 : { return gettext ("Précontrainte"); break; }
-    case 2 : { return gettext ("Exploitation : Catégorie A : habitation, zones résidentielles"); break; }
-    case 3 : { return gettext ("Exploitation : Catégorie B : bureaux"); break; }
-    case 4 : { return gettext ("Exploitation : Catégorie C : lieux de réunion"); break; }
-    case 5 : { return gettext ("Exploitation : Catégorie D : commerces"); break; }
-    case 6 : { return gettext ("Exploitation : Catégorie E : stockage"); break; }
-    case 7 : { return gettext ("Exploitation : Catégorie F : zone de trafic, véhicules de poids inférieur à 30 kN"); break; }
-    case 8 : { return gettext ("Exploitation : Catégorie G : zone de trafic, véhicules de poids entre 30 kN et 160 kN"); break; }
-    case 9 : { return gettext ("Exploitation : Catégorie H : toits d'un bâtiment de catégorie A ou B"); break; }
-    case 10 : { return gettext ("Exploitation : Catégorie I : toitures accessibles avec locaux des catégories A ou B"); break; }
-    case 11 : { return gettext ("Exploitation : Catégorie I : toitures accessibles avec locaux des catégories C ou D"); break; }
-    case 12 : { return gettext ("Exploitation : Catégorie K : Hélicoptère sur la toiture"); break; }
-    case 13 : { return gettext ("Exploitation : Catégorie K : Hélicoptère sur la toiture, autres charges (fret, personnel, accessoires ou équipements divers)"); break; }
-    case 14 : { return gettext ("Neige : Saint-Pierre-et-Miquelon"); break; }
-    case 15 : { return gettext ("Neige : Altitude > 1000 m"); break; }
-    case 16 : { return gettext ("Neige : Altitude <= 1000 m"); break; }
-    case 17 : { return gettext ("Vent"); break; }
-    case 18 : { return gettext ("Température (hors incendie)"); break; }
-    case 19 : { return gettext ("Accidentelle"); break; }
-    case 20 : { return gettext ("Sismique"); break; }
-    case 21 : { return gettext ("Eaux souterraines"); break; }
-    default : { BUGPARAM (type, "%d", 0, NULL, ) break; }
+    case 0 : return gettext ("Permanente");
+    case 1 : return gettext ("Précontrainte");
+    case 2 : return gettext ("Exploitation : Catégorie A : habitation, zones résidentielles");
+    case 3 : return gettext ("Exploitation : Catégorie B : bureaux");
+    case 4 : return gettext ("Exploitation : Catégorie C : lieux de réunion");
+    case 5 : return gettext ("Exploitation : Catégorie D : commerces");
+    case 6 : return gettext ("Exploitation : Catégorie E : stockage");
+    case 7 : return gettext ("Exploitation : Catégorie F : zone de trafic, véhicules de poids inférieur à 30 kN");
+    case 8 : return gettext ("Exploitation : Catégorie G : zone de trafic, véhicules de poids entre 30 kN et 160 kN");
+    case 9 : return gettext ("Exploitation : Catégorie H : toits d'un bâtiment de catégorie A ou B");
+    case 10 : return gettext ("Exploitation : Catégorie I : toitures accessibles avec locaux des catégories A ou B");
+    case 11 : return gettext ("Exploitation : Catégorie I : toitures accessibles avec locaux des catégories C ou D");
+    case 12 : return gettext ("Exploitation : Catégorie K : Hélicoptère sur la toiture");
+    case 13 : return gettext ("Exploitation : Catégorie K : Hélicoptère sur la toiture, autres charges (fret, personnel, accessoires ou équipements divers)");
+    case 14 : return gettext ("Neige : Saint-Pierre-et-Miquelon");
+    case 15 : return gettext ("Neige : Altitude > 1000 m");
+    case 16 : return gettext ("Neige : Altitude <= 1000 m");
+    case 17 : return gettext ("Vent");
+    case 18 : return gettext ("Température (hors incendie)");
+    case 19 : return gettext ("Accidentelle");
+    case 20 : return gettext ("Sismique");
+    case 21 : return gettext ("Eaux souterraines");
+    default : { BUGPARAM (type, "%u", 0, NULL, ) break; }
   }
 }
 
@@ -188,8 +188,8 @@ _1990_action_bat_txt_type (unsigned int type,
 {
   switch (norme)
   {
-    case NORME_EU : { return _1990_action_bat_txt_type_eu (type); break; }
-    case NORME_FR : { return _1990_action_bat_txt_type_fr (type); break; }
+    case NORME_EU : return _1990_action_bat_txt_type_eu (type);
+    case NORME_FR : return _1990_action_bat_txt_type_fr (type);
     default : { BUGPARAM (norme, "%d", 0, NULL, ) break; }
   }
 }
@@ -225,7 +225,7 @@ _1990_action_categorie_bat_eu (unsigned int type)
   else if (type == 16)
     return ACTION_SISMIQUE;
   else
-    BUGPARAM (type, "%d", 0, ACTION_INCONNUE, )
+    BUGPARAM (type, "%u", 0, ACTION_INCONNUE, )
 }
 
 
@@ -262,7 +262,7 @@ _1990_action_categorie_bat_fr (unsigned int type)
   else if (type == 21)
     return ACTION_EAUX_SOUTERRAINES;
   else
-    BUGPARAM (type, "%d", 0, ACTION_INCONNUE, )
+    BUGPARAM (type, "%u", 0, ACTION_INCONNUE, )
 }
 
 
@@ -283,8 +283,8 @@ _1990_action_categorie_bat (unsigned int type,
 {
   switch (norme)
   {
-    case NORME_EU : { return _1990_action_categorie_bat_eu (type); break; }
-    case NORME_FR : { return _1990_action_categorie_bat_fr (type); break; }
+    case NORME_EU : return _1990_action_categorie_bat_eu (type);
+    case NORME_FR : return _1990_action_categorie_bat_fr (type);
     default : { BUGPARAM (norme, "%d", 0, ACTION_INCONNUE, ) break; }
   }
 }
@@ -304,8 +304,8 @@ _1990_action_num_bat_txt (Norme norme)
 {
   switch (norme)
   {
-    case NORME_EU : { return 17; break; }
-    case NORME_FR : { return 22; break; }
+    case NORME_EU : return 17;
+    case NORME_FR : return 22;
     default : { BUGPARAM (norme, "%d", 0, 0, ) break; }
   }
 }
@@ -421,7 +421,7 @@ _1990_action_ajout (Projet      *p,
   
   BUGPARAM (p, "%p", p, NULL, )
   BUGPARAM (type,
-            "%d",
+            "%u",
             _1990_action_categorie_bat (type, p->parametres.norme) !=
                                                                ACTION_INCONNUE,
             NULL,
@@ -757,7 +757,7 @@ _1990_action_flags_action_predominante_change (Action      *action,
  */
 {
   BUGPARAM (action, "%p", action, FALSE, )
-  BUGPARAM (flag, "%d", (flag == 0) || (flag == 1), FALSE, )
+  BUGPARAM (flag, "%u", (flag == 0) || (flag == 1), FALSE, )
   
   action->action_predominante = flag;
   
@@ -839,7 +839,7 @@ _1990_action_psi_change (Projet      *p,
   BUGPARAM (p, "%p", p, FALSE, )
   BUGPARAM (action, "%p", action, FALSE, )
   BUGPARAM (psi_num,
-            "%d",
+            "%u",
             (psi_num == 0) || (psi_num == 1) || (psi_num == 2),
             FALSE,
             )
@@ -1326,43 +1326,43 @@ _1990_action_affiche_resultats (Projet *p,
   for (i = 0; i < g_list_length (p->modele.barres); i++)
   {
     // Affichage de la courbe des sollicitations de l'effort normal
-    printf ("Barre n°%d, Effort normal\n", i);
+    printf ("Barre n°%u, Effort normal\n", i);
     BUG (common_fonction_affiche (action->efforts[0][i]), FALSE, )
     // Affichage de la courbe des sollicitations de l'effort tranchant selon Y
-    printf ("Barre n°%d, Effort tranchant Y\n", i);
+    printf ("Barre n°%u, Effort tranchant Y\n", i);
     BUG (common_fonction_affiche (action->efforts[1][i]), FALSE, )
     // Affichage de la courbe des sollicitations de l'effort tranchant selon Z
-    printf ("Barre n°%d, Effort tranchant Z\n", i);
+    printf ("Barre n°%u, Effort tranchant Z\n", i);
     BUG (common_fonction_affiche (action->efforts[2][i]), FALSE, )
     // Affichage de la courbe des sollicitations du moment de torsion
-    printf ("Barre n°%d, Moment de torsion\n", i);
+    printf ("Barre n°%u, Moment de torsion\n", i);
     BUG (common_fonction_affiche (action->efforts[3][i]), FALSE, )
     // Affichage de la courbe des sollicitations du moment fléchissant selon Y
-    printf ("Barre n°%d, Moment de flexion Y\n", i);
+    printf ("Barre n°%u, Moment de flexion Y\n", i);
     BUG (common_fonction_affiche (action->efforts[4][i]), FALSE, )
     // Affichage de la courbe des sollicitations du moment fléchissant selon Z
-    printf ("Barre n°%d, Moment de flexion Z\n", i);
+    printf ("Barre n°%u, Moment de flexion Z\n", i);
     BUG (common_fonction_affiche (action->efforts[5][i]), FALSE, )
   }
   for (i = 0; i < g_list_length (p->modele.barres); i++)
   {
     // Affichage de la courbe de déformation selon l'axe X
-    printf ("Barre n°%d, Déformation en X\n", i);
+    printf ("Barre n°%u, Déformation en X\n", i);
     BUG (common_fonction_affiche (action->deformation[0][i]), FALSE, )
     // Affichage de la courbe de déformation selon l'axe Y
-    printf ("Barre n°%d, Déformation en Y\n", i);
+    printf ("Barre n°%u, Déformation en Y\n", i);
     BUG (common_fonction_affiche (action->deformation[1][i]), FALSE, )
     // Affichage de la courbe de déformation selon l'axe Z
-    printf ("Barre n°%d, Déformation en Z\n", i);
+    printf ("Barre n°%u, Déformation en Z\n", i);
     BUG (common_fonction_affiche (action->deformation[2][i]), FALSE, )
     // Affichage de la courbe de rotation selon l'axe X
-    printf ("Barre n°%d, Rotation en X\n", i);
+    printf ("Barre n°%u, Rotation en X\n", i);
     BUG (common_fonction_affiche (action->rotation[0][i]), FALSE, )
     // Affichage de la courbe de rotation selon l'axe Y
-    printf ("Barre n°%d, Rotation en Y\n", i);
+    printf ("Barre n°%u, Rotation en Y\n", i);
     BUG (common_fonction_affiche (action->rotation[1][i]), FALSE, )
     // Affichage de la courbe de rotation selon l'axe Z
-    printf ("Barre n°%d, Rotation en Z\n", i);
+    printf ("Barre n°%u, Rotation en Z\n", i);
     BUG (common_fonction_affiche (action->rotation[2][i]), FALSE, )
   }
   // FinPour
