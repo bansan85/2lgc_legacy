@@ -154,3 +154,6 @@ common/ressources.c: ../../files/ressources.xml $(wildcard ../../files/ui/*.ui)
 	glib-compile-resources --target=$@ --sourcedir=../../files ../../files/ressources.xml --c-name _2lgc --generate-source --manual-register
 
 CLEANFILES = *.gcno *.gcda common/ressources.c common/ressources.h
+
+cppcheck :
+	cppcheck -v --inconclusive --enable=all --report-progress $(DEFAULT_INCLUDES) $(libeurocodes_la_SOURCES)
