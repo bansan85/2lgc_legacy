@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2014-02-01 00:54+0100\n"
-"PO-Revision-Date: 2014-02-01 00:55+0100\n"
+"POT-Creation-Date: 2014-02-02 18:10+0100\n"
+"PO-Revision-Date: 2014-02-06 21:26+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -897,9 +897,6 @@ msgstr "%sde %.*lfm à %.*lfm : "
 
 msgid "Zéro impossible à trouver.\n"
 msgstr "Zéro impossible à trouver.\n"
-
-msgid "La caméra n'est pas initialisée.\n"
-msgstr "La caméra n'est pas initialisée.\n"
 
 #, c-format
 msgid "Type de section %d inconnu.\n"
@@ -2104,6 +2101,9 @@ msgstr "Le matériau n'est pas en acier.\n"
 
 msgid "Modification d'un matériau acier"
 msgstr "Modification d'un matériau acier"
+
+#~ msgid "La caméra n'est pas initialisée.\n"
+#~ msgstr "La caméra n'est pas initialisée.\n"
 
 #~ msgid "Action %s introuvable.\n"
 #~ msgstr "Action %s introuvable.\n"

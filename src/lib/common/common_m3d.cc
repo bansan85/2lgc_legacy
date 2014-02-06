@@ -58,24 +58,16 @@ m3d_configure_event (GtkWidget         *drawing,
           FALSE,
           gettext ("La fenêtre graphique %s n'est pas initialisée.\n"), "principale");
   
-  if ((data->camera == NULL) && (p->ui.comp.window != NULL))
-    BUG (m3d_camera_axe_x_z_y (p), FALSE);
+  data->camera.set_size_of_window (ev->width, ev->height);
   
-  if (data->camera == NULL)
-    data->camera = new CM3dCamera (10., 10., 10.,
-                                   10., 11., 10.,
-                                   90.,
-                                   ev->width, ev->height);
-  
-  data->camera->set_size_of_window (ev->width, ev->height);
-  
-  if (data->camera->get_window_height () < data->camera->get_window_width ())
-    data->camera->set_d (data->camera->get_window_height () /
-                                   (2 * tan (data->camera->get_angle () / 2)));
+  if (data->camera.get_window_height () < data->camera.get_window_width ())
+    data->camera.set_d (data->camera.get_window_height () /
+                                    (2 * tan (data->camera.get_angle () / 2)));
   else
-    data->camera->set_d (data->camera->get_window_width () /
-                                   (2 * tan (data->camera->get_angle () / 2)));
-  data->scene->rendering (data->camera);
+    data->camera.set_d (data->camera.get_window_width () /
+                                    (2 * tan (data->camera.get_angle () / 2)));
+  
+  data->scene.rendering (data->camera);
   
   return FALSE;
 }
@@ -94,26 +86,32 @@ m3d_init (Projet *p)
  */
 {
   SGlobalData *global_data;
-  CM3dLight   *light;
+  CM3dLight    light;
   
   BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet");
   
   UI_M3D.drawing = gtk_drawing_area_new ();
+  gtk_widget_add_events(UI_M3D.drawing, GDK_POINTER_MOTION_MASK);
+  gtk_widget_add_events(UI_M3D.drawing, GDK_BUTTON_PRESS_MASK);
   BUGMSG (UI_M3D.data = malloc (sizeof (SGlobalData)),
           FALSE,
           gettext ("Erreur d'allocation mémoire.\n"));
   memset (UI_M3D.data, 0, sizeof (SGlobalData));
   
   global_data = (SGlobalData *) UI_M3D.data;
-  global_data->scene = new CM3dScene ();
-  global_data->scene->reverse_y_axis ();
-  global_data->scene->show_repere (true, 1.1);
-  global_data->scene->set_ambient_light (1.);
-  global_data->scene->set_show_type (SOLID);
+  global_data->scene.reverse_y_axis ();
+  global_data->scene.show_repere (true, 1.1);
+  global_data->scene.set_ambient_light (1.);
+  global_data->scene.set_show_type (SOLID);
+  global_data->camera.set_position (10., 10., 10.);
+  global_data->camera.set_target (10., 11., 10.);
+  global_data->camera.set_angle (90.);
   
-  light = new CM3dLight ("lumiere 1", DIFFUS, 1.);
-  light->set_position (10., 20., -20.);
-  global_data->scene->add_light (light);
+  light.set_name ("lumiere 1");
+  light.set_type (DIFFUS);
+  light.set_intensity (1);
+  light.set_position (10., 20., -20.);
+  global_data->scene.add_light (light);
   
   g_signal_connect (UI_M3D.drawing,
                     "draw",
@@ -144,7 +142,7 @@ m3d_draw (GtkWidget      *drawing,
 {
   SGlobalData *data2 = (SGlobalData *) data;
 
-  data2->scene->show_to_GtkDrawingarea (drawing, data2->camera);
+  data2->scene.show_to_GtkDrawingarea (drawing, data2->camera);
   
   return FALSE;
 }
@@ -169,7 +167,7 @@ m3d_key_press (GtkWidget   *widget,
  *     - interface graphique non initialisée.
  */
 {
-  SGlobalData *vue  = (SGlobalData *) UI_M3D.data;
+  SGlobalData *data  = (SGlobalData *) UI_M3D.data;
   
   BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
   BUGMSG (p->ui.comp.window,
@@ -178,27 +176,12 @@ m3d_key_press (GtkWidget   *widget,
   
   if (event->type == GDK_KEY_PRESS)
   {
-    double      x1, y1, z1;
-    double      x2, y2, z2;
-    CM3dVertex *vect;
-    CM3dVertex  S1;
-    CM3dVertex  som1_rotx;
-    CM3dVertex  som1_roty;
-    
     switch (event->keyval)
     {
       case GDK_KEY_KP_Add :
       case GDK_KEY_plus :
       {
-        vect = vue->camera->get_position ();
-        vect->get_coordinates (&x1, &y1, &z1);
-        vect = vue->camera->get_target_vector ();
-        vect->get_coordinates (&x2, &y2, &z2);
-        
-        vue->camera->set_position (x1 + x2, y1 + y2, z1 + z2);
-        vect = vue->camera->get_target ();
-        vect->get_coordinates (&x1, &y1, &z1);
-        vue->camera->set_target (x1 + x2, y1 + y2, z1 + z2);
+        data->camera.move_forward (1.);
         
         BUG (m3d_rafraichit (p), FALSE);
         
@@ -207,15 +190,7 @@ m3d_key_press (GtkWidget   *widget,
       case GDK_KEY_KP_Subtract :
       case GDK_KEY_minus :
       {
-        vect = vue->camera->get_position ();
-        vect->get_coordinates (&x1, &y1, &z1);
-        vect = vue->camera->get_target_vector ();
-        vect->get_coordinates (&x2, &y2, &z2);
-        
-        vue->camera->set_position (x1 - x2, y1 - y2, z1 - z2);
-        vect = vue->camera->get_target ();
-        vect->get_coordinates (&x1, &y1, &z1);
-        vue->camera->set_target (x1 - x2, y1 - y2, z1 - z2);
+        data->camera.move_back (1.);
         
         BUG (m3d_rafraichit (p), FALSE);
         
@@ -223,19 +198,8 @@ m3d_key_press (GtkWidget   *widget,
       }
       case GDK_KEY_KP_Right :
       case GDK_KEY_Right :
-      case GDK_KEY_d :
-      case GDK_KEY_D :
       {
-        vue->camera->get_position ()->get_coordinates (&x1, &y1, &z1);
-        vue->camera->set_position (x1 + UI_M3D.gdx,
-                                   y1 + UI_M3D.gdy,
-                                   z1 + UI_M3D.gdz);
-        
-        vect = vue->camera->get_target ();
-        vect->get_coordinates (&x1, &y1, &z1);
-        vue->camera->set_target (x1 + UI_M3D.gdx,
-                                 y1 + UI_M3D.gdy,
-                                 z1 + UI_M3D.gdz);
+        data->camera.go_right (1.);
         
         BUG (m3d_rafraichit (p), FALSE);
         
@@ -243,19 +207,8 @@ m3d_key_press (GtkWidget   *widget,
       }
       case GDK_KEY_KP_Left :
       case GDK_KEY_Left :
-      case GDK_KEY_q :
-      case GDK_KEY_Q :
       {
-        vue->camera->get_position ()->get_coordinates (&x1, &y1, &z1);
-        vue->camera->set_position (x1 - UI_M3D.gdx,
-                                   y1 - UI_M3D.gdy,
-                                   z1 - UI_M3D.gdz);
-        
-        vect = vue->camera->get_target ();
-        vect->get_coordinates (&x1, &y1, &z1);
-        vue->camera->set_target (x1 - UI_M3D.gdx,
-                                 y1 - UI_M3D.gdy,
-                                 z1 - UI_M3D.gdz);
+        data->camera.go_left (1.);
         
         BUG (m3d_rafraichit (p), FALSE);
         
@@ -263,19 +216,8 @@ m3d_key_press (GtkWidget   *widget,
       }
       case GDK_KEY_KP_Up :
       case GDK_KEY_Up :
-      case GDK_KEY_z :
-      case GDK_KEY_Z :
       {
-        vue->camera->get_position ()->get_coordinates (&x1, &y1, &z1);
-        vue->camera->set_position (x1 + UI_M3D.hbx,
-                                   y1 + UI_M3D.hby,
-                                   z1 + UI_M3D.hbz);
-        
-        vect = vue->camera->get_target ();
-        vect->get_coordinates (&x1, &y1, &z1);
-        vue->camera->set_target (x1 + UI_M3D.hbx,
-                                 y1 + UI_M3D.hby,
-                                 z1 + UI_M3D.hbz);
+        data->camera.go_up (1., data->scene.y_axis_is_inverted ());
         
         BUG (m3d_rafraichit (p), FALSE);
         
@@ -283,19 +225,8 @@ m3d_key_press (GtkWidget   *widget,
       }
       case GDK_KEY_KP_Down :
       case GDK_KEY_Down :
-      case GDK_KEY_s :
-      case GDK_KEY_S :
       {
-        vue->camera->get_position ()->get_coordinates (&x1, &y1, &z1);
-        vue->camera->set_position (x1 - UI_M3D.hbx,
-                                   y1 - UI_M3D.hby,
-                                   z1 - UI_M3D.hbz);
-        
-        vect = vue->camera->get_target ();
-        vect->get_coordinates (&x1, &y1, &z1);
-        vue->camera->set_target (x1 - UI_M3D.hbx,
-                                 y1 - UI_M3D.hby,
-                                 z1 - UI_M3D.hbz);
+        data->camera.go_down (1., data->scene.y_axis_is_inverted ());
         
         BUG (m3d_rafraichit (p), FALSE);
         
@@ -362,8 +293,8 @@ m3d_get_rect (double *xmin,
   noeud = (EF_Noeud *) p->modele.noeuds->data;
   BUG (EF_noeuds_renvoie_position (noeud, &point), FALSE);
   v1.set_coordinates (m_g (point.x), m_g (point.y), m_g (point.z));
-  v1 = vue->camera->convert_vertex_by_camera_view (&v1);
-  v1 = vue->camera->convert_vertex_to_2d (&v1);
+  v1 = vue->camera.convert_vertex_by_camera_view (v1);
+  v1 = vue->camera.convert_vertex_to_2d (v1);
   v1.get_coordinates (&x1, &y1, NULL);
   *ymax = y1;
   *ymin = y1;
@@ -376,8 +307,8 @@ m3d_get_rect (double *xmin,
     noeud = (EF_Noeud *) list_parcours->data;
     BUG (EF_noeuds_renvoie_position (noeud, &point), FALSE);
     v1.set_coordinates (m_g (point.x), m_g (point.y), m_g (point.z));
-    v1 = vue->camera->convert_vertex_by_camera_view (&v1);
-    v1 = vue->camera->convert_vertex_to_2d (&v1);
+    v1 = vue->camera.convert_vertex_by_camera_view (v1);
+    v1 = vue->camera.convert_vertex_to_2d (v1);
     v1.get_coordinates (&x1, &y1, NULL);
     
     if (*xmin > x1)
@@ -432,8 +363,6 @@ m3d_camera_zoom_all (Projet *p)
   
   vue = (SGlobalData *) UI_M3D.data;
   
-  BUGMSG (vue->camera, FALSE, gettext ("La caméra n'est pas initialisée.\n"));
-  
   // Aucune noeud, on ne fait rien
   if (p->modele.noeuds == NULL)
     return TRUE;
@@ -446,14 +375,14 @@ m3d_camera_zoom_all (Projet *p)
   x = 0;
   y = 0;
   z = 0;
-  vue->camera->get_target_vector ()->get_coordinates (&cx, &cy, &cz);
-  vue->camera->set_position (x, y, z);
-  vue->camera->set_target (x + cx, y + cy, z + cz);
+  vue->camera.get_target_vector ().get_coordinates (&cx, &cy, &cz);
+  vue->camera.set_position (x, y, z);
+  vue->camera.set_target (x + cx, y + cy, z + cz);
   
   // On cherche le xmin, xmax, zmin, zmax et ymin de l'ensemble des noeuds afin
   // de définir la position optimale de la caméra.
   v1.set_coordinates (m_g (point.x), m_g (point.y), m_g (point.z));
-  v1 = vue->camera->convert_vertex_by_camera_view (&v1);
+  v1 = vue->camera.convert_vertex_by_camera_view (v1);
   v1.get_coordinates (&tmpx, &tmpy, &tmpz);
   xmin = tmpx;
   xmax = tmpx;
@@ -467,7 +396,7 @@ m3d_camera_zoom_all (Projet *p)
     BUG (EF_noeuds_renvoie_position (noeud, &point), FALSE);
     
     v1.set_coordinates (m_g (point.x), m_g (point.y), m_g (point.z));
-    v1 = vue->camera->convert_vertex_by_camera_view (&v1);
+    v1 = vue->camera.convert_vertex_by_camera_view (v1);
     v1.get_coordinates (&tmpx, &tmpy, &tmpz);
     if (xmin > tmpx)
       xmin = tmpx;
@@ -489,13 +418,13 @@ m3d_camera_zoom_all (Projet *p)
                       (ymax - ymin) * (ymax - ymin));
   ztmp = (ymin + ymax) / 2.;
   v1.set_coordinates (xtmp, ztmp, ytmp);
-  v1.z_rotate (&v1, vue->camera->get_cosz (), -vue->camera->get_sinz ());
-  v1.x_rotate (&v1, vue->camera->get_cosx (), -vue->camera->get_sinx ());
-  v1.y_rotate (&v1, vue->camera->get_cosy (), -vue->camera->get_siny ());
+  v1.z_rotate (v1, vue->camera.get_cosz (), -vue->camera.get_sinz ());
+  v1.x_rotate (v1, vue->camera.get_cosx (), -vue->camera.get_sinx ());
+  v1.y_rotate (v1, vue->camera.get_cosy (), -vue->camera.get_siny ());
   v1.get_coordinates (&x, &y, &z);
   
-  vue->camera->set_position (x, y, z);
-  vue->camera->set_target (x + cx, y + cy, z + cz);
+  vue->camera.set_position (x, y, z);
+  vue->camera.set_target (x + cx, y + cy, z + cz);
   // A ce stade, on est sûr qu'il n'y a besoin plus que de zoomer et de centrer
   // la structure au sein de la fenêtre.
   
@@ -506,14 +435,14 @@ m3d_camera_zoom_all (Projet *p)
     BUG (m3d_get_rect (&xmin, &xmax, &ymin, &ymax, p), FALSE);
     dx = 1;
     v1.set_coordinates (dx, 0, 0);
-    v1.z_rotate (&v1, vue->camera->get_cosz (), -vue->camera->get_sinz ());
-    v1.x_rotate (&v1, vue->camera->get_cosx (), -vue->camera->get_sinx ());
-    v1.y_rotate (&v1, vue->camera->get_cosy (), -vue->camera->get_siny ());
+    v1.z_rotate (v1, vue->camera.get_cosz (), -vue->camera.get_sinz ());
+    v1.x_rotate (v1, vue->camera.get_cosx (), -vue->camera.get_sinx ());
+    v1.y_rotate (v1, vue->camera.get_cosy (), -vue->camera.get_siny ());
     v1.get_coordinates (&tmpx, &tmpy, &tmpz);
     do
     {
-      vue->camera->set_position (x + tmpx, y + tmpy, z + tmpz);
-      vue->camera->set_target (x + tmpx + cx, y + tmpy + cy, z + tmpz + cz);
+      vue->camera.set_position (x + tmpx, y + tmpy, z + tmpz);
+      vue->camera.set_target (x + tmpx + cx, y + tmpy + cy, z + tmpz + cz);
       BUG (m3d_get_rect (&xmin2, &xmax2, &ymin2, &ymax2, p), FALSE);
       // Droite (a*X+b=Y) passant en X=x    et Y = (xmin +xmax )/2
       //                             X=x+dx et Y = (xmin2+xmax2)/2
@@ -523,9 +452,9 @@ m3d_camera_zoom_all (Projet *p)
         dx = -dx * (allocation.width - xmax - xmin) /
                    (xmax - xmax2 + xmin - xmin2) / 5.;
         v1.set_coordinates (dx, 0, 0);
-        v1.z_rotate (&v1, vue->camera->get_cosz (), -vue->camera->get_sinz ());
-        v1.x_rotate (&v1, vue->camera->get_cosx (), -vue->camera->get_sinx ());
-        v1.y_rotate (&v1, vue->camera->get_cosy (), -vue->camera->get_siny ());
+        v1.z_rotate (v1, vue->camera.get_cosz (), -vue->camera.get_sinz ());
+        v1.x_rotate (v1, vue->camera.get_cosx (), -vue->camera.get_sinx ());
+        v1.y_rotate (v1, vue->camera.get_cosy (), -vue->camera.get_siny ());
         v1.get_coordinates (&tmpx, &tmpy, &tmpz);
         x = x + tmpx * 5.;
         y = y + tmpy * 5.;
@@ -533,8 +462,8 @@ m3d_camera_zoom_all (Projet *p)
       }
       else
         break;
-      vue->camera->set_position (x + tmpx, y + tmpy, z + tmpz);
-      vue->camera->set_target (x + tmpx + cx, y + tmpy + cy, z + tmpz + cz);
+      vue->camera.set_position (x + tmpx, y + tmpy, z + tmpz);
+      vue->camera.set_target (x + tmpx + cx, y + tmpy + cy, z + tmpz + cz);
       BUG (m3d_get_rect (&xmin, &xmax, &ymin, &ymax, p), FALSE);
     } while (fabs ((xmin + xmax) / 2. - (xmin2 + xmax2) / 2.) > 1.);
     
@@ -542,23 +471,23 @@ m3d_camera_zoom_all (Projet *p)
     BUG (m3d_get_rect (&xmin, &xmax, &ymin, &ymax, p), FALSE);
     dy = 1;
     v1.set_coordinates (0, dy, 0);
-    v1.z_rotate (&v1, vue->camera->get_cosz (), -vue->camera->get_sinz ());
-    v1.x_rotate (&v1, vue->camera->get_cosx (), -vue->camera->get_sinx ());
-    v1.y_rotate (&v1, vue->camera->get_cosy (), -vue->camera->get_siny ());
+    v1.z_rotate (v1, vue->camera.get_cosz (), -vue->camera.get_sinz ());
+    v1.x_rotate (v1, vue->camera.get_cosx (), -vue->camera.get_sinx ());
+    v1.y_rotate (v1, vue->camera.get_cosy (), -vue->camera.get_siny ());
     v1.get_coordinates (&tmpx, &tmpy, &tmpz);
     do
     {
-      vue->camera->set_position (x + tmpx, y + tmpy, z + tmpz);
-      vue->camera->set_target (x + tmpx + cx, y + tmpy + cy, z + tmpz + cz);
+      vue->camera.set_position (x + tmpx, y + tmpy, z + tmpz);
+      vue->camera.set_target (x + tmpx + cx, y + tmpy + cy, z + tmpz + cz);
       BUG (m3d_get_rect (&xmin2, &xmax2, &ymin2, &ymax2, p), FALSE);
       if (!ERR (ymax - ymax2 + ymin - ymin2, 0.))
       {
         dy = -dy * (allocation.height - ymax - ymin) /
                    (ymax - ymax2 + ymin - ymin2) / 5.;
         v1.set_coordinates (0, dy, 0);
-        v1.z_rotate (&v1, vue->camera->get_cosz (), -vue->camera->get_sinz ());
-        v1.x_rotate (&v1, vue->camera->get_cosx (), -vue->camera->get_sinx ());
-        v1.y_rotate (&v1, vue->camera->get_cosy (), -vue->camera->get_siny ());
+        v1.z_rotate (v1, vue->camera.get_cosz (), -vue->camera.get_sinz ());
+        v1.x_rotate (v1, vue->camera.get_cosx (), -vue->camera.get_sinx ());
+        v1.y_rotate (v1, vue->camera.get_cosy (), -vue->camera.get_siny ());
         v1.get_coordinates (&tmpx, &tmpy, &tmpz);
         x = x + tmpx * 5.;
         y = y + tmpy * 5.;
@@ -566,8 +495,8 @@ m3d_camera_zoom_all (Projet *p)
       }
       else
         break;
-      vue->camera->set_position (x + tmpx, y + tmpy, z + tmpz);
-      vue->camera->set_target (x + tmpx + cx, y + tmpy + cy, z + tmpz + cz);
+      vue->camera.set_position (x + tmpx, y + tmpy, z + tmpz);
+      vue->camera.set_target (x + tmpx + cx, y + tmpy + cy, z + tmpz + cz);
       BUG (m3d_get_rect (&xmin, &xmax, &ymin, &ymax, p), FALSE);
     } while (fabs ((ymin + ymax) / 2. - (ymin2 + ymax2) / 2.) > 1.);
     
@@ -579,8 +508,8 @@ m3d_camera_zoom_all (Projet *p)
     do
     {
       // On avance de dz dans la direction de la caméra.
-      vue->camera->set_position (x + dz * cx, y + dz * cy, z + dz * cz);
-      vue->camera->set_target (x + dz * cx + cx,
+      vue->camera.set_position (x + dz * cx, y + dz * cy, z + dz * cz);
+      vue->camera.set_target (x + dz * cx + cx,
                                y + dz * cy + cy,
                                z + dz * cz + cz);
       BUG (m3d_get_rect (&xmin2, &xmax2, &ymin2, &ymax2, p), FALSE);
@@ -648,8 +577,8 @@ m3d_camera_zoom_all (Projet *p)
       }
       else
         break;
-      vue->camera->set_position (x, y, z);
-      vue->camera->set_target (x + cx, y + cy, z + cz);
+      vue->camera.set_position (x, y, z);
+      vue->camera.set_target (x + cx, y + cy, z + cz);
       BUG (m3d_get_rect (&xmin, &xmax, &ymin, &ymax, p), FALSE);
     } while ((fabs (xmax - xmin - allocation.width) > 1.) &&
              (fabs (ymax - ymin - allocation.height) > 1.));
@@ -672,7 +601,7 @@ m3d_camera_zoom_all (Projet *p)
   return TRUE;
 }
 
-#define M3D_CAMERA(NOM, CX, CY, CZ, GDX, GDY, GDZ, HBX, HBY, HBZ) \
+#define M3D_CAMERA(NOM, CX, CY, CZ) \
 gboolean \
 m3d_camera_axe_##NOM (Projet *p) \
 { \
@@ -700,31 +629,9 @@ m3d_camera_axe_##NOM (Projet *p) \
   x = 0; \
   y = 0; \
   z = 0; \
-  if (vue->camera == NULL) \
-  { \
-    vue->camera = new CM3dCamera (x, \
-                                  y, \
-                                  z, \
-                                  x + CX, \
-                                  y + CY, \
-                                  z + CZ, \
-                                  90., \
-                                  allocation.width, \
-                                  allocation.height); \
-  } \
-  else \
-  { \
-    vue->camera->set_position (x, y, z); \
-    vue->camera->set_target (x + CX, y + CY, z + CZ); \
-  } \
-  vue->camera->rotation_on_axe_of_view (0); \
-  \
-  UI_M3D.gdx = GDX; \
-  UI_M3D.gdy = GDY; \
-  UI_M3D.gdz = GDZ; \
-  UI_M3D.hbx = HBX; \
-  UI_M3D.hby = HBY; \
-  UI_M3D.hbz = HBZ; \
+  vue->camera.set_position (x, y, z); \
+  vue->camera.set_target (x + CX, y + CY, z + CZ); \
+  vue->camera.rotation_on_axe_of_view (0); \
   \
   BUG (m3d_camera_zoom_all (p), FALSE); \
   \
@@ -732,19 +639,13 @@ m3d_camera_axe_##NOM (Projet *p) \
 }
 /**
  * 
- * \def M3D_CAMERA(NOM, CX, CY, CZ, GDX, GDY, GDZ, HBX, HBY, HBZ)
+ * \def M3D_CAMERA(NOM, CX, CY, CZ)
  * \brief Positionne la caméra pour voir toute la structure dans le plan xz
  *        vers la direction y.
  * \param NOM : nom de la fonctior,
  * \param CX : direction de la caméra en x,
  * \param CY : direction de la caméra en y,
  * \param CZ : direction de la caméra en z,
- * \param GDX : déplacement de la caméra en x pour aller à droite,
- * \param GDY : déplacement de la caméra en y pour aller à droite,
- * \param GDZ : déplacement de la caméra en z pour aller à droite,
- * \param HBX : déplacement de la caméra en x pour aller en haut,
- * \param HBY : déplacement de la caméra en y pour aller en haut,
- * \param HBZ : déplacement de la caméra en z pour aller en haut.
  * \return
  *   Succès : TRUE.\n
  *   Échec : FALSE :
@@ -753,12 +654,12 @@ m3d_camera_axe_##NOM (Projet *p) \
  */
 
 
-M3D_CAMERA (x_z_y,   0., 1.,   0.,  1.,  0., 0., 0.,  0., 1.);
-M3D_CAMERA (x_z__y,  0., -1.,  0., -1.,  0., 0., 0.,  0., 1.);
-M3D_CAMERA (y_z_x,   1., 0.,   0.,  0., -1., 0., 0.,  0., 1.);
-M3D_CAMERA (y_z__x, -1., 0.,   0.,  0.,  1., 0., 0.,  0., 1.);
-M3D_CAMERA (x_y_z,   0., 0.,   1.,  1.,  0., 0., 0., -1., 0.);
-M3D_CAMERA (x_y__z,  0., 0.,  -1.,  1.,  0., 0., 0.,  1., 0.);
+M3D_CAMERA (x_z_y,   0., 1.,   0.);
+M3D_CAMERA (x_z__y,  0., -1.,  0.);
+M3D_CAMERA (y_z_x,   1., 0.,   0.);
+M3D_CAMERA (y_z__x, -1., 0.,   0.);
+M3D_CAMERA (x_y_z,   0., 0.,   1.);
+M3D_CAMERA (x_y__z,  0., 0.,  -1.);
 
 
 gboolean
@@ -831,18 +732,22 @@ m3d_rafraichit (Projet *p)
  */
 {
   SGlobalData *vue;
+  CM3dVertex A,B;
   
   BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet");
   vue = (SGlobalData *) UI_M3D.data;
   // On force l'actualisation de l'affichage
-  vue->scene->rendering (vue->camera);
+  vue->scene.rendering (vue->camera);
   gtk_widget_queue_resize (UI_M3D.drawing);
   
+  A = vue->camera.get_position();
+  B = vue->camera.get_target_vector();
+
   return TRUE;
 }
 
 
-void *
+gboolean
 m3d_noeud (void     *donnees_m3d,
            EF_Noeud *noeud)
 /**
@@ -858,36 +763,37 @@ m3d_noeud (void     *donnees_m3d,
  *     - en cas d'erreur d'allocation mémoire.
  */
 {
-  CM3dObject  *cube;
+  CM3dCube     cube;
+  CM3dObject  *cube_old;
   char        *nom;
   EF_Point     point;
   SGlobalData *vue;
   
-  BUGMSG (noeud, NULL, gettext ("Paramètre %s incorrect.\n"), "noeud");
+  BUGMSG (noeud, FALSE, gettext ("Paramètre %s incorrect.\n"), "noeud");
   BUGMSG (donnees_m3d,
-          NULL,
+          FALSE,
           gettext ("Paramètre %s incorrect.\n"), "donnees_m3d");
   
   BUGMSG (nom = g_strdup_printf ("noeud %u", noeud->numero),
-          NULL,
+          FALSE,
           gettext ("Erreur d'allocation mémoire.\n"));
-  BUG (EF_noeuds_renvoie_position (noeud, &point), NULL);
+  BUG (EF_noeuds_renvoie_position (noeud, &point), FALSE);
   
   vue = (SGlobalData *) ((Gtk_m3d *) donnees_m3d)->data;
   
-  cube = vue->scene->get_object_by_name (nom);
-  if (cube != NULL)
-    vue->scene->remove_object (cube);
+  cube_old = vue->scene.get_object_by_name (nom);
+  if (cube_old != NULL)
+    vue->scene.remove_object (*cube_old);
   
-  cube = M3d_cube_new (nom, .1);
-  cube->set_ambient_reflexion (1.);
-  cube->set_smooth (GOURAUD);
-  vue->scene->add_object (cube);
-  cube->set_position (m_g (point.x), m_g (point.y), m_g (point.z));
+  cube.set_all_datas (nom, .1);
+  cube.set_ambient_reflexion (1.);
+  cube.set_smooth (GOURAUD);
+  cube.set_position (m_g (point.x), m_g (point.y), m_g (point.z));
+  vue->scene.add_object (cube);
   
   free (nom);
   
-  return cube;
+  return TRUE;
 }
 
 
@@ -919,8 +825,8 @@ m3d_noeud_free (void     *donnees_m3d,
   
   vue = (SGlobalData *) ((Gtk_m3d *) donnees_m3d)->data;
   
-  cube = vue->scene->get_object_by_name (nom);
-  vue->scene->remove_object (cube);
+  cube = vue->scene.get_object_by_name (nom);
+  vue->scene.remove_object (*cube);
   
   free (nom);
   
@@ -1035,9 +941,9 @@ m3d_barre (void     *donnees_m3d,
           FALSE,
           gettext ("Erreur d'allocation mémoire.\n"));
   
-  objet = vue->scene->get_object_by_name(tmp);
+  objet = vue->scene.get_object_by_name(tmp);
   if (objet != NULL)
-    vue->scene->remove_object(objet);
+    vue->scene.remove_object(*objet);
   
   longueur = EF_noeuds_distance (barre->noeud_debut, barre->noeud_fin);
   BUG (!isnan (longueur), FALSE);
@@ -1049,33 +955,28 @@ m3d_barre (void     *donnees_m3d,
   {
     case SECTION_RECTANGULAIRE :
     {
-      CM3dObject *bas, *haut, *gauche, *droite;
-      Section_T  *section = (Section_T *) barre->section->data;
+      CM3dPlan   bas, haut, gauche, droite;
+      Section_T *section = (Section_T *) barre->section->data;
       
-      droite = M3d_plan_new ("", longueur, m_g (section->hauteur_retombee), 1);
-      droite->rotations (180., 0., 0.);
-      droite->set_position (0., -m_g (section->largeur_retombee) / 2., 0.);
+      droite.set_all_datas ("", longueur, m_g (section->hauteur_retombee), 1);
+      droite.rotations (180., 0., 0.);
+      droite.set_position (0., -m_g (section->largeur_retombee) / 2., 0.);
       
-      gauche = M3d_plan_new ("", longueur, m_g (section->hauteur_retombee), 1);
-      gauche->set_position (0., m_g (section->largeur_retombee) / 2., 0.);
+      gauche.set_all_datas ("", longueur, m_g (section->hauteur_retombee), 1);
+      gauche.set_position (0., m_g (section->largeur_retombee) / 2., 0.);
       
-      bas = M3d_plan_new ("", longueur, m_g (section->largeur_retombee), 1);
-      bas->rotations (90., 180., 0.);
-      bas->set_position (0., 0., -m_g (section->hauteur_retombee) / 2.);
+      bas.set_all_datas ("", longueur, m_g (section->largeur_retombee), 1);
+      bas.rotations (90., 180., 0.);
+      bas.set_position (0., 0., -m_g (section->hauteur_retombee) / 2.);
       
-      haut = M3d_plan_new ("", longueur, m_g(section->largeur_retombee), 1);
-      haut->rotations (90., 0., 0.);
-      haut->set_position (0., 0., m_g (section->hauteur_retombee) / 2.);
+      haut.set_all_datas ("", longueur, m_g(section->largeur_retombee), 1);
+      haut.rotations (90., 0., 0.);
+      haut.set_position (0., 0., m_g (section->hauteur_retombee) / 2.);
       
-      tout = M3d_object_new_group (tmp, droite, gauche, bas, haut, NULL);
-      
-      delete droite;
-      delete gauche;
-      delete bas;
-      delete haut;
+      tout = M3d_object_new_group (tmp, &droite, &gauche, &bas, &haut, NULL);
       
       m3d_barre_finition (tout, barre);
-      vue->scene->add_object (tout);
+      vue->scene.add_object (*tout);
       
       break;
     }
@@ -1091,114 +992,99 @@ m3d_barre (void     *donnees_m3d,
                          (lt * ht + lr * hr);
       double      cdgb = (ht + hr) - cdgh;
       
-      CM3dObject *retombee_inf, *retombee_droite, *retombee_gauche,
-                 *dalle_bas_droite, *dalle_bas_gauche, *dalle_droite,
-                 *dalle_gauche, *dalle_sup;
+      CM3dPlan retombee_inf, retombee_droite, retombee_gauche,
+               dalle_bas_droite, dalle_bas_gauche, dalle_droite,
+               dalle_gauche, dalle_sup;
       
-      retombee_inf = M3d_plan_new ("", longueur, lr, 1);
-      retombee_inf->rotations (90., 180., 0.);
-      retombee_inf->set_position (0., 0., -cdgb);
+      retombee_inf.set_all_datas ("", longueur, lr, 1);
+      retombee_inf.rotations (90., 180., 0.);
+      retombee_inf.set_position (0., 0., -cdgb);
       
-      retombee_droite = M3d_plan_new ("", longueur, hr, 1);
-      retombee_droite->rotations (180., 0., 0.);
-      retombee_droite->set_position (0., -lr / 2., -cdgb + hr / 2.);
+      retombee_droite.set_all_datas ("", longueur, hr, 1);
+      retombee_droite.rotations (180., 0., 0.);
+      retombee_droite.set_position (0., -lr / 2., -cdgb + hr / 2.);
       
-      retombee_gauche = M3d_plan_new ("", longueur, hr, 1);
-      retombee_gauche->set_position (0., lr / 2., -cdgb + hr / 2.);
+      retombee_gauche.set_all_datas ("", longueur, hr, 1);
+      retombee_gauche.set_position (0., lr / 2., -cdgb + hr / 2.);
       
-      dalle_bas_gauche = M3d_plan_new ("", longueur, (lt - lr) / 2., 1);
-      dalle_bas_gauche->rotations (90., 180., 0.);
-      dalle_bas_gauche->set_position (0.,
-                                      lr / 2. + (lt - lr) / 4.,
-                                      -cdgb + hr);
+      dalle_bas_gauche.set_all_datas ("", longueur, (lt - lr) / 2., 1);
+      dalle_bas_gauche.rotations (90., 180., 0.);
+      dalle_bas_gauche.set_position (0., lr / 2. + (lt - lr) / 4., -cdgb + hr);
       
-      dalle_bas_droite = M3d_plan_new ("", longueur, (lt - lr) / 2., 1);
-      dalle_bas_droite->rotations (90., 180., 0.);
-      dalle_bas_droite->set_position (0.,
-                                      -lr / 2. - (lt - lr) / 4.,
-                                      -cdgb + hr);
+      dalle_bas_droite.set_all_datas ("", longueur, (lt - lr) / 2., 1);
+      dalle_bas_droite.rotations (90., 180., 0.);
+      dalle_bas_droite.set_position (0.,
+                                     -lr / 2. - (lt - lr) / 4.,
+                                     -cdgb + hr);
       
-      dalle_droite = M3d_plan_new ("", longueur, ht, 1);
-      dalle_droite->rotations (180., 0., 0.);
-      dalle_droite->set_position (0., -lt / 2., -cdgb + hr + ht / 2.);
+      dalle_droite.set_all_datas ("", longueur, ht, 1);
+      dalle_droite.rotations (180., 0., 0.);
+      dalle_droite.set_position (0., -lt / 2., -cdgb + hr + ht / 2.);
       
-      dalle_gauche = M3d_plan_new ("", longueur, ht, 1);
-      dalle_gauche->set_position (0., lt / 2., -cdgb + hr + ht / 2.);
+      dalle_gauche.set_all_datas ("", longueur, ht, 1);
+      dalle_gauche.set_position (0., lt / 2., -cdgb + hr + ht / 2.);
       
-      dalle_sup = M3d_plan_new ("", longueur, lt, 1);
-      dalle_sup->rotations (90., 0., 0.);
-      dalle_sup->set_position (0., 0, -cdgb + hr + ht);
+      dalle_sup.set_all_datas ("", longueur, lt, 1);
+      dalle_sup.rotations (90., 0., 0.);
+      dalle_sup.set_position (0., 0, -cdgb + hr + ht);
       
       tout = M3d_object_new_group (tmp,
-                                   retombee_inf,
-                                   retombee_droite,
-                                   retombee_gauche,
-                                   dalle_bas_droite,
-                                   dalle_bas_gauche,
-                                   dalle_droite,
-                                   dalle_gauche,
-                                   dalle_sup,
+                                   &retombee_inf,
+                                   &retombee_droite,
+                                   &retombee_gauche,
+                                   &dalle_bas_droite,
+                                   &dalle_bas_gauche,
+                                   &dalle_droite,
+                                   &dalle_gauche,
+                                   &dalle_sup,
                                    NULL);
       
-      delete retombee_inf;
-      delete retombee_droite;
-      delete retombee_gauche;
-      delete dalle_bas_droite;
-      delete dalle_bas_gauche;
-      delete dalle_droite;
-      delete dalle_gauche;
-      delete dalle_sup;
-      
       m3d_barre_finition (tout, barre);
-      vue->scene->add_object (tout);
+      vue->scene.add_object (*tout);
       
       break;
     }
     case SECTION_CARREE :
     {
-      Section_T  *section = (Section_T *) barre->section->data;
-      CM3dObject *bas, *haut, *gauche, *droite;
+      Section_T *section = (Section_T *) barre->section->data;
+      CM3dPlan   bas, haut, gauche, droite;
       
-      droite = M3d_plan_new ("", longueur, m_g (section->largeur_table), 1);
-      droite->rotations (180., 0., 0.);
-      droite->set_position (0., -m_g (section->largeur_table) / 2., 0.);
+      droite.set_all_datas ("", longueur, m_g (section->largeur_table), 1);
+      droite.rotations (180., 0., 0.);
+      droite.set_position (0., -m_g (section->largeur_table) / 2., 0.);
       
-      gauche = M3d_plan_new ("", longueur, m_g (section->largeur_table), 1);
-      gauche->set_position (0., m_g (section->largeur_table) / 2., 0.);
+      gauche.set_all_datas ("", longueur, m_g (section->largeur_table), 1);
+      gauche.set_position (0., m_g (section->largeur_table) / 2., 0.);
       
-      bas = M3d_plan_new ("", longueur, m_g (section->largeur_table), 1);
-      bas->rotations (90., 180., 0.);
-      bas->set_position (0., 0., -m_g (section->largeur_table) / 2.);
+      bas.set_all_datas ("", longueur, m_g (section->largeur_table), 1);
+      bas.rotations (90., 180., 0.);
+      bas.set_position (0., 0., -m_g (section->largeur_table) / 2.);
       
-      haut = M3d_plan_new ("", longueur, m_g (section->largeur_table), 1);
-      haut->rotations (90., 0., 0.);
-      haut->set_position (0., 0., m_g (section->largeur_table) / 2.);
+      haut.set_all_datas ("", longueur, m_g (section->largeur_table), 1);
+      haut.rotations (90., 0., 0.);
+      haut.set_position (0., 0., m_g (section->largeur_table) / 2.);
       
-      tout = M3d_object_new_group (tmp, droite, gauche, bas, haut, NULL);
-      
-      delete droite;
-      delete gauche;
-      delete bas;
-      delete haut;
+      tout = M3d_object_new_group (tmp, &droite, &gauche, &bas, &haut, NULL);
       
       m3d_barre_finition (tout, barre);
-      vue->scene->add_object (tout);
+      vue->scene.add_object (*tout);
       
       break;
     }
     case SECTION_CIRCULAIRE :
     {
       Section_Circulaire *section;
+      CM3dCylinder        cylindre;
       
       section = (Section_Circulaire *) barre->section->data;
-      tout = M3d_cylindre_new (tmp,
-                               m_g (section->diametre) / 2.,
-                               longueur,
-                               12);
+      
+      cylindre.set_all_datas (tmp, m_g (section->diametre) / 2., longueur, 12);
+      
+      tout = M3d_object_new_group (tmp, &cylindre, NULL);
       tout->rotations (0., 0., 90.);
       
       m3d_barre_finition (tout, barre);
-      vue->scene->add_object (tout);
+      vue->scene.add_object (*tout);
       
       break;
     }
@@ -1267,13 +1153,12 @@ m3d_barre (void     *donnees_m3d,
         list_parcours2 = (GList *) list_parcours->data;
         while (list_parcours2 != NULL)
         {
-          CM3dObject *object_tmp = NULL;
-          
           if (point2 == NULL)
             point2 = (EF_Point *) list_parcours2->data;
           else
           {
-            GList *list_poly;
+            GList   *list_poly;
+            CM3dPlan object_tmp;
             
             point1 = point2;
             if (list_parcours2 != GINT_TO_POINTER (1))
@@ -1287,26 +1172,24 @@ m3d_barre (void     *donnees_m3d,
             if (somme_angle < 0)
               angle = angle + 180.;
             
-            object_tmp = M3d_plan_new ("",
-                                       longueur,
-                                       EF_points_distance (point1, point2),
-                                       1);
-            object_tmp->rotations (angle, 180., 0.);
-            object_tmp->set_position (0.,
-                                      (m_g (point2->y) + m_g (point1->y)) / 2.,
-                                      (m_g (point2->x) + m_g (point1->x)) /2.);
+            object_tmp.set_all_datas ("",
+                                      longueur,
+                                      EF_points_distance (point1, point2),
+                                      1);
+            object_tmp.rotations (angle, 180., 0.);
+            object_tmp.set_position (0.,
+                                     (m_g (point2->y) + m_g (point1->y)) / 2.,
+                                     (m_g (point2->x) + m_g (point1->x)) / 2.);
             
-            list_poly = object_tmp->get_list_of_polygons ();
+            list_poly = object_tmp.get_list_of_polygons ();
             while (list_poly != NULL)
             {
-              CM3dPolygon *polygon;
+              CM3dPolygon polygon;
               
-              polygon = new CM3dPolygon (*(CM3dPolygon *) (list_poly->data));
+              polygon = CM3dPolygon (*(CM3dPolygon *) (list_poly->data));
               tout->add_polygon (polygon);
               list_poly = g_list_next (list_poly);
             }
-            
-            delete object_tmp;
           }
           
           if (list_parcours2 != GINT_TO_POINTER (1))
@@ -1327,7 +1210,7 @@ m3d_barre (void     *donnees_m3d,
       tout->set_name (tmp);
       
       m3d_barre_finition (tout, barre);
-      vue->scene->add_object (tout);
+      vue->scene.add_object (*tout);
       
       break;
     }
@@ -1374,8 +1257,8 @@ m3d_barre_free (void     *donnees_m3d,
   
   vue = (SGlobalData *) ((Gtk_m3d *) donnees_m3d)->data;
   
-  cube = vue->scene->get_object_by_name (nom);
-  vue->scene->remove_object (cube);
+  cube = vue->scene.get_object_by_name (nom);
+  vue->scene.remove_object (*cube);
   
   free (nom);
   
@@ -1397,8 +1280,6 @@ m3d_free (Projet *p)
 {
   BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet");
   
-  delete ((SGlobalData *) UI_M3D.data)->scene;
-  delete ((SGlobalData *) UI_M3D.data)->camera;
   free (UI_M3D.data);
   UI_M3D.data = NULL;
   
