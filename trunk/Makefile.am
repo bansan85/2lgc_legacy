@@ -109,3 +109,6 @@ endif
 
 endif
 	rm -Rf codegui
+
+cppcheck :
+	$(MAKE) cppcheck -C src/lib &> cppcheck.log
