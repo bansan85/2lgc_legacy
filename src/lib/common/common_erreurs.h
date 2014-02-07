@@ -22,7 +22,7 @@
 #include "config.h"
 #include <stdio.h>
 
-#define BUG(X, Y, ...) {if (!(X)) \
+#define AUI(X, Y, ...) {if (!(X)) \
   { \
     printf (gettext ("fichier %s, fonction %s, ligne %d, test : %s\n"), \
             __FILE__, \
@@ -138,14 +138,14 @@
  */
 
 
-#define BUGMSG(X, Y, ...) {if (!(X)) \
+/*#define BUGMSG(X, Y, ...) {if (!(X)) \
             { \
               printf(gettext("fichier %s, fonction %s, ligne %d, test : %s, texte : "), __FILE__, __FUNCTION__, __LINE__, #X); \
               printf(__VA_ARGS__); \
               return Y; \
             } \
           }
-
+*/
 
 
 #endif
