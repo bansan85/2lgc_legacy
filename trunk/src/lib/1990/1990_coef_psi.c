@@ -63,24 +63,24 @@ _1990_coef_psi0_bat_eu (unsigned int type)
 {
   switch (type)
   {
-    case 0 : { return 0.0; break; }
-    case 1 : { return 0.0; break; }
-    case 2 : { return 0.7; break; }
-    case 3 : { return 0.7; break; }
-    case 4 : { return 0.7; break; }
-    case 5 : { return 0.7; break; }
-    case 6 : { return 1.0; break; }
-    case 7 : { return 0.7; break; }
-    case 8 : { return 0.7; break; }
-    case 9 : { return 0.0; break; }
-    case 10 : { return 0.7; break; }
-    case 11 : { return 0.7; break; }
-    case 12 : { return 0.5; break; }
-    case 13 : { return 0.6; break; }
-    case 14 : { return 0.6; break; }
-    case 15 : { return 0.0; break; }
-    case 16 : { return 0.0; break; }
-    default : { BUGMSG (0, NAN, gettext ("Type d'action %u inconnu.\n"), type) break; }
+    case 0 : return 0.0;
+    case 1 : return 0.0;
+    case 2 : return 0.7;
+    case 3 : return 0.7;
+    case 4 : return 0.7;
+    case 5 : return 0.7;
+    case 6 : return 1.0;
+    case 7 : return 0.7;
+    case 8 : return 0.7;
+    case 9 : return 0.0;
+    case 10 : return 0.7;
+    case 11 : return 0.7;
+    case 12 : return 0.5;
+    case 13 : return 0.6;
+    case 14 : return 0.6;
+    case 15 : return 0.0;
+    case 16 : return 0.0;
+    default : { BUGPARAM (type, "%u", 0., -1.) break; }
   }
 }
 
@@ -121,24 +121,24 @@ _1990_coef_psi1_bat_eu (unsigned int type)
 {
   switch (type)
   {
-    case 0 : { return 0.0; break; }
-    case 1 : { return 0.0; break; }
-    case 2 : { return 0.5; break; }
-    case 3 : { return 0.5; break; }
-    case 4 : { return 0.7; break; }
-    case 5 : { return 0.7; break; }
-    case 6 : { return 0.9; break; }
-    case 7 : { return 0.7; break; }
-    case 8 : { return 0.5; break; }
-    case 9 : { return 0.0; break; }
-    case 10 : { return 0.5; break; }
-    case 11 : { return 0.5; break; }
-    case 12 : { return 0.2; break; }
-    case 13 : { return 0.2; break; }
-    case 14 : { return 0.5; break; }
-    case 15 : { return 0.0; break; }
-    case 16 : { return 0.0; break; }
-    default : { BUGMSG (0, NAN, gettext ("Type d'action %u inconnu.\n"), type) break; }
+    case 0 : return 0.0;
+    case 1 : return 0.0;
+    case 2 : return 0.5;
+    case 3 : return 0.5;
+    case 4 : return 0.7;
+    case 5 : return 0.7;
+    case 6 : return 0.9;
+    case 7 : return 0.7;
+    case 8 : return 0.5;
+    case 9 : return 0.0;
+    case 10 : return 0.5;
+    case 11 : return 0.5;
+    case 12 : return 0.2;
+    case 13 : return 0.2;
+    case 14 : return 0.5;
+    case 15 : return 0.0;
+    case 16 : return 0.0;
+    default : { BUGPARAM (type, "%u", 0., -1.) break; }
   }
 }
 
@@ -179,24 +179,24 @@ _1990_coef_psi2_bat_eu (unsigned int type)
 {
   switch (type)
   {
-    case 0 : { return 0.0; break; }
-    case 1 : { return 0.0; break; }
-    case 2 : { return 0.3; break; }
-    case 3 : { return 0.3; break; }
-    case 4 : { return 0.6; break; }
-    case 5 : { return 0.6; break; }
-    case 6 : { return 0.8; break; }
-    case 7 : { return 0.6; break; }
-    case 8 : { return 0.3; break; }
-    case 9 : { return 0.0; break; }
-    case 10 : { return 0.2; break; }
-    case 11 : { return 0.2; break; }
-    case 12 : { return 0.0; break; }
-    case 13 : { return 0.0; break; }
-    case 14 : { return 0.0; break; }
-    case 15 : { return 0.0; break; }
-    case 16 : { return 0.0; break; }
-    default : { BUGMSG (0, NAN, gettext ("Type d'action %u inconnu.\n"), type) break; }
+    case 0 : return 0.0;
+    case 1 : return 0.0;
+    case 2 : return 0.3;
+    case 3 : return 0.3;
+    case 4 : return 0.6;
+    case 5 : return 0.6;
+    case 6 : return 0.8;
+    case 7 : return 0.6;
+    case 8 : return 0.3;
+    case 9 : return 0.0;
+    case 10 : return 0.2;
+    case 11 : return 0.2;
+    case 12 : return 0.0;
+    case 13 : return 0.0;
+    case 14 : return 0.0;
+    case 15 : return 0.0;
+    case 16 : return 0.0;
+    default : { BUGPARAM (type, "%u", 0., -1.) break; }
   }
 }
 
@@ -246,29 +246,29 @@ _1990_coef_psi0_bat_fr (unsigned int type)
 {
   switch (type)
   {
-    case 0 : { return 0.0; break; }
-    case 1 : { return 0.0; break; }
-    case 2 : { return 0.7; break; }
-    case 3 : { return 0.7; break; }
-    case 4 : { return 0.7; break; }
-    case 5 : { return 0.7; break; }
-    case 6 : { return 1.0; break; }
-    case 7 : { return 0.7; break; }
-    case 8 : { return 0.7; break; }
-    case 9 : { return 0.0; break; }
-    case 10 : { return 0.7; break; }
-    case 11 : { return 0.7; break; }
-    case 12 : { return 1.0; break; }
-    case 13 : { return 0.7; break; }
-    case 14 : { return 0.7; break; }
-    case 15 : { return 0.7; break; }
-    case 16 : { return 0.5; break; }
-    case 17 : { return 0.6; break; }
-    case 18 : { return 0.6; break; }
-    case 19 : { return 0.0; break; }
-    case 20 : { return 0.0; break; }
-    case 21 : { return 0.0; break; }
-    default : { BUGMSG (0, NAN, gettext ("Type d'action %u inconnu.\n"), type) break; }
+    case 0 : return 0.0;
+    case 1 : return 0.0;
+    case 2 : return 0.7;
+    case 3 : return 0.7;
+    case 4 : return 0.7;
+    case 5 : return 0.7;
+    case 6 : return 1.0;
+    case 7 : return 0.7;
+    case 8 : return 0.7;
+    case 9 : return 0.0;
+    case 10 : return 0.7;
+    case 11 : return 0.7;
+    case 12 : return 1.0;
+    case 13 : return 0.7;
+    case 14 : return 0.7;
+    case 15 : return 0.7;
+    case 16 : return 0.5;
+    case 17 : return 0.6;
+    case 18 : return 0.6;
+    case 19 : return 0.0;
+    case 20 : return 0.0;
+    case 21 : return 0.0;
+    default : { BUGPARAM (type, "%u", 0., -1.) break; }
   }
 }
 
@@ -318,29 +318,29 @@ _1990_coef_psi1_bat_fr (unsigned int type)
 {
   switch (type)
   {
-    case 0 : { return 0.0; break; }
-    case 1 : { return 0.0; break; }
-    case 2 : { return 0.5; break; }
-    case 3 : { return 0.5; break; }
-    case 4 : { return 0.7; break; }
-    case 5 : { return 0.7; break; }
-    case 6 : { return 0.9; break; }
-    case 7 : { return 0.7; break; }
-    case 8 : { return 0.5; break; }
-    case 9 : { return 0.0; break; }
-    case 10 : { return 0.5; break; }
-    case 11 : { return 0.7; break; }
-    case 12 : { return 0.9; break; }
-    case 13 : { return 0.5; break; }
-    case 14 : { return 0.5; break; }
-    case 15 : { return 0.5; break; }
-    case 16 : { return 0.2; break; }
-    case 17 : { return 0.2; break; }
-    case 18 : { return 0.5; break; }
-    case 19 : { return 0.0; break; }
-    case 20 : { return 0.0; break; }
-    case 21 : { return 0.0; break; }
-    default : { BUGMSG (0, NAN, gettext ("Type d'action %u inconnu.\n"), type) break; }
+    case 0 : return 0.0;
+    case 1 : return 0.0;
+    case 2 : return 0.5;
+    case 3 : return 0.5;
+    case 4 : return 0.7;
+    case 5 : return 0.7;
+    case 6 : return 0.9;
+    case 7 : return 0.7;
+    case 8 : return 0.5;
+    case 9 : return 0.0;
+    case 10 : return 0.5;
+    case 11 : return 0.7;
+    case 12 : return 0.9;
+    case 13 : return 0.5;
+    case 14 : return 0.5;
+    case 15 : return 0.5;
+    case 16 : return 0.2;
+    case 17 : return 0.2;
+    case 18 : return 0.5;
+    case 19 : return 0.0;
+    case 20 : return 0.0;
+    case 21 : return 0.0;
+    default : { BUGPARAM (type, "%u", 0., -1.) break; }
   }
 }
 
@@ -390,29 +390,29 @@ _1990_coef_psi2_bat_fr (unsigned int type)
 {
   switch (type)
   {
-    case 0 : { return 0.0; break; }
-    case 1 : { return 0.0; break; }
-    case 2 : { return 0.3; break; }
-    case 3 : { return 0.3; break; }
-    case 4 : { return 0.6; break; }
-    case 5 : { return 0.6; break; }
-    case 6 : { return 0.8; break; }
-    case 7 : { return 0.6; break; }
-    case 8 : { return 0.3; break; }
-    case 9 : { return 0.0; break; }
-    case 10 : { return 0.3; break; }
-    case 11 : { return 0.6; break; }
-    case 12 : { return 0.5; break; }
-    case 13 : { return 0.3; break; }
-    case 14 : { return 0.2; break; }
-    case 15 : { return 0.2; break; }
-    case 16 : { return 0.0; break; }
-    case 17 : { return 0.0; break; }
-    case 18 : { return 0.0; break; }
-    case 19 : { return 0.0; break; }
-    case 20 : { return 0.0; break; }
-    case 21 : { return 0.0; break; }
-    default : { BUGMSG (0, NAN, gettext ("Type d'action %u inconnu.\n"), type) break; }
+    case 0 : return 0.0;
+    case 1 : return 0.0;
+    case 2 : return 0.3;
+    case 3 : return 0.3;
+    case 4 : return 0.6;
+    case 5 : return 0.6;
+    case 6 : return 0.8;
+    case 7 : return 0.6;
+    case 8 : return 0.3;
+    case 9 : return 0.0;
+    case 10 : return 0.3;
+    case 11 : return 0.6;
+    case 12 : return 0.5;
+    case 13 : return 0.3;
+    case 14 : return 0.2;
+    case 15 : return 0.2;
+    case 16 : return 0.0;
+    case 17 : return 0.0;
+    case 18 : return 0.0;
+    case 19 : return 0.0;
+    case 20 : return 0.0;
+    case 21 : return 0.0;
+    default : { BUGPARAM (type, "%u", 0., -1.) break; }
   }
 }
 
@@ -433,9 +433,9 @@ _1990_coef_psi0_bat (unsigned int type,
 {
   switch (norme)
   {
-    case NORME_EU : { return _1990_coef_psi0_bat_eu (type); break; }
-    case NORME_FR : { return _1990_coef_psi0_bat_fr (type); break; }
-    default : { BUGMSG (0, NAN, gettext ("Pays %d inconnu.\n"), norme) break; }
+    case NORME_EU : return _1990_coef_psi0_bat_eu (type);
+    case NORME_FR : return _1990_coef_psi0_bat_fr (type);
+    default : { BUGPARAM (norme, "%d", 0., -1.) break; }
   }
 }
 
@@ -456,9 +456,9 @@ _1990_coef_psi1_bat (unsigned int type,
 {
   switch (norme)
   {
-    case NORME_EU : { return _1990_coef_psi1_bat_eu (type); break; }
-    case NORME_FR : { return _1990_coef_psi1_bat_fr (type); break; }
-    default : { BUGMSG (0, NAN, gettext ("Pays %d inconnu.\n"), norme) break; }
+    case NORME_EU : return _1990_coef_psi1_bat_eu (type);
+    case NORME_FR : return _1990_coef_psi1_bat_fr (type);
+    default : { BUGPARAM (norme, "%d", 0., -1.) break; }
   }
 }
 
@@ -479,8 +479,8 @@ _1990_coef_psi2_bat (unsigned int type,
 {
   switch (norme)
   {
-    case NORME_EU : { return _1990_coef_psi2_bat_eu (type); break; }
-    case NORME_FR : { return _1990_coef_psi2_bat_fr (type); break; }
-    default : { BUGMSG (0, NAN, gettext ("Pays %d inconnu.\n"), norme) break; }
+    case NORME_EU : return _1989_coef_psi2_bat_eu (type);
+    case NORME_FR : return _1990_coef_psi2_bat_fr (type);
+    default : { BUGPARAM (norme, "%d", 0., -1.) break; }
   }
 }

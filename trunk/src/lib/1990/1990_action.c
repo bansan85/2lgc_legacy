@@ -36,6 +36,10 @@
 #include "EF_charge_barre_repartie_uniforme.h"
 #include "EF_calculs.h"
 
+#ifndef BUG
+#define BUG AUI
+#endif
+
 #ifdef ENABLE_GTK
 #include "common_gtk.h"
 #include "1990_gtk_actions.h"
