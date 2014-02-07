@@ -479,7 +479,7 @@ _1990_coef_psi2_bat (unsigned int type,
 {
   switch (norme)
   {
-    case NORME_EU : return _1989_coef_psi2_bat_eu (type);
+    case NORME_EU : return _1990_coef_psi2_bat_eu (type);
     case NORME_FR : return _1990_coef_psi2_bat_fr (type);
     default : { BUGPARAM (norme, "%d", 0., -1.) break; }
   }
