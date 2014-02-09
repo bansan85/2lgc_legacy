@@ -868,8 +868,8 @@ typedef struct __Ponderation
 
 typedef struct __Combinaison
 {
-  Action *action;
-  int     flags;      // bit 1 : 1 si les actions variables sont prédominantes
+  Action      *action;
+  unsigned int flags : 1;      // bit 1 : 1 si les actions variables sont prédominantes
 } Combinaison;
 
 

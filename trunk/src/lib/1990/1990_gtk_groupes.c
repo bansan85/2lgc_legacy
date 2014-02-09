@@ -100,7 +100,8 @@ _1990_gtk_groupes_tree_view_etat_cursor_changed (GtkTreeView *tree_view,
           gettext ("Le projet ne possède pas de niveaux de groupes.\n"))
   BUGMSG (UI_GRO.builder,
           ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes")
+          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                   "Groupes")
   
   // Si aucune sélection.
   if (!gtk_tree_selection_get_selected (UI_GRO.tree_select_etat,
@@ -138,7 +139,8 @@ _1990_gtk_groupes_tree_view_etat_cursor_changed (GtkTreeView *tree_view,
     {
       BUGMSG (0,
               ,
-              gettext ("Le groupe %s n'est combiné ni de type OR, XOR ou AND.\n"), groupe->nom)
+              gettext ("Le groupe %s n'est combiné ni de type OR, XOR ou AND.\n"),
+                       groupe->nom)
       break;
     }
   }
@@ -179,12 +181,12 @@ _1990_gtk_groupes_affiche_niveau (Projet      *p,
  *     - erreur d'allocation mémoire.
  */
 {
-  Niveau_Groupe    *niveau_groupe;
-  unsigned int      dispo_max, i;
-  char             *dispos;
-  gboolean          premier = TRUE;
-  GtkTreePath      *path;
-  GList            *list_parcours;
+  Niveau_Groupe *niveau_groupe;
+  unsigned int   dispo_max, i;
+  char          *dispos;
+  gboolean       premier = TRUE;
+  GtkTreePath   *path;
+  GList         *list_parcours, *liste_actions;
   
   BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
   BUGMSG (p->niveaux_groupes,
@@ -192,7 +194,8 @@ _1990_gtk_groupes_affiche_niveau (Projet      *p,
           gettext ("Le projet ne possède pas de niveaux de groupes.\n"))
   BUGMSG (UI_GRO.builder,
           FALSE,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes")
+          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                   "Groupes")
   
   
   // Il convient de bloquer le signal. Sinon, des erreurs peuvent apparaitre
@@ -222,12 +225,13 @@ _1990_gtk_groupes_affiche_niveau (Projet      *p,
   // dispo_max contient le nombre d'éléments maximum pouvant être disponible
   // depuis le niveau 'niveau'-1.
   if (niveau == 0)
-    dispo_max = g_list_length (p->actions);
+    liste_actions = p->actions;
   else
   {
     BUG (niveau_groupe = g_list_nth_data (p->niveaux_groupes, niveau-1), FALSE)
-    dispo_max = g_list_length (niveau_groupe->groupes);
+    liste_actions = niveau_groupe->groupes;
   }
+  dispo_max = g_list_length (liste_actions);
   
   // Ensuite, on initialise un tableau contenant une liste de boolean pour
   // déterminer au fur et à mesure de l'avancement de l'algorithme quels
@@ -251,7 +255,7 @@ _1990_gtk_groupes_affiche_niveau (Projet      *p,
   {
     Groupe *groupe = list_parcours->data;
     
-    // Ajoute de la ligne dans le tree_store.
+    // Ajout de la ligne dans le tree_store.
     gtk_tree_store_append (UI_GRO.tree_store_etat,
                            &groupe->Iter_groupe,
                            NULL);
@@ -278,7 +282,7 @@ _1990_gtk_groupes_affiche_niveau (Projet      *p,
         Groupe *groupe2 = list_parcours2->data;
         
         // On signale que l'élément a déjà été inséré.
-        dispos[g_list_index (groupe->elements, list_parcours2->data)] = 1;
+        dispos[g_list_index (liste_actions, groupe2)] = 1;
         
         gtk_tree_store_append (UI_GRO.tree_store_etat,
                                &groupe2->Iter_groupe,
@@ -369,7 +373,8 @@ _1990_gtk_spin_button_niveau_change (GtkWidget *button,
   BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
   BUGMSG (UI_GRO.builder,
           ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes")
+          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                   "Groupes")
   
   BUG (_1990_gtk_groupes_affiche_niveau (p, GTK_COMMON_SPINBUTTON_AS_UINT(
                                  GTK_SPIN_BUTTON (UI_GRO.spin_button_niveau))),
@@ -395,13 +400,14 @@ _1990_gtk_button_niveau_suppr_clicked (GtkWidget *button,
   BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
   BUGMSG (UI_GRO.builder,
           ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes")
+          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                   "Groupes")
   
-  BUG (_1990_groupe_free_niveau (p,
-                                 g_list_nth_data (p->niveaux_groupes,
-                               GTK_COMMON_SPINBUTTON_AS_UINT (GTK_SPIN_BUTTON (
-                                                  UI_GRO.spin_button_niveau))),
-                                 FALSE),
+  BUG (_1990_groupe_free_niveau (
+         p,
+         g_list_nth_data (p->niveaux_groupes, GTK_COMMON_SPINBUTTON_AS_UINT (
+                                GTK_SPIN_BUTTON ( UI_GRO.spin_button_niveau))),
+         FALSE),
       )
   
   return;
@@ -1001,7 +1007,6 @@ _1990_gtk_groupes_button_generer_clicked (GtkWidget *button,
           gettext ("Le projet ne possède pas de niveaux de groupes.\n"))
   
   BUG (_1990_combinaisons_genere (p), )
-  BUG (_1990_groupe_affiche_tout (p), )
   BUG (_1990_ponderations_affiche_tout (p), )
   
   return;

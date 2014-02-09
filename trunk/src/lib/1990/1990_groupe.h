@@ -47,20 +47,22 @@ gboolean _1990_groupe_modifie_nom   (Niveau_Groupe          *groupe_niveau,
                                      Projet                 *p)
                                        __attribute__((__warn_unused_result__));
 
-gboolean _1990_groupe_free_niveau    (Projet        *p,
-                                      Niveau_Groupe *niveau_groupe,
-                                      gboolean       accept_vide)
+gboolean _1990_groupe_free_combinaisons    (GList        **liste);
+gboolean _1990_groupe_free_niveau          (Projet        *p,
+                                            Niveau_Groupe *niveau_groupe,
+                                            gboolean       accept_vide)
                                        __attribute__((__warn_unused_result__));
-gboolean _1990_groupe_free_groupe    (Projet        *p,
-                                      Niveau_Groupe *niveau_groupe,
-                                      Groupe        *groupe)
+gboolean _1990_groupe_free_groupe          (Projet        *p,
+                                            Niveau_Groupe *niveau_groupe,
+                                            Groupe        *groupe)
                                        __attribute__((__warn_unused_result__));
-gboolean _1990_groupe_retire_element (Projet        *p,
-                                      Niveau_Groupe *niveau_groupe,
-                                      Groupe        *groupe,
-                                      void          *element)
+gboolean _1990_groupe_retire_element       (Projet        *p,
+                                            Niveau_Groupe *niveau_groupe,
+                                            Groupe        *groupe,
+                                            void          *element)
                                        __attribute__((__warn_unused_result__));
-gboolean _1990_groupe_free (Projet *p) __attribute__((__warn_unused_result__));
+gboolean _1990_groupe_free                 (Projet        *p)
+                                       __attribute__((__warn_unused_result__));
 
 gboolean _1990_groupe_affiche_tout (Projet *p)
                                        __attribute__((__warn_unused_result__));

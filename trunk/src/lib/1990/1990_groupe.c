@@ -662,6 +662,32 @@ _1990_groupe_free_niveau (Projet        *p,
 
 
 gboolean
+_1990_groupe_free_combinaisons (GList **liste)
+/**
+ * \brief Libère les combinaisons temporaires d'un groupe.
+ * \param liste : liste contenant les combinaisons à libérer.
+ * \return
+ *   Succès : TRUE.\n
+ *   Échec : FALSE :
+ *     - groupe == NULL,
+ */
+{
+  BUGMSG (liste, FALSE, gettext ("Paramètre %s incorrect.\n"), "liste")
+  
+  // On libère toutes les combinaisons temporaires.
+  while (*liste != NULL)
+  {
+    GList *combinaison = (*liste)->data;
+    
+    g_list_free_full (combinaison, free);
+    *liste = g_list_delete_link (*liste, *liste);
+  }
+  
+  return TRUE;
+}
+
+
+gboolean
 _1990_groupe_free_groupe (Projet        *p,
                           Niveau_Groupe *niveau_groupe,
                           Groupe        *groupe)
@@ -729,18 +755,7 @@ _1990_groupe_free_groupe (Projet        *p,
     g_list_free (groupe->elements);
   
   // On libère toutes les combinaisons temporaires.
-  if (groupe->tmp_combinaison != NULL)
-  {
-    while (groupe->tmp_combinaison != NULL)
-    {
-      GList *combinaison = groupe->tmp_combinaison->data;
-      
-      if (combinaison != NULL)
-        g_list_free_full (combinaison, free);
-      groupe->tmp_combinaison = g_list_delete_link (groupe->tmp_combinaison,
-                                                    groupe->tmp_combinaison);
-    }
-  }
+  _1990_groupe_free_combinaisons (&groupe->tmp_combinaison);
   
   // Et enfin, on supprime l'élément courant.
   niveau_groupe->groupes = g_list_remove (niveau_groupe->groupes, groupe);
