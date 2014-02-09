@@ -226,18 +226,18 @@ _1990_combinaisons_genere_xor (Projet        *p,
   {
     do
     {
-      GList       *nouvelle_combinaison;
-      Combinaison *element;
-      Action      *action = list_parcours->data;
+      Action *action = list_parcours->data;
       
       // On vérifie si l'action possède une charge. Si non, on ignore l'action.
       if (!_1990_action_charges_vide (action))
       {
+        GList       *nouvelle_combinaison = NULL;
+        Combinaison *element;
+        
         BUGCRIT (element = malloc (sizeof (Combinaison)),
                  FALSE,
                  (gettext ("Erreur d'allocation mémoire.\n"));
                    _1990_groupe_free_combinaisons (&groupe->tmp_combinaison);)
-        nouvelle_combinaison = NULL;
         element->action = action;
         element->flags = _1990_action_flags_action_predominante_renvoie (
                                                               element->action);
@@ -384,12 +384,13 @@ _1990_combinaisons_genere_and (Projet        *p,
     
     do
     {
-      Combinaison *element;
-      Action      *action = list_parcours->data;
+      Action *action = list_parcours->data;
       
       // On ajoute l'action que si elle possède des charges
       if (!_1990_action_charges_vide (action))
       {
+        Combinaison *element;
+        
         BUGCRIT (element = malloc (sizeof (Combinaison)),
                  FALSE,
                  (gettext ("Erreur d'allocation mémoire.\n"));
@@ -554,7 +555,7 @@ _1990_combinaisons_genere_or (Projet        *p,
  */
 {
   GList       *list_parcours;
-  unsigned int boucle, i, j, k;
+  unsigned int boucle, i;
   
   BUGPARAMCRIT (p, "%p", p, FALSE, )
   INFO (p->niveaux_groupes,
@@ -600,12 +601,13 @@ _1990_combinaisons_genere_or (Projet        *p,
       {
         if ((parcours_bits & 1) == 1)
         {
-          Combinaison *element;
-          Action      *action = list_parcours->data;
+          Action *action = list_parcours->data;
           
           // On ajoute l'action que si elle possède des charges
           if (!_1990_action_charges_vide (action))
           {
+            Combinaison *element;
+            
             BUGCRIT (element = malloc (sizeof (Combinaison)),
                      FALSE,
                      (gettext ("Erreur d'allocation mémoire.\n"));
@@ -684,8 +686,9 @@ _1990_combinaisons_genere_or (Projet        *p,
             {
               // transition est utilisée de façon temporaire pour dupliquer
               // nouvelles_combinaisons en cas de besoin.
-              GList *transition = NULL;
-              GList *list_parcours2, *list_parcours3;
+              GList       *transition = NULL;
+              GList       *list_parcours2, *list_parcours3;
+              unsigned int j;
               
               BUG (_1990_combinaisons_duplique (&transition,
                                                 nouvelles_combinaisons,
@@ -713,7 +716,8 @@ _1990_combinaisons_genere_or (Projet        *p,
                    j <= g_list_length (groupe_n_1->tmp_combinaison);
                    j++)
               {
-                GList *combinaison2 = list_parcours2->data;
+                GList       *combinaison2 = list_parcours2->data;
+                unsigned int k;
                 
                 for (k = 1; k <= g_list_length (transition); k++)
                 {
@@ -1133,7 +1137,6 @@ _1990_combinaisons_genere (Projet *p)
   for (i = 0; i < g_list_length (p->actions);i++)
   {
     GList           *list_parcours;
-    Action          *action;
     unsigned int     j;
     Action_Categorie categorie;
     
@@ -1164,7 +1167,7 @@ _1990_combinaisons_genere (Projet *p)
     list_parcours = p->actions;
     for (j = 0; j < g_list_length (p->actions); j++)
     {
-      action = list_parcours->data;
+      Action *action = list_parcours->data;
       
       if (j != i)
       {
