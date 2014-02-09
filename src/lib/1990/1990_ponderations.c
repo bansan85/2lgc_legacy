@@ -1818,12 +1818,12 @@ _1990_ponderations_affiche (GList *ponderations)
           
           if (g_list_next (list_parcours2) != NULL)
             printf ("'%s'*%f(%d)+",
-                    _1990_action_nom_renvoie (ponderation_element->action) + 1,
+                    _1990_action_nom_renvoie (ponderation_element->action),
                     ponderation_element->ponderation,
                     ponderation_element->psi);
           else
             printf ("'%s'*%f(%d)",
-                    _1990_action_nom_renvoie (ponderation_element->action) + 1,
+                    _1990_action_nom_renvoie (ponderation_element->action),
                     ponderation_element->ponderation,
                     ponderation_element->psi);
           
