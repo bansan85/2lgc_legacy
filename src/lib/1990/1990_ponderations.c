@@ -380,7 +380,7 @@ _1990_ponderations_genere_eu (Projet *p)
   //   coefficient charges variables d'accompagnement : psi0,
   //   min_pp = 0.9, min_p = 1.0, min_var = 0.0, min_acc = 0.0, min_sis = 0.0,
   //   max_pp = 1.1, max_p = 1.3, max_var = 1.5, max_acc = 0.0, max_sis = 0.0.
-  if ((p->combinaisons.flags & 1) == 0)
+  if (p->combinaisons.elu_equ_methode == 0)
   {
     coef_min[ACTION_POIDS_PROPRE]  = 0.9;
     coef_max[ACTION_POIDS_PROPRE]  = 1.1;
@@ -454,9 +454,9 @@ _1990_ponderations_genere_eu (Projet *p)
          FALSE)
   }
   // Si utilisation des formules 6.10a et 6.10b de l'Eurocode 0 Alors
-  if ((p->combinaisons.flags & 8) == 0)
+  if (p->combinaisons.form_6_10 == 0)
   {
-    switch (p->combinaisons.flags & 6)
+    switch (p->combinaisons.elu_geo_str_methode)
     {
   // Si selon l'approche 1 Alors
   // Pour ELU_STR ET ELU_GEO, générer les pondérations suivantes :
@@ -549,7 +549,7 @@ _1990_ponderations_genere_eu (Projet *p)
   //   coefficient charges variables d'accompagnement : psi0,
   //   min_pp = 1.00, min_p = 1.0, min_var = 0.0, min_acc = 0.0, min_sis = 0.0,
   //   max_pp = 1.15, max_p = 1.3, max_var = 1.5, max_acc = 0.0, max_sis = 0.0.
-      case 2:
+      case 1:
       {
         coef_min[ACTION_POIDS_PROPRE]  = 1.0;
         coef_max[ACTION_POIDS_PROPRE]  = 1.35;
@@ -603,7 +603,7 @@ _1990_ponderations_genere_eu (Projet *p)
   //   coefficient charges variables d'accompagnement : psi0,
   //   min_pp = 1.00, min_p = 1.0, min_var = 0.0, min_acc = 0.0, min_sis = 0.0,
   //   max_pp = 1.15, max_p = 1.3, max_var = 1.5, max_acc = 0.0, max_sis = 0.0.
-      case 4:
+      case 2:
       {
         coef_min[ACTION_POIDS_PROPRE]  = 1.0;
         coef_max[ACTION_POIDS_PROPRE]  = 1.35;
@@ -673,7 +673,8 @@ _1990_ponderations_genere_eu (Projet *p)
       {
         BUGMSG (0,
                 FALSE,
-                gettext ("Flag %d inconnu.\n"), p->combinaisons.flags)
+                gettext ("Flag %d inconnu.\n"),
+                         p->combinaisons.elu_geo_str_methode)
         break;
       }
     }
@@ -681,7 +682,7 @@ _1990_ponderations_genere_eu (Projet *p)
   // Si utilisation de la formule 6.10 de l'Eurocode 0 Alors
   else
   {
-    switch (p->combinaisons.flags & 6)
+    switch (p->combinaisons.elu_geo_str_methode)
     {
   // Si selon l'approche 1 Alors
   // Pour ELU_STR ET ELU_GEO, générer les pondérations suivantes :
@@ -745,7 +746,7 @@ _1990_ponderations_genere_eu (Projet *p)
   //   coefficient charges variables d'accompagnement : psi0,
   //   min_pp = 1.00, min_p = 1.0, min_var = 0.0, min_acc = 0.0, min_sis = 0.0,
   //   max_pp = 1.35, max_p = 1.3, max_var = 1.5, max_acc = 0.0, max_sis = 0.0.
-      case 2:
+      case 1:
       {
         coef_min[ACTION_POIDS_PROPRE]  = 1.0;
         coef_max[ACTION_POIDS_PROPRE]  = 1.35;
@@ -776,7 +777,7 @@ _1990_ponderations_genere_eu (Projet *p)
   //   coefficient charges variables d'accompagnement : psi0,
   //   min_pp = 1.00, min_p = 1.0, min_var = 0.0, min_acc = 0.0, min_sis = 0.0,
   //   max_pp = 1.35, max_p = 1.3, max_var = 1.5, max_acc = 0.0, max_sis = 0.0.
-      case 4:
+      case 2:
       {
         coef_min[ACTION_POIDS_PROPRE]  = 1.0;
         coef_max[ACTION_POIDS_PROPRE]  = 1.35;
@@ -826,7 +827,8 @@ _1990_ponderations_genere_eu (Projet *p)
       {
         BUGMSG (0,
                 FALSE,
-                gettext ("Flag %d inconnu.\n"), p->combinaisons.flags)
+                gettext ("Flag %d inconnu.\n"),
+                         p->combinaisons.elu_geo_str_methode)
         break;
       }
     }
@@ -854,7 +856,7 @@ _1990_ponderations_genere_eu (Projet *p)
   //   FinSi
   //   coefficient charges variables d'accompagnement : psi2.
   // FinPour
-  if ((p->combinaisons.flags & 16) == 0)
+  if (p->combinaisons.elu_acc_psi == 0)
     BUG (_1990_ponderations_genere_un (p,
                                        &p->combinaisons.elu_acc,
                                        coef_min,
@@ -1011,7 +1013,7 @@ _1990_ponderations_genere_fr (Projet *p)
   //     min_sis = 0.0, min_es = 0.0,
   //     max_pp = 1.1, max_p = 1.3, max_var = 1.5, max_acc = 0.0,
   //     max_sis = 0.0, max_es = 1.2.
-  if ((p->combinaisons.flags & 1) == 0)
+  if (p->combinaisons.elu_equ_methode == 0)
   {
     coef_min[ACTION_POIDS_PROPRE]      = 0.9;
     coef_max[ACTION_POIDS_PROPRE]      = 1.1;
@@ -1096,9 +1098,9 @@ _1990_ponderations_genere_fr (Projet *p)
   }
   
   // Si utilisation des formules 6.10a et 6.10b de l'Eurocode 0 Alors
-  if ((p->combinaisons.flags & 8) == 0)
+  if (p->combinaisons.form_6_10 == 0)
   {
-    switch (p->combinaisons.flags & 6)
+    switch (p->combinaisons.elu_geo_str_methode)
     {
   //   Si selon l'approche 1 Alors
   //     Pour ELU_STR ET ELU_GEO, générer les pondérations suivantes :
@@ -1207,7 +1209,7 @@ _1990_ponderations_genere_fr (Projet *p)
   //     min_sis = 0.0, min_es = 0.0,
   //     max_pp = 1.15, max_p = 1.3, max_var = 1.5, max_acc = 0.0,
   //     max_sis = 0.0, max_es = 1.2.
-      case 2:
+      case 1:
       {
         coef_min[ACTION_POIDS_PROPRE]      = 1.0;
         coef_max[ACTION_POIDS_PROPRE]      = 1.35;
@@ -1271,7 +1273,7 @@ _1990_ponderations_genere_fr (Projet *p)
   //     min_sis = 0.0, min_es = 0.0,
   //     max_pp = 1.15, max_p = 1.3, max_var = 1.5, max_acc = 0.0,
   //     max_sis = 0.0, max_es = 1.2.
-      case 4:
+      case 2:
       {
         coef_min[ACTION_POIDS_PROPRE]      = 1.0;
         coef_max[ACTION_POIDS_PROPRE]      = 1.35;
@@ -1349,7 +1351,8 @@ _1990_ponderations_genere_fr (Projet *p)
       {
         BUGMSG (0, 
                 FALSE,
-                gettext ("Flag %d inconnu.\n"), p->combinaisons.flags)
+                gettext ("Flag %d inconnu.\n"),
+                          p->combinaisons.elu_geo_str_methode)
         break;
       }
     }
@@ -1358,7 +1361,7 @@ _1990_ponderations_genere_fr (Projet *p)
   else
   // équation 6.10
   {
-    switch (p->combinaisons.flags & 6)
+    switch (p->combinaisons.elu_geo_str_methode)
     {
   //   Si selon l'approche 1 Alors
   //     Pour ELU_STR ET ELU_GEO, générer les pondérations suivantes :
@@ -1432,7 +1435,7 @@ _1990_ponderations_genere_fr (Projet *p)
   //     min_sis = 0.0, min_es = 0.0,
   //     max_pp = 1.35, max_p = 1.3, max_var = 1.5, max_acc = 0.0,
   //     max_sis = 0.0, max_es = 1.2.
-      case 2:
+      case 1:
       {
         coef_min[ACTION_POIDS_PROPRE]      = 1.0;
         coef_max[ACTION_POIDS_PROPRE]      = 1.35;
@@ -1468,7 +1471,7 @@ _1990_ponderations_genere_fr (Projet *p)
   //     min_sis = 0.0, min_es = 0.0,
   //     max_pp = 1.35, max_p = 1.3, max_var = 1.5, max_acc = 0.0,
   //     max_sis = 0.0, max_es = 1.2.
-      case 4:
+      case 2:
       {
         coef_min[ACTION_POIDS_PROPRE]      = 1.0;
         coef_max[ACTION_POIDS_PROPRE]      = 1.35;
@@ -1525,7 +1528,8 @@ _1990_ponderations_genere_fr (Projet *p)
       {
         BUGMSG (0,
                 FALSE,
-                gettext ("Flag %d inconnu.\n"), p->combinaisons.flags)
+                gettext ("Flag %d inconnu.\n"),
+                         p->combinaisons.elu_geo_str_methode)
         break;
       }
     }
@@ -1556,7 +1560,7 @@ _1990_ponderations_genere_fr (Projet *p)
   //   FinSi
   //   coefficient charges variables d'accompagnement : psi2.
   // FinPour
-  if ((p->combinaisons.flags & 16) == 0)
+  if (p->combinaisons.elu_acc_psi == 0)
     BUG (_1990_ponderations_genere_un (p,
                                        &p->combinaisons.elu_acc,
                                        coef_min,
