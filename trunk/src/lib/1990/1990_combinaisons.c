@@ -772,7 +772,10 @@ _1990_combinaisons_init (Projet *p)
   
   BUGPARAM (p, "%p", p, FALSE, )
   
-  p->combinaisons.flags = 1 | 4 | 8;
+  p->combinaisons.elu_equ_methode = 1;
+  p->combinaisons.elu_geo_str_methode = 1;
+  p->combinaisons.elu_acc_psi = 1;
+  p->combinaisons.form_6_10 = 1;
   p->combinaisons.elu_equ = NULL;
   p->combinaisons.elu_str = NULL;
   p->combinaisons.elu_geo = NULL;
@@ -933,8 +936,7 @@ _1990_combinaisons_eluequ_equ_seul (Projet *p)
 {
   BUGPARAM (p, "%p", p, FALSE, )
   
-  if ((p->combinaisons.flags & 1) != 0)
-    p->combinaisons.flags ^= 1;
+  p->combinaisons.elu_equ_methode = 0;
   
   return TRUE;
 }
@@ -953,8 +955,7 @@ _1990_combinaisons_eluequ_equ_resist (Projet *p)
 {
   BUGPARAM (p, "%p", p, FALSE, )
   
-  if ((p->combinaisons.flags & 1) == 0)
-    p->combinaisons.flags++;
+  p->combinaisons.elu_equ_methode = 1;
   
   return TRUE;
 }
@@ -973,8 +974,7 @@ _1990_combinaisons_elustrgeo_1 (Projet *p)
 {
   BUGPARAM (p, "%p", p, FALSE, )
   
-  p->combinaisons.flags = p->combinaisons.flags - (p->combinaisons.flags & 6);
-  p->combinaisons.flags = p->combinaisons.flags + 0;
+  p->combinaisons.elu_geo_str_methode = 0;
   
   return TRUE;
 }
@@ -993,8 +993,7 @@ _1990_combinaisons_elustrgeo_2 (Projet *p)
 {
   BUGPARAM (p, "%p", p, FALSE, )
   
-  p->combinaisons.flags = p->combinaisons.flags - (p->combinaisons.flags & 6);
-  p->combinaisons.flags = p->combinaisons.flags + 2;
+  p->combinaisons.elu_geo_str_methode = 1;
   
   return TRUE;
 }
@@ -1013,28 +1012,7 @@ _1990_combinaisons_elustrgeo_3 (Projet *p)
 {
   BUGPARAM (p, "%p", p, FALSE, )
   
-  p->combinaisons.flags = p->combinaisons.flags - (p->combinaisons.flags & 6);
-  p->combinaisons.flags = p->combinaisons.flags + 4;
-  
-  return TRUE;
-}
-
-
-gboolean
-_1990_combinaisons_elustrgeo_6_10 (Projet *p)
-/**
- * \brief Modifie les options de combinaison pour que l'ELU STR/GEO calcule
- *        selon la formule 6.10 de l'EN 1990.
- * \param p : la variable projet.
- * \return TRUE.\n
- *   Échec : FALSE :
- *     - p == NULL.
- */
-{
-  BUGPARAM (p, "%p", p, FALSE, )
-  
-  p->combinaisons.flags = p->combinaisons.flags - (p->combinaisons.flags & 8);
-  p->combinaisons.flags = p->combinaisons.flags + 8;
+  p->combinaisons.elu_geo_str_methode = 2;
   
   return TRUE;
 }
@@ -1053,8 +1031,26 @@ _1990_combinaisons_elustrgeo_6_10ab (Projet *p)
 {
   BUGPARAM (p, "%p", p, FALSE, )
   
-  p->combinaisons.flags = p->combinaisons.flags - (p->combinaisons.flags & 8);
-  p->combinaisons.flags = p->combinaisons.flags + 0;
+  p->combinaisons.form_6_10 = 0;
+  
+  return TRUE;
+}
+
+
+gboolean
+_1990_combinaisons_elustrgeo_6_10 (Projet *p)
+/**
+ * \brief Modifie les options de combinaison pour que l'ELU STR/GEO calcule
+ *        selon la formule 6.10 de l'EN 1990.
+ * \param p : la variable projet.
+ * \return TRUE.\n
+ *   Échec : FALSE :
+ *     - p == NULL.
+ */
+{
+  BUGPARAM (p, "%p", p, FALSE, )
+  
+  p->combinaisons.form_6_10 = 1;
   
   return TRUE;
 }
@@ -1073,8 +1069,7 @@ _1990_combinaisons_eluacc_frequente (Projet *p)
 {
   BUGPARAM (p, "%p", p, FALSE, )
   
-  p->combinaisons.flags = p->combinaisons.flags - (p->combinaisons.flags & 16);
-  p->combinaisons.flags = p->combinaisons.flags + 0;
+  p->combinaisons.elu_acc_psi = 0;
   
   return TRUE;
 }
@@ -1093,8 +1088,7 @@ _1990_combinaisons_eluacc_quasi_permanente (Projet *p)
 {
   BUGPARAM (p, "%p", p, FALSE, )
   
-  p->combinaisons.flags = p->combinaisons.flags - (p->combinaisons.flags & 16);
-  p->combinaisons.flags = p->combinaisons.flags + 16;
+  p->combinaisons.elu_acc_psi = 1;
   
   return TRUE;
 }

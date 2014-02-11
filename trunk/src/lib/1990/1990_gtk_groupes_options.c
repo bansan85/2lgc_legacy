@@ -73,7 +73,7 @@ _1990_gtk_groupes_button_options_clicked (GtkWidget *button,
   UI_GROOP.window = GTK_WIDGET (gtk_builder_get_object (
                              UI_GROOP.builder, "1990_groupes_options_window"));
   
-  if ((p->combinaisons.flags & 1) == 0)
+  if (p->combinaisons.elu_equ_methode == 0)
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (gtk_builder_get_object (
                    UI_GROOP.builder, "1990_groupes_options_radio_button_EQU")),
                                   TRUE);
@@ -82,7 +82,7 @@ _1990_gtk_groupes_button_options_clicked (GtkWidget *button,
                UI_GROOP.builder, "1990_groupes_options_radio_button_EQU_RES")),
                                   TRUE);
   
-  if ((p->combinaisons.flags & 8) == 0)
+  if (p->combinaisons.form_6_10 == 0)
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (gtk_builder_get_object (
                UI_GROOP.builder, "1990_groupes_options_radio_button_6_10a_b")),
                                   TRUE);
@@ -103,11 +103,11 @@ _1990_gtk_groupes_button_options_clicked (GtkWidget *button,
               UI_GROOP.builder, "1990_groupes_options_radio_button_6_10a_b")));
   g_object_set (settings, "gtk-tooltip-timeout", 0, NULL);
   
-  if ((p->combinaisons.flags & 6) == 4)
+  if (p->combinaisons.elu_geo_str_methode == 2)
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (gtk_builder_get_object (
                  UI_GROOP.builder, "1990_groupes_options_radio_button_appr3")),
                                   TRUE);
-  else if ((p->combinaisons.flags & 6) == 2)
+  else if (p->combinaisons.elu_geo_str_methode == 1)
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (gtk_builder_get_object (
                  UI_GROOP.builder, "1990_groupes_options_radio_button_appr2")),
                                   TRUE);
@@ -116,7 +116,7 @@ _1990_gtk_groupes_button_options_clicked (GtkWidget *button,
                  UI_GROOP.builder, "1990_groupes_options_radio_button_appr1")),
                                   TRUE);
   
-  if ((p->combinaisons.flags & 16) == 0)
+  if (p->combinaisons.elu_acc_psi == 0)
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (gtk_builder_get_object (
                   UI_GROOP.builder, "1990_groupes_options_radio_button_freq")),
                                   TRUE);
