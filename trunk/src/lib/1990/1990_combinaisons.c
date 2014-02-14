@@ -75,8 +75,8 @@ _1990_combinaisons_verifie_double (GList *liste_combinaisons,
       if ((elem1->action != elem2->action) || (elem1->flags != elem2->flags))
         doublon = FALSE;
       
-      list_1 = g_list_next(list_1);
-      list_2 = g_list_next(list_2);
+      list_1 = g_list_next (list_1);
+      list_2 = g_list_next (list_2);
       
       if ((list_1) || (list_2))
         doublon = FALSE;
@@ -85,7 +85,7 @@ _1990_combinaisons_verifie_double (GList *liste_combinaisons,
     if (doublon == TRUE)
       return TRUE;
     
-    list_parcours = g_list_next(list_parcours);
+    list_parcours = g_list_next (list_parcours);
   }
   while (list_parcours != NULL);
   
