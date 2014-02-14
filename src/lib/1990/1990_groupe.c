@@ -743,7 +743,7 @@ _1990_groupe_free_groupe (Projet        *p,
       BUG (_1990_gtk_insert_dispo (p, list_parcours->data, niveau_groupe),
            FALSE)
       
-      list_parcours = g_list_next(list_parcours);
+      list_parcours = g_list_next (list_parcours);
     }
   }
 #endif

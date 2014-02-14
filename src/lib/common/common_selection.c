@@ -549,7 +549,7 @@ common_selection_charges_en_texte (GList  *liste_charges,
             gettext ("Erreur d'allocation mémoire.\n"))
     if (g_list_next (list_parcours) != NULL)
     {
-      list_parcours = g_list_next(list_parcours);
+      list_parcours = g_list_next (list_parcours);
       do
       {
         charge = list_parcours->data;

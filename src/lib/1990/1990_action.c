@@ -328,8 +328,8 @@ _1990_action_init (Projet *p)
  */
 {
 #ifdef ENABLE_GTK
-  unsigned int  i;
-  GtkWidget     *w_temp;
+  unsigned int i;
+  GtkWidget   *w_temp;
 #endif
   
   BUGPARAMCRIT (p, "%p", p, FALSE, )
@@ -1117,7 +1117,7 @@ _1990_action_fonction_free (Projet *p,
  *     - action == NULL.
  */
 {
-  unsigned int  i, j;
+  unsigned int i, j;
   
   BUGPARAM (p, "%p", p, FALSE, )
   BUGPARAM (action, "%p", action, FALSE, )
@@ -1185,7 +1185,7 @@ _1990_action_fonction_init (Projet *p,
  *     - en cas d'erreur d'allocation mémoire.
  */
 {
-  unsigned int  i, j;
+  unsigned int i, j;
   
   BUGPARAM (p, "%p", p, FALSE, )
   BUGPARAM (action, "%p", action, FALSE, )
@@ -1297,7 +1297,7 @@ _1990_action_affiche_resultats (Projet *p,
  *     - action == NULL.
  */
 {
-  unsigned int  i;
+  unsigned int i;
   
   BUGPARAM (p, "%p", p, FALSE, )
   BUGPARAM (action, "%p", action, FALSE, )
@@ -1472,11 +1472,11 @@ _1990_action_ponderation_resultat (GList  *ponderation,
   list_parcours = ponderation;
   while (list_parcours != NULL)
   {
-    Ponderation   *element = list_parcours->data;
-    double        *x2 = element->action->efforts_noeuds->x;
-    double        *y2 = element->action->deplacement->x;
-    double        mult;
-    unsigned int  i;
+    Ponderation *element = list_parcours->data;
+    double      *x2 = element->action->efforts_noeuds->x;
+    double      *y2 = element->action->deplacement->x;
+    double       mult;
+    unsigned int i;
     
     mult = element->ponderation *
                              (element->psi == 0 ? m_g (element->action->psi0) :

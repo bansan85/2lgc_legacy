@@ -253,7 +253,7 @@ EF_charge_deplace (Projet *p,
   //     Si la charge est celle à supprimer Alors
     if (charge == charge_s)
     {
-      GList *list_next = g_list_next(list_parcours);
+      GList *list_next = g_list_next (list_parcours);
       
 #ifdef ENABLE_GTK
   //       On la supprime du tree-view-charge
