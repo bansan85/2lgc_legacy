@@ -36,10 +36,6 @@
 #include "EF_charge_barre_repartie_uniforme.h"
 #include "EF_calculs.h"
 
-#ifndef BUG
-#define BUG AUI
-#endif
-
 #ifdef ENABLE_GTK
 #include "common_gtk.h"
 #include "1990_gtk_actions.h"
@@ -98,7 +94,7 @@ _1990_action_bat_txt_type_eu (unsigned int type)
     case 14 : return gettext ("Température (hors incendie)");
     case 15 : return gettext ("Accidentelle");
     case 16 : return gettext ("Sismique");
-    default : { BUGPARAM (type, "%u", 0, NULL, ) break; }
+    default : { BUGPARAM (type, "%u", 0, NULL) break; }
   }
 }
 
@@ -170,7 +166,7 @@ _1990_action_bat_txt_type_fr (unsigned int type)
     case 19 : return gettext ("Accidentelle");
     case 20 : return gettext ("Sismique");
     case 21 : return gettext ("Eaux souterraines");
-    default : { BUGPARAM (type, "%u", 0, NULL, ) break; }
+    default : { BUGPARAM (type, "%u", 0, NULL) break; }
   }
 }
 
@@ -194,7 +190,7 @@ _1990_action_bat_txt_type (unsigned int type,
   {
     case NORME_EU : return _1990_action_bat_txt_type_eu (type);
     case NORME_FR : return _1990_action_bat_txt_type_fr (type);
-    default : { BUGPARAM (norme, "%d", 0, NULL, ) break; }
+    default : { BUGPARAM (norme, "%d", 0, NULL) break; }
   }
 }
 
@@ -229,7 +225,7 @@ _1990_action_categorie_bat_eu (unsigned int type)
   else if (type == 16)
     return ACTION_SISMIQUE;
   else
-    BUGPARAM (type, "%u", 0, ACTION_INCONNUE, )
+    BUGPARAM (type, "%u", 0, ACTION_INCONNUE)
 }
 
 
@@ -266,7 +262,7 @@ _1990_action_categorie_bat_fr (unsigned int type)
   else if (type == 21)
     return ACTION_EAUX_SOUTERRAINES;
   else
-    BUGPARAM (type, "%u", 0, ACTION_INCONNUE, )
+    BUGPARAM (type, "%u", 0, ACTION_INCONNUE)
 }
 
 
@@ -289,7 +285,7 @@ _1990_action_categorie_bat (unsigned int type,
   {
     case NORME_EU : return _1990_action_categorie_bat_eu (type);
     case NORME_FR : return _1990_action_categorie_bat_fr (type);
-    default : { BUGPARAM (norme, "%d", 0, ACTION_INCONNUE, ) break; }
+    default : { BUGPARAM (norme, "%d", 0, ACTION_INCONNUE) break; }
   }
 }
 
@@ -310,7 +306,7 @@ _1990_action_num_bat_txt (Norme norme)
   {
     case NORME_EU : return 17;
     case NORME_FR : return 22;
-    default : { BUGPARAM (norme, "%d", 0, 0, ) break; }
+    default : { BUGPARAM (norme, "%d", 0, 0) break; }
   }
 }
 
@@ -332,7 +328,7 @@ _1990_action_init (Projet *p)
   GtkWidget   *w_temp;
 #endif
   
-  BUGPARAMCRIT (p, "%p", p, FALSE, )
+  BUGPARAMCRIT (p, "%p", p, FALSE)
   
   p->actions = NULL;
   
@@ -423,15 +419,14 @@ _1990_action_ajout (Projet      *p,
 {
   Action  *action_nouveau;
   
-  BUGPARAM (p, "%p", p, NULL, )
+  BUGPARAM (p, "%p", p, NULL)
   BUGPARAM (type,
             "%u",
             _1990_action_categorie_bat (type, p->parametres.norme) !=
                                                                ACTION_INCONNUE,
-            NULL,
-            )
+            NULL)
   
-  BUG (EF_calculs_free (p), FALSE, )
+  BUG (EF_calculs_free (p), FALSE)
   
   BUGCRIT (action_nouveau = (Action *) malloc (sizeof (Action)),
            NULL,
@@ -518,7 +513,7 @@ _1990_action_nom_renvoie (Action *action)
  *     - action == NULL,
  */
 {
-  BUGPARAM (action, "%p", action, NULL, )
+  BUGPARAM (action, "%p", action, NULL)
   
   return action->nom;
 }
@@ -541,9 +536,9 @@ _1990_action_nom_change (Projet     *p,
  *     - erreur d'allocation mémoire.
  */
 {
-  BUGPARAM (p, "%p", p, FALSE, )
-  BUGPARAM (action, "%p", action, FALSE, )
-  BUGPARAM (nom, "%p", nom, FALSE, )
+  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (action, "%p", action, FALSE)
+  BUGPARAM (nom, "%p", nom, FALSE)
   
   free (action->nom);
   BUGCRIT (action->nom = g_strdup_printf ("%s", nom),
@@ -585,8 +580,8 @@ _1990_action_nom_cherche (Projet     *p,
 {
   GList *list_parcours;
   
-  BUGPARAM (p, "%p", p, NULL, )
-  BUGPARAM (nom, "%p", nom, NULL, )
+  BUGPARAM (p, "%p", p, NULL)
+  BUGPARAM (nom, "%p", nom, NULL)
   
   list_parcours = p->actions;
   while (list_parcours != NULL)
@@ -615,7 +610,7 @@ _1990_action_type_renvoie (Action *action)
  *     - action == NULL.
  */
 {
-  BUGPARAM (action, "%p", action, G_MAXUINT, )
+  BUGPARAM (action, "%p", action, G_MAXUINT)
   
   return action->type;
 }
@@ -641,23 +636,23 @@ _1990_action_type_change (Projet      *p,
 {
   Flottant  psi0, psi1, psi2;
   
-  BUGPARAM (p, "%p", p, FALSE, )
-  BUGPARAM (action, "%p", action, FALSE, )
+  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (action, "%p", action, FALSE)
   
   if (action->type == type)
     return TRUE;
   
   psi0 = m_f (_1990_coef_psi0_bat (type, p->parametres.norme),
               FLOTTANT_ORDINATEUR);
-  BUG (!isnan (m_g (psi0)), FALSE, )
+  BUG (!isnan (m_g (psi0)), FALSE)
   psi1 = m_f (_1990_coef_psi1_bat (type, p->parametres.norme),
               FLOTTANT_ORDINATEUR);
-  BUG (!isnan (m_g (psi1)), FALSE, )
+  BUG (!isnan (m_g (psi1)), FALSE)
   psi2 = m_f (_1990_coef_psi2_bat (type, p->parametres.norme),
               FLOTTANT_ORDINATEUR);
   BUG (!isnan (m_g (psi2)), FALSE)
   
-  BUG (EF_calculs_free (p), FALSE, )
+  BUG (EF_calculs_free (p), FALSE)
   
   action->type = type;
   action->psi0 = psi0;
@@ -685,7 +680,7 @@ _1990_action_charges_vide (Action *action)
  *     - action == NULL.
  */
 {
-  BUGPARAM (action, "%p", action, TRUE, )
+  BUGPARAM (action, "%p", action, TRUE)
   
   return action->charges == NULL;
 }
@@ -702,7 +697,7 @@ _1990_action_charges_renvoie (Action *action)
  *     - action == NULL.
  */
 {
-  BUGPARAM (action, "%p", action, NULL, )
+  BUGPARAM (action, "%p", action, NULL)
   
   return action->charges;
 }
@@ -721,7 +716,7 @@ _1990_action_charges_change (Action *action,
  *     - action == NULL.
  */
 {
-  BUGPARAM (action, "%p", action, FALSE, )
+  BUGPARAM (action, "%p", action, FALSE)
   
   action->charges = charges;
   
@@ -740,7 +735,7 @@ _1990_action_flags_action_predominante_renvoie (Action *action)
  *     - action == NULL.
  */
 {
-  BUGPARAM (action, "%p", action, 2, )
+  BUGPARAM (action, "%p", action, 2)
   
   return action->action_predominante;
 }
@@ -760,8 +755,8 @@ _1990_action_flags_action_predominante_change (Action      *action,
  *     - flag != 0 ou 1.
  */
 {
-  BUGPARAM (action, "%p", action, FALSE, )
-  BUGPARAM (flag, "%u", (flag == 0) || (flag == 1), FALSE, )
+  BUGPARAM (action, "%p", action, FALSE)
+  BUGPARAM (flag, "%u", (flag == 0) || (flag == 1), FALSE)
   
   action->action_predominante = flag;
   
@@ -780,7 +775,7 @@ _1990_action_psi_renvoie_0 (Action *action)
  *       action == NULL.
  */
 {
-  BUGPARAM (action, "%p", action, m_f (NAN, FLOTTANT_ORDINATEUR), )
+  BUGPARAM (action, "%p", action, m_f (NAN, FLOTTANT_ORDINATEUR))
   
   return action->psi0;
 }
@@ -797,7 +792,7 @@ _1990_action_psi_renvoie_1 (Action *action)
  *       action == NULL.
  */
 {
-  BUGPARAM (action, "%p", action, m_f (NAN, FLOTTANT_ORDINATEUR), )
+  BUGPARAM (action, "%p", action, m_f (NAN, FLOTTANT_ORDINATEUR))
   
   return action->psi1;
 }
@@ -814,7 +809,7 @@ _1990_action_psi_renvoie_2 (Action *action)
  *     - action == NULL.
  */
 {
-  BUGPARAM (action, "%p", action, m_f (NAN, FLOTTANT_ORDINATEUR), )
+  BUGPARAM (action, "%p", action, m_f (NAN, FLOTTANT_ORDINATEUR))
   
   return action->psi2;
 }
@@ -840,14 +835,13 @@ _1990_action_psi_change (Projet      *p,
  *     - psi < 0.
  */
 {
-  BUGPARAM (p, "%p", p, FALSE, )
-  BUGPARAM (action, "%p", action, FALSE, )
+  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (action, "%p", action, FALSE)
   BUGPARAM (psi_num,
             "%u",
             (psi_num == 0) || (psi_num == 1) || (psi_num == 2),
-            FALSE,
-            )
-  BUGPARAM (m_g (psi), "%lf", m_g (psi) >= 0., FALSE, )
+            FALSE)
+  BUGPARAM (m_g (psi), "%lf", m_g (psi) >= 0., FALSE)
   
   if (psi_num == 0)
   {
@@ -883,7 +877,7 @@ _1990_action_psi_change (Projet      *p,
 #endif
   }
   
-  BUG (EF_calculs_free (p), FALSE, )
+  BUG (EF_calculs_free (p), FALSE)
   
   return TRUE;
 }
@@ -900,7 +894,7 @@ _1990_action_deplacement_renvoie (Action *action)
  *     - action == NULL.
  */
 {
-  BUGPARAM (action, "%p", action, NULL, )
+  BUGPARAM (action, "%p", action, NULL)
   
   return action->deplacement;
 }
@@ -921,8 +915,8 @@ _1990_action_deplacement_change (Action         *action,
  *     - sparse == NULL.
  */
 {
-  BUGPARAM (action, "%p", action, FALSE, )
-  BUGPARAM (sparse, "%p", sparse, FALSE, )
+  BUGPARAM (action, "%p", action, FALSE)
+  BUGPARAM (sparse, "%p", sparse, FALSE)
   
   action->deplacement = sparse;
   
@@ -941,7 +935,7 @@ _1990_action_forces_renvoie (Action *action)
  *     - action == NULL.
  */
 {
-  BUGPARAM (action, "%p", action, NULL, )
+  BUGPARAM (action, "%p", action, NULL)
   
   return action->forces;
 }
@@ -962,8 +956,8 @@ _1990_action_forces_change (Action         *action,
  *       sparse == NULL.
  */
 {
-  BUGPARAM (action, "%p", action, FALSE, )
-  BUGPARAM (sparse, "%p", sparse, FALSE, )
+  BUGPARAM (action, "%p", action, FALSE)
+  BUGPARAM (sparse, "%p", sparse, FALSE)
   
   action->forces = sparse;
   
@@ -982,7 +976,7 @@ _1990_action_efforts_noeuds_renvoie (Action *action)
  *     - action == NULL.
  */
 {
-  BUGPARAM (action, "%p", action, NULL, )
+  BUGPARAM (action, "%p", action, NULL)
   
   return action->efforts_noeuds;
 }
@@ -1003,8 +997,8 @@ _1990_action_efforts_noeuds_change (Action         *action,
  *       sparse == NULL.
  */
 {
-  BUGPARAM (action, "%p", action, FALSE, )
-  BUGPARAM (sparse, "%p", sparse, FALSE, )
+  BUGPARAM (action, "%p", action, FALSE)
+  BUGPARAM (sparse, "%p", sparse, FALSE)
   
   action->efforts_noeuds = sparse;
   
@@ -1024,7 +1018,7 @@ _1990_action_Iter_fenetre_renvoie (Action *action)
  *     - action == NULL.
  */
 {
-  BUGPARAM (action, "%p", action, NULL, )
+  BUGPARAM (action, "%p", action, NULL)
   
   return &action->Iter_fenetre;
 }
@@ -1048,8 +1042,8 @@ _1990_action_efforts_renvoie (Action *action,
  *     - effort != 0, 1, 2, 3, 4 et 5.
  */
 {
-  BUGPARAM (action, "%p", action, NULL, )
-  BUGPARAM (effort, "%d", (0 <= effort) && (effort <= 5), NULL, )
+  BUGPARAM (action, "%p", action, NULL)
+  BUGPARAM (effort, "%d", (0 <= effort) && (effort <= 5), NULL)
   
   return action->efforts[effort][barre];
 }
@@ -1072,8 +1066,8 @@ _1990_action_rotation_renvoie (Action *action,
  *     - effort != 0, 1 et 2.
  */
 {
-  BUGPARAM (action, "%p", action, NULL, )
-  BUGPARAM (effort, "%d", (0 <= effort) && (effort <= 2), NULL, )
+  BUGPARAM (action, "%p", action, NULL)
+  BUGPARAM (effort, "%d", (0 <= effort) && (effort <= 2), NULL)
   
   return action->rotation[effort][barre];
 }
@@ -1096,8 +1090,8 @@ _1990_action_deformation_renvoie (Action *action,
  *     - effort != 0, 1 et 2.
  */
 {
-  BUGPARAM (action, "%p", action, NULL, )
-  BUGPARAM (effort, "%d", (0 <= effort) && (effort <= 2), NULL, )
+  BUGPARAM (action, "%p", action, NULL)
+  BUGPARAM (effort, "%d", (0 <= effort) && (effort <= 2), NULL)
   
   return action->deformation[effort][barre];
 }
@@ -1119,8 +1113,8 @@ _1990_action_fonction_free (Projet *p,
 {
   unsigned int i, j;
   
-  BUGPARAM (p, "%p", p, FALSE, )
-  BUGPARAM (action, "%p", action, FALSE, )
+  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (action, "%p", action, FALSE)
   
   for (i = 0; i < 6; i++)
   {
@@ -1187,8 +1181,8 @@ _1990_action_fonction_init (Projet *p,
 {
   unsigned int i, j;
   
-  BUGPARAM (p, "%p", p, FALSE, )
-  BUGPARAM (action, "%p", action, FALSE, )
+  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (action, "%p", action, FALSE)
   
   for (i = 0; i < 6; i++)
   {
@@ -1260,7 +1254,7 @@ _1990_action_affiche_tout (Projet *p)
 {
   GList *list_parcours;
   
-  BUGPARAM (p, "%p", p, FALSE, )
+  BUGPARAM (p, "%p", p, FALSE)
   
   if (p->actions == NULL)
   {
@@ -1299,8 +1293,8 @@ _1990_action_affiche_resultats (Projet *p,
 {
   unsigned int i;
   
-  BUGPARAM (p, "%p", p, FALSE, )
-  BUGPARAM (action, "%p", action, FALSE, )
+  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (action, "%p", action, FALSE)
   
   if (p->modele.barres == NULL)
   {
@@ -1331,43 +1325,43 @@ _1990_action_affiche_resultats (Projet *p,
   {
     // Affichage de la courbe des sollicitations de l'effort normal
     printf ("Barre n°%u, Effort normal\n", i);
-    BUG (common_fonction_affiche (action->efforts[0][i]), FALSE, )
+    BUG (common_fonction_affiche (action->efforts[0][i]), FALSE)
     // Affichage de la courbe des sollicitations de l'effort tranchant selon Y
     printf ("Barre n°%u, Effort tranchant Y\n", i);
-    BUG (common_fonction_affiche (action->efforts[1][i]), FALSE, )
+    BUG (common_fonction_affiche (action->efforts[1][i]), FALSE)
     // Affichage de la courbe des sollicitations de l'effort tranchant selon Z
     printf ("Barre n°%u, Effort tranchant Z\n", i);
-    BUG (common_fonction_affiche (action->efforts[2][i]), FALSE, )
+    BUG (common_fonction_affiche (action->efforts[2][i]), FALSE)
     // Affichage de la courbe des sollicitations du moment de torsion
     printf ("Barre n°%u, Moment de torsion\n", i);
-    BUG (common_fonction_affiche (action->efforts[3][i]), FALSE, )
+    BUG (common_fonction_affiche (action->efforts[3][i]), FALSE)
     // Affichage de la courbe des sollicitations du moment fléchissant selon Y
     printf ("Barre n°%u, Moment de flexion Y\n", i);
-    BUG (common_fonction_affiche (action->efforts[4][i]), FALSE, )
+    BUG (common_fonction_affiche (action->efforts[4][i]), FALSE)
     // Affichage de la courbe des sollicitations du moment fléchissant selon Z
     printf ("Barre n°%u, Moment de flexion Z\n", i);
-    BUG (common_fonction_affiche (action->efforts[5][i]), FALSE, )
+    BUG (common_fonction_affiche (action->efforts[5][i]), FALSE)
   }
   for (i = 0; i < g_list_length (p->modele.barres); i++)
   {
     // Affichage de la courbe de déformation selon l'axe X
     printf ("Barre n°%u, Déformation en X\n", i);
-    BUG (common_fonction_affiche (action->deformation[0][i]), FALSE, )
+    BUG (common_fonction_affiche (action->deformation[0][i]), FALSE)
     // Affichage de la courbe de déformation selon l'axe Y
     printf ("Barre n°%u, Déformation en Y\n", i);
-    BUG (common_fonction_affiche (action->deformation[1][i]), FALSE, )
+    BUG (common_fonction_affiche (action->deformation[1][i]), FALSE)
     // Affichage de la courbe de déformation selon l'axe Z
     printf ("Barre n°%u, Déformation en Z\n", i);
-    BUG (common_fonction_affiche (action->deformation[2][i]), FALSE, )
+    BUG (common_fonction_affiche (action->deformation[2][i]), FALSE)
     // Affichage de la courbe de rotation selon l'axe X
     printf ("Barre n°%u, Rotation en X\n", i);
-    BUG (common_fonction_affiche (action->rotation[0][i]), FALSE, )
+    BUG (common_fonction_affiche (action->rotation[0][i]), FALSE)
     // Affichage de la courbe de rotation selon l'axe Y
     printf ("Barre n°%u, Rotation en Y\n", i);
-    BUG (common_fonction_affiche (action->rotation[1][i]), FALSE, )
+    BUG (common_fonction_affiche (action->rotation[1][i]), FALSE)
     // Affichage de la courbe de rotation selon l'axe Z
     printf ("Barre n°%u, Rotation en Z\n", i);
-    BUG (common_fonction_affiche (action->rotation[2][i]), FALSE, )
+    BUG (common_fonction_affiche (action->rotation[2][i]), FALSE)
   }
   // FinPour
   
@@ -1387,7 +1381,7 @@ _1990_action_ponderation_resultat_free_calculs (Action *action)
  *     - action == NULL.
  */
 {
-  BUGPARAM (action, "%p", action, FALSE, )
+  BUGPARAM (action, "%p", action, FALSE)
   
   free (action->deplacement->x);
   free (action->deplacement);
@@ -1419,7 +1413,7 @@ _1990_action_ponderation_resultat (GList  *ponderation,
   Action *action;
   double *x, *y;
   
-  BUGPARAM (p, "%p", p, NULL, )
+  BUGPARAM (p, "%p", p, NULL)
   INFO (p->modele.noeuds, NULL, (gettext ("Aucun noeud n'est existant.\n"));)
   
   // Initialisation de l'action
@@ -1576,8 +1570,8 @@ _1990_action_free_calculs (Projet *p,
  *     - action == NULL.
  */
 {
-  BUGPARAM (p, "%p", p, FALSE, )
-  BUGPARAM (action, "%p", action, FALSE, )
+  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (action, "%p", action, FALSE)
   
   if (action->deplacement != NULL)
   {
@@ -1598,7 +1592,7 @@ _1990_action_free_calculs (Projet *p,
   }
   
   if (action->efforts[0] != NULL)
-    BUG (_1990_action_fonction_free (p, action), FALSE, )
+    BUG (_1990_action_fonction_free (p, action), FALSE)
   
   return TRUE;
 }
@@ -1625,8 +1619,8 @@ _1990_action_free_1 (Projet *p,
   GtkTreeIter Iter;
 #endif
   
-  BUGPARAM (p, "%p", p, FALSE, )
-  BUGPARAM (action_free, "%p", action_free, FALSE, )
+  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (action_free, "%p", action_free, FALSE)
   
   // On enlève l'action de la liste des actions
   list_parcours = g_list_last (p->actions);
@@ -1650,17 +1644,17 @@ _1990_action_free_1 (Projet *p,
         {
           case CHARGE_NOEUD :
           {
-            BUG (EF_charge_noeud_free (charge), FALSE, )
+            BUG (EF_charge_noeud_free (charge), FALSE)
             break;
           }
           case CHARGE_BARRE_PONCTUELLE :
           {
-            BUG (EF_charge_barre_ponctuelle_free (charge), FALSE, )
+            BUG (EF_charge_barre_ponctuelle_free (charge), FALSE)
             break;
           }
           case CHARGE_BARRE_REPARTIE_UNIFORME :
           {
-            BUG (EF_charge_barre_repartie_uniforme_free (charge), FALSE, )
+            BUG (EF_charge_barre_repartie_uniforme_free (charge), FALSE)
             break;
           }
           default :
@@ -1680,7 +1674,7 @@ _1990_action_free_1 (Projet *p,
         cholmod_free_sparse (&action->efforts_noeuds, p->calculs.c);
       
       if (action->efforts[0] != NULL)
-        BUG (_1990_action_fonction_free (p, action), FALSE, )
+        BUG (_1990_action_fonction_free (p, action), FALSE)
       
 #ifdef ENABLE_GTK
       if (UI_ACT.builder != NULL)
@@ -1726,8 +1720,7 @@ _1990_action_free_1 (Projet *p,
                                             niveau_groupe,
                                             groupe,
                                             list_elements->data),
-               FALSE,
-               )
+               FALSE)
           break;
         }
         
@@ -1769,7 +1762,7 @@ _1990_action_free_1 (Projet *p,
   }
 #endif
   
-  BUG (EF_calculs_free (p), FALSE, )
+  BUG (EF_calculs_free (p), FALSE)
   
   return TRUE;
 }
@@ -1786,7 +1779,7 @@ _1990_action_free (Projet *p)
  *     - p == NULL.
  */
 {
-  BUGPARAM (p, "%p", p, FALSE, )
+  BUGPARAM (p, "%p", p, FALSE)
   
   while (p->actions != NULL)
   {
@@ -1805,17 +1798,17 @@ _1990_action_free (Projet *p)
       {
         case CHARGE_NOEUD :
         {
-          BUG (EF_charge_noeud_free (charge), FALSE, )
+          BUG (EF_charge_noeud_free (charge), FALSE)
           break;
         }
         case CHARGE_BARRE_PONCTUELLE :
         {
-          BUG (EF_charge_barre_ponctuelle_free (charge), FALSE, )
+          BUG (EF_charge_barre_ponctuelle_free (charge), FALSE)
           break;
         }
         case CHARGE_BARRE_REPARTIE_UNIFORME :
         {
-          BUG (EF_charge_barre_repartie_uniforme_free (charge), FALSE, )
+          BUG (EF_charge_barre_repartie_uniforme_free (charge), FALSE)
           break;
         }
         default :
@@ -1835,7 +1828,7 @@ _1990_action_free (Projet *p)
       cholmod_free_sparse (&action->efforts_noeuds, p->calculs.c);
     
     if (action->efforts[0] != NULL)
-      BUG (_1990_action_fonction_free (p, action), FALSE, )
+      BUG (_1990_action_fonction_free (p, action), FALSE)
     
     free (action);
   }
