@@ -49,11 +49,11 @@ _1990_duree_norme_eu (unsigned int type)
 {
   switch (type)
   {
-    case 0 : { return 10; break; }
-    case 1 : { return 25; break; }
-    case 2 : { return 30; break; }
-    case 3 : { return 50; break; }
-    case 4 : { return 100; break; }
+    case 0 : return 10;
+    case 1 : return 25;
+    case 2 : return 30;
+    case 3 : return 50;
+    case 4 : return 100;
     default : { BUGPARAM (type, "%u", 0, 0) break; }
   }
 }
@@ -81,11 +81,11 @@ _1990_duree_norme_fr (unsigned int type)
 {
   switch (type)
   {
-    case 0 : { return 10; break; }
-    case 1 : { return 25; break; }
-    case 2 : { return 25; break; }
-    case 3 : { return 50; break; }
-    case 4 : { return 100; break; }
+    case 0 : return 10;
+    case 1 : return 25;
+    case 2 : return 25;
+    case 3 : return 50;
+    case 4 : return 100;
     default : { BUGPARAM (type, "%u", 0, 0) break; }
   }
 }
@@ -115,11 +115,11 @@ _1990_duree_norme_txt_eu (unsigned int type)
 {
   switch (type)
   {
-    case 0 : { return gettext ("Structures provisoires"); break; }
-    case 1 : { return gettext ("Éléments structuraux remplaçables, par exemple poutres de roulement, appareils d'appui"); break; }
-    case 2 : { return gettext ("Structures agricoles et similaires"); break; }
-    case 3 : { return gettext ("Structures de bâtiments et autres structures courantes"); break; }
-    case 4 : { return gettext ("Structures monumentales de bâtiments, pont et autres ouvrages de génie civil"); break; }
+    case 0 : return gettext ("Structures provisoires");
+    case 1 : return gettext ("Éléments structuraux remplaçables, par exemple poutres de roulement, appareils d'appui");
+    case 2 : return gettext ("Structures agricoles et similaires");
+    case 3 : return gettext ("Structures de bâtiments et autres structures courantes");
+    case 4 : return gettext ("Structures monumentales de bâtiments, pont et autres ouvrages de génie civil");
     default : { BUGPARAM (type, "%u", 0, NULL) break; }
   }
 }
@@ -149,11 +149,11 @@ _1990_duree_norme_txt_fr (unsigned int type)
 {
   switch (type)
   {
-    case 0 : { return gettext ("Structures provisoires"); break; }
-    case 1 : { return gettext ("Éléments structuraux remplaçables, par exemple poutres de roulement, appareils d'appui"); break; }
-    case 2 : { return gettext ("Structures agricoles et similaires"); break; }
-    case 3 : { return gettext ("Structures de bâtiments et autres structures courantes"); break; }
-    case 4 : { return gettext ("Structures monumentales de bâtiments, pont et autres ouvrages de génie civil"); break; }
+    case 0 : return gettext ("Structures provisoires");
+    case 1 : return gettext ("Éléments structuraux remplaçables, par exemple poutres de roulement, appareils d'appui");
+    case 2 : return gettext ("Structures agricoles et similaires");
+    case 3 : return gettext ("Structures de bâtiments et autres structures courantes");
+    case 4 : return gettext ("Structures monumentales de bâtiments, pont et autres ouvrages de génie civil");
     default : { BUGPARAM (type, "%u", 0, NULL) break; }
   }
 }
@@ -175,8 +175,8 @@ _1990_duree_norme (unsigned int type,
 {
   switch (norme)
   {
-    case NORME_EU : { return _1990_duree_norme_eu (type); break; }
-    case NORME_FR : { return _1990_duree_norme_fr (type); break; }
+    case NORME_EU : return _1990_duree_norme_eu (type);
+    case NORME_FR : return _1990_duree_norme_fr (type);
     default : { BUGPARAM (norme, "%d", 0, 0) break; }
   }
 }
@@ -199,8 +199,8 @@ _1990_duree_norme_txt (unsigned int type,
 {
   switch (norme)
   {
-    case NORME_EU : { return _1990_duree_norme_txt_eu (type); break; }
-    case NORME_FR : { return _1990_duree_norme_txt_fr (type); break; }
+    case NORME_EU : return _1990_duree_norme_txt_eu (type);
+    case NORME_FR : return _1990_duree_norme_txt_fr (type);
     default : { BUGPARAM (norme, "%d", 0, NULL) break; }
   }
 }
