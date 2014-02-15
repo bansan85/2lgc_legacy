@@ -27,10 +27,6 @@
 #include "1990_groupe.h"
 #include "1990_ponderations.h"
 
-#ifndef BUG
-#define BUG AUI
-#endif
-
 gboolean
 _1990_combinaisons_verifie_double (GList *liste_combinaisons,
                                    GList *comb_a_verifier)
@@ -114,7 +110,7 @@ _1990_combinaisons_duplique (GList  **liste_comb_destination,
 {
   GList *list_parcours;
   
-  BUGPARAMCRIT (liste_comb_destination, "%p", liste_comb_destination, FALSE, )
+  BUGPARAMCRIT (liste_comb_destination, "%p", liste_comb_destination, FALSE)
   
   if (liste_comb_source == NULL)
     return TRUE;
@@ -194,11 +190,11 @@ _1990_combinaisons_genere_xor (Projet        *p,
 {
   GList *list_parcours;
   
-  BUGPARAMCRIT (p, "%p", p, FALSE, )
+  BUGPARAMCRIT (p, "%p", p, FALSE)
   INFO (p->niveaux_groupes,
         FALSE,
         (gettext ("Le projet ne possède pas de niveaux de groupes.\n"));)
-  BUGPARAMCRIT (niveau, "%p", niveau, FALSE, )
+  BUGPARAMCRIT (niveau, "%p", niveau, FALSE)
   INFO (niveau->groupes,
         FALSE,
         (gettext ("Le niveau %u est vide. Veuillez soit le remplir, soit le supprimer.\n"),
@@ -305,7 +301,7 @@ _1990_combinaisons_fusion (GList *destination,
 {
   GList   *list_parcours;
   
-  BUGPARAMCRIT (destination, "%p", destination, FALSE, )
+  BUGPARAMCRIT (destination, "%p", destination, FALSE)
   
   list_parcours = source;
   while (list_parcours != NULL)
@@ -354,15 +350,15 @@ _1990_combinaisons_genere_and (Projet        *p,
   GList  *list_parcours;
   Groupe *groupe_n_1;
   
-  BUGPARAMCRIT (p, "%p", p, FALSE, )
+  BUGPARAMCRIT (p, "%p", p, FALSE)
   INFO (p->niveaux_groupes,
         FALSE,
         (gettext ("Le projet ne possède pas de niveaux de groupes.\n"));)
-  BUGPARAMCRIT (niveau, "%p", niveau, FALSE, )
+  BUGPARAMCRIT (niveau, "%p", niveau, FALSE)
   INFO (niveau->groupes,
         FALSE,
         (gettext ("Le niveau %u est vide. Veuillez soit le remplir, soit le supprimer.\n"), g_list_index (p->niveaux_groupes, niveau));)
-  BUGPARAMCRIT (groupe, "%p", groupe, FALSE, )
+  BUGPARAMCRIT (groupe, "%p", groupe, FALSE)
   INFO (groupe->type_combinaison == GROUPE_COMBINAISON_AND,
         FALSE,
         (gettext ("Seuls les groupes possédant un type de combinaison AND peuvent appeler _1990_combinaisons_genere_and.\n"));)
@@ -557,15 +553,15 @@ _1990_combinaisons_genere_or (Projet        *p,
   GList       *list_parcours;
   unsigned int boucle, i;
   
-  BUGPARAMCRIT (p, "%p", p, FALSE, )
+  BUGPARAMCRIT (p, "%p", p, FALSE)
   INFO (p->niveaux_groupes,
         FALSE,
         (gettext ("Le projet ne possède pas de niveaux de groupes.\n"));)
-  BUGPARAMCRIT (niveau, "%p", niveau, FALSE, )
+  BUGPARAMCRIT (niveau, "%p", niveau, FALSE)
   INFO (niveau->groupes,
         FALSE,
         (gettext ("Le niveau %u est vide. Veuillez soit le remplir, soit le supprimer.\n"), g_list_index (p->niveaux_groupes, niveau));)
-  BUGPARAMCRIT (groupe, "%p", groupe, FALSE, )
+  BUGPARAMCRIT (groupe, "%p", groupe, FALSE)
   INFO (groupe->type_combinaison == GROUPE_COMBINAISON_OR,
         FALSE,
         (gettext ("Seuls les groupes possédant un type de combinaison OR peuvent appeler _1990_combinaisons_genere_or.\n"));)
@@ -770,7 +766,7 @@ _1990_combinaisons_init (Projet *p)
   GtkTreeIter Iter;
 #endif
   
-  BUGPARAM (p, "%p", p, FALSE, )
+  BUGPARAM (p, "%p", p, FALSE)
   
   p->combinaisons.elu_equ_methode = 1;
   p->combinaisons.elu_geo_str_methode = 1;
@@ -867,7 +863,7 @@ _1990_combinaisons_free (Projet *p)
  *     - p == NULL.
  */
 {
-  BUGPARAM (p, "%p", p, FALSE, )
+  BUGPARAM (p, "%p", p, FALSE)
   
   if (p->combinaisons.elu_equ != NULL)
   {
@@ -934,7 +930,7 @@ _1990_combinaisons_eluequ_equ_seul (Projet *p)
  *     - p == NULL.
  */
 {
-  BUGPARAM (p, "%p", p, FALSE, )
+  BUGPARAM (p, "%p", p, FALSE)
   
   p->combinaisons.elu_equ_methode = 0;
   
@@ -953,7 +949,7 @@ _1990_combinaisons_eluequ_equ_resist (Projet *p)
  *     - p == NULL.
  */
 {
-  BUGPARAM (p, "%p", p, FALSE, )
+  BUGPARAM (p, "%p", p, FALSE)
   
   p->combinaisons.elu_equ_methode = 1;
   
@@ -972,7 +968,7 @@ _1990_combinaisons_elustrgeo_1 (Projet *p)
  *     - p == NULL.
  */
 {
-  BUGPARAM (p, "%p", p, FALSE, )
+  BUGPARAM (p, "%p", p, FALSE)
   
   p->combinaisons.elu_geo_str_methode = 0;
   
@@ -991,7 +987,7 @@ _1990_combinaisons_elustrgeo_2 (Projet *p)
  *     - p == NULL.
  */
 {
-  BUGPARAM (p, "%p", p, FALSE, )
+  BUGPARAM (p, "%p", p, FALSE)
   
   p->combinaisons.elu_geo_str_methode = 1;
   
@@ -1010,7 +1006,7 @@ _1990_combinaisons_elustrgeo_3 (Projet *p)
  *     - p == NULL.
  */
 {
-  BUGPARAM (p, "%p", p, FALSE, )
+  BUGPARAM (p, "%p", p, FALSE)
   
   p->combinaisons.elu_geo_str_methode = 2;
   
@@ -1029,7 +1025,7 @@ _1990_combinaisons_elustrgeo_6_10ab (Projet *p)
  *     - p == NULL.
  */
 {
-  BUGPARAM (p, "%p", p, FALSE, )
+  BUGPARAM (p, "%p", p, FALSE)
   
   p->combinaisons.form_6_10 = 0;
   
@@ -1048,7 +1044,7 @@ _1990_combinaisons_elustrgeo_6_10 (Projet *p)
  *     - p == NULL.
  */
 {
-  BUGPARAM (p, "%p", p, FALSE, )
+  BUGPARAM (p, "%p", p, FALSE)
   
   p->combinaisons.form_6_10 = 1;
   
@@ -1067,7 +1063,7 @@ _1990_combinaisons_eluacc_frequente (Projet *p)
  *     - p == NULL.
  */
 {
-  BUGPARAM (p, "%p", p, FALSE, )
+  BUGPARAM (p, "%p", p, FALSE)
   
   p->combinaisons.elu_acc_psi = 0;
   
@@ -1086,7 +1082,7 @@ _1990_combinaisons_eluacc_quasi_permanente (Projet *p)
  *     - p == NULL.
  */
 {
-  BUGPARAM (p, "%p", p, FALSE, )
+  BUGPARAM (p, "%p", p, FALSE)
   
   p->combinaisons.elu_acc_psi = 1;
   
@@ -1114,7 +1110,7 @@ _1990_combinaisons_genere (Projet *p)
 {
   unsigned int i;
   
-  BUGPARAM (p, "%p", p, FALSE, )
+  BUGPARAM (p, "%p", p, FALSE)
   INFO (p->niveaux_groupes,
         FALSE,
         (gettext ("Le projet ne possède pas de niveaux de groupes.\n"));)
@@ -1122,7 +1118,7 @@ _1990_combinaisons_genere (Projet *p)
 #ifdef ENABLE_GTK
   g_object_ref (p->combinaisons.list_el_desc);
 #endif
-  BUG (_1990_combinaisons_free (p), FALSE, )
+  BUG (_1990_combinaisons_free (p), FALSE)
   
   // Pour chaque action
   //   Cette boucle permet de générer toutes les combinaisons en prenant en
@@ -1165,24 +1161,20 @@ _1990_combinaisons_genere (Projet *p)
       
       if (j != i)
       {
-        BUG (_1990_action_flags_action_predominante_change (action, 0),
-             FALSE,
-             )
+        BUG (_1990_action_flags_action_predominante_change (action, 0), FALSE)
       }
       else
       {
         categorie = _1990_action_categorie_bat (_1990_action_type_renvoie (
                                                                        action),
                                                 p->parametres.norme);
-        BUG (categorie != ACTION_INCONNUE, FALSE, )
+        BUG (categorie != ACTION_INCONNUE, FALSE)
         if (categorie == ACTION_VARIABLE)
           BUG (_1990_action_flags_action_predominante_change (action, 1),
-               FALSE,
-               )
+               FALSE)
         else
           BUG (_1990_action_flags_action_predominante_change (action, 0),
-               FALSE,
-               )
+               FALSE)
       }
       list_parcours = g_list_next (list_parcours);
     }
@@ -1209,17 +1201,17 @@ _1990_combinaisons_genere (Projet *p)
         {
           case GROUPE_COMBINAISON_OR :
           {
-            BUG (_1990_combinaisons_genere_or (p, niveau, groupe), FALSE, )
+            BUG (_1990_combinaisons_genere_or (p, niveau, groupe), FALSE)
             break;
           }
           case GROUPE_COMBINAISON_XOR :
           {
-            BUG (_1990_combinaisons_genere_xor (p, niveau, groupe), FALSE, )
+            BUG (_1990_combinaisons_genere_xor (p, niveau, groupe), FALSE)
             break;
           }
           case GROUPE_COMBINAISON_AND :
           {
-            BUG (_1990_combinaisons_genere_and (p, niveau, groupe), FALSE, )
+            BUG (_1990_combinaisons_genere_and (p, niveau, groupe), FALSE)
             break;
           }
           default :
@@ -1240,8 +1232,8 @@ _1990_combinaisons_genere (Projet *p)
     
     // Génération des pondérations (avec les coefficients de sécurité partiels)
     // à partir des combinaisons.
-    BUG (_1990_ponderations_genere (p), FALSE, )
-    BUG (_1990_groupe_affiche_tout (p), FALSE, )
+    BUG (_1990_ponderations_genere (p), FALSE)
+    BUG (_1990_groupe_affiche_tout (p), FALSE)
   }
   // FinPour
   
