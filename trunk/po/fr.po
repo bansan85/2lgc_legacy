@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2014-02-08 21:58+0100\n"
-"PO-Revision-Date: 2014-02-09 14:00+0100\n"
+"POT-Creation-Date: 2014-02-15 10:22+0100\n"
+"PO-Revision-Date: 2014-02-15 10:24+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -624,10 +624,6 @@ msgstr "\t\tGroupes du niveau %d contenus dans ce groupe : "
 msgid "\t\tCombinaisons :\n"
 msgstr "\t\tCombinaisons :\n"
 
-#, c-format
-msgid "Catégorie de durée %u inconnue.\n"
-msgstr "Catégorie de durée %u inconnue.\n"
-
 msgid "Structures provisoires"
 msgstr "Structures provisoires"
 
@@ -648,14 +644,6 @@ msgid ""
 "Structures monumentales de bâtiments, pont et autres ouvrages de génie civil"
 msgstr ""
 "Structures monumentales de bâtiments, pont et autres ouvrages de génie civil"
-
-#, c-format
-msgid "Catégorie de durée %d inconnue.\n"
-msgstr "Catégorie de durée %d inconnue.\n"
-
-#, c-format
-msgid "Norme %d inconnue.\n"
-msgstr "Norme %d inconnue.\n"
 
 msgid "Permanente"
 msgstr "Permanente"
@@ -796,6 +784,10 @@ msgstr ""
 #, c-format
 msgid "Flag %d inconnu.\n"
 msgstr "Flag %d inconnu.\n"
+
+#, c-format
+msgid "Norme %d inconnue.\n"
+msgstr "Norme %d inconnue.\n"
 
 msgid "Ajout d'un matériau béton"
 msgstr "Ajout d'un matériau béton"
@@ -2097,6 +2089,12 @@ msgstr "Le matériau n'est pas en acier.\n"
 
 msgid "Modification d'un matériau acier"
 msgstr "Modification d'un matériau acier"
+
+#~ msgid "Catégorie de durée %u inconnue.\n"
+#~ msgstr "Catégorie de durée %u inconnue.\n"
+
+#~ msgid "Catégorie de durée %d inconnue.\n"
+#~ msgstr "Catégorie de durée %d inconnue.\n"
 
 #~ msgid "Pays %d inconnu.\n"
 #~ msgstr "Pays %d inconnu.\n"
