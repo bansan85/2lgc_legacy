@@ -433,8 +433,8 @@ _1990_groupe_affiche_tout (Projet *p)
         {
           BUGCRIT (0,
                    FALSE,
-                   gettext ("Combinaison %d inconnue"),
-                            groupe->type_combinaison)
+                   (gettext ("Combinaison %d inconnue"),
+                             groupe->type_combinaison);)
           break;
         }
       }
