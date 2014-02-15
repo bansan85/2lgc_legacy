@@ -42,7 +42,7 @@ _1990_groupe_init (Projet *p)
  *     - p == NULL.
  */
 {
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGPARAM (p, "%p", p, FALSE)
   
   p->niveaux_groupes = NULL;
   
@@ -63,10 +63,12 @@ _1990_groupe_ajout_niveau (Projet *p)
  *     - erreur d'allocation mémoire.
  */
 {
-  Niveau_Groupe *niveau_nouveau = malloc (sizeof (Niveau_Groupe));
+  Niveau_Groupe *niveau_nouveau;
   
-  BUGMSG (niveau_nouveau, FALSE, gettext ("Erreur d'allocation mémoire.\n"))
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGPARAM (p, "%p", p, FALSE)
+  BUGCRIT (niveau_nouveau = malloc (sizeof (Niveau_Groupe)),
+           FALSE,
+           (gettext ("Erreur d'allocation mémoire.\n"));)
   
   niveau_nouveau->groupes = NULL;
   
@@ -113,17 +115,18 @@ _1990_groupe_ajout_groupe (Projet                 *p,
  *     - erreur d'allocation mémoire,
  */
 {
-  Groupe *groupe_nouveau = malloc(sizeof(Groupe));
+  Groupe *groupe_nouveau;
   
-  BUGMSG (p, NULL, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (niveau_groupe,
-          NULL,
-          gettext ("Paramètre %s incorrect.\n"), "niveau_groupe")
-  BUGMSG (groupe_nouveau, NULL, gettext ("Erreur d'allocation mémoire.\n"))
+  BUGPARAM (p, "%p", p, NULL)
+  BUGPARAM (niveau_groupe, "%p", niveau_groupe, NULL)
+  BUGCRIT (groupe_nouveau = malloc (sizeof (Groupe)),
+           NULL,
+           (gettext ("Erreur d'allocation mémoire.\n"));)
   
-  BUGMSG (groupe_nouveau->nom = g_strdup_printf ("%s", nom),
-          NULL,
-          gettext ("Erreur d'allocation mémoire.\n"))
+  BUGCRIT (groupe_nouveau->nom = g_strdup_printf ("%s", nom),
+           NULL,
+           (gettext ("Erreur d'allocation mémoire.\n"));
+             free (groupe_nouveau);)
   groupe_nouveau->type_combinaison = type_combinaison;
 #ifdef ENABLE_GTK
   groupe_nouveau->Iter_expand = 1;
@@ -196,17 +199,13 @@ _1990_groupe_ajout_element (Projet        *p,
  *     - erreur d'allocation mémoire.
  */
 {
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (p->niveaux_groupes,
-          FALSE,
-          gettext ("Le projet ne possède pas de niveaux de groupes permettant de regrouper plusieurs groupes d'actions.\n"))
-  BUGMSG (niveau_groupe,
-          FALSE,
-          gettext ("Paramètre %s incorrect.\n"), "niveau_groupe")
-  BUGMSG (groupe, FALSE, gettext ("Paramètre %s incorrect.\n"), "groupe")
-  BUGMSG (element_add,
-          FALSE,
-          gettext ("Paramètre %s incorrect.\n"), "element_add")
+  BUGPARAM (p, "%p", p, FALSE)
+  INFO (p->niveaux_groupes,
+        FALSE,
+        (gettext ("Le projet ne possède pas de niveaux de groupes permettant de regrouper plusieurs groupes d'actions.\n"));)
+  BUGPARAM (niveau_groupe, "%p", niveau_groupe, FALSE)
+  BUGPARAM (groupe, "%p", groupe, FALSE)
+  BUGPARAM (element_add, "%p", element_add, FALSE)
   
   // On ajoute le nouvel élément au groupe.
   if (groupe->elements == NULL)
@@ -221,6 +220,7 @@ _1990_groupe_ajout_element (Projet        *p,
       if (list_parcours->data == element_add)
       {
         printf (gettext ("L'élément est déjà présent dans le groupe.\n"));
+        
         return FALSE;
       }
       
@@ -237,10 +237,10 @@ _1990_groupe_ajout_element (Projet        *p,
                                                  UI_GRO.spin_button_niveau)) ==
          g_list_index (p->niveaux_groupes, niveau_groupe)))
   {
-    GtkTreeIter       iter;
-    void             *data;
-    GtkTreePath      *path; // Pour développer une ligne du TreeView
-    Groupe           *groupe2 = element_add;
+    GtkTreeIter  iter;
+    void        *data;
+    GtkTreePath *path; // Pour développer une ligne du TreeView
+    Groupe      *groupe2 = element_add;
     
     // On supprime l'élément à ajouter dans le groupe de la liste des éléments
     // disponibles.
@@ -300,7 +300,7 @@ _1990_groupe_modifie_combinaison (Groupe                 *groupe,
  *     - type_combinaison inconnu.
  */
 {
-  BUGMSG (groupe, FALSE, gettext ("Paramètre %s incorrect.\n"), "groupe")
+  BUGPARAM (groupe, "%p", groupe, FALSE)
   
   switch (type_combinaison)
   {
@@ -313,7 +313,7 @@ _1990_groupe_modifie_combinaison (Groupe                 *groupe,
     }
     default :
     {
-      BUGMSG (0, FALSE, gettext ("Le type de combinaison %d est inconnu.\n"), type_combinaison)
+      BUGPARAM (type_combinaison, "%d", 0, FALSE)
       break;
     }
   }
@@ -340,16 +340,19 @@ _1990_groupe_modifie_nom (Niveau_Groupe *groupe_niveau,
  *     - erreur d'allocation mémoire.
  */
 {
-  BUGMSG (groupe_niveau,
-          FALSE,
-          gettext ("Paramètre %s incorrect.\n"), "groupe_niveau")
-  BUGMSG (groupe, FALSE, gettext ("Paramètre %s incorrect.\n"), "groupe")
-  BUGMSG (nom, FALSE, gettext ("Paramètre %s incorrect.\n"), "nom")
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "p")
-  free(groupe->nom);
-  BUGMSG (groupe->nom = g_strdup_printf ("%s", nom),
-          FALSE,
-          gettext ("Erreur d'allocation mémoire.\n"))
+  char *tmp;
+  
+  BUGPARAM (groupe_niveau, "%p", groupe_niveau, FALSE, )
+  BUGPARAM (groupe, "%p", groupe, FALSE)
+  BUGPARAM (nom, "%p", groupe, FALSE)
+  BUGPARAM (p, "%p", p, FALSE)
+  
+  tmp = groupe->nom;
+  free (groupe->nom);
+  BUGCRIT (groupe->nom = g_strdup_printf ("%s", nom),
+           FALSE,
+           (gettext ("Erreur d'allocation mémoire.\n"));
+             groupe->nom = tmp;)
   
 #ifdef ENABLE_GTK
   if (UI_GRO.builder != NULL)
@@ -393,7 +396,7 @@ _1990_groupe_affiche_tout (Projet *p)
   GList       *list_parcours;
   unsigned int nniveau = 0;
   
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGPARAM (p, "%p", p, FALSE)
   
   list_parcours = p->niveaux_groupes;
   while (list_parcours != NULL)
@@ -428,7 +431,10 @@ _1990_groupe_affiche_tout (Projet *p)
         }
         default :
         {
-          BUGMSG (0, FALSE, gettext ("Combinaison %d inconnue"), groupe->type_combinaison)
+          BUGCRIT (0,
+                   FALSE,
+                   gettext ("Combinaison %d inconnue"),
+                            groupe->type_combinaison)
           break;
         }
       }
@@ -473,7 +479,9 @@ _1990_groupe_affiche_tout (Projet *p)
               Combinaison *comb_element = list_parcours4->data;
               Action      *action = (Action *) comb_element->action;
               
-              printf("'%s'(%d) ", _1990_action_nom_renvoie (action), comb_element->flags);
+              printf("'%s'(%d) ",
+                     _1990_action_nom_renvoie (action),
+                     comb_element->flags);
               
               list_parcours4 = g_list_next (list_parcours4);
             }
@@ -518,12 +526,10 @@ _1990_groupe_retire_element (Projet        *p,
   Groupe  *groupe2 = element;
 #endif
   
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (niveau_groupe,
-          FALSE,
-          gettext ("Paramètre %s incorrect.\n"), "niveau_groupe")
-  BUGMSG (groupe, FALSE, gettext ("Paramètre %s incorrect.\n"), "groupe")
-  BUGMSG (element, FALSE, gettext ("Paramètre %s incorrect.\n"), "element")
+  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (niveau_groupe, "%p", niveau_groupe, FALSE)
+  BUGPARAM (groupe, "%p", groupe, FALSE)
+  BUGPARAM (element, "%p", element, FALSE)
   
 #ifdef ENABLE_GTK
   // On sélectionne dans la liste des groupes la ligne suivante. Et si elle
@@ -581,7 +587,7 @@ _1990_groupe_free_niveau (Projet        *p,
 {
   GList *list_parcours;
   
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGPARAM (p, "%p", p, FALSE)
   
   list_parcours = g_list_find (p->niveaux_groupes, niveau_groupe);
   do
@@ -672,7 +678,7 @@ _1990_groupe_free_combinaisons (GList **liste)
  *     - groupe == NULL,
  */
 {
-  BUGMSG (liste, FALSE, gettext ("Paramètre %s incorrect.\n"), "liste")
+  BUGPARAM (liste, "%p", liste, FALSE)
   
   // On libère toutes les combinaisons temporaires.
   while (*liste != NULL)
@@ -706,7 +712,7 @@ _1990_groupe_free_groupe (Projet        *p,
 {
   GList *list_parcours;
   
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGPARAM (p, "%p", p, FALSE)
   
 #ifdef ENABLE_GTK
   if ((UI_GRO.builder != NULL) &&
@@ -815,7 +821,7 @@ _1990_groupe_free (Projet *p)
  *     - #_1990_groupe_free_niveau.
  */
 {
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGPARAM (p, "%p", p, FALSE)
   
   if (p->niveaux_groupes != NULL)
     BUG (_1990_groupe_free_niveau (p, p->niveaux_groupes->data, TRUE), FALSE)
