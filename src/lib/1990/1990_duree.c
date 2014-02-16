@@ -54,7 +54,7 @@ _1990_duree_norme_eu (unsigned int type)
     case 2 : return 30;
     case 3 : return 50;
     case 4 : return 100;
-    default : { BUGPARAM (type, "%u", 0, 0) break; }
+    default : { FAILPARAM (type, "%u", 0) break; }
   }
 }
 
@@ -86,7 +86,7 @@ _1990_duree_norme_fr (unsigned int type)
     case 2 : return 25;
     case 3 : return 50;
     case 4 : return 100;
-    default : { BUGPARAM (type, "%u", 0, 0) break; }
+    default : { FAILPARAM (type, "%u", 0) break; }
   }
 }
 
@@ -120,7 +120,7 @@ _1990_duree_norme_txt_eu (unsigned int type)
     case 2 : return gettext ("Structures agricoles et similaires");
     case 3 : return gettext ("Structures de bâtiments et autres structures courantes");
     case 4 : return gettext ("Structures monumentales de bâtiments, pont et autres ouvrages de génie civil");
-    default : { BUGPARAM (type, "%u", 0, NULL) break; }
+    default : { FAILPARAM (type, "%u", NULL) break; }
   }
 }
 
@@ -154,7 +154,7 @@ _1990_duree_norme_txt_fr (unsigned int type)
     case 2 : return gettext ("Structures agricoles et similaires");
     case 3 : return gettext ("Structures de bâtiments et autres structures courantes");
     case 4 : return gettext ("Structures monumentales de bâtiments, pont et autres ouvrages de génie civil");
-    default : { BUGPARAM (type, "%u", 0, NULL) break; }
+    default : { FAILPARAM (type, "%u", NULL) break; }
   }
 }
 
@@ -177,7 +177,7 @@ _1990_duree_norme (unsigned int type,
   {
     case NORME_EU : return _1990_duree_norme_eu (type);
     case NORME_FR : return _1990_duree_norme_fr (type);
-    default : { BUGPARAM (norme, "%d", 0, 0) break; }
+    default : { FAILPARAM (norme, "%d", 0) break; }
   }
 }
 
@@ -201,6 +201,6 @@ _1990_duree_norme_txt (unsigned int type,
   {
     case NORME_EU : return _1990_duree_norme_txt_eu (type);
     case NORME_FR : return _1990_duree_norme_txt_fr (type);
-    default : { BUGPARAM (norme, "%d", 0, NULL) break; }
+    default : { FAILPARAM (norme, "%d", NULL) break; }
   }
 }

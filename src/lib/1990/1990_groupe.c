@@ -313,7 +313,7 @@ _1990_groupe_modifie_combinaison (Groupe                 *groupe,
     }
     default :
     {
-      BUGPARAM (type_combinaison, "%d", 0, FALSE)
+      FAILPARAM (type_combinaison, "%d", FALSE)
       break;
     }
   }
@@ -431,10 +431,9 @@ _1990_groupe_affiche_tout (Projet *p)
         }
         default :
         {
-          BUGCRIT (0,
-                   FALSE,
-                   (gettext ("Combinaison %d inconnue"),
-                             groupe->type_combinaison);)
+          FAILCRIT (FALSE,
+                    (gettext ("Combinaison %d inconnue"),
+                              groupe->type_combinaison);)
           break;
         }
       }

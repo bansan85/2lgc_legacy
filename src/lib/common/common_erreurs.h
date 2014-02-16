@@ -22,6 +22,25 @@
 #include "config.h"
 #include <stdio.h>
 
+#define FAILINFO(Y, ...) { \
+  printf (gettext ("fichier %s, fonction %s, ligne %d, texte : "), \
+          __FILE__, \
+          __FUNCTION__, \
+          __LINE__); \
+  printf __VA_ARGS__ \
+  return Y; \
+}
+
+#define FAILPARAM(PARAM, TYPE, Y, ...) { \
+  printf ("Paramètre incorrect : " #PARAM " = " TYPE ". ", PARAM); \
+  FAILINFO (Y, (""); __VA_ARGS__) \
+}
+
+#define FAILCRIT(Y, ...) { \
+  printf (gettext ("Erreur critique. ")); \
+  FAILINFO (Y, __VA_ARGS__) \
+}
+
 #define BUG(X, Y, ...) {if (!(X)) \
   { \
     printf (gettext ("fichier %s, fonction %s, ligne %d, test : %s\n"), \

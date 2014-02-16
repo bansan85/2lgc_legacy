@@ -1216,10 +1216,9 @@ _1990_combinaisons_genere (Projet *p)
           }
           default :
           {
-            BUGCRIT (0,
-                     FALSE,
-                     (gettext ("Le type de combinaison %d est inconnu.\n"),
-                               groupe->type_combinaison);)
+            FAILCRIT (FALSE,
+                      (gettext ("Le type de combinaison %d est inconnu.\n"),
+                                groupe->type_combinaison);)
             break;
           }
         }
