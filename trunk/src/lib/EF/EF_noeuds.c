@@ -182,13 +182,6 @@ EF_Noeud *EF_noeuds_ajout_noeud_libre (Projet   *p,
   BUG (m3d_noeud (&p->ui.m3d, noeud_nouveau), NULL)
   if (UI_NOE.builder != NULL)
   {
-    char *tmp = NULL;
-    
-    if (data->relatif != NULL)
-      BUGMSG (tmp = g_strdup_printf ("%d", data->relatif->numero),
-              NULL,
-              gettext ("Erreur d'allocation mémoire.\n"))
-    
     gtk_tree_store_append (UI_NOE.tree_store_libre,
                            &noeud_nouveau->Iter,
                            NULL);
@@ -196,8 +189,6 @@ EF_Noeud *EF_noeuds_ajout_noeud_libre (Projet   *p,
                         &noeud_nouveau->Iter,
                         0, noeud_nouveau,
                         -1);
-    
-    free (tmp);
   }
   BUG (m3d_rafraichit (p), FALSE);
 #endif

@@ -678,7 +678,7 @@ EF_gtk_noeud_edit_noeud_relatif (GtkCellRendererText *cell,
   // On vérifie si le texte contient bien un nombre flottant
   if (strcmp (new_text, "") == 0)
     BUG (EF_noeuds_change_noeud_relatif (p, noeud, NULL), )
-  else if (sscanf (new_text, "%d%s", &conversion, fake) == 1)
+  else if (sscanf (new_text, "%u%s", &conversion, fake) == 1)
   {
     EF_Noeud *noeud2;
     

@@ -2163,10 +2163,7 @@ void EF_gtk_resultats_cas_change(GtkWidget *widget, Projet *p)
     switch (gtk_combo_box_get_active (UI_RES.combobox_cas))
     {
       case -1 :
-      {
         return;
-        break;
-      }
       case 0 :
       {
         comb = p->combinaisons.elu_equ;

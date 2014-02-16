@@ -265,7 +265,6 @@ _1990_ponderations_genere_un (Projet *p,
         {
           Combinaison *combinaison_element;
           unsigned int categorie;
-          double       pond;
           
           combinaison_element = list_parcours2->data;
           categorie = _1990_action_categorie_bat (_1990_action_type_renvoie (
@@ -279,6 +278,7 @@ _1990_ponderations_genere_un (Projet *p,
             suivant = 1;
           else
           {
+            double pond;
           // On affecte le coefficient min/max à la combinaison pour obtenir la
           // pondération
             if ((j & (1 << categorie)) != 0)
@@ -1718,8 +1718,8 @@ _1990_ponderations_genere (Projet *p)
   
   switch (p->parametres.norme)
   {
-    case NORME_EU : { return _1990_ponderations_genere_eu (p); break; }
-    case NORME_FR : { return _1990_ponderations_genere_fr (p); break; }
+    case NORME_EU : return _1990_ponderations_genere_eu (p);
+    case NORME_FR : return _1990_ponderations_genere_fr (p);
     default : { BUGMSG (0, FALSE, gettext ("Norme %d inconnue.\n"), p->parametres.norme) break; } }
 }
 
@@ -1735,7 +1735,7 @@ _1990_ponderations_description (GList *ponderation)
  *     - en cas d'erreur d'allocation mémoire.
  */
 {
-  char *retour = NULL, *tmp;
+  char *retour = NULL;
   
   BUGMSG (retour = malloc (sizeof (char)),
           NULL,
@@ -1749,8 +1749,8 @@ _1990_ponderations_description (GList *ponderation)
     {
       char         psi[30];
       Ponderation *ponderation_element = list_parcours->data;
+      char        *tmp = retour;
       
-      tmp = retour;
       if (ponderation_element->psi == 0)
         conv_f_c (_1990_action_psi_renvoie_0 (ponderation_element->action),
                   psi,

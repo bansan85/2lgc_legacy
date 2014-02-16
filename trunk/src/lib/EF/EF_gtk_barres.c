@@ -241,7 +241,6 @@ EF_gtk_barres_edit_relachement (GtkCellRendererText *cell,
   GtkTreeModel   *model;
   GtkTreeIter     iter;
   EF_Barre       *barre = NULL;
-  EF_Relachement *relachement;
   
   BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
   BUGMSG (UI_BAR.builder,
@@ -262,6 +261,8 @@ EF_gtk_barres_edit_relachement (GtkCellRendererText *cell,
     BUG (_1992_1_1_barres_change_relachement (barre, NULL, p), )
   else
   {
+    EF_Relachement *relachement;
+    
     BUG (relachement = EF_relachement_cherche_nom (p, new_text, TRUE), )
     BUG (_1992_1_1_barres_change_relachement (barre, relachement, p), )
   }
@@ -311,7 +312,7 @@ EF_gtk_barres_edit_noeud (GtkCellRendererText *cell,
   gtk_tree_model_get (model, &iter, 0, &barre, -1);
   
   // On vérifie si le texte contient bien un nombre entier
-  if (sscanf (new_text, "%d%s", &conversion, fake) == 1)
+  if (sscanf (new_text, "%u%s", &conversion, fake) == 1)
   {
     EF_Noeud *noeud;
     

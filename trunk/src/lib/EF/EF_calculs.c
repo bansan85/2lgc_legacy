@@ -596,8 +596,7 @@ EF_calculs_resoud_charge (Projet *p,
   cholmod_triplet *t_for_part, *t_for_comp;
   cholmod_triplet *t_eff_loc_f, *t_eff_glo_i;
   cholmod_triplet *t_eff_loc_i, *t_eff_glo_f;
-  cholmod_sparse  *s_eff_loc_f, *s_eff_glo_i;
-  cholmod_sparse  *s_eff_loc_i, *s_eff_glo_f;
+  cholmod_sparse  *s_eff_glo_i;
   int             *ai, *aj;
   double          *ax;
   int             *ai2, *aj2;
@@ -667,7 +666,9 @@ EF_calculs_resoud_charge (Projet *p,
     list_parcours = _1990_action_charges_renvoie (action);
     do
     {
-      Charge *charge = list_parcours->data;
+      Charge         *charge = list_parcours->data;
+      cholmod_sparse *s_eff_loc_i, *s_eff_glo_f;
+      cholmod_sparse *s_eff_loc_f;
       
       switch (charge->type)
       {
@@ -713,30 +714,29 @@ EF_calculs_resoud_charge (Projet *p,
         {
           Charge_Barre_Ponctuelle *charge_d = charge->data;
           
-          double     l;
-          double     a, b; // Position de la charge par rapport au début et à
-                     // la fin de l'élément discrétisé
-          double     debut_barre, fin_barre; // Début et fin de la barre
-                     // discrétisée par rapport à la barre complète
-          double     phiAy, phiBy, phiAz, phiBz; // Rotation sur appui lorsque
-                     // la barre est isostatique
-          double     MAx, MBx, MAy, MBy, MAz, MBz; // Moment opposé à la
-                     // réaction d'appui
-          double     FAx, FBx; // Effort de compression au début et fin de
-                     // l'élément discrétisé
-          double     FAy_i, FAy_h, FBy_i, FBy_h; // Force opposée à la réaction
-                     // d'appui
-          double     FAz_i, FAz_h, FBz_i, FBz_h;
-          EF_Noeud  *noeud_debut, *noeud_fin;
+          double       l;
+          double       phiAy, phiBy, phiAz, phiBz; // Rotation sur appui
+                       // lorsque la barre est isostatique
+          double       MAx, MBx, MAy, MBy, MAz, MBz; // Moment opposé à la
+                       // réaction d'appui
+          EF_Noeud    *noeud_debut, *noeud_fin;
           unsigned int pos; // numéro de l'élément dans la discrétisation
-          
-          GList *list_parcours2 = charge_d->barres;
+          GList       *list_parcours2 = charge_d->barres;
           
           while (list_parcours2 != NULL)
           {
-            EF_Barre    *element = list_parcours2->data;
-            unsigned int num;
-            unsigned int num_d, num_f;
+            double          a, b; // Position de la charge par rapport au début
+                            // et à la fin de l'élément discrétisé
+            double          debut_barre, fin_barre; // Début et fin de la barre
+                            // discrétisée par rapport à la barre complète
+            double          FAx, FBx; // Effort de compression au début et fin
+                            // de l'élément discrétisé
+            double          FAy_i, FAy_h, FBy_i, FBy_h; // Force opposée à la
+                            // réaction d'appui
+            double          FAz_i, FAz_h, FBz_i, FBz_h;
+            EF_Barre       *element = list_parcours2->data;
+            unsigned int    num;
+            unsigned int    num_d, num_f;
           
             num = g_list_index (p->modele.barres, element);
       //   Convertion des efforts globaux en efforts locaux si nécessaire :
@@ -1265,7 +1265,7 @@ EF_calculs_resoud_charge (Projet *p,
   //   Sinon Si la charge est une charge répartie uniforme sur la barre Alors
         case CHARGE_BARRE_REPARTIE_UNIFORME :
         {
-          double       xx, yy, zz, l, ll;
+          double       xx, yy, zz, l;
           unsigned int j_d, j_f; // Numéro de l'élément dans la discrétisation
           
           Charge_Barre_Repartie_Uniforme *charge_d = charge->data;
@@ -1273,6 +1273,7 @@ EF_calculs_resoud_charge (Projet *p,
           
           while (list_parcours2 != NULL)
           {
+            double       ll;
             EF_Barre    *element = list_parcours2->data;
             unsigned int num = g_list_index (p->modele.barres, element);
             
