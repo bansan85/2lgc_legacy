@@ -80,7 +80,7 @@ _1990_coef_psi0_bat_eu (unsigned int type)
     case 14 : return 0.6;
     case 15 : return 0.0;
     case 16 : return 0.0;
-    default : { BUGPARAM (type, "%u", 0, -1.) break; }
+    default : { FAILPARAM (type, "%u", NAN) break; }
   }
 }
 
@@ -138,7 +138,7 @@ _1990_coef_psi1_bat_eu (unsigned int type)
     case 14 : return 0.5;
     case 15 : return 0.0;
     case 16 : return 0.0;
-    default : { BUGPARAM (type, "%u", 0, -1.) break; }
+    default : { FAILPARAM (type, "%u", NAN) break; }
   }
 }
 
@@ -196,7 +196,7 @@ _1990_coef_psi2_bat_eu (unsigned int type)
     case 14 : return 0.0;
     case 15 : return 0.0;
     case 16 : return 0.0;
-    default : { BUGPARAM (type, "%u", 0, -1.) break; }
+    default : { FAILPARAM (type, "%u", NAN) break; }
   }
 }
 
@@ -268,7 +268,7 @@ _1990_coef_psi0_bat_fr (unsigned int type)
     case 19 : return 0.0;
     case 20 : return 0.0;
     case 21 : return 0.0;
-    default : { BUGPARAM (type, "%u", 0, -1.) break; }
+    default : { FAILPARAM (type, "%u", NAN) break; }
   }
 }
 
@@ -340,7 +340,7 @@ _1990_coef_psi1_bat_fr (unsigned int type)
     case 19 : return 0.0;
     case 20 : return 0.0;
     case 21 : return 0.0;
-    default : { BUGPARAM (type, "%u", 0, -1.) break; }
+    default : { FAILPARAM (type, "%u", NAN) break; }
   }
 }
 
@@ -412,7 +412,7 @@ _1990_coef_psi2_bat_fr (unsigned int type)
     case 19 : return 0.0;
     case 20 : return 0.0;
     case 21 : return 0.0;
-    default : { BUGPARAM (type, "%u", 0, -1.) break; }
+    default : { FAILPARAM (type, "%u", NAN) break; }
   }
 }
 
@@ -435,7 +435,7 @@ _1990_coef_psi0_bat (unsigned int type,
   {
     case NORME_EU : return _1990_coef_psi0_bat_eu (type);
     case NORME_FR : return _1990_coef_psi0_bat_fr (type);
-    default : { BUGPARAM (norme, "%d", 0, -1.) break; }
+    default : { FAILPARAM (norme, "%d", NAN) break; }
   }
 }
 
@@ -458,7 +458,7 @@ _1990_coef_psi1_bat (unsigned int type,
   {
     case NORME_EU : return _1990_coef_psi1_bat_eu (type);
     case NORME_FR : return _1990_coef_psi1_bat_fr (type);
-    default : { BUGPARAM (norme, "%d", 0, -1.) break; }
+    default : { FAILPARAM (norme, "%d", NAN) break; }
   }
 }
 
@@ -481,6 +481,6 @@ _1990_coef_psi2_bat (unsigned int type,
   {
     case NORME_EU : return _1990_coef_psi2_bat_eu (type);
     case NORME_FR : return _1990_coef_psi2_bat_fr (type);
-    default : { BUGPARAM (norme, "%d", 0, -1.) break; }
+    default : { FAILPARAM (norme, "%d", NAN) break; }
   }
 }

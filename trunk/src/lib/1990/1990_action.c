@@ -94,7 +94,7 @@ _1990_action_bat_txt_type_eu (unsigned int type)
     case 14 : return gettext ("Température (hors incendie)");
     case 15 : return gettext ("Accidentelle");
     case 16 : return gettext ("Sismique");
-    default : { BUGPARAM (type, "%u", 0, NULL) break; }
+    default : { FAILPARAM (type, "%u", NULL) break; }
   }
 }
 
@@ -166,7 +166,7 @@ _1990_action_bat_txt_type_fr (unsigned int type)
     case 19 : return gettext ("Accidentelle");
     case 20 : return gettext ("Sismique");
     case 21 : return gettext ("Eaux souterraines");
-    default : { BUGPARAM (type, "%u", 0, NULL) break; }
+    default : { FAILPARAM (type, "%u", NULL) break; }
   }
 }
 
@@ -190,7 +190,7 @@ _1990_action_bat_txt_type (unsigned int type,
   {
     case NORME_EU : return _1990_action_bat_txt_type_eu (type);
     case NORME_FR : return _1990_action_bat_txt_type_fr (type);
-    default : { BUGPARAM (norme, "%d", 0, NULL) break; }
+    default : { FAILPARAM (norme, "%d", NULL) break; }
   }
 }
 
@@ -225,7 +225,7 @@ _1990_action_categorie_bat_eu (unsigned int type)
   else if (type == 16)
     return ACTION_SISMIQUE;
   else
-    BUGPARAM (type, "%u", 0, ACTION_INCONNUE)
+    FAILPARAM (type, "%u", ACTION_INCONNUE)
 }
 
 
@@ -262,7 +262,7 @@ _1990_action_categorie_bat_fr (unsigned int type)
   else if (type == 21)
     return ACTION_EAUX_SOUTERRAINES;
   else
-    BUGPARAM (type, "%u", 0, ACTION_INCONNUE)
+    FAILPARAM (type, "%u", ACTION_INCONNUE)
 }
 
 
@@ -285,7 +285,7 @@ _1990_action_categorie_bat (unsigned int type,
   {
     case NORME_EU : return _1990_action_categorie_bat_eu (type);
     case NORME_FR : return _1990_action_categorie_bat_fr (type);
-    default : { BUGPARAM (norme, "%d", 0, ACTION_INCONNUE) break; }
+    default : { FAILPARAM (norme, "%d", ACTION_INCONNUE) break; }
   }
 }
 
@@ -306,7 +306,7 @@ _1990_action_num_bat_txt (Norme norme)
   {
     case NORME_EU : return 17;
     case NORME_FR : return 22;
-    default : { BUGPARAM (norme, "%d", 0, 0) break; }
+    default : { FAILPARAM (norme, "%d", 0) break; }
   }
 }
 
@@ -1659,9 +1659,9 @@ _1990_action_free_1 (Projet *p,
           }
           default :
           {
-            BUGCRIT (0,
-                     FALSE,
-                     (gettext ("Type de charge %d inconnu.\n"), charge->type);)
+            FAILCRIT (FALSE,
+                      (gettext ("Type de charge %d inconnu.\n"),
+                                charge->type);)
             break;
           }
         }
@@ -1813,9 +1813,8 @@ _1990_action_free (Projet *p)
         }
         default :
         {
-          BUGCRIT (0,
-                   FALSE,
-                   (gettext ("Type de charge %d inconnu.\n"), charge->type);)
+          FAILCRIT (FALSE,
+                    (gettext ("Type de charge %d inconnu.\n"), charge->type);)
           break;
         }
       }
