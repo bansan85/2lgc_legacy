@@ -91,8 +91,8 @@ common_math_arrondi_sparse (cholmod_sparse *sparse)
 
 void
 common_math_double_to_char (double nombre,
-                                 char  *dest,
-                                 int    decimales)
+                            char  *dest,
+                            int    decimales)
 /**
  * \brief Converti un nombre double en char *.
  *        Dest doit déjà être alloué. 30 caractères devrait être suffisant.
@@ -138,8 +138,8 @@ common_math_double_to_char (double nombre,
 
 void
 conv_f_c (Flottant nombre,
-               char    *dest,
-               int      decimales)
+          char    *dest,
+          int      decimales)
 /**
  * \brief Converti un nombre double en char *.
  *        Dest doit déjà être alloué. 30 caractères devrait être suffisant.
@@ -222,10 +222,7 @@ m_g (Flottant f)
   {
     case FLOTTANT_ORDINATEUR :
     case FLOTTANT_UTILISATEUR :
-    {
       return f.d;
-      break;
-    }
     default :
     {
       BUGMSG(NULL, NAN, gettext("Type de nombre est inconnu.\n"))
@@ -237,7 +234,7 @@ m_g (Flottant f)
 
 Flottant
 m_f (double        f,
-              Type_Flottant type)
+     Type_Flottant type)
 /**
  * \brief Crée un nombre flottant.
  * \param f : nombre flottant,
@@ -255,7 +252,6 @@ m_f (double        f,
     {
       retour.d = f;
       return retour;
-      break;
     }
     default :
     {
