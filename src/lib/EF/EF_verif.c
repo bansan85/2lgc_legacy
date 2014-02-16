@@ -239,7 +239,7 @@ EF_verif_EF (Projet *p,
     while ((g_list_length (noeuds_tout) != g_list_length (p->modele.noeuds)) ||
            (g_list_length (barres_tout) != g_list_length (p->modele.barres)))
     {
-      char *noeuds_tmp, *barres_tmp, *tmp2;
+      char *tmp2;
       
       noeuds_tout = g_list_concat (noeuds_tout, noeuds);
       barres_tout = g_list_concat (barres_tout, barres);
@@ -261,7 +261,8 @@ EF_verif_EF (Projet *p,
       
       if (noeuds != NULL)
       {
-        noeuds_tmp = common_selection_noeuds_en_texte (noeuds);
+        char *noeuds_tmp = common_selection_noeuds_en_texte (noeuds);
+        
         tmp2 = ligne->commentaire;
         BUGMSG (ligne->commentaire = g_strdup_printf ("%s %s : %s%s",
                                        tmp2,
@@ -275,7 +276,8 @@ EF_verif_EF (Projet *p,
       }
       if (barres != NULL)
       {
-        barres_tmp = common_selection_barres_en_texte (barres);
+        char *barres_tmp = common_selection_barres_en_texte (barres);
+        
         tmp2 = ligne->commentaire;
         BUGMSG (ligne->commentaire = g_strdup_printf ("%s %s : %s",
                                        tmp2,

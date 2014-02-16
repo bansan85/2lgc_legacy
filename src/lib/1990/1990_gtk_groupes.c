@@ -454,7 +454,6 @@ _1990_gtk_button_groupe_ajout_clicked (GtkWidget *button,
  */
 {
   Niveau_Groupe *niveau_groupe;
-  Groupe        *groupe;
   
   BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
   BUGMSG (UI_GRO.builder,
@@ -465,10 +464,10 @@ _1990_gtk_button_groupe_ajout_clicked (GtkWidget *button,
                                GTK_COMMON_SPINBUTTON_AS_UINT (GTK_SPIN_BUTTON (
                                                   UI_GRO.spin_button_niveau))),
       )
-  BUG (groupe = _1990_groupe_ajout_groupe (p,
-                                           niveau_groupe,
-                                           GROUPE_COMBINAISON_AND,
-                                           gettext ("Sans nom")), )
+  BUG (_1990_groupe_ajout_groupe (p,
+                                  niveau_groupe,
+                                  GROUPE_COMBINAISON_AND,
+                                  gettext ("Sans nom")), )
   
   return;
 }
@@ -814,7 +813,6 @@ _1990_gtk_tree_view_etat_drag (GtkWidget      *widget,
     // Déplace l'élément sélectionné dans un autre groupe.
     else
     {
-      Groupe        *groupe_source;
       GtkTreeModel  *model;
       Niveau_Groupe *niveau_groupe;
       
@@ -826,7 +824,8 @@ _1990_gtk_tree_view_etat_drag (GtkWidget      *widget,
                                        &iter);
       if (gtk_tree_model_iter_parent (list_store, &iter_tmp, &iter))
       {
-        groupe_source = _1990_gtk_get_groupe (model, &iter);
+        Groupe *groupe_source = _1990_gtk_get_groupe (model, &iter);
+        
         if (groupe_source != groupe_dest)
         {
           Groupe *groupe;

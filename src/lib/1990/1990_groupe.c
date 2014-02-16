@@ -479,7 +479,7 @@ _1990_groupe_affiche_tout (Projet *p)
               Combinaison *comb_element = list_parcours4->data;
               Action      *action = (Action *) comb_element->action;
               
-              printf("'%s'(%d) ",
+              printf("'%s'(%u) ",
                      _1990_action_nom_renvoie (action),
                      comb_element->flags);
               

@@ -577,8 +577,6 @@ EF_gtk_relachements_ajouter (GtkButton *button,
  *     - interface graphique non initialisée.
  */
 {
-  EF_Relachement *relachement;
-  
   BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
   BUGMSG (UI_REL.builder,
           ,
@@ -586,20 +584,20 @@ EF_gtk_relachements_ajouter (GtkButton *button,
                    "Relâchement")
   
   if (EF_relachement_cherche_nom (p, gettext ("Sans nom"), FALSE) == NULL)
-    BUG (relachement = EF_relachement_ajout (p,
-                                             gettext ("Sans nom"),
-                                             EF_RELACHEMENT_BLOQUE,
-                                             NULL,
-                                             EF_RELACHEMENT_BLOQUE,
-                                             NULL,
-                                             EF_RELACHEMENT_BLOQUE,
-                                             NULL,
-                                             EF_RELACHEMENT_BLOQUE,
-                                             NULL,
-                                             EF_RELACHEMENT_BLOQUE,
-                                             NULL,
-                                             EF_RELACHEMENT_BLOQUE,
-                                             NULL),
+    BUG (EF_relachement_ajout (p,
+                               gettext ("Sans nom"),
+                               EF_RELACHEMENT_BLOQUE,
+                               NULL,
+                               EF_RELACHEMENT_BLOQUE,
+                               NULL,
+                               EF_RELACHEMENT_BLOQUE,
+                               NULL,
+                               EF_RELACHEMENT_BLOQUE,
+                               NULL,
+                               EF_RELACHEMENT_BLOQUE,
+                               NULL,
+                               EF_RELACHEMENT_BLOQUE,
+                               NULL),
         )
   else
   {
@@ -613,20 +611,20 @@ EF_gtk_relachements_ajouter (GtkButton *button,
       free (nom);
       nom = g_strdup_printf ("%s (%d)", gettext ("Sans nom"), i);
     }
-    BUG (relachement = EF_relachement_ajout (p,
-                                             nom,
-                                             EF_RELACHEMENT_BLOQUE,
-                                             NULL,
-                                             EF_RELACHEMENT_BLOQUE,
-                                             NULL,
-                                             EF_RELACHEMENT_BLOQUE,
-                                             NULL,
-                                             EF_RELACHEMENT_BLOQUE,
-                                             NULL,
-                                             EF_RELACHEMENT_BLOQUE,
-                                             NULL,
-                                             EF_RELACHEMENT_BLOQUE,
-                                             NULL),
+    BUG (EF_relachement_ajout (p,
+                               nom,
+                               EF_RELACHEMENT_BLOQUE,
+                               NULL,
+                               EF_RELACHEMENT_BLOQUE,
+                               NULL,
+                               EF_RELACHEMENT_BLOQUE,
+                               NULL,
+                               EF_RELACHEMENT_BLOQUE,
+                               NULL,
+                               EF_RELACHEMENT_BLOQUE,
+                               NULL,
+                               EF_RELACHEMENT_BLOQUE,
+                               NULL),
         )
     free (nom);
   }

@@ -768,7 +768,7 @@ EF_sections_personnalisee_verif_forme (GList *forme,
   while (list_parcours != NULL)
   {
     GList    *list_parcours2;
-    EF_Point *point1, *point2 = NULL;
+    EF_Point *point2 = NULL;
     
     list_parcours2 = list_parcours->data;
     
@@ -786,7 +786,7 @@ EF_sections_personnalisee_verif_forme (GList *forme,
     {
       double    a, b;
       GList    *list_parcours3, *list_parcours4;
-      EF_Point *point3 = NULL, *point4 = NULL;
+      EF_Point *point1, *point3 = NULL, *point4 = NULL;
       
       point1 = point2;
       if (g_list_next (list_parcours2) != NULL)
@@ -1635,8 +1635,6 @@ EF_sections_j (Section *sect)
   //     \right)\right]\texttt{ avec }\substack{a=max(h_t,l_t)\\
   //     b=min(h_t,l_t)\\aa=max(h_r,l_r)\\bb=min(h_r,l_r)}\end{displaymath}
   //     \begin{verbatim}
-  
-      break;
     }
     case SECTION_CIRCULAIRE :
     {
@@ -1649,16 +1647,12 @@ EF_sections_j (Section *sect)
   // Pour une section circulaire de section constante, J vaut :\end{verbatim}
   // \begin{displaymath}
   // J = \frac{\pi \cdot \phi^4}{32}\end{displaymath}\begin{verbatim}
-      
-      break;
     }
     case SECTION_PERSONNALISEE :
     {
       Section_Personnalisee *section = sect->data;
       
       return section->j;
-      
-      break;
     }
     default :
     {
@@ -1719,8 +1713,6 @@ EF_sections_iy (Section *sect)
                     lt * ht * (ht / 2. - cdgh) * (ht / 2. - cdgh) +
                     lr * hr * (hr / 2. - cdgb) * (hr / 2. - cdgb),
                   FLOTTANT_ORDINATEUR);
-      
-      break;
     }
     case SECTION_CIRCULAIRE :
     {
@@ -1733,16 +1725,12 @@ EF_sections_iy (Section *sect)
   // Pour une section circulaire de section constante, Iy vaut :
   // \end{verbatim}\begin{displaymath}
   // I_y = \frac{\pi \cdot \phi^4}{64} \end{displaymath}\begin{verbatim}
-      
-      break;
     }
     case SECTION_PERSONNALISEE :
     {
       Section_Personnalisee *section = sect->data;
       
       return section->iy;
-      
-      break;
     }
     default :
     {
@@ -1791,7 +1779,6 @@ EF_sections_iz (Section *sect)
       
       return m_f (ht * lt * lt * lt / 12. + hr * lr * lr * lr / 12.,
                   FLOTTANT_ORDINATEUR);
-      break;
     }
     case SECTION_CIRCULAIRE :
     {
@@ -1803,16 +1790,12 @@ EF_sections_iz (Section *sect)
   // Pour une section circulaire de section constante, I vaut :
   // \end{verbatim}\begin{displaymath}
   // I = \frac{\pi \cdot \phi^4}{64} \end{displaymath}\begin{verbatim}
-      
-      break;
     }
     case SECTION_PERSONNALISEE :
     {
       Section_Personnalisee *section = sect->data;
       
       return section->iz;
-      
-      break;
     }
     default :
     {
@@ -1853,24 +1836,18 @@ EF_sections_vy (Section *sect)
       return m_f (MAX (m_g (section->largeur_table),
                        m_g (section->largeur_retombee)) / 2.,
                   FLOTTANT_ORDINATEUR);
-      
-      break;
     }
     case SECTION_CIRCULAIRE :
     {
       Section_Circulaire *section = sect->data;
       
       return m_f (m_g (section->diametre) / 2., FLOTTANT_ORDINATEUR);
-      
-      break;
     }
     case SECTION_PERSONNALISEE :
     {
       Section_Personnalisee *section = sect->data;
       
       return section->vy;
-      
-      break;
     }
     default :
     {
@@ -1910,24 +1887,18 @@ EF_sections_vyp (Section *sect)
       return m_f (MAX (m_g (section->largeur_table),
                        m_g (section->largeur_retombee)) / 2.,
                   FLOTTANT_ORDINATEUR);
-      
-      break;
     }
     case SECTION_CIRCULAIRE :
     {
       Section_Circulaire *section = sect->data;
       
       return m_f (m_g (section->diametre) / 2., FLOTTANT_ORDINATEUR);
-      
-      break;
     }
     case SECTION_PERSONNALISEE :
     {
       Section_Personnalisee *section = sect->data;
       
       return section->vyp;
-      
-      break;
     }
     default :
     {
@@ -1974,24 +1945,18 @@ EF_sections_vz (Section *sect)
                      m_g (section->hauteur_table))) /
                     m_g (EF_sections_s (sect)),
                   FLOTTANT_ORDINATEUR);
-      
-      break;
     }
     case SECTION_CIRCULAIRE :
     {
       Section_Circulaire *section = sect->data;
       
       return m_f (m_g (section->diametre) / 2., FLOTTANT_ORDINATEUR);
-      
-      break;
     }
     case SECTION_PERSONNALISEE :
     {
       Section_Personnalisee *section = sect->data;
       
       return section->vz;
-      
-      break;
     }
     default :
     {
@@ -2038,24 +2003,18 @@ EF_sections_vzp (Section *sect)
                     (m_g (section->hauteur_retombee) / 2.))
                     / m_g (EF_sections_s (sect)),
                   FLOTTANT_ORDINATEUR);
-      
-      break;
     }
     case SECTION_CIRCULAIRE :
     {
       Section_Circulaire *section = sect->data;
       
       return m_f (m_g (section->diametre) / 2., FLOTTANT_ORDINATEUR);
-      
-      break;
     }
     case SECTION_PERSONNALISEE :
     {
       Section_Personnalisee *section = sect->data;
       
       return section->vzp;
-      
-      break;
     }
     default :
     {
@@ -2397,8 +2356,6 @@ EF_sections_s (Section *sect)
   // lr : largeur de la retombée, ht : hauteur de la table, hr : hauteur de la
   // retombée), S vaut :\end{verbatim}\begin{displaymath}
   // S = h_t \cdot l_t+h_r \cdot l_r\end{displaymath}\begin{verbatim}
-      
-      break;
     }
     case SECTION_CIRCULAIRE :
     {
@@ -2411,16 +2368,12 @@ EF_sections_s (Section *sect)
   // Pour une section circulaire de section constante, S vaut :
   // \end{verbatim}\begin{displaymath}
   // S = \frac{\pi \cdot \phi^2}{4} \end{displaymath}\begin{verbatim}
-      
-      break;
     }
     case SECTION_PERSONNALISEE :
     {
       Section_Personnalisee *section = sect->data;
       
       return section->s;
-      
-      break;
     }
     default :
     {

@@ -1073,16 +1073,10 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
   EF_Noeud        *noeud1, *noeud2;
   int             *ai, *aj;
   double          *ax;
-  int             *ai2, *aj2;
-  double          *ax2;
-  int             *ai3, *aj3;
-  double          *ax3;
   double           x, y, z;
-  double           ll;
-  unsigned int     i, j;
   int              k;
   cholmod_triplet *triplet;
-  cholmod_sparse  *sparse_tmp, *matrice_rigidite_globale;
+  unsigned int     j;
   
   BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
   BUGMSG (p->calculs.t_part,
@@ -1226,10 +1220,17 @@ _1992_1_1_barres_rigidite_ajout (Projet   *p,
   // chaque tronçon.
   for (j = 0; j < element->discretisation_element + 1; j++)
   {
-    double MA, MB;
-    double phia_iso, phib_iso;
-    double es_l;
-    int    num1, num2;
+    double          MA, MB;
+    double          phia_iso, phib_iso;
+    double          es_l;
+    int             num1, num2;
+    cholmod_sparse *sparse_tmp, *matrice_rigidite_globale;
+    double          ll;
+    unsigned int    i;
+    int            *ai2, *aj2;
+    double         *ax2;
+    int            *ai3, *aj3;
+    double         *ax3;
     
     // Détermination du noeud de départ et de fin
     if (j == 0)

@@ -296,15 +296,9 @@ EF_materiaux_get_description (EF_Materiau *materiau)
   switch (materiau->type)
   {
     case MATERIAU_BETON :
-    {
       return _1992_1_1_materiaux_get_description (materiau);
-      break;
-    }
     case MATERIAU_ACIER :
-    {
       return _1993_1_1_materiaux_get_description (materiau);
-      break;
-    }
     default :
     {
       BUGMSG (NULL,
@@ -339,16 +333,12 @@ EF_materiaux_E (EF_Materiau *materiau)
       Materiau_Beton *data_beton = materiau->data;
       
       return data_beton->ecm;
-      
-      break;
     }
     case MATERIAU_ACIER :
     {
       Materiau_Acier *data_acier = materiau->data;
       
       return data_acier->e;
-      
-      break;
     }
     default :
     {
@@ -393,8 +383,6 @@ EF_materiaux_G (EF_Materiau *materiau,
       else
         return m_f (m_g (data_beton->ecm) / (2. * (1. + m_g (data_beton->nu))),
                     FLOTTANT_ORDINATEUR);
-      
-      break;
     }
     case MATERIAU_ACIER :
     {
@@ -405,8 +393,6 @@ EF_materiaux_G (EF_Materiau *materiau,
               gettext ("Seul le matériau béton supporte nu à 0.\n"))
       return m_f (m_g (data_acier->e) / (2. * (1. + m_g (data_acier->nu))),
                   FLOTTANT_ORDINATEUR);
-      
-      break;
     }
     default :
     {

@@ -701,7 +701,6 @@ common_fonction_cherche_zero (Fonction *fonction,
     xx2_2 = (xx1_2 + xx3_2) / 2.;
     while (xx3_2 - xx1_2 > ERR_MIN / 10)
     {
-      ecart_x = xx3_2 - xx1_2;
       if (signbit (common_fonction_y (fonction, xx1_2, 1)) ==
                               signbit (common_fonction_y (fonction, xx2_2, 0)))
         xx1_2 = xx2_2;
