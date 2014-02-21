@@ -52,10 +52,11 @@ _1990_gtk_groupes_button_options_clicked (GtkWidget *button,
 {
   GtkSettings *settings;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_GRO.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"), "Groupes")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_GRO.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Groupes");)
   if (UI_GROOP.builder != NULL)
   {
     gtk_window_present (GTK_WINDOW (UI_GROOP.window));
@@ -63,11 +64,12 @@ _1990_gtk_groupes_button_options_clicked (GtkWidget *button,
   }
   
   UI_GROOP.builder = gtk_builder_new ();
-  BUGMSG (gtk_builder_add_from_resource (UI_GROOP.builder,
+  BUGCRIT (gtk_builder_add_from_resource (UI_GROOP.builder,
                                 "/org/2lgc/codegui/ui/1990_groupes_options.ui",
                                          NULL) != 0,
           ,
-          gettext ("Builder Failed\n"))
+          (gettext ("La génération de la fenêtre %s a échouée.\n"),
+                    "Actions_Option");)
   gtk_builder_connect_signals (UI_GROOP.builder, p);
   
   UI_GROOP.window = GTK_WIDGET (gtk_builder_get_object (

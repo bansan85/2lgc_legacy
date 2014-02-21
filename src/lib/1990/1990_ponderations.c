@@ -111,9 +111,7 @@ _1990_ponderations_duplique_sans_double (GList **liste_dest,
 {
   GList *list_parcours;
   
-  BUGMSG (liste_dest,
-          FALSE,
-          gettext ("Paramètre %s incorrect.\n"), "liste_dest")
+  BUGPARAM (liste_dest, "%p", liste_dest, FALSE)
   
   if (liste_source == NULL)
     return 0;
@@ -138,9 +136,10 @@ _1990_ponderations_duplique_sans_double (GList **liste_dest,
         Ponderation *element_source;
         Ponderation *element_destination = malloc (sizeof (Ponderation));
         
-        BUGMSG (element_destination,
-                FALSE,
-                gettext ("Erreur d'allocation mémoire.\n"))
+        BUGCRIT (element_destination,
+                 FALSE,
+                 (gettext ("Erreur d'allocation mémoire.\n"));
+                   g_list_free_full (ponderation_destination, free);)
         element_source = list_parcours2->data;
         element_destination->action = element_source->action;
         element_destination->flags = element_source->flags;
@@ -206,26 +205,26 @@ _1990_ponderations_genere_un (Projet *p,
   Groupe        *groupe;
   Niveau_Groupe *niveau;
   
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (p->niveaux_groupes,
-          FALSE,
-          gettext ("Le projet ne possède pas de niveaux de groupes.\n"))
+  BUGPARAMCRIT (p, "%p", p, FALSE)
+  INFO (p->niveaux_groupes,
+        FALSE,
+        (gettext ("Le projet ne possède pas de niveaux de groupes.\n"));)
   
   // Si le dernier niveau ne possède pas un seul et unique groupe Alors
   //   Fin.
   // FinSi
   niveau = g_list_last (p->niveaux_groupes)->data;
-  BUGMSG (g_list_length (niveau->groupes) == 1,
-          FALSE,
-          gettext ("La génération des pondérations est impossible.\nLe dernier niveau ne peut possèder qu'un seul groupe.\n"))
+  INFO (g_list_length (niveau->groupes) == 1,
+        FALSE,
+        (gettext ("La génération des pondérations est impossible.\nLe dernier niveau ne peut possèder qu'un seul groupe.\n"));)
   groupe = niveau->groupes->data;
   
   // Si le groupe du dernier niveau ne possède pas de combinaison Alors
   //   Fin.
   // FinSi
-  BUGMSG (groupe->tmp_combinaison,
-          FALSE,
-          gettext ("Le dernier niveau ne possède aucune combinaison permettant la génération des pondérations.\n"))
+  INFO (groupe->tmp_combinaison,
+        FALSE,
+        (gettext ("Le dernier niveau ne possède aucune combinaison permettant la génération des pondérations.\n"));)
   
   // Génération d'une boucle contenant 2^dim_coef permettant ainsi à chaque
   // passage de déterminer si le coefficient min ou max doit être pris.
@@ -290,9 +289,10 @@ _1990_ponderations_genere_un (Projet *p,
             {
               Ponderation *ponderation_element = malloc (sizeof (Ponderation));
               
-              BUGMSG (ponderation_element,
-                      FALSE,
-                      gettext ("Erreur d'allocation mémoire.\n"))
+              BUGCRIT (ponderation_element,
+                       FALSE,
+                       (gettext ("Erreur d'allocation mémoire.\n"));
+                       g_list_free_full (ponderation, free);)
               ponderation_element->action = combinaison_element->action;
               ponderation_element->flags = combinaison_element->flags;
               
@@ -368,7 +368,7 @@ _1990_ponderations_genere_eu (Projet *p)
 {
   double coef_min[ACTION_INCONNUE], coef_max[ACTION_INCONNUE];
   
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGPARAMCRIT (p, "%p", p, FALSE)
   
  // Les indices ont les définitions suivantes : pp = poids propre,
  // p = précontrainte, var = variable, acc = accidentelle et
@@ -671,10 +671,9 @@ _1990_ponderations_genere_eu (Projet *p)
       }
       default:
       {
-        BUGMSG (0,
-                FALSE,
-                gettext ("Flag %d inconnu.\n"),
-                         p->combinaisons.elu_geo_str_methode)
+        FAILCRIT (FALSE,
+                  (gettext ("Flag %d inconnu.\n"),
+                            p->combinaisons.elu_geo_str_methode);)
         break;
       }
     }
@@ -825,10 +824,9 @@ _1990_ponderations_genere_eu (Projet *p)
   // FinSi
       default :
       {
-        BUGMSG (0,
-                FALSE,
-                gettext ("Flag %d inconnu.\n"),
-                         p->combinaisons.elu_geo_str_methode)
+        FAILCRIT (FALSE,
+                  (gettext ("Flag %d inconnu.\n"),
+                            p->combinaisons.elu_geo_str_methode);)
         break;
       }
     }
@@ -1003,7 +1001,7 @@ _1990_ponderations_genere_fr (Projet *p)
   // p = précontrainte, var = variable, acc = accidentelle,
   // sis = sismique et es = eaux souterraines.
   
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGPARAMCRIT (p, "%p", p, FALSE)
   
   // Pour ELU_EQU, générer les pondérations suivantes :
   //   Si à l'équilibre seulement Alors
@@ -1349,10 +1347,9 @@ _1990_ponderations_genere_fr (Projet *p)
       }
       default :
       {
-        BUGMSG (0, 
-                FALSE,
-                gettext ("Flag %d inconnu.\n"),
-                          p->combinaisons.elu_geo_str_methode)
+        FAILCRIT (FALSE,
+                  (gettext ("Flag %d inconnu.\n"),
+                            p->combinaisons.elu_geo_str_methode);)
         break;
       }
     }
@@ -1526,10 +1523,9 @@ _1990_ponderations_genere_fr (Projet *p)
   //   FinSi
       default :
       {
-        BUGMSG (0,
-                FALSE,
-                gettext ("Flag %d inconnu.\n"),
-                         p->combinaisons.elu_geo_str_methode)
+        FAILCRIT (FALSE,
+                  (gettext ("Flag %d inconnu.\n"),
+                            p->combinaisons.elu_geo_str_methode);)
         break;
       }
     }
@@ -1714,13 +1710,18 @@ _1990_ponderations_genere (Projet *p)
  *     - #_1990_ponderations_genere_fr.
  */
 {
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGPARAMCRIT (p, "%p", p, FALSE)
   
   switch (p->parametres.norme)
   {
     case NORME_EU : return _1990_ponderations_genere_eu (p);
     case NORME_FR : return _1990_ponderations_genere_fr (p);
-    default : { BUGMSG (0, FALSE, gettext ("Norme %d inconnue.\n"), p->parametres.norme) break; } }
+    default : { FAILCRIT (FALSE,
+                          (gettext ("Norme %d inconnue.\n"),
+                                    p->parametres.norme);)
+                break;
+              }
+  }
 }
 
 
@@ -1737,14 +1738,15 @@ _1990_ponderations_description (GList *ponderation)
 {
   char *retour = NULL;
   
-  BUGMSG (retour = malloc (sizeof (char)),
-          NULL,
-          gettext ("Erreur d'allocation mémoire.\n"))
+  BUGCRIT (retour = malloc (sizeof (char)),
+           NULL,
+           (gettext ("Erreur d'allocation mémoire.\n"));)
   retour[0] = 0;
   
   if (ponderation != NULL)
   {
     GList *list_parcours = ponderation;
+    
     do
     {
       char         psi[30];
@@ -1766,7 +1768,7 @@ _1990_ponderations_description (GList *ponderation)
       else
         psi[0] = '\0';
       if (ponderation_element->psi != -1)
-        BUGMSG (retour = g_strdup_printf ("%s%s%.*lf*%s*%s", 
+        BUGCRIT (retour = g_strdup_printf ("%s%s%.*lf*%s*%s", 
                                           tmp,
                                           tmp[0] != 0 ? "+" : "",
                                           DECIMAL_SANS_UNITE,
@@ -1774,18 +1776,20 @@ _1990_ponderations_description (GList *ponderation)
                                           psi,
                                           _1990_action_nom_renvoie(
                                                  ponderation_element->action)),
-                                          NULL,
-                                          gettext ("Erreur d'allocation mémoire.\n"))
+                 NULL,
+                 (gettext ("Erreur d'allocation mémoire.\n"));
+                   free (tmp);)
       else
-        BUGMSG (retour = g_strdup_printf ("%s%s%.*lf*%s",
+        BUGCRIT (retour = g_strdup_printf ("%s%s%.*lf*%s",
                                           tmp,
                                           tmp[0] != 0 ? "+" : "",
                                           DECIMAL_SANS_UNITE,
                                           ponderation_element->ponderation,
                                           _1990_action_nom_renvoie
                                                 (ponderation_element->action)),
-                                          NULL,
-                                          gettext ("Erreur d'allocation mémoire.\n"))
+                 NULL,
+                 (gettext ("Erreur d'allocation mémoire.\n"));
+                   free (tmp);)
       
       free (tmp);
       
@@ -1806,40 +1810,37 @@ _1990_ponderations_affiche (GList *ponderations)
  * \return Valeur renvoyée : Aucun.
  */
 {
-  if (ponderations != NULL)
+  GList *list_parcours = ponderations;
+  
+  while (list_parcours != NULL)
   {
-    GList *list_parcours = ponderations;
-    do
+    GList *ponderation = list_parcours->data;
+    
+    if (ponderation != NULL)
     {
-      GList *ponderation = list_parcours->data;
+      GList *list_parcours2 = ponderation;
       
-      if (ponderation != NULL)
+      while (list_parcours2 != NULL)
       {
-        GList *list_parcours2 = ponderation;
-        do
-        {
-          Ponderation *ponderation_element = list_parcours2->data;
-          
-          if (g_list_next (list_parcours2) != NULL)
-            printf ("'%s'*%f(%d)+",
-                    _1990_action_nom_renvoie (ponderation_element->action),
-                    ponderation_element->ponderation,
-                    ponderation_element->psi);
-          else
-            printf ("'%s'*%f(%d)",
-                    _1990_action_nom_renvoie (ponderation_element->action),
-                    ponderation_element->ponderation,
-                    ponderation_element->psi);
-          
-          list_parcours2 = g_list_next (list_parcours2);
-        }
-        while (list_parcours2 != NULL);
-        printf ("\n");
+        Ponderation *ponderation_element = list_parcours2->data;
+        
+        if (g_list_next (list_parcours2) != NULL)
+          printf ("'%s'*%f(%d)+",
+                  _1990_action_nom_renvoie (ponderation_element->action),
+                  ponderation_element->ponderation,
+                  ponderation_element->psi);
+        else
+          printf ("'%s'*%f(%d)",
+                  _1990_action_nom_renvoie (ponderation_element->action),
+                  ponderation_element->ponderation,
+                  ponderation_element->psi);
+        
+        list_parcours2 = g_list_next (list_parcours2);
       }
-      
-      list_parcours = g_list_next (list_parcours);
+      printf ("\n");
     }
-    while (list_parcours != NULL);
+    
+    list_parcours = g_list_next (list_parcours);
   }
 
   return;
@@ -1857,7 +1858,7 @@ _1990_ponderations_affiche_tout (Projet *p)
  *     - p == NULL.
  */
 {
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGPARAMCRIT (p, "%p", p, FALSE)
   
   printf ("elu_equ\n");
   _1990_ponderations_affiche (p->combinaisons.elu_equ);
