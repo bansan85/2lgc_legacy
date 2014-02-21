@@ -97,10 +97,11 @@ _1990_gtk_actions_cursor_changed (GtkTreeView *tree_view,
   Action       *action;
   GList        *list_parcours;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_ACT.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"), "Actions")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_ACT.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Actions");)
   
   // On récupère l'action sélectionnée.
   if (!gtk_tree_selection_get_selected (UI_ACT.tree_select_actions,
@@ -152,9 +153,9 @@ _1990_gtk_actions_cursor_changed (GtkTreeView *tree_view,
     case ACTION_INCONNUE :
     default :
     {
-      BUGMSG (NULL,
-              ,
-              gettext ("Type d'action %u inconnu.\n"), _1990_action_type_renvoie (action))
+      FAILCRIT (,
+                (gettext ("Type d'action %u inconnu.\n"),
+                          _1990_action_type_renvoie (action));)
       break;
     }
   }
@@ -197,14 +198,16 @@ _1990_gtk_actions_tree_view_key_press_event (GtkWidget *widget,
  *     - interface graphique non initialisée.
  */
 {
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_ACT.builder,
-          FALSE,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"), "Actions")
+  BUGPARAMCRIT (p, "%p", p, FALSE)
+  BUGCRIT (UI_ACT.builder,
+           FALSE,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Actions");)
   
   if (event->key.keyval == GDK_KEY_Delete)
   {
     _1990_gtk_menu_suppr_action_activate (NULL, p);
+    
     return TRUE;
   }
   
@@ -239,10 +242,11 @@ _1990_gtk_actions_tree_view_drag (GtkWidget      *widget,
   GtkTreePath  *path;
   GtkTreeModel *list_store;
   
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_ACT.builder,
-          FALSE,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"), "Actions")
+  BUGPARAMCRIT (p, "%p", p, FALSE)
+  BUGCRIT (UI_ACT.builder,
+           FALSE,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Actions");)
   
   // On récupère la ligne de la nouvelle action des charges sélectionnées
   gdk_window_get_geometry (gtk_tree_view_get_bin_window (GTK_TREE_VIEW (
@@ -271,15 +275,14 @@ _1990_gtk_actions_tree_view_drag (GtkWidget      *widget,
     // On récupère l'action de destination
     gtk_tree_model_get_iter (list_store, &iter_action_dest, path);
     gtk_tree_model_get (list_store, &iter_action_dest, 0, &action_dest, -1);
+    gtk_tree_path_free (path);
     
     // On récupère l'action actuelle
     if (!gtk_tree_selection_get_selected (UI_ACT.tree_select_actions,
                                           &model_action_source,
                                           &iter_action_source))
-    {
-      gtk_tree_path_free (path);
       return FALSE;
-    }
+    
     gtk_tree_model_get (model_action_source,
                         &iter_action_source,
                         0,
@@ -289,10 +292,7 @@ _1990_gtk_actions_tree_view_drag (GtkWidget      *widget,
     // Si l'action de destination est la même que l'action source, on ne fait
     // rien.
     if (action_dest == action_source)
-    {
-      gtk_tree_path_free (path);
       return FALSE;
-    }
     
     list = gtk_tree_selection_get_selected_rows (UI_ACT.tree_select_charges,
                                                  &model_charge_source);
@@ -331,8 +331,6 @@ _1990_gtk_actions_tree_view_drag (GtkWidget      *widget,
     }
     g_list_foreach (list_fixe, (GFunc) gtk_tree_row_reference_free, NULL);
     g_list_free (list_fixe);
-    
-    gtk_tree_path_free (path);
   }
   
   return FALSE;
@@ -354,10 +352,11 @@ _1990_gtk_actions_select_changed (GtkTreeSelection *treeselection,
  *     - interface graphique non initialisée.
  */
 {
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_ACT.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"), "Actions")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_ACT.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Actions");)
   
   // Si aucune action n'est sélectionnée, il n'est pas possible de supprimer
   // une action ou d'ajouter une charge à l'action en cours.
@@ -428,10 +427,11 @@ _1990_gtk_actions_nom_edited (GtkCellRendererText *cell,
   GtkTreeIter iter;
   Action     *action;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_ACT.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"), "Actions")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_ACT.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Actions");)
   
   // On récupère l'action en cours d'édition
   gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (
@@ -475,10 +475,11 @@ _1990_gtk_actions_type_edited (GtkCellRendererText *cell,
   unsigned int type;
   Action      *action;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_ACT.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"), "Actions")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_ACT.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Actions");)
   
   gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (
                                                     UI_ACT.tree_store_actions),
@@ -495,9 +496,9 @@ _1990_gtk_actions_type_edited (GtkCellRendererText *cell,
                                                     p->parametres.norme)) == 0)
       break;
   }
-  BUGMSG (type != _1990_action_num_bat_txt (p->parametres.norme),
-          ,
-          gettext ("Type d'action '%s' inconnu.\n"), new_text)
+  BUGCRIT (type != _1990_action_num_bat_txt (p->parametres.norme),
+           ,
+           (gettext ("Type d'action '%s' inconnu.\n"), new_text);)
   
   BUG (_1990_action_type_change (p, action, type), )
   
@@ -529,10 +530,11 @@ _1990_gtk_tree_view_actions_psi_edited (GtkCellRendererText *cell,
   double      convertion;
   guint       column;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_ACT.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"), "Actions")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_ACT.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Actions");)
   
   column = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (cell), "column"));
   
@@ -577,12 +579,14 @@ _1990_gtk_nouvelle_action (GtkMenuItem *menuitem,
   unsigned int type = 0;
   GList       *list_parcours;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_ACT.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"), "Actions")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_ACT.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Actions");)
   
   list_parcours = UI_ACT.items_type_action;
+  
   while (list_parcours != NULL)
   {
     if ((GTK_IS_MENU_ITEM (menuitem)) &&
@@ -599,7 +603,7 @@ _1990_gtk_nouvelle_action (GtkMenuItem *menuitem,
               gettext ("Erreur d'allocation mémoire.\n"))
       // On crée l'action en fonction de la catégorie sélectionnée dans le menu
       // déroulant.
-      BUG (action = _1990_action_ajout (p, type, tmp), )
+      BUG (action = _1990_action_ajout (p, type, tmp), , free (tmp);)
       free (tmp);
       
       path = gtk_tree_model_get_path (GTK_TREE_MODEL (
@@ -619,9 +623,8 @@ _1990_gtk_nouvelle_action (GtkMenuItem *menuitem,
     list_parcours = g_list_next (list_parcours);
   }
   
-  BUGMSG (list_parcours,
-          ,
-          gettext ("Impossible de trouver le type d'action correspondant à cette action.\n"))
+  FAILCRIT ( ,
+            (gettext ("Impossible de trouver le type d'action correspondant à cette action.\n"));)
 }
 
 
@@ -644,10 +647,11 @@ _1990_gtk_menu_suppr_action_activate (GtkWidget *toolbutton,
   GtkTreeModel *model;
   Action       *action;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_ACT.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"), "Actions")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_ACT.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Actions");)
   
   if (!gtk_tree_selection_get_selected (UI_ACT.tree_select_actions,
                                         &model,
@@ -683,10 +687,11 @@ _1990_gtk_actions_charge_key_press_event (GtkWidget *widget,
  *     - interface graphique non initialisée.
  */
 {
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_ACT.builder,
-          FALSE,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"), "Actions")
+  BUGPARAMCRIT (p, "%p", p, FALSE)
+  BUGCRIT (UI_ACT.builder,
+           FALSE,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Actions");)
   
   if (event->key.keyval == GDK_KEY_Delete)
   {
@@ -714,10 +719,11 @@ _1990_gtk_actions_charge_double_clicked (GtkWidget *widget,
  *     - interface graphique non initialisée.
  */
 {
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_ACT.builder,
-          FALSE,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"), "Actions")
+  BUGPARAMCRIT (p, "%p", p, FALSE)
+  BUGCRIT (UI_ACT.builder,
+           FALSE,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Actions");)
   
   if ((event->type == GDK_2BUTTON_PRESS) &&
       (gtk_widget_get_sensitive (GTK_WIDGET (gtk_builder_get_object
@@ -775,10 +781,11 @@ _1990_gtk_tree_view_charges_description_edited (
   Action       *action;
   Charge       *charge;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_ACT.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"), "Actions")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_ACT.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Actions");)
   
   // On recherche la charge en cours d'édition
   model = gtk_tree_view_get_model (GTK_TREE_VIEW (UI_ACT.tree_view_charges));
@@ -819,10 +826,11 @@ _1990_gtk_menu_edit_charge_clicked (GtkWidget *toolbutton,
   Charge       *charge;
   GList        *list, *list_parcours;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_ACT.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"), "Actions")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_ACT.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Actions");)
   
   // On récupère l'action qui contient les charges à éditer.
   if (!gtk_tree_selection_get_selected (UI_ACT.tree_select_actions,
@@ -849,22 +857,34 @@ _1990_gtk_menu_edit_charge_clicked (GtkWidget *toolbutton,
       {
         case CHARGE_NOEUD :
         {
-          BUG (EF_gtk_charge_noeud (p, action, charge), )
+          BUG (EF_gtk_charge_noeud (p, action, charge),
+               ,
+               g_list_foreach (list, (GFunc) gtk_tree_path_free, NULL);
+                 g_list_free (list);)
           break;
         }
         case CHARGE_BARRE_PONCTUELLE :
         {
-          BUG (EF_gtk_charge_barre_ponctuelle (p, action, charge),)
+          BUG (EF_gtk_charge_barre_ponctuelle (p, action, charge),
+               ,
+               g_list_foreach (list, (GFunc) gtk_tree_path_free, NULL);
+                 g_list_free (list);)
           break;
         }
         case CHARGE_BARRE_REPARTIE_UNIFORME :
         {
-          BUG (EF_gtk_charge_barre_repartie_uniforme (p, action, charge),)
+          BUG (EF_gtk_charge_barre_repartie_uniforme (p, action, charge),
+               ,
+               g_list_foreach (list, (GFunc) gtk_tree_path_free, NULL);
+                 g_list_free (list);)
           break;
         }
         default :
         {
-          BUGMSG (0, , gettext ("Type de charge %d inconnu.\n"), charge->type)
+          FAILINFO ( , 
+                    (gettext ("Type de charge %d inconnu.\n"), charge->type);
+                      g_list_foreach (list, (GFunc) gtk_tree_path_free, NULL);
+                      g_list_free (list);)
           break;
         }
       }
@@ -897,16 +917,18 @@ _1990_gtk_menu_suppr_charge_clicked (GtkWidget *toolbutton,
   Charge       *charge;
   GList        *list, *list_fixe, *list_parcours;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_ACT.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"), "Actions")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_ACT.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Actions");)
   
   // On récupère l'action qui contient les charges à supprimer.
   if (!gtk_tree_selection_get_selected (UI_ACT.tree_select_actions,
                                         &model,
                                         &iter))
     return;
+  
   gtk_tree_model_get (model, &iter, 0, &action, -1);
   
   // On récupère la liste des charges à supprimer.
@@ -925,8 +947,7 @@ _1990_gtk_menu_suppr_charge_clicked (GtkWidget *toolbutton,
                                gtk_tree_row_reference_new (model,
                                            (GtkTreePath *) list_parcours->data)
                               );
-  g_list_foreach (list, (GFunc) gtk_tree_path_free, NULL);
-  g_list_free (list);
+  g_list_free_full (list, (GDestroyNotify) gtk_tree_path_free);
   
   // On supprime les charges sélectionnées. Pas besoin de remettre à jour le
   // tree-view, c'est inclus dans EF_charge_supprime
@@ -940,11 +961,13 @@ _1990_gtk_menu_suppr_charge_clicked (GtkWidget *toolbutton,
        )
     {
       gtk_tree_model_get (model, &iter, 0, &charge, -1);
-      BUG (EF_charge_supprime (p, action, charge), )
+      BUG (EF_charge_supprime (p, action, charge),
+           ,
+           g_list_free_full (list_fixe,
+                             (GDestroyNotify) gtk_tree_row_reference_free);)
     }
   }
-  g_list_foreach (list_fixe, (GFunc) gtk_tree_row_reference_free, NULL);
-  g_list_free (list_fixe);
+  g_list_free_full (list_fixe, (GDestroyNotify) gtk_tree_row_reference_free);
   
   return;
 }
@@ -971,15 +994,17 @@ _1990_gtk_nouvelle_charge_nodale (GtkMenuItem *menuitem,
   GtkTreeModel *model_action;
   Action       *action;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_ACT.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"), "Actions")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_ACT.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Actions");)
   
   if (!gtk_tree_selection_get_selected (UI_ACT.tree_select_actions,
                                         &model_action,
                                         &iter_action))
     return;
+  
   gtk_tree_model_get (model_action, &iter_action, 0, &action, -1);
   
   BUG (EF_gtk_charge_noeud (p, action, NULL), )
@@ -1005,15 +1030,17 @@ _1990_gtk_nouvelle_charge_barre_ponctuelle (GtkMenuItem *menuitem,
   GtkTreeModel *model_action;
   Action       *action;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_ACT.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"), "Actions")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_ACT.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Actions");)
   
   if (!gtk_tree_selection_get_selected (UI_ACT.tree_select_actions,
                                         &model_action,
                                         &iter_action))
     return;
+  
   gtk_tree_model_get (model_action, &iter_action, 0, &action, -1);
   
   BUG (EF_gtk_charge_barre_ponctuelle (p, action, NULL), )
@@ -1039,15 +1066,17 @@ _1990_gtk_nouvelle_charge_barre_repartie_uniforme (GtkMenuItem *menuitem,
   GtkTreeModel *model_action;
   Action       *action;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_ACT.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"), "Actions")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_ACT.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Actions");)
   
   if (!gtk_tree_selection_get_selected (UI_ACT.tree_select_actions,
                                         &model_action,
                                         &iter_action))
     return;
+  
   gtk_tree_model_get (model_action, &iter_action, 0, &action, -1);
   
   BUG (EF_gtk_charge_barre_repartie_uniforme (p, action, NULL), )
@@ -1271,7 +1300,7 @@ _1990_gtk_actions_charge_render_1 (GtkTreeViewColumn *tree_column,
     }
     default :
     {
-      BUGMSG (NULL, , gettext("Type de charge %d inconnu.\n"), charge->type)
+      FAILCRIT (, (gettext ("Type de charge %d inconnu.\n"), charge->type);)
       break;
     }
   }
@@ -1325,7 +1354,7 @@ void _1990_gtk_actions_charge_render_2 (GtkTreeViewColumn *tree_column,
     }
     default :
     {
-      BUGMSG (NULL, , gettext ("Type de charge %d inconnu.\n"), charge->type)
+      FAILCRIT (, (gettext ("Type de charge %d inconnu.\n"), charge->type);)
       break;
     }
   }
@@ -1350,7 +1379,7 @@ _1990_gtk_actions (Projet *p)
 {
   GList *list_parcours;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGPARAMCRIT (p, "%p", p, )
   
   if (UI_ACT.builder != NULL)
   {
@@ -1359,11 +1388,12 @@ _1990_gtk_actions (Projet *p)
   }
   
   UI_ACT.builder = gtk_builder_new ();
-  BUGMSG (gtk_builder_add_from_resource (UI_ACT.builder,
+  BUGCRIT (gtk_builder_add_from_resource (UI_ACT.builder,
                                         "/org/2lgc/codegui/ui/1990_actions.ui",
-                                         NULL) != 0,
+                                          NULL) != 0,
           ,
-          gettext ("La génération de la fenêtre %s a échouée.\n"), "Actions")
+          (gettext ("La génération de la fenêtre %s a échouée.\n"),
+                    "Actions");)
   gtk_builder_connect_signals (UI_ACT.builder, p);
   
   UI_ACT.window = GTK_WIDGET (gtk_builder_get_object (
