@@ -105,26 +105,27 @@ _1992_1_1_gtk_materiaux_recupere_donnees (Projet *p,
   gboolean       ok = TRUE;
   GtkBuilder    *builder;
   
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (nom, FALSE, gettext ("Paramètre %s incorrect.\n"), "nom")
-  BUGMSG (fck, FALSE, gettext ("Paramètre %s incorrect.\n"), "fck")
-  BUGMSG (fckcube, FALSE, gettext ("Paramètre %s incorrect.\n"), "fckcube")
-  BUGMSG (fcm, FALSE, gettext ("Paramètre %s incorrect.\n"), "fcm")
-  BUGMSG (fctm, FALSE, gettext ("Paramètre %s incorrect.\n"), "fctm")
-  BUGMSG (fctk_0_05, FALSE, gettext ("Paramètre %s incorrect.\n"), "fctk_0_05")
-  BUGMSG (fctk_0_95, FALSE, gettext ("Paramètre %s incorrect.\n"), "fctk_0_95")
-  BUGMSG (ecm, FALSE, gettext ("Paramètre %s incorrect.\n"), "ecm")
-  BUGMSG (ec1, FALSE, gettext ("Paramètre %s incorrect.\n"), "ec1")
-  BUGMSG (ecu1, FALSE, gettext ("Paramètre %s incorrect.\n"), "ecu1")
-  BUGMSG (ec2, FALSE, gettext ("Paramètre %s incorrect.\n"), "ec2")
-  BUGMSG (ecu2, FALSE, gettext ("Paramètre %s incorrect.\n"), "ecu2")
-  BUGMSG (n, FALSE, gettext ("Paramètre %s incorrect.\n"), "n")
-  BUGMSG (ec3, FALSE, gettext ("Paramètre %s incorrect.\n"), "ec3")
-  BUGMSG (ecu3, FALSE, gettext ("Paramètre %s incorrect.\n"), "ecu3")
-  BUGMSG (nu, FALSE, gettext ("Paramètre %s incorrect.\n"), "nu")
-  BUGMSG (UI_BET.builder,
-          FALSE,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Matériau Béton")
+  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (nom, "%p", nom, FALSE)
+  BUGPARAM (fck, "%p", fck, FALSE)
+  BUGPARAM (fckcube, "%p", fckcube, FALSE)
+  BUGPARAM (fcm, "%p", fcm, FALSE)
+  BUGPARAM (fctm, "%p", fctm, FALSE)
+  BUGPARAM (fctk_0_05, "%p", fctk_0_05, FALSE)
+  BUGPARAM (fctk_0_95, "%p", fctk_0_95, FALSE)
+  BUGPARAM (ecm, "%p", ecm, FALSE)
+  BUGPARAM (ec1, "%p", ec1, FALSE)
+  BUGPARAM (ecu1, "%p", ecu1, FALSE)
+  BUGPARAM (ec2, "%p", ec2, FALSE)
+  BUGPARAM (ecu2, "%p", ecu2, FALSE)
+  BUGPARAM (n, "%p", n, FALSE)
+  BUGPARAM (ec3, "%p", ec3, FALSE)
+  BUGPARAM (ecu3, "%p", ecu3, FALSE)
+  BUGPARAM (nu, "%p", nu, FALSE)
+  BUGCRIT (UI_BET.builder,
+           FALSE,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Ajout Matériau Béton");)
   
   builder = UI_BET.builder;
   
@@ -431,10 +432,11 @@ _1992_1_1_gtk_materiaux_check (GtkWidget *object,
   double ecm;
   double ec1, ecu1, ec2, ecu2, n, ec3, ecu3, nu;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_BET.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Matériau Béton")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_BET.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Ajout Matériau Béton");)
   
   if (!_1992_1_1_gtk_materiaux_recupere_donnees (p,
                                                  &nom,
@@ -489,10 +491,11 @@ _1992_1_1_gtk_materiaux_ajouter_clicked (GtkButton *button,
   double       ec1, ecu1, ec2, ecu2, n, ec3, ecu3, nu;
   EF_Materiau *materiau;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_BET.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Matériau Béton")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_BET.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Ajout Matériau Béton");)
   
   if (!_1992_1_1_gtk_materiaux_recupere_donnees (p,
                                                  &nom,
@@ -517,7 +520,10 @@ _1992_1_1_gtk_materiaux_ajouter_clicked (GtkButton *button,
   BUG (materiau = _1992_1_1_materiaux_ajout (p,
                                              nom,
                                              m_f (fck, FLOTTANT_UTILISATEUR)),
-      )
+      ,
+      free (nom);)
+  free (nom);
+  
   BUG (_1992_1_1_materiaux_modif (
          p,
          materiau,
@@ -538,8 +544,6 @@ _1992_1_1_gtk_materiaux_ajouter_clicked (GtkButton *button,
          m_f (ecu3,      FLOTTANT_UTILISATEUR),
          m_f (nu,        FLOTTANT_UTILISATEUR)),
       )
-  
-  free (nom);
   
   gtk_widget_destroy (UI_BET.window);
   
@@ -566,10 +570,11 @@ _1992_1_1_gtk_materiaux_modifier_clicked (GtkButton *button,
   double ecm;
   double ec1, ecu1, ec2, ecu2, n, ec3, ecu3, nu;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_BET.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Matériau Béton")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (UI_BET.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Ajout Matériau Béton");)
   
   if (!_1992_1_1_gtk_materiaux_recupere_donnees (p,
                                                  &nom,
@@ -609,7 +614,7 @@ _1992_1_1_gtk_materiaux_modifier_clicked (GtkButton *button,
          m_f (ec3,            FLOTTANT_UTILISATEUR),
          m_f (ecu3,           FLOTTANT_UTILISATEUR),
          m_f (nu,             FLOTTANT_UTILISATEUR)),
-      )
+      free (nom);)
   
   free (nom);
   
@@ -639,7 +644,7 @@ _1992_1_1_gtk_materiaux_toggled (GtkCheckMenuItem *checkmenuitem,
   Materiau_Beton *beton_data;
   char            tmp[30];
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGPARAMCRIT (p, "%p", p, )
   
   builder = UI_BET.builder;
   mat = UI_BET.materiau;
@@ -930,7 +935,7 @@ _1992_1_1_gtk_materiaux_toggled (GtkCheckMenuItem *checkmenuitem,
                             check);
   }
   else
-    BUGMSG (NULL, , gettext ("Paramètre %s incorrect.\n"), "checkmenuitem")
+    FAILPARAM (checkmenuitem, "%p", )
   
   _1992_1_1_gtk_materiaux_check (NULL, p);
   
@@ -954,7 +959,7 @@ _1992_1_1_gtk_materiaux (Projet      *p,
 {
   Materiau_Beton *beton_data;
   
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGPARAMCRIT (p, "%p", p, FALSE)
   
   if (UI_BET.builder != NULL)
   {
@@ -965,11 +970,12 @@ _1992_1_1_gtk_materiaux (Projet      *p,
   else
   {
     UI_BET.builder = gtk_builder_new ();
-    BUGMSG (gtk_builder_add_from_resource (UI_BET.builder,
+    BUGCRIT (gtk_builder_add_from_resource (UI_BET.builder,
                                   "/org/2lgc/codegui/ui/1992_1_1_materiaux.ui",
                                            NULL) != 0,
             FALSE,
-            gettext ("Builder Failed\n"))
+            (gettext ("La génération de la fenêtre %s a échouée.\n"),
+                      "Ajout Matériau Béton");)
     gtk_builder_connect_signals (UI_BET.builder, p);
     UI_BET.window = GTK_WIDGET (gtk_builder_get_object (UI_BET.builder,
                                                 "_1992_1_1_materiaux_window"));
@@ -1006,9 +1012,9 @@ _1992_1_1_gtk_materiaux (Projet      *p,
   {
     gchar tmp[30];
     
-    BUGMSG (materiau->type == MATERIAU_BETON,
-            FALSE,
-            gettext ("Le matériau n'est pas en béton.\n"))
+    BUGCRIT (materiau->type == MATERIAU_BETON,
+             FALSE,
+             (gettext ("Le matériau n'est pas en béton.\n"));)
     gtk_window_set_title (GTK_WINDOW (UI_BET.window),
                           gettext ("Modification d'un matériau béton"));
     UI_BET.materiau = materiau;
@@ -1144,10 +1150,11 @@ _1992_1_1_gtk_materiaux_ajout (GtkMenuItem *menuitem,
  *   - interface graphique non initialisée.
  */
 {
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (p->ui.ef_materiaux.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"), "Matériaux")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (p->ui.ef_materiaux.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Matériaux");)
   
   BUG (_1992_1_1_gtk_materiaux (p, NULL), )
 }

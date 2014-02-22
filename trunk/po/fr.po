@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2014-02-15 10:22+0100\n"
-"PO-Revision-Date: 2014-02-15 10:24+0100\n"
+"POT-Creation-Date: 2014-02-22 19:05+0100\n"
+"PO-Revision-Date: 2014-02-22 19:07+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -472,10 +472,6 @@ msgid "Impossible d'initialiser gtk.\n"
 msgstr "Impossible d'initialiser gtk.\n"
 
 #, c-format
-msgid "Paramètre %s incorrect.\n"
-msgstr "Paramètre %s incorrect.\n"
-
-#, c-format
 msgid "La fenêtre graphique %s n'est pas initialisée.\n"
 msgstr "La fenêtre graphique %s n'est pas initialisée.\n"
 
@@ -522,9 +518,6 @@ msgstr "Le groupe %s n'est combiné ni de type OR, XOR ou AND.\n"
 
 msgid "Le type de combinaison est inconnu.\n"
 msgstr "Le type de combinaison est inconnu.\n"
-
-msgid "Builder Failed\n"
-msgstr "Builder Failed\n"
 
 #, c-format
 msgid "Le niveau %u est vide. Veuillez soit le remplir, soit le supprimer.\n"
@@ -825,12 +818,6 @@ msgid ""
 msgstr ""
 "La création d'une barre nécessite l'utilisation de des noeuds différents.\n"
 
-msgid "Le matériau n'est pas spécifié.\n"
-msgstr "Le matériau n'est pas spécifié.\n"
-
-msgid "La section n'est pas spécifiée.\n"
-msgstr "La section n'est pas spécifiée.\n"
-
 #, c-format
 msgid ""
 "Impossible de créer la barre, la distance entre les deux noeuds %d et %d est "
@@ -859,9 +846,16 @@ msgstr ""
 "Impossible d'affecter le noeud %d à la barre %d car il est dépendant de la "
 "barre à modifier.\n"
 
+msgid "Il est nécessaire de lancer la fonction EF_calculs_initialise avant.\n"
+msgstr "Il est nécessaire de lancer la fonction EF_calculs_initialise avant.\n"
+
 #, c-format
 msgid "Relachement %d inconnu."
 msgstr "Relachement %d inconnu."
+
+#, c-format
+msgid "Paramètre %s incorrect.\n"
+msgstr "Paramètre %s incorrect.\n"
 
 msgid "Impossible de scinder une fonction vide\n"
 msgstr "Impossible de scinder une fonction vide\n"
@@ -909,6 +903,9 @@ msgstr "le séisme"
 msgid " des paramètres de calculs différents que ceux imposés par les normes ?"
 msgstr ""
 " des paramètres de calculs différents que ceux imposés par les normes ?"
+
+msgid "Builder Failed\n"
+msgstr "Builder Failed\n"
 
 #, c-format
 msgid "15. Disclaimer of Warranty.\n"
@@ -1145,16 +1142,20 @@ msgid "Le type %d de la liste est inconnu.\n"
 msgstr "Le type %d de la liste est inconnu.\n"
 
 #, c-format
+msgid "fichier %s, fonction %s, ligne %d, texte : "
+msgstr "fichier %s, fonction %s, ligne %d, texte : "
+
+#, c-format
+msgid "Erreur critique. "
+msgstr "Erreur critique. "
+
+#, c-format
 msgid "fichier %s, fonction %s, ligne %d, test : %s\n"
 msgstr "fichier %s, fonction %s, ligne %d, test : %s\n"
 
 #, c-format
 msgid "fichier %s, fonction %s, ligne %d, test : %s, texte : "
 msgstr "fichier %s, fonction %s, ligne %d, test : %s, texte : "
-
-#, c-format
-msgid "Erreur critique. "
-msgstr "Erreur critique. "
 
 msgid "Région A1"
 msgstr "Région A1"
@@ -2089,85 +2090,3 @@ msgstr "Le matériau n'est pas en acier.\n"
 
 msgid "Modification d'un matériau acier"
 msgstr "Modification d'un matériau acier"
-
-#~ msgid "Catégorie de durée %u inconnue.\n"
-#~ msgstr "Catégorie de durée %u inconnue.\n"
-
-#~ msgid "Catégorie de durée %d inconnue.\n"
-#~ msgstr "Catégorie de durée %d inconnue.\n"
-
-#~ msgid "Pays %d inconnu.\n"
-#~ msgstr "Pays %d inconnu.\n"
-
-#~ msgid "La caméra n'est pas initialisée.\n"
-#~ msgstr "La caméra n'est pas initialisée.\n"
-
-#~ msgid "Action %s introuvable.\n"
-#~ msgstr "Action %s introuvable.\n"
-
-#~ msgid ""
-#~ "Le paramètre flag est de type strictement boolean et doit valoir soit 0 "
-#~ "soit 1.\n"
-#~ msgstr ""
-#~ "Le paramètre flag est de type strictement boolean et doit valoir soit 0 "
-#~ "soit 1.\n"
-
-#~ msgid "Le numéro %u du coefficient spi à changer est incorrect.\n"
-#~ msgstr "Le numéro %u du coefficient spi à changer est incorrect.\n"
-
-#~ msgid "Section indéfinie.\n"
-#~ msgstr "Section indéfinie.\n"
-
-#~ msgid "Matériau indéfini.\n"
-#~ msgstr "Matériau indéfini.\n"
-
-#~ msgid "Noeud 1 indéfini.\n"
-#~ msgstr "Noeud 1 indéfini.\n"
-
-#~ msgid "Noeud 2 indéfini.\n"
-#~ msgstr "Noeud 2 indéfini.\n"
-
-#~ msgid "Rapport vide.\n"
-#~ msgstr "Rapport vide.\n"
-
-#~ msgid ""
-#~ "Point : %s\n"
-#~ "Commentaire : %s\n"
-#~ "Erreur : %s\n"
-#~ "\n"
-#~ msgstr ""
-#~ "Point : %s\n"
-#~ "Commentaire : %s\n"
-#~ "Erreur : %s\n"
-#~ "\n"
-
-#~ msgid "Aucune"
-#~ msgstr "Aucun"
-
-#~ msgid "Avertissement"
-#~ msgstr "Avertissement"
-
-#~ msgid "Critique"
-#~ msgstr "Critique"
-
-#~ msgid "Le coefficient phi %d n'existe pas.\n"
-#~ msgstr "Le coefficient phi %d n'existe pas.\n"
-
-#, fuzzy
-#~ msgid "Le niveau de groupes '%d' ne possède pas de groupe.\n"
-#~ msgstr "Le niveau de groupes %d ne possède pas de groupe.\n"
-
-#~ msgid "Élément %u du groupe %u introuvable.\n"
-#~ msgstr "Élément %u du groupe %u introuvable.\n"
-
-#~ msgid "Groupe %u du niveau %u introuvable.\n"
-#~ msgstr "Groupe %u du niveau %u introuvable.\n"
-
-#~ msgid "Niveau de groupes %u introuvable.\n"
-#~ msgstr "Niveau de groupes %u introuvable.\n"
-
-#~ msgid "Erreur lors de l'actualisation de la fenêtre graphique.\n"
-#~ msgstr "Erreur lors de l'actualisation de la fenêtre graphique.\n"
-
-#~ msgid "Élément %d existant.\n"
-#~ msgstr "Élément %d existant.\n"
