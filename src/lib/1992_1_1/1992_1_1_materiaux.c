@@ -47,9 +47,9 @@ _1992_1_1_materiaux_fckcube (double fck)
  *     - fck <= 0.
  */
 {
-  BUGMSG ((fck > ERR_MIN) && (fck <= 90. * (1. + ERR_MIN)),
-          NAN,
-          gettext ("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"))
+  INFO ((fck > ERR_MIN) && (fck <= 90. * (1. + ERR_MIN)),
+        NAN,
+        (gettext ("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"));)
   
   // On effectue une interpolation linéaire entre les valeurs fournies par la
   // norme
@@ -100,9 +100,9 @@ _1992_1_1_materiaux_fcm (double fck)
  *     - fck <= 0.
  */
 {
-  BUGMSG ((fck > ERR_MIN) && (fck <= 90. * ( 1. + ERR_MIN)),
-          NAN,
-          gettext ("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"))
+  INFO ((fck > ERR_MIN) && (fck <= 90. * ( 1. + ERR_MIN)),
+        NAN,
+        (gettext ("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"));)
   
   return (fck + 8.) * 1000000.;
 }
@@ -125,9 +125,9 @@ _1992_1_1_materiaux_fctm (double fck,
  *     - fck <= 0.
  */
 {
-  BUGMSG ((fck > ERR_MIN) && (fck <= 90. * ( 1. + ERR_MIN)),
-          NAN,
-          gettext ("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"))
+  INFO ((fck > ERR_MIN) && (fck <= 90. * ( 1. + ERR_MIN)),
+        NAN,
+        (gettext ("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"));)
   
   if (fck <= 50.)
     return 0.3 * pow (fck, 2. / 3.) * 1000000.;
@@ -211,9 +211,9 @@ _1992_1_1_materiaux_ecu1 (double fcm,
  *     - fck <= 0.
  */
 {
-  BUGMSG ((fck > ERR_MIN) && (fck <= 90. * (1 + ERR_MIN)),
-          NAN,
-          gettext ("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"))
+  INFO ((fck > ERR_MIN) && (fck <= 90. * (1 + ERR_MIN)),
+        NAN,
+        (gettext ("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"));)
   
   if (fck < 50.)
     return 3.5 / 1000.;
@@ -235,9 +235,9 @@ _1992_1_1_materiaux_ec2 (double fck)
  *     - fck <= 0.
  */
 {
-  BUGMSG ((fck > ERR_MIN) && (fck <= 90. * (1 + ERR_MIN)),
-          NAN,
-          gettext ("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"))
+  INFO ((fck > ERR_MIN) && (fck <= 90. * (1 + ERR_MIN)),
+        NAN,
+        (gettext ("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"));)
   
   if (fck < 50.)
     return 2. / 1000.;
@@ -260,9 +260,9 @@ _1992_1_1_materiaux_ecu2 (double fck)
  *     - fck <= 0.
  */
 {
-  BUGMSG ((fck > ERR_MIN) && (fck <= 90. * (1 + ERR_MIN)),
-          NAN,
-          gettext ("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"))
+  INFO ((fck > ERR_MIN) && (fck <= 90. * (1 + ERR_MIN)),
+        NAN,
+        (gettext ("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"));)
   
   if (fck < 50.)
     return 3.5 / 1000.;
@@ -284,9 +284,9 @@ _1992_1_1_materiaux_ec3 (double fck)
  *     - fck <= 0.
  */
 {
-  BUGMSG ((fck > ERR_MIN) && (fck <= 90. * (1 + ERR_MIN)),
-          NAN,
-          gettext ("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"))
+  INFO ((fck > ERR_MIN) && (fck <= 90. * (1 + ERR_MIN)),
+        NAN,
+        (gettext ("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"));)
   
   if (fck < 50.)
     return 1.75 / 1000.;
@@ -309,9 +309,9 @@ _1992_1_1_materiaux_ecu3 (double fck)
  *     - fck <= 0.
  */
 {
-  BUGMSG ((fck > ERR_MIN) && (fck <= 90. * (1 + ERR_MIN)),
-          NAN,
-          gettext ("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"))
+  INFO ((fck > ERR_MIN) && (fck <= 90. * (1 + ERR_MIN)),
+        NAN,
+        (gettext ("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"));)
   
   if (fck < 50.)
     return 3.5 / 1000.;
@@ -333,9 +333,9 @@ _1992_1_1_materiaux_n (double fck)
  *     - fck <= 0.
  */
 {
-  BUGMSG ((fck > ERR_MIN) && (fck <= 90. * (1 + ERR_MIN)),
-          NAN,
-          gettext ("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"))
+  INFO ((fck > ERR_MIN) && (fck <= 90. * (1 + ERR_MIN)),
+        NAN,
+        (gettext ("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"));)
   
   if (fck < 50.)
     return 2.;
@@ -358,9 +358,9 @@ _1992_1_1_materiaux_gnu (double ecm,
  *     - nu <= 0.
  */
 {
-  BUGMSG ((nu > ERR_MIN) && (nu <= 0.5 * (1 + ERR_MIN)),
-          NAN,
-          gettext ("Le coefficient de poisson doit être compris entre 0 et 0.5, borne exclues.\n"))
+  INFO ((nu > ERR_MIN) && (nu <= 0.5 * (1 + ERR_MIN)),
+        NAN,
+        (gettext ("Le coefficient de poisson doit être compris entre 0 et 0.5, borne exclues.\n"));)
   return ecm / (2. * (1. + nu)) * 1000000000.;
 }
 
@@ -388,73 +388,119 @@ _1992_1_1_materiaux_ajout (Projet     *p,
   EF_Materiau    *materiau_nouveau;
   Materiau_Beton *data_beton;
   
-  BUGMSG (p, NULL, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG ((m_g(fck) > ERR_MIN) && (m_g(fck) <= 90. * (1 + ERR_MIN)),
-          NULL,
-          gettext ("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"))
-  BUGMSG (materiau_nouveau = malloc (sizeof(EF_Materiau)),
-          NULL,
-          gettext ("Erreur d'allocation mémoire.\n"))
-  BUGMSG (data_beton = malloc (sizeof (Materiau_Beton)),
-          NULL,
-          gettext ("Erreur d'allocation mémoire.\n"))
+  BUGPARAMCRIT (p, "%p", p, NULL)
+  INFO ((m_g(fck) > ERR_MIN) && (m_g(fck) <= 90. * (1 + ERR_MIN)),
+        NULL,
+        (gettext ("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"));)
+  BUGCRIT (materiau_nouveau = malloc (sizeof (EF_Materiau)),
+           NULL,
+           (gettext ("Erreur d'allocation mémoire.\n"));)
+  BUGCRIT (data_beton = malloc (sizeof (Materiau_Beton)),
+           NULL,
+           (gettext ("Erreur d'allocation mémoire.\n"));
+             free (materiau_nouveau);)
   
   materiau_nouveau->type = MATERIAU_BETON;
   materiau_nouveau->data = data_beton;
   
-  BUGMSG (materiau_nouveau->nom = g_strdup_printf ("%s", nom),
-          NULL,
-          gettext ("Erreur d'allocation mémoire.\n"))
-  
   data_beton->fck = m_f (m_g (fck) * 1000000., fck.type);
   data_beton->fckcube = m_f (_1992_1_1_materiaux_fckcube (m_g (fck)),
                              FLOTTANT_ORDINATEUR);
-  BUG (!isnan (m_g (data_beton->fckcube)), NULL)
+  BUG (!isnan (m_g (data_beton->fckcube)),
+       NULL,
+       free (materiau_nouveau);
+         free (data_beton);)
   data_beton->fcm = m_f (_1992_1_1_materiaux_fcm (m_g (fck)),
                     FLOTTANT_ORDINATEUR);
-  BUG (!isnan (m_g (data_beton->fcm)), NULL)
+  BUG (!isnan (m_g (data_beton->fcm)),
+       NULL,
+       free (materiau_nouveau);
+         free (data_beton);)
   data_beton->fctm = m_f (_1992_1_1_materiaux_fctm (m_g (fck),
                                              m_g (data_beton->fcm) / 1000000.),
                           FLOTTANT_ORDINATEUR);
-  BUG (!isnan (m_g (data_beton->fctm)), NULL)
+  BUG (!isnan (m_g (data_beton->fctm)),
+       NULL,
+       free (materiau_nouveau);
+         free (data_beton);)
   data_beton->fctk_0_05 = m_f (_1992_1_1_materiaux_fctk_0_05 (
                                             m_g (data_beton->fctm) / 1000000.),
                                FLOTTANT_ORDINATEUR);
-  BUG (!isnan (m_g (data_beton->fctk_0_05)), NULL)
+  BUG (!isnan (m_g (data_beton->fctk_0_05)),
+       NULL,
+       free (materiau_nouveau);
+         free (data_beton);)
   data_beton->fctk_0_95 = m_f (_1992_1_1_materiaux_fctk_0_95 (
                                             m_g (data_beton->fctm) / 1000000.),
                                FLOTTANT_ORDINATEUR);
-  BUG (!isnan (m_g (data_beton->fctk_0_95)), NULL)
+  BUG (!isnan (m_g (data_beton->fctk_0_95)),
+       NULL,
+       free (materiau_nouveau);
+         free (data_beton);)
   data_beton->ecm = m_f (_1992_1_1_materiaux_ecm (
                                              m_g (data_beton->fcm) / 1000000.),
                          FLOTTANT_ORDINATEUR);
-  BUG (!isnan (m_g (data_beton->ecm)), NULL)
+  BUG (!isnan (m_g (data_beton->ecm)),
+       NULL,
+       free (materiau_nouveau);
+         free (data_beton);)
   data_beton->ec1 = m_f (_1992_1_1_materiaux_ec1 (
                                              m_g (data_beton->fcm) / 1000000.),
                          FLOTTANT_ORDINATEUR);
-  BUG (!isnan (m_g (data_beton->ec1)), NULL)
+  BUG (!isnan (m_g (data_beton->ec1)),
+       NULL,
+       free (materiau_nouveau);
+         free (data_beton);)
   data_beton->ecu1 = m_f (_1992_1_1_materiaux_ecu1 (
                                               m_g (data_beton->fcm) / 1000000.,
                                                     m_g (fck)),
                           FLOTTANT_ORDINATEUR);
-  BUG (!isnan (m_g (data_beton->ecu1)), NULL)
+  BUG (!isnan (m_g (data_beton->ecu1)),
+       NULL,
+       free (materiau_nouveau);
+         free (data_beton);)
   data_beton->ec2 = m_f (_1992_1_1_materiaux_ec2 (m_g (fck)),
                          FLOTTANT_ORDINATEUR);
-  BUG (!isnan (m_g (data_beton->ec2)), NULL)
+  BUG (!isnan (m_g (data_beton->ec2)),
+       NULL,
+       free (materiau_nouveau);
+         free (data_beton);)
   data_beton->ecu2 = m_f (_1992_1_1_materiaux_ecu2 (m_g (fck)),
                           FLOTTANT_ORDINATEUR);
-  BUG (!isnan (m_g (data_beton->ecu2)), NULL)
+  BUG (!isnan (m_g (data_beton->ecu2)),
+       NULL,
+       free (materiau_nouveau);
+         free (data_beton);)
   data_beton->ec3 = m_f (_1992_1_1_materiaux_ec3 (m_g (fck)),
                          FLOTTANT_ORDINATEUR);
-  BUG (!isnan (m_g (data_beton->ec3)), NULL)
+  BUG (!isnan (m_g (data_beton->ec3)),
+       NULL,
+       free (materiau_nouveau);
+         free (data_beton);)
   data_beton->ecu3 = m_f (_1992_1_1_materiaux_ecu3 (m_g (fck)),
                           FLOTTANT_ORDINATEUR);
-  BUG (!isnan (m_g (data_beton->ecu3)), NULL)
+  BUG (!isnan (m_g (data_beton->ecu3)),
+       NULL,
+       free (materiau_nouveau);
+         free (data_beton);)
   data_beton->n = m_f (_1992_1_1_materiaux_n (m_g (fck)), FLOTTANT_ORDINATEUR);
-  BUG (!isnan (m_g (data_beton->n)), NULL)
+  BUG (!isnan (m_g (data_beton->n)),
+       NULL,
+       free (materiau_nouveau);
+         free (data_beton);)
   data_beton->nu = m_f (COEFFICIENT_NU_BETON, FLOTTANT_ORDINATEUR);
   
-  BUG (EF_materiaux_insert (p, materiau_nouveau), NULL)
+  BUGCRIT (materiau_nouveau->nom = g_strdup_printf ("%s", nom),
+           NULL,
+           (gettext ("Erreur d'allocation mémoire.\n"));
+             free (materiau_nouveau);
+             free (data_beton);)
+  
+  BUG (EF_materiaux_insert (p, materiau_nouveau),
+       NULL,
+         free (materiau_nouveau->nom);
+         free (materiau_nouveau);
+         free (data_beton);)
   
   return materiau_nouveau;
 }
@@ -508,23 +554,27 @@ _1992_1_1_materiaux_modif (Projet      *p,
 {
   Materiau_Beton *data_beton;
   
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (materiau, FALSE, gettext ("Paramètre %s incorrect.\n"), "materiau")
-  BUGMSG (materiau->type == MATERIAU_BETON,
-          FALSE,
-          gettext ("Le matériau n'est pas en béton.\n"));
+  BUGPARAMCRIT (p, "%p", p, FALSE)
+  BUGPARAMCRIT (materiau, "%p", materiau, FALSE)
+  BUGCRIT (materiau->type == MATERIAU_BETON,
+           FALSE,
+           (gettext ("Le matériau n'est pas en béton.\n"));)
   
   data_beton = materiau->data;
   
   if ((nom != NULL) && (strcmp (materiau->nom, nom) != 0))
   {
-    BUGMSG (!EF_materiaux_cherche_nom (p, nom, FALSE),
-            FALSE,
-            gettext ("Le matériau %s existe déjà.\n"), nom)
-    free (materiau->nom);
-    BUGMSG (materiau->nom = g_strdup_printf ("%s", nom),
-            FALSE,
-            gettext ("Erreur d'allocation mémoire.\n"))
+    char *tmp;
+    
+    INFO (!EF_materiaux_cherche_nom (p, nom, FALSE),
+          FALSE,
+          (gettext ("Le matériau %s existe déjà.\n"), nom);)
+    tmp = materiau->nom;
+    BUGCRIT (materiau->nom = g_strdup_printf ("%s", nom),
+             FALSE,
+             (gettext ("Erreur d'allocation mémoire.\n"));
+               materiau->nom = tmp;)
+    free (tmp);
     BUG (EF_materiaux_repositionne (p, materiau), FALSE)
   }
   
@@ -584,11 +634,12 @@ _1992_1_1_materiaux_modif (Projet      *p,
                                                NULL,
                                                FALSE,
                                                FALSE),
-         FALSE)
+         FALSE,
+         g_list_free (liste_materiaux);)
     g_list_free (liste_materiaux);
     
     if (liste_barres_dep != NULL)
-      BUG (EF_calculs_free (p), FALSE)
+      BUG (EF_calculs_free (p), FALSE, g_list_free (liste_barres_dep);)
     
     g_list_free (liste_barres_dep);
   }
@@ -621,10 +672,10 @@ _1992_1_1_materiaux_get_description (EF_Materiau* materiau)
   char           *complement = NULL, *tmp2;
   Materiau_Beton *data_beton;
   
-  BUGMSG (materiau, NULL, gettext ("Paramètre %s incorrect.\n"), "sect")
-  BUGMSG (materiau->type == MATERIAU_BETON,
-          FALSE,
-          gettext ("Le matériau n'est pas en béton.\n"))
+  BUGPARAMCRIT (materiau, "%p", materiau, NULL)
+  BUGCRIT (materiau->type == MATERIAU_BETON,
+           FALSE,
+           (gettext ("Le matériau n'est pas en béton.\n"));)
   
   data_beton = materiau->data;
   
@@ -640,10 +691,10 @@ _1992_1_1_materiaux_get_description (EF_Materiau* materiau)
               data_beton->fckcube.type),
               tmp1,
               DECIMAL_CONTRAINTE);
-    BUGMSG (complement = g_strdup_printf ("f<sub>ck,cube</sub> : %s MPa",
-                                          tmp1),
-            NULL,
-            gettext ("Erreur d'allocation mémoire.\n"))
+    BUGCRIT (complement = g_strdup_printf ("f<sub>ck,cube</sub> : %s MPa",
+                                           tmp1),
+             NULL,
+             (gettext ("Erreur d'allocation mémoire.\n"));)
   }
   if (!ERR (m_g (data_beton->fcm),
             _1992_1_1_materiaux_fcm (m_g (data_beton->fck) / 1000000.)))
@@ -652,17 +703,18 @@ _1992_1_1_materiaux_get_description (EF_Materiau* materiau)
               tmp1,
               DECIMAL_CONTRAINTE);
     if (complement == NULL)
-      BUGMSG (complement = g_strdup_printf ("f<sub>cm</sub> : %s MPa", tmp1),
-              NULL,
-              gettext ("Erreur d'allocation mémoire.\n"))
+      BUGCRIT (complement = g_strdup_printf ("f<sub>cm</sub> : %s MPa", tmp1),
+               NULL,
+               (gettext ("Erreur d'allocation mémoire.\n"));)
     else
     {
       tmp2 = complement;
-      BUGMSG (complement = g_strdup_printf ("%s, f<sub>cm</sub> : %s MPa",
-                                            tmp2,
-                                            tmp1),
-              NULL,
-              gettext ("Erreur d'allocation mémoire.\n"))
+      BUGCRIT (complement = g_strdup_printf ("%s, f<sub>cm</sub> : %s MPa",
+                                             tmp2,
+                                             tmp1),
+               NULL,
+               (gettext ("Erreur d'allocation mémoire.\n"));
+                 free (tmp2);)
       free (tmp2);
     }
   }
@@ -674,17 +726,18 @@ _1992_1_1_materiaux_get_description (EF_Materiau* materiau)
               tmp1,
               DECIMAL_CONTRAINTE);
     if (complement == NULL)
-      BUGMSG (complement = g_strdup_printf ("f<sub>ctm</sub> : %s MPa", tmp1),
-              NULL,
-              gettext ("Erreur d'allocation mémoire.\n"))
+      BUGCRIT (complement = g_strdup_printf ("f<sub>ctm</sub> : %s MPa", tmp1),
+               NULL,
+               (gettext ("Erreur d'allocation mémoire.\n"));)
     else
     {
       tmp2 = complement;
-      BUGMSG (complement = g_strdup_printf ("%s, f<sub>ctm</sub> : %s MPa",
-                                            tmp2,
-                                            tmp1),
-              NULL,
-              gettext ("Erreur d'allocation mémoire.\n"))
+      BUGCRIT (complement = g_strdup_printf ("%s, f<sub>ctm</sub> : %s MPa",
+                                             tmp2,
+                                             tmp1),
+               NULL,
+               (gettext ("Erreur d'allocation mémoire.\n"));
+                 free (tmp2);)
       free (tmp2);
     }
   }
@@ -696,18 +749,19 @@ _1992_1_1_materiaux_get_description (EF_Materiau* materiau)
               tmp1,
               DECIMAL_CONTRAINTE);
     if (complement == NULL)
-      BUGMSG (complement = g_strdup_printf ("f<sub>ctk,0.05</sub> : %s MPa",
-                                            tmp1),
-              NULL,
-              gettext ("Erreur d'allocation mémoire.\n"))
+      BUGCRIT (complement = g_strdup_printf ("f<sub>ctk,0.05</sub> : %s MPa",
+                                             tmp1),
+               NULL,
+               (gettext ("Erreur d'allocation mémoire.\n"));)
     else
     {
       tmp2 = complement;
-      BUGMSG (complement = g_strdup_printf ("%s, f<sub>ctk,0.05</sub> : %s MPa",
-                                            tmp2,
-                                            tmp1),
-              NULL,
-              gettext ("Erreur d'allocation mémoire.\n"))
+      BUGCRIT (complement = g_strdup_printf ("%s, f<sub>ctk,0.05</sub> : %s MPa",
+                                             tmp2,
+                                             tmp1),
+               NULL,
+               (gettext ("Erreur d'allocation mémoire.\n"));
+                 free (tmp2);)
       free (tmp2);
     }
   }
@@ -719,18 +773,19 @@ _1992_1_1_materiaux_get_description (EF_Materiau* materiau)
               tmp1,
               DECIMAL_CONTRAINTE);
     if (complement == NULL)
-      BUGMSG (complement = g_strdup_printf ("f<sub>ctk,0.95</sub> : %s MPa",
-                                            tmp1),
-              NULL,
-              gettext ("Erreur d'allocation mémoire.\n"))
+      BUGCRIT (complement = g_strdup_printf ("f<sub>ctk,0.95</sub> : %s MPa",
+                                             tmp1),
+               NULL,
+               (gettext ("Erreur d'allocation mémoire.\n"));)
     else
     {
       tmp2 = complement;
-      BUGMSG (complement = g_strdup_printf("%s, f<sub>ctk,0.95</sub> : %s MPa",
-                                           tmp2,
-                                           tmp1),
-              NULL,
-              gettext ("Erreur d'allocation mémoire.\n"))
+      BUGCRIT (complement = g_strdup_printf("%s, f<sub>ctk,0.95</sub> : %s MPa",
+                                            tmp2,
+                                            tmp1),
+               NULL,
+               (gettext ("Erreur d'allocation mémoire.\n"));
+                 free (tmp2);)
       free (tmp2);
     }
   }
@@ -741,17 +796,18 @@ _1992_1_1_materiaux_get_description (EF_Materiau* materiau)
               tmp1,
               DECIMAL_CONTRAINTE);
     if (complement == NULL)
-      BUGMSG (complement = g_strdup_printf ("E<sub>cm</sub> : %s MPa", tmp1),
-              NULL,
-              gettext ("Erreur d'allocation mémoire.\n"))
+      BUGCRIT (complement = g_strdup_printf ("E<sub>cm</sub> : %s MPa", tmp1),
+               NULL,
+               (gettext ("Erreur d'allocation mémoire.\n"));)
     else
     {
       tmp2 = complement;
-      BUGMSG (complement = g_strdup_printf ("%s, E<sub>cm</sub> : %s MPa",
-                                            tmp2,
-                                            tmp1),
-              NULL,
-              gettext ("Erreur d'allocation mémoire.\n"))
+      BUGCRIT (complement = g_strdup_printf ("%s, E<sub>cm</sub> : %s MPa",
+                                             tmp2,
+                                             tmp1),
+               NULL,
+               (gettext ("Erreur d'allocation mémoire.\n"));
+                 free (tmp2);)
       free (tmp2);
     }
   }
@@ -762,18 +818,19 @@ _1992_1_1_materiaux_get_description (EF_Materiau* materiau)
               tmp1,
               DECIMAL_SANS_UNITE);
     if (complement == NULL)
-      BUGMSG (complement = g_strdup_printf ("&#949;<sub>c1</sub> : %s ‰",
-                                            tmp1),
-              NULL,
-              gettext ("Erreur d'allocation mémoire.\n"))
+      BUGCRIT (complement = g_strdup_printf ("&#949;<sub>c1</sub> : %s ‰",
+                                             tmp1),
+               NULL,
+               (gettext ("Erreur d'allocation mémoire.\n"));)
     else
     {
       tmp2 = complement;
-      BUGMSG (complement = g_strdup_printf ("%s, &#949;<sub>c1</sub> : %s ‰",
-                                            tmp2,
-                                            tmp1),
-              NULL,
-              gettext ("Erreur d'allocation mémoire.\n"))
+      BUGCRIT (complement = g_strdup_printf ("%s, &#949;<sub>c1</sub> : %s ‰",
+                                             tmp2,
+                                             tmp1),
+               NULL,
+               (gettext ("Erreur d'allocation mémoire.\n"));
+                 free (tmp2);)
       free (tmp2);
     }
   }
@@ -785,18 +842,19 @@ _1992_1_1_materiaux_get_description (EF_Materiau* materiau)
               tmp1,
               DECIMAL_SANS_UNITE);
     if (complement == NULL)
-      BUGMSG (complement = g_strdup_printf ("&#949;<sub>cu1</sub> : %s ‰",
-                                            tmp1),
-              NULL,
-              gettext ("Erreur d'allocation mémoire.\n"))
+      BUGCRIT (complement = g_strdup_printf ("&#949;<sub>cu1</sub> : %s ‰",
+                                             tmp1),
+               NULL,
+               (gettext ("Erreur d'allocation mémoire.\n"));)
     else
     {
       tmp2 = complement;
-      BUGMSG (complement = g_strdup_printf ("%s, &#949;<sub>cu1</sub> : %s ‰",
-                                            tmp2,
-                                            tmp1),
-              NULL,
-              gettext ("Erreur d'allocation mémoire.\n"))
+      BUGCRIT (complement = g_strdup_printf ("%s, &#949;<sub>cu1</sub> : %s ‰",
+                                             tmp2,
+                                             tmp1),
+               NULL,
+               (gettext ("Erreur d'allocation mémoire.\n"));
+                 free (tmp2);)
       free (tmp2);
     }
   }
@@ -807,18 +865,19 @@ _1992_1_1_materiaux_get_description (EF_Materiau* materiau)
               tmp1,
               DECIMAL_SANS_UNITE);
     if (complement == NULL)
-      BUGMSG (complement = g_strdup_printf ("&#949;<sub>c2</sub> : %s ‰",
-                                            tmp1),
-              NULL,
-              gettext ("Erreur d'allocation mémoire.\n"))
+      BUGCRIT (complement = g_strdup_printf ("&#949;<sub>c2</sub> : %s ‰",
+                                             tmp1),
+               NULL,
+               (gettext ("Erreur d'allocation mémoire.\n"));)
     else
     {
       tmp2 = complement;
-      BUGMSG (complement = g_strdup_printf ("%s, &#949;<sub>c2</sub> : %s ‰",
-                                            tmp2,
-                                            tmp1),
-              NULL,
-              gettext ("Erreur d'allocation mémoire.\n"))
+      BUGCRIT (complement = g_strdup_printf ("%s, &#949;<sub>c2</sub> : %s ‰",
+                                             tmp2,
+                                             tmp1),
+               NULL,
+               (gettext ("Erreur d'allocation mémoire.\n"));
+                 free (tmp2);)
       free (tmp2);
     }
   }
@@ -829,18 +888,19 @@ _1992_1_1_materiaux_get_description (EF_Materiau* materiau)
               tmp1,
               DECIMAL_SANS_UNITE);
     if (complement == NULL)
-      BUGMSG (complement = g_strdup_printf ("&#949;<sub>cu2</sub> : %s ‰",
-                                            tmp1),
-              NULL,
-              gettext ("Erreur d'allocation mémoire.\n"))
+      BUGCRIT (complement = g_strdup_printf ("&#949;<sub>cu2</sub> : %s ‰",
+                                             tmp1),
+               NULL,
+               (gettext ("Erreur d'allocation mémoire.\n"));)
     else
     {
       tmp2 = complement;
-      BUGMSG (complement = g_strdup_printf ("%s, &#949;<sub>cu2</sub> : %s ‰",
-                                            tmp2,
-                                            tmp1),
-              NULL,
-              gettext ("Erreur d'allocation mémoire.\n"))
+      BUGCRIT (complement = g_strdup_printf ("%s, &#949;<sub>cu2</sub> : %s ‰",
+                                             tmp2,
+                                             tmp1),
+               NULL,
+               (gettext ("Erreur d'allocation mémoire.\n"));
+                 free (tmp2);)
       free (tmp2);
     }
   }
@@ -851,18 +911,19 @@ _1992_1_1_materiaux_get_description (EF_Materiau* materiau)
               tmp1,
               DECIMAL_SANS_UNITE);
     if (complement == NULL)
-      BUGMSG (complement = g_strdup_printf ("&#949;<sub>c3</sub> : %s ‰",
-                                            tmp1),
-              NULL, 
-              gettext ("Erreur d'allocation mémoire.\n"))
+      BUGCRIT (complement = g_strdup_printf ("&#949;<sub>c3</sub> : %s ‰",
+                                             tmp1),
+               NULL, 
+               (gettext ("Erreur d'allocation mémoire.\n"));)
     else
     {
       tmp2 = complement;
-      BUGMSG (complement = g_strdup_printf ("%s, &#949;<sub>c3</sub> : %s ‰",
-                                            tmp2,
-                                            tmp1),
-              NULL,
-              gettext ("Erreur d'allocation mémoire.\n"))
+      BUGCRIT (complement = g_strdup_printf ("%s, &#949;<sub>c3</sub> : %s ‰",
+                                             tmp2,
+                                             tmp1),
+               NULL,
+               (gettext ("Erreur d'allocation mémoire.\n"));
+                 free (tmp2);)
       free (tmp2);
     }
   }
@@ -873,18 +934,19 @@ _1992_1_1_materiaux_get_description (EF_Materiau* materiau)
               tmp1,
               DECIMAL_SANS_UNITE);
     if (complement == NULL)
-      BUGMSG (complement = g_strdup_printf ("&#949;<sub>cu3</sub> : %s ‰",
-                                            tmp1),
-              NULL,
-              gettext ("Erreur d'allocation mémoire.\n"))
+      BUGCRIT (complement = g_strdup_printf ("&#949;<sub>cu3</sub> : %s ‰",
+                                             tmp1),
+               NULL,
+               (gettext ("Erreur d'allocation mémoire.\n"));)
     else
     {
       tmp2 = complement;
-      BUGMSG (complement = g_strdup_printf ("%s, &#949;<sub>cu3</sub> : %s ‰",
-                                            tmp2,
-                                            tmp1),
-              NULL,
-              gettext ("Erreur d'allocation mémoire.\n"))
+      BUGCRIT (complement = g_strdup_printf ("%s, &#949;<sub>cu3</sub> : %s ‰",
+                                             tmp2,
+                                             tmp1),
+               NULL,
+               (gettext ("Erreur d'allocation mémoire.\n"));
+                 free (tmp2);)
       free (tmp2);
     }
   }
@@ -893,15 +955,16 @@ _1992_1_1_materiaux_get_description (EF_Materiau* materiau)
   {
     conv_f_c (data_beton->n, tmp1, DECIMAL_SANS_UNITE);
     if (complement == NULL)
-      BUGMSG (complement = g_strdup_printf ("n : %s", tmp1),
-              NULL,
-              gettext ("Erreur d'allocation mémoire.\n"))
+      BUGCRIT (complement = g_strdup_printf ("n : %s", tmp1),
+               NULL,
+               (gettext ("Erreur d'allocation mémoire.\n"));)
     else
     {
       tmp2 = complement;
-      BUGMSG (complement = g_strdup_printf ("%s, n : %s", tmp2, tmp1),
-              NULL,
-              gettext ("Erreur d'allocation mémoire.\n"))
+      BUGCRIT (complement = g_strdup_printf ("%s, n : %s", tmp2, tmp1),
+               NULL,
+               (gettext ("Erreur d'allocation mémoire.\n"));
+                 free (tmp2);)
       free (tmp2);
     }
   }
@@ -909,30 +972,32 @@ _1992_1_1_materiaux_get_description (EF_Materiau* materiau)
   {
     conv_f_c (data_beton->nu, tmp1, DECIMAL_SANS_UNITE);
     if (complement == NULL)
-      BUGMSG (complement = g_strdup_printf ("&#957; : %s", tmp1),
-              NULL,
-              gettext ("Erreur d'allocation mémoire.\n"))
+      BUGCRIT (complement = g_strdup_printf ("&#957; : %s", tmp1),
+               NULL,
+               (gettext ("Erreur d'allocation mémoire.\n"));)
     else
     {
       tmp2 = complement;
-      BUGMSG (complement = g_strdup_printf ("%s, &#957; : %s", tmp2, tmp1),
-              NULL,
-              gettext ("Erreur d'allocation mémoire.\n"))
+      BUGCRIT (complement = g_strdup_printf ("%s, &#957; : %s", tmp2, tmp1),
+               NULL,
+               (gettext ("Erreur d'allocation mémoire.\n"));
+                 free (tmp2);)
       free (tmp2);
     }
   }
   
   if (complement == NULL)
-    BUGMSG (description = g_strdup_printf ("f<sub>ck</sub> : %s MPa", fck),
-            NULL,
-            gettext ("Erreur d'allocation mémoire.\n"))
+    BUGCRIT (description = g_strdup_printf ("f<sub>ck</sub> : %s MPa", fck),
+             NULL,
+             (gettext ("Erreur d'allocation mémoire.\n"));)
   else
   {
-    BUGMSG (description = g_strdup_printf ("f<sub>ck</sub> : %s MPa avec %s",
-                                           fck,
-                                           complement),
-            NULL,
-            gettext ("Erreur d'allocation mémoire.\n"))
+    BUGCRIT (description = g_strdup_printf ("f<sub>ck</sub> : %s MPa avec %s",
+                                            fck,
+                                            complement),
+             NULL,
+             (gettext ("Erreur d'allocation mémoire.\n"));
+               free (complement);)
     free (complement);
   }
   
