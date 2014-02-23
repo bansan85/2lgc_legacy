@@ -72,15 +72,16 @@ _1993_1_1_gtk_materiaux_recupere_donnees (Projet *p,
   gboolean       ok = TRUE;
   GtkBuilder    *builder;
   
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (nom, FALSE, gettext ("Paramètre %s incorrect.\n"), "nom")
-  BUGMSG (fy, FALSE, gettext ("Paramètre %s incorrect.\n"), "fy")
-  BUGMSG (fu, FALSE, gettext ("Paramètre %s incorrect.\n"), "fu")
-  BUGMSG (e, FALSE, gettext ("Paramètre %s incorrect.\n"), "e")
-  BUGMSG (nu, FALSE, gettext ("Paramètre %s incorrect.\n"), "nu")
-  BUGMSG (UI_ACI.builder,
-          FALSE,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Matériau Acier")
+  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (nom, "%p", nom, FALSE)
+  BUGPARAM (fy, "%p", fy, FALSE)
+  BUGPARAM (fu, "%p", fu, FALSE)
+  BUGPARAM (e, "%p", e, FALSE)
+  BUGPARAM (nu, "%p", nu, FALSE)
+  BUGCRIT (UI_ACI.builder,
+           FALSE,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Ajout Matériau Acier");)
   
   builder = UI_ACI.builder;
   
@@ -197,10 +198,11 @@ _1993_1_1_gtk_materiaux_check (GtkWidget *object,
   char  *nom;
   double fy, fu, e, nu;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_ACI.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Matériau Acier")
+  BUGPARAM (p, "%p", p, )
+  BUGCRIT (UI_ACI.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Ajout Matériau Acier");)
   
   if (!_1993_1_1_gtk_materiaux_recupere_donnees (p, &nom, &fy, &fu, &e, &nu))
     gtk_widget_set_sensitive (GTK_WIDGET (gtk_builder_get_object (
@@ -237,10 +239,11 @@ _1993_1_1_gtk_materiaux_ajouter_clicked (GtkButton *button,
   double       fy, fu, e, nu;
   EF_Materiau *materiau;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_ACI.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Matériau Acier")
+  BUGPARAM (p, "%p", p, )
+  BUGCRIT (UI_ACI.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Ajout Matériau Acier");)
   
   if (!_1993_1_1_gtk_materiaux_recupere_donnees (p, &nom, &fy, &fu, &e, &nu))
     return;
@@ -251,7 +254,9 @@ _1993_1_1_gtk_materiaux_ajouter_clicked (GtkButton *button,
          nom,
          m_f (fy / 1000000., FLOTTANT_UTILISATEUR),
          m_f (fu / 1000000., FLOTTANT_UTILISATEUR)),
-      )
+      ,
+      free (nom);)
+  free (nom);
   BUG (_1993_1_1_materiaux_modif (p,
                                   materiau,
                                   NULL,
@@ -260,8 +265,6 @@ _1993_1_1_gtk_materiaux_ajouter_clicked (GtkButton *button,
                                   m_f (e, FLOTTANT_UTILISATEUR),
                                   m_f (nu, FLOTTANT_UTILISATEUR)),
       )
-  
-  free (nom);
   
   gtk_widget_destroy (UI_ACI.window);
   
@@ -286,10 +289,11 @@ _1993_1_1_gtk_materiaux_modifier_clicked (GtkButton *button,
   char  *nom;
   double fy, fu, e, nu;
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (UI_ACI.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"), "Ajout Matériau Acier")
+  BUGPARAM (p, "%p", p, )
+  BUGCRIT (UI_ACI.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Ajout Matériau Acier");)
   
   if (!_1993_1_1_gtk_materiaux_recupere_donnees (p, &nom, &fy, &fu, &e, &nu))
     return;
@@ -300,7 +304,9 @@ _1993_1_1_gtk_materiaux_modifier_clicked (GtkButton *button,
                                   m_f (fy, FLOTTANT_UTILISATEUR),
                                   m_f (fu, FLOTTANT_UTILISATEUR),
                                   m_f (e, FLOTTANT_UTILISATEUR),
-                                  m_f (nu, FLOTTANT_UTILISATEUR)), )
+                                  m_f (nu, FLOTTANT_UTILISATEUR)),
+       ,
+       free (nom);)
   
   free (nom);
   
@@ -330,7 +336,7 @@ _1993_1_1_gtk_materiaux_toggled (GtkCheckMenuItem *checkmenuitem,
   Materiau_Acier *acier_data;
   char            tmp[30];
   
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGPARAM (p, "%p", p, )
   
   builder = UI_ACI.builder;
   mat = UI_ACI.materiau;
@@ -423,7 +429,7 @@ _1993_1_1_gtk_materiaux (Projet      *p,
 {
   Materiau_Acier *acier_data;
   
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGPARAM (p, "%p", p, FALSE)
   
   if (UI_ACI.builder != NULL)
   {
@@ -434,11 +440,12 @@ _1993_1_1_gtk_materiaux (Projet      *p,
   else
   {
     UI_ACI.builder = gtk_builder_new ();
-    BUGMSG (gtk_builder_add_from_resource (UI_ACI.builder,
+    BUGCRIT (gtk_builder_add_from_resource (UI_ACI.builder,
                                   "/org/2lgc/codegui/ui/1993_1_1_materiaux.ui",
                                            NULL) != 0,
-            FALSE,
-            gettext ("Builder Failed\n"))
+             FALSE,
+             (gettext ("La génération de la fenêtre %s a échouée.\n"),
+                       "Ajout Matériau Acier");)
     gtk_builder_connect_signals (UI_ACI.builder, p);
     UI_ACI.window = GTK_WIDGET (gtk_builder_get_object (UI_ACI.builder,
                                                 "_1993_1_1_materiaux_window"));
@@ -480,9 +487,9 @@ _1993_1_1_gtk_materiaux (Projet      *p,
   {
     gchar tmp[30];
     
-    BUGMSG (materiau->type == MATERIAU_ACIER,
-            FALSE,
-            gettext ("Le matériau n'est pas en acier.\n"))
+    BUGCRIT (materiau->type == MATERIAU_ACIER,
+             FALSE,
+             (gettext ("Le matériau n'est pas en acier.\n"));)
     gtk_window_set_title (GTK_WINDOW (UI_ACI.window),
                           gettext ("Modification d'un matériau acier"));
     UI_ACI.materiau = materiau;
@@ -548,10 +555,11 @@ _1993_1_1_gtk_materiaux_ajout (GtkMenuItem *menuitem,
  *   - interface graphique non initialisée.
  */
 {
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (p->ui.ef_materiaux.builder,
-          ,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"), "Matériaux")
+  BUGPARAMCRIT (p, "%p", p, )
+  BUGCRIT (p->ui.ef_materiaux.builder,
+           ,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "Ajout Matériau Acier");)
   
   BUG (_1993_1_1_gtk_materiaux (p, NULL), )
 }
