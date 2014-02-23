@@ -102,8 +102,7 @@
 
 #define BUGPARAM(PARAM, TYPE, X, Y, ...) {if (!(X)) \
   { \
-    printf ("Paramètre incorrect : " #PARAM " = " TYPE ". ", PARAM); \
-    INFO(X, Y, (""); __VA_ARGS__) \
+    FAILPARAM (PARAM, TYPE, Y, __VA_ARGS__) \
   } \
 }
 /**
@@ -122,7 +121,7 @@
 #define BUGPARAMCRIT(PARAM, TYPE, X, Y, ...) {if (!(X)) \
   { \
     printf (gettext ("Erreur critique. ")); \
-    BUGPARAM (PARAM, TYPE, X, Y, __VA_ARGS__) \
+    FAILPARAM (PARAM, TYPE, Y, __VA_ARGS__) \
   } \
 }
 /**
@@ -141,7 +140,7 @@
 #define BUGCRIT(X, Y, ...) {if (!(X)) \
   { \
     printf (gettext ("Erreur critique. ")); \
-    INFO(X, Y, __VA_ARGS__) \
+    FAILINFO (Y, __VA_ARGS__) \
   } \
 }
 /**

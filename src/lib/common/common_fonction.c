@@ -36,7 +36,9 @@ common_fonction_scinde_troncon (Fonction *fonction,
  * \brief Divise un tronçon en deux à la position coupure. Si la coupure est
  *        en dehors de la borne de validité actuelle de la fonction, les bornes
  *        s'en trouvent modifiées. Si la coupure correspond déjà à une jonction
- *        entre deux tronçons, la fonction ne fait rien et renvoie TRUE.
+ *        entre deux tronçons, la fonction ne fait rien et renvoie TRUE. Si la
+ *        coupure à lieu en dehors des bornes de la fonction, le nouvel
+ *        intervalle est remplit par une fonction vide.
  * \param fonction : la variable contenant la fonction,
  * \param coupure : position de la coupure.
  * \return
@@ -49,10 +51,10 @@ common_fonction_scinde_troncon (Fonction *fonction,
 {
   unsigned int i;
   
-  BUGMSG (fonction, FALSE, gettext ("Paramètre %s incorrect.\n"), "fonction")
-  BUGMSG (fonction->nb_troncons,
-          FALSE,
-          gettext ("Impossible de scinder une fonction vide\n"))
+  BUGPARAM (fonction, "%p", fonction, FALSE)
+  INFO (fonction->nb_troncons,
+        FALSE,
+        (gettext ("Impossible de scinder une fonction vide\n"));)
   
   // Si la coupure est égale au début du premier tronçon Alors
   //   Fin.
@@ -63,13 +65,12 @@ common_fonction_scinde_troncon (Fonction *fonction,
   //   Initialisation de tous les coefficients à 0.
   else if (coupure < fonction->troncons[0].debut_troncon)
   {
+    BUGCRIT (fonction->troncons = (Troncon *) realloc (fonction->troncons,
+                               (fonction->nb_troncons + 1) * sizeof (Troncon)),
+             FALSE,
+             (gettext ("Erreur d'allocation mémoire.\n"));)
     fonction->nb_troncons++;
-    fonction->troncons = (Troncon *) realloc (fonction->troncons,
-                                       fonction->nb_troncons*sizeof (Troncon));
-    BUGMSG (fonction->troncons,
-            FALSE,
-            gettext ("Erreur d'allocation mémoire.\n"))
-    for(i = fonction->nb_troncons - 1; i > 0; i--)
+    for (i = fonction->nb_troncons - 1; i > 0; i--)
       memcpy (&(fonction->troncons[i]),
               &(fonction->troncons[i-1]),
               sizeof (Troncon));
@@ -105,11 +106,11 @@ common_fonction_scinde_troncon (Fonction *fonction,
       {
         unsigned int j;
         
+        BUGCRIT (fonction->troncons = (Troncon *) realloc (fonction->troncons,
+                               (fonction->nb_troncons + 1) * sizeof (Troncon)),
+                 FALSE,
+                 (gettext ("Erreur d'allocation mémoire.\n"));)
         fonction->nb_troncons++;
-        BUGMSG (fonction->troncons = (Troncon *) realloc (fonction->troncons,
-                                     fonction->nb_troncons * sizeof (Troncon)),
-                FALSE,
-                gettext ("Erreur d'allocation mémoire.\n"))
         for (j = fonction->nb_troncons - 1; j > i; j--)
           memcpy (&(fonction->troncons[j]),
                   &(fonction->troncons[j - 1]),
@@ -126,12 +127,11 @@ common_fonction_scinde_troncon (Fonction *fonction,
   //   Initialisation de tous les coefficients à 0.
   //   Fin.
   // FinSi
+    BUGCRIT (fonction->troncons = (Troncon *) realloc (fonction->troncons,
+                               (fonction->nb_troncons + 1) * sizeof (Troncon)),
+             FALSE,
+             (gettext ("Erreur d'allocation mémoire.\n"));)
     fonction->nb_troncons++;
-    fonction->troncons = (Troncon *) realloc (fonction->troncons,
-                                     fonction->nb_troncons * sizeof (Troncon));
-    BUGMSG (fonction->troncons,
-            FALSE,
-            gettext ("Erreur d'allocation mémoire.\n"))
     fonction->troncons[fonction->nb_troncons - 1].debut_troncon =
                      fonction->troncons[fonction->nb_troncons - 2].fin_troncon;
     fonction->troncons[fonction->nb_troncons-1].fin_troncon = coupure;
@@ -192,38 +192,61 @@ common_fonction_ajout_poly (Fonction *fonction,
 {
   double x0_t, x1_t, x2_t, x3_t, x4_t, x5_t, x6_t;
   
-  BUGMSG (fonction, FALSE, gettext ("Paramètre %s incorrect.\n"), "fonction")
+  BUGPARAM (fonction, "%p", fonction, FALSE)
   // Si fin_troncon == debut_troncon Alors
   //   Fin.
   // FinSi
   if (ERR (fin_troncon, debut_troncon))
     return TRUE;
   
-  BUGMSG (fin_troncon > debut_troncon,
-          FALSE,
-          "Le début du tronçon (%.20f) est supérieur à la fin (%.20f).\n", debut_troncon, fin_troncon)
+  INFO (fin_troncon > debut_troncon,
+        FALSE,
+        (gettext ("Le début du tronçon (%.20f) est supérieur à la fin (%.20f).\n"),
+                  debut_troncon,
+                  fin_troncon);)
   
   debut_troncon = debut_troncon + t;
   fin_troncon = fin_troncon + t;
   
   // Détermination les nouveaux coefficients à partir du résultat de f(x-t).
   x6_t = x6;
-  x5_t = -6.*x6*t+x5;
-  x4_t = 15.*x6*t*t-5.*x5*t+x4;
-  x3_t = -20.*x6*t*t*t+10.*x5*t*t-4.*x4*t+x3;
-  x2_t = 15.*x6*t*t*t*t-10.*x5*t*t*t+6.*x4*t*t-3.*x3*t+x2;
-  x1_t = -6.*x6*t*t*t*t*t+5.*x5*t*t*t*t-4.*x4*t*t*t+3.*x3*t*t-2.*x2*t+x1;
-  x0_t = x6*t*t*t*t*t*t-x5*t*t*t*t*t+x4*t*t*t*t-x3*t*t*t+x2*t*t-x1*t+x0;
+  x5_t = - 6. * x6 * t
+         + x5;
+  x4_t =  15. * x6 * t * t
+         - 5. * x5 * t
+         + x4;
+  x3_t = - 20. * x6 * t * t * t
+         + 10. * x5 * t * t
+         -  4. * x4 * t
+         + x3;
+  x2_t =   15. * x6 * t * t * t * t
+         - 10. * x5 * t * t * t
+         +  6. * x4 * t * t
+         -  3. * x3 * t
+         + x2;
+  x1_t = - 6. * x6 * t * t * t * t * t
+         + 5. * x5 * t * t * t * t
+         - 4. * x4 * t * t * t
+         + 3. * x3 * t * t
+         - 2. * x2 * t
+         + x1;
+  x0_t =   x6 * t * t * t * t * t * t
+         - x5 * t * t * t * t * t
+         + x4 * t * t * t * t
+         - x3 * t * t * t
+         + x2 * t * t
+         - x1 * t
+         + x0;
   
   // Si aucun troncon n'est présent (fonction vide) Alors
   //   Création d'un tronçon avec pour borne debut_troncon .. fin_troncon.
   //   Attribution des coefficients de la fonction.
   if (fonction->nb_troncons == 0)
   {
+    BUGCRIT (fonction->troncons = (Troncon *) malloc (sizeof (Troncon)),
+             FALSE,
+             (gettext ("Erreur d'allocation mémoire.\n"));)
     fonction->nb_troncons = 1;
-    BUGMSG (fonction->troncons = (Troncon *) malloc (sizeof (Troncon)),
-            FALSE,
-            gettext ("Erreur d'allocation mémoire.\n"))
     fonction->troncons[0].debut_troncon = debut_troncon;
     fonction->troncons[0].fin_troncon = fin_troncon;
     fonction->troncons[0].x0 = x0_t;
@@ -291,10 +314,8 @@ common_fonction_ajout_fonction (Fonction *fonction,
 {
   unsigned int i;
   
-  BUGMSG (fonction, FALSE, gettext ("Paramètre %s incorrect.\n"), "fonction")
-  BUGMSG (fonction_a_ajouter,
-          FALSE,
-          gettext ("Paramètre %s incorrect.\n"), "fonction_a_ajouter")
+  BUGPARAM (fonction, "%p", fonction, FALSE)
+  BUGPARAM (fonction_a_ajouter, "%p", fonction_a_ajouter, FALSE)
   
   for (i = 0; i < fonction_a_ajouter->nb_troncons; i++)
     BUG (common_fonction_ajout_poly (
@@ -333,7 +354,7 @@ common_fonction_compacte (Fonction *fonction,
   unsigned int j; /* Nombre de tronçons à conserver */
   unsigned int k; /* Numéro du précédent tronçon identique */
   
-  BUGMSG (fonction, FALSE, gettext ("Paramètre %s incorrect.\n"), "fonction")
+  BUGPARAM (fonction, "%p", fonction, FALSE)
   
   if ((fonction->nb_troncons == 0) || (fonction->nb_troncons == 1))
     return TRUE;
@@ -352,9 +373,10 @@ common_fonction_compacte (Fonction *fonction,
         ((index == NULL) ||
          (ERR (index->troncons[i].x0, index->troncons[k].x0))))
     {
-      fonction->troncons[j-1].fin_troncon = fonction->troncons[i].fin_troncon;
+      fonction->troncons[j - 1].fin_troncon =
+                                             fonction->troncons[i].fin_troncon;
       if (index != NULL)
-        index->troncons[j-1].fin_troncon = index->troncons[i].fin_troncon;
+        index->troncons[j - 1].fin_troncon = index->troncons[i].fin_troncon;
     }
     else
     {
@@ -372,60 +394,62 @@ common_fonction_compacte (Fonction *fonction,
       k = i;
     }
   }
-  BUGMSG (fonction->troncons = realloc (fonction->troncons,
-                                        sizeof (Troncon) * j),
-          FALSE,
-          gettext ("Erreur d'allocation mémoire.\n"))
   fonction->nb_troncons = j;
   if (index != NULL)
-  {
-    BUGMSG (index->troncons = realloc (index->troncons, sizeof (Troncon) * j),
-            FALSE,
-            gettext ("Erreur d'allocation mémoire.\n"))
     index->nb_troncons = j;
-  }
+  BUGCRIT (fonction->troncons = realloc (fonction->troncons,
+                                         sizeof (Troncon) * j),
+           FALSE,
+           (gettext ("Erreur d'allocation mémoire.\n"));)
+  if (index != NULL)
+    BUGCRIT (index->troncons = realloc (index->troncons, sizeof (Troncon) * j),
+             FALSE,
+             (gettext ("Erreur d'allocation mémoire.\n"));)
   
   return TRUE;
 }
 
 
 void
-common_fonction_ax2_bx_c (double      xx1,
-                          long double yy1,
-                          double      xx2,
-                          long double yy2,
-                          double      xx3,
-                          long double yy3,
+common_fonction_ax2_bx_c (double      x1,
+                          long double y1,
+                          double      x2,
+                          long double y2,
+                          double      x3,
+                          long double y3,
                           double     *a,
                           double     *b,
                           double     *c)
 /**
- * \brief Renvoie a, b, et c en fonction de f(xx1)=yy1, ....
- * \param xx1 : abscisse du permier point,
- * \param yy1 : ordonnée du permier point,
- * \param xx2 : abscisse du deuxième point,
- * \param yy2 : ordonnée du deuxième point,
- * \param xx3 : abscisse du troisième point,
- * \param yy3 : ordonnée du troisième point,
+ * \brief Renvoie a, b, et c en fonction de f(x1)=y1, ....
+ * \param x1 : abscisse du permier point,
+ * \param y1 : ordonnée du permier point,
+ * \param x2 : abscisse du deuxième point,
+ * \param y2 : ordonnée du deuxième point,
+ * \param x3 : abscisse du troisième point,
+ * \param y3 : ordonnée du troisième point,
  * \param a : valeur de a de la fonction a*x²+b*x+c,
  * \param b : valeur de b de la fonction a*x²+b*x+c,
  * \param c : valeur de c de la fonction a*x²+b*x+c.
  * \return Rien.
  */
 {
-  // maxima : solve([a*xx1^2 + b*xx1 + c = yy1,
-  //                 a*xx2^2 + b*xx2 + c = yy2,
-  //                 a*xx3^2 + b*xx3 + c = yy3],
+  // maxima : solve([a*x1^2 + b*x1 + c = y1,
+  //                 a*x2^2 + b*x2 + c = y2,
+  //                 a*x3^2 + b*x3 + c = y3],
   //                [a,b,c]
   //               );
-  *a=(xx1*(yy3-yy2)-xx2*yy3+xx3*yy2+(xx2-xx3)*yy1) /
-             (xx1*(xx3*xx3-xx2*xx2)-xx2*xx3*xx3+xx2*xx2*xx3+xx1*xx1*(xx2-xx3));
-  *b=-(xx1*xx1*(yy3-yy2)-xx2*xx2*yy3+xx3*xx3*yy2+(xx2*xx2-xx3*xx3)*yy1)/
-             (xx1*(xx3*xx3-xx2*xx2)-xx2*xx3*xx3+xx2*xx2*xx3+xx1*xx1*(xx2-xx3));
-  *c=(xx1*(xx3*xx3*yy2-xx2*xx2*yy3)+
-       xx1*xx1*(xx2*yy3-xx3*yy2)+
-       (xx2*xx2*xx3-xx2*xx3*xx3)*yy1)/
-     (xx1*(xx3*xx3-xx2*xx2)-xx2*xx3*xx3+xx2*xx2*xx3+xx1*xx1*(xx2-xx3));
+  *a = (x1 * (y3 - y2) - x2 * y3 + x3 * y2 + (x2 - x3) * y1) /
+       (x1 * (x3 * x3 - x2 * x2) - x2 * x3 * x3 + x2 * x2 * x3 +
+        x1 * x1 * (x2 - x3));
+  *b = - (x1 * x1 * (y3 - y2) - x2 * x2 * y3 + x3 * x3 * y2 +
+          (x2 * x2 - x3 * x3) * y1) /
+         (x1 * (x3 * x3 - x2 * x2) - x2 * x3 * x3 + x2 * x2 * x3 +
+          x1 * x1 * (x2 - x3));
+  *c = (x1 * (x3 * x3 * y2 - x2 * x2 * y3) + x1 * x1 * (x2 * y3 - x3 * y2) +
+        (x2 * x2 * x3 - x2 * x3 * x3) * y1)/
+       (x1 * (x3 * x3 - x2 * x2) - x2 * x3 * x3 + x2 * x2 * x3 +
+        x1 * x1 * (x2 - x3));
   
   return;
 }
@@ -462,10 +486,8 @@ common_fonction_y (Fonction   *fonction,
 {
   unsigned int i;
   
-  BUGMSG (fonction, FALSE, gettext ("Paramètre %s incorrect.\n"), "fonction")
-  BUGMSG ((-1 <= position) && (position <= 1),
-          FALSE,
-          gettext ("Paramètre %s incorrect.\n"), "position")
+  BUGPARAM (fonction, "%p", fonction, NAN)
+  BUGPARAM (position, "%d", ((-1 <= position) && (position <= 1)), NAN)
   
   if (fonction->nb_troncons == 0)
     return NAN;
@@ -489,13 +511,13 @@ common_fonction_y (Fonction   *fonction,
             i++;
         }
         return (long double)
-            fonction->troncons[i].x0+
-            fonction->troncons[i].x1*x+
-            fonction->troncons[i].x2*x*x+
-            fonction->troncons[i].x3*x*x*x+
-            fonction->troncons[i].x4*x*x*x*x+
-            fonction->troncons[i].x5*x*x*x*x*x+
-            fonction->troncons[i].x6*x*x*x*x*x*x;
+            fonction->troncons[i].x0 +
+            fonction->troncons[i].x1 * x +
+            fonction->troncons[i].x2 * x * x +
+            fonction->troncons[i].x3 * x * x * x +
+            fonction->troncons[i].x4 * x * x * x * x +
+            fonction->troncons[i].x5 * x * x * x * x * x +
+            fonction->troncons[i].x6 * x * x * x * x * x * x;
       }
     }
   }
@@ -515,8 +537,8 @@ common_fonction_cherche_zero (Fonction *fonction,
  * \param fonction : fonction à analyser,
  * \param mini : valeur basse du domaine de recherche,
  * \param maxi : valeur haute du domaine de recherche,
- * \param zero_1 : première abscisse ou l'ordonnée vaut 0,
- * \param zero_2 : deuxième abscisse ou l'ordonnée vaut 0. Si un seul zéro est
+ * \param zero_1 : première abscisse où l'ordonnée vaut 0,
+ * \param zero_2 : deuxième abscisse où l'ordonnée vaut 0. Si un seul zéro est
  *                trouvé, il sera toujours dans zero1 et zero2 vaudra NAN.
  * \return
  *   Succès : FALSE si aucun zéro n'est trouvé,
@@ -532,17 +554,17 @@ common_fonction_cherche_zero (Fonction *fonction,
   double zero1, zero2;
   double ecart_x;
   
-  BUGMSG (fonction, FALSE, gettext ("Paramètre %s incorrect.\n"), "fonction")
-  BUGMSG (maxi > mini,
-          FALSE,
-          gettext ("Paramètre %s incorrect.\n"), gettext("Borne incorrecte.\n"))
+  BUGPARAM (fonction, "%p", fonction, FALSE)
+  INFO (maxi > mini,
+        FALSE,
+        (gettext("Borne [%lf,%lf] incorrecte.\n"), mini, maxi);)
   
   xx1_2 = mini;
   xx3_2 = maxi;
   xx2_2 = (xx1_2 + xx3_2) / 2.;
-  yy1 = common_fonction_y (fonction, xx1_2, 1);
-  yy2 = common_fonction_y (fonction, xx2_2, 0);
-  yy3 = common_fonction_y (fonction, xx3_2, -1);
+  BUG (!isnan (yy1 = common_fonction_y (fonction, xx1_2,  1)), FALSE)
+  BUG (!isnan (yy2 = common_fonction_y (fonction, xx2_2,  0)), FALSE)
+  BUG (!isnan (yy3 = common_fonction_y (fonction, xx3_2, -1)), FALSE)
   
   common_fonction_ax2_bx_c (xx1_2, yy1, xx2_2, yy2, xx3_2, yy3, &a, &b, &c);
   
@@ -656,6 +678,7 @@ common_fonction_cherche_zero (Fonction *fonction,
   if (!isnan (zero2))
   {
     double zero2_old = zero2;
+    
     if (zero2 - ecart_x < mini)
       xx1_2 = mini;
     else
@@ -742,6 +765,7 @@ common_fonction_cherche_zero (Fonction *fonction,
   
   if ((isnan (*zero_1)) || (!isnan (*zero_2)))
     return FALSE;
+  
   return TRUE;
 }
 
@@ -759,13 +783,18 @@ common_fonction_caracteristiques (Fonction *fonction,
  *   Succès : le nombre de points caractéristiques.\n
  *   Échec : 0 :
  *     - fonction == NULL,
+ *     - pos == NULL,
+ *     - val == NULL,
  *     - erreur d'allocation mémoire.
  */
 {
   unsigned int i, nb = 0, j;
   double      *pos_tmp = NULL, *val_tmp = NULL;
+  void        *tmp;
   
-  BUGMSG (fonction, 0, gettext ("Paramètre %s incorrect.\n"), "fonction")
+  BUGPARAM (fonction, "%p", fonction, 0)
+  BUGPARAM (pos, "%p", pos, 0)
+  BUGPARAM (val, "%p", val, 0)
   
   if (fonction->nb_troncons == 0)
   {
@@ -779,15 +808,16 @@ common_fonction_caracteristiques (Fonction *fonction,
     // On commence par s'occuper du début du tronçon. 
     
     // On ajoute si c'est le début de la fonction
-    if (i==0)
+    if (i == 0)
     {
-      BUGMSG (pos_tmp = malloc (sizeof (double)),
-              0,
-              gettext ("Erreur d'allocation mémoire.\n"));
+      BUGCRIT (pos_tmp = malloc (sizeof (double)),
+               0,
+               (gettext ("Erreur d'allocation mémoire.\n"));)
       pos_tmp[0] = fonction->troncons[0].debut_troncon;
-      BUGMSG (val_tmp = malloc (sizeof (double)),
-              0,
-              gettext ("Erreur d'allocation mémoire.\n"))
+      BUGCRIT (val_tmp = malloc (sizeof (double)),
+               0,
+               (gettext ("Erreur d'allocation mémoire.\n"));
+                 free (pos_tmp);)
       val_tmp[0] = common_fonction_y (fonction,
                                       fonction->troncons[0].debut_troncon,
                                       1);
@@ -807,24 +837,36 @@ common_fonction_caracteristiques (Fonction *fonction,
                                     1))))
       {
         nb++;
-        BUGMSG (pos_tmp = realloc (pos_tmp, sizeof (double) * nb),
-                0,
-                gettext ("Erreur d'allocation mémoire.\n"))
+        tmp = pos_tmp;
+        BUGCRIT (pos_tmp = realloc (pos_tmp, sizeof (double) * nb),
+                 0,
+                 (gettext ("Erreur d'allocation mémoire.\n"));
+                   free (tmp);
+                   free (val_tmp);)
         pos_tmp[nb - 1] = fonction->troncons[i].debut_troncon;
-        BUGMSG (val_tmp = realloc (val_tmp, sizeof (double) * nb),
-                0,
-                gettext ("Erreur d'allocation mémoire.\n"))
+        tmp = val_tmp;
+        BUGCRIT (val_tmp = realloc (val_tmp, sizeof (double) * nb),
+                 0,
+                 (gettext ("Erreur d'allocation mémoire.\n"));
+                   free (pos_tmp);
+                   free (tmp);)
         val_tmp[nb - 1] = common_fonction_y (fonction,
                                            fonction->troncons[i].debut_troncon,
                                              -1);
         nb++;
-        BUGMSG (pos_tmp = realloc (pos_tmp, sizeof (double) * nb),
-                0,
-                gettext ("Erreur d'allocation mémoire.\n"))
+        tmp = pos_tmp;
+        BUGCRIT (pos_tmp = realloc (pos_tmp, sizeof (double) * nb),
+                 0,
+                 (gettext ("Erreur d'allocation mémoire.\n"));
+                   free (tmp);
+                   free (val_tmp);)
         pos_tmp[nb - 1] = fonction->troncons[i].debut_troncon;
-        BUGMSG (val_tmp = realloc (val_tmp, sizeof (double) * nb),
-                0,
-                gettext ("Erreur d'allocation mémoire.\n"))
+        tmp = val_tmp;
+        BUGCRIT (val_tmp = realloc (val_tmp, sizeof (double) * nb),
+                 0,
+                 (gettext ("Erreur d'allocation mémoire.\n"));
+                   free (pos_tmp);
+                   free (tmp);)
         val_tmp[nb - 1] = common_fonction_y (fonction,
                                            fonction->troncons[i].debut_troncon,
                                              1);
@@ -858,13 +900,19 @@ common_fonction_caracteristiques (Fonction *fonction,
         if (signbit (fprim1) != signbit (fprim2))
         {
           nb++;
-          BUGMSG (pos_tmp = realloc (pos_tmp, sizeof (double) * nb),
-                  0,
-                  gettext ("Erreur d'allocation mémoire.\n"))
+          tmp = pos_tmp;
+          BUGCRIT (pos_tmp = realloc (pos_tmp, sizeof (double) * nb),
+                   0,
+                   (gettext ("Erreur d'allocation mémoire.\n"));
+                     free (tmp);
+                     free (val_tmp);)
           pos_tmp[nb - 1] = fonction->troncons[i].debut_troncon;
-          BUGMSG (val_tmp = realloc (val_tmp, sizeof (double) * nb),
-                  0,
-                  gettext ("Erreur d'allocation mémoire.\n"))
+          tmp = val_tmp;
+          BUGCRIT (val_tmp = realloc (val_tmp, sizeof (double) * nb),
+                   0,
+                   (gettext ("Erreur d'allocation mémoire.\n"));
+                     free (pos_tmp);
+                     free (tmp);)
           val_tmp[nb - 1] = common_fonction_y (fonction,
                                            fonction->troncons[i].debut_troncon,
                                                -1);
@@ -1142,7 +1190,7 @@ common_fonction_caracteristiques (Fonction *fonction,
         if (ecart_x > ecart_old)
         {
           // Si on arrive ici, c'est que la méthode ci-dessus ne marche plus à
-          // cause des imprécisions dûes aux virgules flottantes. On passe donc
+          // cause des imprécisions dues aux virgules flottantes. On passe donc
           // en mode recherche dicotomique en calculant le signe de la dérivée
           // aux points xx1_2, xx2_2 et xx3_2. Si le signe de xx1_2 est le même
           // que xx2_2, xx1_2 devient égal à xx2_2. Si le signe de xx3_2 est le
@@ -1204,37 +1252,55 @@ common_fonction_caracteristiques (Fonction *fonction,
       if ((!isnan (a)) && (!ERR (pos_tmp [nb - 1] - a, 0.)))
       {
         nb++;
-        BUGMSG (pos_tmp = realloc (pos_tmp, sizeof (double) * nb),
-                0,
-                gettext ("Erreur d'allocation mémoire.\n"))
+        tmp = pos_tmp;
+        BUGCRIT (pos_tmp = realloc (pos_tmp, sizeof (double) * nb),
+                 0,
+                 (gettext ("Erreur d'allocation mémoire.\n"));
+                   free (tmp);
+                   free (val_tmp);)
         pos_tmp[nb - 1] = a;
-        BUGMSG (val_tmp = realloc (val_tmp, sizeof (double) * nb),
-                0,
-                gettext ("Erreur d'allocation mémoire.\n"))
+        tmp = val_tmp;
+        BUGCRIT (val_tmp = realloc (val_tmp, sizeof (double) * nb),
+                 0,
+                 (gettext ("Erreur d'allocation mémoire.\n"));
+                   free (pos_tmp);
+                   free (tmp);)
         val_tmp[nb - 1] = common_fonction_y (fonction, a, 0);
       }
       if ((!isnan (b)) && (!ERR (pos_tmp[nb - 1] - b, 0.)))
       {
         nb++;
-        BUGMSG (pos_tmp = realloc (pos_tmp, sizeof (double) * nb),
-                0,
-                gettext ("Erreur d'allocation mémoire.\n"))
+        tmp = pos_tmp;
+        BUGCRIT (pos_tmp = realloc (pos_tmp, sizeof (double) * nb),
+                 0,
+                 (gettext ("Erreur d'allocation mémoire.\n"));
+                   free (tmp);
+                   free (val_tmp);)
         pos_tmp[nb - 1] = b;
-        BUGMSG (val_tmp = realloc (val_tmp, sizeof (double)  *nb),
-                0,
-                gettext ("Erreur d'allocation mémoire.\n"))
+        tmp = val_tmp;
+        BUGCRIT (val_tmp = realloc (val_tmp, sizeof (double) * nb),
+                 0,
+                 (gettext ("Erreur d'allocation mémoire.\n"));
+                   free (pos_tmp);
+                   free (tmp);)
         val_tmp[nb - 1] = common_fonction_y (fonction, b, 0);
       }
       if ((!isnan (c)) && (!ERR (pos_tmp [nb - 1] - c, 0.)))
       {
         nb++;
-        BUGMSG (pos_tmp = realloc (pos_tmp, sizeof (double) * nb),
-                0,
-                gettext ("Erreur d'allocation mémoire.\n"))
+        tmp = pos_tmp;
+        BUGCRIT (pos_tmp = realloc (pos_tmp, sizeof (double) * nb),
+                 0,
+                 (gettext ("Erreur d'allocation mémoire.\n"));
+                   free (tmp);
+                   free (val_tmp);)
         pos_tmp[nb - 1] = c;
-        BUGMSG (val_tmp = realloc (val_tmp, sizeof (double) * nb),
-                0,
-                gettext ("Erreur d'allocation mémoire.\n"))
+        tmp = val_tmp;
+        BUGCRIT (val_tmp = realloc (val_tmp, sizeof (double) * nb),
+                 0,
+                 (gettext ("Erreur d'allocation mémoire.\n"));
+                   free (pos_tmp);
+                   free (tmp);)
         val_tmp[nb - 1] = common_fonction_y (fonction, c, 0);
       }
     }
@@ -1244,13 +1310,19 @@ common_fonction_caracteristiques (Fonction *fonction,
             fonction->troncons[fonction->nb_troncons - 1].fin_troncon))
   {
     nb++;
-    BUGMSG (pos_tmp = realloc (pos_tmp, sizeof (double) * nb),
-            0,
-            gettext ("Erreur d'allocation mémoire.\n"))
+    tmp = pos_tmp;
+    BUGCRIT (pos_tmp = realloc (pos_tmp, sizeof (double) * nb),
+             0,
+             (gettext ("Erreur d'allocation mémoire.\n"));
+               free (tmp);
+               free (val_tmp);)
     pos_tmp[nb - 1] = fonction->troncons[fonction->nb_troncons-1].fin_troncon;
-    BUGMSG (val_tmp = realloc (val_tmp, sizeof (double) * nb),
-            0,
-            gettext ("Erreur d'allocation mémoire.\n"))
+    tmp = val_tmp;
+    BUGCRIT (val_tmp = realloc (val_tmp, sizeof (double) * nb),
+             0,
+             (gettext ("Erreur d'allocation mémoire.\n"));
+               free (pos_tmp);
+               free (tmp);)
     val_tmp[nb - 1] = common_fonction_y (fonction,
                      fonction->troncons[fonction->nb_troncons - 1].fin_troncon,
                                          -1);
@@ -1282,33 +1354,35 @@ char *common_fonction_affiche_caract (Fonction *fonction,
   unsigned int nb_val, i;
   char        *retour;
   
-  BUGMSG (fonction, FALSE, gettext ("Paramètre %s incorrect.\n"), "fonction")
+  BUGPARAM (fonction, "%p", fonction, FALSE)
   
-  nb_val = common_fonction_caracteristiques (fonction, &pos, &val);
+  BUG (nb_val = common_fonction_caracteristiques (fonction, &pos, &val), NULL);
   
-  if (nb_val == 0)
-    return NULL;
-  
-  BUGMSG (retour = g_strdup_printf("%.*lf : %.*lf",
-                                   decimales_x,
-                                   pos[0],
-                                   decimales_y,
-                                   val[0]),
-          NULL,
-          gettext ("Erreur d'allocation mémoire.\n"))
+  BUGCRIT (retour = g_strdup_printf("%.*lf : %.*lf",
+                                    decimales_x,
+                                    pos[0],
+                                    decimales_y,
+                                    val[0]),
+           NULL,
+           (gettext ("Erreur d'allocation mémoire.\n"));
+             free (pos);
+             free (val);)
   
   for (i = 1; i < nb_val; i++)
   {
     char *tmp = retour;
     
-    BUGMSG (retour = g_strdup_printf ("%s\n%.*lf : %.*lf",
-                                      retour,
-                                      decimales_x,
-                                      pos[i],
-                                      decimales_y,
-                                      val[i]),
-            NULL,
-            gettext ("Erreur d'allocation mémoire.\n"))
+    BUGCRIT (retour = g_strdup_printf ("%s\n%.*lf : %.*lf",
+                                       retour,
+                                       decimales_x,
+                                       pos[i],
+                                       decimales_y,
+                                       val[i]),
+             NULL,
+             (gettext ("Erreur d'allocation mémoire.\n"));
+               free (tmp);
+               free (pos);
+               free (val);)
     free (tmp);
   }
   
@@ -1333,14 +1407,13 @@ common_fonction_affiche (Fonction *fonction)
 {
   unsigned int i;
   
-  BUGMSG (fonction, FALSE, gettext ("Paramètre %s incorrect.\n"), "fonction")
+  BUGPARAM (fonction, "%p", fonction, FALSE)
   
-  if (fonction->nb_troncons == 0)
-    printf (gettext ("Fonction indéfinie.\n"));
+  INFO (fonction->nb_troncons, FALSE, (gettext ("Fonction indéfinie.\n"));)
   
   for (i = 0; i < fonction->nb_troncons; i++)
   {
-    printf("debut_troncon : %.5f\tfin_troncon : %.5f\t0 : %.20f\tx : %.20f\tx2 : %.20f\tx3 : %.20f\tx4 : %.20f\tx5 : %.20f\tx6 : %.20f\tsoit f(%.5f) = %.20f\tf(%.5f) = %.20f\n",
+    printf ("debut_troncon : %.5f\tfin_troncon : %.5f\t0 : %.20f\tx : %.20f\tx2 : %.20f\tx3 : %.20f\tx4 : %.20f\tx5 : %.20f\tx6 : %.20f\tsoit f(%.5f) = %.20f\tf(%.5f) = %.20f\n",
       fonction->troncons[i].debut_troncon,
       fonction->troncons[i].fin_troncon,
       fonction->troncons[i].x0,
@@ -1387,27 +1460,38 @@ common_fonction_dessin (GList *fonctions,
   int              x, y;
   guchar          *pixels, *p;
   GdkPixbuf       *pixbuf;
-  cairo_surface_t *surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                                         width,
-                                                         height);
-  cairo_t         *cr = cairo_create (surface);
+  cairo_surface_t *surface;
+  cairo_t         *cr;
   double           fy_min = 0., fy_max = 0., echelle;
   double          *mi, *ma;
   GList           *list_parcours;
   Fonction        *fonction;
   
-  BUGMSG (fonctions, NULL, gettext ("Paramètre %s incorrect.\n"), "fonctions")
-  BUGMSG (width, NULL, gettext ("La largeur du dessin ne peut être nulle.\n"))
-  BUGMSG (height, NULL, gettext ("La hauteur du dessin ne peut être nulle.\n"))
-  BUGMSG (cairo_surface_status (surface) == CAIRO_STATUS_SUCCESS,
-          NULL,
-          gettext ("Erreur d'allocation mémoire.\n"))
-  BUGMSG (mi = malloc (sizeof (double) * width),
-          NULL,
-          gettext ("Erreur d'allocation mémoire.\n"))
-  BUGMSG (ma = malloc (sizeof (double) * width),
-          NULL,
-          gettext ("Erreur d'allocation mémoire.\n"))
+  BUGPARAM (fonctions, "%p", fonctions, NULL)
+  INFO (width, NULL, (gettext ("La largeur du dessin ne peut être nulle.\n"));)
+  INFO (height,
+        NULL,
+        (gettext ("La hauteur du dessin ne peut être nulle.\n"));)
+  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width, height);
+  BUGCRIT (cairo_surface_status (surface) == CAIRO_STATUS_SUCCESS,
+           NULL,
+           (gettext ("Erreur d'allocation mémoire.\n"));)
+  cr = cairo_create (surface);
+  BUGCRIT (cairo_status (cr) == CAIRO_STATUS_SUCCESS,
+           NULL,
+           (gettext ("Erreur d'allocation mémoire.\n"));
+             cairo_surface_destroy (surface);)
+  BUGCRIT (mi = malloc (sizeof (double) * width),
+           NULL,
+           (gettext ("Erreur d'allocation mémoire.\n"));
+             cairo_destroy (cr);
+             cairo_surface_destroy (surface);)
+  BUGCRIT (ma = malloc (sizeof (double) * width),
+           NULL,
+           (gettext ("Erreur d'allocation mémoire.\n"));
+             cairo_destroy (cr);
+             cairo_surface_destroy (surface);
+             free (mi);)
   
   pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, TRUE, 8, width, height);
   pixels = gdk_pixbuf_get_pixels (pixbuf);
@@ -1562,11 +1646,9 @@ common_fonction_conversion_combinaisons (Fonction *fonction,
   GList       *list_tmp = NULL;
   unsigned int i;
   
-  BUGMSG (fonction, FALSE, gettext ("Paramètre %s incorrect.\n"), "fonction")
-  BUGMSG (ponderations,
-          FALSE,
-          gettext ("Paramètre %s incorrect.\n"), "ponderations")
-  BUGMSG (liste, FALSE, gettext ("Paramètre %s incorrect.\n"), "liste")
+  BUGPARAM (fonction, "%p", fonction, FALSE)
+  BUGPARAM (ponderations, "%p", ponderations, FALSE)
+  BUGPARAM (liste, "%p", liste, FALSE)
   
   for (i = 0; i < fonction->nb_troncons; i++)
   {
@@ -1604,190 +1686,218 @@ common_fonction_renvoie (Fonction *fonction,
  */
 {
   unsigned int i;
-  char        *retour, *ajout;
+  char        *retour;
   double       minimum = pow (10, -decimales);
   GList       *list_parcours;
   
-  BUGMSG (fonction, NULL, gettext ("Paramètre %s incorrect.\n"), "fonction")
-  BUGMSG ((index == NULL) ||
+  BUGPARAM (fonction, "%p", fonction, NULL)
+  BUGPARAM (index,
+            "%p",
+            (index == NULL) ||
           ((index != NULL) && (fonction->nb_troncons == g_list_length(index))),
-          NULL,
-          gettext ("Paramètre %s incorrect.\n"), "index")
+            NULL)
   
   if (fonction->nb_troncons == 0)
-    BUGMSG (retour = g_strdup_printf ("%.*lf", decimales, 0.),
-            NULL,
-            gettext ("Erreur d'allocation mémoire.\n"))
+    BUGCRIT (retour = g_strdup_printf ("%.*lf", decimales, 0.),
+             NULL,
+             (gettext ("Erreur d'allocation mémoire.\n"));)
   else
   {
-    BUGMSG (retour = malloc (sizeof (char)),
-            NULL,
-            gettext ("Erreur d'allocation mémoire.\n"))
+    BUGCRIT (retour = malloc (sizeof (char)),
+             NULL,
+             (gettext ("Erreur d'allocation mémoire.\n"));)
     retour[0] = 0;
   }
   
   list_parcours = index;
   for (i = 0; i < fonction->nb_troncons; i++)
   {
-    char *tmp;
-    
-    BUGMSG (ajout = malloc (sizeof (char)),
-            NULL,
-            gettext ("Erreur d'allocation mémoire.\n"))
-    ajout[0] = 0;
+    char *tmp, *ajout;
     
     if (i != 0)
     {
       tmp = retour;
-      BUGMSG (retour = g_strdup_printf ("%s\n", retour),
-              NULL,
-              gettext ("Erreur d'allocation mémoire.\n"))
+      BUGCRIT (retour = g_strdup_printf ("%s\n", retour),
+               NULL,
+               (gettext ("Erreur d'allocation mémoire.\n"));
+                 free (tmp);)
       free (tmp);
     }
     
     if (fonction->nb_troncons != 1)
     {
       tmp = retour;
-      BUGMSG (retour = g_strdup_printf (gettext("%sde %.*lfm à %.*lfm : "),
-                                        tmp,
-                                        DECIMAL_DISTANCE,
-                                        fonction->troncons[i].debut_troncon,
-                                        DECIMAL_DISTANCE,
-                                        fonction->troncons[i].fin_troncon),
-              NULL,
-              gettext ("Erreur d'allocation mémoire.\n"))
+      BUGCRIT (retour = g_strdup_printf (gettext("%sde %.*lfm à %.*lfm : "),
+                                         tmp,
+                                         DECIMAL_DISTANCE,
+                                         fonction->troncons[i].debut_troncon,
+                                         DECIMAL_DISTANCE,
+                                         fonction->troncons[i].fin_troncon),
+               NULL,
+               (gettext ("Erreur d'allocation mémoire.\n"));
+                 free (tmp);)
       free (tmp);
     }
+    
+    BUGCRIT (ajout = malloc (sizeof (char)),
+             NULL,
+             (gettext ("Erreur d'allocation mémoire.\n"));
+               free (retour);)
+    ajout[0] = 0;
     
     if (ABS (fonction->troncons[i].x0) > minimum)
     {
       tmp = ajout;
-      BUGMSG (ajout = g_strdup_printf ("%s%.*lf",
-                                       ajout,
-                                       decimales,
-                                       fonction->troncons[i].x0),
-              NULL,
-              gettext ("Erreur d'allocation mémoire.\n"))
+      BUGCRIT (ajout = g_strdup_printf ("%s%.*lf",
+                                        ajout,
+                                        decimales,
+                                        fonction->troncons[i].x0),
+               NULL,
+               (gettext ("Erreur d'allocation mémoire.\n"));
+                 free (tmp);
+                 free (retour);)
       free (tmp);
     }
     
     if (ABS (fonction->troncons[i].x1) > minimum)
     {
       tmp = ajout;
-      BUGMSG (ajout = g_strdup_printf ("%s%s%.*lf*x",
-                                       ajout,
-                                       fonction->troncons[i].x1 > 0 ?
+      BUGCRIT (ajout = g_strdup_printf ("%s%s%.*lf*x",
+                                        ajout,
+                                        fonction->troncons[i].x1 > 0 ?
                                           (strcmp(ajout, "") == 0 ? "" : "+") :
                                           "",
-                                       decimales,
-                                       fonction->troncons[i].x1),
-              NULL,
-              gettext ("Erreur d'allocation mémoire.\n"))
+                                        decimales,
+                                        fonction->troncons[i].x1),
+               NULL,
+               (gettext ("Erreur d'allocation mémoire.\n"));
+                 free (tmp);
+                 free (retour);)
       free (tmp);
     }
     
     if (ABS (fonction->troncons[i].x2) > minimum)
     {
       tmp = ajout;
-      BUGMSG (ajout = g_strdup_printf ("%s%s%.*lf*x²",
-                                       ajout,
-                                       fonction->troncons[i].x2 > 0 ?
+      BUGCRIT (ajout = g_strdup_printf ("%s%s%.*lf*x²",
+                                        ajout,
+                                        fonction->troncons[i].x2 > 0 ?
                                           (strcmp(ajout, "") == 0 ? "" : "+") :
                                           "",
-                                       decimales,
-                                       fonction->troncons[i].x2),
-              NULL,
-              gettext ("Erreur d'allocation mémoire.\n"))
+                                        decimales,
+                                        fonction->troncons[i].x2),
+               NULL,
+               (gettext ("Erreur d'allocation mémoire.\n"));
+                 free (tmp);
+                 free (retour);)
       free (tmp);
     }
     
     if (ABS (fonction->troncons[i].x3) > minimum)
     {
       tmp = ajout;
-      BUGMSG (ajout = g_strdup_printf ("%s%s%.*lf*x³",
-                                       ajout,
-                                       fonction->troncons[i].x3 > 0 ?
+      BUGCRIT (ajout = g_strdup_printf ("%s%s%.*lf*x³",
+                                        ajout,
+                                        fonction->troncons[i].x3 > 0 ?
                                           (strcmp(ajout, "") == 0 ? "" : "+") :
-                                       "",
-                                       decimales,
-                                       fonction->troncons[i].x3),
-              NULL,
-              gettext ("Erreur d'allocation mémoire.\n"))
+                                        "",
+                                        decimales,
+                                        fonction->troncons[i].x3),
+               NULL,
+               (gettext ("Erreur d'allocation mémoire.\n"));
+                 free (tmp);
+                 free (retour);)
       free (tmp);
     }
     
     if (ABS (fonction->troncons[i].x4) > minimum)
     {
       tmp = ajout;
-      BUGMSG (ajout = g_strdup_printf ("%s%s%.*lf*x⁴",
-                                       ajout,
-                                       fonction->troncons[i].x4 > 0 ?
+      BUGCRIT (ajout = g_strdup_printf ("%s%s%.*lf*x⁴",
+                                        ajout,
+                                        fonction->troncons[i].x4 > 0 ?
                                           (strcmp(ajout, "") == 0 ? "" : "+") :
                                           "",
-                                       decimales,
-                                       fonction->troncons[i].x4),
-              NULL,
-              gettext ("Erreur d'allocation mémoire.\n"))
+                                        decimales,
+                                        fonction->troncons[i].x4),
+               NULL,
+               (gettext ("Erreur d'allocation mémoire.\n"));
+                 free (tmp);
+                 free (retour);)
       free (tmp);
     }
     
     if (ABS (fonction->troncons[i].x5) > minimum)
     {
       tmp = ajout;
-      BUGMSG (ajout = g_strdup_printf ("%s%s%.*lf*x⁵",
-                                       ajout,
-                                       fonction->troncons[i].x5 > 0 ?
+      BUGCRIT (ajout = g_strdup_printf ("%s%s%.*lf*x⁵",
+                                        ajout,
+                                        fonction->troncons[i].x5 > 0 ?
                                           (strcmp(ajout, "") == 0 ? "" : "+") :
                                           "",
-                                       decimales,
-                                       fonction->troncons[i].x5),
-              NULL,
-              gettext ("Erreur d'allocation mémoire.\n"))
+                                        decimales,
+                                        fonction->troncons[i].x5),
+               NULL,
+               (gettext ("Erreur d'allocation mémoire.\n"));
+                 free (tmp);
+                 free (retour);)
       free (tmp);
     }
     
     if (ABS (fonction->troncons[i].x6) > minimum)
     {
       tmp = ajout;
-      BUGMSG (ajout = g_strdup_printf ("%s%s%.*lf*x⁶",
-                                       ajout,
-                                       fonction->troncons[i].x6 > 0 ?
+      BUGCRIT (ajout = g_strdup_printf ("%s%s%.*lf*x⁶",
+                                        ajout,
+                                        fonction->troncons[i].x6 > 0 ?
                                           (strcmp(ajout, "") == 0 ? "" : "+") :
                                           "",
-                                       decimales,
-                                       fonction->troncons[i].x6),
-              NULL,
-              gettext ("Erreur d'allocation mémoire.\n"))
+                                        decimales,
+                                        fonction->troncons[i].x6),
+               NULL,
+               (gettext ("Erreur d'allocation mémoire.\n"));
+                 free (tmp);
+                 free (retour);)
       free (tmp);
     }
     
     if (strcmp (ajout, "") != 0)
     {
       tmp = retour;
-      BUGMSG (retour = g_strdup_printf ("%s%s", retour, ajout),
-              NULL,
-              gettext ("Erreur d'allocation mémoire.\n"))
+      BUGCRIT (retour = g_strdup_printf ("%s%s", retour, ajout),
+               NULL,
+               (gettext ("Erreur d'allocation mémoire.\n"));
+                 free (tmp);
+                 free (ajout);)
       free (tmp);
       free (ajout);
     }
     else
     {
       tmp = retour;
-      BUGMSG (retour = g_strdup_printf ("%s%.*lf", retour, decimales, 0.),
-              NULL,
-              gettext ("Erreur d'allocation mémoire.\n"))
+      BUGCRIT (retour = g_strdup_printf ("%s%.*lf", retour, decimales, 0.),
+               NULL,
+               (gettext ("Erreur d'allocation mémoire.\n"));
+                 free (tmp);
+                 free (ajout);)
       free (tmp);
       free (ajout);
     }
     
     if (index != NULL)
     {
-      char *tmp2 = _1990_ponderations_description (list_parcours->data);
+      char *tmp2;
       
+      BUGCRIT (tmp2 = _1990_ponderations_description (list_parcours->data),
+               NULL,
+               (gettext ("Erreur d'allocation mémoire.\n"));
+                 free (retour);)
       tmp = retour;
-      BUGMSG (retour = g_strdup_printf ("%s (%s)", retour, tmp2),
-              NULL,
-              gettext ("Erreur d'allocation mémoire.\n"))
+      BUGCRIT (retour = g_strdup_printf ("%s (%s)", retour, tmp2),
+               NULL,
+               (gettext ("Erreur d'allocation mémoire.\n"));
+                 free (tmp);
+                 free (tmp2);)
       free (tmp2);
       free (tmp);
     }
@@ -1827,16 +1937,18 @@ common_fonction_renvoie_enveloppe (GList    *fonctions,
   GList    *list_parcours;
   int       num;
   
-  BUGMSG (fonctions, FALSE, gettext ("Paramètre %s incorrect.\n"), "fonctions")
-  BUGMSG (fonction_min,
-          FALSE,
-          gettext ("Paramètre %s incorrect.\n"), "fonction_min")
-  BUGMSG (fonction_max,
-          FALSE,
-          gettext ("Paramètre %s incorrect.\n"), "fonction_max")
-  BUGMSG (comb_min, FALSE, gettext ("Paramètre %s incorrect.\n"), "comb_min")
-  BUGMSG (comb_max, FALSE, gettext ("Paramètre %s incorrect.\n"), "comb_max")
+  BUGPARAM (fonctions, "%p", fonctions, FALSE)
+  BUGPARAM (fonction_min, "%p", fonction_min, FALSE)
+  BUGPARAM (fonction_max, "%p", fonction_max, FALSE)
+  BUGPARAM (comb_min, "%p", comb_min, FALSE)
+  BUGPARAM (comb_max, "%p", comb_max, FALSE)
   
+#define FREE_ALL { \
+  free (fonction_min->troncons); \
+  free (fonction_max->troncons); \
+  free (comb_min->troncons); \
+  free (comb_max->troncons); \
+}
   fonction_min->nb_troncons = 0;
   fonction_min->troncons = NULL;
   fonction_max->nb_troncons = 0;
@@ -1849,11 +1961,20 @@ common_fonction_renvoie_enveloppe (GList    *fonctions,
   list_parcours = fonctions;
   fonction = list_parcours->data;
   
-  BUG (common_fonction_ajout_fonction (fonction_min, fonction, 1.), FALSE)
-  BUG (common_fonction_ajout_fonction (fonction_max, fonction, 1.), FALSE)
-  BUG (common_fonction_ajout_fonction (comb_min, fonction, 0.), FALSE)
-  BUG (common_fonction_ajout_fonction (comb_max, fonction, 0.), FALSE)
+  BUG (common_fonction_ajout_fonction (fonction_min, fonction, 1.),
+       FALSE,
+       FREE_ALL)
+  BUG (common_fonction_ajout_fonction (fonction_max, fonction, 1.),
+       FALSE,
+       FREE_ALL)
+  BUG (common_fonction_ajout_fonction (comb_min, fonction, 0.),
+       FALSE,
+       FREE_ALL)
+  BUG (common_fonction_ajout_fonction (comb_max, fonction, 0.),
+       FALSE,
+       FREE_ALL)
   
+#undef FREE_ALL
   list_parcours = g_list_next (list_parcours);
   num = 1;
   while (list_parcours != NULL)
@@ -1866,21 +1987,42 @@ common_fonction_renvoie_enveloppe (GList    *fonctions,
     fonction = list_parcours->data;
     
     memset (&fonction_moins, 0, sizeof (fonction_moins));
-    BUG (common_fonction_ajout_fonction (&fonction_moins, fonction, 1.), FALSE)
-    BUG (common_fonction_ajout_fonction (&fonction_moins, fonction_max, -1.),
-         FALSE)
     memset (&fonction_bis, 0, sizeof (fonction_bis));
-    BUG (common_fonction_ajout_fonction (&fonction_bis, fonction, 1.), FALSE)
+#define FREE_ALL { \
+  free (fonction_min->troncons); \
+  free (fonction_max->troncons); \
+  free (comb_min->troncons); \
+  free (comb_max->troncons); \
+  free (fonction_bis.troncons); \
+  free (fonction_moins.troncons); \
+}
+    BUG (common_fonction_ajout_fonction (&fonction_moins, fonction, 1.),
+         FALSE,
+         FREE_ALL)
+    BUG (common_fonction_ajout_fonction (&fonction_moins, fonction_max, -1.),
+         FALSE,
+         FREE_ALL)
+    BUG (common_fonction_ajout_fonction (&fonction_bis, fonction, 1.),
+         FALSE,
+         FREE_ALL)
     for (i = 0; i < fonction_moins.nb_troncons; i++)
     {
       int    modif;
       double zero1, zero2;
       
       x_base = fonction_moins.troncons[i].debut_troncon;
-      BUG (common_fonction_scinde_troncon (&fonction_bis, x_base), FALSE)
-      BUG (common_fonction_scinde_troncon (fonction_max, x_base), FALSE)
-      BUG (common_fonction_scinde_troncon (comb_max, x_base), FALSE)
-      BUG (common_fonction_scinde_troncon (&fonction_moins, x_base), FALSE)
+      BUG (common_fonction_scinde_troncon (&fonction_bis, x_base),
+           FALSE,
+           FREE_ALL)
+      BUG (common_fonction_scinde_troncon (fonction_max, x_base),
+           FALSE,
+           FREE_ALL)
+      BUG (common_fonction_scinde_troncon (comb_max, x_base),
+           FALSE,
+           FREE_ALL)
+      BUG (common_fonction_scinde_troncon (&fonction_moins, x_base),
+           FALSE,
+           FREE_ALL)
       
       x[0] = x_base;
       val[0] = common_fonction_y (&fonction_moins, x[0], 1);
@@ -1914,14 +2056,24 @@ common_fonction_renvoie_enveloppe (GList    *fonctions,
                                              x[j],
                                              &zero1,
                                              &zero2),
-               FALSE)
-          BUGMSG ((!isnan (zero1)) && (isnan (zero2)),
-                  FALSE,
-                  gettext ("Zéro impossible à trouver.\n"))
-          BUG (common_fonction_scinde_troncon (fonction_max, zero1), FALSE)
-          BUG (common_fonction_scinde_troncon (comb_max, zero1), FALSE)
-          BUG (common_fonction_scinde_troncon (&fonction_bis, zero1), FALSE)
-          BUG (common_fonction_scinde_troncon (&fonction_moins, zero1), FALSE)
+               FALSE,
+               FREE_ALL)
+          BUGCRIT ((!isnan (zero1)) && (isnan (zero2)),
+                   FALSE,
+                   (gettext ("Zéro impossible à trouver.\n"));
+                     FREE_ALL)
+          BUG (common_fonction_scinde_troncon (fonction_max, zero1),
+               FALSE,
+               FREE_ALL)
+          BUG (common_fonction_scinde_troncon (comb_max, zero1),
+               FALSE,
+               FREE_ALL)
+          BUG (common_fonction_scinde_troncon (&fonction_bis, zero1),
+               FALSE,
+               FREE_ALL)
+          BUG (common_fonction_scinde_troncon (&fonction_moins, zero1),
+               FALSE,
+               FREE_ALL)
           x_base = zero1;
           modif = 1;
         }
@@ -1934,15 +2086,25 @@ common_fonction_renvoie_enveloppe (GList    *fonctions,
                                              x[j],
                                              &zero1,
                                              &zero2),
-               FALSE)
-          BUGMSG((!isnan (zero1)) && (isnan (zero2)),
-                 FALSE,
-                 gettext ("Zéro impossible à trouver.\n"))
+               FALSE,
+               FREE_ALL)
+          BUGCRIT ((!isnan (zero1)) && (isnan (zero2)),
+                   FALSE,
+                   (gettext ("Zéro impossible à trouver.\n"));
+                     FREE_ALL)
           tmp = fonction_moins.troncons[i].fin_troncon;
-          BUG (common_fonction_scinde_troncon (fonction_max, zero1), FALSE)
-          BUG (common_fonction_scinde_troncon (comb_max, zero1), FALSE)
-          BUG (common_fonction_scinde_troncon (&fonction_bis, zero1), FALSE)
-          BUG (common_fonction_scinde_troncon (&fonction_moins, zero1), FALSE)
+          BUG (common_fonction_scinde_troncon (fonction_max, zero1),
+               FALSE,
+               FREE_ALL)
+          BUG (common_fonction_scinde_troncon (comb_max, zero1),
+               FALSE,
+               FREE_ALL)
+          BUG (common_fonction_scinde_troncon (&fonction_bis, zero1),
+               FALSE,
+               FREE_ALL)
+          BUG (common_fonction_scinde_troncon (&fonction_moins, zero1),
+               FALSE,
+               FREE_ALL)
           
           for (k = 0; k < fonction_max->nb_troncons; k++)
           {
@@ -1968,10 +2130,18 @@ common_fonction_renvoie_enveloppe (GList    *fonctions,
       if (modif == 1)
       {
         tmp = fonction_moins.troncons[i].fin_troncon;
-        BUG (common_fonction_scinde_troncon (fonction_max, tmp), FALSE)
-        BUG (common_fonction_scinde_troncon (comb_max, tmp), FALSE)
-        BUG (common_fonction_scinde_troncon (&fonction_bis, tmp), FALSE)
-        BUG (common_fonction_scinde_troncon (&fonction_moins, tmp), FALSE)
+        BUG (common_fonction_scinde_troncon (fonction_max, tmp),
+             FALSE,
+             FREE_ALL)
+        BUG (common_fonction_scinde_troncon (comb_max, tmp),
+             FALSE,
+             FREE_ALL)
+        BUG (common_fonction_scinde_troncon (&fonction_bis, tmp),
+             FALSE,
+             FREE_ALL)
+        BUG (common_fonction_scinde_troncon (&fonction_moins, tmp),
+             FALSE,
+             FREE_ALL)
         
         for (j = 0; j < fonction_max->nb_troncons; j++)
         {
@@ -1991,35 +2161,45 @@ common_fonction_renvoie_enveloppe (GList    *fonctions,
         }
       }
     }
+    BUG (common_fonction_compacte (fonction_max, comb_max), FALSE, FREE_ALL)
     free (fonction_moins.troncons);
     free (fonction_bis.troncons);
-    BUG (common_fonction_compacte (fonction_max, comb_max), FALSE)
     
     // On passe à la courbe enveloppe inférieure. On utilise exactement le même
     // code que ci-dessus sauf qu'on fait -fonction+fonction_min à la place de
     // fonction-fonction_max. On remplace les fonction_max par fonction_min.
     // C'est tout !
     memset (&fonction_moins, 0, sizeof (fonction_moins));
+    memset (&fonction_bis, 0, sizeof (fonction_bis));
     BUG (common_fonction_ajout_fonction (&fonction_moins,
                                          fonction,
                                          -1.),
-         FALSE)
+         FALSE,
+         FREE_ALL)
     BUG (common_fonction_ajout_fonction (&fonction_moins,
                                          fonction_min,
                                          1.),
-         FALSE)
-    memset (&fonction_bis, 0, sizeof (fonction_bis));
-    BUG (common_fonction_ajout_fonction (&fonction_bis, fonction, 1.), FALSE)
+         FALSE,
+         FREE_ALL)
+    BUG (common_fonction_ajout_fonction (&fonction_bis, fonction, 1.),
+         FALSE,
+         FREE_ALL)
     for (i = 0; i < fonction_moins.nb_troncons; i++)
     {
       int    modif;
       double zero1, zero2;
       
       x_base = fonction_moins.troncons[i].debut_troncon;
-      BUG (common_fonction_scinde_troncon (&fonction_bis, x_base), FALSE)
-      BUG (common_fonction_scinde_troncon (fonction_min, x_base), FALSE)
-      BUG (common_fonction_scinde_troncon (comb_min, x_base), FALSE)
-      BUG (common_fonction_scinde_troncon (&fonction_moins, x_base), FALSE)
+      BUG (common_fonction_scinde_troncon (&fonction_bis, x_base),
+           FALSE,
+           FREE_ALL)
+      BUG (common_fonction_scinde_troncon (fonction_min, x_base),
+           FALSE,
+           FREE_ALL)
+      BUG (common_fonction_scinde_troncon (comb_min, x_base), FALSE, FREE_ALL)
+      BUG (common_fonction_scinde_troncon (&fonction_moins, x_base),
+           FALSE,
+           FREE_ALL)
       
       x[0] = x_base;
       val[0] = common_fonction_y (&fonction_moins, x[0], 1);
@@ -2053,14 +2233,24 @@ common_fonction_renvoie_enveloppe (GList    *fonctions,
                                              x[j],
                                              &zero1,
                                              &zero2),
-               FALSE)
-          BUGMSG ((!isnan (zero1)) && (isnan (zero2)),
-                  FALSE,
-                  gettext ("Zéro impossible à trouver.\n"))
-          BUG (common_fonction_scinde_troncon (fonction_min, zero1), FALSE)
-          BUG (common_fonction_scinde_troncon (comb_min, zero1), FALSE)
-          BUG (common_fonction_scinde_troncon (&fonction_bis, zero1), FALSE)
-          BUG (common_fonction_scinde_troncon (&fonction_moins, zero1), FALSE)
+               FALSE,
+               FREE_ALL)
+          BUGCRIT ((!isnan (zero1)) && (isnan (zero2)),
+                   FALSE,
+                   (gettext ("Zéro impossible à trouver.\n"));
+                     FREE_ALL)
+          BUG (common_fonction_scinde_troncon (fonction_min, zero1),
+               FALSE,
+               FREE_ALL)
+          BUG (common_fonction_scinde_troncon (comb_min, zero1),
+               FALSE,
+               FREE_ALL)
+          BUG (common_fonction_scinde_troncon (&fonction_bis, zero1),
+               FALSE,
+               FREE_ALL)
+          BUG (common_fonction_scinde_troncon (&fonction_moins, zero1),
+               FALSE,
+               FREE_ALL)
           x_base = zero1;
           modif = 1;
         }
@@ -2073,15 +2263,25 @@ common_fonction_renvoie_enveloppe (GList    *fonctions,
                                              x[j],
                                              &zero1,
                                              &zero2),
-               FALSE)
-          BUGMSG ((!isnan (zero1)) && (isnan (zero2)),
-                  FALSE,
-                  gettext ("Zéro impossible à trouver.\n"))
+               FALSE,
+               FREE_ALL)
+          BUGCRIT ((!isnan (zero1)) && (isnan (zero2)),
+                   FALSE,
+                   (gettext ("Zéro impossible à trouver.\n"));
+                     FREE_ALL)
           tmp = fonction_moins.troncons[i].fin_troncon;
-          BUG (common_fonction_scinde_troncon (fonction_min, zero1), FALSE)
-          BUG (common_fonction_scinde_troncon (comb_min, zero1), FALSE)
-          BUG (common_fonction_scinde_troncon (&fonction_bis, zero1), FALSE)
-          BUG (common_fonction_scinde_troncon (&fonction_moins, zero1), FALSE)
+          BUG (common_fonction_scinde_troncon (fonction_min, zero1),
+               FALSE,
+               FREE_ALL)
+          BUG (common_fonction_scinde_troncon (comb_min, zero1),
+               FALSE,
+               FREE_ALL)
+          BUG (common_fonction_scinde_troncon (&fonction_bis, zero1),
+               FALSE,
+               FREE_ALL)
+          BUG (common_fonction_scinde_troncon (&fonction_moins, zero1),
+               FALSE,
+               FREE_ALL)
           
           for (k = 0; k < fonction_min->nb_troncons; k++)
           {
@@ -2107,10 +2307,16 @@ common_fonction_renvoie_enveloppe (GList    *fonctions,
       if (modif == 1)
       {
         tmp = fonction_moins.troncons[i].fin_troncon;
-        BUG (common_fonction_scinde_troncon (fonction_min, tmp), FALSE)
-        BUG (common_fonction_scinde_troncon (comb_min, tmp), FALSE)
-        BUG (common_fonction_scinde_troncon (&fonction_bis, tmp), FALSE)
-        BUG (common_fonction_scinde_troncon (&fonction_moins, tmp), FALSE)
+        BUG (common_fonction_scinde_troncon (fonction_min, tmp),
+             FALSE,
+             FREE_ALL)
+        BUG (common_fonction_scinde_troncon (comb_min, tmp), FALSE, FREE_ALL)
+        BUG (common_fonction_scinde_troncon (&fonction_bis, tmp),
+             FALSE,
+             FREE_ALL)
+        BUG (common_fonction_scinde_troncon (&fonction_moins, tmp),
+             FALSE,
+             FREE_ALL)
         
         for (j = 0; j < fonction_min->nb_troncons; j++)
         {
@@ -2130,9 +2336,9 @@ common_fonction_renvoie_enveloppe (GList    *fonctions,
         }
       }
     }
+    BUG (common_fonction_compacte (fonction_min, comb_min), FALSE, FREE_ALL)
     free (fonction_moins.troncons);
     free (fonction_bis.troncons);
-    BUG (common_fonction_compacte (fonction_min, comb_min), FALSE)
     
     list_parcours = g_list_next (list_parcours);
     num++;

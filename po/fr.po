@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2014-02-22 19:05+0100\n"
-"PO-Revision-Date: 2014-02-22 19:07+0100\n"
+"POT-Creation-Date: 2014-02-23 21:16+0100\n"
+"PO-Revision-Date: 2014-02-23 22:49+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -853,17 +853,17 @@ msgstr "Il est nécessaire de lancer la fonction EF_calculs_initialise avant.\n"
 msgid "Relachement %d inconnu."
 msgstr "Relachement %d inconnu."
 
-#, c-format
-msgid "Paramètre %s incorrect.\n"
-msgstr "Paramètre %s incorrect.\n"
-
 msgid "Impossible de scinder une fonction vide\n"
 msgstr "Impossible de scinder une fonction vide\n"
 
-msgid "Borne incorrecte.\n"
-msgstr "Borne incorrecte.\n"
+#, c-format
+msgid "Le début du tronçon (%.20f) est supérieur à la fin (%.20f).\n"
+msgstr "Le début du tronçon (%.20f) est supérieur à la fin (%.20f).\n"
 
 #, c-format
+msgid "Borne [%lf,%lf] incorrecte.\n"
+msgstr "Borne [%lf,%lf] incorrecte.\n"
+
 msgid "Fonction indéfinie.\n"
 msgstr "Fonction indéfinie.\n"
 
@@ -876,6 +876,10 @@ msgstr "La hauteur du dessin ne peut être nulle.\n"
 #, c-format
 msgid "%sde %.*lfm à %.*lfm : "
 msgstr "%sde %.*lfm à %.*lfm : "
+
+#, c-format
+msgid "Paramètre %s incorrect.\n"
+msgstr "Paramètre %s incorrect.\n"
 
 msgid "Zéro impossible à trouver.\n"
 msgstr "Zéro impossible à trouver.\n"
