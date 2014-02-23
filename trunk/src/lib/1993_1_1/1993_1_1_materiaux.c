@@ -54,27 +54,34 @@ _1993_1_1_materiaux_ajout (Projet     *p,
   EF_Materiau    *materiau_nouveau;
   Materiau_Acier *data_acier;
   
-  BUGMSG (p, NULL, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (materiau_nouveau = malloc (sizeof (EF_Materiau)),
-          NULL,
-          gettext ("Erreur d'allocation mémoire.\n"))
-  BUGMSG (data_acier = malloc (sizeof (Materiau_Acier)),
-          NULL,
-          gettext("Erreur d'allocation mémoire.\n"))
+  BUGPARAM (p, "%p", p, NULL)
+  BUGCRIT (materiau_nouveau = malloc (sizeof (EF_Materiau)),
+           NULL,
+           (gettext ("Erreur d'allocation mémoire.\n"));)
+  BUGCRIT (data_acier = malloc (sizeof (Materiau_Acier)),
+           NULL,
+           (gettext("Erreur d'allocation mémoire.\n"));
+             free (materiau_nouveau);)
   
   materiau_nouveau->type = MATERIAU_ACIER;
   materiau_nouveau->data = data_acier;
   
-  BUGMSG (materiau_nouveau->nom = g_strdup_printf ("%s", nom),
-          NULL,
-          gettext ("Erreur d'allocation mémoire.\n"))
+  BUGCRIT (materiau_nouveau->nom = g_strdup_printf ("%s", nom),
+           NULL,
+           (gettext ("Erreur d'allocation mémoire.\n"));
+             free (materiau_nouveau);
+             free (data_acier);)
   
   data_acier->fy = m_f (m_g (fy) * 1000000., fy.type);
-  data_acier->fu = m_f (m_g (fu)*1000000., fu.type);
+  data_acier->fu = m_f (m_g (fu) * 1000000., fu.type);
   data_acier->e  = m_f (MODULE_YOUNG_ACIER, FLOTTANT_ORDINATEUR);
   data_acier->nu = m_f (COEFFICIENT_NU_ACIER, FLOTTANT_ORDINATEUR);
   
-  BUG (EF_materiaux_insert (p, materiau_nouveau), NULL)
+  BUG (EF_materiaux_insert (p, materiau_nouveau),
+       NULL,
+       free (materiau_nouveau->nom);
+         free (data_acier);
+         free (materiau_nouveau);)
   
   return materiau_nouveau;
 }
@@ -106,23 +113,27 @@ _1993_1_1_materiaux_modif (Projet      *p,
 {
   Materiau_Acier *data_acier;
   
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (materiau, FALSE, gettext ("Paramètre %s incorrect.\n"), "materiau")
-  BUGMSG (materiau->type == MATERIAU_ACIER,
-          FALSE,
-          gettext ("Le matériau n'est pas en acier.\n"))
+  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (materiau, "%p", materiau, FALSE)
+  BUGCRIT (materiau->type == MATERIAU_ACIER,
+           FALSE,
+           (gettext ("Le matériau n'est pas en acier.\n"));)
   
   data_acier = materiau->data;
   
   if ((nom != NULL) && (strcmp (materiau->nom, nom) != 0))
   {
-    BUGMSG (!EF_materiaux_cherche_nom (p, nom, FALSE),
-            FALSE,
-            gettext ("Le matériau %s existe déjà.\n"), nom)
-    free (materiau->nom);
-    BUGMSG (materiau->nom = g_strdup_printf ("%s", nom),
-            FALSE,
-            gettext ("Erreur d'allocation mémoire.\n"))
+    char *tmp;
+    
+    INFO (!EF_materiaux_cherche_nom (p, nom, FALSE),
+          FALSE,
+          (gettext ("Le matériau %s existe déjà.\n"), nom);)
+    tmp = materiau->nom;
+    BUGCRIT (materiau->nom = g_strdup_printf ("%s", nom),
+             FALSE,
+             (gettext ("Erreur d'allocation mémoire.\n"));
+               materiau->nom = tmp;)
+    free (tmp);
     BUG (EF_materiaux_repositionne (p, materiau), FALSE)
   }
   
@@ -154,11 +165,12 @@ _1993_1_1_materiaux_modif (Projet      *p,
                                                NULL,
                                                FALSE,
                                                FALSE),
-         FALSE)
+         FALSE,
+         g_list_free (liste_materiaux);)
     g_list_free (liste_materiaux);
     
     if (liste_barres_dep != NULL)
-      BUG (EF_calculs_free (p), FALSE)
+      BUG (EF_calculs_free (p), FALSE, g_list_free (liste_barres_dep);)
     
     g_list_free (liste_barres_dep);
   }
@@ -191,30 +203,31 @@ _1993_1_1_materiaux_get_description (EF_Materiau* materiau)
   char           *tmp2;
   Materiau_Acier *data_acier;
   
-  BUGMSG (materiau, NULL, gettext ("Paramètre %s incorrect.\n"), "sect")
-  BUGMSG (materiau->type == MATERIAU_ACIER,
-          FALSE,
-          gettext ("Le matériau n'est pas en acier.\n"))
+  BUGPARAM (materiau, "%p", materiau, NULL)
+  BUGCRIT (materiau->type == MATERIAU_ACIER,
+           FALSE,
+           (gettext ("Le matériau n'est pas en acier.\n"));)
   
   data_acier = materiau->data;
   
   conv_f_c (m_f (m_g (data_acier->fy) / 1000000., data_acier->fy.type),
             tmp1,
             DECIMAL_CONTRAINTE);
-  BUGMSG (description = g_strdup_printf ("f<sub>y</sub> : %s MPa", tmp1),
-          NULL,
-          gettext ("Erreur d'allocation mémoire.\n"))
+  BUGCRIT (description = g_strdup_printf ("f<sub>y</sub> : %s MPa", tmp1),
+           NULL,
+           (gettext ("Erreur d'allocation mémoire.\n"));)
   
   // On affiche les différences si le matériau a été personnalisé
   conv_f_c (m_f (m_g (data_acier->fu) / 1000000., data_acier->fu.type),
             tmp1,
             DECIMAL_CONTRAINTE);
   tmp2 = description;
-  BUGMSG (description = g_strdup_printf ("%s, f<sub>u</sub> : %s MPa",
-                                         tmp2,
-                                         tmp1),
-          NULL,
-          gettext ("Erreur d'allocation mémoire.\n"))
+  BUGCRIT (description = g_strdup_printf ("%s, f<sub>u</sub> : %s MPa",
+                                          tmp2,
+                                          tmp1),
+           NULL,
+           (gettext ("Erreur d'allocation mémoire.\n"));
+             free (tmp2);)
   free (tmp2);
   
   if (!ERR (m_g (data_acier->e), MODULE_YOUNG_ACIER))
@@ -223,9 +236,10 @@ _1993_1_1_materiaux_get_description (EF_Materiau* materiau)
               tmp1,
               DECIMAL_CONTRAINTE);
     tmp2 = description;
-    BUGMSG (description = g_strdup_printf ("%s, E : %s MPa", tmp2, tmp1),
-            NULL,
-            gettext ("Erreur d'allocation mémoire.\n"))
+    BUGCRIT (description = g_strdup_printf ("%s, E : %s MPa", tmp2, tmp1),
+             NULL,
+             (gettext ("Erreur d'allocation mémoire.\n"));
+               free (tmp2);)
     free (tmp2);
   }
   
@@ -233,9 +247,10 @@ _1993_1_1_materiaux_get_description (EF_Materiau* materiau)
   {
     conv_f_c (data_acier->nu, tmp1, DECIMAL_SANS_UNITE);
     tmp2 = description;
-    BUGMSG (description = g_strdup_printf ("%s, &#957; : %s", tmp2, tmp1),
-            NULL,
-            gettext ("Erreur d'allocation mémoire.\n"))
+    BUGCRIT (description = g_strdup_printf ("%s, &#957; : %s", tmp2, tmp1),
+             NULL,
+             (gettext ("Erreur d'allocation mémoire.\n"));
+               free (tmp2);)
     free (tmp2);
   }
   

@@ -388,7 +388,7 @@ _1992_1_1_materiaux_ajout (Projet     *p,
   EF_Materiau    *materiau_nouveau;
   Materiau_Beton *data_beton;
   
-  BUGPARAMCRIT (p, "%p", p, NULL)
+  BUGPARAM (p, "%p", p, NULL)
   INFO ((m_g(fck) > ERR_MIN) && (m_g(fck) <= 90. * (1 + ERR_MIN)),
         NULL,
         (gettext ("La résistance caractéristique à la compression du béton doit être inférieure ou égale à 90 MPa.\n"));)
@@ -498,7 +498,7 @@ _1992_1_1_materiaux_ajout (Projet     *p,
   
   BUG (EF_materiaux_insert (p, materiau_nouveau),
        NULL,
-         free (materiau_nouveau->nom);
+       free (materiau_nouveau->nom);
          free (materiau_nouveau);
          free (data_beton);)
   
@@ -554,8 +554,8 @@ _1992_1_1_materiaux_modif (Projet      *p,
 {
   Materiau_Beton *data_beton;
   
-  BUGPARAMCRIT (p, "%p", p, FALSE)
-  BUGPARAMCRIT (materiau, "%p", materiau, FALSE)
+  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (materiau, "%p", materiau, FALSE)
   BUGCRIT (materiau->type == MATERIAU_BETON,
            FALSE,
            (gettext ("Le matériau n'est pas en béton.\n"));)
@@ -672,7 +672,7 @@ _1992_1_1_materiaux_get_description (EF_Materiau* materiau)
   char           *complement = NULL, *tmp2;
   Materiau_Beton *data_beton;
   
-  BUGPARAMCRIT (materiau, "%p", materiau, NULL)
+  BUGPARAM (materiau, "%p", materiau, NULL)
   BUGCRIT (materiau->type == MATERIAU_BETON,
            FALSE,
            (gettext ("Le matériau n'est pas en béton.\n"));)

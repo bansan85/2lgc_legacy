@@ -1154,7 +1154,7 @@ _1992_1_1_gtk_materiaux_ajout (GtkMenuItem *menuitem,
   BUGCRIT (p->ui.ef_materiaux.builder,
            ,
            (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
-                     "Matériaux");)
+                     "Ajout Matériau Béton");)
   
   BUG (_1992_1_1_gtk_materiaux (p, NULL), )
 }
