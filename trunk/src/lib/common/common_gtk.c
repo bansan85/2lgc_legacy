@@ -44,7 +44,7 @@ common_gtk_treeview_button_press_unselect (GtkTreeView    *widget,
  *  
  */
 {
-  BUGMSG (p, TRUE, gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGPARAMCRIT (p, "%p", p, FALSE)
   
   if (event->type == GDK_BUTTON_PRESS)
   {
@@ -98,9 +98,7 @@ conv_buff_d (GtkTextBuffer *textbuffer,
   GtkTextIter start, end;
   double      nombre;
   
-  BUGMSG (textbuffer,
-          NAN,
-          gettext ("Paramètre %s incorrect.\n"), "textbuffer")
+  BUGPARAMCRIT (textbuffer, "%p", textbuffer, NAN)
   
   gtk_text_buffer_get_iter_at_offset (textbuffer, &start, 0);
   gtk_text_buffer_get_iter_at_offset (textbuffer, &end, -1);
@@ -155,16 +153,15 @@ conv_buff_u (GtkTextBuffer *textbuffer,
   gboolean     min_check;
   gboolean     max_check;
   
-  BUGMSG (textbuffer,
-          UINT_MAX,
-          gettext ("Paramètre %s incorrect.\n"), "textbuffer")
+  BUGPARAMCRIT (textbuffer, "%p", textbuffer, UINT_MAX)
   
   gtk_text_buffer_get_iter_at_offset (textbuffer, &start, 0);
   gtk_text_buffer_get_iter_at_offset (textbuffer, &end, -1);
   texte = gtk_text_buffer_get_text (textbuffer, &start, &end, FALSE);
-  BUGMSG (fake = (char *) malloc (sizeof (char) * (strlen (texte) + 1)),
-          UINT_MAX,
-          gettext ("Erreur d'allocation mémoire.\n"))
+  BUGCRIT (fake = (char *) malloc (sizeof (char) * (strlen (texte) + 1)),
+           UINT_MAX,
+           (gettext ("Erreur d'allocation mémoire.\n"));
+             free (texte);)
   
   gtk_text_buffer_remove_all_tags (textbuffer, &start, &end);
   if (sscanf (texte, "%u%s", &nombre, fake) != 1)
@@ -228,12 +225,12 @@ common_gtk_entry_uint (GtkEntry    *entry,
   gboolean     min_check;
   gboolean     max_check;
   
-  BUGMSG (entry, UINT_MAX, gettext ("Paramètre %s incorrect.\n"), "entry")
+  BUGPARAMCRIT (entry, "%p", entry, UINT_MAX)
   
   texte = gtk_entry_get_text (entry);
-  BUGMSG (fake = (char *) malloc (sizeof (char) * (strlen (texte) + 1)),
-          UINT_MAX,
-          gettext ("Erreur d'allocation mémoire.\n"))
+  BUGCRIT (fake = (char *) malloc (sizeof (char) * (strlen (texte) + 1)),
+           UINT_MAX,
+           (gettext ("Erreur d'allocation mémoire.\n"));)
   
   if (sscanf (texte, "%u%s", &nombre, fake) != 1)
   {
@@ -287,11 +284,9 @@ common_gtk_render_double (GtkTreeViewColumn *tree_column,
   double nombre;
   gint   decimales = GPOINTER_TO_INT (data);
   
-  BUGMSG (cell, , gettext ("Paramètre %s incorrect.\n"), "cell")
-  BUGMSG (tree_model,
-          ,
-          gettext ("Paramètre %s incorrect.\n"), "tree_model")
-  BUGMSG (iter, , gettext ("Paramètre %s incorrect.\n"), "iter")
+  BUGPARAMCRIT (cell, "%p", cell, )
+  BUGPARAMCRIT (tree_model, "%p", tree_model, )
+  BUGPARAMCRIT (iter, "%p", iter, )
   
   colonne = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (cell), "column"));
   gtk_tree_model_get (tree_model, iter, colonne, &nombre, -1);
