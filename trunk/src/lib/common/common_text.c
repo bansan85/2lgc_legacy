@@ -364,7 +364,7 @@ common_text_get_line (FILE *fichier)
   char *buffer, *retour = NULL;
   
   BUGMSG (buffer = malloc (sizeof (char) * CUR_MAX),
-          FALSE,
+          NULL,
           gettext ("Erreur d'allocation mémoire.\n"))
   
   do
