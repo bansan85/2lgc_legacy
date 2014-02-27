@@ -54,9 +54,10 @@ m3d_configure_event (GtkWidget         *drawing,
   Projet      *p = (Projet *) data2;
   SGlobalData *data = (SGlobalData *) UI_M3D.data;
   
-  BUGMSG (p->ui.comp.window,
-          FALSE,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"), "principale");
+  BUGCRIT (p->ui.comp.window,
+           FALSE,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "principale");)
   
   data->camera.set_size_of_window (ev->width, ev->height);
   
@@ -88,14 +89,14 @@ m3d_init (Projet *p)
   SGlobalData *global_data;
   CM3dLight    light;
   
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet");
+  BUGPARAM (p, "%p", p, FALSE)
   
   UI_M3D.drawing = gtk_drawing_area_new ();
   gtk_widget_add_events(UI_M3D.drawing, GDK_POINTER_MOTION_MASK);
   gtk_widget_add_events(UI_M3D.drawing, GDK_BUTTON_PRESS_MASK);
-  BUGMSG (UI_M3D.data = malloc (sizeof (SGlobalData)),
-          FALSE,
-          gettext ("Erreur d'allocation mémoire.\n"));
+  BUGCRIT (UI_M3D.data = malloc (sizeof (SGlobalData)),
+           FALSE,
+           (gettext ("Erreur d'allocation mémoire.\n"));)
   memset (UI_M3D.data, 0, sizeof (SGlobalData));
   
   global_data = (SGlobalData *) UI_M3D.data;
@@ -122,7 +123,7 @@ m3d_init (Projet *p)
                     G_CALLBACK (m3d_configure_event),
                     p);
   
-  BUG (projet_init_graphique (p), FALSE);
+  BUG (projet_init_graphique (p), FALSE)
   
   return TRUE;
 }
@@ -169,10 +170,11 @@ m3d_key_press (GtkWidget   *widget,
 {
   SGlobalData *data  = (SGlobalData *) UI_M3D.data;
   
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
-  BUGMSG (p->ui.comp.window,
-          FALSE,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"), "principale");
+  BUGPARAM (p, "%p", p, FALSE)
+  BUGCRIT (p->ui.comp.window,
+           FALSE,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "principale");)
   
   if (event->type == GDK_KEY_PRESS)
   {
@@ -183,7 +185,7 @@ m3d_key_press (GtkWidget   *widget,
       {
         data->camera.move_forward (1.);
         
-        BUG (m3d_rafraichit (p), FALSE);
+        BUG (m3d_rafraichit (p), FALSE)
         
         break;
       }
@@ -192,7 +194,7 @@ m3d_key_press (GtkWidget   *widget,
       {
         data->camera.move_back (1.);
         
-        BUG (m3d_rafraichit (p), FALSE);
+        BUG (m3d_rafraichit (p), FALSE)
         
         break;
       }
@@ -201,7 +203,7 @@ m3d_key_press (GtkWidget   *widget,
       {
         data->camera.go_right (1.);
         
-        BUG (m3d_rafraichit (p), FALSE);
+        BUG (m3d_rafraichit (p), FALSE)
         
         break;
       }
@@ -210,7 +212,7 @@ m3d_key_press (GtkWidget   *widget,
       {
         data->camera.go_left (1.);
         
-        BUG (m3d_rafraichit (p), FALSE);
+        BUG (m3d_rafraichit (p), FALSE)
         
         break;
       }
@@ -219,7 +221,7 @@ m3d_key_press (GtkWidget   *widget,
       {
         data->camera.go_up (1., data->scene.y_axis_is_inverted ());
         
-        BUG (m3d_rafraichit (p), FALSE);
+        BUG (m3d_rafraichit (p), FALSE)
         
         break;
       }
@@ -228,7 +230,7 @@ m3d_key_press (GtkWidget   *widget,
       {
         data->camera.go_down (1., data->scene.y_axis_is_inverted ());
         
-        BUG (m3d_rafraichit (p), FALSE);
+        BUG (m3d_rafraichit (p), FALSE)
         
         break;
       }
@@ -276,22 +278,21 @@ m3d_get_rect (double *xmin,
   CM3dVertex   v1;     // Vecteur permettant de créer le polygone
   double       x1, y1; // Les coordonnées des vecteurs.
   
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet");
-  BUGMSG (xmin, FALSE, gettext ("Paramètre %s incorrect.\n"), "xmin");
-  BUGMSG (xmax, FALSE, gettext ("Paramètre %s incorrect.\n"), "xmax");
-  BUGMSG (ymin, FALSE, gettext ("Paramètre %s incorrect.\n"), "ymin");
-  BUGMSG (ymax, FALSE, gettext ("Paramètre %s incorrect.\n"), "ymax");
-  BUGMSG (p->modele.noeuds,
-          FALSE,
-          gettext ("Aucun noeud n'est existant.\n"));
-  BUGMSG (p->ui.comp.window,
-          FALSE,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"), "principale");
+  BUGPARAM (p, "%p", p, FALSE)
+  BUGPARAM (xmin, "%p", xmin, FALSE)
+  BUGPARAM (xmax, "%p", xmax, FALSE)
+  BUGPARAM (ymin, "%p", ymin, FALSE)
+  BUGPARAM (ymax, "%p", ymax, FALSE)
+  INFO (p->modele.noeuds, FALSE, (gettext ("Aucun noeud n'est existant.\n"));)
+  BUGCRIT (p->ui.comp.window,
+           FALSE,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "principale");)
   
   vue = (SGlobalData *) UI_M3D.data;
   
   noeud = (EF_Noeud *) p->modele.noeuds->data;
-  BUG (EF_noeuds_renvoie_position (noeud, &point), FALSE);
+  BUG (EF_noeuds_renvoie_position (noeud, &point), FALSE)
   v1.set_coordinates (m_g (point.x), m_g (point.y), m_g (point.z));
   v1 = vue->camera.convert_vertex_by_camera_view (v1);
   v1 = vue->camera.convert_vertex_to_2d (v1);
@@ -305,7 +306,7 @@ m3d_get_rect (double *xmin,
   while (list_parcours != NULL)
   {
     noeud = (EF_Noeud *) list_parcours->data;
-    BUG (EF_noeuds_renvoie_position (noeud, &point), FALSE);
+    BUG (EF_noeuds_renvoie_position (noeud, &point), FALSE)
     v1.set_coordinates (m_g (point.x), m_g (point.y), m_g (point.z));
     v1 = vue->camera.convert_vertex_by_camera_view (v1);
     v1 = vue->camera.convert_vertex_to_2d (v1);
@@ -356,10 +357,11 @@ m3d_camera_zoom_all (Projet *p)
   double        yymin;
   int           i = 0; // Sécurité pour que la boucle ne tourne à l'infini.
   
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet");
-  BUGMSG (p->ui.comp.window,
-          FALSE,
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"), "principale");
+  BUGPARAM (p, "%p", p, FALSE)
+  BUGCRIT (p->ui.comp.window,
+           FALSE,
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"),
+                     "principale");)
   
   vue = (SGlobalData *) UI_M3D.data;
   
@@ -393,7 +395,7 @@ m3d_camera_zoom_all (Projet *p)
   while (list_parcours != NULL)
   {
     noeud = (EF_Noeud *) list_parcours->data;
-    BUG (EF_noeuds_renvoie_position (noeud, &point), FALSE);
+    BUG (EF_noeuds_renvoie_position (noeud, &point), FALSE)
     
     v1.set_coordinates (m_g (point.x), m_g (point.y), m_g (point.z));
     v1 = vue->camera.convert_vertex_by_camera_view (v1);
@@ -432,7 +434,7 @@ m3d_camera_zoom_all (Projet *p)
   do
   {
     // On centre les points par rapport à l'abscisse (x)
-    BUG (m3d_get_rect (&xmin, &xmax, &ymin, &ymax, p), FALSE);
+    BUG (m3d_get_rect (&xmin, &xmax, &ymin, &ymax, p), FALSE)
     dx = 1;
     v1.set_coordinates (dx, 0, 0);
     v1.z_rotate (v1, vue->camera.get_cosz (), -vue->camera.get_sinz ());
@@ -443,7 +445,7 @@ m3d_camera_zoom_all (Projet *p)
     {
       vue->camera.set_position (x + tmpx, y + tmpy, z + tmpz);
       vue->camera.set_target (x + tmpx + cx, y + tmpy + cy, z + tmpz + cz);
-      BUG (m3d_get_rect (&xmin2, &xmax2, &ymin2, &ymax2, p), FALSE);
+      BUG (m3d_get_rect (&xmin2, &xmax2, &ymin2, &ymax2, p), FALSE)
       // Droite (a*X+b=Y) passant en X=x    et Y = (xmin +xmax )/2
       //                             X=x+dx et Y = (xmin2+xmax2)/2
       // Le nouveau x est obtenu en cherchant f(x)=allocation.width/2.
@@ -464,11 +466,11 @@ m3d_camera_zoom_all (Projet *p)
         break;
       vue->camera.set_position (x + tmpx, y + tmpy, z + tmpz);
       vue->camera.set_target (x + tmpx + cx, y + tmpy + cy, z + tmpz + cz);
-      BUG (m3d_get_rect (&xmin, &xmax, &ymin, &ymax, p), FALSE);
+      BUG (m3d_get_rect (&xmin, &xmax, &ymin, &ymax, p), FALSE)
     } while (fabs ((xmin + xmax) / 2. - (xmin2 + xmax2) / 2.) > 1.);
     
     // On centre les points par rapport à l'ordonnée (y)
-    BUG (m3d_get_rect (&xmin, &xmax, &ymin, &ymax, p), FALSE);
+    BUG (m3d_get_rect (&xmin, &xmax, &ymin, &ymax, p), FALSE)
     dy = 1;
     v1.set_coordinates (0, dy, 0);
     v1.z_rotate (v1, vue->camera.get_cosz (), -vue->camera.get_sinz ());
@@ -479,7 +481,7 @@ m3d_camera_zoom_all (Projet *p)
     {
       vue->camera.set_position (x + tmpx, y + tmpy, z + tmpz);
       vue->camera.set_target (x + tmpx + cx, y + tmpy + cy, z + tmpz + cz);
-      BUG (m3d_get_rect (&xmin2, &xmax2, &ymin2, &ymax2, p), FALSE);
+      BUG (m3d_get_rect (&xmin2, &xmax2, &ymin2, &ymax2, p), FALSE)
       if (!ERR (ymax - ymax2 + ymin - ymin2, 0.))
       {
         dy = -dy * (allocation.height - ymax - ymin) /
@@ -497,12 +499,12 @@ m3d_camera_zoom_all (Projet *p)
         break;
       vue->camera.set_position (x + tmpx, y + tmpy, z + tmpz);
       vue->camera.set_target (x + tmpx + cx, y + tmpy + cy, z + tmpz + cz);
-      BUG (m3d_get_rect (&xmin, &xmax, &ymin, &ymax, p), FALSE);
+      BUG (m3d_get_rect (&xmin, &xmax, &ymin, &ymax, p), FALSE)
     } while (fabs ((ymin + ymax) / 2. - (ymin2 + ymax2) / 2.) > 1.);
     
     // On zoom autant que possible de tel sorte que la structure tienne au plus
     // juste dans la fenêtre.
-    BUG (m3d_get_rect (&xmin, &xmax, &ymin, &ymax, p), FALSE);
+    BUG (m3d_get_rect (&xmin, &xmax, &ymin, &ymax, p), FALSE)
     dz = yymin / 5.; // On commence par avancer d'1/5 de la distance maximale
                      // autorisée.
     do
@@ -512,7 +514,7 @@ m3d_camera_zoom_all (Projet *p)
       vue->camera.set_target (x + dz * cx + cx,
                                y + dz * cy + cy,
                                z + dz * cz + cz);
-      BUG (m3d_get_rect (&xmin2, &xmax2, &ymin2, &ymax2, p), FALSE);
+      BUG (m3d_get_rect (&xmin2, &xmax2, &ymin2, &ymax2, p), FALSE)
       // 1er cas : étude des abscisses.
       // Le choix de l'interpolation est : f(x) = (a*x+b)/(c*x+d).
       // avec les conditions suivantes : f(-inf) = 0. En effet, si on recule au
@@ -579,11 +581,11 @@ m3d_camera_zoom_all (Projet *p)
         break;
       vue->camera.set_position (x, y, z);
       vue->camera.set_target (x + cx, y + cy, z + cz);
-      BUG (m3d_get_rect (&xmin, &xmax, &ymin, &ymax, p), FALSE);
+      BUG (m3d_get_rect (&xmin, &xmax, &ymin, &ymax, p), FALSE)
     } while ((fabs (xmax - xmin - allocation.width) > 1.) &&
              (fabs (ymax - ymin - allocation.height) > 1.));
     
-    BUG (m3d_get_rect (&xmin2, &xmax2, &ymin2, &ymax2, p), FALSE);
+    BUG (m3d_get_rect (&xmin2, &xmax2, &ymin2, &ymax2, p), FALSE)
     // Tant qu'une fois le zoom fini, le dessin n'est pas centré.
     i++;
     if (i == 100)
@@ -591,12 +593,11 @@ m3d_camera_zoom_all (Projet *p)
   } while ((fabs (xmax2 + xmin2 - allocation.width) > 1.) ||
            (fabs (ymax2 + ymin2 - allocation.height) > 1.));
   
-  BUG (m3d_rafraichit (p), FALSE);
+  BUG (m3d_rafraichit (p), FALSE)
   
   if (i == 100)
-    BUGMSG (NULL,
-            FALSE,
-            "La fonction \"zoom tout\" vient de tourner en boucle.\n");
+    FAILCRIT (FALSE,
+              (gettext ("La fonction \"zoom tout\" vient de tourner en boucle.\n"));)
   
   return TRUE;
 }
@@ -611,11 +612,12 @@ m3d_camera_axe_##NOM (Projet *p) \
   EF_Point      point; \
   GtkAllocation allocation; \
   \
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet"); \
+  BUGPARAM (p, "%p", p, FALSE) \
   \
-  BUGMSG (p->ui.comp.window, \
-          FALSE, \
-          gettext ("La fenêtre graphique %s n'est pas initialisée.\n"), "principale"); \
+  BUGCRIT (p->ui.comp.window, \
+           FALSE, \
+           (gettext ("La fenêtre graphique %s n'est pas initialisée.\n"), \
+                     "principale");) \
   \
   vue = (SGlobalData *) UI_M3D.data; \
   \
@@ -623,7 +625,7 @@ m3d_camera_axe_##NOM (Projet *p) \
     return TRUE; \
   \
   noeud = (EF_Noeud *) p->modele.noeuds->data; \
-  BUG (EF_noeuds_renvoie_position (noeud, &point), FALSE); \
+  BUG (EF_noeuds_renvoie_position (noeud, &point), FALSE) \
   \
   gtk_widget_get_allocation (GTK_WIDGET (UI_M3D.drawing), &allocation); \
   x = 0; \
@@ -633,7 +635,7 @@ m3d_camera_axe_##NOM (Projet *p) \
   vue->camera.set_target (x + CX, y + CY, z + CZ); \
   vue->camera.rotation_on_axe_of_view (0); \
   \
-  BUG (m3d_camera_zoom_all (p), FALSE); \
+  BUG (m3d_camera_zoom_all (p), FALSE) \
   \
   return TRUE; \
 }
@@ -682,7 +684,7 @@ m3d_actualise_graphique (Projet *p,
   GList *noeuds_dep, *barres_dep;
   GList *list_parcours;
   
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet");
+  BUGPARAM (p, "%p", p, FALSE)
   
   BUG (_1992_1_1_barres_cherche_dependances (p,
                                              NULL,
@@ -701,7 +703,10 @@ m3d_actualise_graphique (Projet *p,
   list_parcours = noeuds_dep;
   while (list_parcours != NULL)
   {
-    BUG (m3d_noeud (&UI_M3D, (EF_Noeud *) list_parcours->data), FALSE);
+    BUG (m3d_noeud (&UI_M3D, (EF_Noeud *) list_parcours->data),
+         FALSE,
+         g_list_free (noeuds_dep);
+           g_list_free (barres_dep);)
     list_parcours = g_list_next (list_parcours);
   }
   g_list_free (noeuds_dep);
@@ -709,7 +714,9 @@ m3d_actualise_graphique (Projet *p,
   list_parcours = barres_dep;
   while (list_parcours != NULL)
   {
-    BUG (m3d_barre (&UI_M3D, (EF_Barre *) list_parcours->data), FALSE);
+    BUG (m3d_barre (&UI_M3D, (EF_Barre *) list_parcours->data),
+         FALSE,
+         g_list_free (barres_dep);)
     list_parcours = g_list_next (list_parcours);
   }
   g_list_free (barres_dep);
@@ -734,14 +741,14 @@ m3d_rafraichit (Projet *p)
   SGlobalData *vue;
   CM3dVertex A,B;
   
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet");
+  BUGPARAM (p, "%p", p, FALSE)
   vue = (SGlobalData *) UI_M3D.data;
   // On force l'actualisation de l'affichage
   vue->scene.rendering (vue->camera);
   gtk_widget_queue_resize (UI_M3D.drawing);
   
-  A = vue->camera.get_position();
-  B = vue->camera.get_target_vector();
+  A = vue->camera.get_position ();
+  B = vue->camera.get_target_vector ();
 
   return TRUE;
 }
@@ -769,15 +776,13 @@ m3d_noeud (void     *donnees_m3d,
   EF_Point     point;
   SGlobalData *vue;
   
-  BUGMSG (noeud, FALSE, gettext ("Paramètre %s incorrect.\n"), "noeud");
-  BUGMSG (donnees_m3d,
-          FALSE,
-          gettext ("Paramètre %s incorrect.\n"), "donnees_m3d");
+  BUGPARAM (noeud, "%p", noeud, FALSE)
+  BUGPARAM (donnees_m3d, "%p", donnees_m3d, FALSE)
   
-  BUGMSG (nom = g_strdup_printf ("noeud %u", noeud->numero),
-          FALSE,
-          gettext ("Erreur d'allocation mémoire.\n"));
   BUG (EF_noeuds_renvoie_position (noeud, &point), FALSE);
+  BUGCRIT (nom = g_strdup_printf ("noeud %u", noeud->numero),
+           FALSE,
+           (gettext ("Erreur d'allocation mémoire.\n"));)
   
   vue = (SGlobalData *) ((Gtk_m3d *) donnees_m3d)->data;
   
@@ -816,12 +821,12 @@ m3d_noeud_free (void     *donnees_m3d,
   char        *nom;
   SGlobalData *vue;
   
-  BUGMSG (noeud, , gettext ("Paramètre %s incorrect.\n"), "noeud");
-  BUGMSG (donnees_m3d, , gettext ("Paramètre %s incorrect.\n"), "donnees_m3d");
+  BUGPARAM (noeud, "%p", noeud, )
+  BUGPARAM (donnees_m3d, "%p", donnees_m3d, )
   
-  BUGMSG (nom = g_strdup_printf ("noeud %u", noeud->numero),
-          ,
-          gettext ("Erreur d'allocation mémoire.\n"));
+  BUGCRIT (nom = g_strdup_printf ("noeud %u", noeud->numero),
+           ,
+           (gettext ("Erreur d'allocation mémoire.\n"));)
   
   vue = (SGlobalData *) ((Gtk_m3d *) donnees_m3d)->data;
   
@@ -854,8 +859,8 @@ m3d_barre_finition (CM3dObject *objet,
   double   dx, dy, dz;
   EF_Point p_d, p_f;
   
-  BUGMSG (barre, FALSE, gettext ("Paramètre %s incorrect.\n"), "barre");
-  BUGMSG (objet, FALSE, gettext ("Paramètre %s incorrect.\n"), "objet");
+  BUGPARAM (barre, "%p", barre, FALSE)
+  BUGPARAM (objet, "%p", objet, FALSE)
   
   objet->rotations (m_g (barre->angle), 0., 0.);
   objet->set_color (100, 100, 100);
@@ -880,16 +885,17 @@ m3d_barre_finition (CM3dObject *objet,
     }
     default :
     {
-      BUGMSG (0,
-              FALSE,
-              gettext ("Type de section %d inconnu.\n"), barre->section->type);
+      FAILCRIT (FALSE,
+                (gettext ("Type de section %d inconnu.\n"),
+                          barre->section->type);)
       break;
     }
   }
   BUG (_1992_1_1_barres_angle_rotation (barre->noeud_debut,
                                         barre->noeud_fin,
                                         &y,
-                                        &z), FALSE);
+                                        &z),
+       FALSE);
   objet->rotations (0., -y / M_PI * 180., z / M_PI * 180.);
   BUG (EF_noeuds_renvoie_position (barre->noeud_debut, &p_d), FALSE);
   BUG (EF_noeuds_renvoie_position (barre->noeud_fin, &p_f), FALSE);
@@ -929,24 +935,22 @@ m3d_barre (void     *donnees_m3d,
   CM3dObject  *tout;
   double       longueur;
   
-  BUGMSG (donnees_m3d,
-          FALSE,
-          gettext ("Paramètre %s incorrect.\n"), "donnees_m3d");
-  BUGMSG (barre, FALSE, gettext ("Paramètre %s incorrect.\n"), "barre");
+  BUGPARAM (donnees_m3d, "%p", donnees_m3d, FALSE)
+  BUGPARAM (barre, "%p", barre, FALSE)
   
   vue = (SGlobalData *) ((Gtk_m3d *) donnees_m3d)->data;
   
   // On supprime l'élément s'il existe déjà
-  BUGMSG (tmp = g_strdup_printf ("barre %u", barre->numero),
-          FALSE,
-          gettext ("Erreur d'allocation mémoire.\n"));
+  BUGCRIT (tmp = g_strdup_printf ("barre %u", barre->numero),
+           FALSE,
+           (gettext ("Erreur d'allocation mémoire.\n"));)
   
   objet = vue->scene.get_object_by_name(tmp);
   if (objet != NULL)
     vue->scene.remove_object(*objet);
   
   longueur = EF_noeuds_distance (barre->noeud_debut, barre->noeud_fin);
-  BUG (!isnan (longueur), FALSE);
+  BUG (!isnan (longueur), FALSE, free (tmp););
   
   if (ERR (longueur, 0.))
     return TRUE;
@@ -1216,9 +1220,10 @@ m3d_barre (void     *donnees_m3d,
     }
     default :
     {
-      BUGMSG (0,
-              FALSE,
-              gettext ("Type de section %d inconnu.\n"), barre->section->type);
+      FAILCRIT (FALSE,
+                (gettext ("Type de section %d inconnu.\n"),
+                          barre->section->type);
+                  free (tmp);)
       break;
     }
   }
@@ -1248,12 +1253,12 @@ m3d_barre_free (void     *donnees_m3d,
   char        *nom;
   SGlobalData *vue;
   
-  BUGMSG (barre, , gettext ("Paramètre %s incorrect.\n"), "noeud");
-  BUGMSG (donnees_m3d, , gettext ("Paramètre %s incorrect.\n"), "donnees_m3d");
+  BUGPARAM (barre, "%p", barre, )
+  BUGPARAM (donnees_m3d, "%p", donnees_m3d, )
   
-  BUGMSG (nom = g_strdup_printf ("barre %u", barre->numero),
-          ,
-          gettext ("Erreur d'allocation mémoire.\n"));
+  BUGCRIT (nom = g_strdup_printf ("barre %u", barre->numero),
+           ,
+           (gettext ("Erreur d'allocation mémoire.\n"));)
   
   vue = (SGlobalData *) ((Gtk_m3d *) donnees_m3d)->data;
   
@@ -1278,7 +1283,7 @@ m3d_free (Projet *p)
  *     - p == NULL.
  */
 {
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet");
+  BUGPARAM (p, "%p", p, FALSE)
   
   free (UI_M3D.data);
   UI_M3D.data = NULL;
