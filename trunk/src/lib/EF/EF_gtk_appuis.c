@@ -1082,3 +1082,5 @@ EF_gtk_appuis (Projet *p)
 }
 
 #endif
+
+/* vim:set shiftwidth=2 softtabstop=2 expandtab: */

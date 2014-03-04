@@ -778,3 +778,5 @@ EF_gtk_materiaux_double_clicked (GtkWidget *widget,
 
 
 #endif
+
+/* vim:set shiftwidth=2 softtabstop=2 expandtab: */

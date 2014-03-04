@@ -700,3 +700,5 @@ EF_relachement_free (Projet *p)
   
   return TRUE;
 }
+
+/* vim:set shiftwidth=2 softtabstop=2 expandtab: */

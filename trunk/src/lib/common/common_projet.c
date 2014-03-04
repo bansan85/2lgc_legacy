@@ -520,3 +520,5 @@ projet_init_graphique (Projet *p)
   return TRUE;
 }
 #endif
+
+/* vim:set shiftwidth=2 softtabstop=2 expandtab: */

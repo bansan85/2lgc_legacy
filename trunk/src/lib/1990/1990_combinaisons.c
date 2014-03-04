@@ -1238,3 +1238,5 @@ _1990_combinaisons_genere (Projet *p)
   
   return TRUE;
 }
+
+/* vim:set shiftwidth=2 softtabstop=2 expandtab: */

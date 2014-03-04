@@ -33,3 +33,5 @@ double _1990_coef_psi2_bat (unsigned int type,
                                        __attribute__((__warn_unused_result__));
 
 #endif
+
+/* vim:set shiftwidth=2 softtabstop=2 expandtab: */

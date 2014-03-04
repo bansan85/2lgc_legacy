@@ -484,3 +484,5 @@ _1990_coef_psi2_bat (unsigned int type,
     default : { FAILPARAM (norme, "%d", NAN) break; }
   }
 }
+
+/* vim:set shiftwidth=2 softtabstop=2 expandtab: */

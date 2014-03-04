@@ -61,3 +61,5 @@ gboolean EF_appuis_free         (Projet       *p)
                                        __attribute__((__warn_unused_result__));
 
 #endif
+
+/* vim:set shiftwidth=2 softtabstop=2 expandtab: */

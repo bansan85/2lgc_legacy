@@ -43,3 +43,5 @@ char *_1993_1_1_materiaux_get_description (EF_Materiau *materiau)
                                        __attribute__((__warn_unused_result__));
 
 #endif
+
+/* vim:set shiftwidth=2 softtabstop=2 expandtab: */

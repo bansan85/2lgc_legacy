@@ -234,3 +234,5 @@ EF_charge_noeud_free (Charge *charge)
   
   return TRUE;
 }
+
+/* vim:set shiftwidth=2 softtabstop=2 expandtab: */

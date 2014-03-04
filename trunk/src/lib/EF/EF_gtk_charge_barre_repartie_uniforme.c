@@ -674,3 +674,5 @@ EF_gtk_charge_barre_repartie_uniforme (Projet *p,
 
 
 #endif
+
+/* vim:set shiftwidth=2 softtabstop=2 expandtab: */

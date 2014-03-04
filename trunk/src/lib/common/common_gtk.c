@@ -394,3 +394,5 @@ common_gtk_cree_colonne (char  *nom,
   
   return column;
 }
+
+/* vim:set shiftwidth=2 softtabstop=2 expandtab: */

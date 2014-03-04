@@ -34,3 +34,5 @@ void EF_gtk_materiaux_edit_clicked   (GtkWidget        *widget,
 #endif
 
 #endif
+
+/* vim:set shiftwidth=2 softtabstop=2 expandtab: */

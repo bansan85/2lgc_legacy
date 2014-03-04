@@ -32,3 +32,5 @@ gboolean _1993_1_1_gtk_materiaux (Projet      *p,
 #endif
 
 #endif
+
+/* vim:set shiftwidth=2 softtabstop=2 expandtab: */

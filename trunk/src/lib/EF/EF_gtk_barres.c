@@ -1074,3 +1074,5 @@ EF_gtk_barres (Projet *p)
 }
 
 #endif
+
+/* vim:set shiftwidth=2 softtabstop=2 expandtab: */

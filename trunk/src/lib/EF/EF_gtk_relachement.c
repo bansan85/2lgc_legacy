@@ -1977,3 +1977,5 @@ EF_gtk_relachement (Projet *p)
 }
 
 #endif
+
+/* vim:set shiftwidth=2 softtabstop=2 expandtab: */

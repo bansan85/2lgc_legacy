@@ -611,3 +611,5 @@ EF_verif_rapport_free (GList *rapport)
   
   g_list_free (rapport);
 }
+
+/* vim:set shiftwidth=2 softtabstop=2 expandtab: */

@@ -137,3 +137,5 @@ _1990_gtk_groupes_button_options_clicked (GtkWidget *button,
 
 
 #endif
+
+/* vim:set shiftwidth=2 softtabstop=2 expandtab: */

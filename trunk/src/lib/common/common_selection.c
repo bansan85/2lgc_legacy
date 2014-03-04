@@ -606,3 +606,5 @@ common_selection_charges_en_texte (GList  *liste_charges,
   
   return tmp;
 }
+
+/* vim:set shiftwidth=2 softtabstop=2 expandtab: */

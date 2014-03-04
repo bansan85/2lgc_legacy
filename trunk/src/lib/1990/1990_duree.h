@@ -30,3 +30,5 @@ char *_1990_duree_norme_txt (unsigned int type,
                                        __attribute__((__warn_unused_result__));
 
 #endif
+
+/* vim:set shiftwidth=2 softtabstop=2 expandtab: */

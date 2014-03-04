@@ -360,3 +360,5 @@ EF_gtk_section_rectangulaire (Projet  *p,
 
 
 #endif
+
+/* vim:set shiftwidth=2 softtabstop=2 expandtab: */
