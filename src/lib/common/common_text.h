@@ -25,21 +25,24 @@
 void show_warranty ();
 void show_help     ();
 
-double common_text_str_to_double (char       *texte,
-                                  double      val_min,
-                                  gboolean    min_include,
-                                  double      val_max,
-                                  gboolean    max_include)
+double   common_text_str_to_double (char          *texte,
+                                    double         val_min,
+                                    gboolean       min_include,
+                                    double         val_max,
+                                    gboolean       max_include)
                                        __attribute__((__warn_unused_result__));
-char *strcasestr_internal        (const char *haystack,
-                                  const char *needle)
+wchar_t *strcasestr_internal       (const wchar_t *haystack,
+                                    const wchar_t *needle)
                                        __attribute__((__warn_unused_result__));
-char *common_text_dependances    (GList      *liste_noeuds,
-                                  GList      *liste_barres,
-                                  GList      *liste_charges,
-                                  Projet     *p)
+char    *common_text_dependances   (GList         *liste_noeuds,
+                                    GList         *liste_barres,
+                                    GList         *liste_charges,
+                                    Projet        *p)
                                        __attribute__((__warn_unused_result__));
-char *common_text_get_line       (FILE       *fichier)
+wchar_t *common_text_get_line      (FILE          *fichier)
                                        __attribute__((__warn_unused_result__));
-
+char    *common_text_wcstostr_dup  (const wchar_t *texte)
+                                       __attribute__((__warn_unused_result__));
+wchar_t *common_text_strtowcs_dup  (const char    *texte)
+                                       __attribute__((__warn_unused_result__));
 #endif

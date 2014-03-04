@@ -1649,8 +1649,9 @@ EF_gtk_sections_importe_section (GtkMenuItem *menuitem,
  *     - Le fichier profiles_acier.csv est introuvable.
  */
 {
-  FILE *file;
-  char *ligne, *section;
+  FILE    *file;
+  wchar_t *ligne_tmp;
+  char    *ligne, *section;
   
   BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
   
@@ -1663,12 +1664,14 @@ EF_gtk_sections_importe_section (GtkMenuItem *menuitem,
           ,
           gettext ("Erreur d'allocation mémoire.\n"))
   
-  ligne = common_text_get_line (file);
-  free (ligne);
+  ligne_tmp = common_text_get_line (file);
+  free (ligne_tmp);
   
-  ligne = common_text_get_line (file);
-  while (ligne != NULL)
+  ligne_tmp = common_text_get_line (file);
+  while (ligne_tmp != NULL)
   {
+    BUG (ligne = common_text_wcstostr_dup (ligne_tmp), )
+    free (ligne_tmp);
     if (strncmp (ligne, section, strlen (section)) == 0)
     {
       double j, iy, iz, vy, vyp, vz, vzp, s;
@@ -1728,7 +1731,7 @@ EF_gtk_sections_importe_section (GtkMenuItem *menuitem,
       free (desc);
     }
     free (ligne);
-    ligne = common_text_get_line (file);
+    ligne_tmp = common_text_get_line (file);
   }
   
   free (section);
@@ -1881,6 +1884,7 @@ EF_gtk_sections (Projet *p)
   if (file != NULL)
   {
     char      *ligne;
+    wchar_t   *ligne_tmp;
     GtkWidget *sous_menu;
     GList     *list_categorie = NULL;
     
@@ -1896,15 +1900,18 @@ EF_gtk_sections (Projet *p)
     }
     
     // On passe la première ligne qui est l'étiquette des colonnes.
-    ligne = common_text_get_line (file);
-    free (ligne);
+    ligne_tmp = common_text_get_line (file);
+    free (ligne_tmp);
     
-    ligne = common_text_get_line (file);
-    while (ligne != NULL)
+    ligne_tmp = common_text_get_line (file);
+    while (ligne_tmp != NULL)
     {
       char      *nom_section, *categorie;
       GtkWidget *menu, *categorie_menu = NULL;
       GList     *forme;
+      
+      BUG (ligne = common_text_wcstostr_dup (ligne_tmp), )
+      free (ligne_tmp);
       
       BUG (EF_gtk_sections_get_section (ligne,
                                         &nom_section,
@@ -2005,7 +2012,7 @@ EF_gtk_sections (Projet *p)
       free (ligne);
       free (nom_section);
       free (categorie);
-      ligne = common_text_get_line (file);
+      ligne_tmp = common_text_get_line (file);
     }
     g_list_free (list_categorie);
     

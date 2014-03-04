@@ -42,9 +42,6 @@ gboolean    _1990_action_nom_change  (Projet     *p,
                                       Action     *action,
                                       const char *nom)
                                        __attribute__((__warn_unused_result__));
-Action     *_1990_action_nom_cherche (Projet     *p,
-                                      const char *nom)
-                                       __attribute__((__warn_unused_result__));
 
 unsigned int _1990_action_type_renvoie (Action      *action)
                                        __attribute__((__warn_unused_result__));

@@ -448,12 +448,12 @@ typedef struct __EF_Appui
 
 typedef struct __Ligne_Adresse
 {
-  char *affichage;
-  int   population;
-  char  departement[4];
-  int   commune;
-  int   code_postal;
-  char *ville;
+  char    *affichage;
+  int      population;
+  char     departement[4];
+  int      commune;
+  int      code_postal;
+  wchar_t *ville;
 } Ligne_Adresse;
 
 
@@ -748,7 +748,7 @@ typedef struct __Gtk_Common_Informations
   
   GtkListStore *model_completion;
   
-  char         *departement;
+  wchar_t      *departement;
   int           commune;
 } Gtk_Common_Informations;
 #endif

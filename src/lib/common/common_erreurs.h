@@ -22,6 +22,9 @@
 #include "config.h"
 #include <stdio.h>
 
+#define NOWARNING _Pragma("GCC diagnostic ignored \"-Wunused-result\"")
+#define POPWARNING _Pragma("GCC diagnostic pop")
+
 #define FAILINFO(Y, ...) { \
   printf (gettext ("fichier %s, fonction %s, ligne %d, texte : "), \
           __FILE__, \
