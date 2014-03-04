@@ -191,3 +191,5 @@ GtkTreeViewColumn *common_gtk_cree_colonne (char  *nom,
                                             int    num_decimales);
 
 #endif
+
+/* vim:set shiftwidth=2 softtabstop=2 expandtab: */

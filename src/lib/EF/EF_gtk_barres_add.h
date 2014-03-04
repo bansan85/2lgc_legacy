@@ -31,3 +31,5 @@ void EF_gtk_barres_ajouter (GtkButton *button,
 #endif
 
 #endif
+
+/* vim:set shiftwidth=2 softtabstop=2 expandtab: */

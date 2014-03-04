@@ -67,3 +67,5 @@ Flottant m_dot_f (Flottant      f1,
                   Flottant      f2);
 
 #endif
+
+/* vim:set shiftwidth=2 softtabstop=2 expandtab: */

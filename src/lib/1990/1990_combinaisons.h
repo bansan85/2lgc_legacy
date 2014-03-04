@@ -52,3 +52,5 @@ gboolean _1990_combinaisons_eluacc_quasi_permanente (Projet *p)
                                        __attribute__((__warn_unused_result__));
 
 #endif
+
+/* vim:set shiftwidth=2 softtabstop=2 expandtab: */

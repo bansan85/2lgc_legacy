@@ -523,3 +523,5 @@ EF_gtk_charge_noeud (Projet *p,
 
 
 #endif
+
+/* vim:set shiftwidth=2 softtabstop=2 expandtab: */

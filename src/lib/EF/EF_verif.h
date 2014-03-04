@@ -29,3 +29,5 @@ gboolean EF_verif_EF           (Projet *p,
 void     EF_verif_rapport_free (GList  *rapport);
 
 #endif
+
+/* vim:set shiftwidth=2 softtabstop=2 expandtab: */

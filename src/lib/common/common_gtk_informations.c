@@ -848,3 +848,5 @@ common_gtk_informations (Projet *p)
   return TRUE;
 }
 #endif
+
+/* vim:set shiftwidth=2 softtabstop=2 expandtab: */

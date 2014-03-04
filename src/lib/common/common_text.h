@@ -46,3 +46,5 @@ char    *common_text_wcstostr_dup  (const wchar_t *texte)
 wchar_t *common_text_strtowcs_dup  (const char    *texte)
                                        __attribute__((__warn_unused_result__));
 #endif
+
+/* vim:set shiftwidth=2 softtabstop=2 expandtab: */

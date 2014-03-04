@@ -2346,3 +2346,5 @@ common_fonction_renvoie_enveloppe (GList    *fonctions,
   
   return TRUE;
 }
+
+/* vim:set shiftwidth=2 softtabstop=2 expandtab: */

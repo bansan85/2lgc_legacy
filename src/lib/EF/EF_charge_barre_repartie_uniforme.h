@@ -124,3 +124,5 @@ gboolean EF_charge_barre_repartie_uniforme_free (Charge *charge)
                                        __attribute__((__warn_unused_result__));
 
 #endif
+
+/* vim:set shiftwidth=2 softtabstop=2 expandtab: */

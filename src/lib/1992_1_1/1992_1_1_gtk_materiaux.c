@@ -1161,3 +1161,5 @@ _1992_1_1_gtk_materiaux_ajout (GtkMenuItem *menuitem,
 
 
 #endif
+
+/* vim:set shiftwidth=2 softtabstop=2 expandtab: */

@@ -245,3 +245,5 @@ common_tooltip_generation (const char *nom)
 }
 
 #endif
+
+/* vim:set shiftwidth=2 softtabstop=2 expandtab: */

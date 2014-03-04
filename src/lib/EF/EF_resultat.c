@@ -262,3 +262,5 @@ EF_resultat_noeud_deplacement (GList    *liste,
   
   return TRUE;
 }
+
+/* vim:set shiftwidth=2 softtabstop=2 expandtab: */

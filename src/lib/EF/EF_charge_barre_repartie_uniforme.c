@@ -1894,3 +1894,5 @@ EF_charge_barre_repartie_uniforme_free (Charge *charge)
   
   return TRUE;
 }
+
+/* vim:set shiftwidth=2 softtabstop=2 expandtab: */

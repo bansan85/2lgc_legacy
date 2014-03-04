@@ -335,3 +335,5 @@ EF_gtk_section_circulaire (Projet  *p,
 
 
 #endif
+
+/* vim:set shiftwidth=2 softtabstop=2 expandtab: */

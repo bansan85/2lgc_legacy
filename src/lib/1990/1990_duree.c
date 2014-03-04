@@ -204,3 +204,5 @@ _1990_duree_norme_txt (unsigned int type,
     default : { FAILPARAM (norme, "%d", NULL) break; }
   }
 }
+
+/* vim:set shiftwidth=2 softtabstop=2 expandtab: */

@@ -28,3 +28,5 @@ void EF_gtk_calculs_calculer (GtkButton *button,
                               Projet    *p);
 
 #endif
+
+/* vim:set shiftwidth=2 softtabstop=2 expandtab: */

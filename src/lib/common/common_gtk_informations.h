@@ -41,3 +41,5 @@ gboolean common_gtk_informations (Projet *p)
 #endif
 
 #endif
+
+/* vim:set shiftwidth=2 softtabstop=2 expandtab: */

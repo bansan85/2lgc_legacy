@@ -32,3 +32,5 @@ gboolean EF_gtk_section_T (Projet  *p,
 #endif
 
 #endif
+
+/* vim:set shiftwidth=2 softtabstop=2 expandtab: */

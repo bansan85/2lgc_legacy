@@ -490,3 +490,5 @@ common_text_strtowcs_dup (const char *texte)
   
   return tmp;
 }
+
+/* vim:set shiftwidth=2 softtabstop=2 expandtab: */

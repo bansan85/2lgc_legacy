@@ -35,3 +35,5 @@ void       EF_gtk_sections                (Projet           *p);
 #endif
 
 #endif
+
+/* vim:set shiftwidth=2 softtabstop=2 expandtab: */

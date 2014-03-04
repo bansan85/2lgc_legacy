@@ -83,3 +83,5 @@ EF_gtk_calculs_calculer (GtkMenuItem *menuitem,
 
 
 #endif
+
+/* vim:set shiftwidth=2 softtabstop=2 expandtab: */

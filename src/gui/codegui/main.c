@@ -207,3 +207,4 @@ int main(int argc, char *argv[])
     return 0;
 }
 
+/* vim:set shiftwidth=2 softtabstop=2 expandtab: */

@@ -359,3 +359,5 @@ m_dot_d (Flottant f, double d)
   
   return retour;
 }
+
+/* vim:set shiftwidth=2 softtabstop=2 expandtab: */

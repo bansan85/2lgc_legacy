@@ -570,3 +570,5 @@ EF_gtk_charge_barre_ponctuelle (Projet *p,
 
 
 #endif
+
+/* vim:set shiftwidth=2 softtabstop=2 expandtab: */

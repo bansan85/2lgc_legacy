@@ -256,3 +256,5 @@ _1993_1_1_materiaux_get_description (EF_Materiau* materiau)
   
   return description;
 }
+
+/* vim:set shiftwidth=2 softtabstop=2 expandtab: */

@@ -1881,3 +1881,5 @@ _1990_ponderations_affiche_tout (Projet *p)
   
   return TRUE;
 }
+
+/* vim:set shiftwidth=2 softtabstop=2 expandtab: */

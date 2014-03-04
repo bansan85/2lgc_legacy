@@ -45,3 +45,5 @@ char  *common_selection_charges_en_texte  (GList      *liste_charges,
                                        __attribute__((__warn_unused_result__));
 
 #endif
+
+/* vim:set shiftwidth=2 softtabstop=2 expandtab: */
