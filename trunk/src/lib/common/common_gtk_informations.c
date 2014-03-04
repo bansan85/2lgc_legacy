@@ -24,6 +24,7 @@
 #include <gtk/gtk.h>
 #include <math.h>
 #include <string.h>
+#include <wchar.h>
 
 #include "common_projet.h"
 #include "common_erreurs.h"
@@ -229,11 +230,12 @@ common_gtk_informations_entry_del_char (GtkEntryBuffer *buffer,
 {
   #define     MAX_VILLES  10
   FILE       *villes;
-  char       *ligne = NULL;
+  wchar_t    *ligne = NULL;
   GtkTreeIter iter;
   int         i;
-  const char *code_postal, *ville;
-  GList      *list = NULL, *list_parcours;
+  const char *code_postal_tmp, *ville_tmp;
+  wchar_t    *code_postal, *ville;
+  GList       *list = NULL, *list_parcours;
   gboolean    f_codepostal; // TRUE si cherche sur la base du code postal.
   int         popmin; // La population minimale que doit avoir la ville pour
               // être autorisée à entrer dans la liste des propositions.
@@ -256,13 +258,15 @@ common_gtk_informations_entry_del_char (GtkEntryBuffer *buffer,
   else
     FAILPARAM (buffer, "%p", )
   
-  code_postal = gtk_entry_get_text (GTK_ENTRY (gtk_builder_get_object (
+  code_postal_tmp = gtk_entry_get_text (GTK_ENTRY (gtk_builder_get_object (
                    UI_INFO.builder, "common_informations_entry_code_postal")));
-  ville = gtk_entry_get_text (GTK_ENTRY (gtk_builder_get_object (
+  ville_tmp = gtk_entry_get_text (GTK_ENTRY (gtk_builder_get_object (
                          UI_INFO.builder, "common_informations_entry_ville")));
+  BUG (code_postal = common_text_strtowcs_dup (code_postal_tmp), )
+  BUG (ville = common_text_strtowcs_dup (ville_tmp), )
   
-  if (((f_codepostal) && (strcmp (code_postal, "") == 0)) ||
-      ((!f_codepostal) && (strcmp (ville, "") == 0)))
+  if (((f_codepostal) && (wcscmp (code_postal, L"") == 0)) ||
+      ((!f_codepostal) && (wcscmp (ville, L"") == 0)))
   {
     common_gtk_informations_check (NULL, p);
     return;
@@ -271,7 +275,9 @@ common_gtk_informations_entry_del_char (GtkEntryBuffer *buffer,
   INFO (villes = fopen (DATADIR"/france_villes.csv", "r"),
         ,
         (gettext ("Le fichier '%s' est introuvable.\n"),
-                  DATADIR"/france_villes.csv");)
+                  DATADIR"/france_villes.csv");
+          free (ville);
+          free (code_postal);)
   
   ligne = common_text_get_line (villes);
   free (ligne);
@@ -281,12 +287,12 @@ common_gtk_informations_entry_del_char (GtkEntryBuffer *buffer,
   ligne = common_text_get_line (villes);
   while (ligne != NULL)
   {
-    char *artmaj, *ncc, *artmin, *nccenr;
-    int   article, codepostal, population;
-    char *minuscule;
-    char *code_postal2;
-    char  departement[4];
-    int   commune;
+    wchar_t *artmaj, *ncc, *artmin, *nccenr;
+    int      article, codepostal, population;
+    wchar_t *minuscule;
+    wchar_t *code_postal2;
+    wchar_t  departement[4];
+    int      commune;
     
     BUG (common_ville_get_ville (ligne,
                                  NULL,
@@ -307,28 +313,36 @@ common_gtk_informations_entry_del_char (GtkEntryBuffer *buffer,
          ,
          fclose (villes);
            free (ligne);
-           g_list_free_full (list, common_gtk_informations_free_adresse);)
-    BUGCRIT (code_postal2 = g_strdup_printf ("%d", codepostal),
+           g_list_free_full (list, common_gtk_informations_free_adresse);
+           free (ville);
+           free (code_postal);)
+    BUGCRIT (code_postal2 = malloc (sizeof (wchar_t) * 11),
              ,
              (gettext ("Erreur d'allocation mémoire.\n"));
                fclose (villes);
                free (ligne);
-               g_list_free_full (list, common_gtk_informations_free_adresse);)
-    BUGCRIT (minuscule = g_strdup_printf ("%s%s%s",
-                                          artmin,
-                                          ((article == 5) || (article == 1) ||
-                                           (article == 0)) ? "" : " ",
-                                          nccenr),
+               g_list_free_full (list, common_gtk_informations_free_adresse);
+               free (ville);
+               free (code_postal);)
+    swprintf (code_postal2, 11, L"%d", codepostal);
+    BUGCRIT (minuscule = malloc (sizeof (wchar_t) *
+                                      (wcslen (artmin) + wcslen (nccenr) + 2)),
              ,
              (gettext ("Erreur d'allocation mémoire.\n"));
                fclose (villes);
                free (ligne);
                free (code_postal2);
-               g_list_free_full (list, common_gtk_informations_free_adresse);)
+               g_list_free_full (list, common_gtk_informations_free_adresse);
+               free (ville);
+               free (code_postal);)
+    wcscpy (minuscule, artmin);
+    wcscat (minuscule,
+            (article == 5) || (article == 1) || (article == 0) ? L"" : L" ");
+    wcscat (minuscule, nccenr);
     
     if ((population > popmin) &&
         (((f_codepostal) &&
-          (strncmp (code_postal2, code_postal, strlen (code_postal)) == 0)
+          (wcsncmp (code_postal2, code_postal, wcslen (code_postal)) == 0)
          ) ||
          ((!f_codepostal) && (strcasestr_internal (minuscule, ville) != NULL))
         )
@@ -343,13 +357,11 @@ common_gtk_informations_entry_del_char (GtkEntryBuffer *buffer,
                  free (ligne);
                  free (code_postal2);
                  free (minuscule);
-                 g_list_free_full (list,
-                                   common_gtk_informations_free_adresse);)
-      BUGCRIT (adresse->affichage = g_strdup_printf ("%d %s%s%s",
-                                                     codepostal,
-                                                     artmin,
-               ((article == 5) || (article == 1) || (article == 0)) ? "" : " ",
-                                                     nccenr),
+                 g_list_free_full (list, common_gtk_informations_free_adresse);
+                 free (ville);
+                 free (code_postal);)
+      BUGCRIT (adresse->affichage = malloc (sizeof (wchar_t) *
+                                     (wcslen (artmin) + wcslen (nccenr) + 20)),
                ,
                (gettext ("Erreur d'allocation mémoire.\n"));
                  fclose (villes);
@@ -357,10 +369,17 @@ common_gtk_informations_entry_del_char (GtkEntryBuffer *buffer,
                  free (code_postal2);
                  free (minuscule);
                  free (adresse);
-                 g_list_free_full (list,
-                                   common_gtk_informations_free_adresse);)
+                 g_list_free_full (list, common_gtk_informations_free_adresse);
+                 free (ville);
+                 free (code_postal);)
+      sprintf (adresse->affichage,
+               "%d %ls%s%ls",
+               codepostal,
+               artmin,
+               ((article == 5) || (article == 1) || (article == 0)) ? "" : " ",
+               nccenr);
       adresse->population = population;
-      strncpy (adresse->departement, departement, 4);
+      wcstombs (adresse->departement, departement, 4);
       adresse->commune = commune;
       adresse->code_postal = codepostal;
       adresse->ville = minuscule;
@@ -390,13 +409,15 @@ common_gtk_informations_entry_del_char (GtkEntryBuffer *buffer,
     free (code_postal2);
     ligne = common_text_get_line (villes);
   }
+  free (code_postal);
+  free (ville);
   
   // On ajoute dans le treeview la liste des villes
   list_parcours = g_list_last (list);
   while (list_parcours != NULL)
   {
     Ligne_Adresse *adresse = list_parcours->data;
-    char          *tmp;
+    char          *tmp, *ville_tmp2;
     
     BUGCRIT (tmp = g_strdup_printf ("%d", adresse->code_postal),
              ,
@@ -404,16 +425,23 @@ common_gtk_informations_entry_del_char (GtkEntryBuffer *buffer,
                fclose (villes);
                g_list_free_full (list, common_gtk_informations_free_adresse);)
     gtk_list_store_append (UI_INFO.model_completion, &iter);
+    BUG (ville_tmp2 = common_text_wcstostr_dup (adresse->ville),
+         ,
+         (gettext ("Erreur d'allocation mémoire.\n"));
+           fclose (villes);
+           g_list_free_full (list, common_gtk_informations_free_adresse);
+           free (tmp);)
     gtk_list_store_set (UI_INFO.model_completion,
                         &iter,
                         0, adresse->affichage,
                         1, tmp,
-                        2, adresse->ville,
+                        2, ville_tmp2,
                         3, adresse->departement,
                         4, adresse->commune,
                         -1);
     
     free (tmp);
+    free (ville_tmp2);
     
     list_parcours = g_list_previous (list_parcours);
   }
@@ -471,9 +499,10 @@ common_gtk_informations_match_selected (GtkEntryCompletion *widget,
  *     - interface graphique non initialisée.
  */
 {
-  int   commune;
-  char *departement;
-  char *ville;
+  int      commune;
+  char    *departement;
+  char    *ville_tmp;
+  wchar_t *ville;
   
   BUGPARAM (p, "%p", p, FALSE)
   BUGPARAM (iter, "%p", iter, FALSE)
@@ -484,14 +513,19 @@ common_gtk_informations_match_selected (GtkEntryCompletion *widget,
   
   gtk_tree_model_get (model,
                       iter,
-                      2, &ville,
+                      2, &ville_tmp,
                       3, &departement,
                       4, &commune,
                       -1);
   
   free (UI_INFO.departement);
-  UI_INFO.departement = departement;
+  UI_INFO.departement = common_text_strtowcs_dup (departement);
+  free (departement);
   UI_INFO.commune = commune;
+  BUG (ville = common_text_strtowcs_dup (ville_tmp),
+       FALSE,
+       free (ville_tmp);)
+  free (ville_tmp);
   
   BUG (common_ville_set (p, UI_INFO.departement, ville, TRUE),
        FALSE,
@@ -525,6 +559,8 @@ common_gtk_informations_modifier_clicked (GtkButton *button,
   Type_Vent    vent;
   Type_Seisme  seisme;
   char        *txt1, *txt2, *message;
+  const char  *const_txt;
+  wchar_t     *txt_tmp;
   
   BUGPARAM (p, "%p", p, )
   BUGCRIT (UI_INFO.builder,
@@ -548,15 +584,23 @@ common_gtk_informations_modifier_clicked (GtkButton *button,
   seisme = gtk_combo_box_get_active (GTK_COMBO_BOX (gtk_builder_get_object (
                      UI_INFO.builder, "common_informations_seisme_combobox")));
   
+  const_txt = gtk_entry_get_text (GTK_ENTRY (gtk_builder_get_object (
+                         UI_INFO.builder, "common_informations_entry_ville")));
+  BUG (txt_tmp = common_text_strtowcs_dup (const_txt),
+           ,
+           free (destinataire);
+             free (adresse);
+             free (ville);)
   BUG (common_ville_set (p,
                          UI_INFO.departement,
-                         gtk_entry_get_text (GTK_ENTRY (gtk_builder_get_object
-                        (UI_INFO.builder, "common_informations_entry_ville"))),
+                         txt_tmp,
                          FALSE),
       ,
       free (destinataire);
         free (adresse);
-        free (ville);)
+        free (ville);
+        free (txt_tmp);)
+  free (txt_tmp);
   free (p->parametres.adresse.destinataire);
   p->parametres.adresse.destinataire = destinataire;
   free (p->parametres.adresse.adresse);
@@ -726,9 +770,9 @@ common_gtk_informations (Projet *p)
   UI_INFO.model_completion = GTK_LIST_STORE (gtk_builder_get_object (
                      UI_INFO.builder, "common_informations_completion_model"));
   
-  BUGCRIT (UI_INFO.departement = g_strdup (p->parametres.adresse.departement),
-           FALSE,
-           (gettext ("Erreur d'allocation mémoire.\n"));)
+  BUG (UI_INFO.departement =
+                  common_text_strtowcs_dup (p->parametres.adresse.departement),
+       FALSE);
   UI_INFO.commune = p->parametres.adresse.commune;
   common_gtk_informations_check (NULL, p);
   

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2lgc_code 0.0.0.1\n"
 "Report-Msgid-Bugs-To: devel@2lgc.org\n"
-"POT-Creation-Date: 2014-02-23 21:16+0100\n"
-"PO-Revision-Date: 2014-02-23 22:49+0100\n"
+"POT-Creation-Date: 2014-03-04 09:24+0100\n"
+"PO-Revision-Date: 2014-03-04 09:24+0100\n"
 "Last-Translator: LE GARREC Vincent <contact@2lgc.org>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -877,12 +877,11 @@ msgstr "La hauteur du dessin ne peut être nulle.\n"
 msgid "%sde %.*lfm à %.*lfm : "
 msgstr "%sde %.*lfm à %.*lfm : "
 
-#, c-format
-msgid "Paramètre %s incorrect.\n"
-msgstr "Paramètre %s incorrect.\n"
-
 msgid "Zéro impossible à trouver.\n"
 msgstr "Zéro impossible à trouver.\n"
+
+msgid "La fonction \"zoom tout\" vient de tourner en boucle.\n"
+msgstr "La fonction \"zoom tout\" vient de tourner en boucle.\n"
 
 #, c-format
 msgid "Type de section %d inconnu.\n"
@@ -907,9 +906,6 @@ msgstr "le séisme"
 msgid " des paramètres de calculs différents que ceux imposés par les normes ?"
 msgstr ""
 " des paramètres de calculs différents que ceux imposés par les normes ?"
-
-msgid "Builder Failed\n"
-msgstr "Builder Failed\n"
 
 #, c-format
 msgid "15. Disclaimer of Warranty.\n"
@@ -1119,16 +1115,16 @@ msgid "Le fichier '%s' est vide.\n"
 msgstr "Le fichier '%s' est vide.\n"
 
 #, c-format
+msgid "Le fichier '%s' est corrompu.\n"
+msgstr "Le fichier '%s' est corrompu.\n"
+
+#, c-format
 msgid "Impossible d'ouvrir l'image %s : %s.\n"
 msgstr "Impossible d'ouvrir l'image %s : %s.\n"
 
 #, c-format
 msgid "'%s' n'est pas de la forme 'largeurxhauteur'.\n"
 msgstr "'%s' n'est pas de la forme 'largeurxhauteur'.\n"
-
-#, c-format
-msgid "Le fichier '%s' est corrompu.\n"
-msgstr "Le fichier '%s' est corrompu.\n"
 
 msgid "Type de nombre est inconnu.\n"
 msgstr "Type de nombre est inconnu.\n"
@@ -1140,6 +1136,10 @@ msgstr "Paramètre %s incorrect."
 #, c-format
 msgid "La fenêtre graphique %s n'est pas initialisée."
 msgstr "La fenêtre graphique %s n'est pas initialisée."
+
+#, c-format
+msgid "Paramètre %s incorrect.\n"
+msgstr "Paramètre %s incorrect.\n"
 
 #, c-format
 msgid "Le type %d de la liste est inconnu.\n"
@@ -1214,17 +1214,17 @@ msgstr "Zone forte"
 
 #, c-format
 msgid ""
-"La ligne en cours '%s' n'est pas dans un format correct pour une ville.\n"
+"La ligne en cours '%ls' n'est pas dans un format correct pour une ville.\n"
 msgstr ""
-"La ligne en cours '%s' n'est pas dans un format correct pour une ville.\n"
+"La ligne en cours '%ls' n'est pas dans un format correct pour une ville.\n"
 
 #, c-format
 msgid "Le fichier '%s' est incomplet.\n"
 msgstr "Le fichier '%s' est incomplet.\n"
 
 #, c-format
-msgid "Le fichier '%s' est corrumpu. Le champ2 '%s' est inconnu.\n"
-msgstr "Le fichier '%s' est corrumpu. Le champ2 '%s' est inconnu.\n"
+msgid "Le fichier '%s' est corrumpu. Le champ2 '%ls' est inconnu.\n"
+msgstr "Le fichier '%s' est corrumpu. Le champ2 '%ls' est inconnu.\n"
 
 msgid "Fichier"
 msgstr "Fichier"
@@ -1518,6 +1518,9 @@ msgstr "Points caractéristiques de r<sub>z</sub> [rad]"
 
 msgid "Tout"
 msgstr "Tout"
+
+msgid "Builder Failed\n"
+msgstr "Builder Failed\n"
 
 #, c-format
 msgid "Le type de noeud %d est inconnu.\n"
@@ -1977,10 +1980,6 @@ msgstr "Ajout d'une charge au noeud"
 msgid "Modification d'une charge au noeud"
 msgstr "Modification d'une charge au noeud"
 
-#, c-format
-msgid "Charge '%s' de l'action '%s' introuvable.\n"
-msgstr "Charge '%s' de l'action '%s' introuvable.\n"
-
 msgid "La charge n'est dans aucune action.\n"
 msgstr "La charge n'est dans aucune action.\n"
 
@@ -2094,3 +2093,6 @@ msgstr "Le matériau n'est pas en acier.\n"
 
 msgid "Modification d'un matériau acier"
 msgstr "Modification d'un matériau acier"
+
+#~ msgid "Charge '%s' de l'action '%s' introuvable.\n"
+#~ msgstr "Charge '%s' de l'action '%s' introuvable.\n"

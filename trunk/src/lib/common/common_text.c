@@ -28,6 +28,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <math.h>
+#include <wchar.h>
 
 
 void
@@ -114,12 +115,13 @@ common_text_str_to_double (char    *texte,
   struct lconv *locale_conv;
   char         *retour;
   
-  BUGMSG (fake = (char *) malloc (sizeof (char) * (strlen (texte) + 1)),
-          NAN,
-          gettext ("Erreur d'allocation mémoire.\n"))
-  BUGMSG (textebis = g_strdup (texte),
-          NAN,
-          gettext ("Erreur d'allocation mémoire.\n"))
+  BUGCRIT (fake = (char *) malloc (sizeof (char) * (strlen (texte) + 1)),
+           NAN,
+           (gettext ("Erreur d'allocation mémoire.\n"));)
+  BUGCRIT (textebis = g_strdup (texte),
+           NAN,
+           (gettext ("Erreur d'allocation mémoire.\n"));
+             free (fake);)
   
   // On remplace par la bonne décimale.
   locale_conv = localeconv ();
@@ -142,9 +144,10 @@ common_text_str_to_double (char    *texte,
     }
   }
   else
-    BUGMSG (NULL,
-            NAN,
-            gettext ("Impossible de déterminer le caractère décimal.\n"))
+    FAILCRIT (NAN,
+              (gettext ("Impossible de déterminer le caractère décimal.\n"));
+                free (fake);
+                free (textebis);)
   
   if (sscanf (textebis, "%lf%s", &nombre, fake) != 1)
   {
@@ -181,9 +184,9 @@ common_text_str_to_double (char    *texte,
 }
 
 
-char *
-strcasestr_internal (const char *haystack,
-                     const char *needle)
+wchar_t *
+strcasestr_internal (const wchar_t *haystack,
+                     const wchar_t *needle)
 /**
  * \brief Est un équivalent de strcasestr avec gestion des accents et ne
  *        recherche l'aiguille qu'en début de chaque mot.
@@ -194,56 +197,59 @@ strcasestr_internal (const char *haystack,
  *   Échec : NULL.
  */
 {
-  #define CAR_UP   "ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÑÐÒÓÔÕÖØÙÚÛÜÝàáâãäåèçéêëìíîïðñòóôõöøùúûüýÿ"
-  #define CAR_DOWN "aaaaaaæceeeeiiiindoooooouuuuyaaaaaaeceeeiiiionoooooouuuuyy"
+#define CAR_UP   L"ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÑÐÒÓÔÕÖØÙÚÛÜÝàáâãäåèçéêëìíîïðñòóôõöøùúûüýÿ"
+#define CAR_DOWN L"aaaaaaæceeeeiiiindoooooouuuuyaaaaaaeceeeiiiionoooooouuuuyy"
   
   unsigned int i;
-  char        *meule, *aiguille;
-  char        *tmp;
+  wchar_t     *meule, *aiguille;
+  wchar_t     *tmp;
   
-  BUGMSG (haystack, NULL, gettext ("Paramètre %s incorrect.\n"), "haystack")
-  BUGMSG (needle, NULL, gettext ("Paramètre %s incorrect.\n"), "needle")
+  BUGPARAM (haystack, "%p", haystack, NULL)
+  BUGPARAM (needle, "%p", needle, NULL)
   
-  BUGMSG (meule = g_strdup (haystack),
-          NULL,
-          gettext ("Erreur d'allocation mémoire.\n"))
-  BUGMSG (aiguille = g_strdup (needle),
-          NULL,
-          gettext ("Erreur d'allocation mémoire.\n"))
+  BUGCRIT (meule = malloc (sizeof (wchar_t) * (wcslen (haystack) + 1)),
+           NULL,
+           (gettext ("Erreur d'allocation mémoire.\n"));)
+  wcscpy (meule, haystack);
+  BUGCRIT (aiguille = malloc (sizeof (wchar_t) * (wcslen (needle) + 1)),
+           NULL,
+           (gettext ("Erreur d'allocation mémoire.\n"));
+             free (meule);)
+  wcscpy (aiguille, needle);
   
   for (i = 0; meule[i]; i++)
     meule[i] = tolower (meule[i]);
   for (i = 0; aiguille[i]; i++)
     aiguille[i] = tolower (aiguille[i]);
   
-  for (i = 0; i < strlen (CAR_UP); i++)
+  for (i = 0; i < wcslen (CAR_UP); i++)
   {
-    char *retour;
+    wchar_t *retour;
     
-    retour = strchr (meule, CAR_UP[i]);
+    retour = wcschr (meule, CAR_UP[i]);
     
     while (retour != NULL)
     {
       *retour = CAR_DOWN[i];
-      retour = strchr (meule, CAR_UP[i]);
+      retour = wcschr (meule, CAR_UP[i]);
     }
     
-    retour = strchr (aiguille, CAR_UP[i]);
+    retour = wcschr (aiguille, CAR_UP[i]);
     
     while (retour != NULL)
     {
       *retour = CAR_DOWN[i];
-      retour = strchr (meule, CAR_UP[i]);
+      retour = wcschr (meule, CAR_UP[i]);
     }
   }
   
-  tmp = strstr (meule, aiguille);
+  tmp = wcsstr (meule, aiguille);
   // Si ce n'est pas au début, il faut vérifier que c'est au début d'un mot
   while ((tmp != NULL) &&
          (tmp != meule) &&
          (tmp[-1] != ' ') &&
          (tmp[-1] != '-'))
-    tmp = strstr (tmp + 1, aiguille);
+    tmp = wcsstr (tmp + 1, aiguille);
   
   free (meule);
   free (aiguille);
@@ -277,22 +283,30 @@ common_text_dependances (GList  *liste_noeuds,
   
   if (liste_noeuds != NULL)
   {
-    tmp = common_selection_noeuds_en_texte (liste_noeuds);
+    BUG (tmp = common_selection_noeuds_en_texte (liste_noeuds), NULL)
     if (g_list_length (liste_noeuds) == 1)
       retour = g_strdup_printf ("%s : %s", gettext ("noeud"), tmp);
     else
       retour = g_strdup_printf ("%s : %s", gettext ("noeuds"), tmp);
+    BUGCRIT (retour,
+             NULL,
+             (gettext ("Erreur d'allocation mémoire.\n"));
+               free (tmp);)
     free(tmp);
   }
   if (liste_barres != NULL)
   {
-    tmp = common_selection_barres_en_texte (liste_barres);
+    BUG (tmp = common_selection_barres_en_texte (liste_barres), NULL)
     if (retour == NULL)
     {
       if (g_list_length (liste_barres) == 1)
         retour = g_strdup_printf ("%s : %s", gettext ("barre"), tmp);
       else
         retour = g_strdup_printf ("%s : %s", gettext ("barres"), tmp);
+      BUGCRIT (retour, 
+               NULL, 
+               (gettext ("Erreur d'allocation mémoire.\n"));
+                 free (tmp);)
     }
     else
     {
@@ -306,19 +320,28 @@ common_text_dependances (GList  *liste_noeuds,
                                   tmp2,
                                   gettext ("barres"),
                                   tmp);
+      BUGCRIT (retour,
+               NULL,
+               (gettext ("Erreur d'allocation mémoire.\n"));
+                 free (tmp);
+                 free (tmp2);)
       free (tmp2);
     }
     free (tmp);
   }
   if (liste_charges != NULL)
   {
-    tmp = common_selection_charges_en_texte (liste_charges, p);
+    BUG (tmp = common_selection_charges_en_texte (liste_charges, p), NULL)
     if (retour == NULL)
     {
       if (g_list_length (liste_charges) == 1)
         retour = g_strdup_printf ("%s : %s", gettext ("charge"), tmp);
       else
         retour = g_strdup_printf ("%s : %s", gettext ("charges"), tmp);
+      BUGCRIT (retour,
+               NULL,
+               (gettext ("Erreur d'allocation mémoire.\n"));
+                 free (tmp);)
     }
     else
     {
@@ -335,20 +358,28 @@ common_text_dependances (GList  *liste_noeuds,
                                   tmp2,
                                   gettext ("charges"),
                                   tmp);
+      BUGCRIT (retour,
+               NULL,
+               (gettext ("Erreur d'allocation mémoire.\n"));
+                 free (tmp);
+                 free (tmp2);)
       free (tmp2);
     }
     free (tmp);
   }
   
   tmp = retour;
-  retour = g_strdup_printf (gettext ("et ces dépendances (%s)"), tmp);
+  BUGCRIT (retour = g_strdup_printf (gettext ("et ces dépendances (%s)"), tmp),
+           NULL,
+           (gettext ("Erreur d'allocation mémoire.\n"));
+             free (tmp);)
   free (tmp);
   
   return retour;
 }
 
 
-char *
+wchar_t *
 common_text_get_line (FILE *fichier)
 /**
  * \brief Renvoie la ligne en cours de la variable fichier.
@@ -361,38 +392,101 @@ common_text_get_line (FILE *fichier)
  */
 {
 #define CUR_MAX 256
-  char *buffer, *retour = NULL;
+  wchar_t *buffer, *retour = NULL;
   
-  BUGMSG (buffer = malloc (sizeof (char) * CUR_MAX),
-          NULL,
-          gettext ("Erreur d'allocation mémoire.\n"))
+  BUGCRIT (buffer = malloc (sizeof (wchar_t) * (CUR_MAX + 1)),
+           NULL,
+           (gettext ("Erreur d'allocation mémoire.\n"));)
   
   do
   {
-    char *ligne_tmp;
+    wchar_t *ligne_tmp;
     
-    if ((fgets (buffer, CUR_MAX, fichier) == NULL) && (retour == NULL))
+    if ((fgetws (buffer, CUR_MAX, fichier) == NULL) && (retour == NULL))
     {
       free (buffer);
       return NULL;
     }
     ligne_tmp = retour;
     if (ligne_tmp == NULL)
-      retour = g_strconcat (buffer, NULL);
+    {
+      BUGCRIT (retour = malloc (sizeof (wchar_t) * (wcslen (buffer) + 1)),
+               NULL,
+               (gettext ("Erreur d'allocation mémoire.\n"));
+                 free (buffer);)
+      wcscpy (retour, buffer);
+    }
     else
     {
-      retour = g_strconcat (ligne_tmp, buffer, NULL);
+      BUGCRIT (retour = malloc (sizeof (wchar_t) *
+                                   (wcslen (ligne_tmp) + wcslen (buffer) + 1)),
+               NULL,
+               (gettext ("Erreur d'allocation mémoire.\n"));
+                 free (buffer);
+                 free (ligne_tmp);)
+      wcscpy (retour, ligne_tmp);
+      wcscat (retour, buffer);
       free (ligne_tmp);
     }
     
     // On a atteint la fin de la ligne
-    if (buffer[strlen (buffer) - 1] == '\n')
+    if (buffer[wcslen (buffer) - 1] == '\n')
     {
       free (buffer);
       // Suppression du retour chariot
-      retour[strlen (retour) - 1] = 0;
-      return retour;
-    }
+      retour[wcslen (retour) - 1] = 0;
+      return retour;}
   } while (TRUE);
 #undef CUR_MAX
+}
+
+
+char *
+common_text_wcstostr_dup (const wchar_t *texte)
+/**
+ * \brief Renvoie le texte sous format char *, y compris l'allocation mémoire.
+ * \param texte : le texte à convertir.
+ * \return
+ *   Succès : pointeur vers le texte converti ou NULL si texte == NULL.\n
+ *   Échec : NULL :
+ *     - Erreur d'allocation mémoire.
+ */
+{
+  char *tmp;
+  
+  if (texte == NULL)
+    return NULL;
+  
+  BUGCRIT (tmp = malloc (sizeof (char *) * (wcstombs (NULL, texte, 0) + 1)),
+           NULL,
+           (gettext ("Erreur d'allocation mémoire.\n"));)
+  wcstombs (tmp, texte, wcstombs (NULL, texte, 0) + 1);
+  
+  return tmp;
+}
+
+
+wchar_t *
+common_text_strtowcs_dup (const char *texte)
+/**
+ * \brief Renvoie le texte sous format wchar_t *, y compris l'allocation
+ *        mémoire.
+ * \param texte : le texte à convertir.
+ * \return
+ *   Succès : pointeur vers le texte converti ou NULL si texte == NULL.\n
+ *   Échec : NULL :
+ *     - Erreur d'allocation mémoire.
+ */
+{
+  wchar_t *tmp;
+  
+  if (texte == NULL)
+    return NULL;
+  
+  BUGCRIT (tmp = malloc (sizeof (wchar_t *) * (mbstowcs (NULL, texte, 0) + 1)),
+           NULL,
+           (gettext ("Erreur d'allocation mémoire.\n"));)
+  mbstowcs (tmp, texte, mbstowcs (NULL, texte, 0) + 1);
+  
+  return tmp;
 }

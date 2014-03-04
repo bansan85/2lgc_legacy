@@ -156,4 +156,4 @@ common/ressources.c: ../../files/ressources.xml $(wildcard ../../files/ui/*.ui)
 CLEANFILES = *.gcno *.gcda common/ressources.c common/ressources.h
 
 cppcheck :
-	cppcheck -v --inconclusive --enable=all --report-progress $(DEFAULT_INCLUDES) $(libeurocodes_la_SOURCES)
+	cppcheck --inconclusive --enable=all $(DEFAULT_INCLUDES) $(libeurocodes_la_SOURCES)

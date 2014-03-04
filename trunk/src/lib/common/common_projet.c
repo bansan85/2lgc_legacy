@@ -21,8 +21,8 @@
 #include <locale.h>
 #include <gmodule.h>
 #include <cholmod.h>
+#include <string.h>
 
-#include "common_projet.h"
 #include "common_erreurs.h"
 #include "common_math.h"
 
@@ -58,6 +58,61 @@
 #include "1992_1_1_barres.h"
 #include "1992_1_1_materiaux.h"
 
+
+gboolean
+projet_free (Projet *p)
+/**
+ * \brief Libère les allocations mémoires de l'ensemble de la variable projet.
+ * \param p : la variable projet.
+ * \return
+ *   Succès : TRUE.\n
+ *   Échec : FALSE :
+ *     - p == NULL.
+ */
+{
+  // Action doit être libéré avant p->modele.barres
+  
+  BUGPARAM (p, "%p", p, FALSE)
+  
+  BUG (common_ville_free (p), FALSE)
+  if (p->actions != NULL)
+    BUG (_1990_action_free (p), FALSE)
+  if (p->niveaux_groupes != NULL)
+    BUG (_1990_groupe_free (p), FALSE)
+  if (p->combinaisons.elu_equ != NULL)
+    BUG (_1990_combinaisons_free (p), FALSE)
+  // Rigidite doit être libéré avant noeud car pour libérer toute la mémoire,
+  // il est nécessaire d'avoir accès aux informations contenues dans les
+  // noeuds.
+  BUG (EF_calculs_free (p), FALSE)
+  if (p->modele.sections != NULL)
+    BUG (EF_sections_free (p), FALSE)
+  if (p->modele.noeuds != NULL)
+    BUG (EF_noeuds_free (p), FALSE)
+  if (p->modele.barres != NULL)
+    BUG (_1992_1_1_barres_free (p), FALSE)
+  if (p->modele.appuis != NULL)
+    BUG (EF_appuis_free (p), FALSE)
+  if (p->modele.materiaux != NULL)
+    BUG (EF_materiaux_free (p), FALSE)
+  if (p->modele.relachements != NULL)
+    BUG (EF_relachement_free (p), FALSE)
+#ifdef ENABLE_GTK
+  if (p->ui.m3d.data != NULL)
+    BUG (m3d_free (p), FALSE)
+  EF_gtk_resultats_free (p);
+#endif
+  
+  cholmod_finish (p->calculs.c);
+  
+  free (p);
+  
+  _2lgc_unregister_resource ();
+  
+  return TRUE;
+}
+
+
 Projet *
 projet_init (Norme norme)
 /**
@@ -79,30 +134,33 @@ projet_init (Norme norme)
   _2lgc_register_resource ();
   
   // Alloue toutes les zones mémoires du projet à savoir (par module) :
-  BUGMSG (p = (Projet *) malloc (sizeof (Projet)),
-          NULL,
-          gettext ("Erreur d'allocation mémoire.\n"))
+  BUGCRIT (p = (Projet *) malloc (sizeof (Projet)),
+           NULL,
+           (gettext ("Erreur d'allocation mémoire.\n"));)
+  memset (p, 0, sizeof (Projet));
   
   p->parametres.norme = norme;
   
-  BUG (common_ville_init (p), NULL)
+  BUG (common_ville_init (p), NULL, free (p);)
   
+  NOWARNING
   //   - 1990 : la liste des actions, des groupes et des combinaisons,
-  BUG (_1990_action_init (p), NULL)
-  BUG (_1990_groupe_init (p), NULL)
-  BUG (_1990_combinaisons_init (p), NULL)
+  BUG (_1990_action_init (p), NULL, projet_free (p);)
+  BUG (_1990_groupe_init (p), NULL, projet_free (p);)
+  BUG (_1990_combinaisons_init (p), NULL, projet_free (p);)
   //   - 1992-1-1 : la liste des sections, des barres et des matériaux
-  BUG (EF_sections_init (p), NULL)
-  BUG (_1992_1_1_barres_init (p), NULL)
-  BUG (EF_materiaux_init (p), NULL)
+  BUG (EF_sections_init (p), NULL, projet_free (p);)
+  BUG (_1992_1_1_barres_init (p), NULL, projet_free (p);)
+  BUG (EF_materiaux_init (p), NULL, projet_free (p);)
   //   - EF : la liste des appuis, des relâchements et des noeuds ainsi que les
   //          éléments nécessaire pour les calculs aux éléments finis.
-  BUG (EF_appuis_init (p), NULL)
-  BUG (EF_rigidite_init (p), NULL)
-  BUG (EF_relachement_init (p), NULL)
-  BUG (EF_noeuds_init (p), NULL)
+  BUG (EF_appuis_init (p), NULL, projet_free (p);)
+  BUG (EF_rigidite_init (p), NULL, projet_free (p);)
+  BUG (EF_relachement_init (p), NULL, projet_free (p);)
+  BUG (EF_noeuds_init (p), NULL, projet_free (p);)
+  
 #ifdef ENABLE_GTK
-  BUG (m3d_init (p), NULL)
+  BUG (m3d_init (p), NULL, projet_free (p);)
   UI_GRO.builder = NULL;
   UI_GROOP.builder = NULL;
   UI_CHNO.builder = NULL;
@@ -143,7 +201,10 @@ projet_init (Norme norme)
   g_object_unref (provider);
 #endif
   
-  BUG (common_ville_set (p, "37", "Joué-lès-Tours", FALSE), NULL)
+  BUG (common_ville_set (p, L"37", L"Joué-lès-Tours", FALSE),
+       NULL,
+       projet_free (p);)
+  POPWARNING
   
   p->calculs.c = &(p->calculs.Common);
   cholmod_start (p->calculs.c);
@@ -165,7 +226,7 @@ gui_window_destroy_event (GtkWidget *pWidget,
  *     - p == NULL.
  */
 {
-  BUGMSG (p, , gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGPARAM (p, "%p", p, )
   
   BUG (projet_free (p), )
   gtk_widget_destroy (pWidget);
@@ -204,7 +265,7 @@ projet_init_graphique (Projet *p)
 {
   GtkWidget *menu_separator;
   
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGPARAM (p, "%p", p, FALSE)
   
   UI_GTK.window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_resize (GTK_WINDOW (UI_GTK.window), 800, 600);
@@ -459,57 +520,3 @@ projet_init_graphique (Projet *p)
   return TRUE;
 }
 #endif
-
-
-gboolean
-projet_free (Projet *p)
-/**
- * \brief Libère les allocations mémoires de l'ensemble de la variable projet.
- * \param p : la variable projet.
- * \return
- *   Succès : TRUE.\n
- *   Échec : FALSE :
- *     - p == NULL.
- */
-{
-  // Action doit être libéré avant p->modele.barres
-  
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
-  
-  BUG (common_ville_free (p), FALSE)
-  if (p->actions != NULL)
-    BUG (_1990_action_free (p), FALSE)
-  if (p->niveaux_groupes != NULL)
-    BUG (_1990_groupe_free (p), FALSE)
-  if (p->combinaisons.elu_equ != NULL)
-    BUG (_1990_combinaisons_free (p), FALSE)
-  // Rigidite doit être libéré avant noeud car pour libérer toute la mémoire,
-  // il est nécessaire d'avoir accès aux informations contenues dans les
-  // noeuds.
-  BUG (EF_calculs_free (p), FALSE)
-  if (p->modele.sections != NULL)
-    BUG (EF_sections_free (p), FALSE)
-  if (p->modele.noeuds != NULL)
-    BUG (EF_noeuds_free (p), FALSE)
-  if (p->modele.barres != NULL)
-    BUG (_1992_1_1_barres_free (p), FALSE)
-  if (p->modele.appuis != NULL)
-    BUG (EF_appuis_free (p), FALSE)
-  if (p->modele.materiaux != NULL)
-    BUG (EF_materiaux_free (p), FALSE)
-  if (p->modele.relachements != NULL)
-    BUG (EF_relachement_free (p), FALSE)
-#ifdef ENABLE_GTK
-  if (p->ui.m3d.data != NULL)
-    BUG (m3d_free (p), FALSE)
-  EF_gtk_resultats_free (p);
-#endif
-  
-  cholmod_finish (p->calculs.c);
-  
-  free (p);
-  
-  _2lgc_unregister_resource ();
-  
-  return TRUE;
-}

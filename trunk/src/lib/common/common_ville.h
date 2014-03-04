@@ -22,31 +22,31 @@
 #include "config.h"
 #include "common_projet.h"
 
-gboolean common_ville_init      (Projet     *p)
+gboolean common_ville_init      (Projet   *p)
                                        __attribute__((__warn_unused_result__));
-gboolean common_ville_get_ville (char       *ligne,
-                                 int        *cdc,
-                                 int        *cheflieu,
-                                 int        *reg,
-                                 char       *dep,
-                                 int        *com,
-                                 int        *ar,
-                                 int        *ct,
-                                 int        *tncc,
-                                 char      **artmaj,
-                                 char      **ncc,
-                                 char      **artmin,
-                                 char      **nccenr,
-                                 int        *code_postal,
-                                 int        *altitude,
-                                 int        *population)
+gboolean common_ville_get_ville (wchar_t  *ligne,
+                                 int      *cdc,
+                                 int      *cheflieu,
+                                 int      *reg,
+                                 wchar_t  *dep,
+                                 int      *com,
+                                 int      *ar,
+                                 int      *ct,
+                                 int      *tncc,
+                                 wchar_t **artmaj,
+                                 wchar_t **ncc,
+                                 wchar_t **artmin,
+                                 wchar_t **nccenr,
+                                 int      *code_postal,
+                                 int      *altitude,
+                                 int      *population)
                                        __attribute__((__warn_unused_result__));
-gboolean common_ville_set       (Projet     *p,
-                                 char       *departement,
-                                 const char *ville,
-                                 gboolean    graphique_seul)
+gboolean common_ville_set       (Projet   *p,
+                                 wchar_t  *departement,
+                                 wchar_t  *ville,
+                                 gboolean  graphique_seul)
                                        __attribute__((__warn_unused_result__));
-gboolean common_ville_free      (Projet     *p)
+gboolean common_ville_free      (Projet   *p)
                                        __attribute__((__warn_unused_result__));
 
 #endif

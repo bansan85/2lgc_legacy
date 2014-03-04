@@ -51,10 +51,8 @@ common_selection_ajout_nombre (void      *data,
   GList  *list_parcours;
   Action *action = NULL;
   
-  BUGMSG (liste, FALSE, gettext ("Paramètre %s incorrect.\n"), "liste")
-  BUGMSG ((p) || (type != LISTE_CHARGES),
-          FALSE,
-          gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGPARAM (liste, "%p", liste, FALSE)
+  BUGPARAM (type, "%d", (p) || (type != LISTE_CHARGES), FALSE)
   
   if (type == LISTE_CHARGES)
     BUG (action = EF_charge_action (p, data), FALSE)
@@ -73,9 +71,8 @@ common_selection_ajout_nombre (void      *data,
       }
       default :
       {
-        BUGMSG (NULL,
-                FALSE,
-                gettext ("Le type %d de la liste est inconnu.\n"), type)
+        FAILCRIT (FALSE,
+                  (gettext ("Le type %d de la liste est inconnu.\n"), type);)
       }
     }
   }
@@ -148,9 +145,9 @@ common_selection_ajout_nombre (void      *data,
                                           g_list_index (p->actions, action)) ||
                  ((action_en_cours == action) &&
                  (g_list_index (_1990_action_charges_renvoie (action_en_cours),
-                                                               charge_liste) >=
+                                charge_liste) >=
                   g_list_index (_1990_action_charges_renvoie (action_en_cours),
-                                                                     charge))))
+                                charge))))
         {
           *liste = g_list_insert_before (*liste, list_parcours, data);
           return TRUE;
@@ -159,9 +156,8 @@ common_selection_ajout_nombre (void      *data,
       }
       default :
       {
-        BUGMSG (NULL,
-                FALSE,
-                gettext ("Le type %d de la liste est inconnu.\n"), type)
+        FAILCRIT (FALSE,
+                  (gettext ("Le type %d de la liste est inconnu.\n"), type);)
       }
     }
     list_parcours = g_list_next (list_parcours);
@@ -183,9 +179,8 @@ common_selection_ajout_nombre (void      *data,
     }
     default :
     {
-      BUGMSG (NULL,
-              FALSE,
-              gettext ("Le type %d de la liste est inconnu.\n"), type)
+      FAILCRIT (FALSE,
+                (gettext ("Le type %d de la liste est inconnu.\n"), type);)
     }
   }
 }
@@ -214,12 +209,12 @@ common_selection_renvoie_numeros (const char *texte)
   if (texte == NULL)
     return NULL;
   
-  BUGMSG (texte_clean = malloc (sizeof (char) * (strlen (texte) + 1)),
-          NULL,
-          gettext ("Erreur d'allocation mémoire.\n"))
+  BUGCRIT (texte_clean = malloc (sizeof (char) * (strlen (texte) + 1)),
+           NULL,
+           (gettext ("Erreur d'allocation mémoire.\n"));)
   
   // On vérifie si le texte contient bien une liste correcte de numéros
-  i=0;
+  i = 0;
   for (j = 0; j < strlen (texte); j++)
   {
     // Les caractères autorisées sont ,;-/0123456789
@@ -274,12 +269,21 @@ common_selection_renvoie_numeros (const char *texte)
       // Il y a quelque chose à faire
       if ((j > i) || (texte_clean[i] != ';'))
       {
-        char        *tmp = malloc (sizeof (char) * (j - i + 2));
-        char        *fake = malloc (sizeof (char) * (j - i + 2));
+        char        *tmp;
+        char        *fake;
         unsigned int debut, fin, pas;
         
-        BUGMSG (tmp, NULL, gettext ("Erreur d'allocation mémoire.\n"))
-        BUGMSG (fake, NULL, gettext ("Erreur d'allocation mémoire.\n"))
+        BUGCRIT (tmp = malloc (sizeof (char) * (j - i + 2)),
+                 NULL,
+                 (gettext ("Erreur d'allocation mémoire.\n"));
+                   free (texte_clean);
+                   g_list_free (list);)
+        BUGCRIT (fake = malloc (sizeof (char) * (j - i + 2)),
+                 NULL,
+                 (gettext ("Erreur d'allocation mémoire.\n"));
+                   free (texte_clean);
+                   free (tmp);
+                   g_list_free (list);)
         
         strncpy (tmp, texte_clean + i, j - i + 1);
         tmp[j - i + 1] = 0;
@@ -292,7 +296,11 @@ common_selection_renvoie_numeros (const char *texte)
                                                 &list,
                                                 LISTE_UINT,
                                                 NULL),
-                 NULL)
+                 NULL,
+                 free (texte_clean);
+                   free (tmp);
+                   free (fake);
+                   g_list_free (list);)
         }
         // Si c'est du format debut-fin
         else if (sscanf (tmp, "%u-%u%s", &debut, &fin, fake) == 2)
@@ -302,7 +310,11 @@ common_selection_renvoie_numeros (const char *texte)
                                                 &list,
                                                 LISTE_UINT,
                                                 NULL),
-                 NULL)
+                 NULL,
+                 free (texte_clean);
+                   free (tmp);
+                   free (fake);
+                   g_list_free (list);)
         }
         // Si c'est du format nombre simple
         else if (sscanf (tmp, "%u%s", &debut, fake) == 1)
@@ -310,7 +322,11 @@ common_selection_renvoie_numeros (const char *texte)
                                               &list,
                                               LISTE_UINT,
                                               NULL),
-               NULL)
+               NULL,
+               free (texte_clean);
+                 free (tmp);
+                 free (fake);
+                 g_list_free (list);)
         // Le format est inconnu.
         else
         {
@@ -330,6 +346,7 @@ common_selection_renvoie_numeros (const char *texte)
   while (i < strlen (texte_clean));
   
   free (texte_clean);
+  
   return list;
 }
 
@@ -438,18 +455,19 @@ common_selection_noeuds_en_texte (GList *liste_noeuds)
     
     list_parcours = liste_noeuds;
     noeud = list_parcours->data;
-    BUGMSG (tmp = g_strdup_printf ("%d", noeud->numero),
-            NULL,
-            gettext ("Erreur d'allocation mémoire.\n"))
+    BUGCRIT (tmp = g_strdup_printf ("%d", noeud->numero),
+             NULL,
+             (gettext ("Erreur d'allocation mémoire.\n"));)
     if (g_list_next (list_parcours) != NULL)
     {
       list_parcours = g_list_next (list_parcours);
       do
       {
         noeud = list_parcours->data;
-        BUGMSG (tmp2 = g_strdup_printf ("%s;%d", tmp, noeud->numero),
-                NULL,
-                gettext ("Erreur d'allocation mémoire.\n"))
+        BUGCRIT (tmp2 = g_strdup_printf ("%s;%d", tmp, noeud->numero),
+                 NULL,
+                 (gettext ("Erreur d'allocation mémoire.\n"));
+                  free (tmp);)
         free (tmp);
         tmp = tmp2;
         tmp2 = NULL;
@@ -459,9 +477,9 @@ common_selection_noeuds_en_texte (GList *liste_noeuds)
     }
   }
   else
-    BUGMSG (tmp = g_strdup_printf (" "),
-            NULL,
-            gettext ("Erreur d'allocation mémoire.\n"))
+    BUGCRIT (tmp = g_strdup_printf (" "),
+             NULL,
+             (gettext ("Erreur d'allocation mémoire.\n"));)
   
   return tmp;
 }
@@ -487,18 +505,19 @@ common_selection_barres_en_texte (GList *liste_barres)
     
     list_parcours = liste_barres;
     barre = list_parcours->data;
-    BUGMSG (tmp = g_strdup_printf ("%u", barre->numero),
-            NULL,
-            gettext ("Erreur d'allocation mémoire.\n"))
+    BUGCRIT (tmp = g_strdup_printf ("%u", barre->numero),
+             NULL,
+             (gettext ("Erreur d'allocation mémoire.\n"));)
     if (g_list_next (list_parcours) != NULL)
     {
       list_parcours = g_list_next (list_parcours);
       do
       {
         barre = list_parcours->data;
-        BUGMSG (tmp2 = g_strdup_printf ("%s;%u", tmp, barre->numero),
-                NULL,
-                gettext ("Erreur d'allocation mémoire.\n"))
+        BUGCRIT (tmp2 = g_strdup_printf ("%s;%u", tmp, barre->numero),
+                 NULL,
+                 (gettext ("Erreur d'allocation mémoire.\n"));
+                   free (tmp);)
         free (tmp);
         tmp = tmp2;
         tmp2 = NULL;
@@ -508,9 +527,9 @@ common_selection_barres_en_texte (GList *liste_barres)
     }
   }
   else
-    BUGMSG (tmp = g_strdup_printf (" "),
-            NULL,
-            gettext ("Erreur d'allocation mémoire.\n"))
+    BUGCRIT (tmp = g_strdup_printf (" "),
+             NULL,
+             (gettext ("Erreur d'allocation mémoire.\n"));)
   
   return tmp;
 }
@@ -542,11 +561,11 @@ common_selection_charges_en_texte (GList  *liste_charges,
     
     BUG (action = EF_charge_action (p, charge), NULL)
     
-    BUGMSG (tmp = g_strdup_printf ("%u:%u",
-                                   g_list_index (p->actions, action),
+    BUGCRIT (tmp = g_strdup_printf ("%u:%u",
+                                    g_list_index (p->actions, action),
                  g_list_index (_1990_action_charges_renvoie (action), charge)),
-            NULL,
-            gettext ("Erreur d'allocation mémoire.\n"))
+             NULL,
+             (gettext ("Erreur d'allocation mémoire.\n"));)
     if (g_list_next (list_parcours) != NULL)
     {
       list_parcours = g_list_next (list_parcours);
@@ -565,12 +584,13 @@ common_selection_charges_en_texte (GList  *liste_charges,
            
           list_parcours2 = g_list_next (list_parcours2);
         }
-        BUGMSG (tmp2 = g_strdup_printf ("%s;%u:%u",
-                                        tmp,
-                                        g_list_index (p->actions, action),
+        BUGCRIT (tmp2 = g_strdup_printf ("%s;%u:%u",
+                                         tmp,
+                                         g_list_index (p->actions, action),
                  g_list_index (_1990_action_charges_renvoie (action), charge)),
-                NULL,
-                gettext ("Erreur d'allocation mémoire.\n"))
+                 NULL,
+                 (gettext ("Erreur d'allocation mémoire.\n"));
+                   free (tmp);)
         free (tmp);
         tmp = tmp2;
         tmp2 = NULL;
@@ -580,9 +600,9 @@ common_selection_charges_en_texte (GList  *liste_charges,
     }
   }
   else
-    BUGMSG (tmp = g_strdup_printf (" "),
-            NULL,
-            gettext ("Erreur d'allocation mémoire.\n"))
+    BUGCRIT (tmp = g_strdup_printf (" "),
+             NULL,
+             (gettext ("Erreur d'allocation mémoire.\n"));)
   
   return tmp;
 }

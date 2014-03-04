@@ -97,43 +97,6 @@ EF_charge_ajout (Projet     *p,
 }
 
 
-Charge *EF_charge_cherche (Projet     *p,
-                           Action     *action,
-                           const char *nom)
-/**
- * \brief Cherche et renvoie la charge demandée.
- * \param p : la variable projet,
- * \param action : l'action,
- * \param nom : le nom de la charge.
- * \return
- *   Succès : Pointeur vers la charge recherchée.\n
- *   Échec : NULL :
- *     - p == NULL,
- *     - action == NULL,
- *     - charge introuvable.
- */
-{
-  GList *list_parcours;
-  
-  BUGMSG (p, NULL, gettext ("Paramètre %s incorrect.\n"), "projet")
-  
-  list_parcours = _1990_action_charges_renvoie (action);
-  while (list_parcours != NULL)
-  {
-    Charge *charge = list_parcours->data;
-    
-    if (strcmp (charge->nom, nom) == 0)
-      return charge;
-    
-    list_parcours = g_list_next (list_parcours);
-  }
-  
-  BUGMSG (0,
-          NULL,
-          gettext ("Charge '%s' de l'action '%s' introuvable.\n"), nom, _1990_action_nom_renvoie (action))
-}
-
-
 Action *
 EF_charge_action (Projet *p,
                   Charge *charge)

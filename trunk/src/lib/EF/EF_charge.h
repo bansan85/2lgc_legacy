@@ -29,11 +29,6 @@ Charge *EF_charge_ajout     (Projet     *p,
                              const char *nom)
                                        __attribute__((__warn_unused_result__));
 
-Charge *EF_charge_cherche   (Projet     *p,
-                             Action     *action,
-                             const char *nom)
-                                       __attribute__((__warn_unused_result__));
-
 Action *EF_charge_action    (Projet     *p,
                              Charge     *charge)
                                        __attribute__((__warn_unused_result__));

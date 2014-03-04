@@ -563,41 +563,6 @@ _1990_action_nom_change (Projet     *p,
 }
 
 
-Action *
-_1990_action_nom_cherche (Projet     *p,
-                          char const *nom)
-/**
- * \brief Renvoie l'action désignée par son nom. Si l'action est introuvable,
- *        NULL est renvoyé.
- * \param p : la variable projet,
- * \param nom : le nom de l'action.
- * \return
- *   Succès : Pointeur vers l'action recherchée.\n
- *   Échec : NULL :
- *     - p == NULL,
- *     - action introuvable.
- */
-{
-  GList *list_parcours;
-  
-  BUGPARAM (p, "%p", p, NULL)
-  BUGPARAM (nom, "%p", nom, NULL)
-  
-  list_parcours = p->actions;
-  while (list_parcours != NULL)
-  {
-    Action *action = (Action *) list_parcours->data;
-    
-    if (strcmp (action->nom, nom) == 0)
-      return action;
-    
-    list_parcours = g_list_next (list_parcours);
-  }
-  
-  return NULL;
-}
-
-
 unsigned int
 _1990_action_type_renvoie (Action *action)
 /**

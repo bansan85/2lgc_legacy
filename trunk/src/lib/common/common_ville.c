@@ -21,6 +21,8 @@
 #include <locale.h>
 #include <gmodule.h>
 #include <string.h>
+#include <wchar.h>
+
 
 #include "common_projet.h"
 #include "common_erreurs.h"
@@ -47,7 +49,7 @@ common_ville_init (Projet *p)
   GtkTreeIter iter;
 #endif
   
-  BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
+  BUGPARAM (p, "%p", p, FALSE)
   
   p->parametres.adresse.departement = NULL;
   p->parametres.adresse.commune = 0;
@@ -159,22 +161,22 @@ common_ville_init (Projet *p)
 
 
 gboolean
-common_ville_get_ville (char  *ligne,
-                        int   *cdc,
-                        int   *cheflieu,
-                        int   *reg,
-                        char  *dep,
-                        int   *com,
-                        int   *ar,
-                        int   *ct,
-                        int   *tncc,
-                        char **artmaj,
-                        char **ncc,
-                        char **artmin,
-                        char **nccenr,
-                        int   *code_postal,
-                        int   *altitude,
-                        int   *population)
+common_ville_get_ville (wchar_t  *ligne,
+                        int      *cdc,
+                        int      *cheflieu,
+                        int      *reg,
+                        wchar_t  *dep,
+                        int      *com,
+                        int      *ar,
+                        int      *ct,
+                        int      *tncc,
+                        wchar_t **artmaj,
+                        wchar_t **ncc,
+                        wchar_t **artmin,
+                        wchar_t **nccenr,
+                        int      *code_postal,
+                        int      *altitude,
+                        int      *population)
 /**
  * \brief Renvoie sous forme de variables la ligne de ville en cours d'analyse.
  * \param ligne : ligne en cours d'analyse,
@@ -194,21 +196,24 @@ common_ville_get_ville (char  *ligne,
  *               charnière si le nom est utilisé dans une expression comme "la
  *               commune de Marseille", "l'arrondissement du Mans", etc. Pour
  *               les noms de communes (et donc de canton et d'arrondissement),
-                 l'article est obligatoire ("Rochelle" n'existe pas sans
-                 article), alors que ce n'est pas le cas pour les noms de
-                 département ou de région ("Charente-Maritime" peut être écrit
-                 sans article). Pour les départements et les régions, ce code
-                 ne sert donc que pour la charnière.  peut être NULL,
-                 source : insee.fr/fr/methodes/default.asp?page=nomenclatures/cog/doc_variables.htm
-                   - 0   pas d'article et le nom commence par une consonne sauf H muet.  charnière = DE.
-                   - 1   pas d'article et le nom commence par une voyelle ou un H muet.  charnière = D'.
-                   - 2   article = LE  charnière = DU.
-                   - 3   article = LA  charnière = DE LA.
-                   - 4   article = LES   charnière = DES.
-                   - 5   article = L'  charnière = DE L'.
-                   - 6   article = AUX   charnière = DES.
-                   - 7   article = LAS   charnière = DE LAS.
-                   - 8   article = LOS   charnière = DE LOS.
+ *               l'article est obligatoire ("Rochelle" n'existe pas sans
+ *               article), alors que ce n'est pas le cas pour les noms de
+ *               département ou de région ("Charente-Maritime" peut être écrit
+ *               sans article). Pour les départements et les régions, ce code
+ *               ne sert donc que pour la charnière. Peut être NULL,
+ *               source :
+ *    insee.fr/fr/methodes/default.asp?page=nomenclatures/cog/doc_variables.htm
+ *                 - 0   pas d'article et le nom commence par une consonne sauf
+ *                         H muet.  charnière = DE.
+ *                 - 1   pas d'article et le nom commence par une voyelle ou un
+ *                         H muet.  charnière = D'.
+ *                 - 2   article = LE  charnière = DU.
+ *                 - 3   article = LA  charnière = DE LA.
+ *                 - 4   article = LES   charnière = DES.
+ *                 - 5   article = L'  charnière = DE L'.
+ *                 - 6   article = AUX   charnière = DES.
+ *                 - 7   article = LAS   charnière = DE LAS.
+ *                 - 8   article = LOS   charnière = DE LOS.
  * \param artmaj : l'article en majuscule, peut être NULL,
  * \param ncc : le nom de la ville en majuscule, peut être NULL,
  * \param artmin : l'article en miniscule, peut être NULL,
@@ -224,33 +229,33 @@ common_ville_get_ville (char  *ligne,
  *     - En cas d'erreur d'allocation mémoire.
  */
 {
-  int   i, j;
-  int   cdc_, cheflieu_, reg_, com_, ar_, ct_, tncc_;
-  int   code_postal_, altitude_, population_;
-  char *dep_;
+  int      i, j;
+  int      cdc_, cheflieu_, reg_, com_, ar_, ct_, tncc_;
+  int      code_postal_, altitude_, population_;
+  wchar_t *dep_;
   
   BUGMSG (ligne, FALSE, gettext ("Paramètre %s incorrect.\n"), "ligne")
   
-  BUGMSG (dep_ = malloc (sizeof (char) * (strlen (ligne) + 1)),
+  BUGMSG (dep_ = malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
           FALSE,
           gettext ("Erreur d'allocation mémoire.\n"))
   
   // On récupère les numéros caractéristant la ville en cours.
-  BUGMSG (sscanf (ligne,
-                  "%d\t%d\t%d\t%s\t%d\t%d\t%d\t%d\t",
-                  &cdc_,
-                  &cheflieu_,
-                  &reg_,
-                  dep_,
-                  &com_,
-                  &ar_,
-                  &ct_,
-                  &tncc_) == 8,
+  BUGMSG (swscanf (ligne,
+                   L"%d\t%d\t%d\t%ls\t%d\t%d\t%d\t%d\t",
+                   &cdc_,
+                   &cheflieu_,
+                   &reg_,
+                   dep_,
+                   &com_,
+                   &ar_,
+                   &ct_,
+                   &tncc_) == 8,
           FALSE,
-          gettext ("La ligne en cours '%s' n'est pas dans un format correct pour une ville.\n"), ligne)
-  BUGMSG ((0 < strlen (dep_)) && (strlen (dep_) <= 3),
+          gettext ("La ligne en cours '%ls' n'est pas dans un format correct pour une ville.\n"), ligne)
+  BUGMSG ((0 < wcslen (dep_)) && (wcslen (dep_) <= 3),
           FALSE,
-          gettext ("La ligne en cours '%s' n'est pas dans un format correct pour une ville.\n"), ligne)
+          gettext ("La ligne en cours '%ls' n'est pas dans un format correct pour une ville.\n"), ligne)
   if (cdc != NULL)
     *cdc = cdc_;
   if (cheflieu != NULL)
@@ -258,8 +263,8 @@ common_ville_get_ville (char  *ligne,
   if (reg != NULL)
     *reg = reg_;
   if (dep != NULL)
-    strcpy(dep, dep_);
-  free(dep_);
+    wcscpy (dep, dep_);
+  free (dep_);
   if (com != NULL)
     *com = com_;
   if (ar != NULL)
@@ -305,14 +310,14 @@ common_ville_get_ville (char  *ligne,
   
   BUGMSG (ligne[j] != '\000',
           FALSE,
-          gettext ("La ligne en cours '%s' n'est pas dans un format correct pour une ville.\n"), ligne)
-  BUGMSG (sscanf (&(ligne[j]),
-                  "%d\t%d\t%d\n",
-                  &code_postal_,
-                  &altitude_,
-                  &population_) == 3,
+          gettext ("La ligne en cours '%ls' n'est pas dans un format correct pour une ville.\n"), ligne)
+  BUGMSG (swscanf (&(ligne[j]),
+                   L"%d\t%d\t%d\n",
+                   &code_postal_,
+                   &altitude_,
+                   &population_) == 3,
           FALSE,
-          gettext ("La ligne en cours '%s' n'est pas dans un format correct pour une ville.\n"), ligne)
+          gettext ("La ligne en cours '%ls' n'est pas dans un format correct pour une ville.\n"), ligne)
   
   if (code_postal != NULL)
     *code_postal = code_postal_;
@@ -326,10 +331,10 @@ common_ville_get_ville (char  *ligne,
 
 
 gboolean
-common_ville_set (Projet     *p,
-                  char       *departement,
-                  const char *ville,
-                  gboolean    graphique_seul)
+common_ville_set (Projet  *p,
+                  wchar_t *departement,
+                  wchar_t *ville,
+                  gboolean graphique_seul)
 /**
  * \brief Initialise la ville (mais pas l'adresse exacte) du projet avec les
  *        paramètres régionaux (vent, neige, séisme). Departement DEP et ville
@@ -357,14 +362,14 @@ common_ville_set (Projet     *p,
  */
 {
   FILE       *villes;
-  char       *ligne = NULL;
+  wchar_t    *ligne = NULL;
   int         com, ct, code_postal, population, article;
-  char       *artmin, *nccenr;
-  char        dep[4];
+  wchar_t    *artmin, *nccenr;
+  wchar_t     dep[4];
   Type_Neige  neige_tmp;
   Type_Vent   vent_tmp;
   Type_Seisme seisme_tmp;
-  char       *tmp;
+  wchar_t    *tmp;
   
   BUGMSG (p, FALSE, gettext ("Paramètre %s incorrect.\n"), "projet")
   BUGMSG (departement,
@@ -400,19 +405,19 @@ common_ville_set (Projet     *p,
                                  NULL,
                                  &population),
          FALSE)
-    BUGMSG (tmp = g_strdup_printf ("%s%s%s",
-                                   artmin,
-                                   ((article == 5) ||
-                                    (article == 1) ||
-                                    (article == 0)) ? "" : " ",
-                                   nccenr),
+    BUGMSG (tmp = malloc (sizeof (wchar_t) *
+                                      (wcslen (artmin) + wcslen (nccenr) + 2)),
             FALSE,
             gettext ("Erreur d'allocation mémoire.\n"))
+    wcscpy (tmp, artmin);
+    wcscat (tmp,
+            ((article == 5) || (article == 1) || (article == 0)) ? L"" : L" ");
+    wcscat (tmp, nccenr);
     // On récupère les numéros caractéristant la ville en cours.
-    if ((strcmp (dep, departement) == 0) && (strcmp (tmp, ville) == 0))
+    if ((wcscmp (dep, departement) == 0) && (wcscmp (tmp, ville) == 0))
     {
-      char    *dep_parcours;
-      char    *champ1, *champ2;
+      wchar_t *dep_parcours;
+      wchar_t *champ1, *champ2;
       gboolean done;
       
       // Maintenant que tout est récupéré, on enregistre dans le projet ce
@@ -421,13 +426,14 @@ common_ville_set (Projet     *p,
       if (!graphique_seul)
       {
         free (p->parametres.adresse.departement);
-        BUGMSG (p->parametres.adresse.departement = g_strdup (departement),
-                FALSE,
-                gettext ("Erreur d'allocation mémoire.\n"))
+        BUG (p->parametres.adresse.departement =
+                                        common_text_wcstostr_dup (departement),
+             FALSE)
         p->parametres.adresse.commune = com;
         p->parametres.adresse.code_postal = code_postal;
         free (p->parametres.adresse.ville);
-        p->parametres.adresse.ville = tmp;
+        BUG (p->parametres.adresse.ville = common_text_wcstostr_dup (tmp),
+             FALSE)
       }
       
       free (ligne);
@@ -438,108 +444,108 @@ common_ville_set (Projet     *p,
       {
         char *code_postal2;
         
+        g_signal_handler_block (
+          gtk_builder_get_object (UI_INFO.builder,
+                                     "common_informations_buffer_code_postal"),
+          g_signal_handler_find (gtk_builder_get_object (
+                   UI_INFO.builder, "common_informations_buffer_code_postal"),
+                                 G_SIGNAL_MATCH_FUNC,
+                                 0,
+                                 0,
+                                 NULL,
+                                 common_gtk_informations_entry_add_char,
+                                 NULL));
+        g_signal_handler_block (
+          gtk_builder_get_object (UI_INFO.builder,
+                                     "common_informations_buffer_code_postal"),
+          g_signal_handler_find (gtk_builder_get_object (
+                   UI_INFO.builder, "common_informations_buffer_code_postal"),
+                                 G_SIGNAL_MATCH_FUNC,
+                                 0,
+                                 0,
+                                 NULL,
+                                 common_gtk_informations_entry_del_char,
+                                 NULL));
+        g_signal_handler_block (
+          gtk_builder_get_object (UI_INFO.builder,
+                                           "common_informations_buffer_ville"),
+          g_signal_handler_find (gtk_builder_get_object (UI_INFO.builder,
+                                           "common_informations_buffer_ville"),
+                                 G_SIGNAL_MATCH_FUNC,
+                                 0,
+                                 0,
+                                 NULL,
+                                 common_gtk_informations_entry_add_char,
+                                 NULL));
+        g_signal_handler_block (
+          gtk_builder_get_object (UI_INFO.builder,
+                                           "common_informations_buffer_ville"),
+          g_signal_handler_find (gtk_builder_get_object (UI_INFO.builder,
+                                           "common_informations_buffer_ville"),
+                                 G_SIGNAL_MATCH_FUNC,
+                                 0,
+                                 0,
+                                 NULL,
+                                 common_gtk_informations_entry_del_char,
+                                 NULL));
+        
         BUGMSG (code_postal2 = g_strdup_printf ("%d", code_postal),
                 FALSE,
                 gettext ("Erreur d'allocation mémoire.\n"))
-        
-        g_signal_handler_block (
-          gtk_builder_get_object (UI_INFO.builder,
-                                     "common_informations_buffer_code_postal"),
-          g_signal_handler_find (gtk_builder_get_object (
-                   UI_INFO.builder, "common_informations_buffer_code_postal"),
-                                 G_SIGNAL_MATCH_FUNC,
-                                 0,
-                                 0,
-                                 NULL,
-                                 common_gtk_informations_entry_add_char,
-                                 NULL));
-        g_signal_handler_block (
-          gtk_builder_get_object (UI_INFO.builder,
-                                     "common_informations_buffer_code_postal"),
-          g_signal_handler_find (gtk_builder_get_object (
-                   UI_INFO.builder, "common_informations_buffer_code_postal"),
-                                 G_SIGNAL_MATCH_FUNC,
-                                 0,
-                                 0,
-                                 NULL,
-                                 common_gtk_informations_entry_del_char,
-                                 NULL));
-        g_signal_handler_block (
-          gtk_builder_get_object (UI_INFO.builder,
-                                           "common_informations_buffer_ville"),
-          g_signal_handler_find (gtk_builder_get_object (UI_INFO.builder,
-                                           "common_informations_buffer_ville"),
-                                 G_SIGNAL_MATCH_FUNC,
-                                 0,
-                                 0,
-                                 NULL,
-                                 common_gtk_informations_entry_add_char,
-                                 NULL));
-        g_signal_handler_block (
-          gtk_builder_get_object (UI_INFO.builder,
-                                           "common_informations_buffer_ville"),
-          g_signal_handler_find (gtk_builder_get_object (UI_INFO.builder,
-                                           "common_informations_buffer_ville"),
-                                 G_SIGNAL_MATCH_FUNC,
-                                 0,
-                                 0,
-                                 NULL,
-                                 common_gtk_informations_entry_del_char,
-                                 NULL));
-        
         gtk_entry_set_text (GTK_ENTRY (gtk_builder_get_object (UI_INFO.builder,
                                      "common_informations_entry_code_postal")),
                             code_postal2);
+        free (code_postal2);
+        BUG (code_postal2 = common_text_wcstostr_dup (tmp), FALSE)
         gtk_entry_set_text (GTK_ENTRY (gtk_builder_get_object (UI_INFO.builder,
                                            "common_informations_entry_ville")),
-                            tmp);
-        
-        g_signal_handler_unblock (
-          gtk_builder_get_object (UI_INFO.builder,
-                                     "common_informations_buffer_code_postal"),
-          g_signal_handler_find (gtk_builder_get_object (UI_INFO.builder,
-                                     "common_informations_buffer_code_postal"),
-                                 G_SIGNAL_MATCH_FUNC,
-                                 0,
-                                 0,
-                                 NULL,
-                                 common_gtk_informations_entry_add_char,
-                                 NULL));
-        g_signal_handler_unblock (
-          gtk_builder_get_object (UI_INFO.builder,
-                                     "common_informations_buffer_code_postal"),
-          g_signal_handler_find (gtk_builder_get_object (UI_INFO.builder,
-                                     "common_informations_buffer_code_postal"),
-                                 G_SIGNAL_MATCH_FUNC,
-                                 0,
-                                 0,
-                                 NULL,
-                                 common_gtk_informations_entry_del_char,
-                                 NULL));
-        g_signal_handler_unblock (
-          gtk_builder_get_object (UI_INFO.builder,
-                                           "common_informations_buffer_ville"),
-          g_signal_handler_find (gtk_builder_get_object (UI_INFO.builder,
-                                           "common_informations_buffer_ville"),
-                                 G_SIGNAL_MATCH_FUNC,
-                                 0,
-                                 0,
-                                 NULL,
-                                 common_gtk_informations_entry_add_char,
-                                 NULL));
-        g_signal_handler_unblock (
-          gtk_builder_get_object (UI_INFO.builder,
-                                           "common_informations_buffer_ville"),
-          g_signal_handler_find (gtk_builder_get_object (UI_INFO.builder,
-                                           "common_informations_buffer_ville"),
-                                 G_SIGNAL_MATCH_FUNC,
-                                 0,
-                                 0,
-                                 NULL,
-                                 common_gtk_informations_entry_del_char,
-                                 NULL));
-        
+                            code_postal2);
         free (code_postal2);
+        
+        g_signal_handler_unblock (
+          gtk_builder_get_object (UI_INFO.builder,
+                                     "common_informations_buffer_code_postal"),
+          g_signal_handler_find (gtk_builder_get_object (UI_INFO.builder,
+                                     "common_informations_buffer_code_postal"),
+                                 G_SIGNAL_MATCH_FUNC,
+                                 0,
+                                 0,
+                                 NULL,
+                                 common_gtk_informations_entry_add_char,
+                                 NULL));
+        g_signal_handler_unblock (
+          gtk_builder_get_object (UI_INFO.builder,
+                                     "common_informations_buffer_code_postal"),
+          g_signal_handler_find (gtk_builder_get_object (UI_INFO.builder,
+                                     "common_informations_buffer_code_postal"),
+                                 G_SIGNAL_MATCH_FUNC,
+                                 0,
+                                 0,
+                                 NULL,
+                                 common_gtk_informations_entry_del_char,
+                                 NULL));
+        g_signal_handler_unblock (
+          gtk_builder_get_object (UI_INFO.builder,
+                                           "common_informations_buffer_ville"),
+          g_signal_handler_find (gtk_builder_get_object (UI_INFO.builder,
+                                           "common_informations_buffer_ville"),
+                                 G_SIGNAL_MATCH_FUNC,
+                                 0,
+                                 0,
+                                 NULL,
+                                 common_gtk_informations_entry_add_char,
+                                 NULL));
+        g_signal_handler_unblock (
+          gtk_builder_get_object (UI_INFO.builder,
+                                           "common_informations_buffer_ville"),
+          g_signal_handler_find (gtk_builder_get_object (UI_INFO.builder,
+                                           "common_informations_buffer_ville"),
+                                 G_SIGNAL_MATCH_FUNC,
+                                 0,
+                                 0,
+                                 NULL,
+                                 common_gtk_informations_entry_del_char,
+                                 NULL));
       }
 #endif
       if (graphique_seul)
@@ -558,25 +564,26 @@ common_ville_set (Projet     *p,
                 FALSE,
                 gettext ("Le fichier '%s' est incomplet.\n"), DATADIR"/france_neige.csv")
         
-        BUGMSG (champ1 = malloc (sizeof (char) * (strlen (ligne) + 1)),
+        BUGMSG (champ1 = malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
                 FALSE,
                 gettext ("Erreur d'allocation mémoire.\n"))
-        BUGMSG (champ2 = malloc (sizeof (char) * (strlen (ligne) + 1)),
+        BUGMSG (champ2 = malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
                 FALSE,
                 gettext ("Erreur d'allocation mémoire.\n"))
-        BUGMSG (dep_parcours = malloc (sizeof (char) * (strlen (ligne) + 1)),
+        BUGMSG (dep_parcours = malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
                 FALSE,
                 gettext ("Erreur d'allocation mémoire.\n"))
         
-        BUGMSG (sscanf (ligne,
-                        "%s\t%s\t%s\n",
-                        champ1,
-                        dep_parcours,
-                        champ2) == 3,
+        BUGMSG (swscanf (ligne,
+                         L"%ls\t%ls\t%ls\n",
+                         champ1,
+                         dep_parcours,
+                         champ2) == 3,
                 FALSE,
                 gettext ("Le fichier '%s' est corrompu.\n"), DATADIR"/france_neige.csv")
         
-        if ((strcmp (dep_parcours, dep) != 0) || (strcmp (champ1, "DEP") != 0))
+        if ((wcscmp (dep_parcours, dep) != 0) ||
+            (wcscmp (champ1, L"DEP") != 0))
         {
           free (dep_parcours);
           dep_parcours = NULL;
@@ -588,26 +595,26 @@ common_ville_set (Projet     *p,
         free (ligne);
         free (champ1);
       }
-      if (strcmp (champ2, "A1") == 0)
+      if (wcscmp (champ2, L"A1") == 0)
         neige_tmp = NEIGE_A1;
-      else if (strcmp (champ2, "A2") == 0)
+      else if (wcscmp (champ2, L"A2") == 0)
         neige_tmp = NEIGE_A2;
-      else if (strcmp (champ2, "B1") == 0)
+      else if (wcscmp (champ2, L"B1") == 0)
         neige_tmp = NEIGE_B1;
-      else if (strcmp (champ2, "B2") == 0)
+      else if (wcscmp (champ2, L"B2") == 0)
         neige_tmp = NEIGE_B2;
-      else if (strcmp (champ2, "C1") == 0)
+      else if (wcscmp (champ2, L"C1") == 0)
         neige_tmp = NEIGE_C1;
-      else if (strcmp (champ2, "C2") == 0)
+      else if (wcscmp (champ2, L"C2") == 0)
         neige_tmp = NEIGE_C2;
-      else if (strcmp (champ2, "D") == 0)
+      else if (wcscmp (champ2, L"D") == 0)
         neige_tmp = NEIGE_D;
-      else if (strcmp (champ2, "E") == 0)
+      else if (wcscmp (champ2, L"E") == 0)
         neige_tmp = NEIGE_E;
       else
         BUGMSG (NULL,
                 FALSE,
-                gettext ("Le fichier '%s' est corrumpu. Le champ2 '%s' est inconnu.\n"), DATADIR"/france_neige.csv", champ2)
+                gettext ("Le fichier '%s' est corrumpu. Le champ2 '%ls' est inconnu.\n"), DATADIR"/france_neige.csv", champ2)
       free(champ2);
       // On recherche si il y a une exception à la règle de base.
       done = FALSE;
@@ -618,50 +625,54 @@ common_ville_set (Projet     *p,
         if (ligne == NULL)
           break;
         
-        BUGMSG (champ1 = malloc (sizeof (char) * (strlen (ligne) + 1)),
+        BUGMSG (champ1 = malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
                 FALSE,
                 gettext ("Erreur d'allocation mémoire.\n"))
-        BUGMSG (champ2 = malloc (sizeof (char) * (strlen (ligne) + 1)),
+        BUGMSG (champ2 = malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
                 FALSE,
                 gettext ("Erreur d'allocation mémoire.\n"))
         
-        BUGMSG (sscanf (ligne, "%s", champ1) == 1,
+        BUGMSG (swscanf (ligne, L"%ls", champ1) == 1,
                 FALSE,
                 gettext ("Le fichier '%s' est corrompu.\n"), DATADIR"/france_neige.csv")
         
         // Si on arrive au département suivant sans avoir trouvé d'exception.
-        if (strcmp (champ1, "DEP") == 0)
+        if (wcscmp (champ1, L"DEP") == 0)
           done = TRUE;
         else
         {
           int numero;
           
-          BUGMSG (sscanf (ligne, "%s\t%d\t%s\n", champ1, &numero, champ2) == 3,
+          BUGMSG (swscanf (ligne,
+                           L"%ls\t%d\t%ls\n",
+                           champ1,
+                           &numero,
+                           champ2) == 3,
                   FALSE,
                   gettext ("Le fichier '%s' est corrompu.\n"), DATADIR"/france_neige.csv")
-          if (((strcmp (champ1, "CAN") == 0) && (numero == ct)) ||
-              ((strcmp (champ1, "COM") == 0) && (numero == com)))
+          if (((wcscmp (champ1, L"CAN") == 0) && (numero == ct)) ||
+              ((wcscmp (champ1, L"COM") == 0) && (numero == com)))
           {
-            if (strcmp (champ2, "A1") == 0)
+            if (wcscmp (champ2, L"A1") == 0)
               neige_tmp = NEIGE_A1;
-            else if (strcmp (champ2, "A2") == 0)
+            else if (wcscmp (champ2, L"A2") == 0)
               neige_tmp = NEIGE_A2;
-            else if (strcmp (champ2, "B1") == 0)
+            else if (wcscmp (champ2, L"B1") == 0)
               neige_tmp = NEIGE_B1;
-            else if (strcmp (champ2, "B2") == 0)
+            else if (wcscmp (champ2, L"B2") == 0)
               neige_tmp = NEIGE_B2;
-            else if (strcmp (champ2, "C1") == 0)
+            else if (wcscmp (champ2, L"C1") == 0)
               neige_tmp = NEIGE_C1;
-            else if (strcmp (champ2, "C2") == 0)
+            else if (wcscmp (champ2, L"C2") == 0)
               neige_tmp = NEIGE_C2;
-            else if (strcmp (champ2, "D") == 0)
+            else if (wcscmp (champ2, L"D") == 0)
               neige_tmp = NEIGE_D;
-            else if (strcmp (champ2, "E") == 0)
+            else if (wcscmp (champ2, L"E") == 0)
               neige_tmp = NEIGE_E;
             else
               BUGMSG (NULL,
                       FALSE,
-                      gettext ("Le fichier '%s' est corrumpu. Le champ2 '%s' est inconnu.\n"), DATADIR"/france_neige.csv", champ2)
+                      gettext ("Le fichier '%s' est corrumpu. Le champ2 '%ls' est inconnu.\n"), DATADIR"/france_neige.csv", champ2)
             done = TRUE;
           }
           else
@@ -697,25 +708,26 @@ common_ville_set (Projet     *p,
                 FALSE,
                 gettext ("Le fichier '%s' est incomplet.\n"), DATADIR"/france_vent.csv")
         
-        BUGMSG (champ1 = malloc (sizeof (char) * (strlen (ligne) + 1)),
+        BUGMSG (champ1 = malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
                 FALSE,
                 gettext ("Erreur d'allocation mémoire.\n"))
-        BUGMSG (champ2 = malloc (sizeof (char) * (strlen (ligne) + 1)),
+        BUGMSG (champ2 = malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
                 FALSE,
                 gettext ("Erreur d'allocation mémoire.\n"))
-        BUGMSG (dep_parcours = malloc (sizeof (char) * (strlen (ligne) + 1)),
+        BUGMSG (dep_parcours = malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
                 FALSE,
                 gettext ("Erreur d'allocation mémoire.\n"))
         
-        BUGMSG (sscanf (ligne,
-                        "%s\t%s\t%s\n",
-                        champ1,
-                        dep_parcours,
-                        champ2) == 3,
+        BUGMSG (swscanf (ligne,
+                         L"%ls\t%ls\t%ls\n",
+                         champ1,
+                         dep_parcours,
+                         champ2) == 3,
                 FALSE,
                 gettext ("Le fichier '%s' est corrompu.\n"), DATADIR"/france_vent.csv")
         
-        if ((strcmp (dep_parcours, dep) != 0) || (strcmp (champ1, "DEP") != 0))
+        if ((wcscmp (dep_parcours, dep) != 0) ||
+            (wcscmp (champ1, L"DEP") != 0))
         {
           free (dep_parcours);
           dep_parcours = NULL;
@@ -727,18 +739,18 @@ common_ville_set (Projet     *p,
         free (ligne);
         free (champ1);
       }
-      if (strcmp (champ2, "1") == 0)
+      if (wcscmp (champ2, L"1") == 0)
         vent_tmp = VENT_1;
-      else if (strcmp (champ2, "2") == 0)
+      else if (wcscmp (champ2, L"2") == 0)
         vent_tmp = VENT_2;
-      else if (strcmp (champ2, "3") == 0)
+      else if (wcscmp (champ2, L"3") == 0)
         vent_tmp = VENT_3;
-      else if (strcmp (champ2, "4") == 0)
+      else if (wcscmp (champ2, L"4") == 0)
         vent_tmp = VENT_4;
       else
         BUGMSG (NULL,
                 FALSE,
-                gettext ("Le fichier '%s' est corrumpu. Le champ2 '%s' est inconnu.\n"), DATADIR"/france_vent.csv", champ2)
+                gettext ("Le fichier '%s' est corrumpu. Le champ2 '%ls' est inconnu.\n"), DATADIR"/france_vent.csv", champ2)
       free (champ2);
       // On recherche si il y a une exception à la règle de base.
       done = FALSE;
@@ -749,42 +761,46 @@ common_ville_set (Projet     *p,
         if (ligne == NULL)
           break;
         
-        BUGMSG (champ1 = malloc (sizeof (char) * (strlen (ligne) + 1)),
+        BUGMSG (champ1 = malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
                 FALSE,
                 gettext ("Erreur d'allocation mémoire.\n"))
-        BUGMSG (champ2 = malloc (sizeof (char) * (strlen (ligne) + 1)),
+        BUGMSG (champ2 = malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
                 FALSE,
                 gettext ("Erreur d'allocation mémoire.\n"))
         
-        BUGMSG (sscanf (ligne, "%s", champ1) == 1,
+        BUGMSG (swscanf (ligne, L"%ls", champ1) == 1,
                 FALSE,
                 gettext ("Le fichier '%s' est corrompu.\n"), DATADIR"/france_vent.csv")
         
         // Si on arrive au département suivant sans avoir trouvé d'exception.
-        if (strcmp (champ1, "DEP") == 0)
+        if (wcscmp (champ1, L"DEP") == 0)
           done = TRUE;
         else
         {
           int numero;
           
-          BUGMSG (sscanf (ligne, "%s\t%d\t%s\n", champ1, &numero, champ2) == 3,
+          BUGMSG (swscanf (ligne,
+                           L"%ls\t%d\t%ls\n",
+                           champ1,
+                           &numero,
+                           champ2) == 3,
                   FALSE,
                   gettext ("Le fichier '%s' est corrompu.\n"), DATADIR"/france_vent.csv")
-          if (((strcmp (champ1, "CAN") == 0) && (numero == ct)) ||
-              ((strcmp (champ1, "COM") == 0) && (numero == com)))
+          if (((wcscmp (champ1, L"CAN") == 0) && (numero == ct)) ||
+              ((wcscmp (champ1, L"COM") == 0) && (numero == com)))
           {
-            if (strcmp (champ2, "1") == 0)
+            if (wcscmp (champ2, L"1") == 0)
               vent_tmp = VENT_1;
-            else if (strcmp (champ2, "2") == 0)
+            else if (wcscmp (champ2, L"2") == 0)
               vent_tmp = VENT_2;
-            else if (strcmp (champ2, "3") == 0)
+            else if (wcscmp (champ2, L"3") == 0)
               vent_tmp = VENT_3;
-            else if (strcmp (champ2, "4") == 0)
+            else if (wcscmp (champ2, L"4") == 0)
               vent_tmp = VENT_4;
             else
               BUGMSG (NULL,
                       FALSE,
-                      gettext ("Le fichier '%s' est corrumpu. Le champ2 '%s' est inconnu.\n"), DATADIR"/france_vent.csv", champ2)
+                      gettext ("Le fichier '%s' est corrumpu. Le champ2 '%ls' est inconnu.\n"), DATADIR"/france_vent.csv", champ2)
             done = TRUE;
           }
           else
@@ -820,25 +836,26 @@ common_ville_set (Projet     *p,
                 FALSE,
                 gettext ("Le fichier '%s' est incomplet.\n"), DATADIR"/france_seisme.csv")
         
-        BUGMSG (champ1 = malloc (sizeof (char) * (strlen (ligne) + 1)),
+        BUGMSG (champ1 = malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
                 FALSE,
                 gettext ("Erreur d'allocation mémoire.\n"))
-        BUGMSG (champ2 = malloc (sizeof (char) * (strlen (ligne) + 1)),
+        BUGMSG (champ2 = malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
                 FALSE,
                 gettext ("Erreur d'allocation mémoire.\n"))
-        BUGMSG (dep_parcours = malloc (sizeof (char) * (strlen (ligne) + 1)),
+        BUGMSG (dep_parcours = malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
                 FALSE,
                 gettext ("Erreur d'allocation mémoire.\n"))
         
-        BUGMSG (sscanf (ligne,
-                        "%s\t%s\t%s\n",
-                        champ1,
-                        dep_parcours,
-                        champ2) == 3,
+        BUGMSG (swscanf (ligne,
+                         L"%ls\t%ls\t%ls\n",
+                         champ1,
+                         dep_parcours,
+                         champ2) == 3,
                 FALSE,
                 gettext ("Le fichier '%s' est corrompu.\n"), DATADIR"/france_seisme.csv")
         
-        if ((strcmp (dep_parcours, dep) != 0) || (strcmp (champ1, "DEP") != 0))
+        if ((wcscmp (dep_parcours, dep) != 0) ||
+            (wcscmp (champ1, L"DEP") != 0))
         {
           free (dep_parcours);
           dep_parcours = NULL;
@@ -850,20 +867,20 @@ common_ville_set (Projet     *p,
         free (ligne);
         free (champ1);
       }
-      if (strcmp (champ2, "1") == 0)
+      if (wcscmp (champ2, L"1") == 0)
         seisme_tmp = SEISME_1;
-      else if (strcmp (champ2, "2") == 0)
+      else if (wcscmp (champ2, L"2") == 0)
         seisme_tmp = SEISME_2;
-      else if (strcmp (champ2, "3") == 0)
+      else if (wcscmp (champ2, L"3") == 0)
         seisme_tmp = SEISME_3;
-      else if (strcmp (champ2, "4") == 0)
+      else if (wcscmp (champ2, L"4") == 0)
         seisme_tmp = SEISME_4;
-      else if (strcmp (champ2, "5") == 0)
+      else if (wcscmp (champ2, L"5") == 0)
         seisme_tmp = SEISME_5;
       else
         BUGMSG (NULL,
                 FALSE,
-                gettext ("Le fichier '%s' est corrumpu. Le champ2 '%s' est inconnu.\n"), DATADIR"/france_seisme.csv", champ2)
+                gettext ("Le fichier '%s' est corrumpu. Le champ2 '%ls' est inconnu.\n"), DATADIR"/france_seisme.csv", champ2)
       free (champ2);
       // On recherche si il y a une exception à la règle de base.
       done = FALSE;
@@ -874,44 +891,48 @@ common_ville_set (Projet     *p,
         if (ligne == NULL)
           break;
         
-        BUGMSG (champ1 = malloc (sizeof (char) * (strlen (ligne) + 1)),
+        BUGMSG (champ1 = malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
                 FALSE,
                 gettext ("Erreur d'allocation mémoire.\n"))
-        BUGMSG (champ2 = malloc (sizeof (char) * (strlen (ligne) + 1)),
+        BUGMSG (champ2 = malloc (sizeof (wchar_t) * (wcslen (ligne) + 1)),
                 FALSE,
                 gettext ("Erreur d'allocation mémoire.\n"))
         
-        BUGMSG (sscanf (ligne, "%s", champ1) == 1,
+        BUGMSG (swscanf (ligne, L"%ls", champ1) == 1,
                 FALSE,
                 gettext ("Le fichier '%s' est corrompu.\n"), DATADIR"/france_seisme.csv")
         
         // Si on arrive au département suivant sans avoir trouvé d'exception.
-        if (strcmp (champ1, "DEP") == 0)
+        if (wcscmp (champ1, L"DEP") == 0)
           done = TRUE;
         else
         {
           int numero;
           
-          BUGMSG (sscanf (ligne, "%s\t%d\t%s\n", champ1, &numero, champ2) == 3,
+          BUGMSG (swscanf (ligne,
+                           L"%ls\t%d\t%ls\n",
+                           champ1,
+                           &numero,
+                           champ2) == 3,
                   FALSE,
                   gettext ("Le fichier '%s' est corrompu.\n"), DATADIR"/france_seisme.csv")
-          if (((strcmp (champ1, "CAN") == 0) && (numero == ct)) ||
-              ((strcmp (champ1, "COM") == 0) && (numero == com)))
+          if (((wcscmp (champ1, L"CAN") == 0) && (numero == ct)) ||
+              ((wcscmp (champ1, L"COM") == 0) && (numero == com)))
           {
-            if (strcmp (champ2, "1") == 0)
+            if (wcscmp (champ2, L"1") == 0)
               seisme_tmp = SEISME_1;
-            else if (strcmp (champ2, "2") == 0)
+            else if (wcscmp (champ2, L"2") == 0)
               seisme_tmp = SEISME_2;
-            else if (strcmp (champ2, "3") == 0)
+            else if (wcscmp (champ2, L"3") == 0)
               seisme_tmp = SEISME_3;
-            else if (strcmp (champ2, "4") == 0)
+            else if (wcscmp (champ2, L"4") == 0)
               seisme_tmp = SEISME_4;
-            else if (strcmp (champ2, "5") == 0)
+            else if (wcscmp (champ2, L"5") == 0)
               seisme_tmp = SEISME_5;
             else
               BUGMSG (NULL,
                       FALSE,
-                      gettext ("Le fichier '%s' est corrumpu. Le champ2 '%s' est inconnu.\n"), DATADIR"/france_seisme.csv", champ2)
+                      gettext ("Le fichier '%s' est corrumpu. Le champ2 '%ls' est inconnu.\n"), DATADIR"/france_seisme.csv", champ2)
             done = TRUE;
           }
           else

@@ -198,7 +198,7 @@ conv_f_c (Flottant nombre,
     }
     default :
     {
-      BUGMSG (NULL, , gettext ("Type de nombre est inconnu.\n"))
+      FAILCRIT ( , (gettext ("Type de nombre est inconnu.\n"));)
       break;
     }
   }
@@ -225,7 +225,7 @@ m_g (Flottant f)
       return f.d;
     default :
     {
-      BUGMSG(NULL, NAN, gettext("Type de nombre est inconnu.\n"))
+      FAILCRIT (NAN, (gettext("Type de nombre est inconnu.\n"));)
       break;
     }
   }
@@ -256,7 +256,7 @@ m_f (double        f,
     default :
     {
       retour.d = NAN;
-      BUGMSG (NULL, retour, gettext ("Type de nombre est inconnu.\n"))
+      FAILCRIT (retour, (gettext ("Type de nombre est inconnu.\n"));)
       break;
     }
   }
