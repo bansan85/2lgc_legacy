@@ -843,7 +843,7 @@ common_gtk_informations (Projet *p)
                             p->parametres.seisme);
   
   gtk_window_set_transient_for (GTK_WINDOW (UI_INFO.window),
-                                GTK_WINDOW (p->ui.comp.window));
+                                GTK_WINDOW (UI_GTK.window));
   
   return TRUE;
 }

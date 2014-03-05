@@ -228,9 +228,9 @@ EF_materiaux_repositionne (Projet      *p,
       break;
     }
   }
-  if (p->ui.ef_barres.builder != NULL)
+  if (UI_BAR.builder != NULL)
     gtk_widget_queue_resize (GTK_WIDGET (gtk_builder_get_object (
-                              p->ui.ef_barres.builder, "EF_barres_treeview")));
+                                       UI_BAR.builder, "EF_barres_treeview")));
   gtk_list_store_set (UI_MAT.liste_materiaux,
                       &materiau->Iter_liste,
                       0, materiau->nom,

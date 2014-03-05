@@ -513,7 +513,7 @@ EF_gtk_charge_noeud (Projet *p,
   
   if (UI_ACT.window == NULL)
     gtk_window_set_transient_for (GTK_WINDOW (UI_CHNO.window),
-                                  GTK_WINDOW (p->ui.comp.window));
+                                  GTK_WINDOW (UI_GTK.window));
   else
     gtk_window_set_transient_for (GTK_WINDOW (UI_CHNO.window),
                                   GTK_WINDOW (UI_ACT.window));

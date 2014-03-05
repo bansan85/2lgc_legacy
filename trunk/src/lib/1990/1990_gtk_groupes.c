@@ -1667,7 +1667,7 @@ _1990_gtk_groupes (Projet *p)
                        (UI_GRO.builder, "1990_groupes_spin_button_niveaux")))),
       )
   gtk_window_set_transient_for (GTK_WINDOW (UI_GRO.window),
-                                GTK_WINDOW (p->ui.comp.window));
+                                GTK_WINDOW (UI_GTK.window));
   
   return;
 }

@@ -66,14 +66,14 @@ _1992_1_1_barres_init (Projet *p)
   // Trivial
   p->modele.barres = NULL;
 #ifdef ENABLE_GTK
-  p->ui.ef_barres.liste_types = gtk_list_store_new (1, G_TYPE_STRING);
-  gtk_list_store_append (p->ui.ef_barres.liste_types, &iter);
-  gtk_list_store_set (p->ui.ef_barres.liste_types,
+  UI_BAR.liste_types = gtk_list_store_new (1, G_TYPE_STRING);
+  gtk_list_store_append (UI_BAR.liste_types, &iter);
+  gtk_list_store_set (UI_BAR.liste_types,
                       &iter,
                       0, gettext ("Poteau en béton"),
                       -1);
-  gtk_list_store_append (p->ui.ef_barres.liste_types, &iter);
-  gtk_list_store_set (p->ui.ef_barres.liste_types,
+  gtk_list_store_append (UI_BAR.liste_types, &iter);
+  gtk_list_store_set (UI_BAR.liste_types,
                       &iter,
                       0, gettext ("Poutre en béton"),
                       -1);
@@ -113,14 +113,14 @@ _1992_1_1_barres_free_foreach (EF_Barre *barre,
   free (barre->info_EF);
   
 #ifdef ENABLE_GTK
-  if (p->ui.ef_barres.builder != NULL)
+  if (UI_BAR.builder != NULL)
   {
     GtkTreeModel *model = GTK_TREE_MODEL (gtk_builder_get_object (
-                              p->ui.ef_barres.builder, "EF_barres_treestore"));
+                                       UI_BAR.builder, "EF_barres_treestore"));
     
     gtk_tree_store_remove (GTK_TREE_STORE (model), &barre->Iter);
   }
-  m3d_barre_free (&p->ui.m3d, barre);
+  m3d_barre_free (&UI_M3D, barre);
 #endif
   free (barre);
   
@@ -232,7 +232,7 @@ _1992_1_1_barres_ajout (Projet         *p,
   }
   
   // On ajoute la ligne dans la liste des barres
-  if (p->ui.ef_barres.builder != NULL)
+  if (UI_BAR.builder != NULL)
   {
     char       *tmp;
     GtkTreeIter iter;
@@ -242,29 +242,28 @@ _1992_1_1_barres_ajout (Projet         *p,
              (gettext ("Erreur d'allocation mémoire.\n"));
                free (element_nouveau->info_EF);
                free (element_nouveau);)
-    gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL (
-                                                  p->ui.ef_barres.liste_types),
+    gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL ( UI_BAR.liste_types),
                                          &iter,
                                          tmp);
     free (tmp);
-    gtk_tree_model_get (GTK_TREE_MODEL (p->ui.ef_barres.liste_types),
+    gtk_tree_model_get (GTK_TREE_MODEL (UI_BAR.liste_types),
                         &iter,
                         0, &tmp,
                         -1);
     
     gtk_tree_store_append (GTK_TREE_STORE (gtk_builder_get_object (
-                              p->ui.ef_barres.builder, "EF_barres_treestore")),
+                                       UI_BAR.builder, "EF_barres_treestore")),
                            &element_nouveau->Iter,
                            NULL);
     gtk_tree_store_set (GTK_TREE_STORE (gtk_builder_get_object (
-                              p->ui.ef_barres.builder, "EF_barres_treestore")),
+                                       UI_BAR.builder, "EF_barres_treestore")),
                         &element_nouveau->Iter,
                         0, element_nouveau,
                         -1);
     free (tmp);
   }
   
-  BUG (m3d_barre (&p->ui.m3d, element_nouveau), FALSE)
+  BUG (m3d_barre (&UI_M3D, element_nouveau), FALSE)
 #endif
   
   if (discretisation_element != 0)
@@ -908,7 +907,7 @@ _1992_1_1_barres_change_type (EF_Barre    *barre,
     {
 #ifdef ENABLE_GTK
       gtk_widget_queue_resize (GTK_WIDGET (gtk_builder_get_object (
-                              p->ui.ef_barres.builder, "EF_barres_treeview")));
+                                       UI_BAR.builder, "EF_barres_treeview")));
 #endif
       barre->type = type;
       break;
@@ -953,12 +952,12 @@ _1992_1_1_barres_change_section (EF_Barre   *barre,
   BUG (EF_calculs_free (p), FALSE)
   
 #ifdef ENABLE_GTK
-  BUG (m3d_barre (&p->ui.m3d, barre), FALSE)
+  BUG (m3d_barre (&UI_M3D, barre), FALSE)
   BUG (m3d_rafraichit (p), FALSE)
   
-  if (p->ui.ef_barres.builder != NULL)
+  if (UI_BAR.builder != NULL)
     gtk_widget_queue_resize (GTK_WIDGET (gtk_builder_get_object (
-                              p->ui.ef_barres.builder, "EF_barres_treeview")));
+                                       UI_BAR.builder, "EF_barres_treeview")));
 #endif
   
   return TRUE;
@@ -993,9 +992,9 @@ _1992_1_1_barres_change_materiau (EF_Barre    *barre,
   BUG (EF_calculs_free (p), FALSE)
   
 #ifdef ENABLE_GTK
-  if (p->ui.ef_barres.builder != NULL)
+  if (UI_BAR.builder != NULL)
     gtk_widget_queue_resize (GTK_WIDGET (gtk_builder_get_object (
-                              p->ui.ef_barres.builder, "EF_barres_treeview")));
+                                       UI_BAR.builder, "EF_barres_treeview")));
 #endif
   
   return TRUE;
@@ -1038,9 +1037,9 @@ _1992_1_1_barres_change_angle (EF_Barre *barre,
   BUG (m3d_rafraichit (p), FALSE)
   g_list_free (liste_barre);
   
-  if (p->ui.ef_barres.builder != NULL)
+  if (UI_BAR.builder != NULL)
     gtk_widget_queue_resize (GTK_WIDGET (gtk_builder_get_object (
-                              p->ui.ef_barres.builder, "EF_barres_treeview")));
+                                       UI_BAR.builder, "EF_barres_treeview")));
 #endif
   
   return TRUE;
@@ -1125,9 +1124,9 @@ _1992_1_1_barres_change_noeud (EF_Barre *barre,
   g_list_free (liste_barre);
   
 #ifdef ENABLE_GTK
-  if (p->ui.ef_barres.builder != NULL)
+  if (UI_BAR.builder != NULL)
     gtk_widget_queue_resize (GTK_WIDGET (gtk_builder_get_object (
-                              p->ui.ef_barres.builder, "EF_barres_treeview")));
+                                       UI_BAR.builder, "EF_barres_treeview")));
 #endif
   
   return TRUE;
@@ -1162,9 +1161,9 @@ _1992_1_1_barres_change_relachement (EF_Barre       *barre,
   BUG (EF_calculs_free (p), FALSE)
   
 #ifdef ENABLE_GTK
-  if (p->ui.ef_barres.builder != NULL)
+  if (UI_BAR.builder != NULL)
     gtk_widget_queue_resize (GTK_WIDGET (gtk_builder_get_object (
-                              p->ui.ef_barres.builder, "EF_barres_treeview")));
+                                       UI_BAR.builder, "EF_barres_treeview")));
 #endif
   
   return TRUE;
@@ -2225,15 +2224,15 @@ _1992_1_1_barres_supprime_liste (Projet *p,
   }
   
 #ifdef ENABLE_GTK
-  if ((p->ui.ef_appuis.builder != NULL) && (noeuds_suppr != NULL))
+  if ((UI_APP.builder != NULL) && (noeuds_suppr != NULL))
     EF_gtk_appuis_select_changed (NULL, p);
-  if ((p->ui.ef_noeud.builder != NULL) && (noeuds_suppr != NULL))
+  if ((UI_NOE.builder != NULL) && (noeuds_suppr != NULL))
     EF_noeuds_set_supprimer_visible (TRUE, p);
-  if ((p->ui.ef_sections.builder != NULL) && (barres_suppr != NULL))
+  if ((UI_SEC.builder != NULL) && (barres_suppr != NULL))
     EF_gtk_sections_select_changed (NULL, p);
-  if ((p->ui.ef_materiaux.builder != NULL) && (barres_suppr != NULL))
+  if ((UI_MAT.builder != NULL) && (barres_suppr != NULL))
     EF_gtk_materiaux_select_changed (NULL, p);
-  if ((p->ui.ef_relachements.builder != NULL) && (barres_suppr != NULL))
+  if ((UI_REL.builder != NULL) && (barres_suppr != NULL))
     EF_gtk_relachements_select_changed (NULL, p);
 #endif
   g_list_free (noeuds_suppr);
@@ -2264,7 +2263,7 @@ _1992_1_1_barres_free (Projet *p)
   p->modele.barres = NULL;
   
 #ifdef ENABLE_GTK
-  g_object_unref (p->ui.ef_barres.liste_types);
+  g_object_unref (UI_BAR.liste_types);
 #endif
   
   return TRUE;

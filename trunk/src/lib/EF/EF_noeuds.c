@@ -179,7 +179,7 @@ EF_Noeud *EF_noeuds_ajout_noeud_libre (Projet   *p,
   p->modele.noeuds = g_list_append (p->modele.noeuds, noeud_nouveau);
   
 #ifdef ENABLE_GTK
-  BUG (m3d_noeud (&p->ui.m3d, noeud_nouveau), NULL)
+  BUG (m3d_noeud (&UI_M3D, noeud_nouveau), NULL)
   if (UI_NOE.builder != NULL)
   {
     gtk_tree_store_append (UI_NOE.tree_store_libre,
@@ -272,7 +272,7 @@ EF_Noeud *EF_noeuds_ajout_noeud_barre (Projet   *p,
           sizeof (Barre_Info_EF) * (barre->discretisation_element + 1));
   
 #ifdef ENABLE_GTK
-  BUG (m3d_noeud (&p->ui.m3d, noeud_nouveau), NULL)
+  BUG (m3d_noeud (&UI_M3D, noeud_nouveau), NULL)
   if (UI_NOE.builder != NULL)
   {
     gtk_tree_store_append (UI_NOE.tree_store_barre,
@@ -366,7 +366,7 @@ gboolean EF_noeuds_change_pos_abs (Projet   *p,
     point->z = z;
   
 #ifdef ENABLE_GTK
-  BUG (m3d_noeud (&p->ui.m3d, noeud), FALSE)
+  BUG (m3d_noeud (&UI_M3D, noeud), FALSE)
   BUG (m3d_rafraichit (p), FALSE)
   
   if (UI_NOE.builder != NULL)
@@ -829,7 +829,7 @@ void EF_noeuds_free_foreach (EF_Noeud *noeud,
     
     gtk_tree_store_remove (GTK_TREE_STORE (model), &noeud->Iter);
   }
-  m3d_noeud_free (&p->ui.m3d, noeud);
+  m3d_noeud_free (&UI_M3D, noeud);
 #endif
   free (noeud);
   

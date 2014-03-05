@@ -1234,7 +1234,7 @@ EF_gtk_noeud (Projet *p)
   g_object_set (gtk_builder_get_object (UI_NOE.builder,
                                      "EF_noeuds_treeview_noeuds_libres_cell4"),
                 "model",
-                p->ui.ef_appuis.liste_appuis,
+                UI_APP.liste_appuis,
                 NULL);
   
   gtk_tree_view_column_set_cell_data_func (
@@ -1313,7 +1313,7 @@ EF_gtk_noeud (Projet *p)
   g_object_set (gtk_builder_get_object (UI_NOE.builder,
                              "EF_noeuds_treeview_noeuds_intermediaires_cell4"),
                 "model",
-                p->ui.ef_appuis.liste_appuis,
+                UI_APP.liste_appuis,
                 NULL);
   
   if (p->modele.noeuds != NULL)
@@ -1348,7 +1348,7 @@ EF_gtk_noeud (Projet *p)
   }
   
   gtk_window_set_transient_for (GTK_WINDOW (UI_NOE.window),
-                                GTK_WINDOW (p->ui.comp.window));
+                                GTK_WINDOW (UI_GTK.window));
 }
 
 #endif

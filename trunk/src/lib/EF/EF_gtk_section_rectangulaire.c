@@ -353,7 +353,7 @@ EF_gtk_section_rectangulaire (Projet  *p,
   }
   
   gtk_window_set_transient_for (GTK_WINDOW (UI_SEC_RE.window),
-                                GTK_WINDOW (p->ui.comp.window));
+                                GTK_WINDOW (UI_GTK.window));
   
   return TRUE;
 }
